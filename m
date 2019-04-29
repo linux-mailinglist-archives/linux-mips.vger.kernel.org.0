@@ -2,81 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F38B1E81E
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2019 18:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1559E9C8
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2019 20:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728748AbfD2QvC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Apr 2019 12:51:02 -0400
-Received: from mout.kundenserver.de ([217.72.192.74]:52385 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728663AbfD2QvC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Apr 2019 12:51:02 -0400
-Received: from [192.168.1.110] ([77.9.18.117]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MCsDe-1hTuvS0cZE-008vUo; Mon, 29 Apr 2019 18:50:26 +0200
-Subject: Re: serial drivers polishing
-To:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        linux-kernel@vger.kernel.org
-Cc:     lorenzo.pieralisi@arm.com, linux-ia64@vger.kernel.org,
-        linux-serial@vger.kernel.org, andrew@aj.id.au,
-        gregkh@linuxfoundation.org, sudeep.holla@arm.com,
-        liviu.dudau@arm.com, linux-mips@vger.kernel.org, vz@mleia.com,
-        linux@prisktech.co.nz, sparclinux@vger.kernel.org,
-        khilman@baylibre.com, macro@linux-mips.org,
-        slemieux.tyco@gmail.com, matthias.bgg@gmail.com, jacmet@sunsite.dk,
-        linux-amlogic@lists.infradead.org,
-        andriy.shevchenko@linux.intel.com, linuxppc-dev@lists.ozlabs.org,
-        davem@davemloft.net
-References: <1556369542-13247-1-git-send-email-info@metux.net>
- <7471c418-4058-db7b-b2ed-af9a67fff201@c-s.fr>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <5a826a97-4098-7e1e-4f07-5a1a372e66b8@metux.net>
-Date:   Mon, 29 Apr 2019 18:50:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        id S1728966AbfD2SNY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Apr 2019 14:13:24 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:38196 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728748AbfD2SNX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Apr 2019 14:13:23 -0400
+Received: by mail-oi1-f196.google.com with SMTP id t70so3531626oif.5;
+        Mon, 29 Apr 2019 11:13:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2yJIp+wKfF6D2azLlpnnQq6LwUEChuaNxyxk16ryYDI=;
+        b=m6IdKAAQFdCRRThSo56yKjCZoh70AzFaEVtjdJTvnrg1T8cSHRHVzUAp4MoGQEjnWJ
+         7WkV2J++2J8h8epn3MikeZjJYjdbq6SlTJBCVpag/oDroH9LTuYVm4wIGYLfi6lx25q8
+         YEIktqNbDqGxFvJn1Qw7N3PbRPNeFA5OJQzA8l5CBVrEKPX4ac16irV4xEP8Cughdd5A
+         RrhTHs931a0xuIRiUqTRJZPx7OgSo1BnDG114hV85ghNr16NaIxwHDhcnu73F+aeHk2j
+         +G24R/POh7Az9kC17mQXs4zTenCVBWDtpRJw+RtvDb9SYys0OsHfY2t7Nu4yNp1v3cld
+         XBtA==
+X-Gm-Message-State: APjAAAXz2DafGq4/p7tCcbbEx+p2/QFCTkxuEmj24XT3q3BLw3jULHLU
+        Z3IKWyH5VJ6iT5TbWMN9JQ==
+X-Google-Smtp-Source: APXvYqz9b40VqbrX7kX0FUjzkjH2lmhVUpYjf06BckfNOK7wqQ5vew2gsC+yMkKMkAKXerqDmMYF0A==
+X-Received: by 2002:aca:5256:: with SMTP id g83mr276496oib.61.1556561603068;
+        Mon, 29 Apr 2019 11:13:23 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id w10sm14305916oiw.48.2019.04.29.11.13.21
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Apr 2019 11:13:21 -0700 (PDT)
+Date:   Mon, 29 Apr 2019 13:13:21 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        paul.burton@mips.com, robh+dt@kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH v2 4/6] dt-bindings: Add vendor prefix for loongson
+Message-ID: <20190429181321.GA6862@bogus>
+References: <20190312091520.8863-2-jiaxun.yang@flygoat.com>
+ <20190411121915.8040-1-jiaxun.yang@flygoat.com>
+ <20190411121915.8040-5-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-In-Reply-To: <7471c418-4058-db7b-b2ed-af9a67fff201@c-s.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:4Az+bKXfpphMCirSkhKFORck7bJVPT2vr0hUbYV1dZ3UTKG5BDU
- TBxxFim3uD9wy42V2JkDIAjQaQq2ReWyoUc1DN0rdiVQkVig/vB99Cx7w1EEfOAYNzuwxhb
- f4/BRWBebII5HZVGg0UvowwXDI1h5ABVpWiuWuh4eTYZtMAEQD4sc1EXMWP3gmaFheqF9bP
- k5GRKc1Y11dojpA/k5Txg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:dCFArW9i7V0=:h4nMfqswc3y5+ZupbaXaxc
- tFoKtwMnvQVs0UwzjVcogEfzKBl3arCAwUg+Qu2VWAk2Ilq7u2sNI5O1aMJ6CAJkqNHu2uTPX
- Y3yx3fYjWCtcDy9l6OLkwaa69ZvQvWGQCJp3Ou9S8dkvnJ6UmLCcPgM531kn8G+8Il5uw4Qq4
- fSneffuJsYTee2KWv7CFrjm6vlXv5wrAldDuvE1Khsd6M+A8SZ+jCROvLUS+UdQlH5E+u2nm0
- EvQpAmgUmrj0a5vj/qvnfze1O4+gwOONXa+ocsMc2OKjF5rvp3e+m6YVagAVH+9ogDyKxzBSF
- B4Dr7HSCDnjQD6Mno9OfSajn4UzlVCI24/oGwljbOtIR9C4iKsIrWouZp+d/KBBemRUtjbLGl
- JTv2aGZ8xzgbybG4zdtIBrxnTZ+pRhY7K6AjrqZupXlLsuu5g6xlz6e5BUJQC8D03+qT50g2G
- Bt4JGNeR8100ay+aT7Cn/oKa4OtJqHS8if5wsK1bT10QXwQLOrjjacfC+a6NLdIw8N/1nfAw8
- MiA+uGAceRZskTXQwiQ4Fk5YGHD1WsB3tYZQ00f4eBEpSHSbdIZA3h9rSuna888oPBs9mmvVl
- dxWjwGYboM6MpHRT3CrdtGYHP+aeLUDykmNkW1ZrYfNAUuJV5vyfs1Nn/1C54xLYS3mUKyTHa
- el3kZJNkFRqAGhafsnVMEKWsIZ0GCa6lEfp1Xq1UEieK+Q33XlNGAf6xe1G91Hlz/ziLEXu8L
- nQiV+8UmVcbDgxrr/wHIsn9iAsSE0sxMoLbGDcyYyZ+/IRqAPRWFc7zzB4E=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190411121915.8040-5-jiaxun.yang@flygoat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 29.04.19 18:16, Christophe Leroy wrote:
+On Thu, 11 Apr 2019 20:19:13 +0800, Jiaxun Yang wrote:
+> Add vendor prefix for loongson, known as
+> Loongson Technology Corporation Limited, a CPUs & IP Cores vendor.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Hi,
-
-> Got the following build  error while compiling for my powerpc board with
-> your full series applied. No time to investigate though.
-
-thanks, fixed it. That was the unclean patch where i've forgotten to
-add 'rfc' into the title ... turned out that this one needs some
-more rework :o
-
---mtx
-
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Reviewed-by: Rob Herring <robh@kernel.org>
