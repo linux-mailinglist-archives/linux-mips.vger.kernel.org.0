@@ -2,86 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF39E64D
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2019 17:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B56E69E
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2019 17:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728428AbfD2P0E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Apr 2019 11:26:04 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:34504 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728214AbfD2P0D (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Apr 2019 11:26:03 -0400
-Received: by mail-ed1-f66.google.com with SMTP id a6so9533110edv.1;
-        Mon, 29 Apr 2019 08:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=aonALYgL+fC9zvkDd9D30wIh1ca4DE2TOFz5g+1UCQg=;
-        b=MqOlHKGBUrtkGw/thEAiOVcQipneXzleb0RM/WE/NAIrWKwuZ/igOcZfZutIC36Y+D
-         kLv5JhJxZNlHfPV2unFalEBIn+R251ZYHMnUFKHLzWPTKPDBh4j1DH5fBQWKGZMvzLVb
-         SMz6kHEmwAk1jVmwT0zVVqmJxkqUZFnh5Be3UtymNcZBxrZC1dCeA8ZWGCke6h3WuDTI
-         PsjH3VSHWs1BZGE7yQ1Vs9L+vcwsR8eXgeZFz0UjkEq1+l6KvTCFALNtGLuE09m3CghC
-         cx6yoPLSQGZxVeq6086SUPMPKPbmJkifbBv8cOkt/YaQS5IgtCtZFbdEKFHyYcct3Z1K
-         HqIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:references:date
-         :in-reply-to:message-id:user-agent:mime-version;
-        bh=aonALYgL+fC9zvkDd9D30wIh1ca4DE2TOFz5g+1UCQg=;
-        b=oreQoeFV56KpNe1UbPOkHvD/GBJE6e5phON4qyYTD/KyEIpUcJ8nZWlyxz9s5jeu7c
-         FJMys67UXRGdh5FrPUKh3l+GDOuYAHCYUljMRGSWiyojJukVLrMV7gOjrsLnnSd78wty
-         do4jYoiSktEdPanVqK2Y6mhrK1lmTMZuTI6dx3FWETU+0zT0jZFH9A55kHKh+/l0MaQe
-         5epYXLS9l4NqYOKJegTXbPvdRrY6ZCvUnmIJWcb5zldrH+THUCoM8sH2fzQWOpti5Zsm
-         oSOyY5ay7hshntcW8I9pejovY9BAw3yu91qqvOYEQY3hF3RYeX3aMmJKwYGeaZ4pSpDY
-         yp0Q==
-X-Gm-Message-State: APjAAAXQEO60ZV1oMlwCvqeboCQRT1NAGgCiyHHDqtKxLIwETYoa1mb8
-        dy6jIwOWYUGRQEXhCz7wIEQ=
-X-Google-Smtp-Source: APXvYqyEQJEsE2ti6PwOMykBv5n2TIgt00/3l4kIKwcwjUrTagamP80EumknDfmmfKrxqeVCL9NbNA==
-X-Received: by 2002:a17:906:4c95:: with SMTP id q21mr31492152eju.14.1556551561666;
-        Mon, 29 Apr 2019 08:26:01 -0700 (PDT)
-Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
-        by smtp.gmail.com with ESMTPSA id z32sm862711edz.85.2019.04.29.08.26.00
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Apr 2019 08:26:00 -0700 (PDT)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.89)
-        (envelope-from <peter@korsgaard.com>)
-        id 1hL8AK-0000pF-C1; Mon, 29 Apr 2019 17:26:00 +0200
-From:   Peter Korsgaard <peter@korsgaard.com>
-To:     "Enrico Weigelt\, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, lorenzo.pieralisi@arm.com,
-        linux-ia64@vger.kernel.org, linux-serial@vger.kernel.org,
-        andrew@aj.id.au, gregkh@linuxfoundation.org, sudeep.holla@arm.com,
-        liviu.dudau@arm.com, linux-mips@vger.kernel.org, vz@mleia.com,
-        linux@prisktech.co.nz, sparclinux@vger.kernel.org,
-        khilman@baylibre.com, macro@linux-mips.org,
-        slemieux.tyco@gmail.com, matthias.bgg@gmail.com, jacmet@sunsite.dk,
-        linux-amlogic@lists.infradead.org,
-        andriy.shevchenko@linux.intel.com, linuxppc-dev@lists.ozlabs.org,
-        davem@davemloft.net
-Subject: Re: [PATCH 12/41] drivers: tty: serial: uartlite: use dev_dbg() instead of pr_debug()
-References: <1556369542-13247-1-git-send-email-info@metux.net>
-        <1556369542-13247-13-git-send-email-info@metux.net>
-Date:   Mon, 29 Apr 2019 17:26:00 +0200
-In-Reply-To: <1556369542-13247-13-git-send-email-info@metux.net> (Enrico
-        Weigelt's message of "Sat, 27 Apr 2019 14:51:53 +0200")
-Message-ID: <875zqwrfxz.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
+        id S1728555AbfD2Pf5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Apr 2019 11:35:57 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:39727 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728501AbfD2Pf5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 29 Apr 2019 11:35:57 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 44t7z96kGcz9vD31;
+        Mon, 29 Apr 2019 17:35:49 +0200 (CEST)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=Q5o3w0VV; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id kbO7e4z3Oado; Mon, 29 Apr 2019 17:35:49 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 44t7z95Zr4z9vD30;
+        Mon, 29 Apr 2019 17:35:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1556552149; bh=XXe83/pZb9AFMZAVXoUoxnryoMR8eaO+qKHpnqnFOB8=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Q5o3w0VVtDkuaQJ720CrXVg1D1EEff1tyfslomh/gdc4+yk1/Dkug0ZmjOpliak9E
+         SNq24Cb/75QU4Vbo8GkPeMa5ZqrlcCuuxHVxWzptG/UbSIeVfGgHzF9GoK962b/vuv
+         2GQOk16RVxWf7DSmpu538h1my8dNOApiD0oga2ow=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id EDA2C8B8B4;
+        Mon, 29 Apr 2019 17:35:54 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id P3bLUxeO-Wfq; Mon, 29 Apr 2019 17:35:54 +0200 (CEST)
+Received: from PO15451 (po15451.idsi0.si.c-s.fr [172.25.231.6])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AEE718B8B3;
+        Mon, 29 Apr 2019 17:35:54 +0200 (CEST)
+Subject: Re: [RESEND PATCH v3 09/11] powerpc/mm/radix: mark
+ __radix__flush_tlb_range_psize() as __always_inline
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Cc:     linux-s390@vger.kernel.org,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Mathieu Malaterre <malat@debian.org>
+References: <20190423034959.13525-1-yamada.masahiro@socionext.com>
+ <20190423034959.13525-10-yamada.masahiro@socionext.com>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <40b48947-b80e-7971-376d-52b594e26d17@c-s.fr>
+Date:   Mon, 29 Apr 2019 17:35:53 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20190423034959.13525-10-yamada.masahiro@socionext.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
->>>>> "Enrico" == Enrico Weigelt, metux IT consult <info@metux.net> writes:
 
- > Using dev_dbg() instead of pr_debg() for more consistent output.
- > (prints device name, etc).
 
- > Signed-off-by: Enrico Weigelt <info@metux.net>
+Le 23/04/2019 à 05:49, Masahiro Yamada a écrit :
+> This prepares to move CONFIG_OPTIMIZE_INLINING from x86 to a common
+> place. We need to eliminate potential issues beforehand.
 
-Acked-by: Peter Korsgaard <peter@korsgaard.com>
+How did you identify the functions requiring __always_inline as this one 
+? Just by 'test and see if it fails', or did you have some script or so ?
 
--- 
-Bye, Peter Korsgaard
+Here the problem is that one of the parameters of the function are used 
+as "immediate" constraint for the inline assembly, therefore requiring 
+the function to always be inline.
+
+I guess this should be explained in the commit log and I'm wondering how 
+you ensure that you did identify all functions like this.
+
+Christophe
+
+> 
+> If it is enabled for powerpc, the following error is reported:
+> 
+> arch/powerpc/mm/tlb-radix.c: In function '__radix__flush_tlb_range_psize':
+> arch/powerpc/mm/tlb-radix.c:104:2: error: asm operand 3 probably doesn't match constraints [-Werror]
+>    asm volatile(PPC_TLBIEL(%0, %4, %3, %2, %1)
+>    ^~~
+> arch/powerpc/mm/tlb-radix.c:104:2: error: impossible constraint in 'asm'
+> 
+> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+> ---
+> 
+> Changes in v3: None
+> Changes in v2:
+>    - split into a separate patch
+> 
+>   arch/powerpc/mm/tlb-radix.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/mm/tlb-radix.c b/arch/powerpc/mm/tlb-radix.c
+> index 6a23b9ebd2a1..a2b2848f0ae3 100644
+> --- a/arch/powerpc/mm/tlb-radix.c
+> +++ b/arch/powerpc/mm/tlb-radix.c
+> @@ -928,7 +928,7 @@ void radix__tlb_flush(struct mmu_gather *tlb)
+>   	tlb->need_flush_all = 0;
+>   }
+>   
+> -static inline void __radix__flush_tlb_range_psize(struct mm_struct *mm,
+> +static __always_inline void __radix__flush_tlb_range_psize(struct mm_struct *mm,
+>   				unsigned long start, unsigned long end,
+>   				int psize, bool also_pwc)
+>   {
+> 
