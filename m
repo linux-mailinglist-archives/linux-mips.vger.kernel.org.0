@@ -2,129 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD49E58E
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2019 16:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC9CE602
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2019 17:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728427AbfD2Ozr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Apr 2019 10:55:47 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:45647 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728454AbfD2Ozr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Apr 2019 10:55:47 -0400
-Received: from [192.168.1.110] ([77.9.18.117]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MzhSh-1gYdpR49Nx-00vcL0; Mon, 29 Apr 2019 16:55:13 +0200
-Subject: Re: [PATCH 36/41] drivers: tty: serial: 8250: store mmio resource
- size in port struct
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        andrew@aj.id.au, macro@linux-mips.org, vz@mleia.com,
-        slemieux.tyco@gmail.com, khilman@baylibre.com, liviu.dudau@arm.com,
-        sudeep.holla@arm.com, lorenzo.pieralisi@arm.com,
-        davem@davemloft.net, jacmet@sunsite.dk, linux@prisktech.co.nz,
-        matthias.bgg@gmail.com, linux-mips@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org
+        id S1728431AbfD2PUC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Apr 2019 11:20:02 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:40332 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728302AbfD2PUC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Apr 2019 11:20:02 -0400
+Received: by mail-ed1-f67.google.com with SMTP id e56so3190384ede.7;
+        Mon, 29 Apr 2019 08:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version;
+        bh=dPnq76BudBLUCskM0DaeuuctlwoGzT39qQr2q1xJdTg=;
+        b=BBvSV/SrDNJ31+/UOkSM5bpG5QGX9iuVEAlHSpvrDOGj+4PW80QrSA2NQvvNYxzojp
+         Zd++WkJIJdsJI48+0P5HrqTBvNXDC1r245KbMoADl3uY5vH+mVrnUi6+8qjpF2ydE+tq
+         TwF1hj4480FhhbTHgn4M/QznEs6p0sHaHA9yrWx15VQqD4rerfkEYjhIuk1lUIvL8NJx
+         M8wE73xeYfkcTLVAM5oCB5RVNjauTgvl4PjUAhsoMUZ5oTPhnvZ5wvz6bSMifDGNwT/e
+         KSK9tYNcpfIF8GPBuVeJpf2B9oLlA2ItKshISp7tatkcaGkzhTIiD3dveMl7nJ6B+iIV
+         zmmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:references:date
+         :in-reply-to:message-id:user-agent:mime-version;
+        bh=dPnq76BudBLUCskM0DaeuuctlwoGzT39qQr2q1xJdTg=;
+        b=W9s1t/OgV8qqBHvXotuEhe3Mhiwgpg6UMb3tlgDwdL7vTbfT1IIsA8F/0zGK7S5a17
+         fS6q7av8lzSl6yU2Jxju9wOisr8eM5BTihFR86/+hE+d9V8Qnx27Sn1JRCPMYDaoi8M3
+         nNMoM5Xx8EMeLOghY2QX1ly1XTuS14trK8M7b+wsoPQ/bBuSjaJEcapV6EdYuv7O6Nyn
+         5wEw4hhAtE2c+rZYaSWkrvQHt49M1AO+Xr6n9LoIdzFSiu+zHkcHSaNp6zVnZm8o+aD/
+         4XRMEWtw8/+cmjbPqsP6m1o776u3kJQfOabTge5T7UwrLkwz4fwPidRXVz8e0QQ9c+vh
+         BFAg==
+X-Gm-Message-State: APjAAAUfR1FaZgE9tCuK2LQjYH9E/Js7R4wAnV4/ThnKNrmvofTXIN+8
+        lw3oL/YYSNUvlIzDIMUlvTM=
+X-Google-Smtp-Source: APXvYqwQbi0omP7jYdcby2odHruq4pxaQ7sP2Qij52VODZOog6lth6WIRzjEKd0jUTWzRbOuB+nVlQ==
+X-Received: by 2002:a17:906:2482:: with SMTP id e2mr12684688ejb.289.1556551199464;
+        Mon, 29 Apr 2019 08:19:59 -0700 (PDT)
+Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
+        by smtp.gmail.com with ESMTPSA id p18sm5851269ejm.4.2019.04.29.08.19.58
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Apr 2019 08:19:58 -0700 (PDT)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.89)
+        (envelope-from <peter@korsgaard.com>)
+        id 1hL84T-0000dV-Kj; Mon, 29 Apr 2019 17:19:57 +0200
+From:   Peter Korsgaard <peter@korsgaard.com>
+To:     "Enrico Weigelt\, metux IT consult" <info@metux.net>
+Cc:     linux-kernel@vger.kernel.org, lorenzo.pieralisi@arm.com,
+        linux-ia64@vger.kernel.org, linux-serial@vger.kernel.org,
+        andrew@aj.id.au, gregkh@linuxfoundation.org, sudeep.holla@arm.com,
+        liviu.dudau@arm.com, linux-mips@vger.kernel.org, vz@mleia.com,
+        linux@prisktech.co.nz, sparclinux@vger.kernel.org,
+        khilman@baylibre.com, macro@linux-mips.org,
+        slemieux.tyco@gmail.com, matthias.bgg@gmail.com, jacmet@sunsite.dk,
+        linux-amlogic@lists.infradead.org,
+        andriy.shevchenko@linux.intel.com, linuxppc-dev@lists.ozlabs.org,
+        davem@davemloft.net
+Subject: Re: [PATCH 13/41] drivers: tty: serial: uartlite: fill mapsize and use it
 References: <1556369542-13247-1-git-send-email-info@metux.net>
- <1556369542-13247-37-git-send-email-info@metux.net>
- <20190428151848.GO9224@smile.fi.intel.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <4bab941a-c2f2-7f1c-9bc2-86c63f171c25@metux.net>
-Date:   Mon, 29 Apr 2019 16:55:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        <1556369542-13247-14-git-send-email-info@metux.net>
+Date:   Mon, 29 Apr 2019 17:19:57 +0200
+In-Reply-To: <1556369542-13247-14-git-send-email-info@metux.net> (Enrico
+        Weigelt's message of "Sat, 27 Apr 2019 14:51:54 +0200")
+Message-ID: <87muk8rg82.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20190428151848.GO9224@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:3sNaGIwVieBtMMPDbaHtnQ9WqDYUZdXDzXdtSPxuDKdaXl1IhJx
- gExeQeuUVBW9F8lPEU32YFMe/ujn/jKm3Qo/yQgDM0nzyQYP+uCPSUDJN/wl74WlUhOFl0H
- b9FygV4JGeGXjaq1ueGEJHfa2utbBtfqmEwr5N/Cg0mgACNio7NSt3lhmpR00vRsMaYfrz8
- XlPVJlU6S0ovAYl+qK9DA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4eAEJ0wqyW0=:R8Lq31LWiuM3bZqp1AQZRZ
- jyqOXktZyU/EhjOWGDvRMWW3paokS57Sx0yc4uwnO6dW+U4GGDyD5OGfx43RER6pilTojd0Cc
- 1UvhRZhNvHyNSboccxXg4jxVr61SiKbaiipZqc+naHd1ejutU8kiPSah1j2BPJMskurk632/Y
- nukzV2GRHNrvPqdoyfrS6s+qBz9aDlcAx9P6cdOpirdL0w0XVqfr+tiPUixOrykaqEPKMVtKL
- 4OGgSljM9ZDmNeIvVFhlvLWLVFKmPMfuyzdRN0JRAjZGHQP8bk3aTcH8A8onXk/l0QJqHKhDX
- ZQ4bypEgU32hQ4fqOqnWyQmKcfVmdEkraWqwANE/QrsjnJU89kjPxH4M9ZfgkJf1GE7bGdCt1
- XhrQ8ybROPrVDOJCthK1AGoo0AmLPY6uR2O1MZa5KaS3QjuUVPykBRE01dQJR2GvK2jlSiPXW
- zZ6hxOJP8CI1RzsHOkTMtdomXf7Gm8m2tF4WFR6XxuWUgOBnt3ZZIIlrPwEeD6KS08lQpQRZD
- 3qMm83rz1mRcgd9SJaG5GP6l1TZznT12n5BWoD4OS3VG6a46jzylv2wemvehNTDk4TTOjt62R
- OncMDUxVV4h+DnfwTXj+a6L5MPoAszfUepWtuwGjKsEhwBb+0x+CAUGIFYQFSjobFQD0BxRfx
- r0b01pqkzW9vQJ/lMSLIZWsbJ91UXnzPMnujJVFsM8G2B6NAhnk2yAV+0RvlzpNVO1H9zAvDC
- XLBBWgy4vh7jwZz35FbEeJ2gzJ9/pMyOzs3Y5+E5mRhxkcAYeGmPmyAuSLg=
+Content-Type: text/plain
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 28.04.19 17:18, Andy Shevchenko wrote:
-> On Sat, Apr 27, 2019 at 02:52:17PM +0200, Enrico Weigelt, metux IT consult wrote:
->> The io resource size is currently recomputed when it's needed but this
->> actually needs to be done once (or drivers could specify fixed values)
-> 
-> io -> IO
+>>>>> "Enrico" == Enrico Weigelt, metux IT consult <info@metux.net> writes:
 
-fixed.
+ > Fill the struct uart_port->mapsize field and use it, insteaf of
 
->> Simplify that by doing this computation only once and storing the result
->> into the mapsize field. serial8250_register_8250_port() is now called
->> only once on driver init, the previous call sites now just fetch the
->> value from the mapsize field.
-> 
-> Do I understand correctly that this has no side effects?
+s/insteaf/instead/
 
-I don't know of any. (except someting changes things like regshift after
-the initialization phase ... :o)
+ > hardcoded values in many places. This makes the code layout a bit
+ > more consistent and easily allows using generic helpers for the
+ > io memory handling.
 
->> @@ -979,6 +979,9 @@ int serial8250_register_8250_port(struct uart_8250_port *up)
->>  	if (up->port.uartclk == 0)
->>  		return -EINVAL;
->>  
->> +	/* compute the mapsize in case the driver didn't specify one */
->> +	up->mapsize = serial8250_port_size(up);
-> 
-> I don't know all quirks in 8250 drivers by heart, though can you guarantee that
-> at this point the device reports correct IO resource size? (If I'm not mistaken
-> some broken hardware needs some magic to be done before card can be properly
-> handled)
+ > Candidates for such helpers could be eg. the request+ioremap and
+ > iounmap+release combinations.
 
-Actually, I don't see anything talking to the hardware at all here.
-It's all derived from values that are set up before
-serial8250_register_8250_port() is called.
+ > Signed-off-by: Enrico Weigelt <info@metux.net>
 
->> -	unsigned int size = serial8250_port_size(up);
->>  	struct uart_port *port = &up->port;
-> 
->> -	int ret = 0;
-> 
-> This and Co is a separate change that can be done in its own patch.
-
-I don't really understand :(
-Do you mean the splitting off the retval part from the rest ?
-
->> +			port->membase = ioremap_nocache(port->mapbase,
->> +							port->mapsize);
-> 
-> You may increase readability by introducing temporary variables
-> 
-> 	... mapbase = port->mapbase;
-> 	... mapsize = port->mapsize;
-> 	...
-> 	port->membase = ioremap_nocache(mapbase, mapsize);
-> 	...
-
-Is that really necessary ? Maybe it's just my personal taste, but I
-don't feel the more more verbose one is really easier to read.
-
---mtx
+Acked-by: Peter Korsgaard <peter@korsgaard.com>
 
 -- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Bye, Peter Korsgaard
