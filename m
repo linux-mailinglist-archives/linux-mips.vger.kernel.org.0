@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FA6E620
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2019 17:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DBBE643
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Apr 2019 17:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728469AbfD2PWC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Apr 2019 11:22:02 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:41385 "EHLO
+        id S1728521AbfD2PY5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Apr 2019 11:24:57 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:36779 "EHLO
         mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728253AbfD2PWB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Apr 2019 11:22:01 -0400
-Received: by mail-ed1-f66.google.com with SMTP id m4so9475067edd.8;
-        Mon, 29 Apr 2019 08:22:00 -0700 (PDT)
+        with ESMTP id S1728430AbfD2PY5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Apr 2019 11:24:57 -0400
+Received: by mail-ed1-f66.google.com with SMTP id a8so7438048edx.3;
+        Mon, 29 Apr 2019 08:24:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:references:date:in-reply-to:message-id
          :user-agent:mime-version;
-        bh=ZZLpdCaY45ZaWdwl3+E5Jd3Cq8zuL6naI6wCwSuVKCg=;
-        b=ppT6h3G9NuDkcYADi9LW7X3uSGDINXrGpBwPcqsBRDIwXcck7cMScr22OMFoQ4Q7dW
-         8uh86qWSdCnDSh32a04j0feRNOwLlME9xwUQVKfgPlstvStLeefqu2rH6ctjy4IBUOxV
-         0P0njK4P60TKRpkJScyHOWfv1632H2NqB/u65mqvsAgn8LRYGDLgrAGBd7Cg0dA4XFPY
-         n/8jtVt529dPhZATwWpD1GFMOYJDyzMVBjkgHGjF4ebsEjG315Nc+bx3U2dCTC6VylmX
-         CPnB7mvnD2IcDGboMWFxmbnYxHKPLBWhHPOFppg2uPmIHZWARZSoVFjkzBRZXy+KJFjB
-         hzzA==
+        bh=zdkl15yDtUMDjcT3PhPiGxH6HbIfk+17gDQY6gRt9VY=;
+        b=EU8p/LiAuWZTaBXKNZWaKq1vNaSJvDcy39qwV/Z0FHFTDHncV1Zr4ndrOk4JGQHpjX
+         8+2Fp9pb74ZpblErpBwk2AHVSA0XH1TFcISRE2xKvyJ09GkPlceqdU0EpvbPyjROw/Rp
+         2mjTY5DKkCICp5o8xAzP61nli8P0TVf4bfqEgZD8rzztWgastc4fusx/sOq1jUdvqMSm
+         u/4ZemsXZ+LiOOOHhyR/mI0lVFDHDfej+AK9qa3aWH0ZWw6BwM+Q0zzdWbfYGenHUgTj
+         mKQnWyDk7GiejXknp18q+wabn/scWwGXt9KqD4tzqHeVAqnAHml0d/6MfFfKMOSTgfl6
+         uvdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:references:date
          :in-reply-to:message-id:user-agent:mime-version;
-        bh=ZZLpdCaY45ZaWdwl3+E5Jd3Cq8zuL6naI6wCwSuVKCg=;
-        b=CgpH3OWrjVAaJEkaJ0ZaE6SItDpF3kwZVAASTXVhMt2k647q+LVgd71G3Yu4ioE21U
-         fqzhS3ZDxeTZX884IDfT1PX6h71XEGsI8+Xt6esr0ufmst5Ow58bJzGawx0G00bdxG5t
-         OHvOOj/sthf0gqpSfe7c3u6SoPGBAYDI3Th36OBRANwhlH8cjv7Y+2Kx33XVsrvbyeM2
-         QxGEoEIAGjQmYUi85qGDTJm6UJ44C8HSXnW04lWohgszFXzPW6tejlYMb/4Bvo5Nu1sp
-         Ymt34vkPoEMCGIcsQWzufgAgHN6zUrdGb0BOPOfD8q3E50BYUWKxqcj9hSnMEDNGmZQt
-         g/DQ==
-X-Gm-Message-State: APjAAAXj9gRM/5x+95SRZXxwDQ1MtXOOFqEZUIG91DheyCXIeqMWE2ZL
-        eWOonpgWvBcdl4g+9bnMAcg=
-X-Google-Smtp-Source: APXvYqxamfPfJ9uZ6AGqPNu4zJZ93wicN/YjM8vFds68tQNGSe4lFFbL+0I10So0tU7LuEyBIVAoBA==
-X-Received: by 2002:a50:b35a:: with SMTP id r26mr38872334edd.239.1556551319341;
-        Mon, 29 Apr 2019 08:21:59 -0700 (PDT)
+        bh=zdkl15yDtUMDjcT3PhPiGxH6HbIfk+17gDQY6gRt9VY=;
+        b=gXz78eWbfcGVHNvs2gNe+m6z++a2K1aytbjbkyupU3w+K45GmnjU2XV+zPzKhR94mb
+         nbuv/+wdqX98f7M050IoibWKuvFBaansktBsSOCx+Ex6Yapyi6yjsq3Jp3+6yVCcDjEw
+         VojvRGGmC8l2myI5chYC6pvfTg+CNXogWPtm/oTi2tg3i/Y7P4AHvJ3O2TsjzhVXgWP0
+         M45g6YWU1Q2So29lk7aTQHCdYUKzvwL2gxLxQbVGpoqCOu1Sf75FO1ncQYBY3qtSjGgj
+         MWwrxBKA4mqi0nfsgAhnqrjnhczEW9izi1J3n88wCTIoosJ53bJdIScYz2GEsZrm6Yg1
+         C6ww==
+X-Gm-Message-State: APjAAAWd4pbNU/dpbFNzgJ7Hui5afaEveYRk4KN+wLm39KhdYW2et0QG
+        gGevoamv8+zNV/ABLVyDJI8=
+X-Google-Smtp-Source: APXvYqzd7kklmwd/rJ9mZmXiJZJarahK9hi98VCMk8C4K5NtullM8PfDIBfWq8pF0LtSyR4PuNZQ7Q==
+X-Received: by 2002:a17:906:1f53:: with SMTP id d19mr10119945ejk.12.1556551494836;
+        Mon, 29 Apr 2019 08:24:54 -0700 (PDT)
 Received: from dell.be.48ers.dk (d51A5BC31.access.telenet.be. [81.165.188.49])
-        by smtp.gmail.com with ESMTPSA id c8sm2079732ejs.41.2019.04.29.08.21.58
+        by smtp.gmail.com with ESMTPSA id y12sm5901269ejo.85.2019.04.29.08.24.53
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Apr 2019 08:21:58 -0700 (PDT)
+        Mon, 29 Apr 2019 08:24:53 -0700 (PDT)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.89)
         (envelope-from <peter@korsgaard.com>)
-        id 1hL86P-0000gI-Kz; Mon, 29 Apr 2019 17:21:57 +0200
+        id 1hL89F-0000nB-4t; Mon, 29 Apr 2019 17:24:53 +0200
 From:   Peter Korsgaard <peter@korsgaard.com>
 To:     "Enrico Weigelt\, metux IT consult" <info@metux.net>
 Cc:     linux-kernel@vger.kernel.org, lorenzo.pieralisi@arm.com,
@@ -59,13 +59,13 @@ Cc:     linux-kernel@vger.kernel.org, lorenzo.pieralisi@arm.com,
         linux-amlogic@lists.infradead.org,
         andriy.shevchenko@linux.intel.com, linuxppc-dev@lists.ozlabs.org,
         davem@davemloft.net
-Subject: Re: [PATCH 15/41] drivers: tty: serial: uartlite: fix use fix bare 'unsigned'
+Subject: Re: [PATCH 16/41] drivers: tty: serial: uartlite: fix overlong lines
 References: <1556369542-13247-1-git-send-email-info@metux.net>
-        <1556369542-13247-16-git-send-email-info@metux.net>
-Date:   Mon, 29 Apr 2019 17:21:57 +0200
-In-Reply-To: <1556369542-13247-16-git-send-email-info@metux.net> (Enrico
-        Weigelt's message of "Sat, 27 Apr 2019 14:51:56 +0200")
-Message-ID: <87ef5krg4q.fsf@dell.be.48ers.dk>
+        <1556369542-13247-17-git-send-email-info@metux.net>
+Date:   Mon, 29 Apr 2019 17:24:53 +0200
+In-Reply-To: <1556369542-13247-17-git-send-email-info@metux.net> (Enrico
+        Weigelt's message of "Sat, 27 Apr 2019 14:51:57 +0200")
+Message-ID: <87a7g8rfzu.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -77,17 +77,54 @@ X-Mailing-List: linux-mips@vger.kernel.org
 >>>>> "Enrico" == Enrico Weigelt, metux IT consult <info@metux.net> writes:
 
  > Fix checkpatch warnings:
- >     WARNING: Prefer 'unsigned int' to bare use of 'unsigned'
- >     #562: FILE: drivers/tty/serial/uartlite.c:562:
- >     +	unsigned retries = 1000000;
+ >     WARNING: line over 80 characters
+ >     #283: FILE: drivers/tty/serial/uartlite.c:283:
+ >     +	ret = request_irq(port->irq, ulite_isr, IRQF_SHARED | IRQF_TRIGGER_RISING,
 
- >     WARNING: Prefer 'unsigned int' to bare use of 'unsigned'
- >     #574: FILE: drivers/tty/serial/uartlite.c:574:
- >     +				 const char *s, unsigned n)
+ >     WARNING: Missing a blank line after declarations
+ >     #577: FILE: drivers/tty/serial/uartlite.c:577:
+ >     +	struct earlycon_device *device = console->data;
+ >     +	uart_console_write(&device->port, s, n, early_uartlite_putc);
 
-s/fix use fix/fix use of/ in Subject. Other than that:
+ >     WARNING: line over 80 characters
+ >     #590: FILE: drivers/tty/serial/uartlite.c:590:
+ >     +OF_EARLYCON_DECLARE(uartlite_b, "xlnx,opb-uartlite-1.00.b", early_uartlite_setup);
 
-Acked-by: Peter Korsgaard <peter@korsgaard.com>
+ >     WARNING: line over 80 characters
+ >     #591: FILE: drivers/tty/serial/uartlite.c:591:
+ >     +OF_EARLYCON_DECLARE(uartlite_a, "xlnx,xps-uartlite-1.00.a", early_uartlite_setup);
+
+Given that these are just a few characters more than 80 I don't really
+think these changes improve readability.
+
+
+ > Signed-off-by: Enrico Weigelt <info@metux.net>
+ > ---
+ >  drivers/tty/serial/uartlite.c | 10 +++++++---
+ >  1 file changed, 7 insertions(+), 3 deletions(-)
+
+ > diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
+ > index 6f79353..0140cec 100644
+ > --- a/drivers/tty/serial/uartlite.c
+ > +++ b/drivers/tty/serial/uartlite.c
+ > @@ -280,7 +280,8 @@ static int ulite_startup(struct uart_port *port)
+ >  		return ret;
+ >  	}
+ 
+ > -	ret = request_irq(port->irq, ulite_isr, IRQF_SHARED | IRQF_TRIGGER_RISING,
+ > +	ret = request_irq(port->irq, ulite_isr,
+ > +			  IRQF_SHARED | IRQF_TRIGGER_RISING,
+ >  			  "uartlite", port);
+ >  	if (ret)
+ >  		return ret;
+ > @@ -574,6 +575,7 @@ static void early_uartlite_write(struct console *console,
+ >  				 const char *s, unsigned int n)
+ >  {
+ >  	struct earlycon_device *device = console->data;
+ > +
+ >  	uart_console_write(&device->port, s, n, early_uartlite_putc);
+
+Unrelated change?
 
 -- 
 Bye, Peter Korsgaard
