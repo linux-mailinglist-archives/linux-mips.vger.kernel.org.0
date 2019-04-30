@@ -2,14 +2,14 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 880DBF505
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Apr 2019 13:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C31AF4F9
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Apr 2019 13:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbfD3LBn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Apr 2019 07:01:43 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:43226 "EHLO
+        id S1727640AbfD3LBW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Apr 2019 07:01:22 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:43238 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727568AbfD3LBS (ORCPT
+        with ESMTP id S1727613AbfD3LBS (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Apr 2019 07:01:18 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
@@ -17,15 +17,15 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         :Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From
         :Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3iOsMDc/eLLeJdIqAIhjTf5tbnEOPkeC/CTfINb+v8s=; b=ZFsf5RbkvitbI3dDa9MPfsrldT
-        JGeQp8Ha19YrecLU/VmcDCKmxEwrfbBCmypMSDbdrcmAULt4japidFPzYKBh8RJJBMnQUhaHSLndo
-        MyEbobdpLYy+Rebm1U0TXQqqi+Q3fMe2YHdlx1r9+dw8D57qq1TYAf//f23Wf7j32+Mcj1a7LMpn3
-        1c6ZGA3nTHHk8NfZRJ59rP9O1gWG8JYewgKzPEyww/N2BaSwUegIWa1IbhBci7z0B/vbP0o+ZumuS
-        yRg6CAZGx5F/R/AkbftW5Qcin8R7X22PIemRqAwnHeU6vz6cs35QP8btIV5PROwzU3gm8VQ4mQw5O
-        kkZehrwg==;
+        bh=hxewYvCmTQdqR9W0kvD+1bajCF53IT9u1fR91BrTg28=; b=anCeBpI+Elx7eUtxG6lKG2HsI4
+        xhZXkRxzZyuklPGUdThFNgMknmV0dGsjF+m5hjiMdinCFRxlWr4CNCBPZ4hraY/OcGgHcfMU82rGy
+        X9UUp01qHzL9wcav1oMFe6LfwKNZk/1mRtJyo4bsLfIu/Lcnypsb37AFyEGpl+BJf9sFmvkP7pIEn
+        lnVfmHI/YoMhFrDlNkAgrdm+zsNsJWOFwit7AO3TS3hjSO7x0bpvhHNod8/WDlwERvEPg112RzwZ3
+        9SQcNPBCVKvSDrDalwnRU5M/7h1Gt+RRoYxY35ioJ+FJaaO7F4RX7QWn9C2z4B/+XUfJxeq8b85BT
+        UnLXrKVw==;
 Received: from adsl-173-228-226-134.prtc.net ([173.228.226.134] helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hLQVe-0000H2-V0; Tue, 30 Apr 2019 11:01:15 +0000
+        id 1hLQVg-0000HF-Md; Tue, 30 Apr 2019 11:01:16 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
@@ -34,11 +34,10 @@ To:     Ralf Baechle <ralf@linux-mips.org>,
         Michal Simek <monstr@monstr.eu>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
 Cc:     linux-mips@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: [PATCH 3/7] dma-mapping: add a Kconfig symbol to indicate arch_dma_prep_coherent presence
-Date:   Tue, 30 Apr 2019 07:00:28 -0400
-Message-Id: <20190430110032.25301-4-hch@lst.de>
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org
+Subject: [PATCH 4/7] dma-direct: provide generic support for uncached kernel segments
+Date:   Tue, 30 Apr 2019 07:00:29 -0400
+Message-Id: <20190430110032.25301-5-hch@lst.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190430110032.25301-1-hch@lst.de>
 References: <20190430110032.25301-1-hch@lst.de>
@@ -50,76 +49,105 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add a Kconfig symbol that indicates an architecture provides a
-arch_dma_prep_coherent implementation, and provide a stub otherwise.
-
-This will allow the generic dma-iommu code to use it while still
-allowing to be built for cache coherent architectures.
+A few architectures support uncached kernel segments.  In that case we get
+an uncached mapping for a given physica address by using an offset in the
+uncached segement.  Implement support for this scheme in the generic
+dma-direct code instead of duplicating it in arch hooks.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
 ---
- arch/arm64/Kconfig              | 1 +
- arch/csky/Kconfig               | 1 +
- include/linux/dma-noncoherent.h | 6 ++++++
- kernel/dma/Kconfig              | 3 +++
- 4 files changed, 11 insertions(+)
+ arch/Kconfig                    |  8 ++++++++
+ include/linux/dma-noncoherent.h |  3 +++
+ kernel/dma/direct.c             | 18 ++++++++++++++++--
+ 3 files changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 7e34b9eba5de..adda078d6df7 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -13,6 +13,7 @@ config ARM64
- 	select ARCH_HAS_DEVMEM_IS_ALLOWED
- 	select ARCH_HAS_DMA_COHERENT_TO_PFN
- 	select ARCH_HAS_DMA_MMAP_PGPROT
-+	select ARCH_HAS_DMA_PREP_COHERENT
- 	select ARCH_HAS_ACPI_TABLE_UPGRADE if ACPI
- 	select ARCH_HAS_ELF_RANDOMIZE
- 	select ARCH_HAS_FAST_MULTIPLIER
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 725a115759c9..2c3178848b7d 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -1,6 +1,7 @@
- config CSKY
- 	def_bool y
- 	select ARCH_32BIT_OFF_T
-+	select ARCH_HAS_DMA_PREP_COHERENT
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU
- 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
- 	select ARCH_USE_BUILTIN_BSWAP
-diff --git a/include/linux/dma-noncoherent.h b/include/linux/dma-noncoherent.h
-index 69b36ed31a99..9741767e400f 100644
---- a/include/linux/dma-noncoherent.h
-+++ b/include/linux/dma-noncoherent.h
-@@ -72,6 +72,12 @@ static inline void arch_sync_dma_for_cpu_all(struct device *dev)
- }
- #endif /* CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL */
- 
-+#ifdef CONFIG_ARCH_HAS_DMA_PREP_COHERENT
- void arch_dma_prep_coherent(struct page *page, size_t size);
-+#else
-+static inline void arch_dma_prep_coherent(struct page *page, size_t size)
-+{
-+}
-+#endif /* CONFIG_ARCH_HAS_DMA_PREP_COHERENT */
- 
- #endif /* _LINUX_DMA_NONCOHERENT_H */
-diff --git a/kernel/dma/Kconfig b/kernel/dma/Kconfig
-index 52b704e2b97a..83d711f8d665 100644
---- a/kernel/dma/Kconfig
-+++ b/kernel/dma/Kconfig
-@@ -38,6 +38,9 @@ config ARCH_HAS_SYNC_DMA_FOR_CPU
- config ARCH_HAS_SYNC_DMA_FOR_CPU_ALL
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 33687dddd86a..ea22a8c894ec 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -249,6 +249,14 @@ config ARCH_HAS_FORTIFY_SOURCE
+ config ARCH_HAS_SET_MEMORY
  	bool
  
-+config ARCH_HAS_DMA_PREP_COHERENT
++#
++# Select if arch has an uncached kernel segment and provides the
++# uncached_kernel_address / cached_kernel_address symbols to use it
++#
++config ARCH_HAS_UNCACHED_SEGMENT
++	select ARCH_HAS_DMA_PREP_COHERENT
 +	bool
 +
- config ARCH_HAS_DMA_COHERENT_TO_PFN
- 	bool
+ # Select if arch init_task must go in the __init_task_data section
+ config ARCH_TASK_STRUCT_ON_STACK
+        bool
+diff --git a/include/linux/dma-noncoherent.h b/include/linux/dma-noncoherent.h
+index 9741767e400f..7e0126a04e02 100644
+--- a/include/linux/dma-noncoherent.h
++++ b/include/linux/dma-noncoherent.h
+@@ -80,4 +80,7 @@ static inline void arch_dma_prep_coherent(struct page *page, size_t size)
+ }
+ #endif /* CONFIG_ARCH_HAS_DMA_PREP_COHERENT */
  
++void *uncached_kernel_address(void *addr);
++void *cached_kernel_address(void *addr);
++
+ #endif /* _LINUX_DMA_NONCOHERENT_H */
+diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+index 2c2772e9702a..d15a535c3e67 100644
+--- a/kernel/dma/direct.c
++++ b/kernel/dma/direct.c
+@@ -164,6 +164,13 @@ void *dma_direct_alloc_pages(struct device *dev, size_t size,
+ 	}
+ 
+ 	ret = page_address(page);
++
++	if (IS_ENABLED(CONFIG_ARCH_HAS_UNCACHED_SEGMENT) &&
++	    !dev_is_dma_coherent(dev) && !(attrs & DMA_ATTR_NON_CONSISTENT)) {
++		arch_dma_prep_coherent(page, size);
++		ret = uncached_kernel_address(ret);
++	}
++
+ 	if (force_dma_unencrypted()) {
+ 		set_memory_decrypted((unsigned long)ret, 1 << get_order(size));
+ 		*dma_handle = __phys_to_dma(dev, page_to_phys(page));
+@@ -171,6 +178,7 @@ void *dma_direct_alloc_pages(struct device *dev, size_t size,
+ 		*dma_handle = phys_to_dma(dev, page_to_phys(page));
+ 	}
+ 	memset(ret, 0, size);
++
+ 	return ret;
+ }
+ 
+@@ -189,13 +197,18 @@ void dma_direct_free_pages(struct device *dev, size_t size, void *cpu_addr,
+ 
+ 	if (force_dma_unencrypted())
+ 		set_memory_encrypted((unsigned long)cpu_addr, 1 << page_order);
++
++	if (IS_ENABLED(CONFIG_ARCH_HAS_UNCACHED_SEGMENT) &&
++	    !dev_is_dma_coherent(dev) && !(attrs & DMA_ATTR_NON_CONSISTENT))
++		cpu_addr = cached_kernel_address(cpu_addr);
+ 	__dma_direct_free_pages(dev, size, virt_to_page(cpu_addr));
+ }
+ 
+ void *dma_direct_alloc(struct device *dev, size_t size,
+ 		dma_addr_t *dma_handle, gfp_t gfp, unsigned long attrs)
+ {
+-	if (!dev_is_dma_coherent(dev))
++	if (!IS_ENABLED(CONFIG_ARCH_HAS_UNCACHED_SEGMENT) &&
++	    !dev_is_dma_coherent(dev))
+ 		return arch_dma_alloc(dev, size, dma_handle, gfp, attrs);
+ 	return dma_direct_alloc_pages(dev, size, dma_handle, gfp, attrs);
+ }
+@@ -203,7 +216,8 @@ void *dma_direct_alloc(struct device *dev, size_t size,
+ void dma_direct_free(struct device *dev, size_t size,
+ 		void *cpu_addr, dma_addr_t dma_addr, unsigned long attrs)
+ {
+-	if (!dev_is_dma_coherent(dev))
++	if (!IS_ENABLED(CONFIG_ARCH_HAS_UNCACHED_SEGMENT) &&
++	    !dev_is_dma_coherent(dev))
+ 		arch_dma_free(dev, size, cpu_addr, dma_addr, attrs);
+ 	else
+ 		dma_direct_free_pages(dev, size, cpu_addr, dma_addr, attrs);
 -- 
 2.20.1
 
