@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D865F701
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Apr 2019 13:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79F9F805
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Apr 2019 14:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731108AbfD3LuA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Apr 2019 07:50:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36736 "EHLO mail.kernel.org"
+        id S1729351AbfD3Lmc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Apr 2019 07:42:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51558 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728292AbfD3Lt7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 30 Apr 2019 07:49:59 -0400
+        id S1728270AbfD3Lma (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 30 Apr 2019 07:42:30 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C1AD92173E;
-        Tue, 30 Apr 2019 11:49:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A8CFE21670;
+        Tue, 30 Apr 2019 11:42:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556624999;
+        s=default; t=1556624549;
         bh=VcpKBqHheq+0zxr5mfTmUUIAIN1pPJCWkgC44Ioi6eU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ja10iL6bC1ja59PDwGnq91fkFVpz3izxjHkkx66HeOZ03GPP7lmFkG3oP4S6aYiGW
-         Iipq571P0J5xPg4k1zbp2+Rm8MUYF58wlHdU867We89QJHWBuNpRYIqDI5Eiqf7mrp
-         AG9kr3B4Xf7hb1ynzDePH3id645usdUYvVdNvo8U=
+        b=vzNe47WE63+rqobTBvC5c70w6cu7Ftf6y8HF7OBiWHfcK2VYUdsHKlXG8FbTGG3Mh
+         qIV4cR/tTwahszdqbae+wSn9uVSkbfV+jZvubHjoZSr3YCoZY3NKgi0nhV7dCFdsnI
+         3ZAJDyWmAVOB03uBJxoh7GbSk9tS+xAtENcBlB3o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -31,12 +31,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Paul Burton <paul.burton@mips.com>,
         Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH 5.0 18/89] MIPS: scall64-o32: Fix indirect syscall number load
-Date:   Tue, 30 Apr 2019 13:38:09 +0200
-Message-Id: <20190430113610.599586112@linuxfoundation.org>
+Subject: [PATCH 4.14 07/53] MIPS: scall64-o32: Fix indirect syscall number load
+Date:   Tue, 30 Apr 2019 13:38:14 +0200
+Message-Id: <20190430113551.793494451@linuxfoundation.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190430113609.741196396@linuxfoundation.org>
-References: <20190430113609.741196396@linuxfoundation.org>
+In-Reply-To: <20190430113549.400132183@linuxfoundation.org>
+References: <20190430113549.400132183@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
