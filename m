@@ -2,65 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEF810925
-	for <lists+linux-mips@lfdr.de>; Wed,  1 May 2019 16:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324DF109CF
+	for <lists+linux-mips@lfdr.de>; Wed,  1 May 2019 17:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726506AbfEAOc5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 May 2019 10:32:57 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:46637 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726756AbfEAOc5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 May 2019 10:32:57 -0400
-Received: by mail-wr1-f66.google.com with SMTP id r7so5054729wrr.13
-        for <linux-mips@vger.kernel.org>; Wed, 01 May 2019 07:32:56 -0700 (PDT)
+        id S1726473AbfEAPJd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 May 2019 11:09:33 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:52593 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726515AbfEAPJd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 May 2019 11:09:33 -0400
+Received: by mail-wm1-f67.google.com with SMTP id j13so7484239wmh.2
+        for <linux-mips@vger.kernel.org>; Wed, 01 May 2019 08:09:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:openpgp:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=exumjtlKep+GzaYhrdxluBYCF6Tjfx5bHbXLHEjxyCk=;
-        b=tKI7EmXyczNKp0aOfmNEu8SgX2ZY/jXjF+gjOHXcpzQuJG5yKCtkKBbC+xh8YmfTSw
-         bGeDfHPcaSQbHLe34SnmHyaQf81SdU85/9Yn81gTmcTZW4BJatV0nH26DZB6GMgKzXWI
-         X5/+liDBPkEGDgJwkWAifIqCPCZssTxHhDoTNu18qVqRuE4FaLciJPAP4eqefFWM9Njx
-         UzG7X/3LgSYcFXnxleD9yKIjY2NX8e7dkz1FGI/XUlN8PF+xCT/S0s1GhQ2cyna+DmTv
-         tRu3ZCiq2aQx1Qc3AJYIRKsgTWHo9yrE203/7/PBdYkiGd4HQpfG4lJBhxwVZAvGp/AE
-         B5lg==
+        bh=UrF1HV567imV8kGhjPVIyiq0gwu6+3+ww/Xo+YRR8uk=;
+        b=lsMUiyvKsXWJPjTwKglZMo85TR1vzC88oZYn1e8MX3NQ42mnrJbArzmT2m13MYpMUw
+         pK/7Lv80rU4n8r8Pav5o0X+Vtuo9+BaAF8uB89I8V12ILPrShrWIWeY3Kx/LKOCWpNYN
+         /qTKUc8V34tvZIalXiIo4WYyWoVH6o/q4zon/7PVBBRhKVq/55pFxg2nrDNyP+SqT1wY
+         mchr9RhjR57XvWQoMl+/OrNULm5hIIfFAWYDreZAqS01lFK26vajaV8NuCBHBnZFEqEq
+         mns8n33JNNDcHUmsSBBABacImaThJVfu050YR4WBTUzxU3JTDJuFH0MgbkpYzzvQ+t7r
+         yKvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:openpgp
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=exumjtlKep+GzaYhrdxluBYCF6Tjfx5bHbXLHEjxyCk=;
-        b=WY/w7EmdE4ODQZHBDaGs3Lt5/fdv9ZYyW2LzSIOoR3UdQY5bX/690bnqxIVaZv/JWn
-         l/H5+aVbiayXeHnfK6cq3fW53i/IagBg7ym8cBYGzCee178EQsvmov1avhCxTxebAavI
-         k3Pt4QZfkFYWvcC9pitdD4hVFlNgSZpkh3HCAkSnE4p8tpoq3uCdA85WvmYWEMCd6idf
-         cvz0P10vFvThPJIzK+w1cEH3np5bt4CK80UoS2jMiLSQ0IZGzoWgMKCEIMCK8x33wHfs
-         peThhVh+Sol6T9/PrPUL9SdMFh3RSNi6WsAube3+qk9tAb0gRO9jy8fSK6ma71h2uGZZ
-         TlrQ==
-X-Gm-Message-State: APjAAAUTbYv67FzI+uOWdnvUGYJMKuHfBKeYwsQRpcCMONHEN3zD3IYN
-        yu4tMGxjfeGgy1b/yoE1+Zk=
-X-Google-Smtp-Source: APXvYqxYCE9jhAy/5+ItVZpocI9CCaSwt72HP5vHiM8X7brzBf06mSnHGPhdqE1Vc6rR/KJqrmRAdA==
-X-Received: by 2002:adf:f74c:: with SMTP id z12mr7219504wrp.62.1556721175437;
-        Wed, 01 May 2019 07:32:55 -0700 (PDT)
+        bh=UrF1HV567imV8kGhjPVIyiq0gwu6+3+ww/Xo+YRR8uk=;
+        b=s9bdwtfxTVCOUtAEkTM50FqQ2Xd9SA7rPyBXA/Xd6s5lsSYinP1lx1XkcIl88L9t/P
+         zeh0lPF51XtF8jSyVatQAO7F24SUFqzjja/bHEkmfvd0C38y5g27FpxRHhcOCm89U1cU
+         A4o9ON1LBjmRvDAxTgTUWG1yI7gDEiffTqBhXNWrbUY/QccLqG3oLNHMENJQYaIR8aw9
+         t/KXYdbPYwFDiRWT9isosU5w/6mjfE1+/ERGuOT2c+rRvB8yf39ue75n6ODsxCJxpcdB
+         Hax7C5k7DmYifbZBMHK31kZm2DafVFPoZVrzsQnH/S62VeJAlq5Vw74kg88YHDGx+o9o
+         8MIQ==
+X-Gm-Message-State: APjAAAVSq07d5uwCbUHE48ySJM5WsEFzqowTsL/KonJoSN41sAx2tETG
+        hhf8TUdActkDEeK2rKQmKRE=
+X-Google-Smtp-Source: APXvYqxB/Ni3DgBPEe+9Re04PcLpYX5enwSckeaiZOCB3FEigHJgJ1LzQiDDTaNjvsR31buyBF+83w==
+X-Received: by 2002:a1c:23cf:: with SMTP id j198mr6620940wmj.29.1556723370996;
+        Wed, 01 May 2019 08:09:30 -0700 (PDT)
 Received: from [192.168.1.37] (193.red-88-21-103.staticip.rima-tde.net. [88.21.103.193])
-        by smtp.gmail.com with ESMTPSA id r2sm6370609wmh.31.2019.05.01.07.32.53
+        by smtp.gmail.com with ESMTPSA id m187sm3428690wmm.37.2019.05.01.08.09.29
         (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 May 2019 07:32:54 -0700 (PDT)
-Subject: Re: [PATCH 1/4] MIPS: Use memblock_phys_alloc() for exception vector
+        Wed, 01 May 2019 08:09:30 -0700 (PDT)
+Subject: Re: [PATCH 3/4] MIPS: Sync icache for whole exception vector
 To:     Paul Burton <paul.burton@mips.com>,
         "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Paul Burton <pburton@wavecomp.com>
 References: <20190430225216.7164-1-paul.burton@mips.com>
- <20190430225216.7164-2-paul.burton@mips.com>
+ <20190430225216.7164-4-paul.burton@mips.com>
 From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
 Openpgp: url=http://pgp.mit.edu/pks/lookup?op=get&search=0xE3E32C2CDEADC0DE
-Message-ID: <c982e1f3-8145-9c73-ae20-0694a7bd5855@amsat.org>
-Date:   Wed, 1 May 2019 16:32:53 +0200
+Message-ID: <a9878dba-f982-fafa-bde8-1b35757b0b97@amsat.org>
+Date:   Wed, 1 May 2019 17:09:29 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190430225216.7164-2-paul.burton@mips.com>
+In-Reply-To: <20190430225216.7164-4-paul.burton@mips.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -70,43 +70,27 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 5/1/19 12:53 AM, Paul Burton wrote:
-> Allocate the exception vector using memblock_phys_alloc() which gives us
-> a physical address, rather than the previous convoluted setup which
-> obtained a virtual address using memblock_alloc(), converted it to a
-> physical address & then back to a virtual address.
+> Rather than performing cache flushing for a fixed 0x400 bytes, use the
+> actual size of the vector in order to ensure we cover all emitted code
+> on systems that make use of vectored interrupts.
 > 
 > Signed-off-by: Paul Burton <paul.burton@mips.com>
 > ---
->  arch/mips/kernel/traps.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  arch/mips/kernel/traps.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-> index 98ca55d62201..00f44b16385e 100644
+> index 9b565ed51662..2775190adbe7 100644
 > --- a/arch/mips/kernel/traps.c
 > +++ b/arch/mips/kernel/traps.c
-> @@ -2292,9 +2292,8 @@ void __init trap_init(void)
->  		unsigned long size = 0x200 + VECTORSPACING*64;
->  		phys_addr_t ebase_pa;
+> @@ -2454,7 +2454,7 @@ void __init trap_init(void)
+>  	else
+>  		set_handler(0x080, &except_vec3_generic, 0x80);
 >  
-> -		ebase = (unsigned long)
-> -			memblock_alloc(size, 1 << fls(size));
-> -		if (!ebase)
-> +		ebase_pa = memblock_phys_alloc(size, 1 << fls(size));
-> +		if (!ebase_pa)
->  			panic("%s: Failed to allocate %lu bytes align=0x%x\n",
->  			      __func__, size, 1 << fls(size));
+> -	local_flush_icache_range(ebase, ebase + 0x400);
+> +	local_flush_icache_range(ebase, ebase + vec_size);
 >  
-> @@ -2309,9 +2308,10 @@ void __init trap_init(void)
->  		 * EVA is special though as it allows segments to be rearranged
->  		 * and to become uncached during cache error handling.
->  		 */
-> -		ebase_pa = __pa(ebase);
->  		if (!IS_ENABLED(CONFIG_EVA) && !WARN_ON(ebase_pa >= 0x20000000))
->  			ebase = CKSEG0ADDR(ebase_pa);
-> +		else
-> +			ebase = (unsigned long)phys_to_virt(ebase_pa);
->  	} else {
->  		ebase = CAC_BASE;
+>  	sort_extable(__start___dbe_table, __stop___dbe_table);
 >  
 > 
 
