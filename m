@@ -2,159 +2,151 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9833210781
-	for <lists+linux-mips@lfdr.de>; Wed,  1 May 2019 13:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B13310830
+	for <lists+linux-mips@lfdr.de>; Wed,  1 May 2019 15:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726272AbfEALd3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 May 2019 07:33:29 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:34638 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbfEALd3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 May 2019 07:33:29 -0400
-Received: by mail-pg1-f196.google.com with SMTP id c13so7230930pgt.1;
-        Wed, 01 May 2019 04:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0p8KwRB28czlaGQ7jCTVfloESbGnbWWlQ1Azi5oU8aY=;
-        b=ScaBtyen1IG9lI8poQ4+4IK/gGFQQZYTclkQPC1q9kCYc9Ch7n5DzA0LnJMWyPRL2s
-         EgTk3vqX1ajyOcBb5l4Q/Kc6rSpRWwnlAy9yGC7Y/mZd32NNtGHzUzisRolJiuJ8QLve
-         ZAi5nnVCPMMaDUk0kipKYH/si9jWxU9YLdcge6hvPXQeaRJhRdlnaGrphODmT5zhj8PQ
-         XdOGnOwaWxMOU9VP4ezQmyvwQZT6RMtiPir6MIUYZKyiSOt10K1HCksGpu6vc4cZUQk2
-         UW4kvYukHlY8RDBh4S4oh6O4gMgzhhkwT6H4gUiNfK9df1FSzVl/qTxzziPB95JUJAbJ
-         F0PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0p8KwRB28czlaGQ7jCTVfloESbGnbWWlQ1Azi5oU8aY=;
-        b=Oe9O4SrmxvGZE2t2QgzHdSWv7ac3GTLfW9vp6Vtjg+7p+UxDI1A8UdExlT2FTOyx4L
-         bR3a4RNKkw2pFlI7MJTF/VyLTmHnLwtO2OzHX4TZ3qH7/OWVEFeJLWQ4vHYey7heQYmb
-         xaJjGX5Hh3pQhCQx83JDpBlatSShZ+a71CpKmXQVh00rZstEy8IRWAi+pmlePS3/h8ND
-         OND6JFLiPT1bvOlmKmKE2tJVFa4tgPUjovS22K2l903sT3gxn8S53TXrOUEvU9ISzK48
-         kpyPbHqeQFkjYuorT1XKeFmqurFb/PLpV5bH7ZvXlPpVTVA6BDP/pAhpOM2Wpg43sS3D
-         OwFQ==
-X-Gm-Message-State: APjAAAXmxUGzqyvyADVZlGg7EDgZLEqksp4/FurypsX5tMEWiqgo1lsc
-        cOx73R2gIW0OYkQwe9Y8v4KsNlrS
-X-Google-Smtp-Source: APXvYqw88xr0s8VBYKvX91eC18O0Mb22TOUHd+/98bTc4kANUmNbGe8tOkRFtuqXE3ioflXg0pfMBg==
-X-Received: by 2002:a63:fb58:: with SMTP id w24mr37789532pgj.444.1556710408622;
-        Wed, 01 May 2019 04:33:28 -0700 (PDT)
-Received: from ?IPv6:2409:251:20c0:100:fe80:8e59:9ae1:e028? ([2409:251:20c0:100:fe80:8e59:9ae1:e028])
-        by smtp.gmail.com with ESMTPSA id r24sm51157410pfd.120.2019.05.01.04.33.26
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 May 2019 04:33:27 -0700 (PDT)
-Subject: Re: [RFC v2 2/5] dt-bindings: clk: add document for ralink clock
- driver
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     John Crispin <john@phrozen.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20190405000129.19331-1-drvlabo@gmail.com>
- <20190405000129.19331-3-drvlabo@gmail.com>
- <155622059236.15276.15417177789148260137@swboyd.mtv.corp.google.com>
-From:   NOGUCHI Hiroshi <drvlabo@gmail.com>
-Message-ID: <1fe454d3-f24e-4169-5f57-97d516a16cc8@gmail.com>
-Date:   Wed, 1 May 2019 20:33:24 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726145AbfEANN6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 May 2019 09:13:58 -0400
+Received: from verein.lst.de ([213.95.11.211]:52884 "EHLO newverein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725993AbfEANN6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 1 May 2019 09:13:58 -0400
+Received: by newverein.lst.de (Postfix, from userid 2407)
+        id 6CF0168AFE; Wed,  1 May 2019 15:13:39 +0200 (CEST)
+Date:   Wed, 1 May 2019 15:13:39 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Ley Foon Tan <lftan@altera.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
+Subject: [PATCH 5/7 v2] MIPS: use the generic uncached segment support in
+ dma-direct
+Message-ID: <20190501131339.GA890@lst.de>
+References: <20190430110032.25301-1-hch@lst.de> <20190430110032.25301-6-hch@lst.de> <20190430201041.536amvinrcvd2wua@pburton-laptop> <20190430202947.GA30262@lst.de> <20190430211105.ielntedm46uqamca@pburton-laptop>
 MIME-Version: 1.0
-In-Reply-To: <155622059236.15276.15417177789148260137@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190430211105.ielntedm46uqamca@pburton-laptop>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Stop providing our arch alloc/free hooks and just expose the segment
+offset instead.
 
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ arch/mips/Kconfig              |  1 +
+ arch/mips/include/asm/page.h   |  3 ---
+ arch/mips/jazz/jazzdma.c       |  6 ------
+ arch/mips/mm/dma-noncoherent.c | 26 +++++++++-----------------
+ 4 files changed, 10 insertions(+), 26 deletions(-)
 
-On 2019/04/26 4:29, Stephen Boyd wrote:
->> +Required properties:
->> + - compatible: must be "ralink,rt2880-clock"
->> + - #clock-cells: must be 1
->> + - ralink,sysctl: a phandle to a ralink syscon register region
->> + - clock-indices: identifying number.
->> +       These must correspond to the bit number in CLKCFG1.
-> 
-> These look like driver level details that we're putting in the DT so we
-> can compress the number space that consumers use. Is that right? If so,
-> I don't get it. Can we not use this property?
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 4a5f5b0ee9a9..cde4b490f3c7 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -9,6 +9,7 @@ config MIPS
+ 	select ARCH_HAS_ELF_RANDOMIZE
+ 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+ 	select ARCH_HAS_UBSAN_SANITIZE_ALL
++	select ARCH_HAS_UNCACHED_SEGMENT
+ 	select ARCH_SUPPORTS_UPROBES
+ 	select ARCH_USE_BUILTIN_BSWAP
+ 	select ARCH_USE_CMPXCHG_LOCKREF if 64BIT
+diff --git a/arch/mips/include/asm/page.h b/arch/mips/include/asm/page.h
+index 6b31c93b5eaa..23e0f1386e04 100644
+--- a/arch/mips/include/asm/page.h
++++ b/arch/mips/include/asm/page.h
+@@ -258,9 +258,6 @@ extern int __virt_addr_valid(const volatile void *kaddr);
+ 	 ((current->personality & READ_IMPLIES_EXEC) ? VM_EXEC : 0) | \
+ 	 VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC)
+ 
+-#define UNCAC_ADDR(addr)	(UNCAC_BASE + __pa(addr))
+-#define CAC_ADDR(addr)		((unsigned long)__va((addr) - UNCAC_BASE))
+-
+ #include <asm-generic/memory_model.h>
+ #include <asm-generic/getorder.h>
+ 
+diff --git a/arch/mips/jazz/jazzdma.c b/arch/mips/jazz/jazzdma.c
+index bedb5047aff3..1804dc9d8136 100644
+--- a/arch/mips/jazz/jazzdma.c
++++ b/arch/mips/jazz/jazzdma.c
+@@ -575,10 +575,6 @@ static void *jazz_dma_alloc(struct device *dev, size_t size,
+ 		return NULL;
+ 	}
+ 
+-	if (!(attrs & DMA_ATTR_NON_CONSISTENT)) {
+-		dma_cache_wback_inv((unsigned long)ret, size);
+-		ret = (void *)UNCAC_ADDR(ret);
+-	}
+ 	return ret;
+ }
+ 
+@@ -586,8 +582,6 @@ static void jazz_dma_free(struct device *dev, size_t size, void *vaddr,
+ 		dma_addr_t dma_handle, unsigned long attrs)
+ {
+ 	vdma_free(dma_handle);
+-	if (!(attrs & DMA_ATTR_NON_CONSISTENT))
+-		vaddr = (void *)CAC_ADDR((unsigned long)vaddr);
+ 	dma_direct_free_pages(dev, size, vaddr, dma_handle, attrs);
+ }
+ 
+diff --git a/arch/mips/mm/dma-noncoherent.c b/arch/mips/mm/dma-noncoherent.c
+index f9549d2fbea3..ed56c6fa7be2 100644
+--- a/arch/mips/mm/dma-noncoherent.c
++++ b/arch/mips/mm/dma-noncoherent.c
+@@ -44,33 +44,25 @@ static inline bool cpu_needs_post_dma_flush(struct device *dev)
+ 	}
+ }
+ 
+-void *arch_dma_alloc(struct device *dev, size_t size,
+-		dma_addr_t *dma_handle, gfp_t gfp, unsigned long attrs)
++void arch_dma_prep_coherent(struct page *page, size_t size)
+ {
+-	void *ret;
+-
+-	ret = dma_direct_alloc_pages(dev, size, dma_handle, gfp, attrs);
+-	if (ret && !(attrs & DMA_ATTR_NON_CONSISTENT)) {
+-		dma_cache_wback_inv((unsigned long) ret, size);
+-		ret = (void *)UNCAC_ADDR(ret);
+-	}
++	dma_cache_wback_inv((unsigned long)page_address(page), size);
++}
+ 
+-	return ret;
++void *uncached_kernel_address(void *addr)
++{
++	return (void *)(__pa(addr) + UNCAC_BASE);
+ }
+ 
+-void arch_dma_free(struct device *dev, size_t size, void *cpu_addr,
+-		dma_addr_t dma_addr, unsigned long attrs)
++void *cached_kernel_address(void *addr)
+ {
+-	if (!(attrs & DMA_ATTR_NON_CONSISTENT))
+-		cpu_addr = (void *)CAC_ADDR((unsigned long)cpu_addr);
+-	dma_direct_free_pages(dev, size, cpu_addr, dma_addr, attrs);
++	return __va(addr) - UNCAC_BASE;
+ }
+ 
+ long arch_dma_coherent_to_pfn(struct device *dev, void *cpu_addr,
+ 		dma_addr_t dma_addr)
+ {
+-	unsigned long addr = CAC_ADDR((unsigned long)cpu_addr);
+-	return page_to_pfn(virt_to_page((void *)addr));
++	return page_to_pfn(virt_to_page(cached_kernel_address(cpu_addr)));
+ }
+ 
+ pgprot_t arch_dma_mmap_pgprot(struct device *dev, pgprot_t prot,
+-- 
+2.20.1
 
-I understand that the bit numbers in clock gating register are hardware 
-resource informations.
-Therefore, it is not strange that they are described in DT, I think.
-
-
->> +       Clock consumers use one of them as #clock-cells index.
->> + - clock-output-names: array of gating clocks' names
->> + - clocks: array of phandles which points the parent clock
->> +       for gating clocks.
->> +       If gating clock does not need parent clock linkage,
->> +       we bind to dummy clock whose frequency is zero.
->> +
->> +
->> +Example:
->> +
->> +/* dummy parent clock node */
->> +dummy_ck: dummy_ck {
->> +       #clock-cells = <0>;
->> +       compatible = "fixed-clock";
->> +       clock-frequency = <0>;
->> +};
-> 
-> Would this ever exist in practice? If not, please remove from the
-> example so we don't get the wrong idea.
-
-I referred to arch/arm/boot/dts/.
-omap24xx-clocks.dtsi : defines dummy_ck
-omap2420-clocks.dtsi : refers dummy_ck
-
-
-In practice, There is no problem in specifying another existing clock,
-eg MT7620_CLK_PERIPH which is always active.
-
-
->> +
->> +clkctrl: clkctrl {
->> +       compatible = "ralink,rt2880-clock";
->> +       #clock-cells = <1>;
->> +       ralink,sysctl = <&sysc>;
->> +
->> +       clock-indices =
->> +                       <12>,
->> +                       <16>, <17>, <18>, <19>,
->> +                       <20>,
->> +                       <26>;
->> +       clock-output-names =
->> +                       "uart0",
->> +                       "i2c", "i2s", "spi", "uart1",
->> +                       "uart2",
->> +                       "pcie0";
->> +       clocks =
->> +                       <&pll MT7620_CLK_PERIPH>,
->> +                       <&pll MT7620_CLK_PERIPH>, <&pll MT7620_CLK_PCMI2S>, <&pll MT7620_CLK_SYS>, <&pll MT7620_CLK_PERIPH>,
->> +                       <&pll MT7620_CLK_PERIPH>,
->> +                       <&dummy_ck>;
->> +       };
->> +};
->> +
->> +/* consumer which refers "uart0" clock */
->> +uart0: uartlite@c00 {
->> +       compatible = "ns16550a";
->> +       reg = <0xc00 0x100>;
->> +
->> +       clocks = <&clkctrl 12>;
-> 
-> So 12 matches in indices and then that is really "uart0" clk?
-> 
->> +       clock-names = "uart0";
->> +
-
-That is right.
-rt2880-clock driver is implemented to let clock cell indices match 
-indcies in "clock-indices" property.
