@@ -2,168 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA0510C37
-	for <lists+linux-mips@lfdr.de>; Wed,  1 May 2019 19:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C13D910C39
+	for <lists+linux-mips@lfdr.de>; Wed,  1 May 2019 19:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726377AbfEARkf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 May 2019 13:40:35 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:36286 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726069AbfEARke (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 May 2019 13:40:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From
-        :Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=BP+beZIpsfJzRTclhTxlh59ZIpF33FvBmM7W8Ih0HvE=; b=RABO2G/IuKy4J3tWipYIJHjE9B
-        uxwLURBh5ezJ7c3huUBhniLUMPlyKhx4UzwVYW8cOc8L1HKLjWst1Q8UNUwfOXKsx5D25z6Qe775K
-        b9dUQVgo9XF7kh2S0iXYMejAEOML/e8lX2y1izzNelAk4bHQwcO15k+0zEyLIPjXfU4GFxzVSVlg1
-        dTzs2i93pYAON1lmD2CuUwzzbTPBJA3NmvoSZ6MBc+DosI/TimZ49uBvw5QxGqqtmI+sHj6RBlMqK
-        X9WC1TghHNSZGc1SuLVcfG0LmHRGoj3D30YI1INDasrGmwgPRxsGGdaq0OkWeaFgb7EEDfK539gUZ
-        GkSLaLFw==;
-Received: from adsl-173-228-226-134.prtc.net ([173.228.226.134] helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hLtDa-00061g-9E; Wed, 01 May 2019 17:40:30 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Oleg Nesterov <oleg@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] asm-generic: remove ptrace.h
-Date:   Wed,  1 May 2019 13:39:43 -0400
-Message-Id: <20190501173943.5688-6-hch@lst.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190501173943.5688-1-hch@lst.de>
-References: <20190501173943.5688-1-hch@lst.de>
+        id S1726411AbfEARki (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 May 2019 13:40:38 -0400
+Received: from mail-eopbgr700102.outbound.protection.outlook.com ([40.107.70.102]:34944
+        "EHLO NAM04-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726069AbfEARki (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 1 May 2019 13:40:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=wavesemi.onmicrosoft.com; s=selector1-wavecomp-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4KL1l2AfwR4SubBv0dWVJzelYRx3MFtal/g6+bVDW00=;
+ b=lqSXhYyieVzcAFd8rCQI0rbCdxr/GiWLhkZz1EaRHekmrgoXaLBm2IUr3wtkplkC4dV/5m7xJkoxvddkb5AywLH/DrWV2sqHGHg32NwSUoW/SZ+OsYgwYHNeP7F3EbjBwVLwhQDts7wo2bE6gRLyhP1NhEpAQULyRR9/9ufGVdY=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.174.162.17) by
+ MWHPR2201MB1342.namprd22.prod.outlook.com (10.174.162.145) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.11; Wed, 1 May 2019 17:40:34 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::b9d6:bf19:ec58:2765]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::b9d6:bf19:ec58:2765%7]) with mapi id 15.20.1835.018; Wed, 1 May 2019
+ 17:40:34 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     Christoph Hellwig <hch@lst.de>
+CC:     Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Ley Foon Tan <lftan@altera.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
+Subject: Re: [PATCH 4/7] dma-direct: provide generic support for uncached
+ kernel segments
+Thread-Topic: [PATCH 4/7] dma-direct: provide generic support for uncached
+ kernel segments
+Thread-Index: AQHU/0QKKKiJlPSrw0CLkNp0FmAaxqZWhWOAgAAC3QCAAAMrgA==
+Date:   Wed, 1 May 2019 17:40:34 +0000
+Message-ID: <20190501174033.6rj5aiopdeo4uqpw@pburton-laptop>
+References: <20190430110032.25301-1-hch@lst.de>
+ <20190430110032.25301-5-hch@lst.de>
+ <20190501171857.chfxqntvm6r4xrr4@pburton-laptop>
+ <20190501172912.GA19375@lst.de>
+In-Reply-To: <20190501172912.GA19375@lst.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR07CA0014.namprd07.prod.outlook.com
+ (2603:10b6:a02:bc::27) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:24::17)
+user-agent: NeoMutt/20180716
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [12.94.197.246]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 11320ebd-f605-4a90-aa82-08d6ce5c1d45
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:MWHPR2201MB1342;
+x-ms-traffictypediagnostic: MWHPR2201MB1342:
+x-microsoft-antispam-prvs: <MWHPR2201MB134268D215E3D15FEB9B61A3C13B0@MWHPR2201MB1342.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 00246AB517
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(396003)(346002)(136003)(39840400004)(366004)(376002)(199004)(189003)(81166006)(386003)(7736002)(6506007)(305945005)(26005)(76176011)(8676002)(186003)(102836004)(66066001)(99286004)(81156014)(2906002)(8936002)(44832011)(52116002)(7416002)(6246003)(486006)(42882007)(476003)(446003)(53936002)(11346002)(256004)(9686003)(316002)(6512007)(33716001)(58126008)(54906003)(3846002)(6116002)(71190400001)(71200400001)(14454004)(229853002)(4326008)(6436002)(68736007)(6486002)(5660300002)(66556008)(66476007)(64756008)(66446008)(66946007)(1076003)(478600001)(4744005)(73956011)(6916009)(25786009)(41533002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1342;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: n1r4pFRo4Na6zEPiDyzqPWsTDS2hTDeCJjqE0Qa6wcviofhOnEXRtzNS+omazVnnjv0dJjUUY6Lh/ePlwFFdTW7x0wLf0Xh4dv/3b4SmKv3vfD5sOeS5ICgcMvToSEw1F2+hiLfMb8qj6ScdB1TVSrJEj2H9rhnOXLMD7VOv/vyE0iZHV5cw598au47wTOOSu8OKZvvF7TnLpUxO76fyuG3jHBJyGLZRysOMPQy8E6OTxU6r6qZNQdDkKhFnd8+SknyuqKoIC1/y8Bl1VPX9mUs2COKORvQ2DvX/sPqSKRBGXYFE6dSJzs02rF4xrlT6k8TE6SO05WaM0dYMCmKxctsldETeBbJDu7eM4vt8sFWjwmD3rWlyMSAT+WnyeRKt7JvAJVOklfobmthBi/GT/1F6p2wwfYh0huHqR0YRoRo=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <08C2B433C072184F9A5FA2B58FD07D3B@namprd22.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11320ebd-f605-4a90-aa82-08d6ce5c1d45
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 May 2019 17:40:34.5854
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1342
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-No one is using this helper anymore.
+Hi Christoph,
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- MAINTAINERS                    |  1 -
- arch/mips/include/asm/ptrace.h |  5 ---
- include/asm-generic/ptrace.h   | 74 ----------------------------------
- 3 files changed, 80 deletions(-)
- delete mode 100644 include/asm-generic/ptrace.h
+On Wed, May 01, 2019 at 07:29:12PM +0200, Christoph Hellwig wrote:
+> On Wed, May 01, 2019 at 05:18:59PM +0000, Paul Burton wrote:
+> > I'm not so sure about this part though.
+> >=20
+> > On MIPS we currently don't clear the allocated memory with memset. Is
+> > doing that really necessary?
+>=20
+> We are clearling it on mips, it is inside dma_direct_alloc_pages.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5c38f21aee78..0d44b2369f42 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12586,7 +12586,6 @@ F:	include/linux/regset.h
- F:	include/linux/tracehook.h
- F:	include/uapi/linux/ptrace.h
- F:	include/uapi/linux/ptrace.h
--F:	include/asm-generic/ptrace.h
- F:	kernel/ptrace.c
- F:	arch/*/ptrace*.c
- F:	arch/*/*/ptrace*.c
-diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
-index b6578611dddb..1e76774b36dd 100644
---- a/arch/mips/include/asm/ptrace.h
-+++ b/arch/mips/include/asm/ptrace.h
-@@ -56,11 +56,6 @@ static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
- 	return regs->regs[31];
- }
- 
--/*
-- * Don't use asm-generic/ptrace.h it defines FP accessors that don't make
-- * sense on MIPS.  We rather want an error if they get invoked.
-- */
--
- static inline void instruction_pointer_set(struct pt_regs *regs,
-                                            unsigned long val)
- {
-diff --git a/include/asm-generic/ptrace.h b/include/asm-generic/ptrace.h
-deleted file mode 100644
-index 82e674f6b337..000000000000
---- a/include/asm-generic/ptrace.h
-+++ /dev/null
-@@ -1,74 +0,0 @@
--/*
-- * Common low level (register) ptrace helpers
-- *
-- * Copyright 2004-2011 Analog Devices Inc.
-- *
-- * Licensed under the GPL-2 or later.
-- */
--
--#ifndef __ASM_GENERIC_PTRACE_H__
--#define __ASM_GENERIC_PTRACE_H__
--
--#ifndef __ASSEMBLY__
--
--/* Helpers for working with the instruction pointer */
--#ifndef GET_IP
--#define GET_IP(regs) ((regs)->pc)
--#endif
--#ifndef SET_IP
--#define SET_IP(regs, val) (GET_IP(regs) = (val))
--#endif
--
--static inline unsigned long instruction_pointer(struct pt_regs *regs)
--{
--	return GET_IP(regs);
--}
--static inline void instruction_pointer_set(struct pt_regs *regs,
--                                           unsigned long val)
--{
--	SET_IP(regs, val);
--}
--
--#ifndef profile_pc
--#define profile_pc(regs) instruction_pointer(regs)
--#endif
--
--/* Helpers for working with the user stack pointer */
--#ifndef GET_USP
--#define GET_USP(regs) ((regs)->usp)
--#endif
--#ifndef SET_USP
--#define SET_USP(regs, val) (GET_USP(regs) = (val))
--#endif
--
--static inline unsigned long user_stack_pointer(struct pt_regs *regs)
--{
--	return GET_USP(regs);
--}
--static inline void user_stack_pointer_set(struct pt_regs *regs,
--                                          unsigned long val)
--{
--	SET_USP(regs, val);
--}
--
--/* Helpers for working with the frame pointer */
--#ifndef GET_FP
--#define GET_FP(regs) ((regs)->fp)
--#endif
--#ifndef SET_FP
--#define SET_FP(regs, val) (GET_FP(regs) = (val))
--#endif
--
--static inline unsigned long frame_pointer(struct pt_regs *regs)
--{
--	return GET_FP(regs);
--}
--static inline void frame_pointer_set(struct pt_regs *regs,
--                                     unsigned long val)
--{
--	SET_FP(regs, val);
--}
--
--#endif /* __ASSEMBLY__ */
--
--#endif
--- 
-2.20.1
+Ah, of course, I clearly require more caffeine :)
 
+> > If it is necessary then as-is this code will clear the allocated memory
+> > using uncached writes which will be pretty slow. It would be much more
+> > efficient to perform the memset before arch_dma_prep_coherent() & befor=
+e
+> > converting ret to an uncached address.
+>=20
+> Yes, we could do that.
+
+Great; using cached writes would match the existing MIPS behavior.
+
+Thanks,
+    Paul
