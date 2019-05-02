@@ -2,99 +2,174 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C010111B00
-	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 16:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E858411B56
+	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 16:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726197AbfEBONy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 2 May 2019 10:13:54 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:54991 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726278AbfEBONy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 10:13:54 -0400
-X-Originating-IP: 90.88.149.145
-Received: from xps13 (aaubervilliers-681-1-29-145.w90-88.abo.wanadoo.fr [90.88.149.145])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id BC10960015;
-        Thu,  2 May 2019 14:13:47 +0000 (UTC)
-Date:   Thu, 2 May 2019 16:13:46 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        linux-s390@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Mathieu Malaterre <malat@debian.org>, x86@kernel.org,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>, linux-mtd@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [RESEND PATCH v3 05/11] mtd: rawnand: vf610_nfc: add
- initializer to avoid -Wmaybe-uninitialized
-Message-ID: <20190502161346.07c15187@xps13>
-In-Reply-To: <20190423034959.13525-6-yamada.masahiro@socionext.com>
-References: <20190423034959.13525-1-yamada.masahiro@socionext.com>
-        <20190423034959.13525-6-yamada.masahiro@socionext.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726267AbfEBOYo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 May 2019 10:24:44 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:39927 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726197AbfEBOYn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 10:24:43 -0400
+Received: by mail-lj1-f193.google.com with SMTP id q10so2363321ljc.6;
+        Thu, 02 May 2019 07:24:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=RxZ5w9mWQKJNicrHyEV1DSUmteddrLY464RPQLI5MEw=;
+        b=hCeMdYfq8rOLM1fPJDEANp7JijVwFFF7eK76vdoE0+hzxMbf6UE8fU2RRfmfy6FzZD
+         TdfGBos5hC1U2RoJgGavfJ3Hqzit/Zt186ZDcbqowdE/2EqgSV6Hcy3QxxDUAXPajR26
+         zR1wb6ldMFeSb3fx4LufOumYRlh1C/aB/Oo7tauTLshk75feE1Ejc7auv77R6reoPQTZ
+         jPBDjYlE5/kGYQyWuuoE0+RMBiP5UA4UVdXrAL1t7vTAHbhandPY9h/zraOueXpR+efX
+         2HYtG4Blvlg+ercZCnOhZw4zA06iMw2OF+1lTZ6O1SnZJYQzkCzH9P7cnL2ZWUQY1+vH
+         wVVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=RxZ5w9mWQKJNicrHyEV1DSUmteddrLY464RPQLI5MEw=;
+        b=YLo/8PJXjDd72splfPZZaKHNNWNm5sf9FEqbqRoAn+8MEao1XeN9oWk2RrkFTMENt5
+         O6Rs+/IRO2TwMR7ghftNWeMF19LegG794uaCxiypJxqsZIXWfMRY9b3mTIRZDlKaIcOO
+         yFqJJSyN48nut6EVWOcEOqYbMT35tz3zt4RoAXKxx7/LBT4DKTtNsqtNrvh8ErODaVbn
+         2/Hh+nzGAZqdcU4v6PUZ03SkWFbNI/Tbq9TKQMDNKNE/iqEDbqV3OSnceNIgLE0FSJu6
+         TBilOvMJnQ/BdAr+CgrOizw+iZmJ9qcJ8Q5CgBVvdnPitUwCf6IQkhAgKwS5SxaoY17Z
+         miCA==
+X-Gm-Message-State: APjAAAVyDNi3igMEEd8g3G/7G9vyjLVZflzDKwbGXXfnS05rd6rdM/KA
+        9zsCt/lFLGvRj0Kck80ol7g=
+X-Google-Smtp-Source: APXvYqwqxkWHiw/74PjhWAN0MCl9FCHovc+9nVoWV2viac5S/CXNYVd9ONZL+YfQO2W8eXXVal11WA==
+X-Received: by 2002:a2e:4ca:: with SMTP id a71mr1886791ljf.39.1556807080821;
+        Thu, 02 May 2019 07:24:40 -0700 (PDT)
+Received: from mobilestation ([5.164.217.122])
+        by smtp.gmail.com with ESMTPSA id o17sm1985785ljj.39.2019.05.02.07.24.39
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 02 May 2019 07:24:40 -0700 (PDT)
+Date:   Thu, 2 May 2019 17:24:37 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Juergen Gross <jgross@suse.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 04/12] mips: Reserve memory for the kernel image resources
+Message-ID: <20190502142434.mpoyu4hhbunur5xe@mobilestation>
+References: <20190423224748.3765-1-fancer.lancer@gmail.com>
+ <20190423224748.3765-5-fancer.lancer@gmail.com>
+ <20190424224343.4skr727fszycwksq@pburton-laptop>
+ <20190426000035.yfonfvrapmm4j3fg@mobilestation>
+ <20190430225832.cjk7mj6dotw3cib6@pburton-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190430225832.cjk7mj6dotw3cib6@pburton-laptop>
+User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Masahiro,
+On Tue, Apr 30, 2019 at 10:58:33PM +0000, Paul Burton wrote:
 
-Masahiro Yamada <yamada.masahiro@socionext.com> wrote on Tue, 23 Apr
-2019 12:49:53 +0900:
+Hello Paul
 
-> This prepares to move CONFIG_OPTIMIZE_INLINING from x86 to a common
-> place. We need to eliminate potential issues beforehand.
+> Hi Serge,
 > 
-> Kbuild test robot has never reported -Wmaybe-uninitialized warning
-> for this probably because vf610_nfc_run() is inlined by the x86
-> compiler's inlining heuristic.
+> On Fri, Apr 26, 2019 at 03:00:36AM +0300, Serge Semin wrote:
+> > >  1) Older systems generally had something like an ISA bus which used
+> > >     addresses below the kernel, and bootloaders like YAMON left behind
+> > >     functions that could be called right at the start of RAM. This sort
+> > >     of thing should be accounted for by /memreserve/ in DT or similar
+> > >     platform-specific reservations though rather than generically, and
+> > >     at least Malta & SEAD-3 DTs already have /memreserve/ entries for
+> > >     it. So this part I think is OK. Some other older platforms might
+> > >     need updating, but that's fine.
+> > > 
+> > 
+> > Regarding ISA. As far as I remember devices on that bus can DMA only to the
+> > lowest 16MB. So in case if kernel is too big or placed pretty much high,
+> > they may be left even without reachable memory at all in current
+> > implementation.
 > 
-> If CONFIG_OPTIMIZE_INLINING is enabled for a different architecture
-> and vf610_nfc_run() is not inlined, the following warning is reported:
+> Sure - I'm not too worried about these old buses, platforms can continue
+> to reserve the memory through DT or otherwise if they need to.
 > 
-> drivers/mtd/nand/raw/vf610_nfc.c: In function ‘vf610_nfc_cmd’:
-> drivers/mtd/nand/raw/vf610_nfc.c:455:3: warning: ‘offset’ may be used uninitialized in this function [-Wmaybe-uninitialized]
->    vf610_nfc_rd_from_sram(instr->ctx.data.buf.in + offset,
->    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->             nfc->regs + NFC_MAIN_AREA(0) + offset,
->             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->             trfr_sz, !nfc->data_access);
->             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >  2) trap_init() only allocates memory for the exception vector if using
+> > >     a vectored interrupt mode. In other cases it just uses CAC_BASE
+> > >     which currently gets reserved as part of this region between
+> > >     PHYS_OFFSET & _text.
+> > > 
+> > >     I think this behavior is bogus, and we should instead:
+> > > 
+> > >     - Allocate the exception vector memory using memblock_alloc() for
+> > >       CPUs implementing MIPSr2 or higher (ie. CPUs with a programmable
+> > >       EBase register). If we're not using vectored interrupts then
+> > >       allocating one page will do, and we already have the size
+> > >       calculation for if we are.
+> > > 
+> > >     - Otherwise use CAC_BASE but call memblock_reserve() on the first
+> > >       page.
+> > > 
+> > >     I think we should make that change before this one goes in. I can
+> > >     try to get to it tomorrow, but feel free to beat me to it.
+> > > 
+> > 
+> > As far as I understood you and the code this should be enough to fix
+> > the problem:
+> > diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
+> > index 98ca55d62201..f680253e2617 100644
+> > --- a/arch/mips/kernel/traps.c
+> > +++ b/arch/mips/kernel/traps.c
+> > @@ -2326,6 +2326,8 @@ void __init trap_init(void)
+> >  				ebase += (read_c0_ebase() & 0x3ffff000);
+> >  			}
+> >  		}
+> > +
+> > +		memblock_reserve(ebase, PAGE_SIZE);
+> >  	}
+> >  
+> >  	if (cpu_has_mmips) {
+> > ---
+> > 
+> > Allocation has already been implemented in the if-branch under the
+> > (cpu_has_veic || cpu_has_vint) condition. So we don't need to change
+> > there anything.
+> > In case if vectored interrupts aren't supported the else-clause is
+> > taken and we need to reserve whatever is set in the exception base
+> > address variable.
+> > 
+> > I'll add this patch between 3d and 4th ones if you are ok with it.
+> 
+> I think that would work, but I have other motivations to allocate the
+> memory in non-vectored cases anyway. I just sent a series that does that
+> & cleans up a little [1]. If you could take a look that would be great.
+> With that change made I think this patch will be good to apply.
+> 
 
-IMHO this patch has no dependencies with this series.
-Would you mind sending it alone with the proper Fixes tag?
+Just reviewed and tested your series on my machine. I tagged the whole series
+in a response to the cover-letter of [1].
 
-> 
-> Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-> ---
-> 
-> Changes in v3: None
-> Changes in v2:
->   - split into a separate patch
-> 
->  drivers/mtd/nand/raw/vf610_nfc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mtd/nand/raw/vf610_nfc.c b/drivers/mtd/nand/raw/vf610_nfc.c
-> index a662ca1970e5..19792d725ec2 100644
-> --- a/drivers/mtd/nand/raw/vf610_nfc.c
-> +++ b/drivers/mtd/nand/raw/vf610_nfc.c
-> @@ -364,7 +364,7 @@ static int vf610_nfc_cmd(struct nand_chip *chip,
->  {
->  	const struct nand_op_instr *instr;
->  	struct vf610_nfc *nfc = chip_to_nfc(chip);
-> -	int op_id = -1, trfr_sz = 0, offset;
-> +	int op_id = -1, trfr_sz = 0, offset = 0;
->  	u32 col = 0, row = 0, cmd1 = 0, cmd2 = 0, code = 0;
->  	bool force8bit = false;
->  
+Could you please proceed with this patchset review procedure? There are
+also eight more patches left without your tag or comment.  This patch
+is also left with no explicit tag.
 
-Thanks,
-Miquèl
+BTW I see you already applied patches 1-3 to the mips-next, so what shall I
+do when sending a v2 patchset with fixes asked to be provided for patch 12
+and possibly for others in future? Shall I just resend the series without that
+applied patches or send them over with your acked-by tagges?
+
+-Sergey
+
+> Thanks,
+>     Paul
+> 
+> [1] https://lore.kernel.org/linux-mips/20190430225216.7164-1-paul.burton@mips.com/T/#t
