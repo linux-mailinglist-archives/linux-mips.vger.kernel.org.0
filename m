@@ -2,93 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB53116A3
-	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 11:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B89C118FA
+	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 14:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726127AbfEBJll (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 May 2019 05:41:41 -0400
-Received: from esa6.microchip.iphmx.com ([216.71.154.253]:64068 "EHLO
-        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726371AbfEBJl3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 05:41:29 -0400
-Received-SPF: Pass (esa6.microchip.iphmx.com: domain of
-  Joergen.Andreasen@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
-  envelope-from="Joergen.Andreasen@microchip.com";
-  x-sender="Joergen.Andreasen@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa6.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
-  envelope-from="Joergen.Andreasen@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa6.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Joergen.Andreasen@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-X-IronPort-AV: E=Sophos;i="5.60,421,1549954800"; 
-   d="scan'208";a="28787455"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 02 May 2019 02:41:14 -0700
-Received: from localhost (10.10.76.4) by chn-sv-exch04.mchp-main.com
- (10.10.76.105) with Microsoft SMTP Server id 14.3.352.0; Thu, 2 May 2019
- 02:41:14 -0700
-From:   Joergen Andreasen <joergen.andreasen@microchip.com>
-To:     <netdev@vger.kernel.org>
-CC:     Joergen Andreasen <joergen.andreasen@microchip.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S1726268AbfEBM1p (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 May 2019 08:27:45 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:42878 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726197AbfEBM1p (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 08:27:45 -0400
+Received: by mail-ed1-f67.google.com with SMTP id l25so1922335eda.9;
+        Thu, 02 May 2019 05:27:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=KjuhLndbnHfio43jUb8s1c3TkKyM8WF5w012zBcDtiI=;
+        b=Fye5ffDhQsveH3LJAq/nfndQuQ0Litj0p2UPhBWpmyWsQaJeWwGlUF7oTP6QPsrOkM
+         WPrxAiN5AYxLRO7UdFJlRE4SOA2VvlEcHdIjN1UhaL+9wG3g5jU1f5PR8DEhsA2lnB2k
+         Pi4vml9/+rOhxwlJbr+2cXum/CfFEFysxjT5ZK6lnxeeZ6ITge7isVdFo+pN7D+xRuzT
+         JwYZGJF/NtWp5DcCGPpQvGssOUkPmt+k1Pmqrzk/GbGPeMDJjyX4ieFLD7X1BNcxcjYa
+         l5YC7kCO93JpgBu8TMKGSzWE+wgMauU/7F1xpHIxdFnVJZ9H1m1jM4HPvsO+9YYXt3cO
+         2U8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=KjuhLndbnHfio43jUb8s1c3TkKyM8WF5w012zBcDtiI=;
+        b=o5giSljvtc/1ELKX+97KBMUPNKIPUPWb/5nk9WyJGax4yyp4CDTEs+iOTfwj+WRejg
+         RRs/C5KIJ4rRqLKKyMY3J9HTtyZZD07983Oc8+JvWlGCAvRINyEuuiAUHNex4Py8dFDH
+         nN/HpWenOEPz5bgU22dONJJ1uIFvdg5IDiY7yWqIbbG+/GTQB1BznQ9KrSIl9pRGZtG8
+         HC9N3Eqy1qNVcuw+T1l8lLfgxHImMMXjbO1KdO5VyAB7lmnxYy64ulQCvOBZ/1sinsAK
+         Xu9uXf3+yG/eFt5jRk1soduVBTqHs2NxnJcZxzt3NWlmP/guIsO3j2/wT1Et/PNsY5P6
+         KQDg==
+X-Gm-Message-State: APjAAAXgGFI2uKdtS87DVxKdgiSScagnRHNNq204ltXyu0d/eGKuk35W
+        W9IVzv1OLiXxoMRmq8+p7x4ZSeQ7
+X-Google-Smtp-Source: APXvYqx7yMWCZmd9KvNS2j1GBOL6klUkWnn9DUgPYGwd3jivoBKTMNpJs9WeTA2+oeb9CVj1CbjODg==
+X-Received: by 2002:a50:ba8e:: with SMTP id x14mr2318074ede.211.1556800062687;
+        Thu, 02 May 2019 05:27:42 -0700 (PDT)
+Received: from localhost.localdomain ([2001:470:9e39::64])
+        by smtp.gmail.com with ESMTPSA id k18sm2030453eda.92.2019.05.02.05.27.41
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 May 2019 05:27:41 -0700 (PDT)
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Kevin Cernekee <cernekee@gmail.com>,
         Ralf Baechle <ralf@linux-mips.org>,
-        "Paul Burton" <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net-next 3/3] MIPS: generic: Add police related options to ocelot_defconfig
-Date:   Thu, 2 May 2019 11:40:29 +0200
-Message-ID: <20190502094029.22526-4-joergen.andreasen@microchip.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190502094029.22526-1-joergen.andreasen@microchip.com>
-References: <20190502094029.22526-1-joergen.andreasen@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>
+Subject: [PATCH 0/3] MIPS: BMIPS: add support for gated clock controller
+Date:   Thu,  2 May 2019 14:26:54 +0200
+Message-Id: <20190502122657.15577-1-jonas.gorski@gmail.com>
+X-Mailer: git-send-email 2.13.2
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add default support for ingress qdisc, matchall classification
-and police action on MSCC Ocelot.
+This patchset adds support for the gated clock controller found on most
+MIPS based Broadcom BCM63XX SoCs.
 
-Signed-off-by: Joergen Andreasen <joergen.andreasen@microchip.com>
----
- arch/mips/configs/generic/board-ocelot.config | 7 +++++++
- 1 file changed, 7 insertions(+)
+The MIPS based BCM63XX SoCs have very little in common with the ARM
+based ones, so a separate driver is necessary.
 
-diff --git a/arch/mips/configs/generic/board-ocelot.config b/arch/mips/configs/generic/board-ocelot.config
-index 5e53b4bc47f1..5c7360dd819c 100644
---- a/arch/mips/configs/generic/board-ocelot.config
-+++ b/arch/mips/configs/generic/board-ocelot.config
-@@ -25,6 +25,13 @@ CONFIG_SERIAL_OF_PLATFORM=y
- CONFIG_NETDEVICES=y
- CONFIG_NET_SWITCHDEV=y
- CONFIG_NET_DSA=y
-+CONFIG_NET_SCHED=y
-+CONFIG_NET_SCH_INGRESS=y
-+CONFIG_NET_CLS_MATCHALL=y
-+CONFIG_NET_CLS_ACT=y
-+CONFIG_NET_ACT_POLICE=y
-+CONFIG_NET_ACT_GACT=y
-+
- CONFIG_MSCC_OCELOT_SWITCH=y
- CONFIG_MSCC_OCELOT_SWITCH_OCELOT=y
- CONFIG_MDIO_MSCC_MIIM=y
+It's a simple register based controller, with one bit per clock, active
+high.
+
+Since BCM63XX/MIPS runs in big endian mode, the driver depends on the
+series "clk: make register endianness a run-time property", or more
+specifically on patch 3, "clk: gate: add explicit big endian support".
+
+Based on the clk-next branch.
+
+Jonas Gorski (3):
+  devicetree: document the BCM63XX gated clock bindings
+  clk: add BCM63XX gated clock controller driver
+  MIPS: BMIPS: add clock controller nodes
+
+ .../bindings/clock/brcm,bcm63xx-clocks.txt         |  22 ++
+ arch/mips/boot/dts/brcm/bcm3368.dtsi               |  12 +-
+ arch/mips/boot/dts/brcm/bcm63268.dtsi              |  12 +-
+ arch/mips/boot/dts/brcm/bcm6328.dtsi               |   6 +
+ arch/mips/boot/dts/brcm/bcm6358.dtsi               |  12 +-
+ arch/mips/boot/dts/brcm/bcm6362.dtsi               |  12 +-
+ arch/mips/boot/dts/brcm/bcm6368.dtsi               |  12 +-
+ drivers/clk/bcm/Kconfig                            |   8 +
+ drivers/clk/bcm/Makefile                           |   1 +
+ drivers/clk/bcm/clk-bcm63xx-gate.c                 | 246 +++++++++++++++++++++
+ 10 files changed, 328 insertions(+), 15 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/brcm,bcm63xx-clocks.txt
+ create mode 100644 drivers/clk/bcm/clk-bcm63xx-gate.c
+
 -- 
-2.17.1
+2.13.2
 
