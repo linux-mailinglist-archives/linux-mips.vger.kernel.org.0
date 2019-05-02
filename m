@@ -2,47 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A98611900
+	by mail.lfdr.de (Postfix) with ESMTP id ADEDB11903
 	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 14:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726324AbfEBM1t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S1726197AbfEBM1t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Thu, 2 May 2019 08:27:49 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:37424 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726197AbfEBM1s (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 08:27:48 -0400
-Received: by mail-ed1-f65.google.com with SMTP id w37so1942557edw.4;
-        Thu, 02 May 2019 05:27:46 -0700 (PDT)
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:39110 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726267AbfEBM1t (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 08:27:49 -0400
+Received: by mail-ed1-f67.google.com with SMTP id e24so1930696edq.6;
+        Thu, 02 May 2019 05:27:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=fJ70LbLu+r/UeJWgjakzHcU2Xcr5bJUhH4VQC+7cA4g=;
-        b=pVe/TvEgr1w7kp/9+SVxsf7VIOoeFc2ZeU0moEIyG5Pl7eEjghxVmVCFkHdLZK2DKN
-         3wkTaud7FIFtjVdw/7ZTkInKxO3fZ3qRXJMMqjwxg9zrOrU0z8c9l71Epp3stnBPJH7v
-         ACxio9A41y21kV3afMhMMxAcF3uugMNjaQpRpDnIMCM+jkCOJzS/3Xtu7Z/xysZ5ltNc
-         Y2Z+7ieY+DmijVrK8sK03r/HLR5voG9VrnfCZRRGBpC93CFkV8+Jsvx0vxd6Hgr6O3MU
-         dKBjrUIaJe7TRcbq8AJ/PBT3qTvqkO0Rk9R5l8xhKYDfiOUqzNQFp9+Pe5BmSFh5Vzzs
-         wYGg==
+        bh=ZFjF16+Txv8yNaftrhru/aAz5iyK2bm0MPzvuW4t+RM=;
+        b=qHms+JM51wb92F43OP6RbNxVOZ/arwDadKfW48t7CgA7fvL5Vq1aNpw4dhvhvBt7xu
+         FWisiSfkPDw/bYsmE9YJcwrCNOZU0m+1lpO0GW2hWooljFb4vBW5/9f2l5JDok0ygIF9
+         v6NNHMdryPzv216RpCzX2zMFkBj65HiVSZGH0W2g5jQzh0Qkat8DEFFFgFxOsojtAuXN
+         R+KgeFBl4SpGLlJzxu2HIa1tTHL0X5q2IQzAdakQ+OtmXvO2nzoC52s2Yxg2wHh9R7ux
+         GUNYwjJ4jeyPwC93gIbW96F1VRGoS05Yu6J9FPDh7LkRZVrBRdYPc7Rmxyp/AKyRbo+m
+         UfnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=fJ70LbLu+r/UeJWgjakzHcU2Xcr5bJUhH4VQC+7cA4g=;
-        b=Zh+bODwoL7+CekLNg51713/lQQnuP9tYr3M/Y/V3LogKSO7NNvzJY35rhUxWt3+14O
-         LpETs5qulSkBrWPl8GO8e9ZVmLgot0ydhKnc2mEFXTdJWLIuu31Uw1qps9Gr6temtO5z
-         mn1Ge0fXfLXknpui7xwP28TUd8JxCT8GrVDv5SPk2Uet/nbSOyuQ4kkOJnlax9+BjFew
-         1zsZn3Vik9u/+CHA4bSSVJ/GYOJU32O19L+9/RT/lUyl6lzNEZEsTbpwFaGgSFV0E4kw
-         E2HzVKJPF1fP0FKQ2luweLuLo6WYV9rL6k5n2CQQaHP3ampeYOqskjcZnafnVU7ux8Ri
-         41xg==
-X-Gm-Message-State: APjAAAXbUV/Ndgp9vIVZEnvrlRZ9rm+/S1gyXiMyHUJJeOv62QkaIRWU
-        znnsLN05V+o1wK7kPYWTtvHZzz2W
-X-Google-Smtp-Source: APXvYqwguhsMNIQY3s9Lr1HzhN/++Dh4UU10S+NK5Qg8aL96Tnm5kGeH9bdbZql/6wic1eZwUW/9LA==
-X-Received: by 2002:a17:906:708d:: with SMTP id b13mr1670614ejk.120.1556800065341;
-        Thu, 02 May 2019 05:27:45 -0700 (PDT)
+        bh=ZFjF16+Txv8yNaftrhru/aAz5iyK2bm0MPzvuW4t+RM=;
+        b=lqDZVL1unxRn+grt4Jn1npXr3xJxQ2lGSmYDJweZqVx9xl0i1fgj0BZ88KMmKj4HJQ
+         1GyPtZgGN1AfiAZFwzqfnUd63mtF/hyDM6ptCKHVpRUF0oxax3xHgMxg/00O6/EwVSeN
+         xA19zKggJ2mIxyqpDjWoT2/gPdkm8fyTDm0M8c1P8k7aUHcx2R9ilSNFt4aNq3F4m9Y+
+         VVWWbXsY4U+YvHzFEuQCucAaJYJ0HaxuaFSDK/UA93puaIcNp3f1IOuVlhFkiFiHpljd
+         q/R9n7vVM7NpqJHrKHNVhfSSddWYCfDrwniTTVRRtayoHR3rDX83VNizMg1ayIkzPrDM
+         8tdA==
+X-Gm-Message-State: APjAAAXNFNYwwuNJPgPM6iu1GYzXwMQcPpNQLbj5IwFIgTtrBdnVpfBS
+        Z0hhsDDiX0UO1YKacCknmNPRHtNE
+X-Google-Smtp-Source: APXvYqy/Lg18LH5GsRlsy21btrS1XWGpEzHMMPx1ba7UI4/awzkWK7/VVaLJ6MMyT9VzF2YHWzBAPw==
+X-Received: by 2002:a17:906:5c7:: with SMTP id t7mr1625836ejt.129.1556800066610;
+        Thu, 02 May 2019 05:27:46 -0700 (PDT)
 Received: from localhost.localdomain ([2001:470:9e39::64])
-        by smtp.gmail.com with ESMTPSA id k18sm2030453eda.92.2019.05.02.05.27.44
+        by smtp.gmail.com with ESMTPSA id k18sm2030453eda.92.2019.05.02.05.27.45
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 May 2019 05:27:44 -0700 (PDT)
+        Thu, 02 May 2019 05:27:46 -0700 (PDT)
 From:   Jonas Gorski <jonas.gorski@gmail.com>
 To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org
@@ -56,9 +56,9 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>
-Subject: [PATCH 2/3] clk: add BCM63XX gated clock controller driver
-Date:   Thu,  2 May 2019 14:26:56 +0200
-Message-Id: <20190502122657.15577-3-jonas.gorski@gmail.com>
+Subject: [PATCH 3/3] MIPS: BMIPS: add clock controller nodes
+Date:   Thu,  2 May 2019 14:26:57 +0200
+Message-Id: <20190502122657.15577-4-jonas.gorski@gmail.com>
 X-Mailer: git-send-email 2.13.2
 In-Reply-To: <20190502122657.15577-1-jonas.gorski@gmail.com>
 References: <20190502122657.15577-1-jonas.gorski@gmail.com>
@@ -67,299 +67,186 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add a driver for the gated clock controller found on MIPS based BCM63XX
-SoCs.
+Now that we have a driver for the clock controller, add nodes to allow
+devices to make use of it.
 
 Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
 ---
- drivers/clk/bcm/Kconfig            |   8 ++
- drivers/clk/bcm/Makefile           |   1 +
- drivers/clk/bcm/clk-bcm63xx-gate.c | 246 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 255 insertions(+)
- create mode 100644 drivers/clk/bcm/clk-bcm63xx-gate.c
+ arch/mips/boot/dts/brcm/bcm3368.dtsi  | 12 +++++++++---
+ arch/mips/boot/dts/brcm/bcm63268.dtsi | 12 +++++++++---
+ arch/mips/boot/dts/brcm/bcm6328.dtsi  |  6 ++++++
+ arch/mips/boot/dts/brcm/bcm6358.dtsi  | 12 +++++++++---
+ arch/mips/boot/dts/brcm/bcm6362.dtsi  | 12 +++++++++---
+ arch/mips/boot/dts/brcm/bcm6368.dtsi  | 12 +++++++++---
+ 6 files changed, 51 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/clk/bcm/Kconfig b/drivers/clk/bcm/Kconfig
-index 4c4bd85f707c..144e724815c6 100644
---- a/drivers/clk/bcm/Kconfig
-+++ b/drivers/clk/bcm/Kconfig
-@@ -7,6 +7,14 @@ config CLK_BCM_63XX
- 	  Enable common clock framework support for Broadcom BCM63xx DSL SoCs
- 	  based on the ARM architecture
+diff --git a/arch/mips/boot/dts/brcm/bcm3368.dtsi b/arch/mips/boot/dts/brcm/bcm3368.dtsi
+index 7a3e5c8943ca..69cbef472377 100644
+--- a/arch/mips/boot/dts/brcm/bcm3368.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm3368.dtsi
+@@ -51,16 +51,22 @@
+ 		compatible = "simple-bus";
+ 		ranges;
  
-+config CLK_BCM_63XX_GATE
-+	bool "Broadcom BCM63xx gated clock support"
-+	depends on BMIPS_GENERIC || COMPILE_TEST
-+	default BMIPS_GENERIC
-+	help
-+	  Enable common clock framework support for Broadcom BCM63xx DSL SoCs
-+	  based on the MIPS architecture
+-		periph_cntl: syscon@fff8c000 {
++		clkctl: clock-controller@fff8c004 {
++			compatible = "brcm,bcm3368-clocks";
++			reg = <0xfff8c004 0x4>;
++			#clock-cells = <1>;
++		};
 +
- config CLK_BCM_KONA
- 	bool "Broadcom Kona CCU clock support"
- 	depends on ARCH_BCM_MOBILE || COMPILE_TEST
-diff --git a/drivers/clk/bcm/Makefile b/drivers/clk/bcm/Makefile
-index 002661d39128..3d925493db7f 100644
---- a/drivers/clk/bcm/Makefile
-+++ b/drivers/clk/bcm/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_CLK_BCM_63XX)	+= clk-bcm63xx.o
-+obj-$(CONFIG_CLK_BCM_63XX_GATE)	+= clk-bcm63xx-gate.o
- obj-$(CONFIG_CLK_BCM_KONA)	+= clk-kona.o
- obj-$(CONFIG_CLK_BCM_KONA)	+= clk-kona-setup.o
- obj-$(CONFIG_CLK_BCM_KONA)	+= clk-bcm281xx.o
-diff --git a/drivers/clk/bcm/clk-bcm63xx-gate.c b/drivers/clk/bcm/clk-bcm63xx-gate.c
-new file mode 100644
-index 000000000000..4fd10645a192
---- /dev/null
-+++ b/drivers/clk/bcm/clk-bcm63xx-gate.c
-@@ -0,0 +1,246 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++		periph_cntl: syscon@fff8c008 {
+ 			compatible = "syscon";
+-			reg = <0xfff8c000 0xc>;
++			reg = <0xfff8c000 0x4>;
+ 			native-endian;
+ 		};
+ 
+ 		reboot: syscon-reboot@fff8c008 {
+ 			compatible = "syscon-reboot";
+ 			regmap = <&periph_cntl>;
+-			offset = <0x8>;
++			offset = <0x0>;
+ 			mask = <0x1>;
+ 		};
+ 
+diff --git a/arch/mips/boot/dts/brcm/bcm63268.dtsi b/arch/mips/boot/dts/brcm/bcm63268.dtsi
+index 58790b173bb2..beec24145af7 100644
+--- a/arch/mips/boot/dts/brcm/bcm63268.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm63268.dtsi
+@@ -51,16 +51,22 @@
+ 		compatible = "simple-bus";
+ 		ranges;
+ 
+-		periph_cntl: syscon@10000000 {
++		clkctl: clock-controller@10000004 {
++			compatible = "brcm,bcm63268-clocks";
++			reg = <0x10000004 0x4>;
++			#clock-cells = <1>;
++		};
 +
-+#include <linux/clk-provider.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
++		periph_cntl: syscon@10000008 {
+ 			compatible = "syscon";
+-			reg = <0x10000000 0x14>;
++			reg = <0x10000000 0xc>;
+ 			native-endian;
+ 		};
+ 
+ 		reboot: syscon-reboot@10000008 {
+ 			compatible = "syscon-reboot";
+ 			regmap = <&periph_cntl>;
+-			offset = <0x8>;
++			offset = <0x0>;
+ 			mask = <0x1>;
+ 		};
+ 
+diff --git a/arch/mips/boot/dts/brcm/bcm6328.dtsi b/arch/mips/boot/dts/brcm/bcm6328.dtsi
+index bf6716aa425a..af860d06def6 100644
+--- a/arch/mips/boot/dts/brcm/bcm6328.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm6328.dtsi
+@@ -51,6 +51,12 @@
+ 		compatible = "simple-bus";
+ 		ranges;
+ 
++		clkctl: clock-controller@10000004 {
++			compatible = "brcm,bcm6328-clocks";
++			reg = <0x10000004 0x4>;
++			#clock-cells = <1>;
++		};
 +
-+struct clk_bcm63xx_table_entry {
-+	const char * const name;
-+	u8 bit;
-+	unsigned long flags;
-+};
+ 		periph_intc: interrupt-controller@10000020 {
+ 			compatible = "brcm,bcm6345-l1-intc";
+ 			reg = <0x10000020 0x10>,
+diff --git a/arch/mips/boot/dts/brcm/bcm6358.dtsi b/arch/mips/boot/dts/brcm/bcm6358.dtsi
+index 26ddae5a4247..f21176cac038 100644
+--- a/arch/mips/boot/dts/brcm/bcm6358.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm6358.dtsi
+@@ -51,16 +51,22 @@
+ 		compatible = "simple-bus";
+ 		ranges;
+ 
+-		periph_cntl: syscon@fffe0000 {
++		clkctl: clock-controller@fffe0004 {
++			compatible = "brcm,bcm6358-clocks";
++			reg = <0xfffe0004 0x4>;
++			#clock-cells = <1>;
++		};
 +
-+struct clk_bcm63xx_hw {
-+	void __iomem *regs;
-+	spinlock_t lock;
++		periph_cntl: syscon@fffe0008 {
+ 			compatible = "syscon";
+-			reg = <0xfffe0000 0xc>;
++			reg = <0xfffe0000 0x4>;
+ 			native-endian;
+ 		};
+ 
+ 		reboot: syscon-reboot@fffe0008 {
+ 			compatible = "syscon-reboot";
+ 			regmap = <&periph_cntl>;
+-			offset = <0x8>;
++			offset = <0x0>;
+ 			mask = <0x1>;
+ 		};
+ 
+diff --git a/arch/mips/boot/dts/brcm/bcm6362.dtsi b/arch/mips/boot/dts/brcm/bcm6362.dtsi
+index c387793525dd..8ae6981735b8 100644
+--- a/arch/mips/boot/dts/brcm/bcm6362.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm6362.dtsi
+@@ -51,16 +51,22 @@
+ 		compatible = "simple-bus";
+ 		ranges;
+ 
+-		periph_cntl: syscon@10000000 {
++		clkctl: clock-controller@10000004 {
++			compatible = "brcm,bcm6362-clocks";
++			reg = <0x10000004 0x4>;
++			#clock-cells = <1>;
++		};
 +
-+	struct clk_hw_onecell_data data;
-+};
++		periph_cntl: syscon@10000008 {
+ 			compatible = "syscon";
+-			reg = <0x10000000 0x14>;
++			reg = <0x10000000 0xc>;
+ 			native-endian;
+ 		};
+ 
+ 		reboot: syscon-reboot@10000008 {
+ 			compatible = "syscon-reboot";
+ 			regmap = <&periph_cntl>;
+-			offset = <0x8>;
++			offset = <0x0>;
+ 			mask = <0x1>;
+ 		};
+ 
+diff --git a/arch/mips/boot/dts/brcm/bcm6368.dtsi b/arch/mips/boot/dts/brcm/bcm6368.dtsi
+index e116a385525f..449c167dd892 100644
+--- a/arch/mips/boot/dts/brcm/bcm6368.dtsi
++++ b/arch/mips/boot/dts/brcm/bcm6368.dtsi
+@@ -51,16 +51,22 @@
+ 		compatible = "simple-bus";
+ 		ranges;
+ 
+-		periph_cntl: syscon@10000000 {
++		clkctl: clock-controller@10000004 {
++			compatible = "brcm,bcm6368-clocks";
++			reg = <0x10000004 0x4>;
++			#clock-cells = <1>;
++		};
 +
-+const struct clk_bcm63xx_table_entry bcm3368_clocks[] = {
-+	{ .name = "mac", .bit = 3, },
-+	{ .name = "tc", .bit = 5, },
-+	{ .name = "us_top", .bit = 6, },
-+	{ .name = "ds_top", .bit = 7, },
-+	{ .name = "acm", .bit = 8, },
-+	{ .name = "spi", .bit = 9, },
-+	{ .name = "usbs", .bit = 10, },
-+	{ .name = "bmu", .bit = 11, },
-+	{ .name = "pcm", .bit = 12, },
-+	{ .name = "ntp", .bit = 13, },
-+	{ .name = "acp_b", .bit = 14, },
-+	{ .name = "acp_a", .bit = 15, },
-+	{ .name = "emusb", .bit = 17, },
-+	{ .name = "enet0", .bit = 18, },
-+	{ .name = "enet1", .bit = 19, },
-+	{ .name = "usbsu", .bit = 20, },
-+	{ .name = "ephy", .bit = 21, },
-+	{ },
-+};
-+
-+const struct clk_bcm63xx_table_entry bcm6328_clocks[] = {
-+	{ .name = "phy_mips", .bit = 0, },
-+	{ .name = "adsl_qproc", .bit = 1, },
-+	{ .name = "adsl_afe", .bit = 2, },
-+	{ .name = "adsl", .bit = 3, },
-+	{ .name = "mips", .bit = 4, .flags = CLK_IS_CRITICAL, },
-+	{ .name = "sar", .bit = 5, },
-+	{ .name = "pcm", .bit = 6, },
-+	{ .name = "usbd", .bit = 7, },
-+	{ .name = "usbh", .bit = 8, },
-+	{ .name = "hsspi", .bit = 9, },
-+	{ .name = "pcie", .bit = 10, },
-+	{ .name = "robosw", .bit = 11, },
-+	{ },
-+};
-+
-+const struct clk_bcm63xx_table_entry bcm6358_clocks[] = {
-+	{ .name = "enet", .bit = 4, },
-+	{ .name = "adslphy", .bit = 5, },
-+	{ .name = "pcm", .bit = 8, },
-+	{ .name = "spi", .bit = 9, },
-+	{ .name = "usbs", .bit = 10, },
-+	{ .name = "sar", .bit = 11, },
-+	{ .name = "emusb", .bit = 17, },
-+	{ .name = "enet0", .bit = 18, },
-+	{ .name = "enet1", .bit = 19, },
-+	{ .name = "usbsu", .bit = 20, },
-+	{ .name = "ephy", .bit = 21, },
-+	{ },
-+};
-+
-+const struct clk_bcm63xx_table_entry bcm6362_clocks[] = {
-+	{ .name = "adsl_qproc", .bit = 1, },
-+	{ .name = "adsl_afe", .bit = 2, },
-+	{ .name = "adsl", .bit = 3, },
-+	{ .name = "mips", .bit = 4, .flags = CLK_IS_CRITICAL, },
-+	{ .name = "wlan_ocp", .bit = 5, },
-+	{ .name = "swpkt_usb", .bit = 7, },
-+	{ .name = "swpkt_sar", .bit = 8, },
-+	{ .name = "sar", .bit = 9, },
-+	{ .name = "robosw", .bit = 10, },
-+	{ .name = "pcm", .bit = 11, },
-+	{ .name = "usbd", .bit = 12, },
-+	{ .name = "usbh", .bit = 13, },
-+	{ .name = "ipsec", .bit = 14, },
-+	{ .name = "spi", .bit = 15, },
-+	{ .name = "hsspi", .bit = 16, },
-+	{ .name = "pcie", .bit = 17, },
-+	{ .name = "fap", .bit = 18, },
-+	{ .name = "phymips", .bit = 19, },
-+	{ .name = "nand", .bit = 20, },
-+	{ },
-+};
-+
-+const struct clk_bcm63xx_table_entry bcm6368_clocks[] = {
-+	{ .name = "vdsl_qproc", .bit = 2, },
-+	{ .name = "vdsl_afe", .bit = 3, },
-+	{ .name = "vdsl_bonding", .bit = 4, },
-+	{ .name = "vdsl", .bit = 5, },
-+	{ .name = "phymips", .bit = 6, },
-+	{ .name = "swpkt_usb", .bit = 7, },
-+	{ .name = "swpkt_sar", .bit = 8, },
-+	{ .name = "spi", .bit = 9, },
-+	{ .name = "usbd", .bit = 10, },
-+	{ .name = "sar", .bit = 11, },
-+	{ .name = "robosw", .bit = 12, },
-+	{ .name = "utopia", .bit = 13, },
-+	{ .name = "pcm", .bit = 14, },
-+	{ .name = "usbh", .bit = 15, },
-+	{ .name = "disable_gless", .bit = 16, },
-+	{ .name = "nand", .bit = 17, },
-+	{ .name = "ipsec", .bit = 18, },
-+	{ },
-+};
-+
-+const struct clk_bcm63xx_table_entry bcm63268_clocks[] = {
-+	{ .name = "disable_gless", .bit = 0, },
-+	{ .name = "vdsl_qproc", .bit = 1, },
-+	{ .name = "vdsl_afe", .bit = 2, },
-+	{ .name = "vdsl", .bit = 3, },
-+	{ .name = "mips", .bit = 4, .flags = CLK_IS_CRITICAL, },
-+	{ .name = "wlan_ocp", .bit = 5, },
-+	{ .name = "dect", .bit = 6, },
-+	{ .name = "fap0", .bit = 7, },
-+	{ .name = "fap1", .bit = 8, },
-+	{ .name = "sar", .bit = 9, },
-+	{ .name = "robosw", .bit = 10, },
-+	{ .name = "pcm", .bit = 11, },
-+	{ .name = "usbd", .bit = 12, },
-+	{ .name = "usbh", .bit = 13, },
-+	{ .name = "ipsec", .bit = 14, },
-+	{ .name = "spi", .bit = 15, },
-+	{ .name = "hsspi", .bit = 16, },
-+	{ .name = "pcie", .bit = 17, },
-+	{ .name = "phymips", .bit = 18, },
-+	{ .name = "gmac", .bit = 19, },
-+	{ .name = "nand", .bit = 20, },
-+	{ .name = "tbus", .bit = 27, },
-+	{ .name = "robosw250", .bit = 31, },
-+	{ },
-+};
-+
-+static int clk_bcm63xx_probe(struct platform_device *pdev)
-+{
-+	const struct clk_bcm63xx_table_entry *entry, *table;
-+	struct clk_bcm63xx_hw *hw;
-+	struct resource *r;
-+	u8 maxbit = 0;
-+	int i, ret;
-+
-+	table = of_device_get_match_data(&pdev->dev);
-+	if (!table)
-+		return -EINVAL;
-+
-+	for (entry = table; entry->name; entry++)
-+		maxbit = max_t(u8, maxbit, entry->bit);
-+
-+	hw = devm_kzalloc(&pdev->dev, struct_size(hw, data.hws, maxbit),
-+			  GFP_KERNEL);
-+	if (!hw)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, hw);
-+
-+	spin_lock_init(&hw->lock);
-+
-+	hw->data.num = maxbit;
-+	for (i = 0; i < maxbit; i++)
-+		hw->data.hws[i] = ERR_PTR(-ENODEV);
-+
-+	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	hw->regs = devm_ioremap_resource(&pdev->dev, r);
-+	if (IS_ERR(hw->regs))
-+		return PTR_ERR(hw->regs);
-+
-+	for (entry = table; entry->name; entry++) {
-+		struct clk_hw *clk;
-+
-+		clk = clk_hw_register_gate(&pdev->dev, entry->name, NULL,
-+					   entry->flags, hw->regs, entry->bit,
-+					   CLK_GATE_BIG_ENDIAN, &hw->lock);
-+		if (IS_ERR(clk)) {
-+			ret = PTR_ERR(clk);
-+			goto out_err;
-+		}
-+
-+		hw->data.hws[entry->bit] = clk;
-+	}
-+
-+	ret = of_clk_add_hw_provider(pdev->dev.of_node, of_clk_hw_onecell_get,
-+				     &hw->data);
-+	if (!ret)
-+		return 0;
-+out_err:
-+	for (i = 0; i < hw->data.num; i++) {
-+		if (!IS_ERR(hw->data.hws[i]))
-+			clk_hw_unregister_gate(hw->data.hws[i]);
-+	}
-+
-+	return ret;
-+}
-+
-+static int clk_bcm63xx_remove(struct platform_device *pdev)
-+{
-+	struct clk_bcm63xx_hw *hw = platform_get_drvdata(pdev);
-+	int i;
-+
-+	of_clk_del_provider(pdev->dev.of_node);
-+
-+	for (i = 0; i < hw->data.num; i++) {
-+		if (!IS_ERR(hw->data.hws[i]))
-+			clk_hw_unregister_gate(hw->data.hws[i]);
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id clk_bcm63xx_dt_ids[] = {
-+	{ .compatible = "brcm,bcm3368-clocks", .data = &bcm3368_clocks, },
-+	{ .compatible = "brcm,bcm6328-clocks", .data = &bcm6328_clocks, },
-+	{ .compatible = "brcm,bcm6358-clocks", .data = &bcm6358_clocks, },
-+	{ .compatible = "brcm,bcm6362-clocks", .data = &bcm6362_clocks, },
-+	{ .compatible = "brcm,bcm6368-clocks", .data = &bcm6368_clocks, },
-+	{ .compatible = "brcm,bcm63268-clocks", .data = &bcm63268_clocks, },
-+	{ },
-+};
-+
-+MODULE_DEVICE_TABLE(of, clk_bcm63xx_dt_ids);
-+
-+static struct platform_driver clk_bcm63xx = {
-+	.probe = clk_bcm63xx_probe,
-+	.remove = clk_bcm63xx_remove,
-+	.driver = {
-+		.name = "bcm63xx-clock",
-+		.of_match_table = of_match_ptr(clk_bcm63xx_dt_ids),
-+	},
-+};
-+
-+builtin_platform_driver(clk_bcm63xx);
-+
-+MODULE_AUTHOR("Jonas Gorski <jonas.gorski@gmail.com>");
-+MODULE_DESCRIPTION("BCM63XX (MIPS) gated clock controller driver");
-+MODULE_LICENSE("GPL");
++		periph_cntl: syscon@100000008 {
+ 			compatible = "syscon";
+-			reg = <0x10000000 0x14>;
++			reg = <0x10000000 0xc>;
+ 			native-endian;
+ 		};
+ 
+ 		reboot: syscon-reboot@10000008 {
+ 			compatible = "syscon-reboot";
+ 			regmap = <&periph_cntl>;
+-			offset = <0x8>;
++			offset = <0x0>;
+ 			mask = <0x1>;
+ 		};
+ 
 -- 
 2.13.2
 
