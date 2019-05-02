@@ -2,131 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F419D1134D
-	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 08:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FFB11697
+	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 11:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726055AbfEBGWT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 May 2019 02:22:19 -0400
-Received: from mail-it1-f196.google.com ([209.85.166.196]:55119 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725764AbfEBGWS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 02:22:18 -0400
-Received: by mail-it1-f196.google.com with SMTP id a190so1381374ite.4;
-        Wed, 01 May 2019 23:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k56mmNJm2c37muwGSNyw5prel5SUd23hcD0vEkYllYY=;
-        b=OUxx+AAHpV80+7jWx8f1+E7itJj9D1rgHeIv5/3VMm7TKAnaU1bHWCA0kR/Uu4B/N0
-         YiDM2kOhNwjBsVDh7yPbvcSscs4wrg/XbXz1H/w3lDdnJU4TQ9QwedxsTFe/Bbjt18D3
-         JRn/qzW0ooD8Rl7s9nAI0qgl8XU1Fhb9EsRc0VNWcSWwmT5yQ/Ep3gbO5ZmDWB/2TOjs
-         56aGZ16FpdQ10TxCUNbdRMfiLjvkeIGo1brUr0GBhS/X+j6ZJRXFbl8XXTiVI/tpSorx
-         HgJ21xXoiQgpOYV/KzFy4OYZm4ZtO8AhUMxPfwPWagYl7mDnLgavitYf7mYuADYjNy/N
-         5KRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k56mmNJm2c37muwGSNyw5prel5SUd23hcD0vEkYllYY=;
-        b=MIyo4SDSGi/WvE33ca1hznAocUQEWoDqMwzG+5wsQ8x40U+aElZTVV6cC1Cay8TR+M
-         KI654MWkZ+5cI6RqMrG+Fq+ijr0oCojrjuLS0dpAbm2IDNcKuG9jFI2I+ue5JVnChLwO
-         tF/tdKd5JmbtCLlErt2pO87fridJB/nnsFlLngNnYFi+fn084SQYS+K8xx6ur+tiKdlM
-         3j3klGWMGeanQkoCtACPslOEvMj4G9tKlM9s/4LcW4uco0583l+ldyM/HjsKxet/i4+3
-         vnZeub/YcYzhfV/b7z9ZKnk6B2BWAGdpsF2bWqrrs9w2MbbNAwK9oKxCkxQDuimTJ87C
-         5cLw==
-X-Gm-Message-State: APjAAAVC7lf9nWQ7pU6RjkY1B7DsjoFlcku1nJgZzzMxboY5YwajECx/
-        hZAeysXcmv0Kj+IDOSlrwExVawlnhycTOLvuTg==
-X-Google-Smtp-Source: APXvYqx2USGvNZCoaLJnd+1UamBCWbf1OMfqf8foQXGwbUGpu68tSJhvorSVm2AnXEjYEs1kPbB4DdJnuY+hXU3VFhQ=
-X-Received: by 2002:a05:660c:38e:: with SMTP id x14mr1138760itj.146.1556778137619;
- Wed, 01 May 2019 23:22:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <1556087581-14513-1-git-send-email-kernelfans@gmail.com>
- <10dc5468-6cd9-85c7-ba66-1dfa5aa922b7@suse.com> <CAFgQCTstd667wP6g+maxYekz4u3iBR2R=FHUiS1V=XxTs6MKUw@mail.gmail.com>
-In-Reply-To: <CAFgQCTstd667wP6g+maxYekz4u3iBR2R=FHUiS1V=XxTs6MKUw@mail.gmail.com>
-From:   Pingfan Liu <kernelfans@gmail.com>
-Date:   Thu, 2 May 2019 14:22:06 +0800
-Message-ID: <CAFgQCTtQm7SuBRfXik6B065Aa+uQ=Mx6i+Y1q+NJU1GEiUgH4g@mail.gmail.com>
-Subject: Re: [PATCHv2] kernel/crash: make parse_crashkernel()'s return value
- more indicant
-To:     Matthias Brugger <mbrugger@suse.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Rich Felker <dalias@libc.org>,
-        linux-ia64@vger.kernel.org,
-        Julien Thierry <julien.thierry@arm.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>, x86@kernel.org,
-        linux-mips@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-s390@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-sh@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        David Hildenbrand <david@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dave Young <dyoung@redhat.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Will Deacon <will.deacon@arm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Ananth N Mavinakayanahalli <ananth@linux.vnet.ibm.com>,
-        Borislav Petkov <bp@alien8.de>, Stefan Agner <stefan@agner.ch>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>, Tony Luck <tony.luck@intel.com>,
-        Baoquan He <bhe@redhat.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726202AbfEBJlH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 May 2019 05:41:07 -0400
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:8818 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726127AbfEBJlH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 05:41:07 -0400
+Received-SPF: Pass (esa3.microchip.iphmx.com: domain of
+  Joergen.Andreasen@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
+  envelope-from="Joergen.Andreasen@microchip.com";
+  x-sender="Joergen.Andreasen@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
+  a:mx2.microchip.iphmx.com include:servers.mcsv.net
+  include:mktomail.com include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa3.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
+  envelope-from="Joergen.Andreasen@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa3.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Joergen.Andreasen@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+X-IronPort-AV: E=Sophos;i="5.60,421,1549954800"; 
+   d="scan'208";a="31734059"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 02 May 2019 02:41:05 -0700
+Received: from localhost (10.10.76.4) by chn-sv-exch05.mchp-main.com
+ (10.10.76.106) with Microsoft SMTP Server id 14.3.352.0; Thu, 2 May 2019
+ 02:40:55 -0700
+From:   Joergen Andreasen <joergen.andreasen@microchip.com>
+To:     <netdev@vger.kernel.org>
+CC:     Joergen Andreasen <joergen.andreasen@microchip.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        Paul Burton <paul.burton@mips.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Greg Hackmann <ghackmann@android.com>
-Content-Type: text/plain; charset="UTF-8"
+        "Paul Burton" <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH net-next 0/3] Add hw offload of TC police on MSCC ocelot
+Date:   Thu, 2 May 2019 11:40:26 +0200
+Message-ID: <20190502094029.22526-1-joergen.andreasen@microchip.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 25, 2019 at 4:20 PM Pingfan Liu <kernelfans@gmail.com> wrote:
->
-> On Wed, Apr 24, 2019 at 4:31 PM Matthias Brugger <mbrugger@suse.com> wrote:
-> >
-> >
-> [...]
-> > > @@ -139,6 +141,8 @@ static int __init parse_crashkernel_simple(char *cmdline,
-> > >               pr_warn("crashkernel: unrecognized char: %c\n", *cur);
-> > >               return -EINVAL;
-> > >       }
-> > > +     if (*crash_size == 0)
-> > > +             return -EINVAL;
-> >
-> > This covers the case where I pass an argument like "crashkernel=0M" ?
-> > Can't we fix that by using kstrtoull() in memparse and check if the return value
-> > is < 0? In that case we could return without updating the retptr and we will be
-> > fine.
-After a series of work, I suddenly realized that it can not be done
-like this way. "0M" causes kstrtoull() to return -EINVAL, but this is
-caused by "M", not "0". If passing "0" to kstrtoull(), it will return
-0 on success.
+This patch series enables hardware offload of ingress port policing
+on the MSCC ocelot board.
 
-> >
-> It seems that kstrtoull() treats 0M as invalid parameter, while
-> simple_strtoull() does not.
->
-My careless going through the code. And I tested with a valid value
-"256M" using kstrtoull(), it also returned -EINVAL.
+Joergen Andreasen (3):
+  net/sched: act_police: move police parameters into separate header
+    file
+  net: mscc: ocelot: Implement port policers via tc command
+  MIPS: generic: Add police related options to ocelot_defconfig
 
-So I think there is no way to distinguish 0 from a positive value
-inside this basic math function.
-Do I miss anything?
+ arch/mips/configs/generic/board-ocelot.config |   7 +
+ drivers/net/ethernet/mscc/Makefile            |   2 +-
+ drivers/net/ethernet/mscc/ocelot.c            |   6 +-
+ drivers/net/ethernet/mscc/ocelot.h            |   3 +
+ drivers/net/ethernet/mscc/ocelot_police.c     | 289 ++++++++++++++++++
+ drivers/net/ethernet/mscc/ocelot_police.h     |  16 +
+ drivers/net/ethernet/mscc/ocelot_tc.c         | 151 +++++++++
+ drivers/net/ethernet/mscc/ocelot_tc.h         |  19 ++
+ include/net/tc_act/tc_police.h                |  41 +++
+ net/sched/act_police.c                        |  27 +-
+ 10 files changed, 532 insertions(+), 29 deletions(-)
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_police.c
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_police.h
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_tc.c
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_tc.h
+ create mode 100644 include/net/tc_act/tc_police.h
 
-Thanks and regards,
-Pingfan
+-- 
+2.17.1
+
