@@ -2,162 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D87691243B
-	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 23:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54417124F4
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2019 01:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726030AbfEBVmo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 May 2019 17:42:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40480 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726022AbfEBVmo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 2 May 2019 17:42:44 -0400
-Received: from localhost (unknown [104.132.0.70])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B3C902063F;
-        Thu,  2 May 2019 21:42:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556833362;
-        bh=OCcw8kmWfFL4OJ4vDfz0JAFzx/KSGmy5q3CFWyn1YUA=;
-        h=In-Reply-To:References:To:Cc:From:Subject:Date:From;
-        b=I9nz6kect4Kkf8oxnz4HRnUeFZ+kp5/n+4iIer2lQBr6loIzVwxIipubu/SI+d1WP
-         NPd3Ja2yIoDqBTYDFHaOYLhGYtGhzd1iHHqCzNpsKyeSe4K9je3QUvrw+08rstIPxR
-         /mWlUvJrXWHl3jodvupHYetQZ2BU6quui//34KU4=
-Content-Type: text/plain; charset="utf-8"
+        id S1726304AbfEBXPr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 May 2019 19:15:47 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:50848 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726053AbfEBXPr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 19:15:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=x1JkGI4CQYrmvxuM8WIiLxnMqgmcALyQZwo7P71BME0=; b=aMGrAGbRVDdw1l/sw+gckS+sI
+        yDZRI+3C+9JVbYF5x2TNO2v6ZU46vYBCxSlqgSFAyRpfREdxjyopf5mVIOuO+jPgRBsXJd2WNYSnF
+        /I8A7c2f4ZPKJ2BAsrHVAa3XgZa1Qf5UknK5MzQ/VET/Ij0UeqKBGlYDO7wlzooU0qq4VGVtOuSH8
+        FfL6+e4qqO0V8zFTtborrXEeCSKP8gI1CQxx/4VKLrA/KtJTKs3viL4v8Jq+vuEbUwPtPTqSnacch
+        i7OH8Qeq65dZyi5x87J8wju+DihRuYLLXhCq55dy1ya/+objw3Kmmh7K6U5nQGlGqynqD2RbtFQiK
+        OqNefzOAw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hMKvW-0006KY-Ob; Thu, 02 May 2019 23:15:42 +0000
+Date:   Thu, 2 May 2019 16:15:42 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Hillf Danton <dhillf@gmail.com>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        Paul Mundt <lethal@linux-sh.org>, Stas Sergeev <stsp@list.ru>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        Nitin Gupta <nitin.m.gupta@oracle.com>,
+        sparclinux@vger.kernel.org
+Subject: Re: Linux 5.1-rc5
+Message-ID: <20190502231542.GA9336@infradead.org>
+References: <CAHk-=wjvcuyCQGnfOhooaL1H4H63qXO=xgo+9yncSOG=eK+kbA@mail.gmail.com>
+ <20190415051919.GA31481@infradead.org>
+ <CAHk-=wj7jgMOVFW0tiU-X+zhg6+Rn7mEBTej+f26rV3zXezOSA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1fe454d3-f24e-4169-5f57-97d516a16cc8@gmail.com>
-References: <20190405000129.19331-1-drvlabo@gmail.com> <20190405000129.19331-3-drvlabo@gmail.com> <155622059236.15276.15417177789148260137@swboyd.mtv.corp.google.com> <1fe454d3-f24e-4169-5f57-97d516a16cc8@gmail.com>
-To:     NOGUCHI Hiroshi <drvlabo@gmail.com>
-Cc:     John Crispin <john@phrozen.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org
-From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC v2 2/5] dt-bindings: clk: add document for ralink clock driver
-Message-ID: <155683336194.200842.626018072256859764@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.8
-Date:   Thu, 02 May 2019 14:42:41 -0700
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wj7jgMOVFW0tiU-X+zhg6+Rn7mEBTej+f26rV3zXezOSA@mail.gmail.com>
+User-Agent: Mutt/1.9.2 (2017-12-15)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Quoting NOGUCHI Hiroshi (2019-05-01 04:33:24)
->=20
->=20
-> On 2019/04/26 4:29, Stephen Boyd wrote:
-> >> +Required properties:
-> >> + - compatible: must be "ralink,rt2880-clock"
-> >> + - #clock-cells: must be 1
-> >> + - ralink,sysctl: a phandle to a ralink syscon register region
-> >> + - clock-indices: identifying number.
-> >> +       These must correspond to the bit number in CLKCFG1.
-> >=20
-> > These look like driver level details that we're putting in the DT so we
-> > can compress the number space that consumers use. Is that right? If so,
-> > I don't get it. Can we not use this property?
->=20
-> I understand that the bit numbers in clock gating register are hardware=20
-> resource informations.
-> Therefore, it is not strange that they are described in DT, I think.
->=20
->=20
-> >> +       Clock consumers use one of them as #clock-cells index.
-> >> + - clock-output-names: array of gating clocks' names
-> >> + - clocks: array of phandles which points the parent clock
-> >> +       for gating clocks.
-> >> +       If gating clock does not need parent clock linkage,
-> >> +       we bind to dummy clock whose frequency is zero.
-> >> +
-> >> +
-> >> +Example:
-> >> +
-> >> +/* dummy parent clock node */
-> >> +dummy_ck: dummy_ck {
-> >> +       #clock-cells =3D <0>;
-> >> +       compatible =3D "fixed-clock";
-> >> +       clock-frequency =3D <0>;
-> >> +};
-> >=20
-> > Would this ever exist in practice? If not, please remove from the
-> > example so we don't get the wrong idea.
->=20
-> I referred to arch/arm/boot/dts/.
-> omap24xx-clocks.dtsi : defines dummy_ck
-> omap2420-clocks.dtsi : refers dummy_ck
->=20
->=20
-> In practice, There is no problem in specifying another existing clock,
-> eg MT7620_CLK_PERIPH which is always active.
+On Mon, Apr 15, 2019 at 09:17:10AM -0700, Linus Torvalds wrote:
+> I ruthlessly also entirely ignored MIPS, SH and sparc, since they seem
+> largely irrelevant, partly since even theoretically this whole issue
+> needs a _lot_ of memory.
 
-Ok. Please don't add things that don't exist into the example like dummy
-clks. Sometimes people copy the examples directly and this can lead to
-errors in the resulting DTBs.
-
->=20
->=20
-> >> +
-> >> +clkctrl: clkctrl {
-> >> +       compatible =3D "ralink,rt2880-clock";
-> >> +       #clock-cells =3D <1>;
-> >> +       ralink,sysctl =3D <&sysc>;
-> >> +
-> >> +       clock-indices =3D
-> >> +                       <12>,
-> >> +                       <16>, <17>, <18>, <19>,
-> >> +                       <20>,
-> >> +                       <26>;
-> >> +       clock-output-names =3D
-> >> +                       "uart0",
-> >> +                       "i2c", "i2s", "spi", "uart1",
-> >> +                       "uart2",
-> >> +                       "pcie0";
-> >> +       clocks =3D
-> >> +                       <&pll MT7620_CLK_PERIPH>,
-> >> +                       <&pll MT7620_CLK_PERIPH>, <&pll MT7620_CLK_PCM=
-I2S>, <&pll MT7620_CLK_SYS>, <&pll MT7620_CLK_PERIPH>,
-> >> +                       <&pll MT7620_CLK_PERIPH>,
-> >> +                       <&dummy_ck>;
-> >> +       };
-> >> +};
-> >> +
-> >> +/* consumer which refers "uart0" clock */
-> >> +uart0: uartlite@c00 {
-> >> +       compatible =3D "ns16550a";
-> >> +       reg =3D <0xc00 0x100>;
-> >> +
-> >> +       clocks =3D <&clkctrl 12>;
-> >=20
-> > So 12 matches in indices and then that is really "uart0" clk?
-> >=20
-> >> +       clock-names =3D "uart0";
-> >> +
->=20
-> That is right.
-> rt2880-clock driver is implemented to let clock cell indices match=20
-> indcies in "clock-indices" property.
-
-Usually the binding has a bunch of #defines for the clks, instead of
-using raw integers to indicate which clock it is. Then consumers point
-to that clk via <&phandle DEFINE>, similar to your 'clocks' property
-above in the clkctrl node. Then a clk provider driver will remap that
-DEFINE to a clk_hw structure and the driver contains the register
-offsets and bits to twiddle to control the clk.
-
-It looks like here we put those register offsets and bits to twiddle in
-DT as clock-indices, and then consumers are supposed to know what
-clock-indices to match based on the register bits of the clk? That's a
-novel approach that may work here but doesn't really scale. I guess it's
-OK, but I'd prefer to see #defines even for the clock-indices like
-RT2800_UART0 or RT2800_I2C.
-
-After that, it seems risky to put the details of what bits to twiddle in
-DT because it expresses driver level hardware details in a place where
-we might not be able to as easily modify or fix those bits if certain
-clks don't get tested. If we had only specified the provider/consumer
-part of the binding (i.e. the numbers in the clk specifier) we wouldn't
-need to worry as much because we could fix those driver details in the
-driver.
-
+Adding the relevant people - while the might be irrelevant, at least
+mips and sparc have some giant memory systems.  And I'd really like
+to see the arch-specific GUP implementations to go away for other
+reasons, as we have a few issues to sort out with GUP usage now
+(we just had discussions at LSF/MM), and the less implementations we
+have to deal with the better.
