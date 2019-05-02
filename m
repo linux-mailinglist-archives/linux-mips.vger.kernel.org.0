@@ -2,174 +2,167 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E858411B56
-	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 16:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEE311E97
+	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 17:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726267AbfEBOYo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 May 2019 10:24:44 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:39927 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726197AbfEBOYn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 10:24:43 -0400
-Received: by mail-lj1-f193.google.com with SMTP id q10so2363321ljc.6;
-        Thu, 02 May 2019 07:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=RxZ5w9mWQKJNicrHyEV1DSUmteddrLY464RPQLI5MEw=;
-        b=hCeMdYfq8rOLM1fPJDEANp7JijVwFFF7eK76vdoE0+hzxMbf6UE8fU2RRfmfy6FzZD
-         TdfGBos5hC1U2RoJgGavfJ3Hqzit/Zt186ZDcbqowdE/2EqgSV6Hcy3QxxDUAXPajR26
-         zR1wb6ldMFeSb3fx4LufOumYRlh1C/aB/Oo7tauTLshk75feE1Ejc7auv77R6reoPQTZ
-         jPBDjYlE5/kGYQyWuuoE0+RMBiP5UA4UVdXrAL1t7vTAHbhandPY9h/zraOueXpR+efX
-         2HYtG4Blvlg+ercZCnOhZw4zA06iMw2OF+1lTZ6O1SnZJYQzkCzH9P7cnL2ZWUQY1+vH
-         wVVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=RxZ5w9mWQKJNicrHyEV1DSUmteddrLY464RPQLI5MEw=;
-        b=YLo/8PJXjDd72splfPZZaKHNNWNm5sf9FEqbqRoAn+8MEao1XeN9oWk2RrkFTMENt5
-         O6Rs+/IRO2TwMR7ghftNWeMF19LegG794uaCxiypJxqsZIXWfMRY9b3mTIRZDlKaIcOO
-         yFqJJSyN48nut6EVWOcEOqYbMT35tz3zt4RoAXKxx7/LBT4DKTtNsqtNrvh8ErODaVbn
-         2/Hh+nzGAZqdcU4v6PUZ03SkWFbNI/Tbq9TKQMDNKNE/iqEDbqV3OSnceNIgLE0FSJu6
-         TBilOvMJnQ/BdAr+CgrOizw+iZmJ9qcJ8Q5CgBVvdnPitUwCf6IQkhAgKwS5SxaoY17Z
-         miCA==
-X-Gm-Message-State: APjAAAVyDNi3igMEEd8g3G/7G9vyjLVZflzDKwbGXXfnS05rd6rdM/KA
-        9zsCt/lFLGvRj0Kck80ol7g=
-X-Google-Smtp-Source: APXvYqwqxkWHiw/74PjhWAN0MCl9FCHovc+9nVoWV2viac5S/CXNYVd9ONZL+YfQO2W8eXXVal11WA==
-X-Received: by 2002:a2e:4ca:: with SMTP id a71mr1886791ljf.39.1556807080821;
-        Thu, 02 May 2019 07:24:40 -0700 (PDT)
-Received: from mobilestation ([5.164.217.122])
-        by smtp.gmail.com with ESMTPSA id o17sm1985785ljj.39.2019.05.02.07.24.39
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 02 May 2019 07:24:40 -0700 (PDT)
-Date:   Thu, 2 May 2019 17:24:37 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Paul Burton <paul.burton@mips.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S1728581AbfEBPif (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 May 2019 11:38:35 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50312 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728592AbfEBPaB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 11:30:01 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x42FToZZ076147
+        for <linux-mips@vger.kernel.org>; Thu, 2 May 2019 11:29:59 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2s81chnupu-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-mips@vger.kernel.org>; Thu, 02 May 2019 11:29:57 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-mips@vger.kernel.org> from <rppt@linux.ibm.com>;
+        Thu, 2 May 2019 16:28:58 +0100
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 2 May 2019 16:28:50 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x42FSnXd45023486
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 May 2019 15:28:49 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 830D5A4051;
+        Thu,  2 May 2019 15:28:49 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 12855A404D;
+        Thu,  2 May 2019 15:28:45 +0000 (GMT)
+Received: from rapoport-lnx (unknown [9.148.205.209])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu,  2 May 2019 15:28:44 +0000 (GMT)
+Received: by rapoport-lnx (sSMTP sendmail emulation); Thu, 02 May 2019 18:28:43 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, Guo Ren <guoren@kernel.org>,
+        Helge Deller <deller@gmx.de>, Ley Foon Tan <lftan@altera.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Michal Hocko <mhocko@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Juergen Gross <jgross@suse.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 04/12] mips: Reserve memory for the kernel image resources
-Message-ID: <20190502142434.mpoyu4hhbunur5xe@mobilestation>
-References: <20190423224748.3765-1-fancer.lancer@gmail.com>
- <20190423224748.3765-5-fancer.lancer@gmail.com>
- <20190424224343.4skr727fszycwksq@pburton-laptop>
- <20190426000035.yfonfvrapmm4j3fg@mobilestation>
- <20190430225832.cjk7mj6dotw3cib6@pburton-laptop>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190430225832.cjk7mj6dotw3cib6@pburton-laptop>
-User-Agent: NeoMutt/20180716
+        Palmer Dabbelt <palmer@sifive.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Richard Kuo <rkuo@codeaurora.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Creasey <sammy@sammy.net>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
+        nios2-dev@lists.rocketboards.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: [PATCH 00/15] introduce generic pte_{alloc,free}_one[_kernel]
+Date:   Thu,  2 May 2019 18:28:27 +0300
+X-Mailer: git-send-email 2.7.4
+X-TM-AS-GCONF: 00
+x-cbid: 19050215-0008-0000-0000-000002E29914
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19050215-0009-0000-0000-0000224F082B
+Message-Id: <1556810922-20248-1-git-send-email-rppt@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-02_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=1 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=1
+ clxscore=1015 lowpriorityscore=0 mlxscore=1 impostorscore=0
+ mlxlogscore=189 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905020103
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 10:58:33PM +0000, Paul Burton wrote:
+Hi,
 
-Hello Paul
+I've tried to trim down the recipients list, but it's still quite long, so
+sorry for the spam.
 
-> Hi Serge,
-> 
-> On Fri, Apr 26, 2019 at 03:00:36AM +0300, Serge Semin wrote:
-> > >  1) Older systems generally had something like an ISA bus which used
-> > >     addresses below the kernel, and bootloaders like YAMON left behind
-> > >     functions that could be called right at the start of RAM. This sort
-> > >     of thing should be accounted for by /memreserve/ in DT or similar
-> > >     platform-specific reservations though rather than generically, and
-> > >     at least Malta & SEAD-3 DTs already have /memreserve/ entries for
-> > >     it. So this part I think is OK. Some other older platforms might
-> > >     need updating, but that's fine.
-> > > 
-> > 
-> > Regarding ISA. As far as I remember devices on that bus can DMA only to the
-> > lowest 16MB. So in case if kernel is too big or placed pretty much high,
-> > they may be left even without reachable memory at all in current
-> > implementation.
-> 
-> Sure - I'm not too worried about these old buses, platforms can continue
-> to reserve the memory through DT or otherwise if they need to.
-> 
-> > >  2) trap_init() only allocates memory for the exception vector if using
-> > >     a vectored interrupt mode. In other cases it just uses CAC_BASE
-> > >     which currently gets reserved as part of this region between
-> > >     PHYS_OFFSET & _text.
-> > > 
-> > >     I think this behavior is bogus, and we should instead:
-> > > 
-> > >     - Allocate the exception vector memory using memblock_alloc() for
-> > >       CPUs implementing MIPSr2 or higher (ie. CPUs with a programmable
-> > >       EBase register). If we're not using vectored interrupts then
-> > >       allocating one page will do, and we already have the size
-> > >       calculation for if we are.
-> > > 
-> > >     - Otherwise use CAC_BASE but call memblock_reserve() on the first
-> > >       page.
-> > > 
-> > >     I think we should make that change before this one goes in. I can
-> > >     try to get to it tomorrow, but feel free to beat me to it.
-> > > 
-> > 
-> > As far as I understood you and the code this should be enough to fix
-> > the problem:
-> > diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-> > index 98ca55d62201..f680253e2617 100644
-> > --- a/arch/mips/kernel/traps.c
-> > +++ b/arch/mips/kernel/traps.c
-> > @@ -2326,6 +2326,8 @@ void __init trap_init(void)
-> >  				ebase += (read_c0_ebase() & 0x3ffff000);
-> >  			}
-> >  		}
-> > +
-> > +		memblock_reserve(ebase, PAGE_SIZE);
-> >  	}
-> >  
-> >  	if (cpu_has_mmips) {
-> > ---
-> > 
-> > Allocation has already been implemented in the if-branch under the
-> > (cpu_has_veic || cpu_has_vint) condition. So we don't need to change
-> > there anything.
-> > In case if vectored interrupts aren't supported the else-clause is
-> > taken and we need to reserve whatever is set in the exception base
-> > address variable.
-> > 
-> > I'll add this patch between 3d and 4th ones if you are ok with it.
-> 
-> I think that would work, but I have other motivations to allocate the
-> memory in non-vectored cases anyway. I just sent a series that does that
-> & cleans up a little [1]. If you could take a look that would be great.
-> With that change made I think this patch will be good to apply.
-> 
+Many architectures have similar, if not identical implementation of
+pte_alloc_one_kernel(), pte_alloc_one(), pte_free_kernel() and pte_free().
 
-Just reviewed and tested your series on my machine. I tagged the whole series
-in a response to the cover-letter of [1].
+A while ago Anshuman suggested to introduce a common definition of
+GFP_PGTABLE and during the discussion it was suggested to rather
+consolidate the allocators.
 
-Could you please proceed with this patchset review procedure? There are
-also eight more patches left without your tag or comment.  This patch
-is also left with no explicit tag.
+These patches introduce generic version of PTE allocation and free and
+enable their use on several architectures.
 
-BTW I see you already applied patches 1-3 to the mips-next, so what shall I
-do when sending a v2 patchset with fixes asked to be provided for patch 12
-and possibly for others in future? Shall I just resend the series without that
-applied patches or send them over with your acked-by tagges?
+The conversion introduces some changes for some of the architectures.
+Here's the executive summary and the details are described at each patch.
 
--Sergey
+* Most architectures do not set __GFP_ACCOUNT for the user page tables.
+Switch to the generic functions is "spreading that goodness to all other
+architectures"
+* arm, arm64 and unicore32 used to check if the pte is not NULL before
+freeing its memory in pte_free_kernel(). It's dropped during the
+conversion as it seems superfluous.
+* x86 used to BUG_ON() is pte was not page aligned duirng
+pte_free_kernel(), the generic version simply frees the memory without any
+checks.
 
-> Thanks,
->     Paul
-> 
-> [1] https://lore.kernel.org/linux-mips/20190430225216.7164-1-paul.burton@mips.com/T/#t
+This set only performs the straightforward conversion, the architectures
+with different logic in pte_alloc_one() and pte_alloc_one_kernel() are not
+touched, as well as architectures that have custom page table allocators.
+
+[1] https://lore.kernel.org/lkml/1547619692-7946-1-git-send-email-anshuman.khandual@arm.com
+
+ asm-generic, x86: introduce generic pte_{alloc,free}_one[_kernel]
+
+Mike Rapoport (15):
+  asm-generic, x86: introduce generic pte_{alloc,free}_one[_kernel]
+  alpha: switch to generic version of pte allocation
+  arm: switch to generic version of pte allocation
+  arm64: switch to generic version of pte allocation
+  csky: switch to generic version of pte allocation
+  hexagon: switch to generic version of pte allocation
+  m68k: sun3: switch to generic version of pte allocation
+  mips: switch to generic version of pte allocation
+  nds32: switch to generic version of pte allocation
+  nios2: switch to generic version of pte allocation
+  parisc: switch to generic version of pte allocation
+  powerpc/nohash/64: switch to generic version of pte allocation
+  riscv: switch to generic version of pte allocation
+  um: switch to generic version of pte allocation
+  unicore32: switch to generic version of pte allocation
+
+ arch/alpha/include/asm/pgalloc.h             |  40 +---------
+ arch/arm/include/asm/pgalloc.h               |  41 ++++------
+ arch/arm/mm/mmu.c                            |   2 +-
+ arch/arm64/include/asm/pgalloc.h             |  43 +----------
+ arch/arm64/mm/mmu.c                          |   2 +-
+ arch/arm64/mm/pgd.c                          |   4 +-
+ arch/csky/include/asm/pgalloc.h              |  30 +-------
+ arch/hexagon/include/asm/pgalloc.h           |  34 +--------
+ arch/m68k/include/asm/sun3_pgalloc.h         |  41 +---------
+ arch/mips/include/asm/pgalloc.h              |  33 +--------
+ arch/nds32/include/asm/pgalloc.h             |  31 +-------
+ arch/nios2/include/asm/pgalloc.h             |  37 +--------
+ arch/parisc/include/asm/pgalloc.h            |  33 +--------
+ arch/powerpc/include/asm/nohash/64/pgalloc.h |  35 +--------
+ arch/riscv/include/asm/pgalloc.h             |  29 +-------
+ arch/um/include/asm/pgalloc.h                |  16 +---
+ arch/um/kernel/mem.c                         |  22 ------
+ arch/unicore32/include/asm/pgalloc.h         |  36 ++-------
+ arch/x86/include/asm/pgalloc.h               |  19 +----
+ arch/x86/mm/pgtable.c                        |  33 +++------
+ include/asm-generic/pgalloc.h                | 107 ++++++++++++++++++++++++++-
+ virt/kvm/arm/mmu.c                           |   2 +-
+ 22 files changed, 171 insertions(+), 499 deletions(-)
+
+-- 
+2.7.4
+
