@@ -2,251 +2,154 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADEDB11903
-	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 14:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99BD1192D
+	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 14:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726197AbfEBM1t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 May 2019 08:27:49 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:39110 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726267AbfEBM1t (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 08:27:49 -0400
-Received: by mail-ed1-f67.google.com with SMTP id e24so1930696edq.6;
-        Thu, 02 May 2019 05:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ZFjF16+Txv8yNaftrhru/aAz5iyK2bm0MPzvuW4t+RM=;
-        b=qHms+JM51wb92F43OP6RbNxVOZ/arwDadKfW48t7CgA7fvL5Vq1aNpw4dhvhvBt7xu
-         FWisiSfkPDw/bYsmE9YJcwrCNOZU0m+1lpO0GW2hWooljFb4vBW5/9f2l5JDok0ygIF9
-         v6NNHMdryPzv216RpCzX2zMFkBj65HiVSZGH0W2g5jQzh0Qkat8DEFFFgFxOsojtAuXN
-         R+KgeFBl4SpGLlJzxu2HIa1tTHL0X5q2IQzAdakQ+OtmXvO2nzoC52s2Yxg2wHh9R7ux
-         GUNYwjJ4jeyPwC93gIbW96F1VRGoS05Yu6J9FPDh7LkRZVrBRdYPc7Rmxyp/AKyRbo+m
-         UfnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=ZFjF16+Txv8yNaftrhru/aAz5iyK2bm0MPzvuW4t+RM=;
-        b=lqDZVL1unxRn+grt4Jn1npXr3xJxQ2lGSmYDJweZqVx9xl0i1fgj0BZ88KMmKj4HJQ
-         1GyPtZgGN1AfiAZFwzqfnUd63mtF/hyDM6ptCKHVpRUF0oxax3xHgMxg/00O6/EwVSeN
-         xA19zKggJ2mIxyqpDjWoT2/gPdkm8fyTDm0M8c1P8k7aUHcx2R9ilSNFt4aNq3F4m9Y+
-         VVWWbXsY4U+YvHzFEuQCucAaJYJ0HaxuaFSDK/UA93puaIcNp3f1IOuVlhFkiFiHpljd
-         q/R9n7vVM7NpqJHrKHNVhfSSddWYCfDrwniTTVRRtayoHR3rDX83VNizMg1ayIkzPrDM
-         8tdA==
-X-Gm-Message-State: APjAAAXNFNYwwuNJPgPM6iu1GYzXwMQcPpNQLbj5IwFIgTtrBdnVpfBS
-        Z0hhsDDiX0UO1YKacCknmNPRHtNE
-X-Google-Smtp-Source: APXvYqy/Lg18LH5GsRlsy21btrS1XWGpEzHMMPx1ba7UI4/awzkWK7/VVaLJ6MMyT9VzF2YHWzBAPw==
-X-Received: by 2002:a17:906:5c7:: with SMTP id t7mr1625836ejt.129.1556800066610;
-        Thu, 02 May 2019 05:27:46 -0700 (PDT)
-Received: from localhost.localdomain ([2001:470:9e39::64])
-        by smtp.gmail.com with ESMTPSA id k18sm2030453eda.92.2019.05.02.05.27.45
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 May 2019 05:27:46 -0700 (PDT)
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Kevin Cernekee <cernekee@gmail.com>,
+        id S1726586AbfEBMdP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 May 2019 08:33:15 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:52163 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726267AbfEBMdO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 2 May 2019 08:33:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=hIZ2r4SHmJaCkF2EdisXrrWwKAQXEwuZvn4QXzFxD7w=; b=zJCC6NV/LulBNFOyb7zANwOp7f
+        2OjqNtVlSchdm8gSp8kJaAcCM+qtp5Cv+n4jZKNZUaWYtUVazU7MzLbfMSUMZDBlQuV+rdMSpPRiD
+        MNI2CCar4Z/sWrAmBsfc1rZ4lgXhxtHQiaOStuqOtze/dYdAL/rnKQJ81TGhwghncOl8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
+        (envelope-from <andrew@lunn.ch>)
+        id 1hMAtJ-00087U-Bv; Thu, 02 May 2019 14:32:45 +0200
+Date:   Thu, 2 May 2019 14:32:45 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Joergen Andreasen <joergen.andreasen@microchip.com>
+Cc:     netdev@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>
-Subject: [PATCH 3/3] MIPS: BMIPS: add clock controller nodes
-Date:   Thu,  2 May 2019 14:26:57 +0200
-Message-Id: <20190502122657.15577-4-jonas.gorski@gmail.com>
-X-Mailer: git-send-email 2.13.2
-In-Reply-To: <20190502122657.15577-1-jonas.gorski@gmail.com>
-References: <20190502122657.15577-1-jonas.gorski@gmail.com>
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 2/3] net: mscc: ocelot: Implement port policers
+ via tc command
+Message-ID: <20190502123245.GB9844@lunn.ch>
+References: <20190502094029.22526-1-joergen.andreasen@microchip.com>
+ <20190502094029.22526-3-joergen.andreasen@microchip.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190502094029.22526-3-joergen.andreasen@microchip.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Now that we have a driver for the clock controller, add nodes to allow
-devices to make use of it.
+Hi Joergen
 
-Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
----
- arch/mips/boot/dts/brcm/bcm3368.dtsi  | 12 +++++++++---
- arch/mips/boot/dts/brcm/bcm63268.dtsi | 12 +++++++++---
- arch/mips/boot/dts/brcm/bcm6328.dtsi  |  6 ++++++
- arch/mips/boot/dts/brcm/bcm6358.dtsi  | 12 +++++++++---
- arch/mips/boot/dts/brcm/bcm6362.dtsi  | 12 +++++++++---
- arch/mips/boot/dts/brcm/bcm6368.dtsi  | 12 +++++++++---
- 6 files changed, 51 insertions(+), 15 deletions(-)
+> +
+> +#define MSCC_RC(expr)				\
+> +	do {					\
+> +		int __rc__ = (expr);		\
+> +		if (__rc__ < 0)			\
+> +			return __rc__;		\
+> +	}					\
+> +	while (0)
 
-diff --git a/arch/mips/boot/dts/brcm/bcm3368.dtsi b/arch/mips/boot/dts/brcm/bcm3368.dtsi
-index 7a3e5c8943ca..69cbef472377 100644
---- a/arch/mips/boot/dts/brcm/bcm3368.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm3368.dtsi
-@@ -51,16 +51,22 @@
- 		compatible = "simple-bus";
- 		ranges;
- 
--		periph_cntl: syscon@fff8c000 {
-+		clkctl: clock-controller@fff8c004 {
-+			compatible = "brcm,bcm3368-clocks";
-+			reg = <0xfff8c004 0x4>;
-+			#clock-cells = <1>;
-+		};
-+
-+		periph_cntl: syscon@fff8c008 {
- 			compatible = "syscon";
--			reg = <0xfff8c000 0xc>;
-+			reg = <0xfff8c000 0x4>;
- 			native-endian;
- 		};
- 
- 		reboot: syscon-reboot@fff8c008 {
- 			compatible = "syscon-reboot";
- 			regmap = <&periph_cntl>;
--			offset = <0x8>;
-+			offset = <0x0>;
- 			mask = <0x1>;
- 		};
- 
-diff --git a/arch/mips/boot/dts/brcm/bcm63268.dtsi b/arch/mips/boot/dts/brcm/bcm63268.dtsi
-index 58790b173bb2..beec24145af7 100644
---- a/arch/mips/boot/dts/brcm/bcm63268.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm63268.dtsi
-@@ -51,16 +51,22 @@
- 		compatible = "simple-bus";
- 		ranges;
- 
--		periph_cntl: syscon@10000000 {
-+		clkctl: clock-controller@10000004 {
-+			compatible = "brcm,bcm63268-clocks";
-+			reg = <0x10000004 0x4>;
-+			#clock-cells = <1>;
-+		};
-+
-+		periph_cntl: syscon@10000008 {
- 			compatible = "syscon";
--			reg = <0x10000000 0x14>;
-+			reg = <0x10000000 0xc>;
- 			native-endian;
- 		};
- 
- 		reboot: syscon-reboot@10000008 {
- 			compatible = "syscon-reboot";
- 			regmap = <&periph_cntl>;
--			offset = <0x8>;
-+			offset = <0x0>;
- 			mask = <0x1>;
- 		};
- 
-diff --git a/arch/mips/boot/dts/brcm/bcm6328.dtsi b/arch/mips/boot/dts/brcm/bcm6328.dtsi
-index bf6716aa425a..af860d06def6 100644
---- a/arch/mips/boot/dts/brcm/bcm6328.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm6328.dtsi
-@@ -51,6 +51,12 @@
- 		compatible = "simple-bus";
- 		ranges;
- 
-+		clkctl: clock-controller@10000004 {
-+			compatible = "brcm,bcm6328-clocks";
-+			reg = <0x10000004 0x4>;
-+			#clock-cells = <1>;
-+		};
-+
- 		periph_intc: interrupt-controller@10000020 {
- 			compatible = "brcm,bcm6345-l1-intc";
- 			reg = <0x10000020 0x10>,
-diff --git a/arch/mips/boot/dts/brcm/bcm6358.dtsi b/arch/mips/boot/dts/brcm/bcm6358.dtsi
-index 26ddae5a4247..f21176cac038 100644
---- a/arch/mips/boot/dts/brcm/bcm6358.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm6358.dtsi
-@@ -51,16 +51,22 @@
- 		compatible = "simple-bus";
- 		ranges;
- 
--		periph_cntl: syscon@fffe0000 {
-+		clkctl: clock-controller@fffe0004 {
-+			compatible = "brcm,bcm6358-clocks";
-+			reg = <0xfffe0004 0x4>;
-+			#clock-cells = <1>;
-+		};
-+
-+		periph_cntl: syscon@fffe0008 {
- 			compatible = "syscon";
--			reg = <0xfffe0000 0xc>;
-+			reg = <0xfffe0000 0x4>;
- 			native-endian;
- 		};
- 
- 		reboot: syscon-reboot@fffe0008 {
- 			compatible = "syscon-reboot";
- 			regmap = <&periph_cntl>;
--			offset = <0x8>;
-+			offset = <0x0>;
- 			mask = <0x1>;
- 		};
- 
-diff --git a/arch/mips/boot/dts/brcm/bcm6362.dtsi b/arch/mips/boot/dts/brcm/bcm6362.dtsi
-index c387793525dd..8ae6981735b8 100644
---- a/arch/mips/boot/dts/brcm/bcm6362.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm6362.dtsi
-@@ -51,16 +51,22 @@
- 		compatible = "simple-bus";
- 		ranges;
- 
--		periph_cntl: syscon@10000000 {
-+		clkctl: clock-controller@10000004 {
-+			compatible = "brcm,bcm6362-clocks";
-+			reg = <0x10000004 0x4>;
-+			#clock-cells = <1>;
-+		};
-+
-+		periph_cntl: syscon@10000008 {
- 			compatible = "syscon";
--			reg = <0x10000000 0x14>;
-+			reg = <0x10000000 0xc>;
- 			native-endian;
- 		};
- 
- 		reboot: syscon-reboot@10000008 {
- 			compatible = "syscon-reboot";
- 			regmap = <&periph_cntl>;
--			offset = <0x8>;
-+			offset = <0x0>;
- 			mask = <0x1>;
- 		};
- 
-diff --git a/arch/mips/boot/dts/brcm/bcm6368.dtsi b/arch/mips/boot/dts/brcm/bcm6368.dtsi
-index e116a385525f..449c167dd892 100644
---- a/arch/mips/boot/dts/brcm/bcm6368.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm6368.dtsi
-@@ -51,16 +51,22 @@
- 		compatible = "simple-bus";
- 		ranges;
- 
--		periph_cntl: syscon@10000000 {
-+		clkctl: clock-controller@10000004 {
-+			compatible = "brcm,bcm6368-clocks";
-+			reg = <0x10000004 0x4>;
-+			#clock-cells = <1>;
-+		};
-+
-+		periph_cntl: syscon@100000008 {
- 			compatible = "syscon";
--			reg = <0x10000000 0x14>;
-+			reg = <0x10000000 0xc>;
- 			native-endian;
- 		};
- 
- 		reboot: syscon-reboot@10000008 {
- 			compatible = "syscon-reboot";
- 			regmap = <&periph_cntl>;
--			offset = <0x8>;
-+			offset = <0x0>;
- 			mask = <0x1>;
- 		};
- 
--- 
-2.13.2
+I'm sure checkpatch warned about this. A return inside a macros is a
+bad idea. I inherited code doing this, and broke it when adding
+locking, because it was not obvious there was a return.
 
+> +
+> +/* The following two functions do the same as in iproute2 */
+> +#define TIME_UNITS_PER_SEC	1000000
+> +static unsigned int tc_core_tick2time(unsigned int tick)
+> +{
+> +	return (tick * (u32)PSCHED_TICKS2NS(1)) / 1000;
+> +}
+> +
+> +static unsigned int tc_calc_xmitsize(u64 rate, unsigned int ticks)
+> +{
+> +	return div_u64(rate * tc_core_tick2time(ticks), TIME_UNITS_PER_SEC);
+> +}
+
+Should these but put somewhere others can use them?
+
+> +
+> +enum mscc_qos_rate_mode {
+> +	MSCC_QOS_RATE_MODE_DISABLED, /* Policer/shaper disabled */
+> +	MSCC_QOS_RATE_MODE_LINE, /* Measure line rate in kbps incl. IPG */
+> +	MSCC_QOS_RATE_MODE_DATA, /* Measures data rate in kbps excl. IPG */
+> +	MSCC_QOS_RATE_MODE_FRAME, /* Measures frame rate in fps */
+> +	__MSCC_QOS_RATE_MODE_END,
+> +	NUM_MSCC_QOS_RATE_MODE = __MSCC_QOS_RATE_MODE_END,
+> +	MSCC_QOS_RATE_MODE_MAX = __MSCC_QOS_RATE_MODE_END - 1,
+> +};
+> +
+> +/* Round x divided by y to nearest integer. x and y are integers */
+> +#define MSCC_ROUNDING_DIVISION(x, y) (((x) + ((y) / 2)) / (y))
+
+linux/kernel.h defines DIV_ROUND_UP(). Maybe add DIV_ROUND_DOWN()?
+
+> +
+> +/* Round x divided by y to nearest higher integer. x and y are integers */
+> +#define MSCC_DIV_ROUND_UP(x, y) (((x) + (y) - 1) / (y))
+
+DIV_ROUND_UP() ?
+
+> +	/* Limit to maximum values */
+> +	pir = min_t(u32, GENMASK(15, 0), pir);
+> +	cir = min_t(u32, GENMASK(15, 0), cir);
+> +	pbs = min_t(u32, pbs_max, pbs);
+> +	cbs = min_t(u32, cbs_max, cbs);
+
+If it does need to limit, maybe return -EOPNOTSUPP?
+
+> +int ocelot_port_policer_add(struct ocelot_port *port,
+> +			    struct tcf_police *p)
+> +{
+> +	struct ocelot *ocelot = port->ocelot;
+> +	struct qos_policer_conf pp;
+> +
+> +	if (!p)
+> +		return -EINVAL;
+> +
+> +	netdev_dbg(port->dev,
+> +		   "result %d ewma_rate %u burst %lld mtu %u mtu_pktoks %lld\n",
+> +		   p->params->tcfp_result,
+> +		   p->params->tcfp_ewma_rate,
+> +		   p->params->tcfp_burst,
+> +		   p->params->tcfp_mtu,
+> +		   p->params->tcfp_mtu_ptoks);
+> +
+> +	if (p->params->rate_present)
+> +		netdev_dbg(port->dev,
+> +			   "rate: rate %llu mult %u over %u link %u shift %u\n",
+> +			   p->params->rate.rate_bytes_ps,
+> +			   p->params->rate.mult,
+> +			   p->params->rate.overhead,
+> +			   p->params->rate.linklayer,
+> +			   p->params->rate.shift);
+> +
+> +	if (p->params->peak_present)
+> +		netdev_dbg(port->dev,
+> +			   "peak: rate %llu mult %u over %u link %u shift %u\n",
+> +			   p->params->peak.rate_bytes_ps,
+> +			   p->params->peak.mult,
+> +			   p->params->peak.overhead,
+> +			   p->params->peak.linklayer,
+> +			   p->params->peak.shift);
+> +
+> +	memset(&pp, 0, sizeof(pp));
+
+Rather than memset, you can do:
+
+	struct qos_policer_conf pp = { 0 };
+
+	Andrew
