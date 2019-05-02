@@ -2,154 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B99BD1192D
-	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 14:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF8F119CF
+	for <lists+linux-mips@lfdr.de>; Thu,  2 May 2019 15:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726586AbfEBMdP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 May 2019 08:33:15 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:52163 "EHLO vps0.lunn.ch"
+        id S1726282AbfEBNLh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 May 2019 09:11:37 -0400
+Received: from verein.lst.de ([213.95.11.211]:59207 "EHLO newverein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726267AbfEBMdO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 2 May 2019 08:33:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=hIZ2r4SHmJaCkF2EdisXrrWwKAQXEwuZvn4QXzFxD7w=; b=zJCC6NV/LulBNFOyb7zANwOp7f
-        2OjqNtVlSchdm8gSp8kJaAcCM+qtp5Cv+n4jZKNZUaWYtUVazU7MzLbfMSUMZDBlQuV+rdMSpPRiD
-        MNI2CCar4Z/sWrAmBsfc1rZ4lgXhxtHQiaOStuqOtze/dYdAL/rnKQJ81TGhwghncOl8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
-        (envelope-from <andrew@lunn.ch>)
-        id 1hMAtJ-00087U-Bv; Thu, 02 May 2019 14:32:45 +0200
-Date:   Thu, 2 May 2019 14:32:45 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Joergen Andreasen <joergen.andreasen@microchip.com>
-Cc:     netdev@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/3] net: mscc: ocelot: Implement port policers
- via tc command
-Message-ID: <20190502123245.GB9844@lunn.ch>
-References: <20190502094029.22526-1-joergen.andreasen@microchip.com>
- <20190502094029.22526-3-joergen.andreasen@microchip.com>
+        id S1726203AbfEBNLh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 2 May 2019 09:11:37 -0400
+Received: by newverein.lst.de (Postfix, from userid 2407)
+        id 5EEEF68AA6; Thu,  2 May 2019 15:11:19 +0200 (CEST)
+Date:   Thu, 2 May 2019 15:11:19 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Ley Foon Tan <lftan@altera.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
+Subject: Re: [PATCH 4/7] dma-direct: provide generic support for uncached
+ kernel segments
+Message-ID: <20190502131119.GA2859@lst.de>
+References: <20190430110032.25301-1-hch@lst.de> <20190430110032.25301-5-hch@lst.de> <20190501171857.chfxqntvm6r4xrr4@pburton-laptop> <20190501172912.GA19375@lst.de> <20190501174033.6rj5aiopdeo4uqpw@pburton-laptop> <20190501174905.GA20458@lst.de> <20190502000759.4ii2wuogc6fuc3jh@pburton-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190502094029.22526-3-joergen.andreasen@microchip.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20190502000759.4ii2wuogc6fuc3jh@pburton-laptop>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Joergen
+On Thu, May 02, 2019 at 12:08:01AM +0000, Paul Burton wrote:
+> > Can you test the stack with the two updated patches and ack them if
+> > they are fine?  That would allow getting at least the infrastructure
+> > and mips in for this merge window.
+> 
+> Did you send a v2 of this patch?
+> 
+> If so it hasn't showed up in my inbox, nor on the linux-mips archive on
+> lore.kernel.org.
 
-> +
-> +#define MSCC_RC(expr)				\
-> +	do {					\
-> +		int __rc__ = (expr);		\
-> +		if (__rc__ < 0)			\
-> +			return __rc__;		\
-> +	}					\
-> +	while (0)
+I did earlier in this thread.  Here it is again:
 
-I'm sure checkpatch warned about this. A return inside a macros is a
-bad idea. I inherited code doing this, and broke it when adding
-locking, because it was not obvious there was a return.
+---
+From 247ca658ebeb7c8d04918747ec8a0da45c36bcb8 Mon Sep 17 00:00:00 2001
+From: Christoph Hellwig <hch@lst.de>
+Date: Sun, 28 Apr 2019 13:23:26 -0500
+Subject: dma-direct: provide generic support for uncached kernel segments
 
-> +
-> +/* The following two functions do the same as in iproute2 */
-> +#define TIME_UNITS_PER_SEC	1000000
-> +static unsigned int tc_core_tick2time(unsigned int tick)
-> +{
-> +	return (tick * (u32)PSCHED_TICKS2NS(1)) / 1000;
-> +}
-> +
-> +static unsigned int tc_calc_xmitsize(u64 rate, unsigned int ticks)
-> +{
-> +	return div_u64(rate * tc_core_tick2time(ticks), TIME_UNITS_PER_SEC);
-> +}
+A few architectures support uncached kernel segments.  In that case we get
+an uncached mapping for a given physica address by using an offset in the
+uncached segement.  Implement support for this scheme in the generic
+dma-direct code instead of duplicating it in arch hooks.
 
-Should these but put somewhere others can use them?
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ arch/Kconfig                    |  8 ++++++++
+ include/linux/dma-noncoherent.h |  3 +++
+ kernel/dma/direct.c             | 17 +++++++++++++++--
+ 3 files changed, 26 insertions(+), 2 deletions(-)
 
-> +
-> +enum mscc_qos_rate_mode {
-> +	MSCC_QOS_RATE_MODE_DISABLED, /* Policer/shaper disabled */
-> +	MSCC_QOS_RATE_MODE_LINE, /* Measure line rate in kbps incl. IPG */
-> +	MSCC_QOS_RATE_MODE_DATA, /* Measures data rate in kbps excl. IPG */
-> +	MSCC_QOS_RATE_MODE_FRAME, /* Measures frame rate in fps */
-> +	__MSCC_QOS_RATE_MODE_END,
-> +	NUM_MSCC_QOS_RATE_MODE = __MSCC_QOS_RATE_MODE_END,
-> +	MSCC_QOS_RATE_MODE_MAX = __MSCC_QOS_RATE_MODE_END - 1,
-> +};
-> +
-> +/* Round x divided by y to nearest integer. x and y are integers */
-> +#define MSCC_ROUNDING_DIVISION(x, y) (((x) + ((y) / 2)) / (y))
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 33687dddd86a..ea22a8c894ec 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -249,6 +249,14 @@ config ARCH_HAS_FORTIFY_SOURCE
+ config ARCH_HAS_SET_MEMORY
+ 	bool
+ 
++#
++# Select if arch has an uncached kernel segment and provides the
++# uncached_kernel_address / cached_kernel_address symbols to use it
++#
++config ARCH_HAS_UNCACHED_SEGMENT
++	select ARCH_HAS_DMA_PREP_COHERENT
++	bool
++
+ # Select if arch init_task must go in the __init_task_data section
+ config ARCH_TASK_STRUCT_ON_STACK
+        bool
+diff --git a/include/linux/dma-noncoherent.h b/include/linux/dma-noncoherent.h
+index 9741767e400f..7e0126a04e02 100644
+--- a/include/linux/dma-noncoherent.h
++++ b/include/linux/dma-noncoherent.h
+@@ -80,4 +80,7 @@ static inline void arch_dma_prep_coherent(struct page *page, size_t size)
+ }
+ #endif /* CONFIG_ARCH_HAS_DMA_PREP_COHERENT */
+ 
++void *uncached_kernel_address(void *addr);
++void *cached_kernel_address(void *addr);
++
+ #endif /* _LINUX_DMA_NONCOHERENT_H */
+diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+index 2c2772e9702a..6688e1cee7d1 100644
+--- a/kernel/dma/direct.c
++++ b/kernel/dma/direct.c
+@@ -171,6 +171,13 @@ void *dma_direct_alloc_pages(struct device *dev, size_t size,
+ 		*dma_handle = phys_to_dma(dev, page_to_phys(page));
+ 	}
+ 	memset(ret, 0, size);
++
++	if (IS_ENABLED(CONFIG_ARCH_HAS_UNCACHED_SEGMENT) &&
++	    !dev_is_dma_coherent(dev) && !(attrs & DMA_ATTR_NON_CONSISTENT)) {
++		arch_dma_prep_coherent(page, size);
++		ret = uncached_kernel_address(ret);
++	}
++
+ 	return ret;
+ }
+ 
+@@ -189,13 +196,18 @@ void dma_direct_free_pages(struct device *dev, size_t size, void *cpu_addr,
+ 
+ 	if (force_dma_unencrypted())
+ 		set_memory_encrypted((unsigned long)cpu_addr, 1 << page_order);
++
++	if (IS_ENABLED(CONFIG_ARCH_HAS_UNCACHED_SEGMENT) &&
++	    !dev_is_dma_coherent(dev) && !(attrs & DMA_ATTR_NON_CONSISTENT))
++		cpu_addr = cached_kernel_address(cpu_addr);
+ 	__dma_direct_free_pages(dev, size, virt_to_page(cpu_addr));
+ }
+ 
+ void *dma_direct_alloc(struct device *dev, size_t size,
+ 		dma_addr_t *dma_handle, gfp_t gfp, unsigned long attrs)
+ {
+-	if (!dev_is_dma_coherent(dev))
++	if (!IS_ENABLED(CONFIG_ARCH_HAS_UNCACHED_SEGMENT) &&
++	    !dev_is_dma_coherent(dev))
+ 		return arch_dma_alloc(dev, size, dma_handle, gfp, attrs);
+ 	return dma_direct_alloc_pages(dev, size, dma_handle, gfp, attrs);
+ }
+@@ -203,7 +215,8 @@ void *dma_direct_alloc(struct device *dev, size_t size,
+ void dma_direct_free(struct device *dev, size_t size,
+ 		void *cpu_addr, dma_addr_t dma_addr, unsigned long attrs)
+ {
+-	if (!dev_is_dma_coherent(dev))
++	if (!IS_ENABLED(CONFIG_ARCH_HAS_UNCACHED_SEGMENT) &&
++	    !dev_is_dma_coherent(dev))
+ 		arch_dma_free(dev, size, cpu_addr, dma_addr, attrs);
+ 	else
+ 		dma_direct_free_pages(dev, size, cpu_addr, dma_addr, attrs);
+-- 
+2.20.1
 
-linux/kernel.h defines DIV_ROUND_UP(). Maybe add DIV_ROUND_DOWN()?
-
-> +
-> +/* Round x divided by y to nearest higher integer. x and y are integers */
-> +#define MSCC_DIV_ROUND_UP(x, y) (((x) + (y) - 1) / (y))
-
-DIV_ROUND_UP() ?
-
-> +	/* Limit to maximum values */
-> +	pir = min_t(u32, GENMASK(15, 0), pir);
-> +	cir = min_t(u32, GENMASK(15, 0), cir);
-> +	pbs = min_t(u32, pbs_max, pbs);
-> +	cbs = min_t(u32, cbs_max, cbs);
-
-If it does need to limit, maybe return -EOPNOTSUPP?
-
-> +int ocelot_port_policer_add(struct ocelot_port *port,
-> +			    struct tcf_police *p)
-> +{
-> +	struct ocelot *ocelot = port->ocelot;
-> +	struct qos_policer_conf pp;
-> +
-> +	if (!p)
-> +		return -EINVAL;
-> +
-> +	netdev_dbg(port->dev,
-> +		   "result %d ewma_rate %u burst %lld mtu %u mtu_pktoks %lld\n",
-> +		   p->params->tcfp_result,
-> +		   p->params->tcfp_ewma_rate,
-> +		   p->params->tcfp_burst,
-> +		   p->params->tcfp_mtu,
-> +		   p->params->tcfp_mtu_ptoks);
-> +
-> +	if (p->params->rate_present)
-> +		netdev_dbg(port->dev,
-> +			   "rate: rate %llu mult %u over %u link %u shift %u\n",
-> +			   p->params->rate.rate_bytes_ps,
-> +			   p->params->rate.mult,
-> +			   p->params->rate.overhead,
-> +			   p->params->rate.linklayer,
-> +			   p->params->rate.shift);
-> +
-> +	if (p->params->peak_present)
-> +		netdev_dbg(port->dev,
-> +			   "peak: rate %llu mult %u over %u link %u shift %u\n",
-> +			   p->params->peak.rate_bytes_ps,
-> +			   p->params->peak.mult,
-> +			   p->params->peak.overhead,
-> +			   p->params->peak.linklayer,
-> +			   p->params->peak.shift);
-> +
-> +	memset(&pp, 0, sizeof(pp));
-
-Rather than memset, you can do:
-
-	struct qos_policer_conf pp = { 0 };
-
-	Andrew
