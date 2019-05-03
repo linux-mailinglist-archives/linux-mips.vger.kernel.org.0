@@ -2,732 +2,160 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 135EF12C89
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2019 13:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80ADB12FB6
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2019 16:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726997AbfECLit (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 May 2019 07:38:49 -0400
-Received: from esa5.microchip.iphmx.com ([216.71.150.166]:7795 "EHLO
-        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726377AbfECLit (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 May 2019 07:38:49 -0400
-Received-SPF: Pass (esa5.microchip.iphmx.com: domain of
-  Joergen.Andreasen@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa5.microchip.iphmx.com;
-  envelope-from="Joergen.Andreasen@microchip.com";
-  x-sender="Joergen.Andreasen@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa5.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa5.microchip.iphmx.com;
-  envelope-from="Joergen.Andreasen@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa5.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Joergen.Andreasen@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-X-IronPort-AV: E=Sophos;i="5.60,425,1549954800"; 
-   d="scan'208";a="29954309"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 03 May 2019 04:38:47 -0700
-Received: from localhost (10.10.76.4) by chn-sv-exch06.mchp-main.com
- (10.10.76.107) with Microsoft SMTP Server id 14.3.352.0; Fri, 3 May 2019
- 04:38:45 -0700
-Date:   Fri, 3 May 2019 13:38:44 +0200
-From:   Joergen Andreasen <joergen.andreasen@microchip.com>
-To:     Jiri Pirko <jiri@resnulli.us>
-CC:     <netdev@vger.kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Ralf Baechle" <ralf@linux-mips.org>,
+        id S1727089AbfECOB0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 May 2019 10:01:26 -0400
+Received: from ivanoab6.miniserver.com ([5.153.251.140]:48110 "EHLO
+        www.kot-begemot.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726719AbfECOB0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 May 2019 10:01:26 -0400
+X-Greylist: delayed 1909 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 May 2019 10:01:24 EDT
+Received: from [192.168.17.6] (helo=jain.kot-begemot.co.uk)
+        by www.kot-begemot.co.uk with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1hMYFM-00074d-Bk; Fri, 03 May 2019 13:29:04 +0000
+Received: from jain.kot-begemot.co.uk ([192.168.3.3])
+        by jain.kot-begemot.co.uk with esmtp (Exim 4.89)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1hMYFF-0001a5-CV; Fri, 03 May 2019 14:29:03 +0100
+Subject: Re: [PATCH 14/15] um: switch to generic version of pte allocation
+To:     Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Palmer Dabbelt <palmer@sifive.com>, linux-mips@vger.kernel.org,
+        Guo Ren <guoren@kernel.org>, linux-hexagon@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Helge Deller <deller@gmx.de>, x86@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Sam Creasey <sammy@sammy.net>, Arnd Bergmann <arnd@arndb.de>,
+        linux-um@lists.infradead.org, Richard Weinberger <richard@nod.at>,
+        linux-m68k@lists.linux-m68k.org, Greentime Hu <green.hu@gmail.com>,
+        nios2-dev@lists.rocketboards.org, Guan Xuetao <gxt@pku.edu.cn>,
+        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Richard Kuo <rkuo@codeaurora.org>,
         Paul Burton <paul.burton@mips.com>,
-        "James Hogan" <jhogan@kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Joergen Andreasen <joergen.andreasen@microchip.com>
-Subject: Re: [PATCH net-next 2/3] net: mscc: ocelot: Implement port policers
- via tc command
-Message-ID: <20190503113844.3gwdzmijw75uy2ui@soft-dev16>
-References: <20190502094029.22526-1-joergen.andreasen@microchip.com>
- <20190502094029.22526-3-joergen.andreasen@microchip.com>
- <20190502203647.GF2251@nanopsycho>
+        linux-alpha@vger.kernel.org, Ley Foon Tan <lftan@altera.com>,
+        linuxppc-dev@lists.ozlabs.org
+References: <1556810922-20248-1-git-send-email-rppt@linux.ibm.com>
+ <1556810922-20248-15-git-send-email-rppt@linux.ibm.com>
+From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Message-ID: <3fddc076-1843-ee84-febb-44c8d317489f@cambridgegreys.com>
+Date:   Fri, 3 May 2019 14:28:56 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20190502203647.GF2251@nanopsycho>
-User-Agent: NeoMutt/20171215
+In-Reply-To: <1556810922-20248-15-git-send-email-rppt@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0
+X-Spam-Score: -1.0
+X-Clacks-Overhead: GNU Terry Pratchett
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jiri,
 
-The 05/02/2019 22:36, Jiri Pirko wrote:
-> External E-Mail
-> 
-> 
-> Thu, May 02, 2019 at 11:40:28AM CEST, joergen.andreasen@microchip.com wrote:
-> >Hardware offload of port policers are now supported via the tc command.
-> >Supported police parameters are: rate, burst and overhead.
-> 
-> Interesting, you offload matchall cls, yet you don't mention it at all.
-> Please, do it.
->
 
-I will mention that we also offload matchall cls in v2.
+On 02/05/2019 16:28, Mike Rapoport wrote:
+> um allocates PTE pages with __get_free_page() and uses
+> GFP_KERNEL | __GFP_ZERO for the allocations.
+> 
+> Switch it to the generic version that does exactly the same thing for the
+> kernel page tables and adds __GFP_ACCOUNT for the user PTEs.
+> 
+> The pte_free() and pte_free_kernel() versions are identical to the generic
+> ones and can be simply dropped.
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> ---
+>   arch/um/include/asm/pgalloc.h | 16 ++--------------
+>   arch/um/kernel/mem.c          | 22 ----------------------
+>   2 files changed, 2 insertions(+), 36 deletions(-)
+> 
+> diff --git a/arch/um/include/asm/pgalloc.h b/arch/um/include/asm/pgalloc.h
+> index 99eb568..d7b282e 100644
+> --- a/arch/um/include/asm/pgalloc.h
+> +++ b/arch/um/include/asm/pgalloc.h
+> @@ -10,6 +10,8 @@
+>   
+>   #include <linux/mm.h>
+>   
+> +#include <asm-generic/pgalloc.h>	/* for pte_{alloc,free}_one */
+> +
+>   #define pmd_populate_kernel(mm, pmd, pte) \
+>   	set_pmd(pmd, __pmd(_PAGE_TABLE + (unsigned long) __pa(pte)))
+>   
+> @@ -25,20 +27,6 @@
+>   extern pgd_t *pgd_alloc(struct mm_struct *);
+>   extern void pgd_free(struct mm_struct *mm, pgd_t *pgd);
+>   
+> -extern pte_t *pte_alloc_one_kernel(struct mm_struct *);
+> -extern pgtable_t pte_alloc_one(struct mm_struct *);
+> -
+> -static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
+> -{
+> -	free_page((unsigned long) pte);
+> -}
+> -
+> -static inline void pte_free(struct mm_struct *mm, pgtable_t pte)
+> -{
+> -	pgtable_page_dtor(pte);
+> -	__free_page(pte);
+> -}
+> -
+>   #define __pte_free_tlb(tlb,pte, address)		\
+>   do {							\
+>   	pgtable_page_dtor(pte);				\
+> diff --git a/arch/um/kernel/mem.c b/arch/um/kernel/mem.c
+> index 99aa11b..2280374 100644
+> --- a/arch/um/kernel/mem.c
+> +++ b/arch/um/kernel/mem.c
+> @@ -215,28 +215,6 @@ void pgd_free(struct mm_struct *mm, pgd_t *pgd)
+>   	free_page((unsigned long) pgd);
+>   }
+>   
+> -pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
+> -{
+> -	pte_t *pte;
+> -
+> -	pte = (pte_t *)__get_free_page(GFP_KERNEL|__GFP_ZERO);
+> -	return pte;
+> -}
+> -
+> -pgtable_t pte_alloc_one(struct mm_struct *mm)
+> -{
+> -	struct page *pte;
+> -
+> -	pte = alloc_page(GFP_KERNEL|__GFP_ZERO);
+> -	if (!pte)
+> -		return NULL;
+> -	if (!pgtable_page_ctor(pte)) {
+> -		__free_page(pte);
+> -		return NULL;
+> -	}
+> -	return pte;
+> -}
+> -
+>   #ifdef CONFIG_3_LEVEL_PGTABLES
+>   pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
+>   {
+> 
 
-> 
-> >
-> >Example:
-> >
-> >Add:
-> >tc qdisc add dev eth3 handle ffff: ingress
-> >tc filter add dev eth3 parent ffff: prio 1 handle 2		\
-> >	matchall skip_sw					\
-> >	action police rate 100Mbit burst 10000 overhead 20
-> >
-> >Show:
-> >tc -s -d qdisc show dev eth3
-> >tc -s -d filter show dev eth3 ingress
-> >
-> >Delete:
-> >tc filter del dev eth3 parent ffff: prio 1
-> >tc qdisc del dev eth3 handle ffff: ingress
-> >
-> >Signed-off-by: Joergen Andreasen <joergen.andreasen@microchip.com>
-> >---
-> > drivers/net/ethernet/mscc/Makefile        |   2 +-
-> > drivers/net/ethernet/mscc/ocelot.c        |   6 +-
-> > drivers/net/ethernet/mscc/ocelot.h        |   3 +
-> > drivers/net/ethernet/mscc/ocelot_police.c | 289 ++++++++++++++++++++++
-> > drivers/net/ethernet/mscc/ocelot_police.h |  16 ++
-> > drivers/net/ethernet/mscc/ocelot_tc.c     | 151 +++++++++++
-> > drivers/net/ethernet/mscc/ocelot_tc.h     |  19 ++
-> > 7 files changed, 483 insertions(+), 3 deletions(-)
-> > create mode 100644 drivers/net/ethernet/mscc/ocelot_police.c
-> > create mode 100644 drivers/net/ethernet/mscc/ocelot_police.h
-> > create mode 100644 drivers/net/ethernet/mscc/ocelot_tc.c
-> > create mode 100644 drivers/net/ethernet/mscc/ocelot_tc.h
-> >
-> >diff --git a/drivers/net/ethernet/mscc/Makefile b/drivers/net/ethernet/mscc/Makefile
-> >index cb52a3b128ae..5e694dc1f7f8 100644
-> >--- a/drivers/net/ethernet/mscc/Makefile
-> >+++ b/drivers/net/ethernet/mscc/Makefile
-> >@@ -1,5 +1,5 @@
-> > # SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> > obj-$(CONFIG_MSCC_OCELOT_SWITCH) += mscc_ocelot_common.o
-> > mscc_ocelot_common-y := ocelot.o ocelot_io.o
-> >-mscc_ocelot_common-y += ocelot_regs.o
-> >+mscc_ocelot_common-y += ocelot_regs.o ocelot_tc.o ocelot_police.o
-> > obj-$(CONFIG_MSCC_OCELOT_SWITCH_OCELOT) += ocelot_board.o
-> >diff --git a/drivers/net/ethernet/mscc/ocelot.c b/drivers/net/ethernet/mscc/ocelot.c
-> >index d715ef4fc92f..3ec7864d9dc8 100644
-> >--- a/drivers/net/ethernet/mscc/ocelot.c
-> >+++ b/drivers/net/ethernet/mscc/ocelot.c
-> >@@ -943,6 +943,7 @@ static const struct net_device_ops ocelot_port_netdev_ops = {
-> > 	.ndo_vlan_rx_kill_vid		= ocelot_vlan_rx_kill_vid,
-> > 	.ndo_set_features		= ocelot_set_features,
-> > 	.ndo_get_port_parent_id		= ocelot_get_port_parent_id,
-> >+	.ndo_setup_tc			= ocelot_setup_tc,
-> > };
-> > 
-> > static void ocelot_get_strings(struct net_device *netdev, u32 sset, u8 *data)
-> >@@ -1663,8 +1664,9 @@ int ocelot_probe_port(struct ocelot *ocelot, u8 port,
-> > 	dev->netdev_ops = &ocelot_port_netdev_ops;
-> > 	dev->ethtool_ops = &ocelot_ethtool_ops;
-> > 
-> >-	dev->hw_features |= NETIF_F_HW_VLAN_CTAG_FILTER | NETIF_F_RXFCS;
-> >-	dev->features |= NETIF_F_HW_VLAN_CTAG_FILTER;
-> >+	dev->hw_features |= NETIF_F_HW_VLAN_CTAG_FILTER | NETIF_F_RXFCS |
-> >+		NETIF_F_HW_TC;
-> >+	dev->features |= NETIF_F_HW_VLAN_CTAG_FILTER | NETIF_F_HW_TC;
-> > 
-> > 	memcpy(dev->dev_addr, ocelot->base_mac, ETH_ALEN);
-> > 	dev->dev_addr[ETH_ALEN - 1] += port;
-> >diff --git a/drivers/net/ethernet/mscc/ocelot.h b/drivers/net/ethernet/mscc/ocelot.h
-> >index ba3b3380b4d0..9514979fa075 100644
-> >--- a/drivers/net/ethernet/mscc/ocelot.h
-> >+++ b/drivers/net/ethernet/mscc/ocelot.h
-> >@@ -22,6 +22,7 @@
-> > #include "ocelot_rew.h"
-> > #include "ocelot_sys.h"
-> > #include "ocelot_qs.h"
-> >+#include "ocelot_tc.h"
-> > 
-> > #define PGID_AGGR    64
-> > #define PGID_SRC     80
-> >@@ -458,6 +459,8 @@ struct ocelot_port {
-> > 
-> > 	phy_interface_t phy_mode;
-> > 	struct phy *serdes;
-> >+
-> >+	struct ocelot_port_tc tc;
-> > };
-> > 
-> > u32 __ocelot_read_ix(struct ocelot *ocelot, u32 reg, u32 offset);
-> >diff --git a/drivers/net/ethernet/mscc/ocelot_police.c b/drivers/net/ethernet/mscc/ocelot_police.c
-> >new file mode 100644
-> >index 000000000000..b40382dcc748
-> >--- /dev/null
-> >+++ b/drivers/net/ethernet/mscc/ocelot_police.c
-> >@@ -0,0 +1,289 @@
-> >+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> >+/* Microsemi Ocelot Switch TC driver
-> 
-> "TC driver" ? That sounds quite odd...
->
 
-I will change it to "Microsemi Ocelot Switch driver" in v2.
-
-> 
-> >+ *
-> >+ * Copyright (c) 2019 Microsemi Corporation
-> >+ */
-> >+
-> >+#include "ocelot_police.h"
-> >+
-> >+#define MSCC_RC(expr)				\
-> >+	do {					\
-> >+		int __rc__ = (expr);		\
-> >+		if (__rc__ < 0)			\
-> >+			return __rc__;		\
-> >+	}					\
-> >+	while (0)
-> 
-> Please don't use macros like this.
->
-
-This macro will be removed in v2.
-
-> 
-> >+
-> >+/* The following two functions do the same as in iproute2 */
-> >+#define TIME_UNITS_PER_SEC	1000000
-> >+static unsigned int tc_core_tick2time(unsigned int tick)
-> >+{
-> >+	return (tick * (u32)PSCHED_TICKS2NS(1)) / 1000;
-> >+}
-> >+
-> >+static unsigned int tc_calc_xmitsize(u64 rate, unsigned int ticks)
-> >+{
-> >+	return div_u64(rate * tc_core_tick2time(ticks), TIME_UNITS_PER_SEC);
-> >+}
-> >+
-> >+enum mscc_qos_rate_mode {
-> >+	MSCC_QOS_RATE_MODE_DISABLED, /* Policer/shaper disabled */
-> >+	MSCC_QOS_RATE_MODE_LINE, /* Measure line rate in kbps incl. IPG */
-> >+	MSCC_QOS_RATE_MODE_DATA, /* Measures data rate in kbps excl. IPG */
-> >+	MSCC_QOS_RATE_MODE_FRAME, /* Measures frame rate in fps */
-> >+	__MSCC_QOS_RATE_MODE_END,
-> >+	NUM_MSCC_QOS_RATE_MODE = __MSCC_QOS_RATE_MODE_END,
-> >+	MSCC_QOS_RATE_MODE_MAX = __MSCC_QOS_RATE_MODE_END - 1,
-> >+};
-> >+
-> >+/* Round x divided by y to nearest integer. x and y are integers */
-> >+#define MSCC_ROUNDING_DIVISION(x, y) (((x) + ((y) / 2)) / (y))
-> >+
-> >+/* Round x divided by y to nearest higher integer. x and y are integers */
-> >+#define MSCC_DIV_ROUND_UP(x, y) (((x) + (y) - 1) / (y))
-> >+
-> >+/* Types for ANA:POL[0-192]:POL_MODE_CFG.FRM_MODE */
-> >+#define POL_MODE_LINERATE   0 /* Incl IPG. Unit: 33 1/3 kbps, 4096 bytes */
-> >+#define POL_MODE_DATARATE   1 /* Excl IPG. Unit: 33 1/3 kbps, 4096 bytes  */
-> >+#define POL_MODE_FRMRATE_HI 2 /* Unit: 33 1/3 fps, 32.8 frames */
-> >+#define POL_MODE_FRMRATE_LO 3 /* Unit: 1/3 fps, 0.3 frames */
-> >+
-> >+/* Policer indexes */
-> >+#define POL_IX_PORT    0    /* 0-11    : Port policers */
-> >+#define POL_IX_QUEUE   32   /* 32-127  : Queue policers  */
-> >+
-> >+/* Default policer order */
-> >+#define POL_ORDER 0x1d3 /* Ocelot policer order: Serial (QoS -> Port -> VCAP) */
-> >+
-> >+struct qos_policer_conf {
-> >+	enum mscc_qos_rate_mode mode;
-> >+	bool dlb; /* Enable DLB (dual leaky bucket mode */
-> >+	bool cf;  /* Coupling flag (ignored in SLB mode) */
-> >+	u32  cir; /* CIR in kbps/fps (ignored in SLB mode) */
-> >+	u32  cbs; /* CBS in bytes/frames (ignored in SLB mode) */
-> >+	u32  pir; /* PIR in kbps/fps */
-> >+	u32  pbs; /* PBS in bytes/frames */
-> >+	u8   ipg; /* Size of IPG when MSCC_QOS_RATE_MODE_LINE is chosen */
-> >+};
-> >+
-> >+static int qos_policer_conf_set(struct ocelot_port *port,
-> >+				u32 pol_ix,
-> >+				struct qos_policer_conf *conf)
-> >+{
-> >+	struct ocelot *ocelot = port->ocelot;
-> >+	u32 cir = 0, cbs = 0, pir = 0, pbs = 0;
-> >+	u32 cf = 0, cir_ena = 0, frm_mode = 0;
-> >+	u32 pbs_max = 0, cbs_max = 0;
-> >+	bool cir_discard = 0, pir_discard = 0;
-> >+	u8 ipg = 20;
-> >+	u32 value;
-> >+
-> >+	pir = conf->pir;
-> >+	pbs = conf->pbs;
-> >+
-> >+	switch (conf->mode) {
-> >+	case MSCC_QOS_RATE_MODE_LINE:
-> >+	case MSCC_QOS_RATE_MODE_DATA:
-> >+		if (conf->mode == MSCC_QOS_RATE_MODE_LINE) {
-> >+			frm_mode = POL_MODE_LINERATE;
-> >+			ipg = min_t(u8, GENMASK(4, 0), conf->ipg);
-> >+		} else {
-> >+			frm_mode = POL_MODE_DATARATE;
-> >+		}
-> >+		if (conf->dlb) {
-> >+			cir_ena = 1;
-> >+			cir = conf->cir;
-> >+			cbs = conf->cbs;
-> >+			if (cir == 0 && cbs == 0) {
-> >+				/* Discard cir frames */
-> >+				cir_discard = 1;
-> >+			} else {
-> >+				cir = MSCC_DIV_ROUND_UP(cir, 100);
-> >+				cir *= 3; /* 33 1/3 kbps */
-> >+				cbs = MSCC_DIV_ROUND_UP(cbs, 4096);
-> >+				cbs = (cbs ? cbs : 1); /* No zero burst size */
-> >+				cbs_max = 60; /* Limit burst size */
-> >+				cf = conf->cf;
-> >+				if (cf)
-> >+					pir += conf->cir;
-> >+			}
-> >+		}
-> >+		if (pir == 0 && pbs == 0) {
-> >+			/* Discard PIR frames */
-> >+			pir_discard = 1;
-> >+		} else {
-> >+			pir = MSCC_DIV_ROUND_UP(pir, 100);
-> >+			pir *= 3;  /* 33 1/3 kbps */
-> >+			pbs = MSCC_DIV_ROUND_UP(pbs, 4096);
-> >+			pbs = (pbs ? pbs : 1); /* No zero burst size */
-> >+			pbs_max = 60; /* Limit burst size */
-> >+		}
-> >+		break;
-> >+	case MSCC_QOS_RATE_MODE_FRAME:
-> >+		if (pir >= 100) {
-> >+			frm_mode = POL_MODE_FRMRATE_HI;
-> >+			pir = MSCC_DIV_ROUND_UP(pir, 100);
-> >+			pir *= 3;  /* 33 1/3 fps */
-> >+			pbs = (pbs * 10) / 328; /* 32.8 frames */
-> >+			pbs = (pbs ? pbs : 1); /* No zero burst size */
-> >+			pbs_max = GENMASK(6, 0); /* Limit burst size */
-> >+		} else {
-> >+			frm_mode = POL_MODE_FRMRATE_LO;
-> >+			if (pir == 0 && pbs == 0) {
-> >+				/* Discard all frames */
-> >+				pir_discard = 1;
-> >+				cir_discard = 1;
-> >+			} else {
-> >+				pir *= 3; /* 1/3 fps */
-> >+				pbs = (pbs * 10) / 3; /* 0.3 frames */
-> >+				pbs = (pbs ? pbs : 1); /* No zero burst size */
-> >+				pbs_max = 61; /* Limit burst size */
-> >+			}
-> >+		}
-> >+		break;
-> >+	default: /* MSCC_QOS_RATE_MODE_DISABLED */
-> >+		/* Disable policer using maximum rate and zero burst */
-> >+		pir = GENMASK(15, 0);
-> >+		pbs = 0;
-> >+		break;
-> >+	}
-> >+
-> >+	/* Limit to maximum values */
-> >+	pir = min_t(u32, GENMASK(15, 0), pir);
-> >+	cir = min_t(u32, GENMASK(15, 0), cir);
-> >+	pbs = min_t(u32, pbs_max, pbs);
-> >+	cbs = min_t(u32, cbs_max, cbs);
-> >+
-> >+	value = (ANA_POL_MODE_CFG_IPG_SIZE(ipg) |
-> >+		 ANA_POL_MODE_CFG_FRM_MODE(frm_mode) |
-> >+		 (cf ? ANA_POL_MODE_CFG_DLB_COUPLED : 0) |
-> >+		 (cir_ena ? ANA_POL_MODE_CFG_CIR_ENA : 0) |
-> >+		 ANA_POL_MODE_CFG_OVERSHOOT_ENA);
-> >+
-> >+	ocelot_write_gix(ocelot,
-> >+			 value,
-> >+			 ANA_POL_MODE_CFG,
-> >+			 pol_ix);
-> >+
-> >+	ocelot_write_gix(ocelot,
-> >+			 ANA_POL_PIR_CFG_PIR_RATE(pir) |
-> >+			 ANA_POL_PIR_CFG_PIR_BURST(pbs),
-> >+			 ANA_POL_PIR_CFG,
-> >+			 pol_ix);
-> >+
-> >+	ocelot_write_gix(ocelot,
-> >+			 (pir_discard ? GENMASK(22, 0) : 0),
-> >+			 ANA_POL_PIR_STATE,
-> >+			 pol_ix);
-> >+
-> >+	ocelot_write_gix(ocelot,
-> >+			 ANA_POL_CIR_CFG_CIR_RATE(cir) |
-> >+			 ANA_POL_CIR_CFG_CIR_BURST(cbs),
-> >+			 ANA_POL_CIR_CFG,
-> >+			 pol_ix);
-> >+
-> >+	ocelot_write_gix(ocelot,
-> >+			 (cir_discard ? GENMASK(22, 0) : 0),
-> >+			 ANA_POL_CIR_STATE,
-> >+			 pol_ix);
-> 
-> I understand that you want to wrap all 5 calls in the same way. But
-> still, pol_ix does not have to be on a separate line.
->
-
-I will fix this and the folloeing unnecessary line wraps in v2.
-
-> 
-> >+
-> >+	return 0;
-> >+}
-> >+
-> >+int ocelot_port_policer_add(struct ocelot_port *port,
-> >+			    struct tcf_police *p)
-> >+{
-> >+	struct ocelot *ocelot = port->ocelot;
-> >+	struct qos_policer_conf pp;
-> >+
-> >+	if (!p)
-> >+		return -EINVAL;
-> >+
-> >+	netdev_dbg(port->dev,
-> 
-> Unnecessary line wrap.
-> 
-> 
-> >+		   "result %d ewma_rate %u burst %lld mtu %u mtu_pktoks %lld\n",
-> >+		   p->params->tcfp_result,
-> >+		   p->params->tcfp_ewma_rate,
-> >+		   p->params->tcfp_burst,
-> >+		   p->params->tcfp_mtu,
-> >+		   p->params->tcfp_mtu_ptoks);
-> >+
-> >+	if (p->params->rate_present)
-> >+		netdev_dbg(port->dev,
-> 
-> Again, no need to wrap.
-> 
-> 
-> >+			   "rate: rate %llu mult %u over %u link %u shift %u\n",
-> >+			   p->params->rate.rate_bytes_ps,
-> >+			   p->params->rate.mult,
-> >+			   p->params->rate.overhead,
-> >+			   p->params->rate.linklayer,
-> >+			   p->params->rate.shift);
-> >+
-> >+	if (p->params->peak_present)
-> >+		netdev_dbg(port->dev,
-> 
-> Again, no need to wrap.
-> 
-> 
-> >+			   "peak: rate %llu mult %u over %u link %u shift %u\n",
-> >+			   p->params->peak.rate_bytes_ps,
-> >+			   p->params->peak.mult,
-> >+			   p->params->peak.overhead,
-> >+			   p->params->peak.linklayer,
-> >+			   p->params->peak.shift);
-> >+
-> >+	memset(&pp, 0, sizeof(pp));
-> >+
-> >+	if (p->params->tcfp_ewma_rate) {
-> >+		netdev_err(port->dev, "tcfp_ewma_rate is not supported\n");
-> >+		return -EOPNOTSUPP;
-> >+	}
-> >+	if (p->params->peak_present) {
-> >+		netdev_err(port->dev, "peakrate is not supported\n");
-> >+		return -EOPNOTSUPP;
-> >+	}
-> >+	if (!p->params->rate_present) {
-> >+		netdev_err(port->dev, "rate not specified\n");
-> >+		return -EINVAL;
-> >+	}
-> >+	if (p->params->rate.overhead) {
-> >+		pp.mode = MSCC_QOS_RATE_MODE_LINE;
-> >+		pp.ipg = p->params->rate.overhead;
-> >+	} else {
-> >+		pp.mode = MSCC_QOS_RATE_MODE_DATA;
-> >+	}
-> >+
-> >+	pp.pir = (u32)div_u64(p->params->rate.rate_bytes_ps, 1000) * 8;
-> >+	pp.pbs = tc_calc_xmitsize(p->params->rate.rate_bytes_ps,
-> >+				  PSCHED_NS2TICKS(p->params->tcfp_burst));
-> >+	netdev_dbg(port->dev,
-> 
-> Again, no need to wrap.
-> 
-> 
-> >+		   "%s: port %u pir %u kbps, pbs %u bytes, ipg %u bytes\n",
-> >+		   __func__, port->chip_port, pp.pir, pp.pbs, pp.ipg);
-> >+
-> >+	MSCC_RC(qos_policer_conf_set(port, POL_IX_PORT + port->chip_port, &pp));
-> >+
-> >+	ocelot_rmw_gix(ocelot,
-> >+		       ANA_PORT_POL_CFG_PORT_POL_ENA |
-> >+		       ANA_PORT_POL_CFG_POL_ORDER(POL_ORDER),
-> >+		       ANA_PORT_POL_CFG_PORT_POL_ENA |
-> >+		       ANA_PORT_POL_CFG_POL_ORDER_M,
-> >+		       ANA_PORT_POL_CFG,
-> >+		       port->chip_port);
-> >+
-> >+	return 0;
-> >+}
-> >+
-> >+int ocelot_port_policer_del(struct ocelot_port *port)
-> >+{
-> >+	struct ocelot *ocelot = port->ocelot;
-> >+	struct qos_policer_conf pp;
-> >+
-> >+	netdev_dbg(port->dev, "%s: port %u\n", __func__, port->chip_port);
-> >+
-> >+	memset(&pp, 0, sizeof(pp));
-> >+	pp.mode = MSCC_QOS_RATE_MODE_DISABLED;
-> >+
-> >+	MSCC_RC(qos_policer_conf_set(port, POL_IX_PORT + port->chip_port, &pp));
-> >+
-> >+	ocelot_rmw_gix(ocelot, 0 |
-> >+		       ANA_PORT_POL_CFG_POL_ORDER(POL_ORDER),
-> >+		       ANA_PORT_POL_CFG_PORT_POL_ENA |
-> >+		       ANA_PORT_POL_CFG_POL_ORDER_M,
-> >+		       ANA_PORT_POL_CFG,
-> >+		       port->chip_port);
-> >+
-> >+	return 0;
-> >+}
-> >diff --git a/drivers/net/ethernet/mscc/ocelot_police.h b/drivers/net/ethernet/mscc/ocelot_police.h
-> >new file mode 100644
-> >index 000000000000..bc4dc34c684e
-> >--- /dev/null
-> >+++ b/drivers/net/ethernet/mscc/ocelot_police.h
-> >@@ -0,0 +1,16 @@
-> >+/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
-> >+/* Microsemi Ocelot Switch driver
-> >+ *
-> >+ * Copyright (c) 2019 Microsemi Corporation
-> >+ */
-> >+
-> >+#ifndef _MSCC_OCELOT_POLICE_H_
-> >+#define _MSCC_OCELOT_POLICE_H_
-> >+
-> >+#include <net/tc_act/tc_police.h>
-> >+#include "ocelot.h"
-> >+
-> >+int ocelot_port_policer_add(struct ocelot_port *port, struct tcf_police *p);
-> >+int ocelot_port_policer_del(struct ocelot_port *port);
-> >+
-> >+#endif /* _MSCC_OCELOT_POLICE_H_ */
-> >diff --git a/drivers/net/ethernet/mscc/ocelot_tc.c b/drivers/net/ethernet/mscc/ocelot_tc.c
-> >new file mode 100644
-> >index 000000000000..97b0a7bf5d06
-> >--- /dev/null
-> >+++ b/drivers/net/ethernet/mscc/ocelot_tc.c
-> >@@ -0,0 +1,151 @@
-> >+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> >+/* Microsemi Ocelot Switch TC driver
-> >+ *
-> >+ * Copyright (c) 2019 Microsemi Corporation
-> >+ */
-> >+
-> >+#include "ocelot_tc.h"
-> >+#include "ocelot_police.h"
-> >+#include <net/pkt_cls.h>
-> >+
-> >+static int ocelot_setup_tc_cls_matchall(struct ocelot_port *port,
-> >+					struct tc_cls_matchall_offload *f,
-> >+					bool ingress)
-> >+{
-> >+	const struct tc_action *a;
-> >+	int err;
-> >+
-> >+	netdev_dbg(port->dev,
-> 
-> Again, no need to wrap.
-> 
-> 
-> >+		   "%s: port %u cookie %lu\n",
-> >+		   __func__, port->chip_port, f->cookie);
-> >+	switch (f->command) {
-> >+	case TC_CLSMATCHALL_REPLACE:
-> >+		if (!tcf_exts_has_one_action(f->exts)) {
-> >+			netdev_err(port->dev, "only one action is supported\n");
-> >+			return -EOPNOTSUPP;
-> >+		}
-> >+
-> >+		a = tcf_exts_first_action(f->exts);
-> >+
-> >+		if (is_tcf_police(a)) {
-> >+			if (!ingress)
-> >+				return -EOPNOTSUPP;
-> >+
-> >+			if (port->tc.police_id &&
-> >+			    port->tc.police_id != f->cookie) {
-> >+				netdev_warn(port->dev,
-> 
-> Again, no need to wrap.
-> 
-> 
-> >+					    "Only one policer per port is supported\n");
-> >+				return -EEXIST;
-> >+			}
-> >+
-> >+			err = ocelot_port_policer_add(port, to_police(a));
-> >+			if (err) {
-> >+				netdev_err(port->dev, "Could not add policer\n");
-> >+				return err;
-> >+			}
-> >+			port->tc.police_id = f->cookie;
-> >+			return 0;
-> >+		} else {
-> >+			return -EOPNOTSUPP;
-> >+		}
-> >+	case TC_CLSMATCHALL_DESTROY:
-> >+		if (port->tc.police_id != f->cookie)
-> >+			return -ENOENT;
-> >+
-> >+		err = ocelot_port_policer_del(port);
-> >+		if (err) {
-> >+			netdev_err(port->dev, "Could not delete policer\n");
-> >+			return err;
-> >+		}
-> >+		port->tc.police_id = 0;
-> >+		return 0;
-> >+	default:
-> >+		return -EOPNOTSUPP;
-> >+	}
-> >+}
-> >+
-> >+static int ocelot_setup_tc_block_cb(enum tc_setup_type type,
-> >+				    void *type_data,
-> >+				    void *cb_priv, bool ingress)
-> >+{
-> >+	struct ocelot_port *port = cb_priv;
-> >+
-> >+	if (!tc_cls_can_offload_and_chain0(port->dev, type_data))
-> >+		return -EOPNOTSUPP;
-> >+
-> >+	switch (type) {
-> >+	case TC_SETUP_CLSMATCHALL:
-> >+		netdev_dbg(port->dev, "tc_block_cb: TC_SETUP_CLSMATCHALL %s\n",
-> >+			   ingress ? "ingress" : "egress");
-> >+
-> >+		return ocelot_setup_tc_cls_matchall(port, type_data, ingress);
-> >+	case TC_SETUP_CLSFLOWER:
-> >+		netdev_dbg(port->dev, "tc_block_cb: TC_SETUP_CLSFLOWER %s\n",
-> >+			   ingress ? "ingress" : "egress");
-> >+
-> >+		return -EOPNOTSUPP;
-> >+	default:
-> >+		netdev_dbg(port->dev, "tc_block_cb: type %d %s\n",
-> >+			   type,
-> >+			   ingress ? "ingress" : "egress");
-> >+
-> >+		return -EOPNOTSUPP;
-> >+	}
-> >+}
-> >+
-> >+static int ocelot_setup_tc_block_cb_ig(enum tc_setup_type type,
-> >+				       void *type_data,
-> >+				       void *cb_priv)
-> >+{
-> >+	return ocelot_setup_tc_block_cb(type, type_data,
-> 
-> Again, no need to wrap.
-> 
-> 
-> >+					cb_priv, true);
-> >+}
-> >+
-> >+static int ocelot_setup_tc_block_cb_eg(enum tc_setup_type type,
-> >+				       void *type_data,
-> >+				       void *cb_priv)
-> >+{
-> >+	return ocelot_setup_tc_block_cb(type, type_data,
-> 
-> Again, no need to wrap.
-> 
-> 
-> >+					cb_priv, false);
-> >+}
-> >+
-> >+static int ocelot_setup_tc_block(struct ocelot_port *port,
-> >+				 struct tc_block_offload *f)
-> >+{
-> >+	tc_setup_cb_t *cb;
-> >+
-> >+	netdev_dbg(port->dev, "tc_block command %d, binder_type %d\n",
-> >+		   f->command, f->binder_type);
-> >+
-> >+	if (f->binder_type == TCF_BLOCK_BINDER_TYPE_CLSACT_INGRESS)
-> >+		cb = ocelot_setup_tc_block_cb_ig;
-> >+	else if (f->binder_type == TCF_BLOCK_BINDER_TYPE_CLSACT_EGRESS)
-> >+		cb = ocelot_setup_tc_block_cb_eg;
-> >+	else
-> >+		return -EOPNOTSUPP;
-> >+
-> >+	switch (f->command) {
-> >+	case TC_BLOCK_BIND:
-> >+		return tcf_block_cb_register(f->block, cb, port,
-> >+					     port, f->extack);
-> >+	case TC_BLOCK_UNBIND:
-> >+		tcf_block_cb_unregister(f->block, cb, port);
-> >+		return 0;
-> >+	default:
-> >+		return -EOPNOTSUPP;
-> >+	}
-> >+}
-> >+
-> >+int ocelot_setup_tc(struct net_device *dev, enum tc_setup_type type,
-> >+		    void *type_data)
-> >+{
-> >+	struct ocelot_port *port = netdev_priv(dev);
-> >+
-> >+	switch (type) {
-> >+	case TC_SETUP_BLOCK:
-> >+		return ocelot_setup_tc_block(port, type_data);
-> >+	default:
-> >+		return -EOPNOTSUPP;
-> >+	}
-> >+	return 0;
-> >+}
-> >diff --git a/drivers/net/ethernet/mscc/ocelot_tc.h b/drivers/net/ethernet/mscc/ocelot_tc.h
-> >new file mode 100644
-> >index 000000000000..c905b98b6b4c
-> >--- /dev/null
-> >+++ b/drivers/net/ethernet/mscc/ocelot_tc.h
-> >@@ -0,0 +1,19 @@
-> >+/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
-> >+/* Microsemi Ocelot Switch driver
-> >+ *
-> >+ * Copyright (c) 2019 Microsemi Corporation
-> >+ */
-> >+
-> >+#ifndef _MSCC_OCELOT_TC_H_
-> >+#define _MSCC_OCELOT_TC_H_
-> >+
-> >+#include <linux/netdevice.h>
-> >+
-> >+struct ocelot_port_tc {
-> >+	unsigned long police_id;
-> >+};
-> >+
-> >+int ocelot_setup_tc(struct net_device *dev, enum tc_setup_type type,
-> >+		    void *type_data);
-> >+
-> >+#endif /* _MSCC_OCELOT_TC_H_ */
-> >-- 
-> >2.17.1
-> >
-> 
+Reviewed-by: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Acked-by: Anton Ivanov <anton.ivanov@cambridgegreys.com>
 
 -- 
-Joergen Andreasen, Microchip
+Anton R. Ivanov
+Cambridgegreys Limited. Registered in England. Company Number 10273661
+https://www.cambridgegreys.com/
