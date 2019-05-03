@@ -2,48 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4BB1262B
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2019 03:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E171262F
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2019 03:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbfECBq1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 May 2019 21:46:27 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:35653 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726620AbfECBq0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 21:46:26 -0400
-Received: by mail-pf1-f195.google.com with SMTP id t87so1475759pfa.2
-        for <linux-mips@vger.kernel.org>; Thu, 02 May 2019 18:46:26 -0700 (PDT)
+        id S1726517AbfECBrd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 May 2019 21:47:33 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:41717 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726404AbfECBrd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 May 2019 21:47:33 -0400
+Received: by mail-pf1-f194.google.com with SMTP id 188so2048773pfd.8
+        for <linux-mips@vger.kernel.org>; Thu, 02 May 2019 18:47:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=7IcrDcCdcuZcDXckMZ4mzmoblhXXA7yCampfX25DkOs=;
-        b=g6zo6iKSOwZQoKnPyw8M9dJ+9ZwDYu6+kz2+4DutMyIkPNxnlQ749b2Hi8wbAY4R/7
-         9hI9BL574RuQiR5dwYViN0L5jV70IVHJEf/4LZJIr//3xPWNJFchYDfrAgoDUbp+ji5q
-         ycc5IXACMBRevSHmc29TBmIq10EmLf1ST7qGo=
+        bh=4zOgl5hUi+wW+VlTGj/XzvLKsxEjhINNU+5luXRd9xQ=;
+        b=ULsUBTXjRbj5EOctsV2t62xIXVP/NhVpoMxfzRLlbRbb4FXiQ2eWnRZ0N4M0f9blUt
+         L0IDu77/oFUbW6McD4H3/Dbj4nkwTanirtHuvWsCsdej3G6GAQGmcJsWvdydkCo5hzMO
+         oIpxdEGJ2v6OtSga3QEc9pPp+pIEk/IsLD0Gs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=7IcrDcCdcuZcDXckMZ4mzmoblhXXA7yCampfX25DkOs=;
-        b=Bg6H21ppAxkia3eyqJjQTUqaTzRXiJgHnv0tNbepSAjwrt2d1fMJI8T6P54/94rEfr
-         FO7MBG8vHigiG1XN/PmSMg7X9SKA2b3JUsUGDpUv28wBMmTHSaUpzHSoG2E1hsJz61QV
-         dOiPsD4PtsxIpu20BBXNrC7rjGqqO4XjpCURohGfJ6TxQAgZMaRX0QmXEHlwXW+fk43n
-         +j5W8PSpcWhwMFVFTzEfwfHqU1popJCUxEyb7OJt1C0dMosKcacG6InP90DY+/9DELCx
-         ZwcJexJ/RHJnQXTMImC2eLEUNGiPM/aLldA+q2XApphHYlgsstZIvIwUY35l3MY0lKML
-         l1yg==
-X-Gm-Message-State: APjAAAWer9QimEa3c8j3tuDuzv7ll4us58NO0Zbl92tt3tygu8H4S8dn
-        8uPXfOh0/Du61ZiI4EbxiQKHOA==
-X-Google-Smtp-Source: APXvYqyRKJT1o3/DSyunuhNp7NR75CoUtaG2ZHSbgM6SoAvaQV9ddwjGdyH0snDsnZurKNugM4d3Yw==
-X-Received: by 2002:aa7:80d0:: with SMTP id a16mr7811325pfn.206.1556847985785;
-        Thu, 02 May 2019 18:46:25 -0700 (PDT)
+        bh=4zOgl5hUi+wW+VlTGj/XzvLKsxEjhINNU+5luXRd9xQ=;
+        b=oYhcOPAlRey9ujUo4qmcbssBuJU313DsCgkyEghsWIl8lEJs90rXGDhoS7OfrYRi/t
+         AVYU1YZ7XHHghFaSqRu1f0yI5yGucdPL9oH7yZWvqVZ/jYuixK6F+IiCzjw/recYq9Su
+         oUYi+z4FpilOEdMBQf0P0R/gQS+a5mIjO0+oEShl5H0VHgW/LySjg7Ul/G25LK8rrzaA
+         kZkUtXjPYTaYrkm9zCNRZlP3rFO2/rpJrkQ/HMvpkr9/1kHsvPfoUcbh8w0JQNdDS4f9
+         rF7S7KLHP2f8Z9MPxRvBFNdemWceMUPePZ4LIjN1mM0yFvpLE3Vc2M09Kj69ydnQfIlm
+         RMBA==
+X-Gm-Message-State: APjAAAWC3B1c74gu2L/FoK9Py2VDOW6WTaU+xO8TLFKd/Od+Cq8KdssE
+        TwiIlthxeXt49X6uJnPPQIKP6A==
+X-Google-Smtp-Source: APXvYqy08lM1CX7sM6E0+uCipR1m5Zg8/wz83oIkMafw9BZMVFGn/x0dPgZm/GonPzhY9Yao4KNqkQ==
+X-Received: by 2002:a63:ef4c:: with SMTP id c12mr7401785pgk.43.1556848052256;
+        Thu, 02 May 2019 18:47:32 -0700 (PDT)
 Received: from [10.230.28.107] ([192.19.223.250])
-        by smtp.gmail.com with ESMTPSA id 4sm546489pfd.55.2019.05.02.18.46.20
+        by smtp.gmail.com with ESMTPSA id a17sm517916pff.82.2019.05.02.18.47.27
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 May 2019 18:46:24 -0700 (PDT)
-Subject: Re: [PATCH 2/3] clk: add BCM63XX gated clock controller driver
+        Thu, 02 May 2019 18:47:31 -0700 (PDT)
+Subject: Re: [PATCH 3/3] MIPS: BMIPS: add clock controller nodes
 To:     Jonas Gorski <jonas.gorski@gmail.com>, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org
 Cc:     Michael Turquette <mturquette@baylibre.com>,
@@ -57,7 +57,7 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>
 References: <20190502122657.15577-1-jonas.gorski@gmail.com>
- <20190502122657.15577-3-jonas.gorski@gmail.com>
+ <20190502122657.15577-4-jonas.gorski@gmail.com>
 From:   Florian Fainelli <florian.fainelli@broadcom.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
@@ -92,12 +92,12 @@ Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  rw1j77+q3QXldOw/bON361EusWHdbhcRwu3WWFiY2ZslH+Xr69VtYAoMC1xtDxIvZ96ps9ZX
  pUPJUqHJr8QSrTG1/zioQH7j/4iMJ07MMPeQNkmj4kGQOdTcsFfDhYLDdCE5dj5WeE6fYRxE
  Q3up0ArDSP1L
-Message-ID: <c37d43a0-27ba-d4aa-cb55-3fcf349d2d16@broadcom.com>
-Date:   Thu, 2 May 2019 18:46:19 -0700
+Message-ID: <3fb6cf9b-1c07-e897-c9dd-71cd94db9a17@broadcom.com>
+Date:   Thu, 2 May 2019 18:47:26 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190502122657.15577-3-jonas.gorski@gmail.com>
+In-Reply-To: <20190502122657.15577-4-jonas.gorski@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -109,8 +109,8 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 On 5/2/2019 5:26 AM, Jonas Gorski wrote:
-> Add a driver for the gated clock controller found on MIPS based BCM63XX
-> SoCs.
+> Now that we have a driver for the clock controller, add nodes to allow
+> devices to make use of it.
 > 
 > Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
 
