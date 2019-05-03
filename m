@@ -2,122 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2595C12BCF
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2019 12:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 802F112C0D
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2019 13:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726372AbfECKrY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 May 2019 06:47:24 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:11257 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726047AbfECKrY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 May 2019 06:47:24 -0400
-Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
-  Joergen.Andreasen@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Joergen.Andreasen@microchip.com";
-  x-sender="Joergen.Andreasen@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa2.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Joergen.Andreasen@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa2.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Joergen.Andreasen@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-X-IronPort-AV: E=Sophos;i="5.60,425,1549954800"; 
-   d="scan'208";a="31691973"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 03 May 2019 03:47:23 -0700
-Received: from localhost (10.10.76.4) by chn-sv-exch02.mchp-main.com
- (10.10.76.38) with Microsoft SMTP Server id 14.3.352.0; Fri, 3 May 2019
- 03:47:22 -0700
-Date:   Fri, 3 May 2019 12:47:21 +0200
-From:   Joergen Andreasen <joergen.andreasen@microchip.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     <netdev@vger.kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "Microchip Linux Driver Support" <UNGLinuxDriver@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Joergen Andreasen" <joergen.andreasen@microchip.com>
-Subject: Re: [PATCH net-next 3/3] MIPS: generic: Add police related options
- to ocelot_defconfig
-Message-ID: <20190503104720.v5iltltcfdbyy3it@soft-dev16>
-References: <20190502094029.22526-1-joergen.andreasen@microchip.com>
- <20190502094029.22526-4-joergen.andreasen@microchip.com>
- <20190502162700.GC22550@piout.net>
+        id S1727469AbfECLL7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 3 May 2019 07:11:59 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:50555 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726396AbfECLL6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 May 2019 07:11:58 -0400
+Received: from xps13 (aaubervilliers-681-1-29-145.w90-88.abo.wanadoo.fr [90.88.149.145])
+        (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 9D4FF100005;
+        Fri,  3 May 2019 11:11:53 +0000 (UTC)
+Date:   Fri, 3 May 2019 13:11:52 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Mathieu Malaterre <malat@debian.org>, X86 ML <x86@kernel.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [RESEND PATCH v3 05/11] mtd: rawnand: vf610_nfc: add
+ initializer to avoid -Wmaybe-uninitialized
+Message-ID: <20190503131152.57b4ce25@xps13>
+In-Reply-To: <CAK7LNAQH8v8_HG6-cytT4qe05W9iiYwEP1mud4zG2NxxYcFptQ@mail.gmail.com>
+References: <20190423034959.13525-1-yamada.masahiro@socionext.com>
+        <20190423034959.13525-6-yamada.masahiro@socionext.com>
+        <20190502161346.07c15187@xps13>
+        <CAK7LNAQH8v8_HG6-cytT4qe05W9iiYwEP1mud4zG2NxxYcFptQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20190502162700.GC22550@piout.net>
-User-Agent: NeoMutt/20171215
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Alexandre,
+Hi Masahiro,
 
-The 05/02/2019 18:27, Alexandre Belloni wrote:
-> External E-Mail
-> 
-> 
-> Hi Joergen,
-> 
-> On 02/05/2019 11:40:29+0200, Joergen Andreasen wrote:
-> > Add default support for ingress qdisc, matchall classification
-> > and police action on MSCC Ocelot.
-> > 
-> 
-> This patch should be separated from the series as this doesn't have any
-> dependencies and should go through the MIPS tree.
-> 
+Masahiro Yamada <yamada.masahiro@socionext.com> wrote on Fri, 3 May
+2019 19:36:35 +0900:
 
-I will create a separate patch for this when the other patches has been
-accepted.
-
-> > Signed-off-by: Joergen Andreasen <joergen.andreasen@microchip.com>
-> > ---
-> >  arch/mips/configs/generic/board-ocelot.config | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> > 
-> > diff --git a/arch/mips/configs/generic/board-ocelot.config b/arch/mips/configs/generic/board-ocelot.config
-> > index 5e53b4bc47f1..5c7360dd819c 100644
-> > --- a/arch/mips/configs/generic/board-ocelot.config
-> > +++ b/arch/mips/configs/generic/board-ocelot.config
-> > @@ -25,6 +25,13 @@ CONFIG_SERIAL_OF_PLATFORM=y
-> >  CONFIG_NETDEVICES=y
-> >  CONFIG_NET_SWITCHDEV=y
-> >  CONFIG_NET_DSA=y
-> > +CONFIG_NET_SCHED=y
-> > +CONFIG_NET_SCH_INGRESS=y
-> > +CONFIG_NET_CLS_MATCHALL=y
-> > +CONFIG_NET_CLS_ACT=y
-> > +CONFIG_NET_ACT_POLICE=y
-> > +CONFIG_NET_ACT_GACT=y
-> > +
-> >  CONFIG_MSCC_OCELOT_SWITCH=y
-> >  CONFIG_MSCC_OCELOT_SWITCH_OCELOT=y
-> >  CONFIG_MDIO_MSCC_MIIM=y
-> > -- 
-> > 2.17.1
-> > 
+> Hi Miquel,
 > 
-> -- 
-> Alexandre Belloni, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> On Thu, May 2, 2019 at 11:14 PM Miquel Raynal <miquel.raynal@bootlin.com> wrote:
+> >
+> > Hi Masahiro,
+> >
+> > Masahiro Yamada <yamada.masahiro@socionext.com> wrote on Tue, 23 Apr
+> > 2019 12:49:53 +0900:
+> >  
+> > > This prepares to move CONFIG_OPTIMIZE_INLINING from x86 to a common
+> > > place. We need to eliminate potential issues beforehand.
+> > >
+> > > Kbuild test robot has never reported -Wmaybe-uninitialized warning
+> > > for this probably because vf610_nfc_run() is inlined by the x86
+> > > compiler's inlining heuristic.
+> > >
+> > > If CONFIG_OPTIMIZE_INLINING is enabled for a different architecture
+> > > and vf610_nfc_run() is not inlined, the following warning is reported:
+> > >
+> > > drivers/mtd/nand/raw/vf610_nfc.c: In function ‘vf610_nfc_cmd’:
+> > > drivers/mtd/nand/raw/vf610_nfc.c:455:3: warning: ‘offset’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+> > >    vf610_nfc_rd_from_sram(instr->ctx.data.buf.in + offset,
+> > >    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >             nfc->regs + NFC_MAIN_AREA(0) + offset,
+> > >             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >             trfr_sz, !nfc->data_access);
+> > >             ~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+> >
+> > IMHO this patch has no dependencies with this series.  
 > 
+> 
+> This patch is the prerequisite for 11/11.
+> https://lore.kernel.org/patchwork/patch/1064959/
+> 
+> 
+> Without the correct patch order,
+> the kbuild test robot reports the warning.
+> 
+> 
+> > Would you mind sending it alone with the proper Fixes tag?  
+> 
+> 
+> I do not think Fixes is necessary.
 
--- 
-Joergen Andreasen, Microchip
+IMHO it is. Even if today the warning does not spawn, there is a
+real C error which might already be an issue.
+
+> 
+> Nobody has noticed this potential issue before.
+> Without 11/11, probably we cannot reproduce this warning.
+> 
+> 
+> BTW, this series has been for a while in linux-next.
+
+Missed that. Ok, nevermind.
+
+
+Thanks,
+Miquèl
