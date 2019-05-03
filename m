@@ -2,126 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A49312AF2
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2019 11:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB65D12B30
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2019 12:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726561AbfECJrj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 May 2019 05:47:39 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:52205 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726495AbfECJrj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 May 2019 05:47:39 -0400
-Received: by mail-wm1-f66.google.com with SMTP id t76so6344546wmt.1;
-        Fri, 03 May 2019 02:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hKKanKzajc50t11Dd5aKaiR0AfOXx84AGrAuPRlKLjs=;
-        b=UA17r3XTHeasbaxo2HgeTqh666U18nnHTjZ5rdfSeE6j4Td0LmvJ+Hr6LjoguBOcfN
-         gCsq7dIZwojHe4/oa2YouOTZq3r9HgIHLFisQBXqX6sdJovW/mzgQG19n2GpScE0urd+
-         ELDuxgmq/6seVyBww+ELyG1iFKsgqquCCLleMTF5IHTiL4DpcXqpZcXG6YJ9zkMRHTf9
-         5iWv+M9luBRoCfqlaH9QN1tDpPVja3ZCXosLCwiB28KDVeYWn6l3o3Tyz+Ec3+kERcIr
-         kCfIVK5m5gi4+fKAbK1i03VQBJmbZnXzonWg4rHYU42xQLHSyw9Lh3CtHt12ugcOaoBl
-         f5Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hKKanKzajc50t11Dd5aKaiR0AfOXx84AGrAuPRlKLjs=;
-        b=OELTGYV7YBPoQzdJc6UZPQv5x8zItMNeCm5pIO1akRCNxG2WVk44ckfDlENc1uKQHO
-         DYOmaFIvpjwvcQYdklwSSZ2QFkDWIK+avnBGEpWWiCqIanC961pJFAJB1GWaoxWXtdoz
-         ep0tQkaXvaB0ZsVr21IUOKScFT3GX6HmObXVL1p8Hcrbxb99Vl7yA98DRZaVn/qv3W2L
-         vxG47ErGI0c1Xl8Fl+Ju1CGgDer4amKlZ70syav3VfTmSOiibWncVN2x45TcloTu1UQ8
-         pTPK0az5QDfWmNpOuOjdF5zMwKCc/wJsEwJUnPy/V/0IEWGpGDA2i5xJwPZjnLfdkLJP
-         AxEw==
-X-Gm-Message-State: APjAAAWYBfe5vu7k4MMBqEATUZ+y/y1QtGvtAOY79ZMVcK0kqXqV++34
-        LLM6NCGm2ryLKsRebXw7cYvJRLaiAMuyPmHYFsI=
-X-Google-Smtp-Source: APXvYqzaVkmBVr6fBHeaBc5eruyEJ1T9FCYhw4WpOJERBXB50acBkUSBAvgkg4NlFT2Y3Brwgr0ZAB6Lzk1UlfZDHQs=
-X-Received: by 2002:a1c:9941:: with SMTP id b62mr1460156wme.76.1556876857611;
- Fri, 03 May 2019 02:47:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190502122657.15577-1-jonas.gorski@gmail.com>
- <20190502122657.15577-2-jonas.gorski@gmail.com> <27a90951-9525-c9b2-2c61-1a5db345cd70@gmail.com>
-In-Reply-To: <27a90951-9525-c9b2-2c61-1a5db345cd70@gmail.com>
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-Date:   Fri, 3 May 2019 11:47:55 +0200
-Message-ID: <CAOiHx=mbvqN16NG-gEOjVcSm6rV0P7iZd4XfzPHNS+Ns03+V_A@mail.gmail.com>
-Subject: Re: [PATCH 1/3] devicetree: document the BCM63XX gated clock bindings
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-mips@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
+        id S1726835AbfECKFS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 May 2019 06:05:18 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:57752 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725777AbfECKFS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 3 May 2019 06:05:18 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F3CB1374;
+        Fri,  3 May 2019 03:05:16 -0700 (PDT)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.72.51.249])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9CC463F557;
+        Fri,  3 May 2019 03:05:11 -0700 (PDT)
+Date:   Fri, 3 May 2019 11:05:09 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, Guo Ren <guoren@kernel.org>,
+        Helge Deller <deller@gmx.de>, Ley Foon Tan <lftan@altera.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
         Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Richard Kuo <rkuo@codeaurora.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Creasey <sammy@sammy.net>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
+        nios2-dev@lists.rocketboards.org
+Subject: Re: [PATCH 04/15] arm64: switch to generic version of pte allocation
+Message-ID: <20190503100508.GB47811@lakrids.cambridge.arm.com>
+References: <1556810922-20248-1-git-send-email-rppt@linux.ibm.com>
+ <1556810922-20248-5-git-send-email-rppt@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1556810922-20248-5-git-send-email-rppt@linux.ibm.com>
+User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 3 May 2019 at 03:44, Florian Fainelli <f.fainelli@gmail.com> wrote:
->
->
->
-> On 5/2/2019 5:26 AM, Jonas Gorski wrote:
-> > Add binding documentation for the gated clock controller found on MIPS
-> > based BCM63XX SoCs.
-> >
-> > Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
->
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Hi,
 
-Thanks!
+On Thu, May 02, 2019 at 06:28:31PM +0300, Mike Rapoport wrote:
+> The PTE allocations in arm64 are identical to the generic ones modulo the
+> GFP flags.
+> 
+> Using the generic pte_alloc_one() functions ensures that the user page
+> tables are allocated with __GFP_ACCOUNT set.
+> 
+> The arm64 definition of PGALLOC_GFP is removed and replaced with
+> GFP_PGTABLE_USER for p[gum]d_alloc_one() and for KVM memory cache.
+> 
+> The mappings created with create_pgd_mapping() are now using
+> GFP_PGTABLE_KERNEL.
+> 
+> The conversion to the generic version of pte_free_kernel() removes the NULL
+> check for pte.
+> 
+> The pte_free() version on arm64 is identical to the generic one and
+> can be simply dropped.
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> ---
+>  arch/arm64/include/asm/pgalloc.h | 43 ++++------------------------------------
+>  arch/arm64/mm/mmu.c              |  2 +-
+>  arch/arm64/mm/pgd.c              |  4 ++--
+>  virt/kvm/arm/mmu.c               |  2 +-
+>  4 files changed, 8 insertions(+), 43 deletions(-)
 
->
-> > ---
-> >  .../bindings/clock/brcm,bcm63xx-clocks.txt         | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/clock/brcm,bcm63xx-clocks.txt
-> >
-> > diff --git a/Documentation/devicetree/bindings/clock/brcm,bcm63xx-clocks.txt b/Documentation/devicetree/bindings/clock/brcm,bcm63xx-clocks.txt
-> > new file mode 100644
-> > index 000000000000..3041657e2f96
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/clock/brcm,bcm63xx-clocks.txt
-> > @@ -0,0 +1,22 @@
-> > +Gated Clock Controller Bindings for MIPS based BCM63XX SoCs
-> > +
-> > +Required properties:
-> > +- compatible: must be one of:
-> > +      "brcm,bcm3368-clocks"
-> > +      "brcm,bcm6328-clocks"
-> > +      "brcm,bcm6358-clocks"
-> > +      "brcm,bcm6362-clocks"
-> > +      "brcm,bcm6368-clocks"
-> > +      "brcm,bcm63268-clocks"
->
-> We could always add 6348/6338 to that list later one.
+[...]
 
-That's the plan*. But currently neither one is supported by
-BMIPS_GENERIC, which was my starting point. And making BCM63XX use the
-driver is ... complicated, due to (important) consumers not being
-platform drivers (the MPI/PCIe controller codes). And they can't be
-just converted to platform drivers, as they should then be non-legacy
-PCI controller drivers, so a full rewrite is needed.
+> diff --git a/arch/arm64/mm/pgd.c b/arch/arm64/mm/pgd.c
+> index 289f911..2ef1a53 100644
+> --- a/arch/arm64/mm/pgd.c
+> +++ b/arch/arm64/mm/pgd.c
+> @@ -31,9 +31,9 @@ static struct kmem_cache *pgd_cache __ro_after_init;
+>  pgd_t *pgd_alloc(struct mm_struct *mm)
+>  {
+>  	if (PGD_SIZE == PAGE_SIZE)
+> -		return (pgd_t *)__get_free_page(PGALLOC_GFP);
+> +		return (pgd_t *)__get_free_page(GFP_PGTABLE_USER);
+>  	else
+> -		return kmem_cache_alloc(pgd_cache, PGALLOC_GFP);
+> +		return kmem_cache_alloc(pgd_cache, GFP_PGTABLE_USER);
+>  }
 
-So let's stick with BMIPS_GENERIC first, else we never get anything
-done ;-). In the end BCM63XX should go away anyway, once BMIPS_GENERIC
-has reached feature parity.
+In efi_virtmap_init() we use pgd_alloc() to allocate a pgd for EFI
+runtime services, which we map with a special kernel page table.
 
+I'm not sure if accounting that is problematic, as it's allocated in a
+kernel thread off the back of an early_initcall.
 
-Regards
-Jonas
+Just to check, Is that sound, or do we need a pgd_alloc_kernel()?
 
-* if it even makes sense, as these are quite old, and systems will
-quite struggle running a modern kernel/OS.
-
-Jonas
+Thanks,
+Mark.
