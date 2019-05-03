@@ -2,85 +2,151 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 531D41307B
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2019 16:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83114131C1
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2019 18:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727790AbfECOgk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 May 2019 10:36:40 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:42273 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726376AbfECOgj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 May 2019 10:36:39 -0400
-Received: by mail-wr1-f65.google.com with SMTP id l2so8175020wrb.9;
-        Fri, 03 May 2019 07:36:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:openpgp:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9LOlOd4BnNhf1pDjGDrzR/ZKkfoXDSgbpZmiFhx/+So=;
-        b=Hg2G70/IF42hwa2sC6gm/jdkqyjwPHSzvqPkqfP1jo0BUp6RNAnh5BIQm/+kAWYTW8
-         91kQZlHD9Wfl0j/ZWV3Y5J2X70HDKI4N9yYIt5LqnfHnjyaFTxUbp8yeO5vlU4ytOTIq
-         sGeAethRyn+cfdzPBCX297FcoC0C1YKqiNcVyyGRixQXPnbBwJFeyvrwMTTf8w0tv+T4
-         vV9dT0FTqhNvEvfBYf9YYrjQn+KVqq76StJ3fI7jgWazxQ/rfFGgV0aG1EN7C2TCyxOo
-         Kq3ScrICKPE1q3pCT/qoVllfBz8l/des4kRK22/UQ5a/Rs8cYRDXuX/raRqeVM2F2zqo
-         LveQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:openpgp
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=9LOlOd4BnNhf1pDjGDrzR/ZKkfoXDSgbpZmiFhx/+So=;
-        b=IL3aO0mw9uc7IEle5vKz6F6kFd/W6ipGd98S+9+OTie5QUM/TnotTbpnEvmD7JTs91
-         9RDmWGQtXYYdm039PsqHUbDZsHzJNLlQdY9xw407RuUyby0xplk8TctnOFaQR65Sc3VN
-         0EaTIZykuNJnyU3yvxivQKZM23EiMwhT3764meMEvafFC6MFfbtVZVTBQLUXhsY1r0Br
-         9Yv3ppsrRsywCkaudJh5L3y4RHr4DTZvnKfxi2UcLeQZkrK5QMWiEvcRNXT3HRgEmCnn
-         oJkFX3z/I84OKlcg4X7rRxV9Hz9I2Xlx3QAWe9cohvzOvSgaBgaz2GkOJAnlQqYTzfkQ
-         7Axg==
-X-Gm-Message-State: APjAAAU+r1L+9ImqqAsECwBYCDjEf0qATGK8YOyuz46C9CUMUHixHw/Q
-        Day00EqHCvYn9axqA45D0hs=
-X-Google-Smtp-Source: APXvYqwPvEswxGgTxmceKzFYWP1rt3HvGjUS5zfk5glnnt2V0zX2AeQo2kgXS1/hJAMaI+XIGfIWqQ==
-X-Received: by 2002:adf:b646:: with SMTP id i6mr7217752wre.12.1556894198184;
-        Fri, 03 May 2019 07:36:38 -0700 (PDT)
-Received: from [192.168.1.33] (193.red-88-21-103.staticip.rima-tde.net. [88.21.103.193])
-        by smtp.gmail.com with ESMTPSA id o6sm3174417wre.60.2019.05.03.07.36.36
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Fri, 03 May 2019 07:36:37 -0700 (PDT)
-Subject: Re: [PATCH 3/3] MIPS: BMIPS: add clock controller nodes
-To:     Jonas Gorski <jonas.gorski@gmail.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
+        id S1728398AbfECQEK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 May 2019 12:04:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39464 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726495AbfECQEK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 3 May 2019 12:04:10 -0400
+Received: from guoren-Inspiron-7460 (23.83.240.247.16clouds.com [23.83.240.247])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B79282075C;
+        Fri,  3 May 2019 16:03:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1556899448;
+        bh=9K26hWqGMesApQFdaAhFuNyta2kJgrhs2hDdmQ00qcY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HpZWwg5gL0lVYH9xXr2lFjIs4Hr4EFxgLMU0fvIEmuLFdJqilQ6jQYN4Ocb6SStWw
+         iJWfiG66zAQYSvJeB8l3sHAhW93+kPdDD0sZUeypbCGK/KXfyMm98BkvfNuimDaaPM
+         OT2y75fIlpEILXIObpyUg29WsNXovSO+5g+0/f6w=
+Date:   Sat, 4 May 2019 00:03:48 +0800
+From:   Guo Ren <guoren@kernel.org>
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, Helge Deller <deller@gmx.de>,
+        Ley Foon Tan <lftan@altera.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
         Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>
-References: <20190502122657.15577-1-jonas.gorski@gmail.com>
- <20190502122657.15577-4-jonas.gorski@gmail.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
-Openpgp: url=http://pgp.mit.edu/pks/lookup?op=get&search=0xE3E32C2CDEADC0DE
-Message-ID: <ca21b81a-9772-039a-82be-e339f2a5ff16@amsat.org>
-Date:   Fri, 3 May 2019 16:36:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Richard Kuo <rkuo@codeaurora.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Creasey <sammy@sammy.net>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-um@lists.infradead.org,
+        nios2-dev@lists.rocketboards.org
+Subject: Re: [PATCH 05/15] csky: switch to generic version of pte allocation
+Message-ID: <20190503160348.GA9526@guoren-Inspiron-7460>
+References: <1556810922-20248-1-git-send-email-rppt@linux.ibm.com>
+ <1556810922-20248-6-git-send-email-rppt@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <20190502122657.15577-4-jonas.gorski@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1556810922-20248-6-git-send-email-rppt@linux.ibm.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/2/19 2:26 PM, Jonas Gorski wrote:
-> Now that we have a driver for the clock controller, add nodes to allow
-> devices to make use of it.
-> 
-> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+Hi Mike,
 
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Acked-by: Guo Ren <ren_guo@c-sky.com>
+
+On Thu, May 02, 2019 at 06:28:32PM +0300, Mike Rapoport wrote:
+> The csky implementation pte_alloc_one(), pte_free_kernel() and pte_free()
+> is identical to the generic except of lack of __GFP_ACCOUNT for the user
+> PTEs allocation.
+> 
+> Switch csky to use generic version of these functions.
+Ok.
+
+> 
+> The csky implementation of pte_alloc_one_kernel() is not replaced because
+> it does not clear the allocated page but rather sets each PTE in it to a
+> non-zero value.
+Yes, we must set each PTE to _PAGE_GLOBAL because hardware refill the
+MMU TLB entry with two PTEs and it use the result of pte0.global | pte1.global.
+If pte0 is valid and pte1 is invalid, we must set _PAGE_GLOBAL in
+invalid pte entry. Fortunately, there is no performance issue.
+
+> 
+> The pte_free_kernel() and pte_free() versions on csky are identical to the
+> generic ones and can be simply dropped.
+Ok.
+
+Best Regards
+ Guo Ren
+
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> ---
+>  arch/csky/include/asm/pgalloc.h | 30 +++---------------------------
+>  1 file changed, 3 insertions(+), 27 deletions(-)
+> 
+> diff --git a/arch/csky/include/asm/pgalloc.h b/arch/csky/include/asm/pgalloc.h
+> index d213bb4..98c571670 100644
+> --- a/arch/csky/include/asm/pgalloc.h
+> +++ b/arch/csky/include/asm/pgalloc.h
+> @@ -8,6 +8,9 @@
+>  #include <linux/mm.h>
+>  #include <linux/sched.h>
+>  
+> +#define __HAVE_ARCH_PTE_ALLOC_ONE_KERNEL
+> +#include <asm-generic/pgalloc.h>	/* for pte_{alloc,free}_one */
+> +
+>  static inline void pmd_populate_kernel(struct mm_struct *mm, pmd_t *pmd,
+>  					pte_t *pte)
+>  {
+> @@ -39,33 +42,6 @@ static inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
+>  	return pte;
+>  }
+>  
+> -static inline struct page *pte_alloc_one(struct mm_struct *mm)
+> -{
+> -	struct page *pte;
+> -
+> -	pte = alloc_pages(GFP_KERNEL | __GFP_ZERO, 0);
+> -	if (!pte)
+> -		return NULL;
+> -
+> -	if (!pgtable_page_ctor(pte)) {
+> -		__free_page(pte);
+> -		return NULL;
+> -	}
+> -
+> -	return pte;
+> -}
+> -
+> -static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
+> -{
+> -	free_pages((unsigned long)pte, PTE_ORDER);
+> -}
+> -
+> -static inline void pte_free(struct mm_struct *mm, pgtable_t pte)
+> -{
+> -	pgtable_page_dtor(pte);
+> -	__free_pages(pte, PTE_ORDER);
+> -}
+> -
+>  static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
+>  {
+>  	free_pages((unsigned long)pgd, PGD_ORDER);
+> -- 
+> 2.7.4
+> 
