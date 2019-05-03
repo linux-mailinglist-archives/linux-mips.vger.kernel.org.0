@@ -2,157 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C12A131FE
-	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2019 18:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C710913313
+	for <lists+linux-mips@lfdr.de>; Fri,  3 May 2019 19:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727641AbfECQSa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 May 2019 12:18:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55792 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726267AbfECQSa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 3 May 2019 12:18:30 -0400
-Received: from guoren-Inspiron-7460 (23.83.240.247.16clouds.com [23.83.240.247])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1DE0020651;
-        Fri,  3 May 2019 16:18:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556900308;
-        bh=1gc+88gGR8xs/HHG6j+3eKyXyw0MdhLPFZmbxDlan0s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ORHT3+AoYShsuuQO5PFoH4MN9lIuD27v03opdUhE7D6MhJ3ZFlrne2bcwdb1S/99e
-         JNCnsuMLUbfOQundyleyVhRpdJdwc193k7lyiJTj+1sl9zI38iCZlnHNebbBFtS/8d
-         UBobcwP26APlYC3LB4Vq9ec4UDgXUUcThKhfVnBY=
-Date:   Sat, 4 May 2019 00:18:08 +0800
-From:   Guo Ren <guoren@kernel.org>
-To:     Mike Rapoport <rppt@linux.ibm.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Palmer Dabbelt <palmer@sifive.com>, linux-mips@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-hexagon@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arch@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Helge Deller <deller@gmx.de>, x86@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Sam Creasey <sammy@sammy.net>, Arnd Bergmann <arnd@arndb.de>,
-        linux-um@lists.infradead.org, linux-m68k@lists.linux-m68k.org,
-        Greentime Hu <green.hu@gmail.com>,
-        nios2-dev@lists.rocketboards.org, Guan Xuetao <gxt@pku.edu.cn>,
-        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Richard Kuo <rkuo@codeaurora.org>,
-        Paul Burton <paul.burton@mips.com>,
-        linux-alpha@vger.kernel.org, Ley Foon Tan <lftan@altera.com>,
+        id S1727226AbfECRVQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 May 2019 13:21:16 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:32952 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726724AbfECRVQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 May 2019 13:21:16 -0400
+Received: by mail-lj1-f193.google.com with SMTP id f23so5890372ljc.0;
+        Fri, 03 May 2019 10:21:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Y1z3Y8igEir/kIL8uEvgmKE9/Q/zi2rA9ZUq1wYqhIg=;
+        b=IUkN0NIgisTvaKsVmuyeExZheDNyy9eAme5kMeshXiTYCGl60epTwzzDO2GUJAreKu
+         pASeb9cMqEscZtpPkX9dfWnnxyD5qa0BY3zQvNLbNAf0ZMmAwjQVQzXgQl0b/cViF07X
+         9PW/Bqvsl5Pa/DfsPxC6XK5uGD+CPBkNonEwel1MT1X+bvu7q492pwaBvO8klMPCMoUP
+         fYFc9kdmg40Uq26MRiWF9EAKKKZelKEcxAkrJBsi4+epTTbdUA6VI2AKzYC442XPsPJK
+         H2ckO23FCQ6rgqxbDwst5T6Jfg65JvRnThLOcbYR0bTwOl11yzrcP6SoZ4c7ZZBgU+ZH
+         Biow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Y1z3Y8igEir/kIL8uEvgmKE9/Q/zi2rA9ZUq1wYqhIg=;
+        b=pNA35YP+B+TU5BS1Y0hVJy3T/8GGTX6TXCJqH8T46ifd8I8L1dbv0bPue/vGXy1RFb
+         EYgL+Yay75aw9afLyiRyArevMR/X3u21G0t6gqkN5BiOF9P5eIUVetY2qjlBTZfwXp3A
+         NCX1s6sS+dBIpH59SQnk3tsDH/hkA0bDuUOgJZ/xymxc2Oj2ziq0/84iOES9UpIzteZi
+         LTCfVq1DPZQuuVJHW2PjiaKoIin6NK/lvjM9Ji8N9XAj9o/d8N02Jwh2jwQQUOVPfm9R
+         7t+z1mupvqrgvCZw9pYaCegGFfr3xR1NcUW1aeBM4HDXeOdl/HGBJ4C2ca3npo7gSAtl
+         IoPg==
+X-Gm-Message-State: APjAAAWZmepAkG1tmp1dc8g6l8xRdf4ii0ok2mG9VhizyvEFAbCRUx8w
+        cNeWZ78LzPqlo7WTMsZxfe8=
+X-Google-Smtp-Source: APXvYqyY7GCw9gRa4awuSK/u0rzIVlew/Kl87d69O4sE/JGvwV8ZiNCQ9rZ/Y4MJzAPHLfUehCROkA==
+X-Received: by 2002:a2e:2a03:: with SMTP id q3mr5658596ljq.56.1556904073966;
+        Fri, 03 May 2019 10:21:13 -0700 (PDT)
+Received: from mobilestation ([5.164.217.122])
+        by smtp.gmail.com with ESMTPSA id y10sm488084lja.71.2019.05.03.10.21.11
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 03 May 2019 10:21:12 -0700 (PDT)
+Date:   Fri, 3 May 2019 20:21:10 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 05/15] csky: switch to generic version of pte allocation
-Message-ID: <20190503161808.GA11596@guoren-Inspiron-7460>
-References: <1556810922-20248-1-git-send-email-rppt@linux.ibm.com>
- <1556810922-20248-6-git-send-email-rppt@linux.ibm.com>
- <20190503160348.GA9526@guoren-Inspiron-7460>
+        Michal Hocko <mhocko@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Juergen Gross <jgross@suse.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 04/12] mips: Reserve memory for the kernel image resources
+Message-ID: <20190503172108.u7q7dpdo2ggbluar@mobilestation>
+References: <20190423224748.3765-1-fancer.lancer@gmail.com>
+ <20190423224748.3765-5-fancer.lancer@gmail.com>
+ <20190424224343.4skr727fszycwksq@pburton-laptop>
+ <20190426000035.yfonfvrapmm4j3fg@mobilestation>
+ <20190430225832.cjk7mj6dotw3cib6@pburton-laptop>
+ <20190502142434.mpoyu4hhbunur5xe@mobilestation>
+ <20190502184537.ccxnrh6x7vg55kly@pburton-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190503160348.GA9526@guoren-Inspiron-7460>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190502184537.ccxnrh6x7vg55kly@pburton-laptop>
+User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, May 04, 2019 at 12:03:48AM +0800, Guo Ren wrote:
-> Hi Mike,
+Hello Paul
+
+On Thu, May 02, 2019 at 06:45:39PM +0000, Paul Burton wrote:
+> Hi Serge,
 > 
-> Acked-by: Guo Ren <ren_guo@c-sky.com>
+> On Thu, May 02, 2019 at 05:24:37PM +0300, Serge Semin wrote:
+> > Just reviewed and tested your series on my machine. I tagged the whole series
+> > in a response to the cover-letter of [1].
 > 
-> On Thu, May 02, 2019 at 06:28:32PM +0300, Mike Rapoport wrote:
-> > The csky implementation pte_alloc_one(), pte_free_kernel() and pte_free()
-> > is identical to the generic except of lack of __GFP_ACCOUNT for the user
-> > PTEs allocation.
+> Thanks for the review & testing; that series is now in mips-next.
+> 
+> > Could you please proceed with this patchset review procedure? There are
+> > also eight more patches left without your tag or comment.  This patch
+> > is also left with no explicit tag.
 > > 
-> > Switch csky to use generic version of these functions.
-> Ok.
+> > BTW I see you already applied patches 1-3 to the mips-next, so what shall I
+> > do when sending a v2 patchset with fixes asked to be provided for patch 12
+> > and possibly for others in future? Shall I just resend the series without that
+> > applied patches or send them over with your acked-by tagges?
 > 
-> > 
-> > The csky implementation of pte_alloc_one_kernel() is not replaced because
-> > it does not clear the allocated page but rather sets each PTE in it to a
-> > non-zero value.
-> Yes, we must set each PTE to _PAGE_GLOBAL because hardware refill the
-> MMU TLB entry with two PTEs and it use the result of pte0.global | pte1.global.
-                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^
-                                              correct: pte0.global & pte1.global
-> If pte0 is valid and pte1 is invalid, we must set _PAGE_GLOBAL in
-> invalid pte entry. Fortunately, there is no performance issue.
+> I've so far applied patches 1-7 of your series to mips-next, and stopped
+> at patch 8 which has a comment to address.
 > 
-> > 
-> > The pte_free_kernel() and pte_free() versions on csky are identical to the
-> > generic ones and can be simply dropped.
-> Ok.
+> My preference would be if you could send a v2 which just contains the
+> remaining patches (ie. patches 8-12 become patches 1-5), ideally atop
+> the mips-next branch.
 > 
-> Best Regards
->  Guo Ren
+> The series looks good to me once the review comments are addressed, but
+> no need to add an Acked-by - it'll be implicit when I apply them to
+> mips-next.
 > 
-> > 
-> > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > ---
-> >  arch/csky/include/asm/pgalloc.h | 30 +++---------------------------
-> >  1 file changed, 3 insertions(+), 27 deletions(-)
-> > 
-> > diff --git a/arch/csky/include/asm/pgalloc.h b/arch/csky/include/asm/pgalloc.h
-> > index d213bb4..98c571670 100644
-> > --- a/arch/csky/include/asm/pgalloc.h
-> > +++ b/arch/csky/include/asm/pgalloc.h
-> > @@ -8,6 +8,9 @@
-> >  #include <linux/mm.h>
-> >  #include <linux/sched.h>
-> >  
-> > +#define __HAVE_ARCH_PTE_ALLOC_ONE_KERNEL
-> > +#include <asm-generic/pgalloc.h>	/* for pte_{alloc,free}_one */
-> > +
-> >  static inline void pmd_populate_kernel(struct mm_struct *mm, pmd_t *pmd,
-> >  					pte_t *pte)
-> >  {
-> > @@ -39,33 +42,6 @@ static inline pte_t *pte_alloc_one_kernel(struct mm_struct *mm)
-> >  	return pte;
-> >  }
-> >  
-> > -static inline struct page *pte_alloc_one(struct mm_struct *mm)
-> > -{
-> > -	struct page *pte;
-> > -
-> > -	pte = alloc_pages(GFP_KERNEL | __GFP_ZERO, 0);
-> > -	if (!pte)
-> > -		return NULL;
-> > -
-> > -	if (!pgtable_page_ctor(pte)) {
-> > -		__free_page(pte);
-> > -		return NULL;
-> > -	}
-> > -
-> > -	return pte;
-> > -}
-> > -
-> > -static inline void pte_free_kernel(struct mm_struct *mm, pte_t *pte)
-> > -{
-> > -	free_pages((unsigned long)pte, PTE_ORDER);
-> > -}
-> > -
-> > -static inline void pte_free(struct mm_struct *mm, pgtable_t pte)
-> > -{
-> > -	pgtable_page_dtor(pte);
-> > -	__free_pages(pte, PTE_ORDER);
-> > -}
-> > -
-> >  static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
-> >  {
-> >  	free_pages((unsigned long)pgd, PGD_ORDER);
-> > -- 
-> > 2.7.4
-> > 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+Agreed. I'll do it shortly.
+
+-Sergey
+
+> Thanks,
+>     Paul
