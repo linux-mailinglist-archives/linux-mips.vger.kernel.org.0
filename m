@@ -2,82 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A89F139F8
-	for <lists+linux-mips@lfdr.de>; Sat,  4 May 2019 15:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207EA13B01
+	for <lists+linux-mips@lfdr.de>; Sat,  4 May 2019 17:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726905AbfEDNH3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 4 May 2019 09:07:29 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:35022 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726776AbfEDNH2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 May 2019 09:07:28 -0400
-Received: by mail-wr1-f65.google.com with SMTP id h15so5535601wrb.2
-        for <linux-mips@vger.kernel.org>; Sat, 04 May 2019 06:07:27 -0700 (PDT)
+        id S1726555AbfEDPlF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 4 May 2019 11:41:05 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34223 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726217AbfEDPlF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 May 2019 11:41:05 -0400
+Received: by mail-ot1-f65.google.com with SMTP id h2so174983oth.1;
+        Sat, 04 May 2019 08:41:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=bIX74g/Ebw6UXLbNNWzw4fo2NH6a/QGR4Dtf+2q0aD0=;
-        b=aP+Gx+n9L5sgKnRZXtE6elh0uIqEirFfd9dC/RjHG7mBwU5GkfZt+biVib7L8y7QY6
-         dB91OsrwoO4Kbs/sHONdfQpNVZs2KlTov88VbHc3+F8qWLt3qhWdNyr8bQ3ZzrHFMaWl
-         dZTXrCnFSf9Yz9aIDpUWxKvng6Hdbde+70aL9ypnubKpCcF3cVVg6wnPnvamrVtLPv6C
-         I2YqBku+LkKGGkrRN8aeOfMQzueLc0oLxr1t/zh8aj/jK0T19rec0Q/SAs9DQJ2IuOMA
-         3q/iObDu7GOwHbVEvJZhlr1f/MTuwQyyGRykr1u8p6J1LB0lumbNSrTL5tfDSohbv3bd
-         b4TA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NOqG3X6KeVU8jW9kB98iNlmMsjqP6JLYvww7EO9cTKU=;
+        b=CUK4rgKdIDA1cxCLaZilQgFgzUsj9LIn0xHBaVoj+tL1ynJO1ymrgmzCIBt1XKa9DI
+         7mjStmXpr4Md2G1X9It7LU6wyMY6LFu0S6zKL7bmKqY+bNDoDktyjuq1kMBlNR3owAYV
+         fn8d4tEvrjEXSxRAUphxi0KgZvkd5mQHAeysOjiVrT5NsPY948XFIo8roUsyLuV4nLfc
+         cToezmC45OVtOa6mCRXGhiyVILMOff9YGeo4gaTfIneOJAcp1eDoTn5R8Q2riM5NKqcC
+         YbhC2kUg/NUE225KMl7PJN8hQF2uMslrUhtUP9fXKkN8freEXF8UCm0LZFuzmbn+Xonv
+         q9eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bIX74g/Ebw6UXLbNNWzw4fo2NH6a/QGR4Dtf+2q0aD0=;
-        b=oRCtGwOL0O6Ja2P6bo8ABmiB8c52Ofa90dWpMdcdAfYIlz9QjTJx4frmcki0jZcB0+
-         cGY314mn5hB2ko8HulZf7p429moiWI54RdgFZbP5NtqlK7eG9EjluM6NhiXNbozmYX5X
-         vskksDr72RJq4lg6zWsMvRuRTZKUl/gtn5twV1Z1wOjuX05RNOwKip0RB97jcr7JEPri
-         3cEDeKc72Om/gCi8O7Z3ZG63bHqIg6EJtajk6n6p+Hf5OkoBOfE7H0SKeer1p5eDGSey
-         n4ssonHdyedklEacsjUstAxIME4/bwSAHvO8A8xmmBHSliIqF1knMeM2p7t1QCZtsrQU
-         TPvg==
-X-Gm-Message-State: APjAAAWJ2o7XtddejfsgR327g+Z7CMGS/dMmWbeSsyfGJ2TZxk9iohBX
-        F6erLfcwa8e0EIU8kFUil9saxg==
-X-Google-Smtp-Source: APXvYqx/ozBnqo9/lHr34HT+3oRk0fay36BQn/4qD9XF+nwCp+gkn1jy7+yKzyg3DAdfpezw1JxywA==
-X-Received: by 2002:a05:6000:3:: with SMTP id h3mr10677218wrx.314.1556975247343;
-        Sat, 04 May 2019 06:07:27 -0700 (PDT)
-Received: from localhost (jirka.pirko.cz. [84.16.102.26])
-        by smtp.gmail.com with ESMTPSA id d6sm3457846wrp.9.2019.05.04.06.07.26
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 04 May 2019 06:07:26 -0700 (PDT)
-Date:   Sat, 4 May 2019 15:07:26 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Joergen Andreasen <joergen.andreasen@microchip.com>
-Cc:     netdev@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        pieter.jansenvanvuuren@netronome.com
-Subject: Re: [PATCH net-next 2/3] net: mscc: ocelot: Implement port policers
- via tc command
-Message-ID: <20190504130726.GA14684@nanopsycho.orion>
-References: <20190502094029.22526-1-joergen.andreasen@microchip.com>
- <20190502094029.22526-3-joergen.andreasen@microchip.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NOqG3X6KeVU8jW9kB98iNlmMsjqP6JLYvww7EO9cTKU=;
+        b=e9/KjuUzkp7Pd6MMPLP9p3eULVvJuukO586HbWrZWlVFzP/S1GAuPkHbpR4Si2Y6hW
+         Lv4z9f13Z5KJp1Fg8fpHXy/0t0S+BZMtcUt1/79qZUVGuz6QkIYahCKZyAfTP/PIpEwb
+         nXd9MZvHex1qSdqMqWD9sicpGVnIBWeWbqHJi7EMkJixE6NETfm3wgGNvnXrTXywsn2C
+         pMR3tVdyg7+9fW4LcLY7rxH6NWi8mtWItMPc+36eUeOZz+4TxGdpwgy9tNCm3Jidh8qX
+         ByDjc8QssUBquaOJcNb/RVckrzPSh6Xz8wDUzdsTYbwEFy37Iq04/DSuNGBla2WesAMs
+         dHHg==
+X-Gm-Message-State: APjAAAU0cmGbK0X4b7Z59hXDMHI0FE16LiaaKYelLDx0A6PFwDwS7Ib4
+        rK3p0L0w//IY4BNwccWr9bYa6jJ9J+nhWX6Xs+4=
+X-Google-Smtp-Source: APXvYqxcHQ/Bg7b3kWRZyf62dPFG7TyyCvCwOhkNH6X/hpK+QcYgbUfM30aI6ikuoHEyWbcw00nNIg2rTZHkgyI0YW8=
+X-Received: by 2002:a05:6830:14c2:: with SMTP id t2mr5165076otq.64.1556984464473;
+ Sat, 04 May 2019 08:41:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190502094029.22526-3-joergen.andreasen@microchip.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+References: <20190422064046.2822-1-o.rempel@pengutronix.de>
+ <20190422064046.2822-4-o.rempel@pengutronix.de> <20190422132533.GA12718@lunn.ch>
+In-Reply-To: <20190422132533.GA12718@lunn.ch>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Sat, 4 May 2019 23:40:53 +0800
+Message-ID: <CAJsYDVJ84RsNVe9Mj9sYYwwLmmMkinRSJW4ziW22Sf04wS5gyw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] net: ethernet: add ag71xx driver
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-mips@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Felix Fietkau <nbd@nbd.name>, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Thu, May 02, 2019 at 11:40:28AM CEST, joergen.andreasen@microchip.com wrote:
->Hardware offload of port policers are now supported via the tc command.
->Supported police parameters are: rate, burst and overhead.
+Hi!
 
-Joergen, please see:
-[PATCH net-next 00/13] net: act_police offload support
-That patchset is also pushing flow intermediate representation for this,
-so I believe that you should base this patch on top of that.
+On Mon, Apr 22, 2019 at 9:28 PM Andrew Lunn <andrew@lunn.ch> wrote:
+> [...]
+> > +     /*
+> > +      * On most (all?) Atheros/QCA SoCs dual eth interfaces are not equal.
+> > +      *
+> > +      * That is to say eth0 can not work independently. It only works
+> > +      * when eth1 is working.
+> > +      */
+>
+> Please could you explain that some more? Is there just one MDIO bus
+> shared by two ethernet controllers? If so, it would be better to have
+> the MDIO bus controller as a separate driver.
+
+mdio registers exists on both ethernet blocks. And due to how reset
+works on this ethernet IP, it's hard to split it into a separated
+driver. (Only asserting both eth and mdio resets together will reset
+everything including register values.)
+The reason why gmac1 should be brought up first is that on some chips,
+mdio on gmac0 connects to nothing and phy used by gmac0 is on mdio bus
+of gmac1.
+
+> [...]
+
+Regards,
+Chuanhong Guo
