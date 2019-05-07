@@ -2,88 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC8A15F61
-	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2019 10:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724CB16140
+	for <lists+linux-mips@lfdr.de>; Tue,  7 May 2019 11:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726283AbfEGIaW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 May 2019 04:30:22 -0400
-Received: from esa4.microchip.iphmx.com ([68.232.154.123]:57965 "EHLO
-        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726103AbfEGIaV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 May 2019 04:30:21 -0400
-Received-SPF: Pass (esa4.microchip.iphmx.com: domain of
-  Joergen.Andreasen@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa4.microchip.iphmx.com;
-  envelope-from="Joergen.Andreasen@microchip.com";
-  x-sender="Joergen.Andreasen@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa4.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa4.microchip.iphmx.com;
-  envelope-from="Joergen.Andreasen@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa4.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Joergen.Andreasen@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-X-IronPort-AV: E=Sophos;i="5.60,441,1549954800"; 
-   d="scan'208";a="31898599"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 07 May 2019 01:30:20 -0700
-Received: from localhost (10.10.76.4) by chn-sv-exch07.mchp-main.com
- (10.10.76.108) with Microsoft SMTP Server id 14.3.352.0; Tue, 7 May 2019
- 01:30:14 -0700
-Date:   Tue, 7 May 2019 10:30:13 +0200
-From:   Joergen Andreasen <joergen.andreasen@microchip.com>
-To:     Jiri Pirko <jiri@resnulli.us>
-CC:     <netdev@vger.kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Ralf Baechle" <ralf@linux-mips.org>,
+        id S1726583AbfEGJmu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 May 2019 05:42:50 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:48556 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726473AbfEGJmu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 7 May 2019 05:42:50 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19DF8374;
+        Tue,  7 May 2019 02:42:50 -0700 (PDT)
+Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 944413F5AF;
+        Tue,  7 May 2019 02:42:48 -0700 (PDT)
+Date:   Tue, 7 May 2019 10:42:45 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
-        "James Hogan" <jhogan@kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        <pieter.jansenvanvuuren@netronome.com>
-Subject: Re: [PATCH net-next 2/3] net: mscc: ocelot: Implement port policers
- via tc command
-Message-ID: <20190507083012.4yjd7ok6dhzkrdf7@soft-dev16>
-References: <20190502094029.22526-1-joergen.andreasen@microchip.com>
- <20190502094029.22526-3-joergen.andreasen@microchip.com>
- <20190504130726.GA14684@nanopsycho.orion>
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v3 00/3] MIPS: SGI-IP27 rework part2
+Message-ID: <20190507094245.GB10964@e121166-lin.cambridge.arm.com>
+References: <20190319154755.31049-1-tbogendoerfer@suse.de>
+ <20190418205726.GB126710@google.com>
+ <20190506123724.5c78bcff04f722ae92e7f6a8@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190504130726.GA14684@nanopsycho.orion>
-User-Agent: NeoMutt/20171215
+In-Reply-To: <20190506123724.5c78bcff04f722ae92e7f6a8@suse.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jiri,
+On Mon, May 06, 2019 at 12:37:24PM +0200, Thomas Bogendoerfer wrote:
+> On Thu, 18 Apr 2019 15:57:26 -0500
+> Bjorn Helgaas <helgaas@kernel.org> wrote:
+> 
+> > Hi Thomas,
+> > 
+> > On Tue, Mar 19, 2019 at 04:47:49PM +0100, Thomas Bogendoerfer wrote:
+> > > SGI IP27 (Origin/Onyx2) and SGI IP30 (Octane) have a similair
+> > > architecture and share some hardware (ioc3/bridge). To share
+> > > the software parts this patchset reworks SGI IP27 interrupt
+> > > and pci bridge code. By using features Linux gained during the
+> > > many years since SGI IP27 code was integrated this even results
+> > > in code reduction and IMHO cleaner code.
+> > > 
+> > > Tests have been done on a two module O200 (4 CPUs) and an
+> > > Origin 2000 (8 CPUs).
+> > 
+> > Thanks for doing all this work!  It seems like it basically converts
+> > some of the SGI PCI code to the structure typical of current host
+> > controller drivers and moves it to drivers/pci/controller, which all
+> > seems great to me.
+> > 
+> > The patches were kind of in limbo as far as Patchwork.  Lorenzo
+> > handles the native host controller drivers, so I just delegated them
+> > to him, so now they should be on his radar.
+> 
+> Is there a chance to still get this into v5.2 ?
 
-The 05/04/2019 15:07, Jiri Pirko wrote:
-> External E-Mail
-> 
-> 
-> Thu, May 02, 2019 at 11:40:28AM CEST, joergen.andreasen@microchip.com wrote:
-> >Hardware offload of port policers are now supported via the tc command.
-> >Supported police parameters are: rate, burst and overhead.
-> 
-> Joergen, please see:
-> [PATCH net-next 00/13] net: act_police offload support
-> That patchset is also pushing flow intermediate representation for this,
-> so I believe that you should base this patch on top of that.
-> 
+I do not think so, I will have a look as soon as possible, sorry
+for the delay.
 
-I will base my patches on top of that.
-
--- 
-Joergen Andreasen, Microchip
+Lorenzo
