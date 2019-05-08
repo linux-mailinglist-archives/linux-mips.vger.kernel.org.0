@@ -2,31 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 542AB172DC
-	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2019 09:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16A8172EC
+	for <lists+linux-mips@lfdr.de>; Wed,  8 May 2019 09:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbfEHHvv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 8 May 2019 03:51:51 -0400
-Received: from mx2.suse.de ([195.135.220.15]:59542 "EHLO mx1.suse.de"
+        id S1726251AbfEHHwp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 8 May 2019 03:52:45 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59758 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725910AbfEHHvv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 8 May 2019 03:51:51 -0400
+        id S1726858AbfEHHwl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 8 May 2019 03:52:41 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id CD031AEEA;
-        Wed,  8 May 2019 07:51:49 +0000 (UTC)
-Date:   Wed, 8 May 2019 09:51:49 +0200
+        by mx1.suse.de (Postfix) with ESMTP id 3DC01AEF8;
+        Wed,  8 May 2019 07:52:40 +0000 (UTC)
+Date:   Wed, 8 May 2019 09:52:39 +0200
 From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
 To:     Christoph Hellwig <hch@infradead.org>
 Cc:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 00/3] MIPS: SGI-IP27 rework part2
-Message-Id: <20190508095149.6503bde3f33fb5d76ca827be@suse.de>
-In-Reply-To: <20190508061629.GA19227@infradead.org>
+Subject: Re: [PATCH v4 1/3] MIPS: SGI-IP27: move IP27 specific code out of
+ pci-ip27.c into new file
+Message-Id: <20190508095239.d055251e838a9e4fd2eff522@suse.de>
+In-Reply-To: <20190508061815.GB19227@infradead.org>
 References: <20190507210917.4691-1-tbogendoerfer@suse.de>
-        <20190508061629.GA19227@infradead.org>
+        <20190507210917.4691-2-tbogendoerfer@suse.de>
+        <20190508061815.GB19227@infradead.org>
 X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=ISO-8859-1
@@ -36,17 +38,16 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 7 May 2019 23:16:29 -0700
+On Tue, 7 May 2019 23:18:15 -0700
 Christoph Hellwig <hch@infradead.org> wrote:
 
-> On Tue, May 07, 2019 at 11:09:12PM +0200, Thomas Bogendoerfer wrote:
-> > architecture and share some hardware (ioc3/bridge). To share
+> On Tue, May 07, 2019 at 11:09:13PM +0200, Thomas Bogendoerfer wrote:
+> > Code in pci-ip27.c will be moved to drivers/pci/controller therefore
+> > platform specific needs to be extracted and put to the right place.
 > 
-> Isn't much of this also shared by IP35, the next generation Origin/Onyx
-> and and co?  A quick web search shows there even is an early port to
-> IP35 here:
+> I thogh the drivers/pci/controller was nixed by Lorenzo?
 
-yes it is, and IP35 is my next target after IP30 is done.
+yes, I missed this. Paul should I respin ?
 
 Thomas.
 
