@@ -2,101 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7269819275
-	for <lists+linux-mips@lfdr.de>; Thu,  9 May 2019 21:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC162195D2
+	for <lists+linux-mips@lfdr.de>; Fri, 10 May 2019 01:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727308AbfEISpV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 May 2019 14:45:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37136 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727281AbfEISpV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 9 May 2019 14:45:21 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 03BFE217D6;
-        Thu,  9 May 2019 18:45:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557427520;
-        bh=n6R/SMkEDuB4xZ6Ddy+01pQ8t9J5hnVCEn33UDP+TM8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cghv0FKPxEt2BtnmshQGM1ASRgHvjE/37zZKJUExYcTcN7D4bG9o+udyJ+DjnLApm
-         pPotNxgDV35eTMqzTSpdBv0KUKT/Fj+2WJjjHPdMFUrpssF2c5tg0TVGwKQprYNnpO
-         lgdSajVZbGIcQymyzmF90hCpjfB1+vu9664svRlo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chong Qiao <qiaochong@loongson.cn>,
-        Douglas Anderson <dianders@chromium.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Paul Burton <paul.burton@mips.com>,
+        id S1726716AbfEIXww (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 May 2019 19:52:52 -0400
+Received: from mail-eopbgr780121.outbound.protection.outlook.com ([40.107.78.121]:47168
+        "EHLO NAM03-BY2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726620AbfEIXww (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 9 May 2019 19:52:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=wavesemi.onmicrosoft.com; s=selector1-wavecomp-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=c1opa8gVoiMWdXjeoP5MH2to97rq4aewECLBK+VStt8=;
+ b=oqyWi5844ecp/tCDrJ4PVCIHwBIlrtQ/koxd0goGsbRA8QDjuH3EI17DNfMRNFsoH8yopZVYZKAwF/GNZS05B8q5lKkbRIzkGL30rEstj1BlHx8kx/T8Ons7fe7Q8lqFrd1oU+ljwfXE5M/HFI4ADB96Ih7U9UctgP0cDaExlkc=
+Received: from CY4PR2201MB1272.namprd22.prod.outlook.com (10.171.214.23) by
+ CY4PR2201MB1207.namprd22.prod.outlook.com (10.171.210.148) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1878.22; Thu, 9 May 2019 23:52:48 +0000
+Received: from CY4PR2201MB1272.namprd22.prod.outlook.com
+ ([fe80::954e:662f:d233:dc53]) by CY4PR2201MB1272.namprd22.prod.outlook.com
+ ([fe80::954e:662f:d233:dc53%4]) with mapi id 15.20.1856.012; Thu, 9 May 2019
+ 23:52:48 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+CC:     "linux-mips@linux-mips.org" <linux-mips@linux-mips.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <pburton@wavecomp.com>,
         James Hogan <jhogan@kernel.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 13/42] MIPS: KGDB: fix kgdb support for SMP platforms.
-Date:   Thu,  9 May 2019 20:42:02 +0200
-Message-Id: <20190509181255.318076267@linuxfoundation.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190509181252.616018683@linuxfoundation.org>
-References: <20190509181252.616018683@linuxfoundation.org>
-User-Agent: quilt/0.66
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH fixes v2] MIPS: perf: Fix build with CONFIG_CPU_BMIPS5000
+  enabled
+Thread-Topic: [PATCH fixes v2] MIPS: perf: Fix build with CONFIG_CPU_BMIPS5000
+  enabled
+Thread-Index: AQHVBsJOzEtNJUx6U0yfGCTcJdB0/w==
+Date:   Thu, 9 May 2019 23:52:48 +0000
+Message-ID: <CY4PR2201MB1272133F3A938CA88D7099EDC1330@CY4PR2201MB1272.namprd22.prod.outlook.com>
+References: <20190509183047.18408-1-f.fainelli@gmail.com>
+In-Reply-To: <20190509183047.18408-1-f.fainelli@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR02CA0009.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::22) To CY4PR2201MB1272.namprd22.prod.outlook.com
+ (2603:10b6:910:6e::23)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [73.93.154.214]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8bbf069e-ee91-45eb-6d78-08d6d4d97073
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:CY4PR2201MB1207;
+x-ms-traffictypediagnostic: CY4PR2201MB1207:
+x-microsoft-antispam-prvs: <CY4PR2201MB120702E3016E85168D053ABAC1330@CY4PR2201MB1207.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2657;
+x-forefront-prvs: 003245E729
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(376002)(346002)(39850400004)(396003)(366004)(189003)(199004)(2906002)(486006)(53936002)(446003)(6116002)(6246003)(256004)(476003)(11346002)(4326008)(76176011)(74316002)(6436002)(25786009)(186003)(9686003)(3846002)(54906003)(42882007)(55016002)(44832011)(33656002)(71190400001)(71200400001)(305945005)(68736007)(6916009)(316002)(229853002)(102836004)(386003)(7416002)(6506007)(7736002)(478600001)(4744005)(52536014)(26005)(8936002)(66066001)(66446008)(81166006)(81156014)(8676002)(66946007)(66556008)(64756008)(73956011)(66476007)(99286004)(5660300002)(52116002)(14454004)(7696005);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR2201MB1207;H:CY4PR2201MB1272.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: ym0WuYgV/tRX+OlxbSuj+LFsEHTnwxCs/prW/bKx+N3lYhPucRcMr/4Y+uwausEBioJFqRL2V87tk3ULAENmqabr78yyr13E8BcPnqqHSa4PcgvHTkVJ9BaJfU6bHtO6MDyplYUOhk1LQQNlcKIdVtdM7rouGS6fu3Jpsc2XtnLik+1QZHgjGxQEVGy5B1S8UZlVBoCEDT+k8StynQyJEmPxz1evTJTqIDk78DpM9tyfelUb2BJB9RV+oZONGRY0he3TQOQ5gqNNzpfs6z/uGZEf1SpxVMongMG2zxlzkeJLRI/OuIMVMmScfzZxLQruNNCU2dCzjFatoTKy2qVHpjSKdE1YqwqorBsLkrJ8JOHuAxA1/Hv6DjahzzatuX5evu22Ixy2R8ZxnuuTsINQd9mZeSJZUWYcfk2ztL6xh7Q=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bbf069e-ee91-45eb-6d78-08d6d4d97073
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2019 23:52:48.4663
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR2201MB1207
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-[ Upstream commit ab8a6d821179ab9bea1a9179f535ccba6330c1ed ]
-
-KGDB_call_nmi_hook is called by other cpu through smp call.
-MIPS smp call is processed in ipi irq handler and regs is saved in
- handle_int.
-So kgdb_call_nmi_hook get regs by get_irq_regs and regs will be passed
- to kgdb_cpu_enter.
-
-Signed-off-by: Chong Qiao <qiaochong@loongson.cn>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: James Hogan <jhogan@kernel.org>
-Cc: Will Deacon <will.deacon@arm.com>
-Cc: Christophe Leroy <christophe.leroy@c-s.fr>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: QiaoChong <qiaochong@loongson.cn>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/kernel/kgdb.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/mips/kernel/kgdb.c b/arch/mips/kernel/kgdb.c
-index eb6c0d582626b..2c1e30ca7ee4e 100644
---- a/arch/mips/kernel/kgdb.c
-+++ b/arch/mips/kernel/kgdb.c
-@@ -33,6 +33,7 @@
- #include <asm/processor.h>
- #include <asm/sigcontext.h>
- #include <linux/uaccess.h>
-+#include <asm/irq_regs.h>
- 
- static struct hard_trap_info {
- 	unsigned char tt;	/* Trap type code for MIPS R3xxx and R4xxx */
-@@ -214,7 +215,7 @@ static void kgdb_call_nmi_hook(void *ignored)
- 	old_fs = get_fs();
- 	set_fs(get_ds());
- 
--	kgdb_nmicallback(raw_smp_processor_id(), NULL);
-+	kgdb_nmicallback(raw_smp_processor_id(), get_irq_regs());
- 
- 	set_fs(old_fs);
- }
--- 
-2.20.1
-
-
-
+SGVsbG8sDQoNCkZsb3JpYW4gRmFpbmVsbGkgd3JvdGU6DQo+IGFyY2gvbWlwcy9rZXJuZWwvcGVy
+Zl9ldmVudF9taXBzeHguYzogSW4gZnVuY3Rpb24gJ21pcHN4eF9wbXVfZW5hYmxlX2V2ZW50JzoN
+Cj4gYXJjaC9taXBzL2tlcm5lbC9wZXJmX2V2ZW50X21pcHN4eC5jOjMyNjoyMTogZXJyb3I6IHVu
+dXNlZCB2YXJpYWJsZSAnZXZlbnQnIFstV2Vycm9yPXVudXNlZC12YXJpYWJsZV0NCj4gc3RydWN0
+IHBlcmZfZXZlbnQgKmV2ZW50ID0gY29udGFpbmVyX29mKGV2dCwgc3RydWN0IHBlcmZfZXZlbnQs
+IGh3KTsNCj4gXn5+fn4NCj4gDQo+IEZpeCB0aGlzIGJ5IG1ha2luZyB1c2Ugb2YgSVNfRU5BQkxF
+RCgpIHRvIHNpbXBsaWZ5IHRoZSBjb2RlIGFuZCBhdm9pZA0KPiB1bm5lY2Vzc2FyeSBpZmRlZmVy
+eS4NCj4gDQo+IEZpeGVzOiA4NDAwMmM4ODU5OWQgKCJNSVBTOiBwZXJmOiBGaXggcGVyZiB3aXRo
+IE1UIGNvdW50aW5nIG90aGVyIHRocmVhZHMiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBGbG9yaWFuIEZh
+aW5lbGxpIDxmLmZhaW5lbGxpQGdtYWlsLmNvbT4NCg0KQXBwbGllZCB0byBtaXBzLW5leHQuDQoN
+ClRoYW5rcywNCiAgICBQYXVsDQoNClsgVGhpcyBtZXNzYWdlIHdhcyBhdXRvLWdlbmVyYXRlZDsg
+aWYgeW91IGJlbGlldmUgYW55dGhpbmcgaXMgaW5jb3JyZWN0DQogIHRoZW4gcGxlYXNlIGVtYWls
+IHBhdWwuYnVydG9uQG1pcHMuY29tIHRvIHJlcG9ydCBpdC4gXQ0K
