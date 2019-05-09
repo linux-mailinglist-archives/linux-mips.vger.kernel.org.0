@@ -2,75 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E09118DC9
-	for <lists+linux-mips@lfdr.de>; Thu,  9 May 2019 18:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A0318F5D
+	for <lists+linux-mips@lfdr.de>; Thu,  9 May 2019 19:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726713AbfEIQOc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 May 2019 12:14:32 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:43240 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726561AbfEIQOc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 9 May 2019 12:14:32 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 54AE3307D910;
-        Thu,  9 May 2019 16:14:30 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.43.17.159])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 6B4A060BF3;
-        Thu,  9 May 2019 16:14:22 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu,  9 May 2019 18:14:29 +0200 (CEST)
-Date:   Thu, 9 May 2019 18:14:20 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Dmitry V. Levin" <ldv@altlinux.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Elvira Khabirova <lineprinter@altlinux.org>,
-        Eugene Syromyatnikov <esyr@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Greentime Hu <greentime@andestech.com>,
-        Helge Deller <deller@gmx.de>,
-        "James E.J. Bottomley" <jejb@parisc-linux.org>,
-        James Hogan <jhogan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Burton <paul.burton@mips.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Richard Kuo <rkuo@codeaurora.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vincent Chen <deanbo422@gmail.com>, linux-api@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        strace-devel@lists.strace.io
-Subject: Re: [PATCH linux-next v10 0/7] ptrace: add PTRACE_GET_SYSCALL_INFO
- request
-Message-ID: <20190509161420.GD24526@redhat.com>
-References: <20190415234307.GA9364@altlinux.org>
+        id S1726683AbfEIRje (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 May 2019 13:39:34 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:59068 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726631AbfEIRje (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 May 2019 13:39:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=GUcwVt88gpVqJwFXSEww+OxTilIQfKDCwAE+rwYnUs0=; b=BHm4+bSXUCpzMOJEIpmMx6QXb
+        vNaj13uXhlnT39b/MrRrOYAFLh1H/A0GJE5HfjcrZ+k17Npys4ktzcM35ES2OXje2KBv+ZhczI2K3
+        t26Dupejm41mlXPZB9X1A67EM2DOgzCI5jA2JGzIhODbQhXuNwBmOMGfV84X5pAG90h1XJaW3gHFL
+        hdhe6eif/XGSiiYi15uCUtSbcPJX6YfFiRxX5/3YMWMpmV9mwEfYEmVklvPTfgCQjZdjFpDzBgM+3
+        wVjq/xOdMzHcqy9i3E6eSW+EekPxo98P/7Ua6mguBtizkUqmc0aYDhnZTS8a97wy3t6D/sPgLzI6h
+        sLhn2WFRA==;
+Received: from 089144210233.atnat0019.highway.a1.net ([89.144.210.233] helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hOn10-0005KD-U5; Thu, 09 May 2019 17:39:31 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Manuel Lauss <manuel.lauss@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: fix DMA API abuse in various mips fbdev drivers
+Date:   Thu,  9 May 2019 19:38:46 +0200
+Message-Id: <20190509173849.11825-1-hch@lst.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190415234307.GA9364@altlinux.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.48]); Thu, 09 May 2019 16:14:32 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 04/16, Dmitry V. Levin wrote:
->
-> [Andrew, could you take this patchset into your tree, please?]
+Hi all,
 
-Just in case...
+this series fixes up three mips-specific fbdev drivers to not poke
+into the return values from the DMA memory allocators, as those
+aren't guranteed to be pages backed (although on mips in practice
+they are).  Two of them are also fixed up to use the proper DMA API
+mmap helper.
 
-I have already acked 6/7.
-
-Other patches look good to me too, just I don't think I can actually review
-these non-x86 changes.
-
-Oleg.
-
+Note that the first patch is required for pending mips DMA changes,
+so if they are queued up for 5.3 we'll need a stable branch that
+can be pulled into the dma-mapping or mips tree.
