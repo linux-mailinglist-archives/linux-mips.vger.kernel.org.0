@@ -2,106 +2,232 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4B2195DA
-	for <lists+linux-mips@lfdr.de>; Fri, 10 May 2019 01:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36225198CC
+	for <lists+linux-mips@lfdr.de>; Fri, 10 May 2019 09:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726704AbfEIXyu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 May 2019 19:54:50 -0400
-Received: from mail-eopbgr810125.outbound.protection.outlook.com ([40.107.81.125]:6064
-        "EHLO NAM01-BY2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726701AbfEIXyt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 9 May 2019 19:54:49 -0400
+        id S1727141AbfEJHOZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 May 2019 03:14:25 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:39711 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726914AbfEJHOY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 May 2019 03:14:24 -0400
+Received: by mail-wr1-f65.google.com with SMTP id w8so3979477wrl.6
+        for <linux-mips@vger.kernel.org>; Fri, 10 May 2019 00:14:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=wavesemi.onmicrosoft.com; s=selector1-wavecomp-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U6LpKe26DCexrrqFo0FVXVMPJNvpHbzyDK1HZIWiICg=;
- b=YJnaVUoZ6PByzQwTEdz18zlPV9dr0/+OP/YTNY+CFxIP/pWZrb9CZqLMNu09Wm+l6nIWP4QmMrO4pZ/qk1Xf82rNur5SU4wQy9kfFP5gah8wFw8iSRySSc1ztyOihsxRb2x9GcNEb0EWIfjkJYSuCAIaN1dZE28RoiNSl42XxZY=
-Received: from CY4PR2201MB1272.namprd22.prod.outlook.com (10.171.214.23) by
- CY4PR2201MB1047.namprd22.prod.outlook.com (10.171.221.167) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.12; Thu, 9 May 2019 23:54:46 +0000
-Received: from CY4PR2201MB1272.namprd22.prod.outlook.com
- ([fe80::954e:662f:d233:dc53]) by CY4PR2201MB1272.namprd22.prod.outlook.com
- ([fe80::954e:662f:d233:dc53%4]) with mapi id 15.20.1856.012; Thu, 9 May 2019
- 23:54:46 +0000
-From:   Paul Burton <paul.burton@mips.com>
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=8vhSJYdbDo4hmcaw9TnoN03bZbsoMDpBUCHFXbyR/K4=;
+        b=MFqL+9+X0sm8BkKpuJx1bVMj4iTTj/Co1wnnjYzzhiHXTtgGQdpFJ/jOyFJkcjjGiS
+         O5eaPpK9+JlbuRLuiSKOoGvBPP86sklq5AD0KwT1ldvyhMHhMwxCIBlvxDBAwQb/Q+ci
+         XBFmNosme4K+SuuHyNh5RsTZv1HUlgjYsiovIfM0NeQr8BaSP2364n+F+GtyKJi1ybSN
+         Q/PG0iYZ9HoThBZAuRlFlUX1O13V+gGaP8V9mr6onT7QJMnsx334A6+F8d9sO/z41M2l
+         SrW0gJRpTQlS/y2rD5B41QSK3T8NMVLmCtklijPr55KNtgO4ZPpfpqKFBCM6dRD43NGw
+         38pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=8vhSJYdbDo4hmcaw9TnoN03bZbsoMDpBUCHFXbyR/K4=;
+        b=LE+/Qb6P5+j0MGZCTYaHK52TvS8UeB6xM8ZSFeIcqRxqGeaep6TVWuU8UNlolt31Vg
+         Vhbh52ciLEDgJi9EDX1DlHtk0MBtkW8StgKZuiUt0UZE9PkNL9KfqkR3xKSKbMUb5ohf
+         HDCGTF11ZdbYdHCGrY3fzEvKDti0y/U09SgyRd0vXEilaTZ1k/oYSjPKi76SFAmvOPkw
+         Ze9v286naa6ZpSCsAkREAH5N01HEcplYXwfGeyR09ghoYCDMzBY6FO6UVt97J0MXDga3
+         3uhQUVtICTxPY0NL2qFR8rYA88MyeydUxgE0OJUehCVCY9reRlysjbNPi5JqH/F3bwrT
+         Hj/w==
+X-Gm-Message-State: APjAAAUDgSvVeFrnM/lzGzwsR5LtP3Bg5GGdg3Q83DQmOgfRIjCPwpWT
+        qLri7bIA7ExxqTMJ+LII/uErRw==
+X-Google-Smtp-Source: APXvYqy69mm3aXgNaBk9C+3iR8OkVvrFzyQEUwiMhFLr8AJ5XTD2ckTjNjPH+iiVTrKXhGZnZj3hgg==
+X-Received: by 2002:a05:6000:1250:: with SMTP id j16mr6226051wrx.200.1557472461889;
+        Fri, 10 May 2019 00:14:21 -0700 (PDT)
+Received: from dell ([2.27.167.43])
+        by smtp.gmail.com with ESMTPSA id l16sm1856711wrb.40.2019.05.10.00.14.20
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 10 May 2019 00:14:21 -0700 (PDT)
+Date:   Fri, 10 May 2019 08:14:19 +0100
+From:   Lee Jones <lee.jones@linaro.org>
 To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-CC:     Christoph Hellwig <hch@infradead.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 1/3] MIPS: SGI-IP27: move IP27 specific code out of
- pci-ip27.c into new file
-Thread-Topic: [PATCH v4 1/3] MIPS: SGI-IP27: move IP27 specific code out of
- pci-ip27.c into new file
-Thread-Index: AQHVBRkpG9b84HQxUEuMbXrsdvRr/6ZgwXGAgAAaYICAAp8jAA==
-Date:   Thu, 9 May 2019 23:54:46 +0000
-Message-ID: <20190509235444.3bvfwkl7y3cjc2yv@pburton-laptop>
-References: <20190507210917.4691-1-tbogendoerfer@suse.de>
- <20190507210917.4691-2-tbogendoerfer@suse.de>
- <20190508061815.GB19227@infradead.org>
- <20190508095239.d055251e838a9e4fd2eff522@suse.de>
-In-Reply-To: <20190508095239.d055251e838a9e4fd2eff522@suse.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR04CA0034.namprd04.prod.outlook.com
- (2603:10b6:a03:40::47) To CY4PR2201MB1272.namprd22.prod.outlook.com
- (2603:10b6:910:6e::23)
-user-agent: NeoMutt/20180716
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [73.93.154.214]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f23a97b3-e54c-4461-a8d8-08d6d4d9b6c1
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:CY4PR2201MB1047;
-x-ms-traffictypediagnostic: CY4PR2201MB1047:
-x-microsoft-antispam-prvs: <CY4PR2201MB1047E216A0271FB94852DB7CC1330@CY4PR2201MB1047.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-forefront-prvs: 003245E729
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(136003)(39850400004)(346002)(366004)(396003)(376002)(189003)(199004)(76176011)(99286004)(6916009)(6512007)(9686003)(102836004)(52116002)(2906002)(7736002)(229853002)(305945005)(6486002)(6436002)(6506007)(4326008)(386003)(6246003)(6116002)(3846002)(316002)(54906003)(26005)(53936002)(58126008)(478600001)(256004)(186003)(4744005)(1076003)(73956011)(64756008)(14454004)(66446008)(66556008)(66946007)(66476007)(33716001)(8676002)(486006)(8936002)(81166006)(81156014)(476003)(11346002)(446003)(44832011)(68736007)(5660300002)(42882007)(71200400001)(71190400001)(66066001)(25786009);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR2201MB1047;H:CY4PR2201MB1272.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: xPHLggLPhxFE24Ny85cuUs1B7s35tIjcG1uA0Exu4xZMZzkCqCd1j66GqtFMZvZ29CbU24ma4gYL4E5n7eSxmKIxpN3NrZvZU0lY+2rDpO7JXldo7QdIgonp++xwPJRyQ5WPBDcmPH5ARkRdDfp8+dWBLfNcD77NeDjiK9bJW0D0qwkCADaeFgouD2VzAFWKGuzihNb6/lpoZ3+obKmm3hXwj/vFBhktUnx7+F8RrNrPTnFh9kasSzKpBdDb8Zkm8Pq+THChS8MJwvXyvSL5xtjCiVchwsAQ636R6rL4/ZVwvlMuNFgiHnE1ISDDq9LV6Exm22Hvgo3CFKT5fRTAUkyU0g48ijadW9XdTuYmZf+CFZPH+0mKkbq/+Leq188rpkiRlo5noxWhFIXgTF5s3mG3niqiYWn7fLQT0Fn7tco=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2D7D8AA3636B67449B080C63319D98A7@namprd22.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] mfd: ioc3: Add driver for SGI IOC3 chip
+Message-ID: <20190510071419.GB7321@dell>
+References: <20190409154610.6735-1-tbogendoerfer@suse.de>
+ <20190409154610.6735-3-tbogendoerfer@suse.de>
+ <20190508102313.GG3995@dell>
+ <20190509160220.bb5382df931e5bd0972276df@suse.de>
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f23a97b3-e54c-4461-a8d8-08d6d4d9b6c1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2019 23:54:46.2023
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR2201MB1047
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190509160220.bb5382df931e5bd0972276df@suse.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+On Thu, 09 May 2019, Thomas Bogendoerfer wrote:
 
-On Wed, May 08, 2019 at 09:52:39AM +0200, Thomas Bogendoerfer wrote:
-> On Tue, 7 May 2019 23:18:15 -0700
-> Christoph Hellwig <hch@infradead.org> wrote:
->=20
-> > On Tue, May 07, 2019 at 11:09:13PM +0200, Thomas Bogendoerfer wrote:
-> > > Code in pci-ip27.c will be moved to drivers/pci/controller therefore
-> > > platform specific needs to be extracted and put to the right place.
-> >=20
-> > I thogh the drivers/pci/controller was nixed by Lorenzo?
->=20
-> yes, I missed this. Paul should I respin ?
+> On Wed, 8 May 2019 11:23:13 +0100
+> Lee Jones <lee.jones@linaro.org> wrote:
+> 
+> > On Tue, 09 Apr 2019, Thomas Bogendoerfer wrote:
+> > 
+> > > +static u32 crc8_addr(u64 addr)
+> > > +{
+> > > +	u32 crc = 0;
+> > > +	int i;
+> > > +
+> > > +	for (i = 0; i < 64; i += 8)
+> > > +		crc8_byte(&crc, addr >> i);
+> > > +	return crc;
+> > > +}
+> > 
+> > Not looked into these in any detail, but are you not able to use the
+> > CRC functions already provided by the kernel?
+> 
+> they are using a different polynomial, so I can't use it.
 
-No, I've basically dropped this patch whilst applying patches 2 & 3.
-Could you check that mips-next looks good? I checked that ip27_defconfig
-builds but don't have any way to run it.
+Would it be worth moving support out to somewhere more central so
+others can use this "polynomial"?
 
-Thanks,
-    Paul
+> > > +	}
+> > > +	pr_err("ioc3: CRC error in NIC address\n");
+> > > +}
+> > 
+> > This all looks like networking code.  If this is the case, it should
+> > be moved to drivers/networking or similar.
+> 
+> no it's not. nic stands for number in a can produced by Dallas Semi also
+> known under the name 1-Wire (https://en.wikipedia.org/wiki/1-Wire).
+> SGI used them to provide partnumber, serialnumber and mac addresses.
+> By placing the code to read the NiCs inside ioc3 driver there is no need
+> for locking and adding library code for accessing these informations.
+
+Great.  So it looks like you should be using this, no?
+
+  drivers/base/regmap/regmap-w1.c
+
+> > > +static struct resource ioc3_uarta_resources[] = {
+> > > +	DEFINE_RES_MEM(offsetof(struct ioc3, sregs.uarta),
+> > 
+> > You are the first user of offsetof() in MFD.  Could you tell me why
+> > it's required please?
+> 
+> to get the offsets of different chip functions out of a struct.
+
+I can see what it does on a coding level.
+
+What are you using it for in practical/real terms?
+
+Why wouldn't any other MFD driver require this, but you do?
+
+> > Please drop all of these and statically create the MFD cells like
+> > almost all other MFD drivers do.
+> 
+> I started that way and it blew up the driver and create a bigger mess
+> than I wanted to have. What's your concern with my approach ?
+> 
+> I could use static mfd_cell arrays, if there would be a init/startup
+> method per cell, which is called before setting up the platform device.
+> That way I could do the dynamic setup for ethernet and serial devices.
+
+You can set platform data later.  There are plenty of examples of
+this in the MFD subsystem.  Statically define what you can, and add
+the dynamic stuff later.
+
+> > > +static void ioc3_create_devices(struct ioc3_priv_data *ipd)
+> > > +{
+> > > +	struct mfd_cell *cell;
+> > > +
+> > > +	memset(ioc3_mfd_cells, 0, sizeof(ioc3_mfd_cells));
+> > > +	cell = ioc3_mfd_cells;
+> > > +
+> > > +	if (ipd->info->funcs & IOC3_ETH) {
+> > > +		memcpy(ioc3_eth_platform_data.mac_addr, ipd->nic_mac,
+> > > +		       sizeof(ioc3_eth_platform_data.mac_addr));
+> > 
+> > Better to pull the MAC address from within the Ethernet driver.
+> 
+> the NiC where the MAC address is provided is connected to the ioc3
+> chip outside of the ethernet register set. And there is another
+> NiC connected to the same 1-W bus. So moving reading of the MAC
+> address to the ethernet driver duplicates code and adds complexity
+> (locking). Again what's your concern here ?
+
+Does this go away if you use the already provided 1-wire API?
+
+> > > +	if (ipd->info->funcs & IOC3_SER) {
+> > > +		writel(GPCR_UARTA_MODESEL | GPCR_UARTB_MODESEL,
+> > > +			&ipd->regs->gpcr_s);
+> > > +		writel(0, &ipd->regs->gppr[6]);
+> > > +		writel(0, &ipd->regs->gppr[7]);
+> > > +		udelay(100);
+> > > +		writel(readl(&ipd->regs->port_a.sscr) & ~SSCR_DMA_EN,
+> > > +		       &ipd->regs->port_a.sscr);
+> > > +		writel(readl(&ipd->regs->port_b.sscr) & ~SSCR_DMA_EN,
+> > > +		       &ipd->regs->port_b.sscr);
+> > > +		udelay(1000);
+> > 
+> > No idea what any of this does.
+> > 
+> > It looks like it belongs in the serial driver (and needs comments).
+> 
+> it configures the IOC3 chip for serial usage. This is not part of
+> the serial register set, so it IMHO belongs in the MFD driver.
+
+So it does serial things, but doesn't belong in the serial driver?
+
+Could you please go into a bit more detail as to why you think that?
+
+Why is it better here?
+
+It's also totally unreadable by the way!
+
+> > > +	}
+> > > +#if defined(CONFIG_SGI_IP27)
+> > 
+> > What is this?  Can't you obtain this dynamically by probing the H/W?
+> 
+> that's the machine type and the #ifdef CONFIG_xxx are just for saving space,
+> when compiled for other machines and it's easy to remove.
+
+Please find other ways to save the space.  #ifery can get very messy,
+very quickly and is almost always avoidable.
+
+> > > +	if (ipd->info->irq_offset) {
+> > 
+> > What does this really signify?
+> 
+> IOC3 ASICs are most of the time connected to a SGI bridge chip. IOC3 can
+> provide two interrupt lines, which are wired to the bridge chip. The first
+> interrupt is assigned via the PCI core, but since IOC3 is not a PCI multi
+> function device the second interrupt must be treated here. And the used
+> interrupt line on the bridge chip differs between boards.
+
+Please provide a MACRO, function or something else which results in
+more readable code.  Whatever you choose to use, please add this text
+above, it will be helpful for future readers.
+
+> Thank you for your review. I'll address all other comments not cited in
+> my mail.
+
+NP
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
