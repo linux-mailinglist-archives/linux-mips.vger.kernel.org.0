@@ -2,60 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E49D1A122
-	for <lists+linux-mips@lfdr.de>; Fri, 10 May 2019 18:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB7A1ADE7
+	for <lists+linux-mips@lfdr.de>; Sun, 12 May 2019 21:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727645AbfEJQQ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 May 2019 12:16:58 -0400
-Received: from eddie.linux-mips.org ([148.251.95.138]:37718 "EHLO
-        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727271AbfEJQQ6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 May 2019 12:16:58 -0400
-Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
-        with ESMTP id S23994582AbfEJQQ4RvYN4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org> + 1 other);
-        Fri, 10 May 2019 18:16:56 +0200
-Date:   Fri, 10 May 2019 17:16:56 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Paul Burton <paul.burton@mips.com>
-cc:     Valentin Schneider <valentin.schneider@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH 06/14] MIPS: entry: Remove unneeded need_resched() loop
-In-Reply-To: <20190314181306.k6vxmaomyqalhi65@pburton-laptop>
-Message-ID: <alpine.LFD.2.21.1905101706440.12665@eddie.linux-mips.org>
-References: <20190311224752.8337-1-valentin.schneider@arm.com> <20190311224752.8337-7-valentin.schneider@arm.com> <20190314181306.k6vxmaomyqalhi65@pburton-laptop>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+        id S1726931AbfELTIQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Sun, 12 May 2019 15:08:16 -0400
+Received: from smtpbounce5.vodafone.co.nz ([202.73.205.5]:28972 "EHLO
+        mailfilter5.vodafone.co.nz" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726909AbfELTIQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 12 May 2019 15:08:16 -0400
+X-Greylist: delayed 577 seconds by postgrey-1.27 at vger.kernel.org; Sun, 12 May 2019 15:08:15 EDT
+X-Cloudmark-SP-Filtered: true
+X-Cloudmark-SP-Result: =?us-ascii?q?v=3D2=2E1_cv=3DZfq9TphA_c=3D1_sm=3D2_tr?=
+ =?us-ascii?q?=3D0_a=3DCagge7RBZ6KoC26IHpQLRg=3D=3D=3A17?=
+ =?us-ascii?q?_a=3DTWMqmCSF4xkA=3A10_a=3DIkcTkHD0fZMA=3A10_a=3Dx7bEGLp0ZPQA?=
+ =?us-ascii?q?=3A10_a=3DE5NmQfObTbMA=3A10?=
+ =?us-ascii?q?_a=3DLmV7pkAbXYUA=3A10_a=3DDRqDtSxtBlUluDz-HDoA=3A9_a=3D3qg-pZ?=
+ =?us-ascii?q?GFryTyA-tU=3A21?=
+ =?us-ascii?q?_a=3DfF0NayOOzFmGiZD6=3A21_a=3DQEXdDO2ut3YA=3A10?=
+X-IronPort-AV: E=Sophos;i="5.60,462,1549882800"; 
+   d="scan'208";a="482091822"
+Received: from unassigned.core.vf.net.nz (HELO smtp.vodafone.co.nz) ([203.118.158.227])
+  by cust.filter2.content.vf.net.nz with ESMTP; 13 May 2019 06:58:37 +1200
+Received: from clear.net.nz (unknown [103.125.190.80])
+        by smtp.vodafone.co.nz (Postfix) with ESMTPA id 2A619208E2A9
+        for <linux-mips@vger.kernel.org>; Sun, 12 May 2019 18:55:13 +0000 (UTC)
+Reply-To: kentpace@sina.com
+From:   derek@clear.net.nz
+To:     linux-mips@vger.kernel.org
+Subject: Your urgent response is required if you are still alive
+Date:   12 May 2019 11:53:26 -0700
+Message-ID: <20190512115326.0D8368B44EC3D424@clear.net.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam: Yes
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 14 Mar 2019, Paul Burton wrote:
+Dear, 
 
-> > @@ -66,7 +65,7 @@ need_resched:
-> >  	andi	t0, 1
-> >  	beqz	t0, restore_all
-> >  	jal	preempt_schedule_irq
-> > -	b	need_resched
-> > +	j	restore_all
-> 
-> One nit - why change from branch to jump? It's not a big deal, but I'd
-> prefer we stick with the branch ("b") instruction for a few reasons:
-> 
-> - restore_all is nearby so there's no issue with it being out of range
->   of a branch in any variation of the MIPS ISA.
+Please confirm if you are still alive because two gentle men 
+walked into my office this morning to claim your inheritance 
+funds with our bank. They said that you are dead and that they 
+are your  representative. 
 
- FYI, if it does go out of range for whatever reason, then for non-PIC 
-code GAS will relax it to a jump anyway (with a relocation attached); for 
-the regular MIPS ISA that is, where it has been doing that since forever 
-(I meant to implement this for the microMIPS ISA too, but IIRC there was a 
-complication there, probably coming from the existing more complex branch 
-relaxation code and/or slightly different use of relocations, and then it 
-fell through the cracks).
+I got your email from the file of your relative 
+who is yet to be paid for the Contract he has executed before his 
+death several years ago.
 
-  Maciej
+You the beneficiary of this fund has 
+not been in contact with the bank to claim your fund. The 
+gentlemen submitted an address where they want your VISA DEBIT 
+ATM CARD sent. 
+
+If you are still alive, please indicate by sending your full 
+contact details within 7 day of receiving this message, faliure 
+to do so, I will send the card to the address submitted by your 
+representatives. 
+
+
+Regards
