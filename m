@@ -2,107 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EF11B4B5
-	for <lists+linux-mips@lfdr.de>; Mon, 13 May 2019 13:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1D91B539
+	for <lists+linux-mips@lfdr.de>; Mon, 13 May 2019 13:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728772AbfEMLQW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 May 2019 07:16:22 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49324 "EHLO mx1.suse.de"
+        id S1728207AbfEMLrc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 May 2019 07:47:32 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55540 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729433AbfEMLQU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 13 May 2019 07:16:20 -0400
+        id S1729411AbfEMLrc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 13 May 2019 07:47:32 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 19A45AD7C;
-        Mon, 13 May 2019 11:16:19 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 33432AD85;
+        Mon, 13 May 2019 11:47:31 +0000 (UTC)
 From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
 To:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: SGI-IP22: provide missing dma_mask/coherent_dma_mask
-Date:   Mon, 13 May 2019 13:16:08 +0200
-Message-Id: <20190513111609.14855-1-tbogendoerfer@suse.de>
+Subject: [PATCH] MIPS: kernel: only use i8253 clocksource with periodic clockevent
+Date:   Mon, 13 May 2019 13:47:25 +0200
+Message-Id: <20190513114725.17823-1-tbogendoerfer@suse.de>
 X-Mailer: git-send-email 2.13.7
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Set dma_masks for SGIWD93 and SGISEEQ otherwise DMA allocations fails
-and causes not working SCSI/ethernet.
+i8253 clocksource needs a free running timer. This could only
+be used, if i8253 clockevent is set up as periodic.
 
 Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
 ---
- arch/mips/sgi-ip22/ip22-platform.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/mips/kernel/i8253.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/sgi-ip22/ip22-platform.c b/arch/mips/sgi-ip22/ip22-platform.c
-index 37ad26716579..0b2002e02a47 100644
---- a/arch/mips/sgi-ip22/ip22-platform.c
-+++ b/arch/mips/sgi-ip22/ip22-platform.c
-@@ -3,6 +3,7 @@
- #include <linux/if_ether.h>
- #include <linux/kernel.h>
- #include <linux/platform_device.h>
-+#include <linux/dma-mapping.h>
+diff --git a/arch/mips/kernel/i8253.c b/arch/mips/kernel/i8253.c
+index 5f209f111e59..df7ddd246eaa 100644
+--- a/arch/mips/kernel/i8253.c
++++ b/arch/mips/kernel/i8253.c
+@@ -32,7 +32,8 @@ void __init setup_pit_timer(void)
  
- #include <asm/paccess.h>
- #include <asm/sgi/ip22.h>
-@@ -25,6 +26,8 @@ static struct sgiwd93_platform_data sgiwd93_0_pd = {
- 	.irq	= SGI_WD93_0_IRQ,
- };
+ static int __init init_pit_clocksource(void)
+ {
+-	if (num_possible_cpus() > 1) /* PIT does not scale! */
++	if (num_possible_cpus() > 1 || /* PIT does not scale! */
++	    !clockevent_state_periodic(&i8253_clockevent))
+ 		return 0;
  
-+static u64 sgiwd93_0_dma_mask = DMA_BIT_MASK(32);
-+
- static struct platform_device sgiwd93_0_device = {
- 	.name		= "sgiwd93",
- 	.id		= 0,
-@@ -32,6 +35,8 @@ static struct platform_device sgiwd93_0_device = {
- 	.resource	= sgiwd93_0_resources,
- 	.dev = {
- 		.platform_data = &sgiwd93_0_pd,
-+		.dma_mask = &sgiwd93_0_dma_mask,
-+		.coherent_dma_mask = DMA_BIT_MASK(32),
- 	},
- };
- 
-@@ -49,6 +54,8 @@ static struct sgiwd93_platform_data sgiwd93_1_pd = {
- 	.irq	= SGI_WD93_1_IRQ,
- };
- 
-+static u64 sgiwd93_1_dma_mask = DMA_BIT_MASK(32);
-+
- static struct platform_device sgiwd93_1_device = {
- 	.name		= "sgiwd93",
- 	.id		= 1,
-@@ -56,6 +63,8 @@ static struct platform_device sgiwd93_1_device = {
- 	.resource	= sgiwd93_1_resources,
- 	.dev = {
- 		.platform_data = &sgiwd93_1_pd,
-+		.dma_mask = &sgiwd93_1_dma_mask,
-+		.coherent_dma_mask = DMA_BIT_MASK(32),
- 	},
- };
- 
-@@ -96,6 +105,8 @@ static struct resource sgiseeq_0_resources[] = {
- 
- static struct sgiseeq_platform_data eth0_pd;
- 
-+static u64 sgiseeq_dma_mask = DMA_BIT_MASK(32);
-+
- static struct platform_device eth0_device = {
- 	.name		= "sgiseeq",
- 	.id		= 0,
-@@ -103,6 +114,8 @@ static struct platform_device eth0_device = {
- 	.resource	= sgiseeq_0_resources,
- 	.dev = {
- 		.platform_data = &eth0_pd,
-+		.dma_mask = &sgiseeq_dma_mask,
-+		.coherent_dma_mask = DMA_BIT_MASK(32),
- 	},
- };
- 
+ 	return clocksource_i8253_init();
 -- 
 2.13.7
 
