@@ -2,174 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2751CA63
-	for <lists+linux-mips@lfdr.de>; Tue, 14 May 2019 16:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA7B1CE24
+	for <lists+linux-mips@lfdr.de>; Tue, 14 May 2019 19:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726148AbfENO3W convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 14 May 2019 10:29:22 -0400
-Received: from mx2.suse.de ([195.135.220.15]:59182 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726060AbfENO3V (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 14 May 2019 10:29:21 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 0F709AD12;
-        Tue, 14 May 2019 14:29:19 +0000 (UTC)
-Date:   Tue, 14 May 2019 16:29:18 +0200
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-Id: <20190514162918.a481ac682f36eb6f05aed984@suse.de>
-In-Reply-To: <20190510071419.GB7321@dell>
-References: <20190409154610.6735-1-tbogendoerfer@suse.de>
-        <20190409154610.6735-3-tbogendoerfer@suse.de>
-        <20190508102313.GG3995@dell>
-        <20190509160220.bb5382df931e5bd0972276df@suse.de>
-        <20190510071419.GB7321@dell>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+        id S1726229AbfENRiW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 May 2019 13:38:22 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:44295 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726180AbfENRiW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 May 2019 13:38:22 -0400
+Received: by mail-pl1-f194.google.com with SMTP id c5so885286pll.11;
+        Tue, 14 May 2019 10:38:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=yQwlOtBHnK6CRRjE4ab4v9zRwfsos8oSSPSf6ns3DeM=;
+        b=fYamd2nfaPVrWYUlTU2JQo4Hjv80wsUG5q2CIWedan+EMdJUs8r6IroZINOLDxuk4t
+         hUd+rrb1Ggo5A9sXY/vhycaQNaoO4ea/Q7Kr6TKg3Qe8DOwZcxiaSTU8TiuZxZXoKvTm
+         djuup/Bb+CIIhKlnKHjAMoqJweQ7zu3xQNDcOLoGBSUSsbD9MUrKHniw239K4dOOpsPW
+         CgkL7fZ4e2yvAue4fa2pPYBIQ03R8VNGlqj5T8sruSi/4icWRCBTKaYUPy1w3X5ErU/H
+         WNHIC36xyhikn+ZM+yRT2vtYa4SFdW/wpwHXD1tJQriZsiuTnN30YMmu2rYs0fl4s8nP
+         ot7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=yQwlOtBHnK6CRRjE4ab4v9zRwfsos8oSSPSf6ns3DeM=;
+        b=Y7ms9/rOGBK97x7oyD7Xo4a6D9F5CQkf70tFsC/+wRCB5dMpkLqNDvVCRRVJqSXKiK
+         bAtQBJChYGbBEaTGulWd0oXRAnIDrHs/DIqXvQ+zqKnxMsmzjcD0tEPIqb3uO0cKy/nN
+         v6TABkdMR5Jt9GJU/62R1NkyGx8xbWTFq89Fjlr+x5U72kA5IHd0kmzbngdwBPx+75NR
+         qBdxUcTcjmnIRN6fH14qhwQMTjkv4j8eWlTwDQsGeaYFJ4yiYe35KEaOiTy+m/UaSxBa
+         866txLLHhppjwTdOt+Ja7xFGo0o2TYXl0//6pOs5YKe9kgAmqEL2IEJJOg0xrjhmIqB1
+         qYxA==
+X-Gm-Message-State: APjAAAVrrAJB0qo8SvVGU80NY17nM7+Kk48SIEWXEvP7YfO5k/n2eAGP
+        e68Nov1CJoL8TI1CPmwn1YTSOUfM
+X-Google-Smtp-Source: APXvYqwIkqz2URE7Givd+nsWZchVlcnU3FFpVXxK/+Y/f80GPujaPxXDenUc3ZH3hMItbKNhPcLPTQ==
+X-Received: by 2002:a17:902:4624:: with SMTP id o33mr21139240pld.268.1557855501351;
+        Tue, 14 May 2019 10:38:21 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.250])
+        by smtp.gmail.com with ESMTPSA id a80sm46115717pfj.105.2019.05.14.10.38.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 May 2019 10:38:20 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-mips@linux-mips.org
+Cc:     joe@perches.com, Florian Fainelli <f.fainelli@gmail.com>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        linux-mips@vger.kernel.org (open list:BROADCOM NVRAM DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2 1/2] firmware: bcm47xx_nvram: Correct size_t printf format
+Date:   Tue, 14 May 2019 10:38:14 -0700
+Message-Id: <20190514173816.17030-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 10 May 2019 08:14:19 +0100
-Lee Jones <lee.jones@linaro.org> wrote:
+When building on a 64-bit host, we will get warnings like those:
 
-> On Thu, 09 May 2019, Thomas Bogendoerfer wrote:
-> > > > +	}
-> > > > +	pr_err("ioc3: CRC error in NIC address\n");
-> > > > +}
-> > > 
-> > > This all looks like networking code.  If this is the case, it should
-> > > be moved to drivers/networking or similar.
-> > 
-> > no it's not. nic stands for number in a can produced by Dallas Semi also
-> > known under the name 1-Wire (https://en.wikipedia.org/wiki/1-Wire).
-> > SGI used them to provide partnumber, serialnumber and mac addresses.
-> > By placing the code to read the NiCs inside ioc3 driver there is no need
-> > for locking and adding library code for accessing these informations.
-> 
-> Great.  So it looks like you should be using this, no?
-> 
->   drivers/base/regmap/regmap-w1.c
+drivers/firmware/broadcom/bcm47xx_nvram.c:103:3: note: in expansion of macro 'pr_err'
+   pr_err("nvram on flash (%i bytes) is bigger than the reserved space in memory, will just copy the first %i bytes\n",
+   ^~~~~~
+drivers/firmware/broadcom/bcm47xx_nvram.c:103:28: note: format string is defined here
+   pr_err("nvram on flash (%i bytes) is bigger than the reserved space in memory, will just copy the first %i bytes\n",
+                           ~^
+                           %li
 
-not sure about regmap-w1, but drivers/w1 contains usefull stuff
-like w1_crc8. The only drawback I see right now is, that I need
-information about part numbers at ioc3 probe time, but for using
-w1 framework I need to create a platform device, which will give
-me this information not synchronous. I'll see how I could solve that.
+Use %zu instead for that purpose.
 
-> > > > +static struct resource ioc3_uarta_resources[] = {
-> > > > +	DEFINE_RES_MEM(offsetof(struct ioc3, sregs.uarta),
-> > > 
-> > > You are the first user of offsetof() in MFD.  Could you tell me why
-> > > it's required please?
-> > 
-> > to get the offsets of different chip functions out of a struct.
-> 
-> I can see what it does on a coding level.
-> 
-> What are you using it for in practical/real terms?
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+Changes in v2:
+- Use %zu instead of %zi (Joe Perches)
 
-ioc3 has one PCI bar, where all different functions are accessible.
-The current ioc3 register map has all these functions set up in one
-struct. The base address of these registers comes out of the PCI
-framework and to use the MFD framework I need offsets for the different
-functions. And because there was already struct ioc3 I'm using
-offsetof on this struct.
+ drivers/firmware/broadcom/bcm47xx_nvram.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> Why wouldn't any other MFD driver require this, but you do?
-
-the other PCI MFD drivers I've looked at, have a PCI BAR per function,
-which makes live easier and no need for offsetof. Other MFD drivers
-#define the offsets and don't have a big struct, which contains all
-function registers. If you really insist on using #defines I need
-to go through a few parts of the kernel where struct ioc3 is still used.
-
-> > > > +	if (ipd->info->funcs & IOC3_SER) {
-> > > > +		writel(GPCR_UARTA_MODESEL | GPCR_UARTB_MODESEL,
-> > > > +			&ipd->regs->gpcr_s);
-> > > > +		writel(0, &ipd->regs->gppr[6]);
-> > > > +		writel(0, &ipd->regs->gppr[7]);
-> > > > +		udelay(100);
-> > > > +		writel(readl(&ipd->regs->port_a.sscr) & ~SSCR_DMA_EN,
-> > > > +		       &ipd->regs->port_a.sscr);
-> > > > +		writel(readl(&ipd->regs->port_b.sscr) & ~SSCR_DMA_EN,
-> > > > +		       &ipd->regs->port_b.sscr);
-> > > > +		udelay(1000);
-> > > 
-> > > No idea what any of this does.
-> > > 
-> > > It looks like it belongs in the serial driver (and needs comments).
-> > 
-> > it configures the IOC3 chip for serial usage. This is not part of
-> > the serial register set, so it IMHO belongs in the MFD driver.
-> 
-> So it does serial things, but doesn't belong in the serial driver?
-
-It sets up IOC3 GPIOs and IOC3 serial mode in way the 8250 driver
-can work with the connected superio.
-
-> Could you please go into a bit more detail as to why you think that?
-> 
-> Why is it better here?
-
-access to gpio and serial mode is outside of the 8250 register space.
-So either I need to export with some additional resources/new special
-platform data or just set it where it is done.
-
-> It's also totally unreadable by the way!
-
-sure, I'll add comments.
-
-> > > > +	}
-> > > > +#if defined(CONFIG_SGI_IP27)
-> > > 
-> > > What is this?  Can't you obtain this dynamically by probing the H/W?
-> > 
-> > that's the machine type and the #ifdef CONFIG_xxx are just for saving space,
-> > when compiled for other machines and it's easy to remove.
-> 
-> Please find other ways to save the space.  #ifery can get very messy,
-> very quickly and is almost always avoidable.
-
-space isn't a problem at all, so removing #ifdef CONFIG is easy.
-
-> 
-> > > > +	if (ipd->info->irq_offset) {
-> > > 
-> > > What does this really signify?
-> > 
-> > IOC3 ASICs are most of the time connected to a SGI bridge chip. IOC3 can
-> > provide two interrupt lines, which are wired to the bridge chip. The first
-> > interrupt is assigned via the PCI core, but since IOC3 is not a PCI multi
-> > function device the second interrupt must be treated here. And the used
-> > interrupt line on the bridge chip differs between boards.
-> 
-> Please provide a MACRO, function or something else which results in
-> more readable code.  Whatever you choose to use, please add this text
-> above, it will be helpful for future readers.
-
-will do.
-
-Thomas.
-
+diff --git a/drivers/firmware/broadcom/bcm47xx_nvram.c b/drivers/firmware/broadcom/bcm47xx_nvram.c
+index d25f080fcb0d..8698c5dd29d9 100644
+--- a/drivers/firmware/broadcom/bcm47xx_nvram.c
++++ b/drivers/firmware/broadcom/bcm47xx_nvram.c
+@@ -100,7 +100,7 @@ static int nvram_find_and_copy(void __iomem *iobase, u32 lim)
+ 		nvram_len = size;
+ 	}
+ 	if (nvram_len >= NVRAM_SPACE) {
+-		pr_err("nvram on flash (%i bytes) is bigger than the reserved space in memory, will just copy the first %i bytes\n",
++		pr_err("nvram on flash (%zu bytes) is bigger than the reserved space in memory, will just copy the first %i bytes\n",
+ 		       nvram_len, NVRAM_SPACE - 1);
+ 		nvram_len = NVRAM_SPACE - 1;
+ 	}
+@@ -152,7 +152,7 @@ static int nvram_init(void)
+ 	    header.len > sizeof(header)) {
+ 		nvram_len = header.len;
+ 		if (nvram_len >= NVRAM_SPACE) {
+-			pr_err("nvram on flash (%i bytes) is bigger than the reserved space in memory, will just copy the first %i bytes\n",
++			pr_err("nvram on flash (%zu bytes) is bigger than the reserved space in memory, will just copy the first %i bytes\n",
+ 				header.len, NVRAM_SPACE);
+ 			nvram_len = NVRAM_SPACE - 1;
+ 		}
 -- 
-SUSE Linux GmbH
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+2.17.1
+
