@@ -2,75 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 013CD1F277
-	for <lists+linux-mips@lfdr.de>; Wed, 15 May 2019 14:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 938BF1F465
+	for <lists+linux-mips@lfdr.de>; Wed, 15 May 2019 14:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729101AbfEOLLL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 May 2019 07:11:11 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:42930 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729102AbfEOLLL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 May 2019 07:11:11 -0400
-Received: by mail-wr1-f66.google.com with SMTP id l2so2184300wrb.9;
-        Wed, 15 May 2019 04:11:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RfpyiRccRRz5dbumgmGOhQSt6RCKbWXqfWgcImNA2S8=;
-        b=K8t4CDah4BvgpilXqXw5zfSnz0BO2nlRqhLz2gBt2pODiwL4kv8u3l6llr5cwm1NMz
-         cgjs8gfhoBuBlaXma2hIzzXKOHnJIY55Z/RQyQEz9GQRx0FTCMyRfQQ0kZoQLqZ8toG2
-         URD0M9gTxxP3ivyMbkmXAVXh0xlkLqK7wON2A/Md2d7bN+7V1FSBsJFbiLEfdAPl11HY
-         q2QgOryr7QcwIHGew7YmpsJY2YsmBnZh4byZbIyNgyt2awx0qzkJlOcGGENIf8hH0k41
-         E2/+zrNVGv5uXVDKvKDWd8knOGnk3aafQyO7ChMWO5weTw5myZirdUM1jeu643nFh8mW
-         qWlg==
+        id S1727058AbfEOM32 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 May 2019 08:29:28 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:37222 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726803AbfEOM31 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 May 2019 08:29:27 -0400
+Received: by mail-vs1-f68.google.com with SMTP id o5so1566244vsq.4;
+        Wed, 15 May 2019 05:29:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=RfpyiRccRRz5dbumgmGOhQSt6RCKbWXqfWgcImNA2S8=;
-        b=F8PeZ7ZZN9eBEaEvWcJIFwXcUz79YIhgpoZ7jNxQXYzFWHuilcIRl86zFam2ihalUW
-         gmYw81Zo1U45ogI4h5F3ppaBAtUyYZn7quUND+5X4Du+k9GN7xU6PdQH8G+u7Yiij7G9
-         j5aNvdFEPkheTOmoe2AvyrcDlgLMzMxGYLPGeI+P9vwY2vMmUouHdXc+CZGQ6DJ0vjEO
-         3HxOKZAxXYZNXUQbwf1KBVvOmasuoQ5TZ9t4up5/GQ6GQDhtlyNIXREgLATRMid33Fi6
-         54bLAjYYx9fvBkGvqmsmR5+tA886O0vj4x8/2IxHT4JUEDgtYI1MBJEPo2B+fRmaI3RK
-         eedA==
-X-Gm-Message-State: APjAAAWWAGWS8TF8NWT/yNzrZBQ91zB3pOPb1YGDGSzOUf5k1RgLk+2b
-        27tYawGyK1pqYJrG7nW8Ty1M3ZcsoCEV/GxODMs=
-X-Google-Smtp-Source: APXvYqwy9wBDuoVo1pQ2ozYfDPbfcbqcr1FX+HUxx/FMBvDgFydGuewMLp2+gLO8zuWIDfWHm/LYc3Kw0RoFoklukJQ=
-X-Received: by 2002:a5d:440a:: with SMTP id z10mr10309482wrq.157.1557918668653;
- Wed, 15 May 2019 04:11:08 -0700 (PDT)
+        bh=cgdsZEIH2W5eTMf3uaLx4q/hdk2jHzw6fNgJE2/Ss+k=;
+        b=Kl1WAuyv9mYDtkcZTKYWwrcEjYd5h2UITDxQ0i8bc3etfxEnmdO91neWn/D44ScI5o
+         2dPdO26CQ2qpDl0OYOdMME31KZPnk7J8rqt+3+UpgGHGJf3t+chzENYfs7KbrbcznjdH
+         vIvZbymPN0VSnn0Lvj2a3Rkl5szI2YD322jgtVWxlH4lV7ufSmV17xZStx7q5sWryg49
+         pBT++UmGoudT2A4o0d6xVTbTeqSpws9htAsHYUAgQg0bJaeFwQQVrHN7HYMFZ8iOvBTX
+         ZHz5cXs/jzxNfwyxJFN2ZaYbWBoR9+6Ak/XcQ7PIif51U6J0arvK8IuGEdf44ZxsMA44
+         4y9A==
+X-Gm-Message-State: APjAAAUaz+8HolnY8TfWhHskyIP01Y9I2M/xPNoy+LiPFTZvtYNQJwpj
+        XRwh9qVedYi6mqWJlHL+YhcutX43utUGBoWcLrM=
+X-Google-Smtp-Source: APXvYqzDAJzfhabDwTYAYFXSOnY37iC0IXZoLvq4QwE8CVpdlrcgi5gg8xMkv97L4kuyL6Wc28Zhp7a2DMatRjdZeGY=
+X-Received: by 2002:a67:8e03:: with SMTP id q3mr20471095vsd.152.1557923365973;
+ Wed, 15 May 2019 05:29:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190509173849.11825-1-hch@lst.de> <20190509173849.11825-3-hch@lst.de>
-In-Reply-To: <20190509173849.11825-3-hch@lst.de>
-From:   Manuel Lauss <manuel.lauss@gmail.com>
-Date:   Wed, 15 May 2019 13:10:32 +0200
-Message-ID: <CAOLZvyG14NvbgX4PA5aafk=reLcHbqDswqS-8j4+7QJMx02d7A@mail.gmail.com>
-Subject: Re: [PATCH 2/3] au1200fb: fix DMA API abuse
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Linux-MIPS <linux-mips@vger.kernel.org>,
-        linux-fbdev <linux-fbdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20190515100400.3450-1-christian@brauner.io>
+In-Reply-To: <20190515100400.3450-1-christian@brauner.io>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 15 May 2019 14:29:14 +0200
+Message-ID: <CAMuHMdUKJOP2H4cVy0Na5hjn2-HUbfvE_zbctS4L9d-h9Oru4Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] pid: add pidfd_open()
+To:     Christian Brauner <christian@brauner.io>
+Cc:     Jann Horn <jannh@google.com>, Oleg Nesterov <oleg@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        elena.reshetova@intel.com, Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>, cyphar@cyphar.com,
+        Andy Lutomirski <luto@amacapital.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Servus Christoph,
-
-On Thu, May 9, 2019 at 7:39 PM Christoph Hellwig <hch@lst.de> wrote:
-> Virtual addresses return from dma(m)_alloc_attrs are opaque in what
-> backs then, and drivers must not poke into them.  Similarly caching
-> modes are not supposed to be directly set by the driver.  Switch the
-> driver to use the generic DMA API mmap helper to avoid these problems.
+On Wed, May 15, 2019 at 12:04 PM Christian Brauner <christian@brauner.io> wrote:
+> This adds the pidfd_open() syscall. It allows a caller to retrieve pollable
+> pidfds for a process which did not get created via CLONE_PIDFD, i.e. for a
+> process that is created via traditional fork()/clone() calls that is only
+> referenced by a PID:
 >
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  drivers/video/fbdev/au1200fb.c | 19 ++++---------------
->  1 file changed, 4 insertions(+), 15 deletions(-)
+> int pidfd = pidfd_open(1234, 0);
+> ret = pidfd_send_signal(pidfd, SIGSTOP, NULL, 0);
+>
+> With the introduction of pidfds through CLONE_PIDFD it is possible to
+> created pidfds at process creation time.
+> However, a lot of processes get created with traditional PID-based calls
+> such as fork() or clone() (without CLONE_PIDFD). For these processes a
+> caller can currently not create a pollable pidfd. This is a huge problem
+> for Android's low memory killer (LMK) and service managers such as systemd.
+> Both are examples of tools that want to make use of pidfds to get reliable
+> notification of process exit for non-parents (pidfd polling) and race-free
+> signal sending (pidfd_send_signal()). They intend to switch to this API for
+> process supervision/management as soon as possible. Having no way to get
+> pollable pidfds from PID-only processes is one of the biggest blockers for
+> them in adopting this api. With pidfd_open() making it possible to retrieve
+> pidfd for PID-based processes we enable them to adopt this api.
+>
+> In line with Arnd's recent changes to consolidate syscall numbers across
+> architectures, I have added the pidfd_open() syscall to all architectures
+> at the same time.
+>
+> Signed-off-by: Christian Brauner <christian@brauner.io>
 
-Runs fine on my test system.
+>  arch/m68k/kernel/syscalls/syscall.tbl       |  1 +
 
-Tested-by: Manuel Lauss <manuel.lauss@gmail.com>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
