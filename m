@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8901D1F0F4
-	for <lists+linux-mips@lfdr.de>; Wed, 15 May 2019 13:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1831F02B
+	for <lists+linux-mips@lfdr.de>; Wed, 15 May 2019 13:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731249AbfEOLWv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 May 2019 07:22:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33104 "EHLO mail.kernel.org"
+        id S1732440AbfEOL2v (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 May 2019 07:28:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39960 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731274AbfEOLWu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 15 May 2019 07:22:50 -0400
+        id S1732434AbfEOL2s (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 15 May 2019 07:28:48 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 446AA20881;
-        Wed, 15 May 2019 11:22:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AA6C6206BF;
+        Wed, 15 May 2019 11:28:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557919369;
-        bh=Wk3h8qta0dSeyNdeZXz5+gFK1Qw7oSRFsGllNW+DLJU=;
+        s=default; t=1557919728;
+        bh=eNJ7Q5pDHhuVdvQq7LT9RWGjeRk7vPgcuhEzrUADf0E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yW2IJ7R0Oq2etNDpLKXMwYKkzocCZtzkHZH3id1ve77P31CIB5SCj+BCtr6Ol5MKD
-         LDs3Ka2B9ZGoJ3s7euMY+6nj5eBAQs+hEIfPZWUdjIHP6XrwH9Ndsg1PZpZuPPmz10
-         O7pHM4RF50Qs+ftEmfK8SI8HbrEEaqKSyIS1y/VI=
+        b=0PJlXyBQrLSxRRtxP9sACNro4WVNy+6FsvvMhZadmi97XQJhjHR3X6EzZaHIgdVAz
+         jNjFS/wgUfvfHxRw6dSInIDkz7Cwt4WhSk1xUB3MtFn6rPzvkbyjSSh7+Ft5AM7S/1
+         axSPUAWbzYFN5RDAbYq4aYr2fnbpCSNelTyzCST0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,12 +37,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Jason Cooper <jason@lakedaemon.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 050/113] MIPS: perf: ath79: Fix perfcount IRQ assignment
-Date:   Wed, 15 May 2019 12:55:41 +0200
-Message-Id: <20190515090657.452540426@linuxfoundation.org>
+Subject: [PATCH 5.0 069/137] MIPS: perf: ath79: Fix perfcount IRQ assignment
+Date:   Wed, 15 May 2019 12:55:50 +0200
+Message-Id: <20190515090658.457231438@linuxfoundation.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190515090652.640988966@linuxfoundation.org>
-References: <20190515090652.640988966@linuxfoundation.org>
+In-Reply-To: <20190515090651.633556783@linuxfoundation.org>
+References: <20190515090651.633556783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -114,7 +114,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 11 insertions(+), 6 deletions(-)
 
 diff --git a/arch/mips/ath79/setup.c b/arch/mips/ath79/setup.c
-index 4c7a93f4039a0..7c0b2e6cdfbd7 100644
+index 9728abcb18fac..c04ae685003f7 100644
 --- a/arch/mips/ath79/setup.c
 +++ b/arch/mips/ath79/setup.c
 @@ -211,12 +211,6 @@ const char *get_system_type(void)
