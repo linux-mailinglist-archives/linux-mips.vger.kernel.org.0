@@ -2,129 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1FC20B38
-	for <lists+linux-mips@lfdr.de>; Thu, 16 May 2019 17:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A948212C7
+	for <lists+linux-mips@lfdr.de>; Fri, 17 May 2019 06:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727763AbfEPP3V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 May 2019 11:29:21 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:37807 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726692AbfEPP3V (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 May 2019 11:29:21 -0400
-Received: by mail-ed1-f68.google.com with SMTP id w37so5849694edw.4
-        for <linux-mips@vger.kernel.org>; Thu, 16 May 2019 08:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brauner.io; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ZqfBKUXmncS+f99++ptXSxdqupLw9zmhEoHFhOKQ3+w=;
-        b=TH4z/rM7ErguN84LC3AmRg3JM/hVu0pzNCfG54H90jzb63FEyWpgQxI/RMgxJKMw0P
-         YMcyNk31xsPD9o3Q8SwKVFbPkeg8kucRDIsE3yDY3iiXnyBwTwnYxeZvDW5/V+wBXU6a
-         4Whkmp9tF7azl07xuKt/fN1RfMwR7c1B7epJGJ4YizDr1inzgV4yUswyquIaazuD7NSA
-         +Y7PT7f4mQIjQrv4yQyYO9MGe0DD0FnBStZnFHo1gVuPfCi9qKCZU5pU6DsIxSnGA9Ik
-         9SEOtQn5L4G4624dzeKPE3TTelvggQSyZJ+x/s6KcHf9L4yAiTiSgxh1JqlUq122MXzB
-         4CVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZqfBKUXmncS+f99++ptXSxdqupLw9zmhEoHFhOKQ3+w=;
-        b=jIZzrrc4PkL4sh3JmqvMjcAGuMQ9xq7V1c9F/FeiPCpSngpHvy6SvxDT6r1lBC8v8J
-         ODzUysKe30Y2oAGMbOwDiE/i0J4wLSZ5iprYTX/34kAgzSQHIWzxzCDTeul4SmrWALry
-         PORHpHHvOAspNjZKupARD8nufbla5XBhnYz/uE5WS/CX9WTba9/iaP6bUwRQpFOtBaCg
-         f0bJg5iGyqxsFCHUunjfht12wKIglvZZJoGv0Gpebrm7r+Lz8i8uJALKKUgVO6WMfVCY
-         hx1+sGQvHePa5Cjsu3Jaq/XXv7NDTwUmkVEKeeuAOz0tWXOjufxvkf6krXkStgZuM/je
-         uzTQ==
-X-Gm-Message-State: APjAAAXPtQDmJUOe5GaM5XDGE3FVbEbf1X4v5PY5uJvxDzYNAxduJy5Q
-        uMXtFsMB28P/eD+Egu0zgIiFdQ==
-X-Google-Smtp-Source: APXvYqzND3qJO+X7rGwmXjyWOGo7yuQQOnxCqVFCr+1kxGCEKNbb6bF5poI+TQvkmuF3C5Oy1BVzkw==
-X-Received: by 2002:a50:a886:: with SMTP id k6mr51048650edc.211.1558020559731;
-        Thu, 16 May 2019 08:29:19 -0700 (PDT)
-Received: from brauner.io ([193.96.224.243])
-        by smtp.gmail.com with ESMTPSA id b4sm1889513edf.7.2019.05.16.08.29.17
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 16 May 2019 08:29:19 -0700 (PDT)
-Date:   Thu, 16 May 2019 17:29:16 +0200
-From:   Christian Brauner <christian@brauner.io>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>, jannh@google.com,
-        viro@zeniv.linux.org.uk, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org, arnd@arndb.de,
-        akpm@linux-foundation.org, dhowells@redhat.com,
-        ebiederm@xmission.com, elena.reshetova@intel.com,
-        keescook@chromium.org, luto@amacapital.net, luto@kernel.org,
-        tglx@linutronix.de, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, joel@joelfernandes.org,
-        dancol@google.com, serge@hallyn.com,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v1 1/2] pid: add pidfd_open()
-Message-ID: <20190516152915.3t2wofeu3xsyhfbd@brauner.io>
-References: <20190516135944.7205-1-christian@brauner.io>
- <20190516142659.GB22564@redhat.com>
- <20190516145607.j43xyj26k6l5vmbd@yavin>
- <20190516150611.GC22564@redhat.com>
- <20190516151202.hrawrx7hxllmz2di@yavin>
- <20190516152252.GD22564@redhat.com>
+        id S1726078AbfEQETY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 May 2019 00:19:24 -0400
+Received: from conssluserg-05.nifty.com ([210.131.2.90]:47280 "EHLO
+        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725929AbfEQETY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 May 2019 00:19:24 -0400
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id x4H4J8rk020004;
+        Fri, 17 May 2019 13:19:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com x4H4J8rk020004
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1558066749;
+        bh=J7yAUK19cep0kEYDzk4DJ/4J6NgS5gQ7gjFkMhf0nf0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=c0LtECK4wG0ntD78HJSVal1PgIaDPnG3TYgZdKUwPQb1na1TUOyc7O8nFlNd6CaCm
+         AXsspHBBBxyBH+xc+yKwpj4hyYVIlPFcjcW/vHsJL5fSi5Q2gSwjjErNYCHX7DoDJk
+         uzHnaxZfaH6FQsso8f00WBIqbL0o02CmwbkFxF8m6vBwnpe79+CLRENPKmsLOuBRZS
+         H1BuxVeZipFZOyAH3A/7goUgdI8wKHrHt3j0pC8tQP/JX2YVrYwXhbMxIntV2ieT5M
+         FSH/2b85VtqV4XO16MdlVD3fBZ0eNwSQDAHODI3YrVqSmTCnoT21JK380X6v99doLI
+         2TTH2dRT0iNEA==
+X-Nifty-SrcIP: [209.85.222.47]
+Received: by mail-ua1-f47.google.com with SMTP id 49so2202636uas.0;
+        Thu, 16 May 2019 21:19:08 -0700 (PDT)
+X-Gm-Message-State: APjAAAWydtx2tRS6jJKO5xqCPv+Vt3FwVdD9ASPinktF8SumIpi9HPS3
+        i2bpdlZOxCPwGHcr4Eofl46WJIVzZ/yje7rdJvc=
+X-Google-Smtp-Source: APXvYqw2YDleh3v/xnLGvb0ytg007xtjBjm7KsoOOxcHJpN/6dfsgAIRhFvSJ0T46JhQEFnSRL0PruWBvw6llY+KDwI=
+X-Received: by 2002:ab0:3058:: with SMTP id x24mr23094567ual.95.1558066747792;
+ Thu, 16 May 2019 21:19:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190516152252.GD22564@redhat.com>
-User-Agent: NeoMutt/20180716
+References: <20190423034959.13525-1-yamada.masahiro@socionext.com>
+ <20190423034959.13525-11-yamada.masahiro@socionext.com> <ca74c830-fe1b-7bff-8dfd-353fca57b647@redhat.com>
+In-Reply-To: <ca74c830-fe1b-7bff-8dfd-353fca57b647@redhat.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Fri, 17 May 2019 13:18:31 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASjc8rmJvv5kgk6Mxo3mcB4EgB4XJG_8JY47ZQbrsSSXg@mail.gmail.com>
+Message-ID: <CAK7LNASjc8rmJvv5kgk6Mxo3mcB4EgB4XJG_8JY47ZQbrsSSXg@mail.gmail.com>
+Subject: Re: [RESEND PATCH v3 10/11] powerpc/mm/radix: mark as __tlbie_pid()
+ and friends as__always_inline
+To:     Laura Abbott <labbott@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mathieu Malaterre <malat@debian.org>, X86 ML <x86@kernel.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 16, 2019 at 05:22:53PM +0200, Oleg Nesterov wrote:
-> On 05/17, Aleksa Sarai wrote:
-> >
-> > On 2019-05-16, Oleg Nesterov <oleg@redhat.com> wrote:
-> > > On 05/17, Aleksa Sarai wrote:
-> > > > On 2019-05-16, Oleg Nesterov <oleg@redhat.com> wrote:
-> > > > > On 05/16, Christian Brauner wrote:
-> > > > > > With the introduction of pidfds through CLONE_PIDFD it is possible to
-> > > > > > created pidfds at process creation time.
-> > > > >
-> > > > > Now I am wondering why do we need CLONE_PIDFD, you can just do
-> > > > >
-> > > > > 	pid = fork();
-> > > > > 	pidfd_open(pid);
-> > > >
-> > > > While the race window would be exceptionally short, there is the
-> > > > possibility that the child will die
-> > >
-> > > Yes,
-> > >
-> > > > and their pid will be recycled
-> > > > before you do pidfd_open().
-> > >
-> > > No.
-> > >
-> > > Unless the caller's sub-thread does wait() before pidfd_open(), of course.
-> > > Or unless you do signal(SIGCHILD, SIG_IGN).
-> >
-> > What about CLONE_PARENT?
-> 
-> I should have mentioned CLONE_PARENT ;)
-> 
-> Of course in this case the child can be reaped before pidfd_open(). But how often
-> do you or other people use clone(CLONE_PARENT) ? not to mention you can trivially
-> eliminate/detect this race if you really need this.
-> 
-> Don't get me wrong, I am not trying to say that CLONE_PIDFD is a bad idea.
-> 
-> But to me pidfd_open() is much more useful. Say, as a perl programmer I can easily
-> use pidfd_open(), but not CLONE_PIDFD.
+Hi Laura,
 
-Right, but for a libc, service- or container manager CLONE_PIDFD is much
-nicer when spawning processes quickly. :) I think both are very good to
-have.
 
-Thanks, Oleg. As always super helpful reviews. :)
-Christian
+On Fri, May 17, 2019 at 7:55 AM Laura Abbott <labbott@redhat.com> wrote:
+
+> What gcc version was this tested with?
+
+I use kernel.org toolchains
+https://mirrors.edge.kernel.org/pub/tools/crosstool/
+
+It is GCC 8.1
+
+
+> We're still seeing errors on
+> Fedora rawhide with gcc 9.1.1 on a version (8c05f3b965da14e7790711026b32cc10a4c06213)
+> that should have this fix in it:
+>
+> BUILDSTDERR: arch/powerpc/mm/book3s64/radix_tlb.c: In function '_tlbiel_pid':
+> BUILDSTDERR: arch/powerpc/mm/book3s64/radix_tlb.c:104:2: warning: asm operand 3 probably doesn't match constraints
+> BUILDSTDERR:   104 |  asm volatile(PPC_TLBIEL(%0, %4, %3, %2, %1)
+> BUILDSTDERR:       |  ^~~
+> BUILDSTDERR: arch/powerpc/mm/book3s64/radix_tlb.c:104:2: error: impossible constraint in 'asm'
+> BUILDSTDERR: make[3]: *** [scripts/Makefile.build:279: arch/powerpc/mm/book3s64/radix_tlb.o] Error 1
+> BUILDSTDERR: make[2]: *** [scripts/Makefile.build:489: arch/powerpc/mm/book3s64] Error 2
+> BUILDSTDERR: make[1]: *** [scripts/Makefile.build:489: arch/powerpc/mm] Error 2
+
+Thanks for the report.
+
+Does this work for you?
+
+
+diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c
+b/arch/powerpc/mm/book3s64/radix_tlb.c
+index 4d841369399f..9a6befdd5e74 100644
+--- a/arch/powerpc/mm/book3s64/radix_tlb.c
++++ b/arch/powerpc/mm/book3s64/radix_tlb.c
+
+@@ -239,7 +239,7 @@ static inline void fixup_tlbie_lpid(unsigned long lpid)
+ /*
+  * We use 128 set in radix mode and 256 set in hpt mode.
+  */
+-static inline void _tlbiel_pid(unsigned long pid, unsigned long ric)
++static __always_inline void _tlbiel_pid(unsigned long pid, unsigned long ric)
+ {
+        int set;
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
