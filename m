@@ -2,111 +2,176 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F64212D2
-	for <lists+linux-mips@lfdr.de>; Fri, 17 May 2019 06:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A08221C9
+	for <lists+linux-mips@lfdr.de>; Sat, 18 May 2019 08:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727086AbfEQEY4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 May 2019 00:24:56 -0400
-Received: from conssluserg-04.nifty.com ([210.131.2.83]:49060 "EHLO
-        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726755AbfEQEY4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 May 2019 00:24:56 -0400
-Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id x4H4OW2a016993;
-        Fri, 17 May 2019 13:24:33 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com x4H4OW2a016993
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1558067073;
-        bh=XSdURHr+DFj73XgjlE8DVqoSorih7QO9jSg+HW1D8TM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MjmYEj/7xZIYGboJToCEBgv5PN/8CD6sDWZgip2cIfkO7e3Ii9sfP5C3OkJ+w+bmf
-         nV6cmWzKaBSSjsZhyrn4bys5Y4Q6I+OEw7Kw5shBSlS1idFvlydMF1XAeStprazHXe
-         YEbmOvO03hshhgHZXMzPoXOKrUM23BsqSOjE9eL/rkptHR8OUhQKwyp/IklD0+/Dl9
-         owyazsPp24tpqnpga80RjHHMgFR00FgPaqDWKyOVGScKcv6zoiLl/Anuo6IiuxTxjf
-         qbtJQzYFIsrlK27Oe+MJKRLUUuHhjaC4kJm7cNQh1CbYjHyDzVm4085SMLX6fx2uBd
-         H18+0yFykqaGg==
-X-Nifty-SrcIP: [209.85.217.49]
-Received: by mail-vs1-f49.google.com with SMTP id o10so3750740vsp.12;
-        Thu, 16 May 2019 21:24:32 -0700 (PDT)
-X-Gm-Message-State: APjAAAUM7tMr8SHSizjNRn02KJyzLHVXpwOUD1M81+T2t10lCH1GD3ZS
-        gOrlhGZjT2w8LXvKFSaC90rpzIRamTE26OnpgKU=
-X-Google-Smtp-Source: APXvYqwRom2nfToM4jL1gKybhnXBZPLM/8GRypEcR2drcSxkNBd5y+Id9rfE+eiIpAnAfm5gkg5AbPeOHdYPagE+d9M=
-X-Received: by 2002:a67:ad0f:: with SMTP id t15mr7896301vsl.179.1558067071748;
- Thu, 16 May 2019 21:24:31 -0700 (PDT)
+        id S1727367AbfERGb4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 18 May 2019 02:31:56 -0400
+Received: from mail-eopbgr780137.outbound.protection.outlook.com ([40.107.78.137]:6848
+        "EHLO NAM03-BY2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725268AbfERGb4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 18 May 2019 02:31:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=wavesemi.onmicrosoft.com; s=selector1-wavesemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=31LfEHucMieoC0OH0HUuvXG51l8jSbOQYpPN7arvVgI=;
+ b=czzaqIKPqmz7C8itPuNjE0ZdG5uy6h4BfvsIjGKjJfRRr1qu889/G7ZX9FJeXki56TKd2PrPfbVfDGnKFlGF/11CXxMHAh9Kx7ojGnMmuveTova7GPhhMejDuc+rtZPNozRS89SZiprp+D7YIG1A676GMdx8JFg6OKCC4Pjmgms=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.174.162.17) by
+ MWHPR2201MB1488.namprd22.prod.outlook.com (10.174.170.149) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1900.17; Sat, 18 May 2019 06:31:52 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::90ff:8d19:8459:834b]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::90ff:8d19:8459:834b%7]) with mapi id 15.20.1900.010; Sat, 18 May 2019
+ 06:31:51 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: [GIT PULL] More MIPS changes for 5.2
+Thread-Topic: [GIT PULL] More MIPS changes for 5.2
+Thread-Index: AQHVDUNg37AV/Y+AA0CHXsgmhVUIIQ==
+Date:   Sat, 18 May 2019 06:31:51 +0000
+Message-ID: <20190518063149.pvcmpgulqnwwuwuf@pburton-laptop>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR02CA0044.namprd02.prod.outlook.com
+ (2603:10b6:a03:54::21) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:24::17)
+user-agent: NeoMutt/20180716
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2601:646:8a00:9810:9d6:9cca:ff8c:efe0]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8673adf1-9ee6-4793-14e8-08d6db5a8300
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(49563074)(7193020);SRVR:MWHPR2201MB1488;
+x-ms-traffictypediagnostic: MWHPR2201MB1488:
+x-microsoft-antispam-prvs: <MWHPR2201MB148838F7F904C33A7D8AD867C1040@MWHPR2201MB1488.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3383;
+x-forefront-prvs: 0041D46242
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(396003)(366004)(376002)(39850400004)(346002)(136003)(189003)(199004)(9686003)(7736002)(305945005)(316002)(2906002)(25786009)(99936001)(33716001)(6116002)(1076003)(102836004)(52116002)(6916009)(99286004)(386003)(6506007)(6512007)(256004)(14444005)(3716004)(58126008)(8676002)(54906003)(81166006)(81156014)(71190400001)(71200400001)(66616009)(68736007)(8936002)(14454004)(478600001)(6436002)(42882007)(4326008)(5660300002)(46003)(64756008)(476003)(66946007)(44832011)(66476007)(66556008)(73956011)(6486002)(66446008)(186003)(53936002)(486006);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1488;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 9idvyflQvSZ9h0HAG5ctU0AXOctqHpQhv+J9vBkt/J7MAPSaGoFMj3Ui2FNak1bB/Rczyx60p2ysVerFoZu1U6OSr9OmwbMFJwr0xB1e6I3nmI6R4sqcCVrUKgNu0r7rYLVYW8qKTQ5G2SmdFEJqwPUfcbQ0wZXde+iYBaBrgnHLC+HnSre9WhwFRl8AV+DOwOoXD12FIMpHSO2ZqNfiiWi2SsWmE2X9Y2k2TjOuHqAkvuhlGX1vO8x1Y5DqTJYWFpP3Gd7cHE0meXWSU9SnApsBZPXm2xGQeDjF/FI0sHaf7XpuBgi0hePm1UHC0ESjJde1JDuNOcO9UXvST9GmaPpbwjiPz6okL1gfSBvvuwpoHOB+GSsoQ6ZfbJluF+1ntRbS9nlDogBsiKCBxNNnEUzEYPExmWjTtAVpzUjn0Os=
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ipltsq3rrhonmppt"
 MIME-Version: 1.0
-References: <20190423034959.13525-1-yamada.masahiro@socionext.com>
- <20190423034959.13525-5-yamada.masahiro@socionext.com> <aa73f81d-5d5a-a1d2-5239-3e8eb1278ec4@redhat.com>
-In-Reply-To: <aa73f81d-5d5a-a1d2-5239-3e8eb1278ec4@redhat.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Fri, 17 May 2019 13:23:55 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAST5y9Khg0BBz6W0mekPpuLPwWa9nPvvVENidWhHZ-avw@mail.gmail.com>
-Message-ID: <CAK7LNAST5y9Khg0BBz6W0mekPpuLPwWa9nPvvVENidWhHZ-avw@mail.gmail.com>
-Subject: Re: [RESEND PATCH v3 04/11] s390/cpacf: mark scpacf_query() as __always_inline
-To:     Laura Abbott <labbott@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mathieu Malaterre <malat@debian.org>, X86 ML <x86@kernel.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8673adf1-9ee6-4793-14e8-08d6db5a8300
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2019 06:31:51.7629
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1488
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 17, 2019 at 8:01 AM Laura Abbott <labbott@redhat.com> wrote:
->
-> On 4/22/19 8:49 PM, Masahiro Yamada wrote:
-> > This prepares to move CONFIG_OPTIMIZE_INLINING from x86 to a common
-> > place. We need to eliminate potential issues beforehand.
-> >
-> > If it is enabled for s390, the following error is reported:
-> >
-> > In file included from arch/s390/crypto/des_s390.c:19:
-> > ./arch/s390/include/asm/cpacf.h: In function 'cpacf_query':
-> > ./arch/s390/include/asm/cpacf.h:170:2: warning: asm operand 3 probably doesn't match constraints
-> >    asm volatile(
-> >    ^~~
-> > ./arch/s390/include/asm/cpacf.h:170:2: error: impossible constraint in 'asm'
-> >
->
-> This also seems to still be broken, again with gcc 9.1.1
->
-> BUILDSTDERR: In file included from arch/s390/crypto/prng.c:29:
-> BUILDSTDERR: ./arch/s390/include/asm/cpacf.h: In function 'cpacf_query_func':
-> BUILDSTDERR: ./arch/s390/include/asm/cpacf.h:170:2: warning: asm operand 3 probably doesn't match constraints
-> BUILDSTDERR:   170 |  asm volatile(
-> BUILDSTDERR:       |  ^~~
-> BUILDSTDERR: ./arch/s390/include/asm/cpacf.h:170:2: error: impossible constraint in 'asm'
->
-> I realized we're still carrying a patch to add -fno-section-anchors
-> but it's a similar failure to powerpc.
+--ipltsq3rrhonmppt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Linus,
+
+Here's a few more MIPS changes for 5.2, consisting of some SGI IP27
+specific PCI rework and a batch of fixes. Please pull.
+
+You'll see a conflict in arch/mips/sgi-ip27/ip27-irq.c due to commit
+e4952b0c2c03 ("MIPS: SGI-IP27: Fix use of unchecked pointer in
+shutdown_bridge_irq") which was merged in v5.1-rc5. The correct
+resolution is to take the file content from the mips_5.2_2 tag, ie.
+remove the startup_bridge_irq() & shutdown_bridge_irq() functions.
+
+Thanks,
+    Paul
 
 
-Christophe had already pointed out potential issues for "i" constraint,
-and I have fixups in hand:
+The following changes since commit 3751cbda8f223549d7ea28803cbec8ac87e43ed2:
 
-See
-https://lkml.org/lkml/2019/5/3/459
+  mips: Manually call fdt_init_reserved_mem() method (2019-05-05 20:12:20 -0700)
 
+are available in the Git repository at:
 
-My plan was to send it after all of my base patches
-were merged.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git tags/mips_5.2_2
 
-This s390 cparf.h is included in the TODO list.
+for you to fetch changes up to b1e479e3dcbc970bfc0b20a56f213e4df08daf75:
 
-Will fix soon.
+  MIPS: Alchemy: add DMA masks for on-chip ethernet (2019-05-15 14:29:29 -0700)
 
-Thanks.
+----------------------------------------------------------------
+A few more MIPS changes for 5.2:
 
--- 
-Best Regards
-Masahiro Yamada
+- A build fix for BMIPS5000 configurations with CONFIG_HW_PERF_EVENTS=y,
+  which also neatly removes some #ifdefery.
+
+- A fix to report supported ISAs correctly on older Ingenic SoCs which
+  incorrectly indicate MIPSr2 support in their cop0 Config register.
+
+- Some PCI modernization for SGI IP27 systems as part of ongoing work to
+  support some other SGI systems.
+
+- A fix allowing use of appended DTB files with generic kernels.
+
+- DMA mask fixes for SGI IP22 & Alchemy systems.
+
+----------------------------------------------------------------
+Florian Fainelli (1):
+      MIPS: perf: Fix build with CONFIG_CPU_BMIPS5000 enabled
+
+Manuel Lauss (1):
+      MIPS: Alchemy: add DMA masks for on-chip ethernet
+
+Marcin Nowakowski (1):
+      generic: fix appended dtb support
+
+Paul Cercueil (1):
+      MIPS: Fix Ingenic SoCs sometimes reporting wrong ISA
+
+Thomas Bogendoerfer (3):
+      MIPS: SGI-IP27: use generic PCI driver
+      MIPS: SGI-IP27: abstract chipset irq from bridge
+      MIPS: SGI-IP22: provide missing dma_mask/coherent_dma_mask
+
+ arch/mips/Kconfig                          |   6 +
+ arch/mips/alchemy/common/platform.c        |  22 +-
+ arch/mips/generic/init.c                   |   4 +-
+ arch/mips/include/asm/mach-ip27/topology.h |  11 +-
+ arch/mips/include/asm/pci/bridge.h         |  14 +-
+ arch/mips/include/asm/sn/irq_alloc.h       |  11 +
+ arch/mips/include/asm/xtalk/xtalk.h        |   9 -
+ arch/mips/kernel/cpu-probe.c               |   8 +
+ arch/mips/kernel/perf_event_mipsxx.c       |  21 +-
+ arch/mips/pci/Makefile                     |   3 +-
+ arch/mips/pci/ops-bridge.c                 | 302 --------------
+ arch/mips/pci/pci-ip27.c                   | 181 ---------
+ arch/mips/pci/pci-xtalk-bridge.c           | 610 +++++++++++++++++++++++++++++
+ arch/mips/sgi-ip22/ip22-platform.c         |  13 +
+ arch/mips/sgi-ip27/ip27-init.c             |   2 +
+ arch/mips/sgi-ip27/ip27-irq.c              | 191 ++++-----
+ arch/mips/sgi-ip27/ip27-xtalk.c            |  61 ++-
+ include/linux/platform_data/xtalk-bridge.h |  22 ++
+ 18 files changed, 831 insertions(+), 660 deletions(-)
+ create mode 100644 arch/mips/include/asm/sn/irq_alloc.h
+ delete mode 100644 arch/mips/pci/ops-bridge.c
+ create mode 100644 arch/mips/pci/pci-xtalk-bridge.c
+ create mode 100644 include/linux/platform_data/xtalk-bridge.h
+
+--ipltsq3rrhonmppt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQRgLjeFAZEXQzy86/s+p5+stXUA3QUCXN+m1QAKCRA+p5+stXUA
+3RKHAP42Xxe+rzIHg9zrsOalB7XVi2H1wZu9sNakQYB/6PPb8wEAn1iuoaQJsvEH
+e01qEM2t6lEp1tw+YOb1lnS/T7Wz7Ac=
+=Y7hu
+-----END PGP SIGNATURE-----
+
+--ipltsq3rrhonmppt--
