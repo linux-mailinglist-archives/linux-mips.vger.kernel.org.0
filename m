@@ -2,60 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6748B23CD0
-	for <lists+linux-mips@lfdr.de>; Mon, 20 May 2019 18:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7066323F78
+	for <lists+linux-mips@lfdr.de>; Mon, 20 May 2019 19:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389745AbfETQDI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 May 2019 12:03:08 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:45416 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387964AbfETQDI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 20 May 2019 12:03:08 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 4839930BDE44;
-        Mon, 20 May 2019 16:03:08 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.43.17.159])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 7BEBC78386;
-        Mon, 20 May 2019 16:03:05 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon, 20 May 2019 18:03:08 +0200 (CEST)
-Date:   Mon, 20 May 2019 18:03:04 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] asm-generic: remove ptrace.h
-Message-ID: <20190520160304.GE771@redhat.com>
-References: <20190520060018.25569-1-hch@lst.de>
- <20190520060018.25569-6-hch@lst.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190520060018.25569-6-hch@lst.de>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Mon, 20 May 2019 16:03:08 +0000 (UTC)
+        id S1726535AbfETRwC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 May 2019 13:52:02 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:55488 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726282AbfETRwC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 May 2019 13:52:02 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d8])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 90F1514EC46B1;
+        Mon, 20 May 2019 10:52:00 -0700 (PDT)
+Date:   Mon, 20 May 2019 10:51:59 -0700 (PDT)
+Message-Id: <20190520.105159.1094490201484427551.davem@davemloft.net>
+To:     o.rempel@pengutronix.de
+Cc:     paul.burton@mips.com, ralf@linux-mips.org, jhogan@kernel.org,
+        robh+dt@kernel.org, jcliburn@gmail.com, chris.snook@gmail.com,
+        mark.rutland@arm.com, kernel@pengutronix.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, john@phrozen.org, nbd@nbd.name,
+        netdev@vger.kernel.org, andrew@lunn.ch, gch981213@gmail.com,
+        info@freifunk-bad-gandersheim.net
+Subject: Re: [PATCH v5 3/3] net: ethernet: add ag71xx driver
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20190520070716.23668-4-o.rempel@pengutronix.de>
+References: <20190520070716.23668-1-o.rempel@pengutronix.de>
+        <20190520070716.23668-4-o.rempel@pengutronix.de>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 20 May 2019 10:52:01 -0700 (PDT)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 05/20, Christoph Hellwig wrote:
->
-> No one is using this header anymore.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  MAINTAINERS                    |  1 -
->  arch/mips/include/asm/ptrace.h |  5 ---
->  include/asm-generic/ptrace.h   | 74 ----------------------------------
->  3 files changed, 80 deletions(-)
->  delete mode 100644 include/asm-generic/ptrace.h
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+Date: Mon, 20 May 2019 09:07:16 +0200
 
-Acked-by: Oleg Nesterov <oleg@redhat.com>
+> +struct ag71xx_buf {
+> +	union {
+> +		struct sk_buff *skb;
+> +		void *rx_buf;
+> +	};
+> +	union {
+> +		dma_addr_t dma_addr;
+> +		unsigned int len;
+> +	};
+> +};
 
+I find this double union very confusing.
+
+When using unions you should make it strictly clear which members are used
+together, at what times, and in which situations.
+
+Therefore, please use something like anonymous structures to group the
+members that are used together at the same time, something like:
+
+struct ag71xx_buf {
+	union {
+		struct {
+			struct sk_buff *skb;
+			dma_addr_t dma_addr;
+		} tx;
+		struct {
+			void *rx_buf;
+			unsigned int len;
+		} rx;
+};
+
+Or at the very least add a very big comment that explains the use of
+the union members.
+
+> +static int ag71xx_mdio_mii_read(struct mii_bus *bus, int addr, int reg)
+> +{
+> +	struct ag71xx *ag = bus->priv;
+> +	struct net_device *ndev = ag->ndev;
+> +	int err, val;
+
+Reverse christmas tree here please.
+
+> +static int ag71xx_mdio_mii_write(struct mii_bus *bus, int addr, int reg,
+> +				 u16 val)
+> +{
+> +	struct ag71xx *ag = bus->priv;
+> +	struct net_device *ndev = ag->ndev;
+> +
+
+Likewise.
+
+> +static int ag71xx_mdio_probe(struct ag71xx *ag)
+> +{
+> +	static struct mii_bus *mii_bus;
+> +	struct device *dev = &ag->pdev->dev;
+> +	struct device_node *np = dev->of_node;
+> +	struct net_device *ndev = ag->ndev;
+> +	int err;
+
+Likewise.
+
+> +static int ag71xx_tx_packets(struct ag71xx *ag, bool flush)
+> +{
+> +	struct ag71xx_ring *ring = &ag->tx_ring;
+> +	struct net_device *ndev = ag->ndev;
+> +	bool dma_stuck = false;
+> +	int ring_mask = BIT(ring->order) - 1;
+> +	int ring_size = BIT(ring->order);
+> +	int sent = 0;
+> +	int bytes_compl = 0;
+> +	int n = 0;
+
+Likewise.
+
+And so on, and so forth, for the rest of this file.
