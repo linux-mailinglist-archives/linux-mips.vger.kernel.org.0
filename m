@@ -2,24 +2,24 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A48E252E9
-	for <lists+linux-mips@lfdr.de>; Tue, 21 May 2019 16:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A04F9252DC
+	for <lists+linux-mips@lfdr.de>; Tue, 21 May 2019 16:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728823AbfEUOwF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 May 2019 10:52:05 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:40954 "EHLO
+        id S1728843AbfEUOwH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 May 2019 10:52:07 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:41000 "EHLO
         crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728806AbfEUOwF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 May 2019 10:52:05 -0400
+        with ESMTP id S1728828AbfEUOwH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 May 2019 10:52:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1558450322; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1558450324; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=N6uBAf1gxiV9aP0DpduhogZP92NJ0jIr3EDFvCVBuBk=;
-        b=ePVLGd12mLy7ohsrBFtiICLOlb962WmC8Axumtzo3+csIcHJFv/+lfObEETmpaK1eOVJ80
-        Eucibqhvabx724axZd1uGmUoM5UMPNAmnzcVD/v0jbilmr5TyoGRJAdBCgo3P4WUQEBeWP
-        ym/6wSf1gtL5Kjp69V9fJY4KJ9n5CyU=
+        bh=3MMx+ooimnYF/4TQ+y1Cl/dsPe5HhVYjDbsGHixDIx4=;
+        b=c6Qhg2+D8BCmpNy7BSri6S3x00G4zUYzBKIBpudqluEPe5rLfT8jSAs4cpfIFhNvV6QsCu
+        /ygkGRsHgClrjAkWSekGUOU6GjVG7BXW4tLFWwQmJWa3fRCxE24DdxVVBxWgBwJfDDrNPj
+        0kCi03fDZL1jVBv06C10Zfuko0llLJo=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -38,9 +38,9 @@ Cc:     Mathieu Malaterre <malat@debian.org>, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-clk@vger.kernel.org, od@zcrc.me,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v12 06/13] irqchip: Add irq-ingenic-tcu driver
-Date:   Tue, 21 May 2019 16:51:34 +0200
-Message-Id: <20190521145141.9813-7-paul@crapouillou.net>
+Subject: [PATCH v12 07/13] clocksource: Add a new timer-ingenic driver
+Date:   Tue, 21 May 2019 16:51:35 +0200
+Message-Id: <20190521145141.9813-8-paul@crapouillou.net>
 In-Reply-To: <20190521145141.9813-1-paul@crapouillou.net>
 References: <20190521145141.9813-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -50,151 +50,368 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This driver handles the interrupt controller built in the Timer/Counter
-Unit (TCU) of the JZ47xx SoCs from Ingenic.
+This driver handles the TCU (Timer Counter Unit) present on the Ingenic
+JZ47xx SoCs, and provides the kernel with a system timer, a clocksource
+and a sched_clock.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/irqchip/Kconfig           |  11 ++
- drivers/irqchip/Makefile          |   1 +
- drivers/irqchip/irq-ingenic-tcu.c | 182 ++++++++++++++++++++++++++++++
- 3 files changed, 194 insertions(+)
- create mode 100644 drivers/irqchip/irq-ingenic-tcu.c
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 1c1f3f66dfd3..2d0700e52db7 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -293,6 +293,17 @@ config INGENIC_IRQ
- 	depends on MACH_INGENIC
- 	default y
+Notes:
+    v2: Use SPDX identifier for the license
+    
+    v3: - Move documentation to its own patch
+    	- Search the devicetree for PWM clients, and use all the TCU
+    	  channels that won't be used for PWM
+    
+    v4: - Add documentation about why we search for PWM clients
+    	- Verify that the PWM clients are for the TCU PWM driver
+    
+    v5: Major overhaul. Too many changes to list. Consider it's a new
+    	patch.
+    
+    v6: - Add two API functions ingenic_tcu_request_channel and
+    	  ingenic_tcu_release_channel. To be used by the PWM driver to
+    	  request the use of a TCU channel. The driver will now dynamically
+    	  move away the system timer or clocksource to a new TCU channel.
+    	- The system timer now defaults to channel 0, the clocksource now
+    	  defaults to channel 1 and is no more optional. The
+    	  ingenic,timer-channel and ingenic,clocksource-channel devicetree
+    	  properties are now gone.
+    	- Fix round_rate / set_rate not calculating the prescale divider
+    	  the same way. This caused problems when (parent_rate / div) would
+    	  give a non-integer result. The behaviour is correct now.
+    	- The clocksource clock is turned off on suspend now.
+    
+    v7: Fix section mismatch by using builtin_platform_driver_probe()
+    
+    v8: - Removed ingenic_tcu_[request,release]_channel, and the mechanism
+    	  to dynamically change the TCU channel of the system timer or
+    	  the clocksource.
+    	- The driver's devicetree node can now have two more children
+    	  nodes, that correspond to the system timer and clocksource.
+    	  For these two, the driver will use the TCU timer that
+    	  correspond to the memory resource supplied in their
+    	  respective node.
+    
+    v9: - Removed support for clocksource / timer children devicetree
+    	  nodes. Now, we use a property "ingenic,pwm-channels-mask" to
+    	  know which PWM channels are reserved for PWM use and should
+    	  not be used as OS timers.
+    
+    v10: - Use CLK_SET_RATE_UNGATE instead of CLK_SET_RATE_GATE + manually
+    	   un-gating the clock before changing rate. Same for re-parenting.
+    	 - Unconditionally create the clocksource and sched_clock even if
+    	   the SoC possesses a OS Timer. That gives the choice back to the
+    	   user which clocksource should be selected.
+    	 - Use subsys_initcall() instead of builtin_platform_driver_probe().
+    	   The OS Timer driver calls builtin_platform_driver_probe, which
+    	   requires the device to be created before that.
+    	 - Cosmetic cleanups
+    
+    v11: - Change prototype of exported function
+    	   ingenic_tcu_pwm_can_use_chn(), use a struct device * as first
+    	   argument.
+    	 - Read clocksource using the regmap instead of bypassing it.
+    	   Bypassing the regmap makes sense only for the sched_clock where
+    	   the read operation must be as fast as possible.
+    	 - Fix incorrect format in pr_crit() macro
+    
+    v12: - Clock handling and IRQ handling are gone, and are now handled
+    	   in their own driver.
+    	 - Obtain regmap from the ingenic-tcu MFD driver. As a result, we
+    	   cannot bypass the regmap anymore for the sched_clock.
+
+ drivers/clocksource/Kconfig         |  11 +
+ drivers/clocksource/Makefile        |   1 +
+ drivers/clocksource/ingenic-timer.c | 357 ++++++++++++++++++++++++++++
+ 3 files changed, 369 insertions(+)
+ create mode 100644 drivers/clocksource/ingenic-timer.c
+
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index 6bcaa4e2e72c..bb5d5c044341 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -672,4 +672,15 @@ config MILBEAUT_TIMER
+ 	help
+ 	  Enables the support for Milbeaut timer driver.
  
-+config INGENIC_TCU_IRQ
-+	bool "Ingenic JZ47xx TCU interrupt controller"
++config INGENIC_TIMER
++	bool "Clocksource/timer using the TCU in Ingenic JZ SoCs"
 +	default MACH_INGENIC
 +	depends on MIPS || COMPILE_TEST
++	depends on COMMON_CLK
 +	select INGENIC_TCU
++	select TIMER_OF
++	select IRQ_DOMAIN
 +	help
-+	  Support for interrupts in the Timer/Counter Unit (TCU) of the Ingenic
-+	  JZ47xx SoCs.
++	  Support for the timer/counter unit of the Ingenic JZ SoCs.
 +
-+	  If unsure, say N.
-+
- config RENESAS_H8300H_INTC
-         bool
- 	select IRQ_DOMAIN
-diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-index 606a003a0000..f403b2c221e4 100644
---- a/drivers/irqchip/Makefile
-+++ b/drivers/irqchip/Makefile
-@@ -73,6 +73,7 @@ obj-$(CONFIG_RENESAS_H8300H_INTC)	+= irq-renesas-h8300h.o
- obj-$(CONFIG_RENESAS_H8S_INTC)		+= irq-renesas-h8s.o
- obj-$(CONFIG_ARCH_SA1100)		+= irq-sa11x0.o
- obj-$(CONFIG_INGENIC_IRQ)		+= irq-ingenic.o
-+obj-$(CONFIG_INGENIC_TCU_IRQ)		+= irq-ingenic-tcu.o
- obj-$(CONFIG_IMX_GPCV2)			+= irq-imx-gpcv2.o
- obj-$(CONFIG_PIC32_EVIC)		+= irq-pic32-evic.o
- obj-$(CONFIG_MSCC_OCELOT_IRQ)		+= irq-mscc-ocelot.o
-diff --git a/drivers/irqchip/irq-ingenic-tcu.c b/drivers/irqchip/irq-ingenic-tcu.c
+ endmenu
+diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+index 236858fa7fbf..553f3c61717a 100644
+--- a/drivers/clocksource/Makefile
++++ b/drivers/clocksource/Makefile
+@@ -78,6 +78,7 @@ obj-$(CONFIG_ASM9260_TIMER)		+= asm9260_timer.o
+ obj-$(CONFIG_H8300_TMR8)		+= h8300_timer8.o
+ obj-$(CONFIG_H8300_TMR16)		+= h8300_timer16.o
+ obj-$(CONFIG_H8300_TPU)			+= h8300_tpu.o
++obj-$(CONFIG_INGENIC_TIMER)		+= ingenic-timer.o
+ obj-$(CONFIG_CLKSRC_ST_LPC)		+= clksrc_st_lpc.o
+ obj-$(CONFIG_X86_NUMACHIP)		+= numachip.o
+ obj-$(CONFIG_ATCPIT100_TIMER)		+= timer-atcpit100.o
+diff --git a/drivers/clocksource/ingenic-timer.c b/drivers/clocksource/ingenic-timer.c
 new file mode 100644
-index 000000000000..738ed06c983f
+index 000000000000..9f4df64390f4
 --- /dev/null
-+++ b/drivers/irqchip/irq-ingenic-tcu.c
-@@ -0,0 +1,182 @@
++++ b/drivers/clocksource/ingenic-timer.c
+@@ -0,0 +1,357 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * JZ47xx SoCs TCU IRQ driver
 + * Copyright (C) 2019 Paul Cercueil <paul@crapouillou.net>
 + */
 +
++#include <linux/bitops.h>
 +#include <linux/clk.h>
++#include <linux/clockchips.h>
++#include <linux/clocksource.h>
 +#include <linux/interrupt.h>
-+#include <linux/irqchip.h>
-+#include <linux/irqchip/chained_irq.h>
 +#include <linux/mfd/ingenic-tcu.h>
++#include <linux/of.h>
++#include <linux/of_address.h>
 +#include <linux/of_irq.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
 +#include <linux/regmap.h>
++#include <linux/sched_clock.h>
++
++#include <dt-bindings/clock/ingenic,tcu.h>
++
++struct ingenic_soc_info {
++	unsigned int num_channels;
++};
 +
 +struct ingenic_tcu {
 +	struct regmap *map;
-+	struct clk *clk;
++	struct clk *timer_clk, *cs_clk;
 +
-+	struct irq_domain *domain;
-+	unsigned int nb_parent_irqs;
-+	u32 parent_irqs[3];
++	unsigned int timer_channel, cs_channel;
++	struct clock_event_device cevt;
++	struct clocksource cs;
++	char name[4];
++
++	unsigned long pwm_channels_mask;
 +};
 +
-+static void ingenic_tcu_intc_cascade(struct irq_desc *desc)
++static struct ingenic_tcu *ingenic_tcu;
++
++static u64 notrace ingenic_tcu_timer_read(void)
 +{
-+	struct irq_chip *irq_chip = irq_data_get_irq_chip(&desc->irq_data);
-+	struct irq_domain *domain = irq_desc_get_handler_data(desc);
-+	struct irq_chip_generic *gc = irq_get_domain_generic_chip(domain, 0);
-+	struct regmap *map = gc->private;
-+	uint32_t irq_reg, irq_mask;
-+	unsigned int i;
++	struct ingenic_tcu *tcu = ingenic_tcu;
++	unsigned int count;
 +
-+	regmap_read(map, TCU_REG_TFR, &irq_reg);
-+	regmap_read(map, TCU_REG_TMR, &irq_mask);
++	regmap_read(tcu->map, TCU_REG_TCNTc(tcu->cs_channel), &count);
 +
-+	chained_irq_enter(irq_chip, desc);
-+
-+	irq_reg &= ~irq_mask;
-+
-+	for_each_set_bit(i, (unsigned long *)&irq_reg, 32)
-+		generic_handle_irq(irq_linear_revmap(domain, i));
-+
-+	chained_irq_exit(irq_chip, desc);
++	return count;
 +}
 +
-+static void ingenic_tcu_gc_unmask_enable_reg(struct irq_data *d)
++static u64 notrace ingenic_tcu_timer_cs_read(struct clocksource *cs)
 +{
-+	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
-+	struct irq_chip_type *ct = irq_data_get_chip_type(d);
-+	struct regmap *map = gc->private;
-+	u32 mask = d->mask;
-+
-+	irq_gc_lock(gc);
-+	regmap_write(map, ct->regs.ack, mask);
-+	regmap_write(map, ct->regs.enable, mask);
-+	*ct->mask_cache |= mask;
-+	irq_gc_unlock(gc);
++	return ingenic_tcu_timer_read();
 +}
 +
-+static void ingenic_tcu_gc_mask_disable_reg(struct irq_data *d)
++static inline struct ingenic_tcu *to_ingenic_tcu(struct clock_event_device *evt)
 +{
-+	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
-+	struct irq_chip_type *ct = irq_data_get_chip_type(d);
-+	struct regmap *map = gc->private;
-+	u32 mask = d->mask;
-+
-+	irq_gc_lock(gc);
-+	regmap_write(map, ct->regs.disable, mask);
-+	*ct->mask_cache &= ~mask;
-+	irq_gc_unlock(gc);
++	return container_of(evt, struct ingenic_tcu, cevt);
 +}
 +
-+static void ingenic_tcu_gc_mask_disable_reg_and_ack(struct irq_data *d)
++static int ingenic_tcu_cevt_set_state_shutdown(struct clock_event_device *evt)
 +{
-+	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
-+	struct irq_chip_type *ct = irq_data_get_chip_type(d);
-+	struct regmap *map = gc->private;
-+	u32 mask = d->mask;
++	struct ingenic_tcu *tcu = to_ingenic_tcu(evt);
 +
-+	irq_gc_lock(gc);
-+	regmap_write(map, ct->regs.ack, mask);
-+	regmap_write(map, ct->regs.disable, mask);
-+	irq_gc_unlock(gc);
++	regmap_write(tcu->map, TCU_REG_TECR, BIT(tcu->timer_channel));
++
++	return 0;
 +}
 +
-+static int __init ingenic_tcu_irq_init(struct device_node *np,
-+				       struct device_node *parent)
++static int ingenic_tcu_cevt_set_next(unsigned long next,
++				     struct clock_event_device *evt)
 +{
-+	struct irq_chip_generic *gc;
-+	struct irq_chip_type *ct;
++	struct ingenic_tcu *tcu = to_ingenic_tcu(evt);
++
++	if (next > 0xffff)
++		return -EINVAL;
++
++	regmap_write(tcu->map, TCU_REG_TDFRc(tcu->timer_channel), next);
++	regmap_write(tcu->map, TCU_REG_TCNTc(tcu->timer_channel), 0);
++	regmap_write(tcu->map, TCU_REG_TESR, BIT(tcu->timer_channel));
++
++	return 0;
++}
++
++static irqreturn_t ingenic_tcu_cevt_cb(int irq, void *dev_id)
++{
++	struct clock_event_device *evt = dev_id;
++	struct ingenic_tcu *tcu = to_ingenic_tcu(evt);
++
++	regmap_write(tcu->map, TCU_REG_TECR, BIT(tcu->timer_channel));
++
++	if (evt->event_handler)
++		evt->event_handler(evt);
++
++	return IRQ_HANDLED;
++}
++
++static struct clk * __init ingenic_tcu_get_clock(struct device_node *np, int id)
++{
++	struct of_phandle_args args;
++
++	args.np = np;
++	args.args_count = 1;
++	args.args[0] = id;
++
++	return of_clk_get_from_provider(&args);
++}
++
++static int __init ingenic_tcu_timer_init(struct device_node *np,
++					 struct ingenic_tcu *tcu)
++{
++	unsigned int timer_virq, channel = tcu->timer_channel;
++	struct irq_domain *domain;
++	unsigned long rate;
++	int err;
++
++	tcu->timer_clk = ingenic_tcu_get_clock(np, channel);
++	if (IS_ERR(tcu->timer_clk))
++		return PTR_ERR(tcu->timer_clk);
++
++	err = clk_prepare_enable(tcu->timer_clk);
++	if (err)
++		goto err_clk_put;
++
++	rate = clk_get_rate(tcu->timer_clk);
++	if (!rate) {
++		err = -EINVAL;
++		goto err_clk_disable;
++	}
++
++	domain = irq_find_host(np);
++	if (!domain) {
++		err = -ENODEV;
++		goto err_clk_disable;
++	}
++
++	timer_virq = irq_create_mapping(domain, channel);
++	if (!timer_virq) {
++		err = -EINVAL;
++		goto err_clk_disable;
++	}
++
++	snprintf(tcu->name, sizeof(tcu->name), "TCU");
++
++	err = request_irq(timer_virq, ingenic_tcu_cevt_cb, IRQF_TIMER,
++			  tcu->name, &tcu->cevt);
++	if (err)
++		goto err_irq_dispose_mapping;
++
++	tcu->cevt.cpumask = cpumask_of(smp_processor_id());
++	tcu->cevt.features = CLOCK_EVT_FEAT_ONESHOT;
++	tcu->cevt.name = tcu->name;
++	tcu->cevt.rating = 200;
++	tcu->cevt.set_state_shutdown = ingenic_tcu_cevt_set_state_shutdown;
++	tcu->cevt.set_next_event = ingenic_tcu_cevt_set_next;
++
++	clockevents_config_and_register(&tcu->cevt, rate, 10, 0xffff);
++
++	return 0;
++
++err_irq_dispose_mapping:
++	irq_dispose_mapping(timer_virq);
++err_clk_disable:
++	clk_disable_unprepare(tcu->timer_clk);
++err_clk_put:
++	clk_put(tcu->timer_clk);
++	return err;
++}
++
++static int __init ingenic_tcu_clocksource_init(struct device_node *np,
++					       struct ingenic_tcu *tcu)
++{
++	unsigned int channel = tcu->cs_channel;
++	struct clocksource *cs = &tcu->cs;
++	unsigned long rate;
++	int err;
++
++	tcu->cs_clk = ingenic_tcu_get_clock(np, channel);
++	if (IS_ERR(tcu->cs_clk))
++		return PTR_ERR(tcu->cs_clk);
++
++	err = clk_prepare_enable(tcu->cs_clk);
++	if (err)
++		goto err_clk_put;
++
++	rate = clk_get_rate(tcu->cs_clk);
++	if (!rate) {
++		err = -EINVAL;
++		goto err_clk_disable;
++	}
++
++	/* Reset channel */
++	regmap_update_bits(tcu->map, TCU_REG_TCSRc(channel),
++			   0xffff & ~TCU_TCSR_RESERVED_BITS, 0);
++
++	/* Reset counter */
++	regmap_write(tcu->map, TCU_REG_TDFRc(channel), 0xffff);
++	regmap_write(tcu->map, TCU_REG_TCNTc(channel), 0);
++
++	/* Enable channel */
++	regmap_write(tcu->map, TCU_REG_TESR, BIT(channel));
++
++	cs->name = "ingenic-timer";
++	cs->rating = 200;
++	cs->flags = CLOCK_SOURCE_IS_CONTINUOUS;
++	cs->mask = CLOCKSOURCE_MASK(16);
++	cs->read = ingenic_tcu_timer_cs_read;
++
++	err = clocksource_register_hz(cs, rate);
++	if (err)
++		goto err_clk_disable;
++
++	return 0;
++
++err_clk_disable:
++	clk_disable_unprepare(tcu->cs_clk);
++err_clk_put:
++	clk_put(tcu->cs_clk);
++	return err;
++}
++
++static const struct ingenic_soc_info jz4740_soc_info = {
++	.num_channels = 8,
++};
++
++static const struct ingenic_soc_info jz4725b_soc_info = {
++	.num_channels = 6,
++};
++
++static const struct of_device_id ingenic_tcu_of_match[] = {
++	{ .compatible = "ingenic,jz4740-tcu", .data = &jz4740_soc_info, },
++	{ .compatible = "ingenic,jz4725b-tcu", .data = &jz4725b_soc_info, },
++	{ .compatible = "ingenic,jz4770-tcu", .data = &jz4740_soc_info, },
++	{ }
++};
++
++static int __init ingenic_tcu_init(struct device_node *np)
++{
++	const struct of_device_id *id = of_match_node(ingenic_tcu_of_match, np);
++	const struct ingenic_soc_info *soc_info = id->data;
 +	struct ingenic_tcu *tcu;
 +	struct regmap *map;
-+	unsigned int i;
-+	int ret, irqs;
++	long rate;
++	int ret;
++
++	of_node_clear_flag(np, OF_POPULATED);
 +
 +	map = ingenic_tcu_get_regmap(np);
 +	if (IS_ERR(map))
@@ -204,85 +421,108 @@ index 000000000000..738ed06c983f
 +	if (!tcu)
 +		return -ENOMEM;
 +
-+	tcu->map = map;
++	/* Enable all TCU channels for PWM use by default except channels 0/1 */
++	tcu->pwm_channels_mask = GENMASK(soc_info->num_channels - 1, 2);
++	of_property_read_u32(np, "ingenic,pwm-channels-mask",
++			     (u32 *)&tcu->pwm_channels_mask);
 +
-+	irqs = of_property_count_elems_of_size(np, "interrupts", sizeof(u32));
-+	if (irqs < 0 || irqs > ARRAY_SIZE(tcu->parent_irqs)) {
-+		pr_crit("%s: Invalid 'interrupts' property\n", __func__);
++	/* Verify that we have at least two free channels */
++	if (hweight8(tcu->pwm_channels_mask) > soc_info->num_channels - 2) {
++		pr_crit("%s: Invalid PWM channel mask: 0x%02lx\n", __func__,
++			tcu->pwm_channels_mask);
 +		ret = -EINVAL;
-+		goto err_free_tcu;
++		goto err_free_ingenic_tcu;
 +	}
 +
-+	tcu->nb_parent_irqs = irqs;
++	tcu->map = map;
++	ingenic_tcu = tcu;
 +
-+	tcu->domain = irq_domain_add_linear(np, 32, &irq_generic_chip_ops,
-+					    NULL);
-+	if (!tcu->domain) {
-+		ret = -ENOMEM;
-+		goto err_free_tcu;
-+	}
++	tcu->timer_channel = find_first_zero_bit(&tcu->pwm_channels_mask,
++						 soc_info->num_channels);
++	tcu->cs_channel = find_next_zero_bit(&tcu->pwm_channels_mask,
++					     soc_info->num_channels,
++					     tcu->timer_channel + 1);
 +
-+	ret = irq_alloc_domain_generic_chips(tcu->domain, 32, 1, "TCU",
-+					     handle_level_irq, 0,
-+					     IRQ_NOPROBE | IRQ_LEVEL, 0);
++	ret = ingenic_tcu_clocksource_init(np, tcu);
 +	if (ret) {
-+		pr_crit("%s: Invalid 'interrupts' property\n", __func__);
-+		goto out_domain_remove;
++		pr_crit("%s: Unable to init clocksource: %i\n", __func__, ret);
++		goto err_free_ingenic_tcu;
 +	}
 +
-+	gc = irq_get_domain_generic_chip(tcu->domain, 0);
-+	ct = gc->chip_types;
++	ret = ingenic_tcu_timer_init(np, tcu);
++	if (ret)
++		goto err_tcu_clocksource_cleanup;
 +
-+	gc->wake_enabled = IRQ_MSK(32);
-+	gc->private = tcu->map;
-+
-+	ct->regs.disable = TCU_REG_TMSR;
-+	ct->regs.enable = TCU_REG_TMCR;
-+	ct->regs.ack = TCU_REG_TFCR;
-+	ct->chip.irq_unmask = ingenic_tcu_gc_unmask_enable_reg;
-+	ct->chip.irq_mask = ingenic_tcu_gc_mask_disable_reg;
-+	ct->chip.irq_mask_ack = ingenic_tcu_gc_mask_disable_reg_and_ack;
-+	ct->chip.flags = IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_SKIP_SET_WAKE;
-+
-+	/* Mask all IRQs by default */
-+	regmap_write(tcu->map, TCU_REG_TMSR, IRQ_MSK(32));
-+
-+	/*
-+	 * On JZ4740, timer 0 and timer 1 have their own interrupt line;
-+	 * timers 2-7 share one interrupt.
-+	 * On SoCs >= JZ4770, timer 5 has its own interrupt line;
-+	 * timers 0-4 and 6-7 share one single interrupt.
-+	 *
-+	 * To keep things simple, we just register the same handler to
-+	 * all parent interrupts. The handler will properly detect which
-+	 * channel fired the interrupt.
-+	 */
-+	for (i = 0; i < irqs; i++) {
-+		tcu->parent_irqs[i] = irq_of_parse_and_map(np, i);
-+		if (!tcu->parent_irqs[i]) {
-+			ret = -EINVAL;
-+			goto out_unmap_irqs;
-+		}
-+
-+		irq_set_chained_handler_and_data(tcu->parent_irqs[i],
-+						 ingenic_tcu_intc_cascade,
-+						 tcu->domain);
-+	}
++	/* Register the sched_clock at the end as there's no way to undo it */
++	rate = clk_get_rate(tcu->cs_clk);
++	sched_clock_register(ingenic_tcu_timer_read, 16, rate);
 +
 +	return 0;
 +
-+out_unmap_irqs:
-+	for (; i > 0; i--)
-+		irq_dispose_mapping(tcu->parent_irqs[i - 1]);
-+out_domain_remove:
-+	irq_domain_remove(tcu->domain);
-+err_free_tcu:
++err_tcu_clocksource_cleanup:
++	clocksource_unregister(&tcu->cs);
++	clk_disable_unprepare(tcu->cs_clk);
++	clk_put(tcu->cs_clk);
++err_free_ingenic_tcu:
 +	kfree(tcu);
 +	return ret;
 +}
-+IRQCHIP_DECLARE(jz4740_tcu_irq, "ingenic,jz4740-tcu", ingenic_tcu_irq_init);
-+IRQCHIP_DECLARE(jz4725b_tcu_irq, "ingenic,jz4725b-tcu", ingenic_tcu_irq_init);
-+IRQCHIP_DECLARE(jz4770_tcu_irq, "ingenic,jz4770-tcu", ingenic_tcu_irq_init);
++
++TIMER_OF_DECLARE(jz4740_tcu_intc,  "ingenic,jz4740-tcu",  ingenic_tcu_init);
++TIMER_OF_DECLARE(jz4725b_tcu_intc, "ingenic,jz4725b-tcu", ingenic_tcu_init);
++TIMER_OF_DECLARE(jz4770_tcu_intc,  "ingenic,jz4770-tcu",  ingenic_tcu_init);
++
++
++static int __init ingenic_tcu_probe(struct platform_device *pdev)
++{
++	platform_set_drvdata(pdev, ingenic_tcu);
++
++	return 0;
++}
++
++static int __maybe_unused ingenic_tcu_suspend(struct device *dev)
++{
++	struct ingenic_tcu *tcu = dev_get_drvdata(dev);
++
++	clk_disable(tcu->cs_clk);
++	clk_disable(tcu->timer_clk);
++	return 0;
++}
++
++static int __maybe_unused ingenic_tcu_resume(struct device *dev)
++{
++	struct ingenic_tcu *tcu = dev_get_drvdata(dev);
++	int ret;
++
++	ret = clk_enable(tcu->timer_clk);
++	if (ret)
++		return ret;
++
++	ret = clk_enable(tcu->cs_clk);
++	if (ret) {
++		clk_disable(tcu->timer_clk);
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct dev_pm_ops __maybe_unused ingenic_tcu_pm_ops = {
++	/* _noirq: We want the TCU clocks to be gated last / ungated first */
++	.suspend_noirq = ingenic_tcu_suspend,
++	.resume_noirq  = ingenic_tcu_resume,
++};
++
++static struct platform_driver ingenic_tcu_driver = {
++	.driver = {
++		.name	= "ingenic-tcu-timer",
++#ifdef CONFIG_PM_SLEEP
++		.pm	= &ingenic_tcu_pm_ops,
++#endif
++		.of_match_table = ingenic_tcu_of_match,
++	},
++};
++builtin_platform_driver_probe(ingenic_tcu_driver, ingenic_tcu_probe);
 -- 
 2.21.0.593.g511ec345e18
 
