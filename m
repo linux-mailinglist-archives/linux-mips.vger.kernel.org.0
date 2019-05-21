@@ -2,121 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7066323F78
-	for <lists+linux-mips@lfdr.de>; Mon, 20 May 2019 19:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376B424687
+	for <lists+linux-mips@lfdr.de>; Tue, 21 May 2019 06:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726535AbfETRwC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 May 2019 13:52:02 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:55488 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726282AbfETRwC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 May 2019 13:52:02 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d8])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 90F1514EC46B1;
-        Mon, 20 May 2019 10:52:00 -0700 (PDT)
-Date:   Mon, 20 May 2019 10:51:59 -0700 (PDT)
-Message-Id: <20190520.105159.1094490201484427551.davem@davemloft.net>
-To:     o.rempel@pengutronix.de
-Cc:     paul.burton@mips.com, ralf@linux-mips.org, jhogan@kernel.org,
-        robh+dt@kernel.org, jcliburn@gmail.com, chris.snook@gmail.com,
-        mark.rutland@arm.com, kernel@pengutronix.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, john@phrozen.org, nbd@nbd.name,
-        netdev@vger.kernel.org, andrew@lunn.ch, gch981213@gmail.com,
-        info@freifunk-bad-gandersheim.net
-Subject: Re: [PATCH v5 3/3] net: ethernet: add ag71xx driver
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190520070716.23668-4-o.rempel@pengutronix.de>
-References: <20190520070716.23668-1-o.rempel@pengutronix.de>
-        <20190520070716.23668-4-o.rempel@pengutronix.de>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 20 May 2019 10:52:01 -0700 (PDT)
+        id S1725308AbfEUEEQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 May 2019 00:04:16 -0400
+Received: from conuserg-08.nifty.com ([210.131.2.75]:43888 "EHLO
+        conuserg-08.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725283AbfEUEEQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 May 2019 00:04:16 -0400
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id x4L43VVg010681;
+        Tue, 21 May 2019 13:03:32 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com x4L43VVg010681
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1558411413;
+        bh=ih2ZgqObaUdBXIDdXtMeo+bCR3hhcOxpcDhp2NN3U6o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=yLwaFzBsZMFY3pUDNfsPLXeEG1WjIBeu6gW7czqLdlKBc2OL/weJLUrEwe740+eCh
+         U71t8T5NMJLw+aVWa238Y1vQnbt2+eZSESUNdLizoO49WjGeibChXqnZW+eMR/BMR5
+         xnQuj36WWvepgundBru/xONXsknEloGGu1T3E3QmddgjyUC00u3nlPfvAcsDP4cXmX
+         hqxZOOC+Ie5BZvEuROyHw7jJ3MzprY78OWoD9SDyBsVHeVvlw23/4BaWQGLyYnBoW6
+         mvk8+4SaQeonazNpeO8wBE+Q2CDo4fsmiyGMsi3GU4d/09hvEMXh2WAXg4i/HLo1nK
+         T603/ikgWFlvA==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: remove a space after -I to cope with header search paths for VDSO
+Date:   Tue, 21 May 2019 13:03:27 +0900
+Message-Id: <20190521040327.432-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-Date: Mon, 20 May 2019 09:07:16 +0200
+Commit 9cc342f6c4a0 ("treewide: prefix header search paths with
+$(srctree)/") caused a build error for MIPS VDSO.
 
-> +struct ag71xx_buf {
-> +	union {
-> +		struct sk_buff *skb;
-> +		void *rx_buf;
-> +	};
-> +	union {
-> +		dma_addr_t dma_addr;
-> +		unsigned int len;
-> +	};
-> +};
+  CC      arch/mips/vdso/gettimeofday.o
+In file included from ../arch/mips/vdso/vdso.h:26,
+                 from ../arch/mips/vdso/gettimeofday.c:11:
+../arch/mips/include/asm/page.h:12:10: fatal error: spaces.h: No such file or directory
+ #include <spaces.h>
+          ^~~~~~~~~~
 
-I find this double union very confusing.
+The cause of the error is a missing space after the compiler flag -I .
 
-When using unions you should make it strictly clear which members are used
-together, at what times, and in which situations.
+Kbuild used to have a global restriction "no space after -I", but
+commit 48f6e3cf5bc6 ("kbuild: do not drop -I without parameter") got
+rid of it. Having a space after -I is no longer a big deal as far as
+Kbuild is concerned.
 
-Therefore, please use something like anonymous structures to group the
-members that are used together at the same time, something like:
+It is still a big deal for MIPS because arch/mips/vdso/Makefile
+filters the header search paths, like this:
 
-struct ag71xx_buf {
-	union {
-		struct {
-			struct sk_buff *skb;
-			dma_addr_t dma_addr;
-		} tx;
-		struct {
-			void *rx_buf;
-			unsigned int len;
-		} rx;
-};
+  ccflags-vdso := \
+          $(filter -I%,$(KBUILD_CFLAGS)) \
 
-Or at the very least add a very big comment that explains the use of
-the union members.
+..., which relies on the assumption that there is no space after -I .
 
-> +static int ag71xx_mdio_mii_read(struct mii_bus *bus, int addr, int reg)
-> +{
-> +	struct ag71xx *ag = bus->priv;
-> +	struct net_device *ndev = ag->ndev;
-> +	int err, val;
+Fixes: 9cc342f6c4a0 ("treewide: prefix header search paths with $(srctree)/")
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
 
-Reverse christmas tree here please.
+ arch/mips/pnx833x/Platform | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +static int ag71xx_mdio_mii_write(struct mii_bus *bus, int addr, int reg,
-> +				 u16 val)
-> +{
-> +	struct ag71xx *ag = bus->priv;
-> +	struct net_device *ndev = ag->ndev;
-> +
+diff --git a/arch/mips/pnx833x/Platform b/arch/mips/pnx833x/Platform
+index 6b1a847d593f..287260669551 100644
+--- a/arch/mips/pnx833x/Platform
++++ b/arch/mips/pnx833x/Platform
+@@ -1,5 +1,5 @@
+ # NXP STB225
+ platform-$(CONFIG_SOC_PNX833X)	+= pnx833x/
+-cflags-$(CONFIG_SOC_PNX833X)	+= -I $(srctree)/arch/mips/include/asm/mach-pnx833x
++cflags-$(CONFIG_SOC_PNX833X)	+= -I$(srctree)/arch/mips/include/asm/mach-pnx833x
+ load-$(CONFIG_NXP_STB220)	+= 0xffffffff80001000
+ load-$(CONFIG_NXP_STB225)	+= 0xffffffff80001000
+-- 
+2.17.1
 
-Likewise.
-
-> +static int ag71xx_mdio_probe(struct ag71xx *ag)
-> +{
-> +	static struct mii_bus *mii_bus;
-> +	struct device *dev = &ag->pdev->dev;
-> +	struct device_node *np = dev->of_node;
-> +	struct net_device *ndev = ag->ndev;
-> +	int err;
-
-Likewise.
-
-> +static int ag71xx_tx_packets(struct ag71xx *ag, bool flush)
-> +{
-> +	struct ag71xx_ring *ring = &ag->tx_ring;
-> +	struct net_device *ndev = ag->ndev;
-> +	bool dma_stuck = false;
-> +	int ring_mask = BIT(ring->order) - 1;
-> +	int ring_size = BIT(ring->order);
-> +	int sent = 0;
-> +	int bytes_compl = 0;
-> +	int n = 0;
-
-Likewise.
-
-And so on, and so forth, for the rest of this file.
