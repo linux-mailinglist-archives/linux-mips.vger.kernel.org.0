@@ -2,243 +2,170 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D56252E4
-	for <lists+linux-mips@lfdr.de>; Tue, 21 May 2019 16:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D9F2531A
+	for <lists+linux-mips@lfdr.de>; Tue, 21 May 2019 16:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728928AbfEUOw0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 May 2019 10:52:26 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:41340 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728539AbfEUOwU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 May 2019 10:52:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1558450338; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+B18APaxvHsp3HPUtJiRP9lFp/hR6r7x1rtqKumiKiM=;
-        b=ax+OwyfLOM8ZdjPX8gVfeoD39JKJTqcBvVDrGbazKu4KRC9R4nw3xojBtGuHLjHwmroqIZ
-        5VIYrXslA78URBExlzuhtFfFhdS/4o597z7shkq2jTb4kw1hqq5L4Q6mVm56e/02Vq7et4
-        1DTREOThqlN5sNdA2Z3DNCdByblCMBY=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
+        id S1727986AbfEUO4x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 May 2019 10:56:53 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:41131 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727534AbfEUO4w (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 May 2019 10:56:52 -0400
+Received: by mail-vs1-f68.google.com with SMTP id w19so975598vsw.8;
+        Tue, 21 May 2019 07:56:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/RLNME5ZN4U2LiZuoMjOqCgpPfC0Wu4CpzttS58OOVs=;
+        b=o1FdwIj/QFBhC9Q6erQfkIcDXPeKq9p7y/b/nWrFvJ23rTJPq4jiN/cbY7oPijDNK2
+         foknBHHIip7YBX6/ALDem+5fZtzVFEemBRliklrSNyhVwPfVD1foNbigs9fbD2WbNnvq
+         nalYJmSo7xUJlu/7UFxhaVvgm5IUAAfXPFEwbfr5NuzZ9UYjher+NgoPlTV7/2akI5wA
+         c7YFBdknRa9IjFhilTA4RKSx0Q60WwJdBAx0jfV0Rgdvwh/t90dHL8X0M7a/4NuktMbC
+         Rae40qZs+nsBapNIiSjlP3aPKsMY1Xa0GnzCe3xvvRvk3HPzsA08QS4KEV3d5tAefbzA
+         oFvA==
+X-Gm-Message-State: APjAAAWpSeM5MyU+xXmsl7rHfAkjuvNMcJoLuR5EbCOqnmV5SGka+PKS
+        rOWf4x7dmfZRV8zYkzKQnQvJ5d7pK3tT3X/Bq/A=
+X-Google-Smtp-Source: APXvYqwRLvaa+LXk19qb69BfBGS4bC8OwvVBUyC7pQcdYLA02EnermrV8lDDEib3980gp2gkB3eWP394dCpKkR+E870=
+X-Received: by 2002:a67:7c93:: with SMTP id x141mr31187072vsc.96.1558450611159;
+ Tue, 21 May 2019 07:56:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190423224748.3765-1-fancer.lancer@gmail.com> <20190423224748.3765-5-fancer.lancer@gmail.com>
+In-Reply-To: <20190423224748.3765-5-fancer.lancer@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 21 May 2019 16:56:39 +0200
+Message-ID: <CAMuHMdWPmL5Z86cgJ4N-U-3XKr4ys8Y7U85okDcXYEu7z4ybaw@mail.gmail.com>
+Subject: Re: [PATCH 04/12] mips: Reserve memory for the kernel image resources
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     Mathieu Malaterre <malat@debian.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-clk@vger.kernel.org, od@zcrc.me,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v12 13/13] MIPS: jz4740: Drop obsolete code
-Date:   Tue, 21 May 2019 16:51:41 +0200
-Message-Id: <20190521145141.9813-14-paul@crapouillou.net>
-In-Reply-To: <20190521145141.9813-1-paul@crapouillou.net>
-References: <20190521145141.9813-1-paul@crapouillou.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Matt Redfearn <matt.redfearn@mips.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Juergen Gross <jgross@suse.com>, linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The old clocksource/timer platform code is now obsoleted by the newly
-introduced TCU drivers.
+Hi Serge,
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
+On Wed, Apr 24, 2019 at 12:50 AM Serge Semin <fancer.lancer@gmail.com> wrote:
+> The reserved_end variable had been used by the bootmem_init() code
+> to find a lowest limit of memory available for memmap blob. The original
+> code just tried to find a free memory space higher than kernel was placed.
+> This limitation seems justified for the memmap ragion search process, but
+> I can't see any obvious reason to reserve the unused space below kernel
+> seeing some platforms place it much higher than standard 1MB. Moreover
+> the RELOCATION config enables it to be loaded at any memory address.
+> So lets reserve the memory occupied by the kernel only, leaving the region
+> below being free for allocations. After doing this we can now discard the
+> code freeing a space between kernel _text and VMLINUX_LOAD_ADDRESS symbols
+> since it's going to be free anyway (unless marked as reserved by
+> platforms).
+>
+> Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
 
-Notes:
-    v5: New patch
-    
-    v6-v11: No change
-    
-    v12: Only remove clocksource code. The rest will eventually be
-    	 removed in a future patchset when the PWM/watchdog drivers
-    	 are updated.
+This is now commit b93ddc4f9156205e ("mips: Reserve memory for the kernel
+image resources") in v5.2-rc1, which causes rbtx4927 to crash during boot:
 
- arch/mips/jz4740/time.c | 154 +---------------------------------------
- 1 file changed, 2 insertions(+), 152 deletions(-)
+    VFS: Mounted root (nfs filesystem) on device 0:13.
+    devtmpfs: mounted
+    BUG: Bad page state in process swapper  pfn:00001
+    page:804b7820 refcount:0 mapcount:-128 mapping:00000000 index:0x1
+    flags: 0x0()
+    raw: 00000000 00000100 00000200 00000000 00000001 00000000 ffffff7f 00000000
+    page dumped because: nonzero mapcount
+    Modules linked in:
+    CPU: 0 PID: 1 Comm: swapper Not tainted
+5.2.0-rc1-rbtx4927-00468-g3c05ea3d4077b756-dirty #137
+    Stack : 00000000 10008400 8040dd2c 87c1b974 8044af63 8040dd2c
+00000001 804a3490
+            00000001 81000000 0030f231 80148558 00000003 10008400
+87c1dd80 7599ee13
+            00000000 00000000 804b0000 00000000 00000007 00000000
+00000085 00000000
+            62722d31 00000084 804b0000 39347874 00000000 804b7820
+8040cef8 81000010
+            00000001 00000007 00000001 81000000 00000008 8021de24
+00000000 804a0000
+            ...
+    Call Trace:
+    [<8010adec>] show_stack+0x74/0x104
+    [<801a5e44>] bad_page+0x130/0x138
+    [<801a654c>] free_pcppages_bulk+0x17c/0x3b0
+    [<801a789c>] free_unref_page+0x40/0x68
+    [<801120f4>] free_init_pages+0xec/0x104
+    [<803bdde8>] free_initmem+0x10/0x58
+    [<803bdb8c>] kernel_init+0x20/0x100
+    [<801057c8>] ret_from_kernel_thread+0x14/0x1c
+    Disabling lock debugging due to kernel taint
+    BUG: Bad page state in process swapper  pfn:00002
+    [...]
 
-diff --git a/arch/mips/jz4740/time.c b/arch/mips/jz4740/time.c
-index 2ca9160f642a..9a61bca8e9f0 100644
---- a/arch/mips/jz4740/time.c
-+++ b/arch/mips/jz4740/time.c
-@@ -13,164 +13,14 @@
-  *
-  */
- 
--#include <linux/clk.h>
- #include <linux/clk-provider.h>
--#include <linux/interrupt.h>
--#include <linux/kernel.h>
--#include <linux/time.h>
-+#include <linux/clocksource.h>
- 
--#include <linux/clockchips.h>
--#include <linux/sched_clock.h>
--
--#include <asm/mach-jz4740/clock.h>
--#include <asm/mach-jz4740/irq.h>
- #include <asm/mach-jz4740/timer.h>
--#include <asm/time.h>
--
--#include "clock.h"
--
--#define TIMER_CLOCKEVENT 0
--#define TIMER_CLOCKSOURCE 1
--
--static uint16_t jz4740_jiffies_per_tick;
--
--static u64 jz4740_clocksource_read(struct clocksource *cs)
--{
--	return jz4740_timer_get_count(TIMER_CLOCKSOURCE);
--}
--
--static struct clocksource jz4740_clocksource = {
--	.name = "jz4740-timer",
--	.rating = 200,
--	.read = jz4740_clocksource_read,
--	.mask = CLOCKSOURCE_MASK(16),
--	.flags = CLOCK_SOURCE_IS_CONTINUOUS,
--};
--
--static u64 notrace jz4740_read_sched_clock(void)
--{
--	return jz4740_timer_get_count(TIMER_CLOCKSOURCE);
--}
--
--static irqreturn_t jz4740_clockevent_irq(int irq, void *devid)
--{
--	struct clock_event_device *cd = devid;
--
--	jz4740_timer_ack_full(TIMER_CLOCKEVENT);
--
--	if (!clockevent_state_periodic(cd))
--		jz4740_timer_disable(TIMER_CLOCKEVENT);
--
--	cd->event_handler(cd);
--
--	return IRQ_HANDLED;
--}
--
--static int jz4740_clockevent_set_periodic(struct clock_event_device *evt)
--{
--	jz4740_timer_set_count(TIMER_CLOCKEVENT, 0);
--	jz4740_timer_set_period(TIMER_CLOCKEVENT, jz4740_jiffies_per_tick);
--	jz4740_timer_irq_full_enable(TIMER_CLOCKEVENT);
--	jz4740_timer_enable(TIMER_CLOCKEVENT);
--
--	return 0;
--}
--
--static int jz4740_clockevent_resume(struct clock_event_device *evt)
--{
--	jz4740_timer_irq_full_enable(TIMER_CLOCKEVENT);
--	jz4740_timer_enable(TIMER_CLOCKEVENT);
--
--	return 0;
--}
--
--static int jz4740_clockevent_shutdown(struct clock_event_device *evt)
--{
--	jz4740_timer_disable(TIMER_CLOCKEVENT);
--
--	return 0;
--}
--
--static int jz4740_clockevent_set_next(unsigned long evt,
--	struct clock_event_device *cd)
--{
--	jz4740_timer_set_count(TIMER_CLOCKEVENT, 0);
--	jz4740_timer_set_period(TIMER_CLOCKEVENT, evt);
--	jz4740_timer_enable(TIMER_CLOCKEVENT);
--
--	return 0;
--}
--
--static struct clock_event_device jz4740_clockevent = {
--	.name = "jz4740-timer",
--	.features = CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT,
--	.set_next_event = jz4740_clockevent_set_next,
--	.set_state_shutdown = jz4740_clockevent_shutdown,
--	.set_state_periodic = jz4740_clockevent_set_periodic,
--	.set_state_oneshot = jz4740_clockevent_shutdown,
--	.tick_resume = jz4740_clockevent_resume,
--	.rating = 200,
--#ifdef CONFIG_MACH_JZ4740
--	.irq = JZ4740_IRQ_TCU0,
--#endif
--#if defined(CONFIG_MACH_JZ4770) || defined(CONFIG_MACH_JZ4780)
--	.irq = JZ4780_IRQ_TCU2,
--#endif
--};
--
--static struct irqaction timer_irqaction = {
--	.handler	= jz4740_clockevent_irq,
--	.flags		= IRQF_PERCPU | IRQF_TIMER,
--	.name		= "jz4740-timerirq",
--	.dev_id		= &jz4740_clockevent,
--};
- 
- void __init plat_time_init(void)
- {
--	int ret;
--	uint32_t clk_rate;
--	uint16_t ctrl;
--	struct clk *ext_clk;
--
- 	of_clk_init(NULL);
- 	jz4740_timer_init();
--
--	ext_clk = clk_get(NULL, "ext");
--	if (IS_ERR(ext_clk))
--		panic("unable to get ext clock");
--	clk_rate = clk_get_rate(ext_clk) >> 4;
--	clk_put(ext_clk);
--
--	jz4740_jiffies_per_tick = DIV_ROUND_CLOSEST(clk_rate, HZ);
--
--	clockevent_set_clock(&jz4740_clockevent, clk_rate);
--	jz4740_clockevent.min_delta_ns = clockevent_delta2ns(100, &jz4740_clockevent);
--	jz4740_clockevent.min_delta_ticks = 100;
--	jz4740_clockevent.max_delta_ns = clockevent_delta2ns(0xffff, &jz4740_clockevent);
--	jz4740_clockevent.max_delta_ticks = 0xffff;
--	jz4740_clockevent.cpumask = cpumask_of(0);
--
--	clockevents_register_device(&jz4740_clockevent);
--
--	ret = clocksource_register_hz(&jz4740_clocksource, clk_rate);
--
--	if (ret)
--		printk(KERN_ERR "Failed to register clocksource: %d\n", ret);
--
--	sched_clock_register(jz4740_read_sched_clock, 16, clk_rate);
--
--	setup_irq(jz4740_clockevent.irq, &timer_irqaction);
--
--	ctrl = JZ_TIMER_CTRL_PRESCALE_16 | JZ_TIMER_CTRL_SRC_EXT;
--
--	jz4740_timer_set_ctrl(TIMER_CLOCKEVENT, ctrl);
--	jz4740_timer_set_ctrl(TIMER_CLOCKSOURCE, ctrl);
--
--	jz4740_timer_set_period(TIMER_CLOCKEVENT, jz4740_jiffies_per_tick);
--	jz4740_timer_irq_full_enable(TIMER_CLOCKEVENT);
--
--	jz4740_timer_set_period(TIMER_CLOCKSOURCE, 0xffff);
--
--	jz4740_timer_enable(TIMER_CLOCKEVENT);
--	jz4740_timer_enable(TIMER_CLOCKSOURCE);
-+	timer_probe();
- }
+CONFIG_RELOCATABLE is not set, so the only relevant part is the
+change quoted below.
+
+> --- a/arch/mips/kernel/setup.c
+> +++ b/arch/mips/kernel/setup.c
+> @@ -371,7 +371,6 @@ static void __init bootmem_init(void)
+>
+>  static void __init bootmem_init(void)
+>  {
+> -       unsigned long reserved_end;
+>         phys_addr_t ramstart = PHYS_ADDR_MAX;
+>         int i;
+>
+> @@ -382,10 +381,10 @@ static void __init bootmem_init(void)
+>          * will reserve the area used for the initrd.
+>          */
+>         init_initrd();
+> -       reserved_end = (unsigned long) PFN_UP(__pa_symbol(&_end));
+>
+> -       memblock_reserve(PHYS_OFFSET,
+> -                        (reserved_end << PAGE_SHIFT) - PHYS_OFFSET);
+> +       /* Reserve memory occupied by kernel. */
+> +       memblock_reserve(__pa_symbol(&_text),
+> +                       __pa_symbol(&_end) - __pa_symbol(&_text));
+>
+>         /*
+>          * max_low_pfn is not a number of pages. The number of pages
+
+With some debug code added:
+
+    Determined physical RAM map:
+     memory: 08000000 @ 00000000 (usable)
+    bootmem_init:390: PHYS_OFFSET = 0x0
+    bootmem_init:391: __pa_symbol(&_text) = 0x100000
+    bootmem_init:392: __pa_symbol(&_end) = 0x4b77c8
+    bootmem_init:393: PFN_UP(__pa_symbol(&_end)) = 0x4b8
+
+Hence the old code reserved 1 MiB extra at the beginning.
+
+Note that the new code also dropped the rounding up of the memory block
+size to a multiple of PAGE_SIZE. I'm not sure the latter actually
+matters or not.
+
+Do you have a clue? Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.21.0.593.g511ec345e18
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
