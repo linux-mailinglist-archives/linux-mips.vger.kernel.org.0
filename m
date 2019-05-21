@@ -2,24 +2,24 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64096252F9
-	for <lists+linux-mips@lfdr.de>; Tue, 21 May 2019 16:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30009252EE
+	for <lists+linux-mips@lfdr.de>; Tue, 21 May 2019 16:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728780AbfEUOv7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 May 2019 10:51:59 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:40734 "EHLO
+        id S1728753AbfEUOwB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 May 2019 10:52:01 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:40792 "EHLO
         crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728397AbfEUOv6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 May 2019 10:51:58 -0400
+        with ESMTP id S1728306AbfEUOwA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 May 2019 10:52:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1558450315; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1558450317; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pA+PGpDaF9FLM9fLKhA3FZisZhkWFOlD1Tve/vqGEiA=;
-        b=Lj9xu0mKMEHf7DwemD4HqdN2kNZeTXVPj26bMGt7k39+DUoetmnDGdbQsTTbNf5AwusA59
-        5YuQYWqujyN1567QfShO42pKR4iDfuUtuBikwyLm8GbQvqCmQ7pNh20oVq4rsj5Vkybzm+
-        gi2VpbZBQuuCf43RrvU73GIobeIoWhg=
+        bh=UQ9MB+eaUpzl82aQ2euwrO1G0baAmSYj3B1vtrzvuGc=;
+        b=eNKNPysJMN+RUtukUB8dtRYTQSbGCeX1lKFhS2rW6YE3wQfWNRfGU5gdoOr+YJJkGY0/gV
+        d8VPpdBu0lOlXqHVaaifZFIpp9eGVWffpE9LB07DAptXSRgtBahT06Crzj7JAvyE2U5nsq
+        4gTSskXr4cJtqHXK1Dq3KLAhNOqqMqw=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -38,9 +38,9 @@ Cc:     Mathieu Malaterre <malat@debian.org>, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-clk@vger.kernel.org, od@zcrc.me,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v12 03/13] dt-bindings: Add doc for the Ingenic TCU drivers
-Date:   Tue, 21 May 2019 16:51:31 +0200
-Message-Id: <20190521145141.9813-4-paul@crapouillou.net>
+Subject: [PATCH v12 04/13] mfd: Add Ingenic TCU driver
+Date:   Tue, 21 May 2019 16:51:32 +0200
+Message-Id: <20190521145141.9813-5-paul@crapouillou.net>
 In-Reply-To: <20190521145141.9813-1-paul@crapouillou.net>
 References: <20190521145141.9813-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -50,114 +50,199 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add documentation about how to properly use the Ingenic TCU
-(Timer/Counter Unit) drivers from devicetree.
+This driver will provide a regmap that can be retrieved very early in
+the boot process through the API function ingenic_tcu_get_regmap().
+
+Additionally, it will call devm_of_platform_populate() so that all the
+children devices will be probed.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
 
 Notes:
-    v4: New patch in this series. Corresponds to V2 patches 3-4-5 with
-     added content.
-    
-    v5: - Edited PWM/watchdog DT bindings documentation to point to the new
-       document.
-     - Moved main document to
-       Documentation/devicetree/bindings/timer/ingenic,tcu.txt
-     - Updated documentation to reflect the new devicetree bindings.
-    
-    v6: - Removed PWM/watchdog documentation files as asked by upstream
-     - Removed doc about properties that should be implicit
-     - Removed doc about ingenic,timer-channel /
-       ingenic,clocksource-channel as they are gone
-     - Fix WDT clock name in the binding doc
-     - Fix lengths of register areas in watchdog/pwm nodes
-    
-    v7: No change
-    
-    v8: - Fix address of the PWM node
-     - Added doc about system timer and clocksource children nodes
-    
-    v9: - Remove doc about system timer and clocksource children
-       nodes...
-    - Add doc about ingenic,pwm-channels-mask property
-    
-    v10: No change
-    
-    v11: Fix info about default value of ingenic,pwm-channels-mask
-    
-    v12: Drop sub-nodes for now; they will be introduced in a follow-up
-    	 patchset.
+    v12: New patch
 
- .../devicetree/bindings/timer/ingenic,tcu.txt | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/timer/ingenic,tcu.txt
+ drivers/mfd/Kconfig             |   8 +++
+ drivers/mfd/Makefile            |   1 +
+ drivers/mfd/ingenic-tcu.c       | 113 ++++++++++++++++++++++++++++++++
+ include/linux/mfd/ingenic-tcu.h |   8 +++
+ 4 files changed, 130 insertions(+)
+ create mode 100644 drivers/mfd/ingenic-tcu.c
 
-diff --git a/Documentation/devicetree/bindings/timer/ingenic,tcu.txt b/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index 294d9567cc71..a13544474e05 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -494,6 +494,14 @@ config HTC_I2CPLD
+ 	  This device provides input and output GPIOs through an I2C
+ 	  interface to one or more sub-chips.
+ 
++config INGENIC_TCU
++	bool "Ingenic Timer/Counter Unit (TCU) support"
++	depends on MIPS || COMPILE_TEST
++	select REGMAP_MMIO
++	help
++	  Say yes here to support the Timer/Counter Unit (TCU) IP present
++	  in the JZ47xx SoCs from Ingenic.
++
+ config MFD_INTEL_QUARK_I2C_GPIO
+ 	tristate "Intel Quark MFD I2C GPIO"
+ 	depends on PCI
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index 52b1a90ff515..fb89e131ae98 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -180,6 +180,7 @@ obj-$(CONFIG_AB8500_CORE)	+= ab8500-core.o ab8500-sysctrl.o
+ obj-$(CONFIG_MFD_TIMBERDALE)    += timberdale.o
+ obj-$(CONFIG_PMIC_ADP5520)	+= adp5520.o
+ obj-$(CONFIG_MFD_KEMPLD)	+= kempld-core.o
++obj-$(CONFIG_INGENIC_TCU)	+= ingenic-tcu.o
+ obj-$(CONFIG_MFD_INTEL_QUARK_I2C_GPIO)	+= intel_quark_i2c_gpio.o
+ obj-$(CONFIG_LPC_SCH)		+= lpc_sch.o
+ obj-$(CONFIG_LPC_ICH)		+= lpc_ich.o
+diff --git a/drivers/mfd/ingenic-tcu.c b/drivers/mfd/ingenic-tcu.c
 new file mode 100644
-index 000000000000..d101cd72c9b0
+index 000000000000..6c1d5e4310c1
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
-@@ -0,0 +1,59 @@
-+Ingenic JZ47xx SoCs Timer/Counter Unit devicetree bindings
-+==========================================================
++++ b/drivers/mfd/ingenic-tcu.c
+@@ -0,0 +1,113 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * JZ47xx SoCs TCU MFD driver
++ * Copyright (C) 2019 Paul Cercueil <paul@crapouillou.net>
++ */
 +
-+For a description of the TCU hardware and drivers, have a look at
-+Documentation/mips/ingenic-tcu.txt.
++#include <linux/mfd/ingenic-tcu.h>
++#include <linux/of_address.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
 +
-+Required properties:
-+
-+- compatible: Must be one of:
-+  * "ingenic,jz4740-tcu"
-+  * "ingenic,jz4725b-tcu"
-+  * "ingenic,jz4770-tcu"
-+- reg: Should be the offset/length value corresponding to the TCU registers
-+- clocks: List of phandle & clock specifiers for clocks external to the TCU.
-+  The "pclk", "rtc" and "ext" clocks should be provided. The "tcu" clock
-+  should be provided if the SoC has it.
-+- clock-names: List of name strings for the external clocks.
-+- #clock-cells: Should be <1>;
-+  Clock consumers specify this argument to identify a clock. The valid values
-+  may be found in <dt-bindings/clock/ingenic,tcu.h>.
-+- interrupt-controller : Identifies the node as an interrupt controller
-+- #interrupt-cells : Specifies the number of cells needed to encode an
-+  interrupt source. The value should be 1.
-+- interrupt-parent : phandle of the interrupt controller.
-+- interrupts : Specifies the interrupt the controller is connected to.
-+
-+Optional properties:
-+
-+- ingenic,pwm-channels-mask: Bitmask of TCU channels reserved for PWM use.
-+  Default value is 0xfc.
-+
-+
-+Example
-+==========================================================
-+
-+#include <dt-bindings/clock/jz4770-cgu.h>
-+
-+/ {
-+	tcu: timer@10002000 {
-+		compatible = "ingenic,jz4770-tcu";
-+		reg = <0x10002000 0x1000>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0x0 0x10002000 0x1000>;
-+
-+		#clock-cells = <1>;
-+
-+		clocks = <&cgu JZ4770_CLK_RTC
-+			  &cgu JZ4770_CLK_EXT
-+			  &cgu JZ4770_CLK_PCLK>;
-+		clock-names = "rtc", "ext", "pclk";
-+
-+		interrupt-controller;
-+		#interrupt-cells = <1>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <27 26 25>;
-+	};
++struct ingenic_soc_info {
++	unsigned int num_channels;
 +};
++
++static struct regmap *tcu_regmap __initdata;
++
++static const struct regmap_config ingenic_tcu_regmap_config = {
++	.reg_bits = 32,
++	.val_bits = 32,
++	.reg_stride = 4,
++	.max_register = TCU_REG_OST_CNTHBUF,
++};
++
++static const struct ingenic_soc_info jz4740_soc_info = {
++	.num_channels = 8,
++};
++
++static const struct ingenic_soc_info jz4725b_soc_info = {
++	.num_channels = 6,
++};
++
++static const struct of_device_id ingenic_tcu_of_match[] = {
++	{ .compatible = "ingenic,jz4740-tcu", .data = &jz4740_soc_info, },
++	{ .compatible = "ingenic,jz4725b-tcu", .data = &jz4725b_soc_info, },
++	{ .compatible = "ingenic,jz4770-tcu", .data = &jz4740_soc_info, },
++	{ }
++};
++
++static struct regmap * __init ingenic_tcu_create_regmap(struct device_node *np)
++{
++	struct resource res;
++	void __iomem *base;
++	struct regmap *map;
++
++	if (!of_match_node(ingenic_tcu_of_match, np))
++		return ERR_PTR(-EINVAL);
++
++	base = of_io_request_and_map(np, 0, "TCU");
++	if (IS_ERR(base))
++		return ERR_PTR(PTR_ERR(base));
++
++	map = regmap_init_mmio(NULL, base, &ingenic_tcu_regmap_config);
++	if (IS_ERR(map))
++		goto err_iounmap;
++
++	return map;
++
++err_iounmap:
++	iounmap(base);
++	of_address_to_resource(np, 0, &res);
++	release_mem_region(res.start, resource_size(&res));
++
++	return map;
++}
++
++static int __init ingenic_tcu_probe(struct platform_device *pdev)
++{
++	struct regmap *map = ingenic_tcu_get_regmap(pdev->dev.of_node);
++
++	platform_set_drvdata(pdev, map);
++
++	regmap_attach_dev(&pdev->dev, map, &ingenic_tcu_regmap_config);
++
++	return devm_of_platform_populate(&pdev->dev);
++}
++
++static struct platform_driver ingenic_tcu_driver = {
++	.driver = {
++		.name = "ingenic-tcu",
++		.of_match_table = ingenic_tcu_of_match,
++	},
++};
++
++static int __init ingenic_tcu_platform_init(void)
++{
++	return platform_driver_probe(&ingenic_tcu_driver,
++				     ingenic_tcu_probe);
++}
++subsys_initcall(ingenic_tcu_platform_init);
++
++struct regmap * __init ingenic_tcu_get_regmap(struct device_node *np)
++{
++	if (!tcu_regmap)
++		tcu_regmap = ingenic_tcu_create_regmap(np);
++
++	return tcu_regmap;
++}
++
++bool ingenic_tcu_pwm_can_use_chn(struct device *dev, unsigned int channel)
++{
++	const struct ingenic_soc_info *soc = device_get_match_data(dev->parent);
++
++	/* Enable all TCU channels for PWM use by default except channels 0/1 */
++	u32 pwm_channels_mask = GENMASK(soc->num_channels - 1, 2);
++
++	device_property_read_u32(dev->parent, "ingenic,pwm-channels-mask",
++				 &pwm_channels_mask);
++
++	return !!(pwm_channels_mask & BIT(channel));
++}
++EXPORT_SYMBOL_GPL(ingenic_tcu_pwm_can_use_chn);
+diff --git a/include/linux/mfd/ingenic-tcu.h b/include/linux/mfd/ingenic-tcu.h
+index 2083fa20821d..21df23916cd2 100644
+--- a/include/linux/mfd/ingenic-tcu.h
++++ b/include/linux/mfd/ingenic-tcu.h
+@@ -6,6 +6,11 @@
+ #define __LINUX_MFD_INGENIC_TCU_H_
+ 
+ #include <linux/bitops.h>
++#include <linux/init.h>
++
++struct device;
++struct device_node;
++struct regmap;
+ 
+ #define TCU_REG_WDT_TDR		0x00
+ #define TCU_REG_WDT_TCER	0x04
+@@ -53,4 +58,7 @@
+ #define TCU_REG_TCNTc(c)	(TCU_REG_TCNT0 + ((c) * TCU_CHANNEL_STRIDE))
+ #define TCU_REG_TCSRc(c)	(TCU_REG_TCSR0 + ((c) * TCU_CHANNEL_STRIDE))
+ 
++struct regmap * __init ingenic_tcu_get_regmap(struct device_node *np);
++bool ingenic_tcu_pwm_can_use_chn(struct device *dev, unsigned int channel);
++
+ #endif /* __LINUX_MFD_INGENIC_TCU_H_ */
 -- 
 2.21.0.593.g511ec345e18
 
