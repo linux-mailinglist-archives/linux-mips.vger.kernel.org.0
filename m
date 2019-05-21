@@ -2,221 +2,210 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA5E25330
-	for <lists+linux-mips@lfdr.de>; Tue, 21 May 2019 17:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE7B2548D
+	for <lists+linux-mips@lfdr.de>; Tue, 21 May 2019 17:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728691AbfEUPAO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 May 2019 11:00:14 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:34486 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727969AbfEUPAN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 May 2019 11:00:13 -0400
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1hT6FK-0007FT-IR; Tue, 21 May 2019 15:00:06 +0000
-Date:   Tue, 21 May 2019 16:00:06 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christian Brauner <christian@brauner.io>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, jannh@google.com, fweimer@redhat.com,
-        oleg@redhat.com, tglx@linutronix.de, torvalds@linux-foundation.org,
-        arnd@arndb.de, shuah@kernel.org, dhowells@redhat.com,
-        tkjos@android.com, ldv@altlinux.org, miklos@szeredi.hu,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 1/2] open: add close_range()
-Message-ID: <20190521150006.GJ17978@ZenIV.linux.org.uk>
-References: <20190521113448.20654-1-christian@brauner.io>
+        id S1728224AbfEUPxX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 May 2019 11:53:23 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33362 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727941AbfEUPxX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 21 May 2019 11:53:23 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4LFqSBR047581
+        for <linux-mips@vger.kernel.org>; Tue, 21 May 2019 11:53:22 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2smkn1tbex-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-mips@vger.kernel.org>; Tue, 21 May 2019 11:53:21 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-mips@vger.kernel.org> from <rppt@linux.ibm.com>;
+        Tue, 21 May 2019 16:53:19 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 21 May 2019 16:53:14 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4LFrDfK42074180
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 May 2019 15:53:14 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D560811C058;
+        Tue, 21 May 2019 15:53:13 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3132311C05B;
+        Tue, 21 May 2019 15:53:12 +0000 (GMT)
+Received: from rapoport-lnx (unknown [9.148.204.239])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 21 May 2019 15:53:12 +0000 (GMT)
+Date:   Tue, 21 May 2019 18:53:10 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Matt Redfearn <matt.redfearn@mips.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Juergen Gross <jgross@suse.com>, linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>
+Subject: Re: [PATCH 04/12] mips: Reserve memory for the kernel image resources
+References: <20190423224748.3765-1-fancer.lancer@gmail.com>
+ <20190423224748.3765-5-fancer.lancer@gmail.com>
+ <CAMuHMdWPmL5Z86cgJ4N-U-3XKr4ys8Y7U85okDcXYEu7z4ybaw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190521113448.20654-1-christian@brauner.io>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <CAMuHMdWPmL5Z86cgJ4N-U-3XKr4ys8Y7U85okDcXYEu7z4ybaw@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-TM-AS-GCONF: 00
+x-cbid: 19052115-0020-0000-0000-0000033F04C8
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19052115-0021-0000-0000-00002191E561
+Message-Id: <20190521155309.GB24470@rapoport-lnx>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-21_03:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905210099
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 21, 2019 at 01:34:47PM +0200, Christian Brauner wrote:
+Hi Geert,
 
-> This adds the close_range() syscall. It allows to efficiently close a range
-> of file descriptors up to all file descriptors of a calling task.
+On Tue, May 21, 2019 at 04:56:39PM +0200, Geert Uytterhoeven wrote:
+> Hi Serge,
 > 
-> The syscall came up in a recent discussion around the new mount API and
-> making new file descriptor types cloexec by default. During this
-> discussion, Al suggested the close_range() syscall (cf. [1]). Note, a
-> syscall in this manner has been requested by various people over time.
+> On Wed, Apr 24, 2019 at 12:50 AM Serge Semin <fancer.lancer@gmail.com> wrote:
+> > The reserved_end variable had been used by the bootmem_init() code
+> > to find a lowest limit of memory available for memmap blob. The original
+> > code just tried to find a free memory space higher than kernel was placed.
+> > This limitation seems justified for the memmap ragion search process, but
+> > I can't see any obvious reason to reserve the unused space below kernel
+> > seeing some platforms place it much higher than standard 1MB. Moreover
+> > the RELOCATION config enables it to be loaded at any memory address.
+> > So lets reserve the memory occupied by the kernel only, leaving the region
+> > below being free for allocations. After doing this we can now discard the
+> > code freeing a space between kernel _text and VMLINUX_LOAD_ADDRESS symbols
+> > since it's going to be free anyway (unless marked as reserved by
+> > platforms).
+> >
+> > Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
 > 
-> First, it helps to close all file descriptors of an exec()ing task. This
-> can be done safely via (quoting Al's example from [1] verbatim):
+> This is now commit b93ddc4f9156205e ("mips: Reserve memory for the kernel
+> image resources") in v5.2-rc1, which causes rbtx4927 to crash during boot:
 > 
->         /* that exec is sensitive */
->         unshare(CLONE_FILES);
->         /* we don't want anything past stderr here */
->         close_range(3, ~0U);
->         execve(....);
+>     VFS: Mounted root (nfs filesystem) on device 0:13.
+>     devtmpfs: mounted
+>     BUG: Bad page state in process swapper  pfn:00001
+>     page:804b7820 refcount:0 mapcount:-128 mapping:00000000 index:0x1
+>     flags: 0x0()
+>     raw: 00000000 00000100 00000200 00000000 00000001 00000000 ffffff7f 00000000
+>     page dumped because: nonzero mapcount
+>     Modules linked in:
+>     CPU: 0 PID: 1 Comm: swapper Not tainted
+> 5.2.0-rc1-rbtx4927-00468-g3c05ea3d4077b756-dirty #137
+>     Stack : 00000000 10008400 8040dd2c 87c1b974 8044af63 8040dd2c
+> 00000001 804a3490
+>             00000001 81000000 0030f231 80148558 00000003 10008400
+> 87c1dd80 7599ee13
+>             00000000 00000000 804b0000 00000000 00000007 00000000
+> 00000085 00000000
+>             62722d31 00000084 804b0000 39347874 00000000 804b7820
+> 8040cef8 81000010
+>             00000001 00000007 00000001 81000000 00000008 8021de24
+> 00000000 804a0000
+>             ...
+>     Call Trace:
+>     [<8010adec>] show_stack+0x74/0x104
+>     [<801a5e44>] bad_page+0x130/0x138
+>     [<801a654c>] free_pcppages_bulk+0x17c/0x3b0
+>     [<801a789c>] free_unref_page+0x40/0x68
+>     [<801120f4>] free_init_pages+0xec/0x104
+>     [<803bdde8>] free_initmem+0x10/0x58
+>     [<803bdb8c>] kernel_init+0x20/0x100
+>     [<801057c8>] ret_from_kernel_thread+0x14/0x1c
+>     Disabling lock debugging due to kernel taint
+>     BUG: Bad page state in process swapper  pfn:00002
+>     [...]
 > 
-> The code snippet above is one way of working around the problem that file
-> descriptors are not cloexec by default. This is aggravated by the fact that
-> we can't just switch them over without massively regressing userspace. For
-> a whole class of programs having an in-kernel method of closing all file
-> descriptors is very helpful (e.g. demons, service managers, programming
-> language standard libraries, container managers etc.).
-> (Please note, unshare(CLONE_FILES) should only be needed if the calling
->  task is multi-threaded and shares the file descriptor table with another
->  thread in which case two threads could race with one thread allocating
->  file descriptors and the other one closing them via close_range(). For the
->  general case close_range() before the execve() is sufficient.)
+> CONFIG_RELOCATABLE is not set, so the only relevant part is the
+> change quoted below.
 > 
-> Second, it allows userspace to avoid implementing closing all file
-> descriptors by parsing through /proc/<pid>/fd/* and calling close() on each
-> file descriptor. From looking at various large(ish) userspace code bases
-> this or similar patterns are very common in:
-> - service managers (cf. [4])
-> - libcs (cf. [6])
-> - container runtimes (cf. [5])
-> - programming language runtimes/standard libraries
->   - Python (cf. [2])
->   - Rust (cf. [7], [8])
-> As Dmitry pointed out there's even a long-standing glibc bug about missing
-> kernel support for this task (cf. [3]).
-> In addition, the syscall will also work for tasks that do not have procfs
-> mounted and on kernels that do not have procfs support compiled in. In such
-> situations the only way to make sure that all file descriptors are closed
-> is to call close() on each file descriptor up to UINT_MAX or RLIMIT_NOFILE,
-> OPEN_MAX trickery (cf. comment [8] on Rust).
+> > --- a/arch/mips/kernel/setup.c
+> > +++ b/arch/mips/kernel/setup.c
+> > @@ -371,7 +371,6 @@ static void __init bootmem_init(void)
+> >
+> >  static void __init bootmem_init(void)
+> >  {
+> > -       unsigned long reserved_end;
+> >         phys_addr_t ramstart = PHYS_ADDR_MAX;
+> >         int i;
+> >
+> > @@ -382,10 +381,10 @@ static void __init bootmem_init(void)
+> >          * will reserve the area used for the initrd.
+> >          */
+> >         init_initrd();
+> > -       reserved_end = (unsigned long) PFN_UP(__pa_symbol(&_end));
+> >
+> > -       memblock_reserve(PHYS_OFFSET,
+> > -                        (reserved_end << PAGE_SHIFT) - PHYS_OFFSET);
+> > +       /* Reserve memory occupied by kernel. */
+> > +       memblock_reserve(__pa_symbol(&_text),
+> > +                       __pa_symbol(&_end) - __pa_symbol(&_text));
+> >
+> >         /*
+> >          * max_low_pfn is not a number of pages. The number of pages
 > 
-> The performance is striking. For good measure, comparing the following
-> simple close_all_fds() userspace implementation that is essentially just
-> glibc's version in [6]:
+> With some debug code added:
 > 
-> static int close_all_fds(void)
-> {
->         DIR *dir;
->         struct dirent *direntp;
-> 
->         dir = opendir("/proc/self/fd");
->         if (!dir)
->                 return -1;
-> 
->         while ((direntp = readdir(dir))) {
->                 int fd;
->                 if (strcmp(direntp->d_name, ".") == 0)
->                         continue;
->                 if (strcmp(direntp->d_name, "..") == 0)
->                         continue;
->                 fd = atoi(direntp->d_name);
->                 if (fd == 0 || fd == 1 || fd == 2)
->                         continue;
->                 close(fd);
->         }
-> 
->         closedir(dir); /* cannot fail */
->         return 0;
-> }
-> 
-> to close_range() yields:
-> 1. closing 4 open files:
->    - close_all_fds(): ~280 us
->    - close_range():    ~24 us
-> 
-> 2. closing 1000 open files:
->    - close_all_fds(): ~5000 us
->    - close_range():   ~800 us
-> 
-> close_range() is designed to allow for some flexibility. Specifically, it
-> does not simply always close all open file descriptors of a task. Instead,
-> callers can specify an upper bound.
-> This is e.g. useful for scenarios where specific file descriptors are
-> created with well-known numbers that are supposed to be excluded from
-> getting closed.
-> For extra paranoia close_range() comes with a flags argument. This can e.g.
-> be used to implement extension. Once can imagine userspace wanting to stop
-> at the first error instead of ignoring errors under certain circumstances.
-> There might be other valid ideas in the future. In any case, a flag
-> argument doesn't hurt and keeps us on the safe side.
-> 
-> >From an implementation side this is kept rather dumb. It saw some input
-> from David and Jann but all nonsense is obviously my own!
-> - Errors to close file descriptors are currently ignored. (Could be changed
->   by setting a flag in the future if needed.)
-> - __close_range() is a rather simplistic wrapper around __close_fd().
->   My reasoning behind this is based on the nature of how __close_fd() needs
->   to release an fd. But maybe I misunderstood specifics:
->   We take the files_lock and rcu-dereference the fdtable of the calling
->   task, we find the entry in the fdtable, get the file and need to release
->   files_lock before calling filp_close().
->   In the meantime the fdtable might have been altered so we can't just
->   retake the spinlock and keep the old rcu-reference of the fdtable
->   around. Instead we need to grab a fresh reference to the fdtable.
->   If my reasoning is correct then there's really no point in fancyfying
->   __close_range(): We just need to rcu-dereference the fdtable of the
->   calling task once to cap the max_fd value correctly and then go on
->   calling __close_fd() in a loop.
+>     Determined physical RAM map:
+>      memory: 08000000 @ 00000000 (usable)
+>     bootmem_init:390: PHYS_OFFSET = 0x0
+>     bootmem_init:391: __pa_symbol(&_text) = 0x100000
+>     bootmem_init:392: __pa_symbol(&_end) = 0x4b77c8
+>     bootmem_init:393: PFN_UP(__pa_symbol(&_end)) = 0x4b8
 
-> +/**
-> + * __close_range() - Close all file descriptors in a given range.
-> + *
-> + * @fd:     starting file descriptor to close
-> + * @max_fd: last file descriptor to close
-> + *
-> + * This closes a range of file descriptors. All file descriptors
-> + * from @fd up to and including @max_fd are closed.
-> + */
-> +int __close_range(struct files_struct *files, unsigned fd, unsigned max_fd)
-> +{
-> +	unsigned int cur_max;
-> +
-> +	if (fd > max_fd)
-> +		return -EINVAL;
-> +
-> +	rcu_read_lock();
-> +	cur_max = files_fdtable(files)->max_fds;
-> +	rcu_read_unlock();
-> +
-> +	/* cap to last valid index into fdtable */
-> +	if (max_fd >= cur_max)
-> +		max_fd = cur_max - 1;
-> +
-> +	while (fd <= max_fd)
-> +		__close_fd(files, fd++);
-> +
-> +	return 0;
-> +}
+Have you tried adding memblock=debug to the command line?
+Not sure it'll help, but still :)
+ 
+> Hence the old code reserved 1 MiB extra at the beginning.
+> 
+> Note that the new code also dropped the rounding up of the memory block
+> size to a multiple of PAGE_SIZE. I'm not sure the latter actually
+> matters or not.
 
-Umm...  That's going to be very painful if you dup2() something to MAX_INT and
-then run that; roughly 2G iterations of bouncing ->file_lock up and down,
-without anything that would yield CPU in process.
+I'd say that bad page state for pfn 1 is caused by "freeing" the first 1M.
 
-If anything, I would suggest something like
+> Do you have a clue? Thanks!
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+> 
 
-	fd = *start_fd;
-	grab the lock
-        fdt = files_fdtable(files);
-more:
-	look for the next eviction candidate in ->open_fds, starting at fd
-	if there's none up to max_fd
-		drop the lock
-		return NULL
-	*start_fd = fd + 1;
-	if the fscker is really opened and not just reserved
-		rcu_assign_pointer(fdt->fd[fd], NULL);
-		__put_unused_fd(files, fd);
-		drop the lock
-		return the file we'd got
-	if (unlikely(need_resched()))
-		drop lock
-		cond_resched();
-		grab lock
-		fdt = files_fdtable(files);
-	goto more;
-
-with the main loop being basically
-	while ((file = pick_next(files, &start_fd, max_fd)) != NULL)
-		filp_close(file, files);
-
+-- 
+Sincerely yours,
+Mike.
 
