@@ -2,44 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0974F25ED0
-	for <lists+linux-mips@lfdr.de>; Wed, 22 May 2019 09:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9753425F12
+	for <lists+linux-mips@lfdr.de>; Wed, 22 May 2019 10:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726552AbfEVHua (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 May 2019 03:50:30 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:42672 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726514AbfEVHua (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 May 2019 03:50:30 -0400
-Received: by mail-vs1-f68.google.com with SMTP id z11so828157vsq.9;
-        Wed, 22 May 2019 00:50:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VaX5n9Y4+kdsUYd/DwkTtH11TWtmPeaSdyXahzJcElc=;
-        b=J6SZ4MFkN0QH+9oAJxgWMX+ZnSOj8Ger0hdktNpn6Ai/6FrBdK4gZbY7aVkvgXfV87
-         PIruYTXy2F4CCYZ8md872K3TqMoS3ktRBzBLBuGYa9/vj4trKugnwehCBGoQ5joSPvFz
-         GYHXoyxdES6s/sfCtFA4nlhCUVRD8b7JmU06V70xmZmmuXqH1dGGy5Afq/BYcl57Cqko
-         DMzoyZzHQFaEBG9jJrI2hgy7hCvvB0aHn4N8j6KI7msx74yPLCNwMUM6LgzhP6l6H0AK
-         fyYAmqurPjZcfcy06UFzzxtsaLLo1bYKsMSR3QCp5296E7/GeV42qa97NqNyosTjltdK
-         jyew==
-X-Gm-Message-State: APjAAAX1pc+PSMJ4Fz9xgTGxKgAFTRk2YgyDCqUhqRCq86+GMdPiAHJg
-        vDdR40R8Yv38nsx5tbD0hjDad3AZI2YVGDcmSnQ=
-X-Google-Smtp-Source: APXvYqwy2pF+UO7dRnr4UrAQWmD8wUcJ5l9PXgP1dlYl4TIbbRpCuuso+pne9cj3RT3KExnSOEslckAsdIBKx/R7v+w=
-X-Received: by 2002:a67:f589:: with SMTP id i9mr11310444vso.152.1558511429417;
- Wed, 22 May 2019 00:50:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190423224748.3765-1-fancer.lancer@gmail.com>
- <20190423224748.3765-5-fancer.lancer@gmail.com> <CAMuHMdWPmL5Z86cgJ4N-U-3XKr4ys8Y7U85okDcXYEu7z4ybaw@mail.gmail.com>
- <20190521155309.GB24470@rapoport-lnx> <20190521163928.yo75uskjachtw2nt@mobilestation>
-In-Reply-To: <20190521163928.yo75uskjachtw2nt@mobilestation>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 22 May 2019 09:50:17 +0200
-Message-ID: <CAMuHMdUr297MbGqSO+N1NeYbqQsqfLBVFeFMA6epFGQA5V+X+w@mail.gmail.com>
-Subject: Re: [PATCH 04/12] mips: Reserve memory for the kernel image resources
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Mike Rapoport <rppt@linux.ibm.com>,
+        id S1728720AbfEVIIQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 May 2019 04:08:16 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43856 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728085AbfEVIIQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 22 May 2019 04:08:16 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4M7vkAi077281
+        for <linux-mips@vger.kernel.org>; Wed, 22 May 2019 04:08:14 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2smyx66cc6-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-mips@vger.kernel.org>; Wed, 22 May 2019 04:08:14 -0400
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-mips@vger.kernel.org> from <rppt@linux.ibm.com>;
+        Wed, 22 May 2019 09:08:12 +0100
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 22 May 2019 09:08:06 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4M885E258982606
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 May 2019 08:08:05 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D86CEA4051;
+        Wed, 22 May 2019 08:08:05 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 883CBA405B;
+        Wed, 22 May 2019 08:08:04 +0000 (GMT)
+Received: from rapoport-lnx (unknown [9.148.8.112])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 22 May 2019 08:08:04 +0000 (GMT)
+Date:   Wed, 22 May 2019 11:08:02 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
@@ -55,16 +59,38 @@ Cc:     Mike Rapoport <rppt@linux.ibm.com>,
         Juergen Gross <jgross@suse.com>, linux-mips@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Atsushi Nemoto <anemo@mba.ocn.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 04/12] mips: Reserve memory for the kernel image resources
+References: <20190423224748.3765-1-fancer.lancer@gmail.com>
+ <20190423224748.3765-5-fancer.lancer@gmail.com>
+ <CAMuHMdWPmL5Z86cgJ4N-U-3XKr4ys8Y7U85okDcXYEu7z4ybaw@mail.gmail.com>
+ <20190521155309.GB24470@rapoport-lnx>
+ <CAMuHMdWK6-ge-j1NbunDu_Jy7JOwbMfTzNQ767MViuTo4DNf+A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWK6-ge-j1NbunDu_Jy7JOwbMfTzNQ767MViuTo4DNf+A@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-TM-AS-GCONF: 00
+x-cbid: 19052208-4275-0000-0000-000003375536
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19052208-4276-0000-0000-00003846ECDA
+Message-Id: <20190522080802.GA31930@rapoport-lnx>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-22_03:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905220059
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Serge,
-
-On Tue, May 21, 2019 at 6:39 PM Serge Semin <fancer.lancer@gmail.com> wrote:
-> On Tue, May 21, 2019 at 06:53:10PM +0300, Mike Rapoport wrote:
+On Wed, May 22, 2019 at 09:47:04AM +0200, Geert Uytterhoeven wrote:
+> Hi Mike,
+> 
+> On Tue, May 21, 2019 at 5:53 PM Mike Rapoport <rppt@linux.ibm.com> wrote:
 > > On Tue, May 21, 2019 at 04:56:39PM +0200, Geert Uytterhoeven wrote:
 > > > On Wed, Apr 24, 2019 at 12:50 AM Serge Semin <fancer.lancer@gmail.com> wrote:
 > > > > The reserved_end variable had been used by the bootmem_init() code
@@ -119,33 +145,166 @@ On Tue, May 21, 2019 at 6:39 PM Serge Semin <fancer.lancer@gmail.com> wrote:
 > > >     BUG: Bad page state in process swapper  pfn:00002
 > > >     [...]
 > > >
->
-> The root cause of the problem most likely is in prom_free_prom_memory() method of
-> arch/mips/txx9/generic/setup.c:
-> void __init prom_free_prom_memory(void)
-> {
->         unsigned long saddr = PAGE_SIZE;
->         unsigned long eaddr = __pa_symbol(&_text);
->
->         if (saddr < eaddr)
->                 free_init_pages("prom memory", saddr, eaddr);
-> }
->
-> As you can see the txx9 platform tries to free a memory which isn't reserved
-> and set free from the very beginning due to the patch above. So as soon as you
-> remove the free_init_pages("prom memory", ...) the problem shall be fixed.
-> Could you try it and send a result to us whether it helped?
+> > > CONFIG_RELOCATABLE is not set, so the only relevant part is the
+> > > change quoted below.
+> > >
+> > > > --- a/arch/mips/kernel/setup.c
+> > > > +++ b/arch/mips/kernel/setup.c
+> > > > @@ -371,7 +371,6 @@ static void __init bootmem_init(void)
+> > > >
+> > > >  static void __init bootmem_init(void)
+> > > >  {
+> > > > -       unsigned long reserved_end;
+> > > >         phys_addr_t ramstart = PHYS_ADDR_MAX;
+> > > >         int i;
+> > > >
+> > > > @@ -382,10 +381,10 @@ static void __init bootmem_init(void)
+> > > >          * will reserve the area used for the initrd.
+> > > >          */
+> > > >         init_initrd();
+> > > > -       reserved_end = (unsigned long) PFN_UP(__pa_symbol(&_end));
+> > > >
+> > > > -       memblock_reserve(PHYS_OFFSET,
+> > > > -                        (reserved_end << PAGE_SHIFT) - PHYS_OFFSET);
+> > > > +       /* Reserve memory occupied by kernel. */
+> > > > +       memblock_reserve(__pa_symbol(&_text),
+> > > > +                       __pa_symbol(&_end) - __pa_symbol(&_text));
+> > > >
+> > > >         /*
+> > > >          * max_low_pfn is not a number of pages. The number of pages
+> > >
+> > > With some debug code added:
+> > >
+> > >     Determined physical RAM map:
+> > >      memory: 08000000 @ 00000000 (usable)
+> > >     bootmem_init:390: PHYS_OFFSET = 0x0
+> > >     bootmem_init:391: __pa_symbol(&_text) = 0x100000
+> > >     bootmem_init:392: __pa_symbol(&_end) = 0x4b77c8
+> > >     bootmem_init:393: PFN_UP(__pa_symbol(&_end)) = 0x4b8
+> >
+> > Have you tried adding memblock=debug to the command line?
+> > Not sure it'll help, but still :)
+> 
+> Thanks! Output below...
+> 
+>  Determined physical RAM map:
+>   memory: 08000000 @ 00000000 (usable)
+> +memblock_reserve: [0x00100000-0x004b77c7] setup_arch+0x258/0x8e4
+>  Initrd not found or empty - disabling initrd
+> +memblock_reserve: [0x00448000-0x00447fff] setup_arch+0x5ac/0x8e4
+> +MEMBLOCK configuration:
+> + memory size = 0x08000000 reserved size = 0x003b77c8
+> + memory.cnt  = 0x1
+> + memory[0x0]    [0x00000000-0x07ffffff], 0x08000000 bytes on node 0 flags: 0x0
+> + reserved.cnt  = 0x1
+> + reserved[0x0]  [0x00100000-0x004b77c7], 0x003b77c8 bytes flags: 0x0
+> +memblock_alloc_try_nid: 32 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 setup_arch+0x7ec/0x8e4
+> +memblock_reserve: [0x004b77e0-0x004b77ff] memblock_alloc_range_nid+0x130/0x178
+>  Primary instruction cache 32kB, VIPT, 4-way, linesize 32 bytes.
+>  Primary data cache 32kB, 4-way, VIPT, cache aliases, linesize 32 bytes
+>  Zone ranges:
+> @@ -16,10 +26,48 @@ Movable zone start for each node
+>  Early memory node ranges
+>    node   0: [mem 0x0000000000000000-0x0000000007ffffff]
+>  Initmem setup node 0 [mem 0x0000000000000000-0x0000000007ffffff]
+> +memblock_alloc_try_nid: 1048576 bytes align=0x20 nid=0
+> from=0x00000000 max_addr=0x00000000
+> alloc_node_mem_map.constprop.31+0x6c/0xc8
+> +memblock_reserve: [0x004b7800-0x005b77ff] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 16 bytes align=0x20 nid=0 from=0x00000000
+> max_addr=0x00000000 setup_usemap.isra.13+0x68/0xa0
+> +memblock_reserve: [0x005b7800-0x005b780f] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 116 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 start_kernel+0xb0/0x508
+> +memblock_reserve: [0x005b7820-0x005b7893] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 116 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 start_kernel+0xf0/0x508
+> +memblock_reserve: [0x005b78a0-0x005b7913] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 116 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 start_kernel+0x114/0x508
+> +memblock_reserve: [0x005b7920-0x005b7993] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 4096 bytes align=0x1000 nid=-1
+> from=0x00000000 max_addr=0x00000000 pcpu_alloc_alloc_info+0x60/0xb8
+> +memblock_reserve: [0x005b8000-0x005b8fff] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 32768 bytes align=0x1000 nid=-1
+> from=0x01000000 max_addr=0x00000000 setup_per_cpu_areas+0x38/0xa8
+> +memblock_reserve: [0x01000000-0x01007fff] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 4 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 pcpu_setup_first_chunk+0x200/0x588
+> +memblock_reserve: [0x005b79a0-0x005b79a3] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 4 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 pcpu_setup_first_chunk+0x22c/0x588
+> +memblock_reserve: [0x005b79c0-0x005b79c3] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 4 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 pcpu_setup_first_chunk+0x250/0x588
+> +memblock_reserve: [0x005b79e0-0x005b79e3] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 4 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 pcpu_setup_first_chunk+0x288/0x588
+> +memblock_reserve: [0x005b7a00-0x005b7a03] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 120 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 pcpu_setup_first_chunk+0x47c/0x588
+> +memblock_reserve: [0x005b7a20-0x005b7a97] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 89 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 pcpu_alloc_first_chunk+0x88/0x2e0
+> +memblock_reserve: [0x005b7aa0-0x005b7af8] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 1024 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 pcpu_alloc_first_chunk+0xd8/0x2e0
+> +memblock_reserve: [0x005b7b00-0x005b7eff] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 1028 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 pcpu_alloc_first_chunk+0x118/0x2e0
+> +memblock_reserve: [0x005b9000-0x005b9403] memblock_alloc_range_nid+0x130/0x178
+> +memblock_alloc_try_nid: 256 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 pcpu_alloc_first_chunk+0x154/0x2e0
+> +memblock_reserve: [0x005b7f00-0x005b7fff] memblock_alloc_range_nid+0x130/0x178
+> +   memblock_free: [0x005b8000-0x005b8fff] start_kernel+0x164/0x508
+>  Built 1 zonelists, mobility grouping on.  Total pages: 32512
+> -Kernel command line:   console=ttyS0,9600 ip=on root=/dev/nfs rw
+> nfsroot=192.168.97.29:/nas/rbtx4927/debian-mipsel,tcp,v3
+> +Kernel command line:   console=ttyS0,9600 ip=on root=/dev/nfs rw
+> nfsroot=192.168.97.29:/nas/rbtx4927/debian-mipsel,tcp,v3
+> memblock=debug
+> +memblock_alloc_try_nid: 65536 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 alloc_large_system_hash+0x270/0x478
+> +memblock_reserve: [0x005b9420-0x005c941f] memblock_alloc_range_nid+0x130/0x178
+>  Dentry cache hash table entries: 16384 (order: 4, 65536 bytes)
+> +memblock_alloc_try_nid: 32768 bytes align=0x20 nid=-1 from=0x00000000
+> max_addr=0x00000000 alloc_large_system_hash+0x270/0x478
+> +memblock_reserve: [0x005c9420-0x005d141f] memblock_alloc_range_nid+0x130/0x178
+>  Inode-cache hash table entries: 8192 (order: 3, 32768 bytes)
+> +memblock_reserve: [0x00000000-0x000003ff] trap_init+0x58/0x474
+>  Memory: 126100K/131072K available (2830K kernel code, 147K rwdata,
+> 508K rodata, 220K init, 93K bss, 4972K reserved, 0K cma-reserved)
 
-Thanks, that does the trick!
-Will send a patch shortly...
+Presuming your system is !cpu_has_mips_r2_r6 and CAC_BASE is 0 the log
+looks completely sane
+ 
+> > > Hence the old code reserved 1 MiB extra at the beginning.
+> > >
+> > > Note that the new code also dropped the rounding up of the memory block
+> > > size to a multiple of PAGE_SIZE. I'm not sure the latter actually
+> > > matters or not.
+> >
+> > I'd say that bad page state for pfn 1 is caused by "freeing" the first 1M.
+> 
+> Yes, by prom_free_prom_memory(), as pointed out by Serge.
 
-Gr{oetje,eeting}s,
+I wonder how other MIPS variants would react to the fact that the memory
+below the kernel is not reserved ;-)
 
-                        Geert
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+> 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Sincerely yours,
+Mike.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
