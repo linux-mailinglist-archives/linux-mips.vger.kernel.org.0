@@ -2,148 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D9F268B5
-	for <lists+linux-mips@lfdr.de>; Wed, 22 May 2019 18:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9805227426
+	for <lists+linux-mips@lfdr.de>; Thu, 23 May 2019 03:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730222AbfEVQ6T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 May 2019 12:58:19 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:42698 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729641AbfEVQ6S (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 22 May 2019 12:58:18 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 494B93053878;
-        Wed, 22 May 2019 16:57:52 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.43.17.159])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 69B5560BE5;
-        Wed, 22 May 2019 16:57:40 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 22 May 2019 18:57:50 +0200 (CEST)
-Date:   Wed, 22 May 2019 18:57:37 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Christian Brauner <christian@brauner.io>
-Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        torvalds@linux-foundation.org, fweimer@redhat.com,
-        jannh@google.com, tglx@linutronix.de, arnd@arndb.de,
-        shuah@kernel.org, dhowells@redhat.com, tkjos@android.com,
-        ldv@altlinux.org, miklos@szeredi.hu, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v1 1/2] open: add close_range()
-Message-ID: <20190522165737.GC4915@redhat.com>
-References: <20190522155259.11174-1-christian@brauner.io>
+        id S1729551AbfEWB4Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 May 2019 21:56:24 -0400
+Received: from mail-eopbgr750118.outbound.protection.outlook.com ([40.107.75.118]:40777
+        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727305AbfEWB4Y (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 22 May 2019 21:56:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=wavesemi.onmicrosoft.com; s=selector1-wavesemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DZosPkpDItWYJYs7S/5qifLmGQFjJFfZr1rMVkVhp04=;
+ b=WYrDd8GIlWCRE6qGAMv7JJbVfvWUPVkQlVF5QMmtcvGmabmWV34jCb8yRPptRncEgTGydYW23fWxbXvRA2+RJ/VbhLxUO7yBF/UbSmBcUur721bkE9I6DZSAfqr6O5Z3H8bw8GReEHZMLGu1b7I5AKbVUOzLrYEJ8Ep0My2TwJ4=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.174.162.17) by
+ MWHPR2201MB1184.namprd22.prod.outlook.com (10.174.171.39) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.16; Thu, 23 May 2019 01:56:22 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::90ff:8d19:8459:834b]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::90ff:8d19:8459:834b%7]) with mapi id 15.20.1922.017; Thu, 23 May 2019
+ 01:56:22 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+CC:     Paul Burton <pburton@wavecomp.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: mark ginvt() as __always_inline
+Thread-Topic: [PATCH] MIPS: mark ginvt() as __always_inline
+Thread-Index: AQHVD51tB7pkLa0JMU+ha58Nx+HJiaZ39jMA
+Date:   Thu, 23 May 2019 01:56:21 +0000
+Message-ID: <MWHPR2201MB127737A9DBE2931CCD9347E7C1010@MWHPR2201MB1277.namprd22.prod.outlook.com>
+References: <20190521062039.21492-1-yamada.masahiro@socionext.com>
+In-Reply-To: <20190521062039.21492-1-yamada.masahiro@socionext.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR07CA0103.namprd07.prod.outlook.com
+ (2603:10b6:a03:12b::44) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:24::17)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [12.94.197.246]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2002b7a4-6de3-4174-c06a-08d6df21daaf
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:MWHPR2201MB1184;
+x-ms-traffictypediagnostic: MWHPR2201MB1184:
+x-microsoft-antispam-prvs: <MWHPR2201MB11846D49D905CAF72DB32BACC1010@MWHPR2201MB1184.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 00462943DE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(346002)(396003)(39850400004)(136003)(366004)(189003)(199004)(486006)(4744005)(52116002)(99286004)(476003)(256004)(6916009)(81166006)(81156014)(6246003)(42882007)(8676002)(76176011)(8936002)(7696005)(53936002)(66946007)(68736007)(66556008)(64756008)(316002)(66446008)(66476007)(73956011)(44832011)(54906003)(71200400001)(186003)(71190400001)(6436002)(33656002)(6116002)(3846002)(26005)(74316002)(5660300002)(6506007)(52536014)(446003)(11346002)(386003)(2906002)(55016002)(229853002)(9686003)(102836004)(4326008)(7736002)(305945005)(66066001)(478600001)(14454004)(25786009);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1184;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: jw+WTruddpt6b77XmnCEE0lEiXLZ+mC3MH3jXAiLMtfAKf9jbkr2PNOt0FLHmY2cJLzXkjMQYZLUqpguaWOTP+i3OxNxLUU9FNXvi8Gs6GV1S103hqY5cmnqw/fdhNQRS3nQIr9AfoEZDZ9AdWhU2nYyE7NxlWYf1c2WFKdPzOt2SVnJ3ialqULD4JlMAmziHX/mtI0PIhATS4S4mScSpvcBrfES/Ga4QR6MxE5T8Bl6sjaoT1LNOj25QSRR2tvdzs3DAbRIvxgdIA570xjVbjbYFrIoPpUMvRluxhWWrKhQaY2fG20t2dITU0jk81PTeq88YlhKxo5dQtPJKkrxMJQBP5fa7nDz0L+POj6b9ICj2qvwoZtWDUmhnhjjOL/Di79A5V+AxRGFwMmAxr54UmIAKaf2o+UTWCgz/4w+C0E=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190522155259.11174-1-christian@brauner.io>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Wed, 22 May 2019 16:58:18 +0000 (UTC)
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2002b7a4-6de3-4174-c06a-08d6df21daaf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2019 01:56:21.9192
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1184
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 05/22, Christian Brauner wrote:
->
-> +static struct file *pick_file(struct files_struct *files, unsigned fd)
->  {
-> -	struct file *file;
-> +	struct file *file = NULL;
->  	struct fdtable *fdt;
->  
->  	spin_lock(&files->file_lock);
-> @@ -632,15 +629,65 @@ int __close_fd(struct files_struct *files, unsigned fd)
->  		goto out_unlock;
->  	rcu_assign_pointer(fdt->fd[fd], NULL);
->  	__put_unused_fd(files, fd);
-> -	spin_unlock(&files->file_lock);
-> -	return filp_close(file, files);
->  
->  out_unlock:
->  	spin_unlock(&files->file_lock);
-> -	return -EBADF;
-> +	return file;
-
-...
-
-> +int __close_range(struct files_struct *files, unsigned fd, unsigned max_fd)
-> +{
-> +	unsigned int cur_max;
-> +
-> +	if (fd > max_fd)
-> +		return -EINVAL;
-> +
-> +	rcu_read_lock();
-> +	cur_max = files_fdtable(files)->max_fds;
-> +	rcu_read_unlock();
-> +
-> +	/* cap to last valid index into fdtable */
-> +	if (max_fd >= cur_max)
-> +		max_fd = cur_max - 1;
-> +
-> +	while (fd <= max_fd) {
-> +		struct file *file;
-> +
-> +		file = pick_file(files, fd++);
-
-Well, how about something like
-
-	static unsigned int find_next_opened_fd(struct fdtable *fdt, unsigned start)
-	{
-		unsigned int maxfd = fdt->max_fds;
-		unsigned int maxbit = maxfd / BITS_PER_LONG;
-		unsigned int bitbit = start / BITS_PER_LONG;
-
-		bitbit = find_next_bit(fdt->full_fds_bits, maxbit, bitbit) * BITS_PER_LONG;
-		if (bitbit > maxfd)
-			return maxfd;
-		if (bitbit > start)
-			start = bitbit;
-		return find_next_bit(fdt->open_fds, maxfd, start);
-	}
-
-	unsigned close_next_fd(struct files_struct *files, unsigned start, unsigned maxfd)
-	{
-		unsigned fd;
-		struct file *file;
-		struct fdtable *fdt;
-	
-		spin_lock(&files->file_lock);
-		fdt = files_fdtable(files);
-		fd = find_next_opened_fd(fdt, start);
-		if (fd >= fdt->max_fds || fd > maxfd) {
-			fd = -1;
-			goto out;
-		}
-
-		file = fdt->fd[fd];
-		rcu_assign_pointer(fdt->fd[fd], NULL);
-		__put_unused_fd(files, fd);
-	out:
-		spin_unlock(&files->file_lock);
-
-		if (fd == -1u)
-			return fd;
-
-		filp_close(file, files);
-		return fd + 1;
-	}
-
-?
-
-Then close_range() can do
-
-	while (fd < max_fd)
-		fd = close_next_fd(fd, maxfd);
-
-Oleg.
-
+SGVsbG8sDQoNCk1hc2FoaXJvIFlhbWFkYSB3cm90ZToNCj4gVG8gbWVldCB0aGUgJ2knIChpbW1l
+ZGlhdGUpIGNvbnN0cmFpbnQgZm9yIHRoZSBhc20gb3BlcmFuZHMsDQo+IHRoaXMgZnVuY3Rpb24g
+bXVzdCBiZSBhbHdheXMgaW5saW5lZC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IE1hc2FoaXJvIFlh
+bWFkYSA8eWFtYWRhLm1hc2FoaXJvQHNvY2lvbmV4dC5jb20+DQoNCkFwcGxpZWQgdG8gbWlwcy1m
+aXhlcy4NCg0KVGhhbmtzLA0KICAgIFBhdWwNCg0KWyBUaGlzIG1lc3NhZ2Ugd2FzIGF1dG8tZ2Vu
+ZXJhdGVkOyBpZiB5b3UgYmVsaWV2ZSBhbnl0aGluZyBpcyBpbmNvcnJlY3QNCiAgdGhlbiBwbGVh
+c2UgZW1haWwgcGF1bC5idXJ0b25AbWlwcy5jb20gdG8gcmVwb3J0IGl0LiBdDQo=
