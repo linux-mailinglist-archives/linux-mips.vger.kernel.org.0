@@ -2,99 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A753B283C6
-	for <lists+linux-mips@lfdr.de>; Thu, 23 May 2019 18:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE18828AA7
+	for <lists+linux-mips@lfdr.de>; Thu, 23 May 2019 21:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731351AbfEWQey (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 May 2019 12:34:54 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:44775 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731338AbfEWQex (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 May 2019 12:34:53 -0400
-Received: by mail-io1-f65.google.com with SMTP id f22so5348467iol.11
-        for <linux-mips@vger.kernel.org>; Thu, 23 May 2019 09:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brauner.io; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Iz31yxamDJ4SLEgYHA+H3kjkT5XCb4Zp6/gfezC2Qt0=;
-        b=br9pbADirR+994GWUgAiKh+WIakMAmwjJW/UntS6Vn0UL+m+lo1dO/FTn+atO0TVUF
-         WdA8FOmw4uGU2Bt+yb06vyTwDWlE5VoB/+44IeS//dPUmBtjE65Z0H9wy+5UAvWjM+bU
-         m+bJeRTuOymmNkxLknco9nJkzLY7TqLdw6esosEZQQvPH6sHVcKReo2wvVHJQn0pMBUf
-         OX51ptx8FqYA5dBO+dTICUUbyHUOH7QuXKfV6eA1u0UfOiAAh+Mf72MaHLSqmppeHekG
-         sh6nJDFdLtpjiUyCOrk9t/mGk5+b5qcprSS2UKQvflivDDj11xTdb5tgLHk7Hl+UCr+t
-         3OUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Iz31yxamDJ4SLEgYHA+H3kjkT5XCb4Zp6/gfezC2Qt0=;
-        b=VC5fFnHn5oD26WE7XsQoxB+RyyZ9kVng0jzzAWsfLw3wzoCTlKT3j5MimKUArGDWoj
-         J+1rCuihjYlj8xE7Ph/dfGd/Ux4jb3uuFT6K/hyjd1qecFRaWXWMS+9SIXb2g3VSZLIo
-         6kEb3JAkHWv/HEk5QtGYqSw5PlUNtGdeBmugReZn06Ty7JtBO7xCyIWwTuGFeFiAtz6r
-         Xvv2J3YVixY0KwDMQCWGUnki0WGInX1kJ/x2hX4pny1AhDLPlY5Mq/pIL/x8f+rAUUyD
-         ITdOJtFej5zuCX2xwx2ex35xd/4GUeLnm7lDGI6Jlu7QX4D8Gfkgre0fYQDfO0L9i3ME
-         rU3g==
-X-Gm-Message-State: APjAAAUhHgKiKoxFD/WzMjAQqBkDWNj8LoItiWEWHAUxDKpv4P1UF6ab
-        Mz+UcGKIwJeZLVBv0ydiVIg3wQ==
-X-Google-Smtp-Source: APXvYqxbigL0wIoR0wevysC4IvW0XTy55FvFJYU3fuOueOdFBp/HEFetU0vD2YZ0NHaH83jARAO6OQ==
-X-Received: by 2002:a5e:8e4d:: with SMTP id r13mr57452598ioo.300.1558629293065;
-        Thu, 23 May 2019 09:34:53 -0700 (PDT)
-Received: from brauner.io ([172.56.12.187])
-        by smtp.gmail.com with ESMTPSA id i25sm8797750ioi.42.2019.05.23.09.34.43
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 23 May 2019 09:34:52 -0700 (PDT)
-Date:   Thu, 23 May 2019 18:34:41 +0200
-From:   Christian Brauner <christian@brauner.io>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        torvalds@linux-foundation.org, fweimer@redhat.com,
-        jannh@google.com, tglx@linutronix.de, arnd@arndb.de,
-        shuah@kernel.org, dhowells@redhat.com, tkjos@android.com,
-        ldv@altlinux.org, miklos@szeredi.hu, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v2 1/2] open: add close_range()
-Message-ID: <20190523163439.56ucetlt6duvnhdj@brauner.io>
-References: <20190523154747.15162-1-christian@brauner.io>
- <20190523154747.15162-2-christian@brauner.io>
- <20190523162004.GC23070@redhat.com>
+        id S2388738AbfEWToV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 May 2019 15:44:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51396 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389230AbfEWTQl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 23 May 2019 15:16:41 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BF23C217D7;
+        Thu, 23 May 2019 19:16:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558639000;
+        bh=PBtTUBAOYf3seKE7fedPr1UQ96MftwcjzEdHhxafmvk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=0O2AuLJqXEXReWe2wfsd0SBTEaLoN/vXe4O5RlsridP6U5/NU2H7QZisRmAngC/EE
+         T3E/N0JggthMUhfuiIccH/RK6pBP6PXNj2uGgq9sVs5yKoluAmJZ3KDPQLA0axQbw/
+         BxPJs6yDAa99dzlQQMAAQLmfIB+/AYxPv0DEqR0w=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Paul Burton <paul.burton@mips.com>, linux-mips@linux-mips.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH 4.19 059/114] MIPS: perf: Fix build with CONFIG_CPU_BMIPS5000 enabled
+Date:   Thu, 23 May 2019 21:05:58 +0200
+Message-Id: <20190523181736.942250445@linuxfoundation.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190523181731.372074275@linuxfoundation.org>
+References: <20190523181731.372074275@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190523162004.GC23070@redhat.com>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 23, 2019 at 06:20:05PM +0200, Oleg Nesterov wrote:
-> On 05/23, Christian Brauner wrote:
-> >
-> > +int __close_range(struct files_struct *files, unsigned fd, unsigned max_fd)
-> > +{
-> > +	unsigned int cur_max;
-> > +
-> > +	if (fd > max_fd)
-> > +		return -EINVAL;
-> > +
-> > +	rcu_read_lock();
-> > +	cur_max = files_fdtable(files)->max_fds;
-> > +	rcu_read_unlock();
-> > +
-> > +	/* cap to last valid index into fdtable */
-> > +	max_fd = max(max_fd, (cur_max - 1));
->                  ^^^
-> 
-> Hmm. min() ?
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-Yes, thanks! Massive brainf*rt on my end, sorry.
+commit 1b1f01b653b408ebe58fec78c566d1075d285c64 upstream.
 
-Christian
+arch/mips/kernel/perf_event_mipsxx.c: In function 'mipsxx_pmu_enable_event':
+arch/mips/kernel/perf_event_mipsxx.c:326:21: error: unused variable 'event' [-Werror=unused-variable]
+  struct perf_event *event = container_of(evt, struct perf_event, hw);
+                     ^~~~~
+
+Fix this by making use of IS_ENABLED() to simplify the code and avoid
+unnecessary ifdefery.
+
+Fixes: 84002c88599d ("MIPS: perf: Fix perf with MT counting other threads")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+Cc: linux-mips@linux-mips.org
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: stable@vger.kernel.org # v4.18+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+---
+ arch/mips/kernel/perf_event_mipsxx.c |   21 +++------------------
+ 1 file changed, 3 insertions(+), 18 deletions(-)
+
+--- a/arch/mips/kernel/perf_event_mipsxx.c
++++ b/arch/mips/kernel/perf_event_mipsxx.c
+@@ -64,17 +64,11 @@ struct mips_perf_event {
+ 	#define CNTR_EVEN	0x55555555
+ 	#define CNTR_ODD	0xaaaaaaaa
+ 	#define CNTR_ALL	0xffffffff
+-#ifdef CONFIG_MIPS_MT_SMP
+ 	enum {
+ 		T  = 0,
+ 		V  = 1,
+ 		P  = 2,
+ 	} range;
+-#else
+-	#define T
+-	#define V
+-	#define P
+-#endif
+ };
+ 
+ static struct mips_perf_event raw_event;
+@@ -325,9 +319,7 @@ static void mipsxx_pmu_enable_event(stru
+ {
+ 	struct perf_event *event = container_of(evt, struct perf_event, hw);
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+-#ifdef CONFIG_MIPS_MT_SMP
+ 	unsigned int range = evt->event_base >> 24;
+-#endif /* CONFIG_MIPS_MT_SMP */
+ 
+ 	WARN_ON(idx < 0 || idx >= mipspmu.num_counters);
+ 
+@@ -336,21 +328,15 @@ static void mipsxx_pmu_enable_event(stru
+ 		/* Make sure interrupt enabled. */
+ 		MIPS_PERFCTRL_IE;
+ 
+-#ifdef CONFIG_CPU_BMIPS5000
+-	{
++	if (IS_ENABLED(CONFIG_CPU_BMIPS5000)) {
+ 		/* enable the counter for the calling thread */
+ 		cpuc->saved_ctrl[idx] |=
+ 			(1 << (12 + vpe_id())) | BRCM_PERFCTRL_TC;
+-	}
+-#else
+-#ifdef CONFIG_MIPS_MT_SMP
+-	if (range > V) {
++	} else if (IS_ENABLED(CONFIG_MIPS_MT_SMP) && range > V) {
+ 		/* The counter is processor wide. Set it up to count all TCs. */
+ 		pr_debug("Enabling perf counter for all TCs\n");
+ 		cpuc->saved_ctrl[idx] |= M_TC_EN_ALL;
+-	} else
+-#endif /* CONFIG_MIPS_MT_SMP */
+-	{
++	} else {
+ 		unsigned int cpu, ctrl;
+ 
+ 		/*
+@@ -365,7 +351,6 @@ static void mipsxx_pmu_enable_event(stru
+ 		cpuc->saved_ctrl[idx] |= ctrl;
+ 		pr_debug("Enabling perf counter for CPU%d\n", cpu);
+ 	}
+-#endif /* CONFIG_CPU_BMIPS5000 */
+ 	/*
+ 	 * We do not actually let the counter run. Leave it until start().
+ 	 */
+
+
