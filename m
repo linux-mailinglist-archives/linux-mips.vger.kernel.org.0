@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE18828AA7
-	for <lists+linux-mips@lfdr.de>; Thu, 23 May 2019 21:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4B32882B
+	for <lists+linux-mips@lfdr.de>; Thu, 23 May 2019 21:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388738AbfEWToV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 May 2019 15:44:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51396 "EHLO mail.kernel.org"
+        id S2390584AbfEWTWz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 May 2019 15:22:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32952 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389230AbfEWTQl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 23 May 2019 15:16:41 -0400
+        id S2390578AbfEWTWy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 23 May 2019 15:22:54 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BF23C217D7;
-        Thu, 23 May 2019 19:16:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 59AC3206BA;
+        Thu, 23 May 2019 19:22:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558639000;
+        s=default; t=1558639373;
         bh=PBtTUBAOYf3seKE7fedPr1UQ96MftwcjzEdHhxafmvk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0O2AuLJqXEXReWe2wfsd0SBTEaLoN/vXe4O5RlsridP6U5/NU2H7QZisRmAngC/EE
-         T3E/N0JggthMUhfuiIccH/RK6pBP6PXNj2uGgq9sVs5yKoluAmJZ3KDPQLA0axQbw/
-         BxPJs6yDAa99dzlQQMAAQLmfIB+/AYxPv0DEqR0w=
+        b=ad7z8kjl89sYSD86X8f1Gk6siyWOaGttZb2SvMjM5hZ2S4sh7Fq3xkgl/KIPRQTRV
+         Gjbie5lqddRVWhMenb0Vy3/Tcm3O4fC0ZgiC2t6KAeB2rz52urKnEMuvdCMVAXXywG
+         I+ZlA00XchyPkYye4e5qiJdbYJZEH4uyH7Yul+pI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Namhyung Kim <namhyung@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH 4.19 059/114] MIPS: perf: Fix build with CONFIG_CPU_BMIPS5000 enabled
-Date:   Thu, 23 May 2019 21:05:58 +0200
-Message-Id: <20190523181736.942250445@linuxfoundation.org>
+Subject: [PATCH 5.0 073/139] MIPS: perf: Fix build with CONFIG_CPU_BMIPS5000 enabled
+Date:   Thu, 23 May 2019 21:06:01 +0200
+Message-Id: <20190523181730.299366832@linuxfoundation.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190523181731.372074275@linuxfoundation.org>
-References: <20190523181731.372074275@linuxfoundation.org>
+In-Reply-To: <20190523181720.120897565@linuxfoundation.org>
+References: <20190523181720.120897565@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
