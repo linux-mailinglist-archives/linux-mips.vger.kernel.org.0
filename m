@@ -2,50 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D12432A587
-	for <lists+linux-mips@lfdr.de>; Sat, 25 May 2019 18:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7280C2A5B6
+	for <lists+linux-mips@lfdr.de>; Sat, 25 May 2019 19:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727159AbfEYQzE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 25 May 2019 12:55:04 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:56570 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727028AbfEYQzD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 25 May 2019 12:55:03 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d8])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id B527D14FA25C4;
-        Sat, 25 May 2019 09:55:02 -0700 (PDT)
-Date:   Sat, 25 May 2019 09:55:00 -0700 (PDT)
-Message-Id: <20190525.095500.1447810293414838145.davem@davemloft.net>
-To:     hch@lst.de
-Cc:     torvalds@linux-foundation.org, paul.burton@mips.com,
-        jhogan@kernel.org, ysato@users.sourceforge.jp, dalias@libc.org,
-        npiggin@gmail.com, linux-mips@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] sparc64: use the generic get_user_pages_fast code
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190525133203.25853-6-hch@lst.de>
-References: <20190525133203.25853-1-hch@lst.de>
-        <20190525133203.25853-6-hch@lst.de>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sat, 25 May 2019 09:55:03 -0700 (PDT)
+        id S1727149AbfEYRGH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 25 May 2019 13:06:07 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:32811 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727104AbfEYRGG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 25 May 2019 13:06:06 -0400
+Received: by mail-lf1-f67.google.com with SMTP id y17so1407043lfe.0
+        for <linux-mips@vger.kernel.org>; Sat, 25 May 2019 10:06:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eUnPUEw25xH84DOq6zJ0v6Aw5NodbUsM/I1jFeyU0KM=;
+        b=ZvNWnuQZMG/SkUan4dFz03SkF+F6NtqRC/Cgx2fb5lXthFpCjyzEbczW/SDraYncIR
+         zQgHz3FqW2dkuJzWrU9AHwiQ6MhmEIkM0Uwmoc25goSdoXSqyrERxHA6nnEdyvmvjOcJ
+         rQ898QL/9J9sDjvhm9K66P/TQWm9eicsR7EOM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eUnPUEw25xH84DOq6zJ0v6Aw5NodbUsM/I1jFeyU0KM=;
+        b=Hpk6nx4T16fdhoI08b6ZurLFUVF7FNDfDXy0B64cRHiDu4ht97H1SZr2FFJGhGuZy6
+         J3zf075v9Wk3ZtKe1wgA0Anr2RwZJIxgU4utgtX7fcz+ZqtFCD91mk6rMpNLFWmzWa0Z
+         pfX3A/JA7CP+JCf9lXJMJNvLxvgmQzJMavk3gxXR9RjM0yZd+cWC4Dfcr5zGrxgfCHLR
+         onFCGYcpvYitV7cjFuLD4I3P6BDqqeI6kCIvIsjyPvlqzmWrgT9Lh/q2ONVtwezJ1O+D
+         skzaWOaC5a4mWHtXtjteIKcGSnHIBfDb2/pLe1Z3vCbzWtDPP3rxM/1XLCWeoXliJBnn
+         FNWw==
+X-Gm-Message-State: APjAAAVaROtvHv+SRTejGMvGQPLHwR+5tOyF8ENo0nr4tOGUT7B24e4L
+        /p5NEeZMk/7nnjc6syKyvJX43FBPPfw=
+X-Google-Smtp-Source: APXvYqwbCMCOuILnCx69S3ifb3j7CnyX9OOpCXkVOKG/BIW+HU6xo/g7X7irM/tZ6J6FxVXm1qy0MQ==
+X-Received: by 2002:a05:6512:245:: with SMTP id b5mr16340234lfo.24.1558803964350;
+        Sat, 25 May 2019 10:06:04 -0700 (PDT)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
+        by smtp.gmail.com with ESMTPSA id g15sm1162768ljk.83.2019.05.25.10.06.01
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 25 May 2019 10:06:01 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id m15so8662686lfh.4
+        for <linux-mips@vger.kernel.org>; Sat, 25 May 2019 10:06:01 -0700 (PDT)
+X-Received: by 2002:ac2:59c9:: with SMTP id x9mr629669lfn.52.1558803961013;
+ Sat, 25 May 2019 10:06:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190525133203.25853-1-hch@lst.de> <20190525133203.25853-5-hch@lst.de>
+In-Reply-To: <20190525133203.25853-5-hch@lst.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 25 May 2019 10:05:45 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg-KDU9Gp8NGTAffEO2Vh6F_xA4SE9=PCOMYamnEj0D4w@mail.gmail.com>
+Message-ID: <CAHk-=wg-KDU9Gp8NGTAffEO2Vh6F_xA4SE9=PCOMYamnEj0D4w@mail.gmail.com>
+Subject: Re: [PATCH 4/6] mm: add a gup_fixup_start_addr hook
+To:     Christoph Hellwig <hch@lst.de>,
+        Khalid Aziz <khalid.aziz@oracle.com>
+Cc:     Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        linux-mips@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
-Date: Sat, 25 May 2019 15:32:02 +0200
+[ Adding Khalid, who added the sparc64 code ]
 
-> The sparc64 code is mostly equivalent to the generic one, minus various
-> bugfixes and two arch overrides that this patch adds to pgtable.h.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+On Sat, May 25, 2019 at 6:32 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> This will allow sparc64 to override its ADI tags for
+> get_user_pages and get_user_pages_fast.  I have no idea why this
+> is not required for plain old get_user_pages, but it keeps the
+> existing sparc64 behavior.
 
-Acked-by: David S. Miller <davem@davemloft.net>
+This is actually generic. ARM64 has tagged pointers too. Right now the
+system call interfaces are all supposed to mask off the tags, but
+there's been noise about having the kernel understand them.
+
+That said:
+
+> +#ifndef gup_fixup_start_addr
+> +#define gup_fixup_start_addr(start)    (start)
+> +#endif
+
+I'd rather name this much more specifically (ie make it very much
+about "clean up pointer tags") and I'm also not clear on why sparc64
+actually wants this. I thought the sparc64 rules were the same as the
+(current) arm64 rules: any addresses passed to the kernel have to be
+the non-tagged ones.
+
+As you say, nothing *else* in the kernel does that address cleanup,
+why should get_user_pages_fast() do it?
+
+David? Khalid? Why does sparc64 actually need this? It looks like the
+generic get_user_pages() doesn't do it.
+
+                Linus
