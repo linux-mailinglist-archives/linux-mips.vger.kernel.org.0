@@ -2,149 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 645AF2A92C
-	for <lists+linux-mips@lfdr.de>; Sun, 26 May 2019 11:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355302A9E5
+	for <lists+linux-mips@lfdr.de>; Sun, 26 May 2019 15:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727640AbfEZJ23 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sun, 26 May 2019 05:28:29 -0400
-Received: from linux-libre.fsfla.org ([209.51.188.54]:49130 "EHLO
-        linux-libre.fsfla.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727639AbfEZJ23 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 26 May 2019 05:28:29 -0400
-X-Greylist: delayed 466 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 May 2019 05:28:28 EDT
-Received: from free.home (home.lxoliva.fsfla.org [172.31.160.164])
-        by linux-libre.fsfla.org (8.15.2/8.15.2/Debian-3) with ESMTP id x4Q9JdKg031188;
-        Sun, 26 May 2019 09:19:41 GMT
-Received: from livre (livre.home [172.31.160.2])
-        by free.home (8.15.2/8.15.2) with ESMTP id x4Q9J058102102;
-        Sun, 26 May 2019 06:19:01 -0300
-From:   Alexandre Oliva <lxoliva@fsfla.org>
-To:     "Maciej W. Rozycki" <macro@linux-mips.org>
-Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>, Tom Li <tomli@tomli.me>,
+        id S1727771AbfEZNsB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 May 2019 09:48:01 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:43815 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726953AbfEZNsA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 26 May 2019 09:48:00 -0400
+Received: from alex.numericable.fr (127.19.86.79.rev.sfr.net [79.86.19.127])
+        (Authenticated sender: alex@ghiti.fr)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id BD6A0100006;
+        Sun, 26 May 2019 13:47:48 +0000 (UTC)
+From:   Alexandre Ghiti <alex@ghiti.fr>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC] On the Current Troubles of Mainlining Loongson Platform Drivers
-Organization: Free thinker, not speaking for FSF Latin America
-References: <20190208083038.GA1433@localhost.localdomain>
-        <orbm3i5xrn.fsf@lxoliva.fsfla.org>
-        <20190211125506.GA21280@localhost.localdomain>
-        <orimxq3q9j.fsf@lxoliva.fsfla.org>
-        <20190211230614.GB22242@darkstar.musicnaut.iki.fi>
-        <orva1jj9ht.fsf@lxoliva.fsfla.org>
-        <20190217235951.GA20700@darkstar.musicnaut.iki.fi>
-        <orpnrpj2rk.fsf@lxoliva.fsfla.org>
-        <alpine.LFD.2.21.1902180227090.15915@eddie.linux-mips.org>
-        <orlg1ryyo2.fsf@lxoliva.fsfla.org>
-        <alpine.LFD.2.21.1903071744560.7728@eddie.linux-mips.org>
-        <orwolaw5u1.fsf@lxoliva.fsfla.org>
-        <alpine.LFD.2.21.1903082347330.31648@eddie.linux-mips.org>
-Date:   Sun, 26 May 2019 06:19:00 -0300
-In-Reply-To: <alpine.LFD.2.21.1903082347330.31648@eddie.linux-mips.org>
-        (Maciej W. Rozycki's message of "Fri, 8 Mar 2019 23:56:03 +0000
-        (GMT)")
-Message-ID: <or7ead4lq3.fsf@lxoliva.fsfla.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Palmer Dabbelt <palmer@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Alexandre Ghiti <alex@ghiti.fr>
+Subject: [PATCH v4 00/14] Provide generic top-down mmap layout functions
+Date:   Sun, 26 May 2019 09:47:32 -0400
+Message-Id: <20190526134746.9315-1-alex@ghiti.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Scanned-By: MIMEDefang 2.84
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mar  8, 2019, "Maciej W. Rozycki" <macro@linux-mips.org> wrote:
+This series introduces generic functions to make top-down mmap layout
+easily accessible to architectures, in particular riscv which was
+the initial goal of this series.
+The generic implementation was taken from arm64 and used successively
+by arm, mips and finally riscv.
 
->  Anyway I meant: does `war_io_reorder_wmb' expand to `wmb' on your system?
+Note that in addition the series fixes 2 issues:
+- stack randomization was taken into account even if not necessary.
+- [1] fixed an issue with mmap base which did not take into account
+  randomization but did not report it to arm and mips, so by moving
+  arm64 into a generic library, this problem is now fixed for both
+  architectures.
 
-No, it expands to `barrier' on the yeeloong:
+This work is an effort to factorize architecture functions to avoid
+code duplication and oversights as in [1].
 
-CONFIG_CPU_LOONGSON2F=y
-CONFIG_CPU_LOONGSON2F_WORKAROUNDS=y
-CONFIG_CPU_LOONGSON2=y
-CONFIG_SYS_HAS_CPU_LOONGSON2F=y
+[1]: https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1429066.html
 
+Changes in v4:
+  - Make ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT select ARCH_HAS_ELF_RANDOMIZE
+    by default as suggested by Kees,
+  - ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT depends on MMU and defines the
+    functions needed by ARCH_HAS_ELF_RANDOMIZE => architectures that use
+    the generic mmap topdown functions cannot have ARCH_HAS_ELF_RANDOMIZE
+    selected without MMU, but I think it's ok since randomization without
+    MMU does not add much security anyway.
+  - There is no common API to determine if a process is 32b, so I came up with
+    !IS_ENABLED(CONFIG_64BIT) || is_compat_task() in [PATCH v4 12/14].
+  - Mention in the change log that x86 already takes care of not offseting mmap
+    base address if the task does not want randomization.
+  - Re-introduce a comment that should not have been removed.
+  - Add Reviewed/Acked-By from Paul, Christoph and Kees, thank you for that.
+  - I tried to minimize the changes from the commits in v3 in order to make
+    easier the review of the v4, the commits changed or added are:
+    - [PATCH v4 5/14]
+    - [PATCH v4 8/14]
+    - [PATCH v4 11/14]
+    - [PATCH v4 12/14]
+    - [PATCH v4 13/14]
 
-I've finally managed to do the bisection on object files I mentioned I'd
-do to try to pinpoint where __BUILT_IOPORT_PFX with barrier rather than
-!barrier regressed.
+Changes in v3:
+  - Split into small patches to ease review as suggested by Christoph
+    Hellwig and Kees Cook
+  - Move help text of new config as a comment, as suggested by Christoph
+  - Make new config depend on MMU, as suggested by Christoph
 
-I found that forcing barrier off for drivers/irqchip/irq-i8259 was
-enough to avoid the problem.
+Changes in v2 as suggested by Christoph Hellwig:
+  - Preparatory patch that moves randomize_stack_top
+  - Fix duplicate config in riscv
+  - Align #if defined on next line => this gives rise to a checkpatch
+    warning. I found this pattern all around the tree, in the same proportion
+    as the previous pattern which was less pretty:
+    git grep -C 1 -n -P "^#if defined.+\|\|.*\\\\$"
 
-(I further narrowed it down to byte I/O, which is no surprise
-considering irq-i8259 doesn't seem to use any non-byte I/O.)
+Alexandre Ghiti (14):
+  mm, fs: Move randomize_stack_top from fs to mm
+  arm64: Make use of is_compat_task instead of hardcoding this test
+  arm64: Consider stack randomization for mmap base only when necessary
+  arm64, mm: Move generic mmap layout functions to mm
+  arm64, mm: Make randomization selected by generic topdown mmap layout
+  arm: Properly account for stack randomization and stack guard gap
+  arm: Use STACK_TOP when computing mmap base address
+  arm: Use generic mmap top-down layout and brk randomization
+  mips: Properly account for stack randomization and stack guard gap
+  mips: Use STACK_TOP when computing mmap base address
+  mips: Adjust brk randomization offset to fit generic version
+  mips: Replace arch specific way to determine 32bit task with generic
+    version
+  mips: Use generic mmap top-down layout and brk randomization
+  riscv: Make mmap allocation top-down by default
 
-Then I narrowed it down to output only.
-
-A Loongson2F kernel built with the patch below works at normal speed.
-I've also keyed the -1 barrier selector to compiling the irq-i8259
-driver only, and that got me a functional kernel, but I'm not confident
-that the same issues that affect the interrupt controller, preventing it
-from initializing correctly, is not also affecting other drivers, just
-in less visible ways, so the patch conservatively reverts to the older
-barriers for all I/O (i.e., non-mem) out primitives.
-
-I've tested this on a yeeloong on top of v5.1.5.
-
-I'm tempted to start using this patch in my Freeloong builds of GNU
-Linux-libre for gnewsense/yeeloong of 5.0 and 5.1 stable releases, to
-try to make them usable.  Can anyone suggest any reason why it might be
-risky to do so, moving on as much as I could to the new barriers,
-sticking to the 4.19-one only for non-mem out?  As in, could mixing the
-barriers be riskier than reverting to the 4.19 barriers everywhere?
-
-Thanks in advance for any insights and recommendations,
-
-
-diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index 845fbbc7a2e3..04be4758d4ff 100644
---- a/arch/mips/include/asm/io.h
-+++ b/arch/mips/include/asm/io.h
-@@ -416,7 +416,7 @@ static inline void pfx##out##bwlq##p(type val, unsigned long port)	\
- 	volatile type *__addr;						\
- 	type __val;							\
- 									\
--	if (barrier)							\
-+	if (barrier > 0)						\
- 		iobarrier_rw();						\
- 	else								\
- 		war_io_reorder_wmb();					\
-@@ -467,13 +467,22 @@ BUILDIO_MEM(w, u16)
- BUILDIO_MEM(l, u32)
- BUILDIO_MEM(q, u64)
- 
--#define __BUILD_IOPORT_PFX(bus, bwlq, type)				\
--	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0,)			\
--	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0, _p)
-+#define __BUILD_IOPORT_PFX(bus, bwlq, type, barrier)			\
-+	__BUILD_IOPORT_SINGLE(bus, bwlq, type, barrier, 0,)		\
-+	__BUILD_IOPORT_SINGLE(bus, bwlq, type, barrier, 0, _p)
-+
-+/* Choose the kind of barrier used for out in __BUILD_IOPORT_SINGLE in
-+   non-__mem_ variants.  On Loongson2F, irq-i8259 fails to initialize
-+   when this is defined to 1.  */
-+#if defined(CONFIG_CPU_LOONGSON2)
-+#define USE_IO_BARRIER_FOR_NON_MEM_OUT -1
-+#else
-+#define USE_IO_BARRIER_FOR_NON_MEM_OUT 1
-+#endif
- 
- #define BUILDIO_IOPORT(bwlq, type)					\
--	__BUILD_IOPORT_PFX(, bwlq, type)				\
--	__BUILD_IOPORT_PFX(__mem_, bwlq, type)
-+	__BUILD_IOPORT_PFX(, bwlq, type, USE_IO_BARRIER_FOR_NON_MEM_OUT) \
-+	__BUILD_IOPORT_PFX(__mem_, bwlq, type, 2)
- 
- BUILDIO_IOPORT(b, u8)
- BUILDIO_IOPORT(w, u16)
-
+ arch/Kconfig                       |  11 +++
+ arch/arm/Kconfig                   |   2 +-
+ arch/arm/include/asm/processor.h   |   2 -
+ arch/arm/kernel/process.c          |   5 --
+ arch/arm/mm/mmap.c                 |  52 --------------
+ arch/arm64/Kconfig                 |   2 +-
+ arch/arm64/include/asm/processor.h |   2 -
+ arch/arm64/kernel/process.c        |   8 ---
+ arch/arm64/mm/mmap.c               |  72 -------------------
+ arch/mips/Kconfig                  |   2 +-
+ arch/mips/include/asm/processor.h  |   5 --
+ arch/mips/mm/mmap.c                |  84 ----------------------
+ arch/riscv/Kconfig                 |  11 +++
+ fs/binfmt_elf.c                    |  20 ------
+ include/linux/mm.h                 |   2 +
+ kernel/sysctl.c                    |   6 +-
+ mm/util.c                          | 107 ++++++++++++++++++++++++++++-
+ 17 files changed, 137 insertions(+), 256 deletions(-)
 
 -- 
-Alexandre Oliva, freedom fighter  he/him   https://FSFLA.org/blogs/lxo
-Be the change, be Free!                 FSF Latin America board member
-GNU Toolchain Engineer                        Free Software Evangelist
-Hay que enGNUrecerse, pero sin perder la terGNUra jamás - Che GNUevara
+2.20.1
+
