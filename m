@@ -2,61 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8B82AC0C
-	for <lists+linux-mips@lfdr.de>; Sun, 26 May 2019 22:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E5F2AF61
+	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2019 09:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725747AbfEZUXh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 26 May 2019 16:23:37 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:45878 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725616AbfEZUXh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 26 May 2019 16:23:37 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d8])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id A81B3140ADA7D;
-        Sun, 26 May 2019 13:23:35 -0700 (PDT)
-Date:   Sun, 26 May 2019 13:23:35 -0700 (PDT)
-Message-Id: <20190526.132335.1937144810229440950.davem@davemloft.net>
-To:     o.rempel@pengutronix.de
-Cc:     paul.burton@mips.com, ralf@linux-mips.org, jhogan@kernel.org,
-        robh+dt@kernel.org, jcliburn@gmail.com, chris.snook@gmail.com,
-        mark.rutland@arm.com, kernel@pengutronix.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, john@phrozen.org, nbd@nbd.name,
-        netdev@vger.kernel.org, andrew@lunn.ch, gch981213@gmail.com,
-        info@freifunk-bad-gandersheim.net
-Subject: Re: [PATCH v6 0/3] MIPS: ath79: add ag71xx support
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190524111224.24819-1-o.rempel@pengutronix.de>
-References: <20190524111224.24819-1-o.rempel@pengutronix.de>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sun, 26 May 2019 13:23:36 -0700 (PDT)
+        id S1725996AbfE0H3m (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 May 2019 03:29:42 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:47006 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725869AbfE0H3m (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 27 May 2019 03:29:42 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id 6E06AA0AE8;
+        Mon, 27 May 2019 09:29:40 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172]) (amavisd-new, port 10030)
+        with ESMTP id O8TUNVHo2oZw; Mon, 27 May 2019 09:29:31 +0200 (CEST)
+From:   Stefan Roese <sr@denx.de>
+To:     linux-mips@vger.kernel.org
+Cc:     Paul Burton <paul.burton@mips.com>,
+        Harvey Hunt <harvey.hunt@imgtec.com>,
+        John Crispin <john@phrozen.org>
+Subject: [PATCH 1/9] MIPS: ralink: mt7628a.dtsi: Add SPDX GPL-2.0 license identifier
+Date:   Mon, 27 May 2019 09:29:22 +0200
+Message-Id: <20190527072930.9844-1-sr@denx.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-Date: Fri, 24 May 2019 13:12:21 +0200
+As done in commit b24413180f56 ("License cleanup: add SPDX GPL-2.0
+license identifier to files with no license"), this patch adds the SPDX
+license identifier to mt7628a.dtsi, which is currently still missing
+this identifier.
 
- ...
-> This patch series provide ethernet support for many Atheros/QCA
-> MIPS based SoCs.
-> 
-> I reworked ag71xx driver which was previously maintained within OpenWRT
-> repository. So far, following changes was made to make upstreaming
-> easier:
-> - everything what can be some how used in user space was removed. Most
->   of it was debug functionality.
-> - most of deficetree bindings was removed. Not every thing made sense
->   and most of it is SoC specific, so it is possible to detect it by
->   compatible.
-> - mac and mdio parts are merged in to one driver. It makes easier to
->   maintaine SoC specific quirks.
+Signed-off-by: Stefan Roese <sr@denx.de>
+Cc: Paul Burton <paul.burton@mips.com>
+Cc: Harvey Hunt <harvey.hunt@imgtec.com>
+Cc: John Crispin <john@phrozen.org>
+---
+ arch/mips/boot/dts/ralink/mt7628a.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Series applied, thanks.
+diff --git a/arch/mips/boot/dts/ralink/mt7628a.dtsi b/arch/mips/boot/dts/ralink/mt7628a.dtsi
+index 9ff7e8faaecc..3e88c8d496e4 100644
+--- a/arch/mips/boot/dts/ralink/mt7628a.dtsi
++++ b/arch/mips/boot/dts/ralink/mt7628a.dtsi
+@@ -1,3 +1,5 @@
++// SPDX-License-Identifier: GPL-2.0
++
+ / {
+ 	#address-cells = <1>;
+ 	#size-cells = <1>;
+-- 
+2.21.0
+
