@@ -2,19 +2,19 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B50C2AFE2
-	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2019 10:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F1B2B259
+	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2019 12:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726523AbfE0IRe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 May 2019 04:17:34 -0400
-Received: from esa4.microchip.iphmx.com ([68.232.154.123]:50697 "EHLO
-        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725943AbfE0IRd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 May 2019 04:17:33 -0400
-Received-SPF: Pass (esa4.microchip.iphmx.com: domain of
+        id S1726727AbfE0KjM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 May 2019 06:39:12 -0400
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:30904 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726280AbfE0KjC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 May 2019 06:39:02 -0400
+Received-SPF: Pass (esa6.microchip.iphmx.com: domain of
   Horatiu.Vultur@microchip.com designates 198.175.253.82 as
   permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa4.microchip.iphmx.com;
+  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
   envelope-from="Horatiu.Vultur@microchip.com";
   x-sender="Horatiu.Vultur@microchip.com";
   x-conformance=spf_only; x-record-type="v=spf1";
@@ -22,21 +22,25 @@ Received-SPF: Pass (esa4.microchip.iphmx.com: domain of
   a:smtpout.microchip.com a:mx1.microchip.iphmx.com
   a:mx2.microchip.iphmx.com include:servers.mcsv.net
   include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa4.microchip.iphmx.com: no sender
+Received-SPF: None (esa6.microchip.iphmx.com: no sender
   authenticity information available from domain of
   postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa4.microchip.iphmx.com;
+  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
   envelope-from="Horatiu.Vultur@microchip.com";
   x-sender="postmaster@email.microchip.com";
   x-conformance=spf_only
-Authentication-Results: esa4.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Horatiu.Vultur@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+Authentication-Results: esa6.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Horatiu.Vultur@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
 X-IronPort-AV: E=Sophos;i="5.60,518,1549954800"; 
-   d="scan'208";a="34506073"
+   d="scan'208";a="31966454"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 May 2019 01:17:32 -0700
-Received: from soft-dev3.microsemi.net (10.10.85.251) by mx.microchip.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.1713.5; Mon, 27 May 2019
- 01:17:29 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 May 2019 03:38:55 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.87.71) by
+ chn-vm-ex01.mchp-main.com (10.10.87.71) with ShadowRedundancy id 15.1.1713.5;
+ Mon, 27 May 2019 10:38:55 +0000
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex01.mchp-main.com (10.10.87.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Mon, 27 May 2019 01:17:32 -0700
 From:   Horatiu Vultur <horatiu.vultur@microchip.com>
 CC:     Horatiu Vultur <horatiu.vultur@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
