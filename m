@@ -2,62 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E5F2AF61
-	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2019 09:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00BA02B250
+	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2019 12:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725996AbfE0H3m (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 May 2019 03:29:42 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:47006 "EHLO mx2.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725869AbfE0H3m (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 27 May 2019 03:29:42 -0400
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id 6E06AA0AE8;
-        Mon, 27 May 2019 09:29:40 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172]) (amavisd-new, port 10030)
-        with ESMTP id O8TUNVHo2oZw; Mon, 27 May 2019 09:29:31 +0200 (CEST)
-From:   Stefan Roese <sr@denx.de>
-To:     linux-mips@vger.kernel.org
-Cc:     Paul Burton <paul.burton@mips.com>,
-        Harvey Hunt <harvey.hunt@imgtec.com>,
-        John Crispin <john@phrozen.org>
-Subject: [PATCH 1/9] MIPS: ralink: mt7628a.dtsi: Add SPDX GPL-2.0 license identifier
-Date:   Mon, 27 May 2019 09:29:22 +0200
-Message-Id: <20190527072930.9844-1-sr@denx.de>
+        id S1726564AbfE0KjC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 May 2019 06:39:02 -0400
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:30904 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725996AbfE0KjC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 May 2019 06:39:02 -0400
+Received-SPF: Pass (esa6.microchip.iphmx.com: domain of
+  Horatiu.Vultur@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
+  envelope-from="Horatiu.Vultur@microchip.com";
+  x-sender="Horatiu.Vultur@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
+  a:mx2.microchip.iphmx.com include:servers.mcsv.net
+  include:mktomail.com include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa6.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
+  envelope-from="Horatiu.Vultur@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa6.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Horatiu.Vultur@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+X-IronPort-AV: E=Sophos;i="5.60,518,1549954800"; 
+   d="scan'208";a="31966457"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 May 2019 03:38:56 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.87.71) by
+ chn-vm-ex01.mchp-main.com (10.10.87.71) with ShadowRedundancy id 15.1.1713.5;
+ Mon, 27 May 2019 10:38:55 +0000
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex01.mchp-main.com (10.10.87.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Mon, 27 May 2019 01:17:17 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+CC:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        "Paul Burton" <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+Subject: [PATCH net-next 0/2] Add hw offload of TC flower on MSCC Ocelot
+Date:   Mon, 27 May 2019 10:16:34 +0200
+Message-ID: <1558944996-23069-1-git-send-email-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-As done in commit b24413180f56 ("License cleanup: add SPDX GPL-2.0
-license identifier to files with no license"), this patch adds the SPDX
-license identifier to mt7628a.dtsi, which is currently still missing
-this identifier.
+This patch series enables hardware offload for flower filter used in
+traffic controller on MSCC Ocelot board.
 
-Signed-off-by: Stefan Roese <sr@denx.de>
-Cc: Paul Burton <paul.burton@mips.com>
-Cc: Harvey Hunt <harvey.hunt@imgtec.com>
-Cc: John Crispin <john@phrozen.org>
----
- arch/mips/boot/dts/ralink/mt7628a.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+The patch series is based on:
+commit 6ab1f192dcb4 ("net: mscc: ocelot: Implement port policers via tc
+command")
 
-diff --git a/arch/mips/boot/dts/ralink/mt7628a.dtsi b/arch/mips/boot/dts/ralink/mt7628a.dtsi
-index 9ff7e8faaecc..3e88c8d496e4 100644
---- a/arch/mips/boot/dts/ralink/mt7628a.dtsi
-+++ b/arch/mips/boot/dts/ralink/mt7628a.dtsi
-@@ -1,3 +1,5 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
- / {
- 	#address-cells = <1>;
- 	#size-cells = <1>;
+CC: Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC: Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
+CC: Rob Herring <robh+dt@kernel.org>
+CC: Mark Rutland <mark.rutland@arm.com>
+CC: Ralf Baechle <ralf@linux-mips.org>
+CC: Paul Burton <paul.burton@mips.com>
+CC: James Hogan <jhogan@kernel.org>
+CC: "David S. Miller" <davem@davemloft.net>
+CC: linux-mips@vger.kernel.org
+CC: devicetree@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: netdev@vger.kernel.org
+
+Horatiu Vultur (2):
+  net: mscc: ocelot: Add support for tcam
+  net: mscc: ocelot: Hardware ofload for tc flower filter
+
+ arch/mips/boot/dts/mscc/ocelot.dtsi       |   5 +-
+ drivers/net/ethernet/mscc/Makefile        |   2 +-
+ drivers/net/ethernet/mscc/ocelot.c        |  13 +
+ drivers/net/ethernet/mscc/ocelot.h        |   8 +
+ drivers/net/ethernet/mscc/ocelot_ace.c    | 779 ++++++++++++++++++++++++++++++
+ drivers/net/ethernet/mscc/ocelot_ace.h    | 232 +++++++++
+ drivers/net/ethernet/mscc/ocelot_board.c  |   1 +
+ drivers/net/ethernet/mscc/ocelot_flower.c | 345 +++++++++++++
+ drivers/net/ethernet/mscc/ocelot_regs.c   |  11 +
+ drivers/net/ethernet/mscc/ocelot_s2.h     |  64 +++
+ drivers/net/ethernet/mscc/ocelot_tc.c     |  16 +-
+ drivers/net/ethernet/mscc/ocelot_vcap.h   | 403 ++++++++++++++++
+ 12 files changed, 1870 insertions(+), 9 deletions(-)
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_ace.c
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_ace.h
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_flower.c
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_s2.h
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_vcap.h
+
 -- 
-2.21.0
+2.7.4
 
