@@ -2,141 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF072B35B
-	for <lists+linux-mips@lfdr.de>; Mon, 27 May 2019 13:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70142BD4B
+	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2019 04:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726463AbfE0Ljb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 May 2019 07:39:31 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:44041 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726094AbfE0Lja (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 May 2019 07:39:30 -0400
-Received: by mail-ot1-f66.google.com with SMTP id g18so14506656otj.11;
-        Mon, 27 May 2019 04:39:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V0OzTK0kT2ddqZaGr86QRO9HD6H6ELQHgY3vn9EoNSY=;
-        b=nxBPaLcOHEMMdpZHLjXHOILUXYM8fTOI5bfBJJzIuPdm5mvL9uczAcDCZzKQcheqrN
-         /sF7iVdTly8QcS37JohIugNQjMN+SdRwmaBlWSF/xXV+G21BU9sSG6IxvMYDy6VXPHka
-         fFkS2JnNuppbI0A+djLSGEumGqTrDD273Rcea3ZL1j3XS8ACje+k2KImh+nLJXhy2qgQ
-         7K+npPDh3CfHY22hHIYqECLOuBYeiWASF3C5kbgwIVMhNRZRDELzyr3e4j0wGdhtd3ch
-         n/RTnCJSfoeoWo1JNkNo4d5wo6AO5aBK5s7Iq7mjEAM5BnDWeIoU1nH0ddDGyz98XP9Q
-         4djg==
-X-Gm-Message-State: APjAAAV89id1kqpUo8Ajpos7Z4do0GkQNSRoWc00IV5DeQI2NoTE3B0V
-        qTmjmzwgYCtu+y4Fq030nQnnVHdu0JHoWMvMO34=
-X-Google-Smtp-Source: APXvYqzRJPkCqJiOx+VOhGWb3xNSagzD3mXtVwSHX6dsr/mX9srOC/7Nko7rnVoMhplnBtrellrsrHboMJ8YmHsuPBA=
-X-Received: by 2002:a9d:1a5:: with SMTP id e34mr44398857ote.59.1558957169445;
- Mon, 27 May 2019 04:39:29 -0700 (PDT)
+        id S1727811AbfE1Cdy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 May 2019 22:33:54 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:56997 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727313AbfE1Cdx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 27 May 2019 22:33:53 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 45CdFL2nBkz9s3l;
+        Tue, 28 May 2019 12:33:41 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christian Brauner <christian@brauner.io>, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, torvalds@linux-foundation.org,
+        fweimer@redhat.com
+Cc:     jannh@google.com, oleg@redhat.com, tglx@linutronix.de,
+        arnd@arndb.de, shuah@kernel.org, dhowells@redhat.com,
+        tkjos@android.com, ldv@altlinux.org, miklos@szeredi.hu,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, x86@kernel.org,
+        Christian Brauner <christian@brauner.io>
+Subject: Re: [PATCH v2 2/2] tests: add close_range() tests
+In-Reply-To: <20190523154747.15162-3-christian@brauner.io>
+References: <20190523154747.15162-1-christian@brauner.io> <20190523154747.15162-3-christian@brauner.io>
+Date:   Tue, 28 May 2019 12:33:41 +1000
+Message-ID: <8736kzqpdm.fsf@concordia.ellerman.id.au>
 MIME-Version: 1.0
-References: <20190521145141.9813-1-paul@crapouillou.net>
-In-Reply-To: <20190521145141.9813-1-paul@crapouillou.net>
-From:   Mathieu Malaterre <malat@debian.org>
-Date:   Mon, 27 May 2019 13:39:18 +0200
-Message-ID: <CA+7wUszagtyMV3oMxAi4VqpDeFcBY5ohXZ3PrXe-X5JV21bjBw@mail.gmail.com>
-Subject: Re: Ingenic Timer/Counter Unit (TCU) patchset v12
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-mips@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-clk@vger.kernel.org, od@zcrc.me
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 21, 2019 at 4:51 PM Paul Cercueil <paul@crapouillou.net> wrote:
+Christian Brauner <christian@brauner.io> writes:
+> This adds basic tests for the new close_range() syscall.
+> - test that no invalid flags can be passed
+> - test that a range of file descriptors is correctly closed
+> - test that a range of file descriptors is correctly closed if there there
+>   are already closed file descriptors in the range
+> - test that max_fd is correctly capped to the current fdtable maximum
 >
-> Hi,
+> Signed-off-by: Christian Brauner <christian@brauner.io>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Dmitry V. Levin <ldv@altlinux.org>
+> Cc: Oleg Nesterov <oleg@redhat.com>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Florian Weimer <fweimer@redhat.com>
+> Cc: linux-api@vger.kernel.org
+> ---
+> v1: unchanged
+> v2:
+> - Christian Brauner <christian@brauner.io>:
+>   - verify that close_range() correctly closes a single file descriptor
+> ---
+>  tools/testing/selftests/Makefile              |   1 +
+>  tools/testing/selftests/core/.gitignore       |   1 +
+>  tools/testing/selftests/core/Makefile         |   6 +
+>  .../testing/selftests/core/close_range_test.c | 142 ++++++++++++++++++
+>  4 files changed, 150 insertions(+)
+>  create mode 100644 tools/testing/selftests/core/.gitignore
+>  create mode 100644 tools/testing/selftests/core/Makefile
+>  create mode 100644 tools/testing/selftests/core/close_range_test.c
 >
-> Here's the V12 of my patchset to add support for the Timer/Counter Unit
-> (TCU) present on the JZ47xx SoCs from Ingenic.
->
-> This patchset is much shorter at only 13 patches vs. 27 patches in V11;
-> the remaining patches will be sent in parallel (if applicable) or as a
-> follow-up patchset once this one is merged.
->
-> In V11 the clocksource maintainers weren't happy with the size of the
-> ingenic-timer driver, which included clocks and irqchip setup code.
-> On the other hand, devicetree maintainers wanted one single node for
-> the TCU hardware since it's effectively just one hardware block.
->
-> In this patchset the functionality is cut in four different drivers:
-> a MFD one to provide the regmap, probe the children and which provides
-> several API functions; a clocks driver; a irqchip driver; a clocksource
-> driver. All these drivers work with the same regmap, have the same
-> compatible strings, and will probe _with the same devicetree node_.
+> diff --git a/tools/testing/selftests/core/.gitignore b/tools/testing/selftests/core/.gitignore
+> new file mode 100644
+> index 000000000000..6e6712ce5817
+> --- /dev/null
+> +++ b/tools/testing/selftests/core/.gitignore
+> @@ -0,0 +1 @@
+> +close_range_test
+> diff --git a/tools/testing/selftests/core/Makefile b/tools/testing/selftests/core/Makefile
+> new file mode 100644
+> index 000000000000..de3ae68aa345
+> --- /dev/null
+> +++ b/tools/testing/selftests/core/Makefile
+> @@ -0,0 +1,6 @@
+> +CFLAGS += -g -I../../../../usr/include/ -I../../../../include
 
-For the series:
+Your second -I pulls the unexported kernel headers in, userspace
+programs shouldn't include unexported kernel headers.
 
-Tested-by: Mathieu Malaterre <malat@debian.org>
+It breaks the build on powerpc with eg:
 
-System: MIPS Creator CI20
+  powerpc64le-linux-gnu-gcc -g -I../../../../usr/include/ -I../../../../include    close_range_test.c  -o /output/kselftest/core/close_range_test
+  In file included from /usr/powerpc64le-linux-gnu/include/bits/fcntl-linux.h:346,
+                   from /usr/powerpc64le-linux-gnu/include/bits/fcntl.h:62,
+                   from /usr/powerpc64le-linux-gnu/include/fcntl.h:35,
+                   from close_range_test.c:5:
+  ../../../../include/linux/falloc.h:13:2: error: unknown type name '__s16'
+    __s16  l_type;
+    ^~~~~
 
-For reference, here is my local patch:
 
-diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-index 1bfac58da5df..e7b7da32f278 100644
---- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <dt-bindings/clock/jz4780-cgu.h>
-+#include <dt-bindings/clock/ingenic,tcu.h>
- #include <dt-bindings/dma/jz4780-dma.h>
+Did you do that on purpose or just copy it from one of the other
+Makefiles? :)
 
- / {
-@@ -80,6 +81,15 @@
+If you're just wanting to get the syscall number when the headers
+haven't been exported, I think the best solution is to do eg:
 
-                interrupt-parent = <&intc>;
-                interrupts = <27 26 25>;
+diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
+index d6e6079d3d53..34c6f02f25de 100644
+--- a/tools/testing/selftests/core/close_range_test.c
++++ b/tools/testing/selftests/core/close_range_test.c
+@@ -14,6 +14,10 @@
+
+ #include "../kselftest.h"
+
++#ifndef __NR_close_range
++#define __NR_close_range       435
++#endif
 +
-+               watchdog: watchdog@0 {
-+                       compatible = "ingenic,jz4780-watchdog";
-+                       reg = <0x0 0xc>;
-+
-+                       clocks = <&tcu TCU_CLK_WDT>;
-+                       clock-names = "wdt";
-+               };
-+
-        };
-
-        rtc_dev: rtc@10003000 {
-@@ -287,14 +297,6 @@
-                status = "disabled";
-        };
-
--       watchdog: watchdog@10002000 {
--               compatible = "ingenic,jz4780-watchdog";
--               reg = <0x10002000 0x10>;
--
--               clocks = <&cgu JZ4780_CLK_RTCLK>;
--               clock-names = "rtc";
--       };
--
-        nemc: nemc@13410000 {
-                compatible = "ingenic,jz4780-nemc";
-                reg = <0x13410000 0x10000>;
+ static inline int sys_close_range(unsigned int fd, unsigned int max_fd,
+                                  unsigned int flags)
+ {
 
 
-
-> Regards,
-> -Paul
->
->
+cheers
