@@ -2,114 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C182BD6D
-	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2019 04:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A722BDDA
+	for <lists+linux-mips@lfdr.de>; Tue, 28 May 2019 05:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727855AbfE1CxB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 May 2019 22:53:01 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:45790 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727869AbfE1CxB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 May 2019 22:53:01 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 3B7188365B;
-        Tue, 28 May 2019 14:52:58 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1559011978;
-        bh=3+zTeZq32FXUQN9OCVX/QI6nF7yirtMhmyYbWAZK9Zg=;
-        h=From:To:CC:Subject:Date;
-        b=wjyMgR316EAYhmPUwLY9r22vxLDVGITrbkLedug7rWpwajRXKvpUltbVjN92sNulY
-         eOP6gtm6wNh0XIPb5QROXrtoZL4Q4W9AETsGrBsi95waQRX1NKpOxlyibINDT3BsZ3
-         rUnN33Y7YJLG8cL5/t7sVi5058I3wR8NQ7O6GElhSOFLteRKyReweK50ft7+OHkp6m
-         eVsK0WP2+Js3jbgoi7IMwf91pW/8INEXVeMEoWtelNQwoBcO3WDyAM3NNkeZKE0M73
-         Anr+IDxJxrG9P4fdv8CGq3w2cvz+2NQH/c7ZE/WZHS2CQpv381p8GKaA1oynCrdqaI
-         ZYRIuzOjec9Eg==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5ceca28a0001>; Tue, 28 May 2019 14:52:58 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1156.6; Tue, 28 May 2019 14:52:57 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1156.000; Tue, 28 May 2019 14:52:57 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "ralf@linux-mips.org" <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hamish Martin <Hamish.Martin@alliedtelesis.co.nz>
-Subject: MIPS r4k cache operations with SMP enabled
-Thread-Topic: MIPS r4k cache operations with SMP enabled
-Thread-Index: AQHVFQB0Z16/xM5TvUKYi9+2ojSGNw==
-Date:   Tue, 28 May 2019 02:52:57 +0000
-Message-ID: <d87063da1d104af8a040f5f25a588638@svr-chch-ex1.atlnz.lc>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [2001:df5:b000:22:3a2c:4aff:fe70:2b02]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1728012AbfE1Dnw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 May 2019 23:43:52 -0400
+Received: from ozlabs.org ([203.11.71.1]:42453 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727804AbfE1Dnw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 27 May 2019 23:43:52 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 45Cfp83y01z9s9N;
+        Tue, 28 May 2019 13:43:43 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christian Brauner <christian@brauner.io>, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        torvalds@linux-foundation.org, fweimer@redhat.com
+Cc:     jannh@google.com, oleg@redhat.com, tglx@linutronix.de,
+        arnd@arndb.de, shuah@kernel.org, dhowells@redhat.com,
+        tkjos@android.com, ldv@altlinux.org, miklos@szeredi.hu,
+        Christian Brauner <christian@brauner.io>,
+        linux-api@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v3 2/3] arch: wire-up close_range()
+In-Reply-To: <20190524111047.6892-3-christian@brauner.io>
+References: <20190524111047.6892-1-christian@brauner.io> <20190524111047.6892-3-christian@brauner.io>
+Date:   Tue, 28 May 2019 13:43:43 +1000
+Message-ID: <87woibp7kg.fsf@concordia.ellerman.id.au>
 MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,=0A=
-=0A=
-I'm trying to port a fairly old Broadcom integrated chip (BCM6818) to =0A=
-the latest Linux kernel using the mips/bmips support.=0A=
-=0A=
-The chip has a BMIPS4355 core. This has two "thread processors" (cpu =0A=
-cores) with separate I-caches but a shared D-cache.=0A=
-=0A=
-I've got things booting but I encounter the following BUG()=0A=
-=0A=
-BUG: using smp_processor_id() in preemptible [00000000] code: swapper/0/1=
-=0A=
-caller is blast_dcache16+0x24/0x154=0A=
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.1.0-at1 #5=0A=
-Stack : 00000036 8008d0d0 806a0000 807c0000 80754e10 0000000b 80754684 =0A=
-8f831c8c=0A=
-         80900000 8f828424 807986e7 8071348c 00000000 10008f00 8f831c30 =0A=
-7fb69e2a=0A=
-         00000000 00000000 80920000 00000056 00002335 00000000 807a0000 =0A=
-00000000=0A=
-         6d6d3a20 00000000 00000056 73776170 00000000 ffffffff 10008f01 =0A=
-807c0000=0A=
-         80790000 00002cc2 ffffffff 80900000 00000010 8f83198c 00000000 =0A=
-80900000=0A=
-         ...=0A=
-Call Trace:=0A=
-[<8001c208>] show_stack+0x30/0x100=0A=
-[<8063282c>] dump_stack+0x9c/0xd0=0A=
-[<802f1cec>] debug_smp_processor_id+0xfc/0x110=0A=
-[<8002e274>] blast_dcache16+0x24/0x154=0A=
-[<80122978>] map_vm_area+0x58/0x70=0A=
-[<80123888>] __vmalloc_node_range+0x1fc/0x2b4=0A=
-[<80123b54>] vmalloc+0x44/0x50=0A=
-[<807d15d0>] jffs2_zlib_init+0x24/0x94=0A=
-[<807d1354>] jffs2_compressors_init+0x10/0x30=0A=
-[<807d151c>] init_jffs2_fs+0x68/0xf8=0A=
-[<8001016c>] do_one_initcall+0x7c/0x1f0=0A=
-[<807bee30>] kernel_init_freeable+0x17c/0x258=0A=
-[<80650d1c>] kernel_init+0x10/0xf8=0A=
-[<80015e6c>] ret_from_kernel_thread+0x14/0x1c=0A=
-=0A=
-In blast_dcache16 current_cpu_data is used which invokes =0A=
-smp_processor_id() triggering the BUG(). I can fix this by sprinkling =0A=
-preempt_disable/preempt_enable through arch/mips/mm/c-r4k.c but that =0A=
-seems kind of wrong. Does anyone have any suggestion as to the right way =
-=0A=
-to avoid this BUG()?=0A=
-=0A=
-Thanks,=0A=
-Chris=0A=
-=0A=
-=0A=
-=0A=
+Christian Brauner <christian@brauner.io> writes:
+> diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
+> index 103655d84b4b..ba2c1f078cbd 100644
+> --- a/arch/powerpc/kernel/syscalls/syscall.tbl
+> +++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+> @@ -515,3 +515,4 @@
+>  431	common	fsconfig			sys_fsconfig
+>  432	common	fsmount				sys_fsmount
+>  433	common	fspick				sys_fspick
+> +435	common	close_range			sys_close_range
+
+With a minor build fix the selftest passes for me on ppc64le:
+
+  # ./close_range_test 
+  1..9
+  ok 1 do not allow invalid flag values for close_range()
+  ok 2 close_range() from 3 to 53
+  ok 3 fcntl() verify closed range from 3 to 53
+  ok 4 close_range() from 54 to 95
+  ok 5 fcntl() verify closed range from 54 to 95
+  ok 6 close_range() from 96 to 102
+  ok 7 fcntl() verify closed range from 96 to 102
+  ok 8 close_range() closed single file descriptor
+  ok 9 fcntl() verify closed single file descriptor
+  # Pass 9 Fail 0 Xfail 0 Xpass 0 Skip 0 Error 0
+
+
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+
+cheers
