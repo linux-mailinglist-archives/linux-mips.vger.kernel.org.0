@@ -2,190 +2,328 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 666062E878
-	for <lists+linux-mips@lfdr.de>; Thu, 30 May 2019 00:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249FB2E8EE
+	for <lists+linux-mips@lfdr.de>; Thu, 30 May 2019 01:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726189AbfE2Ws4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 May 2019 18:48:56 -0400
-Received: from mail-eopbgr760135.outbound.protection.outlook.com ([40.107.76.135]:54443
-        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726428AbfE2Wsz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 29 May 2019 18:48:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=wavesemi.onmicrosoft.com; s=selector1-wavesemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KYNUPDpLbeLqcGmCWUEb2dcdImVyYawjb+FFP/9ZiAU=;
- b=Oq3e1RSp8O5rPDfNlQgqulyhWGmUp1NXGs26ib+lMPfKL2zBq8bh1HTgF+4JtW/jlpgbcXfH+UtoUkL9DsiKRgntmUJ3keEcylxyTd/leDFllIV1n7zewpxuR58dcbjXQlRF4joIvfHPg9jIBqsLIZZwb7vurh3R8w7WTPdUQ30=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.174.162.17) by
- MWHPR2201MB1757.namprd22.prod.outlook.com (10.164.133.167) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.18; Wed, 29 May 2019 22:47:11 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::90ff:8d19:8459:834b]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::90ff:8d19:8459:834b%7]) with mapi id 15.20.1922.021; Wed, 29 May 2019
- 22:47:11 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
+        id S1726483AbfE2XSB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 May 2019 19:18:01 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:49285 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726189AbfE2XSB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 May 2019 19:18:01 -0400
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 1A10D8365B
+        for <linux-mips@vger.kernel.org>; Thu, 30 May 2019 11:17:56 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1559171876;
+        bh=Dy7uOt76j9SP8JSYx3ykKHAeQOK2/EECk16ZRlar8mc=;
+        h=From:To:CC:Subject:Date:References;
+        b=bMbKQN81RXvLUiUaOPCu8YbCwAvdsUG3fz4+rPmgZUQdb6qdQJVqQ2px7Dh3a0tws
+         6MdG+l3HyJHe07dj94U9mIgWUZQDczwOlFeJdZ+7xmaLm2+ippt/qwpRNzLW1keN48
+         W6B+rOSJ+0CVV0DpputBjYlhowLkmgxeYadyu7czDoxNC72+cjbzUVWF/xa/0LEpnA
+         vvhN6p425NqKjgLyKX6SvLHBhmjQQNDKMLRO1Y789JZx1X3B0zoBQjwKwgipc+J5Do
+         cy6sYGOcFgvS4xCwrzosr6dKbNTFXnei5x4w8h5d0gdXc1NjtK6cDQUAFXY1uYYYyG
+         yIDv8sQzDjXAg==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5cef13220000>; Thu, 30 May 2019 11:17:54 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1156.6; Thu, 30 May 2019 11:17:50 +1200
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1156.000; Thu, 30 May 2019 11:17:50 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Paul Burton <paul.burton@mips.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
 CC:     Paul Burton <pburton@wavecomp.com>
-Subject: [PATCH] MIPS: mm: Implement flush_cache_v(un)map using
+Subject: Re: [PATCH] MIPS: mm: Implement flush_cache_v(un)map using
  __flush_kernel_vmap_range
 Thread-Topic: [PATCH] MIPS: mm: Implement flush_cache_v(un)map using
  __flush_kernel_vmap_range
-Thread-Index: AQHVFnB0gMlUP9a1GkCwDAB1IXJGDg==
-Date:   Wed, 29 May 2019 22:47:11 +0000
-Message-ID: <20190529224659.27614-1-paul.burton@mips.com>
+Thread-Index: AQHVFnB5YovAim0EQkayK4UYoyN+Zw==
+Date:   Wed, 29 May 2019 23:17:50 +0000
+Message-ID: <27d08fadfad14988a1f289fd2a0219f0@svr-chch-ex1.atlnz.lc>
 References: <20190528221255.22460-1-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20190528221255.22460-1-chris.packham@alliedtelesis.co.nz>
-Accept-Language: en-US
+ <20190529224659.27614-1-paul.burton@mips.com>
+Accept-Language: en-NZ, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: BY5PR04CA0030.namprd04.prod.outlook.com
- (2603:10b6:a03:1d0::40) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:24::17)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.21.0
-x-originating-ip: [73.93.155.82]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f98d5c67-2b2f-44ac-fc3a-08d6e487964a
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1757;
-x-ms-traffictypediagnostic: MWHPR2201MB1757:
-x-microsoft-antispam-prvs: <MWHPR2201MB17573782639500E43929976DC11F0@MWHPR2201MB1757.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0052308DC6
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(39850400004)(396003)(376002)(136003)(366004)(189003)(199004)(2906002)(25786009)(50226002)(6116002)(53936002)(3846002)(4326008)(36756003)(107886003)(256004)(14444005)(8676002)(81166006)(81156014)(8936002)(66946007)(64756008)(66446008)(73956011)(66556008)(478600001)(316002)(76176011)(386003)(6506007)(102836004)(66476007)(2501003)(486006)(99286004)(42882007)(186003)(44832011)(476003)(2616005)(11346002)(446003)(26005)(52116002)(110136005)(14454004)(305945005)(68736007)(6436002)(7736002)(71200400001)(71190400001)(6512007)(66066001)(5660300002)(1076003)(6486002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1757;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: SXepklhnrl3iI6n1PkHtMnRGQ/K3xgTVHyd1//6WGoateslX1bX6oGMlhi6it5m2DIHjxI3zCA+X6o4uAy5uHQcghaP3O3qaJ5w4HgfMTTFwsAiIbFy/5rjVQvyBQueYrDPz1oMBbZNUTfxCXGz6epnW+Bb5XFXuWfznglsxESF4KPcd2F5acmgAPUAHGUOXgf6RJpVh1J/WTFIaP5dizaIc/h/r6/Cgv7QYEG7nV/oUIiTeQ+Ak7/wylePIxIu7OcaJWUaAF0AG9hh62bRbh6PgArC6dBY67jfNL/f9nyjtNGXumUplhNNRfYKVHmQPJyWnKL+8/79oGzzxAw4SGVGys86xXGBZk3dPaMXRFGiu2vkl3hbbBRUIDk0M/hZv97MALSrWdwlo24jw57W2RWpqPj8UydViN0J7KgIhpCo=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [2001:df5:b000:22:3a2c:4aff:fe70:2b02]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f98d5c67-2b2f-44ac-fc3a-08d6e487964a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 May 2019 22:47:11.6861
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1757
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-T3VyIGZsdXNoX2NhY2hlX3ZtYXAoKSAmIGZsdXNoX2NhY2hlX3Z1bm1hcCgpIGltcGxlbWVudGF0
-aW9ucyBmb3IgUjRrDQpzdHlsZSBzeXN0ZW1zIHNpbXBseSBjYWxsIHI0a19ibGFzdF9kY2FjaGUo
-KSB0byB3aXBlIG91dCB0aGUgd2hvbGUgTDENCmRjYWNoZSBpZiBpdCBzdWZmZXJzIGZyb20gYWxp
-YXNlcy4gVGhpcyBpcyB1bnNhZmUgb24gU01QIGZvciAyIHJlYXNvbnM6DQoNCjEpIHI0a19ibGFz
-dF9kY2FjaGUoKSByZWxpZXMgdXBvbiBwcmVlbXB0aW9uIGJlaW5nIGRpc2FibGVkIHNvIHRoYXQg
-aXQNCiAgIGNhbiB1c2UgY3VycmVudF9jcHVfZGF0YS9zbXBfcHJvY2Vzc29yX2lkKCkgdG8gZGlz
-Y292ZXIgdGhlDQogICBwcm9wZXJ0aWVzIG9mIHRoZSBjdXJyZW50IENQVSdzIGRjYWNoZSAmIGVu
-c3VyZSB0aGUgd2hvbGUgZmx1c2gNCiAgIG9wZXJhdGlvbiBoYXBwZW5zIG9uIG9uZSBDUFUuIFRo
-aXMgbWF5IG5vdCBiZSB0aGUgY2FzZSB3aGVuDQogICBmbHVzaF9jYWNoZV92bWFwKCkgb3IgZmx1
-c2hfY2FjaGVfdnVubWFwKCkgYXJlIGNhbGxlZC4NCg0KMikgSXQgb25seSBmbHVzaGVzIGNhY2hl
-cyBvbiBvbmUgQ1BVLCB3aGljaCBtZWFucyB0aGUgY2FjaGVzIGZvciBvdGhlcg0KICAgQ1BVcyBt
-YXkgc3RpbGwgY29udGFpbiBzdGFsZSBkYXRhLg0KDQpXZSBhbHJlYWR5IGhhdmUgYW4gaW1wbGVt
-ZW50YXRpb24gb2YgZmx1c2hfa2VybmVsX3ZtYXBfcmFuZ2UoKSB3aGljaA0KZG9lcyBleGFjdGx5
-IHdoYXQgd2UgbmVlZCAtIGl0IGludmFsaWRhdGVzIGRjYWNoZSBlbnRyaWVzIG9uIGFsbCBDUFVz
-DQpzYWZlbHksIGFuZCBpcyBiZXR0ZXIgb3B0aW1pemVkIHRvIGF2b2lkIHdpcGluZyBvdXQgdGhl
-IGVudGlyZSBjYWNoZSBmb3INCnNtYWxsIGZsdXNoZXMuDQoNClJlaW1wbGVtZW50IGZsdXNoX2Nh
-Y2hlX3ZtYXAoKSAmIGZsdXNoX2NhY2hlX3Z1bm1hcCgpIHVzaW5nDQpfX2ZsdXNoX2tlcm5lbF92
-bWFwX3JhbmdlKCkgd2hpY2ggZG9lcyB3aGF0IHdlIG5lZWQgYWxyZWFkeS4NCg0KRm9yIHR4Mzkg
-X19mbHVzaF9rZXJuZWxfdm1hcF9yYW5nZSgpIHdpbGwgc2ltcGx5IEJVRygpLCBidXQgc28gZmFy
-IGFzIEkNCmNhbiBzZWUgdHgzOSBzeXN0ZW1zIGRvbid0IHN1ZmZlciBmcm9tIGRjYWNoZSBhbGlh
-c2luZyBzbyB0aGlzIHNob3VsZCBiZQ0KZmluZSBzaW5jZSBpdCBzaG91bGQgbmV2ZXIgYmUgY2Fs
-bGVkLg0KDQpTaWduZWQtb2ZmLWJ5OiBQYXVsIEJ1cnRvbiA8cGF1bC5idXJ0b25AbWlwcy5jb20+
-DQpSZXBvcnRlZC1ieTogQ2hyaXMgUGFja2hhbSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lz
-LmNvLm56Pg0KLS0tDQpDaHJpcywgd291bGQgeW91IG1pbmQgZ2l2aW5nIHRoaXMgYSB0cnk/DQot
-LS0NCiBhcmNoL21pcHMvaW5jbHVkZS9hc20vY2FjaGVmbHVzaC5oIHwgMjggKysrKysrKysrKysr
-LS0tLS0tLS0tLS0tLS0tLQ0KIGFyY2gvbWlwcy9tbS9jLXI0ay5jICAgICAgICAgICAgICAgfCAx
-NSAtLS0tLS0tLS0tLS0tLS0NCiBhcmNoL21pcHMvbW0vYy10eDM5LmMgICAgICAgICAgICAgIHwg
-MTYgLS0tLS0tLS0tLS0tLS0tLQ0KIGFyY2gvbWlwcy9tbS9jYWNoZS5jICAgICAgICAgICAgICAg
-fCAgMyAtLS0NCiA0IGZpbGVzIGNoYW5nZWQsIDEyIGluc2VydGlvbnMoKyksIDUwIGRlbGV0aW9u
-cygtKQ0KDQpkaWZmIC0tZ2l0IGEvYXJjaC9taXBzL2luY2x1ZGUvYXNtL2NhY2hlZmx1c2guaCBi
-L2FyY2gvbWlwcy9pbmNsdWRlL2FzbS9jYWNoZWZsdXNoLmgNCmluZGV4IGQ2ODdiNDBiOWZiYi4u
-NjI4NWM4MzBjOWYyIDEwMDY0NA0KLS0tIGEvYXJjaC9taXBzL2luY2x1ZGUvYXNtL2NhY2hlZmx1
-c2guaA0KKysrIGIvYXJjaC9taXBzL2luY2x1ZGUvYXNtL2NhY2hlZmx1c2guaA0KQEAgLTg1LDIy
-ICs4NSw2IEBAIGV4dGVybiB2b2lkICgqX19mbHVzaF9pY2FjaGVfdXNlcl9yYW5nZSkodW5zaWdu
-ZWQgbG9uZyBzdGFydCwNCiBleHRlcm4gdm9pZCAoKl9fbG9jYWxfZmx1c2hfaWNhY2hlX3VzZXJf
-cmFuZ2UpKHVuc2lnbmVkIGxvbmcgc3RhcnQsDQogCQkJCQkgICAgICAgdW5zaWduZWQgbG9uZyBl
-bmQpOw0KIA0KLWV4dGVybiB2b2lkICgqX19mbHVzaF9jYWNoZV92bWFwKSh2b2lkKTsNCi0NCi1z
-dGF0aWMgaW5saW5lIHZvaWQgZmx1c2hfY2FjaGVfdm1hcCh1bnNpZ25lZCBsb25nIHN0YXJ0LCB1
-bnNpZ25lZCBsb25nIGVuZCkNCi17DQotCWlmIChjcHVfaGFzX2RjX2FsaWFzZXMpDQotCQlfX2Zs
-dXNoX2NhY2hlX3ZtYXAoKTsNCi19DQotDQotZXh0ZXJuIHZvaWQgKCpfX2ZsdXNoX2NhY2hlX3Z1
-bm1hcCkodm9pZCk7DQotDQotc3RhdGljIGlubGluZSB2b2lkIGZsdXNoX2NhY2hlX3Z1bm1hcCh1
-bnNpZ25lZCBsb25nIHN0YXJ0LCB1bnNpZ25lZCBsb25nIGVuZCkNCi17DQotCWlmIChjcHVfaGFz
-X2RjX2FsaWFzZXMpDQotCQlfX2ZsdXNoX2NhY2hlX3Z1bm1hcCgpOw0KLX0NCi0NCiBleHRlcm4g
-dm9pZCBjb3B5X3RvX3VzZXJfcGFnZShzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnZtYSwNCiAJc3Ry
-dWN0IHBhZ2UgKnBhZ2UsIHVuc2lnbmVkIGxvbmcgdmFkZHIsIHZvaWQgKmRzdCwgY29uc3Qgdm9p
-ZCAqc3JjLA0KIAl1bnNpZ25lZCBsb25nIGxlbik7DQpAQCAtMTUwLDQgKzEzNCwxNiBAQCBzdGF0
-aWMgaW5saW5lIHZvaWQgaW52YWxpZGF0ZV9rZXJuZWxfdm1hcF9yYW5nZSh2b2lkICp2YWRkciwg
-aW50IHNpemUpDQogCQlfX2ZsdXNoX2tlcm5lbF92bWFwX3JhbmdlKCh1bnNpZ25lZCBsb25nKSB2
-YWRkciwgc2l6ZSk7DQogfQ0KIA0KK3N0YXRpYyBpbmxpbmUgdm9pZCBmbHVzaF9jYWNoZV92bWFw
-KHVuc2lnbmVkIGxvbmcgc3RhcnQsIHVuc2lnbmVkIGxvbmcgZW5kKQ0KK3sNCisJaWYgKGNwdV9o
-YXNfZGNfYWxpYXNlcykNCisJCV9fZmx1c2hfa2VybmVsX3ZtYXBfcmFuZ2Uoc3RhcnQsIGVuZCAt
-IHN0YXJ0KTsNCit9DQorDQorc3RhdGljIGlubGluZSB2b2lkIGZsdXNoX2NhY2hlX3Z1bm1hcCh1
-bnNpZ25lZCBsb25nIHN0YXJ0LCB1bnNpZ25lZCBsb25nIGVuZCkNCit7DQorCWlmIChjcHVfaGFz
-X2RjX2FsaWFzZXMpDQorCQlfX2ZsdXNoX2tlcm5lbF92bWFwX3JhbmdlKHN0YXJ0LCBlbmQgLSBz
-dGFydCk7DQorfQ0KKw0KICNlbmRpZiAvKiBfQVNNX0NBQ0hFRkxVU0hfSCAqLw0KZGlmZiAtLWdp
-dCBhL2FyY2gvbWlwcy9tbS9jLXI0ay5jIGIvYXJjaC9taXBzL21tL2MtcjRrLmMNCmluZGV4IDUx
-NjZlMzhjZDFjNi4uMmIyOTUzZDM5NDlkIDEwMDY0NA0KLS0tIGEvYXJjaC9taXBzL21tL2MtcjRr
-LmMNCisrKyBiL2FyY2gvbWlwcy9tbS9jLXI0ay5jDQpAQCAtNTU5LDE2ICs1NTksNiBAQCBzdGF0
-aWMgaW5saW5lIGludCBoYXNfdmFsaWRfYXNpZChjb25zdCBzdHJ1Y3QgbW1fc3RydWN0ICptbSwg
-dW5zaWduZWQgaW50IHR5cGUpDQogCXJldHVybiAwOw0KIH0NCiANCi1zdGF0aWMgdm9pZCByNGtf
-X2ZsdXNoX2NhY2hlX3ZtYXAodm9pZCkNCi17DQotCXI0a19ibGFzdF9kY2FjaGUoKTsNCi19DQot
-DQotc3RhdGljIHZvaWQgcjRrX19mbHVzaF9jYWNoZV92dW5tYXAodm9pZCkNCi17DQotCXI0a19i
-bGFzdF9kY2FjaGUoKTsNCi19DQotDQogLyoNCiAgKiBOb3RlOiBmbHVzaF90bGJfcmFuZ2UoKSBh
-c3N1bWVzIGZsdXNoX2NhY2hlX3JhbmdlKCkgc3VmZmljaWVudGx5IGZsdXNoZXMNCiAgKiB3aG9s
-ZSBjYWNoZXMgd2hlbiB2bWEgaXMgZXhlY3V0YWJsZS4NCkBAIC0xODU0LDkgKzE4NDQsNiBAQCB2
-b2lkIHI0a19jYWNoZV9pbml0KHZvaWQpDQogCWVsc2UNCiAJCXNobV9hbGlnbl9tYXNrID0gUEFH
-RV9TSVpFLTE7DQogDQotCV9fZmx1c2hfY2FjaGVfdm1hcAk9IHI0a19fZmx1c2hfY2FjaGVfdm1h
-cDsNCi0JX19mbHVzaF9jYWNoZV92dW5tYXAJPSByNGtfX2ZsdXNoX2NhY2hlX3Z1bm1hcDsNCi0N
-CiAJZmx1c2hfY2FjaGVfYWxsCQk9IGNhY2hlX25vb3A7DQogCV9fZmx1c2hfY2FjaGVfYWxsCT0g
-cjRrX19fZmx1c2hfY2FjaGVfYWxsOw0KIAlmbHVzaF9jYWNoZV9tbQkJPSByNGtfZmx1c2hfY2Fj
-aGVfbW07DQpAQCAtMTkzMSw4ICsxOTE4LDYgQEAgdm9pZCByNGtfY2FjaGVfaW5pdCh2b2lkKQ0K
-IAljYXNlIENQVV9MT09OR1NPTjM6DQogCQkvKiBMb29uZ3Nvbi0zIG1haW50YWlucyBjYWNoZSBj
-b2hlcmVuY3kgYnkgaGFyZHdhcmUgKi8NCiAJCV9fZmx1c2hfY2FjaGVfYWxsCT0gY2FjaGVfbm9v
-cDsNCi0JCV9fZmx1c2hfY2FjaGVfdm1hcAk9IGNhY2hlX25vb3A7DQotCQlfX2ZsdXNoX2NhY2hl
-X3Z1bm1hcAk9IGNhY2hlX25vb3A7DQogCQlfX2ZsdXNoX2tlcm5lbF92bWFwX3JhbmdlID0gKHZv
-aWQgKiljYWNoZV9ub29wOw0KIAkJZmx1c2hfY2FjaGVfbW0JCT0gKHZvaWQgKiljYWNoZV9ub29w
-Ow0KIAkJZmx1c2hfY2FjaGVfcGFnZQk9ICh2b2lkICopY2FjaGVfbm9vcDsNCmRpZmYgLS1naXQg
-YS9hcmNoL21pcHMvbW0vYy10eDM5LmMgYi9hcmNoL21pcHMvbW0vYy10eDM5LmMNCmluZGV4IGI3
-YzhhOWQ3OWMzNS4uNmJmMTNhN2RiNDg1IDEwMDY0NA0KLS0tIGEvYXJjaC9taXBzL21tL2MtdHgz
-OS5jDQorKysgYi9hcmNoL21pcHMvbW0vYy10eDM5LmMNCkBAIC0xMjEsMTYgKzEyMSw2IEBAIHN0
-YXRpYyBpbmxpbmUgdm9pZCB0eDM5X2JsYXN0X2ljYWNoZSh2b2lkKQ0KIAlsb2NhbF9pcnFfcmVz
-dG9yZShmbGFncyk7DQogfQ0KIA0KLXN0YXRpYyB2b2lkIHR4MzlfX2ZsdXNoX2NhY2hlX3ZtYXAo
-dm9pZCkNCi17DQotCXR4MzlfYmxhc3RfZGNhY2hlKCk7DQotfQ0KLQ0KLXN0YXRpYyB2b2lkIHR4
-MzlfX2ZsdXNoX2NhY2hlX3Z1bm1hcCh2b2lkKQ0KLXsNCi0JdHgzOV9ibGFzdF9kY2FjaGUoKTsN
-Ci19DQotDQogc3RhdGljIGlubGluZSB2b2lkIHR4MzlfZmx1c2hfY2FjaGVfYWxsKHZvaWQpDQog
-ew0KIAlpZiAoIWNwdV9oYXNfZGNfYWxpYXNlcykNCkBAIC0zMzksOCArMzI5LDYgQEAgdm9pZCB0
-eDM5X2NhY2hlX2luaXQodm9pZCkNCiAJc3dpdGNoIChjdXJyZW50X2NwdV90eXBlKCkpIHsNCiAJ
-Y2FzZSBDUFVfVFgzOTEyOg0KIAkJLyogVFgzOS9IIGNvcmUgKHdyaXRldGhydSBkaXJlY3QtbWFw
-IGNhY2hlKSAqLw0KLQkJX19mbHVzaF9jYWNoZV92bWFwCT0gdHgzOV9fZmx1c2hfY2FjaGVfdm1h
-cDsNCi0JCV9fZmx1c2hfY2FjaGVfdnVubWFwCT0gdHgzOV9fZmx1c2hfY2FjaGVfdnVubWFwOw0K
-IAkJZmx1c2hfY2FjaGVfYWxsID0gdHgzOWhfZmx1c2hfaWNhY2hlX2FsbDsNCiAJCV9fZmx1c2hf
-Y2FjaGVfYWxsCT0gdHgzOWhfZmx1c2hfaWNhY2hlX2FsbDsNCiAJCWZsdXNoX2NhY2hlX21tCQk9
-ICh2b2lkICopIHR4MzloX2ZsdXNoX2ljYWNoZV9hbGw7DQpAQCAtMzYzLDEwICszNTEsNiBAQCB2
-b2lkIHR4MzlfY2FjaGVfaW5pdCh2b2lkKQ0KIAlkZWZhdWx0Og0KIAkJLyogVFgzOS9IMixIMyBj
-b3JlICh3cml0ZWJhY2sgMndheS1zZXQtYXNzb2NpYXRpdmUgY2FjaGUpICovDQogCQkvKiBib2Fy
-ZC1kZXBlbmRlbnQgaW5pdCBjb2RlIG1heSBzZXQgV0JPTiAqLw0KLQ0KLQkJX19mbHVzaF9jYWNo
-ZV92bWFwCT0gdHgzOV9fZmx1c2hfY2FjaGVfdm1hcDsNCi0JCV9fZmx1c2hfY2FjaGVfdnVubWFw
-CT0gdHgzOV9fZmx1c2hfY2FjaGVfdnVubWFwOw0KLQ0KIAkJZmx1c2hfY2FjaGVfYWxsID0gdHgz
-OV9mbHVzaF9jYWNoZV9hbGw7DQogCQlfX2ZsdXNoX2NhY2hlX2FsbCA9IHR4MzlfX19mbHVzaF9j
-YWNoZV9hbGw7DQogCQlmbHVzaF9jYWNoZV9tbSA9IHR4MzlfZmx1c2hfY2FjaGVfbW07DQpkaWZm
-IC0tZ2l0IGEvYXJjaC9taXBzL21tL2NhY2hlLmMgYi9hcmNoL21pcHMvbW0vY2FjaGUuYw0KaW5k
-ZXggM2RhMjE2OTg4NjcyLi5jNmMwZWY1MzlkM2EgMTAwNjQ0DQotLS0gYS9hcmNoL21pcHMvbW0v
-Y2FjaGUuYw0KKysrIGIvYXJjaC9taXBzL21tL2NhY2hlLmMNCkBAIC00MCw5ICs0MCw2IEBAIEVY
-UE9SVF9TWU1CT0xfR1BMKF9fZmx1c2hfaWNhY2hlX3VzZXJfcmFuZ2UpOw0KIHZvaWQgKCpfX2xv
-Y2FsX2ZsdXNoX2ljYWNoZV91c2VyX3JhbmdlKSh1bnNpZ25lZCBsb25nIHN0YXJ0LCB1bnNpZ25l
-ZCBsb25nIGVuZCk7DQogRVhQT1JUX1NZTUJPTF9HUEwoX19sb2NhbF9mbHVzaF9pY2FjaGVfdXNl
-cl9yYW5nZSk7DQogDQotdm9pZCAoKl9fZmx1c2hfY2FjaGVfdm1hcCkodm9pZCk7DQotdm9pZCAo
-Kl9fZmx1c2hfY2FjaGVfdnVubWFwKSh2b2lkKTsNCi0NCiB2b2lkICgqX19mbHVzaF9rZXJuZWxf
-dm1hcF9yYW5nZSkodW5zaWduZWQgbG9uZyB2YWRkciwgaW50IHNpemUpOw0KIEVYUE9SVF9TWU1C
-T0xfR1BMKF9fZmx1c2hfa2VybmVsX3ZtYXBfcmFuZ2UpOw0KIA0KLS0gDQoyLjIxLjANCg0K
+Hi Paul,=0A=
+=0A=
+On 30/05/19 10:47 AM, Paul Burton wrote:=0A=
+> Our flush_cache_vmap() & flush_cache_vunmap() implementations for R4k=0A=
+> style systems simply call r4k_blast_dcache() to wipe out the whole L1=0A=
+> dcache if it suffers from aliases. This is unsafe on SMP for 2 reasons:=
+=0A=
+> =0A=
+> 1) r4k_blast_dcache() relies upon preemption being disabled so that it=0A=
+>     can use current_cpu_data/smp_processor_id() to discover the=0A=
+>     properties of the current CPU's dcache & ensure the whole flush=0A=
+>     operation happens on one CPU. This may not be the case when=0A=
+>     flush_cache_vmap() or flush_cache_vunmap() are called.=0A=
+> =0A=
+> 2) It only flushes caches on one CPU, which means the caches for other=0A=
+>     CPUs may still contain stale data.=0A=
+> =0A=
+> We already have an implementation of flush_kernel_vmap_range() which=0A=
+> does exactly what we need - it invalidates dcache entries on all CPUs=0A=
+> safely, and is better optimized to avoid wiping out the entire cache for=
+=0A=
+> small flushes.=0A=
+> =0A=
+> Reimplement flush_cache_vmap() & flush_cache_vunmap() using=0A=
+> __flush_kernel_vmap_range() which does what we need already.=0A=
+> =0A=
+> For tx39 __flush_kernel_vmap_range() will simply BUG(), but so far as I=
+=0A=
+> can see tx39 systems don't suffer from dcache aliasing so this should be=
+=0A=
+> fine since it should never be called.=0A=
+> =0A=
+> Signed-off-by: Paul Burton <paul.burton@mips.com>=0A=
+> Reported-by: Chris Packham <chris.packham@alliedtelesis.co.nz>=0A=
+> ---=0A=
+> Chris, would you mind giving this a try?=0A=
+=0A=
+This doesn't quite seem to work. It avoids the BUG() but I get other bad =
+=0A=
+behavior. I can't discount it being something odd about my half finished =
+=0A=
+port but I can replicate the badness without this patch.=0A=
+=0A=
+One is a kernel panic in response to activity on the console (output =0A=
+below). The other seems to be a result of receiving garbage on the =0A=
+console. I wonder if the range needs to be rounded up to a cacheline =0A=
+boundary?=0A=
+=0A=
+Run /sbin/init as init process=0A=
+overlayfs: upper fs does not support xattr, falling back to index=3Doff =0A=
+and metacopy=3Doff.=0A=
+overlayfs: upper fs does not support xattr, falling back to index=3Doff =0A=
+and metacopy=3Doff.=0A=
+overlayfs: upper fs does not support xattr, falling back to index=3Doff =0A=
+and metacopy=3Doff.=0A=
+random: crng init done=0A=
+CPU 0 Unable to handle kernel paging request at virtual address =0A=
+00000000, epc =3D=3D 80652e00, ra =3D=3D 80652dc4=0A=
+Oops[#1]:=0A=
+CPU: 0 PID: 7 Comm: kworker/u4:0 Not tainted 5.1.0-at1 #15=0A=
+Workqueue: events_unbound flush_to_ldisc=0A=
+$ 0   : 00000000 00000001 00000000 00000000=0A=
+$ 4   : 8f82aa00 fffffff8 fffffffd 00000001=0A=
+$ 8   : 8da08818 00000000 00000001 00000018=0A=
+$12   : fefefeff 7f7f7f7f 00000001 00000001=0A=
+$16   : c00e1268 c00e126c 00000002 8f84bd18=0A=
+$20   : 8da08819 83fa6e00 00000001 c00e1270=0A=
+$24   : 0000c3b6 80336694=0A=
+$28   : 8f84a000 8f84bcf0 0000000d 80652dc4=0A=
+Hi    : d49c5168=0A=
+Lo    : 7f29931c=0A=
+epc   : 80652e00 __mutex_lock.isra.1+0xa8/0x464=0A=
+ra    : 80652dc4 __mutex_lock.isra.1+0x6c/0x464=0A=
+Status: 10008f03        KERNEL EXL IE=0A=
+Cause : 0080000c (ExcCode 03)=0A=
+BadVA : 00000000=0A=
+PrId  : 0002a080 (Broadcom BMIPS4350)=0A=
+Modules linked in:=0A=
+Process kworker/u4:0 (pid: 7, threadinfo=3Df89f9771, task=3Da0a456a2, =0A=
+tls=3D00000000)=0A=
+Stack : 00000002 8064f534 8f82aa80 8f82aa80 6b2dc12d 8006b2c8 8090fc78 =0A=
+83fa6e6c=0A=
+         83fa6e6c 8064f4a4 c00e1270 00000000 83fa6e6c 8064f534 c00df000 =0A=
+83fa6e00=0A=
+         c00e1268 00000000 8da08819 83fa6e00 00000001 c00df018 0000000d =0A=
+80334b50=0A=
+         83fa6e6c 80654aa0 fffb8a00 80790000 83fa6e00 0000000a c00df000 =0A=
+803358a0=0A=
+         8f84bd70 00000000 00000000 8da08818 00000000 00000000 8da08818 =0A=
+80336520=0A=
+         ...=0A=
+Call Trace:=0A=
+[<80652e00>] __mutex_lock.isra.1+0xa8/0x464=0A=
+[<80334b50>] commit_echoes+0x28/0xc4=0A=
+[<803358a0>] n_tty_receive_char_special+0xa20/0xc04=0A=
+[<80336520>] n_tty_receive_buf_common+0xa9c/0xc10=0A=
+[<803366ac>] n_tty_receive_buf2+0x18/0x24=0A=
+[<8033a6b8>] tty_port_default_receive_buf+0x50/0xa4=0A=
+[<80339fc4>] flush_to_ldisc+0xb8/0x12c=0A=
+[<80052098>] process_one_work+0x224/0x424=0A=
+[<80052400>] worker_thread+0x168/0x5a0=0A=
+[<8005882c>] kthread+0x13c/0x144=0A=
+[<80015e6c>] ret_from_kernel_thread+0x14/0x1c=0A=
+Code: afa2002c  ae13000c  afb70028 <ac530000> 8e020008  105300b6 =0A=
+00000000  8f820000  afa20030=0A=
+=0A=
+=0A=
+=0A=
+> ---=0A=
+>   arch/mips/include/asm/cacheflush.h | 28 ++++++++++++----------------=0A=
+>   arch/mips/mm/c-r4k.c               | 15 ---------------=0A=
+>   arch/mips/mm/c-tx39.c              | 16 ----------------=0A=
+>   arch/mips/mm/cache.c               |  3 ---=0A=
+>   4 files changed, 12 insertions(+), 50 deletions(-)=0A=
+> =0A=
+> diff --git a/arch/mips/include/asm/cacheflush.h b/arch/mips/include/asm/c=
+acheflush.h=0A=
+> index d687b40b9fbb..6285c830c9f2 100644=0A=
+> --- a/arch/mips/include/asm/cacheflush.h=0A=
+> +++ b/arch/mips/include/asm/cacheflush.h=0A=
+> @@ -85,22 +85,6 @@ extern void (*__flush_icache_user_range)(unsigned long=
+ start,=0A=
+>   extern void (*__local_flush_icache_user_range)(unsigned long start,=0A=
+>   					       unsigned long end);=0A=
+>   =0A=
+> -extern void (*__flush_cache_vmap)(void);=0A=
+> -=0A=
+> -static inline void flush_cache_vmap(unsigned long start, unsigned long e=
+nd)=0A=
+> -{=0A=
+> -	if (cpu_has_dc_aliases)=0A=
+> -		__flush_cache_vmap();=0A=
+> -}=0A=
+> -=0A=
+> -extern void (*__flush_cache_vunmap)(void);=0A=
+> -=0A=
+> -static inline void flush_cache_vunmap(unsigned long start, unsigned long=
+ end)=0A=
+> -{=0A=
+> -	if (cpu_has_dc_aliases)=0A=
+> -		__flush_cache_vunmap();=0A=
+> -}=0A=
+> -=0A=
+>   extern void copy_to_user_page(struct vm_area_struct *vma,=0A=
+>   	struct page *page, unsigned long vaddr, void *dst, const void *src,=0A=
+>   	unsigned long len);=0A=
+> @@ -150,4 +134,16 @@ static inline void invalidate_kernel_vmap_range(void=
+ *vaddr, int size)=0A=
+>   		__flush_kernel_vmap_range((unsigned long) vaddr, size);=0A=
+>   }=0A=
+>   =0A=
+> +static inline void flush_cache_vmap(unsigned long start, unsigned long e=
+nd)=0A=
+> +{=0A=
+> +	if (cpu_has_dc_aliases)=0A=
+> +		__flush_kernel_vmap_range(start, end - start);=0A=
+> +}=0A=
+> +=0A=
+> +static inline void flush_cache_vunmap(unsigned long start, unsigned long=
+ end)=0A=
+> +{=0A=
+> +	if (cpu_has_dc_aliases)=0A=
+> +		__flush_kernel_vmap_range(start, end - start);=0A=
+> +}=0A=
+> +=0A=
+>   #endif /* _ASM_CACHEFLUSH_H */=0A=
+> diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c=0A=
+> index 5166e38cd1c6..2b2953d3949d 100644=0A=
+> --- a/arch/mips/mm/c-r4k.c=0A=
+> +++ b/arch/mips/mm/c-r4k.c=0A=
+> @@ -559,16 +559,6 @@ static inline int has_valid_asid(const struct mm_str=
+uct *mm, unsigned int type)=0A=
+>   	return 0;=0A=
+>   }=0A=
+>   =0A=
+> -static void r4k__flush_cache_vmap(void)=0A=
+> -{=0A=
+> -	r4k_blast_dcache();=0A=
+> -}=0A=
+> -=0A=
+> -static void r4k__flush_cache_vunmap(void)=0A=
+> -{=0A=
+> -	r4k_blast_dcache();=0A=
+> -}=0A=
+> -=0A=
+>   /*=0A=
+>    * Note: flush_tlb_range() assumes flush_cache_range() sufficiently flu=
+shes=0A=
+>    * whole caches when vma is executable.=0A=
+> @@ -1854,9 +1844,6 @@ void r4k_cache_init(void)=0A=
+>   	else=0A=
+>   		shm_align_mask =3D PAGE_SIZE-1;=0A=
+>   =0A=
+> -	__flush_cache_vmap	=3D r4k__flush_cache_vmap;=0A=
+> -	__flush_cache_vunmap	=3D r4k__flush_cache_vunmap;=0A=
+> -=0A=
+>   	flush_cache_all		=3D cache_noop;=0A=
+>   	__flush_cache_all	=3D r4k___flush_cache_all;=0A=
+>   	flush_cache_mm		=3D r4k_flush_cache_mm;=0A=
+> @@ -1931,8 +1918,6 @@ void r4k_cache_init(void)=0A=
+>   	case CPU_LOONGSON3:=0A=
+>   		/* Loongson-3 maintains cache coherency by hardware */=0A=
+>   		__flush_cache_all	=3D cache_noop;=0A=
+> -		__flush_cache_vmap	=3D cache_noop;=0A=
+> -		__flush_cache_vunmap	=3D cache_noop;=0A=
+>   		__flush_kernel_vmap_range =3D (void *)cache_noop;=0A=
+>   		flush_cache_mm		=3D (void *)cache_noop;=0A=
+>   		flush_cache_page	=3D (void *)cache_noop;=0A=
+> diff --git a/arch/mips/mm/c-tx39.c b/arch/mips/mm/c-tx39.c=0A=
+> index b7c8a9d79c35..6bf13a7db485 100644=0A=
+> --- a/arch/mips/mm/c-tx39.c=0A=
+> +++ b/arch/mips/mm/c-tx39.c=0A=
+> @@ -121,16 +121,6 @@ static inline void tx39_blast_icache(void)=0A=
+>   	local_irq_restore(flags);=0A=
+>   }=0A=
+>   =0A=
+> -static void tx39__flush_cache_vmap(void)=0A=
+> -{=0A=
+> -	tx39_blast_dcache();=0A=
+> -}=0A=
+> -=0A=
+> -static void tx39__flush_cache_vunmap(void)=0A=
+> -{=0A=
+> -	tx39_blast_dcache();=0A=
+> -}=0A=
+> -=0A=
+>   static inline void tx39_flush_cache_all(void)=0A=
+>   {=0A=
+>   	if (!cpu_has_dc_aliases)=0A=
+> @@ -339,8 +329,6 @@ void tx39_cache_init(void)=0A=
+>   	switch (current_cpu_type()) {=0A=
+>   	case CPU_TX3912:=0A=
+>   		/* TX39/H core (writethru direct-map cache) */=0A=
+> -		__flush_cache_vmap	=3D tx39__flush_cache_vmap;=0A=
+> -		__flush_cache_vunmap	=3D tx39__flush_cache_vunmap;=0A=
+>   		flush_cache_all =3D tx39h_flush_icache_all;=0A=
+>   		__flush_cache_all	=3D tx39h_flush_icache_all;=0A=
+>   		flush_cache_mm		=3D (void *) tx39h_flush_icache_all;=0A=
+> @@ -363,10 +351,6 @@ void tx39_cache_init(void)=0A=
+>   	default:=0A=
+>   		/* TX39/H2,H3 core (writeback 2way-set-associative cache) */=0A=
+>   		/* board-dependent init code may set WBON */=0A=
+> -=0A=
+> -		__flush_cache_vmap	=3D tx39__flush_cache_vmap;=0A=
+> -		__flush_cache_vunmap	=3D tx39__flush_cache_vunmap;=0A=
+> -=0A=
+>   		flush_cache_all =3D tx39_flush_cache_all;=0A=
+>   		__flush_cache_all =3D tx39___flush_cache_all;=0A=
+>   		flush_cache_mm =3D tx39_flush_cache_mm;=0A=
+> diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c=0A=
+> index 3da216988672..c6c0ef539d3a 100644=0A=
+> --- a/arch/mips/mm/cache.c=0A=
+> +++ b/arch/mips/mm/cache.c=0A=
+> @@ -40,9 +40,6 @@ EXPORT_SYMBOL_GPL(__flush_icache_user_range);=0A=
+>   void (*__local_flush_icache_user_range)(unsigned long start, unsigned l=
+ong end);=0A=
+>   EXPORT_SYMBOL_GPL(__local_flush_icache_user_range);=0A=
+>   =0A=
+> -void (*__flush_cache_vmap)(void);=0A=
+> -void (*__flush_cache_vunmap)(void);=0A=
+> -=0A=
+>   void (*__flush_kernel_vmap_range)(unsigned long vaddr, int size);=0A=
+>   EXPORT_SYMBOL_GPL(__flush_kernel_vmap_range);=0A=
+>   =0A=
+> =0A=
+=0A=
