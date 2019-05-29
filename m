@@ -2,182 +2,235 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA292DFB4
-	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2019 16:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B032E53E
+	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2019 21:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726118AbfE2O1N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 May 2019 10:27:13 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:43010 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727087AbfE2O1N (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 May 2019 10:27:13 -0400
-Received: by mail-wr1-f67.google.com with SMTP id l17so1927773wrm.10;
-        Wed, 29 May 2019 07:27:11 -0700 (PDT)
+        id S1726085AbfE2T0T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 May 2019 15:26:19 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:45729 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725917AbfE2T0T (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 May 2019 15:26:19 -0400
+Received: by mail-pf1-f193.google.com with SMTP id s11so2250573pfm.12
+        for <linux-mips@vger.kernel.org>; Wed, 29 May 2019 12:26:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:openpgp:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=PwNkBrQv1wNUrppZVJDTx6Vf584sbVV+YeNCp+f2S9M=;
-        b=dm16LjnZxom401BvzSjHBl2qBPtdiVGoxTb4+xJjMZIa5FDFdcEJn4mAWXi1xDuVzf
-         esvDzSKnbvD/ACR+SNKGOIMfb7+ofQYbGbn91UYsfNxbYr9uVW5PD4rVyh/9EyHkSJdG
-         2mmtuc0G8ebXIG1QJWULLQrNUD+3FmwKCKBv7enGnREddFX1ZFYyz4kCvUpwF6Da+Bd2
-         34i09nbg/VzOA3DSf9V7lXyIUEwZRrafNoou//4eXtovrInTjfPxKelpXOYm+Ya6oL9a
-         Q52yTfPs+TY6m6AK+qbxHA6ucCFQqYFhiBbx7fWxT/BQJIUgLAuGm1YnqgGaEB5A5nLv
-         6nGQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MqvScE+mpTeungkeSlvv3Q/uzBYTV0O7Qr5Vox35/hw=;
+        b=Buw3FXSp4ANIXhiVaYcFq7ueT4hHfJzssIhWbmrncc4YnHk0oVg8OvJ0WvauqQALhB
+         sBghG+54cb3Hrx24CLKE7D0oxQLoKUXTBDFyYSm5aD1WKGg3/759D66vG6dvvqaZZSbX
+         RMrPVBwObsIhqMoSQcIrTNLUVIJxzJvUk8a8g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:openpgp
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=PwNkBrQv1wNUrppZVJDTx6Vf584sbVV+YeNCp+f2S9M=;
-        b=OUMizmc1E149+G8YqLWYxZV4/LypVHqXA1e5EwsmfUQYfQ0Yc56xK5bVO6qgDSqPEp
-         XpEVq87JiLFGYwPBKoY469oJMAOBzvhuz0i7mpHgXpKDLaWh6aMwhQHxVHcYI4ZM/X07
-         Ooi6ZDtjRh8rtkZXTgd3/uj9JQE6CIMb5fR65A7+spZqx5tAho/1A07FmqdsfVwcqp0u
-         gLFVhAiod68aruEhEHl2IQIGPD8HnORQltEJgAIJsbKnePKLkenk9PcD5mQxthst2I8h
-         qPuioOORHUel/UENSetPtjZcBe6DyIk3N8EIKj7C0VyYk8ZrirFuuozRpOnoz3gB8bHQ
-         AcJg==
-X-Gm-Message-State: APjAAAWvw7L799+NdkgeG238S68ZxN8Ggq2HmuJ6BYXDpkMuaJ2DEpWN
-        MyanVB9fmUvRaChFiNUJbW1CpVI3ths=
-X-Google-Smtp-Source: APXvYqy7ntzjQBvsKAMAGgrp852raE1nrNtCC8Cgvy9+CG9QO9+LF2J4+AGiOoBEtvL97DGo3wMilw==
-X-Received: by 2002:adf:e845:: with SMTP id d5mr18493394wrn.154.1559140030763;
-        Wed, 29 May 2019 07:27:10 -0700 (PDT)
-Received: from [10.32.224.40] (red-hat-inc.vlan560.asr1.mad1.gblx.net. [159.63.51.90])
-        by smtp.gmail.com with ESMTPSA id a139sm9287027wmd.18.2019.05.29.07.27.09
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 May 2019 07:27:09 -0700 (PDT)
-Subject: Re: [PATCH v2] MIPS: Treat Loongson Extensions as ASEs
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     paul.burton@mips.com, Huacai Chen <chenhc@lemote.com>,
-        Yunqiang Su <ysu@wavecomp.com>, stable@vger.kernel.org
-References: <20190529084259.8511-1-jiaxun.yang@flygoat.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
-Openpgp: url=http://pgp.mit.edu/pks/lookup?op=get&search=0xE3E32C2CDEADC0DE
-Message-ID: <c247ff0a-45f6-4c1f-4aa8-38c7d9a0a78b@amsat.org>
-Date:   Wed, 29 May 2019 16:27:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MqvScE+mpTeungkeSlvv3Q/uzBYTV0O7Qr5Vox35/hw=;
+        b=jDOz01cQZ39M6nhl+EHyijIXC1KnyDNDA4lHyXNQo2TdhgJWi6eoMUERPKx1DW/Ulm
+         kFcVHM7QJlnIatWh8975ncqeksuAlGy+wx//PjG4DcAewBKKi7NgM0OH9SMPwAJzr7Eo
+         qtiW8J3vXZhZ0XSnK4P8a0LgDJ3Ab/E8vSylmyhKwAzLuaLnIH5JJKQt2iHl2W061cgo
+         +tDBQYouxIp+7XD17aZ5p+NZn1AsN84xmfNedEkTjF76ce4TN7YZFq8P5ln/4uk7GOl8
+         sGmo8mKQTpX74Srte5jtTNPpEVmVPA+9CqUhsvmF4wYGQIPXBCPBliIf8HQv3k0OmeEX
+         xmfA==
+X-Gm-Message-State: APjAAAWUDEFwTw50F0iYAdPvYZ/rczIzHD1SvRE+aw2fJ83K18USW9QL
+        jyXCiTo77ALRlxVsTYv3jN2Y/g==
+X-Google-Smtp-Source: APXvYqwq6lC0O0O/2wGuHUis8CaujTzg5ED6XBldzBsiAKxCW18NlPMCdk/8ggb/wiv8TlnrM8H9eg==
+X-Received: by 2002:a62:585:: with SMTP id 127mr130528149pff.231.1559157973778;
+        Wed, 29 May 2019 12:26:13 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q17sm480361pfq.74.2019.05.29.12.26.12
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 29 May 2019 12:26:12 -0700 (PDT)
+Date:   Wed, 29 May 2019 12:26:11 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Alexandre Ghiti <alex@ghiti.fr>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v4 08/14] arm: Use generic mmap top-down layout and brk
+ randomization
+Message-ID: <201905291222.595685C3F0@keescook>
+References: <20190526134746.9315-1-alex@ghiti.fr>
+ <20190526134746.9315-9-alex@ghiti.fr>
 MIME-Version: 1.0
-In-Reply-To: <20190529084259.8511-1-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190526134746.9315-9-alex@ghiti.fr>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jiaxun,
-
-On 5/29/19 10:42 AM, Jiaxun Yang wrote:
-> Recently, binutils had split Loongson-3 Extensions into four ASEs:
-> MMI, CAM, EXT, EXT2. This patch do the samething in kernel and expose
-> them in cpuinfo so applications can probe supported ASEs at runtime.
+On Sun, May 26, 2019 at 09:47:40AM -0400, Alexandre Ghiti wrote:
+> arm uses a top-down mmap layout by default that exactly fits the generic
+> functions, so get rid of arch specific code and use the generic version
+> by selecting ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT.
+> As ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT selects ARCH_HAS_ELF_RANDOMIZE,
+> use the generic version of arch_randomize_brk since it also fits.
+> Note that this commit also removes the possibility for arm to have elf
+> randomization and no MMU: without MMU, the security added by randomization
+> is worth nothing.
 > 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: Huacai Chen <chenhc@lemote.com>
-> Cc: Yunqiang Su <ysu@wavecomp.com>
-> Cc: stable@vger.kernel.org # v4.14+
+> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
+
+Acked-by: Kees Cook <keescook@chromium.org>
+
+It may be worth noting that STACK_RND_MASK is safe to remove here
+because it matches the default that now exists in mm/util.c.
+
+-Kees
+
 > ---
->  arch/mips/include/asm/cpu-features.h | 16 ++++++++++++++++
->  arch/mips/include/asm/cpu.h          |  4 ++++
->  arch/mips/kernel/cpu-probe.c         |  6 ++++++
->  arch/mips/kernel/proc.c              |  4 ++++
->  4 files changed, 30 insertions(+)
+>  arch/arm/Kconfig                 |  2 +-
+>  arch/arm/include/asm/processor.h |  2 --
+>  arch/arm/kernel/process.c        |  5 ---
+>  arch/arm/mm/mmap.c               | 62 --------------------------------
+>  4 files changed, 1 insertion(+), 70 deletions(-)
 > 
-> diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
-> index 6998a9796499..4e2bea8875f5 100644
-> --- a/arch/mips/include/asm/cpu-features.h
-> +++ b/arch/mips/include/asm/cpu-features.h
-> @@ -397,6 +397,22 @@
->  #define cpu_has_dsp3		__ase(MIPS_ASE_DSP3)
+> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> index 8869742a85df..27687a8c9fb5 100644
+> --- a/arch/arm/Kconfig
+> +++ b/arch/arm/Kconfig
+> @@ -6,7 +6,6 @@ config ARM
+>  	select ARCH_CLOCKSOURCE_DATA
+>  	select ARCH_HAS_DEBUG_VIRTUAL if MMU
+>  	select ARCH_HAS_DEVMEM_IS_ALLOWED
+> -	select ARCH_HAS_ELF_RANDOMIZE
+>  	select ARCH_HAS_FORTIFY_SOURCE
+>  	select ARCH_HAS_KEEPINITRD
+>  	select ARCH_HAS_KCOV
+> @@ -29,6 +28,7 @@ config ARM
+>  	select ARCH_SUPPORTS_ATOMIC_RMW
+>  	select ARCH_USE_BUILTIN_BSWAP
+>  	select ARCH_USE_CMPXCHG_LOCKREF
+> +	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+>  	select ARCH_WANT_IPC_PARSE_VERSION
+>  	select BUILDTIME_EXTABLE_SORT if MMU
+>  	select CLONE_BACKWARDS
+> diff --git a/arch/arm/include/asm/processor.h b/arch/arm/include/asm/processor.h
+> index 5d06f75ffad4..95b7688341c5 100644
+> --- a/arch/arm/include/asm/processor.h
+> +++ b/arch/arm/include/asm/processor.h
+> @@ -143,8 +143,6 @@ static inline void prefetchw(const void *ptr)
+>  #endif
 >  #endif
 >  
-> +#ifndef cpu_has_loongson_mmi
-> +#define cpu_has_loongson_mmi		__ase(MIPS_ASE_LOONGSON_MMI)
-> +#endif
-> +
-> +#ifndef cpu_has_loongson_cam
-> +#define cpu_has_loongson_cam		__ase(MIPS_ASE_LOONGSON_CAM)
-> +#endif
-> +
-> +#ifndef cpu_has_loongson_ext
-> +#define cpu_has_loongson_ext		__ase(MIPS_ASE_LOONGSON_EXT)
-> +#endif
-> +
-> +#ifndef cpu_has_loongson_ext2
-> +#define cpu_has_loongson_ext2		__ase(MIPS_ASE_LOONGSON_EXT2)
-> +#endif
-> +
->  #ifndef cpu_has_mipsmt
->  #define cpu_has_mipsmt		__isa_lt_and_ase(6, MIPS_ASE_MIPSMT)
+> -#define HAVE_ARCH_PICK_MMAP_LAYOUT
+> -
 >  #endif
-> diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
-> index 6ad7d3cabd91..cc15670ef43a 100644
-> --- a/arch/mips/include/asm/cpu.h
-> +++ b/arch/mips/include/asm/cpu.h
-> @@ -438,5 +438,9 @@ enum cpu_type_enum {
->  #define MIPS_ASE_MSA		0x00000100 /* MIPS SIMD Architecture */
->  #define MIPS_ASE_DSP3		0x00000200 /* Signal Processing ASE Rev 3*/
->  #define MIPS_ASE_MIPS16E2	0x00000400 /* MIPS16e2 */
-> +#define MIPS_ASE_LOONGSON_MMI	0x00000800 /* Loongson MultiMedia extensions Instructions */
-> +#define MIPS_ASE_LOONGSON_CAM	0x00001000 /* Loongson CAM */
-> +#define MIPS_ASE_LOONGSON_EXT	0x00002000 /* Loongson EXTensions */
-> +#define MIPS_ASE_LOONGSON_EXT2	0x00004000 /* Loongson EXTensions R2 */
 >  
->  #endif /* _ASM_CPU_H */
-> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-> index 6126b77d5a62..f349be1cf5b8 100644
-> --- a/arch/mips/kernel/cpu-probe.c
-> +++ b/arch/mips/kernel/cpu-probe.c
-> @@ -1577,6 +1577,8 @@ static inline void cpu_probe_legacy(struct cpuinfo_mips *c, unsigned int cpu)
->  			__cpu_name[cpu] = "ICT Loongson-3";
->  			set_elf_platform(cpu, "loongson3a");
->  			set_isa(c, MIPS_CPU_ISA_M64R1);
-> +			c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
-> +				MIPS_ASE_LOONGSON_EXT);
->  			break;
->  		case PRID_REV_LOONGSON3B_R1:
->  		case PRID_REV_LOONGSON3B_R2:
-> @@ -1584,6 +1586,8 @@ static inline void cpu_probe_legacy(struct cpuinfo_mips *c, unsigned int cpu)
->  			__cpu_name[cpu] = "ICT Loongson-3";
->  			set_elf_platform(cpu, "loongson3b");
->  			set_isa(c, MIPS_CPU_ISA_M64R1);
-> +			c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
-> +				MIPS_ASE_LOONGSON_EXT);
->  			break;
->  		}
+>  #endif /* __ASM_ARM_PROCESSOR_H */
+> diff --git a/arch/arm/kernel/process.c b/arch/arm/kernel/process.c
+> index 72cc0862a30e..19a765db5f7f 100644
+> --- a/arch/arm/kernel/process.c
+> +++ b/arch/arm/kernel/process.c
+> @@ -322,11 +322,6 @@ unsigned long get_wchan(struct task_struct *p)
+>  	return 0;
+>  }
 >  
-> @@ -1950,6 +1954,8 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
->  		decode_configs(c);
->  		c->options |= MIPS_CPU_FTLB | MIPS_CPU_TLBINV | MIPS_CPU_LDPTE;
->  		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
-> +		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
-> +			MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
-
-You announce the Loongson 2E/2F as supporting the EXTensions R2 ASE, are
-you sure this is correct?
-
-Regards,
-
-Phil.
-
->  		break;
->  	default:
->  		panic("Unknown Loongson Processor ID!");
-> diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
-> index b2de408a259e..f8d36710cd58 100644
-> --- a/arch/mips/kernel/proc.c
-> +++ b/arch/mips/kernel/proc.c
-> @@ -124,6 +124,10 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->  	if (cpu_has_eva)	seq_printf(m, "%s", " eva");
->  	if (cpu_has_htw)	seq_printf(m, "%s", " htw");
->  	if (cpu_has_xpa)	seq_printf(m, "%s", " xpa");
-> +	if (cpu_has_loongson_mmi)	seq_printf(m, "%s", " loongson-mmi");
-> +	if (cpu_has_loongson_cam)	seq_printf(m, "%s", " loongson-cam");
-> +	if (cpu_has_loongson_ext)	seq_printf(m, "%s", " loongson-ext");
-> +	if (cpu_has_loongson_ext2)	seq_printf(m, "%s", " loongson-ext2");
->  	seq_printf(m, "\n");
+> -unsigned long arch_randomize_brk(struct mm_struct *mm)
+> -{
+> -	return randomize_page(mm->brk, 0x02000000);
+> -}
+> -
+>  #ifdef CONFIG_MMU
+>  #ifdef CONFIG_KUSER_HELPERS
+>  /*
+> diff --git a/arch/arm/mm/mmap.c b/arch/arm/mm/mmap.c
+> index 0b94b674aa91..b8d912ac9e61 100644
+> --- a/arch/arm/mm/mmap.c
+> +++ b/arch/arm/mm/mmap.c
+> @@ -17,43 +17,6 @@
+>  	((((addr)+SHMLBA-1)&~(SHMLBA-1)) +	\
+>  	 (((pgoff)<<PAGE_SHIFT) & (SHMLBA-1)))
 >  
->  	if (cpu_has_mmips) {
+> -/* gap between mmap and stack */
+> -#define MIN_GAP		(128*1024*1024UL)
+> -#define MAX_GAP		((STACK_TOP)/6*5)
+> -#define STACK_RND_MASK	(0x7ff >> (PAGE_SHIFT - 12))
+> -
+> -static int mmap_is_legacy(struct rlimit *rlim_stack)
+> -{
+> -	if (current->personality & ADDR_COMPAT_LAYOUT)
+> -		return 1;
+> -
+> -	if (rlim_stack->rlim_cur == RLIM_INFINITY)
+> -		return 1;
+> -
+> -	return sysctl_legacy_va_layout;
+> -}
+> -
+> -static unsigned long mmap_base(unsigned long rnd, struct rlimit *rlim_stack)
+> -{
+> -	unsigned long gap = rlim_stack->rlim_cur;
+> -	unsigned long pad = stack_guard_gap;
+> -
+> -	/* Account for stack randomization if necessary */
+> -	if (current->flags & PF_RANDOMIZE)
+> -		pad += (STACK_RND_MASK << PAGE_SHIFT);
+> -
+> -	/* Values close to RLIM_INFINITY can overflow. */
+> -	if (gap + pad > gap)
+> -		gap += pad;
+> -
+> -	if (gap < MIN_GAP)
+> -		gap = MIN_GAP;
+> -	else if (gap > MAX_GAP)
+> -		gap = MAX_GAP;
+> -
+> -	return PAGE_ALIGN(STACK_TOP - gap - rnd);
+> -}
+> -
+>  /*
+>   * We need to ensure that shared mappings are correctly aligned to
+>   * avoid aliasing issues with VIPT caches.  We need to ensure that
+> @@ -181,31 +144,6 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
+>  	return addr;
+>  }
+>  
+> -unsigned long arch_mmap_rnd(void)
+> -{
+> -	unsigned long rnd;
+> -
+> -	rnd = get_random_long() & ((1UL << mmap_rnd_bits) - 1);
+> -
+> -	return rnd << PAGE_SHIFT;
+> -}
+> -
+> -void arch_pick_mmap_layout(struct mm_struct *mm, struct rlimit *rlim_stack)
+> -{
+> -	unsigned long random_factor = 0UL;
+> -
+> -	if (current->flags & PF_RANDOMIZE)
+> -		random_factor = arch_mmap_rnd();
+> -
+> -	if (mmap_is_legacy(rlim_stack)) {
+> -		mm->mmap_base = TASK_UNMAPPED_BASE + random_factor;
+> -		mm->get_unmapped_area = arch_get_unmapped_area;
+> -	} else {
+> -		mm->mmap_base = mmap_base(random_factor, rlim_stack);
+> -		mm->get_unmapped_area = arch_get_unmapped_area_topdown;
+> -	}
+> -}
+> -
+>  /*
+>   * You really shouldn't be using read() or write() on /dev/mem.  This
+>   * might go away in the future.
+> -- 
+> 2.20.1
 > 
+
+-- 
+Kees Cook
