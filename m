@@ -2,46 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4A82E5CB
-	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2019 22:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF932E5DA
+	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2019 22:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726323AbfE2UKx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 May 2019 16:10:53 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:41138 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726139AbfE2UKx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 May 2019 16:10:53 -0400
-Received: by mail-pf1-f195.google.com with SMTP id q17so2335597pfq.8
-        for <linux-mips@vger.kernel.org>; Wed, 29 May 2019 13:10:52 -0700 (PDT)
+        id S1726688AbfE2UMN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 May 2019 16:12:13 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:35024 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726192AbfE2UMN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 May 2019 16:12:13 -0400
+Received: by mail-pf1-f194.google.com with SMTP id d126so2354819pfd.2
+        for <linux-mips@vger.kernel.org>; Wed, 29 May 2019 13:12:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=l4laiGZ+6EAxTzYgyOLxq6AQ0ebW5F8MPaRp0yaenB4=;
-        b=T+S4dzKkP0QeUP0gvmQYme6HE9FvwMG4qznuFtH/nyALnyYufIZl5Zude490BxgiIt
-         TM/MxYm5xSz69G1obZoGJM1LDIeY9X8HJLMu8K1/UHH+gmEEyXz0iVgKFgUxlRbExavm
-         GdYNYHEiXPSCZWG+4ftE4ubEET85V+Ow68jzY=
+        bh=PGcw43rEtHfebZ1ykAg+O3oB9Ib7l867UUY+4n/dk/Q=;
+        b=mD+XA/C1RPTuYpF3bAQXZIvQOGFykfuFTGv2T4SJe7rylVcI8w0NDLRy0IsBLJ66C4
+         yVcYvfhvVtwxJaG6tBzpFRpEcG+JM4ZK+8yr+Vmhnc0lkQZ9h7mnNWkXgsjQ03iN9T3Y
+         xn9BTzPrq4mJgfWOD9cwdHXpGjo9qYZ06UsdU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=l4laiGZ+6EAxTzYgyOLxq6AQ0ebW5F8MPaRp0yaenB4=;
-        b=XLPWTzJJBEI6bkQwxb0AEB2PvWpn797lsjaWSoe+/PLTqMQz0Yh4eBkcBmBmHx1VIi
-         av0ErqnAR5VerBgVTpdsis9UoOJ7RdrCHlZ1BIwMvuM+p5zKjtBWYtB4hMYOSwMsdRIA
-         BQFuYx+z5Wsq0v4VLawcC9htiDMxvToQGR2V0dSso1TJSv0PsUIWWK7gbfOCl+SfZR69
-         xE6UssDHrS2zUXEIz7GnsxHDEhlWqww3mXET4CeTY+9O5oP8rirfXiq0GjBDst/CpsqJ
-         n4aLex43KKg8rRsohrfd2OEnTEAcU8lUuajxFuRQ1NiE2Gc8IgNmSk8//ZsVtB4M6Rcg
-         tG3g==
-X-Gm-Message-State: APjAAAUQJ7lDYfpSNUCouxsDEJXnOI0tdBQhRoVCDct+XOyJo+RUhLnz
-        Jx7BH8ZOsPQ6vkBR1uzqFG4A9g==
-X-Google-Smtp-Source: APXvYqxcX+GEqaFki9ts9gcHnI+DJ4J45UmF6NQ3tBHikewn3dAB757SCx8zHdqTJ17A6V/LaCRYWA==
-X-Received: by 2002:a63:6c83:: with SMTP id h125mr92843035pgc.86.1559160652464;
-        Wed, 29 May 2019 13:10:52 -0700 (PDT)
+        bh=PGcw43rEtHfebZ1ykAg+O3oB9Ib7l867UUY+4n/dk/Q=;
+        b=Yrgq5vTEd35wB1mJ49BzFPxA9FfFcvIaHslmjqlhop/dCvZp0wSIz33XnjJ3AP3jt9
+         nqV8HhanAcAtlXuDwMeCZ32jwsG4sR63Mip8SP0FNynP24EQ69nfiCFTDkBr8Qhr1b0r
+         hcaIiyBeAz08VfkZcjCI+Y5uKkhGLjFidm0t/mYcbi2E3aXMsopiWObZ60ottU25VPb2
+         /s7lLuFuSma9QojfbhKD0GI55fbUNjib2kZZCajT4eHF6Ypj+WReDCjUI3tdLrHV2eAd
+         jJUJqyx3NcDLUTjrT4Gbc/gEcPWAnFs0NT7WOhobW+LjZNUgmfUlfx4aNGQ914qmEciz
+         51jA==
+X-Gm-Message-State: APjAAAXclYvDRyTRc4rlxOmYfsexX5qllyC2HtvAU2l3J+5eup3b71UH
+        OLuhnPh6PlaN0w4gpVusf3KTmg==
+X-Google-Smtp-Source: APXvYqwDEJpc5XVklT3bHvSVgN9OxPIFPApr20V/GjXll3oEfIoQdqDbKTvTIc6ODp034anrn4Q3IQ==
+X-Received: by 2002:a63:f551:: with SMTP id e17mr11828943pgk.329.1559160732491;
+        Wed, 29 May 2019 13:12:12 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o2sm216631pgq.50.2019.05.29.13.10.51
+        by smtp.gmail.com with ESMTPSA id j2sm494584pfb.157.2019.05.29.13.12.11
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 29 May 2019 13:10:51 -0700 (PDT)
-Date:   Wed, 29 May 2019 13:10:50 -0700
+        Wed, 29 May 2019 13:12:11 -0700 (PDT)
+Date:   Wed, 29 May 2019 13:12:10 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Alexandre Ghiti <alex@ghiti.fr>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -59,113 +59,62 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v4 05/14] arm64, mm: Make randomization selected by
- generic topdown mmap layout
-Message-ID: <201905291310.E27265DACF@keescook>
+Subject: Re: [PATCH v4 11/14] mips: Adjust brk randomization offset to fit
+ generic version
+Message-ID: <201905291311.7E88A71@keescook>
 References: <20190526134746.9315-1-alex@ghiti.fr>
- <20190526134746.9315-6-alex@ghiti.fr>
+ <20190526134746.9315-12-alex@ghiti.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190526134746.9315-6-alex@ghiti.fr>
+In-Reply-To: <20190526134746.9315-12-alex@ghiti.fr>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, May 26, 2019 at 09:47:37AM -0400, Alexandre Ghiti wrote:
-> This commits selects ARCH_HAS_ELF_RANDOMIZE when an arch uses the generic
-> topdown mmap layout functions so that this security feature is on by
-> default.
-> Note that this commit also removes the possibility for arm64 to have elf
-> randomization and no MMU: without MMU, the security added by randomization
-> is worth nothing.
+On Sun, May 26, 2019 at 09:47:43AM -0400, Alexandre Ghiti wrote:
+> This commit simply bumps up to 32MB and 1GB the random offset
+> of brk, compared to 8MB and 256MB, for 32bit and 64bit respectively.
 > 
+> Suggested-by: Kees Cook <keescook@chromium.org>
 > Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
 
-Acked-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -Kees
 
 > ---
->  arch/Kconfig                |  1 +
->  arch/arm64/Kconfig          |  1 -
->  arch/arm64/kernel/process.c |  8 --------
->  mm/util.c                   | 11 +++++++++--
->  4 files changed, 10 insertions(+), 11 deletions(-)
+>  arch/mips/mm/mmap.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index df3ab04270fa..3732654446cc 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -710,6 +710,7 @@ config HAVE_ARCH_COMPAT_MMAP_BASES
->  config ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
->  	bool
->  	depends on MMU
-> +	select ARCH_HAS_ELF_RANDOMIZE
+> diff --git a/arch/mips/mm/mmap.c b/arch/mips/mm/mmap.c
+> index ffbe69f3a7d9..c052565b76fb 100644
+> --- a/arch/mips/mm/mmap.c
+> +++ b/arch/mips/mm/mmap.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/random.h>
+>  #include <linux/sched/signal.h>
+>  #include <linux/sched/mm.h>
+> +#include <linux/sizes.h>
 >  
->  config HAVE_COPY_THREAD_TLS
->  	bool
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 3d754c19c11e..403bd3fffdbc 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -15,7 +15,6 @@ config ARM64
->  	select ARCH_HAS_DMA_MMAP_PGPROT
->  	select ARCH_HAS_DMA_PREP_COHERENT
->  	select ARCH_HAS_ACPI_TABLE_UPGRADE if ACPI
-> -	select ARCH_HAS_ELF_RANDOMIZE
->  	select ARCH_HAS_FAST_MULTIPLIER
->  	select ARCH_HAS_FORTIFY_SOURCE
->  	select ARCH_HAS_GCOV_PROFILE_ALL
-> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-> index 3767fb21a5b8..3f85f8f2d665 100644
-> --- a/arch/arm64/kernel/process.c
-> +++ b/arch/arm64/kernel/process.c
-> @@ -535,14 +535,6 @@ unsigned long arch_align_stack(unsigned long sp)
->  	return sp & ~0xf;
+>  unsigned long shm_align_mask = PAGE_SIZE - 1;	/* Sane caches */
+>  EXPORT_SYMBOL(shm_align_mask);
+> @@ -189,11 +190,11 @@ static inline unsigned long brk_rnd(void)
+>  	unsigned long rnd = get_random_long();
+>  
+>  	rnd = rnd << PAGE_SHIFT;
+> -	/* 8MB for 32bit, 256MB for 64bit */
+> +	/* 32MB for 32bit, 1GB for 64bit */
+>  	if (TASK_IS_32BIT_ADDR)
+> -		rnd = rnd & 0x7ffffful;
+> +		rnd = rnd & SZ_32M;
+>  	else
+> -		rnd = rnd & 0xffffffful;
+> +		rnd = rnd & SZ_1G;
+>  
+>  	return rnd;
 >  }
->  
-> -unsigned long arch_randomize_brk(struct mm_struct *mm)
-> -{
-> -	if (is_compat_task())
-> -		return randomize_page(mm->brk, SZ_32M);
-> -	else
-> -		return randomize_page(mm->brk, SZ_1G);
-> -}
-> -
->  /*
->   * Called from setup_new_exec() after (COMPAT_)SET_PERSONALITY.
->   */
-> diff --git a/mm/util.c b/mm/util.c
-> index 717f5d75c16e..8a38126edc74 100644
-> --- a/mm/util.c
-> +++ b/mm/util.c
-> @@ -319,7 +319,15 @@ unsigned long randomize_stack_top(unsigned long stack_top)
->  }
->  
->  #ifdef CONFIG_ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-> -#ifdef CONFIG_ARCH_HAS_ELF_RANDOMIZE
-> +unsigned long arch_randomize_brk(struct mm_struct *mm)
-> +{
-> +	/* Is the current task 32bit ? */
-> +	if (!IS_ENABLED(CONFIG_64BIT) || is_compat_task())
-> +		return randomize_page(mm->brk, SZ_32M);
-> +
-> +	return randomize_page(mm->brk, SZ_1G);
-> +}
-> +
->  unsigned long arch_mmap_rnd(void)
->  {
->  	unsigned long rnd;
-> @@ -333,7 +341,6 @@ unsigned long arch_mmap_rnd(void)
->  
->  	return rnd << PAGE_SHIFT;
->  }
-> -#endif /* CONFIG_ARCH_HAS_ELF_RANDOMIZE */
->  
->  static int mmap_is_legacy(struct rlimit *rlim_stack)
->  {
 > -- 
 > 2.20.1
 > 
