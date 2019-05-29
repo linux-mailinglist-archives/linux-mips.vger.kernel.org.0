@@ -2,118 +2,182 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F21622DD4C
-	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2019 14:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA292DFB4
+	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2019 16:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726828AbfE2Mjp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 May 2019 08:39:45 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:34018 "EHLO
+        id S1726118AbfE2O1N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 May 2019 10:27:13 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:43010 "EHLO
         mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727053AbfE2Mjp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 May 2019 08:39:45 -0400
-Received: by mail-wr1-f67.google.com with SMTP id f8so1699563wrt.1
-        for <linux-mips@vger.kernel.org>; Wed, 29 May 2019 05:39:44 -0700 (PDT)
+        with ESMTP id S1727087AbfE2O1N (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 May 2019 10:27:13 -0400
+Received: by mail-wr1-f67.google.com with SMTP id l17so1927773wrm.10;
+        Wed, 29 May 2019 07:27:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:openpgp:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=7YrwTFYWMt7logeXSO4Lorars1DzvdxNw1b7gzhWlH0=;
-        b=R3o/HtZTjGQoAzRdJQKabb5bMN8HLiz1RxsP2sBr8iaJcdcwJj3oaw6ihSN3RV2BBv
-         8ug4GtEstyRAm0c07HAgmfs3hmqLtngBUtHRJjaQblinhm+2LWZxDNHqoW6HTK46hkjd
-         tDds2ZbXwjMoM09jxT8gPfUKN/ZoCJOrrc8cD+WJ09BhIlEN9yBc7nhodv+8VoScHXHH
-         x7MqezXCVVft4nufM7UGRKyv5Lg2zUXC3vMhp+261VzfyQ4uF/q1Nzu79spgA3aGT2pr
-         fxFxel6zWz+SaNp+c9i8xfu6maU2i/hVtJsB5iZtr6vdzRFg+7igTFbJz8YqvL5lsOw/
-         opbQ==
+        bh=PwNkBrQv1wNUrppZVJDTx6Vf584sbVV+YeNCp+f2S9M=;
+        b=dm16LjnZxom401BvzSjHBl2qBPtdiVGoxTb4+xJjMZIa5FDFdcEJn4mAWXi1xDuVzf
+         esvDzSKnbvD/ACR+SNKGOIMfb7+ofQYbGbn91UYsfNxbYr9uVW5PD4rVyh/9EyHkSJdG
+         2mmtuc0G8ebXIG1QJWULLQrNUD+3FmwKCKBv7enGnREddFX1ZFYyz4kCvUpwF6Da+Bd2
+         34i09nbg/VzOA3DSf9V7lXyIUEwZRrafNoou//4eXtovrInTjfPxKelpXOYm+Ya6oL9a
+         Q52yTfPs+TY6m6AK+qbxHA6ucCFQqYFhiBbx7fWxT/BQJIUgLAuGm1YnqgGaEB5A5nLv
+         6nGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:openpgp
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=7YrwTFYWMt7logeXSO4Lorars1DzvdxNw1b7gzhWlH0=;
-        b=GDJxE/pawI+0iCGvYLS8x31fbnw7ZCv5XFbtF0c9eDrA32WRmMYZk2vu1It0FD3s5s
-         nTNejPy3bCbNMIIH+6aj52wPCskZTwI5g/sT64gTg4WPAuxBoGelmlMQ9mebjOC/RlRU
-         JuUqM6hirlHrObMNWaQnRsoeFTvlF1pN5iIEFB6eqG4HPX0CUKTOMOi24BoGmBeGxim9
-         yRQbOLee/DtZaR1s707LghQPTeeWPM6AkqKage2bCwo0/m+ZOw59U89ufLnX/490tt1/
-         h/jmkdrR0Q1rl91Qiv2vybfRXhpUeyiLvk3mqFTQu6m9Gtvzu2auxfY0/bltRIALsoKF
-         uNsA==
-X-Gm-Message-State: APjAAAUpb1p4NgG0bQ7ip8kNvbl/gHrz9IZNvarq892tbtXqvKBPlDwo
-        6c4PdJF/FMJh4CZFPoIr/X4=
-X-Google-Smtp-Source: APXvYqysGzF0VhdY7xHgtKrRqzd0fnl8HkB/2ZJdsoWb8D8SCnJFPsdSSOHgdgQa08b73bYhM0PkHg==
-X-Received: by 2002:a5d:510c:: with SMTP id s12mr18399819wrt.338.1559133583547;
-        Wed, 29 May 2019 05:39:43 -0700 (PDT)
+        bh=PwNkBrQv1wNUrppZVJDTx6Vf584sbVV+YeNCp+f2S9M=;
+        b=OUMizmc1E149+G8YqLWYxZV4/LypVHqXA1e5EwsmfUQYfQ0Yc56xK5bVO6qgDSqPEp
+         XpEVq87JiLFGYwPBKoY469oJMAOBzvhuz0i7mpHgXpKDLaWh6aMwhQHxVHcYI4ZM/X07
+         Ooi6ZDtjRh8rtkZXTgd3/uj9JQE6CIMb5fR65A7+spZqx5tAho/1A07FmqdsfVwcqp0u
+         gLFVhAiod68aruEhEHl2IQIGPD8HnORQltEJgAIJsbKnePKLkenk9PcD5mQxthst2I8h
+         qPuioOORHUel/UENSetPtjZcBe6DyIk3N8EIKj7C0VyYk8ZrirFuuozRpOnoz3gB8bHQ
+         AcJg==
+X-Gm-Message-State: APjAAAWvw7L799+NdkgeG238S68ZxN8Ggq2HmuJ6BYXDpkMuaJ2DEpWN
+        MyanVB9fmUvRaChFiNUJbW1CpVI3ths=
+X-Google-Smtp-Source: APXvYqy7ntzjQBvsKAMAGgrp852raE1nrNtCC8Cgvy9+CG9QO9+LF2J4+AGiOoBEtvL97DGo3wMilw==
+X-Received: by 2002:adf:e845:: with SMTP id d5mr18493394wrn.154.1559140030763;
+        Wed, 29 May 2019 07:27:10 -0700 (PDT)
 Received: from [10.32.224.40] (red-hat-inc.vlan560.asr1.mad1.gblx.net. [159.63.51.90])
-        by smtp.gmail.com with ESMTPSA id g2sm16918809wru.37.2019.05.29.05.39.42
+        by smtp.gmail.com with ESMTPSA id a139sm9287027wmd.18.2019.05.29.07.27.09
         (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 May 2019 05:39:42 -0700 (PDT)
-Subject: Re: [PATCH 2/2] MIPS: Make virt_addr_valid() return bool
-To:     Paul Burton <paul.burton@mips.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Cc:     Paul Burton <pburton@wavecomp.com>
-References: <20190528170444.1557-1-paul.burton@mips.com>
- <20190528170444.1557-2-paul.burton@mips.com>
+        Wed, 29 May 2019 07:27:09 -0700 (PDT)
+Subject: Re: [PATCH v2] MIPS: Treat Loongson Extensions as ASEs
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     paul.burton@mips.com, Huacai Chen <chenhc@lemote.com>,
+        Yunqiang Su <ysu@wavecomp.com>, stable@vger.kernel.org
+References: <20190529084259.8511-1-jiaxun.yang@flygoat.com>
 From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
 Openpgp: url=http://pgp.mit.edu/pks/lookup?op=get&search=0xE3E32C2CDEADC0DE
-Message-ID: <01b5bc7a-9e31-cc45-ba91-4a332ee0fcb4@amsat.org>
-Date:   Wed, 29 May 2019 14:39:41 +0200
+Message-ID: <c247ff0a-45f6-4c1f-4aa8-38c7d9a0a78b@amsat.org>
+Date:   Wed, 29 May 2019 16:27:08 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190528170444.1557-2-paul.burton@mips.com>
+In-Reply-To: <20190529084259.8511-1-jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/28/19 7:05 PM, Paul Burton wrote:
-> virt_addr_valid() really returns a boolean value, but currently uses an
-> integer to represent it. Switch to the bool type to make it clearer that
-> we really are returning a true or false value.
+Hi Jiaxun,
+
+On 5/29/19 10:42 AM, Jiaxun Yang wrote:
+> Recently, binutils had split Loongson-3 Extensions into four ASEs:
+> MMI, CAM, EXT, EXT2. This patch do the samething in kernel and expose
+> them in cpuinfo so applications can probe supported ASEs at runtime.
 > 
-> Signed-off-by: Paul Burton <paul.burton@mips.com>
-
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-Tested-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Cc: Huacai Chen <chenhc@lemote.com>
+> Cc: Yunqiang Su <ysu@wavecomp.com>
+> Cc: stable@vger.kernel.org # v4.14+
 > ---
+>  arch/mips/include/asm/cpu-features.h | 16 ++++++++++++++++
+>  arch/mips/include/asm/cpu.h          |  4 ++++
+>  arch/mips/kernel/cpu-probe.c         |  6 ++++++
+>  arch/mips/kernel/proc.c              |  4 ++++
+>  4 files changed, 30 insertions(+)
 > 
->  arch/mips/include/asm/page.h | 2 +-
->  arch/mips/mm/mmap.c          | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/page.h b/arch/mips/include/asm/page.h
-> index 6b31c93b5eaa..a25643d258cb 100644
-> --- a/arch/mips/include/asm/page.h
-> +++ b/arch/mips/include/asm/page.h
-> @@ -249,7 +249,7 @@ static inline int pfn_valid(unsigned long pfn)
->  #define virt_to_pfn(kaddr)   	PFN_DOWN(virt_to_phys((void *)(kaddr)))
->  #define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
+> diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
+> index 6998a9796499..4e2bea8875f5 100644
+> --- a/arch/mips/include/asm/cpu-features.h
+> +++ b/arch/mips/include/asm/cpu-features.h
+> @@ -397,6 +397,22 @@
+>  #define cpu_has_dsp3		__ase(MIPS_ASE_DSP3)
+>  #endif
 >  
-> -extern int __virt_addr_valid(const volatile void *kaddr);
-> +extern bool __virt_addr_valid(const volatile void *kaddr);
->  #define virt_addr_valid(kaddr)						\
->  	__virt_addr_valid((const volatile void *) (kaddr))
+> +#ifndef cpu_has_loongson_mmi
+> +#define cpu_has_loongson_mmi		__ase(MIPS_ASE_LOONGSON_MMI)
+> +#endif
+> +
+> +#ifndef cpu_has_loongson_cam
+> +#define cpu_has_loongson_cam		__ase(MIPS_ASE_LOONGSON_CAM)
+> +#endif
+> +
+> +#ifndef cpu_has_loongson_ext
+> +#define cpu_has_loongson_ext		__ase(MIPS_ASE_LOONGSON_EXT)
+> +#endif
+> +
+> +#ifndef cpu_has_loongson_ext2
+> +#define cpu_has_loongson_ext2		__ase(MIPS_ASE_LOONGSON_EXT2)
+> +#endif
+> +
+>  #ifndef cpu_has_mipsmt
+>  #define cpu_has_mipsmt		__isa_lt_and_ase(6, MIPS_ASE_MIPSMT)
+>  #endif
+> diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
+> index 6ad7d3cabd91..cc15670ef43a 100644
+> --- a/arch/mips/include/asm/cpu.h
+> +++ b/arch/mips/include/asm/cpu.h
+> @@ -438,5 +438,9 @@ enum cpu_type_enum {
+>  #define MIPS_ASE_MSA		0x00000100 /* MIPS SIMD Architecture */
+>  #define MIPS_ASE_DSP3		0x00000200 /* Signal Processing ASE Rev 3*/
+>  #define MIPS_ASE_MIPS16E2	0x00000400 /* MIPS16e2 */
+> +#define MIPS_ASE_LOONGSON_MMI	0x00000800 /* Loongson MultiMedia extensions Instructions */
+> +#define MIPS_ASE_LOONGSON_CAM	0x00001000 /* Loongson CAM */
+> +#define MIPS_ASE_LOONGSON_EXT	0x00002000 /* Loongson EXTensions */
+> +#define MIPS_ASE_LOONGSON_EXT2	0x00004000 /* Loongson EXTensions R2 */
 >  
-> diff --git a/arch/mips/mm/mmap.c b/arch/mips/mm/mmap.c
-> index 7755a1fad05a..50ee7213b432 100644
-> --- a/arch/mips/mm/mmap.c
-> +++ b/arch/mips/mm/mmap.c
-> @@ -201,12 +201,12 @@ unsigned long arch_randomize_brk(struct mm_struct *mm)
->  	return ret;
->  }
+>  #endif /* _ASM_CPU_H */
+> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+> index 6126b77d5a62..f349be1cf5b8 100644
+> --- a/arch/mips/kernel/cpu-probe.c
+> +++ b/arch/mips/kernel/cpu-probe.c
+> @@ -1577,6 +1577,8 @@ static inline void cpu_probe_legacy(struct cpuinfo_mips *c, unsigned int cpu)
+>  			__cpu_name[cpu] = "ICT Loongson-3";
+>  			set_elf_platform(cpu, "loongson3a");
+>  			set_isa(c, MIPS_CPU_ISA_M64R1);
+> +			c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
+> +				MIPS_ASE_LOONGSON_EXT);
+>  			break;
+>  		case PRID_REV_LOONGSON3B_R1:
+>  		case PRID_REV_LOONGSON3B_R2:
+> @@ -1584,6 +1586,8 @@ static inline void cpu_probe_legacy(struct cpuinfo_mips *c, unsigned int cpu)
+>  			__cpu_name[cpu] = "ICT Loongson-3";
+>  			set_elf_platform(cpu, "loongson3b");
+>  			set_isa(c, MIPS_CPU_ISA_M64R1);
+> +			c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
+> +				MIPS_ASE_LOONGSON_EXT);
+>  			break;
+>  		}
 >  
-> -int __virt_addr_valid(const volatile void *kaddr)
-> +bool __virt_addr_valid(const volatile void *kaddr)
->  {
->  	unsigned long vaddr = (unsigned long)vaddr;
+> @@ -1950,6 +1954,8 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+>  		decode_configs(c);
+>  		c->options |= MIPS_CPU_FTLB | MIPS_CPU_TLBINV | MIPS_CPU_LDPTE;
+>  		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+> +		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
+> +			MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
+
+You announce the Loongson 2E/2F as supporting the EXTensions R2 ASE, are
+you sure this is correct?
+
+Regards,
+
+Phil.
+
+>  		break;
+>  	default:
+>  		panic("Unknown Loongson Processor ID!");
+> diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
+> index b2de408a259e..f8d36710cd58 100644
+> --- a/arch/mips/kernel/proc.c
+> +++ b/arch/mips/kernel/proc.c
+> @@ -124,6 +124,10 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+>  	if (cpu_has_eva)	seq_printf(m, "%s", " eva");
+>  	if (cpu_has_htw)	seq_printf(m, "%s", " htw");
+>  	if (cpu_has_xpa)	seq_printf(m, "%s", " xpa");
+> +	if (cpu_has_loongson_mmi)	seq_printf(m, "%s", " loongson-mmi");
+> +	if (cpu_has_loongson_cam)	seq_printf(m, "%s", " loongson-cam");
+> +	if (cpu_has_loongson_ext)	seq_printf(m, "%s", " loongson-ext");
+> +	if (cpu_has_loongson_ext2)	seq_printf(m, "%s", " loongson-ext2");
+>  	seq_printf(m, "\n");
 >  
->  	if ((vaddr < PAGE_OFFSET) || (vaddr >= MAP_BASE))
-> -		return 0;
-> +		return false;
->  
->  	return pfn_valid(PFN_DOWN(virt_to_phys(kaddr)));
->  }
+>  	if (cpu_has_mmips) {
 > 
