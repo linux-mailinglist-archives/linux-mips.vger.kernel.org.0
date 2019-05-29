@@ -2,119 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D51C82D787
-	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2019 10:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 340242D836
+	for <lists+linux-mips@lfdr.de>; Wed, 29 May 2019 10:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726016AbfE2IUJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 May 2019 04:20:09 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:41290 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725917AbfE2IUJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 May 2019 04:20:09 -0400
-Received: by mail-pl1-f194.google.com with SMTP id s24so608186plr.8;
-        Wed, 29 May 2019 01:20:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arm-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Vv80Z7VGeE+yY87s35ZtbvL9SuF+bx88wizFFl2ddXk=;
-        b=cfjTgrmeffoPCrJhI+97W6QXKk6Oei6h+EWkEb+bEn4yMKwe1KRVmiSAlBitS3OzO/
-         c/tyEKG5QaY9H27ocjqX9ClL17ehovMVcUt7YhQ8kf3rHXp6B9XpCCN0CcU6Si2UD4Nx
-         WTLuuegGgJAghoxgukLP6Y9Wo0E6kJgeW38YPyxyZyjfe338LiEpC3p45UFWQN4O+BvI
-         P8+xUi1O2II741hiIEFGS/WMLl/cV3IqvAqIQUVDdyV/KjU3XqOhV1WuYOFjyQW8PnY/
-         amayHly2wRjC94U3jpS4czeAB54sIQF3S61+sOcP7srQnXtmIyeJXkceyyWrL1wlHCJt
-         tFhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Vv80Z7VGeE+yY87s35ZtbvL9SuF+bx88wizFFl2ddXk=;
-        b=TKtqwnpygz5kqP/kUJIUCd8soTgCCN2+gYD8aio6uIfWn8e1uNdpjKExL69cJJACQm
-         pzAYPivclS5hUgTzUktsutSBXl41f2CFEV6T/YBWaSL6YBs/F0Bu2tm6LQkEJ9kEJiKw
-         5mWiG7cN2PAa0RNlGHdf5zX2F7sbDSb5mgJn3QkxglsfLTnxDvlrcJlM+EHNBWsJ50hB
-         SmNbEFa79wzU8x+LCtgJ4ZKdU9ePGw0XcnL8NIOGmlXetrPQ8borpm/hT37Xx8Pi597V
-         N7nga34fmH3GdDPdqbCHXFBw6HPh+LQKPMuhsghOgvn5saMDA7q0VU9KraXn0hT0jMbK
-         s9DQ==
-X-Gm-Message-State: APjAAAXfXJJEByxwaFr+QADho8HPIXphP11fSSvr5j7HVpMPW6qPG7Af
-        DM7CWErhvSPSk6aPN3EoaKyZQyaeTmE2PsPvfpg=
-X-Google-Smtp-Source: APXvYqyfzUdsfOOybUfGF3T6xUuaMylLIfCMpBmv0G9MpnimsL2Jd8Uf2ws2u/OjSpGvnVZhNKSbhFpqsv/52XGO+Xg=
-X-Received: by 2002:a17:902:f212:: with SMTP id gn18mr78134706plb.106.1559118008568;
- Wed, 29 May 2019 01:20:08 -0700 (PDT)
+        id S1725948AbfE2Is6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 May 2019 04:48:58 -0400
+Received: from forward104o.mail.yandex.net ([37.140.190.179]:49986 "EHLO
+        forward104o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725936AbfE2Is6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 29 May 2019 04:48:58 -0400
+X-Greylist: delayed 332 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 May 2019 04:48:55 EDT
+Received: from mxback7g.mail.yandex.net (mxback7g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:168])
+        by forward104o.mail.yandex.net (Yandex) with ESMTP id C8DF29400E7;
+        Wed, 29 May 2019 11:43:21 +0300 (MSK)
+Received: from smtp4o.mail.yandex.net (smtp4o.mail.yandex.net [2a02:6b8:0:1a2d::28])
+        by mxback7g.mail.yandex.net (nwsmtp/Yandex) with ESMTP id n6BLv0hg0n-hK043xmu;
+        Wed, 29 May 2019 11:43:21 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1559119401;
+        bh=cwfu+B8rHHOK+UWLBqLOe2IKQHRFtbxjXw1XP5b7/JY=;
+        h=Subject:To:From:Message-Id:Cc:Date;
+        b=wvR4D7wp8DsEbQ68C7f2rbSxyARJXP82uMLdD0+A5/HgfbkMvITPAhtoQeMfV2aSh
+         FzFFhfCfgNLfz6q1e2f1/Paed6CsdhqC+1d826nTqtLnare9J3xcgV7jn9Q/FqONks
+         qSpB5j84lfIQaP5yY9/WCfHJ1FDAyG4N5oEn16TM=
+Authentication-Results: mxback7g.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by smtp4o.mail.yandex.net (nwsmtp/Yandex) with ESMTPSA id b393VP2gFV-hEBeY9rP;
+        Wed, 29 May 2019 11:43:19 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     paul.burton@mips.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Yunqiang Su <ysu@wavecomp.com>, stable@vger.kernel.org
+Subject: [PATCH v2] MIPS: Treat Loongson Extensions as ASEs
+Date:   Wed, 29 May 2019 16:42:59 +0800
+Message-Id: <20190529084259.8511-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-References: <20190525133203.25853-1-hch@lst.de> <20190525133203.25853-5-hch@lst.de>
-In-Reply-To: <20190525133203.25853-5-hch@lst.de>
-From:   Catalin Marinas <catalin.marinas@arm.com>
-Date:   Wed, 29 May 2019 09:19:56 +0100
-Message-ID: <CAHkRjk5ChgbYGXCRG3ob3iCuggC3MVYqeJNNm+nnt6rCqo+b0Q@mail.gmail.com>
-Subject: Re: [PATCH 4/6] mm: add a gup_fixup_start_addr hook
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Christoph,
+Recently, binutils had split Loongson-3 Extensions into four ASEs:
+MMI, CAM, EXT, EXT2. This patch do the samething in kernel and expose
+them in cpuinfo so applications can probe supported ASEs at runtime.
 
-On Sat, 25 May 2019 at 14:33, Christoph Hellwig <hch@lst.de> wrote:
-> diff --git a/mm/gup.c b/mm/gup.c
-> index f173fcbaf1b2..1c21ecfbf38b 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -2117,6 +2117,10 @@ static void gup_pgd_range(unsigned long addr, unsigned long end,
->         } while (pgdp++, addr = next, addr != end);
->  }
->
-> +#ifndef gup_fixup_start_addr
-> +#define gup_fixup_start_addr(start)    (start)
-> +#endif
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Huacai Chen <chenhc@lemote.com>
+Cc: Yunqiang Su <ysu@wavecomp.com>
+Cc: stable@vger.kernel.org # v4.14+
+---
+ arch/mips/include/asm/cpu-features.h | 16 ++++++++++++++++
+ arch/mips/include/asm/cpu.h          |  4 ++++
+ arch/mips/kernel/cpu-probe.c         |  6 ++++++
+ arch/mips/kernel/proc.c              |  4 ++++
+ 4 files changed, 30 insertions(+)
 
-As you pointed out in a subsequent reply, we could use the
-untagged_addr() macro from Andrey (or a shorter "untag_addr" if you
-want it to look like a verb).
-
->  #ifndef gup_fast_permitted
->  /*
->   * Check if it's allowed to use __get_user_pages_fast() for the range, or
-> @@ -2145,7 +2149,7 @@ int __get_user_pages_fast(unsigned long start, int nr_pages, int write,
->         unsigned long flags;
->         int nr = 0;
->
-> -       start &= PAGE_MASK;
-> +       start = gup_fixup_start_addr(start) & PAGE_MASK;
->         len = (unsigned long) nr_pages << PAGE_SHIFT;
->         end = start + len;
->
-> @@ -2218,7 +2222,7 @@ int get_user_pages_fast(unsigned long start, int nr_pages,
->         unsigned long addr, len, end;
->         int nr = 0, ret = 0;
->
-> -       start &= PAGE_MASK;
-> +       start = gup_fixup_start_addr(start) & PAGE_MASK;
->         addr = start;
->         len = (unsigned long) nr_pages << PAGE_SHIFT;
->         end = start + len;
-
-In Andrey's patch [1] we don't fix __get_user_pages_fast(), only
-__get_user_pages() as it needs to do a find_vma() search. I wonder
-whether this is actually necessary for the *_fast() versions. If the
-top byte is non-zero (i.e. tagged address), 'end' would also have the
-same tag. The page table macros like pgd_index() and pgd_addr_end()
-already take care of masking out the top bits (at least for arm64)
-since they need to work on kernel address with the top bits all 1. So
-gup_pgd_range() should cope with tagged addresses already.
-
-[1] https://lore.kernel.org/lkml/d234cd71774f35229bdfc0a793c34d6712b73093.1557160186.git.andreyknvl@google.com/
-
+diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
+index 6998a9796499..4e2bea8875f5 100644
+--- a/arch/mips/include/asm/cpu-features.h
++++ b/arch/mips/include/asm/cpu-features.h
+@@ -397,6 +397,22 @@
+ #define cpu_has_dsp3		__ase(MIPS_ASE_DSP3)
+ #endif
+ 
++#ifndef cpu_has_loongson_mmi
++#define cpu_has_loongson_mmi		__ase(MIPS_ASE_LOONGSON_MMI)
++#endif
++
++#ifndef cpu_has_loongson_cam
++#define cpu_has_loongson_cam		__ase(MIPS_ASE_LOONGSON_CAM)
++#endif
++
++#ifndef cpu_has_loongson_ext
++#define cpu_has_loongson_ext		__ase(MIPS_ASE_LOONGSON_EXT)
++#endif
++
++#ifndef cpu_has_loongson_ext2
++#define cpu_has_loongson_ext2		__ase(MIPS_ASE_LOONGSON_EXT2)
++#endif
++
+ #ifndef cpu_has_mipsmt
+ #define cpu_has_mipsmt		__isa_lt_and_ase(6, MIPS_ASE_MIPSMT)
+ #endif
+diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
+index 6ad7d3cabd91..cc15670ef43a 100644
+--- a/arch/mips/include/asm/cpu.h
++++ b/arch/mips/include/asm/cpu.h
+@@ -438,5 +438,9 @@ enum cpu_type_enum {
+ #define MIPS_ASE_MSA		0x00000100 /* MIPS SIMD Architecture */
+ #define MIPS_ASE_DSP3		0x00000200 /* Signal Processing ASE Rev 3*/
+ #define MIPS_ASE_MIPS16E2	0x00000400 /* MIPS16e2 */
++#define MIPS_ASE_LOONGSON_MMI	0x00000800 /* Loongson MultiMedia extensions Instructions */
++#define MIPS_ASE_LOONGSON_CAM	0x00001000 /* Loongson CAM */
++#define MIPS_ASE_LOONGSON_EXT	0x00002000 /* Loongson EXTensions */
++#define MIPS_ASE_LOONGSON_EXT2	0x00004000 /* Loongson EXTensions R2 */
+ 
+ #endif /* _ASM_CPU_H */
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index 6126b77d5a62..f349be1cf5b8 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -1577,6 +1577,8 @@ static inline void cpu_probe_legacy(struct cpuinfo_mips *c, unsigned int cpu)
+ 			__cpu_name[cpu] = "ICT Loongson-3";
+ 			set_elf_platform(cpu, "loongson3a");
+ 			set_isa(c, MIPS_CPU_ISA_M64R1);
++			c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
++				MIPS_ASE_LOONGSON_EXT);
+ 			break;
+ 		case PRID_REV_LOONGSON3B_R1:
+ 		case PRID_REV_LOONGSON3B_R2:
+@@ -1584,6 +1586,8 @@ static inline void cpu_probe_legacy(struct cpuinfo_mips *c, unsigned int cpu)
+ 			__cpu_name[cpu] = "ICT Loongson-3";
+ 			set_elf_platform(cpu, "loongson3b");
+ 			set_isa(c, MIPS_CPU_ISA_M64R1);
++			c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
++				MIPS_ASE_LOONGSON_EXT);
+ 			break;
+ 		}
+ 
+@@ -1950,6 +1954,8 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+ 		decode_configs(c);
+ 		c->options |= MIPS_CPU_FTLB | MIPS_CPU_TLBINV | MIPS_CPU_LDPTE;
+ 		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
++		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
++			MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
+ 		break;
+ 	default:
+ 		panic("Unknown Loongson Processor ID!");
+diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
+index b2de408a259e..f8d36710cd58 100644
+--- a/arch/mips/kernel/proc.c
++++ b/arch/mips/kernel/proc.c
+@@ -124,6 +124,10 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+ 	if (cpu_has_eva)	seq_printf(m, "%s", " eva");
+ 	if (cpu_has_htw)	seq_printf(m, "%s", " htw");
+ 	if (cpu_has_xpa)	seq_printf(m, "%s", " xpa");
++	if (cpu_has_loongson_mmi)	seq_printf(m, "%s", " loongson-mmi");
++	if (cpu_has_loongson_cam)	seq_printf(m, "%s", " loongson-cam");
++	if (cpu_has_loongson_ext)	seq_printf(m, "%s", " loongson-ext");
++	if (cpu_has_loongson_ext2)	seq_printf(m, "%s", " loongson-ext2");
+ 	seq_printf(m, "\n");
+ 
+ 	if (cpu_has_mmips) {
 -- 
-Catalin
+2.21.0
+
