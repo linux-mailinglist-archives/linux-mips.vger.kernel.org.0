@@ -2,86 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5625307F7
-	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2019 07:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4631B30934
+	for <lists+linux-mips@lfdr.de>; Fri, 31 May 2019 09:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725963AbfEaFFR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 31 May 2019 01:05:17 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:33523 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725955AbfEaFFQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 31 May 2019 01:05:16 -0400
-X-Originating-IP: 79.86.19.127
-Received: from [192.168.0.12] (127.19.86.79.rev.sfr.net [79.86.19.127])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 6BA8020002;
-        Fri, 31 May 2019 05:04:56 +0000 (UTC)
-Subject: Re: [PATCH v4 00/14] Provide generic top-down mmap layout functions
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
+        id S1726617AbfEaHS2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 31 May 2019 03:18:28 -0400
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:41341 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725963AbfEaHS2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 31 May 2019 03:18:28 -0400
+Received-SPF: Pass (esa6.microchip.iphmx.com: domain of
+  Horatiu.Vultur@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
+  envelope-from="Horatiu.Vultur@microchip.com";
+  x-sender="Horatiu.Vultur@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
+  a:mx2.microchip.iphmx.com include:servers.mcsv.net
+  include:mktomail.com include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa6.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
+  envelope-from="Horatiu.Vultur@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa6.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Horatiu.Vultur@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+X-IronPort-AV: E=Sophos;i="5.60,534,1549954800"; 
+   d="scan'208";a="32575660"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 May 2019 00:18:27 -0700
+Received: from soft-dev3.microsemi.net (10.10.85.251) by mx.microchip.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.1713.5; Fri, 31 May 2019
+ 00:18:23 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+CC:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
+        "Paul Burton" <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-References: <20190526134746.9315-1-alex@ghiti.fr>
- <201905291313.1E6BD2DFB@keescook>
-From:   Alex Ghiti <alex@ghiti.fr>
-Message-ID: <d4e04178-e6f3-6d11-4ab8-9be7cf8ae87a@ghiti.fr>
-Date:   Fri, 31 May 2019 01:04:55 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        "David S. Miller" <davem@davemloft.net>,
+        <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+Subject: [PATCH net-next v3 0/2] Add hw offload of TC flower on MSCC Ocelot
+Date:   Fri, 31 May 2019 09:16:55 +0200
+Message-ID: <1559287017-32397-1-git-send-email-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <201905291313.1E6BD2DFB@keescook>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: sv-FI
+Content-Type: text/plain
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/29/19 4:16 PM, Kees Cook wrote:
-> On Sun, May 26, 2019 at 09:47:32AM -0400, Alexandre Ghiti wrote:
->> This series introduces generic functions to make top-down mmap layout
->> easily accessible to architectures, in particular riscv which was
->> the initial goal of this series.
->> The generic implementation was taken from arm64 and used successively
->> by arm, mips and finally riscv.
-> As I've mentioned before, I think this is really great. Making this
-> common has long been on my TODO list. Thank you for the work! (I've sent
-> separate review emails for individual patches where my ack wasn't
-> already present...)
+This patch series enables hardware offload for flower filter used in
+traffic controller on MSCC Ocelot board.
 
+v2->v3 changes:
+ - remove the check for shared blocks
 
-Thanks :)
+v1->v2 changes:
+ - when declaring variables use reverse christmas tree
 
+CC: Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC: Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
+CC: Rob Herring <robh+dt@kernel.org>
+CC: Mark Rutland <mark.rutland@arm.com>
+CC: Ralf Baechle <ralf@linux-mips.org>
+CC: Paul Burton <paul.burton@mips.com>
+CC: James Hogan <jhogan@kernel.org>
+CC: "David S. Miller" <davem@davemloft.net>
+CC: linux-mips@vger.kernel.org
+CC: devicetree@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: netdev@vger.kernel.org
 
->>    - There is no common API to determine if a process is 32b, so I came up with
->>      !IS_ENABLED(CONFIG_64BIT) || is_compat_task() in [PATCH v4 12/14].
-> Do we need a common helper for this idiom? (Note that I don't think it's
-> worth blocking the series for this.)
+Horatiu Vultur (2):
+  net: mscc: ocelot: Add support for tcam
+  net: mscc: ocelot: Hardware ofload for tc flower filter
 
+ arch/mips/boot/dts/mscc/ocelot.dtsi       |   5 +-
+ drivers/net/ethernet/mscc/Makefile        |   2 +-
+ drivers/net/ethernet/mscc/ocelot.c        |  13 +
+ drivers/net/ethernet/mscc/ocelot.h        |   8 +
+ drivers/net/ethernet/mscc/ocelot_ace.c    | 777 ++++++++++++++++++++++++++++++
+ drivers/net/ethernet/mscc/ocelot_ace.h    | 232 +++++++++
+ drivers/net/ethernet/mscc/ocelot_board.c  |   1 +
+ drivers/net/ethernet/mscc/ocelot_flower.c | 357 ++++++++++++++
+ drivers/net/ethernet/mscc/ocelot_regs.c   |  11 +
+ drivers/net/ethernet/mscc/ocelot_s2.h     |  64 +++
+ drivers/net/ethernet/mscc/ocelot_tc.c     |  16 +-
+ drivers/net/ethernet/mscc/ocelot_vcap.h   | 403 ++++++++++++++++
+ 12 files changed, 1880 insertions(+), 9 deletions(-)
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_ace.c
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_ace.h
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_flower.c
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_s2.h
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_vcap.h
 
-Each architecture has its own way of finding that out, it might be 
-interesting if there are other
-places in generic code to propose something in that sense.
-I will search for such places if they exist and come back with something.
+-- 
+2.7.4
 
-Thanks Kees for your time,
-
-Alex
-
-
->
-> -Kees
->
