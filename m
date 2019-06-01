@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17B8D31EFE
-	for <lists+linux-mips@lfdr.de>; Sat,  1 Jun 2019 15:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542B931E7B
+	for <lists+linux-mips@lfdr.de>; Sat,  1 Jun 2019 15:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728151AbfFANTU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 1 Jun 2019 09:19:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46478 "EHLO mail.kernel.org"
+        id S1728090AbfFANVy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 1 Jun 2019 09:21:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49320 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728184AbfFANTU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 1 Jun 2019 09:19:20 -0400
+        id S1727879AbfFANVw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 1 Jun 2019 09:21:52 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ABACA27280;
-        Sat,  1 Jun 2019 13:19:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E52AE272E7;
+        Sat,  1 Jun 2019 13:21:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559395159;
+        s=default; t=1559395311;
         bh=9xEkafkImboL0Vlars0FgDOJ0ZEDWSP9hRRg7LPRHYY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uYrOX6P2jchL1WyrvPZD9w7+HgIuR3AzX2WhV1gfs2lMZLyqclJpR9LUop9fUahpx
-         tzKVTZyXB3Z43rrxmnB1A//o2ECa/Ajr1lGJO6G9SfFD+SbneweKeDS2rSfzwlDow5
-         NY+VrvkMgovJstgAAU6yDXkyC4CyxQ25SQ1WTdFM=
+        b=vKfp8LvM1ycMLry6ZOzD2N17bJXblFbOWNCUt8U3wqglHOYif7HVTgrmOGN4CJTkN
+         G9HH/QqVSBB8IHT78InlULlWTQDMspfmOrUASgNm7ZXI4NqIhC8X+heuuz98Xk4Yo0
+         1BxsQYb29ceXT+zw/zQIyMwGf5apo9MPnwO02fL8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
@@ -41,12 +41,12 @@ Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Juergen Gross <jgross@suse.com>,
         Serge Semin <Sergey.Semin@t-platforms.ru>,
         linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.1 071/186] mips: Make sure dt memory regions are valid
-Date:   Sat,  1 Jun 2019 09:14:47 -0400
-Message-Id: <20190601131653.24205-71-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.0 066/173] mips: Make sure dt memory regions are valid
+Date:   Sat,  1 Jun 2019 09:17:38 -0400
+Message-Id: <20190601131934.25053-66-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190601131653.24205-1-sashal@kernel.org>
-References: <20190601131653.24205-1-sashal@kernel.org>
+In-Reply-To: <20190601131934.25053-1-sashal@kernel.org>
+References: <20190601131934.25053-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
