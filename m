@@ -2,59 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B063212F
-	for <lists+linux-mips@lfdr.de>; Sun,  2 Jun 2019 01:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C806324CF
+	for <lists+linux-mips@lfdr.de>; Sun,  2 Jun 2019 22:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726634AbfFAXqp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 1 Jun 2019 19:46:45 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:37574 "EHLO
+        id S1726734AbfFBUuM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 2 Jun 2019 16:50:12 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:48296 "EHLO
         shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726211AbfFAXqp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 1 Jun 2019 19:46:45 -0400
+        with ESMTP id S1726270AbfFBUuM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 2 Jun 2019 16:50:12 -0400
 Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d5])
         (using TLSv1 with cipher AES256-SHA (256/256 bits))
         (Client did not present a certificate)
         (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 12DA014FA9CFA;
-        Sat,  1 Jun 2019 16:46:44 -0700 (PDT)
-Date:   Sat, 01 Jun 2019 16:46:43 -0700 (PDT)
-Message-Id: <20190601.164643.756724745563418604.davem@davemloft.net>
-To:     hch@lst.de
-Cc:     torvalds@linux-foundation.org, paul.burton@mips.com,
-        jhogan@kernel.org, ysato@users.sourceforge.jp, dalias@libc.org,
-        npiggin@gmail.com, khalid.aziz@oracle.com, andreyknvl@google.com,
-        benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org, x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: RFC: switch the remaining architectures to use generic GUP v2
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id ACB2F1411B403;
+        Sun,  2 Jun 2019 13:50:10 -0700 (PDT)
+Date:   Sun, 02 Jun 2019 13:50:10 -0700 (PDT)
+Message-Id: <20190602.135010.1382762534390460032.davem@davemloft.net>
+To:     horatiu.vultur@microchip.com
+Cc:     alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        robh+dt@kernel.org, mark.rutland@arm.com, ralf@linux-mips.org,
+        paul.burton@mips.com, jhogan@kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v3 0/2] Add hw offload of TC flower on MSCC
+ Ocelot
 From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190601074959.14036-1-hch@lst.de>
-References: <20190601074959.14036-1-hch@lst.de>
+In-Reply-To: <1559287017-32397-1-git-send-email-horatiu.vultur@microchip.com>
+References: <1559287017-32397-1-git-send-email-horatiu.vultur@microchip.com>
 X-Mailer: Mew version 6.8 on Emacs 26.1
 Mime-Version: 1.0
 Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sat, 01 Jun 2019 16:46:44 -0700 (PDT)
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sun, 02 Jun 2019 13:50:11 -0700 (PDT)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
-Date: Sat,  1 Jun 2019 09:49:43 +0200
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
+Date: Fri, 31 May 2019 09:16:55 +0200
 
-> below is a series to switch mips, sh and sparc64 to use the generic
-> GUP code so that we only have one codebase to touch for further
-> improvements to this code.  I don't have hardware for any of these
-> architectures, and generally no clue about their page table
-> management, so handle with care.
+> This patch series enables hardware offload for flower filter used in
+> traffic controller on MSCC Ocelot board.
 > 
-> Changes since v1:
->  - fix various issues found by the build bot
->  - cherry pick and use the untagged_addr helper form Andrey
->  - add various refactoring patches to share more code over architectures
->  - move the powerpc hugepd code to mm/gup.c and sync it with the generic
->    hup semantics
+> v2->v3 changes:
+>  - remove the check for shared blocks
+> 
+> v1->v2 changes:
+>  - when declaring variables use reverse christmas tree
 
-I will today look seriously at the sparc64 stuff wrt. tagged pointers.
+Series applied, thanks.
