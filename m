@@ -2,54 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C806324CF
-	for <lists+linux-mips@lfdr.de>; Sun,  2 Jun 2019 22:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3A2328CA
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Jun 2019 08:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbfFBUuM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 2 Jun 2019 16:50:12 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:48296 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726270AbfFBUuM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 2 Jun 2019 16:50:12 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id ACB2F1411B403;
-        Sun,  2 Jun 2019 13:50:10 -0700 (PDT)
-Date:   Sun, 02 Jun 2019 13:50:10 -0700 (PDT)
-Message-Id: <20190602.135010.1382762534390460032.davem@davemloft.net>
-To:     horatiu.vultur@microchip.com
-Cc:     alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
-        robh+dt@kernel.org, mark.rutland@arm.com, ralf@linux-mips.org,
-        paul.burton@mips.com, jhogan@kernel.org,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v3 0/2] Add hw offload of TC flower on MSCC
- Ocelot
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <1559287017-32397-1-git-send-email-horatiu.vultur@microchip.com>
-References: <1559287017-32397-1-git-send-email-horatiu.vultur@microchip.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sun, 02 Jun 2019 13:50:11 -0700 (PDT)
+        id S1727056AbfFCGtW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 3 Jun 2019 02:49:22 -0400
+Received: from verein.lst.de ([213.95.11.211]:54901 "EHLO newverein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726618AbfFCGtW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 3 Jun 2019 02:49:22 -0400
+Received: by newverein.lst.de (Postfix, from userid 2407)
+        id 9F53A68B05; Mon,  3 Jun 2019 08:48:55 +0200 (CEST)
+Date:   Mon, 3 Jun 2019 08:48:55 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Ley Foon Tan <lftan@altera.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
+Subject: Re: [PATCH 5/7 v2] MIPS: use the generic uncached segment support
+ in dma-direct
+Message-ID: <20190603064855.GA22023@lst.de>
+References: <20190430110032.25301-1-hch@lst.de> <20190430110032.25301-6-hch@lst.de> <20190430201041.536amvinrcvd2wua@pburton-laptop> <20190430202947.GA30262@lst.de> <20190430211105.ielntedm46uqamca@pburton-laptop> <20190501131339.GA890@lst.de> <20190501171355.7wnrutfnax5djkpx@pburton-laptop>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190501171355.7wnrutfnax5djkpx@pburton-laptop>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Horatiu Vultur <horatiu.vultur@microchip.com>
-Date: Fri, 31 May 2019 09:16:55 +0200
-
-> This patch series enables hardware offload for flower filter used in
-> traffic controller on MSCC Ocelot board.
+On Wed, May 01, 2019 at 05:13:57PM +0000, Paul Burton wrote:
+> Hi Christoph,
 > 
-> v2->v3 changes:
->  - remove the check for shared blocks
+> On Wed, May 01, 2019 at 03:13:39PM +0200, Christoph Hellwig wrote:
+> > Stop providing our arch alloc/free hooks and just expose the segment
+> > offset instead.
+> > 
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> > ---
+> >  arch/mips/Kconfig              |  1 +
+> >  arch/mips/include/asm/page.h   |  3 ---
+> >  arch/mips/jazz/jazzdma.c       |  6 ------
+> >  arch/mips/mm/dma-noncoherent.c | 26 +++++++++-----------------
+> >  4 files changed, 10 insertions(+), 26 deletions(-)
 > 
-> v1->v2 changes:
->  - when declaring variables use reverse christmas tree
+> This one looks good to me now, for patches 1 & 5:
+> 
+>   Acked-by: Paul Burton <paul.burton@mips.com>
 
-Series applied, thanks.
+Thanks, I've merged thos into the dma-mapping tree.
