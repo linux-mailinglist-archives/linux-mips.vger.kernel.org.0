@@ -2,58 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC2F3349D
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Jun 2019 18:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017CD335E5
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Jun 2019 19:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728068AbfFCQJC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 3 Jun 2019 12:09:02 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:43123 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727501AbfFCQJC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Jun 2019 12:09:02 -0400
-Received: by mail-lj1-f194.google.com with SMTP id 16so3182701ljv.10
-        for <linux-mips@vger.kernel.org>; Mon, 03 Jun 2019 09:09:00 -0700 (PDT)
+        id S1727160AbfFCRCd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 3 Jun 2019 13:02:33 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:33010 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727126AbfFCRCc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Jun 2019 13:02:32 -0400
+Received: by mail-lj1-f195.google.com with SMTP id v29so5645735ljv.0
+        for <linux-mips@vger.kernel.org>; Mon, 03 Jun 2019 10:02:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lgsfrWNkeAwXitTJcoIdmm+S5jV0yGJC2wH7GAyc/RM=;
-        b=WCXqjpyK9CxskKR1Rsa2JsUVjNbLjTBCO3DKbpdiCOAgDG3/x4OwA5zT3oR9AF+TAb
-         KoxRzjysV3/yPddUMg57RzzWz8pj3wl00UXp/zI8qmqY5Pxb0GSO0BkOluklf9MnQYLn
-         o8mf30F5cjoqsx0tY+OcCybKIrmRF+OMKq7aY=
+        bh=O+yPhSShogh4P3ENVap3W5oMkAXveVWtK8AHmfJ6K4g=;
+        b=WxopflXf16/Ij+BgtcycHtZ4Hmf9aaeOSPmXtzqGSQ8pDwEzPIMOBMYFkAoo4wEYeT
+         8VeRq+J0v+JDAfheb+586kInV+Sa1f85J5zB8gURyeRKoOLNnlPfX9pmOGSsXGwefMUi
+         0J3B6sJE1Hr8n5WVFsXQ5gn72CRPCxqM1IM0U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lgsfrWNkeAwXitTJcoIdmm+S5jV0yGJC2wH7GAyc/RM=;
-        b=pJOcXcjwFw1vVySkZ3lYGRLAHPdwDM2NxsB6F1V8N9yLcbBF8f5wSZCIoduKmmSDUd
-         mTfKSiWNULHxnE99IiyBEj3KeEfBA/I7xt31isfvt6ZhV5KGdSgwuGgG/vcU4vjmG/A0
-         2CFTPeBlg1JeOKIg1j7bPtrRnzJBd1BibRyv5fa4U3nypP71legaLUqDL+9DxYrcGxxt
-         nT/010Likprfk0mrnqToRS7eTE48RJan93xuvPhKkOPDlENadPaK6rRopQK4lXJ3Vg1D
-         iXI5lfcNYvLSri3DMV9c3peHmX1JOnw/mXOEp7rrWLFrfwUDEwdsWohF8KkkbiRu8qr1
-         uFgg==
-X-Gm-Message-State: APjAAAU+diqzPsAvZsUhTsoONNXQC3bRm87KL5rX2fu91tjsz9Rn++mn
-        KILzFDp5QFZAY8c6rVcyuhLcwP/dUpI=
-X-Google-Smtp-Source: APXvYqxEGOcK1zdO1CWoUJUJZw5xyIT2BPUtgf/Zu8/Py3QlU8t2RS55UN5RsL7CFlCNcL8Bii4tPg==
-X-Received: by 2002:a2e:81c4:: with SMTP id s4mr1706895ljg.182.1559578140173;
-        Mon, 03 Jun 2019 09:09:00 -0700 (PDT)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
-        by smtp.gmail.com with ESMTPSA id i23sm512111ljb.7.2019.06.03.09.08.59
+        bh=O+yPhSShogh4P3ENVap3W5oMkAXveVWtK8AHmfJ6K4g=;
+        b=Ah1aChlzEG9pWiwAssCh9pibFk8zK3GeZSgpA5xM5jnmtnC9sfOH5nB/0K40kwZeTa
+         ngiVR+ugPJKXTHv01tVh1MuqTUZb5AURIr8ZQtw5t8QhXz8n7IufW+TIB7sFtyJ2LH7i
+         yM98NdX/igMZHdFG0U5uzLYkjHBdw3kkKiOjC8JtBNMdhzattfA9smqpsG7Vyl2FZhL5
+         T4+4cf5Gpjpfo+jzODJmm2VlUgPv1XjY5iPHXj4g28+r0KNB41t+Hl2H6VTV3PJr3kYm
+         7LW3HGzm4fIXmG5UfwfZCaTOblI8i1Y5auP/zgoo4W8b8uF/BbTWaydHYT77wJ/KxgdL
+         tusQ==
+X-Gm-Message-State: APjAAAXQEfDrLU92dtSHzm8NaJI2ZRef4z1ubQcpDSmYBsAgWQ/fTqhR
+        SIV+iGBBchBJkmfPqbqYNXmT8gYvRnk=
+X-Google-Smtp-Source: APXvYqy9Jew7JdQMcvAQtvwyh/8Tv4CMxtBWiP9FPRa+yuK5VKecBwDIR7PVgNrC7eicq2qsMYNuQg==
+X-Received: by 2002:a2e:9a19:: with SMTP id o25mr1841149lji.63.1559581350378;
+        Mon, 03 Jun 2019 10:02:30 -0700 (PDT)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id w25sm1946955lfk.70.2019.06.03.10.02.26
         for <linux-mips@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 03 Jun 2019 09:09:00 -0700 (PDT)
-Received: by mail-lj1-f171.google.com with SMTP id 16so3182633ljv.10
-        for <linux-mips@vger.kernel.org>; Mon, 03 Jun 2019 09:08:59 -0700 (PDT)
-X-Received: by 2002:a2e:4246:: with SMTP id p67mr14377820lja.44.1559578139147;
- Mon, 03 Jun 2019 09:08:59 -0700 (PDT)
+        Mon, 03 Jun 2019 10:02:27 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id m15so14169897lfh.4
+        for <linux-mips@vger.kernel.org>; Mon, 03 Jun 2019 10:02:26 -0700 (PDT)
+X-Received: by 2002:a19:2d41:: with SMTP id t1mr13904609lft.79.1559581346039;
+ Mon, 03 Jun 2019 10:02:26 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190601074959.14036-1-hch@lst.de> <20190601074959.14036-4-hch@lst.de>
- <CAHk-=whusWKhS=SYoC9f9HjVmPvR5uP51Mq=ZCtktqTBT2qiBw@mail.gmail.com> <20190603074121.GA22920@lst.de>
-In-Reply-To: <20190603074121.GA22920@lst.de>
+ <CAHk-=whusWKhS=SYoC9f9HjVmPvR5uP51Mq=ZCtktqTBT2qiBw@mail.gmail.com>
+ <20190603074121.GA22920@lst.de> <CAHk-=wg5mww3StP8HqPN4d5eij3KmEayM743v-nDKAMgRe2J6g@mail.gmail.com>
+In-Reply-To: <CAHk-=wg5mww3StP8HqPN4d5eij3KmEayM743v-nDKAMgRe2J6g@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 3 Jun 2019 09:08:43 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg5mww3StP8HqPN4d5eij3KmEayM743v-nDKAMgRe2J6g@mail.gmail.com>
-Message-ID: <CAHk-=wg5mww3StP8HqPN4d5eij3KmEayM743v-nDKAMgRe2J6g@mail.gmail.com>
+Date:   Mon, 3 Jun 2019 10:02:10 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjU3ycY2FvhKmYmOTi95L0qSi9Hj+yrzWTAWepW-zdBOA@mail.gmail.com>
+Message-ID: <CAHk-=wjU3ycY2FvhKmYmOTi95L0qSi9Hj+yrzWTAWepW-zdBOA@mail.gmail.com>
 Subject: Re: [PATCH 03/16] mm: simplify gup_fast_permitted
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Paul Burton <paul.burton@mips.com>,
@@ -79,24 +80,51 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 3, 2019 at 12:41 AM Christoph Hellwig <hch@lst.de> wrote:
+On Mon, Jun 3, 2019 at 9:08 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> I only removed a duplicate of it.
+> The new code has no test at all for "nr_pages == 0", afaik.
 
-I don't see any remaining cases.
+Note that it really is important to check for that, because right now we do
 
-> The full (old) code in get_user_pages_fast() looks like this:
->
->         if (nr_pages <= 0)
->                 return 0;
->
->         if (unlikely(!access_ok((void __user *)start, len)))
->                 return -EFAULT;
->
->         if (gup_fast_permitted(start, nr_pages)) {
+        if (gup_fast_permitted(start, nr_pages)) {
+                local_irq_save(flags);
+                gup_pgd_range(start, end, write ? FOLL_WRITE : 0, pages, &nr);
+                local_irq_restore(flags);
+        }
 
-Yes, and that code was correct.
+and that gup_pgd_range() function *depends* on the range being
+non-zero, and does
 
-The new code has no test at all for "nr_pages == 0", afaik.
+        pgdp = pgd_offset(current->mm, addr);
+        do {
+                pgd_t pgd = READ_ONCE(*pgdp);
+...
+        } while (pgdp++, addr = next, addr != end);
 
-                 Linus
+Note how a zero range would turn into an infinite range here.
+
+And the only check for 0 was that
+
+        if (nr_pages <= 0)
+                return 0;
+
+in get_user_pages_fast() that you removed.
+
+(Admittedly, it would be much better to have that check in
+__get_user_pages_fast() itself, because we do have callers that call
+the double-underscore version)
+
+Now, I sincerely hope that we don't have anybody that passes in a zero
+nr_pages (or a negative one), but we do actually have a comment saying
+it's ok.
+
+Note that the check for "if (end < start)" not only does not check for
+0, it also doesn't really check for negative. It checks for
+_overflow_. Admittedly most negative values would be expected to
+overflow, but it's still a very different issue.
+
+Maybe you added the check for negative somewhere else (in another
+patch), but I don't see it.
+
+                Linus
