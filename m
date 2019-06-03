@@ -2,68 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A6C32917
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Jun 2019 09:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74CC329DF
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Jun 2019 09:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbfFCHF4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 3 Jun 2019 03:05:56 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:33981 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726383AbfFCHFz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 Jun 2019 03:05:55 -0400
-X-Originating-IP: 81.250.144.103
-Received: from [10.30.1.20] (lneuilly-657-1-5-103.w81-250.abo.wanadoo.fr [81.250.144.103])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 4D6CA1C0002;
-        Mon,  3 Jun 2019 07:05:37 +0000 (UTC)
-Subject: Re: [PATCH v4 05/14] arm64, mm: Make randomization selected by
- generic topdown mmap layout
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Paul Burton <paul.burton@mips.com>,
-        linux-riscv@lists.infradead.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        James Hogan <jhogan@kernel.org>, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Luis Chamberlain <mcgrof@kernel.org>
-References: <20190526134746.9315-1-alex@ghiti.fr>
- <20190526134746.9315-6-alex@ghiti.fr> <20190601090437.GF6453@lst.de>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-Message-ID: <211c4d0b-ec11-c94e-8a7f-9564e7905f50@ghiti.fr>
-Date:   Mon, 3 Jun 2019 09:05:37 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726606AbfFCHlu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 3 Jun 2019 03:41:50 -0400
+Received: from verein.lst.de ([213.95.11.211]:55187 "EHLO newverein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726179AbfFCHlu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 3 Jun 2019 03:41:50 -0400
+Received: by newverein.lst.de (Postfix, from userid 2407)
+        id B4E2E67358; Mon,  3 Jun 2019 09:41:21 +0200 (CEST)
+Date:   Mon, 3 Jun 2019 09:41:21 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-mips@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Linux-MM <linux-mm@kvack.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 03/16] mm: simplify gup_fast_permitted
+Message-ID: <20190603074121.GA22920@lst.de>
+References: <20190601074959.14036-1-hch@lst.de> <20190601074959.14036-4-hch@lst.de> <CAHk-=whusWKhS=SYoC9f9HjVmPvR5uP51Mq=ZCtktqTBT2qiBw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190601090437.GF6453@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: fr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whusWKhS=SYoC9f9HjVmPvR5uP51Mq=ZCtktqTBT2qiBw@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 6/1/19 11:04 AM, Christoph Hellwig wrote:
-> Looks good,
->
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
+On Sat, Jun 01, 2019 at 09:14:17AM -0700, Linus Torvalds wrote:
+> On Sat, Jun 1, 2019 at 12:50 AM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > Pass in the already calculated end value instead of recomputing it, and
+> > leave the end > start check in the callers instead of duplicating them
+> > in the arch code.
+> 
+> Good cleanup, except it's wrong.
+> 
+> > -       if (nr_pages <= 0)
+> > +       if (end < start)
+> >                 return 0;
+> 
+> You moved the overflow test to generic code - good.
+> 
+> You removed the sign and zero test on nr_pages - bad.
 
+I only removed a duplicate of it.  The full (old) code in
+get_user_pages_fast() looks like this:
 
-Thanks for your time,
+	if (nr_pages <= 0)
+		return 0;
 
-Alex
+	if (unlikely(!access_ok((void __user *)start, len)))
+		return -EFAULT;
 
-
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+	if (gup_fast_permitted(start, nr_pages)) {
