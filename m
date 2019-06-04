@@ -2,48 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C01A33F71
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2019 09:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994C634012
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2019 09:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbfFDHCb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Jun 2019 03:02:31 -0400
-Received: from verein.lst.de ([213.95.11.211]:33586 "EHLO newverein.lst.de"
+        id S1726840AbfFDH0i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Jun 2019 03:26:38 -0400
+Received: from verein.lst.de ([213.95.11.211]:33768 "EHLO newverein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726547AbfFDHCb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 4 Jun 2019 03:02:31 -0400
+        id S1726589AbfFDH0i (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 4 Jun 2019 03:26:38 -0400
 Received: by newverein.lst.de (Postfix, from userid 2407)
-        id 46D4E68B02; Tue,  4 Jun 2019 09:02:05 +0200 (CEST)
-Date:   Tue, 4 Jun 2019 09:02:05 +0200
+        id 89A2368B02; Tue,  4 Jun 2019 09:26:10 +0200 (CEST)
+Date:   Tue, 4 Jun 2019 09:26:10 +0200
 From:   Christoph Hellwig <hch@lst.de>
-To:     Oleg Nesterov <oleg@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: remove asm-generic/ptrace.h v2
-Message-ID: <20190604070205.GA15438@lst.de>
-References: <20190520060018.25569-1-hch@lst.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-mips@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Linux-MM <linux-mm@kvack.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 03/16] mm: simplify gup_fast_permitted
+Message-ID: <20190604072610.GE15680@lst.de>
+References: <20190601074959.14036-1-hch@lst.de> <20190601074959.14036-4-hch@lst.de> <CAHk-=whusWKhS=SYoC9f9HjVmPvR5uP51Mq=ZCtktqTBT2qiBw@mail.gmail.com> <20190603074121.GA22920@lst.de> <CAHk-=wg5mww3StP8HqPN4d5eij3KmEayM743v-nDKAMgRe2J6g@mail.gmail.com> <CAHk-=wjU3ycY2FvhKmYmOTi95L0qSi9Hj+yrzWTAWepW-zdBOA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190520060018.25569-1-hch@lst.de>
+In-Reply-To: <CAHk-=wjU3ycY2FvhKmYmOTi95L0qSi9Hj+yrzWTAWepW-zdBOA@mail.gmail.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Is anyone going to pick this series up?
+On Mon, Jun 03, 2019 at 10:02:10AM -0700, Linus Torvalds wrote:
+> On Mon, Jun 3, 2019 at 9:08 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > The new code has no test at all for "nr_pages == 0", afaik.
+> 
+> Note that it really is important to check for that, because right now we do
 
-On Mon, May 20, 2019 at 08:00:13AM +0200, Christoph Hellwig wrote:
-> Hi all,
-> 
-> asm-generic/ptrace.h is a little weird in that it doesn't actually
-> implement any functionality, but it provided multiple layers of macros
-> that just implement trivial inline functions.  We implement those
-> directly in the few architectures and be off with a much simpler
-> design.
-> 
-> Changes since v1:
->  - add a missing empty line between functions
----end quoted text---
+True.  The 0 check got lost.  I'll make sure we do the right thing for
+the next version.
