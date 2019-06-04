@@ -2,91 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C829345D4
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2019 13:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06EB34627
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2019 14:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727625AbfFDLrJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Jun 2019 07:47:09 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:39717 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727619AbfFDLrI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Jun 2019 07:47:08 -0400
-Received: by mail-pl1-f194.google.com with SMTP id g9so8244039plm.6
-        for <linux-mips@vger.kernel.org>; Tue, 04 Jun 2019 04:47:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dqp69e2uVFEsGCK8JhiQUI0eIhdoGk5h13T4mTC3vdY=;
-        b=l/j965oTYVXJlxTYWvckE8VTMI089RUFBuoqrrqtaXuZS/XGL2imWUR4Yj62ofLJ5B
-         DgxG1n0xNvR+Z1Q2WKLjXP4Ic6bW7ST7vC/dzKmyj0IUR6vTT0z9AontN1QI8ObMfrqT
-         YfQOny7N2gMtvrAIhPa+UYF2M069gzxKv7PwiRWZjJ1iI6LDinGjOYSS+sjqs5grnF0B
-         e9aJoVfdsnL4PaWC5CyQ3SVTmBWLITUXFdUA/VEb4rquThulv4tr3tFv4LY7s8DA7Ygg
-         QJSsuhRnspRaLycykpAiwScHW5uSOeCZARUrOt7CO58SxO5d7ZxzOztZ8o9JgluM7fHh
-         Jptw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dqp69e2uVFEsGCK8JhiQUI0eIhdoGk5h13T4mTC3vdY=;
-        b=iPigg0fPLjO6bYmYt+xYiF8UdfWtqdR2xZVZSztosgNIkPkjZNJgeYCp+9djV197Lu
-         byP7hRyPym9487TLX9ueVRuDKVRnxyB0nplqDCXSyChCztNSWtDIT5ptU//RqqBtSEZO
-         TIYnwHz+N3UM+qsRhk0qICjLNbGnA/nWk5Bek88gMM6ck0VpwXTHgOIauqLbfObgbGow
-         J2/nZa+6px67W895ZMHwIHAGYq6H5dWDRglyrze33YckmHQ2uT0pT1dnnrIPgENZ/dW5
-         PZZ4ZLrzB1w1o70iggczqyTvCiTb7OTL9a1Kq59XRMJL4iOuFweRViYBNHs49kOcvSMV
-         /P9Q==
-X-Gm-Message-State: APjAAAU/kx4ITVS9anoMUInUPLNmB2L6PLpMnJMGoSk82J7/SQCRtkzp
-        1TrC9yQ7ZRIAsjwqJ7BYeoqffsbcTDbHRa11MR+TWw==
-X-Google-Smtp-Source: APXvYqxxKCotfIzPUp2KWeKyy9ei43iIKcJ+7sjPmxGSimbHW7NgNBX2aQnmBFtOckHX4w3Dtt0BdqhA9Y8aOzwYWxs=
-X-Received: by 2002:a17:902:1566:: with SMTP id b35mr36931113plh.147.1559648827583;
- Tue, 04 Jun 2019 04:47:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190601074959.14036-1-hch@lst.de> <20190601074959.14036-2-hch@lst.de>
- <431c7395-2327-2f7c-cc8f-b01412b74e10@oracle.com> <20190604072706.GF15680@lst.de>
-In-Reply-To: <20190604072706.GF15680@lst.de>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 4 Jun 2019 13:46:56 +0200
-Message-ID: <CAAeHK+xtFwY+S0VY-yyb+i_+GnSjYHfgYHB9Ss=r9xxZZvsKFw@mail.gmail.com>
-Subject: Re: [PATCH 01/16] uaccess: add untagged_addr definition for other arches
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Khalid Aziz <khalid.aziz@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        id S1727642AbfFDMFE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Jun 2019 08:05:04 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:41426 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727250AbfFDMFD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 4 Jun 2019 08:05:03 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2AF3280D;
+        Tue,  4 Jun 2019 05:05:03 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 348353F690;
+        Tue,  4 Jun 2019 05:05:00 -0700 (PDT)
+Subject: Re: [PATCH v6 00/19] Unify vDSOs across more architectures
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <CAK8P3a11DE0sXteZoaP_N=mDhx3tXitGKddn1ogtFqJBYO-SCA@mail.gmail.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <d96667d5-e43b-d33a-fbd0-5acfb4904316@arm.com>
+Date:   Tue, 4 Jun 2019 13:04:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <CAK8P3a11DE0sXteZoaP_N=mDhx3tXitGKddn1ogtFqJBYO-SCA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 4, 2019 at 9:27 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Mon, Jun 03, 2019 at 09:16:08AM -0600, Khalid Aziz wrote:
-> > Could you reword above sentence? We are already starting off with
-> > untagged_addr() not being no-op for arm64 and sparc64. It will expand
-> > further potentially. So something more along the lines of "Define it as
-> > noop for architectures that do not support memory tagging". The first
-> > paragraph in the log can also be rewritten to be not specific to arm64.
->
-> Well, as of this patch this actually is a no-op for everyone.
->
-> Linus, what do you think of applying this patch (maybe with a slightly
-> fixed up commit log) to 5.2-rc so that we remove a cross dependency
-> between the series?
+Hi Arnd,
 
-(I have adjusted the patch description and have just sent it out
-separately from the series).
+thank you for your review.
+
+On 31/05/2019 09:46, Arnd Bergmann wrote:
+> On Thu, May 30, 2019 at 4:15 PM Vincenzo Frascino
+> <vincenzo.frascino@arm.com> wrote:
+>>
+>> vDSO (virtual dynamic shared object) is a mechanism that the Linux
+>> kernel provides as an alternative to system calls to reduce where
+>> possible the costs in terms of cycles.
+>> This is possible because certain syscalls like gettimeofday() do
+>> not write any data and return one or more values that are stored
+>> in the kernel, which makes relatively safe calling them directly
+>> as a library function.
+> 
+> Hi Vincento,
+> 
+> I've very happy with how this turned out overall, and as far as I can
+> tell you have addressed all my previous comments. I had another
+> look through the series and only noticed a few very minor issues.
+> 
+
+Thanks! I agree with what you pointed out in the single patches, I will wait for
+Thomas to review them as well and then will address all the comments in v7.
+
+...
+
+> 
+> One open question I touched in my review is whether we want to
+> have a vdso version of clock_getres() in all architectures or not.
+> I'd prefer to leave it out because there is very little advantage to
+> it over the system call (the results don't change at runtime and
+> can easily be cached by libc if performance ever matters), and
+> it takes up a small amount of memory for the implementation.
+> 
+
+I thought about it and I ended up with what proposed in this patchset mainly for
+symmetry across all the architectures since in the end they use the same common
+code.
+
+It seems also that there is some performance impact (i.e.):
+
+clock-getres-monotonic:    libc(system call): 296 nsec/call
+clock-getres-monotonic:    libc(vdso): 5 nsec/call
+
+
+I agree with you though when you say that caching it in the libc is a
+possibility to overcome the performance impact.
+
+> We shouldn't just need it for consistency because all callers
+> would require implementing a fallback to the system call
+> anyway, to deal with old kernels.
+> 
+
+A way to address this issue would be to use versioning, which seems supported in
+the vdso library (i.e. arch/x86/entry/vdso/vdso32/vdso32.lds.S).
+
+For example for x86 (vdso32) we would have something like:
+
+VERSION
+{
+	LINUX_5.3 (being optimistic here :) ) {
+	global:
+                __vdso_clock_getres;
+                __vdso_clock_gettime64;
+        };
+        LINUX_2.6 {
+        global:
+                __vdso_clock_gettime;
+                __vdso_gettimeofday;
+                __vdso_time;
+        };
+
+        LINUX_2.5 {
+        global:
+                __kernel_vsyscall;
+                __kernel_sigreturn;
+                __kernel_rt_sigreturn;
+        local: *;
+        };
+}
+
+What do you think? Would this be a viable solution?
+
+> If anyone comes up with a good reason why it should be added
+> after all, let me know and I'll stop mentioning it.
+> 
+>       Arnd
+> 
+
+-- 
+Regards,
+Vincenzo
