@@ -2,80 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36314349D6
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2019 16:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC9234D8C
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2019 18:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727287AbfFDOOI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 4 Jun 2019 10:14:08 -0400
-Received: from mail02.inet.sy ([212.11.196.40]:51285 "HELO mail02.inet.sy"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with SMTP
-        id S1727033AbfFDOOI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 4 Jun 2019 10:14:08 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail02.inet.sy (Postfix) with ESMTP id A8EDE164DDC;
-        Tue,  4 Jun 2019 17:14:01 +0300 (EEST)
-X-Virus-Scanned: Debian amavisd-new at mail03.inet.sy
-X-Spam-Flag: NO
-X-Spam-Score: 6.358
-X-Spam-Level: ******
-X-Spam-Status: No, score=6.358 tagged_above=-999 required=7
-        tests=[BAYES_50=0.8, FREEMAIL_FROM=0.001, FREEMAIL_REPLYTO=1,
-        LOTS_OF_MONEY=0.001, MONEY_FRAUD_5=0.001, SPF_FAIL=0.001,
-        SPF_HELO_NONE=0.001, SPOOFED_FREEM_REPTO=2.499,
-        TO_EQ_FM_DOM_SPF_FAIL=0.053, TO_EQ_FM_SPF_FAIL=0.001, US_DOLLARS_3=2]
-        autolearn=unavailable
-Received: from mail02.inet.sy ([127.0.0.1])
-        by localhost (mail02.inet.sy [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 3xHoVuAAhpdy; Tue,  4 Jun 2019 17:14:01 +0300 (EEST)
-Received: from mail01.inet.sy (mail.inet.sy [212.11.196.115])
-        by mail02.inet.sy (Postfix) with ESMTP id 8A7C5164DD0;
-        Tue,  4 Jun 2019 17:14:01 +0300 (EEST)
-Received: from Mail-Exchange.firefite.local (unknown [212.11.218.206])
-        by mail01.inet.sy (Postfix) with ESMTP id 2C24F8EC025;
-        Tue,  4 Jun 2019 17:15:09 +0300 (EEST)
-Received: from Mail-Exchange.firefite.local (192.168.0.19) by
- Mail-Exchange.firefite.local (192.168.0.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.1466.3; Tue, 4 Jun 2019 17:14:05 +0300
-Received: from Admin.localhost (105.186.0.15) by Mail-Exchange.firefite.local
- (192.168.0.19) with Microsoft SMTP Server (version=TLS1_0,
- cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.1.1466.3 via Frontend Transport;
- Tue, 4 Jun 2019 17:13:57 +0300
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1727822AbfFDQd7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Jun 2019 12:33:59 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:47148 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727795AbfFDQd7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Jun 2019 12:33:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1559666037; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=j0HsjNCBgw6fb89AS0Z7APClR+xnsmHO6MK4li8L+Yg=;
+        b=dnheEqEuK7O6vdqyl/0cBNMRU4cw17F0bPm4lIdzfwqPlS/zyW9SIf2s9PnClisWI0PQNA
+        LnUy2qiihxP4YCHu9pkxA8k2GK12dcHGeBUprchnxPOUX3YDqrgfNbqsBZYuTiAk+KH1Ft
+        oHxUNTjM+ks36004qmTWCR0YqqD0oRo=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>, od@zcrc.me,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>, stable@vger.kernel.org
+Subject: [PATCH] MIPS: lb60: Fix pin mappings
+Date:   Tue,  4 Jun 2019 18:33:11 +0200
+Message-Id: <20190604163311.19059-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Award Notice
-To:     Recipients <hnkglobalpromo@brew-meister.com>
-From:   "Mrs. Vera Donald" <hnkglobalpromo@brew-meister.com>
-Date:   Tue, 4 Jun 2019 22:13:49 +0800
-Reply-To: <hp-fudiciaryagent@brew-meister.com>
-X-Antivirus: Avast (VPS 190604-2, 06/04/2019), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <5bb65b3f-8147-4496-a304-77da37777899@Mail-Exchange.firefite.local>
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-We are gleeful to inform you that your e-mail address eventually entered our 2019 online promotion that won you C$3,780,000.00 Canadian Dollars. Claim No:HGP/748/89-3PL. Keep your claim number confidential until claim.
+The pin mappings introduced in commit 636f8ba67fb6
+("MIPS: JZ4740: Qi LB60: Add pinctrl configuration for several drivers")
+are completely wrong. The pinctrl driver name is incorrect, and the
+function and group fields are swapped.
 
-Contact our office immediately with details below to commence release of your winning prize by providing your winning details above.
-
-Mr. Vorst Paxton
-Email: hp-fudiciaryagent@brew-meister.com
-Alternative e-Mail: heinekenglobalpromo@gmail.com
-Office: +1-438-700-9141
-
-Congratulations!!!
-
-Yours Sincerely,
-
-Mrs. Vera Donald
-Head of Award Department
-Heineken Global Promotion
-
+Fixes: 636f8ba67fb6 ("MIPS: JZ4740: Qi LB60: Add pinctrl configuration for several drivers")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+ arch/mips/jz4740/board-qi_lb60.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/arch/mips/jz4740/board-qi_lb60.c b/arch/mips/jz4740/board-qi_lb60.c
+index 071e9d94eea7..daed44ee116d 100644
+--- a/arch/mips/jz4740/board-qi_lb60.c
++++ b/arch/mips/jz4740/board-qi_lb60.c
+@@ -466,27 +466,27 @@ static unsigned long pin_cfg_bias_disable[] = {
+ static struct pinctrl_map pin_map[] __initdata = {
+ 	/* NAND pin configuration */
+ 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-nand",
+-			"10010000.jz4740-pinctrl", "nand", "nand-cs1"),
++			"10010000.pin-controller", "nand-cs1", "nand"),
+ 
+ 	/* fbdev pin configuration */
+ 	PIN_MAP_MUX_GROUP("jz4740-fb", PINCTRL_STATE_DEFAULT,
+-			"10010000.jz4740-pinctrl", "lcd", "lcd-8bit"),
++			"10010000.pin-controller", "lcd-8bit", "lcd"),
+ 	PIN_MAP_MUX_GROUP("jz4740-fb", PINCTRL_STATE_SLEEP,
+-			"10010000.jz4740-pinctrl", "lcd", "lcd-no-pins"),
++			"10010000.pin-controller", "lcd-no-pins", "lcd"),
+ 
+ 	/* MMC pin configuration */
+ 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-mmc.0",
+-			"10010000.jz4740-pinctrl", "mmc", "mmc-1bit"),
++			"10010000.pin-controller", "mmc-1bit", "mmc"),
+ 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-mmc.0",
+-			"10010000.jz4740-pinctrl", "mmc", "mmc-4bit"),
++			"10010000.pin-controller", "mmc-4bit", "mmc"),
+ 	PIN_MAP_CONFIGS_PIN_DEFAULT("jz4740-mmc.0",
+-			"10010000.jz4740-pinctrl", "PD0", pin_cfg_bias_disable),
++			"10010000.pin-controller", "PD0", pin_cfg_bias_disable),
+ 	PIN_MAP_CONFIGS_PIN_DEFAULT("jz4740-mmc.0",
+-			"10010000.jz4740-pinctrl", "PD2", pin_cfg_bias_disable),
++			"10010000.pin-controller", "PD2", pin_cfg_bias_disable),
+ 
+ 	/* PWM pin configuration */
+ 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-pwm",
+-			"10010000.jz4740-pinctrl", "pwm4", "pwm4"),
++			"10010000.pin-controller", "pwm4", "pwm4"),
+ };
+ 
+ 
+-- 
+2.21.0.593.g511ec345e18
 
