@@ -2,92 +2,160 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC9234D8C
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jun 2019 18:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C832435F48
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Jun 2019 16:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727822AbfFDQd7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Jun 2019 12:33:59 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:47148 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727795AbfFDQd7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Jun 2019 12:33:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1559666037; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=j0HsjNCBgw6fb89AS0Z7APClR+xnsmHO6MK4li8L+Yg=;
-        b=dnheEqEuK7O6vdqyl/0cBNMRU4cw17F0bPm4lIdzfwqPlS/zyW9SIf2s9PnClisWI0PQNA
-        LnUy2qiihxP4YCHu9pkxA8k2GK12dcHGeBUprchnxPOUX3YDqrgfNbqsBZYuTiAk+KH1Ft
-        oHxUNTjM+ks36004qmTWCR0YqqD0oRo=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Ralf Baechle <ralf@linux-mips.org>,
+        id S1728341AbfFEOcW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Jun 2019 10:32:22 -0400
+Received: from foss.arm.com ([217.140.101.70]:32776 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728314AbfFEOcV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 5 Jun 2019 10:32:21 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 054BC374;
+        Wed,  5 Jun 2019 07:32:21 -0700 (PDT)
+Received: from [10.37.12.195] (unknown [10.37.12.195])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C1F23F246;
+        Wed,  5 Jun 2019 07:32:17 -0700 (PDT)
+Subject: Re: [PATCH v6 00/19] Unify vDSOs across more architectures
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>, od@zcrc.me,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>, stable@vger.kernel.org
-Subject: [PATCH] MIPS: lb60: Fix pin mappings
-Date:   Tue,  4 Jun 2019 18:33:11 +0200
-Message-Id: <20190604163311.19059-1-paul@crapouillou.net>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <CAK8P3a11DE0sXteZoaP_N=mDhx3tXitGKddn1ogtFqJBYO-SCA@mail.gmail.com>
+ <d96667d5-e43b-d33a-fbd0-5acfb4904316@arm.com>
+ <CAK8P3a3nxd7F5zLyD1SVarKjjKC0qvMEN8wP6R7zHY9HKdoe0w@mail.gmail.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <ea965b5e-9be8-02e9-5dc0-ebbb330bcc2c@arm.com>
+Date:   Wed, 5 Jun 2019 15:32:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK8P3a3nxd7F5zLyD1SVarKjjKC0qvMEN8wP6R7zHY9HKdoe0w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pin mappings introduced in commit 636f8ba67fb6
-("MIPS: JZ4740: Qi LB60: Add pinctrl configuration for several drivers")
-are completely wrong. The pinctrl driver name is incorrect, and the
-function and group fields are swapped.
+On 6/4/19 1:12 PM, Arnd Bergmann wrote:
+> On Tue, Jun 4, 2019 at 2:05 PM Vincenzo Frascino
+> <vincenzo.frascino@arm.com> wrote:
+>> On 31/05/2019 09:46, Arnd Bergmann wrote:
+>>> On Thu, May 30, 2019 at 4:15 PM Vincenzo Frascino
+>>> <vincenzo.frascino@arm.com> wrote:
+>>> One open question I touched in my review is whether we want to
+>>> have a vdso version of clock_getres() in all architectures or not.
+>>> I'd prefer to leave it out because there is very little advantage to
+>>> it over the system call (the results don't change at runtime and
+>>> can easily be cached by libc if performance ever matters), and
+>>> it takes up a small amount of memory for the implementation.
+>>>
+>>
+>> I thought about it and I ended up with what proposed in this patchset mainly for
+>> symmetry across all the architectures since in the end they use the same common
+>> code.
+>>
+>> It seems also that there is some performance impact (i.e.):
+>>
+>> clock-getres-monotonic:    libc(system call): 296 nsec/call
+>> clock-getres-monotonic:    libc(vdso): 5 nsec/call
+>>
+>>
+>> I agree with you though when you say that caching it in the libc is a
+>> possibility to overcome the performance impact.
+> 
+> It's clear that the vdso version is much faster, my point was that
+> I could not think of any use case that cared about it being fast.
+> 
 
-Fixes: 636f8ba67fb6 ("MIPS: JZ4740: Qi LB60: Add pinctrl configuration for several drivers")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- arch/mips/jz4740/board-qi_lb60.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+I do not know of any use case that cares, my point was that since we need to
+implement it in the generic library for some architectures, for symmetry we can
+extend it to all the architectures that support the generic vdso library.
 
-diff --git a/arch/mips/jz4740/board-qi_lb60.c b/arch/mips/jz4740/board-qi_lb60.c
-index 071e9d94eea7..daed44ee116d 100644
---- a/arch/mips/jz4740/board-qi_lb60.c
-+++ b/arch/mips/jz4740/board-qi_lb60.c
-@@ -466,27 +466,27 @@ static unsigned long pin_cfg_bias_disable[] = {
- static struct pinctrl_map pin_map[] __initdata = {
- 	/* NAND pin configuration */
- 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-nand",
--			"10010000.jz4740-pinctrl", "nand", "nand-cs1"),
-+			"10010000.pin-controller", "nand-cs1", "nand"),
- 
- 	/* fbdev pin configuration */
- 	PIN_MAP_MUX_GROUP("jz4740-fb", PINCTRL_STATE_DEFAULT,
--			"10010000.jz4740-pinctrl", "lcd", "lcd-8bit"),
-+			"10010000.pin-controller", "lcd-8bit", "lcd"),
- 	PIN_MAP_MUX_GROUP("jz4740-fb", PINCTRL_STATE_SLEEP,
--			"10010000.jz4740-pinctrl", "lcd", "lcd-no-pins"),
-+			"10010000.pin-controller", "lcd-no-pins", "lcd"),
- 
- 	/* MMC pin configuration */
- 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-mmc.0",
--			"10010000.jz4740-pinctrl", "mmc", "mmc-1bit"),
-+			"10010000.pin-controller", "mmc-1bit", "mmc"),
- 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-mmc.0",
--			"10010000.jz4740-pinctrl", "mmc", "mmc-4bit"),
-+			"10010000.pin-controller", "mmc-4bit", "mmc"),
- 	PIN_MAP_CONFIGS_PIN_DEFAULT("jz4740-mmc.0",
--			"10010000.jz4740-pinctrl", "PD0", pin_cfg_bias_disable),
-+			"10010000.pin-controller", "PD0", pin_cfg_bias_disable),
- 	PIN_MAP_CONFIGS_PIN_DEFAULT("jz4740-mmc.0",
--			"10010000.jz4740-pinctrl", "PD2", pin_cfg_bias_disable),
-+			"10010000.pin-controller", "PD2", pin_cfg_bias_disable),
- 
- 	/* PWM pin configuration */
- 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-pwm",
--			"10010000.jz4740-pinctrl", "pwm4", "pwm4"),
-+			"10010000.pin-controller", "pwm4", "pwm4"),
- };
- 
- 
+> If there is a good reason for it, I also don't mind adding a
+> clock_getres_time64() vdso version everywhere.
+
+Totally agree on this.
+
+> 
+>>> We shouldn't just need it for consistency because all callers
+>>> would require implementing a fallback to the system call
+>>> anyway, to deal with old kernels.
+>>>
+>>
+>> A way to address this issue would be to use versioning, which seems supported in
+>> the vdso library (i.e. arch/x86/entry/vdso/vdso32/vdso32.lds.S).
+>>
+>> For example for x86 (vdso32) we would have something like:
+>>
+>> VERSION
+>> {
+>>         LINUX_5.3 (being optimistic here :) ) {
+>>         global:
+>>                 __vdso_clock_getres;
+>>                 __vdso_clock_gettime64;
+>>         };
+>>         LINUX_2.6 {
+>>         global:
+>>                 __vdso_clock_gettime;
+>>                 __vdso_gettimeofday;
+>>                 __vdso_time;
+>>         };
+>>
+>>         LINUX_2.5 {
+>>         global:
+>>                 __kernel_vsyscall;
+>>                 __kernel_sigreturn;
+>>                 __kernel_rt_sigreturn;
+>>         local: *;
+>>         };
+>> }
+>>
+>> What do you think? Would this be a viable solution?
+> 
+> I actually never understood the point of symbol versioning
+> in the vdso. What does that gain us? Note that there are
+> no conflicting symbol names between the versions, and
+> that nothing enforces the kernel headers to match the
+> symbol version used when linking.
+>
+
+My understanding, based on [1] and [2] is that the version defines the minimum
+kernel version from when a specific symbols is exposed and whenever this symbol
+is requested from the vDSO the correct version needs to be specified.
+Every "new" library, dealing with an "old" kernel, compliant with the exposed
+ABI should implement the vDSO calls in this way and provide a fallback if the
+vDSO function is not present (i.e. [3]).
+
+[1] Documentation/ABI/stable/vdso
+[2] tools/testing/selftests/vDSO/parse_vdso.c
+[3]
+https://github.com/lattera/glibc/blob/master/sysdeps/unix/sysv/linux/aarch64/gettimeofday.c
+
+
+>       Arnd
+> 
+
 -- 
-2.21.0.593.g511ec345e18
-
+Regards,
+Vincenzo
