@@ -2,57 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A97AB38919
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jun 2019 13:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D9E38927
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jun 2019 13:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727980AbfFGLdu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Jun 2019 07:33:50 -0400
-Received: from michel.telenet-ops.be ([195.130.137.88]:39280 "EHLO
+        id S1728651AbfFGLgn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Jun 2019 07:36:43 -0400
+Received: from michel.telenet-ops.be ([195.130.137.88]:44396 "EHLO
         michel.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727228AbfFGLdt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jun 2019 07:33:49 -0400
+        with ESMTP id S1727579AbfFGLgn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jun 2019 07:36:43 -0400
 Received: from ramsan ([84.194.111.163])
         by michel.telenet-ops.be with bizsmtp
-        id MnZn2000V3XaVaC06nZn3S; Fri, 07 Jun 2019 13:33:47 +0200
+        id Mnci200093XaVaC06nciXJ; Fri, 07 Jun 2019 13:36:42 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan with esmtp (Exim 4.90_1)
         (envelope-from <geert@linux-m68k.org>)
-        id 1hZD7z-0004Fh-K0; Fri, 07 Jun 2019 13:33:47 +0200
+        id 1hZDAo-0004G6-2j; Fri, 07 Jun 2019 13:36:42 +0200
 Received: from geert by rox.of.borg with local (Exim 4.90_1)
         (envelope-from <geert@linux-m68k.org>)
-        id 1hZD7z-0003sG-Ic; Fri, 07 Jun 2019 13:33:47 +0200
+        id 1hZDAo-0003xk-1G; Fri, 07 Jun 2019 13:36:42 +0200
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Kosina <trivial@kernel.org>
+To:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH trivial] memory: jz4780-nemc: Grammar s/the its/its/
-Date:   Fri,  7 Jun 2019 13:33:43 +0200
-Message-Id: <20190607113343.14828-1-geert+renesas@glider.be>
+Subject: [PATCH] MIPS: ftrace: Reword prepare_ftrace_return() comment block
+Date:   Fri,  7 Jun 2019 13:36:40 +0200
+Message-Id: <20190607113640.15191-1-geert+renesas@glider.be>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Improve the comment block for prepare_ftrace_return().
+
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/memory/jz4780-nemc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/kernel/ftrace.c | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/memory/jz4780-nemc.c b/drivers/memory/jz4780-nemc.c
-index bcf06adefc96c1c9..bb17b422ccebba2f 100644
---- a/drivers/memory/jz4780-nemc.c
-+++ b/drivers/memory/jz4780-nemc.c
-@@ -59,7 +59,7 @@ struct jz4780_nemc {
-  *
-  * Return: The number of unique NEMC banks referred to by the specified NEMC
-  * child device. Unique here means that a device that references the same bank
-- * multiple times in the its "reg" property will only count once.
-+ * multiple times in its "reg" property will only count once.
-  */
- unsigned int jz4780_nemc_num_banks(struct device *dev)
- {
+diff --git a/arch/mips/kernel/ftrace.c b/arch/mips/kernel/ftrace.c
+index 4b5e1f2bfbcea85f..2625232bfe526a84 100644
+--- a/arch/mips/kernel/ftrace.c
++++ b/arch/mips/kernel/ftrace.c
+@@ -333,20 +333,21 @@ void prepare_ftrace_return(unsigned long *parent_ra_addr, unsigned long self_ra,
+ 		return;
+ 
+ 	/*
+-	 * "parent_ra_addr" is the stack address saved the return address of
+-	 * the caller of _mcount.
++	 * "parent_ra_addr" is the stack address where the return address of
++	 * the caller of _mcount is saved.
+ 	 *
+-	 * if the gcc < 4.5, a leaf function does not save the return address
+-	 * in the stack address, so, we "emulate" one in _mcount's stack space,
+-	 * and hijack it directly, but for a non-leaf function, it save the
+-	 * return address to the its own stack space, we can not hijack it
+-	 * directly, but need to find the real stack address,
+-	 * ftrace_get_parent_addr() does it!
++	 * If gcc < 4.5, a leaf function does not save the return address
++	 * in the stack address, so we "emulate" one in _mcount's stack space,
++	 * and hijack it directly.
++	 * For a non-leaf function, it does save the return address to its own
++	 * stack space, so we can not hijack it directly, but need to find the
++	 * real stack address, which is done by ftrace_get_parent_addr().
+ 	 *
+-	 * if gcc>= 4.5, with the new -mmcount-ra-address option, for a
++	 * If gcc >= 4.5, with the new -mmcount-ra-address option, for a
+ 	 * non-leaf function, the location of the return address will be saved
+-	 * to $12 for us, and for a leaf function, only put a zero into $12. we
+-	 * do it in ftrace_graph_caller of mcount.S.
++	 * to $12 for us.
++	 * For a leaf function, it just puts a zero into $12, so we handle
++	 * it in ftrace_graph_caller() of mcount.S.
+ 	 */
+ 
+ 	/* old_parent_ra = *parent_ra_addr; */
 -- 
 2.17.1
 
