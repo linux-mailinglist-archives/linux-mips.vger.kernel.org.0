@@ -2,57 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6854F37F90
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Jun 2019 23:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A97AB38919
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jun 2019 13:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728500AbfFFV2N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 6 Jun 2019 17:28:13 -0400
-Received: from smtp-out.xnet.cz ([178.217.244.18]:50046 "EHLO smtp-out.xnet.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728490AbfFFV2M (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 6 Jun 2019 17:28:12 -0400
-Received: from meh.true.cz (meh.true.cz [108.61.167.218])
-        (Authenticated sender: petr@true.cz)
-        by smtp-out.xnet.cz (Postfix) with ESMTPSA id D9DDD4E5E;
-        Thu,  6 Jun 2019 23:28:09 +0200 (CEST)
-Received: by meh.true.cz (OpenSMTPD) with ESMTP id b2c764d9;
-        Thu, 6 Jun 2019 23:28:07 +0200 (CEST)
-From:   =?UTF-8?q?Petr=20=C5=A0tetiar?= <ynezz@true.cz>
-To:     sashal@kernel.org
-Cc:     jason@lakedaemon.net, jhogan@kernel.org, john@phrozen.org,
-        ldir@darbyshire-bryant.me.uk, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, marc.zyngier@arm.com,
-        paul.burton@mips.com, ralf@linux-mips.org, stable@vger.kernel.org,
-        tglx@linutronix.de, ynezz@true.cz,
-        =?UTF-8?q?Karl=20P=C3=A1lsson?= <karlp@etactica.com>
-Subject: Re: [PATCH AUTOSEL 4.9 18/25] MIPS: perf: ath79: Fix perfcount IRQ assignment
-Date:   Thu,  6 Jun 2019 23:28:04 +0200
-Message-Id: <1559856484-8579-1-git-send-email-ynezz@true.cz>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <20190507054123.32514-18-sashal@kernel.org>
-References: <20190507054123.32514-18-sashal@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S1727980AbfFGLdu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Jun 2019 07:33:50 -0400
+Received: from michel.telenet-ops.be ([195.130.137.88]:39280 "EHLO
+        michel.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727228AbfFGLdt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jun 2019 07:33:49 -0400
+Received: from ramsan ([84.194.111.163])
+        by michel.telenet-ops.be with bizsmtp
+        id MnZn2000V3XaVaC06nZn3S; Fri, 07 Jun 2019 13:33:47 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hZD7z-0004Fh-K0; Fri, 07 Jun 2019 13:33:47 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hZD7z-0003sG-Ic; Fri, 07 Jun 2019 13:33:47 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Kosina <trivial@kernel.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH trivial] memory: jz4780-nemc: Grammar s/the its/its/
+Date:   Fri,  7 Jun 2019 13:33:43 +0200
+Message-Id: <20190607113343.14828-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/memory/jz4780-nemc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Karl has reported to me today, that he's experiencing weird reboot hang on his
-devices with 4.9.180 kernel and that he has bisected it down to my backported
-patch.
+diff --git a/drivers/memory/jz4780-nemc.c b/drivers/memory/jz4780-nemc.c
+index bcf06adefc96c1c9..bb17b422ccebba2f 100644
+--- a/drivers/memory/jz4780-nemc.c
++++ b/drivers/memory/jz4780-nemc.c
+@@ -59,7 +59,7 @@ struct jz4780_nemc {
+  *
+  * Return: The number of unique NEMC banks referred to by the specified NEMC
+  * child device. Unique here means that a device that references the same bank
+- * multiple times in the its "reg" property will only count once.
++ * multiple times in its "reg" property will only count once.
+  */
+ unsigned int jz4780_nemc_num_banks(struct device *dev)
+ {
+-- 
+2.17.1
 
-I would like to kindly ask you for removal of this patch.  This patch should
-be reverted from all stable kernels up to 5.1, because perf counters were not
-broken on those kernels, and this patch won't work on the ath79 legacy IRQ
-code anyway, it needs new irqchip driver which was enabled on ath79 with
-commit 51fa4f8912c0 ("MIPS: ath79: drop legacy IRQ code").
-
-Thanks!
-
-Cheers,
-
-Petr
