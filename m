@@ -2,57 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED45B3A203
-	for <lists+linux-mips@lfdr.de>; Sat,  8 Jun 2019 22:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E693A204
+	for <lists+linux-mips@lfdr.de>; Sat,  8 Jun 2019 22:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727372AbfFHUsc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 8 Jun 2019 16:48:32 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:44613 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727364AbfFHUsb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 8 Jun 2019 16:48:31 -0400
-Received: by mail-wr1-f68.google.com with SMTP id b17so5394654wrq.11
-        for <linux-mips@vger.kernel.org>; Sat, 08 Jun 2019 13:48:30 -0700 (PDT)
+        id S1727406AbfFHUsl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 8 Jun 2019 16:48:41 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:56149 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727364AbfFHUsl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 8 Jun 2019 16:48:41 -0400
+Received: by mail-wm1-f67.google.com with SMTP id a15so5105705wmj.5
+        for <linux-mips@vger.kernel.org>; Sat, 08 Jun 2019 13:48:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YfoN89ez9eO3wraKc+6QrYXVGhd9S9Rz3z9Gsd3RcLI=;
-        b=lZX5LRqp3l9rxcNCzYiysTttfDxrC4DPoyyMLRgQIFWgQmSnjL/OTleEjItgrvcLPP
-         ru5612Ch3PtctqkpiiiId/nNGMR6MvSzi+U9v0nfK1Qb7Z0uAA1UuBT8gti2hL3k2auJ
-         rHiaFsQgUYsp4LxaVBD0iZQUI7rVreR3Zvd5uD4KuLKPUPL+LMFgCUNaF/Y2S1b2t34f
-         mh+TXpmebMEGgr+chumgrjs0FI4Ygobu+JxGlohzcouhj8fMYP01gEMb0HakjfOQ5cWV
-         HoWhO5M511GVjfX8kt258gS3lCzfRskhKj0v2azwGEk8x7+l1DGt3Qay20UnKq7dDA54
-         VeZg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=UtD9LqGAYakgNOjMfkfswsTmJIWlE3YoJFMFCxDn+fg=;
+        b=LDyQTtv5EX1Jn09YLEnjGaoibpxNYmVNs/c6Or9AmgA5psWHn25QarpfOu70U057TW
+         /WmeEQbB34fTdxXVibQuU7mNbx6W8bFpf7GmXRBr3LwCeLkwvcPULSgYQVg7M6h9vaZ7
+         upk0Y/8WPgi3TCRwZ/H/qAacNisisuIc+QWr1Bc5wUU7WqWMdoPiuch3g0MpUH/zYPF1
+         FmwOGrug8CMSrn1PLZiFq5WzofHAlMdD9JBrO9Qu/Q5UiE4mZZjS6oNl/RSV2CUBJGG6
+         LiG3oBQfnPoM642DFemNgBaTDkHUrFOv2mFmeLg294GU8N+4eexVk2lgUEFdOxhHbUrl
+         sTMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YfoN89ez9eO3wraKc+6QrYXVGhd9S9Rz3z9Gsd3RcLI=;
-        b=BMSwpoKrGBRdWkfcPYgcKa3bMWAN6tOPKJtaojs0rritvWADIkBrPVOCoO/lvwbH6Q
-         OqQ0fLYQZ7goJIBkvGFIenjQp47gFhsSgaLim7CTQX+Jrq3wnxe1MjjDFSpQxsEAU9Rh
-         vLPVUFVKV0aGrvUciMhvQzRwbwpdRKAbxuiZcHV8uGtwcR1bPXOOd8fJDpgudn4JxI4T
-         JLew1ZUZA78s6a7TQiiXPJ0jqUC3FBQxZNqDXDW5QckFaxQVCd4TIyEVMijnfcgmJxzV
-         bWj/FFOIxJbzfeThri6lIPbc8GPc4La2hvbepkc3ulqdy/Dr/Eqo4xCtzcJq5I1OwGRB
-         ytwQ==
-X-Gm-Message-State: APjAAAVXqbCKNhsOO55gwC/c9FAiB6dcuvbcUTBANIz3Dt3b47v0PzRD
-        934JiSApgTcmnlhdRu4K7L4=
-X-Google-Smtp-Source: APXvYqzUU3xrEON5FVBY9IwHcYbFx1/MTlmt73Mpeud0lcvjQoRoqsj/fnIkDFDAYt3pRdEuOUhrKw==
-X-Received: by 2002:a5d:534b:: with SMTP id t11mr622183wrv.61.1560026909963;
-        Sat, 08 Jun 2019 13:48:29 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=UtD9LqGAYakgNOjMfkfswsTmJIWlE3YoJFMFCxDn+fg=;
+        b=W44tbHjqPyBkuHZ5/u/lkRkvFDfMPXT/MK+3WCRa1ralhY3Kls/BwPjRIFBr6b6wvV
+         wK6MpA7ERrRKR0PdG6fLNJXHuD2FHSUvbaeewrhQJDxhBIYs66VKDJvGozGtMeIhF8EW
+         6Tmq+tV7OlZoVi3OkjF7uOUMU1dAklTUeiOO2ehJadulzwFwaahexfIMQpzBrAQMHokh
+         kPpfdSPd8U9OvBIVrlxPlJkE0O+fhnaA0mF7ErvXqmqhRfHeounIml7/7AKb1cj634ok
+         QPgqM3xyV57Nfh5jWKVgeRRzDMCSL0xr37FPZAM+v0wN00A1TCy5gAJfSouQ3/mRAeuF
+         lOaA==
+X-Gm-Message-State: APjAAAU1/tsKL0nggQ6Pa2k3KWGThV0IMqFJQucLQPdJhAOiAh0qpXnN
+        RFLI++G91VTKmT9LMuT4UKg=
+X-Google-Smtp-Source: APXvYqxA4kIf6JyrcOnsgnkTGYhGsoMyGre6NzWlKmmX+BmpB1xJ+k/RiPFrNwwsEkKRMXiCtCJ6Mw==
+X-Received: by 2002:a1c:c8:: with SMTP id 191mr8109727wma.6.1560026919473;
+        Sat, 08 Jun 2019 13:48:39 -0700 (PDT)
 Received: from kontron.lan (2001-1ae9-0ff1-f191-359a-8d64-e90a-f663.ip6.tmcz.cz. [2001:1ae9:ff1:f191:359a:8d64:e90a:f663])
-        by smtp.gmail.com with ESMTPSA id f204sm4986394wme.18.2019.06.08.13.48.28
+        by smtp.gmail.com with ESMTPSA id f204sm4986394wme.18.2019.06.08.13.48.38
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sat, 08 Jun 2019 13:48:29 -0700 (PDT)
+        Sat, 08 Jun 2019 13:48:39 -0700 (PDT)
 From:   petrcvekcz@gmail.com
 X-Google-Original-From: petrcvekcz.gmail.com
 To:     hauke@hauke-m.de, john@phrozen.org
 Cc:     Petr Cvek <petrcvekcz@gmail.com>, linux-mips@vger.kernel.org,
         openwrt-devel@lists.openwrt.org, pakahmar@hotmail.com
-Subject: [PATCH v1 0/7] MIPS: lantiq: irq: Various fixes, add SMP support
-Date:   Sat,  8 Jun 2019 22:48:03 +0200
-Message-Id: <cover.1560024463.git.petrcvekcz@gmail.com>
+Subject: [PATCH v1 1/7] MIPS: lantiq: Move macro directly to iomem function
+Date:   Sat,  8 Jun 2019 22:48:04 +0200
+Message-Id: <e3ef5e9ca51ae3169b42d8da5b2f9c623ba53278.1560024463.git.petrcvekcz@gmail.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1560024463.git.petrcvekcz@gmail.com>
+References: <cover.1560024463.git.petrcvekcz@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -62,71 +64,72 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Petr Cvek <petrcvekcz@gmail.com>
 
-Hi,
+Using the variable as a temporary holder for the macro of the register
+offset value is not necessary. Move it directly to the IOMEM read/write
+call.
 
-While hacking with my modem in openwrt I've found in the lantiq vrx268 SoC
-there is only a support for the processes SMP and not for interrupt
-routing. After some looking into vendors released source codes (probably
-intel UGW) and by observing SoC's memory map I've found out there is
-a second interrupt controller (ICU) for the second VPE. The last patch
-of this series adds support for it. The code is different from intel UGW's
-set affinity function, where the interrupt line gets enabled (switched)
-to the second ICU. Instead only the cpumask gets changed in my set affinity.
-The change will be written into the hardware after the next irq enable call.
-This was changed because of stability reasons in the high irq load of
-the SoC.
+Signed-off-by: Petr Cvek <petrcvekcz@gmail.com>
+---
+ arch/mips/lantiq/irq.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
 
-The first part of the series are more or less cosmetic changes of long
-names, different types and few fixed warnings from checkpatch. There is
-a fix in part 5, where I've found the missing bitfield clear before ORing
-with a new value.
-
-The SMP in part 7 changes devicetree definition for a register regions
-of the ICU. Previously, there was a region for a single IM (a mask/unmask/
-enable/... set for 32 interrupts). Now it is the whole ICU. It match more
-the hardware layout. There is no compatibility issue in vanilla, only
-openwrt was affected by these devicetrees.
-
-Also in the UGW's ltq_enable_irq(), there was a status bit reset before
-the actual IRQ line enable. It was marked as "Bug fix for fake interrupt".
-The code seems to work without it (vanilla and new SMP), but I've made
-an assert if this bit is set before the actual enable. The assert reported
-these IRQ sources:
-
-	22:00004000     spi_rx  (only when SPI is accessed)
-	63:00800000     mei_cpe (permanent 1s)
-	112:00000100    asc_tx
-
-But the code seems to run anyway I didn't include the status bit reset part.
-
-The SMP has an algorithm taken from MIPS loongson64's ht_irqdispatch().
-Every IRQ enable the line get routed to the other VPE (constrained by cpumask
-set in the irq_set_affinity function). This can be effectivelly disabled
-in the userspace by constraining the cpumask set to a single VPE or by
-commenting out the AUTO_AFFINITY_ROTATION macro definition (the code will
-then prefer the first VPE from the cpumask). The default affinity during
-the boot is the first VPE.
-
-The code was tested in nosmp configuration on TPLink W9980B in openwrt tree
-(patched kernel v4.14). The lantiq devices other than vrx268 were not
-tested.
-
-Discussion on openwrt related parts for lantiq ICU SMP is here (devicetrees,
-things not in the vanilla kernel, RFC versions of the patch):
-https://patchwork.ozlabs.org/patch/1100832/
-
-Petr Cvek (7):
-  MIPS: lantiq: Move macro directly to iomem function
-  MIPS: lantiq: Change variables to the same type as the source
-  MIPS: lantiq: Fix attributes of of_device_id structure
-  MIPS: lantiq: Remove unused macros
-  MIPS: lantiq: Fix bitfield masking
-  MIPS: lantiq: Shorten register names, remove unused macros
-  MIPS: lantiq: Add SMP support for lantiq interrupt controller
-
- arch/mips/lantiq/irq.c | 202 ++++++++++++++++++++++++++++++-----------
- 1 file changed, 151 insertions(+), 51 deletions(-)
-
+diff --git a/arch/mips/lantiq/irq.c b/arch/mips/lantiq/irq.c
+index 6549499eb202..fb3e1cc2cf6b 100644
+--- a/arch/mips/lantiq/irq.c
++++ b/arch/mips/lantiq/irq.c
+@@ -77,44 +77,42 @@ int ltq_eiu_get_irq(int exin)
+ 
+ void ltq_disable_irq(struct irq_data *d)
+ {
+-	u32 ier = LTQ_ICU_IM0_IER;
+ 	int offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
+ 	int im = offset / INT_NUM_IM_OFFSET;
+ 
+ 	offset %= INT_NUM_IM_OFFSET;
+-	ltq_icu_w32(im, ltq_icu_r32(im, ier) & ~BIT(offset), ier);
++	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IM0_IER) & ~BIT(offset),
++		    LTQ_ICU_IM0_IER);
+ }
+ 
+ void ltq_mask_and_ack_irq(struct irq_data *d)
+ {
+-	u32 ier = LTQ_ICU_IM0_IER;
+-	u32 isr = LTQ_ICU_IM0_ISR;
+ 	int offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
+ 	int im = offset / INT_NUM_IM_OFFSET;
+ 
+ 	offset %= INT_NUM_IM_OFFSET;
+-	ltq_icu_w32(im, ltq_icu_r32(im, ier) & ~BIT(offset), ier);
+-	ltq_icu_w32(im, BIT(offset), isr);
++	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IM0_IER) & ~BIT(offset),
++		    LTQ_ICU_IM0_IER);
++	ltq_icu_w32(im, BIT(offset), LTQ_ICU_IM0_ISR);
+ }
+ 
+ static void ltq_ack_irq(struct irq_data *d)
+ {
+-	u32 isr = LTQ_ICU_IM0_ISR;
+ 	int offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
+ 	int im = offset / INT_NUM_IM_OFFSET;
+ 
+ 	offset %= INT_NUM_IM_OFFSET;
+-	ltq_icu_w32(im, BIT(offset), isr);
++	ltq_icu_w32(im, BIT(offset), LTQ_ICU_IM0_ISR);
+ }
+ 
+ void ltq_enable_irq(struct irq_data *d)
+ {
+-	u32 ier = LTQ_ICU_IM0_IER;
+ 	int offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
+ 	int im = offset / INT_NUM_IM_OFFSET;
+ 
+ 	offset %= INT_NUM_IM_OFFSET;
+-	ltq_icu_w32(im, ltq_icu_r32(im, ier) | BIT(offset), ier);
++	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IM0_IER) | BIT(offset),
++		    LTQ_ICU_IM0_IER);
+ }
+ 
+ static int ltq_eiu_settype(struct irq_data *d, unsigned int type)
 -- 
 2.21.0
 
