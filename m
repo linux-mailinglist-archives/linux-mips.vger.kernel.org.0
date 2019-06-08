@@ -2,108 +2,158 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4D639924
-	for <lists+linux-mips@lfdr.de>; Sat,  8 Jun 2019 00:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E9F39B62
+	for <lists+linux-mips@lfdr.de>; Sat,  8 Jun 2019 08:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730436AbfFGWuj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Jun 2019 18:50:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59794 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728756AbfFGWui (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 7 Jun 2019 18:50:38 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 02A5D20868;
-        Fri,  7 Jun 2019 22:50:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559947838;
-        bh=ApxVfHs8JnkHiww93//1LZR4TXbvN/4IO2MtYEzl9mo=;
-        h=In-Reply-To:References:To:From:Cc:Subject:Date:From;
-        b=xfujo2GLbkIM+KKtYFuiV81Iew3/QJfwEMbo2anGI8s4SiwI07Ah1j2/ciUOhTDOO
-         q3goGaFH8UPTc3Ej7pzCV+vxygsPZnRYStoVowZC3Jxm6bRTeQ9ni5Ny2lOQ1txxv7
-         PtMvH0dcM+c/REo3Y1kZ5cZB/lRKUS2wrJhduqGA=
-Content-Type: text/plain; charset="utf-8"
+        id S1726522AbfFHGkL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 8 Jun 2019 02:40:11 -0400
+Received: from mail-eopbgr730099.outbound.protection.outlook.com ([40.107.73.99]:37376
+        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725536AbfFHGkL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 8 Jun 2019 02:40:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=wavesemi.onmicrosoft.com; s=selector1-wavesemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hxV+SQTiYk3EouLhpDKxE+AJY9zKUaU/nSKcLo/uTDk=;
+ b=n3W3yoUc6QLehIY3I7ItpenYXCRJRWLTnVqJK4k0yRcPYF4gVfps86UGwbwnIR8nWERD8XDCcmwXZiry4KtJ+UfwvQoTA9748eEzMAWWzTwwwe+hTdcx5/yTX+NiIIOWs3DG/4voRxl6FNSljtsB+3B+YbRdEuyLY27sB6rxOuw=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
+ MWHPR2201MB1166.namprd22.prod.outlook.com (10.174.168.38) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1965.15; Sat, 8 Jun 2019 06:40:09 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::6975:b632:c85b:9e40]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::6975:b632:c85b:9e40%2]) with mapi id 15.20.1965.017; Sat, 8 Jun 2019
+ 06:40:09 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: [GIT PULL] MIPS fixes
+Thread-Topic: [GIT PULL] MIPS fixes
+Thread-Index: AQHVHcUDrNs9ljjF6kSOJCVpUINl0g==
+Date:   Sat, 8 Jun 2019 06:40:08 +0000
+Message-ID: <20190608064006.zofqsbrtfftsutjr@pburton-laptop>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BY5PR04CA0023.namprd04.prod.outlook.com
+ (2603:10b6:a03:1d0::33) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:18::12)
+user-agent: NeoMutt/20180716
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2601:646:8a00:9810:9d6:9cca:ff8c:efe0]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d59a95a8-9f35-4d4a-760e-08d6ebdc2628
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(49563074)(7193020);SRVR:MWHPR2201MB1166;
+x-ms-traffictypediagnostic: MWHPR2201MB1166:
+x-microsoft-antispam-prvs: <MWHPR2201MB116627FB903E7FB734BCC175C1110@MWHPR2201MB1166.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0062BDD52C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(39840400004)(346002)(136003)(396003)(366004)(376002)(199004)(189003)(66446008)(71200400001)(9686003)(6486002)(68736007)(478600001)(186003)(6436002)(14444005)(256004)(54906003)(66946007)(14454004)(71190400001)(73956011)(58126008)(6512007)(64756008)(66556008)(66476007)(66616009)(99936001)(6916009)(99286004)(1076003)(386003)(6506007)(52116002)(33716001)(316002)(53936002)(44832011)(486006)(2906002)(4326008)(7736002)(476003)(25786009)(42882007)(8936002)(6116002)(3716004)(8676002)(81166006)(305945005)(46003)(5660300002)(81156014)(102836004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1166;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: p9XohFoXuK/LNwtguRrOQNBkQ+tl4C2TsHeLnf2AP9Iast66nLoMX4ZA8wTQ4x3sAQAHS9Y7PoYPIQY3NGbT+NnSvotdU1F33+W2aAYLXJacINE0PFrEDI3qomlxqDH6mp9ymMGQ/85j1qbXuUcV+oLrQszxIC4oqG7kvOonVT8xe5FEgHqSPiySXMHizMlhYq4m7Ox09ms/iYp4aX9/g1fBVy+RBKk+gHPS0amQSdYJivNJeVTXcKFaCeG7kzIDnJvwAZuuYZQ8F5ORUx+x/K7Ro8TX3GNxdoT2hXcO5REib3ftxuG5s48AfS2rDhuGOKarm8kpPMv17iR/yiqMWgbkcghJUhvoozRjmzO6DMoDiJkGLE3LZZgM2bZnrtw9nFR7vR248i7X7WEZx5z8Gp+9ewMTcMFs1k4n7vOA3DQ=
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6nu6jqnqddo3gyxj"
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1559944794.11351.0@crapouillou.net>
-References: <20190521145141.9813-1-paul@crapouillou.net> <20190521145141.9813-6-paul@crapouillou.net> <20190607212819.A5FAE208C3@mail.kernel.org> <1559944794.11351.0@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        James Hogan <jhogan@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mathieu Malaterre <malat@debian.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-clk@vger.kernel.org, od@zcrc.me
-Subject: Re: [PATCH v12 05/13] clk: ingenic: Add driver for the TCU clocks
-User-Agent: alot/0.8.1
-Date:   Fri, 07 Jun 2019 15:50:37 -0700
-Message-Id: <20190607225038.02A5D20868@mail.kernel.org>
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d59a95a8-9f35-4d4a-760e-08d6ebdc2628
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2019 06:40:09.0096
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1166
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Quoting Paul Cercueil (2019-06-07 14:59:54)
-> Hi Stephen, thanks for the review.
-> > Quoting Paul Cercueil (2019-05-21 07:51:33)
-> >>  diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
-> >>  new file mode 100644
-> >>  index 000000000000..7249225a6994
-> >>  --- /dev/null
-> >>  +++ b/drivers/clk/ingenic/tcu.c
-> >>  @@ -0,0 +1,458 @@
-> >>  +// SPDX-License-Identifier: GPL-2.0
-> >>  +/*
-> >>  + * JZ47xx SoCs TCU clocks driver
-> >>  + * Copyright (C) 2019 Paul Cercueil <paul@crapouillou.net>
-> >>  + */
-> >>  +
-> >>  +#include <linux/clk.h>
-> >>  +#include <linux/clk-provider.h>
-> >>  +#include <linux/clkdev.h>
-> >>  +#include <linux/clockchips.h>
-> >>  +#include <linux/mfd/ingenic-tcu.h>
-> >>  +#include <linux/regmap.h>
-> >>  +
-> >>  +#include <dt-bindings/clock/ingenic,tcu.h>
-> >>  +
-> >>  +/* 8 channels max + watchdog + OST */
-> >>  +#define TCU_CLK_COUNT  10
-> >>  +
-> >>  +#define TCU_ERR(...) pr_crit("ingenic-tcu-clk: " __VA_ARGS__)
-> >=20
-> > Why is it pr_crit instead of pr_err()?
->=20
-> If the TCU timer clocks are not provided for any reason, the system
-> will have no timer, and the kernel will hang very early in the init
-> process. That's why I chose pr_crit().
+--6nu6jqnqddo3gyxj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-HMm. So maybe it should be TCU_CRIT() then? Or just drop the wrapper
-macro and define a pr_fmt for this file that has ingenic-tcu-clk: for
-it?
+Hi Linus,
 
->=20
-> Most of the code here works without a struct device, it wouldn't be=20
-> easy to
-> get it to work with runtime PM.
->=20
-> I can enable the "tcu" clock in the probe and just gate/ungate it in the
-> suspend/resume callbacks, that would work just fine. We don't need=20
-> anything
-> fancy here.
+Here's a batch of MIPS fixes for 5.2, nothing particularly scary; please
+pull.
 
-OK. That sounds like a better approach to gate and ungate in
-suspend/resume.
+Thanks,
+    Paul
 
+
+The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
+
+  Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git tags/mips_fixes_5.2_1
+
+for you to fetch changes up to f532beeeff0c0a3586cc15538bc52d249eb19e7c:
+
+  MIPS: uprobes: remove set but not used variable 'epc' (2019-05-29 13:20:30 -0700)
+
+----------------------------------------------------------------
+A batch of MIPS fixes:
+
+- Declare ginvt() __always_inline due to its use of an argument as an
+  inline asm immediate.
+
+- A VDSO build fix following Kbuild changes made this cycle.
+
+- A fix for boot failures on txx9 systems following memory
+  initialization changes made this cycle.
+
+- Bounds check virt_addr_valid() to prevent it spuriously indicating
+  that bogus addresses are valid, in turn fixing hardened usercopy
+  failures that have been present since v4.12.
+
+- Build uImage.gz for pistachio systems by default, since this is the
+  image we need in order to actually boot on a board.
+
+- Remove an unused variable in our uprobes code.
+
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      MIPS: TXx9: Fix boot crash in free_initmem()
+
+Masahiro Yamada (2):
+      MIPS: mark ginvt() as __always_inline
+      MIPS: remove a space after -I to cope with header search paths for VDSO
+
+Paul Burton (3):
+      MIPS: Bounds check virt_addr_valid
+      MIPS: Make virt_addr_valid() return bool
+      MIPS: pistachio: Build uImage.gz by default
+
+YueHaibing (1):
+      MIPS: uprobes: remove set but not used variable 'epc'
+
+ arch/mips/include/asm/ginvt.h  | 2 +-
+ arch/mips/include/asm/page.h   | 2 +-
+ arch/mips/kernel/uprobes.c     | 3 ---
+ arch/mips/mm/mmap.c            | 7 ++++++-
+ arch/mips/pistachio/Platform   | 1 +
+ arch/mips/pnx833x/Platform     | 2 +-
+ arch/mips/txx9/generic/setup.c | 6 ------
+ 7 files changed, 10 insertions(+), 13 deletions(-)
+
+--6nu6jqnqddo3gyxj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQRgLjeFAZEXQzy86/s+p5+stXUA3QUCXPtYRgAKCRA+p5+stXUA
+3T/8APoChIaknnoRdHZCwCUJGyg0HVZBwIxtB3JB3Rf3lJOCTgEAoOzlPgpeude/
+/JN5XW6PQr6+kaRrd6e1HHM55Q3EYQo=
+=BZKz
+-----END PGP SIGNATURE-----
+
+--6nu6jqnqddo3gyxj--
