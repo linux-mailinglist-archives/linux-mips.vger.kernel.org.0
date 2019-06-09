@@ -2,37 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 662F43AAC6
+	by mail.lfdr.de (Postfix) with ESMTP id D0AAE3AAC7
 	for <lists+linux-mips@lfdr.de>; Sun,  9 Jun 2019 19:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729181AbfFIQpo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 9 Jun 2019 12:45:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43606 "EHLO mail.kernel.org"
+        id S1730090AbfFIQpt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 9 Jun 2019 12:45:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43664 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730033AbfFIQpn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 9 Jun 2019 12:45:43 -0400
+        id S1730067AbfFIQpp (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 9 Jun 2019 12:45:45 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9C1702083D;
-        Sun,  9 Jun 2019 16:45:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3C5E420833;
+        Sun,  9 Jun 2019 16:45:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560098742;
-        bh=TJCm5AsGVKgzsrO8Flov/50oIA64VW2TAdaGPxGaYm0=;
+        s=default; t=1560098744;
+        bh=RraCkwXdzglEq/7vdS33A/72ye87OZQO/agCNTF+Lok=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2qylCrXwmupjvbIXv2h7FRWKdojG2pxBXbplrrY59vl5EJ9xaR2Mr7ZCTTbGyW4XK
-         akd6CQGsduTJWmOZEi5we47qxOtuBU8GR93eU+nyImCu3sttwRsHeR2HM/XebWfeQ7
-         ytphZodQ11JKYoiG3C44sypeCY3dKLNmlQrJVgpo=
+        b=Mp4dQCYs54Rq1SQU5rqgb+Yj6VQoAW7JdIKwW42h1JPm3XC6EYLt86X7sRPyre9OJ
+         56fHvmGLXpCFt0URSACnUBKeRRZLRebH+SItshPOXOK9h+iZOsQljegc/Vu0h/W15W
+         YwQh4CqKMK0p4xIyb2JPvZjUsR6MnThlnwozaZTc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        Julien Cristau <jcristau@debian.org>,
         =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        YunQiang Su <ysu@wavecomp.com>, linux-mips@vger.kernel.org
-Subject: [PATCH 5.1 45/70] MIPS: Bounds check virt_addr_valid
-Date:   Sun,  9 Jun 2019 18:41:56 +0200
-Message-Id: <20190609164131.137151634@linuxfoundation.org>
+        Kevin Hilman <khilman@baylibre.com>, linux-mips@vger.kernel.org
+Subject: [PATCH 5.1 46/70] MIPS: pistachio: Build uImage.gz by default
+Date:   Sun,  9 Jun 2019 18:41:57 +0200
+Message-Id: <20190609164131.226499200@linuxfoundation.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190609164127.541128197@linuxfoundation.org>
 References: <20190609164127.541128197@linuxfoundation.org>
@@ -47,69 +46,42 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Paul Burton <paul.burton@mips.com>
 
-commit 074a1e1167afd82c26f6d03a9a8b997d564bb241 upstream.
+commit e4f2d1af7163becb181419af9dece9206001e0a6 upstream.
 
-The virt_addr_valid() function is meant to return true iff
-virt_to_page() will return a valid struct page reference. This is true
-iff the address provided is found within the unmapped address range
-between PAGE_OFFSET & MAP_BASE, but we don't currently check for that
-condition. Instead we simply mask the address to obtain what will be a
-physical address if the virtual address is indeed in the desired range,
-shift it to form a PFN & then call pfn_valid(). This can incorrectly
-return true if called with a virtual address which, after masking,
-happens to form a physical address corresponding to a valid PFN.
+The pistachio platform uses the U-Boot bootloader & generally boots a
+kernel in the uImage format. As such it's useful to build one when
+building the kernel, but to do so currently requires the user to
+manually specify a uImage target on the make command line.
 
-For example we may vmalloc an address in the kernel mapped region
-starting a MAP_BASE & obtain the virtual address:
+Make uImage.gz the pistachio platform's default build target, so that
+the default is to build a kernel image that we can actually boot on a
+board such as the MIPS Creator Ci40.
 
-  addr = 0xc000000000002000
-
-When masked by virt_to_phys(), which uses __pa() & in turn CPHYSADDR(),
-we obtain the following (bogus) physical address:
-
-  addr = 0x2000
-
-In a common system with PHYS_OFFSET=0 this will correspond to a valid
-struct page which should really be accessed by virtual address
-PAGE_OFFSET+0x2000, causing virt_addr_valid() to incorrectly return 1
-indicating that the original address corresponds to a struct page.
-
-This is equivalent to the ARM64 change made in commit ca219452c6b8
-("arm64: Correctly bounds check virt_addr_valid").
-
-This fixes fallout when hardened usercopy is enabled caused by the
-related commit 517e1fbeb65f ("mm/usercopy: Drop extra
-is_vmalloc_or_module() check") which removed a check for the vmalloc
-range that was present from the introduction of the hardened usercopy
-feature.
+Marked for stable backport as far as v4.1 where pistachio support was
+introduced. This is primarily useful for CI systems such as kernelci.org
+which will benefit from us building a suitable image which can then be
+booted as part of automated testing, extending our test coverage to the
+affected stable branches.
 
 Signed-off-by: Paul Burton <paul.burton@mips.com>
-Reported-by: Julien Cristau <jcristau@debian.org>
 Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-Tested-by: YunQiang Su <ysu@wavecomp.com>
-URL: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=929366
-Cc: stable@vger.kernel.org # v4.12+
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+Tested-by: Kevin Hilman <khilman@baylibre.com>
+URL: https://groups.io/g/kernelci/message/388
+Cc: stable@vger.kernel.org # v4.1+
 Cc: linux-mips@vger.kernel.org
-Cc: Yunqiang Su <ysu@wavecomp.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ---
- arch/mips/mm/mmap.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ arch/mips/pistachio/Platform |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/mips/mm/mmap.c
-+++ b/arch/mips/mm/mmap.c
-@@ -203,6 +203,11 @@ unsigned long arch_randomize_brk(struct
- 
- int __virt_addr_valid(const volatile void *kaddr)
- {
-+	unsigned long vaddr = (unsigned long)vaddr;
-+
-+	if ((vaddr < PAGE_OFFSET) || (vaddr >= MAP_BASE))
-+		return 0;
-+
- 	return pfn_valid(PFN_DOWN(virt_to_phys(kaddr)));
- }
- EXPORT_SYMBOL_GPL(__virt_addr_valid);
+--- a/arch/mips/pistachio/Platform
++++ b/arch/mips/pistachio/Platform
+@@ -6,3 +6,4 @@ cflags-$(CONFIG_MACH_PISTACHIO)		+=				\
+ 		-I$(srctree)/arch/mips/include/asm/mach-pistachio
+ load-$(CONFIG_MACH_PISTACHIO)		+= 0xffffffff80400000
+ zload-$(CONFIG_MACH_PISTACHIO)		+= 0xffffffff81000000
++all-$(CONFIG_MACH_PISTACHIO)		:= uImage.gz
 
 
