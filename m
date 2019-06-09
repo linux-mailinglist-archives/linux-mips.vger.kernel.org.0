@@ -2,47 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 999F83AA8D
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Jun 2019 19:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC8A3AA4C
+	for <lists+linux-mips@lfdr.de>; Sun,  9 Jun 2019 19:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731288AbfFIRTe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 9 Jun 2019 13:19:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47768 "EHLO mail.kernel.org"
+        id S1731099AbfFIQvY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 9 Jun 2019 12:51:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51644 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730482AbfFIQsi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 9 Jun 2019 12:48:38 -0400
+        id S1728512AbfFIQvY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 9 Jun 2019 12:51:24 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 93A62205ED;
-        Sun,  9 Jun 2019 16:48:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 170D42070B;
+        Sun,  9 Jun 2019 16:51:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560098917;
-        bh=aI2xmFamXF/0UTAWDGIGWTN9D41YnsbOcTzuDUadPCk=;
+        s=default; t=1560099083;
+        bh=TJCm5AsGVKgzsrO8Flov/50oIA64VW2TAdaGPxGaYm0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vDjDBr17F7D3Bw/qD/AhDkZURV04HfPVC/NbpJg6dHdKkDloYLSzUzeyZo2Kpr44z
-         nNM0ITJefsnJEm8o1AQosHZWhzeQ+JEuWt+wmMj3cFtoHYoaArFftxI3T0XpCCVtAP
-         D/lNn8SzwdYsyG9Km9oK7znT+vtRSBZPhGRMmQAk=
+        b=GOMz/sFk3z1bS9koZ9U2xuxboNBDvCdj5WxvkpEKvAfBHLXwKGUOmfxx3J64fU41Y
+         Kz4KoRS4xfX9XUrGInOfo1iGaI4dL3h3X+wZp1myOblpQ+F0GpuBWS+i3tWAK4PvaO
+         eaH6VS07PScMTz0Uf61gFFrnKw+eDTgmwXe02K1o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Petr=20=C5=A0tetiar?= <ynezz@true.cz>,
-        Kevin ldir Darbyshire-Bryant <ldir@darbyshire-bryant.me.uk>,
-        John Crispin <john@phrozen.org>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 34/51] Revert "MIPS: perf: ath79: Fix perfcount IRQ assignment"
-Date:   Sun,  9 Jun 2019 18:42:15 +0200
-Message-Id: <20190609164129.317004440@linuxfoundation.org>
+        stable@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
+        Julien Cristau <jcristau@debian.org>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        YunQiang Su <ysu@wavecomp.com>, linux-mips@vger.kernel.org
+Subject: [PATCH 4.14 21/35] MIPS: Bounds check virt_addr_valid
+Date:   Sun,  9 Jun 2019 18:42:27 +0200
+Message-Id: <20190609164126.752755650@linuxfoundation.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190609164127.123076536@linuxfoundation.org>
-References: <20190609164127.123076536@linuxfoundation.org>
+In-Reply-To: <20190609164125.377368385@linuxfoundation.org>
+References: <20190609164125.377368385@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,81 +45,71 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Paul Burton <paul.burton@mips.com>
 
-This reverts commit ca8648816e3dcc8dadba0e79a034f61c85eb206d which is
-commit a1e8783db8e0d58891681bc1e6d9ada66eae8e20 upstream.
+commit 074a1e1167afd82c26f6d03a9a8b997d564bb241 upstream.
 
-Petr writes:
-	Karl has reported to me today, that he's experiencing weird
-	reboot hang on his devices with 4.9.180 kernel and that he has
-	bisected it down to my backported patch.
+The virt_addr_valid() function is meant to return true iff
+virt_to_page() will return a valid struct page reference. This is true
+iff the address provided is found within the unmapped address range
+between PAGE_OFFSET & MAP_BASE, but we don't currently check for that
+condition. Instead we simply mask the address to obtain what will be a
+physical address if the virtual address is indeed in the desired range,
+shift it to form a PFN & then call pfn_valid(). This can incorrectly
+return true if called with a virtual address which, after masking,
+happens to form a physical address corresponding to a valid PFN.
 
-	I would like to kindly ask you for removal of this patch.  This
-	patch should be reverted from all stable kernels up to 5.1,
-	because perf counters were not broken on those kernels, and this
-	patch won't work on the ath79 legacy IRQ code anyway, it needs
-	new irqchip driver which was enabled on ath79 with commit
-	51fa4f8912c0 ("MIPS: ath79: drop legacy IRQ code").
+For example we may vmalloc an address in the kernel mapped region
+starting a MAP_BASE & obtain the virtual address:
 
-Reported-by: Petr Štetiar <ynezz@true.cz>
-Cc: Kevin 'ldir' Darbyshire-Bryant <ldir@darbyshire-bryant.me.uk>
-Cc: John Crispin <john@phrozen.org>
-Cc: Marc Zyngier <marc.zyngier@arm.com>
-Cc: Paul Burton <paul.burton@mips.com>
+  addr = 0xc000000000002000
+
+When masked by virt_to_phys(), which uses __pa() & in turn CPHYSADDR(),
+we obtain the following (bogus) physical address:
+
+  addr = 0x2000
+
+In a common system with PHYS_OFFSET=0 this will correspond to a valid
+struct page which should really be accessed by virtual address
+PAGE_OFFSET+0x2000, causing virt_addr_valid() to incorrectly return 1
+indicating that the original address corresponds to a struct page.
+
+This is equivalent to the ARM64 change made in commit ca219452c6b8
+("arm64: Correctly bounds check virt_addr_valid").
+
+This fixes fallout when hardened usercopy is enabled caused by the
+related commit 517e1fbeb65f ("mm/usercopy: Drop extra
+is_vmalloc_or_module() check") which removed a check for the vmalloc
+range that was present from the introduction of the hardened usercopy
+feature.
+
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+Reported-by: Julien Cristau <jcristau@debian.org>
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Tested-by: YunQiang Su <ysu@wavecomp.com>
+URL: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=929366
+Cc: stable@vger.kernel.org # v4.12+
 Cc: linux-mips@vger.kernel.org
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: James Hogan <jhogan@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Jason Cooper <jason@lakedaemon.net>
-Cc: Sasha Levin <sashal@kernel.org>
+Cc: Yunqiang Su <ysu@wavecomp.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/mips/ath79/setup.c          |    6 ++++++
- drivers/irqchip/irq-ath79-misc.c |   11 -----------
- 2 files changed, 6 insertions(+), 11 deletions(-)
 
---- a/arch/mips/ath79/setup.c
-+++ b/arch/mips/ath79/setup.c
-@@ -211,6 +211,12 @@ const char *get_system_type(void)
- 	return ath79_sys_type;
- }
+---
+ arch/mips/mm/mmap.c |    5 +++++
+ 1 file changed, 5 insertions(+)
+
+--- a/arch/mips/mm/mmap.c
++++ b/arch/mips/mm/mmap.c
+@@ -203,6 +203,11 @@ unsigned long arch_randomize_brk(struct
  
-+int get_c0_perfcount_int(void)
-+{
-+	return ATH79_MISC_IRQ(5);
-+}
-+EXPORT_SYMBOL_GPL(get_c0_perfcount_int);
+ int __virt_addr_valid(const volatile void *kaddr)
+ {
++	unsigned long vaddr = (unsigned long)vaddr;
 +
- unsigned int get_c0_compare_int(void)
- {
- 	return CP0_LEGACY_COMPARE_IRQ;
---- a/drivers/irqchip/irq-ath79-misc.c
-+++ b/drivers/irqchip/irq-ath79-misc.c
-@@ -22,15 +22,6 @@
- #define AR71XX_RESET_REG_MISC_INT_ENABLE	4
- 
- #define ATH79_MISC_IRQ_COUNT			32
--#define ATH79_MISC_PERF_IRQ			5
--
--static int ath79_perfcount_irq;
--
--int get_c0_perfcount_int(void)
--{
--	return ath79_perfcount_irq;
--}
--EXPORT_SYMBOL_GPL(get_c0_perfcount_int);
- 
- static void ath79_misc_irq_handler(struct irq_desc *desc)
- {
-@@ -122,8 +113,6 @@ static void __init ath79_misc_intc_domai
- {
- 	void __iomem *base = domain->host_data;
- 
--	ath79_perfcount_irq = irq_create_mapping(domain, ATH79_MISC_PERF_IRQ);
--
- 	/* Disable and clear all interrupts */
- 	__raw_writel(0, base + AR71XX_RESET_REG_MISC_INT_ENABLE);
- 	__raw_writel(0, base + AR71XX_RESET_REG_MISC_INT_STATUS);
++	if ((vaddr < PAGE_OFFSET) || (vaddr >= MAP_BASE))
++		return 0;
++
+ 	return pfn_valid(PFN_DOWN(virt_to_phys(kaddr)));
+ }
+ EXPORT_SYMBOL_GPL(__virt_addr_valid);
 
 
