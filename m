@@ -2,86 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A343A91C
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Jun 2019 19:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7C63AE27
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jun 2019 06:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389006AbfFIRGY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 9 Jun 2019 13:06:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46108 "EHLO mail.kernel.org"
+        id S1728181AbfFJEeo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Jun 2019 00:34:44 -0400
+Received: from foss.arm.com ([217.140.110.172]:35948 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389002AbfFIRGX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 9 Jun 2019 13:06:23 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DFCC3204EC;
-        Sun,  9 Jun 2019 17:06:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560099983;
-        bh=RraCkwXdzglEq/7vdS33A/72ye87OZQO/agCNTF+Lok=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rYzh1VcIJ8zUbQq5FtrwAx7yYwdJFvP0GCvFwiKX7kiYzv5V823Y86PuuEKdWDLIP
-         /Pk/IqDWYCAXaqvpGO/BdZCUYyubAugIm6FYqHfdPcN+rrs2ZvFlfzbEeJJMpqq0XC
-         qVSrjF0m1jJijis7OPgyTIJ4UqKGGaPmDBvU0z8I=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        Kevin Hilman <khilman@baylibre.com>, linux-mips@vger.kernel.org
-Subject: [PATCH 4.4 237/241] MIPS: pistachio: Build uImage.gz by default
-Date:   Sun,  9 Jun 2019 18:42:59 +0200
-Message-Id: <20190609164155.616230020@linuxfoundation.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190609164147.729157653@linuxfoundation.org>
-References: <20190609164147.729157653@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1725320AbfFJEeo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 10 Jun 2019 00:34:44 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69043337;
+        Sun,  9 Jun 2019 21:34:43 -0700 (PDT)
+Received: from [10.162.42.131] (p8cg001049571a15.blr.arm.com [10.162.42.131])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B2CA33F557;
+        Sun,  9 Jun 2019 21:34:31 -0700 (PDT)
+Subject: Re: [RFC V3] mm: Generalize and rename notify_page_fault() as
+ kprobe_page_fault()
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        linux-snps-arc@lists.infradead.org,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>
+References: <1559903655-5609-1-git-send-email-anshuman.khandual@arm.com>
+ <20190607201202.GA32656@bombadil.infradead.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <f1b109a3-ef4c-359c-a124-e219e84a6266@arm.com>
+Date:   Mon, 10 Jun 2019 10:04:49 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190607201202.GA32656@bombadil.infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Burton <paul.burton@mips.com>
-
-commit e4f2d1af7163becb181419af9dece9206001e0a6 upstream.
-
-The pistachio platform uses the U-Boot bootloader & generally boots a
-kernel in the uImage format. As such it's useful to build one when
-building the kernel, but to do so currently requires the user to
-manually specify a uImage target on the make command line.
-
-Make uImage.gz the pistachio platform's default build target, so that
-the default is to build a kernel image that we can actually boot on a
-board such as the MIPS Creator Ci40.
-
-Marked for stable backport as far as v4.1 where pistachio support was
-introduced. This is primarily useful for CI systems such as kernelci.org
-which will benefit from us building a suitable image which can then be
-booted as part of automated testing, extending our test coverage to the
-affected stable branches.
-
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-Reviewed-by: Kevin Hilman <khilman@baylibre.com>
-Tested-by: Kevin Hilman <khilman@baylibre.com>
-URL: https://groups.io/g/kernelci/message/388
-Cc: stable@vger.kernel.org # v4.1+
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
- arch/mips/pistachio/Platform |    1 +
- 1 file changed, 1 insertion(+)
-
---- a/arch/mips/pistachio/Platform
-+++ b/arch/mips/pistachio/Platform
-@@ -6,3 +6,4 @@ cflags-$(CONFIG_MACH_PISTACHIO)		+=				\
- 		-I$(srctree)/arch/mips/include/asm/mach-pistachio
- load-$(CONFIG_MACH_PISTACHIO)		+= 0xffffffff80400000
- zload-$(CONFIG_MACH_PISTACHIO)		+= 0xffffffff81000000
-+all-$(CONFIG_MACH_PISTACHIO)		:= uImage.gz
 
 
+On 06/08/2019 01:42 AM, Matthew Wilcox wrote:
+> Before:
+> 
+>> @@ -46,23 +46,6 @@ kmmio_fault(struct pt_regs *regs, unsigned long addr)
+>>  	return 0;
+>>  }
+>>  
+>> -static nokprobe_inline int kprobes_fault(struct pt_regs *regs)
+>> -{
+>> -	if (!kprobes_built_in())
+>> -		return 0;
+>> -	if (user_mode(regs))
+>> -		return 0;
+>> -	/*
+>> -	 * To be potentially processing a kprobe fault and to be allowed to call
+>> -	 * kprobe_running(), we have to be non-preemptible.
+>> -	 */
+>> -	if (preemptible())
+>> -		return 0;
+>> -	if (!kprobe_running())
+>> -		return 0;
+>> -	return kprobe_fault_handler(regs, X86_TRAP_PF);
+>> -}
+> 
+> After:
+> 
+>> +++ b/include/linux/kprobes.h
+>> @@ -458,4 +458,20 @@ static inline bool is_kprobe_optinsn_slot(unsigned long addr)
+>>  }
+>>  #endif
+>>  
+>> +static nokprobe_inline bool kprobe_page_fault(struct pt_regs *regs,
+>> +					      unsigned int trap)
+>> +{
+>> +	int ret = 0;
+>> +
+>> +	/*
+>> +	 * To be potentially processing a kprobe fault and to be allowed
+>> +	 * to call kprobe_running(), we have to be non-preemptible.
+>> +	 */
+>> +	if (kprobes_built_in() && !preemptible() && !user_mode(regs)) {
+>> +		if (kprobe_running() && kprobe_fault_handler(regs, trap))
+>> +			ret = 1;
+>> +	}
+>> +	return ret;
+>> +}
+> 
+> Do you really think this is easier to read?
+> 
+> Why not just move the x86 version to include/linux/kprobes.h, and replace
+> the int with bool?
+
+Will just return bool directly without an additional variable here as suggested
+before. But for the conditional statement, I guess the proposed one here is more
+compact than the x86 one.
+
+> 
+> On Fri, Jun 07, 2019 at 04:04:15PM +0530, Anshuman Khandual wrote:
+>> Very similar definitions for notify_page_fault() are being used by multiple
+>> architectures duplicating much of the same code. This attempts to unify all
+>> of them into a generic implementation, rename it as kprobe_page_fault() and
+>> then move it to a common header.
+> 
+> I think this description suffers from having been written for v1 of
+> this patch.  It describes what you _did_, but it's not what this patch
+> currently _is_.
+> 
+> Why not something like:
+> 
+> Architectures which support kprobes have very similar boilerplate around
+> calling kprobe_fault_handler().  Use a helper function in kprobes.h to
+> unify them, based on the x86 code.
+> 
+> This changes the behaviour for other architectures when preemption
+> is enabled.  Previously, they would have disabled preemption while
+> calling the kprobe handler.  However, preemption would be disabled
+> if this fault was due to a kprobe, so we know the fault was not due
+> to a kprobe handler and can simply return failure.  This behaviour was
+> introduced in commit a980c0ef9f6d ("x86/kprobes: Refactor kprobes_fault()
+> like kprobe_exceptions_notify()")
+
+Will replace commit message with above.
+
+> 
+>>  arch/arm/mm/fault.c      | 24 +-----------------------
+>>  arch/arm64/mm/fault.c    | 24 +-----------------------
+>>  arch/ia64/mm/fault.c     | 24 +-----------------------
+>>  arch/powerpc/mm/fault.c  | 23 ++---------------------
+>>  arch/s390/mm/fault.c     | 16 +---------------
+>>  arch/sh/mm/fault.c       | 18 ++----------------
+>>  arch/sparc/mm/fault_64.c | 16 +---------------
+>>  arch/x86/mm/fault.c      | 21 ++-------------------
+>>  include/linux/kprobes.h  | 16 ++++++++++++++++
+> 
+> What about arc and mips?
+
++ Vineet Gupta <vgupta@synopsys.com> 
++ linux-snps-arc@lists.infradead.org
+
++ James Hogan <jhogan@kernel.org>
++ Paul Burton <paul.burton@mips.com>
++ Ralf Baechle <ralf@linux-mips.org>
++ linux-mips@vger.kernel.org
+
+Both the above architectures dont call kprobe_fault_handler() from the
+page fault context (do_page_fault() to be specific). Though it gets called
+from mips kprobe_exceptions_notify (DIE_PAGE_FAULT). Am I missing something
+here ?
