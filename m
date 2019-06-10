@@ -2,116 +2,162 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9943BB50
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Jun 2019 19:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4533BEEA
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jun 2019 23:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388446AbfFJRr6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Jun 2019 13:47:58 -0400
-Received: from mail.codeweavers.com ([50.203.203.244]:59114 "EHLO
-        mail.codeweavers.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387643AbfFJRr5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jun 2019 13:47:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=codeweavers.com; s=6377696661; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=B+NQK0qQzwriFdGQRKl3qnBuYxHERXIyxTc267JOpl0=; b=ddQy0EE+r/As82BHbGL2enMiF
-        +xSkrfjkaTQ0AJxemttV6by74YhcQ50DLiLC1sA3I03bUdF2mNxbHrY1p4ORkTzfe/rv/xfMgzol2
-        SI2MK+71N2dyNCMb6kZwrM5MZdJ8KNTla+ziNnIZzH+w52ZzB0PpDi3xi3X39ShZeK5/E=;
-Received: from merlot.physics.ox.ac.uk ([163.1.241.98] helo=merlot)
-        by mail.codeweavers.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <huw@codeweavers.com>)
-        id 1haOPC-0004C2-Gt; Mon, 10 Jun 2019 12:48:27 -0500
-Received: from daviesh by merlot with local (Exim 4.90_1)
-        (envelope-from <huw@codeweavers.com>)
-        id 1haOOY-0003Rh-VS; Mon, 10 Jun 2019 18:47:47 +0100
-Date:   Mon, 10 Jun 2019 18:47:46 +0100
-From:   Huw Davies <huw@codeweavers.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v6 01/19] kernel: Standardize vdso_datapage
-Message-ID: <20190610174746.GA13224@merlot.physics.ox.ac.uk>
-References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
- <20190530141531.43462-2-vincenzo.frascino@arm.com>
- <CAK8P3a3EnvkLND2RJdZtEY64PhK5g0sbbuytQro=f0cPur2g9g@mail.gmail.com>
- <bb5253b2-623c-c927-27a2-1d3a2990d20f@arm.com>
+        id S1726684AbfFJVtn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Jun 2019 17:49:43 -0400
+Received: from emh04.mail.saunalahti.fi ([62.142.5.110]:58306 "EHLO
+        emh04.mail.saunalahti.fi" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726556AbfFJVtn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jun 2019 17:49:43 -0400
+Received: from darkstar.musicnaut.iki.fi (85-76-70-161-nat.elisa-mobile.fi [85.76.70.161])
+        by emh04.mail.saunalahti.fi (Postfix) with ESMTP id F06A5300A5;
+        Tue, 11 Jun 2019 00:49:38 +0300 (EEST)
+Date:   Tue, 11 Jun 2019 00:49:38 +0300
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Alexandre Oliva <lxoliva@fsfla.org>
+Cc:     "Maciej W. Rozycki" <macro@linux-mips.org>,
+        Tom Li <tomli@tomli.me>, James Hogan <jhogan@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] On the Current Troubles of Mainlining Loongson Platform
+ Drivers
+Message-ID: <20190610214938.GB7147@darkstar.musicnaut.iki.fi>
+References: <20190211230614.GB22242@darkstar.musicnaut.iki.fi>
+ <orva1jj9ht.fsf@lxoliva.fsfla.org>
+ <20190217235951.GA20700@darkstar.musicnaut.iki.fi>
+ <orpnrpj2rk.fsf@lxoliva.fsfla.org>
+ <alpine.LFD.2.21.1902180227090.15915@eddie.linux-mips.org>
+ <orlg1ryyo2.fsf@lxoliva.fsfla.org>
+ <alpine.LFD.2.21.1903071744560.7728@eddie.linux-mips.org>
+ <orwolaw5u1.fsf@lxoliva.fsfla.org>
+ <alpine.LFD.2.21.1903082347330.31648@eddie.linux-mips.org>
+ <or7ead4lq3.fsf@lxoliva.fsfla.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <bb5253b2-623c-c927-27a2-1d3a2990d20f@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Score: -106.0
-X-Spam-Report: Spam detection software, running on the system "mail.codeweavers.com",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- Content preview:  On Tue, Jun 04, 2019 at 01:05:40PM +0100, Vincenzo Frascino
-    wrote: > On 31/05/2019 09:16, Arnd Bergmann wrote: > > On Thu, May 30, 2019
-    at 4:15 PM Vincenzo Frascino > > <vincenzo.frascino@arm.com> wro [...] 
- Content analysis details:   (-106.0 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -100 USER_IN_WHITELIST      From: address is in the user's white-list
- -6.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <or7ead4lq3.fsf@lxoliva.fsfla.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 04, 2019 at 01:05:40PM +0100, Vincenzo Frascino wrote:
-> On 31/05/2019 09:16, Arnd Bergmann wrote:
-> > On Thu, May 30, 2019 at 4:15 PM Vincenzo Frascino
-> > <vincenzo.frascino@arm.com> wrote:
-> > 
-> >> + * vdso_data will be accessed by 64 bit and compat code at the same time
-> >> + * so we should be careful before modifying this structure.
-> >> + */
-> >> +struct vdso_data {
-> >> +       u32                     seq;
-> >> +
-> >> +       s32                     clock_mode;
-> >> +       u64                     cycle_last;
-> >> +       u64                     mask;
-> >> +       u32                     mult;
-> >> +       u32                     shift;
-> >> +
-> >> +       struct vdso_timestamp   basetime[VDSO_BASES];
-> >> +
-> >> +       s32                     tz_minuteswest;
-> >> +       s32                     tz_dsttime;
-> >> +       u32                     hrtimer_res;
-> >> +};
-> > 
-> > The structure contains four padding bytes at the end, which is
-> > something we try to avoid, at least if this ends up being used as
-> > an ABI. Maybe add "u32 __unused" at the end?
-> > 
+Hi,
+
+On Sun, May 26, 2019 at 06:19:00AM -0300, Alexandre Oliva wrote:
+> On Mar  8, 2019, "Maciej W. Rozycki" <macro@linux-mips.org> wrote:
 > 
-> Agreed, I will fix this in v7.
+> >  Anyway I meant: does `war_io_reorder_wmb' expand to `wmb' on your system?
+> 
+> No, it expands to `barrier' on the yeeloong:
+> 
+> CONFIG_CPU_LOONGSON2F=y
+> CONFIG_CPU_LOONGSON2F_WORKAROUNDS=y
+> CONFIG_CPU_LOONGSON2=y
+> CONFIG_SYS_HAS_CPU_LOONGSON2F=y
+> 
+> 
+> I've finally managed to do the bisection on object files I mentioned I'd
+> do to try to pinpoint where __BUILT_IOPORT_PFX with barrier rather than
+> !barrier regressed.
+> 
+> I found that forcing barrier off for drivers/irqchip/irq-i8259 was
+> enough to avoid the problem.
+> 
+> (I further narrowed it down to byte I/O, which is no surprise
+> considering irq-i8259 doesn't seem to use any non-byte I/O.)
+> 
+> Then I narrowed it down to output only.
+> 
+> A Loongson2F kernel built with the patch below works at normal speed.
+> I've also keyed the -1 barrier selector to compiling the irq-i8259
+> driver only, and that got me a functional kernel, but I'm not confident
+> that the same issues that affect the interrupt controller, preventing it
+> from initializing correctly, is not also affecting other drivers, just
+> in less visible ways, so the patch conservatively reverts to the older
+> barriers for all I/O (i.e., non-mem) out primitives.
+> 
+> I've tested this on a yeeloong on top of v5.1.5.
+> 
+> I'm tempted to start using this patch in my Freeloong builds of GNU
+> Linux-libre for gnewsense/yeeloong of 5.0 and 5.1 stable releases, to
+> try to make them usable.  Can anyone suggest any reason why it might be
+> risky to do so, moving on as much as I could to the new barriers,
+> sticking to the 4.19-one only for non-mem out?  As in, could mixing the
+> barriers be riskier than reverting to the 4.19 barriers everywhere?
+> 
+> Thanks in advance for any insights and recommendations,
 
-Note that this is also necessary to ensure that CLOCK_MONOTONIC_RAW
-works in the 32-bit vDSO on x86_64 kernels.
+Thanks for this work! I'm not yet sure if this completely solves the
+issue, but it's surely an improvement.
 
-Huw.
+Testing multiple reboots on Loongson Mini-PC with the libata driver,
+/proc/irq/14/spurious still shows tens of thousands spurious interrupts,
+e.g.
+
+	count 79453
+	unhandled 76998
+	last_unhandled 4294673096 ms
+
+where as it with the legacy IDE driver it stays reliably at 0 and the total
+count is well under 10000.
+
+However, with your patch the "nobody cared" is never reached so all is
+good. I tried 10 boots with the patch and all were successful. Without
+the patch 8 out of 10 failed with the "nobody cared" warning.
+
+A.
+
+> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+> index 845fbbc7a2e3..04be4758d4ff 100644
+> --- a/arch/mips/include/asm/io.h
+> +++ b/arch/mips/include/asm/io.h
+> @@ -416,7 +416,7 @@ static inline void pfx##out##bwlq##p(type val, unsigned long port)	\
+>  	volatile type *__addr;						\
+>  	type __val;							\
+>  									\
+> -	if (barrier)							\
+> +	if (barrier > 0)						\
+>  		iobarrier_rw();						\
+>  	else								\
+>  		war_io_reorder_wmb();					\
+> @@ -467,13 +467,22 @@ BUILDIO_MEM(w, u16)
+>  BUILDIO_MEM(l, u32)
+>  BUILDIO_MEM(q, u64)
+>  
+> -#define __BUILD_IOPORT_PFX(bus, bwlq, type)				\
+> -	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0,)			\
+> -	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0, _p)
+> +#define __BUILD_IOPORT_PFX(bus, bwlq, type, barrier)			\
+> +	__BUILD_IOPORT_SINGLE(bus, bwlq, type, barrier, 0,)		\
+> +	__BUILD_IOPORT_SINGLE(bus, bwlq, type, barrier, 0, _p)
+> +
+> +/* Choose the kind of barrier used for out in __BUILD_IOPORT_SINGLE in
+> +   non-__mem_ variants.  On Loongson2F, irq-i8259 fails to initialize
+> +   when this is defined to 1.  */
+> +#if defined(CONFIG_CPU_LOONGSON2)
+> +#define USE_IO_BARRIER_FOR_NON_MEM_OUT -1
+> +#else
+> +#define USE_IO_BARRIER_FOR_NON_MEM_OUT 1
+> +#endif
+>  
+>  #define BUILDIO_IOPORT(bwlq, type)					\
+> -	__BUILD_IOPORT_PFX(, bwlq, type)				\
+> -	__BUILD_IOPORT_PFX(__mem_, bwlq, type)
+> +	__BUILD_IOPORT_PFX(, bwlq, type, USE_IO_BARRIER_FOR_NON_MEM_OUT) \
+> +	__BUILD_IOPORT_PFX(__mem_, bwlq, type, 2)
+>  
+>  BUILDIO_IOPORT(b, u8)
+>  BUILDIO_IOPORT(w, u16)
+> 
+> 
+> -- 
+> Alexandre Oliva, freedom fighter  he/him   https://FSFLA.org/blogs/lxo
+> Be the change, be Free!                 FSF Latin America board member
+> GNU Toolchain Engineer                        Free Software Evangelist
+> Hay que enGNUrecerse, pero sin perder la terGNUra jamás - Che GNUevara
