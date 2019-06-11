@@ -2,132 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 087103D51C
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Jun 2019 20:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630543D6BB
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Jun 2019 21:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406904AbfFKSIU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Jun 2019 14:08:20 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:60354 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406922AbfFKSIT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jun 2019 14:08:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1560276492; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0viPHiuXiALagAuJTSTKg7DcwkXlKKizYTwevl9VkvY=;
-        b=OTwdAqC2vxPwXL7L28WXviP21bWFGV8y+cGYif32mwzSRT/BCSzKwjk+Q1ux7qa69HTLuA
-        NMsb+cpARFlcB6oDVxpRdkKf5ip8o5k64lSVX4AREDhS8/6/Lvkb5Mo2To3RRy5ez6iVzS
-        Xz7JVemZ00WM1JLCzB/0e01Vrd1ZMHs=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Ralf Baechle <ralf@linux-mips.org>,
+        id S2390488AbfFKTXl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Jun 2019 15:23:41 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:60484 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387563AbfFKTXl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jun 2019 15:23:41 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5BJEZF2148131;
+        Tue, 11 Jun 2019 19:22:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2018-07-02;
+ bh=w76MFlwvNKhZqtHwJRAkKoCnG/0YMyc0k1SshiGhIFo=;
+ b=lyKS8EPYtHVV69hKRhxbZ6v/wFBGKQdRKMFGV75IF5Ly8f4gx63IiVxb73DDl0+AbJmm
+ CdJvjrw/0ON/ZIZZDVd35XGZGYcOr6YUm+1+c4fVLRIbczJKiRbuQsnnHiPmGT32HeMI
+ yPgGH8BMtCJNcZGgeKqNc9zQymR1ehBB6hPaiWuv6zwujyXlG+0dhRPfn5KJWPXSEiiY
+ 86sDUCAy3UJthE28Vd8oZg8tOUjk962pLYKGbyc4eo09yWsg8uiILcyco70X+7o/NVSy
+ 0l1s88pzby/RchV3V0Lwt3GnLLHzR1ZcAlylaXvzBxfsoWFdW5Th0f/oeh7B7jYF2E0Y MQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 2t02heqdfr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jun 2019 19:22:42 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5BJLICV095933;
+        Tue, 11 Jun 2019 19:22:41 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 2t024uk1m7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jun 2019 19:22:41 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5BJMawp024319;
+        Tue, 11 Jun 2019 19:22:36 GMT
+Received: from [10.154.187.61] (/10.154.187.61)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 11 Jun 2019 12:22:36 -0700
+Subject: Re: [PATCH 01/16] mm: use untagged_addr() for get_user_pages_fast
+ addresses
+To:     Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     od@zcrc.me, linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 5/5] MIPS: Remove dead code
-Date:   Tue, 11 Jun 2019 20:07:57 +0200
-Message-Id: <20190611180757.32299-5-paul@crapouillou.net>
-In-Reply-To: <20190611180757.32299-1-paul@crapouillou.net>
-References: <20190611180757.32299-1-paul@crapouillou.net>
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org, x86@kernel.org, linux-kernel@vger.kernel.org
+References: <20190611144102.8848-1-hch@lst.de>
+ <20190611144102.8848-2-hch@lst.de>
+From:   Khalid Aziz <khalid.aziz@oracle.com>
+Organization: Oracle Corp
+Message-ID: <9145f3f9-4e14-df6a-87f5-663ad197e96e@oracle.com>
+Date:   Tue, 11 Jun 2019 13:22:33 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190611144102.8848-2-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9284 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=920
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906110123
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9284 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=962 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906110123
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Remove the unused <asm/mach-jz4740/clock.h> include.
+On 6/11/19 8:40 AM, Christoph Hellwig wrote:
+> This will allow sparc64 to override its ADI tags for
+> get_user_pages and get_user_pages_fast.
+>=20
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
+Commit message is sparc64 specific but the goal here is to allow any
+architecture with memory tagging to use this. So I would suggest
+rewording the commit log. Other than that:
 
-Notes:
-    v2: Rebase on v5.2-rc4
+Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
 
- arch/mips/include/asm/mach-jz4740/clock.h | 22 ----------------------
- arch/mips/jz4740/board-qi_lb60.c          |  2 --
- arch/mips/jz4740/platform.c               |  2 --
- arch/mips/jz4740/time.c                   |  3 ---
- 4 files changed, 29 deletions(-)
- delete mode 100644 arch/mips/include/asm/mach-jz4740/clock.h
+>  mm/gup.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/mm/gup.c b/mm/gup.c
+> index ddde097cf9e4..6bb521db67ec 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -2146,7 +2146,7 @@ int __get_user_pages_fast(unsigned long start, in=
+t nr_pages, int write,
+>  	unsigned long flags;
+>  	int nr =3D 0;
+> =20
+> -	start &=3D PAGE_MASK;
+> +	start =3D untagged_addr(start) & PAGE_MASK;
+>  	len =3D (unsigned long) nr_pages << PAGE_SHIFT;
+>  	end =3D start + len;
+> =20
+> @@ -2219,7 +2219,7 @@ int get_user_pages_fast(unsigned long start, int =
+nr_pages,
+>  	unsigned long addr, len, end;
+>  	int nr =3D 0, ret =3D 0;
+> =20
+> -	start &=3D PAGE_MASK;
+> +	start =3D untagged_addr(start) & PAGE_MASK;
+>  	addr =3D start;
+>  	len =3D (unsigned long) nr_pages << PAGE_SHIFT;
+>  	end =3D start + len;
+>=20
 
-diff --git a/arch/mips/include/asm/mach-jz4740/clock.h b/arch/mips/include/asm/mach-jz4740/clock.h
-deleted file mode 100644
-index 600d5051691a..000000000000
---- a/arch/mips/include/asm/mach-jz4740/clock.h
-+++ /dev/null
-@@ -1,22 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- *  Copyright (C) 2010, Lars-Peter Clausen <lars@metafoo.de>
-- */
--
--#ifndef __ASM_JZ4740_CLOCK_H__
--#define __ASM_JZ4740_CLOCK_H__
--
--enum jz4740_wait_mode {
--	JZ4740_WAIT_MODE_IDLE,
--	JZ4740_WAIT_MODE_SLEEP,
--};
--
--void jz4740_clock_set_wait_mode(enum jz4740_wait_mode mode);
--
--void jz4740_clock_suspend(void);
--void jz4740_clock_resume(void);
--
--void jz4740_clock_udc_enable_auto_suspend(void);
--void jz4740_clock_udc_disable_auto_suspend(void);
--
--#endif
-diff --git a/arch/mips/jz4740/board-qi_lb60.c b/arch/mips/jz4740/board-qi_lb60.c
-index 071e9d94eea7..d07ee418e5b0 100644
---- a/arch/mips/jz4740/board-qi_lb60.c
-+++ b/arch/mips/jz4740/board-qi_lb60.c
-@@ -37,8 +37,6 @@
- 
- #include <asm/mach-jz4740/platform.h>
- 
--#include "clock.h"
--
- /* GPIOs */
- #define QI_LB60_GPIO_KEYOUT(x)		(JZ_GPIO_PORTC(10) + (x))
- #define QI_LB60_GPIO_KEYIN(x)		(JZ_GPIO_PORTD(18) + (x))
-diff --git a/arch/mips/jz4740/platform.c b/arch/mips/jz4740/platform.c
-index 4b89abb17950..c74c99f5951d 100644
---- a/arch/mips/jz4740/platform.c
-+++ b/arch/mips/jz4740/platform.c
-@@ -21,8 +21,6 @@
- #include <linux/serial_core.h>
- #include <linux/serial_8250.h>
- 
--#include "clock.h"
--
- /* USB Device Controller */
- struct platform_device jz4740_udc_xceiv_device = {
- 	.name = "usb_phy_generic",
-diff --git a/arch/mips/jz4740/time.c b/arch/mips/jz4740/time.c
-index a3260c754e65..cb768e560d8b 100644
---- a/arch/mips/jz4740/time.c
-+++ b/arch/mips/jz4740/time.c
-@@ -13,13 +13,10 @@
- #include <linux/clockchips.h>
- #include <linux/sched_clock.h>
- 
--#include <asm/mach-jz4740/clock.h>
- #include <asm/mach-jz4740/irq.h>
- #include <asm/mach-jz4740/timer.h>
- #include <asm/time.h>
- 
--#include "clock.h"
--
- #define TIMER_CLOCKEVENT 0
- #define TIMER_CLOCKSOURCE 1
- 
--- 
-2.21.0.593.g511ec345e18
 
