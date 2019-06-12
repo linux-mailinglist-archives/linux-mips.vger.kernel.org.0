@@ -2,81 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE9B41938
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2019 02:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2473C419BF
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Jun 2019 02:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404276AbfFLAFV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Jun 2019 20:05:21 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:41495 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387864AbfFLAFV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jun 2019 20:05:21 -0400
-Received: by mail-lj1-f193.google.com with SMTP id s21so13434812lji.8;
-        Tue, 11 Jun 2019 17:05:19 -0700 (PDT)
+        id S2406388AbfFLAzx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Jun 2019 20:55:53 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:43276 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406117AbfFLAzx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Jun 2019 20:55:53 -0400
+Received: by mail-pf1-f195.google.com with SMTP id i189so8515090pfg.10;
+        Tue, 11 Jun 2019 17:55:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=twnhTVYd7tn35O7vvlIa3XEgKYk2/zieh7kgQ5Ms1VY=;
-        b=iDBd+Nyh60vWHvSGtVHWVETugM2fnnm+FqmmiJZ56NZHl6V9Aty9AmjFW8CRdEnVVB
-         aGKuXc3BMI1WRmMN59ZmT1r6kVO7qzb4q1bDpYmpS/ZUrVuenxbQGoF2Qv4WS5P5xTYu
-         MgUGL2vvXlsZ04GvxKv4oWOnyz8mNGE24H+bdBFJTo0aHTJ0k0u+7bh9tcE9VNAMwAtH
-         iKtxqCy1DSmKDdJUUU93WbsyygyX8RtwvZ5Owd5cCDJ9ZU6yAlx8+gKU6PDNIGy1Yrds
-         5FOvUqOWwAWAd5bt0eEYz6DGK7Ot7sHrl6lNbuwYOmPXTEQ7T1WTuP7Qnyr0A/A07xpx
-         QkCw==
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :user-agent:message-id:content-transfer-encoding;
+        bh=JNCR25wKoUF8GmXR1+h5Qxc2sputayqDi9OAgx3GkdA=;
+        b=NiAwzvuW1158vo7YqCqImrGi+gOspOS5ptLbXAIoG+Z9ze7uMdcN2eGWAsbNMH7+TG
+         3ZkAe/orroen/eLz2qm7eGvkJnmLfn0Ao/sWgWXpra1h3e97Fbq8GTUU6tsqNa0XX05a
+         hylXtqpcRAnnO0Mj6KHPmtmbR1ePDFiDX84pGRfqnwJNRN6N/PrW6Cr39MB8mYO7MJlz
+         5R3W6R2v9YZy+6iSs2yC/ugh7qMnOvJh1iKbpPuLSnT/ouMOHYhMPkWq+xopLIjw9uu9
+         yeTUr5c2xq1OasjqxvVRtr5VrtPFnBVEv4hsmatE9KIsBtR0qj+CcdswIM50TMbSCQvN
+         o6Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=twnhTVYd7tn35O7vvlIa3XEgKYk2/zieh7kgQ5Ms1VY=;
-        b=fqEU0XMyfNflfhQT79oxZghavXpJ1dAzYWSMm/qb4gmos8iA2TeNBJ0PUDAE/Hziuc
-         bcmkQUVGTodSXW4WmUcE9UbCbklB1P7Hfg+uvtOj6dEzEdotDAAFyArOd3ScHgIQNVs5
-         0JS9pIniFAgDhZ4tXvbDA5Wd7OJm5Til/+3lHBMc+FZ4Th9Uj7DK21wcJRIHCksoumid
-         oyUuStSybwP7edfVFrdhM6JvHk+DDVpdY1QTx93zhasPNw8m+Rv31ORF54nq/akB0sbh
-         SVkLKb03VXRyP+j7I9Yb4Iqiz7BHFYtNrpDNWePKx+aosKbJYg7P7LG1/Z8/MzWuKwy8
-         Zlbw==
-X-Gm-Message-State: APjAAAVdLDPQZSMGnTI0GPYm3j5E17tzyOWa4m4EfXM7tVCJe8oCX3/+
-        qfJ4ROah2uLK8s8qnMM5gMeTz+fyeeBSbUV9JBw=
-X-Google-Smtp-Source: APXvYqyO/Oi3PmoK5iJ0YzdPrMw5xZcqUF1R75rhMCOs6SLJy8NUkUXX4LUB1wFJr6ZxPQT0SJAlgxYZrwxAPMCixo8=
-X-Received: by 2002:a2e:298a:: with SMTP id p10mr12710225ljp.74.1560297918252;
- Tue, 11 Jun 2019 17:05:18 -0700 (PDT)
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:user-agent:message-id:content-transfer-encoding;
+        bh=JNCR25wKoUF8GmXR1+h5Qxc2sputayqDi9OAgx3GkdA=;
+        b=R5HR+XjXj44+vHeimHoFKSAZgrjD2qTGGD+MQgsUPI4z7uXaCcWDYG3h+GayoOpzuG
+         nVaw5jp4rawhj5qcHlGwskh0y59Ema2P2UHD7Qh+FQs8lVS4SJ76ZawDq/bbHlKOIJYE
+         jEKaKbFYoYC8dWo+F6uNDkb3pTHWZYbZOogeedxhji7S5vMLYIegdanZlVrCvC2F9iAj
+         klPEufI0RO+ch8AEvfaDZBQh7tEc/PwrAFEUg5/9RKKbP1kU6K0uF1xSNIw/iupjO5Ic
+         H9f50qdaOvraM4bpQCXeQlzz9IOlwaxQE2P/KGfNsGI4NOjj6yl3EWPd4pdUpAq6EZAn
+         cHFQ==
+X-Gm-Message-State: APjAAAXHgo2fBKJZ/cJIY1QCDao4cP0bspsylNKZIwL5kEOJ8jueygfx
+        K/Kv4B/+WzgfPLrvS+5gr2U=
+X-Google-Smtp-Source: APXvYqwFJLADjuhoiaHTsjm93GY2KEIrK+4logzMa1qKh7V/rBYbqMu9MhPfYO/mkPAOmVvGgW7CCQ==
+X-Received: by 2002:a63:b07:: with SMTP id 7mr22723250pgl.21.1560300952204;
+        Tue, 11 Jun 2019 17:55:52 -0700 (PDT)
+Received: from localhost (242.60.168.202.static.comindico.com.au. [202.168.60.242])
+        by smtp.gmail.com with ESMTPSA id u2sm3765259pjv.9.2019.06.11.17.55.50
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 11 Jun 2019 17:55:51 -0700 (PDT)
+Date:   Wed, 12 Jun 2019 10:52:53 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 16/16] mm: pass get_user_pages_fast iterator arguments in
+ a structure
+To:     Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Christoph Hellwig <hch@lst.de>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>, sparclinux@vger.kernel.org,
+        x86@kernel.org
+References: <20190611144102.8848-1-hch@lst.de>
+        <20190611144102.8848-17-hch@lst.de>
+In-Reply-To: <20190611144102.8848-17-hch@lst.de>
 MIME-Version: 1.0
-References: <20190611193836.2772-1-shyam.saini@amarulasolutions.com>
-In-Reply-To: <20190611193836.2772-1-shyam.saini@amarulasolutions.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 11 Jun 2019 17:05:06 -0700
-Message-ID: <CAADnVQKwvfuoyDEu+rB8=btOi33LdrUvk4EkQM86sDpDG61kew@mail.gmail.com>
-Subject: Re: [PATCH V2] include: linux: Regularise the use of FIELD_SIZEOF macro
-To:     Shyam Saini <shyam.saini@amarulasolutions.com>
-Cc:     Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Network Development <netdev@vger.kernel.org>,
-        linux-ext4@vger.kernel.org, devel@lists.orangefs.org,
-        linux-mm <linux-mm@kvack.org>, linux-sctp@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, kvm@vger.kernel.org,
-        mayhs11saini@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: astroid/0.14.0 (https://github.com/astroidmail/astroid)
+Message-Id: <1560300464.nijubslu3h.astroid@bobo.none>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 5:00 PM Shyam Saini
-<shyam.saini@amarulasolutions.com> wrote:
->
-> Currently, there are 3 different macros, namely sizeof_field, SIZEOF_FIELD
-> and FIELD_SIZEOF which are used to calculate the size of a member of
-> structure, so to bring uniformity in entire kernel source tree lets use
-> FIELD_SIZEOF and replace all occurrences of other two macros with this.
->
-> For this purpose, redefine FIELD_SIZEOF in include/linux/stddef.h and
-> tools/testing/selftests/bpf/bpf_util.h and remove its defination from
-> include/linux/kernel.h
+Christoph Hellwig's on June 12, 2019 12:41 am:
+> Instead of passing a set of always repeated arguments down the
+> get_user_pages_fast iterators, create a struct gup_args to hold them and
+> pass that by reference.  This leads to an over 100 byte .text size
+> reduction for x86-64.
 
-please dont. bpf_util.h is a user space header.
-Please leave it as-is.
+What does this do for performance? I've found this pattern can be
+bad for store aliasing detection.
+
+Thanks,
+Nick
+=
