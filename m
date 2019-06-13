@@ -2,98 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DFD44127
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Jun 2019 18:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24D14486E
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Jun 2019 19:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732222AbfFMQMP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Jun 2019 12:12:15 -0400
-Received: from smtp5-g21.free.fr ([212.27.42.5]:32442 "EHLO smtp5-g21.free.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391625AbfFMQMO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 13 Jun 2019 12:12:14 -0400
-Received: from heffalump.sk2.org (unknown [88.186.243.14])
-        by smtp5-g21.free.fr (Postfix) with ESMTPS id 4DB325FFB9;
-        Thu, 13 Jun 2019 18:12:12 +0200 (CEST)
-Received: from steve by heffalump.sk2.org with local (Exim 4.89)
-        (envelope-from <steve@sk2.org>)
-        id 1hbSKh-0004Qa-LM; Thu, 13 Jun 2019 18:12:11 +0200
-From:   Stephen Kitt <steve@sk2.org>
-To:     x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Stephen Kitt <steve@sk2.org>
-Subject: [PATCH] Drop unused isa_page_to_bus
-Date:   Thu, 13 Jun 2019 18:11:55 +0200
-Message-Id: <20190613161155.16946-1-steve@sk2.org>
-X-Mailer: git-send-email 2.11.0
+        id S2393445AbfFMRG5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Jun 2019 13:06:57 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52056 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2393384AbfFMRG5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 13 Jun 2019 13:06:57 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 7BB62ADCB;
+        Thu, 13 Jun 2019 17:06:55 +0000 (UTC)
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v3 0/7] Use MFD framework for SGI IOC3 drivers
+Date:   Thu, 13 Jun 2019 19:06:26 +0200
+Message-Id: <20190613170636.6647-1-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.13.7
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-isa_page_to_bus is deprecated and no longer used anywhere, this patch
-removes it entirely.
+SGI IOC3 ASIC includes support for ethernet, PS2 keyboard/mouse,
+NIC (number in a can), GPIO and a byte  bus. By attaching a
+SuperIO chip to it, it also supports serial lines and a parallel
+port. The chip is used on a variety of SGI systems with different
+configurations. This patchset moves code out of the network driver,
+which doesn't belong there, into its new place a MFD driver and
+specific platform drivers for the different subfunctions.
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
----
- arch/alpha/include/asm/io.h | 5 -----
- arch/arm/include/asm/io.h   | 1 -
- arch/mips/include/asm/io.h  | 2 --
- arch/x86/include/asm/io.h   | 1 -
- 4 files changed, 9 deletions(-)
+Changes in v3:
+ - use 1-wire subsystem for handling proms
+ - pci-xtalk driver uses prom information to create PCI subsystem
+   ids for use in MFD driver
+ - changed MFD driver to only use static declared mfd_cells
+ - added IP30 system board setup to MFD driver
+ - mac address is now read from ioc3-eth driver with nvmem framework 
 
-diff --git a/arch/alpha/include/asm/io.h b/arch/alpha/include/asm/io.h
-index ccf9d65166bb..af2c0063dc75 100644
---- a/arch/alpha/include/asm/io.h
-+++ b/arch/alpha/include/asm/io.h
-@@ -93,11 +93,6 @@ static inline void * phys_to_virt(unsigned long address)
- 
- #define page_to_phys(page)	page_to_pa(page)
- 
--static inline dma_addr_t __deprecated isa_page_to_bus(struct page *page)
--{
--	return page_to_phys(page);
--}
--
- /* Maximum PIO space address supported?  */
- #define IO_SPACE_LIMIT 0xffff
- 
-diff --git a/arch/arm/include/asm/io.h b/arch/arm/include/asm/io.h
-index 7e22c81398c4..f96ec93679b7 100644
---- a/arch/arm/include/asm/io.h
-+++ b/arch/arm/include/asm/io.h
-@@ -33,7 +33,6 @@
-  * ISA I/O bus memory addresses are 1:1 with the physical address.
-  */
- #define isa_virt_to_bus virt_to_phys
--#define isa_page_to_bus page_to_phys
- #define isa_bus_to_virt phys_to_virt
- 
- /*
-diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index 29997e42480e..1790274c27eb 100644
---- a/arch/mips/include/asm/io.h
-+++ b/arch/mips/include/asm/io.h
-@@ -149,8 +149,6 @@ static inline void *isa_bus_to_virt(unsigned long address)
- 	return phys_to_virt(address);
- }
- 
--#define isa_page_to_bus page_to_phys
--
- /*
-  * However PCI ones are not necessarily 1:1 and therefore these interfaces
-  * are forbidden in portable PCI drivers.
-diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
-index a06a9f8294ea..6bed97ff6db2 100644
---- a/arch/x86/include/asm/io.h
-+++ b/arch/x86/include/asm/io.h
-@@ -165,7 +165,6 @@ static inline unsigned int isa_virt_to_bus(volatile void *address)
- {
- 	return (unsigned int)virt_to_phys(address);
- }
--#define isa_page_to_bus(page)	((unsigned int)page_to_phys(page))
- #define isa_bus_to_virt		phys_to_virt
- 
- /*
+Changes in v2:
+ - fixed issue in ioc3kbd.c reported by Dmitry Torokhov
+ - merged IP27 RTC removal and 8250 serial driver addition into
+   main MFD patch to keep patches bisectable
+
+Thomas Bogendoerfer (7):
+  nvmem: core: add nvmem_device_find
+  MIPS: PCI: refactor ioc3 special handling
+  MIPS: PCI: use information from 1-wire PROM for IOC3 detection
+  MIPS: SGI-IP27: remove ioc3 ethernet init
+  mfd: ioc3: Add driver for SGI IOC3 chip
+  MIPS: SGI-IP27: fix readb/writeb addressing
+  Input: add IOC3 serio driver
+
+ arch/mips/include/asm/mach-ip27/mangle-port.h |    4 +-
+ arch/mips/include/asm/pci/bridge.h            |    1 +
+ arch/mips/include/asm/sn/ioc3.h               |  356 ++---
+ arch/mips/pci/pci-xtalk-bridge.c              |  296 ++--
+ arch/mips/sgi-ip27/ip27-console.c             |    5 +-
+ arch/mips/sgi-ip27/ip27-init.c                |   13 -
+ arch/mips/sgi-ip27/ip27-timer.c               |   20 -
+ arch/mips/sgi-ip27/ip27-xtalk.c               |   38 +-
+ drivers/input/serio/Kconfig                   |   10 +
+ drivers/input/serio/Makefile                  |    1 +
+ drivers/input/serio/ioc3kbd.c                 |  158 ++
+ drivers/mfd/Kconfig                           |   13 +
+ drivers/mfd/Makefile                          |    1 +
+ drivers/mfd/ioc3.c                            |  683 +++++++++
+ drivers/net/ethernet/sgi/Kconfig              |    4 +-
+ drivers/net/ethernet/sgi/ioc3-eth.c           | 1932 ++++++++++---------------
+ drivers/nvmem/core.c                          |   62 +-
+ drivers/rtc/rtc-m48t35.c                      |   11 +
+ drivers/tty/serial/8250/8250_ioc3.c           |   98 ++
+ drivers/tty/serial/8250/Kconfig               |   11 +
+ drivers/tty/serial/8250/Makefile              |    1 +
+ include/linux/nvmem-consumer.h                |    9 +
+ 22 files changed, 2152 insertions(+), 1575 deletions(-)
+ create mode 100644 drivers/input/serio/ioc3kbd.c
+ create mode 100644 drivers/mfd/ioc3.c
+ create mode 100644 drivers/tty/serial/8250/8250_ioc3.c
+
 -- 
-2.11.0
+2.13.7
 
