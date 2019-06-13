@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E1E441F1
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Jun 2019 18:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB6F44311
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Jun 2019 18:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732186AbfFMQR5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Jun 2019 12:17:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57944 "EHLO mail.kernel.org"
+        id S2392032AbfFMQ1M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Jun 2019 12:27:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53586 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731120AbfFMIkb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 13 Jun 2019 04:40:31 -0400
+        id S1730953AbfFMIgB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 13 Jun 2019 04:36:01 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 78C152147A;
-        Thu, 13 Jun 2019 08:40:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 26BFB2133D;
+        Thu, 13 Jun 2019 08:35:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560415231;
-        bh=C6d/i0uXdJ8+nqPibNnQK8H7JqpkEK6lAr0XOumabc0=;
+        s=default; t=1560414959;
+        bh=iP6jYzHfUINowF7qCGsk1zqpztI8LShfOQD5iyTaOSU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RkDmfAiQl2zvdOmbvh+fFQeAqNGbvXuW2k3TlpTqwvJKZDxmUSPt4bqysjDAULqcr
-         S7J0Cnf/dRL7QMv/C9uJm2zl5nZuE41rd7WUJj7KvpeudkpguZ8xBpcjJ22HX9G71W
-         /LFB/JvvZRUf2KNDJHTI8e0ocBqizgk8ZpifhZ0g=
+        b=UJMGGzfPWPLQiQtmT9EhUhBWyl9PJI7YVf6UanFRgfVFTup0XYqWywLREialMc791
+         +XLigljfc2YwUOzkMLbPMd8wMjvnJo4vUUkoQANqjLbtPuSiFH4HDZrk6Urz6e2RrI
+         P7Zob8SIY1lJ6htwWcKhD6FHIYg3CdSmtJQAY/hY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -41,12 +41,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Juergen Gross <jgross@suse.com>,
         Serge Semin <Sergey.Semin@t-platforms.ru>,
         linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 051/118] mips: Make sure dt memory regions are valid
-Date:   Thu, 13 Jun 2019 10:33:09 +0200
-Message-Id: <20190613075646.719848269@linuxfoundation.org>
+Subject: [PATCH 4.14 34/81] mips: Make sure dt memory regions are valid
+Date:   Thu, 13 Jun 2019 10:33:17 +0200
+Message-Id: <20190613075651.799315210@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190613075643.642092651@linuxfoundation.org>
-References: <20190613075643.642092651@linuxfoundation.org>
+In-Reply-To: <20190613075649.074682929@linuxfoundation.org>
+References: <20190613075649.074682929@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -93,7 +93,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/arch/mips/kernel/prom.c b/arch/mips/kernel/prom.c
-index 89950b7bf536..bdaf3536241a 100644
+index 0dbcd152a1a9..90f332f0625f 100644
 --- a/arch/mips/kernel/prom.c
 +++ b/arch/mips/kernel/prom.c
 @@ -41,7 +41,19 @@ char *mips_get_machine_name(void)
@@ -116,7 +116,7 @@ index 89950b7bf536..bdaf3536241a 100644
 +	add_memory_region(base, size, BOOT_MEM_RAM);
  }
  
- int __init early_init_dt_reserve_memory_arch(phys_addr_t base,
+ void * __init early_init_dt_alloc_memory_arch(u64 size, u64 align)
 -- 
 2.20.1
 
