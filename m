@@ -2,123 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB6F44311
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Jun 2019 18:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70E843F20
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Jun 2019 17:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392032AbfFMQ1M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Jun 2019 12:27:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53586 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730953AbfFMIgB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 13 Jun 2019 04:36:01 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 26BFB2133D;
-        Thu, 13 Jun 2019 08:35:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560414959;
-        bh=iP6jYzHfUINowF7qCGsk1zqpztI8LShfOQD5iyTaOSU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UJMGGzfPWPLQiQtmT9EhUhBWyl9PJI7YVf6UanFRgfVFTup0XYqWywLREialMc791
-         +XLigljfc2YwUOzkMLbPMd8wMjvnJo4vUUkoQANqjLbtPuSiFH4HDZrk6Urz6e2RrI
-         P7Zob8SIY1lJ6htwWcKhD6FHIYg3CdSmtJQAY/hY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Serge Semin <fancer.lancer@gmail.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Juergen Gross <jgross@suse.com>,
-        Serge Semin <Sergey.Semin@t-platforms.ru>,
-        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 34/81] mips: Make sure dt memory regions are valid
-Date:   Thu, 13 Jun 2019 10:33:17 +0200
-Message-Id: <20190613075651.799315210@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190613075649.074682929@linuxfoundation.org>
-References: <20190613075649.074682929@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1731620AbfFMPzL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Jun 2019 11:55:11 -0400
+Received: from relay1.mentorg.com ([192.94.38.131]:56157 "EHLO
+        relay1.mentorg.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731560AbfFMIxL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Jun 2019 04:53:11 -0400
+Received: from nat-ies.mentorg.com ([192.94.31.2] helo=svr-ies-mbx-02.mgc.mentorg.com)
+        by relay1.mentorg.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-SHA384:256)
+        id 1hbLTo-00032A-D9 from Cedric_Hombourger@mentor.com ; Thu, 13 Jun 2019 01:53:08 -0700
+Received: from FRG-W10-HOMBOUR.world.mentorg.com (137.202.0.90) by
+ svr-ies-mbx-02.mgc.mentorg.com (139.181.222.2) with Microsoft SMTP Server
+ (TLS) id 15.0.1320.4; Thu, 13 Jun 2019 09:53:04 +0100
+From:   Cedric Hombourger <Cedric_Hombourger@mentor.com>
+CC:     Cedric Hombourger <Cedric_Hombourger@mentor.com>,
+        <linux-mips@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: [PATCH] MIPS: have "plain" make calls build dtbs for selected platforms
+Date:   Thu, 13 Jun 2019 10:52:50 +0200
+Message-ID: <1560415970-844-1-git-send-email-Cedric_Hombourger@mentor.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [137.202.0.90]
+X-ClientProxiedBy: svr-ies-mbx-05.mgc.mentorg.com (139.181.222.5) To
+ svr-ies-mbx-02.mgc.mentorg.com (139.181.222.2)
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-[ Upstream commit 93fa5b280761a4dbb14c5330f260380385ab2b49 ]
+scripts/package/builddep calls "make dtbs_install" after executing
+a plain make (i.e. no build targets specified). It will fail if dtbs
+were not built beforehand. Match the arm64 architecture where DTBs get
+built by the "all" target.
 
-There are situations when memory regions coming from dts may be
-too big for the platform physical address space. This especially
-concerns XPA-capable systems. Bootloader may determine more than 4GB
-memory available and pass it to the kernel over dts memory node, while
-kernel is built without XPA/64BIT support. In this case the region
-may either simply be truncated by add_memory_region() method
-or by u64->phys_addr_t type casting. But in worst case the method
-can even drop the memory region if it exceeds PHYS_ADDR_MAX size.
-So lets make sure the retrieved from dts memory regions are valid,
-and if some of them aren't, just manually truncate them with a warning
-printed out.
-
-Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: James Hogan <jhogan@kernel.org>
-Cc: Mike Rapoport <rppt@linux.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc: Huacai Chen <chenhc@lemote.com>
-Cc: Stefan Agner <stefan@agner.ch>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Serge Semin <Sergey.Semin@t-platforms.ru>
+Signed-off-by: Cedric Hombourger <Cedric_Hombourger@mentor.com>
 Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
 ---
- arch/mips/kernel/prom.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ arch/mips/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/kernel/prom.c b/arch/mips/kernel/prom.c
-index 0dbcd152a1a9..90f332f0625f 100644
---- a/arch/mips/kernel/prom.c
-+++ b/arch/mips/kernel/prom.c
-@@ -41,7 +41,19 @@ char *mips_get_machine_name(void)
- #ifdef CONFIG_USE_OF
- void __init early_init_dt_add_memory_arch(u64 base, u64 size)
- {
--	return add_memory_region(base, size, BOOT_MEM_RAM);
-+	if (base >= PHYS_ADDR_MAX) {
-+		pr_warn("Trying to add an invalid memory region, skipped\n");
-+		return;
-+	}
-+
-+	/* Truncate the passed memory region instead of type casting */
-+	if (base + size - 1 >= PHYS_ADDR_MAX || base + size < base) {
-+		pr_warn("Truncate memory region %llx @ %llx to size %llx\n",
-+			size, base, PHYS_ADDR_MAX - base);
-+		size = PHYS_ADDR_MAX - base;
-+	}
-+
-+	add_memory_region(base, size, BOOT_MEM_RAM);
- }
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index 8f4486c4415b..eceff9b75b22 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -17,6 +17,7 @@ archscripts: scripts_basic
+ 	$(Q)$(MAKE) $(build)=arch/mips/boot/tools relocs
  
- void * __init early_init_dt_alloc_memory_arch(u64 size, u64 align)
+ KBUILD_DEFCONFIG := 32r2el_defconfig
++KBUILD_DTBS      := dtbs
+ 
+ #
+ # Select the object file format to substitute into the linker script.
+@@ -384,7 +385,7 @@ quiet_cmd_64 = OBJCOPY $@
+ vmlinux.64: vmlinux
+ 	$(call cmd,64)
+ 
+-all:	$(all-y)
++all:	$(all-y) $(KBUILD_DTBS)
+ 
+ # boot
+ $(boot-y): $(vmlinux-32) FORCE
 -- 
-2.20.1
-
-
+2.11.0
 
