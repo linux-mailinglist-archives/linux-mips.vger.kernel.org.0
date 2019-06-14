@@ -2,85 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCA446939
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2019 22:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF2646BAE
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2019 23:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727971AbfFNUaw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Jun 2019 16:30:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54642 "EHLO mail.kernel.org"
+        id S1726442AbfFNVRL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 Jun 2019 17:17:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60176 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727963AbfFNUaw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 14 Jun 2019 16:30:52 -0400
-Received: from sasha-vm.mshome.net (unknown [131.107.159.134])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726349AbfFNVRL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 14 Jun 2019 17:17:11 -0400
+Received: from localhost (unknown [131.107.159.134])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9A8A7217F9;
-        Fri, 14 Jun 2019 20:30:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7CEBA2184B;
+        Fri, 14 Jun 2019 21:17:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560544251;
-        bh=F+anLLuCwXvo7UdHUf2b8qxkr5pxdKd/+T5t+Wh0p2Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PCv/8t90kbpCsFsemava6/k66xUUgdqWSaHND//1zHUwOqUvFQn8wZOBaA1OetMKb
-         YdDL5jyb275VvR76UJDLf6kxcoOuhp+9SY48YtmjWlGmCzdHFiEuD5b33JC4SfwzZm
-         7s0UvlqqjC3/0A//MNEsYju1f9jrC+MXoqih68YY=
+        s=default; t=1560547030;
+        bh=3qZBnSeXO8K4oYa3/N25KQYrBFfoH3IDbPh/Ayhnk1s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wSQKJ/fpvZ2VNMj+Ci4k6VkUSRmnCwxH0B3QSi4pAXHaafCyjkLk5Ay1FlTE8nu4t
+         G9JhtzPQKgDEUCIAmnZTe5zgfu4bvGevKrkwx5eb89dokUpJIBwpcuH1xlDk/nCpvt
+         xMI4C4u1OBkryDfNx63vmnnkfSFUTeuK+DAqJlh4=
+Date:   Fri, 14 Jun 2019 17:17:10 -0400
 From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     YueHaibing <yuehaibing@huawei.com>,
-        Paul Burton <paul.burton@mips.com>, ralf@linux-mips.org,
-        jhogan@kernel.org, linux-mips@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.4 04/10] MIPS: uprobes: remove set but not used variable 'epc'
-Date:   Fri, 14 Jun 2019 16:30:40 -0400
-Message-Id: <20190614203046.28077-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190614203046.28077-1-sashal@kernel.org>
-References: <20190614203046.28077-1-sashal@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Michael Kelley <mikelley@microsoft.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>
+Subject: Re: [PATCH v6 18/19] x86: Add support for generic vDSO
+Message-ID: <20190614211710.GQ1513@sasha-vm>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <20190530141531.43462-19-vincenzo.frascino@arm.com>
+ <BYAPR21MB1221D54FCEC97509EEF7395CD7180@BYAPR21MB1221.namprd21.prod.outlook.com>
+ <alpine.DEB.2.21.1906141313150.1722@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.1906141313150.1722@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: YueHaibing <yuehaibing@huawei.com>
+On Fri, Jun 14, 2019 at 01:15:23PM +0200, Thomas Gleixner wrote:
+>On Thu, 30 May 2019, Michael Kelley wrote:
+>> Vincenzo -- these changes for Hyper-V are a subset of a larger patch set
+>> I have that moves all of the Hyper-V clock/timer code into a separate
+>> clocksource driver in drivers/clocksource, with an include file in
+>> includes/clocksource.  That new include file should be able to work
+>> instead of your new mshyperv-tsc.h.  It also has the benefit of being
+>> ISA neutral, so it will work with my in-progress patch set to support
+>> Linux on Hyper-V on ARM64.  See https://lkml.org/lkml/2019/5/27/231
+>> for the new clocksource driver patch set.
+>
+>Grrr. That's queued in hyperv-next for whatever reasons.
 
-[ Upstream commit f532beeeff0c0a3586cc15538bc52d249eb19e7c ]
+I queue up our future pull requests there to give them some soaking in
+-next.
 
-Fixes gcc '-Wunused-but-set-variable' warning:
+>Sasha, can you please provide me the branch to pull from so I can have a
+>common base for all the various changes floating around?
 
-arch/mips/kernel/uprobes.c: In function 'arch_uprobe_pre_xol':
-arch/mips/kernel/uprobes.c:115:17: warning: variable 'epc' set but not used [-Wunused-but-set-variable]
+I'll send you a unified pull request for these changes.
 
-It's never used since introduction in
-commit 40e084a506eb ("MIPS: Add uprobes support.")
-
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Cc: <ralf@linux-mips.org>
-Cc: <jhogan@kernel.org>
-Cc: <linux-kernel@vger.kernel.org>
-Cc: <linux-mips@vger.kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/kernel/uprobes.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/arch/mips/kernel/uprobes.c b/arch/mips/kernel/uprobes.c
-index 4e7b89f2e244..1363d705cc8c 100644
---- a/arch/mips/kernel/uprobes.c
-+++ b/arch/mips/kernel/uprobes.c
-@@ -164,9 +164,6 @@ int arch_uprobe_pre_xol(struct arch_uprobe *aup, struct pt_regs *regs)
- 	 */
- 	aup->resume_epc = regs->cp0_epc + 4;
- 	if (insn_has_delay_slot((union mips_instruction) aup->insn[0])) {
--		unsigned long epc;
--
--		epc = regs->cp0_epc;
- 		__compute_return_epc_for_insn(regs,
- 			(union mips_instruction) aup->insn[0]);
- 		aup->resume_epc = regs->cp0_epc;
--- 
-2.20.1
-
+--
+Thanks,
+Sasha
