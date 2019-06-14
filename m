@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8892846A88
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2019 22:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A03469CC
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2019 22:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726762AbfFNUh6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Jun 2019 16:37:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50938 "EHLO mail.kernel.org"
+        id S1727758AbfFNUfY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 Jun 2019 16:35:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52436 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726755AbfFNU3F (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 14 Jun 2019 16:29:05 -0400
+        id S1727273AbfFNU35 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 14 Jun 2019 16:29:57 -0400
 Received: from sasha-vm.mshome.net (unknown [131.107.159.134])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8035B2184D;
-        Fri, 14 Jun 2019 20:29:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1085321848;
+        Fri, 14 Jun 2019 20:29:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560544144;
+        s=default; t=1560544197;
         bh=JcfqUTP6x4yGsT+rMP4Hw8NWJSGWT2N9YWh0L6aHju8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AycFfBCoOGVUm55nn3t6nEhvx7WfRKONxYFPxnDoyg2mMe229CUPiRuTBuaQFvl8O
-         JuqrEjD7LVQ7FtNTg8sfIOi1WNdnFfWKT36o/h8nB+czHpP+hXjyoTAr0BB0tNXFr8
-         lX9sa0DQx+VJ9hlUqYTWwgDFJaAIG2nL9wMqq7w0=
+        b=qE1cgiyan7Hj5RvInwG7K1yS0/azt7g3VYxCtPIeW7HrraSh9VgqC+15fIfr0BsP9
+         Hxk2ejcfsDG9Go1V7rpb32orVNHjjxWYDtAcs9MG77Fh/fxTAs7l9tsFNtJdzW8r4C
+         itCEAThxd+RxFd4aVYaxP8cYE05+YHJcQwZD6030=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     YueHaibing <yuehaibing@huawei.com>,
         Paul Burton <paul.burton@mips.com>, ralf@linux-mips.org,
         jhogan@kernel.org, linux-mips@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.1 25/59] MIPS: uprobes: remove set but not used variable 'epc'
-Date:   Fri, 14 Jun 2019 16:28:09 -0400
-Message-Id: <20190614202843.26941-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 15/39] MIPS: uprobes: remove set but not used variable 'epc'
+Date:   Fri, 14 Jun 2019 16:29:20 -0400
+Message-Id: <20190614202946.27385-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190614202843.26941-1-sashal@kernel.org>
-References: <20190614202843.26941-1-sashal@kernel.org>
+In-Reply-To: <20190614202946.27385-1-sashal@kernel.org>
+References: <20190614202946.27385-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
