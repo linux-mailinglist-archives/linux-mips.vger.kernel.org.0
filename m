@@ -2,61 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB2345506
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2019 08:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E086D45530
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Jun 2019 09:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725869AbfFNGwb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Jun 2019 02:52:31 -0400
-Received: from verein.lst.de ([213.95.11.211]:44566 "EHLO newverein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725834AbfFNGwb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 14 Jun 2019 02:52:31 -0400
-Received: by newverein.lst.de (Postfix, from userid 2407)
-        id 14D0B68B05; Fri, 14 Jun 2019 08:52:03 +0200 (CEST)
-Date:   Fri, 14 Jun 2019 08:52:02 +0200
-From:   "hch@lst.de" <hch@lst.de>
-To:     "Tan, Ley Foon" <ley.foon.tan@intel.com>
-Cc:     "hch@lst.de" <hch@lst.de>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "monstr@monstr.eu" <monstr@monstr.eu>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "lftan.linux@gmail.com" <lftan.linux@gmail.com>
-Subject: Re: switch nios2 and microblaze to use the generic uncached
- segement support
-Message-ID: <20190614065202.GA8084@lst.de>
-References: <20190603065324.9724-1-hch@lst.de> <1560476434.21652.1.camel@intel.com> <20190614054418.GA6722@lst.de> <1560492659.21652.3.camel@intel.com>
+        id S1725837AbfFNHCV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 Jun 2019 03:02:21 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:33790 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S1725780AbfFNHCV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 14 Jun 2019 03:02:21 -0400
+X-Greylist: delayed 414 seconds by postgrey-1.27 at vger.kernel.org; Fri, 14 Jun 2019 03:02:19 EDT
+Received: from ld50 (unknown [116.227.76.7])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 49A406011D;
+        Fri, 14 Jun 2019 14:55:23 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
+        t=1560495323; bh=KIsjpnrc1kWTp5mngPR3Kyeg7MjoHz37JvngBJKfgLc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gMVMFGjQp+7oPQFpt+QkMFgKOYBR7sQOKe1S/hD3ZFWtuwUqQrMOHH5TTZIThER98
+         rcwnX4kWid+KtKsLH6btPuQ0HU+NInL7eFyQM32DRDT+gLdrKa/yeyS2M9MaoMLd9z
+         AXUy1bgNk7f3AWGkjJ/XgYhiupgXhdG4amz84lzQ=
+Date:   Fri, 14 Jun 2019 14:55:18 +0800
+From:   WANG Xuerui <kernel@xen0n.name>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mips@vger.kernel.org
+Subject: DMI: support for non-EFI platforms with non-standard SMBIOS
+ entrypoint?
+Message-ID: <20190614065518.GA53855@ld50>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1560492659.21652.3.camel@intel.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 14, 2019 at 06:11:00AM +0000, Tan, Ley Foon wrote:
-> On Fri, 2019-06-14 at 07:44 +0200, Christoph Hellwig wrote:
-> > On Fri, Jun 14, 2019 at 09:40:34AM +0800, Ley Foon Tan wrote:
-> > > 
-> > > Hi Christoph
-> > > 
-> > > Can this patch in http://git.infradead.org/users/hch/dma-mapping.gi
-> > > t/sh
-> > > ortlog/refs/heads/for-next
-> > > 
-> > > [PATCH 1/2] nios2: use the generic uncached segment support in dma-
-> > > direct
-> > Hi Ley Foon,
-> > 
-> > I don't understand the above sentence.  Does it imply a Reviewed-by?
-> Sorry, typo in my previous email. 
-> Can't find this patch in the git link you provided (for-next branch).
-> Did you push the patch?
+Hi,
 
-No, I did not push the microblaze and nios2 patches there.  The for-next
-patch just has the baseline, you'll need to apply the nios2 on top of
-that branch to test it.  If it tests good and you are fine with it I'd
-like to apply it to that branch.
+There are several MIPS platforms floating around with firmware SMBIOS
+support, primarily Loongson 3-series, but their SMBIOS entrypoint is
+non-standard.  According to the SMBIOS spec the non-EFI platforms should
+have the tables in the 000F_0000h-000F_FFFFh physical range, however
+these boards put the table at 0FFF_E000h.
+
+How do we enable DMI for these non-EFI yet non-standard-compliant
+systems without resorting to firmware fixing, which is not always
+feasible?  It is possible to move the address definition to arch realm
+with the standard value as default, but I would like to first ask for
+suggestions, as I am fairly new to kernel development (personal hobby
+for now).
+
+Regards,
+
+Xuerui
