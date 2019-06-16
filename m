@@ -2,107 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 351574766A
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Jun 2019 20:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F230A4771F
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jun 2019 00:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727140AbfFPS36 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 16 Jun 2019 14:29:58 -0400
-Received: from mx.0dd.nl ([5.2.79.48]:35810 "EHLO mx.0dd.nl"
+        id S1727410AbfFPWbO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 16 Jun 2019 18:31:14 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:36854 "EHLO mx2.mailbox.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725947AbfFPS36 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 16 Jun 2019 14:29:58 -0400
-X-Greylist: delayed 569 seconds by postgrey-1.27 at vger.kernel.org; Sun, 16 Jun 2019 14:29:56 EDT
-Received: from mail.vdorst.com (mail.vdorst.com [IPv6:fd01::250])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725811AbfFPWbO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 16 Jun 2019 18:31:14 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
         (No client certificate requested)
-        by mx.0dd.nl (Postfix) with ESMTPS id F2C1160743;
-        Sun, 16 Jun 2019 20:20:29 +0200 (CEST)
-Authentication-Results: mx.0dd.nl;
-        dkim=pass (2048-bit key) header.d=vdorst.com header.i=@vdorst.com header.b="FN0hLvbF";
-        dkim-atps=neutral
-Received: from pc-rene.vdorst.com (pc-rene.vdorst.com [192.168.2.125])
-        by mail.vdorst.com (Postfix) with ESMTPA id B867D1C65C75;
-        Sun, 16 Jun 2019 20:20:29 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.vdorst.com B867D1C65C75
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vdorst.com;
-        s=default; t=1560709229;
-        bh=FVz7Hn4FLBbfcWH9mwHn/c+q2RITenYFgIKX1MKhYCQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FN0hLvbFuwlQgK6xPtWy5fqR54Ff84xdsrphIIXG+WUQ4QJW72tqJF6p8YfBf+aJ7
-         3GW2x6uBRW9ejmGind7x0drMPvLDJ0NKrSbxj4svV54M9YuSeUm3pIMUjJK+J2YzCc
-         1TnUt1XpdxYQworIBPiKx/+Yrm7N9t/cAHDwy5DteKdYG6VFyqHImr+By1CxmiG2Pg
-         AWwkbHe7zuowI7rpLBqhGAF8c8tfoGXcbmrWcwMaXavwRp4NfUsCrV326WThnk+JH5
-         LIgLQ7g6/C3PCQsdxd/Y7+AduwmUIMrs1ZiVbY+rVS5Chz0mUBTMzhKumHFBQbZVMT
-         xFVogJiQQt5Ww==
-From:   =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
-To:     Sean Wang <sean.wang@mediatek.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>
-Cc:     netdev@vger.kernel.org, john@phrozen.org,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
-Subject: [PATCH net-next 2/2] net: dsa: mt7530: Add MT7621 TRGMII mode support
-Date:   Sun, 16 Jun 2019 20:20:10 +0200
-Message-Id: <20190616182010.18778-3-opensource@vdorst.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190616182010.18778-1-opensource@vdorst.com>
-References: <20190616182010.18778-1-opensource@vdorst.com>
+        by mx2.mailbox.org (Postfix) with ESMTPS id 1B66EA017A;
+        Mon, 17 Jun 2019 00:31:11 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter02.heinlein-hosting.de (spamfilter02.heinlein-hosting.de [80.241.56.116]) (amavisd-new, port 10030)
+        with ESMTP id arRDHarA94YK; Mon, 17 Jun 2019 00:31:04 +0200 (CEST)
+From:   Hauke Mehrtens <hauke@hauke-m.de>
+To:     paul.burton@mips.com
+Cc:     ralf@linux-mips.org, jhogan@kernel.org, f4bug@amsat.org,
+        linux-mips@vger.kernel.org, ysu@wavecomp.com, jcristau@debian.org,
+        Hauke Mehrtens <hauke@hauke-m.de>, stable@vger.kernel.org
+Subject: [PATCH] MIPS: Fix bounds check virt_addr_valid
+Date:   Mon, 17 Jun 2019 00:30:39 +0200
+Message-Id: <20190616223039.28158-1-hauke@hauke-m.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-MT7621 internal MT7530 switch also supports TRGMII mode.
-TRGMII speed is 1200MBit.
+The bounds check used the uninitialized variable vaddr, it should use
+the given parameter kaddr instead. When using the uninitialized value
+the compiler assumed it to be 0 and optimized this function to just
+return 0 in all cases.
 
-Signed-off-by: René van Dorst <opensource@vdorst.com>
+This should make the function check the range of the given address and
+only do the page map check in case it is in the expected range of
+virtual addresses.
+
+Fixes: 074a1e1167af ("MIPS: Bounds check virt_addr_valid")
+Cc: stable@vger.kernel.org # v4.12+
+Cc: Paul Burton <paul.burton@mips.com>
+Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
 ---
- drivers/net/dsa/mt7530.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ arch/mips/mm/mmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index c7d352da5448..88de4e880417 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -435,11 +435,20 @@ mt7530_pad_clk_setup(struct dsa_switch *ds, int mode)
- 		trgint = 0;
- 		ncpo1 = 0x0c80;
- 		ssc_delta = 0x87;
-+
-+		/* Port 6 delay settings RGMII central align */
-+		mt7530_rmw(priv, MT7530_TRGMII_TXCTRL, BIT(30) | BIT(28), 0);
-+		mt7530_write(priv, MT7530_TRGMII_TCK_CTRL, 0x0855);
- 		break;
- 	case PHY_INTERFACE_MODE_TRGMII:
- 		trgint = 1;
--		ncpo1 = 0x1400;
-+		/* PLL frequency: MT7621 150MHz, other 162.5MHz */
-+		ncpo1 = (priv->id == ID_MT7621 ? 0x0780 : 0x1400);
- 		ssc_delta = 0x57;
-+
-+		/* Port 6 delay settings TRGMII central align */
-+		mt7530_rmw(priv, MT7530_TRGMII_TXCTRL, 0, BIT(30));
-+		mt7530_write(priv, MT7530_TRGMII_TCK_CTRL, 0x0055);
- 		break;
- 	default:
- 		dev_err(priv->dev, "xMII mode %d not supported\n", mode);
-@@ -507,7 +516,9 @@ mt7530_pad_clk_setup(struct dsa_switch *ds, int mode)
- 			mt7530_rmw(priv, MT7530_TRGMII_RD(i),
- 				   RD_TAP_MASK, RD_TAP(16));
- 	else
--		mt7623_trgmii_set(priv, GSW_INTF_MODE, INTF_MODE_TRGMII);
-+		if (priv->id != ID_MT7621)
-+			mt7623_trgmii_set(priv, GSW_INTF_MODE,
-+					  INTF_MODE_TRGMII);
+diff --git a/arch/mips/mm/mmap.c b/arch/mips/mm/mmap.c
+index 50ee7213b432..d79f2b432318 100644
+--- a/arch/mips/mm/mmap.c
++++ b/arch/mips/mm/mmap.c
+@@ -203,7 +203,7 @@ unsigned long arch_randomize_brk(struct mm_struct *mm)
  
- 	return 0;
- }
+ bool __virt_addr_valid(const volatile void *kaddr)
+ {
+-	unsigned long vaddr = (unsigned long)vaddr;
++	unsigned long vaddr = (unsigned long)kaddr;
+ 
+ 	if ((vaddr < PAGE_OFFSET) || (vaddr >= MAP_BASE))
+ 		return false;
 -- 
 2.20.1
 
