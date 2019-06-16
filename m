@@ -2,89 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDCEE4736B
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Jun 2019 08:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B74447665
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Jun 2019 20:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725920AbfFPG6U convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sun, 16 Jun 2019 02:58:20 -0400
-Received: from relay1.mentorg.com ([192.94.38.131]:37699 "EHLO
-        relay1.mentorg.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725861AbfFPG6U (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Jun 2019 02:58:20 -0400
-Received: from nat-ies.mentorg.com ([192.94.31.2] helo=SVR-IES-MBX-03.mgc.mentorg.com)
-        by relay1.mentorg.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-SHA384:256)
-        id 1hcP7H-0001ds-Ig from Cedric_Hombourger@mentor.com ; Sat, 15 Jun 2019 23:58:15 -0700
-Received: from svr-ies-mbx-02.mgc.mentorg.com (139.181.222.2) by
- SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3) with Microsoft SMTP Server
- (TLS) id 15.0.1320.4; Sun, 16 Jun 2019 07:58:12 +0100
-Received: from svr-ies-mbx-02.mgc.mentorg.com ([fe80::a01f:51c9:5b6c:e0c]) by
- svr-ies-mbx-02.mgc.mentorg.com ([fe80::a01f:51c9:5b6c:e0c%22]) with mapi id
- 15.00.1320.000; Sun, 16 Jun 2019 07:58:11 +0100
-From:   "Hombourger, Cedric" <Cedric_Hombourger@mentor.com>
-To:     Sasha Levin <sashal@kernel.org>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: have "plain" make calls build dtbs for selected
- platforms
-Thread-Topic: [PATCH] MIPS: have "plain" make calls build dtbs for selected
- platforms
-Thread-Index: AQHVIcVrw5tGiAGyckKhKLs3W2AnEaadO4kAgACh3B8=
-Date:   Sun, 16 Jun 2019 06:58:11 +0000
-Message-ID: <1560668291651.87711@mentor.com>
-References: <1560415970-844-1-git-send-email-Cedric_Hombourger@mentor.com>,<20190615221604.E6FB82183F@mail.kernel.org>
-In-Reply-To: <20190615221604.E6FB82183F@mail.kernel.org>
-Accept-Language: en-US, en-IE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [192.94.31.225]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        id S1726069AbfFPS35 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 16 Jun 2019 14:29:57 -0400
+Received: from mx.0dd.nl ([5.2.79.48]:35812 "EHLO mx.0dd.nl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726038AbfFPS35 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 16 Jun 2019 14:29:57 -0400
+Received: from mail.vdorst.com (mail.vdorst.com [IPv6:fd01::250])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx.0dd.nl (Postfix) with ESMTPS id BCECC6049A;
+        Sun, 16 Jun 2019 20:20:26 +0200 (CEST)
+Authentication-Results: mx.0dd.nl;
+        dkim=pass (2048-bit key; secure) header.d=vdorst.com header.i=@vdorst.com header.b="bqVTw9z6";
+        dkim-atps=neutral
+Received: from pc-rene.vdorst.com (pc-rene.vdorst.com [192.168.2.125])
+        by mail.vdorst.com (Postfix) with ESMTPA id 811721C65C71;
+        Sun, 16 Jun 2019 20:20:26 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.vdorst.com 811721C65C71
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vdorst.com;
+        s=default; t=1560709226;
+        bh=cJxXS1s1q+LMki6wCGzDmpmkzhZ9t4IB5EDQoDNc6yk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bqVTw9z692OAlhlk9cyH0sN8FA7xgd/gcSZ5xYPoe0qxdzbA1VYG2t6dk2bJc1zhl
+         Duz6MfC4CsYL+iqWMsMOrksePP77I7PQdNZfBwCkfW6q9jHvWq/sLrqsayusUd/fPG
+         TvyBc/hFJZJShV1Qi4joz193cV8PgD+Si8aRIMX+wmyb1KAc5nauFVeUFbRXL9AQQq
+         pZnPGVkayXzb7J8nwUckN265BOX6DFuRYWmzJDhlw49Ym7PzIG19GeG9EfHw1DJ0xl
+         TGkF7dANVFkm8CHkEc9vE6W3MIT8OhVpCx6jPY3KWF1XHZCqpdglnVV9y8DL+Gut6P
+         nbXHCjke3gWeQ==
+From:   =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
+To:     Sean Wang <sean.wang@mediatek.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>
+Cc:     netdev@vger.kernel.org, john@phrozen.org,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
+Subject: [PATCH net-next 0/2] net: mediatek: Add MT7621 TRGMII mode support
+Date:   Sun, 16 Jun 2019 20:20:08 +0200
+Message-Id: <20190616182010.18778-1-opensource@vdorst.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Sasha,
+Like many other mediatek SOCs, the MT7621 SOC and the internal MT7530 switch both
+supports TRGMII mode. MT7621 TRGMII speed is 1200MBit.
 
-Thanks a lot for testing all these configurations (and I apologize if I missed anything to fulfill the process to contribute to -stable)
-I will check the configurations that fail and check if we just need to resolve the patch conflict(s). Should we mark the current patch as targeting v4.19+ and submit specific patches for < 4.19? Your guidance would be greatly appreciated
+René van Dorst (2):
+  net: ethernet: mediatek: Add MT7621 TRGMII mode support
+  net: dsa: mt7530: Add MT7621 TRGMII mode support
 
-Thank you
-Cedric
-________________________________________
-From: Sasha Levin <sashal@kernel.org>
-Sent: Sunday, June 16, 2019 12:16 AM
-To: Sasha Levin; Hombourger, Cedric
-Cc: Hombourger, Cedric; linux-mips@vger.kernel.org; stable@vger.kernel.org; stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: have "plain" make calls build dtbs for selected platforms
+ drivers/net/dsa/mt7530.c                    | 15 ++++++--
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 38 ++++++++++++++++++---
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h | 11 ++++++
+ 3 files changed, 58 insertions(+), 6 deletions(-)
 
-Hi,
+-- 
+2.20.1
 
-[This is an automated email]
-
-This commit has been processed because it contains a -stable tag.
-The stable tag indicates that it's relevant for the following trees: all
-
-The bot has tested the following trees: v5.1.9, v4.19.50, v4.14.125, v4.9.181, v4.4.181.
-
-v5.1.9: Build OK!
-v4.19.50: Build OK!
-v4.14.125: Failed to apply! Possible dependencies:
-    04d8405e714e ("MIPS: Set defconfig target to a generic system for 32r2el")
-
-v4.9.181: Failed to apply! Possible dependencies:
-    04d8405e714e ("MIPS: Set defconfig target to a generic system for 32r2el")
-
-v4.4.181: Failed to apply! Possible dependencies:
-    04d8405e714e ("MIPS: Set defconfig target to a generic system for 32r2el")
-    aadeec4df9b3 ("MIPS: tools: Build relocs tool")
-
-
-How should we proceed with this patch?
-
---
-Thanks,
-Sasha
