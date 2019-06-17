@@ -2,170 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F1F49192
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jun 2019 22:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2946493C5
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jun 2019 23:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726982AbfFQUpJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Jun 2019 16:45:09 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:38920 "EHLO mx2.mailbox.org"
+        id S1727851AbfFQVdR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Jun 2019 17:33:17 -0400
+Received: from mx.0dd.nl ([5.2.79.48]:39530 "EHLO mx.0dd.nl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725844AbfFQUpJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 17 Jun 2019 16:45:09 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        id S1728972AbfFQVdP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 17 Jun 2019 17:33:15 -0400
+Received: from mail.vdorst.com (mail.vdorst.com [IPv6:fd01::250])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id D64D4A1341;
-        Mon, 17 Jun 2019 22:45:06 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id VeV30pXvhtkJ; Mon, 17 Jun 2019 22:45:00 +0200 (CEST)
-Subject: Re: [PATCH] MIPS: BCM47XX: Add support for Netgear R6200 V1
-To:     =?UTF-8?Q?Edward_Matijevi=c4=87?= <motolav@gmail.com>
-Cc:     linux-mips@vger.kernel.org
-References: <6e003471-e7bd-6e0a-c00c-7de5e1b01428@gmail.com>
-From:   Hauke Mehrtens <hauke@hauke-m.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=hauke@hauke-m.de; keydata=
- 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
-Message-ID: <c468145b-9ee3-e5d0-99b2-45de6f7b8db2@hauke-m.de>
-Date:   Mon, 17 Jun 2019 22:45:00 +0200
+        by mx.0dd.nl (Postfix) with ESMTPS id 56AD65FEE7;
+        Mon, 17 Jun 2019 23:33:12 +0200 (CEST)
+Authentication-Results: mx.0dd.nl;
+        dkim=pass (2048-bit key) header.d=vdorst.com header.i=@vdorst.com header.b="HZgKxU3I";
+        dkim-atps=neutral
+Received: from www (www.vdorst.com [192.168.2.222])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.vdorst.com (Postfix) with ESMTPSA id 168891C79191;
+        Mon, 17 Jun 2019 23:33:12 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.vdorst.com 168891C79191
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vdorst.com;
+        s=default; t=1560807192;
+        bh=mpnW9o2NLTWC9DpV89ZrktdnkCj2Hk6BtAKmEs1R7Io=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HZgKxU3IqFhH818JqCma8/K3LSV4G9kSX63CnGbmPzy+ryh6//NEyxE0Amsd0s/RK
+         k92SraEHuiQKFMQCSWdJb+Q3Z4oGDqMZMMHQQajOArKc4DYo+o8HK1GjWsEJEyum6w
+         KMKFnzGCXNqOwGCH362eRwwKoJdxQRwRysuXHnHk1Z8/9NqbX9GoEaQzOlaP3+o07L
+         3HMijpcylvGBsh08uk7C281KkLD7EA001NidmPBtopdbh+R7q1mhLR1pGSQSCSU+Du
+         XDxoWzNjz37gPi8riDve5Gz6Kh8FmHOEoaUoibX2FKj1k31NtURqtng2ia+vXzpqBE
+         XP8LnlTrOr7oA==
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1]) by
+ www.vdorst.com (Horde Framework) with HTTPS; Mon, 17 Jun 2019 21:33:12 +0000
+Date:   Mon, 17 Jun 2019 21:33:12 +0000
+Message-ID: <20190617213312.Horde.fcb9-g80Zzfd-IMC8EQy50h@www.vdorst.com>
+From:   =?utf-8?b?UmVuw6k=?= van Dorst <opensource@vdorst.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        netdev@vger.kernel.org, john@phrozen.org,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH net-next 0/2] net: mediatek: Add MT7621 TRGMII mode
+ support
+References: <20190616182010.18778-1-opensource@vdorst.com>
+ <20190617140223.GC25211@lunn.ch>
+In-Reply-To: <20190617140223.GC25211@lunn.ch>
+User-Agent: Horde Application Framework 5
+Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
 MIME-Version: 1.0
-In-Reply-To: <6e003471-e7bd-6e0a-c00c-7de5e1b01428@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 6/17/19 7:26 AM, Edward Matijević wrote:
-> The Netgear R6200 v1 uses a BCM4718A1 SOC and a BCM4352/BCM4360 for 5GHz wireless.
-> This patch adds support for detecting this model board and registers the 3 buttons.
-> I have tested that the device can boot kernels 4.14 and 4.19 under OpenWRT.
-> 
-> There is one issue that the LEDs on the device are controlled by a 74HC164 that uses bit-banging instead of SPI so it isn't accessible to the kernel without adding a workaround.
-> Without any workaround the device on boot will flash all LEDs once then the power LED will remain amber as all other LEDs stay off.
-> 
-> I placed my change in board.c in that location because in OpenWRT it would be above the R6300 V1 in one of their patches.
-> 
-> Signed-off-by: Edward Matijevic <motolav@gmail.com>
+Quoting Andrew Lunn <andrew@lunn.ch>:
 
-Acked-by: Hauke Mehrtens <hauke@hauke-m.de>
+> On Sun, Jun 16, 2019 at 08:20:08PM +0200, René van Dorst wrote:
+>> Like many other mediatek SOCs, the MT7621 SOC and the internal  
+>> MT7530 switch both
+>> supports TRGMII mode. MT7621 TRGMII speed is 1200MBit.
+>
+> Hi René
+>
 
-> ---
->  arch/mips/bcm47xx/board.c                          | 1  +
->  arch/mips/bcm47xx/buttons.c                        | 10 ++++++++++
->  arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h | 1  +
->  3 files changed, 12 insertions(+)
-> 
-> --- a/arch/mips/bcm47xx/board.c
-> +++ b/arch/mips/bcm47xx/board.c
-> @@ -163,6 +163,7 @@ struct bcm47xx_board_type_list1 bcm47xx_board_list_board_id[] __initconst = {
->      {{BCM47XX_BOARD_NETGEAR_WGR614V8, "Netgear WGR614 V8"}, "U12H072T00_NETGEAR"},
->      {{BCM47XX_BOARD_NETGEAR_WGR614V9, "Netgear WGR614 V9"}, "U12H094T00_NETGEAR"},
->      {{BCM47XX_BOARD_NETGEAR_WGR614_V10, "Netgear WGR614 V10"}, "U12H139T01_NETGEAR"},
-> +    {{BCM47XX_BOARD_NETGEAR_R6200_V1, "Netgear R6200 V1"}, "U12H192T00_NETGEAR"},
+Hi Andrew,
 
-Why not order this alphabetically?
+> Is TRGMII used only between the SoC and the Switch? Or does external
+> ports of the switch also support 1200Mbit/s? If external ports support
+> this, what does ethtool show for Speed?
 
->      {{BCM47XX_BOARD_NETGEAR_WNDR3300, "Netgear WNDR3300"}, "U12H093T00_NETGEAR"},
->      {{BCM47XX_BOARD_NETGEAR_WNDR3400V1, "Netgear WNDR3400 V1"}, "U12H155T00_NETGEAR"},
->      {{BCM47XX_BOARD_NETGEAR_WNDR3400V2, "Netgear WNDR3400 V2"}, "U12H187T00_NETGEAR"},
-> --- a/arch/mips/bcm47xx/buttons.c
-> +++ b/arch/mips/bcm47xx/buttons.c
-> @@ -384,6 +384,13 @@ bcm47xx_buttons_motorola_wr850gv2v3[] __initconst = {
->  
->  /* Netgear */
->  
-> +static const struct gpio_keys_button
-> +bcm47xx_buttons_netgear_r6200_v1[] __initconst = {
-> +    BCM47XX_GPIO_KEY(2, KEY_RFKILL),
-> +    BCM47XX_GPIO_KEY(3, KEY_RESTART),
-> +    BCM47XX_GPIO_KEY(4, KEY_WPS_BUTTON),
-> +};
-> +
->  static const struct gpio_keys_button
->  bcm47xx_buttons_netgear_wndr3400v1[] __initconst = {
->      BCM47XX_GPIO_KEY(4, KEY_RESTART),
-> @@ -664,6 +671,9 @@ int __init bcm47xx_buttons_register(void)
->          err = bcm47xx_copy_bdata(bcm47xx_buttons_motorola_wr850gv2v3);
->          break;
->  
-> +    case BCM47XX_BOARD_NETGEAR_R6200_V1:
-> +        err = bcm47xx_copy_bdata(bcm47xx_buttons_netgear_r6200_v1);
-> +        break;
->      case BCM47XX_BOARD_NETGEAR_WNDR3400V1:
->          err = bcm47xx_copy_bdata(bcm47xx_buttons_netgear_wndr3400v1);
->          break;
-> --- a/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h
-> +++ b/arch/mips/include/asm/mach-bcm47xx/bcm47xx_board.h
-> @@ -98,6 +98,7 @@ enum bcm47xx_board {
->      BCM47XX_BOARD_MOTOROLA_WR850GP,
->      BCM47XX_BOARD_MOTOROLA_WR850GV2V3,
->  
-> +    BCM47XX_BOARD_NETGEAR_R6200_V1,
->      BCM47XX_BOARD_NETGEAR_WGR614V8,
->      BCM47XX_BOARD_NETGEAR_WGR614V9,
->      BCM47XX_BOARD_NETGEAR_WGR614_V10,
-> 
+Only the first GMAC of the SOC and port 6 of the switch supports this mode.
+The switch can be internal in the SOC but also a separate chip.
+
+PHYLINK and ethertool reports the link as 1Gbit.
+The link is fixed-link with speed = 1000.
+
+dmesg output with unposted PHYLINK patches:
+[    5.236763] mt7530 mdio-bus:1f: configuring for fixed/trgmii link mode
+[    5.249813] mt7530 mdio-bus:1f: phylink_mac_config:  
+mode=fixed/trgmii/1Gbps/Full adv=00,00000000,00000220 pause=12 link=1  
+an=1
+[    6.389435] mtk_soc_eth 1e100000.ethernet eth0: phylink_mac_config:  
+mode=fixed/trgmii/1Gbps/Full adv=00,00000000,00000220 pause=12 link=1  
+an=1
+
+# ethtool eth0
+Settings for eth0:
+          Supported ports: [ MII ]
+          Supported link modes:   1000baseT/Full
+          Supported pause frame use: No
+          Supports auto-negotiation: No
+          Supported FEC modes: Not reported
+          Advertised link modes:  1000baseT/Full
+          Advertised pause frame use: No
+          Advertised auto-negotiation: No
+          Advertised FEC modes: Not reported
+          Speed: 1000Mb/s
+          Duplex: Full
+          Port: MII
+          PHYAD: 0
+          Transceiver: internal
+          Auto-negotiation: on
+          Current message level: 0x000000ff (255)
+                                 drv probe link timer ifdown ifup rx_err tx_err
+          Link detected: yes
+
+
+
+I already have report from a MT7623 user that this patch gives issues.
+
+I send v2 of the patch if I fixed that issue.
+
+Also I think it is better to add a XTAL frequency check.
+The PLL values are only valid with a 40MHz crystal.
+
+Any other comments for v2?
+
+Greats,
+
+René
+
+
+>
+>      Thanks
+> 	Andrew
+
 
