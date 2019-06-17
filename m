@@ -2,100 +2,206 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E4A47722
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jun 2019 00:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA09477DD
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jun 2019 04:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726267AbfFPWw2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 16 Jun 2019 18:52:28 -0400
-Received: from mail-eopbgr800129.outbound.protection.outlook.com ([40.107.80.129]:10528
-        "EHLO NAM03-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726016AbfFPWw1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 16 Jun 2019 18:52:27 -0400
+        id S1727389AbfFQCFY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 16 Jun 2019 22:05:24 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:34915 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727322AbfFQCFX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Jun 2019 22:05:23 -0400
+Received: by mail-io1-f68.google.com with SMTP id m24so17913166ioo.2
+        for <linux-mips@vger.kernel.org>; Sun, 16 Jun 2019 19:05:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=wavesemi.onmicrosoft.com; s=selector1-wavesemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IJizSwLYnyMy5hSTVGw/n8Ejb1uXAhLgP38yrGfH3WA=;
- b=argvBXju4eU/ytRk1HY4tDNM7ohi1iICQfjlVN1PAdANJkGQBJHbLuCQBRDmVJ5UMkmEf9Q5Lzos0ES3rSAB5QIYvjOZ60/KfdglP2qu5EGMhr5itlLDN4PoMiRKQfcwU3sJkfobxTiHSDbDehw4X05ykfagRXav6gVoyqw6EP0=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1648.namprd22.prod.outlook.com (10.174.167.37) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1987.11; Sun, 16 Jun 2019 22:52:23 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::6975:b632:c85b:9e40]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::6975:b632:c85b:9e40%2]) with mapi id 15.20.1987.014; Sun, 16 Jun 2019
- 22:52:23 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Hauke Mehrtens <hauke@hauke-m.de>
-CC:     Paul Burton <pburton@wavecomp.com>,
-        "ralf@linux-mips.org" <ralf@linux-mips.org>,
-        "jhogan@kernel.org" <jhogan@kernel.org>,
-        "f4bug@amsat.org" <f4bug@amsat.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Yunqiang Su <ysu@wavecomp.com>,
-        "jcristau@debian.org" <jcristau@debian.org>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: Fix bounds check virt_addr_valid
-Thread-Topic: [PATCH] MIPS: Fix bounds check virt_addr_valid
-Thread-Index: AQHVJJM2zyT1sAHyZkOPErpVODxD6Kae4ymA
-Date:   Sun, 16 Jun 2019 22:52:23 +0000
-Message-ID: <MWHPR2201MB127770B15273D2B1BC3B3F40C1E80@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20190616223039.28158-1-hauke@hauke-m.de>
-In-Reply-To: <20190616223039.28158-1-hauke@hauke-m.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR06CA0069.namprd06.prod.outlook.com
- (2603:10b6:a03:14b::46) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:18::12)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2601:646:8a00:9810:9d6:9cca:ff8c:efe0]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 94a9631e-3160-49de-dd1a-08d6f2ad4b53
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1648;
-x-ms-traffictypediagnostic: MWHPR2201MB1648:
-x-microsoft-antispam-prvs: <MWHPR2201MB164837ABE3D00FECA6B0DCF0C1E80@MWHPR2201MB1648.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0070A8666B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39840400004)(366004)(136003)(346002)(376002)(396003)(199004)(189003)(33656002)(76176011)(7696005)(52116002)(7736002)(305945005)(71200400001)(8936002)(14454004)(71190400001)(42882007)(46003)(9686003)(55016002)(256004)(5660300002)(99286004)(446003)(478600001)(6116002)(44832011)(11346002)(6916009)(68736007)(186003)(4326008)(102836004)(386003)(6506007)(81156014)(81166006)(52536014)(6436002)(316002)(229853002)(74316002)(476003)(2906002)(486006)(53936002)(73956011)(66946007)(66476007)(66556008)(64756008)(66446008)(4744005)(8676002)(25786009)(54906003)(6246003);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1648;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: oK1d5ltOWXluM8mV9ywoSQlInRNPRrZ/VIuXCZeQuCM+XxU43mdaHFgem4AcUM7KOvP4FYlyvuCtLRj2XTUNqPs+p6F7Pf7WTVn3jsoUq3ewUf0ms1npc6IN/lqjYtlvSWFtGELW3ueupFO6DVgczOj5GTJNmbYyzoayyyWVvDoMnIJ8PlCito1bRs60oajrmBaFU8fgxcDSswNuk0vVtlHlotRChp+n4gQ8pNmuiVt+imp79WBA5Bh39k6N8fnLUU2mbuwzVk2h2jEsLNQmHM4RqGZ02v18HvoqkAea1NMb1ysge2vC+xo2opskJEEd08wyQ8SUgM/CeoJjUeJm1uJTdaesao6GAeOUhzAuVqApkF08d87ZrnV8yWRYMPZhU+BvnEaoh8Nu+j6gwE36+6n81d+huasPtyKAGLGa9LQ=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I6mwHYzooXpOGy5aNm5Uvm4UqkK3cJp4sbgOqaXccos=;
+        b=nUrZrSlTkkMIKdY/AnNfoA04QOxKTirtp/tLPlOv4i6OhFKsXPEz5cVzX1xO32mH0r
+         2u95nfRSrFYI5FzsUmVZGC4OWESVY9rFWYsQpzr1xzNHY4ei3uyJ+dy35pCz4iPeMlwk
+         9UfAHLq7VZMWP2Rp+Opc0+iOEuEjFVmY40y99XW8VgorqEEGqnzdg2PNgJeCPSDUfN/I
+         LljKa5F7GLKHFwXoha4FBzoR5D63snBKgNaET9DWi4vHB7D4ZjuYz5DtJueej7aVfpLX
+         S2dAgEe9m0L5eTWZ9eNYuqIr9pWI1k0ZqodgezaF+jXI0I+QEGz1uoxR3QS5djmwj9nk
+         VmWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I6mwHYzooXpOGy5aNm5Uvm4UqkK3cJp4sbgOqaXccos=;
+        b=XPHrKnzwAPRE0UE7mjOsc/Krzj5L6O5f7vWDSIc/x+1B5LXa0pJ+zjfiXQCYMbBj65
+         0L/XD3usBRNYRjO4Vq97NSLQaogWR6ueE6FG9xC3klJuxlWcPamzZlwAmSmQSOd/8Wss
+         of9lgB1EMek+oHiqajCcBDlMKrAXxJ6xN6dsMENEFluiEzkJOfxEaQWUgxdMLF+FXYMW
+         Dhn0nxejgPph+kvNdtM3ZZFaqmjj+qBh/HTQYjnfhAW3lpnDdlAVtt/wH1Mu04i/HxtU
+         JNx9V7/2TVkW00+cK/Wvw9yaaIJfD1NLr2QckRjXiANmLlgq+PS4BYvVEO7GeOmfYmEv
+         1y2A==
+X-Gm-Message-State: APjAAAXkJRZWq57dcHWl+uHJC8B+Sa/4tF40gv6aB28W4hnZ9Z84W2gp
+        6ZCa2qk8Jiv1QijxRuuiCy/rRN+Sl3YPZdjEdEg=
+X-Google-Smtp-Source: APXvYqyzycJ6GAQEDuRtq6fdsox0+z25xLiUEIRz3lVAd4azqLuSgQ5wnyiF+aUv8tK2ft3fPA6/Lv8zRlAlrkdUKEs=
+X-Received: by 2002:a5d:8702:: with SMTP id u2mr71007676iom.228.1560737122502;
+ Sun, 16 Jun 2019 19:05:22 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94a9631e-3160-49de-dd1a-08d6f2ad4b53
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jun 2019 22:52:23.5132
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1648
+References: <20190613063057.szrvmvpauzagxf62@pengutronix.de>
+ <CALOAHbBd2nv=qAy4b4rP_vxtsTAc-eLrozfzzyVhXVQXrpMvtg@mail.gmail.com>
+ <CALOAHbCp_=_W_0jxkXmvb1b_CTEi_B45DOipM20mWPcYUWQamw@mail.gmail.com>
+ <20190613160214.7df3tnfgtexvdy3y@pengutronix.de> <CALOAHbAMNNL6=-Mw5KTZSL0B-it-jGByqY_65iCjH+vAshYRxA@mail.gmail.com>
+ <20190614083419.stgronjpyglnxjbo@pengutronix.de>
+In-Reply-To: <20190614083419.stgronjpyglnxjbo@pengutronix.de>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Mon, 17 Jun 2019 10:04:46 +0800
+Message-ID: <CALOAHbBLK=sQS+OyOOaEh=Ef-BKjrJ9TGC64EaypzktbnH=BLg@mail.gmail.com>
+Subject: Re: MIPS: ath79: regression after patch: sched/fair: do not expose
+ some tracepoints to user if CONFIG_SCHEDSTATS is not set
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-mips@vger.kernel.org, kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-SGVsbG8sDQoNCkhhdWtlIE1laHJ0ZW5zIHdyb3RlOg0KPiBUaGUgYm91bmRzIGNoZWNrIHVzZWQg
-dGhlIHVuaW5pdGlhbGl6ZWQgdmFyaWFibGUgdmFkZHIsIGl0IHNob3VsZCB1c2UNCj4gdGhlIGdp
-dmVuIHBhcmFtZXRlciBrYWRkciBpbnN0ZWFkLiBXaGVuIHVzaW5nIHRoZSB1bmluaXRpYWxpemVk
-IHZhbHVlDQo+IHRoZSBjb21waWxlciBhc3N1bWVkIGl0IHRvIGJlIDAgYW5kIG9wdGltaXplZCB0
-aGlzIGZ1bmN0aW9uIHRvIGp1c3QNCj4gcmV0dXJuIDAgaW4gYWxsIGNhc2VzLg0KPiANCj4gVGhp
-cyBzaG91bGQgbWFrZSB0aGUgZnVuY3Rpb24gY2hlY2sgdGhlIHJhbmdlIG9mIHRoZSBnaXZlbiBh
-ZGRyZXNzIGFuZA0KPiBvbmx5IGRvIHRoZSBwYWdlIG1hcCBjaGVjayBpbiBjYXNlIGl0IGlzIGlu
-IHRoZSBleHBlY3RlZCByYW5nZSBvZg0KPiB2aXJ0dWFsIGFkZHJlc3Nlcy4NCj4gDQo+IEZpeGVz
-OiAwNzRhMWUxMTY3YWYgKCJNSVBTOiBCb3VuZHMgY2hlY2sgdmlydF9hZGRyX3ZhbGlkIikNCj4g
-Q2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcgIyB2NC4xMisNCj4gQ2M6IFBhdWwgQnVydG9uIDxw
-YXVsLmJ1cnRvbkBtaXBzLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogSGF1a2UgTWVocnRlbnMgPGhh
-dWtlQGhhdWtlLW0uZGU+DQoNCkFwcGxpZWQgdG8gbWlwcy1maXhlcy4NCg0KVGhhbmtzLA0KICAg
-IFBhdWwNCg0KWyBUaGlzIG1lc3NhZ2Ugd2FzIGF1dG8tZ2VuZXJhdGVkOyBpZiB5b3UgYmVsaWV2
-ZSBhbnl0aGluZyBpcyBpbmNvcnJlY3QNCiAgdGhlbiBwbGVhc2UgZW1haWwgcGF1bC5idXJ0b25A
-bWlwcy5jb20gdG8gcmVwb3J0IGl0LiBdDQo=
+On Fri, Jun 14, 2019 at 4:34 PM Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+>
+> On Fri, Jun 14, 2019 at 01:56:04PM +0800, Yafang Shao wrote:
+> > On Fri, Jun 14, 2019 at 12:02 AM Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+> > >
+> > > On Thu, Jun 13, 2019 at 04:12:57PM +0800, Yafang Shao wrote:
+> > > > On Thu, Jun 13, 2019 at 4:08 PM Yafang Shao <laoar.shao@gmail.com> wrote:
+> > > > >
+> > > > > On Thu, Jun 13, 2019 at 2:30 PM Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+> > > > > >
+> > > > > > Hi,
+> > > > > >
+> > > > > > After patch:
+> > > > > > -----------------------------------------------------
+> > > > > > commit 2a09b5de235a6b5f76193a2ed46546a2944f98bf
+> > > > > > Author: Yafang Shao <laoar.shao@gmail.com>
+> > > > > > Date:   Tue Mar 26 20:13:10 2019 +0800
+> > > > > >     sched/fair: do not expose some tracepoints to user if CONFIG_SCHEDSTATS is not set
+> > > > > >
+> > > > > >     The tracepoints trace_sched_stat_{iowait, blocked, wait, sleep} should
+> > > > > >     be not exposed to user if CONFIG_SCHEDSTATS is not set.
+> > > > > >
+> > > > > >     Link: http://lkml.kernel.org/r/1553602391-11926-3-git-send-email-laoar.shao@gmail.com
+> > > > > >
+> > > > > >     Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > > > >     Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> > > > > >     Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> > > > > > -----------------------------------------------------
+> > > > > >
+> > > > > > i can't boot kernel on MIPS based system Atheros ar9331. The boot
+> > > > > > process ends with following oops:
+> > > > > > -----------------------------------------------------
+> > > > > > [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 16256                                                                                                [0/1518]
+> > > > > > [    0.000000] Kernel command line:   ip=dhcp root=/dev/nfs nfsroot=192.168.23.4:/home/ore/nfsroot/dpt-module,v3,tcp
+> > > > > > [    0.000000] Dentry cache hash table entries: 8192 (order: 3, 32768 bytes)
+> > > > > > [    0.000000] Inode-cache hash table entries: 4096 (order: 2, 16384 bytes)
+> > > > > > [    0.000000] Writing ErrCtl register=00000000
+> > > > > > [    0.000000] Readback ErrCtl register=00000000
+> > > > > > [    0.000000] Memory: 56376K/65536K available (5376K kernel code, 437K rwdata, 1068K rodata, 1432K init, 214K bss, 9160K reserved, 0K cma-reserved)
+> > > > > > [    0.000000] random: get_random_u32 called from cache_random_seq_create+0x9c/0x170 with crng_init=0
+> > > > > > [    0.000000] SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+> > > > > > [    0.000000] ftrace: allocating 18167 entries in 36 pages
+> > > > > > [    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 00000000, epc == 00000000, ra == 00000000
+> > > > > > [    0.000000] Oops[#1]:
+> > > > > > [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.2.0-rc4+ #308
+> > > > > > [    0.000000] $ 0   : 00000000 8007e5fc 00000003 00000002
+> > > > > > [    0.000000] $ 4   : 00000001 00000000 00000000 83c22470
+> > > > > > [    0.000000] $ 8   : 00000000 00000000 00000000 00000000
+> > > > > > [    0.000000] $12   : 806afe04 00000000 00000001 00000000
+> > > > > > [    0.000000] $16   : 800adc0c 800adc00 00000000 00000000
+> > > > > > [    0.000000] $20   : 00000000 0000048e 00000000 806c0000
+> > > > > > [    0.000000] $24   : 00000003 800619e4
+> > > > > > [    0.000000] $28   : 806ae000 806afe10 808b0000 00000000
+> > > > > > [    0.000000] Hi    : 00000000
+> > > > > > [    0.000000] Lo    : 00000000
+> > > > > > [    0.000000] epc   : 00000000 0x0
+> > > > > > [    0.000000] ra    : 00000000 0x0
+> > > > > > [    0.000000] Status: 10000002 KERNEL EXL
+> > > > > > [    0.000000] Cause : 10800008 (ExcCode 02)
+> > > > > > [    0.000000] BadVA : 00000000
+> > > > > > [    0.000000] PrId  : 00019374 (MIPS 24Kc)
+> > > > > > [    0.000000] Modules linked in:
+> > > > > > [    0.000000] Process swapper (pid: 0, threadinfo=(ptrval), task=(ptrval), tls=00000000)
+> > > > > > [    0.000000] Stack : 00000002 8007e784 806ca284 00000000 800adc0c 00000000 80070eb0 8007108c
+> > > > > > [    0.000000]         83c03c00 801ab7d8 83c03b80 00000000 00000000 83c03b80 00000000 801109cc
+> > > > > > [    0.000000]         00000001 80880000 80880000 800c1318 00000000 ffffffff 806b0000 806b0000
+> > > > > > [    0.000000]         83c22470 0000048e 8075eb00 807706dc 806b0000 80753158 806b0000 80755209
+> > > > > > [    0.000000]         00000001 80880000 80880000 80726cc8 ffffffff 000046f7 00000024 00000003
+> > > > > > [    0.000000]         ...
+> > > > > > [    0.000000] Call Trace:
+> > > > > > [    0.000000]
+> > > > > > [    0.000000] [<8007e784>] r4k_flush_icache_range+0x10/0x18
+> > > > > > [    0.000000] [<800adc0c>] preempt_count_sub+0x10/0xe4
+> > > > > > [    0.000000] [<80070eb0>] ftrace_caller+0x0/0x54
+> > > > > > [    0.000000] [<8007108c>] ftrace_make_nop+0x8c/0x94
+> > > > > > [    0.000000] [<801ab7d8>] __get_free_pages+0x2c/0x60
+> > > > > > [    0.000000] [<801109cc>] ftrace_process_locs+0x364/0x3ec
+> > > > > > [    0.000000] [<800c1318>] vprintk_default+0x34/0x40
+> > > > > > [    0.000000] [<80726cc8>] ftrace_init+0xb8/0x138
+> > > > > > [    0.000000] [<8071ac98>] start_kernel+0x290/0x584
+> > > > > > [    0.000000] [<8071a368>] unknown_bootoption+0x0/0x270
+> > > > > > [    0.000000]
+> > > > > > [    0.000000] Code: (Bad address in epc)
+> > > > > > [    0.000000]
+> > > > > > [    0.000000] ---[ end trace 64e6fa591c4a277c ]---
+> > > > > > [    0.000000] Kernel panic - not syncing: Fatal exception
+> > > > > > [    0.000000] Rebooting in
+> > > > > > -----------------------------------------------------
+> > > > > >
+> > > > > > After reverting this patch I can normally boot the kernel.
+> > > > > > The kernel is build with CONFIG_SCHEDSTATS not set.
+> > > > > >
+> > > > > > --
+> > > > > > Pengutronix e.K.                           |                             |
+> > > > > > Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+> > > > > > Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+> > > > > > Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> > > > >
+> > > > > Hi Oleksij,
+> > > > >
+> > > > > This really makes me confused.
+> > > > > If CONFIG_SCHEDSTATS is not set,  trace_sched_stat_{iowait, blocked,
+> > > > > wait, sleep} will be optimized out by
+> > > > > the compiler. That should not effect other codes.
+> > > > >
+> > > > > Would you pls. try bellow command on your build server?
+> > > > > $ objdump -dr kernel/sched/fair.o | awk '/>:$/ { F=$2 } /sched_stat/ {
+> > > > > print F " " $0 }'
+> > > > >
+> > > >
+> > > > Plus, could you pls. show me the  difference on the objdump of these
+> > > > two vmlinux (with and without my patch) ?
+> > >
+> > > Both files are in attachment.
+> > >
+> >
+> > Hi Oleksij,
+> >
+> > Unfortunately I don't have a mips toolchain on hand.
+> > It would be better if you could give me the  disassembled code of
+> > these two vmlinuxs.
+> > I will try to build a cross toolchain for MIPS 24Kc, that may take some time.
+>
+> disassembled code is in attachment.
+>
+> --
+
++ Steve,
+
+Hi Oleksij,
+
+I guess this issue is related with __mcount_loc, but I don't have a
+clear idea how to fix it yet.
+It would be better if you could share your .config file as well.
+
+Hi Steve,
+
+Do you have any suggestion on this issue?
+My guess is when we define a tracepoint as nop, there's something
+wrong in __mcount_loc,
+ which will be used by MIPS and then this oops occurs.
+
+Thanks
+Yafang
