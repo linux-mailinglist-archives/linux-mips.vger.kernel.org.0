@@ -2,130 +2,167 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8F349F88
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Jun 2019 13:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B014A4AB37
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Jun 2019 21:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729621AbfFRLq4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Jun 2019 07:46:56 -0400
-Received: from mx.0dd.nl ([5.2.79.48]:46496 "EHLO mx.0dd.nl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729110AbfFRLq4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 18 Jun 2019 07:46:56 -0400
-Received: from mail.vdorst.com (mail.vdorst.com [IPv6:fd01::250])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx.0dd.nl (Postfix) with ESMTPS id CE1E66053E;
-        Tue, 18 Jun 2019 13:46:53 +0200 (CEST)
-Authentication-Results: mx.0dd.nl;
-        dkim=pass (2048-bit key; secure) header.d=vdorst.com header.i=@vdorst.com header.b="ka372HMW";
-        dkim-atps=neutral
-Received: from www (www.vdorst.com [192.168.2.222])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.vdorst.com (Postfix) with ESMTPSA id A24A91C8AAF3;
-        Tue, 18 Jun 2019 13:46:53 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.vdorst.com A24A91C8AAF3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vdorst.com;
-        s=default; t=1560858413;
-        bh=aXEy13LVmystdFScKdG2+jJ7/Q4WXzV3sCnx/eqveIQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ka372HMWQEGJxoSoPn0qqxx8XKULCl2pdxngnU9O3/4A5fnltxIEWot3m4CFc3vHW
-         Y4xjip4YPiTnvQ44f2TI09R+SJEBsw3CwQoS5wYK6zzJZ/FHwcKEKebP8va+r6hgmD
-         J2aMD8BY5+9+NWDJnCxivTUFvM2j5bAJmuOL+WPukF8PoBeUJixqpoYAEbcdC31JUw
-         XhiKBW8J1ZXijeavprcWleMrGe2quQuJzR6r7gZAs81wlBK9Iu6FWK06qAAxnDKkG7
-         v5jnpw+EmRthreXV4x9RbcB4ruERJJ/TiAQ2uRTMqYy7ND7rsNHS5n9FLaQ5MqWyT8
-         PooktwIq9BPoQ==
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1]) by
- www.vdorst.com (Horde Framework) with HTTPS; Tue, 18 Jun 2019 11:46:53 +0000
-Date:   Tue, 18 Jun 2019 11:46:53 +0000
-Message-ID: <20190618114653.Horde._ZDbcd1ZKyg5vfM1JnmQJZb@www.vdorst.com>
-From:   =?utf-8?b?UmVuw6k=?= van Dorst <opensource@vdorst.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Sean Wang <sean.wang@mediatek.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        netdev@vger.kernel.org, john@phrozen.org,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH net-next 0/2] net: mediatek: Add MT7621 TRGMII mode
- support
-References: <20190616182010.18778-1-opensource@vdorst.com>
- <20190617140223.GC25211@lunn.ch>
- <20190617213312.Horde.fcb9-g80Zzfd-IMC8EQy50h@www.vdorst.com>
- <20190617214428.GO17551@lunn.ch>
- <20190617232004.Horde.mAVymZdeb9Jjf29W2PeOggU@www.vdorst.com>
- <20190618015309.GA18088@lunn.ch>
- <7f2fc770-1787-72f8-b91d-e2b12e74d39e@gmail.com>
-In-Reply-To: <7f2fc770-1787-72f8-b91d-e2b12e74d39e@gmail.com>
-User-Agent: Horde Application Framework 5
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        id S1730196AbfFRTwH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Jun 2019 15:52:07 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:46656 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725909AbfFRTwH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jun 2019 15:52:07 -0400
+Received: by mail-qt1-f193.google.com with SMTP id h21so16901320qtn.13
+        for <linux-mips@vger.kernel.org>; Tue, 18 Jun 2019 12:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=poorly.run; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rKlvb5xlV7AjdrT+ymSYk12cKDt0ZQUtMF2LTHfZOts=;
+        b=HIjadFGFGEXpbxE64Z3ryg2YKt6x7P7r8lG5rpQv4JTlECfohUBliyZGbXhgixpAAu
+         Jh5lrATzJzvIM0sM1dMb2n4ed8dlnUBxyR3JldHddNTi1HNu3GGNWGWrewNBWI4ZynHz
+         YEC5el4Ts3kwt+UHyvyrsGzBVXkA1G+8HhuIwVSOhXc++BMwQtb8uOJHt2VFgvCtJjvJ
+         6a6x1rdEedYxVsntJDH2goukZi4FiHMQS5/zlqPjzn8Y2lXqybGFxntfiLAcnPH0BJub
+         FwYwbC21szO0RkUWcuBWOEGq6+bVY7Z1y0PMyZDQZMqwEtoXnIEjplUs24QR6Wh2wXCa
+         NS3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rKlvb5xlV7AjdrT+ymSYk12cKDt0ZQUtMF2LTHfZOts=;
+        b=poidts0rJ0/ravZl8iQhB39GgB3RHcjugBc7XYAGYpMKw05oGMwHK2GVys9KC6jt6C
+         g18WmM2qJaMSWa9ZSBAqoCkaU/ShPemt0PuajDqU8RhZv3GslYHsrO5c3INEfxmFgm+z
+         XkPKUhSobCk0g84dgJpyWJjz5/NmR/7kf0H8bPnxZ/4nP1YfaJJQiqL6GvArsI8KG7ee
+         0EyzLMhRhKWWX1c9CDmiN+JVn65rJ+tX5qpvyD6WPrt1zO0kqdWqveC69uCvx+BmG1rJ
+         CHvVI7CgTl8xkSJ47RJwzTRy3YlYCubh/34WszRuoQjtYnefbQ0zi0Tq6qs0tQLqZpIV
+         Rl7g==
+X-Gm-Message-State: APjAAAWofPPYvxlOmZWVHDxitUrH36dEeCfI26PRCZlH/7HKETCKWMrA
+        eRuv6sROF3ZEcK7ndVEJ8hdWJQ==
+X-Google-Smtp-Source: APXvYqznfGGft1O/1HHlt55I6UyugR1Pndtb6Tm/zxXNwqMH2bv3sqw1e3e2bE9n7RoCnchsRnMmCw==
+X-Received: by 2002:ac8:3132:: with SMTP id g47mr48006861qtb.155.1560887525765;
+        Tue, 18 Jun 2019 12:52:05 -0700 (PDT)
+Received: from localhost ([2620:0:1013:11:89c6:2139:5435:371d])
+        by smtp.gmail.com with ESMTPSA id 102sm7628154qte.52.2019.06.18.12.52.04
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 18 Jun 2019 12:52:05 -0700 (PDT)
+Date:   Tue, 18 Jun 2019 15:52:04 -0400
+From:   Sean Paul <sean@poorly.run>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Huang Rui <ray.huang@amd.com>,
+        Junwei Zhang <Jerry.Zhang@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        "Vadim V . Vlasov" <vadim.vlasov@t-platforms.ru>
+Subject: Re: [PATCH] drm: Permit video-buffers writecombine mapping for MIPS
+Message-ID: <20190618195204.GC25413@art_vandelay>
+References: <20190423123122.32573-1-fancer.lancer@gmail.com>
+ <20190617134729.pd24boyqe2viyihm@mobilestation>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190617134729.pd24boyqe2viyihm@mobilestation>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Quoting Florian Fainelli <f.fainelli@gmail.com>:
+On Mon, Jun 17, 2019 at 04:47:30PM +0300, Serge Semin wrote:
+> Hello folks,
+> 
+> Any updates of this patch status? It has been here for about two months.
+> 
 
-Hi Andrew and Florian,
+Sorry for the mixup, looks like this one just fell through the cracks. I've
+applied it to drm-misc-next with the attached Ack and Review.
 
-> On 6/17/2019 6:53 PM, Andrew Lunn wrote:
->>> By adding some extra speed states in the code it seems to work.
->>>
->>> +               if (state->speed == 1200)
->>> +                       mcr |= PMCR_FORCE_SPEED_1000;
->>
->> Hi René
->>
->> Is TRGMII always 1.2G? Or can you set it to 1000 or 1200?
+Sean
 
-In case of the MT7621 SOC yes, according to the SDKs the MT7623 has 2 options
-2GBit and 2.6Gbit. The current mt7530 driver only set TRGMII speed at 2Gbit.
 
->> This PMCR_FORCE_SPEED_1000 feels wrong.
->
-> It is not uncommon to have to "force" 1G to get a higher speed, there is
-> something similar with B53 switches configuring the CPU ports at 2GB/sec
-> (proprietary too and not standardized either).
+> Regards,
+> -Sergey
+> 
+> On Tue, Apr 23, 2019 at 03:31:22PM +0300, Serge Semin wrote:
+> > Since commit 4b050ba7a66c ("MIPS: pgtable.h: Implement the
+> > pgprot_writecombine function for MIPS") and commit c4687b15a848 ("MIPS: Fix
+> > definition of pgprot_writecombine()") write-combine vma mapping is
+> > available to be used by kernel subsystems for MIPS. In particular the
+> > uncached accelerated attribute is requested to be set by ioremap_wc()
+> > method and by generic PCI memory pages/ranges mapping methods. The same
+> > is done by the drm_io_prot()/ttm_io_prot() functions in case if
+> > write-combine flag is set for vma's passed for mapping. But for some
+> > reason the pgprot_writecombine() method calling is ifdefed to be a
+> > platform-specific with MIPS system being marked as lacking of one. At the
+> > very least it doesn't reflect the current MIPS platform implementation.
+> > So in order to improve the DRM subsystem performance on MIPS with UCA
+> > mapping enabled, we need to have pgprot_writecombine() called for buffers,
+> > which need store operations being combined. In case if particular MIPS
+> > chip doesn't support the UCA attribute, the mapping will fall back to
+> > noncached.
+> > 
+> > Cc: Ralf Baechle <ralf@linux-mips.org>
+> > Cc: Paul Burton <paul.burton@mips.com>
+> > Cc: James Hogan <jhogan@kernel.org>
+> > Signed-off-by: Vadim V. Vlasov <vadim.vlasov@t-platforms.ru>
+> > Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
+> > ---
+> >  drivers/gpu/drm/drm_vm.c          | 5 +++--
+> >  drivers/gpu/drm/ttm/ttm_bo_util.c | 4 ++--
+> >  2 files changed, 5 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/drm_vm.c b/drivers/gpu/drm/drm_vm.c
+> > index c3301046dfaa..50178dc64060 100644
+> > --- a/drivers/gpu/drm/drm_vm.c
+> > +++ b/drivers/gpu/drm/drm_vm.c
+> > @@ -62,7 +62,8 @@ static pgprot_t drm_io_prot(struct drm_local_map *map,
+> >  	/* We don't want graphics memory to be mapped encrypted */
+> >  	tmp = pgprot_decrypted(tmp);
+> >  
+> > -#if defined(__i386__) || defined(__x86_64__) || defined(__powerpc__)
+> > +#if defined(__i386__) || defined(__x86_64__) || defined(__powerpc__) || \
+> > +    defined(__mips__)
+> >  	if (map->type == _DRM_REGISTERS && !(map->flags & _DRM_WRITE_COMBINING))
+> >  		tmp = pgprot_noncached(tmp);
+> >  	else
+> > @@ -73,7 +74,7 @@ static pgprot_t drm_io_prot(struct drm_local_map *map,
+> >  		tmp = pgprot_writecombine(tmp);
+> >  	else
+> >  		tmp = pgprot_noncached(tmp);
+> > -#elif defined(__sparc__) || defined(__arm__) || defined(__mips__)
+> > +#elif defined(__sparc__) || defined(__arm__)
+> >  	tmp = pgprot_noncached(tmp);
+> >  #endif
+> >  	return tmp;
+> > diff --git a/drivers/gpu/drm/ttm/ttm_bo_util.c b/drivers/gpu/drm/ttm/ttm_bo_util.c
+> > index 895d77d799e4..9f918b992f7e 100644
+> > --- a/drivers/gpu/drm/ttm/ttm_bo_util.c
+> > +++ b/drivers/gpu/drm/ttm/ttm_bo_util.c
+> > @@ -539,13 +539,13 @@ pgprot_t ttm_io_prot(uint32_t caching_flags, pgprot_t tmp)
+> >  		tmp = pgprot_noncached(tmp);
+> >  #endif
+> >  #if defined(__ia64__) || defined(__arm__) || defined(__aarch64__) || \
+> > -    defined(__powerpc__)
+> > +    defined(__powerpc__) || defined(__mips__)
+> >  	if (caching_flags & TTM_PL_FLAG_WC)
+> >  		tmp = pgprot_writecombine(tmp);
+> >  	else
+> >  		tmp = pgprot_noncached(tmp);
+> >  #endif
+> > -#if defined(__sparc__) || defined(__mips__)
+> > +#if defined(__sparc__)
+> >  	tmp = pgprot_noncached(tmp);
+> >  #endif
+> >  	return tmp;
+> > -- 
+> > 2.21.0
+> > 
 
-On the SOC MAC side it is basicly only a MAC clock change.
-MAC control registers still need to be set forced 1G.
-
->
->>
->>>> We could consider adding 1200BaseT/Full?
->>>
->>> I don't have any opinion about this.
->>> It is great that it shows nicely in ethtool but I think supporting more
->>> speeds in phy_speed_to_str() is enough.
->>>
->>> Also you may want to add other SOCs trgmii ranges too:
->>> - 1200BaseT/Full for mt7621 only
->>> - 2000BaseT/Full for mt7623 and mt7683
->>> - 2600BaseT/Full for mt7623 only
->>
->> Are these standardised in any way? Or MTK proprietary?  Also, is the T
->> in BaseT correct? These speeds work over copper cables? Or should we
->> be talking about 1200BaseKX?
->
-> Looks like this is MTK proprietary:
->
-> http://lists.infradead.org/pipermail/linux-mediatek/2016-September/007083.html
-> https://patchwork.kernel.org/patch/9341129/
-> --
-> Florian
-
-MTK proprietary, But I think it is equal too the RGMII but with a  
-faster clock.
-
-But do we need a "xxxxBaseT/Full" at all for these fixed-link cases?
-If I am correct a "xxxxBaseT/Full" is only needed to automatically select the
-best option. But with fixed-link we force it so extra "xxxxBaseT/Full" is not
-needed.
-
-Greats,
-
-René
-
+-- 
+Sean Paul, Software Engineer, Google / Chromium OS
