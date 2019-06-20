@@ -2,113 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9104D780
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2019 20:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186304DADE
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2019 22:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728226AbfFTSTN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jun 2019 14:19:13 -0400
-Received: from eddie.linux-mips.org ([148.251.95.138]:38034 "EHLO
-        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727349AbfFTSTM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jun 2019 14:19:12 -0400
-Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
-        with ESMTP id S23994574AbfFTSTIXLeUG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org> + 1 other);
-        Thu, 20 Jun 2019 20:19:08 +0200
-Date:   Thu, 20 Jun 2019 19:19:08 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Paul Burton <paul.burton@mips.com>
-cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Serge Semin <Sergey.Semin@t-platforms.ru>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Vadim V . Vlasov" <vadim.vlasov@t-platforms.ru>,
+        id S1725914AbfFTUDd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jun 2019 16:03:33 -0400
+Received: from mail-eopbgr750101.outbound.protection.outlook.com ([40.107.75.101]:54134
+        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725903AbfFTUDd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 20 Jun 2019 16:03:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=wavesemi.onmicrosoft.com; s=selector1-wavesemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v29dJJNvykQn+fJWRTTPGchZkBFetIV1OtEvVAm8o58=;
+ b=QIqtqozE+ZZ8ggeL7SNIh8hpISBkl3OWzwzuhMay8i8drtrcbf92HwDz9oZVFJSh7gQ5lHcE8TiukXDfDYF64MV6lPmFWBHURe86uQi4NTLvoMO0GAWUhiYFX5bTXOkW803/YuZNcmdjsmllJZ1iVKW3TGD1cpclsXFJfZyj8aQ=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
+ MWHPR2201MB1184.namprd22.prod.outlook.com (10.174.171.39) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2008.13; Thu, 20 Jun 2019 20:03:29 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::6975:b632:c85b:9e40]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::6975:b632:c85b:9e40%2]) with mapi id 15.20.2008.007; Thu, 20 Jun 2019
+ 20:03:29 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     "Hombourger, Cedric" <Cedric_Hombourger@mentor.com>
+CC:     Sasha Levin <sashal@kernel.org>,
         "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mips: Remove q-accessors from non-64bit platforms
-In-Reply-To: <20190620174002.tgayzon7dc5d57fh@pburton-laptop>
-Message-ID: <alpine.LFD.2.21.1906201851580.21654@eddie.linux-mips.org>
-References: <20190614063341.1672-1-fancer.lancer@gmail.com> <20190620174002.tgayzon7dc5d57fh@pburton-laptop>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: have "plain" make calls build dtbs for selected
+ platforms
+Thread-Topic: [PATCH] MIPS: have "plain" make calls build dtbs for selected
+ platforms
+Thread-Index: AQHVIgBpf6BYLkAQw0aPbj6clwp5T6adO4kAgACh3B+ABltpAIAAyaOA
+Date:   Thu, 20 Jun 2019 20:03:29 +0000
+Message-ID: <20190620200325.se6e6yicvlkjrb46@pburton-laptop>
+References: <1560415970-844-1-git-send-email-Cedric_Hombourger@mentor.com>
+ <20190615221604.E6FB82183F@mail.kernel.org> <1560668291651.87711@mentor.com>
+ <1561017706300.81899@mentor.com>
+In-Reply-To: <1561017706300.81899@mentor.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BY5PR13CA0033.namprd13.prod.outlook.com
+ (2603:10b6:a03:180::46) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:18::12)
+user-agent: NeoMutt/20180716
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [12.94.197.246]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e50b23d5-1807-49e9-e59f-08d6f5ba5c91
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1184;
+x-ms-traffictypediagnostic: MWHPR2201MB1184:
+x-microsoft-antispam-prvs: <MWHPR2201MB1184434A80F8A011DAE2D0E6C1E40@MWHPR2201MB1184.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 0074BBE012
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(39840400004)(366004)(396003)(346002)(376002)(136003)(199004)(189003)(71190400001)(229853002)(6246003)(4326008)(54906003)(58126008)(316002)(99286004)(25786009)(6512007)(9686003)(52116002)(6116002)(6436002)(3846002)(2906002)(42882007)(6486002)(256004)(53936002)(102836004)(446003)(11346002)(8676002)(305945005)(476003)(7736002)(386003)(6506007)(186003)(1076003)(66946007)(4744005)(26005)(68736007)(76176011)(66066001)(33716001)(5660300002)(6916009)(73956011)(486006)(66446008)(81156014)(66476007)(64756008)(66556008)(478600001)(44832011)(14454004)(71200400001)(8936002)(81166006);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1184;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: e3Ium3BNKYSYCl8c6HfxsnP6VD8mSpQWME4xqcllZuvKXwkl2YxE9Ps6qlwKJjF9+jxUkkdD6UkwJOr6UIgQdb8QQAtsNCkmWUg9+ohgQqEv0PzXtgSbvoWDbfsw1AUBXj7Q+04MwdpG4yUjyBjdJIMLV40nc95NC+4LtbOsyYzEMaklRuh725COqJy5IcLNimvF2pTCGbgLLf4MCuaDNQWwCoEHulNooZzwovwwE7PRLmtN1igTIhQeyASFqAhy52Wr+JrTi85LK92++rlDjQTwoUT0I2GFgIGWWrPZSkKywrdPgm7OL7bDl0MxlbAs7zsy2+D0iNNRTvZz3Lls3t8yJfZxmtm8enl2YEmlQVsD9/guyNu5NLrYsbVKR7n9xVBR8/t8UCZd+gY4KL6BAg4GxuMoh1yfmEu8+1Yv/Mg=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <37EBF8B93C6D0842B386569C71AEA6C6@namprd22.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e50b23d5-1807-49e9-e59f-08d6f5ba5c91
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2019 20:03:29.3257
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1184
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 20 Jun 2019, Paul Burton wrote:
+Hi Cedric,
 
-> So this seems pretty reasonable. Build testing all our defconfigs only
-> showed up one issue for decstation_defconfig & decstation_r4k_defconfig:
-> 
->   drivers/net/fddi/defza.c: In function 'fza_reads':
->   drivers/net/fddi/defza.c:88:17: error: implicit declaration of
->     function 'readq_relaxed'; did you mean 'readw_relaxed'?
->     [-Werror=implicit-function-declaration]
->    #define readq_u readq_relaxed
->                    ^~~~~~~~~~~~~
->   drivers/net/fddi/defza.c:126:13: note: in expansion of macro 'readq_u'
->       *dst++ = readq_u(src++);
->                ^~~~~~~
->   drivers/net/fddi/defza.c: In function 'fza_writes':
->   drivers/net/fddi/defza.c:92:18: error: implicit declaration of
->     function 'writeq_relaxed'; did you mean 'writel_relaxed'?
->     [-Werror=implicit-function-declaration]
->    #define writeq_u writeq_relaxed
->                     ^~~~~~~~~~~~~~
->   drivers/net/fddi/defza.c:151:4: note: in expansion of macro 'writeq_u'
->       writeq_u(*src++, dst++);
->       ^~~~~~~~
->     CC      net/core/scm.o
->   cc1: some warnings being treated as errors
->   make[4]: *** [scripts/Makefile.build:279: drivers/net/fddi/defza.o] Error 1
-> 
-> These uses of readq_relaxed & writeq_relaxed are both conditional upon
-> sizeof(unsigned long) == 8, ie. upon CONFIG_64BIT=y so they're not going
-> to present a runtime issue but we need to provide some implementation of
-> the *q accessors to keep the compiler happy.
-> 
-> I see a few options:
-> 
-> 1) We could just have defza.c include <io-64-nonatomic-lo-hi.h> to get
->    the appropriate declarations, which should then get optimized away by
->    the compiler anyway & never actually be used.
+On Thu, Jun 20, 2019 at 08:01:46AM +0000, Hombourger, Cedric wrote:
+> Just to follow-up. I have verified that we can apply this patch to 4.4
+> and 4.9 without introducing additional patches but simply resolving
+> conflicts. Should I post separate patches for 4.4 and 4.9?
 
- This, definitely.
+Is the patch actually needed any earlier than v4.20?
 
-> 2) We could have defza.h #define its readq_u & writeq_u macros
->    differently for CONFIG_32BIT=y kernels, perhaps using
->    __compiletime_error to catch any bogus use of them.
-> 
-> 3) We could do the same in a generic header, though if nobody else has
->    needed it so far & this is the only place we need it then maybe it's
->    not worth it.
-> 
-> So I'm thinking option 2 might be best, as below. Having said that I
-> don't mind option 1 either - it's simple. Maciej do you have any
-> preference?
+Locally I've applied it to mips-fixes & tagged it with:
 
- The use of 64-bit operations to access option's packet memory, which is 
-true SRAM, i.e. no side effects, is to improve throughput only and there's 
-no need for atomicity here nor also any kind of barriers, except at the 
-conclusion.  Splitting 64-bit accesses into 32-bit halves in software 
-would not be a functional error here.
+Fixes: d5615e472d23 ("builddeb: Fix inclusion of dtbs in debian package")
+Cc: stable@vger.kernel.org # v4.20+
 
- I benchmarked it back in the day and the difference was noticeable with 
-actual network transmissions between loops using 32-bit (LW/SW) and 64-bit 
-(LD/SD) accesses respectively, though I may not be able to track down the 
-figures anymore as it must have been some 18 years ago.  The performance 
-of the MB ASIC used to interface the R4400 CPU to DRAM and TURBOchannel 
-with the 5000/260 systems was stellar as it was specifically designed with 
-high throughput in mind, as an upgrade to the exiting R3400-based 5000/240 
-systems (the CPU and the ASIC are both on a daughtercard), though new such 
-machines used to be sold as well.
+It looks to me like prior to that commit this is unnecessary. If that's
+wrong please let me know.
 
- For the record the CPU and TURBOchannel run at 60MHz (40MHz with the 
-R3400) and 25MHz respectively with these systems.
-
- Thanks for the heads-up!
-
-  Maciej
+Thanks,
+    Paul
