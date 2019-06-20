@@ -2,176 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBD64CDA1
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2019 14:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04EA94CE22
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2019 15:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731808AbfFTMXQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jun 2019 08:23:16 -0400
-Received: from mx.0dd.nl ([5.2.79.48]:53448 "EHLO mx.0dd.nl"
+        id S1731175AbfFTNCn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jun 2019 09:02:43 -0400
+Received: from mout.gmx.net ([212.227.15.15]:51751 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731720AbfFTMXP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 20 Jun 2019 08:23:15 -0400
-Received: from mail.vdorst.com (mail.vdorst.com [IPv6:fd01::250])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx.0dd.nl (Postfix) with ESMTPS id 2B26E5FEA5;
-        Thu, 20 Jun 2019 14:23:12 +0200 (CEST)
-Authentication-Results: mx.0dd.nl;
-        dkim=pass (2048-bit key) header.d=vdorst.com header.i=@vdorst.com header.b="GZQTCvCo";
-        dkim-atps=neutral
-Received: from pc-rene.vdorst.com (pc-rene.vdorst.com [192.168.2.125])
-        by mail.vdorst.com (Postfix) with ESMTPA id D9B1C1CB7227;
-        Thu, 20 Jun 2019 14:23:11 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.vdorst.com D9B1C1CB7227
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vdorst.com;
-        s=default; t=1561033391;
-        bh=sWaETIGykh20OLdc6TDZc2DkdMJJZTMSUT4mTh+FG9g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GZQTCvComuttNcdNwsmuknmfdxnT7xxm7MuX9DG6Dn/MRYZ9Mdd0/OSVsaDaVCC8D
-         VRouGoWGVrV+KsStCOWtEMMx74nPNxxBrj/Zh0uogYsMIlmr6peSyMiPXn1livIi9z
-         /x1+Ubk4iJ9nzli2tCMYxdCAkv+32/UwKy19QmbUClo1ZlPV6Q6aI2Qqp2dXDZHrHM
-         GJH3Rs4DW6CnuKDTsVz5SN+Ic0A9ciYAHYdhdpUoZbNDWqkhfRSq1zZYcgY+09XG14
-         sTqawHOOJpiINs0v54g2ZmZredlRtawbcswwE5H83p811Ep1g49h8KnMHvQBI7/kT1
-         0CYedXS52G9aw==
-From:   =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
-To:     frank-w@public-files.de, sean.wang@mediatek.com,
-        f.fainelli@gmail.com, davem@davemloft.net, matthias.bgg@gmail.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com
-Cc:     netdev@vger.kernel.org, john@phrozen.org,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
-Subject: [PATCH v2 net-next 2/2] net: dsa: mt7530: Add MT7621 TRGMII mode support
-Date:   Thu, 20 Jun 2019 14:21:55 +0200
-Message-Id: <20190620122155.32078-3-opensource@vdorst.com>
-X-Mailer: git-send-email 2.20.1
+        id S1726569AbfFTNCn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 20 Jun 2019 09:02:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1561035730;
+        bh=+afkOThX5iGh2rB1ktgwAzNdjRHJupZfIJ7drdFwZgo=;
+        h=X-UI-Sender-Class:Date:In-Reply-To:References:Subject:Reply-to:To:
+         CC:From;
+        b=TC6fSpvQ6YnvG0rajSAOfWrG2Mb3JxwuuxBAF0IkUB1Y1BYY0nugbPs/eJFg7b+yw
+         iaajMPYRVNVAbl0qqnxHvTAFv20Ja1sZgUDeDyI7i6gZnE2G1hNcRWdtG0p5JYeouy
+         VPm4A9AbzbPWQR77dXmhxz8OoqhRIqjTr+dCp95A=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.218.201.144] ([88.128.80.145]) by mail.gmx.com (mrgmx001
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 0MbOoG-1hwiXe0qhA-00Illb; Thu, 20
+ Jun 2019 15:02:10 +0200
+Date:   Thu, 20 Jun 2019 15:02:04 +0200
+User-Agent: K-9 Mail for Android
 In-Reply-To: <20190620122155.32078-1-opensource@vdorst.com>
 References: <20190620122155.32078-1-opensource@vdorst.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 net-next 0/2] net: mediatek: Add MT7621 TRGMII mode support
+Reply-to: frank-w@public-files.de
+To:     =?ISO-8859-1?Q?Ren=E9_van_Dorst?= <opensource@vdorst.com>,
+        sean.wang@mediatek.com, f.fainelli@gmail.com, davem@davemloft.net,
+        matthias.bgg@gmail.com, andrew@lunn.ch, vivien.didelot@gmail.com
+CC:     netdev@vger.kernel.org, john@phrozen.org,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org
+From:   Frank Wunderlich <frank-w@public-files.de>
+Message-ID: <74C80E79-877C-4DEC-BC82-1195C3D0981F@public-files.de>
+X-Provags-ID: V03:K1:xIO+yH9i6OHFj2f10Rv4UCkFlBt3qm7Dlkf80DSU+4Hpi3dZzfR
+ X2JpvTbtZM7DauCbrwia3F9oqlqikYHqEb1eHHiCmXGxbY+Wk6sXXVfcy7Qkk98dOvvBKTJ
+ hfIBxOf2QVeHwX3zEHsgf4F/dS/QKHaFp0uT5lOFoJAK94yHJOnnCi39AnzjtWiMGHfMU1/
+ NDOIhG+ZNQHIyBIPIyzUA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:gLuq2wC3/5I=:8NE4223G084VtT9X+ICDmP
+ +EYJ6KJjR+o1VJHowytLI7SHiRVkjpLGZcnhHD8Opk9tPxtmsAXMjnRxHqVcslTw+WvhREoob
+ s6IYBbOHnZwRTON6fDr0YKCfBDxuVd/zxOv9hqlzB45cA/3kGSvd6I2WdsjRr1gNO7zPpGOL9
+ OrZWraERWMDznpDAlWoRCTGLSpt+1P6XaWsWCdzcAInXmXZUPG2Dn7v80YkT1ibteOJOtJfc9
+ G4UD8CHN3vvDk0+OFWGaBEVXliS5dLqZGyAu+6Le+mmaQM2262OR7lhShMPDeD+dCWpifhHIx
+ cuL8rn8WIY3rdR2Os0EOBwxiDSZYV8Hzrnk2D8zai5VlxknekjU1i2XXIh/kDDcOylgDftADg
+ YCQbm/YLB5MBVbypGSHdW8SZM6IfDf2ys/8ve964Ah2IR3IkgGY1YxZ5nu7jLauMiYT8WIDZl
+ /Zhz1LZpQa9yeaTkoeH/eU3TSVxbVWVyHcK2+emENJMc1YHw9tB1A8J46K9tX3kb9sR45oXDb
+ 2R0K6wupIdi3246GKxU8xApf/wxL/MSNVxE8OgmH9DbZt7tzSAQRY8vGmPVTYRM37ZcafeBjn
+ flT+hLmqupzTz+zS9eZrIL8J5U4VVNF89G6IXTRvjklnv7cPGFwN2ZiJb3/6C69L1il+wa4pl
+ LdGAxK62hyKIboRTO6wnw8rtvPLNjUvHU/oH9q94QUTEDfc3/UeU1VvDTRDnhjnqqidKADE86
+ zpQF+122RTNZATc+3LSzA4I0RkeTxrNKh9NgRUYgqrI3C5oz2BxovjlaGyquucBB5MHKPp8w9
+ kuyQgsc0PyHEbDGuFx6FK0LiV6r0gO2Zba0OkVRocxKH05w98Gcj/3ejoOVSn1M4ATYd/WCoH
+ 8IKqvnaK2pFQNq9SaAB5NCXQEww9lFlgDDPZyY7c8ToaXC35/NQZ56Kb+cl2DccCdWS4KaDg3
+ 2GWXN4ZJv6pkn5vKWmn7tT30R8rCHteg0J00M6jxYB67azbua8cKA
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This patch add support TRGMII mode for MT7621 internal MT7530 switch.
-MT7621 TRGMII has only one fix speed mode of 1200MBit.
+Tested on Bananapi R2 (mt7623)
 
-Also adding support for mt7530 25MHz and 40MHz crystal clocksource.
-Values are based on Banana Pi R2 bsp [1].
+Tested-by: "Frank Wunderlich" <frank-w@public-files=2Ede>
 
-Don't change MT7623 registers on a MT7621 device.
-
-[1] https://github.com/BPI-SINOVOIP/BPI-R2-bsp/blob/master/linux-mt/drivers/net/ethernet/mediatek/gsw_mt7623.c#L769
-
-Signed-off-by: René van Dorst <opensource@vdorst.com>
----
- drivers/net/dsa/mt7530.c | 46 +++++++++++++++++++++++++++++++---------
- drivers/net/dsa/mt7530.h |  4 ++++
- 2 files changed, 40 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index c7d352da5448..3181e95586d6 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -428,24 +428,48 @@ static int
- mt7530_pad_clk_setup(struct dsa_switch *ds, int mode)
- {
- 	struct mt7530_priv *priv = ds->priv;
--	u32 ncpo1, ssc_delta, trgint, i;
-+	u32 ncpo1, ssc_delta, trgint, i, xtal;
-+
-+	xtal = mt7530_read(priv, MT7530_MHWTRAP) & HWTRAP_XTAL_MASK;
-+
-+	if (xtal == HWTRAP_XTAL_20MHZ) {
-+		dev_err(priv->dev,
-+			"%s: MT7530 with a 20MHz XTAL is not supported!\n",
-+			__func__);
-+		return -EINVAL;
-+	}
- 
- 	switch (mode) {
- 	case PHY_INTERFACE_MODE_RGMII:
- 		trgint = 0;
-+		/* PLL frequency: 125MHz */
- 		ncpo1 = 0x0c80;
--		ssc_delta = 0x87;
- 		break;
- 	case PHY_INTERFACE_MODE_TRGMII:
- 		trgint = 1;
--		ncpo1 = 0x1400;
--		ssc_delta = 0x57;
-+		if (priv->id == ID_MT7621) {
-+			/* PLL frequency: 150MHz: 1.2GBit */
-+			if (xtal == HWTRAP_XTAL_40MHZ)
-+				ncpo1 = 0x0780;
-+			if (xtal == HWTRAP_XTAL_25MHZ)
-+				ncpo1 = 0x0a00;
-+		} else { /* PLL frequency: 250MHz: 2.0Gbit */
-+			if (xtal == HWTRAP_XTAL_40MHZ)
-+				ncpo1 = 0x0c80;
-+			if (xtal == HWTRAP_XTAL_25MHZ)
-+				ncpo1 = 0x1400;
-+		}
- 		break;
- 	default:
- 		dev_err(priv->dev, "xMII mode %d not supported\n", mode);
- 		return -EINVAL;
- 	}
- 
-+	if (xtal == HWTRAP_XTAL_25MHZ)
-+		ssc_delta = 0x57;
-+	else
-+		ssc_delta = 0x87;
-+
- 	mt7530_rmw(priv, MT7530_P6ECR, P6_INTF_MODE_MASK,
- 		   P6_INTF_MODE(trgint));
- 
-@@ -507,7 +531,9 @@ mt7530_pad_clk_setup(struct dsa_switch *ds, int mode)
- 			mt7530_rmw(priv, MT7530_TRGMII_RD(i),
- 				   RD_TAP_MASK, RD_TAP(16));
- 	else
--		mt7623_trgmii_set(priv, GSW_INTF_MODE, INTF_MODE_TRGMII);
-+		if (priv->id != ID_MT7621)
-+			mt7623_trgmii_set(priv, GSW_INTF_MODE,
-+					  INTF_MODE_TRGMII);
- 
- 	return 0;
- }
-@@ -613,13 +639,13 @@ static void mt7530_adjust_link(struct dsa_switch *ds, int port,
- 	struct mt7530_priv *priv = ds->priv;
- 
- 	if (phy_is_pseudo_fixed_link(phydev)) {
--		if (priv->id == ID_MT7530) {
--			dev_dbg(priv->dev, "phy-mode for master device = %x\n",
--				phydev->interface);
-+		dev_dbg(priv->dev, "phy-mode for master device = %x\n",
-+			phydev->interface);
- 
--			/* Setup TX circuit incluing relevant PAD and driving */
--			mt7530_pad_clk_setup(ds, phydev->interface);
-+		/* Setup TX circuit incluing relevant PAD and driving */
-+		mt7530_pad_clk_setup(ds, phydev->interface);
- 
-+		if (priv->id == ID_MT7530) {
- 			/* Setup RX circuit, relevant PAD and driving on the
- 			 * host which must be placed after the setup on the
- 			 * device side is all finished.
-diff --git a/drivers/net/dsa/mt7530.h b/drivers/net/dsa/mt7530.h
-index 4331429969fa..bfac90f48102 100644
---- a/drivers/net/dsa/mt7530.h
-+++ b/drivers/net/dsa/mt7530.h
-@@ -244,6 +244,10 @@ enum mt7530_vlan_port_attr {
- 
- /* Register for hw trap status */
- #define MT7530_HWTRAP			0x7800
-+#define  HWTRAP_XTAL_MASK		(BIT(10) | BIT(9))
-+#define  HWTRAP_XTAL_25MHZ		(BIT(10) | BIT(9))
-+#define  HWTRAP_XTAL_40MHZ		(BIT(10))
-+#define  HWTRAP_XTAL_20MHZ		(BIT(9))
- 
- /* Register for hw trap modification */
- #define MT7530_MHWTRAP			0x7804
--- 
-2.20.1
-
+Am 20=2E Juni 2019 14:21:53 MESZ schrieb "Ren=C3=A9 van Dorst" <opensource=
+@vdorst=2Ecom>:
+>Like many other mediatek SOCs, the MT7621 SOC and the internal MT7530
+>switch both supports TRGMII mode=2E MT7621 TRGMII speed is fix 1200MBit=
+=2E
+>
+>v1->v2:=20
+> - Fix breakage on non MT7621 SOC
+> - Support 25MHz and 40MHz XTAL as MT7530 clocksource
+>
+>Ren=C3=A9 van Dorst (2):
+>  net: ethernet: mediatek: Add MT7621 TRGMII mode support
+>  net: dsa: mt7530: Add MT7621 TRGMII mode support
+>
+> drivers/net/dsa/mt7530=2Ec                    | 46 ++++++++++++++++-----
+> drivers/net/dsa/mt7530=2Eh                    |  4 ++
+> drivers/net/ethernet/mediatek/mtk_eth_soc=2Ec | 38 +++++++++++++++--
+> drivers/net/ethernet/mediatek/mtk_eth_soc=2Eh | 11 +++++
+> 4 files changed, 85 insertions(+), 14 deletions(-)
