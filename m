@@ -2,56 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A344DCD5
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2019 23:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464D04DCD6
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2019 23:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726278AbfFTVjb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jun 2019 17:39:31 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:34725 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726034AbfFTVja (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jun 2019 17:39:30 -0400
-Received: by mail-wr1-f68.google.com with SMTP id k11so4530176wrl.1
-        for <linux-mips@vger.kernel.org>; Thu, 20 Jun 2019 14:39:29 -0700 (PDT)
+        id S1726192AbfFTVjd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jun 2019 17:39:33 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:38030 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726190AbfFTVjc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jun 2019 17:39:32 -0400
+Received: by mail-wm1-f66.google.com with SMTP id s15so4543381wmj.3
+        for <linux-mips@vger.kernel.org>; Thu, 20 Jun 2019 14:39:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NDkhvgtD/o0cYL0eRaqTRxOMPTqLlZ8l9oete6cnkdg=;
-        b=u1703qGeun92yqCuRMsSPPlt6SCwhBVim6l5cOnkSnKiZ1Zp6CuIdJ3uRwz02SBBuk
-         +H1SpftyQWtwAZKuIllhnh659xM0DKoApf6HapLa8/ZCL5xepIGTRttf+sFFfJGHq6wC
-         QHORcz+tH6Z9MHqIOhKJYc1G0GaiutU2I+/xxw9skE2KeCALOA8p7VEj2MxxVZqYyZRs
-         EuxQiD5OaGT/4znPOyPjT9gYCMo9ubggXlffn1huBrG636k8Odef+R2HQ/gsvB25kdtL
-         bKCF83TZ6IULoWgOjhVJUJZd2cdsfXDIRpADHZXfijxAKU+L824fL0jH0RBvzgHXS6ED
-         TP2Q==
+        bh=dozCcXmpw1UY9jDcU/XY3MvBANFja3vOP+h5t7mgFkw=;
+        b=X8EQ3mCETPx+8ZyddlVvEwf5HgKHBXzuxmT9l9CrSl3vGc4eEU8SXF1VPqsOFDEPAp
+         LN16LD4tPCaqkPmI61gEY61R5vJ9KZP+iAnX6+WBOJ6n4dfBuo2rKeo0Up1IwLIFGAKG
+         aDgWdo0oKS0xi8hPwDHq5vqsHma4KiAmhGJYS+OfAGuSbsKlfUBA6bADcozNaWtuMqfG
+         Gybn+6oxG8NUTe/CKzFoRPnh2QryvmgDxcytSbN3J+xlhuthOEmKqkIaBsvpE8jLttOM
+         tZSpdPBjIHffo+D6UFNDYG41xYs3jZBxA/g2xBUZWfkgUGGrViFrMu5LGpNv3JihjwMr
+         hWlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NDkhvgtD/o0cYL0eRaqTRxOMPTqLlZ8l9oete6cnkdg=;
-        b=MvjE/PP/FnrMZ4+aZa2m9eKVW9pxodsBsgmFKsQA9HpQOawN9R1JrdOv4+hEaXXG24
-         246vkqfkHiYIleCPqm2u2B9qOzn2/twoHBp19VA+qZsM7C4sbnUA0L6YbBsv3zMdoWs1
-         7IzTCiQ4X3A0CqX20Cg0gCmr+MWUPLU0MIYIaxi4GsX/SfKVyjMGXztBf31/WR05pGTK
-         l9pH4B3XzGP7YMC4PeZZlYdorssRLK/Zb6+ILHKKzXVGjTtYy9nIuFFNjdmkreGW8brH
-         4TumpVP/V0NWd7wXAMx8VkHfUQCh0qahZJ2jlBN1GLYdoJI8hB/UsVSxPEuvw20KWLAB
-         1Ycg==
-X-Gm-Message-State: APjAAAXwqeBedHBklPSOJOjUCP3M+PKCusILY67oKhO7qNMcBRCGZZH+
-        wbmIZUSQ64s0Ca+KXBd13PE=
-X-Google-Smtp-Source: APXvYqyZ0GhHA1sqVl08N5c2krQx9+bCPv2EEY5VHEaTc6DXvLMMIuA4h3mv2AN9tb5dFbDfB2MC/w==
-X-Received: by 2002:adf:efcb:: with SMTP id i11mr44748749wrp.188.1561066768785;
-        Thu, 20 Jun 2019 14:39:28 -0700 (PDT)
+        bh=dozCcXmpw1UY9jDcU/XY3MvBANFja3vOP+h5t7mgFkw=;
+        b=qOgcA7rA4i8og8WQsSZM9oFNQFhQlUHaEVUZWKymofWTTQJ4bSsVEfHN3PHV+nMfNj
+         PZxqoxkx6Tew3t9xHucPqvAWJSzSXBl1Sr7e32cXHZH6SDrclw1/TXUWwIiwWpRGkeYB
+         ll6A4+NoWormXEOxhm095MUMNPOXMc7KTiLEzWKAxR3ezjKMXsaLlQdPuOzbQHbqwzM7
+         P4Bk7e4ce6lG10izZ4bplAX+Zod/kcF/oL0TwUtgl1Sq9uM+Uunkuukcc05ZMcweJ4L4
+         +M6RgYsq5ymW7HQvik0Dae8H0EzY3U5e0bJ0v4db5k+jlmquf8c/QakoR7GeyIQFbtzm
+         kLjA==
+X-Gm-Message-State: APjAAAUTOXsxIf7FdLk0BCVO9WdGhXJy7m0BfK3dCt4L7sqD5DGCZ/u2
+        hHuy8S+8QN4pFeZI3TzV4tgsCAeQ
+X-Google-Smtp-Source: APXvYqwx9fcdlbmZJaLTy2tS4ObS5plaC6+s+iwBcjW1ymabafrmUcgzpoiaEmtgH4a5gHXoD1lXiA==
+X-Received: by 2002:a1c:a654:: with SMTP id p81mr941823wme.36.1561066769680;
+        Thu, 20 Jun 2019 14:39:29 -0700 (PDT)
 Received: from kontron.lan (2001-1ae9-0ff1-f191-ecaa-d74f-d492-3738.ip6.tmcz.cz. [2001:1ae9:ff1:f191:ecaa:d74f:d492:3738])
         by smtp.gmail.com with ESMTPSA id j4sm575426wrx.57.2019.06.20.14.39.28
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 20 Jun 2019 14:39:28 -0700 (PDT)
+        Thu, 20 Jun 2019 14:39:29 -0700 (PDT)
 From:   petrcvekcz@gmail.com
 X-Google-Original-From: petrcvekcz.gmail.com
 To:     hauke@hauke-m.de, john@phrozen.org
 Cc:     Petr Cvek <petrcvekcz@gmail.com>, linux-mips@vger.kernel.org,
         openwrt-devel@lists.openwrt.org, pakahmar@hotmail.com
-Subject: [PATCH v2 6/7] MIPS: lantiq: Shorten register names, remove unused macros
-Date:   Thu, 20 Jun 2019 23:39:38 +0200
-Message-Id: <7dd5524c05dc31610d550eb83a401728c64d9105.1561065843.git.petrcvekcz@gmail.com>
+Subject: [PATCH v2 7/7] MIPS: lantiq: Add SMP support for lantiq interrupt controller
+Date:   Thu, 20 Jun 2019 23:39:39 +0200
+Message-Id: <e520b867ef328c21c144847f3658fcb1ab186706.1561065843.git.petrcvekcz@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1561065843.git.petrcvekcz@gmail.com>
 References: <cover.1561065843.git.petrcvekcz@gmail.com>
@@ -64,101 +64,287 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Petr Cvek <petrcvekcz@gmail.com>
 
-The macros LTQ_ICU_IM1_ISR and LTQ_ICU_OFFSET seems to be unused, remove
-them. Allong with that, remove _IM0 substring from the macro names. The
-IM (interrupt module) is already defined in IOMEM access and IM0 would be
-misleading.
+Some lantiq devices have two ICU controllers. The IRQ signal is routed
+to both of them and user can chose which ICU will resend the IRQ to their
+respective VPE. The patch adds the support for the second ICU.
+
+The patch changes a register definition of the driver. Instead of an
+individual IM, the whole ICU is defined. This will only affects openwrt
+patched kernel (vanilla doesn't have additional .dts files).
+
+Also spinlocks has been added, both cores can RMW different bitfields
+in the same register. Added affinity set function. The new VPE cpumask
+will take into the action at the irq enable.
+
+The functionality was tested on 4.14 openwrt kernel and TP-W9980B modem.
 
 Signed-off-by: Petr Cvek <petrcvekcz@gmail.com>
 ---
- arch/mips/lantiq/irq.c | 34 ++++++++++++++++------------------
- 1 file changed, 16 insertions(+), 18 deletions(-)
+ arch/mips/lantiq/irq.c | 130 +++++++++++++++++++++++++++++++++--------
+ 1 file changed, 106 insertions(+), 24 deletions(-)
 
 diff --git a/arch/mips/lantiq/irq.c b/arch/mips/lantiq/irq.c
-index 35d7c5f6d159..b9ca20ff07d5 100644
+index b9ca20ff07d5..b61d33ff685b 100644
 --- a/arch/mips/lantiq/irq.c
 +++ b/arch/mips/lantiq/irq.c
-@@ -22,13 +22,11 @@
- #include <irq.h>
+@@ -28,6 +28,8 @@
+ #define LTQ_ICU_IRSR		0x0018
+ #define LTQ_ICU_IMR		0x0020
  
- /* register definitions - internal irqs */
--#define LTQ_ICU_IM0_ISR		0x0000
--#define LTQ_ICU_IM0_IER		0x0008
--#define LTQ_ICU_IM0_IOSR	0x0010
--#define LTQ_ICU_IM0_IRSR	0x0018
--#define LTQ_ICU_IM0_IMR		0x0020
--#define LTQ_ICU_IM1_ISR		0x0028
--#define LTQ_ICU_OFFSET		(LTQ_ICU_IM1_ISR - LTQ_ICU_IM0_ISR)
-+#define LTQ_ICU_ISR		0x0000
-+#define LTQ_ICU_IER		0x0008
-+#define LTQ_ICU_IOSR		0x0010
-+#define LTQ_ICU_IRSR		0x0018
-+#define LTQ_ICU_IMR		0x0020
- 
++#define LTQ_ICU_IM_SIZE		0x28
++
  /* register definitions - external irqs */
  #define LTQ_EIU_EXIN_C		0x0000
-@@ -77,8 +75,8 @@ void ltq_disable_irq(struct irq_data *d)
+ #define LTQ_EIU_EXIN_INIC	0x0004
+@@ -46,8 +48,11 @@
+  */
+ #define LTQ_ICU_EBU_IRQ		22
+ 
+-#define ltq_icu_w32(m, x, y)	ltq_w32((x), ltq_icu_membase[m] + (y))
+-#define ltq_icu_r32(m, x)	ltq_r32(ltq_icu_membase[m] + (x))
++#define ltq_icu_w32(vpe, m, x, y)	\
++	ltq_w32((x), ltq_icu_membase[vpe] + m*LTQ_ICU_IM_SIZE + (y))
++
++#define ltq_icu_r32(vpe, m, x)		\
++	ltq_r32(ltq_icu_membase[vpe] + m*LTQ_ICU_IM_SIZE + (x))
+ 
+ #define ltq_eiu_w32(x, y)	ltq_w32((x), ltq_eiu_membase + (y))
+ #define ltq_eiu_r32(x)		ltq_r32(ltq_eiu_membase + (x))
+@@ -57,9 +62,11 @@
+ 
+ static int exin_avail;
+ static u32 ltq_eiu_irq[MAX_EIU];
+-static void __iomem *ltq_icu_membase[MAX_IM];
++static void __iomem *ltq_icu_membase[NR_CPUS];
+ static void __iomem *ltq_eiu_membase;
+ static struct irq_domain *ltq_domain;
++static DEFINE_SPINLOCK(ltq_eiu_lock);
++static DEFINE_RAW_SPINLOCK(ltq_icu_lock);
+ static int ltq_perfcount_irq;
+ 
+ int ltq_eiu_get_irq(int exin)
+@@ -73,45 +80,82 @@ void ltq_disable_irq(struct irq_data *d)
+ {
+ 	unsigned long offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
  	unsigned long im = offset / INT_NUM_IM_OFFSET;
++	unsigned long flags;
++	int vpe;
  
  	offset %= INT_NUM_IM_OFFSET;
--	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IM0_IER) & ~BIT(offset),
--		    LTQ_ICU_IM0_IER);
-+	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IER) & ~BIT(offset),
-+		    LTQ_ICU_IER);
+-	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IER) & ~BIT(offset),
+-		    LTQ_ICU_IER);
++
++	raw_spin_lock_irqsave(&ltq_icu_lock, flags);
++	for_each_present_cpu(vpe) {
++		ltq_icu_w32(vpe, im,
++			    ltq_icu_r32(vpe, im, LTQ_ICU_IER) & ~BIT(offset),
++			    LTQ_ICU_IER);
++	}
++	raw_spin_unlock_irqrestore(&ltq_icu_lock, flags);
  }
  
  void ltq_mask_and_ack_irq(struct irq_data *d)
-@@ -87,9 +85,9 @@ void ltq_mask_and_ack_irq(struct irq_data *d)
+ {
+ 	unsigned long offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
  	unsigned long im = offset / INT_NUM_IM_OFFSET;
++	unsigned long flags;
++	int vpe;
  
  	offset %= INT_NUM_IM_OFFSET;
--	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IM0_IER) & ~BIT(offset),
--		    LTQ_ICU_IM0_IER);
--	ltq_icu_w32(im, BIT(offset), LTQ_ICU_IM0_ISR);
-+	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IER) & ~BIT(offset),
-+		    LTQ_ICU_IER);
-+	ltq_icu_w32(im, BIT(offset), LTQ_ICU_ISR);
+-	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IER) & ~BIT(offset),
+-		    LTQ_ICU_IER);
+-	ltq_icu_w32(im, BIT(offset), LTQ_ICU_ISR);
++
++	raw_spin_lock_irqsave(&ltq_icu_lock, flags);
++	for_each_present_cpu(vpe) {
++		ltq_icu_w32(vpe, im,
++			    ltq_icu_r32(vpe, im, LTQ_ICU_IER) & ~BIT(offset),
++			    LTQ_ICU_IER);
++		ltq_icu_w32(vpe, im, BIT(offset), LTQ_ICU_ISR);
++	}
++	raw_spin_unlock_irqrestore(&ltq_icu_lock, flags);
  }
  
  static void ltq_ack_irq(struct irq_data *d)
-@@ -98,7 +96,7 @@ static void ltq_ack_irq(struct irq_data *d)
+ {
+ 	unsigned long offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
  	unsigned long im = offset / INT_NUM_IM_OFFSET;
++	unsigned long flags;
++	int vpe;
  
  	offset %= INT_NUM_IM_OFFSET;
--	ltq_icu_w32(im, BIT(offset), LTQ_ICU_IM0_ISR);
-+	ltq_icu_w32(im, BIT(offset), LTQ_ICU_ISR);
+-	ltq_icu_w32(im, BIT(offset), LTQ_ICU_ISR);
++
++	raw_spin_lock_irqsave(&ltq_icu_lock, flags);
++	for_each_present_cpu(vpe) {
++		ltq_icu_w32(vpe, im, BIT(offset), LTQ_ICU_ISR);
++	}
++	raw_spin_unlock_irqrestore(&ltq_icu_lock, flags);
  }
  
  void ltq_enable_irq(struct irq_data *d)
-@@ -107,8 +105,8 @@ void ltq_enable_irq(struct irq_data *d)
+ {
+ 	unsigned long offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
  	unsigned long im = offset / INT_NUM_IM_OFFSET;
++	unsigned long flags;
++	int vpe;
  
  	offset %= INT_NUM_IM_OFFSET;
--	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IM0_IER) | BIT(offset),
--		    LTQ_ICU_IM0_IER);
-+	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IER) | BIT(offset),
-+		    LTQ_ICU_IER);
+-	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IER) | BIT(offset),
++
++	vpe = cpumask_first(irq_data_get_effective_affinity_mask(d));
++
++	/* This shouldn't be even possible, maybe during CPU hotplug spam */
++	if (unlikely(vpe >= nr_cpu_ids))
++		vpe = smp_processor_id();
++
++	raw_spin_lock_irqsave(&ltq_icu_lock, flags);
++
++	ltq_icu_w32(vpe, im, ltq_icu_r32(vpe, im, LTQ_ICU_IER) | BIT(offset),
+ 		    LTQ_ICU_IER);
++
++	raw_spin_unlock_irqrestore(&ltq_icu_lock, flags);
  }
  
  static int ltq_eiu_settype(struct irq_data *d, unsigned int type)
-@@ -225,7 +223,7 @@ static void ltq_hw_irq_handler(struct irq_desc *desc)
+ {
+ 	int i;
++	unsigned long flags;
+ 
+ 	for (i = 0; i < exin_avail; i++) {
+ 		if (d->hwirq == ltq_eiu_irq[i]) {
+@@ -148,9 +192,11 @@ static int ltq_eiu_settype(struct irq_data *d, unsigned int type)
+ 			if (edge)
+ 				irq_set_handler(d->hwirq, handle_edge_irq);
+ 
++			spin_lock_irqsave(&ltq_eiu_lock, flags);
+ 			ltq_eiu_w32((ltq_eiu_r32(LTQ_EIU_EXIN_C) &
+ 				    (~(7 << (i * 4)))) | (val << (i * 4)),
+ 				    LTQ_EIU_EXIN_C);
++			spin_unlock_irqrestore(&ltq_eiu_lock, flags);
+ 		}
+ 	}
+ 
+@@ -194,6 +240,21 @@ static void ltq_shutdown_eiu_irq(struct irq_data *d)
+ 	}
+ }
+ 
++#if defined(CONFIG_SMP)
++static int ltq_icu_irq_set_affinity(struct irq_data *d,
++				    const struct cpumask *cpumask, bool force)
++{
++	struct cpumask tmask;
++
++	if (!cpumask_and(&tmask, cpumask, cpu_online_mask))
++		return -EINVAL;
++
++	irq_data_update_effective_affinity(d, &tmask);
++
++	return IRQ_SET_MASK_OK;
++}
++#endif
++
+ static struct irq_chip ltq_irq_type = {
+ 	.name = "icu",
+ 	.irq_enable = ltq_enable_irq,
+@@ -202,6 +263,9 @@ static struct irq_chip ltq_irq_type = {
+ 	.irq_ack = ltq_ack_irq,
+ 	.irq_mask = ltq_disable_irq,
+ 	.irq_mask_ack = ltq_mask_and_ack_irq,
++#if defined(CONFIG_SMP)
++	.irq_set_affinity = ltq_icu_irq_set_affinity,
++#endif
+ };
+ 
+ static struct irq_chip ltq_eiu_type = {
+@@ -215,6 +279,9 @@ static struct irq_chip ltq_eiu_type = {
+ 	.irq_mask = ltq_disable_irq,
+ 	.irq_mask_ack = ltq_mask_and_ack_irq,
+ 	.irq_set_type = ltq_eiu_settype,
++#if defined(CONFIG_SMP)
++	.irq_set_affinity = ltq_icu_irq_set_affinity,
++#endif
+ };
+ 
+ static void ltq_hw_irq_handler(struct irq_desc *desc)
+@@ -222,8 +289,9 @@ static void ltq_hw_irq_handler(struct irq_desc *desc)
+ 	unsigned int module = irq_desc_get_irq(desc) - 2;
  	u32 irq;
  	irq_hw_number_t hwirq;
++	int vpe = smp_processor_id();
  
--	irq = ltq_icu_r32(module, LTQ_ICU_IM0_IOSR);
-+	irq = ltq_icu_r32(module, LTQ_ICU_IOSR);
+-	irq = ltq_icu_r32(module, LTQ_ICU_IOSR);
++	irq = ltq_icu_r32(vpe, module, LTQ_ICU_IOSR);
  	if (irq == 0)
  		return;
  
-@@ -288,9 +286,9 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
+@@ -244,6 +312,7 @@ static void ltq_hw_irq_handler(struct irq_desc *desc)
+ static int icu_map(struct irq_domain *d, unsigned int irq, irq_hw_number_t hw)
+ {
+ 	struct irq_chip *chip = &ltq_irq_type;
++	struct irq_data *data;
+ 	int i;
+ 
+ 	if (hw < MIPS_CPU_IRQ_CASCADE)
+@@ -253,6 +322,10 @@ static int icu_map(struct irq_domain *d, unsigned int irq, irq_hw_number_t hw)
+ 		if (hw == ltq_eiu_irq[i])
+ 			chip = &ltq_eiu_type;
+ 
++	data = irq_get_irq_data(irq);
++
++	irq_data_update_effective_affinity(data, cpumask_of(0));
++
+ 	irq_set_chip_and_handler(irq, chip, handle_level_irq);
+ 
+ 	return 0;
+@@ -267,28 +340,37 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
+ {
+ 	struct device_node *eiu_node;
+ 	struct resource res;
+-	int i, ret;
++	int i, ret, vpe;
+ 
+-	for (i = 0; i < MAX_IM; i++) {
+-		if (of_address_to_resource(node, i, &res))
+-			panic("Failed to get icu memory range");
++	/* load register regions of available ICUs */
++	for_each_possible_cpu(vpe) {
++		if (of_address_to_resource(node, vpe, &res))
++			panic("Failed to get icu%i memory range", vpe);
+ 
+ 		if (!request_mem_region(res.start, resource_size(&res),
+ 					res.name))
+-			pr_err("Failed to request icu memory");
++			pr_err("Failed to request icu%i memory\n", vpe);
+ 
+-		ltq_icu_membase[i] = ioremap_nocache(res.start,
++		ltq_icu_membase[vpe] = ioremap_nocache(res.start,
+ 					resource_size(&res));
+-		if (!ltq_icu_membase[i])
+-			panic("Failed to remap icu memory");
++
++		if (!ltq_icu_membase[vpe])
++			panic("Failed to remap icu%i memory", vpe);
+ 	}
+ 
  	/* turn off all irqs by default */
- 	for (i = 0; i < MAX_IM; i++) {
- 		/* make sure all irqs are turned off by default */
--		ltq_icu_w32(i, 0, LTQ_ICU_IM0_IER);
-+		ltq_icu_w32(i, 0, LTQ_ICU_IER);
- 		/* clear all possibly pending interrupts */
--		ltq_icu_w32(i, ~0, LTQ_ICU_IM0_ISR);
-+		ltq_icu_w32(i, ~0, LTQ_ICU_ISR);
+-	for (i = 0; i < MAX_IM; i++) {
+-		/* make sure all irqs are turned off by default */
+-		ltq_icu_w32(i, 0, LTQ_ICU_IER);
+-		/* clear all possibly pending interrupts */
+-		ltq_icu_w32(i, ~0, LTQ_ICU_ISR);
++	for_each_possible_cpu(vpe) {
++		for (i = 0; i < MAX_IM; i++) {
++			/* make sure all irqs are turned off by default */
++			ltq_icu_w32(vpe, i, 0, LTQ_ICU_IER);
++
++			/* clear all possibly pending interrupts */
++			ltq_icu_w32(vpe, i, ~0, LTQ_ICU_ISR);
++			ltq_icu_w32(vpe, i, ~0, LTQ_ICU_IMR);
++
++			/* clear resend */
++			ltq_icu_w32(vpe, i, 0, LTQ_ICU_IRSR);
++		}
  	}
  
  	mips_cpu_irq_init();
