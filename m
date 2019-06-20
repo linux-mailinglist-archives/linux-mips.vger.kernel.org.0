@@ -2,115 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C43AA4DC9C
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2019 23:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A62624DCCF
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2019 23:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726192AbfFTVee (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jun 2019 17:34:34 -0400
-Received: from mail-eopbgr750091.outbound.protection.outlook.com ([40.107.75.91]:39758
-        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726008AbfFTVee (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 20 Jun 2019 17:34:34 -0400
+        id S1726131AbfFTVj0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jun 2019 17:39:26 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:40287 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726034AbfFTVjZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jun 2019 17:39:25 -0400
+Received: by mail-wr1-f66.google.com with SMTP id p11so4488232wre.7
+        for <linux-mips@vger.kernel.org>; Thu, 20 Jun 2019 14:39:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=wavesemi.onmicrosoft.com; s=selector1-wavesemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E9drLOeHfcjuBmuT0pYMdpgQOVuKqTDh6DTw1qUcGrs=;
- b=BZVg7dPlyVZQJ7dV71BzDIkWW4akL/uvRI0DR3MKQJRTfvhdMr4eoxThXxKNmyhp00LV/eBIMd31LeX+iP0WwAGQWA+s9ww29KgpEiAS+IgC5HfNcbtUZZJz7HfgtBeUuKZ/3KQj8nAztdGYfYghuHg+z9HkY5QyQM9PHwxsTIM=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1055.namprd22.prod.outlook.com (10.174.169.141) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1987.15; Thu, 20 Jun 2019 21:34:30 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::6975:b632:c85b:9e40]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::6975:b632:c85b:9e40%2]) with mapi id 15.20.2008.007; Thu, 20 Jun 2019
- 21:34:30 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     "Hombourger, Cedric" <Cedric_Hombourger@mentor.com>
-CC:     Sasha Levin <sashal@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: have "plain" make calls build dtbs for selected
- platforms
-Thread-Topic: [PATCH] MIPS: have "plain" make calls build dtbs for selected
- platforms
-Thread-Index: AQHVIgBpf6BYLkAQw0aPbj6clwp5T6adO4kAgACh3B+ABltpAIAAyaOAgAATRgCAAAYngA==
-Date:   Thu, 20 Jun 2019 21:34:30 +0000
-Message-ID: <20190620213427.pavgu64cxhrsmuo7@pburton-laptop>
-References: <1560415970-844-1-git-send-email-Cedric_Hombourger@mentor.com>
- <20190615221604.E6FB82183F@mail.kernel.org> <1560668291651.87711@mentor.com>
- <1561017706300.81899@mentor.com>
- <20190620200325.se6e6yicvlkjrb46@pburton-laptop>
- <366B6D73-2DCF-49B6-80B2-B1FAD6C73580@mentor.com>
-In-Reply-To: <366B6D73-2DCF-49B6-80B2-B1FAD6C73580@mentor.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR01CA0029.prod.exchangelabs.com (2603:10b6:a02:80::42)
- To MWHPR2201MB1277.namprd22.prod.outlook.com (2603:10b6:301:18::12)
-user-agent: NeoMutt/20180716
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [73.93.153.114]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6c09630a-74e9-4335-b8d3-08d6f5c71399
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1055;
-x-ms-traffictypediagnostic: MWHPR2201MB1055:
-x-microsoft-antispam-prvs: <MWHPR2201MB105538B038293D2C86DD6B58C1E40@MWHPR2201MB1055.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0074BBE012
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(396003)(39850400004)(366004)(346002)(376002)(136003)(189003)(199004)(476003)(26005)(1076003)(6116002)(3846002)(54906003)(6436002)(316002)(58126008)(11346002)(6486002)(6916009)(446003)(102836004)(44832011)(42882007)(6512007)(6506007)(486006)(66946007)(186003)(386003)(64756008)(73956011)(66476007)(53936002)(8936002)(66556008)(7736002)(99286004)(8676002)(71190400001)(6246003)(81166006)(4326008)(52116002)(81156014)(33716001)(66066001)(305945005)(9686003)(2906002)(14454004)(71200400001)(5660300002)(478600001)(25786009)(66446008)(76176011)(229853002)(256004)(68736007)(14444005);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1055;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: jcNgHf+cKZcGYhsV1zrKENiKuSNw3Am/O8b6QJ4CRRI+MVHWInjoL5R04tydLO4wHwbC6yBsvnlUSmZUNpRydahqzik+5GVKx2T5toGYr4Xaaw108mvKM5hQovqUlyim1VMgUVzH6+JbliQix+Gu5AsVDyIz4svppStN506rWxtLv9xW+EDlML1/ew9fekwNT5aZiF4beyTST65l7lgP0KDWADZim5/1NfTbz9V5UAlE+0TGHmYE1hLqv1CIQy1xlGiCbWwjNWkDAsxy0Buw+iU1aGMo5JY9WrFJ4wNCeS+zJKqXURxko5b80IymXsClUZi5k04inGLikZcZjf95ihcuGMsBk6QTGiN5DQcBt/lEckd7/u5dc5M6ucuQ2hlFROqkk26BIsIO+axjgTJ5nW2dLyTsr60OdSf8cyZeXTU=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <97B42FC4A6994C4AAA315BB4E5726C90@namprd22.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7Xk4hez7/mS6XBmLs1KNEHdoO4X2B42iD/8NGVo28lA=;
+        b=gGTfeNjDIzNM9k3EwYZY6jKw4puyD1fr5zWze0YHHgUca/2hrB/y6elMyC92KH4TvW
+         NTGcGnw9BFUn9QTmeR7DHiRgjQtDI2hudJdUqupxZkXacxHxVRpOpmuu/RCun8zHKqYC
+         BopsCbCb/09hHSNpJswoPlIkstAo8KnP5YVSCRZky6VQfqowRCvezoNOKoYVNL0htj1n
+         RaQTeRMro+lc1lpxwtCR0IDT1f0ht7OwVPaARe6EfST1JXTU28qiWvMrpYbZ0jBgsWa8
+         g8GST5dWsxAD9678nLdun7n/R/g8UKi4I4egm2w0EcrZg3dcn6/wDkCe9XTTLtC1xTm1
+         H0ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7Xk4hez7/mS6XBmLs1KNEHdoO4X2B42iD/8NGVo28lA=;
+        b=ib/hDSRaimrbrtWh1Eia3A5vERNn00KuTt9bwFnuGsh6a+5fsApF7TjB0VFcKg5/sq
+         beBjEfuVDaEEZafiWuFk5evFXSFY6BUMb6sYjFDoGlN3B2GvWKUvfqAqnFpf0D+DTOHT
+         rhgJoHlEpx+RGWC7pxvc+9PfST/7r6YSfS66nR0jsQOwtK6NEl8y8UsMMFld9xpeFEMm
+         G0v+Tj5LTRYKsZIYCj/SkwwYDTIFvt7M3fLHut++2pHL6AvoKYriue2KC9KQmW/v4q/M
+         ZBhBHrKIWVXQioJbL42LneXDlLM7TfMoYl9ehZlS/ivQG+tXzcAnVgHxH6w5UdAX5h5g
+         1Z4g==
+X-Gm-Message-State: APjAAAX0RRPahYsvffeeicNW4YtqTKUjB+J3A8ka9vVh6zqHbCVKBCkH
+        aL8qAg2vT5aBpjj0h67BqP8=
+X-Google-Smtp-Source: APXvYqzw82nOMGtzkv5+JVz+jTNPz4eel+zr0vy9Eb+Uy7VeVKoHeeMqLq95b5s/XHaRq6eBkY2vYQ==
+X-Received: by 2002:a5d:5491:: with SMTP id h17mr366714wrv.46.1561066763893;
+        Thu, 20 Jun 2019 14:39:23 -0700 (PDT)
+Received: from kontron.lan (2001-1ae9-0ff1-f191-ecaa-d74f-d492-3738.ip6.tmcz.cz. [2001:1ae9:ff1:f191:ecaa:d74f:d492:3738])
+        by smtp.gmail.com with ESMTPSA id j4sm575426wrx.57.2019.06.20.14.39.22
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 20 Jun 2019 14:39:23 -0700 (PDT)
+From:   petrcvekcz@gmail.com
+X-Google-Original-From: petrcvekcz.gmail.com
+To:     hauke@hauke-m.de, john@phrozen.org
+Cc:     Petr Cvek <petrcvekcz@gmail.com>, linux-mips@vger.kernel.org,
+        openwrt-devel@lists.openwrt.org, pakahmar@hotmail.com
+Subject: [PATCH v2 0/7] MIPS: lantiq: irq: Various fixes, add SMP support
+Date:   Thu, 20 Jun 2019 23:39:32 +0200
+Message-Id: <cover.1561065843.git.petrcvekcz@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c09630a-74e9-4335-b8d3-08d6f5c71399
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2019 21:34:30.5510
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1055
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Cedric,
+From: Petr Cvek <petrcvekcz@gmail.com>
 
-On Thu, Jun 20, 2019 at 09:12:26PM +0000, Hombourger, Cedric wrote:
-> Hello Paul,=20
->=20
-> I will recheck tomorrow morning but the kernel I was initially working
-> with was 4.19 and I did not find dtbs being compiled from a plain make
-> or from builddeb=20
+Hi,
 
-Oh, sure - I don't expect they'd get built either. I did think builddeb
-would succeed without them though, but actually looking at history it
-would still fail for v4.1 through v4.19 because although builddeb
-checked for a dtbs_install target in the arch Makefile prior to the
-commit I mentioned before, we used to have one in those versions...
+While hacking with my modem in openwrt I've found in the lantiq vrx268 SoC
+there is only a support for the processes SMP and not for interrupt
+routing. After some looking into vendors released source codes (probably
+intel UGW) and by observing SoC's memory map I've found out there is
+a second interrupt controller (ICU) for the second VPE. The last patch of
+this series adds a support for it. The code is different from intel UGW's
+set affinity function, where the interrupt line gets enabled (switched)
+to the second ICU. Instead only the cpumask gets changed in my set affinity.
+The change will be written into the hardware after the next irq enable call.
+This was changed because of stability reasons in the high irq load of
+the SoC.
 
-So I'll mark your commit for backport as far as v4.1 where our
-dtbs_install target was introduced.
+The first part of the series are more or less cosmetic changes of long
+names, different types and few fixed warnings from checkpatch. There is
+a fix in part 5, where I've found the missing bitfield clear before ORing
+with a new value.
 
-The usual approach is that the patch goes into mainline first, and once
-that happens you can submit your backports for the stable branches where
-it doesn't apply cleanly. You should receive an email following the
-failed attempts to cherry-pick the commit onto the stable branches,
-which is often a good reminder to handle the backport.
+The SMP in part 7 changes devicetree definition for a register regions
+of the ICU. Previously, there was a region for a single IM (a mask/unmask/
+enable/... set for 32 interrupts). Now it is the whole ICU. It match more
+the hardware layout. There is no compatibility issue in vanilla, only
+openwrt was affected by these devicetrees.
 
-(PS. Top posting is frowned upon pretty much universally in the kernel
-     communify - I'd recommend switching your email reply style before
-     it draws too much attention ;) )
+Also in the UGW's ltq_enable_irq(), there was a status bit reset before
+the actual IRQ line enable. It was marked as "Bug fix for fake interrupt".
+The code seems to work without it (vanilla and new SMP), but I've made
+an assert if this bit is set before the actual enable. The assert reported
+these IRQ sources:
 
-Thanks,
-    Paul
+	22:00004000     spi_rx  (only when SPI is accessed)
+	63:00800000     mei_cpe (permanent 1s)
+	112:00000100    asc_tx
+
+But the code seems to run anyway I didn't include the status bit reset part.
+
+The SMP affinity update is done every IRQ enable, where it extract the first
+valid VPE from affinity cpumask. This is standard in the kernel.
+
+The code was tested in nosmp configuration on TPLink W9980B in openwrt tree
+(patched kernel v4.14). The lantiq devices other than vrx268 were not
+tested.
+
+Discussion on openwrt related parts for lantiq ICU SMP is here (devicetrees,
+things not in the vanilla kernel, RFC versions of the patch):
+https://patchwork.ozlabs.org/patch/1100832/
+
+Changes since v1:
+ * Added a define for IM size
+ * Changed ltq_icu_membase array size to NR_CPUS so for_each_possible_cpu()
+   will not overflow
+ * Removed affinity auto rotation (can be add later from v1 if required)
+ * Commit messages wordings
+
+Petr Cvek (7):
+  MIPS: lantiq: Move macro directly to iomem function
+  MIPS: lantiq: Change variables to the same type as the source
+  MIPS: lantiq: Fix attributes of of_device_id structure
+  MIPS: lantiq: Remove unused macros
+  MIPS: lantiq: Fix bitfield masking
+  MIPS: lantiq: Shorten register names, remove unused macros
+  MIPS: lantiq: Add SMP support for lantiq interrupt controller
+
+ arch/mips/lantiq/irq.c | 177 +++++++++++++++++++++++++++++------------
+ 1 file changed, 126 insertions(+), 51 deletions(-)
+
+-- 
+2.21.0
+
