@@ -2,46 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 858934DCD1
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2019 23:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 184AA4DCD2
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2019 23:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbfFTVj1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jun 2019 17:39:27 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:34907 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726034AbfFTVj0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jun 2019 17:39:26 -0400
-Received: by mail-wr1-f68.google.com with SMTP id m3so4528871wrv.2
+        id S1726196AbfFTVj2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jun 2019 17:39:28 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:38027 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726190AbfFTVj2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jun 2019 17:39:28 -0400
+Received: by mail-wm1-f67.google.com with SMTP id s15so4543277wmj.3
         for <linux-mips@vger.kernel.org>; Thu, 20 Jun 2019 14:39:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=aoxEMTXRyZdBW4b695q86IBvL71gam3jAF4D6e1oWYk=;
-        b=npw55f+ATcn6mfPxVcEVb2eOu5sTVShGqtID0EYa5ifUEqucGxmsZYAI/xvfLgibf/
-         nWff/Odeku9OVz5QRfQaTcUONulf+9Og4zBpqm7WyS3vKCJek0FUxap2ToZEvU9pA3i9
-         DdLtieqrR0E3QXK+pMvoq9xg0QeeSL2upahwvya06YHUJrJROtTSB7xb1uc87EVqV+hf
-         kmHA16gT3hZgeg7NuXCRIcTN6NybC5XYoqp+Q2wuRYLa5NCHbD3RdALNJzRDXYRHGviW
-         ZkxBKP+aP3cD67eMFYdlVrFIjkqLqCLQ56ry1CeIr0QZ0I9/WnWI53MCnhb3qBHEq2vI
-         dBsw==
+        bh=K6XyYBpZYTZIhNAqwvma6CPAxW9A+FG7+THYnS1wA+I=;
+        b=UbGftDAcrr1GE32Qd6KkmpICdn8SCXIlBld/g1srbCN2tyYqORbnOFuMZmVy29j3Vj
+         VHwr+moshdr91lH/tcIjt7JJZge2/LSjc3E3IrwSlwhIWfcCxJSZjVuPJdjw15A21uZM
+         j/632vIzZVBH1m/FuQ8pFeFmpw/+tSkZBxTWrfDDc+eHN60dqXzRYMonxSp2sDa71mO6
+         FgveMHS6/J9fjZ/fcYZgiFRFEHX4gMF7w0mkZydUDB+TtCW3azltAU/twMS6gL12oBUw
+         JGgPPItPqkkQxvXU0uOJtN7e19q2v5VqbgY51/cbPvNHBHbiT4u7uYa34QIS0uXb4p9N
+         TLTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=aoxEMTXRyZdBW4b695q86IBvL71gam3jAF4D6e1oWYk=;
-        b=CuI3fRzrTuqOfbwwf44has8lnfkpDjrpDT2cEpStbYfkWM/MoBvS4C8qyKZ6CJuPqo
-         8I3qo7lDpKtwy8uHEo7M5UOAbWyE5sNYYOZW+Yv5LOw39UJLDKfSRA/iObqdLsuceeA2
-         S7Tms/kBjDuwvW5Etn3dd6dreRpZkt9o4VqdB0ZK/4PD5+YNYH+WFBWsOOmcZHlk+FYJ
-         xfNfjTfnAi5gWKJQVPHjwgfE9EAEphUVM0nyFPDiVNxWNf5WsWnq2q9zBm6fdehjjlLB
-         3UQcKmDszevpMGPCEfa84qmGXd4IQBoC6H1fKVYhBo3GP2law1h4Eb+36TgEh8cRKdXb
-         TXBA==
-X-Gm-Message-State: APjAAAVclYk3Y/iZ5pj6jbRDE+udL5jVT6A34kCWeeEZ3TzZF7ziatWc
-        g2esb9ycVIHjWixaCnts7me02dXE
-X-Google-Smtp-Source: APXvYqwnqWLBKxor2zNDz1OVCipLWIoOFPUlgwTBwdTPBMZQvkXyztHMgGfSVTdjpJenW2DYphijNQ==
-X-Received: by 2002:adf:ed41:: with SMTP id u1mr45563754wro.162.1561066765557;
-        Thu, 20 Jun 2019 14:39:25 -0700 (PDT)
+        bh=K6XyYBpZYTZIhNAqwvma6CPAxW9A+FG7+THYnS1wA+I=;
+        b=rMGtR5OjIIbBcCtHtYHXT9YJBd/si85m7l/TLM6oR4c5Z/SfqjnsamlPvEwF1WLEja
+         2Mzy/GwcMgnUbrUGhQSi0simsg4FsCVKpReFaFe5GfYits6BEf2WyGefrqjBwC8olyKz
+         lfQYf80Ib9qxNyjqdQfydjLxLSj8wJc2hPd3rqr/Kkm1fTXyd1FvCJOrUOXUt3ihMrIu
+         qoo6RPH8aDVi8DzMlUqVGafAd79IwPEEtNRSUIU79hCjOsFKC+3e+ydIFrWXm7KBghyo
+         EJPwaOH2fmroomzm2V/Jqf/b8FJD0w//n3YdWKGpdoFrqQc5Bx14a3qkJ2Nd6hmY0wSy
+         0o0Q==
+X-Gm-Message-State: APjAAAVRydxSELh6N+8+ZSVdSVRHVzwZZmC99JV55VAadOn6JWDrQHoK
+        pLBfqT/1RIzx2vLDguEjldYGKCqe
+X-Google-Smtp-Source: APXvYqyaMfoLNLtNOL7QSY6DauUUCgTpC9kOTKvGlZECcjYL9J0N8pIrgdF2ITD7J/hxLwauHVcPvw==
+X-Received: by 2002:a1c:208c:: with SMTP id g134mr1018201wmg.112.1561066766342;
+        Thu, 20 Jun 2019 14:39:26 -0700 (PDT)
 Received: from kontron.lan (2001-1ae9-0ff1-f191-ecaa-d74f-d492-3738.ip6.tmcz.cz. [2001:1ae9:ff1:f191:ecaa:d74f:d492:3738])
-        by smtp.gmail.com with ESMTPSA id j4sm575426wrx.57.2019.06.20.14.39.24
+        by smtp.gmail.com with ESMTPSA id j4sm575426wrx.57.2019.06.20.14.39.25
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
         Thu, 20 Jun 2019 14:39:25 -0700 (PDT)
 From:   petrcvekcz@gmail.com
@@ -49,9 +49,9 @@ X-Google-Original-From: petrcvekcz.gmail.com
 To:     hauke@hauke-m.de, john@phrozen.org
 Cc:     Petr Cvek <petrcvekcz@gmail.com>, linux-mips@vger.kernel.org,
         openwrt-devel@lists.openwrt.org, pakahmar@hotmail.com
-Subject: [PATCH v2 2/7] MIPS: lantiq: Change variables to the same type as the source
-Date:   Thu, 20 Jun 2019 23:39:34 +0200
-Message-Id: <bf6dd033516c90636f75595c12b1f3c0a3331d28.1561065843.git.petrcvekcz@gmail.com>
+Subject: [PATCH v2 3/7] MIPS: lantiq: Fix attributes of of_device_id structure
+Date:   Thu, 20 Jun 2019 23:39:35 +0200
+Message-Id: <ff66ca5b146e40ac56009a4e511bd0d0120c7814.1561065843.git.petrcvekcz@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1561065843.git.petrcvekcz@gmail.com>
 References: <cover.1561065843.git.petrcvekcz@gmail.com>
@@ -64,76 +64,27 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Petr Cvek <petrcvekcz@gmail.com>
 
-A structure irq_data, irq_desc_get_irq() and irq_linear_revmap() use
-a different type than defined in the lantiq ICU driver, which is using
-signed integers. The substracted result should never be negative nor is
-tested for that situation. Change it to unsigned.
+According to the checkpatch the driver structure of_device_id requires
+to be const and with attribute __initconst. Change it accordingly.
 
 Signed-off-by: Petr Cvek <petrcvekcz@gmail.com>
 ---
- arch/mips/lantiq/irq.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ arch/mips/lantiq/irq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/mips/lantiq/irq.c b/arch/mips/lantiq/irq.c
-index fb3e1cc2cf6b..ef946eb41439 100644
+index ef946eb41439..2df5d37d0a7b 100644
 --- a/arch/mips/lantiq/irq.c
 +++ b/arch/mips/lantiq/irq.c
-@@ -77,8 +77,8 @@ int ltq_eiu_get_irq(int exin)
+@@ -347,7 +347,7 @@ unsigned int get_c0_compare_int(void)
+ 	return CP0_LEGACY_COMPARE_IRQ;
+ }
  
- void ltq_disable_irq(struct irq_data *d)
- {
--	int offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
--	int im = offset / INT_NUM_IM_OFFSET;
-+	unsigned long offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
-+	unsigned long im = offset / INT_NUM_IM_OFFSET;
- 
- 	offset %= INT_NUM_IM_OFFSET;
- 	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IM0_IER) & ~BIT(offset),
-@@ -87,8 +87,8 @@ void ltq_disable_irq(struct irq_data *d)
- 
- void ltq_mask_and_ack_irq(struct irq_data *d)
- {
--	int offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
--	int im = offset / INT_NUM_IM_OFFSET;
-+	unsigned long offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
-+	unsigned long im = offset / INT_NUM_IM_OFFSET;
- 
- 	offset %= INT_NUM_IM_OFFSET;
- 	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IM0_IER) & ~BIT(offset),
-@@ -98,8 +98,8 @@ void ltq_mask_and_ack_irq(struct irq_data *d)
- 
- static void ltq_ack_irq(struct irq_data *d)
- {
--	int offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
--	int im = offset / INT_NUM_IM_OFFSET;
-+	unsigned long offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
-+	unsigned long im = offset / INT_NUM_IM_OFFSET;
- 
- 	offset %= INT_NUM_IM_OFFSET;
- 	ltq_icu_w32(im, BIT(offset), LTQ_ICU_IM0_ISR);
-@@ -107,8 +107,8 @@ static void ltq_ack_irq(struct irq_data *d)
- 
- void ltq_enable_irq(struct irq_data *d)
- {
--	int offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
--	int im = offset / INT_NUM_IM_OFFSET;
-+	unsigned long offset = d->hwirq - MIPS_CPU_IRQ_CASCADE;
-+	unsigned long im = offset / INT_NUM_IM_OFFSET;
- 
- 	offset %= INT_NUM_IM_OFFSET;
- 	ltq_icu_w32(im, ltq_icu_r32(im, LTQ_ICU_IM0_IER) | BIT(offset),
-@@ -224,9 +224,9 @@ static struct irq_chip ltq_eiu_type = {
- 
- static void ltq_hw_irq_handler(struct irq_desc *desc)
- {
--	int module = irq_desc_get_irq(desc) - 2;
-+	unsigned int module = irq_desc_get_irq(desc) - 2;
- 	u32 irq;
--	int hwirq;
-+	irq_hw_number_t hwirq;
- 
- 	irq = ltq_icu_r32(module, LTQ_ICU_IM0_IOSR);
- 	if (irq == 0)
+-static struct of_device_id __initdata of_irq_ids[] = {
++static const struct of_device_id of_irq_ids[] __initconst = {
+ 	{ .compatible = "lantiq,icu", .data = icu_of_init },
+ 	{},
+ };
 -- 
 2.21.0
 
