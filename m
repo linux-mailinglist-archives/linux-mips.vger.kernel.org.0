@@ -2,56 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 184AA4DCD2
+	by mail.lfdr.de (Postfix) with ESMTP id 841424DCD3
 	for <lists+linux-mips@lfdr.de>; Thu, 20 Jun 2019 23:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726196AbfFTVj2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jun 2019 17:39:28 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:38027 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726190AbfFTVj2 (ORCPT
+        id S1726218AbfFTVj3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jun 2019 17:39:29 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:35966 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726034AbfFTVj2 (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jun 2019 17:39:28 -0400
-Received: by mail-wm1-f67.google.com with SMTP id s15so4543277wmj.3
-        for <linux-mips@vger.kernel.org>; Thu, 20 Jun 2019 14:39:26 -0700 (PDT)
+Received: by mail-wr1-f65.google.com with SMTP id n4so3298651wrs.3
+        for <linux-mips@vger.kernel.org>; Thu, 20 Jun 2019 14:39:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=K6XyYBpZYTZIhNAqwvma6CPAxW9A+FG7+THYnS1wA+I=;
-        b=UbGftDAcrr1GE32Qd6KkmpICdn8SCXIlBld/g1srbCN2tyYqORbnOFuMZmVy29j3Vj
-         VHwr+moshdr91lH/tcIjt7JJZge2/LSjc3E3IrwSlwhIWfcCxJSZjVuPJdjw15A21uZM
-         j/632vIzZVBH1m/FuQ8pFeFmpw/+tSkZBxTWrfDDc+eHN60dqXzRYMonxSp2sDa71mO6
-         FgveMHS6/J9fjZ/fcYZgiFRFEHX4gMF7w0mkZydUDB+TtCW3azltAU/twMS6gL12oBUw
-         JGgPPItPqkkQxvXU0uOJtN7e19q2v5VqbgY51/cbPvNHBHbiT4u7uYa34QIS0uXb4p9N
-         TLTg==
+        bh=acjgtnfZM5+ljClU7KhpnoMYZUUlOHiWM5nNWs1Eo98=;
+        b=VGQ4w5Go605TQmCEYTXdnEQDLuDjBy/4JC4cTBrBAgCQUaxEahj8OY/ca+bYkEhRb1
+         5vG+vdbpFZWXSKBiMT9o5Zh9pgpCALb/NX2DRTif6PIR//2N1lVt68IftTKHmtmznsLd
+         Hq+hB+eS2BGdyfSMm2D7xEO/V4pPxazNFsklE8qPwElNFwL3iFs81us4qlRAF0wCvAkg
+         afebjHELKRfpKk+TLtiiX7jZ3DMqYKdvP//GQ7jUKEht4ncUKcBMmzMZW3u9OYqWquLW
+         OL2NHqalQqYN6X5pF6p63LcR1eNmiZ/iTnaIjft/kUgV1RM75kYb8sFugqOpUfBggzYJ
+         hfkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=K6XyYBpZYTZIhNAqwvma6CPAxW9A+FG7+THYnS1wA+I=;
-        b=rMGtR5OjIIbBcCtHtYHXT9YJBd/si85m7l/TLM6oR4c5Z/SfqjnsamlPvEwF1WLEja
-         2Mzy/GwcMgnUbrUGhQSi0simsg4FsCVKpReFaFe5GfYits6BEf2WyGefrqjBwC8olyKz
-         lfQYf80Ib9qxNyjqdQfydjLxLSj8wJc2hPd3rqr/Kkm1fTXyd1FvCJOrUOXUt3ihMrIu
-         qoo6RPH8aDVi8DzMlUqVGafAd79IwPEEtNRSUIU79hCjOsFKC+3e+ydIFrWXm7KBghyo
-         EJPwaOH2fmroomzm2V/Jqf/b8FJD0w//n3YdWKGpdoFrqQc5Bx14a3qkJ2Nd6hmY0wSy
-         0o0Q==
-X-Gm-Message-State: APjAAAVRydxSELh6N+8+ZSVdSVRHVzwZZmC99JV55VAadOn6JWDrQHoK
-        pLBfqT/1RIzx2vLDguEjldYGKCqe
-X-Google-Smtp-Source: APXvYqyaMfoLNLtNOL7QSY6DauUUCgTpC9kOTKvGlZECcjYL9J0N8pIrgdF2ITD7J/hxLwauHVcPvw==
-X-Received: by 2002:a1c:208c:: with SMTP id g134mr1018201wmg.112.1561066766342;
-        Thu, 20 Jun 2019 14:39:26 -0700 (PDT)
+        bh=acjgtnfZM5+ljClU7KhpnoMYZUUlOHiWM5nNWs1Eo98=;
+        b=rJc5gPQLIsqzuepc3Z2efYw6eNgNhYPdXcVylTzIp0FeG+sY1PyhLBUMTxuvqFnLt5
+         qRlLG+FEJxyak5BxbNWDeKC+28mKYVxHs27lEp1lCGYn/72MsAFQEVtEAhXVA14ng4It
+         OaQKO1jwxcK/SDgXE26oZRM/iHE3plbz71Bw3gCveYVP5s7A82WET/L+5RyZcEJ8Q/uN
+         eCaWF77ecTavnH3AA+eVO2qthZOyOEh5PH8oMYlzaEoRh5l4heABrAwY6mzZFSWzj6x9
+         ZXQ2+7Nic2x94knOv6vOqiLVELtxm3eAM9LenHzMF0XpsZ3SuGNy4VlV9Q0FcnH8mg0M
+         E0Sw==
+X-Gm-Message-State: APjAAAVK0iSDu86W95hXqu+oVyoIcna1Uy84wl9ZXCHe1XeaMGErH2HT
+        48updezmC0eO0u0ENDgzT3s=
+X-Google-Smtp-Source: APXvYqyPH8F2fDKmvqu44PVP/pItOJUWglqn49sM52ko+RQL8xu4mDYvtnmW5Y985xINnlkXV8PDxg==
+X-Received: by 2002:adf:eacd:: with SMTP id o13mr21094872wrn.91.1561066767148;
+        Thu, 20 Jun 2019 14:39:27 -0700 (PDT)
 Received: from kontron.lan (2001-1ae9-0ff1-f191-ecaa-d74f-d492-3738.ip6.tmcz.cz. [2001:1ae9:ff1:f191:ecaa:d74f:d492:3738])
-        by smtp.gmail.com with ESMTPSA id j4sm575426wrx.57.2019.06.20.14.39.25
+        by smtp.gmail.com with ESMTPSA id j4sm575426wrx.57.2019.06.20.14.39.26
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 20 Jun 2019 14:39:25 -0700 (PDT)
+        Thu, 20 Jun 2019 14:39:26 -0700 (PDT)
 From:   petrcvekcz@gmail.com
 X-Google-Original-From: petrcvekcz.gmail.com
 To:     hauke@hauke-m.de, john@phrozen.org
 Cc:     Petr Cvek <petrcvekcz@gmail.com>, linux-mips@vger.kernel.org,
         openwrt-devel@lists.openwrt.org, pakahmar@hotmail.com
-Subject: [PATCH v2 3/7] MIPS: lantiq: Fix attributes of of_device_id structure
-Date:   Thu, 20 Jun 2019 23:39:35 +0200
-Message-Id: <ff66ca5b146e40ac56009a4e511bd0d0120c7814.1561065843.git.petrcvekcz@gmail.com>
+Subject: [PATCH v2 4/7] MIPS: lantiq: Remove unused macros
+Date:   Thu, 20 Jun 2019 23:39:36 +0200
+Message-Id: <4b59c74cb4dcf89ae034c4cfe71d942d7588ad7f.1561065843.git.petrcvekcz@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1561065843.git.petrcvekcz@gmail.com>
 References: <cover.1561065843.git.petrcvekcz@gmail.com>
@@ -64,27 +64,28 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Petr Cvek <petrcvekcz@gmail.com>
 
-According to the checkpatch the driver structure of_device_id requires
-to be const and with attribute __initconst. Change it accordingly.
+The last use of both macros was in 4.11.
 
 Signed-off-by: Petr Cvek <petrcvekcz@gmail.com>
 ---
- arch/mips/lantiq/irq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/lantiq/irq.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/arch/mips/lantiq/irq.c b/arch/mips/lantiq/irq.c
-index ef946eb41439..2df5d37d0a7b 100644
+index 2df5d37d0a7b..21ccd580f8f5 100644
 --- a/arch/mips/lantiq/irq.c
 +++ b/arch/mips/lantiq/irq.c
-@@ -347,7 +347,7 @@ unsigned int get_c0_compare_int(void)
- 	return CP0_LEGACY_COMPARE_IRQ;
- }
+@@ -54,10 +54,6 @@
+ #define ltq_eiu_w32(x, y)	ltq_w32((x), ltq_eiu_membase + (y))
+ #define ltq_eiu_r32(x)		ltq_r32(ltq_eiu_membase + (x))
  
--static struct of_device_id __initdata of_irq_ids[] = {
-+static const struct of_device_id of_irq_ids[] __initconst = {
- 	{ .compatible = "lantiq,icu", .data = icu_of_init },
- 	{},
- };
+-/* our 2 ipi interrupts for VSMP */
+-#define MIPS_CPU_IPI_RESCHED_IRQ	0
+-#define MIPS_CPU_IPI_CALL_IRQ		1
+-
+ /* we have a cascade of 8 irqs */
+ #define MIPS_CPU_IRQ_CASCADE		8
+ 
 -- 
 2.21.0
 
