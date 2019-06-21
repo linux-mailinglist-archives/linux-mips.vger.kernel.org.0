@@ -2,48 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCC44EC20
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jun 2019 17:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B4B4EC9B
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jun 2019 17:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726067AbfFUPgP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Jun 2019 11:36:15 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:45212 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726045AbfFUPgP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jun 2019 11:36:15 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5LFOCdN084301;
-        Fri, 21 Jun 2019 15:35:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2018-07-02;
- bh=6t/T0oCX3FYtWnSX59C7RPueclXGYaVh3ih9FejJyy8=;
- b=n7PC265Dn1bw/BeVQsMjARhjLsH2Q5nXXw5HrQQxZRruJV3Pk3wuDJoJppdU8WjTwsE5
- IFOO4VQ1ALO3Tkqca1A1aKFr2myITmN65QxfOid1gg19CyyUUp5tW5p0gcveHhrEOhRp
- bccPzjsBjxJ37TIq0DEoxTFJ3GSerzNRpyQgmcNIrgRZcWIJi6frNAUKxJQrh1B7Domg
- h+0kFLkrc++e4VL6uWl+SqEVobF25+Aly2yk1RoVooheayqd01ChzxdKKr3O9if86pf1
- 0CuQzsjTBC6fhX2gfPmrldWHTXgV8F98JdJPt1DFwiWomTWPOxESNbF+r+mTo403B7Bo dw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 2t7809q6yq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Jun 2019 15:35:20 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5LFZJQK100494;
-        Fri, 21 Jun 2019 15:35:19 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 2t7rdxtbm7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 21 Jun 2019 15:35:19 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5LFZDpA005218;
-        Fri, 21 Jun 2019 15:35:13 GMT
-Received: from [10.154.105.108] (/10.154.105.108)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 21 Jun 2019 08:35:13 -0700
-Subject: Re: [PATCH 01/16] mm: use untagged_addr() for get_user_pages_fast
- addresses
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Christoph Hellwig <hch@lst.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        id S1726080AbfFUPyR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Jun 2019 11:54:17 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:35725 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726073AbfFUPyR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jun 2019 11:54:17 -0400
+Received: by mail-qt1-f193.google.com with SMTP id d23so7433432qto.2
+        for <linux-mips@vger.kernel.org>; Fri, 21 Jun 2019 08:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=mLgah8hWTBbEh5+bUoBbV4cO6mlCq84wOyEco/eLAZk=;
+        b=bLoA8VtprCwV9w7tPcg86jZ1rpAS3H8PKijh78PfsPQTzI+nU5oul0zgXMeLaRiXRt
+         0wFPKH9U615gCpHD+L5Yv8W5lvde3UkjewCNuhwBu5S0CsDeI4/UcCMqeCIrj/KG+8Zb
+         l3QD277Vy5HfhTuZfxzL2AOHsfaHAVgllOoulaRVcrlIq1FSXlq3gNYiB0wHGCzm7t/H
+         qWTA1oANgEuyafWGY7DXvPIkRaLh51XuTMrMh/wGGhVgrxJRSu7jTVC4lvw3CGowryz4
+         kFxWUuoYC16OKmvczWftpSNQDTxxycyKDXLzpSxXkmqILfG31DDx+kT4wcJhilA/snBo
+         PXUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mLgah8hWTBbEh5+bUoBbV4cO6mlCq84wOyEco/eLAZk=;
+        b=GlBKEBsMAwMQOFgfj+vxCdSxY71pORfWRdD5n+st4XshBjPoclLkr5XlNyUAEyksRA
+         ejj9aUda23iwT/IYtuaA1UptU+qs/Zh3pHYc4m7SrdRicpiCjzIhy2wfB+eCRt8/dlLK
+         mi7FcVuOOVMGBzT7ulqUK2dvpnO9Ck7SUaOsLSoBThuWCcQen19Vemj25/2hoG6Gv7HV
+         q0kB7K19li6S0Mg8OUvxYa1WxqtDz6oxMneutnWbMNI9USixIv9fmDjx94o9EGkFzVX7
+         d1LigyFxESMyHcJw62olquCd4dPzUIATUc6G4pCGP7+rzC68zb/a2G4R8tAWh6r4sZuK
+         fRvA==
+X-Gm-Message-State: APjAAAXTnwEEiTHPFbAvDd7qi6lqd7epbYnIAVgZg9COazASECVuuVZE
+        +6G4416oGafx2o43MT5mjcIxyw==
+X-Google-Smtp-Source: APXvYqzhkQgyWFPdC17pHjyc6apgZlhrLfru3XQYo7Lqsq6E89yDvd3j/NnDUqHTzZE/tzkJFdAVuQ==
+X-Received: by 2002:a0c:8885:: with SMTP id 5mr46203792qvn.137.1561132456162;
+        Fri, 21 Jun 2019 08:54:16 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-55-100.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.55.100])
+        by smtp.gmail.com with ESMTPSA id 15sm1699745qtf.2.2019.06.21.08.54.15
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 21 Jun 2019 08:54:15 -0700 (PDT)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1heLrj-0001oa-5A; Fri, 21 Jun 2019 12:54:15 -0300
+Date:   Fri, 21 Jun 2019 12:54:15 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Khalid Aziz <khalid.aziz@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
@@ -57,96 +65,63 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
         sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-mm@kvack.org, x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/16] mm: use untagged_addr() for get_user_pages_fast
+ addresses
+Message-ID: <20190621155415.GU19891@ziepe.ca>
 References: <20190611144102.8848-1-hch@lst.de>
- <20190611144102.8848-2-hch@lst.de> <20190621133911.GL19891@ziepe.ca>
-From:   Khalid Aziz <khalid.aziz@oracle.com>
-Organization: Oracle Corp
-Message-ID: <9a4e1485-4683-92b0-3d26-73f26896d646@oracle.com>
-Date:   Fri, 21 Jun 2019 09:35:11 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+ <20190611144102.8848-2-hch@lst.de>
+ <20190621133911.GL19891@ziepe.ca>
+ <9a4e1485-4683-92b0-3d26-73f26896d646@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <20190621133911.GL19891@ziepe.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9295 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=857
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906210125
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9295 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=897 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906210125
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a4e1485-4683-92b0-3d26-73f26896d646@oracle.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 6/21/19 7:39 AM, Jason Gunthorpe wrote:
-> On Tue, Jun 11, 2019 at 04:40:47PM +0200, Christoph Hellwig wrote:
->> This will allow sparc64 to override its ADI tags for
->> get_user_pages and get_user_pages_fast.
->>
->> Signed-off-by: Christoph Hellwig <hch@lst.de>
->>  mm/gup.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/mm/gup.c b/mm/gup.c
->> index ddde097cf9e4..6bb521db67ec 100644
->> +++ b/mm/gup.c
->> @@ -2146,7 +2146,7 @@ int __get_user_pages_fast(unsigned long start, i=
-nt nr_pages, int write,
->>  	unsigned long flags;
->>  	int nr =3D 0;
->> =20
->> -	start &=3D PAGE_MASK;
->> +	start =3D untagged_addr(start) & PAGE_MASK;
->>  	len =3D (unsigned long) nr_pages << PAGE_SHIFT;
->>  	end =3D start + len;
->=20
-> Hmm, this function, and the other, goes on to do:
->=20
->         if (unlikely(!access_ok((void __user *)start, len)))
->                 return 0;
->=20
-> and I thought that access_ok takes in the tagged pointer?
->=20
-> How about re-order it a bit?
+On Fri, Jun 21, 2019 at 09:35:11AM -0600, Khalid Aziz wrote:
+> On 6/21/19 7:39 AM, Jason Gunthorpe wrote:
+> > On Tue, Jun 11, 2019 at 04:40:47PM +0200, Christoph Hellwig wrote:
+> >> This will allow sparc64 to override its ADI tags for
+> >> get_user_pages and get_user_pages_fast.
+> >>
+> >> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> >>  mm/gup.c | 4 ++--
+> >>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/mm/gup.c b/mm/gup.c
+> >> index ddde097cf9e4..6bb521db67ec 100644
+> >> +++ b/mm/gup.c
+> >> @@ -2146,7 +2146,7 @@ int __get_user_pages_fast(unsigned long start, int nr_pages, int write,
+> >>  	unsigned long flags;
+> >>  	int nr = 0;
+> >>  
+> >> -	start &= PAGE_MASK;
+> >> +	start = untagged_addr(start) & PAGE_MASK;
+> >>  	len = (unsigned long) nr_pages << PAGE_SHIFT;
+> >>  	end = start + len;
+> > 
+> > Hmm, this function, and the other, goes on to do:
+> > 
+> >         if (unlikely(!access_ok((void __user *)start, len)))
+> >                 return 0;
+> > 
+> > and I thought that access_ok takes in the tagged pointer?
+> > 
+> > How about re-order it a bit?
+> 
+> access_ok() can handle tagged or untagged pointers. It just strips the
+> tag bits from the top bits. Current order doesn't really matter from
+> functionality point of view. There might be minor gain in delaying
+> untagging in __get_user_pages_fast() but I could go either way.
 
-access_ok() can handle tagged or untagged pointers. It just strips the
-tag bits from the top bits. Current order doesn't really matter from
-functionality point of view. There might be minor gain in delaying
-untagging in __get_user_pages_fast() but I could go either way.
+I understand the current ARM and SPARC implementations don't do much
+with the tags, but it feels like a really big assumption for the core
+code that all future uses of tags will be fine to have them stripped
+out of 'void __user *' pointers. IMHO that is something we should not
+be doing in the core kernel..
 
---
-Khalid
-
->=20
-> diff --git a/mm/gup.c b/mm/gup.c
-> index ddde097cf9e410..f48747ced4723b 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -2148,11 +2148,12 @@ int __get_user_pages_fast(unsigned long start, =
-int nr_pages, int write,
-> =20
->  	start &=3D PAGE_MASK;
->  	len =3D (unsigned long) nr_pages << PAGE_SHIFT;
-> -	end =3D start + len;
-> -
->  	if (unlikely(!access_ok((void __user *)start, len)))
->  		return 0;
-> =20
-> +	start =3D untagged_ptr(start);
-> +	end =3D start + len;
-> +
->  	/*
->  	 * Disable interrupts.  We use the nested form as we can already have=
-
->  	 * interrupts disabled by get_futex_key.
->=20
-
-
+Jason
