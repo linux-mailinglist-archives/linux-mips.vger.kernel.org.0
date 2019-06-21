@@ -2,166 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9BE4EA1E
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jun 2019 16:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C654EA31
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jun 2019 16:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726259AbfFUOCE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Jun 2019 10:02:04 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:34643 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725985AbfFUOCD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jun 2019 10:02:03 -0400
-Received: by mail-qt1-f196.google.com with SMTP id m29so7029718qtu.1;
-        Fri, 21 Jun 2019 07:02:03 -0700 (PDT)
+        id S1726350AbfFUOFo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Jun 2019 10:05:44 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:33040 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726002AbfFUOFo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jun 2019 10:05:44 -0400
+Received: by mail-qt1-f193.google.com with SMTP id x2so7053464qtr.0
+        for <linux-mips@vger.kernel.org>; Fri, 21 Jun 2019 07:05:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=DkOzjPryuxAAZ6jj5aW+vqBCJ/xdXKjWwEy6q7BhjEk=;
+        b=aWygfjPxOlEI1tnMPH+ZEg4lwdm35MlZ9FC2Sv9mNYz1TXYg7zMy65oynguhqHPLHD
+         5poTOWoehn2uMjooUllCl96WCJBItvfeaEybY0ihx7Fxw7kb42coN1wbRqEsylbfnfz5
+         poQ9cLzRruP/gaTS5r2ivimvPxFxF10jIh6a1t8bY1c5/8nfCSLTPHFwmVvqBcrvoeSR
+         IrRjd3ExmNKIoqdYb4sME5daBw+7RTgROqdSMT/mhe4d+vGey9AkE/rEcyeRljT6dNfy
+         FwbLskfpDrkSyt1xncxh/ARyaZyhUUMnPNBaOl1L9cqI8FBxyq6cZOpH+4o3AamW6xDj
+         GPoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OXXeAOb5rpGL+JHRiSVPIGXcFlOX3Qaj7ipceyvS4V0=;
-        b=mO+m6EjeMd5/Z2WxgkIpPTtqyOtlO7whwtHFoAG+kFKD1b10/PjeeH1c2KQ8Tr090q
-         MnB6S3KA2RI9DQcXfPCaFJ+vaWsdD/zm4/NE38Rz2KYlywimkqfqAnH1VJsgU3erZod6
-         8As2vsNudllgRBAuZq3gUmq61Hs0labops+H69/uO3CNW2X955kCCTGbtNgXC3C0zq6E
-         QLNKINFgFWPrR5NGGJcNbHVzw3LaouSdd+OYSF2ltFr2g3ZOG8ZdUm7zSh8iDSzTVqAT
-         T40SXu2ZypxYynQh2sSWN43eeMGuk3pZQU3Jc6z/XAQ6TqIx/wyCPFJBszncJO5ZI/38
-         JFEg==
-X-Gm-Message-State: APjAAAWRPtJtXJbYqqSH2vYsP/U3PSynNDlp+bWp5cf4/klzGxloOC2q
-        /d7KDl3m8i++kJWHQALwylNFhIk3cdqXwWbj0NA=
-X-Google-Smtp-Source: APXvYqyqCloALuEtaHZRSNBaVsW1xlN7t8qrHA3DGfCUIY7hIRgYdpVqVn4diklgt+vPjMiv5ONk9xTmUOnCGfXAXuE=
-X-Received: by 2002:aed:2bc1:: with SMTP id e59mr97042293qtd.7.1561125722684;
- Fri, 21 Jun 2019 07:02:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190614063341.1672-1-fancer.lancer@gmail.com>
- <20190620174002.tgayzon7dc5d57fh@pburton-laptop> <alpine.LFD.2.21.1906201851580.21654@eddie.linux-mips.org>
- <CAK8P3a28Dp3UygNyomDPDxDmCmey37VS7TJkmDogaKUGZMF2mw@mail.gmail.com>
- <alpine.LFD.2.21.1906211048360.21654@eddie.linux-mips.org>
- <CAK8P3a3HWn7RXjcT0KA_qOc+C1SgWd2qXSdCTTAmRKHdc4qNbQ@mail.gmail.com> <alpine.LFD.2.21.1906211230170.21654@eddie.linux-mips.org>
-In-Reply-To: <alpine.LFD.2.21.1906211230170.21654@eddie.linux-mips.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 21 Jun 2019 16:01:46 +0200
-Message-ID: <CAK8P3a0Vw-DPjRxsOKiqQmACztdKW5Drkdza8eb6yeEkjdsxoQ@mail.gmail.com>
-Subject: Re: [PATCH] mips: Remove q-accessors from non-64bit platforms
-To:     "Maciej W. Rozycki" <macro@linux-mips.org>
-Cc:     Paul Burton <paul.burton@mips.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DkOzjPryuxAAZ6jj5aW+vqBCJ/xdXKjWwEy6q7BhjEk=;
+        b=ETrNmT0IERy8zJW1zNtf2OV2woQxz2dwc5iofb9DmtX1V5bGstG8YxQO9v9/0zOjWE
+         n+SESqQ546jMAmrtlAR76R/zEJ3dGw2ySvAkJ/DcM2UJXd85PRWDA8x2CMDWuU9DxXv5
+         uJlD+DggC/j6ODNKkDBNw1r5x/x3R85NwqdjVooKdfRtdws9dhvfx04a14AVzpROsQmD
+         bYK1+zvrDtL/schJIvLPOh9L3f+tYgTpgujnvsau1BjJZdqbdMWc7HWz6htXYdxQolCh
+         L3+xo6ZigN5dQe+m0u+2uP3mAtc6b5babxcEUT7vtK9M7ieqnay4PNheeasqHnumaN1b
+         U67w==
+X-Gm-Message-State: APjAAAXpIkqNwI6UDSUbvQjwStw6yX1FpKdRsTnyzRGapF3gBwkq5rIX
+        eXeVJ+ZyQl+HFHBBuIcdVRF7mw==
+X-Google-Smtp-Source: APXvYqzN1Bctip/8rcU9u7A4vdGN+f0/Jibs65Z8bT+DlW7GOUgigVYUV0gNRYHBistcmEEvwVki5g==
+X-Received: by 2002:a0c:d610:: with SMTP id c16mr45427150qvj.22.1561125943463;
+        Fri, 21 Jun 2019 07:05:43 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-55-100.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.55.100])
+        by smtp.gmail.com with ESMTPSA id i17sm1269594qkl.71.2019.06.21.07.05.42
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 21 Jun 2019 07:05:42 -0700 (PDT)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1heKAg-0000Jr-7W; Fri, 21 Jun 2019 11:05:42 -0300
+Date:   Fri, 21 Jun 2019 11:05:42 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christoph Hellwig <hch@lst.de>, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        Serge Semin <Sergey.Semin@t-platforms.ru>,
-        "Vadim V . Vlasov" <vadim.vlasov@t-platforms.ru>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org, x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/16] MIPS: use the generic get_user_pages_fast code
+Message-ID: <20190621140542.GO19891@ziepe.ca>
+References: <20190611144102.8848-1-hch@lst.de>
+ <20190611144102.8848-5-hch@lst.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190611144102.8848-5-hch@lst.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 21, 2019 at 2:24 PM Maciej W. Rozycki <macro@linux-mips.org> wrote:
-> On Fri, 21 Jun 2019, Arnd Bergmann wrote:
-> > > > The other property of packet memory and similar things is that you
-> > > > basically want memcpy()-behavior with no byteswaps. This is one
-> > > > of the few cases in which __raw_readq() is actually the right accessor
-> > > > in (mostly) portable code.
-> > >
-> > >  Correct, but we're missing an `__raw_readq_relaxed', etc. interface and
-> > > having additional barriers applied on every access would hit performance
-> > > very badly;
-> >
-> > How so? __raw_readq() by definition has the least barriers of
-> > all, you can't make it more relaxed than it already is.
->
->  Well, `__raw_readq' has all the barriers plain `readq' has except it does
-> not ever do byte-swapping (which may be bad where address swizzling is
-> also present).  Whereas `readq_relaxed' at least avoids the trailing DMA
-> barrier.
->
->  This is what the MIPS version has:
->
-> #define __BUILD_MEMORY_SINGLE(pfx, bwlq, type, barrier, relax, irq)     \
-> [...]
->
-> #define __BUILD_MEMORY_PFX(bus, bwlq, type, relax)                      \
->                                                                         \
-> __BUILD_MEMORY_SINGLE(bus, bwlq, type, 1, relax, 1)
->
-> #define BUILDIO_MEM(bwlq, type)                                         \
->                                                                         \
-> __BUILD_MEMORY_PFX(__raw_, bwlq, type, 0)                               \
-> __BUILD_MEMORY_PFX(__relaxed_, bwlq, type, 1)                           \
-> __BUILD_MEMORY_PFX(__mem_, bwlq, type, 0)                               \
-> __BUILD_MEMORY_PFX(, bwlq, type, 0)
->
-> So `barrier' is always passed 1 and consequently all the accessors have a
-> leading MMIO ordering barrier inserted and only `__relaxed_*' ones have
-> `relax' set to 0 making them skip the trailing MMIO read vs DMA ordering
-> barrier.  This is in accordance to Documentation/memory-barriers.txt I
-> believe.
+On Tue, Jun 11, 2019 at 04:40:50PM +0200, Christoph Hellwig wrote:
+> diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+> index 4ccb465ef3f2..7d27194e3b45 100644
+> +++ b/arch/mips/include/asm/pgtable.h
+> @@ -20,6 +20,7 @@
+>  #include <asm/cmpxchg.h>
+>  #include <asm/io.h>
+>  #include <asm/pgtable-bits.h>
+> +#include <asm/cpu-features.h>
+>  
+>  struct mm_struct;
+>  struct vm_area_struct;
+> @@ -626,6 +627,8 @@ static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
+>  
+>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>  
+> +#define gup_fast_permitted(start, end)	(!cpu_has_dc_aliases)
+> +
 
-It is definitely not what other architectures do here. In particular, the
-asm-generic implementation that is now used on most of them
-defines raw_readl() as
+Today this check is only being done on the get_user_pages_fast() -
+after this patch it is also done for __get_user_pages_fast().
 
-static inline u32 __raw_readl(const volatile void __iomem *addr)
-{
-        return *(const volatile u32 __force *)addr;
-}
+Which means __get_user_pages_fast is now non-functional on a range of
+MIPS CPUs, but that seems OK as far as I can tell, so:
 
-and there are a number of drivers that depend on this behavior.
-readl_relaxed() typically adds the byteswap on this, and readl() adds
-the barriers on top of readl_relaxed().
+Reviewed-by: Jason Gunthorpe <jgg@mellanox.com>
 
->  NB I got one part wrong in the previous e-mail, sorry, as for packet
-> memory accesses etc. the correct accessors are actually `__mem_*' rather
-> than `__raw_*' ones, but the former ones are not portable.  I always
-> forget about this peculiarity and it took us years to get it right with
-> the MIPS port and the old IDE subsystem when doing PIO.
->
->  The `__mem_*' handlers still do whetever system-specific transformation
-> is required to present data in the memory rather than CPU byte ordering.
-> See arch/mips/include/asm/mach-ip27/mangle-port.h for a non-trivial
-> example and arch/mips/include/asm/mach-generic/mangle-port.h for the
-> general case.  Whereas `__raw_*' pass raw data unchanged and are generally
-> only suitable for accesses to onchip SOC MMIO or similar resources that do
-> not traverse any external bus where a system's endianness may be observed.
+However, looks to me like this patch is also a bug fix for this:
 
-Ok, so what you have for __mem_* is actually what I had expected from
-__raw_* for an architecture, except for the barriers that should have been
-left out.
+commit 5b167c123b3c3582f62cf1896465019bc40fe526
+Author: Kamal Dasu <kdasu.kdev@gmail.com>
+Date:   Fri Jun 14 17:10:03 2013 +0000
 
->  So contrary to what I have written before for the theoretical case of a
-> big-endian system possibly doing address swizzling we'd have to define and
-> use `__mem_readq_unordered', etc. here rather than `__raw_readq_relaxed',
-> etc.
+    MIPS: Fix get_user_page_fast() for mips with cache alias
+    
+    get_user_pages_fast() is missing cache flushes for MIPS platforms with
+    cache aliases.  Filesystem failures observed with DirectIO operations due
+    to missing flush_anon_page() that use page coloring logic to work with
+    cache aliases. This fix falls through to take slow_irqon path that calls
+    get_user_pages() that has required logic for platforms where
+    cpu_has_dc_aliases is true.
 
-Right.
+> -	pgdp = pgd_offset(mm, addr);
+> -	do {
+> -		pgd_t pgd = *pgdp;
+> -
+> -		next = pgd_addr_end(addr, end);
+> -		if (pgd_none(pgd))
+> -			goto slow;
+> -		if (!gup_pud_range(pgd, addr, next, gup_flags & FOLL_WRITE,
+> -				   pages, &nr))
 
-> > > in fact even the barriers `*_relaxed' accessors imply would
-> > > best be removed in this use (which is why defza.c uses `readw_o' vs
-> > > `readw_u', etc. internally), but after all the struggles over the years
-> > > for weakly ordered internal APIs x86 people are so averse to I'm not sure
-> > > if I want to start another one.  We can get away with `readq_relaxed' in
-> > > this use though as all the systems this device can be used with are
-> > > little-endian as is TURBOchannel, so no byte-swapping will ever actually
-> > > occur.
-> >
-> > I still don't see any downside of using __raw_readq() here, while the
-> > upsides are:
-> >
-> > - makes the driver portable to big-endian kernels (even though we don't
-> >   care)
-> > - avoids all barriers
-> > - fixes the build regression.
->
->  Giving my observations above it would only address item #3 on your list,
-> while addressing #1 and #2 would require defining `__mem_readq_unordered',
-> etc. I am afraid.
->
->  Have I missed anything?
+This is different too, the core code has a p4d layer, but I see that
+whole thing gets NOP'd by the compiler as mips uses pgtable-nop4d.h -
+right?
 
-No, I think you are right based on how mips defines __raw_readl().
-
-Unfortunately, this also means that all portable drivers using the
-__raw_ accessors to do what you want here are broken on mips
-(at least on big-endian), while mips drivers using __raw_* are not
-portable to anything else.
-
-      Arnd
+Jason
