@@ -2,60 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C4C4F5C5
-	for <lists+linux-mips@lfdr.de>; Sat, 22 Jun 2019 14:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B214F648
+	for <lists+linux-mips@lfdr.de>; Sat, 22 Jun 2019 16:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726286AbfFVMma (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 22 Jun 2019 08:42:30 -0400
-Received: from mail-yb1-f182.google.com ([209.85.219.182]:46521 "EHLO
-        mail-yb1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726112AbfFVMma (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Jun 2019 08:42:30 -0400
-Received: by mail-yb1-f182.google.com with SMTP id p8so3802868ybo.13
-        for <linux-mips@vger.kernel.org>; Sat, 22 Jun 2019 05:42:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:cc;
-        bh=pyrDOB8fiGSo/LcIAiccCbta0QZV69fKk4ZnmtwAP0E=;
-        b=lOWSHSr4Bz4an/cGwgkOO+sh46xFyZUlAc4SSoUC7FovOAiKsQKAmLbEe7LA+OtuqY
-         ctyk8PQue77WP7aVnG/V4jImqjg+c6+XliAyLzzCz2gD4r67bCrHYmZ1VDFrV+bhxYvT
-         S+qFCu1ge26oVag83WCEb/A8RTJ2U+D9E8GsDd3EFgRAZ4Jw7tfJrOqG6jbksHBdWWGv
-         LJizbtF272q76cBM4kp6dZ8VKjKOyLrwMszTFIhp+EBStKYGuNupfDYxHwVERAOGWvs2
-         PcHMMvthNOlbbERNjEwjY6jOe9Qm70MVKKs18Rj/oeGtjN3JSCjyxZnMmNR8NUlQoIv5
-         a1Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:cc;
-        bh=pyrDOB8fiGSo/LcIAiccCbta0QZV69fKk4ZnmtwAP0E=;
-        b=Eh+FUHcZu0rZAmxUU1ertZ/fnc+SLzzvORWksPiscP2c0iz9NCvwwRGqj50ziItvzB
-         X7wT7vJAudVN3CufQts2KrrU79hc30FxMyV40IsCFMnyee7jK1ZiPJCUyRfbLT9g0IVM
-         /FNA2hKRdU4JmPwEADFyMYeYTILDnyS2bdOtar118Wwcla2YVquFjTLQjXIIOSKURRqm
-         HD1wVX+PLfLhuj3TzyUNAR8naq7kQeLX8oBd2OtOp0wGgpSXwM0IyAtZ7oynHEntLN5w
-         PvSk/c8wFD4F7mEk1ZczaaHYjBmjs6Jjlqz0257C+i9Mbi5n0TcT+usb9ML1R6JR2stV
-         2Okg==
-X-Gm-Message-State: APjAAAUDWV7YTQPtt5Gv/A7Ix4L9dmvYtgBCjwYrN6LwzpM3/19x7Nh1
-        jImJNw4/HLvDt/gE45RLjIFHzPsjgNAHqn+ndy1uSw==
-X-Google-Smtp-Source: APXvYqxLuvTZDEgQ6P6hlUXEdDVy8n+sY6J3u1BJnCv03D6NgHXIjHd+hLnxE5ofNIic1kATwjIuxtUR8D/oc+gvgAQ=
-X-Received: by 2002:a25:b7d2:: with SMTP id u18mr28323512ybj.34.1561207349194;
- Sat, 22 Jun 2019 05:42:29 -0700 (PDT)
+        id S1726310AbfFVOqy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 22 Jun 2019 10:46:54 -0400
+Received: from Galois.linutronix.de ([146.0.238.70]:57888 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbfFVOqy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Jun 2019 10:46:54 -0400
+Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1hehHh-00084j-Nz; Sat, 22 Jun 2019 16:46:30 +0200
+Date:   Sat, 22 Jun 2019 16:46:28 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Sasha Levin <sashal@kernel.org>
+cc:     Michael Kelley <mikelley@microsoft.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>, linux-hyperv@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH v6 18/19] x86: Add support for generic vDSO
+In-Reply-To: <20190614211710.GQ1513@sasha-vm>
+Message-ID: <alpine.DEB.2.21.1906221542270.5503@nanos.tec.linutronix.de>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com> <20190530141531.43462-19-vincenzo.frascino@arm.com> <BYAPR21MB1221D54FCEC97509EEF7395CD7180@BYAPR21MB1221.namprd21.prod.outlook.com> <alpine.DEB.2.21.1906141313150.1722@nanos.tec.linutronix.de>
+ <20190614211710.GQ1513@sasha-vm>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-References: <b201c33a-5beb-3dfb-b99b-d9b8fc6c2c64@hauke-m.de>
-In-Reply-To: <b201c33a-5beb-3dfb-b99b-d9b8fc6c2c64@hauke-m.de>
-From:   Carlo Pisani <carlojpisani@gmail.com>
-Date:   Sat, 22 Jun 2019 14:42:05 +0200
-Message-ID: <CA+QBN9A3JmvfCZkXZ2-Yd=nkQCQD48OgYEpe+Po4MuZFpmnPrQ@mail.gmail.com>
-Subject: SGI-IP30
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-hi guys
-I am new on this mailing list, is there anyone on SGI-IP30?
-I am with kernel 4.18, there are a few quirks ... with the SMP
+On Fri, 14 Jun 2019, Sasha Levin wrote:
+> On Fri, Jun 14, 2019 at 01:15:23PM +0200, Thomas Gleixner wrote:
+> > On Thu, 30 May 2019, Michael Kelley wrote:
+> > > Vincenzo -- these changes for Hyper-V are a subset of a larger patch set
+> > > I have that moves all of the Hyper-V clock/timer code into a separate
+> > > clocksource driver in drivers/clocksource, with an include file in
+> > > includes/clocksource.  That new include file should be able to work
+> > > instead of your new mshyperv-tsc.h.  It also has the benefit of being
+> > > ISA neutral, so it will work with my in-progress patch set to support
+> > > Linux on Hyper-V on ARM64.  See https://lkml.org/lkml/2019/5/27/231
+> > > for the new clocksource driver patch set.
+> > 
+> > Grrr. That's queued in hyperv-next for whatever reasons.
+> 
+> I queue up our future pull requests there to give them some soaking in
+> -next.
 
-=)
+What? You queue completely unreviewed stuff which touches two other
+subsystems to let it soak in next?
+
+> > Sasha, can you please provide me the branch to pull from so I can have a
+> > common base for all the various changes floating around?
+> 
+> I'll send you a unified pull request for these changes.
+
+Which has not materialized yet.
+
+TBH, I'm pretty grumpy about those clocksource changes. Here is the
+diffstat:
+
+ MAINTAINERS                          |    2 
+ arch/x86/entry/vdso/vclock_gettime.c |    1 
+ arch/x86/entry/vdso/vma.c            |    2 
+ arch/x86/hyperv/hv_init.c            |   91 ---------
+ arch/x86/include/asm/hyperv-tlfs.h   |    6 
+ arch/x86/include/asm/mshyperv.h      |   81 +-------
+ arch/x86/kernel/cpu/mshyperv.c       |    2 
+ arch/x86/kvm/x86.c                   |    1 
+ drivers/clocksource/Makefile         |    1 
+ drivers/clocksource/hyperv_timer.c   |  322 +++++++++++++++++++++++++++++++++++
+ drivers/hv/Kconfig                   |    3 
+ drivers/hv/hv.c                      |  156 ----------------
+ drivers/hv/hv_util.c                 |    1 
+ drivers/hv/hyperv_vmbus.h            |    3 
+ drivers/hv/vmbus_drv.c               |   42 ++--
+ include/clocksource/hyperv_timer.h   |  105 +++++++++++
+
+While the world and some more people have been CC'ed on those patches,
+neither the clocksource nor the x86 maintainer have been.
+
+When I gave Vincenzo the advise to base his code on that hyper-v branch, I
+expected that I find the related patches in my mail backlog. No, they have
+not been there because I was not on CC.
+
+Folks, please stop chosing Cc lists as you like. We have well established
+rules for that. And please stop queueing random unreviewed patches in
+next. Next is not a playground for not ready and unreviewed stuff. No, the
+hyper-v inbreed Reviewed-by is not sufficient for anything x86 and
+clocksource related.
+
+After chasing and looking at those patches, which have horrible subject
+lines and changelogs btw, I was not able to judge quickly whether that
+stuff is self contained or not. So no, I fixed up the fallout and rebased
+Vincenzos VDSO stuff on mainline w/o those hyperv changes simply because if
+they are not self contained they will break bisection badly.
+
+I'm going to push out the VDSO series later today. That will nicely break
+in combination with the hyper-next branch. Stephen, please drop that and do
+not try to handle the fallout. That stuff needs to go through the proper
+channels or at least be acked/reviewed by the relevant maintainers. So the
+hyper-v folks can rebase themself and post it proper.
+
+Yours grumpy,
+
+	tglx
