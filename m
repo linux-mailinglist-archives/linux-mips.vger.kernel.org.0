@@ -2,92 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D73050F11
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2019 16:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1327E50F2B
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2019 16:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728743AbfFXOtb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Jun 2019 10:49:31 -0400
-Received: from foss.arm.com ([217.140.110.172]:52588 "EHLO foss.arm.com"
+        id S1727014AbfFXOxK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Jun 2019 10:53:10 -0400
+Received: from mx.0dd.nl ([5.2.79.48]:33434 "EHLO mx.0dd.nl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728127AbfFXOtb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 24 Jun 2019 10:49:31 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C1F7344;
-        Mon, 24 Jun 2019 07:49:30 -0700 (PDT)
-Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 12ADD3F71E;
-        Mon, 24 Jun 2019 07:49:26 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 15:49:24 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Will Deacon <will.deacon@arm.com>, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-arch@vger.kernel.org, Dmitry Safonov <dima@arista.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Peter Collingbourne <pcc@google.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Andrei Vagin <avagin@openvz.org>,
-        Huw Davies <huw@codeweavers.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v7 00/25] Unify vDSOs across more architectures
-Message-ID: <20190624144924.GE29120@arrakis.emea.arm.com>
-References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
- <alpine.DEB.2.21.1906240142000.32342@nanos.tec.linutronix.de>
- <alpine.DEB.2.21.1906241613280.32342@nanos.tec.linutronix.de>
- <20190624142346.pxljv3m4npatdiyk@shell.armlinux.org.uk>
+        id S1726414AbfFXOxK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 24 Jun 2019 10:53:10 -0400
+Received: from mail.vdorst.com (mail.vdorst.com [IPv6:fd01::250])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx.0dd.nl (Postfix) with ESMTPS id 1EA955FA1D;
+        Mon, 24 Jun 2019 16:53:09 +0200 (CEST)
+Authentication-Results: mx.0dd.nl;
+        dkim=pass (2048-bit key; secure) header.d=vdorst.com header.i=@vdorst.com header.b="QnEMZIbC";
+        dkim-atps=neutral
+Received: from pc-rene.vdorst.com (pc-rene.vdorst.com [192.168.2.125])
+        by mail.vdorst.com (Postfix) with ESMTPA id D98F51CC6EFD;
+        Mon, 24 Jun 2019 16:53:08 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.vdorst.com D98F51CC6EFD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vdorst.com;
+        s=default; t=1561387988;
+        bh=bS0BvauIqjunMohu89cqlu/hO+41P+Yoze5Z2dDuxPo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QnEMZIbCvwUm5YDuJm/qV2WrEEa0WuIgPQB7ljb8aTVz5BgySE1Ap0P+RK7xvQAPa
+         R7QWjwWNmmne8vGXcRqOKjMjf8dYwohg/W2s6VZjGLziHea2LdEcVJh1MOJu1fq+Ed
+         reJCpa4DzLaV2vZPGORDidCQAc5hxNQtXCX7nsFVymtzDcPFc8xHM+wGhVU81sw6iD
+         9M+VYRIKr73HMgAeALVKp+UeO0EkvjmxnwPMonuF2yW0PZK6xrgKkiWe/GeWR8GGSk
+         ofxqJqCctCBFWneMe4asnODxf22lZ6htR2yP0tSm+XXzMXn7Z69OWJZEkULRBPIUst
+         K6qzEBj6u8mdA==
+From:   =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
+To:     sean.wang@mediatek.com, f.fainelli@gmail.com,
+        linux@armlinux.org.uk, davem@davemloft.net, matthias.bgg@gmail.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com
+Cc:     frank-w@public-files.de, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
+Subject: [PATCH RFC net-next 0/5] net: dsa: MT7530: Convert to PHYLINK and add support for port 5
+Date:   Mon, 24 Jun 2019 16:52:46 +0200
+Message-Id: <20190624145251.4849-1-opensource@vdorst.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190624142346.pxljv3m4npatdiyk@shell.armlinux.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 03:23:46PM +0100, Russell King wrote:
-> On Mon, Jun 24, 2019 at 04:18:28PM +0200, Thomas Gleixner wrote:
-> > Vincenzo,
-> > 
-> > On Mon, 24 Jun 2019, Thomas Gleixner wrote:
-> > 
-> > > I did not merge the ARM and MIPS parts as they lack any form of
-> > > acknowlegment from their maintainers. Please talk to those folks. If they
-> > > ack/review the changes then I can pick them up and they go into 5.3 or they
-> > > have to go in a later cycle. Nevertheless it was well worth the trouble to
-> > > have those conversions done to confirm that the new common library fits a
-> > > bunch of different architectures.
-> > 
-> > I talked to Russell King and he suggested to file the ARM parts into his
-> > patch system and he'll pick them up after 5.3-rc1.
-> > 
-> >    https://www.arm.linux.org.uk/developer/patches/
-> > 
-> > I paged out how to deal with it, but you'll surely manage :)
-> 
-> Easy way: ask git to add the "KernelVersion" tag as a header to the
-> email using --add-header to e.g. git format-patch, and just mail them
-> to patches@armlinux.org.uk
+Here by I am sending my current patches for review.
+I want to know if I am on the right track.
 
-Although I haven't send patches to Russell in a while, I still have a
-git alias in my .gitconfig (only works with one patch at a time IIRC,
-sending multiple patches may arrive in a different order):
+1. 0001-net-dsa-mt7530-Convert-to-PHYLINK-API.patch
+   This patch converts mt7530 to PHYLINK API.
+2. 0002-dt-bindings-net-dsa-mt7530-Add-support-for-port-5.patch
+3. 0003-net-dsa-mt7530-Add-support-for-port-5.patch
+   These 2 patches adding support for port 5 of the switch.
 
-[alias]
-	send-rmk-email = !git send-email --add-header=\"KernelVersion: $(git describe --abbrev=0)\" --no-thread --suppress-cc=all --to="patches@arm.linux.org.uk"
+Optional:
+4. 0004-dt-bindings-net-dsa-mt7530-Add-mediatek-ephy-handle-.patch
+5. 0005-net-dsa-mt7530-Add-mediatek-ephy-handle-to-isolate-e.patch
+   These 2 patches adding property "mediatek,ephy-handle".
+   When set, it puts the external phy in isolation mode.
+   This allows the switch PHY of port 0/4 to interface with 2nd GMAC of
+   the SOC. The external phy, 2nd GMAC and switch port 5 shares the same
+   MII bus.
+
+FWIW: Also working on converting the mediatek ethernet driver to PHYLINK.
+This need a bit more work duo to the SGMII work and support hardware which 
+I don't have.
+https://github.com/vDorst/linux-1/commit/54004b807cba0dcec1653c1c290c2e5aae5127c2
+
+René van Dorst (5):
+  net: dsa: mt7530: Convert to PHYLINK API
+  dt-bindings: net: dsa: mt7530: Add support for port 5
+  net: dsa: mt7530: Add support for port 5
+  dt-bindings: net: dsa: mt7530: Add mediatek,ephy-handle to isolate
+    ext. phy
+  net: dsa: mt7530: Add mediatek,ephy-handle to isolate external phy
+
+ .../devicetree/bindings/net/dsa/mt7530.txt    | 329 ++++++++++++++++
+ drivers/net/dsa/mt7530.c                      | 366 +++++++++++++++---
+ drivers/net/dsa/mt7530.h                      |  39 ++
+ 3 files changed, 688 insertions(+), 46 deletions(-)
 
 -- 
-Catalin
+2.20.1
+
