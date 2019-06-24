@@ -2,126 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D72F551C6F
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2019 22:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A7C51CE3
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jun 2019 23:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728147AbfFXUeC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Jun 2019 16:34:02 -0400
-Received: from mail-eopbgr730105.outbound.protection.outlook.com ([40.107.73.105]:59557
-        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
+        id S1726626AbfFXVPw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Jun 2019 17:15:52 -0400
+Received: from mail-eopbgr790124.outbound.protection.outlook.com ([40.107.79.124]:6066
+        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727592AbfFXUeC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 24 Jun 2019 16:34:02 -0400
+        id S1726009AbfFXVPw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 24 Jun 2019 17:15:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=wavesemi.onmicrosoft.com; s=selector1-wavesemi-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hpj2ln9PdF2iw8CTNKfMyvckw7/rfWmo7YDhUidEPTU=;
- b=CKlrlyGmhJ/QCyiCLX8NQhhVLKb9sH2j/eupCg474rMbmvTDeCr7AGHihTiJuz2GzMGdwvAfc3ovxv2uyeRMyCVj0tNtAPsBb31uv1OwnJNGzQ7YW+2gk5MlVJ1+ufcKyvCgj9DcHy2yEAfXvDPAWPE8Xp88uLXquvXCcLan3Rg=
+ bh=Dfwf3TF+lS/iR+X2mq4ahhgzHkVR/U+ePaJeYMDxZFc=;
+ b=gsJ66+3zPefERI39m9thM2dOAtLyVY4a6QqJOwppJIzFGmZcrwdoqxzV4+2maOKYceaq1E25Pq/TJaBUUWm308pMh80oaTW0hwv1Bc7nSxaNNVDRF9kby1o8FZH8k+NpiGb52YH6/09ivaXBsMC59947m7i3Int5a+4zwm5Kkms=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1054.namprd22.prod.outlook.com (10.174.169.140) with Microsoft
+ MWHPR2201MB1760.namprd22.prod.outlook.com (10.164.206.163) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.16; Mon, 24 Jun 2019 20:33:58 +0000
+ 15.20.2008.13; Mon, 24 Jun 2019 21:15:49 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::6975:b632:c85b:9e40]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::6975:b632:c85b:9e40%2]) with mapi id 15.20.2008.014; Mon, 24 Jun 2019
- 20:33:58 +0000
+ 21:15:49 +0000
 From:   Paul Burton <paul.burton@mips.com>
-To:     Christoph Hellwig <hch@lst.de>
-CC:     Oleg Nesterov <oleg@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
+To:     Dmitry Korotin <dkorotin@wavecomp.com>
+CC:     Paul Burton <pburton@wavecomp.com>,
         "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/5] asm-generic: remove ptrace.h
-Thread-Topic: [PATCH 5/5] asm-generic: remove ptrace.h
-Thread-Index: AQHVKlBfN/z+ea/vT02hAZbwmFNTNqarQ6qA
-Date:   Mon, 24 Jun 2019 20:33:58 +0000
-Message-ID: <20190624203357.cgybfqklcflll2ti@pburton-laptop>
-References: <20190624054728.30966-1-hch@lst.de>
- <20190624054728.30966-6-hch@lst.de>
-In-Reply-To: <20190624054728.30966-6-hch@lst.de>
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Dmitry Korotin <dkorotin@wavecomp.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH] Added missing EHB in mtc0 -> mfc0 sequence.
+Thread-Topic: [PATCH] Added missing EHB in mtc0 -> mfc0 sequence.
+Thread-Index: AQHVKr/IJ/I3WfJb9EWmSHJfQfE2CKarTn0A
+Date:   Mon, 24 Jun 2019 21:15:49 +0000
+Message-ID: <MWHPR2201MB1277CA4A6C1D2DC01E395489C1E00@MWHPR2201MB1277.namprd22.prod.outlook.com>
+References: <CY4PR22MB0245F6CD97467AAB12E437A5AFE00@CY4PR22MB0245.namprd22.prod.outlook.com>
+In-Reply-To: <CY4PR22MB0245F6CD97467AAB12E437A5AFE00@CY4PR22MB0245.namprd22.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR21CA0016.namprd21.prod.outlook.com
- (2603:10b6:a03:114::26) To MWHPR2201MB1277.namprd22.prod.outlook.com
+x-clientproxiedby: BY5PR04CA0007.namprd04.prod.outlook.com
+ (2603:10b6:a03:1d0::17) To MWHPR2201MB1277.namprd22.prod.outlook.com
  (2603:10b6:301:18::12)
-user-agent: NeoMutt/20180716
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=pburton@wavecomp.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 00576424-0e94-4dec-ebb0-08d6f8e348bd
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1054;
-x-ms-traffictypediagnostic: MWHPR2201MB1054:
-x-microsoft-antispam-prvs: <MWHPR2201MB10547E2A5FAB871CBCBC78F0C1E00@MWHPR2201MB1054.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:324;
+x-ms-office365-filtering-correlation-id: cbea753c-f986-4736-494b-08d6f8e9219f
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1760;
+x-ms-traffictypediagnostic: MWHPR2201MB1760:
+x-microsoft-antispam-prvs: <MWHPR2201MB1760DD39AB516879B08B8DD7C1E00@MWHPR2201MB1760.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
 x-forefront-prvs: 007814487B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(376002)(346002)(366004)(136003)(39840400004)(396003)(199004)(189003)(4326008)(54906003)(8936002)(14454004)(58126008)(316002)(1076003)(7416002)(25786009)(6916009)(8676002)(73956011)(81166006)(81156014)(2906002)(66066001)(6436002)(66946007)(66446008)(3846002)(42882007)(64756008)(66556008)(6246003)(66476007)(6486002)(44832011)(6116002)(33716001)(9686003)(6512007)(486006)(26005)(11346002)(446003)(186003)(7736002)(68736007)(305945005)(476003)(229853002)(256004)(14444005)(478600001)(5660300002)(52116002)(76176011)(99286004)(53936002)(71190400001)(71200400001)(6506007)(386003)(102836004)(41533002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1054;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(39840400004)(136003)(366004)(376002)(396003)(189003)(199004)(486006)(53936002)(7736002)(68736007)(76176011)(386003)(66066001)(25786009)(450100002)(4326008)(186003)(305945005)(42882007)(316002)(256004)(74316002)(6506007)(99286004)(54906003)(476003)(52116002)(11346002)(446003)(44832011)(7696005)(26005)(8676002)(102836004)(6116002)(3846002)(9686003)(71190400001)(71200400001)(14454004)(5660300002)(229853002)(6862004)(8936002)(52536014)(4744005)(6436002)(64756008)(66556008)(33656002)(66446008)(66476007)(6246003)(73956011)(2906002)(55016002)(478600001)(66946007)(81166006)(81156014);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1760;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 1o+p+e7S28HMuolVpWY64pfIILQb2dMbrDbcOGciaGoS1LXGJlr7ehnAHp9Ycl6pInnLSSHXLBrmjxD2nhzpvkx6BWCBDK9u52gqwDxJ5Fout54XxI2fy+MGo6qyttipUcv2XOOVnWqxCl/ILzLFSqGZVq5nKzK3lWtjeoHACRyLrV5zsqIYrfBupUjTEw33WanaTTvWYlcv+0mdWFX+DJsZ9kfHAoys2DAzHpb5kk5eWZEkcDMiY+t5uSNUS++2Xf7n8d+IVDrGCH1Z44Y9KNM2QJChm0zMIH8OPuwH6fU3+G65lSIQw1+O3zqWFgusIEIGrLtLxE+CapTrztWLmtxSFCG6D1aRDewri+FvG89kUg5pLHWFmexREBv+wmbnkWGGSSOGcbkW5TPEgJLSUdQnZhZaAx0W6d62WAPHBg8=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <B945272A94CC124191D61CF8D0443342@namprd22.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+x-microsoft-antispam-message-info: uOnH0nwfNR6+SDRs41VjlsUrJ/fqsiEuY7p4yUmbe26FGEKtkvnzhzRORFi5QeoWi4wg2Xm+dd+hfWgAgzZpgSpAKLFI08wm4q9oRetCXxaso1BFj1gNqtx76u1+yXl3XH51o04YhdbQPGN7i8dwyeZVga8M8rXLtsE/gUoQwzqlENZsyyG0b+qPEXJBZsKAsLM90NFXeE7b4vXGnt0Hzy0KT8ZUDkHYTePKjlSjVfi5tgMXbEW+SSvq84UeyHtn8DVMBZiBMCPEnSSOCWJj9JnbD2YaDrxAZ/7QSdNGKqzbdZhtCBOpgpVDNPEkwxb14fNV0DMfA+RiKDdmxGYsiFLaZ28Qmh8iT4+F+r7h5BOVBJm1HgBm18eX0wCW/ijnc0fk9V7Zx0wl6gcIqXb3ObzrymtO7K6dLo2Sh9803qA=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00576424-0e94-4dec-ebb0-08d6f8e348bd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2019 20:33:58.4037
+X-MS-Exchange-CrossTenant-Network-Message-Id: cbea753c-f986-4736-494b-08d6f8e9219f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2019 21:15:49.7451
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1054
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1760
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 07:47:28AM +0200, Christoph Hellwig wrote:
-> No one is using this header anymore.
->=20
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
-> Acked-by: Oleg Nesterov <oleg@redhat.com>
-> ---
->  MAINTAINERS                    |  1 -
->  arch/mips/include/asm/ptrace.h |  5 ---
->  include/asm-generic/ptrace.h   | 73 ----------------------------------
->  3 files changed, 79 deletions(-)
->  delete mode 100644 include/asm-generic/ptrace.h
-
-FWIW:
-
-    Acked-by: Paul Burton <paul.burton@mips.com>
-
-Thanks,
-    Paul
-
-> diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrac=
-e.h
-> index b6578611dddb..1e76774b36dd 100644
-> --- a/arch/mips/include/asm/ptrace.h
-> +++ b/arch/mips/include/asm/ptrace.h
-> @@ -56,11 +56,6 @@ static inline unsigned long kernel_stack_pointer(struc=
-t pt_regs *regs)
->  	return regs->regs[31];
->  }
-> =20
-> -/*
-> - * Don't use asm-generic/ptrace.h it defines FP accessors that don't mak=
-e
-> - * sense on MIPS.  We rather want an error if they get invoked.
-> - */
-> -
->  static inline void instruction_pointer_set(struct pt_regs *regs,
->                                             unsigned long val)
->  {
+SGVsbG8sDQoNCkRtaXRyeSBLb3JvdGluIHdyb3RlOg0KPiBBZGRlZCBtaXNzaW5nIEVIQiAoRXhl
+Y3V0aW9uIEhhemFyZCBCYXJyaWVyKSBpbiBtdGMwIC0+IG1mYzAgc2VxdWVuY2UuDQo+IFdpdGhv
+dXQgdGhpcyBleGVjdXRpb24gaGF6YXJkIGJhcnJpZXIgaXQncyBwb3NzaWJsZSBmb3IgdGhlIHZh
+bHVlIHJlYWQNCj4gYmFjayBmcm9tIHRoZSBLU2NyYXRjaCByZWdpc3RlciB0byBiZSB0aGUgdmFs
+dWUgZnJvbSBiZWZvcmUgdGhlIG10YzAuDQo+IA0KPiBSZXByb2R1Y2lhYmxlIG9uIFA1NjAwICYg
+UDY2MDAuDQo+IA0KPiBNaXBzIGRvY3VtZW50YXRpb24gVm9sdW1lIElJSSAocmV2IDYuMDMpIHRh
+YmxlIDguMS4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IERtaXRyeSBLb3JvdGluIDxka29yb3RpbkB3
+YXZlY29tcC5jb20+DQoNCkFwcGxpZWQgdG8gbWlwcy1maXhlcy4NCg0KVGhhbmtzLA0KICAgIFBh
+dWwNCg0KWyBUaGlzIG1lc3NhZ2Ugd2FzIGF1dG8tZ2VuZXJhdGVkOyBpZiB5b3UgYmVsaWV2ZSBh
+bnl0aGluZyBpcyBpbmNvcnJlY3QNCiAgdGhlbiBwbGVhc2UgZW1haWwgcGF1bC5idXJ0b25AbWlw
+cy5jb20gdG8gcmVwb3J0IGl0LiBdDQo=
