@@ -2,104 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC15354F6D
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jun 2019 14:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1685521E
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jun 2019 16:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729918AbfFYM4g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jun 2019 08:56:36 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:38859 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729912AbfFYM4g (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jun 2019 08:56:36 -0400
-Received: by mail-wr1-f67.google.com with SMTP id d18so17780757wrs.5
-        for <linux-mips@vger.kernel.org>; Tue, 25 Jun 2019 05:56:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=qkm/sR5hDVqHvpHouxyg9xpi0nH3BM7uRz/CI0HhLcc=;
-        b=rRbkzdR/iSJ0T7wrnOqEN3gyZIFvxf+yrv3oOHKAj8X/giJhNNapGy0bLZvuSxWqoy
-         CTDFhWWjDzlF4vY7BiTDM/avstUHEoCdYIV4ZN2mzkMDQTZM5uvqXY4puAjXMYJNqU/o
-         WxyR4s6RpgtJZ9MAbr29nu6JK+HchV0ZhC6PY4avIOL5GT/pihIkZojP1PRTizuBurbn
-         n/1Laf/xPS6pthwMmJiHMoVHMJjMEWmrt4IRdwoa+fVyGwVHCX1cGQ0l5PApUx8T13Ia
-         OCpIrfJaq1nk4kfqi3F8cxRFkw24Q2sM5QATrVHdSSbg/4Z86pZWSNBIbf0TvX0vER3S
-         8vrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=qkm/sR5hDVqHvpHouxyg9xpi0nH3BM7uRz/CI0HhLcc=;
-        b=DRW8QWfVCYtEqhdv3dX6h78ep8CfJzAu6KXjVn155+5JgrhXTWIYymNkpXTJqA8MSY
-         2rPMRBDEgTZ10ua1xgORRAb+GMaB0RUyWqlqY4PBvbbJo9J22jTF/aglTzPpFUa4Sh4V
-         aVfbwk7Tk5C0T3OBwUHJ64swPV7rz8dUPoNjE7kXWrIfAx1V4lV64x5fpMylcN/GPeiU
-         mcF/wdYGeksUm8T3JV30MWxcYXOMcVcx5fpPJOZOX6PFwd3QRC+fJCcvqN4CBdsoLc76
-         O3iWjeeBx0aW2+bJ1z31fPcuzzWQKHRHkSWC5PJQH/Dpv7FPTQriuydolRj3DuaEbigc
-         3m9g==
-X-Gm-Message-State: APjAAAVxqf10Gz3ofYQDsxGevxX7FjcWDdoLe1J19VI53PszCs7KPVwk
-        wHYvXf5Lskvc1Y46D9mzoVjEiwe3LZ8=
-X-Google-Smtp-Source: APXvYqwKYsH2s/ZCuUhf0NqgerUa9YXoCsLcRdER1sXKnWMSunPYA+thz52eb+vjOxTEeRfQTQSw2Q==
-X-Received: by 2002:a5d:50cc:: with SMTP id f12mr36721980wrt.129.1561467393906;
-        Tue, 25 Jun 2019 05:56:33 -0700 (PDT)
-Received: from dell ([2.27.35.164])
-        by smtp.gmail.com with ESMTPSA id o14sm11817057wrp.77.2019.06.25.05.56.33
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 25 Jun 2019 05:56:33 -0700 (PDT)
-Date:   Tue, 25 Jun 2019 13:56:31 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/7] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-ID: <20190625125631.GH21119@dell>
-References: <20190613170636.6647-1-tbogendoerfer@suse.de>
- <20190613170636.6647-6-tbogendoerfer@suse.de>
- <20190625090451.GA9794@alpha.franken.de>
+        id S1731144AbfFYOhq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jun 2019 10:37:46 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52512 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730701AbfFYOhp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jun 2019 10:37:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=f4+tMQltbicxd4ALT4Rx3OQZpZ5MP+Ju7Cl4XLKLtrM=; b=X5F7mPiW6V3GpB2Dzy0uuiLcr
+        Q1nr0Z/bXKkYgiYtfSjd+rSbKATjF3Gdgd0mN3/vYrEMO/Wc/SRIgcRhLlvYadt94BdYFq6jdw/nP
+        AwhtIbzcbLCYlOTHif1Um8TqdW1pmhZSHImvIPJZMwHU/da3RXnjCfqDaWAe3BVBdltBFNznvQFOb
+        sRb3NYKvhSFrwhB734qJDCQWStHZJ257YIrBp8b33Xces5frH9sCRfyV0D74Bszew9YprhF9rXvKm
+        VWnBYQKDFqJSt5VR8xllP4qXZjXg2ARWfiP1d9zuj7aazxYYWmVgGyU3SQUIS3Xwx2oVWJEAJo7C7
+        SL9QNydbA==;
+Received: from 213-225-6-159.nat.highway.a1.net ([213.225.6.159] helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hfmZR-0007x9-Ll; Tue, 25 Jun 2019 14:37:18 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org, x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: switch the remaining architectures to use generic GUP v4
+Date:   Tue, 25 Jun 2019 16:36:59 +0200
+Message-Id: <20190625143715.1689-1-hch@lst.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190625090451.GA9794@alpha.franken.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 25 Jun 2019, Thomas Bogendoerfer wrote:
+Hi Linus and maintainers,
 
-> On Thu, Jun 13, 2019 at 07:06:31PM +0200, Thomas Bogendoerfer wrote:
-> > SGI IOC3 chip has integrated ethernet, keyboard and mouse interface.
-> > It also supports connecting a SuperIO chip for serial and parallel
-> > interfaces. IOC3 is used inside various SGI systemboards and add-on
-> > cards with different equipped external interfaces.
-> > 
-> > Support for ethernet and serial interfaces were implemented inside
-> > the network driver. This patchset moves out the not network related
-> > parts to a new MFD driver, which takes care of card detection,
-> > setup of platform devices and interrupt distribution for the subdevices.
-> > 
-> > Serial portion: Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > 
-> > Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> > ---
-> >  arch/mips/include/asm/sn/ioc3.h     |  345 +++----
-> >  arch/mips/sgi-ip27/ip27-timer.c     |   20 -
-> >  drivers/mfd/Kconfig                 |   13 +
-> >  drivers/mfd/Makefile                |    1 +
-> >  drivers/mfd/ioc3.c                  |  683 +++++++++++++
-> 
-> Lee,
-> 
-> can you give me an indication, if the MFD changes are ok now
-> or if I need to improve it further.
+below is a series to switch mips, sh and sparc64 to use the generic
+GUP code so that we only have one codebase to touch for further
+improvements to this code.  I don't have hardware for any of these
+architectures, and generally no clue about their page table
+management, so handle with care.
 
-I will do, when I get to them.
+Changes since v3:
+ - improve a few commit messages
+ - clean up gup_fast_permitted a bit more
+ - split the code reordering in gup.c into a separate patch
+ - drop the patch to pass argument in a structure for now
 
-My review list currently runs into the 50s.
+Changes since v2:
+ - rebase to mainline to pick up the untagged_addr definition
+ - fix the gup range check to be start <= end to catch the 0 length case
+ - use pfn based version for the missing pud_page/pgd_page definitions
+ - fix a wrong check in the sparc64 version of pte_access_permitted
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Changes since v1:
+ - fix various issues found by the build bot
+ - cherry pick and use the untagged_addr helper form Andrey
+ - add various refactoring patches to share more code over architectures
+ - move the powerpc hugepd code to mm/gup.c and sync it with the generic
+   hup semantics
