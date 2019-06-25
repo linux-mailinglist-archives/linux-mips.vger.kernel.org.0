@@ -2,171 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F7354E72
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jun 2019 14:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E3C54E84
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jun 2019 14:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727435AbfFYMKy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jun 2019 08:10:54 -0400
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:51590 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726659AbfFYMKy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jun 2019 08:10:54 -0400
+        id S1726532AbfFYMNb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jun 2019 08:13:31 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:54054 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726390AbfFYMNa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jun 2019 08:13:30 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=W62WhF17xmzfUuk1lOQSfwqt29Nh9k8JJUw3HEv31xE=; b=Vs5WDFzosl7UHr4YqGyzaMEHb
-        2IffrAQPIXpvqPjY5gSh5XxB5yGZEZ+e9NySGWM4wnMO1W9Dhkm5CAqMpaQMvYZOutUqQiG2naGMy
-        KhJSvJZPwMl32ZPbRcy7NcGXfiaXt66O1Rp1HlTId2cYWEzSVU2djphYPS1kx8JUl8uaPsXFjx0Mq
-        3Z9yDU0PBqJVQL6QWnssO/bdi8ktsjtcl7gF74F1XvHaVHUx1Arh4pdEH9FE347ay175xrY2uoOza
-        c9V6TwAMKG96YNouqg8fcMSMpXOwXX4Z3bnf2FTff4EAULM3sniNy1K3d0q8zKG7WbtzVWmWV2Ocx
-        L2s9nI80A==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:59984)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1hfkHV-0006J7-H9; Tue, 25 Jun 2019 13:10:37 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.89)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1hfkHO-0007Dd-9r; Tue, 25 Jun 2019 13:10:30 +0100
-Date:   Tue, 25 Jun 2019 13:10:30 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>
-Cc:     sean.wang@mediatek.com, f.fainelli@gmail.com, davem@davemloft.net,
-        matthias.bgg@gmail.com, andrew@lunn.ch, vivien.didelot@gmail.com,
-        frank-w@public-files.de, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH RFC net-next 1/5] net: dsa: mt7530: Convert to PHYLINK API
-Message-ID: <20190625121030.m5w7wi3rpezhfgyo@shell.armlinux.org.uk>
-References: <20190624145251.4849-1-opensource@vdorst.com>
- <20190624145251.4849-2-opensource@vdorst.com>
- <20190624153950.hdsuhrvfd77heyor@shell.armlinux.org.uk>
- <20190625113158.Horde.pCaJOVUsgyhYLd5Diz5EZKI@www.vdorst.com>
+         bh=vchcZTzIkMEAWcb5HPtE7BlK4YNlIW5ENXBoS5wrV/4=; b=TxXJ+Mp3u2gUAb2112gcbzBxM
+        zJGL2VNptBAIEd1GELNpXO/vwjXjAp3urpI3ipTt4n/dEPtkkXzeqNJi0pzDSI2mW2ffWGwBXLbOi
+        QTwCkgjPiyFAVNG1GcKP+dKG1lkOjX5toNmUmdNMRmkNS++D4FXR5Y35S7BK9P/PFqV9hkSsln+UG
+        toqL79GDrnds0w8WBbSAtMwP5Z9DVfsoaEeI7cZhqAhWbPzgLdkuUOlmQ+TA27EcF6xBxixlBZWnP
+        EThDTj/9dI3wRHTFE1016qG4If2MWxtopvinuQatpNyMZ5vnh7SmJ8wXML9kUi0ijCYM/dtjCUyaM
+        1AwpKvesA==;
+Received: from srvnet-01-053.ikbnet.co.at ([83.175.70.53] helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hfkKG-0008MR-NZ; Tue, 25 Jun 2019 12:13:29 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc:     Manuel Lauss <manuel.lauss@gmail.com>, linux-mips@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] au1200fb: don't use DMA_ATTR_NON_CONSISTENT
+Date:   Tue, 25 Jun 2019 14:13:21 +0200
+Message-Id: <20190625121321.10197-1-hch@lst.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190625113158.Horde.pCaJOVUsgyhYLd5Diz5EZKI@www.vdorst.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 25, 2019 at 11:31:58AM +0000, René van Dorst wrote:
-> > > +            if (state->link || mode == MLO_AN_FIXED)
-> > > +                    mcr |= PMCR_FORCE_LNK;
-> > 
-> > This should be removed - state->link is not for use in mac_config.
-> > Even in fixed mode, the link can be brought up/down by means of a
-> > gpio, and this should be dealt with via the mac_link_* functions.
-> 
-> Maybe I understand it wrong, but is it the intention that in
-> phylink_mac_config with modes MLO_AN_FIXED and MLO_AN_PHY the MAC is always
-> forces into a certain speed/mode/interface. So it never auto-negotiate because
-> phylink select the best configuration for you?
+au1200fb allocates DMA memory using DMA_ATTR_NON_CONSISTENT, but never
+calls dma_cache_sync to synchronize the memory between the CPU and the
+device.  If it was use on a not cache coherent bus that would be fatal,
+but as far as I can tell from the naming and the mips platform
+implementation it always is used in cache coherent systems.  Remove
+the DMA_ATTR_NON_CONSISTENT flag, which is a no-op in that case.
 
-You are not the only one who has recently tried to make use of
-state->link in mac_config(), so I'm now preparing a set of patches
-to split the current mac_config() method into two separate methods:
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/video/fbdev/au1200fb.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-        void (*mac_config_fixed)(struct net_device *ndev,
-                                 phy_interface_t iface, int speed, int duplex,
-                                 int pause);
-        void (*mac_config_inband)(struct net_device *ndev,
-                                  phy_interface_t iface, bool an_enabled,
-                                  unsigned long *advertising, int pause);
-
-so that it's not possible to use members that should not be accessed
-in various modes.
-
-> Also the PMCR_FORCE_LNK is only set in phylink_link_up() or can I do it here
-> and do nothing phylink_link_up()?
-
-When the link comes up/down, mac_link_up() and mac_link_down() will be
-called appropriately.  In PHY mode, this is equivalent to phylink doing
-this:
-
-	if (link_changed) {
-		if (phydev->link)
-			mac_link_up();
-		else
-			mac_link_down();
-	}
-
-So the actions you would've done depending on phydev->link should be in
-the mac_link_*() methods.
-
-> Other question:
-> Where does the MAC enable/disable TX and RX fits best? port_{enable,disable}?
-> Or only mac_config() and port_disable?
-
-mac_link_*().
-
-> > > +            if (state->pause || phylink_test(state->advertising, Pause))
-> > > +                    mcr |= PMCR_TX_FC_EN | PMCR_RX_FC_EN;
-> > > +            if (state->pause & MLO_PAUSE_TX)
-> > > +                    mcr |= PMCR_TX_FC_EN;
-> > > +            if (state->pause & MLO_PAUSE_RX)
-> > > +                    mcr |= PMCR_RX_FC_EN;
-> > 
-> > This is clearly wrong - if any bit in state->pause is set, then we
-> > end up with both PMCR_TX_FC_EN | PMCR_RX_FC_EN set.  If we have Pause
-> > Pause set in the advertising mask, then both are set.  This doesn't
-> > seem right - are these bits setting the advertisement, or are they
-> > telling the MAC to use flow control?
-> 
-> Last one, tell the MAC to use flow control.
-
-So the first if() statement is incorrect, and should be removed
-entirely.  You only want to enable the MAC to use flow control as a
-result of the negotiation results.
-
-> On the current driver both bits are set in a forced-link situation.
-> 
-> If we always forces the MAC mode I think I always set these bits and don't
-> anything with the Pause modes? Is that the right way to do it?
-
-So what happens if your link partner (e.g. switch) does not support
-flow control?  What if your link partner floods such frames to all
-ports?  You end up transmitting flow control frames, which could be
-sent to all stations on the network... seems not a good idea.
-
-Implementing stuff properly and not taking short-cuts is always a
-good idea for inter-operability.
-
-> > > +
-> > > +static void mt7530_phylink_validate(struct dsa_switch *ds, int port,
-> > > +                                unsigned long *supported,
-> > > +                                struct phylink_link_state *state)
-> > > +{
-> > > +    __ETHTOOL_DECLARE_LINK_MODE_MASK(mask) = { 0, };
-> > > +
-> > > +    switch (port) {
-> > > +    case 0: /* Internal phy */
-> > > +    case 1:
-> > > +    case 2:
-> > > +    case 3:
-> > > +    case 4:
-> > > +            if (state->interface != PHY_INTERFACE_MODE_NA &&
-> > > +                state->interface != PHY_INTERFACE_MODE_GMII)
-> > > +                    goto unsupported;
-> > > +            break;
-> > > +    /* case 5: Port 5 not supported! */
-> > > +    case 6: /* 1st cpu port */
-> > > +            if (state->interface != PHY_INTERFACE_MODE_RGMII &&
-> > > +                state->interface != PHY_INTERFACE_MODE_TRGMII)
-> > 
-> > PHY_INTERFACE_MODE_NA ?
-> 
-> You mean PHY_INTERFACE_MODE_NA is missing?
-
-Yes.  Please see the updated documentation in the patch I sent this
-morning "net: phylink: further documentation clarifications".
-
+diff --git a/drivers/video/fbdev/au1200fb.c b/drivers/video/fbdev/au1200fb.c
+index 26caffb02b7e..265d3b45efd0 100644
+--- a/drivers/video/fbdev/au1200fb.c
++++ b/drivers/video/fbdev/au1200fb.c
+@@ -1234,7 +1234,7 @@ static int au1200fb_fb_mmap(struct fb_info *info, struct vm_area_struct *vma)
+ 	struct au1200fb_device *fbdev = info->par;
+ 
+ 	return dma_mmap_attrs(fbdev->dev, vma, fbdev->fb_mem, fbdev->fb_phys,
+-			fbdev->fb_len, DMA_ATTR_NON_CONSISTENT);
++			fbdev->fb_len, 0);
+ }
+ 
+ static void set_global(u_int cmd, struct au1200_lcd_global_regs_t *pdata)
+@@ -1692,8 +1692,7 @@ static int au1200fb_drv_probe(struct platform_device *dev)
+ 
+ 		fbdev->fb_mem = dmam_alloc_attrs(&dev->dev,
+ 				PAGE_ALIGN(fbdev->fb_len),
+-				&fbdev->fb_phys, GFP_KERNEL,
+-				DMA_ATTR_NON_CONSISTENT);
++				&fbdev->fb_phys, GFP_KERNEL, 0);
+ 		if (!fbdev->fb_mem) {
+ 			print_err("fail to allocate framebuffer (size: %dK))",
+ 				  fbdev->fb_len / 1024);
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
+2.20.1
+
