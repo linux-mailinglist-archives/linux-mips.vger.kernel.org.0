@@ -2,143 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1C9559D0
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jun 2019 23:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA73755A49
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jun 2019 23:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725782AbfFYVVY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jun 2019 17:21:24 -0400
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:58878 "EHLO
+        id S1726376AbfFYVxm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jun 2019 17:53:42 -0400
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:59250 "EHLO
         pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725290AbfFYVVX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jun 2019 17:21:23 -0400
+        with ESMTP id S1725914AbfFYVxm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jun 2019 17:53:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=m6VFMJ052W6TcAKd0grvEKpmjJmNbi6JBUZsRjhZHGc=; b=YFBzGRIYpLWKw5tT+88LlwBlZ
-        rHjBOrY51GBZScvAuV8ZDXriGPIvaik5pQr6aOpl4oDzd75qV0NjAPfshbUtFcZC37IGlpTOxSGjS
-        mcdaOhiphcNBTbJHj9A+r+Z9XZGV7R/0D8VPB54XXHJ9lNfKZRzvZJhh2OC7C8f5rU5QP0xQSNuUo
-        9BIqAYrKWzrS3Qv+9MH6hQ+I+LUYhzjzqpL8CsXFhXiEh/xhdLNoK/JAwpysz+tzBdgyfgsfQEcdv
-        /JmbatZJ5+PSHgrfGpnWx2Pk/2idgPIdAPHfRSW9BmOQAUPOHOd620sgxvDDiPxu6WAwDQrTQVyR6
-        sqMJUSnRg==;
-Received: from shell.armlinux.org.uk ([2002:4e20:1eda:1:5054:ff:fe00:4ec]:59100)
+         bh=deOVYdFFYkcHu9wZG5qa/qLbz0oqLBMHZXk/udGRPFs=; b=Mptb2CI+u4aX2PweVUjMKHnxn
+        IazRltUCx73c5lY8KG8H8Qt15Kyw9vaCKMaxUWp4b/CRN5GaDswnZizCdlQh9PhwARzY/PVmSvb6P
+        p9B4sFczvUXDxRfTfgNCY8XYnxA+uPcCJCmon96RZvOxaL+NzjDCQgo8oskF3wWWloM3U1rQngEjG
+        OOsSJMRJRfiZOqPqsp0fbkHY6cPS2lU5XehpsqmsrpQmaSoYA1KWSzQZqktiBXs1+k8EoSXjzkNib
+        3Db8EoDreYq55rvxo23X7JodVR/D29B/54aiUVvUO91C1nxrA3rIcqIJPgcpTrxYNDv/4XCJxdz0e
+        /BwA9Lklg==;
+Received: from shell.armlinux.org.uk ([2001:4d48:ad52:3201:5054:ff:fe00:4ec]:59016)
         by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.90_1)
         (envelope-from <linux@armlinux.org.uk>)
-        id 1hfssK-0000a8-K6; Tue, 25 Jun 2019 22:21:12 +0100
+        id 1hftNd-0000iZ-Ck; Tue, 25 Jun 2019 22:53:33 +0100
 Received: from linux by shell.armlinux.org.uk with local (Exim 4.89)
         (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1hfssG-0007YL-Hp; Tue, 25 Jun 2019 22:21:08 +0100
-Date:   Tue, 25 Jun 2019 22:21:08 +0100
+        id 1hftNZ-0007ZT-G1; Tue, 25 Jun 2019 22:53:29 +0100
+Date:   Tue, 25 Jun 2019 22:53:29 +0100
 From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Daniel Santos <daniel.santos@pobox.com>,
-        =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
         sean.wang@mediatek.com, f.fainelli@gmail.com, davem@davemloft.net,
-        matthias.bgg@gmail.com, vivien.didelot@gmail.com,
+        matthias.bgg@gmail.com, andrew@lunn.ch, vivien.didelot@gmail.com,
         frank-w@public-files.de, netdev@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org
 Subject: Re: [PATCH RFC net-next 1/5] net: dsa: mt7530: Convert to PHYLINK API
-Message-ID: <20190625212108.hh4g32co6s4drniw@shell.armlinux.org.uk>
+Message-ID: <20190625215329.5ubixxiwprnubwmv@shell.armlinux.org.uk>
 References: <20190624145251.4849-1-opensource@vdorst.com>
  <20190624145251.4849-2-opensource@vdorst.com>
  <20190624153950.hdsuhrvfd77heyor@shell.armlinux.org.uk>
- <20190625113158.Horde.pCaJOVUsgyhYLd5Diz5EZKI@www.vdorst.com>
- <20190625121030.m5w7wi3rpezhfgyo@shell.armlinux.org.uk>
- <1ad9f9a5-8f39-40bd-94bb-6b700f30c4ba@pobox.com>
- <20190625190246.GA27733@lunn.ch>
- <4fc51dc4-0eec-30d7-86d1-3404819cf6fe@pobox.com>
- <20190625204148.GB27733@lunn.ch>
+ <6f80325d-4b42-6174-e050-48626f7a3662@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190625204148.GB27733@lunn.ch>
+In-Reply-To: <6f80325d-4b42-6174-e050-48626f7a3662@gmail.com>
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 25, 2019 at 10:41:48PM +0200, Andrew Lunn wrote:
-> On Tue, Jun 25, 2019 at 02:27:55PM -0500, Daniel Santos wrote:
-> > On 6/25/19 2:02 PM, Andrew Lunn wrote:
-> > >> But will there still be a mechanism to ignore link partner's advertising
-> > >> and force these parameters?
-> > > >From man 1 ethtool:
-> > >
-> > >        -a --show-pause
-> > >               Queries the specified Ethernet device for pause parameter information.
-> > >
-> > >        -A --pause
-> > >               Changes the pause parameters of the specified Ethernet device.
-> > >
-> > >            autoneg on|off
-> > >                   Specifies whether pause autonegotiation should be enabled.
-> > >
-> > >            rx on|off
-> > >                   Specifies whether RX pause should be enabled.
-> > >
-> > >            tx on|off
-> > >                   Specifies whether TX pause should be enabled.
-> > >
-> > > You need to check the driver to see if it actually implements this
-> > > ethtool call, but that is how it should be configured.
-> > >
-> > > 	Andrew
-> > >
-> > Thank you Andrew,
+On Tue, Jun 25, 2019 at 11:24:01PM +0300, Vladimir Oltean wrote:
+> Hi Russell,
+> 
+> On 6/24/19 6:39 PM, Russell King - ARM Linux admin wrote:
+> > This should be removed - state->link is not for use in mac_config.
+> > Even in fixed mode, the link can be brought up/down by means of a
+> > gpio, and this should be dealt with via the mac_link_* functions.
 > > 
-> > So in this context, my question is the difference between "enabling" and
-> > "forcing".  Here's that register for the mt7620 (which has an mt7530 on
-> > its die): https://imgur.com/a/pTk0668  I believe this is also what René
-> > is seeking clarity on?
 > 
-> Lets start with normal operation. If the MAC supports pause or asym
-> pause, it calls phy_support_sym_pause() or phy_support_asym_pause().
-> phylib will then configure the PHY to advertise pause as appropriate.
-> Once auto-neg has completed, the results of the negotiation are set in
-> phydev. So phdev->pause and phydev->asym_pause. The MAC callback is
-> then used to tell the MAC about the autoneg results. The MAC should be
-> programmed using the values in phdev->pause and phydev->asym_pause.
-> 
-> For ethtool, the MAC driver needs to implement .get_pauseparam and
-> .set_pauseparam. The set_pauseparam needs to validate the settings,
-> using phy_validate_pause(). If valid, phy_set_asym_pause() is used to
-> tell the PHY about the new configuration. This will trigger a new
-> auto-neg if auto-neg is enabled, and the results will be passed back
-> in the usual way. If auto-neg is disabled, or pause auto-neg is
-> disabled, the MAC should configure pause directly based on the
-> settings passed.
-> 
-> Looking at the data sheet page, you want FORCE_MODE_Pn set. You never
-> want the MAC directly talking to the PHY. Bad things will happen.
-> Then use FORCE_RX_FC_Pn and FORCE_TX_Pn to reflect phydev->pause and
-> phydev->asym_pause.
-> 
-> The same idea applies when using phylink.
+> What do you mean exactly that state->link is not for use, is that true in
+> general?
 
-Except when using phylink, use pause & MLO_PAUSE_RX to determine whether
-FORCE_RX_FC_Pn should be set, and use pause & MLO_PAUSE_TX to determine
-whether FORCE_TX_Pn should be set.
+Yes.  mac_config() should not touch it; it is not always in a defined
+state.  For example, if you set modes via ethtool (the
+ethtool_ksettings_set API) then state->link will probably contain
+zero irrespective of the true link state.
 
-phylink will take care of the results of negotiation with the link
-partner and tell you what should be set if pause autoneg is enabled.
-If the user has decided to force it via ethtool, and the MAC driver
-passes the calls on to phylink, phylink will instead set MLO_PAUSE_RX
-and MLO_PAUSE_TX according to the users settings.
+It exists in this structure because it was convenient to just use one
+structure to store all the link information in various parts of the
+code, and when requesting the negotiated in-band MAC configuration.
 
-So, with phylink, it's quite literally "if MLO_PAUSE_RX is set in
-mac_config, enable receiption of pause frames.  if MLO_PAUSE_TX is set,
-enable transmission of pause frames."
+I've come to the conclusion that that decision was a mistake, based
+on patches such as the above mistakenly thinking that everything in
+the state structure is fair game.  I've since updated the docs to
+explicitly spell it out, but I'm also looking at the feasibility of
+changing the mac_config() interface entirely - splitting it into two
+(mac_config_fixed() and mac_config_inband()) and passing only the
+appropriate parameters to each.
 
-The above applies for phylink's PHY, FIXED, and SGMII in-band modes.
-For 802.3z in-band modes, pause is negotiated between the two link
-parters (which could be the PCS built into the MACs at either end)
-and in some cases its possible to set the MAC to automatically adjust
-to the results of the built-in PCS negotiation.
+However, having looked at that, I think such a change will make some
+MAC drivers quite a bit more complicated - having all the config
+steps in one method appears to make the configuration of MAC drivers
+easier (eg, mvneta, mvpp2.)
+
+> In drivers/net/dsa/sja1105/sja1105_main.c, if I remove the "if
+> (!state->link)" guard, I see PHYLINK calls with a SPEED_UNKNOWN argument for
+> ports that are BR_STATE_DISABLED. Is that normal?
+
+This looks like another driver which has been converted to phylink
+without my review; I certainly wasn't aware of it.  It gets a few
+things wrong, such as:
+
+1) not checking state->interface in the validate callback - so it
+   is basically saying that it can support any PHY interface mode
+   that the kernel happens to support.
+
+2) if phylink is configured to use in-band, then state->speed is
+   undefined; this driver will fail.  (If folk don't want to support
+   that, we ought to have a way to tell phylink to reject anything
+   that attempts to set it to in-band mode!)
+
+3) it doesn't implement phylink_mac_link_state DSA ops, so it doesn't
+   support SGMII or 802.3z phy interface modes (see 1).
 
 -- 
 RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
