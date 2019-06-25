@@ -2,68 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B188A557E1
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jun 2019 21:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE495588C
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jun 2019 22:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727022AbfFYTh7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jun 2019 15:37:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46580 "EHLO mail.kernel.org"
+        id S1726712AbfFYUPd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jun 2019 16:15:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44048 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726653AbfFYTh6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 25 Jun 2019 15:37:58 -0400
-Received: from akpm3.svl.corp.google.com (unknown [104.133.8.65])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726053AbfFYUPd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 25 Jun 2019 16:15:33 -0400
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C012D2085A;
-        Tue, 25 Jun 2019 19:37:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E7006208CA
+        for <linux-mips@vger.kernel.org>; Tue, 25 Jun 2019 20:15:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561491478;
-        bh=tJdGNjp4NLA7f2CJGKITTf6uA4kMX96bLEi69D1RpFc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ShVOA7PYXmmz24tjLGDu1PYm64KCDa4yjeLXa3l6FjdwwPWxrgsVBDxgsovdp7feN
-         blu+puyvqldhGC0Wxv3kVwuVBCy18spQuzJMsEad+C5F0wrxmqqgxgvTR3f1e5CyBT
-         eX6OYwNFOGaN5Cpc8zEu5AANzUORLi6PZJBbAynU=
-Date:   Tue, 25 Jun 2019 12:37:57 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        s=default; t=1561493732;
+        bh=Non/zwPybF2AGuhmjwFgxmMCpYW8ogfnhbNrhDKk/vc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lLPnssPRCinSZhMedXFl4IX9MsXTNhVSxFwL4KFntKi0pXjqZtp295xgMzrg8LGbO
+         mOUGpRdpbB/L63NxLJu57zUIKU8V40nkRaOVFZ6w0Dr1RtDyGNFekX200zDZun+Q1n
+         hwMQ4fQRt/bJqYXOD6mBo2LKulD7skPGobAZzDmU=
+Received: by mail-wr1-f48.google.com with SMTP id p11so50819wre.7
+        for <linux-mips@vger.kernel.org>; Tue, 25 Jun 2019 13:15:31 -0700 (PDT)
+X-Gm-Message-State: APjAAAXNOkxtpiQnwKbCsAkZj6eeUuqofmv+0/WQkMRnWyxYnS8ELvQX
+        n4Whq1o4SW+FZqJzYv2vuNIesPEqf5ffSPoaOli/Yw==
+X-Google-Smtp-Source: APXvYqyhHtmITJg1+Pl3hirpl0QwbJ++nvN6wGzhM8y02SUtgxU8TIY6h1kuPsgr5idu476pi12gfJv0CJukh1rt4Oc=
+X-Received: by 2002:adf:cc85:: with SMTP id p5mr17560wrj.47.1561493730555;
+ Tue, 25 Jun 2019 13:15:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190624133607.GI29497@fuggles.cambridge.arm.com>
+ <20190625161804.38713-1-vincenzo.frascino@arm.com> <alpine.DEB.2.21.1906251851350.32342@nanos.tec.linutronix.de>
+ <alpine.DEB.2.21.1906252024350.32342@nanos.tec.linutronix.de>
+In-Reply-To: <alpine.DEB.2.21.1906252024350.32342@nanos.tec.linutronix.de>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Tue, 25 Jun 2019 13:15:19 -0700
+X-Gmail-Original-Message-ID: <CALCETrWE3zYN-6h0RkMV9j5kSkSWbJ-nQnjhH=md=ybSR0eZ9Q@mail.gmail.com>
+Message-ID: <CALCETrWE3zYN-6h0RkMV9j5kSkSWbJ-nQnjhH=md=ybSR0eZ9Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] lib/vdso: Delay mask application in do_hres()
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org, x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/16] mm: move the powerpc hugepd code to mm/gup.c
-Message-Id: <20190625123757.ec7e886747bb5a9bc364107d@linux-foundation.org>
-In-Reply-To: <20190625143715.1689-15-hch@lst.de>
-References: <20190625143715.1689-1-hch@lst.de>
-        <20190625143715.1689-15-hch@lst.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 25 Jun 2019 16:37:13 +0200 Christoph Hellwig <hch@lst.de> wrote:
+On Tue, Jun 25, 2019 at 11:27 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Tue, 25 Jun 2019, Thomas Gleixner wrote:
+>
+> > On Tue, 25 Jun 2019, Vincenzo Frascino wrote:
+> >
+> > CC+ Andy
+> >
+> > > do_hres() in the vDSO generic library masks the hw counter value
+> > > immediately after reading it.
+> > >
+> > > Postpone the mask application after checking if the syscall fallback is
+> > > enabled, in order to be able to detect a possible fallback for the
+> > > architectures that have masks smaller than ULLONG_MAX.
+> >
+> > Right. This only worked on x86 because the mask is there ULLONG_MAX for all
+> > VDSO capable clocksources, i.e. that ever worked just by chance.
+> >
+> > As we talked about that already yesterday, I tested this on a couple of
+> > machines and as expected the outcome is uarch dependent. Minimal deviations
+> > to both sides and some machines do not show any change at all. I doubt it's
+> > possible to come up with a solution which makes all uarchs go faster
+> > magically.
+> >
+> > Though, thinking about it, we could remove the mask operation completely on
+> > X86. /me runs tests
+>
+> Unsurprisingly the results vary. Two uarchs do not care, but they did not
+> care about moving the mask either. The other two gain performance and the
+> last one falls back to the state before moving the mask. So in general it
+> looks like a worthwhile optimization.
+>
 
-> +static int gup_huge_pd(hugepd_t hugepd
-
-Naming nitlet: we have hugepd and we also have huge_pd.  We have
-hugepte and we also have huge_pte.  It make things a bit hard to
-remember and it would be nice to make it all consistent sometime.
-
-We're consistent with huge_pud and almost consistent with huge_pmd.
-
-To be fully consistent I guess we should make all of them have the
-underscore.  Or not have it.  
+At one point, I contemplated a different approach: have the "get the
+counter" routine return 0 and then do if (unlikely(cycles <= last))
+goto fallback.  This will remove one branch from the hot path.  I got
+dubious results when I tried benchmarking it, probably because the
+branch in question was always correctly predicted.
