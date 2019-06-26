@@ -2,209 +2,294 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 554855695C
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Jun 2019 14:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA0756A3E
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Jun 2019 15:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726628AbfFZMhv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Jun 2019 08:37:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37876 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726297AbfFZMhv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 26 Jun 2019 08:37:51 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2535220644;
-        Wed, 26 Jun 2019 12:37:50 +0000 (UTC)
-Date:   Wed, 26 Jun 2019 08:37:48 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        linux-mips@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: MIPS: ath79: regression after patch: sched/fair: do not expose
- some tracepoints to user if CONFIG_SCHEDSTATS is not set
-Message-ID: <20190626083748.07c1f204@gandalf.local.home>
-In-Reply-To: <CALOAHbBLK=sQS+OyOOaEh=Ef-BKjrJ9TGC64EaypzktbnH=BLg@mail.gmail.com>
-References: <20190613063057.szrvmvpauzagxf62@pengutronix.de>
-        <CALOAHbBd2nv=qAy4b4rP_vxtsTAc-eLrozfzzyVhXVQXrpMvtg@mail.gmail.com>
-        <CALOAHbCp_=_W_0jxkXmvb1b_CTEi_B45DOipM20mWPcYUWQamw@mail.gmail.com>
-        <20190613160214.7df3tnfgtexvdy3y@pengutronix.de>
-        <CALOAHbAMNNL6=-Mw5KTZSL0B-it-jGByqY_65iCjH+vAshYRxA@mail.gmail.com>
-        <20190614083419.stgronjpyglnxjbo@pengutronix.de>
-        <CALOAHbBLK=sQS+OyOOaEh=Ef-BKjrJ9TGC64EaypzktbnH=BLg@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726628AbfFZNS4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Jun 2019 09:18:56 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43535 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727146AbfFZNS4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jun 2019 09:18:56 -0400
+Received: by mail-wr1-f65.google.com with SMTP id p13so2688083wru.10
+        for <linux-mips@vger.kernel.org>; Wed, 26 Jun 2019 06:18:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=oABEezfN1nTsjGlHAHlBaTiMmQz4aDhMSWiIeYwjCbc=;
+        b=BDIZmNOapw0wdnKowhcOVanLGYEGq8PTEJMCMEAi5Gmar5Q38mp+SuSWavLqPxHywy
+         8DjOMgEcMNmJvYylzQIUqfY4ha2dJx7Ev26rvPoEUOaiZNdQvNOnjo3tPjcYd4E7gDQ1
+         EB4e4f9LPZmMjeUtItGOQkI3h91OQPmAGV9v11aozKdHUDLTlDI1lkMS1W/9SXm1zbGa
+         NU7pNwWbw9oJ356oHDNn5sofavNR7JNLfjx67l4zDyhIBvE1Q3IJ+ybOwMl3OXASi9s8
+         9fBT+RBMD2WUvIG7gK6kpKE5AM/Fk56Bu3K0qZ/SrFStlDCHxNVvg2TTEZHxsqc6aKyR
+         Fr1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=oABEezfN1nTsjGlHAHlBaTiMmQz4aDhMSWiIeYwjCbc=;
+        b=p+0B1eaEg5/mjCcPhPpDcvA5j/vcDR9aE9lFnwm5W4Mrho7OVMAmcDfCMXh3GoLeer
+         m/cGMI/sEmW3e300U6DBX+PlWPtf7I4puUdXOw/GJcyaSdSyTb6RxRmL86mEb3Dza2kU
+         McgcvHPGn5ZgbkkQ0RclLbc8HnQvsWVUdGGaX6XFUABxF/0dANqGDNCioRU9DWLoLoHs
+         sFcYB8taHLsrCCkkRTAzGwhAoR6323bHJUDxagO97s54fF9vf1jYlvW/jvQHqEYOJc6H
+         CwEnQFpjPm/zhodg4jWfH8pFVSINCD3m78PBBT9UJiUdIY39ly5tWCs6+6zsQ87sJ84c
+         YhQA==
+X-Gm-Message-State: APjAAAUyme+0fN2fTfIxQ5mWGxfaCBL++Luc4qZbxBr0y2D4KleVzb9a
+        wbOYniZjhMgNNm9A/7FJQvEwxw==
+X-Google-Smtp-Source: APXvYqxeT+oP2oju/Ny+91153pq74b2segQ2icEC+8amXSZq3egEC6TwFkM8vrRk+uofNHXcuWkhBQ==
+X-Received: by 2002:a5d:61cd:: with SMTP id q13mr3741341wrv.114.1561555133168;
+        Wed, 26 Jun 2019 06:18:53 -0700 (PDT)
+Received: from dell ([2.27.35.164])
+        by smtp.gmail.com with ESMTPSA id z5sm15058643wrh.16.2019.06.26.06.18.51
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 26 Jun 2019 06:18:52 -0700 (PDT)
+Date:   Wed, 26 Jun 2019 14:18:50 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Mathieu Malaterre <malat@debian.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-clk@vger.kernel.org, od@zcrc.me
+Subject: Re: [PATCH v12 04/13] mfd: Add Ingenic TCU driver
+Message-ID: <20190626131850.GW21119@dell>
+References: <20190521145141.9813-1-paul@crapouillou.net>
+ <20190521145141.9813-5-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190521145141.9813-5-paul@crapouillou.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Tue, 21 May 2019, Paul Cercueil wrote:
 
-Sorry for the late response, I was on PTO.
-
-On Mon, 17 Jun 2019 10:04:46 +0800
-Yafang Shao <laoar.shao@gmail.com> wrote:
-
-> On Fri, Jun 14, 2019 at 4:34 PM Oleksij Rempel <o.rempel@pengutronix.de> wrote:
-> >
-> > On Fri, Jun 14, 2019 at 01:56:04PM +0800, Yafang Shao wrote:  
-> > > On Fri, Jun 14, 2019 at 12:02 AM Oleksij Rempel <o.rempel@pengutronix.de> wrote:  
-> > > >
-> > > > On Thu, Jun 13, 2019 at 04:12:57PM +0800, Yafang Shao wrote:  
-> > > > > On Thu, Jun 13, 2019 at 4:08 PM Yafang Shao <laoar.shao@gmail.com> wrote:  
-> > > > > >
-> > > > > > On Thu, Jun 13, 2019 at 2:30 PM Oleksij Rempel <o.rempel@pengutronix.de> wrote:  
-> > > > > > >
-> > > > > > > Hi,
-> > > > > > >
-> > > > > > > After patch:
-> > > > > > > -----------------------------------------------------
-> > > > > > > commit 2a09b5de235a6b5f76193a2ed46546a2944f98bf
-> > > > > > > Author: Yafang Shao <laoar.shao@gmail.com>
-> > > > > > > Date:   Tue Mar 26 20:13:10 2019 +0800
-> > > > > > >     sched/fair: do not expose some tracepoints to user if CONFIG_SCHEDSTATS is not set
-> > > > > > >
-> > > > > > >     The tracepoints trace_sched_stat_{iowait, blocked, wait, sleep} should
-> > > > > > >     be not exposed to user if CONFIG_SCHEDSTATS is not set.
-> > > > > > >
-> > > > > > >     Link: http://lkml.kernel.org/r/1553602391-11926-3-git-send-email-laoar.shao@gmail.com
-> > > > > > >
-
-This commit should not modify the function tracing (mcount) code.
-
-Trace events and function tracing are two separate systems, that do not
-rely on each other.
-
-> > > > > > >     Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > > > > > >     Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> > > > > > >     Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> > > > > > > -----------------------------------------------------
-> > > > > > >
-> > > > > > > i can't boot kernel on MIPS based system Atheros ar9331. The boot
-> > > > > > > process ends with following oops:
-> > > > > > > -----------------------------------------------------
-> > > > > > > [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 16256                                                                                                [0/1518]
-> > > > > > > [    0.000000] Kernel command line:   ip=dhcp root=/dev/nfs nfsroot=192.168.23.4:/home/ore/nfsroot/dpt-module,v3,tcp
-> > > > > > > [    0.000000] Dentry cache hash table entries: 8192 (order: 3, 32768 bytes)
-> > > > > > > [    0.000000] Inode-cache hash table entries: 4096 (order: 2, 16384 bytes)
-> > > > > > > [    0.000000] Writing ErrCtl register=00000000
-> > > > > > > [    0.000000] Readback ErrCtl register=00000000
-> > > > > > > [    0.000000] Memory: 56376K/65536K available (5376K kernel code, 437K rwdata, 1068K rodata, 1432K init, 214K bss, 9160K reserved, 0K cma-reserved)
-> > > > > > > [    0.000000] random: get_random_u32 called from cache_random_seq_create+0x9c/0x170 with crng_init=0
-> > > > > > > [    0.000000] SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
-> > > > > > > [    0.000000] ftrace: allocating 18167 entries in 36 pages
-> > > > > > > [    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 00000000, epc == 00000000, ra == 00000000
-> > > > > > > [    0.000000] Oops[#1]:
-> > > > > > > [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.2.0-rc4+ #308
-> > > > > > > [    0.000000] $ 0   : 00000000 8007e5fc 00000003 00000002
-> > > > > > > [    0.000000] $ 4   : 00000001 00000000 00000000 83c22470
-> > > > > > > [    0.000000] $ 8   : 00000000 00000000 00000000 00000000
-> > > > > > > [    0.000000] $12   : 806afe04 00000000 00000001 00000000
-> > > > > > > [    0.000000] $16   : 800adc0c 800adc00 00000000 00000000
-> > > > > > > [    0.000000] $20   : 00000000 0000048e 00000000 806c0000
-> > > > > > > [    0.000000] $24   : 00000003 800619e4
-> > > > > > > [    0.000000] $28   : 806ae000 806afe10 808b0000 00000000
-> > > > > > > [    0.000000] Hi    : 00000000
-> > > > > > > [    0.000000] Lo    : 00000000
-> > > > > > > [    0.000000] epc   : 00000000 0x0
-> > > > > > > [    0.000000] ra    : 00000000 0x0
-> > > > > > > [    0.000000] Status: 10000002 KERNEL EXL
-> > > > > > > [    0.000000] Cause : 10800008 (ExcCode 02)
-> > > > > > > [    0.000000] BadVA : 00000000
-> > > > > > > [    0.000000] PrId  : 00019374 (MIPS 24Kc)
-> > > > > > > [    0.000000] Modules linked in:
-> > > > > > > [    0.000000] Process swapper (pid: 0, threadinfo=(ptrval), task=(ptrval), tls=00000000)
-> > > > > > > [    0.000000] Stack : 00000002 8007e784 806ca284 00000000 800adc0c 00000000 80070eb0 8007108c
-> > > > > > > [    0.000000]         83c03c00 801ab7d8 83c03b80 00000000 00000000 83c03b80 00000000 801109cc
-> > > > > > > [    0.000000]         00000001 80880000 80880000 800c1318 00000000 ffffffff 806b0000 806b0000
-> > > > > > > [    0.000000]         83c22470 0000048e 8075eb00 807706dc 806b0000 80753158 806b0000 80755209
-> > > > > > > [    0.000000]         00000001 80880000 80880000 80726cc8 ffffffff 000046f7 00000024 00000003
-> > > > > > > [    0.000000]         ...
-> > > > > > > [    0.000000] Call Trace:
-> > > > > > > [    0.000000]
-> > > > > > > [    0.000000] [<8007e784>] r4k_flush_icache_range+0x10/0x18
-> > > > > > > [    0.000000] [<800adc0c>] preempt_count_sub+0x10/0xe4
-> > > > > > > [    0.000000] [<80070eb0>] ftrace_caller+0x0/0x54
-> > > > > > > [    0.000000] [<8007108c>] ftrace_make_nop+0x8c/0x94
-> > > > > > > [    0.000000] [<801ab7d8>] __get_free_pages+0x2c/0x60
-> > > > > > > [    0.000000] [<801109cc>] ftrace_process_locs+0x364/0x3ec
-> > > > > > > [    0.000000] [<800c1318>] vprintk_default+0x34/0x40
-> > > > > > > [    0.000000] [<80726cc8>] ftrace_init+0xb8/0x138
-> > > > > > > [    0.000000] [<8071ac98>] start_kernel+0x290/0x584
-> > > > > > > [    0.000000] [<8071a368>] unknown_bootoption+0x0/0x270
-> > > > > > > [    0.000000]
-> > > > > > > [    0.000000] Code: (Bad address in epc)
-> > > > > > > [    0.000000]
-> > > > > > > [    0.000000] ---[ end trace 64e6fa591c4a277c ]---
-> > > > > > > [    0.000000] Kernel panic - not syncing: Fatal exception
-> > > > > > > [    0.000000] Rebooting in
-> > > > > > > -----------------------------------------------------
-> > > > > > >
-> > > > > > > After reverting this patch I can normally boot the kernel.
-> > > > > > > The kernel is build with CONFIG_SCHEDSTATS not set.
-> > > > > > >
-> > > > > > > --
-> > > > > > > Pengutronix e.K.                           |                             |
-> > > > > > > Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-> > > > > > > Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-> > > > > > > Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |  
-> > > > > >
-> > > > > > Hi Oleksij,
-> > > > > >
-> > > > > > This really makes me confused.
-> > > > > > If CONFIG_SCHEDSTATS is not set,  trace_sched_stat_{iowait, blocked,
-> > > > > > wait, sleep} will be optimized out by
-> > > > > > the compiler. That should not effect other codes.
-> > > > > >
-> > > > > > Would you pls. try bellow command on your build server?
-> > > > > > $ objdump -dr kernel/sched/fair.o | awk '/>:$/ { F=$2 } /sched_stat/ {
-> > > > > > print F " " $0 }'
-> > > > > >  
-> > > > >
-> > > > > Plus, could you pls. show me the  difference on the objdump of these
-> > > > > two vmlinux (with and without my patch) ?  
-> > > >
-> > > > Both files are in attachment.
-> > > >  
-> > >
-> > > Hi Oleksij,
-> > >
-> > > Unfortunately I don't have a mips toolchain on hand.
-> > > It would be better if you could give me the  disassembled code of
-> > > these two vmlinuxs.
-> > > I will try to build a cross toolchain for MIPS 24Kc, that may take some time.  
-> >
-> > disassembled code is in attachment.
-> >
-> > --  
+> This driver will provide a regmap that can be retrieved very early in
+> the boot process through the API function ingenic_tcu_get_regmap().
 > 
-> + Steve,
+> Additionally, it will call devm_of_platform_populate() so that all the
+> children devices will be probed.
 > 
-> Hi Oleksij,
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
 > 
-> I guess this issue is related with __mcount_loc, but I don't have a
-> clear idea how to fix it yet.
-> It would be better if you could share your .config file as well.
+> Notes:
+>     v12: New patch
 > 
-> Hi Steve,
+>  drivers/mfd/Kconfig             |   8 +++
+>  drivers/mfd/Makefile            |   1 +
+>  drivers/mfd/ingenic-tcu.c       | 113 ++++++++++++++++++++++++++++++++
+>  include/linux/mfd/ingenic-tcu.h |   8 +++
+>  4 files changed, 130 insertions(+)
+>  create mode 100644 drivers/mfd/ingenic-tcu.c
 > 
-> Do you have any suggestion on this issue?
-> My guess is when we define a tracepoint as nop, there's something
-> wrong in __mcount_loc,
->  which will be used by MIPS and then this oops occurs.
-> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 294d9567cc71..a13544474e05 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -494,6 +494,14 @@ config HTC_I2CPLD
+>  	  This device provides input and output GPIOs through an I2C
+>  	  interface to one or more sub-chips.
+>  
+> +config INGENIC_TCU
+> +	bool "Ingenic Timer/Counter Unit (TCU) support"
+> +	depends on MIPS || COMPILE_TEST
+> +	select REGMAP_MMIO
+> +	help
+> +	  Say yes here to support the Timer/Counter Unit (TCU) IP present
+> +	  in the JZ47xx SoCs from Ingenic.
+> +
+>  config MFD_INTEL_QUARK_I2C_GPIO
+>  	tristate "Intel Quark MFD I2C GPIO"
+>  	depends on PCI
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 52b1a90ff515..fb89e131ae98 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -180,6 +180,7 @@ obj-$(CONFIG_AB8500_CORE)	+= ab8500-core.o ab8500-sysctrl.o
+>  obj-$(CONFIG_MFD_TIMBERDALE)    += timberdale.o
+>  obj-$(CONFIG_PMIC_ADP5520)	+= adp5520.o
+>  obj-$(CONFIG_MFD_KEMPLD)	+= kempld-core.o
+> +obj-$(CONFIG_INGENIC_TCU)	+= ingenic-tcu.o
+>  obj-$(CONFIG_MFD_INTEL_QUARK_I2C_GPIO)	+= intel_quark_i2c_gpio.o
+>  obj-$(CONFIG_LPC_SCH)		+= lpc_sch.o
+>  obj-$(CONFIG_LPC_ICH)		+= lpc_ich.o
+> diff --git a/drivers/mfd/ingenic-tcu.c b/drivers/mfd/ingenic-tcu.c
+> new file mode 100644
+> index 000000000000..6c1d5e4310c1
+> --- /dev/null
+> +++ b/drivers/mfd/ingenic-tcu.c
+> @@ -0,0 +1,113 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * JZ47xx SoCs TCU MFD driver
 
-Are you positive this is the bad commit? It could be that the problem
-is someplace else, and this commit just makes the compiler do something
-slightly different to trigger the issue.
+Nit: Another line here please.
 
-Have you tried compiling and booting this commit, make sure it crashes,
-and then remove the commit:
+> + * Copyright (C) 2019 Paul Cercueil <paul@crapouillou.net>
+> + */
+> +
+> +#include <linux/mfd/ingenic-tcu.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +
+> +struct ingenic_soc_info {
+> +	unsigned int num_channels;
+> +};
+> +
+> +static struct regmap *tcu_regmap __initdata;
+> +
+> +static const struct regmap_config ingenic_tcu_regmap_config = {
+> +	.reg_bits = 32,
+> +	.val_bits = 32,
+> +	.reg_stride = 4,
+> +	.max_register = TCU_REG_OST_CNTHBUF,
+> +};
+> +
+> +static const struct ingenic_soc_info jz4740_soc_info = {
+> +	.num_channels = 8,
+> +};
+> +
+> +static const struct ingenic_soc_info jz4725b_soc_info = {
+> +	.num_channels = 6,
+> +};
+> +
+> +static const struct of_device_id ingenic_tcu_of_match[] = {
+> +	{ .compatible = "ingenic,jz4740-tcu", .data = &jz4740_soc_info, },
+> +	{ .compatible = "ingenic,jz4725b-tcu", .data = &jz4725b_soc_info, },
+> +	{ .compatible = "ingenic,jz4770-tcu", .data = &jz4740_soc_info, },
+> +	{ }
+> +};
+> +
+> +static struct regmap * __init ingenic_tcu_create_regmap(struct device_node *np)
+> +{
+> +	struct resource res;
+> +	void __iomem *base;
+> +	struct regmap *map;
+> +
+> +	if (!of_match_node(ingenic_tcu_of_match, np))
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	base = of_io_request_and_map(np, 0, "TCU");
+> +	if (IS_ERR(base))
+> +		return ERR_PTR(PTR_ERR(base));
+> +
+> +	map = regmap_init_mmio(NULL, base, &ingenic_tcu_regmap_config);
+> +	if (IS_ERR(map))
+> +		goto err_iounmap;
+> +
+> +	return map;
+> +
+> +err_iounmap:
+> +	iounmap(base);
+> +	of_address_to_resource(np, 0, &res);
+> +	release_mem_region(res.start, resource_size(&res));
+> +
+> +	return map;
+> +}
 
- $ git show | patch -p1 -R
+Why does this need to be set-up earlier than probe()?
 
-compile and make sure it boots?
+> +static int __init ingenic_tcu_probe(struct platform_device *pdev)
+> +{
+> +	struct regmap *map = ingenic_tcu_get_regmap(pdev->dev.of_node);
+> +
+> +	platform_set_drvdata(pdev, map);
+> +
+> +	regmap_attach_dev(&pdev->dev, map, &ingenic_tcu_regmap_config);
+> +
+> +	return devm_of_platform_populate(&pdev->dev);
+> +}
+> +
+> +static struct platform_driver ingenic_tcu_driver = {
+> +	.driver = {
+> +		.name = "ingenic-tcu",
+> +		.of_match_table = ingenic_tcu_of_match,
+> +	},
+> +};
+> +
+> +static int __init ingenic_tcu_platform_init(void)
+> +{
+> +	return platform_driver_probe(&ingenic_tcu_driver,
+> +				     ingenic_tcu_probe);
 
--- Steve
+What?  Why?
+
+> +}
+> +subsys_initcall(ingenic_tcu_platform_init);
+> +
+> +struct regmap * __init ingenic_tcu_get_regmap(struct device_node *np)
+> +{
+> +	if (!tcu_regmap)
+> +		tcu_regmap = ingenic_tcu_create_regmap(np);
+> +
+> +	return tcu_regmap;
+> +}
+
+This makes me pretty uncomfortable.
+
+What calls it?
+
+> +bool ingenic_tcu_pwm_can_use_chn(struct device *dev, unsigned int channel)
+> +{
+> +	const struct ingenic_soc_info *soc = device_get_match_data(dev->parent);
+> +
+> +	/* Enable all TCU channels for PWM use by default except channels 0/1 */
+> +	u32 pwm_channels_mask = GENMASK(soc->num_channels - 1, 2);
+> +
+> +	device_property_read_u32(dev->parent, "ingenic,pwm-channels-mask",
+> +				 &pwm_channels_mask);
+> +
+> +	return !!(pwm_channels_mask & BIT(channel));
+> +}
+> +EXPORT_SYMBOL_GPL(ingenic_tcu_pwm_can_use_chn);
+> diff --git a/include/linux/mfd/ingenic-tcu.h b/include/linux/mfd/ingenic-tcu.h
+> index 2083fa20821d..21df23916cd2 100644
+> --- a/include/linux/mfd/ingenic-tcu.h
+> +++ b/include/linux/mfd/ingenic-tcu.h
+> @@ -6,6 +6,11 @@
+>  #define __LINUX_MFD_INGENIC_TCU_H_
+>  
+>  #include <linux/bitops.h>
+> +#include <linux/init.h>
+> +
+> +struct device;
+> +struct device_node;
+> +struct regmap;
+>  
+>  #define TCU_REG_WDT_TDR		0x00
+>  #define TCU_REG_WDT_TCER	0x04
+> @@ -53,4 +58,7 @@
+>  #define TCU_REG_TCNTc(c)	(TCU_REG_TCNT0 + ((c) * TCU_CHANNEL_STRIDE))
+>  #define TCU_REG_TCSRc(c)	(TCU_REG_TCSR0 + ((c) * TCU_CHANNEL_STRIDE))
+>  
+> +struct regmap * __init ingenic_tcu_get_regmap(struct device_node *np);
+> +bool ingenic_tcu_pwm_can_use_chn(struct device *dev, unsigned int channel);
+> +
+>  #endif /* __LINUX_MFD_INGENIC_TCU_H_ */
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
