@@ -2,93 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E4258AF0
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2019 21:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2DD58BB4
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Jun 2019 22:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726441AbfF0T2h (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Jun 2019 15:28:37 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:38366 "EHLO vps0.lunn.ch"
+        id S1726472AbfF0Ug7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Jun 2019 16:36:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52892 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726384AbfF0T2h (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 27 Jun 2019 15:28:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=pfFOMoKJzOKIQebJNqxQnidmbuTVklA+Iu6cpCenVNE=; b=KXsLMH0hNE8NJ4cEwwQM99d3Me
-        gRSSxDznM4Bg2y37GuZ5KL6eCrBoR2YCPrkvTLWL2r2BtqaeoioZPnXheGxF8DoLf3svxxhEwDuMJ
-        sSCtzMcfYZO3ZVB6LfQlde6hYtvefr76UEEHBaqjXCMjOQOuFyhU5uxartSW9ErTnewE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
-        (envelope-from <andrew@lunn.ch>)
-        id 1hga3y-00037F-Tj; Thu, 27 Jun 2019 21:28:06 +0200
-Date:   Thu, 27 Jun 2019 21:28:06 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Daniel Santos <daniel.santos@pobox.com>
-Cc:     Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
-        sean.wang@mediatek.com, f.fainelli@gmail.com, davem@davemloft.net,
-        matthias.bgg@gmail.com, vivien.didelot@gmail.com,
-        frank-w@public-files.de, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH RFC net-next 1/5] net: dsa: mt7530: Convert to PHYLINK API
-Message-ID: <20190627192806.GQ27733@lunn.ch>
-References: <20190624145251.4849-1-opensource@vdorst.com>
- <20190624145251.4849-2-opensource@vdorst.com>
- <20190624153950.hdsuhrvfd77heyor@shell.armlinux.org.uk>
- <20190625113158.Horde.pCaJOVUsgyhYLd5Diz5EZKI@www.vdorst.com>
- <20190625121030.m5w7wi3rpezhfgyo@shell.armlinux.org.uk>
- <1ad9f9a5-8f39-40bd-94bb-6b700f30c4ba@pobox.com>
- <20190625190246.GA27733@lunn.ch>
- <4fc51dc4-0eec-30d7-86d1-3404819cf6fe@pobox.com>
- <20190625204148.GB27733@lunn.ch>
- <e469daa1-3e28-db9c-e29a-7f68cc676fda@pobox.com>
+        id S1726443AbfF0Ug7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 27 Jun 2019 16:36:59 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 500AA20665;
+        Thu, 27 Jun 2019 20:36:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561667818;
+        bh=DsMcplyTEYbBH+8y3/XcIMhaj5Scb/Qv8vILe8IiSJY=;
+        h=In-Reply-To:References:To:From:Subject:Cc:Date:From;
+        b=j2eE+I4k9fgYdiKSQtkgYwJRaOXQXgmTfpjeq/g4aRWbt02rLc4UpBAiuiaAHLa3B
+         LIY/nTVskn2Mx2igCUzyNquk4KjZ1jMYcrUNoXaR7c/uQfr9WMTipnEFOT1wg+jefe
+         y8/OTa/5lcbkci3W23neAD8raUZVeGFWZhpUx510=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e469daa1-3e28-db9c-e29a-7f68cc676fda@pobox.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190502122657.15577-2-jonas.gorski@gmail.com>
+References: <20190502122657.15577-1-jonas.gorski@gmail.com> <20190502122657.15577-2-jonas.gorski@gmail.com>
+To:     Jonas Gorski <jonas.gorski@gmail.com>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH 1/3] devicetree: document the BCM63XX gated clock bindings
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>
+User-Agent: alot/0.8.1
+Date:   Thu, 27 Jun 2019 13:36:57 -0700
+Message-Id: <20190627203658.500AA20665@mail.kernel.org>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-> > Looking at the data sheet page, you want FORCE_MODE_Pn set. You never
-> > want the MAC directly talking to the PHY. Bad things will happen.
-> 
-> So what exactly do you mean by the MAC directly talking to the PHY?  Do
-> you mean setting speed, duplex, etc. via the MAC registers instead of
-> via MDIO to the MII registers of the PHY?
+Quoting Jonas Gorski (2019-05-02 05:26:55)
+> Add binding documentation for the gated clock controller found on MIPS
+> based BCM63XX SoCs.
+>=20
+> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+> ---
 
-The data sheet implies the MAC hardware performs reads on the PHY to
-get the status, and then uses that to configure the MAC. This is often
-called PHY polling. The MAC hardware however has no idea what the PHY
-driver is doing. The MAC does not take the PHY mutex. So the PHY
-driver might be doing something at the same time the MAC hardware
-polls the PHY, and it gets odd results. Some PHYs have multiple pages,
-and for example reading the temperature sensor means swapping
-pages. If the MAC hardware was to poll while the sensor is being read,
-it would not get the link status, it would read some random
-temperature register.
-
-So you want the PHY driver to read the results of auto-neg and it then
-tell the MAC the results, so the MAC can be configured correctly.
-
-> > Then use FORCE_RX_FC_Pn and FORCE_TX_Pn to reflect phydev->pause and
-> > phydev->asym_pause.
-> >
-> > The same idea applies when using phylink.
-> >
-> >     Andrew
-> 
-> You're help is greatly appreciated here.  Admittedly, I'm also trying to
-> get this working in the now deprecated swconfig for a 3.18 kernel that's
-> in production.
-
-I'm not very familiar with swconfig. Is there software driving the
-PHY? If not, it is then safe for the MAC hardware to poll the PHY.
-
-     Andrew
+Applied to clk-next
 
