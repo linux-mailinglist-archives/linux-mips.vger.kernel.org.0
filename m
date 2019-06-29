@@ -2,159 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D8E5A955
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jun 2019 08:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF7A5A9C4
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jun 2019 11:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726788AbfF2G5f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Jun 2019 02:57:35 -0400
-Received: from foss.arm.com ([217.140.110.172]:60628 "EHLO foss.arm.com"
+        id S1726931AbfF2JHp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Jun 2019 05:07:45 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:29448 "EHLO mx1.mailbox.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726156AbfF2G5f (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 29 Jun 2019 02:57:35 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D3C928;
-        Fri, 28 Jun 2019 23:57:34 -0700 (PDT)
-Received: from [192.168.1.18] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2026F3F246;
-        Fri, 28 Jun 2019 23:59:20 -0700 (PDT)
-Subject: Re: [PATCH v7 04/25] arm64: Substitute gettimeofday with C
- implementation
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huw Davies <huw@codeweavers.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Peter Collingbourne <pcc@google.com>
-References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
- <20190621095252.32307-5-vincenzo.frascino@arm.com>
- <CGME20190628130921eucas1p239935b0771032c331911eacc1a69dd2e@eucas1p2.samsung.com>
- <1fd47b0d-f77f-8d07-c039-6ac9072834fc@samsung.com>
- <27386d82-2906-b541-f71d-3c61f5099bdf@arm.com>
- <530cd07e-0da7-1d83-be4e-b14813029424@samsung.com>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <06c264a8-8778-18b1-1094-4281a4a2abc9@arm.com>
-Date:   Sat, 29 Jun 2019 07:58:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        id S1726818AbfF2JHo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 29 Jun 2019 05:07:44 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx1.mailbox.org (Postfix) with ESMTPS id C8E2C4F5FD;
+        Sat, 29 Jun 2019 11:07:42 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
+        with ESMTP id pYrem8_esLLX; Sat, 29 Jun 2019 11:07:40 +0200 (CEST)
+Subject: Re: [PATCH 5/8 v2] MIPS: ralink: mt7628a.dtsi: Add I2C controller DT
+ node
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        Harvey Hunt <harveyhuntnexus@gmail.com>,
+        John Crispin <john@phrozen.org>
+References: <20190527091323.4582-1-sr@denx.de>
+ <20190527091323.4582-5-sr@denx.de>
+ <20190528204119.g7kvutxcprhwo56d@pburton-laptop>
+ <96f6564a-e45b-a082-4682-c81dde8d22d5@denx.de>
+ <20190624212431.lopvs57iondijlyh@pburton-laptop>
+ <20190624220729.GA8885@kunai>
+From:   Stefan Roese <sr@denx.de>
+Message-ID: <a0300e23-4b81-a9a1-a481-255368c7eccc@denx.de>
+Date:   Sat, 29 Jun 2019 11:07:37 +0200
 MIME-Version: 1.0
-In-Reply-To: <530cd07e-0da7-1d83-be4e-b14813029424@samsung.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20190624220729.GA8885@kunai>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Sylwester,
+Hi Paul,
 
-thank you for the quick turn around to my email.
-
-On 6/28/19 5:50 PM, Sylwester Nawrocki wrote:
-> Hi Vincenzo,
+On 25.06.19 00:07, Wolfram Sang wrote:
 > 
-> On 6/28/19 16:32, Vincenzo Frascino wrote:
->> On 6/28/19 2:09 PM, Marek Szyprowski wrote:
->>> On 2019-06-21 11:52, Vincenzo Frascino wrote:
->>>> To take advantage of the commonly defined vdso interface for
->>>> gettimeofday the architectural code requires an adaptation.
->>>>
->>>> Re-implement the gettimeofday vdso in C in order to use lib/vdso.
->>>>
->>>> With the new implementation arm64 gains support for CLOCK_BOOTTIME
->>>> and CLOCK_TAI.
->>>>
->>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
->>>> Cc: Will Deacon <will.deacon@arm.com>
->>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->>>> Tested-by: Shijith Thotton <sthotton@marvell.com>
->>>> Tested-by: Andre Przywara <andre.przywara@arm.com>
->>>> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
->>>
->>> This patch causes serious regression on Samsung Exynos5433 SoC based 
->>> TM2(e) boards. The time in userspace is always set to begin of the epoch:
->>>
->>> # date 062813152019
->>> Fri Jun 28 13:15:00 UTC 2019
->>> # date
->>> Thu Jan  1 00:00:00 UTC 1970
->>> # date
->>> Thu Jan  1 00:00:00 UTC 1970
->>>
->>> I've noticed that since the patch landed in Linux next-20190625 and 
->>> bisect indeed pointed to this patch.
->>>
->> Thank you for reporting this, seems that the next that you posted is missing
->> some fixes for arm64.
->>
->> Could you please try the tree below?
->>
->> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/vdso
->>
->> Let us know if the functionality is restored. Otherwise the issue will require
->> further investigation.
->  
-> Marek is already out for holidays, I gave your tree a try but kernel from 
-> that branch was failing to boot on TM2(e).  
+>> OK, I don't see the driver queued up yet so in the meantime I've applied
+>> patches 1-4 & 6-7. If you could ping me or resend this one once the I2C
+>> binding is in-tree, that would be wonderful.
 > 
-> Then I have cherry-picked 5 patches from the branch that seemed to 
-> be missing in next-20190628:
-> 
-> 28028f3174cf1 (HEAD) MAINTAINERS: Fix Andy's surname and the directory entries of VDSO
-> ec8f8e4bf2206 arm64: vdso: Fix compilation with clang older than 8
-> 721882ebb5729 arm64: compat: Fix __arch_get_hw_counter() implementation
-> 7027fea977a3d arm64: Fix __arch_get_hw_counter() implementation
-> 10b305853fe22 lib/vdso: Make delta calculation work correctly
-> 48568d8c7f479 (tag: next-20190628, linux-next/master) Add linux-next specific files for 20190628
-> 
-> With those 5 additional patches on top of next-20190628 the problem
-> is not observed any more. date, ping, etc. seems to be working well.
-> 
-> # date
-> Fri Jun 28 16:39:22 UTC 2019
-> #
-> # systemctl stop systemd-timesyncd
-> #  
-> # date 062818392019
-> Fri Jun 28 18:39:00 UTC 2019
-> # date
-> Fri Jun 28 18:39:01 UTC 2019
-> # 
-> # date 062818432019; date
-> Fri Jun 28 18:43:00 UTC 2019
-> Fri Jun 28 18:43:00 UTC 2019
-> # date
-> Fri Jun 28 18:43:04 UTC 2019
->
+> I was waiting for Rob's ack for the driver, but with the merge window
+> coming, I will apply it tomorrow. The bindings are simple enough.
 
-This seems ok, thanks for spending some time to test our patches against your board.
+The I2C driver is now available in linux-next. Could you please
+push this patch too?
 
-If I may, I would like to ask to you one favor, could you please keep an eye on
-next and once those patches are merged repeat the test?
-
-I want just to make sure that the regression does not reappear.
-
-Have a nice weekend.
-
-> --
-> Regards,
-> Sylwester
-> 
-
--- 
-Regards,
-Vincenzo
+Thanks,
+Stefan
