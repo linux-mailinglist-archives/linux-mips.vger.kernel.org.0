@@ -2,93 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EAE5ACA1
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jun 2019 18:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B2D5AD25
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jun 2019 21:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726867AbfF2QxK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Jun 2019 12:53:10 -0400
-Received: from smtprelay0072.hostedemail.com ([216.40.44.72]:46295 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726837AbfF2QxK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 29 Jun 2019 12:53:10 -0400
-X-Greylist: delayed 456 seconds by postgrey-1.27 at vger.kernel.org; Sat, 29 Jun 2019 12:53:09 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave03.hostedemail.com (Postfix) with ESMTP id D68C61801FA36;
-        Sat, 29 Jun 2019 16:45:34 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 72872182CF666;
-        Sat, 29 Jun 2019 16:45:32 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::::::::::::::::::::::,RULES_HIT:41:355:379:599:800:960:968:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1431:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2828:3138:3139:3140:3141:3142:3353:3622:3865:3866:3867:3868:3870:3871:3872:3874:4037:4321:5007:6742:10004:10400:10848:10967:11232:11658:11914:12043:12297:12663:12740:12760:12895:13069:13138:13231:13311:13357:13439:14096:14097:14181:14659:14721:21080:21433:21627:30034:30054:30070:30090:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.14.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:24,LUA_SUMMARY:none
-X-HE-Tag: wood26_67b7f2b025644
-X-Filterd-Recvd-Size: 3038
-Received: from XPS-9350 (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
-        (Authenticated sender: joe@perches.com)
-        by omf01.hostedemail.com (Postfix) with ESMTPA;
-        Sat, 29 Jun 2019 16:45:12 +0000 (UTC)
-Message-ID: <c3b83ba7f9b003dd4fb9cad885461ce93165dc04.camel@perches.com>
-Subject: Re: [PATCH V2] include: linux: Regularise the use of FIELD_SIZEOF
- macro
-From:   Joe Perches <joe@perches.com>
-To:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Andreas Dilger <adilger@dilger.ca>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shyam Saini <shyam.saini@amarulasolutions.com>,
-        kernel-hardening@lists.openwall.com, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev@vger.kernel.org, linux-ext4 <linux-ext4@vger.kernel.org>,
-        devel@lists.orangefs.org, linux-mm@kvack.org,
-        linux-sctp@vger.kernel.org, bpf@vger.kernel.org,
-        kvm@vger.kernel.org, mayhs11saini@gmail.com
-Date:   Sat, 29 Jun 2019 09:45:10 -0700
-In-Reply-To: <20190629142510.GA10629@avx2>
-References: <20190611193836.2772-1-shyam.saini@amarulasolutions.com>
-         <20190611134831.a60c11f4b691d14d04a87e29@linux-foundation.org>
-         <6DCAE4F8-3BEC-45F2-A733-F4D15850B7F3@dilger.ca>
-         <20190629142510.GA10629@avx2>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
+        id S1726897AbfF2Teh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Jun 2019 15:34:37 -0400
+Received: from mail-yb1-f195.google.com ([209.85.219.195]:45875 "EHLO
+        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726909AbfF2Teh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jun 2019 15:34:37 -0400
+Received: by mail-yb1-f195.google.com with SMTP id j133so1390187ybj.12
+        for <linux-mips@vger.kernel.org>; Sat, 29 Jun 2019 12:34:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=TrEAkRNd58OxQm438HJ/LWyeqxT458dpIIN9rnAAj1U=;
+        b=HFHXV38GwofcAY4vLufShERlXUE5rVUMWzsssyqAnf0TGWxiz1zoetJzFqA0bstvbL
+         AU0mOgyXmRgYKWklGPZcp6I3oEkTvzO4rBRpwHqzyG8WuXzhuKX4mizCX9zqbnPS5MOZ
+         T2tb0XGFjnhBKrDXR+37mvesIMo8lpJUcL9dUz8C9J9DyYqu+EguGocJFOnGzRIGrJOf
+         c0jV99HS4ygDUN07KVog9GTaPnlucLiqO7JkYzfGFh/SCaftOgacj8FofJ/2c1gAn/fI
+         wh9SNlrIJtYIpuC9U+pSi8j5OqpG5TaDp3eOICbaZr8rLis5//S33c7cSkvzYykqeZmR
+         5PNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=TrEAkRNd58OxQm438HJ/LWyeqxT458dpIIN9rnAAj1U=;
+        b=VeWMzDUpy9CPoKzab/EEEJZqpO6YiH2bGw+QlN2NFk4ULXKm0EqzdSghC1yK2kZ6JZ
+         8NmuIqKKJraWk/VYPshXwQqT4oZmIq6z6UxUJHwGmhI683aZmnjLDLHkZyol8H16BA1R
+         xu8YilZJ/OygCKvWBp1Gmv4CgyxG32O9ussqfHYPmzNYBZrFD02M5QSykjma4BNopcWq
+         DjG/aN+w5qgFaNGxLGocEl2XO8IwLIBENy8cxPzbKfKGZs6hIPWK6+PyIlRFTza4M6ZF
+         lgTIpI20dPRNAxnaxuNP/F8KtRVKHzBIjGp3LQ/bQ6N8q68a4XZFSJWp+7B1SoOBA/p3
+         65Eg==
+X-Gm-Message-State: APjAAAWqGNscOuCgpk7G+MP67xUGodHkZC7cn1gcTLICghBN8/3iE2Uq
+        Ec1rMVUv0AWdyuD/zEin5P7UU6a2
+X-Google-Smtp-Source: APXvYqzRiSRA0T4W+O6+G2DG6W6ZneN9eLVL1bJJr+1jHQTST8O6iis8j6AaUI0CKoO/xvoJSbbECA==
+X-Received: by 2002:a25:7901:: with SMTP id u1mr10207281ybc.209.1561836875693;
+        Sat, 29 Jun 2019 12:34:35 -0700 (PDT)
+Received: from mail-yw1-f45.google.com (mail-yw1-f45.google.com. [209.85.161.45])
+        by smtp.gmail.com with ESMTPSA id g189sm1529894ywa.20.2019.06.29.12.34.34
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Sat, 29 Jun 2019 12:34:34 -0700 (PDT)
+Received: by mail-yw1-f45.google.com with SMTP id n127so3281436ywd.9
+        for <linux-mips@vger.kernel.org>; Sat, 29 Jun 2019 12:34:34 -0700 (PDT)
+X-Received: by 2002:a81:4807:: with SMTP id v7mr8813316ywa.494.1561836873634;
+ Sat, 29 Jun 2019 12:34:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20190629122419.19026-1-opensource@vdorst.com>
+In-Reply-To: <20190629122419.19026-1-opensource@vdorst.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Sat, 29 Jun 2019 15:33:57 -0400
+X-Gmail-Original-Message-ID: <CA+FuTSdr8HCRJTE8pEVxsga3N-xx-fEAxzKAAyPFWH6doVRHbQ@mail.gmail.com>
+Message-ID: <CA+FuTSdr8HCRJTE8pEVxsga3N-xx-fEAxzKAAyPFWH6doVRHbQ@mail.gmail.com>
+Subject: Re: [PATCH] net: ethernet: mediatek: Fix overlapping capability bits.
+To:     =?UTF-8?Q?Ren=C3=A9_van_Dorst?= <opensource@vdorst.com>
+Cc:     sean.wang@mediatek.com, f.fainelli@gmail.com,
+        linux@armlinux.org.uk, David Miller <davem@davemloft.net>,
+        matthias.bgg@gmail.com, andrew@lunn.ch, vivien.didelot@gmail.com,
+        frank-w@public-files.de,
+        Network Development <netdev@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 2019-06-29 at 17:25 +0300, Alexey Dobriyan wrote:
-> On Tue, Jun 11, 2019 at 03:00:10PM -0600, Andreas Dilger wrote:
-> > On Jun 11, 2019, at 2:48 PM, Andrew Morton <akpm@linux-foundation.org> wrote:
-> > > On Wed, 12 Jun 2019 01:08:36 +0530 Shyam Saini <shyam.saini@amarulasolutions.com> wrote:
-> > I did a check, and FIELD_SIZEOF() is used about 350x, while sizeof_field()
-> > is about 30x, and SIZEOF_FIELD() is only about 5x.
-> > 
-> > That said, I'm much more in favour of "sizeof_field()" or "sizeof_member()"
-> > than FIELD_SIZEOF().  Not only does that better match "offsetof()", with
-> > which it is closely related, but is also closer to the original "sizeof()".
-> > 
-> > Since this is a rather trivial change, it can be split into a number of
-> > patches to get approval/landing via subsystem maintainers, and there is no
-> > huge urgency to remove the original macros until the users are gone.  It
-> > would make sense to remove SIZEOF_FIELD() and sizeof_field() quickly so
-> > they don't gain more users, and the remaining FIELD_SIZEOF() users can be
-> > whittled away as the patches come through the maintainer trees.
-> 
-> The signature should be
-> 
-> 	sizeof_member(T, m)
-> 
-> it is proper English,
-> it is lowercase, so is easier to type,
-> it uses standard term (member, not field),
-> it blends in with standard "sizeof" operator,
+On Sat, Jun 29, 2019 at 8:24 AM Ren=C3=A9 van Dorst <opensource@vdorst.com>=
+ wrote:
+>
+> Both MTK_TRGMII_MT7621_CLK and MTK_PATH_BIT are defined as bit 10.
+>
+> This causes issues on non-MT7621 devices which has the
+> MTK_PATH_BIT(MTK_ETH_PATH_GMAC1_RGMII) capability set.
+> The wrong TRGMII setup code is executed.
+>
+> Moving the MTK_PATH_BIT to bit 11 fixes the issue.
+>
+> Fixes: 8efaa653a8a5 ("net: ethernet: mediatek: Add MT7621 TRGMII mode
+> support")
+> Signed-off-by: Ren=C3=A9 van Dorst <opensource@vdorst.com>
 
-yes please.
+This targets net? Please mark networking patches [PATCH net] or [PATCH
+net-next].
 
-Also, a simple script conversion applied
-immediately after an rc1 might be easiest
-rather than individual patches.
+> ---
+>  drivers/net/ethernet/mediatek/mtk_eth_soc.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/et=
+hernet/mediatek/mtk_eth_soc.h
+> index 876ce6798709..2cb8a915731c 100644
+> --- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+> +++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+> @@ -626,7 +626,7 @@ enum mtk_eth_path {
+>  #define MTK_TRGMII_MT7621_CLK          BIT(10)
+>
+>  /* Supported path present on SoCs */
+> -#define MTK_PATH_BIT(x)         BIT((x) + 10)
+>
+> +#define MTK_PATH_BIT(x)         BIT((x) + 11)
+>
 
+To avoid this happening again, perhaps make the reserved range more explici=
+t?
 
+For instance
+
+#define MTK_FIXED_BIT_LAST 10
+#define MTK_TRGMII_MT7621_CLK  BIT(MTK_FIXED_BIT_LAST)
+
+#define MTK_PATH_BIT_FIRST  (MTK_FIXED_BIT_LAST + 1)
+#define MTK_PATH_BIT_LAST (MTK_FIXED_BIT_LAST + 7)
+#define MTK_MUX_BIT_FIRST (MTK_PATH_BIT_LAST + 1)
+
+Though I imagine there are cleaner approaches. Perhaps define all
+fields as enum instead of just mtk_eth_mux and mtk_eth_path. Then
+there can be no accidental collision.
