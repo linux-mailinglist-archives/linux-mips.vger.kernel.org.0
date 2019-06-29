@@ -2,63 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF7A5A9C4
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jun 2019 11:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE0A5AADE
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jun 2019 14:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726931AbfF2JHp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Jun 2019 05:07:45 -0400
-Received: from mx1.mailbox.org ([80.241.60.212]:29448 "EHLO mx1.mailbox.org"
+        id S1726912AbfF2MYf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Jun 2019 08:24:35 -0400
+Received: from mx.0dd.nl ([5.2.79.48]:50808 "EHLO mx.0dd.nl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726818AbfF2JHo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 29 Jun 2019 05:07:44 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        id S1726892AbfF2MYf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 29 Jun 2019 08:24:35 -0400
+Received: from mail.vdorst.com (mail.vdorst.com [IPv6:fd01::250])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.mailbox.org (Postfix) with ESMTPS id C8E2C4F5FD;
-        Sat, 29 Jun 2019 11:07:42 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
-        with ESMTP id pYrem8_esLLX; Sat, 29 Jun 2019 11:07:40 +0200 (CEST)
-Subject: Re: [PATCH 5/8 v2] MIPS: ralink: mt7628a.dtsi: Add I2C controller DT
- node
-To:     Paul Burton <paul.burton@mips.com>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>,
-        John Crispin <john@phrozen.org>
-References: <20190527091323.4582-1-sr@denx.de>
- <20190527091323.4582-5-sr@denx.de>
- <20190528204119.g7kvutxcprhwo56d@pburton-laptop>
- <96f6564a-e45b-a082-4682-c81dde8d22d5@denx.de>
- <20190624212431.lopvs57iondijlyh@pburton-laptop>
- <20190624220729.GA8885@kunai>
-From:   Stefan Roese <sr@denx.de>
-Message-ID: <a0300e23-4b81-a9a1-a481-255368c7eccc@denx.de>
-Date:   Sat, 29 Jun 2019 11:07:37 +0200
+        by mx.0dd.nl (Postfix) with ESMTPS id E3A885FE8C;
+        Sat, 29 Jun 2019 14:24:32 +0200 (CEST)
+Authentication-Results: mx.0dd.nl;
+        dkim=pass (2048-bit key) header.d=vdorst.com header.i=@vdorst.com header.b="navb87/B";
+        dkim-atps=neutral
+Received: from pc-rene.vdorst.com (pc-rene.vdorst.com [192.168.2.125])
+        by mail.vdorst.com (Postfix) with ESMTPA id 9732F1CE6915;
+        Sat, 29 Jun 2019 14:24:32 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.vdorst.com 9732F1CE6915
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vdorst.com;
+        s=default; t=1561811072;
+        bh=S+aJCigz6fwF72k/RqnynZOytfAg53dL/P7AVyy/NFk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=navb87/BGORIBmdir2smL2aIK21EEZq2HP+PltawpWQYfmzKTjVx+3QYR67t7AhRX
+         L7UDL5GxjJt/Id8r6I6XZZ7rqhVh/KtetRwoi3HNDedY6/TeydYoZHgFcVew8CUOzh
+         bWNsobgeyJ6htLWRdiQ1DpEJZX2VLrl8sOkNUTi6iIAzyJ6sEsWVkF+F6CI08eJ/1G
+         IPKKdGoPV3wurvB4l4/UZG0x9/7RHUoMqw4dsYVSOAOJPC+LSLo3QWxBv93lg3uFXK
+         97R3GO41An50a3+Z8CD1065fnJjMAr/Gvf8aFWyuKmAnc6/LdVyzrCwWmtkOFDSLvH
+         gM+XEOYFWBMtw==
+From:   =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
+To:     sean.wang@mediatek.com, f.fainelli@gmail.com,
+        linux@armlinux.org.uk, davem@davemloft.net, matthias.bgg@gmail.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com
+Cc:     frank-w@public-files.de, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
+Subject: [PATCH] net: ethernet: mediatek: Fix overlapping capability bits.
+Date:   Sat, 29 Jun 2019 14:24:19 +0200
+Message-Id: <20190629122419.19026-1-opensource@vdorst.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <20190624220729.GA8885@kunai>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+Both MTK_TRGMII_MT7621_CLK and MTK_PATH_BIT are defined as bit 10.
 
-On 25.06.19 00:07, Wolfram Sang wrote:
-> 
->> OK, I don't see the driver queued up yet so in the meantime I've applied
->> patches 1-4 & 6-7. If you could ping me or resend this one once the I2C
->> binding is in-tree, that would be wonderful.
-> 
-> I was waiting for Rob's ack for the driver, but with the merge window
-> coming, I will apply it tomorrow. The bindings are simple enough.
+This causes issues on non-MT7621 devices which has the
+MTK_PATH_BIT(MTK_ETH_PATH_GMAC1_RGMII) capability set.
+The wrong TRGMII setup code is executed.
 
-The I2C driver is now available in linux-next. Could you please
-push this patch too?
+Moving the MTK_PATH_BIT to bit 11 fixes the issue.
 
-Thanks,
-Stefan
+Fixes: 8efaa653a8a5 ("net: ethernet: mediatek: Add MT7621 TRGMII mode
+support")
+Signed-off-by: René van Dorst <opensource@vdorst.com>
+---
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index 876ce6798709..2cb8a915731c 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -626,7 +626,7 @@ enum mtk_eth_path {
+ #define MTK_TRGMII_MT7621_CLK		BIT(10)
+ 
+ /* Supported path present on SoCs */
+-#define MTK_PATH_BIT(x)         BIT((x) + 10)
++#define MTK_PATH_BIT(x)         BIT((x) + 11)
+ 
+ #define MTK_GMAC1_RGMII \
+ 	(MTK_PATH_BIT(MTK_ETH_PATH_GMAC1_RGMII) | MTK_RGMII)
+-- 
+2.20.1
+
