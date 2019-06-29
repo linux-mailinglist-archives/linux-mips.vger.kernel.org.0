@@ -2,85 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 928C25AAE1
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jun 2019 14:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 340825ABC1
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jun 2019 16:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726916AbfF2MZN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Jun 2019 08:25:13 -0400
-Received: from mx.0dd.nl ([5.2.79.48]:50844 "EHLO mx.0dd.nl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726892AbfF2MZN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 29 Jun 2019 08:25:13 -0400
-Received: from mail.vdorst.com (mail.vdorst.com [IPv6:fd01::250])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx.0dd.nl (Postfix) with ESMTPS id B87C45FE8C;
-        Sat, 29 Jun 2019 14:25:10 +0200 (CEST)
-Authentication-Results: mx.0dd.nl;
-        dkim=pass (2048-bit key) header.d=vdorst.com header.i=@vdorst.com header.b="aEffR9Jl";
-        dkim-atps=neutral
-Received: from pc-rene.vdorst.com (pc-rene.vdorst.com [192.168.2.125])
-        by mail.vdorst.com (Postfix) with ESMTPA id 84F421CE691F;
-        Sat, 29 Jun 2019 14:25:10 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.vdorst.com 84F421CE691F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vdorst.com;
-        s=default; t=1561811110;
-        bh=Bu6E7/v0dN+ECBnl6aRpZhpeAg3S+W/5IW/5FrwWJIw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=aEffR9JlqHiIo6LHHQKWWJmHDp7ZdKOWTyteHfr77OCeZZIhlA+nrzJ+XuokwILvR
-         htzgQ0zUQgfdNUOMlKDFxkq6p0Ik1aPSMzjd8l1ftgQcJ07EtWNx0k5yk/8zhf8Eqk
-         jOauos5ZEFrB1uenxLCF6/ai3m9frVJskIJeXyLMhirvNH2YfBenbpG1NAWEmASqBa
-         LFOcaw30CHft9da3TEu4gj0fO4rA2pwAakO09Ug306FTzEiIr1Hu/PJS2mf4+CoFTa
-         CBEIilfylObw3ok9aZQrJfx2Bb6DxrSibeJQNHZYRInnh8acA4C1yneM4MiCCNyYuC
-         mDFbvn86S9ybg==
-From:   =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
-To:     sean.wang@mediatek.com, f.fainelli@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net, matthias.bgg@gmail.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com
-Cc:     frank-w@public-files.de, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
-Subject: [PATCH] net: ethernet: mediatek: Allow non TRGMII mode with MT7621 DDR2 devices
-Date:   Sat, 29 Jun 2019 14:24:51 +0200
-Message-Id: <20190629122451.19578-1-opensource@vdorst.com>
-X-Mailer: git-send-email 2.20.1
+        id S1726801AbfF2OZb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Jun 2019 10:25:31 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:33353 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726785AbfF2OZb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jun 2019 10:25:31 -0400
+Received: by mail-wm1-f68.google.com with SMTP id h19so11225072wme.0;
+        Sat, 29 Jun 2019 07:25:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=tSfTfCg1RYrQS9+orWf92BVXcSGyjMupz270+2KJ+Us=;
+        b=Wmn42cCjIZF370922nlT8XBZNT0vFC3qdUoivrJz5yLafRIjdx1Vw+bUvno+QUBVO5
+         oMyQcmwqGx4DE3Y07CmSTM0IATWqZAW8kgg+hDEKwh+1CP4NznlAWonwVsCaGpQLaVCV
+         I2vA/VdkUZjqS9WvauRGJBO3Xjdwe01bpXzqQP8wAMh3LJ6yI1E5Z9SfpRw+TuNVA5cx
+         Mol2Xo2HUenKPsAtO6b1Hxjmm06+PdB0ii0cFoQihuSTWnRJjwjpf6NZuH7lsl3/21RK
+         LnPOrpaBytkjll+vsC5zrv5VKacw2e2sTlF82+ldUSC/dM1uFOjAFEnxgQGkqlBXSG7l
+         +TOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tSfTfCg1RYrQS9+orWf92BVXcSGyjMupz270+2KJ+Us=;
+        b=XaIdppMftJuD3uEwrow4pHAKBqgnJbPuLGiMRhssI+Hi3bgImFGA5HEdpi25c/1Fam
+         kfrGr6s4j2Ag2+IpaXvJQ1wqR9kj99rW1Z9mGEZZeACRq5S+FAzzSPBFWuPSYj3vdx5u
+         SAmYhMKCWKk4OFGZMo6NncAb3sIA1aEwgiIUCZ1Ub39EFQjYPGqyoLkYXSFqj7c7srzh
+         0aItlNF9bi+jesdKebazgVPOIH5IXFT/VtdhhVgTlSaTtOWT0jOG6xpphccPe6sNt1eS
+         I+tNrBI3fDFRZJHl55w9shqt07ZneFt5sQjQUSSVSer6qTCcpkTK8Duullqe0Kfgo8rx
+         J0iA==
+X-Gm-Message-State: APjAAAWpj2QdGaAcPzCg3ksEjKAX/RGqLpODhql+FbQWJxaANIrHIPHC
+        XgZFz2NOWutr2t8NaGyiQg==
+X-Google-Smtp-Source: APXvYqzYjeGlAIXCK0Otnr3tBdPOmwP6gFHgUXBBLaR5nRWD1D7mhQsGKJ7ZXMMjG4yeTA5UDqjZKg==
+X-Received: by 2002:a1c:dc46:: with SMTP id t67mr9957034wmg.159.1561818328264;
+        Sat, 29 Jun 2019 07:25:28 -0700 (PDT)
+Received: from avx2 ([46.53.248.49])
+        by smtp.gmail.com with ESMTPSA id g123sm3503855wme.12.2019.06.29.07.25.26
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 29 Jun 2019 07:25:27 -0700 (PDT)
+Date:   Sat, 29 Jun 2019 17:25:10 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Andreas Dilger <adilger@dilger.ca>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shyam Saini <shyam.saini@amarulasolutions.com>,
+        kernel-hardening@lists.openwall.com, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        netdev@vger.kernel.org, linux-ext4 <linux-ext4@vger.kernel.org>,
+        devel@lists.orangefs.org, linux-mm@kvack.org,
+        linux-sctp@vger.kernel.org, bpf@vger.kernel.org,
+        kvm@vger.kernel.org, mayhs11saini@gmail.com
+Subject: Re: [PATCH V2] include: linux: Regularise the use of FIELD_SIZEOF
+ macro
+Message-ID: <20190629142510.GA10629@avx2>
+References: <20190611193836.2772-1-shyam.saini@amarulasolutions.com>
+ <20190611134831.a60c11f4b691d14d04a87e29@linux-foundation.org>
+ <6DCAE4F8-3BEC-45F2-A733-F4D15850B7F3@dilger.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6DCAE4F8-3BEC-45F2-A733-F4D15850B7F3@dilger.ca>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-No reason to error out on a MT7621 device with DDR2 memory when non
-TRGMII mode is selected.
-Only MT7621 DDR2 clock setup is not supported for TRGMII mode.
-But non TRGMII mode doesn't need any special clock setup.
+On Tue, Jun 11, 2019 at 03:00:10PM -0600, Andreas Dilger wrote:
+> On Jun 11, 2019, at 2:48 PM, Andrew Morton <akpm@linux-foundation.org> wrote:
+> > 
+> > On Wed, 12 Jun 2019 01:08:36 +0530 Shyam Saini <shyam.saini@amarulasolutions.com> wrote:
 
-Signed-off-by: René van Dorst <opensource@vdorst.com>
----
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+> I did a check, and FIELD_SIZEOF() is used about 350x, while sizeof_field()
+> is about 30x, and SIZEOF_FIELD() is only about 5x.
+> 
+> That said, I'm much more in favour of "sizeof_field()" or "sizeof_member()"
+> than FIELD_SIZEOF().  Not only does that better match "offsetof()", with
+> which it is closely related, but is also closer to the original "sizeof()".
+> 
+> Since this is a rather trivial change, it can be split into a number of
+> patches to get approval/landing via subsystem maintainers, and there is no
+> huge urgency to remove the original macros until the users are gone.  It
+> would make sense to remove SIZEOF_FIELD() and sizeof_field() quickly so
+> they don't gain more users, and the remaining FIELD_SIZEOF() users can be
+> whittled away as the patches come through the maintainer trees.
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index 066712f2e985..b20b3a5a1ebb 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -139,9 +139,12 @@ static int mt7621_gmac0_rgmii_adjust(struct mtk_eth *eth,
- {
- 	u32 val;
- 
--	/* Check DDR memory type. Currently DDR2 is not supported. */
-+	/* Check DDR memory type.
-+	 * Currently TRGMII mode with DDR2 memory is not supported.
-+	 */
- 	regmap_read(eth->ethsys, ETHSYS_SYSCFG, &val);
--	if (val & SYSCFG_DRAM_TYPE_DDR2) {
-+	if (interface == PHY_INTERFACE_MODE_TRGMII &&
-+	    val & SYSCFG_DRAM_TYPE_DDR2) {
- 		dev_err(eth->dev,
- 			"TRGMII mode with DDR2 memory is not supported!\n");
- 		return -EOPNOTSUPP;
--- 
-2.20.1
+The signature should be
 
+	sizeof_member(T, m)
+
+it is proper English,
+it is lowercase, so is easier to type,
+it uses standard term (member, not field),
+it blends in with standard "sizeof" operator,
