@@ -2,123 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B2D5AD25
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jun 2019 21:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8AC05AE52
+	for <lists+linux-mips@lfdr.de>; Sun, 30 Jun 2019 06:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726897AbfF2Teh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Jun 2019 15:34:37 -0400
-Received: from mail-yb1-f195.google.com ([209.85.219.195]:45875 "EHLO
-        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726909AbfF2Teh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jun 2019 15:34:37 -0400
-Received: by mail-yb1-f195.google.com with SMTP id j133so1390187ybj.12
-        for <linux-mips@vger.kernel.org>; Sat, 29 Jun 2019 12:34:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=TrEAkRNd58OxQm438HJ/LWyeqxT458dpIIN9rnAAj1U=;
-        b=HFHXV38GwofcAY4vLufShERlXUE5rVUMWzsssyqAnf0TGWxiz1zoetJzFqA0bstvbL
-         AU0mOgyXmRgYKWklGPZcp6I3oEkTvzO4rBRpwHqzyG8WuXzhuKX4mizCX9zqbnPS5MOZ
-         T2tb0XGFjnhBKrDXR+37mvesIMo8lpJUcL9dUz8C9J9DyYqu+EguGocJFOnGzRIGrJOf
-         c0jV99HS4ygDUN07KVog9GTaPnlucLiqO7JkYzfGFh/SCaftOgacj8FofJ/2c1gAn/fI
-         wh9SNlrIJtYIpuC9U+pSi8j5OqpG5TaDp3eOICbaZr8rLis5//S33c7cSkvzYykqeZmR
-         5PNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TrEAkRNd58OxQm438HJ/LWyeqxT458dpIIN9rnAAj1U=;
-        b=VeWMzDUpy9CPoKzab/EEEJZqpO6YiH2bGw+QlN2NFk4ULXKm0EqzdSghC1yK2kZ6JZ
-         8NmuIqKKJraWk/VYPshXwQqT4oZmIq6z6UxUJHwGmhI683aZmnjLDLHkZyol8H16BA1R
-         xu8YilZJ/OygCKvWBp1Gmv4CgyxG32O9ussqfHYPmzNYBZrFD02M5QSykjma4BNopcWq
-         DjG/aN+w5qgFaNGxLGocEl2XO8IwLIBENy8cxPzbKfKGZs6hIPWK6+PyIlRFTza4M6ZF
-         lgTIpI20dPRNAxnaxuNP/F8KtRVKHzBIjGp3LQ/bQ6N8q68a4XZFSJWp+7B1SoOBA/p3
-         65Eg==
-X-Gm-Message-State: APjAAAWqGNscOuCgpk7G+MP67xUGodHkZC7cn1gcTLICghBN8/3iE2Uq
-        Ec1rMVUv0AWdyuD/zEin5P7UU6a2
-X-Google-Smtp-Source: APXvYqzRiSRA0T4W+O6+G2DG6W6ZneN9eLVL1bJJr+1jHQTST8O6iis8j6AaUI0CKoO/xvoJSbbECA==
-X-Received: by 2002:a25:7901:: with SMTP id u1mr10207281ybc.209.1561836875693;
-        Sat, 29 Jun 2019 12:34:35 -0700 (PDT)
-Received: from mail-yw1-f45.google.com (mail-yw1-f45.google.com. [209.85.161.45])
-        by smtp.gmail.com with ESMTPSA id g189sm1529894ywa.20.2019.06.29.12.34.34
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Sat, 29 Jun 2019 12:34:34 -0700 (PDT)
-Received: by mail-yw1-f45.google.com with SMTP id n127so3281436ywd.9
-        for <linux-mips@vger.kernel.org>; Sat, 29 Jun 2019 12:34:34 -0700 (PDT)
-X-Received: by 2002:a81:4807:: with SMTP id v7mr8813316ywa.494.1561836873634;
- Sat, 29 Jun 2019 12:34:33 -0700 (PDT)
+        id S1725978AbfF3Ekt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 30 Jun 2019 00:40:49 -0400
+Received: from foss.arm.com ([217.140.110.172]:44468 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725771AbfF3Eks (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 30 Jun 2019 00:40:48 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A8E728;
+        Sat, 29 Jun 2019 21:40:47 -0700 (PDT)
+Received: from [192.168.0.129] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5ECD73F706;
+        Sat, 29 Jun 2019 21:40:37 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [PATCH] mm: Generalize and rename notify_page_fault() as
+ kprobe_page_fault()
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michal Hocko <mhocko@suse.com>, linux-ia64@vger.kernel.org,
+        linux-sh@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Paul Mackerras <paulus@samba.org>, sparclinux@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-s390@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Hogan <jhogan@kernel.org>,
+        linux-snps-arc@lists.infradead.org,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Tony Luck <tony.luck@intel.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>, linux-mips@vger.kernel.org,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>
+References: <1560420444-25737-1-git-send-email-anshuman.khandual@arm.com>
+ <20190629145009.GA28613@roeck-us.net>
+Message-ID: <78863cd0-8cb5-c4fd-ed06-b1136bdbb6ef@arm.com>
+Date:   Sun, 30 Jun 2019 10:11:03 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-References: <20190629122419.19026-1-opensource@vdorst.com>
-In-Reply-To: <20190629122419.19026-1-opensource@vdorst.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Sat, 29 Jun 2019 15:33:57 -0400
-X-Gmail-Original-Message-ID: <CA+FuTSdr8HCRJTE8pEVxsga3N-xx-fEAxzKAAyPFWH6doVRHbQ@mail.gmail.com>
-Message-ID: <CA+FuTSdr8HCRJTE8pEVxsga3N-xx-fEAxzKAAyPFWH6doVRHbQ@mail.gmail.com>
-Subject: Re: [PATCH] net: ethernet: mediatek: Fix overlapping capability bits.
-To:     =?UTF-8?Q?Ren=C3=A9_van_Dorst?= <opensource@vdorst.com>
-Cc:     sean.wang@mediatek.com, f.fainelli@gmail.com,
-        linux@armlinux.org.uk, David Miller <davem@davemloft.net>,
-        matthias.bgg@gmail.com, andrew@lunn.ch, vivien.didelot@gmail.com,
-        frank-w@public-files.de,
-        Network Development <netdev@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190629145009.GA28613@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jun 29, 2019 at 8:24 AM Ren=C3=A9 van Dorst <opensource@vdorst.com>=
- wrote:
->
-> Both MTK_TRGMII_MT7621_CLK and MTK_PATH_BIT are defined as bit 10.
->
-> This causes issues on non-MT7621 devices which has the
-> MTK_PATH_BIT(MTK_ETH_PATH_GMAC1_RGMII) capability set.
-> The wrong TRGMII setup code is executed.
->
-> Moving the MTK_PATH_BIT to bit 11 fixes the issue.
->
-> Fixes: 8efaa653a8a5 ("net: ethernet: mediatek: Add MT7621 TRGMII mode
-> support")
-> Signed-off-by: Ren=C3=A9 van Dorst <opensource@vdorst.com>
+Hello Guenter,
 
-This targets net? Please mark networking patches [PATCH net] or [PATCH
-net-next].
+On 06/29/2019 08:20 PM, Guenter Roeck wrote:
+> Hi,
+> 
+> On Thu, Jun 13, 2019 at 03:37:24PM +0530, Anshuman Khandual wrote:
+>> Architectures which support kprobes have very similar boilerplate around
+>> calling kprobe_fault_handler(). Use a helper function in kprobes.h to unify
+>> them, based on the x86 code.
+>>
+>> This changes the behaviour for other architectures when preemption is
+>> enabled. Previously, they would have disabled preemption while calling the
+>> kprobe handler. However, preemption would be disabled if this fault was
+>> due to a kprobe, so we know the fault was not due to a kprobe handler and
+>> can simply return failure.
+>>
+>> This behaviour was introduced in the commit a980c0ef9f6d ("x86/kprobes:
+>> Refactor kprobes_fault() like kprobe_exceptions_notify()")
+>>
+> 
+> With this patch applied, parisc:allmodconfig images no longer build.
+> 
+> In file included from arch/parisc/mm/fixmap.c:8:
+> include/linux/kprobes.h: In function 'kprobe_page_fault':
+> include/linux/kprobes.h:477:9: error:
+> 	implicit declaration of function 'kprobe_fault_handler'; did you mean 'kprobe_page_fault'?
 
-> ---
->  drivers/net/ethernet/mediatek/mtk_eth_soc.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/et=
-hernet/mediatek/mtk_eth_soc.h
-> index 876ce6798709..2cb8a915731c 100644
-> --- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-> +++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-> @@ -626,7 +626,7 @@ enum mtk_eth_path {
->  #define MTK_TRGMII_MT7621_CLK          BIT(10)
->
->  /* Supported path present on SoCs */
-> -#define MTK_PATH_BIT(x)         BIT((x) + 10)
->
-> +#define MTK_PATH_BIT(x)         BIT((x) + 11)
->
+Yikes.. Arch parisc does not even define (unlike mips which did but never exported)
+now required function kprobe_fault_handler() when CONFIG_KPROBES is enabled.
 
-To avoid this happening again, perhaps make the reserved range more explici=
-t?
+I believe rather than defining one stub version only for parsic it would be better
+to have an weak symbol generic stub definition for kprobe_fault_handler() in file
+include/linux/kprobes.h when CONFIG_KPROBES is enabled along side the other stub
+definition when !CONFIG_KPROBES. But arch which wants to use kprobe_page_fault()
+cannot use stub kprobe_fault_handler() definition and will have to provide one.
+I will probably add a comment regarding this.
 
-For instance
+> 
+> Reverting the patch fixes the problem.
+> 
+> Guenter
+> 
 
-#define MTK_FIXED_BIT_LAST 10
-#define MTK_TRGMII_MT7621_CLK  BIT(MTK_FIXED_BIT_LAST)
-
-#define MTK_PATH_BIT_FIRST  (MTK_FIXED_BIT_LAST + 1)
-#define MTK_PATH_BIT_LAST (MTK_FIXED_BIT_LAST + 7)
-#define MTK_MUX_BIT_FIRST (MTK_PATH_BIT_LAST + 1)
-
-Though I imagine there are cleaner approaches. Perhaps define all
-fields as enum instead of just mtk_eth_mux and mtk_eth_path. Then
-there can be no accidental collision.
+Thanks for reporting the problem.
