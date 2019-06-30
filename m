@@ -2,183 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DF05B06F
-	for <lists+linux-mips@lfdr.de>; Sun, 30 Jun 2019 17:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 047B85B0B4
+	for <lists+linux-mips@lfdr.de>; Sun, 30 Jun 2019 18:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726547AbfF3Pe6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 30 Jun 2019 11:34:58 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:43203 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726513AbfF3Pe6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 30 Jun 2019 11:34:58 -0400
-X-Originating-IP: 79.86.19.127
-Received: from [192.168.0.12] (127.19.86.79.rev.sfr.net [79.86.19.127])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 9122DE0004;
-        Sun, 30 Jun 2019 15:34:41 +0000 (UTC)
-Subject: Re: [PATCH v4 00/14] Provide generic top-down mmap layout functions
-From:   Alex Ghiti <alex@ghiti.fr>
-To:     Paul Burton <paul.burton@mips.com>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-riscv@lists.infradead.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        James Hogan <jhogan@kernel.org>, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        linux-arm-kernel@lists.infradead.org
-References: <20190526134746.9315-1-alex@ghiti.fr>
- <bfb1565d-0468-8ea8-19f9-b862faa4f1d4@ghiti.fr>
-Message-ID: <c4049021-50fd-32e5-7052-24d58b31e072@ghiti.fr>
-Date:   Sun, 30 Jun 2019 11:34:40 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        id S1726572AbfF3QsL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 30 Jun 2019 12:48:11 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52024 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726520AbfF3QsL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 30 Jun 2019 12:48:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=OOfEOtrG0Sb6Y0YzmxJZbpeIWttqDGl84dqQ7eJVwPg=; b=Xrjm5qZNG1e59Q/Wtor0r/mMS
+        tqG2QGAng39Aw1YruOo7lmewixNBu6SxOymcCzjES7SrJVB4U+CCQV9UVMOqSceTYvVOeL0i9+PmB
+        NeJkRYQTpjGcbc4OnwHn99jepPjWFvQ2anm5vbPMnTkKfTwaU5U/4jYErYBnmzG2fSw4KlJVNjI9v
+        Qj2pjZZafiafco6GYuDmPvGya40WoQKC7MRJ/DZMahAAPJICw4ZLVSgIBZWM4meNnpi7huW0fD5qU
+        i8RZWzQb8R7dVvSDpchsihU4Tzo+YQt7kidskBBBGZ2XyDfv06YrOGqhdTBqHhb2hxnGxdkQ56Tk+
+        M6twGDX0A==;
+Received: from [213.208.157.36] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hhczn-0004lL-Tx; Sun, 30 Jun 2019 16:48:08 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     paul.burton@mips.com
+Cc:     linux@roeck-us.net, linux-mips@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+Subject: [PATCH] MIPS: only select ARCH_HAS_UNCACHED_SEGMENT for non-coherent platforms
+Date:   Sun, 30 Jun 2019 18:48:05 +0200
+Message-Id: <20190630164805.12229-1-hch@lst.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <bfb1565d-0468-8ea8-19f9-b862faa4f1d4@ghiti.fr>
-Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: sv-FI
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 6/13/19 1:29 AM, Alex Ghiti wrote:
-> On 5/26/19 9:47 AM, Alexandre Ghiti wrote:
->> This series introduces generic functions to make top-down mmap layout
->> easily accessible to architectures, in particular riscv which was
->> the initial goal of this series.
->> The generic implementation was taken from arm64 and used successively
->> by arm, mips and finally riscv.
->>
->> Note that in addition the series fixes 2 issues:
->> - stack randomization was taken into account even if not necessary.
->> - [1] fixed an issue with mmap base which did not take into account
->>    randomization but did not report it to arm and mips, so by moving
->>    arm64 into a generic library, this problem is now fixed for both
->>    architectures.
->>
->> This work is an effort to factorize architecture functions to avoid
->> code duplication and oversights as in [1].
->>
->> [1]: 
->> https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1429066.html
->>
->> Changes in v4:
->>    - Make ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT select 
->> ARCH_HAS_ELF_RANDOMIZE
->>      by default as suggested by Kees,
->>    - ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT depends on MMU and defines 
->> the
->>      functions needed by ARCH_HAS_ELF_RANDOMIZE => architectures that 
->> use
->>      the generic mmap topdown functions cannot have 
->> ARCH_HAS_ELF_RANDOMIZE
->>      selected without MMU, but I think it's ok since randomization 
->> without
->>      MMU does not add much security anyway.
->>    - There is no common API to determine if a process is 32b, so I 
->> came up with
->>      !IS_ENABLED(CONFIG_64BIT) || is_compat_task() in [PATCH v4 12/14].
->>    - Mention in the change log that x86 already takes care of not 
->> offseting mmap
->>      base address if the task does not want randomization.
->>    - Re-introduce a comment that should not have been removed.
->>    - Add Reviewed/Acked-By from Paul, Christoph and Kees, thank you 
->> for that.
->>    - I tried to minimize the changes from the commits in v3 in order 
->> to make
->>      easier the review of the v4, the commits changed or added are:
->>      - [PATCH v4 5/14]
->>      - [PATCH v4 8/14]
->>      - [PATCH v4 11/14]
->>      - [PATCH v4 12/14]
->>      - [PATCH v4 13/14]
->
-> Hi Paul,
->
-> Compared to the previous version you already acked, patches 11, 12 and 13
-> would need your feedback, do you have time to take a look at them ?
->
-> Hope I don't bother you,
->
-> Thanks,
->
-> Alex
->
+While mips might architecturally have the uncached segment all the time,
+the infrastructure to use it is only need on platforms where DMA is
+at least partially incoherent.  Only select it for those configuration
+to fix a build failure as the arch_dma_prep_coherent symbol is also only
+provided for non-coherent platforms.
 
-Hi Paul,
+Fixes: 2e96e04d25 ("MIPS: use the generic uncached segment support in dma-direct")
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ arch/mips/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Would you have time to give your feedback on patches 11, 12 and 13 ?
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 61a390c2f2c1..caf480275a31 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -8,7 +8,6 @@ config MIPS
+ 	select ARCH_HAS_ELF_RANDOMIZE
+ 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+ 	select ARCH_HAS_UBSAN_SANITIZE_ALL
+-	select ARCH_HAS_UNCACHED_SEGMENT
+ 	select ARCH_SUPPORTS_UPROBES
+ 	select ARCH_USE_BUILTIN_BSWAP
+ 	select ARCH_USE_CMPXCHG_LOCKREF if 64BIT
+@@ -1120,6 +1119,7 @@ config DMA_NONCOHERENT
+ 	bool
+ 	select ARCH_HAS_DMA_MMAP_PGPROT
+ 	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
++	select ARCH_HAS_UNCACHED_SEGMENT
+ 	select NEED_DMA_MAP_STATE
+ 	select ARCH_HAS_DMA_COHERENT_TO_PFN
+ 	select DMA_NONCOHERENT_CACHE_SYNC
+-- 
+2.20.1
 
-Thanks,
-
-Alex
-
-
->
->>
->> Changes in v3:
->>    - Split into small patches to ease review as suggested by Christoph
->>      Hellwig and Kees Cook
->>    - Move help text of new config as a comment, as suggested by 
->> Christoph
->>    - Make new config depend on MMU, as suggested by Christoph
->>
->> Changes in v2 as suggested by Christoph Hellwig:
->>    - Preparatory patch that moves randomize_stack_top
->>    - Fix duplicate config in riscv
->>    - Align #if defined on next line => this gives rise to a checkpatch
->>      warning. I found this pattern all around the tree, in the same 
->> proportion
->>      as the previous pattern which was less pretty:
->>      git grep -C 1 -n -P "^#if defined.+\|\|.*\\\\$"
->>
->> Alexandre Ghiti (14):
->>    mm, fs: Move randomize_stack_top from fs to mm
->>    arm64: Make use of is_compat_task instead of hardcoding this test
->>    arm64: Consider stack randomization for mmap base only when necessary
->>    arm64, mm: Move generic mmap layout functions to mm
->>    arm64, mm: Make randomization selected by generic topdown mmap layout
->>    arm: Properly account for stack randomization and stack guard gap
->>    arm: Use STACK_TOP when computing mmap base address
->>    arm: Use generic mmap top-down layout and brk randomization
->>    mips: Properly account for stack randomization and stack guard gap
->>    mips: Use STACK_TOP when computing mmap base address
->>    mips: Adjust brk randomization offset to fit generic version
->>    mips: Replace arch specific way to determine 32bit task with generic
->>      version
->>    mips: Use generic mmap top-down layout and brk randomization
->>    riscv: Make mmap allocation top-down by default
->>
->>   arch/Kconfig                       |  11 +++
->>   arch/arm/Kconfig                   |   2 +-
->>   arch/arm/include/asm/processor.h   |   2 -
->>   arch/arm/kernel/process.c          |   5 --
->>   arch/arm/mm/mmap.c                 |  52 --------------
->>   arch/arm64/Kconfig                 |   2 +-
->>   arch/arm64/include/asm/processor.h |   2 -
->>   arch/arm64/kernel/process.c        |   8 ---
->>   arch/arm64/mm/mmap.c               |  72 -------------------
->>   arch/mips/Kconfig                  |   2 +-
->>   arch/mips/include/asm/processor.h  |   5 --
->>   arch/mips/mm/mmap.c                |  84 ----------------------
->>   arch/riscv/Kconfig                 |  11 +++
->>   fs/binfmt_elf.c                    |  20 ------
->>   include/linux/mm.h                 |   2 +
->>   kernel/sysctl.c                    |   6 +-
->>   mm/util.c                          | 107 ++++++++++++++++++++++++++++-
->>   17 files changed, 137 insertions(+), 256 deletions(-)
->>
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
