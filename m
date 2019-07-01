@@ -2,40 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3112E5C3A0
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2019 21:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C93A5C456
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2019 22:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbfGAT13 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 1 Jul 2019 15:27:29 -0400
-Received: from smtp.gentoo.org ([140.211.166.183]:55952 "EHLO smtp.gentoo.org"
+        id S1726586AbfGAUaA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 1 Jul 2019 16:30:00 -0400
+Received: from smtp.gentoo.org ([140.211.166.183]:32894 "EHLO smtp.gentoo.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726695AbfGAT13 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 1 Jul 2019 15:27:29 -0400
+        id S1726509AbfGAUaA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 1 Jul 2019 16:30:00 -0400
 Received: from [192.168.1.13] (c-73-132-78-152.hsd1.md.comcast.net [73.132.78.152])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: kumba)
-        by smtp.gentoo.org (Postfix) with ESMTPSA id 357E7346D98;
-        Mon,  1 Jul 2019 19:27:27 +0000 (UTC)
-From:   Joshua Kinard <kumba@gentoo.org>
+        by smtp.gentoo.org (Postfix) with ESMTPSA id D4247346D99;
+        Mon,  1 Jul 2019 20:29:57 +0000 (UTC)
 Subject: Re: SGI-IP30
 To:     Carlo Pisani <carlojpisani@gmail.com>
-Cc:     Paul Burton <paul.burton@mips.com>,
+Cc:     Matt Turner <mattst88@gmail.com>,
+        Paul Burton <paul.burton@mips.com>,
         Thomas Bogendoerfer <tbogendoerfer@suse.de>,
         "Maciej W. Rozycki" <macro@linux-mips.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        =?UTF-8?Q?Ren=c3=a9_Rebe?= <rene@exactcode.com>
 References: <b201c33a-5beb-3dfb-b99b-d9b8fc6c2c64@hauke-m.de>
  <CA+QBN9A3JmvfCZkXZ2-Yd=nkQCQD48OgYEpe+Po4MuZFpmnPrQ@mail.gmail.com>
  <20190624175553.2tpepq5zsamovrra@pburton-laptop>
  <060345a6-bef2-ec17-e264-eccda29f5c8b@gentoo.org>
- <CA+QBN9CtbYmTnUNyvohifcHQ03+kURZBPJ=CQRrCw0euDe-u9A@mail.gmail.com>
+ <CAEdQ38F6gG1Ee5h6PXZ-wuxuOxAycaWBD_+hTNRjtfQHNw696g@mail.gmail.com>
+ <CA+QBN9DO9sAadwFU6kpAfBxZuTVEx8_9DUYFBs6fTA6==cVDwQ@mail.gmail.com>
+ <CA+QBN9B33Crhyahn5SXZJY8Pk7tDnhqgReuJKx5FhgguG=GXWg@mail.gmail.com>
+ <f633861c-900f-02c5-e592-2ea1c3f1f8f2@gentoo.org>
+ <CA+QBN9Bdnppin1s882OzvkOFCoWmOi_ctWkas2EsxD2mintS7w@mail.gmail.com>
+From:   Joshua Kinard <kumba@gentoo.org>
 Openpgp: preference=signencrypt
-Message-ID: <921d1771-a99e-4378-fd32-b4879a05d4d8@gentoo.org>
-Date:   Mon, 1 Jul 2019 15:27:24 -0400
+Message-ID: <5b019eaa-5e2f-b9ce-9c56-5bb0cfc253ed@gentoo.org>
+Date:   Mon, 1 Jul 2019 16:29:55 -0400
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <CA+QBN9CtbYmTnUNyvohifcHQ03+kURZBPJ=CQRrCw0euDe-u9A@mail.gmail.com>
+In-Reply-To: <CA+QBN9Bdnppin1s882OzvkOFCoWmOi_ctWkas2EsxD2mintS7w@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -44,141 +50,161 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 6/26/2019 01:49, Carlo Pisani wrote:>> SMP works fine, on my machine at
-least.  I got it working back in 4.4 a few
->> years ago, and it's largely just worked fine since then on the one machine I
->> have.
->
-> here I am with
-> - kernel v4.18.20 + Gentoo patches
-> - mips64-unknown-linux-gnu {binutils v2.29.1, gcc-v7.4.0) emerged by
-> Gentoo crossdev
->
-> crossdev --b 2.30-2 --g 8.2.0  --l 2.22-r1 --k 4.3 -s2 -A n32 -t
-> mips64-unknown-linux-gnu --without-headers -v
->
-> my Octane is
->>> hinv
->                    System: IP30
->                 Processor: 600 Mhz R14000, 2M secondary cache
->                 Processor: 600 Mhz R14000, 2M secondary cache, (cpu 1)
->               Memory size: 1536 Mbytes
->                   Network: ef0 ethernet (100/10 base-T)
->                 SCSI Disk: scsi(0)disk(1)
->                 SCSI Disk: scsi(0)disk(2)
->                 SCSI Disk: scsi(0)disk(3)
->                     Audio: RAD Audio Processor
->
-> (yes, there is no GFX, it's a headless configuration)
->
-> my test reports:
->
-> kernel type
-> - No Forced Preemption: stable
-> - Voluntary Kernel Preemption: it works, but it has some issues with
-> smp_stop() and panic()
-> - Preemptible Kernel: completely unstable, the kernel panics in 20 seconds
->
-> I have a ram-rootfs, based on uclibc/mips3-be. It's attached to the
-> kernel, so "bash" is the first process.
->
-> CONFIG_BLK_DEV_INITRD=y
-> CONFIG_INITRAMFS_SOURCE="../rootfs/mips3be-uclibc-2008"
-> CONFIG_INITRAMFS_ROOT_UID=0
-> CONFIG_INITRAMFS_ROOT_GID=0
-> CONFIG_RD_GZIP=y
->
-> I have three SCSI hard drives, and they do work, but I prefer net-booing
->
-> Once booted, it works properly. The 20-hours burning-in test is passed!
-> (two gcc sessions + nbench in a while(1) { do(); } loop )
->
-> When I exit from "bash", the kernel correctly calls the panic()
-> function, which calls ip30_machine_restart()
-> (arch/mips/sgi-ip30/ip30-power.c) but this function is not able to
-> restart the Octane, so it simply hangs and I have to manually force a
-> hardware reset. Sometimes the machine seems gone insane, and I have to
-> press the "reset" button several times before I can see the red light.
+On 7/1/2019 14:36, Carlo Pisani wrote:
+>> The Panics are probably due to some hardcoded logic in Stan's original patches
+>> I mentioned that always assume the presence of a graphics board
+> 
+> with or without the MGRAS card, I have the same behavior.
+> Which is the file you are talking about? ip30-xtalk?
 
-Yeah, I get this sometimes on a normal reboot from userland.  You usually
-have to press reset twice, one second apart.  If it works, the system
-LED/bulb will blink once, then it'll "click" and the red LED will come on
-for a few seconds indicating PROM reset.  It may be a bug in the PROM
-somewhere, or a bug in how the Octane's Linux restart code works.  The
-restart code literally just flips a specific register in HEART to trigger a
-reset.  It is possible there needs to be some special housekeeping done
-beforehand so that HEART doesn't wind up in an unknown hardware state, which
-I suspect is the underlying problem.
+The it's probably some kind of issue with the addressing math in IP30's
+headers somewhere.  As I've said before, it's not a configuration I've ever
+tried, so I never had a motivation to try and hunt it down to fix.  If I
+need to run headless, I just "setenv console=d1" and re-init the system to
+run from my serial console server.
 
+If you want to investigate, under the Gentoo-patched kernel, start looking
+in arch/mips/include/asm/mach-ip30/*.h for IP30's specific defines.  And for
+Xtalk stuff, that is in arch/mips/include/asm/xtalk/*.h.
 
-> the solution is adding "isolcpus=1" to command line. This way the
-> kernel does reboot/restart correctly.
+A lot of the changes I did there were just to add descriptive macros for
+addresses that were formerly coded as raw integers/hex.  A lot of the macros
+are never actually used anywhere, but essentially serve as documentation.
 
-I'll have to look into that kernel flag.  I haven't heard of it before.
+As far as hardwiring the graphics, Slot A actually reports in as Widget C
+during xtalk scan, because we enumerate backwards from Widget F (BaseIO):
+
+Widget | Device
+-------|--------
+  F    | BaseIO
+  E    | Unused
+  D    | PCI Shoebox
+  C    | XIO Slot A
+  B    | XIO Slot B
+  A    | XIO Slot C
+  9    | XIO Slot D
+  8    | HEART
+  0    | XBOW
+ 1-7   | Unused/Reserved
+
+The Widget assignments for XBOW, HEART, and BaseIO are apparently hardwired
+on the PCB itself.  I don't know what Widget E is for, or if it's even
+exposed anywhere, but I suspect it's simply unused based on a look at IRIX
+header files.  Widgets 1-7 are not accessible and, I think, are used
+internally by the Crossbar switch for routing stuff on the system board.
+
+I did a cursory skim of the headers, and I personally do not see where I
+have any macros locked into specific widgets that actually get used
+anywhere.  I do code in that the first graphics slot if Widget C and assign
+that to a macro, but the assigned macro isn't used in any actual code, so
+more documentation.
+
+I don't have the cycles right now to look over the C code in-depth in either
+the xtalk code (ip30-xtalk.c) or the bridge glue code (ip30-bridge.c).
+Those two are responsible for setting up the XIO bus and then probing the
+BRIDGE chips found in any of the slots.
+
+>> Is the shoehorn adapter you have the very rare Octane model, or an Origin
+>> version modified with an Octane XIO locking latch?
+> 
+> It's an origina2k modified with the XIO locking latch. With Irix, it
+> works without any problem.
+
+Generally, modifying an Origin XIO board to work on Octane does not present
+problems (I've done it myself before), but you do want to check that the
+latch is aligning the compression connector up correctly and that it's
+latching properly.  If that connector doesn't seat right, you can
+potentially have a whole host of problems, including possible damage to the
+surface pads of the connector.  From what I've heard, faulty compression
+connectors are absolute devils to debug, because the side-effects are very
+random, almost like bad memory in a PC.
 
 
-> I have also fixed the power-down function (ds1685_rtc_poweroff_ip30,
-> drivers/rtc/rtc-ds1685.c) since the kernel does not power down, it
-> simply hangs forever.
+> Anyway, it seems there are problems with the PCI, related to the BAR,
+> or to how it's configured, or to the memory window ... the kernel
+> panic complaining a "BUS error"
+> 
+> IOC3 Master Driver loaded for 0000:00:02.0
+> PCI host bridge to bus 0001:00
+> pci_bus 0001:00: root bus resource [mem 0x1a200000-0x1a9fffff]
+> pci_bus 0001:00: root bus resource [io  0x1aa00000-0x1abfffff]
+> pci_bus 0001:00: root bus resource [bus 01-ff]
+> pci 0001:00:01.0: BAR 0: assigned [mem 0x1a200000-0x1a200fff]
+> pci 0001:00:01.1: BAR 0: assigned [mem 0x1a201000-0x1a201fff]
+> pci 0001:00:01.2: BAR 0: assigned [mem 0x1a202000-0x1a2020ff]
+> ip30-bridge: 0001:00:01.0 Bar 0 with size 0x00001000 at bus 0x00000000
+> vma 0x000000b080000000 is Direct 64-bit.
+> Data bus error, epc == a8000000203c9884, ra == a8000000203c987c
+> Oops[#1]:
+> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 4.18.20-Merciless-Moray-ip30 #74
+> $ 0   : 0000000000000000 ffffffff9404fde0 900000b080000000 000000b080000000
+> $ 4   : a80000007ead6000 0000000000000000 0000000000000006 0000000000000002
+> $ 8   : a80000007ead6000 0000000000000000 0000000000000005 0000000000000000
+> $12   : a80000007fc8bfe0 000000000000fd00 0000000000000000 fffffffffffffffe
+> $16   : a80000007ead6000 900000b080000000 00000000000c0000 a8000000205f0000
+> $20   : a80000007ead6000 a8000000205b1898 00000007443a9d5a a800000020a90000
+> $24   : 0000000000000220 0000000000000000
+> $28   : a80000007fc88000 a80000007fc8bae0 0000000000000007 a8000000203c987c
+> Hi    : 0000000000008509
+> Lo    : 000000000000038b
+> epc   : a8000000203c9884 0xa8000000203c9884
+> ra    : a8000000203c987c 0xa8000000203c987c
+> Status: 9404fde3        KX SX UX KERNEL EXL IE
+> Cause : 0000001c (ExcCode 07)
+> PrId  : 00000f24 (R14000)
+> Modules linked in:
+> Process swapper/0 (pid: 1, threadinfo=00000000b9e5e6bd,
+> task=000000005215823f, tls=0000000000000000)
+> Stack : 0000000000000007 a80000007fc8bae8 a80000007fc8bae8 11a4d0c4ecae9ccd
+>         a8000000205b1868 a800000020a90000 a8000000205924e0 a8000000205924c8
+>         a80000007ead6000 a8000000205b1898 00000007443a9d5a a800000020a90000
+>         0000000000000007 a800000020301550 0000000000000007 a80000007ead6000
+>         a80000007e59ac28 a80000007e59ac00 a8000000205f0000 a800000020ac0000
+>         a800000020660000 0000000000000000 a800000020a90000 a8000000202e64ec
+>         a80000007e59ac00 a80000007ead6000 a80000007e59ac28 a8000000202e65e8
+>         a80000007e59ac18 a80000007e59ac18 a80000007e59ac00 a8000000203f5df0
+>         a800000020623a30 a80000007fc8bbe8 a80000007fc8bbe8 11a4d0c4ecae9ccd
+>         a80000007e366600 a800000020620000 a8000000205f0000 a80000007fd46b80
+>         ...
+> Call Trace:
+> [<a800000020301550>] 0xa800000020301550
+> [<a8000000202e64ec>] 0xa8000000202e64ec
+> [<a8000000202e65e8>] 0xa8000000202e65e8
+> [<a8000000203f5df0>] 0xa8000000203f5df0
+> [<a8000000203f6094>] 0xa8000000203f6094
+> [<a800000020657eb0>] 0xa800000020657eb0
+> [<a80000002034fa50>] 0xa80000002034fa50
+> [<a80000002034d58c>] 0xa80000002034d58c
+> [<a80000002063133c>] 0xa80000002063133c
+> [<a80000002034d798>] 0xa80000002034d798
+> [<a80000002034d670>] 0xa80000002034d670
+> [<a80000002034acb0>] 0xa80000002034acb0
+> [<a80000002063133c>] 0xa80000002063133c
+> [<a80000002034c5b8>] 0xa80000002034c5b8
+> [<a800000020657adc>] 0xa800000020657adc
+> [<a80000002034e1a0>] 0xa80000002034e1a0
+> [<a8000000206579a0>] 0xa8000000206579a0
+> [<a800000020004530>] 0xa800000020004530
+> [<a800000020632454>] 0xa800000020632454
+> [<a8000000204fc750>] 0xa8000000204fc750
+> [<a8000000204fc760>] 0xa8000000204fc760
+> [<a8000000204fc750>] 0xa8000000204fc750
+> [<a80000002000c168>] 0xa80000002000c168
+> 
+> Code: 02002025  1040ffdd  00408825 <8c550004> 9e12003c  0000000f
+> 32a20100  10400011  00000000
+> 
+> ---[ end trace e8faa9089454f71d ]---
 
-I believe Thomas found and fixed the bug in it recently and sent it upstream
-(or was that something else?).  I remember the shutdown function working in
-the past, but assumed something upstream broke it, or something upstream
-exposed an existing bug that causes this breakage now.
+You really need to enable debugging symbols in your kernel for stack dumps
+to have any meaning.  Those address offsets are going to be unique to your
+kernel build, so they are of no use to anyone else.
 
-
-> /*
->  * sgi-ip30
->  * ========
->  *
->  * ds1685_rtc_poweroff_ip30 - uses the RTC chip to power the system off.
->  * @pdev: pointer to platform_device structure.
->  */
-> void __noreturn
-> ds1685_rtc_poweroff_ip30(struct platform_device *pdev)
-> {
-[snip]
-
-> }
-> EXPORT_SYMBOL(ds1685_rtc_poweroff_ip30);
->
-> This source comes from kernel 2.6.17, and it works properly. Instead
-> of patching the existing ds1685_rtc_poweroff(), I have just created a
-> dedicated function ds1685_rtc_poweroff_ip30() ...
-
-Are you sure that's from 2.6.17?  I believe I cribbed the basic logic for
-RTC shutdown from O2 (IP32), which uses the same RTC chip, and I did most of
-my work on the RTC driver during the 3.x kernel series, getting rtc-ds1685.c
-added with the release of Linux 4.0 in 2015.
-
-Could you do a diff against the 4.18 kernel source so I can more easily see
-the changed logic?
-
-
-> Everything I have tried with the PCI ... doesn't work. The ShoeHorn
-> panics the kernel, the ShoeBox seems to have quirks
-
-Can you make sure that you don't have a Rev A or Rev B BRIDGE chip on that
-shoehorn?  There are known issues/errata with those revs.  The Octane
-Shoebox usually carries a Rev C BRIDGE, and the system board a Rev D BRIDGE
-(except for very old boards I think).  I don't know the .  I can't promise
-that every Rev A/B errata is worked around (or can be worked around).  I
-know I added one or two extra cases that I found buried in the 2.5.70 IA64
-Altix port code that was obviously cribbed from IRIX by SGI themselves.  But
-I think those were for Rev C...
-
-Also, I'll add that PCI support on these SGI machines usually works by the
-sheer force of luck alone.  The one PCI card I have in my shoebox is a Tigon
-II 1gbps ethernet card (copper), commonly marketed as an SGI Acenic.  It's
-one of the few cards that's generally worked w/o issue (and a good
-substitute for the annoying IOC3 ethernet), likely because it's an SGI part.
- I haven't tested much beyond that, since my Octane is primarily a build box
-these days.
-
-I personally have never had luck with USB flash drives, except OHCI USB1.x
-on a Via USB controller years ago.  Sparc systems also had issues way back
-then w/ USB mass storage because a lot of PCI drivers assumed everything in
-Linux was little-endian.
+The early widget addresses you show, 0x1axxxxxx, imply the bus error is
+happening in Slot C (widget A).  You said Slot C works fine?  Did you mean
+Slot D works fine instead?  The snippet of dmesg you put in your other
+e-mail definitely shows Slot D (widget 9) being populated by something that
+has a BRIDGE chip in it.  Does that address space probe correctly (0x19xxxxxx)?
 
 -- 
 Joshua Kinard
@@ -191,4 +217,3 @@ rsa6144/5C63F4E3F5C6C943 2015-04-27
 our lives slip away, moment by moment, lost in that vast, terrible in-between."
 
 --Emperor Turhan, Centauri Republic
-
