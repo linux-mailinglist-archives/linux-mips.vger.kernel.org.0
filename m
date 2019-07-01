@@ -2,70 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 730C75C074
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2019 17:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 989B95C0B6
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2019 17:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728417AbfGAPlP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 1 Jul 2019 11:41:15 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:39331 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727279AbfGAPlO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 1 Jul 2019 11:41:14 -0400
-Received: by mail-qt1-f193.google.com with SMTP id i34so15100671qta.6;
-        Mon, 01 Jul 2019 08:41:14 -0700 (PDT)
+        id S1730103AbfGAPyv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 1 Jul 2019 11:54:51 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:35779 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727589AbfGAPyu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 1 Jul 2019 11:54:50 -0400
+Received: by mail-wm1-f65.google.com with SMTP id c6so60391wml.0;
+        Mon, 01 Jul 2019 08:54:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cq95xuiLFEI6emBiYsdvZFxr6etn0mSivEmoTJ+NQJk=;
+        b=BiODAHp71E+SotRxGHOr5DAPDjAoGa9QWNP4Q2GsuwO1lnS5O80EEQkgp5J+MPi8M4
+         OWHEAkIRNhKgBFrtNySWGU2p/0pjj1vDrK6gL3obdjIC/2UjKsYbKMDvU2DEYdXtkI7R
+         2HoSF8QqpqG09Z0JuJWDLFFYeF4Xge8RUPqty1e0cWNa7s2X92GnAioenNZeJB9SKzqz
+         UPXGk4nLUGUKlNLr7VHdChrtWmHIQNT4ZI0mMAeXtAnDgQ8h6vp79H09xeNHeIaPlO7W
+         1R3KvlWgcefDnvajtXbIqPLzJ54qWpKYIDqJPEg1mdVVaivrtot6iGIbhG83bLhcgZRr
+         pCKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QX/9XC0DeimGVTmEjV3E87RMFjV7Hn7tB/e6eJ8Xuyo=;
-        b=ejjtpGiH8/is5Db3IZRvRC/GCThiuYRbhxrnux/OsudS/Lq5eoufZRL8Ui/0xCR5ip
-         GI0yYXoyxEBipEFfgnO+IQAAnFedM1spbpCyUh5GTJCJ5kQOlvzbYZJJQafRqWNSxTU4
-         mh4yaVuQsrFexf5waUC2LzkZOkKrupYOliNq+4IPuNiS3bA28FDnoPTFe3vzvmQwq5dJ
-         3bF/51inZa/2rvNkw6svo7XyhrvqMXZ2FwGo2RjI7XVnrFNBy81p1zT2U5Q2lXDW4LNL
-         2IZYRqP7V+6wNMQsLm8dAyJOeQNWnR1b3s/PkMPWMQL1RNAwv5t3jPAxMQypXAQ6cS4Z
-         c3Hg==
-X-Gm-Message-State: APjAAAWFLipdafpmkC6gkAOXxaq5uyG28oGBqRXpJ1h+dPdafsE+ZCpQ
-        3zf/DxICUAqkz2U0sJ17B6Bk/ytYBawomgUBDcA=
-X-Google-Smtp-Source: APXvYqxGHBFa8P5vpjbVLPEama12INy2Pt2H83NHNiep+1vxl9TlwguBVZ4KnSLAGXloUkCXunz2yug6gKdinLc2iX0=
-X-Received: by 2002:ac8:3485:: with SMTP id w5mr20305367qtb.142.1561995673724;
- Mon, 01 Jul 2019 08:41:13 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cq95xuiLFEI6emBiYsdvZFxr6etn0mSivEmoTJ+NQJk=;
+        b=KaKUxsKAj3O+dd30UdWly5X8/CfbmhwjEP+Yn5oTfUCLXrMW3DeXXjO0qKuq+dY90F
+         IcGR3lm1H/R+Jhy5uDHO1TE8o7dLozxyXYyTxhtN0rpRU9Im+cfwdk/iy0p9rPLNo7Yl
+         8y2wvSm4NqQ8CVtAA3E2TrOvvz1bCkwnWqgvwkubBx4gHvUvy71QnE4qfbV+FIjbUGOc
+         kHnn0h0vBdiLvQ1qe+chbU89tEZPFN8uQjkX4q7Fbl3wb30RnXhXH77FjAJGQfO2/zJX
+         +KYwqdd1AZPyfHFIkRL60rlJhspJFCvvAUlZ+VbKWUaoIRpXiCkQZT/oo5Opgvvo0Bi8
+         hrig==
+X-Gm-Message-State: APjAAAX9H+iKWcRY/qPouYmQNhrjT06TQGtMeSSBDJ1LJ+V3lPCfXoxV
+        rO2kDhhJwW97qi+nnKR9pas=
+X-Google-Smtp-Source: APXvYqzfJfsS+mdflzd9Nr/1xNS8r3PTEzjpII3Hj4cFfXNUZXPVF20GH8n+kjJKjIO1CPCfqcC3HA==
+X-Received: by 2002:a1c:544d:: with SMTP id p13mr6872wmi.78.1561996488498;
+        Mon, 01 Jul 2019 08:54:48 -0700 (PDT)
+Received: from [192.168.8.147] (27.196.23.93.rev.sfr.net. [93.23.196.27])
+        by smtp.gmail.com with ESMTPSA id z6sm9886992wrw.2.2019.07.01.08.54.46
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Mon, 01 Jul 2019 08:54:47 -0700 (PDT)
+Subject: Re: [PATCH net-next 8/8] net: mscc: PTP Hardware Clock (PHC) support
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Antoine Tenart <antoine.tenart@bootlin.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Richard Cochran <richardcochran@gmail.com>,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        ralf@linux-mips.org, paul.burton@mips.com, jhogan@kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        linux-mips@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        allan.nielsen@microchip.com
+References: <20190701100327.6425-1-antoine.tenart@bootlin.com>
+ <20190701100327.6425-9-antoine.tenart@bootlin.com>
+ <CA+FuTSecj3FYGd5xnybgNFH7ndceLu9Orsa9O4RFp0U5bpNy7w@mail.gmail.com>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <028ded20-61d1-4ac4-46fd-4a97faeac56a@gmail.com>
+Date:   Mon, 1 Jul 2019 17:54:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20190624054728.30966-1-hch@lst.de> <alpine.DEB.2.21.1906240922420.32342@nanos.tec.linutronix.de>
-In-Reply-To: <alpine.DEB.2.21.1906240922420.32342@nanos.tec.linutronix.de>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 1 Jul 2019 17:40:57 +0200
-Message-ID: <CAK8P3a3YHstHAs9OsWNHTtXjHnWtQfqr=WUZTpK+bONLTWLj+w@mail.gmail.com>
-Subject: Re: remove asm-generic/ptrace.h v3
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Christoph Hellwig <hch@lst.de>, Oleg Nesterov <oleg@redhat.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mips@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CA+FuTSecj3FYGd5xnybgNFH7ndceLu9Orsa9O4RFp0U5bpNy7w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 9:23 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> On Mon, 24 Jun 2019, Christoph Hellwig wrote:
-> >
-> > asm-generic/ptrace.h is a little weird in that it doesn't actually
-> > implement any functionality, but it provided multiple layers of macros
-> > that just implement trivial inline functions.  We implement those
-> > directly in the few architectures and be off with a much simpler
-> > design.
-> >
-> > I'm not sure which tree is the right place, but may this can go through
-> > the asm-generic tree since it removes an asm-generic header?
->
-> Makes sense.
 
-Applied and pushed to asm-generic.git/master now, sorry for the delay.
 
-     Arnd
+On 7/1/19 8:12 AM, Willem de Bruijn wrote:
+> On Mon, Jul 1, 2019 at 6:05 AM Antoine Tenart
+> <antoine.tenart@bootlin.com> wrote:
+>>
+>> This patch adds support for PTP Hardware Clock (PHC) to the Ocelot
+>> switch for both PTP 1-step and 2-step modes.
+>>
+>> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+> 
+>>  void ocelot_deinit(struct ocelot *ocelot)
+>>  {
+>> +       struct ocelot_port *port;
+>> +       struct ocelot_skb *entry;
+>> +       struct list_head *pos;
+>> +       int i;
+>> +
+>>         destroy_workqueue(ocelot->stats_queue);
+>>         mutex_destroy(&ocelot->stats_lock);
+>>         ocelot_ace_deinit();
+>> +
+>> +       for (i = 0; i < ocelot->num_phys_ports; i++) {
+>> +               port = ocelot->ports[i];
+>> +
+>> +               list_for_each(pos, &port->skbs) {
+>> +                       entry = list_entry(pos, struct ocelot_skb, head);
+>> +
+>> +                       list_del(pos);
+> 
+> list_for_each_safe
+
+Also entry->skb seems to be leaked ?
+
+dev_kfree_skb_any(entry->skb) seems to be needed
+
+
+> 
+>> +                       kfree(entry);
+
