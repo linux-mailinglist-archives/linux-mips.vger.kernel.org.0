@@ -2,153 +2,193 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 517C95C315
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2019 20:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3112E5C3A0
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2019 21:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726576AbfGASgx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 1 Jul 2019 14:36:53 -0400
-Received: from mail-yb1-f181.google.com ([209.85.219.181]:40763 "EHLO
-        mail-yb1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725853AbfGASgx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 1 Jul 2019 14:36:53 -0400
-Received: by mail-yb1-f181.google.com with SMTP id i14so358108ybp.7
-        for <linux-mips@vger.kernel.org>; Mon, 01 Jul 2019 11:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mIsklxArBVCFOYdzo86h0VK9omdLGQy08LmgbmkoOfQ=;
-        b=LEK2DMGWP6HaIJqB6Zbp8LLV74fFa6Q+8FJCJt04z9kqIeG2xgH6pyKarkQR//wuxY
-         vNY+wvOeLLg8jFiYv/rJm+ciE0ezgsMB+FRZujZZvDJaPXDVgkT0sv0ioo5Gv+vwB5pI
-         +8g+srHFgayJXTKNancXyoBmOMhqJdcwx1SvCrcPUUZ0pitWKh7qbd+Qyeb4gWD+YoTU
-         QZV9ALlS7Cn3BG/o+Z4oD9yUd33ezPn6XymbXol5g5cuFtFgdtdJX+Rk2X9W9+Ms2NLw
-         iOT962rC7udEsdjSh8s2Nd9V+IUHsPICHfRFz5SbA4AukUL5xyGuebj7iqVDvovko2Pc
-         dlWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mIsklxArBVCFOYdzo86h0VK9omdLGQy08LmgbmkoOfQ=;
-        b=XbArsomVlB2+6kIkin8eugi1GWJOyjxOPKIFZDEpndDDKMf7SdAwrKc6346LQSjOnU
-         YaGT6KjFd5yyUORlEvAuhAlLPny+qj+OGlTv/DZGSGcldzRs6ioh3BrvGGj+MwrbMDSf
-         eG+IBqZPaZlWt5G+ERjhVQFb5CePPSTneHYYXA+j1YFwV6S1prJCN/yBvDWRl8vcrphr
-         WBxkMjFXFqffshzaoBXp0al3gMGWoG2PuTxm2a4VW3yiwndav82lbEg9jSeN2myImfZy
-         ux2dLcdJ9DaFF1mcRpDbpLmK0QMXNBfwVCPMIU5YdDnSsNrweTUSWb5KozcQ7CW7Ye/o
-         C4hg==
-X-Gm-Message-State: APjAAAWrpjMxtWyoKo610wR4QJ3urGZiqUVFSxLpIjCzS6OmZRIaEtU+
-        aue0AofruwSrt0TXt9wwVTzWbIrdwnIGdGXT1nY=
-X-Google-Smtp-Source: APXvYqx4nn6ctMClyzlzpYixept5TdJAsYjV6KaFpfCssU190iJjuDr3W+a17AsNhCTpW5UNwqvv7Zucy+/MOq+VRlg=
-X-Received: by 2002:a25:bc83:: with SMTP id e3mr15988939ybk.49.1562006212101;
- Mon, 01 Jul 2019 11:36:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <b201c33a-5beb-3dfb-b99b-d9b8fc6c2c64@hauke-m.de>
- <CA+QBN9A3JmvfCZkXZ2-Yd=nkQCQD48OgYEpe+Po4MuZFpmnPrQ@mail.gmail.com>
- <20190624175553.2tpepq5zsamovrra@pburton-laptop> <060345a6-bef2-ec17-e264-eccda29f5c8b@gentoo.org>
- <CAEdQ38F6gG1Ee5h6PXZ-wuxuOxAycaWBD_+hTNRjtfQHNw696g@mail.gmail.com>
- <CA+QBN9DO9sAadwFU6kpAfBxZuTVEx8_9DUYFBs6fTA6==cVDwQ@mail.gmail.com>
- <CA+QBN9B33Crhyahn5SXZJY8Pk7tDnhqgReuJKx5FhgguG=GXWg@mail.gmail.com> <f633861c-900f-02c5-e592-2ea1c3f1f8f2@gentoo.org>
-In-Reply-To: <f633861c-900f-02c5-e592-2ea1c3f1f8f2@gentoo.org>
-From:   Carlo Pisani <carlojpisani@gmail.com>
-Date:   Mon, 1 Jul 2019 20:36:39 +0200
-Message-ID: <CA+QBN9Bdnppin1s882OzvkOFCoWmOi_ctWkas2EsxD2mintS7w@mail.gmail.com>
+        id S1726734AbfGAT13 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 1 Jul 2019 15:27:29 -0400
+Received: from smtp.gentoo.org ([140.211.166.183]:55952 "EHLO smtp.gentoo.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726695AbfGAT13 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 1 Jul 2019 15:27:29 -0400
+Received: from [192.168.1.13] (c-73-132-78-152.hsd1.md.comcast.net [73.132.78.152])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: kumba)
+        by smtp.gentoo.org (Postfix) with ESMTPSA id 357E7346D98;
+        Mon,  1 Jul 2019 19:27:27 +0000 (UTC)
+From:   Joshua Kinard <kumba@gentoo.org>
 Subject: Re: SGI-IP30
-To:     Joshua Kinard <kumba@gentoo.org>
-Cc:     Matt Turner <mattst88@gmail.com>,
-        Paul Burton <paul.burton@mips.com>,
+To:     Carlo Pisani <carlojpisani@gmail.com>
+Cc:     Paul Burton <paul.burton@mips.com>,
         Thomas Bogendoerfer <tbogendoerfer@suse.de>,
         "Maciej W. Rozycki" <macro@linux-mips.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.com>
-Content-Type: text/plain; charset="UTF-8"
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+References: <b201c33a-5beb-3dfb-b99b-d9b8fc6c2c64@hauke-m.de>
+ <CA+QBN9A3JmvfCZkXZ2-Yd=nkQCQD48OgYEpe+Po4MuZFpmnPrQ@mail.gmail.com>
+ <20190624175553.2tpepq5zsamovrra@pburton-laptop>
+ <060345a6-bef2-ec17-e264-eccda29f5c8b@gentoo.org>
+ <CA+QBN9CtbYmTnUNyvohifcHQ03+kURZBPJ=CQRrCw0euDe-u9A@mail.gmail.com>
+Openpgp: preference=signencrypt
+Message-ID: <921d1771-a99e-4378-fd32-b4879a05d4d8@gentoo.org>
+Date:   Mon, 1 Jul 2019 15:27:24 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <CA+QBN9CtbYmTnUNyvohifcHQ03+kURZBPJ=CQRrCw0euDe-u9A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-> The Panics are probably due to some hardcoded logic in Stan's original patches
-> I mentioned that always assume the presence of a graphics board
+On 6/26/2019 01:49, Carlo Pisani wrote:>> SMP works fine, on my machine at
+least.  I got it working back in 4.4 a few
+>> years ago, and it's largely just worked fine since then on the one machine I
+>> have.
+>
+> here I am with
+> - kernel v4.18.20 + Gentoo patches
+> - mips64-unknown-linux-gnu {binutils v2.29.1, gcc-v7.4.0) emerged by
+> Gentoo crossdev
+>
+> crossdev --b 2.30-2 --g 8.2.0  --l 2.22-r1 --k 4.3 -s2 -A n32 -t
+> mips64-unknown-linux-gnu --without-headers -v
+>
+> my Octane is
+>>> hinv
+>                    System: IP30
+>                 Processor: 600 Mhz R14000, 2M secondary cache
+>                 Processor: 600 Mhz R14000, 2M secondary cache, (cpu 1)
+>               Memory size: 1536 Mbytes
+>                   Network: ef0 ethernet (100/10 base-T)
+>                 SCSI Disk: scsi(0)disk(1)
+>                 SCSI Disk: scsi(0)disk(2)
+>                 SCSI Disk: scsi(0)disk(3)
+>                     Audio: RAD Audio Processor
+>
+> (yes, there is no GFX, it's a headless configuration)
+>
+> my test reports:
+>
+> kernel type
+> - No Forced Preemption: stable
+> - Voluntary Kernel Preemption: it works, but it has some issues with
+> smp_stop() and panic()
+> - Preemptible Kernel: completely unstable, the kernel panics in 20 seconds
+>
+> I have a ram-rootfs, based on uclibc/mips3-be. It's attached to the
+> kernel, so "bash" is the first process.
+>
+> CONFIG_BLK_DEV_INITRD=y
+> CONFIG_INITRAMFS_SOURCE="../rootfs/mips3be-uclibc-2008"
+> CONFIG_INITRAMFS_ROOT_UID=0
+> CONFIG_INITRAMFS_ROOT_GID=0
+> CONFIG_RD_GZIP=y
+>
+> I have three SCSI hard drives, and they do work, but I prefer net-booing
+>
+> Once booted, it works properly. The 20-hours burning-in test is passed!
+> (two gcc sessions + nbench in a while(1) { do(); } loop )
+>
+> When I exit from "bash", the kernel correctly calls the panic()
+> function, which calls ip30_machine_restart()
+> (arch/mips/sgi-ip30/ip30-power.c) but this function is not able to
+> restart the Octane, so it simply hangs and I have to manually force a
+> hardware reset. Sometimes the machine seems gone insane, and I have to
+> press the "reset" button several times before I can see the red light.
 
-with or without the MGRAS card, I have the same behavior.
-Which is the file you are talking about? ip30-xtalk?
+Yeah, I get this sometimes on a normal reboot from userland.  You usually
+have to press reset twice, one second apart.  If it works, the system
+LED/bulb will blink once, then it'll "click" and the red LED will come on
+for a few seconds indicating PROM reset.  It may be a bug in the PROM
+somewhere, or a bug in how the Octane's Linux restart code works.  The
+restart code literally just flips a specific register in HEART to trigger a
+reset.  It is possible there needs to be some special housekeeping done
+beforehand so that HEART doesn't wind up in an unknown hardware state, which
+I suspect is the underlying problem.
 
-> Is the shoehorn adapter you have the very rare Octane model, or an Origin
-> version modified with an Octane XIO locking latch?
 
-It's an origina2k modified with the XIO locking latch. With Irix, it
-works without any problem.
+> the solution is adding "isolcpus=1" to command line. This way the
+> kernel does reboot/restart correctly.
 
-Anyway, it seems there are problems with the PCI, related to the BAR,
-or to how it's configured, or to the memory window ... the kernel
-panic complaining a "BUS error"
+I'll have to look into that kernel flag.  I haven't heard of it before.
 
-IOC3 Master Driver loaded for 0000:00:02.0
-PCI host bridge to bus 0001:00
-pci_bus 0001:00: root bus resource [mem 0x1a200000-0x1a9fffff]
-pci_bus 0001:00: root bus resource [io  0x1aa00000-0x1abfffff]
-pci_bus 0001:00: root bus resource [bus 01-ff]
-pci 0001:00:01.0: BAR 0: assigned [mem 0x1a200000-0x1a200fff]
-pci 0001:00:01.1: BAR 0: assigned [mem 0x1a201000-0x1a201fff]
-pci 0001:00:01.2: BAR 0: assigned [mem 0x1a202000-0x1a2020ff]
-ip30-bridge: 0001:00:01.0 Bar 0 with size 0x00001000 at bus 0x00000000
-vma 0x000000b080000000 is Direct 64-bit.
-Data bus error, epc == a8000000203c9884, ra == a8000000203c987c
-Oops[#1]:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 4.18.20-Merciless-Moray-ip30 #74
-$ 0   : 0000000000000000 ffffffff9404fde0 900000b080000000 000000b080000000
-$ 4   : a80000007ead6000 0000000000000000 0000000000000006 0000000000000002
-$ 8   : a80000007ead6000 0000000000000000 0000000000000005 0000000000000000
-$12   : a80000007fc8bfe0 000000000000fd00 0000000000000000 fffffffffffffffe
-$16   : a80000007ead6000 900000b080000000 00000000000c0000 a8000000205f0000
-$20   : a80000007ead6000 a8000000205b1898 00000007443a9d5a a800000020a90000
-$24   : 0000000000000220 0000000000000000
-$28   : a80000007fc88000 a80000007fc8bae0 0000000000000007 a8000000203c987c
-Hi    : 0000000000008509
-Lo    : 000000000000038b
-epc   : a8000000203c9884 0xa8000000203c9884
-ra    : a8000000203c987c 0xa8000000203c987c
-Status: 9404fde3        KX SX UX KERNEL EXL IE
-Cause : 0000001c (ExcCode 07)
-PrId  : 00000f24 (R14000)
-Modules linked in:
-Process swapper/0 (pid: 1, threadinfo=00000000b9e5e6bd,
-task=000000005215823f, tls=0000000000000000)
-Stack : 0000000000000007 a80000007fc8bae8 a80000007fc8bae8 11a4d0c4ecae9ccd
-        a8000000205b1868 a800000020a90000 a8000000205924e0 a8000000205924c8
-        a80000007ead6000 a8000000205b1898 00000007443a9d5a a800000020a90000
-        0000000000000007 a800000020301550 0000000000000007 a80000007ead6000
-        a80000007e59ac28 a80000007e59ac00 a8000000205f0000 a800000020ac0000
-        a800000020660000 0000000000000000 a800000020a90000 a8000000202e64ec
-        a80000007e59ac00 a80000007ead6000 a80000007e59ac28 a8000000202e65e8
-        a80000007e59ac18 a80000007e59ac18 a80000007e59ac00 a8000000203f5df0
-        a800000020623a30 a80000007fc8bbe8 a80000007fc8bbe8 11a4d0c4ecae9ccd
-        a80000007e366600 a800000020620000 a8000000205f0000 a80000007fd46b80
-        ...
-Call Trace:
-[<a800000020301550>] 0xa800000020301550
-[<a8000000202e64ec>] 0xa8000000202e64ec
-[<a8000000202e65e8>] 0xa8000000202e65e8
-[<a8000000203f5df0>] 0xa8000000203f5df0
-[<a8000000203f6094>] 0xa8000000203f6094
-[<a800000020657eb0>] 0xa800000020657eb0
-[<a80000002034fa50>] 0xa80000002034fa50
-[<a80000002034d58c>] 0xa80000002034d58c
-[<a80000002063133c>] 0xa80000002063133c
-[<a80000002034d798>] 0xa80000002034d798
-[<a80000002034d670>] 0xa80000002034d670
-[<a80000002034acb0>] 0xa80000002034acb0
-[<a80000002063133c>] 0xa80000002063133c
-[<a80000002034c5b8>] 0xa80000002034c5b8
-[<a800000020657adc>] 0xa800000020657adc
-[<a80000002034e1a0>] 0xa80000002034e1a0
-[<a8000000206579a0>] 0xa8000000206579a0
-[<a800000020004530>] 0xa800000020004530
-[<a800000020632454>] 0xa800000020632454
-[<a8000000204fc750>] 0xa8000000204fc750
-[<a8000000204fc760>] 0xa8000000204fc760
-[<a8000000204fc750>] 0xa8000000204fc750
-[<a80000002000c168>] 0xa80000002000c168
 
-Code: 02002025  1040ffdd  00408825 <8c550004> 9e12003c  0000000f
-32a20100  10400011  00000000
+> I have also fixed the power-down function (ds1685_rtc_poweroff_ip30,
+> drivers/rtc/rtc-ds1685.c) since the kernel does not power down, it
+> simply hangs forever.
 
----[ end trace e8faa9089454f71d ]---
+I believe Thomas found and fixed the bug in it recently and sent it upstream
+(or was that something else?).  I remember the shutdown function working in
+the past, but assumed something upstream broke it, or something upstream
+exposed an existing bug that causes this breakage now.
+
+
+> /*
+>  * sgi-ip30
+>  * ========
+>  *
+>  * ds1685_rtc_poweroff_ip30 - uses the RTC chip to power the system off.
+>  * @pdev: pointer to platform_device structure.
+>  */
+> void __noreturn
+> ds1685_rtc_poweroff_ip30(struct platform_device *pdev)
+> {
+[snip]
+
+> }
+> EXPORT_SYMBOL(ds1685_rtc_poweroff_ip30);
+>
+> This source comes from kernel 2.6.17, and it works properly. Instead
+> of patching the existing ds1685_rtc_poweroff(), I have just created a
+> dedicated function ds1685_rtc_poweroff_ip30() ...
+
+Are you sure that's from 2.6.17?  I believe I cribbed the basic logic for
+RTC shutdown from O2 (IP32), which uses the same RTC chip, and I did most of
+my work on the RTC driver during the 3.x kernel series, getting rtc-ds1685.c
+added with the release of Linux 4.0 in 2015.
+
+Could you do a diff against the 4.18 kernel source so I can more easily see
+the changed logic?
+
+
+> Everything I have tried with the PCI ... doesn't work. The ShoeHorn
+> panics the kernel, the ShoeBox seems to have quirks
+
+Can you make sure that you don't have a Rev A or Rev B BRIDGE chip on that
+shoehorn?  There are known issues/errata with those revs.  The Octane
+Shoebox usually carries a Rev C BRIDGE, and the system board a Rev D BRIDGE
+(except for very old boards I think).  I don't know the .  I can't promise
+that every Rev A/B errata is worked around (or can be worked around).  I
+know I added one or two extra cases that I found buried in the 2.5.70 IA64
+Altix port code that was obviously cribbed from IRIX by SGI themselves.  But
+I think those were for Rev C...
+
+Also, I'll add that PCI support on these SGI machines usually works by the
+sheer force of luck alone.  The one PCI card I have in my shoebox is a Tigon
+II 1gbps ethernet card (copper), commonly marketed as an SGI Acenic.  It's
+one of the few cards that's generally worked w/o issue (and a good
+substitute for the annoying IOC3 ethernet), likely because it's an SGI part.
+ I haven't tested much beyond that, since my Octane is primarily a build box
+these days.
+
+I personally have never had luck with USB flash drives, except OHCI USB1.x
+on a Via USB controller years ago.  Sparc systems also had issues way back
+then w/ USB mass storage because a lot of PCI drivers assumed everything in
+Linux was little-endian.
+
+-- 
+Joshua Kinard
+Gentoo/MIPS
+kumba@gentoo.org
+rsa6144/5C63F4E3F5C6C943 2015-04-27
+177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
+
+"The past tempts us, the present confuses us, the future frightens us.  And
+our lives slip away, moment by moment, lost in that vast, terrible in-between."
+
+--Emperor Turhan, Centauri Republic
+
