@@ -2,86 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDBC5C460
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Jul 2019 22:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7C15DA3A
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2019 03:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726658AbfGAUl6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 1 Jul 2019 16:41:58 -0400
-Received: from mail-yb1-f171.google.com ([209.85.219.171]:39457 "EHLO
-        mail-yb1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726620AbfGAUl5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 1 Jul 2019 16:41:57 -0400
-Received: by mail-yb1-f171.google.com with SMTP id u9so515057ybu.6
-        for <linux-mips@vger.kernel.org>; Mon, 01 Jul 2019 13:41:57 -0700 (PDT)
+        id S1727117AbfGCBFJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 2 Jul 2019 21:05:09 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45056 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727065AbfGCBFJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 2 Jul 2019 21:05:09 -0400
+Received: by mail-pf1-f195.google.com with SMTP id r1so299625pfq.12
+        for <linux-mips@vger.kernel.org>; Tue, 02 Jul 2019 18:05:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tmwTjBaBEjCcnXSMwgqKIPST2Lk3AbJK4zNOvtmMH78=;
-        b=K9W18XN5AWgW8FXcrA357ulXlIA+ubp/CK4SQVyS3hsphD51/HpPhfcF4ekzFcR6oz
-         wwX8kp5UNJu/wXdb76Fi2+Kf0zuxndxpcek8J0GRScSd6EPhJ/Rn0wyB6rX1+5Ml7zKN
-         2r54P7rbkiul47QqWMjS7alMGPSrg/2GxGWikS3IpuU7g7509oe2F5VpxPM5KTu8mJ5k
-         u/W9nsNIlOg8D/+Bt9tdt/wr+og6TuDlvqvdKe5l2fRzVQCzJoEH4alZeRB73lKjIjeg
-         ib8FgfEKsvsZysyWAZPAemC5ebOPOvRe3ttAmaHiTcQUn2UsDp5QYBTq1aGWbDshnmsL
-         dC4g==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=a6DSR9zMVNSIPOHutOGYYowzxyygnNjjAgHH6t/fH3Q=;
+        b=ZMFtd4fnwBhjqDgEcmMPYqwTfM3scvxup6E9ES0eTl1QBLbkm4L+EYQQqrUrDt7I0f
+         1W7i7K4qFAKEM9FkLZbBvOwEPA2KShqct0FnQuEtwjRtbN+49uyAwET1ta2fkPFntUdL
+         d1HKAJ/XrkEjycdCCsfgQI1lqoOc8poLOC7Ys=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tmwTjBaBEjCcnXSMwgqKIPST2Lk3AbJK4zNOvtmMH78=;
-        b=Dd3Lij/XyYLENL5JIGKif8tm8sHUwnksYZaQW0Qi1FDB7kK/lAoiIu88UCnFXl1S4O
-         qZOsWqz0GX3FnxtGfEKtqIQNvBu/oWL3N2jszknFwEZdA1LooMnBtwdcXpI3ZB9N0UbD
-         sh5mQ3VTlz+D+1m2KsYQqamO5mObhbZ/Fq63NEtmTIU2oktwao/dIsGNNYMOGgU7lKEF
-         BQQShYBmimafiZ9jremxc8WZGH7wFUQ7khP/oSGx4sYmkMRgSYVY8qBHs2gcLypsF3tI
-         BMzwt1zYh/xCKlSpUvIY3iySbcDsiTC7YbxVa28bUkaVF07T6Ue8HHYt2EPMPV4QWkYJ
-         svgw==
-X-Gm-Message-State: APjAAAXPEvFRDX3rtAS/fmv797vEXa1ykeaGJ/wcLN9mOH63yqxaLgru
-        M5wjh2udxUWTsrSuRBVqa/d1JuxSh/xb/s65Ejw=
-X-Google-Smtp-Source: APXvYqxxxgpxJDDF8xU5KVDE2Gpc2d8PvvAArpHn2yL6ZOgOW6L7qAb26KF7N1YyzuBYXl5EuBl/+eSFWnjw4h5zEKs=
-X-Received: by 2002:a25:bacf:: with SMTP id a15mr17361865ybk.213.1562013717224;
- Mon, 01 Jul 2019 13:41:57 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=a6DSR9zMVNSIPOHutOGYYowzxyygnNjjAgHH6t/fH3Q=;
+        b=LNGP7nPbg8PwNSqzkBnBlLLCzWGzda32T8BIpx0TvOc73xx8HYnetWcTwwTiSi/mGi
+         T0WFPDCrG8MEtt2Ue+MepQF8ocPop2DoyGJE1+elHIsP0cU1q73UHandFJl1BifvGh9R
+         KIKpNe6Jy272tfIbuu2iYAxz9AfpNn2r/jazYTkxzTRn4pjLu+WIobMYA6OIFFSz4yzK
+         3VDzSwqBTqN+Yh1CRDSvIEJIQtLXJV9CwaOr/t/sGNKJ+MDMM28R8bQ3ClYWH8JgN5/S
+         3rI9fq3rnTf21WqxnE3J5+Zd886yb87QCeFVDVqBdKl7jG4qDCJRMl4I9g+TIZChwDen
+         GzNw==
+X-Gm-Message-State: APjAAAVPWplRgBqoiuC/eZQmPOmpdhnntzhwxF/NYwCSls+hSPk96mqt
+        WgfiUrUVLC1TD3M+vfZY5P3AUQ==
+X-Google-Smtp-Source: APXvYqxbnDf0epA4zxEVMf+KQtiS47h5ZVi4HVl0lxeY8pfHVzHmCshNhotvWTcEjEQC+XEnSbkkRg==
+X-Received: by 2002:a17:90a:b908:: with SMTP id p8mr7901348pjr.94.1562101447970;
+        Tue, 02 Jul 2019 14:04:07 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id g1sm52207pgg.27.2019.07.02.14.04.02
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 02 Jul 2019 14:04:03 -0700 (PDT)
+Date:   Tue, 2 Jul 2019 09:33:02 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
+        Andreas Dilger <adilger@dilger.ca>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shyam Saini <shyam.saini@amarulasolutions.com>,
+        kernel-hardening@lists.openwall.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        netdev@vger.kernel.org, linux-ext4 <linux-ext4@vger.kernel.org>,
+        devel@lists.orangefs.org, linux-mm@kvack.org,
+        linux-sctp@vger.kernel.org, bpf@vger.kernel.org,
+        kvm@vger.kernel.org, mayhs11saini@gmail.com
+Subject: Re: [PATCH V2] include: linux: Regularise the use of FIELD_SIZEOF
+ macro
+Message-ID: <201907020931.2170BAB@keescook>
+References: <20190611193836.2772-1-shyam.saini@amarulasolutions.com>
+ <20190611134831.a60c11f4b691d14d04a87e29@linux-foundation.org>
+ <6DCAE4F8-3BEC-45F2-A733-F4D15850B7F3@dilger.ca>
+ <20190629142510.GA10629@avx2>
+ <c3b83ba7f9b003dd4fb9cad885461ce93165dc04.camel@perches.com>
 MIME-Version: 1.0
-References: <b201c33a-5beb-3dfb-b99b-d9b8fc6c2c64@hauke-m.de>
- <CA+QBN9A3JmvfCZkXZ2-Yd=nkQCQD48OgYEpe+Po4MuZFpmnPrQ@mail.gmail.com>
- <20190624175553.2tpepq5zsamovrra@pburton-laptop> <060345a6-bef2-ec17-e264-eccda29f5c8b@gentoo.org>
- <CAEdQ38F6gG1Ee5h6PXZ-wuxuOxAycaWBD_+hTNRjtfQHNw696g@mail.gmail.com>
- <CA+QBN9DO9sAadwFU6kpAfBxZuTVEx8_9DUYFBs6fTA6==cVDwQ@mail.gmail.com>
- <CA+QBN9B33Crhyahn5SXZJY8Pk7tDnhqgReuJKx5FhgguG=GXWg@mail.gmail.com>
- <f633861c-900f-02c5-e592-2ea1c3f1f8f2@gentoo.org> <CA+QBN9Bdnppin1s882OzvkOFCoWmOi_ctWkas2EsxD2mintS7w@mail.gmail.com>
- <5b019eaa-5e2f-b9ce-9c56-5bb0cfc253ed@gentoo.org>
-In-Reply-To: <5b019eaa-5e2f-b9ce-9c56-5bb0cfc253ed@gentoo.org>
-From:   Carlo Pisani <carlojpisani@gmail.com>
-Date:   Mon, 1 Jul 2019 22:41:45 +0200
-Message-ID: <CA+QBN9CDWAe6YQ6nvnWOK5MrjdCD-PrQehsaT4PJf13cEPCBoQ@mail.gmail.com>
-Subject: Re: SGI-IP30
-To:     Joshua Kinard <kumba@gentoo.org>
-Cc:     Matt Turner <mattst88@gmail.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        =?UTF-8?Q?Ren=C3=A9_Rebe?= <rene@exactcode.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3b83ba7f9b003dd4fb9cad885461ce93165dc04.camel@perches.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-> The early widget addresses you show, 0x1axxxxxx
+On Sat, Jun 29, 2019 at 09:45:10AM -0700, Joe Perches wrote:
+> On Sat, 2019-06-29 at 17:25 +0300, Alexey Dobriyan wrote:
+> > On Tue, Jun 11, 2019 at 03:00:10PM -0600, Andreas Dilger wrote:
+> > > On Jun 11, 2019, at 2:48 PM, Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > > On Wed, 12 Jun 2019 01:08:36 +0530 Shyam Saini <shyam.saini@amarulasolutions.com> wrote:
+> > > I did a check, and FIELD_SIZEOF() is used about 350x, while sizeof_field()
+> > > is about 30x, and SIZEOF_FIELD() is only about 5x.
+> > > 
+> > > That said, I'm much more in favour of "sizeof_field()" or "sizeof_member()"
+> > > than FIELD_SIZEOF().  Not only does that better match "offsetof()", with
+> > > which it is closely related, but is also closer to the original "sizeof()".
+> > > 
+> > > Since this is a rather trivial change, it can be split into a number of
+> > > patches to get approval/landing via subsystem maintainers, and there is no
+> > > huge urgency to remove the original macros until the users are gone.  It
+> > > would make sense to remove SIZEOF_FIELD() and sizeof_field() quickly so
+> > > they don't gain more users, and the remaining FIELD_SIZEOF() users can be
+> > > whittled away as the patches come through the maintainer trees.
+> > 
+> > The signature should be
+> > 
+> > 	sizeof_member(T, m)
+> > 
+> > it is proper English,
+> > it is lowercase, so is easier to type,
+> > it uses standard term (member, not field),
+> > it blends in with standard "sizeof" operator,
+> 
+> yes please.
+> 
+> Also, a simple script conversion applied
+> immediately after an rc1 might be easiest
+> rather than individual patches.
 
-can you give me a memory mapping table for the those XIO devices?
+This seems reasonable to me. I think the patch steps would be:
 
-> shows Slot D (widget 9) being populated by something that has a BRIDGE chip in it.
+1) implement sizeof_member(T, m) as a stand-alone macro
+2) do a scripted replacement of all identical macros.
+3) remove all the identical macros.
 
-The BRIGE is a ShoeHorn. I have three units here and two Octanes.
-They have always shown the same behavior.
+Step 2 can be a patch that includes the script used to do the
+replacement. That way Linus can choose to just run the script instead of
+taking the patch.
 
-My conclusion is: the hardware is not damaged, it's a software problem.
-
-> Does that address space probe correctly (0x19xxxxxx)?
-
-It seems so. Anyway, even the ShoeBox is probed correctly but it
-doesn't work correctly!
-It doesn't panic, but it shows a lot of quirks.
-
-What have I to enable in the kernel to debug the PCI and stuff?
+-- 
+Kees Cook
