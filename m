@@ -2,124 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EC05D957
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2019 02:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7BD15E043
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Jul 2019 10:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727219AbfGCAlN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 2 Jul 2019 20:41:13 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:35817 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727132AbfGCAlN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 2 Jul 2019 20:41:13 -0400
-Received: by mail-ot1-f67.google.com with SMTP id j19so510177otq.2;
-        Tue, 02 Jul 2019 17:41:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bSOqYii7ZBXl1VimAzOsNXyArtOqUO8Ub/4ZYTA1j8c=;
-        b=q99GRcsXbET72JhVUP+W09DtQ82pAEbhghUwbJjJUv1NS9OSrA+MEhNfDcpH+tiBXp
-         TWM8sf7tC+y68iDzSrV8xAphAUbgEiXEbjxqmQerxymKzbfMd6mtcqWLXOIzK2JBLbPY
-         H2d/98y/oTDU6E9MlkrvWQH7fJGN1h1mIQSYvw+yBtsZEJi/cdOYWvcP3guzN8MOawfO
-         lnHMNcGRonLGQO2LvHfcsG2x8fevU3l6viLz4gb8JZUHjw9NtQb9O4TVOCIXHIgk1z5K
-         B6Ga3y+dBjjB0K2+cFK4Nm2+qdFszmUnMo6t5zefToiJMhrFq5WwfBwpzDPxDvk1S/HM
-         mpMA==
+        id S1727008AbfGCIyY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 3 Jul 2019 04:54:24 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:35597 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726400AbfGCIyX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Jul 2019 04:54:23 -0400
+Received: by mail-qt1-f194.google.com with SMTP id d23so1719730qto.2;
+        Wed, 03 Jul 2019 01:54:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bSOqYii7ZBXl1VimAzOsNXyArtOqUO8Ub/4ZYTA1j8c=;
-        b=P+kifVX8X3EnAmrAQUuo7dg859nWf4L4yRTu2dkHHV1kIobfMJKzyIL5plltujhzG2
-         nvlaU2AFWavNW7lDse3Od3OG9ZhKjL+ZCRhBfRRWfciG+44Kj5CMpCDk0ET8MpjXfqjo
-         Bo6sWPwB6yyEUlWbVCAiSt/y1aYUFsWQLeviqBipogI2ElxiPb037GYA+hxQvPQUtQdH
-         7/ADC5Hx4TdzWzY3EVuqCr0q6ivKC65yKLX8QWqPz7+avwZAZpjYrSJF1Ihn4tHoaEcV
-         eExIcdoP01ICGRws1whv6I19yG7K3Ddt8WsydmwUY96ZWByNJX6RrnaLi4yDVqjcwYoT
-         Vy2w==
-X-Gm-Message-State: APjAAAXK6aLgqT6jx/OW+WOOu1sXfMINGDchSfkvMAyHekhW6y+2biyb
-        vpIKZBQVCnWahkmWQv71OgQLfVyddjx2bWtemRZd9MXX
-X-Google-Smtp-Source: APXvYqy50mvLsxYgtKfRVlbA3GW5kWzUW612jiymv5fzhnObYnbprETeytMvN2i8gL1V0pTGXBI3bFIWucwvT2K1t5Y=
-X-Received: by 2002:a9d:39a6:: with SMTP id y35mr27422788otb.81.1562110657449;
- Tue, 02 Jul 2019 16:37:37 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MSjZcZaarsSFJ2hu2ClYcmZVIX7oo4qCsiK4ex6LbOI=;
+        b=rpJJNYR8pHarR3zG2F7L9hmYg0ADqULRTwBnnfisItIg4Y9v4IPIAT4ftXyKCvrAGC
+         CSCwr2YDpqfAoHh0mkQ9JBfgDbt9w01AEwZ9MT6bjfs0o4AShkKByDGg9Q1XApfAMvr7
+         OmAcsdu1cpavEm4BdC9dfEf4N9gPFUphSOMDQEdWt3MtWceCcMBO5FzN5z2CiSPlL45G
+         qYAJAHuLgdp3p6kxYFJ3Wg0AvTaVtdhi4jxIbBrClTRCd8ITaHYCkBGlEoGqZi0JWD9X
+         btT5/VdMiZgFty7TZJd7qLtv89hxjloHgM2x43/v691eeLRyCetIdFTb3Mf5fm/yMdvV
+         rtmQ==
+X-Gm-Message-State: APjAAAWZg9pjaNgHsirVvrj/cqLN520rZvGtkWQIJCHO5n4qEZuLy1Rz
+        DBGgbVRJkcrBoCMTIamKxBSk9YpqURe7fo4UNqI=
+X-Google-Smtp-Source: APXvYqwUYSO3x//KZTXG6yv2dZ3NcZk20NbjruJN9Xn8+zo86d+e94GBeKk5SizQIKzkTw9NBTZSnlR8ipikN2uBVs8=
+X-Received: by 2002:a0c:b88e:: with SMTP id y14mr29883517qvf.93.1562144062650;
+ Wed, 03 Jul 2019 01:54:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190702203523.2412-1-martin.blumenstingl@googlemail.com>
- <20190702203523.2412-2-martin.blumenstingl@googlemail.com> <CAL_Jsq+3H-cbrUna27RJ1o0w5MxaubkA9hcZjpWsaEYnx6bWQg@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+3H-cbrUna27RJ1o0w5MxaubkA9hcZjpWsaEYnx6bWQg@mail.gmail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Wed, 3 Jul 2019 01:37:26 +0200
-Message-ID: <CAFBinCCaK5USb062tywd54y=6B0jTFsx1-k7NMfqvjmS7+5LgA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] dt-bindings: phy: add binding for the Lantiq VRX200
- and ARX300 PCIe PHYs
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        John Crispin <john@phrozen.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Paul Burton <paul.burton@mips.com>,
+References: <20190430110032.25301-1-hch@lst.de> <20190430110032.25301-6-hch@lst.de>
+ <20190430201041.536amvinrcvd2wua@pburton-laptop> <20190430202947.GA30262@lst.de>
+ <20190430211105.ielntedm46uqamca@pburton-laptop> <20190501131339.GA890@lst.de>
+ <20190501171355.7wnrutfnax5djkpx@pburton-laptop> <20190603064855.GA22023@lst.de>
+In-Reply-To: <20190603064855.GA22023@lst.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 3 Jul 2019 10:54:05 +0200
+Message-ID: <CAK8P3a0+mmc_DsHZZeM85xGUUB8zc50ROUu3=i3UN1XwD8UGeQ@mail.gmail.com>
+Subject: Re: [PATCH 5/7 v2] MIPS: use the generic uncached segment support in dma-direct
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Paul Burton <paul.burton@mips.com>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin Schiller <ms@dev.tdt.de>
+        James Hogan <jhogan@kernel.org>,
+        Ley Foon Tan <lftan@altera.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rob,
-
-On Wed, Jul 3, 2019 at 1:34 AM Rob Herring <robh+dt@kernel.org> wrote:
-[...]
-> > +  lantiq,rcu:
-> > +    maxItems: 1
-> > +    description: phandle to the RCU syscon
+On Mon, Jun 3, 2019 at 8:50 AM Christoph Hellwig <hch@lst.de> wrote:
 >
-> You need to define the type (and drop maxItems):
+> On Wed, May 01, 2019 at 05:13:57PM +0000, Paul Burton wrote:
+> > Hi Christoph,
+> >
+> > On Wed, May 01, 2019 at 03:13:39PM +0200, Christoph Hellwig wrote:
+> > > Stop providing our arch alloc/free hooks and just expose the segment
+> > > offset instead.
+> > >
+> > > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> > > ---
+> > >  arch/mips/Kconfig              |  1 +
+> > >  arch/mips/include/asm/page.h   |  3 ---
+> > >  arch/mips/jazz/jazzdma.c       |  6 ------
+> > >  arch/mips/mm/dma-noncoherent.c | 26 +++++++++-----------------
+> > >  4 files changed, 10 insertions(+), 26 deletions(-)
+> >
+> > This one looks good to me now, for patches 1 & 5:
+> >
+> >   Acked-by: Paul Burton <paul.burton@mips.com>
 >
-> $ref: /schemas/types.yaml#/definitions/phandle
-thank you for this hint - the examples I used didn't have it
+> Thanks, I've merged thos into the dma-mapping tree.
 
-> > +
-> > +  lantiq,rcu-endian-offset:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description: the offset of the endian registers for this PHY instance in the RCU syscon
-> > +
-> > +  lantiq,rcu-big-endian-mask:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description: the mask to set the PDI (PHY) registers for this PHY instance to big endian
-> > +
-> > +required:
-> > +  - "#phy-cells"
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - clock-names
-> > +  - resets
-> > +  - reset-names
-> > +  - lantiq,rcu
-> > +  - lantiq,rcu-endian-offset
-> > +  - lantiq,rcu-big-endian-mask
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    pcie0_phy: phy@106800 {
-> > +        compatible = "lantiq,vrx200-pcie-phy";
-> > +        reg = <0x106800 0x100>;
-> > +        lantiq,rcu = <&rcu0>;
-> > +        lantiq,rcu-endian-offset = <0x4c>;
-> > +        lantiq,rcu-big-endian-mask = <0x80>; /* bit 7 */
-> > +        big-endian;
->
-> The example will fail to validate because big-endian is not listed as
-> a property and you have 'additionalProperties: false'. So you have to
-> either list big-endian or drop additionalProperties.
-good catch, thank you.
-I'll add big-endian and little-endian as allowed (but optional) properties
+I think this is the cause of some kernelci failures in current
+linux-next builds:
 
-> Note that the examples are validated against the schema in linux-next now.
-I tested this with yesterday's linux-next tree and it didn't fail for me
-do you have any hint how I can run this validation myself?
+https://kernelci.org/build/next/branch/master/kernel/next-20190702/
 
+bigsur_defconfig ‐ mips3 warnings — 1 error
+cavium_octeon_defconfig ‐ mips3 warnings — 1 error
+ip27_defconfig ‐ mips3 warnings — 1 error
+loongson3_defconfig ‐ mips3 warnings — 1 error
+mips_paravirt_defconfig ‐ mips3 warnings — 1 error
+nlm_xlp_defconfig ‐ mips3 warnings — 1 error
+nlm_xlr_defconfig ‐ mips1 warning — 1 error
 
-Martin
+/home/buildslave/workspace/workspace/kernel-build@8/linux/build/../kernel/dma/direct.c:144:
+undefined reference to `arch_dma_prep_coherent'
+2/home/buildslave/workspace/kernel-build/linux/build/../kernel/dma/direct.c:144:
+undefined reference to `arch_dma_prep_coherent'
+2(.text+0xafc): undefined reference to `arch_dma_prep_coherent'
+1direct.c:(.text+0x934): undefined reference to `arch_dma_prep_coherent'
+1(.text+0xb84): undefined reference to `arch_dma_prep_coherent'
+
+I haven't looked into the details, but I suspect all machines
+with cache-coherent DMA are broken.
+
+       Arnd
