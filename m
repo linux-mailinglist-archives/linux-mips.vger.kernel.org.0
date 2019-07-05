@@ -2,74 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D62C760696
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2019 15:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F9060832
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2019 16:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727638AbfGENaY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Jul 2019 09:30:24 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:49129 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726921AbfGENaY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Jul 2019 09:30:24 -0400
-X-Originating-IP: 86.250.200.211
-Received: from localhost (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
-        (Authenticated sender: antoine.tenart@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 24B5B6000B;
-        Fri,  5 Jul 2019 13:30:17 +0000 (UTC)
-Date:   Fri, 5 Jul 2019 15:30:16 +0200
-From:   Antoine Tenart <antoine.tenart@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Antoine Tenart <antoine.tenart@bootlin.com>, davem@davemloft.net,
-        richardcochran@gmail.com, alexandre.belloni@bootlin.com,
-        UNGLinuxDriver@microchip.com, ralf@linux-mips.org,
-        paul.burton@mips.com, jhogan@kernel.org, netdev@vger.kernel.org,
-        linux-mips@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        allan.nielsen@microchip.com
+        id S1726724AbfGEOpY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Jul 2019 10:45:24 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:56416 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725926AbfGEOpY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 5 Jul 2019 10:45:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=EZeBhVxNapTqKm+TwpOXvO0xXIhyUhxpE2tEItylRz8=; b=RzdT0cQsutnBd57fPrKQA8JTW1
+        GldevCdIm0HRpXI6Da4ODBN0o4CjiqNoJu93oqsfoxv+9q2EPFOvMKpS6o3PoTf6ZqUuOZVgD40Xf
+        BrrUKZZhwHKX77ZKAJ4M5KnkzhkiD7o8BLpj8BADo4bw9H5PJMc4dYHCro1Yy3FBdMTE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
+        (envelope-from <andrew@lunn.ch>)
+        id 1hjPSf-0001fm-1w; Fri, 05 Jul 2019 16:45:17 +0200
+Date:   Fri, 5 Jul 2019 16:45:17 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Antoine Tenart <antoine.tenart@bootlin.com>
+Cc:     davem@davemloft.net, richardcochran@gmail.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        ralf@linux-mips.org, paul.burton@mips.com, jhogan@kernel.org,
+        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, allan.nielsen@microchip.com
 Subject: Re: [PATCH net-next 1/8] Documentation/bindings: net: ocelot:
  document the PTP bank
-Message-ID: <20190705133016.GD3926@kwain>
+Message-ID: <20190705144517.GD4428@lunn.ch>
 References: <20190701100327.6425-1-antoine.tenart@bootlin.com>
  <20190701100327.6425-2-antoine.tenart@bootlin.com>
  <20190701135214.GD25795@lunn.ch>
+ <20190705133016.GD3926@kwain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190701135214.GD25795@lunn.ch>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <20190705133016.GD3926@kwain>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Andrew,
-
-On Mon, Jul 01, 2019 at 03:52:14PM +0200, Andrew Lunn wrote:
-> On Mon, Jul 01, 2019 at 12:03:20PM +0200, Antoine Tenart wrote:
-> > One additional register range needs to be described within the Ocelot
-> > device tree node: the PTP. This patch documents the binding needed to do
-> > so.
+On Fri, Jul 05, 2019 at 03:30:16PM +0200, Antoine Tenart wrote:
+> Hi Andrew,
 > 
-> Are there any more register banks? Maybe just add them all?
+> On Mon, Jul 01, 2019 at 03:52:14PM +0200, Andrew Lunn wrote:
+> > On Mon, Jul 01, 2019 at 12:03:20PM +0200, Antoine Tenart wrote:
+> > > One additional register range needs to be described within the Ocelot
+> > > device tree node: the PTP. This patch documents the binding needed to do
+> > > so.
+> > 
+> > Are there any more register banks? Maybe just add them all?
+> 
+> I checked and there are (just a few) more. I also saw your other comment
+> about interrupts, and it's also true there.
+> 
+> Those definitions aren't related to the PHC so I'll prepare a patch for
+> a following series to add all the missing parts.
 
-I checked and there are (just a few) more. I also saw your other comment
-about interrupts, and it's also true there.
+Thanks.
+ 
+> > Also, you should probably add a comment that despite it being in the
+> > Required part of the binding, it is actually optional.
+> 
+> I'm not sure about this: optional properties means some parts of the h/w
+> can be missing or not wired. It's not the case here, it's "optional" in
+> the driver only for dt compatibility (so that an older dt blob can work
+> with a newer kernel image), but it's now mandatory in the binding.
 
-Those definitions aren't related to the PHC so I'll prepare a patch for
-a following series to add all the missing parts.
+Hi Antoine
 
-> Also, you should probably add a comment that despite it being in the
-> Required part of the binding, it is actually optional.
+If the driver can work without it, it is clearly optional. You just
+get reduced functionality. That is the thing with DT. You can never
+add more required properties after the first commit without breaking
+backwards compatibility. To make the documentation fit the driver,
+somewhere you need to state they are optional. Either by placing the
+new properties in the optional section of the binding, or add a
+comment.
 
-I'm not sure about this: optional properties means some parts of the h/w
-can be missing or not wired. It's not the case here, it's "optional" in
-the driver only for dt compatibility (so that an older dt blob can work
-with a newer kernel image), but it's now mandatory in the binding.
-
-Thanks!
-Antoine
-
--- 
-Antoine Ténart, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+	Andrew
