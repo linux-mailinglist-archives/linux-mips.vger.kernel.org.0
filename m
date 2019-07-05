@@ -2,80 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F5B60A5E
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2019 18:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D66460AA1
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2019 18:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728551AbfGEQjj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Jul 2019 12:39:39 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:54247 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726302AbfGEQjj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Jul 2019 12:39:39 -0400
-X-Originating-IP: 90.76.143.236
-Received: from localhost (lfbn-1-2078-236.w90-76.abo.wanadoo.fr [90.76.143.236])
-        (Authenticated sender: antoine.tenart@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 37C4024000A;
-        Fri,  5 Jul 2019 16:39:30 +0000 (UTC)
-Date:   Fri, 5 Jul 2019 18:39:29 +0200
-From:   Antoine Tenart <antoine.tenart@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Antoine Tenart <antoine.tenart@bootlin.com>, davem@davemloft.net,
-        richardcochran@gmail.com, alexandre.belloni@bootlin.com,
+        id S1725884AbfGEQrk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Jul 2019 12:47:40 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:41398 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725788AbfGEQrk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Jul 2019 12:47:40 -0400
+Received: by mail-pf1-f195.google.com with SMTP id m30so4543002pff.8;
+        Fri, 05 Jul 2019 09:47:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=UtlLnC5TRAlG4W/Cn5rW/mrY7NUfn+eVWfGDgCrn+NA=;
+        b=EebMt4kHNNU4St1gh9pQPrRyjq+dQefGVdIKshWZVxKDgEdSSjoCU10RiNuZpqvx+u
+         W5LUAZupTXPHjQQtNl/tGo9zufcf6hq6WIQFhOWKA9iGvWTkqEuqKBgVGscD26m4CPI6
+         BBvTl8J9E4IMV5B7iZoQ/21tKk07FcWKlsrVMyFdDiS+3vHQ8pzgcyjpcMhrqWI8t0SK
+         kRcyw9KNk5pGBOz48qJur1kjak+sg4mcRS3rrQlfsbBRh/A1YbqL4URCQwVbEVEkP1Kt
+         8irPJH+JSx1BTQfWCgejQH4+0ERmYyhu49xTF64FjGuhz25CHlcDvLRrVNvf2XbnMCxj
+         5skA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=UtlLnC5TRAlG4W/Cn5rW/mrY7NUfn+eVWfGDgCrn+NA=;
+        b=XSxcMZfLSQCuSo3B1W1NOgT8NBGtwlKbbUubiNodIMsosGguFvP0+Q7oqYYD+Ih30n
+         QIHDqV0CjkiRBofE3XKRlAvQeDMpxXJqVaONtfIwLRqnuw2qwtCTB5sPE2lOU1H/0Eok
+         vvNvnqsfxXop4/jd0gvH5Cgd0uvSzHcdnQHq0lH3NPj1dqsySKTfzPFgO+Tkz4oqbU06
+         4WMvJRSslRer7xANGhbMFRZ7Vlsh+26eE5YOeQz0bx6Ib4pUwVGeikjzQSVWToxykqz5
+         WDX89GazTZuRV2lIDNXF2rfzkoVpRR2sTwgr/f4SDxo0u6cX5zD/sitgt11X92L1ckjE
+         Pa+g==
+X-Gm-Message-State: APjAAAVK3xlN7j7DVr88MHBqc8BFAH2w3l9vMu9W1BxrInKEL/wAOrDR
+        iiLzwBxfw8P1jm0tF/TeW2c=
+X-Google-Smtp-Source: APXvYqzzuUnoz+i03eSU2aVxxDunTmUAZtNVengEaVs6Y7I7Wb6EZzQ8Z1/26tcM9ViWUO5VsxFVCA==
+X-Received: by 2002:a63:6c7:: with SMTP id 190mr6428633pgg.7.1562345259913;
+        Fri, 05 Jul 2019 09:47:39 -0700 (PDT)
+Received: from localhost (c-73-222-71-142.hsd1.ca.comcast.net. [73.222.71.142])
+        by smtp.gmail.com with ESMTPSA id v3sm9053586pfm.188.2019.07.05.09.47.38
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 05 Jul 2019 09:47:39 -0700 (PDT)
+Date:   Fri, 5 Jul 2019 09:47:36 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Antoine Tenart <antoine.tenart@bootlin.com>
+Cc:     davem@davemloft.net, alexandre.belloni@bootlin.com,
         UNGLinuxDriver@microchip.com, ralf@linux-mips.org,
         paul.burton@mips.com, jhogan@kernel.org, netdev@vger.kernel.org,
         linux-mips@vger.kernel.org, thomas.petazzoni@bootlin.com,
         allan.nielsen@microchip.com
-Subject: Re: [PATCH net-next 1/8] Documentation/bindings: net: ocelot:
- document the PTP bank
-Message-ID: <20190705163929.GK3926@kwain>
+Subject: Re: [PATCH net-next 8/8] net: mscc: PTP Hardware Clock (PHC) support
+Message-ID: <20190705164736.x6dy2oc6jo5db65v@localhost>
 References: <20190701100327.6425-1-antoine.tenart@bootlin.com>
- <20190701100327.6425-2-antoine.tenart@bootlin.com>
- <20190701135214.GD25795@lunn.ch>
- <20190705133016.GD3926@kwain>
- <20190705144517.GD4428@lunn.ch>
+ <20190701100327.6425-9-antoine.tenart@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190705144517.GD4428@lunn.ch>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <20190701100327.6425-9-antoine.tenart@bootlin.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Andrew,
+On Mon, Jul 01, 2019 at 12:03:27PM +0200, Antoine Tenart wrote:
 
-On Fri, Jul 05, 2019 at 04:45:17PM +0200, Andrew Lunn wrote:
-> On Fri, Jul 05, 2019 at 03:30:16PM +0200, Antoine Tenart wrote:
-> > 
-> > I'm not sure about this: optional properties means some parts of the h/w
-> > can be missing or not wired. It's not the case here, it's "optional" in
-> > the driver only for dt compatibility (so that an older dt blob can work
-> > with a newer kernel image), but it's now mandatory in the binding.
-> 
-> If the driver can work without it, it is clearly optional. You just
-> get reduced functionality. That is the thing with DT. You can never
-> add more required properties after the first commit without breaking
-> backwards compatibility. To make the documentation fit the driver,
-> somewhere you need to state they are optional. Either by placing the
-> new properties in the optional section of the binding, or add a
-> comment.
+> +void ocelot_get_hwtimestamp(struct ocelot *ocelot, struct timespec64 *ts)
+> +{
+> +	/* Read current PTP time to get seconds */
+> +	u32 val = ocelot_read_rix(ocelot, PTP_PIN_CFG, TOD_ACC_PIN);
 
-The documentation is unrelated to the driver. It's the documentation of
-the binding itself, which is only describing the h/w.
+This register is protected by ocelot->ptp_clock_lock from other code
+paths, but not in this one!
 
-But I discussed this with a someone and I got to the same conclusion as
-your statement, because there can be old dt blobs in the wild and the
-binding documentation can be used to make new code. That code should be
-aware of required/optional properties.
+> +	val &= ~(PTP_PIN_CFG_SYNC | PTP_PIN_CFG_ACTION_MASK | PTP_PIN_CFG_DOM);
+> +	val |= PTP_PIN_CFG_ACTION(PTP_PIN_ACTION_SAVE);
+> +	ocelot_write_rix(ocelot, val, PTP_PIN_CFG, TOD_ACC_PIN);
+> +	ts->tv_sec = ocelot_read_rix(ocelot, PTP_PIN_TOD_SEC_LSB, TOD_ACC_PIN);
+	...
+> +}
 
-I'll fix this in v2.
 
-Thanks!
-Antoine
+> +static int ocelot_init_timestamp(struct ocelot *ocelot)
+> +{
+> +	ocelot->ptp_info = ocelot_ptp_clock_info;
+> +
+> +	ocelot->ptp_clock = ptp_clock_register(&ocelot->ptp_info, ocelot->dev);
+> +	if (IS_ERR(ocelot->ptp_clock))
+> +		return PTR_ERR(ocelot->ptp_clock);
 
--- 
-Antoine Ténart, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You need to handle the NULL case:
+
+ptp_clock_register() - register a PTP hardware clock driver
+
+@info:   Structure describing the new clock.
+@parent: Pointer to the parent device of the new clock.
+
+Returns a valid pointer on success or PTR_ERR on failure.  If PHC
+support is missing at the configuration level, this function
+returns NULL, and drivers are expected to gracefully handle that
+case separately.
+
+> +
+> +	ocelot_write(ocelot, SYS_PTP_CFG_PTP_STAMP_WID(30), SYS_PTP_CFG);
+> +	ocelot_write(ocelot, 0xffffffff, ANA_TABLES_PTP_ID_LOW);
+> +	ocelot_write(ocelot, 0xffffffff, ANA_TABLES_PTP_ID_HIGH);
+> +
+> +	ocelot_write(ocelot, PTP_CFG_MISC_PTP_EN, PTP_CFG_MISC);
+> +
+> +	return 0;
+> +}
+
+Thanks,
+Richard
