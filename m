@@ -2,87 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F9060832
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2019 16:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D77B460A1B
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Jul 2019 18:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726724AbfGEOpY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Jul 2019 10:45:24 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:56416 "EHLO vps0.lunn.ch"
+        id S1727383AbfGEQU6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Jul 2019 12:20:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47820 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725926AbfGEOpY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 5 Jul 2019 10:45:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=EZeBhVxNapTqKm+TwpOXvO0xXIhyUhxpE2tEItylRz8=; b=RzdT0cQsutnBd57fPrKQA8JTW1
-        GldevCdIm0HRpXI6Da4ODBN0o4CjiqNoJu93oqsfoxv+9q2EPFOvMKpS6o3PoTf6ZqUuOZVgD40Xf
-        BrrUKZZhwHKX77ZKAJ4M5KnkzhkiD7o8BLpj8BADo4bw9H5PJMc4dYHCro1Yy3FBdMTE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
-        (envelope-from <andrew@lunn.ch>)
-        id 1hjPSf-0001fm-1w; Fri, 05 Jul 2019 16:45:17 +0200
-Date:   Fri, 5 Jul 2019 16:45:17 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Antoine Tenart <antoine.tenart@bootlin.com>
-Cc:     davem@davemloft.net, richardcochran@gmail.com,
-        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
-        ralf@linux-mips.org, paul.burton@mips.com, jhogan@kernel.org,
-        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, allan.nielsen@microchip.com
-Subject: Re: [PATCH net-next 1/8] Documentation/bindings: net: ocelot:
- document the PTP bank
-Message-ID: <20190705144517.GD4428@lunn.ch>
-References: <20190701100327.6425-1-antoine.tenart@bootlin.com>
- <20190701100327.6425-2-antoine.tenart@bootlin.com>
- <20190701135214.GD25795@lunn.ch>
- <20190705133016.GD3926@kwain>
+        id S1727188AbfGEQU6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 5 Jul 2019 12:20:58 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 56888216FD;
+        Fri,  5 Jul 2019 16:20:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562343657;
+        bh=C2I1Vzvp4R+iI5qqfSseyRi9fvb4pPn5vXYoJ1XhQhk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=raUqS2+Kvn8FoGgxcAykDtUXVUhARlXX/sGTcK188G8VhjONGbOzRwJP6ehInhn81
+         m046pkOGykNeRLYZHUAV5V3YCbJLqcPYL3ML5aksdarTwetLl4eMiMY6wIXWlJBH+L
+         JysmNDb9yZYQSNWabqYGhTxbp44eAKDMdjxDWgvU=
+Received: by mail-qt1-f179.google.com with SMTP id h18so4242296qtm.9;
+        Fri, 05 Jul 2019 09:20:57 -0700 (PDT)
+X-Gm-Message-State: APjAAAVbsnBgtZKgZPem0y+fbMvNplUW9fNxLKsvCxcJk2+dqSFDY8Qy
+        l60w65w1zmSr88i5lWOclQrcgiX4cXmLMhujIQ==
+X-Google-Smtp-Source: APXvYqxTgmlpUn4krEylX9QF3EJfhq9faEdUppDuCVY+WbzBYGT2sNURu8a6A3PlLeGXAvS57X83Y4oyd4VS+/muFmI=
+X-Received: by 2002:ac8:3908:: with SMTP id s8mr3383843qtb.224.1562343656633;
+ Fri, 05 Jul 2019 09:20:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190705133016.GD3926@kwain>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+References: <20190704122319.8983-1-martin.blumenstingl@googlemail.com> <20190704122319.8983-2-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20190704122319.8983-2-martin.blumenstingl@googlemail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 5 Jul 2019 10:20:43 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJ7iA2kPBPLxkUVYXojqB7Hv69Nv4z3qaQveH24b45Jug@mail.gmail.com>
+Message-ID: <CAL_JsqJ7iA2kPBPLxkUVYXojqB7Hv69Nv4z3qaQveH24b45Jug@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: phy: add binding for the Lantiq
+ VRX200 and ARX300 PCIe PHYs
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        John Crispin <john@phrozen.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin Schiller <ms@dev.tdt.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jul 05, 2019 at 03:30:16PM +0200, Antoine Tenart wrote:
-> Hi Andrew,
-> 
-> On Mon, Jul 01, 2019 at 03:52:14PM +0200, Andrew Lunn wrote:
-> > On Mon, Jul 01, 2019 at 12:03:20PM +0200, Antoine Tenart wrote:
-> > > One additional register range needs to be described within the Ocelot
-> > > device tree node: the PTP. This patch documents the binding needed to do
-> > > so.
-> > 
-> > Are there any more register banks? Maybe just add them all?
-> 
-> I checked and there are (just a few) more. I also saw your other comment
-> about interrupts, and it's also true there.
-> 
-> Those definitions aren't related to the PHC so I'll prepare a patch for
-> a following series to add all the missing parts.
+On Thu, Jul 4, 2019 at 6:23 AM Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
+>
+> Add the bindings for the PCIe PHY on Lantiq VRX200 and ARX300 SoCs.
+> The IP block contains settings for the PHY and a PLL.
+> The PLL mode is configurable through a dedicated #phy-cell in .dts.
+>
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+>  .../bindings/phy/lantiq,vrx200-pcie-phy.yaml  | 95 +++++++++++++++++++
+>  .../dt-bindings/phy/phy-lantiq-vrx200-pcie.h  | 11 +++
+>  2 files changed, 106 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/lantiq,vrx200-pcie-phy.yaml
+>  create mode 100644 include/dt-bindings/phy/phy-lantiq-vrx200-pcie.h
 
-Thanks.
- 
-> > Also, you should probably add a comment that despite it being in the
-> > Required part of the binding, it is actually optional.
-> 
-> I'm not sure about this: optional properties means some parts of the h/w
-> can be missing or not wired. It's not the case here, it's "optional" in
-> the driver only for dt compatibility (so that an older dt blob can work
-> with a newer kernel image), but it's now mandatory in the binding.
-
-Hi Antoine
-
-If the driver can work without it, it is clearly optional. You just
-get reduced functionality. That is the thing with DT. You can never
-add more required properties after the first commit without breaking
-backwards compatibility. To make the documentation fit the driver,
-somewhere you need to state they are optional. Either by placing the
-new properties in the optional section of the binding, or add a
-comment.
-
-	Andrew
+Reviewed-by: Rob Herring <robh@kernel.org>
