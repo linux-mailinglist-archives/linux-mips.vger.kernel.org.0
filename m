@@ -2,86 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 195F662367
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2019 17:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D048628ED
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Jul 2019 21:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390729AbfGHPfJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Jul 2019 11:35:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37614 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390892AbfGHPfI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Jul 2019 11:35:08 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 429AC20651;
-        Mon,  8 Jul 2019 15:35:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562600107;
-        bh=z/ooAq1ICsAXqKXJ0w7Avw/GipHY/HsT8UzX+CHjg6Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MJeJmyDbVhaYTFKvup8TFoJ9pZPPe4krMsNPB0XJui2DLob+ULB66Y7K3GX35NqaS
-         v/h7GpI0Qb1PMNCiGuV2fKuu3gs1UDgHj114QM+wYxOT5NYMnMS7exZ8Tz2I3xnsWO
-         aRAiQyyptr8+th6cTCuCPoUz/spXZWq8Vhm4v9FI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Cedric Hombourger <Cedric_Hombourger@mentor.com>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org
-Subject: [PATCH 5.1 91/96] MIPS: have "plain" make calls build dtbs for selected platforms
-Date:   Mon,  8 Jul 2019 17:14:03 +0200
-Message-Id: <20190708150531.357282183@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190708150526.234572443@linuxfoundation.org>
-References: <20190708150526.234572443@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1729009AbfGHTGd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Jul 2019 15:06:33 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:36894 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726126AbfGHTGd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Jul 2019 15:06:33 -0400
+Received: by mail-qt1-f193.google.com with SMTP id y26so6575293qto.4
+        for <linux-mips@vger.kernel.org>; Mon, 08 Jul 2019 12:06:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=VrVrMm/1sGvO1AtHPCpDj09pM9ej99uvdp0h/aIUafY=;
+        b=vjpk1DmZpSCtppK1dLplX2MObatzOD4kJ+QzWr4ZpWGTbYQncnW553KcIssWjZ5p0r
+         RwP1ilLqMOgtMUAhregkpO8AY91GGqgjFdsWXmTVoK0uztnxe0NtuwI2yjgmVv9an4/O
+         mgHexLpRFwgM6z/0ORm18mQF7SDtSxrbmOBpgut1AsRKnmncoSenv1gUbATEnLGanYu+
+         EyL8LDMVW2086Tau+SgU0iGw0hzmn6H4ZbjYGftek4UDRBdnrZvbHn/Xqv1gyIC3TuaA
+         jgxSTgtmsc8QJEX5gkCFLozYigsyypt/QdasFM5r2FK+6i4Fptctjng77L5zKt2V418q
+         ttcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=VrVrMm/1sGvO1AtHPCpDj09pM9ej99uvdp0h/aIUafY=;
+        b=RPMbTbDS04o9QkwUVcms17HaYDQo2elGGSZXo7m0y4YwcLmLHCehoORlr4qOZ8wQ3G
+         xG28B8wcVnvGTwkQ/DWz60wrKNRR1jpM1GTsnFYaJF76VUjq3TLU2MvopOy63bk5ROXb
+         tOKSl+4MyQKQZx+C4l/wcRClDuN7kkydo4IorpJghDT3/+W5Q22P+c5RyTz2+Z7qNEH8
+         yGQ2HdyAIVDvBraITZNz7rdu5+vu2O4zlBZXyfL7HiAKCyNUzMdVTCgUu+hQnxcGXae1
+         1Z4B6I30HkWJ2DCmTPy9Oo4xeX9d7SXoNas1bHbNQrCKzVxJk1mA6htEdIj52OsnmQPy
+         J5Vg==
+X-Gm-Message-State: APjAAAV1DcamAJOPK/TBaja46nYYWNeo3iLgvkJfAxmr6z1gXL6N56SP
+        hHdUhfIz99J6N5S5N+ZFdzVVBg==
+X-Google-Smtp-Source: APXvYqxHKCLgJp3Ha6v+66EanGTOAxhTgf30cjlh1S+XUFymB0hl55sa3QkW3LydHhu0HuXgV/bIwQ==
+X-Received: by 2002:aed:222d:: with SMTP id n42mr15455953qtc.144.1562612792246;
+        Mon, 08 Jul 2019 12:06:32 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id i62sm5145664qke.52.2019.07.08.12.06.30
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 08 Jul 2019 12:06:32 -0700 (PDT)
+Date:   Mon, 8 Jul 2019 12:06:26 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Antoine Tenart <antoine.tenart@bootlin.com>
+Cc:     davem@davemloft.net, richardcochran@gmail.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        ralf@linux-mips.org, paul.burton@mips.com, jhogan@kernel.org,
+        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, allan.nielsen@microchip.com
+Subject: Re: [PATCH net-next v2 8/8] net: mscc: PTP Hardware Clock (PHC)
+ support
+Message-ID: <20190708120626.2cecc86b@cakuba.netronome.com>
+In-Reply-To: <20190708084809.GB2932@kwain>
+References: <20190705195213.22041-1-antoine.tenart@bootlin.com>
+        <20190705195213.22041-9-antoine.tenart@bootlin.com>
+        <20190705151038.0581a052@cakuba.netronome.com>
+        <20190708084809.GB2932@kwain>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Cedric Hombourger <Cedric_Hombourger@mentor.com>
+On Mon, 8 Jul 2019 10:48:09 +0200, Antoine Tenart wrote:
+> > > +	/* Commit back the result & save it */
+> > > +	memcpy(&ocelot->hwtstamp_config, &cfg, sizeof(cfg));
+> > > +	mutex_unlock(&ocelot->ptp_lock);
+> > > +
+> > > +	return copy_to_user(ifr->ifr_data, &cfg, sizeof(cfg)) ? -EFAULT : 0;
+> > > +}
+> > >  
+> > > +static int ocelot_get_ts_info(struct net_device *dev,
+> > > +			      struct ethtool_ts_info *info)
+> > > +{
+> > > +	struct ocelot_port *ocelot_port = netdev_priv(dev);
+> > > +	struct ocelot *ocelot = ocelot_port->ocelot;
+> > > +	int ret;
+> > > +
+> > > +	if (!ocelot->ptp)
+> > > +		return -EOPNOTSUPP;  
+> > 
+> > Hmm.. why does software timestamping depend on PTP?  
+> 
+> Because it depends on the "PTP" register bank (and the "PTP" interrupt)
+> being described and available. This is why I named the flag 'ptp', but
+> it could be named 'timestamp' or 'ts' as well.
 
-commit 637dfa0fad6d91a9a709dc70549a6d20fa77f615 upstream.
-
-scripts/package/builddeb calls "make dtbs_install" after executing
-a plain make (i.e. no build targets specified). It will fail if dtbs
-were not built beforehand. Match the arm64 architecture where DTBs get
-built by the "all" target.
-
-Signed-off-by: Cedric Hombourger <Cedric_Hombourger@mentor.com>
-[paul.burton@mips.com: s/builddep/builddeb]
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Cc: linux-mips@vger.kernel.org
-Cc: stable@vger.kernel.org # v4.1+
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
- arch/mips/Makefile |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -17,6 +17,7 @@ archscripts: scripts_basic
- 	$(Q)$(MAKE) $(build)=arch/mips/boot/tools relocs
- 
- KBUILD_DEFCONFIG := 32r2el_defconfig
-+KBUILD_DTBS      := dtbs
- 
- #
- # Select the object file format to substitute into the linker script.
-@@ -384,7 +385,7 @@ quiet_cmd_64 = OBJCOPY $@
- vmlinux.64: vmlinux
- 	$(call cmd,64)
- 
--all:	$(all-y)
-+all:	$(all-y) $(KBUILD_DTBS)
- 
- # boot
- $(boot-y): $(vmlinux-32) FORCE
-
-
+Right, but software timestamps are done by calling skb_tx_timestamp(skb)
+in the driver, no need for HW support there (software RX timestamp is
+handled by the stack).
