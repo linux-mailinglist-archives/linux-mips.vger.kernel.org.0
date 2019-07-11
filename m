@@ -2,145 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 238F96543C
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2019 11:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6C86548C
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Jul 2019 12:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728306AbfGKJ5t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 11 Jul 2019 05:57:49 -0400
-Received: from foss.arm.com ([217.140.110.172]:44082 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728295AbfGKJ5t (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 11 Jul 2019 05:57:49 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7565337;
-        Thu, 11 Jul 2019 02:57:47 -0700 (PDT)
-Received: from [10.162.42.96] (p8cg001049571a15.blr.arm.com [10.162.42.96])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 64DD13F71F;
-        Thu, 11 Jul 2019 02:57:36 -0700 (PDT)
-Subject: Re: [PATCH] mm/kprobes: Add generic kprobe_fault_handler() fallback
- definition
-To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>
-Cc:     Vineet Gupta <vgupta@synopsys.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Allison Randal <allison@lohutok.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Enrico Weigelt <info@metux.net>,
-        Richard Fontana <rfontana@redhat.com>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>, x86@kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org
-References: <1562304629-29376-1-git-send-email-anshuman.khandual@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <542893ae-ed64-55b2-11ee-1f19710a25e4@arm.com>
-Date:   Thu, 11 Jul 2019 15:28:07 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1728125AbfGKKem (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 11 Jul 2019 06:34:42 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:49530 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfGKKel (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 Jul 2019 06:34:41 -0400
+Received: from [5.158.153.55] (helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1hlWPJ-0003zg-TT; Thu, 11 Jul 2019 12:34:34 +0200
+Date:   Thu, 11 Jul 2019 12:34:27 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Will Deacon <will@kernel.org>
+cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        andre.przywara@arm.com, arnd@arndb.de, huw@codeweavers.com,
+        catalin.marinas@arm.com, daniel.lezcano@linaro.org,
+        will.deacon@arm.com, linux@armlinux.org.uk, ralf@linux-mips.org,
+        salyzyn@android.com, luto@kernel.org, paul.burton@mips.com,
+        john.stultz@linaro.org, 0x7f454c46@gmail.com,
+        linux@rasmusvillemoes.dk, sthotton@marvell.com, pcc@google.com
+Subject: Re: [PATCH v2] arm64: vdso: Fix ABI regression in compat vdso
+In-Reply-To: <20190711094505.rwy6t6wu2cvmvwr6@willie-the-truck>
+Message-ID: <alpine.DEB.2.21.1907111232000.1889@nanos.tec.linutronix.de>
+References: <20190621095252.32307-11-vincenzo.frascino@arm.com> <20190710140119.23417-1-vincenzo.frascino@arm.com> <20190711094505.rwy6t6wu2cvmvwr6@willie-the-truck>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <1562304629-29376-1-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, 11 Jul 2019, Will Deacon wrote:
 
+> On Wed, Jul 10, 2019 at 03:01:19PM +0100, Vincenzo Frascino wrote:
+> > Prior to the introduction of Unified vDSO support and compat layer for
+> > vDSO on arm64, AT_SYSINFO_EHDR was not defined for compat tasks.
+> > In the current implementation, AT_SYSINFO_EHDR is defined even if the
+> > compat vdso layer is not built and this causes a regression in the
+> > expected behavior of the ABI.
+> > 
+> > Restore the ABI behavior making sure that AT_SYSINFO_EHDR for compat
+> > tasks is defined only when CONFIG_COMPAT_VDSO is enabled.
+> > 
+> > Reported-by: John Stultz <john.stultz@linaro.org>
+> > Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> > ---
+> >  arch/arm64/include/asm/elf.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
+> > index 3c7037c6ba9b..b618017205a3 100644
+> > --- a/arch/arm64/include/asm/elf.h
+> > +++ b/arch/arm64/include/asm/elf.h
+> > @@ -202,7 +202,7 @@ typedef compat_elf_greg_t		compat_elf_gregset_t[COMPAT_ELF_NGREG];
+> >  ({									\
+> >  	set_thread_flag(TIF_32BIT);					\
+> >   })
+> > -#ifdef CONFIG_GENERIC_COMPAT_VDSO
+> > +#ifdef CONFIG_COMPAT_VDSO
+> >  #define COMPAT_ARCH_DLINFO						\
+> >  do {									\
+> >  	/*								\
+> 
+> Acked-by: Will Deacon <will@kernel.org>
+> 
+> I can take this at -rc1 via arm64 unless tglx plans to send it during the
+> rest of the merge window. Please let me know.
 
-On 07/05/2019 11:00 AM, Anshuman Khandual wrote:
-> Architectures like parisc enable CONFIG_KROBES without having a definition
-> for kprobe_fault_handler() which results in a build failure. Arch needs to
-> provide kprobe_fault_handler() as it is platform specific and cannot have
-> a generic working alternative. But in the event when platform lacks such a
-> definition there needs to be a fallback.
-> 
-> This adds a stub kprobe_fault_handler() definition which not only prevents
-> a build failure but also makes sure that kprobe_page_fault() if called will
-> always return negative in absence of a sane platform specific alternative.
-> 
-> While here wrap kprobe_page_fault() in CONFIG_KPROBES. This enables stud
-> definitions for generic kporbe_fault_handler() and kprobes_built_in() can
-> just be dropped. Only on x86 it needs to be added back locally as it gets
-> used in a !CONFIG_KPROBES function do_general_protection().
-> 
-> Cc: Vineet Gupta <vgupta@synopsys.com>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: Fenghua Yu <fenghua.yu@intel.com>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Paul Burton <paul.burton@mips.com>
-> Cc: James Hogan <jhogan@kernel.org>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-> Cc: Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Allison Randal <allison@lohutok.net>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Enrico Weigelt <info@metux.net>
-> Cc: Richard Fontana <rfontana@redhat.com>
-> Cc: Kate Stewart <kstewart@linuxfoundation.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: x86@kernel.org
-> Cc: linux-snps-arc@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-ia64@vger.kernel.org
-> Cc: linux-mips@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-s390@vger.kernel.org
-> Cc: linux-sh@vger.kernel.org
-> Cc: sparclinux@vger.kernel.org
-> 
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
+I had no plan to pick it up, but if you want I can route it through timer
+urgents so it hits Linus tree before rc1.
 
-Any updates or suggestions on this patch ? Currently there is a build failure on
-parisc architecture due to the lack of a kprobe_fault_handler() definition when
-CONFIG_KPROBES is enabled and this build failure needs to be fixed.
+Thanks,
 
-This patch solves the build problem. But otherwise I am also happy to just define
-a stub definition for kprobe_fault_handler() on parisc arch when CONFIG_KPROBES
-is enabled, which will avoid the build failure. Please suggest.
+	tglx
