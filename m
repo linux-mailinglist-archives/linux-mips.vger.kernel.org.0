@@ -2,37 +2,44 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7903F66718
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Jul 2019 08:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF26666B38
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Jul 2019 12:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726047AbfGLGgu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 12 Jul 2019 02:36:50 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:33532 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725562AbfGLGgu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 12 Jul 2019 02:36:50 -0400
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1hlpAI-0006Xe-68; Fri, 12 Jul 2019 06:36:18 +0000
-Date:   Fri, 12 Jul 2019 07:36:18 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Aleksa Sarai <cyphar@cyphar.com>
+        id S1726973AbfGLK6N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 12 Jul 2019 06:58:13 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:42972 "EHLO mx1.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726050AbfGLK6N (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 12 Jul 2019 06:58:13 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx1.mailbox.org (Postfix) with ESMTPS id 648AF5427E;
+        Fri, 12 Jul 2019 12:58:07 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
+        with ESMTP id la_RnxBryad0; Fri, 12 Jul 2019 12:57:56 +0200 (CEST)
+Date:   Fri, 12 Jul 2019 20:57:45 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
 Cc:     Jeff Layton <jlayton@kernel.org>,
         "J. Bruce Fields" <bfields@fieldses.org>,
         Arnd Bergmann <arnd@arndb.de>,
         David Howells <dhowells@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
         Christian Brauner <christian@brauner.io>,
+        David Drysdale <drysdale@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Eric Biederman <ebiederm@xmission.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
         Chanho Min <chanho.min@lge.com>,
         Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
         containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
         linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
@@ -42,38 +49,105 @@ Cc:     Jeff Layton <jlayton@kernel.org>,
         linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v9 01/10] namei: obey trailing magic-link DAC permissions
-Message-ID: <20190712063617.GJ17978@ZenIV.linux.org.uk>
+Subject: Re: [PATCH v9 05/10] namei: O_BENEATH-style path resolution flags
+Message-ID: <20190712105745.nruaftgeat6irhzr@yavin>
 References: <20190706145737.5299-1-cyphar@cyphar.com>
- <20190706145737.5299-2-cyphar@cyphar.com>
- <20190712041454.GG17978@ZenIV.linux.org.uk>
+ <20190706145737.5299-6-cyphar@cyphar.com>
+ <20190712043341.GI17978@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="f3oogwkmh2sysq6o"
 Content-Disposition: inline
-In-Reply-To: <20190712041454.GG17978@ZenIV.linux.org.uk>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190712043341.GI17978@ZenIV.linux.org.uk>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jul 12, 2019 at 05:14:54AM +0100, Al Viro wrote:
 
-> That's not quite guaranteed (it is possible to bind a symlink on top
-> of a regular file, and you will get LOOKUP_JUMPED on the entry into
-> trailing_symlink() when looking the result up).  Moreover, why bother
-> with LOOKUP_JUMPED here?  See that
-> 	nd->last_type = LAST_BIND;
-> several lines prior?  That's precisely to be able to recognize those
-> suckers.
+--f3oogwkmh2sysq6o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-... except that this won't work these days (once upon a time it used
-to, but that had been a long time ago).  However, that doesn't change
-the fact that the test is really wrong.  So let's do it right:
+On 2019-07-12, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> On Sun, Jul 07, 2019 at 12:57:32AM +1000, Aleksa Sarai wrote:
+> > @@ -1442,8 +1464,11 @@ static int follow_dotdot_rcu(struct nameidata *n=
+d)
+> >  	struct inode *inode =3D nd->inode;
+> > =20
+> >  	while (1) {
+> > -		if (path_equal(&nd->path, &nd->root))
+> > +		if (path_equal(&nd->path, &nd->root)) {
+> > +			if (unlikely(nd->flags & LOOKUP_BENEATH))
+> > +				return -EXDEV;
+>=20
+> > @@ -1468,6 +1493,8 @@ static int follow_dotdot_rcu(struct nameidata *nd)
+> >  				return -ECHILD;
+> >  			if (&mparent->mnt =3D=3D nd->path.mnt)
+> >  				break;
+> > +			if (unlikely(nd->flags & LOOKUP_XDEV))
+> > +				return -EXDEV;
+> >  			/* we know that mountpoint was pinned */
+> >  			nd->path.dentry =3D mountpoint;
+> >  			nd->path.mnt =3D &mparent->mnt;
+> > @@ -1482,6 +1509,8 @@ static int follow_dotdot_rcu(struct nameidata *nd)
+> >  			return -ECHILD;
+> >  		if (!mounted)
+> >  			break;
+> > +		if (unlikely(nd->flags & LOOKUP_XDEV))
+> > +			return -EXDEV;
+>=20
+> Are you sure these failure exits in follow_dotdot_rcu() won't give
+> suprious hard errors?
 
-* set a new flag along with LOOKUP_JUMPED in nd_jump_link()
-* clear it in get_link() right before
-	res = READ_ONCE(inode->i_link);
-* check it in trailing_symlink() (or callers thereof)
+I could switch to -ECHILD for the *_rcu() checks if you'd prefer that.
+Though, I'd have (probably naively) thought that you'd have already
+gotten -ECHILD from the seqlock checks if there was a race during ".."
+handling.
 
-The rest of comments stand, AFAICS.
+> > +	if (unlikely(nd->flags & LOOKUP_BENEATH)) {
+> > +		error =3D dirfd_path_init(nd);
+> > +		if (unlikely(error))
+> > +			return ERR_PTR(error);
+> > +		nd->root =3D nd->path;
+> > +		if (!(nd->flags & LOOKUP_RCU))
+> > +			path_get(&nd->root);
+> > +	}
+> >  	if (*s =3D=3D '/') {
+> >  		if (likely(!nd->root.mnt))
+> >  			set_root(nd);
+> > @@ -2350,9 +2400,11 @@ static const char *path_init(struct nameidata *n=
+d, unsigned flags)
+> >  			s =3D ERR_PTR(error);
+> >  		return s;
+> >  	}
+> > -	error =3D dirfd_path_init(nd);
+> > -	if (unlikely(error))
+> > -		return ERR_PTR(error);
+> > +	if (likely(!nd->path.mnt)) {
+>=20
+> Is that a weird way of saying "if we hadn't already called dirfd_path_ini=
+t()"?
+
+Yes. I did it to be more consistent with the other "have we got the
+root" checks elsewhere. Is there another way you'd prefer I do it?
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--f3oogwkmh2sysq6o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXShnpgAKCRCdlLljIbnQ
+EgLTAP4nuVmi0292tyCAkB4Di0UUtazb2EsZPgKq9s2vRoyuFAD/UKONDBSK3VN9
+06Id1xrmV0JIYJSqOIdF2oJIncJ8ZwI=
+=5hbR
+-----END PGP SIGNATURE-----
+
+--f3oogwkmh2sysq6o--
