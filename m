@@ -2,69 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B25AF67449
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Jul 2019 19:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A59677A7
+	for <lists+linux-mips@lfdr.de>; Sat, 13 Jul 2019 04:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727141AbfGLRea (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 12 Jul 2019 13:34:30 -0400
-Received: from ms.lwn.net ([45.79.88.28]:59320 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726976AbfGLRea (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 12 Jul 2019 13:34:30 -0400
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id B29512CC;
-        Fri, 12 Jul 2019 17:34:28 +0000 (UTC)
-Date:   Fri, 12 Jul 2019 11:34:27 -0600
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Alex Shi <alex.shi@linux.alibaba.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
+        id S1727502AbfGMCmV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 12 Jul 2019 22:42:21 -0400
+Received: from zeniv.linux.org.uk ([195.92.253.2]:48010 "EHLO
+        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727338AbfGMCmU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 12 Jul 2019 22:42:20 -0400
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1hm7yz-0001A3-CY; Sat, 13 Jul 2019 02:41:53 +0000
+Date:   Sat, 13 Jul 2019 03:41:53 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <christian@brauner.io>,
+        David Drysdale <drysdale@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH 01/12] Documentation: move architectures together
-Message-ID: <20190712113427.62fa7ffc@lwn.net>
-In-Reply-To: <20190712022018.27989-1-alex.shi@linux.alibaba.com>
-References: <20190712022018.27989-1-alex.shi@linux.alibaba.com>
-Organization: LWN.net
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v9 05/10] namei: O_BENEATH-style path resolution flags
+Message-ID: <20190713024153.GA3817@ZenIV.linux.org.uk>
+References: <20190706145737.5299-1-cyphar@cyphar.com>
+ <20190706145737.5299-6-cyphar@cyphar.com>
+ <20190712043341.GI17978@ZenIV.linux.org.uk>
+ <20190712105745.nruaftgeat6irhzr@yavin>
+ <20190712123924.GK17978@ZenIV.linux.org.uk>
+ <20190712125552.GL17978@ZenIV.linux.org.uk>
+ <20190712132553.GN17978@ZenIV.linux.org.uk>
+ <20190712150026.GO17978@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190712150026.GO17978@ZenIV.linux.org.uk>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 12 Jul 2019 10:20:07 +0800
-Alex Shi <alex.shi@linux.alibaba.com> wrote:
+On Fri, Jul 12, 2019 at 04:00:26PM +0100, Al Viro wrote:
+> On Fri, Jul 12, 2019 at 02:25:53PM +0100, Al Viro wrote:
+> 
+> > 	if (flags & LOOKUP_BENEATH) {
+> > 		nd->root = nd->path;
+> > 		if (!(flags & LOOKUP_RCU))
+> > 			path_get(&nd->root);
+> > 		else
+> > 			nd->root_seq = nd->seq;
+> 
+> BTW, this assignment is needed for LOOKUP_RCU case.  Without it
+> you are pretty much guaranteed that lazy pathwalk will fail,
+> when it comes to complete_walk().
+> 
+> Speaking of which, what would happen if LOOKUP_ROOT/LOOKUP_BENEATH
+> combination would someday get passed?
 
-> There are many different archs in Documentation/ dir, it's better to
-> move them together in 'Documentation/arch' which follows from kernel source.
+I don't understand what's going on with ->r_seq in there - your
+call of path_is_under() is after having (re-)sampled rename_lock,
+but if that was the only .. in there, who's going to recheck
+the value?  For that matter, what's to guarantee that the thing
+won't get moved just as you are returning from handle_dots()?
 
-So this seems certain to collide badly with Mauro's RST-conversion monster
-patch set.
-
-More to the point, though...if we are going to thrash up things this
-badly, we want to be sure that we're doing it right so we don't end up
-renaming everything again.  Grouping stuff into a new arch/ subdirectory
-adds a bit of order, but it doesn't do much toward trying to organize our
-documentation for its readers, and it doesn't help us to modernize the
-docs and get rid of the old, useless stuff.  A quick check shows that many
-of these files have seen no changes other than typo fixes since the
-beginning of the Git era.
-
-So, in my mind, this needs some thought.  Maybe we want a
-Documentation/arch in the end, but I'm not convinced that we should just
-create it and fill it with a snow shovel.  This might be a good thing to
-discuss at the kernel summit in September.
-
-Thanks,
-
-jon
+IOW, what does LOOKUP_IN_ROOT guarantee for caller (openat2())?
