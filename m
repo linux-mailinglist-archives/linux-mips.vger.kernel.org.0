@@ -2,165 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7254B68989
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2019 14:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207EA694BF
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Jul 2019 16:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730147AbfGOMqv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Jul 2019 08:46:51 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:44187 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730058AbfGOMqu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Jul 2019 08:46:50 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 45nNZW3J9cz9sNH;
-        Mon, 15 Jul 2019 22:46:43 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1563194807;
-        bh=9/SEqZnJa8WoQp6beYVP7szEyuuyjE3Y8ntjl4h2KtE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LLFjAfK2CqalVVY8KQGJjBSinznGfUiSl0AuPSDhysPtbyMOH7VJEg7rXy/PMtFok
-         /6nPDrPxjA0qU5PKTKaO/ixBTVxTd/Q/1UtHvKFeikvLMitX0q5h1DskvbQAgRdC7f
-         U8N2hVoK1mRqx/vwuh0MXs3xIStXJQZQQNyx6NeBNuxzw/55NTQcwuE0SFXeuJ1T84
-         APmjuvTLLJHUqux1wq4QMQdqT0XOX4rzMHiRaza3Tn1kQjWIB2Qok7mvvQ3Vl0/sEu
-         ewMdWJBb+86pwUO5nEPU0NDQtQ+eQJRnX5iAdIqbgXfI5jsXy5FCTH9dg8hd/i7WLP
-         dNrTyrueUm5MQ==
-Date:   Mon, 15 Jul 2019 22:46:40 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        John Crispin <john@phrozen.org>,
-        Matthias Schiffer <mschiffer@universe-factory.net>,
-        "Petr =?UTF-8?B?xaB0ZXRpYXI=?=" <ynezz@true.cz>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH] MIPS: fix some more fall through errors in arch/mips
-Message-ID: <20190715224640.5e086766@canb.auug.org.au>
+        id S2404476AbfGOOxr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Jul 2019 10:53:47 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:39764 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391542AbfGOO3T (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Jul 2019 10:29:19 -0400
+Received: by mail-ot1-f66.google.com with SMTP id r21so11122426otq.6
+        for <linux-mips@vger.kernel.org>; Mon, 15 Jul 2019 07:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=6QkSbJ8pehcPJsEqSW/0Jw3Kj7WtEh8gEc9PVJH1CrA=;
+        b=YDX5Cni69En7Hnte+J3OlCSJ0HlBPkTtUerLm+TEt90UKpDUfDuJvjCxyA/xsbdN+4
+         NlM28WRfcpu6byVaPN4oE7VH4s3k0vd1hEb+a57aabIHxBzldliL2Htoq2btKjK4n7AS
+         dEk3INMwrusBqXJOHjVd5y+1ZYzs3lAeIPfrwgpru+b49OUDLgXf6+CpcsZ6fG8itG0F
+         1l0rPwOFa7qBIOGncKcrTTI0b32v3jNfOV6b+s6CSQAQGdFNyL4RrykbWCb0WlSmG84g
+         rPg2y0ELpTG/hNU8ek2ztwI6ffWkYO0HuhjiHpT2javBLichO07Q+0RuqzlaxnSebk5a
+         7e7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=6QkSbJ8pehcPJsEqSW/0Jw3Kj7WtEh8gEc9PVJH1CrA=;
+        b=FwHbzTBgPIb4QM75H/5qJ6yCvFD2FJHyHCLzADkpvoYVPeq73KNSH8wQfecuVZGTNk
+         KzjYyRCV/6L5WuAZEUctNtFHwzDk43bpYo4Jz2v41FdTywuch4RCKyvt+cvrnQwHiosB
+         VceliuClAPDqOFxY6MV0McV8WlS2fgPccv/fVYoa6vp1XKJNzb/d/Tp20pRnkqoLPs5L
+         OGtgczKytcwv+1nnnFD7fUvZTVIqR4hr4L2TaBqeDXDn1QiXagFMIBbulL9RwCle7jks
+         fyQMtVv88vFiDP+DiPVx2lwA3FJesuaiDMLK98Vr7y//AMShsg7FPkNx2CKXYFytXhe+
+         2FWA==
+X-Gm-Message-State: APjAAAV5OVPRlcSM/v/8WAeBKbClVxAt8jWOchtoXi9MKeM6Qbyv66Ul
+        jRVSR4b8KVtwzM/1PMUTlsQ=
+X-Google-Smtp-Source: APXvYqyjL0Ot/+YneSRjZE4d+NlwotmvVCLCkSyihKbIEGxxfUrBUzxa4ggVFEdDWrNvLtFCu+w3cQ==
+X-Received: by 2002:a05:6830:193:: with SMTP id q19mr20811013ota.187.1563200957973;
+        Mon, 15 Jul 2019 07:29:17 -0700 (PDT)
+Received: from brauner.io ([208.54.86.135])
+        by smtp.gmail.com with ESMTPSA id a94sm6577090otb.15.2019.07.15.07.29.11
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 15 Jul 2019 07:29:16 -0700 (PDT)
+Date:   Mon, 15 Jul 2019 16:29:09 +0200
+From:   Christian Brauner <christian@brauner.io>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, arnd@arndb.de,
+        linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>
+Subject: Re: [PATCH 1/2] arch: mark syscall number 435 reserved for clone3
+Message-ID: <20190715142907.7p43dgmx5sz5oouz@brauner.io>
+References: <20190714192205.27190-1-christian@brauner.io>
+ <20190714192205.27190-2-christian@brauner.io>
+ <e14eb2f9-43cb-0b9d-dec4-b7e7dcd62091@de.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- boundary="Sig_/pMnJdw90F43e.iCCqsGhjyR"; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e14eb2f9-43cb-0b9d-dec4-b7e7dcd62091@de.ibm.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
---Sig_/pMnJdw90F43e.iCCqsGhjyR
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jul 15, 2019 at 03:56:04PM +0200, Christian Borntraeger wrote:
+> I think Vasily already has a clone3 patch for s390x with 435. 
 
-Fix these errors:
+Excellent. I'll leave the # 435 reserved for clone3 on s390x in until
+this patch has landed. It shouldn't be a merge conflict and if so it
+should be trivial.
 
- arch/mips/cavium-octeon/executive/cvmx-pko.c:489:7: error: this statement =
-may fall through [-Werror=3Dimplicit-fallthrough=3D]
- arch/mips/bcm63xx/dev-flash.c:89:3: error: this statement may fall through=
- [-Werror=3Dimplicit-fallthrough=3D]
- arch/mips/ath79/setup.c:155:17: error: this statement may fall through [-W=
-error=3Dimplicit-fallthrough=3D]
- arch/mips/ar7/setup.c:50:3: error: this statement may fall through [-Werro=
-r=3Dimplicit-fallthrough=3D]
-
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: John Crispin <john@phrozen.org>
-Cc: Matthias Schiffer <mschiffer@universe-factory.net>
-Cc: "Petr =C5=A0tetiar" <ynezz@true.cz>
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/mips/ar7/setup.c                        | 1 +
- arch/mips/ath79/setup.c                      | 2 +-
- arch/mips/bcm63xx/dev-flash.c                | 1 +
- arch/mips/cavium-octeon/executive/cvmx-pko.c | 2 +-
- 4 files changed, 4 insertions(+), 2 deletions(-)
-
-These are the remaining errors in Linus' tree.
-
-Again, not even tested, but pretty straight forward.
-
-diff --git a/arch/mips/ar7/setup.c b/arch/mips/ar7/setup.c
-index ba32825ae58a..b3ffe7c898eb 100644
---- a/arch/mips/ar7/setup.c
-+++ b/arch/mips/ar7/setup.c
-@@ -57,6 +57,7 @@ const char *get_system_type(void)
- 		case TITAN_CHIP_1060:
- 			return "TI AR7 (TNETV1060)";
- 		}
-+		/* fall through */
- 	default:
- 		return "TI AR7 (unknown)";
- 	}
-diff --git a/arch/mips/ath79/setup.c b/arch/mips/ath79/setup.c
-index f22538cae0ab..ea385a865781 100644
---- a/arch/mips/ath79/setup.c
-+++ b/arch/mips/ath79/setup.c
-@@ -153,7 +153,7 @@ static void __init ath79_detect_sys_type(void)
- 	case REV_ID_MAJOR_QCA9533_V2:
- 		ver =3D 2;
- 		ath79_soc_rev =3D 2;
--		/* drop through */
-+		/* fall through */
-=20
- 	case REV_ID_MAJOR_QCA9533:
- 		ath79_soc =3D ATH79_SOC_QCA9533;
-diff --git a/arch/mips/bcm63xx/dev-flash.c b/arch/mips/bcm63xx/dev-flash.c
-index 172dd8397178..a1093934c616 100644
---- a/arch/mips/bcm63xx/dev-flash.c
-+++ b/arch/mips/bcm63xx/dev-flash.c
-@@ -94,6 +94,7 @@ static int __init bcm63xx_detect_flash_type(void)
- 		case STRAPBUS_6368_BOOT_SEL_PARALLEL:
- 			return BCM63XX_FLASH_TYPE_PARALLEL;
- 		}
-+		/* fall through */
- 	default:
- 		return -EINVAL;
- 	}
-diff --git a/arch/mips/cavium-octeon/executive/cvmx-pko.c b/arch/mips/caviu=
-m-octeon/executive/cvmx-pko.c
-index 676fab50dd2b..b077597c668a 100644
---- a/arch/mips/cavium-octeon/executive/cvmx-pko.c
-+++ b/arch/mips/cavium-octeon/executive/cvmx-pko.c
-@@ -485,11 +485,11 @@ cvmx_pko_status_t cvmx_pko_config_port(uint64_t port,=
- uint64_t base_queue,
- 			config.s.qos_mask =3D 0xff;
- 			break;
- 		case CVMX_PKO_QUEUE_STATIC_PRIORITY:
--			/* Pass 1 will fall through to the error case */
- 			if (!cvmx_octeon_is_pass1()) {
- 				config.s.qos_mask =3D 0xff;
- 				break;
- 			}
-+			/* fall through - to the error case, when Pass 1 */
- 		default:
- 			cvmx_dprintf("ERROR: cvmx_pko_config_port: Invalid "
- 				     "priority %llu\n",
---=20
-2.22.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/pMnJdw90F43e.iCCqsGhjyR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl0sdbAACgkQAVBC80lX
-0GxnxAf/Y/vbLCgdaHACQGiUcRHlAcCMd13g9hqlAh9eU1fluJFLVY8M/QdvSAVw
-3Dzmhz02BwkWLf4UiOuL5vid2lq0ABcT04CW+m9DPjk/SZneYnd73F36MQNqvf5E
-11tsZbdKBJxte8U4VJhaVp5t4jn0LseZFeXr57e2KWsTaGAMgIEcI1RvJz/LsPyP
-x8/gBr6kc6AT5bofCDhRpUJBEF9nQFxfb2wZ3uobq2wvSMNc948vyxlIJffMlzoL
-3a8o6qg6AGfJ8TUpNwviDbPvxpcaUdJNwoUMhpWCOCpMI6Gi0kUIt7vUMfNqY0VS
-YUmp2jpDjQo8goRClJyFtsuYnjtOBg==
-=k1ct
------END PGP SIGNATURE-----
-
---Sig_/pMnJdw90F43e.iCCqsGhjyR--
+Christian
