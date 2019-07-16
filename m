@@ -2,91 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA636AAF1
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Jul 2019 16:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D58406AF52
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jul 2019 20:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387847AbfGPOvT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Jul 2019 10:51:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41986 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728470AbfGPOvS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 16 Jul 2019 10:51:18 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3614B2173C;
-        Tue, 16 Jul 2019 14:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563288677;
-        bh=sonO2Wj/dB2WVkbnigGOIptZBiYzU9g2oAVvNNhm8N0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cJpVGUzwvpQrBfw5VxnjM7fZDMqN8buukyY5uNJV0ilBSNzK8xmxbSP8KeFgOPVGk
-         CdhPYLcquPdpNPv9IfGMnbk93gK1YgS3rEW3NEieCmVZ/yyatbJnN9K/XZrO4tC0sv
-         vpJ81lt0Z15VjbKndmSpPGS7eGfx6pNckGHuM6H8=
-Received: by mail-oi1-f178.google.com with SMTP id w196so15751312oie.7;
-        Tue, 16 Jul 2019 07:51:17 -0700 (PDT)
-X-Gm-Message-State: APjAAAUzNDjM6CkTAVBj689g9/0ymmtl7lnTF+3weDk1ZY69iWxZD8Fb
-        YeSU/Sse0VxX7EvIzce7nrEzXEfu1SiFQCQa6NU=
-X-Google-Smtp-Source: APXvYqznotTEvyaymhJh/wAMu0w2H5gcuDv5j22SZvycyNMyxsk7XBmOnJ7QXnjodYkrV1FF1kduEHzUtbpafqpVCNU=
-X-Received: by 2002:aca:1b0c:: with SMTP id b12mr2605814oib.123.1563288676578;
- Tue, 16 Jul 2019 07:51:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190712022018.27989-1-alex.shi@linux.alibaba.com> <20190712022018.27989-2-alex.shi@linux.alibaba.com>
-In-Reply-To: <20190712022018.27989-2-alex.shi@linux.alibaba.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Tue, 16 Jul 2019 16:51:05 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPcnMM=h9-MW4qg4OTxaY5eBQ=4tH=Gbd3tSuckFvSOPcw@mail.gmail.com>
-Message-ID: <CAJKOXPcnMM=h9-MW4qg4OTxaY5eBQ=4tH=Gbd3tSuckFvSOPcw@mail.gmail.com>
-Subject: Re: [PATCH 02/12] Documentation/arm: repointer docs to Documentation/arch/arm
-To:     Alex Shi <alex.shi@linux.alibaba.com>
-Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, linux-ia64@vger.kernel.org,
+        id S1728495AbfGPS4E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Jul 2019 14:56:04 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43761 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728137AbfGPS4A (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Jul 2019 14:56:00 -0400
+Received: by mail-wr1-f65.google.com with SMTP id p13so22065603wru.10
+        for <linux-mips@vger.kernel.org>; Tue, 16 Jul 2019 11:55:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=HII1jGmOqJ+ZHDKFI1WGLRVkv6rLuJXcbXOQGuTO2qs=;
+        b=fLx81Axc7fZXcKYyn4FdWmT0VEDGlHROQXan6kCDS1lBwXYOSOZICuwNpupEPxZ1KA
+         wYSXFaoVOjGfUCkS+d8cHlAhu3M2pxovWkqnQFOwALA9QBVmnRkxZxo8H9luuiBMYElW
+         teY5CswjSiHPAphop6UNge3b8FVvFOdl6ZPhV/lGeX4EdVgwNRrnGQgmpMB8qwN4h6Vz
+         CUQTMLSjShRSEkdrxPF+i2v0KnEMWmD2NuZDGJaVq93w9O/93sXEJ13J+BUqFv+mqIR0
+         a2nSPFa0W7ZgTdiFK5BAgfXI4EwftEfi8ScyprvmIm71SEiMx2Gq30N3zYyTNzblFVBj
+         IDqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HII1jGmOqJ+ZHDKFI1WGLRVkv6rLuJXcbXOQGuTO2qs=;
+        b=K9O8k3+PNG1rXW0msQEtbVkY5cw6lSXvNaywYT3lT2MCI+2Ae8MjBa4pSapmpjrqi9
+         hc9mCOx4TSI164OixtLfYlpZJVJurxmabtSPaExRJaG54Lsv9VeJfqSq3ndS0mNKNKG9
+         KZvRzsWQcTYPM/TUzyUucfnlsZ6dDVjznVBhN3+0Tq5PZFp+aPK5Fw9P9aU2Lo5Yn2Oz
+         Rk/kc7olb3giW4CFPUs0Pw7wIrlJjYx+zIG+PuUCYiNCr0o5MufWl7jKeiGSb0Alg5od
+         6NRpUuoe4QwZbg9t2LbJvlB+FFYQwsMFV9D6GcVbMRvER9W9X39NQ4jeL2yFPZfk5eY/
+         al7g==
+X-Gm-Message-State: APjAAAVvWf0KbdQLWeqxf0W+l6lxC+gMGcYOqIfKtkr6Iq1633rGnfvU
+        xsqu1/boNnHJw35If+veBAk=
+X-Google-Smtp-Source: APXvYqxjOiZ+/ZmqnAl0iYfzzo4MAVdDizISydYdFT08PVtYYgV0sowV+fqLU0s1PX6fcTCrkIj0Fw==
+X-Received: by 2002:adf:f8cf:: with SMTP id f15mr36779432wrq.333.1563303357931;
+        Tue, 16 Jul 2019 11:55:57 -0700 (PDT)
+Received: from brauner.io ([213.220.153.21])
+        by smtp.gmail.com with ESMTPSA id j33sm48044545wre.42.2019.07.16.11.55.56
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 16 Jul 2019 11:55:57 -0700 (PDT)
+Date:   Tue, 16 Jul 2019 20:55:55 +0200
+From:   Christian Brauner <christian@brauner.io>
+To:     Sven Schnelle <svens@stackframe.org>
+Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-kernel@vger.kernel.org, arnd@arndb.de,
+        linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, linux-sh@vger.kernel.org,
-        Kukjin Kim <kgene@kernel.org>, linux-crypto@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>, mpe@ellerman.id.au
+Subject: Re: [PATCH 1/2] arch: mark syscall number 435 reserved for clone3
+Message-ID: <20190716185554.gwpppirvmxgvnkgb@brauner.io>
+References: <20190714192205.27190-1-christian@brauner.io>
+ <20190714192205.27190-2-christian@brauner.io>
+ <e14eb2f9-43cb-0b9d-dec4-b7e7dcd62091@de.ibm.com>
+ <20190716130631.tohj4ub54md25dys@brauner.io>
+ <20190716185310.GA12537@t470p.stackframe.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190716185310.GA12537@t470p.stackframe.org>
+User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 12 Jul 2019 at 04:20, Alex Shi <alex.shi@linux.alibaba.com> wrote:
->
-> Since we move 'arm/arm64' docs to Documentation/arch/{arm,arm64} dir,
-> redirect the doc pointer to them.
->
-> Signed-off-by: Alex Shi <alex.shi@linux.alibaba.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Kukjin Kim <kgene@kernel.org>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-samsung-soc@vger.kernel.org
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-serial@vger.kernel.org
-> ---
->  Documentation/arch/arm/Samsung-S3C24XX/GPIO.txt    |  2 +-
->  .../arch/arm/Samsung-S3C24XX/Overview.txt          |  6 +++---
->  Documentation/arch/arm/Samsung/GPIO.txt            |  2 +-
->  Documentation/arch/arm/Samsung/Overview.txt        |  4 ++--
->  Documentation/devicetree/bindings/arm/xen.txt      |  2 +-
->  Documentation/devicetree/booting-without-of.txt    |  4 ++--
->  Documentation/translations/zh_CN/arm/Booting       |  4 ++--
->  .../translations/zh_CN/arm/kernel_user_helpers.txt |  4 ++--
->  MAINTAINERS                                        |  6 +++---
+On Tue, Jul 16, 2019 at 08:53:10PM +0200, Sven Schnelle wrote:
+> Hi,
+> 
+> [Adding Helge to CC list]
+> 
+> On Tue, Jul 16, 2019 at 03:06:33PM +0200, Christian Brauner wrote:
+> > On Mon, Jul 15, 2019 at 03:56:04PM +0200, Christian Borntraeger wrote:
+> > > I think Vasily already has a clone3 patch for s390x with 435. 
+> > 
+> > A quick follow-up on this. Helge and Michael have asked whether there
+> > are any tests for clone3. Yes, there will be and I try to have them
+> > ready by the end of the this or next week for review. In the meantime I
+> > hope the following minimalistic test program that just verifies very
+> > very basic functionality (It's not pretty.) will help you test:
+> > [..]
+> 
+> On PA-RISC this seems to work fine with Helge's patch to wire up the
+> clone3 syscall.
 
-I assume it will go through doc tree, so for Samsung:
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+I think I already responded to Helge before and yes, I think that parisc
+doesn't do anything special for fork, vfork, clone, and by extension
+also probably doesn't need to for clone3.
+It should only be a problem for arches that require mucking explicitly
+with arguments of clone-like syscalls.
+In any case, I saw Helge's patch and I think I might've missed to add an
+Acked-by but feel free to add it.
 
-Best regards,
-Krzysztof
+Thanks for testing it and sorry that I couldn't test!
+Christian
