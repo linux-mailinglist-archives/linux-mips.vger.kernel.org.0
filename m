@@ -2,81 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C3F6A447
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Jul 2019 10:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6741B6A797
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Jul 2019 13:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727906AbfGPIwm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Jul 2019 04:52:42 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:40319 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726536AbfGPIwm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Jul 2019 04:52:42 -0400
-Received: by mail-lf1-f67.google.com with SMTP id b17so13092262lff.7
-        for <linux-mips@vger.kernel.org>; Tue, 16 Jul 2019 01:52:41 -0700 (PDT)
+        id S2387587AbfGPLma (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Jul 2019 07:42:30 -0400
+Received: from mail-eopbgr790123.outbound.protection.outlook.com ([40.107.79.123]:38664
+        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387582AbfGPLma (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 16 Jul 2019 07:42:30 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iAR+wiwErDFrYoBGPyUvIsGb1gS4HK/t7gYyBUxbRvlFYvNKb0yQhN8TUKolgaQ4Lkgp2Y+d4hqQRtSqBwvLyCZty39FnmspnrejtdzNcsO3MzVzfaaBDZyMb2yc5Y8ryPQk3f4MaPb/+lTavhFYzLv7A8nupkzAVusc+3gt540CVO+rrZKMmeu/ez/Di9/vBNNGzwAk+PG0gTDc70s+95ge0i2Azm0uNQSD2YNKEM0mUlnqfNAvTVXLYsrEvjrq/vV6uqofH4c2mhx65Xr0RNczi6OM8g56oljqjhKHDJXlV0Bfl7QQcVXoPIiU/8UTOWA7YUsKOG/nWZ2Jcfxadw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5h8tABCJzsxE2qmQ9CG9PmZ//DE/W5dzQF1ycVlUs+M=;
+ b=RaK/VNm2IvM/AV+Ljs7sBqMFT2SiBORQK2pf3f+GNWZuNIvEcqAx2LkjrG6m9gAVU+XIeXPdHNIfD/0TjHr0XR7CqIK/xl2N7ylZpyo3xWEGLQxarB4AMUsTIaUqDoLxAPYU05QHKKcxMoSxhM1krpjhkxKq4nTE9SvNHi6dTaPU9GxGfhdq18/zt1P4oKfsQV47UMz18rZRFTveaLlW0dayqxixdMicM015rf0jwF6Pib2V7CqxRl31XBLg51mJ8dNIQ1jfts9kVMnks5n4JrWB/4EQTCM0cbf0bcmkdo9rKu6LzPhutR/LdphUh86hFVHRbMdzpO+v0af/KRjOjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=wavecomp.com;dmarc=pass action=none
+ header.from=mips.com;dkim=pass header.d=mips.com;arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XyQtv8q/vojaY1D+1nE9nEqdizDyuspw+4fU4V90wfg=;
-        b=h5BnzYaeTvOlH06pndcuIZMyPpXzgZFv4CdRfrazxDwaTYTWGAhMJJ113o9/HjLPTl
-         TEKInE1moxeMIIt89WjjbS2JZFvGkRLPTRDv1889fKRSTRMXTNHjkdUyw2PkC7jM5Hxn
-         I+c75HbDAdEdXRHgyTOvJopT6y8fD36j8m4ioAgiDjfJfoe80ioBjSFCUrZMLWOK35vu
-         ozPXP2/NFlcAjlO3NqDmZk5WVgnyNeJVB8GEfiA23X8fbX5Qgn7czCxhqRGffjSA1X2W
-         iGIfE5dg15UGF+WGh6o53294EcQDsG9M3FTzfifZVytZz0mY/KsQNrho5379BJ7cKtYu
-         4OtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XyQtv8q/vojaY1D+1nE9nEqdizDyuspw+4fU4V90wfg=;
-        b=fngl0hadtEkIB/Km8OTsxlMy+cqnvUFoCN5qXA3p/WEHsEqoh39CyZVT5Se/89Jn6N
-         z+GBODtEZASSe6TI4lJWvpnXS+TClw3d2egiO/xFMwLCW62kyNTWbitXVKhkmfEpBja2
-         cBmGCxf0j/soVYAbRwrIgxGjUYUxgo76M8EY7BQibOTXKw2jORuIZsIHNFiSmuHg3sBZ
-         +scGtzzPMgYtUwDAojb/YfdAyHF7B3TDpFIiXIsJ8iQH1g9V4gNFBbcE5FysFtqco5Sh
-         /MHY0Jj6gUufIMVQSwdB1gUBgIemZNtBGgW7yWrFk21x5HRZqYHWbnL8kV/B6gsbiNWN
-         PYXw==
-X-Gm-Message-State: APjAAAV4NENHAni2qqy+xNUnZJvIgFAWPJ0Ua2dujNRZK2xsxwV0Wa7p
-        ZRdLl+0S1W5Zw/Z22PaOD2GFnibq77Guxw==
-X-Google-Smtp-Source: APXvYqwYuqhrW3TJhCJZ7PX4BmU4vW0ooe7NeWyaoHIu87HRNCS59SvmIGeZ1Cdj5vYOEfwejxR2oA==
-X-Received: by 2002:ac2:5231:: with SMTP id i17mr14127734lfl.39.1563267160476;
-        Tue, 16 Jul 2019 01:52:40 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:486f:abb9:dd58:ac0e:e00:e686? ([2a00:1fa0:486f:abb9:dd58:ac0e:e00:e686])
-        by smtp.gmail.com with ESMTPSA id i62sm3577698lji.14.2019.07.16.01.52.39
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Jul 2019 01:52:39 -0700 (PDT)
-Subject: Re: [PATCH] MIPS: Kconfig: remove HAVE_LATENCYTOP_SUPPORT
-To:     Fabian Mewes <architekt@coding4coffee.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190715160849.25964-1-architekt@coding4coffee.org>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <77754e88-ff5d-2021-60f5-80417d61763c@cogentembedded.com>
-Date:   Tue, 16 Jul 2019 11:52:28 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20190715160849.25964-1-architekt@coding4coffee.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+ d=wavesemi.onmicrosoft.com; s=selector1-wavesemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5h8tABCJzsxE2qmQ9CG9PmZ//DE/W5dzQF1ycVlUs+M=;
+ b=nORXN4Nc8wEmqwTCDsOfDSTNt7prkYCxo+uWAt/WY7fT/7LvIZnGT+X/e5vJhmxD1phfIwvm9rWk+QSivfyi3Clb74hxAhjE1APi2VV06dYwX06DLoyn0Z8uFxv4ETI2NQpA7yxCco4DF5q2WXLwl3M4v4QH4FOven1igQ2PiT8=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
+ MWHPR2201MB1552.namprd22.prod.outlook.com (10.174.170.165) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2073.10; Tue, 16 Jul 2019 11:42:27 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::746d:883d:31:522e]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::746d:883d:31:522e%5]) with mapi id 15.20.2073.012; Tue, 16 Jul 2019
+ 11:42:27 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <pburton@wavecomp.com>,
+        James Hogan <jhogan@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Crispin <john@phrozen.org>,
+        Matthias Schiffer <mschiffer@universe-factory.net>,
+        =?Windows-1252?Q?Petr_=8Atetiar_?= <ynezz@true.cz>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Kees Cook <keescook@chromium.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: fix some more fall through errors in arch/mips
+Thread-Topic: [PATCH] MIPS: fix some more fall through errors in arch/mips
+Thread-Index: AQHVOwtgel77smof50yH54sFVwDx+abNIPEA
+Date:   Tue, 16 Jul 2019 11:42:27 +0000
+Message-ID: <MWHPR2201MB12779F73ACB565148B256387C1CE0@MWHPR2201MB1277.namprd22.prod.outlook.com>
+References: <20190715224640.5e086766@canb.auug.org.au>
+In-Reply-To: <20190715224640.5e086766@canb.auug.org.au>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: LO2P265CA0072.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:60::36) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:18::12)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [212.140.138.203]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 80dbaf4d-f130-4fce-5f23-08d709e2ad36
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1552;
+x-ms-traffictypediagnostic: MWHPR2201MB1552:
+x-microsoft-antispam-prvs: <MWHPR2201MB155269C46285DB7C539486E6C1CE0@MWHPR2201MB1552.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2150;
+x-forefront-prvs: 0100732B76
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(346002)(396003)(39830400003)(136003)(376002)(199004)(189003)(42882007)(5660300002)(52536014)(8676002)(81166006)(66946007)(66476007)(71190400001)(64756008)(66446008)(71200400001)(66556008)(81156014)(8936002)(68736007)(54906003)(316002)(6916009)(74316002)(229853002)(7416002)(7736002)(305945005)(6116002)(3846002)(11346002)(66066001)(4326008)(2906002)(7696005)(52116002)(478600001)(76176011)(99286004)(386003)(6436002)(6246003)(25786009)(186003)(26005)(33656002)(14454004)(9686003)(53936002)(55016002)(4744005)(44832011)(476003)(446003)(256004)(6506007)(102836004)(486006);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1552;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: Yj6zyCOZ1E5Kzfqy4sNNL5T3SCdnVehY/28gRLShhFVQYw8U8fiYY18A0FMjpVpEYvQFAjF/K+5i1SV/SFEBfXSPZ2RN6+c1Zgo3uZZxP4yPTctk+CBM25ppbYrbaGlbKjfWmIHxdSjkcuaTSSUPWan9CQ09FLglQdd1AhE4oTaa11tdapIyKQ58ltLydWdHlcBi/0RRFtkTdef/E9VefYog+N65gYtCauWOK+WgK6uTb+LEPCSpMl9iAv1JEjEP7Pki7eRlzAFPJJQYI1NLFxM0G0kGNma6YLlC9w5T11GzrNVLu1KkEx0Xs0qZJHlZA9CUe+Z5mNYzaDyMBzHOkres5hPA/xvc2zw2Y6LGG+qne9AiB8pxWgnCYNu264Ycc8lV2fYIBLiNk0amxNI5FFvfAVzt065J/ETOmcNp+Yk=
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80dbaf4d-f130-4fce-5f23-08d709e2ad36
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jul 2019 11:42:27.5740
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1552
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+Hello,
 
-On 15.07.2019 19:08, Fabian Mewes wrote:
+Stephen Rothwell wrote:
+> Fix these errors:
+>=20
+> arch/mips/cavium-octeon/executive/cvmx-pko.c:489:7: error: this statement=
+ may fall through [-Werror=3Dimplicit-fallthrough=3D]
+> arch/mips/bcm63xx/dev-flash.c:89:3: error: this statement may fall throug=
+h [-Werror=3Dimplicit-fallthrough=3D]
+> arch/mips/ath79/setup.c:155:17: error: this statement may fall through [-=
+Werror=3Dimplicit-fallthrough=3D]
+> arch/mips/ar7/setup.c:50:3: error: this statement may fall through [-Werr=
+or=3Dimplicit-fallthrough=3D]
+>=20
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: John Crispin <john@phrozen.org>
+> Cc: Matthias Schiffer <mschiffer@universe-factory.net>
+> Cc: "Petr =C5=A0tetiar" <ynezz@true.cz>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-> HAVE_LATENCYTOP_SUPPORT was removed all together in da48d094ce5d7.
+Applied to mips-next.
 
-    You need to also specify that commit's summary enclosed in ("").
+Thanks,
+    Paul
 
-> This commit removes a leftover in the MIPS Kconfig.
-> 
-> Signed-off-by: Fabian Mewes <architekt@coding4coffee.org>
-
-MBR, Sergei
+[ This message was auto-generated; if you believe anything is incorrect
+  then please email paul.burton@mips.com to report it. ]
