@@ -2,108 +2,198 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 124676B04A
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Jul 2019 22:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D446B331
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Jul 2019 03:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388536AbfGPUOM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Jul 2019 16:14:12 -0400
-Received: from mout.gmx.net ([212.227.15.19]:36299 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728137AbfGPUOL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 16 Jul 2019 16:14:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1563308042;
-        bh=7VY8YH9jMovACrIdrhvISc8JByEG9+fowfzeNmRgOfo=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=Kw1mKomLyf4TbBJ/zg23P7apFrDxlIIFzSokOMo69AtSxElmYEy4eq2eopppd7wMr
-         V8XRtNTIUYn4ltq5K91JC1v/XK7U38Oklx26zHYJGCDzpAqlGcHoZIBzBhosfArtWz
-         QREVdI+1aykJHs0N3A/CQ2T+LAPEzD202Z7jEasM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.163.176]) by mail.gmx.com (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MkHMZ-1iC4Dg3Ysb-00kbu2; Tue, 16
- Jul 2019 22:14:01 +0200
-Subject: Re: [PATCH 1/2] arch: mark syscall number 435 reserved for clone3
-To:     Christian Brauner <christian@brauner.io>,
-        Sven Schnelle <svens@stackframe.org>
-Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-kernel@vger.kernel.org, arnd@arndb.de,
-        linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>, mpe@ellerman.id.au
-References: <20190714192205.27190-1-christian@brauner.io>
- <20190714192205.27190-2-christian@brauner.io>
- <e14eb2f9-43cb-0b9d-dec4-b7e7dcd62091@de.ibm.com>
- <20190716130631.tohj4ub54md25dys@brauner.io>
- <20190716185310.GA12537@t470p.stackframe.org>
- <20190716185554.gwpppirvmxgvnkgb@brauner.io>
-From:   Helge Deller <deller@gmx.de>
-Message-ID: <6d47935e-218c-3eb9-7617-14ce199f5958@gmx.de>
-Date:   Tue, 16 Jul 2019 22:13:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726104AbfGQB3M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Jul 2019 21:29:12 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:37300 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbfGQB3M (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Jul 2019 21:29:12 -0400
+Received: by mail-pg1-f195.google.com with SMTP id g15so10305316pgi.4
+        for <linux-mips@vger.kernel.org>; Tue, 16 Jul 2019 18:29:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
+         :from:to;
+        bh=lCAdtmytrwTdW3zlJMsL7BH9HcOHIdUFUev907eAt/A=;
+        b=EWeObjoFmWq4Omx3n/Vk5ieecW6ME7Q+UElx0hnCrcAOTTwfJ8WA/Sx8n3WY/vKhA0
+         w6DxbQo2seu7BVmNL69pGIK8MrLb9SGxQw0ZhHDA/oLivg3XTYry1Jl/HOn/8ds0c/xl
+         O9ThCZWa11yjixEiKl5hzy4Eccujt0+y1RLNUSrPKnvavkdRx+ydohJ0NNiQpiV3Ozvx
+         aK7noJb1AfREOkm/Jo45bQYJsqD5CIa30MNowi++lgOE2CEfnJvHQKtzGzh+WEvqD0ri
+         qekgiFl3gec+0sTohyesxiSbunkhOiFPrtSd5l3tnJD2fwW7uxBVPSQs3Dbrtim5XVys
+         eqYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:date:message-id:mime-version
+         :content-transfer-encoding:cc:from:to;
+        bh=lCAdtmytrwTdW3zlJMsL7BH9HcOHIdUFUev907eAt/A=;
+        b=OBoFGc/8pm8LaBDYPz0xjjq4Re7BBehWyb4K+gjWbgwOsbPQK5/5oYR0wBhM4VU+vp
+         CMw7B72F6YRmILiPMrDI0LSNXDjZSkoNlMbUIYHKvr3pO5FcACtMH1HmMRD9mHHfmdIz
+         iOWUSbhAJzBoPbyYuBW9mpSAHdfW03YBp4lcoFlx35/ehmoumWCFlwBZ3YCjJnnG+0HB
+         lSklv/jX6t9lA//Xmyny7KzPYHlFXbfomIi+ovUYOGPxIZcvHTZwlCQXF6RLQ87y9Zek
+         CdHZUb69GJpZnmGtxXMhPpgL4FScy8+s4kQ9fwroysXNQOb0H+znoc4nzSqAQhx5rCBs
+         lpPg==
+X-Gm-Message-State: APjAAAW3s2q1ovH+tWvtn5dpKtLZujPGo0BUSnGZuuYnhQV9p2rALyPf
+        BMUIykmCFkEVXST0AZubMsKHYQ==
+X-Google-Smtp-Source: APXvYqxD+A8D1A0efvs/gHSpa51lIoBZYiXr5jNYG6C1/J/dqptdfkqKaxchYfNokKm4TbgakH+Oxw==
+X-Received: by 2002:a17:90a:fa18:: with SMTP id cm24mr39334563pjb.120.1563326951272;
+        Tue, 16 Jul 2019 18:29:11 -0700 (PDT)
+Received: from localhost ([12.206.222.5])
+        by smtp.gmail.com with ESMTPSA id r61sm32564152pjb.7.2019.07.16.18.29.09
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 16 Jul 2019 18:29:10 -0700 (PDT)
+Subject: Add a new fchmodat4() syscall, v2
+Date:   Tue, 16 Jul 2019 18:27:15 -0700
+Message-Id: <20190717012719.5524-1-palmer@sifive.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-In-Reply-To: <20190716185554.gwpppirvmxgvnkgb@brauner.io>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:2cW2yydYOFZ0K7SnlkSJRJZL6gbN19kSgKbyZFedY35qUSBwLwc
- KFwmZoyiIfN7b/p+DVlTRhgAyhZ7VdGpXdQVEnj51qjaJkW5gaAkDBU8LIwUGMGXiMX9maV
- GUvBYvRjVz9REkKhNe849boNzNZvi79Q2Q2BRRVgSNGmQF+a0pftaHPMxwZ9+pCndGXBx6X
- LsecZ2wqaeXWgof6fVzqg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4Ns/Ko0qGwY=:qtFJO0B/HPz+a+JhQFRjzt
- ZUmBSoerPrHropq5sAotY7F8GaBnQ0NKeQ9hZL+YtLcMAI3L6BI6rfq0NI6MgK1ZvAJLCivvK
- NUgYMbGygYMSZU1miPsKEwZe124zRrnQ4jnIE+BCdyaJL/Ssq6oTdgKcVUBSh2BII2oU+sttV
- ecWbKpu70lESoJDAcsv0lXwvx07tynJ7eNdW3D4REVKuw0BdPjcPkI3qjL7eyNRw1ikd9/Kep
- bnMPAsfRIeDkbNDu5HKUYZziuZQ+rDL3wX4ZQh0M5zvEnDKQQ7ao22hMHeF5HttlHo7j7kBsr
- SBEp/IIYng2xB8hK2juSQCSrriAv4frGKPVlQuWEhsJtrmL4N1pQMyPXVa5vlkRumb5j9Y575
- RurDMzLcXjUk+DNB3VfJZfQY13lyP9TRMdcmdF/8iyYUNhokijDyW6OGl2ZcptYU57mg1mn35
- WXx+gGRZ8OvEmgH8Adw9FYmkq/dAT/6HKGyd7ZfGzQvoAnRV89YHGodH/L0414MH9JmnTpCpI
- goqA+ognB/fN5yuP919sKtuEo0KqX5TJtbnomJickKwpi6bhD/JLgTq6t5rYq305LZwh3V3iK
- OWzAvy9og0GIV4/tAIl1tO59MaKYf4Jn7AEIiGHNMe3Oj3ko4cz2FfKue8lmpYplbnHGOwDPc
- 6LPDVHagzO6qa70bQ4Gv9llAiOXToQvLWXcmDySzZJ5/LpYp44q+l0jHR1BMv2zUk+90s7vrk
- 4yTl0/SIDguuv5NG39l57oLmZbEuMMLEbqBlmac8YZ8/iaPvkK39hs4dVQSc4HjZcKiMa4Fzc
- MV1yaXRWMb/fR7NZDBbv3mDPGqTwsp5HZW4TzEMWF4uFEnlAtTSL3Xns/LIOAusoitQPTDGUp
- H1zyjdpt6XYPGx3d6diD8rIq+nW4jhpwV+UD4re43PHvScbEs2Omuqo04uuO3eavxgmae26tC
- 6LAMUB8EYaSMzPrwEr/RavbNClLho2zcLOfS5QDolc9rna6TUQsVOYVq/V88IYTUsoce2T7ug
- m/f+5kqLNFStp+2aTBQCjG6TUey84zJXzc8FjGVoGBSvxXfqeU7HTShckbQzDRhAeZ92oID8H
- o04wxVl/EgW4Q9b/TZNQ4z9aVVmJ0CCXIFs4R48cmHufzn9EI6krvCJS2QSHx/euHF6sSXWUa
- NNirjIOYkJY82JMmOEVtBD7qpV+2AU18wSLPuvHkxhUkp613AAth7qcOVrwM8dGNvw5lE=
+Content-Transfer-Encoding: 8bit
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        tony.luck@intel.com, fenghua.yu@intel.com, geert@linux-m68k.org,
+        monstr@monstr.eu, ralf@linux-mips.org, paul.burton@mips.com,
+        jhogan@kernel.org, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, benh@kernel.crashing.org, paulus@samba.org,
+        mpe@ellerman.id.au, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
+        dalias@libc.org, davem@davemloft.net, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        peterz@infradead.org, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, Palmer Dabbelt <palmer@sifive.com>,
+        dhowells@redhat.com, firoz.khan@linaro.org, stefan@agner.ch,
+        schwidefsky@de.ibm.com, axboe@kernel.dk, christian@brauner.io,
+        hare@suse.com, deepa.kernel@gmail.com, tycho@tycho.ws,
+        kim.phillips@arm.com, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
+From:   Palmer Dabbelt <palmer@sifive.com>
+To:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 16.07.19 20:55, Christian Brauner wrote:
-> On Tue, Jul 16, 2019 at 08:53:10PM +0200, Sven Schnelle wrote:
->> Hi,
->>
->> [Adding Helge to CC list]
->>
->> On Tue, Jul 16, 2019 at 03:06:33PM +0200, Christian Brauner wrote:
->>> On Mon, Jul 15, 2019 at 03:56:04PM +0200, Christian Borntraeger wrote:
->>>> I think Vasily already has a clone3 patch for s390x with 435.
->>>
->>> A quick follow-up on this. Helge and Michael have asked whether there
->>> are any tests for clone3. Yes, there will be and I try to have them
->>> ready by the end of the this or next week for review. In the meantime =
-I
->>> hope the following minimalistic test program that just verifies very
->>> very basic functionality (It's not pretty.) will help you test:
->>> [..]
->>
->> On PA-RISC this seems to work fine with Helge's patch to wire up the
->> clone3 syscall.
->
-> [...]
-> In any case, I saw Helge's patch and I think I might've missed to add an
-> Acked-by but feel free to add it.
+This patch set adds fchmodat4(), a new syscall. The actual
+implementation is super simple: essentially it's just the same as
+fchmodat(), but LOOKUP_FOLLOW is conditionally set based on the flags.
+I've attempted to make this match "man 2 fchmodat" as closely as
+possible, which says EINVAL is returned for invalid flags (as opposed to
+ENOTSUPP, which is currently returned by glibc for AT_SYMLINK_NOFOLLOW).
+I have a sketch of a glibc patch that I haven't even compiled yet, but
+seems fairly straight-forward:
 
-Thanks!
-I've added the patch to the parisc-linux for-next tree.
+    diff --git a/sysdeps/unix/sysv/linux/fchmodat.c b/sysdeps/unix/sysv/linux/fchmodat.c
+    index 6d9cbc1ce9e0..b1beab76d56c 100644
+    --- a/sysdeps/unix/sysv/linux/fchmodat.c
+    +++ b/sysdeps/unix/sysv/linux/fchmodat.c
+    @@ -29,12 +29,36 @@
+     int
+     fchmodat (int fd, const char *file, mode_t mode, int flag)
+     {
+    -  if (flag & ~AT_SYMLINK_NOFOLLOW)
+    -    return INLINE_SYSCALL_ERROR_RETURN_VALUE (EINVAL);
+    -#ifndef __NR_lchmod		/* Linux so far has no lchmod syscall.  */
+    +  /* There are four paths through this code:
+    +      - The flags are zero.  In this case it's fine to call fchmodat.
+    +      - The flags are non-zero and glibc doesn't have access to
+    +	__NR_fchmodat4.  In this case all we can do is emulate the error codes
+    +	defined by the glibc interface from userspace.
+    +      - The flags are non-zero, glibc has __NR_fchmodat4, and the kernel has
+    +	fchmodat4.  This is the simplest case, as the fchmodat4 syscall exactly
+    +	matches glibc's library interface so it can be called directly.
+    +      - The flags are non-zero, glibc has __NR_fchmodat4, but the kernel does
+    +	not.  In this case we must respect the error codes defined by the glibc
+    +	interface instead of returning ENOSYS.
+    +    The intent here is to ensure that the kernel is called at most once per
+    +    library call, and that the error types defined by glibc are always
+    +    respected.  */
+    +
+    +#ifdef __NR_fchmodat4
+    +  long result;
+    +#endif
+    +
+    +  if (flag == 0)
+    +    return INLINE_SYSCALL (fchmodat, 3, fd, file, mode);
+    +
+    +#ifdef __NR_fchmodat4
+    +  result = INLINE_SYSCALL (fchmodat4, 4, fd, file, mode, flag);
+    +  if (result == 0 || errno != ENOSYS)
+    +    return result;
+    +#endif
+    +
+       if (flag & AT_SYMLINK_NOFOLLOW)
+         return INLINE_SYSCALL_ERROR_RETURN_VALUE (ENOTSUP);
+    -#endif
 
-Helge
+    -  return INLINE_SYSCALL (fchmodat, 3, fd, file, mode);
+    +  return INLINE_SYSCALL_ERROR_RETURN_VALUE (EINVAL);
+     }
+
+I've never added a new syscall before so I'm not really sure what the
+proper procedure to follow is.  Based on the feedback from my v1 patch
+set it seems this is somewhat uncontroversial.  At this point I don't
+think there's anything I'm missing, though note that I haven't gotten
+around to testing it this time because the diff from v1 is trivial for
+any platform I could reasonably test on.  The v1 patches suggest a
+simple test case, but I didn't re-run it because I don't want to reboot
+my laptop.
+
+    $ touch test-file
+    $ ln -s test-file test-link
+    $ cat > test.c
+    #include <fcntl.h>
+    #include <stdio.h>
+    #include <unistd.h>
+
+    int main(int argc, char **argv)
+    {
+            long out;
+
+            out = syscall(434, AT_FDCWD, "test-file", 0x888, AT_SYMLINK_NOFOLLOW);
+            printf("fchmodat4(AT_FDCWD, \"test-file\", 0x888, AT_SYMLINK_NOFOLLOW): %ld\n", out);
+
+            out = syscall(434, AT_FDCWD, "test-file", 0x888, 0);
+            printf("fchmodat4(AT_FDCWD, \"test-file\", 0x888, 0): %ld\n", out);
+
+            out = syscall(268, AT_FDCWD, "test-file", 0x888);
+            printf("fchmodat(AT_FDCWD, \"test-file\", 0x888): %ld\n", out);
+
+            out = syscall(434, AT_FDCWD, "test-link", 0x888, AT_SYMLINK_NOFOLLOW);
+            printf("fchmodat4(AT_FDCWD, \"test-link\", 0x888, AT_SYMLINK_NOFOLLOW): %ld\n", out);
+
+            out = syscall(434, AT_FDCWD, "test-link", 0x888, 0);
+            printf("fchmodat4(AT_FDCWD, \"test-link\", 0x888, 0): %ld\n", out);
+
+            out = syscall(268, AT_FDCWD, "test-link", 0x888);
+            printf("fchmodat(AT_FDCWD, \"test-link\", 0x888): %ld\n", out);
+
+            return 0;
+    }
+    $ gcc test.c -o test
+    $ ./test
+    fchmodat4(AT_FDCWD, "test-file", 0x888, AT_SYMLINK_NOFOLLOW): 0
+    fchmodat4(AT_FDCWD, "test-file", 0x888, 0): 0
+    fchmodat(AT_FDCWD, "test-file", 0x888): 0
+    fchmodat4(AT_FDCWD, "test-link", 0x888, AT_SYMLINK_NOFOLLOW): -1
+    fchmodat4(AT_FDCWD, "test-link", 0x888, 0): 0
+    fchmodat(AT_FDCWD, "test-link", 0x888): 0
+
+I've only built this on 64-bit x86.
+
+Changes since v1 [20190531191204.4044-1-palmer@sifive.com]:
+
+* All architectures are now supported, which support squashed into a
+  single patch.
+* The do_fchmodat() helper function has been removed, in favor of directly
+  calling do_fchmodat4().
+* The patches are based on 5.2 instead of 5.1.
+
