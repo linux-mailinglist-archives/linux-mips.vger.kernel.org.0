@@ -2,108 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D7F6D608
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jul 2019 22:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FA56D679
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Jul 2019 23:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727939AbfGRUwk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 18 Jul 2019 16:52:40 -0400
-Received: from mail-eopbgr770121.outbound.protection.outlook.com ([40.107.77.121]:54916
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727762AbfGRUwk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 18 Jul 2019 16:52:40 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HB24cPmBoZeR4Ioe1MtHyR4BeIyigQ0SmlVXlDF5P5ennTM33LKGbZ7e61kVaIphGzUS7GSt/508I22Ij9pPhU89K4h/sDFN2dCqpr7e+EcUWXTIiONHlL4V2x/uFWGZdWo2GyjVoGBVrzEexy+genTn6mXbC8FNKGHODeiEBdpSw6RWBnycGCQ3kqR2Wn5NRwcH30+WF/xH6DCgTT9TsweZqnuOtzsumxQ8eQDSTcCQtZwl4XCq4Sx59oa1z2adDXuh5bvcKzYCvcAKibyxlHO9d4ioVqTuunOGnK2Cm0gKKPeshMDu8axtfyWANRru6n7/4wT4vMBW8nzbnJ5vfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pI7T4dFZEKEOUI4/s4E22d91uqY/P/lRnJPim9NqdR4=;
- b=KaAFs1GKeJyB1vukRX3ZQlfYOPWgPa/nG4JAnSd5W7EbkObricxj7rez1rZIp7r33kEkg7lc6kEkCb0+7kIzo8ytMgq3LkbzAnVpPUTq/muWVWP+OXBBaVAMq0fteYJFWHaLzuxUEk01SLkhzfrq+kTsyl181EG+u46UB759ovtjiw+lb7hGRHxwDJ5C7U6btx1mPfrA6SURq7nLlEHAtwWnXvEW5B0xWMqVx6x6/2eIabyOka95WCSin6+CHOaPtQDef2AGv6dd2XAs/oiTUQSL+BDH28dcpE4OkTgod1j0gsfOfgLLJ6kpHk8EneiU+0/6aYnl4E+Qk7SNkCFxHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=wavecomp.com;dmarc=pass action=none
- header.from=mips.com;dkim=pass header.d=mips.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=wavesemi.onmicrosoft.com; s=selector1-wavesemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pI7T4dFZEKEOUI4/s4E22d91uqY/P/lRnJPim9NqdR4=;
- b=lQ67M2SqOXntyEj6X2F4SK85RreZaCjlYQjryaDViuJbWuSDQYAHdhEzkd+4PceZN+IU/TNRWmcMgib/mKrxSIBCCo3vLLRWQT9GJ+DbtvmBpnSgbhATJtXl08PBnz90GANVNWmrww5W2IhpXPp0/o2BOekkuwwNaDrDcToSpmA=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1568.namprd22.prod.outlook.com (10.172.63.22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2094.12; Thu, 18 Jul 2019 20:52:38 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::746d:883d:31:522e]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::746d:883d:31:522e%5]) with mapi id 15.20.2073.012; Thu, 18 Jul 2019
- 20:52:38 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Paul Burton <pburton@wavecomp.com>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Paul Burton <pburton@wavecomp.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: Annotate fall-throughs in Cavium Octeon code
-Thread-Topic: [PATCH] MIPS: Annotate fall-throughs in Cavium Octeon code
-Thread-Index: AQHVPNvy4FFQV/ALgE2Z8yTenvwusqbQ270A
-Date:   Thu, 18 Jul 2019 20:52:38 +0000
-Message-ID: <MWHPR2201MB12774AD630897A6336E980F7C1C80@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20190717201159.23627-1-paul.burton@mips.com>
-In-Reply-To: <20190717201159.23627-1-paul.burton@mips.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR05CA0063.namprd05.prod.outlook.com
- (2603:10b6:a03:74::40) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:18::12)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [12.94.197.246]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d3438d47-ea13-4360-4dad-08d70bc1ddf7
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1568;
-x-ms-traffictypediagnostic: MWHPR2201MB1568:
-x-microsoft-antispam-prvs: <MWHPR2201MB1568C337B6D615C0D97CF663C1C80@MWHPR2201MB1568.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 01026E1310
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(396003)(136003)(366004)(39840400004)(376002)(199004)(189003)(68736007)(53936002)(54906003)(33656002)(186003)(229853002)(102836004)(99286004)(316002)(9686003)(26005)(446003)(11346002)(476003)(55016002)(42882007)(305945005)(76176011)(386003)(6506007)(7696005)(52116002)(486006)(44832011)(66066001)(7736002)(5660300002)(8936002)(66476007)(52536014)(71200400001)(71190400001)(8676002)(74316002)(6436002)(4744005)(478600001)(2906002)(6246003)(256004)(4326008)(66946007)(6116002)(3846002)(6862004)(81156014)(81166006)(25786009)(66556008)(66446008)(64756008)(14454004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1568;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: L/GusH2gSrWRTdazq6IB+LJmdF9rcFlqqjO7YVGwe6ZNKYfWUNNv3HlEfp1Fz5/h2Yvygah9DoIs/BXSjmlDy9S49ovHkfjeAZ/dNlGXWNq56NEEqnzu5Ab0jrZO0F3lUV8gBzVgT7Dr5p8+5X5HhjJcUugWpjq+5+nb7XGMH0kiCGaYkl59lUbTd5BuGbrJ6tBOFNMQaQDTSOcsetDFscTgKDbfWTKk/kaPN+OWfHi51ub4F2WZO6cwlesUm4NoI/EtNyGPORVhnijL6Vk8Nr9ZlBzBm+/b+gtY8/MR/mTLLybaBZqDLBtYrDtAVceHKQH+te6Ci0V/QtfeYPgKq8uBd6s4yR2YEMOkE2YiloOPEqRm8vVW7qyEL3iVzjrMLQpchBKAcv+0Gv9N3DnTQBLmHFXekXTef/h+T54Hxl8=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S2391451AbfGRVaJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 18 Jul 2019 17:30:09 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:35212 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728014AbfGRVaJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Jul 2019 17:30:09 -0400
+Received: by mail-qk1-f196.google.com with SMTP id r21so21732487qke.2;
+        Thu, 18 Jul 2019 14:30:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gXA3fCzwUc7S8+pRMyyFoXYQ6Lxj2094nm3NP6Me1pg=;
+        b=uCH2vUxrfcr6142uAaV9WcXORBKH/D7E4P4NiRuyJaE8kui154F7hapgGZCVK4V5oV
+         h1KnYS8zB5WGcRW0yhYqz6ThOCVt0oV80LAGfoSFKRtZfNXUcqq4Vkc98WyzSf5MEfhC
+         ChJWDCasnRmyjbS9ZdJ1VIkfY5G1MVa9zaR2pgCczj6oOHsD73sgibeBSKVPZopGXvDM
+         xY7mk5kdPJ2hzmYK77+wvt1X8GlX5DuOJeI7mCZMAvHFwnVsvpfPZ56B86qqTVg8XPES
+         7Uk5MUGfBIJqa4SUJOhaEv7m8ueBN492aEPpsSidYIuqRP6htYAWtO8+oyTfmZ0jeCe8
+         JWVw==
+X-Gm-Message-State: APjAAAVWFgTKNxdz5VJMuDG74/oEsWc7zg83gF05rrI4hZNlp1YwqMUs
+        1xmowdKoxZ9t80vjXWPDDaUz1du0yDU5c5Rfqb8=
+X-Google-Smtp-Source: APXvYqwAnwmqNY3PBxWPuNJix5kLy4PEG765j1QyxyCKOemfTtTG+YSbK8sHn1TSB6/emkF2O/3aVUhdKFw2Cxuzrg4=
+X-Received: by 2002:a37:5f45:: with SMTP id t66mr32747316qkb.286.1563485406992;
+ Thu, 18 Jul 2019 14:30:06 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3438d47-ea13-4360-4dad-08d70bc1ddf7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jul 2019 20:52:38.4816
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1568
+References: <20190706145737.5299-1-cyphar@cyphar.com> <20190706145737.5299-9-cyphar@cyphar.com>
+ <CAK8P3a33rGhPDFfRBAQyLTMG_WoEgX_toDgWR2O7rSwxKsZG+w@mail.gmail.com> <20190718161231.xcno272nvqpln3wj@yavin>
+In-Reply-To: <20190718161231.xcno272nvqpln3wj@yavin>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 18 Jul 2019 23:29:50 +0200
+Message-ID: <CAK8P3a3MiYK4bJiA3G_m5H-TpfN5__--b+=szsJBhG7_it+NQg@mail.gmail.com>
+Subject: Re: [PATCH v9 08/10] open: openat2(2) syscall
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <christian@brauner.io>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-mips@vger.kernel.org,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-xtensa@linux-xtensa.org,
+        sparclinux <sparclinux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+On Thu, Jul 18, 2019 at 6:12 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
+> On 2019-07-18, Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Sat, Jul 6, 2019 at 5:00 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
+> >
+> > In fact, that seems similar enough to the existing openat() that I think
+> > you could also just add the fifth argument to the existing call when
+> > a newly defined flag is set, similarly to how we only use the 'mode'
+> > argument when O_CREAT or O_TMPFILE are set.
+>
+> I considered doing this (and even had a preliminary version of it), but
+> I discovered that I was not in favour of this idea -- once I started to
+> write tests using it -- for a few reasons:
+>
+>   1. It doesn't really allow for clean extension for a future 6th
+>          argument (because you are using up O_* flags to signify "use the
+>          next argument", and O_* flags don't give -EINVAL if they're
+>          unknown). Now, yes you can do the on-start runtime check that
+>          everyone does -- but I've never really liked having to do it.
+>
+>          Having reserved padding for later extensions (that is actually
+>          checked and gives -EINVAL) matches more modern syscall designs.
+>
+>   2. I really was hoping that the variadic openat(2) could be done away
+>      using this union setup (Linus said he didn't like it, and suggested
+>          using something like 'struct stat' as an argument for openat(2) --
+>          though personally I am not sure I would personally like to use an
+>          interface like that).
+>
+>   3. In order to avoid wasting a syscall argument for mode/mask you need
+>          to either have something like your suggested mode_mask (which makes
+>          the syscall arguments less consistent) or have some sort of
+>          mode-like argument that is treated specially (which is really awful
+>          on multiple levels -- this one I also tried and even wrote my
+>          original tests using). And in both cases, the shims for
+>          open{,at}(2) are somewhat less clean.
 
-Paul Burton wrote:
-> There are a couple of intentional switch case fall-throughs in Cavium
-> Octeon code, which trigger compile errors with -Wimplicit-fallthrough
-> due to -Werror being enabled for arch/mips.
->=20
-> These can be encountered when building cavium_octeon_defconfig.
->=20
-> Fix the build issues by annotating the intentional fall-throughs.
->=20
-> Signed-off-by: Paul Burton <paul.burton@mips.com>
+These are all good reasons, thanks for providing the background.
 
-Applied to mips-fixes.
+> All of that being said, I'd be happy to switch to whatever you think
+> makes the most sense. As long as it's possible to get an O_PATH with
+> RESOLVE_IN_ROOT set, I'm happy.
 
-Thanks,
-    Paul
+I don't feel I should be in charge of making the decision. I'd still
+prefer avoiding the indirect argument structure because
 
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paul.burton@mips.com to report it. ]
+4. it's inconsistent with most other syscalls
+
+5. you get the same problem with seccomp and strace that
+   clone3() has -- these and others only track the register
+   arguments by default.
+
+6. copying the structure adds a small overhead compared to
+   passing registers
+
+7. the calling conventions may be inconvenient for  a user space
+   library, so you end up with different prototypes for the low-level
+   syscall and the libc abstraction.
+
+I don't see any of the above seven points as a showstopper
+either way, so I hope someone else has a strong opinion
+and can make the decision easier for you.
+
+In the meantime just keep what you have, so you don't have
+to change it multiple times.
+
+       Arnd
