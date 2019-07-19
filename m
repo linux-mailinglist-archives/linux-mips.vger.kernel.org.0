@@ -2,45 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FA56D679
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Jul 2019 23:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FF26D8AD
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jul 2019 03:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391451AbfGRVaJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 18 Jul 2019 17:30:09 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:35212 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728014AbfGRVaJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Jul 2019 17:30:09 -0400
-Received: by mail-qk1-f196.google.com with SMTP id r21so21732487qke.2;
-        Thu, 18 Jul 2019 14:30:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gXA3fCzwUc7S8+pRMyyFoXYQ6Lxj2094nm3NP6Me1pg=;
-        b=uCH2vUxrfcr6142uAaV9WcXORBKH/D7E4P4NiRuyJaE8kui154F7hapgGZCVK4V5oV
-         h1KnYS8zB5WGcRW0yhYqz6ThOCVt0oV80LAGfoSFKRtZfNXUcqq4Vkc98WyzSf5MEfhC
-         ChJWDCasnRmyjbS9ZdJ1VIkfY5G1MVa9zaR2pgCczj6oOHsD73sgibeBSKVPZopGXvDM
-         xY7mk5kdPJ2hzmYK77+wvt1X8GlX5DuOJeI7mCZMAvHFwnVsvpfPZ56B86qqTVg8XPES
-         7Uk5MUGfBIJqa4SUJOhaEv7m8ueBN492aEPpsSidYIuqRP6htYAWtO8+oyTfmZ0jeCe8
-         JWVw==
-X-Gm-Message-State: APjAAAVWFgTKNxdz5VJMuDG74/oEsWc7zg83gF05rrI4hZNlp1YwqMUs
-        1xmowdKoxZ9t80vjXWPDDaUz1du0yDU5c5Rfqb8=
-X-Google-Smtp-Source: APXvYqwAnwmqNY3PBxWPuNJix5kLy4PEG765j1QyxyCKOemfTtTG+YSbK8sHn1TSB6/emkF2O/3aVUhdKFw2Cxuzrg4=
-X-Received: by 2002:a37:5f45:: with SMTP id t66mr32747316qkb.286.1563485406992;
- Thu, 18 Jul 2019 14:30:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190706145737.5299-1-cyphar@cyphar.com> <20190706145737.5299-9-cyphar@cyphar.com>
- <CAK8P3a33rGhPDFfRBAQyLTMG_WoEgX_toDgWR2O7rSwxKsZG+w@mail.gmail.com> <20190718161231.xcno272nvqpln3wj@yavin>
-In-Reply-To: <20190718161231.xcno272nvqpln3wj@yavin>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 18 Jul 2019 23:29:50 +0200
-Message-ID: <CAK8P3a3MiYK4bJiA3G_m5H-TpfN5__--b+=szsJBhG7_it+NQg@mail.gmail.com>
-Subject: Re: [PATCH v9 08/10] open: openat2(2) syscall
+        id S1726399AbfGSB7j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 18 Jul 2019 21:59:39 -0400
+Received: from vmicros1.altlinux.org ([194.107.17.57]:55986 "EHLO
+        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726042AbfGSB7j (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Jul 2019 21:59:39 -0400
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+        by vmicros1.altlinux.org (Postfix) with ESMTP id 492A272CA65;
+        Fri, 19 Jul 2019 04:59:34 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+        id 3B39E7CC774; Fri, 19 Jul 2019 04:59:34 +0300 (MSK)
+Date:   Fri, 19 Jul 2019 04:59:34 +0300
+From:   "Dmitry V. Levin" <ldv@altlinux.org>
 To:     Aleksa Sarai <cyphar@cyphar.com>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Jeff Layton <jlayton@kernel.org>,
         "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         David Howells <dhowells@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -55,93 +37,79 @@ Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Chanho Min <chanho.min@lge.com>,
         Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org,
-        sparclinux <sparclinux@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v9 08/10] open: openat2(2) syscall
+Message-ID: <20190719015933.GA18022@altlinux.org>
+References: <20190706145737.5299-1-cyphar@cyphar.com>
+ <20190706145737.5299-9-cyphar@cyphar.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="huq684BweRXVnRxX"
+Content-Disposition: inline
+In-Reply-To: <20190706145737.5299-9-cyphar@cyphar.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 18, 2019 at 6:12 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
-> On 2019-07-18, Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Sat, Jul 6, 2019 at 5:00 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
-> >
-> > In fact, that seems similar enough to the existing openat() that I think
-> > you could also just add the fifth argument to the existing call when
-> > a newly defined flag is set, similarly to how we only use the 'mode'
-> > argument when O_CREAT or O_TMPFILE are set.
->
-> I considered doing this (and even had a preliminary version of it), but
-> I discovered that I was not in favour of this idea -- once I started to
-> write tests using it -- for a few reasons:
->
->   1. It doesn't really allow for clean extension for a future 6th
->          argument (because you are using up O_* flags to signify "use the
->          next argument", and O_* flags don't give -EINVAL if they're
->          unknown). Now, yes you can do the on-start runtime check that
->          everyone does -- but I've never really liked having to do it.
->
->          Having reserved padding for later extensions (that is actually
->          checked and gives -EINVAL) matches more modern syscall designs.
->
->   2. I really was hoping that the variadic openat(2) could be done away
->      using this union setup (Linus said he didn't like it, and suggested
->          using something like 'struct stat' as an argument for openat(2) --
->          though personally I am not sure I would personally like to use an
->          interface like that).
->
->   3. In order to avoid wasting a syscall argument for mode/mask you need
->          to either have something like your suggested mode_mask (which makes
->          the syscall arguments less consistent) or have some sort of
->          mode-like argument that is treated specially (which is really awful
->          on multiple levels -- this one I also tried and even wrote my
->          original tests using). And in both cases, the shims for
->          open{,at}(2) are somewhat less clean.
 
-These are all good reasons, thanks for providing the background.
+--huq684BweRXVnRxX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> All of that being said, I'd be happy to switch to whatever you think
-> makes the most sense. As long as it's possible to get an O_PATH with
-> RESOLVE_IN_ROOT set, I'm happy.
+On Sun, Jul 07, 2019 at 12:57:35AM +1000, Aleksa Sarai wrote:
+[...]
+> +/**
+> + * Arguments for how openat2(2) should open the target path. If @extra i=
+s zero,
+> + * then openat2(2) is identical to openat(2).
+> + *
+> + * @flags: O_* flags (unknown flags ignored).
 
-I don't feel I should be in charge of making the decision. I'd still
-prefer avoiding the indirect argument structure because
+What was the rationale for implementing this semantics?
+Ignoring unknown flags makes potential extension of this new interface
+problematic.  This has bitten us many times already, so ...
 
-4. it's inconsistent with most other syscalls
+> + * @mode: O_CREAT file mode (ignored otherwise).
+> + * @upgrade_mask: restrict how the O_PATH may be re-opened (ignored othe=
+rwise).
+> + * @resolve: RESOLVE_* flags (-EINVAL on unknown flags).
 
-5. you get the same problem with seccomp and strace that
-   clone3() has -- these and others only track the register
-   arguments by default.
+=2E.. could you consider implementing this (-EINVAL on unknown flags) seman=
+tics
+for @flags as well, please?
 
-6. copying the structure adds a small overhead compared to
-   passing registers
 
-7. the calling conventions may be inconvenient for  a user space
-   library, so you end up with different prototypes for the low-level
-   syscall and the libc abstraction.
+--=20
+ldv
 
-I don't see any of the above seven points as a showstopper
-either way, so I hope someone else has a strong opinion
-and can make the decision easier for you.
+--huq684BweRXVnRxX
+Content-Type: application/pgp-signature; name="signature.asc"
 
-In the meantime just keep what you have, so you don't have
-to change it multiple times.
+-----BEGIN PGP SIGNATURE-----
 
-       Arnd
+iQIcBAEBCAAGBQJdMSQFAAoJEAVFT+BVnCUIuaAP/3pgUoQA466F6S8jYN6F/icf
+oiQHExdeO3ruxRdNl1gi7af0RxQCiprfNIoD7KQyWSnyUyUm0Cdd7PzpEKXuumQi
+pN6ZTEO2bQeSs7AjCNpLrTgKcuOo/pZbNN7InAHKLB7k2xKKeBbdaVypgGiAEDjT
+JK+4s+8JcJoSg+d69G428QP2qpoHyIZJ5437gYv5rJbL9BRihwwvWF2OQ4TXrd6I
+YnyxPFRRZnfiN3HNbNlJjtMgt5g0AisLuahpJaDMq0NaXnBOosDm9jBAhVOX0CSB
+LUNByCygXeBKv9VuyrO4KnLXS3ORGfK38SDGqz3kFYy1quNRAGKgOXPnGXfb2xbZ
+bRCqyuxkSUOIfLKA6q9jnqO9RoUeOtLglFUT/5JpixTaoxSFN3Y6GlJFcnw+cVm+
+oWH4A/IoST68FCfbOMff976O36pakuWbsVGVsdv384OEHfWaf7c10P9EQc3fhgF3
+JoeY5ht9R1k8HWNOlCuCeHfTwSyLG3T/TROuZYtz65RdPemuuPSPERr+GzOtO9Fn
++wQmK99JlE3nhoyv5CmtqCmMQWhYZedqjbjs5wIq7tjalerg6TakNMmhzTGz5l8T
+i+3EfyMHhEtwq+2YNhdaPEmjfdBzyI3stxtEkURya0BnCgbYsP2mTIP8UbLGDqsY
+EJZiRtPRFfVoePwqT8Ux
+=zLLc
+-----END PGP SIGNATURE-----
+
+--huq684BweRXVnRxX--
