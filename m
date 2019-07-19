@@ -2,118 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7A76E452
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Jul 2019 12:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4352F6E4D2
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Jul 2019 13:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727631AbfGSK3v (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Jul 2019 06:29:51 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:53328 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727602AbfGSK3v (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Jul 2019 06:29:51 -0400
-Received: by mail-wm1-f68.google.com with SMTP id x15so28298958wmj.3
-        for <linux-mips@vger.kernel.org>; Fri, 19 Jul 2019 03:29:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brauner.io; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/54Z+i2NAAKKYqTyaHCknB2yONX433P+mrrcxDIdMKQ=;
-        b=JAjsDhcTKFikvYch2sdYf3M1YIU4lD8gtr6ULD+m66RVXVuqlNpAWJ5aCmwhzsJqfu
-         NYMs/ngfnZnIR8qK+5gnlfw/LTN1DoKaojW4kG3ixmkDG7tw9PX3Gi1H6Z3rJyqaYFRY
-         gtdhUxjOR3aQahCtFDINrBG/OSP8pnsgZFupRZsDuzUdLCVJo0FcPvznY5c5cU461qY8
-         z6fVQ/+Mbzs3h37QWljm/AYaqqO87pyj8pyd6RorqrMiW7iIeyvakf6A7A7GAM2bH4rw
-         cbSgv5bCTz5aSE0toZ8ZOUCkVQ0c1BjSzCzQ1F1IbaB+eNv/4FBgS3Np35nlQBPDWp48
-         Qe+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/54Z+i2NAAKKYqTyaHCknB2yONX433P+mrrcxDIdMKQ=;
-        b=Y4iI1Ky2aa0rGaCQs8VWH1ffOFykrdu8S/tyHTJENt/XEB6rjmCtQNI0sHqDMIW0Sh
-         UWvm7Y44Fqlri7wSFyhCCJaJLm9WtTw7RuY+vHog1D/EkAGsB0XJ60v1p1GYnvSytGh5
-         P8JBVnRGDl/fE0vgvk17jPcRAFB6GFcp/WFvyE23U1mKI528unBrwiBlQ7nOnW3UL1mq
-         Ig5FA0L7b+2W0gQ+SfXj0q6ck5iIl0sOZI2ILb55HfDRlK+HkhCC6sPA7ThIP1DhY/qq
-         SHh6YaKCQlrujS5LLhudoisFaocvvA5uBVormuvuEOjZliF8t0ef+pUsGBtXpiocbBhF
-         SBZg==
-X-Gm-Message-State: APjAAAUOppB9tYOUVE0NSjRkdTcKPyUaASryaMMGPqXdE93mnS6j3DCT
-        89dsaeSO31yIu3wA8b70oWA=
-X-Google-Smtp-Source: APXvYqynzSxRaiMvY03x+MCUOq/ut+wmSYg6CTggvreuOHjcm6imyyhYbJGXSWZ87v9KsAJECqBb6Q==
-X-Received: by 2002:a1c:c145:: with SMTP id r66mr47654238wmf.139.1563532189209;
-        Fri, 19 Jul 2019 03:29:49 -0700 (PDT)
-Received: from brauner.io ([81.92.17.140])
-        by smtp.gmail.com with ESMTPSA id v4sm25167633wmg.22.2019.07.19.03.29.47
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 19 Jul 2019 03:29:49 -0700 (PDT)
-Date:   Fri, 19 Jul 2019 12:29:41 +0200
-From:   Christian Brauner <christian@brauner.io>
-To:     "Dmitry V. Levin" <ldv@altlinux.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Aleksa Sarai <cyphar@cyphar.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org,
-        sparclinux <sparclinux@vger.kernel.org>
-Subject: Re: [PATCH v9 08/10] open: openat2(2) syscall
-Message-ID: <20190719102932.274pvmxnrbjcc6gu@brauner.io>
-References: <20190706145737.5299-1-cyphar@cyphar.com>
- <20190706145737.5299-9-cyphar@cyphar.com>
- <CAK8P3a33rGhPDFfRBAQyLTMG_WoEgX_toDgWR2O7rSwxKsZG+w@mail.gmail.com>
- <20190718161231.xcno272nvqpln3wj@yavin>
- <CAK8P3a3MiYK4bJiA3G_m5H-TpfN5__--b+=szsJBhG7_it+NQg@mail.gmail.com>
- <20190719021218.GB18022@altlinux.org>
+        id S1727436AbfGSLNY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Jul 2019 07:13:24 -0400
+Received: from ozlabs.org ([203.11.71.1]:56171 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726072AbfGSLNY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 19 Jul 2019 07:13:24 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 45qpJt0NJrz9s00;
+        Fri, 19 Jul 2019 21:13:17 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christian Brauner <christian@brauner.io>
+Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-kernel@vger.kernel.org, arnd@arndb.de,
+        linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>
+Subject: Re: [PATCH 1/2] arch: mark syscall number 435 reserved for clone3
+In-Reply-To: <20190719102503.tm3ahvkh4rwykmws@brauner.io>
+References: <20190714192205.27190-1-christian@brauner.io> <20190714192205.27190-2-christian@brauner.io> <e14eb2f9-43cb-0b9d-dec4-b7e7dcd62091@de.ibm.com> <20190716130631.tohj4ub54md25dys@brauner.io> <874l3i8h0l.fsf@concordia.ellerman.id.au> <20190719102503.tm3ahvkh4rwykmws@brauner.io>
+Date:   Fri, 19 Jul 2019 21:13:16 +1000
+Message-ID: <871rym8egj.fsf@concordia.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190719021218.GB18022@altlinux.org>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jul 19, 2019 at 05:12:18AM +0300, Dmitry V. Levin wrote:
-> On Thu, Jul 18, 2019 at 11:29:50PM +0200, Arnd Bergmann wrote:
-> [...]
-> > 5. you get the same problem with seccomp and strace that
-> >    clone3() has -- these and others only track the register
-> >    arguments by default.
-> 
-> Just for the record, this is definitely not the case for strace:
-> it decodes arrays, structures, netlink messages, and so on by default.
+Christian Brauner <christian@brauner.io> writes:
+> On Fri, Jul 19, 2019 at 08:18:02PM +1000, Michael Ellerman wrote:
+>> Christian Brauner <christian@brauner.io> writes:
+>> > On Mon, Jul 15, 2019 at 03:56:04PM +0200, Christian Borntraeger wrote:
+>> >> I think Vasily already has a clone3 patch for s390x with 435. 
+>> >
+>> > A quick follow-up on this. Helge and Michael have asked whether there
+>> > are any tests for clone3. Yes, there will be and I try to have them
+>> > ready by the end of the this or next week for review. In the meantime I
+>> > hope the following minimalistic test program that just verifies very
+>> > very basic functionality (It's not pretty.) will help you test:
+>> 
+>> Hi Christian,
+>> 
+>> Thanks for the test.
+>> 
+>> This actually oopses on powerpc, it hits the BUG_ON in CHECK_FULL_REGS
+>> in process.c around line 1633:
+>> 
+>> 	} else {
+>> 		/* user thread */
+>> 		struct pt_regs *regs = current_pt_regs();
+>> 		CHECK_FULL_REGS(regs);
+>> 		*childregs = *regs;
+>> 		if (usp)
+>> 
+>> 
+>> So I'll have to dig into how we fix that before we wire up clone3.
+>> 
+>> Turns out testing is good! :)
+>
+> Indeed. I have a test-suite for clone3 in mind and I hope to have it
+> ready by the end of next week. It's just always the finding the time
+> part that is annoying. :)
 
-There sure is value in trying to design syscalls that can be handled
-nicely by seccomp but that shouldn't become a burden on designing
-extensible syscalls.
-I suggested a session for Ksummit where we can discuss if and how we can
-make seccomp more compatible with pointer-args in syscalls.
+I know the feeling!
 
-Christian
+> Thanks for digging into this, Michael!
+
+No worries, happy to help where I can.
+
+In the intervening five minutes I remembered how we handle this, we just
+need a little wrapper to save the non-volatile regs:
+
+_GLOBAL(ppc_clone3)
+	bl	save_nvgprs
+	bl	sys_clone3
+	b	.Lsyscall_exit
+
+
+A while back I meant to make it generate those automatically based on a
+flag in the syscall.tbl but of course haven't got around to it :)
+
+So with the above it seems all good:
+
+$ ./clone3 ; echo $?
+Parent process received child's pid 4204 as return value
+Parent process received child's pidfd 3
+Parent process received child's pid 4204 as return argument
+Child process with pid 4204
+0
+
+I'll send a patch to wire it up on Monday.
+
+cheers
