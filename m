@@ -2,47 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EFF70C35
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Jul 2019 23:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3C170C36
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jul 2019 00:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728284AbfGVV7q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Jul 2019 17:59:46 -0400
-Received: from mail-eopbgr690130.outbound.protection.outlook.com ([40.107.69.130]:62950
+        id S1728320AbfGVWAB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Jul 2019 18:00:01 -0400
+Received: from mail-eopbgr690124.outbound.protection.outlook.com ([40.107.69.124]:8514
         "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726553AbfGVV7q (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 22 Jul 2019 17:59:46 -0400
+        id S1726553AbfGVWAA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 22 Jul 2019 18:00:00 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CVvJF35DM7agmc7913JivuQvuAgayhePJSLmdoI81GhTVWv7YF/OBh14Ft45F0+wse4IIN1Pc1ypALkkJ0vkeNkBGvvLYaCb9mH+WsAohmsmRriIn0FYlt8dA5nBs451cfwxX3kCcaUTt9WbpC/Uh1mhVCe4xP3w6Ft1V1yj4gbu7+A5GlEIvyOgF55M8bEGnxMI4ogJN8y4bvyT22WhfKXT/xo6yiubhtfci34gWfsPYhmekrW4nluj300/7IqW20C2kI5T/ynPNgBFDoM23bexOEJgFRGum/8l0QPqd2m0nFav8XgfQr+d8TxnAXAuYU9ys/hrvrEqYbjgY48ISQ==
+ b=Z14jFqEsUObWnDKAimDVgrFQChIuBKvsBmAkH6mQql2fvOVEyBBBbSnACPR+0tlAg26OwO76k3XUagPAsBpMnzqHPDXHWObytYqkitpGwTb0bcyPzNF9Di1pyBzlqvIEzmQt75o/vnmPiFHTzxiT1o0XZudANaHQ25G/6Q/qEjCpTu16p6oETTcAtygpq+lf3is9lLpgpKw9+YRMmLbdgQ5/J7FGVES4z8vx12Q3jTEdxY8sGqcgWlN1rgYlujERdjDgSkTw6rvm6Vin48NnmTVhoNsL87tzBOFhIYSyfTIJhPNLJkY2iAYpJFzybtZpYupYgqVWH1Dq+GIT2WbcBA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3JDVsr5KnRnALH9LfNntqfg/wzYYxtyROsyqATgU0J4=;
- b=HP/cYpEBnlRY1BX90Y1PWxrdx6R3yjcv9aJs4ARf0UovUqvYxJ8Je8PBVKqxtyRQ4ua7JCOwBn3k/WX+HdpXODk6tIxC2So36Hf8NZ6xc/sjqlVVVyMp3pETaOAQlL22sgZO4P/hYpp7Ekk3wQWN6XwSuazuIwYTA43lHtnqHe/ywbSfygRafFcJ7EnQMNHMEo+nzAyiSAoZxb2mqdHwwuIuXPfs9GAl6oUeD18PWi23yGodr5VgW/Gdiee+pxl+Jh/8Yy5TPz66+rWPkO0GAjUtUYrOKwkUrkvpk5Y9mAsx+l2V7MPJHcXtWqz4n9gCgaysFX6ttKQpdGjZiRM65w==
+ bh=7T7atFJ2RH5oMNcaAXsQ1pDFoOxZPWDi7pY77JTi2h8=;
+ b=C/fb9K+828fb5raZdZyxRV0eIChbJiDyt0dvh1XLEDYYRom+QZyWzhwfgoNRerhDCyp5wGgyM2hXcu8FzTilXDswLWkmWt1ADNayq2mdG2ce30o2GkSJGLWi3nP4T3gZBodjsTPM7M7+8T5X2RIbyqwHd2zccoBmO5YNiH/bJFUMr/ojGoOgAAPjkx4G5UNqgqpjxBwNNseZw1fDznteuMZ66tf7rzmYwnjQEZzhXCFG9AQhxJvm2ZUxCdbyYIeheDkUXxzxUYQOncjOFtDl5J0YJasYnG807neuJD483yse+e9iimTZr8cHbdqx1d4rR0HQtk7i1drzVk4emQv2+g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
  smtp.mailfrom=wavecomp.com;dmarc=pass action=none
  header.from=mips.com;dkim=pass header.d=mips.com;arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3JDVsr5KnRnALH9LfNntqfg/wzYYxtyROsyqATgU0J4=;
- b=nVspauKds6Eg3axeCm8JmddbBwjqFQaBAhsxGIYNx0QfF14+CO3JuU7PWXkzXiZGeWzVWQWRbwe30xszNC87inQ4e/vgFyRWDWtLjs5iJm045Wjtj0m6JHmpyh7K04szGUEFcZ8HzeyRe088AvynLY1rBShmUBXvAhIF5pK2X28=
+ bh=7T7atFJ2RH5oMNcaAXsQ1pDFoOxZPWDi7pY77JTi2h8=;
+ b=TmHTvDncun5EF9SzfAEr7QmAHSJioplm2Zq0EG00smgB79RbvkBr+djJfRlQIutK2xDAhsDqxb4pEyKR/UgaAlQt2mnuXyYuPfD/GY4fiZ8Hk/rfJbJayssD5vooryoV5QRYViUFkrcgXZxbyIKMH/9YDKjk34TjtTIWaeIKdyo=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
  MWHPR2201MB1184.namprd22.prod.outlook.com (10.174.171.39) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2094.17; Mon, 22 Jul 2019 21:59:43 +0000
+ 15.20.2094.17; Mon, 22 Jul 2019 21:59:51 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::49d3:37f8:217:c83]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::49d3:37f8:217:c83%6]) with mapi id 15.20.2094.017; Mon, 22 Jul 2019
- 21:59:43 +0000
+ 21:59:51 +0000
 From:   Paul Burton <paul.burton@mips.com>
 To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
 CC:     Paul Burton <pburton@wavecomp.com>
-Subject: [PATCH 1/4] MIPS: Remove unused R4300 CPU support
-Thread-Topic: [PATCH 1/4] MIPS: Remove unused R4300 CPU support
-Thread-Index: AQHVQNjE2OmJveifz0y924MF9xE0ug==
-Date:   Mon, 22 Jul 2019 21:59:43 +0000
-Message-ID: <20190722215705.20109-1-paul.burton@mips.com>
+Subject: [PATCH 2/4] MIPS: Remove unused R5432 CPU support
+Thread-Topic: [PATCH 2/4] MIPS: Remove unused R5432 CPU support
+Thread-Index: AQHVQNjJ72/2ELPZjkuS3GO9PX2IzQ==
+Date:   Mon, 22 Jul 2019 21:59:50 +0000
+Message-ID: <20190722215705.20109-2-paul.burton@mips.com>
+References: <20190722215705.20109-1-paul.burton@mips.com>
+In-Reply-To: <20190722215705.20109-1-paul.burton@mips.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -56,23 +58,23 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.22.0
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e189acd5-107b-485a-2fed-08d70eefe736
+x-ms-office365-filtering-correlation-id: 880c1c59-c9d2-4765-de2a-08d70eefeb8c
 x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1184;
 x-ms-traffictypediagnostic: MWHPR2201MB1184:
-x-microsoft-antispam-prvs: <MWHPR2201MB1184A578CFE194E3F0955E28C1C40@MWHPR2201MB1184.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:167;
+x-microsoft-antispam-prvs: <MWHPR2201MB1184E9D0A8060B5F23E85F57C1C40@MWHPR2201MB1184.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:96;
 x-forefront-prvs: 01068D0A20
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(346002)(136003)(376002)(39850400004)(366004)(199004)(189003)(2351001)(6436002)(4326008)(316002)(99286004)(66066001)(6916009)(107886003)(2906002)(6512007)(68736007)(386003)(478600001)(66946007)(36756003)(44832011)(7736002)(66476007)(66556008)(66446008)(64756008)(5640700003)(305945005)(25786009)(8936002)(6486002)(53936002)(50226002)(5660300002)(1076003)(102836004)(186003)(256004)(8676002)(2501003)(42882007)(81156014)(26005)(81166006)(14454004)(476003)(486006)(71190400001)(71200400001)(6116002)(3846002)(6506007)(2616005)(52116002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1184;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(346002)(136003)(376002)(39840400004)(366004)(199004)(189003)(2351001)(6436002)(4326008)(316002)(99286004)(66066001)(6916009)(107886003)(2906002)(6512007)(68736007)(386003)(478600001)(66946007)(36756003)(44832011)(7736002)(66476007)(66556008)(66446008)(64756008)(5640700003)(305945005)(25786009)(8936002)(6486002)(53936002)(446003)(50226002)(5660300002)(1076003)(102836004)(186003)(256004)(8676002)(2501003)(42882007)(81156014)(26005)(81166006)(14454004)(476003)(76176011)(486006)(71190400001)(71200400001)(11346002)(6116002)(3846002)(6506007)(2616005)(52116002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1184;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: kFIq+kk8fgNrU+nZL3//qwvsvc4lYfowz5PrBL+Sb6zTTGlDPMaafOAJoM49sR/e4iroKTELMzHwsG9+tjwJTCmrDjMrnvZ3WpHAxLzIxbYAGQN6bPPY8X76mmPxmywPPuF8RwBppCBBs4QSaxss5XCPlGRHst42+89SVirgsofYG7jxERqUFbalkBAgftukozuwKNCmYVN8l+fvzhXqzwrAR9rVZsjyPiMVknmfCYmmoKvQ7wq8JhjNEXLVDhxwZwYvLF1cJxgxzd7I4XO/ayKy+yZRGUkiafWLAdG4pNNlbalRO3vj9ArHo9n5vxdhuQsPVAPX25xazCv2zTL1bL0sq+F/vTVCm8RAdvOP4F4AXhloMwwtsxxBsJPuKZ0k4dQc89zxQ2zw8e/yZqR1wAao8iESM+i430IEfJQ2MBw=
+x-microsoft-antispam-message-info: OyNWXWZR4EX11D8vqrbTRYGzu+KKG+U1xE4OoVe2dQSnKAK+ncUPG253ot7hZm5nL2LOwu3nwPbs0mSznvhTX2jMNhP7X0ovtOkhlakDeLg+a/OPefuSjnYmsrBxQeyWIdgMGAnVyt43fSRIzHLg72zDEyWkstgL56U2refX+N64aZowZg6e4dZfyRSG8LZ5oYSHGbWukSPWRdDIBF8I1jvipKbXHSnKN2/0pk3jWtS0YOnj8Echh9BJnI/N8RLjNcfCBhKf1oSYmHs74UDpHflwB9W/J86XWXj6PE7iBJoP5HkA/X4XYLZ6DqGbZWCBsA8COSXVbNsYhZsCNpIXWkDAxYg5o62Ebn2h+S6V8ckYBkOaMD9xBkL3QqQkG9CdykA/OOfqxRMse36LDhmrXd1L88hTf7bpaLSI19U/cZc=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e189acd5-107b-485a-2fed-08d70eefe736
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2019 21:59:43.7086
+X-MS-Exchange-CrossTenant-Network-Message-Id: 880c1c59-c9d2-4765-de2a-08d70eefeb8c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2019 21:59:50.9936
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
@@ -84,169 +86,158 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Our R4300 CPU support can only be included if a system selects
-CONFIG_SYS_HAS_CPU_R4300. No system does, making all R4300-related CPU
+Our R5432 CPU support can only be included if a system selects
+CONFIG_SYS_HAS_CPU_R5432. No system does, making all R5432-related CPU
 support dead code. Remove it.
 
 Signed-off-by: Paul Burton <paul.burton@mips.com>
 ---
 
- arch/mips/Kconfig                | 12 ------------
- arch/mips/Makefile               |  1 -
- arch/mips/include/asm/cpu-type.h |  5 -----
+ arch/mips/Kconfig                | 11 -----------
+ arch/mips/Makefile               |  2 --
+ arch/mips/include/asm/cpu-type.h |  4 ----
  arch/mips/include/asm/cpu.h      |  2 +-
  arch/mips/include/asm/module.h   |  2 --
- arch/mips/kernel/cpu-probe.c     |  9 ---------
- arch/mips/kernel/idle.c          |  1 -
+ arch/mips/kernel/cpu-probe.c     |  8 --------
  arch/mips/mm/c-r4k.c             |  1 -
  arch/mips/mm/tlbex.c             |  1 -
- 9 files changed, 1 insertion(+), 33 deletions(-)
+ 8 files changed, 1 insertion(+), 30 deletions(-)
 
 diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index d50fafd7bf3a..2b28c6b02ff9 100644
+index 2b28c6b02ff9..0f4e1a7eb006 100644
 --- a/arch/mips/Kconfig
 +++ b/arch/mips/Kconfig
-@@ -1599,15 +1599,6 @@ config CPU_VR41XX
- 	  kernel built with this option will not run on any other type of
- 	  processor or vice versa.
+@@ -1629,14 +1629,6 @@ config CPU_R5000
+ 	help
+ 	  MIPS Technologies R5000-series processors other than the Nevada.
 =20
--config CPU_R4300
--	bool "R4300"
--	depends on SYS_HAS_CPU_R4300
+-config CPU_R5432
+-	bool "R5432"
+-	depends on SYS_HAS_CPU_R5432
 -	select CPU_SUPPORTS_32BIT_KERNEL
 -	select CPU_SUPPORTS_64BIT_KERNEL
+-	select CPU_SUPPORTS_HUGEPAGES
 -	select CPU_HAS_LOAD_STORE_LR
--	help
--	  MIPS Technologies R4300-series processors.
 -
- config CPU_R4X00
- 	bool "R4x00"
- 	depends on SYS_HAS_CPU_R4X00
-@@ -1969,9 +1960,6 @@ config SYS_HAS_CPU_TX39XX
- config SYS_HAS_CPU_VR41XX
+ config CPU_R5500
+ 	bool "R5500"
+ 	depends on SYS_HAS_CPU_R5500
+@@ -1969,9 +1961,6 @@ config SYS_HAS_CPU_TX49XX
+ config SYS_HAS_CPU_R5000
  	bool
 =20
--config SYS_HAS_CPU_R4300
+-config SYS_HAS_CPU_R5432
 -	bool
 -
- config SYS_HAS_CPU_R4X00
+ config SYS_HAS_CPU_R5500
  	bool
 =20
 diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index eceff9b75b22..e728d0555466 100644
+index e728d0555466..e507e5b6e606 100644
 --- a/arch/mips/Makefile
 +++ b/arch/mips/Makefile
-@@ -163,7 +163,6 @@ cflags-y +=3D -fno-stack-check
- #
- cflags-$(CONFIG_CPU_R3000)	+=3D -march=3Dr3000
- cflags-$(CONFIG_CPU_TX39XX)	+=3D -march=3Dr3900
--cflags-$(CONFIG_CPU_R4300)	+=3D -march=3Dr4300 -Wa,--trap
- cflags-$(CONFIG_CPU_VR41XX)	+=3D -march=3Dr4100 -Wa,--trap
- cflags-$(CONFIG_CPU_R4X00)	+=3D -march=3Dr4600 -Wa,--trap
- cflags-$(CONFIG_CPU_TX49XX)	+=3D -march=3Dr4600 -Wa,--trap
+@@ -173,8 +173,6 @@ cflags-$(CONFIG_CPU_MIPS64_R1)	+=3D -march=3Dmips64 -Wa=
+,--trap
+ cflags-$(CONFIG_CPU_MIPS64_R2)	+=3D -march=3Dmips64r2 -Wa,--trap
+ cflags-$(CONFIG_CPU_MIPS64_R6)	+=3D -march=3Dmips64r6 -Wa,--trap
+ cflags-$(CONFIG_CPU_R5000)	+=3D -march=3Dr5000 -Wa,--trap
+-cflags-$(CONFIG_CPU_R5432)	+=3D $(call cc-option,-march=3Dr5400,-march=3Dr=
+5000) \
+-			-Wa,--trap
+ cflags-$(CONFIG_CPU_R5500)	+=3D $(call cc-option,-march=3Dr5500,-march=3Dr=
+5000) \
+ 			-Wa,--trap
+ cflags-$(CONFIG_CPU_NEVADA)	+=3D $(call cc-option,-march=3Drm5200,-march=
+=3Dr5000) \
 diff --git a/arch/mips/include/asm/cpu-type.h b/arch/mips/include/asm/cpu-t=
 ype.h
-index a45af3de075d..9774e6d0403f 100644
+index 9774e6d0403f..2f1677c360c4 100644
 --- a/arch/mips/include/asm/cpu-type.h
 +++ b/arch/mips/include/asm/cpu-type.h
-@@ -116,11 +116,6 @@ static inline int __pure __get_cpu_type(const int cpu_=
+@@ -138,10 +138,6 @@ static inline int __pure __get_cpu_type(const int cpu_=
 type)
- 	case CPU_VR4181A:
+ 	case CPU_R5000:
  #endif
 =20
--#ifdef CONFIG_SYS_HAS_CPU_R4300
--	case CPU_R4300:
--	case CPU_R4310:
+-#ifdef CONFIG_SYS_HAS_CPU_R5432
+-	case CPU_R5432:
 -#endif
 -
- #ifdef CONFIG_SYS_HAS_CPU_R4X00
- 	case CPU_R4000PC:
- 	case CPU_R4000SC:
+ #ifdef CONFIG_SYS_HAS_CPU_R5500
+ 	case CPU_R5500:
+ #endif
 diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
-index 290369fa44a4..c70c43fc9e09 100644
+index c70c43fc9e09..0f52e4b099ea 100644
 --- a/arch/mips/include/asm/cpu.h
 +++ b/arch/mips/include/asm/cpu.h
-@@ -293,7 +293,7 @@ enum cpu_type_enum {
- 	/*
- 	 * R4000 class processors
+@@ -295,7 +295,7 @@ enum cpu_type_enum {
  	 */
--	CPU_R4000PC, CPU_R4000SC, CPU_R4000MC, CPU_R4200, CPU_R4300, CPU_R4310,
-+	CPU_R4000PC, CPU_R4000SC, CPU_R4000MC, CPU_R4200,
+ 	CPU_R4000PC, CPU_R4000SC, CPU_R4000MC, CPU_R4200,
  	CPU_R4400PC, CPU_R4400SC, CPU_R4400MC, CPU_R4600, CPU_R4640, CPU_R4650,
- 	CPU_R4700, CPU_R5000, CPU_R5500, CPU_NEVADA, CPU_R5432, CPU_R10000,
+-	CPU_R4700, CPU_R5000, CPU_R5500, CPU_NEVADA, CPU_R5432, CPU_R10000,
++	CPU_R4700, CPU_R5000, CPU_R5500, CPU_NEVADA, CPU_R10000,
  	CPU_R12000, CPU_R14000, CPU_R16000, CPU_VR41XX, CPU_VR4111, CPU_VR4121,
+ 	CPU_VR4122, CPU_VR4131, CPU_VR4133, CPU_VR4181, CPU_VR4181A, CPU_RM7000,
+ 	CPU_SR71000, CPU_TX49XX,
 diff --git a/arch/mips/include/asm/module.h b/arch/mips/include/asm/module.=
 h
-index 6dc0b21b8acd..eaf3f37ed583 100644
+index eaf3f37ed583..92cb94ef0231 100644
 --- a/arch/mips/include/asm/module.h
 +++ b/arch/mips/include/asm/module.h
-@@ -103,8 +103,6 @@ search_module_dbetables(unsigned long addr)
- #define MODULE_PROC_FAMILY "TX39XX "
- #elif defined CONFIG_CPU_VR41XX
- #define MODULE_PROC_FAMILY "VR41XX "
--#elif defined CONFIG_CPU_R4300
--#define MODULE_PROC_FAMILY "R4300 "
- #elif defined CONFIG_CPU_R4X00
- #define MODULE_PROC_FAMILY "R4X00 "
- #elif defined CONFIG_CPU_TX49XX
+@@ -109,8 +109,6 @@ search_module_dbetables(unsigned long addr)
+ #define MODULE_PROC_FAMILY "TX49XX "
+ #elif defined CONFIG_CPU_R5000
+ #define MODULE_PROC_FAMILY "R5000 "
+-#elif defined CONFIG_CPU_R5432
+-#define MODULE_PROC_FAMILY "R5432 "
+ #elif defined CONFIG_CPU_R5500
+ #define MODULE_PROC_FAMILY "R5500 "
+ #elif defined CONFIG_CPU_NEVADA
 diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index 9635c1db3ae6..d70bd6542a9f 100644
+index d70bd6542a9f..be717be2ca5f 100644
 --- a/arch/mips/kernel/cpu-probe.c
 +++ b/arch/mips/kernel/cpu-probe.c
-@@ -1384,15 +1384,6 @@ static inline void cpu_probe_legacy(struct cpuinfo_m=
+@@ -1459,14 +1459,6 @@ static inline void cpu_probe_legacy(struct cpuinfo_m=
 ips *c, unsigned int cpu)
- 			break;
- 		}
+ 			     MIPS_CPU_LLSC;
+ 		c->tlbsize =3D 48;
  		break;
--	case PRID_IMP_R4300:
--		c->cputype =3D CPU_R4300;
--		__cpu_name[cpu] =3D "R4300";
--		set_isa(c, MIPS_CPU_ISA_III);
--		c->fpu_msk31 |=3D FPU_CSR_CONDX;
+-	case PRID_IMP_R5432:
+-		c->cputype =3D CPU_R5432;
+-		__cpu_name[cpu] =3D "R5432";
+-		set_isa(c, MIPS_CPU_ISA_IV);
 -		c->options =3D R4K_OPTS | MIPS_CPU_FPU | MIPS_CPU_32FPR |
--			     MIPS_CPU_LLSC;
--		c->tlbsize =3D 32;
+-			     MIPS_CPU_WATCH | MIPS_CPU_LLSC;
+-		c->tlbsize =3D 48;
 -		break;
- 	case PRID_IMP_R4600:
- 		c->cputype =3D CPU_R4600;
- 		__cpu_name[cpu] =3D "R4600";
-diff --git a/arch/mips/kernel/idle.c b/arch/mips/kernel/idle.c
-index 7388f1374d5f..7cc0af34c6e6 100644
---- a/arch/mips/kernel/idle.c
-+++ b/arch/mips/kernel/idle.c
-@@ -151,7 +151,6 @@ void __init check_wait(void)
- 		cpu_wait =3D r39xx_wait;
- 		break;
- 	case CPU_R4200:
--/*	case CPU_R4300: */
- 	case CPU_R4600:
- 	case CPU_R4640:
- 	case CPU_R4650:
+ 	case PRID_IMP_R5500:
+ 		c->cputype =3D CPU_R5500;
+ 		__cpu_name[cpu] =3D "R5500";
 diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
-index 5166e38cd1c6..07d9aa4f7491 100644
+index 07d9aa4f7491..89b9c851d822 100644
 --- a/arch/mips/mm/c-r4k.c
 +++ b/arch/mips/mm/c-r4k.c
-@@ -1134,7 +1134,6 @@ static void probe_pcache(void)
- 	case CPU_R4400PC:
- 	case CPU_R4400SC:
- 	case CPU_R4400MC:
--	case CPU_R4300:
- 		icache_size =3D 1 << (12 + ((config & CONF_IC) >> 9));
- 		c->icache.linesz =3D 16 << ((config & CONF_IB) >> 5);
- 		c->icache.ways =3D 1;
-diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
-index 144ceb0fba88..b5dde6f4423c 100644
---- a/arch/mips/mm/tlbex.c
-+++ b/arch/mips/mm/tlbex.c
-@@ -545,7 +545,6 @@ void build_tlb_write_entry(u32 **p, struct uasm_label *=
-*l,
- 		tlbw(p);
+@@ -1098,7 +1098,6 @@ static void probe_pcache(void)
+ 		c->options |=3D MIPS_CPU_CACHE_CDEX_P;
  		break;
 =20
--	case CPU_R4300:
- 	case CPU_5KC:
- 	case CPU_TX49XX:
- 	case CPU_PR4450:
+-	case CPU_R5432:
+ 	case CPU_R5500:
+ 		icache_size =3D 1 << (12 + ((config & CONF_IC) >> 9));
+ 		c->icache.linesz =3D 16 << ((config & CONF_IB) >> 5);
+diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+index b5dde6f4423c..9b2fcf421321 100644
+--- a/arch/mips/mm/tlbex.c
++++ b/arch/mips/mm/tlbex.c
+@@ -603,7 +603,6 @@ void build_tlb_write_entry(u32 **p, struct uasm_label *=
+*l,
+=20
+ 	case CPU_VR4131:
+ 	case CPU_VR4133:
+-	case CPU_R5432:
+ 		uasm_i_nop(p);
+ 		uasm_i_nop(p);
+ 		tlbw(p);
 --=20
 2.22.0
 
