@@ -2,173 +2,261 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8CF70BF2
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Jul 2019 23:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3882070C01
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Jul 2019 23:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730805AbfGVVsN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Jul 2019 17:48:13 -0400
-Received: from mail-eopbgr720114.outbound.protection.outlook.com ([40.107.72.114]:6072
-        "EHLO NAM05-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731302AbfGVVsN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 22 Jul 2019 17:48:13 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=andbjAkycuIAq+jVLf3aCclsAbk7WVwQjCcVaiuDP/HsEoiKx0/Bbq/iaRHONuJrDk2Q5v4OvcdIdY+mAl3AmR87tcVv4ASvck876xSTgmR9TD1GRFvH+HCWK3ZT7/gFaZW69AFvp7yBmzEpUiQoYYDz2x71OQ4eDvRKdOQbfI8vIAO6qOFjTAp/2V+BRG/neYsMAW9R7/Dirrdxq05cn5TrDqk+l95S5UGG/9a+UVs3MkcHGHuf5om0rw/wAOPc9KVbH8wAJjK4p4ozXESvK5eXk/cGe1ar+nXVlUijdAeIE9dLXYqjX6r5dfL8cElP9cZDOyElIWgXTRGjYxLvHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fqBjQrpDj0OJH8VKBImffIK2WtKZNDhu+QZ0zckAMDA=;
- b=foOq2wsemfDZqvZZzniKrRIqCPqvCdm32SbWGVsIMhXGboYkR072Z4ziK5AVEmah8GA65fw8LpzM++KCGJPxhuGg38QOMG/RkipcK5jDXDgcRRt6t1ndsl0lWKkeRIADcv3P/7vbE4Sbyy3+iFbnrRhk9oeWgCrJQgHD4Cy8rT6b3boCQXFNw1x+feo/iJhsyofnvJR4RkP9hgR3bYwzz0Z6Zr/5+Dd5AJgQGy0Q2nLqiMLEU7FMrf7JbEUToKrI+4wnnpxAVJpr+iJxqGhfSAKLZZq+nI+6S3MxiN3KOVfkaeouwZfk4NyE7SZs1+njrKp0TSXT7HJ8pcHHCyBGng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=wavecomp.com;dmarc=pass action=none
- header.from=mips.com;dkim=pass header.d=mips.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fqBjQrpDj0OJH8VKBImffIK2WtKZNDhu+QZ0zckAMDA=;
- b=n1JrOcpanq9drJqqKfsJSMbu6RdUsaoMd/1M+WqSd56uURdmU9Wn8YGyZwTE5Hkc9zC/743UenmspllAeUFeXzINpmXYCF49ZAxVQdl7+HLCB2MKYP55jZA2LAXXfXiRne9LPlDL8zJ4EaNt/JmLf0UHOIR3EDSYNn9FZYpGd4M=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1760.namprd22.prod.outlook.com (10.164.206.163) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2094.14; Mon, 22 Jul 2019 21:47:25 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::49d3:37f8:217:c83]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::49d3:37f8:217:c83%6]) with mapi id 15.20.2094.017; Mon, 22 Jul 2019
- 21:47:25 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Steven Price <steven.price@arm.com>
-CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        =?iso-8859-1?Q?J=E9r=F4me_Glisse?= <jglisse@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        "Liang, Kan" <kan.liang@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH v9 04/21] mips: mm: Add p?d_leaf() definitions
-Thread-Topic: [PATCH v9 04/21] mips: mm: Add p?d_leaf() definitions
-Thread-Index: AQHVQKQWHhmeZU4KlE2qPPJZI7g5vqbXLM0A
-Date:   Mon, 22 Jul 2019 21:47:24 +0000
-Message-ID: <20190722214722.wdlj6a3der3r2oro@pburton-laptop>
-References: <20190722154210.42799-1-steven.price@arm.com>
- <20190722154210.42799-5-steven.price@arm.com>
-In-Reply-To: <20190722154210.42799-5-steven.price@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR05CA0001.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::14) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:18::12)
-user-agent: NeoMutt/20180716
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [12.94.197.246]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 924f2cf9-abad-44f0-9daa-08d70eee2e91
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:MWHPR2201MB1760;
-x-ms-traffictypediagnostic: MWHPR2201MB1760:
-x-microsoft-antispam-prvs: <MWHPR2201MB1760DD96341A807B6A561F8EC1C40@MWHPR2201MB1760.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
-x-forefront-prvs: 01068D0A20
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(366004)(136003)(376002)(396003)(346002)(39850400004)(199004)(189003)(256004)(81166006)(81156014)(186003)(478600001)(11346002)(44832011)(64756008)(102836004)(486006)(8936002)(42882007)(68736007)(25786009)(6116002)(66556008)(66476007)(66946007)(3846002)(66446008)(1076003)(446003)(71190400001)(476003)(386003)(99286004)(71200400001)(6486002)(6506007)(7736002)(229853002)(316002)(305945005)(9686003)(54906003)(58126008)(6436002)(53936002)(76176011)(6246003)(7416002)(6512007)(8676002)(2906002)(6916009)(26005)(5660300002)(66066001)(52116002)(33716001)(14454004)(4326008);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1760;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: lFHgvB4Ko+ICPs6Xu+lunbkR+AMez0bOGRh1cLmdoO8sc9nERXWg3+T4OLnNTogn9Hb5iNM8qFzfNT2ZleyE+pK/9sfYemk17y8dyG4HBZLR8KvtPfDOjFnBCmQhskRe1RwFdlUOVbyGMmOEqZoGThuHHDIQK0HUMdT4SYgSlOi9L980gYJ/xWC+aBDnGMaCtuIFb5IxNMtG9aR6ZxdjhJBOcruSrTOh+X18vzQsQYenaqiLmkFREPD1q2u/poq+cmSawqF4AevyqyZjy9zjCzrrkCwFlqYTYsIjyrRURug1PFxH9GeCZoJIRtFJVyFFsVyLHpeTkzIjI/Pw8W3oaWjwxQXedOKId/lQiHul+yhi1mV6yf0CaqGecJgUzz5cic9D7OG7YVdiPzZ5pWsUnciIRv0N2xkbImU4nPk7L0U=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <DF7AB4FF039DED40B7A6B5AE3E6E451D@namprd22.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1728303AbfGVVu4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Jul 2019 17:50:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41238 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727243AbfGVVu4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 22 Jul 2019 17:50:56 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B35FA21951;
+        Mon, 22 Jul 2019 21:50:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563832254;
+        bh=SLa3607t61ofYoKGilKahes40T5ZTD5NhrB1m8QE//8=;
+        h=In-Reply-To:References:Subject:To:Cc:From:Date:From;
+        b=oDeRKWVjoAJxHmyHIpND24rqgVpc4cArfVC2jYqkn8TGSJGfRpaGff9A72U+Zcyhm
+         vesOX66cWisLki+xqwp+6nah0fsNx24EjWOFpZxZ95aLXGsFGuRtdfWU4MotnEMx0i
+         8DgQF71Cs00RndZ8+ENjpMjA7BDDy0Jt/fQM51n4=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 924f2cf9-abad-44f0-9daa-08d70eee2e91
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2019 21:47:24.8429
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1760
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190709182018.23193-3-gch981213@gmail.com>
+References: <20190709182018.23193-1-gch981213@gmail.com> <20190709182018.23193-3-gch981213@gmail.com>
+Subject: Re: [PATCH 2/5] MIPS: ralink: fix cpu clock of mt7621 and add dt clk devices
+To:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        John Crispin <john@phrozen.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Weijie Gao <hackpascal@gmail.com>, NeilBrown <neil@brown.name>,
+        Chuanhong Guo <gch981213@gmail.com>
+From:   Stephen Boyd <sboyd@kernel.org>
+User-Agent: alot/0.8.1
+Date:   Mon, 22 Jul 2019 14:50:53 -0700
+Message-Id: <20190722215054.B35FA21951@mail.kernel.org>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Steven,
-
-On Mon, Jul 22, 2019 at 04:41:53PM +0100, Steven Price wrote:
-> walk_page_range() is going to be allowed to walk page tables other than
-> those of user space. For this it needs to know when it has reached a
-> 'leaf' entry in the page tables. This information is provided by the
-> p?d_leaf() functions/macros.
+Quoting Chuanhong Guo (2019-07-09 11:20:15)
+> For a long time the mt7621 uses a fixed cpu clock which causes a problem
+> if the cpu frequency is not 880MHz.
 >=20
-> For mips, we only support large pages on 64 bit.
-
-That ceases to be true with commit 35476311e529 ("MIPS: Add partial
-32-bit huge page support") in mips-next, so I think it may be best to
-move the definition to asm/pgtable.h so that both 32b & 64b kernels can
-pick it up.
-
-Thanks,
-    Paul
-
-> For 64 bit if _PAGE_HUGE is defined we can simply look for it. When not
-> defined we can be confident that there are no leaf pages in existence
-> and fall back on the generic implementation (added in a later patch)
-> which returns 0.
+> This patch fixes the cpu clock calculation and adds the cpu/bus clkdev
+> which will be used in dts.
 >=20
-> CC: Ralf Baechle <ralf@linux-mips.org>
-> CC: Paul Burton <paul.burton@mips.com>
-> CC: James Hogan <jhogan@kernel.org>
-> CC: linux-mips@vger.kernel.org
-> Signed-off-by: Steven Price <steven.price@arm.com>
-> ---
->  arch/mips/include/asm/pgtable-64.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> Ported from OpenWrt:
+> c7ca224299 ramips: fix cpu clock of mt7621 and add dt clk devices
 >=20
-> diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/p=
-gtable-64.h
-> index 93a9dce31f25..2bdbf8652b5f 100644
-> --- a/arch/mips/include/asm/pgtable-64.h
-> +++ b/arch/mips/include/asm/pgtable-64.h
-> @@ -273,6 +273,10 @@ static inline int pmd_present(pmd_t pmd)
->  	return pmd_val(pmd) !=3D (unsigned long) invalid_pte_table;
+> Signed-off-by: Weijie Gao <hackpascal@gmail.com>
+> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+[...]
+> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
+> index 9415be0d57b8..31158b88bcb6 100644
+> --- a/arch/mips/ralink/mt7621.c
+> +++ b/arch/mips/ralink/mt7621.c
+> @@ -7,22 +7,22 @@
+> =20
+>  #include <linux/kernel.h>
+>  #include <linux/init.h>
+> +#include <linux/clk.h>
+
+Is this include used?
+
+> +#include <linux/clkdev.h>
+> +#include <linux/clk-provider.h>
+> +#include <dt-bindings/clock/mt7621-clk.h>
+> =20
+>  #include <asm/mipsregs.h>
+>  #include <asm/smp-ops.h>
+>  #include <asm/mips-cps.h>
+>  #include <asm/mach-ralink/ralink_regs.h>
+>  #include <asm/mach-ralink/mt7621.h>
+> +#include <asm/time.h>
+> =20
+>  #include <pinmux.h>
+> =20
+>  #include "common.h"
+> =20
+> -#define SYSC_REG_SYSCFG                0x10
+> -#define SYSC_REG_CPLL_CLKCFG0  0x2c
+> -#define SYSC_REG_CUR_CLK_STS   0x44
+> -#define CPU_CLK_SEL            (BIT(30) | BIT(31))
+> -
+>  #define MT7621_GPIO_MODE_UART1         1
+>  #define MT7621_GPIO_MODE_I2C           2
+>  #define MT7621_GPIO_MODE_UART3_MASK    0x3
+> @@ -108,49 +108,89 @@ static struct rt2880_pmx_group mt7621_pinmux_data[]=
+ =3D {
+>         { 0 }
+>  };
+> =20
+> +static struct clk *clks[MT7621_CLK_MAX];
+> +static struct clk_onecell_data clk_data =3D {
+> +       .clks =3D clks,
+> +       .clk_num =3D ARRAY_SIZE(clks),
+> +};
+> +
+>  phys_addr_t mips_cpc_default_phys_base(void)
+>  {
+>         panic("Cannot detect cpc address");
 >  }
 > =20
-> +#ifdef _PAGE_HUGE
-> +#define pmd_leaf(pmd)	((pmd_val(pmd) & _PAGE_HUGE) !=3D 0)
-> +#endif
+> +static struct clk *__init mt7621_add_sys_clkdev(
+> +       const char *id, unsigned long rate)
+> +{
+> +       struct clk *clk;
+> +       int err;
 > +
->  static inline void pmd_clear(pmd_t *pmdp)
+> +       clk =3D clk_register_fixed_rate(NULL, id, NULL, 0, rate);
+> +       if (IS_ERR(clk))
+> +               panic("failed to allocate %s clock structure", id);
+> +
+> +       err =3D clk_register_clkdev(clk, id, NULL);
+
+What's the need to use clkdev? i.e. why can't we just use clk_get() with
+proper DT definitions and by passing in the right device pointer?
+
+> +       if (err)
+> +               panic("unable to register %s clock device", id);
+> +
+> +       return clk;
+> +}
+> +
+>  void __init ralink_clk_init(void)
 >  {
->  	pmd_val(*pmdp) =3D ((unsigned long) invalid_pte_table);
-> @@ -297,6 +301,10 @@ static inline int pud_present(pud_t pud)
->  	return pud_val(pud) !=3D (unsigned long) invalid_pmd_table;
+> -       int cpu_fdiv =3D 0;
+> -       int cpu_ffrac =3D 0;
+> -       int fbdiv =3D 0;
+> -       u32 clk_sts, syscfg;
+> -       u8 clk_sel =3D 0, xtal_mode;
+> -       u32 cpu_clk;
+> +       const static u32 prediv_tbl[] =3D {0, 1, 2, 2};
+> +       u32 syscfg, xtal_sel, clkcfg, clk_sel, curclk, ffiv, ffrac;
+> +       u32 pll, prediv, fbdiv;
+> +       u32 xtal_clk, cpu_clk, bus_clk;
+> +
+> +       syscfg =3D rt_sysc_r32(SYSC_REG_SYSTEM_CONFIG0);
+> +       xtal_sel =3D (syscfg >> XTAL_MODE_SEL_SHIFT) & XTAL_MODE_SEL_MASK;
+> =20
+> -       if ((rt_sysc_r32(SYSC_REG_CPLL_CLKCFG0) & CPU_CLK_SEL) !=3D 0)
+> -               clk_sel =3D 1;
+> +       clkcfg =3D rt_sysc_r32(SYSC_REG_CLKCFG0);
+> +       clk_sel =3D (clkcfg >> CPU_CLK_SEL_SHIFT) & CPU_CLK_SEL_MASK;
+> +
+> +       curclk =3D rt_sysc_r32(SYSC_REG_CUR_CLK_STS);
+> +       ffiv =3D (curclk >> CUR_CPU_FDIV_SHIFT) & CUR_CPU_FDIV_MASK;
+> +       ffrac =3D (curclk >> CUR_CPU_FFRAC_SHIFT) & CUR_CPU_FFRAC_MASK;
+> +
+> +       if (xtal_sel <=3D 2)
+> +               xtal_clk =3D 20 * 1000 * 1000;
+> +       else if (xtal_sel <=3D 5)
+> +               xtal_clk =3D 40 * 1000 * 1000;
+> +       else
+> +               xtal_clk =3D 25 * 1000 * 1000;
+> =20
+>         switch (clk_sel) {
+>         case 0:
+> -               clk_sts =3D rt_sysc_r32(SYSC_REG_CUR_CLK_STS);
+> -               cpu_fdiv =3D ((clk_sts >> 8) & 0x1F);
+> -               cpu_ffrac =3D (clk_sts & 0x1F);
+> -               cpu_clk =3D (500 * cpu_ffrac / cpu_fdiv) * 1000 * 1000;
+> +               cpu_clk =3D 500 * 1000 * 1000;
+>                 break;
+> -
+>         case 1:
+> -               fbdiv =3D ((rt_sysc_r32(0x648) >> 4) & 0x7F) + 1;
+> -               syscfg =3D rt_sysc_r32(SYSC_REG_SYSCFG);
+> -               xtal_mode =3D (syscfg >> 6) & 0x7;
+> -               if (xtal_mode >=3D 6) {
+> -                       /* 25Mhz Xtal */
+> -                       cpu_clk =3D 25 * fbdiv * 1000 * 1000;
+> -               } else if (xtal_mode >=3D 3) {
+> -                       /* 40Mhz Xtal */
+> -                       cpu_clk =3D 40 * fbdiv * 1000 * 1000;
+> -               } else {
+> -                       /* 20Mhz Xtal */
+> -                       cpu_clk =3D 20 * fbdiv * 1000 * 1000;
+> -               }
+> +               pll =3D rt_memc_r32(MEMC_REG_CPU_PLL);
+> +               fbdiv =3D (pll >> CPU_PLL_FBDIV_SHIFT) & CPU_PLL_FBDIV_MA=
+SK;
+> +               prediv =3D (pll >> CPU_PLL_PREDIV_SHIFT) & CPU_PLL_PREDIV=
+_MASK;
+> +               cpu_clk =3D ((fbdiv + 1) * xtal_clk) >> prediv_tbl[prediv=
+];
+>                 break;
+> +       default:
+> +               cpu_clk =3D xtal_clk;
+>         }
+> +
+> +       cpu_clk =3D cpu_clk / ffiv * ffrac;
+> +       bus_clk =3D cpu_clk / 4;
+> +
+> +       clks[MT7621_CLK_CPU] =3D mt7621_add_sys_clkdev("cpu", cpu_clk);
+> +       clks[MT7621_CLK_BUS] =3D mt7621_add_sys_clkdev("bus", bus_clk);
+> +
+> +       pr_info("CPU Clock: %dMHz\n", cpu_clk / 1000000);
+> +       mips_hpt_frequency =3D cpu_clk / 2;
+
+There are a few changes here. Probably the patch should be split up a
+bit more to only do one thing at a time, instead of assign
+mips_hpt_frequency, change the calculation code, and change the way clks
+are provided on this platform.
+
 >  }
 > =20
-> +#ifdef _PAGE_HUGE
-> +#define pud_leaf(pud)	((pud_val(pud) & _PAGE_HUGE) !=3D 0)
-> +#endif
+> +static void __init mt7621_clocks_init_dt(struct device_node *np)
+> +{
+> +       of_clk_add_provider(np, of_clk_src_onecell_get, &clk_data);
+> +}
 > +
->  static inline void pud_clear(pud_t *pudp)
+> +CLK_OF_DECLARE(mt7621_clk, "mediatek,mt7621-pll", mt7621_clocks_init_dt);
+> +
+>  void __init ralink_of_remap(void)
 >  {
->  	pud_val(*pudp) =3D ((unsigned long) invalid_pmd_table);
-> --=20
-> 2.20.1
->=20
+>         rt_sysc_membase =3D plat_of_remap_node("mtk,mt7621-sysc");
+> diff --git a/arch/mips/ralink/timer-gic.c b/arch/mips/ralink/timer-gic.c
+> index 944fbe0fc741..9bbaa37a0da1 100644
+> --- a/arch/mips/ralink/timer-gic.c
+> +++ b/arch/mips/ralink/timer-gic.c
+> @@ -9,14 +9,14 @@
+> =20
+>  #include <linux/of.h>
+>  #include <linux/clk-provider.h>
+> -#include <linux/clocksource.h>
+> +#include <asm/time.h>
+> =20
+>  #include "common.h"
+> =20
+>  void __init plat_time_init(void)
+>  {
+>         ralink_of_remap();
+> -
+> +       ralink_clk_init();
+
+Why can't everything flow from CLK_OF_DECLARE() for a particular node?
+Even better would be to make a device driver instead of using
+CLK_OF_DECLARE(), but either way this doesn't look necessary to make a
+direct function call here.
+
+>         of_clk_init(NULL);
+>         timer_probe();
+>  }
