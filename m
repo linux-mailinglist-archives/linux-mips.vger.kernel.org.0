@@ -2,47 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3C170C36
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jul 2019 00:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5DF70C39
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Jul 2019 00:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728320AbfGVWAB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Jul 2019 18:00:01 -0400
-Received: from mail-eopbgr690124.outbound.protection.outlook.com ([40.107.69.124]:8514
+        id S1729392AbfGVWAG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Jul 2019 18:00:06 -0400
+Received: from mail-eopbgr690127.outbound.protection.outlook.com ([40.107.69.127]:58497
         "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726553AbfGVWAA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 22 Jul 2019 18:00:00 -0400
+        id S1726553AbfGVWAF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 22 Jul 2019 18:00:05 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z14jFqEsUObWnDKAimDVgrFQChIuBKvsBmAkH6mQql2fvOVEyBBBbSnACPR+0tlAg26OwO76k3XUagPAsBpMnzqHPDXHWObytYqkitpGwTb0bcyPzNF9Di1pyBzlqvIEzmQt75o/vnmPiFHTzxiT1o0XZudANaHQ25G/6Q/qEjCpTu16p6oETTcAtygpq+lf3is9lLpgpKw9+YRMmLbdgQ5/J7FGVES4z8vx12Q3jTEdxY8sGqcgWlN1rgYlujERdjDgSkTw6rvm6Vin48NnmTVhoNsL87tzBOFhIYSyfTIJhPNLJkY2iAYpJFzybtZpYupYgqVWH1Dq+GIT2WbcBA==
+ b=PRQFsZR8XxXNm3dvcUXR7BQjJj9d7t/lZczDkiNPv6XLHAXomrhz9snkKgz7iIkC0YJaTfQmLJpJx2a1f3Qii/sXJQLVJCoa3UNUbPw1g0T+9mxsTizjoo4/Vh+IP/LPhMxm1Mn/IyYUROR1uj+G7/k7UfvJghfu6BNMGqvb0yIS3G9JmiUXe7UwIXIlo12rAnlc3GaR1zM6H8oO57akYNJntrOSzb8qIyBgq6VfX20qJAt2YZ6XS0cQdKUbAA5wiOTMHK3y5c4JnscQ6XqP9X7GAMZs7jVk37n12q63BB0/y0Fc6dU2uYuwc+KRoYfZDyeDitullcG/sYoOUMyQnQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7T7atFJ2RH5oMNcaAXsQ1pDFoOxZPWDi7pY77JTi2h8=;
- b=C/fb9K+828fb5raZdZyxRV0eIChbJiDyt0dvh1XLEDYYRom+QZyWzhwfgoNRerhDCyp5wGgyM2hXcu8FzTilXDswLWkmWt1ADNayq2mdG2ce30o2GkSJGLWi3nP4T3gZBodjsTPM7M7+8T5X2RIbyqwHd2zccoBmO5YNiH/bJFUMr/ojGoOgAAPjkx4G5UNqgqpjxBwNNseZw1fDznteuMZ66tf7rzmYwnjQEZzhXCFG9AQhxJvm2ZUxCdbyYIeheDkUXxzxUYQOncjOFtDl5J0YJasYnG807neuJD483yse+e9iimTZr8cHbdqx1d4rR0HQtk7i1drzVk4emQv2+g==
+ bh=s5A06+SrX6+aqjWpow4sahxxRBNUdDM4+P7w6rYPTUg=;
+ b=XLNkFvling7c4dtZr+1kHZQPYShWDs3qW6GGVRJtupL+Ic+p7hlPv1xe95euW6lQrunYCFDVqkCFK/LO0GSIZMSCf/pCgZtZ535711xwTIP3yyfBU2K1McWD8rtgTXROuth3kbJTBUbBeqRvA6HgyXKPxvb/kNO+ZAxn3FMMltfrCVN5j6rhpyqzrcbCJtQ8giHiL46c3x8As8tVQyWrQtfuLWfL531dKcCs5GtqDjoeWGWzJrJEO3dlk162lRypumxUBIDGDlUJnFYCazXRAWsn45mQoBub2pBy07OAGMyUcwZPJLtdiMcZ5/BrhUlS5Z/k6DPmXVWpjizHPKP2cg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
  smtp.mailfrom=wavecomp.com;dmarc=pass action=none
  header.from=mips.com;dkim=pass header.d=mips.com;arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7T7atFJ2RH5oMNcaAXsQ1pDFoOxZPWDi7pY77JTi2h8=;
- b=TmHTvDncun5EF9SzfAEr7QmAHSJioplm2Zq0EG00smgB79RbvkBr+djJfRlQIutK2xDAhsDqxb4pEyKR/UgaAlQt2mnuXyYuPfD/GY4fiZ8Hk/rfJbJayssD5vooryoV5QRYViUFkrcgXZxbyIKMH/9YDKjk34TjtTIWaeIKdyo=
+ bh=s5A06+SrX6+aqjWpow4sahxxRBNUdDM4+P7w6rYPTUg=;
+ b=XHosIUhuEwg552oZVWaYTJcLjdVgzTx77cZMZtJD6UMdy3DGC/eR1+ly6sjYrnjt/4kP1bWzAg7ssZRpdkYTpgYOKE9bEtjwMCp6HMW4kBO1yxwhb7qu6/ssCJSNHWsy0ckT+RPftIR85VvdHAnUHrSHOC26SrbbjIi4g7p48iE=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
  MWHPR2201MB1184.namprd22.prod.outlook.com (10.174.171.39) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2094.17; Mon, 22 Jul 2019 21:59:51 +0000
+ 15.20.2094.17; Mon, 22 Jul 2019 22:00:01 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::49d3:37f8:217:c83]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::49d3:37f8:217:c83%6]) with mapi id 15.20.2094.017; Mon, 22 Jul 2019
- 21:59:51 +0000
+ 22:00:01 +0000
 From:   Paul Burton <paul.burton@mips.com>
 To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
 CC:     Paul Burton <pburton@wavecomp.com>
-Subject: [PATCH 2/4] MIPS: Remove unused R5432 CPU support
-Thread-Topic: [PATCH 2/4] MIPS: Remove unused R5432 CPU support
-Thread-Index: AQHVQNjJ72/2ELPZjkuS3GO9PX2IzQ==
-Date:   Mon, 22 Jul 2019 21:59:50 +0000
-Message-ID: <20190722215705.20109-2-paul.burton@mips.com>
+Subject: [PATCH 3/4] MIPS: Remove unused R5432_CP0_INTERRUPT_WAR
+Thread-Topic: [PATCH 3/4] MIPS: Remove unused R5432_CP0_INTERRUPT_WAR
+Thread-Index: AQHVQNjP3MyiinLTTU29vU++kcUjHQ==
+Date:   Mon, 22 Jul 2019 22:00:00 +0000
+Message-ID: <20190722215705.20109-3-paul.burton@mips.com>
 References: <20190722215705.20109-1-paul.burton@mips.com>
 In-Reply-To: <20190722215705.20109-1-paul.burton@mips.com>
 Accept-Language: en-US
@@ -58,23 +58,23 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.22.0
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 880c1c59-c9d2-4765-de2a-08d70eefeb8c
+x-ms-office365-filtering-correlation-id: 12449650-65e5-4ed2-681a-08d70eefef65
 x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1184;
 x-ms-traffictypediagnostic: MWHPR2201MB1184:
-x-microsoft-antispam-prvs: <MWHPR2201MB1184E9D0A8060B5F23E85F57C1C40@MWHPR2201MB1184.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:96;
+x-microsoft-antispam-prvs: <MWHPR2201MB118433D394A88A2A431ABEFCC1C40@MWHPR2201MB1184.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
 x-forefront-prvs: 01068D0A20
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(346002)(136003)(376002)(39840400004)(366004)(199004)(189003)(2351001)(6436002)(4326008)(316002)(99286004)(66066001)(6916009)(107886003)(2906002)(6512007)(68736007)(386003)(478600001)(66946007)(36756003)(44832011)(7736002)(66476007)(66556008)(66446008)(64756008)(5640700003)(305945005)(25786009)(8936002)(6486002)(53936002)(446003)(50226002)(5660300002)(1076003)(102836004)(186003)(256004)(8676002)(2501003)(42882007)(81156014)(26005)(81166006)(14454004)(476003)(76176011)(486006)(71190400001)(71200400001)(11346002)(6116002)(3846002)(6506007)(2616005)(52116002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1184;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(346002)(136003)(376002)(39840400004)(366004)(199004)(189003)(2351001)(6436002)(4326008)(316002)(99286004)(66066001)(6916009)(107886003)(2906002)(6512007)(68736007)(386003)(478600001)(66946007)(36756003)(44832011)(7736002)(66476007)(66556008)(66446008)(64756008)(5640700003)(305945005)(25786009)(8936002)(6486002)(53936002)(446003)(50226002)(5660300002)(1076003)(102836004)(14444005)(186003)(256004)(8676002)(2501003)(42882007)(81156014)(26005)(81166006)(14454004)(476003)(76176011)(486006)(71190400001)(71200400001)(11346002)(6116002)(3846002)(6506007)(2616005)(52116002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1184;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: OyNWXWZR4EX11D8vqrbTRYGzu+KKG+U1xE4OoVe2dQSnKAK+ncUPG253ot7hZm5nL2LOwu3nwPbs0mSznvhTX2jMNhP7X0ovtOkhlakDeLg+a/OPefuSjnYmsrBxQeyWIdgMGAnVyt43fSRIzHLg72zDEyWkstgL56U2refX+N64aZowZg6e4dZfyRSG8LZ5oYSHGbWukSPWRdDIBF8I1jvipKbXHSnKN2/0pk3jWtS0YOnj8Echh9BJnI/N8RLjNcfCBhKf1oSYmHs74UDpHflwB9W/J86XWXj6PE7iBJoP5HkA/X4XYLZ6DqGbZWCBsA8COSXVbNsYhZsCNpIXWkDAxYg5o62Ebn2h+S6V8ckYBkOaMD9xBkL3QqQkG9CdykA/OOfqxRMse36LDhmrXd1L88hTf7bpaLSI19U/cZc=
+x-microsoft-antispam-message-info: J2pNLvvr1AB/XxzLmffsHgD83uYiFSaqFEaGcVkyv+uuEStdQhzAZJlyd1ZbMZWVYNJTbW/jE+DGlgoD8BNBSiI+4+mkstOLvcdfnQMgomwd4VN+AH+I0nvtISDA/99saF17QKXkWU/UrapH+5+cDdA+i7JMvXyzBIzsVqgAACm5ysEcNq1xFlveeN7nIWYBXhOPRJCjlRly+Zyy7ghpe0cXeVpZV232G0hH5uWTuHQnVJzpR6LEGKaps3aAfIS59vc+9zg8kALmQxt7ausZzh7NkB6ac71ULZvFDYGVk/6+KxuEEsMKxoX7zux3iIU9vnIST7umwRMqd5yBnwK3TlY2kHtsg6aUDX1dttWEWh/1Bm2wI3JW/xubzsbApQIvLdzgw8LkADFLQ/MOEKISt1mrrGGdNWj7/XZkCFyKtlI=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 880c1c59-c9d2-4765-de2a-08d70eefeb8c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2019 21:59:50.9936
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12449650-65e5-4ed2-681a-08d70eefef65
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2019 22:00:00.9998
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
@@ -86,158 +86,222 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Our R5432 CPU support can only be included if a system selects
-CONFIG_SYS_HAS_CPU_R5432. No system does, making all R5432-related CPU
-support dead code. Remove it.
+R5432_CP0_INTERRUPT_WAR is defined as 0 for every system we support, and
+so the workaround is never used. Remove the dead code.
 
 Signed-off-by: Paul Burton <paul.burton@mips.com>
 ---
 
- arch/mips/Kconfig                | 11 -----------
- arch/mips/Makefile               |  2 --
- arch/mips/include/asm/cpu-type.h |  4 ----
- arch/mips/include/asm/cpu.h      |  2 +-
- arch/mips/include/asm/module.h   |  2 --
- arch/mips/kernel/cpu-probe.c     |  8 --------
- arch/mips/mm/c-r4k.c             |  1 -
- arch/mips/mm/tlbex.c             |  1 -
- 8 files changed, 1 insertion(+), 30 deletions(-)
+ arch/mips/include/asm/mach-cavium-octeon/war.h |  1 -
+ arch/mips/include/asm/mach-generic/war.h       |  1 -
+ arch/mips/include/asm/mach-ip22/war.h          |  1 -
+ arch/mips/include/asm/mach-ip27/war.h          |  1 -
+ arch/mips/include/asm/mach-ip28/war.h          |  1 -
+ arch/mips/include/asm/mach-ip32/war.h          |  1 -
+ arch/mips/include/asm/mach-malta/war.h         |  1 -
+ arch/mips/include/asm/mach-pmcs-msp71xx/war.h  |  1 -
+ arch/mips/include/asm/mach-rc32434/war.h       |  1 -
+ arch/mips/include/asm/mach-rm/war.h            |  1 -
+ arch/mips/include/asm/mach-sibyte/war.h        |  1 -
+ arch/mips/include/asm/mach-tx49xx/war.h        |  1 -
+ arch/mips/include/asm/war.h                    | 13 -------------
+ arch/mips/kernel/genex.S                       |  3 ---
+ 14 files changed, 28 deletions(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 2b28c6b02ff9..0f4e1a7eb006 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -1629,14 +1629,6 @@ config CPU_R5000
- 	help
- 	  MIPS Technologies R5000-series processors other than the Nevada.
+diff --git a/arch/mips/include/asm/mach-cavium-octeon/war.h b/arch/mips/inc=
+lude/asm/mach-cavium-octeon/war.h
+index 35c80be92207..2421411b7636 100644
+--- a/arch/mips/include/asm/mach-cavium-octeon/war.h
++++ b/arch/mips/include/asm/mach-cavium-octeon/war.h
+@@ -12,7 +12,6 @@
+ #define R4600_V1_INDEX_ICACHEOP_WAR	0
+ #define R4600_V1_HIT_CACHEOP_WAR	0
+ #define R4600_V2_HIT_CACHEOP_WAR	0
+-#define R5432_CP0_INTERRUPT_WAR		0
+ #define BCM1250_M3_WAR			0
+ #define SIBYTE_1956_WAR			0
+ #define MIPS4K_ICACHE_REFILL_WAR	0
+diff --git a/arch/mips/include/asm/mach-generic/war.h b/arch/mips/include/a=
+sm/mach-generic/war.h
+index a1bc2e71f983..f0f4a35d0870 100644
+--- a/arch/mips/include/asm/mach-generic/war.h
++++ b/arch/mips/include/asm/mach-generic/war.h
+@@ -11,7 +11,6 @@
+ #define R4600_V1_INDEX_ICACHEOP_WAR	0
+ #define R4600_V1_HIT_CACHEOP_WAR	0
+ #define R4600_V2_HIT_CACHEOP_WAR	0
+-#define R5432_CP0_INTERRUPT_WAR		0
+ #define BCM1250_M3_WAR			0
+ #define SIBYTE_1956_WAR			0
+ #define MIPS4K_ICACHE_REFILL_WAR	0
+diff --git a/arch/mips/include/asm/mach-ip22/war.h b/arch/mips/include/asm/=
+mach-ip22/war.h
+index fba640517f4f..b48eb4ac362d 100644
+--- a/arch/mips/include/asm/mach-ip22/war.h
++++ b/arch/mips/include/asm/mach-ip22/war.h
+@@ -15,7 +15,6 @@
+ #define R4600_V1_INDEX_ICACHEOP_WAR	1
+ #define R4600_V1_HIT_CACHEOP_WAR	1
+ #define R4600_V2_HIT_CACHEOP_WAR	1
+-#define R5432_CP0_INTERRUPT_WAR		0
+ #define BCM1250_M3_WAR			0
+ #define SIBYTE_1956_WAR			0
+ #define MIPS4K_ICACHE_REFILL_WAR	0
+diff --git a/arch/mips/include/asm/mach-ip27/war.h b/arch/mips/include/asm/=
+mach-ip27/war.h
+index 4ee0e4bdf4fb..ef3efce0094a 100644
+--- a/arch/mips/include/asm/mach-ip27/war.h
++++ b/arch/mips/include/asm/mach-ip27/war.h
+@@ -11,7 +11,6 @@
+ #define R4600_V1_INDEX_ICACHEOP_WAR	0
+ #define R4600_V1_HIT_CACHEOP_WAR	0
+ #define R4600_V2_HIT_CACHEOP_WAR	0
+-#define R5432_CP0_INTERRUPT_WAR		0
+ #define BCM1250_M3_WAR			0
+ #define SIBYTE_1956_WAR			0
+ #define MIPS4K_ICACHE_REFILL_WAR	0
+diff --git a/arch/mips/include/asm/mach-ip28/war.h b/arch/mips/include/asm/=
+mach-ip28/war.h
+index 4821c7b7a38c..61cd67354829 100644
+--- a/arch/mips/include/asm/mach-ip28/war.h
++++ b/arch/mips/include/asm/mach-ip28/war.h
+@@ -11,7 +11,6 @@
+ #define R4600_V1_INDEX_ICACHEOP_WAR	0
+ #define R4600_V1_HIT_CACHEOP_WAR	0
+ #define R4600_V2_HIT_CACHEOP_WAR	0
+-#define R5432_CP0_INTERRUPT_WAR		0
+ #define BCM1250_M3_WAR			0
+ #define SIBYTE_1956_WAR			0
+ #define MIPS4K_ICACHE_REFILL_WAR	0
+diff --git a/arch/mips/include/asm/mach-ip32/war.h b/arch/mips/include/asm/=
+mach-ip32/war.h
+index 9807ecda5a88..e77b9d1b6c96 100644
+--- a/arch/mips/include/asm/mach-ip32/war.h
++++ b/arch/mips/include/asm/mach-ip32/war.h
+@@ -11,7 +11,6 @@
+ #define R4600_V1_INDEX_ICACHEOP_WAR	0
+ #define R4600_V1_HIT_CACHEOP_WAR	0
+ #define R4600_V2_HIT_CACHEOP_WAR	0
+-#define R5432_CP0_INTERRUPT_WAR		0
+ #define BCM1250_M3_WAR			0
+ #define SIBYTE_1956_WAR			0
+ #define MIPS4K_ICACHE_REFILL_WAR	0
+diff --git a/arch/mips/include/asm/mach-malta/war.h b/arch/mips/include/asm=
+/mach-malta/war.h
+index d068fc411f47..d62d2ffe515e 100644
+--- a/arch/mips/include/asm/mach-malta/war.h
++++ b/arch/mips/include/asm/mach-malta/war.h
+@@ -11,7 +11,6 @@
+ #define R4600_V1_INDEX_ICACHEOP_WAR	0
+ #define R4600_V1_HIT_CACHEOP_WAR	0
+ #define R4600_V2_HIT_CACHEOP_WAR	0
+-#define R5432_CP0_INTERRUPT_WAR		0
+ #define BCM1250_M3_WAR			0
+ #define SIBYTE_1956_WAR			0
+ #define MIPS4K_ICACHE_REFILL_WAR	1
+diff --git a/arch/mips/include/asm/mach-pmcs-msp71xx/war.h b/arch/mips/incl=
+ude/asm/mach-pmcs-msp71xx/war.h
+index a60bf9dd14ae..31c546f58bb5 100644
+--- a/arch/mips/include/asm/mach-pmcs-msp71xx/war.h
++++ b/arch/mips/include/asm/mach-pmcs-msp71xx/war.h
+@@ -11,7 +11,6 @@
+ #define R4600_V1_INDEX_ICACHEOP_WAR	0
+ #define R4600_V1_HIT_CACHEOP_WAR	0
+ #define R4600_V2_HIT_CACHEOP_WAR	0
+-#define R5432_CP0_INTERRUPT_WAR		0
+ #define BCM1250_M3_WAR			0
+ #define SIBYTE_1956_WAR			0
+ #define MIPS4K_ICACHE_REFILL_WAR	0
+diff --git a/arch/mips/include/asm/mach-rc32434/war.h b/arch/mips/include/a=
+sm/mach-rc32434/war.h
+index 1bfd489a3708..af430d26f713 100644
+--- a/arch/mips/include/asm/mach-rc32434/war.h
++++ b/arch/mips/include/asm/mach-rc32434/war.h
+@@ -11,7 +11,6 @@
+ #define R4600_V1_INDEX_ICACHEOP_WAR	0
+ #define R4600_V1_HIT_CACHEOP_WAR	0
+ #define R4600_V2_HIT_CACHEOP_WAR	0
+-#define R5432_CP0_INTERRUPT_WAR		0
+ #define BCM1250_M3_WAR			0
+ #define SIBYTE_1956_WAR			0
+ #define MIPS4K_ICACHE_REFILL_WAR	1
+diff --git a/arch/mips/include/asm/mach-rm/war.h b/arch/mips/include/asm/ma=
+ch-rm/war.h
+index a3dde98549bb..eca16d167c2f 100644
+--- a/arch/mips/include/asm/mach-rm/war.h
++++ b/arch/mips/include/asm/mach-rm/war.h
+@@ -15,7 +15,6 @@
+ #define R4600_V1_INDEX_ICACHEOP_WAR	0
+ #define R4600_V1_HIT_CACHEOP_WAR	0
+ #define R4600_V2_HIT_CACHEOP_WAR	1
+-#define R5432_CP0_INTERRUPT_WAR		0
+ #define BCM1250_M3_WAR			0
+ #define SIBYTE_1956_WAR			0
+ #define MIPS4K_ICACHE_REFILL_WAR	0
+diff --git a/arch/mips/include/asm/mach-sibyte/war.h b/arch/mips/include/as=
+m/mach-sibyte/war.h
+index 520f8fc2c806..4755b6116807 100644
+--- a/arch/mips/include/asm/mach-sibyte/war.h
++++ b/arch/mips/include/asm/mach-sibyte/war.h
+@@ -11,7 +11,6 @@
+ #define R4600_V1_INDEX_ICACHEOP_WAR	0
+ #define R4600_V1_HIT_CACHEOP_WAR	0
+ #define R4600_V2_HIT_CACHEOP_WAR	0
+-#define R5432_CP0_INTERRUPT_WAR		0
 =20
--config CPU_R5432
--	bool "R5432"
--	depends on SYS_HAS_CPU_R5432
--	select CPU_SUPPORTS_32BIT_KERNEL
--	select CPU_SUPPORTS_64BIT_KERNEL
--	select CPU_SUPPORTS_HUGEPAGES
--	select CPU_HAS_LOAD_STORE_LR
--
- config CPU_R5500
- 	bool "R5500"
- 	depends on SYS_HAS_CPU_R5500
-@@ -1969,9 +1961,6 @@ config SYS_HAS_CPU_TX49XX
- config SYS_HAS_CPU_R5000
- 	bool
+ #if defined(CONFIG_SB1_PASS_2_WORKAROUNDS)
 =20
--config SYS_HAS_CPU_R5432
--	bool
--
- config SYS_HAS_CPU_R5500
- 	bool
-=20
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index e728d0555466..e507e5b6e606 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -173,8 +173,6 @@ cflags-$(CONFIG_CPU_MIPS64_R1)	+=3D -march=3Dmips64 -Wa=
-,--trap
- cflags-$(CONFIG_CPU_MIPS64_R2)	+=3D -march=3Dmips64r2 -Wa,--trap
- cflags-$(CONFIG_CPU_MIPS64_R6)	+=3D -march=3Dmips64r6 -Wa,--trap
- cflags-$(CONFIG_CPU_R5000)	+=3D -march=3Dr5000 -Wa,--trap
--cflags-$(CONFIG_CPU_R5432)	+=3D $(call cc-option,-march=3Dr5400,-march=3Dr=
-5000) \
--			-Wa,--trap
- cflags-$(CONFIG_CPU_R5500)	+=3D $(call cc-option,-march=3Dr5500,-march=3Dr=
-5000) \
- 			-Wa,--trap
- cflags-$(CONFIG_CPU_NEVADA)	+=3D $(call cc-option,-march=3Drm5200,-march=
-=3Dr5000) \
-diff --git a/arch/mips/include/asm/cpu-type.h b/arch/mips/include/asm/cpu-t=
-ype.h
-index 9774e6d0403f..2f1677c360c4 100644
---- a/arch/mips/include/asm/cpu-type.h
-+++ b/arch/mips/include/asm/cpu-type.h
-@@ -138,10 +138,6 @@ static inline int __pure __get_cpu_type(const int cpu_=
-type)
- 	case CPU_R5000:
+diff --git a/arch/mips/include/asm/mach-tx49xx/war.h b/arch/mips/include/as=
+m/mach-tx49xx/war.h
+index a8e2c586a18c..445abb4eb769 100644
+--- a/arch/mips/include/asm/mach-tx49xx/war.h
++++ b/arch/mips/include/asm/mach-tx49xx/war.h
+@@ -11,7 +11,6 @@
+ #define R4600_V1_INDEX_ICACHEOP_WAR	0
+ #define R4600_V1_HIT_CACHEOP_WAR	0
+ #define R4600_V2_HIT_CACHEOP_WAR	0
+-#define R5432_CP0_INTERRUPT_WAR		0
+ #define BCM1250_M3_WAR			0
+ #define SIBYTE_1956_WAR			0
+ #define MIPS4K_ICACHE_REFILL_WAR	0
+diff --git a/arch/mips/include/asm/war.h b/arch/mips/include/asm/war.h
+index 9344e247a6c8..1eedd596a064 100644
+--- a/arch/mips/include/asm/war.h
++++ b/arch/mips/include/asm/war.h
+@@ -128,19 +128,6 @@
+ #error Check setting of R4600_V2_HIT_CACHEOP_WAR for your platform
  #endif
 =20
--#ifdef CONFIG_SYS_HAS_CPU_R5432
--	case CPU_R5432:
+-/*
+- * When an interrupt happens on a CP0 register read instruction, CPU may
+- * lock up or read corrupted values of CP0 registers after it enters
+- * the exception handler.
+- *
+- * This workaround makes sure that we read a "safe" CP0 register as the
+- * first thing in the exception handler, which breaks one of the
+- * pre-conditions for this problem.
+- */
+-#ifndef R5432_CP0_INTERRUPT_WAR
+-#error Check setting of R5432_CP0_INTERRUPT_WAR for your platform
 -#endif
 -
- #ifdef CONFIG_SYS_HAS_CPU_R5500
- 	case CPU_R5500:
- #endif
-diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
-index c70c43fc9e09..0f52e4b099ea 100644
---- a/arch/mips/include/asm/cpu.h
-+++ b/arch/mips/include/asm/cpu.h
-@@ -295,7 +295,7 @@ enum cpu_type_enum {
- 	 */
- 	CPU_R4000PC, CPU_R4000SC, CPU_R4000MC, CPU_R4200,
- 	CPU_R4400PC, CPU_R4400SC, CPU_R4400MC, CPU_R4600, CPU_R4640, CPU_R4650,
--	CPU_R4700, CPU_R5000, CPU_R5500, CPU_NEVADA, CPU_R5432, CPU_R10000,
-+	CPU_R4700, CPU_R5000, CPU_R5500, CPU_NEVADA, CPU_R10000,
- 	CPU_R12000, CPU_R14000, CPU_R16000, CPU_VR41XX, CPU_VR4111, CPU_VR4121,
- 	CPU_VR4122, CPU_VR4131, CPU_VR4133, CPU_VR4181, CPU_VR4181A, CPU_RM7000,
- 	CPU_SR71000, CPU_TX49XX,
-diff --git a/arch/mips/include/asm/module.h b/arch/mips/include/asm/module.=
-h
-index eaf3f37ed583..92cb94ef0231 100644
---- a/arch/mips/include/asm/module.h
-+++ b/arch/mips/include/asm/module.h
-@@ -109,8 +109,6 @@ search_module_dbetables(unsigned long addr)
- #define MODULE_PROC_FAMILY "TX49XX "
- #elif defined CONFIG_CPU_R5000
- #define MODULE_PROC_FAMILY "R5000 "
--#elif defined CONFIG_CPU_R5432
--#define MODULE_PROC_FAMILY "R5432 "
- #elif defined CONFIG_CPU_R5500
- #define MODULE_PROC_FAMILY "R5500 "
- #elif defined CONFIG_CPU_NEVADA
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index d70bd6542a9f..be717be2ca5f 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -1459,14 +1459,6 @@ static inline void cpu_probe_legacy(struct cpuinfo_m=
-ips *c, unsigned int cpu)
- 			     MIPS_CPU_LLSC;
- 		c->tlbsize =3D 48;
- 		break;
--	case PRID_IMP_R5432:
--		c->cputype =3D CPU_R5432;
--		__cpu_name[cpu] =3D "R5432";
--		set_isa(c, MIPS_CPU_ISA_IV);
--		c->options =3D R4K_OPTS | MIPS_CPU_FPU | MIPS_CPU_32FPR |
--			     MIPS_CPU_WATCH | MIPS_CPU_LLSC;
--		c->tlbsize =3D 48;
--		break;
- 	case PRID_IMP_R5500:
- 		c->cputype =3D CPU_R5500;
- 		__cpu_name[cpu] =3D "R5500";
-diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
-index 07d9aa4f7491..89b9c851d822 100644
---- a/arch/mips/mm/c-r4k.c
-+++ b/arch/mips/mm/c-r4k.c
-@@ -1098,7 +1098,6 @@ static void probe_pcache(void)
- 		c->options |=3D MIPS_CPU_CACHE_CDEX_P;
- 		break;
-=20
--	case CPU_R5432:
- 	case CPU_R5500:
- 		icache_size =3D 1 << (12 + ((config & CONF_IC) >> 9));
- 		c->icache.linesz =3D 16 << ((config & CONF_IB) >> 5);
-diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
-index b5dde6f4423c..9b2fcf421321 100644
---- a/arch/mips/mm/tlbex.c
-+++ b/arch/mips/mm/tlbex.c
-@@ -603,7 +603,6 @@ void build_tlb_write_entry(u32 **p, struct uasm_label *=
-*l,
-=20
- 	case CPU_VR4131:
- 	case CPU_VR4133:
--	case CPU_R5432:
- 		uasm_i_nop(p);
- 		uasm_i_nop(p);
- 		tlbw(p);
+ /*
+  * Workaround for the Sibyte M3 errata the text of which can be found at
+  *
+diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+index 398b905b027d..efde27c99414 100644
+--- a/arch/mips/kernel/genex.S
++++ b/arch/mips/kernel/genex.S
+@@ -32,9 +32,6 @@
+ NESTED(except_vec3_generic, 0, sp)
+ 	.set	push
+ 	.set	noat
+-#if R5432_CP0_INTERRUPT_WAR
+-	mfc0	k0, CP0_INDEX
+-#endif
+ 	mfc0	k1, CP0_CAUSE
+ 	andi	k1, k1, 0x7c
+ #ifdef CONFIG_64BIT
 --=20
 2.22.0
 
