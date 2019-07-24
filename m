@@ -2,214 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A0C73633
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jul 2019 19:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C4F736F0
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jul 2019 20:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727000AbfGXR7D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Jul 2019 13:59:03 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:56258 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726312AbfGXR7C (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Jul 2019 13:59:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1563991140; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w7Ss6sBrQHMupDimQWwO95AVN89e91bf3yXBxmdm6jE=;
-        b=HMBUm4xr7tlEhCFt6PaX05OQdnJDOsbf+iiPbQaNv1FdSBMsmng4rvUDmmTlD+MLO72MTL
-        DodO/fj1dgfM302yjBbdgbKtmEYQolb7xmcXXccoIG6t6rmVAze60NJwKwJ0DH9SD10Knd
-        8s105L0qFYLSPN33HG9+U4UziLhHpcs=
-Date:   Wed, 24 Jul 2019 13:58:46 -0400
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 2/2] MIPS: dts: ingenic: Add 'cpus' node
-To:     Paul Burton <paul.burton@mips.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, od@zcrc.me,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <1563991126.1918.0@crapouillou.net>
-In-Reply-To: <20190722222858.4nmhyzi45dg7u67u@pburton-laptop>
-References: <20190722175548.18434-1-paul@crapouillou.net>
-        <20190722175548.18434-2-paul@crapouillou.net>
-        <20190722222858.4nmhyzi45dg7u67u@pburton-laptop>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+        id S1726696AbfGXSw2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Jul 2019 14:52:28 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:49948 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726623AbfGXSw2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Jul 2019 14:52:28 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 62B341540A488;
+        Wed, 24 Jul 2019 11:52:27 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 11:52:26 -0700 (PDT)
+Message-Id: <20190724.115226.478045379512899769.davem@davemloft.net>
+To:     antoine.tenart@bootlin.com
+Cc:     richardcochran@gmail.com, alexandre.belloni@bootlin.com,
+        UNGLinuxDriver@microchip.com, ralf@linux-mips.org,
+        paul.burton@mips.com, jhogan@kernel.org, netdev@vger.kernel.org,
+        linux-mips@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        allan.nielsen@microchip.com
+Subject: Re: [PATCH net-next v3 8/8] net: mscc: PTP Hardware Clock (PHC)
+ support
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20190724081715.29159-9-antoine.tenart@bootlin.com>
+References: <20190724081715.29159-1-antoine.tenart@bootlin.com>
+        <20190724081715.29159-9-antoine.tenart@bootlin.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=iso-8859-7
+Content-Transfer-Encoding: base64
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 24 Jul 2019 11:52:27 -0700 (PDT)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-Le lun. 22 juil. 2019 =E0 18:28, Paul Burton <paul.burton@mips.com> a=20
-=E9crit :
-> Hi Paul,
->=20
-> On Mon, Jul 22, 2019 at 01:55:48PM -0400, Paul Cercueil wrote:
->>  Add 'cpus' node to the jz4740.dtsi, jz4770.dtsi, jz4780.dtsi files.
->=20
-> What's the motivation for this?
->=20
-> If it's to silence the "cacheinfo: Unable to detect cache hierarchy"
-> messages, does commit b8bea8a5e5d9 ("mips: fix cacheinfo") from
-> mips-fixes work for you instead?
->=20
-> I'm not seeing much point listing cache setup in DT when we already
-> detect it from cop0 anyway.
-
-Ok, just drop this patchset then.
-
->=20
-> Thanks,
->     Paul
->=20
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  ---
->>   arch/mips/boot/dts/ingenic/jz4740.dtsi | 19 +++++++++++
->>   arch/mips/boot/dts/ingenic/jz4770.dtsi | 29 ++++++++++++++++
->>   arch/mips/boot/dts/ingenic/jz4780.dtsi | 47=20
->> ++++++++++++++++++++++++++
->>   3 files changed, 95 insertions(+)
->>=20
->>  diff --git a/arch/mips/boot/dts/ingenic/jz4740.dtsi=20
->> b/arch/mips/boot/dts/ingenic/jz4740.dtsi
->>  index 2beb78a62b7d..14d777dae87d 100644
->>  --- a/arch/mips/boot/dts/ingenic/jz4740.dtsi
->>  +++ b/arch/mips/boot/dts/ingenic/jz4740.dtsi
->>  @@ -6,6 +6,25 @@
->>   	#size-cells =3D <1>;
->>   	compatible =3D "ingenic,jz4740";
->>=20
->>  +	cpus {
->>  +		#address-cells =3D <1>;
->>  +		#size-cells =3D <0>;
->>  +
->>  +		cpu0: cpu@0 {
->>  +			device_type =3D "cpu";
->>  +			compatible =3D "ingenic,xburst-d0";
->>  +			reg =3D <0>;
->>  +			clocks =3D <&cgu JZ4740_CLK_CCLK>;
->>  +			clock-names =3D "cpu";
->>  +
->>  +			i-cache-size =3D <0x4000>;
->>  +			i-cache-block-size =3D <32>;
->>  +
->>  +			d-cache-size =3D <0x4000>;
->>  +			d-cache-block-size =3D <32>;
->>  +		};
->>  +	};
->>  +
->>   	cpuintc: interrupt-controller {
->>   		#address-cells =3D <0>;
->>   		#interrupt-cells =3D <1>;
->>  diff --git a/arch/mips/boot/dts/ingenic/jz4770.dtsi=20
->> b/arch/mips/boot/dts/ingenic/jz4770.dtsi
->>  index 49ede6c14ff3..83ee526fbe10 100644
->>  --- a/arch/mips/boot/dts/ingenic/jz4770.dtsi
->>  +++ b/arch/mips/boot/dts/ingenic/jz4770.dtsi
->>  @@ -7,6 +7,35 @@
->>   	#size-cells =3D <1>;
->>   	compatible =3D "ingenic,jz4770";
->>=20
->>  +	cpus {
->>  +		#address-cells =3D <1>;
->>  +		#size-cells =3D <0>;
->>  +
->>  +		cpu0: cpu@0 {
->>  +			device_type =3D "cpu";
->>  +			compatible =3D "ingenic,xburst-d1";
->>  +			reg =3D <0>;
->>  +			clocks =3D <&cgu JZ4770_CLK_CCLK>;
->>  +			clock-names =3D "cpu";
->>  +
->>  +			i-cache-size =3D <0x4000>;
->>  +			i-cache-block-size =3D <32>;
->>  +
->>  +			d-cache-size =3D <0x4000>;
->>  +			d-cache-block-size =3D <32>;
->>  +
->>  +			next-level-cache =3D <&L2_cache>;
->>  +
->>  +			L2_cache: cache-controller {
->>  +				compatible =3D "cache";
->>  +				cache-unified;
->>  +				cache-level =3D <2>;
->>  +				cache-size =3D <0x40000>;
->>  +				cache-block-size =3D <32>;
->>  +			};
->>  +		};
->>  +	};
->>  +
->>   	cpuintc: interrupt-controller {
->>   		#address-cells =3D <0>;
->>   		#interrupt-cells =3D <1>;
->>  diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi=20
->> b/arch/mips/boot/dts/ingenic/jz4780.dtsi
->>  index b03cdec56de9..3339b37101c0 100644
->>  --- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
->>  +++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
->>  @@ -7,6 +7,53 @@
->>   	#size-cells =3D <1>;
->>   	compatible =3D "ingenic,jz4780";
->>=20
->>  +	cpus {
->>  +		#address-cells =3D <1>;
->>  +		#size-cells =3D <0>;
->>  +
->>  +		cpu0: cpu@0 {
->>  +			device_type =3D "cpu";
->>  +			compatible =3D "ingenic,xburst-e1";
->>  +			reg =3D <0>;
->>  +
->>  +			clocks =3D <&cgu JZ4780_CLK_CPU>;
->>  +			clock-names =3D "cpu";
->>  +
->>  +			i-cache-size =3D <0x8000>;
->>  +			i-cache-block-size =3D <32>;
->>  +
->>  +			d-cache-size =3D <0x8000>;
->>  +			d-cache-block-size =3D <32>;
->>  +
->>  +			next-level-cache =3D <&L2_cache>;
->>  +
->>  +			L2_cache: l2-cache {
->>  +				compatible =3D "cache";
->>  +				cache-unified;
->>  +				cache-level =3D <2>;
->>  +				cache-size =3D <0x80000>;
->>  +				cache-block-size =3D <32>;
->>  +			};
->>  +		};
->>  +
->>  +		cpu1: cpu@1 {
->>  +			device_type =3D "cpu";
->>  +			compatible =3D "ingenic,xburst-e1";
->>  +			reg =3D <1>;
->>  +
->>  +			clocks =3D <&cgu JZ4780_CLK_CORE1>;
->>  +			clock-names =3D "cpu";
->>  +
->>  +			i-cache-size =3D <0x8000>;
->>  +			i-cache-block-size =3D <32>;
->>  +
->>  +			d-cache-size =3D <0x8000>;
->>  +			d-cache-block-size =3D <32>;
->>  +
->>  +			next-level-cache =3D <&L2_cache>;
->>  +		};
->>  +	};
->>  +
->>   	cpuintc: interrupt-controller {
->>   		#address-cells =3D <0>;
->>   		#interrupt-cells =3D <1>;
->>  --
->>  2.21.0.593.g511ec345e18
->>=20
-
-=
-
+RnJvbTogQW50b2luZSBUZW5hcnQgPGFudG9pbmUudGVuYXJ0QGJvb3RsaW4uY29tPg0KRGF0ZTog
+V2VkLCAyNCBKdWwgMjAxOSAxMDoxNzoxNSArMDIwMA0KDQo+ICtzdGF0aWMgaW50IG9jZWxvdF9w
+dHBfYWRqZmluZShzdHJ1Y3QgcHRwX2Nsb2NrX2luZm8gKnB0cCwgbG9uZyBzY2FsZWRfcHBtKQ0K
+PiArew0KPiArCXN0cnVjdCBvY2Vsb3QgKm9jZWxvdCA9IGNvbnRhaW5lcl9vZihwdHAsIHN0cnVj
+dCBvY2Vsb3QsIHB0cF9pbmZvKTsNCj4gKwl1MzIgdW5pdCA9IDAsIGRpcmVjdGlvbiA9IDA7DQo+
+ICsJdW5zaWduZWQgbG9uZyBmbGFnczsNCiAgICAgICAgICAgICAgICAgICAgICBeXl5eDQo+ICsJ
+dTY0IGFkaiA9IDA7DQo+ICsNCj4gKwlpZiAoIXNjYWxlZF9wcG0pDQo+ICsJCWdvdG8gZGlzYWJs
+ZV9hZGo7DQogLi4uDQo+ICtkaXNhYmxlX2FkajoNCj4gKwlvY2Vsb3Rfd3JpdGUob2NlbG90LCAw
+LCBQVFBfQ0xLX0NGR19BREpfQ0ZHKTsNCj4gKw0KPiArCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUo
+Jm9jZWxvdC0+cHRwX2Nsb2NrX2xvY2ssIGZsYWdzKTsNCiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXl5eXl4NCg0KDQpEaWQgR0NDIHJlYWxs
+eSBub3Qgd2FybiBhYm91dCB0aGlzIGluIHlvdXIgYnVpbGQgbGlrZSBpdCBkaWQgaW1tZWRpYXRl
+bHkNCm9uIG1pbmU/DQoNCmRyaXZlcnMvbmV0L2V0aGVybmV0L21zY2Mvb2NlbG90LmM6IEluIGZ1
+bmN0aW9uIKFvY2Vsb3RfcHRwX2FkamZpbmWiOg0KLi9pbmNsdWRlL2xpbnV4L3NwaW5sb2NrLmg6
+Mjg4OjM6IHdhcm5pbmc6IKFmbGFnc6IgbWF5IGJlIHVzZWQgdW5pbml0aWFsaXplZCBpbiB0aGlz
+IGZ1bmN0aW9uIFstV21heWJlLXVuaW5pdGlhbGl6ZWRdDQogICBfcmF3X3NwaW5fdW5sb2NrX2ly
+cXJlc3RvcmUobG9jaywgZmxhZ3MpOyBcDQogICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4N
+Cg0KUGxlYXNlIGZpeCB0aGlzIGFuZCB3aGVuIHlvdSByZXNwaW4gcGxlYXNlIGp1c3QgZWxpZGUg
+dGhlIE1JUFMgdHJlZQ0KcGF0Y2hlcyBhbmQganVzdCBrZWVwIGFsbCB0aGUgb25lcyB0aGF0IEkg
+c2hvdWxkIGFwcGx5IHRvIG5ldC1uZXh0Lg0KDQpUaGFuayB5b3UuDQo=
