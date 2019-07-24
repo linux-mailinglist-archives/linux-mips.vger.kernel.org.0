@@ -2,75 +2,336 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E1B73049
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jul 2019 15:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D18573211
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jul 2019 16:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728047AbfGXNx7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Jul 2019 09:53:59 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46558 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726422AbfGXNx6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Jul 2019 09:53:58 -0400
-Received: by mail-pg1-f196.google.com with SMTP id k189so2237093pgk.13;
-        Wed, 24 Jul 2019 06:53:58 -0700 (PDT)
+        id S1728223AbfGXOrw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Jul 2019 10:47:52 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:37731 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727822AbfGXOrv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Jul 2019 10:47:51 -0400
+Received: by mail-pl1-f193.google.com with SMTP id b3so22112049plr.4
+        for <linux-mips@vger.kernel.org>; Wed, 24 Jul 2019 07:47:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=88pXUcI9m7RWL7dOzPhNJD4mwHzMS+qrMeEnOmuhYac=;
-        b=FwaCjE4FdMMna5fqTMTNs7tCMkBlUt9U/XCAKIJOnxL6m7VPGuHPJcnIylhB40TldK
-         x94bN8SRVxAk9bGYQDoQlCu3o9KkVj3MesZzsvXnwan3XjyaF+nPThXYHtSrwo/K3KxQ
-         1UjBrTWxPRoyehktQghAVdd+5u24RYDonebi5L5SUuT5M6noPF9XrO43RhpxgfXvozA3
-         TZMxZ0KKoLf1wPo66EKJs3BpuzXSVo5luZgnZ7qBhghu2StKqkJHZC6W5z5zXHX62h8+
-         jKxdW3Fjg7ATq9Ihhej0N5tD/HjjunI1/H1tYcqKs34HFukE6XbczwdsOFa1EShCn2SV
-         s5wA==
+        d=brauner.io; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=x1ubznM31Zi+8TITQjBWLaj+FG6dvDHIz+J1DjDCti4=;
+        b=apUb95+UUHbfjQGu5THqimf7upSpdEPG3EOBuYncXw3es/N64Gofs9902QeBgnzEMP
+         1djLkK5QF9ik7aPuwoGym8cZ+Dpi/ZTHp5G4mq9wudiK6uoveKfnJ8Xc1GC+KMwpPbJw
+         lmboN5MR2PSUcGWjGBpyBm27lDjuB+MWW/3VwXOJps0Wh2xhby9nQBNafEZBDjKD26dx
+         jFFH45TLUM4KUozPm/9zlH2q8XZ3KODsH3x4OiYEinpIx9i6CAd1TGWo7aogWwdCFtAX
+         rUedAODkq0ZdmF0CFiYi/YWMtt/10vn4TWyRXo7Weufp159jqwO8KOBZIKQqw912DazD
+         2XEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=88pXUcI9m7RWL7dOzPhNJD4mwHzMS+qrMeEnOmuhYac=;
-        b=Tb6zH/KCr510TX6VvAXXbZ6mytJWlBySRIqCfgrsV2w3KC5a+vXjGtcBaNRtvB+dNv
-         jhnpuibt22YD2t2ygFe1tLTMjxg2ySWkwo5ZHTEFllBMlajn2HtH0QFjeXV0OKG7KrmM
-         5hEB+f7cHaSsnzj45OnFUNR3JWQUPXmdsFS9Y6d+pGbmWllun5Ek7fvxel3S50jSnVH9
-         bJOLoGdUy+ChlEjoH1Qo9EyjvmI0Nh9wWM9ziawEHaGocOhVY2VlM8BaHQlH2Yj9iQza
-         ghTipVE3clwVPBDTefM/c7XGsLMNJXIWwU6Mm1hJ+g7F2Q11vZF4/X9zjfpEDcljwihp
-         b2uQ==
-X-Gm-Message-State: APjAAAUTkR+4ZrKIzS645VeagWzpQx3e1OYlU/sTxc+bRmtBrmhiEMDP
-        ApvQ61fluDD2tnvAfJlIOb4=
-X-Google-Smtp-Source: APXvYqymc/InOLIKLmbk0f+vQjsaxWv+Lvon5yMznzRHEJdzRT249x9IQSvH2N7xZgHodXHC9pQL5g==
-X-Received: by 2002:a63:df06:: with SMTP id u6mr28218818pgg.96.1563976438163;
-        Wed, 24 Jul 2019 06:53:58 -0700 (PDT)
-Received: from localhost (c-73-222-71-142.hsd1.ca.comcast.net. [73.222.71.142])
-        by smtp.gmail.com with ESMTPSA id b36sm71105951pjc.16.2019.07.24.06.53.56
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=x1ubznM31Zi+8TITQjBWLaj+FG6dvDHIz+J1DjDCti4=;
+        b=DNTkEelR1h5LfXh/vqrwPQ7lF6vK4za9HDc54hXnR6aRbXgcTqBGyT9QETx6eyqkba
+         ivzpL1FM9KDyYBQn9+1LYJR+hCJKBNdtLvzftAdQtkrMKEyC86Tr7DcQwHghbegs6WCc
+         KFHwdV7nK1Yuhmi0+ynpmKKJbdZCHDXNIIrdJbhW6W3DVqREPPr7Xy5j4ZRVKGt10+8D
+         LZlAPNdCmX1qx0Oqt4y9yYDyw14UozHXZb8LIb+YMal2VgGUTVilvOEwVQiqcPN9jDVN
+         mIR3aQ8L3vyYH9Foa1fU3jgUuCbmmSUv3hNM1z1NZyiSFb8kN0FmmhdQtxOqoIQGjesT
+         9twA==
+X-Gm-Message-State: APjAAAXV6y5uPmlsQ8SfAWtj4WWbE2eRJFUctIpj/G8jzPTRP2Jv2Bfq
+        itFAOHitWcEx7d92FrgM1jA=
+X-Google-Smtp-Source: APXvYqxgsIhm+uDW9ChjMulVpCeodED60MY1Gj7ZmMvRCcYNs3AH9HQpm4Dxz3xwlUn5xHzOEPau2g==
+X-Received: by 2002:a17:902:2ec5:: with SMTP id r63mr85107148plb.21.1563979670908;
+        Wed, 24 Jul 2019 07:47:50 -0700 (PDT)
+Received: from localhost.localdomain ([172.58.27.54])
+        by smtp.gmail.com with ESMTPSA id g6sm41125644pgh.64.2019.07.24.07.47.39
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 24 Jul 2019 06:53:57 -0700 (PDT)
-Date:   Wed, 24 Jul 2019 06:53:54 -0700
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Antoine Tenart <antoine.tenart@bootlin.com>
-Cc:     davem@davemloft.net, alexandre.belloni@bootlin.com,
-        UNGLinuxDriver@microchip.com, ralf@linux-mips.org,
-        paul.burton@mips.com, jhogan@kernel.org, netdev@vger.kernel.org,
-        linux-mips@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        allan.nielsen@microchip.com
-Subject: Re: [PATCH net-next v3 8/8] net: mscc: PTP Hardware Clock (PHC)
- support
-Message-ID: <20190724135354.GB1300@localhost>
-References: <20190724081715.29159-1-antoine.tenart@bootlin.com>
- <20190724081715.29159-9-antoine.tenart@bootlin.com>
+        Wed, 24 Jul 2019 07:47:50 -0700 (PDT)
+From:   Christian Brauner <christian@brauner.io>
+To:     linux-kernel@vger.kernel.org, oleg@redhat.com
+Cc:     arnd@arndb.de, ebiederm@xmission.com, keescook@chromium.org,
+        joel@joelfernandes.org, tglx@linutronix.de, tj@kernel.org,
+        dhowells@redhat.com, jannh@google.com, luto@kernel.org,
+        akpm@linux-foundation.org, cyphar@cyphar.com,
+        torvalds@linux-foundation.org, viro@zeniv.linux.org.uk,
+        kernel-team@android.com, Christian Brauner <christian@brauner.io>,
+        linux-api@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, x86@kernel.org
+Subject: [PATCH 3/5] arch: wire-up pidfd_wait()
+Date:   Wed, 24 Jul 2019 16:46:49 +0200
+Message-Id: <20190724144651.28272-4-christian@brauner.io>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190724144651.28272-1-christian@brauner.io>
+References: <20190724144651.28272-1-christian@brauner.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190724081715.29159-9-antoine.tenart@bootlin.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jul 24, 2019 at 10:17:15AM +0200, Antoine Tenart wrote:
-> This patch adds support for PTP Hardware Clock (PHC) to the Ocelot
-> switch for both PTP 1-step and 2-step modes.
-> 
-> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+This wires up the pidfd_wait() syscall into all arches at once.
 
-Acked-by: Richard Cochran <richardcochran@gmail.com>
+Signed-off-by: Christian Brauner <christian@brauner.io>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Jann Horn <jannh@google.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Andy Lutomirsky <luto@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: Aleksa Sarai <cyphar@cyphar.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-api@vger.kernel.org
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-ia64@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linux-arch@vger.kernel.org
+Cc: x86@kernel.org
+---
+ arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
+ arch/arm/tools/syscall.tbl                  | 1 +
+ arch/arm64/include/asm/unistd.h             | 2 +-
+ arch/arm64/include/asm/unistd32.h           | 4 +++-
+ arch/ia64/kernel/syscalls/syscall.tbl       | 1 +
+ arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
+ arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
+ arch/s390/kernel/syscalls/syscall.tbl       | 1 +
+ arch/sh/kernel/syscalls/syscall.tbl         | 1 +
+ arch/sparc/kernel/syscalls/syscall.tbl      | 1 +
+ arch/x86/entry/syscalls/syscall_32.tbl      | 1 +
+ arch/x86/entry/syscalls/syscall_64.tbl      | 1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     | 1 +
+ include/linux/syscalls.h                    | 4 ++++
+ include/uapi/asm-generic/unistd.h           | 4 +++-
+ 20 files changed, 27 insertions(+), 3 deletions(-)
+
+diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
+index 728fe028c02c..ca3e593f0c7a 100644
+--- a/arch/alpha/kernel/syscalls/syscall.tbl
++++ b/arch/alpha/kernel/syscalls/syscall.tbl
+@@ -475,3 +475,4 @@
+ 543	common	fspick				sys_fspick
+ 544	common	pidfd_open			sys_pidfd_open
+ # 545 reserved for clone3
++548	common	pidfd_wait			sys_pidfd_wait
+diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+index 6da7dc4d79cc..5e448d915b2f 100644
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -449,3 +449,4 @@
+ 433	common	fspick				sys_fspick
+ 434	common	pidfd_open			sys_pidfd_open
+ 435	common	clone3				sys_clone3
++438	common	pidfd_wait			sys_pidfd_wait
+diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+index 2629a68b8724..b722e47377a5 100644
+--- a/arch/arm64/include/asm/unistd.h
++++ b/arch/arm64/include/asm/unistd.h
+@@ -38,7 +38,7 @@
+ #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
+ #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+ 
+-#define __NR_compat_syscalls		436
++#define __NR_compat_syscalls		439
+ #endif
+ 
+ #define __ARCH_WANT_SYS_CLONE
+diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+index 94ab29cf4f00..ca77c9d4f7a1 100644
+--- a/arch/arm64/include/asm/unistd32.h
++++ b/arch/arm64/include/asm/unistd32.h
+@@ -877,7 +877,9 @@ __SYSCALL(__NR_fsmount, sys_fsmount)
+ __SYSCALL(__NR_fspick, sys_fspick)
+ #define __NR_pidfd_open 434
+ __SYSCALL(__NR_pidfd_open, sys_pidfd_open)
+-#define __NR_clone3 435
++#define __NR_pidfd_wait 438
++__SYSCALL(__NR_pidfd_wait, sys_pidfd_wait)
++#define __NR_clone3 439
+ __SYSCALL(__NR_clone3, sys_clone3)
+ 
+ /*
+diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
+index 36d5faf4c86c..f038afaced9b 100644
+--- a/arch/ia64/kernel/syscalls/syscall.tbl
++++ b/arch/ia64/kernel/syscalls/syscall.tbl
+@@ -356,3 +356,4 @@
+ 433	common	fspick				sys_fspick
+ 434	common	pidfd_open			sys_pidfd_open
+ # 435 reserved for clone3
++438	common	pidfd_wait			sys_pidfd_wait
+diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+index a88a285a0e5f..51f86f7b4cec 100644
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -435,3 +435,4 @@
+ 433	common	fspick				sys_fspick
+ 434	common	pidfd_open			sys_pidfd_open
+ # 435 reserved for clone3
++438	common	pidfd_wait			sys_pidfd_wait
+diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
+index 09b0cd7dab0a..24f912ac5dfa 100644
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@ -441,3 +441,4 @@
+ 433	common	fspick				sys_fspick
+ 434	common	pidfd_open			sys_pidfd_open
+ 435	common	clone3				sys_clone3
++438	common	pidfd_wait			sys_pidfd_wait
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index c9c879ec9b6d..edc144c4040c 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -374,3 +374,4 @@
+ 433	n32	fspick				sys_fspick
+ 434	n32	pidfd_open			sys_pidfd_open
+ # 435 reserved for clone3
++438	n32	pidfd_wait			sys_pidfd_wait
+diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+index bbce9159caa1..da4486ea0f4f 100644
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -350,3 +350,4 @@
+ 433	n64	fspick				sys_fspick
+ 434	n64	pidfd_open			sys_pidfd_open
+ # 435 reserved for clone3
++438	n64	pidfd_wait			sys_pidfd_wait
+diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+index 9653591428ec..d738688e50d8 100644
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -423,3 +423,4 @@
+ 433	o32	fspick				sys_fspick
+ 434	o32	pidfd_open			sys_pidfd_open
+ # 435 reserved for clone3
++438	o32	pidfd_wait			sys_pidfd_wait
+diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
+index 670d1371aca1..d60f44d8145c 100644
+--- a/arch/parisc/kernel/syscalls/syscall.tbl
++++ b/arch/parisc/kernel/syscalls/syscall.tbl
+@@ -432,3 +432,4 @@
+ 433	common	fspick				sys_fspick
+ 434	common	pidfd_open			sys_pidfd_open
+ 435	common	clone3				sys_clone3_wrapper
++438	common	pidfd_wait			sys_pidfd_wait
+diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
+index 3331749aab20..3309bf5f5370 100644
+--- a/arch/powerpc/kernel/syscalls/syscall.tbl
++++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+@@ -517,3 +517,4 @@
+ 433	common	fspick				sys_fspick
+ 434	common	pidfd_open			sys_pidfd_open
+ # 435 reserved for clone3
++438	common	pidfd_wait			sys_pidfd_wait
+diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
+index a90d3e945445..ef8ba9a9c3bb 100644
+--- a/arch/s390/kernel/syscalls/syscall.tbl
++++ b/arch/s390/kernel/syscalls/syscall.tbl
+@@ -438,3 +438,4 @@
+ 433  common	fspick			sys_fspick			sys_fspick
+ 434  common	pidfd_open		sys_pidfd_open			sys_pidfd_open
+ # 435 reserved for clone3
++438  common	pidfd_wait		sys_pidfd_wait			sys_pidfd_wait
+diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
+index b5ed26c4c005..9e786a198bfd 100644
+--- a/arch/sh/kernel/syscalls/syscall.tbl
++++ b/arch/sh/kernel/syscalls/syscall.tbl
+@@ -438,3 +438,4 @@
+ 433	common	fspick				sys_fspick
+ 434	common	pidfd_open			sys_pidfd_open
+ # 435 reserved for clone3
++438	common	pidfd_wait			sys_pidfd_wait
+diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
+index 8c8cc7537fb2..ef4f13907894 100644
+--- a/arch/sparc/kernel/syscalls/syscall.tbl
++++ b/arch/sparc/kernel/syscalls/syscall.tbl
+@@ -481,3 +481,4 @@
+ 433	common	fspick				sys_fspick
+ 434	common	pidfd_open			sys_pidfd_open
+ # 435 reserved for clone3
++438	common	pidfd_wait			sys_pidfd_wait
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index c00019abd076..76ec8c905745 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -440,3 +440,4 @@
+ 433	i386	fspick			sys_fspick			__ia32_sys_fspick
+ 434	i386	pidfd_open		sys_pidfd_open			__ia32_sys_pidfd_open
+ 435	i386	clone3			sys_clone3			__ia32_sys_clone3
++438	i386	pidfd_wait		sys_pidfd_wait			__ia32_sys_pidfd_wait
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index c29976eca4a8..733c206130f8 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -357,6 +357,7 @@
+ 433	common	fspick			__x64_sys_fspick
+ 434	common	pidfd_open		__x64_sys_pidfd_open
+ 435	common	clone3			__x64_sys_clone3/ptregs
++438	common	pidfd_wait		__x64_sys_pidfd_wait
+ 
+ #
+ # x32-specific system call numbers start at 512 to avoid cache impact
+diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
+index 25f4de729a6d..417203971292 100644
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@ -406,3 +406,4 @@
+ 433	common	fspick				sys_fspick
+ 434	common	pidfd_open			sys_pidfd_open
+ 435	common	clone3				sys_clone3
++438	common	pidfd_wait			sys_pidfd_wait
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 88145da7d140..760e8eacb93c 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -932,6 +932,10 @@ asmlinkage long sys_clock_adjtime32(clockid_t which_clock,
+ asmlinkage long sys_syncfs(int fd);
+ asmlinkage long sys_setns(int fd, int nstype);
+ asmlinkage long sys_pidfd_open(pid_t pid, unsigned int flags);
++asmlinkage long sys_pidfd_wait(int pidfd, int __user *stat_addr,
++			       struct siginfo __user *info,
++			       struct rusage __user *ru, unsigned int states,
++			       unsigned int flags);
+ asmlinkage long sys_sendmmsg(int fd, struct mmsghdr __user *msg,
+ 			     unsigned int vlen, unsigned flags);
+ asmlinkage long sys_process_vm_readv(pid_t pid,
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index 1be0e798e362..0dd5b9d4dba0 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -850,9 +850,11 @@ __SYSCALL(__NR_pidfd_open, sys_pidfd_open)
+ #define __NR_clone3 435
+ __SYSCALL(__NR_clone3, sys_clone3)
+ #endif
++#define __NR_pidfd_wait 438
++__SYSCALL(__NR_pidfd_wait, sys_pidfd_wait)
+ 
+ #undef __NR_syscalls
+-#define __NR_syscalls 436
++#define __NR_syscalls 439
+ 
+ /*
+  * 32 bit systems traditionally used different
+-- 
+2.22.0
+
