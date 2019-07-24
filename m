@@ -2,132 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A965B72F7B
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jul 2019 15:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E1B73049
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jul 2019 15:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726766AbfGXNEE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Jul 2019 09:04:04 -0400
-Received: from foss.arm.com ([217.140.110.172]:40630 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726767AbfGXNED (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Jul 2019 09:04:03 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29A9128;
-        Wed, 24 Jul 2019 06:04:03 -0700 (PDT)
-Received: from [10.1.196.133] (e112269-lin.cambridge.arm.com [10.1.196.133])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1FC383F71A;
-        Wed, 24 Jul 2019 06:04:00 -0700 (PDT)
-Subject: Re: [PATCH v9 04/21] mips: mm: Add p?d_leaf() definitions
-To:     Paul Burton <paul.burton@mips.com>
-Cc:     Mark Rutland <Mark.Rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Will Deacon <will@kernel.org>,
-        "Liang, Kan" <kan.liang@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        James Hogan <jhogan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20190722154210.42799-1-steven.price@arm.com>
- <20190722154210.42799-5-steven.price@arm.com>
- <20190722214722.wdlj6a3der3r2oro@pburton-laptop>
-From:   Steven Price <steven.price@arm.com>
-Message-ID: <85b20d93-bb60-b9e2-ea6a-92ca6f90abc6@arm.com>
-Date:   Wed, 24 Jul 2019 14:03:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728047AbfGXNx7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Jul 2019 09:53:59 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:46558 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726422AbfGXNx6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Jul 2019 09:53:58 -0400
+Received: by mail-pg1-f196.google.com with SMTP id k189so2237093pgk.13;
+        Wed, 24 Jul 2019 06:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=88pXUcI9m7RWL7dOzPhNJD4mwHzMS+qrMeEnOmuhYac=;
+        b=FwaCjE4FdMMna5fqTMTNs7tCMkBlUt9U/XCAKIJOnxL6m7VPGuHPJcnIylhB40TldK
+         x94bN8SRVxAk9bGYQDoQlCu3o9KkVj3MesZzsvXnwan3XjyaF+nPThXYHtSrwo/K3KxQ
+         1UjBrTWxPRoyehktQghAVdd+5u24RYDonebi5L5SUuT5M6noPF9XrO43RhpxgfXvozA3
+         TZMxZ0KKoLf1wPo66EKJs3BpuzXSVo5luZgnZ7qBhghu2StKqkJHZC6W5z5zXHX62h8+
+         jKxdW3Fjg7ATq9Ihhej0N5tD/HjjunI1/H1tYcqKs34HFukE6XbczwdsOFa1EShCn2SV
+         s5wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=88pXUcI9m7RWL7dOzPhNJD4mwHzMS+qrMeEnOmuhYac=;
+        b=Tb6zH/KCr510TX6VvAXXbZ6mytJWlBySRIqCfgrsV2w3KC5a+vXjGtcBaNRtvB+dNv
+         jhnpuibt22YD2t2ygFe1tLTMjxg2ySWkwo5ZHTEFllBMlajn2HtH0QFjeXV0OKG7KrmM
+         5hEB+f7cHaSsnzj45OnFUNR3JWQUPXmdsFS9Y6d+pGbmWllun5Ek7fvxel3S50jSnVH9
+         bJOLoGdUy+ChlEjoH1Qo9EyjvmI0Nh9wWM9ziawEHaGocOhVY2VlM8BaHQlH2Yj9iQza
+         ghTipVE3clwVPBDTefM/c7XGsLMNJXIWwU6Mm1hJ+g7F2Q11vZF4/X9zjfpEDcljwihp
+         b2uQ==
+X-Gm-Message-State: APjAAAUTkR+4ZrKIzS645VeagWzpQx3e1OYlU/sTxc+bRmtBrmhiEMDP
+        ApvQ61fluDD2tnvAfJlIOb4=
+X-Google-Smtp-Source: APXvYqymc/InOLIKLmbk0f+vQjsaxWv+Lvon5yMznzRHEJdzRT249x9IQSvH2N7xZgHodXHC9pQL5g==
+X-Received: by 2002:a63:df06:: with SMTP id u6mr28218818pgg.96.1563976438163;
+        Wed, 24 Jul 2019 06:53:58 -0700 (PDT)
+Received: from localhost (c-73-222-71-142.hsd1.ca.comcast.net. [73.222.71.142])
+        by smtp.gmail.com with ESMTPSA id b36sm71105951pjc.16.2019.07.24.06.53.56
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 24 Jul 2019 06:53:57 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 06:53:54 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Antoine Tenart <antoine.tenart@bootlin.com>
+Cc:     davem@davemloft.net, alexandre.belloni@bootlin.com,
+        UNGLinuxDriver@microchip.com, ralf@linux-mips.org,
+        paul.burton@mips.com, jhogan@kernel.org, netdev@vger.kernel.org,
+        linux-mips@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        allan.nielsen@microchip.com
+Subject: Re: [PATCH net-next v3 8/8] net: mscc: PTP Hardware Clock (PHC)
+ support
+Message-ID: <20190724135354.GB1300@localhost>
+References: <20190724081715.29159-1-antoine.tenart@bootlin.com>
+ <20190724081715.29159-9-antoine.tenart@bootlin.com>
 MIME-Version: 1.0
-In-Reply-To: <20190722214722.wdlj6a3der3r2oro@pburton-laptop>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190724081715.29159-9-antoine.tenart@bootlin.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 22/07/2019 22:47, Paul Burton wrote:
-> Hi Steven,
+On Wed, Jul 24, 2019 at 10:17:15AM +0200, Antoine Tenart wrote:
+> This patch adds support for PTP Hardware Clock (PHC) to the Ocelot
+> switch for both PTP 1-step and 2-step modes.
 > 
-> On Mon, Jul 22, 2019 at 04:41:53PM +0100, Steven Price wrote:
->> walk_page_range() is going to be allowed to walk page tables other than
->> those of user space. For this it needs to know when it has reached a
->> 'leaf' entry in the page tables. This information is provided by the
->> p?d_leaf() functions/macros.
->>
->> For mips, we only support large pages on 64 bit.
-> 
-> That ceases to be true with commit 35476311e529 ("MIPS: Add partial
-> 32-bit huge page support") in mips-next, so I think it may be best to
-> move the definition to asm/pgtable.h so that both 32b & 64b kernels can
-> pick it up.
+> Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
 
-Thanks for pointing that out. I'll move the definitions as you suggest.
-
-Steve
-
-> Thanks,
->     Paul
-> 
->> For 64 bit if _PAGE_HUGE is defined we can simply look for it. When not
->> defined we can be confident that there are no leaf pages in existence
->> and fall back on the generic implementation (added in a later patch)
->> which returns 0.
->>
->> CC: Ralf Baechle <ralf@linux-mips.org>
->> CC: Paul Burton <paul.burton@mips.com>
->> CC: James Hogan <jhogan@kernel.org>
->> CC: linux-mips@vger.kernel.org
->> Signed-off-by: Steven Price <steven.price@arm.com>
->> ---
->>  arch/mips/include/asm/pgtable-64.h | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
->> index 93a9dce31f25..2bdbf8652b5f 100644
->> --- a/arch/mips/include/asm/pgtable-64.h
->> +++ b/arch/mips/include/asm/pgtable-64.h
->> @@ -273,6 +273,10 @@ static inline int pmd_present(pmd_t pmd)
->>  	return pmd_val(pmd) != (unsigned long) invalid_pte_table;
->>  }
->>  
->> +#ifdef _PAGE_HUGE
->> +#define pmd_leaf(pmd)	((pmd_val(pmd) & _PAGE_HUGE) != 0)
->> +#endif
->> +
->>  static inline void pmd_clear(pmd_t *pmdp)
->>  {
->>  	pmd_val(*pmdp) = ((unsigned long) invalid_pte_table);
->> @@ -297,6 +301,10 @@ static inline int pud_present(pud_t pud)
->>  	return pud_val(pud) != (unsigned long) invalid_pmd_table;
->>  }
->>  
->> +#ifdef _PAGE_HUGE
->> +#define pud_leaf(pud)	((pud_val(pud) & _PAGE_HUGE) != 0)
->> +#endif
->> +
->>  static inline void pud_clear(pud_t *pudp)
->>  {
->>  	pud_val(*pudp) = ((unsigned long) invalid_pmd_table);
->> -- 
->> 2.20.1
->>
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
-
+Acked-by: Richard Cochran <richardcochran@gmail.com>
