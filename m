@@ -2,71 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E83997248B
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jul 2019 04:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F23A727A2
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jul 2019 07:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387450AbfGXCYp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Jul 2019 22:24:45 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:42509 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728052AbfGXCYo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Jul 2019 22:24:44 -0400
-Received: by mail-pf1-f195.google.com with SMTP id q10so20080018pff.9;
-        Tue, 23 Jul 2019 19:24:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qRMlM2gUSInEC6RWWvSWyihO1TIAbroHme9s+jonTRc=;
-        b=uakhSOoJr7OLv33vGsuhtq2Ax1mkcbw1w3DshzvnsB11Jgvts/botujxNjtMMGf3BD
-         nPjs20j2kLIW8b0TVsHSLGyqAF50zmL2OPm53LfVnH6zm4hr6Zyw6s2Rcd7dPU9gG3gC
-         NPTyac0LdjUbzZ9uc+UhlJ8OughYsGXd6wMtLurs588+3WrMHwS1KYYz30r2BHvqI5Mn
-         do9Wm3Mx0W4fSY77x8zmGEC1S2ppgFhZR8fUmDjkIsOpA4xDs8H0mFf6zR6uFnKShxYE
-         oWAtVJA6PO5CLbreAX4+kIV1V1lFNrZL+qYwabWMZaZLCOUkfCzTPpuGNWvemLxQ3srs
-         MfPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qRMlM2gUSInEC6RWWvSWyihO1TIAbroHme9s+jonTRc=;
-        b=X1nVb8gPML/72wDKEZkOHwpkop83FjvcsgZSnrwXGmzys+Y7vDCleKtISXnx2IW6gS
-         D2RWg47pFJjWUhtGGBO9+oz750dCmLRr2U/bqUukeNQsRSqUQJt1rLrS5SaqBR6q8Hn/
-         2JUCpYIhvbby1dCKlMnxZe2pCW3dOKiF6orSurco1BmTPQZr7Vh/QBjp12etdyqphYzS
-         axAPvkbcD3WWPlPR1C8kBGssNXNSmq8gA9lzzA6kom0s/MUlmgMhcaWF0GF0vewb7cRi
-         gEEqQBQZ6ynp+tJCgBCe2ZIbC2obtTseIFfX9ttYU61BIqqprnoIESBGBGxDbMErJF6R
-         Wn8w==
-X-Gm-Message-State: APjAAAV2z+zSpTs7YIfTHMEEfv2WIhhUGbTvj49X5SmKSV//sV2iQOXe
-        ExASFXPVmAclNwV/AVqq0NAr4T6DSjk=
-X-Google-Smtp-Source: APXvYqwtiFH8QItK41hVwAREdYVTax52z066QYfEO1VzBIZM5BscyljFyb1qFWp/q4lLGfqmyg7yww==
-X-Received: by 2002:aa7:81d9:: with SMTP id c25mr8963389pfn.255.1563935083841;
-        Tue, 23 Jul 2019 19:24:43 -0700 (PDT)
-Received: from guoguo-omen-lan.lan ([107.151.139.128])
-        by smtp.gmail.com with ESMTPSA id s185sm63468029pgs.67.2019.07.23.19.24.38
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 23 Jul 2019 19:24:43 -0700 (PDT)
-From:   Chuanhong Guo <gch981213@gmail.com>
-To:     linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list),
-        linux-mips@vger.kernel.org (open list:MIPS),
-        devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM)
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1725990AbfGXF7E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Jul 2019 01:59:04 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:49991 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725909AbfGXF7D (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Jul 2019 01:59:03 -0400
+X-Originating-IP: 79.86.19.127
+Received: from alex.numericable.fr (127.19.86.79.rev.sfr.net [79.86.19.127])
+        (Authenticated sender: alex@ghiti.fr)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 8CC8220004;
+        Wed, 24 Jul 2019 05:58:54 +0000 (UTC)
+From:   Alexandre Ghiti <alex@ghiti.fr>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        John Crispin <john@phrozen.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Weijie Gao <hackpascal@gmail.com>, NeilBrown <neil@brown.name>,
-        Chuanhong Guo <gch981213@gmail.com>
-Subject: [PATCH v2 6/6] staging: mt7621-dts: add dt nodes for mt7621-pll
-Date:   Wed, 24 Jul 2019 10:23:10 +0800
-Message-Id: <20190724022310.28010-7-gch981213@gmail.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190724022310.28010-1-gch981213@gmail.com>
-References: <20190724022310.28010-1-gch981213@gmail.com>
+        Palmer Dabbelt <palmer@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Alexandre Ghiti <alex@ghiti.fr>
+Subject: [PATCH REBASE v4 00/14] Provide generic top-down mmap layout functions
+Date:   Wed, 24 Jul 2019 01:58:36 -0400
+Message-Id: <20190724055850.6232-1-alex@ghiti.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -74,89 +45,110 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This commit adds device-tree node for mt7621-pll and use its clocks
-accordingly.
+Hi Andrew,
 
-Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
----
+This is simply a rebase on top of next-20190719, where I added various
+Acked/Reviewed-by from Kees and Catalin and a note on commit 08/14 suggested
+by Kees regarding the removal of STACK_RND_MASK that is safe doing.
 
-Changes since v1:
-1. drop cpuclock node in gbpc1.dts
-2. drop syscon in mt7621-pll node
+I would have appreciated a feedback from a mips maintainer but failed to get
+it: can you consider this series for inclusion anyway ? Mips parts have been
+reviewed-by Kees.
 
- drivers/staging/mt7621-dts/gbpc1.dts   |  5 -----
- drivers/staging/mt7621-dts/mt7621.dtsi | 15 +++++++--------
- 2 files changed, 7 insertions(+), 13 deletions(-)
+Thanks,
 
-diff --git a/drivers/staging/mt7621-dts/gbpc1.dts b/drivers/staging/mt7621-dts/gbpc1.dts
-index 1fb560ff059c..d94b73243268 100644
---- a/drivers/staging/mt7621-dts/gbpc1.dts
-+++ b/drivers/staging/mt7621-dts/gbpc1.dts
-@@ -106,11 +106,6 @@
- 			clock-frequency = <225000000>;
- };
- 
--&cpuclock {
--			compatible = "fixed-clock";
--			clock-frequency = <900000000>;
--};
--
- &pcie {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pcie_pins>;
-diff --git a/drivers/staging/mt7621-dts/mt7621.dtsi b/drivers/staging/mt7621-dts/mt7621.dtsi
-index d89d68ffa7bc..7b82f7f70404 100644
---- a/drivers/staging/mt7621-dts/mt7621.dtsi
-+++ b/drivers/staging/mt7621-dts/mt7621.dtsi
-@@ -1,4 +1,5 @@
- #include <dt-bindings/interrupt-controller/mips-gic.h>
-+#include <dt-bindings/clock/mt7621-clk.h>
- #include <dt-bindings/gpio/gpio.h>
- 
- / {
-@@ -27,12 +28,11 @@
- 		serial0 = &uartlite;
- 	};
- 
--	cpuclock: cpuclock@0 {
--		#clock-cells = <0>;
--		compatible = "fixed-clock";
-+	pll: pll {
-+		compatible = "mediatek,mt7621-pll";
- 
--		/* FIXME: there should be way to detect this */
--		clock-frequency = <880000000>;
-+		#clock-cells = <1>;
-+		clock-output-names = "cpu", "bus";
- 	};
- 
- 	sysclock: sysclock@0 {
-@@ -155,7 +155,6 @@
- 			compatible = "ns16550a";
- 			reg = <0xc00 0x100>;
- 
--			clocks = <&sysclock>;
- 			clock-frequency = <50000000>;
- 
- 			interrupt-parent = <&gic>;
-@@ -172,7 +171,7 @@
- 			compatible = "ralink,mt7621-spi";
- 			reg = <0xb00 0x100>;
- 
--			clocks = <&sysclock>;
-+			clocks = <&pll MT7621_CLK_BUS>;
- 
- 			resets = <&rstctrl 18>;
- 			reset-names = "spi";
-@@ -372,7 +371,7 @@
- 		timer {
- 			compatible = "mti,gic-timer";
- 			interrupts = <GIC_LOCAL 1 IRQ_TYPE_NONE>;
--			clocks = <&cpuclock>;
-+			clocks = <&pll MT7621_CLK_CPU>;
- 		};
- 	};
- 
+
+
+This series introduces generic functions to make top-down mmap layout
+easily accessible to architectures, in particular riscv which was
+the initial goal of this series.
+The generic implementation was taken from arm64 and used successively
+by arm, mips and finally riscv.
+
+Note that in addition the series fixes 2 issues:
+- stack randomization was taken into account even if not necessary.
+- [1] fixed an issue with mmap base which did not take into account
+  randomization but did not report it to arm and mips, so by moving
+  arm64 into a generic library, this problem is now fixed for both
+  architectures.
+
+This work is an effort to factorize architecture functions to avoid
+code duplication and oversights as in [1].
+
+[1]: https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1429066.html
+
+Changes in v4:
+  - Make ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT select ARCH_HAS_ELF_RANDOMIZE
+    by default as suggested by Kees,
+  - ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT depends on MMU and defines the
+    functions needed by ARCH_HAS_ELF_RANDOMIZE => architectures that use
+    the generic mmap topdown functions cannot have ARCH_HAS_ELF_RANDOMIZE
+    selected without MMU, but I think it's ok since randomization without
+    MMU does not add much security anyway.
+  - There is no common API to determine if a process is 32b, so I came up with
+    !IS_ENABLED(CONFIG_64BIT) || is_compat_task() in [PATCH v4 12/14].
+  - Mention in the change log that x86 already takes care of not offseting mmap
+    base address if the task does not want randomization.
+  - Re-introduce a comment that should not have been removed.
+  - Add Reviewed/Acked-By from Paul, Christoph and Kees, thank you for that.
+  - I tried to minimize the changes from the commits in v3 in order to make
+    easier the review of the v4, the commits changed or added are:
+    - [PATCH v4 5/14]
+    - [PATCH v4 8/14]
+    - [PATCH v4 11/14]
+    - [PATCH v4 12/14]
+    - [PATCH v4 13/14]
+
+Changes in v3:
+  - Split into small patches to ease review as suggested by Christoph
+    Hellwig and Kees Cook
+  - Move help text of new config as a comment, as suggested by Christoph
+  - Make new config depend on MMU, as suggested by Christoph
+
+Changes in v2 as suggested by Christoph Hellwig:
+  - Preparatory patch that moves randomize_stack_top
+  - Fix duplicate config in riscv
+  - Align #if defined on next line => this gives rise to a checkpatch
+    warning. I found this pattern all around the tree, in the same proportion
+    as the previous pattern which was less pretty:
+    git grep -C 1 -n -P "^#if defined.+\|\|.*\\\\$"
+
+Alexandre Ghiti (14):
+  mm, fs: Move randomize_stack_top from fs to mm
+  arm64: Make use of is_compat_task instead of hardcoding this test
+  arm64: Consider stack randomization for mmap base only when necessary
+  arm64, mm: Move generic mmap layout functions to mm
+  arm64, mm: Make randomization selected by generic topdown mmap layout
+  arm: Properly account for stack randomization and stack guard gap
+  arm: Use STACK_TOP when computing mmap base address
+  arm: Use generic mmap top-down layout and brk randomization
+  mips: Properly account for stack randomization and stack guard gap
+  mips: Use STACK_TOP when computing mmap base address
+  mips: Adjust brk randomization offset to fit generic version
+  mips: Replace arch specific way to determine 32bit task with generic
+    version
+  mips: Use generic mmap top-down layout and brk randomization
+  riscv: Make mmap allocation top-down by default
+
+ arch/Kconfig                       |  11 +++
+ arch/arm/Kconfig                   |   2 +-
+ arch/arm/include/asm/processor.h   |   2 -
+ arch/arm/kernel/process.c          |   5 --
+ arch/arm/mm/mmap.c                 |  52 --------------
+ arch/arm64/Kconfig                 |   2 +-
+ arch/arm64/include/asm/processor.h |   2 -
+ arch/arm64/kernel/process.c        |   8 ---
+ arch/arm64/mm/mmap.c               |  72 -------------------
+ arch/mips/Kconfig                  |   2 +-
+ arch/mips/include/asm/processor.h  |   5 --
+ arch/mips/mm/mmap.c                |  84 ----------------------
+ arch/riscv/Kconfig                 |  11 +++
+ fs/binfmt_elf.c                    |  20 ------
+ include/linux/mm.h                 |   2 +
+ kernel/sysctl.c                    |   6 +-
+ mm/util.c                          | 107 ++++++++++++++++++++++++++++-
+ 17 files changed, 137 insertions(+), 256 deletions(-)
+
 -- 
-2.21.0
+2.20.1
 
