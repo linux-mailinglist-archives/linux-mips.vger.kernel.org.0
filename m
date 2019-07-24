@@ -2,96 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B97187218A
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Jul 2019 23:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9EF7246C
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jul 2019 04:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389269AbfGWVam (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Jul 2019 17:30:42 -0400
-Received: from mout.gmx.net ([212.227.17.21]:39241 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731616AbfGWVam (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 23 Jul 2019 17:30:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1563917421;
-        bh=ToULRC4irrsdH84boQnpkm5KiZJ47FZlgR9fRYxOddQ=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=Mw172/vXJLuMiXnhcNcxkFLc+1aKNWEZ8PiRunLmcf3dhaVRLy3tt6tEfy4Hy2XqC
-         PyJ35c47qRSvmmSrJacGYW026ubBeNnkC3r0iI352l8MRe5TksbAyXXfEfq2ZaSc1L
-         AXwOe3IbD6QKY7TOSbx6Apv6B+fCU/iCs06Tt8DM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [172.17.9.180] ([87.191.208.243]) by mail.gmx.com (mrgmx101
- [212.227.17.168]) with ESMTPSA (Nemesis) id 0LtVLE-1iWxrd16mq-010plk; Tue, 23
- Jul 2019 23:30:21 +0200
-Subject: Re: Build regressions/improvements in v5.3-rc1
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     linux-um@lists.infradead.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-mips@vger.kernel.org,
-        Parisc List <linux-parisc@vger.kernel.org>
-References: <20190723080441.19110-1-geert@linux-m68k.org>
- <CAMuHMdVuVqXnW8SEnpcbvh8agYvPh775rv9tmV9kGUa6Q2wcwA@mail.gmail.com>
-From:   Helge Deller <deller@gmx.de>
-Message-ID: <738c1891-6ef3-8cd1-d25e-b9a36255e3e7@gmx.de>
-Date:   Tue, 23 Jul 2019 23:30:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726635AbfGXCYM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Jul 2019 22:24:12 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:40415 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726108AbfGXCYM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Jul 2019 22:24:12 -0400
+Received: by mail-pg1-f193.google.com with SMTP id w10so20369653pgj.7;
+        Tue, 23 Jul 2019 19:24:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0WMoTaUEzf2i0/9+THzPuZXCIUe+ekMzc88lMAn0PGM=;
+        b=Htgu23gviBJDprRFajzRkyIgxs8zf4w1ZNqqoXGAaftgFuT1oDR17PvgSnH87ucKoO
+         ZtQ2blOutSQbiWoH5NT7N6vyt5MIBdRQGQE2j3VTEUp2fofLXasXEBoXiYWVNZ8TqL1t
+         52OAJj6DHABQZMDHlTEBkeEOuqZKI/lN2zdg+snMOFPKYnPcdM/CL7Kw0vfXSzor9fsI
+         PDZ6MPqWdzagqKxEXec3Wp6AGA4cgH2XPnFAEHLCsC0E9ZTcRdQt9nR8kNkYAhfK1QHd
+         q3SRpbYkxep6kggIlNOdTbPiXR2Gace1SIOOhcn7wWCrv7zSVHwu8flsN+cwPnh1+YMB
+         zegw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0WMoTaUEzf2i0/9+THzPuZXCIUe+ekMzc88lMAn0PGM=;
+        b=DAe3DATrUNgEochJZmugbo0yBWVH5jFM9FMC/mOZBEWBFa8ar5T9OKI7cboE14/Zka
+         Zc+cVyuaKyDyGnGQkzvZBcIvaf/q4zJxoDApr98kz0bx5WoJXDoTo7dLLk71zQOpV1Nr
+         BqVkSPHfwBiWz5/Wt4A/U/h4PHU4gohEM7gjOHEWn1MVHy67VV6kPzKWgVf53jRQb5Mt
+         Mp7oKQM47XPofT55KP+qw5BVhWhJ1UL+yD8HAWj4z9boDzuqa68UANHrw/SRH4kOedW4
+         wkBsI3bZBuSiFJkVRpTbatxllc967qW5HyCeJczxxryRB5x3Urz7he8CkA5oDE7upCl1
+         IUuw==
+X-Gm-Message-State: APjAAAWBN2Czs33jQiMpf0JAaASwU6lMiWHn0VPSIwAprBkSD3XJyzGj
+        BOaiKsnn2lW5dIXnLXQXQA+T57nui/Y=
+X-Google-Smtp-Source: APXvYqxUYEkM9XBDBboLoJOWeoCUeXs/SaDnGfKPq806XSURPgFa31xYTKVVDHaTF3ZqJBL9b6oguQ==
+X-Received: by 2002:a65:6495:: with SMTP id e21mr80068044pgv.359.1563935051079;
+        Tue, 23 Jul 2019 19:24:11 -0700 (PDT)
+Received: from guoguo-omen-lan.lan ([107.151.139.128])
+        by smtp.gmail.com with ESMTPSA id s185sm63468029pgs.67.2019.07.23.19.24.06
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 23 Jul 2019 19:24:10 -0700 (PDT)
+From:   Chuanhong Guo <gch981213@gmail.com>
+To:     linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list),
+        linux-mips@vger.kernel.org (open list:MIPS),
+        devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM)
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        John Crispin <john@phrozen.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Weijie Gao <hackpascal@gmail.com>, NeilBrown <neil@brown.name>,
+        Chuanhong Guo <gch981213@gmail.com>
+Subject: [PATCH v2 0/6] MIPS: ralink: add CPU clock detection for MT7621
+Date:   Wed, 24 Jul 2019 10:23:04 +0800
+Message-Id: <20190724022310.28010-1-gch981213@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdVuVqXnW8SEnpcbvh8agYvPh775rv9tmV9kGUa6Q2wcwA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:T+b1tb8faTODi5y7+U6ZeYg349SPA/Fh6VMkO4Lv68DcHiqWs38
- yMSq6plB/gXOGf08wjD9XUjitvj8jKdC/8/JaMSNHP9vDAOO7Co7tl7rnvZFkj9FzwyC3he
- Osdq0XH55YVvzrSSpZfz5GyKiXcltMbOZz4gbER+z1VPvO52/fBz44TmPn60QnwkG/uiNZp
- Qd7uZwcF8lw5s0lW1uARg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:SryDnYPWR3k=:YfaURXV31fWbWOLAGMHGGV
- Dmnik+n3qAhqkld+yRDUq/ad82uys9dQKsblccpGM1v+nWFWNXHRGjJnWpTHthVgl5MjKareW
- S8+A4ILBwxCub+9qb285MgdDuTPxS7dGZzzs1i1PXNIU4ej6gydgwM3z7ULTsFyJRl8wF1WoB
- Ciz5DIEkIBiRgLcXVj6nyJH3dJGRtqSPguFrXaPSrV/pmj04wTImaGupFmt+NfX1jhjZjXIcr
- DMhTnVxONS3fiOhWtR/1DjnBOcBw26ctyW1tDbpN2jcDeuXM9VjIYVRCYv75waepvsgzx6z+6
- Y+w+9q+vzUpjB64NgLoPSebj8q0PWxcv5LCm5+4zx+WmEhLPdPZBeZ3593O31bsHpcyWwRKlm
- zM8DeFk6vuhWjzB7chszUwcyxFIzn/PowsWGt7KTEenxppLvGxPwYXGj4xyFsBQoN3YhLxyIn
- 3VE0LcZj3lyD8jeXPQ1tQI2xy+8m1GNDoLpvwW310SEdE2L7UmtfHZ1C9mspC4HKXI4f5MuLX
- wLPTjfr/7eWbl51HcUY2Tozd1IZXhusmqwm+BOXN2AancGej6DJ9BFL+DQfuOaZBlhgugp4An
- UPf8cUynTng/Rs2/LqzKmQmFYtRBSwc37YTxiJO3cIayyLWJDbGidsCRXBjke2Yn2rQpG1vht
- huUmUsiUoIhg6pB0qZEQ6xIf/PdZc0yPvuesx1caABIUUpM3BECtj42ujta5WGmAhrZbK45az
- s0J9qGk2Pf2ZLZyzOGkrgEKjuYspigu8gz2zY93ySXrp/r3sKgUEhrYtc9ZmYkmwz1K2Z8I0m
- e+IcH6RAD5eBsI/TPmjBiBJnnIEpQ/D9j7EjFzCPIFvRKsU6q1kMfeD+1KecjIzSJo4APWbVM
- y2pUQKKW0TSl0QYD02OZ+XNA8gvg+sq9vXPt5e5ZEnthuujlO0Eeaj2TRtYqKx5yaWUkyjkuP
- G26mwOYKDQHdZnvffvqtvcy+HW7DI5GEwBhXj0VE5yPPHcWfD9FUXXe3KfDV/StdlSwan7SVK
- 1ZVRDKGDPYLYW7zOY4L6y0bPCt3UEF7Naw7mqyC7SZzElpiiuBTVJ0jUZNIrfQr6ybEOJqPYZ
- RapDmKg7odABSY=
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 23.07.19 17:39, Geert Uytterhoeven wrote:
-> On Tue, Jul 23, 2019 at 5:22 PM Geert Uytterhoeven <geert@linux-m68k.org=
-> wrote:
->> Below is the list of build error/warning regressions/improvements in
->> v5.3-rc1[1] compared to v5.2[2].
->
->> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/5f9e832c13707=
-5045d15cd6899ab0505cfb2ca4b/ (241 out of 242 configs)
->> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/0ecfebd2b5240=
-4ae0c54a878c872bb93363ada36/ (all 242 configs)
->>
->>
->> *** ERRORS ***
->> ...
->>    + /kisskb/src/include/linux/kprobes.h: error: implicit declaration o=
-f function 'kprobe_fault_handler'; did you mean 'kprobe_page_fault'? [-Wer=
-ror=3Dimplicit-function-declaration]:  =3D> 477:9
->
-> parisc-allmodconfig
+This patchset ports CPU clock detection for MT7621 from OpenWrt.
 
-I've a patch queued up for the next pull request (in the parisc git tree) =
-to fix this:
+Last time I sent this, I forgot to add an binding include which
+caused a compile error and the patch doesn't stay in linux-next.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git/co=
-mmit/?h=3Dfor-next&id=3Df5e03d3a04978d2866f82cb11cc7a6b808c8ce07
+This patchset resent the first two commits and also added binding
+documentation for mt7621-pll and used it in mt7621-dts at
+drivers/staging.
 
-Helge
+Changes since v1:
+1. changed commit title prefix for dt include
+2. split the patch adding clock node (details in that patch body)
+3. drop useless syscon in dt documentation
+4. drop cpuclock node for gbpc1
+
+Chuanhong Guo (6):
+  dt-bindings: clock: add dt binding header for mt7621-pll
+  MIPS: ralink: drop ralink_clk_init for mt7621
+  MIPS: ralink: add clock device providing cpu/bus clock for mt7621
+  dt: bindings: add mt7621-pll dt binding documentation
+  staging: mt7621-dts: fix register range of memc node in mt7621.dtsi
+  staging: mt7621-dts: add dt nodes for mt7621-pll
+
+ .../bindings/clock/mediatek,mt7621-pll.txt    | 18 ++++
+ arch/mips/include/asm/mach-ralink/mt7621.h    | 20 ++++
+ arch/mips/ralink/mt7621.c                     | 98 +++++++++++++------
+ drivers/staging/mt7621-dts/gbpc1.dts          |  5 -
+ drivers/staging/mt7621-dts/mt7621.dtsi        | 17 ++--
+ include/dt-bindings/clock/mt7621-clk.h        | 14 +++
+ 6 files changed, 126 insertions(+), 46 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt7621-pll.txt
+ create mode 100644 include/dt-bindings/clock/mt7621-clk.h
+
+-- 
+2.21.0
+
