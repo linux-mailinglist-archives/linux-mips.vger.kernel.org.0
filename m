@@ -2,44 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E137281A
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Jul 2019 08:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BCB729C4
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Jul 2019 10:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725919AbfGXGOV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Jul 2019 02:14:21 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:51479 "EHLO
+        id S1726320AbfGXITU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Jul 2019 04:19:20 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:41285 "EHLO
         relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725909AbfGXGOV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Jul 2019 02:14:21 -0400
-X-Originating-IP: 79.86.19.127
-Received: from alex.numericable.fr (127.19.86.79.rev.sfr.net [79.86.19.127])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id D50ADE0004;
-        Wed, 24 Jul 2019 06:14:14 +0000 (UTC)
-From:   Alexandre Ghiti <alex@ghiti.fr>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        Alexandre Ghiti <alex@ghiti.fr>
-Subject: [PATCH REBASE v4 14/14] riscv: Make mmap allocation top-down by default
-Date:   Wed, 24 Jul 2019 01:58:50 -0400
-Message-Id: <20190724055850.6232-15-alex@ghiti.fr>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190724055850.6232-1-alex@ghiti.fr>
-References: <20190724055850.6232-1-alex@ghiti.fr>
+        with ESMTP id S1726297AbfGXITT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Jul 2019 04:19:19 -0400
+X-Originating-IP: 86.250.200.211
+Received: from localhost (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
+        (Authenticated sender: antoine.tenart@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 87889E0005;
+        Wed, 24 Jul 2019 08:19:16 +0000 (UTC)
+From:   Antoine Tenart <antoine.tenart@bootlin.com>
+To:     davem@davemloft.net, richardcochran@gmail.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        ralf@linux-mips.org, paul.burton@mips.com, jhogan@kernel.org
+Cc:     Antoine Tenart <antoine.tenart@bootlin.com>,
+        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, allan.nielsen@microchip.com
+Subject: [PATCH net-next v3 0/8] net: mscc: PTP Hardware Clock (PHC) support
+Date:   Wed, 24 Jul 2019 10:17:07 +0200
+Message-Id: <20190724081715.29159-1-antoine.tenart@bootlin.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -47,74 +34,55 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In order to avoid wasting user address space by using bottom-up mmap
-allocation scheme, prefer top-down scheme when possible.
+Hello,
 
-Before:
-root@qemuriscv64:~# cat /proc/self/maps
-00010000-00016000 r-xp 00000000 fe:00 6389       /bin/cat.coreutils
-00016000-00017000 r--p 00005000 fe:00 6389       /bin/cat.coreutils
-00017000-00018000 rw-p 00006000 fe:00 6389       /bin/cat.coreutils
-00018000-00039000 rw-p 00000000 00:00 0          [heap]
-1555556000-155556d000 r-xp 00000000 fe:00 7193   /lib/ld-2.28.so
-155556d000-155556e000 r--p 00016000 fe:00 7193   /lib/ld-2.28.so
-155556e000-155556f000 rw-p 00017000 fe:00 7193   /lib/ld-2.28.so
-155556f000-1555570000 rw-p 00000000 00:00 0
-1555570000-1555572000 r-xp 00000000 00:00 0      [vdso]
-1555574000-1555576000 rw-p 00000000 00:00 0
-1555576000-1555674000 r-xp 00000000 fe:00 7187   /lib/libc-2.28.so
-1555674000-1555678000 r--p 000fd000 fe:00 7187   /lib/libc-2.28.so
-1555678000-155567a000 rw-p 00101000 fe:00 7187   /lib/libc-2.28.so
-155567a000-15556a0000 rw-p 00000000 00:00 0
-3fffb90000-3fffbb1000 rw-p 00000000 00:00 0      [stack]
+This series introduces the PTP Hardware Clock (PHC) support to the Mscc
+Ocelot switch driver. In order to make use of this, a new register bank
+is added and described in the device tree, as well as a new interrupt.
+The use this bank and interrupt was made optional in the driver for dt
+compatibility reasons.
 
-After:
-root@qemuriscv64:~# cat /proc/self/maps
-00010000-00016000 r-xp 00000000 fe:00 6389       /bin/cat.coreutils
-00016000-00017000 r--p 00005000 fe:00 6389       /bin/cat.coreutils
-00017000-00018000 rw-p 00006000 fe:00 6389       /bin/cat.coreutils
-2de81000-2dea2000 rw-p 00000000 00:00 0          [heap]
-3ff7eb6000-3ff7ed8000 rw-p 00000000 00:00 0
-3ff7ed8000-3ff7fd6000 r-xp 00000000 fe:00 7187   /lib/libc-2.28.so
-3ff7fd6000-3ff7fda000 r--p 000fd000 fe:00 7187   /lib/libc-2.28.so
-3ff7fda000-3ff7fdc000 rw-p 00101000 fe:00 7187   /lib/libc-2.28.so
-3ff7fdc000-3ff7fe2000 rw-p 00000000 00:00 0
-3ff7fe4000-3ff7fe6000 r-xp 00000000 00:00 0      [vdso]
-3ff7fe6000-3ff7ffd000 r-xp 00000000 fe:00 7193   /lib/ld-2.28.so
-3ff7ffd000-3ff7ffe000 r--p 00016000 fe:00 7193   /lib/ld-2.28.so
-3ff7ffe000-3ff7fff000 rw-p 00017000 fe:00 7193   /lib/ld-2.28.so
-3ff7fff000-3ff8000000 rw-p 00000000 00:00 0
-3fff888000-3fff8a9000 rw-p 00000000 00:00 0      [stack]
+Patches 2 and 4 should probably go through the MIPS tree.
 
-Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- arch/riscv/Kconfig | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Thanks!
+Antoine
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 59a4727ecd6c..6a63973873fd 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -54,6 +54,17 @@ config RISCV
- 	select EDAC_SUPPORT
- 	select ARCH_HAS_GIGANTIC_PAGE
- 	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
-+	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
-+	select HAVE_ARCH_MMAP_RND_BITS
-+
-+config ARCH_MMAP_RND_BITS_MIN
-+	default 18
-+
-+# max bits determined by the following formula:
-+#  VA_BITS - PAGE_SHIFT - 3
-+config ARCH_MMAP_RND_BITS_MAX
-+	default 33 if 64BIT # SV48 based
-+	default 18
- 
- config MMU
- 	def_bool y
+Since v2:
+  - Prevented from a possible infinite loop when reading the h/w
+    timestamps.
+  - s/GFP_KERNEL/GFP_ATOMIC/ in the Tx path.
+  - Set rx_filter to HWTSTAMP_FILTER_PTP_V2_EVENT at probe.
+  - Fixed s/w timestamping dependencies.
+  - Added Paul Burton's Acked-by on patches 2 and 4.
+
+Since v1:
+  - Used list_for_each_safe() in ocelot_deinit().
+  - Fixed a memory leak in ocelot_deinit() by calling
+    dev_kfree_skb_any().
+  - Fixed a locking issue in get_hwtimestamp().
+  - Handled the NULL case of ptp_clock_register().
+  - Added comments on optional dt properties.
+
+Antoine Tenart (8):
+  Documentation/bindings: net: ocelot: document the PTP bank
+  MIPS: dts: mscc: describe the PTP register range
+  Documentation/bindings: net: ocelot: document the PTP ready IRQ
+  MIPS: dts: mscc: describe the PTP ready interrupt
+  net: mscc: describe the PTP register range
+  net: mscc: improve the frame header parsing readability
+  net: mscc: remove the frame_info cpuq member
+  net: mscc: PTP Hardware Clock (PHC) support
+
+ .../devicetree/bindings/net/mscc-ocelot.txt   |  20 +-
+ arch/mips/boot/dts/mscc/ocelot.dtsi           |   7 +-
+ drivers/net/ethernet/mscc/ocelot.c            | 394 +++++++++++++++++-
+ drivers/net/ethernet/mscc/ocelot.h            |  49 ++-
+ drivers/net/ethernet/mscc/ocelot_board.c      | 144 ++++++-
+ drivers/net/ethernet/mscc/ocelot_ptp.h        |  41 ++
+ drivers/net/ethernet/mscc/ocelot_regs.c       |  11 +
+ 7 files changed, 634 insertions(+), 32 deletions(-)
+ create mode 100644 drivers/net/ethernet/mscc/ocelot_ptp.h
+
 -- 
-2.20.1
+2.21.0
 
