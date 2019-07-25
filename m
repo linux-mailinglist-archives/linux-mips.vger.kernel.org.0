@@ -2,128 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E10E75884
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jul 2019 22:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001CD75905
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jul 2019 22:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726481AbfGYUAg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Jul 2019 16:00:36 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43154 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726126AbfGYUAf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Jul 2019 16:00:35 -0400
-Received: by mail-pf1-f195.google.com with SMTP id i189so23278360pfg.10
-        for <linux-mips@vger.kernel.org>; Thu, 25 Jul 2019 13:00:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=czhvpuMA3newxUE1Ok0eyKdEKMeSe/BMrFd/BkJbH88=;
-        b=VFAYa7L009E7Uphizuk8EUTkPs3Kp07Ow0349Bvlb5HNDgpvBrzunrXj9n7hha+kMS
-         bUM5MSI0W1TI2wdDk/dt+iOAY/2LqMW2igW+v6EdmydphptD2J677zHoPzFb2KTmBouE
-         B/nckqeeuspAcsyRQBtXmWSYaDMekv/0MycuA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=czhvpuMA3newxUE1Ok0eyKdEKMeSe/BMrFd/BkJbH88=;
-        b=TWAQXmKhu6VSURD80LQ9tzg8LptNFQQVxWJ+l9N2BUdYC3nw2mEQ7e/VJoN+iC/fir
-         rkqlDKWVjFQpFpCtY1O3Wt3F6twwtB+1bf728ZEzeGFcf8VnaDVjD5VqJd1GS7Pikqxc
-         AO6Q7Ahs1kebyIEtD392xK8LoniEb+UyHObTjEn+cJnZza8ylYZiHXJoPBcCKmhyzD5a
-         dukDjdCWtJnopRYCjm9mBP00TVrvGfITGZvazhXxYW8K7ZoQlJACW4P+Ll0nQ3znx1gX
-         UeZb6/4/CgbqgtPLSJB++wGMW+4hK1pmQc0Zh9rf2BMuh5XJ2qq2lAaDayf5hs5Opx0l
-         gyOA==
-X-Gm-Message-State: APjAAAXGGjS2TA/5N4oVfJU0JnLBbaZaKST/5AV6ceWgDU+AEX0Sa00q
-        +PZsTYb5e2b6k4663K4kYcB7Jg==
-X-Google-Smtp-Source: APXvYqxpPEGm+2UHeZbjVl2jSdGpMi/b2Xe2soYfLXU2pENpqL6KqScEe4kJzeeCzenWEThRkjVa+g==
-X-Received: by 2002:aa7:9713:: with SMTP id a19mr465671pfg.64.1564084835161;
-        Thu, 25 Jul 2019 13:00:35 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j1sm75405528pgl.12.2019.07.25.13.00.34
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 25 Jul 2019 13:00:34 -0700 (PDT)
-Date:   Thu, 25 Jul 2019 13:00:33 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Alexandre Ghiti <alex@ghiti.fr>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Paul Burton <paul.burton@mips.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        James Hogan <jhogan@kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: Re: [PATCH REBASE v4 11/14] mips: Adjust brk randomization offset to
- fit generic version
-Message-ID: <201907251259.09E0101@keescook>
-References: <20190724055850.6232-1-alex@ghiti.fr>
- <20190724055850.6232-12-alex@ghiti.fr>
- <1ba4061a-c026-3b9e-cd91-3ed3a26fce1b@ghiti.fr>
+        id S1726508AbfGYUm2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Jul 2019 16:42:28 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:34074 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726195AbfGYUm1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Jul 2019 16:42:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1564087345; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wd/8RY8QtDpKhjy989F9knR8y6y/xiYlDP4O6NQdYHE=;
+        b=uAZM9BM/qI0q0R0385qtFObwkPKHfE1FfrOEybVSU6F4cSubWFYk4SzfU+gQ3oXlhNKr95
+        GvmdIoBuDI3yn+PA1xHVNwsi/O307s4J6uyrgsXjWp8Rhy4uGzPsB2TeheIxAeR4Y5KaIv
+        GfwfboMFslZNsooUKr5k23NnF0HUVRo=
+Date:   Thu, 25 Jul 2019 16:42:11 -0400
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] MIPS: Add support for partial kernel mode on Xburst CPUs
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, od@zcrc.me
+Message-Id: <1564087331.1848.1@crapouillou.net>
+In-Reply-To: <20190725165930.yvlvmavcgqocl3nn@pburton-laptop>
+References: <20190724234654.16555-1-paul@crapouillou.net>
+        <20190725165930.yvlvmavcgqocl3nn@pburton-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1ba4061a-c026-3b9e-cd91-3ed3a26fce1b@ghiti.fr>
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 25, 2019 at 08:22:06AM +0200, Alexandre Ghiti wrote:
-> On 7/24/19 7:58 AM, Alexandre Ghiti wrote:
-> > This commit simply bumps up to 32MB and 1GB the random offset
-> > of brk, compared to 8MB and 256MB, for 32bit and 64bit respectively.
-> > 
-> > Suggested-by: Kees Cook <keescook@chromium.org>
-> > Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >   arch/mips/mm/mmap.c | 7 ++++---
-> >   1 file changed, 4 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/mips/mm/mmap.c b/arch/mips/mm/mmap.c
-> > index a7e84b2e71d7..faa5aa615389 100644
-> > --- a/arch/mips/mm/mmap.c
-> > +++ b/arch/mips/mm/mmap.c
-> > @@ -16,6 +16,7 @@
-> >   #include <linux/random.h>
-> >   #include <linux/sched/signal.h>
-> >   #include <linux/sched/mm.h>
-> > +#include <linux/sizes.h>
-> >   unsigned long shm_align_mask = PAGE_SIZE - 1;	/* Sane caches */
-> >   EXPORT_SYMBOL(shm_align_mask);
-> > @@ -189,11 +190,11 @@ static inline unsigned long brk_rnd(void)
-> >   	unsigned long rnd = get_random_long();
-> >   	rnd = rnd << PAGE_SHIFT;
-> > -	/* 8MB for 32bit, 256MB for 64bit */
-> > +	/* 32MB for 32bit, 1GB for 64bit */
-> >   	if (TASK_IS_32BIT_ADDR)
-> > -		rnd = rnd & 0x7ffffful;
-> > +		rnd = rnd & SZ_32M;
-> >   	else
-> > -		rnd = rnd & 0xffffffful;
-> > +		rnd = rnd & SZ_1G;
-> >   	return rnd;
-> >   }
-> 
-> Hi Andrew,
-> 
-> I have just noticed that this patch is wrong, do you want me to send
-> another version of the entire series or is the following diff enough ?
-> This mistake gets fixed anyway in patch 13/14 when it gets merged with the
-> generic version.
 
-While I can't speak for Andrew, I'd say, since you've got Paul and
-Luis's Acks to add now, I'd say go ahead and respin with the fix and the
-Acks added.
 
-I'm really looking forward to this cleanup! Thanks again for working on
-it. :)
+Le jeu. 25 juil. 2019 =E0 12:59, Paul Burton <paul.burton@mips.com> a=20
+=E9crit :
+> Hi Paul,
+>=20
+> On Wed, Jul 24, 2019 at 07:46:54PM -0400, Paul Cercueil wrote:
+>>  Support partial kernel mode of Xburst CPUs found in Ingenic SoCs.
+>>  Partial kernel mode means the userspace applications have access to
+>>  the TCSM0 banks of the VPU,
+>=20
+> So far so (reasonably) good :)
+>=20
+>>  and can execute cache instructions.
+>=20
+> Aaaah! Scary!
+>=20
+> Does this allow *all* cache instructions? If so that's a big security=20
+> &
+> stability hole - if userland can invalidate kernel data or data from
+> other programs then it can create all sorts of chaos.
 
--- 
-Kees Cook
+It looked a bit fishy to me as well, but I couldn't point a finger to
+the exact problem. I don't exactly know what it allows and what it
+doesn't.
+
+> Also do you know which Ingenic SoCs this is available on? I see it
+> documented in the JZ4780 Programming Manual, but Config7 bit 6 is=20
+> shown
+> as reserved in my copy of the XBurst1 CPU Core Programming Manual.
+
+I have no idea. I assume all SoCs with a VPU. I know the JZ4770 has it.
+
+> I notice the JZ4780 documentation says it allows access "including=20
+> TCSM,
+> CACHE instructions" which is scary too since it doesn't say that's=20
+> *all*
+> it allows access to. Though just cache instructions by themselves are
+> enough to be game over for any notion of security as mentioned above.
+>=20
+> What is it you want to do with this? I'm wondering if we could achieve
+> your goal is in a safer way.
+
+The plan was to be able to communicate with the firmware running on the
+VPU without going through expensive context switches all the time.
+
+I guess we could mmap() the TCSM memories, but we'd need to bypass the
+data cache (is there a flag for that?).
+
+> Thanks,
+>     Paul
+
+=
+
