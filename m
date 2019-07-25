@@ -2,123 +2,256 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69851754D4
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jul 2019 18:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB037570F
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jul 2019 20:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388177AbfGYQ7g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Jul 2019 12:59:36 -0400
-Received: from mail-eopbgr740137.outbound.protection.outlook.com ([40.107.74.137]:24192
-        "EHLO NAM01-BN3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387616AbfGYQ7f (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 25 Jul 2019 12:59:35 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NCsgsxUP86S4a/hCYWH1e2rYx5QisDaASAAAcpqyGC2OtNAlBfxMQBecIe+PGYwvSAIMDIVbMn9iFAlQzhhYKoe6Ll9/PGqZi1n3rOmO+ibFyaMKInDxD/hmbP+T9wyEbKJKmjt6hEliyjkmOBaRWWfy8hSpi07yt6js599AvoV9Nekci/cjcrUmvMzLumF8pY5S1St7+XbQWNLizoVPbTr9LUJev04E9l6mggiZ85QBinv65hQ+x3xzRDeZ/S8lp/ZOcBAz6HU8A+V0b+AwpdF/0jxaZiUTDmZIc40t/m/lMEfJ774VJWSQ6VzWGO2TkG8PtHxJDquLifaZl0ckoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lUwBbgpWpuaNb7R9R/w4zsI0MS/6goTDvnNv0fwyV0Q=;
- b=jnCkf23NMof2o9bNXXIoR6/1N4uiQJ77HjO7RpYaCvMRgCfLe6AFRHa7FrX/+0RRCxjuCkUDf9WSVYPRN0bg7hH0qR6jKwNKK7SuX9tRDlVJ/R4txH0H/XVGYqX+pEC3pu1ZzY/HqJpWmbJLCLj2u1LHlFnvvABOYfBTnYpI43o373ouu+vqo2FwYiIPRY3m5Iz7BrLkCNKHPejAP8NgAGIoICNtZfOaBJ4e6MoCCI6arIphvhOO0d9HK19+puavOebNEqJfxTGcEGtLcDw+hWw9YEebyyfBiJf4389OzjkObp1OZ3zcr3vDjgKe9JH9/BlkEI6W5GIAhbdFPP8a8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=wavecomp.com;dmarc=pass action=none
- header.from=mips.com;dkim=pass header.d=mips.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lUwBbgpWpuaNb7R9R/w4zsI0MS/6goTDvnNv0fwyV0Q=;
- b=YZuqyl7AP65uIGl15lvsvAxEEXbBij9H69wbII+gg4eiRo7i0zjuCHAJCJjjjh5vuX82aB/kqR2rSANNqM0N6SiTXTDb5mZX20eHV7OADHVf1BQQwPeVIpTfvH1RPNneOuaLezys0lYw2B9WPa+dA7HOuEhQWYvJE3blmtNU7s4=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1344.namprd22.prod.outlook.com (10.174.162.147) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2094.17; Thu, 25 Jul 2019 16:59:32 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::49d3:37f8:217:c83]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::49d3:37f8:217:c83%6]) with mapi id 15.20.2094.017; Thu, 25 Jul 2019
- 16:59:31 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "od@zcrc.me" <od@zcrc.me>
-Subject: Re: [PATCH] MIPS: Add support for partial kernel mode on Xburst CPUs
-Thread-Topic: [PATCH] MIPS: Add support for partial kernel mode on Xburst CPUs
-Thread-Index: AQHVQwpUGZILpjjRRkOL6x5V3OyS8w==
-Date:   Thu, 25 Jul 2019 16:59:31 +0000
-Message-ID: <20190725165930.yvlvmavcgqocl3nn@pburton-laptop>
-References: <20190724234654.16555-1-paul@crapouillou.net>
-In-Reply-To: <20190724234654.16555-1-paul@crapouillou.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR04CA0030.namprd04.prod.outlook.com
- (2603:10b6:a03:40::43) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:18::12)
-user-agent: NeoMutt/20180716
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [12.94.197.246]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4c061dd8-ff78-4fae-ec30-08d711217669
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1344;
-x-ms-traffictypediagnostic: MWHPR2201MB1344:
-x-microsoft-antispam-prvs: <MWHPR2201MB134415E1345B5F5BA003A02EC1C10@MWHPR2201MB1344.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0109D382B0
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(7916004)(376002)(396003)(366004)(136003)(39850400004)(346002)(189003)(199004)(6486002)(446003)(14454004)(305945005)(99286004)(4326008)(68736007)(102836004)(42882007)(7736002)(6916009)(229853002)(71200400001)(26005)(44832011)(1076003)(71190400001)(9686003)(186003)(11346002)(25786009)(6512007)(81166006)(316002)(81156014)(8676002)(6116002)(8936002)(486006)(58126008)(476003)(76176011)(6436002)(52116002)(33716001)(6506007)(53936002)(386003)(54906003)(66066001)(66476007)(66556008)(14444005)(478600001)(66946007)(66446008)(256004)(64756008)(3846002)(6246003)(5660300002)(2906002)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1344;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: K6itYRoBS7Gkt0feI6XJt1zZEdoA/M7unBUqvllmU6MvdUs8z6BYdbWFZ7r5b7gv67zraDXOZuY2DTbNvrpsVOQM85UJakZaoV5cNjARdqlWmrMC2dBjm8o2e1/+46Nmo4PR77SxRki81eRBwIPe/8787Xe7doWXGWcEmuwDdFNx73lQyFEIaDL69OaWvcX2I+4+6H/q6Wp5InoBdA3Cz/YKFRUVow+vyNmDsOyiGwf1JCqNTjAC27QonCjHUjNFi/dIKj76rdlB4Oebz2knMaCZpghhyylRJwvrqd7Y1J6di0lQnXgPXlVrE1RgpEgzDpO50clAi7/KOt1NivFpzqz63Td7Lu7hcTHwfsHLtF8FhnEs3XVYI7JtEy+3YvBnnpyqonM3PGoEMQs7wfqJfDAI3lbH1/Xbk1/WdKk19W0=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <21D86F87B7DF294883B163CAA59E91AD@namprd22.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726166AbfGYShO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Jul 2019 14:37:14 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:39164 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726043AbfGYShO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Jul 2019 14:37:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=7pPb5PLfzbPY4AG/pHdgzIH0FJYaW95a3t1HB4wXvpY=; b=QuhNwSLZ327yNlj9vBU7euh1u
+        ko9pQpYQYwbiaZ3sODQkVRHR5jSHaQ5Vhs8bHWLssSFm0g9v/Ws1KmYsk2KHfcIr4zcBHZ7RsmaBZ
+        ed5dKX3uUg82bSg3Ke1bUI+aA+nqdfQfpuXiS9Rm2p3/uehsLK7IT823xOZ6KjAB2y1jMgzS2GfSx
+        Ha2v96RY1As6H5xIBnqITUlS/nkQ/j8eeqfJr3k6n3qaW1HFz7Sy81ifaffRsLaZypKYgagvuDcZY
+        IoJfZry7UmERtn5NCSFDBXg3MrfnsmRM/hfsLtRpvD3hWT7qTIQI7AbjkWqjH1Zz6WtmiwDjnKFwZ
+        TrNjbmwcw==;
+Received: from [179.95.31.157] (helo=coco.lan)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hqiby-0004et-Ga; Thu, 25 Jul 2019 18:37:06 +0000
+Date:   Thu, 25 Jul 2019 15:36:58 -0300
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Hanna Hawa <hhhawa@amazon.com>
+Cc:     <thor.thayer@linux.intel.com>, <bp@alien8.de>,
+        <james.morse@arm.com>, <rric@kernel.org>, <morbidrsa@gmail.com>,
+        <ralf@linux-mips.org>, <david.daney@cavium.com>,
+        <andy.gross@linaro.org>, <david.brown@linaro.org>,
+        <ckadabi@codeaurora.org>, <vnkgutta@codeaurora.org>,
+        <jglauber@cavium.com>, <khuong@os.amperecomputing.com>,
+        <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
+        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+Subject: Re: [RFC 1/1] edac: Add a counter parameter for
+ edac_device_handle_ue/ce()
+Message-ID: <20190725153658.084ea1aa@coco.lan>
+In-Reply-To: <1563187987-5847-1-git-send-email-hhhawa@amazon.com>
+References: <1563187987-5847-1-git-send-email-hhhawa@amazon.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c061dd8-ff78-4fae-ec30-08d711217669
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jul 2019 16:59:31.9054
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1344
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+Em Mon, 15 Jul 2019 13:53:07 +0300
+Hanna Hawa <hhhawa@amazon.com> escreveu:
 
-On Wed, Jul 24, 2019 at 07:46:54PM -0400, Paul Cercueil wrote:
-> Support partial kernel mode of Xburst CPUs found in Ingenic SoCs.
-> Partial kernel mode means the userspace applications have access to
-> the TCSM0 banks of the VPU,
+> Add a counter parameter in order to avoid losing errors count for edac
+> device, the error count reports the number of errors reported by an edac
+> device similar to the way MC_EDAC do.
+> 
+> Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
+> ---
+>  drivers/edac/altera_edac.c      | 20 ++++++++++++--------
+>  drivers/edac/amd8111_edac.c     |  6 +++---
+>  drivers/edac/cpc925_edac.c      |  4 ++--
+>  drivers/edac/edac_device.c      | 18 ++++++++++--------
+>  drivers/edac/edac_device.h      |  8 ++++++--
+>  drivers/edac/highbank_l2_edac.c |  4 ++--
+>  drivers/edac/mpc85xx_edac.c     |  4 ++--
+>  drivers/edac/mv64x60_edac.c     |  4 ++--
+>  drivers/edac/octeon_edac-l2c.c  | 20 ++++++++++----------
+>  drivers/edac/octeon_edac-pc.c   |  6 +++---
+>  drivers/edac/qcom_edac.c        |  8 ++++----
+>  drivers/edac/thunderx_edac.c    | 10 +++++-----
+>  drivers/edac/xgene_edac.c       | 26 +++++++++++++-------------
+>  13 files changed, 74 insertions(+), 64 deletions(-)
+> 
+> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+> index 8816f74..747dd43 100644
+> --- a/drivers/edac/altera_edac.c
+> +++ b/drivers/edac/altera_edac.c
+> @@ -616,12 +616,12 @@ static irqreturn_t altr_edac_device_handler(int irq, void *dev_id)
+>  	if (irq == drvdata->sb_irq) {
+>  		if (priv->ce_clear_mask)
+>  			writel(priv->ce_clear_mask, drvdata->base);
+> -		edac_device_handle_ce(dci, 0, 0, drvdata->edac_dev_name);
+> +		edac_device_handle_ce(dci, 1, 0, 0, drvdata->edac_dev_name);
+>  		ret_value = IRQ_HANDLED;
+>  	} else if (irq == drvdata->db_irq) {
+>  		if (priv->ue_clear_mask)
+>  			writel(priv->ue_clear_mask, drvdata->base);
+> -		edac_device_handle_ue(dci, 0, 0, drvdata->edac_dev_name);
+> +		edac_device_handle_ue(dci, 1, 0, 0, drvdata->edac_dev_name);
+>  		panic("\nEDAC:ECC_DEVICE[Uncorrectable errors]\n");
+>  		ret_value = IRQ_HANDLED;
+>  	} else {
+> @@ -919,13 +919,15 @@ static irqreturn_t __maybe_unused altr_edac_a10_ecc_irq(int irq, void *dev_id)
+>  	if (irq == dci->sb_irq) {
+>  		writel(ALTR_A10_ECC_SERRPENA,
+>  		       base + ALTR_A10_ECC_INTSTAT_OFST);
+> -		edac_device_handle_ce(dci->edac_dev, 0, 0, dci->edac_dev_name);
+> +		edac_device_handle_ce(dci->edac_dev, 1, 0, 0,
+> +				      dci->edac_dev_name);
+>  
+>  		return IRQ_HANDLED;
+>  	} else if (irq == dci->db_irq) {
+>  		writel(ALTR_A10_ECC_DERRPENA,
+>  		       base + ALTR_A10_ECC_INTSTAT_OFST);
+> -		edac_device_handle_ue(dci->edac_dev, 0, 0, dci->edac_dev_name);
+> +		edac_device_handle_ue(dci->edac_dev, 1, 0, 0,
+> +				      dci->edac_dev_name);
+>  		if (dci->data->panic)
+>  			panic("\nEDAC:ECC_DEVICE[Uncorrectable errors]\n");
+>  
+> @@ -1308,14 +1310,16 @@ static irqreturn_t altr_edac_a10_l2_irq(int irq, void *dev_id)
+>  		regmap_write(dci->edac->ecc_mgr_map,
+>  			     A10_SYSGMR_MPU_CLEAR_L2_ECC_OFST,
+>  			     A10_SYSGMR_MPU_CLEAR_L2_ECC_SB);
+> -		edac_device_handle_ce(dci->edac_dev, 0, 0, dci->edac_dev_name);
+> +		edac_device_handle_ce(dci->edac_dev, 1, 0, 0,
+> +				      dci->edac_dev_name);
+>  
+>  		return IRQ_HANDLED;
+>  	} else if (irq == dci->db_irq) {
+>  		regmap_write(dci->edac->ecc_mgr_map,
+>  			     A10_SYSGMR_MPU_CLEAR_L2_ECC_OFST,
+>  			     A10_SYSGMR_MPU_CLEAR_L2_ECC_MB);
+> -		edac_device_handle_ue(dci->edac_dev, 0, 0, dci->edac_dev_name);
+> +		edac_device_handle_ue(dci->edac_dev, 1, 0, 0,
+> +				      dci->edac_dev_name);
+>  		panic("\nEDAC:ECC_DEVICE[Uncorrectable errors]\n");
+>  
+>  		return IRQ_HANDLED;
+> @@ -1652,12 +1656,12 @@ static irqreturn_t altr_edac_a10_ecc_irq_portb(int irq, void *dev_id)
+>  	if (irq == ad->sb_irq) {
+>  		writel(priv->ce_clear_mask,
+>  		       base + ALTR_A10_ECC_INTSTAT_OFST);
+> -		edac_device_handle_ce(ad->edac_dev, 0, 0, ad->edac_dev_name);
+> +		edac_device_handle_ce(ad->edac_dev, 1, 0, 0, ad->edac_dev_name);
+>  		return IRQ_HANDLED;
+>  	} else if (irq == ad->db_irq) {
+>  		writel(priv->ue_clear_mask,
+>  		       base + ALTR_A10_ECC_INTSTAT_OFST);
+> -		edac_device_handle_ue(ad->edac_dev, 0, 0, ad->edac_dev_name);
+> +		edac_device_handle_ue(ad->edac_dev, 1, 0, 0, ad->edac_dev_name);
+>  		return IRQ_HANDLED;
+>  	}
+>  
+> diff --git a/drivers/edac/amd8111_edac.c b/drivers/edac/amd8111_edac.c
+> index b5786cf..e595fab 100644
+> --- a/drivers/edac/amd8111_edac.c
+> +++ b/drivers/edac/amd8111_edac.c
+> @@ -303,7 +303,7 @@ static void amd8111_lpc_bridge_check(struct edac_device_ctl_info *edac_dev)
+>  		val8 |= IO_CTRL_1_CLEAR_MASK;
+>  		edac_pci_write_byte(dev, REG_IO_CTRL_1, val8);
+>  
+> -		edac_device_handle_ue(edac_dev, 0, 0, edac_dev->ctl_name);
+> +		edac_device_handle_ue(edac_dev, 1, 0, 0, edac_dev->ctl_name);
+>  	}
+>  
+>  	if (at_compat_reg_broken == 0) {
+> @@ -315,8 +315,8 @@ static void amd8111_lpc_bridge_check(struct edac_device_ctl_info *edac_dev)
+>  			out8 |= AT_COMPAT_CLRIOCHK;
+>  		if (out8 > 0) {
+>  			__do_outb(out8, REG_AT_COMPAT);
+> -			edac_device_handle_ue(edac_dev, 0, 0,
+> -						edac_dev->ctl_name);
+> +			edac_device_handle_ue(edac_dev, 1, 0, 0,
+> +					      edac_dev->ctl_name);
+>  		}
+>  	}
+>  }
+> diff --git a/drivers/edac/cpc925_edac.c b/drivers/edac/cpc925_edac.c
+> index 3c0881a..eb74865 100644
+> --- a/drivers/edac/cpc925_edac.c
+> +++ b/drivers/edac/cpc925_edac.c
+> @@ -682,7 +682,7 @@ static void cpc925_cpu_check(struct edac_device_ctl_info *edac_dev)
+>  	cpc925_printk(KERN_INFO, "APIMASK		0x%08x\n", apimask);
+>  	cpc925_printk(KERN_INFO, "APIEXCP		0x%08x\n", apiexcp);
+>  
+> -	edac_device_handle_ue(edac_dev, 0, 0, edac_dev->ctl_name);
+> +	edac_device_handle_ue(edac_dev, 1, 0, 0, edac_dev->ctl_name);
+>  }
+>  
+>  /******************** HT Link err device****************************/
+> @@ -756,7 +756,7 @@ static void cpc925_htlink_check(struct edac_device_ctl_info *edac_dev)
+>  		__raw_writel(HT_LINKERR_DETECTED,
+>  				dev_info->vbase + REG_LINKERR_OFFSET);
+>  
+> -	edac_device_handle_ce(edac_dev, 0, 0, edac_dev->ctl_name);
+> +	edac_device_handle_ce(edac_dev, 1, 0, 0, edac_dev->ctl_name);
+>  }
+>  
+>  static struct cpc925_dev_info cpc925_devs[] = {
+> diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+> index 65cf2b9..d1de296 100644
+> --- a/drivers/edac/edac_device.c
+> +++ b/drivers/edac/edac_device.c
+> @@ -556,7 +556,8 @@ static inline int edac_device_get_panic_on_ue(struct edac_device_ctl_info
+>  }
+>  
+>  void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
+> -			int inst_nr, int block_nr, const char *msg)
+> +			   u16 error_count, int inst_nr, int block_nr,
+> +			   const char *msg)
+>  {
+>  	struct edac_device_instance *instance;
+>  	struct edac_device_block *block = NULL;
+> @@ -582,12 +583,12 @@ void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
+>  
+>  	if (instance->nr_blocks > 0) {
+>  		block = instance->blocks + block_nr;
+> -		block->counters.ce_count++;
+> +		block->counters.ce_count += error_count;
+>  	}
+>  
+>  	/* Propagate the count up the 'totals' tree */
+> -	instance->counters.ce_count++;
+> -	edac_dev->counters.ce_count++;
+> +	instance->counters.ce_count += error_count;
+> +	edac_dev->counters.ce_count += error_count;
+>  
+>  	if (edac_device_get_log_ce(edac_dev))
+>  		edac_device_printk(edac_dev, KERN_WARNING,
+> @@ -598,7 +599,8 @@ void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
+>  EXPORT_SYMBOL_GPL(edac_device_handle_ce);
+>  
+>  void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
+> -			int inst_nr, int block_nr, const char *msg)
+> +			   u16 error_count, int inst_nr, int block_nr,
+> +			   const char *msg)
+>  {
+>  	struct edac_device_instance *instance;
+>  	struct edac_device_block *block = NULL;
+> @@ -624,12 +626,12 @@ void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
+>  
+>  	if (instance->nr_blocks > 0) {
+>  		block = instance->blocks + block_nr;
+> -		block->counters.ue_count++;
+> +		block->counters.ue_count += error_count;
+>  	}
+>  
+>  	/* Propagate the count up the 'totals' tree */
+> -	instance->counters.ue_count++;
+> -	edac_dev->counters.ue_count++;
+> +	instance->counters.ue_count += error_count;
+> +	edac_dev->counters.ue_count += error_count;
 
-So far so (reasonably) good :)
+Patch itself looks a good idea, but maybe it should rise a WARN()
+if error_count == 0.
 
-> and can execute cache instructions.
-
-Aaaah! Scary!
-
-Does this allow *all* cache instructions? If so that's a big security &
-stability hole - if userland can invalidate kernel data or data from
-other programs then it can create all sorts of chaos.
-
-Also do you know which Ingenic SoCs this is available on? I see it
-documented in the JZ4780 Programming Manual, but Config7 bit 6 is shown
-as reserved in my copy of the XBurst1 CPU Core Programming Manual.
-
-I notice the JZ4780 documentation says it allows access "including TCSM,
-CACHE instructions" which is scary too since it doesn't say that's *all*
-it allows access to. Though just cache instructions by themselves are
-enough to be game over for any notion of security as mentioned above.
-
-What is it you want to do with this? I'm wondering if we could achieve
-your goal is in a safer way.
+That applies for both CE and UE error logic.
 
 Thanks,
-    Paul
+Mauro
