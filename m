@@ -2,134 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 544B174711
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Jul 2019 08:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C547480B
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Jul 2019 09:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728660AbfGYGWM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Jul 2019 02:22:12 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:39559 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbfGYGWL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Jul 2019 02:22:11 -0400
-X-Originating-IP: 81.250.144.103
-Received: from [10.30.1.20] (lneuilly-657-1-5-103.w81-250.abo.wanadoo.fr [81.250.144.103])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 5DDD5E000E;
-        Thu, 25 Jul 2019 06:22:06 +0000 (UTC)
-Subject: Re: [PATCH REBASE v4 11/14] mips: Adjust brk randomization offset to
- fit generic version
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Paul Burton <paul.burton@mips.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        James Hogan <jhogan@kernel.org>, linux-fsdevel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Luis Chamberlain <mcgrof@kernel.org>
-References: <20190724055850.6232-1-alex@ghiti.fr>
- <20190724055850.6232-12-alex@ghiti.fr>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-Message-ID: <1ba4061a-c026-3b9e-cd91-3ed3a26fce1b@ghiti.fr>
-Date:   Thu, 25 Jul 2019 08:22:06 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S2388025AbfGYHYJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Jul 2019 03:24:09 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:43109 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387990AbfGYHYJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Jul 2019 03:24:09 -0400
+X-Originating-IP: 86.250.200.211
+Received: from localhost (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
+        (Authenticated sender: antoine.tenart@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 25234C000D;
+        Thu, 25 Jul 2019 07:24:06 +0000 (UTC)
+Date:   Thu, 25 Jul 2019 09:24:06 +0200
+From:   Antoine Tenart <antoine.tenart@bootlin.com>
+To:     David Miller <davem@davemloft.net>
+Cc:     antoine.tenart@bootlin.com, richardcochran@gmail.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        ralf@linux-mips.org, paul.burton@mips.com, jhogan@kernel.org,
+        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, allan.nielsen@microchip.com
+Subject: Re: [PATCH net-next v3 8/8] net: mscc: PTP Hardware Clock (PHC)
+ support
+Message-ID: <20190725072406.GA3235@kwain>
+References: <20190724081715.29159-1-antoine.tenart@bootlin.com>
+ <20190724081715.29159-9-antoine.tenart@bootlin.com>
+ <20190724.115226.478045379512899769.davem@davemloft.net>
 MIME-Version: 1.0
-In-Reply-To: <20190724055850.6232-12-alex@ghiti.fr>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: fr
+In-Reply-To: <20190724.115226.478045379512899769.davem@davemloft.net>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 7/24/19 7:58 AM, Alexandre Ghiti wrote:
-> This commit simply bumps up to 32MB and 1GB the random offset
-> of brk, compared to 8MB and 256MB, for 32bit and 64bit respectively.
->
-> Suggested-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> ---
->   arch/mips/mm/mmap.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/mips/mm/mmap.c b/arch/mips/mm/mmap.c
-> index a7e84b2e71d7..faa5aa615389 100644
-> --- a/arch/mips/mm/mmap.c
-> +++ b/arch/mips/mm/mmap.c
-> @@ -16,6 +16,7 @@
->   #include <linux/random.h>
->   #include <linux/sched/signal.h>
->   #include <linux/sched/mm.h>
-> +#include <linux/sizes.h>
->   
->   unsigned long shm_align_mask = PAGE_SIZE - 1;	/* Sane caches */
->   EXPORT_SYMBOL(shm_align_mask);
-> @@ -189,11 +190,11 @@ static inline unsigned long brk_rnd(void)
->   	unsigned long rnd = get_random_long();
->   
->   	rnd = rnd << PAGE_SHIFT;
-> -	/* 8MB for 32bit, 256MB for 64bit */
-> +	/* 32MB for 32bit, 1GB for 64bit */
->   	if (TASK_IS_32BIT_ADDR)
-> -		rnd = rnd & 0x7ffffful;
-> +		rnd = rnd & SZ_32M;
->   	else
-> -		rnd = rnd & 0xffffffful;
-> +		rnd = rnd & SZ_1G;
->   
->   	return rnd;
->   }
+Hi David,
 
-Hi Andrew,
+On Wed, Jul 24, 2019 at 11:52:26AM -0700, David Miller wrote:
+> From: Antoine Tenart <antoine.tenart@bootlin.com>
+> Date: Wed, 24 Jul 2019 10:17:15 +0200
+> 
+> > +static int ocelot_ptp_adjfine(struct ptp_clock_info *ptp, long scaled_ppm)
+> > +{
+> > +	struct ocelot *ocelot = container_of(ptp, struct ocelot, ptp_info);
+> > +	u32 unit = 0, direction = 0;
+> > +	unsigned long flags;
+>                       ^^^^
+> > +	u64 adj = 0;
+> > +
+> > +	if (!scaled_ppm)
+> > +		goto disable_adj;
+>  ...
+> > +disable_adj:
+> > +	ocelot_write(ocelot, 0, PTP_CLK_CFG_ADJ_CFG);
+> > +
+> > +	spin_unlock_irqrestore(&ocelot->ptp_clock_lock, flags);
+>                                                         ^^^^^
+> Did GCC really not warn about this in your build like it did immediately
+> on mine?
 
-I have just noticed that this patch is wrong, do you want me to send
-another version of the entire series or is the following diff enough ?
-This mistake gets fixed anyway in patch 13/14 when it gets merged with the
-generic version.
+I was using gcc8 for mips32, and it did not warn about this. Sorry about
+that.
 
-Sorry about that,
+> drivers/net/ethernet/mscc/ocelot.c: In function ‘ocelot_ptp_adjfine’:
+> ./include/linux/spinlock.h:288:3: warning: ‘flags’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+>    _raw_spin_unlock_irqrestore(lock, flags); \
+>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Please fix this and when you respin please just elide the MIPS tree
+> patches and just keep all the ones that I should apply to net-next.
 
-Thanks,
+OK, will do.
 
-Alex
+Thanks!
+Antoine
 
-diff --git a/arch/mips/mm/mmap.c b/arch/mips/mm/mmap.c
-index a7e84b2e71d7..ff6ab87e9c56 100644
---- a/arch/mips/mm/mmap.c
-+++ b/arch/mips/mm/mmap.c
-@@ -16,6 +16,7 @@
-  #include <linux/random.h>
-  #include <linux/sched/signal.h>
-  #include <linux/sched/mm.h>
-+#include <linux/sizes.h>
-
-  unsigned long shm_align_mask = PAGE_SIZE - 1;  /* Sane caches */
-  EXPORT_SYMBOL(shm_align_mask);
-@@ -189,11 +190,11 @@ static inline unsigned long brk_rnd(void)
-         unsigned long rnd = get_random_long();
-
-         rnd = rnd << PAGE_SHIFT;
--       /* 8MB for 32bit, 256MB for 64bit */
-+       /* 32MB for 32bit, 1GB for 64bit */
-         if (TASK_IS_32BIT_ADDR)
--               rnd = rnd & 0x7ffffful;
-+               rnd = rnd & (SZ_32M - 1);
-         else
--               rnd = rnd & 0xffffffful;
-+               rnd = rnd & (SZ_1G - 1);
-
-         return rnd;
-  }
-
-
-
+-- 
+Antoine Ténart, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
