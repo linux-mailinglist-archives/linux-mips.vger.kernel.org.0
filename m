@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF79769F5
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2019 15:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3106D76986
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2019 15:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387953AbfGZNm3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 26 Jul 2019 09:42:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49734 "EHLO mail.kernel.org"
+        id S2388269AbfGZNwt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 26 Jul 2019 09:52:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51546 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387948AbfGZNm3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 26 Jul 2019 09:42:29 -0400
+        id S2388281AbfGZNnl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 26 Jul 2019 09:43:41 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2D3F322CC0;
-        Fri, 26 Jul 2019 13:42:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 18B2022CC0;
+        Fri, 26 Jul 2019 13:43:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564148548;
+        s=default; t=1564148621;
         bh=Qpjzsm+fRNhDRErGNwLJjXGpuo84iqjZYGVsf3hADoE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ujlfoQ79QNmwGC46Brvfun77LHxsOQWgImRJ/gfdZbYmsWEhbSfHI4enssynwzO/m
-         SyE+RIQeLCy85yu5N5njYRDFLA3XirOv3AKCBozvZXygPLl9TuTMFbtv/Aad9BIyg8
-         /aIdJd04x3ssFDtuxAzU7oXJPyXnIeXX4wKw2K/0=
+        b=ki1pHr9riLNvi1yj+NZXsfPjfxuUL1a9rluoURDoMw6sCWj4OqCPl4802HEeXGNKV
+         pAgGxeDxUc1gxoO/HLvDfcC8X2MAIHqAW3NzdXbrMXUKsRAAMacMjbr47hyeXNVdQb
+         v3t5L7ejBLQEidA1IsbmwInDr3DatVvMsanG6xVU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Petr Cvek <petrcvekcz@gmail.com>,
@@ -30,12 +30,12 @@ Cc:     Petr Cvek <petrcvekcz@gmail.com>,
         john@phrozen.org, linux-mips@vger.kernel.org,
         openwrt-devel@lists.openwrt.org, pakahmar@hotmail.com,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.19 10/47] MIPS: lantiq: Fix bitfield masking
-Date:   Fri, 26 Jul 2019 09:41:33 -0400
-Message-Id: <20190726134210.12156-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 07/37] MIPS: lantiq: Fix bitfield masking
+Date:   Fri, 26 Jul 2019 09:43:02 -0400
+Message-Id: <20190726134332.12626-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190726134210.12156-1-sashal@kernel.org>
-References: <20190726134210.12156-1-sashal@kernel.org>
+In-Reply-To: <20190726134332.12626-1-sashal@kernel.org>
+References: <20190726134332.12626-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
