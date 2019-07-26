@@ -2,128 +2,173 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 522B175BF0
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2019 02:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15BB475C02
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2019 02:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727061AbfGZAKK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Jul 2019 20:10:10 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:37318 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726942AbfGZAKK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Jul 2019 20:10:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1564099806; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gFaFrhEeyihyNbT3NtUBxEN4a+tGXeK6Vj+6otZDbtA=;
-        b=EjeAwp0Z/Iz3JRj9xNi/OYWvP2qoXOXLR2kbAZQ7FDIMPuZOSiF0qc+SgEr+9qWUDz7njx
-        9fSJSmwLBKrpzZNSM2vLDDU9dSKZqz4/qtlXGm6qm9sWN7tSWyprI05k88rU07mM/u+DSu
-        bZeGz0/dkH6Ou3QGiuwrGDsK3pWy2rI=
-Date:   Thu, 25 Jul 2019 20:09:41 -0400
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 02/11] MIPS: qi_lb60: Migrate to devicetree
-To:     Paul Burton <paul.burton@mips.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, od@zcrc.me,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        Artur Rojek <contact@artur-rojek.eu>
-Message-Id: <1564099781.1699.0@crapouillou.net>
-In-Reply-To: <20190725234735.h7qmtt26qpkjw3n6@pburton-laptop>
-References: <20190725220215.460-1-paul@crapouillou.net>
-        <20190725220215.460-3-paul@crapouillou.net>
-        <20190725234735.h7qmtt26qpkjw3n6@pburton-laptop>
+        id S1726979AbfGZAUy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Jul 2019 20:20:54 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:46189 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726915AbfGZAUx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 25 Jul 2019 20:20:53 -0400
+Received: by mail-io1-f66.google.com with SMTP id i10so101072137iol.13
+        for <linux-mips@vger.kernel.org>; Thu, 25 Jul 2019 17:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=wVoyay7NO1Taf0v9T8BEjNVHV5CQV4op2+u8nOtjKhg=;
+        b=jToOEjgrbrybRXQICjzzQLCzC6a+oGnvytylhhSA9uxtg6WnH51O9ifLdSV6bfGMfa
+         q8niV4muBTTLsVTSbcEIiUpVX+Amr5OSrKkakw3SIsgJ8wNsZyQBOkBDr2dbL5g7FM01
+         G/XkE2FByaeoL8V88ESwf2TAB2YZjUSsL0fYgL45Wj4T/V0LKEidele78SCI55EuL/J/
+         sYl0p5itnLMSTOYg3+6E06sl9nRstqfUkqQp7Rox6hXNDgUyeGkR886lLScN+95mjm/T
+         aOi3Bf5eztl/MGmlss1eZVgOtDl8Lkje5E83dmFr4AAMVpQxweZF/aXyNxTquIa66KkV
+         3ymw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=wVoyay7NO1Taf0v9T8BEjNVHV5CQV4op2+u8nOtjKhg=;
+        b=HGbLQFH/jbDAIN9TPPqq3BjkzBqQdOuNr3ceYNrR7HWYR4x84DqDw8S3kl/cz5iQ7L
+         0tqBUrPaMqoa7PEfgEaKPui7KGQYsDwCLwa4Z6EECr0GZ6D+mQf0l8HbiMYLMpUkciTp
+         UO8jiQrrmBxJV4OaCoUmeJ4iZAbmAAJTxslbyNDJigJA3N5V4mmJ/XnxwZurNjnh5RLy
+         w2QOuhLXT+BmO+ffX+4BFkjg2ZwmRU42Lg7Djz93OZvM+FKUK7CcoZ37cQVNRwFg5Z9i
+         jXW5txnKPXQT6tv4rLRIPDGgCsf/mj9S2Ohxyg6tNAomFHb75WiUJJ8qeCrGrj8LVvfT
+         SR9g==
+X-Gm-Message-State: APjAAAX93Dr+zPGCPtDU/Lc6BIJ8l0kGISZChNHpziCuc3nxUdUK5mhk
+        yfgMzA0Zjuhob8w62JSyRhDrCQ==
+X-Google-Smtp-Source: APXvYqwip5nwThbcgJqNtgafvdfTP5pQ2Oo0kmQagV/oOYV3+6lQkCabaIgCA6ODx3NeYEb64i78TA==
+X-Received: by 2002:a6b:f80e:: with SMTP id o14mr15217081ioh.1.1564100452408;
+        Thu, 25 Jul 2019 17:20:52 -0700 (PDT)
+Received: from localhost (67-0-24-96.albq.qwest.net. [67.0.24.96])
+        by smtp.gmail.com with ESMTPSA id 20sm54026778iog.62.2019.07.25.17.20.50
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 25 Jul 2019 17:20:51 -0700 (PDT)
+Date:   Thu, 25 Jul 2019 17:20:50 -0700 (PDT)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+X-X-Sender: paulw@viisi.sifive.com
+To:     Alexandre Ghiti <alex@ghiti.fr>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Cashman <dcashman@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Paul Burton <paul.burton@mips.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        James Hogan <jhogan@kernel.org>, linux-fsdevel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: [PATCH REBASE v4 14/14] riscv: Make mmap allocation top-down by
+ default
+In-Reply-To: <20190724055850.6232-15-alex@ghiti.fr>
+Message-ID: <alpine.DEB.2.21.9999.1907251655310.32766@viisi.sifive.com>
+References: <20190724055850.6232-1-alex@ghiti.fr> <20190724055850.6232-15-alex@ghiti.fr>
+User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Alexandre,
 
+I have a few questions about this patch.  Sorry to be dense here ...
 
-Le jeu. 25 juil. 2019 =E0 19:47, Paul Burton <paul.burton@mips.com> a=20
-=E9crit :
-> Hi Paul,
->=20
-> On Thu, Jul 25, 2019 at 06:02:06PM -0400, Paul Cercueil wrote:
->>  Move all the platform data to devicetree.
->=20
-> Nice! :)
->=20
->>  The only bit dropped is the PWM beeper, which requires the PWM=20
->> driver
->>  to be updated. I figured it's okay to remove it here since it's=20
->> really
->>  a non-critical device, and it'll be re-introduced soon enough.
->=20
-> OK, I can see that being a price worth paying. Though it's possible to
-> include the binding at least for that in this series I'd be even
-> happier. Actually I see we already have
->=20
->   Documentation/devicetree/bindings/pwm/ingenic,jz47xx-pwm.txt
->=20
-> in mainline - what needs to change with it?
+On Wed, 24 Jul 2019, Alexandre Ghiti wrote:
 
-The PWM driver will be updated to use the TCU clocks and the regmap=20
-provided
-by the TCU driver. The PWM node will be a sub-node of the TCU one.
+> In order to avoid wasting user address space by using bottom-up mmap
+> allocation scheme, prefer top-down scheme when possible.
+> 
+> Before:
+> root@qemuriscv64:~# cat /proc/self/maps
+> 00010000-00016000 r-xp 00000000 fe:00 6389       /bin/cat.coreutils
+> 00016000-00017000 r--p 00005000 fe:00 6389       /bin/cat.coreutils
+> 00017000-00018000 rw-p 00006000 fe:00 6389       /bin/cat.coreutils
+> 00018000-00039000 rw-p 00000000 00:00 0          [heap]
+> 1555556000-155556d000 r-xp 00000000 fe:00 7193   /lib/ld-2.28.so
+> 155556d000-155556e000 r--p 00016000 fe:00 7193   /lib/ld-2.28.so
+> 155556e000-155556f000 rw-p 00017000 fe:00 7193   /lib/ld-2.28.so
+> 155556f000-1555570000 rw-p 00000000 00:00 0
+> 1555570000-1555572000 r-xp 00000000 00:00 0      [vdso]
+> 1555574000-1555576000 rw-p 00000000 00:00 0
+> 1555576000-1555674000 r-xp 00000000 fe:00 7187   /lib/libc-2.28.so
+> 1555674000-1555678000 r--p 000fd000 fe:00 7187   /lib/libc-2.28.so
+> 1555678000-155567a000 rw-p 00101000 fe:00 7187   /lib/libc-2.28.so
+> 155567a000-15556a0000 rw-p 00000000 00:00 0
+> 3fffb90000-3fffbb1000 rw-p 00000000 00:00 0      [stack]
+> 
+> After:
+> root@qemuriscv64:~# cat /proc/self/maps
+> 00010000-00016000 r-xp 00000000 fe:00 6389       /bin/cat.coreutils
+> 00016000-00017000 r--p 00005000 fe:00 6389       /bin/cat.coreutils
+> 00017000-00018000 rw-p 00006000 fe:00 6389       /bin/cat.coreutils
+> 2de81000-2dea2000 rw-p 00000000 00:00 0          [heap]
+> 3ff7eb6000-3ff7ed8000 rw-p 00000000 00:00 0
+> 3ff7ed8000-3ff7fd6000 r-xp 00000000 fe:00 7187   /lib/libc-2.28.so
+> 3ff7fd6000-3ff7fda000 r--p 000fd000 fe:00 7187   /lib/libc-2.28.so
+> 3ff7fda000-3ff7fdc000 rw-p 00101000 fe:00 7187   /lib/libc-2.28.so
+> 3ff7fdc000-3ff7fe2000 rw-p 00000000 00:00 0
+> 3ff7fe4000-3ff7fe6000 r-xp 00000000 00:00 0      [vdso]
+> 3ff7fe6000-3ff7ffd000 r-xp 00000000 fe:00 7193   /lib/ld-2.28.so
+> 3ff7ffd000-3ff7ffe000 r--p 00016000 fe:00 7193   /lib/ld-2.28.so
+> 3ff7ffe000-3ff7fff000 rw-p 00017000 fe:00 7193   /lib/ld-2.28.so
+> 3ff7fff000-3ff8000000 rw-p 00000000 00:00 0
+> 3fff888000-3fff8a9000 rw-p 00000000 00:00 0      [stack]
+> 
+> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> ---
+>  arch/riscv/Kconfig | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 59a4727ecd6c..6a63973873fd 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -54,6 +54,17 @@ config RISCV
+>  	select EDAC_SUPPORT
+>  	select ARCH_HAS_GIGANTIC_PAGE
+>  	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
+> +	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+> +	select HAVE_ARCH_MMAP_RND_BITS
+> +
+> +config ARCH_MMAP_RND_BITS_MIN
+> +	default 18
 
-Additionally, there is this[1] ongoing discussion about PWM which makes
-me uneasy about how to write the binding. So I'd rather not rush it,
-because once the devicetree is written, it's ABI.
+Could you help me understand the rationale behind this constant?
 
-[1]: https://lkml.org/lkml/2019/5/22/607
+> +
+> +# max bits determined by the following formula:
+> +#  VA_BITS - PAGE_SHIFT - 3
 
+I realize that these lines are probably copied from arch/arm64/Kconfig.  
+But the rationale behind the "- 3" is not immediately obvious.  This 
+apparently originates from commit 8f0d3aa9de57 ("arm64: mm: support 
+ARCH_MMAP_RND_BITS"). Can you provide any additional context here?
 
->>  +	spi {
->>  +		compatible =3D "spi-gpio";
->>  +		#address-cells =3D <1>;
->>  +		#size-cells =3D <0>;
->>  +
->>  +		sck-gpios =3D <&gpc 23 GPIO_ACTIVE_HIGH>;
->>  +		mosi-gpios =3D <&gpc 22 GPIO_ACTIVE_HIGH>;
->>  +		cs-gpios =3D <&gpc 21 GPIO_ACTIVE_LOW>;
->>  +		num-chipselects =3D <1>;
->>  +
->>  +		spi@0 {
->>  +			compatible =3D "ili8960";
->=20
-> Should this be "ilitek,ili8960"?
->=20
-> Is there a binding & driver for this submitted somewhere? If not then=20
-> do
-> we need this at all? It doesn't look like the existing platform data
-> would actually lead to a driver being loaded so I'm wondering if we=20
-> can
-> just drop this until such a driver (or at least a documented DT=20
-> binding)
-> exists.
+> +config ARCH_MMAP_RND_BITS_MAX
+> +	default 33 if 64BIT # SV48 based
 
-I can drop it. There is no driver for it, and I'm not even sure the LB60
-has a ILI8960 in the first place.
+The rationale here is clear for Sv48, per the above formula:
 
+   (48 - 12 - 3) = 33
 
-> Thanks,
->     Paul
+> +	default 18
 
-=
+However, here it is less clear to me.  For Sv39, shouldn't this be
 
+   (39 - 12 - 3) = 24
+
+?  And what about Sv32?
+ 
+
+- Paul
