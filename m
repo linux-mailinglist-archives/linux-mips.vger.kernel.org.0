@@ -2,83 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11BD6766D2
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2019 15:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B52476719
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2019 15:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbfGZNFp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 26 Jul 2019 09:05:45 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:54662 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726086AbfGZNFp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 26 Jul 2019 09:05:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=v25fSyTOpn+HLVJ1/RYUYjo/p2HKkKXuypllJV6JuFU=; b=FGTl2rF5Ekw99U5eWA0qO4ViY
-        ezxgPoNckrfd02rKeR5DfhI5n58vJTcEz7aQ3diHZkRmGndI5Rrlekc33Ay4TibbLOwpG1XKCSloG
-        82pJRxtCcnQvPslNG7xO/8DHeER9qlTWSUhlaF/iNE0YUnkdxnIGvBgg9Brpdp4iVK9JkJjbm0TvY
-        TcCvfrG3NaxcqzRwVsiX1+l5U3fjf1yQEEnGnZRs2iZazrP26MkKBj4gTVChmnzy3Hz3krFh/Kx2g
-        S6dj3Qi5GKN2Rfpl0jR+wq9OXeL8jT6dpW75i/Mr7cpWYS51GnMWuFS7A6xMmFALsHG7f3ly85U0p
-        sDY3Ty9HA==;
-Received: from [179.95.31.157] (helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hqzun-0004Yn-F9; Fri, 26 Jul 2019 13:05:42 +0000
-Date:   Fri, 26 Jul 2019 10:05:33 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pci@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-parisc@vger.kernel.org,
-        openrisc@lists.librecores.org, devel@driverdev.osuosl.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        devel@lists.orangefs.org, dmaengine@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org,
-        linux-wireless@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH v2 00/26] ReST conversion of text files without .txt
- extension
-Message-ID: <20190726100521.5d379300@coco.lan>
-In-Reply-To: <cover.1564145354.git.mchehab+samsung@kernel.org>
-References: <cover.1564145354.git.mchehab+samsung@kernel.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1726920AbfGZNQd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 26 Jul 2019 09:16:33 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:40018 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726364AbfGZNQd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 26 Jul 2019 09:16:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=zlBlbbS7pVGRZymSGxMNLXgZrluPVS4d6ho9KEo9Pe8=; b=peGM8EL7a0nP0aP/yzSd4+E5sp
+        FK9GZHL9uLqS0vxfePvism+CuZKTKocVBcNjB0ekZRj/G6FeguYBa39rg7rRZIHGexiWGpeP9UeX+
+        rgGEsjmSoJxk8KSmV3x/M/q6fp3YPZk4fLIefVARbHzSBkS12c6To7D8y+K9aswxBWgA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
+        (envelope-from <andrew@lunn.ch>)
+        id 1hr04q-0004s6-Hl; Fri, 26 Jul 2019 15:16:04 +0200
+Date:   Fri, 26 Jul 2019 15:16:04 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>
+Cc:     netdev@vger.kernel.org, frank-w@public-files.de,
+        sean.wang@mediatek.com, f.fainelli@gmail.com,
+        linux@armlinux.org.uk, davem@davemloft.net, matthias.bgg@gmail.com,
+        vivien.didelot@gmail.com, john@phrozen.org,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next 3/3] dt-bindings: net: ethernet: Update mt7622
+ docs and dts to reflect the new phylink API
+Message-ID: <20190726131604.GA18223@lunn.ch>
+References: <20190724192411.20639-1-opensource@vdorst.com>
+ <20190725193123.GA32542@lunn.ch>
+ <20190726071956.Horde.s4rfuzovwXB-d3LnV0PLRc8@www.vdorst.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190726071956.Horde.s4rfuzovwXB-d3LnV0PLRc8@www.vdorst.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Em Fri, 26 Jul 2019 09:51:10 -0300
-Mauro Carvalho Chehab <mchehab+samsung@kernel.org> escreveu:
+On Fri, Jul 26, 2019 at 07:19:56AM +0000, René van Dorst wrote:
+> Quoting Andrew Lunn <andrew@lunn.ch>:
+> 
+> >>+	gmac0: mac@0 {
+> >>+		compatible = "mediatek,eth-mac";
+> >>+		reg = <0>;
+> >>+		phy-mode = "sgmii";
+> >>+
+> >>+		fixed-link {
+> >>+			speed = <2500>;
+> >>+			full-duplex;
+> >>+			pause;
+> >>+		};
+> >>+	};
+> >
+> >Hi René
+> >
+> 
+> Hi Andrew,
+> 
+> >SGMII and fixed-link is rather odd. Why do you need this combination?
+> 
+> BananaPi R64 has a RTL8367S 5+2-port switch, switch interfaces with the SOC
+> by a
+> (H)SGMII and/or RGMII interface. SGMII is mainly used for the LAN ports and
+> RGMII for the WAN port.
+> 
+> I mimic the SDK software which puts SGMII interface in 2.5GBit fixed-link
+> mode.
+> The RTL8367S switch code also put switch mac in forge 2.5GBit mode.
+> 
+> So this is the reason why I put a fixed-link mode here.
 
-> This series converts the text files under Documentation with doesn't end
-> neither .txt or .rst and are not part of ABI or features.
-> 
-> This series is at:
-> 	https://git.linuxtv.org/mchehab/experimental.git/log/?h=rst_for_5_4_v3
-> 
-> And it is based on yesterday's upstream tree.
-> 
-> After this series, we have ~320 files left to be converted to ReST.
-> 
-> v2:
->   - Added 3 files submitted for v5.3 that weren't merged yet;
->   - markdown patch broken into two, per Rob's request;
->   - rebased on the top of upstream master branch
-> 
-> Mauro Carvalho Chehab (26):
+Are you sure it is using SGMII and not 2500BaseX? Can you get access
+to the signalling word? SGMII is supposed to indicate to the MAC what
+speed it is using, via inband signalling. So there should not be any
+need for a fixed-link. 2500BaseX however does not have such
+signalling, so there would need to be a fixed link.
 
->   docs: ABI: remove extension from sysfs-class-mic.txt
+Maybe we should really consider what phy-mode = "sgmii"; means. Should
+this include the overclocked 2.5G speed, or should we add a 2500sgmii
+link mode?
 
-    ^ In time: this one was already merged.
-
-Thanks,
-Mauro
+     Andrew
