@@ -2,113 +2,202 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D7C76D67
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2019 17:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0268576EF2
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2019 18:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389654AbfGZPd3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 26 Jul 2019 11:33:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48876 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389652AbfGZPd3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 26 Jul 2019 11:33:29 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 925D6205F4;
-        Fri, 26 Jul 2019 15:33:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564155208;
-        bh=69rKnTvgyN+qeWnLwOG5ZuEexG9hRf9rbl27ZPHs/BA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mb4XBR9J52ePmw2aUNJXlPdJhsC6LDOjb1l2cfgX1eTtg7P3WFQoprkcR3+dwJt8r
-         qe5PeX6q8TUDji7Q8yntSZjlwQZG5Vt8yh411fyPC6oVTP4/t2+MSlx7p+BRLgatnY
-         B7ZqaZzfZjR/eaPbEEAGGYuI/47DtkCJmO6EdwKg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>, od@zcrc.me,
-        linux-mips@vger.kernel.org
-Subject: [PATCH 4.19 39/50] MIPS: lb60: Fix pin mappings
-Date:   Fri, 26 Jul 2019 17:25:14 +0200
-Message-Id: <20190726152304.692128452@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190726152300.760439618@linuxfoundation.org>
-References: <20190726152300.760439618@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1727903AbfGZQXc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 26 Jul 2019 12:23:32 -0400
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:53432 "EHLO
+        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727171AbfGZQXc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 26 Jul 2019 12:23:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=W2ljXYKvw+N3+JyqB9djvy0nICZnexsB0k2AWLfEhxk=; b=i8uUQer4IUEBCEI/fTZJTguWH
+        rTo+NRo2hdVicx26QBI4L28j//yvWJIiqo667kCy6slRLWXFNF8wNaOEBRqMXyN1DpiwPXkBtFezZ
+        0JvRsrBjv5eKmED+5jPycoPREMQeBFWBoUNme/KmeZoc2ibefV8mMwwxzYcD9tUkNnpRlDUuWCcrz
+        JjeUQBWIFIvc1mYqjQkWEUCCtM6fuTlwnfcks9MBZLXTGOajVHcb3javJL2943QqGNcmI773Vod/o
+        JCliJ0hoq1gbHq0TV3b22926hMUQt3XEWspgP6bVmO8Wgl+yBThTRexueVSEcbBicyp6dbQaokDpp
+        +A6k6ZQRQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48972)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1hr30A-0007Ec-GB; Fri, 26 Jul 2019 17:23:26 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1hr306-0006vE-2k; Fri, 26 Jul 2019 17:23:22 +0100
+Date:   Fri, 26 Jul 2019 17:23:22 +0100
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+        frank-w@public-files.de, sean.wang@mediatek.com,
+        f.fainelli@gmail.com, davem@davemloft.net, matthias.bgg@gmail.com,
+        vivien.didelot@gmail.com, john@phrozen.org,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next 3/3] dt-bindings: net: ethernet: Update mt7622
+ docs and dts to reflect the new phylink API
+Message-ID: <20190726162321.GQ1330@shell.armlinux.org.uk>
+References: <20190724192411.20639-1-opensource@vdorst.com>
+ <20190725193123.GA32542@lunn.ch>
+ <20190726071956.Horde.s4rfuzovwXB-d3LnV0PLRc8@www.vdorst.com>
+ <20190726131604.GA18223@lunn.ch>
+ <20190726151622.Horde.1AA717IbQrC7_YJcSBe4M-0@www.vdorst.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190726151622.Horde.1AA717IbQrC7_YJcSBe4M-0@www.vdorst.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Cercueil <paul@crapouillou.net>
+On Fri, Jul 26, 2019 at 03:16:22PM +0000, René van Dorst wrote:
+> Quoting Andrew Lunn <andrew@lunn.ch>:
+> > On Fri, Jul 26, 2019 at 07:19:56AM +0000, René van Dorst wrote:
+> > > Quoting Andrew Lunn <andrew@lunn.ch>:
+> > > 
+> > > >>+	gmac0: mac@0 {
+> > > >>+		compatible = "mediatek,eth-mac";
+> > > >>+		reg = <0>;
+> > > >>+		phy-mode = "sgmii";
+> > > >>+
+> > > >>+		fixed-link {
+> > > >>+			speed = <2500>;
+> > > >>+			full-duplex;
+> > > >>+			pause;
+> > > >>+		};
+> > > >>+	};
+> > > >
+> > > >Hi René
+> > > >
+> > > 
+> > > Hi Andrew,
+> > > 
+> > > >SGMII and fixed-link is rather odd. Why do you need this combination?
+> > > 
+> > > BananaPi R64 has a RTL8367S 5+2-port switch, switch interfaces with the SOC
+> > > by a
+> > > (H)SGMII and/or RGMII interface. SGMII is mainly used for the LAN ports and
+> > > RGMII for the WAN port.
+> > > 
+> > > I mimic the SDK software which puts SGMII interface in 2.5GBit fixed-link
+> > > mode.
+> > > The RTL8367S switch code also put switch mac in forge 2.5GBit mode.
+> > > 
+> > > So this is the reason why I put a fixed-link mode here.
+> > 
+> > Are you sure it is using SGMII and not 2500BaseX? Can you get access
+> > to the signalling word? SGMII is supposed to indicate to the MAC what
+> > speed it is using, via inband signalling. So there should not be any
+> > need for a fixed-link. 2500BaseX however does not have such
+> > signalling, so there would need to be a fixed link.
+> 
+> I am not sure.
+> 
+> I just converted the current mainline code to support phylink and mimic the
+> DTS
+> of the SDK. But the SDK seems to be incorrect.
+> 
+> Realtek[0] calls these modes:
+> * SGMII (1.25GHz) Interface
+> * High SGMII (3.125GHz) Interface
+> Also the datasheet that I have doesn't talk about base-x modes.
 
-commit 1323c3b72a987de57141cabc44bf9cd83656bc70 upstream.
+So this is RTL8367S-CG, which is a switch.  It's entirely possible that
+it really does support what it says it does.
 
-The pin mappings introduced in commit 636f8ba67fb6
-("MIPS: JZ4740: Qi LB60: Add pinctrl configuration for several drivers")
-are completely wrong. The pinctrl driver name is incorrect, and the
-function and group fields are swapped.
+> But MT7622 Reference manual[1] page 1960 says:
+>  The core leverages the 1000Base-X PCS and Auto-Negotiation from IEEE 802.3
+>  specification (clause 36/37). This IP can support up to 3.125G baud for
+> 2.5Gbps
+>  (proprietary 2500Base-X) data rate of MAC by overclocking.
+> 
+> So I think it phy-mode should be 2500Base-X in this case.
 
-Fixes: 636f8ba67fb6 ("MIPS: JZ4740: Qi LB60: Add pinctrl configuration for several drivers")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: James Hogan <jhogan@kernel.org>
-Cc: od@zcrc.me
-Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Right, so this suggests that it only supports 1000BASE-X and 2500BASE-X
+via the normal method of "over-clocking" 1000BASE-X.
 
----
- arch/mips/jz4740/board-qi_lb60.c |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+1000BASE-X and SGMII are compatible _if_ and only if you ignore the
+contents of the 16-bit control word which is used for auto-negotiation
+in the case of 1000BASE-X, or for communicating the negotiation results
+in the case of SGMII.  Apart from that 16-bit control word, and the
+semantics of it, at the data link level the two are the same.
 
---- a/arch/mips/jz4740/board-qi_lb60.c
-+++ b/arch/mips/jz4740/board-qi_lb60.c
-@@ -471,27 +471,27 @@ static unsigned long pin_cfg_bias_disabl
- static struct pinctrl_map pin_map[] __initdata = {
- 	/* NAND pin configuration */
- 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-nand",
--			"10010000.jz4740-pinctrl", "nand", "nand-cs1"),
-+			"10010000.pin-controller", "nand-cs1", "nand"),
- 
- 	/* fbdev pin configuration */
- 	PIN_MAP_MUX_GROUP("jz4740-fb", PINCTRL_STATE_DEFAULT,
--			"10010000.jz4740-pinctrl", "lcd", "lcd-8bit"),
-+			"10010000.pin-controller", "lcd-8bit", "lcd"),
- 	PIN_MAP_MUX_GROUP("jz4740-fb", PINCTRL_STATE_SLEEP,
--			"10010000.jz4740-pinctrl", "lcd", "lcd-no-pins"),
-+			"10010000.pin-controller", "lcd-no-pins", "lcd"),
- 
- 	/* MMC pin configuration */
- 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-mmc.0",
--			"10010000.jz4740-pinctrl", "mmc", "mmc-1bit"),
-+			"10010000.pin-controller", "mmc-1bit", "mmc"),
- 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-mmc.0",
--			"10010000.jz4740-pinctrl", "mmc", "mmc-4bit"),
-+			"10010000.pin-controller", "mmc-4bit", "mmc"),
- 	PIN_MAP_CONFIGS_PIN_DEFAULT("jz4740-mmc.0",
--			"10010000.jz4740-pinctrl", "PD0", pin_cfg_bias_disable),
-+			"10010000.pin-controller", "PD0", pin_cfg_bias_disable),
- 	PIN_MAP_CONFIGS_PIN_DEFAULT("jz4740-mmc.0",
--			"10010000.jz4740-pinctrl", "PD2", pin_cfg_bias_disable),
-+			"10010000.pin-controller", "PD2", pin_cfg_bias_disable),
- 
- 	/* PWM pin configuration */
- 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-pwm",
--			"10010000.jz4740-pinctrl", "pwm4", "pwm4"),
-+			"10010000.pin-controller", "pwm4", "pwm4"),
- };
- 
- 
+> SGMII part is a bit hard for me to support, I don't have the hardware,
+> MediaTek datasheets are mostly incomplete and also I am a not familiar with
+> it.
+> 
+> But I think I know what I have to change.
+> Based on your explanation above.
+> 
+> I think this more correct implementation:
+> 
+> * 1000base-x and 2500base-x always force the link.
 
+I think the above is why you have to force the link: a link consisting
+of one end configured for SGMII and the other end configured for
+1000BASE-X is not a good idea at the best of times, but if you ignore
+the 16-bit control word and force it, it will work.
 
+What this means is that you _should_ be forcing it in DT to be a
+fixed link, and not trying to do auto-neg.
+
+> * SGMII is always inband but I need in phylink_mac_link_status() to readout
+>   "PCS_SPEED_ABILITY Clause 45 3.5" register to see the inband status?
+>   Or is it just the GMAC PSMR register? For me it is a bit confusing.
+>   SGMII block has a register to set the link speed and etc. But tests on the
+>   bananapi R64 board shows that I also need to set the GMAC register else it
+>   didn't work. Also it is not easy to debug if you don't have the board.
+
+phylink_mac_link_status() is expected to read the results of SGMII
+or 1000BASE-X negotiation at the MAC side of the link.  To see why,
+consider a fiber link:
+
+MAC-PCS --- SFP ----- fiber ----- SFP --- MAC-PCS
+
+The fiber is passive, the SFP merely converts between light and
+electrical signals - there's nothing apart from the MAC's own PCS
+that can report what the negotiation state of the link is.  So,
+you need to read from whatever bit of hardware on the MAC side
+which will report that - basically, the results of the 1000BASE-X
+negotiation.
+
+phylink currently expects results from the PCS to be automatically
+propagated to the MAC through hardware, since that's what happens
+on Marvell setups - however, that can be changed if there are
+setups which need manual propagation.
+
+If we do need to do that, I'd suggest we rename
+phylink_mac_link_status() to be phylink_macpcs_link_status() to
+clarify which bit of hardware it's supposed to be reading from.
+
+> 
+> > Maybe we should really consider what phy-mode = "sgmii"; means. Should
+> > this include the overclocked 2.5G speed, or should we add a 2500sgmii
+> > link mode?
+> 
+> No.
+
+I'm really not in favour of "sgmii" being used to also describe the
+over-clocked SGMII variants.  It's a different protocol - many data
+sheets (e.g. for PHYs that support it) explicitly state that the
+speed bits in the SGMII 16-bit control word are not valid, and
+over-clocked vs normal SGMII can not be auto-negotiated.  Both ends
+must be running at the same speed in order to successfully transfer
+even the 16-bit control word that dictates the link speed.
+
+So, SGMII at 3.125Gbps is really a different interface mode from
+SGMII at 1.25Gbps.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
+According to speedtest.net: 11.9Mbps down 500kbps up
