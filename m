@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B70776CD2
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2019 17:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCADC76D21
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Jul 2019 17:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728583AbfGZP1o (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 26 Jul 2019 11:27:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42026 "EHLO mail.kernel.org"
+        id S2389153AbfGZPax (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 26 Jul 2019 11:30:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45790 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728578AbfGZP1n (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 26 Jul 2019 11:27:43 -0400
+        id S2388599AbfGZPaw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 26 Jul 2019 11:30:52 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6E010205F4;
-        Fri, 26 Jul 2019 15:27:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CF3DB205F4;
+        Fri, 26 Jul 2019 15:30:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564154862;
-        bh=TOvUZ/V6H7pXioIIJXW/vE91et+Coe2BrdMyH+z6fVE=;
+        s=default; t=1564155051;
+        bh=SDwjP90aPitR34LDnbaqCl3IW4kZgC2Ilb45z9YwOQM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OOqZRr6FKFfPZnHWnGcxjQ9OGFvhJrZB7BhVd+qsSy7DuIM1pt9uZNErHbpczraEA
-         lBAVOZMReozDA6Fs9WFfMgTM/krh4DX4bf++iJsDqLMa9+mS66bC86AYvC2arb1tyV
-         zaC4K9AGB/UII6ttNKCfHd1f58ye4wfKAEPJ7L8k=
+        b=Iwe9D7XHfXEn8bazMaQidUU9PJwXZsHZJLJ8rnh1ZOXeqcNtyQ6aFbuZGoiAyVr2f
+         MfE1wOI5xPVk3lnI2N7NI36dy5dtowqtgqy9Sx7tJixxrXASLQ2xJmg0kXpAwEmB/N
+         q3lnIO3v1TX6phbWkIYoLeonnc9sQ6uVD1JWGjkU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>, od@zcrc.me,
         linux-mips@vger.kernel.org
-Subject: [PATCH 5.2 52/66] MIPS: lb60: Fix pin mappings
-Date:   Fri, 26 Jul 2019 17:24:51 +0200
-Message-Id: <20190726152307.584006536@linuxfoundation.org>
+Subject: [PATCH 5.1 47/62] MIPS: lb60: Fix pin mappings
+Date:   Fri, 26 Jul 2019 17:24:59 +0200
+Message-Id: <20190726152306.985230751@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190726152301.936055394@linuxfoundation.org>
-References: <20190726152301.936055394@linuxfoundation.org>
+In-Reply-To: <20190726152301.720139286@linuxfoundation.org>
+References: <20190726152301.720139286@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -74,7 +74,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/arch/mips/jz4740/board-qi_lb60.c
 +++ b/arch/mips/jz4740/board-qi_lb60.c
-@@ -466,27 +466,27 @@ static unsigned long pin_cfg_bias_disabl
+@@ -469,27 +469,27 @@ static unsigned long pin_cfg_bias_disabl
  static struct pinctrl_map pin_map[] __initdata = {
  	/* NAND pin configuration */
  	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-nand",
