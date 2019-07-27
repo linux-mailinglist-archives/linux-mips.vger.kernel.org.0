@@ -2,132 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DEF7763B
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Jul 2019 05:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF7B777AD
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Jul 2019 10:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727915AbfG0DUS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 26 Jul 2019 23:20:18 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:46860 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726184AbfG0DUS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 26 Jul 2019 23:20:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1564197613; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KYjAC67ZYcDwtcnIBpp0BzLOMVIg3F/G58/tAsJimxs=;
-        b=ORUDr6CuY7vpgmdik7Ldm16UXWRFBr6Ee4ABQbj6tTfLvxBPwmhKA6bLpfcQxX+exzomjP
-        TDrZy1fzdFeQCmOXR6cIQOjxRV8Q06DX/kYE2jocswD/4JlyOxJP5kSuaV94FjAfM/JVnu
-        CJlyiJfb7/kikgxqr4FsYUPCYzzFns0=
-Date:   Fri, 26 Jul 2019 23:19:45 -0400
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 00/11] JZ4740 SoC cleanup
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-pm@vger.kernel.org,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, od@zcrc.me,
-        linux-mtd@lists.infradead.org, dmaengine@vger.kernel.org
-Message-Id: <1564197585.6472.0@crapouillou.net>
-In-Reply-To: <20190726184649.GC14981@ravnborg.org>
-References: <20190725220215.460-1-paul@crapouillou.net>
-        <20190726184649.GC14981@ravnborg.org>
+        id S1728254AbfG0Igc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 27 Jul 2019 04:36:32 -0400
+Received: from smtp.gentoo.org ([140.211.166.183]:34782 "EHLO smtp.gentoo.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727624AbfG0Igc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 27 Jul 2019 04:36:32 -0400
+Received: from [192.168.1.13] (c-76-114-240-162.hsd1.md.comcast.net [76.114.240.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: kumba)
+        by smtp.gentoo.org (Postfix) with ESMTPSA id 52164348CE4;
+        Sat, 27 Jul 2019 08:36:31 +0000 (UTC)
+Subject: Re: [PATCH 4/4] MIPS: Remove unused R8000 CPU support
+To:     Paul Burton <paul.burton@mips.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Cc:     Paul Burton <pburton@wavecomp.com>
+References: <20190722215705.20109-1-paul.burton@mips.com>
+ <20190722215705.20109-4-paul.burton@mips.com>
+From:   Joshua Kinard <kumba@gentoo.org>
+Openpgp: preference=signencrypt
+Message-ID: <56180022-f5dc-d35d-8411-87f96412883d@gentoo.org>
+Date:   Sat, 27 Jul 2019 04:36:28 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190722215705.20109-4-paul.burton@mips.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 7/22/2019 18:00, Paul Burton wrote:
+> Our R8000 CPU support can only be included if a system selects
+> CONFIG_SYS_HAS_CPU_R8000. No system does, making all R8000-related CPU
+> support dead code. Remove it.
+> 
+> Signed-off-by: Paul Burton <paul.burton@mips.com>
 
+[snip]
 
-Le ven. 26 juil. 2019 =E0 14:46, Sam Ravnborg <sam@ravnborg.org> a=20
-=E9crit :
-> Hi Paul.
->=20
-> On Thu, Jul 25, 2019 at 06:02:04PM -0400, Paul Cercueil wrote:
->>  Hi,
->>=20
->>  This patchset converts the Qi LB60 MIPS board to devicetree and=20
->> makes it
->>  use all the shiny new drivers that have been developed or updated
->>  recently.
->>=20
->>  All the crappy old drivers and custom code can be dropped since they
->>  have been replaced by better alternatives.
->=20
-> The overall diffstat is missing.
-> Just for curiosity it would be nice to see what was dropped with this
-> patch.
->=20
-> 	Sam
+I actually have one of these CPUs, and the SGI IP26 system to go with it.
+Fascinating CPU design.  More like a multi-chip set rather than just a
+single CPU die.  That said, no tears are shed over this code getting
+excised, as it's half-complete, because only the R8K TLB code was written.
+The cache code (c-r8k.c?) was never completed.  I don't even know if the R8K
+TLB code was ever tested on real hardware.  A scanned copy of the CPU manual
+is on the linux-mips FTP server somewhere, and I think I have a copy
+somewhere as well, if anyone ever gets interested again.
 
-Diffstat:
+-- 
+Joshua Kinard
+Gentoo/MIPS
+kumba@gentoo.org
+rsa6144/5C63F4E3F5C6C943 2015-04-27
+177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
 
- arch/mips/boot/dts/ingenic/jz4740.dtsi         |  84 ++++++++++++
- arch/mips/boot/dts/ingenic/qi_lb60.dts         | 295=20
-++++++++++++++++++++++++++++++++++++++++-
- arch/mips/configs/qi_lb60_defconfig            |  44 +++---
- arch/mips/include/asm/mach-jz4740/gpio.h       |  15 ---
- arch/mips/include/asm/mach-jz4740/jz4740_fb.h  |  58 --------
- arch/mips/include/asm/mach-jz4740/jz4740_mmc.h |  12 --
- arch/mips/include/asm/mach-jz4740/platform.h   |  26 ----
- arch/mips/jz4740/Makefile                      |   7 +-
- arch/mips/jz4740/board-qi_lb60.c               | 491=20
--------------------------------------------------------------------
- arch/mips/jz4740/platform.c                    | 250=20
------------------------------------
- arch/mips/jz4740/prom.c                        |   5 -
- arch/mips/jz4740/setup.c                       |   3 +-
- drivers/dma/Kconfig                            |   6 -
- drivers/dma/Makefile                           |   1 -
- drivers/dma/dma-jz4740.c                       | 623=20
----------------------------------------------------------------------------=
-----------
- drivers/hwmon/Kconfig                          |  10 --
- drivers/hwmon/Makefile                         |   1 -
- drivers/hwmon/jz4740-hwmon.c                   | 135=20
--------------------
- drivers/mfd/Kconfig                            |   9 --
- drivers/mfd/Makefile                           |   1 -
- drivers/mfd/jz4740-adc.c                       | 324=20
----------------------------------------------
- drivers/mtd/nand/raw/ingenic/Kconfig           |   7 -
- drivers/mtd/nand/raw/ingenic/Makefile          |   1 -
- drivers/mtd/nand/raw/ingenic/jz4740_nand.c     | 536=20
---------------------------------------------------------------------------
- drivers/power/supply/Kconfig                   |  11 --
- drivers/power/supply/Makefile                  |   1 -
- drivers/power/supply/jz4740-battery.c          | 421=20
-----------------------------------------------------------
- drivers/video/fbdev/Kconfig                    |   9 --
- drivers/video/fbdev/Makefile                   |   1 -
- drivers/video/fbdev/jz4740_fb.c                | 690=20
----------------------------------------------------------------------------=
---------------------
- sound/soc/jz4740/Kconfig                       |  25 +---
- sound/soc/jz4740/Makefile                      |   5 -
- sound/soc/jz4740/qi_lb60.c                     | 106 ---------------
- 33 files changed, 404 insertions(+), 3809 deletions(-)
+"The past tempts us, the present confuses us, the future frightens us.  And
+our lives slip away, moment by moment, lost in that vast, terrible in-between."
 
-
-=
-
+--Emperor Turhan, Centauri Republic
