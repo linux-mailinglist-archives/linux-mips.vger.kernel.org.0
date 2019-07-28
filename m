@@ -2,94 +2,355 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B2477ED5
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Jul 2019 11:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A890977EF0
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Jul 2019 12:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725977AbfG1Jep (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 Jul 2019 05:34:45 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:23333 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbfG1Jep (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Jul 2019 05:34:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1564306484; x=1595842484;
-  h=from:subject:to:cc:references:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=HBEj87FM8520lmjB2CAs3MjRc7/bulRXak9RiLFobSE=;
-  b=Ohh6BbE3iaUrMzPYAFCdN2R6o/9zfPmhwuJKu2RUz712wxngd23FmXQo
-   9Ykyk0E2pYnIuFN2Bm/N8dqb6QC4ExLJ619Liae30bWD646U1GWVGdfZz
-   jOyRcpdJrHfR9+gO8PIHRdoCixOlFJ60xnxmMu3cB5q/0fH6sVmU+w2cA
-   4=;
-X-IronPort-AV: E=Sophos;i="5.64,317,1559520000"; 
-   d="scan'208";a="688518889"
-Received: from sea3-co-svc-lb6-vlan2.sea.amazon.com (HELO email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com) ([10.47.22.34])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 28 Jul 2019 09:34:42 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
-        by email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com (Postfix) with ESMTPS id D64F8A21E1;
-        Sun, 28 Jul 2019 09:34:41 +0000 (UTC)
-Received: from EX13D08UEE001.ant.amazon.com (10.43.62.126) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.82) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Sun, 28 Jul 2019 09:34:41 +0000
-Received: from EX13MTAUEE001.ant.amazon.com (10.43.62.200) by
- EX13D08UEE001.ant.amazon.com (10.43.62.126) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Sun, 28 Jul 2019 09:34:41 +0000
-Received: from [10.107.3.19] (10.107.3.19) by mail-relay.amazon.com
- (10.43.62.226) with Microsoft SMTP Server (TLS) id 15.0.1367.3 via Frontend
- Transport; Sun, 28 Jul 2019 09:34:36 +0000
-From:   "Hawa, Hanna" <hhhawa@amazon.com>
-Subject: Re: [UNVERIFIED SENDER] Re: [RFC 1/1] edac: Add a counter parameter
- for edac_device_handle_ue/ce()
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     <thor.thayer@linux.intel.com>, <bp@alien8.de>,
-        <james.morse@arm.com>, <rric@kernel.org>, <morbidrsa@gmail.com>,
-        <ralf@linux-mips.org>, <david.daney@cavium.com>,
-        <andy.gross@linaro.org>, <david.brown@linaro.org>,
-        <ckadabi@codeaurora.org>, <vnkgutta@codeaurora.org>,
-        <jglauber@cavium.com>, <khuong@os.amperecomputing.com>,
-        <dwmw@amazon.co.uk>, <benh@amazon.com>, <ronenk@amazon.com>,
-        <talel@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-References: <1563187987-5847-1-git-send-email-hhhawa@amazon.com>
- <20190725153658.084ea1aa@coco.lan>
-Message-ID: <355dc172-52f5-3d9c-883a-4ad1fd10d54c@amazon.com>
-Date:   Sun, 28 Jul 2019 12:34:35 +0300
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190725153658.084ea1aa@coco.lan>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1725983AbfG1KBo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 Jul 2019 06:01:44 -0400
+Received: from foss.arm.com ([217.140.110.172]:59922 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725961AbfG1KBo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 28 Jul 2019 06:01:44 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 99B98337;
+        Sun, 28 Jul 2019 03:01:42 -0700 (PDT)
+Received: from big-swifty.misterjones.org (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1C5193F694;
+        Sun, 28 Jul 2019 03:01:38 -0700 (PDT)
+Date:   Sun, 28 Jul 2019 11:01:38 +0100
+Message-ID: <86y30imq9p.wl-marc.zyngier@arm.com>
+From:   Marc Zyngier <marc.zyngier@arm.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     tglx@linutronix.de, jason@lakedaemon.net, ralf@linux-mips.org,
+        paul.burton@mips.com, jhogan@kernel.org, robh+dt@kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mark.rutland@arm.com,
+        john@phrozen.org, hauke@hauke-m.de
+Subject: Re: [PATCH 3/5] MIPS: lantiq: add an irq_domain and irq_chip for EBU
+In-Reply-To: <20190727175315.28834-4-martin.blumenstingl@googlemail.com>
+References: <20190727175315.28834-1-martin.blumenstingl@googlemail.com>
+        <20190727175315.28834-4-martin.blumenstingl@googlemail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 EasyPG/1.0.0 Emacs/26
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+Organization: ARM Ltd
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Martin,
 
-
-On 7/25/2019 9:36 PM, Mauro Carvalho Chehab wrote:
->>   	/* Propagate the count up the 'totals' tree */
->> -	instance->counters.ue_count++;
->> -	edac_dev->counters.ue_count++;
->> +	instance->counters.ue_count += error_count;
->> +	edac_dev->counters.ue_count += error_count;
-> Patch itself looks a good idea, but maybe it should rise a WARN()
-> if error_count == 0.
-Good point, shouldn't we use WARN_ONCE here? if the user call 
-edac_device_handle_ue() with error count == 0, it not be change in 
-run-time, only if the error count parameter is calculated somehow, and 
-it'll be the *caller* issue that didn't check the error count.
-What you think?
-
+On Sat, 27 Jul 2019 18:53:13 +0100,
+Martin Blumenstingl <martin.blumenstingl@googlemail.com> wrote:
 > 
-> That applies for both CE and UE error logic.
-Sure.
+> The PCI_INTA on Lantiq SoCs is a chained interrupt:
+> EBU configures the interrupt type, has a registers to enable/disable
+> and ACK the interrupt. This is chained with the ICU interrupt where the
+> parent interrupt of the EBU IRQ has to be ACK'ed.
+> 
+> Move all EBU interrupt logic into ebu.c and expose it using an
+> irq_domain and irq_chip.
+> Drop the hardcoded EBU interrupt configuration from pci-lantiq.c as this
+> can now be expressed in device tree by passing the EBU interrupt line to
+> PCI_INTA (using for example "... &ebu0 0 IRQ_TYPE_LEVEL_LOW").
+> Also drop the EBU interrupt masking from irq.c because that's now
+> managed by EBU's own irq_ack callback.
+> 
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+>  .../include/asm/mach-lantiq/xway/lantiq_soc.h |   3 -
+>  arch/mips/lantiq/ebu.c                        | 149 ++++++++++++++++++
+>  arch/mips/lantiq/irq.c                        |  11 --
+>  arch/mips/pci/pci-lantiq.c                    |   4 -
+>  4 files changed, 149 insertions(+), 18 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h b/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
+> index 02a64ad6c0cc..5555deb02397 100644
+> --- a/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
+> +++ b/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
+> @@ -79,9 +79,6 @@ extern __iomem void *ltq_cgu_membase;
+>  #define LTQ_EARLY_ASC		KSEG1ADDR(LTQ_ASC1_BASE_ADDR)
+>  
+>  /* EBU - external bus unit */
+> -#define LTQ_EBU_PCC_CON		0x0090
+> -#define LTQ_EBU_PCC_IEN		0x00A4
+> -#define LTQ_EBU_PCC_ISTAT	0x00A0
+>  #define LTQ_EBU_BUSCON1		0x0064
+>  #define LTQ_EBU_ADDRSEL1	0x0024
+>  
+> diff --git a/arch/mips/lantiq/ebu.c b/arch/mips/lantiq/ebu.c
+> index b2e84cf83f91..12951eb3c88f 100644
+> --- a/arch/mips/lantiq/ebu.c
+> +++ b/arch/mips/lantiq/ebu.c
+> @@ -7,7 +7,11 @@
+>  #include <linux/bits.h>
+>  #include <linux/export.h>
+>  #include <linux/ioport.h>
+> +#include <linux/irqchip.h>
+> +#include <linux/irqchip/chained_irq.h>
+> +#include <linux/irqdomain.h>
+>  #include <linux/of.h>
+> +#include <linux/of_irq.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/of_address.h>
+>  
+> @@ -15,6 +19,19 @@
+>  
+>  #define LTQ_EBU_BUSCON0				0x0060
+>  #define LTQ_EBU_BUSCON_WRDIS			BIT(31)
+> +#define LTQ_EBU_PCC_CON				0x0090
+> +#define LTQ_EBU_PCC_CON_PCCARD_ON		BIT(0)
+> +#define LTQ_EBU_PCC_CON_IREQ_RISING_EDGE        0x2
+> +#define LTQ_EBU_PCC_CON_IREQ_FALLING_EDGE       0x4
+> +#define LTQ_EBU_PCC_CON_IREQ_BOTH_EDGE          0x6
+
+So BOTH_EDGE is actually (RISING_EDGE | FALLING_EDGE). It'd be nice to
+express it this way.
+
+> +#define LTQ_EBU_PCC_CON_IREQ_DIS                0x8
+
+What does "DIS" mean?
+
+> +#define LTQ_EBU_PCC_CON_IREQ_HIGH_LEVEL_DETECT  0xa
+> +#define LTQ_EBU_PCC_CON_IREQ_LOW_LEVEL_DETECT	0xc
+
+Again, these two are (DIS | RISING) and (DIS | FALLING).
+
+> +#define LTQ_EBU_PCC_CON_IREQ_MASK		0xe
+> +#define LTQ_EBU_PCC_ISTAT			0x00a0
+> +#define LTQ_EBU_PCC_ISTAT_PCI			BIT(4)
+> +#define LTQ_EBU_PCC_IEN				0x00a4
+> +#define LTQ_EBU_PCC_IEN_PCI_EN			BIT(4)
+>  
+>  void __iomem *ltq_ebu_membase;
+>  
+> @@ -52,6 +69,131 @@ static const struct of_device_id of_ebu_ids[] __initconst = {
+>  	{ /* sentinel */ },
+>  };
+>  
+> +static void ltq_ebu_ack_irq(struct irq_data *d)
+> +{
+> +	ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_ISTAT) | LTQ_EBU_PCC_ISTAT_PCI,
+> +		    LTQ_EBU_PCC_ISTAT);
+> +}
+> +
+> +static void ltq_ebu_mask_irq(struct irq_data *d)
+> +{
+> +	ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_IEN) & ~LTQ_EBU_PCC_IEN_PCI_EN,
+> +		    LTQ_EBU_PCC_IEN);
+> +}
+> +
+> +static void ltq_ebu_unmask_irq(struct irq_data *d)
+> +{
+> +	ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_IEN) | LTQ_EBU_PCC_IEN_PCI_EN,
+> +		    LTQ_EBU_PCC_IEN);
+> +}
+> +
+> +static int ltq_ebu_set_irq_type(struct irq_data *d, unsigned int flow_type)
+> +{
+> +	u32 val = ltq_ebu_r32(LTQ_EBU_PCC_CON);
+> +
+> +	val &= ~LTQ_EBU_PCC_CON_IREQ_MASK;
+> +
+> +	switch (flow_type & IRQ_TYPE_SENSE_MASK) {
+> +	case IRQ_TYPE_NONE:
+> +		val |= LTQ_EBU_PCC_CON_IREQ_DIS;
+> +		break;
+
+I'm not sure IRQ_TYPE_NONE makes much sense here. What's the expected
+semantic?
+
+> +
+> +	case IRQ_TYPE_EDGE_RISING:
+> +		val |= LTQ_EBU_PCC_CON_IREQ_RISING_EDGE;
+> +		break;
+> +
+> +	case IRQ_TYPE_EDGE_FALLING:
+> +		val |= LTQ_EBU_PCC_CON_IREQ_FALLING_EDGE;
+> +		break;
+> +
+> +	case IRQ_TYPE_EDGE_BOTH:
+> +		val |= LTQ_EBU_PCC_CON_IREQ_BOTH_EDGE;
+> +		break;
+> +
+> +	case IRQ_TYPE_LEVEL_HIGH:
+> +		val |= LTQ_EBU_PCC_CON_IREQ_HIGH_LEVEL_DETECT;
+> +		break;
+> +
+> +	case IRQ_TYPE_LEVEL_LOW:
+> +		val |= LTQ_EBU_PCC_CON_IREQ_LOW_LEVEL_DETECT;
+> +		break;
+> +
+> +	default:
+> +		pr_err("Invalid trigger mode %x for IRQ %d\n", flow_type,
+> +		       d->irq);
+
+irq_set_type will already complain in the kernel log, no need to add
+an extra message.
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	ltq_ebu_w32(val, LTQ_EBU_PCC_CON);
+> +
+> +	return 0;
+> +}
+> +
+> +static void ltq_ebu_irq_handler(struct irq_desc *desc)
+> +{
+> +	struct irq_domain *domain = irq_desc_get_handler_data(desc);
+> +	struct irq_chip *irqchip = irq_desc_get_chip(desc);
+> +
+> +	chained_irq_enter(irqchip, desc);
+> +
+> +	generic_handle_irq(irq_find_mapping(domain, 0));
+
+Having an irqdomain for a single interrupt is a bit over the top... Is
+that for the convenience of the DT infrastructure?
+
+> +
+> +	chained_irq_exit(irqchip, desc);
+> +}
+> +
+> +static struct irq_chip ltq_ebu_irq_chip = {
+> +	.name = "EBU",
+> +	.irq_ack = ltq_ebu_ack_irq,
+> +	.irq_mask = ltq_ebu_mask_irq,
+> +	.irq_unmask = ltq_ebu_unmask_irq,
+> +	.irq_set_type = ltq_ebu_set_irq_type,
+> +};
+> +
+> +static int ltq_ebu_irq_map(struct irq_domain *domain, unsigned int irq,
+> +			   irq_hw_number_t hwirq)
+> +{
+> +	irq_set_chip_and_handler(irq, &ltq_ebu_irq_chip, handle_edge_irq);
+> +	irq_set_chip_data(irq, domain->host_data);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops ltq_ebu_irqdomain_ops = {
+> +	.map = ltq_ebu_irq_map,
+> +	.xlate = irq_domain_xlate_twocell,
+> +};
+> +
+> +static int ltq_ebu_add_irqchip(struct device_node *np)
+> +{
+> +	struct irq_domain *parent_domain, *domain;
+> +	int irq;
+> +
+> +	parent_domain = irq_find_host(of_irq_find_parent(np));
+> +	if (!parent_domain) {
+> +		pr_err("%pOF: No interrupt-parent found\n", np);
+> +		return -EINVAL;
+> +	}
+> +
+> +	domain = irq_domain_add_linear(np, 1, &ltq_ebu_irqdomain_ops, NULL);
+> +	if (!domain) {
+> +		pr_err("%pOF: Could not register EBU IRQ domain\n", np);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	irq = irq_of_parse_and_map(np, 0);
+> +	if (!irq) {
+> +		pr_err("%pOF: Failed to map interrupt\n", np);
+> +		irq_domain_remove(domain);
+> +		return -EINVAL;
+> +	}
+> +
+> +	irq_create_mapping(domain, 0);
+
+Why do you need to perform this eagerly? I'd expect this interrupt to
+be mapped when it is actually claimed by a driver.
+
+> +
+> +	irq_set_chained_handler_and_data(irq, ltq_ebu_irq_handler, domain);
+
+And there is no HW initialisation whatsoever? I'd expect, at the very
+least, the sole interrupt to be configured as disabled/masked.
+
+> +
+> +	return 0;
+> +}
+> +
+>  static int __init ltq_ebu_setup(void)
+>  {
+>  	const struct ltq_ebu_data *ebu_data;
+> @@ -59,6 +201,7 @@ static int __init ltq_ebu_setup(void)
+>  	struct resource res_ebu;
+>  	struct device_node *np;
+>  	u32 val;
+> +	int ret;
+>  
+>  	np = of_find_matching_node_and_match(NULL, of_ebu_ids, &match);
+>  	if (!np)
+> @@ -83,6 +226,12 @@ static int __init ltq_ebu_setup(void)
+>  		ltq_ebu_w32(val, LTQ_EBU_BUSCON0);
+>  	}
+>  
+> +	if (of_property_read_bool(np, "interrupt-controller")) {
+> +		ret = ltq_ebu_add_irqchip(np);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/arch/mips/lantiq/irq.c b/arch/mips/lantiq/irq.c
+> index 115b417dfb8e..cb9ab51fa748 100644
+> --- a/arch/mips/lantiq/irq.c
+> +++ b/arch/mips/lantiq/irq.c
+> @@ -40,12 +40,6 @@
+>  /* the performance counter */
+>  #define LTQ_PERF_IRQ		(INT_NUM_IM4_IRL0 + 31)
+>  
+> -/*
+> - * irqs generated by devices attached to the EBU need to be acked in
+> - * a special manner
+> - */
+> -#define LTQ_ICU_EBU_IRQ		22
+> -
+>  #define ltq_icu_w32(vpe, m, x, y)	\
+>  	ltq_w32((x), ltq_icu_membase[vpe] + m*LTQ_ICU_IM_SIZE + (y))
+>  
+> @@ -300,11 +294,6 @@ static void ltq_hw_irq_handler(struct irq_desc *desc)
+>  	irq = __fls(irq);
+>  	hwirq = irq + MIPS_CPU_IRQ_CASCADE + (INT_NUM_IM_OFFSET * module);
+>  	generic_handle_irq(irq_linear_revmap(ltq_domain, hwirq));
+> -
+> -	/* if this is a EBU irq, we need to ack it or get a deadlock */
+> -	if ((irq == LTQ_ICU_EBU_IRQ) && (module == 0) && LTQ_EBU_PCC_ISTAT)
+> -		ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_ISTAT) | 0x10,
+> -			LTQ_EBU_PCC_ISTAT);
+>  }
+>  
+>  static int icu_map(struct irq_domain *d, unsigned int irq, irq_hw_number_t hw)
+> diff --git a/arch/mips/pci/pci-lantiq.c b/arch/mips/pci/pci-lantiq.c
+> index 1ca42f482130..a3f6ab94ee2c 100644
+> --- a/arch/mips/pci/pci-lantiq.c
+> +++ b/arch/mips/pci/pci-lantiq.c
+> @@ -190,10 +190,6 @@ static int ltq_pci_startup(struct platform_device *pdev)
+>  	ltq_pci_w32(ltq_pci_r32(PCI_CR_PCI_MOD) | (1 << 24), PCI_CR_PCI_MOD);
+>  	wmb();
+>  
+> -	/* setup irq line */
+> -	ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_CON) | 0xc, LTQ_EBU_PCC_CON);
+> -	ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_IEN) | 0x10, LTQ_EBU_PCC_IEN);
+> -
+>  	/* toggle reset pin */
+>  	if (gpio_is_valid(reset_gpio)) {
+>  		__gpio_set_value(reset_gpio, 0);
+> -- 
+> 2.22.0
+> 
 
 Thanks,
-Hanna
-> 
-> Thanks,
-> Mauro
 
+	M.
+
+-- 
+Jazz is not dead, it just smells funny.
