@@ -2,23 +2,23 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A890977EF0
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Jul 2019 12:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BCD77EFB
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Jul 2019 12:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725983AbfG1KBo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 Jul 2019 06:01:44 -0400
-Received: from foss.arm.com ([217.140.110.172]:59922 "EHLO foss.arm.com"
+        id S1725978AbfG1KDg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 Jul 2019 06:03:36 -0400
+Received: from foss.arm.com ([217.140.110.172]:59972 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725961AbfG1KBo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 28 Jul 2019 06:01:44 -0400
+        id S1725961AbfG1KDg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 28 Jul 2019 06:03:36 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 99B98337;
-        Sun, 28 Jul 2019 03:01:42 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7088D344;
+        Sun, 28 Jul 2019 03:03:35 -0700 (PDT)
 Received: from big-swifty.misterjones.org (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1C5193F694;
-        Sun, 28 Jul 2019 03:01:38 -0700 (PDT)
-Date:   Sun, 28 Jul 2019 11:01:38 +0100
-Message-ID: <86y30imq9p.wl-marc.zyngier@arm.com>
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A6303F694;
+        Sun, 28 Jul 2019 03:03:32 -0700 (PDT)
+Date:   Sun, 28 Jul 2019 11:03:31 +0100
+Message-ID: <86wog2mq6k.wl-marc.zyngier@arm.com>
 From:   Marc Zyngier <marc.zyngier@arm.com>
 To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 Cc:     tglx@linutronix.de, jason@lakedaemon.net, ralf@linux-mips.org,
@@ -26,10 +26,10 @@ Cc:     tglx@linutronix.de, jason@lakedaemon.net, ralf@linux-mips.org,
         linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, mark.rutland@arm.com,
         john@phrozen.org, hauke@hauke-m.de
-Subject: Re: [PATCH 3/5] MIPS: lantiq: add an irq_domain and irq_chip for EBU
-In-Reply-To: <20190727175315.28834-4-martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH 5/5] MIPS: dts: lantiq: danube: easy50712: route the PCI_INTA IRQ through EBU
+In-Reply-To: <20190727175315.28834-6-martin.blumenstingl@googlemail.com>
 References: <20190727175315.28834-1-martin.blumenstingl@googlemail.com>
-        <20190727175315.28834-4-martin.blumenstingl@googlemail.com>
+        <20190727175315.28834-6-martin.blumenstingl@googlemail.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 EasyPG/1.0.0 Emacs/26
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -41,312 +41,47 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Martin,
-
-On Sat, 27 Jul 2019 18:53:13 +0100,
+On Sat, 27 Jul 2019 18:53:15 +0100,
 Martin Blumenstingl <martin.blumenstingl@googlemail.com> wrote:
 > 
-> The PCI_INTA on Lantiq SoCs is a chained interrupt:
-> EBU configures the interrupt type, has a registers to enable/disable
-> and ACK the interrupt. This is chained with the ICU interrupt where the
-> parent interrupt of the EBU IRQ has to be ACK'ed.
-> 
-> Move all EBU interrupt logic into ebu.c and expose it using an
-> irq_domain and irq_chip.
-> Drop the hardcoded EBU interrupt configuration from pci-lantiq.c as this
-> can now be expressed in device tree by passing the EBU interrupt line to
-> PCI_INTA (using for example "... &ebu0 0 IRQ_TYPE_LEVEL_LOW").
-> Also drop the EBU interrupt masking from irq.c because that's now
-> managed by EBU's own irq_ack callback.
+> EBU provides an interrupt line for the PCI_INTA interrupt. Route
+> easy50712's PCI interrupt to EBU so the interrupt line is configured
+> correctly (using IRQ_TYPE_LEVEL_LOW, this was previously hardcoded in
+> the PCI driver) and ACKed properly.
 > 
 > Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 > ---
->  .../include/asm/mach-lantiq/xway/lantiq_soc.h |   3 -
->  arch/mips/lantiq/ebu.c                        | 149 ++++++++++++++++++
->  arch/mips/lantiq/irq.c                        |  11 --
->  arch/mips/pci/pci-lantiq.c                    |   4 -
->  4 files changed, 149 insertions(+), 18 deletions(-)
+>  arch/mips/boot/dts/lantiq/easy50712.dts | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h b/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
-> index 02a64ad6c0cc..5555deb02397 100644
-> --- a/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
-> +++ b/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
-> @@ -79,9 +79,6 @@ extern __iomem void *ltq_cgu_membase;
->  #define LTQ_EARLY_ASC		KSEG1ADDR(LTQ_ASC1_BASE_ADDR)
+> diff --git a/arch/mips/boot/dts/lantiq/easy50712.dts b/arch/mips/boot/dts/lantiq/easy50712.dts
+> index 1ce20b7d05cb..33c26b93cfc9 100644
+> --- a/arch/mips/boot/dts/lantiq/easy50712.dts
+> +++ b/arch/mips/boot/dts/lantiq/easy50712.dts
+> @@ -1,6 +1,8 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /dts-v1/;
 >  
->  /* EBU - external bus unit */
-> -#define LTQ_EBU_PCC_CON		0x0090
-> -#define LTQ_EBU_PCC_IEN		0x00A4
-> -#define LTQ_EBU_PCC_ISTAT	0x00A0
->  #define LTQ_EBU_BUSCON1		0x0064
->  #define LTQ_EBU_ADDRSEL1	0x0024
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+>  /include/ "danube.dtsi"
 >  
-> diff --git a/arch/mips/lantiq/ebu.c b/arch/mips/lantiq/ebu.c
-> index b2e84cf83f91..12951eb3c88f 100644
-> --- a/arch/mips/lantiq/ebu.c
-> +++ b/arch/mips/lantiq/ebu.c
-> @@ -7,7 +7,11 @@
->  #include <linux/bits.h>
->  #include <linux/export.h>
->  #include <linux/ioport.h>
-> +#include <linux/irqchip.h>
-> +#include <linux/irqchip/chained_irq.h>
-> +#include <linux/irqdomain.h>
->  #include <linux/of.h>
-> +#include <linux/of_irq.h>
->  #include <linux/of_platform.h>
->  #include <linux/of_address.h>
->  
-> @@ -15,6 +19,19 @@
->  
->  #define LTQ_EBU_BUSCON0				0x0060
->  #define LTQ_EBU_BUSCON_WRDIS			BIT(31)
-> +#define LTQ_EBU_PCC_CON				0x0090
-> +#define LTQ_EBU_PCC_CON_PCCARD_ON		BIT(0)
-> +#define LTQ_EBU_PCC_CON_IREQ_RISING_EDGE        0x2
-> +#define LTQ_EBU_PCC_CON_IREQ_FALLING_EDGE       0x4
-> +#define LTQ_EBU_PCC_CON_IREQ_BOTH_EDGE          0x6
-
-So BOTH_EDGE is actually (RISING_EDGE | FALLING_EDGE). It'd be nice to
-express it this way.
-
-> +#define LTQ_EBU_PCC_CON_IREQ_DIS                0x8
-
-What does "DIS" mean?
-
-> +#define LTQ_EBU_PCC_CON_IREQ_HIGH_LEVEL_DETECT  0xa
-> +#define LTQ_EBU_PCC_CON_IREQ_LOW_LEVEL_DETECT	0xc
-
-Again, these two are (DIS | RISING) and (DIS | FALLING).
-
-> +#define LTQ_EBU_PCC_CON_IREQ_MASK		0xe
-> +#define LTQ_EBU_PCC_ISTAT			0x00a0
-> +#define LTQ_EBU_PCC_ISTAT_PCI			BIT(4)
-> +#define LTQ_EBU_PCC_IEN				0x00a4
-> +#define LTQ_EBU_PCC_IEN_PCI_EN			BIT(4)
->  
->  void __iomem *ltq_ebu_membase;
->  
-> @@ -52,6 +69,131 @@ static const struct of_device_id of_ebu_ids[] __initconst = {
->  	{ /* sentinel */ },
->  };
->  
-> +static void ltq_ebu_ack_irq(struct irq_data *d)
-> +{
-> +	ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_ISTAT) | LTQ_EBU_PCC_ISTAT_PCI,
-> +		    LTQ_EBU_PCC_ISTAT);
-> +}
-> +
-> +static void ltq_ebu_mask_irq(struct irq_data *d)
-> +{
-> +	ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_IEN) & ~LTQ_EBU_PCC_IEN_PCI_EN,
-> +		    LTQ_EBU_PCC_IEN);
-> +}
-> +
-> +static void ltq_ebu_unmask_irq(struct irq_data *d)
-> +{
-> +	ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_IEN) | LTQ_EBU_PCC_IEN_PCI_EN,
-> +		    LTQ_EBU_PCC_IEN);
-> +}
-> +
-> +static int ltq_ebu_set_irq_type(struct irq_data *d, unsigned int flow_type)
-> +{
-> +	u32 val = ltq_ebu_r32(LTQ_EBU_PCC_CON);
-> +
-> +	val &= ~LTQ_EBU_PCC_CON_IREQ_MASK;
-> +
-> +	switch (flow_type & IRQ_TYPE_SENSE_MASK) {
-> +	case IRQ_TYPE_NONE:
-> +		val |= LTQ_EBU_PCC_CON_IREQ_DIS;
-> +		break;
-
-I'm not sure IRQ_TYPE_NONE makes much sense here. What's the expected
-semantic?
-
-> +
-> +	case IRQ_TYPE_EDGE_RISING:
-> +		val |= LTQ_EBU_PCC_CON_IREQ_RISING_EDGE;
-> +		break;
-> +
-> +	case IRQ_TYPE_EDGE_FALLING:
-> +		val |= LTQ_EBU_PCC_CON_IREQ_FALLING_EDGE;
-> +		break;
-> +
-> +	case IRQ_TYPE_EDGE_BOTH:
-> +		val |= LTQ_EBU_PCC_CON_IREQ_BOTH_EDGE;
-> +		break;
-> +
-> +	case IRQ_TYPE_LEVEL_HIGH:
-> +		val |= LTQ_EBU_PCC_CON_IREQ_HIGH_LEVEL_DETECT;
-> +		break;
-> +
-> +	case IRQ_TYPE_LEVEL_LOW:
-> +		val |= LTQ_EBU_PCC_CON_IREQ_LOW_LEVEL_DETECT;
-> +		break;
-> +
-> +	default:
-> +		pr_err("Invalid trigger mode %x for IRQ %d\n", flow_type,
-> +		       d->irq);
-
-irq_set_type will already complain in the kernel log, no need to add
-an extra message.
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	ltq_ebu_w32(val, LTQ_EBU_PCC_CON);
-> +
-> +	return 0;
-> +}
-> +
-> +static void ltq_ebu_irq_handler(struct irq_desc *desc)
-> +{
-> +	struct irq_domain *domain = irq_desc_get_handler_data(desc);
-> +	struct irq_chip *irqchip = irq_desc_get_chip(desc);
-> +
-> +	chained_irq_enter(irqchip, desc);
-> +
-> +	generic_handle_irq(irq_find_mapping(domain, 0));
-
-Having an irqdomain for a single interrupt is a bit over the top... Is
-that for the convenience of the DT infrastructure?
-
-> +
-> +	chained_irq_exit(irqchip, desc);
-> +}
-> +
-> +static struct irq_chip ltq_ebu_irq_chip = {
-> +	.name = "EBU",
-> +	.irq_ack = ltq_ebu_ack_irq,
-> +	.irq_mask = ltq_ebu_mask_irq,
-> +	.irq_unmask = ltq_ebu_unmask_irq,
-> +	.irq_set_type = ltq_ebu_set_irq_type,
-> +};
-> +
-> +static int ltq_ebu_irq_map(struct irq_domain *domain, unsigned int irq,
-> +			   irq_hw_number_t hwirq)
-> +{
-> +	irq_set_chip_and_handler(irq, &ltq_ebu_irq_chip, handle_edge_irq);
-> +	irq_set_chip_data(irq, domain->host_data);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct irq_domain_ops ltq_ebu_irqdomain_ops = {
-> +	.map = ltq_ebu_irq_map,
-> +	.xlate = irq_domain_xlate_twocell,
-> +};
-> +
-> +static int ltq_ebu_add_irqchip(struct device_node *np)
-> +{
-> +	struct irq_domain *parent_domain, *domain;
-> +	int irq;
-> +
-> +	parent_domain = irq_find_host(of_irq_find_parent(np));
-> +	if (!parent_domain) {
-> +		pr_err("%pOF: No interrupt-parent found\n", np);
-> +		return -EINVAL;
-> +	}
-> +
-> +	domain = irq_domain_add_linear(np, 1, &ltq_ebu_irqdomain_ops, NULL);
-> +	if (!domain) {
-> +		pr_err("%pOF: Could not register EBU IRQ domain\n", np);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	irq = irq_of_parse_and_map(np, 0);
-> +	if (!irq) {
-> +		pr_err("%pOF: Failed to map interrupt\n", np);
-> +		irq_domain_remove(domain);
-> +		return -EINVAL;
-> +	}
-> +
-> +	irq_create_mapping(domain, 0);
-
-Why do you need to perform this eagerly? I'd expect this interrupt to
-be mapped when it is actually claimed by a driver.
-
-> +
-> +	irq_set_chained_handler_and_data(irq, ltq_ebu_irq_handler, domain);
-
-And there is no HW initialisation whatsoever? I'd expect, at the very
-least, the sole interrupt to be configured as disabled/masked.
-
-> +
-> +	return 0;
-> +}
-> +
->  static int __init ltq_ebu_setup(void)
->  {
->  	const struct ltq_ebu_data *ebu_data;
-> @@ -59,6 +201,7 @@ static int __init ltq_ebu_setup(void)
->  	struct resource res_ebu;
->  	struct device_node *np;
->  	u32 val;
-> +	int ret;
->  
->  	np = of_find_matching_node_and_match(NULL, of_ebu_ids, &match);
->  	if (!np)
-> @@ -83,6 +226,12 @@ static int __init ltq_ebu_setup(void)
->  		ltq_ebu_w32(val, LTQ_EBU_BUSCON0);
->  	}
->  
-> +	if (of_property_read_bool(np, "interrupt-controller")) {
-> +		ret = ltq_ebu_add_irqchip(np);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->  	return 0;
->  }
->  
-> diff --git a/arch/mips/lantiq/irq.c b/arch/mips/lantiq/irq.c
-> index 115b417dfb8e..cb9ab51fa748 100644
-> --- a/arch/mips/lantiq/irq.c
-> +++ b/arch/mips/lantiq/irq.c
-> @@ -40,12 +40,6 @@
->  /* the performance counter */
->  #define LTQ_PERF_IRQ		(INT_NUM_IM4_IRL0 + 31)
->  
-> -/*
-> - * irqs generated by devices attached to the EBU need to be acked in
-> - * a special manner
-> - */
-> -#define LTQ_ICU_EBU_IRQ		22
-> -
->  #define ltq_icu_w32(vpe, m, x, y)	\
->  	ltq_w32((x), ltq_icu_membase[vpe] + m*LTQ_ICU_IM_SIZE + (y))
->  
-> @@ -300,11 +294,6 @@ static void ltq_hw_irq_handler(struct irq_desc *desc)
->  	irq = __fls(irq);
->  	hwirq = irq + MIPS_CPU_IRQ_CASCADE + (INT_NUM_IM_OFFSET * module);
->  	generic_handle_irq(irq_linear_revmap(ltq_domain, hwirq));
-> -
-> -	/* if this is a EBU irq, we need to ack it or get a deadlock */
-> -	if ((irq == LTQ_ICU_EBU_IRQ) && (module == 0) && LTQ_EBU_PCC_ISTAT)
-> -		ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_ISTAT) | 0x10,
-> -			LTQ_EBU_PCC_ISTAT);
->  }
->  
->  static int icu_map(struct irq_domain *d, unsigned int irq, irq_hw_number_t hw)
-> diff --git a/arch/mips/pci/pci-lantiq.c b/arch/mips/pci/pci-lantiq.c
-> index 1ca42f482130..a3f6ab94ee2c 100644
-> --- a/arch/mips/pci/pci-lantiq.c
-> +++ b/arch/mips/pci/pci-lantiq.c
-> @@ -190,10 +190,6 @@ static int ltq_pci_startup(struct platform_device *pdev)
->  	ltq_pci_w32(ltq_pci_r32(PCI_CR_PCI_MOD) | (1 << 24), PCI_CR_PCI_MOD);
->  	wmb();
->  
-> -	/* setup irq line */
-> -	ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_CON) | 0xc, LTQ_EBU_PCC_CON);
-> -	ltq_ebu_w32(ltq_ebu_r32(LTQ_EBU_PCC_IEN) | 0x10, LTQ_EBU_PCC_IEN);
-> -
->  	/* toggle reset pin */
->  	if (gpio_is_valid(reset_gpio)) {
->  		__gpio_set_value(reset_gpio, 0);
+>  / {
+> @@ -105,7 +107,7 @@
+>  			lantiq,bus-clock = <33333333>;
+>  			interrupt-map-mask = <0xf800 0x0 0x0 0x7>;
+>  			interrupt-map = <
+> -				0x7000 0 0 1 &icu0 29 1 // slot 14, irq 29
+> +				0x7000 0 0 1 &ebu0 0 IRQ_TYPE_LEVEL_LOW // slot 14
+>  			>;
+>  			gpios-reset = <&gpio 21 0>;
+>  			req-mask = <0x1>;		/* GNT1 */
 > -- 
 > 2.22.0
 > 
+
+Are you OK with breaking compatibility between kernel and DT? It
+usually isn't very nice for users...
 
 Thanks,
 
