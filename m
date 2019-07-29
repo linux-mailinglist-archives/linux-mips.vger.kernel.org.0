@@ -2,93 +2,143 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5EE79C57
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2019 00:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD1679CAA
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2019 01:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728151AbfG2WQt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Jul 2019 18:16:49 -0400
-Received: from eddie.linux-mips.org ([148.251.95.138]:45984 "EHLO
-        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726869AbfG2WQs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Jul 2019 18:16:48 -0400
-Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
-        with ESMTP id S23992779AbfG2WQpdRPci (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org> + 1 other);
-        Tue, 30 Jul 2019 00:16:45 +0200
-Date:   Mon, 29 Jul 2019 23:16:45 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Eli Friedman <efriedma@quicinc.com>,
-        Hassan Naveed <hnaveed@wavecomp.com>,
-        Stephen Kitt <steve@sk2.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH] mips: avoid explicit UB in assignment of
- mips_io_port_base
-In-Reply-To: <20190729211014.39333-1-ndesaulniers@google.com>
-Message-ID: <alpine.LFD.2.21.1907292302451.16059@eddie.linux-mips.org>
-References: <20190729211014.39333-1-ndesaulniers@google.com>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+        id S1729349AbfG2XSB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Jul 2019 19:18:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50624 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727808AbfG2XSB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 29 Jul 2019 19:18:01 -0400
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8040A216C8;
+        Mon, 29 Jul 2019 23:18:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564442280;
+        bh=N2rwtwUzQ5vXhc2Rou7m8QrX8MBo9QM1SyZEDt1CeDE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=2egu48ABH4l6nA3u50w8c3A0+yVjUm7oMKY3q7iV86uivReQ1samnXXJVAtGLk62b
+         tLEtkmMV7DaUAZzMxln6LJWXupPiuGqwdhQmj1slbukiFcR5B+kbZlPj2CUJh4i5S8
+         BaMv0MdzgNPIK1cOlXtaWLKvkOMowaKRbaQ51f/o=
+Received: by mail-qt1-f174.google.com with SMTP id w17so16898823qto.10;
+        Mon, 29 Jul 2019 16:18:00 -0700 (PDT)
+X-Gm-Message-State: APjAAAXx0wJXFQl2aaF+dNsa9Xy6uYZ37YPxA+phqWr/rv68gWG7PWtl
+        as0sfWYnJo6Jbuu8dAlT+Tb0p6WVD6IeyC8e4g==
+X-Google-Smtp-Source: APXvYqyCM9nYr/pqJTVSXr9g4MM31JUmo02cPC6C4os3agfx8G2Cp08P3yIJO+S6Z7fvK4vvnlh0FkidgCeFhfsl7tk=
+X-Received: by 2002:aed:3fb0:: with SMTP id s45mr80553657qth.136.1564442279665;
+ Mon, 29 Jul 2019 16:17:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20190727175315.28834-1-martin.blumenstingl@googlemail.com> <20190727175315.28834-2-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20190727175315.28834-2-martin.blumenstingl@googlemail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 29 Jul 2019 17:17:47 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLRKF3mE7Xf_8Fxt2ycYAMmyo=bGB5f13cVoHShS3+G=g@mail.gmail.com>
+Message-ID: <CAL_JsqLRKF3mE7Xf_8Fxt2ycYAMmyo=bGB5f13cVoHShS3+G=g@mail.gmail.com>
+Subject: Re: [PATCH 1/5] dt-bindings: MIPS: lantiq: Add documentation for the
+ External Bus Unit
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>, maz@kernel.org,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        John Crispin <john@phrozen.org>,
+        Hauke Mehrtens <hauke@hauke-m.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 29 Jul 2019, Nick Desaulniers wrote:
+On Sat, Jul 27, 2019 at 11:53 AM Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
+>
+> Lantiq SoCs contain a so-called External Bus Unit.
+>
+> It attaches PCI memory as well as NAND and NOR flash. Additioanlly it
 
-> The code in question is modifying a variable declared const through
-> pointer manipulation.  Such code is explicitly undefined behavior, and
-> is the lone issue preventing malta_defconfig from booting when built
-> with Clang:
-> 
-> If an attempt is made to modify an object defined with a const-qualified
-> type through use of an lvalue with non-const-qualified type, the
-> behavior is undefined.
-> 
-> LLVM is removing such assignments. A simple fix is to not declare
-> variables const that you plan on modifying.  Limiting the scope would be
-> a better method of preventing unwanted writes to such a variable.
-> 
-> Further, the code in question mentions "compiler bugs" without any links
-> to bug reports, so it is difficult to know if the issue is resolved in
-> GCC. The patch was authored in 2006, which would have been GCC 4.0.3 or
-> 4.1.1. The minimal supported version of GCC in the Linux kernel is
-> currently 4.6.
+typo
 
- It's somewhat older than that.  My investigation points to:
+> contains an interrupt-controller for the PCI_INTA interrupt line.
+>
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+>  .../bindings/mips/lantiq/lantiq,ebu.yaml      | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/lantiq/lantiq,ebu.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/mips/lantiq/lantiq,ebu.yaml b/Documentation/devicetree/bindings/mips/lantiq/lantiq,ebu.yaml
+> new file mode 100644
+> index 000000000000..0b0b27d0b64b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mips/lantiq/lantiq,ebu.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mips/lantiq/lantiq,ebu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Lantiq External Bus Unit (EBU) bindings
+> +
+> +maintainers:
+> +  - Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - lantiq,falcon-ebu
+> +      - lantiq,xway-ebu
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: The EBU module clock
 
-commit c94e57dcd61d661749d53ee876ab265883b0a103
-Author: Ralf Baechle <ralf@linux-mips.org>
-Date:   Sun Nov 25 09:25:53 2001 +0000
+I prefer just 'maxItems: 1' as when there's only one clock, the
+description is not too useful.
 
-    Cleanup of include/asm-mips/io.h.  Now looks neat and harmless.
+> +
+> +  interrupt-controller:
+> +    type: boolean
 
-However the purpose of the arrangement does not appear to me to be 
-particularly specific to a compiler version.
+Just 'true' is fine as this already has a defined type.
 
-> For what its worth, there was UB before the commit in question, it just
-> added a barrier and got lucky IRT codegen. I don't think there's any
-> actual compiler bugs related, just runtime bugs due to UB.
-
- Does your solution preserves the original purpose of the hack though as 
-documented in the comment you propose to be removed?
-
- Clearly it was defined enough to work for almost 18 years, so it would be 
-good to keep the optimisation functionally by using different means that 
-do not rely on UB.  This variable is assigned at most once throughout the 
-life of the kernel and then early on, so considering it r/w with all the 
-consequences for all accesses does not appear to me to be a good use of 
-it.
-
- Maybe a piece of inline asm to hide the initialisation or suchlike then?
-
-  Maciej
+> +
+> +  interrupt-cells:
+> +    const: 2
+> +
+> +  interrupts:
+> +    items:
+> +      - description: The EBU module interrupt line
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    memory-controller@e105300 {
+> +        compatible = "lantiq,xway-ebu";
+> +        reg = <0xe105300 0x100>;
+> +        clocks = <&pmu 10>;
+> +        interrupt-controller;
+> +        #interrupt-cells = <2>;
+> +        interrupt-parent = <&icu0>;
+> +        interrupts = <30>;
+> +    };
+> +...
+> --
+> 2.22.0
+>
