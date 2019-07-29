@@ -2,38 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E327799AD
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jul 2019 22:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6B8798D2
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jul 2019 22:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729450AbfG2TYK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Jul 2019 15:24:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36330 "EHLO mail.kernel.org"
+        id S1730362AbfG2UKg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Jul 2019 16:10:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48646 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729438AbfG2TYH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 29 Jul 2019 15:24:07 -0400
+        id S2388099AbfG2TeP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 29 Jul 2019 15:34:15 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F1D3F21655;
-        Mon, 29 Jul 2019 19:24:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0D9052171F;
+        Mon, 29 Jul 2019 19:34:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564428246;
-        bh=VFAIIZL5hvOD4KbeAdybXfZWSYRbtUQGaVq/WFD0yK4=;
+        s=default; t=1564428854;
+        bh=0FtMzQeacx4AziLkDO6Q+rba4VKfE90ATh2vY7YtSE0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EezLEkHFT47MYbqAphKaa4RlEs2P17kJMEaKL8kY2U9/baaHhl6jxS9qX7aVA2f8q
-         d3iw0BvYQ0hzg46KoG+87+caqRVC2AGxAX+dzw4TfrmqvsuffXKEpQFQo/OM+iJ7x9
-         WFoZYM7T/q1qnZ52tLFCLZwPtn9mZaqBCkhm+YtU=
+        b=fR0aqyqrWNZN/+nMj7fKTtfPOU1v1qa0y/8Q5folA3kmz0S1RRkKDB2hsJHotYyH+
+         vCQIp0Vx6tPWxQWOKz2hPaSj1MRCe/QYIFjEkJZjpemWV+8e1A2xgaX1g7V8yTin96
+         eRCnUPLGWdMif0+NR6ittRIJZdGSYkiSyWZZ42xM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jo-Philipp Wich <jo@mein.io>,
-        =?UTF-8?q?Petr=20=C5=A0tetiar?= <ynezz@true.cz>,
-        Kevin Darbyshire-Bryant <ldir@darbyshire-bryant.me.uk>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 002/293] MIPS: fix build on non-linux hosts
-Date:   Mon, 29 Jul 2019 21:18:13 +0200
-Message-Id: <20190729190820.539632976@linuxfoundation.org>
+        stable@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>, od@zcrc.me,
+        linux-mips@vger.kernel.org
+Subject: [PATCH 4.14 207/293] MIPS: lb60: Fix pin mappings
+Date:   Mon, 29 Jul 2019 21:21:38 +0200
+Message-Id: <20190729190840.314387141@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190729190820.321094988@linuxfoundation.org>
 References: <20190729190820.321094988@linuxfoundation.org>
@@ -46,64 +47,68 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-[ Upstream commit 1196364f21ffe5d1e6d83cafd6a2edb89404a3ae ]
+From: Paul Cercueil <paul@crapouillou.net>
 
-calc_vmlinuz_load_addr.c requires SZ_64K to be defined for alignment
-purposes.  It included "../../../../include/linux/sizes.h" to define
-that size, however "sizes.h" tries to include <linux/const.h> which
-assumes linux system headers.  These may not exist eg. the following
-error was encountered when building Linux for OpenWrt under macOS:
+commit 1323c3b72a987de57141cabc44bf9cd83656bc70 upstream.
 
-In file included from arch/mips/boot/compressed/calc_vmlinuz_load_addr.c:16:
-arch/mips/boot/compressed/../../../../include/linux/sizes.h:11:10: fatal error: 'linux/const.h' file not found
-         ^~~~~~~~~~
+The pin mappings introduced in commit 636f8ba67fb6
+("MIPS: JZ4740: Qi LB60: Add pinctrl configuration for several drivers")
+are completely wrong. The pinctrl driver name is incorrect, and the
+function and group fields are swapped.
 
-Change makefile to force building on local linux headers instead of
-system headers.  Also change eye-watering relative reference in include
-file spec.
-
-Thanks to Jo-Philip Wich & Petr Štetiar for assistance in tracking this
-down & fixing.
-
-Suggested-by: Jo-Philipp Wich <jo@mein.io>
-Signed-off-by: Petr Štetiar <ynezz@true.cz>
-Signed-off-by: Kevin Darbyshire-Bryant <ldir@darbyshire-bryant.me.uk>
+Fixes: 636f8ba67fb6 ("MIPS: JZ4740: Qi LB60: Add pinctrl configuration for several drivers")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Paul Burton <paul.burton@mips.com>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: od@zcrc.me
 Cc: linux-mips@vger.kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
 ---
- arch/mips/boot/compressed/Makefile                 | 2 ++
- arch/mips/boot/compressed/calc_vmlinuz_load_addr.c | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ arch/mips/jz4740/board-qi_lb60.c |   16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-index adce180f3ee4..331b9e0a8072 100644
---- a/arch/mips/boot/compressed/Makefile
-+++ b/arch/mips/boot/compressed/Makefile
-@@ -75,6 +75,8 @@ OBJCOPYFLAGS_piggy.o := --add-section=.image=$(obj)/vmlinux.bin.z \
- $(obj)/piggy.o: $(obj)/dummy.o $(obj)/vmlinux.bin.z FORCE
- 	$(call if_changed,objcopy)
+--- a/arch/mips/jz4740/board-qi_lb60.c
++++ b/arch/mips/jz4740/board-qi_lb60.c
+@@ -456,27 +456,27 @@ static unsigned long pin_cfg_bias_disabl
+ static struct pinctrl_map pin_map[] __initdata = {
+ 	/* NAND pin configuration */
+ 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-nand",
+-			"10010000.jz4740-pinctrl", "nand", "nand-cs1"),
++			"10010000.pin-controller", "nand-cs1", "nand"),
  
-+HOSTCFLAGS_calc_vmlinuz_load_addr.o += $(LINUXINCLUDE)
-+
- # Calculate the load address of the compressed kernel image
- hostprogs-y := calc_vmlinuz_load_addr
+ 	/* fbdev pin configuration */
+ 	PIN_MAP_MUX_GROUP("jz4740-fb", PINCTRL_STATE_DEFAULT,
+-			"10010000.jz4740-pinctrl", "lcd", "lcd-8bit"),
++			"10010000.pin-controller", "lcd-8bit", "lcd"),
+ 	PIN_MAP_MUX_GROUP("jz4740-fb", PINCTRL_STATE_SLEEP,
+-			"10010000.jz4740-pinctrl", "lcd", "lcd-no-pins"),
++			"10010000.pin-controller", "lcd-no-pins", "lcd"),
  
-diff --git a/arch/mips/boot/compressed/calc_vmlinuz_load_addr.c b/arch/mips/boot/compressed/calc_vmlinuz_load_addr.c
-index 542c3ede9722..d14f75ec8273 100644
---- a/arch/mips/boot/compressed/calc_vmlinuz_load_addr.c
-+++ b/arch/mips/boot/compressed/calc_vmlinuz_load_addr.c
-@@ -13,7 +13,7 @@
- #include <stdint.h>
- #include <stdio.h>
- #include <stdlib.h>
--#include "../../../../include/linux/sizes.h"
-+#include <linux/sizes.h>
+ 	/* MMC pin configuration */
+ 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-mmc.0",
+-			"10010000.jz4740-pinctrl", "mmc", "mmc-1bit"),
++			"10010000.pin-controller", "mmc-1bit", "mmc"),
+ 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-mmc.0",
+-			"10010000.jz4740-pinctrl", "mmc", "mmc-4bit"),
++			"10010000.pin-controller", "mmc-4bit", "mmc"),
+ 	PIN_MAP_CONFIGS_PIN_DEFAULT("jz4740-mmc.0",
+-			"10010000.jz4740-pinctrl", "PD0", pin_cfg_bias_disable),
++			"10010000.pin-controller", "PD0", pin_cfg_bias_disable),
+ 	PIN_MAP_CONFIGS_PIN_DEFAULT("jz4740-mmc.0",
+-			"10010000.jz4740-pinctrl", "PD2", pin_cfg_bias_disable),
++			"10010000.pin-controller", "PD2", pin_cfg_bias_disable),
  
- int main(int argc, char *argv[])
- {
--- 
-2.20.1
-
+ 	/* PWM pin configuration */
+ 	PIN_MAP_MUX_GROUP_DEFAULT("jz4740-pwm",
+-			"10010000.jz4740-pinctrl", "pwm4", "pwm4"),
++			"10010000.pin-controller", "pwm4", "pwm4"),
+ };
+ 
+ 
 
 
