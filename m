@@ -2,143 +2,275 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD1679CAA
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2019 01:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BEC79D1D
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Jul 2019 01:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729349AbfG2XSB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Jul 2019 19:18:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50624 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727808AbfG2XSB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 29 Jul 2019 19:18:01 -0400
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8040A216C8;
-        Mon, 29 Jul 2019 23:18:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564442280;
-        bh=N2rwtwUzQ5vXhc2Rou7m8QrX8MBo9QM1SyZEDt1CeDE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=2egu48ABH4l6nA3u50w8c3A0+yVjUm7oMKY3q7iV86uivReQ1samnXXJVAtGLk62b
-         tLEtkmMV7DaUAZzMxln6LJWXupPiuGqwdhQmj1slbukiFcR5B+kbZlPj2CUJh4i5S8
-         BaMv0MdzgNPIK1cOlXtaWLKvkOMowaKRbaQ51f/o=
-Received: by mail-qt1-f174.google.com with SMTP id w17so16898823qto.10;
-        Mon, 29 Jul 2019 16:18:00 -0700 (PDT)
-X-Gm-Message-State: APjAAAXx0wJXFQl2aaF+dNsa9Xy6uYZ37YPxA+phqWr/rv68gWG7PWtl
-        as0sfWYnJo6Jbuu8dAlT+Tb0p6WVD6IeyC8e4g==
-X-Google-Smtp-Source: APXvYqyCM9nYr/pqJTVSXr9g4MM31JUmo02cPC6C4os3agfx8G2Cp08P3yIJO+S6Z7fvK4vvnlh0FkidgCeFhfsl7tk=
-X-Received: by 2002:aed:3fb0:: with SMTP id s45mr80553657qth.136.1564442279665;
- Mon, 29 Jul 2019 16:17:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190727175315.28834-1-martin.blumenstingl@googlemail.com> <20190727175315.28834-2-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20190727175315.28834-2-martin.blumenstingl@googlemail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 29 Jul 2019 17:17:47 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLRKF3mE7Xf_8Fxt2ycYAMmyo=bGB5f13cVoHShS3+G=g@mail.gmail.com>
-Message-ID: <CAL_JsqLRKF3mE7Xf_8Fxt2ycYAMmyo=bGB5f13cVoHShS3+G=g@mail.gmail.com>
-Subject: Re: [PATCH 1/5] dt-bindings: MIPS: lantiq: Add documentation for the
- External Bus Unit
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>, maz@kernel.org,
+        id S1728515AbfG2Xz2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Jul 2019 19:55:28 -0400
+Received: from gateway33.websitewelcome.com ([192.185.145.9]:33176 "EHLO
+        gateway33.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728269AbfG2Xz2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 29 Jul 2019 19:55:28 -0400
+X-Greylist: delayed 1307 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Jul 2019 19:55:27 EDT
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id 92C125C872
+        for <linux-mips@vger.kernel.org>; Mon, 29 Jul 2019 18:32:12 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id sF7khjCBl2PzOsF7khp2m8; Mon, 29 Jul 2019 18:32:12 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=KpUpOxxdU+KhG7Hocsjej/GA+sI7fVcCM88qfdZm4Nk=; b=z5f1wjJKlzs0jlKdEdS03CIAiU
+        asTWm2FuWtrMWHm4TAL1uQg5hBgvO6HgRa04/BfwxMrtF6R5jI2Dldkl8uKPBcmF/vTyQL6rLQG3P
+        p0VCBi5NJMns6GaJzkMrpu5o2wVHhDfML87lbncx5Ae2225YbDpu9Ul/Je47cwZ+6G/Tj1eVbjRcP
+        qkTBzpYM6Z7+/Kqih/W7Haf0RjaVjF0Zuev8UCBMtaY8rEIu3g5Ggzhef2ywZbyilOJO261rHFaMV
+        OpYDDGfFCIb1eqLmyksnaMGGn7wJIiNL1+ZauI9nS4YWdeopFgzxUpSDWMpzTKFJawByzwZiQRcAY
+        7+ugJ65Q==;
+Received: from [187.192.11.120] (port=33296 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hsF7j-002agT-EA; Mon, 29 Jul 2019 18:32:11 -0500
+Date:   Mon, 29 Jul 2019 18:32:10 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Robert Richter <rric@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        John Crispin <john@phrozen.org>,
-        Hauke Mehrtens <hauke@hauke-m.de>
-Content-Type: text/plain; charset="UTF-8"
+        James Hogan <jhogan@kernel.org>
+Cc:     oprofile-list@lists.sf.net, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH] MIPS: OProfile: Mark expected switch fall-throughs
+Message-ID: <20190729233209.GA28779@embeddedor>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.192.11.120
+X-Source-L: No
+X-Exim-ID: 1hsF7j-002agT-EA
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [187.192.11.120]:33296
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 6
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jul 27, 2019 at 11:53 AM Martin Blumenstingl
-<martin.blumenstingl@googlemail.com> wrote:
->
-> Lantiq SoCs contain a so-called External Bus Unit.
->
-> It attaches PCI memory as well as NAND and NOR flash. Additioanlly it
+Mark switch cases where we are expecting to fall through.
 
-typo
+This patch fixes the following warning (Building: mips):
 
-> contains an interrupt-controller for the PCI_INTA interrupt line.
->
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
->  .../bindings/mips/lantiq/lantiq,ebu.yaml      | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mips/lantiq/lantiq,ebu.yaml
->
-> diff --git a/Documentation/devicetree/bindings/mips/lantiq/lantiq,ebu.yaml b/Documentation/devicetree/bindings/mips/lantiq/lantiq,ebu.yaml
-> new file mode 100644
-> index 000000000000..0b0b27d0b64b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mips/lantiq/lantiq,ebu.yaml
-> @@ -0,0 +1,53 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mips/lantiq/lantiq,ebu.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Lantiq External Bus Unit (EBU) bindings
-> +
-> +maintainers:
-> +  - Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - lantiq,falcon-ebu
-> +      - lantiq,xway-ebu
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: The EBU module clock
+arch/mips/oprofile/op_model_mipsxx.c: In function ‘mipsxx_cpu_stop’:
+arch/mips/oprofile/op_model_mipsxx.c:217:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   w_c0_perfctrl3(0);
+   ^~~~~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:218:2: note: here
+  case 3:
+  ^~~~
+arch/mips/oprofile/op_model_mipsxx.c:219:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   w_c0_perfctrl2(0);
+   ^~~~~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:220:2: note: here
+  case 2:
+  ^~~~
+arch/mips/oprofile/op_model_mipsxx.c:221:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   w_c0_perfctrl1(0);
+   ^~~~~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:222:2: note: here
+  case 1:
+  ^~~~
+arch/mips/oprofile/op_model_mipsxx.c: In function ‘mipsxx_cpu_start’:
+arch/mips/oprofile/op_model_mipsxx.c:197:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   w_c0_perfctrl3(WHAT | reg.control[3]);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:198:2: note: here
+  case 3:
+  ^~~~
+arch/mips/oprofile/op_model_mipsxx.c:199:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   w_c0_perfctrl2(WHAT | reg.control[2]);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:200:2: note: here
+  case 2:
+  ^~~~
+arch/mips/oprofile/op_model_mipsxx.c:201:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   w_c0_perfctrl1(WHAT | reg.control[1]);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:202:2: note: here
+  case 1:
+  ^~~~
+arch/mips/oprofile/op_model_mipsxx.c: In function ‘reset_counters’:
+arch/mips/oprofile/op_model_mipsxx.c:299:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   w_c0_perfcntr3(0);
+   ^~~~~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:300:2: note: here
+  case 3:
+  ^~~~
+arch/mips/oprofile/op_model_mipsxx.c:302:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   w_c0_perfcntr2(0);
+   ^~~~~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:303:2: note: here
+  case 2:
+  ^~~~
+arch/mips/oprofile/op_model_mipsxx.c:305:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   w_c0_perfcntr1(0);
+   ^~~~~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:306:2: note: here
+  case 1:
+  ^~~~
+arch/mips/oprofile/op_model_mipsxx.c: In function ‘mipsxx_perfcount_handler’:
+arch/mips/oprofile/op_model_mipsxx.c:242:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   if ((control & MIPS_PERFCTRL_IE) &&   \
+      ^
+arch/mips/oprofile/op_model_mipsxx.c:248:2: note: in expansion of macro ‘HANDLE_COUNTER’
+  HANDLE_COUNTER(3)
+  ^~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:239:2: note: here
+  case n + 1:       \
+  ^
+arch/mips/oprofile/op_model_mipsxx.c:249:2: note: in expansion of macro ‘HANDLE_COUNTER’
+  HANDLE_COUNTER(2)
+  ^~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:242:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   if ((control & MIPS_PERFCTRL_IE) &&   \
+      ^
+arch/mips/oprofile/op_model_mipsxx.c:249:2: note: in expansion of macro ‘HANDLE_COUNTER’
+  HANDLE_COUNTER(2)
+  ^~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:239:2: note: here
+  case n + 1:       \
+  ^
+arch/mips/oprofile/op_model_mipsxx.c:250:2: note: in expansion of macro ‘HANDLE_COUNTER’
+  HANDLE_COUNTER(1)
+  ^~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:242:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   if ((control & MIPS_PERFCTRL_IE) &&   \
+      ^
+arch/mips/oprofile/op_model_mipsxx.c:250:2: note: in expansion of macro ‘HANDLE_COUNTER’
+  HANDLE_COUNTER(1)
+  ^~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:239:2: note: here
+  case n + 1:       \
+  ^
+arch/mips/oprofile/op_model_mipsxx.c:251:2: note: in expansion of macro ‘HANDLE_COUNTER’
+  HANDLE_COUNTER(0)
+  ^~~~~~~~~~~~~~
+  CC      usr/include/linux/pmu.h.s
+arch/mips/oprofile/op_model_mipsxx.c: In function ‘mipsxx_cpu_setup’:
+arch/mips/oprofile/op_model_mipsxx.c:174:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   w_c0_perfcntr3(reg.counter[3]);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:175:2: note: here
+  case 3:
+  ^~~~
+arch/mips/oprofile/op_model_mipsxx.c:177:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   w_c0_perfcntr2(reg.counter[2]);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:178:2: note: here
+  case 2:
+  ^~~~
+arch/mips/oprofile/op_model_mipsxx.c:180:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   w_c0_perfcntr1(reg.counter[1]);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/mips/oprofile/op_model_mipsxx.c:181:2: note: here
+  case 1:
+  ^~~~
 
-I prefer just 'maxItems: 1' as when there's only one clock, the
-description is not too useful.
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ arch/mips/oprofile/op_model_mipsxx.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-> +
-> +  interrupt-controller:
-> +    type: boolean
+diff --git a/arch/mips/oprofile/op_model_mipsxx.c b/arch/mips/oprofile/op_model_mipsxx.c
+index 7c04b17f4a48..96c13a0ab078 100644
+--- a/arch/mips/oprofile/op_model_mipsxx.c
++++ b/arch/mips/oprofile/op_model_mipsxx.c
+@@ -172,12 +172,15 @@ static void mipsxx_cpu_setup(void *args)
+ 	case 4:
+ 		w_c0_perfctrl3(0);
+ 		w_c0_perfcntr3(reg.counter[3]);
++		/* fall through */
+ 	case 3:
+ 		w_c0_perfctrl2(0);
+ 		w_c0_perfcntr2(reg.counter[2]);
++		/* fall through */
+ 	case 2:
+ 		w_c0_perfctrl1(0);
+ 		w_c0_perfcntr1(reg.counter[1]);
++		/* fall through */
+ 	case 1:
+ 		w_c0_perfctrl0(0);
+ 		w_c0_perfcntr0(reg.counter[0]);
+@@ -195,10 +198,13 @@ static void mipsxx_cpu_start(void *args)
+ 	switch (counters) {
+ 	case 4:
+ 		w_c0_perfctrl3(WHAT | reg.control[3]);
++		/* fall through */
+ 	case 3:
+ 		w_c0_perfctrl2(WHAT | reg.control[2]);
++		/* fall through */
+ 	case 2:
+ 		w_c0_perfctrl1(WHAT | reg.control[1]);
++		/* fall through */
+ 	case 1:
+ 		w_c0_perfctrl0(WHAT | reg.control[0]);
+ 	}
+@@ -215,10 +221,13 @@ static void mipsxx_cpu_stop(void *args)
+ 	switch (counters) {
+ 	case 4:
+ 		w_c0_perfctrl3(0);
++		/* fall through */
+ 	case 3:
+ 		w_c0_perfctrl2(0);
++		/* fall through */
+ 	case 2:
+ 		w_c0_perfctrl1(0);
++		/* fall through */
+ 	case 1:
+ 		w_c0_perfctrl0(0);
+ 	}
+@@ -236,6 +245,7 @@ static int mipsxx_perfcount_handler(void)
+ 
+ 	switch (counters) {
+ #define HANDLE_COUNTER(n)						\
++	/* fall through */						\
+ 	case n + 1:							\
+ 		control = r_c0_perfctrl ## n();				\
+ 		counter = r_c0_perfcntr ## n();				\
+@@ -297,12 +307,15 @@ static void reset_counters(void *arg)
+ 	case 4:
+ 		w_c0_perfctrl3(0);
+ 		w_c0_perfcntr3(0);
++		/* fall through */
+ 	case 3:
+ 		w_c0_perfctrl2(0);
+ 		w_c0_perfcntr2(0);
++		/* fall through */
+ 	case 2:
+ 		w_c0_perfctrl1(0);
+ 		w_c0_perfcntr1(0);
++		/* fall through */
+ 	case 1:
+ 		w_c0_perfctrl0(0);
+ 		w_c0_perfcntr0(0);
+-- 
+2.22.0
 
-Just 'true' is fine as this already has a defined type.
-
-> +
-> +  interrupt-cells:
-> +    const: 2
-> +
-> +  interrupts:
-> +    items:
-> +      - description: The EBU module interrupt line
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    memory-controller@e105300 {
-> +        compatible = "lantiq,xway-ebu";
-> +        reg = <0xe105300 0x100>;
-> +        clocks = <&pmu 10>;
-> +        interrupt-controller;
-> +        #interrupt-cells = <2>;
-> +        interrupt-parent = <&icu0>;
-> +        interrupts = <30>;
-> +    };
-> +...
-> --
-> 2.22.0
->
