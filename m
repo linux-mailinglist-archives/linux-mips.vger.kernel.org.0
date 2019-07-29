@@ -2,55 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BF9791BB
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jul 2019 19:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85E1791E6
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jul 2019 19:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728508AbfG2RFw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Jul 2019 13:05:52 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:39114 "EHLO
+        id S1727903AbfG2RTd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Jul 2019 13:19:33 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:40900 "EHLO
         crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728100AbfG2RFv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Jul 2019 13:05:51 -0400
+        with ESMTP id S1726601AbfG2RTd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Jul 2019 13:19:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1564419948; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1564420771; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6ct5sfA9aKEmr8hMlVPpfoX1PCyM/MxIecN3pTsFsbo=;
-        b=tGIbEOveRSTKHoZcpg/izsWRXZB3sJbHvlT52bDMqqruC35KNldtJ6Z1UumMknOBTmqxkS
-        L0QxFFWQrtfalRctJpTe/AFwPD5hYLu/miXPRxLnpxQZvMuW30gWEtzMHrKJVpyhyW4MrF
-        oruZx2tu/qGuw0Xp6xod1DxlnpMTbLU=
-Date:   Mon, 29 Jul 2019 13:05:21 -0400
+        bh=n8E4jxEmkny3KYi/27FNI9LuXpecTWt4GD8+XB/Ki9w=;
+        b=ld68ao2693if3y+5k9n2v4iD3Tr1wo1bSDYqyRtQDHGrjbRHNm7d9GIybz2nt4o9eaDwU8
+        rBzd0kmXRaz+ZaRywMxBbQbxdD8JPP/VqzC9w2NwU3ftcutP1d5G4iVUZ+TWOe0JqExRww
+        wohj74rYHgC/H7/SaegAykIc20AFXuc=
+Date:   Mon, 29 Jul 2019 13:19:14 -0400
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 00/11] JZ4740 SoC cleanup
-To:     Richard Weinberger <richard.weinberger@gmail.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>, od@zcrc.me,
-        linux-mtd@lists.infradead.org, dmaengine@vger.kernel.org,
-        Artur Rojek <contact@artur-rojek.eu>
-Message-Id: <1564419921.1759.1@crapouillou.net>
-In-Reply-To: <CAFLxGvyi0+0E3M12A7cRoHfEKd8-7Yr8EMG9J=2XcjCxPWY5pA@mail.gmail.com>
-References: <20190725220215.460-1-paul@crapouillou.net>
-        <CAFLxGvyi0+0E3M12A7cRoHfEKd8-7Yr8EMG9J=2XcjCxPWY5pA@mail.gmail.com>
+Subject: Re: [PATCH 1/4 v4] irqchip: Ingenic: Change interrupt handling form
+ cascade to chained_irq.
+To:     Zhou Yanjie <zhouyanjie@zoho.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        paul.burton@mips.com, tglx@linutronix.de, mark.rutland@arm.com,
+        jason@lakedaemon.net, marc.zyngier@arm.com
+Message-Id: <1564420754.6633.0@crapouillou.net>
+In-Reply-To: <1564335273-22931-2-git-send-email-zhouyanjie@zoho.com>
+References: <1548517123-60058-1-git-send-email-zhouyanjie@zoho.com>
+        <1564335273-22931-1-git-send-email-zhouyanjie@zoho.com>
+        <1564335273-22931-2-git-send-email-zhouyanjie@zoho.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -59,46 +43,117 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Richard,
+Hi Zhou,
 
 
-Le lun. 29 juil. 2019 =E0 7:23, Richard Weinberger=20
-<richard.weinberger@gmail.com> a =E9crit :
-> On Fri, Jul 26, 2019 at 12:02 AM Paul Cercueil <paul@crapouillou.net>=20
-> wrote:
->>=20
->>  Hi,
->>=20
->>  This patchset converts the Qi LB60 MIPS board to devicetree and=20
->> makes it
->>  use all the shiny new drivers that have been developed or updated
->>  recently.
->>=20
->>  All the crappy old drivers and custom code can be dropped since they
->>  have been replaced by better alternatives.
->>=20
->>  Some of these alternatives are not yet in 5.3-rc1 but have already=20
->> been
->>  accepted by their respective maintainer for inclusion in 5.4-rc1.
->>=20
->>  To upstream this patchset, I think that as soon as MIPS maintainers
->>  agree to take patches 01-03/11 and 11/11, the other patches can go
->>  through their respective maintainer's tree.
+
+Le dim. 28 juil. 2019 =E0 13:34, Zhou Yanjie <zhouyanjie@zoho.com> a=20
+=E9crit :
+> The interrupt handling method is changed from old-style cascade to
+> chained_irq which is more appropriate. Also, it can process the
+> corner situation that more than one irq is coming to a single
+> chip at the same time.
 >=20
-> Was this series tested with the Ben Nanonote device?
-> I have one of these and from time to time I upgrade the kernel on it.
+> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+> ---
+>  drivers/irqchip/irq-ingenic.c | 37=20
+> +++++++++++++++++++++++--------------
+>  1 file changed, 23 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/drivers/irqchip/irq-ingenic.c=20
+> b/drivers/irqchip/irq-ingenic.c
+> index f126255..49f7685 100644
+> --- a/drivers/irqchip/irq-ingenic.c
+> +++ b/drivers/irqchip/irq-ingenic.c
+> @@ -1,7 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0-or-later
+>  /*
+>   *  Copyright (C) 2009-2010, Lars-Peter Clausen <lars@metafoo.de>
+> - *  JZ4740 platform IRQ support
+> + *  Ingenic XBurst platform IRQ support
+>   */
+>=20
+>  #include <linux/errno.h>
+> @@ -10,6 +10,7 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/ioport.h>
+>  #include <linux/irqchip.h>
+> +#include <linux/irqchip/chained_irq.h>
+>  #include <linux/irqchip/ingenic.h>
+>  #include <linux/of_address.h>
+>  #include <linux/of_irq.h>
+> @@ -32,22 +33,34 @@ struct ingenic_intc_data {
+>  #define JZ_REG_INTC_PENDING	0x10
+>  #define CHIP_SIZE		0x20
+>=20
+> -static irqreturn_t intc_cascade(int irq, void *data)
+> +static void ingenic_chained_handle_irq(struct irq_desc *desc)
+>  {
+> -	struct ingenic_intc_data *intc =3D irq_get_handler_data(irq);
+> -	uint32_t irq_reg;
+> +	struct ingenic_intc_data *intc =3D irq_desc_get_handler_data(desc);
+> +	struct irq_chip *chip =3D irq_desc_get_chip(desc);
+> +	bool have_irq =3D false;
+> +	uint32_t pending;
+>  	unsigned i;
+>=20
+> +	chained_irq_enter(chip, desc);
+>  	for (i =3D 0; i < intc->num_chips; i++) {
+> -		irq_reg =3D readl(intc->base + (i * CHIP_SIZE) +
+> +		pending =3D readl(intc->base + (i * CHIP_SIZE) +
+>  				JZ_REG_INTC_PENDING);
+> -		if (!irq_reg)
+> +		if (!pending)
+>  			continue;
+>=20
+> -		generic_handle_irq(__fls(irq_reg) + (i * 32) + JZ4740_IRQ_BASE);
+> +		have_irq =3D true;
+> +		while (pending) {
+> +			int bit =3D __fls(pending);
 
-Yes! Artur (Cc'd) tested it.
+Use the for_each_set_bit() macro here, that will be simpler.
 
-You can test it yourself, after merging this patchset with:
-https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/slave-dma.git=20
-branch next,
-git://git.freedesktop.org/git/drm-misc branch drm-misc-next.
 
-These will be in 5.4-rc1.
-
-Cheers,
--Paul
+> +
+> +			generic_handle_irq(bit + (i * 32) + JZ4740_IRQ_BASE);
+> +			pending &=3D ~BIT(bit);
+> +		}
+>  	}
+>=20
+> -	return IRQ_HANDLED;
+> +	if (!have_irq)
+> +		spurious_interrupt();
+> +
+> +	chained_irq_exit(chip, desc);
+>  }
+>=20
+>  static void intc_irq_set_mask(struct irq_chip_generic *gc, uint32_t=20
+> mask)
+> @@ -70,11 +83,6 @@ void ingenic_intc_irq_resume(struct irq_data *data)
+>  	intc_irq_set_mask(gc, gc->mask_cache);
+>  }
+>=20
+> -static struct irqaction intc_cascade_action =3D {
+> -	.handler =3D intc_cascade,
+> -	.name =3D "SoC intc cascade interrupt",
+> -};
+> -
+>  static int __init ingenic_intc_of_init(struct device_node *node,
+>  				       unsigned num_chips)
+>  {
+> @@ -139,7 +147,8 @@ static int __init ingenic_intc_of_init(struct=20
+> device_node *node,
+>  	if (!domain)
+>  		pr_warn("unable to register IRQ domain\n");
+>=20
+> -	setup_irq(parent_irq, &intc_cascade_action);
+> +	irq_set_chained_handler_and_data(parent_irq,
+> +					ingenic_chained_handle_irq, intc);
+>  	return 0;
+>=20
+>  out_unmap_irq:
+> --
+> 2.7.4
 
 =
 
