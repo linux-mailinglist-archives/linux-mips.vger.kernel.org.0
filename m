@@ -2,85 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6AD792D0
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Jul 2019 20:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0077979359
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Jul 2019 20:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387484AbfG2SIm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 29 Jul 2019 14:08:42 -0400
-Received: from lithops.sigma-star.at ([195.201.40.130]:42270 "EHLO
-        lithops.sigma-star.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727482AbfG2SIm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Jul 2019 14:08:42 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id E832A60632C0;
-        Mon, 29 Jul 2019 20:08:38 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ehX5VuQgnl7G; Mon, 29 Jul 2019 20:08:38 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 70E276083139;
-        Mon, 29 Jul 2019 20:08:38 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id XjNoOe8nauWF; Mon, 29 Jul 2019 20:08:38 +0200 (CEST)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id D590B608311C;
-        Mon, 29 Jul 2019 20:08:37 +0200 (CEST)
-Date:   Mon, 29 Jul 2019 20:08:37 +0200 (CEST)
-From:   Richard Weinberger <richard@nod.at>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Richard Weinberger <richard.weinberger@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
+        id S2387521AbfG2SqA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 29 Jul 2019 14:46:00 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54436 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387512AbfG2SqA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 29 Jul 2019 14:46:00 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 2C7F0AE62;
+        Mon, 29 Jul 2019 18:45:58 +0000 (UTC)
+Date:   Mon, 29 Jul 2019 20:45:57 +0200
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, od@zcrc.me,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        dmaengine@vger.kernel.org, Artur Rojek <contact@artur-rojek.eu>
-Message-ID: <339409106.53616.1564423717793.JavaMail.zimbra@nod.at>
-In-Reply-To: <1564419921.1759.1@crapouillou.net>
-References: <20190725220215.460-1-paul@crapouillou.net> <CAFLxGvyi0+0E3M12A7cRoHfEKd8-7Yr8EMG9J=2XcjCxPWY5pA@mail.gmail.com> <1564419921.1759.1@crapouillou.net>
-Subject: Re: [PATCH 00/11] JZ4740 SoC cleanup
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v3 5/7] mfd: ioc3: Add driver for SGI IOC3 chip
+Message-Id: <20190729204557.468db2153efefda96dd41ec0@suse.de>
+In-Reply-To: <20190725114716.GB23883@dell>
+References: <20190613170636.6647-1-tbogendoerfer@suse.de>
+        <20190613170636.6647-6-tbogendoerfer@suse.de>
+        <20190725114716.GB23883@dell>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF60 (Linux)/8.8.12_GA_3809)
-Thread-Topic: JZ4740 SoC cleanup
-Thread-Index: pyW9XJwx/g8VXIVrZC/ODWU++joHAw==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
------ UrsprÃ¼ngliche Mail -----
->> Was this series tested with the Ben Nanonote device?
->> I have one of these and from time to time I upgrade the kernel on it.
-> 
-> Yes! Artur (Cc'd) tested it.
-> 
-> You can test it yourself, after merging this patchset with:
-> https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/slave-dma.git
-> branch next,
-> git://git.freedesktop.org/git/drm-misc branch drm-misc-next.
-> 
-> These will be in 5.4-rc1.
+On Thu, 25 Jul 2019 12:47:16 +0100
+Lee Jones <lee.jones@linaro.org> wrote:
 
-Awesome! Thanks a lot for cleaning this up.
+> On Thu, 13 Jun 2019, Thomas Bogendoerfer wrote:
+> > +/*
+> > + * On IP30 the RTC (a DS1687) is behind the IOC3 on the generic
+> > + * ByteBus regions. We have to write the RTC address of interest to
+> > + * IOC3_BYTEBUS_DEV1, then read the data from IOC3_BYTEBUS_DEV2.
+> > + * rtc->regs already points to IOC3_BYTEBUS_DEV1.
+> > + */
+> > +#define IP30_RTC_ADDR(rtc) (rtc->regs)
+> > +#define IP30_RTC_DATA(rtc) ((rtc->regs) + IOC3_BYTEBUS_DEV2 - IOC3_BYTEBUS_DEV1)
+> > +
+> > +static u8 ip30_rtc_read(struct ds1685_priv *rtc, int reg)
+> > +{
+> > +	writeb((reg & 0x7f), IP30_RTC_ADDR(rtc));
+> > +	return readb(IP30_RTC_DATA(rtc));
+> > +}
+> > +
+> > +static void ip30_rtc_write(struct ds1685_priv *rtc, int reg, u8 value)
+> > +{
+> > +	writeb((reg & 0x7f), IP30_RTC_ADDR(rtc));
+> > +	writeb(value, IP30_RTC_DATA(rtc));
+> > +}
+> 
+> Why is this not in the RTC driver?
 
-Thanks,
-//richard
+because rtc1685 is used in different systems and accessing the chip
+differs between those systems. 
+
+> > +static struct ds1685_rtc_platform_data ip30_rtc_platform_data = {
+> > +	.bcd_mode = false,
+> > +	.no_irq = false,
+> > +	.uie_unsupported = true,
+> > +	.alloc_io_resources = true,
+> 
+> > +	.plat_read = ip30_rtc_read,
+> > +	.plat_write = ip30_rtc_write,
+> 
+> Call-backs in a non-subsystem API is pretty ugly IMHO.
+
+I agree
+
+> Where are these called from?
+
+drivers/rtc/rtc-ds1685.c
+
+I could do the same as done for serial8250 and add an additional .c file
+in  drivers/rtc which handles this for SGI-IP30. Alexandre would this work
+for you as well ?
+
+> > +#define IOC3_SID(_name, _sid, _setup) \
+> > +	{								   \
+> > +		.name = _name,						   \
+> > +		.sid = (PCI_VENDOR_ID_SGI << 16) | IOC3_SUBSYS_ ## _sid,   \
+> > +		.setup = _setup,					   \
+> > +	}
+> > +
+> > +static struct {
+> > +	const char *name;
+> > +	u32 sid;
+> > +	int (*setup)(struct ioc3_priv_data *ipd);
+> > +} ioc3_infos[] = {
+> 
+> IMHO it's neater if you separate the definition and static data part.
+
+I don't quite understand what you mean here. Should I move the #define at
+the beginning of the file ? Why is it neater ?
+
+Thomas.
+
+-- 
+SUSE Linux GmbH
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
