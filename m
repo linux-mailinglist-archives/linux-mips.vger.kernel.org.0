@@ -2,137 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC407B8DB
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2019 06:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD157B96A
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2019 08:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728414AbfGaEki (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 31 Jul 2019 00:40:38 -0400
-Received: from sender-pp-o92.zoho.com ([135.84.80.237]:25439 "EHLO
-        sender-pp-o92.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728477AbfGaEki (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 31 Jul 2019 00:40:38 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1564547992; cv=none; 
-        d=zoho.com; s=zohoarc; 
-        b=m4avGWKs1SABe+PRjhmFRG0Mu+M4XbK/DqFrIpsXVfrLcBfz8jqojT8ZU1nKdlb19v8QOHK3fGZm+0ZHs7L7ZNa+/XTJR4GfLJQWfL0PbTmi+sAzrik+x8q9G+Ch54nhxdqQ8Bf44/5jKLntRonAJsTqy1Cj0xrlSQ+HEh0O7SQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com; s=zohoarc; 
-        t=1564547992; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To:ARC-Authentication-Results; 
-        bh=JaAydh1T9WDrn0zFAYMF2wyL7O0jE513KdDgoPdGaaM=; 
-        b=PgrUr8ZjzHgyNYHcbyffxSdh/2kfLbgocUl5sToahV1ptYEsvdqhIXuuc9W4JS7y/hkMIwJak6OvBSrJV/y1GnFcfKqgD1ksAQM1BuEExWG7L2F6p1tnS3ZHrZtOBL30dTY1xz6QCe+RaVKadpzDCJ5lpZtrAxJOAiu7ySTdq6o=
-ARC-Authentication-Results: i=1; mx.zoho.com;
-        dkim=pass  header.i=zoho.com;
-        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
-        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
-DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
-  s=zapps768; d=zoho.com; 
-  h=from:to:cc:subject:date:message-id:in-reply-to:references; 
-  b=hBwB8uJngsoSXGOZzIxI3JPXAVXxjulZV7UBqljex3k6bK68OfAy1xzF2Ta0h6JTJRPJcHMVwIzO
-    x+5SwzOws7mitbJ6qFKRUhpqLMR41aIDd5/6VDcjaZC6cOzu1GbE  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1564547992;
-        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        l=2635; bh=JaAydh1T9WDrn0zFAYMF2wyL7O0jE513KdDgoPdGaaM=;
-        b=aN40XLtiJhePB+q6NE/cgkpP5DIXGTDAjo9xRe/5Cv1s/807IIf5ErLKK4xj4zK/
-        amqEBqhGIkTgaqw6lu2j5dEHpJ7etcH3IVftnXN02b8PM/WbYK/2N2X5Gi/vhvgVCHF
-        LeIut5SJpYuokajaQqosmCUhcWbDt4CcOj7LgLM8=
-Received: from localhost.localdomain (171.221.113.137 [171.221.113.137]) by mx.zohomail.com
-        with SMTPS id 156454799072489.93408510051506; Tue, 30 Jul 2019 21:39:50 -0700 (PDT)
-From:   Zhou Yanjie <zhouyanjie@zoho.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, ralf@linux-mips.org,
-        paul@crapouillou.net, paul.burton@mips.com, jhogan@kernel.org,
-        malat@debian.org, chenhc@lemote.com, tglx@linutronix.de,
-        allison@lohutok.net, syq@debian.org, jiaxun.yang@flygoat.com
-Subject: [PATCH v2] MIPS: Ingenic: Fix bugs when detecting X1000's parameters.
-Date:   Wed, 31 Jul 2019 12:39:03 +0800
-Message-Id: <1564547943-27505-2-git-send-email-zhouyanjie@zoho.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1564547943-27505-1-git-send-email-zhouyanjie@zoho.com>
-References: <1564498510-3751-1-git-send-email-zhouyanjie@zoho.com>
- <1564547943-27505-1-git-send-email-zhouyanjie@zoho.com>
-X-ZohoMailClient: External
+        id S1726582AbfGaGFd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 31 Jul 2019 02:05:33 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:47827 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725209AbfGaGFd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 31 Jul 2019 02:05:33 -0400
+Received: from [192.168.0.12] (127.19.86.79.rev.sfr.net [79.86.19.127])
+        (Authenticated sender: alex@ghiti.fr)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 68D61100008;
+        Wed, 31 Jul 2019 06:05:23 +0000 (UTC)
+Subject: Re: [PATCH v5 14/14] riscv: Make mmap allocation top-down by default
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+References: <20190730055113.23635-1-alex@ghiti.fr>
+ <20190730055113.23635-15-alex@ghiti.fr>
+From:   Alex Ghiti <alex@ghiti.fr>
+Message-ID: <88a9bbf8-872f-97cc-fc1a-83eb7694478f@ghiti.fr>
+Date:   Wed, 31 Jul 2019 02:05:23 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
+MIME-Version: 1.0
+In-Reply-To: <20190730055113.23635-15-alex@ghiti.fr>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: sv-FI
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-1.fix bugs when detecting L2 cache sets value.
-2.fix bugs when detecting L2 cache ways value.
-3.fix bugs when calculate bogoMips and loops_per_jiffy.
+On 7/30/19 1:51 AM, Alexandre Ghiti wrote:
+> In order to avoid wasting user address space by using bottom-up mmap
+> allocation scheme, prefer top-down scheme when possible.
+>
+> Before:
+> root@qemuriscv64:~# cat /proc/self/maps
+> 00010000-00016000 r-xp 00000000 fe:00 6389       /bin/cat.coreutils
+> 00016000-00017000 r--p 00005000 fe:00 6389       /bin/cat.coreutils
+> 00017000-00018000 rw-p 00006000 fe:00 6389       /bin/cat.coreutils
+> 00018000-00039000 rw-p 00000000 00:00 0          [heap]
+> 1555556000-155556d000 r-xp 00000000 fe:00 7193   /lib/ld-2.28.so
+> 155556d000-155556e000 r--p 00016000 fe:00 7193   /lib/ld-2.28.so
+> 155556e000-155556f000 rw-p 00017000 fe:00 7193   /lib/ld-2.28.so
+> 155556f000-1555570000 rw-p 00000000 00:00 0
+> 1555570000-1555572000 r-xp 00000000 00:00 0      [vdso]
+> 1555574000-1555576000 rw-p 00000000 00:00 0
+> 1555576000-1555674000 r-xp 00000000 fe:00 7187   /lib/libc-2.28.so
+> 1555674000-1555678000 r--p 000fd000 fe:00 7187   /lib/libc-2.28.so
+> 1555678000-155567a000 rw-p 00101000 fe:00 7187   /lib/libc-2.28.so
+> 155567a000-15556a0000 rw-p 00000000 00:00 0
+> 3fffb90000-3fffbb1000 rw-p 00000000 00:00 0      [stack]
+>
+> After:
+> root@qemuriscv64:~# cat /proc/self/maps
+> 00010000-00016000 r-xp 00000000 fe:00 6389       /bin/cat.coreutils
+> 00016000-00017000 r--p 00005000 fe:00 6389       /bin/cat.coreutils
+> 00017000-00018000 rw-p 00006000 fe:00 6389       /bin/cat.coreutils
+> 2de81000-2dea2000 rw-p 00000000 00:00 0          [heap]
+> 3ff7eb6000-3ff7ed8000 rw-p 00000000 00:00 0
+> 3ff7ed8000-3ff7fd6000 r-xp 00000000 fe:00 7187   /lib/libc-2.28.so
+> 3ff7fd6000-3ff7fda000 r--p 000fd000 fe:00 7187   /lib/libc-2.28.so
+> 3ff7fda000-3ff7fdc000 rw-p 00101000 fe:00 7187   /lib/libc-2.28.so
+> 3ff7fdc000-3ff7fe2000 rw-p 00000000 00:00 0
+> 3ff7fe4000-3ff7fe6000 r-xp 00000000 00:00 0      [vdso]
+> 3ff7fe6000-3ff7ffd000 r-xp 00000000 fe:00 7193   /lib/ld-2.28.so
+> 3ff7ffd000-3ff7ffe000 r--p 00016000 fe:00 7193   /lib/ld-2.28.so
+> 3ff7ffe000-3ff7fff000 rw-p 00017000 fe:00 7193   /lib/ld-2.28.so
+> 3ff7fff000-3ff8000000 rw-p 00000000 00:00 0
+> 3fff888000-3fff8a9000 rw-p 00000000 00:00 0      [stack]
+>
+> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>   arch/riscv/Kconfig | 13 +++++++++++++
+>   1 file changed, 13 insertions(+)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 8ef64fe2c2b3..8d0d8af1a744 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -54,6 +54,19 @@ config RISCV
+>   	select EDAC_SUPPORT
+>   	select ARCH_HAS_GIGANTIC_PAGE
+>   	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
+> +	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+> +	select HAVE_ARCH_MMAP_RND_BITS
+> +
+> +config ARCH_MMAP_RND_BITS_MIN
+> +	default 18 if 64BIT
+> +	default 8
+> +
+> +# max bits determined by the following formula:
+> +#  VA_BITS - PAGE_SHIFT - 3
+> +config ARCH_MMAP_RND_BITS_MAX
+> +	default 33 if RISCV_VM_SV48
+> +	default 24 if RISCV_VM_SV39
+> +	default 17 if RISCV_VM_SV32
+>   
+>   config MMU
+>   	def_bool y
 
-Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
----
- arch/mips/include/asm/mipsregs.h |  1 +
- arch/mips/kernel/cpu-probe.c     |  7 +++++++
- arch/mips/mm/sc-mips.c           | 18 +++++++++++++++---
- 3 files changed, 23 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
-index 1e6966e..01e0fcb 100644
---- a/arch/mips/include/asm/mipsregs.h
-+++ b/arch/mips/include/asm/mipsregs.h
-@@ -2813,6 +2813,7 @@ __BUILD_SET_C0(status)
- __BUILD_SET_C0(cause)
- __BUILD_SET_C0(config)
- __BUILD_SET_C0(config5)
-+__BUILD_SET_C0(config7)
- __BUILD_SET_C0(intcontrol)
- __BUILD_SET_C0(intctl)
- __BUILD_SET_C0(srsmap)
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index eb527a1..547c9a0 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -1964,6 +1964,13 @@ static inline void cpu_probe_ingenic(struct cpuinfo_mips *c, unsigned int cpu)
- 		c->cputype = CPU_XBURST;
- 		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
- 		__cpu_name[cpu] = "Ingenic XBurst";
-+		/*
-+		 * config7 bit 4 is used to control a low-power mode in
-+		 * XBurst architecture. This mode may cause errors in the
-+		 * calculation of bogomips and loops_per_jiffy, set config7
-+		 * bit 4 to disable this feature to prevent that.
-+		 */
-+		set_c0_config7(BIT(4));
- 		break;
- 	default:
- 		panic("Unknown Ingenic Processor ID!");
-diff --git a/arch/mips/mm/sc-mips.c b/arch/mips/mm/sc-mips.c
-index 9385ddb..ed953d4 100644
---- a/arch/mips/mm/sc-mips.c
-+++ b/arch/mips/mm/sc-mips.c
-@@ -215,6 +215,14 @@ static inline int __init mips_sc_probe(void)
- 	else
- 		return 0;
- 
-+	/*
-+	 * According to config2 it would be 512-sets, but that is contradicted
-+	 * by all documentation.
-+	 */
-+	if (current_cpu_type() == CPU_XBURST &&
-+				mips_machtype == MACH_INGENIC_X1000)
-+		c->scache.sets = 256;
-+
- 	tmp = (config2 >> 0) & 0x0f;
- 	if (tmp <= 7)
- 		c->scache.ways = tmp + 1;
-@@ -225,9 +233,13 @@ static inline int __init mips_sc_probe(void)
- 	 * According to config2 it would be 5-ways, but that is contradicted
- 	 * by all documentation.
- 	 */
--	if (current_cpu_type() == CPU_XBURST &&
--				mips_machtype == MACH_INGENIC_JZ4770)
--		c->scache.ways = 4;
-+	if (current_cpu_type() == CPU_XBURST) {
-+		switch (mips_machtype) {
-+		case MACH_INGENIC_JZ4770:
-+		case MACH_INGENIC_X1000:
-+			c->scache.ways = 4;
-+		}
-+	}
- 
- 	c->scache.waysize = c->scache.sets * c->scache.linesz;
- 	c->scache.waybit = __ffs(c->scache.waysize);
--- 
-2.7.4
+Hi Andrew,
 
+I have just seen you took this series into mmotm but without Paul's 
+patch ("riscv: kbuild: add virtual memory system selection") on which 
+this commit relies, I'm not sure it could
+compile without it as there is no default for ARCH_MMAP_RND_BITS_MAX.
+
+Thanks,
+
+Alex
 
