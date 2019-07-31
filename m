@@ -2,135 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD157B96A
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2019 08:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2437C740
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Jul 2019 17:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726582AbfGaGFd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 31 Jul 2019 02:05:33 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:47827 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725209AbfGaGFd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 31 Jul 2019 02:05:33 -0400
-Received: from [192.168.0.12] (127.19.86.79.rev.sfr.net [79.86.19.127])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 68D61100008;
-        Wed, 31 Jul 2019 06:05:23 +0000 (UTC)
-Subject: Re: [PATCH v5 14/14] riscv: Make mmap allocation top-down by default
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Russell King <linux@armlinux.org.uk>,
+        id S1728739AbfGaPq1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 31 Jul 2019 11:46:27 -0400
+Received: from foss.arm.com ([217.140.110.172]:49620 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726962AbfGaPq0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 31 Jul 2019 11:46:26 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6D1621570;
+        Wed, 31 Jul 2019 08:46:26 -0700 (PDT)
+Received: from e112269-lin.arm.com (e112269-lin.cambridge.arm.com [10.1.196.133])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B6463F694;
+        Wed, 31 Jul 2019 08:46:23 -0700 (PDT)
+From:   Steven Price <steven.price@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Steven Price <steven.price@arm.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <Mark.Rutland@arm.com>,
+        "Liang, Kan" <kan.liang@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-References: <20190730055113.23635-1-alex@ghiti.fr>
- <20190730055113.23635-15-alex@ghiti.fr>
-From:   Alex Ghiti <alex@ghiti.fr>
-Message-ID: <88a9bbf8-872f-97cc-fc1a-83eb7694478f@ghiti.fr>
-Date:   Wed, 31 Jul 2019 02:05:23 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH v10 05/22] mips: mm: Add p?d_leaf() definitions
+Date:   Wed, 31 Jul 2019 16:45:46 +0100
+Message-Id: <20190731154603.41797-6-steven.price@arm.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190731154603.41797-1-steven.price@arm.com>
+References: <20190731154603.41797-1-steven.price@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20190730055113.23635-15-alex@ghiti.fr>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: sv-FI
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 7/30/19 1:51 AM, Alexandre Ghiti wrote:
-> In order to avoid wasting user address space by using bottom-up mmap
-> allocation scheme, prefer top-down scheme when possible.
->
-> Before:
-> root@qemuriscv64:~# cat /proc/self/maps
-> 00010000-00016000 r-xp 00000000 fe:00 6389       /bin/cat.coreutils
-> 00016000-00017000 r--p 00005000 fe:00 6389       /bin/cat.coreutils
-> 00017000-00018000 rw-p 00006000 fe:00 6389       /bin/cat.coreutils
-> 00018000-00039000 rw-p 00000000 00:00 0          [heap]
-> 1555556000-155556d000 r-xp 00000000 fe:00 7193   /lib/ld-2.28.so
-> 155556d000-155556e000 r--p 00016000 fe:00 7193   /lib/ld-2.28.so
-> 155556e000-155556f000 rw-p 00017000 fe:00 7193   /lib/ld-2.28.so
-> 155556f000-1555570000 rw-p 00000000 00:00 0
-> 1555570000-1555572000 r-xp 00000000 00:00 0      [vdso]
-> 1555574000-1555576000 rw-p 00000000 00:00 0
-> 1555576000-1555674000 r-xp 00000000 fe:00 7187   /lib/libc-2.28.so
-> 1555674000-1555678000 r--p 000fd000 fe:00 7187   /lib/libc-2.28.so
-> 1555678000-155567a000 rw-p 00101000 fe:00 7187   /lib/libc-2.28.so
-> 155567a000-15556a0000 rw-p 00000000 00:00 0
-> 3fffb90000-3fffbb1000 rw-p 00000000 00:00 0      [stack]
->
-> After:
-> root@qemuriscv64:~# cat /proc/self/maps
-> 00010000-00016000 r-xp 00000000 fe:00 6389       /bin/cat.coreutils
-> 00016000-00017000 r--p 00005000 fe:00 6389       /bin/cat.coreutils
-> 00017000-00018000 rw-p 00006000 fe:00 6389       /bin/cat.coreutils
-> 2de81000-2dea2000 rw-p 00000000 00:00 0          [heap]
-> 3ff7eb6000-3ff7ed8000 rw-p 00000000 00:00 0
-> 3ff7ed8000-3ff7fd6000 r-xp 00000000 fe:00 7187   /lib/libc-2.28.so
-> 3ff7fd6000-3ff7fda000 r--p 000fd000 fe:00 7187   /lib/libc-2.28.so
-> 3ff7fda000-3ff7fdc000 rw-p 00101000 fe:00 7187   /lib/libc-2.28.so
-> 3ff7fdc000-3ff7fe2000 rw-p 00000000 00:00 0
-> 3ff7fe4000-3ff7fe6000 r-xp 00000000 00:00 0      [vdso]
-> 3ff7fe6000-3ff7ffd000 r-xp 00000000 fe:00 7193   /lib/ld-2.28.so
-> 3ff7ffd000-3ff7ffe000 r--p 00016000 fe:00 7193   /lib/ld-2.28.so
-> 3ff7ffe000-3ff7fff000 rw-p 00017000 fe:00 7193   /lib/ld-2.28.so
-> 3ff7fff000-3ff8000000 rw-p 00000000 00:00 0
-> 3fff888000-3fff8a9000 rw-p 00000000 00:00 0      [stack]
->
-> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> ---
->   arch/riscv/Kconfig | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 8ef64fe2c2b3..8d0d8af1a744 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -54,6 +54,19 @@ config RISCV
->   	select EDAC_SUPPORT
->   	select ARCH_HAS_GIGANTIC_PAGE
->   	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
-> +	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
-> +	select HAVE_ARCH_MMAP_RND_BITS
-> +
-> +config ARCH_MMAP_RND_BITS_MIN
-> +	default 18 if 64BIT
-> +	default 8
-> +
-> +# max bits determined by the following formula:
-> +#  VA_BITS - PAGE_SHIFT - 3
-> +config ARCH_MMAP_RND_BITS_MAX
-> +	default 33 if RISCV_VM_SV48
-> +	default 24 if RISCV_VM_SV39
-> +	default 17 if RISCV_VM_SV32
->   
->   config MMU
->   	def_bool y
+walk_page_range() is going to be allowed to walk page tables other than
+those of user space. For this it needs to know when it has reached a
+'leaf' entry in the page tables. This information is provided by the
+p?d_leaf() functions/macros.
 
+If _PAGE_HUGE is defined we can simply look for it. When not defined we
+can be confident that there are no leaf pages in existence and fall back
+on the generic implementation (added in a later patch) which returns 0.
 
-Hi Andrew,
+CC: Ralf Baechle <ralf@linux-mips.org>
+CC: Paul Burton <paul.burton@mips.com>
+CC: James Hogan <jhogan@kernel.org>
+CC: linux-mips@vger.kernel.org
+Signed-off-by: Steven Price <steven.price@arm.com>
+---
+ arch/mips/include/asm/pgtable.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-I have just seen you took this series into mmotm but without Paul's 
-patch ("riscv: kbuild: add virtual memory system selection") on which 
-this commit relies, I'm not sure it could
-compile without it as there is no default for ARCH_MMAP_RND_BITS_MAX.
-
-Thanks,
-
-Alex
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index 7d27194e3b45..238ca243ad31 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -627,6 +627,11 @@ static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
+ 
+ #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+ 
++#ifdef _PAGE_HUGE
++#define pmd_leaf(pmd)	((pmd_val(pmd) & _PAGE_HUGE) != 0)
++#define pud_leaf(pud)	((pud_val(pud) & _PAGE_HUGE) != 0)
++#endif
++
+ #define gup_fast_permitted(start, end)	(!cpu_has_dc_aliases)
+ 
+ #include <asm-generic/pgtable.h>
+-- 
+2.20.1
 
