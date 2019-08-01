@@ -2,141 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CEE7DA68
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2019 13:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826687DB32
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Aug 2019 14:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730789AbfHALgm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Aug 2019 07:36:42 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39828 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729316AbfHALgm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Aug 2019 07:36:42 -0400
-Received: by mail-wr1-f68.google.com with SMTP id x4so20053950wrt.6;
-        Thu, 01 Aug 2019 04:36:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=3PsNsi2Fg8DGSuD3bjQVO0TQEivknJu9Yr7/bdJYvzU=;
-        b=PzoRWKjZFlYUQVRFPQQqndWwjtGZ7pWJ/SY7iVkEwJ+ACvNO6s4lbo52eQHgQuYxbq
-         p5OO50Z2r8okuiaMaJZIXb5x71Lie1wQzT4UiuAxPqWtT+FirRXb9Rh1B7o0X3p/S6dL
-         xtz/UkPHL0WPpbeAi0pqtF4Pxv9+lixRD82FZB+2dobhjthoV71NWf2KlhOr/0uqC4q7
-         F2CNbQf+fpxP03YYC0GincfFTfJAeiGJ8jxPTFBEwtgq46VZb/S1aw/k3YmYTOlVpoGv
-         C/fCXze39+uOxJjVUyU9kNKBUYtpeYvLYK2VyGj7JXL2OFCR1kXMcdRnssdIU983SgVd
-         //mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3PsNsi2Fg8DGSuD3bjQVO0TQEivknJu9Yr7/bdJYvzU=;
-        b=kFIXF3l7najzWRrQ1ZpVFYFIJi+qBGLiBwOKMVmiYyioPHyoakNdUomSWBfuJpLUVf
-         wtKq0Cgk3nk1FKcdgAOtYHsji+b3SOEXjjm0ki7yKaWp39X3iystHGIRX0xPjv0+oNfL
-         pgOi4tuaD05TPvMMjBdJlbMWiORHtmCJ5O8f9bLn88NcH7MdrZIHpvBa1D190Yz1kq1z
-         yg/JHhx9nbljN4Xnufgcsb0C20XpFWOj2qZc49lCkuCfoDPsrPw7GoYelx3ycf6H3yW4
-         yFFpLFCgdRklo9utS+sBT8y08YWnYZeq4RuOdoB6tzWy3/Ru+FtBho1xhPZL8WRzQRWP
-         Ia2w==
-X-Gm-Message-State: APjAAAXkSbA7bs3xtw3UzVtHEk21hlWZVzt74D+MRhTYHV8RWJqKW0nv
-        IvJ4ZZGH9l08AYrlOZP9jHU=
-X-Google-Smtp-Source: APXvYqzNnWUHwlJCYtRjPnM4tG/VteAkGiqthP9PjwfNMneBVu+24Yc772w0iwNmvSeJgfNHe1iDpg==
-X-Received: by 2002:adf:f812:: with SMTP id s18mr3133864wrp.32.1564659400099;
-        Thu, 01 Aug 2019 04:36:40 -0700 (PDT)
-Received: from rric.localdomain (x4e365c6b.dyn.telefonica.de. [78.54.92.107])
-        by smtp.gmail.com with ESMTPSA id l25sm54583654wme.13.2019.08.01.04.36.38
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 01 Aug 2019 04:36:39 -0700 (PDT)
-Date:   Thu, 1 Aug 2019 13:35:49 +0200
-From:   Robert Richter <rric@kernel.org>
-To:     Hanna Hawa <hhhawa@amazon.com>
-Cc:     thor.thayer@linux.intel.com, bp@alien8.de, mchehab@kernel.org,
-        james.morse@arm.com, morbidrsa@gmail.com, ralf@linux-mips.org,
-        david.daney@cavium.com, andy.gross@linaro.org,
-        david.brown@linaro.org, ckadabi@codeaurora.org,
-        vnkgutta@codeaurora.org, jglauber@cavium.com,
-        khuong@os.amperecomputing.com, dwmw@amazon.co.uk, benh@amazon.com,
-        ronenk@amazon.com, talel@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [RFC 1/1] edac: Add a counter parameter for
- edac_device_handle_ue/ce()
-Message-ID: <20190801113548.7leooh57gihixen5@rric.localdomain>
-References: <1563187987-5847-1-git-send-email-hhhawa@amazon.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1563187987-5847-1-git-send-email-hhhawa@amazon.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+        id S1727248AbfHAMSD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Aug 2019 08:18:03 -0400
+Received: from sender-pp-o92.zoho.com ([135.84.80.237]:25489 "EHLO
+        sender-pp-o92.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726014AbfHAMSD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 1 Aug 2019 08:18:03 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1564661852; cv=none; 
+        d=zoho.com; s=zohoarc; 
+        b=MQX0XvzBAMLn2m2cyb05mDOsj4CZfCuyYdSt4Ym/sfAI7oka4wWAImv2uYEYIRZWOABPCbisWtmxCspxtdqZp20n2+MyBYZaVbph4AJ9NiHRq8TVOThi0ccuEamTe8SFFlujICXaU8ZCAtF0E+PWNs1R3kN1qawKfSwobscTFrg=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com; s=zohoarc; 
+        t=1564661852; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To:ARC-Authentication-Results; 
+        bh=kJKEr88bIEfPIQzI901c1rM9db7qmdDjtUh5J1gMv3I=; 
+        b=aVq3gqq7j3GHzbL2H1TVUcql2Uqy/zyFYbub5VCSCUGOk31FGKl0BheugEu4bu3gomjwAOa9syY+evBWrZHJarsv1Z4qV6CHGS5xF2K6RpxTufrjzBqfCT089/YpXR4u3RRMdG9W+Snk3m3scF7r46/JXhBlTmqWJ2145P9BmX8=
+ARC-Authentication-Results: i=1; mx.zoho.com;
+        dkim=pass  header.i=zoho.com;
+        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
+        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
+  s=zapps768; d=zoho.com; 
+  h=from:to:cc:subject:date:message-id:in-reply-to:references; 
+  b=mh5cTJAQ3xJYbtOdXBjWDfvQbK/g4c8+mf5mWkXuhe+F2x9vk2p3fAegIXSQL+8oAJ3nWAqlo5sw
+    95IH2a7RldDWcQZgsTE1P9XUCKIQxOA+J9gZYHmwvpSTAkD8xeCg  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1564661852;
+        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; l=147;
+        bh=kJKEr88bIEfPIQzI901c1rM9db7qmdDjtUh5J1gMv3I=;
+        b=ArFvHgLE9StdNTNO7i/J8PF1RGzoH9hEL2IFFbn3gj/gI3cxdMVK9JkiB/K+KGm5
+        zNAz6jPRDevV73XAIw/SpH9939PJp8TQ+i6xY0H7qaWr7S1Pcg5Ud18optiH85tCbVG
+        wrxEEVGREj2hyff9xvsvbxcS1Ka6SLtJKIPQQMm4=
+Received: from localhost.localdomain (171.221.113.137 [171.221.113.137]) by mx.zohomail.com
+        with SMTPS id 15646618517311010.5135306108771; Thu, 1 Aug 2019 05:17:31 -0700 (PDT)
+From:   Zhou Yanjie <zhouyanjie@zoho.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, ralf@linux-mips.org,
+        paul@crapouillou.net, paul.burton@mips.com, jhogan@kernel.org,
+        malat@debian.org, gregkh@linuxfoundation.org, tglx@linutronix.de,
+        allison@lohutok.net, syq@debian.org, chenhc@lemote.com,
+        jiaxun.yang@flygoat.com
+Subject: MIPS: Ingenic: Fix bugs when detecting X1000's parameters v3
+Date:   Thu,  1 Aug 2019 20:16:29 +0800
+Message-Id: <1564661791-47731-1-git-send-email-zhouyanjie@zoho.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1564498510-3751-1-git-send-email-zhouyanjie@zoho.com>
+References: <1564498510-3751-1-git-send-email-zhouyanjie@zoho.com>
+X-ZohoMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 15.07.19 13:53:07, Hanna Hawa wrote:
-> Add a counter parameter in order to avoid losing errors count for edac
-> device, the error count reports the number of errors reported by an edac
-> device similar to the way MC_EDAC do.
-> 
-> Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
-> ---
->  drivers/edac/altera_edac.c      | 20 ++++++++++++--------
->  drivers/edac/amd8111_edac.c     |  6 +++---
->  drivers/edac/cpc925_edac.c      |  4 ++--
->  drivers/edac/edac_device.c      | 18 ++++++++++--------
->  drivers/edac/edac_device.h      |  8 ++++++--
->  drivers/edac/highbank_l2_edac.c |  4 ++--
->  drivers/edac/mpc85xx_edac.c     |  4 ++--
->  drivers/edac/mv64x60_edac.c     |  4 ++--
->  drivers/edac/octeon_edac-l2c.c  | 20 ++++++++++----------
->  drivers/edac/octeon_edac-pc.c   |  6 +++---
->  drivers/edac/qcom_edac.c        |  8 ++++----
->  drivers/edac/thunderx_edac.c    | 10 +++++-----
->  drivers/edac/xgene_edac.c       | 26 +++++++++++++-------------
->  13 files changed, 74 insertions(+), 64 deletions(-)
+v1->v2: Use "set_c0_config7(BIT(4))" to simplify code and add comment.
+v2->v3: Split patch and use "MIPS_CONF7_BTB_LOOP_EN" to instead "BIT(4)".
 
-> diff --git a/drivers/edac/edac_device.h b/drivers/edac/edac_device.h
-> index 1aaba74..cf1a1da 100644
-> --- a/drivers/edac/edac_device.h
-> +++ b/drivers/edac/edac_device.h
-> @@ -290,23 +290,27 @@ extern struct edac_device_ctl_info *edac_device_del_device(struct device *dev);
->   *	perform a common output and handling of an 'edac_dev' UE event
->   *
->   * @edac_dev: pointer to struct &edac_device_ctl_info
-> + * @error_count: number of errors of the same type
->   * @inst_nr: number of the instance where the UE error happened
->   * @block_nr: number of the block where the UE error happened
->   * @msg: message to be printed
->   */
->  extern void edac_device_handle_ue(struct edac_device_ctl_info *edac_dev,
-> -				int inst_nr, int block_nr, const char *msg);
-> +				  u16 error_count, int inst_nr, int block_nr,
-> +				  const char *msg);
->  /**
->   * edac_device_handle_ce():
->   *	perform a common output and handling of an 'edac_dev' CE event
->   *
->   * @edac_dev: pointer to struct &edac_device_ctl_info
-> + * @error_count: number of errors of the same type
->   * @inst_nr: number of the instance where the CE error happened
->   * @block_nr: number of the block where the CE error happened
->   * @msg: message to be printed
->   */
->  extern void edac_device_handle_ce(struct edac_device_ctl_info *edac_dev,
 
-How about renaming this to __edac_device_handle_ce() and then have 2
-macros for:
-
- * edac_device_handle_ce() to keep old i/f.
-
- * edac_device_handle_ce_count(), with count parameter added.
-
-Same for uncorrectable errors.
-
-Code of other driver can be kept as it is then.
-
-Thanks,
-
--Robert
-
-> -				int inst_nr, int block_nr, const char *msg);
-> +				  u16 error_count, int inst_nr, int block_nr,
-> +				  const char *msg);
