@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4CE81AC1
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2019 15:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A926D81AA1
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2019 15:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730123AbfHENJD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 5 Aug 2019 09:09:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47324 "EHLO mail.kernel.org"
+        id S1729899AbfHENHz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 5 Aug 2019 09:07:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45680 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730121AbfHENJB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 5 Aug 2019 09:09:01 -0400
+        id S1729406AbfHENHy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 5 Aug 2019 09:07:54 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4E3BE2067D;
-        Mon,  5 Aug 2019 13:09:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4E7692173B;
+        Mon,  5 Aug 2019 13:07:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565010540;
+        s=default; t=1565010473;
         bh=f1WaR3tSARaSVDFRiJ7S+mftWy4gyhuDPSgOpNyxiVI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ecGrG6MdpgvScpyRC2+yinDYz1NQlECQyBbiYtg7dJdurr6soSJd0nZourFB1MXlh
-         qfP8yZ1DTBIEAfMnzxNvnKuHVKf34QYmBJAXuPw9/hYnpzeAkagv5a/w4k++4tz2Gd
-         lOrB6hIWeqaGaxTWhzb4evvtszTd5RVjI8sVcNBE=
+        b=le+FelzZHl1hkT1N3Vaou330SMuARsvFI97bV7OOqsGJ+xBJ/wiBlxn5RC7FY59dx
+         UuuVGouMnzpMmmAYAH92KXuP7+hyYoJaZkwSTNyXQMC12yQWCizzkkF9N5+YnmdyqC
+         wrNNrcQfJFILFS401zFzvZDw2UaS2JmZIqwPex1U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -31,12 +31,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         john@phrozen.org, linux-mips@vger.kernel.org,
         openwrt-devel@lists.openwrt.org, pakahmar@hotmail.com,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 10/74] MIPS: lantiq: Fix bitfield masking
-Date:   Mon,  5 Aug 2019 15:02:23 +0200
-Message-Id: <20190805124936.628894906@linuxfoundation.org>
+Subject: [PATCH 4.14 07/53] MIPS: lantiq: Fix bitfield masking
+Date:   Mon,  5 Aug 2019 15:02:32 +0200
+Message-Id: <20190805124928.840395937@linuxfoundation.org>
 X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190805124935.819068648@linuxfoundation.org>
-References: <20190805124935.819068648@linuxfoundation.org>
+In-Reply-To: <20190805124927.973499541@linuxfoundation.org>
+References: <20190805124927.973499541@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
