@@ -2,98 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA36881FB2
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2019 17:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3FD282564
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2019 21:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727259AbfHEPDO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 5 Aug 2019 11:03:14 -0400
-Received: from foss.arm.com ([217.140.110.172]:50452 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728043AbfHEPDO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 5 Aug 2019 11:03:14 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B9A8337;
-        Mon,  5 Aug 2019 08:03:13 -0700 (PDT)
-Received: from [10.1.197.61] (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7BCC13F706;
-        Mon,  5 Aug 2019 08:03:11 -0700 (PDT)
-Subject: Re: [PATCH 3/5] MIPS: lantiq: add an irq_domain and irq_chip for EBU
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     tglx@linutronix.de, jason@lakedaemon.net, ralf@linux-mips.org,
-        paul.burton@mips.com, jhogan@kernel.org, robh+dt@kernel.org,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mark.rutland@arm.com,
-        john@phrozen.org, Hauke Mehrtens <hauke@hauke-m.de>
-References: <20190727175315.28834-1-martin.blumenstingl@googlemail.com>
- <20190727175315.28834-4-martin.blumenstingl@googlemail.com>
- <86y30imq9p.wl-marc.zyngier@arm.com>
- <CAFBinCCb4aTfuxaSrUp8xbUjjefi_qHOUJLjzH+acUTLY+6Geg@mail.gmail.com>
- <86o916mx2m.wl-maz@kernel.org>
- <CAFBinCDRBmG39Pa4XBa2Bu8K6GH7iz_YyKoJ795XKTnEz2b4VQ@mail.gmail.com>
-From:   Marc Zyngier <maz@kernel.org>
-Organization: Approximate
-Message-ID: <f779fc72-ec40-214b-eb81-d21d6b15d5b3@kernel.org>
-Date:   Mon, 5 Aug 2019 16:03:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1730222AbfHETPI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 5 Aug 2019 15:15:08 -0400
+Received: from smtprelay0164.hostedemail.com ([216.40.44.164]:41192 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727830AbfHETPH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Aug 2019 15:15:07 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 005D552B7;
+        Mon,  5 Aug 2019 19:15:05 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::,RULES_HIT:41:152:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:3138:3139:3140:3141:3142:3353:3622:3865:3867:3870:4321:4605:5007:10004:10400:10848:11026:11232:11473:11658:11914:12043:12048:12296:12297:12438:12555:12740:12895:12986:13069:13311:13357:13894:14096:14097:14181:14659:14721:21080:21451:21627:30054:30090:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.14.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:30,LUA_SUMMARY:none
+X-HE-Tag: cub04_4957d22cc6e16
+X-Filterd-Recvd-Size: 2975
+Received: from XPS-9350 (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf19.hostedemail.com (Postfix) with ESMTPA;
+        Mon,  5 Aug 2019 19:15:03 +0000 (UTC)
+Message-ID: <0f56d1fe577707e7804386592e1a5579bfd3abbf.camel@perches.com>
+Subject: Re: [PATCH] MIPS: BCM63XX: Mark expected switch fall-through
+From:   Joe Perches <joe@perches.com>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 05 Aug 2019 12:15:01 -0700
+In-Reply-To: <20190805185533.GA10551@embeddedor>
+References: <20190805185533.GA10551@embeddedor>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
 MIME-Version: 1.0
-In-Reply-To: <CAFBinCDRBmG39Pa4XBa2Bu8K6GH7iz_YyKoJ795XKTnEz2b4VQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/08/2019 18:33, Martin Blumenstingl wrote:
-> Hi Marc,
+On Mon, 2019-08-05 at 13:55 -0500, Gustavo A. R. Silva wrote:
+> Mark switch cases where we are expecting to fall through.
 > 
-> On Sat, Aug 3, 2019 at 11:12 AM Marc Zyngier <maz@kernel.org> wrote:
->>
->> Hi Martin,
->>
->> On Thu, 01 Aug 2019 18:42:42 +0100,
->> Martin Blumenstingl <martin.blumenstingl@googlemail.com> wrote:
->>
->> [...]
->>
->>>>> +static void ltq_ebu_irq_handler(struct irq_desc *desc)
->>>>> +{
->>>>> +     struct irq_domain *domain = irq_desc_get_handler_data(desc);
->>>>> +     struct irq_chip *irqchip = irq_desc_get_chip(desc);
->>>>> +
->>>>> +     chained_irq_enter(irqchip, desc);
->>>>> +
->>>>> +     generic_handle_irq(irq_find_mapping(domain, 0));
->>>>
->>>> Having an irqdomain for a single interrupt is a bit over the top... Is
->>>> that for the convenience of the DT infrastructure?
->>> yes, I did it to get DT support
->>> please let me know if there's a "better" way (preferably with another
->>> driver as example)
->>
->> To be honest, the chained handler is what troubles me the most. You
->> normally would use such a construct if you had a multiplexer. In your
->> case, you have a 1:1 relationship between input and output. It is just
->> that this irqchip allows the trigger to be adapted, which normally
->> calls for a hierarchical implementation.
->>
->> In your case, with only a single interrupt, it doesn't matter much
->> though.
-> I see, thank you for the explanation
+> This patch fixes the following warning (Building: bcm63xx_defconfig mips):
 > 
-> can you name a driver for a hierarchical irqchip driver that you
-> consider "clean" which I could use as reference?
+> arch/mips/pci/ops-bcm63xx.c: In function ‘bcm63xx_pcie_can_access’:
+> arch/mips/pci/ops-bcm63xx.c:474:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    if (PCI_SLOT(devfn) == 0)
+>       ^
+> arch/mips/pci/ops-bcm63xx.c:477:2: note: here
+>   default:
+>   ^~~~~~~
+> 
+> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> ---
+>  arch/mips/pci/ops-bcm63xx.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/mips/pci/ops-bcm63xx.c b/arch/mips/pci/ops-bcm63xx.c
+> index d02eb9d16b55..925c72348fb6 100644
+> --- a/arch/mips/pci/ops-bcm63xx.c
+> +++ b/arch/mips/pci/ops-bcm63xx.c
+> @@ -474,6 +474,7 @@ static int bcm63xx_pcie_can_access(struct pci_bus *bus, int devfn)
+>  		if (PCI_SLOT(devfn) == 0)
+>  			return bcm_pcie_readl(PCIE_DLSTATUS_REG)
+>  					& DLSTATUS_PHYLINKUP;
+> +		/* else, fall through */
+>  	default:
+>  		return false;
+>  	}
 
-Finding a "clean" driver is a challenge, as the world of IRQ controllers
-is where both HW and SW engineers (me included) love to "innovate" ;-).
+Perhaps clearer as:
+---
+ arch/mips/pci/ops-bcm63xx.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-I'd recommend you have a look at drivers/irqchip/irq-mtk-cirq.c, which
-is almost as simple as it gets.
+diff --git a/arch/mips/pci/ops-bcm63xx.c b/arch/mips/pci/ops-bcm63xx.c
+index d02eb9d16b55..a5e4b1905958 100644
+--- a/arch/mips/pci/ops-bcm63xx.c
++++ b/arch/mips/pci/ops-bcm63xx.c
+@@ -471,12 +471,11 @@ static int bcm63xx_pcie_can_access(struct pci_bus *bus, int devfn)
+ 	case PCIE_BUS_BRIDGE:
+ 		return PCI_SLOT(devfn) == 0;
+ 	case PCIE_BUS_DEVICE:
+-		if (PCI_SLOT(devfn) == 0)
+-			return bcm_pcie_readl(PCIE_DLSTATUS_REG)
+-					& DLSTATUS_PHYLINKUP;
+-	default:
+-		return false;
++		return PCI_SLOT(devfn) == 0 &&
++		       bcm_pcie_readl(PCIE_DLSTATUS_REG) & DLSTATUS_PHYLINKUP;
+ 	}
++
++	return false;
+ }
+ 
+ static int bcm63xx_pcie_read(struct pci_bus *bus, unsigned int devfn,
 
-Thanks,
 
-	M.
--- 
-Jazz is not dead, it just smells funny...
