@@ -2,115 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8659D83096
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2019 13:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C5183877
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2019 20:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729898AbfHFLZm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Aug 2019 07:25:42 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:43241 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726783AbfHFLZm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Aug 2019 07:25:42 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1M8k65-1hz6Jj49jd-004lXd; Tue, 06 Aug 2019 13:25:11 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Guenter Roeck <linux@roeck-us.net>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Christoph Lameter <cl@linux.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mips: fix vdso32 build, again
-Date:   Tue,  6 Aug 2019 13:24:50 +0200
-Message-Id: <20190806112509.3244608-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
+        id S1730373AbfHFSQD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 6 Aug 2019 14:16:03 -0400
+Received: from mail-yb1-f195.google.com ([209.85.219.195]:41897 "EHLO
+        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726373AbfHFSQC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Aug 2019 14:16:02 -0400
+Received: by mail-yb1-f195.google.com with SMTP id x188so8802492yba.8;
+        Tue, 06 Aug 2019 11:16:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=uRafBTDMBjTvHKV2v0W2ocmyW8oxhcyjl8OuCW8KKpk=;
+        b=V6766grtOTciLDI60ThaFYVhEvL9guKmIvzYoVESyUSBEvAZQ85PasiJ7sXBa7givy
+         WUvcEaWOeAxBGhMhSKqP70MZS1n8uXBa06JSQZVZyJEM7NfyxzR/DfHx/MPVvZnYbeFH
+         HabZZGSGnFIFGFl3WwVXxJmPg3MSoxcgcEK/kcPrakLa0+bwXL4VdjQHBt//FLLB776D
+         quCt8xrR+DDUY+CUFqzHo21LtjV3DeRu0EXKaCq1Z+feB9EDUy+iF5np0S42VSYM7ynP
+         hfOgGe8aghCLisBI5P+AfuWUlNf63cSzJaBdjF8OqIvq9frmer/W6MZRYDakM7QnYn5x
+         NKeA==
+X-Gm-Message-State: APjAAAUHoud7YysAyMWt9u0c6j8R+Sgl6yFcOqiypmPBh+Y91bWvu1p5
+        2/hMKBPk7k3/dOpaTehz2J9CyXIMbLcZxeNvutw=
+X-Google-Smtp-Source: APXvYqz0ie1VExybZGhZgDfu505MGE+a+39mqnOYkI3V/mDbdlmTbKQDByXcVDmU1YGQZWUYuxZ/qsZyNwMnHAZjYVg=
+X-Received: by 2002:a25:aa85:: with SMTP id t5mr3779024ybi.376.1565115362068;
+ Tue, 06 Aug 2019 11:16:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:tO/9/ogRr4bq49wvtFsjMqiEM/g67IcuFQnQPhgC0dvaFZES6do
- OlodkhyJzcaUlj8yPvV6FTl8C2G92YAL1i1PlwpwX2J6QwOiVKeGnGjHTCxRbFu30QNIbAT
- 2YNZAMFaWPnxbKEM/6tW1ObaR95gkjbi70KKIAda6F3xe/4ER1qdiETHtg0gEZOd4TlmNRC
- rgTB5ChE+OglZto5/nuWQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:NZiPuG2SpzM=:kx7Kz5EW9wktHhBlvjg5oO
- KbOlkmhGRCPmWY46mGnIpEqazZADvwPUwH+atGnrT95d5PIJFXHVLXreejD6+dFc5nm2Ru7qu
- u8fKKpKzGQrv479Sj6JABiogwuOgKIUzHQd+hlFv2+rJNEo1xdxWsHrS0zjt1e1r/eHPto4fc
- pxIyn+/7qUssiJa9emL7400pkywPlh46nASgze+QxHaW3yU63BAV+kjiWJ1adK4Jg/Z4gQ5UU
- r7Lw4HfJ23bRWmkHrD6FV+ffGhHYRf5RWlV98oWUjNvKr4HcOa/RKUkrvDiOrNKIJs8vdq6f4
- 7uDskf7o5tT62etkkklDSfeHgPkbZ1UJYhHyUe4E7kJNYRR9HCMmOTLTOMBiLALxE5Yy9mp6W
- 415dCzRwRjMf1poCdb/lx481E7jKEEqoVERXfkuUsriu2y5z5nCnRqifKp0z80pMqgCkLfwcl
- XXs5pRCVZicyUopNgfkw7X6MY8EpeYIThU8TTWtnjJfSHpTehxn7rvE9BHkWl28REU5KKxD7P
- F5LxdVG/e2D7D/YiP5YaPfbGce0oE95GJcjO7NGrM/o1PigZVUtZ7LhcT1F0UmGtb8EQBKUS1
- c26hgRYddkHRhyfajRqe4nvzc0f26/Pkt6ntJcWziKwU9SUFDXY19flWwa9v6Bn39IO2NbJ/m
- F3Vph5R8IpIk5sLRnSRrudGWiD6GditAx4aHqD3NZKGbTkDx+6xzMDkHXJaeKHjaYbXgonMDA
- r8TAdcOTIxUcXqVOjQyKmbIkaX8g8r99UVnYTg==
+References: <1565001715-22966-1-git-send-email-linux@roeck-us.net>
+In-Reply-To: <1565001715-22966-1-git-send-email-linux@roeck-us.net>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Tue, 6 Aug 2019 20:15:51 +0200
+Message-ID: <CAAdtpL634spP0friWLstK9Ehy5BaHxS3u+GhrEGKsF-1_uCENQ@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: OCTEON: octeon-usb: Mark expected switch fall-through
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Gustavo A . R . Silva" <gustavo@embeddedor.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The generic vdso support adds the same #if hack in two places,
-asm/vdso/vdso.h and config-n32-o32-env.c, but only the second
-is actually used. The result lacks the BUILD_VDSO32_64 macro,
-and that triggers a build error:
+On Mon, Aug 5, 2019 at 12:42 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> Since commit a035d552a93b ("Makefile: Globally enable fall-through
+> warning"), cavium_octeon_defconfig builds fail with
+>
+> In file included from
+> arch/mips/cavium-octeon/octeon-usb.c:12:
+> arch/mips/cavium-octeon/octeon-usb.c: In function 'dwc3_octeon_clocks_start':
+> include/linux/device.h:1499:2: error: this statement may fall through
+>   _dev_err(dev, dev_fmt(fmt), ##__VA_ARGS__)
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> arch/mips/cavium-octeon/octeon-usb.c:399:3: note:
+>                         in expansion of macro 'dev_err'
+>   dev_err(dev, "Invalid ref_clk %u, using 100000000 instead\n",
+>   ^~~~~~~
+> arch/mips/cavium-octeon/octeon-usb.c:401:2: note: here
+>   case 100000000:
+>   ^~~~~~~
+>
+> Mark the switch case to expect fall through.
+>
+> Cc: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-./include/linux/page-flags-layout.h:95:2: error: #error "Not enough bits in page flags"
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
 
-Move the macro into the other place, and remove the duplicated
-bits.
-
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Fixes: ee38d94a0ad8 ("page flags: prioritize kasan bits over last-cpuid")
-Fixes: 24640f233b46 ("mips: Add support for generic vDSO")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-Please fold into the vdso patch
----
- arch/mips/include/asm/vdso/vdso.h   | 11 -----------
- arch/mips/vdso/config-n32-o32-env.c |  1 +
- 2 files changed, 1 insertion(+), 11 deletions(-)
-
-diff --git a/arch/mips/include/asm/vdso/vdso.h b/arch/mips/include/asm/vdso/vdso.h
-index 3b96db735f7f..737ddfc3411c 100644
---- a/arch/mips/include/asm/vdso/vdso.h
-+++ b/arch/mips/include/asm/vdso/vdso.h
-@@ -6,17 +6,6 @@
- 
- #include <asm/sgidefs.h>
- 
--#if _MIPS_SIM != _MIPS_SIM_ABI64 && defined(CONFIG_64BIT)
--
--/* Building 32-bit VDSO for the 64-bit kernel. Fake a 32-bit Kconfig. */
--#define BUILD_VDSO32_64
--#undef CONFIG_64BIT
--#define CONFIG_32BIT 1
--#ifndef __ASSEMBLY__
--#include <asm-generic/atomic64.h>
--#endif
--#endif
--
- #ifndef __ASSEMBLY__
- 
- #include <asm/asm.h>
-diff --git a/arch/mips/vdso/config-n32-o32-env.c b/arch/mips/vdso/config-n32-o32-env.c
-index da4994b2b3e5..7f8d957abd4a 100644
---- a/arch/mips/vdso/config-n32-o32-env.c
-+++ b/arch/mips/vdso/config-n32-o32-env.c
-@@ -12,6 +12,7 @@
- 
- #define CONFIG_32BIT 1
- #define CONFIG_GENERIC_ATOMIC64 1
-+#define BUILD_VDSO32_64
- 
- #endif
- 
--- 
-2.20.0
-
+> ---
+>  arch/mips/cavium-octeon/octeon-usb.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/mips/cavium-octeon/octeon-usb.c b/arch/mips/cavium-octeon/octeon-usb.c
+> index 1f730ded5224..8a16ab37aa11 100644
+> --- a/arch/mips/cavium-octeon/octeon-usb.c
+> +++ b/arch/mips/cavium-octeon/octeon-usb.c
+> @@ -398,6 +398,7 @@ static int dwc3_octeon_clocks_start(struct device *dev, u64 base)
+>         default:
+>                 dev_err(dev, "Invalid ref_clk %u, using 100000000 instead\n",
+>                         clock_rate);
+> +               /* Fall through */
+>         case 100000000:
+>                 mpll_mul = 0x19;
+>                 if (ref_clk_sel < 2)
+> --
+> 2.7.4
+>
