@@ -2,78 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6C0826A2
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Aug 2019 23:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B363D829C8
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Aug 2019 04:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730704AbfHEVNc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 5 Aug 2019 17:13:32 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:51377 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730099AbfHEVNc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Aug 2019 17:13:32 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 5241A886BF;
-        Tue,  6 Aug 2019 09:13:30 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1565039610;
-        bh=gr5g/LdhGiAPQskPWwPEPBEUEIgZSDqZJDL0N1Bmt60=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=2cLajRx2gMhwFVkOpKxHu6FHcGMPWjU90WVzNy+eTJ/gRUFP671Rys7zqdXd5m3S+
-         d6taYtmKwCU2ktfQj/oL4BfOBdaxlBSwzgQZf/VG/pIPHo6doI/uKseYuJ52w+wHfD
-         MW4ub7Dlo4lMw4wWmt/XMABcpXyu0qYTRIOnlLTw20dUIHPeCOlrW0UCzQiVEi69Js
-         1AD/O0qRHsG3o4GcZS7Og/yyAuOgKC2JYp9IY5QY8ykB/OWihqHdz/HTIBYhBjBqC1
-         7Rk9/DJZrWa/+aULCCcXXOa2zr83eymBjRn/NTUr22tx19aqu8Hh9fsxh9DNknWrZT
-         YN7apu6E2jSwQ==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5d489bf80003>; Tue, 06 Aug 2019 09:13:28 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1156.6; Tue, 6 Aug 2019 09:13:29 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1156.000; Tue, 6 Aug 2019 09:13:29 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "tjin@wavecomp.com" <tjin@wavecomp.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: MIPS Cache Coherency Issue
-Thread-Topic: MIPS Cache Coherency Issue
-Thread-Index: AQHVS5HXMgkNbD3nfE6pTHb9H7kbG6bsRPOA
-Date:   Mon, 5 Aug 2019 21:13:29 +0000
-Message-ID: <1565039609.15175.3.camel@alliedtelesis.co.nz>
-References: <MWHPR2201MB1119058430642AC300B621ACB8DA0@MWHPR2201MB1119.namprd22.prod.outlook.com>
-In-Reply-To: <MWHPR2201MB1119058430642AC300B621ACB8DA0@MWHPR2201MB1119.namprd22.prod.outlook.com>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.18.5.2-0ubuntu3.2 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [2001:df5:b000:22:3a2c:4aff:fe70:2b02]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5900F38A54DBF1409DEF0E303A28D16C@atlnz.lc>
-Content-Transfer-Encoding: base64
+        id S1728870AbfHFC4A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 5 Aug 2019 22:56:00 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:33360 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728922AbfHFC4A (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 5 Aug 2019 22:56:00 -0400
+Received: by mail-ed1-f68.google.com with SMTP id i11so17432697edq.0
+        for <linux-mips@vger.kernel.org>; Mon, 05 Aug 2019 19:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=thegavinli.com; s=google;
+        h=sender:mime-version:references:in-reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=ymynYvUaAJ/fSsk8dTF47gjXr8CYua8YobOOSKegPcM=;
+        b=UanfDFFyXJgYSA7QqCuSdaCf5p+I3v2GUlvbhA8+2qe6l86pJKL0lTlbCFnTx3gBOk
+         jjw0CPJdEKovLTwXtm6Go48h8/Y8NunT8oKKFGaMd9OyBH8HT4SxYQbIV6jerO9zgRB+
+         DhQfv6wnIBUjLqio5JTWuVL4Tjft7woEGwUdE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:mime-version:references:in-reply-to:from
+         :date:message-id:subject:to:cc;
+        bh=ymynYvUaAJ/fSsk8dTF47gjXr8CYua8YobOOSKegPcM=;
+        b=ANq3SOxlKg40q9mPWAgkvPoDF+iXsrhGTIEbQcQW2rguAum0feSF8+czSes4BPrLVe
+         fYMfTdyR/UpHxl385xqiUA0U/Pm9yaYHihmeyIRhdVgaOSTO7/wszdKKw8xE3voYXNni
+         2mf9+jA+NxXG2+Bh++HumEFx8nXRYV/D6vQioqm5X5UN6J5WMmamQAZhKx93+h9Pygo8
+         +dV6DgzfqsQuzdcp/b+6VntXOM8xnF2NXMXKNLXMTPdqgNG90lHsNr9wu26BoB0vINLR
+         241B28aunsD1fhP2vcrzp5hQ/lSTPZC0Z4Ip79utxaEvsA92OpQ1p6oiZZVHSFL0V31P
+         tJJQ==
+X-Gm-Message-State: APjAAAUtcoGfIZ0GIeHFCVmo9RfAC8MIZyLcXfftPWftTv58EzcCuE00
+        6mgJQjp53f/mn1KLCINDvjZIVhJ6F74Cew==
+X-Google-Smtp-Source: APXvYqwCQ/MXwCzExS5dUl/Wau0R2IDrgb+fZVtZ3SzyY0Yt7wlLBRDhvpUMbujiF6VcO+U3M2RlWg==
+X-Received: by 2002:aa7:d781:: with SMTP id s1mr1523685edq.20.1565060158213;
+        Mon, 05 Aug 2019 19:55:58 -0700 (PDT)
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
+        by smtp.gmail.com with ESMTPSA id 17sm20458990edu.21.2019.08.05.19.55.55
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Aug 2019 19:55:57 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id v15so80947545eds.9;
+        Mon, 05 Aug 2019 19:55:55 -0700 (PDT)
+X-Received: by 2002:a17:906:b315:: with SMTP id n21mr1014103ejz.312.1565060155502;
+ Mon, 05 Aug 2019 19:55:55 -0700 (PDT)
 MIME-Version: 1.0
+References: <20190805080145.5694-1-hch@lst.de> <20190805080145.5694-2-hch@lst.de>
+ <CAP_+7SzPdNCMKuuXMjHjpCzxsey2YWR_e6mTAWtNSZ6kKBvKFw@mail.gmail.com>
+In-Reply-To: <CAP_+7SzPdNCMKuuXMjHjpCzxsey2YWR_e6mTAWtNSZ6kKBvKFw@mail.gmail.com>
+From:   Gavin Li <gavinli@thegavinli.com>
+Date:   Mon, 5 Aug 2019 19:55:44 -0700
+X-Gmail-Original-Message-ID: <CA+GxvY5C_rrukCzC5K-h72bePyW8PS_Rfj3uxh-K6UrcAextUQ@mail.gmail.com>
+Message-ID: <CA+GxvY5C_rrukCzC5K-h72bePyW8PS_Rfj3uxh-K6UrcAextUQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dma-mapping: fix page attributes for dma_mmap_*
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Shawn Anastasio <shawn@anastas.io>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Gavin Li <git@thegavinli.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-T24gTW9uLCAyMDE5LTA4LTA1IGF0IDE0OjAyICswMDAwLCBUb21teSBKaW4gd3JvdGU6DQo+IEhp
-IENocmlzLA0KPiANCj4gTXkgbmFtZSBpcyBUb21teSwgZnJvbSB3YXZlIGNvbXB1dGluZyBDbyxM
-dGQsIG91ciB0ZWFtIGlzIHdvcmtpbmcgb24NCj4gdGhlIG1haW50ZW5hbmNlIG9mIHRoZSBNSVBT
-IGtlcm5lbC4NCj4gDQo+IFlvdSByYWlzZWQgYSBNSVBTIGNhY2hlIGNvaGVyZW5jeSBwYXRjaCB3
-aGljaCBjYW4gYmUgZm91bmQgaW4gdGhlDQo+IGZvbGxvd2luZyBsaW5rcw0KPiBodHRwczovL2xv
-cmUua2VybmVsLm9yZy9saW51eC1taXBzLzIwMTkwNTI4MjIxMjU1LjIyNDYwLTEtY2hyaXMucGFj
-a2gNCj4gYW1AYWxsaWVkdGVsZXNpcy5jby5uei9ULyN1DQo+IA0KPiBXaXRoIFBhdWwncyBwYXRj
-aCwgSXQgc2VlbXMgeW91IHN0aWxsIGdldCAib3RoZXIgYmFkIGJlaGF2aW91ciIsIGl0DQo+IGRv
-ZXNuJ3Qgd29yayBmb3IgeW91LiBIYXMgdGhpcyBpc3N1ZSBiZWVuIHJlc29sdmVkP8KgDQoNCklu
-IHNob3J0IG5vIGl0IGhhc24ndCBiZWVuIHJlc29sdmVkLiBJIGhhdmVuJ3QgYmVlbiBhYmxlIHRv
-IHNwZW5kIG11Y2gNCnRpbWUgbG9va2luZyBhdCB0aGUgaXNzdWUocykgc28gSSBoYXZlbid0IGJl
-ZW4gYWJsZSB0byB0ZWxsIGlmIFBhdWwncw0KcGF0Y2ggdW5jb3ZlcmVkIHByZS1leGlzdGluZyBp
-c3N1ZXMgb3IgY2F1c2VkIG5ldyBvbmVzLg0KDQpVbmZvcnR1bmF0ZWx5IEkgcHJvYmFibHkgd29u
-J3QgZ2V0IG9udG8gaXQgYW55IHRpbWUgc29vbi4gSSB3YXMgaG9waW5nDQp0byBnZXQgc29tZSBv
-ZiBteSBvdGhlciB0ZWFtIG1lbWJlcnMgdG8gcGljayB1cCB0aGUgaXNzdWUgYnV0IHRoZXkncmUN
-CmFsbCBidXN5IGFzIHdlbGwuDQo=
+>         /* create a coherent mapping */
+>         ret = dma_common_contiguous_remap(page, size, VM_USERMAP,
+> -                       arch_dma_mmap_pgprot(dev, PAGE_KERNEL, attrs),
+> +                       dma_pgprot(dev, PAGE_KERNEL, attrs),
+>                         __builtin_return_address(0));
+>         if (!ret) {
+>                 __dma_direct_free_pages(dev, size, page);
+
+Is dma_common_contiguous_remap() still necessary in the
+DMA_ATTR_NON_CONSISTENT case? I would presume it would be fine to just
+return a linearly mapped address in that case.
