@@ -2,21 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FD98443A
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Aug 2019 08:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828278445F
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Aug 2019 08:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727145AbfHGGEk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Aug 2019 02:04:40 -0400
-Received: from verein.lst.de ([213.95.11.211]:34678 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726511AbfHGGEk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 7 Aug 2019 02:04:40 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id BFD0A68CEE; Wed,  7 Aug 2019 08:04:33 +0200 (CEST)
-Date:   Wed, 7 Aug 2019 08:04:32 +0200
+        id S1727105AbfHGGQY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Aug 2019 02:16:24 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:59020 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727078AbfHGGQX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Aug 2019 02:16:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=rCYQCC3TGNYTbnGKL+NdUWUb7Cy3tCnvUbcf422Cqo8=; b=cqMrr/GpDS/ONJa2adLCzijXQ
+        nhlDPhMwkhB8TMArgr+DXtiNpRuxaX4gIqfxBbgl2R2TMWBoHU7VjEkm6RgE/+hCjg1dpL5y5tNnn
+        s81dLleKt6cPO7tG7ZK9StKoDepTYW/tT9J067lzaDoQk6auHE9prR7gJdA8jeIE8iAdNaUWoQLLx
+        5oI96/Ezmcy2PeCA7PjtVpiiBDbYQItbGaFbynb2bTc8fnQCF14c6deoNq/mqUscZaHFzLM2BsYZj
+        FJlvl6Vl3KkD6RjJREk7K8QQlAh3eMZFXr+SckdnYDGTzmN798A2lIndyBa1/n1ZhMi6XMaJ5XCDf
+        9ggljiyAA==;
+Received: from [195.167.85.94] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hvFEy-0007do-No; Wed, 07 Aug 2019 06:16:05 +0000
 From:   Christoph Hellwig <hch@lst.de>
-To:     Shawn Anastasio <shawn@anastas.io>
-Cc:     Christoph Hellwig <hch@lst.de>, iommu@lists.linux-foundation.org,
+To:     iommu@lists.linux-foundation.org
+Cc:     Shawn Anastasio <shawn@anastas.io>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -25,54 +37,36 @@ Cc:     Christoph Hellwig <hch@lst.de>, iommu@lists.linux-foundation.org,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>, linuxppc-dev@lists.ozlabs.org,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Gavin Li <git@thegavinli.com>
-Subject: Re: [PATCH 1/2] dma-mapping: fix page attributes for dma_mmap_*
-Message-ID: <20190807060432.GD6627@lst.de>
-References: <20190805080145.5694-1-hch@lst.de> <20190805080145.5694-2-hch@lst.de> <7df95ffb-6df3-b118-284c-ee32cad81199@anastas.io>
+        linux-kernel@vger.kernel.org
+Subject: fix default dma_mmap_* pgprot v3
+Date:   Wed,  7 Aug 2019 09:16:00 +0300
+Message-Id: <20190807061602.31217-1-hch@lst.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7df95ffb-6df3-b118-284c-ee32cad81199@anastas.io>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 06, 2019 at 09:39:06PM +0200, Shawn Anastasio wrote:
->> -#ifdef CONFIG_ARCH_HAS_DMA_MMAP_PGPROT
->>   pgprot_t arch_dma_mmap_pgprot(struct device *dev, pgprot_t prot,
->>   		unsigned long attrs);
->> -#else
->> -# define arch_dma_mmap_pgprot(dev, prot, attrs)	pgprot_noncached(prot)
->> -#endif
->
-> Nit, but maybe the prototype should still be ifdef'd here? It at least
-> could prevent a reader from incorrectly thinking that the function is
-> always present.
+Hi all,
 
-Actually it is typical modern Linux style to just provide a prototype
-and then use "if (IS_ENABLED(CONFIG_FOO))" to guard the call(s) to it.
+As Shawn pointed out we've had issues with the dma mmap pgprots ever
+since the dma_common_mmap helper was added beyong the initial
+architectures - we default to uncached mappings, but for devices that
+are DMA coherent, or if the DMA_ATTR_NON_CONSISTENT is set (and
+supported) this can lead to aliasing of cache attributes.  This patch
+fixes that.  My explanation of why this hasn't been much of an issue
+is that the dma_mmap_ helpers aren't used widely and mostly just in
+architecture specific drivers.
 
->
-> Also, like Will mentioned earlier, the function name isn't entirely
-> accurate anymore. I second the suggestion of using something like
-> arch_dma_noncoherent_pgprot().
+Changes since v2:
+ - fix m68knommu compile by inlining dma_prprot helper and providing
+   a stub for !CONFIG_MMU
+ - fix various typos in the commit messages
 
-As mentioned I plan to remove arch_dma_mmap_pgprot for 5.4, so I'd
-rather avoid churn for the short period of time.
-
-> As for your idea of defining
-> pgprot_dmacoherent for all architectures as
->
-> #ifndef pgprot_dmacoherent
-> #define pgprot_dmacoherent pgprot_noncached
-> #endif
->
-> I think that the name here is kind of misleading too, since this
-> definition will only be used when there is no support for proper
-> DMA coherency.
-
-Do you have a suggestion for a better name?  I'm pretty bad at naming,
-so just reusing the arm name seemed like a good way to avoid having
-to make naming decisions myself.
+Changes since v1:
+ - fix handling of DMA_ATTR_NON_CONSISTENT where it is a no-op
+   (which is most architectures)
+ - remove DMA_ATTR_WRITE_COMBINE on mips, as it seem dangerous as-is
