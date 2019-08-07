@@ -2,89 +2,194 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 447C684AFB
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Aug 2019 13:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08057854FF
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Aug 2019 23:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729408AbfHGLqB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Aug 2019 07:46:01 -0400
-Received: from alpha.anastas.io ([104.248.188.109]:54663 "EHLO
-        alpha.anastas.io" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728592AbfHGLqA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Aug 2019 07:46:00 -0400
-Received: from authenticated-user (alpha.anastas.io [104.248.188.109])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by alpha.anastas.io (Postfix) with ESMTPSA id 4E68D7F6C7;
-        Wed,  7 Aug 2019 06:45:56 -0500 (CDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=anastas.io; s=mail;
-        t=1565178359; bh=446J/ks+11OkveMVUDF0cNPnmfj1n92jZbU24O7P9/w=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=hP9u2rSZ2plqV7LSihnZ4KMQVILfq7Ta2sV8HqIs1xbk2MqAhVpRJ6umqGgci1XIw
-         hvh77x7f8n37Psb6kp4uuHgh1P6AfAITszpAvWuCtCDloHJlE5k+uWk9f/dQej3UDU
-         qMHsetLafrL3ESTZBFd89wh1+uVXTW3/D3TX+Bpwv2+kSdwrkuePe9f0Clec/3r7iH
-         7yIC+pqI+WIPPbX9PsepRnRJZLc921VqOzBwDqsh6FmLCalWwMFybFzndKvL3JEuXi
-         5dqTaMkGqM4FXMkjra5WMd5s7geBuqsT9BcRdnx5ncHjHaUtqJtFLGYWb97FotCml5
-         CVyfcDxoPGXew==
-Subject: Re: [PATCH 1/2] dma-mapping: fix page attributes for dma_mmap_*
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     iommu@lists.linux-foundation.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Gavin Li <git@thegavinli.com>
-References: <20190805080145.5694-1-hch@lst.de>
- <20190805080145.5694-2-hch@lst.de>
- <7df95ffb-6df3-b118-284c-ee32cad81199@anastas.io>
- <20190807060432.GD6627@lst.de>
-From:   Shawn Anastasio <shawn@anastas.io>
-Message-ID: <765a7f25-0e3d-3edc-3f6d-9a17e2379253@anastas.io>
-Date:   Wed, 7 Aug 2019 13:45:51 +0200
+        id S1730375AbfHGVM2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 7 Aug 2019 17:12:28 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:38800 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730365AbfHGVM1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Aug 2019 17:12:27 -0400
+Received: by mail-pl1-f193.google.com with SMTP id m12so3959286plt.5
+        for <linux-mips@vger.kernel.org>; Wed, 07 Aug 2019 14:12:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fd+dofbpCV/6k5WcFl4oZMCWdF8fj4kR4/a+wjxKmsA=;
+        b=rAUbgR3zhEw1fjUVF8KM3rovMm6jms4eUTwDrpb/7hk+mJRmY+GevkEEjZ8jd9WxJ8
+         ebboqjF0o1XIe0OyOtHde46MsTIXqNDzKbfU14DIZd/Xg3c2k72+RFur9R2NQ6CghXkb
+         kvSyjMG5CjfRXi8FIkIWOq1aMaubFv5QFuFCjjJdeAsifVfE6p6WjJcnUmgtWFYkBGVZ
+         m1LPTv3MkQd6vdZv9sdS0bQAe2kA/7mk1TFwOGPkDQzcMC/5KjUC/P+kZhx2g/JMS5NV
+         /GJkm5fugsOWIlIhHvsuntFuhFO1K2oR3ulrDn3XIO2GAdfJxdQO/P+tKaNbuLtzqKRt
+         uosA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fd+dofbpCV/6k5WcFl4oZMCWdF8fj4kR4/a+wjxKmsA=;
+        b=mz5GDfTefHwT5M69jR7O55JDEOYeVjHX6iioFuOPpIBsgzRNZEcAlInCU/5iuu1p0T
+         cJsslWIKy45wZ4WtYxQwDejr2CS4pzkzW05YHWj/JKe7TWuVJTaf/jfkZEeVb9xK/XrB
+         SMIBodnqG5k7dZDcIMV2dlnPsPSbm6D7713wixxFyvUE0xRwm7NyJ1jDd+eVbt14egLX
+         VtmsBiGya6CVkLvXji8s9/xfOqO4TRrlPnaFbhJUvttJIilIZ0+qJY36M1dv3ULV9NjK
+         rtDf9G73TmRHZ6JH+/H31iGWvgAwwq82aTL58rZiF0GFoyN9QSWw/STyWO/9bSOjYEne
+         epTg==
+X-Gm-Message-State: APjAAAWMO3hD7HwBvj/NEBelfYjwjeWsGCOm/HVcwE2mJcN7MsHSunk4
+        hJ0GP1yPf8sw4CL7WAqsR/XRtQejFfiwS9v44rkjMQ==
+X-Google-Smtp-Source: APXvYqznwJRoAcnn7fVAEd4l+avqz5PXq39u3baHCNe66I0Lo+mKBr+Sgwoiq+RvXzYN4HtITPL6iOWmEQ73ykipzGY=
+X-Received: by 2002:a17:902:3363:: with SMTP id a90mr9572730plc.119.1565212346434;
+ Wed, 07 Aug 2019 14:12:26 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190807060432.GD6627@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190729211014.39333-1-ndesaulniers@google.com> <alpine.LFD.2.21.1907292302451.16059@eddie.linux-mips.org>
+In-Reply-To: <alpine.LFD.2.21.1907292302451.16059@eddie.linux-mips.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 7 Aug 2019 14:12:15 -0700
+Message-ID: <CAKwvOd==SCBrj=cZ7Ax5F87+-bPMS9AtGSxp+NWp_+yDCg4R-A@mail.gmail.com>
+Subject: Re: [PATCH] mips: avoid explicit UB in assignment of mips_io_port_base
+To:     "Maciej W. Rozycki" <macro@linux-mips.org>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Eli Friedman <efriedma@quicinc.com>,
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        Stephen Kitt <steve@sk2.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, linux-mips@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        regehr@cs.utah.edu, Philip Reames <listmail@philipreames.com>,
+        Alexander Potapenko <glider@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 8/7/19 8:04 AM, Christoph Hellwig wrote:
-> Actually it is typical modern Linux style to just provide a prototype
-> and then use "if (IS_ENABLED(CONFIG_FOO))" to guard the call(s) to it.
+Sorry for the delayed response, literally sent the patch then went on vacation.
 
-I see.
+On Mon, Jul 29, 2019 at 3:16 PM Maciej W. Rozycki <macro@linux-mips.org> wrote:
+>
+> On Mon, 29 Jul 2019, Nick Desaulniers wrote:
+>
+> > The code in question is modifying a variable declared const through
+> > pointer manipulation.  Such code is explicitly undefined behavior, and
+> > is the lone issue preventing malta_defconfig from booting when built
+> > with Clang:
+> >
+> > If an attempt is made to modify an object defined with a const-qualified
+> > type through use of an lvalue with non-const-qualified type, the
+> > behavior is undefined.
+> >
+> > LLVM is removing such assignments. A simple fix is to not declare
+> > variables const that you plan on modifying.  Limiting the scope would be
+> > a better method of preventing unwanted writes to such a variable.
 
->> Also, like Will mentioned earlier, the function name isn't entirely
->> accurate anymore. I second the suggestion of using something like
->> arch_dma_noncoherent_pgprot().
-> 
-> As mentioned I plan to remove arch_dma_mmap_pgprot for 5.4, so I'd
-> rather avoid churn for the short period of time.
+This is now documented in the LLVM release notes for Clang-9:
+https://github.com/llvm/llvm-project/commit/e39e79358fcdd5d8ad809defaa821f0bbfa809a5
 
-Yeah, fair enough.
+> >
+> > Further, the code in question mentions "compiler bugs" without any links
+> > to bug reports, so it is difficult to know if the issue is resolved in
+> > GCC. The patch was authored in 2006, which would have been GCC 4.0.3 or
+> > 4.1.1. The minimal supported version of GCC in the Linux kernel is
+> > currently 4.6.
+>
+>  It's somewhat older than that.  My investigation points to:
+>
+> commit c94e57dcd61d661749d53ee876ab265883b0a103
+> Author: Ralf Baechle <ralf@linux-mips.org>
+> Date:   Sun Nov 25 09:25:53 2001 +0000
+>
+>     Cleanup of include/asm-mips/io.h.  Now looks neat and harmless.
 
->> As for your idea of defining
->> pgprot_dmacoherent for all architectures as
->>
->> #ifndef pgprot_dmacoherent
->> #define pgprot_dmacoherent pgprot_noncached
->> #endif
->>
->> I think that the name here is kind of misleading too, since this
->> definition will only be used when there is no support for proper
->> DMA coherency.
-> 
-> Do you have a suggestion for a better name?  I'm pretty bad at naming,
-> so just reusing the arm name seemed like a good way to avoid having
-> to make naming decisions myself.
+Oh indeed, great find!
 
-Good question. Perhaps something like `pgprot_dmacoherent_fallback`
-would better convey that this is only used for devices that don't
-support DMA coherency? Or maybe `pgprot_dma_noncoherent`?
+So it looks to me like the order of events is:
+1. https://github.com/jaaron/linux-mips-ip30/commit/c94e57dcd61d661749d53ee876ab265883b0a103
+in 2001 first introduces the UB.  mips_io_port_base is defined
+non-const in arch/mips/kernel/setup.c, but then declared extern const
+(and modified via UB) in include/asm-mips/io.h.  A setter is created,
+but not a getter (I'll revisit this below).  This appears to work (due
+to luck) for a few years until:
+2. https://github.com/mpe/linux-fullhistory/commit/966f4406d903a4214fdc74bec54710c6232a95b8
+in 2006 adds a compiler barrier (reload all variables) and this
+appears to work.  The commit message mentions that reads after
+modification of the const variable were buggy (likely GCC started
+taking advantage of the explicit UB around this time as well).  This
+isn't a fix for UB (more thoughts below), but appears to work.
+3. https://github.com/llvm/llvm-project/commit/b45631090220b732e614b5530bbd1d230eb9d38e
+in 2019 removes writes to const variables in LLVM as that's explicit
+UB.  We observe the boot failure in mips and narrow it down to this
+instance.
 
+I can see how throwing a compiler barrier in there made subsequent
+reads after UB writes appear to work, but that was more due to luck
+and implementation details of GCC than the heart of the issue (ie. not
+writing code that is explicitly undefined behavior)(and could change
+in future versions of GCC).  Stated another way, the fix for explicit
+UB is not hacks, but avoiding the UB by rewriting the problematic
+code.
+
+> However the purpose of the arrangement does not appear to me to be
+> particularly specific to a compiler version.
+>
+> > For what its worth, there was UB before the commit in question, it just
+> > added a barrier and got lucky IRT codegen. I don't think there's any
+> > actual compiler bugs related, just runtime bugs due to UB.
+>
+>  Does your solution preserves the original purpose of the hack though as
+> documented in the comment you propose to be removed?
+
+The function modified simply writes to a global variable.  It's not
+clear to my why the value about to be modified would EVER be loaded
+before modification.
+
+>  Clearly it was defined enough to work for almost 18 years, so it would be
+> good to keep the optimisation functionally by using different means that
+> do not rely on UB.
+
+"Defined enough" ???
+https://youtu.be/Aq_1l316ow8?t=17
+
+> This variable is assigned at most once throughout the
+> life of the kernel and then early on, so considering it r/w with all the
+> consequences for all accesses does not appear to me to be a good use of
+> it.
+
+Note: it's not possible to express the semantics of a "write once
+variable" in C short of static initialization (AFAIK, without explicit
+violation of UB, but Cunningham's Law may apply).
+
+(set_io_port_base is called in ~20 places)
+
+Thinking more about this while I was away, I think what this code has
+needed since 2001 is proper encapsulation.  If you want a variable
+that is written from one place only, but readable throughout, then the
+pattern I'd use is:
+
+1. declare a getter in a .h file.
+2. define/qualify `mips_io_port_base` as `static` and non-const in a
+.c file where it's modified.
+3. define the getter and setter in the above .c file.
+
+That would rely on linkage to limit the visibility of the symbol for
+modification.  But, we'd then need to export the getter, vs the symbol
+itself.  There's also on the order of ~20 call sites that would need
+to be changed to invoke the getter rather than read the raw variable.
+Also, it's unlikely the getter gets inlined across translation units
+(short of LTO, which the mainline kernel doesn't support today).
+
+I think my patch here (https://lkml.org/lkml/2019/7/29/1636) is
+minimally and much less invasive.
+
+>  Maybe a piece of inline asm to hide the initialisation or suchlike then?
+
+I think that would still be UB as the definition would not be changed;
+you'd still be modifying a variable declared const.
+-- 
+Thanks,
+~Nick Desaulniers
