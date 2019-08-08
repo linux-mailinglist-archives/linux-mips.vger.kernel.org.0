@@ -2,194 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08057854FF
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Aug 2019 23:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E88485A64
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Aug 2019 08:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730375AbfHGVM2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 7 Aug 2019 17:12:28 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:38800 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730365AbfHGVM1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 7 Aug 2019 17:12:27 -0400
-Received: by mail-pl1-f193.google.com with SMTP id m12so3959286plt.5
-        for <linux-mips@vger.kernel.org>; Wed, 07 Aug 2019 14:12:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fd+dofbpCV/6k5WcFl4oZMCWdF8fj4kR4/a+wjxKmsA=;
-        b=rAUbgR3zhEw1fjUVF8KM3rovMm6jms4eUTwDrpb/7hk+mJRmY+GevkEEjZ8jd9WxJ8
-         ebboqjF0o1XIe0OyOtHde46MsTIXqNDzKbfU14DIZd/Xg3c2k72+RFur9R2NQ6CghXkb
-         kvSyjMG5CjfRXi8FIkIWOq1aMaubFv5QFuFCjjJdeAsifVfE6p6WjJcnUmgtWFYkBGVZ
-         m1LPTv3MkQd6vdZv9sdS0bQAe2kA/7mk1TFwOGPkDQzcMC/5KjUC/P+kZhx2g/JMS5NV
-         /GJkm5fugsOWIlIhHvsuntFuhFO1K2oR3ulrDn3XIO2GAdfJxdQO/P+tKaNbuLtzqKRt
-         uosA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fd+dofbpCV/6k5WcFl4oZMCWdF8fj4kR4/a+wjxKmsA=;
-        b=mz5GDfTefHwT5M69jR7O55JDEOYeVjHX6iioFuOPpIBsgzRNZEcAlInCU/5iuu1p0T
-         cJsslWIKy45wZ4WtYxQwDejr2CS4pzkzW05YHWj/JKe7TWuVJTaf/jfkZEeVb9xK/XrB
-         SMIBodnqG5k7dZDcIMV2dlnPsPSbm6D7713wixxFyvUE0xRwm7NyJ1jDd+eVbt14egLX
-         VtmsBiGya6CVkLvXji8s9/xfOqO4TRrlPnaFbhJUvttJIilIZ0+qJY36M1dv3ULV9NjK
-         rtDf9G73TmRHZ6JH+/H31iGWvgAwwq82aTL58rZiF0GFoyN9QSWw/STyWO/9bSOjYEne
-         epTg==
-X-Gm-Message-State: APjAAAWMO3hD7HwBvj/NEBelfYjwjeWsGCOm/HVcwE2mJcN7MsHSunk4
-        hJ0GP1yPf8sw4CL7WAqsR/XRtQejFfiwS9v44rkjMQ==
-X-Google-Smtp-Source: APXvYqznwJRoAcnn7fVAEd4l+avqz5PXq39u3baHCNe66I0Lo+mKBr+Sgwoiq+RvXzYN4HtITPL6iOWmEQ73ykipzGY=
-X-Received: by 2002:a17:902:3363:: with SMTP id a90mr9572730plc.119.1565212346434;
- Wed, 07 Aug 2019 14:12:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190729211014.39333-1-ndesaulniers@google.com> <alpine.LFD.2.21.1907292302451.16059@eddie.linux-mips.org>
-In-Reply-To: <alpine.LFD.2.21.1907292302451.16059@eddie.linux-mips.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 7 Aug 2019 14:12:15 -0700
-Message-ID: <CAKwvOd==SCBrj=cZ7Ax5F87+-bPMS9AtGSxp+NWp_+yDCg4R-A@mail.gmail.com>
-Subject: Re: [PATCH] mips: avoid explicit UB in assignment of mips_io_port_base
-To:     "Maciej W. Rozycki" <macro@linux-mips.org>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        id S1726721AbfHHGSK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Aug 2019 02:18:10 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:52705 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726475AbfHHGSK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Aug 2019 02:18:10 -0400
+Received: from alex.numericable.fr (127.19.86.79.rev.sfr.net [79.86.19.127])
+        (Authenticated sender: alex@ghiti.fr)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id F38AC100003;
+        Thu,  8 Aug 2019 06:18:00 +0000 (UTC)
+From:   Alexandre Ghiti <alex@ghiti.fr>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Eli Friedman <efriedma@quicinc.com>,
-        Hassan Naveed <hnaveed@wavecomp.com>,
-        Stephen Kitt <steve@sk2.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, linux-mips@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        regehr@cs.utah.edu, Philip Reames <listmail@philipreames.com>,
-        Alexander Potapenko <glider@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Palmer Dabbelt <palmer@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Alexandre Ghiti <alex@ghiti.fr>
+Subject: [PATCH v6 00/14] Provide generic top-down mmap layout functions
+Date:   Thu,  8 Aug 2019 02:17:42 -0400
+Message-Id: <20190808061756.19712-1-alex@ghiti.fr>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Sorry for the delayed response, literally sent the patch then went on vacation.
+This series introduces generic functions to make top-down mmap layout
+easily accessible to architectures, in particular riscv which was
+the initial goal of this series.
+The generic implementation was taken from arm64 and used successively
+by arm, mips and finally riscv.
 
-On Mon, Jul 29, 2019 at 3:16 PM Maciej W. Rozycki <macro@linux-mips.org> wrote:
->
-> On Mon, 29 Jul 2019, Nick Desaulniers wrote:
->
-> > The code in question is modifying a variable declared const through
-> > pointer manipulation.  Such code is explicitly undefined behavior, and
-> > is the lone issue preventing malta_defconfig from booting when built
-> > with Clang:
-> >
-> > If an attempt is made to modify an object defined with a const-qualified
-> > type through use of an lvalue with non-const-qualified type, the
-> > behavior is undefined.
-> >
-> > LLVM is removing such assignments. A simple fix is to not declare
-> > variables const that you plan on modifying.  Limiting the scope would be
-> > a better method of preventing unwanted writes to such a variable.
+Note that in addition the series fixes 2 issues:
+- stack randomization was taken into account even if not necessary.
+- [1] fixed an issue with mmap base which did not take into account
+  randomization but did not report it to arm and mips, so by moving
+  arm64 into a generic library, this problem is now fixed for both
+  architectures.
 
-This is now documented in the LLVM release notes for Clang-9:
-https://github.com/llvm/llvm-project/commit/e39e79358fcdd5d8ad809defaa821f0bbfa809a5
+This work is an effort to factorize architecture functions to avoid
+code duplication and oversights as in [1].
 
-> >
-> > Further, the code in question mentions "compiler bugs" without any links
-> > to bug reports, so it is difficult to know if the issue is resolved in
-> > GCC. The patch was authored in 2006, which would have been GCC 4.0.3 or
-> > 4.1.1. The minimal supported version of GCC in the Linux kernel is
-> > currently 4.6.
->
->  It's somewhat older than that.  My investigation points to:
->
-> commit c94e57dcd61d661749d53ee876ab265883b0a103
-> Author: Ralf Baechle <ralf@linux-mips.org>
-> Date:   Sun Nov 25 09:25:53 2001 +0000
->
->     Cleanup of include/asm-mips/io.h.  Now looks neat and harmless.
+[1]: https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1429066.html
 
-Oh indeed, great find!
+Changes in v6:
+  - Do not handle sv48 as it will be correctly implemented later: assume
+    64BIT <=> sv39.
+  - Add acked-by from Paul
 
-So it looks to me like the order of events is:
-1. https://github.com/jaaron/linux-mips-ip30/commit/c94e57dcd61d661749d53ee876ab265883b0a103
-in 2001 first introduces the UB.  mips_io_port_base is defined
-non-const in arch/mips/kernel/setup.c, but then declared extern const
-(and modified via UB) in include/asm-mips/io.h.  A setter is created,
-but not a getter (I'll revisit this below).  This appears to work (due
-to luck) for a few years until:
-2. https://github.com/mpe/linux-fullhistory/commit/966f4406d903a4214fdc74bec54710c6232a95b8
-in 2006 adds a compiler barrier (reload all variables) and this
-appears to work.  The commit message mentions that reads after
-modification of the const variable were buggy (likely GCC started
-taking advantage of the explicit UB around this time as well).  This
-isn't a fix for UB (more thoughts below), but appears to work.
-3. https://github.com/llvm/llvm-project/commit/b45631090220b732e614b5530bbd1d230eb9d38e
-in 2019 removes writes to const variables in LLVM as that's explicit
-UB.  We observe the boot failure in mips and narrow it down to this
-instance.
+Changes in v5:
+  - Fix [PATCH 11/14]
+  - Rebase on top of v5.3rc2 and commit
+    "riscv: kbuild: add virtual memory system selection"
+  - [PATCH 14/14] now takes into account the various virtual memory systems
 
-I can see how throwing a compiler barrier in there made subsequent
-reads after UB writes appear to work, but that was more due to luck
-and implementation details of GCC than the heart of the issue (ie. not
-writing code that is explicitly undefined behavior)(and could change
-in future versions of GCC).  Stated another way, the fix for explicit
-UB is not hacks, but avoiding the UB by rewriting the problematic
-code.
+Changes in v4:
+  - Make ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT select ARCH_HAS_ELF_RANDOMIZE
+    by default as suggested by Kees,
+  - ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT depends on MMU and defines the
+    functions needed by ARCH_HAS_ELF_RANDOMIZE => architectures that use
+    the generic mmap topdown functions cannot have ARCH_HAS_ELF_RANDOMIZE
+    selected without MMU, but I think it's ok since randomization without
+    MMU does not add much security anyway.
+  - There is no common API to determine if a process is 32b, so I came up with
+    !IS_ENABLED(CONFIG_64BIT) || is_compat_task() in [PATCH v4 12/14].
+  - Mention in the change log that x86 already takes care of not offseting mmap
+    base address if the task does not want randomization.
+  - Re-introduce a comment that should not have been removed.
+  - Add Reviewed/Acked-By from Paul, Christoph and Kees, thank you for that.
+  - I tried to minimize the changes from the commits in v3 in order to make
+    easier the review of the v4, the commits changed or added are:
+    - [PATCH v4 5/14]
+    - [PATCH v4 8/14]
+    - [PATCH v4 11/14]
+    - [PATCH v4 12/14]
+    - [PATCH v4 13/14]
 
-> However the purpose of the arrangement does not appear to me to be
-> particularly specific to a compiler version.
->
-> > For what its worth, there was UB before the commit in question, it just
-> > added a barrier and got lucky IRT codegen. I don't think there's any
-> > actual compiler bugs related, just runtime bugs due to UB.
->
->  Does your solution preserves the original purpose of the hack though as
-> documented in the comment you propose to be removed?
+Changes in v3:
+  - Split into small patches to ease review as suggested by Christoph
+    Hellwig and Kees Cook
+  - Move help text of new config as a comment, as suggested by Christoph
+  - Make new config depend on MMU, as suggested by Christoph
 
-The function modified simply writes to a global variable.  It's not
-clear to my why the value about to be modified would EVER be loaded
-before modification.
+Changes in v2 as suggested by Christoph Hellwig:
+  - Preparatory patch that moves randomize_stack_top
+  - Fix duplicate config in riscv
+  - Align #if defined on next line => this gives rise to a checkpatch
+    warning. I found this pattern all around the tree, in the same proportion
+    as the previous pattern which was less pretty:
+    git grep -C 1 -n -P "^#if defined.+\|\|.*\\\\$" 
 
->  Clearly it was defined enough to work for almost 18 years, so it would be
-> good to keep the optimisation functionally by using different means that
-> do not rely on UB.
+Alexandre Ghiti (14):
+  mm, fs: Move randomize_stack_top from fs to mm
+  arm64: Make use of is_compat_task instead of hardcoding this test
+  arm64: Consider stack randomization for mmap base only when necessary
+  arm64, mm: Move generic mmap layout functions to mm
+  arm64, mm: Make randomization selected by generic topdown mmap layout
+  arm: Properly account for stack randomization and stack guard gap
+  arm: Use STACK_TOP when computing mmap base address
+  arm: Use generic mmap top-down layout and brk randomization
+  mips: Properly account for stack randomization and stack guard gap
+  mips: Use STACK_TOP when computing mmap base address
+  mips: Adjust brk randomization offset to fit generic version
+  mips: Replace arch specific way to determine 32bit task with generic
+    version
+  mips: Use generic mmap top-down layout and brk randomization
+  riscv: Make mmap allocation top-down by default
 
-"Defined enough" ???
-https://youtu.be/Aq_1l316ow8?t=17
+ arch/Kconfig                       |  11 +++
+ arch/arm/Kconfig                   |   2 +-
+ arch/arm/include/asm/processor.h   |   2 -
+ arch/arm/kernel/process.c          |   5 --
+ arch/arm/mm/mmap.c                 |  52 --------------
+ arch/arm64/Kconfig                 |   2 +-
+ arch/arm64/include/asm/processor.h |   2 -
+ arch/arm64/kernel/process.c        |   8 ---
+ arch/arm64/mm/mmap.c               |  72 -------------------
+ arch/mips/Kconfig                  |   2 +-
+ arch/mips/include/asm/processor.h  |   5 --
+ arch/mips/mm/mmap.c                |  84 ----------------------
+ arch/riscv/Kconfig                 |  12 ++++
+ fs/binfmt_elf.c                    |  20 ------
+ include/linux/mm.h                 |   2 +
+ kernel/sysctl.c                    |   6 +-
+ mm/util.c                          | 107 ++++++++++++++++++++++++++++-
+ 17 files changed, 138 insertions(+), 256 deletions(-)
 
-> This variable is assigned at most once throughout the
-> life of the kernel and then early on, so considering it r/w with all the
-> consequences for all accesses does not appear to me to be a good use of
-> it.
-
-Note: it's not possible to express the semantics of a "write once
-variable" in C short of static initialization (AFAIK, without explicit
-violation of UB, but Cunningham's Law may apply).
-
-(set_io_port_base is called in ~20 places)
-
-Thinking more about this while I was away, I think what this code has
-needed since 2001 is proper encapsulation.  If you want a variable
-that is written from one place only, but readable throughout, then the
-pattern I'd use is:
-
-1. declare a getter in a .h file.
-2. define/qualify `mips_io_port_base` as `static` and non-const in a
-.c file where it's modified.
-3. define the getter and setter in the above .c file.
-
-That would rely on linkage to limit the visibility of the symbol for
-modification.  But, we'd then need to export the getter, vs the symbol
-itself.  There's also on the order of ~20 call sites that would need
-to be changed to invoke the getter rather than read the raw variable.
-Also, it's unlikely the getter gets inlined across translation units
-(short of LTO, which the mainline kernel doesn't support today).
-
-I think my patch here (https://lkml.org/lkml/2019/7/29/1636) is
-minimally and much less invasive.
-
->  Maybe a piece of inline asm to hide the initialisation or suchlike then?
-
-I think that would still be UB as the definition would not be changed;
-you'd still be modifying a variable declared const.
 -- 
-Thanks,
-~Nick Desaulniers
+2.20.1
+
