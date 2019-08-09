@@ -2,110 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BCE887683
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2019 11:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FFB8770D
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2019 12:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406198AbfHIJp4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Aug 2019 05:45:56 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:35101 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406138AbfHIJp4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Aug 2019 05:45:56 -0400
-X-Originating-IP: 81.250.144.103
-Received: from [10.30.1.20] (lneuilly-657-1-5-103.w81-250.abo.wanadoo.fr [81.250.144.103])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 732B46000D;
-        Fri,  9 Aug 2019 09:45:51 +0000 (UTC)
-Subject: Re: [PATCH v6 11/14] mips: Adjust brk randomization offset to fit
- generic version
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        id S2406209AbfHIKRI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Aug 2019 06:17:08 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52306 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726091AbfHIKRH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Aug 2019 06:17:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=qtavp7CPHfZNeNkYBrPvAtPsbANfqFLQtCdliW3pDao=; b=pag4yExuYAml6RAwW8ClSI/8O
+        4SvhyG05DRb/VW/V9CDsF+zHeZ5UXFBZuSEmH6L2R/TkkFTUdvg0G5X+mChPhSDo0bv/G81bqVcOE
+        H0+ebgEssg+HPPdNYRmJesf50lZppQPNOWSyxdr7otHpaF8cn8K9ckBUuEcdXQR2moiTTpd1jGx/f
+        vjh5YbK7fMXAxAHvYpu7bjS0cCBSZ//FEHycRa1QcZu/mYorpr133FpqiXnyp7o6RFhVYguPt/B8f
+        P2fGNwRrQbpxYk76nYUeyruj+MAsigriKyn6idQDkNDTkIb9YC0oHITHhwpJDVUNGhDUhHSp0NaMd
+        UOTH8wydQ==;
+Received: from willy by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1hw1wn-0006xR-4P; Fri, 09 Aug 2019 10:16:33 +0000
+Date:   Fri, 9 Aug 2019 03:16:33 -0700
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Steven Price <Steven.Price@arm.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Sri Krishna chowdary <schowdary@nvidia.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vineet Gupta <vgupta@synopsys.com>,
         James Hogan <jhogan@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-References: <20190808061756.19712-1-alex@ghiti.fr>
- <20190808061756.19712-12-alex@ghiti.fr>
- <68ec5cf6-6ba3-68ab-aa01-668b701c642f@cogentembedded.com>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-Message-ID: <7b7e256d-5106-3022-9ded-0af4193b6b8b@ghiti.fr>
-Date:   Fri, 9 Aug 2019 11:45:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC V2 0/1] mm/debug: Add tests for architecture exported page
+ table helpers
+Message-ID: <20190809101632.GM5482@bombadil.infradead.org>
+References: <1565335998-22553-1-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <68ec5cf6-6ba3-68ab-aa01-668b701c642f@cogentembedded.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: fr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1565335998-22553-1-git-send-email-anshuman.khandual@arm.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 8/8/19 11:19 AM, Sergei Shtylyov wrote:
-> Hello!
->
-> On 08.08.2019 9:17, Alexandre Ghiti wrote:
->
->> This commit simply bumps up to 32MB and 1GB the random offset
->> of brk, compared to 8MB and 256MB, for 32bit and 64bit respectively.
->>
->> Suggested-by: Kees Cook <keescook@chromium.org>
->> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
->> Acked-by: Paul Burton <paul.burton@mips.com>
->> Reviewed-by: Kees Cook <keescook@chromium.org>
->> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
->> ---
->>   arch/mips/mm/mmap.c | 7 ++++---
->>   1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/mips/mm/mmap.c b/arch/mips/mm/mmap.c
->> index a7e84b2e71d7..ff6ab87e9c56 100644
->> --- a/arch/mips/mm/mmap.c
->> +++ b/arch/mips/mm/mmap.c
-> [...]
->> @@ -189,11 +190,11 @@ static inline unsigned long brk_rnd(void)
->>       unsigned long rnd = get_random_long();
->>         rnd = rnd << PAGE_SHIFT;
->> -    /* 8MB for 32bit, 256MB for 64bit */
->> +    /* 32MB for 32bit, 1GB for 64bit */
->>       if (TASK_IS_32BIT_ADDR)
->> -        rnd = rnd & 0x7ffffful;
->> +        rnd = rnd & (SZ_32M - 1);
->>       else
->> -        rnd = rnd & 0xffffffful;
->> +        rnd = rnd & (SZ_1G - 1);
->
->    Why not make these 'rnd &= SZ_* - 1', while at it anyways?
+On Fri, Aug 09, 2019 at 01:03:17PM +0530, Anshuman Khandual wrote:
+> Should alloc_gigantic_page() be made available as an interface for general
+> use in the kernel. The test module here uses very similar implementation from
+> HugeTLB to allocate a PUD aligned memory block. Similar for mm_alloc() which
+> needs to be exported through a header.
 
-
-You're right, I could have. Again, this code gets removed afterwards, so 
-I think it's ok
-to leave it as is.
-
-Anyway, thanks for your remarks Sergei !
-
-Alex
-
-
->
-> [...]
->
-> MBR, Sergei
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Why are you allocating memory at all instead of just using some
+known-to-exist PFNs like I suggested?
