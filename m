@@ -2,92 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9CA880CC
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2019 19:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7DA8848C
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2019 23:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437214AbfHIRHo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Aug 2019 13:07:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60596 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437166AbfHIRHo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 9 Aug 2019 13:07:44 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0BB5520820;
-        Fri,  9 Aug 2019 17:07:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565370463;
-        bh=td4WT5L6sUbLPGMcC2rgQ1AreEqJT3zC3mPDyJzfMwg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QYaiJaeNwh52yygHZKBZK4gJSBvGHNK2g9MXjg/qpBnEhDw7XHDMXx4iet/4+C9PQ
-         czBsLI4++elQaRyiricXgHxxvetYGVXZbnt/gzHU1gtm0qsh7Bif8b+E9/3JSaYFp9
-         9CP/LaUOkV+qh9QOdx10zuUkIq64xQzmsETb7FDs=
-Received: by mail-qt1-f180.google.com with SMTP id a15so96431345qtn.7;
-        Fri, 09 Aug 2019 10:07:43 -0700 (PDT)
-X-Gm-Message-State: APjAAAXgCew8m2wEJkvuQaMCyuINzv11KT7MncVG62UlaJn4hsuy0Jkm
-        09BLHc9RZ9PLQNzgBlzdp/zHj5aQ5XaQA2wH9w==
-X-Google-Smtp-Source: APXvYqxQFlsxKQTsoRNrDqs5WV3+vuTWpbQ6YgRh5R5HUZ9BUeRSJyuUwydSt19fd8aJIkkfwtreR3hWL5+n91XE59E=
-X-Received: by 2002:a0c:9782:: with SMTP id l2mr5661633qvd.72.1565370462225;
- Fri, 09 Aug 2019 10:07:42 -0700 (PDT)
+        id S1728160AbfHIVW1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Aug 2019 17:22:27 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:46158 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727498AbfHIVW1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Aug 2019 17:22:27 -0400
+Received: by mail-qt1-f193.google.com with SMTP id j15so3627974qtl.13
+        for <linux-mips@vger.kernel.org>; Fri, 09 Aug 2019 14:22:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=Ug4MTgi2ueZfqMA4+FWSQr133wSyuN+mgZsk4RxY5I8=;
+        b=T0xdr3m2vk1dRABuDHdagNOsvCUEuquJMDDxB4gyWa18mibI8q1Vl2M6UddZGZuoWW
+         bVUPPg4jkfLa01tuKqceOyPnbi9/T9qyxZo8eXdnZjta40CecwXDLsVLjSwlIwd8TnCx
+         aSKa6IzN3mnKHnng1qTOazZiG7hYxV8s5NDQ5gg57ii+DIvjBI4EAo8h2D1ctIrW7Ogy
+         wb3138VaA4Hi8b6nhh8BQ8xYtUBvPhH2REMBZQlFJw+frygxw/RvqwrnBeusxiEt/6gG
+         V0YnG6ULca5e8RNwu3ogTlbKFOwvOjbG6CzJrOvQ4VB0+sSAdwpat07fvTDXm//+YTms
+         RyAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=Ug4MTgi2ueZfqMA4+FWSQr133wSyuN+mgZsk4RxY5I8=;
+        b=OrDQhK5Cp64gCzlBjGrfwEsbbBuUahuL9EUAPNN8GX/saDWsswVGmpcYoL4QbJ5cn+
+         vuxU9emyZrEL44o5lOcNK/+s909blUENBbPXP73wxg+6DM2YEewg3HD/s74NOguzsSnd
+         SpRcMy55VgwK6f71Ba/LyAWcWJdtkuruKXFORbU/dblZ1L7GASRhj7nOI5ruPgwgBuoA
+         9MjqjI6dySBrbtqGynOponn61KuS5dSa8sKd7WGvNHBkKaJLEPwTDN3EWtXOmwfmcXyl
+         RIbqsFB/PLxA7CyGIIELpQIUQtk5NEf6ETJmie92MHklbxhoaez73Pswvz7fYswegUHz
+         mdHA==
+X-Gm-Message-State: APjAAAVrf0Tz2t/slkHuCN1n3sFsXYbggcRzQUY2n9ahfI29nvY+UyMh
+        QLALehuxF4abt51AK6cEDD5btw==
+X-Google-Smtp-Source: APXvYqxHJ16TPbArOOObvex2qGMXiPYuuTyPvcouM0eg7EGKkUFhFNbpUw6MquRPUl6SIdbH5N+5zQ==
+X-Received: by 2002:ac8:252e:: with SMTP id 43mr19908152qtm.61.1565385745973;
+        Fri, 09 Aug 2019 14:22:25 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id p3sm63655473qta.12.2019.08.09.14.22.24
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 09 Aug 2019 14:22:25 -0700 (PDT)
+Date:   Fri, 9 Aug 2019 14:22:22 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v4 7/9] mfd: ioc3: Add driver for SGI IOC3 chip
+Message-ID: <20190809142222.4558691e@cakuba.netronome.com>
+In-Reply-To: <20190809103235.16338-8-tbogendoerfer@suse.de>
+References: <20190809103235.16338-1-tbogendoerfer@suse.de>
+        <20190809103235.16338-8-tbogendoerfer@suse.de>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-References: <20190809121918.25047-1-sr@denx.de> <20190809121918.25047-2-sr@denx.de>
-In-Reply-To: <20190809121918.25047-2-sr@denx.de>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 9 Aug 2019 11:07:29 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJmcHWq8LA6CrTJEV2Pi58+6yO_ND61MNA_=LrOa33Psg@mail.gmail.com>
-Message-ID: <CAL_JsqJmcHWq8LA6CrTJEV2Pi58+6yO_ND61MNA_=LrOa33Psg@mail.gmail.com>
-Subject: Re: [PATCH 2/3 v3] dt-bindings: mips: Add gardena vendor prefix and
- board description
-To:     Stefan Roese <sr@denx.de>
-Cc:     linux-mips@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Aug 9, 2019 at 6:19 AM Stefan Roese <sr@denx.de> wrote:
->
-> This patch adds the vendor prefix for gardena and a short description
-> including the compatible string for the "GARDENA smart Gateway" based
-> on the MT7688 SoC.
->
-> Signed-off-by: Stefan Roese <sr@denx.de>
-> Cc: Paul Burton <paul.burton@mips.com>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> ---
-> v3:
-> - New patch
->
->  .../devicetree/bindings/mips/ralink/gardena.txt          | 9 +++++++++
->  Documentation/devicetree/bindings/vendor-prefixes.yaml   | 2 ++
->  2 files changed, 11 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mips/ralink/gardena.txt
+On Fri,  9 Aug 2019 12:32:29 +0200, Thomas Bogendoerfer wrote:
+> SGI IOC3 chip has integrated ethernet, keyboard and mouse interface.
+> It also supports connecting a SuperIO chip for serial and parallel
+> interfaces. IOC3 is used inside various SGI systemboards and add-on
+> cards with different equipped external interfaces.
+> 
+> Support for ethernet and serial interfaces were implemented inside
+> the network driver. This patchset moves out the not network related
+> parts to a new MFD driver, which takes care of card detection,
+> setup of platform devices and interrupt distribution for the subdevices.
+> 
+> Serial portion: Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> 
+> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
 
-Please add to ralink.txt rather than a new file. Ideally, that would
-be converted to DT schema first, but given this is v3 already I won't
-require that. A binding file per board vendor doesn't scale well and
-will be a lot of duplication for schemas.
+There are a lot of changes in the ethernet part which are not easy to
+explain by the introduction of the other MFD parts.. Could you possibly
+break this change up into smaller chunks?
 
-> diff --git a/Documentation/devicetree/bindings/mips/ralink/gardena.txt b/Documentation/devicetree/bindings/mips/ralink/gardena.txt
-> new file mode 100644
-> index 000000000000..4022fe61a8ee
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mips/ralink/gardena.txt
-> @@ -0,0 +1,9 @@
-> +GARDENA smart Gateway (MT7688)
-> +
-> +This board is based on the MediaTek MT7688 and equipped with 128 MiB
-> +of DDR and 8 MiB of flash (SPI NOR) and additional 128MiB SPI NAND
-> +storage.
-> +
-> +------------------------------
-> +Required root node properties:
-> +- compatible = "gardena,smartGatewayMT7688";
-
-You need an SoC compatible for MT7688 which isn't documented either.
-
-Rob
+Also please don't use stdint types in the kernel, please try checkpatch
+to catch coding style issues.
