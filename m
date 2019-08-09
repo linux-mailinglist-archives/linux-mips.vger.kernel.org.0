@@ -2,263 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6A9879AF
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2019 14:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87D18879D4
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2019 14:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726219AbfHIMTl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Aug 2019 08:19:41 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:42650 "EHLO mx2.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726152AbfHIMTl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 9 Aug 2019 08:19:41 -0400
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id E4CD9A1108;
-        Fri,  9 Aug 2019 14:19:39 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by spamfilter03.heinlein-hosting.de (spamfilter03.heinlein-hosting.de [80.241.56.117]) (amavisd-new, port 10030)
-        with ESMTP id Isln0pQ9WeFD; Fri,  9 Aug 2019 14:19:19 +0200 (CEST)
-From:   Stefan Roese <sr@denx.de>
-To:     linux-mips@vger.kernel.org
-Cc:     Paul Burton <paul.burton@mips.com>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>,
-        John Crispin <john@phrozen.org>
-Subject: [PATCH 3/3 v3] MIPS: ralink: Add GARDENA smart Gateway MT7688 board
-Date:   Fri,  9 Aug 2019 14:19:18 +0200
-Message-Id: <20190809121918.25047-3-sr@denx.de>
-In-Reply-To: <20190809121918.25047-1-sr@denx.de>
-References: <20190809121918.25047-1-sr@denx.de>
+        id S2406735AbfHIMXC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Aug 2019 08:23:02 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:51125 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406048AbfHIMXB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Aug 2019 08:23:01 -0400
+X-Originating-IP: 176.129.6.65
+Received: from localhost (car62-h01-176-129-6-65.dsl.sta.abo.bbox.fr [176.129.6.65])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 0B65C6000F;
+        Fri,  9 Aug 2019 12:22:56 +0000 (UTC)
+Date:   Fri, 9 Aug 2019 14:22:54 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v3 5/7] mfd: ioc3: Add driver for SGI IOC3 chip
+Message-ID: <20190809122254.GN3600@piout.net>
+References: <20190613170636.6647-1-tbogendoerfer@suse.de>
+ <20190613170636.6647-6-tbogendoerfer@suse.de>
+ <20190725114716.GB23883@dell>
+ <20190729204557.468db2153efefda96dd41ec0@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190729204557.468db2153efefda96dd41ec0@suse.de>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This patch adds support for the GARDENA smart Gateway, which is based on
-the MediaTek MT7688 SoC. It is equipped with 128 MiB of DDR and 8 MiB of
-flash (SPI NOR) and additional 128MiB SPI NAND storage.
+On 29/07/2019 20:45:57+0200, Thomas Bogendoerfer wrote:
+> On Thu, 25 Jul 2019 12:47:16 +0100
+> Lee Jones <lee.jones@linaro.org> wrote:
+> 
+> > On Thu, 13 Jun 2019, Thomas Bogendoerfer wrote:
+> > > +/*
+> > > + * On IP30 the RTC (a DS1687) is behind the IOC3 on the generic
+> > > + * ByteBus regions. We have to write the RTC address of interest to
+> > > + * IOC3_BYTEBUS_DEV1, then read the data from IOC3_BYTEBUS_DEV2.
+> > > + * rtc->regs already points to IOC3_BYTEBUS_DEV1.
+> > > + */
+> > > +#define IP30_RTC_ADDR(rtc) (rtc->regs)
+> > > +#define IP30_RTC_DATA(rtc) ((rtc->regs) + IOC3_BYTEBUS_DEV2 - IOC3_BYTEBUS_DEV1)
+> > > +
+> > > +static u8 ip30_rtc_read(struct ds1685_priv *rtc, int reg)
+> > > +{
+> > > +	writeb((reg & 0x7f), IP30_RTC_ADDR(rtc));
+> > > +	return readb(IP30_RTC_DATA(rtc));
+> > > +}
+> > > +
+> > > +static void ip30_rtc_write(struct ds1685_priv *rtc, int reg, u8 value)
+> > > +{
+> > > +	writeb((reg & 0x7f), IP30_RTC_ADDR(rtc));
+> > > +	writeb(value, IP30_RTC_DATA(rtc));
+> > > +}
+> > 
+> > Why is this not in the RTC driver?
+> 
+> because rtc1685 is used in different systems and accessing the chip
+> differs between those systems. 
+> 
+> > > +static struct ds1685_rtc_platform_data ip30_rtc_platform_data = {
+> > > +	.bcd_mode = false,
+> > > +	.no_irq = false,
+> > > +	.uie_unsupported = true,
+> > > +	.alloc_io_resources = true,
+> > 
+> > > +	.plat_read = ip30_rtc_read,
+> > > +	.plat_write = ip30_rtc_write,
+> > 
+> > Call-backs in a non-subsystem API is pretty ugly IMHO.
+> 
+> I agree
+> 
+> > Where are these called from?
+> 
+> drivers/rtc/rtc-ds1685.c
+> 
+> I could do the same as done for serial8250 and add an additional .c file
+> in  drivers/rtc which handles this for SGI-IP30. Alexandre would this work
+> for you as well ?
+> 
 
-Signed-off-by: Stefan Roese <sr@denx.de>
-Cc: Paul Burton <paul.burton@mips.com>
-Cc: Harvey Hunt <harveyhuntnexus@gmail.com>
-Cc: John Crispin <john@phrozen.org>
----
-v3:
-- No change (bindings documentation added in separate patch)
+As it is not particularly big, you could put that directly in
+rtc-ds1685.c.
 
-v2:
-- Use Harvey's new email address (not at imgtec)
-- Use correct linux-mips list address
 
- .../ralink/gardena_smart_gateway_mt7688.dts   | 196 ++++++++++++++++++
- 1 file changed, 196 insertions(+)
- create mode 100644 arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-
-diff --git a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-new file mode 100644
-index 000000000000..2e26df54c753
---- /dev/null
-+++ b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-@@ -0,0 +1,196 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2019 Stefan Roese <sr@denx.de>
-+ */
-+
-+/dts-v1/;
-+
-+/include/ "mt7628a.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+
-+/ {
-+	compatible = "gardena,smartGatewayMT7688", "ralink,mt7628a-soc";
-+	model = "GARDENA smart Gateway (MT7688)";
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x0 0x8000000>;
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinmux_gpio_gpio>;	/* GPIO11 */
-+
-+		user_btn1 {
-+			label = "USER_BTN1";
-+			gpios = <&gpio 11 GPIO_ACTIVE_LOW>;
-+			linux,code =<KEY_PROG1> ;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinmux_pwm0_gpio>,	/* GPIO18 */
-+			    <&pinmux_pwm1_gpio>,	/* GPIO19 */
-+			    <&pinmux_sdmode_gpio>,	/* GPIO22..29 */
-+			    <&pinmux_p0led_an_gpio>;	/* GPIO43 */
-+		/*
-+		 * <&pinmux_i2s_gpio> (covers GPIO0..3) is needed here as
-+		 * well for GPIO3. But this is already claimed for uart1
-+		 * (see below). So we can't include it in this LED node.
-+		 */
-+
-+		power_blue {
-+			label = "smartgw:power:blue";
-+			gpios = <&gpio 18 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+
-+		power_green {
-+			label = "smartgw:power:green";
-+			gpios = <&gpio 19 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+
-+		power_red {
-+			label = "smartgw:power:red";
-+			gpios = <&gpio 22 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+
-+		radio_blue {
-+			label = "smartgw:radio:blue";
-+			gpios = <&gpio 23 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+
-+		radio_green {
-+			label = "smartgw:radio:green";
-+			gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+
-+		radio_red {
-+			label = "smartgw:radio:red";
-+			gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+
-+		internet_blue {
-+			label = "smartgw:internet:blue";
-+			gpios = <&gpio 26 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+
-+		internet_green {
-+			label = "smartgw:internet:green";
-+			gpios = <&gpio 27 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+
-+		internet_red {
-+			label = "smartgw:internet:red";
-+			gpios = <&gpio 28 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+
-+		ethernet_link {
-+			label = "smartgw:eth:link";
-+			gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "netdev";
-+		};
-+
-+		ethernet_activity {
-+			label = "smartgw:eth:act";
-+			gpios = <&gpio 43 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "netdev";
-+		};
-+	};
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+};
-+
-+&i2c {
-+	status = "okay";
-+};
-+
-+&spi {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinmux_spi_spi>, <&pinmux_spi_cs1_cs>;
-+
-+	m25p80@0 {
-+		compatible = "jedec,spi-nor";
-+		reg = <0>;
-+		spi-max-frequency = <40000000>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				label = "uboot";
-+				reg = <0x0 0xa0000>;
-+				read-only;
-+			};
-+
-+			partition@a0000 {
-+				label = "uboot_env0";
-+				reg = <0xa0000 0x10000>;
-+			};
-+
-+			partition@b0000 {
-+				label = "uboot_env1";
-+				reg = <0xb0000 0x10000>;
-+			};
-+
-+			factory: partition@c0000 {
-+				label = "factory";
-+				reg = <0xc0000 0x10000>;
-+				read-only;
-+			};
-+		};
-+	};
-+
-+	nand_flash@1 {
-+		compatible = "spi-nand";
-+		linux,mtd-name = "gd5f";
-+		reg = <1>;
-+		spi-max-frequency = <40000000>;
-+	};
-+};
-+
-+&uart1 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinmux_i2s_gpio>;		/* GPIO0..3 */
-+
-+	rts-gpios = <&gpio 1 GPIO_ACTIVE_LOW>;
-+	cts-gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
-+};
-+
-+&uart2 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinmux_p2led_an_gpio>,	/* GPIO41 */
-+		    <&pinmux_p3led_an_gpio>;	/* GPIO40 */
-+
-+	rts-gpios = <&gpio 40 GPIO_ACTIVE_LOW>;
-+	cts-gpios = <&gpio 41 GPIO_ACTIVE_LOW>;
-+};
-+
-+&watchdog {
-+	status = "okay";
-+};
 -- 
-2.22.0
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
