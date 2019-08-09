@@ -2,110 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D18879D4
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2019 14:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0383C87C1E
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2019 15:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406735AbfHIMXC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Aug 2019 08:23:02 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:51125 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406048AbfHIMXB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Aug 2019 08:23:01 -0400
-X-Originating-IP: 176.129.6.65
-Received: from localhost (car62-h01-176-129-6-65.dsl.sta.abo.bbox.fr [176.129.6.65])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 0B65C6000F;
-        Fri,  9 Aug 2019 12:22:56 +0000 (UTC)
-Date:   Fri, 9 Aug 2019 14:22:54 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S2406704AbfHINw3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Aug 2019 09:52:29 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:59464 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726152AbfHINw2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Aug 2019 09:52:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=EreDrMASgymCoOwex2lDSh6PBVp8vwwZo8lBW7Dx+AU=; b=DCezGss28UrQwdHuY2bFdI4p4
+        S1IQudbzVnxD+07DxZGKpMaIkZjBN26Cdg8l2/Fs8GMFEeX1pJqh0qZAiUghQaE6El6M1XDplTDve
+        EJJcjL9sO79CkY0k30aJUEJAymr58OsH+p8EsukYG7F9sRPnn0G8pCmZVLattID9zhXymV5yWXtFQ
+        ciqngFSM0ntk8BRdLo5xQ4zieBSWsCrkihQ+/ft5+CPIVKlVlUX+N97pCSyIU0MATtJ4kwuaN/o18
+        WCkKlxmfNm5M1Hch5V2lnDpS3brZehU45KR0NW0dNC4+r+Ph0RyNwH7KE6Q/WHvIQU+odBuHV4vuK
+        lstsiJ0Mg==;
+Received: from willy by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1hw5JK-0002PQ-U7; Fri, 09 Aug 2019 13:52:02 +0000
+Date:   Fri, 9 Aug 2019 06:52:02 -0700
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v3 5/7] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-ID: <20190809122254.GN3600@piout.net>
-References: <20190613170636.6647-1-tbogendoerfer@suse.de>
- <20190613170636.6647-6-tbogendoerfer@suse.de>
- <20190725114716.GB23883@dell>
- <20190729204557.468db2153efefda96dd41ec0@suse.de>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Steven Price <Steven.Price@arm.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Sri Krishna chowdary <schowdary@nvidia.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC V2 0/1] mm/debug: Add tests for architecture exported page
+ table helpers
+Message-ID: <20190809135202.GN5482@bombadil.infradead.org>
+References: <1565335998-22553-1-git-send-email-anshuman.khandual@arm.com>
+ <20190809101632.GM5482@bombadil.infradead.org>
+ <a5aab7ff-f7fd-9cc1-6e37-e4185eee65ac@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190729204557.468db2153efefda96dd41ec0@suse.de>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <a5aab7ff-f7fd-9cc1-6e37-e4185eee65ac@arm.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 29/07/2019 20:45:57+0200, Thomas Bogendoerfer wrote:
-> On Thu, 25 Jul 2019 12:47:16 +0100
-> Lee Jones <lee.jones@linaro.org> wrote:
-> 
-> > On Thu, 13 Jun 2019, Thomas Bogendoerfer wrote:
-> > > +/*
-> > > + * On IP30 the RTC (a DS1687) is behind the IOC3 on the generic
-> > > + * ByteBus regions. We have to write the RTC address of interest to
-> > > + * IOC3_BYTEBUS_DEV1, then read the data from IOC3_BYTEBUS_DEV2.
-> > > + * rtc->regs already points to IOC3_BYTEBUS_DEV1.
-> > > + */
-> > > +#define IP30_RTC_ADDR(rtc) (rtc->regs)
-> > > +#define IP30_RTC_DATA(rtc) ((rtc->regs) + IOC3_BYTEBUS_DEV2 - IOC3_BYTEBUS_DEV1)
-> > > +
-> > > +static u8 ip30_rtc_read(struct ds1685_priv *rtc, int reg)
-> > > +{
-> > > +	writeb((reg & 0x7f), IP30_RTC_ADDR(rtc));
-> > > +	return readb(IP30_RTC_DATA(rtc));
-> > > +}
-> > > +
-> > > +static void ip30_rtc_write(struct ds1685_priv *rtc, int reg, u8 value)
-> > > +{
-> > > +	writeb((reg & 0x7f), IP30_RTC_ADDR(rtc));
-> > > +	writeb(value, IP30_RTC_DATA(rtc));
-> > > +}
+On Fri, Aug 09, 2019 at 04:05:07PM +0530, Anshuman Khandual wrote:
+> On 08/09/2019 03:46 PM, Matthew Wilcox wrote:
+> > On Fri, Aug 09, 2019 at 01:03:17PM +0530, Anshuman Khandual wrote:
+> >> Should alloc_gigantic_page() be made available as an interface for general
+> >> use in the kernel. The test module here uses very similar implementation from
+> >> HugeTLB to allocate a PUD aligned memory block. Similar for mm_alloc() which
+> >> needs to be exported through a header.
 > > 
-> > Why is this not in the RTC driver?
+> > Why are you allocating memory at all instead of just using some
+> > known-to-exist PFNs like I suggested?
 > 
-> because rtc1685 is used in different systems and accessing the chip
-> differs between those systems. 
-> 
-> > > +static struct ds1685_rtc_platform_data ip30_rtc_platform_data = {
-> > > +	.bcd_mode = false,
-> > > +	.no_irq = false,
-> > > +	.uie_unsupported = true,
-> > > +	.alloc_io_resources = true,
-> > 
-> > > +	.plat_read = ip30_rtc_read,
-> > > +	.plat_write = ip30_rtc_write,
-> > 
-> > Call-backs in a non-subsystem API is pretty ugly IMHO.
-> 
-> I agree
-> 
-> > Where are these called from?
-> 
-> drivers/rtc/rtc-ds1685.c
-> 
-> I could do the same as done for serial8250 and add an additional .c file
-> in  drivers/rtc which handles this for SGI-IP30. Alexandre would this work
-> for you as well ?
-> 
+> We needed PFN to be PUD aligned for pfn_pud() and PMD aligned for mk_pmd().
+> Now walking the kernel page table for a known symbol like kernel_init()
 
-As it is not particularly big, you could put that directly in
-rtc-ds1685.c.
+I didn't say to walk the kernel page table.  I said to call virt_to_pfn()
+for a known symbol like kernel_init().
 
+> as you had suggested earlier we might encounter page table page entries at PMD
+> and PUD which might not be PMD or PUD aligned respectively. It seemed to me
+> that alignment requirement is applicable only for mk_pmd() and pfn_pud()
+> which create large mappings at those levels but that requirement does not
+> exist for page table pages pointing to next level. Is not that correct ? Or
+> I am missing something here ?
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Just clear the bottom bits off the PFN until you get a PMD or PUD aligned
+PFN.  It's really not hard.
+
