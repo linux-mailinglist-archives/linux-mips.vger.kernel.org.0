@@ -2,105 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0383C87C1E
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2019 15:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9CA880CC
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Aug 2019 19:07:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406704AbfHINw3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 9 Aug 2019 09:52:29 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:59464 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726152AbfHINw2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 9 Aug 2019 09:52:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=EreDrMASgymCoOwex2lDSh6PBVp8vwwZo8lBW7Dx+AU=; b=DCezGss28UrQwdHuY2bFdI4p4
-        S1IQudbzVnxD+07DxZGKpMaIkZjBN26Cdg8l2/Fs8GMFEeX1pJqh0qZAiUghQaE6El6M1XDplTDve
-        EJJcjL9sO79CkY0k30aJUEJAymr58OsH+p8EsukYG7F9sRPnn0G8pCmZVLattID9zhXymV5yWXtFQ
-        ciqngFSM0ntk8BRdLo5xQ4zieBSWsCrkihQ+/ft5+CPIVKlVlUX+N97pCSyIU0MATtJ4kwuaN/o18
-        WCkKlxmfNm5M1Hch5V2lnDpS3brZehU45KR0NW0dNC4+r+Ph0RyNwH7KE6Q/WHvIQU+odBuHV4vuK
-        lstsiJ0Mg==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1hw5JK-0002PQ-U7; Fri, 09 Aug 2019 13:52:02 +0000
-Date:   Fri, 9 Aug 2019 06:52:02 -0700
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC V2 0/1] mm/debug: Add tests for architecture exported page
- table helpers
-Message-ID: <20190809135202.GN5482@bombadil.infradead.org>
-References: <1565335998-22553-1-git-send-email-anshuman.khandual@arm.com>
- <20190809101632.GM5482@bombadil.infradead.org>
- <a5aab7ff-f7fd-9cc1-6e37-e4185eee65ac@arm.com>
+        id S2437214AbfHIRHo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 9 Aug 2019 13:07:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60596 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2437166AbfHIRHo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 9 Aug 2019 13:07:44 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0BB5520820;
+        Fri,  9 Aug 2019 17:07:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565370463;
+        bh=td4WT5L6sUbLPGMcC2rgQ1AreEqJT3zC3mPDyJzfMwg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QYaiJaeNwh52yygHZKBZK4gJSBvGHNK2g9MXjg/qpBnEhDw7XHDMXx4iet/4+C9PQ
+         czBsLI4++elQaRyiricXgHxxvetYGVXZbnt/gzHU1gtm0qsh7Bif8b+E9/3JSaYFp9
+         9CP/LaUOkV+qh9QOdx10zuUkIq64xQzmsETb7FDs=
+Received: by mail-qt1-f180.google.com with SMTP id a15so96431345qtn.7;
+        Fri, 09 Aug 2019 10:07:43 -0700 (PDT)
+X-Gm-Message-State: APjAAAXgCew8m2wEJkvuQaMCyuINzv11KT7MncVG62UlaJn4hsuy0Jkm
+        09BLHc9RZ9PLQNzgBlzdp/zHj5aQ5XaQA2wH9w==
+X-Google-Smtp-Source: APXvYqxQFlsxKQTsoRNrDqs5WV3+vuTWpbQ6YgRh5R5HUZ9BUeRSJyuUwydSt19fd8aJIkkfwtreR3hWL5+n91XE59E=
+X-Received: by 2002:a0c:9782:: with SMTP id l2mr5661633qvd.72.1565370462225;
+ Fri, 09 Aug 2019 10:07:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a5aab7ff-f7fd-9cc1-6e37-e4185eee65ac@arm.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+References: <20190809121918.25047-1-sr@denx.de> <20190809121918.25047-2-sr@denx.de>
+In-Reply-To: <20190809121918.25047-2-sr@denx.de>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 9 Aug 2019 11:07:29 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJmcHWq8LA6CrTJEV2Pi58+6yO_ND61MNA_=LrOa33Psg@mail.gmail.com>
+Message-ID: <CAL_JsqJmcHWq8LA6CrTJEV2Pi58+6yO_ND61MNA_=LrOa33Psg@mail.gmail.com>
+Subject: Re: [PATCH 2/3 v3] dt-bindings: mips: Add gardena vendor prefix and
+ board description
+To:     Stefan Roese <sr@denx.de>
+Cc:     linux-mips@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Aug 09, 2019 at 04:05:07PM +0530, Anshuman Khandual wrote:
-> On 08/09/2019 03:46 PM, Matthew Wilcox wrote:
-> > On Fri, Aug 09, 2019 at 01:03:17PM +0530, Anshuman Khandual wrote:
-> >> Should alloc_gigantic_page() be made available as an interface for general
-> >> use in the kernel. The test module here uses very similar implementation from
-> >> HugeTLB to allocate a PUD aligned memory block. Similar for mm_alloc() which
-> >> needs to be exported through a header.
-> > 
-> > Why are you allocating memory at all instead of just using some
-> > known-to-exist PFNs like I suggested?
-> 
-> We needed PFN to be PUD aligned for pfn_pud() and PMD aligned for mk_pmd().
-> Now walking the kernel page table for a known symbol like kernel_init()
+On Fri, Aug 9, 2019 at 6:19 AM Stefan Roese <sr@denx.de> wrote:
+>
+> This patch adds the vendor prefix for gardena and a short description
+> including the compatible string for the "GARDENA smart Gateway" based
+> on the MT7688 SoC.
+>
+> Signed-off-by: Stefan Roese <sr@denx.de>
+> Cc: Paul Burton <paul.burton@mips.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> ---
+> v3:
+> - New patch
+>
+>  .../devicetree/bindings/mips/ralink/gardena.txt          | 9 +++++++++
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml   | 2 ++
+>  2 files changed, 11 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/ralink/gardena.txt
 
-I didn't say to walk the kernel page table.  I said to call virt_to_pfn()
-for a known symbol like kernel_init().
+Please add to ralink.txt rather than a new file. Ideally, that would
+be converted to DT schema first, but given this is v3 already I won't
+require that. A binding file per board vendor doesn't scale well and
+will be a lot of duplication for schemas.
 
-> as you had suggested earlier we might encounter page table page entries at PMD
-> and PUD which might not be PMD or PUD aligned respectively. It seemed to me
-> that alignment requirement is applicable only for mk_pmd() and pfn_pud()
-> which create large mappings at those levels but that requirement does not
-> exist for page table pages pointing to next level. Is not that correct ? Or
-> I am missing something here ?
+> diff --git a/Documentation/devicetree/bindings/mips/ralink/gardena.txt b/Documentation/devicetree/bindings/mips/ralink/gardena.txt
+> new file mode 100644
+> index 000000000000..4022fe61a8ee
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mips/ralink/gardena.txt
+> @@ -0,0 +1,9 @@
+> +GARDENA smart Gateway (MT7688)
+> +
+> +This board is based on the MediaTek MT7688 and equipped with 128 MiB
+> +of DDR and 8 MiB of flash (SPI NOR) and additional 128MiB SPI NAND
+> +storage.
+> +
+> +------------------------------
+> +Required root node properties:
+> +- compatible = "gardena,smartGatewayMT7688";
 
-Just clear the bottom bits off the PFN until you get a PMD or PUD aligned
-PFN.  It's really not hard.
+You need an SoC compatible for MT7688 which isn't documented either.
 
+Rob
