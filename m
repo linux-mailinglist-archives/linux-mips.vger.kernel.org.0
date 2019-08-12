@@ -2,91 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A79358A773
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Aug 2019 21:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1C68A78A
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Aug 2019 21:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726931AbfHLTpJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Aug 2019 15:45:09 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:52239 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726200AbfHLTpJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Aug 2019 15:45:09 -0400
-Received: by mail-wm1-f68.google.com with SMTP id s3so665560wms.2;
-        Mon, 12 Aug 2019 12:45:07 -0700 (PDT)
+        id S1726972AbfHLTwN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Aug 2019 15:52:13 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:44684 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726749AbfHLTwM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Aug 2019 15:52:12 -0400
+Received: by mail-qt1-f194.google.com with SMTP id 44so73018701qtg.11
+        for <linux-mips@vger.kernel.org>; Mon, 12 Aug 2019 12:52:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zbqcR8Gm7CUEaTh+RQEFIgeFFaQXE5F4/3ORKyv2UHE=;
-        b=lQfWb4yFhgQ4mRFnN01RTsLonKuYclvrzI3yhZrJfxK+IO6uNZI3yee4F1raLgB0c9
-         1UUTDmErlG1v+oNqGJp4ZYAd3vRLQ1FnAWycuLywbO7M3NZy0xzKmfQPwd45Io5HUXF1
-         uF3Ln9pUWp5/sKEmf65C3VgUEX0STyuMhsEuzItdAPk/Tstx0htxMKv7eumaWPddXq25
-         LPFx39t+pnKHhBSDeOJfHM16X4YLpgUHAKbXrs12/HCSMzSxvYa4kZSSpIT9e9jtf7BJ
-         eQ2MggDlyGHceQ7mh9f4wV150ON3UchpJG8RvSwq/5LRGayDcetKqbI3OSjaV7yBUWCy
-         cFSg==
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=kEkVLWwqovwyFjtoRAd3ZuRhWq4pA+S9mUWyYQC3ODQ=;
+        b=Go1xYdCnowLCjBoQHanBZc7stvpdCA4G/sIQJnrvYOMObBB2RF6oSbhmlUQOeUImJi
+         FjU3UE6ZPgHFVoFvHQajdt5DYsYDsfr3MtE4zVRqViB/uQewO2eXWYVzND9A6/k4syDI
+         KiQJ6kbVnAeos66Zydq4l49v2EO55bXWiaIY8YW1yEmsocbSrMGpDqu+fWwU8vgoLsAL
+         BjBZUWdKUw5Ietmf5bF6Q/S0JeYR6CXwsVmVc2s/Qsj4Yz5gyHXdmhwnwpT0kgnEBwjL
+         P516qLnaRnN3sZ9sXUHu8h9MiftUXkp2Ylvq4VMfyG9py3890rhln94s9T5uukkQHTwY
+         uSiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zbqcR8Gm7CUEaTh+RQEFIgeFFaQXE5F4/3ORKyv2UHE=;
-        b=Jsws1uQT5T5lfNVbtZwQutLkjdXdm4Wn1hjqRDTs3SlA99rAQEtzknPQlVfI0gRcsh
-         dFZuHLeR9ncFJSBbqdLvVpr4wzePdtH3mcgtPaZbuF2E/IMARa+0cZbclWxA4y2FQYfp
-         NPiCvlVkZSeiGf99W9cFFryU2I3MXZduPGlUuaTUFUoNJ7V7GNhucxxoghvRWPJL5dLu
-         Bqcm3LpUUzudH7t/1OcxoXzKUgSy2gtMqNibAzNYsAdLb5+SdttFChCmbCNEWco8I3G4
-         lbGn/fBv/A3YBcUsPvHsEI1F2tYV4BhBQ8ZNHSfAfcKoerQgKTq2Y/OniuRrGpSz7ESL
-         ecoA==
-X-Gm-Message-State: APjAAAVpV5kiAR6KwGz9ad8ICJHGAQXxUsOzLmVPij46dkuwC8R+CqN2
-        j9/q4FLqbrSViSmxwoPBJcc=
-X-Google-Smtp-Source: APXvYqyqLvF1Fc7Eg5qhiPGnQdHLeN968UiUjTvxVBktu+SVk34L6MLUBhsdwqaNmHwT1Sb5ojMRGg==
-X-Received: by 2002:a7b:cb8e:: with SMTP id m14mr942713wmi.10.1565639106989;
-        Mon, 12 Aug 2019 12:45:06 -0700 (PDT)
-Received: from archlinux-threadripper ([2a01:4f8:222:2f1b::2])
-        by smtp.gmail.com with ESMTPSA id f17sm443561wmf.27.2019.08.12.12.45.06
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=kEkVLWwqovwyFjtoRAd3ZuRhWq4pA+S9mUWyYQC3ODQ=;
+        b=CaA12EHtqebpGLl+BCEV4JyI/olQGJLaBcSGS/g49/GdDjCEyTNQwwN3kn+4Igff2j
+         C+mjkSvS8YIK2Lslry/pM/DgwErXB3DkzhaFV0Eyn7Ty/swF2eBnskISyxE4pcKrOI/I
+         CbliJcFnUFxWiGOApilQb3aXchM3nSSeJztCksV4A6ABC3OrBniabZmJFSI00tGXVICG
+         koAtq1tPVe/wB9k69h2dFacuprwfMlkJ4eg8dkyRJT3CtGO+j3hS0h9lHxVy+rKlq/J4
+         J6gmj/4S5KsAYxvcch7evvSA/ogLiC0f2L/zvWW6I5Ju7yN7AcXen6WgbXjCx4KoOGFc
+         QVmg==
+X-Gm-Message-State: APjAAAWDx9yILAs9+ZtUkbeTNd/NkAZ8ShNqEnonLVJRnAInjmeSctox
+        EYBPAfsk8KX51Nuuhpa9VSUE6g==
+X-Google-Smtp-Source: APXvYqy2g/f0DiyWHWOpG/JWWUORJpCznhP/S1XW87hCBQrOyaFf5OKJtY8YQ6WH8wMHkAb2ye+Nzw==
+X-Received: by 2002:ac8:376c:: with SMTP id p41mr11767771qtb.306.1565639531882;
+        Mon, 12 Aug 2019 12:52:11 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id g24sm3920710qtc.38.2019.08.12.12.52.09
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 12 Aug 2019 12:45:06 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 12:45:04 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Jussi Kivilinna <jussi.kivilinna@iki.fi>
+        Mon, 12 Aug 2019 12:52:11 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 12:52:02 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
 Cc:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        Vladimir Serbinenko <phcoder@gmail.com>,
-        gcrypt-devel <gcrypt-devel@gnupg.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: Re: [PATCH 3/5] lib/mpi: Fix for building for MIPS32 with Clang
-Message-ID: <20190812194504.GA121197@archlinux-threadripper>
-References: <20190812033120.43013-1-natechancellor@gmail.com>
- <20190812033120.43013-4-natechancellor@gmail.com>
- <ec4666a6-c7db-247b-de81-bb784bb9d649@iki.fi>
- <20190812171448.GA10039@archlinux-threadripper>
- <1ba05172-500b-6b42-00ad-27fb33eff070@iki.fi>
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v4 7/9] mfd: ioc3: Add driver for SGI IOC3 chip
+Message-ID: <20190812125202.46608b74@cakuba.netronome.com>
+In-Reply-To: <20190811093212.88635fb1a6c796a073ec71ff@suse.de>
+References: <20190809103235.16338-1-tbogendoerfer@suse.de>
+        <20190809103235.16338-8-tbogendoerfer@suse.de>
+        <20190809142222.4558691e@cakuba.netronome.com>
+        <20190811093212.88635fb1a6c796a073ec71ff@suse.de>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1ba05172-500b-6b42-00ad-27fb33eff070@iki.fi>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 10:40:49PM +0300, Jussi Kivilinna wrote:
-> That's quite complicated approach. Fast and easier process would be if you
-> just own the patch yourself. Libgcrypt (and target file in libgcrypt) 
-> is LGPL v2.1+, so the license is compatible with kernel and you are good 
-> to go with just your own (kernel DCO) signed-off-by.
+On Sun, 11 Aug 2019 09:32:12 +0200, Thomas Bogendoerfer wrote:
+> > Also please don't use stdint types in the kernel, please try checkpatch
+> > to catch coding style issues.  
 > 
-> -Jussi
+> my patch already reduces them and checkpatch only warns about usage of printk
+> for the network part. Changing that to dev_warn/dev_err in the mfd patch didn't
+> seem the right thing to do. As I'm splitting the conversion patch into a few
+> steps I could also replace the printks.
 
-I have gone this route as another developer pointed out that we can
-eliminate all of the inline asm umul_ppmm definitions because the kernel
-requires GCC 4.6 and newer and that is completely different from the
-libgcrypt patches.
-
-https://lore.kernel.org/lkml/20190812193256.55103-1-natechancellor@gmail.com/
-
-Thanks for weighing in and cheers!
-Nathan
+Thanks for looking into it. I was referring to the use of uint32_t
+instead of u32. Perhaps checkpatch has to be motivated with the --strict
+option to point those out?
