@@ -2,87 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E5589022
-	for <lists+linux-mips@lfdr.de>; Sun, 11 Aug 2019 09:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8187895C6
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Aug 2019 05:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725870AbfHKHcS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sun, 11 Aug 2019 03:32:18 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56438 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725810AbfHKHcS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 11 Aug 2019 03:32:18 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id A6A50AD73;
-        Sun, 11 Aug 2019 07:32:15 +0000 (UTC)
-Date:   Sun, 11 Aug 2019 09:32:12 +0200
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        id S1726236AbfHLDbc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 11 Aug 2019 23:31:32 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:54916 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726144AbfHLDbb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 11 Aug 2019 23:31:31 -0400
+Received: by mail-wm1-f68.google.com with SMTP id p74so10818650wme.4;
+        Sun, 11 Aug 2019 20:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=015uEYjEdFgD5EcbxQBzasE/Mke0/bgRh00o9GHZva0=;
+        b=jtsyS+GKKbqKmghu64eDI2F1Aeep7vqC9zE/KMpc5cqLWd34Iln43ty2Cxqqlz0o/+
+         C4aPiXYqEElm2adXiPv5rlP8FcCVO1RNmIQ+wsyd6P/4DtcXimsoF4HdhpV+q8PtZVyL
+         fSjnd3psn4H6BkMa6NI2QeAlKPL/4xdc7kiPtkO9D2wnFAm9ieDtWBo8rk/HU40IxwuA
+         XSoup8kYS/UZEMiioIyZGHm5XRlmrnW58FzN+JpzDrMQTWlQAxPeGl0FLjqd0G2yDoZy
+         mpHpsdxDt9G0kd8hWSf5NFMJWsZvppAgNuDbSMMJhrozUCEsZ0mUyrW2/ZSWbhE/raIi
+         HCRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=015uEYjEdFgD5EcbxQBzasE/Mke0/bgRh00o9GHZva0=;
+        b=r/DQ4QWBK61jS4SZuc5VqM935u8DaAyoZUqgLv1j2W9IheeaNkqAO8hYiU6RF7VGN3
+         MVTqTiweUJPe/XzExl9GiFDwYGHpJpHvYPfksJbjBOxMX32U5IAOP4AqpoJ3EYUkto1q
+         RAsWWe6s22ICuY8lt6I+a8hgvckChW1CuctKVYcntGR02+/pzaIseNkiHdfGnDjYq+kB
+         512BApGZHzRGHwrn7oAjTOfSIxbqTC2YT2Ty/OCnTa/Wi9YMgBeOP1Y15HI5DjAPk48P
+         89EpV0p3NfAuf7r+iyw+pZgZiWBCUKqjuX/EeCkIzA36jWnlWlydUm2IdMomY429ooy7
+         LqEw==
+X-Gm-Message-State: APjAAAUy5BO+Ba8Gv9kI1rSjMyJpJ7b5GdUIqXdzcNrtai8KDyTSDJe6
+        H4KdocEugG++1ibU2qcDCjU=
+X-Google-Smtp-Source: APXvYqxRUsxYZMPAuPrcrVcfyJ7/tHaLnIxk1G1NYOYUcaFHtmfLSznscq6JYbjhRb3bD6JzPwl5wg==
+X-Received: by 2002:a7b:c8cb:: with SMTP id f11mr11575599wml.138.1565580689506;
+        Sun, 11 Aug 2019 20:31:29 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:4f8:222:2f1b::2])
+        by smtp.gmail.com with ESMTPSA id f12sm117299330wrg.5.2019.08.11.20.31.28
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sun, 11 Aug 2019 20:31:28 -0700 (PDT)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v4 7/9] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-Id: <20190811093212.88635fb1a6c796a073ec71ff@suse.de>
-In-Reply-To: <20190809142222.4558691e@cakuba.netronome.com>
-References: <20190809103235.16338-1-tbogendoerfer@suse.de>
-        <20190809103235.16338-8-tbogendoerfer@suse.de>
-        <20190809142222.4558691e@cakuba.netronome.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+        James Hogan <jhogan@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH 0/5] Clang build fixes for MIPS
+Date:   Sun, 11 Aug 2019 20:31:15 -0700
+Message-Id: <20190812033120.43013-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.23.0.rc2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 9 Aug 2019 14:22:22 -0700
-Jakub Kicinski <jakub.kicinski@netronome.com> wrote:
+Hi all,
 
-> On Fri,  9 Aug 2019 12:32:29 +0200, Thomas Bogendoerfer wrote:
-> > SGI IOC3 chip has integrated ethernet, keyboard and mouse interface.
-> > It also supports connecting a SuperIO chip for serial and parallel
-> > interfaces. IOC3 is used inside various SGI systemboards and add-on
-> > cards with different equipped external interfaces.
-> > 
-> > Support for ethernet and serial interfaces were implemented inside
-> > the network driver. This patchset moves out the not network related
-> > parts to a new MFD driver, which takes care of card detection,
-> > setup of platform devices and interrupt distribution for the subdevices.
-> > 
-> > Serial portion: Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > 
-> > Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> 
-> There are a lot of changes in the ethernet part which are not easy to
-> explain by the introduction of the other MFD parts.. Could you possibly
-> break this change up into smaller chunks?
+As of clang 9.0.0 at r366299 [1], we can build a QEMU bootable
+malta_defconfig kernel with the following fixes (mostly due to -Werror)
+and Nick's patch [2]. This has helped catch some potentially dubious
+behavior with -Wuninitialized, which is stronger than GCC's
+-Wmaybe-uninitialized.
 
-working on it
+If there are any comments or concerns, please let me know.
 
-> Also please don't use stdint types in the kernel, please try checkpatch
-> to catch coding style issues.
+[1]: https://github.com/llvm/llvm-project/commit/7f308af5eeea2d1b24aee0361d39dc43bac4cfe5
+[2]: https://lore.kernel.org/lkml/20190729211014.39333-1-ndesaulniers@google.com/
 
-my patch already reduces them and checkpatch only warns about usage of printk
-for the network part. Changing that to dev_warn/dev_err in the mfd patch didn't
-seem the right thing to do. As I'm splitting the conversion patch into a few
-steps I could also replace the printks.
+Cheers,
+Nathan
 
-Thomas.
 
--- 
-SUSE Linux GmbH
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
