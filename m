@@ -2,48 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2970895CA
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Aug 2019 05:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D340D895D5
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Aug 2019 05:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726573AbfHLDbf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S1726144AbfHLDbf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Sun, 11 Aug 2019 23:31:35 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:39533 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726144AbfHLDbe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 11 Aug 2019 23:31:34 -0400
-Received: by mail-wr1-f65.google.com with SMTP id t16so13199976wra.6;
-        Sun, 11 Aug 2019 20:31:32 -0700 (PDT)
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:46925 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726527AbfHLDbf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 11 Aug 2019 23:31:35 -0400
+Received: by mail-wr1-f66.google.com with SMTP id z1so103319548wru.13;
+        Sun, 11 Aug 2019 20:31:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vWEzzku9YP0pC2dVc45a5odEYQH6f9+aCPyBPp3kmxo=;
-        b=SE46LZAyzH6U02vpi2RK3qP0aLUW1s+/BySNKx1Vx4S8RXZICkMsI/eJv+OqXAwPP3
-         zvcL+q8quy9DClR6kQeC2lScNnSM+ejjox7aOtH5YfkUQwBYBgn/2tfaqVFaY5PaboST
-         lkmwAEWyFKNvfXTrltJpGO+rWBYvxYpWbEhUVcR0Y8ftxIA+BwLfv2xdTsS1ywqc8Nwq
-         DjDFHd0hqOILYBuv+Hdku+V8EeM67hr3aueaUlu9dmvJXUjVs75WpAeguDfsiSjI9PNp
-         Y8QYv175125TSd/rQ63ui22KWJSxRI+34UAgeSBdM1PVSGCTDQZBjm8Vy6trqLCHRipJ
-         mEDw==
+        bh=CIiORaxsknShCfRL75nn07wOJCPKFADThWQpO+7rVHs=;
+        b=REkzW2FUBdfwjt8SG6zkKNG2pEIOqqyOP2yzOlSdGozMLfLnoluynhn025S+HivChz
+         U1+db6NzVUPDXrBAX823rdwC8tmmAdJIBp4wtCnwYKVgOJ1L8XkGye7yE57cNPnAihMy
+         PWIzuL2KSWQXis50w/eUGuLZ354Nkb1ZuJYXjTpO+ucGx3XaWib83cNY7Y6ELEEH6pxb
+         nvURelBgS9WXqo6xlJqAXywsuzkubg3o1YIGXYxjRH+NFwUy+W4VvGKSb6sAl+ChN53h
+         RTDDXeNQck58h4F8Df30RvZOsNGeu2BI36jezR2x7Emt1XU4rdzJhCoVX+Gk6S4ckPFZ
+         3SaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vWEzzku9YP0pC2dVc45a5odEYQH6f9+aCPyBPp3kmxo=;
-        b=KdMnbGsrAuHssIOgZBC79FZbMuA5XtI3xzqd2kmCt9wxaHlrpzceS5dto4b+TSOfcn
-         ZDDwbYcqBCflYaerKpwJetTS16J8q1uCi+ai6A1B3uEVTrVqs/blxfagjuVU/f7hacHB
-         PSQMB1FGANv7YmY/kb4bCAwiEx+dPAPWgzrpMPT/u2LquIbhB5LWPl2OFSW3N67+FR9T
-         mvUuRi/WUokUaV3VQbMMRbrVFL4ChlMd+o7Cyi9XePa2p527rJzc0fgEldlA42ZOP3v5
-         zODYvLPr1SYrAtv8uRCLrI3Oex6NvHsVoFy5G3lAqYSsJ7GUM6ZXEBDMIYo5U/JUxzzW
-         Y/2A==
-X-Gm-Message-State: APjAAAUo3qYi/zEVIIzkGL5viLdHWD3FJkQlLPuAvlMY8Kg86RcKAtkk
-        x5Efcqhw8NuHyfk+IXMxisQ=
-X-Google-Smtp-Source: APXvYqxmGrFmRa688YKY6KKrrvbIKQnMYH/dlZ8HtOC/RsQAE59TS2Ihfg/5QMeiJhniZfHANkVALg==
-X-Received: by 2002:adf:f04d:: with SMTP id t13mr37798273wro.133.1565580691538;
-        Sun, 11 Aug 2019 20:31:31 -0700 (PDT)
+        bh=CIiORaxsknShCfRL75nn07wOJCPKFADThWQpO+7rVHs=;
+        b=fPK9N8eBCJ+Ql/+kIqs6uYrq4XHd5R4RpVOYsgCdLxoQi0EF/Ii1kBRWldufdOR6lY
+         tbgEVMpbjmIe0OrvOCR6Gw1LXSLz4hgeVmzSKs9jrAy9i4TUj6qP7yrFF2d0Y0PJyXQn
+         XjK6/mej9SJJD959eZVwmz0e794HO9YVVznOC3DOHQjsfCXdSiyvWbfcBo0Ko/ZCJhc6
+         fwj8BAG0hP9Vs3XjULVDaC9yZbljpf7rniGGmo7eb30JovOcEityCvaOxYRI59GbHeNB
+         JbXozjJ6wXuTaUm05xW/tGTTkK/EqN7AzAnqkMLcSnlHsr0+oP43mFgw3989ombH6l1p
+         a71g==
+X-Gm-Message-State: APjAAAWlHAu9IZm0SXhoyktzZzruVFV/Ep7tKl8eULCT43PYDdxjPXgn
+        g/jCxg4ze60r/W82RD7MLS8=
+X-Google-Smtp-Source: APXvYqxtDSZUjQr/+MByGolBL7ow/DNNzEu+D63hZIlHg20khUaLSJzrBbSnipi0bAR2bu1xADrSpg==
+X-Received: by 2002:a5d:6ccd:: with SMTP id c13mr39563914wrc.4.1565580692982;
+        Sun, 11 Aug 2019 20:31:32 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:4f8:222:2f1b::2])
-        by smtp.gmail.com with ESMTPSA id f12sm117299330wrg.5.2019.08.11.20.31.30
+        by smtp.gmail.com with ESMTPSA id f12sm117299330wrg.5.2019.08.11.20.31.32
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 11 Aug 2019 20:31:31 -0700 (PDT)
+        Sun, 11 Aug 2019 20:31:32 -0700 (PDT)
 From:   Nathan Chancellor <natechancellor@gmail.com>
 To:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
@@ -52,9 +52,9 @@ Cc:     Nick Desaulniers <ndesaulniers@google.com>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         clang-built-linux@googlegroups.com,
         Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH 1/5] MIPS: Don't use bc_false uninitialized in __mm_isBranchInstr
-Date:   Sun, 11 Aug 2019 20:31:16 -0700
-Message-Id: <20190812033120.43013-2-natechancellor@gmail.com>
+Subject: [PATCH 2/5] MIPS/ptrace: Update mips_get_syscall_arg's return type
+Date:   Sun, 11 Aug 2019 20:31:17 -0700
+Message-Id: <20190812033120.43013-3-natechancellor@gmail.com>
 X-Mailer: git-send-email 2.23.0.rc2
 In-Reply-To: <20190812033120.43013-1-natechancellor@gmail.com>
 References: <20190812033120.43013-1-natechancellor@gmail.com>
@@ -67,153 +67,97 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 clang warns:
 
-arch/mips/kernel/branch.c:148:8: error: variable 'bc_false' is used
-uninitialized whenever switch case is taken
-[-Werror,-Wsometimes-uninitialized]
-                case mm_bc2t_op:
-                     ^~~~~~~~~~
-arch/mips/kernel/branch.c:157:8: note: uninitialized use occurs here
-                        if (bc_false)
-                            ^~~~~~~~
-arch/mips/kernel/branch.c:149:8: error: variable 'bc_false' is used
-uninitialized whenever switch case is taken
-[-Werror,-Wsometimes-uninitialized]
-                case mm_bc1t_op:
-                     ^~~~~~~~~~
-arch/mips/kernel/branch.c:157:8: note: uninitialized use occurs here
-                        if (bc_false)
-                            ^~~~~~~~
-arch/mips/kernel/branch.c:142:4: note: variable 'bc_false' is declared
-here
-                        int bc_false = 0;
-                        ^
-2 errors generated.
+arch/mips/include/asm/syscall.h:136:3: error: variable 'ret' is
+uninitialized when used here [-Werror,-Wuninitialized]
+                ret |= mips_get_syscall_arg(args++, task, regs, i++);
+                ^~~
+arch/mips/include/asm/syscall.h:129:9: note: initialize the variable
+'ret' to silence this warning
+        int ret;
+               ^
+                = 0
+1 error generated.
 
-When mm_bc1t_op and mm_bc2t_op are taken, the bc_false initialization
-does not happen, which leads to a garbage value upon use, as illustrated
-below with a small sample program.
+It's not wrong; however, it's not an issue in practice because ret is
+only assigned to, not read from. ret could just be initialized to zero
+but looking into it further, ret has been unused since it was first
+added in 2012 so just get rid of it and update mips_get_syscall_arg's
+return type since none of the return values are ever checked. If it is
+ever needed again, this commit can be reverted and ret can be properly
+initialized.
 
-$ mipsel-linux-gnu-gcc --version | head -n1
-mipsel-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0
-
-$ clang --version | head -n1
-ClangBuiltLinux clang version 9.0.0 (git://github.com/llvm/llvm-project
-544315b4197034a3be8acd12cba56a75fb1f08dc) (based on LLVM 9.0.0svn)
-
-$ cat test.c
- #include <stdio.h>
-
- static void switch_scoped(int opcode)
- {
-	 switch (opcode) {
-	 case 1:
-	 case 2: {
-		 int bc_false = 0;
-
-		 bc_false = 4;
-	 case 3:
-	 case 4:
-		 printf("\t* switch scoped bc_false = %d\n", bc_false);
-	 }
-	 }
- }
-
- static void function_scoped(int opcode)
- {
-	 int bc_false = 0;
-
-	 switch (opcode) {
-	 case 1:
-	 case 2: {
-		 bc_false = 4;
-	 case 3:
-	 case 4:
-		 printf("\t* function scoped bc_false = %d\n", bc_false);
-	 }
-	 }
- }
-
- int main(void)
- {
-	 int opcode;
-
-	 for (opcode = 1; opcode < 5; opcode++) {
-		 printf("opcode = %d:\n", opcode);
-		 switch_scoped(opcode);
-		 function_scoped(opcode);
-		 printf("\n");
-	 }
-
-	 return 0;
- }
-
-$ mipsel-linux-gnu-gcc -std=gnu89 -static test.c && \
-  qemu-mipsel a.out
-opcode = 1:
-        * switch scoped bc_false = 4
-        * function scoped bc_false = 4
-
-opcode = 2:
-        * switch scoped bc_false = 4
-        * function scoped bc_false = 4
-
-opcode = 3:
-        * switch scoped bc_false = 2147483004
-        * function scoped bc_false = 0
-
-opcode = 4:
-        * switch scoped bc_false = 2147483004
-        * function scoped bc_false = 0
-
-$ clang -std=gnu89 --target=mipsel-linux-gnu -m32 -static test.c && \
-  qemu-mipsel a.out
-opcode = 1:
-        * switch scoped bc_false = 4
-        * function scoped bc_false = 4
-
-opcode = 2:
-        * switch scoped bc_false = 4
-        * function scoped bc_false = 4
-
-opcode = 3:
-        * switch scoped bc_false = 2147483004
-        * function scoped bc_false = 0
-
-opcode = 4:
-        * switch scoped bc_false = 2147483004
-        * function scoped bc_false = 0
-
-Move the definition up so that we get the right behavior and mark it
-__maybe_unused as it will not be used when CONFIG_MIPS_FP_SUPPORT
-isn't enabled.
-
-Fixes: 6a1cc218b9cc ("MIPS: branch: Remove FP branch handling when CONFIG_MIPS_FP_SUPPORT=n")
-Link: https://github.com/ClangBuiltLinux/linux/issues/603
+Fixes: c0ff3c53d4f9 ("MIPS: Enable HAVE_ARCH_TRACEHOOK.")
+Link: https://github.com/ClangBuiltLinux/linux/issues/604
 Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 ---
- arch/mips/kernel/branch.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/include/asm/syscall.h | 21 +++++++--------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
 
-diff --git a/arch/mips/kernel/branch.c b/arch/mips/kernel/branch.c
-index 1db29957a931..2c38f75d87ff 100644
---- a/arch/mips/kernel/branch.c
-+++ b/arch/mips/kernel/branch.c
-@@ -58,6 +58,7 @@ int __mm_isBranchInstr(struct pt_regs *regs, struct mm_decoded_insn dec_insn,
- 		       unsigned long *contpc)
+diff --git a/arch/mips/include/asm/syscall.h b/arch/mips/include/asm/syscall.h
+index 83bb439597d8..25fa651c937d 100644
+--- a/arch/mips/include/asm/syscall.h
++++ b/arch/mips/include/asm/syscall.h
+@@ -54,7 +54,7 @@ static inline void mips_syscall_update_nr(struct task_struct *task,
+ 		task_thread_info(task)->syscall = regs->regs[2];
+ }
+ 
+-static inline unsigned long mips_get_syscall_arg(unsigned long *arg,
++static inline void mips_get_syscall_arg(unsigned long *arg,
+ 	struct task_struct *task, struct pt_regs *regs, unsigned int n)
  {
- 	union mips_instruction insn = (union mips_instruction)dec_insn.insn;
-+	int __maybe_unused bc_false = 0;
+ 	unsigned long usp __maybe_unused = regs->regs[29];
+@@ -63,23 +63,24 @@ static inline unsigned long mips_get_syscall_arg(unsigned long *arg,
+ 	case 0: case 1: case 2: case 3:
+ 		*arg = regs->regs[4 + n];
  
- 	if (!cpu_has_mmips)
- 		return 0;
-@@ -139,7 +140,6 @@ int __mm_isBranchInstr(struct pt_regs *regs, struct mm_decoded_insn dec_insn,
- #ifdef CONFIG_MIPS_FP_SUPPORT
- 		case mm_bc2f_op:
- 		case mm_bc1f_op: {
--			int bc_false = 0;
- 			unsigned int fcr31;
- 			unsigned int bit;
+-		return 0;
++		return;
  
+ #ifdef CONFIG_32BIT
+ 	case 4: case 5: case 6: case 7:
+-		return get_user(*arg, (int *)usp + n);
++		get_user(*arg, (int *)usp + n);
++		return;
+ #endif
+ 
+ #ifdef CONFIG_64BIT
+ 	case 4: case 5: case 6: case 7:
+ #ifdef CONFIG_MIPS32_O32
+ 		if (test_tsk_thread_flag(task, TIF_32BIT_REGS))
+-			return get_user(*arg, (int *)usp + n);
++			get_user(*arg, (int *)usp + n);
+ 		else
+ #endif
+ 			*arg = regs->regs[4 + n];
+ 
+-		return 0;
++		return;
+ #endif
+ 
+ 	default:
+@@ -126,21 +127,13 @@ static inline void syscall_get_arguments(struct task_struct *task,
+ {
+ 	unsigned int i = 0;
+ 	unsigned int n = 6;
+-	int ret;
+ 
+ 	/* O32 ABI syscall() */
+ 	if (mips_syscall_is_indirect(task, regs))
+ 		i++;
+ 
+ 	while (n--)
+-		ret |= mips_get_syscall_arg(args++, task, regs, i++);
+-
+-	/*
+-	 * No way to communicate an error because this is a void function.
+-	 */
+-#if 0
+-	return ret;
+-#endif
++		mips_get_syscall_arg(args++, task, regs, i++);
+ }
+ 
+ extern const unsigned long sys_call_table[];
 -- 
 2.23.0.rc2
 
