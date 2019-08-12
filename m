@@ -2,117 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D80A89684
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Aug 2019 06:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583AE896B1
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Aug 2019 07:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725822AbfHLE4W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Aug 2019 00:56:22 -0400
-Received: from mail-eopbgr690110.outbound.protection.outlook.com ([40.107.69.110]:29920
-        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725808AbfHLE4W (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 12 Aug 2019 00:56:22 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KD/oVdmJQTbgRCXNplfaPAQ9q5mMGKBEOOBxbWyjsCSJSH9Jc848hQhdNPtDWmkWGTctQKtwmTbWy1+F/IOcooc+Az0IPfF7FA3q6vC6jKuuRa7rosbJirx6PnxAzgatu1lBRZyFBxRtg+EqB0pkmUWM014/303JvXHByiuuyGMeLUjwYvkSyJ3GQWrWFDOoYBNNBeerBxTGIoAempLNmGC0gU+z4rBOP8a/4sEkcp8IVby4DLCv77MWIaRShLD+nOmKjpJrBwmuZ724cZweWRJVvgWQFNufLYXL3nkFyIQNvXCoCTundnJpJe3bR5Lse6K+HLCjuX53D6/omKnYnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QF8UpJYGtwDPZ9yJBse6jIFJjf/39sLtWmKqw+Sr9Zg=;
- b=cOy7MeaxcjYF60YnpiBpGsrdnxsE3gbJ2PhgxSVwAKgzoGOjJiaPc9wdSavTsioEsX8NDWi4Rnb/xw2o2aEZ7ddaV3REdcnhdbZkp995jY3XrgpsQblovVVDxLACt5TGo2k84axOGJD5/NZbKb27EE5BsdVw0uy1SaHWFDrrA/HKQzKMOXhdeWFcJDPQKT4kERND5ngD9awYLGWeGdlKdWAeqlEqno/pV7uIXjBtUHPJATFphCZjI2hP7UrEVYyUU1Cj4+y2X1c06MqmAgEeEAO9/h6DT12K8t08+j3dTepscWXWjTVRGugx69vXarTcds40eF7GsbB9l+1v5h86eQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
- dkim=pass header.d=mips.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QF8UpJYGtwDPZ9yJBse6jIFJjf/39sLtWmKqw+Sr9Zg=;
- b=tVZAV9pcXArCTSCCQxWQvGGk8JV5Hbczy/e/AE0THQbZPECkq6MYzSrY5BiIDNsfrv4S52vPUTZfJZBreczTn8IohV13I6V1BUCfVEzuG9gn3DofdEVreMEKQKj8+PFA1y8PD6ub9sL0dTKArMRlExXRAiFRmYEq7q6yY5a6910=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1581.namprd22.prod.outlook.com (10.174.167.30) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2157.21; Mon, 12 Aug 2019 04:56:20 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::f566:bf1f:dcd:862c]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::f566:bf1f:dcd:862c%10]) with mapi id 15.20.2157.022; Mon, 12 Aug 2019
- 04:56:20 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "yasha.che3@gmail.com" <yasha.che3@gmail.com>,
-        "aurelien@aurel32.net" <aurelien@aurel32.net>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "fancer.lancer@gmail.com" <fancer.lancer@gmail.com>,
-        "matt.redfearn@mips.com" <matt.redfearn@mips.com>,
-        "chenhc@lemote.com" <chenhc@lemote.com>
-Subject: Re: [EXTERNAL]Drop boot_mem_map
-Thread-Topic: [EXTERNAL]Drop boot_mem_map
-Thread-Index: AQHVTb3/KP1SZlftUU2CZ8shWcxSeab2+REA
-Date:   Mon, 12 Aug 2019 04:56:20 +0000
-Message-ID: <20190812045618.ncqtfm6qmia6cxaz@pburton-laptop>
-References: <20190808075013.4852-1-jiaxun.yang@flygoat.com>
-In-Reply-To: <20190808075013.4852-1-jiaxun.yang@flygoat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR21CA0011.namprd21.prod.outlook.com
- (2603:10b6:a03:114::21) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:18::12)
-user-agent: NeoMutt/20180716
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2601:646:8a00:9810:9d6:9cca:ff8c:efe0]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 76739b02-1d2d-454d-383b-08d71ee16a8e
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1581;
-x-ms-traffictypediagnostic: MWHPR2201MB1581:
-x-microsoft-antispam-prvs: <MWHPR2201MB1581060A6935E6830D6FCE31C1D30@MWHPR2201MB1581.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 012792EC17
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(346002)(366004)(136003)(39830400003)(396003)(376002)(189003)(199004)(6512007)(9686003)(81166006)(8676002)(46003)(7736002)(42882007)(102836004)(305945005)(486006)(53936002)(52116002)(81156014)(6506007)(478600001)(386003)(76176011)(6916009)(25786009)(476003)(316002)(6246003)(66946007)(66476007)(66556008)(64756008)(66446008)(446003)(11346002)(4744005)(71200400001)(71190400001)(4326008)(256004)(54906003)(44832011)(2906002)(186003)(1076003)(5660300002)(229853002)(58126008)(8936002)(14454004)(33716001)(6116002)(6436002)(6486002)(99286004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1581;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: L5IsMVBm3POcXkC+hwUCFMzOsjgzNq2O8AXZITg6SUx0mQV40XgeyuftPpueBt38r2bzQ5Pz6ydIahrfp4BDeR823Bt06iLDLALcHMcvhWA/DhnbLPpCMpihhVNgyn5Sr9PWAcaL9HEVXTN2NOi1/4Z9rXzqERr+MtHVfiFskQF+0Dp54LdRoe36pIfcz5HfW4rl2QlCSJ8f+1Z8zIBxT8jZa1jYgExc+1ZfxLpCN9qE5q7sCid7KULk2ScbPsqSdayUEHsiR7BqlDIc8+o8i4Sp0rMa9VhUpL5PCCxurl9lz9Nt2c+OYlI091aecuXDR85+q67jUop3S8qthe4wGTjugXKYp2likRhYzyIgtlkpD72CGoeDFcGCaTPFgCQEoTCGzsUv5ACxc6DabPYu0YGkarmoIfLZeK54x8SV12I=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <4AE0C34623BBCA48A7B16F5F7423CFD8@namprd22.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726484AbfHLFYA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Aug 2019 01:24:00 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:32890 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725822AbfHLFYA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Aug 2019 01:24:00 -0400
+Received: by mail-wm1-f67.google.com with SMTP id p77so10079636wme.0;
+        Sun, 11 Aug 2019 22:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=3G+7nnAoIeoj8pl8gwLC4j538STzFlKu9JRfT8QamrY=;
+        b=Cmt25JmBFBzRZH9o6r2weMvR9QbDFlaOqk0pEQmjPcr7R42kFqy188ZbvpjM1j2kxU
+         tiOfSjCYJFeMtz8Ip60cjoY9Ki8f2oUSfJDudk/hU1MTf8e1KhIaXMDNNFN6+eQJNu+B
+         zs4BW1qoyT8sJUQ3ESU+ZvP0s2ARsQlyQLrXn/BNZnHQi6sftgtP+AHi+wePV4Pex9Z5
+         cGExYLpYW9425m3ofGrhaiw5tkUh/mKnv4bfRzqS44/0N5ywXEYUrGcWFGorxx6BuTBb
+         zykE9yGxTmVyPNURdXdExoiwEP9fu5Hs+QkwkNPeMpmtwCg/gIwlatkACV4k60XYhno9
+         wckg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=3G+7nnAoIeoj8pl8gwLC4j538STzFlKu9JRfT8QamrY=;
+        b=egHngYetJmfPsL9EtFMHJO/5voEfuB7piuZMDCfuYkYf2hQmqCS2mxXkXnvoUC14lC
+         AqF7X0FIajPb4F1mZiGotHQwJCfRZptnTPGPcOvBdzBrWDodKY8d8Y8YCgS+Ce7RdPR2
+         VOUBAf698hg+jqjpxd0hxluEG+RhqnMD64MLdSSU1lwWgu+AsgZ8qIYqF0XEZCXdS7ro
+         iC/lMaiSqeudocclH0rZm/HPFJXATwf2RXuC9jfL+04MMMs6cRsGN/wf6XdHL/riyhfn
+         5ihhMDREh0/OIUIWn3w14w1AbDHvVwbkrfRYuob4f2RhbyayBgXKYfsEazWQxyC9PL37
+         LoOQ==
+X-Gm-Message-State: APjAAAVw6dzMWmhgArFzyt7AeP5ewSPwUt/I4vHaswPHYYZpfA2axQtL
+        MKm8TjwrJ3XaCPVLWGI8SBk=
+X-Google-Smtp-Source: APXvYqzxBT1GjR+HXBUYMH2naomA6rQ/kLlkfxmJfBUdVOcOstXLOPPWqkW9YZ8HvdkZ8wrIwYaUCg==
+X-Received: by 2002:a7b:c928:: with SMTP id h8mr26234799wml.93.1565587438068;
+        Sun, 11 Aug 2019 22:23:58 -0700 (PDT)
+Received: from archlinux-threadripper ([2a01:4f8:222:2f1b::2])
+        by smtp.gmail.com with ESMTPSA id f17sm17575259wmf.27.2019.08.11.22.23.57
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sun, 11 Aug 2019 22:23:57 -0700 (PDT)
+Date:   Sun, 11 Aug 2019 22:23:55 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Vladimir Serbinenko <phcoder@gmail.com>,
+        Jussi Kivilinna <jussi.kivilinna@iki.fi>
+Subject: Re: [PATCH 3/5] lib/mpi: Fix for building for MIPS32 with Clang
+Message-ID: <20190812052355.GA47342@archlinux-threadripper>
+References: <20190812033120.43013-1-natechancellor@gmail.com>
+ <20190812033120.43013-4-natechancellor@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76739b02-1d2d-454d-383b-08d71ee16a8e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Aug 2019 04:56:20.3123
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: IrylAUSrFzrrGilhNfjiRXqSHYcprPGgV4I9OBE+EIB6qk7XItb52j6MXR5qakUDs4lo9E4WtmuUvDuTI8TdKA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1581
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190812033120.43013-4-natechancellor@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jiaxun,
+On Sun, Aug 11, 2019 at 08:31:18PM -0700, Nathan Chancellor wrote:
+> From: Vladimir Serbinenko <phcoder@gmail.com>
+> 
+> clang doesn't recognise =l / =h assembly operand specifiers but apparently
+> handles C version well.
+> 
+> lib/mpi/generic_mpih-mul1.c:37:24: error: invalid use of a cast in a
+> inline asm context requiring an l-value: remove the cast or build with
+> -fheinous-gnu-extensions
+>                 umul_ppmm(prod_high, prod_low, s1_ptr[j], s2_limb);
+>                 ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> lib/mpi/longlong.h:652:20: note: expanded from macro 'umul_ppmm'
+>         : "=l" ((USItype)(w0)), \
+>                 ~~~~~~~~~~^~~
+> lib/mpi/generic_mpih-mul1.c:37:3: error: invalid output constraint '=h'
+> in asm
+>                 umul_ppmm(prod_high, prod_low, s1_ptr[j], s2_limb);
+>                 ^
+> lib/mpi/longlong.h:653:7: note: expanded from macro 'umul_ppmm'
+>              "=h" ((USItype)(w1)) \
+>              ^
+> 2 errors generated.
+> 
+> Fixes: 5ce3e312ec5c ("crypto: GnuPG based MPI lib - header files (part 2)")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/605
+> Link: https://github.com/gpg/libgcrypt/commit/1ecbd0bca31d462719a2a6590c1d03244e76ef89
+> Signed-off-by: Vladimir Serbinenko <phcoder@gmail.com>
+> [jk: add changelog, rebase on libgcrypt repository, reformat changed
+>  line so it does not go over 80 characters]
+> Signed-off-by: Jussi Kivilinna <jussi.kivilinna@iki.fi>
+> [nc: Added build error and tags to commit message
+>      Added Vladimir's signoff with his permission
+>      Adjusted Jussi's comment to wrap at 73 characters
+>      Modified commit subject to mirror MIPS64 commit
+>      Removed space between defined and (__clang__)]
+> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+> ---
+>  lib/mpi/longlong.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/mpi/longlong.h b/lib/mpi/longlong.h
+> index 3bb6260d8f42..8a1507fc94dd 100644
+> --- a/lib/mpi/longlong.h
+> +++ b/lib/mpi/longlong.h
+> @@ -639,7 +639,8 @@ do { \
+>  	**************  MIPS  *****************
+>  	***************************************/
+>  #if defined(__mips__) && W_TYPE_SIZE == 32
+> -#if (__GNUC__ >= 5) || (__GNUC__ >= 4 && __GNUC_MINOR__ >= 4)
+> +#if defined(__clang__) || (__GNUC__ >= 5) || (__GNUC__ == 4 && \
+> +					      __GNUC_MINOR__ >= 4)
+>  #define umul_ppmm(w1, w0, u, v)			\
+>  do {						\
+>  	UDItype __ll = (UDItype)(u) * (v);	\
+> -- 
+> 2.23.0.rc2
+> 
 
-On Thu, Aug 08, 2019 at 03:50:06PM +0800, Jiaxun Yang wrote:
-> Hi there:
-> I was trying to make a generic NUMA implementation for ip27 and loongson-=
-3,
-> and the boot_mem_map without nid support become a barrier of merging memo=
-ry
-> init code.
->=20
-> Rather than add nid support to boot_mem_map, this patchset drops the whol=
-e
-> boot_mem_map as it can be replaced by memblock functions.
+ Hi Paul,
 
-Very nice - cleaning this up will be a neat improvement :)
+ I noticed you didn't pick up this patch with the other ones you
+ applied. I just wanted to make sure it wasn't because it was sent to
+ the wrong person. This set of files doesn't appear to have an owner in
+ MAINTAINERS, I guess based on git history either Andrew or Hubert (on
+ CC) pick up patches for this set of files? If I need to, I can resend
+ it to the proper people.
 
-Am I right to suspect though that patch 1 will break the build for all
-platforms that make use of boot_mem_map? (ie. all the platforms touched
-by later patches in this series)
-
-Thanks,
-    Paul
+ Cheers,
+ Nathan
