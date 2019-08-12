@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 516C289662
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Aug 2019 06:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE5B89664
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Aug 2019 06:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726185AbfHLErT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Aug 2019 00:47:19 -0400
-Received: from mail-eopbgr810128.outbound.protection.outlook.com ([40.107.81.128]:47501
+        id S1726776AbfHLErW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Aug 2019 00:47:22 -0400
+Received: from mail-eopbgr810103.outbound.protection.outlook.com ([40.107.81.103]:2688
         "EHLO NAM01-BY2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725648AbfHLErT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 12 Aug 2019 00:47:19 -0400
+        id S1725648AbfHLErV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 12 Aug 2019 00:47:21 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RY1I6fdXgcDMWewXfs+7wOSQuIPU2znIPWHFn8a1r2tHTM42vIza5TLAiTVB8ZbJxdRFNix5kJypeVaShZ322rAFQ9OVDCZLNCUvoTSYJrOVpcY8NhQSuiaw4Gf6ldxHzxZp2Hes2cL7LkvHZ53S6vRDPI2xujrx4ohtnuqAqy/sULGhYsifuqYsGtXkx7BUN7on/W3dVAWra1Jf6TSncJ+WQrkp1b6Js5s50Bg+QIiqivtZ00dFk1uYtpilCOcWTR/MEA37kQbYmKQAlTTKw8qR/bcnETcoEoo2k2u7MAZPovDN/7vC4s6G3TFFLo8ylaBe60erikwO91+m/Nxzmw==
+ b=FvZLI8+oQxLIGjL63N3gwxjtythMb6Hm0vJzVp9mg3Y6Bf3kv5HVUAkbWbudJsXfHejTCKT3XD13mYnexq7aONbKQBbxbpyZFzUAVVy+o3WDwzpHk0wORk6e5ASGd1Z8IvebLynN386esRjt7BTD8/opHLNvOZxPRfeAwilkj36n/r6MBPLPBNvx8iEdIkQFL73cA55P9M1u6bMSCFUC9EiVMGo5oatprknleug7ynqvpFFTGTrAu4csGG5bxo/lVoVKNw19GXsUUv3lVOms+4cqmFi3t3v7NuNz0Fj9xu2sGTo4s+k7SbV/sl9FyD2OXiCJFZOaFQIQKOyRSWlmsA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VkQMtbiJfKoDw6+Yo1Jxt1v4dE8XQcIdBSjr0sAH3cA=;
- b=QmKUVMJeUR3lF98Jyq6xKXmCAhuSSwYeuxFbIqraEpqnwCd1KnRvy/aEL/V57iY9swMy1f9gJ3xXDozl0BhSJrn3TrwB+88b/EiOnFKVQ0V/bEXWqKVlzFo3xj/tRwqH+fXHiRbGlIYBirikxKfvnYUNlwrmOX5NAvPCjgp2mfEsxz++wRNQ42hz41W5xHU10ur3YJrFjE+j33q7K64eHFlOn04QN8CKRX1bvrfTe5qK5FPxdwkk4QC6l5jU3VRm9qGNfEUBVD7glpT8op+CUCM5gLloFZRYACTX2VQSUp2ztznl1phdqjHPkLfu2lv+iwDdpdsjGzCz8sMofdd3DQ==
+ bh=600OC8eie1woCTMKQcwlX592dEb/QW50tKbkbqXBqac=;
+ b=R8+j7nNYEC2QBaXPTih4twNpyAg2aqbD7iIvFDnBjZ6mPZhmf5QNttYghaQSMJr8fcFCLsG36iTf3YaV57qtaiHilxeCzhyLMNwhGdl6OcV04iJ0RYZCoYdq23vqITjUzXqOj2umkO0y/M4H0wN4tHVtyd1lFwxw7sdZzHgoo4B3lOFomZrbsfusxqbqj21CB9iz52aJ0u/H7/2HE+We4Kn6U4KQgHzNHieGOEIeWmSjvDfpgfhs8WO6lumEJkJRSPqdz7xEYR3VZKE2UT0MHP/ISC1dKarSl1wlBD1ZcPLZnYTF1lueN4u9lP+C3iyZ9H5klkmS2YExaVtLJ1Vddg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VkQMtbiJfKoDw6+Yo1Jxt1v4dE8XQcIdBSjr0sAH3cA=;
- b=Tbc+4AUz5RItrovO54wSMOrCzFvNbvgYuDJQ/cwMmg96ZGKH+ANZ7kaj16YVwBzHFFio27BbMdZ6t8YFx0sdjhFi/8LwhCvblAPFC9W+4UO2DhPhtlBULjTUnUb544z4HPjTyRjCSL4jKPoMvDSWVnIx6rbV2Vg+hKER5f07f54=
+ bh=600OC8eie1woCTMKQcwlX592dEb/QW50tKbkbqXBqac=;
+ b=KKTYzklPTGZRmQL/rIPcngY18RQgKPiADgdR2vNV+USKhgw3udN/nO4lXMYc97hfCQ6UcDmPEST+oqX0VneLHv2kXHhEr2oxWNvQRGletr+S5vd8Joa462YVJxBv63J3pFoqkGbsmKhxuGXVfXABfbevDqlXLp1Z+2hcMBP+Cf8=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
  MWHPR2201MB1469.namprd22.prod.outlook.com (10.174.170.142) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2157.22; Mon, 12 Aug 2019 04:47:15 +0000
+ 15.20.2157.22; Mon, 12 Aug 2019 04:47:20 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::f566:bf1f:dcd:862c]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::f566:bf1f:dcd:862c%10]) with mapi id 15.20.2157.022; Mon, 12 Aug 2019
- 04:47:15 +0000
+ 04:47:20 +0000
 From:   Paul Burton <paul.burton@mips.com>
 To:     Nathan Chancellor <natechancellor@gmail.com>
 CC:     Ralf Baechle <ralf@linux-mips.org>,
@@ -47,51 +47,51 @@ CC:     Ralf Baechle <ralf@linux-mips.org>,
         <clang-built-linux@googlegroups.com>,
         Nathan Chancellor <natechancellor@gmail.com>,
         "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH 1/5] MIPS: Don't use bc_false uninitialized in
-  __mm_isBranchInstr
-Thread-Topic: [PATCH 1/5] MIPS: Don't use bc_false uninitialized in
-  __mm_isBranchInstr
-Thread-Index: AQHVUMkDqKjwYqiFLUa9pBXZ514zBw==
-Date:   Mon, 12 Aug 2019 04:47:15 +0000
-Message-ID: <MWHPR2201MB127785F4CEC464CB6F11F3DAC1D30@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20190812033120.43013-2-natechancellor@gmail.com>
-In-Reply-To: <20190812033120.43013-2-natechancellor@gmail.com>
+Subject: Re: [PATCH 2/5] MIPS/ptrace: Update mips_get_syscall_arg's return
+ type
+Thread-Topic: [PATCH 2/5] MIPS/ptrace: Update mips_get_syscall_arg's return
+ type
+Thread-Index: AQHVUMkFJUA2gB3zTEG/0sWsQvg0eA==
+Date:   Mon, 12 Aug 2019 04:47:19 +0000
+Message-ID: <MWHPR2201MB127735989B4545BE3F64C566C1D30@MWHPR2201MB1277.namprd22.prod.outlook.com>
+References: <20190812033120.43013-3-natechancellor@gmail.com>
+In-Reply-To: <20190812033120.43013-3-natechancellor@gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR21CA0026.namprd21.prod.outlook.com
- (2603:10b6:a03:114::36) To MWHPR2201MB1277.namprd22.prod.outlook.com
+x-clientproxiedby: BYAPR21CA0030.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::40) To MWHPR2201MB1277.namprd22.prod.outlook.com
  (2603:10b6:301:18::12)
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=pburton@wavecomp.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
 x-originating-ip: [2601:646:8a00:9810:9d6:9cca:ff8c:efe0]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 722b53c4-2284-4497-7c61-08d71ee025a0
+x-ms-office365-filtering-correlation-id: 22c75ca8-3edd-43a1-5a46-08d71ee0282a
 x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:MWHPR2201MB1469;
 x-ms-traffictypediagnostic: MWHPR2201MB1469:
 x-ms-exchange-purlcount: 2
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB14696740AE76D50BDB0F263EC1D30@MWHPR2201MB1469.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-microsoft-antispam-prvs: <MWHPR2201MB1469991CC773E2FB5DF28D6BC1D30@MWHPR2201MB1469.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-forefront-prvs: 012792EC17
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(136003)(346002)(366004)(39830400003)(396003)(189003)(199004)(6306002)(81156014)(81166006)(8676002)(14454004)(9686003)(99286004)(446003)(7736002)(11346002)(42882007)(486006)(966005)(2906002)(476003)(25786009)(478600001)(8936002)(54906003)(229853002)(55016002)(6916009)(6436002)(1411001)(102836004)(52116002)(316002)(76176011)(71190400001)(71200400001)(66946007)(7696005)(64756008)(66556008)(66446008)(386003)(6506007)(186003)(66476007)(74316002)(256004)(6246003)(46003)(33656002)(5660300002)(52536014)(44832011)(6116002)(4326008)(305945005)(53936002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1469;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(136003)(346002)(366004)(39830400003)(396003)(189003)(199004)(6306002)(81156014)(81166006)(8676002)(14454004)(9686003)(99286004)(446003)(7736002)(11346002)(42882007)(486006)(966005)(2906002)(476003)(25786009)(478600001)(8936002)(54906003)(229853002)(55016002)(6916009)(6436002)(1411001)(102836004)(52116002)(316002)(76176011)(71190400001)(71200400001)(66946007)(7696005)(64756008)(66556008)(66446008)(386003)(15650500001)(6506007)(186003)(66476007)(74316002)(256004)(14444005)(6246003)(46003)(33656002)(5660300002)(52536014)(44832011)(6116002)(4326008)(305945005)(53936002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1469;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: BxULVD3sabcl04ntRCMNbs0Sz9X4Oa1MnhbqE6c5ROJm7MRXgGmDeuJGsoKLlTIcRaa7Z3j5pHYnsicVKKUwIIeXyXoKRvfKO4qyAE3NR3IP8ec103zy6wTI0yHx9envZjNUJHNmW+0moi4qJhmb+o8HT+HyKiGcfgg/gdXaVOkvBi2ZLojFke95zi+EzIJCBqjUvT2r4Mf0e2VVfBBDUHXQ0k+iu5ybVC9P7SsLfvRY7Et38ZhOmvj4GS8yXGpr1gOLUuftUmEJb9WEuoCl4aKDX22RrYk19S52kclcD7zepGBdWLsOJiREQNVWI8etD+HVP3SbuvEIyVzMxvI5b/F0kSvEBlQwKNijxKicv0oRYN1pg/651/eE16nD1DazZ3T/NNg9xLjFIOQ6rXqMI8J/FLuWUbE4YnB/d/jVjDU=
+x-microsoft-antispam-message-info: Nm20rIrc5vqChLvZ48osxILkQqj18Kf0p48gCHWiDCMSys6N3W3xXmD8S6h2ZK2Pa9+ZsW1yw3hvP3ZdOAdpRAX3B63Wb1YCZctWHWlczboQ21wmHP9/9quxgQO/mRxzfSDQ9c6LSURitXwqhpgn7AF2nYfmUZZiQOsj5F+hfi8WJpC2ez9gRF+Xt+f7wyyw1d+bm4u6QZq/Ku7Oy1fPCoBdb9Rc//A3OgebpyEgnn09aKddt48PFjJEAstdpQUBWc3nsvCVvz/iFeT8hWt6X5+G7QZxHHS90628zE4jr2aD9r6FpdOtI3mza/ogIvWPy6NvDDS3JmeOglH9kPCJPuJrfwkA35yEpMLhIEYGkc2j0i4ckBGG+mSY//XVnLokuapQ3Nuuqwgc/AC1Zg0SGQwdi0nFRtj21Z+v1xgEHvI=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 722b53c4-2284-4497-7c61-08d71ee025a0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Aug 2019 04:47:15.0575
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22c75ca8-3edd-43a1-5a46-08d71ee0282a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Aug 2019 04:47:19.8543
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Cp3xf5M7Tdn8v66dkki9TnD+V4dVwi++CXk/LAxwppcHkp7WRC9RMD95hXwaVqKZFUB48BiyV4B2qVGpY/5kVA==
+X-MS-Exchange-CrossTenant-userprincipalname: oIlIb3+tiHt9kJSlExozhGD8jxNSOYX+PH0WsmB8c7zL5NFNtzh12UyqGq4+NwSciHguzyerk0v+dENwou3GWw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1469
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
@@ -103,134 +103,32 @@ Hello,
 Nathan Chancellor wrote:
 > clang warns:
 >=20
-> arch/mips/kernel/branch.c:148:8: error: variable 'bc_false' is used
-> uninitialized whenever switch case is taken
-> [-Werror,-Wsometimes-uninitialized]
->                 case mm_bc2t_op:
->                      ^~~~~~~~~~
-> arch/mips/kernel/branch.c:157:8: note: uninitialized use occurs here
->                         if (bc_false)
->                             ^~~~~~~~
-> arch/mips/kernel/branch.c:149:8: error: variable 'bc_false' is used
-> uninitialized whenever switch case is taken
-> [-Werror,-Wsometimes-uninitialized]
->                 case mm_bc1t_op:
->                      ^~~~~~~~~~
-> arch/mips/kernel/branch.c:157:8: note: uninitialized use occurs here
->                         if (bc_false)
->                             ^~~~~~~~
-> arch/mips/kernel/branch.c:142:4: note: variable 'bc_false' is declared
-> here
->                         int bc_false =3D 0;
->                         ^
-> 2 errors generated.
+> arch/mips/include/asm/syscall.h:136:3: error: variable 'ret' is
+> uninitialized when used here [-Werror,-Wuninitialized]
+>                 ret |=3D mips_get_syscall_arg(args++, task, regs, i++);
+>                 ^~~
+> arch/mips/include/asm/syscall.h:129:9: note: initialize the variable
+> 'ret' to silence this warning
+>         int ret;
+>                ^
+>                 =3D 0
+> 1 error generated.
 >=20
-> When mm_bc1t_op and mm_bc2t_op are taken, the bc_false initialization
-> does not happen, which leads to a garbage value upon use, as illustrated
-> below with a small sample program.
->=20
-> $ mipsel-linux-gnu-gcc --version | head -n1
-> mipsel-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0
->=20
-> $ clang --version | head -n1
-> ClangBuiltLinux clang version 9.0.0 (git://github.com/llvm/llvm-project
-> 544315b4197034a3be8acd12cba56a75fb1f08dc) (based on LLVM 9.0.0svn)
->=20
-> $ cat test.c
->  #include <stdio.h>
->=20
->  static void switch_scoped(int opcode)
->  {
-> 	 switch (opcode) {
-> 	 case 1:
-> 	 case 2: {
-> 		 int bc_false =3D 0;
->=20
-> 		 bc_false =3D 4;
-> 	 case 3:
-> 	 case 4:
-> 		 printf("\t* switch scoped bc_false =3D %d\n", bc_false);
-> 	 }
-> 	 }
->  }
->=20
->  static void function_scoped(int opcode)
->  {
-> 	 int bc_false =3D 0;
->=20
-> 	 switch (opcode) {
-> 	 case 1:
-> 	 case 2: {
-> 		 bc_false =3D 4;
-> 	 case 3:
-> 	 case 4:
-> 		 printf("\t* function scoped bc_false =3D %d\n", bc_false);
-> 	 }
-> 	 }
->  }
->=20
->  int main(void)
->  {
-> 	 int opcode;
->=20
-> 	 for (opcode =3D 1; opcode < 5; opcode++) {
-> 		 printf("opcode =3D %d:\n", opcode);
-> 		 switch_scoped(opcode);
-> 		 function_scoped(opcode);
-> 		 printf("\n");
-> 	 }
->=20
-> 	 return 0;
->  }
->=20
-> $ mipsel-linux-gnu-gcc -std=3Dgnu89 -static test.c && \
->   qemu-mipsel a.out
-> opcode =3D 1:
->         * switch scoped bc_false =3D 4
->         * function scoped bc_false =3D 4
->=20
-> opcode =3D 2:
->         * switch scoped bc_false =3D 4
->         * function scoped bc_false =3D 4
->=20
-> opcode =3D 3:
->         * switch scoped bc_false =3D 2147483004
->         * function scoped bc_false =3D 0
->=20
-> opcode =3D 4:
->         * switch scoped bc_false =3D 2147483004
->         * function scoped bc_false =3D 0
->=20
-> $ clang -std=3Dgnu89 --target=3Dmipsel-linux-gnu -m32 -static test.c && \
->   qemu-mipsel a.out
-> opcode =3D 1:
->         * switch scoped bc_false =3D 4
->         * function scoped bc_false =3D 4
->=20
-> opcode =3D 2:
->         * switch scoped bc_false =3D 4
->         * function scoped bc_false =3D 4
->=20
-> opcode =3D 3:
->         * switch scoped bc_false =3D 2147483004
->         * function scoped bc_false =3D 0
->=20
-> opcode =3D 4:
->         * switch scoped bc_false =3D 2147483004
->         * function scoped bc_false =3D 0
->=20
-> Move the definition up so that we get the right behavior and mark it
-> __maybe_unused as it will not be used when CONFIG_MIPS_FP_SUPPORT
-> isn't enabled.
+> It's not wrong; however, it's not an issue in practice because ret is
+> only assigned to, not read from. ret could just be initialized to zero
+> but looking into it further, ret has been unused since it was first
+> added in 2012 so just get rid of it and update mips_get_syscall_arg's
+> return type since none of the return values are ever checked. If it is
+> ever needed again, this commit can be reverted and ret can be properly
+> initialized.
 
 Applied to mips-next.
 
-> commit c2869aafe719
-> https://git.kernel.org/mips/c/c2869aafe719
+> commit 077ff3be06e8
+> https://git.kernel.org/mips/c/077ff3be06e8
 >=20
-> Fixes: 6a1cc218b9cc ("MIPS: branch: Remove FP branch handling when CONFIG=
-_MIPS_FP_SUPPORT=3Dn")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/603
+> Fixes: c0ff3c53d4f9 ("MIPS: Enable HAVE_ARCH_TRACEHOOK.")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/604
 > Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 > Signed-off-by: Paul Burton <paul.burton@mips.com>
 
