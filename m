@@ -2,95 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 084B68B45D
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Aug 2019 11:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B168B4DC
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Aug 2019 12:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727234AbfHMJki (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 13 Aug 2019 05:40:38 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:36578 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726915AbfHMJki (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Aug 2019 05:40:38 -0400
-Received: by mail-wm1-f67.google.com with SMTP id g67so869356wme.1
-        for <linux-mips@vger.kernel.org>; Tue, 13 Aug 2019 02:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=t6fEiZ4sytTb7mfNqU+GHgkx4N2cyC0uVxBfUPG4iKY=;
-        b=ZvsLh64Nk3rAwaI66fNByKOuqlUAVATJ7Anm+IGbigwF8Q1o/w3VJaWo75OL9J4RRh
-         P6MM9VWap5aQfI/N7Lx2+MPdZtbDCPIaa38ij3O+dLMzs1uq4WksSPOpkiqrGPZURKOw
-         F9ySGABl4fJIkLR2xFs7vzM02DlcYhTIt+TzjRUa9xYdL1zKROAHi2grMg0I75OWzLFr
-         dNy0bYJ1bjGDxrwJnHYFPYYpdH9lagy5q2wRtvnRF6Vu6oz+I/mHuHZFELJiQ2Sm7GuK
-         YRLTo+KSwWDHBc4xeE4N5MDdSOEMhHG+XEenWOrsZXIIrZFvWTBFsPxKm2ppGMuAc3HW
-         6jiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=t6fEiZ4sytTb7mfNqU+GHgkx4N2cyC0uVxBfUPG4iKY=;
-        b=R8LkDxDaAxSn7stqu5juV5ENl+0MLUJIUUrrCZBiXkkjI5iUUBdTR1vG+jrYuNEQcJ
-         y3qb7wHIOY2wTeWHnMzSBQSrBwkHvdAV52fD0pOjbuEY5O6FRChoHwrTdgbC8A+SyjRk
-         eDVmKt2Y59VDiHErF3NmmRtXRLfnRMkfnmA4mgNhkitZIH98J//1GZ0aVTP7TFDK67r+
-         ar+RTIN3BC7qx+RIeStgcho5GKSUPBdLJGyO3WS7+rSACFLCnbuWgJCQJRuhS92Az7x3
-         vsfYiPOVyLLUZJcI8h47yVNJoAMvykfFOr+234OkNyaLz40A9Weiy3iSMXNmhns4Uwiz
-         Oiaw==
-X-Gm-Message-State: APjAAAWHq1OtS+6952+8oNXukk5tDgVm0hb9Mof5N9mZPEC1c30PuMHV
-        gkq0mpgZSjSrqZKrIsnk0shttg==
-X-Google-Smtp-Source: APXvYqxtZp5y+W/eo8hxCFccDh9B73EN2zN9q/ucA2LVNH+5drh1g1mUkC7z2xIrJUpFbM+AMvB0iA==
-X-Received: by 2002:a1c:9a4b:: with SMTP id c72mr2089507wme.102.1565689236579;
-        Tue, 13 Aug 2019 02:40:36 -0700 (PDT)
-Received: from [192.168.86.34] (cpc89974-aztw32-2-0-cust43.18-1.cable.virginm.net. [86.30.250.44])
-        by smtp.googlemail.com with ESMTPSA id f12sm122487785wrg.5.2019.08.13.02.40.34
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 13 Aug 2019 02:40:35 -0700 (PDT)
-Subject: Re: [PATCH v4 3/9] nvmem: core: add nvmem_device_find
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        id S1728767AbfHMKCA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Aug 2019 06:02:00 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:59160 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728761AbfHMKCA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Aug 2019 06:02:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1565690517; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZbzHVM6ENaR4P/6+oOoubZ60cH5LA2N4J6V2DJChuP0=;
+        b=pFFfezQjKuJRCyCrZ9/ijjroaefD35Husngjhtv0sS9eRbULkJZieHwFjjUUwZHaOSMVhv
+        Jym9DJW3vwQNxQw4SI21TSkg5AYgp4PLMnIjtp7Fi2rteFN9o2S3rSBW+rrUXddKsUjfoL
+        iN4pdyxvhjsec4lYAWRoFxESQB5CuEc=
+Date:   Tue, 13 Aug 2019 12:01:48 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 10/11] mfd: Drop obsolete JZ4740 driver
+To:     Philippe =?iso-8859-1?q?Mathieu-Daud=E9?= <f4bug@amsat.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20190809103235.16338-1-tbogendoerfer@suse.de>
- <20190809103235.16338-4-tbogendoerfer@suse.de>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Message-ID: <8d18de64-9234-fcba-aa3d-b46789eb62a5@linaro.org>
-Date:   Tue, 13 Aug 2019 10:40:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, od@zcrc.me,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        Artur Rojek <contact@artur-rojek.eu>
+Message-Id: <1565690508.1856.0@crapouillou.net>
+In-Reply-To: <4b48e597-951e-45fd-dfb2-4a1292a8b067@amsat.org>
+References: <20190725220215.460-1-paul@crapouillou.net>
+        <20190725220215.460-11-paul@crapouillou.net> <20190812081640.GA26727@dell>
+        <4b48e597-951e-45fd-dfb2-4a1292a8b067@amsat.org>
 MIME-Version: 1.0
-In-Reply-To: <20190809103235.16338-4-tbogendoerfer@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Philippe,
 
 
-On 09/08/2019 11:32, Thomas Bogendoerfer wrote:
-> nvmem_device_find provides a way to search for nvmem devices with
-> the help of a match function simlair to bus_find_device.
-> 
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> ---
->   drivers/nvmem/core.c           | 62 ++++++++++++++++++++++--------------------
->   include/linux/nvmem-consumer.h |  9 ++++++
->   2 files changed, 41 insertions(+), 30 deletions(-)
+Le mar. 13 ao=FBt 2019 =E0 10:44, Philippe=20
+=3D?iso-8859-1?q?Mathieu-Daud=3DE9?=3D <f4bug@amsat.org> a =E9crit :
+> Hi Lee,
+>=20
+> On 8/12/19 10:16 AM, Lee Jones wrote:
+>>  On Thu, 25 Jul 2019, Paul Cercueil wrote:
+>>=20
+>>>  It has been replaced with the ingenic-iio driver for the ADC.
+>>>=20
+>>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>>  Tested-by: Artur Rojek <contact@artur-rojek.eu>
+>>>  ---
+>>>   drivers/mfd/Kconfig      |   9 --
+>>>   drivers/mfd/Makefile     |   1 -
+>>>   drivers/mfd/jz4740-adc.c | 324=20
+>>> ---------------------------------------
+>>>   3 files changed, 334 deletions(-)
+>>>   delete mode 100644 drivers/mfd/jz4740-adc.c
+>>=20
+>>  Applied, thanks.
+>=20
+> It seems the replacement is done in "MIPS: qi_lb60: Migrate to
+> devicetree" which is not yet merged.
 
-Have you considered using nvmem_register_notifier() ?
+It's merged in the MIPS tree, though, so it'll blend together just
+fine in linux-next.
 
+>=20
+> Probably easier if this patch goes thru the MIPS tree as part of the
+> "JZ4740 SoC cleanup" series.
+>=20
+> Regards,
+>=20
+> Phil.
 
---srini
+=
+
