@@ -2,84 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA918B2CD
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Aug 2019 10:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084B68B45D
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Aug 2019 11:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726026AbfHMIrU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 13 Aug 2019 04:47:20 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:54024 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725820AbfHMIrU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Aug 2019 04:47:20 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 10so718262wmp.3;
-        Tue, 13 Aug 2019 01:47:17 -0700 (PDT)
+        id S1727234AbfHMJki (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Aug 2019 05:40:38 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:36578 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726915AbfHMJki (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Aug 2019 05:40:38 -0400
+Received: by mail-wm1-f67.google.com with SMTP id g67so869356wme.1
+        for <linux-mips@vger.kernel.org>; Tue, 13 Aug 2019 02:40:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:openpgp:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=03y8Wjx7U11up3+RZThjfaMw+lLqPQBXDguRRoaN+LY=;
-        b=ncyhB6mKip2BS/qeyhDZu6RAVH1K5U/lFzQFg8QnqpsTWcpkVsPxr+kmH2ffSwT9K2
-         0/5kneH0Mq6WT76DYFZPQqo7MmWMKVRIDdBkGCt+Sq1P7e+L8k8oGLGFF+0OmG8MW8ol
-         zmQSfu84WwQdwqcA7nGEhMoTsW16bxKbYbM3nD276Fq9NQ6ITTik5JEqPzyvz1TuC6go
-         +1rLOz5eLjWQuCKaRcCSIRR/glitHrjOXvy6GxDfdSCi3a/qts0EbLmu/P2ZHlizWoPD
-         sJfSdBUYZMD7ps5PR6ttZS0GaaFIoqCGfev3H2HCNZ8G0cv+sIbcgZwJdlDi5v7Ux95z
-         P1yg==
+        d=linaro.org; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=t6fEiZ4sytTb7mfNqU+GHgkx4N2cyC0uVxBfUPG4iKY=;
+        b=ZvsLh64Nk3rAwaI66fNByKOuqlUAVATJ7Anm+IGbigwF8Q1o/w3VJaWo75OL9J4RRh
+         P6MM9VWap5aQfI/N7Lx2+MPdZtbDCPIaa38ij3O+dLMzs1uq4WksSPOpkiqrGPZURKOw
+         F9ySGABl4fJIkLR2xFs7vzM02DlcYhTIt+TzjRUa9xYdL1zKROAHi2grMg0I75OWzLFr
+         dNy0bYJ1bjGDxrwJnHYFPYYpdH9lagy5q2wRtvnRF6Vu6oz+I/mHuHZFELJiQ2Sm7GuK
+         YRLTo+KSwWDHBc4xeE4N5MDdSOEMhHG+XEenWOrsZXIIrZFvWTBFsPxKm2ppGMuAc3HW
+         6jiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:openpgp
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=03y8Wjx7U11up3+RZThjfaMw+lLqPQBXDguRRoaN+LY=;
-        b=C16hToflD/IQ7z+TsArz7I91f6z6F36d6qpke6GCID45O4xyxxgA1Le1Pnek9dTTxj
-         kfUQ9HsIdbvmbvh7a3s2mLakdpNEBu8wZW/53fEEJFRhw+prv6TkWweDFSvsgVKsg9L8
-         4tKkiIqw8cZPquWciferwsLNlAJcFdXMwmtVGgk1CbknEenTjj/DKkZs4PyaxEKmC6g6
-         +QwXilgjW8oP4UTauWbz+2ocSm/NXbZJBSkt3hkRx2rdgFDuM6n7k2tvnSlENTYHK2nm
-         kLrFREo20h0P9ERhXgyMNrM0LuHXBE5eJ7Tj1MJL+ffJQYR1a2MByO+7QBUUGzes0tH3
-         tjVQ==
-X-Gm-Message-State: APjAAAWqIc6ciH9j4dZ28a/q5k2tNCNKrH5Yj0EpIX8bXde2e1Owc2e+
-        bFRo9tm6n8RXdKsIjG3QSxkqMsP7
-X-Google-Smtp-Source: APXvYqxydKntiX7YOVouyRug41eCWhL/ILs06ZTeA7wcYl2JOaFWwyH2oVevfaDyH3m518OCqkWTDQ==
-X-Received: by 2002:a1c:18a:: with SMTP id 132mr1842163wmb.15.1565686036157;
-        Tue, 13 Aug 2019 01:47:16 -0700 (PDT)
-Received: from [192.168.1.35] (251.red-88-10-102.dynamicip.rima-tde.net. [88.10.102.251])
-        by smtp.gmail.com with ESMTPSA id q18sm134573625wrw.36.2019.08.13.01.47.14
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 13 Aug 2019 01:47:15 -0700 (PDT)
-Subject: Re: [PATCH v4 8/9] MIPS: SGI-IP27: fix readb/writeb addressing
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=t6fEiZ4sytTb7mfNqU+GHgkx4N2cyC0uVxBfUPG4iKY=;
+        b=R8LkDxDaAxSn7stqu5juV5ENl+0MLUJIUUrrCZBiXkkjI5iUUBdTR1vG+jrYuNEQcJ
+         y3qb7wHIOY2wTeWHnMzSBQSrBwkHvdAV52fD0pOjbuEY5O6FRChoHwrTdgbC8A+SyjRk
+         eDVmKt2Y59VDiHErF3NmmRtXRLfnRMkfnmA4mgNhkitZIH98J//1GZ0aVTP7TFDK67r+
+         ar+RTIN3BC7qx+RIeStgcho5GKSUPBdLJGyO3WS7+rSACFLCnbuWgJCQJRuhS92Az7x3
+         vsfYiPOVyLLUZJcI8h47yVNJoAMvykfFOr+234OkNyaLz40A9Weiy3iSMXNmhns4Uwiz
+         Oiaw==
+X-Gm-Message-State: APjAAAWHq1OtS+6952+8oNXukk5tDgVm0hb9Mof5N9mZPEC1c30PuMHV
+        gkq0mpgZSjSrqZKrIsnk0shttg==
+X-Google-Smtp-Source: APXvYqxtZp5y+W/eo8hxCFccDh9B73EN2zN9q/ucA2LVNH+5drh1g1mUkC7z2xIrJUpFbM+AMvB0iA==
+X-Received: by 2002:a1c:9a4b:: with SMTP id c72mr2089507wme.102.1565689236579;
+        Tue, 13 Aug 2019 02:40:36 -0700 (PDT)
+Received: from [192.168.86.34] (cpc89974-aztw32-2-0-cust43.18-1.cable.virginm.net. [86.30.250.44])
+        by smtp.googlemail.com with ESMTPSA id f12sm122487785wrg.5.2019.08.13.02.40.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Aug 2019 02:40:35 -0700 (PDT)
+Subject: Re: [PATCH v4 3/9] nvmem: core: add nvmem_device_find
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
         Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
 References: <20190809103235.16338-1-tbogendoerfer@suse.de>
- <20190809103235.16338-9-tbogendoerfer@suse.de>
- <CAHp75Vd_083R9sRsspVuJ3ZMTxpVR79PF5Lg-bpnMxRfN+b7wA@mail.gmail.com>
- <20190811072907.GA1416@kroah.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
-Openpgp: url=http://pgp.mit.edu/pks/lookup?op=get&search=0xE3E32C2CDEADC0DE
-Message-ID: <90129235-58c2-aeed-a9d3-96f4a8f45709@amsat.org>
-Date:   Tue, 13 Aug 2019 10:47:13 +0200
+ <20190809103235.16338-4-tbogendoerfer@suse.de>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Message-ID: <8d18de64-9234-fcba-aa3d-b46789eb62a5@linaro.org>
+Date:   Tue, 13 Aug 2019 10:40:34 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190811072907.GA1416@kroah.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20190809103235.16338-4-tbogendoerfer@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -87,48 +78,19 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
 
-On 8/11/19 9:29 AM, Greg Kroah-Hartman wrote:
-> On Sat, Aug 10, 2019 at 04:22:23PM +0300, Andy Shevchenko wrote:
->> On Fri, Aug 9, 2019 at 1:34 PM Thomas Bogendoerfer
->> <tbogendoerfer@suse.de> wrote:
->>>
->>> Our chosen byte swapping, which is what firmware already uses, is to
->>> do readl/writel by normal lw/sw intructions (data invariance). This
->>> also means we need to mangle addresses for u8 and u16 accesses. The
->>> mangling for 16bit has been done aready, but 8bit one was missing.
->>> Correcting this causes different addresses for accesses to the
->>> SuperIO and local bus of the IOC3 chip. This is fixed by changing
->>> byte order in ioc3 and m48rtc_rtc structs.
->>
->>>  /* serial port register map */
->>>  struct ioc3_serialregs {
->>> -       uint32_t        sscr;
->>> -       uint32_t        stpir;
->>> -       uint32_t        stcir;
->>> -       uint32_t        srpir;
->>> -       uint32_t        srcir;
->>> -       uint32_t        srtr;
->>> -       uint32_t        shadow;
->>> +       u32     sscr;
->>> +       u32     stpir;
->>> +       u32     stcir;
->>> +       u32     srpir;
->>> +       u32     srcir;
->>> +       u32     srtr;
->>> +       u32     shadow;
->>>  };
->>
->> Isn't it a churn? AFAIU kernel documentation the uint32_t is okay to
->> use, just be consistent inside one module / driver.
->> Am I mistaken?
+
+On 09/08/2019 11:32, Thomas Bogendoerfer wrote:
+> nvmem_device_find provides a way to search for nvmem devices with
+> the help of a match function simlair to bus_find_device.
 > 
-> No, but really it uint* shouldn't be used anywhere in the kernel source
-> as it does not make sense.
+> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+> ---
+>   drivers/nvmem/core.c           | 62 ++++++++++++++++++++++--------------------
+>   include/linux/nvmem-consumer.h |  9 ++++++
+>   2 files changed, 41 insertions(+), 30 deletions(-)
 
-If you respin your series, please send this cleanup as a separate patch.
+Have you considered using nvmem_register_notifier() ?
 
-Thanks,
 
-Phil.
+--srini
