@@ -2,93 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7D48AB59
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Aug 2019 01:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AADDC8AC99
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Aug 2019 04:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726689AbfHLXnJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Aug 2019 19:43:09 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:44542 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726453AbfHLXnJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Aug 2019 19:43:09 -0400
-Received: by mail-ot1-f67.google.com with SMTP id b7so115434093otl.11;
-        Mon, 12 Aug 2019 16:43:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=diWyFvgrxloUL25PWlMWiWVbWH7kFJmehbZp7USbjYs=;
-        b=fgkWOZiorjsmoGF2Y1tkfNbeODCDl+evdLr2V1yO2y/WbPq2VIoUCcJwm7sHOxSEyr
-         3ZPC+VgaSBjSlWv17rrEj2vjVUdm3SPhNerq7dIqyXtbTvFsa4VHnvPCY8eFwcNxiPDc
-         V+ogQVCG/2j2DpP+FgpSDBPTUY+7tmkeVVZqq1iMCUG0fZtW9/rIcay5Jhi82vo+iZrE
-         Lzz3WL0gXdFfffm1gVQ3M/y6oyhnIpYI5p7bMkW5wZmePTfYzvwoWE7Jp4R8PLwxgcGO
-         xALwui6y14BKTzq//vCLbzgNZxDVivv1gnMc3Abnly6ba0HpzE3DuOfqlwYeiGW0TrLV
-         Aw2A==
-X-Gm-Message-State: APjAAAWoLbSvHZ7+BagbOckgkS5rdF/GkS8mNYsoYOv/nwZbss/zr13f
-        1ejauWQh7eqvJcGGC9VvovzssaQ=
-X-Google-Smtp-Source: APXvYqwndy9yeKK7tFiaiOXPhVbI3rSeHolHt/frXP4VHoOKfqggRaK6S1M22/SGQGdtX2xoGHuD3Q==
-X-Received: by 2002:a5d:9448:: with SMTP id x8mr39885728ior.102.1565653388357;
-        Mon, 12 Aug 2019 16:43:08 -0700 (PDT)
-Received: from localhost ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id c13sm20184641iok.84.2019.08.12.16.43.07
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 12 Aug 2019 16:43:07 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 17:43:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, od@zcrc.me,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt/bindings: mips: Document Ingenic SoCs binding
-Message-ID: <20190812234306.GA28064@bogus>
-References: <20190722175548.18434-1-paul@crapouillou.net>
+        id S1726516AbfHMCNc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Aug 2019 22:13:32 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:42234 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726488AbfHMCNc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 12 Aug 2019 22:13:32 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id A4171CD0CBA6D6613AF4;
+        Tue, 13 Aug 2019 09:57:01 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS413-HUB.china.huawei.com
+ (10.3.19.213) with Microsoft SMTP Server id 14.3.439.0; Tue, 13 Aug 2019
+ 09:56:50 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <tglx@linutronix.de>, <jason@lakedaemon.net>, <maz@kernel.org>,
+        <paul@crapouillou.net>, <malat@debian.org>, <paul.burton@mips.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH] irqchip/irq-ingenic-tcu: Fix COMPILE_TEST building
+Date:   Tue, 13 Aug 2019 09:56:02 +0800
+Message-ID: <20190813015602.30576-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190722175548.18434-1-paul@crapouillou.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.133.213.239]
+X-CFilter-Loop: Reflected
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jul 22, 2019 at 01:55:47PM -0400, Paul Cercueil wrote:
-> Document the available properties for the root node and the cpu nodes of
-> the devicetree for the Ingenic SoCs.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  .../devicetree/bindings/mips/ingenic-socs.txt      | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mips/ingenic-socs.txt
+While do COMPILE_TEST building, if GENERIC_IRQ_CHIP is
+not selected, it fails:
 
-Please convert this to DT schema.
+drivers/irqchip/irq-ingenic-tcu.o: In function `ingenic_tcu_intc_cascade':
+irq-ingenic-tcu.c:(.text+0x13f): undefined reference to `irq_get_domain_generic_chip'
+drivers/irqchip/irq-ingenic-tcu.o: In function `ingenic_tcu_irq_init':
+irq-ingenic-tcu.c:(.init.text+0x97): undefined reference to `irq_generic_chip_ops'
+irq-ingenic-tcu.c:(.init.text+0xdd): undefined reference to `__irq_alloc_domain_generic_chips'
+irq-ingenic-tcu.c:(.init.text+0x10b): undefined reference to `irq_get_domain_generic_chip'
 
-> diff --git a/Documentation/devicetree/bindings/mips/ingenic-socs.txt b/Documentation/devicetree/bindings/mips/ingenic-socs.txt
-> new file mode 100644
-> index 000000000000..fea2e6ec10a3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mips/ingenic-socs.txt
-> @@ -0,0 +1,14 @@
-> +Bindings for Ingenic JZ47xx family of SoCs
-> +
-> +Required properties for root node:
-> +- compatible: One of:
-> +  * ingenic,jz4740
-> +  * ingenic,jz4725b
-> +  * ingenic,jz4770
-> +  * ingenic,jz4780
-> +
-> +Required properties for CPU nodes:
-> +- compatible: One of:
-> +  * ingenic,xburst-d0
-> +  * ingenic,xburst-d1
-> +  * ingenic,xburst-e1
+select GENERIC_IRQ_CHIP to fix this.
 
-Root node and cpu bindings should be separate files. The CPU nodes 
-should have much more than just a compatible string.
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: 9536eba03ec7 ("irqchip: Add irq-ingenic-tcu driver")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/irqchip/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Rob
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 3c8308e..ccbb897 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -320,6 +320,7 @@ config INGENIC_TCU_IRQ
+ 	default MACH_INGENIC
+ 	depends on MIPS || COMPILE_TEST
+ 	select MFD_SYSCON
++	select GENERIC_IRQ_CHIP
+ 	help
+ 	  Support for interrupts in the Timer/Counter Unit (TCU) of the Ingenic
+ 	  JZ47xx SoCs.
+-- 
+2.7.4
+
+
