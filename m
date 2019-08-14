@@ -2,51 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 274848D5F0
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Aug 2019 16:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE918D653
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Aug 2019 16:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726522AbfHNO3R (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Aug 2019 10:29:17 -0400
-Received: from elvis.franken.de ([193.175.24.41]:33402 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725955AbfHNO3R (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 14 Aug 2019 10:29:17 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1hxuGx-0005Vf-00; Wed, 14 Aug 2019 16:29:07 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 91682C25C0; Wed, 14 Aug 2019 16:28:28 +0200 (CEST)
-Date:   Wed, 14 Aug 2019 16:28:28 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     aurelien@aurel32.net, paul.burton@mips.com, sfr@canb.auug.org.au,
-        chenhc@lemote.com, Serge Semin <fancer.lancer@gmail.com>,
-        yasha.che3@gmail.com, matt.redfearn@mips.com,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH 3/7] MIPS: fw: Record prom memory
-Message-ID: <20190814142828.GA1568@alpha.franken.de>
-References: <20190814172100.KtYqTGuD@smtp2o.mail.yandex.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190814172100.KtYqTGuD@smtp2o.mail.yandex.net>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+        id S1727703AbfHNOhg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 14 Aug 2019 10:37:36 -0400
+Received: from mx2.suse.de ([195.135.220.15]:39532 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726157AbfHNOhg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 14 Aug 2019 10:37:36 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 7E29EAF98;
+        Wed, 14 Aug 2019 14:37:34 +0000 (UTC)
+Date:   Wed, 14 Aug 2019 16:37:33 +0200
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Jonas Gorski <jonas.gorski@gmail.com>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v4 9/9] Input: add IOC3 serio driver
+Message-Id: <20190814163733.82f624e342d061866ba8ff87@suse.de>
+In-Reply-To: <CAOiHx=kuQtOuNfsJ+fDrps+hbrbp5cPujmQpi8Vfy+0qeP8dtA@mail.gmail.com>
+References: <20190809103235.16338-1-tbogendoerfer@suse.de>
+        <20190809103235.16338-10-tbogendoerfer@suse.de>
+        <CAOiHx=kuQtOuNfsJ+fDrps+hbrbp5cPujmQpi8Vfy+0qeP8dtA@mail.gmail.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 10:20:48PM +0800, Jiaxun Yang wrote:
-> Hi Thomas
-> 
-> I can see only two ROM DATA maps in your system.
-> As we're only recording ROM DATA here, rest types of memory will be handled
-> by memblock.
+On Wed, 14 Aug 2019 15:20:14 +0200
+Jonas Gorski <jonas.gorski@gmail.com> wrote:
 
-ok, sorry for the noise.
+> > +       d = devm_kzalloc(&pdev->dev, sizeof(*d), GFP_KERNEL);
+> 
+> &pdev->dev => dev
+
+will change.
+
+> 
+> > +       if (!d)
+> > +               return -ENOMEM;
+> > +
+> > +       sk = kzalloc(sizeof(*sk), GFP_KERNEL);
+> 
+> any reason not to devm_kzalloc this as well? Then you won't need to
+> manually free it in the error cases.
+
+it has different life time than the device, so it may not allocated
+via devm_kzalloc
+
+> > +static int ioc3kbd_remove(struct platform_device *pdev)
+> > +{
+> > +       struct ioc3kbd_data *d = platform_get_drvdata(pdev);
+> > +
+> > +       devm_free_irq(&pdev->dev, d->irq, d);
+> > +       serio_unregister_port(d->kbd);
+> > +       serio_unregister_port(d->aux);
+> > +       return 0;
+> > +}
+> 
+> and on that topic, won't you need to kfree d->kbd and d->aux here?
+
+that's done in serio_release_port() by the serio core.
 
 Thomas.
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+SUSE Linux GmbH
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
