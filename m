@@ -2,128 +2,187 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D840E8DCA4
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Aug 2019 20:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0BD8E056
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Aug 2019 00:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728725AbfHNSEU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Aug 2019 14:04:20 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:32993 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728301AbfHNSET (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Aug 2019 14:04:19 -0400
-Received: by mail-pl1-f196.google.com with SMTP id c14so50923457plo.0;
-        Wed, 14 Aug 2019 11:04:19 -0700 (PDT)
+        id S1729054AbfHNWHq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Aug 2019 18:07:46 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:38954 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727975AbfHNWHp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Aug 2019 18:07:45 -0400
+Received: by mail-pf1-f193.google.com with SMTP id f17so182002pfn.6;
+        Wed, 14 Aug 2019 15:07:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=i65TMBvSXi6h25YTw/qjPwCNbGJI3tR/idiaX47L8Ck=;
-        b=oDgz7DWIxwNG9Rs8Av0aGQCb4Y4zM1LQ1tAIMtpGam4wL/8Gxup4y2oPyAmIxWlcIU
-         kFLQtS/AH/pC6D3MgtHWR9wg4hJ8t7xgrFUhclrPwzaVA5FyFlC0I/QalhEl2xy39Ffo
-         eSuQi/eiDx0fZE+0aJqR9uDc+19OfkJ3osRSnctH5h8O/aOk9KsZZRg/A1/+0Tw2jl1a
-         +CwRtB5bOqJvNipwLJ31AP3rI2NRvqwMQvjjVBoOhKueYR/6UdtBYuQgyj/AkrOQao2w
-         gkwPUGt/gn4vewJtfXhQp0BRvUYwhtL3OjR11guj+ZKxR5BlILFL/gYphITtDECXwsJV
-         4zQg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=fm+XMGdKo1qLDwMEPJoOd+67atBUmC1hzfZly9LEwV0=;
+        b=sgPCxVPDpH9l2X4SPUlx10kZFVi9IyEGQZCYZYSp7q2+1HYZUvT2BP02kXdHCDxuQe
+         ovLGoEDRejVtZkJFak27XXUav3OaPEikhGNchX4l2i6fwcPxTxbG+IuniEBAnuJs1Wnn
+         vE3XrY4NLX8lQ0cXESW4Dhc9SO9SwnUyFax0vMAwqj1rzBIWXFt0FeSvTdRUc4l3NpvN
+         jX3+ZqLSgrLGCWOssPanOkD0fstz6U6ag9S/JUBDg1jCWNYg1kaWU8QYMgT+SvMMzzb2
+         dX82zkunQSsga8PbpkqwG1h5iYhdx/yxUvNXdd7H192iWYxzh/ZNrGhBHqmcDohBWF4H
+         +wGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=i65TMBvSXi6h25YTw/qjPwCNbGJI3tR/idiaX47L8Ck=;
-        b=JQJdFqrg73K4bOsDiRvK/+npZVbRPJe+3vK6v4sO7goRjG8JPG9ALLItbJjG/XNCZR
-         /hXeTJcd2knfhMQCftdI2mWsRAYqUIe1YfJQCPQJrvFuOS8tZXH4GgHM/uQfJ2P4V5fA
-         AFzsVqECfgCTsGS3cKe2auXkNo9MAaB5avOBz2lRNvLVmkAT6Orh2UiQXRoeUoeb7FJr
-         +lpeNXK3l0F3oOlr/Cko05/NIpUzWCoyX7tckl9GhP8YTdr9fh5wR0YJiyQXR2QZnFXY
-         1VpDxW1UuH71OAgUfTKVz7Optpg7fB+NgQVsZhCDaLlDmC54gRSFkVGH7hvzAKVIae25
-         nUKw==
-X-Gm-Message-State: APjAAAX33uVnppEVISY4+XWuJUTkFsd4A+34vTUf8dLgN0Ns0GWzowa+
-        D9KMcFLTwA7coN4cSWFYtBk=
-X-Google-Smtp-Source: APXvYqzbRZiUS7F/Q9f8KdCAGzOCl81uvnwp5gpKSitriEyE233/ryC3fENXJCdawVK1SUb1JeKNVA==
-X-Received: by 2002:a17:902:b105:: with SMTP id q5mr596304plr.81.1565805858657;
-        Wed, 14 Aug 2019 11:04:18 -0700 (PDT)
-Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
-        by smtp.gmail.com with ESMTPSA id i126sm540372pfb.32.2019.08.14.11.04.16
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 14 Aug 2019 11:04:17 -0700 (PDT)
-Date:   Wed, 14 Aug 2019 11:04:15 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Jonas Gorski <jonas.gorski@gmail.com>
-Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=fm+XMGdKo1qLDwMEPJoOd+67atBUmC1hzfZly9LEwV0=;
+        b=liKKYHuldK7U5oJrugKPIGoNpHUf9SXW8xpPViEky0MmtONe2HXUfxK43LVbLMrubT
+         kfF8QMyI9sCzAYkpWpeGFBqsBtKgjyRgELoSOoIO1RwNrcR8Q8CBo4Fof5L8OfkczG+U
+         SuHSYCsfo7+RF/ocuvXdgrlaVfPw0UJ7itrZZKDvDfHxfhEkL4VHRDccRg7jQW5N0+yc
+         8NRNfxdCH8Ug0DEB3KG/JEGCCWV3ja5kiDGNAk/5IU3HaaelszpsHwlb/afysX9un07r
+         BIYCQRDGuQv28DTJlb25OAj9gJ77xXTmMlh55wjl5kvMo5z7hMKThNrK+sxFBiTKhBDX
+         1cyg==
+X-Gm-Message-State: APjAAAW9VrpmRKQLfUiWPPLfUf0dWSRO7OT4LvF1uC67qZXZdzeCtywG
+        c9eF9CXoRxaV+s8rQLYSUkk=
+X-Google-Smtp-Source: APXvYqxEANCpUtYQ+5OhPEAzs37rqT2wBBhN570Sw5KrEeNXbOBWwWt7Xo763dhxGWxso/PvNN7UjA==
+X-Received: by 2002:a17:90a:eb05:: with SMTP id j5mr87119pjz.102.1565820464819;
+        Wed, 14 Aug 2019 15:07:44 -0700 (PDT)
+Received: from localhost ([100.118.89.196])
+        by smtp.gmail.com with ESMTPSA id i9sm659836pgo.46.2019.08.14.15.07.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Aug 2019 15:07:44 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Christoph Hellwig <hch@lst.de>, Rob Clark <robdclark@chromium.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v4 9/9] Input: add IOC3 serio driver
-Message-ID: <20190814180415.GC121898@dtor-ws>
-References: <20190809103235.16338-1-tbogendoerfer@suse.de>
- <20190809103235.16338-10-tbogendoerfer@suse.de>
- <CAOiHx=kuQtOuNfsJ+fDrps+hbrbp5cPujmQpi8Vfy+0qeP8dtA@mail.gmail.com>
- <20190814163733.82f624e342d061866ba8ff87@suse.de>
- <CAOiHx=mjLpLg9r=mE25T7RQFNRT8wEPkRcy2ZkfT7H=Y5RT-vw@mail.gmail.com>
+        Allison Randal <allison@lohutok.net>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: [PATCH 2/6] mips: export arch_sync_dma_for_*()
+Date:   Wed, 14 Aug 2019 14:59:57 -0700
+Message-Id: <20190814220011.26934-3-robdclark@gmail.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190814220011.26934-1-robdclark@gmail.com>
+References: <20190814220011.26934-1-robdclark@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOiHx=mjLpLg9r=mE25T7RQFNRT8wEPkRcy2ZkfT7H=Y5RT-vw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 06:57:55PM +0200, Jonas Gorski wrote:
-> On Wed, 14 Aug 2019 at 16:37, Thomas Bogendoerfer <tbogendoerfer@suse.de> wrote:
-> >
-> > On Wed, 14 Aug 2019 15:20:14 +0200
-> > Jonas Gorski <jonas.gorski@gmail.com> wrote:
-> >
-> > > > +       d = devm_kzalloc(&pdev->dev, sizeof(*d), GFP_KERNEL);
-> > >
-> > > &pdev->dev => dev
-> >
-> > will change.
-> >
-> > >
-> > > > +       if (!d)
-> > > > +               return -ENOMEM;
-> > > > +
-> > > > +       sk = kzalloc(sizeof(*sk), GFP_KERNEL);
-> > >
-> > > any reason not to devm_kzalloc this as well? Then you won't need to
-> > > manually free it in the error cases.
-> >
-> > it has different life time than the device, so it may not allocated
-> > via devm_kzalloc
-> >
-> > > > +static int ioc3kbd_remove(struct platform_device *pdev)
-> > > > +{
-> > > > +       struct ioc3kbd_data *d = platform_get_drvdata(pdev);
-> > > > +
-> > > > +       devm_free_irq(&pdev->dev, d->irq, d);
-> > > > +       serio_unregister_port(d->kbd);
-> > > > +       serio_unregister_port(d->aux);
-> > > > +       return 0;
-> > > > +}
-> > >
-> > > and on that topic, won't you need to kfree d->kbd and d->aux here?
-> >
-> > that's done in serio_release_port() by the serio core.
-> 
-> i see. But in that case, don't the kfree's after the
-> serio_unregister_port's in the error path of the .probe function cause
-> a double free?
+From: Rob Clark <robdclark@chromium.org>
 
-Yes they do, we need to drop kfree()s from there. Nicely spotted.
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ arch/arm64/mm/flush.c          |  2 ++
+ arch/mips/mm/dma-noncoherent.c |  2 ++
+ drivers/gpu/drm/drm_cache.c    | 20 +++++++++++++++++---
+ include/drm/drm_cache.h        |  4 ++++
+ 4 files changed, 25 insertions(+), 3 deletions(-)
 
-Thanks.
-
+diff --git a/arch/arm64/mm/flush.c b/arch/arm64/mm/flush.c
+index dc19300309d2..f0eb6320c979 100644
+--- a/arch/arm64/mm/flush.c
++++ b/arch/arm64/mm/flush.c
+@@ -93,3 +93,5 @@ void arch_invalidate_pmem(void *addr, size_t size)
+ }
+ EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
+ #endif
++
++EXPORT_SYMBOL_GPL(__flush_dcache_area);
+diff --git a/arch/mips/mm/dma-noncoherent.c b/arch/mips/mm/dma-noncoherent.c
+index ed56c6fa7be2..bd5debe1b423 100644
+--- a/arch/mips/mm/dma-noncoherent.c
++++ b/arch/mips/mm/dma-noncoherent.c
+@@ -131,6 +131,7 @@ void arch_sync_dma_for_device(struct device *dev, phys_addr_t paddr,
+ {
+ 	dma_sync_phys(paddr, size, dir);
+ }
++EXPORT_SYMBOL_GPL(arch_sync_dma_for_device);
+ 
+ #ifdef CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU
+ void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
+@@ -139,6 +140,7 @@ void arch_sync_dma_for_cpu(struct device *dev, phys_addr_t paddr,
+ 	if (cpu_needs_post_dma_flush(dev))
+ 		dma_sync_phys(paddr, size, dir);
+ }
++EXPORT_SYMBOL_GPL(arch_sync_dma_for_cpu);
+ #endif
+ 
+ void arch_dma_cache_sync(struct device *dev, void *vaddr, size_t size,
+diff --git a/drivers/gpu/drm/drm_cache.c b/drivers/gpu/drm/drm_cache.c
+index 3bd76e918b5d..90105c637797 100644
+--- a/drivers/gpu/drm/drm_cache.c
++++ b/drivers/gpu/drm/drm_cache.c
+@@ -69,6 +69,14 @@ static void drm_cache_flush_clflush(struct page *pages[],
+ }
+ #endif
+ 
++#if defined(__powerpc__)
++static void __flush_dcache_area(void *addr, size_t len)
++{
++	flush_dcache_range((unsigned long)addr,
++			   (unsigned long)addr + PAGE_SIZE);
++}
++#endif
++
+ /**
+  * drm_clflush_pages - Flush dcache lines of a set of pages.
+  * @pages: List of pages to be flushed.
+@@ -90,7 +98,7 @@ drm_clflush_pages(struct page *pages[], unsigned long num_pages)
+ 	if (wbinvd_on_all_cpus())
+ 		pr_err("Timed out waiting for cache flush\n");
+ 
+-#elif defined(__powerpc__)
++#elif defined(__powerpc__) || defined(CONFIG_ARM64)
+ 	unsigned long i;
+ 	for (i = 0; i < num_pages; i++) {
+ 		struct page *page = pages[i];
+@@ -100,8 +108,7 @@ drm_clflush_pages(struct page *pages[], unsigned long num_pages)
+ 			continue;
+ 
+ 		page_virtual = kmap_atomic(page);
+-		flush_dcache_range((unsigned long)page_virtual,
+-				   (unsigned long)page_virtual + PAGE_SIZE);
++		__flush_dcache_area(page_virtual, PAGE_SIZE);
+ 		kunmap_atomic(page_virtual);
+ 	}
+ #else
+@@ -135,6 +142,13 @@ drm_clflush_sg(struct sg_table *st)
+ 
+ 	if (wbinvd_on_all_cpus())
+ 		pr_err("Timed out waiting for cache flush\n");
++#elif defined(CONFIG_ARM64)
++	struct sg_page_iter sg_iter;
++
++	for_each_sg_page(st->sgl, &sg_iter, st->nents, 0) {
++		struct page *p = sg_page_iter_page(&sg_iter);
++		drm_clflush_pages(&p, 1);
++	}
+ #else
+ 	pr_err("Architecture has no drm_cache.c support\n");
+ 	WARN_ON_ONCE(1);
+diff --git a/include/drm/drm_cache.h b/include/drm/drm_cache.h
+index 987ff16b9420..f94e7bd3eca4 100644
+--- a/include/drm/drm_cache.h
++++ b/include/drm/drm_cache.h
+@@ -40,6 +40,10 @@ void drm_clflush_sg(struct sg_table *st);
+ void drm_clflush_virt_range(void *addr, unsigned long length);
+ bool drm_need_swiotlb(int dma_bits);
+ 
++#if defined(CONFIG_X86) || defined(__powerpc__) || defined(CONFIG_ARM64)
++#define HAS_DRM_CACHE 1
++#endif
++
+ 
+ static inline bool drm_arch_can_wc_memory(void)
+ {
 -- 
-Dmitry
+2.21.0
+
