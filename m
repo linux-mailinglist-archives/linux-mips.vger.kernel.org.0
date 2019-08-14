@@ -2,57 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C69878D88A
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Aug 2019 18:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D840E8DCA4
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Aug 2019 20:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726951AbfHNQ6D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Aug 2019 12:58:03 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:38570 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726047AbfHNQ6C (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Aug 2019 12:58:02 -0400
-Received: by mail-wm1-f66.google.com with SMTP id m125so5059890wmm.3;
-        Wed, 14 Aug 2019 09:58:00 -0700 (PDT)
+        id S1728725AbfHNSEU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Aug 2019 14:04:20 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:32993 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728301AbfHNSET (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Aug 2019 14:04:19 -0400
+Received: by mail-pl1-f196.google.com with SMTP id c14so50923457plo.0;
+        Wed, 14 Aug 2019 11:04:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MTEkYKL8BVYhxHYUGvIBzu9AUXRPM4JLAqesOWugBI4=;
-        b=XW6JU+744xiPyvNGXbdLzF9iT8xBjUrwuGqjiEzePGIE10acGza/QX9wb4sifiJBAM
-         s+Vyy/HYTvljbdR154FO5gtmYoW1+UlIcJRZC9sXJuXt1rDFpF/OQwU0XchQtQblKFbc
-         IkklEWAlaDopBwgale8LaS9oJ0BfMiMIf2P5Nf2A2xJh3tCNntxuMYi6K/sZSEDYpkBY
-         BNknRECBO3vUKy9XXwwvOCy0UiOp5wehR1znL40YUof9CC48bZXbB8MA0F/O+O5wI/ll
-         bhPZL/2ucJSM9SDYCOe08SqxFuKEREop4O6V9kG+Jmm0KY45RiDm46Dt3cDJD2ouV5lm
-         UXoQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=i65TMBvSXi6h25YTw/qjPwCNbGJI3tR/idiaX47L8Ck=;
+        b=oDgz7DWIxwNG9Rs8Av0aGQCb4Y4zM1LQ1tAIMtpGam4wL/8Gxup4y2oPyAmIxWlcIU
+         kFLQtS/AH/pC6D3MgtHWR9wg4hJ8t7xgrFUhclrPwzaVA5FyFlC0I/QalhEl2xy39Ffo
+         eSuQi/eiDx0fZE+0aJqR9uDc+19OfkJ3osRSnctH5h8O/aOk9KsZZRg/A1/+0Tw2jl1a
+         +CwRtB5bOqJvNipwLJ31AP3rI2NRvqwMQvjjVBoOhKueYR/6UdtBYuQgyj/AkrOQao2w
+         gkwPUGt/gn4vewJtfXhQp0BRvUYwhtL3OjR11guj+ZKxR5BlILFL/gYphITtDECXwsJV
+         4zQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MTEkYKL8BVYhxHYUGvIBzu9AUXRPM4JLAqesOWugBI4=;
-        b=IMRRaITUThNW8X0GDlfDRHchVTbSGB0Zl/OTkJCFXVKTdngbvuryXTwJfgKPiOnT93
-         pLOXSvnxdb1eViQbRKtyOd/fw9FSco5o1lIzGGdbmcfjjclP955RMWfXPs/I1LYppgVD
-         69/PxO4a//G79FrXaXo2FVNvlKJbFQuGrEm4HQFPGOvhJOBt71wSHmv23EXrvdQmjr/C
-         7eQqQI7osRyWWPRcQ6bIYLHQC+tmtRxZEugC3MfFo5P25NkmCQV8sYo1OpUnETWRPbSP
-         OugScLkieW77mKuSRTjF5LXrSpgCpMv4rTzMfj+qbbWwZ4u6mVLWLZJ6XHsA0iZwQLth
-         AkVA==
-X-Gm-Message-State: APjAAAVvkFqjpexBZzmVj+wi6Xf+Ckv/pHUkuhfakmhbhcVy24SncZVa
-        6714H2EACqXkmB7sC+Axnd1wMJeepmSuSWVvd4c=
-X-Google-Smtp-Source: APXvYqwkB83yqS+8NjQ83QcF+PEzdvw0fVo5cYYg9YRmO2gZttUCgzRF+qn91dqYvwhB3wvP6frRE/cX8xn120tcF9I=
-X-Received: by 2002:a05:600c:54c:: with SMTP id k12mr79276wmc.117.1565801879761;
- Wed, 14 Aug 2019 09:57:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190809103235.16338-1-tbogendoerfer@suse.de> <20190809103235.16338-10-tbogendoerfer@suse.de>
- <CAOiHx=kuQtOuNfsJ+fDrps+hbrbp5cPujmQpi8Vfy+0qeP8dtA@mail.gmail.com> <20190814163733.82f624e342d061866ba8ff87@suse.de>
-In-Reply-To: <20190814163733.82f624e342d061866ba8ff87@suse.de>
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-Date:   Wed, 14 Aug 2019 18:57:55 +0200
-Message-ID: <CAOiHx=mjLpLg9r=mE25T7RQFNRT8wEPkRcy2ZkfT7H=Y5RT-vw@mail.gmail.com>
-Subject: Re: [PATCH v4 9/9] Input: add IOC3 serio driver
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=i65TMBvSXi6h25YTw/qjPwCNbGJI3tR/idiaX47L8Ck=;
+        b=JQJdFqrg73K4bOsDiRvK/+npZVbRPJe+3vK6v4sO7goRjG8JPG9ALLItbJjG/XNCZR
+         /hXeTJcd2knfhMQCftdI2mWsRAYqUIe1YfJQCPQJrvFuOS8tZXH4GgHM/uQfJ2P4V5fA
+         AFzsVqECfgCTsGS3cKe2auXkNo9MAaB5avOBz2lRNvLVmkAT6Orh2UiQXRoeUoeb7FJr
+         +lpeNXK3l0F3oOlr/Cko05/NIpUzWCoyX7tckl9GhP8YTdr9fh5wR0YJiyQXR2QZnFXY
+         1VpDxW1UuH71OAgUfTKVz7Optpg7fB+NgQVsZhCDaLlDmC54gRSFkVGH7hvzAKVIae25
+         nUKw==
+X-Gm-Message-State: APjAAAX33uVnppEVISY4+XWuJUTkFsd4A+34vTUf8dLgN0Ns0GWzowa+
+        D9KMcFLTwA7coN4cSWFYtBk=
+X-Google-Smtp-Source: APXvYqzbRZiUS7F/Q9f8KdCAGzOCl81uvnwp5gpKSitriEyE233/ryC3fENXJCdawVK1SUb1JeKNVA==
+X-Received: by 2002:a17:902:b105:: with SMTP id q5mr596304plr.81.1565805858657;
+        Wed, 14 Aug 2019 11:04:18 -0700 (PDT)
+Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
+        by smtp.gmail.com with ESMTPSA id i126sm540372pfb.32.2019.08.14.11.04.16
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 14 Aug 2019 11:04:17 -0700 (PDT)
+Date:   Wed, 14 Aug 2019 11:04:15 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Jonas Gorski <jonas.gorski@gmail.com>
+Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         "David S. Miller" <davem@davemloft.net>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
@@ -64,53 +62,68 @@ Cc:     Ralf Baechle <ralf@linux-mips.org>,
         linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         Network Development <netdev@vger.kernel.org>,
         linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v4 9/9] Input: add IOC3 serio driver
+Message-ID: <20190814180415.GC121898@dtor-ws>
+References: <20190809103235.16338-1-tbogendoerfer@suse.de>
+ <20190809103235.16338-10-tbogendoerfer@suse.de>
+ <CAOiHx=kuQtOuNfsJ+fDrps+hbrbp5cPujmQpi8Vfy+0qeP8dtA@mail.gmail.com>
+ <20190814163733.82f624e342d061866ba8ff87@suse.de>
+ <CAOiHx=mjLpLg9r=mE25T7RQFNRT8wEPkRcy2ZkfT7H=Y5RT-vw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOiHx=mjLpLg9r=mE25T7RQFNRT8wEPkRcy2ZkfT7H=Y5RT-vw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 14 Aug 2019 at 16:37, Thomas Bogendoerfer <tbogendoerfer@suse.de> wrote:
->
-> On Wed, 14 Aug 2019 15:20:14 +0200
-> Jonas Gorski <jonas.gorski@gmail.com> wrote:
->
-> > > +       d = devm_kzalloc(&pdev->dev, sizeof(*d), GFP_KERNEL);
+On Wed, Aug 14, 2019 at 06:57:55PM +0200, Jonas Gorski wrote:
+> On Wed, 14 Aug 2019 at 16:37, Thomas Bogendoerfer <tbogendoerfer@suse.de> wrote:
 > >
-> > &pdev->dev => dev
->
-> will change.
->
+> > On Wed, 14 Aug 2019 15:20:14 +0200
+> > Jonas Gorski <jonas.gorski@gmail.com> wrote:
 > >
-> > > +       if (!d)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       sk = kzalloc(sizeof(*sk), GFP_KERNEL);
+> > > > +       d = devm_kzalloc(&pdev->dev, sizeof(*d), GFP_KERNEL);
+> > >
+> > > &pdev->dev => dev
 > >
-> > any reason not to devm_kzalloc this as well? Then you won't need to
-> > manually free it in the error cases.
->
-> it has different life time than the device, so it may not allocated
-> via devm_kzalloc
->
-> > > +static int ioc3kbd_remove(struct platform_device *pdev)
-> > > +{
-> > > +       struct ioc3kbd_data *d = platform_get_drvdata(pdev);
-> > > +
-> > > +       devm_free_irq(&pdev->dev, d->irq, d);
-> > > +       serio_unregister_port(d->kbd);
-> > > +       serio_unregister_port(d->aux);
-> > > +       return 0;
-> > > +}
+> > will change.
 > >
-> > and on that topic, won't you need to kfree d->kbd and d->aux here?
->
-> that's done in serio_release_port() by the serio core.
+> > >
+> > > > +       if (!d)
+> > > > +               return -ENOMEM;
+> > > > +
+> > > > +       sk = kzalloc(sizeof(*sk), GFP_KERNEL);
+> > >
+> > > any reason not to devm_kzalloc this as well? Then you won't need to
+> > > manually free it in the error cases.
+> >
+> > it has different life time than the device, so it may not allocated
+> > via devm_kzalloc
+> >
+> > > > +static int ioc3kbd_remove(struct platform_device *pdev)
+> > > > +{
+> > > > +       struct ioc3kbd_data *d = platform_get_drvdata(pdev);
+> > > > +
+> > > > +       devm_free_irq(&pdev->dev, d->irq, d);
+> > > > +       serio_unregister_port(d->kbd);
+> > > > +       serio_unregister_port(d->aux);
+> > > > +       return 0;
+> > > > +}
+> > >
+> > > and on that topic, won't you need to kfree d->kbd and d->aux here?
+> >
+> > that's done in serio_release_port() by the serio core.
+> 
+> i see. But in that case, don't the kfree's after the
+> serio_unregister_port's in the error path of the .probe function cause
+> a double free?
 
-i see. But in that case, don't the kfree's after the
-serio_unregister_port's in the error path of the .probe function cause
-a double free?
+Yes they do, we need to drop kfree()s from there. Nicely spotted.
 
+Thanks.
 
-Regards
-Jonas
+-- 
+Dmitry
