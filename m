@@ -2,298 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9154F8D47C
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Aug 2019 15:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10168D4B3
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Aug 2019 15:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727691AbfHNNUX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Aug 2019 09:20:23 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:40682 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726263AbfHNNUX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Aug 2019 09:20:23 -0400
-Received: by mail-wr1-f67.google.com with SMTP id c3so2814303wrd.7;
-        Wed, 14 Aug 2019 06:20:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5907J95qWoLJJAA1lrle4n+n+JLaMq9U4FEtPQp3pMA=;
-        b=ql9QSH5FhXZyRIdBtvWaeuIRc7qRxTT/qZ+JAQG945r/3234BBZ50gvSCAxGZDWAkZ
-         fthWDInI6zqlCyW+vlG+ezMSNcaTbAu/Eb6JoWZeAkjtVdMx0p4x8bpEJ5ZiBl6dXC7Q
-         fHQQ8OGRYuukco20Zj0l2lyqNG3wg0byvl79S+fm2+X+EcWYllxvBJ/AUhm4hZn+9goP
-         Q4qaA36O0CoAL8SJm7IcMJqdY4q+PD3gUye5fpjokjOp98FKOqvwbRHzrxkYXPOJ76GY
-         m2Z/K/AWRw0ru2pySLtOFWF1Ia9nKadiaHReJygrTjgi1pT5tuq+EQFson/8k5hJT8sI
-         XS5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5907J95qWoLJJAA1lrle4n+n+JLaMq9U4FEtPQp3pMA=;
-        b=GbWEZEVziWwVwzHdm5MP1tN9G1/IcrfOGE7OrTNOHEthljHtQgW1Ofxp22/a1t6LjI
-         k4EhkUG2yTP8MBizR2hwlC/mO9dLzhvPr61XhMYENAHvjXO7v6vo6xS4MbcRJHdsfRb9
-         SOLvjXs2Uaz4Iv2BUy4r/gFu5uVmXP3ywakBNoPAuh86bkbN3xIO/+kNhtH+Pd4iIIuA
-         xQwaYDoaZDBxNYw6NczaCfzyyRNn0mqwm5QC+gvcjWKFwzZFIy1H2L1AQI0nLTUZoM+x
-         Q9h06WFiKljOCr+hs9ZWSZBokQvoxXiOsv2CWIcbbyi0dsdXbZaflJTOwqkZTFPiIEFe
-         NqWA==
-X-Gm-Message-State: APjAAAU4dNFrknAG3dwt1OxAIIBmhu5J1+RfBuxGWNfB+2EHn66N4cFC
-        sLrlSWAAt/56kiWGrNfHQ3jhwJLgRdR57Ic+E9w=
-X-Google-Smtp-Source: APXvYqzIbbGwC0dKbbnnkR3gQ4fzUrPZlBBlDmcLc6ksAiuUPbYb+ipMDTi49nvmKdt3ouESKaYsHfPJvUkvI8EIGRM=
-X-Received: by 2002:adf:e782:: with SMTP id n2mr24698878wrm.1.1565788819460;
- Wed, 14 Aug 2019 06:20:19 -0700 (PDT)
+        id S1727899AbfHNN3n (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Aug 2019 09:29:43 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:48274 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727954AbfHNN3n (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Aug 2019 09:29:43 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7EDSwL8051616;
+        Wed, 14 Aug 2019 13:29:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=/7//kmOrqhhp8O4LuF61rEBvEGdxH5BSo4SewEJRvtk=;
+ b=hbL+u1zUilX32JNT/hEaFTr9RvXXPXNMaGGkw3NMO8TZ6rHXRLkYNs8UbLAsIpR35nYe
+ XaCL08yq5n/kPC0vlcgop9h58e7hPb4ksO7sIQC1/YlI+DWwyEAX+1CZzq9e4s0GInx/
+ O0T0Pr/NtThKc8CmkSqam4HMkD3HmXHgR0NKb45cCwQaI65qCXhvTf0AiKhzD+jO80xa
+ Mh21Xo0o73dG0kKnVVBoW3Wa8Z2x8BLK1lMLL2p2SKKbE7x6RuDnnCAtjyzJczKN6eZa
+ 7U+RQKpcLLpJKzWlqoJTksY4GLwkTX58BxHwTlA/uC5PRLZ824neuIWiZgckCA4Q2erl Rw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 2u9pjqmpfj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Aug 2019 13:29:32 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7EDSU8s040634;
+        Wed, 14 Aug 2019 13:29:31 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 2ubwcy151a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Aug 2019 13:29:31 +0000
+Received: from abhmp0022.oracle.com (abhmp0022.oracle.com [141.146.116.28])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7EDTURH019559;
+        Wed, 14 Aug 2019 13:29:30 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 14 Aug 2019 06:29:30 -0700
+Date:   Wed, 14 Aug 2019 16:29:24 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     ralf@linux-mips.org
+Cc:     linux-mips@vger.kernel.org
+Subject: [bug report] [MIPS] MT: Improved multithreading support.
+Message-ID: <20190814132924.GA23964@mwanda>
 MIME-Version: 1.0
-References: <20190809103235.16338-1-tbogendoerfer@suse.de> <20190809103235.16338-10-tbogendoerfer@suse.de>
-In-Reply-To: <20190809103235.16338-10-tbogendoerfer@suse.de>
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-Date:   Wed, 14 Aug 2019 15:20:14 +0200
-Message-ID: <CAOiHx=kuQtOuNfsJ+fDrps+hbrbp5cPujmQpi8Vfy+0qeP8dtA@mail.gmail.com>
-Subject: Re: [PATCH v4 9/9] Input: add IOC3 serio driver
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=518
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908140139
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=572 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908140139
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+[ This is ancient code, but the bug is straight forward -- dan ]
 
-On Fri, 9 Aug 2019 at 12:33, Thomas Bogendoerfer <tbogendoerfer@suse.de> wrote:
->
-> This patch adds a platform driver for supporting keyboard and mouse
-> interface of SGI IOC3 chips.
->
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> ---
->  drivers/input/serio/Kconfig   |  10 +++
->  drivers/input/serio/Makefile  |   1 +
->  drivers/input/serio/ioc3kbd.c | 163 ++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 174 insertions(+)
->  create mode 100644 drivers/input/serio/ioc3kbd.c
->
-> diff --git a/drivers/input/serio/Kconfig b/drivers/input/serio/Kconfig
-> index f3e18f8ef9ca..373a1646019e 100644
-> --- a/drivers/input/serio/Kconfig
-> +++ b/drivers/input/serio/Kconfig
-> @@ -165,6 +165,16 @@ config SERIO_MACEPS2
->           To compile this driver as a module, choose M here: the
->           module will be called maceps2.
->
-> +config SERIO_SGI_IOC3
-> +       tristate "SGI IOC3 PS/2 controller"
-> +       depends on SGI_MFD_IOC3
-> +       help
-> +         Say Y here if you have an SGI Onyx2, SGI Octane or IOC3 PCI card
-> +         and you want to attach and use a keyboard, mouse, or both.
-> +
-> +         To compile this driver as a module, choose M here: the
-> +         module will be called ioc3kbd.
-> +
->  config SERIO_LIBPS2
->         tristate "PS/2 driver library"
->         depends on SERIO_I8042 || SERIO_I8042=n
-> diff --git a/drivers/input/serio/Makefile b/drivers/input/serio/Makefile
-> index 67950a5ccb3f..6d97bad7b844 100644
-> --- a/drivers/input/serio/Makefile
-> +++ b/drivers/input/serio/Makefile
-> @@ -20,6 +20,7 @@ obj-$(CONFIG_HIL_MLC)         += hp_sdc_mlc.o hil_mlc.o
->  obj-$(CONFIG_SERIO_PCIPS2)     += pcips2.o
->  obj-$(CONFIG_SERIO_PS2MULT)    += ps2mult.o
->  obj-$(CONFIG_SERIO_MACEPS2)    += maceps2.o
-> +obj-$(CONFIG_SERIO_SGI_IOC3)   += ioc3kbd.o
->  obj-$(CONFIG_SERIO_LIBPS2)     += libps2.o
->  obj-$(CONFIG_SERIO_RAW)                += serio_raw.o
->  obj-$(CONFIG_SERIO_AMS_DELTA)  += ams_delta_serio.o
-> diff --git a/drivers/input/serio/ioc3kbd.c b/drivers/input/serio/ioc3kbd.c
-> new file mode 100644
-> index 000000000000..6840e3c23fed
-> --- /dev/null
-> +++ b/drivers/input/serio/ioc3kbd.c
-> @@ -0,0 +1,163 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * SGI IOC3 PS/2 controller driver for linux
-> + *
-> + * Copyright (C) 2019 Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> + *
-> + * Based on code Copyright (C) 2005 Stanislaw Skowronek <skylark@unaligned.org>
-> + *               Copyright (C) 2009 Johannes Dickgreber <tanzy@gmx.de>
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/init.h>
-> +#include <linux/io.h>
-> +#include <linux/serio.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include <asm/sn/ioc3.h>
-> +
-> +struct ioc3kbd_data {
-> +       struct ioc3_serioregs __iomem *regs;
-> +       struct serio *kbd, *aux;
-> +       int irq;
-> +};
-> +
-> +static int ioc3kbd_write(struct serio *dev, u8 val)
-> +{
-> +       struct ioc3kbd_data *d = dev->port_data;
-> +       unsigned long timeout = 0;
-> +       u32 mask;
-> +
-> +       mask = (dev == d->aux) ? KM_CSR_M_WRT_PEND : KM_CSR_K_WRT_PEND;
-> +       while ((readl(&d->regs->km_csr) & mask) && (timeout < 1000)) {
-> +               udelay(100);
-> +               timeout++;
-> +       }
-> +
-> +       if (timeout >= 1000)
-> +               return -ETIMEDOUT;
-> +
-> +       writel(val, dev == d->aux ? &d->regs->m_wd : &d->regs->k_wd);
-> +
-> +       return 0;
-> +}
-> +
-> +static irqreturn_t ioc3kbd_intr(int itq, void *dev_id)
-> +{
-> +       struct ioc3kbd_data *d = dev_id;
-> +       u32 data_k, data_m;
-> +
-> +       data_k = readl(&d->regs->k_rd);
-> +       data_m = readl(&d->regs->m_rd);
-> +
-> +       if (data_k & KM_RD_VALID_0)
-> +               serio_interrupt(d->kbd, (data_k >> KM_RD_DATA_0_SHIFT) & 0xff,
-> +                               0);
-> +       if (data_k & KM_RD_VALID_1)
-> +               serio_interrupt(d->kbd, (data_k >> KM_RD_DATA_1_SHIFT) & 0xff,
-> +                               0);
-> +       if (data_k & KM_RD_VALID_2)
-> +               serio_interrupt(d->kbd, (data_k >> KM_RD_DATA_2_SHIFT) & 0xff,
-> +                               0);
-> +       if (data_m & KM_RD_VALID_0)
-> +               serio_interrupt(d->aux, (data_m >> KM_RD_DATA_0_SHIFT) & 0xff,
-> +                               0);
-> +       if (data_m & KM_RD_VALID_1)
-> +               serio_interrupt(d->aux, (data_m >> KM_RD_DATA_1_SHIFT) & 0xff,
-> +                               0);
-> +       if (data_m & KM_RD_VALID_2)
-> +               serio_interrupt(d->aux, (data_m >> KM_RD_DATA_2_SHIFT) & 0xff,
-> +                               0);
-> +
-> +       return 0;
-> +}
-> +
-> +static int ioc3kbd_probe(struct platform_device *pdev)
-> +{
-> +       struct ioc3_serioregs __iomem *regs;
-> +       struct device *dev = &pdev->dev;
-> +       struct ioc3kbd_data *d;
-> +       struct serio *sk, *sa;
-> +       int irq, ret;
-> +
-> +       regs = devm_platform_ioremap_resource(pdev, 0);
-> +       if (IS_ERR(regs))
-> +               return PTR_ERR(regs);
-> +
-> +       irq = platform_get_irq(pdev, 0);
-> +       if (irq < 0)
-> +               return -ENXIO;
-> +
-> +       d = devm_kzalloc(&pdev->dev, sizeof(*d), GFP_KERNEL);
+Hello Ralf Baechle,
 
-&pdev->dev => dev
+The patch 41c594ab65fc: "[MIPS] MT: Improved multithreading support."
+from Apr 5, 2006, leads to the following static checker warning:
 
-> +       if (!d)
-> +               return -ENOMEM;
-> +
-> +       sk = kzalloc(sizeof(*sk), GFP_KERNEL);
+	arch/mips/kernel/smp-mt.c:168 vsmp_boot_secondary()
+	warn: potential pointer math issue
 
-any reason not to devm_kzalloc this as well? Then you won't need to
-manually free it in the error cases.
+arch/mips/kernel/smp-mt.c
+   142  static int vsmp_boot_secondary(int cpu, struct task_struct *idle)
+   143  {
+   144          struct thread_info *gp = task_thread_info(idle);
+                ^^^^^^^^^^^^^^^^^^^^^^
+gp is a thread_info struct pointer.
 
-> +       if (!sk)
-> +               return -ENOMEM;
-> +
-> +       sa = kzalloc(sizeof(*sa), GFP_KERNEL);
+   145          dvpe();
+   146          set_c0_mvpcontrol(MVPCONTROL_VPC);
+   147  
+   148          settc(cpu);
+   149  
+   150          /* restart */
+   151          write_tc_c0_tcrestart((unsigned long)&smp_bootstrap);
+   152  
+   153          /* enable the tc this vpe/cpu will be running */
+   154          write_tc_c0_tcstatus((read_tc_c0_tcstatus() & ~TCSTATUS_IXMT) | TCSTATUS_A);
+   155  
+   156          write_tc_c0_tchalt(0);
+   157  
+   158          /* enable the VPE */
+   159          write_vpe_c0_vpeconf0(read_vpe_c0_vpeconf0() | VPECONF0_VPA);
+   160  
+   161          /* stack pointer */
+   162          write_tc_gpr_sp( __KSTK_TOS(idle));
+   163  
+   164          /* global pointer */
+   165          write_tc_gpr_gp((unsigned long)gp);
+   166  
+   167          flush_icache_range((unsigned long)gp,
+   168                             (unsigned long)(gp + sizeof(struct thread_info)));
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This should almost certainly be "gp + 1" because of pointer math.
 
-same here.
+   169  
+   170          /* finally out of configuration and into chaos */
+   171          clear_c0_mvpcontrol(MVPCONTROL_VPC);
+   172  
+   173          evpe(EVPE_ENABLE);
+   174  
+   175          return 0;
+   176  }
 
-> +       if (!sa) {
-> +               kfree(sk);
-> +               return -ENOMEM;
-> +       }
-> +
-> +       sk->id.type = SERIO_8042;
-> +       sk->write = ioc3kbd_write;
-> +       snprintf(sk->name, sizeof(sk->name), "IOC3 keyboard %d", pdev->id);
-> +       snprintf(sk->phys, sizeof(sk->phys), "ioc3/serio%dkbd", pdev->id);
-> +       sk->port_data = d;
-> +       sk->dev.parent = &pdev->dev;
-
-&pdev->dev => dev
-
-> +
-> +       sa->id.type = SERIO_8042;
-> +       sa->write = ioc3kbd_write;
-> +       snprintf(sa->name, sizeof(sa->name), "IOC3 auxiliary %d", pdev->id);
-> +       snprintf(sa->phys, sizeof(sa->phys), "ioc3/serio%daux", pdev->id);
-> +       sa->port_data = d;
-> +       sa->dev.parent = dev;
-> +
-> +       d->regs = regs;
-> +       d->kbd = sk;
-> +       d->aux = sa;
-> +       d->irq = irq;
-> +
-> +       platform_set_drvdata(pdev, d);
-> +       serio_register_port(d->kbd);
-> +       serio_register_port(d->aux);
-> +
-> +       ret = devm_request_irq(&pdev->dev, irq, ioc3kbd_intr, IRQF_SHARED,
-> +                              "ioc3-kbd", d);
-> +       if (ret) {
-> +               dev_err(&pdev->dev, "could not request IRQ %d\n", irq);
-> +               serio_unregister_port(d->kbd);
-> +               serio_unregister_port(d->aux);
-> +               kfree(sk);
-> +               kfree(sa);
-> +               return ret;
-> +       }
-> +       return 0;
-> +}
-> +
-> +static int ioc3kbd_remove(struct platform_device *pdev)
-> +{
-> +       struct ioc3kbd_data *d = platform_get_drvdata(pdev);
-> +
-> +       devm_free_irq(&pdev->dev, d->irq, d);
-> +       serio_unregister_port(d->kbd);
-> +       serio_unregister_port(d->aux);
-> +       return 0;
-> +}
-
-and on that topic, won't you need to kfree d->kbd and d->aux here?
-Unless you devm_kzalloc'd them.
-
-Alternatively you could also just embed the two serio structs into
-ioc3kbd_data, then you only need one allocation instead of three.
-
-
-Regards
-
-Jonas
+regards,
+dan carpenter
