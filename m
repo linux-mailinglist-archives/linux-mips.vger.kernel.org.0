@@ -2,102 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C22911D0
-	for <lists+linux-mips@lfdr.de>; Sat, 17 Aug 2019 18:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34550911EB
+	for <lists+linux-mips@lfdr.de>; Sat, 17 Aug 2019 18:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726202AbfHQQBJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 17 Aug 2019 12:01:09 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:40999 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726033AbfHQQBI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Aug 2019 12:01:08 -0400
-Received: by mail-lf1-f66.google.com with SMTP id 62so6086967lfa.8
-        for <linux-mips@vger.kernel.org>; Sat, 17 Aug 2019 09:01:07 -0700 (PDT)
+        id S1726013AbfHQQXB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 17 Aug 2019 12:23:01 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:36672 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726012AbfHQQXB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Aug 2019 12:23:01 -0400
+Received: by mail-ot1-f66.google.com with SMTP id k18so1822808otr.3;
+        Sat, 17 Aug 2019 09:23:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1+7TiPxmJ3iAAUyU8+nGKfNJ+qg4H69wdJGgYgGKXe4=;
-        b=renwLVE4t6MRcP5ZcmILI4AbPfXwqYVjMBTfKIElNDtgfcIFYeU8tIrB/gUAytl6lf
-         GUpFHkf80zb+V0K3tM4r1Ot/9rCYkg84zdkCVJdaGdaWLOpozsDhzbvufdrpihHrN3tR
-         TMxRzxhlJOIgtqRCrMKBJjP0q/GTzQu3Y+xuowVJpW1Icfg6Gn+WBtpfMuxFGsqNj8oB
-         RlW1kLKfSyibvLnhWNBdW0PJ1JnQ35HN0rADSVoKpu7sfG7Xl0X/7sr2FWTSDPYnsGg8
-         aLYzSLDdBf8VJM9zqhQZCDbdbFM9CTE+LknLwNOfmvJpyWjg0Gz9hP3js+7ih/iHtfFi
-         vrkw==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KkNWyjY6i4wH5Ddws0s2bRyPMfosm9/NVsRV0Y2N3PA=;
+        b=Gae8lsMgP+bqtdFraWZyNJ3QSjRTqvKKxKT4pM6SJUdpIMMZgL+pwT5603gDEytVT/
+         7IfPEA5vvnTeWryo5heiMGJkAqnA08w2yfKhxvSElFgtd5W+8Jm470hzi6zroaCGJ4rw
+         IRShg0E8R9s5W6TZo6nQ6/67TigSbeW3d14/CU1xYbvXmR2YdfsDfGqQbADNVpNq4OnZ
+         BQtrbyMc56aC3fLcKG1YLIQxNKAHZwRXMdZ/GkmYDtfpLoKc0gIKuK/ZIJdVrw0qnGDL
+         VXRtZ4uTCDCHCJ3DE3B8FJnpLOfl2Jee8DBzGa2sh+vclbL62MbrRa32N8kEoDkipkMy
+         OPYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1+7TiPxmJ3iAAUyU8+nGKfNJ+qg4H69wdJGgYgGKXe4=;
-        b=N1OldA8BXLPS1g3SdnyXOAEJ8V1Wg8d1oRjaI4TvW1YEtX2L6Jpxq+My6z8ABhrcJa
-         V6j9Tg+VINqme8AZ4pc6m27MmhRLEv7doeNixUGI57TKivF9LpHcmHObDJDOqFjfuFg+
-         cJGGkDDvttMsnbf4gkl+sFK/nxuRzeWRMUE+n4WO5Kk9/J5rzO6FL0p311DxUzFBjKhP
-         gl0pXhoYR0zvGwjRA9UZe/gIKuH/BqQ7P68aehmuXI03RNvjwZk/ANe03AorsA5yjBbX
-         SeMJd9KmPOS7AI5XRNz5Iczwo38x2uBm9YszD2ztpSdCbPuor4fvRXxxlGNZsBhdwY4Q
-         +SkQ==
-X-Gm-Message-State: APjAAAWTJWOJDjBjN1RPSkgRMLwswmVeV5VAEhVP2+N1IluzISoCwbWM
-        mZCa6R+91mVEPWh7rsTheEk7Qw==
-X-Google-Smtp-Source: APXvYqzgHOkrd316w+DBxyDOOMOwfJvlMQJHfKxSm3Tpn7OUxlUzLbfoBMdqodlTlf7xRwkY3y0i2g==
-X-Received: by 2002:ac2:456d:: with SMTP id k13mr7785781lfm.77.1566057666460;
-        Sat, 17 Aug 2019 09:01:06 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:4817:8b14:6cce:9848:7977:d7d5? ([2a00:1fa0:4817:8b14:6cce:9848:7977:d7d5])
-        by smtp.gmail.com with ESMTPSA id b10sm1517289ljk.79.2019.08.17.09.01.04
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 17 Aug 2019 09:01:05 -0700 (PDT)
-Subject: Re: [PATCH 06/26] ia64: rename ioremap_nocache to ioremap_uc
-To:     Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
-        Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org
-Cc:     linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        nios2-dev@lists.rocketboards.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-mtd@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20190817073253.27819-1-hch@lst.de>
- <20190817073253.27819-7-hch@lst.de>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <b19607c1-07aa-e361-3c26-8bcb063ed8c1@cogentembedded.com>
-Date:   Sat, 17 Aug 2019 19:00:48 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KkNWyjY6i4wH5Ddws0s2bRyPMfosm9/NVsRV0Y2N3PA=;
+        b=j4ZuL0vW1cEEvLqtfF4yRPXzzhQPkc6/SHG/jU45MaizEVqamTlH+kCzUWGoV5+tj8
+         zKpBI+LfNQc0ms/U+G72S6T0quKnLsd68HBixk7MEwaOhBQgVe6spcO23OzsXjwPklgH
+         0XawBO7BYpcPmlJdXVaQ76u0LmvDFiQ4KREMur0LbddnOsCkNPeMCt+5Ce2fXjSGsAck
+         JXLxjssJNGJWsnUAZ4Nh9M5jF0QbeiEHpaMobsCWCFhHmLlA/2EU07loeAVoHv7SGe6L
+         SUHxnxGUdq6ZyOXQOwjsCm6RhDQjdNZgUyhjF/TM+8Dr5Cg4iroYzQNZB6O9HuvPLNFx
+         miDw==
+X-Gm-Message-State: APjAAAUegvt3RMGlmQPSvFBpK7GoZIGFffEZz4og951nZeVxMpTy9MhH
+        exz4UcJb4la1Os1SoiuIvJLYcW/xtXNosGSfVXY=
+X-Google-Smtp-Source: APXvYqzk0u4Ilu0Q5NFLJH9XglZbvfPbUIEi9ktxQWn+FMhZXdGxFqVp2pgY+cR90FakhznowefHdiXUlijcVdJ4n0Q=
+X-Received: by 2002:a05:6830:1184:: with SMTP id u4mr11456282otq.181.1566058980205;
+ Sat, 17 Aug 2019 09:23:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190817073253.27819-7-hch@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190724022310.28010-1-gch981213@gmail.com> <20190724022310.28010-5-gch981213@gmail.com>
+ <20190813155143.GA19830@bogus> <CAJsYDVKnf4M8jyVOyotRxs=SsHqjex_q60AwkX=QAPK33ivw-Q@mail.gmail.com>
+ <2d48f4a4-7d30-547b-21ee-6aadabe7d7c3@gmx.net>
+In-Reply-To: <2d48f4a4-7d30-547b-21ee-6aadabe7d7c3@gmx.net>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Sun, 18 Aug 2019 00:22:49 +0800
+Message-ID: <CAJsYDVLq1-U_AngA4=YKHS_L=zurhLse9XwQ0Rzup9BdXfri-w@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] dt: bindings: add mt7621-pll dt binding documentation
+To:     Oleksij Rempel <fishor@gmx.net>
+Cc:     Rob Herring <robh@kernel.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        John Crispin <john@phrozen.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Weijie Gao <hackpascal@gmail.com>, NeilBrown <neil@brown.name>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+Hi!
 
-On 17.08.2019 10:32, Christoph Hellwig wrote:
+On Sat, Aug 17, 2019 at 11:40 PM Oleksij Rempel <fishor@gmx.net> wrote:
 
-> On ia64 ioremap_nocache fails if attributs don't match.  Not other
+> In provided link [0] the  ralink_clk_init function is reading SYSC_REG_CPLL_CLKCFG0 R/W register.
+> This register is used to determine clock source,  clock freq and CPU or bus clocks.
 
-    Attributes. :-)
+This register should only be changed by bootloader, not kernel. So
+it's read-only in kernel's perspective.
 
-> architectures does this, and we plan to get rid of ioremap_nocache.
-> So get rid of the special semantics and define ioremap_nocache in
-> terms of ioremap as no portable driver could rely on the behavior
-> anyway.
-> 
-> However x86 implements ioremap_uc with a in a similar way as the ia64
+> SYSC_REG_CPLL_CLKCFG1 register is a clock gate controller. It is used to enable or disable clocks.
+> Jist wild assumption. All peripheral devices are suing bus clock.
 
-    "With a" not really needed?
+This assumption is incorrect. When this patchset is applied in
+OpenWrt, I asked the author why there's still a fixed clock in
+mt7621.dtsi, He told me that there's another clock for those unchanged
+peripherals and he doesn't have time to write a clock provider for it.
+I don't know how many undocumented clocks are there since this piece
+of info is missing in datasheet.
 
-> version of ioremap_nocache, so implement that instead.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-[...]
+>
+> IMO - this information is enough to create full blown drivers/clk/mediatek/clk-mt7621.c
 
-MBR, Sergei
+And this information isn't enough because the assumption above is incorrect :P
+
+Regards,
+Chuanhong Guo
