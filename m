@@ -2,53 +2,29 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC301910D9
-	for <lists+linux-mips@lfdr.de>; Sat, 17 Aug 2019 16:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB75911B2
+	for <lists+linux-mips@lfdr.de>; Sat, 17 Aug 2019 17:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726083AbfHQOmY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 17 Aug 2019 10:42:24 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:33050 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725832AbfHQOmY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Aug 2019 10:42:24 -0400
-Received: by mail-ot1-f66.google.com with SMTP id q20so11445941otl.0;
-        Sat, 17 Aug 2019 07:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u+ouuMQrNVti/jSM5pYCBsXYcjd9f+fOqg85jip3rp8=;
-        b=UWWveDzaXrnRWzm77yDCOLyoGFGeMfwlcrcoDAlg+n2BRt2WEWB+dpBiXK97kiEVRW
-         YLslFXHdVfC/GFkbxBh6Gdu+SWw8331QjQC4zEte152sB0ESTXRTCOUbwt/2NLDYtOKx
-         8x4YttqP2cffWMMb59Y5HOAWsDO97/1519Du2PTbYAKeCg14TS/QiD6i9PDXlLQWNvXR
-         6kslMkAzXMm9HtWfEnB4f0gVx6gPQn57wPLjuujlARLCoOugYV8BGr1cOT43lj9FNhae
-         QlaM/ig6tXqy2Ch72M9GC//cNQXpQ6crg3hfg3Q0rHRMqQ/FIk0B3+y5YmIQCpkT+Wi1
-         GWWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u+ouuMQrNVti/jSM5pYCBsXYcjd9f+fOqg85jip3rp8=;
-        b=VkoUw6yaygih1gnIuD+w142Wc52KdPj/pYd/8kXL0vILO6afv1lyvmql/PiTjw2+Ux
-         t1QVgqlghUUvc7Yvpuo4AYCChXA5eCKTXtewnkWAXg6/udfesnXlwqbQWjtIY6x75zq+
-         PRBa9KNY9OJJPPWjeyMIMbpHnW8wB/wxuclDeZnioEOTMYRgqEaP2Ad0bUfLXPoSgy8S
-         aKn0w+xDEPY7rB1qRFqDcuVLHvb7iHcXsjHdj5eErVHtTBMYZWKbSRpYjmg3XD94aVUz
-         YJDUBOE4m5JLiNsdh50xyUXqIdQvaYzg2yeaILt2+OxamPSbWFp5+/T/5B10nVBOqA63
-         S3GQ==
-X-Gm-Message-State: APjAAAWzOO9QVJNl8CQ52xPKSENAPVDiXouy2xQxdo8Hu7FhzMyR3WQ9
-        tmlXNksdDi8PjXrbwDjIM3JvTtZZFK1KKODJDRg=
-X-Google-Smtp-Source: APXvYqz5ceM2JCDDDSIcgUhj8lMv5v0FOmMnXg2IeO6sSggcznPDuJampGWaCUwiZ5tB3C/ohH295tN+dd8XvA8ef8o=
-X-Received: by 2002:a05:6830:1592:: with SMTP id i18mr5384197otr.86.1566052943046;
- Sat, 17 Aug 2019 07:42:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190724022310.28010-1-gch981213@gmail.com> <20190724022310.28010-5-gch981213@gmail.com>
- <20190813155143.GA19830@bogus>
-In-Reply-To: <20190813155143.GA19830@bogus>
-From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Sat, 17 Aug 2019 22:42:12 +0800
-Message-ID: <CAJsYDVKnf4M8jyVOyotRxs=SsHqjex_q60AwkX=QAPK33ivw-Q@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] dt: bindings: add mt7621-pll dt binding documentation
-To:     Rob Herring <robh@kernel.org>
+        id S1726013AbfHQPkM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 17 Aug 2019 11:40:12 -0400
+Received: from mout.gmx.net ([212.227.15.18]:50741 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726010AbfHQPkL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 17 Aug 2019 11:40:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1566056394;
+        bh=AT8tQ8sV2zOi6Dtc/VRg7C7E0nn4hiwSx3ciNzqfz0w=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=avVszXptm4G/mPAGm2B4LOJZFFvuTZCLjF1eUjNJn8lyOFZUxIRW4B/FhcEGtig4L
+         AUbjclSp3MC/ovb3Kkbxbk/dJIcm1s/qqLYJS3hSd+l/CJfZhbf3amk09nN7MU/FUu
+         ArjZpjqD0e1DJY4T5dmLrnolBCcWis32mnASaraM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.38] ([95.90.191.58]) by mail.gmx.com (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M59C2-1i06jm1htE-001EXn; Sat, 17
+ Aug 2019 17:39:54 +0200
+Subject: Re: [PATCH v2 4/6] dt: bindings: add mt7621-pll dt binding
+ documentation
+To:     Chuanhong Guo <gch981213@gmail.com>, Rob Herring <robh@kernel.org>
 Cc:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
@@ -64,49 +40,100 @@ Cc:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
         John Crispin <john@phrozen.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Weijie Gao <hackpascal@gmail.com>, NeilBrown <neil@brown.name>
-Content-Type: text/plain; charset="UTF-8"
+References: <20190724022310.28010-1-gch981213@gmail.com>
+ <20190724022310.28010-5-gch981213@gmail.com> <20190813155143.GA19830@bogus>
+ <CAJsYDVKnf4M8jyVOyotRxs=SsHqjex_q60AwkX=QAPK33ivw-Q@mail.gmail.com>
+From:   Oleksij Rempel <fishor@gmx.net>
+Message-ID: <2d48f4a4-7d30-547b-21ee-6aadabe7d7c3@gmx.net>
+Date:   Sat, 17 Aug 2019 17:39:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <CAJsYDVKnf4M8jyVOyotRxs=SsHqjex_q60AwkX=QAPK33ivw-Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:KUmLKsF+HTyzMx/uyoNKutLyersnTtU0bdigAi87JdxCt+apx0p
+ RVLj0qGlC+f5yfR4KdHtu1IM+omrhfvaVwW2MV4hi+r7opWxmVCN64gZ26VXAzcYviGctL3
+ FSxjqt1KeAPEmF5+5FZgvYU+qKw6UHq/f5D4zpPwtZMtAomt6s8ew+XBo0O+PSYdk4Xytvy
+ DcH09fsacZnm8/qW1JR9g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PVGbF0GK/B0=:/XleIUlOc/F0S93RM3xKFP
+ Yk0/MDhFODIEuiZZcww7NTjHWHwDWdxM8cYONolAPNu0VCPPYdSiJfFCKczG9KSCeCkfTa68e
+ BUYzoDm8eGiOO6Qj8llb6jENGpumkN+cpSaAGDyo1UoJRsGvvefcAKrMA9mhZH6z3W5O5oWwR
+ En8YCmVkeLvuksHfK5WkRMHmuzZeEY/vuBmXy1nvm4FjyV2f3sixsJR3Ir7eyNsQsaKuHc8tO
+ CfzxWR+89ES0BJjwtJXtR2+Ck08q0oHxqgqtdz3fiv8OcwEUqQi9a1UP81ksV35L8LvSxL7s9
+ l4Q5lcPrN6cOAdiaHIETHkFnIF1toHQY9LLzx33lqQ5yv6squyKtZ2sQ2yF7oDeAXFrDlbZly
+ 9DBMuti1zkraj7yjtq2s0J9DqPzRD098MEIrO9lt9CUyv77dl5G5gzgylUTI5T9rEG4+55Gpg
+ 8QUwlTQuWtE7KHnpdPaOyY0UyfPtDYQD/TMUGcO90WrcO0oXUQX6PMx+xP0EfXi9D+g3VDkbX
+ 2W+S9U1cj6XhZWCmi5I1xIuQyjald7cvR9+r5+KoLP37BMC8cmwnR89svgYxLhG0kRbhtzWBU
+ lVDxZZxLIefBix90CckokM5/X1yTdzobXQn01lJ1Vl+uqmqKAZTK65eK0oTkvGqlfr08bKubZ
+ etVKkkBAEPbcJQ6TU1oeQcDD02EP2rOAIETe+dj7Gqf83ysXa8y6h3BA/YOylB3UQLbW8o/gZ
+ YCL3COVx1QqOMoaykUsqbIXzSHJnXuTqBZsMuenKCxWbwaHfUskhyuX8vojcfgm4O12zVICC+
+ TN6mRdqK9NmqH4ht1qAn3uc1zuKzCHZyK1dhZqdH2Qa+Gq5a9KCpHXtRGdiPXzlPZrFUcLz6n
+ o/z2Jq8/hYOB4KZqljfBnvyNQISqVBjRRqStpYAquRyLfnDfrAOG2+U4+npUsJVtDWH6wduXT
+ ZKV5mdDQfRl0K9s/u6VibTlEbVwpB59iIaZGG8MlSKhxd5QwPzGgo/BTpbgNFOmUKQ2SjTTZF
+ bljFwecu85lqklhtdtyhFFy7zqwfACdZQcgOrx/L6lB2LwWzSHvl/kq3PG2JEyq1SbAHoehon
+ OZ7D7OILi5flyJjgqkI+V+jsAqry203cx6fm+Akj3x3ucT6iUDYrtkuYnqORd6kbVOWyUZioz
+ iDVMqIWG4cqo+Id6x4MCvLfVfz10fpRj6PYJHUFkzW6vnvQg==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi!
+Hi,
 
-On Tue, Aug 13, 2019 at 11:51 PM Rob Herring <robh@kernel.org> wrote:
-> [...]
-> > +Example:
-> > +     pll {
-> > +             compatible = "mediatek,mt7621-pll";
+Am 17.08.19 um 16:42 schrieb Chuanhong Guo:
+> Hi!
 >
-> You didn't answer Stephen's question on v1.
-
-I thought he was asking why there's a syscon in compatible string. I
-noticed that the syscon in my previous patch is a copy-paste error
-from elsewhere and dropped it.
-
+> On Tue, Aug 13, 2019 at 11:51 PM Rob Herring <robh@kernel.org> wrote:
+>> [...]
+>>> +Example:
+>>> +     pll {
+>>> +             compatible =3D "mediatek,mt7621-pll";
+>>
+>> You didn't answer Stephen's question on v1.
 >
-> Based on this binding, there is no way to control/program the PLL. Is
-> this part of some IP block?
-
-The entire section is called "system control" in datasheet and is
-occupied in arch/mips/ralink/mt7621.c [0]
-Two clocks provided here is determined by reading some read-only
-registers in this part.
-There's another register in this section providing clock gates for
-every peripherals, but MTK doesn't provide a clock plan in their
-datasheet. I can't determine corresponding clock frequencies for every
-peripherals, thus unable to write a working clock driver.
-
+> I thought he was asking why there's a syscon in compatible string. I
+> noticed that the syscon in my previous patch is a copy-paste error
+> from elsewhere and dropped it.
 >
-> > +
-> > +             #clock-cells = <1>;
-> > +             clock-output-names = "cpu", "bus";
-> > +     };
-> > --
-> > 2.21.0
-> >
+>>
+>> Based on this binding, there is no way to control/program the PLL. Is
+>> this part of some IP block?
+>
+> The entire section is called "system control" in datasheet and is
+> occupied in arch/mips/ralink/mt7621.c [0]
+> Two clocks provided here is determined by reading some read-only
+> registers in this part.
+> There's another register in this section providing clock gates for
+> every peripherals, but MTK doesn't provide a clock plan in their
+> datasheet. I can't determine corresponding clock frequencies for every
+> peripherals, thus unable to write a working clock driver.
 
-Regards,
-Chuanhong Guo
+In provided link [0] the  ralink_clk_init function is reading SYSC_REG_CPL=
+L_CLKCFG0 R/W register.
+This register is used to determine clock source,  clock freq and CPU or bu=
+s clocks.
+SYSC_REG_CPLL_CLKCFG1 register is a clock gate controller. It is used to e=
+nable or disable clocks.
+Jist wild assumption. All peripheral devices are suing bus clock.
 
-[0] https://elixir.bootlin.com/linux/latest/source/arch/mips/ralink/mt7621.c#L156
+IMO - this information is enough to create full blown drivers/clk/mediatek=
+/clk-mt7621.c
+
+>>> +
+>>> +             #clock-cells =3D <1>;
+>>> +             clock-output-names =3D "cpu", "bus";
+>>> +     };
+>>> --
+>>> 2.21.0
+>>>
+>
+> Regards,
+> Chuanhong Guo
+>
+> [0] https://elixir.bootlin.com/linux/latest/source/arch/mips/ralink/mt76=
+21.c#L156
+>
+
