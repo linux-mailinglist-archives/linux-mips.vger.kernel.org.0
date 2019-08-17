@@ -2,37 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C8A90EC4
-	for <lists+linux-mips@lfdr.de>; Sat, 17 Aug 2019 09:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95EBF9100A
+	for <lists+linux-mips@lfdr.de>; Sat, 17 Aug 2019 12:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726864AbfHQHtW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 17 Aug 2019 03:49:22 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:38374 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726087AbfHQHtV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Aug 2019 03:49:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From
-        :Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=lil/5cEkB/ZCAm17l4nkkVLk0wR2AVyhy52WWrhy+jc=; b=n1VbjRLr/nwQjd5ZfA52ZR3MZ8
-        k29dIMFlgP3oYclhmvi9fgmBEis1Z9UVc8+ZboG5zmnh0Kraox4Z4eT+3Q1GmSWh8KpVjv1GwpgZI
-        ORwoiM+UKb9lXoq1eBwDsMRpGVfIXQRMa3Z+CWXkE6jxZoN7SjhX6io1bFrcGE4GRuG2p4hLDYANx
-        7cQrOaT+B4f6PE5qBTv6euDf8A5i3Q2s4/9h882Lq7GqrbTLWFK2L0fzJ4fj/QrPjxjv44bMyEW2g
-        sHocDvCS5K8yzeRTbUNwISrC3XFN8/qVkrkRAt5TIjJDu27jMsU1vRFyK/DR3ho2FQxkPu5j7TtS9
-        KMiq2Iaw==;
-Received: from [2001:4bb8:18c:28b5:44f9:d544:957f:32cb] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hytSe-0005Wn-N5; Sat, 17 Aug 2019 07:49:17 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        id S1726163AbfHQKeK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 17 Aug 2019 06:34:10 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:36695 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725947AbfHQKeJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Aug 2019 06:34:09 -0400
+Received: by mail-wm1-f67.google.com with SMTP id g67so6023108wme.1;
+        Sat, 17 Aug 2019 03:34:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=39YvwnXSLPYPPS8HyY6xQ0pEYqQsaSVOcIZxY6QaSy0=;
+        b=HaU5j73Xl18SPfWIKR/l5s1id63iaB7lpk2eLE9Cv93RaSr0QygCeb8VtdrjK/DFoH
+         BzanBzeDzwH/CfWIayA254C8bK/pzQhAr1B+Cx1TRlWNSkT4XCzZLK+D58uxuJj/Z6c8
+         1+jn+z+dU7Ewi0li9IwJ7jmFgqXABsf3p+TxQXzA7fHIgWlPmx739auC7j/bqLC+8NoU
+         C3XDYz8eetWLerWT9nDLSd3eyiPofE72zfZEgyCEmcNmd7KEx0oxertXb8lLCukZQpFv
+         6wFercfLlPzs2ZP2Iysl6A4A+S9cPkEPkEAEiZMttS1pDBUiq7OyBBL/XEMk2UGfKSWg
+         tAUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=39YvwnXSLPYPPS8HyY6xQ0pEYqQsaSVOcIZxY6QaSy0=;
+        b=YlyDnqzp/aXsF5I1ibSIfDJeQqZPLczBp3smnIgBj4mYbK81lMo8hkhTnrAJb8rgqG
+         cMzMZamZ3VwhqtXnvfq0pts+ZrNFxInv8fQO7xWXqGP19gabrUnPUgxfKAu8QaEc/Sle
+         B+3ArTgh++CFuZNdxRAm5E7kcvCfkj/C4R+TL6VbaIeNWxJ/MGagRDWAMaZ8SAzKvvVG
+         x7fkfizvMpLUFVdSJ+z5OVqiONuh060E5DAJjhmH5yHwRKAKqKD6ax2V4tEHXEtwVLyx
+         cWuJT+irlAI3bqzepSKQ3NEcTX9KbOxOK9V7tAV/aaeqPijlpHGmZk1CWojcS4lq6Bo3
+         IgQg==
+X-Gm-Message-State: APjAAAXHlZwj8UpncqJsZZdiPXqcYLCtLyRWXCTB8rBgi9BuK8fzoS7x
+        YWVr52MTgvhROZCV7dQJ0pM=
+X-Google-Smtp-Source: APXvYqx+skxBDSiX8lI2gwUVvrx6yD5s1jqeJ+6VF/JmtojW+ENXyX4cQUxihmaZEwvtXGQA8HaHqg==
+X-Received: by 2002:a1c:b342:: with SMTP id c63mr11130163wmf.84.1566038046300;
+        Sat, 17 Aug 2019 03:34:06 -0700 (PDT)
+Received: from gmail.com (2E8B0CD5.catv.pool.telekom.hu. [46.139.12.213])
+        by smtp.gmail.com with ESMTPSA id 4sm14396946wro.78.2019.08.17.03.34.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Aug 2019 03:34:05 -0700 (PDT)
+Date:   Sat, 17 Aug 2019 12:34:02 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
         Michal Simek <monstr@monstr.eu>,
         Greentime Hu <green.hu@gmail.com>,
         Vincent Chen <deanbo422@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org
-Cc:     linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
         linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
@@ -42,70 +62,35 @@ Cc:     linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
         sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         linux-mtd@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 21/26] nios2: remove __iounmap
-Date:   Sat, 17 Aug 2019 09:32:48 +0200
-Message-Id: <20190817073253.27819-22-hch@lst.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190817073253.27819-1-hch@lst.de>
+Subject: Re: [PATCH 12/26] x86: clean up ioremap
+Message-ID: <20190817103402.GA7602@gmail.com>
 References: <20190817073253.27819-1-hch@lst.de>
+ <20190817073253.27819-13-hch@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190817073253.27819-13-hch@lst.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-No need to indirect iounmap for nios2.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- arch/nios2/include/asm/io.h | 7 +------
- arch/nios2/mm/ioremap.c     | 6 +++---
- 2 files changed, 4 insertions(+), 9 deletions(-)
+* Christoph Hellwig <hch@lst.de> wrote:
 
-diff --git a/arch/nios2/include/asm/io.h b/arch/nios2/include/asm/io.h
-index d108937c321e..746853ac7d8d 100644
---- a/arch/nios2/include/asm/io.h
-+++ b/arch/nios2/include/asm/io.h
-@@ -26,12 +26,7 @@
- #define writel_relaxed(x, addr)	writel(x, addr)
- 
- void __iomem *ioremap(unsigned long physaddr, unsigned long size);
--extern void __iounmap(void __iomem *addr);
--
--static inline void iounmap(void __iomem *addr)
--{
--	__iounmap(addr);
--}
-+void iounmap(void __iomem *addr);
- 
- /* Pages to physical address... */
- #define page_to_phys(page)	virt_to_phys(page_to_virt(page))
-diff --git a/arch/nios2/mm/ioremap.c b/arch/nios2/mm/ioremap.c
-index 7a1a27f3daa3..b56af759dcdf 100644
---- a/arch/nios2/mm/ioremap.c
-+++ b/arch/nios2/mm/ioremap.c
-@@ -157,11 +157,11 @@ void __iomem *ioremap(unsigned long phys_addr, unsigned long size)
- EXPORT_SYMBOL(ioremap);
- 
- /*
-- * __iounmap unmaps nearly everything, so be careful
-+ * iounmap unmaps nearly everything, so be careful
-  * it doesn't free currently pointer/page tables anymore but it
-  * wasn't used anyway and might be added later.
-  */
--void __iounmap(void __iomem *addr)
-+void iounmap(void __iomem *addr)
- {
- 	struct vm_struct *p;
- 
-@@ -173,4 +173,4 @@ void __iounmap(void __iomem *addr)
- 		pr_err("iounmap: bad address %p\n", addr);
- 	kfree(p);
- }
--EXPORT_SYMBOL(__iounmap);
-+EXPORT_SYMBOL(iounmap);
--- 
-2.20.1
+> Use ioremap as the main implemented function, and defined
+> ioremap_nocache to it as a deprecated alias.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  arch/x86/include/asm/io.h | 8 ++------
+>  arch/x86/mm/ioremap.c     | 8 ++++----
+>  arch/x86/mm/pageattr.c    | 4 ++--
+>  3 files changed, 8 insertions(+), 12 deletions(-)
 
+Acked-by: Ingo Molnar <mingo@kernel.org>
+
+Thanks,
+
+	Ingo
