@@ -2,85 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 963C29133F
-	for <lists+linux-mips@lfdr.de>; Sat, 17 Aug 2019 23:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 642B891429
+	for <lists+linux-mips@lfdr.de>; Sun, 18 Aug 2019 04:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbfHQV1F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 17 Aug 2019 17:27:05 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:35534 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726347AbfHQV1E (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Aug 2019 17:27:04 -0400
-Received: by mail-io1-f65.google.com with SMTP id i22so13256584ioh.2
-        for <linux-mips@vger.kernel.org>; Sat, 17 Aug 2019 14:27:04 -0700 (PDT)
+        id S1726265AbfHRC3l (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 17 Aug 2019 22:29:41 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:41690 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726247AbfHRC3l (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Aug 2019 22:29:41 -0400
+Received: by mail-oi1-f195.google.com with SMTP id g7so7459366oia.8;
+        Sat, 17 Aug 2019 19:29:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=RWNnky4tg4pNafhn5H03aH8PwpXjgmBSavfJgIeX0Ak=;
-        b=hov3AcxQ6M0mcpBwyir6wMfwuFoM/2pj4MlCmv+T09knj2Mmqt8UJz4bLEelDU0dEY
-         q35RSput0GqdXzjDl39iW6e96fi6ZvYG7hVSedcruoQ/r2si3vSEQf+S3NbKo/JWKMFz
-         l1Pncvs1WA7x9utXPIZU7hNH8C4hBPXAZA2OymhT4WgZagRVCnEht474gNpFzrJa6Xjg
-         FvMhl4KIMbZ3FFtCmeGSVrAzUl96LhDRs8lD2zGj/KFGyr4hodIlFUOwRQsA6Da7S+zZ
-         ouRU8O2CZBVhaSm1B4pGrx6QOwfw1b8VOQgHVh5JaC0Jm1cxHTFnZdggwnO1D5Ig+YJ1
-         Lkvg==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Epy/wiFdMahX+RcrO6BylN4SVEqUlDpp4VHq8uy62L8=;
+        b=CW3drVPLLqonFPNLRtQRlHJk3CvJCBF10ngKwEO2lvD/+AgY+xETP3TTv1BsSYpBju
+         CRRKhcHLUli8oBCxhgvkmuQcOFJ9+NJNf/jR9MNiDHQ3840tjdPrHnS3FNloeYUcY0JH
+         hrc1JE3FUgGtJ6+ueIh3Z0L6LhVcNWuxdC5LxtJyr9aXWdk84OG4K4BVYh2I9gN3Wz6L
+         yCBsMpPtDI/AXny+iBCytakPEYy52T2htxPCp5qkEDS8qLPzHYGrAte/BMgubreVpWj/
+         28kkXb1DDSzQPj3omc8QcuLk+Cg/4Wppibg6od+YcNmUSepCmnLAqUZbweCEFNo6dHzv
+         duQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=RWNnky4tg4pNafhn5H03aH8PwpXjgmBSavfJgIeX0Ak=;
-        b=Ww0ephRF4t1pydNmELYGg4PEiLDsHfjI22b3HEFHJHuqqDlAwW1oNB5w7hFVU8x39F
-         FLtVdQ2Gvj+eE1/w/XMpVJqddIRgM0nUL3vNuXTBKtqmxSm4Us2imsUm3V83Lotvivln
-         AL4wWOQS2Nprvo6Nj0BRjdhwiIhhknwnSMaFFHbuM/sxHGPXv+pafAEvCqjX6V0qc1M/
-         H9/sT1dY8HZ5GtemFyYpAUN9yTLXiNhiGFjchsxW4DZ42UmgqGKNbV2dPrhDRDipig5l
-         kfNq70ERpNjzOJTJFQNNbQtB8FPP0bnmtqYDpRHAu86vuWpc/Tz130jWhrjA3tdsrAqt
-         UyTQ==
-X-Gm-Message-State: APjAAAVzgZ+hoSUYY13CULvY/p3rfGagNYOzAilUGomqOkbRK6tchX5h
-        cH3tBzYdRBFmO8GlTYqNGmHVOA==
-X-Google-Smtp-Source: APXvYqwKE/3SM/rVpl4teujkfN9+UilDZaKhxrZT/14FwdMPovoCNf3aYcPot40i7G8y5JQK54ukCg==
-X-Received: by 2002:a6b:b9c2:: with SMTP id j185mr15509819iof.148.1566077223658;
-        Sat, 17 Aug 2019 14:27:03 -0700 (PDT)
-Received: from localhost (c-73-95-159-87.hsd1.co.comcast.net. [73.95.159.87])
-        by smtp.gmail.com with ESMTPSA id v23sm11488293ioh.58.2019.08.17.14.27.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Aug 2019 14:27:03 -0700 (PDT)
-Date:   Sat, 17 Aug 2019 14:27:02 -0700 (PDT)
-From:   Paul Walmsley <paul.walmsley@sifive.com>
-X-X-Sender: paulw@viisi.sifive.com
-To:     Christoph Hellwig <hch@lst.de>
-cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        openrisc@lists.librecores.org, linux-mtd@lists.infradead.org,
-        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
-        nios2-dev@lists.rocketboards.org, linux-riscv@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 14/26] asm-generic: don't provide __ioremap
-In-Reply-To: <alpine.DEB.2.21.9999.1908171357180.4130@viisi.sifive.com>
-Message-ID: <alpine.DEB.2.21.9999.1908171426390.4130@viisi.sifive.com>
-References: <20190817073253.27819-1-hch@lst.de> <20190817073253.27819-15-hch@lst.de> <alpine.DEB.2.21.9999.1908171357180.4130@viisi.sifive.com>
-User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Epy/wiFdMahX+RcrO6BylN4SVEqUlDpp4VHq8uy62L8=;
+        b=XXyMuAheCNeSseVbGLbSwmYu/Ih2fnQuo7hJlYg6oPjYmaDb90fZnxK7GxvaGBFMIh
+         sTCVxCUYXkNYOWwOUdENW1foOEqO1gO4aCdkT++NeLxTGAftlt6Mcj4meGY38NTaOxcb
+         jSU8FnOVIpqgJ2yc900hQ6rO4/oiNGYvSrRehi53PLhtljdPkJ6fE6jwga72/nKjsacs
+         U4PPH4EHAtB/LDGzQJF0J1p89OxOF/vT4h/PWBACC4lwc0EOexcxvkeTiux2SXbEOKIW
+         8rFgx3TiML4OSrGfHpmMGDqQa4+ITUfkGwyWlJjcEJSiLeKWE8jc4Lf01rxGnNS7jjjZ
+         2uSQ==
+X-Gm-Message-State: APjAAAWHvGepWnMXWhTxL9jG4FMcPG7VlTEdVuTHBE7Y3TlHQoO2gF5g
+        Sf06ujjFxlY2nyrbIay0MYjPewb7LBY3HMkHOME=
+X-Google-Smtp-Source: APXvYqwDnwZvJO1bQNNX2gziXRdvteTMHyC0n9PY9/2wekwt4q2j5TdudTm3N25tr8wrimRZr0WLEJ2JaTa6g8Kzbyg=
+X-Received: by 2002:aca:df08:: with SMTP id w8mr9038674oig.84.1566095380102;
+ Sat, 17 Aug 2019 19:29:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20190724022310.28010-1-gch981213@gmail.com> <20190724022310.28010-5-gch981213@gmail.com>
+ <20190813155143.GA19830@bogus> <CAJsYDVKnf4M8jyVOyotRxs=SsHqjex_q60AwkX=QAPK33ivw-Q@mail.gmail.com>
+ <2d48f4a4-7d30-547b-21ee-6aadabe7d7c3@gmx.net> <CAJsYDVLq1-U_AngA4=YKHS_L=zurhLse9XwQ0Rzup9BdXfri-w@mail.gmail.com>
+ <6b6ee744-61d3-8848-19e7-0a301fe4d1b3@rempel-privat.de>
+In-Reply-To: <6b6ee744-61d3-8848-19e7-0a301fe4d1b3@rempel-privat.de>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Sun, 18 Aug 2019 10:29:29 +0800
+Message-ID: <CAJsYDVLLPa07wUg2EoeJww9XSJYgX_kBu-oGiv7n+zejUc877w@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] dt: bindings: add mt7621-pll dt binding documentation
+To:     Oleksij Rempel <linux@rempel-privat.de>
+Cc:     Rob Herring <robh@kernel.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        John Crispin <john@phrozen.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Weijie Gao <hackpascal@gmail.com>, NeilBrown <neil@brown.name>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 17 Aug 2019, Paul Walmsley wrote:
+Hi!
 
-> Acked-by: Paul Walmsley <paul.walmsley@sifive.com> # arch/riscv
+On Sun, Aug 18, 2019 at 2:06 AM Oleksij Rempel <linux@rempel-privat.de> wrote:
+> >> SYSC_REG_CPLL_CLKCFG1 register is a clock gate controller. It is used to enable or disable clocks.
+> >> Jist wild assumption. All peripheral devices are suing bus clock.
+> >
+> > This assumption is incorrect. When this patchset is applied in
+> > OpenWrt, I asked the author why there's still a fixed clock in
+> > mt7621.dtsi, He told me that there's another clock for those unchanged
+> > peripherals and he doesn't have time to write a clock provider for it.
+>
+> Can you please provide a link to this patch or email.
 
-This ack is superfluous since the patch doesn't touch arch/riscv; feel 
-free to drop it
+This discussion is in Chinese and using an IM software so there's no
+link available.
 
+> We have at least 2 know registers:
+> SYSC_REG_CPLL_CLKCFG0 - it provides some information about boostrapped
+> refclock. PLL and dividers used for CPU and some sort of BUS (AHB?).
+> SYSC_REG_CPLL_CLKCFG1 - a banch of gates to enable/disable clocks for
+> all or some ip cores.
+> What is probably missing is a set of dividers for
+> each ip core. From your words it is not document.
 
-- Paul
+The specific missing part I was referring to, is parent clocks for
+every gates. I'm not going to assume this with current openwrt device
+tree because some peripherals doesn't have a clock binding at all or
+have a dummy one there.
+
+>
+> With this information the clk driver will provide gate functionality and
+> a set of hardcoded clocks. With this driver will work part of power
+> management and nice devicetree without fixed clocks.
+
+Regards,
+Chuanhong Guo
