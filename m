@@ -2,131 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6479495C
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Aug 2019 18:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 614E694A67
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Aug 2019 18:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726905AbfHSQDr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Aug 2019 12:03:47 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:43003 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727745AbfHSQDr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Aug 2019 12:03:47 -0400
-Received: by mail-wr1-f65.google.com with SMTP id b16so9276438wrq.9
-        for <linux-mips@vger.kernel.org>; Mon, 19 Aug 2019 09:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6CiC3PI+TmOa2p2Q2SeB4X/ZsXshUT7DqEoOM5ckDHQ=;
-        b=G0jEj9zV3eHqI1j8W40/3fnNs82adJ3/UEI+kEZAZDf+H9nczzYzLB/t1dOYuND52g
-         Zsqaw5E9SNMHuyCkZVr0K5I2rB0mxLGPmbSFeGR4ex2qV5IdSd5d2ykx2F2C0Gd7ARkD
-         hW5Jpr+nDc5SEg5xkamYzxCLL4hT3dz2e9wk325giL2Ct76TMMgslshO1RP4NdwNnH8d
-         jFlC6RdBu845K9FlsgHXaEhavopGWu07xmmfSHsVtW/UphPyk1cNpWaSumgBpOO9Rrw7
-         QNyGYu3l0FiA9KGS7h/Wz6vwSFfGlXgkqbji+U0d6WQLRwMrNYh4giZ/pypWafEJHvI6
-         sGSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6CiC3PI+TmOa2p2Q2SeB4X/ZsXshUT7DqEoOM5ckDHQ=;
-        b=i7DnTTkNGESEssmMielbDfkknqJjXQVJCatHWEHJFD2v5334nta6rV7+a8GAhiSc3R
-         oNuCf+HxC5vuqidY+Kq9od/yojLazszgxPcWAkko3la65QZN4217zlO0jVKtDC0uusum
-         tdnPmDmM3pF6i6t+wDl60K/B+bzR4fh8Dw+upY/QS8bJGdKQZGwuX7ZbCQOP/F+AeLdC
-         52zEXT5n3FpmGikYibJKM01tUNNYk3MCotodZKwq7FyNm0FCrhkktv8pzivIB58dBN9i
-         NwzGLZTvTH/bB5cYQH70x3ZSft2xtnj4c0Z/N6ZPy2GvxswL9OwqpWNo6BV2XsnOFXaE
-         tPcw==
-X-Gm-Message-State: APjAAAVdq91xhwqb/8GAZTnWmMhKK8W5EzYsC77ZSkjHlwK1LuHPeaW0
-        9GuyfYKnbyfsV+dnHmwTruwtb9s+yQ0=
-X-Google-Smtp-Source: APXvYqx1eK0G7jwYaqgVAS+nqtWjQWIhjZxh4MmgupwqIPPmzYQcW6th/ak/QwO45xkaGiS3mSuXgQ==
-X-Received: by 2002:a5d:554e:: with SMTP id g14mr14857333wrw.68.1566230625109;
-        Mon, 19 Aug 2019 09:03:45 -0700 (PDT)
-Received: from [192.168.86.34] (cpc89974-aztw32-2-0-cust43.18-1.cable.virginm.net. [86.30.250.44])
-        by smtp.googlemail.com with ESMTPSA id s2sm13301910wrp.32.2019.08.19.09.03.42
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Aug 2019 09:03:43 -0700 (PDT)
-Subject: Re: [PATCH v4 3/9] nvmem: core: add nvmem_device_find
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        id S1727870AbfHSQcE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Aug 2019 12:32:04 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55208 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726879AbfHSQcE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 19 Aug 2019 12:32:04 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 310AAAFAE;
+        Mon, 19 Aug 2019 16:32:01 +0000 (UTC)
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
         "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20190809103235.16338-1-tbogendoerfer@suse.de>
- <20190809103235.16338-4-tbogendoerfer@suse.de>
- <8d18de64-9234-fcba-aa3d-b46789eb62a5@linaro.org>
- <20190814134616.b4dab3c0aa6ac913d78edb6a@suse.de>
- <31d680ee-ddb3-8536-c915-576222d263e1@linaro.org>
- <20190816140942.GA15050@alpha.franken.de>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Message-ID: <fca76e6d-fa0b-176b-abcf-e7551b22e6a9@linaro.org>
-Date:   Mon, 19 Aug 2019 17:03:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190816140942.GA15050@alpha.franken.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Evgeniy Polyakov <zbr@ioremap.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH v5 00/17] Use MFD framework for SGI IOC3 drivers
+Date:   Mon, 19 Aug 2019 18:31:23 +0200
+Message-Id: <20190819163144.3478-1-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.13.7
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+GI IOC3 ASIC includes support for ethernet, PS2 keyboard/mouse,
+NIC (number in a can), GPIO and a byte  bus. By attaching a
+SuperIO chip to it, it also supports serial lines and a parallel
+port. The chip is used on a variety of SGI systems with different
+configurations. This patchset moves code out of the network driver,
+which doesn't belong there, into its new place a MFD driver and
+specific platform drivers for the different subfunctions.
 
+Changes in v5:
+ - requested by Jakub I've splitted ioc3 ethernet driver changes into
+   more steps to make the transition more visible; on the way there 
+   I've "checkpatched" the driver and reduced code reorderings
+ - dropped all uint16_t and uint32_t
+ - added nvmem API extension to the documenation file
+ - changed to use request_irq/free_irq in serio driver
+ - removed wrong kfree() in serio error path
 
-On 16/08/2019 15:09, Thomas Bogendoerfer wrote:
-> On Wed, Aug 14, 2019 at 01:52:49PM +0100, Srinivas Kandagatla wrote:
->> On 14/08/2019 12:46, Thomas Bogendoerfer wrote:
->>> On Tue, 13 Aug 2019 10:40:34 +0100
->>> Srinivas Kandagatla <srinivas.kandagatla@linaro.org> wrote:
->>>> On 09/08/2019 11:32, Thomas Bogendoerfer wrote:
->>>>> nvmem_device_find provides a way to search for nvmem devices with
->>>>> the help of a match function simlair to bus_find_device.
->>>>>
->>>>> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
->>>>> ---
->>>>>    drivers/nvmem/core.c           | 62 ++++++++++++++++++++++--------------------
->>>>>    include/linux/nvmem-consumer.h |  9 ++++++
->>>>>    2 files changed, 41 insertions(+), 30 deletions(-)
->>>>
->>>> Have you considered using nvmem_register_notifier() ?
->>>
->>> yes, that was the first idea. But then I realized I need to build up
->>> a private database of information already present in nvmem bus. So I
->>> looked for a way to retrieve it from there. Unfortunately I couldn't
->>> use bus_find_device directly, because nvmem_bus_type and struct nvmem_device
->>> is hidden. So I refactured the lookup code and added a more universal
->>> lookup function, which fits my needs and should be usable for more.
->> I see your point.
->>
->> overall the patch as it is look good, but recently we added more generic
->> lookups for DT node, looks like part of your patch is un-doing generic
->> device name lookup.
->>
->> DT node match lookup is in https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/log/?h=generic_lookup_helpers
-> 
-> these patches are not in Linus tree, yet. I guess they will show up
-> in 5.4. No idea how to deal with it right now, do you ?
-All these patches are due to go in next merge window,
-You should base your patch on top of linux-next.
+Changes in v4:
+ - added w1 drivers to the series after merge in 5.3 failed because
+   of no response from maintainer and other parts of this series
+   won't work without that drivers
+ - moved ip30 systemboard support to the ip30 series, which will
+   deal with rtc oddity Lee found
+ - converted to use devm_platform_ioremap_resource
+ - use PLATFORM_DEVID_AUTO for serial, ethernet and serio in mfd driver
+ - fixed reverse christmas order in ioc3-eth.c
+ - formating issue found by Lee
+ - re-worked irq request/free in serio driver to avoid crashes during
+   probe/remove
 
-thanks,
-srini
-> 
->> Other missing bit is adding this api to documentation in
->> ./Documentation/driver-api/nvmem.rst
-> 
-> ok, will do.
-> 
-> Thomas.
-> 
+Changes in v3:
+ - use 1-wire subsystem for handling proms
+ - pci-xtalk driver uses prom information to create PCI subsystem
+   ids for use in MFD driver
+ - changed MFD driver to only use static declared mfd_cells
+ - added IP30 system board setup to MFD driver
+ - mac address is now read from ioc3-eth driver with nvmem framework
+
+Changes in v2:
+ - fixed issue in ioc3kbd.c reported by Dmitry Torokhov
+ - merged IP27 RTC removal and 8250 serial driver addition into
+   main MFD patch to keep patches bisectable
+
+Thomas Bogendoerfer (17):
+  w1: add 1-wire master driver for IP block found in SGI ASICs
+  w1: add DS2501, DS2502, DS2505 EPROM device driver
+  nvmem: core: add nvmem_device_find
+  MIPS: PCI: refactor ioc3 special handling
+  MIPS: PCI: use information from 1-wire PROM for IOC3 detection
+  MIPS: SGI-IP27: remove ioc3 ethernet init
+  MIPS: SGI-IP27: restructure ioc3 register access
+  net: sgi: ioc3-eth: remove checkpatch errors/warning
+  net: sgi: ioc3-eth: use defines for constants dealing with desc rings
+  net: sgi: ioc3-eth: rework skb rx handling
+  net: sgi: ioc3-eth: no need to stop queue set_multicast_list
+  net: sgi: ioc3-eth: use dma-direct for dma allocations
+  net: sgi: ioc3-eth: use csum_fold
+  net: sgi: ioc3-eth: Fix IPG settings
+  mfd: ioc3: Add driver for SGI IOC3 chip
+  MIPS: SGI-IP27: fix readb/writeb addressing
+  Input: add IOC3 serio driver
+
+ Documentation/driver-api/nvmem.rst            |    2 +
+ arch/mips/include/asm/mach-ip27/mangle-port.h |    4 +-
+ arch/mips/include/asm/pci/bridge.h            |    1 +
+ arch/mips/include/asm/sn/ioc3.h               |  364 +++----
+ arch/mips/pci/pci-xtalk-bridge.c              |  296 ++++--
+ arch/mips/sgi-ip27/ip27-console.c             |    5 +-
+ arch/mips/sgi-ip27/ip27-init.c                |   13 -
+ arch/mips/sgi-ip27/ip27-timer.c               |   20 -
+ arch/mips/sgi-ip27/ip27-xtalk.c               |   38 +-
+ drivers/input/serio/Kconfig                   |   10 +
+ drivers/input/serio/Makefile                  |    1 +
+ drivers/input/serio/ioc3kbd.c                 |  160 +++
+ drivers/mfd/Kconfig                           |   13 +
+ drivers/mfd/Makefile                          |    1 +
+ drivers/mfd/ioc3.c                            |  586 +++++++++++
+ drivers/net/ethernet/sgi/Kconfig              |    4 +-
+ drivers/net/ethernet/sgi/ioc3-eth.c           | 1405 +++++++++----------------
+ drivers/nvmem/core.c                          |   62 +-
+ drivers/rtc/rtc-m48t35.c                      |   11 +
+ drivers/tty/serial/8250/8250_ioc3.c           |   98 ++
+ drivers/tty/serial/8250/Kconfig               |   11 +
+ drivers/tty/serial/8250/Makefile              |    1 +
+ drivers/w1/masters/Kconfig                    |    9 +
+ drivers/w1/masters/Makefile                   |    1 +
+ drivers/w1/masters/sgi_w1.c                   |  130 +++
+ drivers/w1/slaves/Kconfig                     |    6 +
+ drivers/w1/slaves/Makefile                    |    1 +
+ drivers/w1/slaves/w1_ds250x.c                 |  293 ++++++
+ include/linux/nvmem-consumer.h                |    9 +
+ include/linux/platform_data/sgi-w1.h          |   15 +
+ include/linux/w1.h                            |    2 +
+ 31 files changed, 2266 insertions(+), 1306 deletions(-)
+ create mode 100644 drivers/input/serio/ioc3kbd.c
+ create mode 100644 drivers/mfd/ioc3.c
+ create mode 100644 drivers/tty/serial/8250/8250_ioc3.c
+ create mode 100644 drivers/w1/masters/sgi_w1.c
+ create mode 100644 drivers/w1/slaves/w1_ds250x.c
+ create mode 100644 include/linux/platform_data/sgi-w1.h
+
+-- 
+2.13.7
+
