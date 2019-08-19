@@ -2,257 +2,165 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A5894A10
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Aug 2019 18:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A172594F6B
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Aug 2019 22:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727424AbfHSQc1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Aug 2019 12:32:27 -0400
-Received: from mx2.suse.de ([195.135.220.15]:55432 "EHLO mx1.suse.de"
+        id S1728494AbfHSU5q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Aug 2019 16:57:46 -0400
+Received: from mail-eopbgr810109.outbound.protection.outlook.com ([40.107.81.109]:32719
+        "EHLO NAM01-BY2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728036AbfHSQcK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 19 Aug 2019 12:32:10 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 011DDB632;
-        Mon, 19 Aug 2019 16:32:08 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH v5 17/17] Input: add IOC3 serio driver
-Date:   Mon, 19 Aug 2019 18:31:40 +0200
-Message-Id: <20190819163144.3478-18-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.13.7
-In-Reply-To: <20190819163144.3478-1-tbogendoerfer@suse.de>
-References: <20190819163144.3478-1-tbogendoerfer@suse.de>
+        id S1727769AbfHSU5q (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 19 Aug 2019 16:57:46 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bGz4W9u+/50ifh/XazO3SsJDsdYXcV0ub1dmfkoaZkrmCZumDMfyTWWiT/rCAG9y2Ohhe/b19HWRKD8YyEzcSdyWFw4M2/k5sk2VvuM1QuSOW4TqhYV8CJSRuQqd0u5WabkghdQSYHQRyAKD5J6/98ZsbeYbOa8mUgI9lRcnEC43zxXgp6PaKgtfer7rHRtzIlaecvBDcl2SGL4ijfD2324+8jz5ch+OV/2qn9TILMjwtwcUPQTKFItYqPqGFvwgDPPNZcGDhmxKzqJlq/+4lXxGOAibOaSm/MplXnTI35ax6Kl3y6diRe0luZe8/XeJ8ut26/rkH+rM4mzdg2NYdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sQlemvDaibl3TmaUoytPX70nix/LzsjtaZ1/LsbuUDQ=;
+ b=F77d5PqBjjR3NragXVyVzF+8IkCwFqeHS39abnfMgapxqGRsW9ukpD9zzSEVUDMQ/jvJ8vtbwTapkx8jmMyooGsjxmyJ6feHFSCHU4uyyYGB2TuhSSrPr2+1UDkRWA+BFtV2bXItHCx641szKLf8rx1CgmYnMcvH9JIdiURutWM9ff9gTPnYBiVbM4x0My2mjjRWGh8Z5MBvyc+59MRB0n/ebVvDytQWcjhq7QegUhj8ZAqF4n5V2GVJMgo1Ew9oAoY5GxvNq4v6FveJxHGWet+WCpK1Igjfc636zVP6GO+f66TXXxn2dPV25V8G0Qy8fjwKPNs5Zgn60y7DjItg4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
+ dkim=pass header.d=mips.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sQlemvDaibl3TmaUoytPX70nix/LzsjtaZ1/LsbuUDQ=;
+ b=vQ/3pUFl5pl4EUYYaAjWg0jq9iLtomWR7q2NzSLd8KleB3fGL4Kf68+gNkERCR82HHTgHcJ3jmVtdMwBtxwKYn3CRheLwhUqHgXa2RA7zB/l6Vqrg1soikbidi4Hc0Eqd6Q3wYn9MPQsHUlsA7C2DQENfza+mdqBZZVqVoiJd3o=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
+ MWHPR2201MB1214.namprd22.prod.outlook.com (10.174.161.147) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2178.18; Mon, 19 Aug 2019 20:57:30 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::f566:bf1f:dcd:862c]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::f566:bf1f:dcd:862c%10]) with mapi id 15.20.2178.018; Mon, 19 Aug 2019
+ 20:57:30 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     Christoph Hellwig <hch@lst.de>
+CC:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "nios2-dev@lists.rocketboards.org" <nios2-dev@lists.rocketboards.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH 04/26] mips: remove ioremap_cachable
+Thread-Topic: [PATCH 04/26] mips: remove ioremap_cachable
+Thread-Index: AQHVVtC3NrUy1/60K0Ou3aE6SqmWcg==
+Date:   Mon, 19 Aug 2019 20:57:30 +0000
+Message-ID: <20190819205722.4eir2edy6qgtgarl@pburton-laptop>
+References: <20190817073253.27819-1-hch@lst.de>
+ <20190817073253.27819-5-hch@lst.de>
+In-Reply-To: <20190817073253.27819-5-hch@lst.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: LO2P123CA0023.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:a6::35) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:18::12)
+user-agent: NeoMutt/20180716
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2a02:c7f:5e65:9900:8519:dc48:d16b:70fc]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9c641ce4-c757-4855-8ea6-08d724e7d94d
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1214;
+x-ms-traffictypediagnostic: MWHPR2201MB1214:
+x-microsoft-antispam-prvs: <MWHPR2201MB1214CEE95E7DDEFA250FDB2FC1A80@MWHPR2201MB1214.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-forefront-prvs: 0134AD334F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(136003)(376002)(346002)(39830400003)(366004)(396003)(199004)(189003)(71200400001)(8936002)(71190400001)(5660300002)(486006)(1076003)(8676002)(44832011)(6246003)(76176011)(81156014)(81166006)(476003)(256004)(66946007)(42882007)(446003)(14454004)(64756008)(66446008)(66556008)(478600001)(7736002)(305945005)(4326008)(386003)(25786009)(6506007)(11346002)(186003)(46003)(316002)(102836004)(66476007)(33716001)(54906003)(58126008)(6436002)(229853002)(6916009)(53936002)(7416002)(52116002)(6512007)(9686003)(6486002)(99286004)(2906002)(6116002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1214;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: dV5mX8Pkr7io2t7Y4ptazUid5uXLcd1UBG1s8OB1iX7EfIpmwYRnxosRjB4LPEuf2aK6uYDRQyp3dJs9e92YsCag7SS46KiQIJbIs+xQf+X8AorBt+ClHaEVCD7ZJaKLLsK3BIu7HFM1fPLPFZYo9THzyC9l4isY5g+3SOqRd/PbHXxUZ2uSgAoDnFmA680Ikl/P2i1gv3Pq8U/+3zr5m9Se1heQNHNW9W+IpGDnSPoGZOheeQ1j1UyNjGTZ4d/ErxRt/oTakJHM26tn5F/e3EyR6w/SfiyXxgkxjzOiIVN/b0Qwc0Q4NwrF6c3sEnhjWrphN8eeZ8tYGK+3E8XLhe+j80tJ3Xkjkkm9LpWxh8NtiS6ZHs+RZNPPFMYIRwC+tWYw1I0HPisjb3DBeEEY9hu4JK07d0TBFPfz0jEA40s=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <F7A01E6E65132543B693A9F6442F8662@namprd22.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c641ce4-c757-4855-8ea6-08d724e7d94d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Aug 2019 20:57:30.3016
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qJQF+IhT4z5pqGUgbfafaPiHTxqFNEqH6R6Z4I+k8rb9DobUqivCvM1ix+ODt4H/DJNJU2Hcxxg3SjfiBemtkw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1214
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This patch adds a platform driver for supporting keyboard and mouse
-interface of SGI IOC3 chips.
+Hi Christoph,
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
----
- drivers/input/serio/Kconfig   |  10 +++
- drivers/input/serio/Makefile  |   1 +
- drivers/input/serio/ioc3kbd.c | 160 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 171 insertions(+)
- create mode 100644 drivers/input/serio/ioc3kbd.c
+On Sat, Aug 17, 2019 at 09:32:31AM +0200, Christoph Hellwig wrote:
+> Just define ioremap_cache directly.
+>=20
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-diff --git a/drivers/input/serio/Kconfig b/drivers/input/serio/Kconfig
-index f3e18f8ef9ca..373a1646019e 100644
---- a/drivers/input/serio/Kconfig
-+++ b/drivers/input/serio/Kconfig
-@@ -165,6 +165,16 @@ config SERIO_MACEPS2
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called maceps2.
- 
-+config SERIO_SGI_IOC3
-+	tristate "SGI IOC3 PS/2 controller"
-+	depends on SGI_MFD_IOC3
-+	help
-+	  Say Y here if you have an SGI Onyx2, SGI Octane or IOC3 PCI card
-+	  and you want to attach and use a keyboard, mouse, or both.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called ioc3kbd.
-+
- config SERIO_LIBPS2
- 	tristate "PS/2 driver library"
- 	depends on SERIO_I8042 || SERIO_I8042=n
-diff --git a/drivers/input/serio/Makefile b/drivers/input/serio/Makefile
-index 67950a5ccb3f..6d97bad7b844 100644
---- a/drivers/input/serio/Makefile
-+++ b/drivers/input/serio/Makefile
-@@ -20,6 +20,7 @@ obj-$(CONFIG_HIL_MLC)		+= hp_sdc_mlc.o hil_mlc.o
- obj-$(CONFIG_SERIO_PCIPS2)	+= pcips2.o
- obj-$(CONFIG_SERIO_PS2MULT)	+= ps2mult.o
- obj-$(CONFIG_SERIO_MACEPS2)	+= maceps2.o
-+obj-$(CONFIG_SERIO_SGI_IOC3)	+= ioc3kbd.o
- obj-$(CONFIG_SERIO_LIBPS2)	+= libps2.o
- obj-$(CONFIG_SERIO_RAW)		+= serio_raw.o
- obj-$(CONFIG_SERIO_AMS_DELTA)	+= ams_delta_serio.o
-diff --git a/drivers/input/serio/ioc3kbd.c b/drivers/input/serio/ioc3kbd.c
-new file mode 100644
-index 000000000000..32df2743c27f
---- /dev/null
-+++ b/drivers/input/serio/ioc3kbd.c
-@@ -0,0 +1,160 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * SGI IOC3 PS/2 controller driver for linux
-+ *
-+ * Copyright (C) 2019 Thomas Bogendoerfer <tbogendoerfer@suse.de>
-+ *
-+ * Based on code Copyright (C) 2005 Stanislaw Skowronek <skylark@unaligned.org>
-+ *               Copyright (C) 2009 Johannes Dickgreber <tanzy@gmx.de>
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/serio.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+
-+#include <asm/sn/ioc3.h>
-+
-+struct ioc3kbd_data {
-+	struct ioc3_serioregs __iomem *regs;
-+	struct serio *kbd, *aux;
-+	int irq;
-+};
-+
-+static int ioc3kbd_write(struct serio *dev, u8 val)
-+{
-+	struct ioc3kbd_data *d = dev->port_data;
-+	unsigned long timeout = 0;
-+	u32 mask;
-+
-+	mask = (dev == d->aux) ? KM_CSR_M_WRT_PEND : KM_CSR_K_WRT_PEND;
-+	while ((readl(&d->regs->km_csr) & mask) && (timeout < 1000)) {
-+		udelay(100);
-+		timeout++;
-+	}
-+
-+	if (timeout >= 1000)
-+		return -ETIMEDOUT;
-+
-+	writel(val, dev == d->aux ? &d->regs->m_wd : &d->regs->k_wd);
-+
-+	return 0;
-+}
-+
-+static irqreturn_t ioc3kbd_intr(int itq, void *dev_id)
-+{
-+	struct ioc3kbd_data *d = dev_id;
-+	u32 data_k, data_m;
-+
-+	data_k = readl(&d->regs->k_rd);
-+	data_m = readl(&d->regs->m_rd);
-+
-+	if (data_k & KM_RD_VALID_0)
-+		serio_interrupt(d->kbd, (data_k >> KM_RD_DATA_0_SHIFT) & 0xff,
-+				0);
-+	if (data_k & KM_RD_VALID_1)
-+		serio_interrupt(d->kbd, (data_k >> KM_RD_DATA_1_SHIFT) & 0xff,
-+				0);
-+	if (data_k & KM_RD_VALID_2)
-+		serio_interrupt(d->kbd, (data_k >> KM_RD_DATA_2_SHIFT) & 0xff,
-+				0);
-+	if (data_m & KM_RD_VALID_0)
-+		serio_interrupt(d->aux, (data_m >> KM_RD_DATA_0_SHIFT) & 0xff,
-+				0);
-+	if (data_m & KM_RD_VALID_1)
-+		serio_interrupt(d->aux, (data_m >> KM_RD_DATA_1_SHIFT) & 0xff,
-+				0);
-+	if (data_m & KM_RD_VALID_2)
-+		serio_interrupt(d->aux, (data_m >> KM_RD_DATA_2_SHIFT) & 0xff,
-+				0);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int ioc3kbd_probe(struct platform_device *pdev)
-+{
-+	struct ioc3_serioregs __iomem *regs;
-+	struct device *dev = &pdev->dev;
-+	struct ioc3kbd_data *d;
-+	struct serio *sk, *sa;
-+	int irq, ret;
-+
-+	regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(regs))
-+		return PTR_ERR(regs);
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return -ENXIO;
-+
-+	d = devm_kzalloc(dev, sizeof(*d), GFP_KERNEL);
-+	if (!d)
-+		return -ENOMEM;
-+
-+	sk = kzalloc(sizeof(*sk), GFP_KERNEL);
-+	if (!sk)
-+		return -ENOMEM;
-+
-+	sa = kzalloc(sizeof(*sa), GFP_KERNEL);
-+	if (!sa) {
-+		kfree(sk);
-+		return -ENOMEM;
-+	}
-+
-+	sk->id.type = SERIO_8042;
-+	sk->write = ioc3kbd_write;
-+	snprintf(sk->name, sizeof(sk->name), "IOC3 keyboard %d", pdev->id);
-+	snprintf(sk->phys, sizeof(sk->phys), "ioc3/serio%dkbd", pdev->id);
-+	sk->port_data = d;
-+	sk->dev.parent = dev;
-+
-+	sa->id.type = SERIO_8042;
-+	sa->write = ioc3kbd_write;
-+	snprintf(sa->name, sizeof(sa->name), "IOC3 auxiliary %d", pdev->id);
-+	snprintf(sa->phys, sizeof(sa->phys), "ioc3/serio%daux", pdev->id);
-+	sa->port_data = d;
-+	sa->dev.parent = dev;
-+
-+	d->regs = regs;
-+	d->kbd = sk;
-+	d->aux = sa;
-+	d->irq = irq;
-+
-+	platform_set_drvdata(pdev, d);
-+	serio_register_port(d->kbd);
-+	serio_register_port(d->aux);
-+
-+	ret = request_irq(irq, ioc3kbd_intr, IRQF_SHARED, "ioc3-kbd", d);
-+	if (ret) {
-+		dev_err(dev, "could not request IRQ %d\n", irq);
-+		serio_unregister_port(d->kbd);
-+		serio_unregister_port(d->aux);
-+		return ret;
-+	}
-+	return 0;
-+}
-+
-+static int ioc3kbd_remove(struct platform_device *pdev)
-+{
-+	struct ioc3kbd_data *d = platform_get_drvdata(pdev);
-+
-+	free_irq(d->irq, d);
-+	serio_unregister_port(d->kbd);
-+	serio_unregister_port(d->aux);
-+	return 0;
-+}
-+
-+static struct platform_driver ioc3kbd_driver = {
-+	.probe          = ioc3kbd_probe,
-+	.remove         = ioc3kbd_remove,
-+	.driver = {
-+		.name = "ioc3-kbd",
-+	},
-+};
-+module_platform_driver(ioc3kbd_driver);
-+
-+MODULE_AUTHOR("Thomas Bogendoerfer <tbogendoerfer@suse.de>");
-+MODULE_DESCRIPTION("SGI IOC3 serio driver");
-+MODULE_LICENSE("GPL");
--- 
-2.13.7
+Acked-by: Paul Burton <paul.burton@mips.com>
 
+Thanks,
+    Paul
+
+> ---
+>  arch/mips/include/asm/io.h | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+> index 97a280640daf..c02db986ddf5 100644
+> --- a/arch/mips/include/asm/io.h
+> +++ b/arch/mips/include/asm/io.h
+> @@ -262,11 +262,11 @@ static inline void __iomem *ioremap_prot(phys_addr_=
+t offset,
+>  #define ioremap_uc ioremap_nocache
+> =20
+>  /*
+> - * ioremap_cachable -	map bus memory into CPU space
+> + * ioremap_cache -	map bus memory into CPU space
+>   * @offset:	    bus address of the memory
+>   * @size:	    size of the resource to map
+>   *
+> - * ioremap_nocache performs a platform specific sequence of operations t=
+o
+> + * ioremap_cache performs a platform specific sequence of operations to
+>   * make bus memory CPU accessible via the readb/readw/readl/writeb/
+>   * writew/writel functions and the other mmio helpers. The returned
+>   * address is not guaranteed to be usable directly as a virtual
+> @@ -276,9 +276,8 @@ static inline void __iomem *ioremap_prot(phys_addr_t =
+offset,
+>   * the CPU.  Also enables full write-combining.	 Useful for some
+>   * memory-like regions on I/O busses.
+>   */
+> -#define ioremap_cachable(offset, size)					\
+> +#define ioremap_cache(offset, size)					\
+>  	__ioremap_mode((offset), (size), _page_cachable_default)
+> -#define ioremap_cache ioremap_cachable
+> =20
+>  /*
+>   * ioremap_wc     -   map bus memory into CPU space
+> --=20
+> 2.20.1
+>=20
