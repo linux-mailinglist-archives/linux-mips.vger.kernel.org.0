@@ -2,40 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7139691F72
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Aug 2019 10:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF93291F8E
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Aug 2019 11:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727191AbfHSI4Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Aug 2019 04:56:16 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:44977 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726186AbfHSI4P (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Aug 2019 04:56:15 -0400
-Received: by mail-oi1-f195.google.com with SMTP id k22so733476oiw.11;
-        Mon, 19 Aug 2019 01:56:14 -0700 (PDT)
+        id S1727329AbfHSJAh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Aug 2019 05:00:37 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:38949 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726661AbfHSJAh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Aug 2019 05:00:37 -0400
+Received: by mail-ot1-f68.google.com with SMTP id b1so984848otp.6;
+        Mon, 19 Aug 2019 02:00:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6G5Q8MNHtBsxtM0EYIY9kLhACl1vZMsZYLOG6VK87LE=;
-        b=p8IDsKsxecsmx7fA/TTSwpImLS1tvufbE81mL0ENZCxFmwOm6ZTCcplHbeUnxeD/pg
-         Bqxopf5eFqGy6WSmadBN2o1GHJ60mkNTs5hV00d2pHhxkrz2A6CfTlqKqmxqmtqa8uU6
-         TsrPcK3lN4viGY25py0Jujpu4G3MWzmsibWEa03dT3RfO3gPAQyKVpAmV68p1uIdPfdt
-         bZymL6c4xYAfParRwXNWFTEpXAU3VL77msA/P8eIe6r8AW3jnkXftjDw44j/HCIUySIX
-         xb9CkGBP5kfnc88KvttpetzGqjZWSdNqA5haMq8KV4g0y/OM/ECTzoQvdfUdOp4C6l5M
-         1qUw==
-X-Gm-Message-State: APjAAAVY0UTbGPGSM+XHHPMA9pWsFCvkH6VhP9z1VK6cGr4YpfwKGDpG
-        /WBbXaEtx36iHlkJ3xbs7WcJz0dbHb7QaSuP2H0=
-X-Google-Smtp-Source: APXvYqwNkMBh58jQZs/taAE8CIPOk6D0evfJ20SfbPqDG1zrFPybSy7xKWIfKgi9aIO2Yy6HJzobqI2PMgSWcaN0QpY=
-X-Received: by 2002:a54:478d:: with SMTP id o13mr12702951oic.54.1566204974376;
- Mon, 19 Aug 2019 01:56:14 -0700 (PDT)
+        bh=fmtPnJSRI0zndYON4lQ0lxZkTiNZNjENxpxxDRXsGjM=;
+        b=Twp0IvHs1SbWYDIfvY9lRbdliTRa1qImMneYt75ss1CYps6QV50PsHgukHKgigYMX1
+         KZ3J/sbnwZC832lbHdqLWAfvDoaU/kWtBqscTiEbVu0o6DdJVP644cin7a/Nfobrcz84
+         1vuZlFT9/trwJy7zdA9DE6iLrjnnvcmxwhGCmMCEsvF7xHkhkWv3RO5w0tO1JCGF8Kp4
+         J1BRFGTmc29uYYGueEBkK9dVZ8I+1ovhq8ppJh6rcWTT7jmvaGYyT8bRJR1WFdaCRcng
+         /k74H2C8dCMRlQQRBZmByt5ez4AfFs0ZYvBiVk7xGbXZq31EbMZsUlLO3wuCUJIZ1Y/P
+         KmoA==
+X-Gm-Message-State: APjAAAUhPPqIh69LSyYj5i+o13f5SldJXKMkwVYioyQG7wmd18VfWF9T
+        HjO6STAyf2Dbstf1AvM1AcsYNSXGoLDQ9R/1aEY=
+X-Google-Smtp-Source: APXvYqwhI3T2oGgeZwLOQSfvRhaXT1jrSgi6r47r+Se5hS7KcKzZEqkkqP7EFf8wTbDzFidtX+J78UJ3IrYCTcoWc4g=
+X-Received: by 2002:a9d:68c5:: with SMTP id i5mr17294497oto.250.1566205235743;
+ Mon, 19 Aug 2019 02:00:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190817073253.27819-1-hch@lst.de> <20190817073253.27819-9-hch@lst.de>
-In-Reply-To: <20190817073253.27819-9-hch@lst.de>
+References: <20190817073253.27819-1-hch@lst.de> <20190817073253.27819-19-hch@lst.de>
+In-Reply-To: <20190817073253.27819-19-hch@lst.de>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 19 Aug 2019 10:56:02 +0200
-Message-ID: <CAMuHMdWyXGjokWi7tn9JHCTz9YMb_vHn6XKeE7KzH5n-54Sy0A@mail.gmail.com>
-Subject: Re: [PATCH 08/26] m68k: simplify ioremap_nocache
+Date:   Mon, 19 Aug 2019 11:00:24 +0200
+Message-ID: <CAMuHMdWjAUMc_G1AUE_dgbrUn3qm4th+jiG3NJwperDVHdcoSw@mail.gmail.com>
+Subject: Re: [PATCH 18/26] m68k: rename __iounmap and mark it static
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
         Michal Simek <monstr@monstr.eu>,
@@ -68,24 +68,67 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Christoph,
 
-On Sat, Aug 17, 2019 at 9:48 AM Christoph Hellwig <hch@lst.de> wrote:
-> Just define ioremap_nocache to ioremap instead of duplicating the
-> inline.  Also defined ioremap_uc in terms of ioremap instead of
-> the using a double indirection.
+On Sat, Aug 17, 2019 at 9:49 AM Christoph Hellwig <hch@lst.de> wrote:
+> m68k uses __iounmap as the name for an internal helper that is only
+> used for some CPU types.  Mark it static and give it a better name.
 >
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Thanks for your patch!
 
-BTW, shouldn't we get rid of the sole user of ioremap_uc(), too?
-Seems to make a difference on x86 only, where it is "strongly uncached"
-(whatever that may mean ;-)
+> --- a/arch/m68k/mm/kmap.c
+> +++ b/arch/m68k/mm/kmap.c
+> @@ -52,6 +52,7 @@ static inline void free_io_area(void *addr)
+>
+>  #define IO_SIZE                (256*1024)
+>
+> +static void __free_io_area(void *addr, unsigned long size);
+>  static struct vm_struct *iolist;
+>
+>  static struct vm_struct *get_io_area(unsigned long size)
+> @@ -90,7 +91,7 @@ static inline void free_io_area(void *addr)
+>                 if (tmp->addr == addr) {
+>                         *p = tmp->next;
+>                         /* remove gap added in get_io_area() */
+> -                       __iounmap(tmp->addr, tmp->size - IO_SIZE);
+> +                       __free_io_area(tmp->addr, tmp->size - IO_SIZE);
+>                         kfree(tmp);
+>                         return;
+>                 }
+> @@ -249,12 +250,13 @@ void iounmap(void __iomem *addr)
+>  }
+>  EXPORT_SYMBOL(iounmap);
+>
+> +#ifndef CPU_M68040_OR_M68060_ONLY
+
+Cant you move this block up, to avoid adding more #ifdef cluttery?
+The rest looks good to me.
+
+>  /*
+> - * __iounmap unmaps nearly everything, so be careful
+> + * __free_io_area unmaps nearly everything, so be careful
+>   * Currently it doesn't free pointer/page tables anymore but this
+>   * wasn't used anyway and might be added later.
+>   */
+> -void __iounmap(void *addr, unsigned long size)
+> +static void __free_io_area(void *addr, unsigned long size)
+>  {
+>         unsigned long virtaddr = (unsigned long)addr;
+>         pgd_t *pgd_dir;
+> @@ -297,6 +299,7 @@ void __iounmap(void *addr, unsigned long size)
+>
+>         flush_tlb_all();
+>  }
+> +#endif /* CPU_M68040_OR_M68060_ONLY */
+>
+>  /*
+>   * Set new cache mode for some kernel address space.
 
 Gr{oetje,eeting}s,
 
                         Geert
 
---
+-- 
 Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
 In personal conversations with technical people, I call myself a hacker. But
