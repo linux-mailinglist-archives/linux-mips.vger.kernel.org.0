@@ -2,23 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D50FA95744
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Aug 2019 08:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E4C9593E
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Aug 2019 10:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729280AbfHTGXN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 20 Aug 2019 02:23:13 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:48743 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728657AbfHTGXN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Aug 2019 02:23:13 -0400
-X-Originating-IP: 90.65.161.137
-Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id C639B40008;
-        Tue, 20 Aug 2019 06:23:08 +0000 (UTC)
-Date:   Tue, 20 Aug 2019 08:23:08 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+        id S1729269AbfHTIRh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 20 Aug 2019 04:17:37 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51140 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729150AbfHTIRh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 20 Aug 2019 04:17:37 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 6F5DEAEA1;
+        Tue, 20 Aug 2019 08:17:35 +0000 (UTC)
+Date:   Tue, 20 Aug 2019 10:17:34 +0200
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     Jonathan Corbet <corbet@lwn.net>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
@@ -35,54 +34,59 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         linux-input@vger.kernel.org, netdev@vger.kernel.org,
         linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
 Subject: Re: [PATCH v5 15/17] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-ID: <20190820062308.GK3545@piout.net>
+Message-Id: <20190820101734.bffe41588e0c92094b9dba3d@suse.de>
+In-Reply-To: <20190820062308.GK3545@piout.net>
 References: <20190819163144.3478-1-tbogendoerfer@suse.de>
- <20190819163144.3478-16-tbogendoerfer@suse.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190819163144.3478-16-tbogendoerfer@suse.de>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        <20190819163144.3478-16-tbogendoerfer@suse.de>
+        <20190820062308.GK3545@piout.net>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On Tue, 20 Aug 2019 08:23:08 +0200
+Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> On 19/08/2019 18:31:38+0200, Thomas Bogendoerfer wrote:
+> > diff --git a/drivers/mfd/ioc3.c b/drivers/mfd/ioc3.c
+> > new file mode 100644
+> > index 000000000000..5bcb3461a189
+> > --- /dev/null
+> > +++ b/drivers/mfd/ioc3.c
+> > @@ -0,0 +1,586 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * SGI IOC3 multifunction device driver
+> > + *
+> > + * Copyright (C) 2018, 2019 Thomas Bogendoerfer <tbogendoerfer@suse.de>
+> > + *
+> > + * Based on work by:
+> > + *   Stanislaw Skowronek <skylark@unaligned.org>
+> > + *   Joshua Kinard <kumba@gentoo.org>
+> > + *   Brent Casavant <bcasavan@sgi.com> - IOC4 master driver
+> > + *   Pat Gefre <pfg@sgi.com> - IOC3 serial port IRQ demuxer
+> > + */
+> > +
+> > +#include <linux/delay.h>
+> > +#include <linux/errno.h>
+> > +#include <linux/interrupt.h>
+> > +#include <linux/mfd/core.h>
+> > +#include <linux/module.h>
+> > +#include <linux/pci.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/platform_data/sgi-w1.h>
+> > +#include <linux/rtc/ds1685.h>
+> I don't think this include is necessary.
 
-On 19/08/2019 18:31:38+0200, Thomas Bogendoerfer wrote:
-> diff --git a/drivers/mfd/ioc3.c b/drivers/mfd/ioc3.c
-> new file mode 100644
-> index 000000000000..5bcb3461a189
-> --- /dev/null
-> +++ b/drivers/mfd/ioc3.c
-> @@ -0,0 +1,586 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * SGI IOC3 multifunction device driver
-> + *
-> + * Copyright (C) 2018, 2019 Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> + *
-> + * Based on work by:
-> + *   Stanislaw Skowronek <skylark@unaligned.org>
-> + *   Joshua Kinard <kumba@gentoo.org>
-> + *   Brent Casavant <bcasavan@sgi.com> - IOC4 master driver
-> + *   Pat Gefre <pfg@sgi.com> - IOC3 serial port IRQ demuxer
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/errno.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/mfd/core.h>
-> +#include <linux/module.h>
-> +#include <linux/pci.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/platform_data/sgi-w1.h>
-> +#include <linux/rtc/ds1685.h>
-I don't think this include is necessary.
+you are right. I'll move it to the patch where IP30 systemboard gets added.
 
+Thanks,
+Thomas.
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+SUSE Linux GmbH
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
