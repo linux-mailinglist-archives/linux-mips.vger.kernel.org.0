@@ -2,96 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BDE7985B6
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Aug 2019 22:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BDA9863B
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Aug 2019 23:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730282AbfHUUiG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 21 Aug 2019 16:38:06 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:33086 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727959AbfHUUiG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Aug 2019 16:38:06 -0400
-Received: by mail-qt1-f193.google.com with SMTP id v38so4799841qtb.0
-        for <linux-mips@vger.kernel.org>; Wed, 21 Aug 2019 13:38:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=KBkBS4T8hAWzkfNP3gQHnK1bQ8RpJnciYJrpqq3rMf8=;
-        b=NGNASHAt0aPooyP8CTgYOtb0t3kgtdGLqJ/VHFyFTEdgiE7gvblv2PrEwXcwoLyfxI
-         ccDsl3wj3dinhEivqLgnXhnjdMvz9SYxIr9fpo4xGRV7gSPqHBr6rxbt2u8iEjVZdgpw
-         7AE+NjJy/4oGhxrVjvzRnstX2xG3qMkv8QBUgrw6BgXzyLRd9Q1gQlOhegN3181ZOKWQ
-         hisqrpXmlhJPtYveRNEhyFqUIVvw2jXBRTKqiPYR1tNoVElMJ3Vgs77iGpC9g9m12/JU
-         /PQ7v6S2UdmdJ+RxLBjBRRYTkQgr4jOXbD0hugqQzNfBaj2Xn77PLl4Vddgkb4PP6FlG
-         yMBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=KBkBS4T8hAWzkfNP3gQHnK1bQ8RpJnciYJrpqq3rMf8=;
-        b=tWZQTUvAc+seCui90+9N1UMNV4F9Z7vfZfpsyJ4cGsgZ2ur6nZA2D8VI6JFY2IhWAU
-         gTsCaVD3uZd8T2qgzy6x04I/j0MUd4Y8N6aN5tgQG7pB72Sn1PY0TY1ugjrXd8563BNl
-         ibpoZ3pnmOrbl5oLWot9+FBWIeB5zjGHi+ZbHUOC23nPIyYWOvCvNIg/Wat6qwpBfhOR
-         rgTtAd/Ncsg+i8TAU4KvBb6am2O6DyN+f0ZtfHiF9bMqogg8Dtkb3WhUhABoEeaTmLzM
-         Hx9xZAHzM9D81+ui7XSTuBBOtEtWE1G11sVqn3Su0lBn00FFUiw7jWwb4HqSkUS64QOh
-         uA2Q==
-X-Gm-Message-State: APjAAAUPNxtx7pAnsj2aGNoTBCzhOJB+BGC8m6fZcfgV8feFwrdj5/Sk
-        ZwB//SKX7E4hE0T0Y7jVK4ky5g==
-X-Google-Smtp-Source: APXvYqwe9lERHFY9Jt1Z7JNSvqvEYMbh8DR6XD7zaGMsKCtoXCi/P5AunlMu5Ut2t+UrTpcRunsngQ==
-X-Received: by 2002:ac8:739a:: with SMTP id t26mr33575094qtp.65.1566419884839;
-        Wed, 21 Aug 2019 13:38:04 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id e15sm9805954qtr.51.2019.08.21.13.38.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2019 13:38:04 -0700 (PDT)
-Date:   Wed, 21 Aug 2019 13:37:57 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: Re: [PATCH v5 10/17] net: sgi: ioc3-eth: rework skb rx handling
-Message-ID: <20190821133757.4fb5253c@cakuba.netronome.com>
-In-Reply-To: <20190821162847.479c9967d4dc8026fe65fa0e@suse.de>
-References: <20190819163144.3478-1-tbogendoerfer@suse.de>
-        <20190819163144.3478-11-tbogendoerfer@suse.de>
-        <20190819165522.451f2ea2@cakuba.netronome.com>
-        <20190821162847.479c9967d4dc8026fe65fa0e@suse.de>
-Organization: Netronome Systems, Ltd.
+        id S1730396AbfHUVF4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 21 Aug 2019 17:05:56 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:50062 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726330AbfHUVF4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 21 Aug 2019 17:05:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=Rvl93iZiPwt6hyRyRBwILS2dFDVCroIMTnNqvpC9gZw=; b=W9vKw3GJXbKV+1lnFbQkx1pY2h
+        osciFrPjrzqF0VqJwWR/ARcXaSDlGH2jBuMD24p2yBtIsc7rIeDjk7Wv6Y9Sk4REyO8Xa/IAQu6bQ
+        unGXHCzWNkd2256rkPXDdW7jyiDco8+aTOYrT1fcpfPq6FaolgPrtC44teDt/qPz+s1Y=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
+        (envelope-from <andrew@lunn.ch>)
+        id 1i0XnM-00081a-I4; Wed, 21 Aug 2019 23:05:28 +0200
+Date:   Wed, 21 Aug 2019 23:05:28 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
+        Frank Wunderlich <frank-w@public-files.de>
+Subject: Re: [PATCH net-next v2 0/3] net: dsa: mt7530: Convert to PHYLINK and
+ add support for port 5
+Message-ID: <20190821210528.GA29618@lunn.ch>
+References: <20190821144547.15113-1-opensource@vdorst.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190821144547.15113-1-opensource@vdorst.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 21 Aug 2019 16:28:47 +0200, Thomas Bogendoerfer wrote:
-> > This looks like a DMA engine alignment requirement, more than an
-> > optimization.  
+On Wed, Aug 21, 2019 at 04:45:44PM +0200, René van Dorst wrote:
+> 1. net: dsa: mt7530: Convert to PHYLINK API
+>    This patch converts mt7530 to PHYLINK API.
+> 2. dt-bindings: net: dsa: mt7530: Add support for port 5
+> 3. net: dsa: mt7530: Add support for port 5
+>    These 2 patches adding support for port 5 of the switch.
 > 
-> that true, there are two constraints for the rx buffers, start must be aligned
-> to 128 bytes and a buffer must not cross a 16kbyte boundary. I was already
-> thinking of allocating pages and chop them up. Is there a Linux API available,
-> which could help for implementing this ?
-> 
-> I'll probably drop this patch or only change the skb_put stuff plus RX_BUF_SIZE
-> define.
+> v1->v2:
+>  * Mostly phylink improvements after review.
 
-Sounds a little like frag allocator (napi_alloc_frag()/
-netdev_alloc_frag()), but I'm not sure you'd have sufficient control
-to skip over the 16k boundary.. Perhaps others have better suggestions.
+Hi René
+
+You are addressing comments mostly from Russell King. It would of been
+good to Cc: him on the patchset.
+
+Andrew
