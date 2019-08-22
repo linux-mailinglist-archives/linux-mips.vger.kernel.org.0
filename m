@@ -2,196 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6A6997CE
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Aug 2019 17:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C369985F
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Aug 2019 17:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389451AbfHVPLT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 22 Aug 2019 11:11:19 -0400
-Received: from mx.0dd.nl ([5.2.79.48]:57788 "EHLO mx.0dd.nl"
+        id S1730029AbfHVPoz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 22 Aug 2019 11:44:55 -0400
+Received: from mout.gmx.net ([212.227.17.21]:44183 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387755AbfHVPLT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 22 Aug 2019 11:11:19 -0400
-Received: from mail.vdorst.com (mail.vdorst.com [IPv6:fd01::250])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx.0dd.nl (Postfix) with ESMTPS id CC0475FC44;
-        Thu, 22 Aug 2019 17:11:16 +0200 (CEST)
-Authentication-Results: mx.0dd.nl;
-        dkim=pass (2048-bit key) header.d=vdorst.com header.i=@vdorst.com header.b="dYtNjIu0";
-        dkim-atps=neutral
-Received: from www (www.vdorst.com [192.168.2.222])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.vdorst.com (Postfix) with ESMTPSA id 793D71D85FE6;
-        Thu, 22 Aug 2019 17:11:16 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.vdorst.com 793D71D85FE6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vdorst.com;
-        s=default; t=1566486676;
-        bh=pWtXsRVEPvLed/m0NhhlKu1CLza7De9LHyjrNdYZbdw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dYtNjIu04is6DPPpcRUqOnSHBRAWJuENhjamzlkFcc69mGO3UfQ3rsngHuva405Ha
-         Sf5D+/HMAqHmafBNG8I9vTUaW1SbS+dtuyQPKaqOEwzoP+22izycD/C2tswjAIR9A8
-         z4YKAjK0nuAEI1H0+0Mk7BEakNXjYBNeM5QDi79kZSKYlaquhliHINULslkHDOW2aI
-         c4/YqK5inUtYUUTbx5tmLY0lheFwhmR28bcfPzcQMTIqHRgOayJpgCQbp62D9Q9sHW
-         +pgb9NVMHtGsvrCejRaJDOJF/5b0maqGgeBus9yWOdWZRepvuqnmewN04zsKY/7BzC
-         wH5MogCvoHYew==
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1]) by
- www.vdorst.com (Horde Framework) with HTTPS; Thu, 22 Aug 2019 15:11:16 +0000
-Date:   Thu, 22 Aug 2019 15:11:16 +0000
-Message-ID: <20190822151116.Horde.3pVh2Kr0MEO82EWm7859Zd2@www.vdorst.com>
-From:   =?utf-8?b?UmVuw6k=?= van Dorst <opensource@vdorst.com>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Nelson Chang <nelson.chang@mediatek.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, Stefan Roese <sr@denx.de>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH net-next v2 1/3] net: ethernet: mediatek: Add basic
- PHYLINK support
-References: <20190821144336.9259-1-opensource@vdorst.com>
- <20190821144336.9259-2-opensource@vdorst.com>
- <20190822142739.GS13294@shell.armlinux.org.uk>
-In-Reply-To: <20190822142739.GS13294@shell.armlinux.org.uk>
-User-Agent: Horde Application Framework 5
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        id S1725876AbfHVPoz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 22 Aug 2019 11:44:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1566488653;
+        bh=Vy2sL6yIc2Cm33yYziTqAMn0mT4b4EWOI52QiBXdRmc=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=QrOHC6/2NAmFobf5S2YYzs5TWISc4dkEgsm5srJ57fksDPmZB21ItRv9XjzV9cu45
+         9nYnDIY/F6xa164T9B2M2OOw5hOcwSpgxZJAnlhW002+Z4B1iLgtsZfGSgDtAqqWR8
+         c0/aCfFCDn9ugbR4ouH7YUnV+aie8Hwekw14+hfg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.154.89] ([217.61.154.89]) by web-mail.gmx.net
+ (3c-app-gmx-bap07.server.lan [172.19.172.77]) (via HTTP); Thu, 22 Aug 2019
+ 17:44:13 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Message-ID: <trinity-b1f48e51-af73-466d-9ecf-d560a7d7c1ee-1566488653737@3c-app-gmx-bap07>
+From:   "Frank Wunderlich" <frank-w@public-files.de>
+To:     =?UTF-8?Q?=22Ren=C3=A9_van_Dorst=22?= <opensource@vdorst.com>
+Cc:     "Sean Wang" <sean.wang@mediatek.com>,
+        "Andrew Lunn" <andrew@lunn.ch>,
+        "Vivien Didelot" <vivien.didelot@gmail.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
+        =?UTF-8?Q?=22Ren=C3=A9_van_Dorst=22?= <opensource@vdorst.com>,
+        linux-mediatek@lists.infradead.org,
+        "John Crispin" <john@phrozen.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Aw: [PATCH net-next v2 0/3] net: dsa: mt7530: Convert to PHYLINK
+ and add support for port 5
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 22 Aug 2019 17:44:13 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20190821144547.15113-1-opensource@vdorst.com>
+References: <20190821144547.15113-1-opensource@vdorst.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:OnOmnNjRELKVDhw1WQ00dkVJuIqcBT9mIxsIJFG3y8nB9jk9SoGT1zYS+j7Hrug05uaRc
+ wyfpj5sv6EnDKgPWJT1nDz20RXXwzuhx/jflRFQlLJECmmRxBLZT0IDWBzDceWlqwm05vt1Q30ZB
+ qxHcSPFXQfWgRe6xK7ko3+YGTQsteRpHY6fIjn1gREIrNVmzXUH898hwnFvyxpkJw7gBmpF5JbYX
+ OotJuHOPdSolA/xZdJ4ol64gN4UuJddW0ahxqEcnYXSi4BvaojZNNekB7/0c1Z/6rTCdONIWuqqA
+ FU=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:A9vU9Oh1LEE=:DFgHGOwKN1RHx6kZQ498pi
+ zX+xC8Drxjpw+G+vUDjrzkxjmEdsaQWF99BUxfFFCB1Lbuxweib2bcOxiDc45mjrxOKULzmBh
+ Tc2QG63jIq3UVmi7GJusiZoTjWppmjHJnLO7rDs3sgR8JItcfzD7Jrpm8MCL0ZgeQek/IL3S5
+ MIlrU9tpcspXV28cUK4mCDjbykLugedrl7F6hjyTULWoG6kiPjLERQ+tK8mD9CKwmRIDNHM5U
+ pj3Iy3MikCcaCxfSaOzM/mFoqXkbr5HjHN1odpnXWmt6OFas74gyG/3zS0YtfbfWmEaUZETvG
+ mtVkJqwC5SmAZO7A/U6QPdQbtz7by7K2q4BuMpLEOG00hcZd728gvTyFy4ijTfLJqvNbf9pLb
+ QvpKS3YZjTkgd6EEk3AnQvLG5DdDJDqP5B8+dKZ5uvrgbDt309vqoAKI1acHb9grNIqcyzsc4
+ 9FsqenYJm99b8XMLxZNWdelX12TmV2HUBZqqzOFxZ8W3vIf9dGoD+qMk8kPnQzLd9Tz7BSLuS
+ d8292YpgCPIH1Plr1UZUan+Csz6krXBBiDhfgA70meddJds6kDD0b5bh7MuDwMC2Dh90kb38D
+ z/9p4y6SR4kUOz/OHWXwi81phfKlOK/oZHIGZVPpSXN3d+rXsqoINiaFv7EBjC7s40cZQQ+yM
+ 0UfGTxouFcI+56UwaoItJWKiDXNeSPvXruKyh7SCBStUFbg==
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Russell,
+Hi,
 
-Quoting Russell King - ARM Linux admin <linux@armlinux.org.uk>:
+tested on BPI-R2 (mt7623) with 2 Problems (already reported to Rene, just =
+to inform everyone)...maybe anybody has an idea
 
-> On Wed, Aug 21, 2019 at 04:43:34PM +0200, René van Dorst wrote:
->> +static void mtk_mac_link_down(struct phylink_config *config,  
->> unsigned int mode,
->> +			      phy_interface_t interface)
->> +{
->> +	struct mtk_mac *mac = container_of(config, struct mtk_mac,
->> +					   phylink_config);
->>
->> -	return 0;
->> +	mtk_w32(mac->hw, MAC_MCR_FORCE_LINK_DOWN, MTK_MAC_MCR(mac->id));
->>  }
->
-> You set the MAC_MCR_FORCE_MODE bit here...
->
->> +static void mtk_mac_link_up(struct phylink_config *config,  
->> unsigned int mode,
->> +			    phy_interface_t interface,
->> +			    struct phy_device *phy)
->>  {
->> +	struct mtk_mac *mac = container_of(config, struct mtk_mac,
->> +					   phylink_config);
->> +	u32 mcr = mtk_r32(mac->hw, MTK_MAC_MCR(mac->id));
->>
->> +	mcr |= MAC_MCR_TX_EN | MAC_MCR_RX_EN;
->> +	mtk_w32(mac->hw, mcr, MTK_MAC_MCR(mac->id));
->> +}
->
-> Looking at this, a link_down() followed by a link_up() would result in
-> this register containing MAC_MCR_FORCE_MODE | MAC_MCR_TX_EN |
-> MAC_MCR_RX_EN ?  Is that actually correct?  (MAC_MCR_FORCE_LINK isn't
-> set, so it looks to me like it still forces the link down.)
+- linux-next (i know it's not part of the series, but a pitfall on testing=
+ other devices) seems to break power-regulator somewhere here:
 
-Thanks for reviewing.
+priv->core_pwr =3D devm_regulator_get(&mdiodev->dev, "core"); returns 517
 
-Probably not.
-I assumed that mac_config() is always called before link_up()
+#define EPROBE_DEFER517/* Driver requests probe retry */
 
-I simply can make it the opposite of link_up()
+https://elixir.bootlin.com/linux/latest/source/drivers/regulator/core.c#L1=
+726
 
-like this:
-static void mtk_mac_link_down(struct phylink_config *config, unsigned  
-int mode,
-                               phy_interface_t interface)
-{
-       struct mtk_mac *mac = container_of(config, struct mtk_mac,
-                                  phylink_config);
-       u32 mcr = mtk_r32(mac->hw, MTK_MAC_MCR(mac->id));
+without linux-next switch came up including dsa-ports
 
-       mcr &= (MAC_MCR_TX_EN | MAC_MCR_RX_EN);
-       mtk_w32(mac->hw, mcr, MTK_MAC_MCR(mac->id));
-}
+- RX-traffic (run iperf3 -c x.x.x.x -R) is only 780 Mbits/sec (TX=3D940 Mb=
+its/sec), same measure with 5.3-rc4 gives 940 MBit/s with same devices,
+maybe caused by changes for mt76x8?
 
->
-> Note that link up/down forcing should not be done for in-band AN.
->
-
-This means that mac_config() of the SGMII patch is also incorrect?
-
-mac_config() always sets the MAC in a force mode.
-But the SGMII block is set in AN.
-
-Mainline code seems to do the same.
-Puts the SGMII block in AN or forced mode and always set the MAC in  
-forced mode.
-
->> +static void mtk_validate(struct phylink_config *config,
->> +			 unsigned long *supported,
->> +			 struct phylink_link_state *state)
->> +{
->> +	struct mtk_mac *mac = container_of(config, struct mtk_mac,
->> +					   phylink_config);
->> +	__ETHTOOL_DECLARE_LINK_MODE_MASK(mask) = { 0, };
->>
->> +	if (state->interface != PHY_INTERFACE_MODE_NA &&
->> +	    state->interface != PHY_INTERFACE_MODE_MII &&
->> +	    state->interface != PHY_INTERFACE_MODE_GMII &&
->> +	    !(MTK_HAS_CAPS(mac->hw->soc->caps, MTK_RGMII) &&
->> +	      phy_interface_mode_is_rgmii(state->interface)) &&
->> +	    !(MTK_HAS_CAPS(mac->hw->soc->caps, MTK_TRGMII) &&
->> +	      !mac->id && state->interface == PHY_INTERFACE_MODE_TRGMII)) {
->> +		linkmode_zero(supported);
->> +		return;
->>  	}
->>
->> +	phylink_set_port_modes(mask);
->> +	phylink_set(mask, Autoneg);
->>
->> +	if (state->interface == PHY_INTERFACE_MODE_TRGMII) {
->> +		phylink_set(mask, 1000baseT_Full);
->> +	} else {
->> +		phylink_set(mask, 10baseT_Half);
->> +		phylink_set(mask, 10baseT_Full);
->> +		phylink_set(mask, 100baseT_Half);
->> +		phylink_set(mask, 100baseT_Full);
->> +
->> +		if (state->interface != PHY_INTERFACE_MODE_MII) {
->> +			phylink_set(mask, 1000baseT_Half);
->> +			phylink_set(mask, 1000baseT_Full);
->> +			phylink_set(mask, 1000baseX_Full);
->> +		}
->> +	}
->>
->> +	phylink_set(mask, Pause);
->> +	phylink_set(mask, Asym_Pause);
->>
->> +	linkmode_and(supported, supported, mask);
->> +	linkmode_and(state->advertising, state->advertising, mask);
->>  }
->
-> This looks fine.
-
-OK.
-
-> Thanks.
->
-> --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-> According to speedtest.net: 11.9Mbps down 500kbps up
-
-Greats,
-
-René
-
-
+regards Frank
