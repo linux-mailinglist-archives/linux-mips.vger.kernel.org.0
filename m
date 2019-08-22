@@ -2,91 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8E7993CC
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Aug 2019 14:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5B399689
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Aug 2019 16:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732206AbfHVMeF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 22 Aug 2019 08:34:05 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38219 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387657AbfHVMeD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Aug 2019 08:34:03 -0400
-Received: by mail-lj1-f196.google.com with SMTP id x3so5390019lji.5
-        for <linux-mips@vger.kernel.org>; Thu, 22 Aug 2019 05:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=Rbh3JsGIh2x+jDuVbneOEsdobwGn2xF3k9KTKgjnK8Dyd2ODu1sdAQZQ15vVyYnqdt
-         7E9K7FhpCx9S2Dr1Ddo93q8TQvnmC/kE524CSoK66UbjC0Keqf53qhQ3yEqx3HAqneCK
-         QJH+OsNLuiNr6NKxEeJtactPjxkq0IA/anzWTZbfxsdGDFNukm8hCNfpT4lameBjcg1P
-         vMEErESY7RDQugMc/b/MZ0+sk5n2uzgwjXg1V0nNdJsVb5O6VyZacEb0HGljYN7+OPri
-         sm6Rp5BE3EkVBy2/1k5KenPYcnLllMAdQCixAZH/6rT6ERxgPTfrELU8FhhN52TrBApt
-         4Cxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=OPhONhElRLAeKhx7ovw8EJmSdGUMHYP9xnoW3cTmS7RnM+45kFXXnMtGLuTiM8s3r7
-         RtwgM7QPDlCsPWjUvK80XJ66UArcNCN7hsOU+EOtx8rjOl3tzUWwrz30Upf5gqweUO/n
-         bMcbCuHO549jWLFtUSkXT2tSD5Gt6d2as7ZivhF9WlHUnfD8L2G+o10GHmPoOTNUmmAC
-         SfLI/dL8B7F4OWt8wAxF9/1byTIgZQpyv3CRRIrRoDWyPlMTllQnTLOCj4OMXraJQZNF
-         b4gCjeGnVBTtQNxQBuxcTmFEky4FF7yjkDRZEkO6JF0Bm255zCQAyjTlPKvw6ZdOUMEB
-         G0og==
-X-Gm-Message-State: APjAAAXljUgt8XCLbT1s6+OL9Wio8YVcZTxstPZtsZXBD4GRyL0Sf+m2
-        GN4qx6Vq4qoRuj2ZYv6EmRAU9mfCZzZbNiY9p4Y=
-X-Google-Smtp-Source: APXvYqz3MRqWqCJljuYvGs7Z39vR8szuBA98XmfHPUkBGUeOj4vI/x4jHKyZ57W6CcLrF9xDbGoqKi5bbRMPFZ+Cc3Y=
-X-Received: by 2002:a2e:9a44:: with SMTP id k4mr17910876ljj.96.1566477241520;
- Thu, 22 Aug 2019 05:34:01 -0700 (PDT)
+        id S1725873AbfHVO2K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 22 Aug 2019 10:28:10 -0400
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:43872 "EHLO
+        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731487AbfHVO2J (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Aug 2019 10:28:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=Fg0ublZzgw0A5Szj0n+RkN+2zqyaQU5CTNzjkTpcOJ8=; b=rCPArFXYhmfM98sv0h9BelJSm
+        tbLpRAGrRGuQ3+j/EAJjtdH6ZkCsUUaoDtmTMMxj6z5sF9GJkzLhO2vNR06oxoTYCmTOzM73rRrfr
+        axkoasy9w9Yot1Q5SnpyRIdAyUDkhwOzUJ9xUFvEAEZR2U3clyZB6xvJFg9iL53Ms8AGzesHd0GLw
+        kbYuB6Kff4HYqNQni9GCj/Wkr+JELdcecTABRBjmfS+P8tw8aZgxh6M2Rp+OdDzfvhhJTYhicfeVE
+        owyJGvIEzxW0IXGZmfjzojfLYd/fpHEC6q36/hgE0wG78WGF7yYfn/BqeI5t1nEEWRvCHlpW/+Y9N
+        7JzH9RBNw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:59702)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1i0o43-00078p-7T; Thu, 22 Aug 2019 15:27:47 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1i0o3w-0007kt-33; Thu, 22 Aug 2019 15:27:40 +0100
+Date:   Thu, 22 Aug 2019 15:27:40 +0100
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>
+Cc:     John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Nelson Chang <nelson.chang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, Stefan Roese <sr@denx.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH net-next v2 1/3] net: ethernet: mediatek: Add basic
+ PHYLINK support
+Message-ID: <20190822142739.GS13294@shell.armlinux.org.uk>
+References: <20190821144336.9259-1-opensource@vdorst.com>
+ <20190821144336.9259-2-opensource@vdorst.com>
 MIME-Version: 1.0
-Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:34:01
- -0700 (PDT)
-Reply-To: eku.lawfirm@gmail.com
-From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
-Date:   Thu, 22 Aug 2019 12:34:01 +0000
-Message-ID: <CAN-_bTZ726ayFtAv4dpjhKOuZFqgxZg3rZFa8VV4nXz4ZvjT-Q@mail.gmail.com>
-Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190821144336.9259-2-opensource@vdorst.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
---=20
-Dear,
-With due respect this is not spam or Scam mail, because I have
-contacted you before and there was no response from you,I apologise if
-the contents of this mail are contrary to your moral ethics, which I
-feel may be of great disturbance to your person, but please treat this
-with absolute confidentiality, believing that this email reaches you
-in good faith. My contacting you is not a mistake or a coincidence
-because God can use any person known or unknown to accomplish great
-things.
-I am a lawyer and I have an investment business proposal to offer you.
-It is not official but should be considered as legal and confidential
-business. I have a customer's deposit of $US25 million dollars ready
-to be moved for investment if you can partner with us. We are ready to
-offer you 10% of this total amount as your compensation for supporting
-the transaction to completion. If you are interested to help me please
-reply me with your full details as stated below:
-(1) Your full names:
-(2) Your address:
-(3) Your occupation:
-(4) Your mobile telephone number:
-(5) Your nationality:
-(6) Your present location:
-(7) Your age:
-So that I will provide you more details on what to do and what is
-required for successful completion.
-Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
-MENTIONED DETAILS
+On Wed, Aug 21, 2019 at 04:43:34PM +0200, René van Dorst wrote:
+> +static void mtk_mac_link_down(struct phylink_config *config, unsigned int mode,
+> +			      phy_interface_t interface)
+> +{
+> +	struct mtk_mac *mac = container_of(config, struct mtk_mac,
+> +					   phylink_config);
+>  
+> -	return 0;
+> +	mtk_w32(mac->hw, MAC_MCR_FORCE_LINK_DOWN, MTK_MAC_MCR(mac->id));
+>  }
 
-Sinc=C3=A8rement v=C3=B4tre,
-Avocat Etienne Eku Esq.(Lawfirm)
-Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
-=E2=80=99ouest.
-Skype:westafricalawfirm
+You set the MAC_MCR_FORCE_MODE bit here...
+
+> +static void mtk_mac_link_up(struct phylink_config *config, unsigned int mode,
+> +			    phy_interface_t interface,
+> +			    struct phy_device *phy)
+>  {
+> +	struct mtk_mac *mac = container_of(config, struct mtk_mac,
+> +					   phylink_config);
+> +	u32 mcr = mtk_r32(mac->hw, MTK_MAC_MCR(mac->id));
+>  
+> +	mcr |= MAC_MCR_TX_EN | MAC_MCR_RX_EN;
+> +	mtk_w32(mac->hw, mcr, MTK_MAC_MCR(mac->id));
+> +}
+
+Looking at this, a link_down() followed by a link_up() would result in
+this register containing MAC_MCR_FORCE_MODE | MAC_MCR_TX_EN |
+MAC_MCR_RX_EN ?  Is that actually correct?  (MAC_MCR_FORCE_LINK isn't
+set, so it looks to me like it still forces the link down.)
+
+Note that link up/down forcing should not be done for in-band AN.
+
+> +static void mtk_validate(struct phylink_config *config,
+> +			 unsigned long *supported,
+> +			 struct phylink_link_state *state)
+> +{
+> +	struct mtk_mac *mac = container_of(config, struct mtk_mac,
+> +					   phylink_config);
+> +	__ETHTOOL_DECLARE_LINK_MODE_MASK(mask) = { 0, };
+>  
+> +	if (state->interface != PHY_INTERFACE_MODE_NA &&
+> +	    state->interface != PHY_INTERFACE_MODE_MII &&
+> +	    state->interface != PHY_INTERFACE_MODE_GMII &&
+> +	    !(MTK_HAS_CAPS(mac->hw->soc->caps, MTK_RGMII) &&
+> +	      phy_interface_mode_is_rgmii(state->interface)) &&
+> +	    !(MTK_HAS_CAPS(mac->hw->soc->caps, MTK_TRGMII) &&
+> +	      !mac->id && state->interface == PHY_INTERFACE_MODE_TRGMII)) {
+> +		linkmode_zero(supported);
+> +		return;
+>  	}
+>  
+> +	phylink_set_port_modes(mask);
+> +	phylink_set(mask, Autoneg);
+>  
+> +	if (state->interface == PHY_INTERFACE_MODE_TRGMII) {
+> +		phylink_set(mask, 1000baseT_Full);
+> +	} else {
+> +		phylink_set(mask, 10baseT_Half);
+> +		phylink_set(mask, 10baseT_Full);
+> +		phylink_set(mask, 100baseT_Half);
+> +		phylink_set(mask, 100baseT_Full);
+> +
+> +		if (state->interface != PHY_INTERFACE_MODE_MII) {
+> +			phylink_set(mask, 1000baseT_Half);
+> +			phylink_set(mask, 1000baseT_Full);
+> +			phylink_set(mask, 1000baseX_Full);
+> +		}
+> +	}
+>  
+> +	phylink_set(mask, Pause);
+> +	phylink_set(mask, Asym_Pause);
+>  
+> +	linkmode_and(supported, supported, mask);
+> +	linkmode_and(state->advertising, state->advertising, mask);
+>  }
+
+This looks fine.
+
+Thanks.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
+According to speedtest.net: 11.9Mbps down 500kbps up
