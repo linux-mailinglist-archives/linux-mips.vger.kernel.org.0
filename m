@@ -2,193 +2,226 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E5D9B263
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2019 16:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5199B543
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2019 19:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393859AbfHWOpO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Aug 2019 10:45:14 -0400
-Received: from mail-eopbgr760121.outbound.protection.outlook.com ([40.107.76.121]:22717
-        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2393839AbfHWOpO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 23 Aug 2019 10:45:14 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fOZB5Kiyr9QtEpF3JEzrwhN/Z/5cQSu0ylaDsrITXwbI1u8Yji7c/juTQcLp5aXgoh48+HN6OMXnKr/ex3x+vnfOw8Oy8NKXBiMEmFKuwG6cpkpLxKEaGp2464xLTBmtpvyUTIYuUuYU+ciLWUK4Vmq7I2UqiZP6aYVun82iy3fChaxiKQLUD9tR5g6YSNoFCjl18hJ69yovzWxqd2eXHF4pbg5rXGhk7xz/UdpL+S0fCBh05zSaD27Obdr0/uH6dMqhRIWRxVxPh2e7KIFphE+cqv2ZDnO9U0BIDncsGGCaAT6EDRmIxhsUbpx9b8S8LtIo7kGwk6sz2UtFE8MrTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TJuqR+9ksljcTgh7nVCW75AyIxsX1AkOj1XwCMsmmLg=;
- b=Uc4brvBWLeXJH5xjq2ZrZ3c5xtXFKTOK9aq/0FbsvkdmZZo8h/Z4N09LcJA3lfaR/5c1LvYrjhb6q1X1uFKcMWk5QgdnpzsNcBNe1byYmcIwFltiax73aLyRZ7Gfsm2MhWw157tXV1zO5aO/21RQle3uGHrXCCWhEa7n9P+SYiKeWITkjwee9lOTs6nFskYzWC4fQ9/2IEABaT+TV7WazVGYujvGKBLClS9gzquEy7EFKSXisPwZoZjqHtGmy+QsGE8PsZvITxM8cVbXPMKPKqfDlxR7NjtaB0MOr01YCAPOxSKcG3V0uGY7PDsXNl8pI3O6e72FutbQhOefNupHgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
- dkim=pass header.d=mips.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TJuqR+9ksljcTgh7nVCW75AyIxsX1AkOj1XwCMsmmLg=;
- b=qG8WdFjQRSs4M+kII8niYVzOhHWJd54L4XWMB+A73BHNjikHqrgveZrA/bhWxdOdxPQ/734C7vW8pjCqwrE4yln9QeX0Z4C0VnSTX8b56q+Zqs3rWApvLkNURdpRwe0jvIsWAghepOOLMwUzH/u+i8sU6gK4uxgi5emltZFkx44=
-Received: from CY4PR2201MB1272.namprd22.prod.outlook.com (10.171.214.23) by
- CY4PR2201MB1494.namprd22.prod.outlook.com (10.171.241.14) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2178.16; Fri, 23 Aug 2019 14:45:09 +0000
-Received: from CY4PR2201MB1272.namprd22.prod.outlook.com
- ([fe80::2d81:1469:ceaf:1168]) by CY4PR2201MB1272.namprd22.prod.outlook.com
- ([fe80::2d81:1469:ceaf:1168%5]) with mapi id 15.20.2178.020; Fri, 23 Aug 2019
- 14:45:09 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Paul Burton <pburton@wavecomp.com>,
-        "yasha.che3@gmail.com" <yasha.che3@gmail.com>,
-        "aurelien@aurel32.net" <aurelien@aurel32.net>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "fancer.lancer@gmail.com" <fancer.lancer@gmail.com>,
-        "matt.redfearn@mips.com" <matt.redfearn@mips.com>,
-        "chenhc@lemote.com" <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH v1 0/8] MIPS: Drop boot_mem_map
-Thread-Topic: [PATCH v1 0/8] MIPS: Drop boot_mem_map
-Thread-Index: AQHVWcFcYE+Lie3YYk6eIa4siUSzuQ==
-Date:   Fri, 23 Aug 2019 14:45:08 +0000
-Message-ID: <CY4PR2201MB1272B48BC8DCEACB50038F09C1A40@CY4PR2201MB1272.namprd22.prod.outlook.com>
-References: <20190819142313.3535-1-jiaxun.yang@flygoat.com>
-In-Reply-To: <20190819142313.3535-1-jiaxun.yang@flygoat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: LO2P265CA0458.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:a2::14) To CY4PR2201MB1272.namprd22.prod.outlook.com
- (2603:10b6:910:6e::23)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2a02:c7f:5e65:9900:8519:dc48:d16b:70fc]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e9ba360e-699f-4919-af48-08d727d87ea1
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:CY4PR2201MB1494;
-x-ms-traffictypediagnostic: CY4PR2201MB1494:
-x-ms-exchange-purlcount: 8
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <CY4PR2201MB149430B1ECDA640E7FD601F9C1A40@CY4PR2201MB1494.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0138CD935C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(346002)(136003)(396003)(39850400004)(366004)(189003)(199004)(25786009)(486006)(6436002)(476003)(54906003)(14454004)(316002)(7736002)(6916009)(74316002)(386003)(6506007)(33656002)(52536014)(186003)(44832011)(229853002)(5660300002)(46003)(11346002)(8936002)(446003)(42882007)(66946007)(66446008)(66476007)(52116002)(64756008)(66556008)(81156014)(81166006)(99286004)(478600001)(4326008)(76176011)(102836004)(305945005)(53936002)(966005)(7696005)(9686003)(6306002)(71190400001)(71200400001)(8676002)(6116002)(2906002)(256004)(55016002)(6246003);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR2201MB1494;H:CY4PR2201MB1272.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: TkrjHEqVBwDNzwxdhof8y11BPR3FO3nUW5/kYDCo2Kwbu+aEFltBpugxcySIHLhCTSDkb+oaHmaYd5CrwwmTo23mSDss/XOOzUbBfb18y05v8/hDc2GLdzuHnZXLldNwslFZqP5hGvQbTK6DvzKfWaIxgVuZaEE8JwDW0hlYwtYwhDRwdJn6NvVbiDIQqYte/A+xZm2oARjxX7HuxM8QHOH0sjOL266+ALckDMntUr2MgEzW2yqibITylTgvyszoGp++N5otejroRkgh6L0+pWnkiEgvncxVUENNaKtP8sBeo+rljSPXbSFh1K36RhSxlGGw4WzQSvZyqsD9kvtefFGfZgJyvoqPTx0saJTT3M99hEX3n+H6UqppCWFwPbamH/1Akb9fTeE6Syn8a15i5CgicXGbl1yu7SjLvyYN9C0=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1732973AbfHWRQR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 23 Aug 2019 13:16:17 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:40724 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731346AbfHWRQQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Aug 2019 13:16:16 -0400
+Received: by mail-pf1-f196.google.com with SMTP id w16so6852137pfn.7
+        for <linux-mips@vger.kernel.org>; Fri, 23 Aug 2019 10:16:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9DzZ5tBJ/5ijRD9+7u3gl0wIvugmOxHsruYTm4QtT68=;
+        b=W8GIVaB8rGd7EMVaNvOWNGQGtO9OcfY9IZT6A8PjRQ91C89zSJg3XjiR1yVXhwRPbb
+         u4Pb2XSQRoKBkkwhobhc797pbff4PCdeI/YFbVjytv9OOacmvwEiHOWTQW4Vg9R3e6kK
+         UzN2P3fA95DeRAJgAtcuKBAoHWxW/jtMFR/F3BFQzh/j2mKrrodtqPq9FaZ9oIaf9N39
+         Wu0zMWAJk10iKxakmUkvFm7omvf3hiXYq/OtK89i5NiI1u7iEUzWT78HrjLOJv5zTEIS
+         MVRd7Efjon5tGQoDDmkzS4/gUIlBtaScz28mn5RTtmbFU1Bj59SKxsvYkpV5UDJQH/9p
+         fvEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9DzZ5tBJ/5ijRD9+7u3gl0wIvugmOxHsruYTm4QtT68=;
+        b=Ulx+wQu2xQdzE5zed1h5e4ypsq3YUmTLL13BHky3lmVH4PAxKnKEBEgDPt6jA47i2j
+         zO/RgjbWvWC2P7dOSQkVtgxlzAOUdp2HP6dYz5GB+Y7QbiXqSaP2XWrzaB7L3ciGiDxF
+         DNwLW/HSHALRjPNoDi9sDj8RZjrqpULMglkPWsfLkO77SjEulLpL0nE4vr+6O6L4ab8Y
+         6e9Kup4cMBiu6rbW2CIo6moNJojj9Hp1LIJHJRvwANPgidJGATbmsSVa8qCbcgXt48bw
+         /qPLs7vix6ZIYviF8R/wzLRELKWr5wOhfSgZJmoz5PM2XEsuByypuoDqpAzrabdz5+Ha
+         /Czw==
+X-Gm-Message-State: APjAAAV0tjxTV7FKUDTjpBNy2ni0kyLrAENFtyR9LdRozlhwUpWgGkSV
+        e5TxXv6lzG7pO+MlAcV/C7IuJDImx3gGeXUk4ZP0cQ==
+X-Google-Smtp-Source: APXvYqw0fR/sRLo6BnRDukhLtAs2eJY/rIk8qs41s14k4IrSkE1bJcwERqNuLHJycTJLHJ/oxhk3lu2nSZCIfJ55mSg=
+X-Received: by 2002:a17:90a:ac02:: with SMTP id o2mr6420803pjq.134.1566580575131;
+ Fri, 23 Aug 2019 10:16:15 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9ba360e-699f-4919-af48-08d727d87ea1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2019 14:45:08.9128
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /WEHOOSNht1ZM4DtDXdhsImGjSOEqiHdbbOiZmdp/7aOao/AYM/kUMFKPch/bA2JBj5Ll28dGac87bfbpJWBAg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR2201MB1494
+References: <20190729211014.39333-1-ndesaulniers@google.com>
+ <alpine.LFD.2.21.1907292302451.16059@eddie.linux-mips.org>
+ <CAKwvOd==SCBrj=cZ7Ax5F87+-bPMS9AtGSxp+NWp_+yDCg4R-A@mail.gmail.com> <CAKwvOdkXLhEuLiQ_ukE75zEg=Sw5-4BLHHCFqcZ0oyTEX3pWTQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdkXLhEuLiQ_ukE75zEg=Sw5-4BLHHCFqcZ0oyTEX3pWTQ@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 23 Aug 2019 10:16:04 -0700
+Message-ID: <CAKwvOdmGax-WgXeKEnTq8+Xe0+Z5d2k4_Ad1vw0uOiO2NJ0bkg@mail.gmail.com>
+Subject: Re: [PATCH] mips: avoid explicit UB in assignment of mips_io_port_base
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Eli Friedman <efriedma@quicinc.com>,
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        Stephen Kitt <steve@sk2.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, linux-mips@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        regehr@cs.utah.edu, Philip Reames <listmail@philipreames.com>,
+        Alexander Potapenko <glider@google.com>,
+        Alistair Delva <adelva@google.com>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+On Tue, Aug 20, 2019 at 10:15 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> Hi Paul,
+> Bumping this thread; we'd really like to be able to boot test another
+> ISA in our CI.  This lone patch is affecting our ability to boot.  Can
+> you please pick it up?
+> https://lore.kernel.org/lkml/20190729211014.39333-1-ndesaulniers@google.com/
 
-Jiaxun Yang wrote:
-> v1: Reording patches, fixes according to Serge's suggestions,
-> fix maar section mismatch.
->=20
-> Jiaxun Yang (8):
->   MIPS: OCTEON: Drop boot_mem_map
->   MIPS: fw: Record prom memory
->   MIPS: malta: Drop prom_free_prom_memory
->   MIPS: msp: Record prom memory
->   MIPS: ip22: Drop addr_is_ram
->   MIPS: xlp: Drop boot_mem_map
->   MIPS: mm: Drop boot_mem_map
->   MIPS: init: Drop boot_mem_map
->=20
->  arch/mips/cavium-octeon/dma-octeon.c |  17 +-
->  arch/mips/cavium-octeon/setup.c      |   3 +-
->  arch/mips/fw/arc/memory.c            |  24 +-
->  arch/mips/include/asm/bootinfo.h     |  16 --
->  arch/mips/include/asm/maar.h         |   8 +-
+Hi Paul,
+Following up with this link that explains the undefined behavior issue more:
+https://wiki.sei.cmu.edu/confluence/display/c/EXP05-C.+Do+not+cast+away+a+const+qualification
+Please reconsider accepting this patch.
 
-Series applied to mips-next.
+>
+> On Wed, Aug 7, 2019 at 2:12 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+> >
+> > Sorry for the delayed response, literally sent the patch then went on vacation.
+> >
+> > On Mon, Jul 29, 2019 at 3:16 PM Maciej W. Rozycki <macro@linux-mips.org> wrote:
+> > >
+> > > On Mon, 29 Jul 2019, Nick Desaulniers wrote:
+> > >
+> > > > The code in question is modifying a variable declared const through
+> > > > pointer manipulation.  Such code is explicitly undefined behavior, and
+> > > > is the lone issue preventing malta_defconfig from booting when built
+> > > > with Clang:
+> > > >
+> > > > If an attempt is made to modify an object defined with a const-qualified
+> > > > type through use of an lvalue with non-const-qualified type, the
+> > > > behavior is undefined.
+> > > >
+> > > > LLVM is removing such assignments. A simple fix is to not declare
+> > > > variables const that you plan on modifying.  Limiting the scope would be
+> > > > a better method of preventing unwanted writes to such a variable.
+> >
+> > This is now documented in the LLVM release notes for Clang-9:
+> > https://github.com/llvm/llvm-project/commit/e39e79358fcdd5d8ad809defaa821f0bbfa809a5
+> >
+> > > >
+> > > > Further, the code in question mentions "compiler bugs" without any links
+> > > > to bug reports, so it is difficult to know if the issue is resolved in
+> > > > GCC. The patch was authored in 2006, which would have been GCC 4.0.3 or
+> > > > 4.1.1. The minimal supported version of GCC in the Linux kernel is
+> > > > currently 4.6.
+> > >
+> > >  It's somewhat older than that.  My investigation points to:
+> > >
+> > > commit c94e57dcd61d661749d53ee876ab265883b0a103
+> > > Author: Ralf Baechle <ralf@linux-mips.org>
+> > > Date:   Sun Nov 25 09:25:53 2001 +0000
+> > >
+> > >     Cleanup of include/asm-mips/io.h.  Now looks neat and harmless.
+> >
+> > Oh indeed, great find!
+> >
+> > So it looks to me like the order of events is:
+> > 1. https://github.com/jaaron/linux-mips-ip30/commit/c94e57dcd61d661749d53ee876ab265883b0a103
+> > in 2001 first introduces the UB.  mips_io_port_base is defined
+> > non-const in arch/mips/kernel/setup.c, but then declared extern const
+> > (and modified via UB) in include/asm-mips/io.h.  A setter is created,
+> > but not a getter (I'll revisit this below).  This appears to work (due
+> > to luck) for a few years until:
+> > 2. https://github.com/mpe/linux-fullhistory/commit/966f4406d903a4214fdc74bec54710c6232a95b8
+> > in 2006 adds a compiler barrier (reload all variables) and this
+> > appears to work.  The commit message mentions that reads after
+> > modification of the const variable were buggy (likely GCC started
+> > taking advantage of the explicit UB around this time as well).  This
+> > isn't a fix for UB (more thoughts below), but appears to work.
+> > 3. https://github.com/llvm/llvm-project/commit/b45631090220b732e614b5530bbd1d230eb9d38e
+> > in 2019 removes writes to const variables in LLVM as that's explicit
+> > UB.  We observe the boot failure in mips and narrow it down to this
+> > instance.
+> >
+> > I can see how throwing a compiler barrier in there made subsequent
+> > reads after UB writes appear to work, but that was more due to luck
+> > and implementation details of GCC than the heart of the issue (ie. not
+> > writing code that is explicitly undefined behavior)(and could change
+> > in future versions of GCC).  Stated another way, the fix for explicit
+> > UB is not hacks, but avoiding the UB by rewriting the problematic
+> > code.
+> >
+> > > However the purpose of the arrangement does not appear to me to be
+> > > particularly specific to a compiler version.
+> > >
+> > > > For what its worth, there was UB before the commit in question, it just
+> > > > added a barrier and got lucky IRT codegen. I don't think there's any
+> > > > actual compiler bugs related, just runtime bugs due to UB.
+> > >
+> > >  Does your solution preserves the original purpose of the hack though as
+> > > documented in the comment you propose to be removed?
+> >
+> > The function modified simply writes to a global variable.  It's not
+> > clear to my why the value about to be modified would EVER be loaded
+> > before modification.
+> >
+> > >  Clearly it was defined enough to work for almost 18 years, so it would be
+> > > good to keep the optimisation functionally by using different means that
+> > > do not rely on UB.
+> >
+> > "Defined enough" ???
+> > https://youtu.be/Aq_1l316ow8?t=17
+> >
+> > > This variable is assigned at most once throughout the
+> > > life of the kernel and then early on, so considering it r/w with all the
+> > > consequences for all accesses does not appear to me to be a good use of
+> > > it.
+> >
+> > Note: it's not possible to express the semantics of a "write once
+> > variable" in C short of static initialization (AFAIK, without explicit
+> > violation of UB, but Cunningham's Law may apply).
+> >
+> > (set_io_port_base is called in ~20 places)
+> >
+> > Thinking more about this while I was away, I think what this code has
+> > needed since 2001 is proper encapsulation.  If you want a variable
+> > that is written from one place only, but readable throughout, then the
+> > pattern I'd use is:
+> >
+> > 1. declare a getter in a .h file.
+> > 2. define/qualify `mips_io_port_base` as `static` and non-const in a
+> > .c file where it's modified.
+> > 3. define the getter and setter in the above .c file.
+> >
+> > That would rely on linkage to limit the visibility of the symbol for
+> > modification.  But, we'd then need to export the getter, vs the symbol
+> > itself.  There's also on the order of ~20 call sites that would need
+> > to be changed to invoke the getter rather than read the raw variable.
+> > Also, it's unlikely the getter gets inlined across translation units
+> > (short of LTO, which the mainline kernel doesn't support today).
+> >
+> > I think my patch here (https://lkml.org/lkml/2019/7/29/1636) is
+> > minimally and much less invasive.
+> >
+> > >  Maybe a piece of inline asm to hide the initialisation or suchlike then?
+> >
+> > I think that would still be UB as the definition would not be changed;
+> > you'd still be modifying a variable declared const.
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
+>
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
 
-> MIPS: OCTEON: Drop boot_mem_map
->   commit 6cda3a5e002f
->   https://git.kernel.org/mips/c/6cda3a5e002f
->  =20
->   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> MIPS: fw: Record prom memory
->   commit 0df1007677d5
->   https://git.kernel.org/mips/c/0df1007677d5
->  =20
->   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> MIPS: malta: Drop prom_free_prom_memory
->   commit 79fd0fe44731
->   https://git.kernel.org/mips/c/79fd0fe44731
->  =20
->   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> MIPS: msp: Record prom memory
->   commit b3c948e2c00f
->   https://git.kernel.org/mips/c/b3c948e2c00f
->  =20
->   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> MIPS: ip22: Drop addr_is_ram
->   commit aa1edac13e5f
->   https://git.kernel.org/mips/c/aa1edac13e5f
->  =20
->   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> MIPS: xlp: Drop boot_mem_map
->   commit a121d6e0caf0
->   https://git.kernel.org/mips/c/a121d6e0caf0
->  =20
->   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> MIPS: mm: Drop boot_mem_map
->   commit a5718fe8f70f
->   https://git.kernel.org/mips/c/a5718fe8f70f
->  =20
->   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->   [paul.burton@mips.com:
->     - Fix bad MAAR address calculations.
->     - Use ALIGN() & define maar_align to make it clearer what's going on
->       with address manipulations.
->     - Drop the new used field from struct maar_config.
->     - Rework the RAM walk to avoid iterating over the cfg array needlessl=
-y
->       to find the first unused entry, then count used entries at the end.
->       Instead just keep the count as we go.]
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> MIPS: init: Drop boot_mem_map
->   commit a94e4f24ec83
->   https://git.kernel.org/mips/c/a94e4f24ec83
->  =20
->   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->   [paul.burton@mips.com: Fix size calculation in check_kernel_sections_me=
-m]
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
 
+
+-- 
 Thanks,
-    Paul
-
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paul.burton@mips.com to report it. ]
+~Nick Desaulniers
