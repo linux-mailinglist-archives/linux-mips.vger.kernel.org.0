@@ -2,73 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 467989A4BE
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2019 03:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 838A99A59D
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2019 04:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387644AbfHWBJ4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 22 Aug 2019 21:09:56 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:53622 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730545AbfHWBJz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 22 Aug 2019 21:09:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=bubYkOWQv/TmjmevXp07B1YxRSMrPurV5Qv8qeYJzMg=; b=PxaSz34QDnYHyaA6CFTIHBtfGH
-        ow2ULEN3il0uWeBGbbnScQcUzT2s+cnFmmS8jlf2UaTXTGryJXIkg7tMZ8VqYXuNldBrgggMhycEG
-        EXmpf5NKePxcDTTu5kP1ATysD0t/uYER73kH4IW5Z/eNsXf+9OwJ4dZnXOMZ8huSwcM4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.89)
-        (envelope-from <andrew@lunn.ch>)
-        id 1i0y52-0000ap-FE; Fri, 23 Aug 2019 03:09:28 +0200
-Date:   Fri, 23 Aug 2019 03:09:28 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     David Miller <davem@davemloft.net>
-Cc:     opensource@vdorst.com, sean.wang@mediatek.com,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        matthias.bgg@gmail.com, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, john@phrozen.org,
-        linux-mips@vger.kernel.org, frank-w@public-files.de
-Subject: Re: [PATCH net-next v2 0/3] net: dsa: mt7530: Convert to PHYLINK and
- add support for port 5
-Message-ID: <20190823010928.GK13020@lunn.ch>
-References: <20190821144547.15113-1-opensource@vdorst.com>
- <20190822.162047.1140525762795777800.davem@davemloft.net>
+        id S2390256AbfHWCgz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 22 Aug 2019 22:36:55 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:56412 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389643AbfHWCgz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Aug 2019 22:36:55 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7N2aJ1u068638;
+        Thu, 22 Aug 2019 21:36:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1566527779;
+        bh=nkExP0eRbsPB/OWk2fAwZsppRHsUY3F2k8vm2ySuYXE=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=n78gSZca5zRUaYh6aN1w/zueFQG3RgizaqRouQ+tXSV380/ZMho4iz27VBE4XBGXe
+         BaeEw45AKwRpJWWodv4To3aNKs8fLmy+7/9fbjNWs+761/erIceZIfOKoJtspcscqn
+         HvdJm3durOh7tJF14fmnvYItUCmQSnOUAdEvY4Uw=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7N2aIBV090688
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 22 Aug 2019 21:36:19 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 22
+ Aug 2019 21:36:18 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Thu, 22 Aug 2019 21:36:18 -0500
+Received: from [172.24.190.233] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7N2aEJw039712;
+        Thu, 22 Aug 2019 21:36:15 -0500
+Subject: Re: [PATCH v3 0/4] Lantiq VRX200/ARX300 PCIe PHY driver
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <john@phrozen.org>, <paul.burton@mips.com>, <ralf@linux-mips.org>
+CC:     <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hauke@hauke-m.de>, <mark.rutland@arm.com>, <ms@dev.tdt.de>
+References: <20190727120415.15859-1-martin.blumenstingl@googlemail.com>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <1d5212e1-aeb4-1f05-d5d4-6b944cf328cc@ti.com>
+Date:   Fri, 23 Aug 2019 08:06:13 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190822.162047.1140525762795777800.davem@davemloft.net>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20190727120415.15859-1-martin.blumenstingl@googlemail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Aug 22, 2019 at 04:20:47PM -0700, David Miller wrote:
-> From: René van Dorst <opensource@vdorst.com>
-> Date: Wed, 21 Aug 2019 16:45:44 +0200
+
+
+On 27/07/19 5:34 PM, Martin Blumenstingl wrote:
+> Various Lantiq (now Intel) SoCs contain one or more PCIe controllers
+> and PHYs.
+> This adds a driver for the PCIe PHYs found on the Lantiq VRX200 and
+> ARX300 SoCs. GRX390 should also be supported as far as I can tell,
+> but I don't have any of these devices to further verify that.
 > 
-> > 1. net: dsa: mt7530: Convert to PHYLINK API
-> >    This patch converts mt7530 to PHYLINK API.
-> > 2. dt-bindings: net: dsa: mt7530: Add support for port 5
-> > 3. net: dsa: mt7530: Add support for port 5
-> >    These 2 patches adding support for port 5 of the switch.
-> > 
-> > v1->v2:
-> >  * Mostly phylink improvements after review.
-> > rfc -> v1:
-> >  * Mostly phylink improvements after review.
-> >  * Drop phy isolation patches. Adds no value for now.
+> I have tested this PCIe PHY driver with the out-of-tree PCIe controller
+> driver in OpenWrt: [0]
 > 
-> This definitely needs some review before I'll apply it.
+> dependencies for this series:
+> none
+> 
+> patches 1-3 should go through the PHY tree
 
-That would be Russell.
+merged the phy patches.
 
-We should try to improve MAINTAINER so that Russell King gets picked
-by the get_maintainer script.
-
-   Andrew
+Thanks
+Kishon
+> patch 4 should go through the mips tree
+> 
+> I am aware that this series is too late for the v5.3 development cycle.
+> Getting review comments is still appreciated so this can be queued early
+> in the v5.4 development cycle.
+> 
+> 
+> Changes since v2 at [2]:
+> - added Rob's Reviewed-by to the dt-bindings patch (thank you!)
+> 
+> Changes since v1 at [1]:
+> - many thanks to Rob for giving me many hints regarding the .yaml bindings!
+> - update the .yaml binding license to (GPL-2.0-only OR BSD-2-Clause)
+> - changed the property lantiq,rcu to type phandle
+> - add the optional big-endian and little-endian boolean properties
+> - use numeric values for the clock phandles in the example to make the
+>   dt_binding_check build happy
+> - replaced two mdelay(1); with usleep_range(1000, 2000); in patch #2
+>   (spotted and reported by Hauke off-list)
+> 
+> 
+> [0] https://github.com/xdarklight/openwrt/commits/lantiq-mainline-pcie-phy-20190702
+> [1] https://patchwork.kernel.org/cover/11028797/
+> [2] https://patchwork.kernel.org/cover/11031421/
+> 
+> 
+> Martin Blumenstingl (4):
+>   dt-bindings: phy: add binding for the Lantiq VRX200 and ARX300 PCIe
+>     PHYs
+>   phy: lantiq: vrx200-pcie: add a driver for the Lantiq VRX200 PCIe PHY
+>   phy: enable compile-testing for the Lantiq PHY drivers
+>   MIPS: lantiq: update the clock alias' for the mainline PCIe PHY driver
+> 
+>  .../bindings/phy/lantiq,vrx200-pcie-phy.yaml  |  95 ++++
+>  arch/mips/lantiq/xway/sysctrl.c               |  16 +-
+>  drivers/phy/Makefile                          |   2 +-
+>  drivers/phy/lantiq/Kconfig                    |  11 +
+>  drivers/phy/lantiq/Makefile                   |   1 +
+>  drivers/phy/lantiq/phy-lantiq-vrx200-pcie.c   | 494 ++++++++++++++++++
+>  .../dt-bindings/phy/phy-lantiq-vrx200-pcie.h  |  11 +
+>  7 files changed, 621 insertions(+), 9 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/phy/lantiq,vrx200-pcie-phy.yaml
+>  create mode 100644 drivers/phy/lantiq/phy-lantiq-vrx200-pcie.c
+>  create mode 100644 include/dt-bindings/phy/phy-lantiq-vrx200-pcie.h
+> 
