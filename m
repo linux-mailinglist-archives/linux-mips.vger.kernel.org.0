@@ -2,127 +2,171 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B099B5F0
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2019 19:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC839B60E
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2019 20:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390006AbfHWR5P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Aug 2019 13:57:15 -0400
-Received: from mout.gmx.net ([212.227.15.15]:56701 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389214AbfHWR5P (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 23 Aug 2019 13:57:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1566583013;
-        bh=a3hZV3/n3ap+4WSZEq2RCiSPGLdIgJo4H4GyKnhd4jQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Ts+0NBdd02jIOaF9g1O+JvxABsznTx6snIgz4VeDRBddaITcjR6Nqv3e0N6vElRv9
-         jRvzmc4DkatBYwteaGDAGJqGUC/qDK/SBtcBUBRggGsH0rFcVPRHpZRajiD3FpW2hq
-         812QeuqLdTWOt4wZp6hTWFFLox9/EA5C91RjywIQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [217.61.154.8] ([217.61.154.8]) by web-mail.gmx.net
- (3c-app-gmx-bs75.server.lan [172.19.170.219]) (via HTTP); Fri, 23 Aug 2019
- 19:56:53 +0200
+        id S1725976AbfHWSFw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 23 Aug 2019 14:05:52 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:36964 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404508AbfHWSFw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Aug 2019 14:05:52 -0400
+Received: by mail-lj1-f195.google.com with SMTP id t14so9690152lji.4
+        for <linux-mips@vger.kernel.org>; Fri, 23 Aug 2019 11:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=54HuLcXJRBmqmLj5M8KRhwZ0HialDx0iJt+LBWZjxns=;
+        b=UUyF0nDXQ6XKk1yaAhF8QfXkeY+fEfwWr+MzdJW29tAurEYVLCCidU6PTXSjtwNIOp
+         MQcjEJ9XfAZ4jqBp7lS2yvGUHryu/dfFHa+I2GbBr4ZmQYbuxG0v3FBubPg2cg3zbZLF
+         7yCRJ15frsPOtjSRvTBETLFdD0IArr9pTl6niwZ3YeenT4fxeQrtwlKQ6Q30IZQqT3Y4
+         ZiqIeIlWWURV3EZ31+jbTMQJJ8/aN9rRba2eLVMMsGKbCCyrN30Si9GTINDQ+d5jp3Wi
+         dRFqH2WWZcAdnzyV5MxpRRRzhZLRNRS8Abhby6+hw65wew5zgtVSQtEr/Eq6lzpFXnF2
+         ISJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=54HuLcXJRBmqmLj5M8KRhwZ0HialDx0iJt+LBWZjxns=;
+        b=BQXzatIJPxpdaixfmtU5op5BO66VgWwHFcOXdSgys9epprmsx0v2UtPm7B/q34xU8r
+         lsdzzbVrfjf84tYC0nMwxxX3l0nuUhFVsvPFtdTfk2ZE7ycvXx39XcfwCjdJT/DhioSq
+         3O3IbP+6EvQoejDW5nX0FkDqqPujYwnuo7ANhJ0t4KHfrbkgCaj3y7rqGCD9Pc3Yopiq
+         NP09JZrdQWyUyQoVKcDxxFwR1TXAC5y/3NczPHsPiw/D4rjmPjny1orSZStwSxFDWvCK
+         eFMWTKEMcRpZpnOwap32HbpJ+0MNhxHfg0cQgSxPNq+YAj96j5Xs6cFlzcNUGVGxf++6
+         wusA==
+X-Gm-Message-State: APjAAAWVIQYquWviQo3NesAZpZFjGDZqM6qYDY18hAf5CBj8add48Obv
+        tw5aaRtnTawI6+9UsYUymkc=
+X-Google-Smtp-Source: APXvYqyeNYSz/PBF67Mjn6HVod+MTxkyMQZfYozcDAn1ucyWwoXjJmJc9YU2ifA+FuKEIZM1zmWS7Q==
+X-Received: by 2002:a2e:9b02:: with SMTP id u2mr3729734lji.219.1566583549178;
+        Fri, 23 Aug 2019 11:05:49 -0700 (PDT)
+Received: from mobilestation ([5.166.200.232])
+        by smtp.gmail.com with ESMTPSA id y10sm735566ljk.5.2019.08.23.11.05.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Aug 2019 11:05:48 -0700 (PDT)
+Date:   Fri, 23 Aug 2019 21:05:46 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        Paul Burton <pburton@wavecomp.com>,
+        "yasha.che3@gmail.com" <yasha.che3@gmail.com>,
+        "aurelien@aurel32.net" <aurelien@aurel32.net>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "matt.redfearn@mips.com" <matt.redfearn@mips.com>,
+        "chenhc@lemote.com" <chenhc@lemote.com>
+Subject: Re: [PATCH v1 0/8] MIPS: Drop boot_mem_map
+Message-ID: <20190823180545.iypv4m2avuklsywu@mobilestation>
+References: <20190819142313.3535-1-jiaxun.yang@flygoat.com>
+ <CY4PR2201MB1272B48BC8DCEACB50038F09C1A40@CY4PR2201MB1272.namprd22.prod.outlook.com>
 MIME-Version: 1.0
-Message-ID: <trinity-df75d11a-c27f-4941-a880-b017ebabd3dc-1566583013438@3c-app-gmx-bs75>
-From:   "Frank Wunderlich" <frank-w@public-files.de>
-To:     =?UTF-8?Q?=22Ren=C3=A9_van_Dorst=22?= <opensource@vdorst.com>
-Cc:     "John Crispin" <john@phrozen.org>,
-        "Sean Wang" <sean.wang@mediatek.com>,
-        "Nelson Chang" <nelson.chang@mediatek.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Stefan Roese" <sr@denx.de>,
-        =?UTF-8?Q?=22Ren=C3=A9_van_Dorst=22?= <opensource@vdorst.com>
-Subject: Aw: [PATCH net-next v3 0/3] net: ethernet: mediatek: convert to
- PHYLINK
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 23 Aug 2019 19:56:53 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20190823134516.27559-1-opensource@vdorst.com>
-References: <20190823134516.27559-1-opensource@vdorst.com>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:S0kLgvQPkllpT2VhF6NadCxmnsC4j1OSSgjS8MvBJRToXf5272KzfOlHJTEuMwhdhRBkV
- alz6rIZAKym54sGmYq+kBS+OqXCV1CPFSm9ypNkwOGS14DBQAGcoVfPkdH5Nr7yncJza6H0T9DMr
- GZZCcFwyv72zk+Svv2dxTijzg3isID01ns4l5Tw3kfKQ41yAUKX5MS8Gm5+YCMtQydyWUEgWilq3
- HjT1GubFAxqdU7t3UOnwSylRmsBgFAQtFa37MIEPi0Iw0gTAhZUkmJCyNQM+D4nXU9D/xYGJC6W7
- Hc=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JjDFsC2WnnU=:dLB5XzDJgCgcJHVkZzvig5
- sTjeopAWAVioeRr8fmySRP1TgkFxKvRFvH3V4mUfeb3fHx8O0wsGCKSHrMOR9ELfHshqz3Bss
- MyLUU7uOWk+qzN2c5je2sFCKWuOnlgvfW5TBU3GXrj4g7k8wsqCcb3G7s+/c/CpNPMBmGDApl
- tA+kC+/VNwnmQy+Htr97ROyH7qzxTYPnlYARpzFm5Q1atphm6wW6AGx+UiVttsNQiK6X3LfoM
- /wzkvPtWesv8LfSmoa3a4NlT+PxQYDhCrBCWDgiT+QEapuBUT7KcVjl0fX+iuHIjsycbBHRKR
- a0hIyb6KORjVOjSz7R+0EzfIzV07qo7nuqwZqayALOnLdmzVHgWda3T9nfuy5BARIgEcJ8Ol6
- 72tHrpLx3s7zrX3NUdgOaxgaFDkyfDZZ9yB7+yN/9reEukzot6BSvGtlnWe+LETCno+Mvx85o
- xW59anHfl78cmTchS7iFUcSnlZqikA8R5gYnrrfenNILbTq/DOYKlcUaNDbTMTYh0SyShz7sb
- LQwdrByFdm1qPiSo5CPNb5z+/+iT7agAiLSdyfq2nnKJSU6z5aZqOJ2KF8OqUeaBNe6/Jn1Oa
- JpFKrukp3wtwVa+GA8HZndkCd14kMpR3jlOXKi4jhjzz8s4nNll4XDfh03MRrUi57hEeZJ+OD
- eOpHjC0BxSYsKoUsR9axMSqPLp/noA04+c7IaR4XXlFg12w==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CY4PR2201MB1272B48BC8DCEACB50038F09C1A40@CY4PR2201MB1272.namprd22.prod.outlook.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-tested on bpi-r2 (mt7623/mt7530) and bpi-r64 (mt7622/rtl8367)
+On Fri, Aug 23, 2019 at 02:45:08PM +0000, Paul Burton wrote:
+> Hello,
+> 
+> Jiaxun Yang wrote:
+> > v1: Reording patches, fixes according to Serge's suggestions,
+> > fix maar section mismatch.
+> > 
+> > Jiaxun Yang (8):
+> >   MIPS: OCTEON: Drop boot_mem_map
+> >   MIPS: fw: Record prom memory
+> >   MIPS: malta: Drop prom_free_prom_memory
+> >   MIPS: msp: Record prom memory
+> >   MIPS: ip22: Drop addr_is_ram
+> >   MIPS: xlp: Drop boot_mem_map
+> >   MIPS: mm: Drop boot_mem_map
+> >   MIPS: init: Drop boot_mem_map
+> > 
+> >  arch/mips/cavium-octeon/dma-octeon.c |  17 +-
+> >  arch/mips/cavium-octeon/setup.c      |   3 +-
+> >  arch/mips/fw/arc/memory.c            |  24 +-
+> >  arch/mips/include/asm/bootinfo.h     |  16 --
+> >  arch/mips/include/asm/maar.h         |   8 +-
+> 
+> Series applied to mips-next.
 
-as reported to rene directly rx-path needs some rework because current rx-=
-speed
-on bpi-r2 is 865 Mbits/sec instead of ~940 Mbits/sec
+it seems to me too late to set the tag...
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
 
-Tested-by: Frank Wunderlich <frank-w@public-files=2Ede>
+-Sergey
 
-regards Frank
-
-
-> Gesendet: Freitag, 23=2E August 2019 um 15:45 Uhr
-> Von: "Ren=C3=A9 van Dorst" <opensource@vdorst=2Ecom>
-> An: "John Crispin" <john@phrozen=2Eorg>, "Sean Wang" <sean=2Ewang@mediat=
-ek=2Ecom>, "Nelson Chang" <nelson=2Echang@mediatek=2Ecom>, "David S =2E Mil=
-ler" <davem@davemloft=2Enet>, "Matthias Brugger" <matthias=2Ebgg@gmail=2Eco=
-m>
-> Cc: netdev@vger=2Ekernel=2Eorg, linux-arm-kernel@lists=2Einfradead=2Eorg=
-, linux-mediatek@lists=2Einfradead=2Eorg, linux-mips@vger=2Ekernel=2Eorg, "=
-Russell King" <linux@armlinux=2Eorg=2Euk>, "Frank Wunderlich" <frank-w@publ=
-ic-files=2Ede>, "Stefan Roese" <sr@denx=2Ede>, "Ren=C3=A9 van Dorst" <opens=
-ource@vdorst=2Ecom>
-> Betreff: [PATCH net-next v3 0/3] net: ethernet: mediatek: convert to PHY=
-LINK
->
-> These patches converts mediatek driver to PHYLINK API=2E
->=20
-> v2->v3:
-> * Phylink improvements and clean-ups after review
-> v1->v2:
-> * Rebase for mt76x8 changes
-> * Phylink improvements and clean-ups after review
-> * SGMII port doesn't support 2=2E5Gbit in SGMII mode only in BASE-X mode=
-=2E
->   Refactor the code=2E
->=20
-> Ren=C3=A9 van Dorst (3):
->   net: ethernet: mediatek: Add basic PHYLINK support
->   net: ethernet: mediatek: Re-add support SGMII
->   dt-bindings: net: ethernet: Update mt7622 docs and dts to reflect the
->     new phylink API
->=20
->  =2E=2E=2E/arm/mediatek/mediatek,sgmiisys=2Etxt        |   2 -
->  =2E=2E=2E/dts/mediatek/mt7622-bananapi-bpi-r64=2Edts  |  28 +-
->  arch/arm64/boot/dts/mediatek/mt7622=2Edtsi      |   1 -
->  drivers/net/ethernet/mediatek/Kconfig         |   2 +-
->  drivers/net/ethernet/mediatek/mtk_eth_path=2Ec  |  75 +--
->  drivers/net/ethernet/mediatek/mtk_eth_soc=2Ec   | 529 ++++++++++++-----=
--
->  drivers/net/ethernet/mediatek/mtk_eth_soc=2Eh   |  68 ++-
->  drivers/net/ethernet/mediatek/mtk_sgmii=2Ec     |  65 ++-
->  8 files changed, 477 insertions(+), 293 deletions(-)
->=20
-> --=20
-> 2=2E20=2E1
->=20
->
+> 
+> > MIPS: OCTEON: Drop boot_mem_map
+> >   commit 6cda3a5e002f
+> >   https://git.kernel.org/mips/c/6cda3a5e002f
+> >   
+> >   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >   Signed-off-by: Paul Burton <paul.burton@mips.com>
+> > 
+> > MIPS: fw: Record prom memory
+> >   commit 0df1007677d5
+> >   https://git.kernel.org/mips/c/0df1007677d5
+> >   
+> >   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >   Signed-off-by: Paul Burton <paul.burton@mips.com>
+> > 
+> > MIPS: malta: Drop prom_free_prom_memory
+> >   commit 79fd0fe44731
+> >   https://git.kernel.org/mips/c/79fd0fe44731
+> >   
+> >   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >   Signed-off-by: Paul Burton <paul.burton@mips.com>
+> > 
+> > MIPS: msp: Record prom memory
+> >   commit b3c948e2c00f
+> >   https://git.kernel.org/mips/c/b3c948e2c00f
+> >   
+> >   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >   Signed-off-by: Paul Burton <paul.burton@mips.com>
+> > 
+> > MIPS: ip22: Drop addr_is_ram
+> >   commit aa1edac13e5f
+> >   https://git.kernel.org/mips/c/aa1edac13e5f
+> >   
+> >   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >   Signed-off-by: Paul Burton <paul.burton@mips.com>
+> > 
+> > MIPS: xlp: Drop boot_mem_map
+> >   commit a121d6e0caf0
+> >   https://git.kernel.org/mips/c/a121d6e0caf0
+> >   
+> >   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >   Signed-off-by: Paul Burton <paul.burton@mips.com>
+> > 
+> > MIPS: mm: Drop boot_mem_map
+> >   commit a5718fe8f70f
+> >   https://git.kernel.org/mips/c/a5718fe8f70f
+> >   
+> >   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >   [paul.burton@mips.com:
+> >     - Fix bad MAAR address calculations.
+> >     - Use ALIGN() & define maar_align to make it clearer what's going on
+> >       with address manipulations.
+> >     - Drop the new used field from struct maar_config.
+> >     - Rework the RAM walk to avoid iterating over the cfg array needlessly
+> >       to find the first unused entry, then count used entries at the end.
+> >       Instead just keep the count as we go.]
+> >   Signed-off-by: Paul Burton <paul.burton@mips.com>
+> > 
+> > MIPS: init: Drop boot_mem_map
+> >   commit a94e4f24ec83
+> >   https://git.kernel.org/mips/c/a94e4f24ec83
+> >   
+> >   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >   [paul.burton@mips.com: Fix size calculation in check_kernel_sections_mem]
+> >   Signed-off-by: Paul Burton <paul.burton@mips.com>
+> 
+> Thanks,
+>     Paul
+> 
+> [ This message was auto-generated; if you believe anything is incorrect
+>   then please email paul.burton@mips.com to report it. ]
