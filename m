@@ -2,100 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDC59B598
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2019 19:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B099B5F0
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2019 19:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388865AbfHWRgc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Aug 2019 13:36:32 -0400
-Received: from forward106j.mail.yandex.net ([5.45.198.249]:46968 "EHLO
-        forward106j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389882AbfHWRg3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 23 Aug 2019 13:36:29 -0400
-Received: from mxback16g.mail.yandex.net (mxback16g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:316])
-        by forward106j.mail.yandex.net (Yandex) with ESMTP id B723911A0052;
-        Fri, 23 Aug 2019 20:36:26 +0300 (MSK)
-Received: from smtp2o.mail.yandex.net (smtp2o.mail.yandex.net [2a02:6b8:0:1a2d::26])
-        by mxback16g.mail.yandex.net (nwsmtp/Yandex) with ESMTP id Di3qhoV3bL-aPnKIDdf;
-        Fri, 23 Aug 2019 20:36:26 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1566581786;
-        bh=P3aDP7nZiXM3Ci1iJ/HB1DRtPsbO1Qvxn+leyUChYi8=;
-        h=In-Reply-To:Cc:To:From:Subject:Date:References:Message-ID;
-        b=jUfPLKeENvLpFcau8LQiI8zbA4Gp+TbyWjvChH5PMTfToNKCMtJbk1LPbraqbQ4N6
-         RcHxaA3mD6Xsqlgt9YKCcEN1bC9E+lP65PDXl43H9uafSOTnhC/LufQZavdxHU4UTu
-         zJuFZcvjkVKuybHQuE6bRPQAPFmVk6MZoaT1gYIA=
-Authentication-Results: mxback16g.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by smtp2o.mail.yandex.net (nwsmtp/Yandex) with ESMTPSA id Y9UbYehodS-aKXC4AP4;
-        Fri, 23 Aug 2019 20:36:24 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-Subject: Re: [PATCH v1 0/8] MIPS: Drop boot_mem_map
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Paul Burton <paul.burton@mips.com>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Paul Burton <pburton@wavecomp.com>,
-        "yasha.che3@gmail.com" <yasha.che3@gmail.com>,
-        "aurelien@aurel32.net" <aurelien@aurel32.net>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "fancer.lancer@gmail.com" <fancer.lancer@gmail.com>,
-        "matt.redfearn@mips.com" <matt.redfearn@mips.com>,
-        "chenhc@lemote.com" <chenhc@lemote.com>
-References: <20190819142313.3535-1-jiaxun.yang@flygoat.com>
- <CY4PR2201MB1272B48BC8DCEACB50038F09C1A40@CY4PR2201MB1272.namprd22.prod.outlook.com>
- <783425a8-3067-f61b-9f7f-e01ca7fed121@flygoat.com>
-Message-ID: <b4f7afab-ec17-6904-eb91-26cb629ed6c0@flygoat.com>
-Date:   Sat, 24 Aug 2019 01:36:18 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2390006AbfHWR5P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 23 Aug 2019 13:57:15 -0400
+Received: from mout.gmx.net ([212.227.15.15]:56701 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389214AbfHWR5P (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 23 Aug 2019 13:57:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1566583013;
+        bh=a3hZV3/n3ap+4WSZEq2RCiSPGLdIgJo4H4GyKnhd4jQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Ts+0NBdd02jIOaF9g1O+JvxABsznTx6snIgz4VeDRBddaITcjR6Nqv3e0N6vElRv9
+         jRvzmc4DkatBYwteaGDAGJqGUC/qDK/SBtcBUBRggGsH0rFcVPRHpZRajiD3FpW2hq
+         812QeuqLdTWOt4wZp6hTWFFLox9/EA5C91RjywIQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.154.8] ([217.61.154.8]) by web-mail.gmx.net
+ (3c-app-gmx-bs75.server.lan [172.19.170.219]) (via HTTP); Fri, 23 Aug 2019
+ 19:56:53 +0200
 MIME-Version: 1.0
-In-Reply-To: <783425a8-3067-f61b-9f7f-e01ca7fed121@flygoat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Message-ID: <trinity-df75d11a-c27f-4941-a880-b017ebabd3dc-1566583013438@3c-app-gmx-bs75>
+From:   "Frank Wunderlich" <frank-w@public-files.de>
+To:     =?UTF-8?Q?=22Ren=C3=A9_van_Dorst=22?= <opensource@vdorst.com>
+Cc:     "John Crispin" <john@phrozen.org>,
+        "Sean Wang" <sean.wang@mediatek.com>,
+        "Nelson Chang" <nelson.chang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Stefan Roese" <sr@denx.de>,
+        =?UTF-8?Q?=22Ren=C3=A9_van_Dorst=22?= <opensource@vdorst.com>
+Subject: Aw: [PATCH net-next v3 0/3] net: ethernet: mediatek: convert to
+ PHYLINK
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 23 Aug 2019 19:56:53 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20190823134516.27559-1-opensource@vdorst.com>
+References: <20190823134516.27559-1-opensource@vdorst.com>
+Content-Transfer-Encoding: quoted-printable
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:S0kLgvQPkllpT2VhF6NadCxmnsC4j1OSSgjS8MvBJRToXf5272KzfOlHJTEuMwhdhRBkV
+ alz6rIZAKym54sGmYq+kBS+OqXCV1CPFSm9ypNkwOGS14DBQAGcoVfPkdH5Nr7yncJza6H0T9DMr
+ GZZCcFwyv72zk+Svv2dxTijzg3isID01ns4l5Tw3kfKQ41yAUKX5MS8Gm5+YCMtQydyWUEgWilq3
+ HjT1GubFAxqdU7t3UOnwSylRmsBgFAQtFa37MIEPi0Iw0gTAhZUkmJCyNQM+D4nXU9D/xYGJC6W7
+ Hc=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JjDFsC2WnnU=:dLB5XzDJgCgcJHVkZzvig5
+ sTjeopAWAVioeRr8fmySRP1TgkFxKvRFvH3V4mUfeb3fHx8O0wsGCKSHrMOR9ELfHshqz3Bss
+ MyLUU7uOWk+qzN2c5je2sFCKWuOnlgvfW5TBU3GXrj4g7k8wsqCcb3G7s+/c/CpNPMBmGDApl
+ tA+kC+/VNwnmQy+Htr97ROyH7qzxTYPnlYARpzFm5Q1atphm6wW6AGx+UiVttsNQiK6X3LfoM
+ /wzkvPtWesv8LfSmoa3a4NlT+PxQYDhCrBCWDgiT+QEapuBUT7KcVjl0fX+iuHIjsycbBHRKR
+ a0hIyb6KORjVOjSz7R+0EzfIzV07qo7nuqwZqayALOnLdmzVHgWda3T9nfuy5BARIgEcJ8Ol6
+ 72tHrpLx3s7zrX3NUdgOaxgaFDkyfDZZ9yB7+yN/9reEukzot6BSvGtlnWe+LETCno+Mvx85o
+ xW59anHfl78cmTchS7iFUcSnlZqikA8R5gYnrrfenNILbTq/DOYKlcUaNDbTMTYh0SyShz7sb
+ LQwdrByFdm1qPiSo5CPNb5z+/+iT7agAiLSdyfq2nnKJSU6z5aZqOJ2KF8OqUeaBNe6/Jn1Oa
+ JpFKrukp3wtwVa+GA8HZndkCd14kMpR3jlOXKi4jhjzz8s4nNll4XDfh03MRrUi57hEeZJ+OD
+ eOpHjC0BxSYsKoUsR9axMSqPLp/noA04+c7IaR4XXlFg12w==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+tested on bpi-r2 (mt7623/mt7530) and bpi-r64 (mt7622/rtl8367)
 
-On 2019/8/24 上午1:20, Jiaxun Yang wrote:
+as reported to rene directly rx-path needs some rework because current rx-=
+speed
+on bpi-r2 is 865 Mbits/sec instead of ~940 Mbits/sec
+
+Tested-by: Frank Wunderlich <frank-w@public-files=2Ede>
+
+regards Frank
+
+
+> Gesendet: Freitag, 23=2E August 2019 um 15:45 Uhr
+> Von: "Ren=C3=A9 van Dorst" <opensource@vdorst=2Ecom>
+> An: "John Crispin" <john@phrozen=2Eorg>, "Sean Wang" <sean=2Ewang@mediat=
+ek=2Ecom>, "Nelson Chang" <nelson=2Echang@mediatek=2Ecom>, "David S =2E Mil=
+ler" <davem@davemloft=2Enet>, "Matthias Brugger" <matthias=2Ebgg@gmail=2Eco=
+m>
+> Cc: netdev@vger=2Ekernel=2Eorg, linux-arm-kernel@lists=2Einfradead=2Eorg=
+, linux-mediatek@lists=2Einfradead=2Eorg, linux-mips@vger=2Ekernel=2Eorg, "=
+Russell King" <linux@armlinux=2Eorg=2Euk>, "Frank Wunderlich" <frank-w@publ=
+ic-files=2Ede>, "Stefan Roese" <sr@denx=2Ede>, "Ren=C3=A9 van Dorst" <opens=
+ource@vdorst=2Ecom>
+> Betreff: [PATCH net-next v3 0/3] net: ethernet: mediatek: convert to PHY=
+LINK
 >
-> On 2019/8/23 下午10:45, Paul Burton wrote:
->> Hello,
->>
->> Jiaxun Yang wrote:
->>> v1: Reording patches, fixes according to Serge's suggestions,
->>> fix maar section mismatch.
->>>
->>> Jiaxun Yang (8):
->>>    MIPS: OCTEON: Drop boot_mem_map
->>>    MIPS: fw: Record prom memory
->>>    MIPS: malta: Drop prom_free_prom_memory
->>>    MIPS: msp: Record prom memory
->>>    MIPS: ip22: Drop addr_is_ram
->>>    MIPS: xlp: Drop boot_mem_map
->>>    MIPS: mm: Drop boot_mem_map
->>>    MIPS: init: Drop boot_mem_map
->>>
->>>   arch/mips/cavium-octeon/dma-octeon.c |  17 +-
->>>   arch/mips/cavium-octeon/setup.c      |   3 +-
->>>   arch/mips/fw/arc/memory.c            |  24 +-
->>>   arch/mips/include/asm/bootinfo.h     |  16 --
->>>   arch/mips/include/asm/maar.h         |   8 +-
->> Series applied to mips-next.
+> These patches converts mediatek driver to PHYLINK API=2E
+>=20
+> v2->v3:
+> * Phylink improvements and clean-ups after review
+> v1->v2:
+> * Rebase for mt76x8 changes
+> * Phylink improvements and clean-ups after review
+> * SGMII port doesn't support 2=2E5Gbit in SGMII mode only in BASE-X mode=
+=2E
+>   Refactor the code=2E
+>=20
+> Ren=C3=A9 van Dorst (3):
+>   net: ethernet: mediatek: Add basic PHYLINK support
+>   net: ethernet: mediatek: Re-add support SGMII
+>   dt-bindings: net: ethernet: Update mt7622 docs and dts to reflect the
+>     new phylink API
+>=20
+>  =2E=2E=2E/arm/mediatek/mediatek,sgmiisys=2Etxt        |   2 -
+>  =2E=2E=2E/dts/mediatek/mt7622-bananapi-bpi-r64=2Edts  |  28 +-
+>  arch/arm64/boot/dts/mediatek/mt7622=2Edtsi      |   1 -
+>  drivers/net/ethernet/mediatek/Kconfig         |   2 +-
+>  drivers/net/ethernet/mediatek/mtk_eth_path=2Ec  |  75 +--
+>  drivers/net/ethernet/mediatek/mtk_eth_soc=2Ec   | 529 ++++++++++++-----=
+-
+>  drivers/net/ethernet/mediatek/mtk_eth_soc=2Eh   |  68 ++-
+>  drivers/net/ethernet/mediatek/mtk_sgmii=2Ec     |  65 ++-
+>  8 files changed, 477 insertions(+), 293 deletions(-)
+>=20
+> --=20
+> 2=2E20=2E1
+>=20
 >
-> Sorry Paul, there are some build issues suggested by kbuild test boot, 
-> I'm going to send v2 later.
->
-Or you can simply fix them and apply again...
-
-Sorry for the stupid problems. I should test with varies of configs 
-before send them out.
-
-I promise that won't happen again.
-
---
-
-Jiaxun Yang
-
-
