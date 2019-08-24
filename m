@@ -2,61 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3E69C0C3
-	for <lists+linux-mips@lfdr.de>; Sun, 25 Aug 2019 00:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDE69C0F1
+	for <lists+linux-mips@lfdr.de>; Sun, 25 Aug 2019 01:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727868AbfHXWez (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 24 Aug 2019 18:34:55 -0400
-Received: from verein.lst.de ([213.95.11.211]:37645 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727879AbfHXWez (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 24 Aug 2019 18:34:55 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 3E93268AEF; Sun, 25 Aug 2019 00:34:50 +0200 (CEST)
-Date:   Sun, 25 Aug 2019 00:34:49 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Paul Burton <paul.burton@mips.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        Guan Xuetao <gxt@pku.edu.cn>,
-        Shawn Anastasio <shawn@anastas.io>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        James Hogan <jhogan@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: cleanup the dma_pgprot handling
-Message-ID: <20190824223449.GC21729@lst.de>
-References: <20190816070754.15653-1-hch@lst.de> <20190823215759.zprrwotlbva46y33@pburton-laptop>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190823215759.zprrwotlbva46y33@pburton-laptop>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+        id S1727740AbfHXXTP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Sat, 24 Aug 2019 19:19:15 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:48464 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727708AbfHXXTP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Aug 2019 19:19:15 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 1E0F91525F715;
+        Sat, 24 Aug 2019 16:19:14 -0700 (PDT)
+Date:   Sat, 24 Aug 2019 16:19:12 -0700 (PDT)
+Message-Id: <20190824.161912.1377369658338940538.davem@davemloft.net>
+To:     opensource@vdorst.com
+Cc:     sean.wang@mediatek.com, andrew@lunn.ch, vivien.didelot@gmail.com,
+        f.fainelli@gmail.com, matthias.bgg@gmail.com,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, john@phrozen.org,
+        linux-mips@vger.kernel.org, frank-w@public-files.de
+Subject: Re: [PATCH net-next v2 3/3] net: dsa: mt7530: Add support for port
+ 5
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20190821144547.15113-4-opensource@vdorst.com>
+References: <20190821144547.15113-1-opensource@vdorst.com>
+        <20190821144547.15113-4-opensource@vdorst.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sat, 24 Aug 2019 16:19:14 -0700 (PDT)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Aug 23, 2019 at 09:58:04PM +0000, Paul Burton wrote:
-> So I believe uncached & uncached accelerated are another case like that
-> described above - they're 2 different CCAs but the same "access type",
-> namely uncached.
-> 
-> Section 4.9 then goes on to forbid mixing access types, but not CCAs.
-> 
-> It would be nice if the precise mapping from CCA to access type was
-> provided, but I don't see that anywhere. I can check with the
-> architecture team to be sure, but to my knowledge we're fine to mix
-> access via kseg1 (ie. uncached) & mappings with CCA=7 (uncached
-> accelerated).
+From: René van Dorst <opensource@vdorst.com>
+Date: Wed, 21 Aug 2019 16:45:47 +0200
 
-Ok.  Looks like we can keep it then and I'll add a comment to the
-code with the above reference.
+> +	dev_info(ds->dev, "Setup P5, HWTRAP=0x%x, intf_sel=%s, phy-mode=%s\n",
+> +		 val, p5_intf_modes(priv->p5_intf_sel), phy_modes(interface));
+
+This is debugging, at best.  Please make this a debugging message or
+remove it entirely.
