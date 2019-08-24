@@ -2,139 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 773319B85D
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Aug 2019 23:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED7B9BC61
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Aug 2019 09:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390607AbfHWV6u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Aug 2019 17:58:50 -0400
-Received: from mail-eopbgr730107.outbound.protection.outlook.com ([40.107.73.107]:12666
-        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2390764AbfHWV6u (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 23 Aug 2019 17:58:50 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d1EkpdLfyx/v96aCRXVA5nHPw0P7ZTpel0Etz8EmPlY2K+irZ4Otkpr5Qv0nIYOolJz+qmKdhK+1KxeM2fBsHEzyfl4aDMdkrjmWmmWyRpCk1vcpgEf+VDlkBLU1o8S3Q0Zi04VYwYU5G2ZE1KUnPpa7Gj6mYrNMuOuSGFmn1Yrihya7FajWgXl9ljofx9/F7SJCt2l9eu9YyaKmJRsDgyYPOnCfk41AzWnmqBtuZxyMjaB5W5tzxkc+rib/GaaQm2kOJo7c8nr848HYxbke2NQ0LaDd0qGcInuGOCQIevSA6eSr64gWe1c2qcVYiNj/1TUPZqjtiOt/SRD0bCKr2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+15AuWsYroL9LW4VXjaZCJFMXePsi9rZcg3Tcu9VZaM=;
- b=MUfpEaCATgYMS765gjDYdwjCDpaCUn4MF5z7BecY6PNCmNEz09se6eiA91pkODasCq56lq/UycHxUI0JSXXWhh+GEz5Vtu0dWfuCIhEr0RtUBp5k84A8zC6iLBIDYlc8yNQ2lWkExguYZ7+JNX91cuM55r+1DvbsjOqRjB3yLBwuLdF7zaDp34OiSk2dSuL1WtP4gJKobdIVtFGNG0l75VkI/v6lM8uaYD8D0UogUgMZXNCJTce+/zpJMSyN1SzlvBg5SHqFBhN+syrQfp9f/2sGbU+15w8MHJ8ErG+syJmKKv/TxAxKWKAqLebY6SF7PpmerieqE+sWZQFAX8FBbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
- dkim=pass header.d=mips.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+15AuWsYroL9LW4VXjaZCJFMXePsi9rZcg3Tcu9VZaM=;
- b=XmBEwPVvZq38GZmQ5jgMsSUxf+GhRt368mKsypUHUacthzEM8eYYnf8xbI6Nt75GFdP/QiQXH8EC3ERpWmuhcmwuy9/+jD6rfJxGLBuFM1f6Q8ZMgi6rwaf3HBBQX5ot9yyDFypTa3+tg+k3EuFYThvB+U7Nn/G3iFS1HTwJn6M=
-Received: from CY4PR2201MB1272.namprd22.prod.outlook.com (10.171.214.23) by
- CY4PR2201MB1414.namprd22.prod.outlook.com (10.171.211.150) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2178.18; Fri, 23 Aug 2019 21:58:04 +0000
-Received: from CY4PR2201MB1272.namprd22.prod.outlook.com
- ([fe80::2d81:1469:ceaf:1168]) by CY4PR2201MB1272.namprd22.prod.outlook.com
- ([fe80::2d81:1469:ceaf:1168%5]) with mapi id 15.20.2178.020; Fri, 23 Aug 2019
- 21:58:04 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Christoph Hellwig <hch@lst.de>
-CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        Guan Xuetao <gxt@pku.edu.cn>,
-        Shawn Anastasio <shawn@anastas.io>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        James Hogan <jhogan@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: cleanup the dma_pgprot handling
-Thread-Topic: cleanup the dma_pgprot handling
-Thread-Index: AQHVWf3Wcj0vRRmtDE2acan7+F6osQ==
-Date:   Fri, 23 Aug 2019 21:58:04 +0000
-Message-ID: <20190823215759.zprrwotlbva46y33@pburton-laptop>
-References: <20190816070754.15653-1-hch@lst.de>
-In-Reply-To: <20190816070754.15653-1-hch@lst.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: LO2P265CA0231.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:b::27) To CY4PR2201MB1272.namprd22.prod.outlook.com
- (2603:10b6:910:6e::23)
-user-agent: NeoMutt/20180716
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2a02:c7f:5e65:9900:8519:dc48:d16b:70fc]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b74269f9-04f9-48ea-b4a3-08d72814f910
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:CY4PR2201MB1414;
-x-ms-traffictypediagnostic: CY4PR2201MB1414:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <CY4PR2201MB14149DB010BB253D3F0874EAC1A40@CY4PR2201MB1414.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0138CD935C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(396003)(366004)(376002)(136003)(39850400004)(346002)(199004)(189003)(33716001)(6116002)(6246003)(9686003)(6512007)(58126008)(11346002)(446003)(6916009)(66446008)(14454004)(66556008)(66476007)(64756008)(66946007)(8936002)(14444005)(44832011)(316002)(6306002)(476003)(102836004)(54906003)(5660300002)(478600001)(99286004)(386003)(4326008)(71200400001)(8676002)(52116002)(25786009)(53936002)(6436002)(256004)(305945005)(486006)(46003)(7736002)(42882007)(81156014)(7416002)(76176011)(6486002)(1076003)(2906002)(966005)(229853002)(186003)(71190400001)(81166006)(6506007);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR2201MB1414;H:CY4PR2201MB1272.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: GeZiVlypx6XvjUENFejkSpKkGP5OpN13T7pYyv2o8nL2nWiVUeeebEQge+rcZzKDCMhRuxYLRUwUW5724RVIjyaTq2/DLrMGW3qhmqRdqpDuF9iwzrHATQnFaaHzSCTKevvjlHGhqFXH4/h9sB9CeBE2S1sfuLlyQr6YUQlou16XHP47Wtf3qTo4b7Wpy3ysMVXWDfjhjY/zXaMKRwpyn17su+g9eiA6LCenFAkEd/3XqPqHMRktP9sNeDcgvgPujhKYoO59EicVMpHJuBNuXPKa3UvL0fYnthdcOqiIiOy5i6r7vacG1RoYNK9jA7Olz8oy3rBAp9q+8nmN8iqQpm3RsjsqoxEyxylisFG90pTiIY70NpXpYTUhB1NxI3VjZiA4dvbBWpU+tvYnxHekTJ5pj0M6WxaJ/OXHiqEWZKE=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1C4B7209ABEB4A4BA21FDFF51979BD88@namprd22.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1726072AbfHXHlG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 24 Aug 2019 03:41:06 -0400
+Received: from mx.0dd.nl ([5.2.79.48]:35660 "EHLO mx.0dd.nl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726018AbfHXHlG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 24 Aug 2019 03:41:06 -0400
+Received: from mail.vdorst.com (mail.vdorst.com [IPv6:fd01::250])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx.0dd.nl (Postfix) with ESMTPS id B91985FBFB;
+        Sat, 24 Aug 2019 09:41:03 +0200 (CEST)
+Authentication-Results: mx.0dd.nl;
+        dkim=pass (2048-bit key; secure) header.d=vdorst.com header.i=@vdorst.com header.b="NB/3M+Pc";
+        dkim-atps=neutral
+Received: from www (www.vdorst.com [192.168.2.222])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.vdorst.com (Postfix) with ESMTPSA id 73B691D8AB7C;
+        Sat, 24 Aug 2019 09:41:03 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.vdorst.com 73B691D8AB7C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vdorst.com;
+        s=default; t=1566632463;
+        bh=qIA9b/hnzdc6JPIQXZGuy0VUvB2oMhN3+uI0Vi3Y2S8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NB/3M+PccmfTsXHEG8/Dt6nXF+TorTmYyddrD5jtILMDoXxmAL2rjVqx0GE9r2hR0
+         VjF97jks+woX3OuhAfM399NVCfBaGsQ+iqG15fMmKwKb7uw7tYn8JMZp0nog/nfx1e
+         6GT1iWi3yX1Q3CvMdMuCgXbz8UK1ZAlSxyJFRCrtvAIDHdmMh2KiHLM7CHTKIr847R
+         0BKs1lYe31LmPVlqlEI0mlnKvxlaEkVReteoKHZ5wYC7bWN+MwNjZtgbe6Hb/LuiNr
+         B8fHGlRq1zFSLzCG4UqQyy2nGUFYgZPGO3FeQWOVhi5Ikqhq/Lxs7eIjrAmHi6MpGw
+         X18MxL+T5IIJQ==
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1]) by
+ www.vdorst.com (Horde Framework) with HTTPS; Sat, 24 Aug 2019 07:41:03 +0000
+Date:   Sat, 24 Aug 2019 07:41:03 +0000
+Message-ID: <20190824074103.Horde.ytG2fquC9xJKq5TL79l6J0M@www.vdorst.com>
+From:   =?utf-8?b?UmVuw6k=?= van Dorst <opensource@vdorst.com>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Nelson Chang <nelson.chang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>, Stefan Roese <sr@denx.de>
+Subject: Re: Aw: [PATCH net-next v3 0/3] net: ethernet: mediatek: convert to
+ PHYLINK
+References: <20190823134516.27559-1-opensource@vdorst.com>
+ <trinity-df75d11a-c27f-4941-a880-b017ebabd3dc-1566583013438@3c-app-gmx-bs75>
+In-Reply-To: <trinity-df75d11a-c27f-4941-a880-b017ebabd3dc-1566583013438@3c-app-gmx-bs75>
+User-Agent: Horde Application Framework 5
+Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b74269f9-04f9-48ea-b4a3-08d72814f910
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2019 21:58:04.1602
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6s7AcMKI2KDWcvgKbXilApbKVoLsJWClFKM+0moHuR1SbZUzIElph++bHPA3d73NkZwFjRZ3kAA8Za8Lflw0cg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR2201MB1414
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-SGkgQ2hyaXN0b3BoLA0KDQpPbiBGcmksIEF1ZyAxNiwgMjAxOSBhdCAwOTowNzo0OEFNICswMjAw
-LCBDaHJpc3RvcGggSGVsbHdpZyB3cm90ZToNCj4gSSdkIHN0aWxsIGxpa2UgdG8gaGVhciBhIGNv
-bmZpcm1hdGlvbiBmcm9tIHRoZSBtaXBzIGZvbGtzIGhvdw0KPiB0aGUgd3JpdGUgY29tYmliZSBh
-dHRyaWJ1dGUgY2FuIG9yIGNhbid0IHdvcmsgd2l0aCB0aGUgS1NFRzENCj4gdW5jYWNoZWQgc2Vn
-bWVudC4NCg0KUXVvdGluZyBzZWN0aW9uIDQuOCAiQ2FjaGVhYmlsaXR5IGFuZCBDb2hlcmVuY3kg
-QXR0cmlidXRlcyBhbmQgQWNjZXNzDQpUeXBlcyIgb2YgIk1JUFMgQXJjaGl0ZWN0dXJlIFZvbHVt
-ZSAxOiBJbnRyb2R1Y3Rpb24gdG8gdGhlIE1JUFMzMg0KQXJjaGl0ZWN0dXJlIiAoTUQwMDA4MCwg
-cmV2aXNpb24gNi4wMSk6DQoNCmh0dHBzOi8vd3d3Lm1pcHMuY29tLz9kby1kb3dubG9hZD1pbnRy
-b2R1Y3Rpb24tdG8tdGhlLW1pcHMzMi1hcmNoaXRlY3R1cmUtdjYtMDENCg0KPiBNZW1vcnkgYWNj
-ZXNzIHR5cGVzIGFyZSBzcGVjaWZpZWQgYnkgYXJjaGl0ZWN0dXJhbGx5LWRlZmluZWQgYW5kDQo+
-IGltcGxlbWVudGF0aW9uLXNwZWNpZmljIENhY2hlYWJpbGl0eSBhbmQgQ29oZXJlbmN5IEF0dHJp
-YnV0ZSBiaXRzDQo+IChDQ0FzKSBnZW5lcmF0ZWQgYnkgdGhlIE1NVSBmb3IgdGhlIGFjY2Vzcy4N
-Cj4NCj4gU2xpZ2h0bHkgZGlmZmVyZW50IGNhY2hlYWJpbGl0eSBhbmQgY29oZXJlbmN5IGF0dHJp
-YnV0ZXMgc3VjaCBhcw0KPiDigJxjYWNoZWQgY29oZXJlbnQsIHVwZGF0ZSBvbiB3cml0ZeKAnSBh
-bmQg4oCcY2FjaGVkIGNvaGVyZW50LCBleGNsdXNpdmUgb24NCj4gd3JpdGXigJ0gY2FuIG1hcCB0
-byB0aGUgc2FtZSBtZW1vcnkgYWNjZXNzIHR5cGU7IGluIHRoaXMgY2FzZSB0aGV5IGJvdGgNCj4g
-bWFwIHRvIGNhY2hlZCBjb2hlcmVudC4gSW4gb3JkZXIgdG8gbWFwIHRvIHRoZSBzYW1lIGFjY2Vz
-cyB0eXBlLCB0aGUNCj4gZnVuZGFtZW50YWwgbWVjaGFuaXNtcyBvZiBib3RoIENDQXMgbXVzdCBi
-ZSB0aGUgc2FtZS4NCj4NCj4gV2hlbiB0aGUgb3BlcmF0aW9uIG9mIHRoZSBpbnN0cnVjdGlvbiBp
-cyBhZmZlY3RlZCwgdGhlIGluc3RydWN0aW9ucw0KPiBhcmUgZGVzY3JpYmVkIGluIHRlcm1zIG9m
-IG1lbW9yeSBhY2Nlc3MgdHlwZXMuIFRoZSBsb2FkIGFuZCBzdG9yZQ0KPiBvcGVyYXRpb25zIGlu
-IGEgcHJvY2Vzc29yIHByb2NlZWQgYWNjb3JkaW5nIHRvIHRoZSBzcGVjaWZpYyBDQ0Egb2YgdGhl
-DQo+IHJlZmVyZW5jZSwgaG93ZXZlciwgYW5kIHRoZSBwc2V1ZG9jb2RlIGZvciBsb2FkIGFuZCBz
-dG9yZSBjb21tb24NCj4gZnVuY3Rpb25zIHVzZXMgdGhlIENDQSB2YWx1ZSByYXRoZXIgdGhhbiB0
-aGUgY29ycmVzcG9uZGluZyBtZW1vcnkNCj4gYWNjZXNzIHR5cGUuDQoNClNvIEkgYmVsaWV2ZSB1
-bmNhY2hlZCAmIHVuY2FjaGVkIGFjY2VsZXJhdGVkIGFyZSBhbm90aGVyIGNhc2UgbGlrZSB0aGF0
-DQpkZXNjcmliZWQgYWJvdmUgLSB0aGV5J3JlIDIgZGlmZmVyZW50IENDQXMgYnV0IHRoZSBzYW1l
-ICJhY2Nlc3MgdHlwZSIsDQpuYW1lbHkgdW5jYWNoZWQuDQoNClNlY3Rpb24gNC45IHRoZW4gZ29l
-cyBvbiB0byBmb3JiaWQgbWl4aW5nIGFjY2VzcyB0eXBlcywgYnV0IG5vdCBDQ0FzLg0KDQpJdCB3
-b3VsZCBiZSBuaWNlIGlmIHRoZSBwcmVjaXNlIG1hcHBpbmcgZnJvbSBDQ0EgdG8gYWNjZXNzIHR5
-cGUgd2FzDQpwcm92aWRlZCwgYnV0IEkgZG9uJ3Qgc2VlIHRoYXQgYW55d2hlcmUuIEkgY2FuIGNo
-ZWNrIHdpdGggdGhlDQphcmNoaXRlY3R1cmUgdGVhbSB0byBiZSBzdXJlLCBidXQgdG8gbXkga25v
-d2xlZGdlIHdlJ3JlIGZpbmUgdG8gbWl4DQphY2Nlc3MgdmlhIGtzZWcxIChpZS4gdW5jYWNoZWQp
-ICYgbWFwcGluZ3Mgd2l0aCBDQ0E9NyAodW5jYWNoZWQNCmFjY2VsZXJhdGVkKS4NCg0KVGhhbmtz
-LA0KICAgIFBhdWwNCg==
+Hi Frank,
+
+Quoting Frank Wunderlich <frank-w@public-files.de>:
+
+> tested on bpi-r2 (mt7623/mt7530) and bpi-r64 (mt7622/rtl8367)
+>
+
+Thanks for testing!
+
+> as reported to rene directly rx-path needs some rework because  
+> current rx-speed
+> on bpi-r2 is 865 Mbits/sec instead of ~940 Mbits/sec
+
+I still think it is a result of the extra code in the rx path when mt76x8
+was introduced.
+
+Greats,
+
+René
+
+>
+> Tested-by: Frank Wunderlich <frank-w@public-files.de>
+>
+> regards Frank
+>
+>
+>> Gesendet: Freitag, 23. August 2019 um 15:45 Uhr
+>> Von: "René van Dorst" <opensource@vdorst.com>
+>> An: "John Crispin" <john@phrozen.org>, "Sean Wang"  
+>> <sean.wang@mediatek.com>, "Nelson Chang"  
+>> <nelson.chang@mediatek.com>, "David S . Miller"  
+>> <davem@davemloft.net>, "Matthias Brugger" <matthias.bgg@gmail.com>
+>> Cc: netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,  
+>> linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,  
+>> "Russell King" <linux@armlinux.org.uk>, "Frank Wunderlich"  
+>> <frank-w@public-files.de>, "Stefan Roese" <sr@denx.de>, "René van  
+>> Dorst" <opensource@vdorst.com>
+>> Betreff: [PATCH net-next v3 0/3] net: ethernet: mediatek: convert to PHYLINK
+>>
+>> These patches converts mediatek driver to PHYLINK API.
+>>
+>> v2->v3:
+>> * Phylink improvements and clean-ups after review
+>> v1->v2:
+>> * Rebase for mt76x8 changes
+>> * Phylink improvements and clean-ups after review
+>> * SGMII port doesn't support 2.5Gbit in SGMII mode only in BASE-X mode.
+>>   Refactor the code.
+>>
+>> René van Dorst (3):
+>>   net: ethernet: mediatek: Add basic PHYLINK support
+>>   net: ethernet: mediatek: Re-add support SGMII
+>>   dt-bindings: net: ethernet: Update mt7622 docs and dts to reflect the
+>>     new phylink API
+>>
+>>  .../arm/mediatek/mediatek,sgmiisys.txt        |   2 -
+>>  .../dts/mediatek/mt7622-bananapi-bpi-r64.dts  |  28 +-
+>>  arch/arm64/boot/dts/mediatek/mt7622.dtsi      |   1 -
+>>  drivers/net/ethernet/mediatek/Kconfig         |   2 +-
+>>  drivers/net/ethernet/mediatek/mtk_eth_path.c  |  75 +--
+>>  drivers/net/ethernet/mediatek/mtk_eth_soc.c   | 529 ++++++++++++------
+>>  drivers/net/ethernet/mediatek/mtk_eth_soc.h   |  68 ++-
+>>  drivers/net/ethernet/mediatek/mtk_sgmii.c     |  65 ++-
+>>  8 files changed, 477 insertions(+), 293 deletions(-)
+>>
+>> --
+>> 2.20.1
+>>
+>>
+
+
+
