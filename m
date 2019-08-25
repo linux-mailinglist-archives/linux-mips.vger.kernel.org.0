@@ -2,101 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8129C3DF
-	for <lists+linux-mips@lfdr.de>; Sun, 25 Aug 2019 15:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F4C9C538
+	for <lists+linux-mips@lfdr.de>; Sun, 25 Aug 2019 19:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727889AbfHYNZO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 25 Aug 2019 09:25:14 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:33450 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725922AbfHYNZO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 25 Aug 2019 09:25:14 -0400
-Received: by mail-pg1-f195.google.com with SMTP id n190so8764783pgn.0;
-        Sun, 25 Aug 2019 06:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0QzXKgHJNJjac27m2EIm1Lz0/kAofQ72J+526iejRFQ=;
-        b=GO/PVWf3Aip/lj76SnUDb0sMdXD+1tVF4Pr4MtQbEEKh9xmXb2UDDeimXy+D9tSRoG
-         ONfI3x+1GnVxlk4972mu5UBRbB3v9cDn0s0GXIfDvUkoxvFpZB7qpM3Wm7svq08IqXES
-         3/9H/nvW/APPaP6DXd/ZlsqTaXXFgfY5nbRum3oET7EhpHDQM6O7aQgrLYUCx31vh/tp
-         Pj3jnXMeh/9xoFgvF62TEqWkl9dtlG9kZEQ23LqbLsRsqn9qkIxzDaA35xnLfCdk7Yvg
-         kdWiDXZHWBnkOUGF5K8KzJ635D2qzEbl/F8Ge9MZplop+b+vPJfi/jVV3tdF7l5wEKUI
-         HPiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0QzXKgHJNJjac27m2EIm1Lz0/kAofQ72J+526iejRFQ=;
-        b=Jvvca8TFYhzYsqQ/ZFPDiSNutCaBpej+5YxzhZvvjJSLbcab7uIEPRV4tJHG5HKAJl
-         suuVlly85JWk8GgrzrdO2B0jEvxIm00qLeTDHwk1Cy50T7dGhJiQgTdapAUv4Q/dmFqK
-         ktEHfIU49Eus3RvJ8DDf1p2zeAyBBOT8k0bs7/l1uiYiYfawHQOYTCNW2LXahdcxRees
-         TPbf8FdMQbJvUvdbXBF1OIGIWMrTGrKiBZyed30PdtcPXZQPs0V12fjqtUhi2n+9P8o+
-         tWmTdbVjPxFuQEYrn4nAsfwk73qYxlDYCak06TUX4mXFYkBhhJ3e17kD8XBjdyt02W+2
-         452A==
-X-Gm-Message-State: APjAAAWBPEmoJISmEYJN+ZGWdinrVEqqb+pPMSFlF05v0L2Uug8TFZch
-        Q5tzo4+eWCFxJS4ZJeLe6Vk=
-X-Google-Smtp-Source: APXvYqxZ3PAtXLqHmn+Zgv1+tnSLgb0uWh1NyJ7+nIhirLt8hpEvkUAsM2RAxT5IIyrqsmvFKAmyHw==
-X-Received: by 2002:a17:90a:3465:: with SMTP id o92mr14610155pjb.20.1566739513587;
-        Sun, 25 Aug 2019 06:25:13 -0700 (PDT)
-Received: from localhost.localdomain ([149.28.153.17])
-        by smtp.gmail.com with ESMTPSA id y23sm11076562pfr.86.2019.08.25.06.25.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Aug 2019 06:25:13 -0700 (PDT)
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Jessica Yu <jeyu@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Changbin Du <changbin.du@gmail.com>
-Subject: [PATCH 11/11] MAINTAINERS: make scripts/ftrace/ maintained
-Date:   Sun, 25 Aug 2019 21:23:30 +0800
-Message-Id: <20190825132330.5015-12-changbin.du@gmail.com>
+        id S1728696AbfHYRn5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 25 Aug 2019 13:43:57 -0400
+Received: from mx.0dd.nl ([5.2.79.48]:38696 "EHLO mx.0dd.nl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727077AbfHYRn5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 25 Aug 2019 13:43:57 -0400
+Received: from mail.vdorst.com (mail.vdorst.com [IPv6:fd01::250])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx.0dd.nl (Postfix) with ESMTPS id 0BDA45FA49;
+        Sun, 25 Aug 2019 19:43:55 +0200 (CEST)
+Authentication-Results: mx.0dd.nl;
+        dkim=pass (2048-bit key; secure) header.d=vdorst.com header.i=@vdorst.com header.b="GGlDHOIy";
+        dkim-atps=neutral
+Received: from pc-rene.vdorst.com (pc-rene.vdorst.com [192.168.2.125])
+        by mail.vdorst.com (Postfix) with ESMTPA id BDD6E1D8E163;
+        Sun, 25 Aug 2019 19:43:54 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.vdorst.com BDD6E1D8E163
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vdorst.com;
+        s=default; t=1566755034;
+        bh=o6wAtIg9/9bX+HgLTjY6gx3KROiRBjCVc3xSGwYT8a4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GGlDHOIyVmHv3TJ/Pwnx6inYEWPnk/uL9BdikBAoiAv4wjbsOUKCSt+9/rEz8C4dq
+         ODy7m/c8vrCUnLkaXFvTGm+FtbTATj0DL9kkdchm/5FkCz48ivzBGDO39Cc6tdFEzI
+         fPpaNR4siNWqWf8Svp7Ir9VNL47OHf91CYWMJsdzMGyp/aOT/FeIZanbPOAb19WK1f
+         cxPVGncvxKPxUDm3FRYe/bQq/2SZcn33j7tNy69TRrD4/4SIpkUR+5pskKcKO3w0mW
+         +EXGwVpLUK/ms8Y1YwkXiEVdxZuTY0nLu+IknfWmo2eNFGlyDZ0WvDtFn3NPIQVvQD
+         YDMnzZe+iKG2A==
+From:   =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
+To:     John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Nelson Chang <nelson.chang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Stefan Roese <sr@denx.de>,
+        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>
+Subject: [PATCH net-next v4 0/3] net: ethernet: mediatek: convert to PHYLINK
+Date:   Sun, 25 Aug 2019 19:43:38 +0200
+Message-Id: <20190825174341.20750-1-opensource@vdorst.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190825132330.5015-1-changbin.du@gmail.com>
-References: <20190825132330.5015-1-changbin.du@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Make scripts/ftrace/ maintained and I would like to help with reviewing
-related patches.
+These patches converts mediatek driver to PHYLINK API.
 
-Signed-off-by: Changbin Du <changbin.du@gmail.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+v3->v4:
+* Phylink improvements and clean-ups after review
+v2->v3:
+* Phylink improvements and clean-ups after review
+v1->v2:
+* Rebase for mt76x8 changes
+* Phylink improvements and clean-ups after review
+* SGMII port doesn't support 2.5Gbit in SGMII mode only in BASE-X mode.
+  Refactor the code.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9cbcf167bdd0..ca012ea260d7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16293,6 +16293,7 @@ F:	drivers/char/tpm/
- TRACING
- M:	Steven Rostedt <rostedt@goodmis.org>
- M:	Ingo Molnar <mingo@redhat.com>
-+R:	Changbin Du <changbin.du@gmail.com>
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
- S:	Maintained
- F:	Documentation/trace/ftrace.rst
-@@ -16303,6 +16304,7 @@ F:	include/linux/trace*.h
- F:	include/trace/
- F:	kernel/trace/
- F:	tools/testing/selftests/ftrace/
-+F:	scripts/ftrace/
- 
- TRACING MMIO ACCESSES (MMIOTRACE)
- M:	Steven Rostedt <rostedt@goodmis.org>
+
+René van Dorst (3):
+  net: ethernet: mediatek: Add basic PHYLINK support
+  net: ethernet: mediatek: Re-add support SGMII
+  dt-bindings: net: ethernet: Update mt7622 docs and dts to reflect the
+    new phylink API
+
+ .../arm/mediatek/mediatek,sgmiisys.txt        |   2 -
+ .../dts/mediatek/mt7622-bananapi-bpi-r64.dts  |  28 +-
+ arch/arm64/boot/dts/mediatek/mt7622.dtsi      |   1 -
+ drivers/net/ethernet/mediatek/Kconfig         |   2 +-
+ drivers/net/ethernet/mediatek/mtk_eth_path.c  |  75 +--
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c   | 521 ++++++++++++------
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h   |  68 ++-
+ drivers/net/ethernet/mediatek/mtk_sgmii.c     |  65 ++-
+ 8 files changed, 470 insertions(+), 292 deletions(-)
+
 -- 
 2.20.1
 
