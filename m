@@ -2,111 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5079CADB
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2019 09:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19789CC88
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2019 11:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730053AbfHZHpN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 26 Aug 2019 03:45:13 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:52422 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728198AbfHZHpM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Aug 2019 03:45:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=FqJ6xvyn0LHQ16MKsazT2HhX3KxiVzyDvsY2B23Ctso=; b=bdX927/h7yS5b1qg30jd4ATTN
-        X998dcLFf2XLF3GhMdnEPUlpSbM/iRxAGrhpx+yvAcP6BXLmbwDijPz2wcP/JwkDHBUjSbZxoDB+3
-        YQ57G9VNts3H7N7la3on6VnVzaxdmSveaKRWl58IAtaq38KY9/FnISbhc9828VnPKrpWSuveuwCsf
-        LLkKN5ECiFgMtCQvCGf3g2FcMbmezoDuCh0pBTcRFNTS/Q3Cy+gP7YmApuR0lGoAMiLT59cXHHtB4
-        IueRhEqDIVavy7Y4upqvIZAVIkf6Nx08E5ArJ5fpMQa79c0XUnLbHIWxJnMajZebul2t7vd6teTi+
-        wxeuxTAhA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i29g9-00028n-7H; Mon, 26 Aug 2019 07:44:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4A7803070F4;
-        Mon, 26 Aug 2019 09:44:04 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A84BA20B33552; Mon, 26 Aug 2019 09:44:37 +0200 (CEST)
-Date:   Mon, 26 Aug 2019 09:44:37 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, Jessica Yu <jeyu@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH 05/11] ftrace: create memcache for hash entries
-Message-ID: <20190826074437.GM2369@hirez.programming.kicks-ass.net>
-References: <20190825132330.5015-1-changbin.du@gmail.com>
- <20190825132330.5015-6-changbin.du@gmail.com>
+        id S1730947AbfHZJZE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Aug 2019 05:25:04 -0400
+Received: from mout.gmx.net ([212.227.15.15]:59153 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729753AbfHZJZE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 26 Aug 2019 05:25:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1566811473;
+        bh=WPm8X1ChJ0p/RZOC+rkk0PdvK8NnGje9cQ3dIxTdJIc=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=SxbLIwR5cB4Cnp/Peqdd1D7ppiU0h1VWCMGDT9kWiwjFScV4QyPLPxaCuJuMYcVi0
+         VlXstiUA0+OSvDhWir8vlpyGrv1nCrxqWad0eJv6Z1GTH/jMEhXssX+tTqelJRJE6L
+         A0JoPWsokLnp8fXbo0Qd9mK54ZxXTx/4/2eQiNXg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [185.75.74.250] ([185.75.74.250]) by web-mail.gmx.net
+ (3c-app-gmx-bs57.server.lan [172.19.170.141]) (via HTTP); Mon, 26 Aug 2019
+ 11:24:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190825132330.5015-6-changbin.du@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Message-ID: <trinity-6b3ee2ed-957b-405d-83db-84d7bccf2fb9-1566811472863@3c-app-gmx-bs57>
+From:   "Frank Wunderlich" <frank-w@public-files.de>
+To:     =?UTF-8?Q?=22Ren=C3=A9_van_Dorst=22?= <opensource@vdorst.com>
+Cc:     "John Crispin" <john@phrozen.org>,
+        "Sean Wang" <sean.wang@mediatek.com>,
+        "Nelson Chang" <nelson.chang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Stefan Roese" <sr@denx.de>,
+        =?UTF-8?Q?=22Ren=C3=A9_van_Dorst=22?= <opensource@vdorst.com>
+Subject: Aw: [PATCH net-next v4 0/3] net: ethernet: mediatek: convert to
+ PHYLINK
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 26 Aug 2019 11:24:32 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20190825174341.20750-1-opensource@vdorst.com>
+References: <20190825174341.20750-1-opensource@vdorst.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:86Ct19xn0B1fqyZ7orUtEMSW3w64xKQU3Hnx+X8RdbwRpEVO6B/9KE3Ek2J6+1swlTVPe
+ deEKC8gY2MDrQuaj8ONAP9FIivSj+XSiawtQfyu1Tu3r5octtCP3D9DoNA2gB03XdyKlRmc1kILu
+ ETDmLKNl5GPmGlvhnD5kRF31vJK+A7aC2MBPV0n32YJlJyQvnf8AojevyQVJfjzGjChHIYGgf6vJ
+ Twx8seQGwwANm/LHCQBeM/D/cTElxvT1wR6GwObYgFUtNhc1yCzNlD8DslfpMLeMtvY6EIytfHw8
+ Jw=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:T3D1PvKgRWo=:EoSCKcOlaQEGzHM2Ytsthg
+ 4f0qLEOIGzMqI8bjUfKMtYNWpHR+B3i8eqICHnexdvv/kCsX/cs43Dr2V9DYKgcCNcPChH5yi
+ siGW/VLviBu1u+f875CxHS9Hm9E07v2NPV4GQOMMdJ4kCL7wMc45Ei9dtduQx7hEkke+yXiat
+ B77YwJ7qTmLIAmQdO+fJByWIQ2moUU/cXMm0R7S1e/JSmwkssbzZCpUiNwvGQOoEJxDNj1zgQ
+ NmTpk57NZ8GuLhtY+Qs00XUfjl42fXIWrrlhw3i99MsjM+k8GN2DYVol1X1awtSly/bJf0+e4
+ trlfZbXvJdzHKfNBsQ2GHvhhgXRHYrSQN8/eGMgQ1XIJos+mzkSNTeGIPhiLtsyWWtqOvHDo2
+ frlaK3AKk4C8BU5j2luIutrkvVqwEBroDOo35htrrqBi8E4KsrUGTUfu+vZSOoXekOlSmHuLt
+ ik1RASajtTlqWDzoO6mreg7HAIj2HUOIGTwOI1rJqx1eA6Abanm4Oy285H3Rq/+O3yJWbwFPu
+ aZbxyADTQRJZ9izUAzTTWYw9pq7jNEenjhWe3gkvc2X0xLREGAjI0YtNlO+3VxzB5HdQa7t/1
+ NUqGmJ2GU5e59HhAloupT/ZG3tP18WpDlz3jfJPpe7KD3GTcZv3RVkkrJwQPiCHhtdz83Gr88
+ FJ8Y+n99kx6CzYVtnqsNXaa55KyapZoYzMFtkZ365rk3JGA==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Aug 25, 2019 at 09:23:24PM +0800, Changbin Du wrote:
-> When CONFIG_FTRACE_FUNC_PROTOTYPE is enabled, thousands of
-> ftrace_func_entry instances are created. So create a dedicated
-> memcache to enhance performance.
-> 
-> Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> ---
->  kernel/trace/ftrace.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index a314f0768b2c..cfcb8dad93ea 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -94,6 +94,8 @@ struct ftrace_ops *function_trace_op __read_mostly = &ftrace_list_end;
->  /* What to set function_trace_op to */
->  static struct ftrace_ops *set_function_trace_op;
->  
-> +struct kmem_cache *hash_entry_cache;
-> +
->  static bool ftrace_pids_enabled(struct ftrace_ops *ops)
->  {
->  	struct trace_array *tr;
-> @@ -1169,7 +1171,7 @@ static int add_hash_entry(struct ftrace_hash *hash, unsigned long ip,
->  {
->  	struct ftrace_func_entry *entry;
->  
-> -	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
-> +	entry = kmem_cache_alloc(hash_entry_cache, GFP_KERNEL);
->  	if (!entry)
->  		return -ENOMEM;
->  
-> @@ -6153,6 +6155,15 @@ void __init ftrace_init(void)
->  	if (ret)
->  		goto failed;
->  
-> +	hash_entry_cache = kmem_cache_create("ftrace-hash",
-> +					     sizeof(struct ftrace_func_entry),
-> +					     sizeof(struct ftrace_func_entry),
-> +					     0, NULL);
-> +	if (!hash_entry_cache) {
-> +		pr_err("failed to create ftrace hash entry cache\n");
-> +		goto failed;
-> +	}
+Tested on Bananapi-R2 (mt7623+mt7530) and Bananapi-R64 v0.1 (mt7622+rtl8367)
 
-Wait what; you already have then in the binary image, now you're
-allocating extra memory for each of them?
+Tested-by: Frank Wunderlich <frank-w@public-files.de>
 
-Did you look at what ORC does? Is the binary search really not fast
-enough?
+regards Frank
+
