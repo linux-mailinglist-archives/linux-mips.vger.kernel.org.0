@@ -2,105 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 086ED9C74C
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2019 04:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA4B9CAD0
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Aug 2019 09:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729058AbfHZChV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 25 Aug 2019 22:37:21 -0400
-Received: from foss.arm.com ([217.140.110.172]:52498 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728460AbfHZChV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 25 Aug 2019 22:37:21 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19249344;
-        Sun, 25 Aug 2019 19:37:20 -0700 (PDT)
-Received: from [10.162.43.136] (p8cg001049571a15.blr.arm.com [10.162.43.136])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E19513F718;
-        Sun, 25 Aug 2019 19:37:09 -0700 (PDT)
-Subject: Re: [RFC V2 0/1] mm/debug: Add tests for architecture exported page
- table helpers
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        id S1729942AbfHZHmt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Aug 2019 03:42:49 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:55080 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728198AbfHZHms (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Aug 2019 03:42:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=lIut4B8w/K6qaNO5//JKDXgxZBzz15ddgNf2zVVfQ1E=; b=f6XJLfxeBVv9Hyb0B1vtj9oxL
+        i8iw5LMMkKhG+T6Xu47kb2+iCLpMrKBQjXS1NBw74AP7B3pgxUBsbndSWQGizhRtNCAgW99j5+OeI
+        c+T+1uJAk4oCoRSmOm0NE/wm6iL8VH+qSfESDzvXkGeSKy+GyCJWsD5r3LnItvz8EK4g8tAXBgRgi
+        JMSMaRtxN+OddwD4UaHD/oWS7Za8/f15E/5LTf3nBtMiL8X2OQpSYRhvIozCuZOKt/2bBeTu5XD5k
+        MSr7q1wHFvaw9hwCCzoDKZY0xDJWDWNsCSapSfqxfwjWoZuh5bxf2qBIOtw+RF3Jx2EN1us7T239k
+        nCed49xqA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1i29dr-0004v1-6h; Mon, 26 Aug 2019 07:42:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3BB083075FE;
+        Mon, 26 Aug 2019 09:41:42 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9740120B33552; Mon, 26 Aug 2019 09:42:15 +0200 (CEST)
+Date:   Mon, 26 Aug 2019 09:42:15 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, Jessica Yu <jeyu@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <1565335998-22553-1-git-send-email-anshuman.khandual@arm.com>
- <20190809101632.GM5482@bombadil.infradead.org>
- <a5aab7ff-f7fd-9cc1-6e37-e4185eee65ac@arm.com>
- <20190809135202.GN5482@bombadil.infradead.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <7a88f6bb-e8c7-3ac7-2f92-1de752a01f33@arm.com>
-Date:   Mon, 26 Aug 2019 08:07:13 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH 03/11] asm-generic: add generic dwarf definition
+Message-ID: <20190826074215.GL2369@hirez.programming.kicks-ass.net>
+References: <20190825132330.5015-1-changbin.du@gmail.com>
+ <20190825132330.5015-4-changbin.du@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190809135202.GN5482@bombadil.infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190825132330.5015-4-changbin.du@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 08/09/2019 07:22 PM, Matthew Wilcox wrote:
-> On Fri, Aug 09, 2019 at 04:05:07PM +0530, Anshuman Khandual wrote:
->> On 08/09/2019 03:46 PM, Matthew Wilcox wrote:
->>> On Fri, Aug 09, 2019 at 01:03:17PM +0530, Anshuman Khandual wrote:
->>>> Should alloc_gigantic_page() be made available as an interface for general
->>>> use in the kernel. The test module here uses very similar implementation from
->>>> HugeTLB to allocate a PUD aligned memory block. Similar for mm_alloc() which
->>>> needs to be exported through a header.
->>>
->>> Why are you allocating memory at all instead of just using some
->>> known-to-exist PFNs like I suggested?
->>
->> We needed PFN to be PUD aligned for pfn_pud() and PMD aligned for mk_pmd().
->> Now walking the kernel page table for a known symbol like kernel_init()
+On Sun, Aug 25, 2019 at 09:23:22PM +0800, Changbin Du wrote:
+> Add generic DWARF constant definitions. We will use it later.
 > 
-> I didn't say to walk the kernel page table.  I said to call virt_to_pfn()
-> for a known symbol like kernel_init().
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> ---
+>  include/asm-generic/dwarf.h | 199 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 199 insertions(+)
+>  create mode 100644 include/asm-generic/dwarf.h
 > 
->> as you had suggested earlier we might encounter page table page entries at PMD
->> and PUD which might not be PMD or PUD aligned respectively. It seemed to me
->> that alignment requirement is applicable only for mk_pmd() and pfn_pud()
->> which create large mappings at those levels but that requirement does not
->> exist for page table pages pointing to next level. Is not that correct ? Or
->> I am missing something here ?
-> 
-> Just clear the bottom bits off the PFN until you get a PMD or PUD aligned
-> PFN.  It's really not hard.
+> diff --git a/include/asm-generic/dwarf.h b/include/asm-generic/dwarf.h
+> new file mode 100644
+> index 000000000000..c705633c2a8f
+> --- /dev/null
+> +++ b/include/asm-generic/dwarf.h
+> @@ -0,0 +1,199 @@
+> +/* SPDX-License-Identifier: GPL-2.0
+> + *
+> + * Architecture independent definitions of DWARF.
+> + *
+> + * Copyright (C) 2019 Changbin Du <changbin.du@gmail.com>
 
-As Mark pointed out earlier that might end up being just a synthetic PFN
-which might not even exist on a given system.
+You're claiming copyright on dwarf definitions? ;-)
+
+I'm thinking only Oracle was daft enough to think stuff like that was
+copyrightable.
+
+Also; I think it would be very good to not use/depend on DWARF for this.
+
+You really don't need all of DWARF; I'm thikning you only need a few
+types; for location we already have regs_get_kernel_argument() which
+has all the logic to find the n-th argument.
+
