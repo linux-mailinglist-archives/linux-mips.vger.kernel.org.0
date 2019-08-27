@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F2A9E1FE
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Aug 2019 10:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3B49E1FF
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Aug 2019 10:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730149AbfH0Hys (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 27 Aug 2019 03:54:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46482 "EHLO mail.kernel.org"
+        id S1730171AbfH0Hyu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Aug 2019 03:54:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46518 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730142AbfH0Hyq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 27 Aug 2019 03:54:46 -0400
+        id S1730164AbfH0Hyu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 27 Aug 2019 03:54:50 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C310D2173E;
-        Tue, 27 Aug 2019 07:54:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9754D206BA;
+        Tue, 27 Aug 2019 07:54:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566892486;
-        bh=cLlmmAGCVwDgnENcAsbB4Ldr9YL25YNv2N8nZLv1Zok=;
+        s=default; t=1566892489;
+        bh=hSXiHTaIGZAtakKjmWxzWPqo1JJ9IeJSuT3tMk0Qho4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cv16O7zkKrHK7nM9pqjezm6a2yKxCzet+oPFHwqJcF9EMqSDVGspYCIZvW25Bt5T0
-         6ItlwqXzN6hhnIg6vhNGKduSVAtROtyZvYqZLZrs4tRyNzpeGz8BgNaQ0cwI5p7Xhp
-         G8aTmQJZZzyY7ACpSWWsP2tYsuURsFutuBXkVsxw=
+        b=0hy4mk58PicfsKxdibXUIqz6+xqrjAFI/qz0jUdXlwhu3mnrJKqR7AMU6zWApv3Os
+         Op3l6dU3BVBJMHbv1amw/faMlKc0gPbwRSzjpC5QNTp6bDOPAYb05Wo0bLBNlBZTpp
+         z2qdU80MATW2Jak5riL37AxfQArJtpMxWar1VGcM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Vladimir Kondratiev <vladimir.kondratiev@linux.intel.com>,
         Paul Burton <paul.burton@mips.com>,
         Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 02/98] MIPS: kernel: only use i8253 clocksource with periodic clockevent
-Date:   Tue, 27 Aug 2019 09:49:41 +0200
-Message-Id: <20190827072718.261794938@linuxfoundation.org>
+Subject: [PATCH 4.19 03/98] mips: fix cacheinfo
+Date:   Tue, 27 Aug 2019 09:49:42 +0200
+Message-Id: <20190827072718.323552414@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20190827072718.142728620@linuxfoundation.org>
 References: <20190827072718.142728620@linuxfoundation.org>
@@ -47,12 +47,22 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-[ Upstream commit a07e3324538a989b7cdbf2c679be6a7f9df2544f ]
+[ Upstream commit b8bea8a5e5d942e62203416ab41edecaed4fda02 ]
 
-i8253 clocksource needs a free running timer. This could only
-be used, if i8253 clockevent is set up as periodic.
+Because CONFIG_OF defined for MIPS, cacheinfo attempts to fill information
+from DT, ignoring data filled by architecture routine. This leads to error
+reported
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+ cacheinfo: Unable to detect cache hierarchy for CPU 0
+
+Way to fix this provided in
+commit fac51482577d ("drivers: base: cacheinfo: fix x86 with
+ CONFIG_OF enabled")
+
+Utilize same mechanism to report that cacheinfo set by architecture
+specific function
+
+Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@linux.intel.com>
 Signed-off-by: Paul Burton <paul.burton@mips.com>
 Cc: Ralf Baechle <ralf@linux-mips.org>
 Cc: James Hogan <jhogan@kernel.org>
@@ -60,23 +70,22 @@ Cc: linux-mips@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/kernel/i8253.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/mips/kernel/cacheinfo.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/kernel/i8253.c b/arch/mips/kernel/i8253.c
-index 5f209f111e59e..df7ddd246eaac 100644
---- a/arch/mips/kernel/i8253.c
-+++ b/arch/mips/kernel/i8253.c
-@@ -32,7 +32,8 @@ void __init setup_pit_timer(void)
+diff --git a/arch/mips/kernel/cacheinfo.c b/arch/mips/kernel/cacheinfo.c
+index 97d5239ca47ba..428ef21892039 100644
+--- a/arch/mips/kernel/cacheinfo.c
++++ b/arch/mips/kernel/cacheinfo.c
+@@ -80,6 +80,8 @@ static int __populate_cache_leaves(unsigned int cpu)
+ 	if (c->tcache.waysize)
+ 		populate_cache(tcache, this_leaf, 3, CACHE_TYPE_UNIFIED);
  
- static int __init init_pit_clocksource(void)
- {
--	if (num_possible_cpus() > 1) /* PIT does not scale! */
-+	if (num_possible_cpus() > 1 || /* PIT does not scale! */
-+	    !clockevent_state_periodic(&i8253_clockevent))
- 		return 0;
++	this_cpu_ci->cpu_map_populated = true;
++
+ 	return 0;
+ }
  
- 	return clocksource_i8253_init();
 -- 
 2.20.1
 
