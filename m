@@ -2,143 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 551339E532
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Aug 2019 12:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0C89E54C
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Aug 2019 12:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728928AbfH0KDT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 27 Aug 2019 06:03:19 -0400
-Received: from mail-eopbgr690109.outbound.protection.outlook.com ([40.107.69.109]:59695
+        id S1727815AbfH0KEb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Aug 2019 06:04:31 -0400
+Received: from mail-eopbgr690124.outbound.protection.outlook.com ([40.107.69.124]:23515
         "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725912AbfH0KDT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 27 Aug 2019 06:03:19 -0400
+        id S1725805AbfH0KEa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 27 Aug 2019 06:04:30 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CCLLh9tHGhGutNySZb0R2tUORy6bJaCmjE406vazF+6/Kgu8gr+iqoUErJ0cNcDteQPtDHPzCs1hg6J0SFOk3C6iXsiXbffJfOd9VAGNm6f127OscxHhGdVrJlapWJRK5ZDWEsJEsLwNo/fSLuuvd2gsqNvdnq4rjGDIFhTVQovptnFM8wtLCgR/k5PW810zV6Nx2rJuR8rraiaD1CjXvkEaigjVCBdB2x1iezGKOwW2m3fourOb0WuIkhNvOEifFVqSK4Gsru6AV+OP0wwmpX/GvWOjs09BXBo6mNnZPM8oolKfkvOxdplV9r3l8xNRhJi+9l4kNBDFqeS+XZvFrw==
+ b=SeA1GCq723vx2j1lxThwkniul86eBTvwNTy/iUQWnMMzydzEBCgfS4AoMqFKXetkYeRNL758n8pix+cyl66bltYaax5stdrsoJyyZQfSNmXMgYZhPECND2VpOHlfyAMpIGl+88izG+apAPnilDoOyRSmYiJ90PY+A/8y8d8gZG2cb4e5jMNbE6QvTM2BPCuW1YjEQhc3lPsbUIk1JJOH2eeQb2DzD4BtbVWHBvFwy/FlVZFsEzX24B9El6SCIZpZph0i3+NCGjgADm4YhLz0763LFedYv3VSEyzOzlm9cLbNx4Ct61E/4DxeEvUndbRgfUM/5eExieQN4QDnSFhKMQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6Xwq9EmfsYlF6D5P+L2rJ5Fh+3lrN+JOtnL4zwXCgro=;
- b=TA0ZJKsDG4sJ6ghHznKr/z6eI6AlS9NBQL9TTPDNHAoLg0ReaZTSCM4L6skW1NWO4Pt3vcdPIfneeiglHWcBcK1LGtsl0zU06lDUXnw5uEjDUCrXEY4QRQSzMW8Aa8q9gOJgHi0V9xU6sAoOqMgr/iqnU2KQgWj7Ob6nl8WSLJ6wIVnEkYYiUCxE9Z8VQnEQhvbny81+qYVJv44xkljQUUaZ3QzCPfwv63ncwGkXjzZwWO0u/MpZyBWSv6+cZYNyGFwOJ4jG4ySIx63AOHJu4eCFkphPh9luYwX2DHNyE88/x2R6eMMuaOwy8aIfHgnVUwYKfDIIUjMBTxXXLs+PLg==
+ bh=WyYcJt30vIEhUKL86UG4/KYM+tcxU8JXS/dlbYT25QY=;
+ b=UcJE+MmWdXvi3M+/F9uJ+idcg7AW6kn5JEYJlSEE7ca+f+QnWzGjHQ/S8oBhZwDAPdV+s2ugCFqhqEiwXb2mc3/Ddph+5/evCEMQFEA3neIQKtSpB98kXsPRHY3lACuX8XcoXd21R1lWX8yTOIbODLKrcb7WR0nEJR1vMW+RL6o63pn2Iv+WzOlfb1lVx5vM9biisjYMR6qSmM7cb19nH0NyMmF0UBiP/nSzq7uEjuTjZGH5S1jNE0bfIY+CV1k5vEne3fQH3mHosb9dVCTidgNTe19HNchJaVG2WClNNKw/ornoEHYOw//VRh8koYUnGzUF+hFApbhoTsN1pZepUg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6Xwq9EmfsYlF6D5P+L2rJ5Fh+3lrN+JOtnL4zwXCgro=;
- b=Vy24JsrBlA7/Vh3EIWL0Ny/ZTs/hYZqwAmiufIhdLlQBmKOS7JkdpgoZb0jjxsHkcqd8iQ3JKQOuDgt/c+erc9GJZgBaY9qoKiTJuItVwvTmLlicmuDV+VO9gm4J85VF461dzeMK9glJxl/a4qcIHpghgm6bi3v8NrZZjWgggag=
+ bh=WyYcJt30vIEhUKL86UG4/KYM+tcxU8JXS/dlbYT25QY=;
+ b=uoErz5sCGk86MQLTf5eLBX1INGlNrYl3u0bBMB4I7AwvnUXvQUt1MNqKNahz4EOlzIKrrGrLzuGDukBBEJCDKs3GZzve+WqoeDnyo+EgCosCnWLiRs5hb6TBThEaMt1U0kC4QhjCRv1ZfrDYOauFvuuXxITd2CRVCvbDuX6m1O0=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1390.namprd22.prod.outlook.com (10.174.162.9) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2199.20; Tue, 27 Aug 2019 10:03:17 +0000
+ MWHPR2201MB1536.namprd22.prod.outlook.com (10.174.170.161) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2199.19; Tue, 27 Aug 2019 10:04:23 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::f9e8:5e8c:7194:fad3]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::f9e8:5e8c:7194:fad3%11]) with mapi id 15.20.2199.021; Tue, 27 Aug
- 2019 10:03:17 +0000
+ 2019 10:04:23 +0000
 From:   Paul Burton <paul.burton@mips.com>
-To:     Christoph Hellwig <hch@lst.de>
-CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        Guan Xuetao <gxt@pku.edu.cn>,
-        Shawn Anastasio <shawn@anastas.io>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
+To:     YueHaibing <yuehaibing@huawei.com>
+CC:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <pburton@wavecomp.com>,
         James Hogan <jhogan@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        YueHaibing <yuehaibing@huawei.com>,
         "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 6/6] MIPS: document mixing "slightly different CCAs"
-Thread-Topic: [PATCH 6/6] MIPS: document mixing "slightly different CCAs"
-Thread-Index: AQHVXL6l2iVfJsYr5Ei+0s2DQeCv9Q==
-Date:   Tue, 27 Aug 2019 10:03:16 +0000
-Message-ID: <20190827100310.p2o5y3aklcoti74z@pburton-laptop>
-References: <20190826132553.4116-1-hch@lst.de>
- <20190826132553.4116-7-hch@lst.de>
-In-Reply-To: <20190826132553.4116-7-hch@lst.de>
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH -next] MIPS: Octeon: remove duplicated include from
+  dma-octeon.c
+Thread-Topic: [PATCH -next] MIPS: Octeon: remove duplicated include from
+  dma-octeon.c
+Thread-Index: AQHVXL7MPNdVTCGbT02z68VZO84++g==
+Date:   Tue, 27 Aug 2019 10:04:21 +0000
+Message-ID: <MWHPR2201MB1277BA013BC2E677E1924887C1A00@MWHPR2201MB1277.namprd22.prod.outlook.com>
+References: <20190827072334.96670-1-yuehaibing@huawei.com>
+In-Reply-To: <20190827072334.96670-1-yuehaibing@huawei.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: LO2P123CA0011.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:a6::23) To MWHPR2201MB1277.namprd22.prod.outlook.com
+x-clientproxiedby: LNXP265CA0072.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:5d::36) To MWHPR2201MB1277.namprd22.prod.outlook.com
  (2603:10b6:301:18::12)
-user-agent: NeoMutt/20180716
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=pburton@wavecomp.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
 x-originating-ip: [94.118.89.251]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 31247056-33f9-45f6-9500-08d72ad5c7d8
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1390;
-x-ms-traffictypediagnostic: MWHPR2201MB1390:
-x-microsoft-antispam-prvs: <MWHPR2201MB1390144256A14498A26D68CDC1A00@MWHPR2201MB1390.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-ms-office365-filtering-correlation-id: f0918c6f-c4fb-47e5-cec8-08d72ad5ee75
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1536;
+x-ms-traffictypediagnostic: MWHPR2201MB1536:
+x-ms-exchange-purlcount: 1
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MWHPR2201MB153618E9D9B5B8F009034BF6C1A00@MWHPR2201MB1536.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1850;
 x-forefront-prvs: 0142F22657
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(366004)(39850400004)(376002)(136003)(396003)(346002)(189003)(199004)(71200400001)(486006)(102836004)(186003)(476003)(386003)(26005)(8676002)(42882007)(478600001)(6246003)(2906002)(305945005)(5660300002)(66066001)(53936002)(8936002)(9686003)(1076003)(446003)(14444005)(81156014)(6486002)(7736002)(81166006)(256004)(11346002)(4326008)(25786009)(14454004)(44832011)(52116002)(6512007)(58126008)(7416002)(6916009)(54906003)(76176011)(6116002)(3846002)(66946007)(66446008)(66476007)(66556008)(64756008)(33716001)(99286004)(71190400001)(316002)(6436002)(6506007)(229853002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1390;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(136003)(376002)(39850400004)(396003)(346002)(189003)(199004)(6436002)(76176011)(6916009)(81156014)(99286004)(7736002)(64756008)(5660300002)(81166006)(54906003)(66556008)(52536014)(66446008)(478600001)(66476007)(71190400001)(71200400001)(486006)(52116002)(476003)(66946007)(4744005)(8676002)(33656002)(256004)(316002)(44832011)(6116002)(3846002)(74316002)(966005)(25786009)(7696005)(53936002)(4326008)(386003)(42882007)(186003)(2906002)(6306002)(14454004)(66066001)(229853002)(6246003)(9686003)(11346002)(446003)(6506007)(8936002)(305945005)(7416002)(55016002)(102836004)(26005);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1536;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: hzQ2W7D89/5bOMckqiyD4YmPVgAE+qzEqiVqLEhKTz76XIkalHuEwK5B8RO5FDj5VB80v63tntNByUn6Gd/gOgE6cflzAHG5dXBGD8KgsefRz4nUM/EpQXaDmwaDPu0C1wyF7go+Of4hHuwWIs/GaL+nAdaSD+6Cyh8RSd0oDis+apASwR/lr4gsW/NLoBazYjWbuTH87jVp2jp9QlubW9l7NhHMlwkCSbSjC6ibeiesKnqE5yraqZJpy10BSvnZSmnoYTcCiDFqC/w0wAfz+BDCyPNg6AAKq1VvXtm2EICLMVEhh6yeQScHpabuwGBWVyBeRZO6osHQ3nIR7aSCf5uK9TZ7FvSEPQWf50v9ukrBTDgDe7X4niP0uuM8dFbU9kGn7tHL9IJrN7gwiptGR50dwqDQkAGz8XRtS0UMtEI=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <112563C691B9D24084999634B2E39C47@namprd22.prod.outlook.com>
+x-microsoft-antispam-message-info: 2df5tpuNsccrQVaED4qInwkbVI1DessqYNnKpIHDhDA6TnhAcLj/V6XQMlOZBAVSYm9wojYLI06zh+PlszdSPOXUXQBVmQvcyC4FUumhBHnX5nMQoTRCWKCu7mj+LBO+FTjT299rQcWj4tGnH3V8T3C+Ts+XT1jSwPwfaJuk8tJVbqnBSS90dXKGJs9LCmizbjCE4Te50W9ufN5Rs6SGPkJSacBC+xMb4Py0A+NUNnz/Tjn06fsG/iIoWhtjF99VxF8oHVDEofa3f/iN7LzAIJULbFO2bRUWGGq8QLyzQstxZYtmCmzAnYW2cIeCWu7mjFNJ1dufdXXrk008E3u43TxrI3jTE3rI0p5XT49o3lS6w1UKUBM97FQ5EN2ZFhpZM3zG28ixGCn89hB1/c8F6wqkOFSN8rkABza7MoOA7o0=
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31247056-33f9-45f6-9500-08d72ad5c7d8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Aug 2019 10:03:16.7814
+X-MS-Exchange-CrossTenant-Network-Message-Id: f0918c6f-c4fb-47e5-cec8-08d72ad5ee75
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Aug 2019 10:04:22.3728
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ijY4BT1J6qbZ0asLVx9KlfJdlwGDY7JNLjL4/utrumR/7V7gpeHBxew9QwsJA+Izplvd0C8tBPzS1I/l2EOppg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1390
+X-MS-Exchange-CrossTenant-userprincipalname: JvASwCGnnYok2WaaNst4oj2DuSQX0dVZOW88f/Fv8snPaBIFBUhhdhv3NtqKhiWS5JgRPo0jvxV0Z1xmLNxlaw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1536
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Christoph,
+Hello,
 
-On Mon, Aug 26, 2019 at 03:25:53PM +0200, Christoph Hellwig wrote:
-> Based on an email from Paul Burton, quoting section 4.8 "Cacheability and
-> Coherency Attributes and Access Types" of "MIPS Architecture Volume 1:
-> Introduction to the MIPS32 Architecture" (MD00080, revision 6.01).
+YueHaibing wrote:
+> Remove duplicated include.
+
+Applied to mips-next.
+
+> commit 00f3e689518b
+> https://git.kernel.org/mips/c/00f3e689518b
 >=20
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-
-Acked-by: Paul Burton <paul.burton@mips.com>
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> Signed-off-by: Paul Burton <paul.burton@mips.com>
 
 Thanks,
     Paul
 
-> ---
->  arch/mips/Kconfig | 7 +++++++
->  1 file changed, 7 insertions(+)
->=20
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index fc88f68ea1ee..aff1cadeea43 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -1119,6 +1119,13 @@ config DMA_PERDEV_COHERENT
-> =20
->  config DMA_NONCOHERENT
->  	bool
-> +	#
-> +	# MIPS allows mixing "slightly different" Cacheability and Coherency
-> +	# Attribute bits.  It is believed that the uncached access through
-> +	# KSEG1 and the implementation specific "uncached accelerated" used
-> +	# by pgprot_writcombine can be mixed, and the latter sometimes provides
-> +	# significant advantages.
-> +	#
->  	select ARCH_HAS_DMA_WRITE_COMBINE
->  	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->  	select ARCH_HAS_UNCACHED_SEGMENT
-> --=20
-> 2.20.1
->=20
+[ This message was auto-generated; if you believe anything is incorrect
+  then please email paul.burton@mips.com to report it. ]
