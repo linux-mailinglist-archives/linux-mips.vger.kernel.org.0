@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3B49E1FF
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Aug 2019 10:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8C49E232
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Aug 2019 10:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730171AbfH0Hyu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 27 Aug 2019 03:54:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46518 "EHLO mail.kernel.org"
+        id S1728222AbfH0Hvs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Aug 2019 03:51:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42910 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730164AbfH0Hyu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 27 Aug 2019 03:54:50 -0400
+        id S1725985AbfH0Hvr (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 27 Aug 2019 03:51:47 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9754D206BA;
-        Tue, 27 Aug 2019 07:54:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0B9BE206BA;
+        Tue, 27 Aug 2019 07:51:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566892489;
+        s=default; t=1566892306;
         bh=hSXiHTaIGZAtakKjmWxzWPqo1JJ9IeJSuT3tMk0Qho4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0hy4mk58PicfsKxdibXUIqz6+xqrjAFI/qz0jUdXlwhu3mnrJKqR7AMU6zWApv3Os
-         Op3l6dU3BVBJMHbv1amw/faMlKc0gPbwRSzjpC5QNTp6bDOPAYb05Wo0bLBNlBZTpp
-         z2qdU80MATW2Jak5riL37AxfQArJtpMxWar1VGcM=
+        b=IxfpouoWoSZRO/jubkxsAhh5qskITiBfn7uZC3WFAKnNm4nhaiCiODspLlmRWn/D0
+         h6Ld9inoesBFuWEN4aZ6m6X4UMy06b1yxGyRjptcYFhhD/qwmOcXzocLlrIW0TyQPv
+         w2VoMQzKGeJVIJIyaAfdjygQoqiGS/6D67WhxAoY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 03/98] mips: fix cacheinfo
-Date:   Tue, 27 Aug 2019 09:49:42 +0200
-Message-Id: <20190827072718.323552414@linuxfoundation.org>
+Subject: [PATCH 4.14 03/62] mips: fix cacheinfo
+Date:   Tue, 27 Aug 2019 09:50:08 +0200
+Message-Id: <20190827072700.223038050@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190827072718.142728620@linuxfoundation.org>
-References: <20190827072718.142728620@linuxfoundation.org>
+In-Reply-To: <20190827072659.803647352@linuxfoundation.org>
+References: <20190827072659.803647352@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
