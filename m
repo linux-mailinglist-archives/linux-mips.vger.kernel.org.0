@@ -2,172 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A70EF9D95C
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Aug 2019 00:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C38FA9DA90
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Aug 2019 02:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726892AbfHZWot (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 26 Aug 2019 18:44:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59646 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725817AbfHZWos (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 26 Aug 2019 18:44:48 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 186C020644;
-        Mon, 26 Aug 2019 22:44:46 +0000 (UTC)
-Date:   Mon, 26 Aug 2019 18:44:44 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Jessica Yu <jeyu@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        "John F . Reiser" <jreiser@BitWagon.com>,
-        Matt Helsley <mhelsley@vmware.com>
-Subject: Re: [PATCH 01/11] ftrace: move recordmcount tools to scripts/ftrace
-Message-ID: <20190826184444.09334ae9@gandalf.local.home>
-In-Reply-To: <20190825132330.5015-2-changbin.du@gmail.com>
-References: <20190825132330.5015-1-changbin.du@gmail.com>
-        <20190825132330.5015-2-changbin.du@gmail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1727778AbfH0AT4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Aug 2019 20:19:56 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:36941 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727563AbfH0ATz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Aug 2019 20:19:55 -0400
+Received: by mail-pg1-f194.google.com with SMTP id d1so11579833pgp.4
+        for <linux-mips@vger.kernel.org>; Mon, 26 Aug 2019 17:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hEEzzkdeRsczZgOxP6fZZQbk+BsAjtf5i89GMJdNvlE=;
+        b=rlLf2ah1lkpxv0U4sCKox8teYypFOsXhPw8Tiz+SNCVDdyx4vxv9LfOgcNYsNS+y83
+         Yg8HzPGc8JUgeBKk3Y2PX+C6aGW6qoUtel5U5CIfMXnlcd+S/IBtU0XpZ+qJ/JOjxarD
+         j/OE/JjfpvfD8gTDgShCI4D93Zslm+cAAMdMy5AuO8bY0ovqd1N4Eeqw/ZZsB+cV9KZk
+         E95+VcgDt12U1PKk6YwfKBE5UyiBXuEZffnmHhZNAIc1BMj+PhulPKqKi9XAS5AhiLce
+         gMt9DGZc8pfbPA6NP32hvvW4qr5XdG4+KzQDbnE6bP2somHVDqq+XLFb24EFtCnMTeMn
+         gJaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hEEzzkdeRsczZgOxP6fZZQbk+BsAjtf5i89GMJdNvlE=;
+        b=eSRfAc9NTbw4Wb0Kb0KsIfGTZjkjAnFZs7BlmuFeCH7SX5IJGPhh1hKevm/hg2Y9lG
+         rtRYzClsSng21SaAmeWnhCEVRg22kiDLkkZXNtBqkLR7miul/jzfMlZBugVyXxwV7N7D
+         km+f0SAeoIVtnIBwrku50zt9ukmPG7IJ5govY6uBoV8HI2D3bUGu+V1bfeKywwlcwtbq
+         KCxRaPAMjtH/VUUVFMyzn0n0WccT9k1gLNOXYgbAQq8aO4owzeb7vOH5eTwz/YnuC5DO
+         dJxK/vNrM2UbA5BTjUN9Uqmhy6kxT8Tk5rDaQUgGeKDISlnEDC3FSOVQtFca1uPbtqq0
+         jiCw==
+X-Gm-Message-State: APjAAAV1dNsTWYmXgB5Fq6Qme/MyStD3+4nXNhNebO6kPACnAG1Cswpq
+        0VaZv/oCRr0Lw3cjlmdLjB5AMS6sMFh4y0t3bqQHiw==
+X-Google-Smtp-Source: APXvYqxHnCdlzUczP/jzH7EyDlrfTM8SgWVtE5IiAWt81GfWcFP3LsN64bL6ZIOrHbsimWRUCdvbNDymaO/b10v3kbg=
+X-Received: by 2002:aa7:8085:: with SMTP id v5mr21870548pff.165.1566865194432;
+ Mon, 26 Aug 2019 17:19:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20190812215052.71840-1-ndesaulniers@google.com>
+ <20190812215052.71840-8-ndesaulniers@google.com> <20190815093848.tremcmaftzspuzzj@pburton-laptop>
+In-Reply-To: <20190815093848.tremcmaftzspuzzj@pburton-laptop>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 26 Aug 2019 17:19:43 -0700
+Message-ID: <CAKwvOdm4PgZten24afX5yiccYPjperVaW24bDms4ocf6ROdPjg@mail.gmail.com>
+Subject: Re: [PATCH 08/16] mips: prefer __section from compiler_attributes.h
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "sedat.dilek@gmail.com" <sedat.dilek@gmail.com>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "yhs@fb.com" <yhs@fb.com>,
+        "miguel.ojeda.sandonis@gmail.com" <miguel.ojeda.sandonis@gmail.com>,
+        "clang-built-linux@googlegroups.com" 
+        <clang-built-linux@googlegroups.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 25 Aug 2019 21:23:20 +0800
-Changbin Du <changbin.du@gmail.com> wrote:
+On Thu, Aug 15, 2019 at 2:38 AM Paul Burton <paul.burton@mips.com> wrote:
+>
+> Hi Nick,
+>
+> On Mon, Aug 12, 2019 at 02:50:41PM -0700, Nick Desaulniers wrote:
+> > Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
+> > Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> It would be good to add a commit message, even if it's just a line
+> repeating the subject & preferably describing the motivation.
+>
+> > ---
+> >  arch/mips/include/asm/cache.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/mips/include/asm/cache.h b/arch/mips/include/asm/cache.h
+> > index 8b14c2706aa5..af2d943580ee 100644
+> > --- a/arch/mips/include/asm/cache.h
+> > +++ b/arch/mips/include/asm/cache.h
+> > @@ -14,6 +14,6 @@
+> >  #define L1_CACHE_SHIFT               CONFIG_MIPS_L1_CACHE_SHIFT
+> >  #define L1_CACHE_BYTES               (1 << L1_CACHE_SHIFT)
+> >
+> > -#define __read_mostly __attribute__((__section__(".data..read_mostly")))
+> > +#define __read_mostly __section(.data..read_mostly)
+> >
+> >  #endif /* _ASM_CACHE_H */
+> > --
+> > 2.23.0.rc1.153.gdeed80330f-goog
+>
+> I'm not copied on the rest of the series so I'm not sure what your
+> expectations are about where this should be applied. Let me know if
+> you'd prefer this to go through mips-next, otherwise:
+>
+>     Acked-by: Paul Burton <paul.burton@mips.com>
 
-> Move ftrace tools to its own directory. We will add another tool later.
-> 
-> Cc: John F. Reiser <jreiser@BitWagon.com>
-> Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> ---
->  scripts/.gitignore                   |  1 -
->  scripts/Makefile                     |  2 +-
->  scripts/Makefile.build               | 10 +++++-----
->  scripts/ftrace/.gitignore            |  4 ++++
->  scripts/ftrace/Makefile              |  4 ++++
->  scripts/{ => ftrace}/recordmcount.c  |  0
->  scripts/{ => ftrace}/recordmcount.h  |  0
->  scripts/{ => ftrace}/recordmcount.pl |  0
->  8 files changed, 14 insertions(+), 7 deletions(-)
->  create mode 100644 scripts/ftrace/.gitignore
->  create mode 100644 scripts/ftrace/Makefile
->  rename scripts/{ => ftrace}/recordmcount.c (100%)
->  rename scripts/{ => ftrace}/recordmcount.h (100%)
->  rename scripts/{ => ftrace}/recordmcount.pl (100%)
->  mode change 100755 => 100644
-
-Note, we are in the process of merging recordmcount with objtool. It
-would be better to continue from that work.
-
- http://lkml.kernel.org/r/2767f55f4a5fbf30ba0635aed7a9c5ee92ac07dd.1563992889.git.mhelsley@vmware.com
-
--- Steve
-
-> 
-> diff --git a/scripts/.gitignore b/scripts/.gitignore
-> index 17f8cef88fa8..1b5b5d595d80 100644
-> --- a/scripts/.gitignore
-> +++ b/scripts/.gitignore
-> @@ -6,7 +6,6 @@ conmakehash
->  kallsyms
->  pnmtologo
->  unifdef
-> -recordmcount
->  sortextable
->  asn1_compiler
->  extract-cert
-> diff --git a/scripts/Makefile b/scripts/Makefile
-> index 16bcb8087899..d5992def49a8 100644
-> --- a/scripts/Makefile
-> +++ b/scripts/Makefile
-> @@ -14,7 +14,6 @@ hostprogs-$(CONFIG_BUILD_BIN2C)  += bin2c
->  hostprogs-$(CONFIG_KALLSYMS)     += kallsyms
->  hostprogs-$(CONFIG_LOGO)         += pnmtologo
->  hostprogs-$(CONFIG_VT)           += conmakehash
-> -hostprogs-$(BUILD_C_RECORDMCOUNT) += recordmcount
->  hostprogs-$(CONFIG_BUILDTIME_EXTABLE_SORT) += sortextable
->  hostprogs-$(CONFIG_ASN1)	 += asn1_compiler
->  hostprogs-$(CONFIG_MODULE_SIG)	 += sign-file
-> @@ -34,6 +33,7 @@ hostprogs-y += unifdef
->  subdir-$(CONFIG_GCC_PLUGINS) += gcc-plugins
->  subdir-$(CONFIG_MODVERSIONS) += genksyms
->  subdir-$(CONFIG_SECURITY_SELINUX) += selinux
-> +subdir-$(CONFIG_FTRACE) += ftrace
->  
->  # Let clean descend into subdirs
->  subdir-	+= basic dtc gdb kconfig mod package
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index 2f66ed388d1c..67558983c518 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -188,18 +188,18 @@ endif
->  # files, including recordmcount.
->  sub_cmd_record_mcount =					\
->  	if [ $(@) != "scripts/mod/empty.o" ]; then	\
-> -		$(objtree)/scripts/recordmcount $(RECORDMCOUNT_FLAGS) "$(@)";	\
-> +		$(objtree)/scripts/ftrace/recordmcount $(RECORDMCOUNT_FLAGS) "$(@)"; \
->  	fi;
-> -recordmcount_source := $(srctree)/scripts/recordmcount.c \
-> -		    $(srctree)/scripts/recordmcount.h
-> +recordmcount_source := $(srctree)/scripts/ftrace/recordmcount.c \
-> +		       $(srctree)/scripts/ftrace/recordmcount.h
->  else
-> -sub_cmd_record_mcount = perl $(srctree)/scripts/recordmcount.pl "$(ARCH)" \
-> +sub_cmd_record_mcount = perl $(srctree)/scripts/ftrace/recordmcount.pl "$(ARCH)" \
->  	"$(if $(CONFIG_CPU_BIG_ENDIAN),big,little)" \
->  	"$(if $(CONFIG_64BIT),64,32)" \
->  	"$(OBJDUMP)" "$(OBJCOPY)" "$(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS)" \
->  	"$(LD) $(KBUILD_LDFLAGS)" "$(NM)" "$(RM)" "$(MV)" \
->  	"$(if $(part-of-module),1,0)" "$(@)";
-> -recordmcount_source := $(srctree)/scripts/recordmcount.pl
-> +recordmcount_source := $(srctree)/scripts/ftrace/recordmcount.pl
->  endif # BUILD_C_RECORDMCOUNT
->  cmd_record_mcount = $(if $(findstring $(strip $(CC_FLAGS_FTRACE)),$(_c_flags)),	\
->  	$(sub_cmd_record_mcount))
-> diff --git a/scripts/ftrace/.gitignore b/scripts/ftrace/.gitignore
-> new file mode 100644
-> index 000000000000..54d582c8faad
-> --- /dev/null
-> +++ b/scripts/ftrace/.gitignore
-> @@ -0,0 +1,4 @@
-> +#
-> +# Generated files
-> +#
-> +recordmcount
-> diff --git a/scripts/ftrace/Makefile b/scripts/ftrace/Makefile
-> new file mode 100644
-> index 000000000000..6797e51473e5
-> --- /dev/null
-> +++ b/scripts/ftrace/Makefile
-> @@ -0,0 +1,4 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +hostprogs-$(BUILD_C_RECORDMCOUNT) += recordmcount
-> +always         := $(hostprogs-y)
-> diff --git a/scripts/recordmcount.c b/scripts/ftrace/recordmcount.c
-> similarity index 100%
-> rename from scripts/recordmcount.c
-> rename to scripts/ftrace/recordmcount.c
-> diff --git a/scripts/recordmcount.h b/scripts/ftrace/recordmcount.h
-> similarity index 100%
-> rename from scripts/recordmcount.h
-> rename to scripts/ftrace/recordmcount.h
-> diff --git a/scripts/recordmcount.pl b/scripts/ftrace/recordmcount.pl
-> old mode 100755
-> new mode 100644
-> similarity index 100%
-> rename from scripts/recordmcount.pl
-> rename to scripts/ftrace/recordmcount.pl
-
+Thanks Paul, going to send this up via Miguel's tree, if you don't
+mind.  Updating my series now.  (Will probably avoid running
+get_maintainer.pl on every patch...too hard to cc everyone on the
+whole series).
+-- 
+Thanks,
+~Nick Desaulniers
