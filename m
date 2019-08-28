@@ -2,97 +2,147 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DBBA06DE
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2019 18:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B504A082E
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2019 19:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726513AbfH1QCV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 28 Aug 2019 12:02:21 -0400
-Received: from foss.arm.com ([217.140.110.172]:33666 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726450AbfH1QCV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 28 Aug 2019 12:02:21 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E32C028;
-        Wed, 28 Aug 2019 09:02:20 -0700 (PDT)
-Received: from [10.1.197.61] (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A84DE3F59C;
-        Wed, 28 Aug 2019 09:02:19 -0700 (PDT)
-Subject: Re: [PATCH 04/13] irqchip: Add driver for Loongson-3 I/O interrupt
- controller
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, chenhc@lemote.com,
-        paul.burton@mips.com, tglx@linutronix.de, jason@lakedaemon.net,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.co, devicetree@vger.kernel.org
-References: <20190827085302.5197-1-jiaxun.yang@flygoat.com>
- <20190827085302.5197-5-jiaxun.yang@flygoat.com>
- <e6a5862f-0f6c-cab0-9f4a-51b7889d38e7@kernel.org>
- <82c4b9ed-7270-74ce-6e10-165182e540dd@flygoat.com>
- <20190828075940.549e1983@why>
- <619b1d35-7bc2-999f-5a51-fb2efdc63f60@flygoat.com>
-From:   Marc Zyngier <maz@kernel.org>
-Organization: Approximate
-Message-ID: <45615c1a-7af8-3496-5369-4b2f174a76e7@kernel.org>
-Date:   Wed, 28 Aug 2019 17:02:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726566AbfH1RKX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 28 Aug 2019 13:10:23 -0400
+Received: from smtprelay0155.hostedemail.com ([216.40.44.155]:49214 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726315AbfH1RKX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 28 Aug 2019 13:10:23 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 958B2100E86C8;
+        Wed, 28 Aug 2019 17:10:21 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 10,1,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::,RULES_HIT:41:355:379:599:973:988:989:1260:1277:1311:1313:1314:1345:1359:1381:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2194:2199:2393:2559:2562:2729:2828:3138:3139:3140:3141:3142:3355:3622:3865:3866:3867:3871:3872:3874:4225:4250:4321:5007:6119:7875:7903:10007:10400:10848:11026:11232:11657:11658:11914:12043:12048:12296:12297:12679:12740:12760:12895:13161:13229:13439:13972:14659:14721:21080:21451:21627:30003:30012:30029:30034:30054:30076:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.14.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:1:0,LFtime:25,LUA_SUMMARY:none
+X-HE-Tag: use06_2004d02ba580f
+X-Filterd-Recvd-Size: 4000
+Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf09.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 28 Aug 2019 17:10:19 +0000 (UTC)
+Message-ID: <d0fd02c3634d187dcfe5487917099bc1905e3789.camel@perches.com>
+Subject: Re: [PATCH net-next 03/15] net: sgi: ioc3-eth: remove checkpatch
+ errors/warning
+From:   Joe Perches <joe@perches.com>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Date:   Wed, 28 Aug 2019 10:10:18 -0700
+In-Reply-To: <20190828140315.17048-4-tbogendoerfer@suse.de>
+References: <20190828140315.17048-1-tbogendoerfer@suse.de>
+         <20190828140315.17048-4-tbogendoerfer@suse.de>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.32.1-2 
 MIME-Version: 1.0
-In-Reply-To: <619b1d35-7bc2-999f-5a51-fb2efdc63f60@flygoat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 28/08/2019 16:31, Jiaxun Yang wrote:
-> 
-> On 2019/8/28 下午2:59, Marc Zyngier wrote:
->> On Wed, 28 Aug 2019 08:27:05 +0800
->> Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->>
->>> On 2019/8/28 上午12:45, Marc Zyngier wrote:
->>>> On 27/08/2019 09:52, Jiaxun Yang wrote:
->>>>> +	chained_irq_enter(chip, desc);
->>>>> +
->>>>> +	pending = readl(priv->intc_base + LS3_REG_INTC_EN_STATUS) &
->>>>> +		readl(priv->intc_base + LS3_REG_INTC_STATUS);
->>>> Reading the enabled status from the HW on each interrupt? I'm sure
->>>> that's pretty cheap...
->>> Seems expensive but to deal with a buggy hardware... That's worthy.
->> How broken is it? You very much seem to rely on the HW being correct
->> here, since you trust it exclusively. I'd expect the enable mask to be
->> a SW construct if you didn't blindly trust it
-> Hi Marc
-> 
-> Thanks for your answering.
-> 
-> The vendor code did this and said there is a HW issue. I just don't have 
-> the guts to remove this check.
-> Seems like sometimes masked interrupt may get ISR set wrongly.
+On Wed, 2019-08-28 at 16:03 +0200, Thomas Bogendoerfer wrote:
+> Before massaging the driver further fix oddities found by checkpatch like
+> - wrong indention
+> - comment formatting
+> - use of printk instead or netdev_xxx/pr_xxx
 
-And that would just as well avoided by a SW managed mask.
+trivial notes:
 
->> And if this is truly the right way to do it, please document the
->> various problems with the controller so that we don't break it at a
->> later time.
-> Thanks, will do.
->>
->> Then how comes this comes from the irqchip's DT node? This should be
->> part of the endpoint's interrupt specifier.
-> 
-> In theory it should be, However if we set different interrupt 
-> lines/cores on that controller, interrupts may get lost. It means we can 
-> only have single parent core/interrupt.
-> 
-> So I'd prefer just set them uniformly by controller's dt-binding to 
-> prevent confusing.
+Please try to make the code better rather than merely
+shutting up checkpatch.
 
-And I disagree. You can document the restriction, and even maybe enforce
-it by validating the DT one way or another. But we're not putting what
-ends up being a routing table in the irqchip binding.
+> diff --git a/drivers/net/ethernet/sgi/ioc3-eth.c b/drivers/net/ethernet/sgi/ioc3-eth.c
+[]
+> @@ -209,8 +201,7 @@ static inline void nic_write_bit(u32 __iomem *mcr, int bit)
+>  	nic_wait(mcr);
+>  }
+>  
+> -/*
+> - * Read a byte from an iButton device
+> +/* Read a byte from an iButton device
+>   */
 
-	M.
--- 
-Jazz is not dead, it just smells funny...
+These comment styles would be simpler on a single line
+
+/* Read a byte from an iButton device */
+
+>  static u32 nic_read_byte(u32 __iomem *mcr)
+>  {
+> @@ -223,8 +214,7 @@ static u32 nic_read_byte(u32 __iomem *mcr)
+>  	return result;
+>  }
+>  
+> -/*
+> - * Write a byte to an iButton device
+> +/* Write a byte to an iButton device
+>   */
+
+/* Write a byte to an iButton device */
+
+etc...
+
+[]
+> @@ -323,16 +315,15 @@ static int nic_init(u32 __iomem *mcr)
+>  		break;
+>  	}
+>  
+> -	printk("Found %s NIC", type);
+> +	pr_info("Found %s NIC", type);
+>  	if (type != unknown)
+> -		printk (" registration number %pM, CRC %02x", serial, crc);
+> -	printk(".\n");
+> +		pr_cont(" registration number %pM, CRC %02x", serial, crc);
+> +	pr_cont(".\n");
+
+This code would be more sensible as
+
+	if (type != unknown)
+		pr_info("Found %s NIC registration number %pM, CRC %02x\n",
+			type, serial, crc);
+	else
+		pr_info("Found %s NIC\n", type); 
+
+Though I don't know if registration number is actually a MAC
+address or something else.  If it's just a 6 byte identifier
+that uses colon separation it should probably use "%6phC"
+instead of "%pM"
+
+[] 
+
+> @@ -645,22 +636,21 @@ static inline void ioc3_tx(struct net_device *dev)
+>  static void ioc3_error(struct net_device *dev, u32 eisr)
+>  {
+>  	struct ioc3_private *ip = netdev_priv(dev);
+> -	unsigned char *iface = dev->name;
+>  
+>  	spin_lock(&ip->ioc3_lock);
+>  
+>  	if (eisr & EISR_RXOFLO)
+> -		printk(KERN_ERR "%s: RX overflow.\n", iface);
+> +		netdev_err(dev, "RX overflow.\n");
+>  	if (eisr & EISR_RXBUFOFLO)
+> -		printk(KERN_ERR "%s: RX buffer overflow.\n", iface);
+> +		netdev_err(dev, "RX buffer overflow.\n");
+>  	if (eisr & EISR_RXMEMERR)
+> -		printk(KERN_ERR "%s: RX PCI error.\n", iface);
+> +		netdev_err(dev, "RX PCI error.\n");
+>  	if (eisr & EISR_RXPARERR)
+> -		printk(KERN_ERR "%s: RX SSRAM parity error.\n", iface);
+> +		netdev_err(dev, "RX SSRAM parity error.\n");
+>  	if (eisr & EISR_TXBUFUFLO)
+> -		printk(KERN_ERR "%s: TX buffer underflow.\n", iface);
+> +		netdev_err(dev, "TX buffer underflow.\n");
+>  	if (eisr & EISR_TXMEMERR)
+> -		printk(KERN_ERR "%s: TX PCI error.\n", iface);
+> +		netdev_err(dev, "TX PCI error.\n");
+
+All of these should probably be ratelimited() output.
+
+
