@@ -2,76 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D988EA0E09
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2019 01:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C603A0E5E
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2019 01:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726400AbfH1XEx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 28 Aug 2019 19:04:53 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:35361 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726896AbfH1XEw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 28 Aug 2019 19:04:52 -0400
-Received: by mail-ed1-f67.google.com with SMTP id t50so1850644edd.2
-        for <linux-mips@vger.kernel.org>; Wed, 28 Aug 2019 16:04:51 -0700 (PDT)
+        id S1727103AbfH1Xlu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 28 Aug 2019 19:41:50 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:33867 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727097AbfH1Xlu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 28 Aug 2019 19:41:50 -0400
+Received: by mail-pg1-f194.google.com with SMTP id n9so556255pgc.1;
+        Wed, 28 Aug 2019 16:41:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=Q7JSnutSKY6xFT4D0TS+NhWVJ0m3aop0mXkuXZwQ1WQ=;
-        b=qb/E47jXOQPuSvEFEgQZ7e41y//cnPauFgA7N4iBWYIFh6wHQFWfYFLNNfbQ4A+sb/
-         /qnFd2EB8mWvqw4vz7E//rOpCQ3J8x7zvsV/DMFXEWxYoTU6ItNXRO0108vKV2kENDnm
-         PpjkDlT2YtJbRTDKhSvJ3U0DqYWwfduFnp0wGBXxvtBMR3xuUQOEiJzP2XVES6qL+WVh
-         ktXbUmgNkTA+t/6QApnEGFEQQq+PkfIKy5urWRJqmlEO+36R3IehsZ3pJ5Mq35rAFzFr
-         vEgFYvHXzZhVXhP/w6b/yicN1Sju0q+zvBG02tORCEgOso/0Ijm9TXar209tRNN25BIs
-         IZUQ==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=LEwbl1nqNHBHcJacD9dfeICHgcsBE/f/ceNiyU0uO2c=;
+        b=kWxS12FOGo7kRO8bUZisQdbdPaD7m90liBO1DJILGgor5och3M3Y8ixQUrLiOlvUAQ
+         KSCAKzPOIhK4qh4mkp723yecDQTzrNvHfSo5O2PLFMUzPr9tFIvttGdACmQk3GcLv9I5
+         cjYvi8Gr7ER3JMRMI2IeaYoSEzfDVilJaC9VvUum/aPr5t4C5xA5idz5lFsS5zANKFcg
+         337AY91x4TvIwnn1y9efIs3f4w9SNmURv9K2dvAIcHu0ypgbd+SQV2CIW7BfJIlZApXq
+         u8dQIG+K1EEA2/INmvvXiOQePA1oy0eoOgbrzRogC4V4vLfCANYJbRnPt4/hj/mnM9HJ
+         IDqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=Q7JSnutSKY6xFT4D0TS+NhWVJ0m3aop0mXkuXZwQ1WQ=;
-        b=KJXy0cwnvBKU0S1y6vr7mW6GijT7uuouGd7ib8IuYQjak6RIJxSIlaToZDMS20nvj1
-         alatHssXTk4sesrT6GJItaRMbRU/rbzk4uI5sJLPBDipEv5yYEMoGzfdkJNy4pZ2SeZf
-         PwH7S3DGU3YfVGna5Gge/TLKicoI24OTNPH/2GLIemB+Btg7v3Rh3XTt5CHe1OVpwxEY
-         +rZRNwb/BReEkZt1Wt85vNnHYRVp9dLHxOf4gEtTJIYAFYK4KUixt+7iHqL4ntKy3AiD
-         PdR929uPHNV7cyjQO17DeOTdoMp43AbNZpTAk7lXcXlk/NOLu7fHEfckMVItvh/Hb12f
-         ETSQ==
-X-Gm-Message-State: APjAAAVQCq1jiZ0HJwx24c5UE+ro42hUNoJ92fsJA+LvEjeVzsuFFauy
-        CEDnAOnBMjDa04FslQbaZmxucw==
-X-Google-Smtp-Source: APXvYqzv+JrKNf2JDsSOceh0HfkjOXGNKBtr248ZuV0rxGOLR7awEnFCsvsCnef6NT1LwX6c05Rjjg==
-X-Received: by 2002:a17:906:5391:: with SMTP id g17mr5530333ejo.61.1567033491155;
-        Wed, 28 Aug 2019 16:04:51 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id d10sm102967ejd.86.2019.08.28.16.04.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2019 16:04:50 -0700 (PDT)
-Date:   Wed, 28 Aug 2019 16:04:29 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 09/15] net: sgi: ioc3-eth: split ring
- cleaning/freeing and allocation
-Message-ID: <20190828160429.6f9abb4e@cakuba.netronome.com>
-In-Reply-To: <20190828140315.17048-10-tbogendoerfer@suse.de>
-References: <20190828140315.17048-1-tbogendoerfer@suse.de>
-        <20190828140315.17048-10-tbogendoerfer@suse.de>
-Organization: Netronome Systems, Ltd.
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LEwbl1nqNHBHcJacD9dfeICHgcsBE/f/ceNiyU0uO2c=;
+        b=Dm6bK6YON5/uJ6yGcjawkadlawzzNOu4QZ/dxM4e/ZS6ZOM3weqTqSHAvvlNt+4cL7
+         bfMuHglY8fX44F7wMu5Uf+A2h+OmwcsvFW2+nAo0QTUypU2F05WBVXbfmfG12cdnTxLE
+         YxzDQVlpF3VYifP8YunGgnh/0FC5P4ztnlFbuVoVeoC8PBmvCF6NJhcEO/VLuKRH3jad
+         lW9WvNVzgtm1BzUDWfto0zH+/2zs7qlDbjLdIRqSGrZUaJcfUkoypEApUU3MDT7PmzEg
+         70pt2B7Lsp7vPBaA40BcYnebuANLTbT8ggelkPlPmEwP+BR2lzk7ji4HI2uDK82fopA3
+         MxXA==
+X-Gm-Message-State: APjAAAUYMvbDkleLX03ySndy5ert+il4kq9FkW6y9/LZBMEyqWPezMyX
+        nhDQRuq3AquMzIHDlmudKKjAzF9up37YUg==
+X-Google-Smtp-Source: APXvYqyltBUmIDPff9MzOKVsnLKdLLLDhQKStB24jbwVvtjezQpxtP9BLXnDENuon3HqazilZSGjqw==
+X-Received: by 2002:a17:90a:32a3:: with SMTP id l32mr7061863pjb.14.1567035708956;
+        Wed, 28 Aug 2019 16:41:48 -0700 (PDT)
+Received: from mail.google.com ([149.28.153.17])
+        by smtp.gmail.com with ESMTPSA id g1sm270497pgg.27.2019.08.28.16.41.44
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 28 Aug 2019 16:41:48 -0700 (PDT)
+Date:   Wed, 28 Aug 2019 23:41:34 +0000
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Changbin Du <changbin.du@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, Jessica Yu <jeyu@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        "John F . Reiser" <jreiser@BitWagon.com>,
+        Matt Helsley <mhelsley@vmware.com>
+Subject: Re: [PATCH 01/11] ftrace: move recordmcount tools to scripts/ftrace
+Message-ID: <20190828234133.quir3ptl4kidnxud@mail.google.com>
+References: <20190825132330.5015-1-changbin.du@gmail.com>
+ <20190825132330.5015-2-changbin.du@gmail.com>
+ <20190826184444.09334ae9@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190826184444.09334ae9@gandalf.local.home>
+User-Agent: NeoMutt/20180716-508-7c9a6d
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 28 Aug 2019 16:03:08 +0200, Thomas Bogendoerfer wrote:
-> Do tx ring cleaning and freeing of rx buffers, when chip is shutdown and
-> allocate buffers before bringing chip up.
+On Mon, Aug 26, 2019 at 06:44:44PM -0400, Steven Rostedt wrote:
+> On Sun, 25 Aug 2019 21:23:20 +0800
+> Changbin Du <changbin.du@gmail.com> wrote:
 > 
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+> > Move ftrace tools to its own directory. We will add another tool later.
+> > 
+> > Cc: John F. Reiser <jreiser@BitWagon.com>
+> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> > ---
+> >  scripts/.gitignore                   |  1 -
+> >  scripts/Makefile                     |  2 +-
+> >  scripts/Makefile.build               | 10 +++++-----
+> >  scripts/ftrace/.gitignore            |  4 ++++
+> >  scripts/ftrace/Makefile              |  4 ++++
+> >  scripts/{ => ftrace}/recordmcount.c  |  0
+> >  scripts/{ => ftrace}/recordmcount.h  |  0
+> >  scripts/{ => ftrace}/recordmcount.pl |  0
+> >  8 files changed, 14 insertions(+), 7 deletions(-)
+> >  create mode 100644 scripts/ftrace/.gitignore
+> >  create mode 100644 scripts/ftrace/Makefile
+> >  rename scripts/{ => ftrace}/recordmcount.c (100%)
+> >  rename scripts/{ => ftrace}/recordmcount.h (100%)
+> >  rename scripts/{ => ftrace}/recordmcount.pl (100%)
+> >  mode change 100755 => 100644
+> 
+> Note, we are in the process of merging recordmcount with objtool. It
+> would be better to continue from that work.
+> 
+>  http://lkml.kernel.org/r/2767f55f4a5fbf30ba0635aed7a9c5ee92ac07dd.1563992889.git.mhelsley@vmware.com
+> 
+> -- Steve
+Thanks for reminding. Let me check if prototype tool can merge into
+objtool easily after above work.
 
-Ah, so you are moving the alloc/free to open/close, that's good.
+-- 
+Cheers,
+Changbin Du
