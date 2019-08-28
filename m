@@ -2,49 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1811A0DF3
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2019 00:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9780A0E02
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2019 01:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726941AbfH1W6j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 28 Aug 2019 18:58:39 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:37793 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726844AbfH1W6e (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 28 Aug 2019 18:58:34 -0400
-Received: by mail-ed1-f67.google.com with SMTP id f22so1821868edt.4
-        for <linux-mips@vger.kernel.org>; Wed, 28 Aug 2019 15:58:33 -0700 (PDT)
+        id S1727045AbfH1XDK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 28 Aug 2019 19:03:10 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:35879 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726926AbfH1XDK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 28 Aug 2019 19:03:10 -0400
+Received: by mail-ed1-f68.google.com with SMTP id g24so1837818edu.3
+        for <linux-mips@vger.kernel.org>; Wed, 28 Aug 2019 16:03:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=netronome-com.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:in-reply-to:references
          :organization:mime-version:content-transfer-encoding;
-        bh=MWIFKIzouiKNiGjOqNU3Lg2whivTBv+XNz2yxpVpVdk=;
-        b=rczdY01AKrKa0uF52azBBxJb1SYipY6u79S6FnAjJZbqKBaWR4bEt5Q1F/z+gPOmV8
-         2LgNnTLUtcsNPBxAimDjDrKhK0XRpX2UbKs39RWkqXGG9vFmXddS5Chm8nmO/ctPLS/W
-         7Q3E4uzkWIt60Md8eSjv8qlbJC/ug1geug3/TgIL/4PFwjIPXZfAbBt8c5t0Zy4vZbJE
-         zAOpSAmCM9V6Pw/rW6+TDwunxdFqfAuY2uHJ24RM3iuy1UP6oeVKO7wlEexYBwI5EEZG
-         aCfhrSzLY3b5JnFMCUmlK4fswrNsctSFSCY1XQ93oEnydxJoaICx83awfv8BwNZUXeMX
-         4aag==
+        bh=819swzQKe98LdzJrxDCxiGarxJHyCdbjjXG7zzq6Gf4=;
+        b=QubqZWHDcswIDRZ8UX5aJXD/sm3fEumW25hWHLvukFM819Yknc/uzen5kBObQFjrdN
+         XmFszcsJ+GPcabhUnQT1QZN/w+PEpinIsaoZaVN3ECc0kcf60/vQ8pnlJD8N6G5S45ds
+         U4nOHX9dKdLgiNdKat17I/2K1IKRnkemIE5FRUhHjwIWSZvpT49XEePRucm0LPPssiP/
+         eNrQgiMr4oO3n1I2TRi1W8epuOB/BSo2TQ4NXTwQ9tMoyIUsSMYyQOtgjCD4HdSNHI45
+         Q1uGRcf12BioBGyMHqAyd0jv/HvOl73jHciadrnImwkS3urwM1/v69qBrZiTpCMpl7ns
+         7hHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:organization:mime-version:content-transfer-encoding;
-        bh=MWIFKIzouiKNiGjOqNU3Lg2whivTBv+XNz2yxpVpVdk=;
-        b=pcm2CI4S1EdLOvw1D1ArMUCe5m4f2dqG/F8n8yJkwjN+7kCMIZ0Hyk8hN6NvM66+wU
-         VAZiccwFSKUoykKSaSVGZJsBU+GgIK35cuLdszrBAgtcopKcAnu/HcTBHjWV1AnqD4A6
-         17NpoKehzSa5BYq81kzZ+zm7+WH44W6bQb5TG5WlPBNkOfMRZXrMOO92A5szSYEFbTpl
-         bb+GXQ57E+gN2LpMhWqr9bVC6EwwiUJlz6/O0zj+iDGKEcfVq3EyXi5oSq+lkP8FcLx0
-         utF7SmhPpupz6bMApzUcSvxkaYWFfbjuyHxIkw4x5w92sZtyr7qmkV1q1DNx3VTtYM7j
-         Tu1A==
-X-Gm-Message-State: APjAAAXc1HVl87ToaUWTqw5f1QDiX63qGv3EM5oV4NGzrP2pmyeZzz7J
-        tE/1hpACwgz2BVHk1RJFoZCfNw==
-X-Google-Smtp-Source: APXvYqzlwrSyUeO/iZbE6dDzW6rjW3NYftlJjlyPkx6b8TsSKh+G73SS2+o4rdG+5KdBZyEOmHOotw==
-X-Received: by 2002:aa7:da4d:: with SMTP id w13mr6716505eds.224.1567033112940;
-        Wed, 28 Aug 2019 15:58:32 -0700 (PDT)
+        bh=819swzQKe98LdzJrxDCxiGarxJHyCdbjjXG7zzq6Gf4=;
+        b=ZdyYjTswBvrJLKHaheTdIK6Q7kxs2l5bHEwBTJQOxlxFUigzzfjJBWm95m50w7jSc8
+         Qs1nWBYopfOSrBKX110LP/uIpHq9KWyGKdvxHWK+w0hiK55FMgzTiSP6yknoECv6Hg1U
+         JylVkvgOvUKVC3VzSd2Z6DR1l+OuugYfaxkzjwQgvh9DsNEEENfrD0YaEwHdwM3Madxc
+         OPikKTzS8x436C4G33SvFquNf4uwUtZYgUA4cNUi9anas07epYVgEDN6b0WA+VtAi/Ui
+         4zwlGL/sG2wGTHZ5sQm+9ydqNCMdv9RXozuRpN3WAcG0Mq+fhM/U+bR7s3q2q1mWPi20
+         KPUA==
+X-Gm-Message-State: APjAAAUh27EqwMgGD8Bg+K7fj2JjLaSVm2XokzxGhlCqqv6kZ2Dq2gHH
+        zosqnKCCMyE/z2lhZesmTUuSsw==
+X-Google-Smtp-Source: APXvYqwBNeZBsZAb2QiHZ3ka+pGiYcIhUqd3Va0L+/ypOzKgUthP1oIon5KcXep4ANSKBdqvf6IDlg==
+X-Received: by 2002:a50:9116:: with SMTP id e22mr6723578eda.161.1567033388739;
+        Wed, 28 Aug 2019 16:03:08 -0700 (PDT)
 Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id k15sm101111ejk.46.2019.08.28.15.58.30
+        by smtp.gmail.com with ESMTPSA id f6sm96846edn.63.2019.08.28.16.03.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2019 15:58:32 -0700 (PDT)
-Date:   Wed, 28 Aug 2019 15:58:09 -0700
+        Wed, 28 Aug 2019 16:03:08 -0700 (PDT)
+Date:   Wed, 28 Aug 2019 16:02:46 -0700
 From:   Jakub Kicinski <jakub.kicinski@netronome.com>
 To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
 Cc:     Ralf Baechle <ralf@linux-mips.org>,
@@ -53,12 +53,12 @@ Cc:     Ralf Baechle <ralf@linux-mips.org>,
         "David S. Miller" <davem@davemloft.net>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 05/15] net: sgi: ioc3-eth: allocate space for
- desc rings only once
-Message-ID: <20190828155809.5c155bee@cakuba.netronome.com>
-In-Reply-To: <20190828140315.17048-6-tbogendoerfer@suse.de>
+Subject: Re: [PATCH net-next 06/15] net: sgi: ioc3-eth: get rid of
+ ioc3_clean_rx_ring()
+Message-ID: <20190828160246.7b211f8a@cakuba.netronome.com>
+In-Reply-To: <20190828140315.17048-7-tbogendoerfer@suse.de>
 References: <20190828140315.17048-1-tbogendoerfer@suse.de>
-        <20190828140315.17048-6-tbogendoerfer@suse.de>
+        <20190828140315.17048-7-tbogendoerfer@suse.de>
 Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -68,16 +68,57 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 28 Aug 2019 16:03:04 +0200, Thomas Bogendoerfer wrote:
-> Memory for descriptor rings are allocated/freed, when interface is
-> brought up/down. Since the size of the rings is not changeable by
-> hardware, we now allocate rings now during probe and free it, when
-> device is removed.
+On Wed, 28 Aug 2019 16:03:05 +0200, Thomas Bogendoerfer wrote:
+> Clean rx ring is just called once after a new ring is allocated, which
+> is per definition clean. So there is not need for this function.
 > 
 > Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+> ---
+>  drivers/net/ethernet/sgi/ioc3-eth.c | 21 ---------------------
+>  1 file changed, 21 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/sgi/ioc3-eth.c b/drivers/net/ethernet/sgi/ioc3-eth.c
+> index 6ca560d4ab79..39631e067b71 100644
+> --- a/drivers/net/ethernet/sgi/ioc3-eth.c
+> +++ b/drivers/net/ethernet/sgi/ioc3-eth.c
+> @@ -761,26 +761,6 @@ static void ioc3_mii_start(struct ioc3_private *ip)
+>  	add_timer(&ip->ioc3_timer);
+>  }
+>  
+> -static inline void ioc3_clean_rx_ring(struct ioc3_private *ip)
+> -{
+> -	struct ioc3_erxbuf *rxb;
+> -	struct sk_buff *skb;
+> -	int i;
+> -
+> -	for (i = ip->rx_ci; i & 15; i++) {
+> -		ip->rx_skbs[ip->rx_pi] = ip->rx_skbs[ip->rx_ci];
+> -		ip->rxr[ip->rx_pi++] = ip->rxr[ip->rx_ci++];
+> -	}
+> -	ip->rx_pi &= RX_RING_MASK;
+> -	ip->rx_ci &= RX_RING_MASK;
+> -
+> -	for (i = ip->rx_ci; i != ip->rx_pi; i = (i + 1) & RX_RING_MASK) {
+> -		skb = ip->rx_skbs[i];
+> -		rxb = (struct ioc3_erxbuf *)(skb->data - RX_OFFSET);
+> -		rxb->w0 = 0;
 
-So the rings still get freed and allocated from ioc3_init()
-but there's a set allocated from the start? I guess that makes 
-some sense..
+There's gotta be some purpose to setting this w0 word to zero no?
+ioc3_rx() uses that to see if the descriptor is done, and dutifully
+clears it after..
 
-Most drivers will allocate rings in open() and free them in close().
+> -	}
+> -}
+> -
+>  static inline void ioc3_clean_tx_ring(struct ioc3_private *ip)
+>  {
+>  	struct sk_buff *skb;
+> @@ -860,7 +840,6 @@ static void ioc3_init_rings(struct net_device *dev)
+>  	ioc3_free_rings(ip);
+>  	ioc3_alloc_rings(dev);
+>  
+> -	ioc3_clean_rx_ring(ip);
+>  	ioc3_clean_tx_ring(ip);
+>  
+>  	/* Now the rx ring base, consume & produce registers.  */
+
