@@ -2,90 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CEAA06BC
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2019 17:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DBBA06DE
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Aug 2019 18:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726921AbfH1Pzv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 28 Aug 2019 11:55:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38158 "EHLO mail.kernel.org"
+        id S1726513AbfH1QCV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 28 Aug 2019 12:02:21 -0400
+Received: from foss.arm.com ([217.140.110.172]:33666 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726513AbfH1Pzu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 28 Aug 2019 11:55:50 -0400
-Received: from tleilax.poochiereds.net (68-20-15-154.lightspeed.rlghnc.sbcglobal.net [68.20.15.154])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 765322064A;
-        Wed, 28 Aug 2019 15:55:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567007749;
-        bh=tm23iPOHz5qNiVmbKBRthv6o0H14qpr8dY7bd4MTQKs=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=pqTccn5JcnucNCAhPvukewbhK7LnqfZiA1JhrrT1FDFY4mCrVB8AZyQ8GN7mLjP8y
-         7s9EDdOPkKuIVFWDEaVrPbihjrm8teyPYUCsz+WciUJXkEpW4kr0ySk55f/ASUGrn8
-         zpEFoJeA5Hy5XDMtaE0vrkdWUVKHa2wWQhJO2xxg=
-Message-ID: <4da231cd52880991d8a038adb8fbb2ef3d724db9.camel@kernel.org>
-Subject: Re: [PATCH RESEND v11 7/8] open: openat2(2) syscall
-From:   Jeff Layton <jlayton@kernel.org>
-To:     sbaugh@catern.com, linux-fsdevel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org
-Date:   Wed, 28 Aug 2019 11:55:47 -0400
-In-Reply-To: <854l2366zp.fsf@catern.com>
-References: <20190820033406.29796-1-cyphar@cyphar.com>
-         <20190820033406.29796-8-cyphar@cyphar.com> <854l2366zp.fsf@catern.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1726450AbfH1QCV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 28 Aug 2019 12:02:21 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E32C028;
+        Wed, 28 Aug 2019 09:02:20 -0700 (PDT)
+Received: from [10.1.197.61] (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A84DE3F59C;
+        Wed, 28 Aug 2019 09:02:19 -0700 (PDT)
+Subject: Re: [PATCH 04/13] irqchip: Add driver for Loongson-3 I/O interrupt
+ controller
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, chenhc@lemote.com,
+        paul.burton@mips.com, tglx@linutronix.de, jason@lakedaemon.net,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.co, devicetree@vger.kernel.org
+References: <20190827085302.5197-1-jiaxun.yang@flygoat.com>
+ <20190827085302.5197-5-jiaxun.yang@flygoat.com>
+ <e6a5862f-0f6c-cab0-9f4a-51b7889d38e7@kernel.org>
+ <82c4b9ed-7270-74ce-6e10-165182e540dd@flygoat.com>
+ <20190828075940.549e1983@why>
+ <619b1d35-7bc2-999f-5a51-fb2efdc63f60@flygoat.com>
+From:   Marc Zyngier <maz@kernel.org>
+Organization: Approximate
+Message-ID: <45615c1a-7af8-3496-5369-4b2f174a76e7@kernel.org>
+Date:   Wed, 28 Aug 2019 17:02:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <619b1d35-7bc2-999f-5a51-fb2efdc63f60@flygoat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 2019-08-26 at 19:50 +0000, sbaugh@catern.com wrote:
-> Aleksa Sarai <cyphar@cyphar.com> writes:
-> > To this end, we introduce the openat2(2) syscall. It provides all of the
-> > features of openat(2) through the @how->flags argument, but also
-> > also provides a new @how->resolve argument which exposes RESOLVE_* flags
-> > that map to our new LOOKUP_* flags. It also eliminates the long-standing
-> > ugliness of variadic-open(2) by embedding it in a struct.
+On 28/08/2019 16:31, Jiaxun Yang wrote:
 > 
-> I don't like this usage of a structure in memory to pass arguments that
-> would fit in registers. This would be quite inconvenient for me as a
-> userspace developer.
+> On 2019/8/28 下午2:59, Marc Zyngier wrote:
+>> On Wed, 28 Aug 2019 08:27:05 +0800
+>> Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>>
+>>> On 2019/8/28 上午12:45, Marc Zyngier wrote:
+>>>> On 27/08/2019 09:52, Jiaxun Yang wrote:
+>>>>> +	chained_irq_enter(chip, desc);
+>>>>> +
+>>>>> +	pending = readl(priv->intc_base + LS3_REG_INTC_EN_STATUS) &
+>>>>> +		readl(priv->intc_base + LS3_REG_INTC_STATUS);
+>>>> Reading the enabled status from the HW on each interrupt? I'm sure
+>>>> that's pretty cheap...
+>>> Seems expensive but to deal with a buggy hardware... That's worthy.
+>> How broken is it? You very much seem to rely on the HW being correct
+>> here, since you trust it exclusively. I'd expect the enable mask to be
+>> a SW construct if you didn't blindly trust it
+> Hi Marc
 > 
-> Others have brought up issues with this: the issue of seccomp, and the
-> issue of mismatch between the userspace interface and the kernel
-> interface, are the most important for me. I want to add another,
-> admittedly somewhat niche, concern.
+> Thanks for your answering.
 > 
-> This interfaces requires a program to allocate memory (even on the
-> stack) just to pass arguments to the kernel which could be passed
-> without allocating that memory. That makes it more difficult and less
-> efficient to use this syscall in any case where memory is not so easily
-> allocatable: such as early program startup or assembly, where the stack
-> may be limited in size or not even available yet, or when injecting a
-> syscall while ptracing.
-> 
-> A struct-passing interface was needed for clone, since we ran out of
-> registers; but we have not run out of registers yet for openat, so it
-> would be nice to avoid this if we can. We can always expand later...
-> 
+> The vendor code did this and said there is a HW issue. I just don't have 
+> the guts to remove this check.
+> Seems like sometimes masked interrupt may get ISR set wrongly.
 
-We can't really expand later like you suggest.
+And that would just as well avoided by a SW managed mask.
 
-Suppose in a couple of years that we need to add some new argument to
-openat2 that isn't just a new flag. If all these values are passed by
-individual arguments, you can't add one later without adding yet another
-syscall.
+>> And if this is truly the right way to do it, please document the
+>> various problems with the controller so that we don't break it at a
+>> later time.
+> Thanks, will do.
+>>
+>> Then how comes this comes from the irqchip's DT node? This should be
+>> part of the endpoint's interrupt specifier.
+> 
+> In theory it should be, However if we set different interrupt 
+> lines/cores on that controller, interrupts may get lost. It means we can 
+> only have single parent core/interrupt.
+> 
+> So I'd prefer just set them uniformly by controller's dt-binding to 
+> prevent confusing.
 
-Using a struct for this allows this to be extended later, OTOH. You can
-extend it, and add a flag that tells the kernel that it can access the
-new field. No new syscall required.
+And I disagree. You can document the restriction, and even maybe enforce
+it by validating the DT one way or another. But we're not putting what
+ends up being a routing table in the irqchip binding.
+
+	M.
 -- 
-Jeff Layton <jlayton@kernel.org>
-
+Jazz is not dead, it just smells funny...
