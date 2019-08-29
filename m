@@ -2,102 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D79A1F01
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2019 17:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A22DAA1F1B
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Aug 2019 17:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727495AbfH2PZQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 29 Aug 2019 11:25:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43010 "EHLO mail.kernel.org"
+        id S1727008AbfH2P2W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 29 Aug 2019 11:28:22 -0400
+Received: from verein.lst.de ([213.95.11.211]:47223 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727073AbfH2PZQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 29 Aug 2019 11:25:16 -0400
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D613823429
-        for <linux-mips@vger.kernel.org>; Thu, 29 Aug 2019 15:25:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567092315;
-        bh=izoNkph/QjwkRYkXPZQmm9ytluYnjBoc9TYsmIgqnSU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=iUFipIVZ1HFIrEALnAF/EnoEcF209ZLWvRC4PEWbszkw/lCP9Yvj37ci8J+w7/hxQ
-         zi/3IdAUX14zyQDtjJ0thyL4mPt5cSWzBq103mHEZpUO2EBt91zBEDCvu4xzO9SOzg
-         6Vbq+bL+ekh6s4QH3C1lVJ97BVS4YmMDzILHOYCc=
-Received: by mail-wm1-f45.google.com with SMTP id d16so4293866wme.2
-        for <linux-mips@vger.kernel.org>; Thu, 29 Aug 2019 08:25:14 -0700 (PDT)
-X-Gm-Message-State: APjAAAVyhpOKsy794J/OIB4GLDwxKvpmoDKfqzO9PbeoE65n3uAcimcp
-        yDJQO+zY11RoktOERZDhVa0l4i0jb4b/PJ38tI+zuw==
-X-Google-Smtp-Source: APXvYqw9u1fu+EHt/4WAojvjLjQ7rKpFezaEHESzZAnb7jZ2raRq1MIbYw3eQuXsuFrZUlLqFJAlw9hQa1Rszg/FXvs=
-X-Received: by 2002:a05:600c:22d7:: with SMTP id 23mr12807622wmg.0.1567092313279;
- Thu, 29 Aug 2019 08:25:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190829111843.41003-1-vincenzo.frascino@arm.com> <20190829111843.41003-5-vincenzo.frascino@arm.com>
-In-Reply-To: <20190829111843.41003-5-vincenzo.frascino@arm.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Thu, 29 Aug 2019 08:25:02 -0700
-X-Gmail-Original-Message-ID: <CALCETrVprrrR3TSVSAnHfLW4HDQG=gcVrdjmsk6ss6Z3+vKOBg@mail.gmail.com>
-Message-ID: <CALCETrVprrrR3TSVSAnHfLW4HDQG=gcVrdjmsk6ss6Z3+vKOBg@mail.gmail.com>
-Subject: Re: [PATCH 4/7] lib: vdso: Remove VDSO_HAS_32BIT_FALLBACK
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        id S1727294AbfH2P2W (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 29 Aug 2019 11:28:22 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id C63D5227A81; Thu, 29 Aug 2019 17:28:16 +0200 (CEST)
+Date:   Thu, 29 Aug 2019 17:28:16 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     iommu@lists.linux-foundation.org
+Cc:     Shawn Anastasio <shawn@anastas.io>, Will Deacon <will@kernel.org>,
+        linux-m68k@lists.linux-m68k.org, Guan Xuetao <gxt@pku.edu.cn>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        linux-mips@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Andrew Lutomirski <luto@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        James Hogan <jhogan@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: cleanup the dma_pgprot handling v2
+Message-ID: <20190829152816.GA20232@lst.de>
+References: <20190826132553.4116-1-hch@lst.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190826132553.4116-1-hch@lst.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Aug 29, 2019 at 4:19 AM Vincenzo Frascino
-<vincenzo.frascino@arm.com> wrote:
->
-> VDSO_HAS_32BIT_FALLBACK was introduced to address a regression which
-> caused seccomp to deny access to the applications to clock_gettime64()
-> and clock_getres64() because they are not enabled in the existing
-> filters.
->
-> The purpose of VDSO_HAS_32BIT_FALLBACK was to simplify the conditional
-> implementation of __cvdso_clock_get*time32() variants.
->
-> Now that all the architectures that support the generic vDSO library
-> have been converted to support the 32 bit fallbacks the conditional
-> can be removed.
->
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> CC: Andy Lutomirski <luto@kernel.org>
-> References: c60a32ea4f45 ("lib/vdso/32: Provide legacy syscall fallbacks")
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> ---
->  lib/vdso/gettimeofday.c | 10 ----------
->  1 file changed, 10 deletions(-)
->
-> diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-> index a86e89e6dedc..2c4b311c226d 100644
-> --- a/lib/vdso/gettimeofday.c
-> +++ b/lib/vdso/gettimeofday.c
-> @@ -126,13 +126,8 @@ __cvdso_clock_gettime32(clockid_t clock, struct old_timespec32 *res)
->
->         ret = __cvdso_clock_gettime_common(clock, &ts);
->
-> -#ifdef VDSO_HAS_32BIT_FALLBACK
->         if (unlikely(ret))
->                 return clock_gettime32_fallback(clock, res);
-> -#else
-> -       if (unlikely(ret))
-> -               ret = clock_gettime_fallback(clock, &ts);
-> -#endif
->
->         if (likely(!ret)) {
->                 res->tv_sec = ts.tv_sec;
-
-I think you could have a little follow-up patch to remove the if
-statement -- by the time you get here, it's guaranteed that ret == 0.
-
---Andy
+I've pulled this into the dma-mapping for-next tree now.
