@@ -2,64 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC19BA31E4
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2019 10:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 006BDA33C4
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2019 11:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727410AbfH3IJ3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 30 Aug 2019 04:09:29 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60750 "EHLO mx1.suse.de"
+        id S1727635AbfH3JZx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Aug 2019 05:25:53 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41694 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725780AbfH3IJ3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 30 Aug 2019 04:09:29 -0400
+        id S1726480AbfH3JZx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 30 Aug 2019 05:25:53 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 8C2AAB69F;
-        Fri, 30 Aug 2019 08:09:27 +0000 (UTC)
-Date:   Fri, 30 Aug 2019 10:09:26 +0200
+        by mx1.suse.de (Postfix) with ESMTP id B8A66AD85;
+        Fri, 30 Aug 2019 09:25:51 +0000 (UTC)
 From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
+To:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 05/15] net: sgi: ioc3-eth: allocate space
- for desc rings only once
-Message-Id: <20190830100926.343e7c2c7f3cd059c359bdd4@suse.de>
-In-Reply-To: <20190829150504.68a04fe4@cakuba.netronome.com>
-References: <20190829155014.9229-1-tbogendoerfer@suse.de>
-        <20190829155014.9229-6-tbogendoerfer@suse.de>
-        <20190829140537.68abfc9f@cakuba.netronome.com>
-        <20190830000058.882feb357058437cddc71315@suse.de>
-        <20190829150504.68a04fe4@cakuba.netronome.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+Subject: [PATCH v3 net-next 00/15] ioc3-eth improvements
+Date:   Fri, 30 Aug 2019 11:25:23 +0200
+Message-Id: <20190830092539.24550-1-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.13.7
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 29 Aug 2019 15:05:04 -0700
-Jakub Kicinski <jakub.kicinski@netronome.com> wrote:
+In my patch series for splitting out the serial code from ioc3-eth
+by using a MFD device there was one big patch for ioc3-eth.c,
+which wasn't really usefull for reviews. This series contains the
+ioc3-eth changes splitted in smaller steps and few more cleanups.
+Only the conversion to MFD will be done later in a different series.
 
-> On Fri, 30 Aug 2019 00:00:58 +0200, Thomas Bogendoerfer wrote:
+Changes in v3:
+- no need to check skb == NULL before passing it to dev_kfree_skb_any
+- free memory allocated with get_page(s) with free_page(s)
+- allocate rx ring with just GFP_KERNEL
+- add required alignment for rings in comments
 
-> > Out of curiosity does kcalloc/kmalloc_array give me the same guarantees about
-> > alignment ? rx ring needs to be 4KB aligned, tx ring 16KB aligned.
-> 
-> I don't think so, actually, I was mostly worried you are passing
-> address from get_page() into kfree() here ;) But patch 11 cures that,
-> so that's good, too.
+Changes in v2:
+- use net_err_ratelimited for printing various ioc3 errors
+- added missing clearing of rx buf valid flags into ioc3_alloc_rings
+- use __func__ for printing out of memory messages
 
-I realized that after sending my last mail. I'll fix that in v3 even
-it's just a transient bug.
+Thomas Bogendoerfer (15):
+  MIPS: SGI-IP27: remove ioc3 ethernet init
+  MIPS: SGI-IP27: restructure ioc3 register access
+  net: sgi: ioc3-eth: remove checkpatch errors/warning
+  net: sgi: ioc3-eth: use defines for constants dealing with desc rings
+  net: sgi: ioc3-eth: allocate space for desc rings only once
+  net: sgi: ioc3-eth: get rid of ioc3_clean_rx_ring()
+  net: sgi: ioc3-eth: separate tx and rx ring handling
+  net: sgi: ioc3-eth: introduce chip start function
+  net: sgi: ioc3-eth: split ring cleaning/freeing and allocation
+  net: sgi: ioc3-eth: refactor rx buffer allocation
+  net: sgi: ioc3-eth: use dma-direct for dma allocations
+  net: sgi: ioc3-eth: use csum_fold
+  net: sgi: ioc3-eth: Fix IPG settings
+  net: sgi: ioc3-eth: protect emcr in all cases
+  net: sgi: ioc3-eth: no need to stop queue set_multicast_list
 
-Thomas.
+ arch/mips/include/asm/sn/ioc3.h     |  357 +++++-------
+ arch/mips/sgi-ip27/ip27-console.c   |    5 +-
+ arch/mips/sgi-ip27/ip27-init.c      |   13 -
+ drivers/net/ethernet/sgi/ioc3-eth.c | 1038 +++++++++++++++++------------------
+ 4 files changed, 665 insertions(+), 748 deletions(-)
 
 -- 
-SUSE Software Solutions Germany GmbH
-HRB 247165 (AG München)
-Geschäftsführer: Felix Imendörffer
+2.13.7
+
