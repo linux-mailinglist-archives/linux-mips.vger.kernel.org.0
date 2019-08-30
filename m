@@ -2,62 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EDCA3F2B
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2019 22:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF90A3FD6
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2019 23:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728042AbfH3Uzh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Aug 2019 16:55:37 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:41694 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727992AbfH3Uzg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Aug 2019 16:55:36 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 2AB31154FD908;
-        Fri, 30 Aug 2019 13:55:36 -0700 (PDT)
-Date:   Fri, 30 Aug 2019 13:55:35 -0700 (PDT)
-Message-Id: <20190830.135535.690331861133879813.davem@davemloft.net>
-To:     tbogendoerfer@suse.de
-Cc:     ralf@linux-mips.org, paul.burton@mips.com, jhogan@kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v3 net-next 00/15] ioc3-eth improvements
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190830092539.24550-1-tbogendoerfer@suse.de>
-References: <20190830092539.24550-1-tbogendoerfer@suse.de>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 30 Aug 2019 13:55:36 -0700 (PDT)
+        id S1728194AbfH3VpQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Aug 2019 17:45:16 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:41888 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728143AbfH3VpQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Aug 2019 17:45:16 -0400
+Received: by mail-pl1-f195.google.com with SMTP id m9so3930569pls.8;
+        Fri, 30 Aug 2019 14:45:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=CyAnPYKlnqoE6HYrk4XrrLs/lfWC1furlwMXZwIbdJM=;
+        b=Ey9XQvoj8H/Rnwv8NzD/KreDQNAtk/Y1mAfNtWWSPWRvpRHkSG3qzrkTUiyqzLyy8y
+         FhYeM7nvgl239YS8plycKvLT74pvzlcX8njCo82d73vUDrqGOQIz8oARAkP7UKilrwM5
+         NDqVYaJdxQw5YtmBNy2VGaqetGKnvddyuLZTFzzrXm1WRH2hh5P7VzQIaPjNRzRh/cM8
+         +iOgz2nm0iGcnxDUVyloWrKJlS93KDGv8twzcGSeFsCL8uqXFf9uQEZtHNVy3yjgG/aD
+         DEMAEjrPTZxgLBaKb3rpS25bBzOjAWuXx/Z+kiRAvu2tepHCjzQrK3HOb0q7by4MMmYW
+         wmeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=CyAnPYKlnqoE6HYrk4XrrLs/lfWC1furlwMXZwIbdJM=;
+        b=EIOO/dpI+2pUY4aPFL8ZvpQPyrNVpIj6HE8Cdu5W0ZRr3evJH+4Wcp4LtYcT1T/V8D
+         wMyHsWm1eSyvdxDmeYzjFZPLEv1+J29G5ldl+mx8F6xKG6etI1QKO2KxM0oVE41nRNeP
+         QobTKQ+ZNZRregfPzseXgLrriY+wK+IMfefZr8EcdZy2gPAX6iYLci/PCwFyLofl2Hqf
+         0kJs/VvNA38d3qR3b3YQz09KsPvspGGedvbJm5CShNdmiT1Y4YBzq3oA5tFVUWKBxmN6
+         HF6WzibRQRHI5DUWOtgCfbiakI9RFSYAq3YtohDMnkquqOPQxgJMSkQvOBQE166LwScl
+         b0HA==
+X-Gm-Message-State: APjAAAUI1QI8ePr7mY+ERjQxKNIzcol2ok3K8624tlRNypLxNJobmsiy
+        JDaxLfrJn4w8oTC31xZvHHoLCd8cqRQ=
+X-Google-Smtp-Source: APXvYqzQSc6jNbxZKUcovD9FZLciwfGuo7Kt2wn5aZSHSDm6zSKrBIeIlpBZCEWXRcfFUHXs7Afe6Q==
+X-Received: by 2002:a17:902:9b8f:: with SMTP id y15mr18714988plp.194.1567201515169;
+        Fri, 30 Aug 2019 14:45:15 -0700 (PDT)
+Received: from localhost (g75.222-224-160.ppp.wakwak.ne.jp. [222.224.160.75])
+        by smtp.gmail.com with ESMTPSA id q69sm5777108pjb.0.2019.08.30.14.45.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Aug 2019 14:45:14 -0700 (PDT)
+Date:   Sat, 31 Aug 2019 06:45:12 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        nios2-dev@lists.rocketboards.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-mtd@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/26] openrisc: map as uncached in ioremap
+Message-ID: <20190830214512.GX24874@lianli.shorne-pla.net>
+References: <20190817073253.27819-1-hch@lst.de>
+ <20190817073253.27819-6-hch@lst.de>
+ <20190823135539.GC24874@lianli.shorne-pla.net>
+ <20190830160705.GF26887@lst.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190830160705.GF26887@lst.de>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Date: Fri, 30 Aug 2019 11:25:23 +0200
-
-> In my patch series for splitting out the serial code from ioc3-eth
-> by using a MFD device there was one big patch for ioc3-eth.c,
-> which wasn't really usefull for reviews. This series contains the
-> ioc3-eth changes splitted in smaller steps and few more cleanups.
-> Only the conversion to MFD will be done later in a different series.
+On Fri, Aug 30, 2019 at 06:07:05PM +0200, Christoph Hellwig wrote:
+> On Fri, Aug 23, 2019 at 10:55:39PM +0900, Stafford Horne wrote:
+> > On Sat, Aug 17, 2019 at 09:32:32AM +0200, Christoph Hellwig wrote:
+> > > Openrisc is the only architecture not mapping ioremap as uncached,
+> > > which has been the default since the Linux 2.6.x days.  Switch it
+> > > over to implement uncached semantics by default.
+> > > 
+> > > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> > > ---
+> > >  arch/openrisc/include/asm/io.h      | 20 +++-----------------
+> > >  arch/openrisc/include/asm/pgtable.h |  2 +-
+> > >  arch/openrisc/mm/ioremap.c          |  8 ++++----
+> > >  3 files changed, 8 insertions(+), 22 deletions(-)
+> > 
+> > Acked-by: Stafford Horne <shorne@gmail.com>
 > 
-> Changes in v3:
-> - no need to check skb == NULL before passing it to dev_kfree_skb_any
-> - free memory allocated with get_page(s) with free_page(s)
-> - allocate rx ring with just GFP_KERNEL
-> - add required alignment for rings in comments
-> 
-> Changes in v2:
-> - use net_err_ratelimited for printing various ioc3 errors
-> - added missing clearing of rx buf valid flags into ioc3_alloc_rings
-> - use __func__ for printing out of memory messages
+> Can you send this one to Linus for 5.4?  That would help with the
+> possibility to remove ioremap_nocache after that.
 
-Series applied, thanks.
+Sure, I will pick this up.
 
-I might be nice to use get_order() instead of hardcoding the page size
-when "2" is passed into the page alloc/free calls.  Just FYI...
+-Stafford
