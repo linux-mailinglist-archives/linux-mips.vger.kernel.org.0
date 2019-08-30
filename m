@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB39A2E67
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2019 06:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15BB8A2E6F
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2019 06:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbfH3EdB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Aug 2019 00:33:01 -0400
-Received: from forward101p.mail.yandex.net ([77.88.28.101]:59209 "EHLO
-        forward101p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725819AbfH3EdA (ORCPT
+        id S1726236AbfH3EdL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Aug 2019 00:33:11 -0400
+Received: from forward106p.mail.yandex.net ([77.88.28.109]:58701 "EHLO
+        forward106p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726090AbfH3EdL (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 30 Aug 2019 00:33:00 -0400
-Received: from mxback11g.mail.yandex.net (mxback11g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:90])
-        by forward101p.mail.yandex.net (Yandex) with ESMTP id 7FD383280711;
-        Fri, 30 Aug 2019 07:32:56 +0300 (MSK)
+        Fri, 30 Aug 2019 00:33:11 -0400
+Received: from mxback12j.mail.yandex.net (mxback12j.mail.yandex.net [IPv6:2a02:6b8:0:1619::87])
+        by forward106p.mail.yandex.net (Yandex) with ESMTP id 1F6441C80A75;
+        Fri, 30 Aug 2019 07:33:07 +0300 (MSK)
 Received: from smtp1p.mail.yandex.net (smtp1p.mail.yandex.net [2a02:6b8:0:1472:2741:0:8b6:6])
-        by mxback11g.mail.yandex.net (nwsmtp/Yandex) with ESMTP id ed7UcnEzyq-WuC8gcCF;
-        Fri, 30 Aug 2019 07:32:56 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1567139576;
-        bh=VD9k6EC93VnKj/3YVMc7QTVJI+Lj0puUJgN+sd5hBPM=;
-        h=Subject:To:From:Cc:Date:Message-Id;
-        b=HfERE2Im2NgUtA1292WFPq/OzdAsL6ntfOSFHEhGOJhK8IJdAISVOFgTlDaqVnRE3
-         l/UQMoKGBY3Xn+rCEOFZ0vwYO68uYzqZj6bJXhOYHzY9kYwZeRNDpBgAsszjsmm7my
-         6Y6d9M+VXLIPD00GIlE3I+pepqAZt1+Od2pCs2as=
-Authentication-Results: mxback11g.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by smtp1p.mail.yandex.net (nwsmtp/Yandex) with ESMTPSA id vFuwVxmDwr-WlDGm3mn;
-        Fri, 30 Aug 2019 07:32:54 +0300
+        by mxback12j.mail.yandex.net (nwsmtp/Yandex) with ESMTP id EF5346hYcL-X6oeTDPq;
+        Fri, 30 Aug 2019 07:33:07 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1567139587;
+        bh=jLzJicLkbXfHmx3eYxmpwhMZURKGvtDVrPk8smkP6xQ=;
+        h=In-Reply-To:Subject:To:From:Cc:References:Date:Message-Id;
+        b=EmqcIx6H6da7C5wNP5sNvzZQsBO2Dx86kxx/35sUE9/eVfcpZKztaSVCtK+1o4Ect
+         i8fEITmt1TzjMCW7RXav5ZeDAJPEy1LZ3BmdDWu8i44Y/My1nbj5edoiuEzgxI10up
+         6TmmtvkrPLybcuWUAU+rd8YTU1gXWlf7Qyd8YPrs=
+Authentication-Results: mxback12j.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by smtp1p.mail.yandex.net (nwsmtp/Yandex) with ESMTPSA id vFuwVxmDwr-WvDGJwA3;
+        Fri, 30 Aug 2019 07:33:03 +0300
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (Client certificate not present)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
@@ -35,10 +35,12 @@ Cc:     chenhc@lemote.com, paul.burton@mips.com, tglx@linutronix.de,
         jason@lakedaemon.net, maz@kernel.org, linux-kernel@vger.kernel.org,
         robh+dt@kernel.org, mark.rutland@arm.co,
         devicetree@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v1 06/18] dt-bindings: interrupt-controller: Add Loongson-3 IOINTC
-Date:   Fri, 30 Aug 2019 12:32:20 +0800
-Message-Id: <20190830043232.20191-1-jiaxun.yang@flygoat.com>
+Subject: [PATCH v1 07/18] irqchip: Add driver for Loongson-3 HyperTransport interrupt controller
+Date:   Fri, 30 Aug 2019 12:32:21 +0800
+Message-Id: <20190830043232.20191-2-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190830043232.20191-1-jiaxun.yang@flygoat.com>
+References: <20190830043232.20191-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -46,95 +48,198 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Document Loongson-3 I/O Interrupt controller.
+This controller appeared on Loongson-3 family of chips to receive interrupts
+from PCH chip.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- .../loongson,ls3-iointc.yaml                  | 75 +++++++++++++++++++
- 1 file changed, 75 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,ls3-iointc.yaml
+ drivers/irqchip/Kconfig          |   8 ++
+ drivers/irqchip/Makefile         |   1 +
+ drivers/irqchip/irq-ls3-htintc.c | 147 +++++++++++++++++++++++++++++++
+ 3 files changed, 156 insertions(+)
+ create mode 100644 drivers/irqchip/irq-ls3-htintc.c
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls3-iointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls3-iointc.yaml
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 8d9eac5fd4a7..b3ce0f3e43ae 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -480,6 +480,14 @@ config LS3_IOINTC
+ 	help
+ 	  Support for the Loongson-3 I/O Interrupt Controller.
+ 
++config LS3_HTINTC
++	bool "Loongson3 HyperTransport Interrupt Controller"
++	depends on MACH_LOONGSON64
++	default y
++	select IRQ_DOMAIN
++	select GENERIC_IRQ_CHIP
++	help
++	  Support for the Loongson-3 HyperTransport Interrupt Controller.
+ endmenu
+ 
+ config SIFIVE_PLIC
+diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
+index 49ecb8d38138..0fda94c319e9 100644
+--- a/drivers/irqchip/Makefile
++++ b/drivers/irqchip/Makefile
+@@ -103,3 +103,4 @@ obj-$(CONFIG_LS1X_IRQ)			+= irq-ls1x.o
+ obj-$(CONFIG_TI_SCI_INTR_IRQCHIP)	+= irq-ti-sci-intr.o
+ obj-$(CONFIG_TI_SCI_INTA_IRQCHIP)	+= irq-ti-sci-inta.o
+ obj-$(CONFIG_LS3_IOINTC)			+= irq-ls3-iointc.o
++obj-$(CONFIG_LS3_HTINTC)			+= irq-ls3-htintc.o
+diff --git a/drivers/irqchip/irq-ls3-htintc.c b/drivers/irqchip/irq-ls3-htintc.c
 new file mode 100644
-index 000000000000..9aee10abd5cd
+index 000000000000..d5013606faa8
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls3-iointc.yaml
-@@ -0,0 +1,75 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/interrupt-controller/loongson,ls3-iointc.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++++ b/drivers/irqchip/irq-ls3-htintc.c
+@@ -0,0 +1,147 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ *  Copyright (C) 2019, Jiaxun Yang <jiaxun.yang@flygoat.com>
++ *  Loongson-3 HyperTransport IRQ support
++ */
 +
-+title: Loongson-3 I/O Interrupt Controller
++#include <linux/errno.h>
++#include <linux/init.h>
++#include <linux/types.h>
++#include <linux/interrupt.h>
++#include <linux/ioport.h>
++#include <linux/irqchip.h>
++#include <linux/of_address.h>
++#include <linux/of_irq.h>
++#include <linux/io.h>
++#include <linux/irqchip/chained_irq.h>
 +
-+maintainers:
-+  - Jiaxun Yang <jiaxun.yang@flygoat.com>
++#define HTINTC_NUM_GC  4
++#define HTINTC_GC_SIZE  0x4
++#define HTINTC_NUM_HANDLER  4
++#define HTINTC_HANDLER_SIZE  0x8
++#define HTINTC_HANDLER_IRQ  64
 +
-+description: |
-+  This interrupt controller is found in the Loongson-3 family of chips as the primary
-+  package interrupt source which can route interrupt to interrupt line of cores.
++#define HTINTC_VECTOR_OFFSET   0x0
++#define HTINTC_EN_OFFSET   0x20
 +
-+properties:
-+  compatible:
-+    const: loongson,ls3-iointc
++struct htintc_handler_priv {
++	struct irq_domain	*domain;
++	void __iomem		*handler_base;
++};
 +
-+  reg:
-+    maxItems: 1
++static void htintc_chained_handle_irq(struct irq_desc *desc)
++{
++	struct htintc_handler_priv *priv = irq_desc_get_handler_data(desc);
++	struct irq_chip *chip = irq_desc_get_chip(desc);
++	int i;
++	bool handled = false;
 +
++	chained_irq_enter(chip, desc);
 +
-+  interrupt-controller: true
++	for (i = 0; i < HTINTC_NUM_GC; i++) {
++		uint32_t irqs = readl(priv->handler_base + HTINTC_GC_SIZE * i);
 +
-+  "#interrupt-cells":
-+    description: |
-+      Specifies the number of cells needed to encode an interrupt source.
-+      Must be 2 or 4.
-+      If the system requires describing interrupt line & core mapping, than
-+      it must be 4.
++		while (irqs) {
++			int bit = __ffs(irqs);
 +
-+      The 1st cell is the hardware interrupt number.
++			generic_handle_irq(irq_find_mapping(priv->domain, bit + 32 * i));
++			irqs &= ~BIT(bit);
++			handled = true;
++		}
++	}
 +
-+      The 2nd cell is the flags, encoded as follows:
-+        bits[3:0] trigger type and level flags.
-+          1 = low-to-high edge triggered
-+          2 = high-to-low edge triggered
-+          4 = active high level-sensitive
-+          8 = active low level-sensitive.
++	if (!handled)
++		spurious_interrupt();
 +
-+      The 3rd is the parent interrupt line that interrupt would map to.
-+      As the CPU preserved 4 interrupt lines for I/O, in theory any of the iointc
-+      interrupt can be chained to any interrupt lines on a core. But currently
-+      we can only map all the interrupt to a single parent, so this cell must be
-+      set uniformly for all the child interrupts corresponding to the parent
-+      interrupt.
++	chained_irq_exit(chip, desc);
++}
 +
-+      The 4th is the parent core that interrupt would map to. The interrupt
-+      contoller can map any of the interrupt to the specified core on a package.
-+      This cell determined the core. It must be the bootcore.
++int __init ls3_htintc_of_init(struct device_node *node,
++					   struct device_node *parent)
++{
++	struct irq_chip_generic *gc;
++	struct irq_chip_type *ct;
++	struct htintc_handler_priv *priv;
++	struct irq_domain *domain;
++	void __iomem *base;
++	int parent_irq[HTINTC_NUM_HANDLER], err = 0;
++	int i;
 +
-+      If the 3rd, 4th cell is not set, it will default to the 0# interrupt line
-+      and bootcore.
++	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
 +
-+    enum: [ 2, 4 ]
++	base = of_iomap(node, 0);
++	if (!base) {
++		err = -ENODEV;
++		goto out_free_priv;
++	}
 +
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-controller
-+  - '#interrupt-cells'
++	for (i = 0; i < HTINTC_NUM_HANDLER; i++) {
++		parent_irq[i] = irq_of_parse_and_map(node, i);
++		if (!parent_irq[i]) {
++			pr_err("ls3-htintc: unable to get parent irq %d\n", i);
++			err =  -ENODEV;
++			goto out_iounmap;
++		}
++	}
++	/* Set up an IRQ domain */
++	domain = irq_domain_add_linear(node, 32 * HTINTC_NUM_GC,
++								&irq_generic_chip_ops, NULL);
++	if (!domain) {
++		pr_err("ls3-htintc: cannot add IRQ domain\n");
++		err = -ENOMEM;
++		goto out_iounmap;
++	}
 +
++	for (i = 0; i < HTINTC_NUM_HANDLER; i++) {
++		/* Mask all interrupts */
++		writeq(0x0, base + HTINTC_EN_OFFSET + HTINTC_HANDLER_SIZE * i);
++	}
 +
-+examples:
-+  - |
-+    iointc: interrupt-controller@3ff01400 {
-+        compatible = "loongson,ls3-io-intc";
-+        reg = <0x3ff01400 0x60>;
-+        interrupts = <2>;
-+        interrupt-controller;
-+        #interrupt-cells = <4>;
-+    };
-+...
++	err = irq_alloc_domain_generic_chips(domain, 32, 1,
++										node->full_name,
++										handle_edge_irq,
++										IRQ_NOPROBE, 0,
++										IRQ_GC_INIT_MASK_CACHE);
++	if (err) {
++		pr_err("ls3-htintc: unable to register IRQ domain\n");
++		err = -ENOMEM;
++		goto out_free_domain;
++	}
++
++	for (i = 0; i < HTINTC_NUM_GC; i++) {
++		gc = irq_get_domain_generic_chip(domain, i * 32);
++		gc->reg_base = base + HTINTC_GC_SIZE * i;
++		gc->domain = domain;
++
++		ct = gc->chip_types;
++		ct->regs.mask = HTINTC_EN_OFFSET;
++		ct->regs.ack = HTINTC_VECTOR_OFFSET;
++		ct->chip.irq_unmask = irq_gc_mask_set_bit;
++		ct->chip.irq_mask = irq_gc_mask_clr_bit;
++		ct->chip.irq_ack = irq_gc_ack_set_bit;
++	}
++
++	priv->domain = domain;
++	priv->handler_base = base + HTINTC_VECTOR_OFFSET;
++
++	for (i = 0; i < HTINTC_NUM_HANDLER; i++) {
++		irq_set_chained_handler_and_data(parent_irq[i],
++										htintc_chained_handle_irq,
++										priv);
++	}
++
++	return 0;
++
++out_free_domain:
++	irq_domain_remove(domain);
++out_iounmap:
++	iounmap(base);
++out_free_priv:
++	kfree(priv);
++
++	return err;
++}
++
++IRQCHIP_DECLARE(ls3_htintc, "loongson,ls3-htintc", ls3_htintc_of_init);
 -- 
 2.22.0
 
