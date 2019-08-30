@@ -2,67 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13631A33D1
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2019 11:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD51A3670
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Aug 2019 14:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728415AbfH3J0S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Aug 2019 05:26:18 -0400
-Received: from mx2.suse.de ([195.135.220.15]:41818 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728255AbfH3JZ7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 30 Aug 2019 05:25:59 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 748DCB0F2;
-        Fri, 30 Aug 2019 09:25:58 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH v3 net-next 15/15] net: sgi: ioc3-eth: no need to stop queue set_multicast_list
-Date:   Fri, 30 Aug 2019 11:25:38 +0200
-Message-Id: <20190830092539.24550-16-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.13.7
-In-Reply-To: <20190830092539.24550-1-tbogendoerfer@suse.de>
-References: <20190830092539.24550-1-tbogendoerfer@suse.de>
+        id S1727595AbfH3MNX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Aug 2019 08:13:23 -0400
+Received: from foss.arm.com ([217.140.110.172]:59122 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727326AbfH3MNX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 30 Aug 2019 08:13:23 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7C67F337;
+        Fri, 30 Aug 2019 05:13:22 -0700 (PDT)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0CC233F246;
+        Fri, 30 Aug 2019 05:13:20 -0700 (PDT)
+Date:   Fri, 30 Aug 2019 13:13:18 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        will@kernel.org, paul.burton@mips.com, tglx@linutronix.de,
+        salyzyn@android.com, 0x7f454c46@gmail.com, luto@kernel.org
+Subject: Re: [PATCH 1/7] arm64: compat: vdso: Expose BUILD_VDSO32
+Message-ID: <20190830121318.GH36992@arrakis.emea.arm.com>
+References: <20190829111843.41003-1-vincenzo.frascino@arm.com>
+ <20190829111843.41003-2-vincenzo.frascino@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190829111843.41003-2-vincenzo.frascino@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-netif_stop_queue()/netif_wake_qeue() aren't needed for changing
-multicast filters.
+On Thu, Aug 29, 2019 at 12:18:37PM +0100, Vincenzo Frascino wrote:
+> clock_gettime32 and clock_getres_time32 should be compiled only with the
+> 32 bit vdso library.
+> 
+> Expose BUILD_VDSO32 when arm64 compat is compiled, to provide an
+> indication to the generic library to include these symbols.
+> 
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
----
- drivers/net/ethernet/sgi/ioc3-eth.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/sgi/ioc3-eth.c b/drivers/net/ethernet/sgi/ioc3-eth.c
-index 963ed0f9787c..deb636d653f3 100644
---- a/drivers/net/ethernet/sgi/ioc3-eth.c
-+++ b/drivers/net/ethernet/sgi/ioc3-eth.c
-@@ -1627,8 +1627,6 @@ static void ioc3_set_multicast_list(struct net_device *dev)
- 	struct netdev_hw_addr *ha;
- 	u64 ehar = 0;
- 
--	netif_stop_queue(dev);				/* Lock out others. */
--
- 	spin_lock_irq(&ip->ioc3_lock);
- 
- 	if (dev->flags & IFF_PROMISC) {			/* Set promiscuous.  */
-@@ -1660,8 +1658,6 @@ static void ioc3_set_multicast_list(struct net_device *dev)
- 	}
- 
- 	spin_unlock_irq(&ip->ioc3_lock);
--
--	netif_wake_queue(dev);			/* Let us get going again. */
- }
- 
- module_pci_driver(ioc3_driver);
--- 
-2.13.7
-
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
