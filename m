@@ -2,21 +2,21 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BE9A42AB
-	for <lists+linux-mips@lfdr.de>; Sat, 31 Aug 2019 08:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC575A42AE
+	for <lists+linux-mips@lfdr.de>; Sat, 31 Aug 2019 08:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728324AbfHaGBQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 31 Aug 2019 02:01:16 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:49510 "EHLO huawei.com"
+        id S1725899AbfHaGAs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 31 Aug 2019 02:00:48 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:49362 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726579AbfHaGA5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 31 Aug 2019 02:00:57 -0400
+        id S1726135AbfHaGAs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 31 Aug 2019 02:00:48 -0400
 Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 2006AC3D66F954624D19;
-        Sat, 31 Aug 2019 14:00:42 +0800 (CST)
+        by Forcepoint Email with ESMTP id DFA271D7914D6E80DE7C;
+        Sat, 31 Aug 2019 14:00:41 +0800 (CST)
 Received: from localhost.localdomain (10.67.212.75) by
  DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
- 14.3.439.0; Sat, 31 Aug 2019 14:00:34 +0800
+ 14.3.439.0; Sat, 31 Aug 2019 14:00:35 +0800
 From:   Yunsheng Lin <linyunsheng@huawei.com>
 To:     <catalin.marinas@arm.com>, <will@kernel.org>, <mingo@redhat.com>,
         <bp@alien8.de>, <rth@twiddle.net>, <ink@jurassic.park.msu.ru>,
@@ -40,9 +40,9 @@ CC:     <akpm@linux-foundation.org>, <rppt@linux.ibm.com>,
         <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
         <tbogendoerfer@suse.de>, <linux-mips@vger.kernel.org>,
         <linuxarm@huawei.com>
-Subject: [PATCH v2 3/9] alpha: numa: check the node id consistently for alpha
-Date:   Sat, 31 Aug 2019 13:58:17 +0800
-Message-ID: <1567231103-13237-4-git-send-email-linyunsheng@huawei.com>
+Subject: [PATCH v2 4/9] powerpc: numa: check the node id consistently for powerpc
+Date:   Sat, 31 Aug 2019 13:58:18 +0800
+Message-ID: <1567231103-13237-5-git-send-email-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
 References: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
@@ -73,34 +73,33 @@ node_to_cpumask_map[node]:
 
 Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 ---
-note node_to_cpumask_map[node] is already a pointer, so the
-cpumask_clear should be called with node_to_cpumask_map[node]
-instead of &node_to_cpumask_map[node]? And cpumask_of_node()
-function need to be inlined when defined in a header file?
-If the above are problems, maybe another patch to fix or clean
-it up.
----
- arch/alpha/include/asm/topology.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ arch/powerpc/include/asm/topology.h | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/arch/alpha/include/asm/topology.h b/arch/alpha/include/asm/topology.h
-index 5a77a40..9e0b1cd1 100644
---- a/arch/alpha/include/asm/topology.h
-+++ b/arch/alpha/include/asm/topology.h
-@@ -30,8 +30,11 @@ static const struct cpumask *cpumask_of_node(int node)
- {
- 	int cpu;
+diff --git a/arch/powerpc/include/asm/topology.h b/arch/powerpc/include/asm/topology.h
+index 2f7e1ea..217dc9b 100644
+--- a/arch/powerpc/include/asm/topology.h
++++ b/arch/powerpc/include/asm/topology.h
+@@ -17,9 +17,16 @@ struct device_node;
  
--	if (node == NUMA_NO_NODE)
--		return cpu_all_mask;
+ #include <asm/mmzone.h>
+ 
+-#define cpumask_of_node(node) ((node) == -1 ?				\
+-			       cpu_all_mask :				\
+-			       node_to_cpumask_map[node])
++static inline const struct cpumask *cpumask_of_node(int node)
++{
 +	if (node >= nr_node_ids)
 +		return cpu_none_mask;
 +
 +	if (node < 0 || !node_to_cpumask_map[node])
 +		return cpu_online_mask;
++
++	return node_to_cpumask_map[node];
++}
  
- 	cpumask_clear(&node_to_cpumask_map[node]);
- 
+ struct pci_bus;
+ #ifdef CONFIG_PCI
 -- 
 2.8.1
 
