@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CEE7A4279
-	for <lists+linux-mips@lfdr.de>; Sat, 31 Aug 2019 08:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63BE9A42AB
+	for <lists+linux-mips@lfdr.de>; Sat, 31 Aug 2019 08:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725981AbfHaGAq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 31 Aug 2019 02:00:46 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:49298 "EHLO huawei.com"
+        id S1728324AbfHaGBQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 31 Aug 2019 02:01:16 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:49510 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725899AbfHaGAq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 31 Aug 2019 02:00:46 -0400
+        id S1726579AbfHaGA5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 31 Aug 2019 02:00:57 -0400
 Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id CCA8FFE050212F500B61;
-        Sat, 31 Aug 2019 14:00:41 +0800 (CST)
+        by Forcepoint Email with ESMTP id 2006AC3D66F954624D19;
+        Sat, 31 Aug 2019 14:00:42 +0800 (CST)
 Received: from localhost.localdomain (10.67.212.75) by
  DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
  14.3.439.0; Sat, 31 Aug 2019 14:00:34 +0800
@@ -40,9 +40,9 @@ CC:     <akpm@linux-foundation.org>, <rppt@linux.ibm.com>,
         <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
         <tbogendoerfer@suse.de>, <linux-mips@vger.kernel.org>,
         <linuxarm@huawei.com>
-Subject: [PATCH v2 2/9] x86: numa: check the node id consistently for x86
-Date:   Sat, 31 Aug 2019 13:58:16 +0800
-Message-ID: <1567231103-13237-3-git-send-email-linyunsheng@huawei.com>
+Subject: [PATCH v2 3/9] alpha: numa: check the node id consistently for alpha
+Date:   Sat, 31 Aug 2019 13:58:17 +0800
+Message-ID: <1567231103-13237-4-git-send-email-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
 References: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
@@ -73,40 +73,34 @@ node_to_cpumask_map[node]:
 
 Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 ---
- arch/x86/include/asm/topology.h | 6 ++++++
- arch/x86/mm/numa.c              | 2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+note node_to_cpumask_map[node] is already a pointer, so the
+cpumask_clear should be called with node_to_cpumask_map[node]
+instead of &node_to_cpumask_map[node]? And cpumask_of_node()
+function need to be inlined when defined in a header file?
+If the above are problems, maybe another patch to fix or clean
+it up.
+---
+ arch/alpha/include/asm/topology.h | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-index 4b14d23..f36e9c8 100644
---- a/arch/x86/include/asm/topology.h
-+++ b/arch/x86/include/asm/topology.h
-@@ -69,6 +69,12 @@ extern const struct cpumask *cpumask_of_node(int node);
- /* Returns a pointer to the cpumask of CPUs on Node 'node'. */
- static inline const struct cpumask *cpumask_of_node(int node)
+diff --git a/arch/alpha/include/asm/topology.h b/arch/alpha/include/asm/topology.h
+index 5a77a40..9e0b1cd1 100644
+--- a/arch/alpha/include/asm/topology.h
++++ b/arch/alpha/include/asm/topology.h
+@@ -30,8 +30,11 @@ static const struct cpumask *cpumask_of_node(int node)
  {
+ 	int cpu;
+ 
+-	if (node == NUMA_NO_NODE)
+-		return cpu_all_mask;
 +	if (node >= nr_node_ids)
 +		return cpu_none_mask;
 +
 +	if (node < 0 || !node_to_cpumask_map[node])
 +		return cpu_online_mask;
-+
- 	return node_to_cpumask_map[node];
- }
- #endif
-diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-index e6dad60..5e393d2 100644
---- a/arch/x86/mm/numa.c
-+++ b/arch/x86/mm/numa.c
-@@ -868,7 +868,7 @@ const struct cpumask *cpumask_of_node(int node)
- 		dump_stack();
- 		return cpu_none_mask;
- 	}
--	if (node_to_cpumask_map[node] == NULL) {
-+	if (node < 0 || !node_to_cpumask_map[node]) {
- 		printk(KERN_WARNING
- 			"cpumask_of_node(%d): no node_to_cpumask_map!\n",
- 			node);
+ 
+ 	cpumask_clear(&node_to_cpumask_map[node]);
+ 
 -- 
 2.8.1
 
