@@ -2,17 +2,17 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC575A42AE
-	for <lists+linux-mips@lfdr.de>; Sat, 31 Aug 2019 08:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A2CA4296
+	for <lists+linux-mips@lfdr.de>; Sat, 31 Aug 2019 08:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725899AbfHaGAs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 31 Aug 2019 02:00:48 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:49362 "EHLO huawei.com"
+        id S1728244AbfHaGBK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 31 Aug 2019 02:01:10 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:49226 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726135AbfHaGAs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 31 Aug 2019 02:00:48 -0400
+        id S1725903AbfHaGBA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 31 Aug 2019 02:01:00 -0400
 Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id DFA271D7914D6E80DE7C;
+        by Forcepoint Email with ESMTP id B8999A0606B4FD5A4803;
         Sat, 31 Aug 2019 14:00:41 +0800 (CST)
 Received: from localhost.localdomain (10.67.212.75) by
  DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
@@ -40,9 +40,9 @@ CC:     <akpm@linux-foundation.org>, <rppt@linux.ibm.com>,
         <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
         <tbogendoerfer@suse.de>, <linux-mips@vger.kernel.org>,
         <linuxarm@huawei.com>
-Subject: [PATCH v2 4/9] powerpc: numa: check the node id consistently for powerpc
-Date:   Sat, 31 Aug 2019 13:58:18 +0800
-Message-ID: <1567231103-13237-5-git-send-email-linyunsheng@huawei.com>
+Subject: [PATCH v2 5/9] s390: numa: check the node id consistently for s390
+Date:   Sat, 31 Aug 2019 13:58:19 +0800
+Message-ID: <1567231103-13237-6-git-send-email-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
 References: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
@@ -73,33 +73,31 @@ node_to_cpumask_map[node]:
 
 Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 ---
- arch/powerpc/include/asm/topology.h | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+Note node_to_cpumask_map[node] is already a pointer, so
+returning &node_to_cpumask_map[node] does not seem to
+be correct, if this is problem, maybe clean it up in another
+patch.
+---
+ arch/s390/include/asm/topology.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/powerpc/include/asm/topology.h b/arch/powerpc/include/asm/topology.h
-index 2f7e1ea..217dc9b 100644
---- a/arch/powerpc/include/asm/topology.h
-+++ b/arch/powerpc/include/asm/topology.h
-@@ -17,9 +17,16 @@ struct device_node;
- 
- #include <asm/mmzone.h>
- 
--#define cpumask_of_node(node) ((node) == -1 ?				\
--			       cpu_all_mask :				\
--			       node_to_cpumask_map[node])
-+static inline const struct cpumask *cpumask_of_node(int node)
-+{
+diff --git a/arch/s390/include/asm/topology.h b/arch/s390/include/asm/topology.h
+index cca406f..75340ca 100644
+--- a/arch/s390/include/asm/topology.h
++++ b/arch/s390/include/asm/topology.h
+@@ -78,6 +78,12 @@ static inline int cpu_to_node(int cpu)
+ #define cpumask_of_node cpumask_of_node
+ static inline const struct cpumask *cpumask_of_node(int node)
+ {
 +	if (node >= nr_node_ids)
 +		return cpu_none_mask;
 +
 +	if (node < 0 || !node_to_cpumask_map[node])
 +		return cpu_online_mask;
 +
-+	return node_to_cpumask_map[node];
-+}
+ 	return &node_to_cpumask_map[node];
+ }
  
- struct pci_bus;
- #ifdef CONFIG_PCI
 -- 
 2.8.1
 
