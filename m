@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40878A4A96
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA70A4A97
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728930AbfIAQba (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 12:31:30 -0400
-Received: from pio-pvt-msa1.bahnhof.se ([79.136.2.40]:60382 "EHLO
-        pio-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726727AbfIAQba (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:31:30 -0400
+        id S1728938AbfIAQbz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 12:31:55 -0400
+Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:33154 "EHLO
+        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726727AbfIAQbz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:31:55 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 444E53F752
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:31:29 +0200 (CEST)
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 733683FC34
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:31:53 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -21,20 +21,20 @@ X-Spam-Level:
 X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         tests=[BAYES_00=-1.9, URIBL_BLOCKED=0.001]
         autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa1.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id DtdsWtezF5Wa for <linux-mips@vger.kernel.org>;
-        Sun,  1 Sep 2019 18:31:28 +0200 (CEST)
+Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id G2dZd_2aeDBL for <linux-mips@vger.kernel.org>;
+        Sun,  1 Sep 2019 18:31:52 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 74E453F393
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:31:28 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 18:31:28 +0200
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id A9BD03FA2D
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:31:52 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 18:31:52 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     linux-mips@vger.kernel.org
-Subject: [PATCH 098/120] MIPS: PS2: FB: Preconfigure standard PAL, NTSC and
- VESA display modes
-Message-ID: <6b0617e9a1f60312b3a22c24549011b434ac413b.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 099/120] MIPS: PS2: FB: Reset the Graphics Synthesizer
+ drawing environment
+Message-ID: <eebbc511b81bcb50cc6b25eb51b254e412e7b637.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -46,173 +46,251 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-These display mode configurations are a combination of modes made by
-Sony[1] and modes from the PlayStation 3 frame buffer driver (ps3fb.c).
+Various parameters are used to draw Graphics Synthesizer primitives, for
+example texture information and drawing attributes set by the PRIM
+register[1]. These parameters are called the drawing environment. The
+environment remains in effect for multiple primitives until it is reset.
 
-The VESA modes are designed to work with the synch-on-green (SOG) VGA
-cable that Sony distributed with the Linux kit for the PlayStation 2.
-Modern computer displays typically do not support synch-on-green, so
-an adapter is most likely necessary for these modes.
+Some environment registers such as XYOFFSET_1 and XYOFFSET_2 represent
+the same function and can be chosen with the CTXT primitive attribute.
+
+This driver is currently only using the first drawing environment.
 
 References:
 
 [1] "GS User's Manual", version 6.0, Sony Computer Entertainment Inc.,
-    p. 84.
+    pp. 47-49.
 
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
- drivers/video/fbdev/ps2fb.c | 110 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 110 insertions(+)
+ drivers/video/fbdev/ps2fb.c | 198 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 197 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/video/fbdev/ps2fb.c b/drivers/video/fbdev/ps2fb.c
-index dd8b468ab72b..a28263474665 100644
+index a28263474665..90ddcbe27d43 100644
 --- a/drivers/video/fbdev/ps2fb.c
 +++ b/drivers/video/fbdev/ps2fb.c
-@@ -156,6 +156,91 @@ struct gs_sync_param {
- 	struct gs_display display;
- };
+@@ -59,6 +59,11 @@
  
-+static const struct fb_videomode standard_modes[] = {
-+	/* PAL */
-+	{ "256p", 50, 640, 256, 74074, 100, 61, 34, 22, 63, 2,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED, FB_MODE_IS_STANDARD },
-+	{ "288p", 50, 720, 288, 74074, 70, 11, 19, 3, 63, 3,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED, FB_MODE_IS_STANDARD },
-+	{ "512i", 50, 640, 512, 74074, 100, 61, 67, 41, 63, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_INTERLACED, FB_MODE_IS_STANDARD },
-+	{ "576i", 50, 720, 576, 74074, 70, 11, 39, 5, 63, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_INTERLACED, FB_MODE_IS_STANDARD },
-+	{ "576p", 50, 720, 576, 37037, 70, 11, 39, 5, 63, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED, FB_MODE_IS_STANDARD },
-+	{ "720p", 50, 1280, 720, 13468, 220, 400, 19, 6, 80, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED, FB_MODE_IS_STANDARD },
-+	{ "1080i", 50, 1920, 1080, 13468, 148, 484, 36, 4, 88, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_INTERLACED, FB_MODE_IS_STANDARD },
-+	{ "1080p", 50, 1920, 1080, 6734, 148, 484, 36, 4, 88, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED, FB_MODE_IS_STANDARD },
+ #define PALETTE_BLOCK_COUNT 1	/* One block is used for the indexed colors */
+ 
++#define GIF_PACKAGE_TAG(package) ((package)++)->gif.tag = (struct gif_tag)
++#define GIF_PACKAGE_REG(package) ((package)++)->gif.reg = (struct gif_data_reg)
++#define GIF_PACKAGE_AD(package)  ((package)++)->gif.packed.ad = (struct gif_packed_ad)
++#define DMA_PACKAGE_TAG(package) ((package)++)->dma = (struct dma_tag)
 +
-+	/* PAL with borders to ensure that the whole screen is visible */
-+	{ "460i", 50, 576, 460, 74074, 142, 83, 97, 63, 63, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_INTERLACED },
-+	{ "460p", 50, 576, 460, 37037, 142, 83, 97, 63, 63, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED },
-+	{ "644p", 50, 1124, 644, 13468, 298, 478, 57, 44, 80, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED },
-+	{ "964i", 50, 1688, 964, 13468, 264, 600, 94, 62, 88, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_INTERLACED },
-+	{ "964p", 50, 1688, 964, 6734, 264, 600, 94, 62, 88, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED },
-+
-+	/* NTSC */
-+	{ "224p", 60, 640, 224, 74074, 95, 60, 22, 14, 63, 3,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED, FB_MODE_IS_STANDARD },
-+	{ "240p", 60, 720, 240, 74074, 58, 17, 15, 5, 63, 3,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED, FB_MODE_IS_STANDARD },
-+	{ "448i", 60, 640, 448, 74074, 95, 60, 44, 27, 63, 6,
-+	  FB_SYNC_BROADCAST, FB_VMODE_INTERLACED, FB_MODE_IS_STANDARD },
-+	{ "480i", 60, 720, 480, 74074, 58, 17, 30, 9, 63, 6,
-+	  FB_SYNC_BROADCAST, FB_VMODE_INTERLACED, FB_MODE_IS_STANDARD },
-+	{ "480p", 60, 720, 480, 37037, 58, 17, 30, 9, 63, 6,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED, FB_MODE_IS_STANDARD },
-+	{ "720p", 60, 1280, 720, 13481, 220, 70, 19, 6, 80, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED, FB_MODE_IS_STANDARD },
-+	{ "1080i", 60, 1920, 1080, 13481, 148, 44, 36, 4, 88, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_INTERLACED, FB_MODE_IS_STANDARD },
-+	{ "1080p", 60, 1920, 1080, 6741, 148, 44, 36, 4, 88, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED, FB_MODE_IS_STANDARD },
-+
-+	/* NTSC with borders to ensure that the whole screen is visible */
-+	{ "384i", 60, 576, 384, 74074, 130, 89, 78, 57, 63, 6,
-+	  FB_SYNC_BROADCAST, FB_VMODE_INTERLACED },
-+	{ "384p", 60, 576, 384, 37037, 130, 89, 78, 57, 63, 6,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED },
-+	{ "644p", 60, 1124, 644, 13481, 298, 148, 57, 44, 80, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED },
-+	{ "964i", 60, 1688, 964, 13481, 264, 160, 94, 62, 88, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_INTERLACED },
-+	{ "964p", 60, 1688, 964, 6741, 264, 160, 94, 62, 88, 5,
-+	  FB_SYNC_BROADCAST, FB_VMODE_NONINTERLACED },
-+
-+	/* VESA */
-+	{ "vesa-1a", 60, 640, 480, 39682,  48, 16, 33, 10, 96, 2,
-+	  0, FB_VMODE_NONINTERLACED, FB_MODE_IS_VESA },
-+	{ "vesa-1c", 75, 640, 480, 31746, 120, 16, 16, 1, 64, 3,
-+	  0, FB_VMODE_NONINTERLACED, FB_MODE_IS_VESA },
-+	{ "vesa-2b", 60, 800, 600, 25000, 88, 40, 23, 1, 128, 4,
-+	  FB_SYNC_HOR_HIGH_ACT | FB_SYNC_VERT_HIGH_ACT,
-+	  FB_VMODE_NONINTERLACED, FB_MODE_IS_VESA },
-+	{ "vesa-2d", 75, 800, 600, 20202, 160, 16, 21, 1, 80, 3,
-+	  FB_SYNC_HOR_HIGH_ACT | FB_SYNC_VERT_HIGH_ACT,
-+	  FB_VMODE_NONINTERLACED, FB_MODE_IS_VESA },
-+	{ "vesa-3b", 60, 1024, 768, 15384, 160, 24, 29, 3, 136, 6,
-+	  0, FB_VMODE_NONINTERLACED, FB_MODE_IS_VESA },
-+	{ "vesa-3d", 75, 1024, 768, 12690, 176, 16, 28, 1, 96, 3,
-+	  FB_SYNC_HOR_HIGH_ACT | FB_SYNC_VERT_HIGH_ACT,
-+	  FB_VMODE_NONINTERLACED, FB_MODE_IS_VESA },
-+	{ "vesa-4a", 60, 1280, 1024, 9259, 248, 48, 38, 1, 112, 3,
-+	  FB_SYNC_HOR_HIGH_ACT | FB_SYNC_VERT_HIGH_ACT,
-+	  FB_VMODE_NONINTERLACED, FB_MODE_IS_VESA },
-+	{ "vesa-4b", 75, 1280, 1024, 7407, 248, 16, 38, 1, 144, 3,
-+	  FB_SYNC_HOR_HIGH_ACT | FB_SYNC_VERT_HIGH_ACT,
-+	  FB_VMODE_NONINTERLACED, FB_MODE_IS_VESA }
-+};
-+
- /**
-  * var_to_fbw - frame buffer width for a given virtual x resolution
-  * @var: screen info object to compute FBW for
-@@ -829,6 +914,17 @@ static u32 block_dimensions(u32 dim, u32 alignment)
- 	return mask;
+ /* Module parameters */
+ static char *mode_option;
+ 
+@@ -361,6 +366,194 @@ static u32 display_buffer_size(const u32 xres_virtual, const u32 yres_virtual,
+ 	return (xres_virtual * yres_virtual * bits_per_pixel) / 8;
  }
  
-+static void fill_modes(struct device *dev, struct list_head *head)
++/**
++ * struct environment - Graphics Synthesizer drawing environment context
++ * @xres: x resolution in pixels
++ * @yres: y resolution in pixels
++ * @fbw: frame buffer width in 64-pixel unit
++ * @psm: pixel storage mode
++ * @fbp: frame buffer base pointer in 2048-pixel unit
++ */
++struct environment {
++	u32 xres;
++	u32 yres;
++	u32 fbw;
++	enum gs_psm psm;
++	u32 fbp;
++};
++
++/**
++ * var_to_env - Graphics Synthesizer drawing environment for a given video mode
++ * @var: screen info object
++ * @info: frame buffer info object
++ *
++ * Return: Graphics Synthesizer drawing environment parameters
++ */
++static struct environment var_to_env(const struct fb_var_screeninfo *var,
++	const struct fb_info *info)
 +{
-+	int i;
-+
-+	INIT_LIST_HEAD(head);
-+
-+	for (i = 0; i < ARRAY_SIZE(standard_modes); i++)
-+		if (fb_add_videomode(&standard_modes[i], head) < 0)
-+			dev_err(dev, "fb_add_videomode failed\n");
++	return (struct environment) {
++		.xres = var->xres,
++		.yres = var->yres,
++		.fbw  = var_to_fbw(var),
++		.psm  = var_to_psm(var, info)
++	};
 +}
 +
- static int init_console_buffer(struct platform_device *pdev,
- 	struct fb_info *info)
- {
-@@ -897,6 +993,8 @@ static int ps2fb_probe(struct platform_device *pdev)
- 	}
- 	par->package.capacity = PAGE_SIZE / sizeof(union package);
- 
-+	fill_modes(&pdev->dev, &info->modelist);
++/**
++ * package_environment - package drawing environment tags and data for the GIF
++ * @package: DMA buffer to put packages in
++ * @env: drawing environment to package
++ *
++ * Various parameters are used to draw Graphics Synthesizer primitives, for
++ * example texture information and drawing attributes set by the PRIM register.
++ * These parameters are called the drawing environment. The environment remains
++ * in effect for multiple primitives until it is reset.
++ *
++ * Some environment registers such as XYOFFSET_1 and XYOFFSET_2 represent the
++ * same function and can be chosen with the CTXT primitive attribute.
++ *
++ * The following registers are available:
++ *
++ * ============ =============================================================
++ * XYOFFSET_1/2 offset value of vertex coordinates
++ * PRMODECONT   PRIM attributes enabled/disabled
++ * TEX0_1/2     attributes of texture buffer and texture mapping
++ * TEX1_1/2     attributes of texture mapping
++ * TEX2_1/2     colour lookup table entry
++ * CLAMP_1/2    wrap mode of texture mapping
++ * TEXCLUT      colour lookup table setting
++ * SCANMSK      drawing control with y coordinate of pixel
++ * MIPTBP1_1/2  base pointer for MIPMAP on each level
++ * MIPTBP2_1/2  base pointer for MIPMAP on each level
++ * TEXA         reference value when expanding alpha value of TEX16 and TEX24
++ * FOGCOL       fogging distant color
++ * SCISSOR_1/2  scissoring area
++ * ALPHA_1/2    alpha-blending attributes
++ * DIMX         dither matrix
++ * DTHE         dithering enabled/disabled
++ * COLCLAMP     color clamp/mask
++ * TEST_1/2     pixel operation
++ * PABE         alpha-blending in pixel units enabled/disabled
++ * FBA_1/2      alpha correction value
++ * FRAME_1/2    frame buffer setting
++ * ZBUF_1/2     z buffer setting
++ * ============ =============================================================
++ *
++ * Return: number of generated GIF packages in 16-byte unit
++ */
++static size_t package_environment(union package *package,
++	const struct environment env)
++{
++	union package * const base_package = package;
 +
- 	strlcpy(info->fix.id, "PS2 GS", ARRAY_SIZE(info->fix.id));
- 	info->fix.accel = FB_ACCEL_PLAYSTATION_2;
- 
-@@ -904,6 +1002,17 @@ static int ps2fb_probe(struct platform_device *pdev)
- 	if (err < 0)
- 		goto err_init_buffer;
- 
-+	fb_info(info, "Mode option is \"%s\"\n", mode_option);
++	GIF_PACKAGE_TAG(package) {
++		.flg = gif_packed_mode,
++		.reg0 = gif_reg_ad,
++		.nreg = 1,
++		.nloop = 11
++	};
++	GIF_PACKAGE_AD(package) {
++		.addr = gs_addr_frame_1,
++		.data.frame_1 = {
++			.fbw = env.fbw,
++			.fbp = env.fbp,
++			.psm = env.psm
++		}
++	};
++	GIF_PACKAGE_AD(package) {
++		.addr = gs_addr_xyoffset_1,
++		.data.xyoffset_1 = {
++			.ofx = 0,
++			.ofy = 0,
++		}
++	};
++	GIF_PACKAGE_AD(package) {
++		.addr = gs_addr_scissor_1,
++		.data.scissor_1 = {
++			.scax0 = 0, .scax1 = env.xres,
++			.scay0 = 0, .scay1 = env.yres
++		}
++	};
++	GIF_PACKAGE_AD(package) {
++		.addr = gs_addr_scanmsk,
++		.data.scanmsk = {
++			.msk = gs_scanmsk_normal
++		}
++	};
++	GIF_PACKAGE_AD(package) {
++		.addr = gs_addr_prmode,
++		.data.prmode = { }	/* Reset PRMODE to a known value */
++	};
++	GIF_PACKAGE_AD(package) {
++		.addr = gs_addr_prmodecont,
++		.data.prmodecont = {
++			.ac = 1
++		}
++	};
++	GIF_PACKAGE_AD(package) {
++		.addr = gs_addr_test_1,
++		.data.test_1 = {
++			.zte  = gs_depth_test_on,	/* Must always be ON */
++			.ztst = gs_depth_pass		/* Emulate OFF */
++		}
++	};
++	GIF_PACKAGE_AD(package) {
++		.addr = gs_addr_texa,
++		.data.texa = {
++			.ta0 = GS_ALPHA_ONE,
++			.aem = gs_aem_normal,
++			.ta1 = GS_ALPHA_ONE
++		}
++	};
++	GIF_PACKAGE_AD(package) {
++		.addr = gs_addr_tex1_1,
++		.data.tex1 = {
++			.lcm = gs_lcm_fixed,
++			.mmag = gs_lod_nearest,
++			.mmin = gs_lod_nearest,
++			.k = 0
++		}
++	};
++	GIF_PACKAGE_AD(package) {
++		.addr = gs_addr_zbuf_1,
++		.data.zbuf = {
++			.zmsk = gs_zbuf_off
++		}
++	};
++	GIF_PACKAGE_AD(package) {
++		.addr = gs_addr_dthe,
++		.data.dthe = {
++			.dthe = gs_dthe_off
++		}
++	};
 +
-+	info->var = (struct fb_var_screeninfo) { };
-+	if (!fb_find_mode(&info->var, info, mode_option,
-+			standard_modes, ARRAY_SIZE(standard_modes), NULL, 32)) {
-+		fb_err(info, "Failed to find video mode \"%s\"\n",
-+			mode_option);
-+		err = -EINVAL;
-+		goto err_find_mode;
++	return package - base_package;
++}
++
++/**
++ * write_cb_environment - write console buffer GS drawing environment to the GIF
++ * @info: frame buffer info object
++ *
++ * Write various parameters used to draw Graphics Synthesizer primitives, for
++ * example texture information and drawing attributes set by the PRIM register.
++ * The environment remains in effect for multiple primitives until it is reset.
++ */
++void write_cb_environment(struct fb_info *info)
++{
++        if (gif_wait()) {
++		struct ps2fb_par *par = info->par;
++		union package * const base_package = par->package.buffer;
++		union package *package = base_package;
++
++		package += package_environment(package,
++			var_to_env(&info->var, info));
++
++		gif_write(&base_package->gif, package - base_package);
++	} else
++		fb_err(info, "Failed to write GS environment, GIF is busy\n");
++}
++
+ /**
+  * ps2fb_cb_get_tilemax - maximum number of tiles
+  * @info: frame buffer info object
+@@ -889,9 +1082,12 @@ static int ps2fb_cb_set_par(struct fb_info *info)
+ 	spin_lock_irqsave(&par->lock, flags);
+ 
+ 	err = ps2fb_set_par(info);
+-	if (!err)
++	if (!err) {
+ 		par->cb.block_count = var_to_block_count(info);
+ 
++		write_cb_environment(info);
 +	}
 +
- 	info->mode = &par->mode;
+ 	spin_unlock_irqrestore(&par->lock, flags);
  
- 	if (register_framebuffer(info) < 0) {
-@@ -917,6 +1026,7 @@ static int ps2fb_probe(struct platform_device *pdev)
- 	return 0;
- 
- err_register_framebuffer:
-+err_find_mode:
- err_init_buffer:
- 	free_page((unsigned long)par->package.buffer);
- err_package_buffer:
+ 	if (!err && info->tileops)
 -- 
 2.21.0
 
