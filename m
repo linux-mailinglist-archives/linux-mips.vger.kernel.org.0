@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DA7A4AA3
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B500A4AA4
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728616AbfIAQev (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 12:34:51 -0400
-Received: from pio-pvt-msa3.bahnhof.se ([79.136.2.42]:45570 "EHLO
+        id S1728570AbfIAQfM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 12:35:12 -0400
+Received: from pio-pvt-msa3.bahnhof.se ([79.136.2.42]:45588 "EHLO
         pio-pvt-msa3.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728570AbfIAQev (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:34:51 -0400
+        with ESMTP id S1726727AbfIAQfM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:35:12 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id D7DD93F63C
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:34:48 +0200 (CEST)
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id 56DBF3F63C
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:35:10 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -23,22 +23,22 @@ X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         autolearn=ham autolearn_force=no
 Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
         by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Xm8D0X-kbY-w for <linux-mips@vger.kernel.org>;
-        Sun,  1 Sep 2019 18:34:48 +0200 (CEST)
+        with ESMTP id J-TUNSvu7yIo for <linux-mips@vger.kernel.org>;
+        Sun,  1 Sep 2019 18:35:09 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id 237AC3F58C
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:34:48 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 18:34:47 +0200
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id 84DF83F58C
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:35:09 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 18:35:09 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     linux-mips@vger.kernel.org
-Subject: [PATCH 111/120] MIPS: PS2: FB: Analogue display mode adjustment
- module parameter
-Message-ID: <1dec8a1cc49058ccc7d2973f6eeee0888012fc2a.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 112/120] USB: OHCI: Support for the PlayStation 2
+Message-ID: <abe0bcd3a39bfc6381d6148b6cb06ad0013c6faa.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 In-Reply-To: <cover.1567326213.git.noring@nocrew.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
@@ -46,122 +46,304 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Analogue devices are frequently a few pixels off. Use this mode_margin
-option to make necessary device dependent adjustments to the built-in
-modes.
+Support the USB 1.1 OHCI for the PlayStation 2. The controller is
+connected to the input/output processor (IOP) which is separate from
+the main (R5900) processor that runs the kernel.
+
+IOP DMA memory and OHCI registers are mapped into kernel address space.
+OHCI interrupts are asserted on the IOP and forwarded to the kernel by
+an IOP IRQ relay module.
 
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
- drivers/video/fbdev/ps2fb.c | 58 ++++++++++++++++++++++++++++++++++---
- 1 file changed, 54 insertions(+), 4 deletions(-)
+ drivers/usb/host/Kconfig    |   8 ++
+ drivers/usb/host/Makefile   |   1 +
+ drivers/usb/host/ohci-ps2.c | 245 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 254 insertions(+)
+ create mode 100644 drivers/usb/host/ohci-ps2.c
 
-diff --git a/drivers/video/fbdev/ps2fb.c b/drivers/video/fbdev/ps2fb.c
-index 4975f9adb5d0..121c271aa826 100644
---- a/drivers/video/fbdev/ps2fb.c
-+++ b/drivers/video/fbdev/ps2fb.c
-@@ -67,6 +67,7 @@
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index 40b5de597112..5b3b138006cd 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -552,6 +552,14 @@ config USB_OHCI_EXYNOS
+ 	help
+ 	 Enable support for the Samsung Exynos SOC's on-chip OHCI controller.
  
- /* Module parameters */
- static char *mode_option;
-+static char *mode_margin = "";
++config USB_OHCI_HCD_PS2
++	tristate "OHCI support for the Sony PlayStation 2"
++	depends on SONY_PS2
++	select GENERIC_ALLOCATOR
++	default y
++	help
++	 Enable support for the Sony PlayStation 2 OHCI controller.
++
+ config USB_CNS3XXX_OHCI
+ 	bool "Cavium CNS3XXX OHCI Module (DEPRECATED)"
+ 	depends on ARCH_CNS3XXX
+diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
+index 84514f71ae44..9ed4e0fa6657 100644
+--- a/drivers/usb/host/Makefile
++++ b/drivers/usb/host/Makefile
+@@ -69,6 +69,7 @@ obj-$(CONFIG_USB_OHCI_HCD_S3C2410)	+= ohci-s3c2410.o
+ obj-$(CONFIG_USB_OHCI_HCD_LPC32XX)	+= ohci-nxp.o
+ obj-$(CONFIG_USB_OHCI_HCD_PXA27X)	+= ohci-pxa27x.o
+ obj-$(CONFIG_USB_OHCI_HCD_DAVINCI)	+= ohci-da8xx.o
++obj-$(CONFIG_USB_OHCI_HCD_PS2)	+= ohci-ps2.o
  
- union package {
- 	union gif_data gif;
-@@ -1923,9 +1924,45 @@ static struct gs_sync_param vm_to_sp(const struct fb_videomode *vm)
- 	return vm_to_sp_for_synch_gen(vm, gs_synch_gen_for_vck(vm->pixclock));
- }
- 
-+/**
-+ * struct margin_adjustment - move display screen relative given display mode
-+ * @dx: positive, negative or zero horizontal x adjustment in pixels
-+ * @dy: positive, negative or zero vertical y adjustment in pixels
+ obj-$(CONFIG_USB_UHCI_HCD)	+= uhci-hcd.o
+ obj-$(CONFIG_USB_FHCI_HCD)	+= fhci.o
+diff --git a/drivers/usb/host/ohci-ps2.c b/drivers/usb/host/ohci-ps2.c
+new file mode 100644
+index 000000000000..a1d446313c13
+--- /dev/null
++++ b/drivers/usb/host/ohci-ps2.c
+@@ -0,0 +1,245 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * PlayStation 2 USB 1.1 OHCI host controller (HCD)
++ *
++ * Copyright (C) 2017 Jürgen Urban
++ * Copyright (C) 2018 Fredrik Noring
 + */
-+struct margin_adjustment {
-+	int dx;
-+	int dy;
++
++#include <linux/dma-mapping.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/usb.h>
++#include <linux/usb/hcd.h>
++
++#include <asm/mach-ps2/iop-heap.h>
++#include <asm/mach-ps2/iop-memory.h>
++#include <asm/mach-ps2/iop-registers.h>
++
++#include "ohci.h"
++
++#define DRIVER_DESC "PlayStation 2 USB OHCI host controller"
++#define DRV_NAME "ohci-ps2"
++
++/* Size allocated from IOP heap (maximum size of DMA memory). */
++#define DMA_BUFFER_SIZE (256 * 1024)
++
++#define hcd_to_priv(hcd) ((struct ps2_hcd *)(hcd_to_ohci(hcd)->priv))
++
++/**
++ * struct ps2_hcd - private device driver structure
++ * @iop_dma_addr: input/output processor (IOP) DMA buffer address
++ */
++struct ps2_hcd {
++	dma_addr_t iop_dma_addr;
 +};
 +
-+static struct margin_adjustment margin_adjustment(struct fb_info *info)
++static struct hc_driver __read_mostly ohci_ps2_hc_driver;
++
++static void ohci_ps2_enable(struct usb_hcd *hcd)
 +{
-+	char sx = '+', sy = '+';
-+	int dx = 0, dy = 0;
++	struct ohci_hcd *ohci = hcd_to_ohci(hcd);
 +
-+	bool valid =
-+		sscanf(mode_margin, "%c%d%c%d", &sx, &dx, &sy, &dy) == 4 &&
-+		(sx == '-' || sx == '+') &&
-+		(sy == '-' || sy == '+');
-+
-+	if (sx == '-')
-+		dx = -dx;
-+	if (sy == '-')
-+		dy = -dy;
-+
-+	if (mode_margin[0] != '\0')
-+		fb_info(info, "Mode margin \"%s\" with %d dx %d dy is %s\n",
-+			mode_margin, dx, dy, valid ? "valid" : "invalid");
-+
-+	if (!valid)
-+		return (struct margin_adjustment) { };
-+
-+	return (struct margin_adjustment) { .dx = dx, .dy = dy };
++	ohci_writel(ohci, 1, &ohci->regs->roothub.portstatus[11]);
 +}
 +
- static int ps2fb_set_par(struct fb_info *info)
- {
- 	struct ps2fb_par *par = info->par;
-+	const struct margin_adjustment margin_adjust = margin_adjustment(info);
- 	const struct fb_var_screeninfo *var = &info->var;
- 	const struct fb_videomode *mm = fb_match_mode(var, &info->modelist);
- 	const struct fb_videomode vm = (struct fb_videomode) {
-@@ -1933,10 +1970,10 @@ static int ps2fb_set_par(struct fb_info *info)
- 		.xres         = var->xres,
- 		.yres         = var->yres,
- 		.pixclock     = var->pixclock,
--		.left_margin  = var->left_margin,
--		.right_margin = var->right_margin,
--		.upper_margin = var->upper_margin,
--		.lower_margin = var->lower_margin,
-+		.left_margin  = var->left_margin  + margin_adjust.dx,
-+		.right_margin = var->right_margin - margin_adjust.dx,
-+		.upper_margin = var->upper_margin + margin_adjust.dy,
-+		.lower_margin = var->lower_margin - margin_adjust.dy,
- 		.hsync_len    = var->hsync_len,
- 		.vsync_len    = var->vsync_len,
- 		.sync         = var->sync,
-@@ -2198,6 +2235,9 @@ static int ps2fb_probe(struct platform_device *pdev)
- 		goto err_register_framebuffer;
- 	}
- 
-+	/* Clear the mode adjustment after setting the initial mode. */
-+	mode_margin = "";
++static void ohci_ps2_disable(struct usb_hcd *hcd)
++{
++	struct ohci_hcd *ohci = hcd_to_ohci(hcd);
 +
- 	platform_set_drvdata(pdev, info);
- 
- 	return 0;
-@@ -2269,6 +2309,8 @@ static int __init ps2fb_init(void)
- 			mode_option = &this_opt[12];
- 		else if ('0' <= this_opt[0] && this_opt[0] <= '9')
- 			mode_option = this_opt;
-+		else if (!strncmp(this_opt, "mode_margin:", 12))
-+			mode_margin = &this_opt[12];
- 		else
- 			pr_warn(DEVICE_NAME ": Unrecognized option \"%s\"\n",
- 				this_opt);
-@@ -2307,6 +2349,14 @@ module_param(mode_option, charp, 0);
- MODULE_PARM_DESC(mode_option,
- 	"Specify initial video mode as \"<xres>x<yres>[-<bpp>][@<refresh>]\"");
- 
-+/*
-+ * Analogue devices are frequently a few pixels off. Use this mode_margin
-+ * option to make necessary device dependent adjustments to the built-in modes.
-+ */
-+module_param(mode_margin, charp, 0);
-+MODULE_PARM_DESC(mode_margin,
-+	"Adjust initial video mode margin as \"<-|+><dx><-|+><dy>\"");
++	ohci_writel(ohci, 0, &ohci->regs->roothub.portstatus[11]);
++}
 +
- MODULE_DESCRIPTION("PlayStation 2 frame buffer driver");
- MODULE_AUTHOR("Fredrik Noring");
- MODULE_LICENSE("GPL");
++static void ohci_ps2_start_hc(struct usb_hcd *hcd)
++{
++	iop_set_dma_dpcr2(IOP_DMA_DPCR2_OHCI);
++
++	outw(1, IOP_OHCI_BASE + 0x80);
++}
++
++static void ohci_ps2_stop_hc(struct usb_hcd *hcd)
++{
++	iop_clr_dma_dpcr2(IOP_DMA_DPCR2_OHCI);
++}
++
++static int ohci_ps2_reset(struct usb_hcd *hcd)
++{
++	int err;
++
++	ohci_ps2_start_hc(hcd);
++
++	err = ohci_setup(hcd);
++	if (err) {
++		ohci_ps2_stop_hc(hcd);
++		return err;
++	}
++
++	ohci_ps2_enable(hcd);
++
++	return 0;
++}
++
++static int iopheap_alloc_dma_buffer(struct platform_device *pdev, size_t size)
++{
++	struct device *dev = &pdev->dev;
++	struct usb_hcd *hcd = platform_get_drvdata(pdev);
++	struct ps2_hcd *ps2priv = hcd_to_priv(hcd);
++	int err;
++
++	ps2priv->iop_dma_addr = iop_alloc(size);
++	if (!ps2priv->iop_dma_addr) {
++		dev_err(dev, "iop_alloc failed\n");
++		return -ENOMEM;
++	}
++
++	err = usb_hcd_setup_local_mem(hcd,
++		iop_bus_to_phys(ps2priv->iop_dma_addr),
++		ps2priv->iop_dma_addr, size);
++	if (err) {
++		dev_err(dev, "usb_hcd_setup_local_mem failed with %d\n", err);
++		iop_free(ps2priv->iop_dma_addr);
++		ps2priv->iop_dma_addr = 0;
++		return err;
++	}
++
++	return 0;
++}
++
++static void iopheap_free_dma_buffer(struct platform_device *pdev)
++{
++	struct usb_hcd *hcd = platform_get_drvdata(pdev);
++	struct ps2_hcd *ps2priv = hcd_to_priv(hcd);
++
++	if (!ps2priv->iop_dma_addr)
++		return;
++
++	iop_free(ps2priv->iop_dma_addr);
++	ps2priv->iop_dma_addr = 0;
++}
++
++static int ohci_hcd_ps2_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct resource *regs;
++	struct usb_hcd *hcd;
++	struct ps2_hcd *ps2priv;
++	int irq;
++	int err;
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0) {
++		dev_err(dev, "platform_get_irq failed\n");
++		return irq;
++	}
++
++	hcd = usb_create_hcd(&ohci_ps2_hc_driver, dev, dev_name(dev));
++	if (!hcd) {
++		dev_err(dev, "usb_create_hcd failed\n");
++		return -ENOMEM;
++	}
++
++	ps2priv = hcd_to_priv(hcd);
++	memset(ps2priv, 0, sizeof(*ps2priv));
++
++	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!regs) {
++		dev_err(dev, "platform_get_resource 0 failed\n");
++		err = -ENOENT;
++		goto err_platform;
++	}
++
++	hcd->rsrc_start = regs->start;
++	hcd->rsrc_len = resource_size(regs);
++	hcd->regs = ioremap(hcd->rsrc_start, hcd->rsrc_len);
++	if (IS_ERR(hcd->regs)) {
++		err = PTR_ERR(hcd->regs);
++		dev_err(dev, "ioremap failed with %d\n", err);
++		goto err_ioremap;
++	}
++
++	err = iopheap_alloc_dma_buffer(pdev, DMA_BUFFER_SIZE);
++	if (err)
++		goto err_alloc_dma_buffer;
++
++	err = usb_add_hcd(hcd, irq, IRQF_SHARED);
++	if (err) {
++		dev_err(dev, "usb_add_hcd failed with %d\n", err);
++		goto err_add_hcd;
++	}
++
++	err = device_wakeup_enable(hcd->self.controller);
++	if (err) {
++		dev_err(dev, "device_wakeup_enable failed with %d\n", err);
++		goto err_wakeup;
++	}
++
++	return 0;
++
++err_wakeup:
++	usb_remove_hcd(hcd);
++err_add_hcd:
++	iopheap_free_dma_buffer(pdev);
++err_alloc_dma_buffer:
++	iounmap(hcd->regs);
++err_ioremap:
++err_platform:
++	usb_put_hcd(hcd);
++	return err;
++}
++
++static int ohci_hcd_ps2_remove(struct platform_device *pdev)
++{
++	struct usb_hcd *hcd = platform_get_drvdata(pdev);
++
++	usb_remove_hcd(hcd);
++
++	ohci_ps2_disable(hcd);
++	ohci_ps2_stop_hc(hcd);
++
++	iopheap_free_dma_buffer(pdev);
++	iounmap(hcd->regs);
++
++	usb_put_hcd(hcd);
++
++	return 0;
++}
++
++static struct platform_driver ohci_hcd_ps2_driver = {
++	.probe		= ohci_hcd_ps2_probe,
++	.remove		= ohci_hcd_ps2_remove,
++	.shutdown	= usb_hcd_platform_shutdown,
++	.driver		= {
++		.name	= DRV_NAME,
++	},
++};
++
++static const struct ohci_driver_overrides ps2_overrides __initconst = {
++	.reset		= ohci_ps2_reset,
++	.product_desc	= DRIVER_DESC,
++	.extra_priv_size = sizeof(struct ps2_hcd),
++};
++
++static int __init ohci_ps2_init(void)
++{
++	if (usb_disabled()) {
++		pr_err(DRV_NAME ": Initialization failed: USB is disabled\n");
++		return -ENODEV;
++	}
++
++	ohci_init_driver(&ohci_ps2_hc_driver, &ps2_overrides);
++
++	return platform_driver_register(&ohci_hcd_ps2_driver);
++}
++module_init(ohci_ps2_init);
++
++static void __exit ohci_ps2_exit(void)
++{
++	platform_driver_unregister(&ohci_hcd_ps2_driver);
++}
++module_exit(ohci_ps2_exit);
++
++MODULE_DESCRIPTION(DRIVER_DESC);
++MODULE_AUTHOR("Fredrik Noring");
++MODULE_AUTHOR("Jürgen Urban");
++MODULE_LICENSE("GPL");
++MODULE_ALIAS("platform:" DRV_NAME);
 -- 
 2.21.0
 
