@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BE4A4A79
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45500A4A7A
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728775AbfIAQRT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 12:17:19 -0400
-Received: from pio-pvt-msa1.bahnhof.se ([79.136.2.40]:59124 "EHLO
-        pio-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728496AbfIAQRT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:17:19 -0400
+        id S1728677AbfIAQRz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 12:17:55 -0400
+Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:60206 "EHLO
+        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728496AbfIAQRz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:17:55 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 8F0A63F7B1
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:17:17 +0200 (CEST)
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id EA83A3FC34
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:17:51 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -21,19 +21,20 @@ X-Spam-Level:
 X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         tests=[BAYES_00=-1.9, URIBL_BLOCKED=0.001]
         autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa1.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 3cldcrmmP36D for <linux-mips@vger.kernel.org>;
-        Sun,  1 Sep 2019 18:17:16 +0200 (CEST)
+Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id QbEEVNTHL-ag for <linux-mips@vger.kernel.org>;
+        Sun,  1 Sep 2019 18:17:51 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id A49E63F752
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:17:16 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 18:17:16 +0200
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 0D8B33F62D
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:17:50 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 18:17:50 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     linux-mips@vger.kernel.org
-Subject: [PATCH 075/120] MIPS: PS2: IOP: IRQ support
-Message-ID: <8d4f6f44a2ff5024836a7f1a152c6cd7ab6bdfa2.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 076/120] MIPS: PS2: GS: Define privileged Graphics
+ Synthesizer registers
+Message-ID: <51240db505d6c5acf84b80f044ce5393dfa907fd.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -45,292 +46,605 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-IOP interrupts are not directly available to the kernel. IOP IRQs are
-instead serviced by an IRQ relay module, and then forwarded to the
-kernel by remote procedure calls (RPCs) via the sub-system interface
-(SIF).
+All privileged GS registers are write-only except CSR (system status)
+and SIGLBLID (signal and label id)[1][2]. Reading write-only registers
+is emulated by shadow registers in memory. Reading unwritten registers
+is not permitted. Predicate functions indicate whether registers are
+readable.
 
-The IRQ relay module can also forward IRQs via the SMFLAG (sub-to-main)
-register. This is more efficient, but the number of flags is limited.
-Currently only RPC forwarding is implemented in the kernel.
+The following privileged registers are available:
+
+Register | Description
+---------+---------------------------------------------------
+PMODE    | PCRTC mode setting
+SMODE1   | Mode setting related to video synchronisation
+SMODE2   | Mode setting related to video synchronisation
+SYNCH1   | Mode setting related to video synchronisation
+SYNCH2   | Mode setting related to video synchronisation
+SYNCHV   | Mode setting related to video synchronisation
+SRFSH    | DRAM refresh
+DISPFB1  | Setting for rectangular area read output circuit 1
+DISPLAY1 | Setting for rectangular area read output circuit 1
+DISPFB2  | Setting for rectangular area read output circuit 2
+DISPLAY2 | Setting for rectangular area read output circuit 2
+EXTBUF   | Feedback write buffer setting
+EXTDATA  | Feedback write setting
+EXTWRITE | Feedback write control
+BGCOLOR  | Background colour setting
+CSR      | System status
+IMR      | Interrupt mask control
+BUSDIR   | Host interface bus switching
+SIGLBLID | Signal and label identification value read
+---------+---------------------------------------------------
+
+References:
+
+[1] "EE User's Manual", version 6.0, Sony Computer Entertainment Inc.,
+    p. 26.
+
+[2] "GS User's Manual", version 6.0, Sony Computer Entertainment Inc.,
+    pp. 142-157, 159.
 
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
- arch/mips/include/asm/mach-ps2/irq.h |  49 ++++++-
- drivers/ps2/Makefile                 |   1 +
- drivers/ps2/iop-irq.c                | 186 +++++++++++++++++++++++++++
- 3 files changed, 235 insertions(+), 1 deletion(-)
- create mode 100644 drivers/ps2/iop-irq.c
+ arch/mips/include/asm/mach-ps2/gs-registers.h | 548 ++++++++++++++++++
+ 1 file changed, 548 insertions(+)
+ create mode 100644 arch/mips/include/asm/mach-ps2/gs-registers.h
 
-diff --git a/arch/mips/include/asm/mach-ps2/irq.h b/arch/mips/include/asm/mach-ps2/irq.h
-index 64d3fbf4789e..57b3e539ad92 100644
---- a/arch/mips/include/asm/mach-ps2/irq.h
-+++ b/arch/mips/include/asm/mach-ps2/irq.h
-@@ -13,7 +13,7 @@
- #define INTC_STAT	0x1000f000	/* Flags are cleared by writing 1 */
- #define INTC_MASK	0x1000f010	/* Bits are reversed by writing 1 */
- 
--#define NR_IRQS		56
-+#define NR_IRQS		128
- 
- /*
-  * The interrupt controller (INTC) arbitrates interrupts from peripheral
-@@ -71,6 +71,53 @@
- #define IRQ_C0_DMAC	51
- #define IRQ_C0_IRQ7	55
- 
-+/* Input/output processor (IOP) */
-+#define IOP_IRQ_BASE	64
-+#define IRQ_IOP_VBLANK	64
-+#define IRQ_IOP_SBUS	65
-+#define IRQ_IOP_CDVD	66
-+#define IRQ_IOP_DMA	67
-+#define IRQ_IOP_RTC0	68
-+#define IRQ_IOP_RTC1	69
-+#define IRQ_IOP_RTC2	70
-+#define IRQ_IOP_SIO0	71
-+#define IRQ_IOP_SIO1	72
-+#define IRQ_IOP_SPU	73
-+#define IRQ_IOP_PIO	74
-+#define IRQ_IOP_EVBLANK	75
-+#define IRQ_IOP_DVD	76
-+#define IRQ_IOP_DEV9	77
-+#define IRQ_IOP_RTC3	78
-+#define IRQ_IOP_RTC4	79
-+#define IRQ_IOP_RTC5	80
-+#define IRQ_IOP_SIO2	81
-+#define IRQ_IOP_HTR0	82
-+#define IRQ_IOP_HTR1	83
-+#define IRQ_IOP_HTR2	84
-+#define IRQ_IOP_HTR3	85
-+#define IRQ_IOP_USB	86
-+#define IRQ_IOP_EXTR	87
-+#define IRQ_IOP_ILINK	88
-+#define IRQ_IOP_ILNKDMA	89
-+
-+#define IRQ_IOP_DMAC_MDEC_IN	96	/* Ch 0 */
-+#define IRQ_IOP_DMAC_MDEC_OUT	97	/* Ch 1 */
-+#define IRQ_IOP_DMAC_SIF2	98	/* Ch 2 */
-+#define IRQ_IOP_DMAC_CDVD	99	/* Ch 3 */
-+#define IRQ_IOP_DMAC_SPU	100	/* Ch 4 */
-+#define IRQ_IOP_DMAC_PIO	101	/* Ch 5 */
-+#define IRQ_IOP_DMAC_GPU_OTC	102	/* Ch 6 */
-+#define IRQ_IOP_DMAC_BE		103	/* Bus error */
-+#define IRQ_IOP_DMAC_SPU2	104	/* Ch 7 */
-+#define IRQ_IOP_DMAC_DEV9	105	/* Ch 8 */
-+#define IRQ_IOP_DMAC_SIF0	106	/* Ch 9 */
-+#define IRQ_IOP_DMAC_SIF1	107	/* Ch 10 */
-+#define IRQ_IOP_DMAC_SIO2_IN	108	/* Ch 11 */
-+#define IRQ_IOP_DMAC_SIO2_OUT	109	/* Ch 12 */
-+
-+#define IRQ_IOP_SW1	126	/* R3000A Software Interrupt 1 */
-+#define IRQ_IOP_SW2	127	/* R3000A Software Interrupt 2 */
-+
- int __init intc_irq_init(void);
- int __init dmac_irq_init(void);
- 
-diff --git a/drivers/ps2/Makefile b/drivers/ps2/Makefile
-index 02a5756cb059..dd00eff52ef3 100644
---- a/drivers/ps2/Makefile
-+++ b/drivers/ps2/Makefile
-@@ -1,4 +1,5 @@
- obj-m				+= iop-heap.o
-+obj-m				+= iop-irq.o
- obj-m				+= iop-memory.o
- obj-m				+= iop-module.o
- obj-m				+= iop-registers.o
-diff --git a/drivers/ps2/iop-irq.c b/drivers/ps2/iop-irq.c
+diff --git a/arch/mips/include/asm/mach-ps2/gs-registers.h b/arch/mips/include/asm/mach-ps2/gs-registers.h
 new file mode 100644
-index 000000000000..859a3f64dd00
+index 000000000000..ab59c751190f
 --- /dev/null
-+++ b/drivers/ps2/iop-irq.c
-@@ -0,0 +1,186 @@
++++ b/arch/mips/include/asm/mach-ps2/gs-registers.h
+@@ -0,0 +1,548 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * PlayStation 2 input/output processor (IOP) IRQs
++ * PlayStation 2 privileged Graphics Synthesizer (GS) registers
 + *
 + * Copyright (C) 2019 Fredrik Noring
 + */
 +
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/types.h>
++/**
++ * DOC: Privileged Graphics Synthesizer (GS) registers
++ *
++ * All privileged GS registers are write-only except CSR (system status)
++ * and SIGLBLID (signal and label id). Reading write-only registers is
++ * emulated by shadow registers in memory. Reading unwritten registers
++ * is not permitted. Predicate functions indicate whether registers are
++ * readable.
++ */
 +
-+#include <asm/mach-ps2/iop-module.h>
-+#include <asm/mach-ps2/irq.h>
-+#include <asm/mach-ps2/sif.h>
++#ifndef __ASM_MACH_PS2_GS_REGISTERS_H
++#define __ASM_MACH_PS2_GS_REGISTERS_H
++
++#include <asm/types.h>
++
++/* Privileged GS registers must be accessed using LD/SD instructions. */
++
++#define GS_PMODE	0x12000000  /* (WO) PCRTC mode setting */
++#define GS_SMODE1	0x12000010  /* (WO) Sync */
++#define GS_SMODE2	0x12000020  /* (WO) Sync */
++#define GS_SRFSH	0x12000030  /* (WO) DRAM refresh */
++#define GS_SYNCH1	0x12000040  /* (WO) Sync */
++#define GS_SYNCH2	0x12000050  /* (WO) Sync */
++#define GS_SYNCV	0x12000060  /* (WO) Sync */
++#define GS_DISPFB1	0x12000070  /* (WO) Rectangle read output circuit 1 */
++#define GS_DISPLAY1	0x12000080  /* (WO) Rectangle read output circuit 1 */
++#define GS_DISPFB2	0x12000090  /* (WO) Rectangle read output circuit 2 */
++#define GS_DISPLAY2	0x120000a0  /* (WO) Rectangle read output circuit 2 */
++#define GS_EXTBUF	0x120000b0  /* (WO) Feedback write buffer */
++#define GS_EXTDATA	0x120000c0  /* (WO) Feedback write setting */
++#define GS_EXTWRITE	0x120000d0  /* (WO) Feedback write function control */
++#define GS_BGCOLOR	0x120000e0  /* (WO) Background color setting */
++#define GS_CSR		0x12001000  /* (RW) System status */
++#define GS_IMR		0x12001010  /* (WO) Interrupt mask control */
++#define GS_BUSDIR	0x12001040  /* (WO) Host interface bus switching */
++#define GS_SIGLBLID	0x12001080  /* (RW) Signal and label id */
 +
 +/**
-+ * enum iop_irq_relay_rpc_ops - IOP IRQ relay RPC operations
-+ * @rpo_request_irq: request IRQ mapping
-+ * @rpo_release_irq: release IRQ mapping
-+ * @rpo_remap_irq: remap existing IRQ mapping
++ * enum gs_pmode_mmod - &gs_pmode.mmod alpha blending value
++ * @gs_mmod_circuit1: FIXME
++ * @gs_mmod_alp: FIXME
 + */
-+enum iop_irq_relay_rpc_ops {
-+	rpo_request_irq = 1,
-+	rpo_release_irq = 2,
-+	rpo_remap_irq   = 3,
++enum gs_pmode_mmod {
++	gs_mmod_circuit1,
++	gs_mmod_alp
 +};
 +
 +/**
-+ * struct iop_rpc_relay_map - IOP IRQ relay mapping
-+ * @u8 iop: IOP IRQ map source
-+ * @u8 map: main IRQ map target
-+ * @u8 rpc: %true for RPC relay, %false for SMFLAG relay
++ * enum gs_pmode_amod - &gs_pmode.amod OUT1 alpha output
++ * @gs_amod_circuit1: FIXME
++ * @gs_amod_circuit2: FIXME
 + */
-+struct iop_rpc_relay_map {
-+	u8 iop;
-+	u8 map;
-+	u8 rpc;
++enum gs_pmode_amod {
++	gs_amod_circuit1,
++	gs_amod_circuit2
 +};
 +
 +/**
-+ * struct iop_rpc_relay_release - IOP IRQ relay to release
-+ * @iop: IOP IRQ to release mapping for
++ * enum gs_pmode_slbg - &gs_pmode.slbg alpha blending method
++ * @gs_slbg_circuit2: FIXME
++ * @gs_slbg_bgcolor: FIXME
 + */
-+struct iop_rpc_relay_release {
-+	u8 iop;
++enum gs_pmode_slbg {
++	gs_slbg_circuit2,
++	gs_slbg_bgcolor
 +};
 +
-+static struct sif_rpc_client iop_irq_rpc;
-+
-+static unsigned int iop_irq_startup(struct irq_data *data)
-+{
-+	static bool irq_relay = false;
-+
-+	const struct iop_rpc_relay_map arg = {
-+		.iop = data->irq - IOP_IRQ_BASE,
-+		.map = data->irq,
-+		.rpc = true,	/* FIXME: Also implement SMFLAG relay */
-+	};
-+	s32 status;
-+	int err;
-+
-+	BUG_ON(in_irq());
-+
-+	if (!irq_relay) {
-+		int id;
-+
-+		/*
-+		 * The main reason for requesting the IOP IRQ relay module here
-+		 * instead of in irqrelay_init() is that now the console may be
-+		 * visible to print messages if there are problems.
-+		 */
-+		id = iop_module_request("irqrelay", 0x0100, NULL);
-+		if (id < 0)
-+			return id;
-+
-+		err = sif_rpc_bind(&iop_irq_rpc, SIF_SID_IRQ_RELAY);
-+		if (err < 0) {
-+			pr_err("%s: sif_rpc_bind failed with %d\n",
-+				__func__, err);
-+			return err;
-+		}
-+
-+		irq_relay = true;
-+	}
-+
-+	err = sif_rpc(&iop_irq_rpc, rpo_request_irq,
-+		&arg, sizeof(arg),
-+		&status, sizeof(status));
-+
-+	pr_debug("%s: err %d status %d\n", __func__, err, status);
-+
-+	return err < 0 ? err : status;
-+}
-+
-+static void iop_irq_shutdown(struct irq_data *data)
-+{
-+	const struct iop_rpc_relay_release arg = {
-+		.iop = data->irq - IOP_IRQ_BASE,
-+	};
-+	s32 status;
-+	int err;
-+
-+	BUG_ON(in_irq());
-+
-+	err = sif_rpc(&iop_irq_rpc, rpo_release_irq,
-+		&arg, sizeof(arg),
-+		&status, sizeof(status));
-+
-+	pr_debug("%s: err %d status %d\n", __func__, err, status);
-+}
-+
-+#define IOP_IRQ_TYPE(irq_, name_)					\
-+	{								\
-+		.irq = irq_,						\
-+		.irq_chip = {						\
-+			.name = name_,					\
-+			.irq_startup = iop_irq_startup,			\
-+			.irq_shutdown = iop_irq_shutdown,		\
-+		}							\
-+	}
-+
-+static struct {
-+	unsigned int irq;
-+	struct irq_chip irq_chip;
-+} iop_irqs[] = {
-+	IOP_IRQ_TYPE(IRQ_IOP_VBLANK,        "IOP VBLANK"),
-+	IOP_IRQ_TYPE(IRQ_IOP_SBUS,          "IOP SBUS"),
-+	IOP_IRQ_TYPE(IRQ_IOP_CDVD,          "IOP CDVD"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMA,           "IOP DMA"),
-+	IOP_IRQ_TYPE(IRQ_IOP_RTC0,          "IOP RTC0"),
-+	IOP_IRQ_TYPE(IRQ_IOP_RTC1,          "IOP RTC1"),
-+	IOP_IRQ_TYPE(IRQ_IOP_RTC2,          "IOP RTC2"),
-+	IOP_IRQ_TYPE(IRQ_IOP_SIO0,          "IOP SIO0"),
-+	IOP_IRQ_TYPE(IRQ_IOP_SIO1,          "IOP SIO1"),
-+	IOP_IRQ_TYPE(IRQ_IOP_SPU,           "IOP SPU"),
-+	IOP_IRQ_TYPE(IRQ_IOP_PIO,           "IOP PIO"),
-+	IOP_IRQ_TYPE(IRQ_IOP_EVBLANK,       "IOP EVBLANK"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DVD,           "IOP DVD"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DEV9,          "IOP DEV9"),
-+	IOP_IRQ_TYPE(IRQ_IOP_RTC3,          "IOP RTC3"),
-+	IOP_IRQ_TYPE(IRQ_IOP_RTC4,          "IOP RTC4"),
-+	IOP_IRQ_TYPE(IRQ_IOP_RTC5,          "IOP RTC5"),
-+	IOP_IRQ_TYPE(IRQ_IOP_SIO2,          "IOP SIO2"),
-+	IOP_IRQ_TYPE(IRQ_IOP_HTR0,          "IOP HTR0"),
-+	IOP_IRQ_TYPE(IRQ_IOP_HTR1,          "IOP HTR1"),
-+	IOP_IRQ_TYPE(IRQ_IOP_HTR2,          "IOP HTR2"),
-+	IOP_IRQ_TYPE(IRQ_IOP_HTR3,          "IOP HTR3"),
-+	IOP_IRQ_TYPE(IRQ_IOP_USB,           "IOP USB"),
-+	IOP_IRQ_TYPE(IRQ_IOP_EXTR,          "IOP EXTR"),
-+	IOP_IRQ_TYPE(IRQ_IOP_ILINK,         "IOP iLink"),
-+	IOP_IRQ_TYPE(IRQ_IOP_ILNKDMA,       "IOP ILink DMA"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_MDEC_IN,  "IOP DMAC MDEC IN"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_MDEC_OUT, "IOP DMAC MDEC OUT"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_SIF2,     "IOP DMAC SIF2"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_CDVD,     "IOP DMAC CDVD"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_SPU,      "IOP DMAC SPU"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_PIO,      "IOP DMAC PIO"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_GPU_OTC,  "IOP DMAC GPU OTC"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_BE,       "IOP DMAC BE"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_SPU2,     "IOP DMAC SPU2"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_DEV9,     "IOP DMAC DEV9"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_SIF0,     "IOP DMAC SIF0"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_SIF1,     "IOP DMAC SIF1"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_SIO2_IN,  "IOP DMAC SIO2 IN"),
-+	IOP_IRQ_TYPE(IRQ_IOP_DMAC_SIO2_OUT, "IOP DMAC SIO2 OUT"),
-+	IOP_IRQ_TYPE(IRQ_IOP_SW1,           "IOP SW1"),
-+	IOP_IRQ_TYPE(IRQ_IOP_SW2,           "IOP SW2"),
++/**
++ * struct gs_pmode - PMODE privileged Graphics Synthesizer register
++ * @en1: enable read circuit 1
++ * @en2: enable read circuit 2
++ * @crtmd: CRT output switching (always 001)
++ * @mmod: alpha blending value
++ * @amod: OUT1 alpha output
++ * @slbg: alpha blending method
++ * @alp: fixed alpha (0xff = 1.0)
++ * @zero: must be zero
++ */
++struct gs_pmode {
++	u64 en1 : 1;
++	u64 en2 : 1;
++	u64 crtmd : 3;
++	u64 mmod : 1;
++	u64 amod : 1;
++	u64 slbg : 1;
++	u64 alp : 8;
++	u64 zero : 1;
++	u64 : 47;
 +};
 +
-+static int __init iop_irq_init(void)
-+{
-+	size_t i;
++/**
++ * enum gs_smode1_cmod - &gs_smode1.cmod value
++ * @gs_cmod_vesa: VESA
++ * @gs_cmod_ntsc: NTSC broadcast
++ * @gs_cmod_pal: PAL broadcast
++ */
++enum gs_smode1_cmod {
++	gs_cmod_vesa,
++	/* Reserved */
++	gs_cmod_ntsc = 2,
++	gs_cmod_pal
++};
 +
-+	for (i = 0; i < ARRAY_SIZE(iop_irqs); i++)
-+		irq_set_chip_and_handler(iop_irqs[i].irq,
-+			&iop_irqs[i].irq_chip, handle_level_irq);
++/**
++ * enum gs_smode1_gcont - &gs_smode1.gcont value
++ * @gs_gcont_rgbyc: Output RGBYc
++ * @gs_gcont_ycrcb: Output YCrCb
++ */
++enum gs_smode1_gcont {
++	gs_gcont_rgbyc,
++	gs_gcont_ycrcb
++};
 +
-+	return 0;
-+}
-+// FIXME: subsys_initcall(iop_irq_init);
-+module_init(iop_irq_init);
++/**
++ * struct gs_smode1 - SMODE1 privileged Graphics Synthesizer register
++ * @rc: PLL reference divider
++ * @lc: PLL loop divider
++ * @t1248: PLL output divider
++ * @slck: FIXME
++ * @cmod: @enum gs_smode1_cmod display mode (PAL, NTSC or VESA)
++ * @ex: FIXME
++ * @prst: PLL reset
++ * @sint: PLL (phase-locked loop)
++ * @xpck: FIXME
++ * @pck2: FIXME
++ * @spml: FIXME
++ * @gcont: @enum gs_smode1_gcont select RGBYC or YCrCb
++ * @phs: HSync output
++ * @pvs: VSync output
++ * @pehs: FIXME
++ * @pevs: FIXME
++ * @clksel: FIXME
++ * @nvck: FIXME
++ * @slck2: FIXME
++ * @vcksel: FIXME
++ * @vhp: FIXME
++ *
++ * The video clock VCK = (13500000 * @lc) / ((@t1248 + 1) * @spml * @rc).
++ */
++struct gs_smode1 {
++	u64 rc : 3;
++	u64 lc : 7;
++	u64 t1248 : 2;
++	u64 slck : 1;
++	u64 cmod : 2;
++	u64 ex : 1;
++	u64 prst : 1;
++	u64 sint : 1;
++	u64 xpck : 1;
++	u64 pck2 : 2;
++	u64 spml : 4;
++	u64 gcont : 1;
++	u64 phs : 1;
++	u64 pvs : 1;
++	u64 pehs : 1;
++	u64 pevs : 1;
++	u64 clksel : 2;
++	u64 nvck : 1;
++	u64 slck2 : 1;
++	u64 vcksel : 2;
++	u64 vhp : 1;
++	u64 : 27;
++};
 +
-+MODULE_DESCRIPTION("PlayStation 2 input/output processor (IOP) IRQs");
-+MODULE_AUTHOR("Fredrik Noring");
-+MODULE_LICENSE("GPL");
++/**
++ * enum gs_smode2_intm - &gs_smode2.intm interlace mode
++ * @gs_intm_progressive: progressive (noninterlace) mode
++ * @gs_intm_interlace: interlace mode
++ */
++enum gs_smode2_intm {
++	gs_intm_progressive,
++	gs_intm_interlace
++};
++
++/**
++ * enum gs_smode2_ffmd - &gs_smode2.ffmd FIELD or FRAME mode
++ * @gs_ffmd_field:
++ * @gs_ffmd_frame:
++ *
++ * In FIELD mode every other line is read: 0, 2, 4, ... / 1, 3, 5, ...
++ *
++ * In FRAME mode every line is read: 1, 2, 3, 4, 5, ...
++ */
++enum gs_smode2_ffmd {
++	gs_ffmd_field,
++	gs_ffmd_frame
++};
++
++/**
++ * enum gs_smode2_dpms - &gs_smode2.dpms VESA display power management
++ *      signaling (DPMS) levels
++ * @gs_dpms_on: in use
++ * @gs_dpms_standby: blanked, low power
++ * @gs_dpms_suspend: blanked, lower power
++ * @gs_dpms_off: shut off, awaiting activity
++ */
++enum gs_smode2_dpms {
++	gs_dpms_on,
++	gs_dpms_standby,
++	gs_dpms_suspend,
++	gs_dpms_off
++};
++
++/**
++ * struct gs_smode2 - SMODE2 privileged Graphics Synthesizer register
++ * @intm: &enum gs_smode2_intm progressive or interlace mode
++ * @ffmd: &enum gs_smode2_ffmd FIELD or FRAME mode
++ * @dpms: &enum gs_smode2_dpms VESA display power management signaling (DPMS)
++ *      level
++ */
++struct gs_smode2 {
++	u64 intm : 1;
++	u64 ffmd : 1;
++	u64 dpms : 2;
++	u64 : 60;
++};
++
++/**
++ * struct gs_srfsh - DRAM refresh privileged Graphics Synthesizer register
++ * @rfsh: FIXME
++ */
++struct gs_srfsh {
++	u64 rfsh : 4;		/* FIXME: Number of bits? */
++	u64 : 60;
++};
++
++/**
++ * struct gs_synch1 - SYNCH1 privileged Graphics Synthesizer register
++ * @hfp: horizontal front porch
++ * @hbp: horizontal back porch
++ * @hseq: FIXME
++ * @hsvs: FIXME
++ * @hs: FIXME
++ */
++struct gs_synch1 {
++	u64 hfp : 11;
++	u64 hbp : 11;
++	u64 hseq : 10;
++	u64 hsvs : 11;
++	u64 hs : 21;		/* FIXME: Number of bits? */
++};
++
++/**
++ * struct gs_synch2 - SYNCH2 privileged Graphics Synthesizer register
++ * @hf: FIXME
++ * @hb: FIXME
++ */
++struct gs_synch2 {
++	u64 hf : 11;
++	u64 hb : 11;
++	u64 : 42;
++};
++
++/**
++ * struct gs_syncv - SYNCHV privileged Graphics Synthesizer register
++ * @vfp: vertical front porch, halflines with color burst after video data
++ * @vfpe: halflines without color burst after @vfp
++ * @vbp: vertical back porch, halflines with color burst after @vbpe
++ * @vbpe: halflines without color burst after @vbp
++ * @vdp: halflines with with video data
++ * @vs: halflines with VSYNC
++ */
++struct gs_syncv {
++	u64 vfp : 10;
++	u64 vfpe : 10;
++	u64 vbp : 12;
++	u64 vbpe : 10;
++	u64 vdp : 11;
++	u64 vs : 11;
++};
++
++/**
++ * struct gs_dispfb - DISPFB privileged Graphics Synthesizer register
++ * @fbp: base pointer address/2048
++ * @fbw: buffer width/64
++ * @psm: pixel storage format FIXME
++ * @dbx: upper left x position
++ * @dby: upper left y position
++ */
++struct gs_dispfb {
++	u64 fbp : 9;
++	u64 fbw : 6;
++	u64 psm : 5;
++	u64 : 12;
++	u64 dbx : 11;
++	u64 dby : 11;
++	u64 : 10;
++};
++
++/**
++ * struct gs_display - DISPLAY privileged Graphics Synthesizer register
++ * @dx: display x position (VCK)
++ * @dy: display y position (px)
++ * @magh: horizontal magnification
++ * @magv: vertical magnification
++ * @dw: display area width-1 (VCK)
++ * @dh: display area height-1 (px)
++ *
++ * @magh and @magv are factor-1, so 0 is 1x, 1 is 2x, 2 is 3x, etc.
++ */
++struct gs_display {
++	u64 dx : 12;
++	u64 dy : 11;
++	u64 magh : 4;
++	u64 magv : 5;
++	u64 dw : 12;
++	u64 dh : 11;
++	u64 : 9;
++};
++
++/**
++ * enum gs_extbuf_fbin - &&gs_extbuf.fbin selection of input source
++ * @gs_fbin_out1: FIXME
++ * @gs_fbin_out2: FIXME
++ */
++enum gs_extbuf_fbin {
++	gs_fbin_out1,
++	gs_fbin_out2
++};
++
++/*
++ * enum gs_extbuf_wffmd - &gs_extbuf.wffmd interlace mode
++ * @gs_wffmd_field: write to every other raster
++ * @gs_wffmd_frame: write to every raster
++ */
++enum gs_extbuf_wffmd {
++	gs_wffmd_field,
++	gs_wffmd_frame
++};
++
++/**
++ * enum gs_extbuf_emoda - &gs_extbuf.emoda processing of input alpha
++ * @gs_emoda_alpha: input alpha is written as it is
++ * @gs_emoda_y: FIXME
++ * @gs_emoda_yhalf: FIXME
++ * @gs_emoda_zero: FIXME
++ */
++enum gs_extbuf_emoda {
++	gs_emoda_alpha,
++	gs_emoda_y,
++	gs_emoda_yhalf,
++	gs_emoda_zero
++};
++
++/**
++ * enum gs_extbuf_emodc - &gs_extbuf.emodc processing of input color
++ * @gs_emodc_rgb: FIXME
++ * @gs_emodc_y: FIXME
++ * @gs_emodc_ycbcr: FIXME
++ * @gs_emodc_alpha: FIXME
++ */
++enum gs_extbuf_emodc {
++	gs_emodc_rgb,
++	gs_emodc_y,
++	gs_emodc_ycbcr,
++	gs_emodc_alpha
++};
++
++/**
++ * struct gs_extbuf - EXTBUF privileged Graphics Synthesizer register
++ * @exbp: buffer base pointer/64
++ * @exbw: width of buffer/64
++ * @fbin: @enum gs_extbuf_fbin selection of input source
++ * @wffmd: @enum gs_extbuf_wffmd interlace mode
++ * @emoda: @enum gs_extbuf_emoda processing of input alpha
++ * @emodc: @enum gs_extbuf_emodc processing of input color
++ * @wdx: upper left x position
++ * @wdy: upper left y position
++ */
++struct gs_extbuf {
++	u64 exbp : 14;
++	u64 exbw : 6;
++	u64 fbin : 2;
++	u64 wffmd : 1;
++	u64 emoda : 2;
++	u64 emodc : 2;
++	u64 : 5;
++	u64 wdx : 11;
++	u64 wdy : 11;
++	u64 : 10;
++};
++
++/**
++ * struct gs_extdata - EXTDATA privileged Graphics Synthesizer register
++ * @sx: upper left x position (VCK)
++ * @sy: upper left y position (VCK)
++ * @smph: horizontal sampling rate interval (VCK)
++ * @smpv: vertical sampling rate interval (VCK)
++ * @ww: rectangular area width-1
++ * @wh: rectangular area height-1
++ */
++struct gs_extdata {
++	u64 sx : 12;
++	u64 sy : 11;
++	u64 smph : 4;
++	u64 smpv : 2;
++	u64 : 3;
++	u64 ww : 12;
++	u64 wh : 11;
++	u64 : 9;
++};
++
++/**
++ * enum gs_extwrite_write - &gs_extwrite.write enable feedback write
++ * @gs_write_complete_current: FIXME
++ * @gs_write_start_next: FIXME
++ */
++enum gs_extwrite_write {
++	gs_write_complete_current,
++	gs_write_start_next
++};
++
++/**
++ * struct gs_extwrite - EXTWRITE privileged Graphics Synthesizer register
++ * @write: &enum gs_extwrite_write enable feedback write
++ */
++struct gs_extwrite {
++	u64 write : 1;
++	u64 : 63;
++};
++
++/**
++ * struct gs_bgcolor - BGCOLOR privileged Graphics Synthesizer register
++ * @r: red background color
++ * @g: green background color
++ * @b: blue background color
++ */
++struct gs_bgcolor {
++	u64 r : 8;
++	u64 g : 8;
++	u64 b : 8;
++	u64 : 40;
++};
++
++/**
++ * enum gs_csr_fifo - &gs_csr.fifo host interface FIFO status
++ * @gs_fifo_neither: neither empty nor almost full
++ * @gs_fifo_empty: FIXME
++ * @gs_fifo_almost_full: FIXME
++ */
++enum gs_csr_fifo {
++	gs_fifo_neither,
++	gs_fifo_empty,
++	gs_fifo_almost_full
++};
++
++/**
++ * enum gs_csr_field - &gs_csr.field field display currently FIXME
++ * @gs_field_even: FIXME
++ * @gs_field_odd: FIXME
++ */
++enum gs_csr_field {
++	gs_field_even,
++	gs_field_odd
++};
++
++/**
++ * struct gs_csr - CSR privileged Graphics Synthesizer register FIXME
++ * @signal: SIGNAL event control
++ * @finish: FINISH event control
++ * @hsint: HSync interrupt control
++ * @vsint: VSync interrupt control
++ * @edwint: rectangular area write termination interrupt control
++ * @zero: must be zero
++ * @flush: drawing suspend and FIFO clear (enabled during data write)
++ * @reset: Graphics Synthesizer reset (enabled during data write)
++ * @nfield: VSync sampled FIELD
++ * @field: &enum gs_csr_field field display currently
++ * @fifo: &enum gs_csr_fifo host interface FIFO status
++ * @rev: Graphics Synthesizer revision (hex)
++ * @id: Graphics Synthesizer id (hex)
++ */
++struct gs_csr {
++	u64 signal : 1;
++	u64 finish : 1;
++	u64 hsint : 1;
++	u64 vsint : 1;
++	u64 edwint : 1;
++	u64 zero : 2;
++	u64 : 1;
++	u64 flush : 1;
++	u64 reset : 1;
++	u64 : 2;
++	u64 nfield : 1;
++	u64 field : 1;
++	u64 fifo : 2;
++	u64 rev : 8;
++	u64 id : 8;
++	u64 : 32;
++};
++
++/**
++ * struct gs_imr - IMR privileged Graphics Synthesizer register FIXME
++ * @sigmsk: SIGNAL event interrupt mask
++ * @finishmsk: FINISH event interrupt mask
++ * @hsmsk: HSync interrupt mask
++ * @vsmsk: VSync interrupt mask
++ * @edwmsk: rectangular area write termination interrupt mask
++ * @ones: should be set to all ones (= 3)
++ */
++struct gs_imr {
++	u64 : 8;
++	u64 sigmsk : 1;
++	u64 finishmsk : 1;
++	u64 hsmsk : 1;
++	u64 vsmsk : 1;
++	u64 edwmsk : 1;
++	u64 ones : 2;
++	u64 : 49;
++};
++
++/**
++ * enum gs_busdir_dir - &gs_busdir.dir host to local direction, or vice versa
++ * @gs_dir_host_to_local: host to local bus transfer direction
++ * @gs_dir_local_to_host: local to host bus transfer direction
++ */
++enum gs_busdir_dir {
++	gs_dir_host_to_local,
++	gs_dir_local_to_host
++};
++
++/**
++ * struct gs_busdir - BUSDIR privileged Graphics Synthesizer register FIXME
++ * @dir: &enum gs_busdir_dir host to local direction, or vice versa
++ */
++struct gs_busdir {
++	u64 dir : 1;
++	u64 : 63;
++};
++
++/**
++ * struct gs_siglblid - SIGLBLID privileged Graphics Synthesizer register FIXME
++ * @sigid: id value set by SIGNAL register
++ * @lblid: id value set by LABEL register
++ */
++struct gs_siglblid {
++	u64 sigid : 32;
++	u64 lblid : 32;
++};
++
++#endif /* __ASM_MACH_PS2_GS_REGISTERS_H */
 -- 
 2.21.0
 
