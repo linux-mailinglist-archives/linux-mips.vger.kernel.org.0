@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C14DA4A8E
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3B8A4A93
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728888AbfIAQ0S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 12:26:18 -0400
-Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:60918 "EHLO
-        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728779AbfIAQ0R (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:26:17 -0400
+        id S1728830AbfIAQap (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 12:30:45 -0400
+Received: from pio-pvt-msa1.bahnhof.se ([79.136.2.40]:60304 "EHLO
+        pio-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726727AbfIAQao (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:30:44 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id B8AE9402D7
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:26:13 +0200 (CEST)
+        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTP id DF2C43F752
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:30:40 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -21,20 +21,20 @@ X-Spam-Level:
 X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         tests=[BAYES_00=-1.9, URIBL_BLOCKED=0.001]
         autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xraPv2jdkMOf for <linux-mips@vger.kernel.org>;
-        Sun,  1 Sep 2019 18:26:12 +0200 (CEST)
+Received: from pio-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id oCUJYps_ptr0 for <linux-mips@vger.kernel.org>;
+        Sun,  1 Sep 2019 18:30:39 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 82EBA3FC34
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:26:12 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 18:26:12 +0200
+        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id E76783F393
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:30:39 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 18:30:39 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     linux-mips@vger.kernel.org
-Subject: [PATCH 094/120] MIPS: PS2: FB: Frame buffer driver for the
- PlayStation 2
-Message-ID: <4927c42fb3401c42c4c5a077f272331ac79d80b1.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 095/120] MIPS: PS2: FB: fb_set_par() standard-definition
+ television support
+Message-ID: <fb309bbc324f5587b0ffed895143f1a679906346.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -46,634 +46,388 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The main limitation is the lack of mmap, since the Graphics Synthesizer
-has local frame buffer memory that is not directly accessible from the
-main bus. The GS has 4 MiB of local memory.
+Most of the computations for the video synchronisation registers are
+based on trial an error, as their bit fields are undocumented. A small
+set of standard video modes are supplied with the Graphics Synthesizer
+user manual[1], and for these modes the corresponding register values
+are known.
 
-The console drawing primitives are synchronous to allow printk at any
-time. This is highly useful for debugging but it is not the fastest
-possible implementation. The console is nevertheless very fast and
-makes use of several hardware accelerated features of the Graphics
-Synthesizer.
+This frame buffer driver allows arbitrary top, bottom, left and right
+video display margin (border) adjustments, hence registers are computed
+instead of tabulated. This is useful to for example precisely center the
+image for a given analogue video display.
 
-The maximum practical resolution is 1920x1080p at 16 bits per pixel that
-requires 4147200 bytes of local memory, leaving 47104 bytes for a tiled
-font, which at 8x8 pixels and a minimum 4 bits indexed texture palette is
-at most 1464 characters. The indexed palette makes switching colours easy.
-&struct fb_tile_ops is accelerated with GS texture sprites that are fast
-(GS local copy) for the kernel via simple DMA GS commands via the GIF.
+The SDTV modes are designed to work with S-video, SCART and component
+video cables, in addition to the PS2 HDMI adapter based on the Macro
+Silicon MS9282 chip.
+
+The MAGV and MAGH fields for vertical and horizontal magnification in
+the DISPLAY registers could be used to support lower resolution video
+modes, for example 320x200 that was popular with many 8-bit and 16-bit
+computers, but that is left for a future extension.
+
+References:
+
+[1] "GS User's Manual", version 6.0, Sony Computer Entertainment Inc.,
+    p. 84.
 
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
- drivers/video/fbdev/Kconfig    |  12 +
- drivers/video/fbdev/Makefile   |   1 +
- drivers/video/fbdev/ps2fb.c    | 533 +++++++++++++++++++++++++++++++++
- include/linux/console_struct.h |   2 +
- include/uapi/linux/fb.h        |   1 +
- 5 files changed, 549 insertions(+)
- create mode 100644 drivers/video/fbdev/ps2fb.c
+ drivers/video/fbdev/ps2fb.c | 328 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 328 insertions(+)
 
-diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
-index 6b2de93bd302..cc93cbd67b01 100644
---- a/drivers/video/fbdev/Kconfig
-+++ b/drivers/video/fbdev/Kconfig
-@@ -1999,6 +1999,18 @@ config FB_IBM_GXT4500
- 	  doesn't use Geometry Engine GT1000. This driver also supports
- 	  AGP Fire GL2/3/4 cards on x86.
- 
-+# FIXME FB_SYS_*
-+config FB_PS2
-+	tristate "Frame buffer driver for Sony Playstation 2"
-+	depends on FB && SONY_PS2
-+	select PS2_GS
-+	select FB_TILEBLITTING
-+	default y
-+	help
-+	  Frame buffer driver for the Sony Playstation 2 Graphics Synthesizer.
-+	  Memory mapping is not supported since the frame buffer is local to
-+	  the GS.
-+
- config FB_PS3
- 	tristate "PS3 GPU framebuffer driver"
- 	depends on FB && PS3_PS3AV
-diff --git a/drivers/video/fbdev/Makefile b/drivers/video/fbdev/Makefile
-index 7dc4861a93e6..1e55fa8ca4af 100644
---- a/drivers/video/fbdev/Makefile
-+++ b/drivers/video/fbdev/Makefile
-@@ -105,6 +105,7 @@ obj-$(CONFIG_FB_S3C2410)	  += s3c2410fb.o
- obj-$(CONFIG_FB_FSL_DIU)	  += fsl-diu-fb.o
- obj-$(CONFIG_FB_COBALT)           += cobalt_lcdfb.o
- obj-$(CONFIG_FB_IBM_GXT4500)	  += gxt4500.o
-+obj-$(CONFIG_FB_PS2)		  += ps2fb.o
- obj-$(CONFIG_FB_PS3)		  += ps3fb.o
- obj-$(CONFIG_FB_SM501)            += sm501fb.o
- obj-$(CONFIG_FB_UDL)		  += udlfb.o
 diff --git a/drivers/video/fbdev/ps2fb.c b/drivers/video/fbdev/ps2fb.c
-new file mode 100644
-index 000000000000..7bfbc3c2aa4d
---- /dev/null
+index 7bfbc3c2aa4d..3fb31719459c 100644
+--- a/drivers/video/fbdev/ps2fb.c
 +++ b/drivers/video/fbdev/ps2fb.c
-@@ -0,0 +1,533 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * PlayStation 2 frame buffer driver
-+ *
-+ * Copyright (C) 2019 Fredrik Noring
-+ */
-+
+@@ -133,6 +133,97 @@ struct ps2fb_par {
+ 	} package;
+ };
+ 
 +/**
-+ * DOC: The PlayStation 2 frame buffer console
++ * struct gs_sync_param - Graphics Synthesizer registers for video modes
++ * @smode1: SMODE1 register
++ * @smode2: SMODE2 register
++ * @srfsh: SRFSH register
++ * @synch1: SYNCH1 register
++ * @synch2: SYNCH2 register
++ * @syncv: SYNCV register
++ * @display: DISPLAY1 or DISPLAY2 register
 + *
-+ * The frame buffer supports a tiled frame buffer console. The main limitation
-+ * is the lack of memory mapping (mmap), since the Graphics Synthesizer has
-+ * local frame buffer memory that is not directly accessible from the main bus.
-+ * The GS has 4 MiB of local memory.
-+ *
-+ * The console drawing primitives are synchronous to allow printk at any time.
-+ * This is highly useful for debugging but it is not the fastest possible
-+ * implementation. The console is nevertheless very fast and makes use of
-+ * several hardware accelerated features of the Graphics Synthesizer.
-+ *
-+ * The maximum practical resolution is 1920x1080p at 16 bits per pixel that
-+ * requires 4147200 bytes of local memory, leaving 47104 bytes for a tiled
-+ * font, which at 8x8 pixels and a minimum 4 bits indexed texture palette is
-+ * at most 1464 characters. The indexed palette makes switching colours easy.
-+ * &struct fb_tile_ops is accelerated with GS texture sprites that are fast
-+ * (GS local copy) for the kernel via simple DMA GS commands via the GIF.
-+ *
-+ * The local memory is organised as follows: first comes the display buffer,
-+ * then one block of a palette, and finally the font installed as a texture.
-+ *
-+ * All frame buffer transmissions are done by DMA via GIF PATH3.
++ * These are the essential Graphics Synthesizer video synchronisation register
++ * parameters.
 + */
-+
-+#include <linux/bitops.h>
-+#include <linux/delay.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/interrupt.h>
-+#include <linux/errno.h>
-+#include <linux/fb.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/mm.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/string.h>
-+#include <linux/uaccess.h>
-+
-+#include <asm/io.h>
-+
-+#include <asm/mach-ps2/dmac.h>
-+#include <asm/mach-ps2/gif.h>
-+#include <asm/mach-ps2/gs.h>
-+#include <asm/mach-ps2/gs-registers.h>
-+
-+#include <uapi/asm/gif.h>
-+#include <uapi/asm/gs.h>
-+
-+#define DEVICE_NAME "ps2fb"
-+
-+#define PALETTE_BLOCK_COUNT 1	/* One block is used for the indexed colors */
-+
-+/* Module parameters */
-+static char *mode_option;
-+
-+union package {
-+	union gif_data gif;
-+	struct dma_tag dma;
++struct gs_sync_param {
++	struct gs_smode1 smode1;
++	struct gs_smode2 smode2;
++	struct gs_srfsh srfsh;
++	struct gs_synch1 synch1;
++	struct gs_synch2 synch2;
++	struct gs_syncv syncv;
++	struct gs_display display;
 +};
 +
 +/**
-+ * struct tile_texture - texture representing a tile
-+ * @tbp: texture base pointer
-+ * @u: texel u coordinate (x coordinate)
-+ * @v: texel v coordinate (y coordinate)
-+ */
-+struct tile_texture {
-+	u32 tbp;
-+	u32 u;
-+	u32 v;
-+};
-+
-+/**
-+ * struct console_buffer - console buffer
-+ * @block_count: number of frame buffer blocks
-+ * @bg: background color index
-+ * @fg: foreground color index
-+ * @tile: tile dimensions
-+ * @tile.width: width in pixels
-+ * @tile.height: height in pixels
-+ * @tile.width2: least width in pixels, power of 2
-+ * @tile.height2: least height in pixels, power of 2
-+ * @tile.block: tiles are stored as textures in the PSMT4 pixel storage format
-+ * 	with both cols and rows as powers of 2
-+ * @tile.block.cols: tile columns per GS block
-+ * @tile.block.rows: tile rows per GS block
-+ */
-+struct console_buffer {
-+	u32 block_count;
-+
-+	u32 bg;
-+	u32 fg;
-+
-+	struct cb_tile {
-+		u32 width;
-+		u32 height;
-+
-+		u32 width2;
-+		u32 height2;
-+
-+		struct {
-+			u32 cols;
-+			u32 rows;
-+		} block;
-+	} tile;
-+};
-+
-+/**
-+ * struct ps2fb_par - driver specific structure
-+ * @lock: spin lock to be taken for all structure operations
-+ * @cb: console buffer definition
-+ * @package: tags and datafor the GIF
-+ * @package.capacity: maximum number of GIF packages in 16-byte unit
-+ * @package.buffer: DMA buffer for GIF packages
-+ */
-+struct ps2fb_par {
-+	spinlock_t lock;
-+
-+	struct console_buffer cb;
-+
-+	struct {
-+		size_t capacity;
-+		union package *buffer;
-+	} package;
-+};
-+
-+/**
-+ * texture_least_power_of_2 - round up to a power of 2, not less than 8
-+ * @n: integer to round up
++ * var_to_fbw - frame buffer width for a given virtual x resolution
++ * @var: screen info object to compute FBW for
 + *
-+ * Return: least integer that is a power of 2 and not less than @n or 8
++ * Return: frame buffer width (FBW) in 64-pixel unit
 + */
-+static u32 texture_least_power_of_2(u32 n)
++static u32 var_to_fbw(const struct fb_var_screeninfo *var)
 +{
-+	return max(1 << get_count_order(n), 8);
++	/*
++	 * Round up to nearest GS_FB_PAGE_WIDTH (64 px) since there are
++	 * valid resolutions such as 720 px that do not divide 64 properly.
++	 */
++	return (var->xres_virtual + GS_FB_PAGE_WIDTH - 1) / GS_FB_PAGE_WIDTH;
 +}
 +
 +/**
-+ * cb_tile - create a console buffer tile object
-+ * @width: width of tile in pixels
-+ * @height: height of tile in pixels
++ * var_to_psm - frame buffer pixel storage mode for a given bits per pixel
++ * @var: screen info object to compute PSM for
++ * @info: frame buffer info object
 + *
-+ * Return: a console buffer tile object with the given width and height
++ * Return: frame buffer pixel storage mode
 + */
-+static struct cb_tile cb_tile(u32 width, u32 height)
++static enum gs_psm var_to_psm(const struct fb_var_screeninfo *var,
++	const struct fb_info *info)
 +{
-+	const u32 width2 = texture_least_power_of_2(width);
-+	const u32 height2 = texture_least_power_of_2(height);
++	if (var->bits_per_pixel == 1)
++		return gs_psm_ct16;
++	if (var->bits_per_pixel == 16)
++		return gs_psm_ct16;
++	if (var->bits_per_pixel == 32)
++		return gs_psm_ct32;
 +
-+	return (struct cb_tile) {
-+		.width = width,
-+		.height = height,
++	fb_warn_once(info, "%s: Unsupported bits per pixel %u\n",
++		__func__, var->bits_per_pixel);
++	return gs_psm_ct32;
++}
 +
-+		.width2 = width2,
-+		.height2 = height2,
++/**
++ * var_to_block_count - number of frame buffer blocks for a given video mode
++ * @var: screen info object to compute the number of blocks for
++ *
++ * The Graphics Synthesizer frame buffer is subdivided into rectangular pages,
++ * from left to right, top to bottom. Pages are further subdivided into blocks,
++ * with different arrangements for PSMCT16 and PSMCT32. Blocks are further
++ * subdivided into columns, which are finally subdivided into pixels.
++ *
++ * The video display buffer, textures and palettes share the same frame buffer.
++ * This function can be used to compute the first free block after the video
++ * display buffer.
++ *
++ * Return: number of blocks, or zero for unsupported pixel storage modes
++ */
++static u32 var_to_block_count(const struct fb_info *info)
++{
++	const struct fb_var_screeninfo *var = &info->var;
++	const enum gs_psm psm = var_to_psm(var, info);
++	const u32 fbw = var_to_fbw(var);
 +
-+		.block = {
-+			.cols = GS_PSMT4_BLOCK_WIDTH / width2,
-+			.rows = GS_PSMT4_BLOCK_HEIGHT / height2,
++	if (psm == gs_psm_ct16)
++		return gs_psm_ct16_block_count(fbw, var->yres_virtual);
++	if (psm == gs_psm_ct32)
++		return gs_psm_ct32_block_count(fbw, var->yres_virtual);
++
++	fb_warn_once(info, "%s: Unsupported pixel storage mode %u\n",
++		__func__, psm);
++	return 0;
++}
++
+ /**
+  * texture_least_power_of_2 - round up to a power of 2, not less than 8
+  * @n: integer to round up
+@@ -330,6 +421,242 @@ static int ps2fb_cb_check_var(
+ 	return err;
+ }
+ 
++/**
++ * refresh_for_var - display refresh frequency for a given screen info
++ * @var: screen info object to compute the display frequency for
++ *
++ * Return: display refresh frequency in hertz
++ */
++static u32 refresh_for_var(const struct fb_var_screeninfo *var)
++{
++	const u32 htotal = var->hsync_len +
++		var->left_margin + var->xres + var->right_margin;
++	const u32 vtotal = var->vsync_len +
++		var->upper_margin + var->yres + var->lower_margin;
++	const u32 ptotal = htotal * vtotal;
++
++	return DIV_ROUND_CLOSEST_ULL(DIV_ROUND_CLOSEST_ULL(
++		1000000000000ull * ((var->vmode & FB_VMODE_INTERLACED) ? 2 : 1),
++		var->pixclock), ptotal);
++}
++
++/**
++ * vm_to_cmod - determine the CMOD field for the SMODE1 register
++ * @vm: video mode object to compute CMOD for
++ *
++ * Result: PAL, NTSC or VESA
++ */
++static enum gs_smode1_cmod vm_to_cmod(const struct fb_videomode *vm)
++{
++	const u32 htotal = vm->hsync_len +
++		vm->left_margin + vm->xres + vm->right_margin;
++	const u32 vtotal = vm->vsync_len +
++		vm->upper_margin + vm->yres + vm->lower_margin;
++	const u32 ptotal = htotal * vtotal;
++	const u32 refresh = DIV_ROUND_CLOSEST_ULL(DIV_ROUND_CLOSEST_ULL(
++		1000000000000ull * ((vm->vmode & FB_VMODE_INTERLACED) ? 2 : 1),
++		vm->pixclock), ptotal);
++
++	if (vm->sync & FB_SYNC_BROADCAST)
++		return refresh < 55 ? gs_cmod_pal :
++		       refresh < 65 ? gs_cmod_ntsc :
++				      gs_cmod_vesa;
++
++	return gs_cmod_vesa;
++}
++
++/**
++ * vm_to_sp_sdtv - standard-definition television video synch parameters
++ * @vm: video mode object to compute synchronisation parameters for
++ *
++ * The numeric register field constants come from fixed SDTV video modes made
++ * by Sony. The main complication is that these values are the basis to compute
++ * arbitrary top, bottom, left and right display margin (border) settings for
++ * both PAL and NTSC. This is useful to for example precisely center the image
++ * for a given analogue video display.
++ *
++ * The SDTV modes are designed to work with S-video, SCART and component video
++ * cables, in addition to the PS2 HDMI adapter based on the Macro Silicon
++ * MS9282 chip.
++ *
++ * The MAGV and MAGH fields for vertical and horizontal magnification in the
++ * DISPLAY registers could be used to support lower resolution video modes,
++ * for example 320x200 that was popular with many 8-bit and 16-bit computers,
++ * but that is left for a future extension.
++ *
++ * Return: Graphics Synthesizer SDTV video mode synchronisation parameters
++ */
++static struct gs_sync_param vm_to_sp_sdtv(const struct fb_videomode *vm)
++{
++	const u32 cmod = vm_to_cmod(vm);
++	const u32 intm = (vm->vmode & FB_VMODE_INTERLACED) ? 1 : 0;
++	const u32 vs   = cmod == gs_cmod_pal ? 5 : 6;
++	const u32 hb   = cmod == gs_cmod_pal ? 1680 : 1652;
++	const u32 hf   = 2892 - hb;
++	const u32 hs   = 254;
++	const u32 hbp  = cmod == gs_cmod_pal ? 262 : 222;
++	const u32 hfp  = cmod == gs_cmod_pal ? 48 : 64;
++	const u32 vdp  = cmod == gs_cmod_pal ? 576 : 480;
++	const u32 vbpe = vs;
++	const u32 vbp  = cmod == gs_cmod_pal ? 33 : 26;
++	const u32 vfpe = vs;
++	const u32 vfp  = (vm->vmode & FB_VMODE_INTERLACED) ? 1 :
++		cmod == gs_cmod_pal ? 4 : 2;
++	const u32 tw = hb + hf;
++	const u32 th = vdp;
++	const u32 dw = min_t(u32, vm->xres * 4, tw);
++	const u32 dh = min_t(u32, vm->yres * (intm ? 1 : 2), th);
++	const u32 dx = hs + hbp + (tw - dw)/2 - 1;
++	const u32 dy = (vs + vbp + vbpe + (th - dh)/2) / (intm ? 1 : 2) - 1;
++
++	return (struct gs_sync_param) {
++		.smode1 = {
++			.vhp    =    0, .vcksel = 1, .slck2 = 1, .nvck = 1,
++			.clksel =    1, .pevs   = 0, .pehs  = 0, .pvs  = 0,
++			.phs    =    0, .gcont  = 0, .spml  = 4, .pck2 = 0,
++			.xpck   =    0, .sint   = 1, .prst  = 0, .ex   = 0,
++			.cmod   = cmod, .slck   = 0, .t1248 = 1,
++			.lc     =   32, .rc     = 4
 +		},
++		.smode2 = {
++			.intm = intm
++		},
++		.srfsh = {
++			.rfsh = 8
++		},
++		.synch1 = {
++			.hs   = hs,
++			.hsvs = cmod == gs_cmod_pal ? 1474 : 1462,
++			.hseq = cmod == gs_cmod_pal ? 127 : 124,
++			.hbp  = hbp,
++			.hfp  = hfp
++		},
++		.synch2 = {
++			.hb = hb,
++			.hf = hf
++		},
++		.syncv = {
++			.vs   = vs,
++			.vdp  = vdp,
++			.vbpe = vbpe,
++			.vbp  = vbp,
++			.vfpe = vfpe,
++			.vfp  = vfp
++		},
++		.display = {
++			.dh   = vm->yres - 1,
++			.dw   = vm->xres * 4 - 1,
++			.magv = 0,
++			.magh = 3,
++			.dy   = dy,
++			.dx   = dx
++		}
 +	};
 +}
 +
-+/**
-+ * display_buffer_size - display buffer size for a given video resolution
-+ *
-+ * This calculation is a lower bound estimate. A precise calculation would have
-+ * to take memory pages, blocks and column arrangements into account. To choose
-+ * the appropriate standard video mode such details can be disregarded, though.
-+ *
-+ * Return: the size in bytes of the display buffer
-+ */
-+static u32 display_buffer_size(const u32 xres_virtual, const u32 yres_virtual,
-+      const u32 bits_per_pixel)
++static struct gs_sync_param vm_to_sp_for_synch_gen(
++	const struct fb_videomode *vm, const struct gs_synch_gen sg)
 +{
-+	return (xres_virtual * yres_virtual * bits_per_pixel) / 8;
++	struct gs_sync_param sp = vm_to_sp_sdtv(vm);
++
++	sp.smode1.gcont = gs_gcont_ycrcb;
++	sp.smode1.sint = 1;
++	sp.smode1.prst = 0;
++
++	return sp;
 +}
 +
-+/**
-+ * ps2fb_cb_get_tilemax - maximum number of tiles
-+ * @info: frame buffer info object
-+ *
-+ * Return: the maximum number of tiles
-+ */
-+static int ps2fb_cb_get_tilemax(struct fb_info *info)
++static struct gs_sync_param vm_to_sp(const struct fb_videomode *vm)
 +{
-+	const struct ps2fb_par *par = info->par;
-+	const u32 block_tile_count =
-+		par->cb.tile.block.cols *
-+		par->cb.tile.block.rows;
-+	const s32 blocks_available =
-+		GS_BLOCK_COUNT - par->cb.block_count - PALETTE_BLOCK_COUNT;
-+
-+	return blocks_available > 0 ? blocks_available * block_tile_count : 0;
++	return vm_to_sp_for_synch_gen(vm, gs_synch_gen_for_vck(vm->pixclock));
 +}
 +
-+/**
-+ * bits_per_pixel_fits - does the given resolution fit the given buffer size?
-+ * @xres_virtual: virtual x resolution in pixels
-+ * @yres_virtual: virtual y resolution in pixels
-+ * @bits_per_pixel: number of bits per pixel
-+ * @buffer_size: size in bytes of display buffer
-+ *
-+ * The size calculation is approximate, but accurate enough for the standard
-+ * video modes.
-+ *
-+ * Return: %true if the resolution fits the given buffer size, otherwise %false
-+ */
-+static bool bits_per_pixel_fits(const u32 xres_virtual, const u32 yres_virtual,
-+      const int bits_per_pixel, const size_t buffer_size)
++static int ps2fb_set_par(struct fb_info *info)
 +{
-+	return display_buffer_size(xres_virtual, yres_virtual,
-+		bits_per_pixel) <= buffer_size;
++	struct ps2fb_par *par = info->par;
++	const struct fb_var_screeninfo *var = &info->var;
++	const struct fb_videomode *mm = fb_match_mode(var, &info->modelist);
++	const struct fb_videomode vm = (struct fb_videomode) {
++		.refresh      = refresh_for_var(var),
++		.xres         = var->xres,
++		.yres         = var->yres,
++		.pixclock     = var->pixclock,
++		.left_margin  = var->left_margin,
++		.right_margin = var->right_margin,
++		.upper_margin = var->upper_margin,
++		.lower_margin = var->lower_margin,
++		.hsync_len    = var->hsync_len,
++		.vsync_len    = var->vsync_len,
++		.sync         = var->sync,
++		.vmode        = var->vmode,
++		.flag         = mm != NULL ? mm->flag : 0
++	};
++	const struct gs_sync_param sp = vm_to_sp(&vm);
++	struct gs_smode1 smode1 = sp.smode1;
++
++	par->mode = vm;
++
++	info->fix.type = FB_TYPE_PACKED_PIXELS;
++	info->fix.visual = FB_VISUAL_TRUECOLOR;
++	info->fix.xpanstep = 0;
++	info->fix.ypanstep = 0;
++	info->fix.ywrapstep = 1;
++	info->fix.line_length = var->xres_virtual * var->bits_per_pixel / 8;
++
++	gs_write_smode1(smode1);
++	gs_write_smode2(sp.smode2);
++	gs_write_srfsh(sp.srfsh);
++	gs_write_synch1(sp.synch1);
++	gs_write_synch2(sp.synch2);
++	gs_write_syncv(sp.syncv);
++	gs_write_display1(sp.display);
++
++	GS_WRITE_DISPFB1(
++		.fbw = var_to_fbw(var),
++		.psm = var_to_psm(var, info),
++		.dbx = var->xoffset,
++		.dby = var->yoffset,
++	);
++
++	GS_WRITE_PMODE(
++		.en1 = 1,
++		.crtmd = 1
++	);
++
++	smode1.prst = 1;
++	gs_write_smode1(smode1);
++
++	udelay(2500);
++
++	smode1.sint = 0;
++	smode1.prst = 0;
++	gs_write_smode1(smode1);
++
++	return 0;
 +}
 +
-+/**
-+ * default_bits_per_pixel - choose either 16 or 32 bits per pixel
-+ * @xres_virtual: virtual x resolution in pixels
-+ * @yres_virtual: virtual y resolution in pixels
-+ * @buffer_size: size in bytes of display buffer
-+ *
-+ * 32 bits per pixel is returned unless this does not fit the given buffer size.
-+ *
-+ * The size calculation is approximate, but accurate enough for the standard
-+ * video modes.
-+ *
-+ * Return: 16 or 32 bits per pixel
-+ */
-+static int default_bits_per_pixel(
-+	const u32 xres_virtual, const u32 yres_virtual,
-+	const size_t buffer_size)
-+{
-+	return bits_per_pixel_fits(xres_virtual, yres_virtual,
-+		32, buffer_size) ? 32 : 16;
-+}
-+
-+/**
-+ * filled_var_videomode - is the screen info video mode filled in?
-+ * @var: screen info object to check
-+ *
-+ * Return: %true if the video mode is filled in, otherwise %false
-+ */
-+static bool filled_var_videomode(const struct fb_var_screeninfo *var)
-+{
-+	return var->xres > 0 && var->hsync_len > 0 &&
-+	       var->yres > 0 && var->vsync_len > 0 && var->pixclock > 0;
-+}
-+
-+static int ps2fb_check_var(struct fb_var_screeninfo *var, struct fb_info *info)
-+{
-+	/* Check whether video mode defaults are needed. */
-+	if (!filled_var_videomode(var)) {
-+		const struct fb_videomode *vm =
-+			fb_find_best_mode(var, &info->modelist);
-+
-+		if (!vm)
-+			return -EINVAL;
-+
-+		fb_videomode_to_var(var, vm);
-+	}
-+
-+        /* GS video register resolution is limited to 2048. */
-+        if (var->xres < 1 || 2048 < var->xres ||
-+	    var->yres < 1 || 2048 < var->yres)
-+		return -EINVAL;
-+
-+	var->xres_virtual = var->xres;
-+	var->yres_virtual = var->yres;
-+	var->xoffset = 0;
-+	var->yoffset = 0;
-+
-+        /* Check bits per pixel. */
-+        if (!var->bits_per_pixel)
-+		var->bits_per_pixel = default_bits_per_pixel(
-+		     var->xres_virtual, var->yres_virtual, info->fix.smem_len);
-+	else if (var->bits_per_pixel != 16 &&
-+		 var->bits_per_pixel != 32)
-+		return -EINVAL;
-+        if (!bits_per_pixel_fits(var->xres_virtual, var->yres_virtual,
-+			var->bits_per_pixel, info->fix.smem_len))
-+		var->bits_per_pixel = default_bits_per_pixel(
-+		     var->xres_virtual, var->yres_virtual, info->fix.smem_len);
-+        if (!bits_per_pixel_fits(var->xres_virtual, var->yres_virtual,
-+			var->bits_per_pixel, info->fix.smem_len))
-+		return -ENOMEM;
-+	if (var->bits_per_pixel == 16) {
-+		var->red    = (struct fb_bitfield){ .offset =  0, .length = 5 };
-+		var->green  = (struct fb_bitfield){ .offset =  5, .length = 5 };
-+		var->blue   = (struct fb_bitfield){ .offset = 10, .length = 5 };
-+		var->transp = (struct fb_bitfield){ .offset = 15, .length = 1 };
-+	} else if (var->bits_per_pixel == 32) {
-+		var->red    = (struct fb_bitfield){ .offset =  0, .length = 8 };
-+		var->green  = (struct fb_bitfield){ .offset =  8, .length = 8 };
-+		var->blue   = (struct fb_bitfield){ .offset = 16, .length = 8 };
-+		var->transp = (struct fb_bitfield){ .offset = 24, .length = 8 };
-+	} else
-+		return -EINVAL;		/* Unsupported bits per pixel. */
-+
-+        /* Screen rotations are not supported. */
-+	if (var->rotate)
-+		return -EINVAL;
-+
-+        return 0;
-+}
-+
-+static int ps2fb_cb_check_var(
-+	struct fb_var_screeninfo *var, struct fb_info *info)
++static int ps2fb_cb_set_par(struct fb_info *info)
 +{
 +	struct ps2fb_par *par = info->par;
 +	unsigned long flags;
 +	int err;
 +
 +	spin_lock_irqsave(&par->lock, flags);
-+	err = ps2fb_check_var(var, info);
++
++	err = ps2fb_set_par(info);
++	if (!err)
++		par->cb.block_count = var_to_block_count(info);
++
 +	spin_unlock_irqrestore(&par->lock, flags);
 +
 +	if (!err && info->tileops)
-+		if (info->tileops->fb_get_tilemax(info) < 256)
-+			err = -ENOMEM;
++		fb_info(info, "%d tiles maximum for %ux%u font\n",
++			info->tileops->fb_get_tilemax(info),
++			par->cb.tile.width, par->cb.tile.height);
 +
 +	return err;
 +}
 +
-+static u32 block_dimensions(u32 dim, u32 alignment)
-+{
-+	u32 mask = 0;
-+	u32 d;
-+
-+	for (d = 1; d <= dim; d++)
-+		if (d % alignment == 0)
-+			mask |= 1 << (d - 1);
-+
-+	return mask;
-+}
-+
-+static int init_console_buffer(struct platform_device *pdev,
-+	struct fb_info *info)
-+{
-+	static struct fb_ops fbops = {
-+		.owner		= THIS_MODULE,
-+		.fb_check_var	= ps2fb_cb_check_var,
-+	};
-+
-+	static struct fb_tile_ops tileops = {
-+		.fb_get_tilemax = ps2fb_cb_get_tilemax
-+	};
-+
-+	struct ps2fb_par *par = info->par;
-+
-+	fb_info(info, "Graphics Synthesizer console frame buffer device\n");
-+
-+	info->screen_size = 0;
-+	info->screen_base = NULL;	/* mmap is unsupported by hardware */
-+
-+	info->fix.smem_start = 0;	/* GS frame buffer is local memory */
-+	info->fix.smem_len = GS_MEMORY_SIZE;
-+
-+	info->fbops = &fbops;
-+	info->flags = FBINFO_DEFAULT |
-+		      FBINFO_READS_FAST;
-+
-+	info->flags |= FBINFO_MISC_TILEBLITTING;
-+	info->tileops = &tileops;
-+
-+	/*
-+	 * BITBLTBUF for pixel format CT32 requires divisibility by 2,
-+	 * and CT16 requires divisibility by 4. So 4 is a safe choice.
-+	 */
-+	info->pixmap.blit_x = block_dimensions(GS_PSMT4_BLOCK_WIDTH, 4);
-+	info->pixmap.blit_y = block_dimensions(GS_PSMT4_BLOCK_HEIGHT, 1);
-+
-+	/* 8x8 default font tile size for fb_get_tilemax */
-+	par->cb.tile = cb_tile(8, 8);
-+
-+	return 0;
-+}
-+
-+static int ps2fb_probe(struct platform_device *pdev)
-+{
-+	struct ps2fb_par *par;
-+	struct fb_info *info;
-+	int err;
-+
-+	info = framebuffer_alloc(sizeof(*par), &pdev->dev);
-+	if (info == NULL) {
-+		dev_err(&pdev->dev, "framebuffer_alloc failed\n");
-+		err = -ENOMEM;
-+		goto err_framebuffer_alloc;
-+	}
-+
-+	par = info->par;
-+
-+	spin_lock_init(&par->lock);
-+
-+	par->package.buffer = (union package *)__get_free_page(GFP_DMA);
-+	if (!par->package.buffer) {
-+		dev_err(&pdev->dev, "Failed to allocate package buffer\n");
-+		err = -ENOMEM;
-+		goto err_package_buffer;
-+	}
-+	par->package.capacity = PAGE_SIZE / sizeof(union package);
-+
-+	strlcpy(info->fix.id, "PS2 GS", ARRAY_SIZE(info->fix.id));
-+	info->fix.accel = FB_ACCEL_PLAYSTATION_2;
-+
-+	err = init_console_buffer(pdev, info);
-+	if (err < 0)
-+		goto err_init_buffer;
-+
-+	info->mode = &par->mode;
-+
-+	if (register_framebuffer(info) < 0) {
-+		fb_err(info, "register_framebuffer failed\n");
-+		err = -EINVAL;
-+		goto err_register_framebuffer;
-+	}
-+
-+	platform_set_drvdata(pdev, info);
-+
-+	return 0;
-+
-+err_register_framebuffer:
-+err_init_buffer:
-+	free_page((unsigned long)par->package.buffer);
-+err_package_buffer:
-+	framebuffer_release(info);
-+err_framebuffer_alloc:
-+	return err;
-+}
-+
-+static int ps2fb_remove(struct platform_device *pdev)
-+{
-+	struct fb_info *info = platform_get_drvdata(pdev);
-+	struct ps2fb_par *par = info->par;
-+	int err = 0;
-+
-+	if (info != NULL) {
-+		unregister_framebuffer(info);
-+		fb_dealloc_cmap(&info->cmap);
-+
-+		framebuffer_release(info);
-+	}
-+
-+	if (!gif_wait()) {
-+		fb_err(info, "Failed to complete GIF DMA transfer\n");
-+		err = -EBUSY;
-+	}
-+	free_page((unsigned long)par->package.buffer);
-+
-+	return err;
-+}
-+
-+static struct platform_driver ps2fb_driver = {
-+	.probe		= ps2fb_probe,
-+	.remove		= ps2fb_remove,
-+	.driver = {
-+		.name	= DEVICE_NAME,
-+	},
-+};
-+
-+static struct platform_device *ps2fb_device;
-+
-+static int __init ps2fb_init(void)
-+{
-+	int err;
-+
-+#ifndef MODULE
-+	char *options = NULL;
-+	char *this_opt;
-+
-+	if (fb_get_options(DEVICE_NAME, &options))
-+		return -ENODEV;
-+	if (!options || !*options)
-+		goto no_options;
-+
-+	while ((this_opt = strsep(&options, ",")) != NULL) {
-+		if (!*this_opt)
-+			continue;
-+
-+		if (!strncmp(this_opt, "mode_option:", 12))
-+			mode_option = &this_opt[12];
-+		else if ('0' <= this_opt[0] && this_opt[0] <= '9')
-+			mode_option = this_opt;
-+		else
-+			pr_warn(DEVICE_NAME ": Unrecognized option \"%s\"\n",
-+				this_opt);
-+	}
-+
-+no_options:
-+#endif /* !MODULE */
-+
-+	/* Default to a suitable PAL or NTSC broadcast mode. */
-+	if (!mode_option)
-+		mode_option = gs_region_pal() ? "576x460i@50" : "576x384i@60";
-+
-+	ps2fb_device = platform_device_alloc("ps2fb", 0);
-+	if (!ps2fb_device)
-+		return -ENOMEM;
-+
-+	err = platform_device_add(ps2fb_device);
-+	if (err < 0) {
-+		platform_device_put(ps2fb_device);
-+		return err;
-+	}
-+
-+	return platform_driver_register(&ps2fb_driver);
-+}
-+
-+static void __exit ps2fb_exit(void)
-+{
-+	platform_driver_unregister(&ps2fb_driver);
-+	platform_device_unregister(ps2fb_device);
-+}
-+
-+module_init(ps2fb_init);
-+module_exit(ps2fb_exit);
-+
-+module_param(mode_option, charp, 0);
-+MODULE_PARM_DESC(mode_option,
-+	"Specify initial video mode as \"<xres>x<yres>[-<bpp>][@<refresh>]\"");
-+
-+MODULE_DESCRIPTION("PlayStation 2 frame buffer driver");
-+MODULE_AUTHOR("Fredrik Noring");
-+MODULE_LICENSE("GPL");
-diff --git a/include/linux/console_struct.h b/include/linux/console_struct.h
-index 24d4c16e3ae0..cb562672cc3a 100644
---- a/include/linux/console_struct.h
-+++ b/include/linux/console_struct.h
-@@ -13,9 +13,11 @@
- #ifndef _LINUX_CONSOLE_STRUCT_H
- #define _LINUX_CONSOLE_STRUCT_H
- 
-+#include <linux/tty.h>
- #include <linux/wait.h>
- #include <linux/vt.h>
- #include <linux/workqueue.h>
-+#include <uapi/linux/kd.h>
- 
- struct uni_pagedir;
- struct uni_screen;
-diff --git a/include/uapi/linux/fb.h b/include/uapi/linux/fb.h
-index b6aac7ee1f67..38d88eebf651 100644
---- a/include/uapi/linux/fb.h
-+++ b/include/uapi/linux/fb.h
-@@ -149,6 +149,7 @@
- #define FB_ACCEL_SUPERSAVAGE    0x8c    /* S3 Supersavage               */
- #define FB_ACCEL_PROSAVAGE_DDR  0x8d	/* S3 ProSavage DDR             */
- #define FB_ACCEL_PROSAVAGE_DDRK 0x8e	/* S3 ProSavage DDR-K           */
-+#define FB_ACCEL_PLAYSTATION_2  0x8f	/* PlayStation 2                */
- 
- #define FB_ACCEL_PUV3_UNIGFX	0xa0	/* PKUnity-v3 Unigfx		*/
+ static u32 block_dimensions(u32 dim, u32 alignment)
+ {
+ 	u32 mask = 0;
+@@ -347,6 +674,7 @@ static int init_console_buffer(struct platform_device *pdev,
+ {
+ 	static struct fb_ops fbops = {
+ 		.owner		= THIS_MODULE,
++		.fb_set_par	= ps2fb_cb_set_par,
+ 		.fb_check_var	= ps2fb_cb_check_var,
+ 	};
  
 -- 
 2.21.0
