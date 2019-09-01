@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37FFEA4A33
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 17:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24481A4A39
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 17:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728667AbfIAPtu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 11:49:50 -0400
-Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:57714 "EHLO
-        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726552AbfIAPtu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 11:49:50 -0400
+        id S1728753AbfIAPvL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 11:51:11 -0400
+Received: from pio-pvt-msa3.bahnhof.se ([79.136.2.42]:41792 "EHLO
+        pio-pvt-msa3.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726260AbfIAPvK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 11:51:10 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id A5F844036B
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:49:48 +0200 (CEST)
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id 1B13F3F6B8
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:41:42 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -21,20 +21,20 @@ X-Spam-Level:
 X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         tests=[BAYES_00=-1.9, URIBL_BLOCKED=0.001]
         autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ACefYi-2gaLe for <linux-mips@vger.kernel.org>;
-        Sun,  1 Sep 2019 17:49:48 +0200 (CEST)
+Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id BysIxn_d_7g7 for <linux-mips@vger.kernel.org>;
+        Sun,  1 Sep 2019 17:41:41 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 081F43FBF6
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:49:47 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 17:49:47 +0200
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id 7C8AB3F69D
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:41:41 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 17:41:41 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     linux-mips@vger.kernel.org
-Subject: [PATCH 037/120] MIPS: PS2: ROM: Find ROM files with a given name, if
- they exist
-Message-ID: <34f0675b7e66bf672ff043e8f66c2c2364cd9880.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 016/120] MIPS: R5900: The ERET instruction has issues with
+ delay slot and CACHE
+Message-ID: <3a2945e9ac2b70c6f6b14100bf8c805d3ef51ce0.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -46,42 +46,50 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-rom_find_files() searches for files in the given ROM directory. Most ROM
-files have unique names, but certain special files named for example "-"
-appear multiple times.
-
-The "continue; else" construction is used to avoid an if-else ambiguity
-warning from GCC, when the loop has an if-else statement.
-
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
- arch/mips/include/asm/mach-ps2/rom.h | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+The Linux 2.6 port to the PlayStation 2 has this remark. I don't know
+where it comes from.
+---
+ arch/mips/mm/tlbex.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/arch/mips/include/asm/mach-ps2/rom.h b/arch/mips/include/asm/mach-ps2/rom.h
-index 063c8b6acf15..8794bd13184e 100644
---- a/arch/mips/include/asm/mach-ps2/rom.h
-+++ b/arch/mips/include/asm/mach-ps2/rom.h
-@@ -85,6 +85,19 @@ extern struct rom_dir rom1_dir;		/* ROM1 directory (DVD) */
- 	     !rom_terminating_file(file);				\
- 	     (file) = rom_next_file(file))
- 
-+/**
-+ * rom_find_files - find ROM files with the given name, if they exist
-+ * @file: &struct rom_file to use as a ROM file match cursor
-+ * @dir: &struct rom_dir with ROM directory to search in
-+ * @filename: file name to look for
-+ *
-+ * The statement following the macro is executed for ROM files having the
-+ * given name.
-+ */
-+#define rom_find_files(file, dir, filename)				\
-+	rom_for_each_file((file), (dir))				\
-+		if (strcmp((file).name, filename) != 0) continue; else
+diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+index 1bd134b6f033..9d5864b20e9f 100644
+--- a/arch/mips/mm/tlbex.c
++++ b/arch/mips/mm/tlbex.c
+@@ -1383,6 +1383,16 @@ static void build_r4000_tlb_refill_handler(void)
+ 		uasm_l_leave(&l, p);
+ 		uasm_i_eret(&p); /* return from trap */
+ 	}
 +
- bool rom_empty_dir(const struct rom_dir dir);
++#ifdef CONFIG_CPU_R5900
++	/* There should be nothing which can be interpreted as cache instruction. */
++	uasm_i_nop(&p);
++	uasm_i_nop(&p);
++	uasm_i_nop(&p);
++	uasm_i_nop(&p);
++	uasm_i_nop(&p);
++#endif
++
+ #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
+ 	uasm_l_tlb_huge_update(&l, p);
+ 	if (htlb_info.need_reload_pte)
+@@ -2129,6 +2139,14 @@ build_r4000_tlbchange_handler_tail(u32 **p, struct uasm_label **l,
+ 	uasm_l_leave(l, *p);
+ 	build_restore_work_registers(p);
+ 	uasm_i_eret(p); /* return from trap */
++#ifdef CONFIG_CPU_R5900
++	/* There should be nothing which can be interpreted as cache instruction. */
++	uasm_i_nop(p);
++	uasm_i_nop(p);
++	uasm_i_nop(p);
++	uasm_i_nop(p);
++	uasm_i_nop(p);
++#endif
  
- bool rom_terminating_file(const struct rom_file file);
+ #ifdef CONFIG_64BIT
+ 	build_get_pgd_vmalloc64(p, l, r, tmp, ptr, not_refill);
 -- 
 2.21.0
 
