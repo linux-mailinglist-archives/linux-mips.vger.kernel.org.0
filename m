@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 640D4A4A8B
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656B7A4A8C
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728878AbfIAQZ0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 12:25:26 -0400
-Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:60848 "EHLO
-        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728877AbfIAQZ0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:25:26 -0400
+        id S1728883AbfIAQZ2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 12:25:28 -0400
+Received: from pio-pvt-msa3.bahnhof.se ([79.136.2.42]:44868 "EHLO
+        pio-pvt-msa3.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728877AbfIAQZ2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:25:28 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 940743FC34;
-        Sun,  1 Sep 2019 18:25:17 +0200 (CEST)
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id 3F72C3F660;
+        Sun,  1 Sep 2019 18:25:26 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -21,20 +21,20 @@ X-Spam-Level:
 X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         tests=[BAYES_00=-1.9, URIBL_BLOCKED=0.001]
         autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id AlyCZdn1sUj4; Sun,  1 Sep 2019 18:25:16 +0200 (CEST)
+Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id EgNUseOu8H_3; Sun,  1 Sep 2019 18:25:25 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 71A9F3F62D;
-        Sun,  1 Sep 2019 18:25:16 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 18:25:16 +0200
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id 820163F58C;
+        Sun,  1 Sep 2019 18:25:25 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 18:25:25 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org
 Cc:     "Maciej W. Rozycki" <macro@linux-mips.org>,
         =?utf-8?Q?J=C3=BCrgen?= Urban <JuergenUrban@gmx.de>
-Subject: [PATCH 091/120] MIPS: PS2: GS: Show privileged registers with sysfs
-Message-ID: <ecc74e0565aa949a4a2a6a1e7cb65442010b7c9d.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 092/120] MIPS: PS2: GS: Store privileged registers with sysfs
+Message-ID: <0742ac0d622df50b672d8743146a947cac73d2e4.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -46,530 +46,208 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Reading arbitrary numerical and symbolical privileged GS register bit
-fields is supported. For example, the PMODE register can be inspected
-with:
+One or several bit fields can be written simultaneously. For example,
+the PMODE slbg field can be changed with:
 
-    # cat /sys/devices/platform/gs/registers/pmode
-    en1 1
-    en2 0
-    crtmd 1
-    mmod circuit1
-    amod circuit1
-    slbg circuit2
-    alp 0
+    # echo "slbg bgcolor" >/sys/devices/platform/gs/registers/pmode
 
-The implementation uses a fair amount of macro expansions. This greatly
-simplifies register definitions, which in the case of PMODE is:
-
-    SYSFS_RW_REG(pmode, pmode,
-    	SYSFS_DECNUM_FIELD(en1),
-    	SYSFS_DECNUM_FIELD(en2),
-    	SYSFS_DECNUM_FIELD(crtmd),
-    	SYSFS_SYMBOL_FIELD(mmod, circuit1, alp),
-    	SYSFS_SYMBOL_FIELD(amod, circuit1, circuit2),
-    	SYSFS_SYMBOL_FIELD(slbg, circuit2, bgcolor),
-    	SYSFS_DECNUM_FIELD(alp));
-
-It relies on the following enum and struct definitions:
-
-    enum gs_pmode_mmod { gs_mmod_circuit1, gs_mmod_alp };
-    enum gs_pmode_amod { gs_amod_circuit1, gs_amod_circuit2 };
-    enum gs_pmode_slbg { gs_slbg_circuit2, gs_slbg_bgcolor };
-    struct gs_pmode {
-    	u64 en1 : 1;		/* Enable read circuit 1 */
-    	u64 en2 : 1;		/* Enable read circuit 2 */
-    	u64 crtmd : 3;		/* CRT output switching (always 001) */
-    	u64 mmod : 1;		/* Alpha blending value */
-    	u64 amod : 1;		/* OUT1 alpha output */
-    	u64 slbg : 1;		/* Alpha blending method */
-    	u64 alp : 8;		/* Fixed alpha (0xff = 1.0) */
-    	u64 zero : 1;		/* Must be zero */
-    	u64 : 47;
-    };
+Written values are integers or enum symbols, depending on the field.
 
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
- drivers/ps2/Makefile   |   1 +
- drivers/ps2/gs-sysfs.c | 457 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 458 insertions(+)
- create mode 100644 drivers/ps2/gs-sysfs.c
+ drivers/ps2/gs-sysfs.c | 145 +++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 140 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/ps2/Makefile b/drivers/ps2/Makefile
-index 28fb55803199..86ba1d3908dd 100644
---- a/drivers/ps2/Makefile
-+++ b/drivers/ps2/Makefile
-@@ -2,6 +2,7 @@ obj-$(CONFIG_PS2_GS)		+= gif.o
- obj-$(CONFIG_PS2_GS)		+= gs.o
- obj-$(CONFIG_PS2_GS)		+= gs-irq.o
- obj-$(CONFIG_PS2_GS)		+= gs-registers.o
-+obj-$(CONFIG_PS2_GS)		+= gs-sysfs.o
- 
- obj-m				+= iop-heap.o
- obj-m				+= iop-irq.o
 diff --git a/drivers/ps2/gs-sysfs.c b/drivers/ps2/gs-sysfs.c
-new file mode 100644
-index 000000000000..2429de3e0094
---- /dev/null
+index 2429de3e0094..3c749375aee0 100644
+--- a/drivers/ps2/gs-sysfs.c
 +++ b/drivers/ps2/gs-sysfs.c
-@@ -0,0 +1,457 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * PlayStation 2 Graphics Synthesizer (GS) sysfs driver
+@@ -4,9 +4,9 @@
+  *
+  * Copyright (C) 2019 Fredrik Noring
+  *
+- * Reading arbitrary numerical and symbolical privileged GS register
+- * bit fields is supported. For example, the PMODE register can be
+- * inspected with:
++ * Reading and writing arbitrary numerical and symbolical privileged
++ * GS register bit fields is supported. For example, the PMODE register
++ * can be inspected with:
+  *
+  *	# cat /sys/devices/platform/gs/registers/pmode
+  *	en1 1
+@@ -17,6 +17,11 @@
+  *	slbg circuit2
+  *	alp 0
+  *
++ * One or several bit fields can be written simultaneously. For example,
++ * the PMODE slbg field can be changed with:
 + *
-+ * Copyright (C) 2019 Fredrik Noring
++ * 	# echo "slbg bgcolor" >/sys/devices/platform/gs/registers/pmode
 + *
-+ * Reading arbitrary numerical and symbolical privileged GS register
-+ * bit fields is supported. For example, the PMODE register can be
-+ * inspected with:
-+ *
-+ *	# cat /sys/devices/platform/gs/registers/pmode
-+ *	en1 1
-+ *	en2 0
-+ *	crtmd 1
-+ *	mmod circuit1
-+ *	amod circuit1
-+ *	slbg circuit2
-+ *	alp 0
-+ *
-+ * The implementation uses a fair amount of macro expansions. This greatly
-+ * simplifies register definitions, which in the case of PMODE is:
-+ *
-+ *	SYSFS_RW_REG(pmode, pmode,
-+ *		SYSFS_DECNUM_FIELD(en1),
-+ *		SYSFS_DECNUM_FIELD(en2),
-+ *		SYSFS_DECNUM_FIELD(crtmd),
-+ *		SYSFS_SYMBOL_FIELD(mmod, circuit1, alp),
-+ *		SYSFS_SYMBOL_FIELD(amod, circuit1, circuit2),
-+ *		SYSFS_SYMBOL_FIELD(slbg, circuit2, bgcolor),
-+ *		SYSFS_DECNUM_FIELD(alp));
-+ *
-+ * It relies on the following enum and struct definitions:
-+ *
-+ *	enum gs_pmode_mmod { gs_mmod_circuit1, gs_mmod_alp };
-+ *	enum gs_pmode_amod { gs_amod_circuit1, gs_amod_circuit2 };
-+ *	enum gs_pmode_slbg { gs_slbg_circuit2, gs_slbg_bgcolor };
-+ *	struct gs_pmode {
-+ *		u64 en1 : 1;		// Enable read circuit 1
-+ *		u64 en2 : 1;		// Enable read circuit 2
-+ *		u64 crtmd : 3;		// CRT output switching (always 001)
-+ *		u64 mmod : 1;		// Alpha blending value
-+ *		u64 amod : 1;		// OUT1 alpha output
-+ *		u64 slbg : 1;		// Alpha blending method
-+ *		u64 alp : 8;		// Fixed alpha (0xff = 1.0)
-+ *		u64 zero : 1;		// Must be zero
-+ *		u64 : 47;
-+ *	};
-+ */
+  * The implementation uses a fair amount of macro expansions. This greatly
+  * simplifies register definitions, which in the case of PMODE is:
+  *
+@@ -64,6 +69,76 @@
+ 
+ static struct kobject *registers_kobj;
+ 
++static size_t line_size(const char *s)
++{
++	const size_t n = strchrnul(s, '\n') - s;
 +
-+#include <linux/ctype.h>
-+#include <linux/errno.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/types.h>
-+#include <linux/uaccess.h>
++	return s[n] == '\n' ? n + 1 : n;
++}
 +
-+#include <asm/page.h>
-+#include <asm/uaccess.h>
++static const char *trim_line_space(const char *s)
++{
++	while (isspace(*s) && *s != '\n')
++		s++;
 +
-+#include <asm/mach-ps2/gs.h>
-+#include <asm/mach-ps2/gs-registers.h>
++	return s;
++}
 +
-+#include <uapi/asm/gs.h>
++static bool symbol_match(const char **s, const char *symbol)
++{
++	const size_t length = strlen(symbol);
++	const char *t = *s;
 +
-+static struct kobject *registers_kobj;
++	t = trim_line_space(t);
++	if (strncmp(t, symbol, length) != 0)
++		return false;
++	t += length;
++	t = trim_line_space(t);
 +
-+#define SYSFS_STATEMENT1(prefix_, macro_)				\
-+	prefix_##macro_;
++	*s = t;
 +
-+#define SYSFS_STATEMENT2(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT1(prefix_, __VA_ARGS__)
++	return true;
++}
 +
-+#define SYSFS_STATEMENT3(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT2(prefix_, __VA_ARGS__)
++static bool number_match(const char **s, u64 *value)
++{
++	const char *t = *s;
++	char *e;
 +
-+#define SYSFS_STATEMENT4(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT3(prefix_, __VA_ARGS__)
++	t = trim_line_space(t);
++	*value = simple_strtoull(t, &e, 0);
++	if (t == e)
++		return false;
++	t = e;
++	t = trim_line_space(t);
 +
-+#define SYSFS_STATEMENT5(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT4(prefix_, __VA_ARGS__)
++	*s = t;
 +
-+#define SYSFS_STATEMENT6(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT5(prefix_, __VA_ARGS__)
++	return true;
++}
 +
-+#define SYSFS_STATEMENT7(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT6(prefix_, __VA_ARGS__)
++static bool end_of_field(const char *s)
++{
++	return *s == '\n' || *s == '\0';
++}
 +
-+#define SYSFS_STATEMENT8(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT7(prefix_, __VA_ARGS__)
++static bool symbol_field(const char *s, const char *field, const char *value)
++{
++	return symbol_match(&s, field) &&
++	       symbol_match(&s, value) &&
++	       end_of_field(s);
++}
 +
-+#define SYSFS_STATEMENT9(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT8(prefix_, __VA_ARGS__)
++static bool number_field(const char *s, const char *field, u64 *value)
++{
++	return symbol_match(&s, field) &&
++	       number_match(&s, value) &&
++	       end_of_field(s);
++}
 +
-+#define SYSFS_STATEMENT10(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT9(prefix_, __VA_ARGS__)
++#define for_each_line(s, n)						\
++	for (n = 0; (s)[n] != '\0'; n += line_size(&(s)[n]))
 +
-+#define SYSFS_STATEMENT11(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT10(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT12(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT11(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT13(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT12(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT14(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT13(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT15(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT14(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT16(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT15(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT17(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT16(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT18(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT17(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT19(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT18(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT20(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT19(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT21(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT20(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT22(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT21(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT23(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT22(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT24(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT23(prefix_, __VA_ARGS__)
-+
-+#define SYSFS_STATEMENT25(prefix_, macro_, ...)				\
-+	prefix_##macro_;						\
-+	SYSFS_STATEMENT24(prefix_, __VA_ARGS__)
-+
-+#define SHOW_SYSFS_DECNUM_FIELD(field_, ...)				\
+ #define SYSFS_STATEMENT1(prefix_, macro_)				\
+ 	prefix_##macro_;
+ 
+@@ -231,13 +306,73 @@ static struct kobject *registers_kobj;
+ 		CONCATENATE(SYSFS_STATEMENT,				\
+ 			COUNT_ARGS(__VA_ARGS__))(SHOW_, __VA_ARGS__))
+ 
++#define STORE_SYSFS_DECNUM_FIELD(field_)				\
 +	do {								\
-+		if (valid)						\
-+			n += scnprintf(&buf[n], PAGE_SIZE - n,		\
-+				#field_ " %u\n", value.field_);		\
-+		else							\
-+			n += scnprintf(&buf[n], PAGE_SIZE - n,		\
-+				#field_ "\n");				\
++		u64 value_;						\
++		if (number_field(&buf[n], #field_, &value_))		\
++			value.field_ = value_;				\
 +	} while (false)
 +
-+#define SHOW_SYSFS_HEXNUM_FIELD(field_, ...)				\
++#define STORE_SYSFS_HEXNUM_FIELD(field_)				\
++	STORE_SYSFS_DECNUM_FIELD(field_)
++
++#define STORE_SYSFS_SYMBOL_FIELD_ENTRY(field_, prefix_, value_)		\
 +	do {								\
-+		if (valid)						\
-+			n += scnprintf(&buf[n], PAGE_SIZE - n,		\
-+				#field_ " 0x%x\n", value.field_);	\
-+		else							\
-+			n += scnprintf(&buf[n], PAGE_SIZE - n,		\
-+				#field_ "\n");				\
++		if (symbol_field(&buf[n], #field_, #value_))		\
++			value.field_ = prefix_##_##value_;		\
 +	} while (false)
 +
-+#define SHOW_SYSFS_SYMBOL_STRING_ENTRY(field_, prefix_, value_)		\
-+	value.field_ == prefix_##_##value_ ? " " #value_ :
++#define STORE_SYSFS_SYMBOL_FIELD1(field_, prefix_, value_)		\
++	STORE_SYSFS_SYMBOL_FIELD_ENTRY(field_, prefix_, value_)
 +
-+#define SHOW_SYSFS_SYMBOL_STRING1(field_, prefix_, value_)		\
-+	SHOW_SYSFS_SYMBOL_STRING_ENTRY(field_, prefix_, value_) "-"
++#define STORE_SYSFS_SYMBOL_FIELD2(field_, prefix_, value_, ...)		\
++	STORE_SYSFS_SYMBOL_FIELD_ENTRY(field_, prefix_, value_);	\
++	STORE_SYSFS_SYMBOL_FIELD1(field_, prefix_, __VA_ARGS__)
 +
-+#define SHOW_SYSFS_SYMBOL_STRING2(field_, prefix_, value_, ...)		\
-+	SHOW_SYSFS_SYMBOL_STRING_ENTRY(field_, prefix_, value_)		\
-+	SHOW_SYSFS_SYMBOL_STRING1(field_, prefix_, __VA_ARGS__)
++#define STORE_SYSFS_SYMBOL_FIELD3(field_, prefix_, value_, ...)		\
++	STORE_SYSFS_SYMBOL_FIELD_ENTRY(field_, prefix_, value_);	\
++	STORE_SYSFS_SYMBOL_FIELD2(field_, prefix_, __VA_ARGS__)
 +
-+#define SHOW_SYSFS_SYMBOL_STRING3(field_, prefix_, value_, ...)		\
-+	SHOW_SYSFS_SYMBOL_STRING_ENTRY(field_, prefix_, value_)		\
-+	SHOW_SYSFS_SYMBOL_STRING2(field_, prefix_, __VA_ARGS__)
++#define STORE_SYSFS_SYMBOL_FIELD4(field_, prefix_, value_, ...)		\
++	STORE_SYSFS_SYMBOL_FIELD_ENTRY(field_, prefix_, value_);	\
++	STORE_SYSFS_SYMBOL_FIELD3(field_, prefix_, __VA_ARGS__)
 +
-+#define SHOW_SYSFS_SYMBOL_STRING4(field_, prefix_, value_, ...)		\
-+	SHOW_SYSFS_SYMBOL_STRING_ENTRY(field_, prefix_, value_)		\
-+	SHOW_SYSFS_SYMBOL_STRING3(field_, prefix_, __VA_ARGS__)
++#define STORE_SYSFS_SYMBOL_FIELD5(field_, prefix_, value_, ...)		\
++	STORE_SYSFS_SYMBOL_FIELD_ENTRY(field_, prefix_, value_);	\
++	STORE_SYSFS_SYMBOL_FIELD4(field_, prefix_, __VA_ARGS__)
 +
-+#define SHOW_SYSFS_SYMBOL_STRING5(field_, prefix_, value_, ...)		\
-+	SHOW_SYSFS_SYMBOL_STRING_ENTRY(field_, prefix_, value_)		\
-+	SHOW_SYSFS_SYMBOL_STRING4(field_, prefix_, __VA_ARGS__)
++#define STORE_SYSFS_SYMBOL_FIELD(field_, ...)			\
++	CONCATENATE(STORE_SYSFS_SYMBOL_FIELD,				\
++		COUNT_ARGS(__VA_ARGS__))(field_, gs_##field_, __VA_ARGS__)
 +
-+#define SHOW_SYSFS_SYMBOL_STRING(field_, prefix_, ...)			\
-+	!valid ? "" :							\
-+	CONCATENATE(SHOW_SYSFS_SYMBOL_STRING,				\
-+		COUNT_ARGS(__VA_ARGS__))(field_, prefix_, __VA_ARGS__)
-+
-+#define SHOW_SYSFS_SYMBOL_FIELD(field_, ...)			\
-+	n += scnprintf(&buf[n], PAGE_SIZE - n, #field_ "%s\n",		\
-+		SHOW_SYSFS_SYMBOL_STRING(field_, gs_##field_, __VA_ARGS__))
-+
-+#define SHOW_SYSFS_REGISTER(reg, str, ...)				\
-+	static ssize_t show_##reg(struct device *device,		\
-+		struct device_attribute *attr, char *buf)		\
++#define STORE_SYSFS_REGISTER(reg, str, ...)				\
++	static ssize_t store_##reg(struct device *device,		\
++	       struct device_attribute *attr, const char *buf, size_t size) \
 +	{								\
 +		const bool valid = gs_valid_##reg();			\
-+		const struct gs_##str value = valid ?			\
++		struct gs_##str value = valid ?			\
 +			gs_read_##reg() : (struct gs_##str) { };	\
-+		size_t n = 0;						\
-+		__VA_ARGS__;						\
-+		return n;						\
++		size_t n;						\
++		for_each_line(buf, n) {					\
++			__VA_ARGS__;					\
++		}							\
++		gs_write_##reg(value);					\
++		return size;						\
 +	}
 +
-+#define SYSFS_SHOW(reg, str, ...)					\
-+	SHOW_SYSFS_REGISTER(reg, str,					\
++#define SYSFS_STORE(reg, str, ...)					\
++	STORE_SYSFS_REGISTER(reg, str,				\
 +		CONCATENATE(SYSFS_STATEMENT,				\
-+			COUNT_ARGS(__VA_ARGS__))(SHOW_, __VA_ARGS__))
++			COUNT_ARGS(__VA_ARGS__))(STORE_, __VA_ARGS__))
 +
-+#define SYSFS_RO_REG(reg, str, ...)					\
-+	SYSFS_SHOW(reg, str, __VA_ARGS__)				\
-+	static DEVICE_ATTR(reg, S_IRUGO, show_##reg, NULL)
-+
-+#define SYSFS_RW_REG(reg, str, ...)					\
-+	SYSFS_SHOW(reg, str, __VA_ARGS__)				\
-+	static DEVICE_ATTR(reg, S_IRUGO, show_##reg, NULL)
-+
-+SYSFS_RW_REG(pmode, pmode,
-+	SYSFS_DECNUM_FIELD(en1),
-+	SYSFS_DECNUM_FIELD(en2),
-+	SYSFS_DECNUM_FIELD(crtmd),
-+	SYSFS_SYMBOL_FIELD(mmod, circuit1, alp),
-+	SYSFS_SYMBOL_FIELD(amod, circuit1, circuit2),
-+	SYSFS_SYMBOL_FIELD(slbg, circuit2, bgcolor),
-+	SYSFS_DECNUM_FIELD(alp));
-+
-+SYSFS_RW_REG(smode1, smode1,
-+	SYSFS_DECNUM_FIELD(rc),
-+	SYSFS_DECNUM_FIELD(lc),
-+	SYSFS_DECNUM_FIELD(t1248),
-+	SYSFS_DECNUM_FIELD(slck),
-+	SYSFS_SYMBOL_FIELD(cmod, vesa, ntsc, pal),
-+	SYSFS_DECNUM_FIELD(ex),
-+	SYSFS_DECNUM_FIELD(prst),
-+	SYSFS_DECNUM_FIELD(sint),
-+	SYSFS_DECNUM_FIELD(xpck),
-+	SYSFS_DECNUM_FIELD(pck2),
-+	SYSFS_DECNUM_FIELD(spml),
-+	SYSFS_SYMBOL_FIELD(gcont, rgbyc, ycrcb),
-+	SYSFS_DECNUM_FIELD(phs),
-+	SYSFS_DECNUM_FIELD(pvs),
-+	SYSFS_DECNUM_FIELD(pehs),
-+	SYSFS_DECNUM_FIELD(pevs),
-+	SYSFS_DECNUM_FIELD(clksel),
-+	SYSFS_DECNUM_FIELD(nvck),
-+	SYSFS_DECNUM_FIELD(slck2),
-+	SYSFS_DECNUM_FIELD(vcksel),
-+	SYSFS_DECNUM_FIELD(vhp));
-+
-+SYSFS_RW_REG(smode2, smode2,
-+	SYSFS_SYMBOL_FIELD(intm, progressive, interlace),
-+	SYSFS_SYMBOL_FIELD(ffmd, field, frame),
-+	SYSFS_SYMBOL_FIELD(dpms, on, standby, suspend, off));
-+
-+SYSFS_RW_REG(srfsh, srfsh,
-+	SYSFS_DECNUM_FIELD(rfsh));
-+
-+SYSFS_RW_REG(synch1, synch1,
-+	SYSFS_DECNUM_FIELD(hfp),
-+	SYSFS_DECNUM_FIELD(hbp),
-+	SYSFS_DECNUM_FIELD(hseq),
-+	SYSFS_DECNUM_FIELD(hsvs),
-+	SYSFS_DECNUM_FIELD(hs));
-+
-+SYSFS_RW_REG(synch2, synch2,
-+	SYSFS_DECNUM_FIELD(hf),
-+	SYSFS_DECNUM_FIELD(hb));
-+
-+SYSFS_RW_REG(syncv, syncv,
-+	SYSFS_DECNUM_FIELD(vfp),
-+	SYSFS_DECNUM_FIELD(vfpe),
-+	SYSFS_DECNUM_FIELD(vbp),
-+	SYSFS_DECNUM_FIELD(vbpe),
-+	SYSFS_DECNUM_FIELD(vdp),
-+	SYSFS_DECNUM_FIELD(vs));
-+
-+SYSFS_RW_REG(dispfb1, dispfb,
-+	SYSFS_DECNUM_FIELD(fbp),
-+	SYSFS_DECNUM_FIELD(fbw),
-+	SYSFS_SYMBOL_FIELD(psm, ct32, ct24, ct16, ct16s, gpu24),
-+	SYSFS_DECNUM_FIELD(dbx),
-+	SYSFS_DECNUM_FIELD(dby));
-+
-+SYSFS_RW_REG(display1, display,
-+	SYSFS_DECNUM_FIELD(dx),
-+	SYSFS_DECNUM_FIELD(dy),
-+	SYSFS_DECNUM_FIELD(magh),
-+	SYSFS_DECNUM_FIELD(magv),
-+	SYSFS_DECNUM_FIELD(dw),
-+	SYSFS_DECNUM_FIELD(dh));
-+
-+SYSFS_RW_REG(dispfb2, dispfb,
-+	SYSFS_DECNUM_FIELD(fbp),
-+	SYSFS_DECNUM_FIELD(fbw),
-+	SYSFS_SYMBOL_FIELD(psm, ct32, ct24, ct16, ct16s),
-+	SYSFS_DECNUM_FIELD(dbx),
-+	SYSFS_DECNUM_FIELD(dby));
-+
-+SYSFS_RW_REG(display2, display,
-+	SYSFS_DECNUM_FIELD(dx),
-+	SYSFS_DECNUM_FIELD(dy),
-+	SYSFS_DECNUM_FIELD(magh),
-+	SYSFS_DECNUM_FIELD(magv),
-+	SYSFS_DECNUM_FIELD(dw),
-+	SYSFS_DECNUM_FIELD(dh));
-+
-+SYSFS_RW_REG(extbuf, extbuf,
-+	SYSFS_DECNUM_FIELD(exbp),
-+	SYSFS_DECNUM_FIELD(exbw),
-+	SYSFS_SYMBOL_FIELD(fbin, out1, out2),
-+	SYSFS_SYMBOL_FIELD(wffmd, field, frame),
-+	SYSFS_SYMBOL_FIELD(emoda, alpha, y, yhalf, zero),
-+	SYSFS_SYMBOL_FIELD(emodc, rgb, y, ycbcr, alpha),
-+	SYSFS_DECNUM_FIELD(wdx),
-+	SYSFS_DECNUM_FIELD(wdy));
-+
-+SYSFS_RW_REG(extdata, extdata,
-+	SYSFS_DECNUM_FIELD(sx),
-+	SYSFS_DECNUM_FIELD(sy),
-+	SYSFS_DECNUM_FIELD(smph),
-+	SYSFS_DECNUM_FIELD(smpv),
-+	SYSFS_DECNUM_FIELD(ww),
-+	SYSFS_DECNUM_FIELD(wh));
-+
-+SYSFS_RW_REG(extwrite, extwrite,
-+	SYSFS_SYMBOL_FIELD(write, complete_current, start_next));
-+
-+SYSFS_RW_REG(bgcolor, bgcolor,
-+	SYSFS_DECNUM_FIELD(r),
-+	SYSFS_DECNUM_FIELD(g),
-+	SYSFS_DECNUM_FIELD(b));
-+
-+SYSFS_RO_REG(csr, csr,
-+	SYSFS_DECNUM_FIELD(signal),
-+	SYSFS_DECNUM_FIELD(finish),
-+	SYSFS_DECNUM_FIELD(hsint),
-+	SYSFS_DECNUM_FIELD(vsint),
-+	SYSFS_DECNUM_FIELD(edwint),
-+	SYSFS_DECNUM_FIELD(flush),
-+	SYSFS_DECNUM_FIELD(reset),
-+	SYSFS_DECNUM_FIELD(nfield),
-+	SYSFS_SYMBOL_FIELD(field, even, odd),
-+	SYSFS_SYMBOL_FIELD(fifo, neither, empty, almost_full),
-+	SYSFS_HEXNUM_FIELD(rev),
-+	SYSFS_HEXNUM_FIELD(id));
-+
-+SYSFS_RO_REG(imr, imr,
-+	SYSFS_DECNUM_FIELD(sigmsk),
-+	SYSFS_DECNUM_FIELD(finishmsk),
-+	SYSFS_DECNUM_FIELD(hsmsk),
-+	SYSFS_DECNUM_FIELD(vsmsk),
-+	SYSFS_DECNUM_FIELD(edwmsk),
-+	SYSFS_DECNUM_FIELD(ones));
-+
-+SYSFS_RO_REG(busdir, busdir,
-+	SYSFS_SYMBOL_FIELD(dir, host_to_local, local_to_host));
-+
-+SYSFS_RW_REG(siglblid, siglblid,
-+	SYSFS_DECNUM_FIELD(sigid),
-+	SYSFS_DECNUM_FIELD(lblid));
-+
-+static struct attribute *gs_registers_attributes[] = {
-+	&dev_attr_pmode.attr,
-+	&dev_attr_smode1.attr,
-+	&dev_attr_smode2.attr,
-+	&dev_attr_srfsh.attr,
-+	&dev_attr_synch1.attr,
-+	&dev_attr_synch2.attr,
-+	&dev_attr_syncv.attr,
-+	&dev_attr_dispfb1.attr,
-+	&dev_attr_display1.attr,
-+	&dev_attr_dispfb2.attr,
-+	&dev_attr_display2.attr,
-+	&dev_attr_extbuf.attr,
-+	&dev_attr_extdata.attr,
-+	&dev_attr_extwrite.attr,
-+	&dev_attr_bgcolor.attr,
-+	&dev_attr_csr.attr,		/* FIXME: Too lowlevel for sysfs? */
-+	&dev_attr_imr.attr,		/* FIXME: Too lowlevel for sysfs? */
-+	&dev_attr_busdir.attr,		/* FIXME: Too lowlevel for sysfs? */
-+	&dev_attr_siglblid.attr,	/* FIXME: Too lowlevel for sysfs? */
-+	NULL
-+};
-+
-+static struct attribute_group gs_registers_attribute_group = {
-+	.attrs = gs_registers_attributes
-+};
-+
-+static int __init gs_sysfs_init(void)
-+{
-+	struct device *gs_dev = gs_device();	/* FIXME: Is this method appropriate? */
-+	int err;
-+
-+	if (!gs_dev) {
-+		pr_err("gs-sysfs: Failed to retrieve gs device\n");
-+		err = -ENXIO;
-+		goto gs_dev_err;
-+	}
-+
-+	registers_kobj = kobject_create_and_add("registers", &gs_dev->kobj);
-+	if (!registers_kobj) {
-+		pr_err("gs-sysfs: Failed to create and add register kernel object\n");
-+		err = -ENOMEM;
-+		goto kobj_err;
-+	}
-+
-+	err = sysfs_create_group(registers_kobj, &gs_registers_attribute_group);
-+	if (err) {
-+		pr_err("gs-sysfs: Failed to create register sysfs group\n");
-+		goto group_err;
-+	}
-+
-+	return 0;
-+
-+group_err:
-+	kobject_del(registers_kobj);
-+
-+kobj_err:
-+gs_dev_err:
-+	return err;
-+}
-+
-+static void __exit gs_sysfs_exit(void)
-+{
-+	kobject_del(registers_kobj);
-+}
-+
-+module_init(gs_sysfs_init);
-+module_exit(gs_sysfs_exit);
-+
-+MODULE_DESCRIPTION("PlayStation 2 Graphics Synthesizer sysfs driver");
-+MODULE_AUTHOR("Fredrik Noring");
-+MODULE_LICENSE("GPL");
+ #define SYSFS_RO_REG(reg, str, ...)					\
+ 	SYSFS_SHOW(reg, str, __VA_ARGS__)				\
+ 	static DEVICE_ATTR(reg, S_IRUGO, show_##reg, NULL)
+ 
+ #define SYSFS_RW_REG(reg, str, ...)					\
+ 	SYSFS_SHOW(reg, str, __VA_ARGS__)				\
+-	static DEVICE_ATTR(reg, S_IRUGO, show_##reg, NULL)
++	SYSFS_STORE(reg, str, __VA_ARGS__)				\
++	static DEVICE_ATTR(reg, S_IRUGO | S_IWUSR, show_##reg, store_##reg)
+ 
+ SYSFS_RW_REG(pmode, pmode,
+ 	SYSFS_DECNUM_FIELD(en1),
+@@ -412,7 +547,7 @@ static struct attribute_group gs_registers_attribute_group = {
+ 
+ static int __init gs_sysfs_init(void)
+ {
+-	struct device *gs_dev = gs_device();	/* FIXME: Is this method appropriate? */
++	struct device *gs_dev = gs_device_driver();	/* FIXME: Is this method appropriate? */
+ 	int err;
+ 
+ 	if (!gs_dev) {
 -- 
 2.21.0
 
