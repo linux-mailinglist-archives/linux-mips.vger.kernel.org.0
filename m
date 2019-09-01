@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 855EFA4A36
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 17:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C63A4A37
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 17:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728734AbfIAPu3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 11:50:29 -0400
-Received: from pio-pvt-msa1.bahnhof.se ([79.136.2.40]:56864 "EHLO
-        pio-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726552AbfIAPu3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 11:50:29 -0400
+        id S1726552AbfIAPum (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 11:50:42 -0400
+Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:57800 "EHLO
+        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726260AbfIAPum (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 11:50:42 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTP id BCC1B3F73E
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:50:27 +0200 (CEST)
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 37E20402D7
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:50:41 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -21,20 +21,19 @@ X-Spam-Level:
 X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         tests=[BAYES_00=-1.9, URIBL_BLOCKED=0.001]
         autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa1.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id aKX_22ltDbSv for <linux-mips@vger.kernel.org>;
-        Sun,  1 Sep 2019 17:50:26 +0200 (CEST)
+Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3ia7rdVHrTBq for <linux-mips@vger.kernel.org>;
+        Sun,  1 Sep 2019 17:50:40 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id E90993F708
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:50:26 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 17:50:26 +0200
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 85C8C3FBF6
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:50:40 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 17:50:40 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     linux-mips@vger.kernel.org
-Subject: [PATCH 039/120] MIPS: PS2: ROM: Read extended information for a
- given ROM file
-Message-ID: <5ea0f2d9e2cb3475661c922ee1b1b05367293c63.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 040/120] MIPS: PS2: ROM: Read and decode the ROMVER file
+Message-ID: <01d431fa1e7c4b03bb95d5a7016677958a09abd3.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -46,193 +45,109 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The extended information (EXTINFO) is metadata about ROM files, often
-but not always containing file date, version and brief comments.
+The ROMVER file contains information on the ROM version, the machine
+region, the machine type (CEX for retail, DEX for debug, or TOOL) and
+the date the ROM was created.
 
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
- arch/mips/include/asm/mach-ps2/rom.h |  22 ++++++
- arch/mips/ps2/rom.c                  | 106 +++++++++++++++++++++++++++
- 2 files changed, 128 insertions(+)
+ arch/mips/include/asm/mach-ps2/rom.h | 30 ++++++++++++++++++++++++++++
+ arch/mips/ps2/rom.c                  | 28 ++++++++++++++++++++++++++
+ 2 files changed, 58 insertions(+)
 
 diff --git a/arch/mips/include/asm/mach-ps2/rom.h b/arch/mips/include/asm/mach-ps2/rom.h
-index f2c35788ddfb..4cc3fcffaa59 100644
+index 4cc3fcffaa59..42e520f32f65 100644
 --- a/arch/mips/include/asm/mach-ps2/rom.h
 +++ b/arch/mips/include/asm/mach-ps2/rom.h
-@@ -69,6 +69,25 @@ struct rom_file {
- 	const struct rom_dir_entry *next;
- };
+@@ -123,6 +123,36 @@ ssize_t rom_read_file(const struct rom_dir dir,
+ struct rom_extinfo rom_read_extinfo(const char *name,
+ 	const void *buffer, size_t size);
  
 +/**
-+ * struct rom_extinfo - extended ROM file information
-+ * @version: version number
++ * struct rom_ver - ROM version
++ * @number: ROM version number
++ * @region: ROM region with ``'J'`` for Japan, ``'E'`` for Europe,
++ * 	``'C'`` for China, and ``'A'`` or ``'H'`` for the USA
++ * @type: ROM type with ``'C'`` for retail (CEX), ``'D'`` for debug (DEX),
++ * 	and `'T'`` for TOOL, or ``'-'`` for undefined
 + * @date: date ROM was created
 + * @date.year: year ROM was created
 + * @date.month: month ROM was created
 + * @date.day: day ROM was created
-+ * @comment: comment or the empty string
++ *
++ * Note that the Namco System 246 arcade systems are TOOL types as well.
++ *
++ * A ROM version is considered to be invalid if @number is zero, in which
++ * case all members are zero except @region and @type that are ``'-'``.
 + */
-+struct rom_extinfo {
-+	int version;
++struct rom_ver {
++	int number;
++	char region;
++	char type;
 +	struct {
 +		int year;
 +		int month;
 +		int day;
 +	} date;
-+	const char *comment;
 +};
 +
- extern struct rom_dir rom0_dir;		/* ROM0 directory (boot) */
- extern struct rom_dir rom1_dir;		/* ROM1 directory (DVD) */
- 
-@@ -101,6 +120,9 @@ extern struct rom_dir rom1_dir;		/* ROM1 directory (DVD) */
- ssize_t rom_read_file(const struct rom_dir dir,
- 	const char *name, void *buffer, size_t size, loff_t offset);
- 
-+struct rom_extinfo rom_read_extinfo(const char *name,
-+	const void *buffer, size_t size);
++struct rom_ver rom_version(void);
 +
  bool rom_empty_dir(const struct rom_dir dir);
  
  bool rom_terminating_file(const struct rom_file file);
 diff --git a/arch/mips/ps2/rom.c b/arch/mips/ps2/rom.c
-index 840d37a199d8..a510832e26d7 100644
+index a510832e26d7..32ae8ec839c4 100644
 --- a/arch/mips/ps2/rom.c
 +++ b/arch/mips/ps2/rom.c
-@@ -66,6 +66,7 @@
-  * a specific address.
-  */
- 
-+#include <linux/bcd.h>
- #include <linux/build_bug.h>
- #include <linux/errno.h>
- #include <linux/init.h>
-@@ -108,6 +109,32 @@ struct rom_dir_entry {
- 	u32 size;
- };
- 
-+/**
-+ * enum rom_extinfo_entry_type - EXTINFO &rom_extinfo_entry.type for a ROM file
-+ * @rom_extinfo_entry_date: BCD of day, month and year follows as 4 byte data
-+ * @rom_extinfo_entry_version: version number is in &rom_extinfo_entry.value
-+ * @rom_extinfo_entry_comment: NUL terminated comment string follows as data
-+ * @rom_extinfo_entry_unknown: Unclear, but seems to indicate file is aligned
-+ */
-+enum rom_extinfo_entry_type {
-+	rom_extinfo_entry_date		= 1,
-+	rom_extinfo_entry_version	= 2,
-+	rom_extinfo_entry_comment	= 3,
-+	rom_extinfo_entry_unknown	= 0x7f
-+};
-+
-+/**
-+ * struct rom_extinfo_entry - raw 4-byte EXTINFO entry for a ROM file
-+ * @value: only known use is the version number for &rom_extinfo_entry_version
-+ * @size: size in bytes of following data
-+ * @type: &rom_extinfo_entry_type type
-+ */
-+struct rom_extinfo_entry {
-+	u16 value;
-+	u8 size;
-+	u8 type;
-+};
-+
- /**
-  * rom_align_file_size - align ROM file size to 16 byte boundaries
-  * @size: possibly unaligned ROM size in bytes
-@@ -257,6 +284,84 @@ ssize_t rom_read_file(const struct rom_dir dir,
+@@ -362,6 +362,27 @@ struct rom_extinfo rom_read_extinfo(const char *name,
  }
- EXPORT_SYMBOL_GPL(rom_read_file);
+ EXPORT_SYMBOL_GPL(rom_read_extinfo);
  
 +/**
-+ * rom_read_extinfo - read EXTINFO for a ROM file
-+ * @name: name of ROM file, used for error reporting
-+ * @buffer: pointer to EXTINFO data
-+ * @size: size of EXTINFO data
++ * rom_version - read the ROMVER file in ROM0
 + *
-+ * Return: EXTINFO for ROM file, where undefined members are zero or the empty
-+ * 	string in the case of the comment
++ * Context: any
++ * Return: ROM version; or, if reading failed, all members zeroed except
++ *      @region and @type that are set to ``'-'``
 + */
-+struct rom_extinfo rom_read_extinfo(const char *name,
-+	const void *buffer, size_t size)
++struct rom_ver rom_version(void)
 +{
-+	struct rom_extinfo ei = { .comment = "" };
-+	struct rom_extinfo_entry entry;
-+	const u8 *buf = buffer;
-+	size_t i = 0;
++	struct rom_ver v = { };
++	char buffer[20] = { };
++	ssize_t r = rom_read_file(rom0_dir, "ROMVER",
++		buffer, sizeof(buffer) - 1, 0);
 +
-+	/*
-+	 * As an example, three EXTINFO entries for a ROM file might look
-+	 * like this in binary form:
-+	 *
-+	 * 00 00 04 01 03 04 02 20 01 01 00 02 00 00 08 03  ................
-+	 * 53 74 64 69 6f 00 00 00                          Stdio...
-+	 *
-+	 * The first entry is the date 2002-04-03, the second entry is the
-+	 * version 0x101, and the last entry is the comment "Stdio".
-+	 */
-+
-+	while (i + sizeof(entry) <= size) {
-+		const u8 *data = &buf[i + sizeof(entry)];
-+
-+		memcpy(&entry, &buf[i], sizeof(entry));
-+		i += sizeof(entry) + entry.size;
-+
-+		if (i > size) {
-+			pr_debug("%s: %s: Invalid entry size %zu > %zu\n",
-+				__func__, name, i, size);
-+			break;
-+		}
-+
-+		switch (entry.type) {
-+		case rom_extinfo_entry_date:
-+			if (entry.size == 4) {
-+				ei.date.day   = bcd2bin(data[0]);
-+				ei.date.month = bcd2bin(data[1]);
-+				ei.date.year  = bcd2bin(data[2]) +
-+						bcd2bin(data[3]) * 100;
-+			} else
-+				pr_debug("%s: %s: Invalid date size %u\n",
-+					__func__, name, entry.size);
-+			break;
-+
-+		case rom_extinfo_entry_version:
-+			ei.version = entry.value;
-+			break;
-+
-+		case rom_extinfo_entry_comment:
-+			if (entry.size > 0 && data[entry.size - 1] == '\0') {
-+				ei.comment = (const char *)data;
-+			} else
-+				pr_debug("%s: %s: Malformed comment\n",
-+					__func__, name);
-+			break;
-+
-+		case rom_extinfo_entry_unknown:
-+			/* Ignore */
-+			break;
-+
-+		default:
-+			pr_debug("%s: %s: Invalid type %d\n",
-+				__func__, name, entry.type);
-+		}
-+	}
-+
-+	return ei;
++	return r > 0 && sscanf(buffer, "%4x%c%c%4d%2d%2d",
++				&v.number, &v.region, &v.type,
++				&v.date.year, &v.date.month, &v.date.day) == 6 ?
++		v : (struct rom_ver) { .region = '-', .type = '-' };
 +}
-+EXPORT_SYMBOL_GPL(rom_read_extinfo);
++EXPORT_SYMBOL_GPL(rom_version);
 +
  /**
   * find_reset_string - find the offset to the ``"RESET"`` string, if it exists
   * @rom: ROM to search in
-@@ -525,6 +630,7 @@ static struct rom_dir __init rom_dir_init(const char *name,
+@@ -629,12 +650,19 @@ static struct rom_dir __init rom_dir_init(const char *name,
+ 
  static int __init ps2_rom_init(void)
  {
++	struct rom_ver v;
++
  	BUILD_BUG_ON(sizeof(struct rom_dir_entry) != 16);
-+	BUILD_BUG_ON(sizeof(struct rom_extinfo_entry) != 4);
+ 	BUILD_BUG_ON(sizeof(struct rom_extinfo_entry) != 4);
  
  	rom0_dir = rom_dir_init("rom0", ROM0_BASE, ROM0_SIZE);
  	rom1_dir = rom_dir_init("rom1", ROM1_BASE, ROM1_SIZE);
+ 
++	v = rom_version();
++	pr_info("rom0: Version %04x %c %c %04d-%02d-%02d\n",
++		v.number, v.region, v.type,
++		v.date.year, v.date.month, v.date.day);
++
+ 	return 0;
+ }
+ arch_initcall(ps2_rom_init);
 -- 
 2.21.0
 
