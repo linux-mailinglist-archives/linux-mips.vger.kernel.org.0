@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BB6A4AA5
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB179A4AA6
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728496AbfIAQfV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 12:35:21 -0400
-Received: from pio-pvt-msa1.bahnhof.se ([79.136.2.40]:60740 "EHLO
+        id S1728616AbfIAQfd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 12:35:33 -0400
+Received: from pio-pvt-msa1.bahnhof.se ([79.136.2.40]:60758 "EHLO
         pio-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726727AbfIAQfU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:35:20 -0400
+        with ESMTP id S1726727AbfIAQfd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:35:33 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 3A9533F752
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:35:19 +0200 (CEST)
+        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 962F23F752
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:35:31 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -23,18 +23,18 @@ X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         autolearn=ham autolearn_force=no
 Received: from pio-pvt-msa1.bahnhof.se ([127.0.0.1])
         by localhost (pio-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fkrI8xPP0jOh for <linux-mips@vger.kernel.org>;
-        Sun,  1 Sep 2019 18:35:18 +0200 (CEST)
+        with ESMTP id qzbCWvMS0Tdg for <linux-mips@vger.kernel.org>;
+        Sun,  1 Sep 2019 18:35:30 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 9BFB53F393
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:35:18 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 18:35:18 +0200
+        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id E67533F393
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:35:30 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 18:35:30 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     linux-mips@vger.kernel.org
-Subject: [PATCH 113/120] USB: OHCI: OHCI_INTR_MIE workaround for freeze on
- the PlayStation 2
-Message-ID: <786e161e0e7f52ca14e635e3f1225e76b5f7833b.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 114/120] MIPS: PS2: Workaround for unexpected uLaunchELF CP0
+ Status user mode
+Message-ID: <05de0a34e2f6e28a611838c615c562bb12e3f680.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -46,59 +46,35 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-OHCI_INTR_MIE needs to be disabled, most likely due to a hardware bug.
-Without it, reading a large amount of data (> 1 GB) from a mass storage
-device results in a freeze.
+The PlayStation 2 uLaunchELF program, used as a kernel boot loader,
+starts in user mode with CP0 access enabled (CP0 Status 0x70030c11).
+This is unexpected and causes a boot freeze.
 
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
- drivers/usb/host/ohci-ps2.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ arch/mips/boot/compressed/head.S | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/usb/host/ohci-ps2.c b/drivers/usb/host/ohci-ps2.c
-index a1d446313c13..cdbcbe5ff34e 100644
---- a/drivers/usb/host/ohci-ps2.c
-+++ b/drivers/usb/host/ohci-ps2.c
-@@ -35,6 +35,7 @@ struct ps2_hcd {
- };
+diff --git a/arch/mips/boot/compressed/head.S b/arch/mips/boot/compressed/head.S
+index e3dc831e2616..6dc728d6ebea 100644
+--- a/arch/mips/boot/compressed/head.S
++++ b/arch/mips/boot/compressed/head.S
+@@ -24,6 +24,15 @@ start:
+ 	move	s2, a2
+ 	move	s3, a3
  
- static struct hc_driver __read_mostly ohci_ps2_hc_driver;
-+static irqreturn_t (*ohci_irq)(struct usb_hcd *hcd);
- 
- static void ohci_ps2_enable(struct usb_hcd *hcd)
- {
-@@ -79,6 +80,21 @@ static int ohci_ps2_reset(struct usb_hcd *hcd)
- 	return 0;
- }
- 
-+static irqreturn_t ohci_ps2_irq(struct usb_hcd *hcd)
-+{
-+	struct ohci_hcd	*ohci = hcd_to_ohci(hcd);
-+	struct ohci_regs __iomem *regs = ohci->regs;
++#ifdef CONFIG_CPU_R5900
++	# The PlayStation 2 uLaunchELF starts in user mode with
++	# CP0 access enabled (CP0 Status 0x70030c11), which is
++	# unexpected. This is corrected here:
++	li	k0, 0x30010000
++	mtc0	k0, $12
++	sync.p
++#endif /* CONFIG_CPU_R5900 */
 +
-+	/*
-+	 * OHCI_INTR_MIE needs to be disabled, most likely due to a
-+	 * hardware bug. Without it, reading a large amount of data
-+	 * (> 1 GB) from a mass storage device results in a freeze.
-+	 */
-+	ohci_writel(ohci, OHCI_INTR_MIE, &regs->intrdisable);
-+
-+	return ohci_irq(hcd);	/* Call normal IRQ handler. */
-+}
-+
- static int iopheap_alloc_dma_buffer(struct platform_device *pdev, size_t size)
- {
- 	struct device *dev = &pdev->dev;
-@@ -228,6 +244,9 @@ static int __init ohci_ps2_init(void)
- 
- 	ohci_init_driver(&ohci_ps2_hc_driver, &ps2_overrides);
- 
-+	ohci_irq = ohci_ps2_hc_driver.irq;	/* Save normal IRQ handler. */
-+	ohci_ps2_hc_driver.irq = ohci_ps2_irq;	/* Install IRQ workaround. */
-+
- 	return platform_driver_register(&ohci_hcd_ps2_driver);
- }
- module_init(ohci_ps2_init);
+ 	/* Clear BSS */
+ 	PTR_LA	a0, _edata - 4
+ 	PTR_LA	a2, _end
 -- 
 2.21.0
 
