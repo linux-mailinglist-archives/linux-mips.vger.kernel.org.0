@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FC8AA4A57
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D309A4A58
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728763AbfIAQAG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 12:00:06 -0400
-Received: from pio-pvt-msa3.bahnhof.se ([79.136.2.42]:42542 "EHLO
+        id S1728830AbfIAQBv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 12:01:51 -0400
+Received: from pio-pvt-msa3.bahnhof.se ([79.136.2.42]:42688 "EHLO
         pio-pvt-msa3.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728570AbfIAQAF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:00:05 -0400
+        with ESMTP id S1728570AbfIAQBv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:01:51 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id 83BD03F695
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:00:03 +0200 (CEST)
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id 626F33F63C
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:01:49 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -23,17 +23,18 @@ X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         autolearn=ham autolearn_force=no
 Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
         by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id UeXzNYOBe5jT for <linux-mips@vger.kernel.org>;
-        Sun,  1 Sep 2019 18:00:02 +0200 (CEST)
+        with ESMTP id ToJMRHal35WH for <linux-mips@vger.kernel.org>;
+        Sun,  1 Sep 2019 18:01:48 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id AF39F3F615
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:00:02 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 18:00:02 +0200
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id B3E6A3F58C
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:01:48 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 18:01:48 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     linux-mips@vger.kernel.org
-Subject: [PATCH 060/120] MIPS: PS2: SIF: Enable the IOP to issue SIF RPCs
-Message-ID: <84fc3fb4961e1b598b772889d28817819d93f74e.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 061/120] MIPS: PS2: SIF: sif_rpc_bind() to request an RPC
+ server connection
+Message-ID: <560734ac45b85db15b6ad002e433c3db979084dd.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -45,128 +46,77 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Send the SIF_CMD_INIT_CMD command with option argument 1 to let the IOP
-issue remote procedure calls (RPCs). Wait for the IOP to acknowledge by
-writing a nonzero value to the SIF_SREG_RPCINIT SIF register.
+This is the first initialisation step to perform remote procedure calls.
+
+A PAGE_SIZE buffer is allocated to store RPC data. A future improvement is
+to make the buffer size adjustable.
 
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
- drivers/ps2/sif.c | 51 +++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ arch/mips/include/asm/mach-ps2/sif.h |  2 ++
+ drivers/ps2/sif.c                    | 38 ++++++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
 
-diff --git a/drivers/ps2/sif.c b/drivers/ps2/sif.c
-index b6c348974bdb..7a5aab785237 100644
---- a/drivers/ps2/sif.c
-+++ b/drivers/ps2/sif.c
-@@ -51,6 +51,8 @@
- #define SIF0_BUFFER_SIZE	PAGE_SIZE
- #define SIF1_BUFFER_SIZE	PAGE_SIZE
- 
-+#define SIF_SREG_RPCINIT	0
-+
- struct sif_rpc_packet_header {
- 	u32 rec_id;
- 	void *pkt_addr;
-@@ -74,6 +76,10 @@ struct sif_rpc_bind_packet {
- 	u32 server_id;
+diff --git a/arch/mips/include/asm/mach-ps2/sif.h b/arch/mips/include/asm/mach-ps2/sif.h
+index 3d163980a4be..1d9a7ede2fb5 100644
+--- a/arch/mips/include/asm/mach-ps2/sif.h
++++ b/arch/mips/include/asm/mach-ps2/sif.h
+@@ -85,4 +85,6 @@ struct sif_rpc_client
+ 	struct completion done;
  };
  
-+struct sif_cmd_change_addr_packet {
-+	iop_addr_t addr;
-+};
++int sif_rpc_bind(struct sif_rpc_client *client, u32 server_id);
 +
- struct sif_cmd_handler
- {
- 	sif_cmd_cb cb;
-@@ -103,6 +109,25 @@ static void cmd_write_sreg(const struct sif_cmd_header *header,
- 	spin_unlock_irqrestore(&sregs_lock, flags);
+ #endif /* __ASM_MACH_PS2_SIF_H */
+diff --git a/drivers/ps2/sif.c b/drivers/ps2/sif.c
+index 7a5aab785237..ecb26239518c 100644
+--- a/drivers/ps2/sif.c
++++ b/drivers/ps2/sif.c
+@@ -387,6 +387,44 @@ static irqreturn_t sif0_dma_handler(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
  }
  
-+static s32 read_sreg(u32 reg)
++/**
++ * sif_rpc_bind - request a connection to an IOP RPC server
++ * @client: RPC client object to initialise
++ * @server_id: identification number for the requested IOP RPC server
++ *
++ * A %PAGE_SIZE buffer is allocated to store RPC data. A future improvement is
++ * to make its size adjustable.
++ *
++ * Return: 0 on success, otherwise a negative error number
++ */
++int sif_rpc_bind(struct sif_rpc_client *client, u32 server_id)
 +{
-+	unsigned long flags;
-+	s32 val;
-+
-+	BUG_ON(reg >= ARRAY_SIZE(sregs));
-+
-+	spin_lock_irqsave(&sregs_lock, flags);
-+	val = sregs[reg];
-+	spin_unlock_irqrestore(&sregs_lock, flags);
-+
-+	return val;
-+}
-+
-+static bool sif_sreg_rpcinit(void)
-+{
-+	return read_sreg(SIF_SREG_RPCINIT) != 0;
-+}
-+
- /**
-  * sif_write_msflag - write to set main-to-sub flag register bits
-  * @mask: MSFLAG register bit values to set
-@@ -296,6 +321,11 @@ static int sif_cmd_copy(u32 cmd_id, const void *pkt, size_t pktsize,
- 	return sif_cmd_opt_copy(cmd_id, 0, pkt, pktsize, dst, src, nbytes);
- }
- 
-+static int sif_cmd_opt(u32 cmd_id, u32 opt, const void *pkt, size_t pktsize)
-+{
-+	return sif_cmd_opt_copy(cmd_id, opt, pkt, pktsize, 0, NULL, 0);
-+}
-+
- static int sif_cmd(u32 cmd_id, const void *pkt, size_t pktsize)
- {
- 	return sif_cmd_copy(cmd_id, pkt, pktsize, 0, NULL, 0);
-@@ -448,6 +478,17 @@ static int sif_cmd_init(dma_addr_t cmd_buffer)
- 	return sif_cmd_opt(SIF_CMD_INIT_CMD, 0, &cmd, sizeof(cmd));
- }
- 
-+static int sif_rpc_init(void)
-+{
++	const struct sif_rpc_bind_packet bind = {
++		.client    = client,
++		.server_id = server_id,
++	};
 +	int err;
 +
-+	err = sif_cmd_opt(SIF_CMD_INIT_CMD, 1, NULL, 0);
-+	if (err)
-+		return err;
++	memset(client, 0, sizeof(*client));
++	init_completion(&client->done);
 +
-+	return completed(sif_sreg_rpcinit) ? 0 : -EIO;
-+}
++	client->client_size_max = SIF0_BUFFER_SIZE;
++	client->client_buffer = (void *)__get_free_page(GFP_DMA);
++	if (client->client_buffer == NULL)
++		return -ENOMEM;
 +
- static int sif_read_subaddr(dma_addr_t *subaddr)
- {
- 	if (!completed(sif_smflag_cmdinit))
-@@ -593,6 +634,8 @@ EXPORT_SYMBOL_GPL(iop_error_message);
-  *
-  * 12. Enable the IOP to issue SIF commands.
-  *
-+ * 13. Enable the IOP to issue SIF RPCs.
-+ *
-  * Return: 0 on success, otherwise a negative error number
-  */
- static int __init sif_init(void)
-@@ -603,6 +646,7 @@ static int __init sif_init(void)
- 	BUILD_BUG_ON(sizeof(struct sif_rpc_request_end_packet) != 32);
- 	BUILD_BUG_ON(sizeof(struct sif_rpc_bind_packet) != 20);
- 	BUILD_BUG_ON(sizeof(struct sif_cmd_header) != 16);
-+	BUILD_BUG_ON(sizeof(struct sif_cmd_change_addr_packet) != 4);
- 
- 	sif_disable_dma();
- 
-@@ -659,8 +703,15 @@ static int __init sif_init(void)
- 		goto err_cmd_init;
- 	}
- 
-+	err = sif_rpc_init();
++	err = sif_cmd(SIF_CMD_RPC_BIND, &bind, sizeof(bind));
 +	if (err) {
-+		pr_err("sif: Failed to initialise RPC with %d\n", err);
-+		goto err_rpc_init;
++		free_page((unsigned long)client->client_buffer);
++		return err;
 +	}
 +
- 	return 0;
- 
-+err_rpc_init:
- err_cmd_init:
- 	free_irq(IRQ_DMAC_SIF0, NULL);
- 
++	wait_for_completion(&client->done);
++
++	return client->server ? 0 : -ENXIO;
++}
++EXPORT_SYMBOL_GPL(sif_rpc_bind);
++
+ static void cmd_rpc_end(const struct sif_cmd_header *header,
+ 	const void *data, void *arg)
+ {
 -- 
 2.21.0
 
