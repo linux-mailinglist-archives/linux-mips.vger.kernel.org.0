@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE7AA4A22
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 17:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA43A4A23
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 17:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729173AbfIAPr1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 11:47:27 -0400
-Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:57456 "EHLO
-        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729159AbfIAPr1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 11:47:27 -0400
+        id S1729179AbfIAPrl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 11:47:41 -0400
+Received: from pio-pvt-msa1.bahnhof.se ([79.136.2.40]:56658 "EHLO
+        pio-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729175AbfIAPrl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 11:47:41 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 3513340484
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:47:25 +0200 (CEST)
+        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 9571C3F73E
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:47:38 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -21,19 +21,19 @@ X-Spam-Level:
 X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         tests=[BAYES_00=-1.9, URIBL_BLOCKED=0.001]
         autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id YLwueEjwB2Ts for <linux-mips@vger.kernel.org>;
-        Sun,  1 Sep 2019 17:47:24 +0200 (CEST)
+Received: from pio-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fOXa-0EfqYe5 for <linux-mips@vger.kernel.org>;
+        Sun,  1 Sep 2019 17:47:37 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 5CF484047D
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:47:24 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 17:47:24 +0200
+        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id BB6693F708
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:47:37 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 17:47:37 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     linux-mips@vger.kernel.org
-Subject: [PATCH 026/120] MIPS: PS2: Interrupt controller (INTC) IRQ support
-Message-ID: <4396db79b04c1eb3e24e051d1a406d25506875a3.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 027/120] MIPS: PS2: DMAC: Define DMA controller registers
+Message-ID: <896e5738996b0cf2a7b8670c68610b5c45b31877.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -45,167 +45,215 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+The DMA controller handles transfers between main memory and peripheral
+devices or the scratch-pad RAM (SPR)[1].
+
+References:
+
+[1] "EE User's Manual", version 6.0, Sony Computer Entertainment Inc.,
+    pp. 23-24, 41-80.
+
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
-I'm not sure edges or HARDIRQS_SW_RESEND etc. are needed.
----
- arch/mips/include/asm/mach-ps2/irq.h |   2 +
- arch/mips/ps2/Makefile               |   1 +
- arch/mips/ps2/intc-irq.c             | 112 +++++++++++++++++++++++++++
- arch/mips/ps2/irq.c                  |   2 +
- 4 files changed, 117 insertions(+)
- create mode 100644 arch/mips/ps2/intc-irq.c
+ arch/mips/include/asm/mach-ps2/dmac.h | 189 ++++++++++++++++++++++++++
+ 1 file changed, 189 insertions(+)
+ create mode 100644 arch/mips/include/asm/mach-ps2/dmac.h
 
-diff --git a/arch/mips/include/asm/mach-ps2/irq.h b/arch/mips/include/asm/mach-ps2/irq.h
-index d6f72a7e37a3..071c8139dabe 100644
---- a/arch/mips/include/asm/mach-ps2/irq.h
-+++ b/arch/mips/include/asm/mach-ps2/irq.h
-@@ -71,4 +71,6 @@
- #define IRQ_C0_DMAC	51
- #define IRQ_C0_IRQ7	55
- 
-+int __init intc_irq_init(void);
-+
- #endif /* __ASM_MACH_PS2_IRQ_H */
-diff --git a/arch/mips/ps2/Makefile b/arch/mips/ps2/Makefile
-index d5d089c61381..ccdfb80c9f03 100644
---- a/arch/mips/ps2/Makefile
-+++ b/arch/mips/ps2/Makefile
-@@ -1,2 +1,3 @@
-+obj-y		+= intc-irq.o
- obj-y		+= irq.o
- obj-y		+= memory.o
-diff --git a/arch/mips/ps2/intc-irq.c b/arch/mips/ps2/intc-irq.c
+diff --git a/arch/mips/include/asm/mach-ps2/dmac.h b/arch/mips/include/asm/mach-ps2/dmac.h
 new file mode 100644
-index 000000000000..36cdc3dd31ca
+index 000000000000..30a0f72eeab3
 --- /dev/null
-+++ b/arch/mips/ps2/intc-irq.c
-@@ -0,0 +1,112 @@
++++ b/arch/mips/include/asm/mach-ps2/dmac.h
+@@ -0,0 +1,189 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * PlayStation 2 Interrupt controller (INTC) IRQs
++ * PlayStation 2 DMA controller (DMAC)
 + *
 + * Copyright (C) 2019 Fredrik Noring
 + */
 +
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/ioport.h>
-+#include <linux/module.h>
-+#include <linux/types.h>
++/**
++ * DOC:
++ *
++ * The DMA controller handles transfers between main memory and peripheral
++ * devices or the scratch-pad RAM (SPR).
++ *
++ * The DMAC arbitrates the main bus at the same time, and supports chain
++ * mode which switches transfer addresses according to DMA tags attached to
++ * the transfer. The stall control synchronises two-channel transfers with
++ * priority control.
++ *
++ * Data is transferred in 128-bit words that must be aligned. Bus snooping
++ * is not performed.
++ */
 +
-+#include <asm/io.h>
-+#include <asm/irq_cpu.h>
-+#include <asm/mipsregs.h>
++#ifndef __ASM_MACH_PS2_DMAC_H
++#define __ASM_MACH_PS2_DMAC_H
 +
-+#include <asm/mach-ps2/irq.h>
++#include <asm/types.h>
 +
-+static void intc_reverse_mask(struct irq_data *data)
-+{
-+	outl(BIT(data->irq - IRQ_INTC), INTC_MASK);
-+}
++/* Channel 0: Vector core operation unit 0 (VU0) interface (VIF0) */
++#define DMAC_VIF0_CHCR		0x10008000	/* VIF0 channel control */
++#define DMAC_VIF0_MADR		0x10008010	/* VIF0 memory address */
++#define DMAC_VIF0_QWC		0x10008020	/* VIF0 quadword count */
++#define DMAC_VIF0_TADR		0x10008030	/* VIF0 tag address */
++#define DMAC_VIF0_ASR0		0x10008040	/* VIF0 address stack 0 */
++#define DMAC_VIF0_ASR1		0x10008050	/* VIF0 address stack 1 */
 +
-+static void intc_mask_ack(struct irq_data *data)
-+{
-+	const unsigned int bit = BIT(data->irq - IRQ_INTC);
++/* Channel 1: Vector core operation unit 1 (VU1) interface (VIF1) */
++#define DMAC_VIF1_CHCR		0x10009000	/* VIF1 channel control */
++#define DMAC_VIF1_MADR		0x10009010	/* VIF1 memory address */
++#define DMAC_VIF1_QWC		0x10009020	/* VIF1 quadword count */
++#define DMAC_VIF1_TADR		0x10009030	/* VIF1 tag address */
++#define DMAC_VIF1_ASR0		0x10009040	/* VIF1 address stack 0 */
++#define DMAC_VIF1_ASR1		0x10009050	/* VIF1 address stack 1 */
 +
-+	outl(bit, INTC_MASK);
-+	outl(bit, INTC_STAT);
-+}
++/* Channel 2: Graphics Synthesizer interface (GIF) */
++#define DMAC_GIF_CHCR		0x1000a000	/* GIF channel control */
++#define DMAC_GIF_MADR		0x1000a010	/* GIF memory address */
++#define DMAC_GIF_QWC		0x1000a020	/* GIF quadword count */
++#define DMAC_GIF_TADR		0x1000a030	/* GIF tag address */
++#define DMAC_GIF_ASR0		0x1000a040	/* GIF address stack 0 */
++#define DMAC_GIF_ASR1		0x1000a050	/* GIF address stack 1 */
 +
-+#define INTC_IRQ_TYPE(irq_, name_)				\
-+	{							\
-+		.irq = irq_,					\
-+		.irq_chip = {					\
-+			.name = name_,				\
-+			.irq_unmask = intc_reverse_mask,	\
-+			.irq_mask = intc_reverse_mask,		\
-+			.irq_mask_ack = intc_mask_ack,		\
-+		}						\
-+	}
++/* Channel 3: From image processor unit (IPU) */
++#define DMAC_FIPU_CHCR		0x1000b000	/* From IPU channel control */
++#define DMAC_FIPU_MADR		0x1000b010	/* From IPU memory address */
++#define DMAC_FIPU_QWC		0x1000b020	/* From IPU quadword count */
 +
-+static struct {
-+	unsigned int irq;
-+	struct irq_chip irq_chip;
-+} intc_irqs[] = {
-+	INTC_IRQ_TYPE(IRQ_INTC_GS,     "INTC GS"),
-+	INTC_IRQ_TYPE(IRQ_INTC_SBUS,   "INTC SBUS"),
-+	INTC_IRQ_TYPE(IRQ_INTC_VB_ON,  "INTC VB on"),
-+	INTC_IRQ_TYPE(IRQ_INTC_VB_OFF, "INTC VB off"),
-+	INTC_IRQ_TYPE(IRQ_INTC_VIF0,   "INTC VIF0"),
-+	INTC_IRQ_TYPE(IRQ_INTC_VIF1,   "INTC VIF1"),
-+	INTC_IRQ_TYPE(IRQ_INTC_VU0,    "INTC VU0"),
-+	INTC_IRQ_TYPE(IRQ_INTC_VU1,    "INTC VU1"),
-+	INTC_IRQ_TYPE(IRQ_INTC_IPU,    "INTC IPU"),
-+	INTC_IRQ_TYPE(IRQ_INTC_TIMER0, "INTC timer0"),
-+	INTC_IRQ_TYPE(IRQ_INTC_TIMER1, "INTC timer1"),
-+	INTC_IRQ_TYPE(IRQ_INTC_TIMER2, "INTC timer2"),
-+	INTC_IRQ_TYPE(IRQ_INTC_TIMER3, "INTC timer3"),
-+	INTC_IRQ_TYPE(IRQ_INTC_SFIFO,  "INTC SFIFO"),
-+	INTC_IRQ_TYPE(IRQ_INTC_VU0WD,  "INTC VU0WD"),
-+	INTC_IRQ_TYPE(IRQ_INTC_PGPU,   "INTC PGPU"),
-+};
++/* Channel 4: To image processor unit (IPU) */
++#define DMAC_TIPU_CHCR		0x1000b400	/* To IPU channel control */
++#define DMAC_TIPU_MADR		0x1000b410	/* To IPU memory address */
++#define DMAC_TIPU_QWC		0x1000b420	/* To IPU quadword count */
++#define DMAC_TIPU_TADR		0x1000b430	/* To IPU tag address */
 +
-+static irqreturn_t intc_cascade(int irq, void *data)
-+{
-+	unsigned int pending, irq_intc;
-+	irqreturn_t status = IRQ_NONE;
++/* Channel 5: Sub-system interface 0 (SIF0) */
++#define DMAC_SIF0_CHCR		0x1000c000	/* SIF0 channel control */
++#define DMAC_SIF0_MADR		0x1000c010	/* SIF0 memory address */
++#define DMAC_SIF0_QWC		0x1000c020	/* SIF0 quadword count */
 +
-+	for (pending = inl(INTC_STAT); pending; pending &= ~BIT(irq_intc)) {
-+		irq_intc = __fls(pending);
++/* Channel 6: Sub-system interface 1 (SIF1) */
++#define DMAC_SIF1_CHCR		0x1000c400	/* SIF1 channel control */
++#define DMAC_SIF1_MADR		0x1000c410	/* SIF1 memory address */
++#define DMAC_SIF1_QWC		0x1000c420	/* SIF1 quadword count */
++#define DMAC_SIF1_TADR		0x1000c430	/* SIF1 tag address */
 +
-+		if (generic_handle_irq(irq_intc + IRQ_INTC) < 0)
-+			spurious_interrupt();
-+		else
-+			status = IRQ_HANDLED;
-+	}
++/* Channel 7: Sub-system interface 2 (SIF2) */
++#define DMAC_SIF2_CHCR		0x1000c800	/* SIF2 channel control */
++#define DMAC_SIF2_MADR		0x1000c810	/* SIF2 memory address */
++#define DMAC_SIF2_QWC		0x1000c820	/* SIF2 quadword count */
 +
-+	return status;
-+}
++/* Channel 8: From scratch-pad RAM (SPR) */
++#define DMAC_FSPR_CHCR		0x1000d000	/* From SPR channel control */
++#define DMAC_FSPR_MADR		0x1000d010	/* From SPR memory address */
++#define DMAC_FSPR_QWC		0x1000d020	/* From SPR quadword count */
++#define DMAC_FSPR_SADR		0x1000d080	/* From SPR address */
 +
-+static struct irqaction cascade_intc_irqaction = {
-+	.name = "INTC cascade",
-+	.handler = intc_cascade,
-+};
++/* Channel 9: To scratch-pad RAM (SPR) */
++#define DMAC_TSPR_CHCR		0x1000d400	/* To SPR channel control */
++#define DMAC_TSPR_MADR		0x1000d410	/* To SPR memory address */
++#define DMAC_TSPR_QWC		0x1000d420	/* To SPR quadword count */
++#define DMAC_TSPR_TADR		0x1000d430	/* To SPR tag address */
++#define DMAC_TSPR_SADR		0x1000d480	/* To SPR address */
 +
-+int __init intc_irq_init(void)
-+{
-+	size_t i;
-+	int err;
++#define DMAC_CHCR_DIR_TOMEM	(0 << 0)	/* Direction to memory */
++#define DMAC_CHCR_DIR_FROMMEM	(1 << 0)	/* Direction from memory */
++#define DMAC_CHCR_MOD_NORMAL	(0 << 2)	/* Mode normal */
++#define DMAC_CHCR_MOD_CHAIN	(1 << 2)	/* Mode chain */
++#define DMAC_CHCR_MOD_ILEAVE	(2 << 2)	/* Mode interleave */
++#define DMAC_CHCR_ASP_NONE	(0 << 4)	/* 0 address stack pointer */
++#define DMAC_CHCR_ASP_1ADDR	(1 << 4)	/* 1 address stack pointer */
++#define DMAC_CHCR_ASP_2ADDR	(2 << 4)	/* 2 address stack pointer */
++#define DMAC_CHCR_TTE_OFF	(0 << 6)	/* Tag transfer enable off */
++#define DMAC_CHCR_TTE_ON	(1 << 6)	/* Tag transfer enable on */
++#define DMAC_CHCR_TIE_OFF	(0 << 7)	/* Tag interrupt enable off */
++#define DMAC_CHCR_TIE_ON	(1 << 7)	/* Tag interrupt enable on */
++#define DMAC_CHCR_STR_STOP	(0 << 8)	/* Stop DMA */
++#define DMAC_CHCR_STR_START	(1 << 8)	/* Start DMA */
 +
-+	/* Clear mask and status registers */
-+	outl(inl(INTC_MASK), INTC_MASK);
-+	outl(inl(INTC_STAT), INTC_STAT);
++#define DMAC_CHCR_STOP		DMAC_CHCR_STR_STOP
++#define DMAC_CHCR_BUSY		DMAC_CHCR_STR_START
++#define DMAC_CHCR_SENDN		(DMAC_CHCR_DIR_FROMMEM	| \
++				 DMAC_CHCR_MOD_NORMAL	| \
++				 DMAC_CHCR_ASP_NONE	| \
++				 DMAC_CHCR_TTE_OFF	| \
++				 DMAC_CHCR_TIE_OFF	| \
++				 DMAC_CHCR_STR_START)
++#define DMAC_CHCR_SENDN_TIE	(DMAC_CHCR_DIR_FROMMEM	| \
++				 DMAC_CHCR_MOD_NORMAL	| \
++				 DMAC_CHCR_ASP_NONE	| \
++				 DMAC_CHCR_TTE_OFF	| \
++				 DMAC_CHCR_TIE_ON	| \
++				 DMAC_CHCR_STR_START)
++#define DMAC_CHCR_SENDC		(DMAC_CHCR_DIR_FROMMEM	| \
++				 DMAC_CHCR_MOD_CHAIN	| \
++				 DMAC_CHCR_ASP_NONE	| \
++				 DMAC_CHCR_TTE_OFF	| \
++				 DMAC_CHCR_TIE_OFF	| \
++				 DMAC_CHCR_STR_START)
++#define DMAC_CHCR_SENDC_TTE	(DMAC_CHCR_DIR_FROMMEM	| \
++				 DMAC_CHCR_MOD_CHAIN	| \
++				 DMAC_CHCR_ASP_NONE	| \
++				 DMAC_CHCR_TTE_ON	| \
++				 DMAC_CHCR_TIE_OFF	| \
++				 DMAC_CHCR_STR_START)
++#define DMAC_CHCR_RECVN		(DMAC_CHCR_DIR_TOMEM	| \
++				 DMAC_CHCR_MOD_NORMAL	| \
++				 DMAC_CHCR_ASP_NONE	| \
++				 DMAC_CHCR_TTE_OFF	| \
++				 DMAC_CHCR_TIE_OFF	| \
++				 DMAC_CHCR_STR_START)
++#define DMAC_CHCR_RECVC_TIE	(DMAC_CHCR_DIR_TOMEM	| \
++				 DMAC_CHCR_MOD_CHAIN	| \
++				 DMAC_CHCR_ASP_NONE	| \
++				 DMAC_CHCR_TTE_OFF	| \
++				 DMAC_CHCR_TIE_ON	| \
++				 DMAC_CHCR_STR_START)
 +
-+	for (i = 0; i < ARRAY_SIZE(intc_irqs); i++)
-+		irq_set_chip_and_handler(intc_irqs[i].irq,
-+			&intc_irqs[i].irq_chip, handle_level_irq);
++#define DMAC_CTRL	0x1000e000	/* DMAC control */
++#define DMAC_STAT	0x1000e010	/* DMAC status */
++#define DMAC_PCR	0x1000e020	/* DMAC priority control */
++#define DMAC_SQWC	0x1000e030	/* DMAC skip quadword */
++#define DMAC_RBSR	0x1000e040	/* DMAC ring buffer size */
++#define DMAC_RBOR	0x1000e050	/* DMAC ring buffer offset */
++#define DMAC_STADR	0x1000e060	/* DMAC stall address */
 +
-+	/* FIXME: Is HARDIRQS_SW_RESEND needed? Are these edge types needed? */
-+	irq_set_irq_type(IRQ_INTC_GS, IRQ_TYPE_EDGE_FALLING);
-+	irq_set_irq_type(IRQ_INTC_SBUS, IRQ_TYPE_EDGE_FALLING);
-+	irq_set_irq_type(IRQ_INTC_VB_ON, IRQ_TYPE_EDGE_RISING);
-+	irq_set_irq_type(IRQ_INTC_VB_OFF, IRQ_TYPE_EDGE_FALLING);
++/*
++ * The lower 16 bits are status bits and the upper 16 bits are mask bits.
++ * Status bit cleared by writing 1. Mask bits are reversed by writing 1.
++ */
++#define DMAC_STAT_MASK	0x1000e010
 +
-+	err = setup_irq(IRQ_C0_INTC, &cascade_intc_irqaction);
-+	if (err)
-+		pr_err("irq: Failed to setup INTC IRQs (err = %d)\n", err);
++#define DMAC_STAT_VIF0S	(1 << 0)	/* Ch0 interrupt status VIF0 */
++#define DMAC_STAT_VIF1S	(1 << 1)	/* Ch1 interrupt status VIF1 */
++#define DMAC_STAT_GIFS	(1 << 2)	/* Ch2 interrupt status GIF */
++#define DMAC_STAT_FIPUS	(1 << 3)	/* Ch3 interrupt status from IPU */
++#define DMAC_STAT_TIPUS	(1 << 4)	/* Ch4 interrupt status to IPU */
++#define DMAC_STAT_SIF0S	(1 << 5)	/* Ch5 interrupt status SIF0 */
++#define DMAC_STAT_SIF1S	(1 << 6)	/* Ch6 interrupt status SIF1 */
++#define DMAC_STAT_SIF2S	(1 << 7)	/* Ch7 interrupt status SIF2 */
++#define DMAC_STAT_FSPRS	(1 << 8)	/* Ch8 interrupt status from SPR */
++#define DMAC_STAT_TSPRS	(1 << 9)	/* Ch9 interrupt status to SPR */
++#define DMAC_STAT_SIS	(1 << 13)	/* DMA stall interrupt status */
++#define DMAC_STAT_MEIS	(1 << 14)	/* MFIFO empty interrupt status */
++#define DMAC_STAT_BEIS	(1 << 15)	/* BUSERR interrupt status */
++#define DMAC_STAT_VIF0M	(1 << 16)	/* Ch0 interrupt mask VIF0 */
++#define DMAC_STAT_VIF1M	(1 << 17)	/* Ch1 interrupt mask VIF1 */
++#define DMAC_STAT_GIFM	(1 << 18)	/* Ch2 interrupt mask GIF */
++#define DMAC_STAT_FIPUM	(1 << 19)	/* Ch3 interrupt mask from IPU */
++#define DMAC_STAT_TIPUM	(1 << 20)	/* Ch4 interrupt mask to IPU */
++#define DMAC_STAT_SIF0M	(1 << 21)	/* Ch5 interrupt mask SIF0 */
++#define DMAC_STAT_SIF1M	(1 << 22)	/* Ch6 interrupt mask SIF1 */
++#define DMAC_STAT_SIF2M	(1 << 23)	/* Ch7 interrupt mask SIF2 */
++#define DMAC_STAT_FSPRM	(1 << 24)	/* Ch8 interrupt mask from SPR */
++#define DMAC_STAT_TSPRM	(1 << 25)	/* Ch9 interrupt mask to SPR */
++#define DMAC_STAT_SIM	(1 << 29)	/* DMA stall interrupt mask */
++#define DMAC_STAT_MEIM	(1 << 30)	/* MFIFO empty interrupt mask */
 +
-+	return err;
-+}
-diff --git a/arch/mips/ps2/irq.c b/arch/mips/ps2/irq.c
-index 09047e128ce8..935171a1e3bd 100644
---- a/arch/mips/ps2/irq.c
-+++ b/arch/mips/ps2/irq.c
-@@ -17,6 +17,8 @@
- void __init arch_init_irq(void)
- {
- 	mips_cpu_irq_init();
++#define DMAC_ENABLER	0x1000f520	/* Acquisition of DMA suspend status */
++#define DMAC_ENABLEW	0x1000f590	/* DMA suspend control */
 +
-+	intc_irq_init();
- }
- 
- asmlinkage void plat_irq_dispatch(void)
++#endif /* __ASM_MACH_PS2_DMAC_H */
 -- 
 2.21.0
 
