@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E10A9A4A69
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D18BA4A76
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728961AbfIAQMP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 12:12:15 -0400
-Received: from pio-pvt-msa1.bahnhof.se ([79.136.2.40]:58630 "EHLO
-        pio-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726121AbfIAQMP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:12:15 -0400
+        id S1728863AbfIAQQZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 12:16:25 -0400
+Received: from pio-pvt-msa3.bahnhof.se ([79.136.2.42]:43984 "EHLO
+        pio-pvt-msa3.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728848AbfIAQQZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:16:25 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 70D1D3F752
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:12:13 +0200 (CEST)
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id D28733F63C
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:16:22 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -21,19 +21,19 @@ X-Spam-Level:
 X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         tests=[BAYES_00=-1.9, URIBL_BLOCKED=0.001]
         autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa1.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id YtAymFzjaPTx for <linux-mips@vger.kernel.org>;
-        Sun,  1 Sep 2019 18:12:12 +0200 (CEST)
+Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id sqZkzGQXo5OL for <linux-mips@vger.kernel.org>;
+        Sun,  1 Sep 2019 18:16:22 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id C1A913F73E
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:12:12 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 18:12:12 +0200
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id 292CD3F58C
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:16:22 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 18:16:21 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     linux-mips@vger.kernel.org
-Subject: [PATCH 072/120] MIPS: PS2: IOP: SIF printk command support
-Message-ID: <53102a0102944d3c118f5cfc8cda3210284f59d6.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 073/120] MIPS: PS2: IOP: Heap memory allocate and free
+Message-ID: <e0aad3b9a5462e17e0a910aca63a356834d29673.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -45,72 +45,148 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Allow IOP modules to print kernel messages, with kernel log levels. This
-greatly simplifies debugging of subsequent IOP modules.
-
-IOP messages are prefixed with "iop: " in the kernel log.
+The IOP heap memory operations are serviced by an IOP module linked from
+read-only memory (ROM).
 
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
- drivers/ps2/iop-module.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ arch/mips/include/asm/mach-ps2/iop-heap.h | 19 +++++
+ drivers/ps2/Makefile                      |  1 +
+ drivers/ps2/iop-heap.c                    | 90 +++++++++++++++++++++++
+ 3 files changed, 110 insertions(+)
+ create mode 100644 arch/mips/include/asm/mach-ps2/iop-heap.h
+ create mode 100644 drivers/ps2/iop-heap.c
 
-diff --git a/drivers/ps2/iop-module.c b/drivers/ps2/iop-module.c
-index bb4814b5d3c4..18020b3673d3 100644
---- a/drivers/ps2/iop-module.c
-+++ b/drivers/ps2/iop-module.c
-@@ -892,6 +892,30 @@ int iop_module_request(const char *name, int version, const char *arg)
- }
- EXPORT_SYMBOL_GPL(iop_module_request);
- 
-+/**
-+ * cmd_printk - IOP module kernel log printk command
-+ * @header: SIF command header
-+ * @void: message to print
-+ * @arg: optional argument to sif_request_cmd, set to %NULL
+diff --git a/arch/mips/include/asm/mach-ps2/iop-heap.h b/arch/mips/include/asm/mach-ps2/iop-heap.h
+new file mode 100644
+index 000000000000..ee96e2ffba83
+--- /dev/null
++++ b/arch/mips/include/asm/mach-ps2/iop-heap.h
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * PlayStation 2 input/output processor (IOP) heap memory
 + *
-+ * The command allows IOP modules to print kernel messages, with kernel log
-+ * levels. This greatly simplifies debugging of subsequent IOP modules. IOP
-+ * messages are prefixed with "iop: " in the kernel log.
++ * Copyright (C) 2019 Fredrik Noring
 + */
-+static void cmd_printk(const struct sif_cmd_header *header,
-+	const void *data, void *arg)
++
++#ifndef __ASM_MACH_PS2_IOP_HEAP_H
++#define __ASM_MACH_PS2_IOP_HEAP_H
++
++#include <linux/types.h>
++
++#include <asm/mach-ps2/iop.h>
++
++iop_addr_t iop_alloc(size_t nbyte);
++
++int iop_free(iop_addr_t baddr);
++
++#endif /* __ASM_MACH_PS2_IOP_HEAP_H */
+diff --git a/drivers/ps2/Makefile b/drivers/ps2/Makefile
+index b04e4d3c3374..02a5756cb059 100644
+--- a/drivers/ps2/Makefile
++++ b/drivers/ps2/Makefile
+@@ -1,3 +1,4 @@
++obj-m				+= iop-heap.o
+ obj-m				+= iop-memory.o
+ obj-m				+= iop-module.o
+ obj-m				+= iop-registers.o
+diff --git a/drivers/ps2/iop-heap.c b/drivers/ps2/iop-heap.c
+new file mode 100644
+index 000000000000..f803401f59e5
+--- /dev/null
++++ b/drivers/ps2/iop-heap.c
+@@ -0,0 +1,90 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * PlayStation 2 input/output processor (IOP) heap memory
++ *
++ * Copyright (C) 2019 Fredrik Noring
++ */
++
++#include <linux/init.h>
++#include <linux/types.h>
++#include <linux/module.h>
++
++#include <asm/mach-ps2/iop-error.h>
++#include <asm/mach-ps2/iop-heap.h>
++#include <asm/mach-ps2/sif.h>
++
++/**
++ * enum iop_heap_rpc_ops - I/O processor (IOP) heap RPC operations
++ * @rpo_alloc: allocate IOP memory
++ * @rpo_free: free IOP memory
++ * @rpo_load: FIXME
++ */
++enum iop_heap_rpc_ops {
++	rpo_alloc = 1,
++	rpo_free  = 2,
++	rpo_load  = 3,
++};
++
++static struct sif_rpc_client iop_heap_rpc;
++
++/**
++ * iop_alloc - allocate IOP memory
++ * @nbyte: number of bytes to allocate
++ *
++ * Context: sleep
++ * Return: IOP address, or zero if the allocation failed
++ */
++iop_addr_t iop_alloc(size_t nbyte)
 +{
-+	const char *msg = data;
++	const u32 size_arg = nbyte;
++	u32 iop_addr;
 +
-+	if (msg[0] == KERN_SOH[0]) {
-+		const char fmt[] = { msg[0], msg[1],
-+			'i', 'o', 'p', ':', ' ', '%', 's', '\0' };
++	if (size_arg != nbyte)
++		return 0;
 +
-+		printk(fmt, &msg[2]);
-+	} else
-+		printk("iop: %s", msg);
++	return sif_rpc(&iop_heap_rpc, rpo_alloc,
++		&size_arg, sizeof(size_arg),
++		&iop_addr, sizeof(iop_addr)) < 0 ? 0 : iop_addr;
++}
++EXPORT_SYMBOL(iop_alloc);
++
++/**
++ * iop_free - free previously allocated IOP memory
++ * @baddr: IOP address, or zero
++ *
++ * Context: sleep
++ * Return: 0 on success, otherwise a negative error number
++ */
++int iop_free(iop_addr_t baddr)
++{
++	const u32 addr_arg = baddr;
++	s32 status;
++	int err;
++
++	if (!baddr)
++		return 0;
++
++	err = sif_rpc(&iop_heap_rpc, rpo_free,
++		&addr_arg, sizeof(addr_arg),
++		&status, sizeof(status));
++
++	return err < 0 ? err : errno_for_iop_error(status);
++}
++EXPORT_SYMBOL(iop_free);
++
++static int __init iop_heap_init(void)
++{
++	return sif_rpc_bind(&iop_heap_rpc, SIF_SID_HEAP);
 +}
 +
- static int __init iop_module_init(void)
- {
- 	int err;
-@@ -902,6 +926,12 @@ static int __init iop_module_init(void)
- 		return -ENOMEM;
- 	}
- 
-+	err = sif_request_cmd(SIF_CMD_PRINTK, cmd_printk, NULL);
-+	if (err < 0) {
-+		pr_err("iop-module: Failed request printk cmd with %d\n", err);
-+		goto err_printk;
-+	}
++static void __exit iop_heap_exit(void)
++{
++	sif_rpc_unbind(&iop_heap_rpc);
++}
 +
- 	err = sif_rpc_bind(&load_file_rpc_client, SIF_SID_LOAD_MODULE);
- 	if (err < 0) {
- 		pr_err("iop-module: Failed to bind load module with %d\n", err);
-@@ -910,6 +940,7 @@ static int __init iop_module_init(void)
- 
- 	return 0;
- 
-+err_printk:
- err_bind:
- 	root_device_unregister(iop_module_device);
- 
++module_init(iop_heap_init);
++module_exit(iop_heap_exit);
++
++MODULE_DESCRIPTION("PlayStation 2 input/output processor (IOP) heap memory");
++MODULE_AUTHOR("Fredrik Noring");
++MODULE_LICENSE("GPL");
 -- 
 2.21.0
 
