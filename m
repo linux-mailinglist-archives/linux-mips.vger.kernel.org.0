@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B38A4AA8
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E82BA4AA9
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728621AbfIAQf7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 12:35:59 -0400
-Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:33524 "EHLO
+        id S1728654AbfIAQgJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 12:36:09 -0400
+Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:33538 "EHLO
         pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726727AbfIAQf7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:35:59 -0400
+        with ESMTP id S1726727AbfIAQgJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:36:09 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 20FC83FC34
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:35:58 +0200 (CEST)
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 0DCF33FC34
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:36:08 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -23,18 +23,17 @@ X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         autolearn=ham autolearn_force=no
 Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
         by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id U4-H2k3DEMNQ for <linux-mips@vger.kernel.org>;
-        Sun,  1 Sep 2019 18:35:57 +0200 (CEST)
+        with ESMTP id Rc02y_NILEGS for <linux-mips@vger.kernel.org>;
+        Sun,  1 Sep 2019 18:36:07 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 69FD73FBF6
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:35:57 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 18:35:57 +0200
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 72DB73FBF6
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:36:07 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 18:36:07 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     linux-mips@vger.kernel.org
-Subject: [PATCH 116/120] MIPS: PS2: Define workarounds related to the
- PlayStation 2
-Message-ID: <5b2bda95c84d149338fcf3d6d583063f33f173fc.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 117/120] MIPS: PS2: Define R5900 feature overrides
+Message-ID: <656c226804a2a6a93c4da13b8a95da2c60e905d7.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -49,40 +48,51 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
- arch/mips/include/asm/mach-ps2/war.h | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
- create mode 100644 arch/mips/include/asm/mach-ps2/war.h
+ .../asm/mach-ps2/cpu-feature-overrides.h      | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 arch/mips/include/asm/mach-ps2/cpu-feature-overrides.h
 
-diff --git a/arch/mips/include/asm/mach-ps2/war.h b/arch/mips/include/asm/mach-ps2/war.h
+diff --git a/arch/mips/include/asm/mach-ps2/cpu-feature-overrides.h b/arch/mips/include/asm/mach-ps2/cpu-feature-overrides.h
 new file mode 100644
-index 000000000000..f2ebbd31e9ee
+index 000000000000..e9b218e657f7
 --- /dev/null
-+++ b/arch/mips/include/asm/mach-ps2/war.h
-@@ -0,0 +1,24 @@
++++ b/arch/mips/include/asm/mach-ps2/cpu-feature-overrides.h
+@@ -0,0 +1,35 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * PlayStation 2 workarounds
++ * PlayStation 2 CPU features
 + *
 + * Copyright (C) 2010-2013 Jürgen Urban
 + */
 +
-+#ifndef __ASM_MIPS_MACH_PS2_WAR_H
-+#define __ASM_MIPS_MACH_PS2_WAR_H
++#ifndef __ASM_MACH_PS2_CPU_FEATURE_OVERRIDES_H
++#define __ASM_MACH_PS2_CPU_FEATURE_OVERRIDES_H
 +
-+#define R4600_V1_INDEX_ICACHEOP_WAR	0
-+#define R4600_V1_HIT_CACHEOP_WAR	0
-+#define R4600_V2_HIT_CACHEOP_WAR	0
-+#define R5432_CP0_INTERRUPT_WAR		0
-+#define BCM1250_M3_WAR			0
-+#define SIBYTE_1956_WAR			0
-+#define MIPS4K_ICACHE_REFILL_WAR	0
-+#define MIPS_CACHE_SYNC_WAR		0
-+#define TX49XX_ICACHE_INDEX_INV_WAR	0
-+#define ICACHE_REFILLS_WORKAROUND_WAR	0
-+#define R10000_LLSC_WAR			0
-+#define MIPS34K_MISSED_ITLB_WAR		0
++#define cpu_has_llsc			0
++#define cpu_has_4k_cache		1
++#define cpu_has_divec			1
++#define cpu_has_4kex			1
++#define cpu_has_counter			1
++#define cpu_has_cache_cdex_p		0
++#define cpu_has_cache_cdex_s		0
++#define cpu_has_mcheck			0
++#define cpu_has_nofpuex			1
++#define cpu_has_mipsmt			0
++#define cpu_has_vce			0
++#define cpu_has_dsp			0
++#define cpu_has_userlocal		0
++#define cpu_has_64bit_addresses		0
++#define cpu_has_64bit   		1	/* FIXME */
++#define cpu_has_64bit_gp_regs		0	/* FIXME */
++#define cpu_has_64bit_zero_reg		0	/* FIXME */
++#define cpu_vmbits			31
++#define cpu_has_clo_clz			0
++#define cpu_has_ejtag			0
++#define cpu_has_ic_fills_f_dc		0
++#define cpu_has_inclusive_pcaches	0
++#define cpu_has_fpu 			0	/* FIXME */
 +
-+#endif /* __ASM_MIPS_MACH_PS2_WAR_H */
++#endif /* __ASM_MACH_PS2_CPU_FEATURE_OVERRIDES_H */
 -- 
 2.21.0
 
