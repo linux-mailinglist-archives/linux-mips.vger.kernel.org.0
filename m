@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45500A4A7A
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E07F0A4A7B
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 18:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728677AbfIAQRz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 12:17:55 -0400
-Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:60206 "EHLO
-        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728496AbfIAQRz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:17:55 -0400
+        id S1728570AbfIAQSU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 12:18:20 -0400
+Received: from pio-pvt-msa3.bahnhof.se ([79.136.2.42]:44238 "EHLO
+        pio-pvt-msa3.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728496AbfIAQSU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 12:18:20 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id EA83A3FC34
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:17:51 +0200 (CEST)
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id B6F443F65F
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:18:17 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -21,20 +21,19 @@ X-Spam-Level:
 X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         tests=[BAYES_00=-1.9, URIBL_BLOCKED=0.001]
         autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id QbEEVNTHL-ag for <linux-mips@vger.kernel.org>;
-        Sun,  1 Sep 2019 18:17:51 +0200 (CEST)
+Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fHsoRL-32Jy5 for <linux-mips@vger.kernel.org>;
+        Sun,  1 Sep 2019 18:18:17 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 0D8B33F62D
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:17:50 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 18:17:50 +0200
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id EE5183F58C
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 18:18:16 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 18:18:16 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     linux-mips@vger.kernel.org
-Subject: [PATCH 076/120] MIPS: PS2: GS: Define privileged Graphics
- Synthesizer registers
-Message-ID: <51240db505d6c5acf84b80f044ce5393dfa907fd.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 077/120] MIPS: PS2: GS: Write privileged registers
+Message-ID: <758ac4deba96217ee4ec40dc06429951e4d4495c.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -46,57 +45,102 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-All privileged GS registers are write-only except CSR (system status)
-and SIGLBLID (signal and label id)[1][2]. Reading write-only registers
-is emulated by shadow registers in memory. Reading unwritten registers
-is not permitted. Predicate functions indicate whether registers are
-readable.
+All privileged Graphics Synthesizer register functions follow the same
+pattern. For example, the CSR register has the following functions:
 
-The following privileged registers are available:
+    bool gs_valid_csr(void);
+    void gs_writeq_csr(u64 value);
 
-Register | Description
----------+---------------------------------------------------
-PMODE    | PCRTC mode setting
-SMODE1   | Mode setting related to video synchronisation
-SMODE2   | Mode setting related to video synchronisation
-SYNCH1   | Mode setting related to video synchronisation
-SYNCH2   | Mode setting related to video synchronisation
-SYNCHV   | Mode setting related to video synchronisation
-SRFSH    | DRAM refresh
-DISPFB1  | Setting for rectangular area read output circuit 1
-DISPLAY1 | Setting for rectangular area read output circuit 1
-DISPFB2  | Setting for rectangular area read output circuit 2
-DISPLAY2 | Setting for rectangular area read output circuit 2
-EXTBUF   | Feedback write buffer setting
-EXTDATA  | Feedback write setting
-EXTWRITE | Feedback write control
-BGCOLOR  | Background colour setting
-CSR      | System status
-IMR      | Interrupt mask control
-BUSDIR   | Host interface bus switching
-SIGLBLID | Signal and label identification value read
----------+---------------------------------------------------
+gs_valid_csr() indicates whether CSR is readable, which is always true,
+since CSR is read-write in hardware. The IMR register however is write-
+only in hardware, so its shadow register is only valid and readable once
+it is written at least once. Reading nonvalid registers is not permitted.
 
-References:
-
-[1] "EE User's Manual", version 6.0, Sony Computer Entertainment Inc.,
-    p. 26.
-
-[2] "GS User's Manual", version 6.0, Sony Computer Entertainment Inc.,
-    pp. 142-157, 159.
+The following registers have functions: PMODE, SMODE1, SMODE2, SYNCH1,
+SYNCH2, SYNCV, SRFSH, DISPFB1, DISPLAY1, DISPFB2, DISPLAY2, EXTBUF,
+EXTDATA, EXTWRITE, BGCOLOR, CSR, IMR, BUSDIR and SIGLBLID.
 
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
- arch/mips/include/asm/mach-ps2/gs-registers.h | 548 ++++++++++++++++++
- 1 file changed, 548 insertions(+)
- create mode 100644 arch/mips/include/asm/mach-ps2/gs-registers.h
+ arch/mips/include/asm/mach-ps2/gs-registers.h |  48 +++++++
+ drivers/ps2/Makefile                          |   2 +
+ drivers/ps2/gs-registers.c                    | 121 ++++++++++++++++++
+ 3 files changed, 171 insertions(+)
+ create mode 100644 drivers/ps2/gs-registers.c
 
 diff --git a/arch/mips/include/asm/mach-ps2/gs-registers.h b/arch/mips/include/asm/mach-ps2/gs-registers.h
-new file mode 100644
-index 000000000000..ab59c751190f
---- /dev/null
+index ab59c751190f..291b503447e4 100644
+--- a/arch/mips/include/asm/mach-ps2/gs-registers.h
 +++ b/arch/mips/include/asm/mach-ps2/gs-registers.h
-@@ -0,0 +1,548 @@
+@@ -545,4 +545,52 @@ struct gs_siglblid {
+ 	u64 lblid : 32;
+ };
+ 
++#define GS_DECLARE_VALID_REG(reg)			\
++	bool gs_valid_##reg(void)
++
++#define GS_DECLARE_WQ_REG(reg)				\
++	void gs_writeq_##reg(u64 value)
++
++#define GS_DECLARE_RW_REG(reg)				\
++	GS_DECLARE_VALID_REG(reg);			\
++	GS_DECLARE_WQ_REG(reg)
++
++/**
++ * DOC:
++ *
++ * All privileged Graphics Synthesizer register functions follow the same
++ * pattern. For example, the CSR register has the following functions::
++ *
++ *	bool gs_valid_csr(void);
++ *	void gs_writeq_csr(u64 value);
++ *
++ * gs_valid_csr() indicates whether CSR is readable, which is always true,
++ * since CSR is read-write in hardware. The IMR register however is write-
++ * only in hardware, so its shadow register is only valid and readable once
++ * it is written at least once. Reading nonvalid registers is not permitted.
++ *
++ * The following registers have functions: PMODE, SMODE1, SMODE2, SRFSH,
++ * SYNCH1, SYNCH2, SYNCV, DISPFB1 , DISPLAY1, DISPFB2, DISPLAY2, EXTBUF,
++ * EXTDATA, EXTWRITE, BGCOLOR, CSR, IMR, BUSDIR and SIGLBLID.
++ */
++GS_DECLARE_RW_REG(pmode);
++GS_DECLARE_RW_REG(smode1);
++GS_DECLARE_RW_REG(smode2);
++GS_DECLARE_RW_REG(srfsh);
++GS_DECLARE_RW_REG(synch1);
++GS_DECLARE_RW_REG(synch2);
++GS_DECLARE_RW_REG(syncv);
++GS_DECLARE_RW_REG(dispfb1 );
++GS_DECLARE_RW_REG(display1);
++GS_DECLARE_RW_REG(dispfb2);
++GS_DECLARE_RW_REG(display2);
++GS_DECLARE_RW_REG(extbuf);
++GS_DECLARE_RW_REG(extdata);
++GS_DECLARE_RW_REG(extwrite);
++GS_DECLARE_RW_REG(bgcolor);
++GS_DECLARE_RW_REG(csr);
++GS_DECLARE_RW_REG(imr);
++GS_DECLARE_RW_REG(busdir);
++GS_DECLARE_RW_REG(siglblid);
++
+ #endif /* __ASM_MACH_PS2_GS_REGISTERS_H */
+diff --git a/drivers/ps2/Makefile b/drivers/ps2/Makefile
+index dd00eff52ef3..533ab86d6a58 100644
+--- a/drivers/ps2/Makefile
++++ b/drivers/ps2/Makefile
+@@ -1,3 +1,5 @@
++obj-$(CONFIG_PS2_GS)		+= gs-registers.o
++
+ obj-m				+= iop-heap.o
+ obj-m				+= iop-irq.o
+ obj-m				+= iop-memory.o
+diff --git a/drivers/ps2/gs-registers.c b/drivers/ps2/gs-registers.c
+new file mode 100644
+index 000000000000..781604b874b5
+--- /dev/null
++++ b/drivers/ps2/gs-registers.c
+@@ -0,0 +1,121 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * PlayStation 2 privileged Graphics Synthesizer (GS) registers
@@ -104,547 +148,120 @@ index 000000000000..ab59c751190f
 + * Copyright (C) 2019 Fredrik Noring
 + */
 +
-+/**
-+ * DOC: Privileged Graphics Synthesizer (GS) registers
-+ *
-+ * All privileged GS registers are write-only except CSR (system status)
-+ * and SIGLBLID (signal and label id). Reading write-only registers is
-+ * emulated by shadow registers in memory. Reading unwritten registers
-+ * is not permitted. Predicate functions indicate whether registers are
-+ * readable.
-+ */
++#include <linux/build_bug.h>
++#include <linux/ctype.h>
++#include <linux/delay.h>
++#include <linux/module.h>
++#include <linux/spinlock.h>
++#include <linux/types.h>
 +
-+#ifndef __ASM_MACH_PS2_GS_REGISTERS_H
-+#define __ASM_MACH_PS2_GS_REGISTERS_H
++#include <asm/io.h>
 +
-+#include <asm/types.h>
++#include <asm/mach-ps2/gs-registers.h>
 +
-+/* Privileged GS registers must be accessed using LD/SD instructions. */
++/* Shadow write-only privileged Graphics Synthesizer registers. */
++static struct {
++	spinlock_t lock;	/* Must be taken to access shadow registers. */
 +
-+#define GS_PMODE	0x12000000  /* (WO) PCRTC mode setting */
-+#define GS_SMODE1	0x12000010  /* (WO) Sync */
-+#define GS_SMODE2	0x12000020  /* (WO) Sync */
-+#define GS_SRFSH	0x12000030  /* (WO) DRAM refresh */
-+#define GS_SYNCH1	0x12000040  /* (WO) Sync */
-+#define GS_SYNCH2	0x12000050  /* (WO) Sync */
-+#define GS_SYNCV	0x12000060  /* (WO) Sync */
-+#define GS_DISPFB1	0x12000070  /* (WO) Rectangle read output circuit 1 */
-+#define GS_DISPLAY1	0x12000080  /* (WO) Rectangle read output circuit 1 */
-+#define GS_DISPFB2	0x12000090  /* (WO) Rectangle read output circuit 2 */
-+#define GS_DISPLAY2	0x120000a0  /* (WO) Rectangle read output circuit 2 */
-+#define GS_EXTBUF	0x120000b0  /* (WO) Feedback write buffer */
-+#define GS_EXTDATA	0x120000c0  /* (WO) Feedback write setting */
-+#define GS_EXTWRITE	0x120000d0  /* (WO) Feedback write function control */
-+#define GS_BGCOLOR	0x120000e0  /* (WO) Background color setting */
-+#define GS_CSR		0x12001000  /* (RW) System status */
-+#define GS_IMR		0x12001010  /* (WO) Interrupt mask control */
-+#define GS_BUSDIR	0x12001040  /* (WO) Host interface bus switching */
-+#define GS_SIGLBLID	0x12001080  /* (RW) Signal and label id */
-+
-+/**
-+ * enum gs_pmode_mmod - &gs_pmode.mmod alpha blending value
-+ * @gs_mmod_circuit1: FIXME
-+ * @gs_mmod_alp: FIXME
-+ */
-+enum gs_pmode_mmod {
-+	gs_mmod_circuit1,
-+	gs_mmod_alp
++	struct {
++		u64 value;
++		bool valid;	/* True if value is written at least once. */
++	} pmode,
++	  smode1,
++	  smode2,
++	  srfsh,
++	  synch1,
++	  synch2,
++	  syncv,
++	  dispfb1,
++	  display1,
++	  dispfb2,
++	  display2,
++	  extbuf,
++	  extdata,
++	  extwrite,
++	  bgcolor,
++	  imr,
++	  busdir;
++} gs_registers = {
++	.lock = __SPIN_LOCK_UNLOCKED(gs_registers.lock),
 +};
 +
-+/**
-+ * enum gs_pmode_amod - &gs_pmode.amod OUT1 alpha output
-+ * @gs_amod_circuit1: FIXME
-+ * @gs_amod_circuit2: FIXME
-+ */
-+enum gs_pmode_amod {
-+	gs_amod_circuit1,
-+	gs_amod_circuit2
-+};
++/* Read-write registers are not shadowed and are always valid. */
++#define GS_DEFINE_VALID_RW_REG(reg, addr)				\
++	bool gs_valid_##reg(void)					\
++	{								\
++		return true;						\
++	}								\
++	EXPORT_SYMBOL_GPL(gs_valid_##reg)
 +
-+/**
-+ * enum gs_pmode_slbg - &gs_pmode.slbg alpha blending method
-+ * @gs_slbg_circuit2: FIXME
-+ * @gs_slbg_bgcolor: FIXME
-+ */
-+enum gs_pmode_slbg {
-+	gs_slbg_circuit2,
-+	gs_slbg_bgcolor
-+};
++/* Read-write registers are not shadowed and trivially write. */
++#define GS_DEFINE_WQ_RW_REG(reg, addr)					\
++	void gs_writeq_##reg(u64 value)					\
++	{								\
++		outq(value, addr);					\
++	}								\
++	EXPORT_SYMBOL_GPL(gs_writeq_##reg)
 +
-+/**
-+ * struct gs_pmode - PMODE privileged Graphics Synthesizer register
-+ * @en1: enable read circuit 1
-+ * @en2: enable read circuit 2
-+ * @crtmd: CRT output switching (always 001)
-+ * @mmod: alpha blending value
-+ * @amod: OUT1 alpha output
-+ * @slbg: alpha blending method
-+ * @alp: fixed alpha (0xff = 1.0)
-+ * @zero: must be zero
-+ */
-+struct gs_pmode {
-+	u64 en1 : 1;
-+	u64 en2 : 1;
-+	u64 crtmd : 3;
-+	u64 mmod : 1;
-+	u64 amod : 1;
-+	u64 slbg : 1;
-+	u64 alp : 8;
-+	u64 zero : 1;
-+	u64 : 47;
-+};
++/* Write-only registers are shadowed and valid only if previously written. */
++#define GS_DEFINE_VALID_WO_REG(reg, addr)				\
++	bool gs_valid_##reg(void)					\
++	{								\
++		unsigned long flags;					\
++		bool valid;						\
++		spin_lock_irqsave(&gs_registers.lock, flags);		\
++		valid = gs_registers.reg.valid;				\
++		spin_unlock_irqrestore(&gs_registers.lock, flags);	\
++		return valid;						\
++	}								\
++	EXPORT_SYMBOL_GPL(gs_valid_##reg)
 +
-+/**
-+ * enum gs_smode1_cmod - &gs_smode1.cmod value
-+ * @gs_cmod_vesa: VESA
-+ * @gs_cmod_ntsc: NTSC broadcast
-+ * @gs_cmod_pal: PAL broadcast
-+ */
-+enum gs_smode1_cmod {
-+	gs_cmod_vesa,
-+	/* Reserved */
-+	gs_cmod_ntsc = 2,
-+	gs_cmod_pal
-+};
++/* Write-only registers are shadowed and reading requires a previous write. */
++#define GS_DEFINE_WQ_WO_REG(reg, addr)					\
++	void gs_writeq_##reg(u64 value)					\
++	{								\
++		unsigned long flags;					\
++		spin_lock_irqsave(&gs_registers.lock, flags);		\
++		gs_registers.reg.value = value;				\
++		gs_registers.reg.valid = true;				\
++		outq(value, addr);					\
++		spin_unlock_irqrestore(&gs_registers.lock, flags);	\
++	}								\
++	EXPORT_SYMBOL_GPL(gs_writeq_##reg)
 +
-+/**
-+ * enum gs_smode1_gcont - &gs_smode1.gcont value
-+ * @gs_gcont_rgbyc: Output RGBYc
-+ * @gs_gcont_ycrcb: Output YCrCb
-+ */
-+enum gs_smode1_gcont {
-+	gs_gcont_rgbyc,
-+	gs_gcont_ycrcb
-+};
++/* Only CSR and SIGLBLID are read-write (RW) with hardware. */
++#define GS_DEFINE_RW_REG(reg, addr)					\
++	GS_DEFINE_VALID_RW_REG(reg, addr);				\
++	GS_DEFINE_WQ_RW_REG(reg, addr)
 +
-+/**
-+ * struct gs_smode1 - SMODE1 privileged Graphics Synthesizer register
-+ * @rc: PLL reference divider
-+ * @lc: PLL loop divider
-+ * @t1248: PLL output divider
-+ * @slck: FIXME
-+ * @cmod: @enum gs_smode1_cmod display mode (PAL, NTSC or VESA)
-+ * @ex: FIXME
-+ * @prst: PLL reset
-+ * @sint: PLL (phase-locked loop)
-+ * @xpck: FIXME
-+ * @pck2: FIXME
-+ * @spml: FIXME
-+ * @gcont: @enum gs_smode1_gcont select RGBYC or YCrCb
-+ * @phs: HSync output
-+ * @pvs: VSync output
-+ * @pehs: FIXME
-+ * @pevs: FIXME
-+ * @clksel: FIXME
-+ * @nvck: FIXME
-+ * @slck2: FIXME
-+ * @vcksel: FIXME
-+ * @vhp: FIXME
-+ *
-+ * The video clock VCK = (13500000 * @lc) / ((@t1248 + 1) * @spml * @rc).
-+ */
-+struct gs_smode1 {
-+	u64 rc : 3;
-+	u64 lc : 7;
-+	u64 t1248 : 2;
-+	u64 slck : 1;
-+	u64 cmod : 2;
-+	u64 ex : 1;
-+	u64 prst : 1;
-+	u64 sint : 1;
-+	u64 xpck : 1;
-+	u64 pck2 : 2;
-+	u64 spml : 4;
-+	u64 gcont : 1;
-+	u64 phs : 1;
-+	u64 pvs : 1;
-+	u64 pehs : 1;
-+	u64 pevs : 1;
-+	u64 clksel : 2;
-+	u64 nvck : 1;
-+	u64 slck2 : 1;
-+	u64 vcksel : 2;
-+	u64 vhp : 1;
-+	u64 : 27;
-+};
++/* The rest are write-only (WO) with reading emulated by shadow registers. */
++#define GS_DEFINE_WO_REG(reg, addr)					\
++	GS_DEFINE_VALID_WO_REG(reg, addr);				\
++	GS_DEFINE_WQ_WO_REG(reg, addr)
 +
-+/**
-+ * enum gs_smode2_intm - &gs_smode2.intm interlace mode
-+ * @gs_intm_progressive: progressive (noninterlace) mode
-+ * @gs_intm_interlace: interlace mode
-+ */
-+enum gs_smode2_intm {
-+	gs_intm_progressive,
-+	gs_intm_interlace
-+};
++GS_DEFINE_WO_REG(pmode,    GS_PMODE);
++GS_DEFINE_WO_REG(smode1,   GS_SMODE1);
++GS_DEFINE_WO_REG(smode2,   GS_SMODE2);
++GS_DEFINE_WO_REG(srfsh,    GS_SRFSH);
++GS_DEFINE_WO_REG(synch1,   GS_SYNCH1);
++GS_DEFINE_WO_REG(synch2,   GS_SYNCH2);
++GS_DEFINE_WO_REG(syncv,    GS_SYNCV);
++GS_DEFINE_WO_REG(dispfb1,  GS_DISPFB1);
++GS_DEFINE_WO_REG(display1, GS_DISPLAY1);
++GS_DEFINE_WO_REG(dispfb2,  GS_DISPFB2);
++GS_DEFINE_WO_REG(display2, GS_DISPLAY2);
++GS_DEFINE_WO_REG(extbuf,   GS_EXTBUF);
++GS_DEFINE_WO_REG(extdata,  GS_EXTDATA);
++GS_DEFINE_WO_REG(extwrite, GS_EXTWRITE);
++GS_DEFINE_WO_REG(bgcolor,  GS_BGCOLOR);
++GS_DEFINE_RW_REG(csr,      GS_CSR);		/* Read-write */
++GS_DEFINE_WO_REG(imr,      GS_IMR);
++GS_DEFINE_WO_REG(busdir,   GS_BUSDIR);
++GS_DEFINE_RW_REG(siglblid, GS_SIGLBLID);	/* Read-write */
 +
-+/**
-+ * enum gs_smode2_ffmd - &gs_smode2.ffmd FIELD or FRAME mode
-+ * @gs_ffmd_field:
-+ * @gs_ffmd_frame:
-+ *
-+ * In FIELD mode every other line is read: 0, 2, 4, ... / 1, 3, 5, ...
-+ *
-+ * In FRAME mode every line is read: 1, 2, 3, 4, 5, ...
-+ */
-+enum gs_smode2_ffmd {
-+	gs_ffmd_field,
-+	gs_ffmd_frame
-+};
-+
-+/**
-+ * enum gs_smode2_dpms - &gs_smode2.dpms VESA display power management
-+ *      signaling (DPMS) levels
-+ * @gs_dpms_on: in use
-+ * @gs_dpms_standby: blanked, low power
-+ * @gs_dpms_suspend: blanked, lower power
-+ * @gs_dpms_off: shut off, awaiting activity
-+ */
-+enum gs_smode2_dpms {
-+	gs_dpms_on,
-+	gs_dpms_standby,
-+	gs_dpms_suspend,
-+	gs_dpms_off
-+};
-+
-+/**
-+ * struct gs_smode2 - SMODE2 privileged Graphics Synthesizer register
-+ * @intm: &enum gs_smode2_intm progressive or interlace mode
-+ * @ffmd: &enum gs_smode2_ffmd FIELD or FRAME mode
-+ * @dpms: &enum gs_smode2_dpms VESA display power management signaling (DPMS)
-+ *      level
-+ */
-+struct gs_smode2 {
-+	u64 intm : 1;
-+	u64 ffmd : 1;
-+	u64 dpms : 2;
-+	u64 : 60;
-+};
-+
-+/**
-+ * struct gs_srfsh - DRAM refresh privileged Graphics Synthesizer register
-+ * @rfsh: FIXME
-+ */
-+struct gs_srfsh {
-+	u64 rfsh : 4;		/* FIXME: Number of bits? */
-+	u64 : 60;
-+};
-+
-+/**
-+ * struct gs_synch1 - SYNCH1 privileged Graphics Synthesizer register
-+ * @hfp: horizontal front porch
-+ * @hbp: horizontal back porch
-+ * @hseq: FIXME
-+ * @hsvs: FIXME
-+ * @hs: FIXME
-+ */
-+struct gs_synch1 {
-+	u64 hfp : 11;
-+	u64 hbp : 11;
-+	u64 hseq : 10;
-+	u64 hsvs : 11;
-+	u64 hs : 21;		/* FIXME: Number of bits? */
-+};
-+
-+/**
-+ * struct gs_synch2 - SYNCH2 privileged Graphics Synthesizer register
-+ * @hf: FIXME
-+ * @hb: FIXME
-+ */
-+struct gs_synch2 {
-+	u64 hf : 11;
-+	u64 hb : 11;
-+	u64 : 42;
-+};
-+
-+/**
-+ * struct gs_syncv - SYNCHV privileged Graphics Synthesizer register
-+ * @vfp: vertical front porch, halflines with color burst after video data
-+ * @vfpe: halflines without color burst after @vfp
-+ * @vbp: vertical back porch, halflines with color burst after @vbpe
-+ * @vbpe: halflines without color burst after @vbp
-+ * @vdp: halflines with with video data
-+ * @vs: halflines with VSYNC
-+ */
-+struct gs_syncv {
-+	u64 vfp : 10;
-+	u64 vfpe : 10;
-+	u64 vbp : 12;
-+	u64 vbpe : 10;
-+	u64 vdp : 11;
-+	u64 vs : 11;
-+};
-+
-+/**
-+ * struct gs_dispfb - DISPFB privileged Graphics Synthesizer register
-+ * @fbp: base pointer address/2048
-+ * @fbw: buffer width/64
-+ * @psm: pixel storage format FIXME
-+ * @dbx: upper left x position
-+ * @dby: upper left y position
-+ */
-+struct gs_dispfb {
-+	u64 fbp : 9;
-+	u64 fbw : 6;
-+	u64 psm : 5;
-+	u64 : 12;
-+	u64 dbx : 11;
-+	u64 dby : 11;
-+	u64 : 10;
-+};
-+
-+/**
-+ * struct gs_display - DISPLAY privileged Graphics Synthesizer register
-+ * @dx: display x position (VCK)
-+ * @dy: display y position (px)
-+ * @magh: horizontal magnification
-+ * @magv: vertical magnification
-+ * @dw: display area width-1 (VCK)
-+ * @dh: display area height-1 (px)
-+ *
-+ * @magh and @magv are factor-1, so 0 is 1x, 1 is 2x, 2 is 3x, etc.
-+ */
-+struct gs_display {
-+	u64 dx : 12;
-+	u64 dy : 11;
-+	u64 magh : 4;
-+	u64 magv : 5;
-+	u64 dw : 12;
-+	u64 dh : 11;
-+	u64 : 9;
-+};
-+
-+/**
-+ * enum gs_extbuf_fbin - &&gs_extbuf.fbin selection of input source
-+ * @gs_fbin_out1: FIXME
-+ * @gs_fbin_out2: FIXME
-+ */
-+enum gs_extbuf_fbin {
-+	gs_fbin_out1,
-+	gs_fbin_out2
-+};
-+
-+/*
-+ * enum gs_extbuf_wffmd - &gs_extbuf.wffmd interlace mode
-+ * @gs_wffmd_field: write to every other raster
-+ * @gs_wffmd_frame: write to every raster
-+ */
-+enum gs_extbuf_wffmd {
-+	gs_wffmd_field,
-+	gs_wffmd_frame
-+};
-+
-+/**
-+ * enum gs_extbuf_emoda - &gs_extbuf.emoda processing of input alpha
-+ * @gs_emoda_alpha: input alpha is written as it is
-+ * @gs_emoda_y: FIXME
-+ * @gs_emoda_yhalf: FIXME
-+ * @gs_emoda_zero: FIXME
-+ */
-+enum gs_extbuf_emoda {
-+	gs_emoda_alpha,
-+	gs_emoda_y,
-+	gs_emoda_yhalf,
-+	gs_emoda_zero
-+};
-+
-+/**
-+ * enum gs_extbuf_emodc - &gs_extbuf.emodc processing of input color
-+ * @gs_emodc_rgb: FIXME
-+ * @gs_emodc_y: FIXME
-+ * @gs_emodc_ycbcr: FIXME
-+ * @gs_emodc_alpha: FIXME
-+ */
-+enum gs_extbuf_emodc {
-+	gs_emodc_rgb,
-+	gs_emodc_y,
-+	gs_emodc_ycbcr,
-+	gs_emodc_alpha
-+};
-+
-+/**
-+ * struct gs_extbuf - EXTBUF privileged Graphics Synthesizer register
-+ * @exbp: buffer base pointer/64
-+ * @exbw: width of buffer/64
-+ * @fbin: @enum gs_extbuf_fbin selection of input source
-+ * @wffmd: @enum gs_extbuf_wffmd interlace mode
-+ * @emoda: @enum gs_extbuf_emoda processing of input alpha
-+ * @emodc: @enum gs_extbuf_emodc processing of input color
-+ * @wdx: upper left x position
-+ * @wdy: upper left y position
-+ */
-+struct gs_extbuf {
-+	u64 exbp : 14;
-+	u64 exbw : 6;
-+	u64 fbin : 2;
-+	u64 wffmd : 1;
-+	u64 emoda : 2;
-+	u64 emodc : 2;
-+	u64 : 5;
-+	u64 wdx : 11;
-+	u64 wdy : 11;
-+	u64 : 10;
-+};
-+
-+/**
-+ * struct gs_extdata - EXTDATA privileged Graphics Synthesizer register
-+ * @sx: upper left x position (VCK)
-+ * @sy: upper left y position (VCK)
-+ * @smph: horizontal sampling rate interval (VCK)
-+ * @smpv: vertical sampling rate interval (VCK)
-+ * @ww: rectangular area width-1
-+ * @wh: rectangular area height-1
-+ */
-+struct gs_extdata {
-+	u64 sx : 12;
-+	u64 sy : 11;
-+	u64 smph : 4;
-+	u64 smpv : 2;
-+	u64 : 3;
-+	u64 ww : 12;
-+	u64 wh : 11;
-+	u64 : 9;
-+};
-+
-+/**
-+ * enum gs_extwrite_write - &gs_extwrite.write enable feedback write
-+ * @gs_write_complete_current: FIXME
-+ * @gs_write_start_next: FIXME
-+ */
-+enum gs_extwrite_write {
-+	gs_write_complete_current,
-+	gs_write_start_next
-+};
-+
-+/**
-+ * struct gs_extwrite - EXTWRITE privileged Graphics Synthesizer register
-+ * @write: &enum gs_extwrite_write enable feedback write
-+ */
-+struct gs_extwrite {
-+	u64 write : 1;
-+	u64 : 63;
-+};
-+
-+/**
-+ * struct gs_bgcolor - BGCOLOR privileged Graphics Synthesizer register
-+ * @r: red background color
-+ * @g: green background color
-+ * @b: blue background color
-+ */
-+struct gs_bgcolor {
-+	u64 r : 8;
-+	u64 g : 8;
-+	u64 b : 8;
-+	u64 : 40;
-+};
-+
-+/**
-+ * enum gs_csr_fifo - &gs_csr.fifo host interface FIFO status
-+ * @gs_fifo_neither: neither empty nor almost full
-+ * @gs_fifo_empty: FIXME
-+ * @gs_fifo_almost_full: FIXME
-+ */
-+enum gs_csr_fifo {
-+	gs_fifo_neither,
-+	gs_fifo_empty,
-+	gs_fifo_almost_full
-+};
-+
-+/**
-+ * enum gs_csr_field - &gs_csr.field field display currently FIXME
-+ * @gs_field_even: FIXME
-+ * @gs_field_odd: FIXME
-+ */
-+enum gs_csr_field {
-+	gs_field_even,
-+	gs_field_odd
-+};
-+
-+/**
-+ * struct gs_csr - CSR privileged Graphics Synthesizer register FIXME
-+ * @signal: SIGNAL event control
-+ * @finish: FINISH event control
-+ * @hsint: HSync interrupt control
-+ * @vsint: VSync interrupt control
-+ * @edwint: rectangular area write termination interrupt control
-+ * @zero: must be zero
-+ * @flush: drawing suspend and FIFO clear (enabled during data write)
-+ * @reset: Graphics Synthesizer reset (enabled during data write)
-+ * @nfield: VSync sampled FIELD
-+ * @field: &enum gs_csr_field field display currently
-+ * @fifo: &enum gs_csr_fifo host interface FIFO status
-+ * @rev: Graphics Synthesizer revision (hex)
-+ * @id: Graphics Synthesizer id (hex)
-+ */
-+struct gs_csr {
-+	u64 signal : 1;
-+	u64 finish : 1;
-+	u64 hsint : 1;
-+	u64 vsint : 1;
-+	u64 edwint : 1;
-+	u64 zero : 2;
-+	u64 : 1;
-+	u64 flush : 1;
-+	u64 reset : 1;
-+	u64 : 2;
-+	u64 nfield : 1;
-+	u64 field : 1;
-+	u64 fifo : 2;
-+	u64 rev : 8;
-+	u64 id : 8;
-+	u64 : 32;
-+};
-+
-+/**
-+ * struct gs_imr - IMR privileged Graphics Synthesizer register FIXME
-+ * @sigmsk: SIGNAL event interrupt mask
-+ * @finishmsk: FINISH event interrupt mask
-+ * @hsmsk: HSync interrupt mask
-+ * @vsmsk: VSync interrupt mask
-+ * @edwmsk: rectangular area write termination interrupt mask
-+ * @ones: should be set to all ones (= 3)
-+ */
-+struct gs_imr {
-+	u64 : 8;
-+	u64 sigmsk : 1;
-+	u64 finishmsk : 1;
-+	u64 hsmsk : 1;
-+	u64 vsmsk : 1;
-+	u64 edwmsk : 1;
-+	u64 ones : 2;
-+	u64 : 49;
-+};
-+
-+/**
-+ * enum gs_busdir_dir - &gs_busdir.dir host to local direction, or vice versa
-+ * @gs_dir_host_to_local: host to local bus transfer direction
-+ * @gs_dir_local_to_host: local to host bus transfer direction
-+ */
-+enum gs_busdir_dir {
-+	gs_dir_host_to_local,
-+	gs_dir_local_to_host
-+};
-+
-+/**
-+ * struct gs_busdir - BUSDIR privileged Graphics Synthesizer register FIXME
-+ * @dir: &enum gs_busdir_dir host to local direction, or vice versa
-+ */
-+struct gs_busdir {
-+	u64 dir : 1;
-+	u64 : 63;
-+};
-+
-+/**
-+ * struct gs_siglblid - SIGLBLID privileged Graphics Synthesizer register FIXME
-+ * @sigid: id value set by SIGNAL register
-+ * @lblid: id value set by LABEL register
-+ */
-+struct gs_siglblid {
-+	u64 sigid : 32;
-+	u64 lblid : 32;
-+};
-+
-+#endif /* __ASM_MACH_PS2_GS_REGISTERS_H */
++MODULE_DESCRIPTION("PlayStation 2 privileged Graphics Synthesizer registers");
++MODULE_AUTHOR("Fredrik Noring");
++MODULE_LICENSE("GPL");
 -- 
 2.21.0
 
