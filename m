@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 609F3A4A26
-	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 17:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A991AA4A2B
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Sep 2019 17:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729167AbfIAPsI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 1 Sep 2019 11:48:08 -0400
-Received: from pio-pvt-msa3.bahnhof.se ([79.136.2.42]:41494 "EHLO
-        pio-pvt-msa3.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729159AbfIAPsI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 11:48:08 -0400
+        id S1725954AbfIAPsY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 1 Sep 2019 11:48:24 -0400
+Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:57502 "EHLO
+        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729151AbfIAPsY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 1 Sep 2019 11:48:24 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id 502A93F65F
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:48:06 +0200 (CEST)
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id BC5EF3F9B6
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:48:21 +0200 (CEST)
 X-Virus-Scanned: Debian amavisd-new at bahnhof.se
 X-Spam-Flag: NO
 X-Spam-Score: -1.899
@@ -21,23 +21,24 @@ X-Spam-Level:
 X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
         tests=[BAYES_00=-1.9, URIBL_BLOCKED=0.001]
         autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id swQf4agJgyyI for <linux-mips@vger.kernel.org>;
-        Sun,  1 Sep 2019 17:48:05 +0200 (CEST)
+Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id AD1PnPto9xjE for <linux-mips@vger.kernel.org>;
+        Sun,  1 Sep 2019 17:48:21 +0200 (CEST)
 Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
         (Authenticated sender: mb547485)
-        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id AD44F3F615
-        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:48:05 +0200 (CEST)
-Date:   Sun, 1 Sep 2019 17:48:05 +0200
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 062113F21C
+        for <linux-mips@vger.kernel.org>; Sun,  1 Sep 2019 17:48:20 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 17:48:20 +0200
 From:   Fredrik Noring <noring@nocrew.org>
 To:     linux-mips@vger.kernel.org
-Subject: [PATCH 029/120] MIPS: PS2: DMAC: IRQ support
-Message-ID: <ff109142b9ed290001840cea1b6c3b978181deb4.1567326213.git.noring@nocrew.org>
+Subject: [PATCH 030/120] MIPS: PS2: Timer support
+Message-ID: <dd92b624fe575229937010f66e131fb9744e2da4.1567326213.git.noring@nocrew.org>
 References: <cover.1567326213.git.noring@nocrew.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 In-Reply-To: <cover.1567326213.git.noring@nocrew.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
@@ -45,155 +46,196 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+The Emotion Engine has 4 independent timers with 16-bit counters[1]. The
+bus clock or an external (H-BLANK or V-BLANK) clock perform the counting.
+When a counter reaches a specified reference value, or when it overflows,
+an interrupt is asserted. The timer status register indicates the cause.
+
+Timers 0 and 1 have hold registers for recording the counter value when
+an SBUS interrupt occurs.
+
+Timer registers are 32-bit long and only word-accessible.
+
+References:
+
+[1] "EE User's Manual", version 6.0, Sony Computer Entertainment Inc.,
+    pp. 33-39.
+
 Signed-off-by: Fredrik Noring <noring@nocrew.org>
 ---
- arch/mips/include/asm/mach-ps2/irq.h |   1 +
- arch/mips/ps2/Makefile               |   1 +
- arch/mips/ps2/dmac-irq.c             | 102 +++++++++++++++++++++++++++
- arch/mips/ps2/irq.c                  |   1 +
- 4 files changed, 105 insertions(+)
- create mode 100644 arch/mips/ps2/dmac-irq.c
+ arch/mips/ps2/Makefile |   1 +
+ arch/mips/ps2/time.c   | 153 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 154 insertions(+)
+ create mode 100644 arch/mips/ps2/time.c
 
-diff --git a/arch/mips/include/asm/mach-ps2/irq.h b/arch/mips/include/asm/mach-ps2/irq.h
-index 071c8139dabe..16c96aa7ca09 100644
---- a/arch/mips/include/asm/mach-ps2/irq.h
-+++ b/arch/mips/include/asm/mach-ps2/irq.h
-@@ -72,5 +72,6 @@
- #define IRQ_C0_IRQ7	55
- 
- int __init intc_irq_init(void);
-+int __init dmac_irq_init(void);
- 
- #endif /* __ASM_MACH_PS2_IRQ_H */
 diff --git a/arch/mips/ps2/Makefile b/arch/mips/ps2/Makefile
-index ccdfb80c9f03..1e6406f42b3a 100644
+index 1e6406f42b3a..2015870f9fe7 100644
 --- a/arch/mips/ps2/Makefile
 +++ b/arch/mips/ps2/Makefile
-@@ -1,3 +1,4 @@
-+obj-y		+= dmac-irq.o
+@@ -2,3 +2,4 @@ obj-y		+= dmac-irq.o
  obj-y		+= intc-irq.o
  obj-y		+= irq.o
  obj-y		+= memory.o
-diff --git a/arch/mips/ps2/dmac-irq.c b/arch/mips/ps2/dmac-irq.c
++obj-y		+= time.o
+diff --git a/arch/mips/ps2/time.c b/arch/mips/ps2/time.c
 new file mode 100644
-index 000000000000..8bb75034fd32
+index 000000000000..4979679bc909
 --- /dev/null
-+++ b/arch/mips/ps2/dmac-irq.c
-@@ -0,0 +1,102 @@
++++ b/arch/mips/ps2/time.c
+@@ -0,0 +1,153 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * PlayStation 2 DMA controller (DMAC) IRQs
++ * PlayStation 2 timer functions
 + *
-+ * Copyright (C) 2019 Fredrik Noring
++ * Copyright (C) 2010-2013 Jürgen Urban
++ * Copyright (C) 2017-2019 Fredrik Noring
 + */
 +
++#include <linux/errno.h>
 +#include <linux/init.h>
++#include <linux/kernel_stat.h>
++#include <linux/sched.h>
++#include <linux/kernel.h>
++#include <linux/param.h>
++#include <linux/string.h>
++#include <linux/mm.h>
 +#include <linux/interrupt.h>
-+#include <linux/ioport.h>
-+#include <linux/module.h>
-+#include <linux/types.h>
++#include <linux/timex.h>
 +
-+#include <asm/io.h>
-+#include <asm/irq_cpu.h>
++#include <asm/bootinfo.h>
++#include <asm/time.h>
 +#include <asm/mipsregs.h>
-+
-+#include <asm/mach-ps2/dmac.h>
++#include <asm/io.h>
++#include <asm/irq.h>
 +#include <asm/mach-ps2/irq.h>
 +
-+static void dmac_reverse_mask(struct irq_data *data)
++#define CPU_FREQ		294912000	/* CPU clock frequency (Hz) */
++#define BUS_CLOCK		(CPU_FREQ/2)	/* Bus clock frequency (Hz) */
++#define TM_COMPARE_VALUE	(BUS_CLOCK/256/HZ)  /* To generate HZ event */
++
++/*
++ * The Emotion Engine has four independent timers with 16-bit counters. The
++ * bus clock or an external (H-BLANK or V-BLANK) clock performs the counting.
++ * When a counter reaches a specified reference value, or when it overflows,
++ * an interrupt is asserted. The timer status register indicates the cause.
++ *
++ * Timers 0 and 1 have hold registers for recording the counter value when an
++ * SBUS interrupt occurs.
++ *
++ * Timer registers are 32-bit long and only word-accessible.
++ */
++
++#define T0_COUNT		0x10000000	/* Timer 0 counter value */
++#define T0_MODE			0x10000010	/* Timer 0 mode/status */
++#define T0_COMP			0x10000020	/* Timer 0 compare value */
++#define T0_HOLD			0x10000030	/* Timer 0 hold value */
++
++#define T1_COUNT		0x10000800	/* Timer 1 counter value */
++#define T1_MODE			0x10000810	/* Timer 1 mode/status */
++#define T1_COMP			0x10000820	/* Timer 1 compare value */
++#define T1_HOLD			0x10000830	/* Timer 1 hold value */
++
++#define T2_COUNT		0x10001000	/* Timer 2 counter value */
++#define T2_MODE			0x10001010	/* Timer 2 mode/status */
++#define T2_COMP			0x10001020	/* Timer 2 compare value */
++
++#define T3_COUNT		0x10001800	/* Timer 3 counter value */
++#define T3_MODE			0x10001810	/* Timer 3 mode/status */
++#define T3_COMP			0x10001820	/* Timer 3 compare value */
++
++#define TM_MODE_CLKS_BUSCLK	(0 << 0) /* BUSCLK (147.456 MHz) */
++#define TM_MODE_CLKS_BUSCLK_16	(1 << 0) /* 1/16 of BUSCLK */
++#define TM_MODE_CLKS_BUSCLK_256	(2 << 0) /* 1/256 of BUSCLK */
++#define TM_MODE_CLKS_EXTERNAL	(3 << 0) /* External clock (V-BLANK) */
++#define TM_MODE_GATE_DISABLE	(0 << 2) /* Gate function is not used */
++#define TM_MODE_GATE_ENABLE	(1 << 2) /* Gate function is used */
++#define TM_MODE_GATS_H_BLANK	(0 << 3) /* H-BLANK (disabled if CLKS is 3) */
++#define TM_MODE_GATS_V_BLANK	(1 << 3) /* V-BLANK */
++#define TM_MODE_GATM_WHILE_LOW	(0 << 4) /* Count while gate signal is low */
++#define TM_MODE_GATM_RESET_RISE	(1 << 4) /* Reset and start on rising edge */
++#define TM_MODE_GATM_RESET_FALL	(2 << 4) /* Reset and start on falling edge */
++#define TM_MODE_GATM_RESET_BOTH	(3 << 4) /* Reset and start on both edges */
++#define TM_MODE_ZRET_KEEP	(0 << 6) /* Keep counting ignoring reference */
++#define TM_MODE_ZRET_CLEAR	(1 << 6) /* Zero counter reaching reference */
++#define TM_MODE_CUE_STOP	(0 << 7) /* Stop counting */
++#define TM_MODE_CUE_START	(1 << 7) /* Start counting */
++#define TM_MODE_CMPE_DISABLE	(0 << 8) /* Disable compare interrupts */
++#define TM_MODE_CMPE_ENABLE	(1 << 8) /* Interrupt reaching reference */
++#define TM_MODE_OVFE_DISABLE	(0 << 9) /* Disable overflow interrupts */
++#define TM_MODE_OVFE_ENABLE	(1 << 9) /* Interrupt on overflow */
++
++/*
++ * The equal status flag bit is 1 when a compare-interrupt
++ * has occured. Write 1 to clear.
++ */
++#define TM_MODE_EQUAL_FLAG	(1 << 10)
++
++/*
++ * The overflow status flag bit is 1 when an overflow-interrupt
++ * has occured. Write 1 to clear.
++ */
++#define TM_MODE_OVERFLOW_FLAG	(1 << 11)
++
++static irqreturn_t ps2_timer_interrupt(int irq, void *dev_id)
 +{
-+	outl(BIT(16 + data->irq - IRQ_DMAC), DMAC_STAT_MASK);
-+}
++	struct clock_event_device *cd = dev_id;
 +
-+static void dmac_mask_ack(struct irq_data *data)
-+{
-+	const unsigned int bit = BIT(data->irq - IRQ_DMAC);
++	outl(inl(T0_MODE), T0_MODE); /* Clear the interrupt */
 +
-+	outl((bit << 16) | bit, DMAC_STAT_MASK);
-+}
-+
-+#define DMAC_IRQ_TYPE(irq_, name_)				\
-+	{							\
-+		.irq = irq_,					\
-+		.irq_chip = {					\
-+			.name = name_,				\
-+			.irq_unmask = dmac_reverse_mask,	\
-+			.irq_mask = dmac_reverse_mask,		\
-+			.irq_mask_ack = dmac_mask_ack		\
-+		}						\
-+	}
-+
-+static struct {
-+	unsigned int irq;
-+	struct irq_chip irq_chip;
-+} dmac_irqs[] = {
-+	DMAC_IRQ_TYPE(IRQ_DMAC_VIF0, "DMAC VIF0"),
-+	DMAC_IRQ_TYPE(IRQ_DMAC_VIF1, "DMAC VIF1"),
-+	DMAC_IRQ_TYPE(IRQ_DMAC_GIF,  "DMAC GIF"),
-+	DMAC_IRQ_TYPE(IRQ_DMAC_FIPU, "DMAC fromIPU"),
-+	DMAC_IRQ_TYPE(IRQ_DMAC_TIPU, "DMAC toIPU"),
-+	DMAC_IRQ_TYPE(IRQ_DMAC_SIF0, "DMAC SIF0"),
-+	DMAC_IRQ_TYPE(IRQ_DMAC_SIF1, "DMAC SIF1"),
-+	DMAC_IRQ_TYPE(IRQ_DMAC_SIF2, "DMAC SIF2"),
-+	DMAC_IRQ_TYPE(IRQ_DMAC_FSPR, "DMAC fromSPR"),
-+	DMAC_IRQ_TYPE(IRQ_DMAC_TSPR, "DMAC toSPR"),
-+	DMAC_IRQ_TYPE(IRQ_DMAC_S,    "DMAC stall"),
-+	DMAC_IRQ_TYPE(IRQ_DMAC_ME,   "DMAC MFIFO empty"),
-+	DMAC_IRQ_TYPE(IRQ_DMAC_BE,   "DMAC bus error"),
-+};
-+
-+static irqreturn_t dmac_cascade(int irq, void *data)
-+{
-+	unsigned int pending = inl(DMAC_STAT_MASK) & 0xffff;
-+
-+	if (!pending)
-+		return IRQ_NONE;
-+
-+	while (pending) {
-+		const unsigned int irq_dmac = __fls(pending);
-+
-+		if (generic_handle_irq(irq_dmac + IRQ_DMAC) < 0)
-+			spurious_interrupt();
-+		pending &= ~BIT(irq_dmac);
-+	}
++	cd->event_handler(cd);
 +
 +	return IRQ_HANDLED;
 +}
 +
-+static struct irqaction cascade_dmac_irqaction = {
-+	.name = "DMAC cascade",
-+	.handler = dmac_cascade,
++static int timer0_periodic(struct clock_event_device *evt)
++{
++	outl(0, T0_COUNT);
++	outl(TM_COMPARE_VALUE, T0_COMP);
++	outl(TM_MODE_CLKS_BUSCLK_256 | TM_MODE_ZRET_CLEAR | TM_MODE_CUE_START |
++		TM_MODE_CMPE_ENABLE | TM_MODE_EQUAL_FLAG, T0_MODE);
++
++	return 0;
++}
++
++static int timer0_shutdown(struct clock_event_device *evt)
++{
++	outl(0, T0_MODE); /* Stop timer */
++
++	return 0;
++}
++
++static struct irqaction timer0_irqaction = {
++	.handler	= ps2_timer_interrupt,
++	.flags		= IRQF_PERCPU | IRQF_TIMER,
++	.name		= "intc-timer0",
 +};
 +
-+int __init dmac_irq_init(void)
++static struct clock_event_device timer0_clockevent_device = {
++	.name		= "timer0",
++	/* FIXME: Timer is also able to provide CLOCK_EVT_FEAT_ONESHOT. */
++	.features	= CLOCK_EVT_FEAT_PERIODIC,
++
++	/* FIXME: .mult, .shift, .max_delta_ns and .min_delta_ns left uninitialized */
++
++	.rating		= 300, /* FIXME: Check value. */
++	.irq		= IRQ_INTC_TIMER0,
++	.set_state_periodic	= timer0_periodic,
++	.set_state_shutdown	= timer0_shutdown,
++};
++
++void __init plat_time_init(void)
 +{
-+	size_t i;
-+	int err;
++	/* Add timer 0 as clock event source. */
++	timer0_clockevent_device.cpumask = cpumask_of(smp_processor_id());
++	clockevents_register_device(&timer0_clockevent_device);
++	timer0_irqaction.dev_id = &timer0_clockevent_device;
++	setup_irq(IRQ_INTC_TIMER0, &timer0_irqaction);
 +
-+	outl(inl(DMAC_STAT_MASK), DMAC_STAT_MASK); /* Clear status register */
++	/* FIXME: Timer 1 is free and can also be configured as clock event source. */
 +
-+	for (i = 0; i < ARRAY_SIZE(dmac_irqs); i++)
-+		irq_set_chip_and_handler(dmac_irqs[i].irq,
-+			&dmac_irqs[i].irq_chip, handle_level_irq);
-+
-+	err = setup_irq(IRQ_C0_DMAC, &cascade_dmac_irqaction);
-+	if (err)
-+		pr_err("irq: Failed to setup DMAC IRQs (err = %d)\n", err);
-+
-+	return err;
++	/* Setup frequency for IP7 timer interrupt. */
++	mips_hpt_frequency = CPU_FREQ;
 +}
-diff --git a/arch/mips/ps2/irq.c b/arch/mips/ps2/irq.c
-index 935171a1e3bd..7c656e3735a1 100644
---- a/arch/mips/ps2/irq.c
-+++ b/arch/mips/ps2/irq.c
-@@ -19,6 +19,7 @@ void __init arch_init_irq(void)
- 	mips_cpu_irq_init();
- 
- 	intc_irq_init();
-+	dmac_irq_init();
- }
- 
- asmlinkage void plat_irq_dispatch(void)
 -- 
 2.21.0
 
