@@ -2,125 +2,147 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A94A5278
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Sep 2019 11:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25FD3A55F0
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Sep 2019 14:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730732AbfIBJGA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 2 Sep 2019 05:06:00 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:41684 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729762AbfIBJF7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 Sep 2019 05:05:59 -0400
-Received: by mail-lj1-f195.google.com with SMTP id m24so12139140ljg.8
-        for <linux-mips@vger.kernel.org>; Mon, 02 Sep 2019 02:05:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=xJet210slRrDsHfH5YZFRI+dvRy0H7DfsDp5vKpJNzw=;
-        b=RL4Vd4LsxHaRT9M7Id9PiKeSprXF4TKxcKMRVduVuA4+0FzRK5tRqPzC/AWUN51fCG
-         X3n4djdQX3FxOEycidGdVJahoGQOuXgHAjVLaSqO3lLlFidUNDJa6D9vKLWrgf6vG7q2
-         6NWSBH20zdKxr8b3SuoZda8NtKpYcLQxAlTk4DTmxZwFFBm80u9MkKnwX2bVmLCBYSqF
-         t8nTmubkKDHEYIZUjvc7LgD/eNYcGuAl+f35NanOMtTOJm+5tCL2UTqatOFFf5Pt5w8Y
-         yjgHxYpaASZ0Q7GMsT46ZhREBKenxQvolgpj2CfOYj3ucYz2+fc0Xq0Ea+w84EQiuUgd
-         PZWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xJet210slRrDsHfH5YZFRI+dvRy0H7DfsDp5vKpJNzw=;
-        b=alU0BcgtJg2ho9zkbaMl/ppvLpAeAqN78ghPTGj7m6DFxDJYJmc3s/T5Xxm5ZrLO20
-         RovPRI1mBkLsT48zfDEy6VVpsOOOlWkUtnA629t2N4Leu/OSF80jbbcs7VwaQp/CUCWc
-         sxXYaHGBPbM5jGFewMYZZqNxK57Vo1RSVCyWYVAHUaU3NN8P2doWtfUCcAsCoOUE7YC2
-         AcdAEySiEfAE0OaCcb+trUolFKD2cJddFhLzv9k2Rzvs/hgxz0041LHoD5FUOLxbK/JG
-         3wk5Va4n5YJcolUYST5ekLJSsluQRlcAARHHdR9q18Naea24jvMNxEoXpyyg4PreFZHv
-         zZGw==
-X-Gm-Message-State: APjAAAWhz5fM2gtrDoh18kc6pe5P6lxjfI3GbB/quKL+fomC866THqOX
-        /x68xLJpifB6v3j0nlM0t7mszw+Kze7clQ==
-X-Google-Smtp-Source: APXvYqzWs+c5N2Gmr9Y6G2XIch7oOYnVtrN3Y2L59ZkN7PJu3fssExRyMM+vU8VrUT/K7ne+HTRUsw==
-X-Received: by 2002:a2e:8616:: with SMTP id a22mr16133127lji.167.1567415157575;
-        Mon, 02 Sep 2019 02:05:57 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:8de:1913:38a5:50eb:7e9f:dca9? ([2a00:1fa0:8de:1913:38a5:50eb:7e9f:dca9])
-        by smtp.gmail.com with ESMTPSA id 27sm2236347ljv.21.2019.09.02.02.05.56
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 02 Sep 2019 02:05:56 -0700 (PDT)
-Subject: Re: [PATCH 038/120] MIPS: PS2: ROM: Read data for a given ROM file
- name
-To:     Fredrik Noring <noring@nocrew.org>, linux-mips@vger.kernel.org
-References: <cover.1567326213.git.noring@nocrew.org>
- <69a1b78886392bca426ac6f521197af06d768042.1567326213.git.noring@nocrew.org>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <9a699dfb-b597-f674-5fd3-cef19b9db15b@cogentembedded.com>
-Date:   Mon, 2 Sep 2019 12:05:53 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1731026AbfIBM0M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 2 Sep 2019 08:26:12 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:5711 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729893AbfIBM0L (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 2 Sep 2019 08:26:11 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 17A6940E61A165018A38;
+        Mon,  2 Sep 2019 20:26:05 +0800 (CST)
+Received: from [127.0.0.1] (10.74.191.121) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.439.0; Mon, 2 Sep 2019
+ 20:25:57 +0800
+Subject: Re: [PATCH v2 2/9] x86: numa: check the node id consistently for x86
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     <dalias@libc.org>, <linux-sh@vger.kernel.org>,
+        <catalin.marinas@arm.com>, <dave.hansen@linux.intel.com>,
+        <heiko.carstens@de.ibm.com>, <linuxarm@huawei.com>,
+        <jiaxun.yang@flygoat.com>, <linux-kernel@vger.kernel.org>,
+        <mwb@linux.vnet.ibm.com>, <paulus@samba.org>, <hpa@zytor.com>,
+        <sparclinux@vger.kernel.org>, <chenhc@lemote.com>,
+        <will@kernel.org>, <linux-s390@vger.kernel.org>,
+        <ysato@users.sourceforge.jp>, <mpe@ellerman.id.au>,
+        <x86@kernel.org>, <rppt@linux.ibm.com>, <borntraeger@de.ibm.com>,
+        <dledford@redhat.com>, <mingo@redhat.com>,
+        <jeffrey.t.kirsher@intel.com>, <benh@kernel.crashing.org>,
+        <jhogan@kernel.org>, <nfont@linux.vnet.ibm.com>,
+        <mattst88@gmail.com>, <len.brown@intel.com>, <gor@linux.ibm.com>,
+        <anshuman.khandual@arm.com>, <ink@jurassic.park.msu.ru>,
+        <cai@lca.pw>, <luto@kernel.org>, <tglx@linutronix.de>,
+        <naveen.n.rao@linux.vnet.ibm.com>,
+        <linux-arm-kernel@lists.infradead.org>, <rth@twiddle.net>,
+        <axboe@kernel.dk>, <robin.murphy@arm.com>,
+        <linux-mips@vger.kernel.org>, <ralf@linux-mips.org>,
+        <tbogendoerfer@suse.de>, <paul.burton@mips.com>,
+        <linux-alpha@vger.kernel.org>, <bp@alien8.de>,
+        <akpm@linux-foundation.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <davem@davemloft.net>
+References: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
+ <1567231103-13237-3-git-send-email-linyunsheng@huawei.com>
+ <20190831085539.GG2369@hirez.programming.kicks-ass.net>
+ <4d89c688-49e4-a2aa-32ee-65e36edcd913@huawei.com>
+ <20190831161247.GM2369@hirez.programming.kicks-ass.net>
+ <ae64285f-5134-4147-7b02-34bb5d519e8c@huawei.com>
+ <20190902072542.GN2369@hirez.programming.kicks-ass.net>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <5fa2aa99-89fa-cd41-b090-36a23cfdeb73@huawei.com>
+Date:   Mon, 2 Sep 2019 20:25:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-In-Reply-To: <69a1b78886392bca426ac6f521197af06d768042.1567326213.git.noring@nocrew.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20190902072542.GN2369@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.74.191.121]
+X-CFilter-Loop: Reflected
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
-
-On 01.09.2019 18:50, Fredrik Noring wrote:
-
-> Reading ROM files is trivial since they are permanently available in
-> memory. Having rom_read_file() is a convenient when for example
-> resolving the machine region in subsequent changes.
+On 2019/9/2 15:25, Peter Zijlstra wrote:
+> On Mon, Sep 02, 2019 at 01:46:51PM +0800, Yunsheng Lin wrote:
+>> On 2019/9/1 0:12, Peter Zijlstra wrote:
 > 
-> Signed-off-by: Fredrik Noring <noring@nocrew.org>
-[...]
-> index 12a57f24bd63..840d37a199d8 100644
-> --- a/arch/mips/ps2/rom.c
-> +++ b/arch/mips/ps2/rom.c
-> @@ -224,6 +224,39 @@ struct rom_file rom_first_file(const struct rom_dir dir)
->   }
->   EXPORT_SYMBOL_GPL(rom_first_file);
->   
-> +/**
-> + * rom_read_file - read ROM file data
-> + * @dir: directory to read the file from
-> + * @name: file name to read
-> + * @buffer: pointer to buffer to store data that is read
-> + * @size: size in bytes to read
-> + * @offset: offset in bytes to start reading
-> + *
-> + * Context: any
-> + * Return: on successful completion, a nonnegative integer indicating the
-> + * 	number of bytes actually read; otherwise, a negative error number
-> + */
-> +ssize_t rom_read_file(const struct rom_dir dir,
-> +	const char *name, void *buffer, size_t size, loff_t offset)
-> +{
-> +	struct rom_file file;
-> +
-> +	rom_find_files(file, dir, name)
-> +		if (offset < file.size) {
-> +			const u8 *b = file.data;
-> +			size_t remaining = file.size - offset;
-> +			size_t n = min(size, remaining);
-> +
-> +			memcpy(buffer, &b[offset], n);
-> +
-> +			return n;
-> +		} else
+>>> 1) because even it is not set, the device really does belong to a node.
+>>> It is impossible a device will have magic uniform access to memory when
+>>> CPUs cannot.
+>>
+>> So it means dev_to_node() will return either NUMA_NO_NODE or a
+>> valid node id?
+> 
+> NUMA_NO_NODE := -1, which is not a valid node number. It is also, like I
+> said, not a valid device location on a NUMA system.
+> 
+> Just because ACPI/BIOS is shit, doesn't mean the device doesn't have a
+> node association. It just means we don't know and might have to guess.
 
-    The *else* branch also needs {} if the *if* branch has 'emn, according to 
-Documentation/process/coding-style.rst.
+How do we guess the device's location when ACPI/BIOS does not set it?
 
-> +			return 0;
-> +
-> +	return -ENOENT;
-> +}
-> +EXPORT_SYMBOL_GPL(rom_read_file);
-> +
->   /**
->    * find_reset_string - find the offset to the ``"RESET"`` string, if it exists
->    * @rom: ROM to search in
+It seems dev_to_node() does not do anything about that and leave the
+job to the caller or whatever function that get called with its return
+value, such as cpumask_of_node().
 
-MBR, Sergei
+> 
+>>> 2) is already true today, cpumask_of_node() requires a valid node_id.
+>>
+>> Ok, most of the user does check node_id before calling
+>> cpumask_of_node(), but does a little different type of checking:
+>>
+>> 1) some does " < 0" check;
+>> 2) some does "== NUMA_NO_NODE" check;
+>> 3) some does ">= MAX_NUMNODES" check;
+>> 4) some does "< 0 || >= MAX_NUMNODES || !node_online(node)" check.
+> 
+> The one true way is:
+> 
+> 	'(unsigned)node_id >= nr_node_ids'
+
+I missed the magic of the "unsigned" in your previous reply.
+
+> 
+>>> 3) is just wrong and increases overhead for everyone.
+>>
+>> Ok, cpumask_of_node() is also used in some critical path such
+>> as scheduling, which may not need those checking, the overhead
+>> is unnecessary.
+>>
+>> But for non-critical path such as setup or configuration path,
+>> it better to have consistent checking, and also simplify the
+>> user code that calls cpumask_of_node().
+>>
+>> Do you think it is worth the trouble to add a new function
+>> such as cpumask_of_node_check(maybe some other name) to do
+>> consistent checking?
+>>
+>> Or caller just simply check if dev_to_node()'s return value is
+>> NUMA_NO_NODE before calling cpumask_of_node()?
+> 
+> It is not a matter of convenience. The function is called
+> cpumask_of_node(), when node < 0 || node >= nr_node_ids, it is not a
+> valid node, therefore the function shouldn't return anything except an
+> error.
+what do you mean by error? What I can think is three type of errors:
+1) return NULL, this way it seems cpumask_of_node() also leave the
+   job to the function that calls it.
+2) cpu_none_mask, I am not sure what this means, maybe it means there
+   is no cpu on the same node with the device?
+3) give a warning, stack dump, or even a BUG_ON?
+
+I would prefer the second one, and implement the third one when the
+CONFIG_DEBUG_PER_CPU_MAPS is selected.
+
+Any suggestion?
+
+> 
+> Also note that the CONFIG_DEBUG_PER_CPU_MAPS version of
+> cpumask_of_node() already does this (although it wants the below fix).
+
+Thanks for the note and example.
+
