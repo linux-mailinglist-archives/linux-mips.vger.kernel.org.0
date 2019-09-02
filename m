@@ -2,145 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B08A4FE6
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Sep 2019 09:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20C6A5060
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Sep 2019 09:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729527AbfIBH3y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 2 Sep 2019 03:29:54 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:42206 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729408AbfIBH3y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 Sep 2019 03:29:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=kuvYA3T0maxhdGUw985D46q7bOf4rHWESmnw46BzIyU=; b=RSg8SK30rWjj+TGxS+skngBb9
-        2fH0Zbvox/26y8ns9l17onRj+Z0upMjen1Jy9C225gpAYncbszcWwsNoaRVXtRhycw5sQPRXxvqZF
-        MZcgdzGUMBphpdnOn16uYyMgLt+qN6EW1z0DTDeFTlEiZTt3odbqEu+DJSqCou9wwYKKH0FxT6dWN
-        I+zp9Ai4QHlNhoBhF21uUvEYbhfjZl2GTj5O4kluEqPaq3MIV3nvvVSecP3gXpoqPTIw8UHW+LeG+
-        00NHCbD42nXGQS4hidMqlBA/pQDia+x5u1X7c5K0Y5fMyiWYIiSoxiwz3DDXxm0RHe9+pK3isf+sd
-        NVR1Me1xA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i4gik-0004XZ-Fx; Mon, 02 Sep 2019 07:25:50 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6DC0530116F;
-        Mon,  2 Sep 2019 09:25:06 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1636C29B6185F; Mon,  2 Sep 2019 09:25:42 +0200 (CEST)
-Date:   Mon, 2 Sep 2019 09:25:42 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     dalias@libc.org, linux-sh@vger.kernel.org, catalin.marinas@arm.com,
-        dave.hansen@linux.intel.com, heiko.carstens@de.ibm.com,
-        linuxarm@huawei.com, jiaxun.yang@flygoat.com,
-        linux-mips@vger.kernel.org, mwb@linux.vnet.ibm.com,
-        paulus@samba.org, hpa@zytor.com, sparclinux@vger.kernel.org,
-        chenhc@lemote.com, will@kernel.org, cai@lca.pw,
-        linux-s390@vger.kernel.org, ysato@users.sourceforge.jp,
-        mpe@ellerman.id.au, x86@kernel.org, rppt@linux.ibm.com,
-        borntraeger@de.ibm.com, dledford@redhat.com, mingo@redhat.com,
-        jeffrey.t.kirsher@intel.com, benh@kernel.crashing.org,
-        jhogan@kernel.org, nfont@linux.vnet.ibm.com, mattst88@gmail.com,
-        len.brown@intel.com, gor@linux.ibm.com, anshuman.khandual@arm.com,
-        bp@alien8.de, luto@kernel.org, tglx@linutronix.de,
-        naveen.n.rao@linux.vnet.ibm.com,
-        linux-arm-kernel@lists.infradead.org, rth@twiddle.net,
-        axboe@kernel.dk, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, ralf@linux-mips.org,
-        tbogendoerfer@suse.de, paul.burton@mips.com,
-        linux-alpha@vger.kernel.org, ink@jurassic.park.msu.ru,
-        akpm@linux-foundation.org, robin.murphy@arm.com,
-        davem@davemloft.net
-Subject: Re: [PATCH v2 2/9] x86: numa: check the node id consistently for x86
-Message-ID: <20190902072542.GN2369@hirez.programming.kicks-ass.net>
-References: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
- <1567231103-13237-3-git-send-email-linyunsheng@huawei.com>
- <20190831085539.GG2369@hirez.programming.kicks-ass.net>
- <4d89c688-49e4-a2aa-32ee-65e36edcd913@huawei.com>
- <20190831161247.GM2369@hirez.programming.kicks-ass.net>
- <ae64285f-5134-4147-7b02-34bb5d519e8c@huawei.com>
+        id S1729982AbfIBHxO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 2 Sep 2019 03:53:14 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:33555 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729457AbfIBHxO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 Sep 2019 03:53:14 -0400
+Received: by mail-ot1-f66.google.com with SMTP id p23so12811311oto.0;
+        Mon, 02 Sep 2019 00:53:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eXerReUtklcQDMDiAd2B7yy5/iYyeA9QfRGIULHn46Y=;
+        b=TimCe+rboTXhKNRwod9wY0LQixXq7N4d44ur73fTW2/Sl9IlzP0TM034In+nMphow6
+         xiWiEDZqeMr0hSqMmT3xGkOz7OVg3dbGFxB6DnaI7/rbUfGLp5wGTB8UdW1WjXG8zXJq
+         GC35+s1KZNEV6mpr4HpVQXkHzZooeXqyeTqNvhLbts5fV4wZDQecIXdsonD0+BAab9PD
+         ij7RgMJOuMnsdBRGk7Iikhn+E+SpUcF8PhWa1X7S/JkgFIr4SpDy+OGKLjntqmbZyPL8
+         YXo/hLdpnibizxv/zjuyNQYT5x6g91TVLGViL8KITcv+fUoz2h9zZaMW/KkBcnt6S4gT
+         8YrQ==
+X-Gm-Message-State: APjAAAX7DS5L5+NH75wZDOV+fHjVTm+zfjVhMTvhhFYG555Vtd1bttjE
+        mQDQeXujl1PugjbVRt4e0bk7o6oxmGdZkjYu+9w=
+X-Google-Smtp-Source: APXvYqwnZmuBQPAycR4wh+MzLxpLnaIqn9yYtJhnEginGgy5iGXJS00OPV33e9x6cT87GYQg3tA+HlJbqb3xbqDiJRA=
+X-Received: by 2002:a9d:61c3:: with SMTP id h3mr14729198otk.39.1567410792636;
+ Mon, 02 Sep 2019 00:53:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ae64285f-5134-4147-7b02-34bb5d519e8c@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190817073253.27819-1-hch@lst.de> <20190817073253.27819-9-hch@lst.de>
+ <CAMuHMdWyXGjokWi7tn9JHCTz9YMb_vHn6XKeE7KzH5n-54Sy0A@mail.gmail.com> <20190830160620.GD26887@lst.de>
+In-Reply-To: <20190830160620.GD26887@lst.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 2 Sep 2019 09:53:01 +0200
+Message-ID: <CAMuHMdXB=DWyu=Y25gih5poeanVnhLEP2MXoozvxdEY6op32FA@mail.gmail.com>
+Subject: Re: [PATCH 08/26] m68k: simplify ioremap_nocache
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-mips@vger.kernel.org, nios2-dev@lists.rocketboards.org,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-riscv@lists.infradead.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-xtensa@linux-xtensa.org,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 02, 2019 at 01:46:51PM +0800, Yunsheng Lin wrote:
-> On 2019/9/1 0:12, Peter Zijlstra wrote:
+Hi Christoph,
 
-> > 1) because even it is not set, the device really does belong to a node.
-> > It is impossible a device will have magic uniform access to memory when
-> > CPUs cannot.
-> 
-> So it means dev_to_node() will return either NUMA_NO_NODE or a
-> valid node id?
+On Fri, Aug 30, 2019 at 6:06 PM Christoph Hellwig <hch@lst.de> wrote:
+> On Mon, Aug 19, 2019 at 10:56:02AM +0200, Geert Uytterhoeven wrote:
+> > On Sat, Aug 17, 2019 at 9:48 AM Christoph Hellwig <hch@lst.de> wrote:
+> > > Just define ioremap_nocache to ioremap instead of duplicating the
+> > > inline.  Also defined ioremap_uc in terms of ioremap instead of
+> > > the using a double indirection.
+> > >
+> > > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> >
+> > Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>
+> Do you mind picking this up through the m68k tree?
 
-NUMA_NO_NODE := -1, which is not a valid node number. It is also, like I
-said, not a valid device location on a NUMA system.
+Sure. Applied and queued for v5.4.
 
-Just because ACPI/BIOS is shit, doesn't mean the device doesn't have a
-node association. It just means we don't know and might have to guess.
+Gr{oetje,eeting}s,
 
-> > 2) is already true today, cpumask_of_node() requires a valid node_id.
-> 
-> Ok, most of the user does check node_id before calling
-> cpumask_of_node(), but does a little different type of checking:
-> 
-> 1) some does " < 0" check;
-> 2) some does "== NUMA_NO_NODE" check;
-> 3) some does ">= MAX_NUMNODES" check;
-> 4) some does "< 0 || >= MAX_NUMNODES || !node_online(node)" check.
+                        Geert
 
-The one true way is:
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-	'(unsigned)node_id >= nr_node_ids'
-
-> > 3) is just wrong and increases overhead for everyone.
-> 
-> Ok, cpumask_of_node() is also used in some critical path such
-> as scheduling, which may not need those checking, the overhead
-> is unnecessary.
-> 
-> But for non-critical path such as setup or configuration path,
-> it better to have consistent checking, and also simplify the
-> user code that calls cpumask_of_node().
-> 
-> Do you think it is worth the trouble to add a new function
-> such as cpumask_of_node_check(maybe some other name) to do
-> consistent checking?
-> 
-> Or caller just simply check if dev_to_node()'s return value is
-> NUMA_NO_NODE before calling cpumask_of_node()?
-
-It is not a matter of convenience. The function is called
-cpumask_of_node(), when node < 0 || node >= nr_node_ids, it is not a
-valid node, therefore the function shouldn't return anything except an
-error.
-
-Also note that the CONFIG_DEBUG_PER_CPU_MAPS version of
-cpumask_of_node() already does this (although it wants the below fix).
-
----
-diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-index e6dad600614c..5f49c10201c7 100644
---- a/arch/x86/mm/numa.c
-+++ b/arch/x86/mm/numa.c
-@@ -861,7 +861,7 @@ void numa_remove_cpu(int cpu)
-  */
- const struct cpumask *cpumask_of_node(int node)
- {
--	if (node >= nr_node_ids) {
-+	if ((unsigned)node >= nr_node_ids) {
- 		printk(KERN_WARNING
- 			"cpumask_of_node(%d): node > nr_node_ids(%u)\n",
- 			node, nr_node_ids);
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
