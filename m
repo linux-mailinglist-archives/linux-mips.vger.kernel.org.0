@@ -2,158 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12729A63F6
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2019 10:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E68A6479
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2019 10:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728366AbfICIcC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Sep 2019 04:32:02 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:5729 "EHLO huawei.com"
+        id S1728398AbfICI5H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Sep 2019 04:57:07 -0400
+Received: from mail-eopbgr750127.outbound.protection.outlook.com ([40.107.75.127]:6020
+        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728373AbfICIcB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 3 Sep 2019 04:32:01 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 2C5574F5198C842DE6B7;
-        Tue,  3 Sep 2019 16:31:57 +0800 (CST)
-Received: from [127.0.0.1] (10.74.191.121) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.439.0; Tue, 3 Sep 2019
- 16:31:48 +0800
-Subject: Re: [PATCH v2 2/9] x86: numa: check the node id consistently for x86
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <dalias@libc.org>, <linux-sh@vger.kernel.org>,
-        <catalin.marinas@arm.com>, <dave.hansen@linux.intel.com>,
-        <heiko.carstens@de.ibm.com>, <linuxarm@huawei.com>,
-        <jiaxun.yang@flygoat.com>, <linux-kernel@vger.kernel.org>,
-        <mwb@linux.vnet.ibm.com>, <paulus@samba.org>, <hpa@zytor.com>,
-        <sparclinux@vger.kernel.org>, <chenhc@lemote.com>,
-        <will@kernel.org>, <linux-s390@vger.kernel.org>,
-        <ysato@users.sourceforge.jp>, <mpe@ellerman.id.au>,
-        <x86@kernel.org>, <rppt@linux.ibm.com>, <borntraeger@de.ibm.com>,
-        <dledford@redhat.com>, <mingo@redhat.com>,
-        <jeffrey.t.kirsher@intel.com>, <benh@kernel.crashing.org>,
-        <jhogan@kernel.org>, <nfont@linux.vnet.ibm.com>,
-        <mattst88@gmail.com>, <len.brown@intel.com>, <gor@linux.ibm.com>,
-        <anshuman.khandual@arm.com>, <ink@jurassic.park.msu.ru>,
-        <cai@lca.pw>, <luto@kernel.org>, <tglx@linutronix.de>,
-        <naveen.n.rao@linux.vnet.ibm.com>,
-        <linux-arm-kernel@lists.infradead.org>, <rth@twiddle.net>,
-        <axboe@kernel.dk>, <robin.murphy@arm.com>,
-        <linux-mips@vger.kernel.org>, <ralf@linux-mips.org>,
-        <tbogendoerfer@suse.de>, <paul.burton@mips.com>,
-        <linux-alpha@vger.kernel.org>, <bp@alien8.de>,
-        <akpm@linux-foundation.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-References: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
- <1567231103-13237-3-git-send-email-linyunsheng@huawei.com>
- <20190831085539.GG2369@hirez.programming.kicks-ass.net>
- <4d89c688-49e4-a2aa-32ee-65e36edcd913@huawei.com>
- <20190831161247.GM2369@hirez.programming.kicks-ass.net>
- <ae64285f-5134-4147-7b02-34bb5d519e8c@huawei.com>
- <20190902072542.GN2369@hirez.programming.kicks-ass.net>
- <5fa2aa99-89fa-cd41-b090-36a23cfdeb73@huawei.com>
- <20190902125644.GQ2369@hirez.programming.kicks-ass.net>
- <1f48081c-c9d6-8f3e-9559-8b0bec98f125@huawei.com>
- <20190903071111.GU2369@hirez.programming.kicks-ass.net>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <06eee8d0-ce56-03da-30a5-6b07e989a5e0@huawei.com>
-Date:   Tue, 3 Sep 2019 16:31:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
-MIME-Version: 1.0
-In-Reply-To: <20190903071111.GU2369@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="utf-8"
+        id S1725888AbfICI5H (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 3 Sep 2019 04:57:07 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ffEmgDXQ32ktnYik+eVGVMhdy8ERJFJeO9bVlL8V0Mxg4D6rOgPOUmRR7Fyc3r5aBchk3kD/SxYNJ6jDqMm+AlskxxR5D6gxXz4Ap3C9770rvYs5nLEsf8mirPxU147GUK5AgKTMUtISMWNOtFlGwWzrwULp+0VStdI2wTEgEgT9m9CiXwweHgnAEA6bmg/le9JCAHcolXW4kVPKP+4i/tjNhpMPCtb+PiJR4S+hcx3BtV38qnjTaW2sukEWyMAFLneojynBG7YRQMRvUfkTpCTzG2o8YIi3y8H3g6xYI5TS5hmsnaBUCgqXB3ZFMQw1YJyeLXmZ+RH55DXVzybgeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pKGjwp1Uo8LfIHoyH7+b//d/bD44+fJfePgvviW7l8g=;
+ b=mG1tWN7uUdyshf80A5MUT9b4f6P+Wl3TJJjI2GQ8ZUx0AFflfdICBbq8iw3/Yhzq8BPbGw5wEEcJcYFHMoY9CTTLu5rjbdoYrQRooJHt40TGSSs8CRwl3yHAmgH3BcdBm212x/sNaI/JHePgkCL5RI5ImrHCW4Va/8xjqT8RxvnislgjsJYAH74bugV/eCnLe84HjYXFBqSKMRX7dUb10TLokdEPKjB2Pk6ZuJOwUa60shooMhVChq5OtJZYqPC3c7Lh8TPywmKg3ZnAePzVm64g0iURm4a0MshUvC9WoYxNmVvtGmHAyRBCFSAQ2px4keNF4rch/Xz1xwu89RP0iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
+ dkim=pass header.d=mips.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pKGjwp1Uo8LfIHoyH7+b//d/bD44+fJfePgvviW7l8g=;
+ b=VCoxzS8WWTGfTcQYd0/WZ+jzrF0fosMbreNkfKpbvjQ4IW659Bg+NPwvuAf4EQKOuVRKFsAOj0pCb8p+7Dill9cY5mxZ4QAPW5CJCiLvD1LY+jZ1udVFo87TRkJbmYam+XgewallJsGzm3jjrChp1wMbXFymbbSiyHLv9/Ei034=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
+ MWHPR2201MB1422.namprd22.prod.outlook.com (10.172.59.146) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2220.18; Tue, 3 Sep 2019 08:57:01 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::f9e8:5e8c:7194:fad3]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::f9e8:5e8c:7194:fad3%11]) with mapi id 15.20.2220.021; Tue, 3 Sep 2019
+ 08:57:01 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     Christoph Hellwig <hch@lst.de>
+CC:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "nios2-dev@lists.rocketboards.org" <nios2-dev@lists.rocketboards.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH 04/26] mips: remove ioremap_cachable
+Thread-Topic: [PATCH 04/26] mips: remove ioremap_cachable
+Thread-Index: AQHVYjWM7xZdW0g9rk2mdDHsFCA7Ig==
+Date:   Tue, 3 Sep 2019 08:57:00 +0000
+Message-ID: <MWHPR2201MB1277E4E8214F6E50E5EC9BFCC1B90@MWHPR2201MB1277.namprd22.prod.outlook.com>
+References: <20190817073253.27819-5-hch@lst.de>
+In-Reply-To: <20190817073253.27819-5-hch@lst.de>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.74.191.121]
-X-CFilter-Loop: Reflected
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: LO2P265CA0041.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:61::29) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:18::12)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [94.196.173.241]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bc4e3957-ec12-4171-af7d-08d7304cae89
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1422;
+x-ms-traffictypediagnostic: MWHPR2201MB1422:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <MWHPR2201MB14223E109C3EC6DA480974C1C1B90@MWHPR2201MB1422.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1728;
+x-forefront-prvs: 01494FA7F7
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(136003)(366004)(376002)(346002)(39840400004)(199004)(189003)(7736002)(71190400001)(6116002)(4744005)(3846002)(71200400001)(256004)(7416002)(99286004)(966005)(8936002)(66446008)(64756008)(66556008)(66946007)(66476007)(14454004)(8676002)(478600001)(386003)(6506007)(55236004)(53936002)(102836004)(2906002)(6246003)(74316002)(6436002)(42882007)(316002)(44832011)(446003)(476003)(11346002)(26005)(486006)(9686003)(6306002)(186003)(54906003)(55016002)(66066001)(81166006)(81156014)(25786009)(52116002)(7696005)(305945005)(52536014)(6916009)(229853002)(5660300002)(4326008)(76176011)(33656002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1422;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: AMsW0LyaOM/yHrXI9m5Kie1YaQxjkfvMhyNX9ES2CGzwwwtpZntVqBckfi52aNkMc1Cdw2HlQMfo43GMtbo5mFVnqmdWekTCV8WgfEaqK2CjzX3+jfIMYgUYhhBN4zWgT9CB6mowfVObZSeeIEMtj7+DNC2MxefkmdolMdDmNiKZeyM/3alS0wsSmeCRCsmzACIx3yo9Czz0fYxxpPvPbHTf+KaRtsqNbIV5fuR38UuaxwgSY7khdFw8Ar3ThZt6HWelwgU4vmFePNfnQ/2+RAPxMWvPKk8KwT0tM6kvsaKJZ5DXKM+M8iKqCcMBcLD53stvyeVLaj4Syqkv0mqrETEw4t6/7LI69R/6BoyyTS/WN9nNKWlcsqFhE/rl8Anat/j9v2p6UBqUVH6JJkwAm+0PTbtyAY3KukhvYKL2BNg=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc4e3957-ec12-4171-af7d-08d7304cae89
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Sep 2019 08:57:00.4929
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CsvUw2VRN18dDCQo8ThReG3qLd2pbxbAWkvlwIUDlGTbHTsWbcHQ6WJEwrmmhkC2GbNjKIBlixwAJHAstD6HBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1422
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2019/9/3 15:11, Peter Zijlstra wrote:
-> On Tue, Sep 03, 2019 at 02:19:04PM +0800, Yunsheng Lin wrote:
->> On 2019/9/2 20:56, Peter Zijlstra wrote:
->>> On Mon, Sep 02, 2019 at 08:25:24PM +0800, Yunsheng Lin wrote:
->>>> On 2019/9/2 15:25, Peter Zijlstra wrote:
->>>>> On Mon, Sep 02, 2019 at 01:46:51PM +0800, Yunsheng Lin wrote:
->>>>>> On 2019/9/1 0:12, Peter Zijlstra wrote:
->>>>>
->>>>>>> 1) because even it is not set, the device really does belong to a node.
->>>>>>> It is impossible a device will have magic uniform access to memory when
->>>>>>> CPUs cannot.
->>>>>>
->>>>>> So it means dev_to_node() will return either NUMA_NO_NODE or a
->>>>>> valid node id?
->>>>>
->>>>> NUMA_NO_NODE := -1, which is not a valid node number. It is also, like I
->>>>> said, not a valid device location on a NUMA system.
->>>>>
->>>>> Just because ACPI/BIOS is shit, doesn't mean the device doesn't have a
->>>>> node association. It just means we don't know and might have to guess.
->>>>
->>>> How do we guess the device's location when ACPI/BIOS does not set it?
->>>
->>> See device_add(), it looks to the device's parent and on NO_NODE, puts
->>> it there.
->>>
->>> Lacking any hints, just stick it to node0 and print a FW_BUG or
->>> something.
->>>
->>>> It seems dev_to_node() does not do anything about that and leave the
->>>> job to the caller or whatever function that get called with its return
->>>> value, such as cpumask_of_node().
->>>
->>> Well, dev_to_node() doesn't do anything; nor should it. It are the
->>> callers of set_dev_node() that should be taking care.
->>>
->>> Also note how device_add() sets the device node to the parent device's
->>> node on NUMA_NO_NODE. Arguably we should change it to complain when it
->>> finds NUMA_NO_NODE and !parent.
->>
->> Is it possible that the node id set by device_add() become invalid
->> if the node is offlined, then dev_to_node() may return a invalid
->> node id.
-> 
-> In that case I would expect the device to go away too. Once the memory
-> controller goes away, the PCI bus connected to it cannot continue to
-> function.
+Hello,
 
-Ok. To summarize the discussion in order to for me to understand it
-correctly:
+Christoph Hellwig wrote:
+> Just define ioremap_cache directly.
 
-1) Make sure device_add() set to default node0 to a device if
-   ACPI/BIOS does not set the node id and it has not no parent device.
+Applied to mips-next.
 
-2) Use '(unsigned)node_id >= nr_node_ids' to fix the
-   CONFIG_DEBUG_PER_CPU_MAPS version of cpumask_of_node() for x86
-   and arm64, x86 just has a fix from you now, a patch for arm64 is
-   also needed.
+> commit 60af0d94cc37
+> https://git.kernel.org/mips/c/60af0d94cc37
+>=20
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Paul Burton <paul.burton@mips.com>
 
-3) Maybe fix some other the sign bug for node id checking through the
-   kernel using the '(unsigned)node_id >= nr_node_ids'.
+Thanks,
+    Paul
 
-Please see if I understand it correctly or miss something.
-Maybe I can begin by sending a patch about item one to see if everyone
-is ok with the idea?
-
-
-> 
->> From the comment in select_fallback_rq(), it seems that a node can
->> be offlined, not sure if node offline process has taken cared of that?
->>
->> 	/*
->>          * If the node that the CPU is on has been offlined, cpu_to_node()
->>          * will return -1. There is no CPU on the node, and we should
->>          * select the CPU on the other node.
->>          */
-> 
-> Ugh, so I disagree with that notion. cpu_to_node() mapping should be
-> fixed, you simply cannot change it after boot, too much stuff relies on
-> it.
-> 
-> Setting cpu_to_node to -1 on node offline is just wrong. But alas, it
-> seems this is already so.
-
-
+[ This message was auto-generated; if you believe anything is incorrect
+  then please email paul.burton@mips.com to report it. ]
