@@ -2,89 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04233A7542
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2019 22:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A82A75D6
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2019 23:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726956AbfICUru (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Sep 2019 16:47:50 -0400
-Received: from mail-eopbgr740130.outbound.protection.outlook.com ([40.107.74.130]:54944
-        "EHLO NAM01-BN3-obe.outbound.protection.outlook.com"
+        id S1726451AbfICVBB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Sep 2019 17:01:01 -0400
+Received: from mail-eopbgr800104.outbound.protection.outlook.com ([40.107.80.104]:7800
+        "EHLO NAM03-DM3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726375AbfICUrq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 3 Sep 2019 16:47:46 -0400
+        id S1725953AbfICVBA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 3 Sep 2019 17:01:00 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ug1bjRejfjh/uHsY5p4KIEBwknRjZSH06ERwAXfGL8LMp1eOKvjukAF71s5ZU+GLxu35FFVGtr++kkvyKl9ynSIr1XQ3LAr6iWDuU57ORAiy06X72F0odc+DBCqfWeXEgiLffoU3yvf/DSQ0/1mo2nHZPHuJ3CBkMJwgQq2SpT8WxMCE0noPJlJwCh9NHOQV3lzMgcyLSWrMVJSQgLky3/jcwz19iVOG0F703lndvqv9Wp+VdxAVRXWW8kV+AEjkT4QQb9LDdyL4pALQQKiwFl3UCwpIkktqWp+EmdNmWTTkhp3C6Q4Qc4pJvxcWeZpNBoRqNWd3SDt+7hL3JisJaA==
+ b=MSFlb6L76FOTBkw9d6tZAq1mBDr9HFVAykGZL/beLoWPflucXzLRmh98Bcbifd89Rq0zen2N7vG4mOQVar54Q2cIccB04hLAKpM4JVo83Wf8R4tYvDanxtljPru5LlYEJw6SB8Vf11KGqD/8gJfe6Eq42U71q75qpM2/4DbboTjgJHSeja4BAu+sX0DMqBiGCsjY7WJawVkgPbSAN4x9mpxb3SZUay02jma1UuCxP9al9xUhMbpRtdN8ezgi66pdGQFARhb6pyYA7Bc/7Om/9b6Jr7cfjDIf5cDpW2ysWas/4n+t7OPLtMWXhCNI5crYhPCG/kQax7emR0XhOJb2Wg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TUgPSQv+r5StWQ6bfMtlK7naR1omTHvHOnuKrq3A+EU=;
- b=cFkqpVni1UCIA5tPKeAevNXyup4Tvuo6aQDBFR6M39m5o4EZkYJAm2nKB22NJo8Tg9KpPJJbM2rv9ze2K9HcUq0dvn2UH9RRV/OP1XcTUQMqlnAuYhzEoTyBq4uclhXSG2n8hwfRu501OYhcZk02RrTEejAhxa2ow8km7vNaKoup9tINJqh6AKIVYKf6XkWZwypCs1/s2M2WOMAkcFxRMBxJpTXDWDkueymcZpbiBC0cvSTGyIe4ohQmBJX4vMpWgIDnVbZJaZjEdARthS9Wx1dxENmvUBtN4qzNwsFQZU1hdB01KEnbLyqAfrp6MYRFGj8EBvZ0D7KxDZjgYgG+bw==
+ bh=cHe+nRs17sEsXXBKjE7Wm2h+HNWZwys85dH9KzCIaeg=;
+ b=ZyP3V5fQY8R88Xz3MjEZh1/Zri1phSJJMs/II1Hf7Cem98/DTCUUN8LfT1p1vZkAff1DuQYosaoz7cpd9bV/nKyNOii8yIE9LX3KtFwIuRLitvlcrkOsr0+GdGQaIpbB3YypjVaGucQkeDzGPQ/ABRRDuwMn+Ve/HdmQ0Y5YZgTezc+KgT5s7MnOkdZxL1qLZFFOawGCsPOoRHhCEDQy51Pq9RXoQ9bfphF7OaJJimSlAA/KREZSnSf+ikkb3T9plwtEmtdW/e9gX+FLkg1Ulc59itZN5Rj6VBGksDrd/nSDkvjM9PRSSVTY6iLo0jywkYfkQ+fir6zzJk3CROdPOA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TUgPSQv+r5StWQ6bfMtlK7naR1omTHvHOnuKrq3A+EU=;
- b=NIvyd3Bv6AP6TvKpoxUO7zDbind6kM5yGHtDmS0rnznIFs7SPtRj20LZavv9o8EqHJOU+YbLF/VKLMoY2TZIHZXZGWOYAnJy5+L/YA5xgbui2Pn5kNs86R9i0M5wQVbNrONfYf9czpO+60b+cT0ikwSDhioJUESOHPvanHIWCjo=
+ bh=cHe+nRs17sEsXXBKjE7Wm2h+HNWZwys85dH9KzCIaeg=;
+ b=WUVpWvQYd/b8YHlZ30o06xC6aGkigy7yGaOccKHGj8bkXL4Zr4q2EPO+X8+sHD7nGFPxzyHZPHuYAV4MOv1ZXuMJiyPfggUa3DlBzLAL7MgqScsDXCabNCqmMgRrG22PVupe1utSHJozh1gyQ9CCZPFPtUQvOJdSCbXca0tCsh8=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1343.namprd22.prod.outlook.com (10.172.62.16) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.20; Tue, 3 Sep 2019 20:47:42 +0000
+ MWHPR2201MB1551.namprd22.prod.outlook.com (10.174.170.164) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2220.20; Tue, 3 Sep 2019 21:00:57 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::f9e8:5e8c:7194:fad3]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::f9e8:5e8c:7194:fad3%11]) with mapi id 15.20.2220.021; Tue, 3 Sep 2019
- 20:47:42 +0000
+ 21:00:57 +0000
 From:   Paul Burton <paul.burton@mips.com>
-To:     Paul Burton <pburton@wavecomp.com>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
         Paul Burton <pburton@wavecomp.com>,
-        Huacai Chen <chenhc@lemote.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "salyzyn@android.com" <salyzyn@android.com>,
+        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
+        "luto@kernel.org" <luto@kernel.org>,
         "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: Drop Loongson _CACHE_* definitions
-Thread-Topic: [PATCH] MIPS: Drop Loongson _CACHE_* definitions
-Thread-Index: AQHVYBKgBRpwpRy2vUOxDgPtlxAwFacaD++A
-Date:   Tue, 3 Sep 2019 20:47:42 +0000
-Message-ID: <MWHPR2201MB127745CFB0EE46FEE15D1ECCC1B90@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20190831154145.7328-1-paul.burton@mips.com>
-In-Reply-To: <20190831154145.7328-1-paul.burton@mips.com>
+Subject: Re: [PATCH v2 3/8] mips: compat: vdso: Use legacy syscalls as
+ fallback
+Thread-Topic: [PATCH v2 3/8] mips: compat: vdso: Use legacy syscalls as
+ fallback
+Thread-Index: AQHVYpquVTUocwY3d0uz1j8PNA3NAg==
+Date:   Tue, 3 Sep 2019 21:00:57 +0000
+Message-ID: <MWHPR2201MB1277ED2AD21C031201F749EAC1B90@MWHPR2201MB1277.namprd22.prod.outlook.com>
+References: <20190830135902.20861-4-vincenzo.frascino@arm.com>
+In-Reply-To: <20190830135902.20861-4-vincenzo.frascino@arm.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: LNXP123CA0009.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:d2::21) To MWHPR2201MB1277.namprd22.prod.outlook.com
+x-clientproxiedby: LO2P265CA0480.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a2::36) To MWHPR2201MB1277.namprd22.prod.outlook.com
  (2603:10b6:301:18::12)
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=pburton@wavecomp.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
 x-originating-ip: [94.196.167.206]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5a90c6f4-42b0-483e-08eb-08d730aff70e
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1343;
-x-ms-traffictypediagnostic: MWHPR2201MB1343:
+x-ms-office365-filtering-correlation-id: ff988808-de10-4ae0-5a8f-08d730b1d103
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1551;
+x-ms-traffictypediagnostic: MWHPR2201MB1551:
 x-ms-exchange-purlcount: 1
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB13432EFC050A02D4A7B9C683C1B90@MWHPR2201MB1343.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-microsoft-antispam-prvs: <MWHPR2201MB15518335CDAC1F1178B5C2DBC1B90@MWHPR2201MB1551.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
 x-forefront-prvs: 01494FA7F7
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(39840400004)(396003)(376002)(346002)(366004)(189003)(199004)(42882007)(26005)(6246003)(81166006)(8936002)(966005)(74316002)(6436002)(66066001)(2906002)(81156014)(8676002)(305945005)(478600001)(486006)(55016002)(446003)(9686003)(53936002)(6306002)(54906003)(3846002)(44832011)(6116002)(6862004)(4326008)(476003)(6506007)(386003)(102836004)(7736002)(55236004)(76176011)(14454004)(186003)(7696005)(229853002)(11346002)(4744005)(64756008)(66446008)(256004)(66556008)(66946007)(66476007)(5660300002)(52536014)(25786009)(33656002)(316002)(71190400001)(52116002)(99286004)(14444005)(71200400001);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1343;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(396003)(346002)(136003)(39850400004)(376002)(199004)(189003)(55236004)(316002)(42882007)(7736002)(305945005)(4326008)(8936002)(6916009)(74316002)(386003)(6506007)(256004)(7696005)(81166006)(76176011)(102836004)(54906003)(186003)(25786009)(8676002)(81156014)(71200400001)(71190400001)(26005)(229853002)(478600001)(966005)(99286004)(5660300002)(52536014)(3846002)(6116002)(2906002)(52116002)(33656002)(14454004)(486006)(53936002)(6246003)(64756008)(66476007)(66556008)(66946007)(446003)(44832011)(66446008)(9686003)(11346002)(7416002)(4744005)(476003)(6436002)(6306002)(55016002)(66066001);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1551;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: vzpBcK371CDvWap6R4KsUKewruxKadEMHR/rvic+Oddmm9ONDPrRAMw1olR4f3pZDPyCltVXngcy7uo21K1OO+EnfIy9J7GWrh/QPdMCgKyAZajX3psjIT2x1o3527Povqlbt2ZoYrB/9huWbAeN9CNVx4qbwJ+clCaE7SsfIg0KPboO3mAMloO1If/Ql+r1RlUvpykE7Z38roO/Awr3u0NGU+eAuaFgHjNS2xSC1Kzkjf7KpflDFRnGaMeql3hVuXGnNycw4ZtiIg2FL5oWydOiWCefyFLuvl0TBQW2MpOc5rLBVS+mz3V8fgePoUj0kVKV7vbq250uorERh8CyxrH+aR7AHVQh+SDahsdnjcBSq0S1HgTfFofqYSBumom100LzqI28Yym7rHb/qJlC76Cy8GQQrv8XSUiS5VLef1Q=
+x-microsoft-antispam-message-info: Lo0x0Jh2oXuLX5JZhpQmBBuMCZ2IPJFHMZClsa04RSG3Z92aOAe+YdCS3uEyrWFlmyVdZdwwhFWq+CTTQK33S56C7wxAXE2keHyhUDXp/EbHEViNgnsdQ82KpsmlCUmFGDRq6seiug3JSkpTCW7fp6AsttfNsfP/NX3UuzcGjCwRxv9iaieV4IC/J8TE6Kho/gJdbvDtm953vZLuaa29ChN4IOaq2gesawcKrVdGFEoLyNuqPhxT0yMuxk5XMHHStlI7JFScGK95JUbvoNFo7o3ain73ae25TF6crmmee96djOsa5PINRVFfeG4b9eh8YoUbzl1H93ZuwUzDpqvAg52zC4e6p2D84mlsR3OzdFY6XCnIzwySaiLEusFNODKg+HrCNwMyUo1MxIoN8akRnDqlbpcubbyGwBHIyFH3uJ8=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a90c6f4-42b0-483e-08eb-08d730aff70e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Sep 2019 20:47:42.4873
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff988808-de10-4ae0-5a8f-08d730b1d103
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Sep 2019 21:00:57.1566
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0UY6Orn4hz6jMO/uRnbUB3uZNNWJ/92tDIILYI7SCd34a6cK2b4pjl9ySVcX84/bxofU+nRrVHuDTfRGHoxh1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1343
+X-MS-Exchange-CrossTenant-userprincipalname: FsCJgR/o5cPJLaGQBxzwofEvEivm+RyDYhetHFlca0WvlvLtRW12y77S8Y9XM46+oWy7g7q9MongdJBtbWKUzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1551
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -92,30 +104,25 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hello,
 
-Paul Burton wrote:
-> _CACHE_CACHABLE_NONCOHERENT is defined as 3<<_CACHE_SHIFT by default, so
-> there's no need to define it as such specifically for Loongson.
+Vincenzo Frascino wrote:
+> The generic VDSO implementation uses the Y2038 safe clock_gettime64() and
+> clock_getres_time64() syscalls as fallback for 32bit VDSO. This breaks
+> seccomp setups because these syscalls might be not (yet) allowed.
 >=20
-> _CACHE_CACHABLE_COHERENT is not used anywhere in the kernel, so there's
-> no need to define it at all.
+> Implement the 32bit variants which use the legacy syscalls and select the
+> variant in the core library.
 >=20
-> Finally the comment found alongside these definitions seems incorrect -
-> it suggests that we're defining _CACHE_CACHABLE_NONCOHERENT such that it
-> actually provides coherence, but the opposite seems to be true & instead
-> the unused _CACHE_CACHABLE_COHERENT is defined as the typically
-> incoherent value.
->=20
-> Delete the whole thing, which will have no effect on the compiled code
-> anyway.
+> The 64bit time variants are not removed because they are required for the
+> time64 based vdso accessors.
 
 Applied to mips-next.
 
-> commit 3d77a95fc03b
-> https://git.kernel.org/mips/c/3d77a95fc03b
+> commit 932bb934ed4d
+> https://git.kernel.org/mips/c/932bb934ed4d
 >=20
+> Fixes: 00b26474c2f1 ("lib/vdso: Provide generic VDSO implementation")
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 > Signed-off-by: Paul Burton <paul.burton@mips.com>
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.org>
-> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
 Thanks,
     Paul
