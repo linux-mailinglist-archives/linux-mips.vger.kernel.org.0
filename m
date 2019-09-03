@@ -2,122 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46737A5C9D
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Sep 2019 21:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D0BA5FE6
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2019 05:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727042AbfIBTPx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 2 Sep 2019 15:15:53 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:46544 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727022AbfIBTPw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 Sep 2019 15:15:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=jLmXpLU6F1RGPbvNG04Pwx+M4aB058HdSSdmCuhuLak=; b=ABUi6bxwns6yQEN+1PnwjRCTK
-        GpwKo/K2O4pz7QylK87ZTmWEBXC3cVnMf4e54Wg0s5A0GhBfCrxAY5UkSmMCD2l120rKEBOMtmmSx
-        fQv7FhbjUE0Rpx3DiFQyebngjv0bSKpYfLtzd6C7v0yuII8sKLhPVKc2NYTg4oEjO86VlgdYYl2rw
-        /2rqFgmolMcY8H2vtNv4U8p9VQ9qhC7n/cEEEv5csuBN+Cf0JtVgyQGd6kZTDlEJSlCZaDYqDu3gN
-        nj7VnN5S6ckTuLGYXWcKmdyXpwxgRfmGWokUG7W1qrM5Pncbt6HIFrG7uIE9qeQYXi0H+WkSD6QRc
-        ZKFJaOhww==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i4rmW-0003ny-LE; Mon, 02 Sep 2019 19:14:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 393DE306023;
-        Mon,  2 Sep 2019 21:13:46 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E09FA29B9FF21; Mon,  2 Sep 2019 21:14:21 +0200 (CEST)
-Date:   Mon, 2 Sep 2019 21:14:21 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Yunsheng Lin <linyunsheng@huawei.com>, dalias@libc.org,
-        linux-sh@vger.kernel.org, catalin.marinas@arm.com,
-        dave.hansen@linux.intel.com, heiko.carstens@de.ibm.com,
-        linuxarm@huawei.com, jiaxun.yang@flygoat.com,
-        linux-kernel@vger.kernel.org, mwb@linux.vnet.ibm.com,
-        paulus@samba.org, hpa@zytor.com, sparclinux@vger.kernel.org,
-        chenhc@lemote.com, will@kernel.org, linux-s390@vger.kernel.org,
-        ysato@users.sourceforge.jp, mpe@ellerman.id.au, x86@kernel.org,
-        rppt@linux.ibm.com, borntraeger@de.ibm.com, dledford@redhat.com,
-        mingo@redhat.com, jeffrey.t.kirsher@intel.com,
-        benh@kernel.crashing.org, jhogan@kernel.org,
-        nfont@linux.vnet.ibm.com, mattst88@gmail.com, len.brown@intel.com,
-        gor@linux.ibm.com, anshuman.khandual@arm.com,
-        ink@jurassic.park.msu.ru, cai@lca.pw, luto@kernel.org,
-        tglx@linutronix.de, naveen.n.rao@linux.vnet.ibm.com,
-        linux-arm-kernel@lists.infradead.org, rth@twiddle.net,
-        axboe@kernel.dk, robin.murphy@arm.com, linux-mips@vger.kernel.org,
-        ralf@linux-mips.org, tbogendoerfer@suse.de, paul.burton@mips.com,
-        linux-alpha@vger.kernel.org, bp@alien8.de,
-        akpm@linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
-        davem@davemloft.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [PATCH v2 2/9] x86: numa: check the node id consistently for x86
-Message-ID: <20190902191421.GT2369@hirez.programming.kicks-ass.net>
-References: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
- <1567231103-13237-3-git-send-email-linyunsheng@huawei.com>
- <20190831085539.GG2369@hirez.programming.kicks-ass.net>
- <4d89c688-49e4-a2aa-32ee-65e36edcd913@huawei.com>
- <20190831161247.GM2369@hirez.programming.kicks-ass.net>
- <ae64285f-5134-4147-7b02-34bb5d519e8c@huawei.com>
- <20190902072542.GN2369@hirez.programming.kicks-ass.net>
- <5fa2aa99-89fa-cd41-b090-36a23cfdeb73@huawei.com>
- <20190902125644.GQ2369@hirez.programming.kicks-ass.net>
- <20190902182252.GC35858@gmail.com>
+        id S1725854AbfICDuO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 2 Sep 2019 23:50:14 -0400
+Received: from forward102j.mail.yandex.net ([5.45.198.243]:60790 "EHLO
+        forward102j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725848AbfICDuO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 Sep 2019 23:50:14 -0400
+Received: from mxback6o.mail.yandex.net (mxback6o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::20])
+        by forward102j.mail.yandex.net (Yandex) with ESMTP id A6704F20E20;
+        Tue,  3 Sep 2019 06:50:09 +0300 (MSK)
+Received: from smtp3o.mail.yandex.net (smtp3o.mail.yandex.net [2a02:6b8:0:1a2d::27])
+        by mxback6o.mail.yandex.net (nwsmtp/Yandex) with ESMTP id 62lEUQt2Wi-o9VSi1kk;
+        Tue, 03 Sep 2019 06:50:09 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1567482609;
+        bh=PkIw7mWkWCTDrNINO37DwccJDXBDRHKoyiJUMgN/55U=;
+        h=In-Reply-To:From:To:Subject:Cc:Date:References:Message-ID;
+        b=aK434M+69tCznKfHh6l8nrg3UtYJyNfKq7bxCWHVOnmWwmJzsqE8sChnK6l4ZMzwC
+         Ikhg2qCKpE2AFhjdj8wCCPapcAgjk1RWoMzUrJ8Qo88pRnHhH26fCVhV+vc7ZENKCW
+         q01KavZZ8LiX+SNgwXC+7c/n9TALzmauZbXuvg7Q=
+Authentication-Results: mxback6o.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by smtp3o.mail.yandex.net (nwsmtp/Yandex) with ESMTPSA id gFijUlGWMN-o7MmjvTl;
+        Tue, 03 Sep 2019 06:50:08 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+Subject: Re: [PATCH 120/120] MIPS: Fix name of BOOT_MEM_ROM_DATA
+To:     Fredrik Noring <noring@nocrew.org>
+Cc:     linux-mips@vger.kernel.org
+References: <cover.1567326213.git.noring@nocrew.org>
+ <54a08fcb41b12e715529148a6bc11bcb3e2adb4d.1567326213.git.noring@nocrew.org>
+ <d88ab711-b8b6-a04f-6f19-82ecbb758398@flygoat.com>
+ <20190902152626.GC2479@sx9>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <01a6d6e1-2c14-c3fd-8c15-ac54726e55d3@flygoat.com>
+Date:   Tue, 3 Sep 2019 11:50:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190902182252.GC35858@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190902152626.GC2479@sx9>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 02, 2019 at 08:22:52PM +0200, Ingo Molnar wrote:
-> 
-> * Peter Zijlstra <peterz@infradead.org> wrote:
 
-> > diff --git a/drivers/base/core.c b/drivers/base/core.c
-> > index f0dd8e38fee3..2caf204966a0 100644
-> > --- a/drivers/base/core.c
-> > +++ b/drivers/base/core.c
-> > @@ -2120,8 +2120,16 @@ int device_add(struct device *dev)
-> >  		dev->kobj.parent = kobj;
-> >  
-> >  	/* use parent numa_node */
-> > -	if (parent && (dev_to_node(dev) == NUMA_NO_NODE))
-> > -		set_dev_node(dev, dev_to_node(parent));
-> > +	if (dev_to_node(dev) == NUMA_NO_NODE) {
-> > +		if (parent)
-> > +			set_dev_node(dev, dev_to_node(parent));
-> > +#ifdef CONFIG_NUMA
-> > +		else {
-> > +			pr_err("device: '%s': has no assigned NUMA node\n", dev_name(dev));
-> > +			set_dev_node(dev, 0);
-> > +		}
-> > +#endif
-> 
-> BTW., is firmware required to always provide a NUMA node on NUMA systems?
-> 
-> I.e. do we really want this warning on non-NUMA systems that don't assign 
-> NUMA nodes?
+在 2019/9/2 23:26, Fredrik Noring 写道:
+>> ROM_DATA meant memory used by ROM(Bootloader) to store data in some
+>> machines, is that name right?
+> That's the machine reset code, and other things such as the BIOS, drivers,
+> firmware, splash screen animations, a DVD player, etc.
 
-Good point; we might have to exclude nr_node_ids==1 systems from
-warning.
+Hi Fredik,
 
-> Also, even on NUMA systems, is firmware required to provide a NUMA node - 
-> i.e. is it in principle invalid to offer no NUMA binding?
+Then it's not *memory* right?'
 
-I think so; a device needs to be _somewhere_, right? Typically though;
-devices are on a PCI bus, and the PCI bridge itself will have a NUMA
-binding and then the above parent rule will make everything just work.
+And It should not be managed by boot_mem_map (Or memblock after 
+boot_mem_map being dropped).
 
-But I don't see how you can be outside of the NUMA topology.
+>> Btw, boot_mem_map had been droped recently, see mips-next tree, please
+>> rebase.
+> OK, then I think we can drop this patch since it was meant as a starting
+> point to mapping all addresses in /proc/iomem. I have patches that make
+> it look like this:
+Add these stuff to resource system by platform code is better than 
+hijack memory map of all other machines.
+>
+> # cat /proc/iomem
+> 00000000-01ffffff : System RAM
+>    00010000-00431c4b : Kernel code
+>    00431c4c-00584fff : Kernel data
+>    007c0000-007e695f : Kernel bss
+> 12000000-13ffffff : Graphics Synthesizer
+> 1c000000-1c1fffff : IOP RAM
+> 1e000000-1e0fffff : System ROM
+> 1f801600-1f8016ff : USB OHCI
+> 1fc00000-1fffffff : System ROM
+>
+> There are many other regions, and it would be useful to have them all
+> included eventually, but they are not essential for the initial system.
+>
+> Fredrik
+Thanks.
+
+--
+
+Jiaxun Yang
+
