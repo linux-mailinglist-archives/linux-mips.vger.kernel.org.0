@@ -2,100 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6281FA6BD6
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2019 16:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7971CA6D83
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2019 18:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729509AbfICOuB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Sep 2019 10:50:01 -0400
-Received: from foss.arm.com ([217.140.110.172]:38518 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727667AbfICOuA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 3 Sep 2019 10:50:00 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF1EC337;
-        Tue,  3 Sep 2019 07:49:59 -0700 (PDT)
-Received: from [10.37.8.116] (unknown [10.37.8.116])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C3E663F246;
-        Tue,  3 Sep 2019 07:49:57 -0700 (PDT)
-Subject: Re: [PATCH v2 7/8] mips: vdso: Remove unused VDSO_HAS_32BIT_FALLBACK
-To:     Paul Burton <paul.burton@mips.com>
-Cc:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "salyzyn@android.com" <salyzyn@android.com>,
-        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
-        "luto@kernel.org" <luto@kernel.org>
-References: <20190830135902.20861-1-vincenzo.frascino@arm.com>
- <20190830135902.20861-8-vincenzo.frascino@arm.com>
- <20190903143801.7upetfqe6upouzlh@pburton-laptop>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <f783346b-3e33-1bce-f204-f9737ef493e0@arm.com>
-Date:   Tue, 3 Sep 2019 15:51:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1729865AbfICQGb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Sep 2019 12:06:31 -0400
+Received: from pio-pvt-msa3.bahnhof.se ([79.136.2.42]:37540 "EHLO
+        pio-pvt-msa3.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728860AbfICQGb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Sep 2019 12:06:31 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTP id 168D53F59B;
+        Tue,  3 Sep 2019 18:06:30 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Flag: NO
+X-Spam-Score: -1.899
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
+        tests=[BAYES_00=-1.9, URIBL_BLOCKED=0.001]
+        autolearn=ham autolearn_force=no
+Received: from pio-pvt-msa3.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa3.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id R2QSjieuHuo7; Tue,  3 Sep 2019 18:06:29 +0200 (CEST)
+Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
+        (Authenticated sender: mb547485)
+        by pio-pvt-msa3.bahnhof.se (Postfix) with ESMTPA id 200113F4A9;
+        Tue,  3 Sep 2019 18:06:28 +0200 (CEST)
+Date:   Tue, 3 Sep 2019 18:06:28 +0200
+From:   Fredrik Noring <noring@nocrew.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH 120/120] MIPS: Fix name of BOOT_MEM_ROM_DATA
+Message-ID: <20190903160628.GB3595@sx9>
+References: <cover.1567326213.git.noring@nocrew.org>
+ <54a08fcb41b12e715529148a6bc11bcb3e2adb4d.1567326213.git.noring@nocrew.org>
+ <d88ab711-b8b6-a04f-6f19-82ecbb758398@flygoat.com>
+ <20190902152626.GC2479@sx9>
+ <01a6d6e1-2c14-c3fd-8c15-ac54726e55d3@flygoat.com>
 MIME-Version: 1.0
-In-Reply-To: <20190903143801.7upetfqe6upouzlh@pburton-laptop>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <01a6d6e1-2c14-c3fd-8c15-ac54726e55d3@flygoat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+> Then it's not *memory* right?'
+>
+> And It should not be managed by boot_mem_map (Or memblock after 
+> boot_mem_map being dropped).
 
-On 9/3/19 3:46 PM, Paul Burton wrote:
-> Hi Vincenzo,
-> 
-> On Fri, Aug 30, 2019 at 02:59:01PM +0100, Vincenzo Frascino wrote:
->> VDSO_HAS_32BIT_FALLBACK has been removed from the core since
->> the architectures that support the generic vDSO library have
->> been converted to support the 32 bit fallbacks.
->>
->> Remove unused VDSO_HAS_32BIT_FALLBACK from mips vdso.
->>
->> Cc: Paul Burton <paul.burton@mips.com>
->> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> 
-> Do you want this one in mips-next too, or applied somewhere else along
-> with the rest of the series? If the latter:
-> 
->     Acked-by: Paul Burton <paul.burton@mips.com>
-> 
+ROM0 corresponds to IC503 (BOOT) and ROM1 to IC506 (DVD) in the SCPH-30000
+series edition 6 service manual. Both 4 MiB 44 pin chips. IC506 is faintly
+marked with SCEI at the bottom of this image of the A side of the mainboard:
 
-This patch has a dependency on patch n5 hence can not be applied independently.
+https://commons.wikimedia.org/wiki/File:PS2-SCPH-30001-Motherboard.jpg
 
-Thanks,
-Vincenzo
+IC503 is on the B side. What would they be if not read-only memory?
 
-> Thanks,
->     Paul
-> 
->> ---
->>  arch/mips/include/asm/vdso/gettimeofday.h | 2 --
->>  1 file changed, 2 deletions(-)
->>
->> diff --git a/arch/mips/include/asm/vdso/gettimeofday.h b/arch/mips/include/asm/vdso/gettimeofday.h
->> index e78462e8ca2e..5ad2b086626d 100644
->> --- a/arch/mips/include/asm/vdso/gettimeofday.h
->> +++ b/arch/mips/include/asm/vdso/gettimeofday.h
->> @@ -107,8 +107,6 @@ static __always_inline int clock_getres_fallback(
->>  
->>  #if _MIPS_SIM != _MIPS_SIM_ABI64
->>  
->> -#define VDSO_HAS_32BIT_FALLBACK	1
->> -
->>  static __always_inline long clock_gettime32_fallback(
->>  					clockid_t _clkid,
->>  					struct old_timespec32 *_ts)
->> -- 
->> 2.23.0
->>
+Sony made numerous revisions of their mainboards, so earlier and later
+designs were different.
 
+> Add these stuff to resource system by platform code is better than 
+> hijack memory map of all other machines.
+
+Sorry, I was unclear. The other ones are platform resources, although
+incomplete.
+
+Fredrik
