@@ -2,57 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0A6A6B92
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2019 16:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F024A6B98
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Sep 2019 16:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729583AbfICOcp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Sep 2019 10:32:45 -0400
-Received: from ste-pvt-msa2.bahnhof.se ([213.80.101.71]:3759 "EHLO
-        ste-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728925AbfICOcp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Sep 2019 10:32:45 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by ste-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 0FAFF3F559;
-        Tue,  3 Sep 2019 16:32:43 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Flag: NO
-X-Spam-Score: -1.9
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 tagged_above=-999 required=6.31
-        tests=[BAYES_00=-1.9] autolearn=ham autolearn_force=no
-Received: from ste-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (ste-ftg-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id HKnREz6gfMeo; Tue,  3 Sep 2019 16:32:42 +0200 (CEST)
-Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
-        (Authenticated sender: mb547485)
-        by ste-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 4E10C3F346;
-        Tue,  3 Sep 2019 16:32:42 +0200 (CEST)
-Date:   Tue, 3 Sep 2019 16:32:42 +0200
-From:   Fredrik Noring <noring@nocrew.org>
-To:     Aaro Koskinen <aaro.koskinen@iki.fi>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 094/120] MIPS: PS2: FB: Frame buffer driver for the
- PlayStation 2
-Message-ID: <20190903143241.GA3595@sx9>
-References: <cover.1567326213.git.noring@nocrew.org>
- <4927c42fb3401c42c4c5a077f272331ac79d80b1.1567326213.git.noring@nocrew.org>
- <1003c9cc-c30e-00a7-7494-4f1cb4862e88@flygoat.com>
- <20190902144007.GA2479@sx9>
- <20190902174735.GA4339@darkstar.musicnaut.iki.fi>
+        id S1729036AbfICOeq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Sep 2019 10:34:46 -0400
+Received: from foss.arm.com ([217.140.110.172]:38208 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727667AbfICOeq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 3 Sep 2019 10:34:46 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1FBB5337;
+        Tue,  3 Sep 2019 07:34:43 -0700 (PDT)
+Received: from [10.37.8.116] (unknown [10.37.8.116])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 255533F246;
+        Tue,  3 Sep 2019 07:34:40 -0700 (PDT)
+Subject: Re: [PATCH v2 1/8] arm64: compat: vdso: Expose BUILD_VDSO32
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     catalin.marinas@arm.com, 0x7f454c46@gmail.com, salyzyn@android.com,
+        paul.burton@mips.com, luto@kernel.org, tglx@linutronix.de,
+        will@kernel.org
+References: <20190830135902.20861-1-vincenzo.frascino@arm.com>
+ <20190830135902.20861-2-vincenzo.frascino@arm.com>
+Message-ID: <c0b1673d-e37d-a526-0862-ad07f779f5bf@arm.com>
+Date:   Tue, 3 Sep 2019 15:36:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
+In-Reply-To: <20190830135902.20861-2-vincenzo.frascino@arm.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190902174735.GA4339@darkstar.musicnaut.iki.fi>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Aaro,
+Hi Catalin and Will,
 
-> DRM drivers do provide FB console.
+On 8/30/19 2:58 PM, Vincenzo Frascino wrote:
+> clock_gettime32 and clock_getres_time32 should be compiled only with the
+> 32 bit vdso library.
+> 
+> Expose BUILD_VDSO32 when arm64 compat is compiled, to provide an
+> indication to the generic library to include these symbols.
+> 
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+> ---
+>  arch/arm64/include/asm/vdso/compat_gettimeofday.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/include/asm/vdso/compat_gettimeofday.h b/arch/arm64/include/asm/vdso/compat_gettimeofday.h
+> index c50ee1b7d5cd..fe7afe0f1a3d 100644
+> --- a/arch/arm64/include/asm/vdso/compat_gettimeofday.h
+> +++ b/arch/arm64/include/asm/vdso/compat_gettimeofday.h
+> @@ -17,6 +17,7 @@
+>  #define VDSO_HAS_CLOCK_GETRES		1
+>  
+>  #define VDSO_HAS_32BIT_FALLBACK		1
+> +#define BUILD_VDSO32			1
+>  
+>  static __always_inline
+>  int gettimeofday_fallback(struct __kernel_old_timeval *_tv,
+> 
 
-Great, thanks! I will look into that.
+This patch is independent from the rest and touches only arch code. Can it go in
+via the arm64 tree?
 
-Fredrik
+-- 
+Regards,
+Vincenzo
