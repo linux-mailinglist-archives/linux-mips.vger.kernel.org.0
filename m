@@ -2,102 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2724CA7FF2
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 12:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0E0A8159
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 13:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727722AbfIDKFO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Sep 2019 06:05:14 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:59550 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727348AbfIDKFO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Sep 2019 06:05:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=02H0SxIUNxp2UEHFkwbSDc5jO1XGq5OcUntTnGs7L8E=; b=Dkt/kG8vsEat9piuYXOUnEuBQ
-        3NF4HRst+CVGpbbMU79i+G9Q9ev57UBLxxvNpZdptNOW9ucvBSfeWmRo5FX5gCVerXRlzzmfkszM2
-        L39DAS44eYIg/FfphFWBJKF/D0E3dKiHWI5iKhr+Ma05vVcey3CWY+FvRw3Gme+Kjy3lGrPvv8sZW
-        ql3TDG3uMB6pt79plBQfzN7gQiL44gxpIgPExb0fXQIvO0lgq7GGlSL75rf1InzKHRIo35UQjL86Z
-        skmh9C3hDSDM8Wd+Gm/pTx06sUyg281LNaD9AclhSsq7DlEmi2fnCtrJSJIYLn7uorvK5cjBnOKxm
-        RD5ouJa6A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i5S9o-00010H-Fx; Wed, 04 Sep 2019 10:04:56 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 529C130116F;
-        Wed,  4 Sep 2019 12:04:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C865B29C3712D; Wed,  4 Sep 2019 12:04:53 +0200 (CEST)
-Date:   Wed, 4 Sep 2019 12:04:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "huangpei@loongson.cn" <huangpei@loongson.cn>
-Cc:     =?utf-8?B?6ZmI5Y2O5omN?= <chenhc@lemote.com>,
-        ralf <ralf@linux-mips.org>, Paul Burton <paul.burton@mips.com>,
-        jhogan <jhogan@kernel.org>,
-        "jiaxun.yang" <jiaxun.yang@flygoat.com>,
-        linux-mips <linux-mips@vger.kernel.org>
-Subject: Re: Something about loongson_llsc_mb
-Message-ID: <20190904100453.GU2386@hirez.programming.kicks-ass.net>
-References: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
- <1567231103-13237-3-git-send-email-linyunsheng@huawei.com>
- <20190831085539.GG2369@hirez.programming.kicks-ass.net>
- <4d89c688-49e4-a2aa-32ee-65e36edcd913@huawei.com>
- <20190831161247.GM2369@hirez.programming.kicks-ass.net>
- <tencent_34DDA31F622119EE5003B7F4@qq.com>
- <2019090410032559707512@loongson.cn>
- <20190904092154.GC2349@hirez.programming.kicks-ass.net>
+        id S1726010AbfIDLq6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Sep 2019 07:46:58 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:45791 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725829AbfIDLq6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Sep 2019 07:46:58 -0400
+Received: by mail-lj1-f195.google.com with SMTP id l1so19255593lji.12
+        for <linux-mips@vger.kernel.org>; Wed, 04 Sep 2019 04:46:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:from:to:references:organization:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=anhS1dT8Khzjsj1S9LZyMCozECKYQ0s+N4eL9s1N5B4=;
+        b=Xu7huIrWossEWfgJM30hnPsvuQFejF+v6VPP0VwDTmzEJdIjyaOs6NCjxeVWpjZsru
+         566aYYLGBbjfRsb8M1O5+IA5h+OhpjsuZFMAiLVEzjy7qyjETJO7U93UAC8BGJ1CfqH1
+         3pBWEm3j9k2baujh/9zS28M9Btla0PmhiVKmOeNh8vLDMJN42c+xBLn1+FMta+uH+n5m
+         8Mvqb0QwJP1lav6wpxsQoi1oB8DTNB/7px6i2iisg6Jbc3JuBJTC5bgppqnwwhBdJopf
+         KuSjvByYATm7Q3CBTEUBhJ+PgE8fbB2ZCWKF0JsuJqjZ8vqSim2j19XBwjGsUzvpOytd
+         qSkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:references:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=anhS1dT8Khzjsj1S9LZyMCozECKYQ0s+N4eL9s1N5B4=;
+        b=jsbibJdAVQubVrPzAI4+dUdvmskRZFNF/ILPRwCrCiUt8m0bRA/gs03heTUQsIQE27
+         1DiBRC+ecuUEd4Y9vu9PnUFkmr9NvQ7+esqnFSL7kOWCP3hT4R0xWLFioJFhMNxu5xGA
+         cp6yYbNK1yhogiv+nR7GelvOcPpUiOFB7cDwbOvckC88U4JdfSpBcpLnAQmU8NFzi4o6
+         2RWT9LuldLvYgp/czONFugRITddU/bOrHTaJnld010C2/22joycIoWFJYf525unrHjfT
+         We/FrdJJYsg27uTyrBXl0zFuaAygLVIp3lGYJa3gogp6F61eUwi9PhhnwTAc+nW2Q+dj
+         olcA==
+X-Gm-Message-State: APjAAAXyMuG20BH3Ynf71Bpc4uv0O9rkYNIgyw1uFlfZLIjNGPjrGeox
+        npRfBlw8siNAOX5moINGFwosCF9A8YJ92w==
+X-Google-Smtp-Source: APXvYqwaWxtuQz1gEQRLu/KtxjGHWAWV2lFg0k6obrXmQXgCX96iURPWQwPU3/mZpx9xzBupt1OKyg==
+X-Received: by 2002:a2e:95cd:: with SMTP id y13mr1171913ljh.188.1567597616738;
+        Wed, 04 Sep 2019 04:46:56 -0700 (PDT)
+Received: from wasted.cogentembedded.com ([2a00:1fa0:461a:d9ce:6456:1196:2b4:13b6])
+        by smtp.gmail.com with ESMTPSA id a11sm3439989lfi.60.2019.09.04.04.46.55
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 04 Sep 2019 04:46:55 -0700 (PDT)
+Subject: Re: [PATCH 038/120] MIPS: PS2: ROM: Read data for a given ROM file
+ name
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+To:     Fredrik Noring <noring@nocrew.org>, linux-mips@vger.kernel.org
+References: <cover.1567326213.git.noring@nocrew.org>
+ <69a1b78886392bca426ac6f521197af06d768042.1567326213.git.noring@nocrew.org>
+ <9a699dfb-b597-f674-5fd3-cef19b9db15b@cogentembedded.com>
+Organization: Cogent Embedded
+Message-ID: <4da72bee-5641-04d0-e74a-ae216874ad4a@cogentembedded.com>
+Date:   Wed, 4 Sep 2019 14:46:54 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190904092154.GC2349@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <9a699dfb-b597-f674-5fd3-cef19b9db15b@cogentembedded.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-MW
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Sep 04, 2019 at 11:21:54AM +0200, Peter Zijlstra wrote:
-> 
-> *why* are you replying to some random unrelated thread?
-> 
-> Also, please use a sane MUA and wrap your lines <80 chars.
-> 
-> On Wed, Sep 04, 2019 at 10:03:31AM +0800, huangpei@loongson.cn wrote:
-> > >Hi, Peter,
-> > >
-> > >I found that this patch has been merged but I haven't received the e-mail for some unknown reasons.
-> > >https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=1c6c1ca318585f1096d4d04bc722297c85e9fb8a
-> > >
-> > >Firstly, your comments are correct, so the barrier.h part is perfect.
-> > >
-> > >Secondly, most of the rest is useless, because smp_mb__before_llsc, loongson_llsc_mb and other memory barriers are the same thing on Loongson-3. We don't need to add loongson_llsc_mb if there is already a smp_mb__before_llsc.
-> 
-> There wasn't. Take for example set_bit(), that didn't have
-> smp_mb__before_llsc on.
-> 
-> Also; MIPS should probably convert to asm-generic/bitops/atomic.h.
-> 
-> > >Thirdly, maybe the only exception is syscall.c, but mips_atomic_set is not used on Loongson-3. And if in some cases we use it, I think the user-to-kernel context switch has the same effect of a memory barrier.
-> 
-> And how is some random person trying to make sense of MIPS to know that?
-> 
-> You all created a badly documented inconsitent trainwreck. You're
-> 'lucky' the MIPS maintainers accepted that mess in the first place.
-> 
-> Anyway, yes there are too many barrers now in some cases, in a previous
-> version I had:
-> 
->   https://lkml.kernel.org/r/20190424124421.693353463@infradead.org
-> 
-> But because I dropped changes to local.h that might not be true anymore;
-> it needs careful consideration. Please audit carefully and if you find
-> all smp_mb__before_llsc() usage is now superfluous for this 'funny' chip
-> of yours, then re-submit the above patch.
+Hello!
 
-I think we're good, smp_mb__{before,after}_atomic() already doesn't work
-with local_t.
+On 09/02/2019 12:05 PM, Sergei Shtylyov wrote:
+
+>> Reading ROM files is trivial since they are permanently available in
+>> memory. Having rom_read_file() is a convenient when for example
+>> resolving the machine region in subsequent changes.
+>>
+>> Signed-off-by: Fredrik Noring <noring@nocrew.org>
+> [...]
+>> index 12a57f24bd63..840d37a199d8 100644
+>> --- a/arch/mips/ps2/rom.c
+>> +++ b/arch/mips/ps2/rom.c
+>> @@ -224,6 +224,39 @@ struct rom_file rom_first_file(const struct rom_dir dir)
+>>   }
+>>   EXPORT_SYMBOL_GPL(rom_first_file);
+>>   +/**
+>> + * rom_read_file - read ROM file data
+>> + * @dir: directory to read the file from
+>> + * @name: file name to read
+>> + * @buffer: pointer to buffer to store data that is read
+>> + * @size: size in bytes to read
+>> + * @offset: offset in bytes to start reading
+>> + *
+>> + * Context: any
+>> + * Return: on successful completion, a nonnegative integer indicating the
+>> + *     number of bytes actually read; otherwise, a negative error number
+>> + */
+>> +ssize_t rom_read_file(const struct rom_dir dir,
+>> +    const char *name, void *buffer, size_t size, loff_t offset)
+>> +{
+>> +    struct rom_file file;
+>> +
+>> +    rom_find_files(file, dir, name)
+>> +        if (offset < file.size) {
+>> +            const u8 *b = file.data;
+>> +            size_t remaining = file.size - offset;
+>> +            size_t n = min(size, remaining);
+>> +
+>> +            memcpy(buffer, &b[offset], n);
+>> +
+>> +            return n;
+>> +        } else
+> 
+>    The *else* branch also needs {} if the *if* branch has 'emn, according to Documentation/process/coding-style.rst.
+
+   Just realized that we don't need *else* after *return*...
+
+>> +            return 0;
+>> +
+>> +    return -ENOENT;
+>> +}
+>> +EXPORT_SYMBOL_GPL(rom_read_file);
+>> +
+>>   /**
+>>    * find_reset_string - find the offset to the ``"RESET"`` string, if it exists
+>>    * @rom: ROM to search in
+
+MBR, Sergei
