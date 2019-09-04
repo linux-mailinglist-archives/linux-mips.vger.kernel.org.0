@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18BE1A8E01
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 21:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 295EFA8EA9
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 21:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732709AbfIDRze (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Sep 2019 13:55:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60634 "EHLO mail.kernel.org"
+        id S2387810AbfIDR7S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Sep 2019 13:59:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38090 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732659AbfIDRzd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 4 Sep 2019 13:55:33 -0400
+        id S1733309AbfIDR7R (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 4 Sep 2019 13:59:17 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AA6AE22CEA;
-        Wed,  4 Sep 2019 17:55:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 071CB21883;
+        Wed,  4 Sep 2019 17:59:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567619732;
+        s=default; t=1567619956;
         bh=hHHjSbiQsAjEEctleSS533vZ2M8xIgEBQTPowA2D9+g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eCeuUo/OnwnRSc7kPZPszNJ0Kx4wBMOKS/4VKS06t4jEfWJmWqckBJPck2OUyDqcy
-         3ud2AWmhZLMrM+kln764gjZljwojlpVi8SMpL+DOYBvq48IT7ITIawPmQ2Ldx/gcFG
-         VUdj2B7zUf9QpYZWlaeegfFpL6lWMtfbIfeJXqfw=
+        b=TZFeWXsFTS0tox8q4MetCL5UZ2Xpm/iyTAKpnGTITrB1k9wjxDcl3q42o7RIhoL8H
+         7K+F0zM1uqyIxcTJpEFY3RiHm3zV5+nlbuKHERUdNC1wCV9t11dT2/TLhoI1xsDzJ7
+         PL3kknrnWT63jWjjl7x3sW6QGiQTKlpfyw7q5tSQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 02/77] MIPS: kernel: only use i8253 clocksource with periodic clockevent
-Date:   Wed,  4 Sep 2019 19:52:49 +0200
-Message-Id: <20190904175303.589784339@linuxfoundation.org>
+Subject: [PATCH 4.9 02/83] MIPS: kernel: only use i8253 clocksource with periodic clockevent
+Date:   Wed,  4 Sep 2019 19:52:54 +0200
+Message-Id: <20190904175303.776133799@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190904175303.317468926@linuxfoundation.org>
-References: <20190904175303.317468926@linuxfoundation.org>
+In-Reply-To: <20190904175303.488266791@linuxfoundation.org>
+References: <20190904175303.488266791@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
