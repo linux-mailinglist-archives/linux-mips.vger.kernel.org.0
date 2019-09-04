@@ -2,500 +2,708 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C017BA889D
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 21:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E463A88A2
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 21:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727156AbfIDOTR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Sep 2019 10:19:17 -0400
-Received: from mail-eopbgr680104.outbound.protection.outlook.com ([40.107.68.104]:35810
-        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729877AbfIDOTR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 4 Sep 2019 10:19:17 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ccJHbMOR93uQ+fondUV6zc47RxBbG9pPO9KW7LqiJOLxUyTD0x04kEvtlGxroa1/H9zLsxrfZ3mIfH4+HS2g92NQN4K3J27lSv0e0PwgYFXUq+bxHWl4bvY/HQDIq7j7ph7CtTQz6CtLkyKAuBRUlQgeY5dL0JCzJp/2GWUdE5Y0jLqRDf1nTaGoHi3+LnIJNqCA2dXqF/T6zlS27rdavk6Tg+lkpdMlkcnnbR9d94bWv/Veg1vto1QRDRiPVx7+NBOgaMu6hFqstq4oIjRaNxiuNKIWmUjXERh/tsnTskeRxHJAjxn1SXrqZAa5HAHROwWHKn9L48dcLZYb4tDQ/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bKts4KBgjmCNdKxAB1ZFWvQVInrJlal16KksX24g6Oo=;
- b=lSHq+dJa+V04+bMxoYPhL5ZduPGTTW3BqfAGaLa97Hb1SAjGD9X/8nqYK3dV/bQ9kWJZH0P25q5K2bNSiFS7UUYHwFflHLPq18gVqlukxk8yBlkni8JLgb2HQE/+JwcgDUR0+wWQpZoTXSRYEJWT23cz0+8kU+0W7+SuZf6+M9R3/ey9wzqVPfeIHAk3jXQN3JngOZNACsU7sY4mNaKUqtYjvWT0MlFhtK/1ValtcOqNKvFPCXvdm59uVopz/C1x/AH4yavgMqvUobE9fUwqKgFHSEoNTJmEtUYzVihGFAkoXMsEWi6SBsbLJI2+Xc97RRRGq0/ORZ4bHu/lyvGyDA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
- dkim=pass header.d=mips.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bKts4KBgjmCNdKxAB1ZFWvQVInrJlal16KksX24g6Oo=;
- b=iaZUbsn5/CCxLGkw1ahVVnfuRE4lCVHB0QMH3aUnQ86BkRVrLPnp/xreTE4v3H03kgnPJNrJwztRN+0qpIaqY1PNP2L7/M7jK+lRjJY3OH8qbGyr/Pta31t6tqCrCa8oPoMPXQRKdfKbcGF2QXa3b69SRaXirqEuwHJdpe+tR9k=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1216.namprd22.prod.outlook.com (10.174.161.16) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2241.14; Wed, 4 Sep 2019 14:19:11 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::f9e8:5e8c:7194:fad3]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::f9e8:5e8c:7194:fad3%11]) with mapi id 15.20.2220.021; Wed, 4 Sep 2019
- 14:19:11 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Fredrik Noring <noring@nocrew.org>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>,
-        =?iso-8859-1?Q?J=FCrgen_Urban?= <JuergenUrban@gmx.de>
-Subject: Re: [PATCH 000/120] Linux for the PlayStation 2
-Thread-Topic: [PATCH 000/120] Linux for the PlayStation 2
-Thread-Index: AQHVYyu4w/pAdUa0306r+CnDKIYKVQ==
-Date:   Wed, 4 Sep 2019 14:19:11 +0000
-Message-ID: <20190904141026.hwzibvauis5sizq6@pburton-laptop>
-References: <cover.1567326213.git.noring@nocrew.org>
-In-Reply-To: <cover.1567326213.git.noring@nocrew.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: LO2P265CA0223.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:b::19) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:18::12)
-user-agent: NeoMutt/20180716
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [94.196.178.126]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fb743a90-f199-45ba-666a-08d73142daec
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1216;
-x-ms-traffictypediagnostic: MWHPR2201MB1216:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <MWHPR2201MB1216728E766BC76092F8CF4EC1B80@MWHPR2201MB1216.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 0150F3F97D
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(346002)(376002)(396003)(39840400004)(136003)(366004)(199004)(189003)(305945005)(186003)(42882007)(102836004)(229853002)(26005)(6486002)(6916009)(6506007)(55236004)(386003)(6306002)(9686003)(6512007)(76176011)(53936002)(53946003)(99286004)(4326008)(6246003)(52116002)(25786009)(58126008)(54906003)(316002)(66066001)(6436002)(33716001)(1076003)(30864003)(66946007)(5660300002)(66556008)(14454004)(64756008)(66446008)(478600001)(256004)(14444005)(66476007)(966005)(71190400001)(71200400001)(6116002)(3846002)(2906002)(81166006)(81156014)(8936002)(8676002)(476003)(7736002)(11346002)(446003)(486006)(44832011)(579004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1216;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 0OUfyBLyMtnWW1638O4838gk6GLDjTztrdbzA/pmIr+NPCiq3ZfyZBuSsiW3lSKDMAvaOecWJPECJ+0Id2fTnhVA/JkEW9YRaIMN4Ajnx5PrXiDtPWYquU0uwi9YVdrRF49xPU0OwHtOKAcI6KFDmgkalyWewVEeqV2qzaKQ1HyvujhPVYi9RgBIkCowQPgzvQc9Xx1/NdJMO8AANq2kFOiFs0m7FxBE8UnWCC8BUj9WzGD++HLor5Cws39tLDVKQJBktaEHwmsay6f5q8wcvJUTpX/vaD4V3mXIW4G8G5qDOhkQLKFqwnLD+3BHUmk98ZVrsHZz3PsOuv4XlP1/D7Zm1L5NvVo118ehSpzgj/BqB4iuVb4jPs+ssQcptzmIZintI7iEi7rJQjIyGuasxQu4vatlSYGbb3MP7NBBRNU=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <966DF1ADF43C6643931BDF3328C3ED6C@namprd22.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1727722AbfIDOTq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Sep 2019 10:19:46 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:43962 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730576AbfIDOTp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Sep 2019 10:19:45 -0400
+Received: by mail-ed1-f66.google.com with SMTP id c19so8722040edy.10
+        for <linux-mips@vger.kernel.org>; Wed, 04 Sep 2019 07:19:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=IBoj6Yt0vAXXvjfGBhbQPt08BNUVDVJb97KrFIx4mW4=;
+        b=1MAO3oltDdtt/rSRaPHr8j9WQb257fuo8jpsAn27fbwKTzvoORs+1FDgG31EQJ0nSh
+         gbxHvyNs96KKpw2FUApx5tSPYaOnbMp0WnNdY6QHXmyxRrY1K9f9CuAIecmFxMYXPwky
+         67Y3o6Up3ZP6jgBYq8VrNspcs+x4YqCUgrFe9lfDEOjZf7ZeV6y/hwNgDX8FrLOH5geC
+         U2eBxXNurWVtCaIhxiX4ZVG/EoKQ9kLuyLEQ3c5W0w3nmtjWopzCXBtwDvAhitK3DrmR
+         k0r9Ur73r5UYBsn7jgyuPeRt/2pB7vLIKI2aftavmwXNzAt71wEmKkvLgYASwdub6RdR
+         CcNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=IBoj6Yt0vAXXvjfGBhbQPt08BNUVDVJb97KrFIx4mW4=;
+        b=Q85fRsPu4yM8ohaKZDUNnwNH4+tYzXAKa+lz7Nmw1TIQeES6gASSGVsneFDgBByk9R
+         4m5HeAffY5DMOfWF5Y1FveN/CtdG3Ol1tpIBpuRF3eXAxgK4zv1FB2cVl2DZufhKqMqd
+         G9p8ahUZRmiFoepOlEyLr2MP7Qx/lt8Zq7FR+pANT2EJm8ssUZrFruurq6IULvh/Dbz/
+         a1z0dzJVhVlqjlET8joBQ9Ws/b72S3BUlzyehPwiLLSEHW6b7HmnkAjNzkHN833xqCCr
+         HQptJyKBcYGn2u2NVhJHe/0EWCLEVgyGdK0HQdjX91y6orNp5KOf9RhPNUrtygLMsJVp
+         j+/Q==
+X-Gm-Message-State: APjAAAV8APyXauG1EveO/MuimVikrUl5cNXgbVqs/XPFEgoMMHBD1i8Y
+        pwL5PzLyzXGwA2wAZ/ntYleDgQ==
+X-Google-Smtp-Source: APXvYqxqecjGo3YexDyuEHi4DxtpqC+N5YnaUi3Z1hNeiNdEhbEeAjhnE2sdDMWcmnFvCY0iHqFcFw==
+X-Received: by 2002:aa7:c649:: with SMTP id z9mr33892712edr.97.1567606783210;
+        Wed, 04 Sep 2019 07:19:43 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id w14sm4120554eda.69.2019.09.04.07.19.42
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 04 Sep 2019 07:19:42 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 98363102752; Wed,  4 Sep 2019 17:19:50 +0300 (+03)
+Date:   Wed, 4 Sep 2019 17:19:50 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Steven Price <Steven.Price@arm.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sri Krishna chowdary <schowdary@nvidia.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] mm/pgtable/debug: Add test validating architecture
+ page table helpers
+Message-ID: <20190904141950.ykoe3h7b4hcvnysu@box>
+References: <1567497706-8649-1-git-send-email-anshuman.khandual@arm.com>
+ <1567497706-8649-2-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb743a90-f199-45ba-666a-08d73142daec
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Sep 2019 14:19:11.1520
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jpQ3AEeatenaNWu4YNE+Sfn1e/gm2Qb+B7FZMJBycXDpG38G+YJd8kDbUYSYE+rNQzAlxHIZ7CsnDNyNV5nrBQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1216
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1567497706-8649-2-git-send-email-anshuman.khandual@arm.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Fredrik,
+On Tue, Sep 03, 2019 at 01:31:46PM +0530, Anshuman Khandual wrote:
+> This adds a test module which will validate architecture page table helpers
+> and accessors regarding compliance with generic MM semantics expectations.
+> This will help various architectures in validating changes to the existing
+> page table helpers or addition of new ones.
+> 
+> Test page table and memory pages creating it's entries at various level are
+> all allocated from system memory with required alignments. If memory pages
+> with required size and alignment could not be allocated, then all depending
+> individual tests are skipped.
 
-On Sun, Sep 01, 2019 at 05:35:21PM +0200, Fredrik Noring wrote:
-> Hi Paul,
->=20
-> This is the initial patch submission for the PlayStation 2. The series
-> implements support for USB devices and a frame buffer console, making
-> Linux usable with unmodified hardware having a working boot loader
-> installed on a memory card.
+See my comments below.
 
-Wow - you've been busy, this patchset is huge!
+> 
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Steven Price <Steven.Price@arm.com>
+> Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Sri Krishna chowdary <schowdary@nvidia.com>
+> Cc: Dave Hansen <dave.hansen@intel.com>
+> Cc: Russell King - ARM Linux <linux@armlinux.org.uk>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
+> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Vineet Gupta <vgupta@synopsys.com>
+> Cc: James Hogan <jhogan@kernel.org>
+> Cc: Paul Burton <paul.burton@mips.com>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: linux-snps-arc@lists.infradead.org
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-ia64@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-s390@vger.kernel.org
+> Cc: linux-sh@vger.kernel.org
+> Cc: sparclinux@vger.kernel.org
+> Cc: x86@kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> 
+> Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  mm/Kconfig.debug       |  14 ++
+>  mm/Makefile            |   1 +
+>  mm/arch_pgtable_test.c | 425 +++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 440 insertions(+)
+>  create mode 100644 mm/arch_pgtable_test.c
+> 
+> diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
+> index 327b3ebf23bf..ce9c397f7b07 100644
+> --- a/mm/Kconfig.debug
+> +++ b/mm/Kconfig.debug
+> @@ -117,3 +117,17 @@ config DEBUG_RODATA_TEST
+>      depends on STRICT_KERNEL_RWX
+>      ---help---
+>        This option enables a testcase for the setting rodata read-only.
+> +
+> +config DEBUG_ARCH_PGTABLE_TEST
+> +	bool "Test arch page table helpers for semantics compliance"
+> +	depends on MMU
+> +	depends on DEBUG_KERNEL
+> +	help
+> +	  This options provides a kernel module which can be used to test
+> +	  architecture page table helper functions on various platform in
+> +	  verifying if they comply with expected generic MM semantics. This
+> +	  will help architectures code in making sure that any changes or
+> +	  new additions of these helpers will still conform to generic MM
+> +	  expected semantics.
+> +
+> +	  If unsure, say N.
+> diff --git a/mm/Makefile b/mm/Makefile
+> index d996846697ef..bb572c5aa8c5 100644
+> --- a/mm/Makefile
+> +++ b/mm/Makefile
+> @@ -86,6 +86,7 @@ obj-$(CONFIG_HWPOISON_INJECT) += hwpoison-inject.o
+>  obj-$(CONFIG_DEBUG_KMEMLEAK) += kmemleak.o
+>  obj-$(CONFIG_DEBUG_KMEMLEAK_TEST) += kmemleak-test.o
+>  obj-$(CONFIG_DEBUG_RODATA_TEST) += rodata_test.o
+> +obj-$(CONFIG_DEBUG_ARCH_PGTABLE_TEST) += arch_pgtable_test.o
+>  obj-$(CONFIG_PAGE_OWNER) += page_owner.o
+>  obj-$(CONFIG_CLEANCACHE) += cleancache.o
+>  obj-$(CONFIG_MEMORY_ISOLATION) += page_isolation.o
+> diff --git a/mm/arch_pgtable_test.c b/mm/arch_pgtable_test.c
+> new file mode 100644
+> index 000000000000..f15be8a73723
+> --- /dev/null
+> +++ b/mm/arch_pgtable_test.c
+> @@ -0,0 +1,425 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * This kernel module validates architecture page table helpers &
+> + * accessors and helps in verifying their continued compliance with
+> + * generic MM semantics.
+> + *
+> + * Copyright (C) 2019 ARM Ltd.
+> + *
+> + * Author: Anshuman Khandual <anshuman.khandual@arm.com>
+> + */
+> +#define pr_fmt(fmt) "arch_pgtable_test: %s " fmt, __func__
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/hugetlb.h>
+> +#include <linux/mm.h>
+> +#include <linux/mman.h>
+> +#include <linux/mm_types.h>
+> +#include <linux/module.h>
+> +#include <linux/printk.h>
+> +#include <linux/swap.h>
+> +#include <linux/swapops.h>
+> +#include <linux/pfn_t.h>
+> +#include <linux/gfp.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/sched/mm.h>
+> +#include <asm/pgalloc.h>
+> +#include <asm/pgtable.h>
+> +
+> +/*
+> + * Basic operations
+> + *
+> + * mkold(entry)			= An old and not a young entry
+> + * mkyoung(entry)		= A young and not an old entry
+> + * mkdirty(entry)		= A dirty and not a clean entry
+> + * mkclean(entry)		= A clean and not a dirty entry
+> + * mkwrite(entry)		= A write and not a write protected entry
+> + * wrprotect(entry)		= A write protected and not a write entry
+> + * pxx_bad(entry)		= A mapped and non-table entry
+> + * pxx_same(entry1, entry2)	= Both entries hold the exact same value
+> + */
+> +#define VADDR_TEST	(PGDIR_SIZE + PUD_SIZE + PMD_SIZE + PAGE_SIZE)
 
-> There are eight major parts:
+What is special about this address? How do you know if it is not occupied
+yet?
 
-I think we may be best to split this up into 8 (or more) different
-patchsets along these lines. In my experience large patchsets that touch
-lots of different subsystems are very difficult to get merged, so I'd
-suggest maybe we start with just the CPU support for arch/mips/ & if you
-have the bandwidth you could submit drivers to other subsystem
-maintainers in parallel.
+> +#define VMA_TEST_FLAGS	(VM_READ|VM_WRITE|VM_EXEC)
+> +#define RANDOM_NZVALUE	(0xbe)
+> +
+> +static bool pud_aligned;
+> +static bool pmd_aligned;
+> +
+> +extern struct mm_struct *mm_alloc(void);
+> +
+> +static void pte_basic_tests(struct page *page, pgprot_t prot)
+> +{
+> +	pte_t pte = mk_pte(page, prot);
+> +
+> +	WARN_ON(!pte_same(pte, pte));
+> +	WARN_ON(!pte_young(pte_mkyoung(pte)));
+> +	WARN_ON(!pte_dirty(pte_mkdirty(pte)));
+> +	WARN_ON(!pte_write(pte_mkwrite(pte)));
+> +	WARN_ON(pte_young(pte_mkold(pte)));
+> +	WARN_ON(pte_dirty(pte_mkclean(pte)));
+> +	WARN_ON(pte_write(pte_wrprotect(pte)));
+> +}
+> +
+> +#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE
+> +static void pmd_basic_tests(struct page *page, pgprot_t prot)
+> +{
+> +	pmd_t pmd;
+> +
+> +	/*
+> +	 * Memory block here must be PMD_SIZE aligned. Abort this
+> +	 * test in case we could not allocate such a memory block.
+> +	 */
+> +	if (!pmd_aligned) {
+> +		pr_warn("Could not proceed with PMD tests\n");
+> +		return;
+> +	}
+> +
+> +	pmd = mk_pmd(page, prot);
+> +	WARN_ON(!pmd_same(pmd, pmd));
+> +	WARN_ON(!pmd_young(pmd_mkyoung(pmd)));
+> +	WARN_ON(!pmd_dirty(pmd_mkdirty(pmd)));
+> +	WARN_ON(!pmd_write(pmd_mkwrite(pmd)));
+> +	WARN_ON(pmd_young(pmd_mkold(pmd)));
+> +	WARN_ON(pmd_dirty(pmd_mkclean(pmd)));
+> +	WARN_ON(pmd_write(pmd_wrprotect(pmd)));
+> +	/*
+> +	 * A huge page does not point to next level page table
+> +	 * entry. Hence this must qualify as pmd_bad().
+> +	 */
+> +	WARN_ON(!pmd_bad(pmd_mkhuge(pmd)));
+> +}
+> +#else
+> +static void pmd_basic_tests(struct page *page, pgprot_t prot) { }
+> +#endif
+> +
+> +#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+> +static void pud_basic_tests(struct page *page, pgprot_t prot)
+> +{
+> +	pud_t pud;
+> +
+> +	/*
+> +	 * Memory block here must be PUD_SIZE aligned. Abort this
+> +	 * test in case we could not allocate such a memory block.
+> +	 */
+> +	if (!pud_aligned) {
+> +		pr_warn("Could not proceed with PUD tests\n");
+> +		return;
+> +	}
+> +
+> +	pud = pfn_pud(page_to_pfn(page), prot);
+> +	WARN_ON(!pud_same(pud, pud));
+> +	WARN_ON(!pud_young(pud_mkyoung(pud)));
+> +	WARN_ON(!pud_write(pud_mkwrite(pud)));
+> +	WARN_ON(pud_write(pud_wrprotect(pud)));
+> +	WARN_ON(pud_young(pud_mkold(pud)));
+> +
+> +#if !defined(__PAGETABLE_PMD_FOLDED) && !defined(__ARCH_HAS_4LEVEL_HACK)
+> +	/*
+> +	 * A huge page does not point to next level page table
+> +	 * entry. Hence this must qualify as pud_bad().
+> +	 */
+> +	WARN_ON(!pud_bad(pud_mkhuge(pud)));
+> +#endif
+> +}
+> +#else
+> +static void pud_basic_tests(struct page *page, pgprot_t prot) { }
+> +#endif
+> +
+> +static void p4d_basic_tests(struct page *page, pgprot_t prot)
+> +{
+> +	p4d_t p4d;
+> +
+> +	memset(&p4d, RANDOM_NZVALUE, sizeof(p4d_t));
+> +	WARN_ON(!p4d_same(p4d, p4d));
+> +}
+> +
+> +static void pgd_basic_tests(struct page *page, pgprot_t prot)
+> +{
+> +	pgd_t pgd;
+> +
+> +	memset(&pgd, RANDOM_NZVALUE, sizeof(pgd_t));
+> +	WARN_ON(!pgd_same(pgd, pgd));
+> +}
+> +
+> +#if !defined(__PAGETABLE_PMD_FOLDED) && !defined(__ARCH_HAS_4LEVEL_HACK)
+> +static void pud_clear_tests(pud_t *pudp)
+> +{
+> +	memset(pudp, RANDOM_NZVALUE, sizeof(pud_t));
+> +	pud_clear(pudp);
+> +	WARN_ON(!pud_none(READ_ONCE(*pudp)));
+> +}
+> +
+> +static void pud_populate_tests(struct mm_struct *mm, pud_t *pudp, pmd_t *pmdp)
+> +{
+> +	/*
+> +	 * This entry points to next level page table page.
+> +	 * Hence this must not qualify as pud_bad().
+> +	 */
+> +	pmd_clear(pmdp);
+> +	pud_clear(pudp);
+> +	pud_populate(mm, pudp, pmdp);
+> +	WARN_ON(pud_bad(READ_ONCE(*pudp)));
+> +}
+> +#else
+> +static void pud_clear_tests(pud_t *pudp) { }
+> +static void pud_populate_tests(struct mm_struct *mm, pud_t *pudp, pmd_t *pmdp)
+> +{
+> +}
+> +#endif
+> +
+> +#if !defined(__PAGETABLE_PUD_FOLDED) && !defined(__ARCH_HAS_5LEVEL_HACK)
+> +static void p4d_clear_tests(p4d_t *p4dp)
+> +{
+> +	memset(p4dp, RANDOM_NZVALUE, sizeof(p4d_t));
+> +	p4d_clear(p4dp);
+> +	WARN_ON(!p4d_none(READ_ONCE(*p4dp)));
+> +}
+> +
+> +static void p4d_populate_tests(struct mm_struct *mm, p4d_t *p4dp, pud_t *pudp)
+> +{
+> +	/*
+> +	 * This entry points to next level page table page.
+> +	 * Hence this must not qualify as p4d_bad().
+> +	 */
+> +	pud_clear(pudp);
+> +	p4d_clear(p4dp);
+> +	p4d_populate(mm, p4dp, pudp);
+> +	WARN_ON(p4d_bad(READ_ONCE(*p4dp)));
+> +}
+> +#else
+> +static void p4d_clear_tests(p4d_t *p4dp) { }
+> +static void p4d_populate_tests(struct mm_struct *mm, p4d_t *p4dp, pud_t *pudp)
+> +{
+> +}
+> +#endif
+> +
+> +#ifndef __PAGETABLE_P4D_FOLDED
+> +static void pgd_clear_tests(pgd_t *pgdp)
+> +{
+> +	memset(pgdp, RANDOM_NZVALUE, sizeof(pgd_t));
+> +	pgd_clear(pgdp);
+> +	WARN_ON(!pgd_none(READ_ONCE(*pgdp)));
+> +}
+> +
+> +static void pgd_populate_tests(struct mm_struct *mm, pgd_t *pgdp, p4d_t *p4dp)
+> +{
+> +	/*
+> +	 * This entry points to next level page table page.
+> +	 * Hence this must not qualify as pgd_bad().
+> +	 */
+> +	p4d_clear(p4dp);
+> +	pgd_clear(pgdp);
+> +	pgd_populate(mm, pgdp, p4dp);
+> +	WARN_ON(pgd_bad(READ_ONCE(*pgdp)));
+> +}
+> +#else
+> +static void pgd_clear_tests(pgd_t *pgdp) { }
+> +static void pgd_populate_tests(struct mm_struct *mm, pgd_t *pgdp, p4d_t *p4dp)
+> +{
+> +}
+> +#endif
 
-> 1. The R5900 is the main processor that runs the kernel[1]. It implements
->    the 64-bit MIPS III instruction set except LL, SC, LLD and SCD, with
->    additional PREFETCH and conditional move instructions from MIPS IV as
->    well as three-operand multiply and multiply-accumulate instructions.
->    It has a set of R5900 specific 128-bit multimedia instructions (MMIs).
->=20
->    The FPU implements single-precision floating-point operations but it
->    is not entirely IEEE 754 compatible. The FPU is therefore emulated in
->    software for normal ELF executables. The R5900 has several significant
->    hardware bugs. Perhaps the most important bug affecting applications
->    is the short loop bug that under certain conditions causes loops to
->    execute only once or twice.
->=20
->    R5900 specific handling of SYNC.P, SYNC.L, ERET, etc. are implemented.
+This will not work if p4d is folded at runtime. Like for x86-64 and s390.
 
-I see you already got a few comments including on some of the early
-CPU-related patches. I'll start looking through them in detail soon.
+Here's the fixup. It should work for both x86-64 and s390, but I only
+tested on x86-64:
 
-Thanks,
-    Paul
+diff --git a/arch/x86/include/asm/pgtable_64_types.h b/arch/x86/include/asm/pgtable_64_types.h
+index 52e5f5f2240d..b882792a3999 100644
+--- a/arch/x86/include/asm/pgtable_64_types.h
++++ b/arch/x86/include/asm/pgtable_64_types.h
+@@ -40,6 +40,8 @@ static inline bool pgtable_l5_enabled(void)
+ #define pgtable_l5_enabled() 0
+ #endif /* CONFIG_X86_5LEVEL */
+ 
++#define mm_p4d_folded(mm) (!pgtable_l5_enabled())
++
+ extern unsigned int pgdir_shift;
+ extern unsigned int ptrs_per_p4d;
+ 
+diff --git a/mm/arch_pgtable_test.c b/mm/arch_pgtable_test.c
+index f15be8a73723..206fe3334a28 100644
+--- a/mm/arch_pgtable_test.c
++++ b/mm/arch_pgtable_test.c
+@@ -193,9 +193,11 @@ static void p4d_populate_tests(struct mm_struct *mm, p4d_t *p4dp, pud_t *pudp)
+ }
+ #endif
+ 
+-#ifndef __PAGETABLE_P4D_FOLDED
+ static void pgd_clear_tests(pgd_t *pgdp)
+ {
++	if (mm_p4d_folded(mm))
++		return;
++
+ 	memset(pgdp, RANDOM_NZVALUE, sizeof(pgd_t));
+ 	pgd_clear(pgdp);
+ 	WARN_ON(!pgd_none(READ_ONCE(*pgdp)));
+@@ -203,6 +205,9 @@ static void pgd_clear_tests(pgd_t *pgdp)
+ 
+ static void pgd_populate_tests(struct mm_struct *mm, pgd_t *pgdp, p4d_t *p4dp)
+ {
++	if (mm_p4d_folded(mm))
++		return;
++
+ 	/*
+ 	 * This entry points to next level page table page.
+ 	 * Hence this must not qualify as pgd_bad().
+@@ -212,12 +217,6 @@ static void pgd_populate_tests(struct mm_struct *mm, pgd_t *pgdp, p4d_t *p4dp)
+ 	pgd_populate(mm, pgdp, p4dp);
+ 	WARN_ON(pgd_bad(READ_ONCE(*pgdp)));
+ }
+-#else
+-static void pgd_clear_tests(pgd_t *pgdp) { }
+-static void pgd_populate_tests(struct mm_struct *mm, pgd_t *pgdp, p4d_t *p4dp)
+-{
+-}
+-#endif
+ 
+ static void pte_clear_tests(pte_t *ptep)
+ {
 
-> 2. Interrupts, a timer and minimal DMA support are implemented.
->=20
-> 3. System commands (SCMDs) are implemented to identify the hardware model=
-,
->    read and set the real-time clock (RTC), and power off the machine.
->=20
-> 4. Read-only memory (ROM) operations are implemented. These are used to
->    identify the hardware. ROM operations are also used to resolve IOP
->    libraries linked as firmware, as explained below.
->=20
-> 6. The input/output processor (IOP) and its sub-system interface (SIF)
->    are supported[2]. The IOP is a MIPS R3000A, or in later models a
->    PowerPC 405GP emulating a MIPS R3000A, sometimes referred to as the
->    sub processor. It runs a separate minikernel implemented in ROM. Most
->    peripherals require, in whole or in part, handling by the IOP.
->=20
->    Two IOP services are required to support USB devices: IOP memory
->    allocation and IOP interrupt relay. The latter requires linking a
->    custom IOP module, handled as firmware by the kernel, with library
->    dependency resolution. Remote procedure calls (RPCs) are used to
->    issue bidirectional commands over the SIF, via DMA.
->=20
-> 7. The Graphics Synthesizer (GS) is the video hardware that displays the
->    frame buffer console. The GS is highly configurable with a substantial
->    set of hardware accelerated features. Its local memory is not directly
->    accessible from the main bus. All drawing primitives are transmitted
->    via DMA[3].
->=20
-> 8. The frame buffer driver implements console support. The font is stored
->    as textures in local GS memory and several hardware accelerated
->    operations are implemented, for example XPAN, YPAN and YWRAP.
->=20
-> The o32 ABI is supported, but not yet n32 as it involves some additional
-> complications. I would very much like to add support for the 128-bit R590=
-0
-> GPRs, for two primary reasons:
->=20
-> - The 128-bit multimedia instruction set is one of the defining features
->   of the R5900. A respectable PlayStation 2 application ought to use them=
-.
->=20
-> - The MMIs cannot be disabled by the kernel. MMIs will therefore appear
->   to mostly work, with some occasional register corruption due to context
->   switches, unless the kernel properly saves and restores the 128-bit
->   registers.
->=20
-> This patch series has been tested with the PlayStation 2 models SCPH-3000=
-4,
-> SCPH-30004 R, SCPH-37000 L, SCPH-39004, SCPH-50004, SCPH-70004, SCPH-7500=
-4
-> and SCPH-77004.
->=20
-> Please consider it for inclusion.
->=20
-> Fredrik
->=20
-> References:
->=20
-> [1] "TX System RISC TX79 Core Architecture" manual, revision 2.0,
->     Toshiba Corporation, https://wiki.qemu.org/File:C790.pdf
->=20
-> [2] "EE Overview", version 6.0, Sony Computer Entertainment Inc.
->=20
-> [3] "GS User's Manual", version 6.0, Sony Computer Entertainment Inc.
->=20
-> Fredrik Noring (120):
->   MIPS: R5900: Initial support for the Emotion Engine in the PlayStation =
-2
->   MIPS: R5900: Trap the RDHWR instruction as an SQ address exception
->   MIPS: R5900: Sign-extend o32 system call registers
->   MIPS: R5900: Reset bits 127..64 of GPRs in RESTORE_SOME
->   MIPS: R5900: Reset the funnel shift amount (SA) register in RESTORE_SOM=
-E
->   MIPS: R5900: Workaround for the short loop bug
->   MIPS: R5900: Add the SYNC.P instruction
->   MIPS: R5900: Add implicit SYNC.P to the UASM_i_M[FT]C0 macros
->   MIPS: R5900: Add mandatory SYNC.P to all M[FT]C0 instructions
->   MIPS: R5900: Workaround exception NOP execution bug (FLX05)
->   MIPS: R5900: Avoid pipeline hazard with the TLBP instruction
->   MIPS: R5900: Avoid pipeline hazards with the TLBW[IR] instructions
->   MIPS: R5900: Avoid pipeline hazard with the TLBR instruction
->   MIPS: R5900: Install final length of TLB refill handler rather than 256=
- bytes
->   MIPS: R5900: Verify that the TLB refill handler does not overflow
->   MIPS: R5900: The ERET instruction has issues with delay slot and CACHE
->   MIPS: R5900: Define CACHE instruction operation field encodings
->   MIPS: R5900: Workaround where MSB must be 0 for the instruction cache
->   MIPS: R5900: Use SYNC.L for data cache and SYNC.P for instruction cache
->   MIPS: R5900: Define CP0.Config register fields
->   MIPS: R5900: Workaround for CACHE instruction near branch delay slot
->   MIPS: R5900: Support 64-bit inq() and outq() macros in 32-bit kernels
->   MIPS: R5900: Add MFSA and MTSA instructions for the special SA register
->   MIPS: PS2: Define PlayStation 2 I/O port, ROM and RAM address spaces
->   MIPS: PS2: Define interrupt controller, DMA and timer IRQs
->   MIPS: PS2: Interrupt controller (INTC) IRQ support
->   MIPS: PS2: DMAC: Define DMA controller registers
->   MIPS: PS2: DMAC: Define tag structures
->   MIPS: PS2: DMAC: IRQ support
->   MIPS: PS2: Timer support
->   MIPS: PS2: SCMD: System command support
->   MIPS: PS2: SCMD: System power off command
->   MIPS: PS2: SCMD: Read system machine name command
->   MIPS: PS2: SCMD: Read system command for the real-time clock (RTC)
->   MIPS: PS2: SCMD: Set system command for the real-time clock (RTC)
->   MIPS: PS2: ROM: Iterate over the files in a given ROM directory
->   MIPS: PS2: ROM: Find ROM files with a given name, if they exist
->   MIPS: PS2: ROM: Read data for a given ROM file name
->   MIPS: PS2: ROM: Read extended information for a given ROM file
->   MIPS: PS2: ROM: Read and decode the ROMVER file
->   MIPS: PS2: ROM: Resolve the name for the type in the ROMVER file
->   MIPS: PS2: ROM: Resolve the name for the region in the ROMVER file
->   MIPS: PS2: ROM: Permit /dev/mem to access read-only memory
->   MIPS: PS2: ROM: Sysfs module to inspect ROM files
->   MIPS: PS2: ROM: Provide extended file information via sysfs
->   MIPS: PS2: Identify the machine by model name
->   MIPS: PS2: Let the system type be Sony PlayStation 2
->   MIPS: Define and use cpu_relax_forever() for various halting loops
->   MIPS: PS2: Power off support
->   MIPS: PS2: Real-time clock (RTC) driver
->   MIPS: PS2: IOP: I/O processor DMA register PCR2 set and clear
->   MIPS: PS2: SIF: Sub-system interface reset of the I/O processor (IOP)
->   MIPS: PS2: IOP: Define error numbers, descriptions and errno mapping
->   MIPS: PS2: SIF: SIF register write command support
->   MIPS: PS2: SIF: Respond to remote procedure call (RPC) bind command
->   MIPS: PS2: SIF: Respond to RPC bind end command
->   MIPS: PS2: SIF: Reset the SIF0 (sub-to-main) DMA controller
->   MIPS: PS2: SIF: Handle SIF0 (sub-to-main) RPCs via interrupts
->   MIPS: PS2: SIF: Enable the IOP to issue SIF commands
->   MIPS: PS2: SIF: Enable the IOP to issue SIF RPCs
->   MIPS: PS2: SIF: sif_rpc_bind() to request an RPC server connection
->   MIPS: PS2: SIF: sif_rpc_unbind() to release an RPC server connection
->   MIPS: PS2: SIF: sif_rpc() to issue a remote procedure call
->   MIPS: PS2: IOP: Permit /dev/mem to access IOP memory
->   MIPS: PS2: IOP: I/O processor memory support
->   FIXME: Export _dma_cache_{wback,wback_inv,inv}
->   MIPS: PS2: IOP: Module linking support
->   MIPS: PS2: IOP: Verify that modules are IRX objects
->   MIPS: PS2: IOP: Module version compatibility verification
->   MIPS: PS2: IOP: Avoid linking already linked library modules
->   MIPS: PS2: IOP: Resolve module dependencies
->   MIPS: PS2: IOP: SIF printk command support
->   MIPS: PS2: IOP: Heap memory allocate and free
->   MIPS: PS2: SIF: Request RPC IRQ command
->   MIPS: PS2: IOP: IRQ support
->   MIPS: PS2: GS: Define privileged Graphics Synthesizer registers
->   MIPS: PS2: GS: Write privileged registers
->   MIPS: PS2: GS: Read privileged registers
->   MIPS: PS2: GS: Define privileged register structures
->   MIPS: PS2: GS: Define gs_xorq_imr()
->   MIPS: PS2: GS: Privileged register write macros with named fields
->   MIPS: PS2: GS: IRQ support
->   MIPS: PS2: GS: Define Graphics Synthesizer primitive structures
->   MIPS: PS2: GIF: Define Graphics Synthesizer interface structures
->   MIPS: PS2: GIF: Graphics Synthesizer interface support
->   MIPS: PS2: GS: Graphics Synthesizer device init and video clock
->   MIPS: PS2: GS: Compute block count and indices
->   MIPS: PS2: GS: Primitive and texel coordinate transformations
->   MIPS: PS2: GS: Approximate video region with ROM region
->   macro: Extend COUNT_ARGS() from 12 to 32 arguments
->   MIPS: PS2: GS: Show privileged registers with sysfs
->   MIPS: PS2: GS: Store privileged registers with sysfs
->   fbdev: Add fb_warn_once() variant that only prints a warning once
->   MIPS: PS2: FB: Frame buffer driver for the PlayStation 2
->   MIPS: PS2: FB: fb_set_par() standard-definition television support
->   MIPS: PS2: FB: fb_set_par() high-definition television support
->   MIPS: PS2: FB: fb_set_par() VESA computer display mode support
->   MIPS: PS2: FB: Preconfigure standard PAL, NTSC and VESA display modes
->   MIPS: PS2: FB: Reset the Graphics Synthesizer drawing environment
->   MIPS: PS2: FB: Clear the display buffer when changing video modes
->   MIPS: PS2: FB: fb_setcolreg() 256 colour pseudo palette support
->   MIPS: PS2: FB: fb_settile() with font stored as palette indexed texture=
-s
->   MIPS: PS2: FB: Hardware accelerated fb_tilecopy() support
->   MIPS: PS2: FB: Hardware accelerated fb_tilefill() support
->   MIPS: PS2: FB: Simplified fb_tileblit() support
->   MIPS: PS2: FB: fb_tilecursor() placeholder
->   MIPS: PS2: FB: Hardware accelerated fb_pan_display() support
->   MIPS: PS2: FB: fb_blank() display power management signaling (DPMS)
->   MIPS: PS2: FB: Disable GIF DMA completion interrupts
->   MIPS: PS2: FB: PAL and NTSC grayscale support
->   MIPS: PS2: FB: Analogue display mode adjustment module parameter
->   USB: OHCI: Support for the PlayStation 2
->   USB: OHCI: OHCI_INTR_MIE workaround for freeze on the PlayStation 2
->   MIPS: PS2: Workaround for unexpected uLaunchELF CP0 Status user mode
->   MIPS: PS2: Define initial PlayStation 2 devices
->   MIPS: PS2: Define workarounds related to the PlayStation 2
->   MIPS: PS2: Define R5900 feature overrides
->   MIPS: PS2: Define the PlayStation 2 platform
->   MIPS: PS2: Initial support for the Sony PlayStation 2
->   MIPS: Fix name of BOOT_MEM_ROM_DATA
->=20
->  arch/mips/Kbuild.platforms                    |    1 +
->  arch/mips/Kconfig                             |   35 +-
->  arch/mips/Makefile                            |    1 +
->  arch/mips/alchemy/board-gpr.c                 |    7 +-
->  arch/mips/alchemy/board-mtx1.c                |    7 +-
->  arch/mips/alchemy/board-xxs1500.c             |    7 +-
->  arch/mips/alchemy/devboards/platform.c        |    4 +-
->  arch/mips/ar7/setup.c                         |    4 +-
->  arch/mips/ath79/setup.c                       |    8 +-
->  arch/mips/bcm47xx/setup.c                     |    9 +-
->  arch/mips/bcm63xx/setup.c                     |   12 +-
->  arch/mips/boot/compressed/decompress.c        |    4 +-
->  arch/mips/boot/compressed/head.S              |   16 +-
->  arch/mips/cavium-octeon/smp.c                 |    4 +-
->  arch/mips/cobalt/reset.c                      |    5 +-
->  arch/mips/emma/markeins/setup.c               |    5 +-
->  arch/mips/fw/arc/init.c                       |    4 +-
->  arch/mips/include/asm/asmmacro.h              |   53 +
->  arch/mips/include/asm/cacheops.h              |   17 +
->  arch/mips/include/asm/cpu-type.h              |    4 +
->  arch/mips/include/asm/cpu.h                   |    3 +-
->  arch/mips/include/asm/io.h                    |   60 +-
->  arch/mips/include/asm/irqflags.h              |   15 +
->  .../asm/mach-ps2/cpu-feature-overrides.h      |   35 +
->  arch/mips/include/asm/mach-ps2/dmac.h         |  254 ++
->  arch/mips/include/asm/mach-ps2/gif.h          |   77 +
->  arch/mips/include/asm/mach-ps2/gs-registers.h |  646 +++++
->  arch/mips/include/asm/mach-ps2/gs.h           |   81 +
->  arch/mips/include/asm/mach-ps2/iop-error.h    |   76 +
->  arch/mips/include/asm/mach-ps2/iop-heap.h     |   19 +
->  arch/mips/include/asm/mach-ps2/iop-memory.h   |   21 +
->  arch/mips/include/asm/mach-ps2/iop-module.h   |   13 +
->  .../mips/include/asm/mach-ps2/iop-registers.h |   19 +
->  arch/mips/include/asm/mach-ps2/iop.h          |   21 +
->  arch/mips/include/asm/mach-ps2/irq.h          |  130 +
->  arch/mips/include/asm/mach-ps2/rom.h          |  171 ++
->  arch/mips/include/asm/mach-ps2/scmd.h         |   56 +
->  arch/mips/include/asm/mach-ps2/sif.h          |   94 +
->  arch/mips/include/asm/mach-ps2/war.h          |   24 +
->  arch/mips/include/asm/mipsregs.h              |  103 +
->  arch/mips/include/asm/module.h                |    2 +
->  arch/mips/include/asm/processor.h             |    6 +
->  arch/mips/include/asm/r4kcache.h              |  244 +-
->  arch/mips/include/asm/stackframe.h            |  108 +
->  arch/mips/include/asm/string.h                |    3 +
->  arch/mips/include/asm/traps.h                 |    2 +
->  arch/mips/include/asm/uasm.h                  |   23 +
->  arch/mips/include/uapi/asm/gif.h              |  164 ++
->  arch/mips/include/uapi/asm/gs.h               |  723 +++++
->  arch/mips/jz4740/reset.c                      |    9 +-
->  arch/mips/kernel/cpu-probe.c                  |    8 +
->  arch/mips/kernel/genex.S                      |   65 +
->  arch/mips/kernel/head.S                       |    9 +
->  arch/mips/kernel/r4k_switch.S                 |    9 +
->  arch/mips/kernel/scall32-o32.S                |   12 +
->  arch/mips/kernel/setup.c                      |    6 +-
->  arch/mips/kernel/traps.c                      |   19 +-
->  arch/mips/kernel/unaligned.c                  |   36 +-
->  arch/mips/lib/delay.c                         |    7 +-
->  arch/mips/lib/memset.S                        |    2 +
->  arch/mips/loongson64/common/reset.c           |   16 +-
->  arch/mips/mm/Makefile                         |    1 +
->  arch/mips/mm/c-r4k.c                          |   27 +-
->  arch/mips/mm/cache.c                          |    4 +
->  arch/mips/mm/cerr-sb1.c                       |    4 +-
->  arch/mips/mm/cex-gen.S                        |    6 +
->  arch/mips/mm/tlbex-fault.S                    |    3 +
->  arch/mips/mm/tlbex.c                          |   94 +-
->  arch/mips/mm/uasm-mips.c                      |    1 +
->  arch/mips/mm/uasm.c                           |    5 +-
->  arch/mips/pic32/common/reset.c                |    9 +-
->  arch/mips/pnx833x/common/reset.c              |    5 +-
->  arch/mips/ps2/Kconfig                         |   16 +
->  arch/mips/ps2/Makefile                        |   12 +
->  arch/mips/ps2/Platform                        |    7 +
->  arch/mips/ps2/devices.c                       |   98 +
->  arch/mips/ps2/dmac-irq.c                      |  102 +
->  arch/mips/ps2/identify.c                      |   86 +
->  arch/mips/ps2/intc-irq.c                      |  118 +
->  arch/mips/ps2/irq.c                           |   38 +
->  arch/mips/ps2/memory.c                        |   45 +
->  arch/mips/ps2/prom.c                          |   18 +
->  arch/mips/ps2/reboot.c                        |   29 +
->  arch/mips/ps2/rom-sysfs.c                     |  392 +++
->  arch/mips/ps2/rom.c                           |  702 +++++
->  arch/mips/ps2/scmd.c                          |  379 +++
->  arch/mips/ps2/time.c                          |  153 ++
->  arch/mips/sgi-ip22/ip22-reset.c               |    3 +-
->  arch/mips/sgi-ip27/ip27-berr.c                |    4 +-
->  arch/mips/sgi-ip27/ip27-reset.c               |   13 +-
->  arch/mips/sgi-ip32/ip32-berr.c                |    4 +-
->  arch/mips/sgi-ip32/ip32-irq.c                 |    3 +-
->  arch/mips/sibyte/common/cfe.c                 |    3 +-
->  arch/mips/txx9/rbtx4939/setup.c               |    4 +-
->  arch/mips/vr41xx/common/pmu.c                 |    2 +-
->  drivers/Makefile                              |    1 +
->  drivers/ps2/Makefile                          |   12 +
->  drivers/ps2/gif.c                             |  106 +
->  drivers/ps2/gs-irq.c                          |   93 +
->  drivers/ps2/gs-registers.c                    |  189 ++
->  drivers/ps2/gs-sysfs.c                        |  592 +++++
->  drivers/ps2/gs.c                              |  319 +++
->  drivers/ps2/iop-heap.c                        |   90 +
->  drivers/ps2/iop-irq.c                         |  186 ++
->  drivers/ps2/iop-memory.c                      |   56 +
->  drivers/ps2/iop-module.c                      |  954 +++++++
->  drivers/ps2/iop-registers.c                   |   39 +
->  drivers/ps2/sif.c                             |  888 +++++++
->  drivers/rtc/Kconfig                           |   10 +
->  drivers/rtc/Makefile                          |    1 +
->  drivers/rtc/rtc-ps2.c                         |   74 +
->  drivers/usb/host/Kconfig                      |    8 +
->  drivers/usb/host/Makefile                     |    1 +
->  drivers/usb/host/ohci-ps2.c                   |  264 ++
->  drivers/video/fbdev/Kconfig                   |   12 +
->  drivers/video/fbdev/Makefile                  |    1 +
->  drivers/video/fbdev/ps2fb.c                   | 2362 +++++++++++++++++
->  include/linux/console_struct.h                |    2 +
->  include/linux/fb.h                            |    2 +
->  include/linux/kernel.h                        |   12 +-
->  include/uapi/linux/fb.h                       |    1 +
->  121 files changed, 12077 insertions(+), 186 deletions(-)
->  create mode 100644 arch/mips/include/asm/mach-ps2/cpu-feature-overrides.=
-h
->  create mode 100644 arch/mips/include/asm/mach-ps2/dmac.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/gif.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/gs-registers.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/gs.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/iop-error.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/iop-heap.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/iop-memory.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/iop-module.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/iop-registers.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/iop.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/irq.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/rom.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/scmd.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/sif.h
->  create mode 100644 arch/mips/include/asm/mach-ps2/war.h
->  create mode 100644 arch/mips/include/uapi/asm/gif.h
->  create mode 100644 arch/mips/include/uapi/asm/gs.h
->  create mode 100644 arch/mips/ps2/Kconfig
->  create mode 100644 arch/mips/ps2/Makefile
->  create mode 100644 arch/mips/ps2/Platform
->  create mode 100644 arch/mips/ps2/devices.c
->  create mode 100644 arch/mips/ps2/dmac-irq.c
->  create mode 100644 arch/mips/ps2/identify.c
->  create mode 100644 arch/mips/ps2/intc-irq.c
->  create mode 100644 arch/mips/ps2/irq.c
->  create mode 100644 arch/mips/ps2/memory.c
->  create mode 100644 arch/mips/ps2/prom.c
->  create mode 100644 arch/mips/ps2/reboot.c
->  create mode 100644 arch/mips/ps2/rom-sysfs.c
->  create mode 100644 arch/mips/ps2/rom.c
->  create mode 100644 arch/mips/ps2/scmd.c
->  create mode 100644 arch/mips/ps2/time.c
->  create mode 100644 drivers/ps2/Makefile
->  create mode 100644 drivers/ps2/gif.c
->  create mode 100644 drivers/ps2/gs-irq.c
->  create mode 100644 drivers/ps2/gs-registers.c
->  create mode 100644 drivers/ps2/gs-sysfs.c
->  create mode 100644 drivers/ps2/gs.c
->  create mode 100644 drivers/ps2/iop-heap.c
->  create mode 100644 drivers/ps2/iop-irq.c
->  create mode 100644 drivers/ps2/iop-memory.c
->  create mode 100644 drivers/ps2/iop-module.c
->  create mode 100644 drivers/ps2/iop-registers.c
->  create mode 100644 drivers/ps2/sif.c
->  create mode 100644 drivers/rtc/rtc-ps2.c
->  create mode 100644 drivers/usb/host/ohci-ps2.c
->  create mode 100644 drivers/video/fbdev/ps2fb.c
->=20
-> --=20
-> 2.21.0
->=20
+> +
+> +static void pte_clear_tests(pte_t *ptep)
+> +{
+> +	memset(ptep, RANDOM_NZVALUE, sizeof(pte_t));
+> +	pte_clear(NULL, 0, ptep);
+> +	WARN_ON(!pte_none(READ_ONCE(*ptep)));
+> +}
+> +
+> +static void pmd_clear_tests(pmd_t *pmdp)
+> +{
+> +	memset(pmdp, RANDOM_NZVALUE, sizeof(pmd_t));
+> +	pmd_clear(pmdp);
+> +	WARN_ON(!pmd_none(READ_ONCE(*pmdp)));
+> +}
+> +
+> +static void pmd_populate_tests(struct mm_struct *mm, pmd_t *pmdp,
+> +			       pgtable_t pgtable)
+> +{
+> +	/*
+> +	 * This entry points to next level page table page.
+> +	 * Hence this must not qualify as pmd_bad().
+> +	 */
+> +	pmd_clear(pmdp);
+> +	pmd_populate(mm, pmdp, pgtable);
+> +	WARN_ON(pmd_bad(READ_ONCE(*pmdp)));
+> +}
+> +
+> +static bool pfn_range_valid(struct zone *z, unsigned long start_pfn,
+> +			    unsigned long nr_pages)
+> +{
+> +	unsigned long i, end_pfn = start_pfn + nr_pages;
+> +	struct page *page;
+> +
+> +	for (i = start_pfn; i < end_pfn; i++) {
+> +		if (!pfn_valid(i))
+> +			return false;
+> +
+> +		page = pfn_to_page(i);
+> +
+> +		if (page_zone(page) != z)
+> +			return false;
+> +
+> +		if (PageReserved(page))
+> +			return false;
+> +
+> +		if (page_count(page) > 0)
+> +			return false;
+> +
+> +		if (PageHuge(page))
+> +			return false;
+> +	}
+> +	return true;
+> +}
+> +
+> +static struct page *alloc_gigantic_page(nodemask_t *nodemask,
+> +					int nid, gfp_t gfp_mask, int order)
+> +{
+> +	struct zonelist *zonelist;
+> +	struct zone *zone;
+> +	struct zoneref *z;
+> +	enum zone_type zonesel;
+> +	unsigned long ret, pfn, flags, nr_pages;
+> +
+> +	nr_pages = 1UL << order;
+> +	zonesel = gfp_zone(gfp_mask);
+> +	zonelist = node_zonelist(nid, gfp_mask);
+> +	for_each_zone_zonelist_nodemask(zone, z, zonelist, zonesel, nodemask) {
+> +		spin_lock_irqsave(&zone->lock, flags);
+> +		pfn = ALIGN(zone->zone_start_pfn, nr_pages);
+> +		while (zone_spans_pfn(zone, pfn + nr_pages - 1)) {
+> +			if (pfn_range_valid(zone, pfn, nr_pages)) {
+> +				spin_unlock_irqrestore(&zone->lock, flags);
+> +				ret = alloc_contig_range(pfn, pfn + nr_pages,
+> +							 MIGRATE_MOVABLE,
+> +							 gfp_mask);
+> +				if (!ret)
+> +					return pfn_to_page(pfn);
+> +				spin_lock_irqsave(&zone->lock, flags);
+> +			}
+> +			pfn += nr_pages;
+> +		}
+> +		spin_unlock_irqrestore(&zone->lock, flags);
+> +	}
+> +	return NULL;
+> +}
+> +
+> +static struct page *alloc_mapped_page(void)
+> +{
+> +	gfp_t gfp_mask = GFP_KERNEL | __GFP_ZERO;
+> +	struct page *page = NULL;
+> +
+> +	page = alloc_gigantic_page(&node_states[N_MEMORY], first_memory_node,
+> +				   gfp_mask, get_order(PUD_SIZE));
+> +	if (page) {
+> +		pud_aligned = true;
+> +		pmd_aligned = true;
+> +		return page;
+> +	}
+> +
+> +	page = alloc_pages(gfp_mask, get_order(PMD_SIZE));
+> +	if (page) {
+> +		pmd_aligned = true;
+> +		return page;
+> +	}
+> +	return alloc_page(gfp_mask);
+> +}
+> +
+> +static void free_mapped_page(struct page *page)
+> +{
+> +	if (pud_aligned) {
+> +		unsigned long pfn = page_to_pfn(page);
+> +
+> +		free_contig_range(pfn, 1ULL << get_order(PUD_SIZE));
+> +		return;
+> +	}
+> +
+> +	if (pmd_aligned) {
+> +		int order = get_order(PMD_SIZE);
+> +
+> +		free_pages((unsigned long)page_address(page), order);
+> +		return;
+> +	}
+> +	free_page((unsigned long)page_address(page));
+> +}
+> +
+> +static int __init arch_pgtable_tests_init(void)
+> +{
+> +	struct mm_struct *mm;
+> +	struct page *page;
+> +	pgd_t *pgdp;
+> +	p4d_t *p4dp, *saved_p4dp;
+> +	pud_t *pudp, *saved_pudp;
+> +	pmd_t *pmdp, *saved_pmdp;
+> +	pte_t *ptep, *saved_ptep;
+> +	pgprot_t prot = vm_get_page_prot(VMA_TEST_FLAGS);
+> +	unsigned long vaddr = VADDR_TEST;
+> +
+> +	mm = mm_alloc();
+> +	if (!mm) {
+> +		pr_err("mm_struct allocation failed\n");
+> +		return 1;
+> +	}
+> +
+> +	page = alloc_mapped_page();
+> +	if (!page) {
+> +		pr_err("memory allocation failed\n");
+> +		return 1;
+> +	}
+> +
+> +	pgdp = pgd_offset(mm, vaddr);
+> +	p4dp = p4d_alloc(mm, pgdp, vaddr);
+> +	pudp = pud_alloc(mm, p4dp, vaddr);
+> +	pmdp = pmd_alloc(mm, pudp, vaddr);
+> +	ptep = pte_alloc_map(mm, pmdp, vaddr);
+> +
+> +	/*
+> +	 * Save all the page table page addresses as the page table
+> +	 * entries will be used for testing with random or garbage
+> +	 * values. These saved addresses will be used for freeing
+> +	 * page table pages.
+> +	 */
+> +	saved_p4dp = p4d_offset(pgdp, 0UL);
+> +	saved_pudp = pud_offset(p4dp, 0UL);
+> +	saved_pmdp = pmd_offset(pudp, 0UL);
+> +	saved_ptep = pte_offset_map(pmdp, 0UL);
+> +
+> +	pte_basic_tests(page, prot);
+> +	pmd_basic_tests(page, prot);
+> +	pud_basic_tests(page, prot);
+> +	p4d_basic_tests(page, prot);
+> +	pgd_basic_tests(page, prot);
+> +
+> +	pte_clear_tests(ptep);
+> +	pmd_clear_tests(pmdp);
+> +	pud_clear_tests(pudp);
+> +	p4d_clear_tests(p4dp);
+> +	pgd_clear_tests(pgdp);
+> +
+> +	pmd_populate_tests(mm, pmdp, (pgtable_t) page);
+
+This is not correct for architectures that defines pgtable_t as pte_t
+pointer, not struct page pointer.
+
+> +	pud_populate_tests(mm, pudp, pmdp);
+> +	p4d_populate_tests(mm, p4dp, pudp);
+> +	pgd_populate_tests(mm, pgdp, p4dp);
+
+This is wrong. All p?dp points to the second entry in page table entry.
+This is not valid pointer for page table and triggers p?d_bad() on x86.
+
+Use saved_p?dp instead.
+
+> +
+> +	p4d_free(mm, saved_p4dp);
+> +	pud_free(mm, saved_pudp);
+> +	pmd_free(mm, saved_pmdp);
+> +	pte_free(mm, (pgtable_t) virt_to_page(saved_ptep));
+> +
+> +	mm_dec_nr_puds(mm);
+> +	mm_dec_nr_pmds(mm);
+> +	mm_dec_nr_ptes(mm);
+> +	__mmdrop(mm);
+> +
+> +	free_mapped_page(page);
+> +	return 0;
+> +}
+> +
+> +static void __exit arch_pgtable_tests_exit(void) { }
+> +
+> +module_init(arch_pgtable_tests_init);
+> +module_exit(arch_pgtable_tests_exit);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_AUTHOR("Anshuman Khandual <anshuman.khandual@arm.com>");
+> +MODULE_DESCRIPTION("Test archicture page table helpers");
+> -- 
+> 2.20.1
+> 
+> 
+
+-- 
+ Kirill A. Shutemov
