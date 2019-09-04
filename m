@@ -2,122 +2,160 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8313FA8404
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 15:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA25A8857
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 21:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727156AbfIDM6J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Sep 2019 08:58:09 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:55999 "EHLO
-        mail.loongson.cn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725965AbfIDM6J (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Sep 2019 08:58:09 -0400
-Received: from [10.8.0.76] (unknown [89.187.165.41])
-        by mail (Coremail) with SMTP id QMiowPCxIM_VtG9dwT08AA--.6515S2;
-        Wed, 04 Sep 2019 20:58:09 +0800 (CST)
-Subject: Re: Something about loongson_llsc_mb
-To:     ambrosehua@icloud.com
-Cc:     Paul Burton <paul.burton@mips.com>, jhogan <jhogan@kernel.org>,
-        "jiaxun.yang" <jiaxun.yang@flygoat.com>,
-        linux-mips <linux-mips@vger.kernel.org>
-References: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
- <1567231103-13237-3-git-send-email-linyunsheng@huawei.com>
- <20190831085539.GG2369@hirez.programming.kicks-ass.net>
- <4d89c688-49e4-a2aa-32ee-65e36edcd913@huawei.com>
- <20190831161247.GM2369@hirez.programming.kicks-ass.net>
- <tencent_34DDA31F622119EE5003B7F4@qq.com>
- <2019090410032559707512@loongson.cn>
- <20190904092154.GC2349@hirez.programming.kicks-ass.net>
-From:   Huang Pei <huangpei@loongson.cn>
-Message-ID: <270f90f1-cbe5-b8e3-4f67-dc13781719e5@loongson.cn>
-Date:   Wed, 4 Sep 2019 20:57:38 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
-MIME-Version: 1.0
-In-Reply-To: <20190904092154.GC2349@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1730733AbfIDOCf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Sep 2019 10:02:35 -0400
+Received: from mail-eopbgr790125.outbound.protection.outlook.com ([40.107.79.125]:6593
+        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730639AbfIDOCe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 4 Sep 2019 10:02:34 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BlwYQiBodOtzsC8/Jjx/gSBl931MNv/7JH2oc3DoAGo13RhBCWgBcthtrhX50wMBmOZ9jyUejymme+Ztp7CQkBZjIq9GFTaB9f9TVC6/jS7Xo/8PKtey2ZfX8PYi/aRcvzkHm/VsqYZB6JwxxNympGSZacN45fgax7L7pGejt3K1xqVU6SV3GhEmyl+1hUxam4RJ9NMrNkKH2R0nIwocKsnCv7bSMWyfBC+CNTNZRIv9jNanoRhjdj57V38b5IABSdgkfP91mAtqHMK09FzspkOWofxBAviq4TvAUsUUjFg+tbN132Ru5Z3uWyOk8Ez/ZS4Q3TQNNIiJ9IX630aWPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7fl5EKIpff2tWTnQX7SoqpDcC/R28wXDUncJMXGMAIQ=;
+ b=fWwkt1tSFZPqJFgE1RWp2IF+sveI+Q4VsVXABcMKp5d981F1asWrSXk2VLrnkr/kWpNJ6Wc6oFA91Uj/tgb5F62/By2eVmhfFKkLc766IFrz0oy0CscSve1GLYr0qmHrmxcB0W4NR/etiAy+5tJSU3BERo57SrSPyTgU3csMIuaucc0FuqECGoWb7pgBtr/UoOhkrejrNbqbMkAk1ULHLk56n1O1rYAXV7v0r2PB1Gpb3x4ab2zMFoVuTaRzFrWAdd4Zc70xRbjlzUiWsu67QBEJsO3cq5cmJnsPDZC63+g0FO97uMg5vV7rcXeP/kZFRdkR2RYaGD6RmgVBkuZJCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
+ dkim=pass header.d=mips.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7fl5EKIpff2tWTnQX7SoqpDcC/R28wXDUncJMXGMAIQ=;
+ b=jo8XmqG6FjuAc96Bq6Mp8JqvR1eGLk3pNAU+AHiVz1Kj/bovIWc6jumaDHismiUShRkSqcUQVLqIe6vJGmbsJ3qwR/4eWKckBUTKpfHa87yYmWEvP5VxgOdVqbz71FER2KbSCY2HjCVqsmkXSK1nNsslqPPGyl35/dRMC5zoSwM=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
+ MWHPR2201MB1485.namprd22.prod.outlook.com (10.174.170.146) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2220.18; Wed, 4 Sep 2019 14:02:30 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::f9e8:5e8c:7194:fad3]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::f9e8:5e8c:7194:fad3%11]) with mapi id 15.20.2220.021; Wed, 4 Sep 2019
+ 14:02:30 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     Gary Fu <qfu@wavecomp.com>
+CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        Paul Burton <pburton@wavecomp.com>,
+        Archer Yan <ayan@wavecomp.com>, James Hogan <jhogan@kernel.org>
+Subject: Re: [PATCH] KVM: Fix an issue in non-preemptible kernel.
+Thread-Topic: [PATCH] KVM: Fix an issue in non-preemptible kernel.
+Thread-Index: AQHVYylkk5V28nmdRkmNneMu0zLGcA==
+Date:   Wed, 4 Sep 2019 14:02:30 +0000
+Message-ID: <20190904135343.gbqfs4nlpnjvyfhc@pburton-laptop>
+References: <20190902090148.10356-1-qfu@wavecomp.com>
+In-Reply-To: <20190902090148.10356-1-qfu@wavecomp.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: QMiowPCxIM_VtG9dwT08AA--.6515S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCFWftFyrZw1UWF45KrW7Arb_yoW5XF15p3
-        yIkF42yr4vyr4Iywsay3yDX3WS9395Ar9rZFyrurZIkas2g3sxtrW09r9rurWDJr93Gr42
-        yFWDC3W7XFykuFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvYb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8Jw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY
-        02Avz4vE1syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
-        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-        bVAw3UUUUU=
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: LO2P265CA0289.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a5::13) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:18::12)
+user-agent: NeoMutt/20180716
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [94.196.178.126]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0ac7b58c-29f9-400b-575b-08d731408676
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1485;
+x-ms-traffictypediagnostic: MWHPR2201MB1485:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MWHPR2201MB148508F3EE024AAF738F5AA2C1B80@MWHPR2201MB1485.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 0150F3F97D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(136003)(366004)(396003)(376002)(39840400004)(346002)(199004)(189003)(51914003)(476003)(386003)(6506007)(53936002)(14454004)(42882007)(446003)(11346002)(186003)(486006)(102836004)(71190400001)(71200400001)(1076003)(9686003)(6512007)(55236004)(478600001)(4326008)(33716001)(2906002)(6862004)(6486002)(25786009)(66066001)(6246003)(6436002)(99286004)(26005)(44832011)(8676002)(7736002)(76176011)(256004)(14444005)(66946007)(229853002)(66476007)(305945005)(66446008)(64756008)(66556008)(52116002)(58126008)(81156014)(8936002)(81166006)(316002)(5660300002)(54906003)(6116002)(3846002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1485;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: pm7yEJ5LkW0n/3rwfcWJmx9s42ICVtYDc468f2+b2GrGPc2L1pfMiwOq6pr1MvYitOabv3QbH3Q4eQonNu6MyW0Qn+4lDhasXEgGAewDKU3lY4L5y4xNwHi5ZZp2xNnjmq/0r5VEhleeEggGfa6fOQu0A4wgZRPIdTLMIpWJ16VVttWRq08IrRCHYKYRPMB7G41j6WiI7B/pV/JVmSixvTlKMNzIue2rg7K/Zn/Vpxsad6f7eNYaoowqAU8hMgP0i8GUSvjvJzOEGvfs0yg8ACLON935u1v4KoYVo1eWM0XUCpd7wZmr1ZD3tgSJlBqC25BzbpWhh9YD0zjnCuqAjxb5b3PxTX47AKQ3+lS3YCgsOaqTG0EYMg0tl1ysj4raKNDR+bq+tOJ1cRzDCTulor+QV9NuIXjyDjrb2Z3+52o=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <EC30B26113C2E5439F7657552FDF4D5D@namprd22.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ac7b58c-29f9-400b-575b-08d731408676
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Sep 2019 14:02:30.4013
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2Fn5SznhqjVjvyuNuwYV2e+xtBAssU918pH2TAnQzuQNi8TOuGK9qWgHtDTT1iFc5+4kCU8kkuAy6Ea3fMAJlw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1485
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09/04/2019 05:21 PM, Peter Zijlstra wrote:
-> 
-> *why* are you replying to some random unrelated thread?
+Hi Gary,
 
-Chen ask me if whether your patch has more sync than needed, but I'm not sure 
-whether sync before and after *cmpxchg_local* is.
-> 
-> Also, please use a sane MUA and wrap your lines <80 chars.
+On Mon, Sep 02, 2019 at 09:02:32AM +0000, Gary Fu wrote:
+> Add a cond_resched() to give the scheduler a chance to run madvise
+> task to avoid endless loop here in non-preemptible kernel.
 
-Sorry, I finally got thunderbird in plain text mode with < 80 chars. It wont 
-happen again.
+Thanks for the patch!
 
-> 
-> On Wed, Sep 04, 2019 at 10:03:31AM +0800, huangpei@loongson.cn wrote:
->>> Hi, Peter,
->>>
->>> I found that this patch has been merged but I haven't received the e-mail for some unknown reasons.
->>> https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=1c6c1ca318585f1096d4d04bc722297c85e9fb8a
->>>
->>> Firstly, your comments are correct, so the barrier.h part is perfect.
->>>
->>> Secondly, most of the rest is useless, because smp_mb__before_llsc, loongson_llsc_mb and other memory barriers are the same thing on Loongson-3. We don't need to add loongson_llsc_mb if there is already a smp_mb__before_llsc.
-> 
-> There wasn't. Take for example set_bit(), that didn't have
-> smp_mb__before_llsc on.
-> 
-> Also; MIPS should probably convert to asm-generic/bitops/atomic.h.
-> 
->>> Thirdly, maybe the only exception is syscall.c, but mips_atomic_set is not used on Loongson-3. And if in some cases we use it, I think the user-to-kernel context switch has the same effect of a memory barrier.
-> 
-> And how is some random person trying to make sense of MIPS to know that?
-> 
-> You all created a badly documented inconsitent trainwreck. You're
-> 'lucky' the MIPS maintainers accepted that mess in the first place.
-> 
-> Anyway, yes there are too many barrers now in some cases, in a previous
-> version I had:
-> 
->    https://lkml.kernel.org/r/20190424124421.693353463@infradead.org
-> 
-> But because I dropped changes to local.h that might not be true anymore;
-> it needs careful consideration. Please audit carefully and if you find
-> all smp_mb__before_llsc() usage is now superfluous for this 'funny' chip
-> of yours, then re-submit the above patch.
-> 
->> +. per-cpu like local_t *should only* be written by local cpu, and may be read by remote cpu sometimes
->>
->> +. if and only if local cpu can write per-cpu, then Loongson3's llsc bug would not be triggerd.
->>
->> same as this_cpu_cmpxchg_double
->>
->> If so, then no need to add sync before and after cmpxchg_local
-> 
-> Correct, we already dropped the change for other local.h stuff.
-> 
+> Otherwise, the kvm_mmu_notifier would have no chance to be descreased
 
-What about cmpxchg_local? Your patch add sync before and after ll/sc in 
-__cmpxchg, so *cmpxchg_local* has sync around it. But cmpxchg_local operate on 
-per-cpu, which *shall not* trigger loongson's LLSC bug, since only *this* cpu 
-write, other cpus read.
+s/descreased/decreased/
+(and in the comment too)
 
+> to 0 by madvise task -> syscall -> zap_page_range ->
+> mmu_notifier_invalidate_range_end ->
+> __mmu_notifier_invalidate_range_end -> invalidate_range_end ->
+> kvm_mmu_notifier_invalidate_range_end, as the madvise task would be
+> scheduled when running unmap_single_vma -> unmap_page_range ->
+> zap_p4d_range -> zap_pud_range -> zap_pmd_range -> cond_resched which
+> is called before mmu_notifier_invalidate_range_end in zap_page_range.
+
+I'm not entirely sure I follow - could you clarify whether the task
+invoking the madvise syscall is related to the task using KVM?
+
+> Signed-off-by: Gary Fu <qfu@wavecomp.com>
+> ---
+>  arch/mips/kvm/mmu.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>=20
+> diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
+> index 97e538a8c1be..e52e63d225f4 100644
+> --- a/arch/mips/kvm/mmu.c
+> +++ b/arch/mips/kvm/mmu.c
+> @@ -746,6 +746,22 @@ static int kvm_mips_map_page(struct kvm_vcpu *vcpu, =
+unsigned long gpa,
+>  		 */
+>  		spin_unlock(&kvm->mmu_lock);
+>  		kvm_release_pfn_clean(pfn);
+> +		/*
+> +		 * Add a cond_resched() to give the scheduler a chance to run
+> +		 * madvise task to avoid endless loop here in non-preemptible
+> +		 * kernel.
+> +		 * Otherwise, the kvm_mmu_notifier would have no chance to be
+> +		 * descreased to 0 by madvise task -> syscall -> zap_page_range
+> +		 * -> mmu_notifier_invalidate_range_end ->
+> +		 * __mmu_notifier_invalidate_range_end -> invalidate_range_end
+> +		 * -> kvm_mmu_notifier_invalidate_range_end, as the madvise task
+> +		 * would be scheduled when running unmap_single_vma ->
+> +		 * unmap_page_range -> zap_p4d_range -> zap_pud_range ->
+> +		 * zap_pmd_range -> cond_resched which is called before
+> +		 * mmu_notifier_invalidate_range_end in zap_page_range.
+> +		 */
+> +		if (need_resched())
+> +			cond_resched();
+
+Can we remove the need_resched() check here? cond_resched() already
+checks should_resched(0) which tests the same thread-info flag as
+need_resched(). So we should be fine to just call cond_resched()
+unconditionally.
+
+Thanks,
+    Paul
+
+>  		goto retry;
+>  	}
+> =20
+> --=20
+> 2.17.1
+>=20
