@@ -2,127 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0E0A8159
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 13:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8313FA8404
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 15:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726010AbfIDLq6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Sep 2019 07:46:58 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:45791 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725829AbfIDLq6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Sep 2019 07:46:58 -0400
-Received: by mail-lj1-f195.google.com with SMTP id l1so19255593lji.12
-        for <linux-mips@vger.kernel.org>; Wed, 04 Sep 2019 04:46:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:from:to:references:organization:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=anhS1dT8Khzjsj1S9LZyMCozECKYQ0s+N4eL9s1N5B4=;
-        b=Xu7huIrWossEWfgJM30hnPsvuQFejF+v6VPP0VwDTmzEJdIjyaOs6NCjxeVWpjZsru
-         566aYYLGBbjfRsb8M1O5+IA5h+OhpjsuZFMAiLVEzjy7qyjETJO7U93UAC8BGJ1CfqH1
-         3pBWEm3j9k2baujh/9zS28M9Btla0PmhiVKmOeNh8vLDMJN42c+xBLn1+FMta+uH+n5m
-         8Mvqb0QwJP1lav6wpxsQoi1oB8DTNB/7px6i2iisg6Jbc3JuBJTC5bgppqnwwhBdJopf
-         KuSjvByYATm7Q3CBTEUBhJ+PgE8fbB2ZCWKF0JsuJqjZ8vqSim2j19XBwjGsUzvpOytd
-         qSkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:references:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=anhS1dT8Khzjsj1S9LZyMCozECKYQ0s+N4eL9s1N5B4=;
-        b=jsbibJdAVQubVrPzAI4+dUdvmskRZFNF/ILPRwCrCiUt8m0bRA/gs03heTUQsIQE27
-         1DiBRC+ecuUEd4Y9vu9PnUFkmr9NvQ7+esqnFSL7kOWCP3hT4R0xWLFioJFhMNxu5xGA
-         cp6yYbNK1yhogiv+nR7GelvOcPpUiOFB7cDwbOvckC88U4JdfSpBcpLnAQmU8NFzi4o6
-         2RWT9LuldLvYgp/czONFugRITddU/bOrHTaJnld010C2/22joycIoWFJYf525unrHjfT
-         We/FrdJJYsg27uTyrBXl0zFuaAygLVIp3lGYJa3gogp6F61eUwi9PhhnwTAc+nW2Q+dj
-         olcA==
-X-Gm-Message-State: APjAAAXyMuG20BH3Ynf71Bpc4uv0O9rkYNIgyw1uFlfZLIjNGPjrGeox
-        npRfBlw8siNAOX5moINGFwosCF9A8YJ92w==
-X-Google-Smtp-Source: APXvYqwaWxtuQz1gEQRLu/KtxjGHWAWV2lFg0k6obrXmQXgCX96iURPWQwPU3/mZpx9xzBupt1OKyg==
-X-Received: by 2002:a2e:95cd:: with SMTP id y13mr1171913ljh.188.1567597616738;
-        Wed, 04 Sep 2019 04:46:56 -0700 (PDT)
-Received: from wasted.cogentembedded.com ([2a00:1fa0:461a:d9ce:6456:1196:2b4:13b6])
-        by smtp.gmail.com with ESMTPSA id a11sm3439989lfi.60.2019.09.04.04.46.55
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Sep 2019 04:46:55 -0700 (PDT)
-Subject: Re: [PATCH 038/120] MIPS: PS2: ROM: Read data for a given ROM file
- name
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-To:     Fredrik Noring <noring@nocrew.org>, linux-mips@vger.kernel.org
-References: <cover.1567326213.git.noring@nocrew.org>
- <69a1b78886392bca426ac6f521197af06d768042.1567326213.git.noring@nocrew.org>
- <9a699dfb-b597-f674-5fd3-cef19b9db15b@cogentembedded.com>
-Organization: Cogent Embedded
-Message-ID: <4da72bee-5641-04d0-e74a-ae216874ad4a@cogentembedded.com>
-Date:   Wed, 4 Sep 2019 14:46:54 +0300
+        id S1727156AbfIDM6J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Sep 2019 08:58:09 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:55999 "EHLO
+        mail.loongson.cn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725965AbfIDM6J (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Sep 2019 08:58:09 -0400
+Received: from [10.8.0.76] (unknown [89.187.165.41])
+        by mail (Coremail) with SMTP id QMiowPCxIM_VtG9dwT08AA--.6515S2;
+        Wed, 04 Sep 2019 20:58:09 +0800 (CST)
+Subject: Re: Something about loongson_llsc_mb
+To:     ambrosehua@icloud.com
+Cc:     Paul Burton <paul.burton@mips.com>, jhogan <jhogan@kernel.org>,
+        "jiaxun.yang" <jiaxun.yang@flygoat.com>,
+        linux-mips <linux-mips@vger.kernel.org>
+References: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
+ <1567231103-13237-3-git-send-email-linyunsheng@huawei.com>
+ <20190831085539.GG2369@hirez.programming.kicks-ass.net>
+ <4d89c688-49e4-a2aa-32ee-65e36edcd913@huawei.com>
+ <20190831161247.GM2369@hirez.programming.kicks-ass.net>
+ <tencent_34DDA31F622119EE5003B7F4@qq.com>
+ <2019090410032559707512@loongson.cn>
+ <20190904092154.GC2349@hirez.programming.kicks-ass.net>
+From:   Huang Pei <huangpei@loongson.cn>
+Message-ID: <270f90f1-cbe5-b8e3-4f67-dc13781719e5@loongson.cn>
+Date:   Wed, 4 Sep 2019 20:57:38 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-In-Reply-To: <9a699dfb-b597-f674-5fd3-cef19b9db15b@cogentembedded.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
+In-Reply-To: <20190904092154.GC2349@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: QMiowPCxIM_VtG9dwT08AA--.6515S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCFWftFyrZw1UWF45KrW7Arb_yoW5XF15p3
+        yIkF42yr4vyr4Iywsay3yDX3WS9395Ar9rZFyrurZIkas2g3sxtrW09r9rurWDJr93Gr42
+        yFWDC3W7XFykuFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvYb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY
+        02Avz4vE1syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
+        bVAw3UUUUU=
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
-
-On 09/02/2019 12:05 PM, Sergei Shtylyov wrote:
-
->> Reading ROM files is trivial since they are permanently available in
->> memory. Having rom_read_file() is a convenient when for example
->> resolving the machine region in subsequent changes.
->>
->> Signed-off-by: Fredrik Noring <noring@nocrew.org>
-> [...]
->> index 12a57f24bd63..840d37a199d8 100644
->> --- a/arch/mips/ps2/rom.c
->> +++ b/arch/mips/ps2/rom.c
->> @@ -224,6 +224,39 @@ struct rom_file rom_first_file(const struct rom_dir dir)
->>   }
->>   EXPORT_SYMBOL_GPL(rom_first_file);
->>   +/**
->> + * rom_read_file - read ROM file data
->> + * @dir: directory to read the file from
->> + * @name: file name to read
->> + * @buffer: pointer to buffer to store data that is read
->> + * @size: size in bytes to read
->> + * @offset: offset in bytes to start reading
->> + *
->> + * Context: any
->> + * Return: on successful completion, a nonnegative integer indicating the
->> + *     number of bytes actually read; otherwise, a negative error number
->> + */
->> +ssize_t rom_read_file(const struct rom_dir dir,
->> +    const char *name, void *buffer, size_t size, loff_t offset)
->> +{
->> +    struct rom_file file;
->> +
->> +    rom_find_files(file, dir, name)
->> +        if (offset < file.size) {
->> +            const u8 *b = file.data;
->> +            size_t remaining = file.size - offset;
->> +            size_t n = min(size, remaining);
->> +
->> +            memcpy(buffer, &b[offset], n);
->> +
->> +            return n;
->> +        } else
+On 09/04/2019 05:21 PM, Peter Zijlstra wrote:
 > 
->    The *else* branch also needs {} if the *if* branch has 'emn, according to Documentation/process/coding-style.rst.
+> *why* are you replying to some random unrelated thread?
 
-   Just realized that we don't need *else* after *return*...
+Chen ask me if whether your patch has more sync than needed, but I'm not sure 
+whether sync before and after *cmpxchg_local* is.
+> 
+> Also, please use a sane MUA and wrap your lines <80 chars.
 
->> +            return 0;
->> +
->> +    return -ENOENT;
->> +}
->> +EXPORT_SYMBOL_GPL(rom_read_file);
->> +
->>   /**
->>    * find_reset_string - find the offset to the ``"RESET"`` string, if it exists
->>    * @rom: ROM to search in
+Sorry, I finally got thunderbird in plain text mode with < 80 chars. It wont 
+happen again.
 
-MBR, Sergei
+> 
+> On Wed, Sep 04, 2019 at 10:03:31AM +0800, huangpei@loongson.cn wrote:
+>>> Hi, Peter,
+>>>
+>>> I found that this patch has been merged but I haven't received the e-mail for some unknown reasons.
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=1c6c1ca318585f1096d4d04bc722297c85e9fb8a
+>>>
+>>> Firstly, your comments are correct, so the barrier.h part is perfect.
+>>>
+>>> Secondly, most of the rest is useless, because smp_mb__before_llsc, loongson_llsc_mb and other memory barriers are the same thing on Loongson-3. We don't need to add loongson_llsc_mb if there is already a smp_mb__before_llsc.
+> 
+> There wasn't. Take for example set_bit(), that didn't have
+> smp_mb__before_llsc on.
+> 
+> Also; MIPS should probably convert to asm-generic/bitops/atomic.h.
+> 
+>>> Thirdly, maybe the only exception is syscall.c, but mips_atomic_set is not used on Loongson-3. And if in some cases we use it, I think the user-to-kernel context switch has the same effect of a memory barrier.
+> 
+> And how is some random person trying to make sense of MIPS to know that?
+> 
+> You all created a badly documented inconsitent trainwreck. You're
+> 'lucky' the MIPS maintainers accepted that mess in the first place.
+> 
+> Anyway, yes there are too many barrers now in some cases, in a previous
+> version I had:
+> 
+>    https://lkml.kernel.org/r/20190424124421.693353463@infradead.org
+> 
+> But because I dropped changes to local.h that might not be true anymore;
+> it needs careful consideration. Please audit carefully and if you find
+> all smp_mb__before_llsc() usage is now superfluous for this 'funny' chip
+> of yours, then re-submit the above patch.
+> 
+>> +. per-cpu like local_t *should only* be written by local cpu, and may be read by remote cpu sometimes
+>>
+>> +. if and only if local cpu can write per-cpu, then Loongson3's llsc bug would not be triggerd.
+>>
+>> same as this_cpu_cmpxchg_double
+>>
+>> If so, then no need to add sync before and after cmpxchg_local
+> 
+> Correct, we already dropped the change for other local.h stuff.
+> 
+
+What about cmpxchg_local? Your patch add sync before and after ll/sc in 
+__cmpxchg, so *cmpxchg_local* has sync around it. But cmpxchg_local operate on 
+per-cpu, which *shall not* trigger loongson's LLSC bug, since only *this* cpu 
+write, other cpus read.
+
