@@ -2,66 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 227E9A8ADA
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 21:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18BE1A8E01
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 21:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732833AbfIDQAu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Sep 2019 12:00:50 -0400
-Received: from eddie.linux-mips.org ([148.251.95.138]:36764 "EHLO
-        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732823AbfIDQAt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Sep 2019 12:00:49 -0400
-Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
-        with ESMTP id S23994735AbfIDQAm6-rc2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Sep 2019 18:00:42 +0200
-Date:   Wed, 4 Sep 2019 17:00:42 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc:     Fredrik Noring <noring@nocrew.org>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
-        =?UTF-8?Q?J=C3=BCrgen_Urban?= <JuergenUrban@gmx.de>
-Subject: Re: [PATCH 022/120] MIPS: R5900: Support 64-bit inq() and outq()
- macros in 32-bit kernels
-In-Reply-To: <975d5c12-2918-80e7-3ab5-93c678e1a2e0@flygoat.com>
-Message-ID: <alpine.LFD.2.21.1909041635410.2031@eddie.linux-mips.org>
-References: <cover.1567326213.git.noring@nocrew.org> <7ea8b1211bceb8193154b51ad4241e7c0b86547d.1567326213.git.noring@nocrew.org> <975d5c12-2918-80e7-3ab5-93c678e1a2e0@flygoat.com>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+        id S1732709AbfIDRze (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Sep 2019 13:55:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60634 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732659AbfIDRzd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 4 Sep 2019 13:55:33 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AA6AE22CEA;
+        Wed,  4 Sep 2019 17:55:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567619732;
+        bh=hHHjSbiQsAjEEctleSS533vZ2M8xIgEBQTPowA2D9+g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eCeuUo/OnwnRSc7kPZPszNJ0Kx4wBMOKS/4VKS06t4jEfWJmWqckBJPck2OUyDqcy
+         3ud2AWmhZLMrM+kln764gjZljwojlpVi8SMpL+DOYBvq48IT7ITIawPmQ2Ldx/gcFG
+         VUdj2B7zUf9QpYZWlaeegfFpL6lWMtfbIfeJXqfw=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.4 02/77] MIPS: kernel: only use i8253 clocksource with periodic clockevent
+Date:   Wed,  4 Sep 2019 19:52:49 +0200
+Message-Id: <20190904175303.589784339@linuxfoundation.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20190904175303.317468926@linuxfoundation.org>
+References: <20190904175303.317468926@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 4 Sep 2019, Jiaxun Yang wrote:
+[ Upstream commit a07e3324538a989b7cdbf2c679be6a7f9df2544f ]
 
-> > PlayStation 2 hardware such as the Graphics Synthesizer requires 64-bit
-> > register reads and writes[1], also in 32-bit kernels. Interrupts must be
-> > disabled when manipulating 64-bit registers unless the kernel saves and
-> > restores 64-bit registers in the interrupt and context switch handlers.
-> 
-> Hi Fredrik,
-> 
-> Why don't we just build a 64bit kernel rather than do these hacks?
-> 
-> Any hardware/firmware issue blocks 64bit kernel?
+i8253 clocksource needs a free running timer. This could only
+be used, if i8253 clockevent is set up as periodic.
 
- One issue I recall with the R5900 is $pc is 32-bit (as if with 
-CP0.Status.PX=1 on modern hardware) and is zero- rather than sign-extended 
-when copied to a GPR with instructions like JALR, BLTZAL, etc.  This is 
-contrary to MIPS architecture requirements and unlike other 64-bit MIPS 
-processors.
+Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/kernel/i8253.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- This does not cause an issue in the user mode (because USEG addresses 
-have bit #31 set to 0 anyway) or with the JR and JALR instructions 
-(because these ignore the upper 32 bits in the source GPR).  This however 
-breaks in the kernel mode whenever the value retrieved from $pc is used 
-for any kind of calculation, meaning that the kernel will have to be 
-audited for such use before we can run 64-bit kernel code.
+diff --git a/arch/mips/kernel/i8253.c b/arch/mips/kernel/i8253.c
+index c5bc344fc745c..73039746ae364 100644
+--- a/arch/mips/kernel/i8253.c
++++ b/arch/mips/kernel/i8253.c
+@@ -31,7 +31,8 @@ void __init setup_pit_timer(void)
+ 
+ static int __init init_pit_clocksource(void)
+ {
+-	if (num_possible_cpus() > 1) /* PIT does not scale! */
++	if (num_possible_cpus() > 1 || /* PIT does not scale! */
++	    !clockevent_state_periodic(&i8253_clockevent))
+ 		return 0;
+ 
+ 	return clocksource_i8253_init();
+-- 
+2.20.1
 
- This means it's much easier to have a 32-bit kernel running, with a small 
-and simple sanitanisation change posted as 003/120, and have all the 
-platform and driver infrastructure verified before this processor quirk is 
-addressed.
 
-  Maciej
+
