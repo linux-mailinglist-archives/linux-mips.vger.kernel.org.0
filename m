@@ -2,129 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F21AFA7B59
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 08:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB08A7F38
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Sep 2019 11:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727499AbfIDGOa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Sep 2019 02:14:30 -0400
-Received: from foss.arm.com ([217.140.110.172]:48070 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726033AbfIDGOa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 4 Sep 2019 02:14:30 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 312C2344;
-        Tue,  3 Sep 2019 23:14:29 -0700 (PDT)
-Received: from [10.162.41.129] (p8cg001049571a15.blr.arm.com [10.162.41.129])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 89A8D3F718;
-        Tue,  3 Sep 2019 23:16:41 -0700 (PDT)
-Subject: Re: [PATCH 1/1] mm/pgtable/debug: Add test validating architecture
- page table helpers
-To:     kbuild test robot <lkp@intel.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, linux-ia64@vger.kernel.org,
-        linux-sh@vger.kernel.org,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        James Hogan <jhogan@kernel.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Michal Hocko <mhocko@kernel.org>, linux-mm@kvack.org,
-        Paul Mackerras <paulus@samba.org>, sparclinux@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-s390@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        x86@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Paul Burton <paul.burton@mips.com>, kbuild-all@01.org,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>
-References: <1567497706-8649-2-git-send-email-anshuman.khandual@arm.com>
- <201909031912.htvWy2Bu%lkp@intel.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <4dc9698f-dff4-b916-a83e-dc932c8087c0@arm.com>
-Date:   Wed, 4 Sep 2019 11:44:25 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1729493AbfIDJWM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Sep 2019 05:22:12 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:35484 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727351AbfIDJWM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Sep 2019 05:22:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=srv7PXqbi6juyW+1f2ZlkHbP0cRMwyoZ/SBVTOWg5/Q=; b=jYFNGmO50yf14HGjXMyZCRNLv
+        D+qirA9LeOciu4777OXErDnKo1ijyxqr1YhZ5ZqV29FfotmjhMsGWNyqZNbsTnsRJnir1M4HZeuOY
+        FT/kNdWcR+Wonv3hnwA6L6XA+akYJSS9PH5uPcQV9xFIY7C+IKU+GLmB7JJ6PH9+vCwuOoo7APS2x
+        VfwZuw7VxlxfIOTgt6BWP8reR9WUkeE9wnmfKpE18aOB3sPIQAp6NPlCxLvYAV+xuajKjSFb6nU/w
+        O/y+w2eSt/BMOEvCi0we9dRfW1uemD7uHnbS8TiY1BCds/m4x3mzEBkDmxTxSLr/jawrkg3dHdYtO
+        JHTTcncmQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1i5RUD-00029v-7N; Wed, 04 Sep 2019 09:21:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 08366306024;
+        Wed,  4 Sep 2019 11:21:18 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7F90C29D882FC; Wed,  4 Sep 2019 11:21:54 +0200 (CEST)
+Date:   Wed, 4 Sep 2019 11:21:54 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "huangpei@loongson.cn" <huangpei@loongson.cn>
+Cc:     =?utf-8?B?6ZmI5Y2O5omN?= <chenhc@lemote.com>,
+        ralf <ralf@linux-mips.org>, Paul Burton <paul.burton@mips.com>,
+        jhogan <jhogan@kernel.org>,
+        "jiaxun.yang" <jiaxun.yang@flygoat.com>,
+        linux-mips <linux-mips@vger.kernel.org>
+Subject: Re: Something about loongson_llsc_mb
+Message-ID: <20190904092154.GC2349@hirez.programming.kicks-ass.net>
+References: <1567231103-13237-1-git-send-email-linyunsheng@huawei.com>
+ <1567231103-13237-3-git-send-email-linyunsheng@huawei.com>
+ <20190831085539.GG2369@hirez.programming.kicks-ass.net>
+ <4d89c688-49e4-a2aa-32ee-65e36edcd913@huawei.com>
+ <20190831161247.GM2369@hirez.programming.kicks-ass.net>
+ <tencent_34DDA31F622119EE5003B7F4@qq.com>
+ <2019090410032559707512@loongson.cn>
 MIME-Version: 1.0
-In-Reply-To: <201909031912.htvWy2Bu%lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2019090410032559707512@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
+*why* are you replying to some random unrelated thread?
 
-On 09/03/2019 04:43 PM, kbuild test robot wrote:
-> Hi Anshuman,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on linus/master]
-> [cannot apply to v5.3-rc7 next-20190902]
-> [if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
-> 
-> url:    https://github.com/0day-ci/linux/commits/Anshuman-Khandual/mm-debug-Add-tests-for-architecture-exported-page-table-helpers/20190903-162959
-> config: m68k-allmodconfig (attached as .config)
-> compiler: m68k-linux-gcc (GCC) 7.4.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # save the attached .config to linux build tree
->         GCC_VERSION=7.4.0 make.cross ARCH=m68k 
-> 
-> If you fix the issue, kindly add following tag
-> Reported-by: kbuild test robot <lkp@intel.com>
-> 
-> All error/warnings (new ones prefixed by >>):
-> 
->    In file included from arch/m68k/include/asm/bug.h:32:0,
->                     from include/linux/bug.h:5,
->                     from include/linux/thread_info.h:12,
->                     from include/asm-generic/preempt.h:5,
->                     from ./arch/m68k/include/generated/asm/preempt.h:1,
->                     from include/linux/preempt.h:78,
->                     from arch/m68k/include/asm/irqflags.h:6,
->                     from include/linux/irqflags.h:16,
->                     from arch/m68k/include/asm/atomic.h:6,
->                     from include/linux/atomic.h:7,
->                     from include/linux/mm_types_task.h:13,
->                     from include/linux/mm_types.h:5,
->                     from include/linux/hugetlb.h:5,
->                     from mm/arch_pgtable_test.c:14:
->    mm/arch_pgtable_test.c: In function 'pmd_clear_tests':
->>> arch/m68k/include/asm/page.h:31:22: error: lvalue required as unary '&' operand
->     #define pmd_val(x) ((&x)->pmd[0])
->                          ^
->    include/asm-generic/bug.h:124:25: note: in definition of macro 'WARN_ON'
->      int __ret_warn_on = !!(condition);    \
->                             ^~~~~~~~~
->>> arch/m68k/include/asm/motorola_pgtable.h:138:26: note: in expansion of macro 'pmd_val'
->     #define pmd_none(pmd)  (!pmd_val(pmd))
->                              ^~~~~~~
->>> mm/arch_pgtable_test.c:233:11: note: in expansion of macro 'pmd_none'
->      WARN_ON(!pmd_none(READ_ONCE(*pmdp)));
->               ^~~~~~~~
->    mm/arch_pgtable_test.c: In function 'pmd_populate_tests':
->>> arch/m68k/include/asm/page.h:31:22: error: lvalue required as unary '&' operand
->     #define pmd_val(x) ((&x)->pmd[0])
+Also, please use a sane MUA and wrap your lines <80 chars.
 
-Storing READ_ONCE(*pmdp) in a local pmd_t variable first solves the problem.
+On Wed, Sep 04, 2019 at 10:03:31AM +0800, huangpei@loongson.cn wrote:
+> >Hi, Peter,
+> >
+> >I found that this patch has been merged but I haven't received the e-mail for some unknown reasons.
+> >https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=1c6c1ca318585f1096d4d04bc722297c85e9fb8a
+> >
+> >Firstly, your comments are correct, so the barrier.h part is perfect.
+> >
+> >Secondly, most of the rest is useless, because smp_mb__before_llsc, loongson_llsc_mb and other memory barriers are the same thing on Loongson-3. We don't need to add loongson_llsc_mb if there is already a smp_mb__before_llsc.
+
+There wasn't. Take for example set_bit(), that didn't have
+smp_mb__before_llsc on.
+
+Also; MIPS should probably convert to asm-generic/bitops/atomic.h.
+
+> >Thirdly, maybe the only exception is syscall.c, but mips_atomic_set is not used on Loongson-3. And if in some cases we use it, I think the user-to-kernel context switch has the same effect of a memory barrier.
+
+And how is some random person trying to make sense of MIPS to know that?
+
+You all created a badly documented inconsitent trainwreck. You're
+'lucky' the MIPS maintainers accepted that mess in the first place.
+
+Anyway, yes there are too many barrers now in some cases, in a previous
+version I had:
+
+  https://lkml.kernel.org/r/20190424124421.693353463@infradead.org
+
+But because I dropped changes to local.h that might not be true anymore;
+it needs careful consideration. Please audit carefully and if you find
+all smp_mb__before_llsc() usage is now superfluous for this 'funny' chip
+of yours, then re-submit the above patch.
+
+> +. per-cpu like local_t *should only* be written by local cpu, and may be read by remote cpu sometimes
+> 
+> +. if and only if local cpu can write per-cpu, then Loongson3's llsc bug would not be triggerd.
+> 
+> same as this_cpu_cmpxchg_double
+> 
+> If so, then no need to add sync before and after cmpxchg_local
+
+Correct, we already dropped the change for other local.h stuff.
+
