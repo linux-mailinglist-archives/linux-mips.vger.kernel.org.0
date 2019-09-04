@@ -2,62 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72646A9670
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2019 00:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F16A9680
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2019 00:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729563AbfIDW2m convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 4 Sep 2019 18:28:42 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:38716 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727722AbfIDW2m (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Sep 2019 18:28:42 -0400
-Received: from localhost (unknown [62.21.130.100])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 380CA15286012;
-        Wed,  4 Sep 2019 15:28:38 -0700 (PDT)
-Date:   Wed, 04 Sep 2019 15:28:37 -0700 (PDT)
-Message-Id: <20190904.152837.1289570584021077118.davem@davemloft.net>
-To:     opensource@vdorst.com
-Cc:     sean.wang@mediatek.com, andrew@lunn.ch, vivien.didelot@gmail.com,
-        f.fainelli@gmail.com, matthias.bgg@gmail.com,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux@armlinux.org.uk,
-        john@phrozen.org, linux-mips@vger.kernel.org,
-        frank-w@public-files.de
-Subject: Re: [PATCH net-next v3 0/3] net: dsa: mt7530: Convert to PHYLINK
- and add support for port 5
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190902130226.26845-1-opensource@vdorst.com>
-References: <20190902130226.26845-1-opensource@vdorst.com>
-X-Mailer: Mew version 6.8 on Emacs 26.2
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 04 Sep 2019 15:28:41 -0700 (PDT)
+        id S1730438AbfIDWb3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Sep 2019 18:31:29 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:33580 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729919AbfIDWb2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 4 Sep 2019 18:31:28 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 7774A10277E2;
+        Wed,  4 Sep 2019 22:31:27 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2332A1001956;
+        Wed,  4 Sep 2019 22:31:16 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=wgcJq21Hydh7Tx5-o8empoPp7ULDBw0Am-du_Pa+fcftQ@mail.gmail.com>
+References: <CAHk-=wgcJq21Hydh7Tx5-o8empoPp7ULDBw0Am-du_Pa+fcftQ@mail.gmail.com> <20190904201933.10736-1-cyphar@cyphar.com> <20190904201933.10736-11-cyphar@cyphar.com> <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com> <20190904214856.vnvom7h5xontvngq@yavin.dot.cyphar.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian@brauner.io>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v12 10/12] namei: aggressively check for nd->root escape on ".." resolution
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <20591.1567636276.1@warthog.procyon.org.uk>
+Date:   Wed, 04 Sep 2019 23:31:16 +0100
+Message-ID: <20592.1567636276@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.66]); Wed, 04 Sep 2019 22:31:28 +0000 (UTC)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: René van Dorst <opensource@vdorst.com>
-Date: Mon,  2 Sep 2019 15:02:23 +0200
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-> 1. net: dsa: mt7530: Convert to PHYLINK API
->    This patch converts mt7530 to PHYLINK API.
-> 2. dt-bindings: net: dsa: mt7530: Add support for port 5
-> 3. net: dsa: mt7530: Add support for port 5
->    These 2 patches adding support for port 5 of the switch.
+> > Hinting to userspace to do a retry (with -EAGAIN as you mention in your
+> > other mail) wouldn't be a bad thing at all, though you'd almost
+> > certainly get quite a few spurious -EAGAINs -- &{mount,rename}_lock are
+> > global for the entire machine, after all.
 > 
-> v2->v3:
->  * Removed 'status = "okay"' lines in patch #2
->  * Change a port 5 setup message in a debug message in patch #3
->  * Added ack-by and tested-by tags
-> v1->v2:
->  * Mostly phylink improvements after review.
-> rfc -> v1:
->  * Mostly phylink improvements after review.
->  * Drop phy isolation patches. Adds no value for now.
+> I'd hope that we have some future (possibly very long-term)
+> alternative that is not quite system-global, but yes, right now they
+> are.
 
-Series applied.
+It ought to be reasonably easy to make them per-sb at least, I think.  We
+don't allow cross-super rename, right?
+
+David
