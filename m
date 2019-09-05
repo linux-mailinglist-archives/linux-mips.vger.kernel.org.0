@@ -2,197 +2,309 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB832AA520
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2019 15:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21DFAA626
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2019 16:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731903AbfIENyX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Sep 2019 09:54:23 -0400
-Received: from mail-eopbgr780123.outbound.protection.outlook.com ([40.107.78.123]:55054
-        "EHLO NAM03-BY2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731109AbfIENyX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 5 Sep 2019 09:54:23 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ou6olii5QRFTmjcZmCC89O1574BFZ4KPuc9lu8jJY+1kHUv5EP/zo+7qzjoUo6tj3rQVoUh+dGeDoZzPWK1bRFnhWGFbtneRu0t43pECXSwi8092J3aJyeO9nmIf/sbXPPmOf6xyli4lnWURPNJG4KkVOw0d/WqihfyF+N0VtEpP+SY/rzuGrr5uQBsgQ3U2r0E+5bmXK6MYC37JFgs65WFRiAOQlDaZp3zzVK9FqRO75ue0uu2zvQnbRvbIIkl9Anl5OAMw2gvM9O56uyUa2w7vlqErWgE3sXCJ8Kv86awZBVHOMBHt3eZ9U4ykbwiTJOW1RFjQAFzd4FRwY5MH9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c4s+7oShYEu+v7Jfd3AS7UU0/ftvu9Fm0mT4EEH2A/0=;
- b=ldlYcUaFoxjmcRimEBi8Q9LqWt6ozHDN2aHaXiFpbEmv1f5h/8Rvb71n1I3P4SIX5IhkQHsBJGM/Y8AquEhUimoGVRcJmkIAU5TiFbUfky82mieqfYLaXU0amp9Dj+IpBoA49Voq1Gh+hEAmmpRPvsveZOCpexQyaANV7Ci/6qtswhU/IotTke7pfsMiOPnJSEgJEtGv8h9ZkmbnQKEKb0wJ4NgJSPeOS684FbGbvrkJ4Gx/1mFl0uhB4tS6lytBrcHL2nqtBd+XtZmqOJDBTqjdKzHtQZBF76Z9nyhb6DWS1QLJy+pElXKq+StGkcstmeBGvTzyRqALfYo6vpsXIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=wavecomp.com;
- dkim=pass header.d=wavecomp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c4s+7oShYEu+v7Jfd3AS7UU0/ftvu9Fm0mT4EEH2A/0=;
- b=KvXh0VYkDp004ChUCP43qbNa6tkr0rm3KybO/1qkbFvNpk/Cinkrkdy0VhsdQwTH0A1iBzZroPp9+w6jBEcE9Php+lgRm7RxzgP/bgwRaZZin51ZCUMy0Z5sRkl9hIkU+uyX5QOyazD/I4F9HLiYQhw52I5xQTn94m0WI0V0rIQ=
-Received: from DM5PR22MB0860.namprd22.prod.outlook.com (10.171.160.147) by
- DM5PR22MB0364.namprd22.prod.outlook.com (10.173.174.138) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2241.15; Thu, 5 Sep 2019 13:54:19 +0000
-Received: from DM5PR22MB0860.namprd22.prod.outlook.com
- ([fe80::592b:85e8:62b8:dfd9]) by DM5PR22MB0860.namprd22.prod.outlook.com
- ([fe80::592b:85e8:62b8:dfd9%3]) with mapi id 15.20.2220.022; Thu, 5 Sep 2019
- 13:54:19 +0000
-From:   Gary Fu <qfu@wavecomp.com>
-To:     Paul Burton <pburton@wavecomp.com>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Archer Yan <ayan@wavecomp.com>, James Hogan <jhogan@kernel.org>
-Subject: RE: [PATCH] KVM: Fix an issue in non-preemptible kernel.
-Thread-Topic: [PATCH] KVM: Fix an issue in non-preemptible kernel.
-Thread-Index: AQHVYW0nkTjSutOr40CVXBCxMMHvk6cbj+0AgAFPCfA=
-Date:   Thu, 5 Sep 2019 13:54:19 +0000
-Message-ID: <DM5PR22MB08601676A09479ECA9B43D6EC3BB0@DM5PR22MB0860.namprd22.prod.outlook.com>
-References: <20190902090148.10356-1-qfu@wavecomp.com>
- <20190904135343.gbqfs4nlpnjvyfhc@pburton-laptop>
-In-Reply-To: <20190904135343.gbqfs4nlpnjvyfhc@pburton-laptop>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=qfu@wavecomp.com; 
-x-originating-ip: [112.10.76.155]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0786dc05-89a8-4984-017f-08d732088c72
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:DM5PR22MB0364;
-x-ms-traffictypediagnostic: DM5PR22MB0364:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM5PR22MB03649D2DFB17C9B216311A89C3BB0@DM5PR22MB0364.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 015114592F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(366004)(136003)(396003)(39850400004)(376002)(13464003)(51914003)(199004)(189003)(33656002)(99286004)(6436002)(14454004)(2906002)(6116002)(11346002)(5660300002)(3846002)(6246003)(486006)(6862004)(476003)(478600001)(9686003)(55016002)(54906003)(66946007)(66446008)(64756008)(66556008)(66476007)(446003)(66066001)(76116006)(14444005)(53936002)(53546011)(6506007)(74316002)(102836004)(25786009)(6636002)(76176011)(256004)(7696005)(86362001)(316002)(71190400001)(71200400001)(81166006)(81156014)(8676002)(4326008)(8936002)(7736002)(305945005)(52536014)(186003)(229853002)(26005);DIR:OUT;SFP:1102;SCL:1;SRVR:DM5PR22MB0364;H:DM5PR22MB0860.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: zRhQF+Ue8NuIq+gaOJYuaglmH2a8tBgGacj3JdurrWCKrxBUMBQsv4K57pkzv/Ltmml9og3A7z7D6c+NVbopXR+rtsVCaPqjj/0rxNORDQqYG0Gyoz/yADU1nj9y+peLsqpO6fL7Me7Lqji09bZFBSh5BlN0AaP/QwsXfU5GImrUwDR0LqYRZyxqN8RxhaX3LESPNUTxcMGmVXnaDYZ8xrPlAgnAHTNpRTmcWAbiZVLiCabdMpgG8C+yxn07DxIoksuZn7gX3G0o1l0bpXB+w6mPD3P2bybJpiU8dkroZZM3ebrRRBsAWivsAs6y1BH4khw0rES5QJCjWKajFbRcrV+ujjVbomHusxdoZ+BIR37dYKKetoVN2b9PaooD6+Tf7dPseqbWJAcgfo7AtSMTrqkZ8P+hYQK2jXC/zvnoikM=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S2389773AbfIEOnj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Sep 2019 10:43:39 -0400
+Received: from forward102j.mail.yandex.net ([5.45.198.243]:34278 "EHLO
+        forward102j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389734AbfIEOnj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Sep 2019 10:43:39 -0400
+Received: from mxback20j.mail.yandex.net (mxback20j.mail.yandex.net [IPv6:2a02:6b8:0:1619::114])
+        by forward102j.mail.yandex.net (Yandex) with ESMTP id BCADAF2122F;
+        Thu,  5 Sep 2019 17:43:35 +0300 (MSK)
+Received: from smtp2o.mail.yandex.net (smtp2o.mail.yandex.net [2a02:6b8:0:1a2d::26])
+        by mxback20j.mail.yandex.net (nwsmtp/Yandex) with ESMTP id 7nMWa1DCdI-hYxOba6U;
+        Thu, 05 Sep 2019 17:43:35 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1567694615;
+        bh=+JZQMBdrsGdZn1E+puXKU3NivVn1ljREQDpSj7/0RhM=;
+        h=In-Reply-To:Subject:To:From:Cc:References:Date:Message-Id;
+        b=fUYEqAE5kOsr/87j0gKboJYEwvwBlORj9h8fR3M7PDxhHbw7zOkpM4VhUS5tyoX5o
+         NLTPQ5mX9Z6uG17SIhTZdO1h+N2UkCLFXXmTVI0SHcy0wt9JY3piPqP2BQP/lNlGzO
+         0Pbt9yQinxPi+z6VDcagPhk9gSjBZHBBTUGJ7T6E=
+Authentication-Results: mxback20j.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by smtp2o.mail.yandex.net (nwsmtp/Yandex) with ESMTPSA id zkoybIaMjG-hRxWWcw6;
+        Thu, 05 Sep 2019 17:43:32 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     chenhc@lemote.com, paul.burton@mips.com, tglx@linutronix.de,
+        jason@lakedaemon.net, maz@kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, mark.rutland@arm.co,
+        devicetree@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 00/19] Modernize Loongson64 Machine
+Date:   Thu,  5 Sep 2019 22:42:57 +0800
+Message-Id: <20190905144316.12527-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190827085302.5197-1-jiaxun.yang@flygoat.com>
+References: 
 MIME-Version: 1.0
-X-OriginatorOrg: wavecomp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0786dc05-89a8-4984-017f-08d732088c72
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2019 13:54:19.1704
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: q71wfNf1vlPJQf2DgVGpR6PqbMuey0g1kz9pGJwUGpEiQk4Egv1gIP9vXpSLiBvpT0bmzdIij/0G8YJWu1xFcg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR22MB0364
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+v1:
+- dt-bindings fixup according to Rob's comments
+- irqchip fixup according to Marc's comments
+- ls3-iointc: Make Core&IP map per-IRQ
+- Regenerate kconfigs
+- Typo & style improvements
 
-Thanks for your review.
-Please see my comments below.
+v2:
+- dt-bindings: Fix IOINTC, collect Rob's review tag
+- dtbs: Drop CPU Node, merge different ways according to Huacai and Paul's comments
 
------Original Message-----
-From: Paul Burton <pburton@wavecomp.com>=20
-Sent: Wednesday, September 4, 2019 10:03 PM
-To: Gary Fu <qfu@wavecomp.com>
-Cc: linux-mips@vger.kernel.org; Paul Burton <pburton@wavecomp.com>; Archer =
-Yan <ayan@wavecomp.com>; James Hogan <jhogan@kernel.org>
-Subject: Re: [PATCH] KVM: Fix an issue in non-preemptible kernel.
+Jiaxun Yang (19):
+  MIPS: Loongson64: Rename CPU TYPES
+  MIPS: Loongson64: separate loongson2ef/loongson64 code
+  MAINTAINERS: Fix entries for new loongson64 path
+  irqchip: Export generic chip domain map/unmap functions
+  irqchip: Add driver for Loongson-3 I/O interrupt controller
+  dt-bindings: interrupt-controller: Add Loongson-3 IOINTC
+  irqchip: Add driver for Loongson-3 HyperTransport interrupt controller
+  dt-bindings: interrupt-controller: Add Loongson-3 HTINTC
+  irqchip: i8259: Add plat-poll support
+  irqchip: mips-cpu: Convert to simple domain
+  MIPS: Loongson64: Drop legacy IRQ code
+  dt-bindings: mips: Add loongson boards
+  dt-bindings: Document loongson vendor-prefix
+  MIPS: Loongson64: Add generic dts
+  MIPS: Loongson64: Load built-in dtbs
+  GPIO: loongson: Drop Loongson-3A/3B support
+  MIPS: Loongson: Regenerate defconfigs
+  MAINTAINERS: Add new pathes to LOONGSON64 ARCHITECTURE
+  MAINTAINERS: Add myself as maintainer of LOONGSON64
 
-Hi Gary,
+ .../loongson,ls3-htintc.yaml                  |  55 ++++
+ .../loongson,ls3-iointc.yaml                  |  79 +++++
+ .../bindings/mips/loongson/devices.yaml       |  39 +++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |  13 +-
+ arch/mips/Kbuild.platforms                    |   1 +
+ arch/mips/Kconfig                             |  83 ++++--
+ arch/mips/boot/dts/Makefile                   |   1 +
+ arch/mips/boot/dts/loongson/3a-package.dtsi   |  69 +++++
+ arch/mips/boot/dts/loongson/3a1000_780e.dts   |  10 +
+ arch/mips/boot/dts/loongson/3a2000_780e.dts   |  10 +
+ arch/mips/boot/dts/loongson/3a3000_780e.dts   |  10 +
+ arch/mips/boot/dts/loongson/3b-package.dtsi   |  69 +++++
+ arch/mips/boot/dts/loongson/3b1x00_780e.dts   |  10 +
+ arch/mips/boot/dts/loongson/Makefile          |   5 +
+ arch/mips/boot/dts/loongson/rs780e-pch.dtsi   |  35 +++
+ arch/mips/configs/fuloong2e_defconfig         |   8 +-
+ arch/mips/configs/lemote2f_defconfig          |   8 +-
+ arch/mips/configs/loongson3_defconfig         |  13 +-
+ arch/mips/include/asm/bootinfo.h              |   1 -
+ arch/mips/include/asm/cop2.h                  |   2 +-
+ arch/mips/include/asm/cpu-type.h              |   6 +-
+ arch/mips/include/asm/cpu.h                   |   4 +-
+ arch/mips/include/asm/hazards.h               |   2 +-
+ arch/mips/include/asm/io.h                    |   2 +-
+ arch/mips/include/asm/irqflags.h              |   2 +-
+ .../mach-loongson2ef/cpu-feature-overrides.h  |  45 +++
+ .../cs5536/cs5536.h                           |   0
+ .../cs5536/cs5536_mfgpt.h                     |   0
+ .../cs5536/cs5536_pci.h                       |   0
+ .../cs5536/cs5536_vsm.h                       |   0
+ .../loongson2ef.h}                            |  31 +-
+ .../machine.h                                 |   6 -
+ .../mc146818rtc.h                             |   5 +-
+ .../mem.h                                     |   6 +-
+ arch/mips/include/asm/mach-loongson2ef/pci.h  |  43 +++
+ .../include/asm/mach-loongson2ef/spaces.h     |  10 +
+ .../asm/mach-loongson64/builtin_dtbs.h        |  16 +
+ .../mach-loongson64/cpu-feature-overrides.h   |   8 +-
+ arch/mips/include/asm/mach-loongson64/irq.h   |   6 +-
+ .../asm/mach-loongson64/kernel-entry-init.h   |  74 -----
+ .../include/asm/mach-loongson64/loongson64.h  |  50 ++++
+ .../mips/include/asm/mach-loongson64/mmzone.h |  16 -
+ arch/mips/include/asm/mach-loongson64/pci.h   |  41 +--
+ .../include/asm/mach-loongson64/workarounds.h |   4 +-
+ arch/mips/include/asm/module.h                |   8 +-
+ arch/mips/include/asm/processor.h             |   2 +-
+ arch/mips/include/asm/r4kcache.h              |   4 +-
+ arch/mips/kernel/cpu-probe.c                  |  14 +-
+ arch/mips/kernel/idle.c                       |   2 +-
+ arch/mips/kernel/perf_event_mipsxx.c          |   4 +-
+ arch/mips/kernel/setup.c                      |   2 +-
+ arch/mips/kernel/traps.c                      |   2 +-
+ arch/mips/lib/csum_partial.S                  |   4 +-
+ arch/mips/loongson2ef/Kconfig                 |  93 ++++++
+ arch/mips/loongson2ef/Makefile                |  18 ++
+ arch/mips/loongson2ef/Platform                |  32 ++
+ .../common/Makefile                           |   0
+ .../common/bonito-irq.c                       |   2 +-
+ .../common/cmdline.c                          |   2 +-
+ .../common/cs5536/Makefile                    |   0
+ .../common/cs5536/cs5536_acc.c                |   0
+ .../common/cs5536/cs5536_ehci.c               |   0
+ .../common/cs5536/cs5536_ide.c                |   0
+ .../common/cs5536/cs5536_isa.c                |   0
+ .../common/cs5536/cs5536_mfgpt.c              |   0
+ .../common/cs5536/cs5536_ohci.c               |   0
+ .../common/cs5536/cs5536_pci.c                |   0
+ .../common/early_printk.c                     |   2 +-
+ arch/mips/loongson2ef/common/env.c            |  71 +++++
+ .../{loongson64 => loongson2ef}/common/init.c |   7 +-
+ .../{loongson64 => loongson2ef}/common/irq.c  |   2 +-
+ .../common/machtype.c                         |   3 +-
+ .../{loongson64 => loongson2ef}/common/mem.c  |  40 +--
+ .../{loongson64 => loongson2ef}/common/pci.c  |  11 +-
+ .../common/platform.c                         |   0
+ .../{loongson64 => loongson2ef}/common/pm.c   |   2 +-
+ .../common/reset.c                            |  23 +-
+ .../{loongson64 => loongson2ef}/common/rtc.c  |   0
+ .../common/serial.c                           |  37 +--
+ .../common/setup.c                            |   2 +-
+ .../{loongson64 => loongson2ef}/common/time.c |   2 +-
+ .../common/uart_base.c                        |  10 +-
+ .../fuloong-2e/Makefile                       |   0
+ .../fuloong-2e/dma.c                          |   0
+ .../fuloong-2e/irq.c                          |   2 +-
+ .../fuloong-2e/reset.c                        |   2 +-
+ .../lemote-2f/Makefile                        |   0
+ .../lemote-2f/clock.c                         |   2 +-
+ .../lemote-2f/dma.c                           |   0
+ .../lemote-2f/ec_kb3310b.c                    |   0
+ .../lemote-2f/ec_kb3310b.h                    |   0
+ .../lemote-2f/irq.c                           |   2 +-
+ .../lemote-2f/machtype.c                      |   2 +-
+ .../lemote-2f/pm.c                            |   2 +-
+ .../lemote-2f/reset.c                         |   2 +-
+ arch/mips/loongson64/Kconfig                  | 126 +-------
+ arch/mips/loongson64/Makefile                 |  23 +-
+ arch/mips/loongson64/Platform                 |  36 +--
+ .../loongson64/{loongson-3 => }/acpi_init.c   |   3 +-
+ .../loongson64/{loongson-3 => }/cop2-ex.c     |   5 +-
+ arch/mips/loongson64/{loongson-3 => }/dma.c   |   6 +-
+ arch/mips/loongson64/{common => }/env.c       |  98 +++----
+ arch/mips/loongson64/{loongson-3 => }/hpet.c  |   0
+ arch/mips/loongson64/irq.c                    |  27 ++
+ arch/mips/loongson64/loongson-3/Makefile      |  11 -
+ arch/mips/loongson64/loongson-3/irq.c         | 158 ----------
+ arch/mips/loongson64/{loongson-3 => }/numa.c  |   4 +-
+ arch/mips/loongson64/pci.c                    |  45 +++
+ .../loongson64/{loongson-3 => }/platform.c    |   0
+ arch/mips/loongson64/reset.c                  |  58 ++++
+ arch/mips/loongson64/setup.c                  | 107 +++++++
+ arch/mips/loongson64/{loongson-3 => }/smp.c   |  28 +-
+ arch/mips/loongson64/{loongson-3 => }/smp.h   |   0
+ arch/mips/mm/c-r4k.c                          |  32 +-
+ arch/mips/mm/page.c                           |   2 +-
+ arch/mips/mm/tlb-r4k.c                        |   4 +-
+ arch/mips/mm/tlbex.c                          |   6 +-
+ arch/mips/oprofile/Makefile                   |   4 +-
+ arch/mips/oprofile/common.c                   |   4 +-
+ arch/mips/oprofile/op_model_loongson2.c       |   2 +-
+ arch/mips/oprofile/op_model_loongson3.c       |   2 +-
+ arch/mips/pci/Makefile                        |   2 +-
+ arch/mips/pci/fixup-fuloong2e.c               |   2 +-
+ arch/mips/pci/fixup-lemote2f.c                |   2 +-
+ arch/mips/pci/ops-loongson2.c                 |   2 +-
+ arch/mips/pci/ops-loongson3.c                 |   2 +-
+ drivers/cpufreq/loongson2_cpufreq.c           |   2 +-
+ drivers/gpio/Kconfig                          |   6 +-
+ drivers/gpio/gpio-loongson.c                  |  11 +-
+ drivers/irqchip/Kconfig                       |  17 ++
+ drivers/irqchip/Makefile                      |   2 +
+ drivers/irqchip/irq-i8259.c                   |  47 ++-
+ drivers/irqchip/irq-ls3-htintc.c              | 147 ++++++++++
+ drivers/irqchip/irq-ls3-iointc.c              | 275 ++++++++++++++++++
+ drivers/irqchip/irq-mips-cpu.c                |   2 +-
+ drivers/platform/mips/cpu_hwmon.c             |   2 +-
+ include/drm/drm_cache.h                       |   2 +-
+ include/linux/irq.h                           |   1 +
+ kernel/irq/generic-chip.c                     |   4 +-
+ 140 files changed, 1760 insertions(+), 874 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,ls3-htintc.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,ls3-iointc.yaml
+ create mode 100644 Documentation/devicetree/bindings/mips/loongson/devices.yaml
+ create mode 100644 arch/mips/boot/dts/loongson/3a-package.dtsi
+ create mode 100644 arch/mips/boot/dts/loongson/3a1000_780e.dts
+ create mode 100644 arch/mips/boot/dts/loongson/3a2000_780e.dts
+ create mode 100644 arch/mips/boot/dts/loongson/3a3000_780e.dts
+ create mode 100644 arch/mips/boot/dts/loongson/3b-package.dtsi
+ create mode 100644 arch/mips/boot/dts/loongson/3b1x00_780e.dts
+ create mode 100644 arch/mips/boot/dts/loongson/Makefile
+ create mode 100644 arch/mips/boot/dts/loongson/rs780e-pch.dtsi
+ create mode 100644 arch/mips/include/asm/mach-loongson2ef/cpu-feature-overrides.h
+ rename arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/cs5536/cs5536.h (100%)
+ rename arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/cs5536/cs5536_mfgpt.h (100%)
+ rename arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/cs5536/cs5536_pci.h (100%)
+ rename arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/cs5536/cs5536_vsm.h (100%)
+ rename arch/mips/include/asm/{mach-loongson64/loongson.h => mach-loongson2ef/loongson2ef.h} (91%)
+ rename arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/machine.h (80%)
+ rename arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/mc146818rtc.h (80%)
+ rename arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/mem.h (86%)
+ create mode 100644 arch/mips/include/asm/mach-loongson2ef/pci.h
+ create mode 100644 arch/mips/include/asm/mach-loongson2ef/spaces.h
+ create mode 100644 arch/mips/include/asm/mach-loongson64/builtin_dtbs.h
+ delete mode 100644 arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
+ create mode 100644 arch/mips/include/asm/mach-loongson64/loongson64.h
+ create mode 100644 arch/mips/loongson2ef/Kconfig
+ create mode 100644 arch/mips/loongson2ef/Makefile
+ create mode 100644 arch/mips/loongson2ef/Platform
+ rename arch/mips/{loongson64 => loongson2ef}/common/Makefile (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/bonito-irq.c (97%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/cmdline.c (97%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/Makefile (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_acc.c (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_ehci.c (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_ide.c (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_isa.c (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_mfgpt.c (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_ohci.c (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_pci.c (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/early_printk.c (97%)
+ create mode 100644 arch/mips/loongson2ef/common/env.c
+ rename arch/mips/{loongson64 => loongson2ef}/common/init.c (90%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/irq.c (98%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/machtype.c (94%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/mem.c (72%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/pci.c (89%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/platform.c (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/pm.c (99%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/reset.c (77%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/rtc.c (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/serial.c (63%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/setup.c (97%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/time.c (96%)
+ rename arch/mips/{loongson64 => loongson2ef}/common/uart_base.c (77%)
+ rename arch/mips/{loongson64 => loongson2ef}/fuloong-2e/Makefile (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/fuloong-2e/dma.c (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/fuloong-2e/irq.c (98%)
+ rename arch/mips/{loongson64 => loongson2ef}/fuloong-2e/reset.c (93%)
+ rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/Makefile (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/clock.c (98%)
+ rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/dma.c (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/ec_kb3310b.c (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/ec_kb3310b.h (100%)
+ rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/irq.c (99%)
+ rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/machtype.c (98%)
+ rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/pm.c (99%)
+ rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/reset.c (99%)
+ rename arch/mips/loongson64/{loongson-3 => }/acpi_init.c (99%)
+ rename arch/mips/loongson64/{loongson-3 => }/cop2-ex.c (88%)
+ rename arch/mips/loongson64/{loongson-3 => }/dma.c (82%)
+ rename arch/mips/loongson64/{common => }/env.c (83%)
+ rename arch/mips/loongson64/{loongson-3 => }/hpet.c (100%)
+ create mode 100644 arch/mips/loongson64/irq.c
+ delete mode 100644 arch/mips/loongson64/loongson-3/Makefile
+ delete mode 100644 arch/mips/loongson64/loongson-3/irq.c
+ rename arch/mips/loongson64/{loongson-3 => }/numa.c (98%)
+ create mode 100644 arch/mips/loongson64/pci.c
+ rename arch/mips/loongson64/{loongson-3 => }/platform.c (100%)
+ create mode 100644 arch/mips/loongson64/reset.c
+ create mode 100644 arch/mips/loongson64/setup.c
+ rename arch/mips/loongson64/{loongson-3 => }/smp.c (98%)
+ rename arch/mips/loongson64/{loongson-3 => }/smp.h (100%)
+ create mode 100644 drivers/irqchip/irq-ls3-htintc.c
+ create mode 100644 drivers/irqchip/irq-ls3-iointc.c
 
-On Mon, Sep 02, 2019 at 09:02:32AM +0000, Gary Fu wrote:
-> Add a cond_resched() to give the scheduler a chance to run madvise=20
-> task to avoid endless loop here in non-preemptible kernel.
+-- 
+2.22.0
 
-Thanks for the patch!
-
-> Otherwise, the kvm_mmu_notifier would have no chance to be descreased
-
-s/descreased/decreased/
-(and in the comment too)
-
-Thank you for your comments. I'll fix these typo errors.
-
-> to 0 by madvise task -> syscall -> zap_page_range ->=20
-> mmu_notifier_invalidate_range_end ->=20
-> __mmu_notifier_invalidate_range_end -> invalidate_range_end ->=20
-> kvm_mmu_notifier_invalidate_range_end, as the madvise task would be=20
-> scheduled when running unmap_single_vma -> unmap_page_range ->=20
-> zap_p4d_range -> zap_pud_range -> zap_pmd_range -> cond_resched which=20
-> is called before mmu_notifier_invalidate_range_end in zap_page_range.
-
-I'm not entirely sure I follow - could you clarify whether the task invokin=
-g the madvise syscall is related to the task using KVM?
-
-Yes, the QEMU application invokes the madvise syscall with behavior param M=
-ADV_DONTNEED.
-When handling GPA faults by creating a new GPA mapping in kvm_mips_map_page=
-, it will be retrying to get available page. In the low memory case, it is =
-waiting for the memory resources freed by madvise syscall with MADV_DONTNEE=
-D (QEMU application -> madvise with MADV_DONTNEED -> syscall -> madvise_vma=
- -> madvise_dontneed_free -> madvise_dontneed_single_vma -> zap_page_range)=
-. In zap_page_range, after the TLB of given address range is cleared by unm=
-ap_single_vma, it will call __mmu_notifier_invalidate_range_end which final=
-ly calls kvm_mmu_notifier_invalidate_range_end to decrease mmu_notifier_cou=
-nt to 0. The retrying loop in kvm_mips_map_page checks the mmu_notifier_cou=
-nt and if the value is 0 which indicates that some new page is available fo=
-r mapping, it will jump out the retrying loop and set up PTE for a new GPA =
-mapping.
-During the TLB clearing ( in unmap_single_vma in madvise syscall) mentioned=
- above, it will call cond_resched() per PMD for avoiding occupying CPU for =
-a long time (in case of huge page range zapping). When this happened in the=
- non-preemptible kernel, the retrying loop in kvm_mips_map_page will be run=
-ning endlessly as there is no chance to reschedule back to madvise syscall =
-to run __mmu_notifier_invalidate_range_end to decrease mmu_notifier_count s=
-o that the value of  mmu_notifier_count is always 1.
-Adding a scheduling point before every retry in kvm_mips_map_page will give=
- the madvise syscall (invoked by QEMU) a chance to be re-scheduled back to =
-zap all the given pages and clear mmu_notifier_count value to let kvm_mips_=
-map_page task jump out the loop.
-
-> Signed-off-by: Gary Fu <qfu@wavecomp.com>
-> ---
->  arch/mips/kvm/mmu.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->=20
-> diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c index=20
-> 97e538a8c1be..e52e63d225f4 100644
-> --- a/arch/mips/kvm/mmu.c
-> +++ b/arch/mips/kvm/mmu.c
-> @@ -746,6 +746,22 @@ static int kvm_mips_map_page(struct kvm_vcpu *vcpu, =
-unsigned long gpa,
->  		 */
->  		spin_unlock(&kvm->mmu_lock);
->  		kvm_release_pfn_clean(pfn);
-> +		/*
-> +		 * Add a cond_resched() to give the scheduler a chance to run
-> +		 * madvise task to avoid endless loop here in non-preemptible
-> +		 * kernel.
-> +		 * Otherwise, the kvm_mmu_notifier would have no chance to be
-> +		 * descreased to 0 by madvise task -> syscall -> zap_page_range
-> +		 * -> mmu_notifier_invalidate_range_end ->
-> +		 * __mmu_notifier_invalidate_range_end -> invalidate_range_end
-> +		 * -> kvm_mmu_notifier_invalidate_range_end, as the madvise task
-> +		 * would be scheduled when running unmap_single_vma ->
-> +		 * unmap_page_range -> zap_p4d_range -> zap_pud_range ->
-> +		 * zap_pmd_range -> cond_resched which is called before
-> +		 * mmu_notifier_invalidate_range_end in zap_page_range.
-> +		 */
-> +		if (need_resched())
-> +			cond_resched();
-
-Can we remove the need_resched() check here? cond_resched() already checks =
-should_resched(0) which tests the same thread-info flag as need_resched(). =
-So we should be fine to just call cond_resched() unconditionally.
-
-Yes, you're right. Just calling cond_resched() is enough. I'll update the p=
-atch.
-
-Thanks,
-    Paul
-
->  		goto retry;
->  	}
-> =20
-> --
-> 2.17.1
->=20
