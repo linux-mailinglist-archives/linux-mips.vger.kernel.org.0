@@ -2,30 +2,30 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8890DAA630
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2019 16:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DA7AA633
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2019 16:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389799AbfIEOog (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Sep 2019 10:44:36 -0400
-Received: from forward105o.mail.yandex.net ([37.140.190.183]:51257 "EHLO
+        id S2388676AbfIEOoq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Sep 2019 10:44:46 -0400
+Received: from forward105o.mail.yandex.net ([37.140.190.183]:51539 "EHLO
         forward105o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729806AbfIEOof (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Sep 2019 10:44:35 -0400
-Received: from mxback13o.mail.yandex.net (mxback13o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::64])
-        by forward105o.mail.yandex.net (Yandex) with ESMTP id CAE0842012B8;
-        Thu,  5 Sep 2019 17:44:31 +0300 (MSK)
+        by vger.kernel.org with ESMTP id S2388474AbfIEOoq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Sep 2019 10:44:46 -0400
+Received: from mxback10j.mail.yandex.net (mxback10j.mail.yandex.net [IPv6:2a02:6b8:0:1619::113])
+        by forward105o.mail.yandex.net (Yandex) with ESMTP id 6C98142010A4;
+        Thu,  5 Sep 2019 17:44:44 +0300 (MSK)
 Received: from smtp2o.mail.yandex.net (smtp2o.mail.yandex.net [2a02:6b8:0:1a2d::26])
-        by mxback13o.mail.yandex.net (nwsmtp/Yandex) with ESMTP id EfSvaFNDef-iVHiA9Hm;
-        Thu, 05 Sep 2019 17:44:31 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1567694671;
-        bh=sG7BgDIr8p+HYZulZslQuEeDufhWrupg4Wh8iBL4A9s=;
+        by mxback10j.mail.yandex.net (nwsmtp/Yandex) with ESMTP id Mx1wCsv1Ga-ihGu1rMU;
+        Thu, 05 Sep 2019 17:44:44 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1567694684;
+        bh=ssU1xbXPnMavyQAKaHcnEU9cRk4yBbb7WNysTP7LPAo=;
         h=In-Reply-To:Subject:To:From:Cc:References:Date:Message-Id;
-        b=uzskY4CC7NeOC5lHaiRucDLJpj38N7azTn7eke+gSbwFZFKcZ9vHnvBLOYAGuGI5c
-         ktuhdRHK98WUZMqMqVzNSzSQCH3TeqrJE20FgrigSxCgeblEiBkY+qpVD7FgSNXEjz
-         4TIUC0Q62KigQll9R6zMSlCCult2LL844HAMUvnI=
-Authentication-Results: mxback13o.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by smtp2o.mail.yandex.net (nwsmtp/Yandex) with ESMTPSA id zkoybIaMjG-iJxWVVor;
-        Thu, 05 Sep 2019 17:44:29 +0300
+        b=ELF6ct16o2sVxpuqKGQyQjY9ck9pDcWZBHY+5VX4/71GOqmFlVWJVWnZDLIPNEa04
+         aXYmci2/ZEb/wcqj66nJ2z+pHQdwe5u4KXyXb+mZmFHgBD4oWSFRDG+Yu+gL/4EMgu
+         SnxKJqewBVT2Dl+briqV7T6B++Mi0wiqc2l9g0o8=
+Authentication-Results: mxback10j.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by smtp2o.mail.yandex.net (nwsmtp/Yandex) with ESMTPSA id zkoybIaMjG-iWxWGQE5;
+        Thu, 05 Sep 2019 17:44:41 +0300
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (Client certificate not present)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
@@ -34,9 +34,9 @@ Cc:     chenhc@lemote.com, paul.burton@mips.com, tglx@linutronix.de,
         jason@lakedaemon.net, maz@kernel.org, linux-kernel@vger.kernel.org,
         robh+dt@kernel.org, mark.rutland@arm.co,
         devicetree@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v2 03/19] MAINTAINERS: Fix entries for new loongson64 path
-Date:   Thu,  5 Sep 2019 22:43:00 +0800
-Message-Id: <20190905144316.12527-4-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 04/19] irqchip: Export generic chip domain map/unmap functions
+Date:   Thu,  5 Sep 2019 22:43:01 +0800
+Message-Id: <20190905144316.12527-5-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190905144316.12527-1-jiaxun.yang@flygoat.com>
 References: <20190905144316.12527-1-jiaxun.yang@flygoat.com>
@@ -47,40 +47,50 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-As we sepreated the code of loongson2ef/loongson3a, they can
-now have their own entries.
+Export irq_map_generic_chip, irq_unmap_generic_chip so drivers
+can use them to construct their own generic chip domain ops.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- MAINTAINERS | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ include/linux/irq.h       | 1 +
+ kernel/irq/generic-chip.c | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 783569e3c4b4..b2ad16902d70 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10742,17 +10742,16 @@ F:	arch/mips/include/asm/mach-loongson32/
- F:	drivers/*/*loongson1*
- F:	drivers/*/*/*loongson1*
+diff --git a/include/linux/irq.h b/include/linux/irq.h
+index fb301cf29148..3637c24046e1 100644
+--- a/include/linux/irq.h
++++ b/include/linux/irq.h
+@@ -1060,6 +1060,7 @@ int irq_gc_set_wake(struct irq_data *d, unsigned int on);
+ /* Setup functions for irq_chip_generic */
+ int irq_map_generic_chip(struct irq_domain *d, unsigned int virq,
+ 			 irq_hw_number_t hw_irq);
++void irq_unmap_generic_chip(struct irq_domain *d, unsigned int virq);
+ struct irq_chip_generic *
+ irq_alloc_generic_chip(const char *name, int nr_ct, unsigned int irq_base,
+ 		       void __iomem *reg_base, irq_flow_handler_t handler);
+diff --git a/kernel/irq/generic-chip.c b/kernel/irq/generic-chip.c
+index e2999a070a99..211b15c0d647 100644
+--- a/kernel/irq/generic-chip.c
++++ b/kernel/irq/generic-chip.c
+@@ -423,8 +423,9 @@ int irq_map_generic_chip(struct irq_domain *d, unsigned int virq,
+ 	irq_modify_status(virq, dgc->irq_flags_to_clear, dgc->irq_flags_to_set);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(irq_map_generic_chip);
  
--MIPS/LOONGSON2 ARCHITECTURE
-+MIPS/LOONGSON2E/F ARCHITECTURE
- M:	Jiaxun Yang <jiaxun.yang@flygoat.com>
- L:	linux-mips@vger.kernel.org
- S:	Maintained
--F:	arch/mips/loongson64/fuloong-2e/
--F:	arch/mips/loongson64/lemote-2f/
--F:	arch/mips/include/asm/mach-loongson64/
-+F:	arch/mips/loongson2ef/
-+F:	arch/mips/include/asm/mach-loongson2ef/
- F:	drivers/*/*loongson2*
- F:	drivers/*/*/*loongson2*
+-static void irq_unmap_generic_chip(struct irq_domain *d, unsigned int virq)
++void irq_unmap_generic_chip(struct irq_domain *d, unsigned int virq)
+ {
+ 	struct irq_data *data = irq_domain_get_irq_data(d, virq);
+ 	struct irq_domain_chip_generic *dgc = d->gc;
+@@ -443,6 +444,7 @@ static void irq_unmap_generic_chip(struct irq_domain *d, unsigned int virq)
+ 			    NULL);
  
--MIPS/LOONGSON3 ARCHITECTURE
-+MIPS/LOONGSON64 ARCHITECTURE
- M:	Huacai Chen <chenhc@lemote.com>
- L:	linux-mips@vger.kernel.org
- S:	Maintained
+ }
++EXPORT_SYMBOL_GPL(irq_unmap_generic_chip);
+ 
+ struct irq_domain_ops irq_generic_chip_ops = {
+ 	.map	= irq_map_generic_chip,
 -- 
 2.22.0
 
