@@ -2,84 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6840AAAEE
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2019 20:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E972AAB07
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2019 20:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391267AbfIES2j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Sep 2019 14:28:39 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:39716 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731541AbfIES2j (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Sep 2019 14:28:39 -0400
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.1 #3 (Red Hat Linux))
-        id 1i5wUD-0004ZK-Jy; Thu, 05 Sep 2019 18:28:02 +0000
-Date:   Thu, 5 Sep 2019 19:28:01 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>, Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian@brauner.io>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v12 01/12] lib: introduce copy_struct_{to,from}_user
- helpers
-Message-ID: <20190905182801.GR1131@ZenIV.linux.org.uk>
-References: <20190904201933.10736-1-cyphar@cyphar.com>
- <20190904201933.10736-2-cyphar@cyphar.com>
- <20190905180750.GQ1131@ZenIV.linux.org.uk>
- <20190905182303.7f6bxpa2enbgcegv@wittgenstein>
+        id S2388941AbfIESct (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Sep 2019 14:32:49 -0400
+Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:36980 "EHLO
+        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730223AbfIESct (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Sep 2019 14:32:49 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 1D35E3FBD3;
+        Thu,  5 Sep 2019 20:32:47 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Flag: NO
+X-Spam-Score: -1.9
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 tagged_above=-999 required=6.31
+        tests=[BAYES_00=-1.9] autolearn=ham autolearn_force=no
+Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Cgg9MphdKKTb; Thu,  5 Sep 2019 20:32:46 +0200 (CEST)
+Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
+        (Authenticated sender: mb547485)
+        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id A9A573F7C7;
+        Thu,  5 Sep 2019 20:32:45 +0200 (CEST)
+Date:   Thu, 5 Sep 2019 20:32:45 +0200
+From:   Fredrik Noring <noring@nocrew.org>
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>,
+        =?utf-8?Q?J=C3=BCrgen?= Urban <JuergenUrban@gmx.de>
+Subject: Re: [PATCH 000/120] Linux for the PlayStation 2
+Message-ID: <20190905183245.GA3981@sx9>
+References: <cover.1567326213.git.noring@nocrew.org>
+ <20190904141026.hwzibvauis5sizq6@pburton-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190905182303.7f6bxpa2enbgcegv@wittgenstein>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190904141026.hwzibvauis5sizq6@pburton-laptop>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 05, 2019 at 08:23:03PM +0200, Christian Brauner wrote:
+> Wow - you've been busy, this patchset is huge!
 
-> Because every caller of that function right now has that limit set
-> anyway iirc. So we can either remove it from here and place it back for
-> the individual callers or leave it in the helper.
-> Also, I'm really asking, why not? Is it unreasonable to have an upper
-> bound on the size (for a long time probably) or are you disagreeing with
-> PAGE_SIZE being used? PAGE_SIZE limit is currently used by sched, perf,
-> bpf, and clone3 and in a few other places.
+I started in 2017 with a 2.6.35.14 patchset[1] maintained by Jürgen Urban,
+and ported it through 3.x, 4.x and 5.x to present day. The history goes
+back to 2.2.1[2] when Sony released a Linux kit.
 
-For a primitive that can be safely used with any size (OK, any within
-the usual 2Gb limit)?  Why push the random policy into the place where
-it doesn't belong?
+Maciej W. Rozycki and Jürgen Urban have been very helpful along the way.
 
-Seriously, what's the point?  If they want to have a large chunk of
-userland memory zeroed or checked for non-zeroes - why would that
-be a problem?
+Most of the drivers in the 2.6 series are not present in this initial
+patchset. It is supposed to be fairly small, after all. Most of the other
+parts from 2.6 were eventually removed, reworked or expanded.
+
+For example, the 2.6 kernel uses BIOS routines for certain services. The
+BIOS is discarded and the kernel handles the hardware directly in this
+patchset. Arbitrary video mode lines are now supported. The 2.6 kernel
+supported n32, and 128-bit GPRs, but this patchset supports only o32,
+and only 32-bit GPRs although I very much hope we can retain the support
+for 128-bit GPRs, as suggested in the patchset cover letter, as that is
+a defining feature of the R5900.
+
+The input/output processor (IOP) modules, handled as firmware by the
+kernel, have also been reworked and updated for a modern compiler[3].
+
+Some ideas and discussions on further development etc. can be found here:
+
+https://github.com/frno7/linux/issues
+
+> I think we may be best to split this up into 8 (or more) different
+> patchsets along these lines. In my experience large patchsets that touch
+> lots of different subsystems are very difficult to get merged, so I'd
+> suggest maybe we start with just the CPU support for arch/mips/ & if you
+> have the bandwidth you could submit drivers to other subsystem
+> maintainers in parallel.
+
+Sure!
+
+> I see you already got a few comments including on some of the early
+> CPU-related patches. I'll start looking through them in detail soon.
+
+Great, thanks!
+
+Fredrik
+
+References:
+
+[1] https://github.com/frno7/linux/tree/ps2-v2.6.35.14
+
+[2] https://github.com/frno7/linux/tree/ps2-v2.2.1
+
+[3] https://github.com/frno7/iopmod
