@@ -2,30 +2,30 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2165DAA657
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2019 16:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE38AA65A
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2019 16:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389551AbfIEOrP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Sep 2019 10:47:15 -0400
-Received: from forward102p.mail.yandex.net ([77.88.28.102]:52411 "EHLO
-        forward102p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389424AbfIEOrP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Sep 2019 10:47:15 -0400
-Received: from mxback21o.mail.yandex.net (mxback21o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::72])
-        by forward102p.mail.yandex.net (Yandex) with ESMTP id 52CD11D410D7;
-        Thu,  5 Sep 2019 17:47:10 +0300 (MSK)
+        id S2389958AbfIEOrX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Sep 2019 10:47:23 -0400
+Received: from forward104o.mail.yandex.net ([37.140.190.179]:40247 "EHLO
+        forward104o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389424AbfIEOrX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Sep 2019 10:47:23 -0400
+Received: from mxback21j.mail.yandex.net (mxback21j.mail.yandex.net [IPv6:2a02:6b8:0:1619::221])
+        by forward104o.mail.yandex.net (Yandex) with ESMTP id 57A6E940BE0;
+        Thu,  5 Sep 2019 17:47:19 +0300 (MSK)
 Received: from smtp2o.mail.yandex.net (smtp2o.mail.yandex.net [2a02:6b8:0:1a2d::26])
-        by mxback21o.mail.yandex.net (nwsmtp/Yandex) with ESMTP id GL3nnRFtUJ-lAaOgHgK;
-        Thu, 05 Sep 2019 17:47:10 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1567694830;
-        bh=/XMdPqFSv/Ey7BZiLDqI1bxotUzCQROUuUJZC4H4+JY=;
+        by mxback21j.mail.yandex.net (nwsmtp/Yandex) with ESMTP id eoyPHuHK6s-lIQiEErp;
+        Thu, 05 Sep 2019 17:47:19 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1567694839;
+        bh=J7uqJDuEc4mgi25ryHv+4u3mROfFI+lLp5dI8/AuBdQ=;
         h=In-Reply-To:Subject:To:From:Cc:References:Date:Message-Id;
-        b=XmnBILRranXzYu76hpq2W1xWGgcfD+KJFJ8W2pwuTIPvtG5mFWdJX/26Lr3NhwibT
-         NnF+Y+4vnAbRHQujO42cOaa90Rb8fU4NHEZLfyasezkkUYalBLxUqJU1N1dfCTezxk
-         a7ngYDI8tcqcjLjEBARJFPEoXvXTCSHODoTv7C5E=
-Authentication-Results: mxback21o.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by smtp2o.mail.yandex.net (nwsmtp/Yandex) with ESMTPSA id zkoybIaMjG-l2xW1tqC;
-        Thu, 05 Sep 2019 17:47:08 +0300
+        b=Lv8kBc2FYeGaSoALA0vk/EtnGL1PNFAAL9EaytKlWRIg5WV13y/bAxbhewXdTMiRa
+         3MimA+NdsYuwPuVPDaGO0qEo/FN3QUw3WuC4L3FIP1GdQZvUAJmMr+42XmGVhDp22D
+         vUyjhjiME14NqlKUAZX8Gj/Rmk8UrpcRfhseaH9o=
+Authentication-Results: mxback21j.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by smtp2o.mail.yandex.net (nwsmtp/Yandex) with ESMTPSA id zkoybIaMjG-lBxWPDBJ;
+        Thu, 05 Sep 2019 17:47:16 +0300
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (Client certificate not present)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
@@ -34,9 +34,9 @@ Cc:     chenhc@lemote.com, paul.burton@mips.com, tglx@linutronix.de,
         jason@lakedaemon.net, maz@kernel.org, linux-kernel@vger.kernel.org,
         robh+dt@kernel.org, mark.rutland@arm.co,
         devicetree@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v2 14/19] MIPS: Loongson64: Add generic dts
-Date:   Thu,  5 Sep 2019 22:43:11 +0800
-Message-Id: <20190905144316.12527-15-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 15/19] MIPS: Loongson64: Load built-in dtbs
+Date:   Thu,  5 Sep 2019 22:43:12 +0800
+Message-Id: <20190905144316.12527-16-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190905144316.12527-1-jiaxun.yang@flygoat.com>
 References: <20190905144316.12527-1-jiaxun.yang@flygoat.com>
@@ -47,331 +47,136 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add generic device dts for Loongson-3 devices.
-They seems identical but will be different later.
+Load proper dtb according to firmware passed parameters and
+CPU PRID.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/Kconfig                           |  4 +-
- arch/mips/boot/dts/Makefile                 |  1 +
- arch/mips/boot/dts/loongson/3a-package.dtsi | 69 +++++++++++++++++++++
- arch/mips/boot/dts/loongson/3a1000_780e.dts | 10 +++
- arch/mips/boot/dts/loongson/3a2000_780e.dts | 10 +++
- arch/mips/boot/dts/loongson/3a3000_780e.dts | 10 +++
- arch/mips/boot/dts/loongson/3b-package.dtsi | 69 +++++++++++++++++++++
- arch/mips/boot/dts/loongson/3b1x00_780e.dts | 10 +++
- arch/mips/boot/dts/loongson/Makefile        |  5 ++
- arch/mips/boot/dts/loongson/rs780e-pch.dtsi | 35 +++++++++++
- 10 files changed, 222 insertions(+), 1 deletion(-)
- create mode 100644 arch/mips/boot/dts/loongson/3a-package.dtsi
- create mode 100644 arch/mips/boot/dts/loongson/3a1000_780e.dts
- create mode 100644 arch/mips/boot/dts/loongson/3a2000_780e.dts
- create mode 100644 arch/mips/boot/dts/loongson/3a3000_780e.dts
- create mode 100644 arch/mips/boot/dts/loongson/3b-package.dtsi
- create mode 100644 arch/mips/boot/dts/loongson/3b1x00_780e.dts
- create mode 100644 arch/mips/boot/dts/loongson/Makefile
- create mode 100644 arch/mips/boot/dts/loongson/rs780e-pch.dtsi
+ .../asm/mach-loongson64/builtin_dtbs.h        | 16 ++++++++++++
+ .../include/asm/mach-loongson64/loongson64.h  |  2 ++
+ arch/mips/loongson64/env.c                    | 26 +++++++++++++++++++
+ arch/mips/loongson64/setup.c                  | 16 ++++++++++++
+ 4 files changed, 60 insertions(+)
+ create mode 100644 arch/mips/include/asm/mach-loongson64/builtin_dtbs.h
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index b6bdd96ec74e..5bad9aafcbdf 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -489,6 +489,8 @@ config MACH_LOONGSON64
- 	select SYS_SUPPORTS_LITTLE_ENDIAN
- 	select ZONE_DMA32
- 	select SYS_SUPPORTS_ZBOOT
-+	select USE_OF
-+	select BUILTIN_DTB
- 	help
- 	  This enables the support of Loongson-3A/3B/2-series-soc processors
+diff --git a/arch/mips/include/asm/mach-loongson64/builtin_dtbs.h b/arch/mips/include/asm/mach-loongson64/builtin_dtbs.h
+new file mode 100644
+index 000000000000..38063c7d20b1
+--- /dev/null
++++ b/arch/mips/include/asm/mach-loongson64/builtin_dtbs.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * Copyright (C) 2019 Jiaxun Yang <jiaxun.yang@flygoat.com>
++ *
++ * Built-in Generic dtbs for MACH_LOONGSON64
++ */
++
++#ifndef __ASM_MACH_LOONGSON64_BUILTIN_DTBS_H_
++#define __ASM_MACH_LOONGSON64_BUILTIN_DTBS_H_
++
++extern u32 __dtb_3a1000_780e_begin[];
++extern u32 __dtb_3a2000_780e_begin[];
++extern u32 __dtb_3a3000_780e_begin[];
++extern u32 __dtb_3b1x00_780e_begin[];
++
++#endif
+diff --git a/arch/mips/include/asm/mach-loongson64/loongson64.h b/arch/mips/include/asm/mach-loongson64/loongson64.h
+index ace91d52744e..58e07b7d835f 100644
+--- a/arch/mips/include/asm/mach-loongson64/loongson64.h
++++ b/arch/mips/include/asm/mach-loongson64/loongson64.h
+@@ -45,4 +45,6 @@ extern u64 loongson_freqctrl[MAX_PACKAGES];
  
-@@ -3047,7 +3049,7 @@ endchoice
- choice
- 	prompt "Kernel command line type" if !CMDLINE_OVERRIDE
- 	default MIPS_CMDLINE_FROM_DTB if USE_OF && !ATH79 && !MACH_INGENIC && \
--					 !MIPS_MALTA && \
-+					 !MACH_LOONGSON64 && !MIPS_MALTA && \
- 					 !CAVIUM_OCTEON_SOC
- 	default MIPS_CMDLINE_FROM_BOOTLOADER
+ extern const struct plat_smp_ops loongson3_smp_ops;
+ extern void __init prom_init_lefi(void);
++extern void *loongson_fdt_blob;
++
+ #endif
+diff --git a/arch/mips/loongson64/env.c b/arch/mips/loongson64/env.c
+index 93658cfbf3a6..34b4d77097f2 100644
+--- a/arch/mips/loongson64/env.c
++++ b/arch/mips/loongson64/env.c
+@@ -20,6 +20,7 @@
  
-diff --git a/arch/mips/boot/dts/Makefile b/arch/mips/boot/dts/Makefile
-index 1e79cab8e269..d429a69bfe30 100644
---- a/arch/mips/boot/dts/Makefile
-+++ b/arch/mips/boot/dts/Makefile
-@@ -4,6 +4,7 @@ subdir-y	+= cavium-octeon
- subdir-y	+= img
- subdir-y	+= ingenic
- subdir-y	+= lantiq
-+subdir-y	+= loongson
- subdir-y	+= mscc
- subdir-y	+= mti
- subdir-y	+= netlogic
-diff --git a/arch/mips/boot/dts/loongson/3a-package.dtsi b/arch/mips/boot/dts/loongson/3a-package.dtsi
-new file mode 100644
-index 000000000000..739cf43c7310
---- /dev/null
-+++ b/arch/mips/boot/dts/loongson/3a-package.dtsi
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: GPL-2.0
+ #include <loongson64.h>
+ #include <boot_param.h>
++#include <builtin_dtbs.h>
+ #include <workarounds.h>
+ 
+ u32 cpu_clock_freq;
+@@ -126,6 +127,31 @@ void __init prom_init_lefi(void)
+ 		loongson_sysconf.cores_per_node - 1) /
+ 		loongson_sysconf.cores_per_node;
+ 
++	if ((read_c0_prid() & PRID_IMP_MASK) == PRID_IMP_LOONGSON_64) {
++		switch (read_c0_prid() & PRID_REV_MASK) {
++		case PRID_REV_LOONGSON3A_R1:
++			loongson_fdt_blob = __dtb_3a1000_780e_begin;
++			break;
++		case PRID_REV_LOONGSON3A_R2_0:
++		case PRID_REV_LOONGSON3A_R2_1:
++			loongson_fdt_blob = __dtb_3a2000_780e_begin;
++			break;
++		case PRID_REV_LOONGSON3A_R3_0:
++		case PRID_REV_LOONGSON3A_R3_1:
++			loongson_fdt_blob = __dtb_3a3000_780e_begin;
++			break;
++		case PRID_REV_LOONGSON3B_R1:
++		case PRID_REV_LOONGSON3B_R2:
++			loongson_fdt_blob = __dtb_3b1x00_780e_begin;
++			break;
++		default:
++			break;
++		}
++	}
 +
-+#include <dt-bindings/interrupt-controller/irq.h>
++	if (!loongson_fdt_blob)
++		pr_err("Failed to determine built-in Loongson64 dtb\n");
 +
-+/ {
-+	#address-cells = <2>;
-+	#size-cells = <2>;
+ 	loongson_sysconf.pci_mem_start_addr = eirq_source->pci_mem_start_addr;
+ 	loongson_sysconf.pci_mem_end_addr = eirq_source->pci_mem_end_addr;
+ 	loongson_sysconf.pci_io_base = eirq_source->pci_io_start_addr;
+diff --git a/arch/mips/loongson64/setup.c b/arch/mips/loongson64/setup.c
+index ed014374780a..3b850b3128ea 100644
+--- a/arch/mips/loongson64/setup.c
++++ b/arch/mips/loongson64/setup.c
+@@ -7,9 +7,15 @@
+ #include <asm/setup.h>
+ #include <asm/smp-ops.h>
+ #include <asm/cacheflush.h>
++#include <linux/libfdt.h>
++#include <linux/of_fdt.h>
 +
-+	cpuintc: interrupt-controller {
-+		#address-cells = <0>;
-+		#interrupt-cells = <1>;
-+		interrupt-controller;
-+		compatible = "mti,cpu-interrupt-controller";
-+	};
++#include <asm/prom.h>
+ 
+ #include <loongson64.h>
+ 
++void *loongson_fdt_blob;
 +
-+	package@0 {
-+		compatible = "simple-bus";
-+		#address-cells = <2>;
-+		#size-cells = <1>;
-+		ranges = <0 0x1fe00000 0 0x1fe00000 0x100000
-+				0 0x3ff00000 0 0x3ff00000 0x100000
-+				0xEFD 0xFB000000 0xEFD 0xFB000000 0x10000000 /* 3A HT Config Space */>;
+ static void wbflush_loongson(void)
+ {
+ 	asm(".set\tpush\n\t"
+@@ -81,6 +87,8 @@ void __init prom_free_prom_memory(void)
+ 
+ void __init plat_mem_setup(void)
+ {
++	if (loongson_fdt_blob)
++		__dt_setup_arch(loongson_fdt_blob);
+ }
+ 
+ void __init plat_time_init(void)
+@@ -89,3 +97,11 @@ void __init plat_time_init(void)
+ 	setup_hpet_timer();
+ #endif
+ }
 +
-+		iointc: interrupt-controller@3ff01400 {
-+			compatible = "loongson,ls3-iointc";
-+			reg = <0 0x3ff01400 0x64>;
++void __init device_tree_init(void)
++{
++	if (!initial_boot_params)
++		return;
 +
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+
-+			interrupt-parent = <&cpuintc>;
-+			interrupts = <2>;
-+			};
-+
-+		cpu_uart0: serial@1fe001e0 {
-+			device_type = "serial";
-+			compatible = "ns16550a";
-+			reg = <0 0x1fe001e0 0x8>;
-+			clock-frequency = <33000000>;
-+			interrupt-parent = <&iointc>;
-+			interrupts = <10 IRQ_TYPE_LEVEL_HIGH>;
-+			no-loopback-test;
-+		};
-+
-+		cpu_uart1: serial@1fe001e8 {
-+			status = "disabled";
-+			device_type = "serial";
-+			compatible = "ns16550a";
-+			reg = <0 0x1fe001e8 0x8>;
-+			clock-frequency = <33000000>;
-+			interrupts = <10 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-parent = <&iointc>;
-+			no-loopback-test;
-+		};
-+
-+		htintc: interrupt-controller@0xEFDFB000080 {
-+			compatible = "loongson,ls3-htintc";
-+			reg = <0xEFD 0xFB000080 0x100>;
-+			interrupt-controller;
-+			#interrupt-cells = <1>;
-+
-+			interrupt-parent = <&iointc>;
-+			interrupts = <24 IRQ_TYPE_LEVEL_HIGH>,
-+						<25 IRQ_TYPE_LEVEL_HIGH>,
-+						<26 IRQ_TYPE_LEVEL_HIGH>,
-+						<27 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+	};
-+};
-diff --git a/arch/mips/boot/dts/loongson/3a1000_780e.dts b/arch/mips/boot/dts/loongson/3a1000_780e.dts
-new file mode 100644
-index 000000000000..dc1afe9410c8
---- /dev/null
-+++ b/arch/mips/boot/dts/loongson/3a1000_780e.dts
-@@ -0,0 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/dts-v1/;
-+
-+#include "3a-package.dtsi"
-+#include "rs780e-pch.dtsi"
-+
-+/ {
-+	compatible = "loongson,ls3a1000-780e";
-+};
-diff --git a/arch/mips/boot/dts/loongson/3a2000_780e.dts b/arch/mips/boot/dts/loongson/3a2000_780e.dts
-new file mode 100644
-index 000000000000..621e0d3b5fbd
---- /dev/null
-+++ b/arch/mips/boot/dts/loongson/3a2000_780e.dts
-@@ -0,0 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/dts-v1/;
-+
-+#include "3a-package.dtsi"
-+#include "rs780e-pch.dtsi"
-+
-+/ {
-+	compatible = "loongson,ls3a2000-780e";
-+};
-diff --git a/arch/mips/boot/dts/loongson/3a3000_780e.dts b/arch/mips/boot/dts/loongson/3a3000_780e.dts
-new file mode 100644
-index 000000000000..f170f1c2189d
---- /dev/null
-+++ b/arch/mips/boot/dts/loongson/3a3000_780e.dts
-@@ -0,0 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/dts-v1/;
-+
-+#include "3a-package.dtsi"
-+#include "rs780e-pch.dtsi"
-+
-+/ {
-+	compatible = "loongson,ls3a3000-780e";
-+};
-diff --git a/arch/mips/boot/dts/loongson/3b-package.dtsi b/arch/mips/boot/dts/loongson/3b-package.dtsi
-new file mode 100644
-index 000000000000..af6e115d33c0
---- /dev/null
-+++ b/arch/mips/boot/dts/loongson/3b-package.dtsi
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+/ {
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+
-+	cpuintc: interrupt-controller {
-+		#address-cells = <0>;
-+		#interrupt-cells = <1>;
-+		interrupt-controller;
-+		compatible = "mti,cpu-interrupt-controller";
-+	};
-+
-+	package@0 {
-+		compatible = "simple-bus";
-+		#address-cells = <2>;
-+		#size-cells = <1>;
-+		ranges = <0 0x1fe00000 0 0x1fe00000 0x100000
-+				0 0x3ff00000 0 0x3ff00000 0x100000
-+				0x1EFD 0xFB000000 0x1EFD 0xFB000000 0x10000000 /* 3B HT Config Space */>;
-+
-+		iointc: interrupt-controller@3ff01400 {
-+			compatible = "loongson,ls3-iointc";
-+			reg = <0 0x3ff01400 0x64>;
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+
-+			interrupt-parent = <&cpuintc>;
-+			interrupts = <2>;
-+			};
-+
-+		cpu_uart0: serial@1fe001e0 {
-+			device_type = "serial";
-+			compatible = "ns16550a";
-+			reg = <0 0x1fe001e0 0x8>;
-+			clock-frequency = <33000000>;
-+			interrupts = <10 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-parent = <&iointc>;
-+			no-loopback-test;
-+		};
-+
-+		cpu_uart1: serial@1fe001e8 {
-+			status = "disabled";
-+			device_type = "serial";
-+			compatible = "ns16550a";
-+			reg = <0 0x1fe001e8 0x8>;
-+			clock-frequency = <33000000>;
-+			interrupts = <10 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-parent = <&iointc>;
-+			no-loopback-test;
-+		};
-+
-+		htintc: interrupt-controller@0x1EFDFB000080 {
-+			compatible = "loongson,ls3-htintc";
-+			reg = <0x1EFD 0xFB000080 0x100>;
-+			interrupt-controller;
-+			#interrupt-cells = <1>;
-+
-+			interrupt-parent = <&iointc>;
-+			interrupts = <24 IRQ_TYPE_LEVEL_HIGH>,
-+						<25 IRQ_TYPE_LEVEL_HIGH>,
-+						<26 IRQ_TYPE_LEVEL_HIGH>,
-+						<27 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+	};
-+};
-diff --git a/arch/mips/boot/dts/loongson/3b1x00_780e.dts b/arch/mips/boot/dts/loongson/3b1x00_780e.dts
-new file mode 100644
-index 000000000000..9b0dff0b1482
---- /dev/null
-+++ b/arch/mips/boot/dts/loongson/3b1x00_780e.dts
-@@ -0,0 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/dts-v1/;
-+
-+#include "3b-package.dtsi"
-+#include "rs780e-pch.dtsi"
-+
-+/ {
-+	compatible = "loongson,ls3b-780e";
-+};
-diff --git a/arch/mips/boot/dts/loongson/Makefile b/arch/mips/boot/dts/loongson/Makefile
-new file mode 100644
-index 000000000000..a225d84a521e
---- /dev/null
-+++ b/arch/mips/boot/dts/loongson/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX_License_Identifier: GPL_2.0
-+dtb-$(CONFIG_MACH_LOONGSON64)	+= 3a1000_780e.dtb 3a2000_780e.dtb 3a3000_780e.dtb 3b1x00_780e.dtb \
-+
-+
-+obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
-diff --git a/arch/mips/boot/dts/loongson/rs780e-pch.dtsi b/arch/mips/boot/dts/loongson/rs780e-pch.dtsi
-new file mode 100644
-index 000000000000..915363eafa2f
---- /dev/null
-+++ b/arch/mips/boot/dts/loongson/rs780e-pch.dtsi
-@@ -0,0 +1,35 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/ {
-+	pch {
-+		compatible = "simple-bus";
-+		#address-cells = <2>;
-+		#size-cells = <1>;
-+		ranges = <0x000 0x10000000 0x000 0x10000000 0x10000000
-+			  0x000 0x40000000 0x000 0x40000000 0x40000000>;
-+
-+		isa {
-+			compatible = "isa";
-+			#address-cells = <2>;
-+			#size-cells = <1>;
-+			ranges = <1 0 0 0 0x1000>;
-+
-+			i8259: interrupt-controller@20 {
-+				compatible = "intel,i8259";
-+				interrupt-controller;
-+				#interrupt-cells = <1>;
-+				plat-poll;
-+				interrupts = <0>, <1>, <2>, <3>, <4>, <5>, <6>, <7>,
-+							<8>, <9>, <10>, <11>, <12>, <13>, <14>, <15>;
-+				interrupt-parent = <&htintc>;
-+			};
-+
-+			rtc0: rtc@70 {
-+				compatible = "motorola,mc146818";
-+				reg = <1 0x70 0x8>;
-+				interrupts = <8>;
-+				interrupt-parent = <&i8259>;
-+			};
-+		};
-+	};
-+};
++	unflatten_and_copy_device_tree();
++}
 -- 
 2.22.0
 
