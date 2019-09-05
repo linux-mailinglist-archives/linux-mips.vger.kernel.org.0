@@ -2,30 +2,30 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 738DEAA63F
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2019 16:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E513AA642
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2019 16:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731715AbfIEOpt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Sep 2019 10:45:49 -0400
-Received: from forward103p.mail.yandex.net ([77.88.28.106]:37282 "EHLO
-        forward103p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728918AbfIEOpt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Sep 2019 10:45:49 -0400
-Received: from mxback25j.mail.yandex.net (mxback25j.mail.yandex.net [IPv6:2a02:6b8:0:1619::225])
-        by forward103p.mail.yandex.net (Yandex) with ESMTP id 1FBC818C0DE1;
-        Thu,  5 Sep 2019 17:45:46 +0300 (MSK)
+        id S2389368AbfIEOqG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Sep 2019 10:46:06 -0400
+Received: from forward100j.mail.yandex.net ([5.45.198.240]:44622 "EHLO
+        forward100j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389424AbfIEOqF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Sep 2019 10:46:05 -0400
+Received: from mxback20o.mail.yandex.net (mxback20o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::71])
+        by forward100j.mail.yandex.net (Yandex) with ESMTP id 13D4C50E0D67;
+        Thu,  5 Sep 2019 17:46:01 +0300 (MSK)
 Received: from smtp2o.mail.yandex.net (smtp2o.mail.yandex.net [2a02:6b8:0:1a2d::26])
-        by mxback25j.mail.yandex.net (nwsmtp/Yandex) with ESMTP id mPVYa6OIO5-jjJ4arOt;
-        Thu, 05 Sep 2019 17:45:46 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1567694746;
-        bh=SYUsU3A6DANeNap3vpGKSbFb8T19SYF+OCm5875euJU=;
+        by mxback20o.mail.yandex.net (nwsmtp/Yandex) with ESMTP id Ew6bU6hMB0-k0Z0frFu;
+        Thu, 05 Sep 2019 17:46:01 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1567694761;
+        bh=GDPLbh2Za9If16kngBr0Vy91wenOeOyR+BDWVi+j/l8=;
         h=In-Reply-To:Subject:To:From:Cc:References:Date:Message-Id;
-        b=LRTXpe59c2XXW10E/GRjYLxQBczkPI7aerOE6E4ZF4ZlujYm4l2j+JCz6wN+9oqe4
-         SlqC7e8c76cricRRNZSgDiDgm85KunuuJujDL1JF1Pd+SuXJuXnwnr+JfwqhdJbVL5
-         4Z1bOuGN5p0HpiXPc7HRczpOGW+u4YtB5o36/5gs=
-Authentication-Results: mxback25j.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by smtp2o.mail.yandex.net (nwsmtp/Yandex) with ESMTPSA id zkoybIaMjG-jWxWOA4N;
-        Thu, 05 Sep 2019 17:45:44 +0300
+        b=JyKKDs9U5ZKs2JQfu4IkzVIq6AmaokuKzZhOc3wYlG5UlORdlcw3UpIAH6vPmbC8F
+         4MB69anqrCl9nRSGoU/3oLLjhaxHlLtAcErri0oVnsW2pqShkEBZ0ZAldNsJgfNyDz
+         j99KtC/MZvFYGLSyDBzp7QuT7rTV95By1crzfntE=
+Authentication-Results: mxback20o.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by smtp2o.mail.yandex.net (nwsmtp/Yandex) with ESMTPSA id zkoybIaMjG-jlxW4ZjN;
+        Thu, 05 Sep 2019 17:45:58 +0300
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (Client certificate not present)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
@@ -33,11 +33,10 @@ To:     linux-mips@vger.kernel.org
 Cc:     chenhc@lemote.com, paul.burton@mips.com, tglx@linutronix.de,
         jason@lakedaemon.net, maz@kernel.org, linux-kernel@vger.kernel.org,
         robh+dt@kernel.org, mark.rutland@arm.co,
-        devicetree@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 08/19] dt-bindings: interrupt-controller: Add Loongson-3 HTINTC
-Date:   Thu,  5 Sep 2019 22:43:05 +0800
-Message-Id: <20190905144316.12527-9-jiaxun.yang@flygoat.com>
+        devicetree@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 09/19] irqchip: i8259: Add plat-poll support
+Date:   Thu,  5 Sep 2019 22:43:06 +0800
+Message-Id: <20190905144316.12527-10-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190905144316.12527-1-jiaxun.yang@flygoat.com>
 References: <20190905144316.12527-1-jiaxun.yang@flygoat.com>
@@ -48,76 +47,93 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Document Loongson-3 HyperTransport Interrupt controller.
+For some platforms (e.g. Loongson-3), platfrom interrupt controller
+supports polling interrupt vector from i8259 automaticly and generating
+sepreated interrupt.
+
+Thus we add plat-poll OF property for these platforms and setup sepreated
+chained interrupt handler.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../loongson,ls3-htintc.yaml                  | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,ls3-htintc.yaml
+ drivers/irqchip/irq-i8259.c | 47 ++++++++++++++++++++++++++++++++-----
+ 1 file changed, 41 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,ls3-htintc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls3-htintc.yaml
-new file mode 100644
-index 000000000000..51fee46ab060
---- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,ls3-htintc.yaml
-@@ -0,0 +1,55 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/interrupt-controller/loongson,ls3-htintc.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+diff --git a/drivers/irqchip/irq-i8259.c b/drivers/irqchip/irq-i8259.c
+index d000870d9b6b..e7a9895f3b2d 100644
+--- a/drivers/irqchip/irq-i8259.c
++++ b/drivers/irqchip/irq-i8259.c
+@@ -40,6 +40,12 @@ static void mask_and_ack_8259A(struct irq_data *d);
+ static void init_8259A(int auto_eoi);
+ static int (*i8259_poll)(void) = i8259_irq;
+ 
++struct plat_poll_priv {
++	struct irq_domain *domain;
++	int hwirq;
++};
++static struct plat_poll_priv plat_poll_priv[16];
 +
-+title: Loongson-3 HyperTransport Interrupt Controller
+ static struct irq_chip i8259A_chip = {
+ 	.name			= "XT-PIC",
+ 	.irq_mask		= disable_8259A_irq,
+@@ -346,22 +352,51 @@ static void i8259_irq_dispatch(struct irq_desc *desc)
+ 	generic_handle_irq(irq);
+ }
+ 
++static void plat_poll_irq_dispatch(struct irq_desc *desc)
++{
++	struct plat_poll_priv *priv = irq_desc_get_handler_data(desc);
++	unsigned int irq;
 +
-+maintainers:
-+  - Jiaxun Yang <jiaxun.yang@flygoat.com>
++	irq = irq_linear_revmap(priv->domain, priv->hwirq);
++	generic_handle_irq(irq);
++}
 +
-+description: |
-+  This interrupt controller is found in the Loongson-3 family of chips to transfer
-+  interrupts from PCH connected on HyperTransport bus.
+ int __init i8259_of_init(struct device_node *node, struct device_node *parent)
+ {
+ 	struct irq_domain *domain;
+-	unsigned int parent_irq;
+ 
+ 	domain = __init_i8259_irqs(node);
+ 
+-	parent_irq = irq_of_parse_and_map(node, 0);
+-	if (!parent_irq) {
+-		pr_err("Failed to map i8259 parent IRQ\n");
+-		irq_domain_remove(domain);
+-		return -ENODEV;
++	if (of_find_property(node, "plat-poll", NULL)) {
++		int i;
 +
-+properties:
-+  compatible:
-+    const: loongson,ls3-htintc
++		for (i = 0; i < 16; i++) {
++			int parent_irq = irq_of_parse_and_map(node, i);
 +
-+  reg:
-+    maxItems: 1
++			if (!parent_irq) {
++				pr_err("Failed to map %d plat-poll i8259 parent IRQ\n", i);
++				irq_domain_remove(domain);
++				return -ENODEV;
++			}
++			plat_poll_priv[i].domain = domain;
++			plat_poll_priv[i].hwirq = i;
++			irq_set_chained_handler_and_data(parent_irq,
++				plat_poll_irq_dispatch,
++				&plat_poll_priv[i]);
++		}
++	} else {
++		unsigned int parent_irq;
 +
-+  interrupts:
-+    maxItems: 4
-+    description: |
-+      Four parent interrupts that recieve chained interrupt randomly.
-+
-+  interrupt-controller: true
-+
-+  '#interrupt-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-controller
-+  - '#interrupt-cells'
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    htintc: interrupt-controller@fb000080 {
-+      compatible = "loongson,ls3-htintc";
-+      reg = <0xfb000080 0x100>;
-+      interrupt-controller;
-+      #interrupt-cells = <1>;
-+
-+      interrupt-parent = <&iointc>;
-+      interrupts = <24 IRQ_TYPE_LEVEL_HIGH>,
-+            <25 IRQ_TYPE_LEVEL_HIGH>,
-+            <26 IRQ_TYPE_LEVEL_HIGH>,
-+            <27 IRQ_TYPE_LEVEL_HIGH>;
-+    };
-+...
++		parent_irq = irq_of_parse_and_map(node, 0);
++		if (!parent_irq) {
++			pr_err("Failed to map i8259 parent IRQ\n");
++			irq_domain_remove(domain);
++			return -ENODEV;
+ 	}
+ 
+ 	irq_set_chained_handler_and_data(parent_irq, i8259_irq_dispatch,
+ 					 domain);
++	}
+ 	return 0;
+ }
+ IRQCHIP_DECLARE(i8259, "intel,i8259", i8259_of_init);
 -- 
 2.22.0
 
