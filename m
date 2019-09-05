@@ -2,96 +2,143 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC4DAADE7
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Sep 2019 23:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A26DAAE88
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2019 00:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730485AbfIEViC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 5 Sep 2019 17:38:02 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46820 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730193AbfIEViC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 5 Sep 2019 17:38:02 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 0A7C5ABC7;
-        Thu,  5 Sep 2019 21:38:01 +0000 (UTC)
-Date:   Thu, 5 Sep 2019 23:38:00 +0200
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCH] mips: sgi-ip27: switch from DISCONTIGMEM to SPARSEMEM
-Message-Id: <20190905233800.0f6b3fb3722cde2f5a88663a@suse.de>
-In-Reply-To: <20190905154747.GB3650@rapoport-lnx>
-References: <1567662477-27404-1-git-send-email-rppt@kernel.org>
-        <20190905152150.f7ff6ef70726085de63df828@suse.de>
-        <20190905133251.GA3650@rapoport-lnx>
-        <20190905154831.88b7853b47ba7db7bd7626bd@suse.de>
-        <20190905154747.GB3650@rapoport-lnx>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+        id S2389899AbfIEWc3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Sep 2019 18:32:29 -0400
+Received: from zeniv.linux.org.uk ([195.92.253.2]:43054 "EHLO
+        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732639AbfIEWc2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Sep 2019 18:32:28 -0400
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.1 #3 (Red Hat Linux))
+        id 1i60I9-0001pN-0U; Thu, 05 Sep 2019 22:31:49 +0000
+Date:   Thu, 5 Sep 2019 23:31:48 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian@brauner.io>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v12 01/12] lib: introduce copy_struct_{to,from}_user
+ helpers
+Message-ID: <20190905223148.GS1131@ZenIV.linux.org.uk>
+References: <20190904201933.10736-1-cyphar@cyphar.com>
+ <20190904201933.10736-2-cyphar@cyphar.com>
+ <20190905180750.GQ1131@ZenIV.linux.org.uk>
+ <20190905182303.7f6bxpa2enbgcegv@wittgenstein>
+ <20190905182801.GR1131@ZenIV.linux.org.uk>
+ <20190905195618.pwzgvuzadkfpznfz@yavin.dot.cyphar.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190905195618.pwzgvuzadkfpznfz@yavin.dot.cyphar.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 5 Sep 2019 18:47:49 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
-
-> On Thu, Sep 05, 2019 at 03:48:31PM +0200, Thomas Bogendoerfer wrote:
-> > On Thu, 5 Sep 2019 16:32:53 +0300
-> > Mike Rapoport <rppt@kernel.org> wrote:
+On Fri, Sep 06, 2019 at 05:56:18AM +1000, Aleksa Sarai wrote:
+> On 2019-09-05, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> > On Thu, Sep 05, 2019 at 08:23:03PM +0200, Christian Brauner wrote:
 > > 
-> > > On Thu, Sep 05, 2019 at 03:21:50PM +0200, Thomas Bogendoerfer wrote:
-> > > > On Thu,  5 Sep 2019 08:47:57 +0300
-> > > > Mike Rapoport <rppt@kernel.org> wrote:
-> > > > 
-> > > > > From: Mike Rapoport <rppt@linux.ibm.com>
-> > > > > 
-> > > > > The memory initialization of SGI-IP27 is already half-way to support
-> > > > > SPARSEMEM and only a call to sparse_init() was missing. Add it to
-> > > > > prom_meminit() and adjust arch/mips/Kconfig to enable SPARSEMEM and
-> > > > > SPARSEMEM_EXTREME for SGI-IP27
-> > > > > 
-> > > > > Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> > > > > ---
-> > > > > 
-> > > > > Thomas, could you please test this on your Origin machine?
-> > > > 
-> > > > it crashes in sparse_early_usemaps_alloc_pgdat_section(). Since there is
-> > > > already a sparse_init() in arch_mem_setup() I removed it from ip27-memory.c.
-> > > 
-> > > Oops, missed that.
-> > > 
-> > > > With this booting made more progress but I get an unaligned access in
-> > > > kernel_init_free_pages(). 
-> > > 
-> > > Can you please share the log?
+> > > Because every caller of that function right now has that limit set
+> > > anyway iirc. So we can either remove it from here and place it back for
+> > > the individual callers or leave it in the helper.
+> > > Also, I'm really asking, why not? Is it unreasonable to have an upper
+> > > bound on the size (for a long time probably) or are you disagreeing with
+> > > PAGE_SIZE being used? PAGE_SIZE limit is currently used by sched, perf,
+> > > bpf, and clone3 and in a few other places.
 > > 
-> > sure
+> > For a primitive that can be safely used with any size (OK, any within
+> > the usual 2Gb limit)?  Why push the random policy into the place where
+> > it doesn't belong?
+> > 
+> > Seriously, what's the point?  If they want to have a large chunk of
+> > userland memory zeroed or checked for non-zeroes - why would that
+> > be a problem?
 > 
-> Nothing looked particularly suspicious, but I've found that I've missed the
-> definition of pfn_to_nid() is for DISCONTIGMEM only, maybe making it
-> available for SPARSE would help :)
-> 
-> I'm pretty much shooting in the dark here, but can you please try the patch
-> below on top of the original one:
+> Thinking about it some more, there isn't really any r/w amplification --
+> so there isn't much to gain by passing giant structs. Though, if we are
+> going to permit 2GB buffers, isn't that also an argument to use
+> memchr_inv()? :P
 
-doesn't compile: 
+I'm not sure I understand the last bit.  If you look at what copy_from_user()
+does on misaligned source/destination, especially on architectures that
+really, really do not like unaligned access...
 
-/home/tbogendoerfer/wip/mips/linux/include/linux/mmzone.h:1367:0: warning: "pfn_to_nid" redefined
- #define pfn_to_nid(pfn)       \
+Case in point: alpha (and it's not unusual in that respect).  What it boils
+down to is
+	copy bytes until the destination is aligned
+	if source and destination are both aligned
+		copy word by word
+	else
+		read word by word, storing the mix of two adjacent words
+	copy the rest byte by byte
 
+The unpleasant case (to and from having different remainders modulo 8) is
+basically
 
-For testing I've removed the version in linux/mmzone.h, but kernel still crashes. Only
-difference is that several CPUs are printing the oops in unaligned handler in parallel.
-With the sparse_init() in prom_meminit() kernel dies at the same spot as before.
+	if (count >= 8) {
+		u64 *aligned = (u64 *)(from & ~7);
+		u64 *dest = (u64 *)to;
+		int bitshift = (from & 7) * 8;
+		u64 prev, next;
 
-Thomas.
+		prev = aligned[0];
+		do {   
+			next = aligned[1];
+			prev <<= bitshift;
+			prev |= next >> (64 - bitshift);
+			*dest++ = prev;
+			aligned++;  
+			prev = next;
+			from += 8;
+			to += 8;
+			count -= 8;
+		} while (count >= 8);
+	}
 
--- 
-SUSE Software Solutions Germany GmbH
-HRB 247165 (AG München)
-Geschäftsführer: Felix Imendörffer
+Now, mix that with "... and do memchr_inv() on the copy to find if we'd
+copied any non-zeroes, nevermind where" and it starts looking really
+ridiculous.
+
+We should just read the fscking source, aligned down to word boundary
+and check each word being read.  The first and the last ones - masked.
+All there is to it.  On almost all architectures that'll work well
+enough; s390 might want something more elaborate (there even word-by-word
+copies are costly, but I'd suggest talking to them for details).
+
+Something like bool all_zeroes_user(const void __user *p, size_t count)
+would probably be a sane API...
