@@ -2,168 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8BEAAFBE
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2019 02:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF53AB27F
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2019 08:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391470AbfIFAPA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Sep 2019 20:15:00 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:44722 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391444AbfIFAPA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Sep 2019 20:15:00 -0400
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.1 #3 (Red Hat Linux))
-        id 1i61tX-00047s-6A; Fri, 06 Sep 2019 00:14:31 +0000
-Date:   Fri, 6 Sep 2019 01:14:31 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
+        id S2392362AbfIFG3E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Sep 2019 02:29:04 -0400
+Received: from foss.arm.com ([217.140.110.172]:51964 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732131AbfIFG3E (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 6 Sep 2019 02:29:04 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2652828;
+        Thu,  5 Sep 2019 23:29:03 -0700 (PDT)
+Received: from [10.162.42.101] (p8cg001049571a15.blr.arm.com [10.162.42.101])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE03C3F67D;
+        Thu,  5 Sep 2019 23:31:17 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Subject: Re: [PATCH 1/1] mm/pgtable/debug: Add test validating architecture
+ page table helpers
+To:     Gerald Schaefer <gerald.schaefer@de.ibm.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dan Williams <dan.j.williams@intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian@brauner.io>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Steven Price <Steven.Price@arm.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
         Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v12 01/12] lib: introduce copy_struct_{to,from}_user
- helpers
-Message-ID: <20190906001431.GU1131@ZenIV.linux.org.uk>
-References: <20190904201933.10736-1-cyphar@cyphar.com>
- <20190904201933.10736-2-cyphar@cyphar.com>
- <20190905180750.GQ1131@ZenIV.linux.org.uk>
- <20190905230003.bek7vqdvruzi4ybx@yavin.dot.cyphar.com>
- <20190905234944.GT1131@ZenIV.linux.org.uk>
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sri Krishna chowdary <schowdary@nvidia.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+References: <1567497706-8649-1-git-send-email-anshuman.khandual@arm.com>
+ <1567497706-8649-2-git-send-email-anshuman.khandual@arm.com>
+ <20190904221618.1b624a98@thinkpad>
+ <20e3044d-2af5-b27b-7653-cec53bdec941@arm.com>
+ <20190905190629.523bdb87@thinkpad>
+Message-ID: <3c609e33-afbb-ffaf-481a-6d225a06d1d0@arm.com>
+Date:   Fri, 6 Sep 2019 11:58:59 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190905234944.GT1131@ZenIV.linux.org.uk>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+In-Reply-To: <20190905190629.523bdb87@thinkpad>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 06, 2019 at 12:49:44AM +0100, Al Viro wrote:
-> On Fri, Sep 06, 2019 at 09:00:03AM +1000, Aleksa Sarai wrote:
-> > > > +			return -EFAULT;
-> > > > +	}
-> > > > +	/* Copy the interoperable parts of the struct. */
-> > > > +	if (__copy_to_user(dst, src, size))
-> > > > +		return -EFAULT;
-> > > 
-> > > Why not simply clear_user() and copy_to_user()?
-> > 
-> > I'm not sure I understand what you mean -- are you asking why we need to
-> > do memchr_inv(src + size, 0, rest) earlier?
+On 09/05/2019 10:36 PM, Gerald Schaefer wrote:
+> On Thu, 5 Sep 2019 14:48:14 +0530
+> Anshuman Khandual <anshuman.khandual@arm.com> wrote:
 > 
-> I'm asking why bother with __ and separate access_ok().
+>>> [...]  
+>>>> +
+>>>> +#if !defined(__PAGETABLE_PMD_FOLDED) && !defined(__ARCH_HAS_4LEVEL_HACK)
+>>>> +static void pud_clear_tests(pud_t *pudp)
+>>>> +{
+>>>> +	memset(pudp, RANDOM_NZVALUE, sizeof(pud_t));
+>>>> +	pud_clear(pudp);
+>>>> +	WARN_ON(!pud_none(READ_ONCE(*pudp)));
+>>>> +}  
+>>>
+>>> For pgd/p4d/pud_clear(), we only clear if the page table level is present
+>>> and not folded. The memset() here overwrites the table type bits, so
+>>> pud_clear() will not clear anything on s390 and the pud_none() check will
+>>> fail.
+>>> Would it be possible to OR a (larger) random value into the table, so that
+>>> the lower 12 bits would be preserved?  
+>>
+>> So the suggestion is instead of doing memset() on entry with RANDOM_NZVALUE,
+>> it should OR a large random value preserving lower 12 bits. Hmm, this should
+>> still do the trick for other platforms, they just need non zero value. So on
+>> s390, the lower 12 bits on the page table entry already has valid value while
+>> entering this function which would make sure that pud_clear() really does
+>> clear the entry ?
 > 
-> > > 	if ((unsigned long)addr & 1) {
-> > > 		u8 v;
-> > > 		if (get_user(v, (__u8 __user *)addr))
-> > > 			return -EFAULT;
-> > > 		if (v)
-> > > 			return -E2BIG;
-> > > 		addr++;
-> > > 	}
-> > > 	if ((unsigned long)addr & 2) {
-> > > 		u16 v;
-> > > 		if (get_user(v, (__u16 __user *)addr))
-> > > 			return -EFAULT;
-> > > 		if (v)
-> > > 			return -E2BIG;
-> > > 		addr +=2;
-> > > 	}
-> > > 	if ((unsigned long)addr & 4) {
-> > > 		u32 v;
-> > > 		if (get_user(v, (__u32 __user *)addr))
-> > > 			return -EFAULT;
-> > > 		if (v)
-> > > 			return -E2BIG;
-> > > 	}
-> > > 	<read the rest like you currently do>
-> 
-> Actually, this is a dumb way to do it - page size on anything
-> is going to be a multiple of 8, so you could just as well
-> read 8 bytes from an address aligned down.  Then mask the
-> bytes you don't want to check out and see if there's anything
-> left.
-> 
-> You can have readability boundaries inside a page - it's either
-> the entire page (let alone a single word) being readable, or
-> it's EFAULT for all parts.
-> 
-> > > would be saner, and things like x86 could trivially add an
-> > > asm variant - it's not hard.  Incidentally, memchr_inv() is
-> > > an overkill in this case...
-> > 
-> > Why is memchr_inv() overkill?
-> 
-> Look at its implementation; you only care if there are
-> non-zeroes, you don't give a damn where in the buffer
-> the first one would be.  All you need is the same logics
-> as in "from userland" case
-> 	if (!count)
-> 		return true;
-> 	offset = (unsigned long)from & 7
-> 	p = (u64 *)(from - offset);
-> 	v = *p++;
-> 	if (offset) {	// unaligned
-> 		count += offset;
-> 		v &= ~aligned_byte_mask(offset); // see strnlen_user.c
-> 	}
-> 	while (count > 8) {
-> 		if (v)
-> 			return false;
-> 		v = *p++;
-> 		count -= 8;
-> 	}
-> 	if (count != 8)
-> 		v &= aligned_byte_mask(count);
-> 	return v == 0;
-> 
-> All there is to it...
+> Yes, in theory the table entry on s390 would have the type set in the last
+> 4 bits, so preserving those would be enough. If it does not conflict with
+> others, I would still suggest preserving all 12 bits since those would contain
+> arch-specific flags in general, just to be sure. For s390, the pte/pmd tests
+> would also work with the memset, but for consistency I think the same logic
+> should be used in all pxd_clear_tests.
 
-... and __user case would be pretty much this with
-	if (user_access_begin(from, count)) {
-		....
-		user_access_end();
-	}
-wrapped around the damn thing - again, see strnlen_user.c, with
-	unsafe_get_user(v, p++, efault);
-instead of those
-	v = *p++;
+Makes sense but..
 
-Calling conventions might need some thinking - it might be
-	* all read, all zeroes
-	* non-zero found
-	* read failed
-so we probably want to map the "all zeroes" case to 0,
-"read failed" to -EFAULT and "non-zero found" to something
-else.  Might be positive, might be some other -E.... - not
-sure if E2BIG (or EFBIG) makes much sense here.  Need to
-look at the users...
+There is a small challenge with this. Modifying individual bits on a given
+page table entry from generic code like this test case is bit tricky. That
+is because there are not enough helpers to create entries with an absolute
+value. This would have been easier if all the platforms provided functions
+like __pxx() which is not the case now. Otherwise something like this should
+have worked.
+
+
+pud_t pud = READ_ONCE(*pudp);
+pud = __pud(pud_val(pud) | RANDOM_VALUE (keeping lower 12 bits 0))
+WRITE_ONCE(*pudp, pud);
+
+But __pud() will fail to build in many platforms.
+
+The other alternative will be to make sure memset() happens on all other
+bits except the lower 12 bits which will depend on endianness. If s390
+has a fixed endianness, we can still use either of them which will hold
+good for others as well.
+
+memset(pudp, RANDOM_NZVALUE, sizeof(pud_t) - 3);
+
+OR
+
+memset(pudp + 3, RANDOM_NZVALUE, sizeof(pud_t) - 3);
+
+> 
+> However, there is another issue on s390 which will make this only work
+> for pud_clear_tests(), and not for the p4d/pgd_tests. The problem is that
+> mm_alloc() will only give you a 3-level page table initially on s390.
+> This means that pudp == p4dp == pgdp, and so the p4d/pgd_tests will
+> both see the pud level (of course this also affects other tests).
+
+Got it.
+
+> 
+> Not sure yet how to fix this, i.e. how to initialize/update the page table
+> to 5 levels. We can handle 5 level page tables, and it would be good if
+> all levels could be tested, but using mm_alloc() to establish the page
+> tables might not work on s390. One option could be to provide an arch-hook
+> or weak function to allocate/initialize the mm.
+
+Sure, got it. Though I plan to do add some arch specific tests or init sequence
+like the above later on but for now the idea is to get the smallest possible set
+of test cases which builds and runs on all platforms without requiring any arch
+specific hooks or special casing (#ifdef) to be agreed upon broadly and accepted.
+
+Do you think this is absolutely necessary on s390 for the very first set of test
+cases or we can add this later on as an improvement ?
+
+> 
+> IIUC, the (dummy) mm is really only needed to provide an mm->pgd as starting
+> point, right?
+
+Right.
