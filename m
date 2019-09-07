@@ -2,216 +2,396 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C69AC019
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Sep 2019 21:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B3AAC426
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Sep 2019 04:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406198AbfIFTEG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 6 Sep 2019 15:04:06 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:55928 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727768AbfIFTEF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Sep 2019 15:04:05 -0400
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x86J1lN3106898
-        for <linux-mips@vger.kernel.org>; Fri, 6 Sep 2019 15:04:04 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2uu37pagdv-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-mips@vger.kernel.org>; Fri, 06 Sep 2019 15:04:04 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-mips@vger.kernel.org> from <gerald.schaefer@de.ibm.com>;
-        Fri, 6 Sep 2019 20:03:59 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 6 Sep 2019 20:03:50 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x86J3nGp51839194
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 Sep 2019 19:03:49 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 20BAC42042;
-        Fri,  6 Sep 2019 19:03:49 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 047F842049;
-        Fri,  6 Sep 2019 19:03:48 +0000 (GMT)
-Received: from thinkpad (unknown [9.152.96.94])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  6 Sep 2019 19:03:47 +0000 (GMT)
-Date:   Fri, 6 Sep 2019 21:03:46 +0200
-From:   Gerald Schaefer <gerald.schaefer@de.ibm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] mm/pgtable/debug: Add test validating architecture
- page table helpers
-In-Reply-To: <3c609e33-afbb-ffaf-481a-6d225a06d1d0@arm.com>
-References: <1567497706-8649-1-git-send-email-anshuman.khandual@arm.com>
-        <1567497706-8649-2-git-send-email-anshuman.khandual@arm.com>
-        <20190904221618.1b624a98@thinkpad>
-        <20e3044d-2af5-b27b-7653-cec53bdec941@arm.com>
-        <20190905190629.523bdb87@thinkpad>
-        <3c609e33-afbb-ffaf-481a-6d225a06d1d0@arm.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S2387639AbfIGCso (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Sep 2019 22:48:44 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:45931 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733080AbfIGCso (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Sep 2019 22:48:44 -0400
+Received: by mail-io1-f66.google.com with SMTP id f12so17184439iog.12;
+        Fri, 06 Sep 2019 19:48:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jdnn1qcqf+HDYLu8f6vKIBbz4GYFW8dtq9yIl2VgXDE=;
+        b=BXOy6gf+IUrONzYrnaC2L0TV37PA2azZ57IFd4MDYnOylamWSMxD8ymd9iXtm5W2+H
+         wevc2VTheCTzyHMZBYvIuq1ea4Spkh3yOhRBRrirNWVyk1+Nqme8JDA3nxtBkYl9g1AK
+         6TPQEQchsTzB5GbQCiKc1nRKLYLbhc2oR2YaZx7qzy8En+WiIiqtJHval3LarsqZJiEF
+         C/sJyeKPu+8FpIyBzsl9mDjxet147rGQUgs6+UTkHbl1VOQhOAPLsCHwFL4T5IEb6Yc9
+         ZRO7aA43puicvMtBPdMxBjiJ53BDXz8w+XARKEzR3j8A8IyZSP7S2FRr31lgLtEzoNPX
+         PCNg==
+X-Gm-Message-State: APjAAAXLSni2uNdqVrI8LX2hZM9NQVfVwYdIg3UxRQ7WyQ0UldUdb4lq
+        Zn1cire5lO54GtHiRp3PXCC6FrwkzQ7VfjOzJRc=
+X-Google-Smtp-Source: APXvYqy6s93HUiOJEwd8rZymGSwnhkZmw58+50IrBSzo0kJr8BHG9v7CPA+R3CuYQgwkmExqy/tEKi8altIOQatC26Y=
+X-Received: by 2002:a5d:8f86:: with SMTP id l6mr370367iol.270.1567824522658;
+ Fri, 06 Sep 2019 19:48:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19090619-0020-0000-0000-000003689871
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19090619-0021-0000-0000-000021BE1320
-Message-Id: <20190906210346.5ecbff01@thinkpad>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-06_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1909060198
+References: <20190905144316.12527-1-jiaxun.yang@flygoat.com> <20190905144316.12527-15-jiaxun.yang@flygoat.com>
+In-Reply-To: <20190905144316.12527-15-jiaxun.yang@flygoat.com>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Sat, 7 Sep 2019 10:53:17 +0800
+Message-ID: <CAAhV-H7jzUZr9fGHF_=F3pri9F3zN3ygHhd3xWZevOugaStcfA@mail.gmail.com>
+Subject: Re: [PATCH v2 14/19] MIPS: Loongson64: Add generic dts
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.co>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 6 Sep 2019 11:58:59 +0530
-Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+On Thu, Sep 5, 2019 at 10:47 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+> Add generic device dts for Loongson-3 devices.
+> They seems identical but will be different later.
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  arch/mips/Kconfig                           |  4 +-
+>  arch/mips/boot/dts/Makefile                 |  1 +
+>  arch/mips/boot/dts/loongson/3a-package.dtsi | 69 +++++++++++++++++++++
+>  arch/mips/boot/dts/loongson/3a1000_780e.dts | 10 +++
+>  arch/mips/boot/dts/loongson/3a2000_780e.dts | 10 +++
+>  arch/mips/boot/dts/loongson/3a3000_780e.dts | 10 +++
+>  arch/mips/boot/dts/loongson/3b-package.dtsi | 69 +++++++++++++++++++++
+>  arch/mips/boot/dts/loongson/3b1x00_780e.dts | 10 +++
+>  arch/mips/boot/dts/loongson/Makefile        |  5 ++
+>  arch/mips/boot/dts/loongson/rs780e-pch.dtsi | 35 +++++++++++
+>  10 files changed, 222 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/mips/boot/dts/loongson/3a-package.dtsi
+>  create mode 100644 arch/mips/boot/dts/loongson/3a1000_780e.dts
+>  create mode 100644 arch/mips/boot/dts/loongson/3a2000_780e.dts
+>  create mode 100644 arch/mips/boot/dts/loongson/3a3000_780e.dts
+>  create mode 100644 arch/mips/boot/dts/loongson/3b-package.dtsi
+>  create mode 100644 arch/mips/boot/dts/loongson/3b1x00_780e.dts
+>  create mode 100644 arch/mips/boot/dts/loongson/Makefile
+>  create mode 100644 arch/mips/boot/dts/loongson/rs780e-pch.dtsi
+>
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index b6bdd96ec74e..5bad9aafcbdf 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -489,6 +489,8 @@ config MACH_LOONGSON64
+>         select SYS_SUPPORTS_LITTLE_ENDIAN
+>         select ZONE_DMA32
+>         select SYS_SUPPORTS_ZBOOT
+> +       select USE_OF
+> +       select BUILTIN_DTB
+>         help
+>           This enables the support of Loongson-3A/3B/2-series-soc processors
+>
+> @@ -3047,7 +3049,7 @@ endchoice
+>  choice
+>         prompt "Kernel command line type" if !CMDLINE_OVERRIDE
+>         default MIPS_CMDLINE_FROM_DTB if USE_OF && !ATH79 && !MACH_INGENIC && \
+> -                                        !MIPS_MALTA && \
+> +                                        !MACH_LOONGSON64 && !MIPS_MALTA && \
+>                                          !CAVIUM_OCTEON_SOC
+>         default MIPS_CMDLINE_FROM_BOOTLOADER
+>
+> diff --git a/arch/mips/boot/dts/Makefile b/arch/mips/boot/dts/Makefile
+> index 1e79cab8e269..d429a69bfe30 100644
+> --- a/arch/mips/boot/dts/Makefile
+> +++ b/arch/mips/boot/dts/Makefile
+> @@ -4,6 +4,7 @@ subdir-y        += cavium-octeon
+>  subdir-y       += img
+>  subdir-y       += ingenic
+>  subdir-y       += lantiq
+> +subdir-y       += loongson
+>  subdir-y       += mscc
+>  subdir-y       += mti
+>  subdir-y       += netlogic
+> diff --git a/arch/mips/boot/dts/loongson/3a-package.dtsi b/arch/mips/boot/dts/loongson/3a-package.dtsi
+> new file mode 100644
+> index 000000000000..739cf43c7310
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/loongson/3a-package.dtsi
+> @@ -0,0 +1,69 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +/ {
+> +       #address-cells = <2>;
+> +       #size-cells = <2>;
+> +
+> +       cpuintc: interrupt-controller {
+> +               #address-cells = <0>;
+> +               #interrupt-cells = <1>;
+> +               interrupt-controller;
+> +               compatible = "mti,cpu-interrupt-controller";
+> +       };
+> +
+> +       package@0 {
+> +               compatible = "simple-bus";
+> +               #address-cells = <2>;
+> +               #size-cells = <1>;
+> +               ranges = <0 0x1fe00000 0 0x1fe00000 0x100000
+> +                               0 0x3ff00000 0 0x3ff00000 0x100000
+> +                               0xEFD 0xFB000000 0xEFD 0xFB000000 0x10000000 /* 3A HT Config Space */>;
+> +
+> +               iointc: interrupt-controller@3ff01400 {
+> +                       compatible = "loongson,ls3-iointc";
+> +                       reg = <0 0x3ff01400 0x64>;
+> +
+> +                       interrupt-controller;
+> +                       #interrupt-cells = <2>;
+> +
+> +                       interrupt-parent = <&cpuintc>;
+> +                       interrupts = <2>;
+> +                       };
+> +
+> +               cpu_uart0: serial@1fe001e0 {
+> +                       device_type = "serial";
+> +                       compatible = "ns16550a";
+> +                       reg = <0 0x1fe001e0 0x8>;
+> +                       clock-frequency = <33000000>;
+> +                       interrupt-parent = <&iointc>;
+> +                       interrupts = <10 IRQ_TYPE_LEVEL_HIGH>;
+> +                       no-loopback-test;
+> +               };
+> +
+> +               cpu_uart1: serial@1fe001e8 {
+> +                       status = "disabled";
+> +                       device_type = "serial";
+> +                       compatible = "ns16550a";
+> +                       reg = <0 0x1fe001e8 0x8>;
+> +                       clock-frequency = <33000000>;
+> +                       interrupts = <10 IRQ_TYPE_LEVEL_HIGH>;
+> +                       interrupt-parent = <&iointc>;
+> +                       no-loopback-test;
+> +               };
+> +
+> +               htintc: interrupt-controller@0xEFDFB000080 {
+> +                       compatible = "loongson,ls3-htintc";
+> +                       reg = <0xEFD 0xFB000080 0x100>;
+> +                       interrupt-controller;
+> +                       #interrupt-cells = <1>;
+> +
+> +                       interrupt-parent = <&iointc>;
+> +                       interrupts = <24 IRQ_TYPE_LEVEL_HIGH>,
+> +                                               <25 IRQ_TYPE_LEVEL_HIGH>,
+> +                                               <26 IRQ_TYPE_LEVEL_HIGH>,
+> +                                               <27 IRQ_TYPE_LEVEL_HIGH>;
+> +               };
+> +       };
+> +};
 
-> On 09/05/2019 10:36 PM, Gerald Schaefer wrote:
-> > On Thu, 5 Sep 2019 14:48:14 +0530
-> > Anshuman Khandual <anshuman.khandual@arm.com> wrote:
-> >   
-> >>> [...]    
-> >>>> +
-> >>>> +#if !defined(__PAGETABLE_PMD_FOLDED) && !defined(__ARCH_HAS_4LEVEL_HACK)
-> >>>> +static void pud_clear_tests(pud_t *pudp)
-> >>>> +{
-> >>>> +	memset(pudp, RANDOM_NZVALUE, sizeof(pud_t));
-> >>>> +	pud_clear(pudp);
-> >>>> +	WARN_ON(!pud_none(READ_ONCE(*pudp)));
-> >>>> +}    
-> >>>
-> >>> For pgd/p4d/pud_clear(), we only clear if the page table level is present
-> >>> and not folded. The memset() here overwrites the table type bits, so
-> >>> pud_clear() will not clear anything on s390 and the pud_none() check will
-> >>> fail.
-> >>> Would it be possible to OR a (larger) random value into the table, so that
-> >>> the lower 12 bits would be preserved?    
-> >>
-> >> So the suggestion is instead of doing memset() on entry with RANDOM_NZVALUE,
-> >> it should OR a large random value preserving lower 12 bits. Hmm, this should
-> >> still do the trick for other platforms, they just need non zero value. So on
-> >> s390, the lower 12 bits on the page table entry already has valid value while
-> >> entering this function which would make sure that pud_clear() really does
-> >> clear the entry ?  
-> > 
-> > Yes, in theory the table entry on s390 would have the type set in the last
-> > 4 bits, so preserving those would be enough. If it does not conflict with
-> > others, I would still suggest preserving all 12 bits since those would contain
-> > arch-specific flags in general, just to be sure. For s390, the pte/pmd tests
-> > would also work with the memset, but for consistency I think the same logic
-> > should be used in all pxd_clear_tests.  
-> 
-> Makes sense but..
-> 
-> There is a small challenge with this. Modifying individual bits on a given
-> page table entry from generic code like this test case is bit tricky. That
-> is because there are not enough helpers to create entries with an absolute
-> value. This would have been easier if all the platforms provided functions
-> like __pxx() which is not the case now. Otherwise something like this should
-> have worked.
-> 
-> 
-> pud_t pud = READ_ONCE(*pudp);
-> pud = __pud(pud_val(pud) | RANDOM_VALUE (keeping lower 12 bits 0))
-> WRITE_ONCE(*pudp, pud);
-> 
-> But __pud() will fail to build in many platforms.
+Hi, Jiaxun,
 
-Hmm, I simply used this on my system to make pud_clear_tests() work, not
-sure if it works on all archs:
+I'm very glad to see that dts files become less in this version, but I
+think we also don't need to distinguish cpu types (i.e.,
+3a1000/3b1500/3a2000/3a3000). Then, we only need three dts files
+(loongson3_ls2h.dts, loongson3_ls7a.dts, loongson3_rs780.dts) which is
+the same as in our own git repository. If we really need to
+distinguish cpu type, PRID or CPUCFG in Loongson-3A4000 is more
+suitable than dts. In other words, I want dts only do as minimal as
+possible.
 
-pud_val(*pudp) |= RANDOM_NZVALUE;
+Huacai
 
-> 
-> The other alternative will be to make sure memset() happens on all other
-> bits except the lower 12 bits which will depend on endianness. If s390
-> has a fixed endianness, we can still use either of them which will hold
-> good for others as well.
-> 
-> memset(pudp, RANDOM_NZVALUE, sizeof(pud_t) - 3);
-> 
-> OR
-> 
-> memset(pudp + 3, RANDOM_NZVALUE, sizeof(pud_t) - 3);
-> 
-> > 
-> > However, there is another issue on s390 which will make this only work
-> > for pud_clear_tests(), and not for the p4d/pgd_tests. The problem is that
-> > mm_alloc() will only give you a 3-level page table initially on s390.
-> > This means that pudp == p4dp == pgdp, and so the p4d/pgd_tests will
-> > both see the pud level (of course this also affects other tests).  
-> 
-> Got it.
-> 
-> > 
-> > Not sure yet how to fix this, i.e. how to initialize/update the page table
-> > to 5 levels. We can handle 5 level page tables, and it would be good if
-> > all levels could be tested, but using mm_alloc() to establish the page
-> > tables might not work on s390. One option could be to provide an arch-hook
-> > or weak function to allocate/initialize the mm.  
-> 
-> Sure, got it. Though I plan to do add some arch specific tests or init sequence
-> like the above later on but for now the idea is to get the smallest possible set
-> of test cases which builds and runs on all platforms without requiring any arch
-> specific hooks or special casing (#ifdef) to be agreed upon broadly and accepted.
-> 
-> Do you think this is absolutely necessary on s390 for the very first set of test
-> cases or we can add this later on as an improvement ?
-
-It can be added later, no problem. I did not expect this to work flawlessly
-on s390 right from the start anyway, with all our peculiarities, so don't
-let this hinder you. I might come up with an add-on patch later.
-
-Actually, using get_unmapped_area() as suggested by Kirill could also
-solve this issue. We do create a new mm with 3-level page tables on s390,
-and the dynamic upgrade to 4 or 5 levels is then triggered exactly by
-arch_get_unmapped_area(), depending on the addr. But I currently don't
-see how / where arch_get_unmapped_area() is set up for such a dummy mm
-created by mm_alloc().
-
-Regards,
-Gerald
-
+> diff --git a/arch/mips/boot/dts/loongson/3a1000_780e.dts b/arch/mips/boot/dts/loongson/3a1000_780e.dts
+> new file mode 100644
+> index 000000000000..dc1afe9410c8
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/loongson/3a1000_780e.dts
+> @@ -0,0 +1,10 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/dts-v1/;
+> +
+> +#include "3a-package.dtsi"
+> +#include "rs780e-pch.dtsi"
+> +
+> +/ {
+> +       compatible = "loongson,ls3a1000-780e";
+> +};
+> diff --git a/arch/mips/boot/dts/loongson/3a2000_780e.dts b/arch/mips/boot/dts/loongson/3a2000_780e.dts
+> new file mode 100644
+> index 000000000000..621e0d3b5fbd
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/loongson/3a2000_780e.dts
+> @@ -0,0 +1,10 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/dts-v1/;
+> +
+> +#include "3a-package.dtsi"
+> +#include "rs780e-pch.dtsi"
+> +
+> +/ {
+> +       compatible = "loongson,ls3a2000-780e";
+> +};
+> diff --git a/arch/mips/boot/dts/loongson/3a3000_780e.dts b/arch/mips/boot/dts/loongson/3a3000_780e.dts
+> new file mode 100644
+> index 000000000000..f170f1c2189d
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/loongson/3a3000_780e.dts
+> @@ -0,0 +1,10 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/dts-v1/;
+> +
+> +#include "3a-package.dtsi"
+> +#include "rs780e-pch.dtsi"
+> +
+> +/ {
+> +       compatible = "loongson,ls3a3000-780e";
+> +};
+> diff --git a/arch/mips/boot/dts/loongson/3b-package.dtsi b/arch/mips/boot/dts/loongson/3b-package.dtsi
+> new file mode 100644
+> index 000000000000..af6e115d33c0
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/loongson/3b-package.dtsi
+> @@ -0,0 +1,69 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +/ {
+> +       #address-cells = <2>;
+> +       #size-cells = <2>;
+> +
+> +       cpuintc: interrupt-controller {
+> +               #address-cells = <0>;
+> +               #interrupt-cells = <1>;
+> +               interrupt-controller;
+> +               compatible = "mti,cpu-interrupt-controller";
+> +       };
+> +
+> +       package@0 {
+> +               compatible = "simple-bus";
+> +               #address-cells = <2>;
+> +               #size-cells = <1>;
+> +               ranges = <0 0x1fe00000 0 0x1fe00000 0x100000
+> +                               0 0x3ff00000 0 0x3ff00000 0x100000
+> +                               0x1EFD 0xFB000000 0x1EFD 0xFB000000 0x10000000 /* 3B HT Config Space */>;
+> +
+> +               iointc: interrupt-controller@3ff01400 {
+> +                       compatible = "loongson,ls3-iointc";
+> +                       reg = <0 0x3ff01400 0x64>;
+> +
+> +                       interrupt-controller;
+> +                       #interrupt-cells = <2>;
+> +
+> +                       interrupt-parent = <&cpuintc>;
+> +                       interrupts = <2>;
+> +                       };
+> +
+> +               cpu_uart0: serial@1fe001e0 {
+> +                       device_type = "serial";
+> +                       compatible = "ns16550a";
+> +                       reg = <0 0x1fe001e0 0x8>;
+> +                       clock-frequency = <33000000>;
+> +                       interrupts = <10 IRQ_TYPE_LEVEL_HIGH>;
+> +                       interrupt-parent = <&iointc>;
+> +                       no-loopback-test;
+> +               };
+> +
+> +               cpu_uart1: serial@1fe001e8 {
+> +                       status = "disabled";
+> +                       device_type = "serial";
+> +                       compatible = "ns16550a";
+> +                       reg = <0 0x1fe001e8 0x8>;
+> +                       clock-frequency = <33000000>;
+> +                       interrupts = <10 IRQ_TYPE_LEVEL_HIGH>;
+> +                       interrupt-parent = <&iointc>;
+> +                       no-loopback-test;
+> +               };
+> +
+> +               htintc: interrupt-controller@0x1EFDFB000080 {
+> +                       compatible = "loongson,ls3-htintc";
+> +                       reg = <0x1EFD 0xFB000080 0x100>;
+> +                       interrupt-controller;
+> +                       #interrupt-cells = <1>;
+> +
+> +                       interrupt-parent = <&iointc>;
+> +                       interrupts = <24 IRQ_TYPE_LEVEL_HIGH>,
+> +                                               <25 IRQ_TYPE_LEVEL_HIGH>,
+> +                                               <26 IRQ_TYPE_LEVEL_HIGH>,
+> +                                               <27 IRQ_TYPE_LEVEL_HIGH>;
+> +               };
+> +       };
+> +};
+> diff --git a/arch/mips/boot/dts/loongson/3b1x00_780e.dts b/arch/mips/boot/dts/loongson/3b1x00_780e.dts
+> new file mode 100644
+> index 000000000000..9b0dff0b1482
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/loongson/3b1x00_780e.dts
+> @@ -0,0 +1,10 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/dts-v1/;
+> +
+> +#include "3b-package.dtsi"
+> +#include "rs780e-pch.dtsi"
+> +
+> +/ {
+> +       compatible = "loongson,ls3b-780e";
+> +};
+> diff --git a/arch/mips/boot/dts/loongson/Makefile b/arch/mips/boot/dts/loongson/Makefile
+> new file mode 100644
+> index 000000000000..a225d84a521e
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/loongson/Makefile
+> @@ -0,0 +1,5 @@
+> +# SPDX_License_Identifier: GPL_2.0
+> +dtb-$(CONFIG_MACH_LOONGSON64)  += 3a1000_780e.dtb 3a2000_780e.dtb 3a3000_780e.dtb 3b1x00_780e.dtb \
+> +
+> +
+> +obj-$(CONFIG_BUILTIN_DTB)      += $(addsuffix .o, $(dtb-y))
+> diff --git a/arch/mips/boot/dts/loongson/rs780e-pch.dtsi b/arch/mips/boot/dts/loongson/rs780e-pch.dtsi
+> new file mode 100644
+> index 000000000000..915363eafa2f
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/loongson/rs780e-pch.dtsi
+> @@ -0,0 +1,35 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/ {
+> +       pch {
+> +               compatible = "simple-bus";
+> +               #address-cells = <2>;
+> +               #size-cells = <1>;
+> +               ranges = <0x000 0x10000000 0x000 0x10000000 0x10000000
+> +                         0x000 0x40000000 0x000 0x40000000 0x40000000>;
+> +
+> +               isa {
+> +                       compatible = "isa";
+> +                       #address-cells = <2>;
+> +                       #size-cells = <1>;
+> +                       ranges = <1 0 0 0 0x1000>;
+> +
+> +                       i8259: interrupt-controller@20 {
+> +                               compatible = "intel,i8259";
+> +                               interrupt-controller;
+> +                               #interrupt-cells = <1>;
+> +                               plat-poll;
+> +                               interrupts = <0>, <1>, <2>, <3>, <4>, <5>, <6>, <7>,
+> +                                                       <8>, <9>, <10>, <11>, <12>, <13>, <14>, <15>;
+> +                               interrupt-parent = <&htintc>;
+> +                       };
+> +
+> +                       rtc0: rtc@70 {
+> +                               compatible = "motorola,mc146818";
+> +                               reg = <1 0x70 0x8>;
+> +                               interrupts = <8>;
+> +                               interrupt-parent = <&i8259>;
+> +                       };
+> +               };
+> +       };
+> +};
+> --
+> 2.22.0
+>
