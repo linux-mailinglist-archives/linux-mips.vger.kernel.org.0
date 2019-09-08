@@ -2,58 +2,28 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6C0AC8B6
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Sep 2019 20:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD33CACFB5
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Sep 2019 18:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387845AbfIGSPR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 7 Sep 2019 14:15:17 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:40870 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388468AbfIGSPM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 7 Sep 2019 14:15:12 -0400
-Received: by mail-pg1-f195.google.com with SMTP id w10so5359423pgj.7
-        for <linux-mips@vger.kernel.org>; Sat, 07 Sep 2019 11:15:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=yCXO2IUW/xP5rGitFpbGKrkQxCFizP24AMzmcKYJo+k=;
-        b=gPB2S/s21fOdrhZkZvzaMRRbkTHlbc79vLkQ8L7Cpmmu8hvbAG6eoC0Dm32QXRGYMY
-         +1LPES8i+LJBkfY/p1yzpRzMMv2odDchTO0YHOkxwFiie7OsEOHDwtOH8zJJ6F9AZyk5
-         MkZFVhvuxPxeMIKfq+G9obcmbfsQBob0Nc70jrYQVbX0W8tNU0vMgyrejbOLHj/PJBII
-         8jO1EQn6kWKOgkBib76U4yxHBzWI3KaSO/lLhJIPi5x1WrjQ3kHOZysmKhg2Dv2MsCh4
-         N/OxZH40a7P6xhJ/lAgfa+dSsRZSJmy+02UKql6Xb3VKWtRKJq/2ht+J5tBxXcxSYFTB
-         1GhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=yCXO2IUW/xP5rGitFpbGKrkQxCFizP24AMzmcKYJo+k=;
-        b=YWf94ADvG5dhteU/QaDT5zdZr2UlgwnzQGCC6D6eHIaWz2e2RWl8rU7qoGCpHDIHP3
-         Kg9hkiRM6kp8nj+Wk19NpK037L2CPDAPlOPQW2iKUWdr25wVPoZCG7zWCz8g90XUtNzl
-         89K7VKkjfx3XY5NKKvWPD0LLEVVjdqxORSmt71CW431K8ngqXARib6FB0RnPYGGaRx5n
-         dks1vKQ/foykl3lXC4ckyE7mx1rcbeccIzcNxHv8w3HW6Rys8aXLV5vwG1R6xSqC6vi5
-         JzxqVHfn4kP70rLncFk3ygwxL9N5ReR5cnpGHiLIXzMtsrtc7MRnoh3w3KFP0e4lzYZi
-         OynQ==
-X-Gm-Message-State: APjAAAVIRL2kfOkoJVDHtJlg5kqhiZHkf85JNgVvxOtjrs/hG1xZy1TQ
-        X+UV4otdTjMUpapsZ9DUYVzQaA==
-X-Google-Smtp-Source: APXvYqwtLHTxDBZPI4nj5nW8UmB/sRAqU0rGQe5gnm9Rg561yB9Atb14l/OoZSzCcZVB4Qk4BIIw8Q==
-X-Received: by 2002:aa7:8b09:: with SMTP id f9mr13154710pfd.23.1567880111917;
-        Sat, 07 Sep 2019 11:15:11 -0700 (PDT)
-Received: from ?IPv6:2600:100f:b121:da37:bc66:d4de:83c7:e0cd? ([2600:100f:b121:da37:bc66:d4de:83c7:e0cd])
-        by smtp.gmail.com with ESMTPSA id x5sm10495873pfn.149.2019.09.07.11.15.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 07 Sep 2019 11:15:11 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v12 11/12] open: openat2(2) syscall
-From:   Andy Lutomirski <luto@amacapital.net>
-X-Mailer: iPhone Mail (16G102)
-In-Reply-To: <CAHk-=whe90Ec_RRrMRLE0=bJOHNS9YmVwcytVxmrfK3oCuZF6A@mail.gmail.com>
-Date:   Sat, 7 Sep 2019 11:15:09 -0700
-Cc:     Jeff Layton <jlayton@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        id S1729496AbfIHQYt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 8 Sep 2019 12:24:49 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:20600 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729355AbfIHQYs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 8 Sep 2019 12:24:48 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id F270BA10CE;
+        Sun,  8 Sep 2019 18:24:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
+        with ESMTP id RaAVojXx0viX; Sun,  8 Sep 2019 18:24:32 +0200 (CEST)
+Date:   Mon, 9 Sep 2019 02:24:19 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         "J. Bruce Fields" <bfields@fieldses.org>,
         Arnd Bergmann <arnd@arndb.de>,
         David Howells <dhowells@redhat.com>,
@@ -76,75 +46,84 @@ Cc:     Jeff Layton <jlayton@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>,
         Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         Aleksa Sarai <asarai@suse.de>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <EE7399FD-7587-407B-B628-1D92CFD6B120@amacapital.net>
-References: <20190904201933.10736-1-cyphar@cyphar.com> <20190904201933.10736-12-cyphar@cyphar.com> <7236f382d72130f2afbbe8940e72cc67e5c6dce0.camel@kernel.org> <CAHk-=whZx97Nm-gUK0ppofj2RA2LLz2vmaDUTKSSV-+yYB9q_Q@mail.gmail.com> <C81D6D29-F6BF-48E6-A15E-3ABCB2C992E5@amacapital.net> <CAHk-=whe90Ec_RRrMRLE0=bJOHNS9YmVwcytVxmrfK3oCuZF6A@mail.gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v12 11/12] open: openat2(2) syscall
+Message-ID: <20190908162419.yrzm2s7rflqgdxig@yavin>
+References: <20190904201933.10736-1-cyphar@cyphar.com>
+ <20190904201933.10736-12-cyphar@cyphar.com>
+ <7236f382d72130f2afbbe8940e72cc67e5c6dce0.camel@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="gzznbyzuni6ynbc5"
+Content-Disposition: inline
+In-Reply-To: <7236f382d72130f2afbbe8940e72cc67e5c6dce0.camel@kernel.org>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
-> On Sep 7, 2019, at 10:45 AM, Linus Torvalds <torvalds@linux-foundation.org=
-> wrote:
->=20
->> On Sat, Sep 7, 2019 at 10:42 AM Andy Lutomirski <luto@amacapital.net> wro=
-te:
->>=20
->> Linus, you rejected resolveat() because you wanted a *nice* API
->=20
-> No. I rejected resoveat() because it was a completely broken garbage
-> API that couldn't do even basic stuff right (like O_CREAT).
->=20
-> We have a ton of flag space in the new openat2() model, we might as
-> well leave the old flags alone that people are (a) used to and (b) we
-> have code to support _anyway_.
->=20
-> Making up a new flag namespace is only going to cause us - and users -
-> more work, and more confusion. For no actual advantage. It's not going
-> to be "cleaner". It's just going to be worse.
->=20
->=20
+--gzznbyzuni6ynbc5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If we keep all the flag bits in the same mask with the same values, then we=E2=
-=80=99re stuck with O_RDONLY=3D0 and everything that implies.  We=E2=80=99ll=
- have UPGRADE_READ that works differently from the missing plain-old-READ bi=
-t, and we can=E2=80=99t express execute-only-no-read-or-write. This sucks.
+On 2019-09-07, Jeff Layton <jlayton@kernel.org> wrote:
+> On Thu, 2019-09-05 at 06:19 +1000, Aleksa Sarai wrote:
+> > + * @flags: O_* flags.
+> > + * @mode: O_CREAT/O_TMPFILE file mode.
+> > + * @upgrade_mask: UPGRADE_* flags (to restrict O_PATH re-opening).
+> > + * @resolve: RESOLVE_* flags.
+> > + */
+> > +struct open_how {
+> > +	__u32 flags;
+> > +	union {
+> > +		__u16 mode;
+> > +		__u16 upgrade_mask;
+> > +	};
+> > +	__u16 resolve;
+> > +};
+> > +
+> > +#define OPEN_HOW_SIZE_VER0	8 /* sizeof first published struct */
+> > +
+>=20
+> Hmm, there is no version field. When you want to expand this in the
+> future, what is the plan? Add a new flag to indicate that it's some
+> length?
 
-Can we at least split the permission bits into their own mask and make bits 0=
- and 1 illegal in the main set of flags in openat2?
+The "version number" is the size of the struct. Any extensions we make
+are appended to the struct (openat2 now takes a size_t argument), and
+the new copy_struct_{to,from}_user() helpers handle all of the
+permutations of {old,new} kernel and {old,new} user space.
 
-There=E2=80=99s another thread going on right now about adding a bit along t=
-he lines of =E2=80=9CMAYEXEC=E2=80=9D, and one of the conclusions was that i=
-t should wait for openat2 so that it can have same semantics. If we=E2=80=99=
-re stuck with O_RDONLY and friends, then MAYEXEC is doomed to being at least=
- a bit nonsensical.
+This is how clone3(), sched_[gs]etattr() and perf_event_open() all
+operate (all of the sigset syscalls operate similarly but don't
+gracefully handle different kernel vintages -- you just get -EINVAL).
 
-As an analogy, AMD64 introduced bigger PTEs but kept the same nonsense encod=
-ing of read and write permission. And then we got NX, and now we=E2=80=99re g=
-etting little holes in the encoding stolen by CET to mean new silly things. =
- I don=E2=80=99t know if you=E2=80=99ve been following the various rounds of=
- patches, but it is truly horrible. The mapping from meaning to the actual b=
-its is *shit*, and AMD64 should have made a clean break instead.
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
 
-open()=E2=80=99s permission bits are basically the same situation. And the k=
-ernel *already* has a non-type-safe translation layer. Please, please let op=
-enat2() at least get rid of the turd in open()=E2=80=99s bits 0 and 1.
+--gzznbyzuni6ynbc5
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXXUrMAAKCRCdlLljIbnQ
+EgC+AQCVKXVqUiPLaSjLjt+ByWrSsopM/OM3NwCHHZ5oD+CB1gD/cSuQohVmXskg
+v8dQLpd9K1QW//8GG3Aa/FRHhqPAfAU=
+=G4Hw
+-----END PGP SIGNATURE-----
+
+--gzznbyzuni6ynbc5--
