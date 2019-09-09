@@ -2,194 +2,309 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A13B2AD207
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2019 04:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BA9AD23D
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2019 05:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733155AbfIICt0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 8 Sep 2019 22:49:26 -0400
-Received: from mail-eopbgr750124.outbound.protection.outlook.com ([40.107.75.124]:8679
-        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1733062AbfIICt0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 8 Sep 2019 22:49:26 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jgj32YJtpsCfnm4W2GFbPIsT1qN4UK00Cn3D4Y+orAhm4OwjfcXI3VFsPhBqfgIeNX0/ifCt7V1/XHuyp+mwfndZGmoL1+8BXCXvR0MpX9DM6o2rq3zm0YomIWYzwCJCEwGVhhxUSak3/vre6X/OneEOzwAzT4CWPh1OyA5FWfDWO+I/oqm+ROlAQNA7ccDjCAT/UUT806J43zbIcAmLlgxQobXv6scolPKptrJYzkKzio8O8O+8WJKYXVQ2PBR7H4LLjC/3JrfUFqdP6AgHnabELHKokyPwoyUqxjIxD0sOZ+ULb0pkqt+DDhPgP6Or8U2hvCDDgjOO01M24Dvrhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g46fOMqOdfH+8DR56s96c8+WqNlUAOY+CoMyKjXI2UU=;
- b=bCbsTQ2qEWbHKciQRwIAnBQ8aA5yJbMhir3s9850VqtKCyQcXMpSwguMhzrv84yhtfDAy9ntdhmmiRTUhaOWe9HnaGXW8Zx89NOe9XCC1M7Bqtf2K3uvk0hdJdcnTUAMeDBRSxzSDrcfqUcGAdZcSjVHwkaapv4+esBfDallv9SdpKw485/BCAL1kk9rDWA/x3Huq0AjjFzd+TapitywsXITxO83jAy0teSWfCogx+QztW+SQWci/C0qr01LA7nfHrDk4TR5TTHypqO9vOvlQvDE3nhlWm98gh++CnibDezuGjVmf7/LNo9OoaSQEItuxd2WHaJkz7h1nNQB4p1n1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=wavecomp.com;
- dkim=pass header.d=wavecomp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g46fOMqOdfH+8DR56s96c8+WqNlUAOY+CoMyKjXI2UU=;
- b=Rv+VgLCf7yMnNovClOfXe2k3hpJFXQki/H4FBi6sWFRFlfsgny7ZiCWZT3gPwjv/efs1VKeNZaFEdcUjsl8T+b/L4dlF6GzYYzhm0wYXo78z1Y66RmFExNGh8BnY+2MVQJiTlJ63JHRAoRYG0VH/z4HaYmnYtsY7NKgVJecIafU=
-Received: from DM5PR22MB0860.namprd22.prod.outlook.com (10.171.160.147) by
- DM5PR22MB0412.namprd22.prod.outlook.com (10.173.171.147) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2241.15; Mon, 9 Sep 2019 02:49:20 +0000
-Received: from DM5PR22MB0860.namprd22.prod.outlook.com
- ([fe80::592b:85e8:62b8:dfd9]) by DM5PR22MB0860.namprd22.prod.outlook.com
- ([fe80::592b:85e8:62b8:dfd9%3]) with mapi id 15.20.2241.018; Mon, 9 Sep 2019
- 02:49:20 +0000
-From:   Gary Fu <qfu@wavecomp.com>
-To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-CC:     Paul Burton <pburton@wavecomp.com>,
-        "jhogan@kernel.org" <jhogan@kernel.org>,
-        Archer Yan <ayan@wavecomp.com>, Gary Fu <qfu@wavecomp.com>
-Subject: [PATCH] KVM: Fix an issue in non-preemptible kernel.
-Thread-Topic: [PATCH] KVM: Fix an issue in non-preemptible kernel.
-Thread-Index: AQHVZrktJiYQlXJorEWsFSqM1ehwjw==
-Date:   Mon, 9 Sep 2019 02:49:19 +0000
-Message-ID: <20190909024838.2757-1-qfu@wavecomp.com>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HK0P153CA0013.APCP153.PROD.OUTLOOK.COM
- (2603:1096:203:18::25) To DM5PR22MB0860.namprd22.prod.outlook.com
- (2603:10b6:3:13b::19)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=qfu@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.17.1
-x-originating-ip: [218.108.86.174]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e8ce6cb3-2c21-4a3a-a6fc-08d734d04ff8
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:DM5PR22MB0412;
-x-ms-traffictypediagnostic: DM5PR22MB0412:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM5PR22MB0412A2FE41E56E731EE39BE2C3B70@DM5PR22MB0412.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 01559F388D
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(366004)(396003)(136003)(39840400004)(376002)(189003)(199004)(64756008)(8676002)(2501003)(71190400001)(36756003)(66476007)(2616005)(99286004)(52116002)(5660300002)(53936002)(26005)(6436002)(478600001)(54906003)(2906002)(6916009)(1076003)(5640700003)(102836004)(2351001)(486006)(86362001)(476003)(6486002)(386003)(14454004)(6512007)(316002)(6506007)(186003)(50226002)(66946007)(66556008)(66446008)(256004)(71200400001)(3846002)(7736002)(6116002)(107886003)(81166006)(81156014)(4326008)(305945005)(25786009)(66066001)(14444005)(8936002);DIR:OUT;SFP:1102;SCL:1;SRVR:DM5PR22MB0412;H:DM5PR22MB0860.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: NwvnsgJynVYTEUpG389eznGwd8oMjqOC3faWg2mUn2SaXUE08MWbxNe+E8ccSSbIpRaf/5WIBD9aXQ7eDv9J0MTrpRGfNtQjMa8InS209UQTAbzP82rDqFKDU7AvOsIYoPva9azXclNOHSPbthDSyjE+EmUF0nJh/SkE+cjlj1CCWE04w1vQkmqdUzkws9gfxV+mH1hEMk6blj8aU/eeuAFi7qXl3Eov1rJpyn9g+T1tECPkR7b7SrfG5kHx6ctT+8+oXm1u954ndCrJUxyTtQP2l4gwNuBtcWXOYAQf2lLHJRwylvWkjk1tKexRM/iW6SewRxRd2dveDhAhdFlQN9Spak8mCwWrW+yvm3KPj/wDEnknPTe5wjjxmh6h9vYBRxItiqG0Dxtucj5/gVVU09qBJ6HHT9yOAIFs7XvL8rg=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: wavecomp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8ce6cb3-2c21-4a3a-a6fc-08d734d04ff8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2019 02:49:19.9660
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NUKeNwz88JcVPtxaPXFZTL4NcgGxrUTj/sp7zuRR/ZHsIdUOrdp3jPgGNKzAns7r0f5AzW8ehl7GDyiK/SEZUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR22MB0412
+        id S1726174AbfIIDgx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 8 Sep 2019 23:36:53 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33151 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727530AbfIIDgx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Sep 2019 23:36:53 -0400
+Received: by mail-pf1-f193.google.com with SMTP id q10so8279409pfl.0
+        for <linux-mips@vger.kernel.org>; Sun, 08 Sep 2019 20:36:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=o3Pj806WuG4KiLhBo5pGEu1Mrepp1o3jDsBnP/wiDqI=;
+        b=MkWHcGngi8jctib0h84FDNJGSntGhae+KBo3tjUsnePGR2WvR+dVsG1iekQ7Dbrqx9
+         fxl7Aj1DKI/Spwtnnefj4SJG6bODTlovMfO+O8aZr2BG96CSVzlfPcU/22zgybf66SP2
+         VxQ3PT3P3HpgpH/t+mR5ivOI2V6SqHo8Ff+aBz63r/3VEJ+IMa6oiArBIO6RUEFXohxn
+         T0k6etGsqPx6b5K2k3rBLQFrFJTfvDJgANA+y3ZF+4pp9nGE3AGw1FglS47SQfOGzAWB
+         cU7++FozQHoZ7SrO0sFHt2+Zn3JzGG5IrV04XqKPApNXsma9KAiUDdYVLyUO8Utnk2XE
+         odSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=o3Pj806WuG4KiLhBo5pGEu1Mrepp1o3jDsBnP/wiDqI=;
+        b=CjT0HienGTR88/JX50ZtI4+Pi1xAQ34kD/BHeAs0gSudMPUSPj2UE8EDkEbD9KJlS1
+         RoxELDL0rIcCmnMxxTXqmjh/5t9Sq41PQLh5qxekC7Tf/Ffbqdz8wdyCslN2xvsRVLj6
+         bqspE++wFEbfv1D+9v7XjENATKxV8Wo46ZDOBVF64cAzYomOCgXm6hxaMq1zxfq3rBPF
+         wD3RsYM4fAj+iHGZtepa6x81BlmOA5qO0/I8BJjbUzfmSSot71eC4F0HYWmCfAGb1f0N
+         T27FAS5gu0Tm5Fp3lK3l+zox76yPcqRpnlm0B9qKcXX6gVmTbSJsjVpCaQIMwu3q+qES
+         6sIQ==
+X-Gm-Message-State: APjAAAVBXCVGYxZBkWzfL4XfziFCVPMBwkVcBNdkBOfy/LiBFoXd/H1d
+        QGM77V0w+/iecLJCj2aaSpQ=
+X-Google-Smtp-Source: APXvYqxc6ZqP85mv+S7aIGNIRqz/fNH6fVxMHBV8/YY5zzl+XuPq2nh16rjYV1bdzdP7JsVGMTaljw==
+X-Received: by 2002:a63:5823:: with SMTP id m35mr19963788pgb.329.1568000210897;
+        Sun, 08 Sep 2019 20:36:50 -0700 (PDT)
+Received: from software.domain.org ([103.118.43.97])
+        by smtp.gmail.com with ESMTPSA id b24sm13939437pfi.75.2019.09.08.20.36.43
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Sun, 08 Sep 2019 20:36:50 -0700 (PDT)
+From:   Huacai Chen <chenhc@lemote.com>
+To:     Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>
+Cc:     linux-mips@linux-mips.org, linux-mips@vger.kernel.org,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH V1 1/3] MIPS: Loongson: Add CFUCFG&CSR support
+Date:   Mon,  9 Sep 2019 11:38:21 +0800
+Message-Id: <1568000303-771-1-git-send-email-chenhc@lemote.com>
+X-Mailer: git-send-email 2.7.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add a cond_resched() to give the scheduler a chance to run madvise
-task to avoid endless loop here in non-preemptible kernel.
+Loongson-3A R4+ (Loongson-3A4000 and newer) has CPUCFG (CPU config) and
+CSR (Control and Status Register) extensions. This patch add read/write
+functionalities for them.
 
-Otherwise, the kvm_mmu_notifier would have no chance to be decreased
-to 0 by madvise task -> syscall -> zap_page_range ->
-mmu_notifier_invalidate_range_end ->
-__mmu_notifier_invalidate_range_end -> invalidate_range_end ->
-kvm_mmu_notifier_invalidate_range_end, as the madvise task would be
-scheduled when running unmap_single_vma -> unmap_page_range ->
-zap_p4d_range -> zap_pud_range -> zap_pmd_range -> cond_resched which
-is called before mmu_notifier_invalidate_range_end in zap_page_range.
-
-When handling GPA faults by creating a new GPA mapping in
-kvm_mips_map_page, it will be retrying to get available page. In the
-low memory case, it is waiting for the memory resources freed by
-madvise syscall with MADV_DONTNEED (QEMU application -> madvise with
-MADV_DONTNEED -> syscall -> madvise_vma -> madvise_dontneed_free ->
-madvise_dontneed_single_vma -> zap_page_range). In zap_page_range,
-after the TLB of given address range is cleared by unmap_single_vma,
-it will call __mmu_notifier_invalidate_range_end which finally calls
-kvm_mmu_notifier_invalidate_range_end to decrease mmu_notifier_count
-to 0. The retrying loop in kvm_mips_map_page checks the
-mmu_notifier_count and if the value is 0 which indicates that some
-new page is available for mapping, it will jump out the retrying loop
-and set up PTE for a new GPA mapping.
-During the TLB clearing (in unmap_single_vma in madvise syscall)
-mentioned above, it will call cond_resched() per PMD for avoiding
-occupying CPU for a long time (in case of huge page range zapping).
-When this happens in the non-preemptible kernel, the retrying loop in
-kvm_mips_map_page will be running endlessly as there is no chance to
-reschedule back to madvise syscall to run
-__mmu_notifier_invalidate_range_end to decrease mmu_notifier_count so
-that the value of mmu_notifier_count is always 1.
-Adding a scheduling point before every retry in kvm_mips_map_page will
-give the madvise syscall (invoked by QEMU) a chance to be re-scheduled
-back to zap pages in the given range and clear mmu_notifier_count
-value to let kvm_mips_map_page task jump out the loop.
-
-Signed-off-by: Gary Fu <qfu@wavecomp.com>
+Signed-off-by: Huacai Chen <chenhc@lemote.com>
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/kvm/mmu.c | 48 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ .../include/asm/mach-loongson64/loongson_regs.h    | 227 +++++++++++++++++++++
+ 1 file changed, 227 insertions(+)
+ create mode 100644 arch/mips/include/asm/mach-loongson64/loongson_regs.h
 
-diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
-index 97e538a8c1be..26bac7e1ea85 100644
---- a/arch/mips/kvm/mmu.c
-+++ b/arch/mips/kvm/mmu.c
-@@ -746,6 +746,54 @@ static int kvm_mips_map_page(struct kvm_vcpu *vcpu, un=
-signed long gpa,
- 		 */
- 		spin_unlock(&kvm->mmu_lock);
- 		kvm_release_pfn_clean(pfn);
-+		/*
-+		 * Add a cond_resched() to give the scheduler a chance to run
-+		 * madvise task to avoid endless loop here in non-preemptible
-+		 * kernel.
-+		 * Otherwise, the kvm_mmu_notifier would have no chance to be
-+		 * decreased to 0 by madvise task -> syscall -> zap_page_range
-+		 * -> mmu_notifier_invalidate_range_end ->
-+		 * __mmu_notifier_invalidate_range_end -> invalidate_range_end
-+		 * -> kvm_mmu_notifier_invalidate_range_end, as the madvise task
-+		 * would be scheduled when running unmap_single_vma ->
-+		 * unmap_page_range -> zap_p4d_range -> zap_pud_range ->
-+		 * zap_pmd_range -> cond_resched which is called before
-+		 * mmu_notifier_invalidate_range_end in zap_page_range.
-+		 *
-+		 * When handling GPA faults by creating a new GPA mapping in
-+		 * kvm_mips_map_page, it will be retrying to get available
-+		 * pages.
-+		 * In the low memory case, it is waiting for the memory
-+		 * resources freed by madvise syscall with MADV_DONTNEED (QEMU
-+		 * application -> madvise with MADV_DONTNEED -> syscall ->
-+		 * madvise_vma -> madvise_dontneed_free ->
-+		 * madvise_dontneed_single_vma -> zap_page_range). In
-+		 * zap_page_range, after the TLB of given address range is
-+		 * cleared by unmap_single_vma, it will call
-+		 *  __mmu_notifier_invalidate_range_end which finally calls
-+		 * kvm_mmu_notifier_invalidate_range_end to decrease
-+		 * mmu_notifier_count to 0. The retrying loop in
-+		 * kvm_mips_map_page checks the mmu_notifier_count and if the
-+		 * value is 0 which indicates that some new page is available
-+		 * for mapping, it will jump out the retrying loop and set up
-+		 * PTE for a new GPA mapping.
-+		 * During the TLB clearing (in unmap_single_vma in madvise
-+		 * syscall) mentioned above, it will call cond_resched() per
-+		 * PMD for avoiding occupying CPU for a long time (in case of
-+		 * huge page range zapping). When this happens in the
-+		 * non-preemptible kernel, the retrying loop in
-+		 * kvm_mips_map_page will be running endlessly as there is no
-+		 * chance to reschedule back to madvise syscall to run
-+		 * __mmu_notifier_invalidate_range_end to decrease
-+		 * mmu_notifier_count so that the value of mmu_notifier_count
-+		 * is always 1.
-+		 * Adding a scheduling point before every retry in
-+		 * kvm_mips_map_page will give the madvise syscall (invoked by
-+		 * QEMU) a chance to be re-scheduled back to zap pages in the
-+		 * given range and clear mmu_notifier_count value to let
-+		 * kvm_mips_map_page task jump out the loop.
-+		 */
-+		cond_resched();
- 		goto retry;
- 	}
-=20
---=20
-2.17.1
+diff --git a/arch/mips/include/asm/mach-loongson64/loongson_regs.h b/arch/mips/include/asm/mach-loongson64/loongson_regs.h
+new file mode 100644
+index 0000000..6e3569a
+--- /dev/null
++++ b/arch/mips/include/asm/mach-loongson64/loongson_regs.h
+@@ -0,0 +1,227 @@
++/*
++ * Read/Write Loongson Extension Registers
++ */
++
++#ifndef _LOONGSON_REGS_H_
++#define _LOONGSON_REGS_H_
++
++#include <linux/types.h>
++#include <linux/bits.h>
++
++#include <asm/mipsregs.h>
++#include <asm/cpu.h>
++
++static inline bool cpu_has_cfg(void)
++{
++	return ((read_c0_prid() & PRID_IMP_MASK) == PRID_IMP_LOONGSON_64G);
++}
++
++static inline u32 read_cpucfg(u32 reg)
++{
++	u32 __res;
++
++	__asm__ __volatile__(
++		"parse_r __res,%0\n\t"
++		"parse_r reg,%1\n\t"
++		".insn \n\t"
++		".word (0xc8080118 | (reg << 21) | (__res << 11))\n\t"
++		:"=r"(__res)
++		:"r"(reg)
++		:
++		);
++	return __res;
++}
++
++/* Bit Domains for CFG registers */
++#define LOONGSON_CFG0	0x0
++#define LOONGSON_CFG0_PRID GENMASK(31, 0)
++
++#define LOONGSON_CFG1 0x1
++#define LOONGSON_CFG1_FP	BIT(0)
++#define LOONGSON_CFG1_FPREV	GENMASK(3, 1)
++#define LOONGSON_CFG1_MMI	BIT(4)
++#define LOONGSON_CFG1_MSA1	BIT(5)
++#define LOONGSON_CFG1_MSA2	BIT(6)
++#define LOONGSON_CFG1_CGP	BIT(7)
++#define LOONGSON_CFG1_WRP	BIT(8)
++#define LOONGSON_CFG1_LSX1	BIT(9)
++#define LOONGSON_CFG1_LSX2	BIT(10)
++#define LOONGSON_CFG1_LASX	BIT(11)
++#define LOONGSON_CFG1_R6FXP	BIT(12)
++#define LOONGSON_CFG1_R6CRCP	BIT(13)
++#define LOONGSON_CFG1_R6FPP	BIT(14)
++#define LOONGSON_CFG1_CNT64	BIT(15)
++#define LOONGSON_CFG1_LSLDR0	BIT(16)
++#define LOONGSON_CFG1_LSPREF	BIT(17)
++#define LOONGSON_CFG1_LSPREFX	BIT(18)
++#define LOONGSON_CFG1_LSSYNCI	BIT(19)
++#define LOONGSON_CFG1_LSUCA	BIT(20)
++#define LOONGSON_CFG1_LLSYNC	BIT(21)
++#define LOONGSON_CFG1_TGTSYNC	BIT(22)
++#define LOONGSON_CFG1_LLEXC	BIT(23)
++#define LOONGSON_CFG1_SCRAND	BIT(24)
++#define LOONGSON_CFG1_MUALP	BIT(25)
++#define LOONGSON_CFG1_KMUALEN	BIT(26)
++#define LOONGSON_CFG1_ITLBT	BIT(27)
++#define LOONGSON_CFG1_LSUPERF	BIT(28)
++#define LOONGSON_CFG1_SFBP	BIT(29)
++#define LOONGSON_CFG1_CDMAP	BIT(30)
++
++#define LOONGSON_CFG2 0x2
++#define LOONGSON_CFG2_LEXT1	BIT(0)
++#define LOONGSON_CFG2_LEXT2	BIT(1)
++#define LOONGSON_CFG2_LEXT3	BIT(2)
++#define LOONGSON_CFG2_LSPW	BIT(3)
++#define LOONGSON_CFG2_LBT1	BIT(4)
++#define LOONGSON_CFG2_LBT2	BIT(5)
++#define LOONGSON_CFG2_LBT3	BIT(6)
++#define LOONGSON_CFG2_LBTMMU	BIT(7)
++#define LOONGSON_CFG2_LPMP	BIT(8)
++#define LOONGSON_CFG2_LPMPREV	GENMASK(11, 9)
++#define LOONGSON_CFG2_LAMO	BIT(12)
++#define LOONGSON_CFG2_LPIXU	BIT(13)
++#define LOONGSON_CFG2_LPIXUN	BIT(14)
++#define LOONGSON_CFG2_LZVP	BIT(15)
++#define LOONGSON_CFG2_LZVREV	GENMASK(18, 16)
++#define LOONGSON_CFG2_LGFTP	BIT(19)
++#define LOONGSON_CFG2_LGFTPREV	GENMASK(22, 20)
++#define LOONGSON_CFG2_LLFTP	BIT(23)
++#define LOONGSON_CFG2_LLFTPREV	GENMASK(24, 26)
++#define LOONGSON_CFG2_LCSRP	BIT(27)
++#define LOONGSON_CFG2_LDISBLIKELY	BIT(28)
++
++#define LOONGSON_CFG3 0x3
++#define LOONGSON_CFG3_LCAMP	BIT(0)
++#define LOONGSON_CFG3_LCAMREV	GENMASK(3, 1)
++#define LOONGSON_CFG3_LCAMNUM	GENMASK(11, 4)
++#define LOONGSON_CFG3_LCAMKW	GENMASK(19, 12)
++#define LOONGSON_CFG3_LCAMVW	GENMASK(27, 20)
++
++#define LOONGSON_CFG4 0x4
++#define LOONGSON_CFG4_CCFREQ	GENMASK(31, 0)
++
++#define LOONGSON_CFG5 0x5
++#define LOONGSON_CFG5_CFM	GENMASK(15, 0)
++#define LOONGSON_CFG5_CFD	GENMASK(31, 16)
++
++#define LOONGSON_CFG6 0x6
++
++#define LOONGSON_CFG7 0x7
++#define LOONGSON_CFG7_GCCAEQRP	BIT(0)
++#define LOONGSON_CFG7_UCAWINP	BIT(1)
++
++static inline bool cpu_has_csr(void)
++{
++	if (cpu_has_cfg())
++		return (read_cpucfg(LOONGSON_CFG2) & LOONGSON_CFG2_LCSRP);
++
++	return false;
++}
++
++static inline u32 csr_readl(u32 reg)
++{
++	u32 __res;
++
++	/* RDCSR reg, val */
++	__asm__ __volatile__(
++		"parse_r __res,%0\n\t"
++		"parse_r reg,%1\n\t"
++		".insn \n\t"
++		".word (0xc8000118 | (reg << 21) | (__res << 11))\n\t"
++		:"=r"(__res)
++		:"r"(reg)
++		:
++		);
++	return __res;
++}
++
++static inline u64 csr_readq(u32 reg)
++{
++	u64 __res;
++
++	/* DWRCSR reg, val */
++	__asm__ __volatile__(
++		"parse_r __res,%0\n\t"
++		"parse_r reg,%1\n\t"
++		".insn \n\t"
++		".word (0xc8020118 | (reg << 21) | (__res << 11))\n\t"
++		:"=r"(__res)
++		:"r"(reg)
++		:
++		);
++	return __res;
++}
++
++static inline void csr_writel(u32 val, u32 reg)
++{
++	/* WRCSR reg, val */
++	__asm__ __volatile__(
++		"parse_r reg,%0\n\t"
++		"parse_r val,%1\n\t"
++		".insn \n\t"
++		".word (0xc8010118 | (reg << 21) | (val << 11))\n\t"
++		:
++		:"r"(reg),"r"(val)
++		:
++		);
++}
++
++static inline void csr_writeq(u64 val, u32 reg)
++{
++	/* DWRCSR reg, val */
++	__asm__ __volatile__(
++		"parse_r reg,%0\n\t"
++		"parse_r val,%1\n\t"
++		".insn \n\t"
++		".word (0xc8030118 | (reg << 21) | (val << 11))\n\t"
++		:
++		:"r"(reg),"r"(val)
++		:
++		);
++}
++
++/* Public CSR Register can also be accessed with regular addresses */
++#define CSR_PUBLIC_MMIO_BASE 0x1fe00000
++
++#define MMIO_CSR(x)		(void *)TO_UNCAC(CSR_PUBLIC_MMIO_BASE + x)
++
++#define LOONGSON_CSR_FEATURES	0x8
++#define LOONGSON_CSRF_TEMP	BIT(0)
++#define LOONGSON_CSRF_NODECNT	BIT(1)
++#define LOONGSON_CSRF_MSI	BIT(2)
++#define LOONGSON_CSRF_EXTIOI	BIT(3)
++#define LOONGSON_CSRF_IPI	BIT(4)
++#define LOONGSON_CSRF_FREQ	BIT(5)
++
++#define LOONGSON_CSR_VENDOR	0x10 /* Vendor name string, should be "Loongson" */
++#define LOONGSON_CSR_CPUNAME	0x20 /* Processor name string */
++#define LOONGSON_CSR_NODECNT	0x408
++#define LOONGSON_CSR_CPUTEMP	0x428
++
++/* PerCore CSR, only accessable by local cores */
++#define LOONGSON_CSR_IPI_STATUS	0x1000
++#define LOONGSON_CSR_IPI_EN	0x1004
++#define LOONGSON_CSR_IPI_SET	0x1008
++#define LOONGSON_CSR_IPI_CLEAR	0x100c
++#define LOONGSON_CSR_IPI_SEND	0x1040
++#define CSR_IPI_SEND_IP_SHIFT	0
++#define CSR_IPI_SEND_CPU_SHIFT	16
++#define CSR_IPI_SEND_BLOCK	BIT(31)
++
++static inline u64 drdtime(void)
++{
++	int rID = 0;
++	u64 val = 0;
++
++	__asm__ __volatile__(
++		"parse_r rID,%0\n\t"
++		"parse_r val,%1\n\t"
++		".insn \n\t"
++		".word (0xc8090118 | (rID << 21) | (val << 11))\n\t"
++		:"=r"(rID),"=r"(val)
++		:
++		);
++	return val;
++}
++
++#endif
+-- 
+2.7.0
 
