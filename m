@@ -2,213 +2,291 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D98AD253
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2019 05:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4A5AD317
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2019 08:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729280AbfIIDlI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 8 Sep 2019 23:41:08 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:39257 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728741AbfIIDlI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Sep 2019 23:41:08 -0400
-Received: by mail-pf1-f196.google.com with SMTP id s12so8271066pfe.6
-        for <linux-mips@vger.kernel.org>; Sun, 08 Sep 2019 20:41:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=bNh1RagaNmk+mawVUoE7ysB93szXp1ih53+M2GfhhEg=;
-        b=c3h4kzNcfU/5kjgyxNOAFigu/7846ZfOspcecQ7Ei8LBe9Mhs8TBdV7VQY+cNnTfyO
-         Iott/BzjOn0YTJ/jleUNjEzS1zWdN44XNowmpNP69EPWQ6WgpHJgmtYTL6jxuAoLaUc+
-         ebqvST5RWPuBdRdXRVL1Ejc5CwnhvDxkszfkYZGsv1YQVpcRWw9/COBfe+Bxp+bd6n0v
-         mgq0VlJ6IXb7pZmPpJ78iWq1dt7ZEwdZxqi6B1/h0oHud+d601yWlnVueTV6I8jV1FqJ
-         1ZChW78gVsjPUAAJO7WX5fiGF2xoabrQNZ9lOfMdF7prsqMU94WUbsQqM2jyorYA44UI
-         Bxkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=bNh1RagaNmk+mawVUoE7ysB93szXp1ih53+M2GfhhEg=;
-        b=PPtiYKHN5cN8cFhDDauIF4DLzfhH7/AFR4pVVpruU97ohComrrn68g/HhTiR40TOVF
-         MsN0GJei9NBHF414mj1B86gWX3/yHFdii4PKD2UyWqiPIyvkzr4ODMKYHf4qYz4xap1H
-         exxw1yVUraElkD2cyXgM0oEUZBnzq/TPMMJ56mV1kjkcAViACFK3dQ8uhkzTdILII4sq
-         te7a3e6HA0GzewK0WKCEtxVD40iRN9dsdtWbCsiShrET5/Dc6LTsXtdZ/Se3LMF9TAHv
-         M+JG1/FZMF0zaQsEcbnJ5r3yYlul1LVSoeKiSbGJquU2RLD3dgSdeyqQY9TbCXy6obTf
-         Fz3w==
-X-Gm-Message-State: APjAAAV8s+u0aLqZEeqskWJ+cPw95s2uFjHcFLGIfu2NN7u663Ao/zwm
-        GLuTPdDbzWzYnNaTR9QtGfk=
-X-Google-Smtp-Source: APXvYqyJsyvOMQSKSLIL+4p328X2OZPQ4AaV5K4ZWSKsUBXQCbwD4sI+vwadqoMYtt0+WA1LEJU6Gg==
-X-Received: by 2002:a62:e915:: with SMTP id j21mr25539143pfh.239.1568000467415;
-        Sun, 08 Sep 2019 20:41:07 -0700 (PDT)
-Received: from software.domain.org ([103.118.43.97])
-        by smtp.gmail.com with ESMTPSA id z6sm12386781pgk.18.2019.09.08.20.41.01
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sun, 08 Sep 2019 20:41:06 -0700 (PDT)
-From:   Huacai Chen <chenhc@lemote.com>
-To:     Paul Burton <paul.burton@mips.com>,
+        id S1728040AbfIIG0z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 Sep 2019 02:26:55 -0400
+Received: from foss.arm.com ([217.140.110.172]:45010 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727983AbfIIG0y (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 9 Sep 2019 02:26:54 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 84286337;
+        Sun,  8 Sep 2019 23:26:53 -0700 (PDT)
+Received: from [10.162.43.129] (p8cg001049571a15.blr.arm.com [10.162.43.129])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5676C3F67D;
+        Sun,  8 Sep 2019 23:29:08 -0700 (PDT)
+Subject: Re: [PATCH 1/1] mm/pgtable/debug: Add test validating architecture
+ page table helpers
+To:     Gerald Schaefer <gerald.schaefer@de.ibm.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Steven Price <Steven.Price@arm.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sri Krishna chowdary <schowdary@nvidia.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
         Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>
-Cc:     linux-mips@linux-mips.org, linux-mips@vger.kernel.org,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Huang Pei <huangpei@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH] MIPS: Loongson: remove unnecessary loongson_llsc_mb()
-Date:   Mon,  9 Sep 2019 11:42:38 +0800
-Message-Id: <1568000558-11823-1-git-send-email-chenhc@lemote.com>
-X-Mailer: git-send-email 2.7.0
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+References: <1567497706-8649-1-git-send-email-anshuman.khandual@arm.com>
+ <1567497706-8649-2-git-send-email-anshuman.khandual@arm.com>
+ <20190904221618.1b624a98@thinkpad>
+ <20e3044d-2af5-b27b-7653-cec53bdec941@arm.com>
+ <20190905190629.523bdb87@thinkpad>
+ <3c609e33-afbb-ffaf-481a-6d225a06d1d0@arm.com>
+ <20190906210346.5ecbff01@thinkpad>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <3d5de35f-8192-1c75-50a9-03e66e3b8e5c@arm.com>
+Date:   Mon, 9 Sep 2019 11:56:50 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
+MIME-Version: 1.0
+In-Reply-To: <20190906210346.5ecbff01@thinkpad>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Commit 1c6c1ca318585f1 ("mips/atomic: Fix loongson_llsc_mb() wreckage")
-fix the description of Loongson-3's llsc bug and try to add all missing
-loongson_llsc_mb(). This is a good job but there are some unnecessary
-memory barries:
 
-loongson_llsc_mb() is a Loongson-specific problem. smp_llsc_mb(),
-smp_mb__before_llsc(), loongson_llsc_mb() and and other memory barriers
-are essentially the same thing on Loongson-3. So we don't need to add
-loongson_llsc_mb() if there is already a smp_mb__before_llsc() or other
-types of memory barriers.
 
-So, most of loongson_llsc_mb() in Peter's patch is superfluous and can
-be removed, except the one in test_and_set_bit_lock().
+On 09/07/2019 12:33 AM, Gerald Schaefer wrote:
+> On Fri, 6 Sep 2019 11:58:59 +0530
+> Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+> 
+>> On 09/05/2019 10:36 PM, Gerald Schaefer wrote:
+>>> On Thu, 5 Sep 2019 14:48:14 +0530
+>>> Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+>>>   
+>>>>> [...]    
+>>>>>> +
+>>>>>> +#if !defined(__PAGETABLE_PMD_FOLDED) && !defined(__ARCH_HAS_4LEVEL_HACK)
+>>>>>> +static void pud_clear_tests(pud_t *pudp)
+>>>>>> +{
+>>>>>> +	memset(pudp, RANDOM_NZVALUE, sizeof(pud_t));
+>>>>>> +	pud_clear(pudp);
+>>>>>> +	WARN_ON(!pud_none(READ_ONCE(*pudp)));
+>>>>>> +}    
+>>>>>
+>>>>> For pgd/p4d/pud_clear(), we only clear if the page table level is present
+>>>>> and not folded. The memset() here overwrites the table type bits, so
+>>>>> pud_clear() will not clear anything on s390 and the pud_none() check will
+>>>>> fail.
+>>>>> Would it be possible to OR a (larger) random value into the table, so that
+>>>>> the lower 12 bits would be preserved?    
+>>>>
+>>>> So the suggestion is instead of doing memset() on entry with RANDOM_NZVALUE,
+>>>> it should OR a large random value preserving lower 12 bits. Hmm, this should
+>>>> still do the trick for other platforms, they just need non zero value. So on
+>>>> s390, the lower 12 bits on the page table entry already has valid value while
+>>>> entering this function which would make sure that pud_clear() really does
+>>>> clear the entry ?  
+>>>
+>>> Yes, in theory the table entry on s390 would have the type set in the last
+>>> 4 bits, so preserving those would be enough. If it does not conflict with
+>>> others, I would still suggest preserving all 12 bits since those would contain
+>>> arch-specific flags in general, just to be sure. For s390, the pte/pmd tests
+>>> would also work with the memset, but for consistency I think the same logic
+>>> should be used in all pxd_clear_tests.  
+>>
+>> Makes sense but..
+>>
+>> There is a small challenge with this. Modifying individual bits on a given
+>> page table entry from generic code like this test case is bit tricky. That
+>> is because there are not enough helpers to create entries with an absolute
+>> value. This would have been easier if all the platforms provided functions
+>> like __pxx() which is not the case now. Otherwise something like this should
+>> have worked.
+>>
+>>
+>> pud_t pud = READ_ONCE(*pudp);
+>> pud = __pud(pud_val(pud) | RANDOM_VALUE (keeping lower 12 bits 0))
+>> WRITE_ONCE(*pudp, pud);
+>>
+>> But __pud() will fail to build in many platforms.
+> 
+> Hmm, I simply used this on my system to make pud_clear_tests() work, not
+> sure if it works on all archs:
+> 
+> pud_val(*pudp) |= RANDOM_NZVALUE;
 
-mips_atomic_set() is not used on Loongson-3, and if in some cases we use
-it, the user-to-kernel context switching probably has the same effect of
-a memory barrier. But anyway, add a memory barrier in mips_atomic_set()
-is harmless, so I keep this one.
+Which compiles on arm64 but then fails on x86 because of the way pmd_val()
+has been defined there. on arm64 and s390 (with many others) pmd_val() is
+a macro which still got the variable that can be used as lvalue but that is
+not true for some other platforms like x86.
 
-For cmpxchg.h, the 32-bit version of cmpxchg64() doesn't need to be care
-about because Loongson64 can support 64-bit kernel only, cmpxchg() need
-memory barriers and it already has, cmpxchg_local() doesn't need memory
-barriers because only the local cpu can write, which is the same as all
-other local_t ops. So I remove all loongson_llsc_mb() in cmpxchg.h from
-Peter's patch.
+arch/arm64/include/asm/pgtable-types.h:	#define pmd_val(x)	((x).pmd)
+arch/s390/include/asm/page.h:		#define pmd_val(x)	((x).pmd)
+arch/x86/include/asm/pgtable.h:		#define pmd_val(x)       native_pmd_val(x)
 
-To summarize:
-I keep Peter's comments and also keep necessary loongson_llsc_mb() in
-test_and_set_bit_lock()/mips_atomic_set() from Peter's patch, but all
-superfluous memory barries are removed.
+static inline pmdval_t native_pmd_val(pmd_t pmd)
+{
+        return pmd.pmd;
+}
 
-Cc: Huang Pei <huangpei@loongson.cn>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
----
- arch/mips/include/asm/atomic.h  | 5 ++---
- arch/mips/include/asm/bitops.h  | 4 ----
- arch/mips/include/asm/cmpxchg.h | 5 -----
- 3 files changed, 2 insertions(+), 12 deletions(-)
+Unless I am mistaken, the return value from this function can not be used as
+lvalue for future assignments.
 
-diff --git a/arch/mips/include/asm/atomic.h b/arch/mips/include/asm/atomic.h
-index bb8658cc..4f6e538 100644
---- a/arch/mips/include/asm/atomic.h
-+++ b/arch/mips/include/asm/atomic.h
-@@ -193,7 +193,6 @@ static __inline__ int atomic_sub_if_positive(int i, atomic_t * v)
- 	if (kernel_uses_llsc) {
- 		int temp;
- 
--		loongson_llsc_mb();
- 		__asm__ __volatile__(
- 		"	.set	push					\n"
- 		"	.set	"MIPS_ISA_LEVEL"			\n"
-@@ -201,12 +200,12 @@ static __inline__ int atomic_sub_if_positive(int i, atomic_t * v)
- 		"	.set	pop					\n"
- 		"	subu	%0, %1, %3				\n"
- 		"	move	%1, %0					\n"
--		"	bltz	%0, 2f					\n"
-+		"	bltz	%0, 1f					\n"
- 		"	.set	push					\n"
- 		"	.set	"MIPS_ISA_LEVEL"			\n"
- 		"	sc	%1, %2					\n"
- 		"\t" __scbeqz "	%1, 1b					\n"
--		"2:							\n"
-+		"1:							\n"
- 		"	.set	pop					\n"
- 		: "=&r" (result), "=&r" (temp),
- 		  "+" GCC_OFF_SMALL_ASM() (v->counter)
-diff --git a/arch/mips/include/asm/bitops.h b/arch/mips/include/asm/bitops.h
-index 985d6a0..5016b96 100644
---- a/arch/mips/include/asm/bitops.h
-+++ b/arch/mips/include/asm/bitops.h
-@@ -257,7 +257,6 @@ static inline int test_and_set_bit(unsigned long nr,
- 		unsigned long *m = ((unsigned long *) addr) + (nr >> SZLONG_LOG);
- 		unsigned long temp;
- 
--		loongson_llsc_mb();
- 		do {
- 			__asm__ __volatile__(
- 			"	.set	push				\n"
-@@ -374,7 +373,6 @@ static inline int test_and_clear_bit(unsigned long nr,
- 		unsigned long *m = ((unsigned long *) addr) + (nr >> SZLONG_LOG);
- 		unsigned long temp;
- 
--		loongson_llsc_mb();
- 		do {
- 			__asm__ __volatile__(
- 			"	" __LL	"%0, %1 # test_and_clear_bit	\n"
-@@ -390,7 +388,6 @@ static inline int test_and_clear_bit(unsigned long nr,
- 		unsigned long *m = ((unsigned long *) addr) + (nr >> SZLONG_LOG);
- 		unsigned long temp;
- 
--		loongson_llsc_mb();
- 		do {
- 			__asm__ __volatile__(
- 			"	.set	push				\n"
-@@ -450,7 +447,6 @@ static inline int test_and_change_bit(unsigned long nr,
- 		unsigned long *m = ((unsigned long *) addr) + (nr >> SZLONG_LOG);
- 		unsigned long temp;
- 
--		loongson_llsc_mb();
- 		do {
- 			__asm__ __volatile__(
- 			"	.set	push				\n"
-diff --git a/arch/mips/include/asm/cmpxchg.h b/arch/mips/include/asm/cmpxchg.h
-index 79bf34e..dd39bae 100644
---- a/arch/mips/include/asm/cmpxchg.h
-+++ b/arch/mips/include/asm/cmpxchg.h
-@@ -46,7 +46,6 @@ extern unsigned long __xchg_called_with_bad_pointer(void)
- 	__typeof(*(m)) __ret;						\
- 									\
- 	if (kernel_uses_llsc) {						\
--		loongson_llsc_mb();					\
- 		__asm__ __volatile__(					\
- 		"	.set	push				\n"	\
- 		"	.set	noat				\n"	\
-@@ -118,7 +117,6 @@ static inline unsigned long __xchg(volatile void *ptr, unsigned long x,
- 	__typeof(*(m)) __ret;						\
- 									\
- 	if (kernel_uses_llsc) {						\
--		loongson_llsc_mb();					\
- 		__asm__ __volatile__(					\
- 		"	.set	push				\n"	\
- 		"	.set	noat				\n"	\
-@@ -136,7 +134,6 @@ static inline unsigned long __xchg(volatile void *ptr, unsigned long x,
- 		: "=&r" (__ret), "=" GCC_OFF_SMALL_ASM() (*m)		\
- 		: GCC_OFF_SMALL_ASM() (*m), "Jr" (old), "Jr" (new)	\
- 		: __LLSC_CLOBBER);					\
--		loongson_llsc_mb();					\
- 	} else {							\
- 		unsigned long __flags;					\
- 									\
-@@ -232,7 +229,6 @@ static inline unsigned long __cmpxchg64(volatile void *ptr,
- 	 */
- 	local_irq_save(flags);
- 
--	loongson_llsc_mb();
- 	asm volatile(
- 	"	.set	push				\n"
- 	"	.set	" MIPS_ISA_ARCH_LEVEL "		\n"
-@@ -278,7 +274,6 @@ static inline unsigned long __cmpxchg64(volatile void *ptr,
- 	  "r" (old),
- 	  "r" (new)
- 	: "memory");
--	loongson_llsc_mb();
- 
- 	local_irq_restore(flags);
- 	return ret;
--- 
-2.7.0
+mm/arch_pgtable_test.c: In function ‘pud_clear_tests’:
+mm/arch_pgtable_test.c:156:17: error: lvalue required as left operand of assignment
+  pud_val(*pudp) |= RANDOM_ORVALUE;
+                 ^~
+AFAICS pxx_val() were never intended to be used as lvalue and using it that way
+might just happen to work on all those platforms which define them as macros.
+They meant to just provide values for an entry as being determined by the platform.
 
+In principle pxx_val() on an entry was not supposed to be modified directly from
+generic code without going through (again) platform helpers for any specific state
+change (write, old, dirty, special, huge etc). The current use case is a deviation
+for that.
+
+I originally went with memset() just to load up the entries with non-zero value so
+that we know pxx_clear() are really doing the clearing. The same is being followed
+for all pxx_same() checks.
+
+Another way for fixing the problem would be to mark them with known attributes
+like write/young/huge etc instead which for sure will create non-zero entries.
+We can do that for pxx_clear() and pxx_same() tests and drop RANDOM_NZVALUE
+completely. Does that sound good ?
+
+> 
+>>
+>> The other alternative will be to make sure memset() happens on all other
+>> bits except the lower 12 bits which will depend on endianness. If s390
+>> has a fixed endianness, we can still use either of them which will hold
+>> good for others as well.
+>>
+>> memset(pudp, RANDOM_NZVALUE, sizeof(pud_t) - 3);
+>>
+>> OR
+>>
+>> memset(pudp + 3, RANDOM_NZVALUE, sizeof(pud_t) - 3);
+>>
+>>>
+>>> However, there is another issue on s390 which will make this only work
+>>> for pud_clear_tests(), and not for the p4d/pgd_tests. The problem is that
+>>> mm_alloc() will only give you a 3-level page table initially on s390.
+>>> This means that pudp == p4dp == pgdp, and so the p4d/pgd_tests will
+>>> both see the pud level (of course this also affects other tests).  
+>>
+>> Got it.
+>>
+>>>
+>>> Not sure yet how to fix this, i.e. how to initialize/update the page table
+>>> to 5 levels. We can handle 5 level page tables, and it would be good if
+>>> all levels could be tested, but using mm_alloc() to establish the page
+>>> tables might not work on s390. One option could be to provide an arch-hook
+>>> or weak function to allocate/initialize the mm.  
+>>
+>> Sure, got it. Though I plan to do add some arch specific tests or init sequence
+>> like the above later on but for now the idea is to get the smallest possible set
+>> of test cases which builds and runs on all platforms without requiring any arch
+>> specific hooks or special casing (#ifdef) to be agreed upon broadly and accepted.
+>>
+>> Do you think this is absolutely necessary on s390 for the very first set of test
+>> cases or we can add this later on as an improvement ?
+> 
+> It can be added later, no problem. I did not expect this to work flawlessly
+> on s390 right from the start anyway, with all our peculiarities, so don't
+> let this hinder you. I might come up with an add-on patch later.
+
+Sure.
+
+> 
+> Actually, using get_unmapped_area() as suggested by Kirill could also
+> solve this issue. We do create a new mm with 3-level page tables on s390,
+> and the dynamic upgrade to 4 or 5 levels is then triggered exactly by
+> arch_get_unmapped_area(), depending on the addr. But I currently don't
+> see how / where arch_get_unmapped_area() is set up for such a dummy mm
+> created by mm_alloc().
+
+Normally they are set during program loading but we can set it up explicitly
+for the test mm_struct if we need to but there are some other challenges.
+
+load_[aout|elf|flat|..]_binary()
+	setup_new_exec()
+		arch_pick_mmap_layout().
+
+I did some initial experiments around get_unmapped_area(). Seems bit tricky
+to get it working on a pure 'test' mm_struct. It expects a real user context
+in the form of current->mm.
+
+get_unmapped_area()
+{
+	....
+	get_area = current->mm->get_unmapped_area;
+	....
+	addr = get_area(file, addr, len, pgoff, flags); {
+		....
+		struct mm_struct *mm = current->mm;
+		....
+		if (addr) {
+			...
+			vma = find_vma_prev(mm, addr, &prev);
+		}
+		....
+		vm_unmapped_area() {
+			struct mm_struct *mm = current->mm;
+			....
+			/* Walks across mm->mm_rb.rb_node */
+		}
+	}
+	....
+}	
+
+Simple call like get_unmapped_area(NULL, 0, PAGE_SIZE, 0, 0) to get an
+address fails right away on current->mm->get_unmapped_area which does
+not have a valid value in the kernel context.
+
+There might be two methods to get around this problem
+
+1) Write a custom get_unmapped_area() imitating the real one but going
+   around the problem by taking an appropriately initialized mm_struct
+   instead of current->mm.
+
+2) Create dummy user task with dummy mm, switch 'current' context before
+   calling into get_unmapped_area() and switch back again. Dont know if
+   this is even possible.
+
+Wondering if this might deviate too much from the original goal of
+testing the page table helpers.
+
+Looking back again at the proposed test vaddr, wondering what will be the
+real problem in case it goes beyond user address range ? Will pxx_alloc()
+fail to create page table ranges at required level ? Apart from skipping
+pgtable_page_ctor/dtor for page table pages, it might not really affect
+any helpers as such.
+
+VADDR_TEST (PGDIR_SIZE + [P4D_SIZE] + PUD_SIZE + PMD_SIZE + PAGE_SIZE)
+
+OR
+
+A random page aligned address in [FIRST_USER_ADDRESS..TASK_SIZE] range ?
