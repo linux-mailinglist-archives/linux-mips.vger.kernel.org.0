@@ -2,25 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4A5AD317
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2019 08:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64890ADBEA
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2019 17:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728040AbfIIG0z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 Sep 2019 02:26:55 -0400
-Received: from foss.arm.com ([217.140.110.172]:45010 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727983AbfIIG0y (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 9 Sep 2019 02:26:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 84286337;
-        Sun,  8 Sep 2019 23:26:53 -0700 (PDT)
-Received: from [10.162.43.129] (p8cg001049571a15.blr.arm.com [10.162.43.129])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5676C3F67D;
-        Sun,  8 Sep 2019 23:29:08 -0700 (PDT)
-Subject: Re: [PATCH 1/1] mm/pgtable/debug: Add test validating architecture
- page table helpers
-To:     Gerald Schaefer <gerald.schaefer@de.ibm.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        id S1728535AbfIIPNt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 Sep 2019 11:13:49 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:37828 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728046AbfIIPNs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Sep 2019 11:13:48 -0400
+Received: by mail-ed1-f67.google.com with SMTP id i1so13320367edv.4
+        for <linux-mips@vger.kernel.org>; Mon, 09 Sep 2019 08:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ptGQKrJwsC6QNZJxPTcIFHrTBzodlhROW8EV9Cr6mks=;
+        b=lqK7soM8Ql8EG2Ftn3h3hR+olO0M3L5hi5yR7FV9iLEmOGD4dckGUM3j+cW0/Dime1
+         tcaru2ydfakL0qOGX9NW71rS5xXhlEsWXHR5tZTvN8nAdg3jRR7H91vVYT27iUT4zLQL
+         /8sd6tx6RSZch+NQKzd2gDDMnTl6lfsTiDI17WOQGfxtCfWUReS2eIOCKDQqmHkeOOb6
+         CQ29hW9JyqW2659VgWaWS03hTBmcSoCzS6kj58DkCjvhtjcgvBnAojuQ6LW0JN5ngCCR
+         oxmuahVreVZAzOjjnErCDvkrgGlDpVGWckjhAKTQyS0XAzH5VKEiZW6qr15a3nTgG9T0
+         I28w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ptGQKrJwsC6QNZJxPTcIFHrTBzodlhROW8EV9Cr6mks=;
+        b=crNxTH8g3IlZkD9WEWidKjSF/i7O5xqiu/9ovgbwAYUbguvzZGMKpTU5LHLMz2qtyJ
+         X5uJX2rF+8FBt/LJQ18voOQ0Ro6ed+2cmKPhv3G9Av3sCEC6t36bMGG2KKVfrXD10cCA
+         EJwYoPJsuf19Rhu4Xz/NI7mghRmBeWpFgMPU34y/osW11mAwJKePRi1BFFcHhK0GLx1m
+         r0heYWcuMGV6CE5nlxpel24PAqRyv1FVRoQYlwrlpVan4fpQnr/BUVWx3dVdpYCQcy8J
+         HE38hSET0tKu172tHVNZo12V2aX8ZiX2XNv+UJ66msYJV6GTCPF/cnSPKf5kj81Df/LH
+         sphw==
+X-Gm-Message-State: APjAAAVFi9ZelOQvJDne7M//szniQlgot+yVs+c34G0tp0rdTfL9UdhA
+        E6x6sv3jIoCDCzNgteHSXDSAig==
+X-Google-Smtp-Source: APXvYqwJokBcl6isKFmA//BZZyEEgwoj2uNW2kTs0Tg/Y35qXurjsqN7Jks2aTze1VFcwFZl9Fv8+Q==
+X-Received: by 2002:a17:906:c304:: with SMTP id s4mr20002026ejz.71.1568042026870;
+        Mon, 09 Sep 2019 08:13:46 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id bf19sm3010529edb.23.2019.09.09.08.13.45
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 09 Sep 2019 08:13:46 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id CD9501003B5; Mon,  9 Sep 2019 18:13:44 +0300 (+03)
+Date:   Mon, 9 Sep 2019 18:13:44 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Gerald Schaefer <gerald.schaefer@de.ibm.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -54,6 +84,9 @@ Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
         linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] mm/pgtable/debug: Add test validating architecture
+ page table helpers
+Message-ID: <20190909151344.ghfypjbgxyosjdk3@box>
 References: <1567497706-8649-1-git-send-email-anshuman.khandual@arm.com>
  <1567497706-8649-2-git-send-email-anshuman.khandual@arm.com>
  <20190904221618.1b624a98@thinkpad>
@@ -61,232 +94,88 @@ References: <1567497706-8649-1-git-send-email-anshuman.khandual@arm.com>
  <20190905190629.523bdb87@thinkpad>
  <3c609e33-afbb-ffaf-481a-6d225a06d1d0@arm.com>
  <20190906210346.5ecbff01@thinkpad>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <3d5de35f-8192-1c75-50a9-03e66e3b8e5c@arm.com>
-Date:   Mon, 9 Sep 2019 11:56:50 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+ <3d5de35f-8192-1c75-50a9-03e66e3b8e5c@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20190906210346.5ecbff01@thinkpad>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3d5de35f-8192-1c75-50a9-03e66e3b8e5c@arm.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 09/07/2019 12:33 AM, Gerald Schaefer wrote:
-> On Fri, 6 Sep 2019 11:58:59 +0530
-> Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+On Mon, Sep 09, 2019 at 11:56:50AM +0530, Anshuman Khandual wrote:
 > 
->> On 09/05/2019 10:36 PM, Gerald Schaefer wrote:
->>> On Thu, 5 Sep 2019 14:48:14 +0530
->>> Anshuman Khandual <anshuman.khandual@arm.com> wrote:
->>>   
->>>>> [...]    
->>>>>> +
->>>>>> +#if !defined(__PAGETABLE_PMD_FOLDED) && !defined(__ARCH_HAS_4LEVEL_HACK)
->>>>>> +static void pud_clear_tests(pud_t *pudp)
->>>>>> +{
->>>>>> +	memset(pudp, RANDOM_NZVALUE, sizeof(pud_t));
->>>>>> +	pud_clear(pudp);
->>>>>> +	WARN_ON(!pud_none(READ_ONCE(*pudp)));
->>>>>> +}    
->>>>>
->>>>> For pgd/p4d/pud_clear(), we only clear if the page table level is present
->>>>> and not folded. The memset() here overwrites the table type bits, so
->>>>> pud_clear() will not clear anything on s390 and the pud_none() check will
->>>>> fail.
->>>>> Would it be possible to OR a (larger) random value into the table, so that
->>>>> the lower 12 bits would be preserved?    
->>>>
->>>> So the suggestion is instead of doing memset() on entry with RANDOM_NZVALUE,
->>>> it should OR a large random value preserving lower 12 bits. Hmm, this should
->>>> still do the trick for other platforms, they just need non zero value. So on
->>>> s390, the lower 12 bits on the page table entry already has valid value while
->>>> entering this function which would make sure that pud_clear() really does
->>>> clear the entry ?  
->>>
->>> Yes, in theory the table entry on s390 would have the type set in the last
->>> 4 bits, so preserving those would be enough. If it does not conflict with
->>> others, I would still suggest preserving all 12 bits since those would contain
->>> arch-specific flags in general, just to be sure. For s390, the pte/pmd tests
->>> would also work with the memset, but for consistency I think the same logic
->>> should be used in all pxd_clear_tests.  
->>
->> Makes sense but..
->>
->> There is a small challenge with this. Modifying individual bits on a given
->> page table entry from generic code like this test case is bit tricky. That
->> is because there are not enough helpers to create entries with an absolute
->> value. This would have been easier if all the platforms provided functions
->> like __pxx() which is not the case now. Otherwise something like this should
->> have worked.
->>
->>
->> pud_t pud = READ_ONCE(*pudp);
->> pud = __pud(pud_val(pud) | RANDOM_VALUE (keeping lower 12 bits 0))
->> WRITE_ONCE(*pudp, pud);
->>
->> But __pud() will fail to build in many platforms.
 > 
-> Hmm, I simply used this on my system to make pud_clear_tests() work, not
-> sure if it works on all archs:
+> On 09/07/2019 12:33 AM, Gerald Schaefer wrote:
+> > On Fri, 6 Sep 2019 11:58:59 +0530
+> > Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+> > 
+> >> On 09/05/2019 10:36 PM, Gerald Schaefer wrote:
+> >>> On Thu, 5 Sep 2019 14:48:14 +0530
+> >>> Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+> >>>   
+> >>>>> [...]    
+> >>>>>> +
+> >>>>>> +#if !defined(__PAGETABLE_PMD_FOLDED) && !defined(__ARCH_HAS_4LEVEL_HACK)
+> >>>>>> +static void pud_clear_tests(pud_t *pudp)
+> >>>>>> +{
+> >>>>>> +	memset(pudp, RANDOM_NZVALUE, sizeof(pud_t));
+> >>>>>> +	pud_clear(pudp);
+> >>>>>> +	WARN_ON(!pud_none(READ_ONCE(*pudp)));
+> >>>>>> +}    
+> >>>>>
+> >>>>> For pgd/p4d/pud_clear(), we only clear if the page table level is present
+> >>>>> and not folded. The memset() here overwrites the table type bits, so
+> >>>>> pud_clear() will not clear anything on s390 and the pud_none() check will
+> >>>>> fail.
+> >>>>> Would it be possible to OR a (larger) random value into the table, so that
+> >>>>> the lower 12 bits would be preserved?    
+> >>>>
+> >>>> So the suggestion is instead of doing memset() on entry with RANDOM_NZVALUE,
+> >>>> it should OR a large random value preserving lower 12 bits. Hmm, this should
+> >>>> still do the trick for other platforms, they just need non zero value. So on
+> >>>> s390, the lower 12 bits on the page table entry already has valid value while
+> >>>> entering this function which would make sure that pud_clear() really does
+> >>>> clear the entry ?  
+> >>>
+> >>> Yes, in theory the table entry on s390 would have the type set in the last
+> >>> 4 bits, so preserving those would be enough. If it does not conflict with
+> >>> others, I would still suggest preserving all 12 bits since those would contain
+> >>> arch-specific flags in general, just to be sure. For s390, the pte/pmd tests
+> >>> would also work with the memset, but for consistency I think the same logic
+> >>> should be used in all pxd_clear_tests.  
+> >>
+> >> Makes sense but..
+> >>
+> >> There is a small challenge with this. Modifying individual bits on a given
+> >> page table entry from generic code like this test case is bit tricky. That
+> >> is because there are not enough helpers to create entries with an absolute
+> >> value. This would have been easier if all the platforms provided functions
+> >> like __pxx() which is not the case now. Otherwise something like this should
+> >> have worked.
+> >>
+> >>
+> >> pud_t pud = READ_ONCE(*pudp);
+> >> pud = __pud(pud_val(pud) | RANDOM_VALUE (keeping lower 12 bits 0))
+> >> WRITE_ONCE(*pudp, pud);
+> >>
+> >> But __pud() will fail to build in many platforms.
+> > 
+> > Hmm, I simply used this on my system to make pud_clear_tests() work, not
+> > sure if it works on all archs:
+> > 
+> > pud_val(*pudp) |= RANDOM_NZVALUE;
 > 
-> pud_val(*pudp) |= RANDOM_NZVALUE;
+> Which compiles on arm64 but then fails on x86 because of the way pmd_val()
+> has been defined there.
 
-Which compiles on arm64 but then fails on x86 because of the way pmd_val()
-has been defined there. on arm64 and s390 (with many others) pmd_val() is
-a macro which still got the variable that can be used as lvalue but that is
-not true for some other platforms like x86.
+Use instead
 
-arch/arm64/include/asm/pgtable-types.h:	#define pmd_val(x)	((x).pmd)
-arch/s390/include/asm/page.h:		#define pmd_val(x)	((x).pmd)
-arch/x86/include/asm/pgtable.h:		#define pmd_val(x)       native_pmd_val(x)
+	*pudp = __pud(pud_val(*pudp) | RANDOM_NZVALUE);
 
-static inline pmdval_t native_pmd_val(pmd_t pmd)
-{
-        return pmd.pmd;
-}
+It *should* be more portable.
 
-Unless I am mistaken, the return value from this function can not be used as
-lvalue for future assignments.
-
-mm/arch_pgtable_test.c: In function ‘pud_clear_tests’:
-mm/arch_pgtable_test.c:156:17: error: lvalue required as left operand of assignment
-  pud_val(*pudp) |= RANDOM_ORVALUE;
-                 ^~
-AFAICS pxx_val() were never intended to be used as lvalue and using it that way
-might just happen to work on all those platforms which define them as macros.
-They meant to just provide values for an entry as being determined by the platform.
-
-In principle pxx_val() on an entry was not supposed to be modified directly from
-generic code without going through (again) platform helpers for any specific state
-change (write, old, dirty, special, huge etc). The current use case is a deviation
-for that.
-
-I originally went with memset() just to load up the entries with non-zero value so
-that we know pxx_clear() are really doing the clearing. The same is being followed
-for all pxx_same() checks.
-
-Another way for fixing the problem would be to mark them with known attributes
-like write/young/huge etc instead which for sure will create non-zero entries.
-We can do that for pxx_clear() and pxx_same() tests and drop RANDOM_NZVALUE
-completely. Does that sound good ?
-
-> 
->>
->> The other alternative will be to make sure memset() happens on all other
->> bits except the lower 12 bits which will depend on endianness. If s390
->> has a fixed endianness, we can still use either of them which will hold
->> good for others as well.
->>
->> memset(pudp, RANDOM_NZVALUE, sizeof(pud_t) - 3);
->>
->> OR
->>
->> memset(pudp + 3, RANDOM_NZVALUE, sizeof(pud_t) - 3);
->>
->>>
->>> However, there is another issue on s390 which will make this only work
->>> for pud_clear_tests(), and not for the p4d/pgd_tests. The problem is that
->>> mm_alloc() will only give you a 3-level page table initially on s390.
->>> This means that pudp == p4dp == pgdp, and so the p4d/pgd_tests will
->>> both see the pud level (of course this also affects other tests).  
->>
->> Got it.
->>
->>>
->>> Not sure yet how to fix this, i.e. how to initialize/update the page table
->>> to 5 levels. We can handle 5 level page tables, and it would be good if
->>> all levels could be tested, but using mm_alloc() to establish the page
->>> tables might not work on s390. One option could be to provide an arch-hook
->>> or weak function to allocate/initialize the mm.  
->>
->> Sure, got it. Though I plan to do add some arch specific tests or init sequence
->> like the above later on but for now the idea is to get the smallest possible set
->> of test cases which builds and runs on all platforms without requiring any arch
->> specific hooks or special casing (#ifdef) to be agreed upon broadly and accepted.
->>
->> Do you think this is absolutely necessary on s390 for the very first set of test
->> cases or we can add this later on as an improvement ?
-> 
-> It can be added later, no problem. I did not expect this to work flawlessly
-> on s390 right from the start anyway, with all our peculiarities, so don't
-> let this hinder you. I might come up with an add-on patch later.
-
-Sure.
-
-> 
-> Actually, using get_unmapped_area() as suggested by Kirill could also
-> solve this issue. We do create a new mm with 3-level page tables on s390,
-> and the dynamic upgrade to 4 or 5 levels is then triggered exactly by
-> arch_get_unmapped_area(), depending on the addr. But I currently don't
-> see how / where arch_get_unmapped_area() is set up for such a dummy mm
-> created by mm_alloc().
-
-Normally they are set during program loading but we can set it up explicitly
-for the test mm_struct if we need to but there are some other challenges.
-
-load_[aout|elf|flat|..]_binary()
-	setup_new_exec()
-		arch_pick_mmap_layout().
-
-I did some initial experiments around get_unmapped_area(). Seems bit tricky
-to get it working on a pure 'test' mm_struct. It expects a real user context
-in the form of current->mm.
-
-get_unmapped_area()
-{
-	....
-	get_area = current->mm->get_unmapped_area;
-	....
-	addr = get_area(file, addr, len, pgoff, flags); {
-		....
-		struct mm_struct *mm = current->mm;
-		....
-		if (addr) {
-			...
-			vma = find_vma_prev(mm, addr, &prev);
-		}
-		....
-		vm_unmapped_area() {
-			struct mm_struct *mm = current->mm;
-			....
-			/* Walks across mm->mm_rb.rb_node */
-		}
-	}
-	....
-}	
-
-Simple call like get_unmapped_area(NULL, 0, PAGE_SIZE, 0, 0) to get an
-address fails right away on current->mm->get_unmapped_area which does
-not have a valid value in the kernel context.
-
-There might be two methods to get around this problem
-
-1) Write a custom get_unmapped_area() imitating the real one but going
-   around the problem by taking an appropriately initialized mm_struct
-   instead of current->mm.
-
-2) Create dummy user task with dummy mm, switch 'current' context before
-   calling into get_unmapped_area() and switch back again. Dont know if
-   this is even possible.
-
-Wondering if this might deviate too much from the original goal of
-testing the page table helpers.
-
-Looking back again at the proposed test vaddr, wondering what will be the
-real problem in case it goes beyond user address range ? Will pxx_alloc()
-fail to create page table ranges at required level ? Apart from skipping
-pgtable_page_ctor/dtor for page table pages, it might not really affect
-any helpers as such.
-
-VADDR_TEST (PGDIR_SIZE + [P4D_SIZE] + PUD_SIZE + PMD_SIZE + PAGE_SIZE)
-
-OR
-
-A random page aligned address in [FIRST_USER_ADDRESS..TASK_SIZE] range ?
+-- 
+ Kirill A. Shutemov
