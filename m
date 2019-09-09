@@ -2,47 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D20FAD240
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2019 05:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D98AD253
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2019 05:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726968AbfIIDim (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 8 Sep 2019 23:38:42 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:36676 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727530AbfIIDim (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Sep 2019 23:38:42 -0400
-Received: by mail-pg1-f194.google.com with SMTP id l21so6984925pgm.3
-        for <linux-mips@vger.kernel.org>; Sun, 08 Sep 2019 20:38:40 -0700 (PDT)
+        id S1729280AbfIIDlI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 8 Sep 2019 23:41:08 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:39257 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728741AbfIIDlI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Sep 2019 23:41:08 -0400
+Received: by mail-pf1-f196.google.com with SMTP id s12so8271066pfe.6
+        for <linux-mips@vger.kernel.org>; Sun, 08 Sep 2019 20:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=2M8wonX+I/RkSuHWSt9hgNXjdwLVL1UDwyNQ3nExDNQ=;
-        b=NAF+6nawyJFMnZA+rrSlwfRH6LX0INQAka5ehJ83pw7fJy3nnlMJ4f260pLWrN1DF6
-         CYxfv7DmOzbgAFztrfI0v0RsWBGN2jHMstuQPWxUvuKzbsrZ04byDkrYVsecf7nYXWUJ
-         valwGcD2hk7THpn2aAWW+zAEaq4Yb+V4KxZj6OxPY+W/J8oTuMrfo/WWecvFrRI9+n4l
-         t7HpRL3mEsoGOTx1o0gV71RLm2FBIRU8vIombUjGhDv57EWr+0e8NAhbJAw03VrqvfXi
-         /TfDpp1+BQXPWCpNAs8b1+b2Ap8J0+vHf7jSUS5cI/6v/bs7+I37UjrNJ4l3Il7ik7hO
-         +wjQ==
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=bNh1RagaNmk+mawVUoE7ysB93szXp1ih53+M2GfhhEg=;
+        b=c3h4kzNcfU/5kjgyxNOAFigu/7846ZfOspcecQ7Ei8LBe9Mhs8TBdV7VQY+cNnTfyO
+         Iott/BzjOn0YTJ/jleUNjEzS1zWdN44XNowmpNP69EPWQ6WgpHJgmtYTL6jxuAoLaUc+
+         ebqvST5RWPuBdRdXRVL1Ejc5CwnhvDxkszfkYZGsv1YQVpcRWw9/COBfe+Bxp+bd6n0v
+         mgq0VlJ6IXb7pZmPpJ78iWq1dt7ZEwdZxqi6B1/h0oHud+d601yWlnVueTV6I8jV1FqJ
+         1ZChW78gVsjPUAAJO7WX5fiGF2xoabrQNZ9lOfMdF7prsqMU94WUbsQqM2jyorYA44UI
+         Bxkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=2M8wonX+I/RkSuHWSt9hgNXjdwLVL1UDwyNQ3nExDNQ=;
-        b=T7IaR/lwmASIxvC3pTrGPC6bT6+uBZ/enKiy21nYLdZIDtt83ueZDEMwyPlOE/O+2x
-         DhCozR9VGTd41AHQZC9iC21j+2/7k3rT1VYFWszvX5D9Wh2o4u1uqZ6KSBEev6EPmHHN
-         rSfiNTqiAUUFkBvFZ9/iWTUjvdNXHj5qwkYa3itj47qj6bYvxrnp8nqwtnF09sANsJHm
-         ODDM+jV+aMgfsX+7Ce7TF97mxknjUX+eh2r7/b7csAAaJX2olggCudVPTewWhuXDumXs
-         uzi0Bw73CXI3WP61f7uc7CuMoe0PtH2Jmwc6daaVh8T6WephsHNKvcBnNpXxw3i8WHLM
-         VnYQ==
-X-Gm-Message-State: APjAAAWsYDL9lJuLofCO5XjMqU3jhw8mHNlz97YiP1bDICRj8/A17+4d
-        uldKmwCG8aTnWfrW3qe6E8QatV871XN2gQ==
-X-Google-Smtp-Source: APXvYqyl6lMEoDDYn9hkhUDArDOxYZiM5hTcf3L7LpTU80V0U35KA06Ix3Hvgdhlvk9cLc/9qCnghg==
-X-Received: by 2002:a17:90a:4c:: with SMTP id 12mr22331110pjb.40.1568000320101;
-        Sun, 08 Sep 2019 20:38:40 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=bNh1RagaNmk+mawVUoE7ysB93szXp1ih53+M2GfhhEg=;
+        b=PPtiYKHN5cN8cFhDDauIF4DLzfhH7/AFR4pVVpruU97ohComrrn68g/HhTiR40TOVF
+         MsN0GJei9NBHF414mj1B86gWX3/yHFdii4PKD2UyWqiPIyvkzr4ODMKYHf4qYz4xap1H
+         exxw1yVUraElkD2cyXgM0oEUZBnzq/TPMMJ56mV1kjkcAViACFK3dQ8uhkzTdILII4sq
+         te7a3e6HA0GzewK0WKCEtxVD40iRN9dsdtWbCsiShrET5/Dc6LTsXtdZ/Se3LMF9TAHv
+         M+JG1/FZMF0zaQsEcbnJ5r3yYlul1LVSoeKiSbGJquU2RLD3dgSdeyqQY9TbCXy6obTf
+         Fz3w==
+X-Gm-Message-State: APjAAAV8s+u0aLqZEeqskWJ+cPw95s2uFjHcFLGIfu2NN7u663Ao/zwm
+        GLuTPdDbzWzYnNaTR9QtGfk=
+X-Google-Smtp-Source: APXvYqyJsyvOMQSKSLIL+4p328X2OZPQ4AaV5K4ZWSKsUBXQCbwD4sI+vwadqoMYtt0+WA1LEJU6Gg==
+X-Received: by 2002:a62:e915:: with SMTP id j21mr25539143pfh.239.1568000467415;
+        Sun, 08 Sep 2019 20:41:07 -0700 (PDT)
 Received: from software.domain.org ([103.118.43.97])
-        by smtp.gmail.com with ESMTPSA id b24sm13939437pfi.75.2019.09.08.20.38.34
+        by smtp.gmail.com with ESMTPSA id z6sm12386781pgk.18.2019.09.08.20.41.01
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sun, 08 Sep 2019 20:38:39 -0700 (PDT)
+        Sun, 08 Sep 2019 20:41:06 -0700 (PDT)
 From:   Huacai Chen <chenhc@lemote.com>
 To:     Paul Burton <paul.burton@mips.com>,
         Ralf Baechle <ralf@linux-mips.org>,
@@ -51,151 +50,165 @@ Cc:     linux-mips@linux-mips.org, linux-mips@vger.kernel.org,
         Fuxin Zhang <zhangfx@lemote.com>,
         Zhangjin Wu <wuzhangjin@gmail.com>,
         Huacai Chen <chenhuacai@gmail.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH V1 3/3] MIPS: Loongson-3: Add CSR IPI support
-Date:   Mon,  9 Sep 2019 11:38:23 +0800
-Message-Id: <1568000303-771-3-git-send-email-chenhc@lemote.com>
+        Huacai Chen <chenhc@lemote.com>,
+        Huang Pei <huangpei@loongson.cn>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH] MIPS: Loongson: remove unnecessary loongson_llsc_mb()
+Date:   Mon,  9 Sep 2019 11:42:38 +0800
+Message-Id: <1568000558-11823-1-git-send-email-chenhc@lemote.com>
 X-Mailer: git-send-email 2.7.0
-In-Reply-To: <1568000303-771-1-git-send-email-chenhc@lemote.com>
-References: <1568000303-771-1-git-send-email-chenhc@lemote.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-CSR IPI and legacy MMIO use the same infrastructure, but CSR IPI is
-faster than legacy MMIO IPI. This patch enable CSR IPI if possible
-(except for MailBox, because CSR IPI is too complicated for MailBox).
+Commit 1c6c1ca318585f1 ("mips/atomic: Fix loongson_llsc_mb() wreckage")
+fix the description of Loongson-3's llsc bug and try to add all missing
+loongson_llsc_mb(). This is a good job but there are some unnecessary
+memory barries:
 
+loongson_llsc_mb() is a Loongson-specific problem. smp_llsc_mb(),
+smp_mb__before_llsc(), loongson_llsc_mb() and and other memory barriers
+are essentially the same thing on Loongson-3. So we don't need to add
+loongson_llsc_mb() if there is already a smp_mb__before_llsc() or other
+types of memory barriers.
+
+So, most of loongson_llsc_mb() in Peter's patch is superfluous and can
+be removed, except the one in test_and_set_bit_lock().
+
+mips_atomic_set() is not used on Loongson-3, and if in some cases we use
+it, the user-to-kernel context switching probably has the same effect of
+a memory barrier. But anyway, add a memory barrier in mips_atomic_set()
+is harmless, so I keep this one.
+
+For cmpxchg.h, the 32-bit version of cmpxchg64() doesn't need to be care
+about because Loongson64 can support 64-bit kernel only, cmpxchg() need
+memory barriers and it already has, cmpxchg_local() doesn't need memory
+barriers because only the local cpu can write, which is the same as all
+other local_t ops. So I remove all loongson_llsc_mb() in cmpxchg.h from
+Peter's patch.
+
+To summarize:
+I keep Peter's comments and also keep necessary loongson_llsc_mb() in
+test_and_set_bit_lock()/mips_atomic_set() from Peter's patch, but all
+superfluous memory barries are removed.
+
+Cc: Huang Pei <huangpei@loongson.cn>
+Cc: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Huacai Chen <chenhc@lemote.com>
 ---
- arch/mips/loongson64/loongson-3/smp.c | 70 +++++++++++++++++++++++++++++++----
- 1 file changed, 62 insertions(+), 8 deletions(-)
+ arch/mips/include/asm/atomic.h  | 5 ++---
+ arch/mips/include/asm/bitops.h  | 4 ----
+ arch/mips/include/asm/cmpxchg.h | 5 -----
+ 3 files changed, 2 insertions(+), 12 deletions(-)
 
-diff --git a/arch/mips/loongson64/loongson-3/smp.c b/arch/mips/loongson64/loongson-3/smp.c
-index e999bb1..de8e074 100644
---- a/arch/mips/loongson64/loongson-3/smp.c
-+++ b/arch/mips/loongson64/loongson-3/smp.c
-@@ -18,6 +18,7 @@
- #include <asm/tlbflush.h>
- #include <asm/cacheflush.h>
- #include <loongson.h>
-+#include <loongson_regs.h>
- #include <workarounds.h>
+diff --git a/arch/mips/include/asm/atomic.h b/arch/mips/include/asm/atomic.h
+index bb8658cc..4f6e538 100644
+--- a/arch/mips/include/asm/atomic.h
++++ b/arch/mips/include/asm/atomic.h
+@@ -193,7 +193,6 @@ static __inline__ int atomic_sub_if_positive(int i, atomic_t * v)
+ 	if (kernel_uses_llsc) {
+ 		int temp;
  
- #include "smp.h"
-@@ -48,6 +49,62 @@ static uint32_t core0_c0count[NR_CPUS];
- 		__wbflush();			\
- 	} while (0)
+-		loongson_llsc_mb();
+ 		__asm__ __volatile__(
+ 		"	.set	push					\n"
+ 		"	.set	"MIPS_ISA_LEVEL"			\n"
+@@ -201,12 +200,12 @@ static __inline__ int atomic_sub_if_positive(int i, atomic_t * v)
+ 		"	.set	pop					\n"
+ 		"	subu	%0, %1, %3				\n"
+ 		"	move	%1, %0					\n"
+-		"	bltz	%0, 2f					\n"
++		"	bltz	%0, 1f					\n"
+ 		"	.set	push					\n"
+ 		"	.set	"MIPS_ISA_LEVEL"			\n"
+ 		"	sc	%1, %2					\n"
+ 		"\t" __scbeqz "	%1, 1b					\n"
+-		"2:							\n"
++		"1:							\n"
+ 		"	.set	pop					\n"
+ 		: "=&r" (result), "=&r" (temp),
+ 		  "+" GCC_OFF_SMALL_ASM() (v->counter)
+diff --git a/arch/mips/include/asm/bitops.h b/arch/mips/include/asm/bitops.h
+index 985d6a0..5016b96 100644
+--- a/arch/mips/include/asm/bitops.h
++++ b/arch/mips/include/asm/bitops.h
+@@ -257,7 +257,6 @@ static inline int test_and_set_bit(unsigned long nr,
+ 		unsigned long *m = ((unsigned long *) addr) + (nr >> SZLONG_LOG);
+ 		unsigned long temp;
  
-+u32 (*ipi_read_clear)(int cpu);
-+void (*ipi_write_action)(int cpu, u32 action);
-+
-+static u32 csr_ipi_read_clear(int cpu)
-+{
-+	u32 action;
-+
-+	/* Load the ipi register to figure out what we're supposed to do */
-+	action = csr_readl(LOONGSON_CSR_IPI_STATUS);
-+	/* Clear the ipi register to clear the interrupt */
-+	csr_writel(action, LOONGSON_CSR_IPI_CLEAR);
-+
-+	return action;
-+}
-+
-+static void csr_ipi_write_action(int cpu, u32 action)
-+{
-+	unsigned int irq = 0;
-+
-+	while ((irq = ffs(action))) {
-+		uint32_t val = CSR_IPI_SEND_BLOCK;
-+		val |= (irq - 1);
-+		val |= (cpu << CSR_IPI_SEND_CPU_SHIFT);
-+		csr_writel(val, LOONGSON_CSR_IPI_SEND);
-+		action &= ~BIT(irq - 1);
-+	}
-+}
-+
-+static u32 legacy_ipi_read_clear(int cpu)
-+{
-+	u32 action;
-+
-+	/* Load the ipi register to figure out what we're supposed to do */
-+	action = loongson3_ipi_read32(ipi_status0_regs[cpu_logical_map(cpu)]);
-+	/* Clear the ipi register to clear the interrupt */
-+	loongson3_ipi_write32(action, ipi_clear0_regs[cpu_logical_map(cpu)]);
-+
-+	return action;
-+}
-+
-+static void legacy_ipi_write_action(int cpu, u32 action)
-+{
-+	loongson3_ipi_write32((u32)action, ipi_set0_regs[cpu]);
-+}
-+
-+static void csr_ipi_probe(void)
-+{
-+	if (cpu_has_csr() && csr_readl(LOONGSON_CSR_FEATURES) & LOONGSON_CSRF_IPI) {
-+		ipi_read_clear = csr_ipi_read_clear;
-+		ipi_write_action = csr_ipi_write_action;
-+	} else {
-+		ipi_read_clear = legacy_ipi_read_clear;
-+		ipi_write_action = legacy_ipi_write_action;
-+	}
-+}
-+
- static void ipi_set0_regs_init(void)
- {
- 	ipi_set0_regs[0] = (void *)
-@@ -233,7 +290,7 @@ static void ipi_mailbox_buf_init(void)
-  */
- static void loongson3_send_ipi_single(int cpu, unsigned int action)
- {
--	loongson3_ipi_write32((u32)action, ipi_set0_regs[cpu_logical_map(cpu)]);
-+	ipi_write_action(cpu_logical_map(cpu), (u32)action);
- }
+-		loongson_llsc_mb();
+ 		do {
+ 			__asm__ __volatile__(
+ 			"	.set	push				\n"
+@@ -374,7 +373,6 @@ static inline int test_and_clear_bit(unsigned long nr,
+ 		unsigned long *m = ((unsigned long *) addr) + (nr >> SZLONG_LOG);
+ 		unsigned long temp;
  
- static void
-@@ -242,14 +299,14 @@ loongson3_send_ipi_mask(const struct cpumask *mask, unsigned int action)
- 	unsigned int i;
+-		loongson_llsc_mb();
+ 		do {
+ 			__asm__ __volatile__(
+ 			"	" __LL	"%0, %1 # test_and_clear_bit	\n"
+@@ -390,7 +388,6 @@ static inline int test_and_clear_bit(unsigned long nr,
+ 		unsigned long *m = ((unsigned long *) addr) + (nr >> SZLONG_LOG);
+ 		unsigned long temp;
  
- 	for_each_cpu(i, mask)
--		loongson3_ipi_write32((u32)action, ipi_set0_regs[cpu_logical_map(i)]);
-+		ipi_write_action(cpu_logical_map(i), (u32)action);
- }
+-		loongson_llsc_mb();
+ 		do {
+ 			__asm__ __volatile__(
+ 			"	.set	push				\n"
+@@ -450,7 +447,6 @@ static inline int test_and_change_bit(unsigned long nr,
+ 		unsigned long *m = ((unsigned long *) addr) + (nr >> SZLONG_LOG);
+ 		unsigned long temp;
  
- #define IPI_IRQ_OFFSET 6
+-		loongson_llsc_mb();
+ 		do {
+ 			__asm__ __volatile__(
+ 			"	.set	push				\n"
+diff --git a/arch/mips/include/asm/cmpxchg.h b/arch/mips/include/asm/cmpxchg.h
+index 79bf34e..dd39bae 100644
+--- a/arch/mips/include/asm/cmpxchg.h
++++ b/arch/mips/include/asm/cmpxchg.h
+@@ -46,7 +46,6 @@ extern unsigned long __xchg_called_with_bad_pointer(void)
+ 	__typeof(*(m)) __ret;						\
+ 									\
+ 	if (kernel_uses_llsc) {						\
+-		loongson_llsc_mb();					\
+ 		__asm__ __volatile__(					\
+ 		"	.set	push				\n"	\
+ 		"	.set	noat				\n"	\
+@@ -118,7 +117,6 @@ static inline unsigned long __xchg(volatile void *ptr, unsigned long x,
+ 	__typeof(*(m)) __ret;						\
+ 									\
+ 	if (kernel_uses_llsc) {						\
+-		loongson_llsc_mb();					\
+ 		__asm__ __volatile__(					\
+ 		"	.set	push				\n"	\
+ 		"	.set	noat				\n"	\
+@@ -136,7 +134,6 @@ static inline unsigned long __xchg(volatile void *ptr, unsigned long x,
+ 		: "=&r" (__ret), "=" GCC_OFF_SMALL_ASM() (*m)		\
+ 		: GCC_OFF_SMALL_ASM() (*m), "Jr" (old), "Jr" (new)	\
+ 		: __LLSC_CLOBBER);					\
+-		loongson_llsc_mb();					\
+ 	} else {							\
+ 		unsigned long __flags;					\
+ 									\
+@@ -232,7 +229,6 @@ static inline unsigned long __cmpxchg64(volatile void *ptr,
+ 	 */
+ 	local_irq_save(flags);
  
- void loongson3_send_irq_by_ipi(int cpu, int irqs)
- {
--	loongson3_ipi_write32(irqs << IPI_IRQ_OFFSET, ipi_set0_regs[cpu_logical_map(cpu)]);
-+	ipi_write_action(cpu_logical_map(cpu), irqs << IPI_IRQ_OFFSET);
- }
+-	loongson_llsc_mb();
+ 	asm volatile(
+ 	"	.set	push				\n"
+ 	"	.set	" MIPS_ISA_ARCH_LEVEL "		\n"
+@@ -278,7 +274,6 @@ static inline unsigned long __cmpxchg64(volatile void *ptr,
+ 	  "r" (old),
+ 	  "r" (new)
+ 	: "memory");
+-	loongson_llsc_mb();
  
- void loongson3_ipi_interrupt(struct pt_regs *regs)
-@@ -257,13 +314,9 @@ void loongson3_ipi_interrupt(struct pt_regs *regs)
- 	int i, cpu = smp_processor_id();
- 	unsigned int action, c0count, irqs;
- 
--	/* Load the ipi register to figure out what we're supposed to do */
--	action = loongson3_ipi_read32(ipi_status0_regs[cpu_logical_map(cpu)]);
-+	action = ipi_read_clear(cpu);
- 	irqs = action >> IPI_IRQ_OFFSET;
- 
--	/* Clear the ipi register to clear the interrupt */
--	loongson3_ipi_write32((u32)action, ipi_clear0_regs[cpu_logical_map(cpu)]);
--
- 	if (action & SMP_RESCHEDULE_YOURSELF)
- 		scheduler_ipi();
- 
-@@ -372,6 +425,7 @@ static void __init loongson3_smp_setup(void)
- 		num++;
- 	}
- 
-+	csr_ipi_probe();
- 	ipi_set0_regs_init();
- 	ipi_clear0_regs_init();
- 	ipi_status0_regs_init();
+ 	local_irq_restore(flags);
+ 	return ret;
 -- 
 2.7.0
 
