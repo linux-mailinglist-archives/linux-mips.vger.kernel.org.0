@@ -2,134 +2,154 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6075AE3D1
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2019 08:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD73EAE4A8
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2019 09:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393492AbfIJGfm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Sep 2019 02:35:42 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34009 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729627AbfIJGfl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Sep 2019 02:35:41 -0400
-Received: by mail-wr1-f66.google.com with SMTP id a11so7851369wrx.1;
-        Mon, 09 Sep 2019 23:35:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=9uC8BSyBqqvpBHr+UBJrMjpTjeLS9eaSkiimfXBOGmI=;
-        b=RT2CZzYflWq0hJIviZ1qNiz7T8GR4+WUrisMZXe3m9cauTkqIyyVGGFPULrde7A02W
-         tj7FplDkEllE02owPbUYDzEtapP1C48use/4kFc7fZZmFt/DdDZTI55D8qvOaO2r24Ne
-         q4FNPrvlkjfx+lYW3lSYcZ69k2e463dcG9Y4rn+PPa/Glpr++eDfgJ8gFO5kdGQ+ZZAk
-         nXhnUxrt/DhKZTkCCWYef7FPywkEzNn0z8LUShNXRMIkZZwOG/G3kJoXGIwG7zGeC0aS
-         TI+DZ2QVgsA7VVK9EZCvbN7bPdpk9PkNXAPdUVWeWNcFfO4yiY8K5tj2pJUrGvJYeUSW
-         9/rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9uC8BSyBqqvpBHr+UBJrMjpTjeLS9eaSkiimfXBOGmI=;
-        b=OGIIu7kQiC9NfKryZfiQuYrZPpsBPFxbvEH8fwEKiZuuqtgtF7jXfIN29NnGbc7fId
-         rvFMXp1KemiGvI8uDGKpmB7TKTpH09ZSH+pP6wff/kjUKi7y/gzYWD37MGi08QJKXSU5
-         qIzIK/9psV/Dmfg+9g4+w5obNvUboDNYacCXAulcDEnDDCAlCvNGVCW+/KRRgW+yYKgs
-         bJbBptmLeUkrnIBvsbU7dGCeqeZV5c2GnIcnxDregkX0MA47Sf4/LsthdFQLCntmSSpS
-         lDqB3Sg9s1mVKXpH8rGLDUn39r1sa8uWlauqHahO9JXETkbxQ2gJO9wOvf2hvpR7bsNy
-         0bJQ==
-X-Gm-Message-State: APjAAAVO1jrEEqNqZtkwzYjI7tJkcM927HxyjlUx7zJFLbv3jtpt93vv
-        vOFlChZAgfWDE3vxlNeRRCw=
-X-Google-Smtp-Source: APXvYqw8XHm4leFwnC6sWR8BjhyMsv0e/YjeclMhzrktUUdT/wG1WxzN3IHekSLZEGkf3MnHklk0qA==
-X-Received: by 2002:a5d:6b0f:: with SMTP id v15mr22340960wrw.19.1568097336267;
-        Mon, 09 Sep 2019 23:35:36 -0700 (PDT)
-Received: from gmail.com (2E8B0CD5.catv.pool.telekom.hu. [46.139.12.213])
-        by smtp.gmail.com with ESMTPSA id u22sm32329249wru.72.2019.09.09.23.35.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Sep 2019 23:35:35 -0700 (PDT)
-Date:   Tue, 10 Sep 2019 08:35:32 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Lutomirski <luto@amacapital.net>,
-        Jeff Layton <jlayton@kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian@brauner.io>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v12 11/12] open: openat2(2) syscall
-Message-ID: <20190910063532.GB1579@gmail.com>
-References: <20190904201933.10736-1-cyphar@cyphar.com>
- <20190904201933.10736-12-cyphar@cyphar.com>
- <7236f382d72130f2afbbe8940e72cc67e5c6dce0.camel@kernel.org>
- <CAHk-=whZx97Nm-gUK0ppofj2RA2LLz2vmaDUTKSSV-+yYB9q_Q@mail.gmail.com>
- <C81D6D29-F6BF-48E6-A15E-3ABCB2C992E5@amacapital.net>
- <CAHk-=whe90Ec_RRrMRLE0=bJOHNS9YmVwcytVxmrfK3oCuZF6A@mail.gmail.com>
+        id S1728364AbfIJH3O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 Sep 2019 03:29:14 -0400
+Received: from srv1.deutnet.info ([116.203.153.70]:41230 "EHLO
+        srv1.deutnet.info" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbfIJH3O (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Sep 2019 03:29:14 -0400
+X-Greylist: delayed 2537 seconds by postgrey-1.27 at vger.kernel.org; Tue, 10 Sep 2019 03:29:12 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deutnet.info; s=default; h=Message-ID:Subject:Cc:To:From:Date:in-reply-to;
+         bh=QXUe3+3nzq15jatpRDKHw4LMVFNX7Jji04dG2mMWZNE=; b=oeAHHM5JcJiB9J+TKZ3FERW6s
+        7007dX+mSOYoJ3YCrylOQ6BAUKuDymofE4R6i7kFrbOnJGuLYXXmqlX8e5Ma0DKNXJzMxAeMejrBE
+        0mFJp2kmIE1VHwoSn8nh4mdhash/Yj73xKglrQBsWtiph7zB4LyBKLSXOAwkzEGJKXgRPCQj8SVGn
+        C3oF74vmkUCJZD+8Gsb1BBEhByQSRTue89tMReudkBC0Oa6Q/l+bNzaAmLReXE+HUVa1gDmDspood
+        ykxE8P+b5j4N0Eha8TpOHfE2B3sxW/lxHp3fE05XbA8gZ3wOgK0+Wt2QObXrkElmzC+feKitAMC3J
+        yB+pHDkxQ==;
+Received: from [2001:bc8:3dc9::1] (helo=localhost)
+        by srv1.deutnet.info with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <agriveaux@deutnet.info>)
+        id 1i7ZvQ-0001RS-Qy; Tue, 10 Sep 2019 08:46:52 +0200
+Received: from agriveaux by localhost with local (Exim 4.92)
+        (envelope-from <agriveaux@deutnet.info>)
+        id 1i7ZvQ-000ZKW-G2; Tue, 10 Sep 2019 08:46:52 +0200
+Date:   Tue, 10 Sep 2019 08:46:52 +0200
+From:   Alexandre GRIVEAUX <agriveaux@deutnet.info>
+To:     robh+dt@kernel.org, mark.rutland@arm.com, ralf@linux-mips.org,
+        paul.burton@mips.com, jhogan@kernel.org, agriveaux@deutnet.info
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCHv4] MIPS: JZ4780: DTS: Add I2C nodes
+Message-ID: <20190910064652.GA135775@deutnet.info>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whe90Ec_RRrMRLE0=bJOHNS9YmVwcytVxmrfK3oCuZF6A@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Add the devicetree nodes for the I2C core of the JZ4780 SoC, disabled
+by default.
 
-* Linus Torvalds <torvalds@linux-foundation.org> wrote:
+Signed-off-by: Alexandre GRIVEAUX <agriveaux@deutnet.info>
+---
+ arch/mips/boot/dts/ingenic/jz4780.dtsi | 86 ++++++++++++++++++++++++++
+ 1 file changed, 86 insertions(+)
 
-> On Sat, Sep 7, 2019 at 10:42 AM Andy Lutomirski <luto@amacapital.net> wrote:
-> >
-> > Linus, you rejected resolveat() because you wanted a *nice* API
-> 
-> No. I rejected resoveat() because it was a completely broken garbage
-> API that couldn't do even basic stuff right (like O_CREAT).
-> 
-> We have a ton of flag space in the new openat2() model, we might as
-> well leave the old flags alone that people are (a) used to and (b) we
-> have code to support _anyway_.
-> 
-> Making up a new flag namespace is only going to cause us - and users -
-> more work, and more confusion. For no actual advantage. It's not going
-> to be "cleaner". It's just going to be worse.
+diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+index b03cdec56de9..a76ecd69bfd0 100644
+--- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+@@ -239,6 +239,92 @@
+ 		status = "disabled";
+ 	};
+ 
++	i2c0: i2c@10050000 {
++		compatible = "ingenic,jz4780-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		reg = <0x10050000 0x1000>;
++
++		interrupt-parent = <&intc>;
++		interrupts = <60>;
++
++		clocks = <&cgu JZ4780_CLK_SMB0>;
++		clock-frequency = <100000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pins_i2c0_data>;
++
++		status = "disabled";
++	};
++
++	i2c1: i2c@10051000 {
++		compatible = "ingenic,jz4780-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0x10051000 0x1000>;
++
++		interrupt-parent = <&intc>;
++		interrupts = <59>;
++
++		clocks = <&cgu JZ4780_CLK_SMB1>;
++		clock-frequency = <100000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pins_i2c1_data>;
++
++		status = "disabled";
++	};
++
++	i2c2: i2c@10052000 {
++		compatible = "ingenic,jz4780-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0x10052000 0x1000>;
++
++		interrupt-parent = <&intc>;
++		interrupts = <58>;
++
++		clocks = <&cgu JZ4780_CLK_SMB2>;
++		clock-frequency = <100000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pins_i2c2_data>;
++
++		status = "disabled";
++	};
++
++	i2c3: i2c@10053000 {
++		compatible = "ingenic,jz4780-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0x10053000 0x1000>;
++
++		interrupt-parent = <&intc>;
++		interrupts = <57>;
++
++		clocks = <&cgu JZ4780_CLK_SMB3>;
++		clock-frequency = <100000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pins_i2c3_data>;
++
++		status = "disabled";
++	};
++
++	i2c4: i2c@10054000 {
++		compatible = "ingenic,jz4780-i2c";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		reg = <0x10054000 0x1000>;
++
++		interrupt-parent = <&intc>;
++		interrupts = <56>;
++
++		clocks = <&cgu JZ4780_CLK_SMB4>;
++		clock-frequency = <100000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pins_i2c4_data>;
++
++		status = "disabled";
++	};
++
+ 	watchdog: watchdog@10002000 {
+ 		compatible = "ingenic,jz4780-watchdog";
+ 		reg = <0x10002000 0x10>;
+-- 
+2.20.1
 
-I suspect there is a "add a clean new flags namespace" analogy to the 
-classic "add a clean new standard" XKCD:
-
-	https://xkcd.com/927/
-
-Thanks,
-
-	Ingo
