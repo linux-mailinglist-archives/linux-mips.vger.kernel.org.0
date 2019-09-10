@@ -2,197 +2,333 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F12EADD7B
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Sep 2019 18:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C1DAE19B
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2019 02:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727573AbfIIQvj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 9 Sep 2019 12:51:39 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7804 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726702AbfIIQvj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Sep 2019 12:51:39 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x89GlU5r090795
-        for <linux-mips@vger.kernel.org>; Mon, 9 Sep 2019 12:51:38 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2uwsnqjkd7-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-mips@vger.kernel.org>; Mon, 09 Sep 2019 12:51:37 -0400
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-mips@vger.kernel.org> from <gerald.schaefer@de.ibm.com>;
-        Mon, 9 Sep 2019 17:51:35 +0100
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 9 Sep 2019 17:51:24 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x89GoxbI41157048
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 9 Sep 2019 16:50:59 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 85A0311C050;
-        Mon,  9 Sep 2019 16:51:23 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 387CA11C04C;
-        Mon,  9 Sep 2019 16:51:22 +0000 (GMT)
-Received: from thinkpad (unknown [9.152.212.222])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  9 Sep 2019 16:51:22 +0000 (GMT)
-Date:   Mon, 9 Sep 2019 18:51:21 +0200
-From:   Gerald Schaefer <gerald.schaefer@de.ibm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] mm/pgtable/debug: Add test validating architecture
- page table helpers
-In-Reply-To: <3d5de35f-8192-1c75-50a9-03e66e3b8e5c@arm.com>
-References: <1567497706-8649-1-git-send-email-anshuman.khandual@arm.com>
-        <1567497706-8649-2-git-send-email-anshuman.khandual@arm.com>
-        <20190904221618.1b624a98@thinkpad>
-        <20e3044d-2af5-b27b-7653-cec53bdec941@arm.com>
-        <20190905190629.523bdb87@thinkpad>
-        <3c609e33-afbb-ffaf-481a-6d225a06d1d0@arm.com>
-        <20190906210346.5ecbff01@thinkpad>
-        <3d5de35f-8192-1c75-50a9-03e66e3b8e5c@arm.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S2390317AbfIJAMy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 Sep 2019 20:12:54 -0400
+Received: from mail-eopbgr720113.outbound.protection.outlook.com ([40.107.72.113]:31712
+        "EHLO NAM05-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2390303AbfIJAMy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 9 Sep 2019 20:12:54 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jo5wMBfN7mJHjumQ3ZNhaaif4EnGjJLgy0pqffcLtzb+cQkkhlI9dRlfND+GSqsFEYO0r/Yzsv5d3TSKDCnk1ZNIl3/YdjK9Rdoa+JQwtFYb9dlqWrrxHOSpDKazluAXH0/EZyxsBrKDURfQS5SlZyV5vnZuGupSYt8WUnw0uN1b2dgn1aGyCGSEDHRt2xAu8kFjq0B1PelMMRdKhkuNxeKbF2yNL79/9ZrXVJ+s06ykFzVxL47lMorEEwrgsBozZm8LW4oen8Ymzg2enSK7DobeIi+MYvKRE3L0J1cLeHqVVEpXyPI42RDPhFXdv6lggu+innHbZJztwjJSztYIcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ljh2jsS4AGqHrqoVwrwqizyvTSrzOUGLkNZyzf2Eps8=;
+ b=esAw0LVVqnrZWWn8U9AoAeuXzG6MoBwALDSICVvHdZuIPnDOufws5uSMzV7TXTTSgU7ue596U6emUOZs1uYY8PXy/n7ov5W3d4nhLhGj3IEFqDPqn9bYjLAqRQ0xreDdiRlJp/qW8lbXyq3DEwIgogo+5r3y3xZhBWu0bjcWj2Xf1WbrvAuAuz2f3X71So8M5vvrDjnp0XcbJG78xhrfiWgbVa45IXBIFyojObBfXhpmw+3tsVvI1cjRfsXFkl9vnIxsn4PVIF9Zz5Tzg/M9ntmU570ZZusdDMAexmob/tHhjeH5IIeFHCF4dRmP4uMoX+MbeLzDy6KX8KfmRAGd/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
+ dkim=pass header.d=mips.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ljh2jsS4AGqHrqoVwrwqizyvTSrzOUGLkNZyzf2Eps8=;
+ b=BuMOQkbR9HL1Q926uTKv0BGO1L8gYkpMBke93ER2avZWNNK3Qe1dUuhQtbJalQENYOHiphE0l91d/ZKloG1/LC3myzJMZlGbkbPbBsvVm8lL5dMLwmcZvxtZkfs6x2s8XUk/AzK2oT2Adbs8fGBb7yFknl7AguDwgQ8X6STxRW0=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
+ MWHPR2201MB1152.namprd22.prod.outlook.com (10.174.167.167) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2241.15; Tue, 10 Sep 2019 00:12:50 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::f9e8:5e8c:7194:fad3]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::f9e8:5e8c:7194:fad3%11]) with mapi id 15.20.2241.018; Tue, 10 Sep
+ 2019 00:12:50 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "chenhc@lemote.com" <chenhc@lemote.com>
+CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "jason@lakedaemon.net" <jason@lakedaemon.net>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.co" <mark.rutland@arm.co>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 02/19] MIPS: Loongson64: separate
+ loongson2ef/loongson64 code
+Thread-Topic: [PATCH v2 02/19] MIPS: Loongson64: separate
+ loongson2ef/loongson64 code
+Thread-Index: AQHVZ2x7s9cB9C8WRkqS1WFEbLqHmw==
+Date:   Tue, 10 Sep 2019 00:12:49 +0000
+Message-ID: <20190910001248.few7zmxsrg72mdum@pburton-laptop>
+References: <20190905144316.12527-1-jiaxun.yang@flygoat.com>
+ <20190905144316.12527-3-jiaxun.yang@flygoat.com>
+In-Reply-To: <20190905144316.12527-3-jiaxun.yang@flygoat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR08CA0067.namprd08.prod.outlook.com
+ (2603:10b6:a03:117::44) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:18::12)
+user-agent: NeoMutt/20180716
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [12.94.197.246]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9b266151-4478-4aeb-8984-08d735839d47
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1152;
+x-ms-traffictypediagnostic: MWHPR2201MB1152:
+x-microsoft-antispam-prvs: <MWHPR2201MB1152697E11F0C0618D05BAC7C1B60@MWHPR2201MB1152.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 01565FED4C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(346002)(396003)(39850400004)(366004)(136003)(376002)(199004)(189003)(52314003)(305945005)(7736002)(6486002)(52116002)(229853002)(110136005)(54906003)(30864003)(99286004)(316002)(14444005)(256004)(5660300002)(66066001)(3846002)(6116002)(25786009)(2501003)(7416002)(33716001)(4326008)(1076003)(64756008)(66446008)(76176011)(66476007)(386003)(6506007)(66946007)(478600001)(42882007)(186003)(102836004)(58126008)(26005)(71200400001)(71190400001)(6436002)(446003)(2906002)(53936002)(8936002)(8676002)(81166006)(81156014)(6512007)(9686003)(44832011)(14454004)(6246003)(486006)(11346002)(476003)(66556008);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1152;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: G992zPrr/UyjYGViB6bQk3Y2xSA5NLavk+Rf5RtcnCLVUCQeLg12xJGNzf4qvXq24lSzIRQyWT868BGl97QUjTgQcG30cBCg/dSm+Yz4RFoQscMot2V+ZFKExApj5B8rm7VW1c2Xyg7tVgT7wX4cDMoxvusTfkHV8VG5FQRdYgAEnunKOoQXP/EJ3LLobFgvF58A9RU4qa87ldpKKOoWQ7QF2YxPbnvNPjyw2Fhxpcpjs+EJijqdFOo/CXMOlkLiQdfNbMdj+wetgnjzKoq9Uy5VGzZv6FgTMvRQGzZPThYi2o5hPZcfDk01Yv7xkme3g5B5jOJdTivy1TgAwzZOQRmsNjGkl6+bK4oXxUa/ikv+AuLjJV3h8MIYijbyBHpcaBNRy1FZfEG6QXPJ60ApsI9pgAMhVecR1hC6mpyqJ5M=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <9954A55BAF02BB4E8DCD3606A05CE45B@namprd22.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-TM-AS-GCONF: 00
-x-cbid: 19090916-0020-0000-0000-00000369E0CB
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19090916-0021-0000-0000-000021BF62C6
-Message-Id: <20190909185121.6271e9be@thinkpad>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-09_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1909090170
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b266151-4478-4aeb-8984-08d735839d47
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Sep 2019 00:12:49.6151
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5yM8TxRL9o+Wp5Rpg+sRveOgmI2CG/M4W9Ul2THBb7FLy+9hkkuim0TxIts/8ip6J2v8wE3acpDLCdtUOxhKfw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1152
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 9 Sep 2019 11:56:50 +0530
-Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+Hi Jiaxun & Huacai,
 
-[..]
-> > 
-> > Hmm, I simply used this on my system to make pud_clear_tests() work, not
-> > sure if it works on all archs:
-> > 
-> > pud_val(*pudp) |= RANDOM_NZVALUE;  
-> 
-> Which compiles on arm64 but then fails on x86 because of the way pmd_val()
-> has been defined there. on arm64 and s390 (with many others) pmd_val() is
-> a macro which still got the variable that can be used as lvalue but that is
-> not true for some other platforms like x86.
-> 
-> arch/arm64/include/asm/pgtable-types.h:	#define pmd_val(x)	((x).pmd)
-> arch/s390/include/asm/page.h:		#define pmd_val(x)	((x).pmd)
-> arch/x86/include/asm/pgtable.h:		#define pmd_val(x)       native_pmd_val(x)
-> 
-> static inline pmdval_t native_pmd_val(pmd_t pmd)
-> {
->         return pmd.pmd;
-> }
-> 
-> Unless I am mistaken, the return value from this function can not be used as
-> lvalue for future assignments.
-> 
-> mm/arch_pgtable_test.c: In function ‘pud_clear_tests’:
-> mm/arch_pgtable_test.c:156:17: error: lvalue required as left operand of assignment
->   pud_val(*pudp) |= RANDOM_ORVALUE;
->                  ^~
-> AFAICS pxx_val() were never intended to be used as lvalue and using it that way
-> might just happen to work on all those platforms which define them as macros.
-> They meant to just provide values for an entry as being determined by the platform.
-> 
-> In principle pxx_val() on an entry was not supposed to be modified directly from
-> generic code without going through (again) platform helpers for any specific state
-> change (write, old, dirty, special, huge etc). The current use case is a deviation
-> for that.
-> 
-> I originally went with memset() just to load up the entries with non-zero value so
-> that we know pxx_clear() are really doing the clearing. The same is being followed
-> for all pxx_same() checks.
-> 
-> Another way for fixing the problem would be to mark them with known attributes
-> like write/young/huge etc instead which for sure will create non-zero entries.
-> We can do that for pxx_clear() and pxx_same() tests and drop RANDOM_NZVALUE
-> completely. Does that sound good ?
+On Thu, Sep 05, 2019 at 10:42:59PM +0800, Jiaxun Yang wrote:
+> As later model of GSx64 family processors including 2-series-soc have
+> similar design with initial loongson3a while loongson2e/f seems less
+> identical, we separate loongson2e/f support code out of mach-loongson64
+> to make our life easier.
+>=20
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-Umm, not really. Those mkwrite/young/huge etc. helpers do only exist for
-page table levels where we can also have large mappings, at least on s390.
-Also, we do (on s390) again check for certain sanity before actually setting
-the bits.
-Good news is that at least for the pxx_same() checks the memset() is no
-problem, because pxx_same() does not do any checks other than the same check.
+I looked at applying the first 3 patches of this series to mips-next &
+squashed in the relevant defconfig updates, then was looking at applying
+Huacai's recent 3 patch series.
 
-For the pxx_clear_tests(), maybe it could be an option to put them behind the
-pxx_populate_tests(), and rely on them having properly populated (non-clear)
-values after that?
+One issue is that they conflict, but beyond that it showed me that this
+patch deletes kernel-entry-init.h entirely. Was that intentional? If so
+it should be a separate patch & it needs an explanation.
 
-[...]
-> > 
-> > Actually, using get_unmapped_area() as suggested by Kirill could also
-> > solve this issue. We do create a new mm with 3-level page tables on s390,
-> > and the dynamic upgrade to 4 or 5 levels is then triggered exactly by
-> > arch_get_unmapped_area(), depending on the addr. But I currently don't
-> > see how / where arch_get_unmapped_area() is set up for such a dummy mm
-> > created by mm_alloc().  
-> 
-> Normally they are set during program loading but we can set it up explicitly
-> for the test mm_struct if we need to but there are some other challenges.
-> 
-> load_[aout|elf|flat|..]_binary()
-> 	setup_new_exec()
-> 		arch_pick_mmap_layout().
-> 
-> I did some initial experiments around get_unmapped_area(). Seems bit tricky
-> to get it working on a pure 'test' mm_struct. It expects a real user context
-> in the form of current->mm.
+Please could the two of you make it clear what branch & commit your
+patches are based upon? Ideally it should be the current head of the
+mips-next branch.
 
-Yes, that's where I stopped because it looked rather complicated :-)
-Not sure why Kirill suggested it initially, but if using get_unmapped_area()
-would only be necessary to get properly initialized page table levels
-on s390, you could also defer this to a later add-on patch.
+Also Jiaxun, it's really hard to see whether this patch is making any
+functional changes in addition to the duplication & renaming. I think it
+would be much better to split this into a few steps across multiple
+commits, something like this:
 
-Regards,
-Gerald
+1) Copy the loongson64 directory to loongson2ef, and keep the copy as-is
+   *except* for the removal of the loongson2ef/loongon-3 subdirectory.
+   Delete loongson64/fuloong-2e & loongson64/lemote-2f.
 
+2) Now clean up the loongson64 directory by moving files up from the
+   loongson-3 subdirectory.
+
+3) Now clean up code, removing #ifdef's etc that no longer make sense.
+
+Provide the -M & -C flags to git format-patch when generating your
+patches. --find-copies-harder might help with the first step, if it's
+practical to run.
+
+That way each commit will be easier to review, and issues like the
+deletion of kernel-entry-init.h will be easier to spot.
+
+For now I undid the whole thing. It's getting late in the cycle anyway,
+so this will probably be v5.5 material.
+
+Thanks,
+    Paul
+
+> ---
+>  arch/mips/Kbuild.platforms                    |   1 +
+>  arch/mips/Kconfig                             |  51 +++++--
+>  arch/mips/include/asm/bootinfo.h              |   1 -
+>  .../mach-loongson2ef/cpu-feature-overrides.h  |  45 +++++++
+>  .../cs5536/cs5536.h                           |   0
+>  .../cs5536/cs5536_mfgpt.h                     |   0
+>  .../cs5536/cs5536_pci.h                       |   0
+>  .../cs5536/cs5536_vsm.h                       |   0
+>  .../loongson2ef.h}                            |  29 +---
+>  .../machine.h                                 |   6 -
+>  .../mc146818rtc.h                             |   5 +-
+>  .../mem.h                                     |   6 +-
+>  arch/mips/include/asm/mach-loongson2ef/pci.h  |  43 ++++++
+>  .../include/asm/mach-loongson2ef/spaces.h     |  10 ++
+>  .../mach-loongson64/cpu-feature-overrides.h   |   8 +-
+>  arch/mips/include/asm/mach-loongson64/irq.h   |   7 +-
+>  .../asm/mach-loongson64/kernel-entry-init.h   |  74 ----------
+>  .../include/asm/mach-loongson64/loongson64.h  |  48 +++++++
+>  .../mips/include/asm/mach-loongson64/mmzone.h |  16 ---
+>  arch/mips/include/asm/mach-loongson64/pci.h   |  41 +-----
+>  .../include/asm/mach-loongson64/workarounds.h |   4 +-
+>  arch/mips/loongson2ef/Kconfig                 |  93 +++++++++++++
+>  arch/mips/loongson2ef/Makefile                |  18 +++
+>  arch/mips/loongson2ef/Platform                |  32 +++++
+>  .../common/Makefile                           |   0
+>  .../common/bonito-irq.c                       |   2 +-
+>  .../common/cmdline.c                          |   2 +-
+>  .../common/cs5536/Makefile                    |   0
+>  .../common/cs5536/cs5536_acc.c                |   0
+>  .../common/cs5536/cs5536_ehci.c               |   0
+>  .../common/cs5536/cs5536_ide.c                |   0
+>  .../common/cs5536/cs5536_isa.c                |   0
+>  .../common/cs5536/cs5536_mfgpt.c              |   0
+>  .../common/cs5536/cs5536_ohci.c               |   0
+>  .../common/cs5536/cs5536_pci.c                |   0
+>  .../common/early_printk.c                     |   2 +-
+>  arch/mips/loongson2ef/common/env.c            |  71 ++++++++++
+>  .../{loongson64 =3D> loongson2ef}/common/init.c |   7 +-
+>  .../{loongson64 =3D> loongson2ef}/common/irq.c  |   2 +-
+>  .../common/machtype.c                         |   3 +-
+>  .../{loongson64 =3D> loongson2ef}/common/mem.c  |  40 +-----
+>  .../{loongson64 =3D> loongson2ef}/common/pci.c  |  11 +-
+>  .../common/platform.c                         |   0
+>  .../{loongson64 =3D> loongson2ef}/common/pm.c   |   2 +-
+>  .../common/reset.c                            |  23 +---
+>  .../{loongson64 =3D> loongson2ef}/common/rtc.c  |   0
+>  .../common/serial.c                           |  37 +----
+>  .../common/setup.c                            |   2 +-
+>  .../{loongson64 =3D> loongson2ef}/common/time.c |   2 +-
+>  .../common/uart_base.c                        |  10 +-
+>  .../fuloong-2e/Makefile                       |   0
+>  .../fuloong-2e/dma.c                          |   0
+>  .../fuloong-2e/irq.c                          |   2 +-
+>  .../fuloong-2e/reset.c                        |   2 +-
+>  .../lemote-2f/Makefile                        |   0
+>  .../lemote-2f/clock.c                         |   2 +-
+>  .../lemote-2f/dma.c                           |   0
+>  .../lemote-2f/ec_kb3310b.c                    |   0
+>  .../lemote-2f/ec_kb3310b.h                    |   0
+>  .../lemote-2f/irq.c                           |   2 +-
+>  .../lemote-2f/machtype.c                      |   2 +-
+>  .../lemote-2f/pm.c                            |   2 +-
+>  .../lemote-2f/reset.c                         |   2 +-
+>  arch/mips/loongson64/Kconfig                  | 126 +-----------------
+>  arch/mips/loongson64/Makefile                 |  23 +---
+>  arch/mips/loongson64/Platform                 |  26 +---
+>  .../loongson64/{loongson-3 =3D> }/acpi_init.c   |   3 +-
+>  .../loongson64/{loongson-3 =3D> }/cop2-ex.c     |   5 +-
+>  arch/mips/loongson64/{loongson-3 =3D> }/dma.c   |   6 +-
+>  arch/mips/loongson64/{common =3D> }/env.c       |  72 +++-------
+>  arch/mips/loongson64/{loongson-3 =3D> }/hpet.c  |   0
+>  arch/mips/loongson64/{loongson-3 =3D> }/irq.c   |  40 +++++-
+>  arch/mips/loongson64/loongson-3/Makefile      |  11 --
+>  arch/mips/loongson64/{loongson-3 =3D> }/numa.c  |   4 +-
+>  arch/mips/loongson64/pci.c                    |  45 +++++++
+>  .../loongson64/{loongson-3 =3D> }/platform.c    |   0
+>  arch/mips/loongson64/reset.c                  |  58 ++++++++
+>  arch/mips/loongson64/setup.c                  |  91 +++++++++++++
+>  arch/mips/loongson64/{loongson-3 =3D> }/smp.c   |   4 +-
+>  arch/mips/loongson64/{loongson-3 =3D> }/smp.h   |   0
+>  arch/mips/oprofile/op_model_loongson2.c       |   2 +-
+>  arch/mips/oprofile/op_model_loongson3.c       |   2 +-
+>  arch/mips/pci/Makefile                        |   2 +-
+>  arch/mips/pci/fixup-fuloong2e.c               |   2 +-
+>  arch/mips/pci/fixup-lemote2f.c                |   2 +-
+>  arch/mips/pci/ops-loongson2.c                 |   2 +-
+>  arch/mips/pci/ops-loongson3.c                 |   2 +-
+>  drivers/cpufreq/loongson2_cpufreq.c           |   2 +-
+>  drivers/gpio/gpio-loongson.c                  |   2 +-
+>  drivers/platform/mips/cpu_hwmon.c             |   2 +-
+>  90 files changed, 720 insertions(+), 582 deletions(-)
+>  create mode 100644 arch/mips/include/asm/mach-loongson2ef/cpu-feature-ov=
+errides.h
+>  rename arch/mips/include/asm/{mach-loongson64 =3D> mach-loongson2ef}/cs5=
+536/cs5536.h (100%)
+>  rename arch/mips/include/asm/{mach-loongson64 =3D> mach-loongson2ef}/cs5=
+536/cs5536_mfgpt.h (100%)
+>  rename arch/mips/include/asm/{mach-loongson64 =3D> mach-loongson2ef}/cs5=
+536/cs5536_pci.h (100%)
+>  rename arch/mips/include/asm/{mach-loongson64 =3D> mach-loongson2ef}/cs5=
+536/cs5536_vsm.h (100%)
+>  rename arch/mips/include/asm/{mach-loongson64/loongson.h =3D> mach-loong=
+son2ef/loongson2ef.h} (91%)
+>  rename arch/mips/include/asm/{mach-loongson64 =3D> mach-loongson2ef}/mac=
+hine.h (80%)
+>  rename arch/mips/include/asm/{mach-loongson64 =3D> mach-loongson2ef}/mc1=
+46818rtc.h (80%)
+>  rename arch/mips/include/asm/{mach-loongson64 =3D> mach-loongson2ef}/mem=
+.h (86%)
+>  create mode 100644 arch/mips/include/asm/mach-loongson2ef/pci.h
+>  create mode 100644 arch/mips/include/asm/mach-loongson2ef/spaces.h
+>  delete mode 100644 arch/mips/include/asm/mach-loongson64/kernel-entry-in=
+it.h
+>  create mode 100644 arch/mips/include/asm/mach-loongson64/loongson64.h
+>  create mode 100644 arch/mips/loongson2ef/Kconfig
+>  create mode 100644 arch/mips/loongson2ef/Makefile
+>  create mode 100644 arch/mips/loongson2ef/Platform
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/Makefile (100%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/bonito-irq.c (97%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/cmdline.c (97%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/cs5536/Makefile (1=
+00%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/cs5536/cs5536_acc.=
+c (100%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/cs5536/cs5536_ehci=
+.c (100%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/cs5536/cs5536_ide.=
+c (100%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/cs5536/cs5536_isa.=
+c (100%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/cs5536/cs5536_mfgp=
+t.c (100%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/cs5536/cs5536_ohci=
+.c (100%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/cs5536/cs5536_pci.=
+c (100%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/early_printk.c (97=
+%)
+>  create mode 100644 arch/mips/loongson2ef/common/env.c
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/init.c (90%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/irq.c (98%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/machtype.c (94%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/mem.c (72%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/pci.c (89%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/platform.c (100%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/pm.c (99%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/reset.c (77%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/rtc.c (100%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/serial.c (63%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/setup.c (97%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/time.c (96%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/common/uart_base.c (77%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/fuloong-2e/Makefile (100%=
+)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/fuloong-2e/dma.c (100%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/fuloong-2e/irq.c (98%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/fuloong-2e/reset.c (93%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/lemote-2f/Makefile (100%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/lemote-2f/clock.c (98%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/lemote-2f/dma.c (100%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/lemote-2f/ec_kb3310b.c (1=
+00%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/lemote-2f/ec_kb3310b.h (1=
+00%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/lemote-2f/irq.c (99%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/lemote-2f/machtype.c (98%=
+)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/lemote-2f/pm.c (99%)
+>  rename arch/mips/{loongson64 =3D> loongson2ef}/lemote-2f/reset.c (99%)
+>  rename arch/mips/loongson64/{loongson-3 =3D> }/acpi_init.c (99%)
+>  rename arch/mips/loongson64/{loongson-3 =3D> }/cop2-ex.c (88%)
+>  rename arch/mips/loongson64/{loongson-3 =3D> }/dma.c (82%)
+>  rename arch/mips/loongson64/{common =3D> }/env.c (79%)
+>  rename arch/mips/loongson64/{loongson-3 =3D> }/hpet.c (100%)
+>  rename arch/mips/loongson64/{loongson-3 =3D> }/irq.c (77%)
+>  delete mode 100644 arch/mips/loongson64/loongson-3/Makefile
+>  rename arch/mips/loongson64/{loongson-3 =3D> }/numa.c (98%)
+>  create mode 100644 arch/mips/loongson64/pci.c
+>  rename arch/mips/loongson64/{loongson-3 =3D> }/platform.c (100%)
+>  create mode 100644 arch/mips/loongson64/reset.c
+>  create mode 100644 arch/mips/loongson64/setup.c
+>  rename arch/mips/loongson64/{loongson-3 =3D> }/smp.c (99%)
+>  rename arch/mips/loongson64/{loongson-3 =3D> }/smp.h (100%)
