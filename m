@@ -2,154 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD73EAE4A8
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2019 09:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC45AAE931
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2019 13:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728364AbfIJH3O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Sep 2019 03:29:14 -0400
-Received: from srv1.deutnet.info ([116.203.153.70]:41230 "EHLO
-        srv1.deutnet.info" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726317AbfIJH3O (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Sep 2019 03:29:14 -0400
-X-Greylist: delayed 2537 seconds by postgrey-1.27 at vger.kernel.org; Tue, 10 Sep 2019 03:29:12 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deutnet.info; s=default; h=Message-ID:Subject:Cc:To:From:Date:in-reply-to;
-         bh=QXUe3+3nzq15jatpRDKHw4LMVFNX7Jji04dG2mMWZNE=; b=oeAHHM5JcJiB9J+TKZ3FERW6s
-        7007dX+mSOYoJ3YCrylOQ6BAUKuDymofE4R6i7kFrbOnJGuLYXXmqlX8e5Ma0DKNXJzMxAeMejrBE
-        0mFJp2kmIE1VHwoSn8nh4mdhash/Yj73xKglrQBsWtiph7zB4LyBKLSXOAwkzEGJKXgRPCQj8SVGn
-        C3oF74vmkUCJZD+8Gsb1BBEhByQSRTue89tMReudkBC0Oa6Q/l+bNzaAmLReXE+HUVa1gDmDspood
-        ykxE8P+b5j4N0Eha8TpOHfE2B3sxW/lxHp3fE05XbA8gZ3wOgK0+Wt2QObXrkElmzC+feKitAMC3J
-        yB+pHDkxQ==;
-Received: from [2001:bc8:3dc9::1] (helo=localhost)
-        by srv1.deutnet.info with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <agriveaux@deutnet.info>)
-        id 1i7ZvQ-0001RS-Qy; Tue, 10 Sep 2019 08:46:52 +0200
-Received: from agriveaux by localhost with local (Exim 4.92)
-        (envelope-from <agriveaux@deutnet.info>)
-        id 1i7ZvQ-000ZKW-G2; Tue, 10 Sep 2019 08:46:52 +0200
-Date:   Tue, 10 Sep 2019 08:46:52 +0200
-From:   Alexandre GRIVEAUX <agriveaux@deutnet.info>
-To:     robh+dt@kernel.org, mark.rutland@arm.com, ralf@linux-mips.org,
-        paul.burton@mips.com, jhogan@kernel.org, agriveaux@deutnet.info
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCHv4] MIPS: JZ4780: DTS: Add I2C nodes
-Message-ID: <20190910064652.GA135775@deutnet.info>
+        id S1726132AbfIJLcv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 Sep 2019 07:32:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57556 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725935AbfIJLcu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 10 Sep 2019 07:32:50 -0400
+Received: from rapoport-lnx (unknown [148.69.85.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7228B2082C;
+        Tue, 10 Sep 2019 11:32:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568115170;
+        bh=oVJlcC6Fa3JOCh03KW8/C6wrCtWNwPECY7yZpA43UUs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s5xWQ/DsXA441n81LmgcIULE1UtAG6DK3yayVS4B55bE3N7MKkrmbIcnRuifyvso6
+         IATe001oZ5KRxL6NYiIzwRg1IiQmRWc/k1O7FcGghI/l5/tH8osPxDSHu6rHH1qqgL
+         OEZP254v+Oq4EsuiYJstBDsYMrwAwaNtJsIQFniU=
+Date:   Tue, 10 Sep 2019 12:32:44 +0100
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH] mips: sgi-ip27: switch from DISCONTIGMEM to SPARSEMEM
+Message-ID: <20190910113243.GA19207@rapoport-lnx>
+References: <1567662477-27404-1-git-send-email-rppt@kernel.org>
+ <20190905152150.f7ff6ef70726085de63df828@suse.de>
+ <20190905133251.GA3650@rapoport-lnx>
+ <20190905154831.88b7853b47ba7db7bd7626bd@suse.de>
+ <20190905154747.GB3650@rapoport-lnx>
+ <20190905233800.0f6b3fb3722cde2f5a88663a@suse.de>
+ <20190906130223.GA17704@rapoport-lnx>
+ <20190909182242.c1ef9717d14b20212ef75954@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190909182242.c1ef9717d14b20212ef75954@suse.de>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add the devicetree nodes for the I2C core of the JZ4780 SoC, disabled
-by default.
+On Mon, Sep 09, 2019 at 06:22:42PM +0200, Thomas Bogendoerfer wrote:
+> On Fri, 6 Sep 2019 16:02:24 +0300
+> Mike Rapoport <rppt@kernel.org> wrote:
+> 
+> > I suspect that unaligned access comes from __page_to_pfn, can you please
+> > check what scripts/fadd2line reports for kernel_init_free_pages+0xcc/0x138?
+> 
+> kernel_init_free_pages+0xcc/0x138:
+> pagefault_disabled_dec at include/linux/uaccess.h:173
+> (inlined by) pagefault_enable at include/linux/uaccess.h:200
+> (inlined by) __kunmap_atomic at include/linux/highmem.h:101
+> (inlined by) clear_highpage at include/linux/highmem.h:215
+> (inlined by) kernel_init_free_pages at mm/page_alloc.c:1124
+> 
+> While making some sense out of this I booted the system a few times
+> with the same kernel and I get different crashes (it even booted once
+> to userspace).
+> 
+> Here a list (decoded with fadd2line)
 
-Signed-off-by: Alexandre GRIVEAUX <agriveaux@deutnet.info>
----
- arch/mips/boot/dts/ingenic/jz4780.dtsi | 86 ++++++++++++++++++++++++++
- 1 file changed, 86 insertions(+)
-
-diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-index b03cdec56de9..a76ecd69bfd0 100644
---- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-@@ -239,6 +239,92 @@
- 		status = "disabled";
- 	};
+... 
  
-+	i2c0: i2c@10050000 {
-+		compatible = "ingenic,jz4780-i2c";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		reg = <0x10050000 0x1000>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <60>;
-+
-+		clocks = <&cgu JZ4780_CLK_SMB0>;
-+		clock-frequency = <100000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pins_i2c0_data>;
-+
-+		status = "disabled";
-+	};
-+
-+	i2c1: i2c@10051000 {
-+		compatible = "ingenic,jz4780-i2c";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x10051000 0x1000>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <59>;
-+
-+		clocks = <&cgu JZ4780_CLK_SMB1>;
-+		clock-frequency = <100000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pins_i2c1_data>;
-+
-+		status = "disabled";
-+	};
-+
-+	i2c2: i2c@10052000 {
-+		compatible = "ingenic,jz4780-i2c";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x10052000 0x1000>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <58>;
-+
-+		clocks = <&cgu JZ4780_CLK_SMB2>;
-+		clock-frequency = <100000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pins_i2c2_data>;
-+
-+		status = "disabled";
-+	};
-+
-+	i2c3: i2c@10053000 {
-+		compatible = "ingenic,jz4780-i2c";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x10053000 0x1000>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <57>;
-+
-+		clocks = <&cgu JZ4780_CLK_SMB3>;
-+		clock-frequency = <100000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pins_i2c3_data>;
-+
-+		status = "disabled";
-+	};
-+
-+	i2c4: i2c@10054000 {
-+		compatible = "ingenic,jz4780-i2c";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		reg = <0x10054000 0x1000>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <56>;
-+
-+		clocks = <&cgu JZ4780_CLK_SMB4>;
-+		clock-frequency = <100000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pins_i2c4_data>;
-+
-+		status = "disabled";
-+	};
-+
- 	watchdog: watchdog@10002000 {
- 		compatible = "ingenic,jz4780-watchdog";
- 		reg = <0x10002000 0x10>;
--- 
-2.20.1
+> I couldn't make real sense out of this yet, but maybe it gives
+> a hint for you.
 
+Unfortunately, no :(
+
+Before we start adding printks, can you please run with
+CONFIG_DEBUG_MEMORY_INIT=y and with 
+
+mminit_loglevel=4 ignore_loglevel
+
+in the command line?
+
+> Thomas.
+> 
+> -- 
+> SUSE Software Solutions Germany GmbH
+> HRB 247165 (AG München)
+> Geschäftsführer: Felix Imendörffer
+
+-- 
+Sincerely yours,
+Mike.
