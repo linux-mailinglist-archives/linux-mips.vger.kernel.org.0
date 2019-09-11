@@ -2,56 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C54AF7E9
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Sep 2019 10:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE0AAF7E0
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Sep 2019 10:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbfIKI2U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Sep 2019 04:28:20 -0400
-Received: from mail-eopbgr720118.outbound.protection.outlook.com ([40.107.72.118]:17624
-        "EHLO NAM05-CO1-obe.outbound.protection.outlook.com"
+        id S1727154AbfIKI1Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Sep 2019 04:27:25 -0400
+Received: from mail-eopbgr770130.outbound.protection.outlook.com ([40.107.77.130]:40420
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726696AbfIKI2U (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 11 Sep 2019 04:28:20 -0400
+        id S1726735AbfIKI1Z (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 11 Sep 2019 04:27:25 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e0rZopdgeJOQsF4PvXdq65ofQI5NuEIoA3DVQwK/ltlCMJNnklZssfQ0Ucu0xF9yRegybdAwNiUJWVc6/sgervn+/6uiuuC+B+fMVwaxj96Rcge/eYXs4V+Iss81mftGFQK54D4258cJ/qeQzy2U7CjfkJr/fi75j1LaN70x7h1gsNcZPkMgJl74CwC1VWf2zvPOpoayr/5bIQGjqTpxXmLeKX5DYMiVmv9MZuoafZ3APOAnoJML37sUjxa6uCH7FWyyqzJrwhqFB8XzvHYui4NKwjG/FBafRFmsj6CXmcclERsQqK+2AwckyzSjVAaN6HBJg4w+fRtFaF5YDYB6VQ==
+ b=UogkYfGpIceOQWm4dF6UCxGxjW4pIKxdGunxYJKDMx71IHENw+o8LoVDlF9kCxUA2quaQrbKrBS5MxHuBEM41QO2MUMY4FQDtRcVNppV0bP7ZcVCiamTmV7BGPldymrSB8Tq5UhuxHRhHJyJS3ngAV5dWaJI7dGJKMgZcqY47wut4kIEeUa4frSZ5l1wkG47jT+pcJIb+50yj8zSsvWWZXdspr82IvHikeTm2deJm+hLVwMFtjKVCOyG7cOLsQzG0hbelfFXDUtJhz+drEi5TfZEpFAWIUAIY/SrpgmmWcLNICgeFKQ/ZNVx+sGwco0a+p+v8byHkcsGJ8Ku4yKwLw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=871Z+TCdFWQh+HU81ZyoG1NzejB/p16nFg6NLHPuRdo=;
- b=brEjOBCxVBHN3u5OvKO2gIw+S/NRPLOGcY3BM+IP0pgIvq0IMqtFSfOnoAwdzJEpHvetOLltYKKjxqm4dgy2EwOr64GtTyJMhNNt3TvcNcU9anxWJaChh7qzpIgd3xGrCXz1BZFk1pYOrl+57RdHzHZJZaZ/U0ieQHMqIuRBdv60r05B1Hp4H0SU+1/DktMJooJIle7dBEpeS1IdLsWbs3wB9ycHyBMGzbqkkhGEYe35r+/TP5E2fV6ubaK32jNRuCuvob99n7tbDOsOyCVxQIvVFMK9GPNNYvKGVNb1Wu+sQfMO+kRkhv4Z6akt+tUpbj6EaXK86Fh6zdCV9jdzcg==
+ bh=SWcxQO0VaxkMlhXX6FI78/V1+k+l9toKVz+JAcdBj3Y=;
+ b=eqf5FWp73s6YSqhNDvGy0WS5Pvt+sklTRq6xLI+dgilvqfVcKx2tIvc4zrfqazjEjdKFZd0apKqqAZvq9SVXb8SCYqVJZWWWz03mV7hbGUEX5OFlqH45JfGsr74JMGOo4eMJTU1tX1ma+10Mkat4ywvLZ7is20Tp0Z4074UlX8so85r+52xwsq7Lz+d6gYsNL1Wq1X8UYUmvyTOhVBl8jB4o987eGY5hcH23fhh+BZVOKsKYKXCNTSB+BTnZTn+fLaBiZgoWwrKdd4A9xhvClXiI2AJShO4gbLsaRF4PecSJ1wAlG5GbpUtEZPA1QRGpNgzJjXA/EZnB1VhuCQRaXQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=wavecomp.com;
  dkim=pass header.d=wavecomp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=871Z+TCdFWQh+HU81ZyoG1NzejB/p16nFg6NLHPuRdo=;
- b=JCOcOHuKycWPmBbV37JtjVL8/w++GYzTH3VKqv9SAB4f7J/Jg3wH6BKzzBJgz86yF4JU6joQJY7L1s5XDoZEnIWPVQhuq01lNFgj6K9DXK+noQARThJ/3mMm1srHi6TLgujA9XGQIKA4nWh5rXYZFGxcSAlcQzpML6SkTfnZ2RI=
+ bh=SWcxQO0VaxkMlhXX6FI78/V1+k+l9toKVz+JAcdBj3Y=;
+ b=ZECVBM5aopDsXXWu2PYgnhooFNFdvAJNDZfr8fT5JYXOOwlOTMozqju6hGN7OF0HGFpsbYQ1+wQjZrotenCrsWZTglDCrDNk2N9He6NG4H1V8SDF5rVaNpIki5caJR7ti9u6jTrFOlD1ay6kCsO4vunbWKJu7Y2rc1u24jJ+Iew=
 Received: from MWHPR2201MB1534.namprd22.prod.outlook.com (10.174.170.159) by
  MWHPR2201MB1247.namprd22.prod.outlook.com (10.174.162.11) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2241.18; Wed, 11 Sep 2019 08:26:38 +0000
+ 15.20.2241.18; Wed, 11 Sep 2019 08:26:48 +0000
 Received: from MWHPR2201MB1534.namprd22.prod.outlook.com
  ([fe80::c9df:89ab:dcf6:2a86]) by MWHPR2201MB1534.namprd22.prod.outlook.com
  ([fe80::c9df:89ab:dcf6:2a86%4]) with mapi id 15.20.2241.018; Wed, 11 Sep 2019
- 08:26:38 +0000
+ 08:26:48 +0000
 From:   Archer Yan <ayan@wavecomp.com>
 To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-CC:     David Daney <david.daney@cavium.com>,
+CC:     Archer Yan <ayan@wavecomp.com>,
+        David Daney <david.daney@cavium.com>,
         "linux-mips@linux-mips.org" <linux-mips@linux-mips.org>,
-        Jiri Olsa <jolsa@redhat.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Peter Zijlstra <a.p.zijlstra@chello.nl>,
         Paul Mackerras <paulus@samba.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@ghostprotocols.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Archer Yan <ayan@wavecomp.com>
-Subject: [PATCH 1/2] Support mips unwinding and dwarf-regs.
-Thread-Topic: [PATCH 1/2] Support mips unwinding and dwarf-regs.
-Thread-Index: AQHVaHqhtfvUDrS4kkew3iwPTmr1iA==
-Date:   Wed, 11 Sep 2019 08:26:37 +0000
-Message-ID: <20190911082548.31546-1-ayan@wavecomp.com>
+        Ralf Baechle <ralf@linux-mips.org>
+Subject: [PATCH 2/2] Support extracting off-line stack traces from user-space
+ with perf.
+Thread-Topic: [PATCH 2/2] Support extracting off-line stack traces from
+ user-space with perf.
+Thread-Index: AQHVaHqnNstQioZOyE2BiD4e+77nEQ==
+Date:   Wed, 11 Sep 2019 08:26:48 +0000
+Message-ID: <20190911082548.31546-2-ayan@wavecomp.com>
+References: <20190911082548.31546-1-ayan@wavecomp.com>
+In-Reply-To: <20190911082548.31546-1-ayan@wavecomp.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -65,197 +68,271 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.17.1
 x-originating-ip: [218.108.86.174]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fb0ee303-d728-4399-e365-08d73691c39e
+x-ms-office365-filtering-correlation-id: e48cf5f7-4d98-4c30-6c6e-08d73691ca07
 x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1247;
 x-ms-traffictypediagnostic: MWHPR2201MB1247:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB1247C246D747EEF9916BD4CEB6B10@MWHPR2201MB1247.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-microsoft-antispam-prvs: <MWHPR2201MB1247594716473D9E0CFF5F10B6B10@MWHPR2201MB1247.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4941;
 x-forefront-prvs: 0157DEB61B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(346002)(39850400004)(396003)(136003)(366004)(189003)(199004)(2906002)(256004)(6486002)(478600001)(3846002)(6116002)(2616005)(8676002)(25786009)(186003)(486006)(8936002)(66066001)(81166006)(50226002)(71200400001)(71190400001)(81156014)(476003)(1076003)(7736002)(66476007)(66556008)(64756008)(66446008)(26005)(305945005)(102836004)(2351001)(6506007)(7416002)(5660300002)(386003)(66946007)(316002)(6916009)(99286004)(54906003)(14454004)(4326008)(2501003)(6436002)(36756003)(6512007)(107886003)(5640700003)(53936002)(86362001)(52116002)(14444005)(2004002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1247;H:MWHPR2201MB1534.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(346002)(39850400004)(396003)(136003)(366004)(189003)(199004)(2906002)(256004)(6486002)(478600001)(3846002)(6116002)(446003)(11346002)(2616005)(8676002)(25786009)(186003)(486006)(8936002)(66066001)(81166006)(50226002)(71200400001)(71190400001)(81156014)(476003)(30864003)(1076003)(7736002)(66476007)(66556008)(64756008)(66446008)(26005)(305945005)(102836004)(2351001)(6506007)(5660300002)(386003)(66946007)(316002)(6916009)(99286004)(54906003)(14454004)(4326008)(2501003)(6436002)(36756003)(6512007)(5640700003)(53936002)(86362001)(52116002)(76176011)(14444005)(2004002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1247;H:MWHPR2201MB1534.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 7mqP2+z96dbbT9q/6UbnQ0MGP3WC6IldZgZw4Twc49oT56NEdRxUJBfD2rBym6VxQcqLBHod8xxLX9Twn1J9RU1JF3n5CcxBe2QsF6Zn4L7g0PhpuXjiCApu1ZlaR3bmje9vHAbAhSvDcmMQXNaLf99Dl+7Rxjz52aDVRZPGfrQTh7TqjGxMjsU89wtw8s4TZE8Q09ytDgLEjk3ApN4Ibb1BMbgeRad3CYfNsJ5CNu9OUYpne7ZUa+2+XtPxLDcXMvv/juCXbTw6P74aFH2b4b8pP1AtT2D7a4N8hsEWGO3UuQb5NCps1kr1t4Ejb5p+TYwK3N/Q7d01NKsGgxgybMWY087iuVYy8+QZ13WalBvY0zZmeHeLO5aI5HEStGNXRrQnLlzrsoh3JmgkkmwmzDFE6TmlgGjXHHfkYxumfwI=
+x-microsoft-antispam-message-info: 9vU+giatP+tQJKqqGcrpNBssXQM09OYQtsl/lD5DCd+hKxgVn+F/uDGmu6BHKhJgmNFBhNgBVWngP410ywAdgwV5CSH5WPVB3f4/HPg0INwIC7p8WBZ2G5eH44tf8X1J+AZ0dmd8pLxouInMFthBvX+xBtGjKmLrGBgb2GZ6Nku/KrTcnen0kXSqIcj+xFoh8vkDmbzfj9qUF20QCOIoyHPrObHLPhgh30zKm376jWg3nnBnChPABg0Sb8ICv4OM0RSSw1RaCZ6gqsBj+pl77DHVi+TKm4hCV8pnbAM9qXaM7uuKvElnHuc5PNGZW00maCm/jSeLaALFrw/VptzoUn5MyxBReAkz+5CigjGPGr5i/1uMyXIPXDi/NQdLNVSRmJIx3FstTR+XNFUhvmrkzZaB2+wXrzHOXThe1gd7ns4=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: wavecomp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb0ee303-d728-4399-e365-08d73691c39e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2019 08:26:37.9820
+X-MS-Exchange-CrossTenant-Network-Message-Id: e48cf5f7-4d98-4c30-6c6e-08d73691ca07
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2019 08:26:48.7604
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iwBkvLTQsGcW6UW0wbBvvTJTwIpTYt8NMkFcnW50c6OJjV/pxWnczmt96o2IAYsuXtJywyeSedymPqXwRj0HQw==
+X-MS-Exchange-CrossTenant-userprincipalname: m8HKvkR6C3htizqDaY9YJzTQEWHUFTLjkPsn6lcry0fbU3ktIjCdOhGdHNnjlY9XlRk7HTNsKfNNPRB2usY1cg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1247
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: David Daney <david.daney@cavium.com>
+1. Add perf_event_mips_regs/perf_reg_value/perf_reg_validate to support
+   features HAVE_PERF_REGS/HAVE_PERF_USER_STACK_DUMP in kernel;
+2. Add dwarf reg table in perf tool for dwarf unwinding.
 
-Map perf APIs(perf_reg_name/get_arch_regstr/unwind__arch_reg_id)
-with MIPS specific registers.
+[ayan@wavecomp.com: Repick this patch for unwinding userstack backtrace
+ by perf and libunwind on MIPS based CPU.]
 
-[ayan@wavecomp.com: repick this patch for unwinding userstack
-backtrace by perf and libunwind on MIPS based CPU.]
+[ralf@linux-mips.org: Add perf_get_regs_user() which is required after
+'commit 88a7c26af8da ("perf: Move task_pt_regs sampling into arch code")'.]
 
 Signed-off-by: David Daney <david.daney@cavium.com>
 Cc: linux-mips@linux-mips.org
-Cc: Jiri Olsa <jolsa@redhat.com>
 Cc: linux-kernel@vger.kernel.org
 Cc: Peter Zijlstra <a.p.zijlstra@chello.nl>
 Cc: Paul Mackerras <paulus@samba.org>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Arnaldo Carvalho de Melo <acme@ghostprotocols.net>
 Signed-off-by: Ralf Baechle <ralf@linux-mips.org>
+
 Signed-off-by: Archer Yan <ayan@wavecomp.com>
 ---
- tools/perf/arch/mips/Build                   |  2 +-
- tools/perf/arch/mips/Makefile                |  7 ++
- tools/perf/arch/mips/include/perf_regs.h     | 84 ++++++++++++++++++++
- tools/perf/arch/mips/util/Build              |  2 +
- tools/perf/arch/mips/util/dwarf-regs.c       | 37 +++++++++
- tools/perf/arch/mips/util/unwind-libunwind.c | 21 +++++
- 6 files changed, 152 insertions(+), 1 deletion(-)
- create mode 100644 tools/perf/arch/mips/Makefile
- create mode 100644 tools/perf/arch/mips/include/perf_regs.h
- create mode 100644 tools/perf/arch/mips/util/Build
- create mode 100644 tools/perf/arch/mips/util/dwarf-regs.c
- create mode 100644 tools/perf/arch/mips/util/unwind-libunwind.c
+ arch/mips/Kconfig                             |  2 +
+ arch/mips/include/uapi/asm/perf_regs.h        | 42 ++++++++++++
+ arch/mips/kernel/Makefile                     |  2 +-
+ arch/mips/kernel/perf_regs.c                  | 67 +++++++++++++++++++
+ tools/perf/Makefile.config                    |  6 ++
+ tools/perf/arch/mips/Build                    |  2 +-
+ tools/perf/arch/mips/Makefile                 |  4 --
+ .../perf/arch/mips/include/dwarf-regs-table.h | 31 +++++++++
+ tools/perf/arch/mips/include/perf_regs.h      |  2 +-
+ tools/perf/arch/mips/util/Build               |  4 +-
+ tools/perf/arch/mips/util/dwarf-regs.c        |  3 +-
+ tools/perf/arch/mips/util/unwind-libunwind.c  |  3 +-
+ tools/perf/util/dwarf-regs.c                  |  3 +
+ 13 files changed, 159 insertions(+), 12 deletions(-)
+ create mode 100644 arch/mips/include/uapi/asm/perf_regs.h
+ create mode 100644 arch/mips/kernel/perf_regs.c
+ create mode 100644 tools/perf/arch/mips/include/dwarf-regs-table.h
 
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index d50fafd7bf3a..4b68beb285b5 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -69,6 +69,8 @@ config MIPS
+ 	select HAVE_NMI
+ 	select HAVE_OPROFILE
+ 	select HAVE_PERF_EVENTS
++	select HAVE_PERF_REGS
++	select HAVE_PERF_USER_STACK_DUMP
+ 	select HAVE_REGS_AND_STACK_ACCESS_API
+ 	select HAVE_RSEQ
+ 	select HAVE_STACKPROTECTOR
+diff --git a/arch/mips/include/uapi/asm/perf_regs.h b/arch/mips/include/uap=
+i/asm/perf_regs.h
+new file mode 100644
+index 000000000000..f3cef08b97c9
+--- /dev/null
++++ b/arch/mips/include/uapi/asm/perf_regs.h
+@@ -0,0 +1,42 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef _ASM_MIPS_PERF_REGS_H
++#define _ASM_MIPS_PERF_REGS_H
++
++enum perf_event_mips_regs {
++	PERF_REG_MIPS_PC,
++	PERF_REG_MIPS_R1,
++	PERF_REG_MIPS_R2,
++	PERF_REG_MIPS_R3,
++	PERF_REG_MIPS_R4,
++	PERF_REG_MIPS_R5,
++	PERF_REG_MIPS_R6,
++	PERF_REG_MIPS_R7,
++	PERF_REG_MIPS_R8,
++	PERF_REG_MIPS_R9,
++	PERF_REG_MIPS_R10,
++	PERF_REG_MIPS_R11,
++	PERF_REG_MIPS_R12,
++	PERF_REG_MIPS_R13,
++	PERF_REG_MIPS_R14,
++	PERF_REG_MIPS_R15,
++	PERF_REG_MIPS_R16,
++	PERF_REG_MIPS_R17,
++	PERF_REG_MIPS_R18,
++	PERF_REG_MIPS_R19,
++	PERF_REG_MIPS_R20,
++	PERF_REG_MIPS_R21,
++	PERF_REG_MIPS_R22,
++	PERF_REG_MIPS_R23,
++	PERF_REG_MIPS_R24,
++	PERF_REG_MIPS_R25,
++	/*
++	 * 26 and 27 are k0 and k1, they are always clobbered thus not
++	 * stored.
++	 */
++	PERF_REG_MIPS_R28,
++	PERF_REG_MIPS_R29,
++	PERF_REG_MIPS_R30,
++	PERF_REG_MIPS_R31,
++	PERF_REG_MIPS_MAX =3D PERF_REG_MIPS_R31 + 1,
++};
++#endif /* _ASM_MIPS_PERF_REGS_H */
+diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
+index 89b07ea8d249..d8fb04540505 100644
+--- a/arch/mips/kernel/Makefile
++++ b/arch/mips/kernel/Makefile
+@@ -100,7 +100,7 @@ CFLAGS_cpu-bugs64.o	=3D $(shell if $(CC) $(KBUILD_CFLAG=
+S) -Wa,-mdaddi -c -o /dev/n
+=20
+ obj-$(CONFIG_HAVE_STD_PC_SERIAL_PORT)	+=3D 8250-platform.o
+=20
+-obj-$(CONFIG_PERF_EVENTS)	+=3D perf_event.o
++obj-$(CONFIG_PERF_EVENTS)	+=3D perf_event.o perf_regs.o
+ obj-$(CONFIG_HW_PERF_EVENTS)	+=3D perf_event_mipsxx.o
+=20
+ obj-$(CONFIG_JUMP_LABEL)	+=3D jump_label.o
+diff --git a/arch/mips/kernel/perf_regs.c b/arch/mips/kernel/perf_regs.c
+new file mode 100644
+index 000000000000..11f93836c240
+--- /dev/null
++++ b/arch/mips/kernel/perf_regs.c
+@@ -0,0 +1,67 @@
++/*
++ * This file is subject to the terms and conditions of the GNU General Pub=
+lic
++ * License.  See the file "COPYING" in the main directory of this archive
++ * for more details.
++ *
++ * Some parts derived from x86 version of this file.
++ *
++ * Copyright (C) 2013 Cavium, Inc.
++ */
++
++#include <linux/perf_event.h>
++
++#include <asm/ptrace.h>
++
++#ifdef CONFIG_32BIT
++u64 perf_reg_abi(struct task_struct *tsk)
++{
++	return PERF_SAMPLE_REGS_ABI_32;
++}
++#else /* Must be CONFIG_64BIT */
++u64 perf_reg_abi(struct task_struct *tsk)
++{
++	if (test_tsk_thread_flag(tsk, TIF_32BIT_REGS))
++		return PERF_SAMPLE_REGS_ABI_32;
++	else
++		return PERF_SAMPLE_REGS_ABI_64;
++}
++#endif /* CONFIG_32BIT */
++
++int perf_reg_validate(u64 mask)
++{
++	if (!mask)
++		return -EINVAL;
++	if (mask & ~((1ull << PERF_REG_MIPS_MAX) - 1))
++		return -EINVAL;
++	return 0;
++}
++
++u64 perf_reg_value(struct pt_regs *regs, int idx)
++{
++	long v;
++
++	switch (idx) {
++	case PERF_REG_MIPS_PC:
++		v =3D regs->cp0_epc;
++		break;
++	case PERF_REG_MIPS_R1 ... PERF_REG_MIPS_R25:
++		v =3D regs->regs[idx - PERF_REG_MIPS_R1 + 1];
++		break;
++	case PERF_REG_MIPS_R28 ... PERF_REG_MIPS_R31:
++		v =3D regs->regs[idx - PERF_REG_MIPS_R28 + 28];
++		break;
++
++	default:
++		WARN_ON_ONCE(1);
++		return 0;
++	}
++
++	return (s64)v; /* Sign extend if 32-bit. */
++}
++
++void perf_get_regs_user(struct perf_regs *regs_user,
++		struct pt_regs *regs, struct pt_regs *regs_user_copy)
++{
++	regs_user->regs =3D task_pt_regs(current);
++	regs_user->abi =3D perf_reg_abi(current);
++}
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index 89ac5a1f1550..f382c282fb8e 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -74,6 +74,12 @@ ifeq ($(NO_PERF_REGS),0)
+   $(call detected,CONFIG_PERF_REGS)
+ endif
+=20
++ifeq ($(ARCH),mips)
++  NO_PERF_REGS :=3D 0
++  CFLAGS +=3D -I../../arch/mips/include/uapi -I../../arch/mips/include/gen=
+erated/uapi
++  LIBUNWIND_LIBS =3D -lunwind -lunwind-mips
++endif
++
+ ifneq ($(NO_SYSCALL_TABLE),1)
+   CFLAGS +=3D -DHAVE_SYSCALL_TABLE_SUPPORT
+ endif
 diff --git a/tools/perf/arch/mips/Build b/tools/perf/arch/mips/Build
-index 1bb8bf6d7fd4..54afe4a467e7 100644
+index 54afe4a467e7..e4e5f33c84d8 100644
 --- a/tools/perf/arch/mips/Build
 +++ b/tools/perf/arch/mips/Build
 @@ -1 +1 @@
--# empty
-+libperf-y +=3D util/
+-libperf-y +=3D util/
++perf-y +=3D util/
 diff --git a/tools/perf/arch/mips/Makefile b/tools/perf/arch/mips/Makefile
-new file mode 100644
-index 000000000000..fe9b61e322a5
---- /dev/null
+index fe9b61e322a5..7fbca175099e 100644
+--- a/tools/perf/arch/mips/Makefile
 +++ b/tools/perf/arch/mips/Makefile
-@@ -0,0 +1,7 @@
-+ifndef NO_DWARF
-+PERF_HAVE_DWARF_REGS :=3D 1
-+LIB_OBJS +=3D $(OUTPUT)arch/$(ARCH)/util/dwarf-regs.o
-+endif
-+ifndef NO_LIBUNWIND
-+LIB_OBJS +=3D $(OUTPUT)arch/$(ARCH)/util/unwind.o
-+endif
-diff --git a/tools/perf/arch/mips/include/perf_regs.h b/tools/perf/arch/mip=
-s/include/perf_regs.h
+@@ -1,7 +1,3 @@
+ ifndef NO_DWARF
+ PERF_HAVE_DWARF_REGS :=3D 1
+-LIB_OBJS +=3D $(OUTPUT)arch/$(ARCH)/util/dwarf-regs.o
+-endif
+-ifndef NO_LIBUNWIND
+-LIB_OBJS +=3D $(OUTPUT)arch/$(ARCH)/util/unwind.o
+ endif
+diff --git a/tools/perf/arch/mips/include/dwarf-regs-table.h b/tools/perf/a=
+rch/mips/include/dwarf-regs-table.h
 new file mode 100644
-index 000000000000..bc47b25d95dd
+index 000000000000..169a3f9679d5
 --- /dev/null
-+++ b/tools/perf/arch/mips/include/perf_regs.h
-@@ -0,0 +1,84 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef ARCH_PERF_REGS_H
-+#define ARCH_PERF_REGS_H
-+
-+#include <stdlib.h>
-+#include "../../util/types.h"
-+#include <asm/perf_regs.h>
-+
-+#define PERF_REG_IP PERF_REG_MIPS_PC
-+#define PERF_REG_SP PERF_REG_MIPS_R29
-+
-+#define PERF_REGS_MASK ((1ULL << PERF_REG_MIPS_MAX) - 1)
-+
-+static inline const char *perf_reg_name(int id)
-+{
-+	switch (id) {
-+	case PERF_REG_MIPS_PC:
-+		return "PC";
-+	case PERF_REG_MIPS_R1:
-+		return "$1";
-+	case PERF_REG_MIPS_R2:
-+		return "$2";
-+	case PERF_REG_MIPS_R3:
-+		return "$3";
-+	case PERF_REG_MIPS_R4:
-+		return "$4";
-+	case PERF_REG_MIPS_R5:
-+		return "$5";
-+	case PERF_REG_MIPS_R6:
-+		return "$6";
-+	case PERF_REG_MIPS_R7:
-+		return "$7";
-+	case PERF_REG_MIPS_R8:
-+		return "$8";
-+	case PERF_REG_MIPS_R9:
-+		return "$9";
-+	case PERF_REG_MIPS_R10:
-+		return "$10";
-+	case PERF_REG_MIPS_R11:
-+		return "$11";
-+	case PERF_REG_MIPS_R12:
-+		return "$12";
-+	case PERF_REG_MIPS_R13:
-+		return "$13";
-+	case PERF_REG_MIPS_R14:
-+		return "$14";
-+	case PERF_REG_MIPS_R15:
-+		return "$15";
-+	case PERF_REG_MIPS_R16:
-+		return "$16";
-+	case PERF_REG_MIPS_R17:
-+		return "$17";
-+	case PERF_REG_MIPS_R18:
-+		return "$18";
-+	case PERF_REG_MIPS_R19:
-+		return "$19";
-+	case PERF_REG_MIPS_R20:
-+		return "$20";
-+	case PERF_REG_MIPS_R21:
-+		return "$21";
-+	case PERF_REG_MIPS_R22:
-+		return "$22";
-+	case PERF_REG_MIPS_R23:
-+		return "$23";
-+	case PERF_REG_MIPS_R24:
-+		return "$24";
-+	case PERF_REG_MIPS_R25:
-+		return "$25";
-+	case PERF_REG_MIPS_R28:
-+		return "$28";
-+	case PERF_REG_MIPS_R29:
-+		return "$29";
-+	case PERF_REG_MIPS_R30:
-+		return "$30";
-+	case PERF_REG_MIPS_R31:
-+		return "$31";
-+	default:
-+		break;
-+	}
-+	return NULL;
-+}
-+
-+
-+#endif /* ARCH_PERF_REGS_H */
-diff --git a/tools/perf/arch/mips/util/Build b/tools/perf/arch/mips/util/Bu=
-ild
-new file mode 100644
-index 000000000000..7da83b5ebc4c
---- /dev/null
-+++ b/tools/perf/arch/mips/util/Build
-@@ -0,0 +1,2 @@
-+libperf-$(CONFIG_DWARF)                +=3D dwarf-regs.o
-+libperf-$(CONFIG_LIBUNWIND)    +=3D unwind-libunwind.o
-diff --git a/tools/perf/arch/mips/util/dwarf-regs.c b/tools/perf/arch/mips/=
-util/dwarf-regs.c
-new file mode 100644
-index 000000000000..165e0179ea11
---- /dev/null
-+++ b/tools/perf/arch/mips/util/dwarf-regs.c
-@@ -0,0 +1,37 @@
++++ b/tools/perf/arch/mips/include/dwarf-regs-table.h
+@@ -0,0 +1,31 @@
 +/*
-+ * dwarf-regs.c : Mapping of DWARF debug register numbers into register na=
-mes.
++ * dwarf-regs-table.h : Mapping of DWARF debug register numbers into
++ * register names.
 + *
 + * Copyright (C) 2013 Cavium, Inc.
 + *
@@ -271,54 +348,99 @@ mes.
 + *
 + */
 +
-+#include <libio.h>
-+#include <dwarf-regs.h>
-+
-+static const char *mips_gpr_names[32] =3D {
++#ifdef DEFINE_DWARF_REGSTR_TABLE
++#undef REG_DWARFNUM_NAME
++#define REG_DWARFNUM_NAME(reg, idx)	([idx] =3D "$" #reg)
++static const char *mips_regstr_tbl[] =3D {
 +	"$0", "$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9",
 +	"$10", "$11", "$12", "$13", "$14", "$15", "$16", "$17", "$18", "$19",
 +	"$20", "$21", "$22", "$23", "$24", "$25", "$26", "$27", "$28", "$29",
-+	"$30", "$31"
-+};
++	"$30", "$31",
++	REG_DWARFNUM_NAME(hi,   64),
++	REG_DWARFNUM_NAME(lo,   65),
 +
-+const char *get_arch_regstr(unsigned int n)
-+{
-+	if (n < 32)
-+		return mips_gpr_names[n];
-+	if (n =3D=3D 64)
-+		return "hi";
-+	if (n =3D=3D 65)
-+		return "lo";
-+	return NULL;
-+}
++};
++#endif
+diff --git a/tools/perf/arch/mips/include/perf_regs.h b/tools/perf/arch/mip=
+s/include/perf_regs.h
+index bc47b25d95dd..871bc6febe22 100644
+--- a/tools/perf/arch/mips/include/perf_regs.h
++++ b/tools/perf/arch/mips/include/perf_regs.h
+@@ -3,9 +3,9 @@
+ #define ARCH_PERF_REGS_H
+=20
+ #include <stdlib.h>
+-#include "../../util/types.h"
+ #include <asm/perf_regs.h>
+=20
++#define PERF_REGS_MAX PERF_REG_MIPS_MAX
+ #define PERF_REG_IP PERF_REG_MIPS_PC
+ #define PERF_REG_SP PERF_REG_MIPS_R29
+=20
+diff --git a/tools/perf/arch/mips/util/Build b/tools/perf/arch/mips/util/Bu=
+ild
+index 7da83b5ebc4c..678a68830ceb 100644
+--- a/tools/perf/arch/mips/util/Build
++++ b/tools/perf/arch/mips/util/Build
+@@ -1,2 +1,2 @@
+-libperf-$(CONFIG_DWARF)                +=3D dwarf-regs.o
+-libperf-$(CONFIG_LIBUNWIND)    +=3D unwind-libunwind.o
++perf-$(CONFIG_DWARF)                +=3D dwarf-regs.o
++perf-$(CONFIG_LIBUNWIND)    +=3D unwind-libunwind.o
+diff --git a/tools/perf/arch/mips/util/dwarf-regs.c b/tools/perf/arch/mips/=
+util/dwarf-regs.c
+index 165e0179ea11..423abf158c99 100644
+--- a/tools/perf/arch/mips/util/dwarf-regs.c
++++ b/tools/perf/arch/mips/util/dwarf-regs.c
+@@ -14,8 +14,7 @@
+  * GNU General Public License for more details.
+  *
+  */
+-
+-#include <libio.h>
++#include <stdio.h>
+ #include <dwarf-regs.h>
+=20
+ static const char *mips_gpr_names[32] =3D {
 diff --git a/tools/perf/arch/mips/util/unwind-libunwind.c b/tools/perf/arch=
 /mips/util/unwind-libunwind.c
-new file mode 100644
-index 000000000000..7af25427943f
---- /dev/null
+index 7af25427943f..0d8c99c29da6 100644
+--- a/tools/perf/arch/mips/util/unwind-libunwind.c
 +++ b/tools/perf/arch/mips/util/unwind-libunwind.c
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <errno.h>
-+#include <libunwind.h>
-+#include "perf_regs.h"
-+#include "../../util/unwind.h"
-+
-+int unwind__arch_reg_id(int regnum)
-+{
-+	switch (regnum) {
-+	case UNW_MIPS_R1 ... UNW_MIPS_R25:
-+		return regnum - UNW_MIPS_R1 + PERF_REG_MIPS_R1;
-+	case UNW_MIPS_R28 ... UNW_MIPS_R31:
-+		return regnum - UNW_MIPS_R28 + PERF_REG_MIPS_R28;
-+	case UNW_MIPS_PC:
-+		return PERF_REG_MIPS_PC;
-+	default:
-+		pr_err("unwind: invalid reg id %d\n", regnum);
-+		return -EINVAL;
-+	}
-+}
+@@ -4,8 +4,9 @@
+ #include <libunwind.h>
+ #include "perf_regs.h"
+ #include "../../util/unwind.h"
++#include "util/debug.h"
+=20
+-int unwind__arch_reg_id(int regnum)
++int libunwind__arch_reg_id(int regnum)
+ {
+ 	switch (regnum) {
+ 	case UNW_MIPS_R1 ... UNW_MIPS_R25:
+diff --git a/tools/perf/util/dwarf-regs.c b/tools/perf/util/dwarf-regs.c
+index db55eddce8cd..0bf60e6d28b5 100644
+--- a/tools/perf/util/dwarf-regs.c
++++ b/tools/perf/util/dwarf-regs.c
+@@ -25,6 +25,7 @@
+ #include "../arch/s390/include/dwarf-regs-table.h"
+ #include "../arch/sparc/include/dwarf-regs-table.h"
+ #include "../arch/xtensa/include/dwarf-regs-table.h"
++#include "../arch/mips/include/dwarf-regs-table.h"
+=20
+ #define __get_dwarf_regstr(tbl, n) (((n) < ARRAY_SIZE(tbl)) ? (tbl)[(n)] :=
+ NULL)
+=20
+@@ -54,6 +55,8 @@ const char *get_dwarf_regstr(unsigned int n, unsigned int=
+ machine)
+ 		return __get_dwarf_regstr(sparc_regstr_tbl, n);
+ 	case EM_XTENSA:
+ 		return __get_dwarf_regstr(xtensa_regstr_tbl, n);
++	case EM_MIPS:
++		return __get_dwarf_regstr(mips_regstr_tbl, n);
+ 	default:
+ 		pr_err("ELF MACHINE %x is not supported.\n", machine);
+ 	}
 --=20
 2.17.1
 
