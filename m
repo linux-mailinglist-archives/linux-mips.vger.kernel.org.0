@@ -2,297 +2,224 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5638AF051
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Sep 2019 19:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7DA7AF6F8
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Sep 2019 09:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437090AbfIJRQF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Sep 2019 13:16:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38658 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437088AbfIJRQF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 10 Sep 2019 13:16:05 -0400
-Received: from localhost (110.8.30.213.rev.vodafone.pt [213.30.8.110])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6EADF2081B;
-        Tue, 10 Sep 2019 17:16:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568135764;
-        bh=hUYdhn7tFl6XOIHOWQRJF5fSSz97EzLxhwquR6JM8RQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sXDmL5mSBT5euAGAZPqxXUqzw0UFP0uFkP/pG7aKaZmh1fF9xAXMlJ2OpEWpOo7of
-         TnQ4oaGoaAZljjOztF78qwJSuXeGtowodS81bvPIhet6Gtu564hp73M0stF3Q1r/lX
-         +hNkdh4MuZPDYjJvtt3mVdoSElPBVlcsplcLQ0Jk=
-Date:   Tue, 10 Sep 2019 18:16:01 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sheetal Tigadoli <sheetal.tigadoli@broadcom.com>
-Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rajan Vaja <rajan.vaja@xilinx.com>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Ray Jui <ray.jui@broadcom.com>,
-        Vikram Prakash <vikram.prakash@broadcom.com>,
-        tee-dev@lists.linaro.org, bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Vikas Gupta <vikas.gupta@broadcom.com>
-Subject: Re: [PATCH] firmware: broadcom: add OP-TEE based BNXT f/w manager
-Message-ID: <20190910171601.GA12665@kroah.com>
-References: <1568128624-2902-1-git-send-email-sheetal.tigadoli@broadcom.com>
+        id S1725924AbfIKHeh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Sep 2019 03:34:37 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:55337 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726735AbfIKHeg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Sep 2019 03:34:36 -0400
+Received: by mail-wm1-f67.google.com with SMTP id g207so2150104wmg.5
+        for <linux-mips@vger.kernel.org>; Wed, 11 Sep 2019 00:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:openpgp:autocrypt:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=ntQnlZ165aoTq9A7WDI2toA4HdgPISzpICPAyGRYlc4=;
+        b=DMMbzJxxUXHFi6Z63lgJ1y7Sb/XAkiZLWF0D1+uoabJCHSepnQp4es4L6JW2eVagzh
+         72rCnxWkdINIZffgA6FJDDv1cZsc+xCJ96gjFDGsnFT/hoLUjJPTrbgYaJd7PokhtWnH
+         OTfaJl12/d5r/1ERItxyTyhsgX31+DwTKVVyoNiRpdAo1kVz31c2aiTgxAUBVDnpjMAV
+         DjtgPgaTKqzDjK8Ac7atghJQxxGqy9uZA+Mg+e9bu/zTWhUlugNecrmiCFU/k80GDkh6
+         fuT2Iwj60ftMrfIVjjBd2usNbSjEkk428eJwTjzYtZ3c+FGD6oRv2oFmwmg93VzpK1Sh
+         ca5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=ntQnlZ165aoTq9A7WDI2toA4HdgPISzpICPAyGRYlc4=;
+        b=aU3mlT3Ve4rCxtjZotQfXhqAsXvs981dC2dpLxV9pKuvxm+5C9LmvxQHWLVggfKWHU
+         D4w0jzf++h1p3Oud3OATul4BaW867GDrx6oUWCn5uVF5mT2qUeT7Zy0eHTcItAGFdIOQ
+         jAJSccrgx34rxKaRCwsaCj+kce+yQyD75h9OUleANWWKMAHfSnw1MVsLd5ISq6WO9Yax
+         YPNnCXPUcleRLZdY6/NiL0uY8CVfgMs/MqogAULAnJMwcg++i6ZYH3yfj8W/v9TQg8p+
+         xcWYMh6WXC1hr9j9OAfyUcqlVlL8p0TBk40yAlM2RRL0u061n4Iv/8dHG82WzR75DAY5
+         Sasg==
+X-Gm-Message-State: APjAAAV7Dw4sfilqXCGR1oC/uDUFz6uJmAWlduqc59rgeSRQdtd6RXT0
+        RRNL27sELkJ9Fb8vBUOvbaPy8A==
+X-Google-Smtp-Source: APXvYqxxDvRVKQaWLplVyw8RxLikPJkEefVhJ7vX1GPMo2oDLkeZWy4Fj5QkFLqrwRhYintC8OnwBA==
+X-Received: by 2002:a1c:ca02:: with SMTP id a2mr2835861wmg.127.1568187271380;
+        Wed, 11 Sep 2019 00:34:31 -0700 (PDT)
+Received: from [192.168.1.62] (176-150-251-154.abo.bbox.fr. [176.150.251.154])
+        by smtp.gmail.com with ESMTPSA id d193sm3518079wmd.0.2019.09.11.00.34.27
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 11 Sep 2019 00:34:30 -0700 (PDT)
+Subject: Re: [PATCH 4/7] dt-bindings: chosen: Add clocksource and clockevent
+ selection
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, linux@armlinux.org.uk, nsekhar@ti.com,
+        bgolaszewski@baylibre.com, monstr@monstr.eu, john@phrozen.org,
+        ralf@linux-mips.org, paul.burton@mips.com, jhogan@kernel.org,
+        lftan@altera.com, tglx@linutronix.de, vgupta@synopsys.com,
+        marc.zyngier@arm.com, patrice.chotard@st.com,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@st.com,
+        eric@anholt.net, wahrenst@gmx.net, f.fainelli@gmail.com,
+        rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, linus.walleij@linaro.org,
+        shc_work@mail.ru, kgene@kernel.org, krzk@kernel.org,
+        ysato@users.sourceforge.jp, liviu.dudau@arm.com,
+        sudeep.holla@arm.com, lorenzo.pieralisi@arm.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, baohua@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        ludovic.desroches@microchip.com, baruch@tkos.co.il,
+        u.kleine-koenig@pengutronix.de, guoren@kernel.org,
+        kaloz@openwrt.org, khalasa@piap.pl, ssantosh@kernel.org,
+        vz@mleia.com, slemieux.tyco@gmail.com, khilman@baylibre.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        afaerber@suse.de, manivannan.sadhasivam@linaro.org,
+        agross@kernel.org, palmer@sifive.com, aou@eecs.berkeley.edu,
+        heiko@sntech.de, orsonzhai@gmail.com, baolin.wang@linaro.org,
+        zhang.lyra@gmail.com, maxime.ripard@bootlin.com, wens@csie.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux@prisktech.co.nz, john.stultz@linaro.org, sboyd@kernel.org,
+        matthias.bgg@gmail.com
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        nios2-dev@lists.rocketboards.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp,
+        linux-amlogic@lists.infradead.org, openbmc@lists.ozlabs.org,
+        linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org,
+        linux-unisoc@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <1568123236-767-1-git-send-email-claudiu.beznea@microchip.com>
+ <1568123236-767-5-git-send-email-claudiu.beznea@microchip.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ ZaTUOEkgIor5losDrePdPgE=
+Organization: Baylibre
+Message-ID: <81da473f-54d7-2a00-61ec-9351cdfcaaf3@baylibre.com>
+Date:   Wed, 11 Sep 2019 09:34:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1568128624-2902-1-git-send-email-sheetal.tigadoli@broadcom.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <1568123236-767-5-git-send-email-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 10, 2019 at 08:47:04PM +0530, Sheetal Tigadoli wrote:
-> From: Vikas Gupta <vikas.gupta@broadcom.com>
+Hi,
+
+On 10/09/2019 15:47, Claudiu Beznea wrote:
+> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 > 
-> This driver registers on TEE bus to interact with OP-TEE based
-> BNXT firmware management modules
+> Some timer drivers may behave either as clocksource or clockevent
+> or both. Until now, in case of platforms with multiple hardware
+> resources of the same type, the drivers were chosing the first
+> registered hardware resource as clocksource/clockevent and the
+> next one as clockevent/clocksource. Other were using different
+> compatibles (one for each functionality, although its about the
+> same hardware). Add DT bindings to be able to choose the
+> functionality of a timer.
 > 
-> Signed-off-by: Vikas Gupta <vikas.gupta@broadcom.com>
-> Signed-off-by: Sheetal Tigadoli <sheetal.tigadoli@broadcom.com>
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 > ---
->  drivers/firmware/broadcom/Kconfig             |   8 +
->  drivers/firmware/broadcom/Makefile            |   1 +
->  drivers/firmware/broadcom/tee_bnxt_fw.c       | 447 ++++++++++++++++++++++++++
->  include/linux/firmware/broadcom/tee_bnxt_fw.h |  17 +
->  4 files changed, 473 insertions(+)
->  create mode 100644 drivers/firmware/broadcom/tee_bnxt_fw.c
->  create mode 100644 include/linux/firmware/broadcom/tee_bnxt_fw.h
+>  Documentation/devicetree/bindings/chosen.txt | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
 > 
-> diff --git a/drivers/firmware/broadcom/Kconfig b/drivers/firmware/broadcom/Kconfig
-> index 6468082..a846a21 100644
-> --- a/drivers/firmware/broadcom/Kconfig
-> +++ b/drivers/firmware/broadcom/Kconfig
-> @@ -22,3 +22,11 @@ config BCM47XX_SPROM
->  	  In case of SoC devices SPROM content is stored on a flash used by
->  	  bootloader firmware CFE. This driver provides method to ssb and bcma
->  	  drivers to read SPROM on SoC.
+> diff --git a/Documentation/devicetree/bindings/chosen.txt b/Documentation/devicetree/bindings/chosen.txt
+> index 45e79172a646..aad3034cdbdf 100644
+> --- a/Documentation/devicetree/bindings/chosen.txt
+> +++ b/Documentation/devicetree/bindings/chosen.txt
+> @@ -135,3 +135,23 @@ e.g.
+>  		linux,initrd-end = <0x82800000>;
+>  	};
+>  };
 > +
-> +config TEE_BNXT_FW
-> +	bool "Broadcom BNXT firmware manager"
-> +	depends on ARCH_BCM_IPROC && OPTEE
-
-No ability to build with compile testing?
-
-> +	default ARCH_BCM_IPROC
-> +	help
-> +	  This module help to manage firmware on Broadcom BNXT device. The module
-> +	  registers on tee bus and invoke calls to manage firmware on BNXT device.
-> diff --git a/drivers/firmware/broadcom/Makefile b/drivers/firmware/broadcom/Makefile
-> index 72c7fdc..17c5061 100644
-> --- a/drivers/firmware/broadcom/Makefile
-> +++ b/drivers/firmware/broadcom/Makefile
-> @@ -1,3 +1,4 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  obj-$(CONFIG_BCM47XX_NVRAM)		+= bcm47xx_nvram.o
->  obj-$(CONFIG_BCM47XX_SPROM)		+= bcm47xx_sprom.o
-> +obj-$(CONFIG_TEE_BNXT_FW)		+= tee_bnxt_fw.o
-> diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
-> new file mode 100644
-> index 00000000..89a48fd
-> --- /dev/null
-> +++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
-> @@ -0,0 +1,447 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2019 Broadcom.
-> + */
+> +linux,clocksource and linux,clockevent
+> +--------------------------------------
 > +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/tee_drv.h>
-> +#include <linux/uuid.h>
+> +Those nodes have a timer property. This property is a phandle to the timer to be
+> +chosen as the clocksource or clockevent. This is only useful when the platform
+> +has multiple identical timers and it is not possible to let linux make the
+> +correct choice.
 > +
-> +#include <linux/firmware/broadcom/tee_bnxt_fw.h>
+> +/ {
+> +	chosen {
+> +		linux,clocksource {
+> +			timer = <&timer0>;
+> +		};
 > +
-> +#define DRIVER_NAME	"tee-bnxt-fw"
-
-KBUILD_MODNAME?
-
-> +#define MAX_SHM_MEM_SZ	SZ_4M
-
-Why?
-
-> +
-> +#define MAX_TEE_PARAM_ARRY_MEMB		4
-> +
-> +enum ta_cmd {
-> +/*
-> + * TA_CMD_BNXT_FASTBOOT - boot bnxt device by copying f/w into sram
-> + *
-> + * param[0] unused
-> + * param[1] unused
-> + * param[2] unused
-> + * param[3] unused
-> + *
-> + * Result:
-> + * TEE_SUCCESS - Invoke command success
-> + * TEE_ERROR_ITEM_NOT_FOUND - Corrupt f/w image found on memory
-> + */
-> +	TA_CMD_BNXT_FASTBOOT = 0,
-> +
-
-Please indent the comments too.  As-is this is hard to read.
-
-
-> +/*
-> + * TA_CMD_BNXT_HEALTH_STATUS - to check health of bnxt device
-> + *
-> + * param[0] (out value) - value.a: health status
-> + * param[1] unused
-> + * param[2] unused
-> + * param[3] unused
-> + *
-> + * Result:
-> + * TEE_SUCCESS - Invoke command success
-> + * TEE_ERROR_BAD_PARAMETERS - Incorrect input param
-> + */
-> +	TA_CMD_BNXT_HEALTH_STATUS,
-
-Should all of these have explicit values?
-
-> +
-> +/*
-> + * TA_CMD_BNXT_HANDSHAKE - to check bnxt device is booted
-> + *
-> + * param[0] (in value)  - value.a: max timeout value
-> + * param[0] (out value) - value.a: boot status
-> + * param[1] unused
-> + * param[2] unused
-> + * param[3] unused
-> + *
-> + * Result:
-> + * TEE_SUCCESS - Invoke command success
-> + * TEE_ERROR_BAD_PARAMETERS - Incorrect input param
-> + */
-> +	TA_CMD_BNXT_HANDSHAKE,
-> +
-> +/*
-> + * TA_CMD_BNXT_COPY_COREDUMP - copy the core dump into shm
-> + *
-> + * param[0] (in value) - value.a: offset at which data to be copied from
-> + *			 value.b: size of the data
-> + * param[1] unused
-> + * param[2] unused
-> + * param[3] unused
-> + *
-> + * Result:
-> + * TEE_SUCCESS - Invoke command success
-> + * TEE_ERROR_BAD_PARAMETERS - Incorrect input param
-> + * TEE_ERROR_ITEM_NOT_FOUND - Corrupt core dump
-> + */
-> +	TA_CMD_BNXT_COPY_COREDUMP,
-> +
-> +/*
-> + * TA_CMD_BNXT_FW_UPGRADE - upgrade the bnxt firmware
-> + *
-> + * param[0] (in value) - value.a: size of the f/w image
-> + * param[1] unused
-> + * param[2] unused
-> + * param[3] unused
-> + *
-> + * Result:
-> + * TEE_SUCCESS - Invoke command success
-> + * TEE_ERROR_BAD_PARAMETERS - Incorrect input param
-> + */
-> +	TA_CMD_BNXT_FW_UPGRADE,
+> +		linux,clockevent {
+> +			timer = <&timer1>;
+> +		};
+> +	};
 > +};
-> +
-> +/**
-> + * struct tee_bnxt_fw_private - OP-TEE bnxt private data
-> + * @dev:		OP-TEE based bnxt device.
-> + * @ctx:		OP-TEE context handler.
-> + * @session_id:		TA session identifier.
-> + */
-> +struct tee_bnxt_fw_private {
-> +	struct device *dev;
+> 
 
-Why is the pointer back needed?
+Why not in aliases ?
 
-> +	struct tee_context *ctx;
-> +	u32 session_id;
-> +	struct tee_shm *fw_shm_pool;
-> +};
-> +
-> +static struct tee_bnxt_fw_private pvt_data;
-> +
-> +static inline void prepare_args(int cmd,
-> +				struct tee_ioctl_invoke_arg *inv_arg,
-> +				struct tee_param *param)
-> +{
-> +	memset(inv_arg, 0, sizeof(*inv_arg));
-> +	memset(param, 0, (MAX_TEE_PARAM_ARRY_MEMB * sizeof(*param)));
-> +
-> +	inv_arg->func = cmd;
-> +	inv_arg->session = pvt_data.session_id;
-> +	inv_arg->num_params = MAX_TEE_PARAM_ARRY_MEMB;
-> +
-> +	/* Fill invoke cmd params */
-> +	switch (cmd) {
-> +	case TA_CMD_BNXT_HEALTH_STATUS:
-> +		param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_OUTPUT;
-> +		break;
-> +	case TA_CMD_BNXT_HANDSHAKE:
-> +		param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_INOUT;
-> +		break;
-> +	case TA_CMD_BNXT_COPY_COREDUMP:
-> +	case TA_CMD_BNXT_FW_UPGRADE:
-> +		param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INOUT;
-> +		param[0].u.memref.shm = pvt_data.fw_shm_pool;
-> +		param[0].u.memref.size = MAX_SHM_MEM_SZ;
-> +		param[0].u.memref.shm_offs = 0;
-> +		param[1].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_INPUT;
-> +		break;
-> +	case TA_CMD_BNXT_FASTBOOT:
-> +	default:
-> +		/* Nothing to do */
-> +		break;
-> +	}
-> +}
-> +
-> +/**
-> + * tee_bnxt_fw_load() - Load the bnxt firmware
-> + *		    Uses an OP-TEE call to start a secure
-> + *		    boot process.
-> + * Returns 0 on success, negative errno otherwise.
-> + */
-> +int tee_bnxt_fw_load(void)
-> +{
-> +	int ret = 0;
-> +	struct tee_ioctl_invoke_arg inv_arg;
-> +	struct tee_param param[MAX_TEE_PARAM_ARRY_MEMB];
-> +
-> +	if (!pvt_data.ctx)
-> +		return -ENODEV;
-> +
-> +	prepare_args(TA_CMD_BNXT_FASTBOOT, &inv_arg, param);
-> +
-> +	ret = tee_client_invoke_func(pvt_data.ctx, &inv_arg, param);
-> +	if ((ret < 0) || (inv_arg.ret != 0)) {
-> +		dev_err(pvt_data.dev, "TA_CMD_BNXT_LOAD invoke err: %x\n",
-> +			(ret < 0) ? ret : inv_arg.ret);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(tee_bnxt_fw_load);
+aliases {
+    clocksource0 = &timer0;
+    clockevent0 = &timer1;
+};
 
-Why are you exporting symbols for a single file?  What uses these?
-This feels really wrong, are you sure this all is correct?
+since we can have multiple of each, we should not limit ourselves to 1 clkevent
+and 1 clksource.
 
-I stopped reading here :)
+In the aliases case, each driver would expose both capabilities, and the core would select
+what to enable.
 
-thanks,
-
-greg k-h
+Neil
