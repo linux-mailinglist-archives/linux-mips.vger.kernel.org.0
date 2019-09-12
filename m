@@ -2,103 +2,141 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E16B0C84
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2019 12:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A260B0D5B
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2019 12:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731141AbfILKSE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Sep 2019 06:18:04 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:58424 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730811AbfILKSE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 12 Sep 2019 06:18:04 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 010D1E8274BF11552BDD;
-        Thu, 12 Sep 2019 18:18:02 +0800 (CST)
-Received: from localhost.localdomain (10.67.212.75) by
- DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
- 14.3.439.0; Thu, 12 Sep 2019 18:17:58 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <catalin.marinas@arm.com>, <will@kernel.org>, <mingo@redhat.com>,
-        <bp@alien8.de>, <rth@twiddle.net>, <ink@jurassic.park.msu.ru>,
-        <mattst88@gmail.com>, <benh@kernel.crashing.org>,
-        <paulus@samba.org>, <mpe@ellerman.id.au>,
-        <heiko.carstens@de.ibm.com>, <gor@linux.ibm.com>,
-        <borntraeger@de.ibm.com>, <ysato@users.sourceforge.jp>,
-        <dalias@libc.org>, <davem@davemloft.net>, <ralf@linux-mips.org>,
-        <paul.burton@mips.com>, <jhogan@kernel.org>,
-        <jiaxun.yang@flygoat.com>, <chenhc@lemote.com>
-CC:     <akpm@linux-foundation.org>, <rppt@linux.ibm.com>,
-        <anshuman.khandual@arm.com>, <tglx@linutronix.de>, <cai@lca.pw>,
-        <robin.murphy@arm.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <hpa@zytor.com>, <x86@kernel.org>,
-        <dave.hansen@linux.intel.com>, <luto@kernel.org>,
-        <peterz@infradead.org>, <len.brown@intel.com>, <axboe@kernel.dk>,
-        <dledford@redhat.com>, <jeffrey.t.kirsher@intel.com>,
-        <linux-alpha@vger.kernel.org>, <naveen.n.rao@linux.vnet.ibm.com>,
-        <mwb@linux.vnet.ibm.com>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-s390@vger.kernel.org>, <linux-sh@vger.kernel.org>,
-        <sparclinux@vger.kernel.org>, <tbogendoerfer@suse.de>,
-        <linux-mips@vger.kernel.org>, <rafael@kernel.org>,
-        <mhocko@kernel.org>, <gregkh@linuxfoundation.org>
-Subject: [PATCH v3 8/8] mips: numa: make node_to_cpumask_map() NUMA_NO_NODE aware for loongson64
-Date:   Thu, 12 Sep 2019 18:15:34 +0800
-Message-ID: <1568283334-178380-9-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1568283334-178380-1-git-send-email-linyunsheng@huawei.com>
-References: <1568283334-178380-1-git-send-email-linyunsheng@huawei.com>
+        id S1731284AbfILK6k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Sep 2019 06:58:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57862 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730811AbfILK6j (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 12 Sep 2019 06:58:39 -0400
+Received: from rapoport-lnx (unknown [88.157.232.34])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8369821479;
+        Thu, 12 Sep 2019 10:58:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568285918;
+        bh=ri4DX0jWeAR1yy3PHEcU0ID7qnBiwLO0Rgp4NA8oeE8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iq0N7apOzLju2Y2Uc5VIqIviB2zX9q93C1e+slLnCqhm8EWOSjQbWvMCASglAws6R
+         a8S0jRJ+D7dOOpzA6uQgXzRgyCnqKpTUaLmdpNXj+r06vpN8hH1PN+J2nWUDFuuTRC
+         LYk7LFBQIf0tPyQDNuuTZrRigJZZFA/mAnO5M3yA=
+Date:   Thu, 12 Sep 2019 11:58:33 +0100
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH] mips: sgi-ip27: switch from DISCONTIGMEM to SPARSEMEM
+Message-ID: <20190912105831.GA10677@rapoport-lnx>
+References: <1567662477-27404-1-git-send-email-rppt@kernel.org>
+ <20190905152150.f7ff6ef70726085de63df828@suse.de>
+ <20190905133251.GA3650@rapoport-lnx>
+ <20190905154831.88b7853b47ba7db7bd7626bd@suse.de>
+ <20190905154747.GB3650@rapoport-lnx>
+ <20190905233800.0f6b3fb3722cde2f5a88663a@suse.de>
+ <20190906130223.GA17704@rapoport-lnx>
+ <20190909182242.c1ef9717d14b20212ef75954@suse.de>
+ <20190910113243.GA19207@rapoport-lnx>
+ <20190911160939.19f776535770d12ff51a2af7@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.212.75]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190911160939.19f776535770d12ff51a2af7@suse.de>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When passing the return value of dev_to_node() to cpumask_of_node()
-without checking the node id if the node id is NUMA_NO_NODE, there is
-global-out-of-bounds detected by KASAN.
+On Wed, Sep 11, 2019 at 04:09:39PM +0200, Thomas Bogendoerfer wrote:
+> On Tue, 10 Sep 2019 12:32:44 +0100
+> Mike Rapoport <rppt@kernel.org> wrote:
+> 
+> > [..]
+> 
+> Patch below works on the same Origin.
+> 
+> Does memblocks_present() deal better with the one reserved page per node
+> than sparse_memory_present_with_active_regions() ? Or is there a better
+> explanation ? My debug prints didn't make sense out of it...
 
-From the discussion [1], NUMA_NO_NODE really means no node affinity,
-which also means all cpus should be usable. So the cpumask_of_node()
-should always return all cpus online when user passes the node id
-as NUMA_NO_NODE, just like similar semantic that page allocator handles
-NUMA_NO_NODE.
+I think the problem is that when we call
+sparse_memory_present_with_active_regions() per node, the page for the node
+data of the next nodes is not yet reserved and since memory_present() does
+memblock allocations it may use that memory.
 
-But we cannot really copy the page allocator logic. Simply because the
-page allocator doesn't enforce the near node affinity. It just picks it
-up as a preferred node but then it is free to fallback to any other numa
-node. This is not the case here and node_to_cpumask_map will only restrict
-to the particular node's cpus which would have really non deterministic
-behavior depending on where the code is executed. So in fact we really
-want to return cpu_online_mask for NUMA_NO_NODE.
+We can try to verify that with "memblock=debug" in the command line.
 
-[1] https://lore.kernel.org/patchwork/patch/1125789/
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-Suggested-by: Michal Hocko <mhocko@kernel.org>
----
-V3: Change to only handle NUMA_NO_NODE, and return cpu_online_mask
-    for NUMA_NO_NODE case, and change the commit log to better justify
-    the change.
----
- arch/mips/include/asm/mach-loongson64/topology.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Another thing we could try to rule out the differences between
+memblocks_present() and sparse_memory_present_with_active_regions() is to
+replace memblocks_present() in your patch with
+sparse_memory_present_with_active_regions(MAX_NUMNODES).
 
-diff --git a/arch/mips/include/asm/mach-loongson64/topology.h b/arch/mips/include/asm/mach-loongson64/topology.h
-index 7ff819a..2207e2e 100644
---- a/arch/mips/include/asm/mach-loongson64/topology.h
-+++ b/arch/mips/include/asm/mach-loongson64/topology.h
-@@ -5,7 +5,9 @@
- #ifdef CONFIG_NUMA
  
- #define cpu_to_node(cpu)	(cpu_logical_map(cpu) >> 2)
--#define cpumask_of_node(node)	(&__node_data[(node)]->cpumask)
-+#define cpumask_of_node(node)  ((node) == NUMA_NO_NODE ?	\
-+				cpu_online_mask :		\
-+				(&__node_data[(node)]->cpumask)
- 
- struct pci_bus;
- extern int pcibus_to_node(struct pci_bus *);
+> Thomas.
+> 
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index d50fafd7bf3a..e4b02b5f3487 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -669,6 +669,7 @@ config SGI_IP22
+>  config SGI_IP27
+>  	bool "SGI IP27 (Origin200/2000)"
+>  	select ARCH_HAS_PHYS_TO_DMA
+> +	select ARCH_SPARSEMEM_ENABLE
+>  	select FW_ARC
+>  	select FW_ARC64
+>  	select BOOT_ELF64
+> @@ -2633,18 +2634,9 @@ config ARCH_FLATMEM_ENABLE
+>  	def_bool y
+>  	depends on !NUMA && !CPU_LOONGSON2
+>  
+> -config ARCH_DISCONTIGMEM_ENABLE
+> -	bool
+> -	default y if SGI_IP27
+> -	help
+> -	  Say Y to support efficient handling of discontiguous physical memory,
+> -	  for architectures which are either NUMA (Non-Uniform Memory Access)
+> -	  or have huge holes in the physical address space for other reasons.
+> -	  See <file:Documentation/vm/numa.rst> for more.
+> -
+>  config ARCH_SPARSEMEM_ENABLE
+>  	bool
+> -	select SPARSEMEM_STATIC
+> +	select SPARSEMEM_STATIC if !SGI_IP27
+>  
+>  config NUMA
+>  	bool "NUMA Support"
+> diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
+> index fb077a947575..370f2ba14a89 100644
+> --- a/arch/mips/sgi-ip27/ip27-memory.c
+> +++ b/arch/mips/sgi-ip27/ip27-memory.c
+> @@ -410,8 +410,6 @@ static void __init node_mem_init(cnodeid_t node)
+>  
+>  	memblock_reserve(slot_firstpfn << PAGE_SHIFT,
+>  			 ((slot_freepfn - slot_firstpfn) << PAGE_SHIFT));
+> -
+> -	sparse_memory_present_with_active_regions(node);
+>  }
+>  
+>  /*
+> @@ -444,6 +442,7 @@ void __init prom_meminit(void)
+>  		}
+>  		__node_data[node] = &null_node;
+>  	}
+> +	memblocks_present();
+>  }
+>  
+>  void __init prom_free_prom_memory(void)
+> 
+> -- 
+> SUSE Software Solutions Germany GmbH
+> HRB 247165 (AG München)
+> Geschäftsführer: Felix Imendörffer
+
 -- 
-2.8.1
-
+Sincerely yours,
+Mike.
