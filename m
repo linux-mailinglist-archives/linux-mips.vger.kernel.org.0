@@ -2,17 +2,17 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CA7B0C93
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2019 12:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20003B0C8C
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2019 12:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731205AbfILKSG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Sep 2019 06:18:06 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:59470 "EHLO huawei.com"
+        id S1731153AbfILKSF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Sep 2019 06:18:05 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:59348 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731139AbfILKSG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 12 Sep 2019 06:18:06 -0400
+        id S1731138AbfILKSE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 12 Sep 2019 06:18:04 -0400
 Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 3E41A8133B2273B54CD8;
+        by Forcepoint Email with ESMTP id 28016B5415292F76FC6D;
         Thu, 12 Sep 2019 18:18:02 +0800 (CST)
 Received: from localhost.localdomain (10.67.212.75) by
  DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
@@ -40,9 +40,9 @@ CC:     <akpm@linux-foundation.org>, <rppt@linux.ibm.com>,
         <sparclinux@vger.kernel.org>, <tbogendoerfer@suse.de>,
         <linux-mips@vger.kernel.org>, <rafael@kernel.org>,
         <mhocko@kernel.org>, <gregkh@linuxfoundation.org>
-Subject: [PATCH v3 3/8] alpha: numa: make node_to_cpumask_map() NUMA_NO_NODE aware for alpha
-Date:   Thu, 12 Sep 2019 18:15:29 +0800
-Message-ID: <1568283334-178380-4-git-send-email-linyunsheng@huawei.com>
+Subject: [PATCH v3 4/8] powerpc: numa: make node_to_cpumask_map() NUMA_NO_NODE aware for powerpc
+Date:   Thu, 12 Sep 2019 18:15:30 +0800
+Message-ID: <1568283334-178380-5-git-send-email-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1568283334-178380-1-git-send-email-linyunsheng@huawei.com>
 References: <1568283334-178380-1-git-send-email-linyunsheng@huawei.com>
@@ -74,7 +74,7 @@ behavior depending on where the code is executed. So in fact we really
 want to return cpu_online_mask for NUMA_NO_NODE.
 
 Since this arch was already NUMA_NO_NODE aware, this patch only changes
-it to return cpu_online_mask.
+it to return cpu_online_mask and use NUMA_NO_NODE instead of "-1".
 
 [1] https://lore.kernel.org/patchwork/patch/1125789/
 Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
@@ -84,22 +84,24 @@ V3: Change to only handle NUMA_NO_NODE, and return cpu_online_mask
     for NUMA_NO_NODE case, and change the commit log to better justify
     the change.
 ---
- arch/alpha/include/asm/topology.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/include/asm/topology.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/alpha/include/asm/topology.h b/arch/alpha/include/asm/topology.h
-index 5a77a40..836c9e2 100644
---- a/arch/alpha/include/asm/topology.h
-+++ b/arch/alpha/include/asm/topology.h
-@@ -31,7 +31,7 @@ static const struct cpumask *cpumask_of_node(int node)
- 	int cpu;
+diff --git a/arch/powerpc/include/asm/topology.h b/arch/powerpc/include/asm/topology.h
+index 2f7e1ea..107f5cd 100644
+--- a/arch/powerpc/include/asm/topology.h
++++ b/arch/powerpc/include/asm/topology.h
+@@ -17,8 +17,8 @@ struct device_node;
  
- 	if (node == NUMA_NO_NODE)
--		return cpu_all_mask;
-+		return cpu_online_mask;
+ #include <asm/mmzone.h>
  
- 	cpumask_clear(&node_to_cpumask_map[node]);
+-#define cpumask_of_node(node) ((node) == -1 ?				\
+-			       cpu_all_mask :				\
++#define cpumask_of_node(node) ((node) == NUMA_NO_NODE ?			\
++			       cpu_online_mask :			\
+ 			       node_to_cpumask_map[node])
  
+ struct pci_bus;
 -- 
 2.8.1
 
