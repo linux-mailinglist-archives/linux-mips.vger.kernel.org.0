@@ -2,17 +2,17 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB7BB0CA2
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2019 12:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A15B0C90
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2019 12:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731250AbfILKSQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Sep 2019 06:18:16 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:59534 "EHLO huawei.com"
+        id S1731149AbfILKSF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Sep 2019 06:18:05 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:58816 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731176AbfILKSH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 12 Sep 2019 06:18:07 -0400
+        id S1731137AbfILKSE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 12 Sep 2019 06:18:04 -0400
 Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 66E23A1E9E63440E65DF;
+        by Forcepoint Email with ESMTP id 1569256779CEDAB8F563;
         Thu, 12 Sep 2019 18:18:02 +0800 (CST)
 Received: from localhost.localdomain (10.67.212.75) by
  DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
@@ -40,9 +40,9 @@ CC:     <akpm@linux-foundation.org>, <rppt@linux.ibm.com>,
         <sparclinux@vger.kernel.org>, <tbogendoerfer@suse.de>,
         <linux-mips@vger.kernel.org>, <rafael@kernel.org>,
         <mhocko@kernel.org>, <gregkh@linuxfoundation.org>
-Subject: [PATCH v3 6/8] sparc64: numa: make node_to_cpumask_map() NUMA_NO_NODE aware for sparc64
-Date:   Thu, 12 Sep 2019 18:15:32 +0800
-Message-ID: <1568283334-178380-7-git-send-email-linyunsheng@huawei.com>
+Subject: [PATCH v3 7/8] mips: numa: make node_to_cpumask_map() NUMA_NO_NODE aware for mips
+Date:   Thu, 12 Sep 2019 18:15:33 +0800
+Message-ID: <1568283334-178380-8-git-send-email-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1568283334-178380-1-git-send-email-linyunsheng@huawei.com>
 References: <1568283334-178380-1-git-send-email-linyunsheng@huawei.com>
@@ -84,24 +84,24 @@ V3: Change to only handle NUMA_NO_NODE, and return cpu_online_mask
     for NUMA_NO_NODE case, and change the commit log to better justify
     the change.
 ---
- arch/sparc/include/asm/topology_64.h | 4 ++--
+ arch/mips/include/asm/mach-ip27/topology.h | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/sparc/include/asm/topology_64.h b/arch/sparc/include/asm/topology_64.h
-index 34c628a..34f9240 100644
---- a/arch/sparc/include/asm/topology_64.h
-+++ b/arch/sparc/include/asm/topology_64.h
-@@ -11,8 +11,8 @@ static inline int cpu_to_node(int cpu)
- 	return numa_cpu_lookup_table[cpu];
- }
+diff --git a/arch/mips/include/asm/mach-ip27/topology.h b/arch/mips/include/asm/mach-ip27/topology.h
+index 965f079..04505e6 100644
+--- a/arch/mips/include/asm/mach-ip27/topology.h
++++ b/arch/mips/include/asm/mach-ip27/topology.h
+@@ -15,8 +15,8 @@ struct cpuinfo_ip27 {
+ extern struct cpuinfo_ip27 sn_cpu_info[NR_CPUS];
  
--#define cpumask_of_node(node) ((node) == -1 ?				\
--			       cpu_all_mask :				\
-+#define cpumask_of_node(node) ((node) == NUMA_NO_NODE ?			\
-+			       cpu_online_mask :			\
- 			       &numa_cpumask_lookup_table[node])
- 
+ #define cpu_to_node(cpu)	(sn_cpu_info[(cpu)].p_nodeid)
+-#define cpumask_of_node(node)	((node) == -1 ?				\
+-				 cpu_all_mask :				\
++#define cpumask_of_node(node)	((node) == NUMA_NO_NODE ?		\
++				 cpu_online_mask :			\
+ 				 &hub_data(node)->h_cpus)
  struct pci_bus;
+ extern int pcibus_to_node(struct pci_bus *);
 -- 
 2.8.1
 
