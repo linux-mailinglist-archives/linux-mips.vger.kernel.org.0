@@ -2,141 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A260B0D5B
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2019 12:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B32B0D6C
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Sep 2019 13:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731284AbfILK6k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Sep 2019 06:58:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57862 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730811AbfILK6j (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 12 Sep 2019 06:58:39 -0400
-Received: from rapoport-lnx (unknown [88.157.232.34])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8369821479;
-        Thu, 12 Sep 2019 10:58:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568285918;
-        bh=ri4DX0jWeAR1yy3PHEcU0ID7qnBiwLO0Rgp4NA8oeE8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iq0N7apOzLju2Y2Uc5VIqIviB2zX9q93C1e+slLnCqhm8EWOSjQbWvMCASglAws6R
-         a8S0jRJ+D7dOOpzA6uQgXzRgyCnqKpTUaLmdpNXj+r06vpN8hH1PN+J2nWUDFuuTRC
-         LYk7LFBQIf0tPyQDNuuTZrRigJZZFA/mAnO5M3yA=
-Date:   Thu, 12 Sep 2019 11:58:33 +0100
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCH] mips: sgi-ip27: switch from DISCONTIGMEM to SPARSEMEM
-Message-ID: <20190912105831.GA10677@rapoport-lnx>
-References: <1567662477-27404-1-git-send-email-rppt@kernel.org>
- <20190905152150.f7ff6ef70726085de63df828@suse.de>
- <20190905133251.GA3650@rapoport-lnx>
- <20190905154831.88b7853b47ba7db7bd7626bd@suse.de>
- <20190905154747.GB3650@rapoport-lnx>
- <20190905233800.0f6b3fb3722cde2f5a88663a@suse.de>
- <20190906130223.GA17704@rapoport-lnx>
- <20190909182242.c1ef9717d14b20212ef75954@suse.de>
- <20190910113243.GA19207@rapoport-lnx>
- <20190911160939.19f776535770d12ff51a2af7@suse.de>
+        id S1731356AbfILLAT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Sep 2019 07:00:19 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:43050 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731358AbfILLAS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Sep 2019 07:00:18 -0400
+Received: by mail-ed1-f65.google.com with SMTP id c19so23496744edy.10
+        for <linux-mips@vger.kernel.org>; Thu, 12 Sep 2019 04:00:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=i4n3cs5YIwHpBBnCvQbY3FnLMZHpwOIQycs63oVDiSc=;
+        b=XU1ehr7BQ2UPg1KBuVQ5nl6L4OIYSyENUTpJxtu0PcESlZD1JDIDF/kfEGLVTwGTPP
+         MxBuxnwufiCItM0eu2f6PGyyjzV27Q2cNWmrCI/fGkWv00JgM+mdZSN1lgpv2XIZF9yD
+         Ti1WM/t84cLxXEP8DSXzi5NQKs0TYyJ79hQa7AZv9JgQdH0hTuNKnH8BEAiZ+ewccLLa
+         vvU+d/v7/7I+eQ9LvIytn9jJr+WOd1sRRaRjF83QEr00IfWCJU2SCQ/EcoyWOdAh3E8X
+         tFKZsg92QCTLtpzpNowjR1vbUr8LIL24WrcjhMNVcplThOrveFyd6bS7Oehx93UQGF8r
+         wpAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=i4n3cs5YIwHpBBnCvQbY3FnLMZHpwOIQycs63oVDiSc=;
+        b=rsSe5f1opqK4WDYCReVQQ7f5dzyhGUYl71Fgh7SKci0SbUlK/Ghyp4TE5HMN7SsYVT
+         5KuDJdbnL9q5SdT3rC6iVnxZGRH4Xzm3P0so68cb2wJAx52bgUUvHlhEgLMWdH325ecD
+         uZ63/wlOrHGonnUwmeKeGkMiciPUcTdDF0G2AYAZY8N7aXcvqQJAAW7Nzzbz4EVKK+4d
+         YzxfzCmPhSZ3mvOxczDXH+bS8etehXNvgFj8d+DLPGt3VLI6k+oxiaiCDL5syuzRYISc
+         Jk5htV7eGSNi1SSuJbkJUsgkaIE1+LjwFIEUZ+2ftxNiXpwhAzLSQdk4qzyJnZz3v22S
+         HRaQ==
+X-Gm-Message-State: APjAAAVF7g4vIqXDqvT+flYIgHJlaj1kNabN+fqI39Z07v3J9eMf87ty
+        dWlSJ34SWF4yXqH00SCJ1VkPTw==
+X-Google-Smtp-Source: APXvYqzn86bOsg/hOamx0ZM4X4jdcRXf0RIV/TYjmuJGR8c1qTMEHrx7GcnktNsAZCbZ5Sfr2/boLg==
+X-Received: by 2002:a50:d084:: with SMTP id v4mr42151595edd.48.1568286015703;
+        Thu, 12 Sep 2019 04:00:15 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id 60sm4730030edg.10.2019.09.12.04.00.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 12 Sep 2019 04:00:14 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 379ED100B4A; Thu, 12 Sep 2019 14:00:16 +0300 (+03)
+Date:   Thu, 12 Sep 2019 14:00:16 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Steven Price <Steven.Price@arm.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sri Krishna chowdary <schowdary@nvidia.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 2/2] mm/pgtable/debug: Add test validating
+ architecture page table helpers
+Message-ID: <20190912110016.srrydg2krplscbgq@box>
+References: <1568268173-31302-1-git-send-email-anshuman.khandual@arm.com>
+ <1568268173-31302-3-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190911160939.19f776535770d12ff51a2af7@suse.de>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <1568268173-31302-3-git-send-email-anshuman.khandual@arm.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Sep 11, 2019 at 04:09:39PM +0200, Thomas Bogendoerfer wrote:
-> On Tue, 10 Sep 2019 12:32:44 +0100
-> Mike Rapoport <rppt@kernel.org> wrote:
-> 
-> > [..]
-> 
-> Patch below works on the same Origin.
-> 
-> Does memblocks_present() deal better with the one reserved page per node
-> than sparse_memory_present_with_active_regions() ? Or is there a better
-> explanation ? My debug prints didn't make sense out of it...
+On Thu, Sep 12, 2019 at 11:32:53AM +0530, Anshuman Khandual wrote:
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_AUTHOR("Anshuman Khandual <anshuman.khandual@arm.com>");
+> +MODULE_DESCRIPTION("Test architecture page table helpers");
 
-I think the problem is that when we call
-sparse_memory_present_with_active_regions() per node, the page for the node
-data of the next nodes is not yet reserved and since memory_present() does
-memblock allocations it may use that memory.
+It's not module. Why?
 
-We can try to verify that with "memblock=debug" in the command line.
-
-Another thing we could try to rule out the differences between
-memblocks_present() and sparse_memory_present_with_active_regions() is to
-replace memblocks_present() in your patch with
-sparse_memory_present_with_active_regions(MAX_NUMNODES).
-
- 
-> Thomas.
-> 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index d50fafd7bf3a..e4b02b5f3487 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -669,6 +669,7 @@ config SGI_IP22
->  config SGI_IP27
->  	bool "SGI IP27 (Origin200/2000)"
->  	select ARCH_HAS_PHYS_TO_DMA
-> +	select ARCH_SPARSEMEM_ENABLE
->  	select FW_ARC
->  	select FW_ARC64
->  	select BOOT_ELF64
-> @@ -2633,18 +2634,9 @@ config ARCH_FLATMEM_ENABLE
->  	def_bool y
->  	depends on !NUMA && !CPU_LOONGSON2
->  
-> -config ARCH_DISCONTIGMEM_ENABLE
-> -	bool
-> -	default y if SGI_IP27
-> -	help
-> -	  Say Y to support efficient handling of discontiguous physical memory,
-> -	  for architectures which are either NUMA (Non-Uniform Memory Access)
-> -	  or have huge holes in the physical address space for other reasons.
-> -	  See <file:Documentation/vm/numa.rst> for more.
-> -
->  config ARCH_SPARSEMEM_ENABLE
->  	bool
-> -	select SPARSEMEM_STATIC
-> +	select SPARSEMEM_STATIC if !SGI_IP27
->  
->  config NUMA
->  	bool "NUMA Support"
-> diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
-> index fb077a947575..370f2ba14a89 100644
-> --- a/arch/mips/sgi-ip27/ip27-memory.c
-> +++ b/arch/mips/sgi-ip27/ip27-memory.c
-> @@ -410,8 +410,6 @@ static void __init node_mem_init(cnodeid_t node)
->  
->  	memblock_reserve(slot_firstpfn << PAGE_SHIFT,
->  			 ((slot_freepfn - slot_firstpfn) << PAGE_SHIFT));
-> -
-> -	sparse_memory_present_with_active_regions(node);
->  }
->  
->  /*
-> @@ -444,6 +442,7 @@ void __init prom_meminit(void)
->  		}
->  		__node_data[node] = &null_node;
->  	}
-> +	memblocks_present();
->  }
->  
->  void __init prom_free_prom_memory(void)
-> 
-> -- 
-> SUSE Software Solutions Germany GmbH
-> HRB 247165 (AG München)
-> Geschäftsführer: Felix Imendörffer
+BTW, I think we should make all code here __init (or it's variants) so it
+can be discarded on boot. It has not use after that.
 
 -- 
-Sincerely yours,
-Mike.
+ Kirill A. Shutemov
