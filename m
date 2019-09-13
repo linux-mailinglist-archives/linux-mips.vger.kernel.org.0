@@ -2,139 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06EE2B167C
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2019 00:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C04EB1832
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Sep 2019 08:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726822AbfILWxs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Sep 2019 18:53:48 -0400
-Received: from mail-eopbgr700091.outbound.protection.outlook.com ([40.107.70.91]:17857
-        "EHLO NAM04-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726754AbfILWxs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 12 Sep 2019 18:53:48 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AXUQiovd106st/HGvhzdVXC39S5KnvxKf8kLRw+RPzVtOm5CFpfLyJPeDOkp4eESsS/S34QSsSQudqqTdLk2hiRAO3YnUgVBzqizqJRPL5L0Fp48PG+P5Vf2epkKMO3hjqLNE2ucWDULvtmyEqqvBU4f/nOlYTqNmhp6nO+0A1ot8OMAUEDgs9EOdoG9u+FPgYwj64PXVJK7d7v42s/4j4SXkhG5Jkopp2r3cx3NORjlst7tWYwW4fAdQaZ50EzejySyHrEmuABBQxHSEhLN2egH6d0ObAdU6vPrqarwPKTjosIdc8va2BdZt0x7KpJNQqWyGKKP5JkZxhEeBpIisA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=smiJ3KxWYKhPbObVxMXVZrGAr3b8Bk8xPhUIjJ0wQfw=;
- b=nZ8z+wx4abr6/AKMG/QqcO2UD3zG66YeTJHN+Utz426IVY/xnQyjlL9Rur/2avSVTa01CfHXjHZTx0shUj2U5jjBa6u9PxQfOH2hMzcUcwvfM5po83cRb/gT3ZnasNDWgMpc23HZvcTilWylGWPvPgeyebBgQx751ZuecHJMCaQCIXO0OBv54/e1WE5LhYWZMRQJtERYZxyQxH+cBi1nEEs8QuB6qp+92+LTQm2n/8mo/h33H4XJorT5yM9MmAYtA+oZv4ihQ9JJwPlzqBybdR8s05+52lbCgUAfkG+i9My2j4eDJOay4jKXL8wrLTUENPC+L+gc7PBnVnJbO9uRdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=wavecomp.com;
- dkim=pass header.d=wavecomp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=smiJ3KxWYKhPbObVxMXVZrGAr3b8Bk8xPhUIjJ0wQfw=;
- b=gKitjCsPh/UrTDZMhxU7tNhnl8AVRqubEGrTeKOhKOzD8SPhW6iwv011aZrarq3PpdLLQ9C4qomY6JRPG5w/e43tdbNBgZBqWErkf6ArznbUAYtLaYLZoa29sKdqQn4PSJFVCEGC0QOoDUoRHwwmNyrqrmkTVPIjee+y899dmAA=
-Received: from CY4PR22MB0471.namprd22.prod.outlook.com (10.173.191.12) by
- CY4PR22MB0775.namprd22.prod.outlook.com (10.171.168.16) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2263.13; Thu, 12 Sep 2019 22:53:45 +0000
-Received: from CY4PR22MB0471.namprd22.prod.outlook.com
- ([fe80::48d:cca7:a463:a297]) by CY4PR22MB0471.namprd22.prod.outlook.com
- ([fe80::48d:cca7:a463:a297%3]) with mapi id 15.20.2241.022; Thu, 12 Sep 2019
- 22:53:45 +0000
-From:   Dmitry Korotin <dkorotin@wavecomp.com>
-To:     Paul Burton <pburton@wavecomp.com>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Dmitry Korotin <dkorotin@wavecomp.com>
-Subject: [PATCH] mips: Kconfig: Add ARCH_HAS_FORTIFY_SOURCE
-Thread-Topic: [PATCH] mips: Kconfig: Add ARCH_HAS_FORTIFY_SOURCE
-Thread-Index: AQHVabzu21vL1CNsKkWTvmtyhwNF4Q==
-Date:   Thu, 12 Sep 2019 22:53:45 +0000
-Message-ID: <CY4PR22MB04717E7C68389573AADA4E99AFB00@CY4PR22MB0471.namprd22.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BY5PR03CA0019.namprd03.prod.outlook.com
- (2603:10b6:a03:1e0::29) To CY4PR22MB0471.namprd22.prod.outlook.com
- (2603:10b6:903:b6::12)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=dkorotin@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [216.35.128.4]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9b3de4cc-c5ab-4ba8-8a48-08d737d4102a
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:CY4PR22MB0775;
-x-ms-traffictypediagnostic: CY4PR22MB0775:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <CY4PR22MB0775FF89DC2C55F59B496465AFB00@CY4PR22MB0775.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3276;
-x-forefront-prvs: 01583E185C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(366004)(346002)(39840400004)(396003)(376002)(199004)(189003)(2906002)(256004)(66066001)(8936002)(102836004)(486006)(476003)(186003)(26005)(6506007)(386003)(33656002)(66446008)(66556008)(64756008)(66946007)(66476007)(55016002)(9686003)(5660300002)(52536014)(86362001)(14454004)(6116002)(3846002)(478600001)(107886003)(6862004)(53936002)(4326008)(25786009)(6636002)(74316002)(52116002)(7696005)(7736002)(316002)(81166006)(71200400001)(71190400001)(6436002)(99286004)(54906003)(8676002)(81156014)(305945005);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR22MB0775;H:CY4PR22MB0471.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: /2rX5RhkEg5vc8AfGYmO4t12XAKWcZ2+DzwgPPmJ1TnWpH5UZfVu5CARGljjIZUul8ki125h3G8suI24+mU8GRqDrRQjZvA6zV4/nOVM2mImYzx7ShMFt456WjgIpyCHSSkXroyMrelPKQK1LIyimeLBQjFIcQFMhgSn8zL8PgyoRX8t6Dr7SoS+dwYlJECSZm3MUHUZWswqjr7OhIOnLRkKhNvOYFGTN+gMWzWr26GuN9gN78YJi6x0pCnxWdSS2iqxRh1g/zgEl4lMlOhJnnQQCHFFoezjeaKnfjRt3iIEHdGpLoU7q6B1Aq7hy6GV8HCPkZr4LHOyzfntYdvbAZepIY3pQxWfeecIWat+CwStRc/pnstpCqFF0vTiD/pgcPBms7rB/bn4GfHIZLV0ohxj3aJ52bYOxEKBoSNMUBU=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: wavecomp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b3de4cc-c5ab-4ba8-8a48-08d737d4102a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Sep 2019 22:53:45.2206
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EWi6aw7VvOcSc5zcsef6B6AdjycI4X0b8zqbzLJZkKcNxnhp+cklUFmlokSn/sq8zW9XSIaeoAxKJJcOxID8ow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR22MB0775
+        id S1726558AbfIMGXz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Sep 2019 02:23:55 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:5974 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725817AbfIMGXz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 13 Sep 2019 02:23:55 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 46V5F20LG8z9vKGM;
+        Fri, 13 Sep 2019 08:23:50 +0200 (CEST)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=f446T9wp; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id zlMG0g1kYZvK; Fri, 13 Sep 2019 08:23:49 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 46V5F16D30z9vKGY;
+        Fri, 13 Sep 2019 08:23:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1568355829; bh=pdwAlCDBbA9CsaJmAmYfOp6ncuC/iDPFuNIc/mtHpeE=;
+        h=From:Subject:To:Cc:In-Reply-To:Date:From;
+        b=f446T9wpDZfLilO9u7fC1JJ5iPPIYtr2YAcUoymNbdzP8LwmjS6SLA7gucXb/2pYd
+         VcLEFXtcILm2zGItfCjmRNrmwQSWptgurhi6JAzw/j7ABoblpvS+FvvWWNuWnkMXHB
+         2ymh0I7z1GrSxPozeE2BsYVNS2vfgkTIggcJZPx4=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BE6A08B7FD;
+        Fri, 13 Sep 2019 08:23:50 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id PJOZp0medcMg; Fri, 13 Sep 2019 08:23:50 +0200 (CEST)
+Received: from pc16032vm.idsi0.si.c-s.fr (po15451.idsi0.si.c-s.fr [172.25.230.101])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 42BBF8B770;
+        Fri, 13 Sep 2019 08:23:50 +0200 (CEST)
+Received: by pc16032vm.idsi0.si.c-s.fr (Postfix, from userid 0)
+        id 17A0F6B760; Fri, 13 Sep 2019 06:23:49 +0000 (UTC)
+Message-Id: <1892b37d1fd9a4ed39e76c4b999b6556077201c0.1568355752.git.christophe.leroy@c-s.fr>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Subject: [PATCH] mm/pgtable/debug: Fix test validating architecture page table
+ helpers
+To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
+Cc:     Mark Rutland <mark.rutland@arm.com>, linux-ia64@vger.kernel.org,
+        linux-sh@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        James Hogan <jhogan@kernel.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Paul Mackerras <paulus@samba.org>, sparclinux@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-s390@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        x86@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Steven Price <Steven.Price@arm.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        linux-snps-arc@lists.infradead.org,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-arm-kernel@lists.infradead.org,
+        Sri Krishna chowdary <schowdary@nvidia.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
+        linux-kernel@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>
+In-Reply-To: <ab0ca38b-1e4f-b636-f8b4-007a15903984@c-s.fr>
+Date:   Fri, 13 Sep 2019 06:23:49 +0000 (UTC)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-FORTIFY_SOURCE detects various overflows at compile and run time.
-(6974f0c4555e ("include/linux/string.h:
-add the option of fortified string.h functions)
+Fix build failure on powerpc.
 
-ARCH_HAS_FORTIFY_SOURCE means that the architecture can be built and
-run with CONFIG_FORTIFY_SOURCE.
+Fix preemption imbalance.
 
-Since mips can be built and run with that flag,
-select ARCH_HAS_FORTIFY_SOURCE as default.
-
-Signed-off-by: Dmitry Korotin <dkorotin@wavecomp.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
 ---
- arch/mips/Kconfig              |    1 +
- arch/mips/include/asm/string.h |    2 ++
- 2 files changed, 3 insertions(+), 0 deletions(-)
+ mm/arch_pgtable_test.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index d50fafd..63d608f 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -8,6 +8,7 @@ config MIPS
- 	select ARCH_HAS_ELF_RANDOMIZE
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
-+	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_SUPPORTS_UPROBES
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_CMPXCHG_LOCKREF if 64BIT
-diff --git a/arch/mips/include/asm/string.h b/arch/mips/include/asm/string.=
-h
-index 29030cb..4b938c5 100644
---- a/arch/mips/include/asm/string.h
-+++ b/arch/mips/include/asm/string.h
-@@ -10,6 +10,7 @@
- #ifndef _ASM_STRING_H
- #define _ASM_STRING_H
-=20
-+#if !defined(__OPTIMIZE__) || !defined(CONFIG_FORTIFY_SOURCE)
-=20
- /*
-  * Most of the inline functions are rather naive implementations so I just
-@@ -130,6 +131,7 @@ static __inline__ int strcmp(__const__ char *__cs, __co=
-nst__ char *__ct)
- 	return __res;
- }
- #endif /* CONFIG_32BIT */
-+#endif /* !defined(__OPTIMIZE__) || !defined(CONFIG_FORTIFY_SOURCE) */
-=20
- #define __HAVE_ARCH_MEMSET
- extern void *memset(void *__s, int __c, size_t __count);
---=20
-1.7.1
+diff --git a/mm/arch_pgtable_test.c b/mm/arch_pgtable_test.c
+index 8b4a92756ad8..f2b3c9ec35fa 100644
+--- a/mm/arch_pgtable_test.c
++++ b/mm/arch_pgtable_test.c
+@@ -24,6 +24,7 @@
+ #include <linux/swap.h>
+ #include <linux/swapops.h>
+ #include <linux/sched/mm.h>
++#include <linux/highmem.h>
+ #include <asm/pgalloc.h>
+ #include <asm/pgtable.h>
+ 
+@@ -400,6 +401,8 @@ static int __init arch_pgtable_tests_init(void)
+ 	p4d_clear_tests(p4dp);
+ 	pgd_clear_tests(mm, pgdp);
+ 
++	pte_unmap(ptep);
++
+ 	pmd_populate_tests(mm, pmdp, saved_ptep);
+ 	pud_populate_tests(mm, pudp, saved_pmdp);
+ 	p4d_populate_tests(mm, p4dp, saved_pudp);
+-- 
+2.13.3
 
