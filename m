@@ -2,135 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CC8B368B
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Sep 2019 10:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 447B5B36D2
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Sep 2019 11:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731250AbfIPInj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 16 Sep 2019 04:43:39 -0400
-Received: from mx2.suse.de ([195.135.220.15]:33136 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731218AbfIPInj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 16 Sep 2019 04:43:39 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 67640AE5E;
-        Mon, 16 Sep 2019 08:43:33 +0000 (UTC)
-Date:   Mon, 16 Sep 2019 10:43:29 +0200
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, mingo@redhat.com,
-        bp@alien8.de, rth@twiddle.net, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, benh@kernel.crashing.org, paulus@samba.org,
-        mpe@ellerman.id.au, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
-        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
-        dalias@libc.org, davem@davemloft.net, ralf@linux-mips.org,
-        paul.burton@mips.com, jhogan@kernel.org, jiaxun.yang@flygoat.com,
-        chenhc@lemote.com, akpm@linux-foundation.org, rppt@linux.ibm.com,
-        anshuman.khandual@arm.com, tglx@linutronix.de, cai@lca.pw,
-        robin.murphy@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, hpa@zytor.com, x86@kernel.org,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        len.brown@intel.com, axboe@kernel.dk, dledford@redhat.com,
-        jeffrey.t.kirsher@intel.com, linux-alpha@vger.kernel.org,
-        naveen.n.rao@linux.vnet.ibm.com, mwb@linux.vnet.ibm.com,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        tbogendoerfer@suse.de, linux-mips@vger.kernel.org,
-        rafael@kernel.org, gregkh@linuxfoundation.org
-Subject: Re: [PATCH v4] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
-Message-ID: <20190916084328.GC10231@dhcp22.suse.cz>
-References: <1568535656-158979-1-git-send-email-linyunsheng@huawei.com>
+        id S1731651AbfIPJHP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 16 Sep 2019 05:07:15 -0400
+Received: from elvis.franken.de ([193.175.24.41]:52205 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726541AbfIPJHP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 16 Sep 2019 05:07:15 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1i9myX-0002mF-00; Mon, 16 Sep 2019 11:07:13 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id E18CDC278F; Mon, 16 Sep 2019 11:07:05 +0200 (CEST)
+Date:   Mon, 16 Sep 2019 11:07:05 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH] mips: sgi-ip27: switch from DISCONTIGMEM to SPARSEMEM
+Message-ID: <20190916090705.GA5119@alpha.franken.de>
+References: <20190905154747.GB3650@rapoport-lnx>
+ <20190905233800.0f6b3fb3722cde2f5a88663a@suse.de>
+ <20190906130223.GA17704@rapoport-lnx>
+ <20190909182242.c1ef9717d14b20212ef75954@suse.de>
+ <20190910113243.GA19207@rapoport-lnx>
+ <20190911160939.19f776535770d12ff51a2af7@suse.de>
+ <20190912105831.GA10677@rapoport-lnx>
+ <20190912155539.6151b0811e858455be4c8d86@suse.de>
+ <20190912140912.GA13137@alpha.franken.de>
+ <20190914104112.GA12045@rapoport-lnx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1568535656-158979-1-git-send-email-linyunsheng@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190914104112.GA12045@rapoport-lnx>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun 15-09-19 16:20:56, Yunsheng Lin wrote:
-> When passing the return value of dev_to_node() to cpumask_of_node()
-> without checking if the device's node id is NUMA_NO_NODE, there is
-> global-out-of-bounds detected by KASAN.
+On Sat, Sep 14, 2019 at 11:41:13AM +0100, Mike Rapoport wrote:
+> On Thu, Sep 12, 2019 at 04:09:12PM +0200, Thomas Bogendoerfer wrote:
+> > On Thu, Sep 12, 2019 at 03:55:39PM +0200, Thomas Bogendoerfer wrote:
+> > > - reserved[0xd]	[0x000000035bff8000-0x000000035bffffff], 0x0000000000008000 bytes flags: 0x0
+> > > 
+> > > I have no idea which reservation this is, but it's not from one of the
+> > > node data.
+> > 
+> > that's sparsemem's mem_section. And 
+> > 
+> >  free_bootmem_with_active_regions(node, end_pfn);
 > 
-> >From the discussion [1], NUMA_NO_NODE really means no node affinity,
-> which also means all cpus should be usable. So the cpumask_of_node()
-> should always return all cpus online when user passes the node id as
-> NUMA_NO_NODE, just like similar semantic that page allocator handles
-> NUMA_NO_NODE.
+> It seems that the call to free_bootmem_with_active_regions() should have
+> been removed along with bootmem and it's not needed now.
 > 
-> But we cannot really copy the page allocator logic. Simply because the
-> page allocator doesn't enforce the near node affinity. It just picks it
-> up as a preferred node but then it is free to fallback to any other numa
-> node. This is not the case here and node_to_cpumask_map will only restrict
-> to the particular node's cpus which would have really non deterministic
-> behavior depending on where the code is executed. So in fact we really
-> want to return cpu_online_mask for NUMA_NO_NODE.
-> 
-> Some arches were already NUMA_NO_NODE aware, so only change them to return
-> cpu_online_mask and use NUMA_NO_NODE instead of "-1".
-> 
-> Also there is a debugging version of node_to_cpumask_map() for x86 and
-> arm64, which is only used when CONFIG_DEBUG_PER_CPU_MAPS is defined, this
-> patch changes it to handle NUMA_NO_NODE as normal node_to_cpumask_map().
-> And "fix" a sign "bug" since it is for debugging and should catch all the
-> error cases.
-> 
-> [1] https://lore.kernel.org/patchwork/patch/1125789/
-> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-> Suggested-by: Michal Hocko <mhocko@kernel.org>
+> Can you please test the below version of the patch?
 
-The change makes sense to me. I wish this particular thing wasn't
-duplicated so heavily - maybe we can unify all of them and use a common
-code? In a separate patch most likely...
+Patch is good. I've compared bootlogs and output is the same
+regarding memblock/memory debug messages.
 
-I would also not change cpu_all_mask -> cpu_online_mask in this patch.
-That is worth a patch on its own with some explanation. I haven't
-checked but I would suspect that alpha simply doesn't support cpu
-hotplug so the two things are the same. But this needs some explanation.
+When this is merged, I'll have a look into using memblock_alloc
+for the node memory.
 
-Other than that the patch looks good to me. Feel free to add
-Acked-by: Michal Hocko <mhocko@suse.com>
+Thomas.
 
-[...]
-> diff --git a/arch/alpha/include/asm/topology.h b/arch/alpha/include/asm/topology.h
-> index 5a77a40..836c9e2 100644
-> --- a/arch/alpha/include/asm/topology.h
-> +++ b/arch/alpha/include/asm/topology.h
-> @@ -31,7 +31,7 @@ static const struct cpumask *cpumask_of_node(int node)
->  	int cpu;
->  
->  	if (node == NUMA_NO_NODE)
-> -		return cpu_all_mask;
-> +		return cpu_online_mask;
->  
->  	cpumask_clear(&node_to_cpumask_map[node]);
->  
-[...]
-
-> diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-> index e6dad60..c676ffb 100644
-> --- a/arch/x86/mm/numa.c
-> +++ b/arch/x86/mm/numa.c
-> @@ -861,9 +861,12 @@ void numa_remove_cpu(int cpu)
->   */
->  const struct cpumask *cpumask_of_node(int node)
->  {
-> -	if (node >= nr_node_ids) {
-> +	if (node == NUMA_NO_NODE)
-> +		return cpu_online_mask;
-> +
-> +	if ((unsigned int)node >= nr_node_ids) {
->  		printk(KERN_WARNING
-> -			"cpumask_of_node(%d): node > nr_node_ids(%u)\n",
-> +			"cpumask_of_node(%d): node >= nr_node_ids(%u)\n",
->  			node, nr_node_ids);
->  		dump_stack();
->  		return cpu_none_mask;
-
-Why do we need this?
 -- 
-Michal Hocko
-SUSE Labs
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
