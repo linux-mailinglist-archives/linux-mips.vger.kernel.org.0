@@ -2,300 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95116B5796
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Sep 2019 23:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F1A9B590B
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Sep 2019 02:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728242AbfIQVa5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 Sep 2019 17:30:57 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:39275 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728051AbfIQVav (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Sep 2019 17:30:51 -0400
-Received: by mail-oi1-f196.google.com with SMTP id w144so4208527oia.6
-        for <linux-mips@vger.kernel.org>; Tue, 17 Sep 2019 14:30:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ESCnXX2tcIZXxoYYdwBnYQ13kyLGDQXAfzDyU1IsljM=;
-        b=jUgafeXoQWRROVQcTu6YfyeHgWxQgQnh4jo0vXJb9gmwfB60c9yL42Xud+pRnhazvu
-         I55/SWoMFVopXjb7HLBe3ZwDp8YJ8AIZ8yE+MZ1ol1jCwWnIpfYZUGgVJMSnV8dTUt6g
-         Fj+f3RqGjAClmuMaYSKTGHkK+kbzWWV2PGu8pnhEDzRe1H1j/2nUdgWnUmqKQJs9XJhD
-         bcgWdPhYUHXwS43uDaRjRrlqwvcEMFzpAIgQXR+SQCsx7w3nXgWKc6kAeP7uC4P5GOpV
-         geTEa7Nd78q01D+rHdE0lfUUKO0VvNzXAoY9/ESlMRu9nFZIkRllJNqARaqGkFjsJcK8
-         RCrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ESCnXX2tcIZXxoYYdwBnYQ13kyLGDQXAfzDyU1IsljM=;
-        b=JN2iFuGfZ5Nq7VcNHBKFi0IAvsWm4lEknJS3q35oT2ZV9q4EVDzbeMWczWmd2T3Szv
-         hZQEDw7FnIr46lZ3tvCn2xLsJrmolp8zWDY/wjlMZNQ/yivyd/JS2wxAeCxtEKm3uBiI
-         DflWzrAh2NdkxbnwsOFOYj28FtZHb5Ztqlgjb2zeI30LNsMt3KupImsY8ybGrVRwge+b
-         aU9zMPmF07uQS+GfWuiUOlVPlvF0IXPQX79oGRTKHGG8Dni7F8LpWupiGwuL8DMSiSFl
-         r52hML53+P9xf2X2p84h4NBon0YNSc25DuG1oBXtv1ZntFVZgvH6v91bv0+b6mlCAyKT
-         xZIg==
-X-Gm-Message-State: APjAAAVZUc4ColLb8mKPPK0ASEilir3o/B6TWMwV2vmhW9qLjAJ4BtSt
-        fx7RYgnagiIIOJ4Sh7osI/B4QDfYbJYC/4cViEdjMQ==
-X-Google-Smtp-Source: APXvYqwxm+0NJ68SJt1aKiZMUXpTcHLshnMGNY9q+/BgS9qyQqvS1IrxODCZyEWbmarv3+IaDknKyiL8F7FGSmCNufY=
-X-Received: by 2002:aca:ed52:: with SMTP id l79mr129659oih.47.1568755849487;
- Tue, 17 Sep 2019 14:30:49 -0700 (PDT)
+        id S1727064AbfIRAen (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 17 Sep 2019 20:34:43 -0400
+Received: from forward105o.mail.yandex.net ([37.140.190.183]:58901 "EHLO
+        forward105o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726971AbfIRAen (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 17 Sep 2019 20:34:43 -0400
+Received: from mxback1g.mail.yandex.net (mxback1g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:162])
+        by forward105o.mail.yandex.net (Yandex) with ESMTP id B52284200735;
+        Wed, 18 Sep 2019 03:34:38 +0300 (MSK)
+Received: from sas2-44d129ed7200.qloud-c.yandex.net (sas2-44d129ed7200.qloud-c.yandex.net [2a02:6b8:c08:ff0a:0:640:44d1:29ed])
+        by mxback1g.mail.yandex.net (nwsmtp/Yandex) with ESMTP id XWNVTDbIbC-YbRKrJBa;
+        Wed, 18 Sep 2019 03:34:38 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1568766878;
+        bh=Kij3Q0nxAJtBn/KMLLWc5IhgVDlVLSDmGkWny3ag4IU=;
+        h=In-Reply-To:Cc:To:Subject:From:Date:References:Message-ID;
+        b=wf7QcMBASD+rXFGYmfJ9aWi+OBk4VPX4Head61X/yck70Mte3nSBqcOoJly+J0c/1
+         vzd0CtmKaiHxHrQjUylIcgFajxhyPhWH74oV5ieUwrkVsLytTEVsQ7YPGAF8t5M/tS
+         U08EDH69uixwqo2UxYEY7Wc9R2ZGwnlNPYkAKZvQ=
+Authentication-Results: mxback1g.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by sas2-44d129ed7200.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id RDO4Quqbdf-YIqG4kHW;
+        Wed, 18 Sep 2019 03:34:23 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH 00/13] Modernize Loongson64 Machine
+To:     Matt Turner <mattst88@gmail.com>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        Huacai Chen <chenhc@lemote.com>,
+        Paul Burton <paul.burton@mips.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?57O757ufLeeOi+a0quiZjg==?= <wanghonghu@loongson.cn>,
+        Paul Hua <paul.hua.gm@gmail.com>, wangxuerui@qiniu.com
+References: <20190827085302.5197-1-jiaxun.yang@flygoat.com>
+ <CAEdQ38EbtBsmAU0D8VtNkp=AMLo9XN43v3-OaEN-2n6zfGDMkw@mail.gmail.com>
+Message-ID: <0491a5e9-1113-046d-b455-cd54f8cc8651@flygoat.com>
+Date:   Wed, 18 Sep 2019 08:33:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.0
 MIME-Version: 1.0
-References: <20190904201933.10736-1-cyphar@cyphar.com> <20190904201933.10736-6-cyphar@cyphar.com>
-In-Reply-To: <20190904201933.10736-6-cyphar@cyphar.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Tue, 17 Sep 2019 23:30:23 +0200
-Message-ID: <CAG48ez1_64249RdX6Nj_32YS+jhuXZBAd_ZL9ozggbSQy+cc-A@mail.gmail.com>
-Subject: Re: [PATCH v12 05/12] namei: obey trailing magic-link DAC permissions
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian@brauner.io>,
-        Andy Lutomirski <luto@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        linux-alpha@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAEdQ38EbtBsmAU0D8VtNkp=AMLo9XN43v3-OaEN-2n6zfGDMkw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Sep 4, 2019 at 10:21 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
-> The ability for userspace to "re-open" file descriptors through
-> /proc/self/fd has been a very useful tool for all sorts of usecases
-> (container runtimes are one common example). However, the current
-> interface for doing this has resulted in some pretty subtle security
-> holes. Userspace can re-open a file descriptor with more permissions
-> than the original, which can result in cases such as /proc/$pid/exe
-> being re-opened O_RDWR at a later date even though (by definition)
-> /proc/$pid/exe cannot be opened for writing. When combined with O_PATH
-> the results can get even more confusing.
-[...]
-> Instead we have to restrict it in such a way that it doesn't break
-> (good) users but does block potential attackers. The solution applied in
-> this patch is to restrict *re-opening* (not resolution through)
-> magic-links by requiring that mode of the link be obeyed. Normal
-> symlinks have modes of a+rwx but magic-links have other modes. These
-> magic-link modes were historically ignored during path resolution, but
-> they've now been re-purposed for more useful ends.
 
-Thanks for dealing with this issue!
 
-[...]
-> diff --git a/fs/namei.c b/fs/namei.c
-> index 209c51a5226c..54d57dad0f91 100644
-> --- a/fs/namei.c
-> +++ b/fs/namei.c
-> @@ -872,7 +872,7 @@ void nd_jump_link(struct path *path)
->
->         nd->path = *path;
->         nd->inode = nd->path.dentry->d_inode;
-> -       nd->flags |= LOOKUP_JUMPED;
-> +       nd->flags |= LOOKUP_JUMPED | LOOKUP_MAGICLINK_JUMPED;
->  }
-[...]
-> +static int trailing_magiclink(struct nameidata *nd, int acc_mode,
-> +                             fmode_t *opath_mask)
-> +{
-> +       struct inode *inode = nd->link_inode;
-> +       fmode_t upgrade_mask = 0;
-> +
-> +       /* Was the trailing_symlink() a magic-link? */
-> +       if (!(nd->flags & LOOKUP_MAGICLINK_JUMPED))
-> +               return 0;
-> +
-> +       /*
-> +        * Figure out the upgrade-mask of the link_inode. Since these aren't
-> +        * strictly POSIX semantics we don't do an acl_permission_check() here,
-> +        * so we only care that at least one bit is set for each upgrade-mode.
-> +        */
-> +       if (inode->i_mode & S_IRUGO)
-> +               upgrade_mask |= FMODE_PATH_READ;
-> +       if (inode->i_mode & S_IWUGO)
-> +               upgrade_mask |= FMODE_PATH_WRITE;
-> +       /* Restrict the O_PATH upgrade-mask of the caller. */
-> +       if (opath_mask)
-> +               *opath_mask &= upgrade_mask;
-> +       return may_open_magiclink(upgrade_mask, acc_mode);
->  }
+14:30, 2019年9月12日, Matt Turner <mattst88@gmail.com>:
 
-This looks racy because entries in the file descriptor table can be
-switched out as long as task->files->file_lock isn't held. Unless I'm
-missing something, something like the following (untested) would
-bypass this restriction:
+    On Tue, Aug 27, 2019 at 1:53 AM Jiaxun Yang <jiaxun.yang@flygoat.com
+    <mailto:jiaxun.yang@flygoat.com>> wrote:
 
-int readonly_fd = ...; /* some read-only fd we want to reopen as writable */
-int writable_fd = open("/dev/null", O_RDWR);
-int flippy_fd = dup(writable_fd);
-char flippy_fd_path[100];
-sprintf(flippy_fd_path, "/proc/%d/fd/%d", getpid(), flippy_fd);
-if (fork() == 0) {
-  while (1) {
-    int reopened_fd = open(flippy_fd_path, O_RDWR);
-    if (reopened_fd == -1) continue;
-    char reopened_fd_path[100];
-    sprintf(reopened_fd_path, "/proc/self/fd/%d", reopened_fd);
-    char reopened_fd_target[1000];
-    int target_len = readlink(reopened_fd_path, reopened_fd_target,
-sizeof(reopened_fd_target)-1);
-    reopened_fd_target[target_len] = 0;
-    if (strcmp(reopened_fd_target, "/dev/null"))
-      printf("managed to reopen as writable\n");
-    close(reopened_fd);
-  }
-} else {
-  while (1) {
-    dup2(readonly_fd, flippy_fd);
-    dup2(writable_fd, flippy_fd);
-  }
-}
+          Loongson have a long history of contributing their code to
+        mainline kernel.
+          However, it seems like recent years, they are focusing on
+        maintain a kernel by themselves
+          rather than contribute there code to the community.
 
-Perhaps you could change nd_jump_link() to "void nd_jump_link(struct
-path *path, umode_t link_mode)", and let proc_pid_get_link() pass the
-link_mode through from an out-argument of .proc_get_link()? Then
-proc_fd_link() could grab the proper mode in a race-free manner. And
-nd_jump_link() could stash the mode in the nameidata.
+Hi Matt:
 
-A sketch of how I imagine that:
-===============================
-diff --git a/fs/namei.c b/fs/namei.c
-index 6b936038319b..14c6790203c7 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -506,6 +506,7 @@ struct nameidata {
-        struct inode    *link_inode;
-        unsigned        root_seq;
-        int             dfd;
-+       umode_t         last_link_mode;
- } __randomize_layout;
+    Do you know more about this? I have a Loongson 3A3000 system that I
+    have never been able to make stable. I tried pulling patches out of
+    the glibc, binutils, gcc, and Linux repos I found at
+    https://github.com/loongson-community but my system still hardlocks,
 
- static void set_nameidata(struct nameidata *p, int dfd, struct filename *name)
-@@ -890,7 +891,7 @@ static int nd_jump_root(struct nameidata *nd)
-  * Helper to directly jump to a known parsed path from ->get_link,
-  * caller must have taken a reference to path beforehand.
-  */
--void nd_jump_link(struct path *path)
-+void nd_jump_link(struct path *path, umode_t link_mode)
- {
-        struct nameidata *nd = current->nameidata;
-        path_put(&nd->path);
-@@ -898,6 +899,7 @@ void nd_jump_link(struct path *path)
-        nd->path = *path;
-        nd->inode = nd->path.dentry->d_inode;
-        nd->flags |= LOOKUP_JUMPED | LOOKUP_MAGICLINK_JUMPED;
-+       nd->last_link_mode = link_mode;
- }
+What's the behaviour of hardlock? Kernel RCU stall? Or simply no response?
 
- static inline void put_link(struct nameidata *nd)
-@@ -3654,9 +3656,9 @@ static int trailing_magiclink(struct nameidata
-*nd, int acc_mode,
-         * strictly POSIX semantics we don't do an acl_permission_check() here,
-         * so we only care that at least one bit is set for each upgrade-mode.
-         */
--       if (inode->i_mode & S_IRUGO)
-+       if (nd->last_link_mode & S_IRUGO)
-                upgrade_mask |= FMODE_PATH_READ;
--       if (inode->i_mode & S_IWUGO)
-+       if (nd->last_link_mode & S_IWUGO)
-                upgrade_mask |= FMODE_PATH_WRITE;
-        /* Restrict the O_PATH upgrade-mask of the caller. */
-        if (opath_mask)
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 297242174402..af0218447571 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -1614,6 +1614,7 @@ static const char *proc_pid_get_link(struct
-dentry *dentry,
- {
-        struct path path;
-        int error = -EACCES;
-+       umode_t link_mode;
+    preventing me from doing much of anything with it.
 
-        if (!dentry)
-                return ERR_PTR(-ECHILD);
-@@ -1622,11 +1623,11 @@ static const char *proc_pid_get_link(struct
-dentry *dentry,
-        if (!proc_fd_access_allowed(inode))
-                goto out;
+    Do we know why critical looking toolchain patches like "Added misses
+    sync in mips_process_sync_loop for add sync before ll sc" [0] and "Fix
 
--       error = PROC_I(inode)->op.proc_get_link(dentry, &path);
-+       error = PROC_I(inode)->op.proc_get_link(dentry, &path, &link_mode);
-        if (error)
-                goto out;
+LLSC fixes have been mainlined in latest binutils.
+And GCC-9.1 have introduced march=gs464e for 3A3000.
 
--       nd_jump_link(&path);
-+       nd_jump_link(&path, link_mode);
-        return NULL;
- out:
-        return ERR_PTR(error);
-diff --git a/fs/proc/fd.c b/fs/proc/fd.c
-index 9b7d8becb002..9c1d247177b1 100644
---- a/fs/proc/fd.c
-+++ b/fs/proc/fd.c
-@@ -163,7 +163,8 @@ static const struct dentry_operations
-tid_fd_dentry_operations = {
-        .d_delete       = pid_delete_dentry,
- };
+    loads for Loongson3 to promoting stability" [1] have not been
+    submitted upstream?
 
--static int proc_fd_link(struct dentry *dentry, struct path *path)
-+static int proc_fd_link(struct dentry *dentry, struct path *path,
-+                       umode_t *link_mode)
- {
-        struct files_struct *files = NULL;
-        struct task_struct *task;
-@@ -184,6 +185,7 @@ static int proc_fd_link(struct dentry *dentry,
-struct path *path)
-                if (fd_file) {
-                        *path = fd_file->f_path;
-                        path_get(&fd_file->f_path);
-+                       *link_mode = /* something based on fd_file->f_mode */;
-                        ret = 0;
-                }
-                spin_unlock(&files->file_lock);
-diff --git a/fs/proc/internal.h b/fs/proc/internal.h
-index cd0c8d5ce9a1..a090fff984ed 100644
---- a/fs/proc/internal.h
-+++ b/fs/proc/internal.h
-@@ -74,7 +74,7 @@ extern struct kmem_cache *proc_dir_entry_cache;
- void pde_free(struct proc_dir_entry *pde);
+Load issue only influence specified revisions of Loongson-3A2000, your 
+hardware shouldn't have that problem.
 
- union proc_op {
--       int (*proc_get_link)(struct dentry *, struct path *);
-+       int (*proc_get_link)(struct dentry *, struct path *, umode_t *);
-        int (*proc_show)(struct seq_file *m,
-                struct pid_namespace *ns, struct pid *pid,
-                struct task_struct *task);
-===============================
+    I'm interested in supporting Loongson 3 in Gentoo, and the hardware
+    that has been given to me would be extremely useful for Gentoo's MIPS
+    port in general, but it's just not usable at all currently.
+
+You can try Fedora 28 maintained by Lemote  which have been verified in 
+production environment for a period 
+[http://mirror.lemote.com:8000/fedora/fedora28-live/] if the hardware is 
+still unstable, then it might be a memory stability issue. You can try 
+to clean your DIMM solt and DDR golden finger, or even swap the memory 
+module.
+
+Btw: Xuerui Wang <wangxuerui@qiniu.com> had maintained his 3A3000 Gentoo 
+port [https://github.com/xen0n/loongson-overlay] for a long time. I'll 
+Cc him this email and probability he can give you further assistance.
+
+
+Thanks.
+
+
+    [0]
+    https://github.com/longson-community/gcc/commit/e7e3b0f956929f022caa01ed25a482495b11d575
+    <https://github.com/loongson-community/gcc/commit/e7e3b0f956929f022caa01ed25a482495b11d575>
+    [1]
+    https://github.com/loongson-community/binutils-gdb/commit/2f0e91d2af6093097202fae3adab624ffa86a156
+
+
+
+-- 
+Jiaxun Yang
