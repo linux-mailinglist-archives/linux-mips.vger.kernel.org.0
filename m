@@ -2,49 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7E7B6801
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Sep 2019 18:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BBD4B6A71
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Sep 2019 20:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728334AbfIRQ0N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 18 Sep 2019 12:26:13 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:45353 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726900AbfIRQ0M (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 18 Sep 2019 12:26:12 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 46YQMh22Z3z9v1BX;
-        Wed, 18 Sep 2019 18:26:08 +0200 (CEST)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=pyjpbDaw; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id 9Y0Ay24P9bpW; Wed, 18 Sep 2019 18:26:08 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 46YQMh0fTtz9v1BW;
-        Wed, 18 Sep 2019 18:26:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1568823968; bh=UgJ2Vcem+ArVILPonqQdgD2fYngRPmGDyA7SB2VX37Y=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=pyjpbDawotebglj/v7nzS+SZ56zwKmvl8UJSMakTVDe9dCV/6GjdddMgM+KIG8OC1
-         kUNBRNCHr1KKmqumixwnPv1WdKVo4bZRwpWAfR0t7CPiiV7bBbJcoAYH63FALSqftC
-         hwtslTTRJYeOY7/1Aq03nzD37Ir1v6MuTgWj7N0c=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8FA068B93C;
-        Wed, 18 Sep 2019 18:26:09 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id WQXgO4akDWdq; Wed, 18 Sep 2019 18:26:09 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id F41388B937;
-        Wed, 18 Sep 2019 18:26:03 +0200 (CEST)
-Subject: Re: [PATCH V2 2/2] mm/pgtable/debug: Add test validating architecture
- page table helpers
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        id S2388046AbfIRSXB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 18 Sep 2019 14:23:01 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11376 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388507AbfIRSXA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 18 Sep 2019 14:23:00 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8IIMNWd136613
+        for <linux-mips@vger.kernel.org>; Wed, 18 Sep 2019 14:23:00 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2v3r2e3f52-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-mips@vger.kernel.org>; Wed, 18 Sep 2019 14:22:59 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-mips@vger.kernel.org> from <gerald.schaefer@de.ibm.com>;
+        Wed, 18 Sep 2019 19:22:57 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 18 Sep 2019 19:22:47 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8IIMkOY40436054
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Sep 2019 18:22:46 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4D57D11C058;
+        Wed, 18 Sep 2019 18:22:46 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 02F0511C04A;
+        Wed, 18 Sep 2019 18:22:45 +0000 (GMT)
+Received: from thinkpad (unknown [9.152.212.222])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 18 Sep 2019 18:22:44 +0000 (GMT)
+Date:   Wed, 18 Sep 2019 20:22:43 +0200
+From:   Gerald Schaefer <gerald.schaefer@de.ibm.com>
+To:     Christophe Leroy <christophe.leroy@c-s.fr>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -74,255 +74,78 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Paul Burton <paul.burton@mips.com>,
         Ralf Baechle <ralf@linux-mips.org>,
         "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
         linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 2/2] mm/pgtable/debug: Add test validating
+ architecture page table helpers
+In-Reply-To: <64504101-d9dd-f273-02f9-e9a8b178eecc@c-s.fr>
 References: <1568268173-31302-1-git-send-email-anshuman.khandual@arm.com>
- <1568268173-31302-3-git-send-email-anshuman.khandual@arm.com>
- <ab0ca38b-1e4f-b636-f8b4-007a15903984@c-s.fr>
- <502c497a-9bf1-7d2e-95f2-cfebcd9cf1d9@arm.com>
- <95ed9d92-dd43-4c45-2e52-738aed7f2fb5@c-s.fr>
- <f872e6f4-a5cb-069d-2034-78961930cb9f@arm.com>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <64504101-d9dd-f273-02f9-e9a8b178eecc@c-s.fr>
-Date:   Wed, 18 Sep 2019 18:26:03 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        <1568268173-31302-3-git-send-email-anshuman.khandual@arm.com>
+        <ab0ca38b-1e4f-b636-f8b4-007a15903984@c-s.fr>
+        <502c497a-9bf1-7d2e-95f2-cfebcd9cf1d9@arm.com>
+        <95ed9d92-dd43-4c45-2e52-738aed7f2fb5@c-s.fr>
+        <f872e6f4-a5cb-069d-2034-78961930cb9f@arm.com>
+        <64504101-d9dd-f273-02f9-e9a8b178eecc@c-s.fr>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <f872e6f4-a5cb-069d-2034-78961930cb9f@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19091818-0008-0000-0000-000003180C76
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19091818-0009-0000-0000-00004A368EF9
+Message-Id: <20190918202243.37e709df@thinkpad>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-18_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1909180162
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Wed, 18 Sep 2019 18:26:03 +0200
+Christophe Leroy <christophe.leroy@c-s.fr> wrote:
 
-
-Le 18/09/2019 à 07:04, Anshuman Khandual a écrit :
+[..] 
+> My suggestion was not to completely drop the #ifdef but to do like you 
+> did in pgd_clear_tests() for instance, ie to add the following test on 
+> top of the function:
 > 
-> 
-> On 09/13/2019 03:31 PM, Christophe Leroy wrote:
->>
->>
->> Le 13/09/2019 à 11:02, Anshuman Khandual a écrit :
->>>
->>>>> +#if !defined(__PAGETABLE_PMD_FOLDED) && !defined(__ARCH_HAS_4LEVEL_HACK)
->>>>
->>>> #ifdefs have to be avoided as much as possible, see below
->>>
->>> Yeah but it has been bit difficult to avoid all these $ifdef because of the
->>> availability (or lack of it) for all these pgtable helpers in various config
->>> combinations on all platforms.
->>
->> As far as I can see these pgtable helpers should exist everywhere at least via asm-generic/ files.
-> 
-> But they might not actually do the right thing.
-> 
->>
->> Can you spot a particular config which fails ?
-> 
-> Lets consider the following example (after removing the $ifdefs around it)
-> which though builds successfully but fails to pass the intended test. This
-> is with arm64 config 4K pages sizes with 39 bits VA space which ends up
-> with a 3 level page table arrangement.
-> 
-> static void __init p4d_clear_tests(p4d_t *p4dp)
-> {
->          p4d_t p4d = READ_ONCE(*p4dp);
-
-My suggestion was not to completely drop the #ifdef but to do like you 
-did in pgd_clear_tests() for instance, ie to add the following test on 
-top of the function:
-
-	if (mm_pud_folded(mm) || is_defined(__ARCH_HAS_5LEVEL_HACK))
-		return;
-
-> 
->          p4d = __p4d(p4d_val(p4d) | RANDOM_ORVALUE);
->          WRITE_ONCE(*p4dp, p4d);
->          p4d_clear(p4dp);
->          p4d = READ_ONCE(*p4dp);
->          WARN_ON(!p4d_none(p4d));
-> }
-> 
-> The following test hits an error at WARN_ON(!p4d_none(p4d))
-> 
-> [   16.757333] ------------[ cut here ]------------
-> [   16.758019] WARNING: CPU: 11 PID: 1 at mm/arch_pgtable_test.c:187 arch_pgtable_tests_init+0x24c/0x474
-> [   16.759455] Modules linked in:
-> [   16.759952] CPU: 11 PID: 1 Comm: swapper/0 Not tainted 5.3.0-next-20190916-00005-g61c218153bb8-dirty #222
-> [   16.761449] Hardware name: linux,dummy-virt (DT)
-> [   16.762185] pstate: 00400005 (nzcv daif +PAN -UAO)
-> [   16.762964] pc : arch_pgtable_tests_init+0x24c/0x474
-> [   16.763750] lr : arch_pgtable_tests_init+0x174/0x474
-> [   16.764534] sp : ffffffc011d7bd50
-> [   16.765065] x29: ffffffc011d7bd50 x28: ffffffff1756bac0
-> [   16.765908] x27: ffffff85ddaf3000 x26: 00000000000002e8
-> [   16.766767] x25: ffffffc0111ce000 x24: ffffff85ddaf32e8
-> [   16.767606] x23: ffffff85ddaef278 x22: 00000045cc844000
-> [   16.768445] x21: 000000065daef003 x20: ffffffff17540000
-> [   16.769283] x19: ffffff85ddb60000 x18: 0000000000000014
-> [   16.770122] x17: 00000000980426bb x16: 00000000698594c6
-> [   16.770976] x15: 0000000066e25a88 x14: 0000000000000000
-> [   16.771813] x13: ffffffff17540000 x12: 000000000000000a
-> [   16.772651] x11: ffffff85fcfd0a40 x10: 0000000000000001
-> [   16.773488] x9 : 0000000000000008 x8 : ffffffc01143ab26
-> [   16.774336] x7 : 0000000000000000 x6 : 0000000000000000
-> [   16.775180] x5 : 0000000000000000 x4 : 0000000000000000
-> [   16.776018] x3 : ffffffff1756bbe8 x2 : 000000065daeb003
-> [   16.776856] x1 : 000000000065daeb x0 : fffffffffffff000
-> [   16.777693] Call trace:
-> [   16.778092]  arch_pgtable_tests_init+0x24c/0x474
-> [   16.778843]  do_one_initcall+0x74/0x1b0
-> [   16.779458]  kernel_init_freeable+0x1cc/0x290
-> [   16.780151]  kernel_init+0x10/0x100
-> [   16.780710]  ret_from_fork+0x10/0x18
-> [   16.781282] ---[ end trace 042e6c40c0a3b038 ]---
-> 
-> On arm64 (4K page size|39 bits VA|3 level page table)
-> 
-> #elif CONFIG_PGTABLE_LEVELS == 3	/* Applicable here */
-> #define __ARCH_USE_5LEVEL_HACK
-> #include <asm-generic/pgtable-nopud.h>
-> 
-> Which pulls in
-> 
-> #include <asm-generic/pgtable-nop4d-hack.h>
-> 
-> which pulls in
-> 
-> #include <asm-generic/5level-fixup.h>
-> 
-> which defines
-> 
-> static inline int p4d_none(p4d_t p4d)
-> {
->          return 0;
-> }
-> 
-> which will invariably trigger WARN_ON(!p4d_none(p4d)).
-> 
-> Similarly for next test p4d_populate_tests() which will always be
-> successful because p4d_bad() invariably returns negative.
-> 
-> static inline int p4d_bad(p4d_t p4d)
-> {
->          return 0;
-> }
-> 
-> static void __init p4d_populate_tests(struct mm_struct *mm, p4d_t *p4dp,
->                                        pud_t *pudp)
-> {
->          p4d_t p4d;
-> 
->          /*
->           * This entry points to next level page table page.
->           * Hence this must not qualify as p4d_bad().
->           */
->          pud_clear(pudp);
->          p4d_clear(p4dp);
->          p4d_populate(mm, p4dp, pudp);
->          p4d = READ_ONCE(*p4dp);
->          WARN_ON(p4d_bad(p4d));
-> }
-> 
-> We should not run these tests for the above config because they are
-> not applicable and will invariably produce same result.
-> 
->>
->>>
->>>>
->>
->> [...]
->>
->>>>> +#if !defined(__PAGETABLE_PUD_FOLDED) && !defined(__ARCH_HAS_5LEVEL_HACK)
->>>>
->>>> The same can be done here.
->>>
->>> IIRC not only the page table helpers but there are data types (pxx_t) which
->>> were not present on various configs and these wrappers help prevent build
->>> failures. Any ways will try and see if this can be improved further. But
->>> meanwhile if you have some suggestions, please do let me know.
->>
->> pgt_t and pmd_t are everywhere I guess.
->> then pud_t and p4d_t have fallbacks in asm-generic files.
-> 
-> Lets take another example where it fails to compile. On arm64 with 16K
-> page size, 48 bits VA, 4 level page table arrangement in the following
-> test, pgd_populate() does not have the required signature.
-> 
-> static void pgd_populate_tests(struct mm_struct *mm, pgd_t *pgdp, p4d_t *p4dp)
-> {
->          pgd_t pgd;
-> 
->          if (mm_p4d_folded(mm))
->                  return;
-> 
->         /*
->           * This entry points to next level page table page.
->           * Hence this must not qualify as pgd_bad().
->           */
->          p4d_clear(p4dp);
->          pgd_clear(pgdp);
->          pgd_populate(mm, pgdp, p4dp);
->          pgd = READ_ONCE(*pgdp);
->          WARN_ON(pgd_bad(pgd));
-> }
-> 
-> mm/arch_pgtable_test.c: In function ‘pgd_populate_tests’:
-> mm/arch_pgtable_test.c:254:25: error: passing argument 3 of ‘pgd_populate’ from incompatible pointer type [-Werror=incompatible-pointer-types]
->    pgd_populate(mm, pgdp, p4dp);
->                           ^~~~
-> In file included from mm/arch_pgtable_test.c:27:0:
-> ./arch/arm64/include/asm/pgalloc.h:81:20: note: expected ‘pud_t * {aka struct <anonymous> *}’ but argument is of type ‘pgd_t * {aka struct <anonymous> *}’
->   static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgdp, pud_t *pudp)
-> 
-> The build failure is because p4d_t * maps to pgd_t * but the applicable
-> (it does not fallback on generic ones) pgd_populate() expects a pud_t *.
-> 
-> Except for archs which have 5 level page able, pgd_populate() always accepts
-> lower level page table pointers as the last argument as they dont have that
-> many levels.
-> 
-> arch/x86/include/asm/pgalloc.h:static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgd, p4d_t *p4d)
-> arch/s390/include/asm/pgalloc.h:static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgd, p4d_t *p4d)
-> 
-> But others
-> 
-> arch/arm64/include/asm/pgalloc.h:static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgdp, pud_t *pudp)
-> arch/m68k/include/asm/motorola_pgalloc.h:static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgd, pmd_t *pmd)
-> arch/mips/include/asm/pgalloc.h:static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgd, pud_t *pud)
-> arch/powerpc/include/asm/book3s/64/pgalloc.h:static inline void pgd_populate(struct mm_struct *mm, pgd_t *pgd, pud_t *pud)
-> 
-> I remember going through all these combinations before arriving at the
-> current state of #ifdef exclusions. Probably, to solved this all platforms
-> have to define pxx_populate() helpers assuming they support 5 level page
-> table.
-> 
->>
->> So it shouldn't be an issue. Maybe if a couple of arches miss them, the best would be to fix the arches, since that's the purpose of your testsuite isn't it ?
-> 
-> The run time failures as explained previously is because of the folding which
-> needs to be protected as they are not even applicable. The compile time
-> failures are because pxx_populate() signatures are platform specific depending
-> on how many page table levels they really support.
+> 	if (mm_pud_folded(mm) || is_defined(__ARCH_HAS_5LEVEL_HACK))
+> 		return;
 > 
 
-So IIUC, the compiletime problem is around __ARCH_HAS_5LEVEL_HACK. For 
-all #if !defined(__PAGETABLE_PXX_FOLDED), something equivalent to the 
-following should make the trick.
+Ah, very nice, this would also fix the remaining issues for s390. Since
+we have dynamic page table folding, neither __PAGETABLE_PXX_FOLDED nor
+__ARCH_HAS_XLEVEL_HACK is defined, but mm_pxx_folded() will work.
 
-	if (mm_pxx_folded())
-		return;
+mm_alloc() returns with a 3-level page table by default on s390, so we
+will run into issues in p4d_clear/populate_tests(), and also at the end
+with p4d/pud_free() (double free).
 
+So, adding the mm_pud_folded() check to p4d_clear/populate_tests(),
+and also adding mm_p4d/pud_folded() checks at the end before calling
+p4d/pud_free(), would make it all work on s390.
 
-For the __ARCH_HAS_5LEVEL_HACK stuff, I think we should be able to 
-regroup all impacted functions inside a single #ifdef 
-__ARCH_HAS_5LEVEL_HACK
+BTW, regarding p4d/pud_free(), I'm not sure if we should rather check
+the folding inside our s390 functions, similar to how we do it for
+p4d/pud_free_tlb(), instead of relying on not being called for folded
+p4d/pud. So far, I see no problem with this behavior, all callers of
+p4d/pud_free() should be fine because of our folding check within
+p4d/pud_present/none(). But that doesn't mean that it is correct not
+to check for the folding inside p4d/pud_free(). At least, with this
+test module we do now have a caller of p4d/pud_free() on potentially
+folded entries, so instead of adding pxx_folded() checks to this
+test module, we could add them to our p4d/pud_free() functions.
+Any thoughts on this?
 
-Christophe
+Regards,
+Gerald
+
