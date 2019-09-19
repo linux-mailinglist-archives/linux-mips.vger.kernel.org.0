@@ -2,89 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BF5B8186
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Sep 2019 21:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FDDB853C
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Sep 2019 00:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392385AbfISTjR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 19 Sep 2019 15:39:17 -0400
-Received: from mga07.intel.com ([134.134.136.100]:50290 "EHLO mga07.intel.com"
+        id S2406602AbfISWS6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 19 Sep 2019 18:18:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60736 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392354AbfISTjR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 19 Sep 2019 15:39:17 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Sep 2019 12:39:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,524,1559545200"; 
-   d="scan'208";a="217417278"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
-  by fmsmga002.fm.intel.com with ESMTP; 19 Sep 2019 12:39:15 -0700
-Date:   Thu, 19 Sep 2019 12:39:15 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Paul Mackerras <paulus@ozlabs.org>
-Cc:     James Hogan <jhogan@kernel.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry@arm.com>,
-        Suzuki K Pouloze <suzuki.poulose@arm.com>,
-        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/13] KVM: Provide common implementation for generic
- dirty log functions
-Message-ID: <20190919193915.GC30495@linux.intel.com>
-References: <20190911185038.24341-1-sean.j.christopherson@intel.com>
- <20190911185038.24341-11-sean.j.christopherson@intel.com>
- <20190919002242.GA19503@blackberry>
+        id S2404703AbfISWS6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 19 Sep 2019 18:18:58 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CDF7E21D6C;
+        Thu, 19 Sep 2019 22:18:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568931537;
+        bh=ATTSTQNzeM8sUDrhqGjI62uCRviZbT7bue9ppOoviPs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ciy1WpbJFohKxi6fZdnqOeMg7v/YF42jtnwpsNSEsq83m6514z1oMeu1OV0JjewKZ
+         NVCEb2/nL35LSZ/NjMg9rRrRcOjc7RQ4iuC8hY5QoNr1MVwAmMvrCYYMA5bdMQ+h2w
+         P60UvQa5QJcyAvTXg7Mn27LMo7INsjdjbZnUN1TQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH 4.9 22/74] MIPS: VDSO: Use same -m%-float cflag as the kernel proper
+Date:   Fri, 20 Sep 2019 00:03:35 +0200
+Message-Id: <20190919214806.913155402@linuxfoundation.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20190919214800.519074117@linuxfoundation.org>
+References: <20190919214800.519074117@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190919002242.GA19503@blackberry>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 10:22:42AM +1000, Paul Mackerras wrote:
-> On Wed, Sep 11, 2019 at 11:50:35AM -0700, Sean Christopherson wrote:
-> > Move the implementations of KVM_GET_DIRTY_LOG and KVM_CLEAR_DIRTY_LOG
-> > for CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT into common KVM code.
-> > The arch specific implemenations are extremely similar, differing
-> > only in whether the dirty log needs to be sync'd from hardware (x86)
-> > and how the TLBs are flushed.  Add new arch hooks to handle sync
-> > and TLB flush; the sync will also be used for non-generic dirty log
-> > support in a future patch (s390).
-> > 
-> > The ulterior motive for providing a common implementation is to
-> > eliminate the dependency between arch and common code with respect to
-> > the memslot referenced by the dirty log, i.e. to make it obvious in the
-> > code that the validity of the memslot is guaranteed, as a future patch
-> > will rework memslot handling such that id_to_memslot() can return NULL.
-> 
-> I notice you add empty definitions of kvm_arch_sync_dirty_log() for
-> PPC, both Book E and Book 3S.  Given that PPC doesn't select
-> CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT, why is this necessary?
+From: Paul Burton <paul.burton@mips.com>
 
-s390 has a non-empty kvm_arch_sync_dirty_log() but doesn't select
-CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT.  Patch 11/13 moves s390's call
-of kvm_arch_sync_dirty_log() from s390's kvm_vm_ioctl_get_dirty_log() into
-the common (but not "generic") kvm_get_dirty_log() so that it's obvious
-that kvm_vm_ioctl_get_dirty_log() and kvm_get_dirty_log() are operating on
-the same memslot, i.e. aren't independently querying id_to_memslot().
+commit 0648e50e548d881d025b9419a1a168753c8e2bf7 upstream.
 
-I originally made kvm_arch_sync_dirty_log() opt-in with a __KVM_HAVE_ARCH
-macro, but the resulting #ifdeffery felt uglier than having PPC and ARM
-provide empty functions.
+The MIPS VDSO build currently doesn't provide the -msoft-float flag to
+the compiler as the kernel proper does. This results in an attempt to
+use the compiler's default floating point configuration, which can be
+problematic in cases where this is incompatible with the target CPU's
+-march= flag. For example decstation_defconfig fails to build using
+toolchains in which gcc was configured --with-fp-32=xx with the
+following error:
+
+    LDS     arch/mips/vdso/vdso.lds
+  cc1: error: '-march=r3000' requires '-mfp32'
+  make[2]: *** [scripts/Makefile.build:379: arch/mips/vdso/vdso.lds] Error 1
+
+The kernel proper avoids this error because we build with the
+-msoft-float compiler flag, rather than using the compiler's default.
+Pass this flag through to the VDSO build so that it too becomes agnostic
+to the toolchain's floating point configuration.
+
+Note that this is filtered out from KBUILD_CFLAGS rather than simply
+always using -msoft-float such that if we switch the kernel to use
+-mno-float in the future the VDSO will automatically inherit the change.
+
+The VDSO doesn't actually include any floating point code, and its
+.MIPS.abiflags section is already manually generated to specify that
+it's compatible with any floating point ABI. As such this change should
+have no effect on the resulting VDSO, apart from fixing the build
+failure for affected toolchains.
+
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+Reported-by: Kevin Hilman <khilman@baylibre.com>
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Tested-by: Kevin Hilman <khilman@baylibre.com>
+Fixes: ebb5e78cc634 ("MIPS: Initial implementation of a VDSO")
+Cc: Maciej W. Rozycki <macro@linux-mips.org>
+Cc: linux-mips@vger.kernel.org
+Cc: stable@vger.kernel.org # v4.4+
+Cc: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+---
+ arch/mips/vdso/Makefile |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/arch/mips/vdso/Makefile
++++ b/arch/mips/vdso/Makefile
+@@ -7,6 +7,7 @@ ccflags-vdso := \
+ 	$(filter -E%,$(KBUILD_CFLAGS)) \
+ 	$(filter -mmicromips,$(KBUILD_CFLAGS)) \
+ 	$(filter -march=%,$(KBUILD_CFLAGS)) \
++	$(filter -m%-float,$(KBUILD_CFLAGS)) \
+ 	-D__VDSO__
+ cflags-vdso := $(ccflags-vdso) \
+ 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
+
+
