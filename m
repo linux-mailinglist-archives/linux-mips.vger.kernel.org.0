@@ -2,143 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75642B72CD
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Sep 2019 07:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2BF5B8186
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Sep 2019 21:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727517AbfISFon (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 19 Sep 2019 01:44:43 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:35572 "EHLO pegase1.c-s.fr"
+        id S2392385AbfISTjR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 19 Sep 2019 15:39:17 -0400
+Received: from mga07.intel.com ([134.134.136.100]:50290 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725887AbfISFon (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 19 Sep 2019 01:44:43 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 46Ym523Fvpz9vBnB;
-        Thu, 19 Sep 2019 07:44:38 +0200 (CEST)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=FtPM45xR; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id E1DzxbKi3YAE; Thu, 19 Sep 2019 07:44:38 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 46Ym521sh9z9vBn5;
-        Thu, 19 Sep 2019 07:44:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1568871878; bh=u3IPZEW+32C7DaDMfn0DvIJKyx2qRHLH39Ao90Ba2vI=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=FtPM45xRRq+ZMAt65+IvhdTxuzxace0VwgaQdf3cKJJT4y/Eahg1dC/4UOdaGCdh8
-         2keyDA6ggFlB3Ny+FMd2SlwiqZK/16OHJduDKueIBvHCwUrv+TaOH/TmV6EmcQ6aZD
-         62XuqZlFMWXmXNg2d+icfo4iXGpGWnUP9d4AjRIg=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1BE5C8B80C;
-        Thu, 19 Sep 2019 07:44:39 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id kqE2oHvK7TMH; Thu, 19 Sep 2019 07:44:39 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C1DA68B783;
-        Thu, 19 Sep 2019 07:44:36 +0200 (CEST)
-Subject: Re: [PATCH] mm/pgtable/debug: Fix test validating architecture page
- table helpers
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     Mark Rutland <mark.rutland@arm.com>, linux-ia64@vger.kernel.org,
-        linux-sh@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        James Hogan <jhogan@kernel.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Paul Mackerras <paulus@samba.org>, sparclinux@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-s390@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        x86@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        linux-snps-arc@lists.infradead.org,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        linux-kernel@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>
-References: <1892b37d1fd9a4ed39e76c4b999b6556077201c0.1568355752.git.christophe.leroy@c-s.fr>
- <cb338e2e-23b1-b8af-811c-57feb6f4e7b4@arm.com>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <cc28ebaf-4167-6bc7-54a7-630cd5ab827c@c-s.fr>
-Date:   Thu, 19 Sep 2019 07:44:36 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2392354AbfISTjR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 19 Sep 2019 15:39:17 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Sep 2019 12:39:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,524,1559545200"; 
+   d="scan'208";a="217417278"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Sep 2019 12:39:15 -0700
+Date:   Thu, 19 Sep 2019 12:39:15 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Paul Mackerras <paulus@ozlabs.org>
+Cc:     James Hogan <jhogan@kernel.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry@arm.com>,
+        Suzuki K Pouloze <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/13] KVM: Provide common implementation for generic
+ dirty log functions
+Message-ID: <20190919193915.GC30495@linux.intel.com>
+References: <20190911185038.24341-1-sean.j.christopherson@intel.com>
+ <20190911185038.24341-11-sean.j.christopherson@intel.com>
+ <20190919002242.GA19503@blackberry>
 MIME-Version: 1.0
-In-Reply-To: <cb338e2e-23b1-b8af-811c-57feb6f4e7b4@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190919002242.GA19503@blackberry>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, Sep 19, 2019 at 10:22:42AM +1000, Paul Mackerras wrote:
+> On Wed, Sep 11, 2019 at 11:50:35AM -0700, Sean Christopherson wrote:
+> > Move the implementations of KVM_GET_DIRTY_LOG and KVM_CLEAR_DIRTY_LOG
+> > for CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT into common KVM code.
+> > The arch specific implemenations are extremely similar, differing
+> > only in whether the dirty log needs to be sync'd from hardware (x86)
+> > and how the TLBs are flushed.  Add new arch hooks to handle sync
+> > and TLB flush; the sync will also be used for non-generic dirty log
+> > support in a future patch (s390).
+> > 
+> > The ulterior motive for providing a common implementation is to
+> > eliminate the dependency between arch and common code with respect to
+> > the memslot referenced by the dirty log, i.e. to make it obvious in the
+> > code that the validity of the memslot is guaranteed, as a future patch
+> > will rework memslot handling such that id_to_memslot() can return NULL.
+> 
+> I notice you add empty definitions of kvm_arch_sync_dirty_log() for
+> PPC, both Book E and Book 3S.  Given that PPC doesn't select
+> CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT, why is this necessary?
 
+s390 has a non-empty kvm_arch_sync_dirty_log() but doesn't select
+CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT.  Patch 11/13 moves s390's call
+of kvm_arch_sync_dirty_log() from s390's kvm_vm_ioctl_get_dirty_log() into
+the common (but not "generic") kvm_get_dirty_log() so that it's obvious
+that kvm_vm_ioctl_get_dirty_log() and kvm_get_dirty_log() are operating on
+the same memslot, i.e. aren't independently querying id_to_memslot().
 
-Le 18/09/2019 à 09:32, Anshuman Khandual a écrit :
-> 
-> 
-> On 09/13/2019 11:53 AM, Christophe Leroy wrote:
->> Fix build failure on powerpc.
->>
->> Fix preemption imbalance.
->>
->> Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
->> ---
->>   mm/arch_pgtable_test.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/mm/arch_pgtable_test.c b/mm/arch_pgtable_test.c
->> index 8b4a92756ad8..f2b3c9ec35fa 100644
->> --- a/mm/arch_pgtable_test.c
->> +++ b/mm/arch_pgtable_test.c
->> @@ -24,6 +24,7 @@
->>   #include <linux/swap.h>
->>   #include <linux/swapops.h>
->>   #include <linux/sched/mm.h>
->> +#include <linux/highmem.h>
->>   #include <asm/pgalloc.h>
->>   #include <asm/pgtable.h>
->>   
->> @@ -400,6 +401,8 @@ static int __init arch_pgtable_tests_init(void)
->>   	p4d_clear_tests(p4dp);
->>   	pgd_clear_tests(mm, pgdp);
->>   
->> +	pte_unmap(ptep);
->> +
->>   	pmd_populate_tests(mm, pmdp, saved_ptep);
->>   	pud_populate_tests(mm, pudp, saved_pmdp);
->>   	p4d_populate_tests(mm, p4dp, saved_pudp);
->>
-> 
-> Hello Christophe,
-> 
-> I am planning to fold this fix into the current patch and retain your
-> Signed-off-by. Are you okay with it ?
-> 
-
-No problem, do whatever is convenient for you. You can keep the 
-signed-off-by, or use tested-by: as I tested it on PPC32.
-
-Christophe
+I originally made kvm_arch_sync_dirty_log() opt-in with a __KVM_HAVE_ARCH
+macro, but the resulting #ifdeffery felt uglier than having PPC and ARM
+provide empty functions.
