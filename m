@@ -2,26 +2,25 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2AF6B89E2
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Sep 2019 06:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4EDB8B17
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Sep 2019 08:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726599AbfITEGL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 20 Sep 2019 00:06:11 -0400
-Received: from foss.arm.com ([217.140.110.172]:40678 "EHLO foss.arm.com"
+        id S2394860AbfITGd1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 20 Sep 2019 02:33:27 -0400
+Received: from foss.arm.com ([217.140.110.172]:41388 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726464AbfITEGL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 20 Sep 2019 00:06:11 -0400
+        id S2387829AbfITGd1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 20 Sep 2019 02:33:27 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08718337;
-        Thu, 19 Sep 2019 21:06:10 -0700 (PDT)
-Received: from [10.162.40.137] (p8cg001049571a15.blr.arm.com [10.162.40.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 85C4F3F67D;
-        Thu, 19 Sep 2019 21:05:57 -0700 (PDT)
-Subject: Re: [PATCH V2 2/2] mm/pgtable/debug: Add test validating architecture
- page table helpers
-To:     Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C5F5328;
+        Thu, 19 Sep 2019 23:33:25 -0700 (PDT)
+Received: from p8cg001049571a15.blr.arm.com (p8cg001049571a15.blr.arm.com [10.162.40.137])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 55D1F3F575;
+        Thu, 19 Sep 2019 23:35:44 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -51,79 +50,160 @@ Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
         Paul Burton <paul.burton@mips.com>,
         Ralf Baechle <ralf@linux-mips.org>,
         "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
         linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         x86@kernel.org, linux-kernel@vger.kernel.org
-References: <1568268173-31302-1-git-send-email-anshuman.khandual@arm.com>
- <1568268173-31302-3-git-send-email-anshuman.khandual@arm.com>
- <ab0ca38b-1e4f-b636-f8b4-007a15903984@c-s.fr>
- <502c497a-9bf1-7d2e-95f2-cfebcd9cf1d9@arm.com>
- <95ed9d92-dd43-4c45-2e52-738aed7f2fb5@c-s.fr>
- <f872e6f4-a5cb-069d-2034-78961930cb9f@arm.com>
- <64504101-d9dd-f273-02f9-e9a8b178eecc@c-s.fr>
- <20190918202243.37e709df@thinkpad>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <5a6045af-bcfb-12c2-0f4a-3b49a905ec4d@arm.com>
-Date:   Fri, 20 Sep 2019 09:36:12 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
-MIME-Version: 1.0
-In-Reply-To: <20190918202243.37e709df@thinkpad>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH V3 0/2] mm/debug: Add tests for architecture exported page table helpers
+Date:   Fri, 20 Sep 2019 12:03:21 +0530
+Message-Id: <1568961203-18660-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+This series adds a test validation for architecture exported page table
+helpers. Patch in the series adds basic transformation tests at various
+levels of the page table. Before that it exports gigantic page allocation
+function from HugeTLB.
 
+This test was originally suggested by Catalin during arm64 THP migration
+RFC discussion earlier. Going forward it can include more specific tests
+with respect to various generic MM functions like THP, HugeTLB etc and
+platform specific tests.
 
-On 09/18/2019 11:52 PM, Gerald Schaefer wrote:
-> On Wed, 18 Sep 2019 18:26:03 +0200
-> Christophe Leroy <christophe.leroy@c-s.fr> wrote:
-> 
-> [..] 
->> My suggestion was not to completely drop the #ifdef but to do like you 
->> did in pgd_clear_tests() for instance, ie to add the following test on 
->> top of the function:
->>
->> 	if (mm_pud_folded(mm) || is_defined(__ARCH_HAS_5LEVEL_HACK))
->> 		return;
->>
-> 
-> Ah, very nice, this would also fix the remaining issues for s390. Since
-> we have dynamic page table folding, neither __PAGETABLE_PXX_FOLDED nor
-> __ARCH_HAS_XLEVEL_HACK is defined, but mm_pxx_folded() will work.
+https://lore.kernel.org/linux-mm/20190628102003.GA56463@arrakis.emea.arm.com/
 
-Like Christophe mentioned earlier on the other thread, we will convert
-all __PGTABLE_PXX_FOLDED checks as mm_pxx_folded() but looks like 
-ARCH_HAS_[4 and 5]LEVEL_HACK macros will still be around. Will respin
-the series with all agreed upon changes first and probably we can then
-discuss pending issues from there.
+Testing:
 
-> 
-> mm_alloc() returns with a 3-level page table by default on s390, so we
-> will run into issues in p4d_clear/populate_tests(), and also at the end
-> with p4d/pud_free() (double free).
-> 
-> So, adding the mm_pud_folded() check to p4d_clear/populate_tests(),
-> and also adding mm_p4d/pud_folded() checks at the end before calling> p4d/pud_free(), would make it all work on s390.
+Successfully build and boot tested on both arm64 and x86 platforms without
+any test failing. Only build tested on some other platforms. Build failed
+on some platforms (known) in pud_clear_tests() as there were no available
+__pgd() definitions.
 
-Atleast p4d_clear/populate_tests() tests will be taken care.
+- ARM32
+- IA64
 
-> 
-> BTW, regarding p4d/pud_free(), I'm not sure if we should rather check
-> the folding inside our s390 functions, similar to how we do it for
-> p4d/pud_free_tlb(), instead of relying on not being called for folded
-> p4d/pud. So far, I see no problem with this behavior, all callers of
-> p4d/pud_free() should be fine because of our folding check within
-> p4d/pud_present/none(). But that doesn't mean that it is correct not
-> to check for the folding inside p4d/pud_free(). At least, with this
-> test module we do now have a caller of p4d/pud_free() on potentially
-> folded entries, so instead of adding pxx_folded() checks to this
-> test module, we could add them to our p4d/pud_free() functions.
-> Any thoughts on this?
-Agreed, it seems better to do the check inside p4d/pud_free() functions.
+But I would really appreciate if folks can help validate this test on other
+architectures and report back problems. All suggestions, comments and inputs
+welcome. Thank you.
+
+Changes in V3:
+
+- Changed test trigger from module format into late_initcall()
+- Marked all functions with __init to be freed after completion
+- Changed all __PGTABLE_PXX_FOLDED checks as mm_pxx_folded()
+- Folded in PPC32 fixes from Christophe
+
+Changes in V2:
+
+https://lore.kernel.org/linux-mm/1568268173-31302-1-git-send-email-anshuman.khandual@arm.com/T/#t
+
+- Fixed small typo error in MODULE_DESCRIPTION()
+- Fixed m64k build problems for lvalue concerns in pmd_xxx_tests()
+- Fixed dynamic page table level folding problems on x86 as per Kirril
+- Fixed second pointers during pxx_populate_tests() per Kirill and Gerald
+- Allocate and free pte table with pte_alloc_one/pte_free per Kirill
+- Modified pxx_clear_tests() to accommodate s390 lower 12 bits situation
+- Changed RANDOM_NZVALUE value from 0xbe to 0xff
+- Changed allocation, usage, free sequence for saved_ptep
+- Renamed VMA_FLAGS as VMFLAGS
+- Implemented a new method for random vaddr generation
+- Implemented some other cleanups
+- Dropped extern reference to mm_alloc()
+- Created and exported new alloc_gigantic_page_order()
+- Dropped the custom allocator and used new alloc_gigantic_page_order()
+
+Changes in V1:
+
+https://lore.kernel.org/linux-mm/1567497706-8649-1-git-send-email-anshuman.khandual@arm.com/
+
+- Added fallback mechanism for PMD aligned memory allocation failure
+
+Changes in RFC V2:
+
+https://lore.kernel.org/linux-mm/1565335998-22553-1-git-send-email-anshuman.khandual@arm.com/T/#u
+
+- Moved test module and it's config from lib/ to mm/
+- Renamed config TEST_ARCH_PGTABLE as DEBUG_ARCH_PGTABLE_TEST
+- Renamed file from test_arch_pgtable.c to arch_pgtable_test.c
+- Added relevant MODULE_DESCRIPTION() and MODULE_AUTHOR() details
+- Dropped loadable module config option
+- Basic tests now use memory blocks with required size and alignment
+- PUD aligned memory block gets allocated with alloc_contig_range()
+- If PUD aligned memory could not be allocated it falls back on PMD aligned
+  memory block from page allocator and pud_* tests are skipped
+- Clear and populate tests now operate on real in memory page table entries
+- Dummy mm_struct gets allocated with mm_alloc()
+- Dummy page table entries get allocated with [pud|pmd|pte]_alloc_[map]()
+- Simplified [p4d|pgd]_basic_tests(), now has random values in the entries
+
+Original RFC V1:
+
+https://lore.kernel.org/linux-mm/1564037723-26676-1-git-send-email-anshuman.khandual@arm.com/
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Steven Price <Steven.Price@arm.com>
+Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Sri Krishna chowdary <schowdary@nvidia.com>
+Cc: Dave Hansen <dave.hansen@intel.com>
+Cc: Russell King - ARM Linux <linux@armlinux.org.uk>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
+Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Vineet Gupta <vgupta@synopsys.com>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: Paul Burton <paul.burton@mips.com>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Kirill A. Shutemov <kirill@shutemov.name>
+Cc: Gerald Schaefer <gerald.schaefer@de.ibm.com>
+Cc: Christophe Leroy <christophe.leroy@c-s.fr>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-ia64@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (2):
+  mm/hugetlb: Make alloc_gigantic_page() available for general use
+  mm/pgtable/debug: Add test validating architecture page table helpers
+
+ arch/x86/include/asm/pgtable_64_types.h |   2 +
+ include/linux/hugetlb.h                 |   9 +
+ mm/Kconfig.debug                        |  14 +
+ mm/Makefile                             |   1 +
+ mm/arch_pgtable_test.c                  | 440 ++++++++++++++++++++++++++++++++
+ mm/hugetlb.c                            |  24 +-
+ 6 files changed, 488 insertions(+), 2 deletions(-)
+ create mode 100644 mm/arch_pgtable_test.c
+
+-- 
+2.7.4
+
