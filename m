@@ -2,217 +2,239 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B4ABA036
-	for <lists+linux-mips@lfdr.de>; Sun, 22 Sep 2019 04:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A06FDBA29D
+	for <lists+linux-mips@lfdr.de>; Sun, 22 Sep 2019 14:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727140AbfIVCQk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 21 Sep 2019 22:16:40 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:38700 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727139AbfIVCQk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 21 Sep 2019 22:16:40 -0400
-Received: by mail-io1-f67.google.com with SMTP id u8so3684441iom.5
-        for <linux-mips@vger.kernel.org>; Sat, 21 Sep 2019 19:16:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kn6fTJ+EBool/zp8vvAcG4bDOsS7Q3JrCWlM0fUArhY=;
-        b=Jz4dEUFd2lZ1n4Sr89OnMqry1i/ZUdipWS/WCKEXCIWUreFfztsGrMHhP8dhmpAcq5
-         84iA2uFFGX+qSid54RC8l8T9Fh4eiGfBQjjQDOrm692RP6eFp3+OkwRFIpen168m/Yio
-         bsBH0gkXJ3hjtTcYXjcqEQmigL1ERLmXUsTpyzV/7j3S6GlwkAsZipeRxG3LhULUBcaK
-         yQgyn2+tXwU9HSxcpA9J8Rx3foo/TJv+UM4nqUuAyldcTHR9w4oIc2ULWRXPVlNvUikz
-         TeYyomFKwvkCiNIqHJMEqZ87DHHRu5WXtGW8zki1HJVtpQjOjmMT896zdOJ3kstM2VqP
-         470A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kn6fTJ+EBool/zp8vvAcG4bDOsS7Q3JrCWlM0fUArhY=;
-        b=qQfS/SucRrrrjdtHMf7KbHuonAhNC5zLDEBOXm52TMCTTua9xWs+ucxkMMnqeMtiUA
-         Q2J+S5GRl7oXFbivRxeGwMA8R1nr0ipbx6XhKUyb3RDE5jvUgzlz0XCFbt+muKdC7C2Q
-         Im8n87PpJmlu4ba4wt4Duzh6P9CC2zKCR1whkFx0xbaVEpGyUQEr4To6NKGeHh3BGuTZ
-         /AeTtDhYAurk+ih5QNlTeacGN2CBoj1GS6l2MDsjPyHMHCEX9Itgo/qSjplDCprgc2h0
-         bjX5OJ9NpgLFew8bJT+KCrWed3ybceSxAgu6kebvcaD6LETB+GCNjSHK1xv92IUO3z9/
-         Hk9A==
-X-Gm-Message-State: APjAAAXzwf0LczjZ3aAMshJggupGmVnwSqU6cfjzPs8H5XGTU+Bnvnlw
-        K4bNR+FUIFdsp+7NeTHn8fOvQ9lWk3QBJtioQL0=
-X-Google-Smtp-Source: APXvYqxc7RD+HvfnSd/PdIRHgdZOrPon3dOfmb1LgXVDi98G5Xr5ZVVA1oKn2/+4FUj0LmAd7RtdKhIIi8HUc+JeEAM=
-X-Received: by 2002:a02:55c4:: with SMTP id e187mr29473421jab.32.1569118599139;
- Sat, 21 Sep 2019 19:16:39 -0700 (PDT)
+        id S1728879AbfIVMbS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 22 Sep 2019 08:31:18 -0400
+Received: from inca-roads.misterjones.org ([213.251.177.50]:43505 "EHLO
+        inca-roads.misterjones.org" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728863AbfIVMbR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 22 Sep 2019 08:31:17 -0400
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why)
+        by cheepnis.misterjones.org with esmtpsa (TLSv1.2:AES256-GCM-SHA384:256)
+        (Exim 4.80)
+        (envelope-from <maz@kernel.org>)
+        id 1iC11C-0003oU-OU; Sun, 22 Sep 2019 14:31:11 +0200
+Date:   Sun, 22 Sep 2019 13:31:08 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Justin Chen <justinpopo6@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        bcm-kernel-feedback-list@broadcom.com (open list:BROADCOM BMIPS MIPS
+        ARCHITECTURE),
+        linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE)
+Subject: Re: [PATCH v2 1/5] irqchip/irq-bcm7038-l1: Add PM support
+Message-ID: <20190922133108.09211a17@why>
+In-Reply-To: <20190913191542.9908-2-f.fainelli@gmail.com>
+References: <20190913191542.9908-1-f.fainelli@gmail.com>
+        <20190913191542.9908-2-f.fainelli@gmail.com>
+Organization: Approximate
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <1568000558-11823-1-git-send-email-chenhc@lemote.com>
-In-Reply-To: <1568000558-11823-1-git-send-email-chenhc@lemote.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sun, 22 Sep 2019 10:21:29 +0800
-Message-ID: <CAAhV-H7u3s8mYxR7+4=mXGB=5gJ5zwtfyTkYphm96r+H6bd45A@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Loongson: remove unnecessary loongson_llsc_mb()
-To:     Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>
-Cc:     Linux MIPS Mailing List <linux-mips@linux-mips.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huang Pei <huangpei@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: f.fainelli@gmail.com, linux-kernel@vger.kernel.org, justinpopo6@gmail.com, tglx@linutronix.de, jason@lakedaemon.net, robh+dt@kernel.org, mark.rutland@arm.com, cernekee@gmail.com, devicetree@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on cheepnis.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Ping?
+On Fri, 13 Sep 2019 12:15:38 -0700
+Florian Fainelli <f.fainelli@gmail.com> wrote:
 
-On Mon, Sep 9, 2019 at 11:41 AM Huacai Chen <chenhc@lemote.com> wrote:
->
-> Commit 1c6c1ca318585f1 ("mips/atomic: Fix loongson_llsc_mb() wreckage")
-> fix the description of Loongson-3's llsc bug and try to add all missing
-> loongson_llsc_mb(). This is a good job but there are some unnecessary
-> memory barries:
->
-> loongson_llsc_mb() is a Loongson-specific problem. smp_llsc_mb(),
-> smp_mb__before_llsc(), loongson_llsc_mb() and and other memory barriers
-> are essentially the same thing on Loongson-3. So we don't need to add
-> loongson_llsc_mb() if there is already a smp_mb__before_llsc() or other
-> types of memory barriers.
->
-> So, most of loongson_llsc_mb() in Peter's patch is superfluous and can
-> be removed, except the one in test_and_set_bit_lock().
->
-> mips_atomic_set() is not used on Loongson-3, and if in some cases we use
-> it, the user-to-kernel context switching probably has the same effect of
-> a memory barrier. But anyway, add a memory barrier in mips_atomic_set()
-> is harmless, so I keep this one.
->
-> For cmpxchg.h, the 32-bit version of cmpxchg64() doesn't need to be care
-> about because Loongson64 can support 64-bit kernel only, cmpxchg() need
-> memory barriers and it already has, cmpxchg_local() doesn't need memory
-> barriers because only the local cpu can write, which is the same as all
-> other local_t ops. So I remove all loongson_llsc_mb() in cmpxchg.h from
-> Peter's patch.
->
-> To summarize:
-> I keep Peter's comments and also keep necessary loongson_llsc_mb() in
-> test_and_set_bit_lock()/mips_atomic_set() from Peter's patch, but all
-> superfluous memory barries are removed.
->
-> Cc: Huang Pei <huangpei@loongson.cn>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> From: Justin Chen <justinpopo6@gmail.com>
+> 
+> The current l1 controller does not mask any interrupts when dropping
+> into suspend. This mean we can receive unexpected wake up sources.
+> Modified MIPS l1 controller to mask the all non-wake interrupts before
+> dropping into suspend.
+> 
+> Signed-off-by: Justin Chen <justinpopo6@gmail.com>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
->  arch/mips/include/asm/atomic.h  | 5 ++---
->  arch/mips/include/asm/bitops.h  | 4 ----
->  arch/mips/include/asm/cmpxchg.h | 5 -----
->  3 files changed, 2 insertions(+), 12 deletions(-)
->
-> diff --git a/arch/mips/include/asm/atomic.h b/arch/mips/include/asm/atomic.h
-> index bb8658cc..4f6e538 100644
-> --- a/arch/mips/include/asm/atomic.h
-> +++ b/arch/mips/include/asm/atomic.h
-> @@ -193,7 +193,6 @@ static __inline__ int atomic_sub_if_positive(int i, atomic_t * v)
->         if (kernel_uses_llsc) {
->                 int temp;
->
-> -               loongson_llsc_mb();
->                 __asm__ __volatile__(
->                 "       .set    push                                    \n"
->                 "       .set    "MIPS_ISA_LEVEL"                        \n"
-> @@ -201,12 +200,12 @@ static __inline__ int atomic_sub_if_positive(int i, atomic_t * v)
->                 "       .set    pop                                     \n"
->                 "       subu    %0, %1, %3                              \n"
->                 "       move    %1, %0                                  \n"
-> -               "       bltz    %0, 2f                                  \n"
-> +               "       bltz    %0, 1f                                  \n"
->                 "       .set    push                                    \n"
->                 "       .set    "MIPS_ISA_LEVEL"                        \n"
->                 "       sc      %1, %2                                  \n"
->                 "\t" __scbeqz " %1, 1b                                  \n"
-> -               "2:                                                     \n"
-> +               "1:                                                     \n"
->                 "       .set    pop                                     \n"
->                 : "=&r" (result), "=&r" (temp),
->                   "+" GCC_OFF_SMALL_ASM() (v->counter)
-> diff --git a/arch/mips/include/asm/bitops.h b/arch/mips/include/asm/bitops.h
-> index 985d6a0..5016b96 100644
-> --- a/arch/mips/include/asm/bitops.h
-> +++ b/arch/mips/include/asm/bitops.h
-> @@ -257,7 +257,6 @@ static inline int test_and_set_bit(unsigned long nr,
->                 unsigned long *m = ((unsigned long *) addr) + (nr >> SZLONG_LOG);
->                 unsigned long temp;
->
-> -               loongson_llsc_mb();
->                 do {
->                         __asm__ __volatile__(
->                         "       .set    push                            \n"
-> @@ -374,7 +373,6 @@ static inline int test_and_clear_bit(unsigned long nr,
->                 unsigned long *m = ((unsigned long *) addr) + (nr >> SZLONG_LOG);
->                 unsigned long temp;
->
-> -               loongson_llsc_mb();
->                 do {
->                         __asm__ __volatile__(
->                         "       " __LL  "%0, %1 # test_and_clear_bit    \n"
-> @@ -390,7 +388,6 @@ static inline int test_and_clear_bit(unsigned long nr,
->                 unsigned long *m = ((unsigned long *) addr) + (nr >> SZLONG_LOG);
->                 unsigned long temp;
->
-> -               loongson_llsc_mb();
->                 do {
->                         __asm__ __volatile__(
->                         "       .set    push                            \n"
-> @@ -450,7 +447,6 @@ static inline int test_and_change_bit(unsigned long nr,
->                 unsigned long *m = ((unsigned long *) addr) + (nr >> SZLONG_LOG);
->                 unsigned long temp;
->
-> -               loongson_llsc_mb();
->                 do {
->                         __asm__ __volatile__(
->                         "       .set    push                            \n"
-> diff --git a/arch/mips/include/asm/cmpxchg.h b/arch/mips/include/asm/cmpxchg.h
-> index 79bf34e..dd39bae 100644
-> --- a/arch/mips/include/asm/cmpxchg.h
-> +++ b/arch/mips/include/asm/cmpxchg.h
-> @@ -46,7 +46,6 @@ extern unsigned long __xchg_called_with_bad_pointer(void)
->         __typeof(*(m)) __ret;                                           \
->                                                                         \
->         if (kernel_uses_llsc) {                                         \
-> -               loongson_llsc_mb();                                     \
->                 __asm__ __volatile__(                                   \
->                 "       .set    push                            \n"     \
->                 "       .set    noat                            \n"     \
-> @@ -118,7 +117,6 @@ static inline unsigned long __xchg(volatile void *ptr, unsigned long x,
->         __typeof(*(m)) __ret;                                           \
->                                                                         \
->         if (kernel_uses_llsc) {                                         \
-> -               loongson_llsc_mb();                                     \
->                 __asm__ __volatile__(                                   \
->                 "       .set    push                            \n"     \
->                 "       .set    noat                            \n"     \
-> @@ -136,7 +134,6 @@ static inline unsigned long __xchg(volatile void *ptr, unsigned long x,
->                 : "=&r" (__ret), "=" GCC_OFF_SMALL_ASM() (*m)           \
->                 : GCC_OFF_SMALL_ASM() (*m), "Jr" (old), "Jr" (new)      \
->                 : __LLSC_CLOBBER);                                      \
-> -               loongson_llsc_mb();                                     \
->         } else {                                                        \
->                 unsigned long __flags;                                  \
->                                                                         \
-> @@ -232,7 +229,6 @@ static inline unsigned long __cmpxchg64(volatile void *ptr,
->          */
->         local_irq_save(flags);
->
-> -       loongson_llsc_mb();
->         asm volatile(
->         "       .set    push                            \n"
->         "       .set    " MIPS_ISA_ARCH_LEVEL "         \n"
-> @@ -278,7 +274,6 @@ static inline unsigned long __cmpxchg64(volatile void *ptr,
->           "r" (old),
->           "r" (new)
->         : "memory");
-> -       loongson_llsc_mb();
->
->         local_irq_restore(flags);
->         return ret;
-> --
-> 2.7.0
->
+>  drivers/irqchip/irq-bcm7038-l1.c | 98 ++++++++++++++++++++++++++++++++
+>  1 file changed, 98 insertions(+)
+> 
+> diff --git a/drivers/irqchip/irq-bcm7038-l1.c b/drivers/irqchip/irq-bcm7038-l1.c
+> index fc75c61233aa..f5e4ff5251ab 100644
+> --- a/drivers/irqchip/irq-bcm7038-l1.c
+> +++ b/drivers/irqchip/irq-bcm7038-l1.c
+> @@ -27,6 +27,7 @@
+>  #include <linux/types.h>
+>  #include <linux/irqchip.h>
+>  #include <linux/irqchip/chained_irq.h>
+> +#include <linux/syscore_ops.h>
+>  
+>  #define IRQS_PER_WORD		32
+>  #define REG_BYTES_PER_IRQ_WORD	(sizeof(u32) * 4)
+> @@ -39,6 +40,10 @@ struct bcm7038_l1_chip {
+>  	unsigned int		n_words;
+>  	struct irq_domain	*domain;
+>  	struct bcm7038_l1_cpu	*cpus[NR_CPUS];
+> +#ifdef CONFIG_PM_SLEEP
+> +	struct list_head	list;
+> +	u32			wake_mask[MAX_WORDS];
+> +#endif
+>  	u8			affinity[MAX_WORDS * IRQS_PER_WORD];
+>  };
+>  
+> @@ -47,6 +52,17 @@ struct bcm7038_l1_cpu {
+>  	u32			mask_cache[0];
+>  };
+>  
+> +/*
+> + * We keep a list of bcm7038_l1_chip used for suspend/resume. This hack is
+> + * used because the struct chip_type suspend/resume hooks are not called
+> + * unless chip_type is hooked onto a generic_chip. Since this driver does
+> + * not use generic_chip, we need to manually hook our resume/suspend to
+> + * syscore_ops.
+> + */
+> +#ifdef CONFIG_PM_SLEEP
+> +static LIST_HEAD(bcm7038_l1_intcs_list);
+> +#endif
+
+nit: this could be moved down to be close to the rest of the PM_SLEEP
+ifdefery.
+
+> +
+>  /*
+>   * STATUS/MASK_STATUS/MASK_SET/MASK_CLEAR are packed one right after another:
+>   *
+> @@ -287,6 +303,77 @@ static int __init bcm7038_l1_init_one(struct device_node *dn,
+>  	return 0;
+>  }
+>  
+> +#ifdef CONFIG_PM_SLEEP
+> +static int bcm7038_l1_suspend(void)
+> +{
+> +	struct bcm7038_l1_chip *intc;
+> +	unsigned long flags;
+> +	int boot_cpu, word;
+> +
+> +	/* Wakeup interrupt should only come from the boot cpu */
+> +	boot_cpu = cpu_logical_map(smp_processor_id());
+
+What guarantees that you're actually running on the boot CPU at this
+point? If that's actually the case, why isn't cpu_logical_map(0) enough?
+
+> +
+> +	list_for_each_entry(intc, &bcm7038_l1_intcs_list, list) {
+> +		raw_spin_lock_irqsave(&intc->lock, flags);
+
+And if this can only run on a single CPU, what's the purpose of this
+lock?
+
+> +		for (word = 0; word < intc->n_words; word++) {
+> +			l1_writel(~intc->wake_mask[word],
+> +				intc->cpus[boot_cpu]->map_base +
+> +				reg_mask_set(intc, word));
+> +			l1_writel(intc->wake_mask[word],
+> +				intc->cpus[boot_cpu]->map_base +
+> +				reg_mask_clr(intc, word));
+
+nit: Please don't split the write address across two lines, it makes it
+harder to read.
+
+> +		}
+> +		raw_spin_unlock_irqrestore(&intc->lock, flags);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void bcm7038_l1_resume(void)
+> +{
+> +	struct bcm7038_l1_chip *intc;
+> +	unsigned long flags;
+> +	int boot_cpu, word;
+> +
+> +	boot_cpu = cpu_logical_map(smp_processor_id());
+> +
+> +	list_for_each_entry(intc, &bcm7038_l1_intcs_list, list) {
+> +		raw_spin_lock_irqsave(&intc->lock, flags);
+> +		for (word = 0; word < intc->n_words; word++) {
+> +			l1_writel(intc->cpus[boot_cpu]->mask_cache[word],
+> +				intc->cpus[boot_cpu]->map_base +
+> +				reg_mask_set(intc, word));
+> +			l1_writel(~intc->cpus[boot_cpu]->mask_cache[word],
+> +				intc->cpus[boot_cpu]->map_base +
+> +				reg_mask_clr(intc, word));
+> +		}
+> +		raw_spin_unlock_irqrestore(&intc->lock, flags);
+> +	}
+> +}
+> +
+> +static struct syscore_ops bcm7038_l1_syscore_ops = {
+> +	.suspend	= bcm7038_l1_suspend,
+> +	.resume		= bcm7038_l1_resume,
+> +};
+> +
+> +static int bcm7038_l1_set_wake(struct irq_data *d, unsigned int on)
+> +{
+> +	struct bcm7038_l1_chip *intc = irq_data_get_irq_chip_data(d);
+> +	unsigned long flags;
+> +	u32 word = d->hwirq / IRQS_PER_WORD;
+> +	u32 mask = BIT(d->hwirq % IRQS_PER_WORD);
+> +
+> +	raw_spin_lock_irqsave(&intc->lock, flags);
+> +	if (on)
+> +		intc->wake_mask[word] |= mask;
+> +	else
+> +		intc->wake_mask[word] &= ~mask;
+> +	raw_spin_unlock_irqrestore(&intc->lock, flags);
+> +
+> +	return 0;
+> +}
+> +#endif
+> +
+>  static struct irq_chip bcm7038_l1_irq_chip = {
+>  	.name			= "bcm7038-l1",
+>  	.irq_mask		= bcm7038_l1_mask,
+> @@ -295,6 +382,9 @@ static struct irq_chip bcm7038_l1_irq_chip = {
+>  #ifdef CONFIG_SMP
+>  	.irq_cpu_offline	= bcm7038_l1_cpu_offline,
+>  #endif
+> +#ifdef CONFIG_PM_SLEEP
+> +	.irq_set_wake		= bcm7038_l1_set_wake,
+> +#endif
+>  };
+>  
+>  static int bcm7038_l1_map(struct irq_domain *d, unsigned int virq,
+> @@ -340,6 +430,14 @@ int __init bcm7038_l1_of_init(struct device_node *dn,
+>  		goto out_unmap;
+>  	}
+>  
+> +#ifdef CONFIG_PM_SLEEP
+> +	/* Add bcm7038_l1_chip into a list */
+> +	INIT_LIST_HEAD(&intc->list);
+> +	list_add_tail(&intc->list, &bcm7038_l1_intcs_list);
+
+No locking to manipulate this list? Is that safe?
+
+> +
+> +	register_syscore_ops(&bcm7038_l1_syscore_ops);
+
+Do you really register the syscore_ops for each and every L1 irqchip?
+
+> +#endif
+> +
+>  	pr_info("registered BCM7038 L1 intc (%pOF, IRQs: %d)\n",
+>  		dn, IRQS_PER_WORD * intc->n_words);
+>  
+
+Thanks,
+
+	M.
+-- 
+Without deviation from the norm, progress is not possible.
