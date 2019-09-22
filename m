@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C81BAB93
-	for <lists+linux-mips@lfdr.de>; Sun, 22 Sep 2019 22:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B01FBAB94
+	for <lists+linux-mips@lfdr.de>; Sun, 22 Sep 2019 22:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387655AbfIVUM4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 22 Sep 2019 16:12:56 -0400
-Received: from srv1.deutnet.info ([116.203.153.70]:44682 "EHLO
+        id S2388747AbfIVUNJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 22 Sep 2019 16:13:09 -0400
+Received: from srv1.deutnet.info ([116.203.153.70]:44692 "EHLO
         srv1.deutnet.info" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729892AbfIVUM4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 22 Sep 2019 16:12:56 -0400
+        with ESMTP id S2388723AbfIVUNJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 22 Sep 2019 16:13:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=deutnet.info; s=default; h=In-Reply-To:Message-ID:Subject:Cc:To:From:Date;
-         bh=60OHukiHnNspCw6OiVucbGC3zH8iOy4aw+kE5lf5Fcs=; b=Y598TbxalyCEDnB33hTvaNier
-        +ggf33Jo+FjbodgdNV/m2JuOTrp0WNvOSp5GyOd8EKmQAaQUa9UfEWxKMUMuXaWw2JnbaqQPsdC+m
-        rZkU8bAXkHrl6A2ceWc0llkvh8w5SdEiC0/pGtnfoJ61q4ETek413wFUHsUfXskvSqxEEZ/zt0nig
-        tyV6LlYVgUFkN7ovwIwcRkD6djLW5n1uKMWDq8Qh/AkoTi1tfTqOk/fI3Tgna3K6AlOLPg93X/8FJ
-        Qi1w3FWwyI4WVl1GjHEkxcxapDY0kQlxUUof/ldbuN8EP8Y9q5zW1IZnCNyw5OBP8Xfv2k2FjE5py
-        cDmwxJkPA==;
+         bh=/BP8hOWE8SJ76SRf1RmiWyLqtKvXhcXYW4oao3LZWlU=; b=lB+pkqsq5ngXh/Zi0/7wsCsa8
+        aW8g0qd9xLSsT8X3lvyYzVZ7cu596Ipc06stOJO1ZO1DJPVNBhuD2aAgGj667hmdGmGvXP+i7UeZA
+        XtOwM5f6dCpQ4t53xgNOKRHtnlPoyWOBAgowbNcuBr7DPs2Qw3REE+Mlm4h+V+mPA/t1Z29jrOICc
+        mtz33a/XSXrEcWEFTgkV0py/nt6I8ndDz1s/p0jhkywFk9FdP8/sYX4+CI5F+Ax12m+FlHElkr88h
+        0eJkbucaqCoetZME+8FV41AZf4NSNJ84QWmuq2BvRpfzTPw/P5eosTjiMvcmyAz1eX7md6176ienE
+        +kSORIMMA==;
 Received: from [2001:bc8:3dc9::1] (helo=localhost)
         by srv1.deutnet.info with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <agriveaux@deutnet.info>)
-        id 1iC8E0-0007tk-IR; Sun, 22 Sep 2019 22:12:52 +0200
+        id 1iC8EE-0007u8-5c; Sun, 22 Sep 2019 22:13:06 +0200
 Received: from agriveaux by localhost with local (Exim 4.92)
         (envelope-from <agriveaux@deutnet.info>)
-        id 1iC8E0-007vfB-6q; Sun, 22 Sep 2019 22:12:52 +0200
-Date:   Sun, 22 Sep 2019 22:12:52 +0200
+        id 1iC8ED-007vfi-Qc; Sun, 22 Sep 2019 22:13:05 +0200
+Date:   Sun, 22 Sep 2019 22:13:05 +0200
 From:   Alexandre GRIVEAUX <agriveaux@deutnet.info>
 To:     robh+dt@kernel.org, mark.rutland@arm.com, ralf@linux-mips.org,
         paul.burton@mips.com, jhogan@kernel.org, agriveaux@deutnet.info
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH 3/4] MIPS: CI20: DTS: Add Leds
-Message-ID: <400e1552629dcf84d11cddab60b0177057e2c852.1569181001.git.agriveaux@deutnet.info>
+Subject: [PATCH 4/4] MIPS: JZ4780: DTS: Add CPU nodes
+Message-ID: <d4f2225005f6d8a92eec05bb64e7fe937ead8ccc.1569181001.git.agriveaux@deutnet.info>
 References: <cover.1569181001.git.agriveaux@deutnet.info>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -46,52 +46,41 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Adding leds and related triggers.
+The JZ4780 have 2 core, adding to DT.
 
 Signed-off-by: Alexandre GRIVEAUX <agriveaux@deutnet.info>
 ---
- arch/mips/boot/dts/ingenic/ci20.dts | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ arch/mips/boot/dts/ingenic/jz4780.dtsi | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index c62c36ae94c2..37b93166bf22 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -25,6 +25,34 @@
- 		       0x30000000 0x30000000>;
- 	};
+diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+index f928329b034b..9c7346724f1f 100644
+--- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+@@ -7,6 +7,23 @@
+ 	#size-cells = <1>;
+ 	compatible = "ingenic,jz4780";
  
-+	leds {
-+		compatible = "gpio-leds";
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
-+		led0 {
-+			label = "ci20:red:led0";
-+			gpios = <&gpc 3 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "none";
++		cpu@0 {
++			compatible = "ingenic,jz4780";
++			device_type = "cpu";
++			reg = <0>;
 +		};
 +
-+		led1 {
-+			label = "ci20:red:led1";
-+			gpios = <&gpc 2 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "nand-disk";
-+		};
-+
-+		led2 {
-+			label = "ci20:red:led2";
-+			gpios = <&gpc 1 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "cpu1";
-+		};
-+
-+		led3 {
-+			label = "ci20:red:led3";
-+			gpios = <&gpc 0 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "cpu0";
++		cpu@1 {
++			compatible = "ingenic,jz4780";
++			device_type = "cpu";
++			reg = <1>;
 +		};
 +	};
 +
- 	eth0_power: fixedregulator@0 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "eth0_power";
+ 	cpuintc: interrupt-controller {
+ 		#address-cells = <0>;
+ 		#interrupt-cells = <1>;
 -- 
 2.20.1
 
