@@ -2,106 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E490BB816
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Sep 2019 17:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDF9BB882
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Sep 2019 17:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732064AbfIWPg5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 Sep 2019 11:36:57 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:35327 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732063AbfIWPg5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 Sep 2019 11:36:57 -0400
-Received: by mail-pf1-f193.google.com with SMTP id 205so9361975pfw.2;
-        Mon, 23 Sep 2019 08:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ijALtNMVDCbRngnlUemEOMqxh/pmlAYjBmJTRLvXFqE=;
-        b=DIpSBZz7HEpByiy/fNz+JyvxDoOOZ09A1dZh+X8HnqtM5NW+KIAJsZQmVDgSOuMb51
-         fvaPBwl7+oOS2zuhPyNx2n9sJAlkYZ4uzrWBhgHdJr819RN1sqFlY1Z8Q+foyPZwjpld
-         tGomb12TZLB/14W77hjoI/d/+HRTYEWUnDRyIZSvfvXAt8H7LXJgCqfqE/ggQLVu2BWa
-         skwtb/LGV3PeMt/HfCAG78fsKI0rFSzldjNsCb2AO8odTztYE4nm1kYM1VGzMvRXJWeZ
-         ahHYP/K8Gt1JAQLHv4GJkiaf6LIH6iSvR4y5bhwNkYZSTWUzRj0UkZrtAgeMnB3Kq8Xq
-         ZjeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ijALtNMVDCbRngnlUemEOMqxh/pmlAYjBmJTRLvXFqE=;
-        b=grlbC6rwY5ALT8FU0p1I1Bav5RNSTsVTjpfkk8VWU0ioz18b4Zpv1aYgM7ECQQT+/r
-         BChv7LESWJBJYKWKAvoqw9HXBzVfkkaZ9F2m9OTPo7PTQYY1RSYeMWKeTmpZFtF0kbma
-         J6EloPY+a5Y2wz2wT09nyHlT7hudQUnrs92Mh+ktoculXl7i9Y6GHsTYStg51h8DMmmz
-         y57PP+a3UxkgfQIRIq+czZ/QpkUOYZ+rSmoVeJowxS7avkYW3Pg6W5xUteFKgkMjlrsR
-         qg3B0wXGHRKfq5nZbEjqSkXw3IRTKsrMxfQJSMyIC25fBfiKYWJ+ZzoWv4JxVXVH+R8o
-         wCtw==
-X-Gm-Message-State: APjAAAXxaw/UWx/6M+fJhIubR9A/fZ6t/k/YFNO2+QYmmfr9oVx8Ynse
-        7dZz9/nMH04h+w2qP5+jLATzoipuN6Q=
-X-Google-Smtp-Source: APXvYqxKErLEPgwToF1xjIjSrEMsm45EEQIHxCIhG0rhsc/BFBsX8V6p0M59fQ9mrKhJjz5R5wCksw==
-X-Received: by 2002:a65:4785:: with SMTP id e5mr498575pgs.407.1569253016423;
-        Mon, 23 Sep 2019 08:36:56 -0700 (PDT)
-Received: from [10.230.28.130] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id b5sm17838111pfp.38.2019.09.23.08.36.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Sep 2019 08:36:55 -0700 (PDT)
-Subject: Re: [GIT PULL] MIPS changes
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Paul Burton <paul.burton@mips.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-References: <20190921231022.kawfomtmka737arq@pburton-laptop>
- <CAHk-=wjmJbF3p9vZTW2nbeD4LkG-JZV+uqv8BnxzojJ5SZsLjw@mail.gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <ac8e3a45-5efe-0e60-3ee0-1a5dbcfa8fc2@gmail.com>
-Date:   Mon, 23 Sep 2019 08:36:54 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        id S1728783AbfIWPvF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 Sep 2019 11:51:05 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:40272 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728720AbfIWPvF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 Sep 2019 11:51:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=0RDd3iHkouZU1pRFRB48/lD4Y4fOddJfRH7mBxc6Vao=; b=NXlQx8HeAqeDb6yqEaTk/519B
+        dPw5dQx+43R/Xql9eX//W6l/1vbSDqJBsSKbX0+GgxGyR/lMzRBIJJLwaiBlYUPovHMUeZ4WuI2U9
+        pqR/T7IrCuH324g5O+5uhidav3oL5K11yioHiIVa88PxC9Lhl8Af25UBQiNsPQjgWAv5dhal7H8Pm
+        kjjT0b4sbkwdVtooJ5V/S1z3/O080RdL39Z8BxDGhymwdoNXrZ7KMaQqR08JJFpuEuA5JxPauwCNC
+        NwI5i96tju02O7rB8oB1RofYv2QQUL82ESd4By1d+WKKUSotGlAN05bG1WBwAaFYH+M7oRF/I/hUL
+        8rRYpfeYg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
+        id 1iCQa9-0006CY-8C; Mon, 23 Sep 2019 15:49:02 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CEBBA303DFD;
+        Mon, 23 Sep 2019 17:48:07 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0AF5F20D80D41; Mon, 23 Sep 2019 17:48:53 +0200 (CEST)
+Date:   Mon, 23 Sep 2019 17:48:52 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     Yunsheng Lin <linyunsheng@huawei.com>, catalin.marinas@arm.com,
+        will@kernel.org, mingo@redhat.com, bp@alien8.de, rth@twiddle.net,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
+        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
+        dalias@libc.org, davem@davemloft.net, ralf@linux-mips.org,
+        paul.burton@mips.com, jhogan@kernel.org, jiaxun.yang@flygoat.com,
+        chenhc@lemote.com, akpm@linux-foundation.org, rppt@linux.ibm.com,
+        anshuman.khandual@arm.com, tglx@linutronix.de, cai@lca.pw,
+        robin.murphy@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, hpa@zytor.com, x86@kernel.org,
+        dave.hansen@linux.intel.com, luto@kernel.org, len.brown@intel.com,
+        axboe@kernel.dk, dledford@redhat.com, jeffrey.t.kirsher@intel.com,
+        linux-alpha@vger.kernel.org, naveen.n.rao@linux.vnet.ibm.com,
+        mwb@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, tbogendoerfer@suse.de,
+        linux-mips@vger.kernel.org, rafael@kernel.org,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH v6] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
+Message-ID: <20190923154852.GG2369@hirez.programming.kicks-ass.net>
+References: <1568724534-146242-1-git-send-email-linyunsheng@huawei.com>
+ <20190923151519.GE2369@hirez.programming.kicks-ass.net>
+ <20190923152856.GB17206@dhcp22.suse.cz>
 MIME-Version: 1.0
-In-Reply-To: <CAHk-=wjmJbF3p9vZTW2nbeD4LkG-JZV+uqv8BnxzojJ5SZsLjw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190923152856.GB17206@dhcp22.suse.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Mon, Sep 23, 2019 at 05:28:56PM +0200, Michal Hocko wrote:
+> On Mon 23-09-19 17:15:19, Peter Zijlstra wrote:
+
+> > > diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
+> > > index 4123100e..9859acb 100644
+> > > --- a/arch/x86/mm/numa.c
+> > > +++ b/arch/x86/mm/numa.c
+> > > @@ -861,6 +861,9 @@ void numa_remove_cpu(int cpu)
+> > >   */
+> > >  const struct cpumask *cpumask_of_node(int node)
+> > >  {
+> > > +	if (node == NUMA_NO_NODE)
+> > > +		return cpu_online_mask;
+> > 
+> > This mandates the caller holds cpus_read_lock() or something, I'm pretty
+> > sure that if I put:
+> > 
+> > 	lockdep_assert_cpus_held();
+> 
+> Is this documented somewhere?
+
+No idea... common sense :-)
+
+> Also how does that differ from a normal
+> case when a proper node is used? The cpumask will always be dynamic in
+> the cpu hotplug presence, right?
+
+As per normal yes, and I'm fairly sure there's a ton of bugs. Any
+'online' state is subject to change except when you're holding
+sufficient locks to stop it.
+
+Disabling preemption also stabilizes it, because cpu unplug relies on
+stop-machine.
+
+> > here, it comes apart real quick. Without holding the cpu hotplug lock,
+> > the online mask is gibberish.
+> 
+> Can the returned cpu mask go away?
+
+No, the cpu_online_mask itself has static storage, the contents OTOH can
+change at will. Very little practical difference :-)
 
 
-On 9/22/2019 11:35 AM, Linus Torvalds wrote:
-> On Sat, Sep 21, 2019 at 4:10 PM Paul Burton <paul.burton@mips.com> wrote:
->>
->> Here are the main MIPS changes for v5.4; please pull.
-> 
-> Hmm. I pulled and because initial tests didn't show any issues, I
-> already pushed out.
-> 
-> But some unrelated further testing then shows that this:
-> 
->> Florian Fainelli (2):
->>       firmware: bcm47xx_nvram: Correct size_t printf format
->>       firmware: bcm47xx_nvram: Allow COMPILE_TEST
-> 
-> causes problems, and commit feb4eb060c3a ("firmware: bcm47xx_nvram:
-> Correct size_t printf format") is buggy:
-> 
->   drivers/firmware/broadcom/bcm47xx_nvram.c: In function ‘nvram_init’:
->   drivers/firmware/broadcom/bcm47xx_nvram.c:151: warning: format ‘%zu’
-> expects argument of type ‘size_t’, but argument 2 has type ‘u32’ {aka
-> ‘unsigned int’} [-Wformat=]
-> 
-> and the change to use %zu was completely wrong.
-> 
-> It prints out 'header.len', which is an u32, not nvram_len which is a size_t.
-> 
-> Tssk tssk.
-> 
-> I've fixed it in my tree, but this should have shown up in linux-next,
-> or in MIPS testing. The process clearly failed.
-
-Thanks for fixing that. The process worked, there was an email sent by
-the kbuild robot but I saw it only now somehow and failed to address it
-in time before Paul sent out the pull request.
--- 
-Florian
