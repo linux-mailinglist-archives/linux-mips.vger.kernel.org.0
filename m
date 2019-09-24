@@ -2,135 +2,216 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E92BBC86C
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Sep 2019 15:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B52AEBC87D
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Sep 2019 15:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441012AbfIXNAX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 Sep 2019 09:00:23 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:35136 "EHLO
+        id S2441082AbfIXNBj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 Sep 2019 09:01:39 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:35200 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436745AbfIXNAX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Sep 2019 09:00:23 -0400
+        with ESMTP id S2441070AbfIXNBi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Sep 2019 09:01:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=ylrO+be3Mmt+XjMqDRomHffExbjsXGlaXweUO2EGDGw=; b=b0KTt7xaHwsu3rE54aR9vlkxp
-        aXve44h/2oq0DshKJQpyeK3clHkUTZBL2jf617MWWYi1VP+TBuo1zAw/egHbl2cQwxDjPG3n326wc
-        CBPFOUX6971a0HFnr8xPfy8sqXrUIJn6wo4ySykwm1yWMdOXLe87GZ3mral+5xdHOVraQbyzjeeOb
-        KzVVwubFdmgQvhXjsVCg9be0PiHlkfvdGwbOJ55IBt7PtAUOiH9LLyY2sucwO/r1M8Jug/sEtV+WM
-        R64nVAZkbXZWJFgPsUT218LWuQbiHCxfmkctmbYDsMotGKIMx9CCaGLAM2EriZYPUD8GziRFYqoJe
-        nyru16oqQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+         bh=2DxfHYXnwwUH36k2ScufOGUb3wQBtCqq7ti4FtFbk+w=; b=G3W8W/4deGODTCIYCpCmbmoGr
+        bn2FSqr7JxfkjNfDSZADFk4BPK3kvMk5KVoT7cmVNH67m2k9PwB2Q5V3EGsoSZPhFsMKpcgDQK9z6
+        O2Eqj33TGU7ewR8EW2Pa2YCFi0SRttxIhH1va4ItMB7112Qo4MRvjba0obXSH7UFCEKaulAB0wqEk
+        TxtNpV9Xem6Ow7wfsnw6dyrBtI1AxCLEJC03/zAFUQ+PfVEiheZ3Cf9ZULqVqId1EiPP9w4N9nPAW
+        6gnN63y0cK7PqkJqgFzuXLy30ePttDbdx4kC+0HmpmacfZTorgXX3WwpknN0cvh9Gvguqg7cjWQoK
+        dSWeHc9rA==;
+Received: from 177.96.206.173.dynamic.adsl.gvt.net.br ([177.96.206.173] helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
-        id 1iCkPs-00081B-C4; Tue, 24 Sep 2019 12:59:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AD9EB301A7A;
-        Tue, 24 Sep 2019 14:58:50 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4B82120C3E176; Tue, 24 Sep 2019 14:59:36 +0200 (CEST)
-Date:   Tue, 24 Sep 2019 14:59:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Michal Hocko <mhocko@kernel.org>
-Cc:     Yunsheng Lin <linyunsheng@huawei.com>, catalin.marinas@arm.com,
-        will@kernel.org, mingo@redhat.com, bp@alien8.de, rth@twiddle.net,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
-        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
-        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
-        dalias@libc.org, davem@davemloft.net, ralf@linux-mips.org,
-        paul.burton@mips.com, jhogan@kernel.org, jiaxun.yang@flygoat.com,
-        chenhc@lemote.com, akpm@linux-foundation.org, rppt@linux.ibm.com,
-        anshuman.khandual@arm.com, tglx@linutronix.de, cai@lca.pw,
-        robin.murphy@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, hpa@zytor.com, x86@kernel.org,
-        dave.hansen@linux.intel.com, luto@kernel.org, len.brown@intel.com,
-        axboe@kernel.dk, dledford@redhat.com, jeffrey.t.kirsher@intel.com,
-        linux-alpha@vger.kernel.org, naveen.n.rao@linux.vnet.ibm.com,
-        mwb@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, tbogendoerfer@suse.de,
-        linux-mips@vger.kernel.org, rafael@kernel.org,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH v6] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
-Message-ID: <20190924125936.GR2349@hirez.programming.kicks-ass.net>
-References: <20190923165235.GD17206@dhcp22.suse.cz>
- <20190923203410.GI2369@hirez.programming.kicks-ass.net>
- <20190924074751.GB23050@dhcp22.suse.cz>
- <20190924091714.GJ2369@hirez.programming.kicks-ass.net>
- <20190924105622.GH23050@dhcp22.suse.cz>
- <20190924112349.GJ2332@hirez.programming.kicks-ass.net>
- <20190924115401.GM23050@dhcp22.suse.cz>
- <20190924120943.GP2349@hirez.programming.kicks-ass.net>
- <20190924122500.GP23050@dhcp22.suse.cz>
- <20190924124325.GQ2349@hirez.programming.kicks-ass.net>
+        id 1iCkRi-0000un-7T; Tue, 24 Sep 2019 13:01:34 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.2)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1iCkRf-0001ax-RW; Tue, 24 Sep 2019 10:01:31 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>, corbet@lwn.net
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Saeed Mahameed <saeedm@mellanox.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shannon Nelson <snelson@pensando.io>,
+        Pensando Drivers <drivers@pensando.io>,
+        Steve French <sfrench@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-mips@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-riscv@lists.infradead.org
+Subject: [PATCH 1/3] docs: fix some broken references
+Date:   Tue, 24 Sep 2019 10:01:28 -0300
+Message-Id: <b87385b2ac6ce6c75df82062fce2976149bbaa6b.1569330078.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190924124325.GQ2349@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 24, 2019 at 02:43:25PM +0200, Peter Zijlstra wrote:
-> On Tue, Sep 24, 2019 at 02:25:00PM +0200, Michal Hocko wrote:
-> > On Tue 24-09-19 14:09:43, Peter Zijlstra wrote:
-> 
-> > > We can push back and say we don't respect the specification because it
-> > > is batshit insane ;-)
-> > 
-> > Here is my fingers crossed.
-> > 
-> > [...]
-> > 
-> > > Now granted; there's a number of virtual devices that really don't have
-> > > a node affinity, but then, those are not hurt by forcing them onto a
-> > > random node, they really don't do anything. Like:
-> > 
-> > Do you really consider a random node a better fix than simply living
-> > with a more robust NUMA_NO_NODE which tells the actual state? Page
-> > allocator would effectivelly use the local node in that case. Any code
-> > using the cpumask will know that any of the online cpus are usable.
-> 
-> For the pmu devices? Yes, those 'devices' aren't actually used for
-> anything other than sysfs entries.
-> 
-> Nothing else uses the struct device.
+There are a number of documentation files that got moved or
+renamed. update their references.
 
-The below would get rid of the PMU and workqueue warnings with no
-side-effects (the device isn't used for anything except sysfs).
-
-I'm stuck in the device code for BDIs, I can't find a sane place to set
-the node before it gets added, due to it using device_create_vargs().
-
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 4f08b17d6426..2a64dcc3d70f 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -9965,6 +9965,7 @@ static int pmu_dev_alloc(struct pmu *pmu)
- 	if (!pmu->dev)
- 		goto out;
+ Documentation/devicetree/bindings/cpu/cpu-topology.txt    | 2 +-
+ Documentation/devicetree/bindings/timer/ingenic,tcu.txt   | 2 +-
+ Documentation/driver-api/gpio/driver.rst                  | 2 +-
+ Documentation/hwmon/inspur-ipsps1.rst                     | 2 +-
+ Documentation/mips/ingenic-tcu.rst                        | 2 +-
+ Documentation/networking/device_drivers/mellanox/mlx5.rst | 2 +-
+ MAINTAINERS                                               | 2 +-
+ drivers/net/ethernet/faraday/ftgmac100.c                  | 2 +-
+ drivers/net/ethernet/pensando/ionic/ionic_if.h            | 4 ++--
+ fs/cifs/cifsfs.c                                          | 2 +-
+ 10 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/cpu/cpu-topology.txt b/Documentation/devicetree/bindings/cpu/cpu-topology.txt
+index 99918189403c..9bd530a35d14 100644
+--- a/Documentation/devicetree/bindings/cpu/cpu-topology.txt
++++ b/Documentation/devicetree/bindings/cpu/cpu-topology.txt
+@@ -549,5 +549,5 @@ Example 3: HiFive Unleashed (RISC-V 64 bit, 4 core system)
+ [2] Devicetree NUMA binding description
+     Documentation/devicetree/bindings/numa.txt
+ [3] RISC-V Linux kernel documentation
+-    Documentation/devicetree/bindings/riscv/cpus.txt
++    Documentation/devicetree/bindings/riscv/cpus.yaml
+ [4] https://www.devicetree.org/specifications/
+diff --git a/Documentation/devicetree/bindings/timer/ingenic,tcu.txt b/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
+index 5a4b9ddd9470..7f6fe20503f5 100644
+--- a/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
++++ b/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
+@@ -2,7 +2,7 @@ Ingenic JZ47xx SoCs Timer/Counter Unit devicetree bindings
+ ==========================================================
  
-+	set_dev_node(pmu->dev, 0);
- 	pmu->dev->groups = pmu->attr_groups;
- 	device_initialize(pmu->dev);
- 	ret = dev_set_name(pmu->dev, "%s", pmu->name);
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index bc2e09a8ea61..efafc4590bbe 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -5613,6 +5613,7 @@ int workqueue_sysfs_register(struct workqueue_struct *wq)
- 	wq_dev->dev.bus = &wq_subsys;
- 	wq_dev->dev.release = wq_device_release;
- 	dev_set_name(&wq_dev->dev, "%s", wq->name);
-+	set_dev_node(wq_dev, 0);
+ For a description of the TCU hardware and drivers, have a look at
+-Documentation/mips/ingenic-tcu.txt.
++Documentation/mips/ingenic-tcu.rst.
  
+ Required properties:
+ 
+diff --git a/Documentation/driver-api/gpio/driver.rst b/Documentation/driver-api/gpio/driver.rst
+index 3fdb32422f8a..9076cc76d5bf 100644
+--- a/Documentation/driver-api/gpio/driver.rst
++++ b/Documentation/driver-api/gpio/driver.rst
+@@ -493,7 +493,7 @@ available but we try to move away from this:
+   gpiochip. It will pass the struct gpio_chip* for the chip to all IRQ
+   callbacks, so the callbacks need to embed the gpio_chip in its state
+   container and obtain a pointer to the container using container_of().
+-  (See Documentation/driver-model/design-patterns.txt)
++  (See Documentation/driver-api/driver-model/design-patterns.rst)
+ 
+ - gpiochip_irqchip_add_nested(): adds a nested cascaded irqchip to a gpiochip,
+   as discussed above regarding different types of cascaded irqchips. The
+diff --git a/Documentation/hwmon/inspur-ipsps1.rst b/Documentation/hwmon/inspur-ipsps1.rst
+index 2b871ae3448f..ed32a65c30e1 100644
+--- a/Documentation/hwmon/inspur-ipsps1.rst
++++ b/Documentation/hwmon/inspur-ipsps1.rst
+@@ -17,7 +17,7 @@ Usage Notes
+ -----------
+ 
+ This driver does not auto-detect devices. You will have to instantiate the
+-devices explicitly. Please see Documentation/i2c/instantiating-devices for
++devices explicitly. Please see Documentation/i2c/instantiating-devices.rst for
+ details.
+ 
+ Sysfs entries
+diff --git a/Documentation/mips/ingenic-tcu.rst b/Documentation/mips/ingenic-tcu.rst
+index c4ef4c45aade..c5a646b14450 100644
+--- a/Documentation/mips/ingenic-tcu.rst
++++ b/Documentation/mips/ingenic-tcu.rst
+@@ -68,4 +68,4 @@ and frameworks can be controlled from the same registers, all of these
+ drivers access their registers through the same regmap.
+ 
+ For more information regarding the devicetree bindings of the TCU drivers,
+-have a look at Documentation/devicetree/bindings/mfd/ingenic,tcu.txt.
++have a look at Documentation/devicetree/bindings/timer/ingenic,tcu.txt.
+diff --git a/Documentation/networking/device_drivers/mellanox/mlx5.rst b/Documentation/networking/device_drivers/mellanox/mlx5.rst
+index d071c6b49e1f..a74422058351 100644
+--- a/Documentation/networking/device_drivers/mellanox/mlx5.rst
++++ b/Documentation/networking/device_drivers/mellanox/mlx5.rst
+@@ -258,7 +258,7 @@ mlx5 tracepoints
+ ================
+ 
+ mlx5 driver provides internal trace points for tracking and debugging using
+-kernel tracepoints interfaces (refer to Documentation/trace/ftrase.rst).
++kernel tracepoints interfaces (refer to Documentation/trace/ftrace.rst).
+ 
+ For the list of support mlx5 events check /sys/kernel/debug/tracing/events/mlx5/
+ 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 54f1286087e9..65b7d9a0a44a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3680,7 +3680,7 @@ M:	Oleksij Rempel <o.rempel@pengutronix.de>
+ R:	Pengutronix Kernel Team <kernel@pengutronix.de>
+ L:	linux-can@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/networking/j1939.txt
++F:	Documentation/networking/j1939.rst
+ F:	net/can/j1939/
+ F:	include/uapi/linux/can/j1939.h
+ 
+diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ethernet/faraday/ftgmac100.c
+index 9b7af94a40bb..8abe5e90d268 100644
+--- a/drivers/net/ethernet/faraday/ftgmac100.c
++++ b/drivers/net/ethernet/faraday/ftgmac100.c
+@@ -1835,7 +1835,7 @@ static int ftgmac100_probe(struct platform_device *pdev)
+ 		}
+ 
+ 		/* Indicate that we support PAUSE frames (see comment in
+-		 * Documentation/networking/phy.txt)
++		 * Documentation/networking/phy.rst)
+ 		 */
+ 		phy_support_asym_pause(phy);
+ 
+diff --git a/drivers/net/ethernet/pensando/ionic/ionic_if.h b/drivers/net/ethernet/pensando/ionic/ionic_if.h
+index 5bfdda19f64d..80028f781c83 100644
+--- a/drivers/net/ethernet/pensando/ionic/ionic_if.h
++++ b/drivers/net/ethernet/pensando/ionic/ionic_if.h
+@@ -596,8 +596,8 @@ enum ionic_txq_desc_opcode {
+  *                      the @encap is set, the device will
+  *                      offload the outer header checksums using
+  *                      LCO (local checksum offload) (see
+- *                      Documentation/networking/checksum-
+- *                      offloads.txt for more info).
++ *                      Documentation/networking/checksum-offloads.rst
++ *                      for more info).
+  *
+  *                   IONIC_TXQ_DESC_OPCODE_CSUM_HW:
+  *
+diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+index 2e9c7f493f99..811f510578cb 100644
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -1529,7 +1529,7 @@ init_cifs(void)
  	/*
- 	 * unbound_attrs are created separately.  Suppress uevent until
+ 	 * Consider in future setting limit!=0 maybe to min(num_of_cores - 1, 3)
+ 	 * so that we don't launch too many worker threads but
+-	 * Documentation/workqueue.txt recommends setting it to 0
++	 * Documentation/core-api/workqueue.rst recommends setting it to 0
+ 	 */
+ 
+ 	/* WQ_UNBOUND allows decrypt tasks to run on any CPU */
+-- 
+2.21.0
+
