@@ -2,88 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E52A5BC801
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Sep 2019 14:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F39D2BC815
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Sep 2019 14:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440961AbfIXMkR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 24 Sep 2019 08:40:17 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:53796 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2440960AbfIXMkR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 24 Sep 2019 08:40:17 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 37ECA18C892F;
-        Tue, 24 Sep 2019 12:40:17 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-125-72.rdu2.redhat.com [10.10.125.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E254960852;
-        Tue, 24 Sep 2019 12:40:15 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wiC_B8R6th+83vKwGT1H-8vtFrmMg+1mK_P8n3VeWAWRg@mail.gmail.com>
-References: <CAHk-=wiC_B8R6th+83vKwGT1H-8vtFrmMg+1mK_P8n3VeWAWRg@mail.gmail.com> <20190921231022.kawfomtmka737arq@pburton-laptop> <CAHk-=wjmJbF3p9vZTW2nbeD4LkG-JZV+uqv8BnxzojJ5SZsLjw@mail.gmail.com> <20190923180728.flp6jx4jc2bh7cys@pburton-laptop>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Paul Burton <paul.burton@mips.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips\@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [GIT PULL] MIPS changes
+        id S2440951AbfIXMpA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 Sep 2019 08:45:00 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:48768 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2439119AbfIXMo7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Sep 2019 08:44:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=z5wfISW69eZ/kWXd4xS3/YcskS/mxFjheiW7ixIex14=; b=WIMYj2tRUrC7JYkCCQxCqzPmr
+        eY7v/diobkQ+WLbrXSbzwyxW4iMZCZphUYFSPt9rrDdGl9ZKXo2i0OceglW9WDcIPsjHcxD15Qc2Y
+        K9ozUDMls72WuTWCN/TorFuAf4A6PAQ5Xh0ACawwLZJ3mXrTTg1uJPW5mjf7w7vC5NgBQBysGTU3U
+        np6ZtqoWQ0GKmiKv0p0ouxKN6kL4WmFc01pnfZxtbBI58YXEugJXvMXqBuEOAvfAG3Jp3qPhZ64vT
+        Mxyw8HrGyIIAC9fvxv9ZzX7kCmie2FgIcHYDOFNNUFZSLhS4fE7hRJwacFZpyQ7/PXoAr3A3VCJbg
+        mK0txX+5A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
+        id 1iCkAF-0000Nf-M0; Tue, 24 Sep 2019 12:43:31 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 17485305E35;
+        Tue, 24 Sep 2019 14:42:40 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id AD4FF20D83742; Tue, 24 Sep 2019 14:43:25 +0200 (CEST)
+Date:   Tue, 24 Sep 2019 14:43:25 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     Yunsheng Lin <linyunsheng@huawei.com>, catalin.marinas@arm.com,
+        will@kernel.org, mingo@redhat.com, bp@alien8.de, rth@twiddle.net,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
+        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
+        dalias@libc.org, davem@davemloft.net, ralf@linux-mips.org,
+        paul.burton@mips.com, jhogan@kernel.org, jiaxun.yang@flygoat.com,
+        chenhc@lemote.com, akpm@linux-foundation.org, rppt@linux.ibm.com,
+        anshuman.khandual@arm.com, tglx@linutronix.de, cai@lca.pw,
+        robin.murphy@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, hpa@zytor.com, x86@kernel.org,
+        dave.hansen@linux.intel.com, luto@kernel.org, len.brown@intel.com,
+        axboe@kernel.dk, dledford@redhat.com, jeffrey.t.kirsher@intel.com,
+        linux-alpha@vger.kernel.org, naveen.n.rao@linux.vnet.ibm.com,
+        mwb@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, tbogendoerfer@suse.de,
+        linux-mips@vger.kernel.org, rafael@kernel.org,
+        gregkh@linuxfoundation.org
+Subject: Re: [PATCH v6] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
+Message-ID: <20190924124325.GQ2349@hirez.programming.kicks-ass.net>
+References: <20190923154852.GG2369@hirez.programming.kicks-ass.net>
+ <20190923165235.GD17206@dhcp22.suse.cz>
+ <20190923203410.GI2369@hirez.programming.kicks-ass.net>
+ <20190924074751.GB23050@dhcp22.suse.cz>
+ <20190924091714.GJ2369@hirez.programming.kicks-ass.net>
+ <20190924105622.GH23050@dhcp22.suse.cz>
+ <20190924112349.GJ2332@hirez.programming.kicks-ass.net>
+ <20190924115401.GM23050@dhcp22.suse.cz>
+ <20190924120943.GP2349@hirez.programming.kicks-ass.net>
+ <20190924122500.GP23050@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Date:   Tue, 24 Sep 2019 13:40:15 +0100
-Message-ID: <14580.1569328815@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.70]); Tue, 24 Sep 2019 12:40:17 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190924122500.GP23050@dhcp22.suse.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Tue, Sep 24, 2019 at 02:25:00PM +0200, Michal Hocko wrote:
+> On Tue 24-09-19 14:09:43, Peter Zijlstra wrote:
 
-> In honesty, I actually do have one warning in my tree:
+> > We can push back and say we don't respect the specification because it
+> > is batshit insane ;-)
 > 
->   samples/vfs/test-statx.c:24:15: warning: ‘struct foo’ declared
-> inside parameter list will not be visible outside of this definition
-> or declaration
->      24 | #define statx foo
->         |               ^~~
-
-Were there any note lines from the compiler associated with this?  The warning
-message can't actually be taking place on this line.
-
-Another thing I'm wondering is why your compiler shows this warning - and mine
-does not.  I've seen this before with uninitialised variables too where you
-get a warning and I don't.
-
-> but because it's in the sample code, it pretty much never gets rebuilt
-> for me unless I basically do a "git clean" to get rid of everything,
-> so I don't normally see it for any normal pull.
+> Here is my fingers crossed.
 > 
-> So I've ignored that one warning, although I've actually been tempted
-> to just remove the sample because of it.
+> [...]
 > 
-> Adding David and Al to the cc just in case they have some simple fixup
-> for it that is likely to work across different user headers.
+> > Now granted; there's a number of virtual devices that really don't have
+> > a node affinity, but then, those are not hurt by forcing them onto a
+> > random node, they really don't do anything. Like:
 > 
-> I considered just adding a
-> 
->      struct foo;
-> 
-> declaration, but the whole thing is incredibly ugly.
+> Do you really consider a random node a better fix than simply living
+> with a more robust NUMA_NO_NODE which tells the actual state? Page
+> allocator would effectivelly use the local node in that case. Any code
+> using the cpumask will know that any of the online cpus are usable.
 
-Yeah - I'm not sure the best way to deal with this.  The problem being that
-userspace may have a conflicting definition - or no definition at all - and I
-need to use the one from the kernel in preference as that may have changes in
-it that aren't yet reflected in userspace.
+For the pmu devices? Yes, those 'devices' aren't actually used for
+anything other than sysfs entries.
 
-I'd rather not remove the sample if I can avoid it as I use it occasionally,
-but maybe I should switch to relying on glibc.
+Nothing else uses the struct device.
 
-David
+> Compare that to a wild guess that might be easily wrong and have subtle
+> side effects which are really hard to debug. You will only see a higher
+> utilization on a specific node. Good luck with a bug report like that.
+
+We'd have the FW_BUG in the dmesg, which should be a big fat clue.
+
+
