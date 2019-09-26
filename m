@@ -2,587 +2,177 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6B5BE7D8
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Sep 2019 23:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CB0BEDA2
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Sep 2019 10:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726995AbfIYVr2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 25 Sep 2019 17:47:28 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:58412 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726941AbfIYVr2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 25 Sep 2019 17:47:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=ZBvcjF7zDDxpnQNxilxomsaKbhuVkdJJJLolhmHxeds=; b=a0gOZH8QPRAVwGfE0sU/Xp6s4
-        8eK4FqO9HNDsI/FSg3GHxkg/XXyIS/W7mu3cEgy1vGjGhHQeSO7vNQoqyj6rPg8OYdNr1cZ0APVHq
-        H6Fmlj//gmirtVogemTFDzKvO0GURtNZjas80D0cmjapUQfNAQLOImLW3WIcphjy7y/Ugabg7wtks
-        3Re2oF5IJ73PPMvqfCgAFtq+z7OlQClV1TK4ENdQfxwb4VZgJFcU4FIj56FGNI6DGWdCh7GNNYKG+
-        00kk2Ji/KuNBt/dIQ8CAJt9T+2SO4QhTUD7g5R8ehYnn+23wSH8FEgluu2UEbWgpLpoc+z4Ieocp4
-        9LlLCWMDA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
-        id 1iDF6H-0007v7-QN; Wed, 25 Sep 2019 21:45:30 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 86F40980189; Wed, 25 Sep 2019 23:45:26 +0200 (CEST)
-Date:   Wed, 25 Sep 2019 23:45:26 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Michal Hocko <mhocko@kernel.org>
-Cc:     Yunsheng Lin <linyunsheng@huawei.com>, catalin.marinas@arm.com,
-        will@kernel.org, mingo@redhat.com, bp@alien8.de, rth@twiddle.net,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
-        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
-        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
-        dalias@libc.org, davem@davemloft.net, ralf@linux-mips.org,
-        paul.burton@mips.com, jhogan@kernel.org, jiaxun.yang@flygoat.com,
-        chenhc@lemote.com, akpm@linux-foundation.org, rppt@linux.ibm.com,
-        anshuman.khandual@arm.com, tglx@linutronix.de, cai@lca.pw,
-        robin.murphy@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, hpa@zytor.com, x86@kernel.org,
-        dave.hansen@linux.intel.com, luto@kernel.org, len.brown@intel.com,
-        axboe@kernel.dk, dledford@redhat.com, jeffrey.t.kirsher@intel.com,
-        linux-alpha@vger.kernel.org, naveen.n.rao@linux.vnet.ibm.com,
-        mwb@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, tbogendoerfer@suse.de,
-        linux-mips@vger.kernel.org, rafael@kernel.org,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH v6] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
-Message-ID: <20190925214526.GA4643@worktop.programming.kicks-ass.net>
-References: <20190924112349.GJ2332@hirez.programming.kicks-ass.net>
- <20190924115401.GM23050@dhcp22.suse.cz>
- <20190924120943.GP2349@hirez.programming.kicks-ass.net>
- <20190924122500.GP23050@dhcp22.suse.cz>
- <20190924124325.GQ2349@hirez.programming.kicks-ass.net>
- <20190924125936.GR2349@hirez.programming.kicks-ass.net>
- <20190924131939.GS23050@dhcp22.suse.cz>
- <20190925104040.GD4553@hirez.programming.kicks-ass.net>
- <20190925132544.GL23050@dhcp22.suse.cz>
- <20190925163154.GF4553@hirez.programming.kicks-ass.net>
+        id S1729616AbfIZIn1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 26 Sep 2019 04:43:27 -0400
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:14473 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727523AbfIZIn1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 26 Sep 2019 04:43:27 -0400
+Received-SPF: Pass (esa3.microchip.iphmx.com: domain of
+  Claudiu.Beznea@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
+  envelope-from="Claudiu.Beznea@microchip.com";
+  x-sender="Claudiu.Beznea@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
+  a:mx2.microchip.iphmx.com include:servers.mcsv.net
+  include:mktomail.com include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa3.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
+  envelope-from="Claudiu.Beznea@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa3.microchip.iphmx.com; spf=Pass smtp.mailfrom=Claudiu.Beznea@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: bGPvAKkYtCCIgj6XsufIyAqUrQrFHrlqJehWu8yrdxg4XiZIE8HY3m74zYA4pBIl2dM7Pq+ZiJ
+ LMvmeWr6vZnbyNa1dvP5oH0bFOGDI+E7wEt2XDFgNrRn/F2jWKLV/Sui2cTi/x8ankFs/PIURZ
+ TCg8MTFdqbtLfps3qWHL/iIhNj31YdPJxbUvZNLKnOEScDu8lsPFT/Lo48djBzoPV70jWJWvau
+ vMusOB4QRQ1oBRtYgjzGwcUplzmz3fjJ4kwuop2bnbMgjUTrRgFlSlR/yGLz4fFsqwnPjLBbN+
+ /Jg=
+X-IronPort-AV: E=Sophos;i="5.64,551,1559545200"; 
+   d="scan'208";a="50637679"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Sep 2019 01:43:21 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 26 Sep 2019 01:43:00 -0700
+Received: from NAM03-DM3-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
+ Transport; Thu, 26 Sep 2019 01:43:00 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LAKd7nZdlrszjrScV/mDSpWwlBQpz4OW0Dq5CkoWjMuANbBM/5HX/mvCJ1BNkwGaou60fK1luDG1SuErBCcdivcJl6U97E+tf1icsRtvuQ/c+Vr2D92oKwwatg0KqviXN2zYMA798CDsrMljh0bRj+9j1SbWoeVILlyHFAkEqx84mpvhrLkUSFLHJt4KtSrf/z7OA4pgb9SOD2xLoG0W4nM2nMGaKlqL1hWyj4ap6F9Q7eD/Dwx55GTPy9NYABjKlRNGK1h+vhv9d6jaUomv8NBO5QBvowkgirRyJRDu6PpaLkQDcirfByS9IQ6JXG+x/2GcEY46GPeFLsYudjLlxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6EWbUDqnvgUzzXQW00IRG+60rKbfAvKMDdZxX46efN0=;
+ b=PMuHzwlKZ/fYZX5ADVZQMHPliV3OCxDJetV6TPNVzFVpB9wpLqxsMO4dGQNYuW20PuyJ1gi3lxhJY2T7t0XOtb60I9UIvRErFWu0AakkepzRnilU+wMxIEn7YSnUWm315jeiJ1n9jl3CaJ9iIFD9QOFvG/zkfG7//OozLJdk5UxfBrXWpS68TI21N8kiWIIiE7jSToEPXJyxoMNzYcFomFLL+dxvwKQ4CAd/GIYbuKUGFHRHwLgZbGNKfW9ygkwPtRQFbsZIhzc8QabpS3eFPJQig+U2BqU+r4p3K44MosG5VXOrEtN0H1s7i5FFbpsZO5ToS4D6o1jN0neJDEjLcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6EWbUDqnvgUzzXQW00IRG+60rKbfAvKMDdZxX46efN0=;
+ b=sRxHJIvVGtZ8/GEHxWp33aMPe7Q4GBN7VmF5wkFAFLTlyjSyrWQenBoVymB9ziCE1mLc20JUtKFtda5cfZmJD77buGVJQ/kmAe0jvenOIQF+StDHIvxBJI3+CHQiN/0f+r5T2RN8LBa8K6t8Z5LFY6BQYYDheLYNVw6KDBXpydM=
+Received: from MWHPR11MB1549.namprd11.prod.outlook.com (10.172.54.17) by
+ MWHPR11MB1901.namprd11.prod.outlook.com (10.175.54.12) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2284.26; Thu, 26 Sep 2019 08:42:58 +0000
+Received: from MWHPR11MB1549.namprd11.prod.outlook.com
+ ([fe80::1c73:1329:a07:ab9a]) by MWHPR11MB1549.namprd11.prod.outlook.com
+ ([fe80::1c73:1329:a07:ab9a%12]) with mapi id 15.20.2305.017; Thu, 26 Sep 2019
+ 08:42:57 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <daniel.lezcano@linaro.org>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <linux@armlinux.org.uk>, <nsekhar@ti.com>,
+        <bgolaszewski@baylibre.com>, <monstr@monstr.eu>,
+        <john@phrozen.org>, <ralf@linux-mips.org>, <paul.burton@mips.com>,
+        <jhogan@kernel.org>, <lftan@altera.com>, <tglx@linutronix.de>,
+        <vgupta@synopsys.com>, <marc.zyngier@arm.com>,
+        <patrice.chotard@st.com>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@st.com>, <eric@anholt.net>, <wahrenst@gmx.net>,
+        <f.fainelli@gmail.com>, <rjui@broadcom.com>,
+        <sbranden@broadcom.com>, <bcm-kernel-feedback-list@broadcom.com>,
+        <linus.walleij@linaro.org>, <shc_work@mail.ru>, <kgene@kernel.org>,
+        <krzk@kernel.org>, <ysato@users.sourceforge.jp>,
+        <liviu.dudau@arm.com>, <sudeep.holla@arm.com>,
+        <lorenzo.pieralisi@arm.com>, <shawnguo@kernel.org>,
+        <s.hauer@pengutronix.de>, <kernel@pengutronix.de>,
+        <festevam@gmail.com>, <linux-imx@nxp.com>, <baohua@kernel.org>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <Ludovic.Desroches@microchip.com>, <baruch@tkos.co.il>,
+        <u.kleine-koenig@pengutronix.de>, <guoren@kernel.org>,
+        <kaloz@openwrt.org>, <khalasa@piap.pl>, <ssantosh@kernel.org>,
+        <vz@mleia.com>, <slemieux.tyco@gmail.com>, <khilman@baylibre.com>,
+        <avifishman70@gmail.com>, <tmaimon77@gmail.com>,
+        <tali.perry1@gmail.com>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <afaerber@suse.de>,
+        <manivannan.sadhasivam@linaro.org>, <narmstrong@baylibre.com>,
+        <agross@kernel.org>, <palmer@sifive.com>, <aou@eecs.berkeley.edu>,
+        <heiko@sntech.de>, <orsonzhai@gmail.com>, <baolin.wang@linaro.org>,
+        <zhang.lyra@gmail.com>, <maxime.ripard@bootlin.com>,
+        <wens@csie.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <linux@prisktech.co.nz>,
+        <john.stultz@linaro.org>, <sboyd@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mips@vger.kernel.org>, <nios2-dev@lists.rocketboards.org>,
+        <linux-snps-arc@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-rpi-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        <linux-amlogic@lists.infradead.org>, <openbmc@lists.ozlabs.org>,
+        <linux-oxnas@groups.io>, <linux-arm-msm@vger.kernel.org>,
+        <linux-unisoc@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>,
+        <linux-tegra@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH 0/7] add support for clocksource/clockevent DT selection
+Thread-Topic: [PATCH 0/7] add support for clocksource/clockevent DT selection
+Thread-Index: AQHVc8VbrLXkUp4vH02J/Sk0g3X+4Kc9pRwA
+Date:   Thu, 26 Sep 2019 08:42:57 +0000
+Message-ID: <72edc5fd-df05-cba5-5aa7-39da1709415b@microchip.com>
+References: <1568123236-767-1-git-send-email-claudiu.beznea@microchip.com>
+ <c3a68a08-d134-cd28-c8af-f757628e07f1@linaro.org>
+In-Reply-To: <c3a68a08-d134-cd28-c8af-f757628e07f1@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MR2P264CA0113.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:33::29) To MWHPR11MB1549.namprd11.prod.outlook.com
+ (2603:10b6:301:c::17)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tagtoolbar-keys: D20190926114228283
+x-originating-ip: [94.177.32.156]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bc557067-1077-42be-6717-08d7425d8720
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600167)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR11MB1901;
+x-ms-traffictypediagnostic: MWHPR11MB1901:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MWHPR11MB19011D574DC5569C649FB82D87860@MWHPR11MB1901.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0172F0EF77
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(396003)(376002)(136003)(39860400002)(366004)(51914003)(199004)(189003)(446003)(4744005)(71200400001)(25786009)(386003)(6506007)(52116002)(229853002)(71190400001)(53546011)(6486002)(7416002)(76176011)(36756003)(7406005)(7366002)(31686004)(7336002)(14454004)(6512007)(66946007)(1191002)(561944003)(64756008)(66446008)(66476007)(7736002)(305945005)(99286004)(2501003)(5660300002)(102836004)(256004)(14444005)(66556008)(476003)(26005)(6116002)(6246003)(11346002)(486006)(86362001)(31696002)(316002)(8676002)(81166006)(81156014)(6436002)(478600001)(186003)(2171002)(3846002)(8936002)(110136005)(54906003)(2201001)(2616005)(4326008)(2906002)(66066001)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:MWHPR11MB1901;H:MWHPR11MB1549.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: JsNRlFiKu2xImweAE+BluMpKIUoInHFuE2sg+dLKuGs4T9kFDOqgcHKJUCYS2gybgMXXZI5osydBUn9KNyoHWWJ6/NEaYP7KAKFfRJ0/CBzJRNVV9Mpz72YJ/dwnH04AjmMgpY41/nVVGtmUYJYTJXrEzGLfmayrGh8nNn5Sbf4qIM3pSA5H8Sl3NizOFZQjufDCOp/GxaNSWWnBaSVrEfjMjVKTtgnofFe0H1aEiy8Tt0GakCl/TvuOscqDULtqdRbtiBBDaTwX3stbA4aowKc9J1UXVNNUbKf75xSs3TjOyQ7u+YASL6mozZNWDOz84BYusPgi0naRrvDr9rr+RxZsw27ZcfUbWPxhjmHmc/eWGyOuc1UAcucjh0WBPML8WyL/9v1fZOEV2kZBxSHkZAgdTmCtqwt/9/u7k/BT0i0=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BCA8ECD1111F6948AB05E557D0B1C52E@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190925163154.GF4553@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc557067-1077-42be-6717-08d7425d8720
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Sep 2019 08:42:57.4048
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eE5XSWl4V1fxZGL0K/Lmn+PqH/2rvLsnNBp8C6u5rbSFictpiZGwaDBVFvOtdFPhk1KlWc6lCOOc/r1X6WP3h/tNVqI8F7Vm3oPSfeDBGRU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1901
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Sep 25, 2019 at 06:31:54PM +0200, Peter Zijlstra wrote:
-> On Wed, Sep 25, 2019 at 03:25:44PM +0200, Michal Hocko wrote:
-> > I am sorry but I still do not understand why you consider this whack a
-> > mole better then simply live with the fact that NUMA_NO_NODE is a
-> > reality and that using the full cpu mask is a reasonable answer to that.
-> 
-> Because it doesn't make physical sense. A device _cannot_ be local to
-> all CPUs in a NUMA system.
-
-The below patch still gives a fair amount of noise on my fairly old and
-cruft IVB-EP, but it gets rid of most of the simple stuff.
-
-[    2.890739] [Firmware Bug]: device: 'platform': no node assigned on NUMA capable HW
-[    2.901855] [Firmware Bug]: device: 'vtcon0': no node assigned on NUMA capable HW
-[    2.911804] [Firmware Bug]: device: 'id': no node assigned on NUMA capable HW
-[    3.800832] [Firmware Bug]: device: 'fbcon': no node assigned on NUMA capable HW
-[    4.824808] [Firmware Bug]: device: 'LNXSYSTM:00': no node assigned on NUMA capable HW
-[    5.112739] [Firmware Bug]: device: 'pci0000:00': no node assigned on NUMA capable HW
-[    6.703425] [Firmware Bug]: device: 'pci0000:80': no node assigned on NUMA capable HW
-[    7.049515] [Firmware Bug]: device: 'ACPI0004:00': no node assigned on NUMA capable HW
-[    7.078823] [Firmware Bug]: device: 'ACPI0004:01': no node assigned on NUMA capable HW
-[    7.149889] [Firmware Bug]: device: 'pci0000:7f': no node assigned on NUMA capable HW
-[    7.158798] [Firmware Bug]: device: '0000:7f': no node assigned on NUMA capable HW
-[    7.183796] [Firmware Bug]: device: '0000:7f:08.0': no node assigned on NUMA capable HW
-[    7.199796] [Firmware Bug]: device: '0000:7f:09.0': no node assigned on NUMA capable HW
-[    7.215792] [Firmware Bug]: device: '0000:7f:0a.0': no node assigned on NUMA capable HW
-[    7.231791] [Firmware Bug]: device: '0000:7f:0a.1': no node assigned on NUMA capable HW
-[    7.247793] [Firmware Bug]: device: '0000:7f:0a.2': no node assigned on NUMA capable HW
-[    7.262794] [Firmware Bug]: device: '0000:7f:0a.3': no node assigned on NUMA capable HW
-[    7.278789] [Firmware Bug]: device: '0000:7f:0b.0': no node assigned on NUMA capable HW
-[    7.294787] [Firmware Bug]: device: '0000:7f:0b.3': no node assigned on NUMA capable HW
-[    7.310794] [Firmware Bug]: device: '0000:7f:0c.0': no node assigned on NUMA capable HW
-[    7.325796] [Firmware Bug]: device: '0000:7f:0c.1': no node assigned on NUMA capable HW
-[    7.341790] [Firmware Bug]: device: '0000:7f:0c.2': no node assigned on NUMA capable HW
-[    7.357789] [Firmware Bug]: device: '0000:7f:0c.3': no node assigned on NUMA capable HW
-[    7.373789] [Firmware Bug]: device: '0000:7f:0c.4': no node assigned on NUMA capable HW
-[    7.388789] [Firmware Bug]: device: '0000:7f:0d.0': no node assigned on NUMA capable HW
-[    7.404791] [Firmware Bug]: device: '0000:7f:0d.1': no node assigned on NUMA capable HW
-[    7.420789] [Firmware Bug]: device: '0000:7f:0d.2': no node assigned on NUMA capable HW
-[    7.436790] [Firmware Bug]: device: '0000:7f:0d.3': no node assigned on NUMA capable HW
-[    7.451789] [Firmware Bug]: device: '0000:7f:0d.4': no node assigned on NUMA capable HW
-[    7.467799] [Firmware Bug]: device: '0000:7f:0e.0': no node assigned on NUMA capable HW
-[    7.483797] [Firmware Bug]: device: '0000:7f:0e.1': no node assigned on NUMA capable HW
-[    7.499830] [Firmware Bug]: device: '0000:7f:0f.0': no node assigned on NUMA capable HW
-[    7.515825] [Firmware Bug]: device: '0000:7f:0f.1': no node assigned on NUMA capable HW
-[    7.530823] [Firmware Bug]: device: '0000:7f:0f.2': no node assigned on NUMA capable HW
-[    7.546824] [Firmware Bug]: device: '0000:7f:0f.3': no node assigned on NUMA capable HW
-[    7.562823] [Firmware Bug]: device: '0000:7f:0f.4': no node assigned on NUMA capable HW
-[    7.578822] [Firmware Bug]: device: '0000:7f:0f.5': no node assigned on NUMA capable HW
-[    7.594830] [Firmware Bug]: device: '0000:7f:10.0': no node assigned on NUMA capable HW
-[    7.609834] [Firmware Bug]: device: '0000:7f:10.1': no node assigned on NUMA capable HW
-[    7.625825] [Firmware Bug]: device: '0000:7f:10.2': no node assigned on NUMA capable HW
-[    7.641824] [Firmware Bug]: device: '0000:7f:10.3': no node assigned on NUMA capable HW
-[    7.657825] [Firmware Bug]: device: '0000:7f:10.4': no node assigned on NUMA capable HW
-[    7.673824] [Firmware Bug]: device: '0000:7f:10.5': no node assigned on NUMA capable HW
-[    7.689792] [Firmware Bug]: device: '0000:7f:10.6': no node assigned on NUMA capable HW
-[    7.704825] [Firmware Bug]: device: '0000:7f:10.7': no node assigned on NUMA capable HW
-[    7.720791] [Firmware Bug]: device: '0000:7f:13.0': no node assigned on NUMA capable HW
-[    7.736793] [Firmware Bug]: device: '0000:7f:13.1': no node assigned on NUMA capable HW
-[    7.752791] [Firmware Bug]: device: '0000:7f:13.4': no node assigned on NUMA capable HW
-[    7.767780] [Firmware Bug]: device: '0000:7f:13.5': no node assigned on NUMA capable HW
-[    7.783793] [Firmware Bug]: device: '0000:7f:13.6': no node assigned on NUMA capable HW
-[    7.799790] [Firmware Bug]: device: '0000:7f:16.0': no node assigned on NUMA capable HW
-[    7.815789] [Firmware Bug]: device: '0000:7f:16.1': no node assigned on NUMA capable HW
-[    7.831795] [Firmware Bug]: device: '0000:7f:16.2': no node assigned on NUMA capable HW
-[    7.882888] [Firmware Bug]: device: 'pci0000:ff': no node assigned on NUMA capable HW
-[    7.891785] [Firmware Bug]: device: '0000:ff': no node assigned on NUMA capable HW
-[    7.916800] [Firmware Bug]: device: '0000:ff:08.0': no node assigned on NUMA capable HW
-[    7.932798] [Firmware Bug]: device: '0000:ff:09.0': no node assigned on NUMA capable HW
-[    7.948795] [Firmware Bug]: device: '0000:ff:0a.0': no node assigned on NUMA capable HW
-[    7.964800] [Firmware Bug]: device: '0000:ff:0a.1': no node assigned on NUMA capable HW
-[    7.979794] [Firmware Bug]: device: '0000:ff:0a.2': no node assigned on NUMA capable HW
-[    7.995799] [Firmware Bug]: device: '0000:ff:0a.3': no node assigned on NUMA capable HW
-[    8.011809] [Firmware Bug]: device: '0000:ff:0b.0': no node assigned on NUMA capable HW
-[    8.027793] [Firmware Bug]: device: '0000:ff:0b.3': no node assigned on NUMA capable HW
-[    8.042793] [Firmware Bug]: device: '0000:ff:0c.0': no node assigned on NUMA capable HW
-[    8.058793] [Firmware Bug]: device: '0000:ff:0c.1': no node assigned on NUMA capable HW
-[    8.074804] [Firmware Bug]: device: '0000:ff:0c.2': no node assigned on NUMA capable HW
-[    8.090794] [Firmware Bug]: device: '0000:ff:0c.3': no node assigned on NUMA capable HW
-[    8.105793] [Firmware Bug]: device: '0000:ff:0c.4': no node assigned on NUMA capable HW
-[    8.121800] [Firmware Bug]: device: '0000:ff:0d.0': no node assigned on NUMA capable HW
-[    8.137805] [Firmware Bug]: device: '0000:ff:0d.1': no node assigned on NUMA capable HW
-[    8.153795] [Firmware Bug]: device: '0000:ff:0d.2': no node assigned on NUMA capable HW
-[    8.169797] [Firmware Bug]: device: '0000:ff:0d.3': no node assigned on NUMA capable HW
-[    8.184796] [Firmware Bug]: device: '0000:ff:0d.4': no node assigned on NUMA capable HW
-[    8.200802] [Firmware Bug]: device: '0000:ff:0e.0': no node assigned on NUMA capable HW
-[    8.216803] [Firmware Bug]: device: '0000:ff:0e.1': no node assigned on NUMA capable HW
-[    8.232832] [Firmware Bug]: device: '0000:ff:0f.0': no node assigned on NUMA capable HW
-[    8.248821] [Firmware Bug]: device: '0000:ff:0f.1': no node assigned on NUMA capable HW
-[    8.263833] [Firmware Bug]: device: '0000:ff:0f.2': no node assigned on NUMA capable HW
-[    8.279830] [Firmware Bug]: device: '0000:ff:0f.3': no node assigned on NUMA capable HW
-[    8.295829] [Firmware Bug]: device: '0000:ff:0f.4': no node assigned on NUMA capable HW
-[    8.311830] [Firmware Bug]: device: '0000:ff:0f.5': no node assigned on NUMA capable HW
-[    8.327834] [Firmware Bug]: device: '0000:ff:10.0': no node assigned on NUMA capable HW
-[    8.342830] [Firmware Bug]: device: '0000:ff:10.1': no node assigned on NUMA capable HW
-[    8.358829] [Firmware Bug]: device: '0000:ff:10.2': no node assigned on NUMA capable HW
-[    8.374830] [Firmware Bug]: device: '0000:ff:10.3': no node assigned on NUMA capable HW
-[    8.390837] [Firmware Bug]: device: '0000:ff:10.4': no node assigned on NUMA capable HW
-[    8.406831] [Firmware Bug]: device: '0000:ff:10.5': no node assigned on NUMA capable HW
-[    8.421842] [Firmware Bug]: device: '0000:ff:10.6': no node assigned on NUMA capable HW
-[    8.437830] [Firmware Bug]: device: '0000:ff:10.7': no node assigned on NUMA capable HW
-[    8.453795] [Firmware Bug]: device: '0000:ff:13.0': no node assigned on NUMA capable HW
-[    8.469794] [Firmware Bug]: device: '0000:ff:13.1': no node assigned on NUMA capable HW
-[    8.485796] [Firmware Bug]: device: '0000:ff:13.4': no node assigned on NUMA capable HW
-[    8.500797] [Firmware Bug]: device: '0000:ff:13.5': no node assigned on NUMA capable HW
-[    8.516795] [Firmware Bug]: device: '0000:ff:13.6': no node assigned on NUMA capable HW
-[    8.532794] [Firmware Bug]: device: '0000:ff:16.0': no node assigned on NUMA capable HW
-[    8.548794] [Firmware Bug]: device: '0000:ff:16.1': no node assigned on NUMA capable HW
-[    8.563777] [Firmware Bug]: device: '0000:ff:16.2': no node assigned on NUMA capable HW
-[    8.668308] [Firmware Bug]: device: 'mc': no node assigned on NUMA capable HW
-[    8.758913] [Firmware Bug]: device: 'lo': no node assigned on NUMA capable HW
-[    8.767975] [Firmware Bug]: device: 'wmi_bus-PNP0C14:00': no node assigned on NUMA capable HW
-[    9.065753] [Firmware Bug]: device: 'pnp0': no node assigned on NUMA capable HW
-[   11.220722] [Firmware Bug]: device: 'cooling_device0': no node assigned on NUMA capable HW
-[   11.240495] [Firmware Bug]: device: 'cooling_device1': no node assigned on NUMA capable HW
-[   11.260546] [Firmware Bug]: device: 'cooling_device2': no node assigned on NUMA capable HW
-[   11.280271] [Firmware Bug]: device: 'cooling_device3': no node assigned on NUMA capable HW
-[   11.300384] [Firmware Bug]: device: 'cooling_device4': no node assigned on NUMA capable HW
-[   11.320479] [Firmware Bug]: device: 'cooling_device5': no node assigned on NUMA capable HW
-[   11.340206] [Firmware Bug]: device: 'cooling_device6': no node assigned on NUMA capable HW
-[   11.360185] [Firmware Bug]: device: 'cooling_device7': no node assigned on NUMA capable HW
-[   11.379938] [Firmware Bug]: device: 'cooling_device8': no node assigned on NUMA capable HW
-[   11.399969] [Firmware Bug]: device: 'cooling_device9': no node assigned on NUMA capable HW
-[   11.419789] [Firmware Bug]: device: 'cooling_device10': no node assigned on NUMA capable HW
-[   11.440004] [Firmware Bug]: device: 'cooling_device11': no node assigned on NUMA capable HW
-[   11.464025] [Firmware Bug]: device: 'cooling_device12': no node assigned on NUMA capable HW
-[   11.484837] [Firmware Bug]: device: 'cooling_device13': no node assigned on NUMA capable HW
-[   11.505052] [Firmware Bug]: device: 'cooling_device14': no node assigned on NUMA capable HW
-[   11.524997] [Firmware Bug]: device: 'cooling_device15': no node assigned on NUMA capable HW
-[   11.545174] [Firmware Bug]: device: 'cooling_device16': no node assigned on NUMA capable HW
-[   11.565095] [Firmware Bug]: device: 'cooling_device17': no node assigned on NUMA capable HW
-[   11.585328] [Firmware Bug]: device: 'cooling_device18': no node assigned on NUMA capable HW
-[   11.605273] [Firmware Bug]: device: 'cooling_device19': no node assigned on NUMA capable HW
-[   11.625487] [Firmware Bug]: device: 'cooling_device20': no node assigned on NUMA capable HW
-[   11.645382] [Firmware Bug]: device: 'cooling_device21': no node assigned on NUMA capable HW
-[   11.665511] [Firmware Bug]: device: 'cooling_device22': no node assigned on NUMA capable HW
-[   11.685326] [Firmware Bug]: device: 'cooling_device23': no node assigned on NUMA capable HW
-[   11.705528] [Firmware Bug]: device: 'cooling_device24': no node assigned on NUMA capable HW
-[   11.725422] [Firmware Bug]: device: 'cooling_device25': no node assigned on NUMA capable HW
-[   11.745623] [Firmware Bug]: device: 'cooling_device26': no node assigned on NUMA capable HW
-[   11.765454] [Firmware Bug]: device: 'cooling_device27': no node assigned on NUMA capable HW
-[   11.785643] [Firmware Bug]: device: 'cooling_device28': no node assigned on NUMA capable HW
-[   11.805595] [Firmware Bug]: device: 'cooling_device29': no node assigned on NUMA capable HW
-[   11.825786] [Firmware Bug]: device: 'cooling_device30': no node assigned on NUMA capable HW
-[   11.845675] [Firmware Bug]: device: 'cooling_device31': no node assigned on NUMA capable HW
-[   11.865875] [Firmware Bug]: device: 'cooling_device32': no node assigned on NUMA capable HW
-[   11.885853] [Firmware Bug]: device: 'cooling_device33': no node assigned on NUMA capable HW
-[   11.906039] [Firmware Bug]: device: 'cooling_device34': no node assigned on NUMA capable HW
-[   11.925978] [Firmware Bug]: device: 'cooling_device35': no node assigned on NUMA capable HW
-[   11.946160] [Firmware Bug]: device: 'cooling_device36': no node assigned on NUMA capable HW
-[   11.966030] [Firmware Bug]: device: 'cooling_device37': no node assigned on NUMA capable HW
-[   11.986297] [Firmware Bug]: device: 'cooling_device38': no node assigned on NUMA capable HW
-[   12.006158] [Firmware Bug]: device: 'cooling_device39': no node assigned on NUMA capable HW
-[   12.443956] [Firmware Bug]: device: 'ttm': no node assigned on NUMA capable HW
-[   12.490234] [Firmware Bug]: device: 'vtcon1': no node assigned on NUMA capable HW
-[   12.585094] [Firmware Bug]: device: 'vtcon0': no node assigned on NUMA capable HW
-[   12.889374] [Firmware Bug]: device: 'loop0': no node assigned on NUMA capable HW
-[   12.902623] [Firmware Bug]: device: 'loop1': no node assigned on NUMA capable HW
-[   12.915193] [Firmware Bug]: device: 'loop2': no node assigned on NUMA capable HW
-[   12.928095] [Firmware Bug]: device: 'loop3': no node assigned on NUMA capable HW
-[   12.941188] [Firmware Bug]: device: 'loop4': no node assigned on NUMA capable HW
-[   12.953799] [Firmware Bug]: device: 'loop5': no node assigned on NUMA capable HW
-[   12.966731] [Firmware Bug]: device: 'loop6': no node assigned on NUMA capable HW
-[   12.979575] [Firmware Bug]: device: 'loop7': no node assigned on NUMA capable HW
-[   13.857948] [Firmware Bug]: device: 'mice': no node assigned on NUMA capable HW
-[   13.997228] [Firmware Bug]: device: 'cooling_device40': no node assigned on NUMA capable HW
-[   14.006845] [Firmware Bug]: device: 'thermal_zone0': no node assigned on NUMA capable HW
-[   14.016649] [Firmware Bug]: device: 'thermal_zone1': no node assigned on NUMA capable HW
-[   14.641660] [Firmware Bug]: device: 'timer': no node assigned on NUMA capable HW
-
-The PCI bits indicate my BIOS is shit, I suspect 7f is socket-0 and ff
-is socket-1, but I'm not sure how to tie that back up sanely, I _really_
-don't know anything about PCI :/
-
-The thermal crud is just that, crud that needs an overhaul. It creates a
-'cooling_device' per CPU, but in the process looses all actual
-association to the actual CPU number and so we cannot sanely set right
-node information, even though thermal does use the devm_ APIs and thus
-setting the node number is 'required'. Idem for the 'thermal_zone' ones,
-those are the sockets but loose all relation to them in the process.
-
-See how nice it is to be strict? You find bugs everywhere you look. Now
-we get to fix them :-)
-
----
- arch/x86/kernel/cpu/mce/core.c |  1 +
- arch/x86/kernel/cpuid.c        |  1 +
- arch/x86/kernel/msr.c          |  1 +
- drivers/base/bus.c             |  4 +++-
- drivers/base/core.c            | 23 +++++++++++++++++++----
- drivers/base/cpu.c             |  4 +++-
- drivers/base/node.c            |  4 +++-
- drivers/char/mem.c             |  1 +
- drivers/char/misc.c            |  2 ++
- drivers/tty/tty_io.c           |  1 +
- drivers/tty/vt/vc_screen.c     |  3 +++
- drivers/tty/vt/vt.c            |  1 +
- include/linux/device.h         | 10 ++++++++--
- include/linux/numa.h           |  1 +
- kernel/events/core.c           |  1 +
- kernel/time/clockevents.c      |  2 +-
- kernel/time/clocksource.c      |  1 +
- kernel/workqueue.c             |  1 +
- mm/backing-dev.c               |  1 +
- 19 files changed, 53 insertions(+), 10 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 743370ee4983..ce09413b7c39 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -2098,6 +2098,7 @@ static void mce_enable_ce(void *all)
- static struct bus_type mce_subsys = {
- 	.name		= "machinecheck",
- 	.dev_name	= "machinecheck",
-+	.no_devm	= true,
- };
- 
- DEFINE_PER_CPU(struct device *, mce_device);
-diff --git a/arch/x86/kernel/cpuid.c b/arch/x86/kernel/cpuid.c
-index 3492aa36bf09..6d7d2a35e911 100644
---- a/arch/x86/kernel/cpuid.c
-+++ b/arch/x86/kernel/cpuid.c
-@@ -161,6 +161,7 @@ static int __init cpuid_init(void)
- 		goto out_chrdev;
- 	}
- 	cpuid_class->devnode = cpuid_devnode;
-+	cpuid_class->no_devm = true;
- 
- 	err = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/cpuid:online",
- 				cpuid_device_create, cpuid_device_destroy);
-diff --git a/arch/x86/kernel/msr.c b/arch/x86/kernel/msr.c
-index 3db2252b958d..e41add671596 100644
---- a/arch/x86/kernel/msr.c
-+++ b/arch/x86/kernel/msr.c
-@@ -210,6 +210,7 @@ static int __init msr_init(void)
- 		goto out_chrdev;
- 	}
- 	msr_class->devnode = msr_devnode;
-+	msr_class->no_devm = true;
- 
- 	err  = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/msr:online",
- 				 msr_device_create, msr_device_destroy);
-diff --git a/drivers/base/bus.c b/drivers/base/bus.c
-index df3cac739813..96ee8c50ab8a 100644
---- a/drivers/base/bus.c
-+++ b/drivers/base/bus.c
-@@ -1142,7 +1142,9 @@ static int subsys_register(struct bus_type *subsys,
- 	dev->groups = groups;
- 	dev->release = system_root_device_release;
- 
--	err = device_register(dev);
-+	device_initialize(dev);
-+	set_dev_node(dev, NUMA_INVALID_NODE);
-+	err = device_add(dev);
- 	if (err < 0)
- 		goto err_dev_reg;
- 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 636058bbf48a..049f3c7dbdcb 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -1670,7 +1670,7 @@ void device_initialize(struct device *dev)
- 	spin_lock_init(&dev->devres_lock);
- 	INIT_LIST_HEAD(&dev->devres_head);
- 	device_pm_init(dev);
--	set_dev_node(dev, -1);
-+	set_dev_node(dev, NUMA_NO_NODE);
- #ifdef CONFIG_GENERIC_MSI_IRQ
- 	INIT_LIST_HEAD(&dev->msi_list);
- #endif
-@@ -2056,9 +2056,24 @@ int device_add(struct device *dev)
- 	if (kobj)
- 		dev->kobj.parent = kobj;
- 
--	/* use parent numa_node */
--	if (parent && (dev_to_node(dev) == NUMA_NO_NODE))
--		set_dev_node(dev, dev_to_node(parent));
-+#ifdef CONFIG_NUMA
-+	/* use parent node */
-+	if (dev->numa_node == NUMA_NO_NODE && parent)
-+		set_dev_node(dev, parent->numa_node);
-+
-+	if (dev->numa_node == NUMA_NO_NODE && dev->class && dev->class->no_devm)
-+		set_dev_node(dev, NUMA_INVALID_NODE);
-+
-+	if (dev->numa_node == NUMA_NO_NODE && dev->bus && dev->bus->no_devm)
-+		set_dev_node(dev, NUMA_INVALID_NODE);
-+
-+	/* verify 'real' devices have a node assigned on NUMA capable hardware */
-+	if (nr_node_ids > 1 && dev->numa_node == NUMA_NO_NODE) {
-+		pr_warn(FW_BUG "device: '%s': no node assigned on NUMA capable HW\n",
-+				dev_name(dev));
-+		set_dev_node(dev, 0); // assign 'random' valid node
-+	}
-+#endif
- 
- 	/* first, register with generic layer. */
- 	/* we require the name to be set before, and pass NULL */
-diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-index cc37511de866..6613aed4de17 100644
---- a/drivers/base/cpu.c
-+++ b/drivers/base/cpu.c
-@@ -381,7 +381,9 @@ int register_cpu(struct cpu *cpu, int num)
- 	cpu->dev.groups = common_cpu_attr_groups;
- 	if (cpu->hotpluggable)
- 		cpu->dev.groups = hotplugable_cpu_attr_groups;
--	error = device_register(&cpu->dev);
-+	device_initialize(&cpu->dev);
-+	set_dev_node(&cpu->dev, cpu->node_id);
-+	error = device_add(&cpu->dev);
- 	if (error) {
- 		put_device(&cpu->dev);
- 		return error;
-diff --git a/drivers/base/node.c b/drivers/base/node.c
-index 75b7e6f6535b..153bf21cf7ce 100644
---- a/drivers/base/node.c
-+++ b/drivers/base/node.c
-@@ -616,7 +616,9 @@ static int register_node(struct node *node, int num)
- 	node->dev.bus = &node_subsys;
- 	node->dev.release = node_device_release;
- 	node->dev.groups = node_dev_groups;
--	error = device_register(&node->dev);
-+	device_initialize(&node->dev);
-+	set_dev_node(&node->dev, num);
-+	error = device_add(&node->dev);
- 
- 	if (error)
- 		put_device(&node->dev);
-diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-index b08dc50f9f26..848d704839f0 100644
---- a/drivers/char/mem.c
-+++ b/drivers/char/mem.c
-@@ -927,6 +927,7 @@ static int __init chr_dev_init(void)
- 		return PTR_ERR(mem_class);
- 
- 	mem_class->devnode = mem_devnode;
-+	mem_class->no_devm = true;
- 	for (minor = 1; minor < ARRAY_SIZE(devlist); minor++) {
- 		if (!devlist[minor].name)
- 			continue;
-diff --git a/drivers/char/misc.c b/drivers/char/misc.c
-index f6a147427029..14ced3adfaad 100644
---- a/drivers/char/misc.c
-+++ b/drivers/char/misc.c
-@@ -274,6 +274,8 @@ static int __init misc_init(void)
- 	if (IS_ERR(misc_class))
- 		goto fail_remove;
- 
-+	misc_class->no_devm = true;
-+
- 	err = -EIO;
- 	if (register_chrdev(MISC_MAJOR, "misc", &misc_fops))
- 		goto fail_printk;
-diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
-index 566728fbaf3c..28e4d531595f 100644
---- a/drivers/tty/tty_io.c
-+++ b/drivers/tty/tty_io.c
-@@ -3419,6 +3419,7 @@ static int __init tty_class_init(void)
- 	if (IS_ERR(tty_class))
- 		return PTR_ERR(tty_class);
- 	tty_class->devnode = tty_devnode;
-+	tty_class->no_devm = true;
- 	return 0;
- }
- 
-diff --git a/drivers/tty/vt/vc_screen.c b/drivers/tty/vt/vc_screen.c
-index 1f042346e722..b8fa9e6c0b71 100644
---- a/drivers/tty/vt/vc_screen.c
-+++ b/drivers/tty/vt/vc_screen.c
-@@ -735,6 +735,9 @@ int __init vcs_init(void)
- 		panic("unable to get major %d for vcs device", VCS_MAJOR);
- 	vc_class = class_create(THIS_MODULE, "vc");
- 
-+	if (vc_class)
-+		vc_class->no_devm = true;
-+
- 	device_create(vc_class, NULL, MKDEV(VCS_MAJOR, 0), NULL, "vcs");
- 	device_create(vc_class, NULL, MKDEV(VCS_MAJOR, 64), NULL, "vcsu");
- 	device_create(vc_class, NULL, MKDEV(VCS_MAJOR, 128), NULL, "vcsa");
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index 34aa39d1aed9..15add0f1b0d0 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -4138,6 +4138,7 @@ static int __init vtconsole_class_init(void)
- 			PTR_ERR(vtconsole_class));
- 		vtconsole_class = NULL;
- 	}
-+	vtconsole_class->no_devm = true;
- 
- 	/* Add system drivers to sysfs */
- 	for (i = 0; i < MAX_NR_CON_DRIVER; i++) {
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 6717adee33f0..6414788e642e 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -144,6 +144,7 @@ struct bus_type {
- 	struct lock_class_key lock_key;
- 
- 	bool need_parent_lock;
-+	bool no_devm;
- };
- 
- extern int __must_check bus_register(struct bus_type *bus);
-@@ -428,6 +429,8 @@ struct class {
- 	const struct dev_pm_ops *pm;
- 
- 	struct subsys_private *p;
-+
-+	bool no_devm;
- };
- 
- struct class_dev_iter {
-@@ -1109,7 +1112,10 @@ int dev_set_name(struct device *dev, const char *name, ...);
- #ifdef CONFIG_NUMA
- static inline int dev_to_node(struct device *dev)
- {
--	return dev->numa_node;
-+	int node = dev->numa_node;
-+	if (WARN_ON(node == NUMA_INVALID_NODE))
-+		node = 0; // 'random' valid node
-+	return node;
- }
- static inline void set_dev_node(struct device *dev, int node)
- {
-@@ -1118,7 +1124,7 @@ static inline void set_dev_node(struct device *dev, int node)
- #else
- static inline int dev_to_node(struct device *dev)
- {
--	return NUMA_NO_NODE;
-+	return 0;
- }
- static inline void set_dev_node(struct device *dev, int node)
- {
-diff --git a/include/linux/numa.h b/include/linux/numa.h
-index 110b0e5d0fb0..7d8597f1d73a 100644
---- a/include/linux/numa.h
-+++ b/include/linux/numa.h
-@@ -12,5 +12,6 @@
- #define MAX_NUMNODES    (1 << NODES_SHIFT)
- 
- #define	NUMA_NO_NODE	(-1)
-+#define NUMA_INVALID_NODE (-2)
- 
- #endif /* _LINUX_NUMA_H */
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index caae4b7743b4..3bc081bfbb3f 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -9865,6 +9865,7 @@ static int pmu_bus_running;
- static struct bus_type pmu_bus = {
- 	.name		= "event_source",
- 	.dev_groups	= pmu_dev_groups,
-+	.no_devm	= true,
- };
- 
- static void pmu_dev_release(struct device *dev)
-diff --git a/kernel/time/clockevents.c b/kernel/time/clockevents.c
-index f5490222e134..27ce96638b96 100644
---- a/kernel/time/clockevents.c
-+++ b/kernel/time/clockevents.c
-@@ -663,6 +663,7 @@ void tick_cleanup_dead_cpu(int cpu)
- static struct bus_type clockevents_subsys = {
- 	.name		= "clockevents",
- 	.dev_name       = "clockevent",
-+	.no_devm	= true,
- };
- 
- static DEFINE_PER_CPU(struct device, tick_percpu_dev);
-@@ -732,7 +733,6 @@ static struct tick_device *tick_get_tick_dev(struct device *dev)
- static __init int tick_broadcast_init_sysfs(void)
- {
- 	int err = device_register(&tick_bc_dev);
--
- 	if (!err)
- 		err = device_create_file(&tick_bc_dev, &dev_attr_current_device);
- 	return err;
-diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-index fff5f64981c6..a6809106750d 100644
---- a/kernel/time/clocksource.c
-+++ b/kernel/time/clocksource.c
-@@ -1171,6 +1171,7 @@ ATTRIBUTE_GROUPS(clocksource);
- static struct bus_type clocksource_subsys = {
- 	.name = "clocksource",
- 	.dev_name = "clocksource",
-+	.no_devm = true,
- };
- 
- static struct device device_clocksource = {
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 601d61150b65..bd1e48239dfd 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -5513,6 +5513,7 @@ static struct device_attribute wq_sysfs_unbound_attrs[] = {
- static struct bus_type wq_subsys = {
- 	.name				= "workqueue",
- 	.dev_groups			= wq_sysfs_groups,
-+	.no_devm			= true,
- };
- 
- static ssize_t wq_unbound_cpumask_show(struct device *dev,
-diff --git a/mm/backing-dev.c b/mm/backing-dev.c
-index e8e89158adec..2f4473c74c5c 100644
---- a/mm/backing-dev.c
-+++ b/mm/backing-dev.c
-@@ -224,6 +224,7 @@ static __init int bdi_class_init(void)
- 		return PTR_ERR(bdi_class);
- 
- 	bdi_class->dev_groups = bdi_dev_groups;
-+	bdi_class->no_devm = true;
- 	bdi_debug_init();
- 
- 	return 0;
-
+DQoNCk9uIDI1LjA5LjIwMTkgMjA6MTksIERhbmllbCBMZXpjYW5vIHdyb3RlOg0KPiBFeHRlcm5h
+bCBFLU1haWwNCj4gDQo+IA0KPiBIaSBDbGF1ZGl1LA0KPiANCj4gT24gMTAvMDkvMjAxOSAxNTo0
+NywgQ2xhdWRpdSBCZXpuZWEgd3JvdGU6DQo+PiBIaSwNCj4+DQo+PiBUaGlzIHNlcmllcyBhZGRz
+IHN1cHBvcnQgdG8gcGVybWl0IHRoZSBzZWxlY3Rpb24gb2YgY2xvY2tzb3VyY2UvY2xvY2tldmVu
+dA0KPj4gdmlhIERULg0KPiANCj4gVGhhbmtzIGZvciB0aGUgcHJvcG9zYWwgYW5kIHRha2luZyBj
+YXJlIG9mIG1ha2luZyBzb21lIHByb2dyZXNzIG9uIHRoaXMuDQo+IA0KPiBJIGp1c3Qgd2FudGVk
+IHRvIGxldCB5b3Uga25vdyBJJ3ZlIGJlZW4gdHJhdmVsaW5nIGJ1dCB0aGUgc2VyaWVzIGlzIGlu
+DQo+IG15IHBpcGUgYW5kIEkgZGlkIG5vdCBmb3JnZXQgaXQuIEknbGwgY29tbWVudCBpdCBuZXh0
+IHdlZWsuDQoNCkhpIERhbmllbCwNCg0KTm8gcHJvYmxlbS4gVGhhbmsgeW91IGZvciBsZXR0aW5n
+IG1lIGtub3cuDQoNCkNsYXVkaXUNCg0KPiANCj4gIC0tIERhbmllbA0KPiANCj4gDQo=
