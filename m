@@ -2,100 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B353FC036D
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Sep 2019 12:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3E2C1041
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Sep 2019 10:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbfI0Kba (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 27 Sep 2019 06:31:30 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:35701 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726116AbfI0Kba (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 27 Sep 2019 06:31:30 -0400
-Received: by mail-io1-f65.google.com with SMTP id q10so15056494iop.2
-        for <linux-mips@vger.kernel.org>; Fri, 27 Sep 2019 03:31:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ECriue4BlXPrfTwdD5iJ91esc04F7WeNmP6JsoF7ESA=;
-        b=i2HuP4vD/4pOg1BTUT6kJ2k42ikLoMtNgPSHaGYqNP4mPJVvrV3qzPv+kehNpl/4HU
-         DF8/xdxFAKq8O8TPIt18XY9dVkz3GlOyyhRAuwFO6sod133JiNX5aZuLhT/L3XO9OZgi
-         1D6kDzArDYWmVqCrMIy/Ps7Ku7fMUas2CTj3mmsxo6zYnArE73nzFpsBFghwEaCDa4zE
-         NlGn+m2SzOvxmXeGmYNwHGZrU8Nz+K/S8n7/pEhemT5/TPmFo+KqeOWTccjkLDm9AP1X
-         FdRgIsEQ03gyJI94YnweLLuj/gtJ4vB0dn+tB/x/F0Wug8yzzolp4hD7UYvE6bVBPnOU
-         EG8Q==
-X-Gm-Message-State: APjAAAUvjiefqF0e0bJPhC9oXCyTI9kSr/cdJUlnc2HTSNVeTdqiEAuL
-        8eXUSoVkiqWuJ6yVeTauWMWOuNEALtzawWHfipmHith5knE=
-X-Google-Smtp-Source: APXvYqxc7vJVSA9dWQzFTj+mXYhuH18+9JByBqbNJh49E4h/LXE/EGW9k50xDm2uqZm92n+iScz+mY0BOuGubtbQXPI=
-X-Received: by 2002:a5d:814f:: with SMTP id f15mr7919829ioo.134.1569580289491;
- Fri, 27 Sep 2019 03:31:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190926140458.10367-1-jiaxun.yang@flygoat.com>
-In-Reply-To: <20190926140458.10367-1-jiaxun.yang@flygoat.com>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Fri, 27 Sep 2019 18:36:29 +0800
-Message-ID: <CAAhV-H4H5dXZCL_P7+o+SR1dVGchbyvCAqvHyac9i4-7-esoCQ@mail.gmail.com>
+        id S1725857AbfI1Iwi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 28 Sep 2019 04:52:38 -0400
+Received: from forward104o.mail.yandex.net ([37.140.190.179]:37115 "EHLO
+        forward104o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725856AbfI1Iwh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 28 Sep 2019 04:52:37 -0400
+Received: from mxback23o.mail.yandex.net (mxback23o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::74])
+        by forward104o.mail.yandex.net (Yandex) with ESMTP id 4A78A940090;
+        Sat, 28 Sep 2019 11:52:34 +0300 (MSK)
+Received: from sas8-93a22d3a76f4.qloud-c.yandex.net (sas8-93a22d3a76f4.qloud-c.yandex.net [2a02:6b8:c1b:2988:0:640:93a2:2d3a])
+        by mxback23o.mail.yandex.net (nwsmtp/Yandex) with ESMTP id 1gCcRH8Ysn-qXliDdFq;
+        Sat, 28 Sep 2019 11:52:34 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1569660754;
+        bh=vRF5Tkp240cQ5fSdDrArQ2fiMS69xhiYtJf0hJBeT+4=;
+        h=In-Reply-To:From:To:Subject:Cc:Date:References:Message-ID;
+        b=UcyKVt/yV8FglmbKip4x1vjnA7egeE5LkNR5NdYaHPq0ppERm+1mCxkauL2i2EHsr
+         dRoEJST5zqInr+uKnn70lkwg5IRllZBM6SyTGCg1C+ogCoxqUCJuQ5bIirkwIauZLR
+         ojMF/RpSb6eOryC/BbwElrMh0QIcC4G8EeNAw1mU=
+Authentication-Results: mxback23o.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by sas8-93a22d3a76f4.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id JAUu2lHH1A-qVI4hKwk;
+        Sat, 28 Sep 2019 11:52:32 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
 Subject: Re: [PATCH] MIPS: Loongson64: Remove duplicated add_memory_region
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     Huacai Chen <chenhc@lemote.com>
 Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
         Paul Burton <paul.burton@mips.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <20190926140458.10367-1-jiaxun.yang@flygoat.com>
+ <CAAhV-H4H5dXZCL_P7+o+SR1dVGchbyvCAqvHyac9i4-7-esoCQ@mail.gmail.com>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <55580733-11eb-4bae-55b2-0ce5ff0a7694@flygoat.com>
+Date:   Sat, 28 Sep 2019 16:52:25 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.0
+MIME-Version: 1.0
+In-Reply-To: <CAAhV-H4H5dXZCL_P7+o+SR1dVGchbyvCAqvHyac9i4-7-esoCQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jiaxun and Paul,
 
-This patch isn't a complete fix, please refer to
-https://patchwork.kernel.org/patch/11164281/.
+On 2019/9/27 下午6:36, Huacai Chen wrote:
+> Hi Jiaxun and Paul,
+>
+> This patch isn't a complete fix, please refer to
+> https://patchwork.kernel.org/patch/11164281/.
 
-Huacai
+Hi Paul,
 
-On Thu, Sep 26, 2019 at 10:05 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
-> From a94e4f24ec83 ("MIPS: init: Drop boot_mem_map"), add_memory_region is
-> handled by memblock_add directly. So they're totally duplicated with following
-> memblock_add_node and leading to boot failure in some cases.
->
-> Reported-by: Huacai Chen <chenhc@lemote.com>
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  arch/mips/loongson64/loongson-3/numa.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/mips/loongson64/loongson-3/numa.c b/arch/mips/loongson64/loongson-3/numa.c
-> index 414e97de5dc0..dae7d7704e66 100644
-> --- a/arch/mips/loongson64/loongson-3/numa.c
-> +++ b/arch/mips/loongson64/loongson-3/numa.c
-> @@ -142,8 +142,6 @@ static void __init szmem(unsigned int node)
->                                 (u32)node_id, mem_type, mem_start, mem_size);
->                         pr_info("       start_pfn:0x%llx, end_pfn:0x%llx, num_physpages:0x%lx\n",
->                                 start_pfn, end_pfn, num_physpages);
-> -                       add_memory_region((node_id << 44) + mem_start,
-> -                               (u64)mem_size << 20, BOOT_MEM_RAM);
->                         memblock_add_node(PFN_PHYS(start_pfn),
->                                 PFN_PHYS(end_pfn - start_pfn), node);
->                         break;
-> @@ -156,16 +154,14 @@ static void __init szmem(unsigned int node)
->                                 (u32)node_id, mem_type, mem_start, mem_size);
->                         pr_info("       start_pfn:0x%llx, end_pfn:0x%llx, num_physpages:0x%lx\n",
->                                 start_pfn, end_pfn, num_physpages);
-> -                       add_memory_region((node_id << 44) + mem_start,
-> -                               (u64)mem_size << 20, BOOT_MEM_RAM);
->                         memblock_add_node(PFN_PHYS(start_pfn),
->                                 PFN_PHYS(end_pfn - start_pfn), node);
->                         break;
->                 case SYSTEM_RAM_RESERVED:
->                         pr_info("Node%d: mem_type:%d, mem_start:0x%llx, mem_size:0x%llx MB\n",
->                                 (u32)node_id, mem_type, mem_start, mem_size);
-> -                       add_memory_region((node_id << 44) + mem_start,
-> -                               (u64)mem_size << 20, BOOT_MEM_RESERVED);
-> +                       memblock_add_node(PFN_PHYS(start_pfn),
-> +                               PFN_PHYS(end_pfn - start_pfn), node);
->                         memblock_reserve(((node_id << 44) + mem_start),
->                                 mem_size << 20);
->                         break;
-> --
-> 2.23.0
->
+Please pick Huacai's patch as a material of rc1.
+
+Thanks
+
+--
+
+Jiaxun Yang
+
+> Huacai
