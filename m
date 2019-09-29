@@ -2,51 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 729FDC16F0
-	for <lists+linux-mips@lfdr.de>; Sun, 29 Sep 2019 19:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D14AC16FA
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Sep 2019 19:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730325AbfI2ReO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 29 Sep 2019 13:34:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45904 "EHLO mail.kernel.org"
+        id S1730355AbfI2Re2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 Sep 2019 13:34:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46356 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730323AbfI2ReN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 29 Sep 2019 13:34:13 -0400
+        id S1730338AbfI2Re1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 29 Sep 2019 13:34:27 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C17B921906;
-        Sun, 29 Sep 2019 17:34:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5722821D56;
+        Sun, 29 Sep 2019 17:34:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569778452;
-        bh=w2whw1Hr/775putsFnagWM9RGPe7vXYrduAUtGNqhKA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q5/7G4ooWzq9i8y9Yb6FhOF1luL3xMGdfNOj3ylyUBBJ2zNGIK23iBJU4j2GZbBQz
-         aa1Ccww2wfzkeC4YAnOLWHQJQhtUkNTrjz7dZkU+ed7nrWG5bsqkcylB0LVPF51vdP
-         EIBHI75TsB+MxBsTENFYFDvScxH6/2m8RIa3mmPg=
+        s=default; t=1569778466;
+        bh=SQiPdMoGXan/kBILxp/c6ImMkLBLa+XfJ5YOUTLLxaQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=F5ZPztJebixoukyNnTfWn8ahzIwHuvSaV1GgKhIsOOAxNlUOz2KPF4mUyZ88Xo6Lq
+         /CQxN/qpyjpSbYQbM0Pz+C+0bRGhUx6Y+//dOJMdZcO5DTkxt4cWwV4B3A7BoGtP+M
+         XRN4w0zIgYerTm03121fw3KoIP1CUULsiWaQATnQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexandre Ghiti <alex@ghiti.fr>, Kees Cook <keescook@chromium.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        James Hogan <jhogan@kernel.org>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will.deacon@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 40/42] mips: properly account for stack randomization and stack guard gap
-Date:   Sun, 29 Sep 2019 13:32:39 -0400
-Message-Id: <20190929173244.8918-40-sashal@kernel.org>
+Cc:     Zhou Yanjie <zhouyanjie@zoho.com>,
+        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
+        ralf@linux-mips.org, paul@crapouillou.net, jhogan@kernel.org,
+        malat@debian.org, gregkh@linuxfoundation.org, tglx@linutronix.de,
+        allison@lohutok.net, syq@debian.org, chenhc@lemote.com,
+        jiaxun.yang@flygoat.com, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 01/33] MIPS: Ingenic: Disable broken BTB lookup optimization.
+Date:   Sun, 29 Sep 2019 13:33:49 -0400
+Message-Id: <20190929173424.9361-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190929173244.8918-1-sashal@kernel.org>
-References: <20190929173244.8918-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,69 +44,76 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Alexandre Ghiti <alex@ghiti.fr>
+From: Zhou Yanjie <zhouyanjie@zoho.com>
 
-[ Upstream commit b1f61b5bde3a1f50392c97b4c8513d1b8efb1cf2 ]
+[ Upstream commit 053951dda71ecb4b554a2cdbe26f5f6f9bee9dd2 ]
 
-This commit takes care of stack randomization and stack guard gap when
-computing mmap base address and checks if the task asked for
-randomization.  This fixes the problem uncovered and not fixed for arm
-here: https://lkml.kernel.org/r/20170622200033.25714-1-riel@redhat.com
+In order to further reduce power consumption, the XBurst core
+by default attempts to avoid branch target buffer lookups by
+detecting & special casing loops. This feature will cause
+BogoMIPS and lpj calculate in error. Set cp0 config7 bit 4 to
+disable this feature.
 
-Link: http://lkml.kernel.org/r/20190730055113.23635-10-alex@ghiti.fr
-Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
-Acked-by: Kees Cook <keescook@chromium.org>
-Acked-by: Paul Burton <paul.burton@mips.com>
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Albert Ou <aou@eecs.berkeley.edu>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: James Hogan <jhogan@kernel.org>
-Cc: Palmer Dabbelt <palmer@sifive.com>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Will Deacon <will.deacon@arm.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: ralf@linux-mips.org
+Cc: paul@crapouillou.net
+Cc: jhogan@kernel.org
+Cc: malat@debian.org
+Cc: gregkh@linuxfoundation.org
+Cc: tglx@linutronix.de
+Cc: allison@lohutok.net
+Cc: syq@debian.org
+Cc: chenhc@lemote.com
+Cc: jiaxun.yang@flygoat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/mm/mmap.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ arch/mips/include/asm/mipsregs.h | 4 ++++
+ arch/mips/kernel/cpu-probe.c     | 7 +++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/arch/mips/mm/mmap.c b/arch/mips/mm/mmap.c
-index d79f2b4323187..f5c778113384b 100644
---- a/arch/mips/mm/mmap.c
-+++ b/arch/mips/mm/mmap.c
-@@ -21,8 +21,9 @@ unsigned long shm_align_mask = PAGE_SIZE - 1;	/* Sane caches */
- EXPORT_SYMBOL(shm_align_mask);
+diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
+index 01df9ad62fb83..1bb9448777c5c 100644
+--- a/arch/mips/include/asm/mipsregs.h
++++ b/arch/mips/include/asm/mipsregs.h
+@@ -688,6 +688,9 @@
+ #define MIPS_CONF7_IAR		(_ULCAST_(1) << 10)
+ #define MIPS_CONF7_AR		(_ULCAST_(1) << 16)
  
- /* gap between mmap and stack */
--#define MIN_GAP (128*1024*1024UL)
--#define MAX_GAP ((TASK_SIZE)/6*5)
-+#define MIN_GAP		(128*1024*1024UL)
-+#define MAX_GAP		((TASK_SIZE)/6*5)
-+#define STACK_RND_MASK	(0x7ff >> (PAGE_SHIFT - 12))
- 
- static int mmap_is_legacy(struct rlimit *rlim_stack)
- {
-@@ -38,6 +39,15 @@ static int mmap_is_legacy(struct rlimit *rlim_stack)
- static unsigned long mmap_base(unsigned long rnd, struct rlimit *rlim_stack)
- {
- 	unsigned long gap = rlim_stack->rlim_cur;
-+	unsigned long pad = stack_guard_gap;
++/* Ingenic Config7 bits */
++#define MIPS_CONF7_BTB_LOOP_EN	(_ULCAST_(1) << 4)
 +
-+	/* Account for stack randomization if necessary */
-+	if (current->flags & PF_RANDOMIZE)
-+		pad += (STACK_RND_MASK << PAGE_SHIFT);
-+
-+	/* Values close to RLIM_INFINITY can overflow. */
-+	if (gap + pad > gap)
-+		gap += pad;
+ /* Config7 Bits specific to MIPS Technologies. */
  
- 	if (gap < MIN_GAP)
- 		gap = MIN_GAP;
+ /* Performance counters implemented Per TC */
+@@ -2774,6 +2777,7 @@ __BUILD_SET_C0(status)
+ __BUILD_SET_C0(cause)
+ __BUILD_SET_C0(config)
+ __BUILD_SET_C0(config5)
++__BUILD_SET_C0(config7)
+ __BUILD_SET_C0(intcontrol)
+ __BUILD_SET_C0(intctl)
+ __BUILD_SET_C0(srsmap)
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index d535fc706a8b3..25cd8737e7fe0 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -1879,6 +1879,13 @@ static inline void cpu_probe_ingenic(struct cpuinfo_mips *c, unsigned int cpu)
+ 		c->cputype = CPU_JZRISC;
+ 		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+ 		__cpu_name[cpu] = "Ingenic JZRISC";
++		/*
++		 * The XBurst core by default attempts to avoid branch target
++		 * buffer lookups by detecting & special casing loops. This
++		 * feature will cause BogoMIPS and lpj calculate in error.
++		 * Set cp0 config7 bit 4 to disable this feature.
++		 */
++		set_c0_config7(MIPS_CONF7_BTB_LOOP_EN);
+ 		break;
+ 	default:
+ 		panic("Unknown Ingenic Processor ID!");
 -- 
 2.20.1
 
