@@ -2,69 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3E2C1041
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Sep 2019 10:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240DEC1678
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Sep 2019 19:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725857AbfI1Iwi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 28 Sep 2019 04:52:38 -0400
-Received: from forward104o.mail.yandex.net ([37.140.190.179]:37115 "EHLO
-        forward104o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725856AbfI1Iwh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 28 Sep 2019 04:52:37 -0400
-Received: from mxback23o.mail.yandex.net (mxback23o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::74])
-        by forward104o.mail.yandex.net (Yandex) with ESMTP id 4A78A940090;
-        Sat, 28 Sep 2019 11:52:34 +0300 (MSK)
-Received: from sas8-93a22d3a76f4.qloud-c.yandex.net (sas8-93a22d3a76f4.qloud-c.yandex.net [2a02:6b8:c1b:2988:0:640:93a2:2d3a])
-        by mxback23o.mail.yandex.net (nwsmtp/Yandex) with ESMTP id 1gCcRH8Ysn-qXliDdFq;
-        Sat, 28 Sep 2019 11:52:34 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1569660754;
-        bh=vRF5Tkp240cQ5fSdDrArQ2fiMS69xhiYtJf0hJBeT+4=;
-        h=In-Reply-To:From:To:Subject:Cc:Date:References:Message-ID;
-        b=UcyKVt/yV8FglmbKip4x1vjnA7egeE5LkNR5NdYaHPq0ppERm+1mCxkauL2i2EHsr
-         dRoEJST5zqInr+uKnn70lkwg5IRllZBM6SyTGCg1C+ogCoxqUCJuQ5bIirkwIauZLR
-         ojMF/RpSb6eOryC/BbwElrMh0QIcC4G8EeNAw1mU=
-Authentication-Results: mxback23o.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by sas8-93a22d3a76f4.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id JAUu2lHH1A-qVI4hKwk;
-        Sat, 28 Sep 2019 11:52:32 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-Subject: Re: [PATCH] MIPS: Loongson64: Remove duplicated add_memory_region
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Paul Burton <paul.burton@mips.com>
-References: <20190926140458.10367-1-jiaxun.yang@flygoat.com>
- <CAAhV-H4H5dXZCL_P7+o+SR1dVGchbyvCAqvHyac9i4-7-esoCQ@mail.gmail.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <55580733-11eb-4bae-55b2-0ce5ff0a7694@flygoat.com>
-Date:   Sat, 28 Sep 2019 16:52:25 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        id S1726827AbfI2Ra5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 Sep 2019 13:30:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41262 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726149AbfI2Ra5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 29 Sep 2019 13:30:57 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B6FC82086A;
+        Sun, 29 Sep 2019 17:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569778256;
+        bh=9RTI3BxKAQ8c6bSqWTjG3ttwscWdlooxdIEWTE/1ib4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RqEWG5ZJqb1CzW/i5pHNHOc8EDFsT/pifYwt8VJZtwHHW1eEtgbF86AG8hZtuYIQT
+         b1jGavAoDoyQ00lfR7oaXgTnI6lJw5UE7Sug0HA+VJy4O9X8vsSarFU8ZDD6jHoz+S
+         JXBSIqzEvML3oqD3x+QUyuXfeSxI6H34JUk2RNks=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Zhou Yanjie <zhouyanjie@zoho.com>,
+        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
+        ralf@linux-mips.org, paul@crapouillou.net, jhogan@kernel.org,
+        malat@debian.org, gregkh@linuxfoundation.org, tglx@linutronix.de,
+        allison@lohutok.net, syq@debian.org, chenhc@lemote.com,
+        jiaxun.yang@flygoat.com, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.3 01/49] MIPS: Ingenic: Disable broken BTB lookup optimization.
+Date:   Sun, 29 Sep 2019 13:30:01 -0400
+Message-Id: <20190929173053.8400-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H4H5dXZCL_P7+o+SR1dVGchbyvCAqvHyac9i4-7-esoCQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+From: Zhou Yanjie <zhouyanjie@zoho.com>
 
-On 2019/9/27 下午6:36, Huacai Chen wrote:
-> Hi Jiaxun and Paul,
->
-> This patch isn't a complete fix, please refer to
-> https://patchwork.kernel.org/patch/11164281/.
+[ Upstream commit 053951dda71ecb4b554a2cdbe26f5f6f9bee9dd2 ]
 
-Hi Paul,
+In order to further reduce power consumption, the XBurst core
+by default attempts to avoid branch target buffer lookups by
+detecting & special casing loops. This feature will cause
+BogoMIPS and lpj calculate in error. Set cp0 config7 bit 4 to
+disable this feature.
 
-Please pick Huacai's patch as a material of rc1.
+Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: ralf@linux-mips.org
+Cc: paul@crapouillou.net
+Cc: jhogan@kernel.org
+Cc: malat@debian.org
+Cc: gregkh@linuxfoundation.org
+Cc: tglx@linutronix.de
+Cc: allison@lohutok.net
+Cc: syq@debian.org
+Cc: chenhc@lemote.com
+Cc: jiaxun.yang@flygoat.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/include/asm/mipsregs.h | 4 ++++
+ arch/mips/kernel/cpu-probe.c     | 7 +++++++
+ 2 files changed, 11 insertions(+)
 
-Thanks
+diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
+index 1e6966e8527e9..bdbdc19a2b8f8 100644
+--- a/arch/mips/include/asm/mipsregs.h
++++ b/arch/mips/include/asm/mipsregs.h
+@@ -689,6 +689,9 @@
+ #define MIPS_CONF7_IAR		(_ULCAST_(1) << 10)
+ #define MIPS_CONF7_AR		(_ULCAST_(1) << 16)
+ 
++/* Ingenic Config7 bits */
++#define MIPS_CONF7_BTB_LOOP_EN	(_ULCAST_(1) << 4)
++
+ /* Config7 Bits specific to MIPS Technologies. */
+ 
+ /* Performance counters implemented Per TC */
+@@ -2813,6 +2816,7 @@ __BUILD_SET_C0(status)
+ __BUILD_SET_C0(cause)
+ __BUILD_SET_C0(config)
+ __BUILD_SET_C0(config5)
++__BUILD_SET_C0(config7)
+ __BUILD_SET_C0(intcontrol)
+ __BUILD_SET_C0(intctl)
+ __BUILD_SET_C0(srsmap)
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index 9635c1db3ae6a..e654ffc1c8a0d 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -1964,6 +1964,13 @@ static inline void cpu_probe_ingenic(struct cpuinfo_mips *c, unsigned int cpu)
+ 		c->cputype = CPU_JZRISC;
+ 		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+ 		__cpu_name[cpu] = "Ingenic JZRISC";
++		/*
++		 * The XBurst core by default attempts to avoid branch target
++		 * buffer lookups by detecting & special casing loops. This
++		 * feature will cause BogoMIPS and lpj calculate in error.
++		 * Set cp0 config7 bit 4 to disable this feature.
++		 */
++		set_c0_config7(MIPS_CONF7_BTB_LOOP_EN);
+ 		break;
+ 	default:
+ 		panic("Unknown Ingenic Processor ID!");
+-- 
+2.20.1
 
---
-
-Jiaxun Yang
-
-> Huacai
