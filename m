@@ -2,52 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 183EEC2A77
+	by mail.lfdr.de (Postfix) with ESMTP id 86BE8C2A78
 	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 01:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732644AbfI3XIu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Sep 2019 19:08:50 -0400
+        id S1732676AbfI3XIy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Sep 2019 19:08:54 -0400
 Received: from mail-eopbgr690119.outbound.protection.outlook.com ([40.107.69.119]:48448
         "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732626AbfI3XIs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 30 Sep 2019 19:08:48 -0400
+        id S1732664AbfI3XIy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 30 Sep 2019 19:08:54 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LFy9eP0i7wgXBbC2Cz1vS1D7JH4CTXILLGc9j+t9lzOTB4hF3A19MNZsVfGmNEu/3Z58se+Rk6t56GvrbQ8P04Rg96nd9NcEY0NAiDKMKYLd0nk2Y+l+Fj2io2IlbZ3OI+hQ9y2Fx0SiXz6ybvJZgtSfpl2ckxzr6Jl479BQRO/YVLbh8OTTbwwM/lHARuyu3nFgPckgtbhFCgrEvUtEkIqe6N6Lmd5wsdkgGNW49p9f8d5DtJaVm927U/dSASv7ZeKlC96ENhjEHPDbjRvYc+XG2r8r5ZrRagojDGE08p1uLWc6Q/NkQfzU9Wx55lSg7fP8U9HDVjsjCnc1p5UO3w==
+ b=ZMOXENCh6Qnf1QhHczZLMnGgD+ygIGu4v3dq3qT6NnkGo3zM1NNGOKGk/gQLaG05ZKhqhwiJFqmtj1hk6Svpk2EaimvQ+jHGF4ktI7rSYrO+JFGA8TLq2BmlRAmbcIg4OpCC56IAf7pgspnzO4arrBpUPIj6mkeD8BMa5ri1Vn/UVsCY/Yy2xE32Tf69sIvH0wIv3Ne7gqHuVGDlGRdIaEwCFeI515XBpgMTCFGAD5vVLfb626WvbjpXv2y4nqHWWPyPvetV1+we3dTShnwnAQphTeigXsRdfQ2PgMa/y08osi+s8wAMmeKl312ev+0w9rTDchoov+IgHzbfc3a3yA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZfAVvGvI2aPckslAY0N2YIANjNjzPYFO+OauvzKZOUs=;
- b=OtzmAI4cdl3jMy08PQaExOZ4fZk1zeLR8Z+VV94VZNqGfqgJxVF0p0DSInO+/z0mbdBlM1ZbXHX9JvGfr1ksrFpG4BJ+sxuXQ6Fay3tyMgI5RU0gQCq2SyLn6JCWE/qfAstB91K2OBfOPmUbb70kgzhJ4uw4qTNqpqfDvt4pg1znwyLTZYX7HgWh2e4MzNhFMOow7ZmxMmSRRpldj6hvjVRD8U2EwPzypNOcEC5kpXF3Xvu6tltPauypJHRFVdi//4sF7TRNsKisBNOKlOWmFio9kOLHVhH3thHpaFRH1jRIASRRad79Ifbo7bpfKvftN1QtsUZz6OelPG8fxh1jFA==
+ bh=Ak6sjpxGyC8CbsbIm1/cUuebkaYx7A1pT8ibGpVE7uU=;
+ b=SyPhHUpm7iJbVydeFLHwl45J0BvAXGVk3Z+nA52i5D5rZ8Z5o7YOAdaerlXWM4gZtHHrq1rA/lnSIs+MgXh0OZPwWJf1A16COg9z673IqiK4Smqq8pyagxzOfIXoL7Cpk2L7R2USyLJRvv2GBTD4IBYBhFpvjG2HjIlNWqQzd7VxY8BJqpoJgS6vXYYQ2GXacGHqF7KZZ9AEvMzd2jVuRc0bus4jn6WxuCRjKqFRFPw+Xaea2+6+uizLfKSAgZHfwxksP7/64qQtdd/2n1cIa9T+l5FYEzn3dXaC4lpicJERw6Zu7Q6L4w3VhFhvbAgnc588vSYJJ7cFM0jbp/4TvQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZfAVvGvI2aPckslAY0N2YIANjNjzPYFO+OauvzKZOUs=;
- b=h9kK2ywUUnUVXHfc5B8My/08ZQlB7EjUVbfdxvaDmkhguypbuVGLMsP4eErqVZVvi8BGjHq6pEt4prmNXAkeXo2baRKhKkwJrbjXO9bsf1HQQUt5CHCBs6HEaTUMNgNIYmm20kkXt6T87INMWs3N4pFONzrVgMeephlIpYCghjM=
+ bh=Ak6sjpxGyC8CbsbIm1/cUuebkaYx7A1pT8ibGpVE7uU=;
+ b=JJbbvJrQkpdHmFc2SOQw6T6PJvCsl/kuZSFKOiZ8J2E9zMZMqhDy/CchxthhEInYGich04V7/X6h4JEDNtLpN9HI9jIY33Ucd09TncdeVRuE+CJkryIiL8VBmgwKGK88MJ/pAC9uNSoivrBFR8pJzKw/9vtCLJjRVpXN90ytbGs=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
  MWHPR2201MB1022.namprd22.prod.outlook.com (10.174.167.23) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.17; Mon, 30 Sep 2019 23:08:32 +0000
+ 15.20.2305.17; Mon, 30 Sep 2019 23:08:36 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481%2]) with mapi id 15.20.2305.017; Mon, 30 Sep 2019
- 23:08:32 +0000
+ 23:08:36 +0000
 From:   Paul Burton <paul.burton@mips.com>
 To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
 CC:     Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Paul Burton <pburton@wavecomp.com>
-Subject: [PATCH 21/37] MIPS: bitops: Implement test_and_set_bit() in terms of
- _lock variant
-Thread-Topic: [PATCH 21/37] MIPS: bitops: Implement test_and_set_bit() in
- terms of _lock variant
-Thread-Index: AQHVd+P6iWZRVNZFTkSLRs37dgW89Q==
-Date:   Mon, 30 Sep 2019 23:08:32 +0000
-Message-ID: <20190930230806.2940505-22-paul.burton@mips.com>
+Subject: [PATCH 25/37] MIPS: bitops: Abstract LL/SC loops
+Thread-Topic: [PATCH 25/37] MIPS: bitops: Abstract LL/SC loops
+Thread-Index: AQHVd+P8NJwoT+um5EOQRUe4f/jQIw==
+Date:   Mon, 30 Sep 2019 23:08:36 +0000
+Message-ID: <20190930230806.2940505-26-paul.burton@mips.com>
 References: <20190930230806.2940505-1-paul.burton@mips.com>
 In-Reply-To: <20190930230806.2940505-1-paul.burton@mips.com>
 Accept-Language: en-US
@@ -63,128 +61,266 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.23.0
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 63001d44-d434-440c-5d12-08d745fb1d0e
+x-ms-office365-filtering-correlation-id: d0f649e1-e92b-4f71-1a77-08d745fb1f47
 x-ms-traffictypediagnostic: MWHPR2201MB1022:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB102286AFEAE3B61D70624D13C1820@MWHPR2201MB1022.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-microsoft-antispam-prvs: <MWHPR2201MB1022991BD0AF34A10A63EC39C1820@MWHPR2201MB1022.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:751;
 x-forefront-prvs: 01762B0D64
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(376002)(136003)(366004)(189003)(199004)(14454004)(508600001)(256004)(6512007)(81166006)(81156014)(44832011)(2351001)(486006)(476003)(6916009)(14444005)(186003)(2501003)(6436002)(50226002)(8676002)(11346002)(8936002)(2616005)(5640700003)(66946007)(6486002)(42882007)(64756008)(66446008)(66476007)(66556008)(446003)(6506007)(1076003)(305945005)(386003)(52116002)(7736002)(102836004)(2906002)(71190400001)(71200400001)(36756003)(5660300002)(26005)(4326008)(66066001)(54906003)(25786009)(76176011)(107886003)(99286004)(6116002)(3846002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1022;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39850400004)(346002)(396003)(376002)(136003)(366004)(189003)(199004)(14454004)(256004)(6512007)(81166006)(316002)(81156014)(44832011)(2351001)(486006)(476003)(6916009)(14444005)(186003)(478600001)(2501003)(6436002)(50226002)(8676002)(11346002)(8936002)(2616005)(5640700003)(66946007)(6486002)(42882007)(64756008)(66446008)(66476007)(66556008)(446003)(6506007)(1076003)(305945005)(386003)(52116002)(7736002)(102836004)(2906002)(71190400001)(71200400001)(36756003)(5660300002)(26005)(4326008)(66066001)(54906003)(25786009)(76176011)(107886003)(99286004)(6116002)(3846002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1022;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: AcHyZX3BwJe9LWnyA5nQjylcFTDS4oMYnEeFJWnGXliGqVYlZ5zyyVUglJpxLStGv+Y3FdPn8NPbSjWYHEquqn12l21YKN34tk7PjSH18Jrpno7EKT+jGuj+VUdpPs8SXEb79LriRsbtqhMe84F4xX79FwiI54dG6im4j3UsxIfeVbGNkaFgz15p3WZbYccXTSmqYnrsQTp1CrsaJsvZTphU7Elhi6/Ip0ik96Ji5ZwqOBHuSyKSPXgL0SmombDSmtEo5fvf34cxLeZ2nVqAXJBwQJBfp2sKqki5wtsHV2F3BNKeqZCGVsSK3UFMNzDSTrY499w2GCw5GYkqkEwyOzGj00XmpQnVWDJSea/lbvn77KeC3fMsgGcnWE9UaqkDKm42+uTUAqqMgUnvr8h+xRd8lN4kMyKcVPYu2s6nkM0=
+x-microsoft-antispam-message-info: wym9qoA4ReEjcWGoJFCiZC4P/VpLFP/t6bTJiqX262km2FQWhYjoCF1R0yNbnsc9M05ydw4OxjHI33LTB7vkVKKlD2ZI9b7eUd/Ngv6b90UxXhbMKjcKRKXqvHMC6IPabBSp+EJcAEi8D7LkZ/Kx/TWqVyj9/hDUuxkdYXL9sXOTl8UBc2nznqgYs7ByH6DU4qW1xspiutNn+Zv/c80Iow+WQlkFQGUMFeavb4umrCxsWegnnokdi8uB94T8975Spwh04zI7iX8DDzvbsB8lNQFvcGTrzK3mV5MsFVhIPlEjQDmQoTPMAPLqrB+wbgG+2s5uEUz2MmdAArdIWXpfFkLRI4URewECqMp1goIo1Zl+7/UcLDLb3jrfXW3UYfOdpiclC3w5bR0MYRROXy6UqKHHCWJBOcgJq/vQ7qOe8VA=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63001d44-d434-440c-5d12-08d745fb1d0e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2019 23:08:32.4602
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0f649e1-e92b-4f71-1a77-08d745fb1f47
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2019 23:08:36.1785
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VRZb82qP8cNWXFM/sH3OL743g0Gmdo1aB1Yr6dCdTWWQQyLgvU6VNLgRg526m+KEQaPz66LHLFYTB6jz+gTSnQ==
+X-MS-Exchange-CrossTenant-userprincipalname: fx31rtvENW4/R2oL2X11xjj3fU2YgprUY6mG6vvsRpG0pPJCqeDrbqYkK3Vhw35T4x9H6JG2XXwDZauJzrBuzQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1022
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The only difference between test_and_set_bit() & test_and_set_bit_lock()
-is memory ordering barrier semantics - the former provides a full
-barrier whilst the latter only provides acquire semantics.
-
-We can therefore implement test_and_set_bit() in terms of
-test_and_set_bit_lock() with the addition of the extra memory barrier.
-Do this in order to avoid duplicating logic.
+Introduce __bit_op() & __test_bit_op() macros which abstract away the
+implementation of LL/SC loops. This cuts down on a lot of duplicate
+boilerplate code, and also allows R10000_LLSC_WAR to be handled outside
+of the individual bitop functions.
 
 Signed-off-by: Paul Burton <paul.burton@mips.com>
 ---
 
- arch/mips/include/asm/bitops.h | 66 +++++++---------------------------
- arch/mips/lib/bitops.c         | 26 --------------
- 2 files changed, 13 insertions(+), 79 deletions(-)
+ arch/mips/include/asm/bitops.h | 267 ++++++++-------------------------
+ 1 file changed, 63 insertions(+), 204 deletions(-)
 
 diff --git a/arch/mips/include/asm/bitops.h b/arch/mips/include/asm/bitops.=
 h
-index 83fd1f1c3ab4..34d6fe3f18d0 100644
+index 3e5589320e83..5701f8b41e87 100644
 --- a/arch/mips/include/asm/bitops.h
 +++ b/arch/mips/include/asm/bitops.h
-@@ -31,8 +31,6 @@
- void __mips_set_bit(unsigned long nr, volatile unsigned long *addr);
- void __mips_clear_bit(unsigned long nr, volatile unsigned long *addr);
- void __mips_change_bit(unsigned long nr, volatile unsigned long *addr);
--int __mips_test_and_set_bit(unsigned long nr,
--			    volatile unsigned long *addr);
- int __mips_test_and_set_bit_lock(unsigned long nr,
- 				 volatile unsigned long *addr);
- int __mips_test_and_clear_bit(unsigned long nr,
-@@ -236,24 +234,22 @@ static inline void change_bit(unsigned long nr, volat=
-ile unsigned long *addr)
- }
+@@ -25,6 +25,41 @@
+ #include <asm/sgidefs.h>
+ #include <asm/war.h>
 =20
++#define __bit_op(mem, insn, inputs...) do {			\
++	unsigned long temp;					\
++								\
++	asm volatile(						\
++	"	.set		push			\n"	\
++	"	.set		" MIPS_ISA_LEVEL "	\n"	\
++	"1:	" __LL		"%0, %1			\n"	\
++	"	" insn		"			\n"	\
++	"	" __SC		"%0, %1			\n"	\
++	"	" __SC_BEQZ	"%0, 1b			\n"	\
++	"	.set		pop			\n"	\
++	: "=3D&r"(temp), "+" GCC_OFF_SMALL_ASM()(mem)		\
++	: inputs						\
++	: __LLSC_CLOBBER);					\
++} while (0)
++
++#define __test_bit_op(mem, ll_dst, insn, inputs...) ({		\
++	unsigned long orig, temp;				\
++								\
++	asm volatile(						\
++	"	.set		push			\n"	\
++	"	.set		" MIPS_ISA_LEVEL "	\n"	\
++	"1:	" __LL		ll_dst ", %2		\n"	\
++	"	" insn		"			\n"	\
++	"	" __SC		"%1, %2			\n"	\
++	"	" __SC_BEQZ	"%1, 1b			\n"	\
++	"	.set		pop			\n"	\
++	: "=3D&r"(orig), "=3D&r"(temp),				\
++	  "+" GCC_OFF_SMALL_ASM()(mem)				\
++	: inputs						\
++	: __LLSC_CLOBBER);					\
++								\
++	orig;							\
++})
++
  /*
-- * test_and_set_bit - Set a bit and return its old value
-+ * test_and_set_bit_lock - Set a bit and return its old value
-  * @nr: Bit to set
-  * @addr: Address to count from
-  *
-- * This operation is atomic and cannot be reordered.
-- * It also implies a memory barrier.
-+ * This operation is atomic and implies acquire ordering semantics
-+ * after the memory operation.
-  */
--static inline int test_and_set_bit(unsigned long nr,
-+static inline int test_and_set_bit_lock(unsigned long nr,
- 	volatile unsigned long *addr)
+  * These are the "slower" versions of the functions and are in bitops.c.
+  * These functions call raw_local_irq_{save,restore}().
+@@ -54,55 +89,20 @@ static inline void set_bit(unsigned long nr, volatile u=
+nsigned long *addr)
  {
  	unsigned long *m =3D ((unsigned long *)addr) + (nr >> SZLONG_LOG);
  	int bit =3D nr & SZLONG_MASK;
- 	unsigned long res, temp;
+-	unsigned long temp;
 =20
--	smp_mb__before_llsc();
--
  	if (!kernel_uses_llsc) {
--		res =3D __mips_test_and_set_bit(nr, addr);
-+		res =3D __mips_test_and_set_bit_lock(nr, addr);
- 	} else if (R10000_LLSC_WAR) {
- 		__asm__ __volatile__(
- 		"	.set	push					\n"
-@@ -264,7 +260,7 @@ static inline int test_and_set_bit(unsigned long nr,
- 		"	beqzl	%2, 1b					\n"
- 		"	and	%2, %0, %3				\n"
- 		"	.set	pop					\n"
--		: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m), "=3D&r" (res)
-+		: "=3D&r" (temp), "+m" (*m), "=3D&r" (res)
- 		: "r" (1UL << bit)
- 		: __LLSC_CLOBBER);
- 	} else {
-@@ -291,56 +287,20 @@ static inline int test_and_set_bit(unsigned long nr,
+ 		__mips_set_bit(nr, addr);
+ 		return;
+ 	}
+=20
+-	if (R10000_LLSC_WAR) {
+-		__asm__ __volatile__(
+-		"	.set	push					\n"
+-		"	.set	arch=3Dr4000				\n"
+-		"1:	" __LL "%0, %1			# set_bit	\n"
+-		"	or	%0, %2					\n"
+-		"	" __SC	"%0, %1					\n"
+-		"	beqzl	%0, 1b					\n"
+-		"	.set	pop					\n"
+-		: "=3D&r" (temp), "=3D" GCC_OFF_SMALL_ASM() (*m)
+-		: "ir" (BIT(bit)), GCC_OFF_SMALL_ASM() (*m)
+-		: __LLSC_CLOBBER);
+-		return;
+-	}
+-
+ 	if ((MIPS_ISA_REV >=3D 2) && __builtin_constant_p(bit) && (bit >=3D 16)) =
+{
+ 		loongson_llsc_mb();
+-		do {
+-			__asm__ __volatile__(
+-			"	" __LL "%0, %1		# set_bit	\n"
+-			"	" __INS "%0, %3, %2, 1			\n"
+-			"	" __SC "%0, %1				\n"
+-			: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m)
+-			: "i" (bit), "r" (~0)
+-			: __LLSC_CLOBBER);
+-		} while (unlikely(!temp));
++		__bit_op(*m, __INS "%0, %3, %2, 1", "i"(bit), "r"(~0));
+ 		return;
+ 	}
+=20
+ 	loongson_llsc_mb();
+-	do {
+-		__asm__ __volatile__(
+-		"	.set	push				\n"
+-		"	.set	"MIPS_ISA_ARCH_LEVEL"		\n"
+-		"	" __LL "%0, %1		# set_bit	\n"
+-		"	or	%0, %2				\n"
+-		"	" __SC	"%0, %1				\n"
+-		"	.set	pop				\n"
+-		: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m)
+-		: "ir" (BIT(bit))
+-		: __LLSC_CLOBBER);
+-	} while (unlikely(!temp));
++	__bit_op(*m, "or\t%0, %2", "ir"(BIT(bit)));
  }
 =20
  /*
-- * test_and_set_bit_lock - Set a bit and return its old value
-+ * test_and_set_bit - Set a bit and return its old value
-  * @nr: Bit to set
-  * @addr: Address to count from
-  *
-- * This operation is atomic and implies acquire ordering semantics
-- * after the memory operation.
-+ * This operation is atomic and cannot be reordered.
-+ * It also implies a memory barrier.
-  */
--static inline int test_and_set_bit_lock(unsigned long nr,
-+static inline int test_and_set_bit(unsigned long nr,
- 	volatile unsigned long *addr)
+@@ -119,55 +119,20 @@ static inline void clear_bit(unsigned long nr, volati=
+le unsigned long *addr)
  {
--	unsigned long *m =3D ((unsigned long *)addr) + (nr >> SZLONG_LOG);
--	int bit =3D nr & SZLONG_MASK;
--	unsigned long res, temp;
+ 	unsigned long *m =3D ((unsigned long *)addr) + (nr >> SZLONG_LOG);
+ 	int bit =3D nr & SZLONG_MASK;
+-	unsigned long temp;
+=20
+ 	if (!kernel_uses_llsc) {
+ 		__mips_clear_bit(nr, addr);
+ 		return;
+ 	}
+=20
+-	if (R10000_LLSC_WAR) {
+-		__asm__ __volatile__(
+-		"	.set	push					\n"
+-		"	.set	arch=3Dr4000				\n"
+-		"1:	" __LL "%0, %1			# clear_bit	\n"
+-		"	and	%0, %2					\n"
+-		"	" __SC "%0, %1					\n"
+-		"	beqzl	%0, 1b					\n"
+-		"	.set	pop					\n"
+-		: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m)
+-		: "ir" (~(BIT(bit)))
+-		: __LLSC_CLOBBER);
+-		return;
+-	}
 -
--	if (!kernel_uses_llsc) {
--		res =3D __mips_test_and_set_bit_lock(nr, addr);
+ 	if ((MIPS_ISA_REV >=3D 2) && __builtin_constant_p(bit)) {
+ 		loongson_llsc_mb();
+-		do {
+-			__asm__ __volatile__(
+-			"	" __LL "%0, %1		# clear_bit	\n"
+-			"	" __INS "%0, $0, %2, 1			\n"
+-			"	" __SC "%0, %1				\n"
+-			: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m)
+-			: "i" (bit)
+-			: __LLSC_CLOBBER);
+-		} while (unlikely(!temp));
++		__bit_op(*m, __INS "%0, $0, %2, 1", "i"(bit));
+ 		return;
+ 	}
+=20
+ 	loongson_llsc_mb();
+-	do {
+-		__asm__ __volatile__(
+-		"	.set	push				\n"
+-		"	.set	"MIPS_ISA_ARCH_LEVEL"		\n"
+-		"	" __LL "%0, %1		# clear_bit	\n"
+-		"	and	%0, %2				\n"
+-		"	" __SC "%0, %1				\n"
+-		"	.set	pop				\n"
+-		: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m)
+-		: "ir" (~(BIT(bit)))
+-		: __LLSC_CLOBBER);
+-	} while (unlikely(!temp));
++	__bit_op(*m, "and\t%0, %2", "ir"(~BIT(bit)));
+ }
+=20
+ /*
+@@ -197,41 +162,14 @@ static inline void change_bit(unsigned long nr, volat=
+ile unsigned long *addr)
+ {
+ 	unsigned long *m =3D ((unsigned long *)addr) + (nr >> SZLONG_LOG);
+ 	int bit =3D nr & SZLONG_MASK;
+-	unsigned long temp;
+=20
+ 	if (!kernel_uses_llsc) {
+ 		__mips_change_bit(nr, addr);
+ 		return;
+ 	}
+=20
+-	if (R10000_LLSC_WAR) {
+-		__asm__ __volatile__(
+-		"	.set	push				\n"
+-		"	.set	arch=3Dr4000			\n"
+-		"1:	" __LL "%0, %1		# change_bit	\n"
+-		"	xor	%0, %2				\n"
+-		"	" __SC	"%0, %1				\n"
+-		"	beqzl	%0, 1b				\n"
+-		"	.set	pop				\n"
+-		: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m)
+-		: "ir" (BIT(bit))
+-		: __LLSC_CLOBBER);
+-		return;
+-	}
+-
+ 	loongson_llsc_mb();
+-	do {
+-		__asm__ __volatile__(
+-		"	.set	push				\n"
+-		"	.set	"MIPS_ISA_ARCH_LEVEL"		\n"
+-		"	" __LL "%0, %1		# change_bit	\n"
+-		"	xor	%0, %2				\n"
+-		"	" __SC	"%0, %1				\n"
+-		"	.set	pop				\n"
+-		: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m)
+-		: "ir" (BIT(bit))
+-		: __LLSC_CLOBBER);
+-	} while (unlikely(!temp));
++	__bit_op(*m, "xor\t%0, %2", "ir"(BIT(bit)));
+ }
+=20
+ /*
+@@ -247,41 +185,16 @@ static inline int test_and_set_bit_lock(unsigned long=
+ nr,
+ {
+ 	unsigned long *m =3D ((unsigned long *)addr) + (nr >> SZLONG_LOG);
+ 	int bit =3D nr & SZLONG_MASK;
+-	unsigned long res, temp;
++	unsigned long res, orig;
+=20
+ 	if (!kernel_uses_llsc) {
+ 		res =3D __mips_test_and_set_bit_lock(nr, addr);
 -	} else if (R10000_LLSC_WAR) {
 -		__asm__ __volatile__(
 -		"	.set	push					\n"
@@ -196,9 +332,12 @@ ile unsigned long *addr)
 -		"	and	%2, %0, %3				\n"
 -		"	.set	pop					\n"
 -		: "=3D&r" (temp), "+m" (*m), "=3D&r" (res)
--		: "r" (1UL << bit)
+-		: "ir" (BIT(bit))
 -		: __LLSC_CLOBBER);
--	} else {
+-
+-		res =3D res !=3D 0;
+ 	} else {
+ 		loongson_llsc_mb();
 -		do {
 -			__asm__ __volatile__(
 -			"	.set	push				\n"
@@ -208,62 +347,147 @@ ile unsigned long *addr)
 -			"	" __SC	"%2, %1				\n"
 -			"	.set	pop				\n"
 -			: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m), "=3D&r" (res)
--			: "r" (1UL << bit)
+-			: "ir" (BIT(bit))
 -			: __LLSC_CLOBBER);
 -		} while (unlikely(!res));
 -
--		res =3D temp & (1UL << bit);
--	}
+-		res =3D (temp & BIT(bit)) !=3D 0;
++		orig =3D __test_bit_op(*m, "%0",
++				     "or\t%1, %0, %3",
++				     "ir"(BIT(bit)));
++		res =3D (orig & BIT(bit)) !=3D 0;
+ 	}
+=20
+ 	smp_llsc_mb();
+@@ -317,57 +230,25 @@ static inline int test_and_clear_bit(unsigned long nr=
+,
+ {
+ 	unsigned long *m =3D ((unsigned long *)addr) + (nr >> SZLONG_LOG);
+ 	int bit =3D nr & SZLONG_MASK;
+-	unsigned long res, temp;
++	unsigned long res, orig;
+=20
+ 	smp_mb__before_llsc();
+=20
+ 	if (!kernel_uses_llsc) {
+ 		res =3D __mips_test_and_clear_bit(nr, addr);
+-	} else if (R10000_LLSC_WAR) {
+-		__asm__ __volatile__(
+-		"	.set	push					\n"
+-		"	.set	arch=3Dr4000				\n"
+-		"1:	" __LL	"%0, %1		# test_and_clear_bit	\n"
+-		"	or	%2, %0, %3				\n"
+-		"	xor	%2, %3					\n"
+-		"	" __SC	"%2, %1					\n"
+-		"	beqzl	%2, 1b					\n"
+-		"	and	%2, %0, %3				\n"
+-		"	.set	pop					\n"
+-		: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m), "=3D&r" (res)
+-		: "ir" (BIT(bit))
+-		: __LLSC_CLOBBER);
 -
--	smp_llsc_mb();
+-		res =3D res !=3D 0;
+ 	} else if ((MIPS_ISA_REV >=3D 2) && __builtin_constant_p(nr)) {
+ 		loongson_llsc_mb();
+-		do {
+-			__asm__ __volatile__(
+-			"	" __LL	"%0, %1 # test_and_clear_bit	\n"
+-			"	" __EXT "%2, %0, %3, 1			\n"
+-			"	" __INS "%0, $0, %3, 1			\n"
+-			"	" __SC	"%0, %1				\n"
+-			: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m), "=3D&r" (res)
+-			: "i" (bit)
+-			: __LLSC_CLOBBER);
+-		} while (unlikely(!temp));
++		res =3D __test_bit_op(*m, "%1",
++				    __EXT "%0, %1, %3, 1;"
++				    __INS "%1, $0, %3, 1",
++				    "i"(bit));
+ 	} else {
+ 		loongson_llsc_mb();
+-		do {
+-			__asm__ __volatile__(
+-			"	.set	push				\n"
+-			"	.set	"MIPS_ISA_ARCH_LEVEL"		\n"
+-			"	" __LL	"%0, %1 # test_and_clear_bit	\n"
+-			"	or	%2, %0, %3			\n"
+-			"	xor	%2, %3				\n"
+-			"	" __SC	"%2, %1				\n"
+-			"	.set	pop				\n"
+-			: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m), "=3D&r" (res)
+-			: "ir" (BIT(bit))
+-			: __LLSC_CLOBBER);
+-		} while (unlikely(!res));
 -
--	return res !=3D 0;
-+	smp_mb__before_llsc();
-+	return test_and_set_bit_lock(nr, addr);
+-		res =3D (temp & BIT(bit)) !=3D 0;
++		orig =3D __test_bit_op(*m, "%0",
++				     "or\t%1, %0, %3;"
++				     "xor\t%1, %1, %3",
++				     "ir"(BIT(bit)));
++		res =3D (orig & BIT(bit)) !=3D 0;
+ 	}
+=20
+ 	smp_llsc_mb();
+@@ -388,43 +269,18 @@ static inline int test_and_change_bit(unsigned long n=
+r,
+ {
+ 	unsigned long *m =3D ((unsigned long *)addr) + (nr >> SZLONG_LOG);
+ 	int bit =3D nr & SZLONG_MASK;
+-	unsigned long res, temp;
++	unsigned long res, orig;
+=20
+ 	smp_mb__before_llsc();
+=20
+ 	if (!kernel_uses_llsc) {
+ 		res =3D __mips_test_and_change_bit(nr, addr);
+-	} else if (R10000_LLSC_WAR) {
+-		__asm__ __volatile__(
+-		"	.set	push					\n"
+-		"	.set	arch=3Dr4000				\n"
+-		"1:	" __LL	"%0, %1		# test_and_change_bit	\n"
+-		"	xor	%2, %0, %3				\n"
+-		"	" __SC	"%2, %1					\n"
+-		"	beqzl	%2, 1b					\n"
+-		"	and	%2, %0, %3				\n"
+-		"	.set	pop					\n"
+-		: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m), "=3D&r" (res)
+-		: "ir" (BIT(bit))
+-		: __LLSC_CLOBBER);
+-
+-		res =3D res !=3D 0;
+ 	} else {
+ 		loongson_llsc_mb();
+-		do {
+-			__asm__ __volatile__(
+-			"	.set	push				\n"
+-			"	.set	"MIPS_ISA_ARCH_LEVEL"		\n"
+-			"	" __LL	"%0, %1 # test_and_change_bit	\n"
+-			"	xor	%2, %0, %3			\n"
+-			"	" __SC	"\t%2, %1			\n"
+-			"	.set	pop				\n"
+-			: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m), "=3D&r" (res)
+-			: "ir" (BIT(bit))
+-			: __LLSC_CLOBBER);
+-		} while (unlikely(!res));
+-
+-		res =3D (temp & BIT(bit)) !=3D 0;
++		orig =3D __test_bit_op(*m, "%0",
++				     "xor\t%1, %0, %3",
++				     "ir"(BIT(bit)));
++		res =3D (orig & BIT(bit)) !=3D 0;
+ 	}
+=20
+ 	smp_llsc_mb();
+@@ -432,6 +288,9 @@ static inline int test_and_change_bit(unsigned long nr,
+ 	return res;
  }
+=20
++#undef __bit_op
++#undef __test_bit_op
 +
+ #include <asm-generic/bitops/non-atomic.h>
+=20
  /*
-  * test_and_clear_bit - Clear a bit and return its old value
-  * @nr: Bit to clear
-diff --git a/arch/mips/lib/bitops.c b/arch/mips/lib/bitops.c
-index 3b2a1e78a543..fba402c0879d 100644
---- a/arch/mips/lib/bitops.c
-+++ b/arch/mips/lib/bitops.c
-@@ -77,32 +77,6 @@ void __mips_change_bit(unsigned long nr, volatile unsign=
-ed long *addr)
- EXPORT_SYMBOL(__mips_change_bit);
-=20
-=20
--/**
-- * __mips_test_and_set_bit - Set a bit and return its old value.  This is
-- * called by test_and_set_bit() if it cannot find a faster solution.
-- * @nr: Bit to set
-- * @addr: Address to count from
-- */
--int __mips_test_and_set_bit(unsigned long nr,
--			    volatile unsigned long *addr)
--{
--	unsigned long *a =3D (unsigned long *)addr;
--	unsigned bit =3D nr & SZLONG_MASK;
--	unsigned long mask;
--	unsigned long flags;
--	int res;
--
--	a +=3D nr >> SZLONG_LOG;
--	mask =3D 1UL << bit;
--	raw_local_irq_save(flags);
--	res =3D (mask & *a) !=3D 0;
--	*a |=3D mask;
--	raw_local_irq_restore(flags);
--	return res;
--}
--EXPORT_SYMBOL(__mips_test_and_set_bit);
--
--
- /**
-  * __mips_test_and_set_bit_lock - Set a bit and return its old value.  Thi=
-s is
-  * called by test_and_set_bit_lock() if it cannot find a faster solution.
 --=20
 2.23.0
 
