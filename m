@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3123C2A9A
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 01:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39BBC2A70
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 01:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732894AbfI3XK1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Sep 2019 19:10:27 -0400
-Received: from mail-eopbgr710120.outbound.protection.outlook.com ([40.107.71.120]:26432
-        "EHLO NAM05-BY2-obe.outbound.protection.outlook.com"
+        id S1732515AbfI3XIe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Sep 2019 19:08:34 -0400
+Received: from mail-eopbgr820094.outbound.protection.outlook.com ([40.107.82.94]:14848
+        "EHLO NAM01-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732301AbfI3XI0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 30 Sep 2019 19:08:26 -0400
+        id S1732495AbfI3XId (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 30 Sep 2019 19:08:33 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OrqyB217Zsg1jTUFDrycLyvGlkUUcmY5cGzHjbPyQmb9U4aObnVRoRV404M2XganAVPZg6+b/yMRVaYVjuOGcvw0yWSjTdg2Yes8O96UmOeF9IQbYrwuiNNa6i1yiIf0Kanciu39kaLWrFcPfCGgaE9/p/+WR6y/stnBzVOj7D4QwFqWzw464ttxMobTKVdSxC7LOySOtlhwVVzSntXAntfKJvIgSg6IaRtdLHbTtaLAA1bC7PxC2m4ePerSl22/TvkSRNj6A/W6BKGnZxhIreZsrfEiZZ6UuFC/rK5sjDOaq3tzPaMen458hyTt/6+wV6IBYB54s2o3GexuDDdXjg==
+ b=OxO7Vv2OwjZH9DPWNYnMHtZpdIP5cgSJpMO8VHKhm/ZEwP/sUrg9U7tZF0Uz75lqmKXPoXiXkLo2+1K8LkEsdKI++tF2VDm4/Ns5GoHsNcSz1rz54b01J5q6Xl0yIfqHsVQV2QdMqnjqDoYCkgi8Jn8igA8az3UtcJfh26bfiIr5AJ0oIKBxuQOjITQTnDnzbkJCy8+yXDAeyz3cDUCvLMIiFkDsMn7QoN0OPP5/rAr+SvXwbqL6CSpayNPumRYfsLB2y9Dd8Qx4r5mam7onWpXQvlEW6FO8ZUvXkKAQv3dd0laM+qCUvCnVx15GmJzvZclVGAKwEFNAyDkaGoQGwQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fm6FPvZH8hxf+zAzpzsntcS0rkuB6XfnOtezk+/vkWA=;
- b=Z7GOS+2ihdFZ4pphBa6UGnZmRJIHHZUUEgJOoVV3Tg7M5tINnkwPNkzjTOz+NyUTDLTMiK1wSb0jNjImkjjTAsdLKMuSLzGBvwXrZNR7QFKbWu1uz6NRhV/jG6Jk+Q2YAhi9dbQsdvTFM4boNtbTk5dYx4tW09u3pU+fMuLmu0eZN7KEz8LCkhQQag+ZDaUHzeZ3ExVeX//yLIjtZQl6nNtqkttUxVw4Q7IQvCUqI9bRgp36BMeMG+AV/lKe6oExbW8z9ETIHRvaKLHjzNJ2H/9tB0qAH+NoqXatvdeGeQ08iIek7frGhkFZ4IAxTTVJ3pyENKtTOUdC2/zDVjn+pA==
+ bh=IfFkFFyX4dZVqXccoMFyxLU1QIZHdxm2ySnEWOas+FE=;
+ b=C3pfc8lL0Tn6nA7hbZ+XV4wuQIoT6hiCkJkPqHTIKg8GoZ+J+1SAdtJXvF5gPyc6n35hIKcM/auzbbPe1FMYRNoFracMFP9rHAcscBv5/Ed0okBQXsBZOF08PSCev+j5qLbCA3/zpMo7kjlRjbNtNIKjWq8yPRLQVIeU4BjIKbBJS6I7gW5MqO/VQkr9Yu31NEkxfgRqM0LZoY7pUIPx8tbDZTESPoKijG1Xrer6DkWEPSS0Eyl+QEzFKvAoO/S1o8MS7DvIImRsXcTEsctFVTrEucq5Xbn1Gntic+2e7vpC32liKvMlUD8w1698sUgE3eui16de+U03UejYnppptw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fm6FPvZH8hxf+zAzpzsntcS0rkuB6XfnOtezk+/vkWA=;
- b=alNIxFLkgxtO30gCg2dyF2xh6SeaIPmV2eELP0cMofJl5PdLh1OnhSwSLATtcSpoYFXbfc45EmR3533/YXSNXgRXj8E0RBo2nDdTb9BV8U2sP6NO7eHCfh8o2DP9plX/qiLdrqNWgmdIEaQZ9s80vaI6cUrwlAmz6bg4HmZsuN4=
+ bh=IfFkFFyX4dZVqXccoMFyxLU1QIZHdxm2ySnEWOas+FE=;
+ b=YsGPy7HrMtPg2g8QyK/ZTgXKYfxLVeAimfbjXNubnlq1gwdmDh4qpwrCWWkdbUX5p+lwRsehgnlEo4c3vVYUO/vVFpudqb9MFke23M2kbXTK3OaocPBdx/kUPsQypTpBEKyhpqKDwHyMruq7nsxMnaiEeLpUOQwZ3Fy3b42+jUs=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1709.namprd22.prod.outlook.com (10.164.206.151) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.20; Mon, 30 Sep 2019 23:08:24 +0000
+ MWHPR2201MB1022.namprd22.prod.outlook.com (10.174.167.23) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2305.17; Mon, 30 Sep 2019 23:08:25 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481%2]) with mapi id 15.20.2305.017; Mon, 30 Sep 2019
- 23:08:24 +0000
+ 23:08:25 +0000
 From:   Paul Burton <paul.burton@mips.com>
 To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
 CC:     Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Paul Burton <pburton@wavecomp.com>
-Subject: [PATCH 12/37] MIPS: atomic: Emit Loongson3 sync workarounds within
- asm
-Thread-Topic: [PATCH 12/37] MIPS: atomic: Emit Loongson3 sync workarounds
- within asm
-Thread-Index: AQHVd+P2LHb7bttF2kuoIZMMsxRr2Q==
-Date:   Mon, 30 Sep 2019 23:08:24 +0000
-Message-ID: <20190930230806.2940505-13-paul.burton@mips.com>
+Subject: [PATCH 13/37] MIPS: atomic: Use _atomic barriers in
+ atomic_sub_if_positive()
+Thread-Topic: [PATCH 13/37] MIPS: atomic: Use _atomic barriers in
+ atomic_sub_if_positive()
+Thread-Index: AQHVd+P2NMRzSLbeOE2Dihp5C2GVWg==
+Date:   Mon, 30 Sep 2019 23:08:25 +0000
+Message-ID: <20190930230806.2940505-14-paul.burton@mips.com>
 References: <20190930230806.2940505-1-paul.burton@mips.com>
 In-Reply-To: <20190930230806.2940505-1-paul.burton@mips.com>
 Accept-Language: en-US
@@ -63,136 +63,69 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.23.0
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b2b90aa2-97df-40b2-2d1a-08d745fb1884
-x-ms-traffictypediagnostic: MWHPR2201MB1709:
+x-ms-office365-filtering-correlation-id: 5ad43eb9-0a5c-493d-421b-08d745fb18ff
+x-ms-traffictypediagnostic: MWHPR2201MB1022:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB17094B763BA5F776B8E560D4C1820@MWHPR2201MB1709.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1186;
+x-microsoft-antispam-prvs: <MWHPR2201MB1022073596E9C2020C2D1D29C1820@MWHPR2201MB1022.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3276;
 x-forefront-prvs: 01762B0D64
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(39840400004)(376002)(346002)(396003)(136003)(199004)(189003)(2351001)(66476007)(66556008)(66946007)(64756008)(66446008)(107886003)(99286004)(6486002)(52116002)(5640700003)(6436002)(25786009)(478600001)(14454004)(76176011)(26005)(6512007)(5660300002)(71200400001)(71190400001)(1076003)(4326008)(186003)(42882007)(6506007)(11346002)(256004)(486006)(44832011)(476003)(2616005)(14444005)(446003)(54906003)(316002)(7736002)(305945005)(6116002)(2906002)(3846002)(81156014)(81166006)(102836004)(50226002)(6916009)(386003)(36756003)(8676002)(8936002)(66066001)(2501003);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1709;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(376002)(136003)(366004)(189003)(199004)(14454004)(508600001)(256004)(6512007)(81166006)(81156014)(44832011)(2351001)(486006)(476003)(6916009)(186003)(2501003)(6436002)(50226002)(8676002)(11346002)(8936002)(2616005)(5640700003)(66946007)(6486002)(42882007)(64756008)(66446008)(66476007)(66556008)(446003)(6506007)(1076003)(305945005)(4744005)(386003)(52116002)(7736002)(102836004)(2906002)(71190400001)(71200400001)(36756003)(5660300002)(26005)(4326008)(66066001)(54906003)(25786009)(76176011)(107886003)(99286004)(6116002)(3846002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1022;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YFcCf4+6fBzEaCN0IeyP6/8d/qYudt+JvKxsIjv1z37/CAKsdqP0WLbZTbpFPy1SWf6/bF7YaILL7hGyAsfphdg1Xdlz3Ju53gr6q9qxK9AabJH8hb35ElVYSbPD99A5he9fPNadoWqDpwWp3ZAyIifdgTP/aIpbNMo7lK4WomzVlVtKwvjGGNQdZaQH2Tz9Cut6u6qIIXiB5pooX0PIp9BJhxpEah7AkivWRJpuOLQVdYuZHz9GzqYXnvuikUsQE8Dwi7c5XxDg1vNeCYp9QplJBgTm83FdJvCsEBMaU7B5GP10GBUay5hwi7i0IXiBqTG5LE2tfzCP5xS/WQPA2PatctMGM84BmoY9BMIYWoyP2YqgHXviE5YUIMSnhnwuHlCrArpjRzuCJ6VRFOZRjd8pkXiQf4bUgX5mCPnm+8o=
+x-microsoft-antispam-message-info: yBWvKHClNVX44CNiMysbB/O2iu2jPSi+wDFGrs9Ta1/khIl3Qyd5hP2JzEfCMlPeGiM85inb/8vEqJnzz/ozkx9lNW73AcPfpMQUsqX1CxnbdZDGzAdIWR4GyfaH+/kNkJR7i4abQ4kuS3kDNb44Latyti+p7nghYqdpuZrstGdM3RtQQH3nqu3VSt2jBJUvRHLAFgNALtD44BttWqsjfhzHyishQEiCNs+vOZUjbzNf002gCySQYOv5n1jp3DHZZL6LK5+kaApB872SQ/0iCNrsha/XtReSBqGU/echZMh8z8Oqol7r034iYEJS5Jvx7/Mu1zjfLAst/bxmRGIieEGJkG5JPxnNAMOafvkNzWw0bDuSPylwhsUx/pCQ8HzgnDlz2c50In++o4puzsWYIa6JwrjYUGq2YvKlFG3Wyhg=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2b90aa2-97df-40b2-2d1a-08d745fb1884
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2019 23:08:24.8297
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ad43eb9-0a5c-493d-421b-08d745fb18ff
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2019 23:08:25.6503
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XjC0DEfcgWtBq3Tx8SsUz1mIiueYr9NZHTe40D8ZICyOTkC4l4RaCoGLFPBVblpN5TAAMzNrPKZTXIDRTg2QLA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1709
+X-MS-Exchange-CrossTenant-userprincipalname: KorPUaUHMf6sIzVklDMrF7LDX3nHI5NR5KiixxTiODosFa1aVDVQ5486Q/GSlpnnM4pikM31Y5clpBh26xRohQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1022
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Generate the sync instructions required to workaround Loongson3 LL/SC
-errata within inline asm blocks, which feels a little safer than doing
-it from C where strictly speaking the compiler would be well within its
-rights to insert a memory access between the separate asm statements we
-previously had, containing sync & ll instructions respectively.
+Use smp_mb__before_atomic() & smp_mb__after_atomic() in
+atomic_sub_if_positive() rather than the equivalent
+smp_mb__before_llsc() & smp_llsc_mb(). The former are more standard &
+this preps us for avoiding redundant duplicate barriers on Loongson3 in
+a later patch.
 
 Signed-off-by: Paul Burton <paul.burton@mips.com>
 ---
 
- arch/mips/include/asm/atomic.h | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ arch/mips/include/asm/atomic.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/mips/include/asm/atomic.h b/arch/mips/include/asm/atomic.=
 h
-index b834af5a7382..841ff274ada6 100644
+index 841ff274ada6..24443ef29337 100644
 --- a/arch/mips/include/asm/atomic.h
 +++ b/arch/mips/include/asm/atomic.h
-@@ -21,6 +21,7 @@
- #include <asm/cpu-features.h>
- #include <asm/cmpxchg.h>
- #include <asm/llsc.h>
-+#include <asm/sync.h>
- #include <asm/war.h>
+@@ -196,7 +196,7 @@ static __inline__ int atomic_sub_if_positive(int i, ato=
+mic_t * v)
+ {
+ 	int result;
 =20
- #define ATOMIC_INIT(i)	  { (i) }
-@@ -56,10 +57,10 @@ static __inline__ void pfx##_##op(type i, pfx##_t * v)	=
-		\
- 		return;							\
- 	}								\
- 									\
--	loongson_llsc_mb();						\
- 	__asm__ __volatile__(						\
- 	"	.set	push					\n"	\
- 	"	.set	" MIPS_ISA_LEVEL "			\n"	\
-+	"	" __SYNC(full, loongson3_war) "			\n"	\
- 	"1:	" #ll "	%0, %1		# " #pfx "_" #op "	\n"	\
- 	"	" #asm_op " %0, %2				\n"	\
- 	"	" #sc "	%0, %1					\n"	\
-@@ -85,10 +86,10 @@ static __inline__ type pfx##_##op##_return_relaxed(type=
- i, pfx##_t * v)	\
- 		return result;						\
- 	}								\
- 									\
--	loongson_llsc_mb();						\
- 	__asm__ __volatile__(						\
- 	"	.set	push					\n"	\
- 	"	.set	" MIPS_ISA_LEVEL "			\n"	\
-+	"	" __SYNC(full, loongson3_war) "			\n"	\
- 	"1:	" #ll "	%1, %2		# " #pfx "_" #op "_return\n"	\
- 	"	" #asm_op " %0, %1, %3				\n"	\
- 	"	" #sc "	%0, %2					\n"	\
-@@ -117,10 +118,10 @@ static __inline__ type pfx##_fetch_##op##_relaxed(typ=
-e i, pfx##_t * v)	\
- 		return result;						\
- 	}								\
- 									\
--	loongson_llsc_mb();						\
- 	__asm__ __volatile__(						\
- 	"	.set	push					\n"	\
- 	"	.set	" MIPS_ISA_LEVEL "			\n"	\
-+	"	" __SYNC(full, loongson3_war) "			\n"	\
- 	"1:	" #ll "	%1, %2		# " #pfx "_fetch_" #op "\n"	\
- 	"	" #asm_op " %0, %1, %3				\n"	\
- 	"	" #sc "	%0, %2					\n"	\
-@@ -200,10 +201,10 @@ static __inline__ int atomic_sub_if_positive(int i, a=
-tomic_t * v)
+-	smp_mb__before_llsc();
++	smp_mb__before_atomic();
+=20
  	if (kernel_uses_llsc) {
  		int temp;
-=20
--		loongson_llsc_mb();
- 		__asm__ __volatile__(
- 		"	.set	push					\n"
- 		"	.set	"MIPS_ISA_LEVEL"			\n"
-+		"	" __SYNC(full, loongson3_war) "			\n"
- 		"1:	ll	%1, %2		# atomic_sub_if_positive\n"
- 		"	.set	pop					\n"
- 		"	subu	%0, %1, %3				\n"
-@@ -213,7 +214,7 @@ static __inline__ int atomic_sub_if_positive(int i, ato=
+@@ -237,7 +237,7 @@ static __inline__ int atomic_sub_if_positive(int i, ato=
 mic_t * v)
- 		"	.set	"MIPS_ISA_LEVEL"			\n"
- 		"	sc	%1, %2					\n"
- 		"\t" __SC_BEQZ "%1, 1b					\n"
--		"2:							\n"
-+		"2:	" __SYNC(full, loongson3_war) "			\n"
- 		"	.set	pop					\n"
- 		: "=3D&r" (result), "=3D&r" (temp),
- 		  "+" GCC_OFF_SMALL_ASM() (v->counter)
-@@ -229,7 +230,14 @@ static __inline__ int atomic_sub_if_positive(int i, at=
-omic_t * v)
- 		raw_local_irq_restore(flags);
- 	}
-=20
--	smp_llsc_mb();
-+	/*
-+	 * In the Loongson3 workaround case we already have a completion
-+	 * barrier at 2: above, which is needed due to the bltz that can branch
-+	 * to code outside of the LL/SC loop. As such, we don't need to emit
-+	 * another barrier here.
-+	 */
-+	if (!__SYNC_loongson3_war)
-+		smp_llsc_mb();
+ 	 * another barrier here.
+ 	 */
+ 	if (!__SYNC_loongson3_war)
+-		smp_llsc_mb();
++		smp_mb__after_atomic();
 =20
  	return result;
  }
