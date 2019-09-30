@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6E7C2A47
+	by mail.lfdr.de (Postfix) with ESMTP id BEF7CC2A48
 	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 01:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732253AbfI3XIV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Sep 2019 19:08:21 -0400
+        id S1732018AbfI3XIW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Sep 2019 19:08:22 -0400
 Received: from mail-eopbgr710105.outbound.protection.outlook.com ([40.107.71.105]:33459
         "EHLO NAM05-BY2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726425AbfI3XIU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 30 Sep 2019 19:08:20 -0400
+        id S1732246AbfI3XIV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 30 Sep 2019 19:08:21 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mU+jX0xITwclfsoMHiSvMaB4mrMvMm/PTdHgUSv5DtWt9oUdfU2PXR13dIViv2yHL+QUivpiPNyR9FoVimif8qiuU7MC/7ETAiTJaIdpkEAQtEZbKTR9PSq5qRZ0ng+bqo1SPHv8+M3CfSkbzvikzS1r34ro+LwoL5FzfsCDvIW3Wc7CmeUTZFFuwgoHEFuSVqGIJfbxvPrmnBCIFfBaqVsdsP166lESC6i5lOxbs1rzk28sET9ZaruYuI470xjqIw8LTCvxjefwzvCFUeXQzuxzoS/Hyy6G8V8RXum2zvmvENTXfNrYUAjYOrFgdK/r3SO19mLLn4HRvXNPzGP3aw==
+ b=WJQHidDChIUG5gBiaChfpjcOlaYKcVdJD30ebkbA5CZvr2nKUvsCN3bvADYIQLd0HkSBJCdMjm5nuFgmrmT3nbpk2x59tljRODazfT8JmTypfO/OT12MOdAXki7RLhPrKfHVmD8B7JIZUiL1JL2jT8bHtjb7L2AAJ+6yo98Ga7CeZGYEK4+kROgKF0s2DdqJEv5q9r4F4L9CjbjGTd9z6xaapNKWwPLPR9PbKE2HXKFy8N1CJHo3uIx2JaGdDBb6kV1DzR8CNzv+61I6ne8XXl5VzjvtdmYA/hQiDIbvvMQKj53yDbtfOYluttPZPVsMXnEBqE8JuZP5hpl8hVWvDg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/H7VFEgK5L2CSygsMdg95Dj2PplW8Nur2FDPObYfrHo=;
- b=eDhcJrRKx9xzXFeV/IBz6bBr4bm2T4twPrJYqzGGzq+RORq+/HENeNUqZnGLkW/l1k9OO/nBPHoEDsBOt3qr9o2ntuZWlpvOX13Vm8WQmVBloc7vG/Wb10+YqkYUKiEHw+WpfCU5qedApw1ZSSksLL7ctE9GJ04t0tfyFRkBph6HeyWYVLL7CODiPk3CMiE3Ag+ex8RU20yDainSyFr+TSTW8MWuCWO+DETiksWInvCQzvZERPDCxCG3J7sNjhWu+d8i5gYK6GL1SMmqP+9Mo/phfbI7uF0+n1bkxjAzLeX3TNOZD8ICQiPzxBdOPAlkrLFng2esZCgPacWA+1VuVQ==
+ bh=XlgXrBWp7RH//htYCKYl6gXUEMhb1+7hgVOI3Od5iVs=;
+ b=oXSs2FHtsa1Zu/5TNp3+CBFpItPfBtpRq41xmvFM3iYWiF5T2cucvxgNAhYvRCeD7oF+6+TBIeUZNQMpEFsUpkbgKzPCK2GYBMj3+OQcGdGFQDEksESq0ZOoirlOCI9QdUndK66Vea21goTVcyKeI+kVvySb4d+S1f4YeVHh9jp8opCvc3Lr4z/MfXOIQqjk03JGTtmJtQvFPGXiQ4f6Ju9DXbd99Hx5lo9D/iqMAnYs/W9AWWdZN7EwuOpEICqFNKb8ssMx//O6msBAy1WIV8r0gdN9poE6RfTgz+53T6NJi1EbcgLV+KWBa7qJ5GY4h7hCZ01R+G+9/tU86vMQkg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/H7VFEgK5L2CSygsMdg95Dj2PplW8Nur2FDPObYfrHo=;
- b=R16BjZmwbgMC/Uh/F3bU+4gHn5PI/OutYC3fd0XTKn9Y3yT+k25ObE4vKqDxlpRzS9iHCafCCB1ju8uX4N3ADsWU2nAniCXWSzOqR5XW2RTD95lAfrTfw6BXot6rbegw/vxWJCACT7YFI2+b06vCIXau8VB5DKjHqEx2bFsgntg=
+ bh=XlgXrBWp7RH//htYCKYl6gXUEMhb1+7hgVOI3Od5iVs=;
+ b=u2ykeHkt4pQrkFOouKwyWB4gkiZVQui4U4WqziPfGqYYa3Hda/SxrPJtZkVYBHkAX/LKYusfjTb7vzRY1ImCTwlkMhhbdwkjwVksIKaVFEWQLDPPmSm8hzD0lzKBr9tTnw2GseQMt8oadpuwfnvkZLvlHDzddjxsVIB3yP0j2pk=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
  MWHPR2201MB1709.namprd22.prod.outlook.com (10.164.206.151) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -41,11 +41,11 @@ CC:     Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Paul Burton <pburton@wavecomp.com>
-Subject: [PATCH 04/37] MIPS: barrier: Clean up rmb() & wmb() definitions
-Thread-Topic: [PATCH 04/37] MIPS: barrier: Clean up rmb() & wmb() definitions
-Thread-Index: AQHVd+Py/lmEsltRXUiYsxgmO+g4aA==
-Date:   Mon, 30 Sep 2019 23:08:17 +0000
-Message-ID: <20190930230806.2940505-5-paul.burton@mips.com>
+Subject: [PATCH 05/37] MIPS: barrier: Clean up __smp_mb() definition
+Thread-Topic: [PATCH 05/37] MIPS: barrier: Clean up __smp_mb() definition
+Thread-Index: AQHVd+PyjeAR6CxZcka5NocqscHcuA==
+Date:   Mon, 30 Sep 2019 23:08:18 +0000
+Message-ID: <20190930230806.2940505-6-paul.burton@mips.com>
 References: <20190930230806.2940505-1-paul.burton@mips.com>
 In-Reply-To: <20190930230806.2940505-1-paul.burton@mips.com>
 Accept-Language: en-US
@@ -61,118 +61,74 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.23.0
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9d223693-1744-4959-7ac6-08d745fb1469
+x-ms-office365-filtering-correlation-id: 2b6e6f17-c0dc-41a9-420d-08d745fb14db
 x-ms-traffictypediagnostic: MWHPR2201MB1709:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB17094BE68382F1440E3C4544C1820@MWHPR2201MB1709.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
+x-microsoft-antispam-prvs: <MWHPR2201MB17096E8AAA4F519BB7E604C9C1820@MWHPR2201MB1709.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
 x-forefront-prvs: 01762B0D64
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(39840400004)(376002)(346002)(396003)(136003)(199004)(189003)(2351001)(66476007)(66556008)(66946007)(64756008)(66446008)(107886003)(99286004)(6486002)(52116002)(5640700003)(6436002)(25786009)(478600001)(14454004)(76176011)(26005)(6512007)(5660300002)(71200400001)(71190400001)(1076003)(4326008)(186003)(42882007)(6506007)(11346002)(256004)(486006)(44832011)(476003)(2616005)(446003)(54906003)(316002)(7736002)(305945005)(6116002)(2906002)(3846002)(81156014)(81166006)(102836004)(50226002)(6916009)(386003)(36756003)(8676002)(8936002)(66066001)(2501003);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1709;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(39840400004)(376002)(346002)(396003)(136003)(199004)(189003)(2351001)(66476007)(66556008)(66946007)(64756008)(66446008)(107886003)(99286004)(6486002)(52116002)(5640700003)(6436002)(25786009)(478600001)(14454004)(76176011)(26005)(6512007)(5660300002)(71200400001)(71190400001)(1076003)(4326008)(186003)(42882007)(6506007)(11346002)(256004)(486006)(44832011)(476003)(2616005)(14444005)(446003)(54906003)(316002)(7736002)(305945005)(6116002)(2906002)(3846002)(81156014)(81166006)(102836004)(50226002)(6916009)(386003)(36756003)(8676002)(8936002)(66066001)(2501003);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1709;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: j0OFVz7zG0ZIRqUHdOzZwnGQEMtoyStNLf670w+gigN3lDWs4zFQcrX0mLaRogtqFxfmQzsvzs8wEpe6ZSMSoq+Gyd8pVoYXLGFemvgyp51Bw3bWQLtWu5mJWvCqhHi+Iyi7W4p3qagDb7f1PHCeiJGOw/CcS7CTzUjgp514EjwMaw7xJL022wL0YxZGwLol64BIz21QnPsfI7fglFePUOIbloBUzjMXHc3NeSW4/y/pOJk/owpSGZoM0UoH6lOXzGf51EQMfKITrLl1o3JhKr4v23Jq2JTTw38eJIC7Vu48WsTc1phyDh7DbXwRjg93Ewg2UEVIuZ5Je3BFWwfxdWH2FYF0GUv2r68h9aGqbaEYWG85Hu/hH6BM0ceKOsmfK9bsm6oi1mDP3zjQBN5khcgTBFWu/KzaZ0F3uKwcaX8=
+x-microsoft-antispam-message-info: SAj3usvMsSOu87ekDeX6Sdq0ZbGhmhZvJ6LNtH6XOZ58vbkRVJq6FVp7KBl6DOUEuy69fnzJQno7SCaAhIFk+nNIZmhdw0rMol1DvbqryI+pKa/dWOhqS5bUTGgzKX2dUTCx8RFI/8XZ/rsBexaeAsEyVWA/TohNKAH79SSo5dzpSZ1V6/5cVi9AHD/VWHUMl2YpZT2opLviPDuuOAKcmiBYTsDChtlxUGu+Vw32mRaXGf1bjg2fgoAK3iGbrIeKjpelFI51F9raSwpbGQiaji6QiD6KAfxsf4lTU4WJnKQq4xc3w0HkbjeC/Z9KWjW68vm1qkjwp13Rorq6Wn8z8MYMJDtIQXPraFBfcffufgRYh9N/FoS8efaUxiiRcWM1lpHlL3gtci8t07W757i5sWbzMllz65pI59X21ytTp+w=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d223693-1744-4959-7ac6-08d745fb1469
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2019 23:08:17.9208
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b6e6f17-c0dc-41a9-420d-08d745fb14db
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2019 23:08:18.6925
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zUKSsOeWCvoxqwzKRucMT9uDJa7i+ytFB/mglfqLyqdNQfi9z1uuLJbv2GZjW56RNNfLdwVkjexFb4ShMM+9Hw==
+X-MS-Exchange-CrossTenant-userprincipalname: L7FwRa+qfrSFtMVAx7TKH24Sx0D1FrkWZs8Es6HO+GieoEUd82EN63kCiqnvuhsaZBZuIb4+R958ERlfw+pYmw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1709
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Simplify our definitions of rmb() & wmb() using the new __SYNC()
-infrastructure.
+We #ifdef on Cavium Octeon CPUs, but emit the same sync instruction in
+both cases. Remove the #ifdef & simply expand to the __sync() macro.
 
-The fast_rmb() & fast_wmb() macros are removed, since they only provided
-a level of indirection that made the code less readable & weren't
-directly used anywhere in the kernel tree.
-
-The Octeon #ifdef'ery is removed, since the "syncw" instruction
-previously used is merely an alias for "sync 4" which __SYNC() will emit
-for the wmb sync type when the kernel is configured for an Octeon CPU.
-Similarly __SYNC() will emit nothing for the rmb sync type in Octeon
-configurations.
+Whilst here indent the strong ordering case definitions to match the
+indentation of the weak ordering ones, helping readability.
 
 Signed-off-by: Paul Burton <paul.burton@mips.com>
 ---
 
- arch/mips/include/asm/barrier.h | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ arch/mips/include/asm/barrier.h | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
 diff --git a/arch/mips/include/asm/barrier.h b/arch/mips/include/asm/barrie=
 r.h
-index 5ad39bfd3b6d..f36cab87cfde 100644
+index f36cab87cfde..8a5abc1c85a6 100644
 --- a/arch/mips/include/asm/barrier.h
 +++ b/arch/mips/include/asm/barrier.h
-@@ -26,6 +26,18 @@
- #define __sync()	do { } while(0)
- #endif
-=20
-+static inline void rmb(void)
-+{
-+	asm volatile(__SYNC(rmb, always) ::: "memory");
-+}
-+#define rmb rmb
-+
-+static inline void wmb(void)
-+{
-+	asm volatile(__SYNC(wmb, always) ::: "memory");
-+}
-+#define wmb wmb
-+
- #define __fast_iob()				\
- 	__asm__ __volatile__(			\
- 		".set	push\n\t"		\
-@@ -37,16 +49,9 @@
- 		: "m" (*(int *)CKSEG1)		\
- 		: "memory")
- #ifdef CONFIG_CPU_CAVIUM_OCTEON
--# define OCTEON_SYNCW_STR	".set push\n.set arch=3Docteon\nsyncw\nsyncw\n.s=
-et pop\n"
--# define __syncw()	__asm__ __volatile__(OCTEON_SYNCW_STR : : : "memory")
--
--# define fast_wmb()	__syncw()
--# define fast_rmb()	barrier()
- # define fast_mb()	__sync()
- # define fast_iob()	do { } while (0)
- #else /* ! CONFIG_CPU_CAVIUM_OCTEON */
--# define fast_wmb()	__sync()
--# define fast_rmb()	__sync()
- # define fast_mb()	__sync()
- # ifdef CONFIG_SGI_IP28
- #  define fast_iob()				\
-@@ -83,19 +88,14 @@
-=20
+@@ -89,17 +89,13 @@ static inline void wmb(void)
  #endif /* !CONFIG_CPU_HAS_WB */
 =20
--#define wmb()		fast_wmb()
--#define rmb()		fast_rmb()
--
  #if defined(CONFIG_WEAK_ORDERING)
- # ifdef CONFIG_CPU_CAVIUM_OCTEON
- #  define __smp_mb()	__sync()
--#  define __smp_rmb()	barrier()
--#  define __smp_wmb()	__syncw()
- # else
- #  define __smp_mb()	__asm__ __volatile__("sync" : : :"memory")
--#  define __smp_rmb()	__asm__ __volatile__("sync" : : :"memory")
--#  define __smp_wmb()	__asm__ __volatile__("sync" : : :"memory")
- # endif
-+# define __smp_rmb()	rmb()
-+# define __smp_wmb()	wmb()
+-# ifdef CONFIG_CPU_CAVIUM_OCTEON
+-#  define __smp_mb()	__sync()
+-# else
+-#  define __smp_mb()	__asm__ __volatile__("sync" : : :"memory")
+-# endif
++# define __smp_mb()	__sync()
+ # define __smp_rmb()	rmb()
+ # define __smp_wmb()	wmb()
  #else
- #define __smp_mb()	barrier()
- #define __smp_rmb()	barrier()
+-#define __smp_mb()	barrier()
+-#define __smp_rmb()	barrier()
+-#define __smp_wmb()	barrier()
++# define __smp_mb()	barrier()
++# define __smp_rmb()	barrier()
++# define __smp_wmb()	barrier()
+ #endif
+=20
+ /*
 --=20
 2.23.0
 
