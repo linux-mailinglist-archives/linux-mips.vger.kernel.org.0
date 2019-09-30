@@ -2,172 +2,163 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 878CCC29A7
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 00:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46883C29CB
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 00:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726350AbfI3WfA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Sep 2019 18:35:00 -0400
-Received: from mail-eopbgr730098.outbound.protection.outlook.com ([40.107.73.98]:17664
-        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727681AbfI3WfA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 30 Sep 2019 18:35:00 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GSvIt3aUl41Msh1uLvggKKIHpVfem6ot6XyQNLM4wjgYIhcwHNmAm7Sph9pvPvF2kJkF2cjVI+ok8oaKdXaA/R629nkkXnVOGM+AnMJCJNZPugoV8Z2E2u17nVRiWeHjPIsFE/FHX4QuXNnaTlbMFidbuYeLQ/YMc95hK1fn4PUcmJjvtCGYTi+zMWwk0sd+mFuISFL1h8thI2QdCIJwuRh/PKjSTuMRCJES4LgfG19ylHwB/MknMJfua+ajTye4Z50We69bIB33vk9TrUPL/7OArNPpoQZ5xSMh5qOdIwrAVz+yyd42KTkHh/8reyVQke+UdmV61xBAN474M1YAjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bzeG928AODIeWhB8wtVcFVETkxuUUIzTgdl7CfJllPw=;
- b=S0UVtvk3dD1BzVkU73myYm3jUjRzIxcEpcryfy9hUggOMsbRaOSZKGzt6hB77OYpLmLyK9xEKPqO+wnzyN2rRcOZpUVk6lPORV1kPBOw87ZeWOU0lHUOkz65scVmJlRvu/B6+upPh7xLl7QAc8qj0Z2pVtS+vN+Fr3UIHVPW9XiILcMQWalgwVeopkYp7+v/7OMnZ0F4OtBjMzVexu3CPeNLQNiNd2xOJXrUTebrmkIZcYIAYv/kCo3HwrA2XOdxdaZ/H51UxHLGRTDzZkbz/nBytN2LWLHXq74M02aOBArYhbkz5rBcUuL69KXUXK1BtH5kCqtL2I4sXQela4BtKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
- dkim=pass header.d=mips.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bzeG928AODIeWhB8wtVcFVETkxuUUIzTgdl7CfJllPw=;
- b=Y+pXLlAMfVLYliF6xgj6/MIsXAeAW1Necupcxt+3BcfkC7+WeL0u66SW3dtc0UbqLxDAYXmnL70IlJGviRNfoDIrVrF18MJLGx8nAcsA2lRFaVVqyYYgvBYnaRp1EGSaAqFcnd0NzDqY88lXY+y6T2EW3j6IXyQy2DRNw3XQKHY=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1088.namprd22.prod.outlook.com (10.174.169.150) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.20; Mon, 30 Sep 2019 22:34:53 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::498b:c2cd:e816:1481]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::498b:c2cd:e816:1481%2]) with mapi id 15.20.2305.017; Mon, 30 Sep 2019
- 22:34:53 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: cpu-bugs64: Mark inline functions as
- __always_inline
-Thread-Topic: [PATCH] MIPS: cpu-bugs64: Mark inline functions as
- __always_inline
-Thread-Index: AQHVd99HhgQiWwNKWUyizdhbOnGX7w==
-Date:   Mon, 30 Sep 2019 22:34:53 +0000
-Message-ID: <20190930223452.ouznftjxryfp5zux@pburton-laptop>
-References: <20190927053339.11866-1-jiaxun.yang@flygoat.com>
-In-Reply-To: <20190927053339.11866-1-jiaxun.yang@flygoat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR05CA0018.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::31) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:18::12)
-user-agent: NeoMutt/20180716
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [12.94.197.246]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 98464d13-4e8e-4389-5982-08d745f6699a
-x-ms-traffictypediagnostic: MWHPR2201MB1088:
-x-microsoft-antispam-prvs: <MWHPR2201MB1088E2307769B80349B28D60C1820@MWHPR2201MB1088.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 01762B0D64
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(346002)(376002)(136003)(366004)(39850400004)(396003)(199004)(189003)(64756008)(66556008)(66476007)(33716001)(66446008)(5660300002)(102836004)(71190400001)(478600001)(66946007)(6436002)(71200400001)(6916009)(52116002)(25786009)(99286004)(1076003)(386003)(76176011)(6506007)(81156014)(8676002)(14454004)(3846002)(8936002)(6116002)(26005)(186003)(229853002)(7736002)(11346002)(446003)(42882007)(316002)(2906002)(6246003)(81166006)(6486002)(4326008)(256004)(305945005)(58126008)(9686003)(476003)(66066001)(6512007)(486006)(44832011);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1088;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MIuu9cqn76XbKi2CrgRWGkPS6L2VU0qlxayxu3OGd4Pw1hBoIwmjgXDPLNEbfjV+IhOgwXjY741bxCNp/OTxTxF4QEUI2Soj1bnBJBzmJeJPWZKVoGCBStUrItYp56LBUMhVw5DE+kcR2TWVmdlvr/n8+Dg7raRCCUD67pv3ywIPO/v+WSPJGDpIr/boKQFIF2leCxA+cowuEr/5aggE3hFtOC4FogIu3zqaNWx3vTckrMpzwW7T73L2MpXyTdwcFmazXI5N89gabT0n9JPDPTluPqf6VXqeQKRg2MPcxdvbuFDFzTUT1bcN1oNt3bk+bIXr84xpMamFwef6bKLd7hFBBTSwrHr0+j32GKL73enpItPodjiEO+bfFnbdz1eYJYNoH9lRFKskeM6ptLhO8z83HdfAzJv7E7rbnq2PJ8c=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <38B23DEA41F84A41A9E7D57D0146D3B3@namprd22.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1729109AbfI3Wmj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Sep 2019 18:42:39 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:20990 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726425AbfI3Wmj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 30 Sep 2019 18:42:39 -0400
+Received: from smtp2.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id 83B48A1A1C;
+        Tue,  1 Oct 2019 00:42:30 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.240])
+        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
+        with ESMTP id i0Vf_5Qcnyhu; Tue,  1 Oct 2019 00:42:25 +0200 (CEST)
+Date:   Tue, 1 Oct 2019 08:41:59 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@01.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-ia64@vger.kernel.org, linux-sh@vger.kernel.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        sparclinux@vger.kernel.org, Jiri Olsa <jolsa@redhat.com>,
+        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
+        Tycho Andersen <tycho@tycho.ws>, Aleksa Sarai <asarai@suse.de>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linuxppc-dev@lists.ozlabs.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        David Drysdale <drysdale@google.com>,
+        Christian Brauner <christian@brauner.io>,
+        libc-alpha@sourceware.org, linux-parisc@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-api@vger.kernel.org,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-alpha@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org
+Subject: Re: [PATCH v13 7/9] open: openat2(2) syscall
+Message-ID: <20190930224159.gp2hqm57qxlm2eat@yavin.dot.cyphar.com>
+References: <20190930183316.10190-8-cyphar@cyphar.com>
+ <201910010404.WLqR1mUW%lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98464d13-4e8e-4389-5982-08d745f6699a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2019 22:34:53.4587
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9gMghwc2sSa5aT5Jv4NpLSkQwKUhYnk61v1bw/cM+G+BL5HUQywjjJeQvRS5Hhbunp0L1oEgwF9duYWLEkQiVw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1088
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="t4elbyhlilsmpd4b"
+Content-Disposition: inline
+In-Reply-To: <201910010404.WLqR1mUW%lkp@intel.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jiaxun,
 
-On Fri, Sep 27, 2019 at 01:33:39PM +0800, Jiaxun Yang wrote:
-> Commit ac7c3e4ff401 ("compiler: enable CONFIG_OPTIMIZE_INLINING forcibly"=
-)
-> allows compiler to uninline functions marked as 'inline'. Leading to sect=
-ion
-> mismatch in this case.
+--t4elbyhlilsmpd4b
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 2019-10-01, kbuild test robot <lkp@intel.com> wrote:
+> Hi Aleksa,
 >=20
-> Since we're using const variables to pass assembly flags, 'inline's can't
-> be dropped. So we simply mark them as __always_inline.
+> Thank you for the patch! Yet something to improve:
 >=20
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: Paul Burton <paul.burton@mips.com>
-> Cc: linux-mips@vger.kernel.org
+> [auto build test ERROR on linus/master]
+> [cannot apply to v5.4-rc1 next-20190930]
+> [if your patch is applied to the wrong git tree, please drop us a note to=
+ help
+> improve the system. BTW, we also suggest to use '--base' option to specif=
+y the
+> base tree in git format-patch, please see https://stackoverflow.com/a/374=
+06982]
+
+I forgot to include --base to signify this series depends on the
+copy_struct_from_user() one. I'll include it in the next version.
+
+> url:    https://github.com/0day-ci/linux/commits/Aleksa-Sarai/namei-opena=
+t2-2-path-resolution-restrictions/20191001-025628
+> config: i386-defconfig (attached as .config)
+> compiler: gcc-7 (Debian 7.4.0-13) 7.4.0
+> reproduce:
+>         # save the attached .config to linux build tree
+>         make ARCH=3Di386=20
+>=20
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+>=20
+> All errors (new ones prefixed by >>):
+>=20
+>    fs/open.c: In function '__do_sys_openat2':
+> >> fs/open.c:1173:8: error: implicit declaration of function 'copy_struct=
+_from_user'; did you mean 'copy_siginfo_from_user'? [-Werror=3Dimplicit-fun=
+ction-declaration]
+>      err =3D copy_struct_from_user(&tmp, sizeof(tmp), how, usize);
+>            ^~~~~~~~~~~~~~~~~~~~~
+>            copy_siginfo_from_user
+>    cc1: some warnings being treated as errors
+>=20
+> vim +1173 fs/open.c
+>=20
+>   1163=09
+>   1164	SYSCALL_DEFINE4(openat2, int, dfd, const char __user *, filename,
+>   1165			const struct open_how __user *, how, size_t, usize)
+>   1166	{
+>   1167		int err;
+>   1168		struct open_how tmp;
+>   1169=09
+>   1170		if (unlikely(usize < OPEN_HOW_SIZE_VER0))
+>   1171			return -EINVAL;
+>   1172=09
+> > 1173		err =3D copy_struct_from_user(&tmp, sizeof(tmp), how, usize);
+>   1174		if (err)
+>   1175			return err;
+>   1176=09
+>   1177		if (force_o_largefile())
+>   1178			tmp.flags |=3D O_LARGEFILE;
+>   1179=09
+>   1180		return do_sys_open(dfd, filename, &tmp);
+>   1181	}
+>   1182=09
+>=20
 > ---
->  arch/mips/kernel/cpu-bugs64.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/arch/mips/kernel/cpu-bugs64.c b/arch/mips/kernel/cpu-bugs64.=
-c
-> index fa62cd1dff93..93d23232357c 100644
-> --- a/arch/mips/kernel/cpu-bugs64.c
-> +++ b/arch/mips/kernel/cpu-bugs64.c
-> @@ -24,7 +24,7 @@ static char r4kwar[] __initdata =3D
->  static char daddiwar[] __initdata =3D
->  	"Enable CPU_DADDI_WORKAROUNDS to rectify.";
-> =20
-> -static inline void align_mod(const int align, const int mod)
-> +static __always_inline void align_mod(const int align, const int mod)
->  {
->  	asm volatile(
->  		".set	push\n\t"
-> @@ -113,7 +113,7 @@ static __always_inline void mult_sh_align_mod(long *v=
-1, long *v2, long *w,
->  	*w =3D lw;
->  }
-> =20
-> -static inline void check_mult_sh(void)
-> +static __always_inline void check_mult_sh(void)
->  {
->  	long v1[8], v2[8], w[8];
->  	int bug, fix, i;
+> 0-DAY kernel test infrastructure                Open Source Technology Ce=
+nter
+> https://lists.01.org/pipermail/kbuild-all                   Intel Corpora=
+tion
 
-So far so good, I see align_mod() uses arguments in inline asm &
-check_mult_sh() makes use of it (via mult_sh_align_mod() which is
-already __always_inline).
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
 
-I'd prefer that we add the __init annotation too though, even if all
-it's doing is making it clear to human readers when this code can be
-used.
+--t4elbyhlilsmpd4b
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> @@ -176,7 +176,7 @@ asmlinkage void __init do_daddi_ov(struct pt_regs *re=
-gs)
->  	exception_exit(prev_state);
->  }
-> =20
-> -static inline void check_daddi(void)
-> +static __always_inline void check_daddi(void)
->  {
->  	extern asmlinkage void handle_daddi_ov(void);
->  	unsigned long flags;
-> @@ -242,7 +242,7 @@ static inline void check_daddi(void)
-> =20
->  int daddiu_bug	=3D IS_ENABLED(CONFIG_CPU_MIPSR6) ? 0 : -1;
-> =20
-> -static inline void check_daddiu(void)
-> +static __always_inline void check_daddiu(void)
->  {
->  	long v, w, tmp;
-> =20
+-----BEGIN PGP SIGNATURE-----
 
-I'm not seeing a reason for always inlining check_daddi() or
-check_daddiu() though - neither one appears to use arguments as inline
-asm immediates, so I'd prefer that we just mark them with __init & let
-the compiler decide whether to inline.
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXZKEtAAKCRCdlLljIbnQ
+EmxJAQDTSUj176CMMvs56b+zPL9VCZGAIFkQ+0fXCW8y6GyasAD/d8NBlZ2zmc9b
+DdtZcltEmeWc0Rd4LR1wAUrHajuvTAU=
+=sSPC
+-----END PGP SIGNATURE-----
 
-Does that sound good to you?
-
-Thanks,
-    Paul
+--t4elbyhlilsmpd4b--
