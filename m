@@ -2,50 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F30EC4337
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 23:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9747FC4334
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 23:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728544AbfJAVzC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Oct 2019 17:55:02 -0400
-Received: from mail-eopbgr780114.outbound.protection.outlook.com ([40.107.78.114]:49402
-        "EHLO NAM03-BY2-obe.outbound.protection.outlook.com"
+        id S1728190AbfJAVxh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Oct 2019 17:53:37 -0400
+Received: from mail-eopbgr730113.outbound.protection.outlook.com ([40.107.73.113]:17171
+        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728122AbfJAVx3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 1 Oct 2019 17:53:29 -0400
+        id S1728177AbfJAVxg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 1 Oct 2019 17:53:36 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z5VXRcMMj+vhzrIbeaty0ivIBBqfwhJxUgaNnbeKDitZ/k0NCS3MPLv/nwToBdWE6GRCvA9MZlaxZLtEKPbcDgoajGv+LkTnbeJ+wpCPv/0JN1O0oN0xwN2eyXEIb1moAAM06mphSf/wuSkwEcSjweKV9wFtlen1Z/ZiSgiOOoKaud/BqDNv5uWSBncJJoX17aYQ+JC5R+vSKDTzc4x6vjBits3m3UL1bQ81SudEz84hUMwJisPBe9SvVGO8CJKVYSGqss06uwfIII5FeRFNGOWjgqDWTTwXmw6k6QvprXqUOyOnrK+SIMXCwsfzK+rgs8YmKAFUj7KPOdEeGkhaAw==
+ b=RJCab2LgaLrvJyYrUnFOSa9RcFME5qBcRP6NKxM5c/jx+DVUIOaNfX8oaLTah2KWiom/1f9duZhf4Wu4tMu2zxEc1FsWGgIJOVqOFOgp0ZSZj5T1dZPKkpOMkaMMUOM57NFrvwpXA3SVTJm+ngMtv7QO6AW6kXrt7UCr0etDwzIPddjkqBVjy1/CJoKLEYV9c/o0TZe934oOGxiHj1fJX8SId7EwtiOoz4kwf+hxiAlbQG5hSs4iIyNupIyFUZrMXKA60kKNX6mSiikNB4kXV5r33gbTmIIzVJn1b8Hl6sFrGv8he+Mt8EiaHfzculKabdDcZKWhfU3mj5ILeCduAA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VVeqRdQx8uxlqlfyAFwW6/7HHFA0hQKyR9N3fC+u/Cg=;
- b=DmkVAfyNjs3S1LUGJcfFRLrFws4wQU3SZqjKA17BcPpvDFMO6v7sZToP+LaIreJl5JGjEd8TdNqGATd6rEsIBier6AbF2c1DYi8Fm7nqoCzYT/KTYbhDMa5srwXrD4eh7uvgHp3BAO/O5FluQTiAv0HmG0LO33Q5q1/kBLrEsnR6z5ARET5vwMiqAhC6j3uXw6KcpbMtVv0jXOYBl9Gu7h6YhjQ8uvJpGRjE3apBIqDX1RQ6u9ZKmH0FfOcrrApO+M3lPIxUp3AzIepcJ5AD5DlO5bQ58FN9hBljZD3sOvuJC6NTJUA7l5T5pSes2xRqYTp/a7ZqEmffSm25j5zu0g==
+ bh=wfQFj92XwiM5Yll6ITwBRnUHmK79aZPRXQ36V53lwPs=;
+ b=afQ8TXxmy/FqSd5so196E4HVcUeiyt9jiacGyT5Py7251Uu9Rk/IAIBSANQz4l2joyiEbZbf5wpMKJ++yRzZ2a0V5oEYGuia2jxPxEIPn15A6WwXkQtZw4Kjp/WHdRU7tUhKkt4qZhhYoWIO+EPrgSw4NTM38zEaF5ml1LyPY/hxLjNIFw1cn98CDxt2A/tYUvmPdK425uKJetDBOveVM4Ugjuw0JtK2RK7QSquHdyGVMqVHpfU9gxFwiTMOsEgCYucuz8phkDuK2yovNhyOLDsAHk/VwoLLPDNFhZKiHXDw0Cm/NzHs7MW6YY0klIhstQC9L3zp3PJQf4jRWW0MtQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VVeqRdQx8uxlqlfyAFwW6/7HHFA0hQKyR9N3fC+u/Cg=;
- b=LiXFfHKTf/c7u6gL7HJ2fjVyuL1nnTpOGgzkyxFavQS1I7Npz112SW/B5TPjMHs8B+4V9jHagG582mBrUcPJQXBOZFN/ezM1FzaTh+TBV0LJVLV/7tg8NAulaV0TJvKmN/uR3Zo1UAtu99XkjqVyvnGhT5XNeRJWU6t8ojmFzUY=
+ bh=wfQFj92XwiM5Yll6ITwBRnUHmK79aZPRXQ36V53lwPs=;
+ b=o42ZpeGPUWIHtUH6cCDu9WTgYZjE/OdtdRPUqDUQoAQ9rh54kTstPBNf+xt4qtoqBVpKRUp1TIFfCpr29yFpOrYucYepOWpRBLkhdWvze5yy14FUl+2Qa0SWdycOYiyBhpIJFzSN+z9ZXBCkpkPhApkz/Cge6KMGkMr/wif5D/E=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1213.namprd22.prod.outlook.com (10.172.61.148) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.20; Tue, 1 Oct 2019 21:53:27 +0000
+ MWHPR2201MB1439.namprd22.prod.outlook.com (10.174.169.166) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2305.20; Tue, 1 Oct 2019 21:53:29 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481%2]) with mapi id 15.20.2305.022; Tue, 1 Oct 2019
- 21:53:27 +0000
+ 21:53:29 +0000
 From:   Paul Burton <paul.burton@mips.com>
 To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
 CC:     Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Paul Burton <pburton@wavecomp.com>
-Subject: [PATCH v2 18/36] MIPS: bitops: Use MIPS_ISA_REV, not #ifdefs
-Thread-Topic: [PATCH v2 18/36] MIPS: bitops: Use MIPS_ISA_REV, not #ifdefs
-Thread-Index: AQHVeKKngmDrZVAa20Gg4WzhINML+w==
-Date:   Tue, 1 Oct 2019 21:53:27 +0000
-Message-ID: <20191001215249.4157062-19-paul.burton@mips.com>
+Subject: [PATCH v2 19/36] MIPS: bitops: ins start position is always an
+ immediate
+Thread-Topic: [PATCH v2 19/36] MIPS: bitops: ins start position is always an
+ immediate
+Thread-Index: AQHVeKKpGFkNJ1wM/EuB/qgdkW07aw==
+Date:   Tue, 1 Oct 2019 21:53:29 +0000
+Message-ID: <20191001215249.4157062-20-paul.burton@mips.com>
 References: <20191001215249.4157062-1-paul.burton@mips.com>
 In-Reply-To: <20191001215249.4157062-1-paul.burton@mips.com>
 Accept-Language: en-US
@@ -61,120 +63,83 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.23.0
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fa24ba13-7f02-4d32-56f4-08d746b9ca3d
-x-ms-traffictypediagnostic: MWHPR2201MB1213:
+x-ms-office365-filtering-correlation-id: 468e0ca3-ee65-49c3-4969-08d746b9cb81
+x-ms-traffictypediagnostic: MWHPR2201MB1439:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB1213824DDD1F04A0AF42298DC19D0@MWHPR2201MB1213.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3044;
+x-microsoft-antispam-prvs: <MWHPR2201MB14399608912C26D85978EA69C19D0@MWHPR2201MB1439.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2887;
 x-forefront-prvs: 0177904E6B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(396003)(366004)(376002)(136003)(39840400004)(199004)(189003)(6512007)(5640700003)(54906003)(2501003)(3846002)(6486002)(5660300002)(6436002)(66066001)(6116002)(1076003)(50226002)(2906002)(76176011)(52116002)(6506007)(107886003)(2351001)(4326008)(6916009)(102836004)(71190400001)(8936002)(386003)(25786009)(36756003)(44832011)(8676002)(71200400001)(81166006)(81156014)(186003)(256004)(11346002)(14444005)(2616005)(7736002)(316002)(42882007)(305945005)(99286004)(66446008)(64756008)(66556008)(478600001)(66946007)(66476007)(486006)(446003)(476003)(14454004)(26005);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1213;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(39840400004)(366004)(346002)(136003)(376002)(199004)(189003)(186003)(11346002)(6512007)(1076003)(486006)(66066001)(26005)(6486002)(316002)(2906002)(5640700003)(6436002)(44832011)(42882007)(25786009)(446003)(6916009)(386003)(6506007)(76176011)(478600001)(52116002)(2616005)(102836004)(476003)(5660300002)(305945005)(64756008)(66446008)(2351001)(7736002)(99286004)(54906003)(14454004)(71190400001)(71200400001)(66946007)(66556008)(66476007)(36756003)(3846002)(6116002)(107886003)(4326008)(50226002)(81166006)(81156014)(8676002)(2501003)(8936002)(256004)(14773001);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1439;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SfrP+nZnYz4gpBrMwLAlWVyW3i+IXquODu17ejqBVmc1L/ep8b2Bqn/DaqyXr0c2/Z9iIRBOxSed/ZvSEH5zVHO+khgBtVm3A5IeAhyJ5UMYX6Y6b7qD2e+Qms8ZptIOvVA6bLMwwNxD0GC8QNT2zhQ+E+FjgXVjOToxSzWO1zs1tPMu5f/ONZUeUkJbCOhu0gH2NODyBBgb2MGR/FGTBB0AkqJeW6CyPH+fOKOVhoKhG3aCTOXOzfqCRDqpB09QDH6ZOegGTQ/NAw/04mtkn47zfGRFgDCfZ1hNceLRtntCbtakbjQSm93IrjTgTgLzoVrcOB5FYbyEMcdtnwNp88muav5NFIrh9upv7Q45aNC2mS/iJJcrulD52WrPwbRI6uTS9Puqpl1Pbp1KwIzPP4gxIrpvGE5LVVGYaKpIMqk=
+x-microsoft-antispam-message-info: c6ks9cX5dYcPxi7uPV1n4z1Wm5ToFFHkt2GHB7u935/bVkaYx9XI7oecMEACZCaKUO04Hcg+MXKnoJQ2UA4TP/NPQ3eyZamjRD7bMY+OvVTenrSSgRMcMPrJgg6lSGelRI61VdJ8GM7yKGhduFHccV7NsODXxiq+R4Ic8mhZkgN4zw88BZ/WiW29T305Vtmrmlg/sObDsKFrGJBwfl79mOQSudIjDt6YWzM+07BVYRmkBdZEeYg8j6o/wz3T19PgEi66yem3pR0b/7GjIrr4Rz55CB1Hur+9XB44yS7s0Bhk4zvoNSEpt70Eklv3tZMt3u667YuRBUeBhR4ajhSShH+G2BwLqmDPzP7pwzWoTwGVsh8/7YpO8niSBpQfpUUYF92DcTaf+2vxZDbSkfM1XyU3Id/E2pKxjdBvTpG5RyQ=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa24ba13-7f02-4d32-56f4-08d746b9ca3d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2019 21:53:27.3745
+X-MS-Exchange-CrossTenant-Network-Message-Id: 468e0ca3-ee65-49c3-4969-08d746b9cb81
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2019 21:53:29.4475
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 54EYtv8P97pQ41RHp63z20ChkRbdI6DCw4a5rohz6lbmpBk8NykOz56046eXC2fZOFdwxUZjIAXUDq/8F0pNpQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1213
+X-MS-Exchange-CrossTenant-userprincipalname: OX7LwPCZnvbTKg2EQrBMW4QMfNLCw3lQ3TirWoN4tqszFt5imivMI69r9VDmmkaop6kqyT26RnfEJqi0DV08cQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1439
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Rather than #ifdef on CONFIG_CPU_* to determine whether the ins
-instruction is supported we can simply check MIPS_ISA_REV to discover
-whether we're targeting MIPSr2 or higher. Do so in order to clean up the
-code.
+The start position for an ins instruction is always encoded as an
+immediate, so allowing registers to be used by the inline asm makes no
+sense. It should never happen anyway since a bit index should always be
+small enough to be treated as an immediate, but remove the nonsensical
+"r" for sanity.
 
 Signed-off-by: Paul Burton <paul.burton@mips.com>
 ---
 
 Changes in v2: None
 
- arch/mips/include/asm/bitops.h | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+ arch/mips/include/asm/bitops.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/arch/mips/include/asm/bitops.h b/arch/mips/include/asm/bitops.=
 h
-index 1e5739191ddf..0f5329e32e87 100644
+index 0f5329e32e87..03532ae9f528 100644
 --- a/arch/mips/include/asm/bitops.h
 +++ b/arch/mips/include/asm/bitops.h
-@@ -19,6 +19,7 @@
- #include <asm/byteorder.h>		/* sigh ... */
- #include <asm/compiler.h>
- #include <asm/cpu-features.h>
-+#include <asm/isa-rev.h>
- #include <asm/llsc.h>
- #include <asm/sgidefs.h>
- #include <asm/war.h>
-@@ -76,8 +77,7 @@ static inline void set_bit(unsigned long nr, volatile uns=
+@@ -85,7 +85,7 @@ static inline void set_bit(unsigned long nr, volatile uns=
 igned long *addr)
- 		return;
- 	}
-=20
--#if defined(CONFIG_CPU_MIPSR2) || defined(CONFIG_CPU_MIPSR6)
--	if (__builtin_constant_p(bit) && (bit >=3D 16)) {
-+	if ((MIPS_ISA_REV >=3D 2) && __builtin_constant_p(bit) && (bit >=3D 16)) =
-{
- 		loongson_llsc_mb();
- 		do {
- 			__asm__ __volatile__(
-@@ -90,7 +90,6 @@ static inline void set_bit(unsigned long nr, volatile uns=
-igned long *addr)
- 		} while (unlikely(!temp));
- 		return;
- 	}
--#endif /* CONFIG_CPU_MIPSR2 || CONFIG_CPU_MIPSR6 */
-=20
- 	loongson_llsc_mb();
- 	do {
-@@ -143,8 +142,7 @@ static inline void clear_bit(unsigned long nr, volatile=
- unsigned long *addr)
- 		return;
- 	}
-=20
--#if defined(CONFIG_CPU_MIPSR2) || defined(CONFIG_CPU_MIPSR6)
--	if (__builtin_constant_p(bit)) {
-+	if ((MIPS_ISA_REV >=3D 2) && __builtin_constant_p(bit)) {
- 		loongson_llsc_mb();
- 		do {
- 			__asm__ __volatile__(
-@@ -157,7 +155,6 @@ static inline void clear_bit(unsigned long nr, volatile=
- unsigned long *addr)
- 		} while (unlikely(!temp));
- 		return;
- 	}
--#endif /* CONFIG_CPU_MIPSR2 || CONFIG_CPU_MIPSR6 */
-=20
- 	loongson_llsc_mb();
- 	do {
-@@ -377,8 +374,7 @@ static inline int test_and_clear_bit(unsigned long nr,
- 		: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m), "=3D&r" (res)
- 		: "r" (1UL << bit)
- 		: __LLSC_CLOBBER);
--#if defined(CONFIG_CPU_MIPSR2) || defined(CONFIG_CPU_MIPSR6)
--	} else if (__builtin_constant_p(nr)) {
-+	} else if ((MIPS_ISA_REV >=3D 2) && __builtin_constant_p(nr)) {
- 		loongson_llsc_mb();
- 		do {
- 			__asm__ __volatile__(
-@@ -390,7 +386,6 @@ static inline int test_and_clear_bit(unsigned long nr,
- 			: "ir" (bit)
+ 			"	" __INS "%0, %3, %2, 1			\n"
+ 			"	" __SC "%0, %1				\n"
+ 			: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m)
+-			: "ir" (bit), "r" (~0)
++			: "i" (bit), "r" (~0)
  			: __LLSC_CLOBBER);
  		} while (unlikely(!temp));
--#endif
+ 		return;
+@@ -150,7 +150,7 @@ static inline void clear_bit(unsigned long nr, volatile=
+ unsigned long *addr)
+ 			"	" __INS "%0, $0, %2, 1			\n"
+ 			"	" __SC "%0, %1				\n"
+ 			: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m)
+-			: "ir" (bit)
++			: "i" (bit)
+ 			: __LLSC_CLOBBER);
+ 		} while (unlikely(!temp));
+ 		return;
+@@ -383,7 +383,7 @@ static inline int test_and_clear_bit(unsigned long nr,
+ 			"	" __INS "%0, $0, %3, 1			\n"
+ 			"	" __SC	"%0, %1				\n"
+ 			: "=3D&r" (temp), "+" GCC_OFF_SMALL_ASM() (*m), "=3D&r" (res)
+-			: "ir" (bit)
++			: "i" (bit)
+ 			: __LLSC_CLOBBER);
+ 		} while (unlikely(!temp));
  	} else {
- 		loongson_llsc_mb();
- 		do {
 --=20
 2.23.0
 
