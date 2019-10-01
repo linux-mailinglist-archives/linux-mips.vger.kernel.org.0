@@ -2,238 +2,262 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FCBC2CD4
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 07:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C0EC3103
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 12:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727720AbfJAFHH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Oct 2019 01:07:07 -0400
-Received: from mga17.intel.com ([192.55.52.151]:16783 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725535AbfJAFHG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 1 Oct 2019 01:07:06 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Sep 2019 22:07:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,569,1559545200"; 
-   d="scan'208";a="190474561"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Sep 2019 22:06:56 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1iFANE-000IpB-8f; Tue, 01 Oct 2019 13:06:56 +0800
-Date:   Tue, 1 Oct 2019 13:06:23 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     kbuild-all@01.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-ia64@vger.kernel.org, linux-sh@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        sparclinux@vger.kernel.org, Jiri Olsa <jolsa@redhat.com>,
-        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
-        Tycho Andersen <tycho@tycho.ws>, Aleksa Sarai <asarai@suse.de>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linuxppc-dev@lists.ozlabs.org,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        David Drysdale <drysdale@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        libc-alpha@sourceware.org, linux-parisc@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-api@vger.kernel.org,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-alpha@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org
-Subject: Re: [PATCH v13 7/9] open: openat2(2) syscall
-Message-ID: <201910011326.iTYOtJYo%lkp@intel.com>
-References: <20190930183316.10190-8-cyphar@cyphar.com>
+        id S1730302AbfJAKMD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Oct 2019 06:12:03 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:52992 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729983AbfJAKMD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Oct 2019 06:12:03 -0400
+Received: by mail-wm1-f65.google.com with SMTP id r19so2668697wmh.2
+        for <linux-mips@vger.kernel.org>; Tue, 01 Oct 2019 03:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=8hy45pyP7kv6EXfVxQmzNrFK2VbFBW1Lka/Gmb0X5J0=;
+        b=J7AYTjPqD5jXOPq7aic9RA8CQUOWh4TzXM79Ki6WY5pV+NU0lcnsopzWRK734enmtS
+         aIN8K2zIIsNuDNokBRn5ANOCSDxrJASgmDumtnQiAFlKDHCYPR9QLokvRL1+7pI+r5eG
+         EgGd8Zbkw0NIMKrY90aFXTCqcOLlhj0wWeSYELbaGGKRRS1HeVoTBbyueR2JdfkEsQ8r
+         6x2jjpafrgoFux01vRuGQqxDlqebtdUR0AK8nda/osYxrW+JA9rma3mZbCbek0UG6lT1
+         jg0Gi4EF4iTC25c+QTBfhRILf7Zc2pdnFte2FmXGPfpyRrxO8+pWrfYewQD8hrKfCeH9
+         f29w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8hy45pyP7kv6EXfVxQmzNrFK2VbFBW1Lka/Gmb0X5J0=;
+        b=oCkQovIDJflqRG8tFqdW7+yo7y9Xfy4WqW92BxCr2SDBzML5g5N/zs68jceTdjzCp/
+         wwVOzCqmZG7/UXwPW2XLRHaXmin/AIPmn3Pw58ORTl9lvoQkSlGT95ub72hm+XnMA7jy
+         GZ0kEWSMCigIdzoWLYXiSBoRoI3XmGLoh1FJpodi9BisjG1YLzoFF/a40z6LF6ysR8Yy
+         RHt5lkvbxM8W79ieCPv24TyXQgCdwgH+uRxE4ngNA0AFCV4rTe5AZJGFHrL8Zii01xRo
+         JPaW9avBN3PY32LLX2uiMjc5l74D+f4W94qwJSasqIEICUBdfwuzG7Znd3G89/TG5XMQ
+         Labw==
+X-Gm-Message-State: APjAAAXCV+tXcsghKtTnInD6sqAeGbY49hGmDsjAF0NVe9dwe2QcWLmD
+        Z8xxvK2g526/V9Tq0j9EJdSzoA==
+X-Google-Smtp-Source: APXvYqyce6kLiNa02VTrU6yr/ckelEv9Vwx7Pd1FX7YNYnZ2gxLu2G+aiD+MbyaODltXlPmlKz4Vqg==
+X-Received: by 2002:a7b:cf12:: with SMTP id l18mr3198121wmg.25.1569924720081;
+        Tue, 01 Oct 2019 03:12:00 -0700 (PDT)
+Received: from [192.168.86.34] (cpc89974-aztw32-2-0-cust43.18-1.cable.virginm.net. [86.30.250.44])
+        by smtp.googlemail.com with ESMTPSA id r2sm4155309wma.1.2019.10.01.03.11.58
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 01 Oct 2019 03:11:59 -0700 (PDT)
+Subject: Re: [PATCH v6 1/4] nvmem: core: add nvmem_device_find
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+References: <20190923114636.6748-1-tbogendoerfer@suse.de>
+ <20190923114636.6748-2-tbogendoerfer@suse.de>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Message-ID: <ce44c762-f9a6-b4ef-fa8a-19ee4a6d391f@linaro.org>
+Date:   Tue, 1 Oct 2019 11:11:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190930183316.10190-8-cyphar@cyphar.com>
-X-Patchwork-Hint: ignore
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190923114636.6748-2-tbogendoerfer@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Aleksa,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[cannot apply to v5.4-rc1 next-20191001]
-[if your patch is applied to the wrong git tree, please drop us a note to help
-improve the system. BTW, we also suggest to use '--base' option to specify the
-base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
-
-url:    https://github.com/0day-ci/linux/commits/Aleksa-Sarai/namei-openat2-2-path-resolution-restrictions/20191001-025628
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.1-rc1-37-gd466a02-dirty
-        make ARCH=x86_64 allmodconfig
-        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
-
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
 
 
-sparse warnings: (new ones prefixed by >>)
+On 23/09/2019 12:46, Thomas Bogendoerfer wrote:
+> nvmem_device_find provides a way to search for nvmem devices with
+> the help of a match function simlair to bus_find_device.
+> 
+> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+> ---
 
-   fs/open.c:757:13: sparse: sparse: restricted fmode_t degrades to integer
-   fs/open.c:983:18: sparse: sparse: restricted fmode_t degrades to integer
->> fs/open.c:1011:36: sparse: sparse: invalid assignment: |=
->> fs/open.c:1011:36: sparse:    left side has type int
->> fs/open.c:1011:36: sparse:    right side has type restricted fmode_t
-   fs/open.c:1013:36: sparse: sparse: invalid assignment: |=
-   fs/open.c:1013:36: sparse:    left side has type int
-   fs/open.c:1013:36: sparse:    right side has type restricted fmode_t
->> fs/open.c:1029:24: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted fmode_t [usertype] opath_mask @@    got pe] opath_mask @@
->> fs/open.c:1029:24: sparse:    expected restricted fmode_t [usertype] opath_mask
->> fs/open.c:1029:24: sparse:    got int opath_mask
->> fs/open.c:1011:36: sparse: sparse: invalid assignment: |=
->> fs/open.c:1011:36: sparse:    left side has type int
->> fs/open.c:1011:36: sparse:    right side has type restricted fmode_t
-   fs/open.c:1013:36: sparse: sparse: invalid assignment: |=
-   fs/open.c:1013:36: sparse:    left side has type int
-   fs/open.c:1013:36: sparse:    right side has type restricted fmode_t
->> fs/open.c:1029:24: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted fmode_t [usertype] opath_mask @@    got pe] opath_mask @@
->> fs/open.c:1029:24: sparse:    expected restricted fmode_t [usertype] opath_mask
->> fs/open.c:1029:24: sparse:    got int opath_mask
->> fs/open.c:1011:36: sparse: sparse: invalid assignment: |=
->> fs/open.c:1011:36: sparse:    left side has type int
->> fs/open.c:1011:36: sparse:    right side has type restricted fmode_t
-   fs/open.c:1013:36: sparse: sparse: invalid assignment: |=
-   fs/open.c:1013:36: sparse:    left side has type int
-   fs/open.c:1013:36: sparse:    right side has type restricted fmode_t
->> fs/open.c:1029:24: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted fmode_t [usertype] opath_mask @@    got pe] opath_mask @@
->> fs/open.c:1029:24: sparse:    expected restricted fmode_t [usertype] opath_mask
->> fs/open.c:1029:24: sparse:    got int opath_mask
-   fs/open.c:1173:15: sparse: sparse: undefined identifier 'copy_struct_from_user'
 
-vim +1011 fs/open.c
+Thanks for the patch,
+This patch looks good for me.
 
-   957	
-   958	static inline int build_open_flags(const struct open_how *how,
-   959					   struct open_flags *op)
-   960	{
-   961		int flags = how->flags;
-   962		int lookup_flags = 0;
-   963		int opath_mask = 0;
-   964		int acc_mode = ACC_MODE(flags);
-   965	
-   966		/*
-   967		 * Older syscalls still clear these bits before calling
-   968		 * build_open_flags(), but openat2(2) checks all its arguments.
-   969		 */
-   970		if (flags & ~VALID_OPEN_FLAGS)
-   971			return -EINVAL;
-   972		if (how->resolve & ~VALID_RESOLVE_FLAGS)
-   973			return -EINVAL;
-   974		if (!(how->flags & (O_PATH | O_CREAT | __O_TMPFILE)) && how->mode != 0)
-   975			return -EINVAL;
-   976	
-   977		if (flags & (O_CREAT | __O_TMPFILE))
-   978			op->mode = (how->mode & S_IALLUGO) | S_IFREG;
-   979		else
-   980			op->mode = 0;
-   981	
-   982		/* Must never be set by userspace */
- > 983		flags &= ~FMODE_NONOTIFY & ~O_CLOEXEC;
-   984	
-   985		/*
-   986		 * O_SYNC is implemented as __O_SYNC|O_DSYNC.  As many places only
-   987		 * check for O_DSYNC if the need any syncing at all we enforce it's
-   988		 * always set instead of having to deal with possibly weird behaviour
-   989		 * for malicious applications setting only __O_SYNC.
-   990		 */
-   991		if (flags & __O_SYNC)
-   992			flags |= O_DSYNC;
-   993	
-   994		if (flags & __O_TMPFILE) {
-   995			if ((flags & O_TMPFILE_MASK) != O_TMPFILE)
-   996				return -EINVAL;
-   997			if (!(acc_mode & MAY_WRITE))
-   998				return -EINVAL;
-   999		} else if (flags & O_PATH) {
-  1000			/*
-  1001			 * If we have O_PATH in the open flag. Then we
-  1002			 * cannot have anything other than the below set of flags
-  1003			 */
-  1004			flags &= O_DIRECTORY | O_NOFOLLOW | O_PATH;
-  1005			acc_mode = 0;
-  1006	
-  1007			/* Allow userspace to restrict the re-opening of O_PATH fds. */
-  1008			if (how->upgrade_mask & ~VALID_UPGRADE_FLAGS)
-  1009				return -EINVAL;
-  1010			if (!(how->upgrade_mask & UPGRADE_NOREAD))
-> 1011				opath_mask |= FMODE_PATH_READ;
-  1012			if (!(how->upgrade_mask & UPGRADE_NOWRITE))
-  1013				opath_mask |= FMODE_PATH_WRITE;
-  1014		}
-  1015	
-  1016		op->open_flag = flags;
-  1017	
-  1018		/* O_TRUNC implies we need access checks for write permissions */
-  1019		if (flags & O_TRUNC)
-  1020			acc_mode |= MAY_WRITE;
-  1021	
-  1022		/* Allow the LSM permission hook to distinguish append
-  1023		   access from general write access. */
-  1024		if (flags & O_APPEND)
-  1025			acc_mode |= MAY_APPEND;
-  1026	
-  1027		op->acc_mode = acc_mode;
-  1028		op->intent = flags & O_PATH ? 0 : LOOKUP_OPEN;
-> 1029		op->opath_mask = opath_mask;
-  1030	
-  1031		if (flags & O_CREAT) {
-  1032			op->intent |= LOOKUP_CREATE;
-  1033			if (flags & O_EXCL)
-  1034				op->intent |= LOOKUP_EXCL;
-  1035		}
-  1036	
-  1037		if (flags & O_DIRECTORY)
-  1038			lookup_flags |= LOOKUP_DIRECTORY;
-  1039		if (!(flags & O_NOFOLLOW))
-  1040			lookup_flags |= LOOKUP_FOLLOW;
-  1041		if (flags & O_EMPTYPATH)
-  1042			lookup_flags |= LOOKUP_EMPTY;
-  1043	
-  1044		if (how->resolve & RESOLVE_NO_XDEV)
-  1045			lookup_flags |= LOOKUP_NO_XDEV;
-  1046		if (how->resolve & RESOLVE_NO_MAGICLINKS)
-  1047			lookup_flags |= LOOKUP_NO_MAGICLINKS;
-  1048		if (how->resolve & RESOLVE_NO_SYMLINKS)
-  1049			lookup_flags |= LOOKUP_NO_SYMLINKS;
-  1050		if (how->resolve & RESOLVE_BENEATH)
-  1051			lookup_flags |= LOOKUP_BENEATH;
-  1052		if (how->resolve & RESOLVE_IN_ROOT)
-  1053			lookup_flags |= LOOKUP_IN_ROOT;
-  1054	
-  1055		op->lookup_flags = lookup_flags;
-  1056		return 0;
-  1057	}
-  1058	
+Do you know which tree is going to pick this series up?
 
----
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+I can either apply this patch to nvmem tree
+
+or here is my Ack for this patch to take it via other trees.
+
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+
+--srini
+>   Documentation/driver-api/nvmem.rst |  2 ++
+>   drivers/nvmem/core.c               | 61 +++++++++++++++++---------------------
+>   include/linux/nvmem-consumer.h     |  9 ++++++
+>   3 files changed, 38 insertions(+), 34 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/nvmem.rst b/Documentation/driver-api/nvmem.rst
+> index d9d958d5c824..287e86819640 100644
+> --- a/Documentation/driver-api/nvmem.rst
+> +++ b/Documentation/driver-api/nvmem.rst
+> @@ -129,6 +129,8 @@ To facilitate such consumers NVMEM framework provides below apis::
+>     struct nvmem_device *nvmem_device_get(struct device *dev, const char *name);
+>     struct nvmem_device *devm_nvmem_device_get(struct device *dev,
+>   					   const char *name);
+> +  struct nvmem_device *nvmem_device_find(void *data,
+> +			int (*match)(struct device *dev, const void *data));
+>     void nvmem_device_put(struct nvmem_device *nvmem);
+>     int nvmem_device_read(struct nvmem_device *nvmem, unsigned int offset,
+>   		      size_t bytes, void *buf);
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index 057d1ff87d5d..9f1ee9c766ec 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -76,33 +76,6 @@ static struct bus_type nvmem_bus_type = {
+>   	.name		= "nvmem",
+>   };
+>   
+> -static struct nvmem_device *of_nvmem_find(struct device_node *nvmem_np)
+> -{
+> -	struct device *d;
+> -
+> -	if (!nvmem_np)
+> -		return NULL;
+> -
+> -	d = bus_find_device_by_of_node(&nvmem_bus_type, nvmem_np);
+> -
+> -	if (!d)
+> -		return NULL;
+> -
+> -	return to_nvmem_device(d);
+> -}
+> -
+> -static struct nvmem_device *nvmem_find(const char *name)
+> -{
+> -	struct device *d;
+> -
+> -	d = bus_find_device_by_name(&nvmem_bus_type, NULL, name);
+> -
+> -	if (!d)
+> -		return NULL;
+> -
+> -	return to_nvmem_device(d);
+> -}
+> -
+>   static void nvmem_cell_drop(struct nvmem_cell *cell)
+>   {
+>   	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_CELL_REMOVE, cell);
+> @@ -532,13 +505,16 @@ int devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem)
+>   }
+>   EXPORT_SYMBOL(devm_nvmem_unregister);
+>   
+> -static struct nvmem_device *__nvmem_device_get(struct device_node *np,
+> -					       const char *nvmem_name)
+> +static struct nvmem_device *__nvmem_device_get(void *data,
+> +			int (*match)(struct device *dev, const void *data))
+>   {
+>   	struct nvmem_device *nvmem = NULL;
+> +	struct device *dev;
+>   
+>   	mutex_lock(&nvmem_mutex);
+> -	nvmem = np ? of_nvmem_find(np) : nvmem_find(nvmem_name);
+> +	dev = bus_find_device(&nvmem_bus_type, NULL, data, match);
+> +	if (dev)
+> +		nvmem = to_nvmem_device(dev);
+>   	mutex_unlock(&nvmem_mutex);
+>   	if (!nvmem)
+>   		return ERR_PTR(-EPROBE_DEFER);
+> @@ -587,7 +563,7 @@ struct nvmem_device *of_nvmem_device_get(struct device_node *np, const char *id)
+>   	if (!nvmem_np)
+>   		return ERR_PTR(-ENOENT);
+>   
+> -	return __nvmem_device_get(nvmem_np, NULL);
+> +	return __nvmem_device_get(nvmem_np, device_match_of_node);
+>   }
+>   EXPORT_SYMBOL_GPL(of_nvmem_device_get);
+>   #endif
+> @@ -613,10 +589,26 @@ struct nvmem_device *nvmem_device_get(struct device *dev, const char *dev_name)
+>   
+>   	}
+>   
+> -	return __nvmem_device_get(NULL, dev_name);
+> +	return __nvmem_device_get((void *)dev_name, device_match_name);
+>   }
+>   EXPORT_SYMBOL_GPL(nvmem_device_get);
+>   
+> +/**
+> + * nvmem_device_find() - Find nvmem device with matching function
+> + *
+> + * @data: Data to pass to match function
+> + * @match: Callback function to check device
+> + *
+> + * Return: ERR_PTR() on error or a valid pointer to a struct nvmem_device
+> + * on success.
+> + */
+> +struct nvmem_device *nvmem_device_find(void *data,
+> +			int (*match)(struct device *dev, const void *data))
+> +{
+> +	return __nvmem_device_get(data, match);
+> +}
+> +EXPORT_SYMBOL_GPL(nvmem_device_find);
+> +
+>   static int devm_nvmem_device_match(struct device *dev, void *res, void *data)
+>   {
+>   	struct nvmem_device **nvmem = res;
+> @@ -710,7 +702,8 @@ nvmem_cell_get_from_lookup(struct device *dev, const char *con_id)
+>   		if ((strcmp(lookup->dev_id, dev_id) == 0) &&
+>   		    (strcmp(lookup->con_id, con_id) == 0)) {
+>   			/* This is the right entry. */
+> -			nvmem = __nvmem_device_get(NULL, lookup->nvmem_name);
+> +			nvmem = __nvmem_device_get((void *)lookup->nvmem_name,
+> +						   device_match_name);
+>   			if (IS_ERR(nvmem)) {
+>   				/* Provider may not be registered yet. */
+>   				cell = ERR_CAST(nvmem);
+> @@ -780,7 +773,7 @@ struct nvmem_cell *of_nvmem_cell_get(struct device_node *np, const char *id)
+>   	if (!nvmem_np)
+>   		return ERR_PTR(-EINVAL);
+>   
+> -	nvmem = __nvmem_device_get(nvmem_np, NULL);
+> +	nvmem = __nvmem_device_get(nvmem_np, device_match_of_node);
+>   	of_node_put(nvmem_np);
+>   	if (IS_ERR(nvmem))
+>   		return ERR_CAST(nvmem);
+> diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consumer.h
+> index 8f8be5b00060..02dc4aa992b2 100644
+> --- a/include/linux/nvmem-consumer.h
+> +++ b/include/linux/nvmem-consumer.h
+> @@ -89,6 +89,9 @@ void nvmem_del_cell_lookups(struct nvmem_cell_lookup *entries,
+>   int nvmem_register_notifier(struct notifier_block *nb);
+>   int nvmem_unregister_notifier(struct notifier_block *nb);
+>   
+> +struct nvmem_device *nvmem_device_find(void *data,
+> +			int (*match)(struct device *dev, const void *data));
+> +
+>   #else
+>   
+>   static inline struct nvmem_cell *nvmem_cell_get(struct device *dev,
+> @@ -204,6 +207,12 @@ static inline int nvmem_unregister_notifier(struct notifier_block *nb)
+>   	return -EOPNOTSUPP;
+>   }
+>   
+> +static inline struct nvmem_device *nvmem_device_find(void *data,
+> +			int (*match)(struct device *dev, const void *data))
+> +{
+> +	return NULL;
+> +}
+> +
+>   #endif /* CONFIG_NVMEM */
+>   
+>   #if IS_ENABLED(CONFIG_NVMEM) && IS_ENABLED(CONFIG_OF)
+> 
