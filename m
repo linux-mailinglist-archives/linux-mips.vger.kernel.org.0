@@ -2,196 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A93CBC441A
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Oct 2019 01:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9944CC442E
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Oct 2019 01:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725977AbfJAXEh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Oct 2019 19:04:37 -0400
-Received: from mail-eopbgr700103.outbound.protection.outlook.com ([40.107.70.103]:24961
-        "EHLO NAM04-SN1-obe.outbound.protection.outlook.com"
+        id S1728864AbfJAXOG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Oct 2019 19:14:06 -0400
+Received: from mail-eopbgr750112.outbound.protection.outlook.com ([40.107.75.112]:41204
+        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726050AbfJAXEg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 1 Oct 2019 19:04:36 -0400
+        id S1728528AbfJAXOG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 1 Oct 2019 19:14:06 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nD3HWGUByGl+NME568rQI8ale5LCKT/Z/FAEEYzJcU/uvOitfvgdXni5s0vucqIfQJw+OhAdHIAroKuh2AZY2Q9wV4AJuYwChgodhZegdV+bxsef/dEU8kZAZh1lXufZGjH4n7qF6X4N3BA2ZcuRP/SPE6hCOV1EAHgnFNS/rNA/UsZXKeZnq4RRUfIWTQP5Vjd6MNyH7LtoJech6yqUwtTJYLeL2pDpoN0oH0L2BGIoU+nFk2A/Bu4wyycup6lhMQ0b2Mual3drr58tLPwYfZxsvhD20ZH6wv9Edb7ZsuEQvu+4It/dCHJv/UTuT37v8Kwpub91EEWBh8AicuFWbg==
+ b=NNlaIG5g/lUMh/bvp62oKz/6UawYntXV6G9Eu1+ivIt96cj0H9w/QKjmTDyfMzS0F52n0WnQKZF+xty3ELx1xfKMLbyec2FgnylmOUXmjNawFhiZJqHQA+YfUOzj8mT9bQOi50l4kZUFPmo6lh8YfjFrMZVRtAuGhBDidFTRfCRYX3vGsE4oZBSJWPNMQ2U7HC66VLvax8RGO1tbLtWVa5/8Ox+8tY+Zr9I1XeOOPMLb6tugXbsnVpr6SlAGDGmtp349J+7Ark89W9xAHbV7qJ6OfbIiHD7mC7SwViGTrkm+FNpznruoX6AjFZ2MH69pt/gYUe0M0Stb4LFH8y+Iow==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u4s1uKHknWrWg7+tKT4n0L4s4gxr5xlP+7VbtuFDPSE=;
- b=IoV9XkG3+nAzBQ8CMsyTlhPlNFWBDu5t31jBrulRUzN6Q/n2vgvgP7hVaweSUPPFwPwpZMEiZTyuVnqJAey002WfzwuI4BX2M/sSaGfvwvxObUIDB0U4ugXUolfTwaODgYHj63W5M4v2BeOnzUNZXwxVa4ZEOnh8mf4SgnvZXFK2yc9ti/z/C3HlWziHqB4UrBcbumO21qOm3NmKDQezqla1Q+4NLkdV+UWJ8ZNME1OAgxmT3MtFE23r6nAmccIK+IFex8OJF0/9TMiDKX5aNm5029fSm9QcOHte3oxRmbYVY3E6Uaqp25gXdOo/9+evzjo5rG8X++AKXI2CYv36Ng==
+ bh=c7JViKhb8AhpA1H34+0YYUSk6nQGlBkiovvI65J1xJo=;
+ b=SAaK9KuQp2tcLuHEx73DXouDOriAfw24DwmT3/pANx5rIQB22JPSYkBnjY5Ra34jfr8rx9EpCF9CuOKBqb95Wy+TZtyYmlEo7ktk5GAxmlrGLmW5yY1RQayi/XCPX/DcrfWziXWnATCoNqOssO/r4BlV+HRTsAAG0daW8hFLoJO6wKFBt5JTUioKpD4RdtKABdivY309bjxkErDZxcj9oV7yHTd/Ld2+A+re8UlN4VaR4yk9sCJYn16n4PfUuQKDRAwoYVXzQpyG4eqt4a92h0sT+K3/Mz+v6qx95yPnVG7Qf29AnjADEEkedplbNc109Q7OWIoqa/zUy/PvWEQT+g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u4s1uKHknWrWg7+tKT4n0L4s4gxr5xlP+7VbtuFDPSE=;
- b=VTT0kJVQvsK3wV6rG1f0oZrE11TTEwroxxgoy9U8zpLxL5xmkvN19GHbiPa63LYx/gKUKeiuj1VeXaGa8vvIWsCdp+lPUdQUr7jQ3swJjqDXkNZWqnEtO3/rdbZ3U4lfMnrHts8GRAeqtPUUX6w0SG8EIxOIAY7zhTVtne/hIuA=
+ bh=c7JViKhb8AhpA1H34+0YYUSk6nQGlBkiovvI65J1xJo=;
+ b=OWxTv9fz5mDnxmEA7Uw4O0j5mWDifoaa8i5HPuAUFUzDFtzofMCpp/FpltMqWbLkdYsK8gJhXgOSsbkdA7QGis/ITnVY+MZ3KLC+DfIfJLd7xPAsm3bAAdBpDRDYn82KVo/+Xhpe1dGO59ClDyrtrJZ6+DIdqwrqlOtdrttPQ44=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1232.namprd22.prod.outlook.com (10.174.160.7) with Microsoft SMTP
+ MWHPR2201MB1328.namprd22.prod.outlook.com (10.172.63.11) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.22; Tue, 1 Oct 2019 23:04:32 +0000
+ 15.20.2305.20; Tue, 1 Oct 2019 23:14:01 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481%2]) with mapi id 15.20.2305.022; Tue, 1 Oct 2019
- 23:04:32 +0000
+ 23:14:01 +0000
 From:   Paul Burton <paul.burton@mips.com>
-To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-CC:     Paul Burton <pburton@wavecomp.com>
-Subject: [PATCH 1/2] MIPS: r4k-bugs64: Limit R4k bug checks to affected
- systems
-Thread-Topic: [PATCH 1/2] MIPS: r4k-bugs64: Limit R4k bug checks to affected
- systems
-Thread-Index: AQHVeKyVHe6LsfVCvkuqMlkkqP8DBA==
-Date:   Tue, 1 Oct 2019 23:04:32 +0000
-Message-ID: <20191001230423.70119-1-paul.burton@mips.com>
+To:     Alexander Lobakin <alobakin@dlink.ru>
+CC:     Dmitry Korotin <dkorotin@wavecomp.com>,
+        Paul Burton <pburton@wavecomp.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-mips-owner@vger.kernel.org" <linux-mips-owner@vger.kernel.org>
+Subject: Re: [PATCH] mips: Kconfig: Add ARCH_HAS_FORTIFY_SOURCE
+Thread-Topic: [PATCH] mips: Kconfig: Add ARCH_HAS_FORTIFY_SOURCE
+Thread-Index: AQHVeK3pFynOU+aQEEeaJnVK7RFEnw==
+Date:   Tue, 1 Oct 2019 23:14:01 +0000
+Message-ID: <20191001231400.cjge7xocdesmx7pf@pburton-laptop>
+References: <CY4PR22MB04717E7C68389573AADA4E99AFB00@CY4PR22MB0471.namprd22.prod.outlook.com>
+ <1563c90e9d9ed42bd1dedd552fa0316a@dlink.ru>
+In-Reply-To: <1563c90e9d9ed42bd1dedd552fa0316a@dlink.ru>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR06CA0055.namprd06.prod.outlook.com
- (2603:10b6:a03:14b::32) To MWHPR2201MB1277.namprd22.prod.outlook.com
+x-clientproxiedby: BY5PR16CA0028.namprd16.prod.outlook.com
+ (2603:10b6:a03:1a0::41) To MWHPR2201MB1277.namprd22.prod.outlook.com
  (2603:10b6:301:18::12)
+user-agent: NeoMutt/20180716
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=pburton@wavecomp.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.23.0
 x-originating-ip: [73.93.153.72]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 74749d61-973a-43ea-4da7-08d746c3b844
-x-ms-traffictypediagnostic: MWHPR2201MB1232:
+x-ms-office365-filtering-correlation-id: 86de2314-ff2a-45f9-08b9-08d746c50bbe
+x-ms-traffictypediagnostic: MWHPR2201MB1328:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB1232A09B472EB417CE19A61BC19D0@MWHPR2201MB1232.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-microsoft-antispam-prvs: <MWHPR2201MB1328555B3BA028182AAF88D5C19D0@MWHPR2201MB1328.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-forefront-prvs: 0177904E6B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(366004)(136003)(39850400004)(346002)(396003)(199004)(189003)(50226002)(1076003)(486006)(256004)(5660300002)(14444005)(42882007)(6436002)(5640700003)(7736002)(476003)(305945005)(14454004)(44832011)(6512007)(99286004)(6116002)(3846002)(2351001)(386003)(6506007)(2906002)(26005)(2616005)(52116002)(102836004)(71200400001)(186003)(71190400001)(66066001)(66946007)(36756003)(66476007)(66556008)(64756008)(8676002)(66446008)(4326008)(2501003)(25786009)(81166006)(81156014)(316002)(107886003)(478600001)(6486002)(8936002)(6916009);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1232;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(7916004)(366004)(136003)(396003)(376002)(39840400004)(346002)(199004)(189003)(81156014)(99286004)(6506007)(386003)(76176011)(52116002)(81166006)(6916009)(8676002)(42882007)(25786009)(478600001)(26005)(186003)(102836004)(446003)(66556008)(64756008)(66446008)(66476007)(66946007)(71200400001)(33716001)(14454004)(66066001)(44832011)(476003)(486006)(11346002)(71190400001)(14444005)(256004)(6486002)(6246003)(6116002)(3846002)(316002)(305945005)(7736002)(5660300002)(229853002)(9686003)(4326008)(1076003)(6512007)(54906003)(4744005)(58126008)(2906002)(6436002)(8936002)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1328;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dFgToO6GcgfYhxDhva9268I9HaVn+bFvlYvVBf/v09f+t2YUrD36xBSVhCH0I47cwvIqWGs5K90BauK+xLr1HeVxV9NEa/8b4dhWe5x3MCTLnFnd/bKXE3mD7VnF1t+GUGVtBoXD60d71I6hBYSN984th6hv0vXZ7bpWf/F4rarmt+CXIyWmqSkjThfIfIMYXacAaXO/louE9e7fExwUy2Cu7MVin+KFwLE/iB/Uc6xvzLJAnFb7icNgtdbZFwT9jaMWiSCKWKsi4u/JyW82IXtjekJc5gvpCsmiH8UA2WBTBfoCQs6iMz/MpWywnkJXd6pQ0BJImsddEQlGUtB6+HjqO8H4g2NnmfAkgbE7MkeWuF0fEyzf0fT7GC/JW7SXgxbPU/xgIIlGquopKeUFTek8wFmhNWcs/GXlsexg/Ng=
-Content-Type: text/plain; charset="iso-8859-1"
+x-microsoft-antispam-message-info: KtxyiFNxXYradhvcDuZ2YKRN795XapnhOEQmDFdIaAxwdNdCyuC736vsqVB85xyFJ9slqAKNBPifNSemmIe0i0FkohtJwvu7yEQYZlJCfbOyZzgAtK7GQ3LS/9j8JNfTjeg43QENRiMPKGiwoznJ1DAt536zPoZNFEV/pM1f8odNqwWi5pMHACx9nhG4Xi1Q7W57/ZVySIt6ULu5cX4y7qhI1c4jpMlXD4/di6NUc6nVmg/4/jYGYdp0mEGBfXrmxW7q2HfTKYMSvPgKjn5aZs6pOiJ/4nMVL1+nfV8+ELhKXjVMvl0yJdT7Uoz9rXxeL2CKWI33VCFN+ExOoOrSv9CnmKQEm+D7qivacSTd604uZuUyWUV5zbIDgpxpbc8c0xED6411IfkbLYpAtZ7XV8VR5GK0kD8fXg/+Qea7wmc=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <CDF2EE085A79E545960DC897FDA42464@namprd22.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74749d61-973a-43ea-4da7-08d746c3b844
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2019 23:04:32.1674
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86de2314-ff2a-45f9-08b9-08d746c50bbe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2019 23:14:01.7228
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: B7K2wgI0fNjplEq6G5GbTypOVxy7JSf/0nkhG9+AyZ92VmLSIgo1eulJi6xfJOuX0g/wY5IdRTof/Ls3/bum5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1232
+X-MS-Exchange-CrossTenant-userprincipalname: xdFII/zm6Bez8+L6OzYsabX+laZWpXpzLOr4+biYRaNnD5heFtNW5mbJpw9sq+43eHCVSf/8SdRwIyd4Lz1F9A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1328
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Only build the checks for R4k errata workarounds if we expect that the
-kernel might actually run on a system with an R4k CPU - ie.
-CONFIG_SYS_HAS_CPU_R4X00=3Dy & we're targeting a pre-MIPSr1 ISA revision.
+Hi Alexander,
 
-Rename cpu-bugs64.c to r4k-bugs64.c to indicate the fact that the code
-is specific to R4k CPUs.
+On Tue, Oct 01, 2019 at 03:49:56PM +0300, Alexander Lobakin wrote:
+> Maybe it's time to remove the "rather naive" block under CONFIG_32BIT at =
+all
+> and use C implementations in all cases? I'm interested in what does Paul
+> think abous this.
 
-Signed-off-by: Paul Burton <paul.burton@mips.com>
----
+That's not a bad idea - it's something I've already been considering
+doing anyway as I slowly prep for nanoMIPS support. The reason I haven't
+pulled the trigger yet is that I haven't had time to verify the
+performance impact - I expect it to be minimal, perhaps even beneficial,
+but it'd be good to get numbers from a few machines to check that.
 
- arch/mips/Kconfig                              |  4 ++++
- arch/mips/include/asm/bugs.h                   | 18 ++++++++----------
- arch/mips/kernel/Makefile                      |  2 +-
- arch/mips/kernel/genex.S                       |  2 +-
- .../mips/kernel/{cpu-bugs64.c =3D> r4k-bugs64.c} |  0
- 5 files changed, 14 insertions(+), 12 deletions(-)
- rename arch/mips/kernel/{cpu-bugs64.c =3D> r4k-bugs64.c} (100%)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index a0bd9bdb5f83..8736bf4420bc 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -2554,6 +2554,10 @@ config CPU_R4000_WORKAROUNDS
- config CPU_R4400_WORKAROUNDS
- 	bool
-=20
-+config CPU_R4X00_BUGS64
-+	bool
-+	default y if SYS_HAS_CPU_R4X00 && 64BIT && (TARGET_ISA_REV < 1)
-+
- config MIPS_ASID_SHIFT
- 	int
- 	default 6 if CPU_R3000 || CPU_TX39XX
-diff --git a/arch/mips/include/asm/bugs.h b/arch/mips/include/asm/bugs.h
-index d8ab8b7129b5..d72dc6e1cf3c 100644
---- a/arch/mips/include/asm/bugs.h
-+++ b/arch/mips/include/asm/bugs.h
-@@ -26,9 +26,8 @@ extern void check_bugs64(void);
-=20
- static inline void check_bugs_early(void)
- {
--#ifdef CONFIG_64BIT
--	check_bugs64_early();
--#endif
-+	if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
-+		check_bugs64_early();
- }
-=20
- static inline void check_bugs(void)
-@@ -37,19 +36,18 @@ static inline void check_bugs(void)
-=20
- 	cpu_data[cpu].udelay_val =3D loops_per_jiffy;
- 	check_bugs32();
--#ifdef CONFIG_64BIT
--	check_bugs64();
--#endif
-+
-+	if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
-+		check_bugs64();
- }
-=20
- static inline int r4k_daddiu_bug(void)
- {
--#ifdef CONFIG_64BIT
-+	if (!IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
-+		return 0;
-+
- 	WARN_ON(daddiu_bug < 0);
- 	return daddiu_bug !=3D 0;
--#else
--	return 0;
--#endif
- }
-=20
- #endif /* _ASM_BUGS_H */
-diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
-index 89b07ea8d249..d6e97df51cfb 100644
---- a/arch/mips/kernel/Makefile
-+++ b/arch/mips/kernel/Makefile
-@@ -80,7 +80,7 @@ obj-$(CONFIG_KGDB)		+=3D kgdb.o
- obj-$(CONFIG_PROC_FS)		+=3D proc.o
- obj-$(CONFIG_MAGIC_SYSRQ)	+=3D sysrq.o
-=20
--obj-$(CONFIG_64BIT)		+=3D cpu-bugs64.o
-+obj-$(CONFIG_CPU_R4X00_BUGS64)	+=3D r4k-bugs64.o
-=20
- obj-$(CONFIG_I8253)		+=3D i8253.o
-=20
-diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-index efde27c99414..d586cdac9605 100644
---- a/arch/mips/kernel/genex.S
-+++ b/arch/mips/kernel/genex.S
-@@ -657,7 +657,7 @@ isrdhwr:
- 	.set	pop
- 	END(handle_ri_rdhwr)
-=20
--#ifdef CONFIG_64BIT
-+#ifdef CONFIG_CPU_R4X00_BUGS64
- /* A temporary overflow handler used by check_daddi(). */
-=20
- 	__INIT
-diff --git a/arch/mips/kernel/cpu-bugs64.c b/arch/mips/kernel/r4k-bugs64.c
-similarity index 100%
-rename from arch/mips/kernel/cpu-bugs64.c
-rename to arch/mips/kernel/r4k-bugs64.c
---=20
-2.23.0
-
+Thanks,
+    Paul
