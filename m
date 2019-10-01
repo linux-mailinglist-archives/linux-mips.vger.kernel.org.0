@@ -2,124 +2,169 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7707C41D1
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 22:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BE8C42FC
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 23:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726393AbfJAUdR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Oct 2019 16:33:17 -0400
-Received: from mail-eopbgr820095.outbound.protection.outlook.com ([40.107.82.95]:26009
-        "EHLO NAM01-SN1-obe.outbound.protection.outlook.com"
+        id S1727858AbfJAVxJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Oct 2019 17:53:09 -0400
+Received: from mail-eopbgr730112.outbound.protection.outlook.com ([40.107.73.112]:19088
+        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726287AbfJAUdR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 1 Oct 2019 16:33:17 -0400
+        id S1726681AbfJAVxJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 1 Oct 2019 17:53:09 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PcYywzAcwFfLrrlO7lGN3Af1xEqW8rlv+2E1yY3rVJphkymbCh9hLDMd/x/rKvw+muYvJKrOMgh78mht8qhmNK6Bk14TP0N2KqQFPDSF/4J5xZ0Eht/lf6tUiYwQwQLOQgn5AC7r8lJcxSGMNXviojhJ6OlRbNJ/1W4qNwRYU0sa0zVulzCNjYJjwzUclAISDeZoI8xlp5LkwED9pEHSiAp+v/di27jdS/1NFJD6E2asCgec8z8tHs0G9bIsMG3gGjztqjGRTYK/XJ47GfoV5GzaKFZVttzzX+sl2dd8juCPEIMctCuWFjz09H563NysH+AtAuoCNaGcBhaYumsStA==
+ b=TyjZcAo8LIct20bg9DhPBjs3IIT5d+XULMNcD3/dP7HOjKoavUOWtdL0pwqTdbmRZujdD+vCyFWXDWEU70L/1sU8blDkJCU7NLnSWdI/+B3L5Sm601HxlcMfmvUf/Cqwtqi/gfLji5tJ2mhl8VM/uvji2L57eFJLrTjB132Y/dwh6JPwZEp+sO199M+PCOVu903rvo2pKeEcL1sF0dBH2+7AvfEl39hFzMWyrv0eQwgvd3hHxldfsDLZx+ONysZR6sUZdlLxSUOXm1PNhHsRmuhyDhHHUxldbzEL2PlmAayJv4gmwJtnQOBWwZyf4DPrJWfgTIZKm1Oe2LuR6E5q/A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4czECiE6F5+hNqC4i+Hz0tCHzYqo/uD0te4uJEKfbJc=;
- b=lNRvBv8j7L/vnUgr0isNAWD0dvi50M9jaFcGW7imN2xm7AVMQpSryb8sTHI0aUxVrSYGE0hNq1TolGzJRhBv0oIrkdRseriJ0imqwMehRWp5QlUhIE0uffhCCl0LNOj05JXVDylpjsXEkmOxi7uWrxCs4ky515Wu6YETHIy+zvCNukUOr1Ukj7uQ6oDelfYSe3PospAXXsik30/sb7EY3bk0k7R74znWUxxyt2lv8AifA2rYxYJsjjfvq90DqdApgzvVR9wnbpWsBjd+lSTQAU95RUNzj/2S7TtXkjPmImTeZHaQ2aRxrgTIm5/pOIk61SMWsNd/FlJDpXJzdp7HNQ==
+ bh=yeMuagG9Ykp2+mFcYCbVvniDLVktRzk6k7mIirbQ3m4=;
+ b=AVTjyVBlZTIccoxL6pnfBQpURE0bB+8j2Ky4W49dX3LWZY/0zFquLvLDweHHCUOAynL67NgsoLY9NFEXNw6CdN/YNtU9EELANDr6P15gOnwOHAEdxxHWqBvHx21o/uELFPoeepZ2R4n5+RNuQqYJpSFqKwmWj+M1diGCP50xVBFAgbbehCGqsnLzQaliUFcvMJjaHnuvG8lUDiOca9BtA1/TRokh4EWqeuz3t4kuBw3JMXaU8rPIGEckpGPuJTKO8ppGrLfRS9sYVVmd1bojSEqgqoS1DTl0eMu5zITd2lm2N2tR/KnwPrniF8CpA7REm3xZj8jmtTg6KgmNN0NcEg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4czECiE6F5+hNqC4i+Hz0tCHzYqo/uD0te4uJEKfbJc=;
- b=DgI+FDmFk0/GkaveGW1WuCPzJnXcOMnUF9/MPZNz9tnPx9awT++JVyPXJdLZWrgOMrvX1eNZMvZWMSc0it7qXQdij1g8OprJG/Pc4mlfgJul1CppuAk/S1YaxADbclJXX4OGlY9JkSTPIaDHwzwSuYWbXWdmWtAUWUaZ/GqRqgA=
+ bh=yeMuagG9Ykp2+mFcYCbVvniDLVktRzk6k7mIirbQ3m4=;
+ b=KSEbRduiZC9toKGFupQ1izSDtHRa9KqRIcfIAzMAX68NcqrQovLuAeb/csKhA/YsfX1QgDRNW2c0RQfQMp/dNVbvX722DA8mQDDcOuoMTUp9n/PBT0pUQQDNtrRE4pjq/jZULKuPp2zJUxLBwXK3DfzKIBkZ1nkXm3cBnRpJelM=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1293.namprd22.prod.outlook.com (10.174.160.22) with Microsoft SMTP
+ MWHPR2201MB1213.namprd22.prod.outlook.com (10.172.61.148) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.20; Tue, 1 Oct 2019 20:33:14 +0000
+ 15.20.2305.20; Tue, 1 Oct 2019 21:53:04 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481%2]) with mapi id 15.20.2305.022; Tue, 1 Oct 2019
- 20:33:14 +0000
+ 21:53:04 +0000
 From:   Paul Burton <paul.burton@mips.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+CC:     Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <pburton@wavecomp.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: cpu-bugs64: Mark inline functions as
- __always_inline
-Thread-Topic: [PATCH] MIPS: cpu-bugs64: Mark inline functions as
- __always_inline
-Thread-Index: AQHVeJdyS8SpctoV4EOsscOeZnZ6Fg==
-Date:   Tue, 1 Oct 2019 20:33:14 +0000
-Message-ID: <MWHPR2201MB1277B32E583C7865EF29E4D7C19D0@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20190927053339.11866-1-jiaxun.yang@flygoat.com>
-In-Reply-To: <20190927053339.11866-1-jiaxun.yang@flygoat.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paul Burton <pburton@wavecomp.com>
+Subject: [PATCH v2 00/36] MIPS: barriers & atomics cleanups
+Thread-Topic: [PATCH v2 00/36] MIPS: barriers & atomics cleanups
+Thread-Index: AQHVeKKaZKEPRGamiECLP4Zg0pCBgg==
+Date:   Tue, 1 Oct 2019 21:53:04 +0000
+Message-ID: <20191001215249.4157062-1-paul.burton@mips.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR05CA0047.namprd05.prod.outlook.com
- (2603:10b6:a03:74::24) To MWHPR2201MB1277.namprd22.prod.outlook.com
+x-clientproxiedby: BYAPR07CA0093.namprd07.prod.outlook.com
+ (2603:10b6:a03:12b::34) To MWHPR2201MB1277.namprd22.prod.outlook.com
  (2603:10b6:301:18::12)
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=pburton@wavecomp.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.23.0
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 22cc4bda-0775-4c05-161f-08d746ae9551
-x-ms-traffictypediagnostic: MWHPR2201MB1293:
-x-ms-exchange-purlcount: 1
+x-ms-office365-filtering-correlation-id: 327f40a7-973e-4549-56a3-08d746b9bc7a
+x-ms-traffictypediagnostic: MWHPR2201MB1213:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB129331AB7E54C3C90CFC7244C19D0@MWHPR2201MB1293.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-microsoft-antispam-prvs: <MWHPR2201MB121330EA0061BF60CBCBF067C19D0@MWHPR2201MB1213.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
 x-forefront-prvs: 0177904E6B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(396003)(136003)(366004)(39840400004)(376002)(199004)(189003)(26005)(76176011)(305945005)(52536014)(81166006)(14454004)(6116002)(3846002)(25786009)(6916009)(102836004)(8676002)(2906002)(81156014)(6436002)(42882007)(186003)(4326008)(71200400001)(71190400001)(5660300002)(44832011)(486006)(966005)(6246003)(256004)(33656002)(478600001)(99286004)(446003)(11346002)(4744005)(476003)(54906003)(74316002)(316002)(66066001)(8936002)(66446008)(55016002)(386003)(66556008)(9686003)(66946007)(64756008)(6306002)(229853002)(7736002)(52116002)(7696005)(6506007)(66476007);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1293;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(396003)(366004)(376002)(136003)(39840400004)(199004)(189003)(6512007)(5640700003)(54906003)(2501003)(3846002)(6486002)(5660300002)(6436002)(66066001)(6116002)(1076003)(50226002)(2906002)(52116002)(6506007)(107886003)(2351001)(4326008)(6916009)(102836004)(71190400001)(8936002)(386003)(25786009)(36756003)(44832011)(8676002)(71200400001)(81166006)(81156014)(186003)(256004)(14444005)(2616005)(7736002)(316002)(42882007)(305945005)(99286004)(66446008)(64756008)(66556008)(478600001)(66946007)(66476007)(486006)(476003)(14454004)(26005);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1213;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hN/KUeiJh3Y8a01IoA2hivmXs1OuxZ/r3v1QMbcPUSlUbuNdxmANsi7xAgC6VffiMbnGzugAIE1DFu5WJFnn4n7s8COzUSabitanQJXe9xVpZ77ktN3Ob61wpsL8Y1gu+FipBwz688HSgqjTqyRSi7H5+DDWJa0NHdtv/r6wuSI7zq9+kb0T0cEZwqV1L8o9dYz+Fnzxkrnw0qcuEEDrleDzvYo5qPeLn36xXXdp0VmVyD8M/x04sBed4acX/hdCC9BTpCRcEO/07ZAiW430q+1zxBem0nR6yyELsV4hvaOoZYw1LoFNp6FOA6ZzHu6fdbhgvfzQsYDm+pJKfHL0RffGnSQGo/WM1XkaDZoB2W0XEzXl++a8n/yIteZbK/1caZwxC1OwSdlhpaXZ5qRfZtKjc2X4xOFjWRueGWBqXjCB6iinP4UqM5k8N3Qz3WgCH6dh7nxuPXWTh/cj/DnUXg==
+x-microsoft-antispam-message-info: hyX6vCUdiZ7clVz43VRs7d8HrctaA+ZVM06Ucb4Z0g4xTE2HzLD2+ka7r9b1zeSKFjpNe1CesdmG5GzXGAdRkhGtraxwl/7tB0k+mrVqGJjnZqAe6cy2Tz1C33fHRNCdk8Jg+L5x7RRha2I/8JwHga13gDIZ9LrGy/Cw0EqYwe2P02i4Cm8f/RTvriJPg0e9pjpmIUpnlO9gpswVuSjQtuaznGGDBSSlupbeP52jiqZ6IQl8FzlEHi7e1kGVqgiJfZQcFWcH2aCgZ9+Vh29BqKPwknGVoVr6nNap64QIbY9m0lbNxkgpswkNKlI9/1iPxWHDRkjMHaAzVRumeiMr6s/RH4MTjA7zvCw3uyz+oR2LUio8LeFTUCmCC5L3VxLB+vta8Pptk2LNdZd8CJaLUc/qlqE+OtnqVVFNW5jnjxw=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 22cc4bda-0775-4c05-161f-08d746ae9551
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2019 20:33:14.2336
+X-MS-Exchange-CrossTenant-Network-Message-Id: 327f40a7-973e-4549-56a3-08d746b9bc7a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2019 21:53:04.5091
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: K76DXnkwAIyucnEn31hSgrsOS+c9HTdHWMG704IrAseOqD2/FHMX4DccSnSWRBPkJcExspFtJVQyotrXQRlsMQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1293
+X-MS-Exchange-CrossTenant-userprincipalname: SqrErdsmW7ry+fCzkZ8RKSieF0mekA/njQof6UhREbQoPCgA03qxeRNjAjbl0KQ6BmOXpuNRiV3mkBSYMop3JA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1213
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+This series consists of a bunch of cleanups to the way we handle memory
+barriers (though no changes to the sync instructions we use to implement
+them) & atomic memory accesses. One major goal was to ensure the
+Loongson3 LL/SC errata workarounds are applied in a safe manner from
+within inline-asm & that we can automatically verify the resulting
+kernel binary looks reasonable. Many patches are cleanups found along
+the way.
 
-Jiaxun Yang wrote:
-> Commit ac7c3e4ff401 ("compiler: enable CONFIG_OPTIMIZE_INLINING forcibly"=
-)
-> allows compiler to uninline functions marked as 'inline'. Leading to sect=
-ion
-> mismatch in this case.
->=20
-> Since we're using const variables to pass assembly flags, 'inline's can't
-> be dropped. So we simply mark them as __always_inline.
+Applies atop v5.4-rc1.
 
-Applied to mips-fixes.
+Changes in v2:
+- Keep our fls/ffs implementations. Turns out GCC's builtins call
+  intrinsics in some configurations, and if we'd need to go implement
+  those then using the generic fls/ffs doesn't seem like such a win.
+- De-string __WEAK_LLSC_MB to allow use with __SYNC_ELSE().
+- Only try to build the loongson3-llsc-check tool from
+  arch/mips/Makefile when CONFIG_CPU_LOONGSON3_WORKAROUNDS is enabled.
 
-> commit d345d9cad225
-> https://git.kernel.org/mips/c/d345d9cad225
->=20
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> [paul.burton@mips.com:
->   - Annotate these functions with __init, even if it only serves to
->     inform human readers when the code can be used.
->   - Drop the __always_inline from check_daddi() & check_daddiu() which
->     don't use arguments as immediates in inline asm.
->   - Rewrap the commit message.]
-> Signed-off-by: Paul Burton <paul.burton@mips.com>
+Paul Burton (36):
+  MIPS: Unify sc beqz definition
+  MIPS: Use compact branch for LL/SC loops on MIPSr6+
+  MIPS: barrier: Add __SYNC() infrastructure
+  MIPS: barrier: Clean up rmb() & wmb() definitions
+  MIPS: barrier: Clean up __smp_mb() definition
+  MIPS: barrier: Remove fast_mb() Octeon #ifdef'ery
+  MIPS: barrier: Clean up __sync() definition
+  MIPS: barrier: Clean up sync_ginv()
+  MIPS: atomic: Fix whitespace in ATOMIC_OP macros
+  MIPS: atomic: Handle !kernel_uses_llsc first
+  MIPS: atomic: Use one macro to generate 32b & 64b functions
+  MIPS: atomic: Emit Loongson3 sync workarounds within asm
+  MIPS: atomic: Use _atomic barriers in atomic_sub_if_positive()
+  MIPS: atomic: Unify 32b & 64b sub_if_positive
+  MIPS: atomic: Deduplicate 32b & 64b read, set, xchg, cmpxchg
+  MIPS: bitops: Handle !kernel_uses_llsc first
+  MIPS: bitops: Only use ins for bit 16 or higher
+  MIPS: bitops: Use MIPS_ISA_REV, not #ifdefs
+  MIPS: bitops: ins start position is always an immediate
+  MIPS: bitops: Implement test_and_set_bit() in terms of _lock variant
+  MIPS: bitops: Allow immediates in test_and_{set,clear,change}_bit
+  MIPS: bitops: Use the BIT() macro
+  MIPS: bitops: Avoid redundant zero-comparison for non-LLSC
+  MIPS: bitops: Abstract LL/SC loops
+  MIPS: bitops: Use BIT_WORD() & BITS_PER_LONG
+  MIPS: bitops: Emit Loongson3 sync workarounds within asm
+  MIPS: bitops: Use smp_mb__before_atomic in test_* ops
+  MIPS: cmpxchg: Emit Loongson3 sync workarounds within asm
+  MIPS: cmpxchg: Omit redundant barriers for Loongson3
+  MIPS: futex: Emit Loongson3 sync workarounds within asm
+  MIPS: syscall: Emit Loongson3 sync workarounds within asm
+  MIPS: barrier: Remove loongson_llsc_mb()
+  MIPS: barrier: Make __smp_mb__before_atomic() a no-op for Loongson3
+  MIPS: genex: Add Loongson3 LL/SC workaround to ejtag_debug_handler
+  MIPS: genex: Don't reload address unnecessarily
+  MIPS: Check Loongson3 LL/SC errata workaround correctness
 
-Thanks,
-    Paul
+ arch/mips/Makefile                     |   3 +
+ arch/mips/Makefile.postlink            |  10 +-
+ arch/mips/include/asm/atomic.h         | 571 +++++++++----------------
+ arch/mips/include/asm/barrier.h        | 228 ++--------
+ arch/mips/include/asm/bitops.h         | 443 ++++++-------------
+ arch/mips/include/asm/cmpxchg.h        |  59 +--
+ arch/mips/include/asm/futex.h          |  15 +-
+ arch/mips/include/asm/llsc.h           |  19 +-
+ arch/mips/include/asm/sync.h           | 207 +++++++++
+ arch/mips/kernel/genex.S               |   6 +-
+ arch/mips/kernel/pm-cps.c              |  20 +-
+ arch/mips/kernel/syscall.c             |   3 +-
+ arch/mips/lib/bitops.c                 |  57 +--
+ arch/mips/loongson64/Platform          |   2 +-
+ arch/mips/tools/.gitignore             |   1 +
+ arch/mips/tools/Makefile               |   5 +
+ arch/mips/tools/loongson3-llsc-check.c | 307 +++++++++++++
+ 17 files changed, 981 insertions(+), 975 deletions(-)
+ create mode 100644 arch/mips/include/asm/sync.h
+ create mode 100644 arch/mips/tools/loongson3-llsc-check.c
 
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paul.burton@mips.com to report it. ]
+--=20
+2.23.0
+
