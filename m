@@ -2,50 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80CE5C4307
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 23:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93F1C433A
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 23:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728119AbfJAVx2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Oct 2019 17:53:28 -0400
+        id S1727244AbfJAVzB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Oct 2019 17:55:01 -0400
 Received: from mail-eopbgr730113.outbound.protection.outlook.com ([40.107.73.113]:17171
         "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728107AbfJAVx2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 1 Oct 2019 17:53:28 -0400
+        id S1728116AbfJAVx3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 1 Oct 2019 17:53:29 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FpwfJgj3xZubnIgtc1o/99v2211BulRrSGkD3Kj+DMhGUSTAEYvBsO+ziliM3Dm/c/2fOeWd8qkuGw6qX5RSAJY821OlGooPxtOl+SiU6xZFI3lDsEletAOmNrQVVMJWCTvordWxvjI8+rYBLifQ767kIRMuK22e5kK3+rwDYP0RtzjONBa/VfQiFJomqDlRamByZXhAvVBEeTlCw0b6jXPhlpHw2EMUYEmcFK/+a1PH5AWHW0WzkxjknsNiqrx9tfZpHdMJyZXLGX16xVb4qVunqzBi5eotKeRB+cmE5gCQGChiuGQJjIhGzMWsX80/uDgkQgF+JarBIlElzKvWwA==
+ b=IEufhwe8NhiuB90fwBr0dUUUWK4jqSHlby/ZQtA/5YIepMbzIBu/q9eGKApu+Ed/MLiuJ9wAdsnpV+8gueyJ0PJiiVqTD8PmoM1SnQS6FXSxPedXMjcVCb+aqExLgVdNArNSo7SkugDqn9iDnSluMrythdSxr6gNHjUgQPKAUlhUXS2S3/7ycqfHi0WqdROsGfK/ULK1NRxdBBmYHoawLsmr1CCLJPbS64Cv0JCLtRsJPJjeZgfC6oepHGwdeSueGKsd2QcUOdv+l6QB4F4jQVlwfABW/vGlI7NvmmBSkjpf67pIX0JTNVG3gAxR1MQYK1QJdIYyssPm9af3RsWD2A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/oIdoh72+TuqYxw0e6v85QgBl6Han8Vh4G1I/SBvwDg=;
- b=lg441+636AFT+PKtOkKacyvJ3HLQqjNhHMkbHBa9uy/6d/mdzj+k73obmhRohc1fcufQVVS9oZ8QU+hivF3ZZUc5v0yO7dkWnCy+skjkUeDkvgfcRtZIw/EuZt944DSTIMHjZyhSNOSCXsgBKWm+PUQUNgQBn8sXt6qcLPjo9+vUVEqSZtlv1EMqDHaZ+fo3PAT9LLZWWJdw5CRH+05snVnN2zD8cwFfNsGL04n3JvEVACLjEDbvjO1ZZV7kx3jsVu9TLzUxal4w9ikRSqJMMz91isdjhFwUA6SGrOZsvJieCrWEAg8X09k2VtlcsTnDlvJFJWeHK9sCv2AlrqNfwg==
+ bh=dho5hzus8m/2lkImn8ZIXDv7gok3Vo42gJWi78e//V4=;
+ b=DB8Pf1FiTNKr+qRd4rZBVX8Ze+4joCE3l4160pCQ63lQtMZx1dx+Jl3g34Es4G0dJOI76xcBdAe/ZsHkU5rJVlyncNRymGvkzGSKRk530iDhG0+bJQ0wovYce4GKDC2pMoYnK5Gj13qMgEuby8LDaFb+42YNLH44hLKpEmZ/BWJz+rflRk3voc8yYUV9D5hV+EEb8K29Pr4jXYZBeYLbvCo/CWnWoeN/gqn/Gl9ELU4m0ceQhb4CbOSaaPje8wWSeg5TGgZEE/tOIYGpZbzWh/PMfRYFOmgB/heo66tlwhqtEoLnRJ96h9MAMX8vuf5KgubCNA5R9t5qRQ/lmDLflw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/oIdoh72+TuqYxw0e6v85QgBl6Han8Vh4G1I/SBvwDg=;
- b=anQiEHWkG+Cm5rT9cscMPbXU8wTgk5VLGYL1vGqSXj7YZ6Pcw+vs26Bcp0VOavZD+Ewk4Iqpid8+6rSIIY5ULyLhMACi1xq9We8x0lFB/qpv8tTtenyhRajcF/k94cMbiwm6djgiPsf+Bj9O8qvI7mCaQUSw+WxJNamH19LoMrI=
+ bh=dho5hzus8m/2lkImn8ZIXDv7gok3Vo42gJWi78e//V4=;
+ b=PmsZpBHYK11++JtOfhV7JK7iu05A2QQpkJTSWg8LfaWNqllb7vKFD0tT0RXuCPDX0yvC9MA1A4SnVJXIg6mBerdEmT8xkn/Ktw34/1IHkkqYz6yVj+zajMiJQekBJVEECBQa2+9FPup6W2lxi9jx4bBP0pI/lVfXroBn4COTplA=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
  MWHPR2201MB1439.namprd22.prod.outlook.com (10.174.169.166) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.20; Tue, 1 Oct 2019 21:53:23 +0000
+ 15.20.2305.20; Tue, 1 Oct 2019 21:53:24 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481%2]) with mapi id 15.20.2305.022; Tue, 1 Oct 2019
- 21:53:23 +0000
+ 21:53:24 +0000
 From:   Paul Burton <paul.burton@mips.com>
 To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
 CC:     Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Paul Burton <pburton@wavecomp.com>
-Subject: [PATCH v2 14/36] MIPS: atomic: Unify 32b & 64b sub_if_positive
-Thread-Topic: [PATCH v2 14/36] MIPS: atomic: Unify 32b & 64b sub_if_positive
-Thread-Index: AQHVeKKlEcpsFkxrr0SAHmIRa77Nfg==
-Date:   Tue, 1 Oct 2019 21:53:23 +0000
-Message-ID: <20191001215249.4157062-15-paul.burton@mips.com>
+Subject: [PATCH v2 15/36] MIPS: atomic: Deduplicate 32b & 64b read, set, xchg,
+ cmpxchg
+Thread-Topic: [PATCH v2 15/36] MIPS: atomic: Deduplicate 32b & 64b read, set,
+ xchg, cmpxchg
+Thread-Index: AQHVeKKlJxT7iMVLuk6sBsJVvUiXBQ==
+Date:   Tue, 1 Oct 2019 21:53:24 +0000
+Message-ID: <20191001215249.4157062-16-paul.burton@mips.com>
 References: <20191001215249.4157062-1-paul.burton@mips.com>
 In-Reply-To: <20191001215249.4157062-1-paul.burton@mips.com>
 Accept-Language: en-US
@@ -61,248 +63,153 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.23.0
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d8603796-3fe2-4034-1765-08d746b9c7a9
+x-ms-office365-filtering-correlation-id: e36d3218-ddf0-4a29-109c-08d746b9c84b
 x-ms-traffictypediagnostic: MWHPR2201MB1439:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB1439F905F5160AF025C35440C19D0@MWHPR2201MB1439.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-microsoft-antispam-prvs: <MWHPR2201MB14395E98321904BB79F3616AC19D0@MWHPR2201MB1439.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4502;
 x-forefront-prvs: 0177904E6B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(39840400004)(366004)(346002)(136003)(376002)(199004)(189003)(186003)(11346002)(6512007)(1076003)(486006)(66066001)(26005)(6486002)(316002)(2906002)(5640700003)(6436002)(44832011)(42882007)(25786009)(446003)(6916009)(386003)(6506007)(76176011)(478600001)(52116002)(2616005)(102836004)(476003)(5660300002)(305945005)(64756008)(66446008)(14444005)(2351001)(7736002)(99286004)(54906003)(14454004)(71190400001)(71200400001)(66946007)(66556008)(66476007)(36756003)(3846002)(6116002)(107886003)(4326008)(50226002)(81166006)(81156014)(8676002)(2501003)(8936002)(256004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1439;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(39840400004)(366004)(346002)(136003)(376002)(199004)(189003)(186003)(11346002)(6512007)(1076003)(486006)(66066001)(26005)(6486002)(316002)(2906002)(5640700003)(6436002)(44832011)(42882007)(25786009)(446003)(6916009)(386003)(6506007)(76176011)(478600001)(52116002)(2616005)(102836004)(476003)(5660300002)(305945005)(64756008)(66446008)(2351001)(7736002)(99286004)(54906003)(14454004)(71190400001)(71200400001)(66946007)(66556008)(66476007)(36756003)(3846002)(6116002)(107886003)(4326008)(50226002)(81166006)(81156014)(8676002)(2501003)(8936002)(256004)(17423001)(156123004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1439;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VhFf1wWa3ekmr4zjGTkOJlAZMP9X9gL0/PYJOaLIlj/guMtEQQsh/nE73A41UGx7VHeear45kecdCduwErrgG1LGxzmDYahy+9DPKhtdibjqPPg6E8522O8v8lsAdTVeCKlbDrq0wHCFUqbUlxuZls9nr7o970DNzwYOX9uDOjstVfG1/upiD6qhvGh3bgll1iMEQF06Oo+c5dTY3Ly3xRXpdRRGh2XGkpQHSWDhfbHLVEUC8LKOM+Gu0wWjExsiyFcZAKEPJJfGgN8J6nNFHSJ9a8vP0gSmVu06OFR98IC6tO7klIbRo/meRbp6oKmTikeAz3m/QiJrBXsmUZ5301PLFOmUUeZ5byMqcwDUpvOoZX6c2EqStOoCd5hD2hrPnCDHzJqhcBHzarlurZOfR5Jg1Ei16744eoIz5wJVXMo=
+x-microsoft-antispam-message-info: hJHMGK9rixxdn8S+HITneOMVgWtCKJV0XWmk9f4z246tOU7i0LgXnZm5Q3lIGPxxhpNh2HcDoPb3Epby09Tarb6mfM70tzSPum6XgNotstOEGhmfMamCKrTDBcjBZJy8Sg3uDjREgFM3US0iNtbd9GiSFl6QSXqDGlol4s3XZIuA864Zb7lXdwGfBCPXUDwPcYjPupmd5Srw5ZAV/4PNoBhYEwrEvljb5sxjWlnYjS4pQbQQNhb4/SjhIrrCPVXgALXegRRAm3HPYRBC8pWJpnldE9HYt8ErUVHqzQm4RHTXHOwmUo+nUGQ4S5GraHtCHJZ0BsVO3Rnawf8k5Cz5e/zBKxItW8NoYOhL6PyMIUXmQyC6WQUZotQiAxis2gnCVOz88lGCzpdH1/oWk4DzZJBSXyJat3i54/LL83SDk4Y=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8603796-3fe2-4034-1765-08d746b9c7a9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2019 21:53:23.1914
+X-MS-Exchange-CrossTenant-Network-Message-Id: e36d3218-ddf0-4a29-109c-08d746b9c84b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2019 21:53:24.2479
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hS7P8MaCWkY9yvjZxPV9VIzNQkTK0zmaKDN20f3pTS0E49PAxvx/O6+y2VtC/O2Ias0kwFQkSzZKjQo2fczQwA==
+X-MS-Exchange-CrossTenant-userprincipalname: Vgw/i5OgStAW4NH8lB6S2dTTaBXJBL8FntPeixBdf7rcLz3FPXianjrvx/gPYDwEvxfJMSj1LOgoI9IdoYHz2w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1439
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Unify the definitions of atomic_sub_if_positive() &
-atomic64_sub_if_positive() using a macro like we do for most other
-atomic functions. This allows us to share the implementation ensuring
-consistency between the two. Notably this provides the appropriate
-loongson3_war barriers in the atomic64_sub_if_positive() case which were
-previously missing.
+Remove the remaining duplication between 32b & 64b in asm/atomic.h by
+making use of an ATOMIC_OPS() macro to generate:
 
-The code is rearranged a little to handle the !kernel_uses_llsc case
-first in order to de-indent the LL/SC case & allow us not to go over 80
-characters per line.
+  - atomic_read()/atomic64_read()
+  - atomic_set()/atomic64_set()
+  - atomic_cmpxchg()/atomic64_cmpxchg()
+  - atomic_xchg()/atomic64_xchg()
+
+This is consistent with the way all other functions in asm/atomic.h are
+generated, and ensures consistency between the 32b & 64b functions.
+
+Of note is that this results in the above now being static inline
+functions rather than macros.
 
 Signed-off-by: Paul Burton <paul.burton@mips.com>
 ---
 
 Changes in v2: None
 
- arch/mips/include/asm/atomic.h | 164 ++++++++++++---------------------
- 1 file changed, 58 insertions(+), 106 deletions(-)
+ arch/mips/include/asm/atomic.h | 70 +++++++++++++---------------------
+ 1 file changed, 27 insertions(+), 43 deletions(-)
 
 diff --git a/arch/mips/include/asm/atomic.h b/arch/mips/include/asm/atomic.=
 h
-index 24443ef29337..96ef50fa2817 100644
+index 96ef50fa2817..e5ac88392d1f 100644
 --- a/arch/mips/include/asm/atomic.h
 +++ b/arch/mips/include/asm/atomic.h
-@@ -192,65 +192,71 @@ ATOMIC_OPS(atomic64, xor, s64, ^=3D, xor, lld, scd)
-  * Atomically test @v and subtract @i if @v is greater or equal than @i.
-  * The function returns the old value of @v minus @i.
-  */
--static __inline__ int atomic_sub_if_positive(int i, atomic_t * v)
--{
--	int result;
--
--	smp_mb__before_atomic();
--
--	if (kernel_uses_llsc) {
--		int temp;
--
--		__asm__ __volatile__(
--		"	.set	push					\n"
--		"	.set	"MIPS_ISA_LEVEL"			\n"
--		"	" __SYNC(full, loongson3_war) "			\n"
--		"1:	ll	%1, %2		# atomic_sub_if_positive\n"
--		"	.set	pop					\n"
--		"	subu	%0, %1, %3				\n"
--		"	move	%1, %0					\n"
--		"	bltz	%0, 2f					\n"
--		"	.set	push					\n"
--		"	.set	"MIPS_ISA_LEVEL"			\n"
--		"	sc	%1, %2					\n"
--		"\t" __SC_BEQZ "%1, 1b					\n"
--		"2:	" __SYNC(full, loongson3_war) "			\n"
--		"	.set	pop					\n"
--		: "=3D&r" (result), "=3D&r" (temp),
--		  "+" GCC_OFF_SMALL_ASM() (v->counter)
--		: "Ir" (i) : __LLSC_CLOBBER);
--	} else {
--		unsigned long flags;
-+#define ATOMIC_SIP_OP(pfx, type, op, ll, sc)				\
-+static __inline__ int pfx##_sub_if_positive(type i, pfx##_t * v)	\
+@@ -24,24 +24,34 @@
+ #include <asm/sync.h>
+ #include <asm/war.h>
+=20
+-#define ATOMIC_INIT(i)	  { (i) }
++#define ATOMIC_OPS(pfx, type)						\
++static __always_inline type pfx##_read(const pfx##_t *v)		\
 +{									\
-+	type temp, result;						\
++	return READ_ONCE(v->counter);					\
++}									\
 +									\
-+	smp_mb__before_atomic();					\
++static __always_inline void pfx##_set(pfx##_t *v, type i)		\
++{									\
++	WRITE_ONCE(v->counter, i);					\
++}									\
 +									\
-+	if (!kernel_uses_llsc) {					\
-+		unsigned long flags;					\
++static __always_inline type pfx##_cmpxchg(pfx##_t *v, type o, type n)	\
++{									\
++	return cmpxchg(&v->counter, o, n);				\
++}									\
 +									\
-+		raw_local_irq_save(flags);				\
-+		result =3D v->counter;					\
-+		result -=3D i;						\
-+		if (result >=3D 0)					\
-+			v->counter =3D result;				\
-+		raw_local_irq_restore(flags);				\
-+		smp_mb__after_atomic();					\
-+		return result;						\
-+	}								\
-+									\
-+	__asm__ __volatile__(						\
-+	"	.set	push					\n"	\
-+	"	.set	" MIPS_ISA_LEVEL "			\n"	\
-+	"	" __SYNC(full, loongson3_war) "			\n"	\
-+	"1:	" #ll "	%1, %2		# atomic_sub_if_positive\n"	\
-+	"	.set	pop					\n"	\
-+	"	" #op "	%0, %1, %3				\n"	\
-+	"	move	%1, %0					\n"	\
-+	"	bltz	%0, 2f					\n"	\
-+	"	.set	push					\n"	\
-+	"	.set	" MIPS_ISA_LEVEL "			\n"	\
-+	"	" #sc "	%1, %2					\n"	\
-+	"	" __SC_BEQZ "%1, 1b				\n"	\
-+	"2:	" __SYNC(full, loongson3_war) "			\n"	\
-+	"	.set	pop					\n"	\
-+	: "=3D&r" (result), "=3D&r" (temp),					\
-+	  "+" GCC_OFF_SMALL_ASM() (v->counter)				\
-+	: "Ir" (i)							\
-+	: __LLSC_CLOBBER);						\
-+									\
-+	/*								\
-+	 * In the Loongson3 workaround case we already have a		\
-+	 * completion barrier at 2: above, which is needed due to the	\
-+	 * bltz that can branch	to code outside of the LL/SC loop. As	\
-+	 * such, we don't need to emit another barrier here.		\
-+	 */								\
-+	if (!__SYNC_loongson3_war)					\
-+		smp_mb__after_atomic();					\
-+									\
-+	return result;							\
++static __always_inline type pfx##_xchg(pfx##_t *v, type n)		\
++{									\
++	return xchg(&v->counter, n);					\
 +}
 =20
--		raw_local_irq_save(flags);
--		result =3D v->counter;
--		result -=3D i;
--		if (result >=3D 0)
--			v->counter =3D result;
--		raw_local_irq_restore(flags);
--	}
-+ATOMIC_SIP_OP(atomic, int, subu, ll, sc)
-+#define atomic_dec_if_positive(v)	atomic_sub_if_positive(1, v)
+-/*
+- * atomic_read - read atomic variable
+- * @v: pointer of type atomic_t
+- *
+- * Atomically reads the value of @v.
+- */
+-#define atomic_read(v)		READ_ONCE((v)->counter)
++#define ATOMIC_INIT(i)		{ (i) }
++ATOMIC_OPS(atomic, int)
 =20
--	/*
--	 * In the Loongson3 workaround case we already have a completion
--	 * barrier at 2: above, which is needed due to the bltz that can branch
--	 * to code outside of the LL/SC loop. As such, we don't need to emit
--	 * another barrier here.
--	 */
--	if (!__SYNC_loongson3_war)
--		smp_mb__after_atomic();
+-/*
+- * atomic_set - set atomic variable
+- * @v: pointer of type atomic_t
+- * @i: required value
+- *
+- * Atomically sets the value of @v to @i.
+- */
+-#define atomic_set(v, i)	WRITE_ONCE((v)->counter, (i))
 +#ifdef CONFIG_64BIT
-+ATOMIC_SIP_OP(atomic64, s64, dsubu, lld, scd)
-+#define atomic64_dec_if_positive(v)	atomic64_sub_if_positive(1, v)
++# define ATOMIC64_INIT(i)	{ (i) }
++ATOMIC_OPS(atomic64, s64)
 +#endif
 =20
--	return result;
--}
-+#undef ATOMIC_SIP_OP
+ #define ATOMIC_OP(pfx, op, type, c_op, asm_op, ll, sc)			\
+ static __inline__ void pfx##_##op(type i, pfx##_t * v)			\
+@@ -135,6 +145,7 @@ static __inline__ type pfx##_fetch_##op##_relaxed(type =
+i, pfx##_t * v)	\
+ 	return result;							\
+ }
 =20
- #define atomic_cmpxchg(v, o, n) (cmpxchg(&((v)->counter), (o), (n)))
- #define atomic_xchg(v, new) (xchg(&((v)->counter), (new)))
++#undef ATOMIC_OPS
+ #define ATOMIC_OPS(pfx, op, type, c_op, asm_op, ll, sc)			\
+ 	ATOMIC_OP(pfx, op, type, c_op, asm_op, ll, sc)			\
+ 	ATOMIC_OP_RETURN(pfx, op, type, c_op, asm_op, ll, sc)		\
+@@ -254,31 +265,4 @@ ATOMIC_SIP_OP(atomic64, s64, dsubu, lld, scd)
 =20
--/*
-- * atomic_dec_if_positive - decrement by 1 if old value positive
-- * @v: pointer of type atomic_t
-- */
--#define atomic_dec_if_positive(v)	atomic_sub_if_positive(1, v)
+ #undef ATOMIC_SIP_OP
+=20
+-#define atomic_cmpxchg(v, o, n) (cmpxchg(&((v)->counter), (o), (n)))
+-#define atomic_xchg(v, new) (xchg(&((v)->counter), (new)))
 -
- #ifdef CONFIG_64BIT
-=20
- #define ATOMIC64_INIT(i)    { (i) }
-@@ -269,64 +275,10 @@ static __inline__ int atomic_sub_if_positive(int i, a=
-tomic_t * v)
-  */
- #define atomic64_set(v, i)	WRITE_ONCE((v)->counter, (i))
-=20
+-#ifdef CONFIG_64BIT
+-
+-#define ATOMIC64_INIT(i)    { (i) }
+-
 -/*
-- * atomic64_sub_if_positive - conditionally subtract integer from atomic
-- *                            variable
-- * @i: integer value to subtract
+- * atomic64_read - read atomic variable
 - * @v: pointer of type atomic64_t
 - *
-- * Atomically test @v and subtract @i if @v is greater or equal than @i.
-- * The function returns the old value of @v minus @i.
 - */
--static __inline__ s64 atomic64_sub_if_positive(s64 i, atomic64_t * v)
--{
--	s64 result;
+-#define atomic64_read(v)	READ_ONCE((v)->counter)
 -
--	smp_mb__before_llsc();
--
--	if (kernel_uses_llsc) {
--		s64 temp;
--
--		__asm__ __volatile__(
--		"	.set	push					\n"
--		"	.set	"MIPS_ISA_LEVEL"			\n"
--		"1:	lld	%1, %2		# atomic64_sub_if_positive\n"
--		"	dsubu	%0, %1, %3				\n"
--		"	move	%1, %0					\n"
--		"	bltz	%0, 1f					\n"
--		"	scd	%1, %2					\n"
--		"\t" __SC_BEQZ "%1, 1b					\n"
--		"1:							\n"
--		"	.set	pop					\n"
--		: "=3D&r" (result), "=3D&r" (temp),
--		  "+" GCC_OFF_SMALL_ASM() (v->counter)
--		: "Ir" (i));
--	} else {
--		unsigned long flags;
--
--		raw_local_irq_save(flags);
--		result =3D v->counter;
--		result -=3D i;
--		if (result >=3D 0)
--			v->counter =3D result;
--		raw_local_irq_restore(flags);
--	}
--
--	smp_llsc_mb();
--
--	return result;
--}
--
- #define atomic64_cmpxchg(v, o, n) \
- 	((__typeof__((v)->counter))cmpxchg(&((v)->counter), (o), (n)))
- #define atomic64_xchg(v, new) (xchg(&((v)->counter), (new)))
-=20
 -/*
-- * atomic64_dec_if_positive - decrement by 1 if old value positive
+- * atomic64_set - set atomic variable
 - * @v: pointer of type atomic64_t
+- * @i: required value
 - */
--#define atomic64_dec_if_positive(v)	atomic64_sub_if_positive(1, v)
+-#define atomic64_set(v, i)	WRITE_ONCE((v)->counter, (i))
 -
- #endif /* CONFIG_64BIT */
-=20
+-#define atomic64_cmpxchg(v, o, n) \
+-	((__typeof__((v)->counter))cmpxchg(&((v)->counter), (o), (n)))
+-#define atomic64_xchg(v, new) (xchg(&((v)->counter), (new)))
+-
+-#endif /* CONFIG_64BIT */
+-
  #endif /* _ASM_ATOMIC_H */
 --=20
 2.23.0
