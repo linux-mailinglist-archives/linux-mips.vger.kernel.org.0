@@ -2,76 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C0EC3103
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 12:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25971C339C
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Oct 2019 14:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730302AbfJAKMD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Oct 2019 06:12:03 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:52992 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729983AbfJAKMD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Oct 2019 06:12:03 -0400
-Received: by mail-wm1-f65.google.com with SMTP id r19so2668697wmh.2
-        for <linux-mips@vger.kernel.org>; Tue, 01 Oct 2019 03:12:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=8hy45pyP7kv6EXfVxQmzNrFK2VbFBW1Lka/Gmb0X5J0=;
-        b=J7AYTjPqD5jXOPq7aic9RA8CQUOWh4TzXM79Ki6WY5pV+NU0lcnsopzWRK734enmtS
-         aIN8K2zIIsNuDNokBRn5ANOCSDxrJASgmDumtnQiAFlKDHCYPR9QLokvRL1+7pI+r5eG
-         EgGd8Zbkw0NIMKrY90aFXTCqcOLlhj0wWeSYELbaGGKRRS1HeVoTBbyueR2JdfkEsQ8r
-         6x2jjpafrgoFux01vRuGQqxDlqebtdUR0AK8nda/osYxrW+JA9rma3mZbCbek0UG6lT1
-         jg0Gi4EF4iTC25c+QTBfhRILf7Zc2pdnFte2FmXGPfpyRrxO8+pWrfYewQD8hrKfCeH9
-         f29w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8hy45pyP7kv6EXfVxQmzNrFK2VbFBW1Lka/Gmb0X5J0=;
-        b=oCkQovIDJflqRG8tFqdW7+yo7y9Xfy4WqW92BxCr2SDBzML5g5N/zs68jceTdjzCp/
-         wwVOzCqmZG7/UXwPW2XLRHaXmin/AIPmn3Pw58ORTl9lvoQkSlGT95ub72hm+XnMA7jy
-         GZ0kEWSMCigIdzoWLYXiSBoRoI3XmGLoh1FJpodi9BisjG1YLzoFF/a40z6LF6ysR8Yy
-         RHt5lkvbxM8W79ieCPv24TyXQgCdwgH+uRxE4ngNA0AFCV4rTe5AZJGFHrL8Zii01xRo
-         JPaW9avBN3PY32LLX2uiMjc5l74D+f4W94qwJSasqIEICUBdfwuzG7Znd3G89/TG5XMQ
-         Labw==
-X-Gm-Message-State: APjAAAXCV+tXcsghKtTnInD6sqAeGbY49hGmDsjAF0NVe9dwe2QcWLmD
-        Z8xxvK2g526/V9Tq0j9EJdSzoA==
-X-Google-Smtp-Source: APXvYqyce6kLiNa02VTrU6yr/ckelEv9Vwx7Pd1FX7YNYnZ2gxLu2G+aiD+MbyaODltXlPmlKz4Vqg==
-X-Received: by 2002:a7b:cf12:: with SMTP id l18mr3198121wmg.25.1569924720081;
-        Tue, 01 Oct 2019 03:12:00 -0700 (PDT)
-Received: from [192.168.86.34] (cpc89974-aztw32-2-0-cust43.18-1.cable.virginm.net. [86.30.250.44])
-        by smtp.googlemail.com with ESMTPSA id r2sm4155309wma.1.2019.10.01.03.11.58
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 01 Oct 2019 03:11:59 -0700 (PDT)
-Subject: Re: [PATCH v6 1/4] nvmem: core: add nvmem_device_find
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20190923114636.6748-1-tbogendoerfer@suse.de>
- <20190923114636.6748-2-tbogendoerfer@suse.de>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Message-ID: <ce44c762-f9a6-b4ef-fa8a-19ee4a6d391f@linaro.org>
-Date:   Tue, 1 Oct 2019 11:11:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1731291AbfJAMA4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Oct 2019 08:00:56 -0400
+Received: from forward102j.mail.yandex.net ([5.45.198.243]:55205 "EHLO
+        forward102j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726131AbfJAMA4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Oct 2019 08:00:56 -0400
+Received: from mxback23o.mail.yandex.net (mxback23o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::74])
+        by forward102j.mail.yandex.net (Yandex) with ESMTP id C7871F21182;
+        Tue,  1 Oct 2019 15:00:51 +0300 (MSK)
+Received: from sas2-b0ca3cd64eaa.qloud-c.yandex.net (sas2-b0ca3cd64eaa.qloud-c.yandex.net [2a02:6b8:c14:718c:0:640:b0ca:3cd6])
+        by mxback23o.mail.yandex.net (nwsmtp/Yandex) with ESMTP id 1N2e8GAzMn-0orauqwk;
+        Tue, 01 Oct 2019 15:00:51 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1569931251;
+        bh=CFjTu00A06m+sp8vEvai0/UZaJ9/+yfU/cO5F4YlOG8=;
+        h=In-Reply-To:From:To:Subject:Cc:Date:References:Message-ID;
+        b=lqmgMNyIark8SWsubs29lk1z8Uud94r7wmk93hAJ95bXL8lh07FKKf2dL9h+zMTs0
+         v9hCQBy/eosp8YfxtRcDSi8fSK1ROcG7jj4vC8PH03nJDY4exYNapy/DBLhwiDfY6v
+         XoJLIxCrp50emFXVRN5MalAdfx1Yem4hW+0BxNj4=
+Authentication-Results: mxback23o.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by sas2-b0ca3cd64eaa.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id IXAnvLjvZC-0mIeI0Af;
+        Tue, 01 Oct 2019 15:00:49 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+Subject: Re: [PATCH] MIPS: cpu-bugs64: Mark inline functions as
+ __always_inline
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+References: <20190927053339.11866-1-jiaxun.yang@flygoat.com>
+ <20190930223452.ouznftjxryfp5zux@pburton-laptop>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <27d1e488-12c1-94c2-4910-b923fc1ca7e9@flygoat.com>
+Date:   Tue, 1 Oct 2019 20:00:43 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-In-Reply-To: <20190923114636.6748-2-tbogendoerfer@suse.de>
+In-Reply-To: <20190930223452.ouznftjxryfp5zux@pburton-laptop>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -79,185 +51,85 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-On 23/09/2019 12:46, Thomas Bogendoerfer wrote:
-> nvmem_device_find provides a way to search for nvmem devices with
-> the help of a match function simlair to bus_find_device.
+On 2019/10/1 上午6:34, Paul Burton wrote:
+> Hi Jiaxun,
 > 
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> ---
-
-
-Thanks for the patch,
-This patch looks good for me.
-
-Do you know which tree is going to pick this series up?
-
-I can either apply this patch to nvmem tree
-
-or here is my Ack for this patch to take it via other trees.
-
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-
-
---srini
->   Documentation/driver-api/nvmem.rst |  2 ++
->   drivers/nvmem/core.c               | 61 +++++++++++++++++---------------------
->   include/linux/nvmem-consumer.h     |  9 ++++++
->   3 files changed, 38 insertions(+), 34 deletions(-)
+> On Fri, Sep 27, 2019 at 01:33:39PM +0800, Jiaxun Yang wrote:
+>> Commit ac7c3e4ff401 ("compiler: enable CONFIG_OPTIMIZE_INLINING forcibly")
+>> allows compiler to uninline functions marked as 'inline'. Leading to section
+>> mismatch in this case.
+>>
+>> Since we're using const variables to pass assembly flags, 'inline's can't
+>> be dropped. So we simply mark them as __always_inline.
+>>
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> Cc: Paul Burton <paul.burton@mips.com>
+>> Cc: linux-mips@vger.kernel.org
+>> ---
+>>   arch/mips/kernel/cpu-bugs64.c | 8 ++++----
+>>   1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/arch/mips/kernel/cpu-bugs64.c b/arch/mips/kernel/cpu-bugs64.c
+>> index fa62cd1dff93..93d23232357c 100644
+>> --- a/arch/mips/kernel/cpu-bugs64.c
+>> +++ b/arch/mips/kernel/cpu-bugs64.c
+>> @@ -24,7 +24,7 @@ static char r4kwar[] __initdata =
+>>   static char daddiwar[] __initdata =
+>>   	"Enable CPU_DADDI_WORKAROUNDS to rectify.";
+>>   
+>> -static inline void align_mod(const int align, const int mod)
+>> +static __always_inline void align_mod(const int align, const int mod)
+>>   {
+>>   	asm volatile(
+>>   		".set	push\n\t"
+>> @@ -113,7 +113,7 @@ static __always_inline void mult_sh_align_mod(long *v1, long *v2, long *w,
+>>   	*w = lw;
+>>   }
+>>   
+>> -static inline void check_mult_sh(void)
+>> +static __always_inline void check_mult_sh(void)
+>>   {
+>>   	long v1[8], v2[8], w[8];
+>>   	int bug, fix, i;
 > 
-> diff --git a/Documentation/driver-api/nvmem.rst b/Documentation/driver-api/nvmem.rst
-> index d9d958d5c824..287e86819640 100644
-> --- a/Documentation/driver-api/nvmem.rst
-> +++ b/Documentation/driver-api/nvmem.rst
-> @@ -129,6 +129,8 @@ To facilitate such consumers NVMEM framework provides below apis::
->     struct nvmem_device *nvmem_device_get(struct device *dev, const char *name);
->     struct nvmem_device *devm_nvmem_device_get(struct device *dev,
->   					   const char *name);
-> +  struct nvmem_device *nvmem_device_find(void *data,
-> +			int (*match)(struct device *dev, const void *data));
->     void nvmem_device_put(struct nvmem_device *nvmem);
->     int nvmem_device_read(struct nvmem_device *nvmem, unsigned int offset,
->   		      size_t bytes, void *buf);
-> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-> index 057d1ff87d5d..9f1ee9c766ec 100644
-> --- a/drivers/nvmem/core.c
-> +++ b/drivers/nvmem/core.c
-> @@ -76,33 +76,6 @@ static struct bus_type nvmem_bus_type = {
->   	.name		= "nvmem",
->   };
->   
-> -static struct nvmem_device *of_nvmem_find(struct device_node *nvmem_np)
-> -{
-> -	struct device *d;
-> -
-> -	if (!nvmem_np)
-> -		return NULL;
-> -
-> -	d = bus_find_device_by_of_node(&nvmem_bus_type, nvmem_np);
-> -
-> -	if (!d)
-> -		return NULL;
-> -
-> -	return to_nvmem_device(d);
-> -}
-> -
-> -static struct nvmem_device *nvmem_find(const char *name)
-> -{
-> -	struct device *d;
-> -
-> -	d = bus_find_device_by_name(&nvmem_bus_type, NULL, name);
-> -
-> -	if (!d)
-> -		return NULL;
-> -
-> -	return to_nvmem_device(d);
-> -}
-> -
->   static void nvmem_cell_drop(struct nvmem_cell *cell)
->   {
->   	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_CELL_REMOVE, cell);
-> @@ -532,13 +505,16 @@ int devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem)
->   }
->   EXPORT_SYMBOL(devm_nvmem_unregister);
->   
-> -static struct nvmem_device *__nvmem_device_get(struct device_node *np,
-> -					       const char *nvmem_name)
-> +static struct nvmem_device *__nvmem_device_get(void *data,
-> +			int (*match)(struct device *dev, const void *data))
->   {
->   	struct nvmem_device *nvmem = NULL;
-> +	struct device *dev;
->   
->   	mutex_lock(&nvmem_mutex);
-> -	nvmem = np ? of_nvmem_find(np) : nvmem_find(nvmem_name);
-> +	dev = bus_find_device(&nvmem_bus_type, NULL, data, match);
-> +	if (dev)
-> +		nvmem = to_nvmem_device(dev);
->   	mutex_unlock(&nvmem_mutex);
->   	if (!nvmem)
->   		return ERR_PTR(-EPROBE_DEFER);
-> @@ -587,7 +563,7 @@ struct nvmem_device *of_nvmem_device_get(struct device_node *np, const char *id)
->   	if (!nvmem_np)
->   		return ERR_PTR(-ENOENT);
->   
-> -	return __nvmem_device_get(nvmem_np, NULL);
-> +	return __nvmem_device_get(nvmem_np, device_match_of_node);
->   }
->   EXPORT_SYMBOL_GPL(of_nvmem_device_get);
->   #endif
-> @@ -613,10 +589,26 @@ struct nvmem_device *nvmem_device_get(struct device *dev, const char *dev_name)
->   
->   	}
->   
-> -	return __nvmem_device_get(NULL, dev_name);
-> +	return __nvmem_device_get((void *)dev_name, device_match_name);
->   }
->   EXPORT_SYMBOL_GPL(nvmem_device_get);
->   
-> +/**
-> + * nvmem_device_find() - Find nvmem device with matching function
-> + *
-> + * @data: Data to pass to match function
-> + * @match: Callback function to check device
-> + *
-> + * Return: ERR_PTR() on error or a valid pointer to a struct nvmem_device
-> + * on success.
-> + */
-> +struct nvmem_device *nvmem_device_find(void *data,
-> +			int (*match)(struct device *dev, const void *data))
-> +{
-> +	return __nvmem_device_get(data, match);
-> +}
-> +EXPORT_SYMBOL_GPL(nvmem_device_find);
-> +
->   static int devm_nvmem_device_match(struct device *dev, void *res, void *data)
->   {
->   	struct nvmem_device **nvmem = res;
-> @@ -710,7 +702,8 @@ nvmem_cell_get_from_lookup(struct device *dev, const char *con_id)
->   		if ((strcmp(lookup->dev_id, dev_id) == 0) &&
->   		    (strcmp(lookup->con_id, con_id) == 0)) {
->   			/* This is the right entry. */
-> -			nvmem = __nvmem_device_get(NULL, lookup->nvmem_name);
-> +			nvmem = __nvmem_device_get((void *)lookup->nvmem_name,
-> +						   device_match_name);
->   			if (IS_ERR(nvmem)) {
->   				/* Provider may not be registered yet. */
->   				cell = ERR_CAST(nvmem);
-> @@ -780,7 +773,7 @@ struct nvmem_cell *of_nvmem_cell_get(struct device_node *np, const char *id)
->   	if (!nvmem_np)
->   		return ERR_PTR(-EINVAL);
->   
-> -	nvmem = __nvmem_device_get(nvmem_np, NULL);
-> +	nvmem = __nvmem_device_get(nvmem_np, device_match_of_node);
->   	of_node_put(nvmem_np);
->   	if (IS_ERR(nvmem))
->   		return ERR_CAST(nvmem);
-> diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consumer.h
-> index 8f8be5b00060..02dc4aa992b2 100644
-> --- a/include/linux/nvmem-consumer.h
-> +++ b/include/linux/nvmem-consumer.h
-> @@ -89,6 +89,9 @@ void nvmem_del_cell_lookups(struct nvmem_cell_lookup *entries,
->   int nvmem_register_notifier(struct notifier_block *nb);
->   int nvmem_unregister_notifier(struct notifier_block *nb);
->   
-> +struct nvmem_device *nvmem_device_find(void *data,
-> +			int (*match)(struct device *dev, const void *data));
-> +
->   #else
->   
->   static inline struct nvmem_cell *nvmem_cell_get(struct device *dev,
-> @@ -204,6 +207,12 @@ static inline int nvmem_unregister_notifier(struct notifier_block *nb)
->   	return -EOPNOTSUPP;
->   }
->   
-> +static inline struct nvmem_device *nvmem_device_find(void *data,
-> +			int (*match)(struct device *dev, const void *data))
-> +{
-> +	return NULL;
-> +}
-> +
->   #endif /* CONFIG_NVMEM */
->   
->   #if IS_ENABLED(CONFIG_NVMEM) && IS_ENABLED(CONFIG_OF)
+> So far so good, I see align_mod() uses arguments in inline asm &
+> check_mult_sh() makes use of it (via mult_sh_align_mod() which is
+> already __always_inline).
 > 
+> I'd prefer that we add the __init annotation too though, even if all
+> it's doing is making it clear to human readers when this code can be
+> used.
+Hi Paul,
+
+You're right.
+> 
+>> @@ -176,7 +176,7 @@ asmlinkage void __init do_daddi_ov(struct pt_regs *regs)
+>>   	exception_exit(prev_state);
+>>   }
+>>   
+>> -static inline void check_daddi(void)
+>> +static __always_inline void check_daddi(void)
+>>   {
+>>   	extern asmlinkage void handle_daddi_ov(void);
+>>   	unsigned long flags;
+>> @@ -242,7 +242,7 @@ static inline void check_daddi(void)
+>>   
+>>   int daddiu_bug	= IS_ENABLED(CONFIG_CPU_MIPSR6) ? 0 : -1;
+>>   
+>> -static inline void check_daddiu(void)
+>> +static __always_inline void check_daddiu(void)
+>>   {
+>>   	long v, w, tmp;
+>>   
+> 
+> I'm not seeing a reason for always inlining check_daddi() or
+> check_daddiu() though - neither one appears to use arguments as inline
+> asm immediates, so I'd prefer that we just mark them with __init & let
+> the compiler decide whether to inline.
+> 
+> Does that sound good to you?
+LGTM. Should I send v2 or you just fix them at apply time?
+
+Thanks.
+--
+Jiaxun
