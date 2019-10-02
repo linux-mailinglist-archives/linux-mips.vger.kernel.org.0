@@ -2,154 +2,381 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FCBC8F83
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Oct 2019 19:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2E8C902E
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Oct 2019 19:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728199AbfJBROg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Oct 2019 13:14:36 -0400
-Received: from mail-eopbgr690098.outbound.protection.outlook.com ([40.107.69.98]:60710
-        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
+        id S1728412AbfJBRsA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Oct 2019 13:48:00 -0400
+Received: from mail-eopbgr720108.outbound.protection.outlook.com ([40.107.72.108]:10863
+        "EHLO NAM05-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728149AbfJBROg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 2 Oct 2019 13:14:36 -0400
+        id S1727268AbfJBRsA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 2 Oct 2019 13:48:00 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oJCovABkeFGMj0MJ4jXs/7Ypu8fRRRKr94JUzJlx7E7SEeFiwSerBTYK+1MXNVOUz1gid8MITgZJB06Eio9wrL3vFHbK7UD0lPRkTCLTlwJrGPUwTG7SxsBOwK9POTDh/t5id3dtFNn7S8+zmlI5XfkVDe6ak4XwbNPW4DhlRhdH8WZ7d/wrDoH6pfhnZMS/dDRuJ3MzReC3E+moF6L/VcHqhiN/uJid/wOk3vvN8qVwh7d5EK7UMRwzUFFjlNyNxu2vT0pBzrg7AYrcLL2AuIEacRX8D2Jfe6KvGxWA2IPJNtGzkqEoyi4IjYmC/99B4zQxtAnL1ARyMViRq9rTww==
+ b=i7rsepOvFm4KUdum7l2ikOnyBOBjZoP6yKwcDXZY/ObTY52IMX5PXQ5W8/d0isyl3cxtrHazzJToOAj6lM9SPqGs5BqCwpz7CzZ8VJWw2r7UWT4KOK2rbe+kqO11Uol10FvaNmAX9y2sAIjtFCyudcGbhRobK+vnzetNt4mUZHe+nY4/+eArZZOPcPmF3/H3Z4t24q8UxeVG0gCrwMWpv1IJfRE9noSS1X6CgNYnz8VkRRGcOAGzEz16FoFTYzHU2ijLIq8Q+e3clwk+IeVXbN99R6Lp0nl38A+0ssqw7o7ALYHz7nnToJhaks1PivKUgBcAxELFyXtobEwFuvT2iA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WG/16uns95m8iiPc/tsEWzSuSVDWlnwEWNuKqiPtmd0=;
- b=G8WPyj0MN5RaUL+hWT3edTGRpHMKg5wvG0FEt6JdVc3YompHrUrZZBGM+j8LASTUgZhqPbxPkbugPOcXG0tB8PcdhXNj/5xOvMxrrrtZtcc7dBU2WsCiiAdQx/CBn52T4EFQ67pOqAuEaKWc/SrvB06SttGOh6yiaDw4nOZkxolqMFzGJRaYxWxGeUQMJFneE9ugx+7WLSqW6mPdF3+Qm3vLPztPiRX+wCN5BwPnK3CFpDT6FNzyOBIL8cNjEYmwJzfnlqQhHxsZwwkXNAP7zXtoCEXlqFunWvzBVLGCWsdZMapRchdq+aJ4FSSjOzrJsFy2SNyWQAgIHNst3W/iSA==
+ bh=GGEc5cpQIipOYl33IEtgMeuoA14CpFjtNvqpQZ/WwW0=;
+ b=U89nWAwI560qmwgfgqcxO8ePt4c4XBkegavqOtg3+Cp3oSOfRN2+vTuh6rWME2LBH+9UU7WvKc5oDbJdCkCwDpXHHbI6O4hJYCwTMr0m5mngrXxJj5ZAsKafNGXsDjDOAqPlIwuqCth7/66wGFkJnve15yr4PrVd2cYKW38GKlWzKmAOPTAkVMiI+VxmxidKxNytT8fG5f1sbCB2cN6QMiN9/kDFuw504CAw3q/rpvdFO1y2i6Nv5LWN1sKPHfdg4xz3ijyw6YB3LbjRbJwUh4H9fqq21n72XLUbZ2CxSQ/P1+vqsJh9YtIbhzZFsRdiURi4Ux5F4KTdaX+t4eiUMA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WG/16uns95m8iiPc/tsEWzSuSVDWlnwEWNuKqiPtmd0=;
- b=DAKoCadUU+32PMe6lKNWD+PLe7U9CP43oz83lbICGmEmb4V6NmZdTKObjuc+pu1CblVxxU6bQrJuWkwlGrc/hUVc1L5n9BN4nuWSed5QEQ0hzs/fALgp2iWZbfF6ynHT7DD33z8E/e81781r1dpUdxQWmpRHk8lS+XX1UmK2fNU=
+ bh=GGEc5cpQIipOYl33IEtgMeuoA14CpFjtNvqpQZ/WwW0=;
+ b=FSBWxLvLojUPbDC72Tbbw4O3JsNxB4nRbb8Jop/ghGZCspToegHVPYGbKNfIvM/EnnCO79oW6rKW+PTTdJy9Z+kJ0QEjuwpTlOxDOnUzVFVTJA8PQ8bLDiWLxSHPr3ytRBCawY6Na+wXDGnGFfZSE+Li7Onlqa53F02qLQxoLps=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1759.namprd22.prod.outlook.com (10.164.206.39) with Microsoft SMTP
+ MWHPR2201MB1646.namprd22.prod.outlook.com (10.174.167.35) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.20; Wed, 2 Oct 2019 17:14:32 +0000
+ 15.20.2305.20; Wed, 2 Oct 2019 17:46:17 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481%2]) with mapi id 15.20.2305.023; Wed, 2 Oct 2019
- 17:14:31 +0000
+ 17:46:17 +0000
 From:   Paul Burton <paul.burton@mips.com>
-To:     Paul Burton <pburton@wavecomp.com>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Paul Burton <pburton@wavecomp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: octeon: Include required header; fix octeon
- ethernet  build
-Thread-Topic: [PATCH] MIPS: octeon: Include required header; fix octeon
- ethernet  build
-Thread-Index: AQHVeUTaE242exN6yU6adRnp4AQQRw==
-Date:   Wed, 2 Oct 2019 17:14:31 +0000
-Message-ID: <MWHPR2201MB12773A25D55977CA6ABA0D56C19C0@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20191001215622.4173931-1-paul.burton@mips.com>
-In-Reply-To: <20191001215622.4173931-1-paul.burton@mips.com>
+To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+CC:     Paul Burton <pburton@wavecomp.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: [PATCH 1/2] MIPS: VDSO: Remove unused gettimeofday.c
+Thread-Topic: [PATCH 1/2] MIPS: VDSO: Remove unused gettimeofday.c
+Thread-Index: AQHVeUlKziXb77G6g0exbBt6BwBZKw==
+Date:   Wed, 2 Oct 2019 17:46:17 +0000
+Message-ID: <20191002174438.127127-1-paul.burton@mips.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: BY5PR13CA0030.namprd13.prod.outlook.com
- (2603:10b6:a03:180::43) To MWHPR2201MB1277.namprd22.prod.outlook.com
+x-clientproxiedby: BYAPR07CA0076.namprd07.prod.outlook.com
+ (2603:10b6:a03:12b::17) To MWHPR2201MB1277.namprd22.prod.outlook.com
  (2603:10b6:301:18::12)
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=pburton@wavecomp.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.23.0
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1568fdba-8ecf-4413-c81f-08d7475bfd37
-x-ms-traffictypediagnostic: MWHPR2201MB1759:
-x-ms-exchange-purlcount: 1
+x-ms-office365-filtering-correlation-id: 5122012b-be29-4233-fafb-08d747606d29
+x-ms-traffictypediagnostic: MWHPR2201MB1646:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB17592C77018918C09ABF16ACC19C0@MWHPR2201MB1759.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-microsoft-antispam-prvs: <MWHPR2201MB1646BBDABB747DED2C161E09C19C0@MWHPR2201MB1646.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1728;
 x-forefront-prvs: 0178184651
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(346002)(376002)(136003)(39830400003)(396003)(366004)(199004)(189003)(14444005)(256004)(52536014)(4326008)(6306002)(9686003)(26005)(14454004)(52116002)(55016002)(478600001)(42882007)(6862004)(6246003)(229853002)(966005)(71190400001)(6436002)(71200400001)(8676002)(81156014)(81166006)(476003)(8936002)(486006)(74316002)(33656002)(44832011)(7736002)(54906003)(11346002)(3846002)(316002)(6116002)(2906002)(25786009)(99286004)(446003)(76176011)(102836004)(5660300002)(64756008)(66446008)(66556008)(386003)(66476007)(186003)(66946007)(66066001)(305945005)(7696005)(6506007)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1759;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(366004)(39830400003)(376002)(136003)(396003)(189003)(199004)(66476007)(8936002)(6116002)(6916009)(6436002)(5640700003)(3846002)(14454004)(6486002)(478600001)(1076003)(486006)(2351001)(5660300002)(81156014)(8676002)(50226002)(81166006)(66556008)(64756008)(66446008)(66946007)(316002)(36756003)(54906003)(25786009)(44832011)(6512007)(7736002)(102836004)(6506007)(52116002)(26005)(42882007)(66066001)(476003)(2616005)(386003)(99286004)(2501003)(305945005)(71190400001)(71200400001)(186003)(2906002)(14444005)(4326008)(256004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1646;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: axSEe5EO6W5RmGvltjBkbx26QsjI56OO3Kr12U2feqKVAJsMp21maxWVS35bevC5A0G/wAMXpUNRN9izxu3Tqq82AJsANe/BEYZyNFqz04u8pudVN2zIHUE+rEbhGkJrVhwxcT3JquxN3bvmhxm2AZbs6QctbXSbhDeti05woyL2C0rnMNyzM7QE7kNSpkgSZUO/RirTRfTOocW8YJSUry39rnj+0Ja9dWH2R5jzAhLtft+MZHRlap92qICaxuSzeiIzFkHucEURZd1PTQntS+uYVckCPZsDJIfR4esnrb92tyr9aNgN6d6V4ngxHejvWjbuTUnamu41dRbQfGFlQYGS8TAYjOqvtNIEDKAge3P8kkqVvB7jtPJK7aumGIWYZix/rVKuKuxp9BMXtqW4nKtsTGtI6Wm8TlwHHF+iS7ZJD9sf4iblcSW5Racoxm0m1mlft4vMyvtYEHZvVbVdEg==
+x-microsoft-antispam-message-info: T1k6q+esz27/c7Mr1YPeg56rA12sckcN7wupgHhVr9wFFSQvJYFu9SbkdtPOFOKaGLPiUTn0J2XsYJ26bXo7MrvB4rYtEslEslHoj1IDCUeAPAsMT1jLc1Ochar0A12a32oXxtJfa0nsoxznxucudxm/wbFpt73xnkQLbkKTBVVYP22UMGHKitwT+sTeH8ZZh2G9EJR/SP+8F73tVF5DEyVKBhXEExRAulGwrvIQApx18HYDECS89z8CgsTQsIDsaqsvG/R3vO2ftMZhXtr6ZptMVDf0Z9gaBEHEe/uAYN5Fjs9dRj2zI5U1vaGm20ybKlQzuxY9tvfiClz/ksnKeA2PnuIeUtOKhuYxOOtKpjQmcYQP9ZZfePg8n+LnskqofR7EVia2ur1qt4pjDTxIFbmODm3sJTS2EpLOS0cGwxE=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1568fdba-8ecf-4413-c81f-08d7475bfd37
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2019 17:14:31.6809
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5122012b-be29-4233-fafb-08d747606d29
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2019 17:46:17.3403
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JcbyZOOcabCxolbN85gvbnYVMnwuSAAJgMvRS7Bn8lqqUZBtBNOonchGbAEr2mB47/tkJV9ikm3aP+FdacEtSg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1759
+X-MS-Exchange-CrossTenant-userprincipalname: bBqF8Da9YMKrSawnq/PU/uqqNhJFNKQpqA9Sbqu6T1MB+rRMx9/kUBQhJDPGbWXglEMF2Bhfvrp9GlI5+Jo/0Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1646
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+arch/mips/vdso/gettimeofday.c has been unused since commit 24640f233b46
+("mips: Add support for generic vDSO"). Remove the dead code.
 
-Paul Burton wrote:
-> Commit 171a9bae68c7 ("staging/octeon: Allow test build on !MIPS") moved
-> the inclusion of a bunch of headers by various files in the Octeon
-> ethernet driver into a common header, but in doing so it changed the
-> order in which those headers are included.
->=20
-> Prior to the referenced commit drivers/staging/octeon/ethernet.c
-> included asm/octeon/cvmx-pip.h before asm/octeon/cvmx-ipd.h, which makes
-> use of the CVMX_PIP_SFT_RST definition pulled in by the former. After
-> commit 171a9bae68c7 ("staging/octeon: Allow test build on !MIPS") we
-> pull in asm/octeon/cvmx-ipd.h first & builds fail with:
->=20
->   In file included from drivers/staging/octeon/octeon-ethernet.h:27,
->                    from drivers/staging/octeon/ethernet.c:22:
->   arch/mips/include/asm/octeon/cvmx-ipd.h: In function 'cvmx_ipd_free_ptr=
-':
->   arch/mips/include/asm/octeon/cvmx-ipd.h:330:27: error: storage size of
->     'pip_sft_rst' isn't known
->       union cvmx_pip_sft_rst pip_sft_rst;
->                              ^~~~~~~~~~~
->   arch/mips/include/asm/octeon/cvmx-ipd.h:331:36: error: 'CVMX_PIP_SFT_RS=
-T'
->     undeclared (first use in this function); did you mean 'CVMX_CIU_SOFT_=
-RST'?
->       pip_sft_rst.u64 =3D cvmx_read_csr(CVMX_PIP_SFT_RST);
->                                       ^~~~~~~~~~~~~~~~
->                                       CVMX_CIU_SOFT_RST
->   arch/mips/include/asm/octeon/cvmx-ipd.h:331:36: note: each undeclared
->     identifier is reported only once for each function it appears in
->   arch/mips/include/asm/octeon/cvmx-ipd.h:330:27: warning: unused variabl=
-e
->     'pip_sft_rst' [-Wunused-variable]
->       union cvmx_pip_sft_rst pip_sft_rst;
->                              ^~~~~~~~~~~
->   make[4]: *** [scripts/Makefile.build:266: drivers/staging/octeon/ethern=
-et.o]
->     Error 1
->   make[3]: *** [scripts/Makefile.build:509: drivers/staging/octeon] Error=
- 2
->=20
-> Fix this by having asm/octeon/cvmx-ipd.h include the
-> asm/octeon/cvmx-pip-defs.h header that it is reliant upon, rather than
-> requiring its users to pull in that header before it.
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+Fixes: 24640f233b46 ("mips: Add support for generic vDSO")
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+---
 
-Applied to mips-fixes.
+ arch/mips/vdso/gettimeofday.c | 269 ----------------------------------
+ 1 file changed, 269 deletions(-)
+ delete mode 100644 arch/mips/vdso/gettimeofday.c
 
-> commit 0228ecf6128c
-> https://git.kernel.org/mips/c/0228ecf6128c
->=20
-> Signed-off-by: Paul Burton <paul.burton@mips.com>
-> Fixes: 171a9bae68c7 ("staging/octeon: Allow test build on !MIPS")
+diff --git a/arch/mips/vdso/gettimeofday.c b/arch/mips/vdso/gettimeofday.c
+deleted file mode 100644
+index e8243c7fd5b5..000000000000
+--- a/arch/mips/vdso/gettimeofday.c
++++ /dev/null
+@@ -1,269 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * Copyright (C) 2015 Imagination Technologies
+- * Author: Alex Smith <alex.smith@imgtec.com>
+- */
+-
+-#include "vdso.h"
+-
+-#include <linux/compiler.h>
+-#include <linux/time.h>
+-
+-#include <asm/clocksource.h>
+-#include <asm/io.h>
+-#include <asm/unistd.h>
+-#include <asm/vdso.h>
+-
+-#ifdef CONFIG_MIPS_CLOCK_VSYSCALL
+-
+-static __always_inline long gettimeofday_fallback(struct timeval *_tv,
+-					  struct timezone *_tz)
+-{
+-	register struct timezone *tz asm("a1") =3D _tz;
+-	register struct timeval *tv asm("a0") =3D _tv;
+-	register long ret asm("v0");
+-	register long nr asm("v0") =3D __NR_gettimeofday;
+-	register long error asm("a3");
+-
+-	asm volatile(
+-	"       syscall\n"
+-	: "=3Dr" (ret), "=3Dr" (error)
+-	: "r" (tv), "r" (tz), "r" (nr)
+-	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+-	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+-
+-	return error ? -ret : ret;
+-}
+-
+-#endif
+-
+-static __always_inline long clock_gettime_fallback(clockid_t _clkid,
+-					   struct timespec *_ts)
+-{
+-	register struct timespec *ts asm("a1") =3D _ts;
+-	register clockid_t clkid asm("a0") =3D _clkid;
+-	register long ret asm("v0");
+-	register long nr asm("v0") =3D __NR_clock_gettime;
+-	register long error asm("a3");
+-
+-	asm volatile(
+-	"       syscall\n"
+-	: "=3Dr" (ret), "=3Dr" (error)
+-	: "r" (clkid), "r" (ts), "r" (nr)
+-	: "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+-	  "$14", "$15", "$24", "$25", "hi", "lo", "memory");
+-
+-	return error ? -ret : ret;
+-}
+-
+-static __always_inline int do_realtime_coarse(struct timespec *ts,
+-					      const union mips_vdso_data *data)
+-{
+-	u32 start_seq;
+-
+-	do {
+-		start_seq =3D vdso_data_read_begin(data);
+-
+-		ts->tv_sec =3D data->xtime_sec;
+-		ts->tv_nsec =3D data->xtime_nsec >> data->cs_shift;
+-	} while (vdso_data_read_retry(data, start_seq));
+-
+-	return 0;
+-}
+-
+-static __always_inline int do_monotonic_coarse(struct timespec *ts,
+-					       const union mips_vdso_data *data)
+-{
+-	u32 start_seq;
+-	u64 to_mono_sec;
+-	u64 to_mono_nsec;
+-
+-	do {
+-		start_seq =3D vdso_data_read_begin(data);
+-
+-		ts->tv_sec =3D data->xtime_sec;
+-		ts->tv_nsec =3D data->xtime_nsec >> data->cs_shift;
+-
+-		to_mono_sec =3D data->wall_to_mono_sec;
+-		to_mono_nsec =3D data->wall_to_mono_nsec;
+-	} while (vdso_data_read_retry(data, start_seq));
+-
+-	ts->tv_sec +=3D to_mono_sec;
+-	timespec_add_ns(ts, to_mono_nsec);
+-
+-	return 0;
+-}
+-
+-#ifdef CONFIG_CSRC_R4K
+-
+-static __always_inline u64 read_r4k_count(void)
+-{
+-	unsigned int count;
+-
+-	__asm__ __volatile__(
+-	"	.set push\n"
+-	"	.set mips32r2\n"
+-	"	rdhwr	%0, $2\n"
+-	"	.set pop\n"
+-	: "=3Dr" (count));
+-
+-	return count;
+-}
+-
+-#endif
+-
+-#ifdef CONFIG_CLKSRC_MIPS_GIC
+-
+-static __always_inline u64 read_gic_count(const union mips_vdso_data *data=
+)
+-{
+-	void __iomem *gic =3D get_gic(data);
+-	u32 hi, hi2, lo;
+-
+-	do {
+-		hi =3D __raw_readl(gic + sizeof(lo));
+-		lo =3D __raw_readl(gic);
+-		hi2 =3D __raw_readl(gic + sizeof(lo));
+-	} while (hi2 !=3D hi);
+-
+-	return (((u64)hi) << 32) + lo;
+-}
+-
+-#endif
+-
+-static __always_inline u64 get_ns(const union mips_vdso_data *data)
+-{
+-	u64 cycle_now, delta, nsec;
+-
+-	switch (data->clock_mode) {
+-#ifdef CONFIG_CSRC_R4K
+-	case VDSO_CLOCK_R4K:
+-		cycle_now =3D read_r4k_count();
+-		break;
+-#endif
+-#ifdef CONFIG_CLKSRC_MIPS_GIC
+-	case VDSO_CLOCK_GIC:
+-		cycle_now =3D read_gic_count(data);
+-		break;
+-#endif
+-	default:
+-		return 0;
+-	}
+-
+-	delta =3D (cycle_now - data->cs_cycle_last) & data->cs_mask;
+-
+-	nsec =3D (delta * data->cs_mult) + data->xtime_nsec;
+-	nsec >>=3D data->cs_shift;
+-
+-	return nsec;
+-}
+-
+-static __always_inline int do_realtime(struct timespec *ts,
+-				       const union mips_vdso_data *data)
+-{
+-	u32 start_seq;
+-	u64 ns;
+-
+-	do {
+-		start_seq =3D vdso_data_read_begin(data);
+-
+-		if (data->clock_mode =3D=3D VDSO_CLOCK_NONE)
+-			return -ENOSYS;
+-
+-		ts->tv_sec =3D data->xtime_sec;
+-		ns =3D get_ns(data);
+-	} while (vdso_data_read_retry(data, start_seq));
+-
+-	ts->tv_nsec =3D 0;
+-	timespec_add_ns(ts, ns);
+-
+-	return 0;
+-}
+-
+-static __always_inline int do_monotonic(struct timespec *ts,
+-					const union mips_vdso_data *data)
+-{
+-	u32 start_seq;
+-	u64 ns;
+-	u64 to_mono_sec;
+-	u64 to_mono_nsec;
+-
+-	do {
+-		start_seq =3D vdso_data_read_begin(data);
+-
+-		if (data->clock_mode =3D=3D VDSO_CLOCK_NONE)
+-			return -ENOSYS;
+-
+-		ts->tv_sec =3D data->xtime_sec;
+-		ns =3D get_ns(data);
+-
+-		to_mono_sec =3D data->wall_to_mono_sec;
+-		to_mono_nsec =3D data->wall_to_mono_nsec;
+-	} while (vdso_data_read_retry(data, start_seq));
+-
+-	ts->tv_sec +=3D to_mono_sec;
+-	ts->tv_nsec =3D 0;
+-	timespec_add_ns(ts, ns + to_mono_nsec);
+-
+-	return 0;
+-}
+-
+-#ifdef CONFIG_MIPS_CLOCK_VSYSCALL
+-
+-/*
+- * This is behind the ifdef so that we don't provide the symbol when there=
+'s no
+- * possibility of there being a usable clocksource, because there's nothin=
+g we
+- * can do without it. When libc fails the symbol lookup it should fall bac=
+k on
+- * the standard syscall path.
+- */
+-int __vdso_gettimeofday(struct timeval *tv, struct timezone *tz)
+-{
+-	const union mips_vdso_data *data =3D get_vdso_data();
+-	struct timespec ts;
+-	int ret;
+-
+-	ret =3D do_realtime(&ts, data);
+-	if (ret)
+-		return gettimeofday_fallback(tv, tz);
+-
+-	if (tv) {
+-		tv->tv_sec =3D ts.tv_sec;
+-		tv->tv_usec =3D ts.tv_nsec / 1000;
+-	}
+-
+-	if (tz) {
+-		tz->tz_minuteswest =3D data->tz_minuteswest;
+-		tz->tz_dsttime =3D data->tz_dsttime;
+-	}
+-
+-	return 0;
+-}
+-
+-#endif /* CONFIG_MIPS_CLOCK_VSYSCALL */
+-
+-int __vdso_clock_gettime(clockid_t clkid, struct timespec *ts)
+-{
+-	const union mips_vdso_data *data =3D get_vdso_data();
+-	int ret =3D -1;
+-
+-	switch (clkid) {
+-	case CLOCK_REALTIME_COARSE:
+-		ret =3D do_realtime_coarse(ts, data);
+-		break;
+-	case CLOCK_MONOTONIC_COARSE:
+-		ret =3D do_monotonic_coarse(ts, data);
+-		break;
+-	case CLOCK_REALTIME:
+-		ret =3D do_realtime(ts, data);
+-		break;
+-	case CLOCK_MONOTONIC:
+-		ret =3D do_monotonic(ts, data);
+-		break;
+-	default:
+-		break;
+-	}
+-
+-	if (ret)
+-		ret =3D clock_gettime_fallback(clkid, ts);
+-
+-	return ret;
+-}
+--=20
+2.23.0
 
-Thanks,
-    Paul
-
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paul.burton@mips.com to report it. ]
