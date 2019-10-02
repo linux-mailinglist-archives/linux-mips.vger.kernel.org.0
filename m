@@ -2,130 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 241F9C902C
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Oct 2019 19:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B62E0C903E
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Oct 2019 19:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728474AbfJBRrK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Oct 2019 13:47:10 -0400
-Received: from mail-eopbgr720138.outbound.protection.outlook.com ([40.107.72.138]:35519
-        "EHLO NAM05-CO1-obe.outbound.protection.outlook.com"
+        id S1728000AbfJBRvp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Oct 2019 13:51:45 -0400
+Received: from mail-eopbgr790114.outbound.protection.outlook.com ([40.107.79.114]:62112
+        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728412AbfJBRrK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 2 Oct 2019 13:47:10 -0400
+        id S1727883AbfJBRvo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 2 Oct 2019 13:51:44 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ll+qXvac6DcutucENLeAIaupRC5y/JxU7XkoDo6E8Z6f3jjJn1LJbXKEs+h7yCd0tydMbiNIe+fiHkySipHAeF3ZDeVlQj6JfrYLgQcSGAdE/HfFKPMdJyYcoh3xLawGIs48w4tNkwjNpiS/BD9GZyPXS1E1C6hGxHnBLzJg9n4cHLovKLe5xTdhsjuIJIWQ0+VscdVKRFllYHKUPoxUzuXeF1RdXdxItPhppGTMrPw+6nVDZkXKM3etIXvhSM5tE/CePfWcZDPlkjFgu05mS6/2vwOeQUybjnmOEzdzWRXQamzwO9uEX75Mj/LtivmV7zHnjI8uPQTBzlo/sAe19A==
+ b=W3RT8l7uFExRB7OkHUAVplTTbEt/9rj1Vf3BZcajvRNTbx2KNN8iLkdfmN5CIH1u3N/aoJNYsojLb7TK8DPwGn+qQ/EU5VWyQ0RYHUp43TnwY0LJC0o1CcHhrgDHR9I9Tm7UWziBd80844/iS6TmCC0FjiMG27cyiY3tRLdyTE8THq5ydT3b+X0IE1hbq4JqoSkY6A4pDUe0kKozk4Tlvnr9poPfOzS/bDfJ8IcckfCVAlgQW1+gnLGuf14jJKZ7Jn13K2VFZAONiLliQPkvWdz/02BAt0/zaF9MEDk98HfbjbHEmmvWKC/AzgWTp//eoNow1aokSrVTjJMPv3RcLA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DXH/eNAwtvvHwaW80VvF/8bVvtjFVbQSqAW4mkjtAwA=;
- b=KiFms3EDqwZPjikrbwsivu6mTXtlQU5sqvGgeBA4JJCJFJJuTX6LNjNdLMQuptlSca0fmb5FhmMw9cIVB8L8vjuqTdzWmSzOyuU/GnjnmrgoEszC7fhYiFOx/Nx+JiGZ7NbqQkm9OZYw7lDvLRuNHuXyfMeh8Y/QZTHDFhJ/SwjvF35IAsU7DQD12Jh36gfvZAodEud0Iwub4PjhrWuQqEwJ1DZl4ekd+deUXx2YYpXy/44NJuqhk/X71fn5tpbBc0K4TSrCQCx8kxwxTzV2HxfsXKvOuFPtW3wQHdUT4eANzbG+Wvx0OXheQdyNBbNccrtmAHnFx51yo1OOyvea7w==
+ bh=ou0ZMCPjm20WTETaxPYXYOkjSt7ku8tiSmTwSGHm41A=;
+ b=MrTp1AqGGZp9LmjnbEvruaH3zNFIf/BksUQNeeLTmRUDZC9e2kkxpdtkPprApA/mcugjeylZyitTwebyfS9WB1PRRwTsCiv0lkapSIaTPD0VcYLWM2e6puQstCEVOQho4qA19m9H9XokJY56KuH5iVKun99MVB29wqHH1DjdFH8vXGMkL4Wo4lwbFqiitYG6qcO4Z+VVB7AsxkT77AX3j6w6UOw/OZNZ8cPeLuLtQuZJiKjxWp8e8HcOKGY3km4NYNED5a4H3mxuxDT/B6LcBHn0fsgH8UjnxuiFP1LDzKbVhhPiKlG2JPZPXSghkmxUX62tj/KIw7MEX6wghE8dvw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DXH/eNAwtvvHwaW80VvF/8bVvtjFVbQSqAW4mkjtAwA=;
- b=DGBHW6myIHjUTqwgcqFUJoL8eYpmrc5Mo8RnBCGFlQoaM3MUsSJwBZgYew5hrd5uJgNTYc9iZlOaOW32dWGl8HD5ogzf96dJ7ybp1gjbSrXOXYWNN0yDprz24amg90OkqPQ0PRzaMQdPoTv5TN96SNeCpyWe7/NykbwQX0FeEJs=
+ bh=ou0ZMCPjm20WTETaxPYXYOkjSt7ku8tiSmTwSGHm41A=;
+ b=gAkFzrNhMg8CgjOkE98EUTZCmmjhmhl4g0RM40VLKIIcj90Dgm/xOJGxRV5XhF5NBkvvgRIztHcNNKiQA/RYI48TL/awiIrfn/hNKFU4uinSnkeMh75X4GPQ3PZASaEEGqaWPT0ed51CRHNIi7eklXioQIqQ84Sydy9K5hf7mUQ=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1646.namprd22.prod.outlook.com (10.174.167.35) with Microsoft SMTP
+ MWHPR2201MB1582.namprd22.prod.outlook.com (10.174.167.31) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.20; Wed, 2 Oct 2019 17:46:36 +0000
+ 15.20.2305.17; Wed, 2 Oct 2019 17:51:41 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::498b:c2cd:e816:1481%2]) with mapi id 15.20.2305.023; Wed, 2 Oct 2019
- 17:46:36 +0000
+ 17:51:41 +0000
 From:   Paul Burton <paul.burton@mips.com>
-To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-CC:     Paul Burton <pburton@wavecomp.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Subject: [PATCH 2/2] MIPS: VDSO: Fix build for binutils < 2.25
-Thread-Topic: [PATCH 2/2] MIPS: VDSO: Fix build for binutils < 2.25
-Thread-Index: AQHVeUlWDfP89pcbwEGYZtTvpI6IMw==
-Date:   Wed, 2 Oct 2019 17:46:36 +0000
-Message-ID: <20191002174438.127127-2-paul.burton@mips.com>
-References: <20191002174438.127127-1-paul.burton@mips.com>
-In-Reply-To: <20191002174438.127127-1-paul.burton@mips.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Daney <ddaney.cavm@gmail.com>,
+        Alex Vesker <valex@mellanox.com>,
+        Matt Fleming <matt@codeblueprint.co.uk>
+Subject: Re: Build regressions/improvements in v5.4-rc1
+Thread-Topic: Build regressions/improvements in v5.4-rc1
+Thread-Index: AQHVeUoMBJ4wgZGrM0q/CkOKKS1F+Q==
+Date:   Wed, 2 Oct 2019 17:51:41 +0000
+Message-ID: <20191002175140.b4ejnamkjiz365o2@pburton-laptop>
+References: <20191002085809.16381-1-geert@linux-m68k.org>
+ <CAMuHMdUHG-4=HEOspGH=-6P_nTdbR_wYnyKdyUR9+-2=r1fNkQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdUHG-4=HEOspGH=-6P_nTdbR_wYnyKdyUR9+-2=r1fNkQ@mail.gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR07CA0076.namprd07.prod.outlook.com
- (2603:10b6:a03:12b::17) To MWHPR2201MB1277.namprd22.prod.outlook.com
+x-clientproxiedby: BY5PR04CA0028.namprd04.prod.outlook.com
+ (2603:10b6:a03:1d0::38) To MWHPR2201MB1277.namprd22.prod.outlook.com
  (2603:10b6:301:18::12)
+user-agent: NeoMutt/20180716
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=pburton@wavecomp.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.23.0
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9bad8cf1-e9ce-4238-b32c-08d7476077d5
-x-ms-traffictypediagnostic: MWHPR2201MB1646:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB1646BE78B31BD1D3F5E986B0C19C0@MWHPR2201MB1646.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-office365-filtering-correlation-id: 120a2c1c-dbc3-48fb-fbb5-08d747612e66
+x-ms-traffictypediagnostic: MWHPR2201MB1582:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <MWHPR2201MB1582A516822C1466E0A15F62C19C0@MWHPR2201MB1582.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:125;
 x-forefront-prvs: 0178184651
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(366004)(39830400003)(376002)(136003)(396003)(189003)(199004)(66476007)(8936002)(6116002)(6916009)(6436002)(5640700003)(3846002)(14454004)(6486002)(478600001)(1076003)(486006)(2351001)(5660300002)(81156014)(8676002)(50226002)(81166006)(66556008)(64756008)(66446008)(66946007)(316002)(36756003)(54906003)(25786009)(76176011)(44832011)(6512007)(7736002)(102836004)(6506007)(52116002)(26005)(11346002)(446003)(42882007)(66066001)(476003)(2616005)(386003)(99286004)(2501003)(305945005)(71190400001)(71200400001)(186003)(2906002)(14444005)(4326008)(256004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1646;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(366004)(376002)(39850400004)(346002)(396003)(136003)(189003)(199004)(42882007)(81156014)(102836004)(229853002)(25786009)(316002)(6512007)(6246003)(9686003)(6306002)(186003)(6436002)(8936002)(6486002)(6916009)(14444005)(81166006)(52116002)(26005)(99286004)(256004)(8676002)(33716001)(44832011)(1076003)(66066001)(6506007)(66946007)(71190400001)(76176011)(14454004)(71200400001)(966005)(486006)(478600001)(5660300002)(4326008)(54906003)(7736002)(446003)(11346002)(476003)(66446008)(64756008)(6116002)(305945005)(66556008)(2906002)(3846002)(66476007)(386003)(58126008);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1582;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nrxFyTu0ioddbt0iNGW7iP+5tnGM14paMKC5dvqmHeXjNJujFBOtmPEIu4g+GFBnDEJyvCH91S8eXtMzIR1/LDgd1BoXJWfMGf/iZpGYREvD/7LsTEuCoF+2q6tpGMsKjwYrmbG7dxIepvWcJxQcjAolmb/mhM3taZUCz1uZzTGpQhqa6Uee4hLKUyJkARn5IYcCAUigI7hwk5VuxO0/oQjNL+gvrJkUPDunMir7J9l8qe+GLK6lFTFGW8zOz8xJTvVJM87s7qnvU2Iss2zfEEa2L6W9sNQyfZ6m6goquK0qCFEgs7AtZKPbuZf0wJFSEKDJeqRZf7aLbDKX/1i/26eR5h2YgI3qPv4AunFK7kg19K0KjuTMgouEfp6DUMKFLAcsgDNTOYxZ//T7ZwzJGnufnPZT5sr3fsZEzyaZqpA=
-Content-Type: text/plain; charset="iso-8859-1"
+x-microsoft-antispam-message-info: 9dCF8IVlunofqermplfLLbzFQgAujQRYyrW2tUP32KqaHKx1Vaj3ypaUZpJPaHrZ8UMwzJ4GHYdRGEt2HCKwFV5jEJ1nixVrHkLvUEOY4ah3w4oE/qzJ6sMGKcRfx5Wp473H8m8R92s6hRxMzfJfsD/uJHO6GynvsYOhqQea0OESizqdUcGdXqmOFiLZGS3ol657dA1UdTiBCBNct8CrS5MfrbYaOxb2BVXVTs+EVJhxZNAu1E/SlsC7rXhqcEp6ND4er4i7eeIp/Icko75sezTUICDu1Q9b7zwcYRGozvGIAgF+YbCvL17QKzYLDgnYyOPdq3xIn2/4kQ/IzM4/bdbOFJX4eZLIXTJIe/C4DRbDBfiu5LZswxd/C6q30aEAuZdfuBioiPtUhIy9KfXIQ9fOFDt7VDP6lrilrjNllWz9CErEI0YPEsvRxQhZVKSeeC4gapsdRtlhjmVmGuPU9A==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <DB51F5C535F0704392DD215CE7487E5D@namprd22.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9bad8cf1-e9ce-4238-b32c-08d7476077d5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2019 17:46:36.4033
+X-MS-Exchange-CrossTenant-Network-Message-Id: 120a2c1c-dbc3-48fb-fbb5-08d747612e66
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2019 17:51:41.4574
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cK27cldi85MPivu22WAsxubh5Mn/18OIx9c2TI5HQFEGAqMSp23BHD4i01+B4ql23oN3GuB4yFWxSq3jsd37Ng==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1646
+X-MS-Exchange-CrossTenant-userprincipalname: syLvhjyzZung8kZJmngKwGUG5vAV8UAYOR6D0d+4d7n4S5CQkIL4KxInEi4n1kkuZr6uSpsZjyNMzSPvXWW8SA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1582
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Versions of binutils prior to 2.25 are unable to link our VDSO due to an
-unsupported R_MIPS_PC32 relocation generated by the ".word _start - ."
-line of the inline asm in get_vdso_base(). As such, the intent is that
-when building with binutils older than 2.25 we don't build code for
-gettimeofday() & friends in the VDSO that rely upon get_vdso_base().
+Hi Geert,
 
-Commit 24640f233b46 ("mips: Add support for generic vDSO") converted us
-to using generic VDSO infrastructure, and as part of that the
-gettimeofday() functionality moved to a new vgettimeofday.c file. The
-check for binutils < 2.25 wasn't updated to handle this new filename,
-and so it continues trying to remove the old unused filename from the
-build. The end result is that we try to include the gettimeofday() code
-in builds that will fail to link.
+On Wed, Oct 02, 2019 at 11:17:26AM +0200, Geert Uytterhoeven wrote:
+> > 15 error regressions:
+> >   + /kisskb/build/tmp/cc1Or5dj.s: Error: can't resolve `_start' {*UND* =
+section} - `L0 ' {.text section}:  =3D> 663, 1200, 222, 873, 1420
+> >   + /kisskb/build/tmp/cc2uWmof.s: Error: can't resolve `_start' {*UND* =
+section} - `L0 ' {.text section}:  =3D> 1213, 919, 688, 1434, 226
+> >   + /kisskb/build/tmp/ccc6hBqd.s: Error: can't resolve `_start' {*UND* =
+section} - `L0 ' {.text section}:  =3D> 513, 1279, 1058, 727
+> >   + /kisskb/build/tmp/cclSQ19p.s: Error: can't resolve `_start' {*UND* =
+section} - `L0 ' {.text section}:  =3D> 1396, 881, 1175, 671, 226
+> >   + /kisskb/build/tmp/ccu3SlxY.s: Error: can't resolve `_start' {*UND* =
+section} - `L0 ' {.text section}:  =3D> 1238, 911, 222, 680, 1457
+>=20
+> Various mips (allmodconfig, allnoconfig, malta_defconfig, ip22_defconfig)
+>=20
+> Related to
+>=20
+>     /kisskb/src/arch/mips/vdso/Makefile:61: MIPS VDSO requires binutils >=
+=3D 2.25
+>=20
+> ?
 
-Fix this by updating the binutils < 2.25 case to remove vgettimeofday.c
-from obj-vdso-y, rather than gettimeofday.c.
+Hmm, this looks like fallout from the conversion to the generic VDSO
+infrastructure. This patch resolves it:
 
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Fixes: 24640f233b46 ("mips: Add support for generic vDSO")
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
----
+  https://lore.kernel.org/linux-mips/20191002174438.127127-2-paul.burton@mi=
+ps.com/
 
- arch/mips/vdso/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> >   + /kisskb/src/arch/mips/include/asm/octeon/cvmx-ipd.h: error: 'CVMX_P=
+IP_SFT_RST' undeclared (first use in this function):  =3D> 331:36
+> >   + /kisskb/src/arch/mips/include/asm/octeon/cvmx-ipd.h: error: 'CVMX_P=
+IP_SFT_RST' undeclared (first use in this function); did you mean 'CVMX_CIU=
+_SOFT_RST'?:  =3D> 331:36
+> >   + /kisskb/src/arch/mips/include/asm/octeon/cvmx-ipd.h: error: storage=
+ size of 'pip_sft_rst' isn't known:  =3D> 330:27
+>=20
+> mips-allmodconfig (CC Matthew Wilcox)
 
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index 69cfa0a5339e..807f0f782f75 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -59,7 +59,7 @@ CFLAGS_REMOVE_vgettimeofday.o =3D -pg
- ifndef CONFIG_CPU_MIPSR6
-   ifeq ($(call ld-ifversion, -lt, 225000000, y),y)
-     $(warning MIPS VDSO requires binutils >=3D 2.25)
--    obj-vdso-y :=3D $(filter-out gettimeofday.o, $(obj-vdso-y))
-+    obj-vdso-y :=3D $(filter-out vgettimeofday.o, $(obj-vdso-y))
-     ccflags-vdso +=3D -DDISABLE_MIPS_VDSO
-   endif
- endif
---=20
-2.23.0
+That one's triggered by a change in the ordering of some include
+directives in the drivers/staging/octeon code, and fixed by commit
+0228ecf6128c ("MIPS: octeon: Include required header; fix octeon
+ethernet build") in mips-next.
 
+Thanks,
+    Paul
