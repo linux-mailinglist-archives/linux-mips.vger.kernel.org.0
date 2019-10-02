@@ -2,166 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB09C91A6
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Oct 2019 21:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4792AC923D
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Oct 2019 21:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729355AbfJBTKo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Oct 2019 15:10:44 -0400
-Received: from shadbolt.e.decadent.org.uk ([88.96.1.126]:35834 "EHLO
-        shadbolt.e.decadent.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729310AbfJBTIQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Oct 2019 15:08:16 -0400
-Received: from [192.168.4.242] (helo=deadeye)
-        by shadbolt.decadent.org.uk with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1iFjyu-00036B-RT; Wed, 02 Oct 2019 20:08:12 +0100
-Received: from ben by deadeye with local (Exim 4.92.1)
-        (envelope-from <ben@decadent.org.uk>)
-        id 1iFjyq-0003g3-2a; Wed, 02 Oct 2019 20:08:08 +0100
-Content-Type: text/plain; charset="UTF-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Ben Hutchings <ben@decadent.org.uk>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-CC:     akpm@linux-foundation.org, Denis Kirjanov <kda@linux-powerpc.org>,
-        "Paul Burton" <paul.burton@mips.com>, linux-mips@vger.kernel.org,
-        "Dmitry Korotin" <dkorotin@wavecomp.com>
-Date:   Wed, 02 Oct 2019 20:06:51 +0100
-Message-ID: <lsq.1570043211.121577724@decadent.org.uk>
-X-Mailer: LinuxStableQueue (scripts by bwh)
-X-Patchwork-Hint: ignore
-Subject: [PATCH 3.16 77/87] MIPS: Add missing EHB in mtc0 -> mfc0 sequence.
-In-Reply-To: <lsq.1570043210.379046399@decadent.org.uk>
-X-SA-Exim-Connect-IP: 192.168.4.242
-X-SA-Exim-Mail-From: ben@decadent.org.uk
-X-SA-Exim-Scanned: No (on shadbolt.decadent.org.uk); SAEximRunCond expanded to false
+        id S1728612AbfJBTYy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 2 Oct 2019 15:24:54 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60996 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726076AbfJBTYy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 2 Oct 2019 15:24:54 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 6EB2FAD09;
+        Wed,  2 Oct 2019 19:24:51 +0000 (UTC)
+Date:   Wed, 2 Oct 2019 21:08:31 +0200
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
+Subject: Re: [PATCH v6 1/4] nvmem: core: add nvmem_device_find
+Message-Id: <20191002210831.f7fa10ad7f055801df26669d@suse.de>
+In-Reply-To: <20191002183327.grhkxlbyu65vvhr4@pburton-laptop>
+References: <20190923114636.6748-1-tbogendoerfer@suse.de>
+        <20190923114636.6748-2-tbogendoerfer@suse.de>
+        <ce44c762-f9a6-b4ef-fa8a-19ee4a6d391f@linaro.org>
+        <20191002183327.grhkxlbyu65vvhr4@pburton-laptop>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-3.16.75-rc1 review patch.  If anyone has any objections, please let me know.
+On Wed, 2 Oct 2019 18:33:28 +0000
+Paul Burton <paul.burton@mips.com> wrote:
 
-------------------
+> Hello,
+> 
+> On Tue, Oct 01, 2019 at 11:11:58AM +0100, Srinivas Kandagatla wrote:
+> > On 23/09/2019 12:46, Thomas Bogendoerfer wrote:
+> > > nvmem_device_find provides a way to search for nvmem devices with
+> > > the help of a match function simlair to bus_find_device.
+> > > 
+> > > Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+> > > ---
+> > 
+> > Thanks for the patch,
+> > This patch looks good for me.
+> > 
+> > Do you know which tree is going to pick this series up?
+> > 
+> > I can either apply this patch to nvmem tree
+> > 
+> > or here is my Ack for this patch to take it via other trees.
+> > 
+> > Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> > Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> 
+> Thanks - if you don't mind I'll take this through mips-next along with
+> the following patch that depends on it.
+> 
+> Thomas: I see patch 3 has an issue reported by the kbuild test robot,
 
-From: Dmitry Korotin <dkorotin@wavecomp.com>
+yes, that's because kbuild robot tries to build it 32bit. I'm going to make
+it depend on 64bit all possible ioc3 platforms only support 64bit kernels.
 
-commit 0b24cae4d535045f4c9e177aa228d4e97bad212c upstream.
+>         and still needs acks from the MFD & network maintainers. Can I
+> 	presume it's safe to apply patches 1 & 2 without 3 & 4 in the
+> 	meantime?
 
-Add a missing EHB (Execution Hazard Barrier) in mtc0 -> mfc0 sequence.
-Without this execution hazard barrier it's possible for the value read
-back from the KScratch register to be the value from before the mtc0.
+yes, thank you.
 
-Reproducible on P5600 & P6600.
+Thomas.
 
-The hazard is documented in the MIPS Architecture Reference Manual Vol.
-III: MIPS32/microMIPS32 Privileged Resource Architecture (MD00088), rev
-6.03 table 8.1 which includes:
-
-   Producer | Consumer | Hazard
-  ----------|----------|----------------------------
-   mtc0     | mfc0     | any coprocessor 0 register
-
-Signed-off-by: Dmitry Korotin <dkorotin@wavecomp.com>
-[paul.burton@mips.com:
-  - Commit message tweaks.
-  - Add Fixes tags.
-  - Mark for stable back to v3.15 where P5600 support was introduced.]
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Fixes: 3d8bfdd03072 ("MIPS: Use C0_KScratch (if present) to hold PGD pointer.")
-Fixes: 829dcc0a956a ("MIPS: Add MIPS P5600 probe support")
-Cc: linux-mips@vger.kernel.org
-[bwh: Backported to 3.16: adjust context]
-Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
----
- arch/mips/mm/tlbex.c | 29 ++++++++++++++++++++---------
- 1 file changed, 20 insertions(+), 9 deletions(-)
-
---- a/arch/mips/mm/tlbex.c
-+++ b/arch/mips/mm/tlbex.c
-@@ -374,6 +374,7 @@ static struct work_registers build_get_w
- static void build_restore_work_registers(u32 **p)
- {
- 	if (scratch_reg >= 0) {
-+		uasm_i_ehb(p);
- 		UASM_i_MFC0(p, 1, c0_kscratch(), scratch_reg);
- 		return;
- 	}
-@@ -665,10 +666,12 @@ static void build_restore_pagemask(u32 *
- 			uasm_i_mtc0(p, 0, C0_PAGEMASK);
- 			uasm_il_b(p, r, lid);
- 		}
--		if (scratch_reg >= 0)
-+		if (scratch_reg >= 0) {
-+			uasm_i_ehb(p);
- 			UASM_i_MFC0(p, 1, c0_kscratch(), scratch_reg);
--		else
-+		} else {
- 			UASM_i_LW(p, 1, scratchpad_offset(0), 0);
-+		}
- 	} else {
- 		/* Reset default page size */
- 		if (PM_DEFAULT_MASK >> 16) {
-@@ -906,10 +909,12 @@ build_get_pgd_vmalloc64(u32 **p, struct
- 		uasm_i_jr(p, ptr);
- 
- 		if (mode == refill_scratch) {
--			if (scratch_reg >= 0)
-+			if (scratch_reg >= 0) {
-+				uasm_i_ehb(p);
- 				UASM_i_MFC0(p, 1, c0_kscratch(), scratch_reg);
--			else
-+			} else {
- 				UASM_i_LW(p, 1, scratchpad_offset(0), 0);
-+			}
- 		} else {
- 			uasm_i_nop(p);
- 		}
-@@ -1215,6 +1220,7 @@ build_fast_tlb_refill_handler (u32 **p,
- 	UASM_i_MTC0(p, odd, C0_ENTRYLO1); /* load it */
- 
- 	if (c0_scratch_reg >= 0) {
-+		uasm_i_ehb(p);
- 		UASM_i_MFC0(p, scratch, c0_kscratch(), c0_scratch_reg);
- 		build_tlb_write_entry(p, l, r, tlb_random);
- 		uasm_l_leave(l, *p);
-@@ -1466,12 +1472,14 @@ static void build_setup_pgd(void)
- 		uasm_i_dinsm(&p, a0, 0, 29, 64 - 29);
- 		uasm_l_tlbl_goaround1(&l, p);
- 		UASM_i_SLL(&p, a0, a0, 11);
--		uasm_i_jr(&p, 31);
- 		UASM_i_MTC0(&p, a0, C0_CONTEXT);
-+		uasm_i_jr(&p, 31);
-+		uasm_i_ehb(&p);
- 	} else {
- 		/* PGD in c0_KScratch */
--		uasm_i_jr(&p, 31);
- 		UASM_i_MTC0(&p, a0, c0_kscratch(), pgd_reg);
-+		uasm_i_jr(&p, 31);
-+		uasm_i_ehb(&p);
- 	}
- #else
- #ifdef CONFIG_SMP
-@@ -1485,13 +1493,16 @@ static void build_setup_pgd(void)
- 	UASM_i_LA_mostly(&p, a2, pgdc);
- 	UASM_i_SW(&p, a0, uasm_rel_lo(pgdc), a2);
- #endif /* SMP */
--	uasm_i_jr(&p, 31);
- 
- 	/* if pgd_reg is allocated, save PGD also to scratch register */
--	if (pgd_reg != -1)
-+	if (pgd_reg != -1) {
- 		UASM_i_MTC0(&p, a0, c0_kscratch(), pgd_reg);
--	else
-+		uasm_i_jr(&p, 31);
-+		uasm_i_ehb(&p);
-+	} else {
-+		uasm_i_jr(&p, 31);
- 		uasm_i_nop(&p);
-+	}
- #endif
- 	if (p >= tlbmiss_handler_setup_pgd_end)
- 		panic("tlbmiss_handler_setup_pgd space exceeded");
-
+-- 
+SUSE Software Solutions Germany GmbH
+HRB 247165 (AG München)
+Geschäftsführer: Felix Imendörffer
