@@ -2,84 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2C0C8AFA
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Oct 2019 16:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3B2C8B5E
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Oct 2019 16:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728313AbfJBOTf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Oct 2019 10:19:35 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:45345 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728230AbfJBOTe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Oct 2019 10:19:34 -0400
-Received: by mail-qt1-f196.google.com with SMTP id c21so26492019qtj.12;
-        Wed, 02 Oct 2019 07:19:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:subject:references
-         :in-reply-to:mime-version:content-transfer-encoding:cc:cc:to;
-        bh=xEcXpQ/NEwyCKzNgI7asImKqcpzGOLlroU+HXRPzw4Y=;
-        b=pbl8cfHVjygWxRJrxDOT49+2J+Ri/7m9++D1QRchMBW3FEQG7zQUcPOUe3cs5urfnb
-         Q0gi2YkQr/rIhtBd4h2+T8G1NFLNChz2+zexhlEqwu4rmW2YMR9lB7T64NehQhKocP4q
-         9Oof/LI67NNKSHmCrrDHJEOuPP6bBGCyBGC5smgkm7/bkFddY6Ro0A5olq3/DoKy8LPT
-         VSz4k0vEnlmGSeeBekTIGef9GXNwC/JLQmW6DhDUdufbYzI+SLB5g9gL1v8HuBvHeHht
-         7F7uup4R07DdNjMlFi/n+lQ8sl+Q5OYoOegcWTcoFqzJjEBOqGmw4nIkEZp46o3gLEfY
-         HqUg==
-X-Gm-Message-State: APjAAAUH2F5bdtEQ+UKEMKF0F+bvtIM7tC0pjFVK6R7af0s0XgIMZNEW
-        OOmvhU5p749tQMYsynvR6f4F9yQQOA==
-X-Google-Smtp-Source: APXvYqxaLnHeciWkdlweE2LBBH7eoNN5RyZrMPdqv69QmbChVl6tENsSTpMqu/HDsjtpBHL6zYeZPA==
-X-Received: by 2002:a0c:a5a5:: with SMTP id z34mr3240240qvz.110.1570025972605;
-        Wed, 02 Oct 2019 07:19:32 -0700 (PDT)
-Received: from localhost ([132.205.230.8])
-        by smtp.gmail.com with ESMTPSA id d45sm12737320qtc.70.2019.10.02.07.19.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2019 07:19:32 -0700 (PDT)
-Message-ID: <5d94b1f4.1c69fb81.6f9ad.2586@mx.google.com>
-Date:   Wed, 02 Oct 2019 09:19:29 -0500
-From:   Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 1/3] docs: fix some broken references
-References: <b87385b2ac6ce6c75df82062fce2976149bbaa6b.1569330078.git.mchehab+samsung@kernel.org>
-In-Reply-To: <b87385b2ac6ce6c75df82062fce2976149bbaa6b.1569330078.git.mchehab+samsung@kernel.org>
+        id S1728219AbfJBOhB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Oct 2019 10:37:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46668 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726951AbfJBOhB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 2 Oct 2019 10:37:01 -0400
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 083D321D7B;
+        Wed,  2 Oct 2019 14:37:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570027020;
+        bh=l424NVEzG4ThrC9rmj9+Vglen2NQpsXN1YuwbmNYEIU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=byCCvAQuO7pG4NgtQHjzkNpqMJMc8uN9GoybJZJsfHTo2nmAl3VSY2yXF47ipcDb4
+         Nk0fQmLETDXEolz7N8SS7wNiSXiaSfcIA4FWfK2HB+CTfah85Kwqux8g+8kj/d1aJH
+         Z9ZD4LTmktO6DTYw1qEANP+Te5+tkMW/IoafqWwo=
+Received: by mail-qk1-f177.google.com with SMTP id 4so15194402qki.6;
+        Wed, 02 Oct 2019 07:36:59 -0700 (PDT)
+X-Gm-Message-State: APjAAAXomx2/D338/z2DmS6coJ0wN3JIFgq+ML8v/7DK62XXOlp1/nfU
+        4widuXSSnsApmgJKBnLd1CMKFf3TERThbwoyEA==
+X-Google-Smtp-Source: APXvYqyQu5u58Q1H/RMYMjrc+hk8IrR9Ex+cJ5BZ5rEtYCuvFPeYbkLD00dRnvDJbQP0p52zUid51CoENQZ0ZOpbAFU=
+X-Received: by 2002:a05:620a:7da:: with SMTP id 26mr3707675qkb.119.1570027019132;
+ Wed, 02 Oct 2019 07:36:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>, corbet@lwn.net
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Shannon Nelson <snelson@pensando.io>,
-        Pensando Drivers <drivers@pensando.io>,
-        Steve French <sfrench@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-mips@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-riscv@lists.infradead.org
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+References: <20190704122319.8983-1-martin.blumenstingl@googlemail.com> <20190704122319.8983-2-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20190704122319.8983-2-martin.blumenstingl@googlemail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 2 Oct 2019 09:36:45 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJ9yUK2HNu9fLes1eEtEKdAZcXqBjGF90xKEuQh9fCU6g@mail.gmail.com>
+Message-ID: <CAL_JsqJ9yUK2HNu9fLes1eEtEKdAZcXqBjGF90xKEuQh9fCU6g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: phy: add binding for the Lantiq
+ VRX200 and ARX300 PCIe PHYs
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        devicetree@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin Schiller <ms@dev.tdt.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 24 Sep 2019 10:01:28 -0300, Mauro Carvalho Chehab wrote:
-> There are a number of documentation files that got moved or
-> renamed. update their references.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+On Thu, Jul 4, 2019 at 7:23 AM Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
+>
+> Add the bindings for the PCIe PHY on Lantiq VRX200 and ARX300 SoCs.
+> The IP block contains settings for the PHY and a PLL.
+> The PLL mode is configurable through a dedicated #phy-cell in .dts.
+>
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 > ---
->  Documentation/devicetree/bindings/cpu/cpu-topology.txt    | 2 +-
->  Documentation/devicetree/bindings/timer/ingenic,tcu.txt   | 2 +-
->  Documentation/driver-api/gpio/driver.rst                  | 2 +-
->  Documentation/hwmon/inspur-ipsps1.rst                     | 2 +-
->  Documentation/mips/ingenic-tcu.rst                        | 2 +-
->  Documentation/networking/device_drivers/mellanox/mlx5.rst | 2 +-
->  MAINTAINERS                                               | 2 +-
->  drivers/net/ethernet/faraday/ftgmac100.c                  | 2 +-
->  drivers/net/ethernet/pensando/ionic/ionic_if.h            | 4 ++--
->  fs/cifs/cifsfs.c                                          | 2 +-
->  10 files changed, 11 insertions(+), 11 deletions(-)
-> 
+>  .../bindings/phy/lantiq,vrx200-pcie-phy.yaml  | 95 +++++++++++++++++++
+>  .../dt-bindings/phy/phy-lantiq-vrx200-pcie.h  | 11 +++
+>  2 files changed, 106 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/lantiq,vrx200-pcie-phy.yaml
+>  create mode 100644 include/dt-bindings/phy/phy-lantiq-vrx200-pcie.h
+>
+> diff --git a/Documentation/devicetree/bindings/phy/lantiq,vrx200-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/lantiq,vrx200-pcie-phy.yaml
+> new file mode 100644
+> index 000000000000..8a56a8526cef
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/lantiq,vrx200-pcie-phy.yaml
+> @@ -0,0 +1,95 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/lantiq,vrx200-pcie-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Lantiq VRX200 and ARX300 PCIe PHY Device Tree Bindings
+> +
+> +maintainers:
+> +  - Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> +
+> +properties:
+> +  "#phy-cells":
+> +    const: 1
+> +    description: selects the PHY mode as defined in <dt-bindings/phy/phy-lantiq-vrx200-pcie.h>
+> +
+> +  compatible:
+> +    enum:
+> +      - lantiq,vrx200-pcie-phy
+> +      - lantiq,arx300-pcie-phy
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: PHY module clock
+> +      - description: PDI register clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: phy
+> +      - const: pdi
+> +
+> +  resets:
+> +    items:
+> +      - description: exclusive PHY reset line
+> +      - description: shared reset line between the PCIe PHY and PCIe controller
+> +
+> +  resets-names:
 
-Acked-by: Rob Herring <robh@kernel.org>
+This breaks 'make dt_binding_check'. It should be 'reset-names'.
 
+Rob
