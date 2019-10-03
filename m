@@ -2,118 +2,262 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FEC4C947F
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Oct 2019 00:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CCDC993C
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Oct 2019 09:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727979AbfJBWyM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Oct 2019 18:54:12 -0400
-Received: from mail-eopbgr770123.outbound.protection.outlook.com ([40.107.77.123]:24449
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727103AbfJBWyM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 2 Oct 2019 18:54:12 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=La8ohh3aiuUsGkwSOsRslvxQSus8+ZQKm4ErMbzXBu9aDCyvmpai6dK5lIXbcusIvmta2F4X3PSD0LzFnnH+PpHU1p2Qcb3o88Fr/r2RJSWrnM/XeJkobQ5MKAIxP+Qzt7062iaEuG5eIz9gQ0OQUnWBKhAL3ggcjJdo28jlWlsDItrBDHc41u46xB83jWgBvptzXTpsFcqWkkWwV/hDxHQhVcSbywmx2T7Z9kzXLNfSJXX+jirWXmnmvrqsgbAJaXLSgriS9td7qbP5zU7ans+EP15XocANBg76amcvg4RrFx4eX/4aTOCX1tqx8cjfbdnD/pgJrB8aLC0Vlhx8Wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6V2N83kZKCIZC2CN25Jx+KR2Jf+p6eNWOJ8Y3yeXYRY=;
- b=MnBCagLm2NRGwxdPHRHUKGA06m0gXYg2JRqhUDivm0rSvyH2str9xLqmY3YMFL05cuiwoIA4g39xcn/2R4sx8TmcNCeYsnvOW50GRdxJDpPjwB6EQyvY+x8Fy2KvpOnoy51IZtdGxeyFUkRdskiXZTII9nJrCVm0yuqIVhB+ysNjSpZBfAlELhZyrZd+Aq/kwCiS32iBtJ5Or8ml3xbCY6C0qOzkX+TS9RBvVkjGSZcz7xqoV5xFPG+lyGglBDatRuf8/lLtuUogAF4xVQwDp0LtqoEC/pNtaU/BOscny42jgIHe0aaP8Mr9oGJO+he+HgwX61PIRGhx8Bk1jBYZ8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
- dkim=pass header.d=mips.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6V2N83kZKCIZC2CN25Jx+KR2Jf+p6eNWOJ8Y3yeXYRY=;
- b=gx9OfJIi+ncIDWitVkmWUQ9st+N/U9a+ZR3Ys4ZbVo2MWlw+CoXK0kzXu9FaEYXXGbNR2bb8dn/90/FFie989Cn7L0CrKMivyF/7spjFgn9F4vZyR3Jp3lapsLXyQPdtUexkCp+2ZlJZUm069bxJ/u3crignpOoNszqeRklVfpw=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1406.namprd22.prod.outlook.com (10.172.62.150) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.20; Wed, 2 Oct 2019 22:54:09 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::498b:c2cd:e816:1481]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::498b:c2cd:e816:1481%2]) with mapi id 15.20.2305.023; Wed, 2 Oct 2019
- 22:54:09 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-CC:     "chenhc@lemote.com" <chenhc@lemote.com>,
-        "ralf@linux-mips.org" <ralf@linux-mips.org>,
-        Paul Burton <pburton@wavecomp.com>,
-        "jhogan@kernel.org" <jhogan@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH] mips: Loongson: Fix the link time qualifier of
-  'serial_exit()'
-Thread-Topic: [PATCH] mips: Loongson: Fix the link time qualifier of
-  'serial_exit()'
-Thread-Index: AQHVeXRMpnqlZcTRMkWlftBxb59DFA==
-Date:   Wed, 2 Oct 2019 22:54:08 +0000
-Message-ID: <MWHPR2201MB12775BCFABEBAC5426879C41C19C0@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20190910035907.6430-1-christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20190910035907.6430-1-christophe.jaillet@wanadoo.fr>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR02CA0036.namprd02.prod.outlook.com
- (2603:10b6:a02:ee::49) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:18::12)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [12.94.197.246]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bf0b02c2-cea0-4707-7c0e-08d7478b6f0e
-x-ms-traffictypediagnostic: MWHPR2201MB1406:
-x-ms-exchange-purlcount: 1
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB1406856DDB38FE128234E3A0C19C0@MWHPR2201MB1406.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3173;
-x-forefront-prvs: 0178184651
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(396003)(39840400004)(376002)(366004)(136003)(189003)(199004)(14454004)(5660300002)(305945005)(74316002)(229853002)(4744005)(476003)(66446008)(64756008)(66556008)(66066001)(33656002)(6246003)(44832011)(76176011)(7696005)(52116002)(478600001)(25786009)(2906002)(6116002)(3846002)(966005)(4326008)(42882007)(52536014)(486006)(55016002)(6306002)(6916009)(446003)(6436002)(9686003)(11346002)(71200400001)(186003)(8936002)(7736002)(316002)(8676002)(71190400001)(81166006)(256004)(81156014)(54906003)(386003)(6506007)(66946007)(66476007)(102836004)(99286004)(26005);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1406;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: np42fj1kMcv9To8cJuw7/sm6JyDtCCUK7uE4as4OidGR0IxbfWXy8L1ppL4Fdp2hss81aKSnMO6Px4QBybe/BShqAHHJa/EE4RV+gTFZX2Xyiv6N3vdg6GOZer+4OYGZlRE1jEBH7QUafTxqer8TRCO7RTQXrk5gRfL0ofCQ1PWgrJ12kCs0T0Cu4IOcspGLv+jgo7n7RiaFIjWjlTpb6zX4R5i3lL/LfM3MMU8PybS6O2t0Pulw8qbZUHh9pzGduiMRwf1E1CQjzujELum4c6LlDmKtx8qH0RWKZSSK8llcuGknMAWjPE/rdG58E8Ib4bafJGyANhBKlmReN/qgtnYQHlAGn7aa27/sCg6hed4aVZe/3zz0bJIKcN+uPYYbgdmXBcJ2k4nZgwxWrltDBH9vzPSNlxUqdAyJTH+fBSebaToOd/aznuX2Yu5GEQ07+6CXo8Ey2JGSvKx5dkNUiA==
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1727452AbfJCHxU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Oct 2019 03:53:20 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:36370 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725497AbfJCHxU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Oct 2019 03:53:20 -0400
+Received: by mail-oi1-f195.google.com with SMTP id k20so1762724oih.3
+        for <linux-mips@vger.kernel.org>; Thu, 03 Oct 2019 00:53:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=OjGOtM7igFnxOTkazDzEAF1mbsEsRdgokYn8LnXlxak=;
+        b=0ljP/Xqkv8mT++dxL9IDYrrnXlEv9lrJP90Bahq1OBLUXK3btgYh5wyHlZssI3YurN
+         pFDAkt12ppGUrER632fCfdihcSkLnFygz07D3eEGii2r2Puunq5JCKwhf/olqSyQJkhe
+         y4sxSAWaYpjr9f5Wrxp90qzT0eir6UjXXj2LeikUk8mVJIBX5nJR3znXBIO9CoTmsRr6
+         LkMnSa//LbiPkRtmhxr1iEvteUzvh1LjMwn00n5k+Q+R5FcGfpoYjlNwxgcL0FpK8Y1W
+         tjUDW9f2sxUGKn5ZjbjT1ogyxC+SzYQbv5HTFeCum1+SvlQU5DzEXntInmz46VsYXXrg
+         dQMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OjGOtM7igFnxOTkazDzEAF1mbsEsRdgokYn8LnXlxak=;
+        b=k9my2HT6OVzE7EHi8nvoZ2K51vvtcnoRlS8yUeIAdy+/CIN3aDpn+zw4NZhGjlnG62
+         nMyBWY2qDr9uzHwaoJPht5iW1Et2S7kI05eUdxadAiNhQN/sNswmoSJ6B8bZw2JHejrR
+         uYMSnlyzq+dJppkOKiqQkXYhXBwPAeA37Z0nnK4Qp/gKAFAnqCRjypqF6nttGV77/5G8
+         vlSpjPWiOx9ghZ6d3M1jCDpgaX9W2g9RVvX9S8h0PvAr2VwC0d+4EpLMAdf+8WjJR9q/
+         EPN1bAHsS459hDaMpSt6vnLLdh+txxEMnRt244TQ0HovS8q4HrhkRrgvradnGZnnsMlo
+         0kKA==
+X-Gm-Message-State: APjAAAXDsgMa5MoVYTb0vCX8gMejn8b2O1E9teVjh8An+vgSfLjV3EQ4
+        aD0Aa5i0zJFwcpbWRckOvqd3Mz9/lyo1nDSp20LS2g==
+X-Google-Smtp-Source: APXvYqz7m7kCXZYIv7j5R46VZcpbdhhoa42pgCHxxwP/titPUyQPDIy7EJgb+avLl4yWojBI9F0QLe5D/MGpfKQJ+94=
+X-Received: by 2002:a54:4f8a:: with SMTP id g10mr1832202oiy.147.1570089199061;
+ Thu, 03 Oct 2019 00:53:19 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf0b02c2-cea0-4707-7c0e-08d7478b6f0e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2019 22:54:09.3187
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UnRUpI93BQTUP10p4apBKivHi6QmwS40Sf7IXDeV8AGjGxxFK5D1Xp9WkkPx7mY1GfrtOe6+uVGJ8hm6rkdaBg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1406
+References: <b87385b2ac6ce6c75df82062fce2976149bbaa6b.1569330078.git.mchehab+samsung@kernel.org>
+In-Reply-To: <b87385b2ac6ce6c75df82062fce2976149bbaa6b.1569330078.git.mchehab+samsung@kernel.org>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Thu, 3 Oct 2019 09:53:08 +0200
+Message-ID: <CAMpxmJUYZ-6p_uD=ktO+mDMZ3VooRkjLBwDVDieT1gvo3474uw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] docs: fix some broken references
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Saeed Mahameed <saeedm@mellanox.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shannon Nelson <snelson@pensando.io>,
+        Pensando Drivers <drivers@pensando.io>,
+        Steve French <sfrench@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-devicetree <devicetree@vger.kernel.org>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>, linux-rdma@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+wt., 24 wrz 2019 o 15:01 Mauro Carvalho Chehab
+<mchehab+samsung@kernel.org> napisa=C5=82(a):
+>
+> There are a number of documentation files that got moved or
+> renamed. update their references.
+>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/cpu/cpu-topology.txt    | 2 +-
+>  Documentation/devicetree/bindings/timer/ingenic,tcu.txt   | 2 +-
+>  Documentation/driver-api/gpio/driver.rst                  | 2 +-
+>  Documentation/hwmon/inspur-ipsps1.rst                     | 2 +-
+>  Documentation/mips/ingenic-tcu.rst                        | 2 +-
+>  Documentation/networking/device_drivers/mellanox/mlx5.rst | 2 +-
+>  MAINTAINERS                                               | 2 +-
+>  drivers/net/ethernet/faraday/ftgmac100.c                  | 2 +-
+>  drivers/net/ethernet/pensando/ionic/ionic_if.h            | 4 ++--
+>  fs/cifs/cifsfs.c                                          | 2 +-
+>  10 files changed, 11 insertions(+), 11 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/cpu/cpu-topology.txt b/Doc=
+umentation/devicetree/bindings/cpu/cpu-topology.txt
+> index 99918189403c..9bd530a35d14 100644
+> --- a/Documentation/devicetree/bindings/cpu/cpu-topology.txt
+> +++ b/Documentation/devicetree/bindings/cpu/cpu-topology.txt
+> @@ -549,5 +549,5 @@ Example 3: HiFive Unleashed (RISC-V 64 bit, 4 core sy=
+stem)
+>  [2] Devicetree NUMA binding description
+>      Documentation/devicetree/bindings/numa.txt
+>  [3] RISC-V Linux kernel documentation
+> -    Documentation/devicetree/bindings/riscv/cpus.txt
+> +    Documentation/devicetree/bindings/riscv/cpus.yaml
+>  [4] https://www.devicetree.org/specifications/
+> diff --git a/Documentation/devicetree/bindings/timer/ingenic,tcu.txt b/Do=
+cumentation/devicetree/bindings/timer/ingenic,tcu.txt
+> index 5a4b9ddd9470..7f6fe20503f5 100644
+> --- a/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
+> +++ b/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
+> @@ -2,7 +2,7 @@ Ingenic JZ47xx SoCs Timer/Counter Unit devicetree binding=
+s
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>  For a description of the TCU hardware and drivers, have a look at
+> -Documentation/mips/ingenic-tcu.txt.
+> +Documentation/mips/ingenic-tcu.rst.
+>
+>  Required properties:
+>
+> diff --git a/Documentation/driver-api/gpio/driver.rst b/Documentation/dri=
+ver-api/gpio/driver.rst
+> index 3fdb32422f8a..9076cc76d5bf 100644
+> --- a/Documentation/driver-api/gpio/driver.rst
+> +++ b/Documentation/driver-api/gpio/driver.rst
+> @@ -493,7 +493,7 @@ available but we try to move away from this:
+>    gpiochip. It will pass the struct gpio_chip* for the chip to all IRQ
+>    callbacks, so the callbacks need to embed the gpio_chip in its state
+>    container and obtain a pointer to the container using container_of().
+> -  (See Documentation/driver-model/design-patterns.txt)
+> +  (See Documentation/driver-api/driver-model/design-patterns.rst)
+>
+>  - gpiochip_irqchip_add_nested(): adds a nested cascaded irqchip to a gpi=
+ochip,
+>    as discussed above regarding different types of cascaded irqchips. The
+> diff --git a/Documentation/hwmon/inspur-ipsps1.rst b/Documentation/hwmon/=
+inspur-ipsps1.rst
+> index 2b871ae3448f..ed32a65c30e1 100644
+> --- a/Documentation/hwmon/inspur-ipsps1.rst
+> +++ b/Documentation/hwmon/inspur-ipsps1.rst
+> @@ -17,7 +17,7 @@ Usage Notes
+>  -----------
+>
+>  This driver does not auto-detect devices. You will have to instantiate t=
+he
+> -devices explicitly. Please see Documentation/i2c/instantiating-devices f=
+or
+> +devices explicitly. Please see Documentation/i2c/instantiating-devices.r=
+st for
+>  details.
+>
+>  Sysfs entries
+> diff --git a/Documentation/mips/ingenic-tcu.rst b/Documentation/mips/inge=
+nic-tcu.rst
+> index c4ef4c45aade..c5a646b14450 100644
+> --- a/Documentation/mips/ingenic-tcu.rst
+> +++ b/Documentation/mips/ingenic-tcu.rst
+> @@ -68,4 +68,4 @@ and frameworks can be controlled from the same register=
+s, all of these
+>  drivers access their registers through the same regmap.
+>
+>  For more information regarding the devicetree bindings of the TCU driver=
+s,
+> -have a look at Documentation/devicetree/bindings/mfd/ingenic,tcu.txt.
+> +have a look at Documentation/devicetree/bindings/timer/ingenic,tcu.txt.
+> diff --git a/Documentation/networking/device_drivers/mellanox/mlx5.rst b/=
+Documentation/networking/device_drivers/mellanox/mlx5.rst
+> index d071c6b49e1f..a74422058351 100644
+> --- a/Documentation/networking/device_drivers/mellanox/mlx5.rst
+> +++ b/Documentation/networking/device_drivers/mellanox/mlx5.rst
+> @@ -258,7 +258,7 @@ mlx5 tracepoints
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>  mlx5 driver provides internal trace points for tracking and debugging us=
+ing
+> -kernel tracepoints interfaces (refer to Documentation/trace/ftrase.rst).
+> +kernel tracepoints interfaces (refer to Documentation/trace/ftrace.rst).
+>
+>  For the list of support mlx5 events check /sys/kernel/debug/tracing/even=
+ts/mlx5/
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 54f1286087e9..65b7d9a0a44a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3680,7 +3680,7 @@ M:        Oleksij Rempel <o.rempel@pengutronix.de>
+>  R:     Pengutronix Kernel Team <kernel@pengutronix.de>
+>  L:     linux-can@vger.kernel.org
+>  S:     Maintained
+> -F:     Documentation/networking/j1939.txt
+> +F:     Documentation/networking/j1939.rst
+>  F:     net/can/j1939/
+>  F:     include/uapi/linux/can/j1939.h
+>
+> diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ether=
+net/faraday/ftgmac100.c
+> index 9b7af94a40bb..8abe5e90d268 100644
+> --- a/drivers/net/ethernet/faraday/ftgmac100.c
+> +++ b/drivers/net/ethernet/faraday/ftgmac100.c
+> @@ -1835,7 +1835,7 @@ static int ftgmac100_probe(struct platform_device *=
+pdev)
+>                 }
+>
+>                 /* Indicate that we support PAUSE frames (see comment in
+> -                * Documentation/networking/phy.txt)
+> +                * Documentation/networking/phy.rst)
+>                  */
+>                 phy_support_asym_pause(phy);
+>
+> diff --git a/drivers/net/ethernet/pensando/ionic/ionic_if.h b/drivers/net=
+/ethernet/pensando/ionic/ionic_if.h
+> index 5bfdda19f64d..80028f781c83 100644
+> --- a/drivers/net/ethernet/pensando/ionic/ionic_if.h
+> +++ b/drivers/net/ethernet/pensando/ionic/ionic_if.h
+> @@ -596,8 +596,8 @@ enum ionic_txq_desc_opcode {
+>   *                      the @encap is set, the device will
+>   *                      offload the outer header checksums using
+>   *                      LCO (local checksum offload) (see
+> - *                      Documentation/networking/checksum-
+> - *                      offloads.txt for more info).
+> + *                      Documentation/networking/checksum-offloads.rst
+> + *                      for more info).
+>   *
+>   *                   IONIC_TXQ_DESC_OPCODE_CSUM_HW:
+>   *
+> diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+> index 2e9c7f493f99..811f510578cb 100644
+> --- a/fs/cifs/cifsfs.c
+> +++ b/fs/cifs/cifsfs.c
+> @@ -1529,7 +1529,7 @@ init_cifs(void)
+>         /*
+>          * Consider in future setting limit!=3D0 maybe to min(num_of_core=
+s - 1, 3)
+>          * so that we don't launch too many worker threads but
+> -        * Documentation/workqueue.txt recommends setting it to 0
+> +        * Documentation/core-api/workqueue.rst recommends setting it to =
+0
+>          */
+>
+>         /* WQ_UNBOUND allows decrypt tasks to run on any CPU */
+> --
+> 2.21.0
+>
 
-Christophe JAILLET wrote:
-> 'exit' functions should be marked as __exit, not __init.
+For GPIO:
 
-Applied to mips-fixes.
-
-> commit 25b69a889b63
-> https://git.kernel.org/mips/c/25b69a889b63
->=20
-> Fixes: 85cc028817ef ("mips: make loongsoon serial driver explicitly modul=
-ar")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Signed-off-by: Paul Burton <paul.burton@mips.com>
-
-Thanks,
-    Paul
-
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paul.burton@mips.com to report it. ]
+Acked-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
