@@ -2,262 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39CCDC993C
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Oct 2019 09:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B901C9B1D
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Oct 2019 11:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727452AbfJCHxU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Oct 2019 03:53:20 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:36370 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725497AbfJCHxU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Oct 2019 03:53:20 -0400
-Received: by mail-oi1-f195.google.com with SMTP id k20so1762724oih.3
-        for <linux-mips@vger.kernel.org>; Thu, 03 Oct 2019 00:53:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=OjGOtM7igFnxOTkazDzEAF1mbsEsRdgokYn8LnXlxak=;
-        b=0ljP/Xqkv8mT++dxL9IDYrrnXlEv9lrJP90Bahq1OBLUXK3btgYh5wyHlZssI3YurN
-         pFDAkt12ppGUrER632fCfdihcSkLnFygz07D3eEGii2r2Puunq5JCKwhf/olqSyQJkhe
-         y4sxSAWaYpjr9f5Wrxp90qzT0eir6UjXXj2LeikUk8mVJIBX5nJR3znXBIO9CoTmsRr6
-         LkMnSa//LbiPkRtmhxr1iEvteUzvh1LjMwn00n5k+Q+R5FcGfpoYjlNwxgcL0FpK8Y1W
-         tjUDW9f2sxUGKn5ZjbjT1ogyxC+SzYQbv5HTFeCum1+SvlQU5DzEXntInmz46VsYXXrg
-         dQMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OjGOtM7igFnxOTkazDzEAF1mbsEsRdgokYn8LnXlxak=;
-        b=k9my2HT6OVzE7EHi8nvoZ2K51vvtcnoRlS8yUeIAdy+/CIN3aDpn+zw4NZhGjlnG62
-         nMyBWY2qDr9uzHwaoJPht5iW1Et2S7kI05eUdxadAiNhQN/sNswmoSJ6B8bZw2JHejrR
-         uYMSnlyzq+dJppkOKiqQkXYhXBwPAeA37Z0nnK4Qp/gKAFAnqCRjypqF6nttGV77/5G8
-         vlSpjPWiOx9ghZ6d3M1jCDpgaX9W2g9RVvX9S8h0PvAr2VwC0d+4EpLMAdf+8WjJR9q/
-         EPN1bAHsS459hDaMpSt6vnLLdh+txxEMnRt244TQ0HovS8q4HrhkRrgvradnGZnnsMlo
-         0kKA==
-X-Gm-Message-State: APjAAAXDsgMa5MoVYTb0vCX8gMejn8b2O1E9teVjh8An+vgSfLjV3EQ4
-        aD0Aa5i0zJFwcpbWRckOvqd3Mz9/lyo1nDSp20LS2g==
-X-Google-Smtp-Source: APXvYqz7m7kCXZYIv7j5R46VZcpbdhhoa42pgCHxxwP/titPUyQPDIy7EJgb+avLl4yWojBI9F0QLe5D/MGpfKQJ+94=
-X-Received: by 2002:a54:4f8a:: with SMTP id g10mr1832202oiy.147.1570089199061;
- Thu, 03 Oct 2019 00:53:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <b87385b2ac6ce6c75df82062fce2976149bbaa6b.1569330078.git.mchehab+samsung@kernel.org>
-In-Reply-To: <b87385b2ac6ce6c75df82062fce2976149bbaa6b.1569330078.git.mchehab+samsung@kernel.org>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Thu, 3 Oct 2019 09:53:08 +0200
-Message-ID: <CAMpxmJUYZ-6p_uD=ktO+mDMZ3VooRkjLBwDVDieT1gvo3474uw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] docs: fix some broken references
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        id S1729465AbfJCJwx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Oct 2019 05:52:53 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37284 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728992AbfJCJww (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 3 Oct 2019 05:52:52 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 67E80B14A;
+        Thu,  3 Oct 2019 09:52:49 +0000 (UTC)
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Jonathan Corbet <corbet@lwn.net>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
-        Saeed Mahameed <saeedm@mellanox.com>,
-        Leon Romanovsky <leon@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Shannon Nelson <snelson@pensando.io>,
-        Pensando Drivers <drivers@pensando.io>,
-        Steve French <sfrench@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        linux-gpio <linux-gpio@vger.kernel.org>,
-        linux-hwmon@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>, linux-rdma@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v7 0/5] Use MFD framework for SGI IOC3 drivers
+Date:   Thu,  3 Oct 2019 11:52:28 +0200
+Message-Id: <20191003095235.5158-1-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-wt., 24 wrz 2019 o 15:01 Mauro Carvalho Chehab
-<mchehab+samsung@kernel.org> napisa=C5=82(a):
->
-> There are a number of documentation files that got moved or
-> renamed. update their references.
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> ---
->  Documentation/devicetree/bindings/cpu/cpu-topology.txt    | 2 +-
->  Documentation/devicetree/bindings/timer/ingenic,tcu.txt   | 2 +-
->  Documentation/driver-api/gpio/driver.rst                  | 2 +-
->  Documentation/hwmon/inspur-ipsps1.rst                     | 2 +-
->  Documentation/mips/ingenic-tcu.rst                        | 2 +-
->  Documentation/networking/device_drivers/mellanox/mlx5.rst | 2 +-
->  MAINTAINERS                                               | 2 +-
->  drivers/net/ethernet/faraday/ftgmac100.c                  | 2 +-
->  drivers/net/ethernet/pensando/ionic/ionic_if.h            | 4 ++--
->  fs/cifs/cifsfs.c                                          | 2 +-
->  10 files changed, 11 insertions(+), 11 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/cpu/cpu-topology.txt b/Doc=
-umentation/devicetree/bindings/cpu/cpu-topology.txt
-> index 99918189403c..9bd530a35d14 100644
-> --- a/Documentation/devicetree/bindings/cpu/cpu-topology.txt
-> +++ b/Documentation/devicetree/bindings/cpu/cpu-topology.txt
-> @@ -549,5 +549,5 @@ Example 3: HiFive Unleashed (RISC-V 64 bit, 4 core sy=
-stem)
->  [2] Devicetree NUMA binding description
->      Documentation/devicetree/bindings/numa.txt
->  [3] RISC-V Linux kernel documentation
-> -    Documentation/devicetree/bindings/riscv/cpus.txt
-> +    Documentation/devicetree/bindings/riscv/cpus.yaml
->  [4] https://www.devicetree.org/specifications/
-> diff --git a/Documentation/devicetree/bindings/timer/ingenic,tcu.txt b/Do=
-cumentation/devicetree/bindings/timer/ingenic,tcu.txt
-> index 5a4b9ddd9470..7f6fe20503f5 100644
-> --- a/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
-> +++ b/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
-> @@ -2,7 +2,7 @@ Ingenic JZ47xx SoCs Timer/Counter Unit devicetree binding=
-s
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->  For a description of the TCU hardware and drivers, have a look at
-> -Documentation/mips/ingenic-tcu.txt.
-> +Documentation/mips/ingenic-tcu.rst.
->
->  Required properties:
->
-> diff --git a/Documentation/driver-api/gpio/driver.rst b/Documentation/dri=
-ver-api/gpio/driver.rst
-> index 3fdb32422f8a..9076cc76d5bf 100644
-> --- a/Documentation/driver-api/gpio/driver.rst
-> +++ b/Documentation/driver-api/gpio/driver.rst
-> @@ -493,7 +493,7 @@ available but we try to move away from this:
->    gpiochip. It will pass the struct gpio_chip* for the chip to all IRQ
->    callbacks, so the callbacks need to embed the gpio_chip in its state
->    container and obtain a pointer to the container using container_of().
-> -  (See Documentation/driver-model/design-patterns.txt)
-> +  (See Documentation/driver-api/driver-model/design-patterns.rst)
->
->  - gpiochip_irqchip_add_nested(): adds a nested cascaded irqchip to a gpi=
-ochip,
->    as discussed above regarding different types of cascaded irqchips. The
-> diff --git a/Documentation/hwmon/inspur-ipsps1.rst b/Documentation/hwmon/=
-inspur-ipsps1.rst
-> index 2b871ae3448f..ed32a65c30e1 100644
-> --- a/Documentation/hwmon/inspur-ipsps1.rst
-> +++ b/Documentation/hwmon/inspur-ipsps1.rst
-> @@ -17,7 +17,7 @@ Usage Notes
->  -----------
->
->  This driver does not auto-detect devices. You will have to instantiate t=
-he
-> -devices explicitly. Please see Documentation/i2c/instantiating-devices f=
-or
-> +devices explicitly. Please see Documentation/i2c/instantiating-devices.r=
-st for
->  details.
->
->  Sysfs entries
-> diff --git a/Documentation/mips/ingenic-tcu.rst b/Documentation/mips/inge=
-nic-tcu.rst
-> index c4ef4c45aade..c5a646b14450 100644
-> --- a/Documentation/mips/ingenic-tcu.rst
-> +++ b/Documentation/mips/ingenic-tcu.rst
-> @@ -68,4 +68,4 @@ and frameworks can be controlled from the same register=
-s, all of these
->  drivers access their registers through the same regmap.
->
->  For more information regarding the devicetree bindings of the TCU driver=
-s,
-> -have a look at Documentation/devicetree/bindings/mfd/ingenic,tcu.txt.
-> +have a look at Documentation/devicetree/bindings/timer/ingenic,tcu.txt.
-> diff --git a/Documentation/networking/device_drivers/mellanox/mlx5.rst b/=
-Documentation/networking/device_drivers/mellanox/mlx5.rst
-> index d071c6b49e1f..a74422058351 100644
-> --- a/Documentation/networking/device_drivers/mellanox/mlx5.rst
-> +++ b/Documentation/networking/device_drivers/mellanox/mlx5.rst
-> @@ -258,7 +258,7 @@ mlx5 tracepoints
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->  mlx5 driver provides internal trace points for tracking and debugging us=
-ing
-> -kernel tracepoints interfaces (refer to Documentation/trace/ftrase.rst).
-> +kernel tracepoints interfaces (refer to Documentation/trace/ftrace.rst).
->
->  For the list of support mlx5 events check /sys/kernel/debug/tracing/even=
-ts/mlx5/
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 54f1286087e9..65b7d9a0a44a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3680,7 +3680,7 @@ M:        Oleksij Rempel <o.rempel@pengutronix.de>
->  R:     Pengutronix Kernel Team <kernel@pengutronix.de>
->  L:     linux-can@vger.kernel.org
->  S:     Maintained
-> -F:     Documentation/networking/j1939.txt
-> +F:     Documentation/networking/j1939.rst
->  F:     net/can/j1939/
->  F:     include/uapi/linux/can/j1939.h
->
-> diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ether=
-net/faraday/ftgmac100.c
-> index 9b7af94a40bb..8abe5e90d268 100644
-> --- a/drivers/net/ethernet/faraday/ftgmac100.c
-> +++ b/drivers/net/ethernet/faraday/ftgmac100.c
-> @@ -1835,7 +1835,7 @@ static int ftgmac100_probe(struct platform_device *=
-pdev)
->                 }
->
->                 /* Indicate that we support PAUSE frames (see comment in
-> -                * Documentation/networking/phy.txt)
-> +                * Documentation/networking/phy.rst)
->                  */
->                 phy_support_asym_pause(phy);
->
-> diff --git a/drivers/net/ethernet/pensando/ionic/ionic_if.h b/drivers/net=
-/ethernet/pensando/ionic/ionic_if.h
-> index 5bfdda19f64d..80028f781c83 100644
-> --- a/drivers/net/ethernet/pensando/ionic/ionic_if.h
-> +++ b/drivers/net/ethernet/pensando/ionic/ionic_if.h
-> @@ -596,8 +596,8 @@ enum ionic_txq_desc_opcode {
->   *                      the @encap is set, the device will
->   *                      offload the outer header checksums using
->   *                      LCO (local checksum offload) (see
-> - *                      Documentation/networking/checksum-
-> - *                      offloads.txt for more info).
-> + *                      Documentation/networking/checksum-offloads.rst
-> + *                      for more info).
->   *
->   *                   IONIC_TXQ_DESC_OPCODE_CSUM_HW:
->   *
-> diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-> index 2e9c7f493f99..811f510578cb 100644
-> --- a/fs/cifs/cifsfs.c
-> +++ b/fs/cifs/cifsfs.c
-> @@ -1529,7 +1529,7 @@ init_cifs(void)
->         /*
->          * Consider in future setting limit!=3D0 maybe to min(num_of_core=
-s - 1, 3)
->          * so that we don't launch too many worker threads but
-> -        * Documentation/workqueue.txt recommends setting it to 0
-> +        * Documentation/core-api/workqueue.rst recommends setting it to =
-0
->          */
->
->         /* WQ_UNBOUND allows decrypt tasks to run on any CPU */
-> --
-> 2.21.0
->
+SGI IOC3 ASIC includes support for ethernet, PS2 keyboard/mouse,
+NIC (number in a can), GPIO and a byte  bus. By attaching a
+SuperIO chip to it, it also supports serial lines and a parallel
+port. The chip is used on a variety of SGI systems with different
+configurations. This patchset moves code out of the network driver,
+which doesn't belong there, into its new place a MFD driver and
+specific platform drivers for the different subfunctions.
 
-For GPIO:
+Changes in v7:
+ - added patch to enable ethernet phy for Origin 200 systems
+ - depend on 64bit for ioc3 mfd driver
 
-Acked-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Changes in v6:
+ - dropped patches accepted for v5.4-rc1
+ - moved serio patch to ip30 patch series
+ - adapted nvmem patch
+
+Changes in v5:
+ - requested by Jakub I've splited ioc3 ethernet driver changes into
+   more steps to make the transition more visible; on the way there 
+   I've "checkpatched" the driver and reduced code reorderings
+ - dropped all uint16_t and uint32_t
+ - added nvmem API extension to the documenation file
+ - changed to use request_irq/free_irq in serio driver
+ - removed wrong kfree() in serio error path
+
+Changes in v4:
+ - added w1 drivers to the series after merge in 5.3 failed because
+   of no response from maintainer and other parts of this series
+   won't work without that drivers
+ - moved ip30 systemboard support to the ip30 series, which will
+   deal with rtc oddity Lee found
+ - converted to use devm_platform_ioremap_resource
+ - use PLATFORM_DEVID_AUTO for serial, ethernet and serio in mfd driver
+ - fixed reverse christmas order in ioc3-eth.c
+ - formating issue found by Lee
+ - re-worked irq request/free in serio driver to avoid crashes during
+   probe/remove
+
+Changes in v3:
+ - use 1-wire subsystem for handling proms
+ - pci-xtalk driver uses prom information to create PCI subsystem
+   ids for use in MFD driver
+ - changed MFD driver to only use static declared mfd_cells
+ - added IP30 system board setup to MFD driver
+ - mac address is now read from ioc3-eth driver with nvmem framework
+
+Changes in v2:
+ - fixed issue in ioc3kbd.c reported by Dmitry Torokhov
+ - merged IP27 RTC removal and 8250 serial driver addition into
+   main MFD patch to keep patches bisectable
+
+Thomas Bogendoerfer (5):
+  nvmem: core: add nvmem_device_find
+  MIPS: PCI: use information from 1-wire PROM for IOC3 detection
+  mfd: ioc3: Add driver for SGI IOC3 chip
+  MIPS: SGI-IP27: fix readb/writeb addressing
+  MIPS: SGI-IP27: Enable ethernet phy on second Origin 200 module
+
+ Documentation/driver-api/nvmem.rst            |   2 +
+ arch/mips/include/asm/mach-ip27/mangle-port.h |   4 +-
+ arch/mips/include/asm/pci/bridge.h            |   1 +
+ arch/mips/include/asm/sn/ioc3.h               |  47 ++-
+ arch/mips/pci/pci-ip27.c                      |  22 +
+ arch/mips/pci/pci-xtalk-bridge.c              | 135 +++++-
+ arch/mips/sgi-ip27/ip27-timer.c               |  20 -
+ arch/mips/sgi-ip27/ip27-xtalk.c               |  38 +-
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/ioc3.c                            | 585 ++++++++++++++++++++++++++
+ drivers/net/ethernet/sgi/Kconfig              |   4 +-
+ drivers/net/ethernet/sgi/ioc3-eth.c           | 561 +++++-------------------
+ drivers/nvmem/core.c                          |  61 ++-
+ drivers/rtc/rtc-m48t35.c                      |  11 +
+ drivers/tty/serial/8250/8250_ioc3.c           |  98 +++++
+ drivers/tty/serial/8250/Kconfig               |  11 +
+ drivers/tty/serial/8250/Makefile              |   1 +
+ include/linux/nvmem-consumer.h                |   9 +
+ 19 files changed, 1076 insertions(+), 548 deletions(-)
+ create mode 100644 drivers/mfd/ioc3.c
+ create mode 100644 drivers/tty/serial/8250/8250_ioc3.c
+
+-- 
+2.16.4
+
