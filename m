@@ -2,76 +2,148 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC84CCD37
-	for <lists+linux-mips@lfdr.de>; Sun,  6 Oct 2019 01:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BBECCD67
+	for <lists+linux-mips@lfdr.de>; Sun,  6 Oct 2019 02:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbfJEXB0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 5 Oct 2019 19:01:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51600 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726094AbfJEXBZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 5 Oct 2019 19:01:25 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F123520862;
-        Sat,  5 Oct 2019 23:01:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570316485;
-        bh=OSMf8B0AB6AIqckNzRwk3oaI7AdreTyoAu9Y39HJWY4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wdh7qOQEB4QaKJ9SsdQIroEMCFUpYSThpjFkzk3JTX+LmSsoc8UgEcT/7Dh+9cp4M
-         hCXIakPFvhJkjm/MKMrN6YCu5z66OVEtIbxUxKmCC7vGerW1A44245MN1f7bqzjCOM
-         h0u2+hCUSBGr8akNAPcZtdglTavpSlWip+KIgu1I=
-Date:   Sat, 5 Oct 2019 19:01:24 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, john@phrozen.org, kishon@ti.com,
-        ralf@linux-mips.org, robh+dt@kernel.org,
-        Hauke Mehrtens <hauke@hauke-m.de>, mark.rutland@arm.com,
-        ms@dev.tdt.de
-Subject: Re: [PATCH AUTOSEL 4.19 12/33] MIPS: lantiq: update the clock alias'
- for the mainline PCIe PHY driver
-Message-ID: <20191005230124.GC25255@sasha-vm>
-References: <20190929173424.9361-1-sashal@kernel.org>
- <20190929173424.9361-12-sashal@kernel.org>
- <CAFBinCCD7xTnektDhDa+wRsAWmyzMwgfou59Y3=Qf8b2utaciw@mail.gmail.com>
+        id S1726863AbfJFAN6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 5 Oct 2019 20:13:58 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:41520 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725947AbfJFAN6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Oct 2019 20:13:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1570320835; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+/oO5mExpdmBQpEMZOy4k4kOdcpKXU38wnPGDT51Lzs=;
+        b=si0hLKwZqYyO19XjTE1TZPo31nrOfRy6NDghoWyNG7sPQ6eX/gK+sjq2F4CoS5yME4Jbiz
+        GSoZWzdZiF/6fo5hZwN29cjK11IRH9B4Cpyhy+4KoyVY8C9xETZhCnQHHwPA/97lny1vd/
+        bDXreVkj5kBPk4u/fdpt1odH5RpLBwI=
+Date:   Sun, 06 Oct 2019 02:13:49 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/5 v5] irqchip: ingenic: Drop redundant irq_suspend /
+ irq_resume functions
+To:     Zhou Yanjie <zhouyanjie@zoho.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, paul.burton@mips.com,
+        gregkh@linuxfoundation.org, jason@lakedaemon.net, syq@debian.org,
+        marc.zyngier@arm.com, rfontana@redhat.com, armijn@tjaldur.nl,
+        allison@lohutok.net
+Message-Id: <1570320829.3.2@crapouillou.net>
+In-Reply-To: <1570015525-27018-2-git-send-email-zhouyanjie@zoho.com>
+References: <1548517123-60058-1-git-send-email-zhouyanjie@zoho.com>
+        <1570015525-27018-1-git-send-email-zhouyanjie@zoho.com>
+        <1570015525-27018-2-git-send-email-zhouyanjie@zoho.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAFBinCCD7xTnektDhDa+wRsAWmyzMwgfou59Y3=Qf8b2utaciw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Sep 29, 2019 at 07:40:28PM +0200, Martin Blumenstingl wrote:
->Hi Sasha,
->
->On Sun, Sep 29, 2019 at 7:34 PM Sasha Levin <sashal@kernel.org> wrote:
->>
->> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
->>
->> [ Upstream commit ed90302be64a53d9031c8ce05428c358b16a5d96 ]
->>
->> The mainline PCIe PHY driver has it's own devicetree node. Update the
->> clock alias so the mainline driver finds the clocks.
->the mainline PCIe PHY driver only made it into Linux 5.4
->I am pointing this out because OpenWrt uses an out-of-tree PCIe driver
->with Linux 4.19 and this patch will break that if we don't do
->additional work there
->
->thus I would like to understand why this got queued as backport for
->various -stable kernels
+Hi Zhou,
 
-It went through the automatic selection process, where we attempt to
-identify fixes that were not tagged for stable.
 
-I've dropped this patch from all stable trees, thank you.
+Le mer., oct. 2, 2019 at 19:25, Zhou Yanjie <zhouyanjie@zoho.com> a=20
+=E9crit :
+> From: Paul Cercueil <paul@crapouillou.net>
+>=20
+> The same behaviour can be obtained by using the=20
+> IRQCHIP_MASK_ON_SUSPEND
+> flag on the IRQ chip.
+>=20
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
--- 
-Thanks,
-Sasha
+If you sumbit a patchset that contains someone else's patches you need=20
+to add your Signed-off-by too.
+
+> ---
+>  drivers/irqchip/irq-ingenic.c   | 24 +-----------------------
+>  include/linux/irqchip/ingenic.h | 14 --------------
+>  2 files changed, 1 insertion(+), 37 deletions(-)
+>  delete mode 100644 include/linux/irqchip/ingenic.h
+>=20
+> diff --git a/drivers/irqchip/irq-ingenic.c=20
+> b/drivers/irqchip/irq-ingenic.c
+> index f126255..06fa810 100644
+> --- a/drivers/irqchip/irq-ingenic.c
+> +++ b/drivers/irqchip/irq-ingenic.c
+> @@ -10,7 +10,6 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/ioport.h>
+>  #include <linux/irqchip.h>
+> -#include <linux/irqchip/ingenic.h>
+>  #include <linux/of_address.h>
+>  #include <linux/of_irq.h>
+>  #include <linux/timex.h>
+> @@ -50,26 +49,6 @@ static irqreturn_t intc_cascade(int irq, void=20
+> *data)
+>  	return IRQ_HANDLED;
+>  }
+>=20
+> -static void intc_irq_set_mask(struct irq_chip_generic *gc, uint32_t=20
+> mask)
+> -{
+> -	struct irq_chip_regs *regs =3D &gc->chip_types->regs;
+> -
+> -	writel(mask, gc->reg_base + regs->enable);
+> -	writel(~mask, gc->reg_base + regs->disable);
+> -}
+> -
+> -void ingenic_intc_irq_suspend(struct irq_data *data)
+> -{
+> -	struct irq_chip_generic *gc =3D irq_data_get_irq_chip_data(data);
+> -	intc_irq_set_mask(gc, gc->wake_active);
+> -}
+> -
+> -void ingenic_intc_irq_resume(struct irq_data *data)
+> -{
+> -	struct irq_chip_generic *gc =3D irq_data_get_irq_chip_data(data);
+> -	intc_irq_set_mask(gc, gc->mask_cache);
+> -}
+> -
+>  static struct irqaction intc_cascade_action =3D {
+>  	.handler =3D intc_cascade,
+>  	.name =3D "SoC intc cascade interrupt",
+> @@ -127,8 +106,7 @@ static int __init ingenic_intc_of_init(struct=20
+> device_node *node,
+>  		ct->chip.irq_mask =3D irq_gc_mask_disable_reg;
+>  		ct->chip.irq_mask_ack =3D irq_gc_mask_disable_reg;
+>  		ct->chip.irq_set_wake =3D irq_gc_set_wake;
+> -		ct->chip.irq_suspend =3D ingenic_intc_irq_suspend;
+> -		ct->chip.irq_resume =3D ingenic_intc_irq_resume;
+> +		ct->chip.flags =3D IRQCHIP_MASK_ON_SUSPEND;
+>=20
+>  		irq_setup_generic_chip(gc, IRQ_MSK(32), 0, 0,
+>  				       IRQ_NOPROBE | IRQ_LEVEL);
+> diff --git a/include/linux/irqchip/ingenic.h=20
+> b/include/linux/irqchip/ingenic.h
+> deleted file mode 100644
+> index 1465588..0000000
+> --- a/include/linux/irqchip/ingenic.h
+> +++ /dev/null
+> @@ -1,14 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0-or-later */
+> -/*
+> - *  Copyright (C) 2010, Lars-Peter Clausen <lars@metafoo.de>
+> - */
+> -
+> -#ifndef __LINUX_IRQCHIP_INGENIC_H__
+> -#define __LINUX_IRQCHIP_INGENIC_H__
+> -
+> -#include <linux/irq.h>
+> -
+> -extern void ingenic_intc_irq_suspend(struct irq_data *data);
+> -extern void ingenic_intc_irq_resume(struct irq_data *data);
+> -
+> -#endif
+> --
+> 2.7.4
+>=20
+>=20
+
+=
+
