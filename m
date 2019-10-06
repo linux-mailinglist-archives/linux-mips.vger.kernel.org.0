@@ -2,39 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF96CD827
-	for <lists+linux-mips@lfdr.de>; Sun,  6 Oct 2019 20:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D39CD77B
+	for <lists+linux-mips@lfdr.de>; Sun,  6 Oct 2019 20:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728693AbfJFR76 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 6 Oct 2019 13:59:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55722 "EHLO mail.kernel.org"
+        id S1729178AbfJFR36 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 6 Oct 2019 13:29:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55764 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728325AbfJFR34 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 6 Oct 2019 13:29:56 -0400
+        id S1729172AbfJFR36 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 6 Oct 2019 13:29:58 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 479AD2080F;
-        Sun,  6 Oct 2019 17:29:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DED2421479;
+        Sun,  6 Oct 2019 17:29:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570382994;
-        bh=SQiPdMoGXan/kBILxp/c6ImMkLBLa+XfJ5YOUTLLxaQ=;
+        s=default; t=1570382997;
+        bh=6pp193ZWj/z/jm/8qFFmazh0y8EHXMWgxcloAi8VryM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uXI/eHrWv4tsVJwc0olaDEpwI390hr7X58HJP3MCtxlzkHSwBEXMO/50bhaiI5Say
-         U4Kk48CoTnJW3eEhoXzJt0HtRIB3i039OAMtBGbTdfM2/nMivlwR3DuWC93wmhGV3w
-         U0Q2Ds0g2Sij/CwPurae+vL+Gic20k04UCE1APFw=
+        b=l54CGChabYPNYvGzy5SSYw8+8IKZsrX3i1RN2GlDAZCOB0B74fNKNTOGlgRAAue9A
+         eLCnqaSo4ysXI2WwIxCcHM68FsU7pNiIL+jumugCEwuo4H0tBu0ZJZthtyFxorRzPf
+         wBrkCn6URhFUy6WHdStuyRDT5krjjx7dr9/CzeyE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Yanjie <zhouyanjie@zoho.com>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
-        ralf@linux-mips.org, paul@crapouillou.net, jhogan@kernel.org,
-        malat@debian.org, tglx@linutronix.de, allison@lohutok.net,
-        syq@debian.org, chenhc@lemote.com, jiaxun.yang@flygoat.com,
+        stable@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, clang-built-linux@googlegroups.com,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 048/106] MIPS: Ingenic: Disable broken BTB lookup optimization.
-Date:   Sun,  6 Oct 2019 19:20:54 +0200
-Message-Id: <20191006171144.248358221@linuxfoundation.org>
+Subject: [PATCH 4.19 049/106] MIPS: tlbex: Explicitly cast _PAGE_NO_EXEC to a boolean
+Date:   Sun,  6 Oct 2019 19:20:55 +0200
+Message-Id: <20191006171144.326519243@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191006171124.641144086@linuxfoundation.org>
 References: <20191006171124.641144086@linuxfoundation.org>
@@ -47,76 +49,57 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Zhou Yanjie <zhouyanjie@zoho.com>
+From: Nathan Chancellor <natechancellor@gmail.com>
 
-[ Upstream commit 053951dda71ecb4b554a2cdbe26f5f6f9bee9dd2 ]
+[ Upstream commit c59ae0a1055127dd3828a88e111a0db59b254104 ]
 
-In order to further reduce power consumption, the XBurst core
-by default attempts to avoid branch target buffer lookups by
-detecting & special casing loops. This feature will cause
-BogoMIPS and lpj calculate in error. Set cp0 config7 bit 4 to
-disable this feature.
+clang warns:
 
-Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+arch/mips/mm/tlbex.c:634:19: error: use of logical '&&' with constant
+operand [-Werror,-Wconstant-logical-operand]
+        if (cpu_has_rixi && _PAGE_NO_EXEC) {
+                         ^  ~~~~~~~~~~~~~
+arch/mips/mm/tlbex.c:634:19: note: use '&' for a bitwise operation
+        if (cpu_has_rixi && _PAGE_NO_EXEC) {
+                         ^~
+                         &
+arch/mips/mm/tlbex.c:634:19: note: remove constant to silence this
+warning
+        if (cpu_has_rixi && _PAGE_NO_EXEC) {
+                        ~^~~~~~~~~~~~~~~~
+1 error generated.
+
+Explicitly cast this value to a boolean so that clang understands we
+intend for this to be a non-zero value.
+
+Fixes: 00bf1c691d08 ("MIPS: tlbex: Avoid placing software PTE bits in Entry* PFN fields")
+Link: https://github.com/ClangBuiltLinux/linux/issues/609
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 Signed-off-by: Paul Burton <paul.burton@mips.com>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
 Cc: linux-mips@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
-Cc: ralf@linux-mips.org
-Cc: paul@crapouillou.net
-Cc: jhogan@kernel.org
-Cc: malat@debian.org
-Cc: gregkh@linuxfoundation.org
-Cc: tglx@linutronix.de
-Cc: allison@lohutok.net
-Cc: syq@debian.org
-Cc: chenhc@lemote.com
-Cc: jiaxun.yang@flygoat.com
+Cc: clang-built-linux@googlegroups.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/mipsregs.h | 4 ++++
- arch/mips/kernel/cpu-probe.c     | 7 +++++++
- 2 files changed, 11 insertions(+)
+ arch/mips/mm/tlbex.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
-index 01df9ad62fb83..1bb9448777c5c 100644
---- a/arch/mips/include/asm/mipsregs.h
-+++ b/arch/mips/include/asm/mipsregs.h
-@@ -688,6 +688,9 @@
- #define MIPS_CONF7_IAR		(_ULCAST_(1) << 10)
- #define MIPS_CONF7_AR		(_ULCAST_(1) << 16)
+diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+index 8c4fda52b91dc..355f8eadb1cd2 100644
+--- a/arch/mips/mm/tlbex.c
++++ b/arch/mips/mm/tlbex.c
+@@ -630,7 +630,7 @@ static __maybe_unused void build_convert_pte_to_entrylo(u32 **p,
+ 		return;
+ 	}
  
-+/* Ingenic Config7 bits */
-+#define MIPS_CONF7_BTB_LOOP_EN	(_ULCAST_(1) << 4)
-+
- /* Config7 Bits specific to MIPS Technologies. */
- 
- /* Performance counters implemented Per TC */
-@@ -2774,6 +2777,7 @@ __BUILD_SET_C0(status)
- __BUILD_SET_C0(cause)
- __BUILD_SET_C0(config)
- __BUILD_SET_C0(config5)
-+__BUILD_SET_C0(config7)
- __BUILD_SET_C0(intcontrol)
- __BUILD_SET_C0(intctl)
- __BUILD_SET_C0(srsmap)
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index d535fc706a8b3..25cd8737e7fe0 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -1879,6 +1879,13 @@ static inline void cpu_probe_ingenic(struct cpuinfo_mips *c, unsigned int cpu)
- 		c->cputype = CPU_JZRISC;
- 		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
- 		__cpu_name[cpu] = "Ingenic JZRISC";
-+		/*
-+		 * The XBurst core by default attempts to avoid branch target
-+		 * buffer lookups by detecting & special casing loops. This
-+		 * feature will cause BogoMIPS and lpj calculate in error.
-+		 * Set cp0 config7 bit 4 to disable this feature.
-+		 */
-+		set_c0_config7(MIPS_CONF7_BTB_LOOP_EN);
- 		break;
- 	default:
- 		panic("Unknown Ingenic Processor ID!");
+-	if (cpu_has_rixi && _PAGE_NO_EXEC) {
++	if (cpu_has_rixi && !!_PAGE_NO_EXEC) {
+ 		if (fill_includes_sw_bits) {
+ 			UASM_i_ROTR(p, reg, reg, ilog2(_PAGE_GLOBAL));
+ 		} else {
 -- 
 2.20.1
 
