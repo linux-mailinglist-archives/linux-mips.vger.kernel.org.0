@@ -2,126 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA21CCD69
-	for <lists+linux-mips@lfdr.de>; Sun,  6 Oct 2019 02:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09BFCCEE9
+	for <lists+linux-mips@lfdr.de>; Sun,  6 Oct 2019 07:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbfJFAPM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 5 Oct 2019 20:15:12 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:42752 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726706AbfJFAPM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Oct 2019 20:15:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1570320910; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gZM7V1pkH0sVB7y2myY/TYuHFbDtv9G72fDIOvzaLsI=;
-        b=chUAnj05zQ5vNyLBoF9jajibOPfItnCbzq4P9+cz9QNSsJ6HGN1hmbA+BTRtZLTEQCGv//
-        PAiQqVEVh3SjyjJeZSX+ADQe/1K9n5dxDJhKCnVQSW5crpA4PAaiIPXJIvUq66Sww0JyWy
-        dK4G2VP2RlNus+5B6vI/vMz3dFcXruk=
-Date:   Sun, 06 Oct 2019 02:15:05 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 5/5 v5] irqchip: Ingenic: Add process for more than one
- irq at the same time.
-To:     Zhou Yanjie <zhouyanjie@zoho.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, paul.burton@mips.com,
-        gregkh@linuxfoundation.org, jason@lakedaemon.net, syq@debian.org,
-        marc.zyngier@arm.com, rfontana@redhat.com, armijn@tjaldur.nl,
-        allison@lohutok.net
-Message-Id: <1570320905.3.3@crapouillou.net>
-In-Reply-To: <1570015525-27018-6-git-send-email-zhouyanjie@zoho.com>
-References: <1548517123-60058-1-git-send-email-zhouyanjie@zoho.com>
-        <1570015525-27018-1-git-send-email-zhouyanjie@zoho.com>
-        <1570015525-27018-6-git-send-email-zhouyanjie@zoho.com>
+        id S1726137AbfJFF7B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 6 Oct 2019 01:59:01 -0400
+Received: from sender4-pp-o95.zoho.com ([136.143.188.95]:25526 "EHLO
+        sender4-pp-o95.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726087AbfJFF7B (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 6 Oct 2019 01:59:01 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1570341511; cv=none; 
+        d=zoho.com; s=zohoarc; 
+        b=QruYSnbHA0yyNDY/sgQYXicI+jC/qwjzuFoMQZmVs3usxOg5E0lE34ZdydyhHFQxpn5PK/9ezuZTqcghGsQprHTmFcSwPMW/0t16ziNS7PE5UqiyawJyUg5NTkvyoNlBbz6Waavgb/ktngkWZbCTowIW/jTl7HTGG/awOf9xkdw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com; s=zohoarc; 
+        t=1570341511; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To:ARC-Authentication-Results; 
+        bh=FIVmd6RsuPA3669yj2KqpaCMQ3WoQUu2gHxtBlIpTTU=; 
+        b=N6xELN1wDY83oG4cUNWMwaGGJu+btURHCd7oQ99dulTcestCPPzjeZ2+NGcdSvWJEq86hiO6ZyFnMWcOiug9SvEK1LZXhbSq65gQbbaylAyFgU6E9u31z93e12TAU5CBWJeKRT54/Bwe0jNchGbmcey4zXu3A433xX3q6tVm1oM=
+ARC-Authentication-Results: i=1; mx.zoho.com;
+        dkim=pass  header.i=zoho.com;
+        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
+        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
+  s=zapps768; d=zoho.com; 
+  h=subject:to:references:cc:from:message-id:date:user-agent:mime-version:in-reply-to:content-type; 
+  b=tge/DNPCR423FXM+9+fHt2KFD7ONafxrNKUeOCHFbuXuXI76etVqhZ3+brx9obILTPiKVJTOwD44
+    5WUB37H3f/dLuSM5LxorQxwPEpBXvj47T8sPFuyeuszc+7aKPttq  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1570341511;
+        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
+        h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        l=747; bh=FIVmd6RsuPA3669yj2KqpaCMQ3WoQUu2gHxtBlIpTTU=;
+        b=fopFJTxW+5Sq2WarzwK+qaEywXDKt1iyvpK360sR8zEDpLzrp6NPRYJwhR9rzOoU
+        uZG1bLt/SJVMLuUVBsR7OyBQLGxckhu+xf8ToBT3Uie7HVOQ6KBN6p77mERJyrixO1A
+        RsybX5KbZ7L1+e+jWNrgYXfQiHDyP/F/oTDiMEag=
+Received: from [192.168.88.140] (171.221.113.164 [171.221.113.164]) by mx.zohomail.com
+        with SMTPS id 1570341509230422.7816399434387; Sat, 5 Oct 2019 22:58:29 -0700 (PDT)
+Subject: Re: [PATCH 4/4] MMC: Ingenic: Add support for JZ4760 and support for
+ LPM.
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+References: <1567669089-88693-1-git-send-email-zhouyanjie@zoho.com>
+ <1567669089-88693-5-git-send-email-zhouyanjie@zoho.com>
+ <CAPDyKFo0aR2fhCd8qCNAf7hoXSjV+9vG1BqB6vEM=B9Vpmpovg@mail.gmail.com>
+Cc:     linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Mathieu Malaterre <malat@debian.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, syq@debian.org,
+        jiaxun.yang@flygoat.com
+From:   Zhou Yanjie <zhouyanjie@zoho.com>
+Message-ID: <5D99827E.9070505@zoho.com>
+Date:   Sun, 6 Oct 2019 13:58:22 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+In-Reply-To: <CAPDyKFo0aR2fhCd8qCNAf7hoXSjV+9vG1BqB6vEM=B9Vpmpovg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Uffe,
+On 2019=E5=B9=B410=E6=9C=8803=E6=97=A5 18:00, Ulf Hansson wrote:
+> On Thu, 5 Sep 2019 at 09:40, Zhou Yanjie <zhouyanjie@zoho.com> wrote:
+>> 1.add support for probing mmc driver on the JZ4760 Soc from Ingenic.
+>> 2.add support for Low Power Mode of Ingenic's MMC/SD Controller.
+> Normally we try to make "one" change per patch, unless there are some
+> good reasons not to.
+>
+> In this case, it seems like you should rather split this patch into
+> two separate pieces. Can you please do that?
 
+OK,I'll split it in v2.
 
-Le mer., oct. 2, 2019 at 19:25, Zhou Yanjie <zhouyanjie@zoho.com> a=20
-=E9crit :
-> Add process for the situation that more than one irq is coming to
-> a single chip at the same time. The original code will only respond
-> to the lowest setted bit in JZ_REG_INTC_PENDING, and then exit the
-> interrupt dispatch function. After exiting the interrupt dispatch
-> function, since the second interrupt has not yet responded, the
-> interrupt dispatch function is again entered to process the second
-> interrupt. This creates additional unnecessary overhead, and the
-> more interrupts that occur at the same time, the more overhead is
-> added. The improved method in this patch is to check whether there
-> are still unresponsive interrupts after processing the lowest
-> setted bit interrupt. If there are any, the processing will be
-> processed according to the bit in JZ_REG_INTC_PENDING, and the
-> interrupt dispatch function will be exited until all processing
-> is completed.
->=20
-> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+>
+> Additionally, please change the prefix for the commit message header
+> to start with "mmc: jz4740:"
 
-Looks good to me.
+sure, it will be change in v2.
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+>
+> [...]
+>
+> Kind regards
+> Uffe
+Thanks  and best regards!
 
-
-> ---
->  drivers/irqchip/irq-ingenic.c | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/irqchip/irq-ingenic.c=20
-> b/drivers/irqchip/irq-ingenic.c
-> index 06ab3ad..c1be3d5 100644
-> --- a/drivers/irqchip/irq-ingenic.c
-> +++ b/drivers/irqchip/irq-ingenic.c
-> @@ -1,7 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0-or-later
->  /*
->   *  Copyright (C) 2009-2010, Lars-Peter Clausen <lars@metafoo.de>
-> - *  JZ4740 platform IRQ support
-> + *  Ingenic XBurst platform IRQ support
->   */
->=20
->  #include <linux/errno.h>
-> @@ -37,18 +37,23 @@ static irqreturn_t intc_cascade(int irq, void=20
-> *data)
->  	struct ingenic_intc_data *intc =3D irq_get_handler_data(irq);
->  	struct irq_domain *domain =3D intc->domain;
->  	struct irq_chip_generic *gc;
-> -	uint32_t irq_reg;
-> +	uint32_t pending;
->  	unsigned i;
->=20
->  	for (i =3D 0; i < intc->num_chips; i++) {
->  		gc =3D irq_get_domain_generic_chip(domain, i * 32);
->=20
-> -		irq_reg =3D irq_reg_readl(gc, JZ_REG_INTC_PENDING);
-> -		if (!irq_reg)
-> +		pending =3D irq_reg_readl(gc, JZ_REG_INTC_PENDING);
-> +		if (!pending)
->  			continue;
->=20
-> -		irq =3D irq_find_mapping(domain, __fls(irq_reg) + (i * 32));
-> -		generic_handle_irq(irq);
-> +		while (pending) {
-> +			int bit =3D __fls(pending);
-> +
-> +			irq =3D irq_find_mapping(domain, bit + (i * 32));
-> +			generic_handle_irq(irq);
-> +			pending &=3D ~BIT(bit);
-> +		}
->  	}
->=20
->  	return IRQ_HANDLED;
-> --
-> 2.7.4
->=20
->=20
-
-=
 
