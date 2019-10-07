@@ -2,35 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB5CCEEFD
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Oct 2019 00:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367A1CEEFC
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Oct 2019 00:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729285AbfJGWUH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Oct 2019 18:20:07 -0400
+        id S1729051AbfJGWUF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Oct 2019 18:20:05 -0400
 Received: from mail-eopbgr730116.outbound.protection.outlook.com ([40.107.73.116]:58336
         "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728654AbfJGWUG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 7 Oct 2019 18:20:06 -0400
+        id S1728980AbfJGWUF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 7 Oct 2019 18:20:05 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iitl1K3OvL7pnA4iAUB04GzNNXmJH7dFFZrCbah8Y9JA3vtNKzCG5dgFFb5rjGyqckdO5c+6D5Fr+TSngdxdpINKPB+U7jG2/FwBY8zi8NMDbOGOGTiQ+8LrNGMSIiMuynmGf1Ttb7vU5fN8+VW4iirmm5zb/ilDpOxPZkMoipqo85bfSii4qj1KVo/exrX+r+STon6xEm75Hqu2Zu/+LocoZjg57KUBmjA/KL8rWQtkyRuP8XGtaeNGwaXq5+x91P743BbsQOVdjGsTYptq2rXbDw8IizifmNsE9VQrh3TVxuf0rbJqt6CaCrD3L1AEA3ANh+O3XR3UslLwGjOfTg==
+ b=nkP2ifFBtO905/z2YHHSAsM48oOQVlcY8vSXVinABy1VzCcVn9t5t1tTtsaPbnQzQbh6B2L2HV38/zEHl5mCN1HyZwOB/aixNWXdibsUm/TGcAQ6EGdf7+6KTqLLkLI0ELFAlrHqXsfLeyfptDk6hfPkf719pQLjW/EOo/rvfSz7EMPLTmxD+YhNEEGtnSLwTGyYtFMF7g3Y/Ig4B4OPY3irrUfriLyeAgs++alcZcRCTJlt8v97WO57cjhA4USSAYv+KFG1UxQqXKci2DNxW2NZdaHkDD8kSI75d1XBUybf0pioNQFTYJRgIvQTx22Sa8sIZps9lti1Y4XTtZ8WPQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rwbha+idgLkB1T5tDkxQCYVHMus56qhZWJ2fGWztFSg=;
- b=IGVGLl4GzRFWa8RjZ56NnoQdwCJaqI0r/eyhDWS7X51Rvnz8sakmlCG6glIUoEZFlGpOcIZElrF5awRnJelK2mN+/zLfD6wWHvkSZDtHZtM1vnKf+KjFlA1wiYZbjUA+RPycbxR1xSQ6E8GjNzbSnjMsbTAJFZw0yENpjzgpsIA3ZK/8ioBNRJusvlZcQXZkG4+m3T9OINk/fmUWALk+PF0nMneQ2CsUgH+S/lyFl5B8EVC6W960nPmIYWEs9VbtGW0vmEbWyvppjVI04Jpj+PjJaoDcE2qIzRJDeCpi0bpaDkDugj8bFdOnpqxfMPw/zGhJyuZZ6ZV1zGbgJ2pmuw==
+ bh=nArTmDDpuJi6tUS6FX0jU9l2nhqYUII9699qXqJ+37U=;
+ b=Fn8UT0tRCSUNVT/hY/3JgYbLTnCzsTik/cXbeK2o3jeN8M1+uKPkykjSN1Xc9hniOiDY/a8MqwGWCzB1UAFoHanD1BfkvJ0OMTIhJtZWFfhqDhwO7VdHP6rDUT47sbFiSveJT4J4zaoYSj3p5RAdNyda9pHijXUFXFYkGRVVnRL3R4R5P3tIziHdkDH6VN5YxL2k5XbONKqEtiktUN4IMTi4BcYsR85DKfihmB1qrzNgi2cPDMuA7wVJMxxXb0wiem4i6q5hOIoseSi6aV+DlbFcy6Cfv5XLbgFHhVMu7ud1/E8e8Tt9TkLLD7N7TsjyXSnmMOu+V1rgHlIy6p0Luw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rwbha+idgLkB1T5tDkxQCYVHMus56qhZWJ2fGWztFSg=;
- b=wGI2RSOp1xDNx6diiiYHdVRsvd1x1P1TTwqrYW3rRAFLWjSO5KEXEavXIZzz4tItdDWDtELimp9ZtvyAzG28QVKVDIiePXgoEhMiSlcmKnwk4k8lt2zt5TSN05sF+OOg2GU4OVErR1h5N1P1Hb8z6mrM+tZ6Kmm4A0tCI9eHx1I=
+ bh=nArTmDDpuJi6tUS6FX0jU9l2nhqYUII9699qXqJ+37U=;
+ b=cChb+SZRjmABao2/8S5j8gEMq3uCc8pQEXZDbucfFMOy/Lv/TbpsTK90lvfUcseVIl8s+ujKCA+fpeC3QR8eLnGBrA8fu1KcW9sD6TtbiwgHrT4iNjbtK4gZHfoV27CEeAtX3JNhi3jUYQZNQfbzlwQBSG9UlN4Wfd1lxghLhWY=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
  MWHPR2201MB1310.namprd22.prod.outlook.com (10.174.162.16) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2327.24; Mon, 7 Oct 2019 22:20:03 +0000
+ 15.20.2327.24; Mon, 7 Oct 2019 22:20:02 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::3050:9a38:9d8e:8033]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::3050:9a38:9d8e:8033%5]) with mapi id 15.20.2327.025; Mon, 7 Oct 2019
@@ -38,11 +38,11 @@ Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
 From:   Paul Burton <paul.burton@mips.com>
 To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
 CC:     Paul Burton <pburton@wavecomp.com>
-Subject: [PATCH 3/4] MIPS: cmdline: Remove redundant Kconfig defaults
-Thread-Topic: [PATCH 3/4] MIPS: cmdline: Remove redundant Kconfig defaults
-Thread-Index: AQHVfV1dKA/znw7xLEmQ9KKBLUDtWg==
+Subject: [PATCH 2/4] MIPS: cmdline: Remove CONFIG_MIPS_CMDLINE_DTB_EXTEND
+Thread-Topic: [PATCH 2/4] MIPS: cmdline: Remove CONFIG_MIPS_CMDLINE_DTB_EXTEND
+Thread-Index: AQHVfV1cj5Q8zAUdTUq6A98d97kCng==
 Date:   Mon, 7 Oct 2019 22:20:02 +0000
-Message-ID: <20191007221951.1889661-3-paul.burton@mips.com>
+Message-ID: <20191007221951.1889661-2-paul.burton@mips.com>
 References: <20191007221951.1889661-1-paul.burton@mips.com>
 In-Reply-To: <20191007221951.1889661-1-paul.burton@mips.com>
 Accept-Language: en-US
@@ -58,75 +58,86 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.23.0
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: be9d9ee0-cb5d-4a13-c5c0-08d74b747fab
+x-ms-office365-filtering-correlation-id: 25c010e9-7d1c-43ac-a894-08d74b747f22
 x-ms-traffictypediagnostic: MWHPR2201MB1310:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB131097EEC520CE670D0B23A7C19B0@MWHPR2201MB1310.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-microsoft-antispam-prvs: <MWHPR2201MB1310EDF917773F978DFB4E26C19B0@MWHPR2201MB1310.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2887;
 x-forefront-prvs: 01834E39B7
 x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(376002)(366004)(346002)(39840400004)(136003)(189003)(199004)(1076003)(4326008)(8936002)(50226002)(186003)(44832011)(99286004)(102836004)(6506007)(6916009)(107886003)(76176011)(26005)(476003)(386003)(486006)(478600001)(305945005)(7736002)(25786009)(71200400001)(66556008)(2351001)(66946007)(66476007)(11346002)(71190400001)(66446008)(64756008)(81156014)(8676002)(2501003)(81166006)(5660300002)(446003)(36756003)(2616005)(66066001)(3846002)(316002)(256004)(2906002)(42882007)(52116002)(6436002)(6486002)(6512007)(14454004)(5640700003)(6116002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1310;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nChpxnjAILHGH3nPCJ6Hkfd7DAD3vRgxPdWegSanWLeJgGLGSsShEYdVVjq2VoiGv3HWjSNBteQJtp3dBDL5losbKbsxu9M0hYZFNoUri+DddVc+Fs9c8z+Qo5DgHvls9bbvaGS7aEO6vl2geaobWxJoqfJHXmXilmEpv2bOYyoGbQJa/UqmTzBBCdmtJiqCMdY72RZsglx9zmaeT0QNVndvIozty9DRdiavPAwAncLGNoKDogPRtDkFTGxudSYtSMtbPhk9HIQV5dmGQDIDz722EfyFHeR0mWhENOEDL18YCzWII7hMQyWnLfllZE5cpbUS8HJSvY2GVUY6powxZG31+hnjwdcQPfKJiKPq0kKxpCt8bPM+BdOu1EIFayTS2SenJ1E4VWfEjLk5ujtRJPxRdWOpYuQUBarzxunyrtc=
+x-microsoft-antispam-message-info: YdAzsFmXqY8CxeqSnHNCrXE5HzJc/N0By02V0I5ajss4Juk5AojYS/anI2cdY7lNZbJ8tGrDnMYCW4OLrQVT1I8Z0o8G/Lk+mokk/45uhxc1w7qHkm8znACTfUnp9Gb+a5z0GggZtSnOzdyeqj5VWayH39CWu6rn4L6Q8IKn3aVSjSvwNklaJfcUIxDAMg562RUx/VBuptvuS8z/B1aNdN4po35x/s/BBOOsJkaR8V+CN3hBr/vct0r9s4qhXexgt/7+PCoxbrtzW0i42NZtyKl/vaP/FPWCib5tPFbhhmYUK0D+J3VzSC34BIjVXIE+ofl69B9HnfOCuCg5FTOiPe4PtBPsA9kOc/b6n+IfBewlc95IJ1tnLWLIFQ7Xjn1aZRDn4BYJbihQertLL25PEuTruETgPbrwz5593PReTUg=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be9d9ee0-cb5d-4a13-c5c0-08d74b747fab
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Oct 2019 22:20:02.9196
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25c010e9-7d1c-43ac-a894-08d74b747f22
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Oct 2019 22:20:02.1220
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vlJbQ3+ZWq1D7R4EyJVabIw/tIFa2eqAdzTOJ2KvpsedfzcXnTq95NBpwtCZEVb7G7F8D+5WSrnJjoxykEbDsw==
+X-MS-Exchange-CrossTenant-userprincipalname: igZpREIvCzhupO2GMYSxu2oQ1oPmV7d4t9fhCWKyycLxVJu4gZtFAwBEEi5kmyOVMwWjC/6Urz88DXFJJR+AFQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1310
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-CMDLINE, CMDLINE_BOOL & CMDLINE_FORCE all explicitly specify default
-values that are the same as the default value for their respective types
-anyway (ie. n for booleans, and the empty string for strings).
-
-Remove the redundant defaults.
+CONFIG_MIPS_CMDLINE_DTB_EXTEND is not selected by any of our defconfigs,
+so remove it to simplify the messy command line logic in arch_mem_init()
+a little.
 
 Signed-off-by: Paul Burton <paul.burton@mips.com>
 ---
 
- arch/mips/Kconfig.debug | 3 ---
- 1 file changed, 3 deletions(-)
+ arch/mips/Kconfig        | 4 ----
+ arch/mips/kernel/setup.c | 7 -------
+ 2 files changed, 11 deletions(-)
 
-diff --git a/arch/mips/Kconfig.debug b/arch/mips/Kconfig.debug
-index 0c86b2a2adfc..93a2974d2ab7 100644
---- a/arch/mips/Kconfig.debug
-+++ b/arch/mips/Kconfig.debug
-@@ -32,7 +32,6 @@ config USE_GENERIC_EARLY_PRINTK_8250
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index ec922e6ff40b..736b691e7e5e 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -3028,10 +3028,6 @@ choice
+ 		depends on USE_OF
+ 		bool "Dtb kernel arguments if available"
 =20
- config CMDLINE_BOOL
- 	bool "Built-in kernel command line"
--	default n
- 	help
- 	  For most systems, it is firmware or second stage bootloader that
- 	  by default specifies the kernel command line options.  However,
-@@ -53,7 +52,6 @@ config CMDLINE_BOOL
- config CMDLINE
- 	string "Default kernel command string"
- 	depends on CMDLINE_BOOL
--	default ""
- 	help
- 	  On some platforms, there is currently no way for the boot loader to
- 	  pass arguments to the kernel.  For these platforms, and for the cases
-@@ -68,7 +66,6 @@ config CMDLINE
+-	config MIPS_CMDLINE_DTB_EXTEND
+-		depends on USE_OF
+-		bool "Extend dtb kernel arguments with bootloader arguments"
+-
+ 	config MIPS_CMDLINE_FROM_BOOTLOADER
+ 		bool "Bootloader kernel arguments if available"
+ endchoice
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index c2a09f082d88..273b26a81935 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -540,7 +540,6 @@ static void __init check_kernel_sections_mem(void)
 =20
- config CMDLINE_OVERRIDE
- 	bool "Built-in command line overrides firmware arguments"
--	default n
- 	depends on CMDLINE_BOOL
- 	help
- 	  By setting this option to 'Y' you will have your kernel ignore
+ #define USE_PROM_CMDLINE	IS_ENABLED(CONFIG_MIPS_CMDLINE_FROM_BOOTLOADER)
+ #define USE_DTB_CMDLINE		IS_ENABLED(CONFIG_MIPS_CMDLINE_FROM_DTB)
+-#define EXTEND_WITH_PROM	IS_ENABLED(CONFIG_MIPS_CMDLINE_DTB_EXTEND)
+=20
+ /*
+  * arch_mem_init - initialize memory management subsystem
+@@ -588,12 +587,6 @@ static void __init arch_mem_init(char **cmdline_p)
+ 	    (USE_DTB_CMDLINE && !boot_command_line[0]))
+ 		strlcpy(boot_command_line, arcs_cmdline, COMMAND_LINE_SIZE);
+=20
+-	if (EXTEND_WITH_PROM && arcs_cmdline[0]) {
+-		if (boot_command_line[0])
+-			strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
+-		strlcat(boot_command_line, arcs_cmdline, COMMAND_LINE_SIZE);
+-	}
+-
+ #if defined(CONFIG_CMDLINE_BOOL)
+ 	if (builtin_cmdline[0]) {
+ 		if (boot_command_line[0])
 --=20
 2.23.0
 
