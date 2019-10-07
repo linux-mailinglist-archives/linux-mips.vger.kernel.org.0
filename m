@@ -2,140 +2,142 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DA6CED56
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Oct 2019 22:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E7BCEEFB
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Oct 2019 00:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729400AbfJGUSn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Oct 2019 16:18:43 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:38772 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728983AbfJGUSm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Oct 2019 16:18:42 -0400
-Received: by mail-ot1-f67.google.com with SMTP id e11so12150860otl.5;
-        Mon, 07 Oct 2019 13:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9fI56kb8XrBq/n2Vd1t2Eq/YF+8w9ByM+OoMJzAVvww=;
-        b=junpjngobCXGrOQX8WIZrHiw8oAClJmkJSkc9/ivFMgsoFBhBiiWNVQiugV/6sGcpm
-         2fF6UiSQEXDpzV3AWFwQHCQdQAKRFXgDJZepzMBYowxi3v1lHiFpJRVzOvdxsD4o8NDw
-         2s+KAq6MJ36q/kEb3++w44Lyon6RdBUMvzJfQFgZ9BPO+2wJJfD7eTAaErvShkwsILVf
-         Knhc2skyHAEOVRS0JDfUiqX19zx5XkXLFDGeSs5Jj5vFZt7uZ5A5+f2LooELKkDeplmQ
-         YgqYbSAJ6mgVUPJeg0MnTo/mHgTqJ3r9ArejF2Fv5vg3Cf7xTZg0E7RUe7fGqspjMHpA
-         xLCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9fI56kb8XrBq/n2Vd1t2Eq/YF+8w9ByM+OoMJzAVvww=;
-        b=poi05zEDjptnooJ0uZswsZEaNnQebApXNgxrJGGBk8Ekjv2asGA/ZalmK0cQaceKym
-         Kx/t00BvRdyl/s30/wOZyB1FBBVCBL5MoewfKB5TOrHr9Evd+N6MUt23CoKkhiSz64aq
-         7+yGm8K8nlTxKbEls5VmLhEaVGIg6AJgVhEJqoYaf1FETqsu8GS+zpEIcwmWmHnXN4xb
-         Ej9Epqg2HVIuK25tuj/pGIGvUBQoeJaRfifzBVVojK7An92/E7Du0x2sn8nkkG7Eluva
-         f/eg8Hzl1eYIerD5rsXvaEXMpo9TkXHagrUqpQrHqLUSr5iuRkAG57zBG58k+w3USkKn
-         8Vuw==
-X-Gm-Message-State: APjAAAU7QcSiOVLU/464Io9Do2V+VeTOrtJoNo8VGdzRCMjNbskIwysj
-        6eedWaL9XJyGSROuVSvGS6skecr9caVsWNc1KeUtWtsS
-X-Google-Smtp-Source: APXvYqwoxF6wT+cdXqzZvOPYwc7uqh94iwKwWqJomkbznqqdiPli6LGgs912r9xTvoywg9/5BDf6qIb5romw9BdLSOg=
-X-Received: by 2002:a9d:6d82:: with SMTP id x2mr21022411otp.42.1570479520637;
- Mon, 07 Oct 2019 13:18:40 -0700 (PDT)
+        id S1728983AbfJGWUF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Oct 2019 18:20:05 -0400
+Received: from mail-eopbgr730116.outbound.protection.outlook.com ([40.107.73.116]:58336
+        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728654AbfJGWUE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 7 Oct 2019 18:20:04 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S8Hz3a/UWUyiZYagQNri9hIR/ntqY8GP9fgRV2G3h7el6kPyS4rqWXDpWI3RIEfxVqSC4AR6vbUsN19optMF1yAaIAtvxdIsndqoxlqOZTwnaSBrxGFIQLI7XqvNLALh135Ox42I96fUbupfD6612yth89EEeS3pXu7WodtJkogBKG7jwir89KIl8qEMjSKlcIvxOiIfhAcIAeDYa6OHO0n+4vfX4CGzwAtmB0MUON6uaotdnQN8I1aN6aZBQOXtvgZEPbYE+jOaO0Rpzs03p6oPR2n7aj6ghNprmN/qgNdrp0GWni124oKET7EzhZPXxgt3D+7XlBvR8vj6W0Zw1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AvuCt8fizbvf/UnFLUN+kHgLlX8D5me4RAYIFAw53H4=;
+ b=a+us1nD4XRfQt7Y4pai2Ep4/IzxzuJ3DBgHaokFRieWHA7zktlz+SHl+XK4L40MbDa5ZvutwdFe0eQnIlYVO08P4PL3uQEjVWVdgw/DLk8lx/mTI3S84PsBvBM7/NMIGGIbvIFx1EWeUoIcj3vDOKFshDgu9CXAOFePUKXaPkzJtRFbQkImMFBQvht7uN4BsZDYOebnpZS1wuIdK2cjuCg/GFuG2Vo3cN7LCWVRM/inliqKNpBTdhoiRu+ZkHrW+Zlt4c8KFBF7hsYOaU6di5vMbSjw7cxQo6WjGvjvknYMT0/xIxv4iOntWCrOQCJZOHcoHqvAK3Dvw0MwIcXxOHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
+ dkim=pass header.d=mips.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AvuCt8fizbvf/UnFLUN+kHgLlX8D5me4RAYIFAw53H4=;
+ b=O1bQE97pGodx1ZTvBQ1PdsS5WVhSpcACxqqSp/xId5L9VQCmCfOeuv88Cp8LJUwCQIMk1cXIXEAOS63feS1RjujoOMsMB0l9XXuQxBJEMeViWJTVvqw7+UDSs7BwHcciqaLwTw2MQQhx7xWOYmTChbNZF4vZaTtlF5GfZR7jBo4=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
+ MWHPR2201MB1310.namprd22.prod.outlook.com (10.174.162.16) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2327.24; Mon, 7 Oct 2019 22:20:01 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::3050:9a38:9d8e:8033]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::3050:9a38:9d8e:8033%5]) with mapi id 15.20.2327.025; Mon, 7 Oct 2019
+ 22:20:01 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+CC:     Paul Burton <pburton@wavecomp.com>
+Subject: [PATCH 1/4] MIPS: cmdline: Remove CONFIG_MIPS_CMDLINE_BUILTIN_EXTEND
+Thread-Topic: [PATCH 1/4] MIPS: cmdline: Remove
+ CONFIG_MIPS_CMDLINE_BUILTIN_EXTEND
+Thread-Index: AQHVfV1cKvTopIeE5EOEEl/ItiIYAg==
+Date:   Mon, 7 Oct 2019 22:20:01 +0000
+Message-ID: <20191007221951.1889661-1-paul.burton@mips.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR08CA0023.namprd08.prod.outlook.com
+ (2603:10b6:a03:100::36) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:18::12)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.23.0
+x-originating-ip: [12.94.197.246]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5f830cd2-90bc-4707-3c9d-08d74b747eab
+x-ms-traffictypediagnostic: MWHPR2201MB1310:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MWHPR2201MB13107B73A9C9E08B77BDD133C19B0@MWHPR2201MB1310.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3631;
+x-forefront-prvs: 01834E39B7
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(396003)(376002)(366004)(346002)(39840400004)(136003)(189003)(199004)(1076003)(4326008)(8936002)(50226002)(186003)(44832011)(99286004)(102836004)(6506007)(6916009)(107886003)(26005)(476003)(386003)(486006)(478600001)(305945005)(7736002)(25786009)(71200400001)(66556008)(2351001)(66946007)(66476007)(71190400001)(66446008)(64756008)(81156014)(8676002)(2501003)(81166006)(5660300002)(36756003)(2616005)(66066001)(3846002)(316002)(256004)(2906002)(42882007)(52116002)(6436002)(6486002)(6512007)(14454004)(5640700003)(6116002)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1310;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YMbZTD39xalDpt7b34VU7CROZ9ui0dUk13XAylaJrbltMt8DpRil/TrRu3xV3MjlNuzHKXXLuxBEF6H9hsZYNKbfTIFC7ObBdluPWTdTZXsgysMsb3VCGFr6PNgJTM7Cdu3lxalwIISaKXTfNJhWbzU6uiQWI9FUyMpxcVTvChBRl7HkwQ0AEalyK0AyyeQv6La4vNpLsBNnF+0AqReggbCYKSPimNgRN97sND3GFxIZgZaLJ19IB7tKbrOyHMq4jwzVvdeEpW2CupFrJm0AWiMAwi0va5a8YthJPRDif7pQG+8MqD1VSmOEOas4ZUJM95OzvQSPuRRsz5klXRjbyoPAlWuBLfud9T0QVV6ibFBQo0xEz066EwQVzrDMPRTKDiDdEMIFfikzDZ+7RfZx1XK+L55mC4mgVreDDW//F7s=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20190704122319.8983-1-martin.blumenstingl@googlemail.com>
- <20190704122319.8983-2-martin.blumenstingl@googlemail.com> <CAL_JsqJ9yUK2HNu9fLes1eEtEKdAZcXqBjGF90xKEuQh9fCU6g@mail.gmail.com>
-In-Reply-To: <CAL_JsqJ9yUK2HNu9fLes1eEtEKdAZcXqBjGF90xKEuQh9fCU6g@mail.gmail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 7 Oct 2019 22:18:29 +0200
-Message-ID: <CAFBinCDrEhCANr2V4mmhE62C8WNi=DBfyCh+yZ7jb0bXqUPfUA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: phy: add binding for the Lantiq
- VRX200 and ARX300 PCIe PHYs
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        devicetree@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin Schiller <ms@dev.tdt.de>, mripard@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f830cd2-90bc-4707-3c9d-08d74b747eab
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Oct 2019 22:20:01.2204
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GiZeWcvZ8CIYtORxqyrSOrmC9OM1pqBavEGzsvynqwrVVkI7tWzSfDGSzCS8ZfVUpcZvDqclRFryyHt8SUnExQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1310
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rob,
+CONFIG_MIPS_CMDLINE_BUILTIN_EXTEND is not selected by any of our
+defconfigs, so remove it to simplify the messy command line logic in
+arch_mem_init() a little.
 
-On Wed, Oct 2, 2019 at 4:37 PM Rob Herring <robh+dt@kernel.org> wrote:
->
-> On Thu, Jul 4, 2019 at 7:23 AM Martin Blumenstingl
-> <martin.blumenstingl@googlemail.com> wrote:
-> >
-> > Add the bindings for the PCIe PHY on Lantiq VRX200 and ARX300 SoCs.
-> > The IP block contains settings for the PHY and a PLL.
-> > The PLL mode is configurable through a dedicated #phy-cell in .dts.
-> >
-> > Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> > ---
-> >  .../bindings/phy/lantiq,vrx200-pcie-phy.yaml  | 95 +++++++++++++++++++
-> >  .../dt-bindings/phy/phy-lantiq-vrx200-pcie.h  | 11 +++
-> >  2 files changed, 106 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/phy/lantiq,vrx200-pcie-phy.yaml
-> >  create mode 100644 include/dt-bindings/phy/phy-lantiq-vrx200-pcie.h
-> >
-> > diff --git a/Documentation/devicetree/bindings/phy/lantiq,vrx200-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/lantiq,vrx200-pcie-phy.yaml
-> > new file mode 100644
-> > index 000000000000..8a56a8526cef
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/phy/lantiq,vrx200-pcie-phy.yaml
-> > @@ -0,0 +1,95 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/phy/lantiq,vrx200-pcie-phy.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Lantiq VRX200 and ARX300 PCIe PHY Device Tree Bindings
-> > +
-> > +maintainers:
-> > +  - Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> > +
-> > +properties:
-> > +  "#phy-cells":
-> > +    const: 1
-> > +    description: selects the PHY mode as defined in <dt-bindings/phy/phy-lantiq-vrx200-pcie.h>
-> > +
-> > +  compatible:
-> > +    enum:
-> > +      - lantiq,vrx200-pcie-phy
-> > +      - lantiq,arx300-pcie-phy
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: PHY module clock
-> > +      - description: PDI register clock
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: phy
-> > +      - const: pdi
-> > +
-> > +  resets:
-> > +    items:
-> > +      - description: exclusive PHY reset line
-> > +      - description: shared reset line between the PCIe PHY and PCIe controller
-> > +
-> > +  resets-names:
->
-> This breaks 'make dt_binding_check'. It should be 'reset-names'.
-sorry for the typo
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+---
 
-Maxime has already fixed this (thank you!) and the fix has already
-landed in 5.4-rc2 with f437ade3296bacaddb6d7882ba0515940f01daf4
+ arch/mips/Kconfig        | 4 ----
+ arch/mips/kernel/setup.c | 8 --------
+ 2 files changed, 12 deletions(-)
 
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index a0bd9bdb5f83..ec922e6ff40b 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -3034,10 +3034,6 @@ choice
+=20
+ 	config MIPS_CMDLINE_FROM_BOOTLOADER
+ 		bool "Bootloader kernel arguments if available"
+-
+-	config MIPS_CMDLINE_BUILTIN_EXTEND
+-		depends on CMDLINE_BOOL
+-		bool "Extend builtin kernel arguments with bootloader arguments"
+ endchoice
+=20
+ endmenu
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index 5eec13b8d222..c2a09f082d88 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -541,8 +541,6 @@ static void __init check_kernel_sections_mem(void)
+ #define USE_PROM_CMDLINE	IS_ENABLED(CONFIG_MIPS_CMDLINE_FROM_BOOTLOADER)
+ #define USE_DTB_CMDLINE		IS_ENABLED(CONFIG_MIPS_CMDLINE_FROM_DTB)
+ #define EXTEND_WITH_PROM	IS_ENABLED(CONFIG_MIPS_CMDLINE_DTB_EXTEND)
+-#define BUILTIN_EXTEND_WITH_PROM	\
+-	IS_ENABLED(CONFIG_MIPS_CMDLINE_BUILTIN_EXTEND)
+=20
+ /*
+  * arch_mem_init - initialize memory management subsystem
+@@ -602,12 +600,6 @@ static void __init arch_mem_init(char **cmdline_p)
+ 			strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
+ 		strlcat(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+ 	}
+-
+-	if (BUILTIN_EXTEND_WITH_PROM && arcs_cmdline[0]) {
+-		if (boot_command_line[0])
+-			strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
+-		strlcat(boot_command_line, arcs_cmdline, COMMAND_LINE_SIZE);
+-	}
+ #endif
+ #endif
+ 	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
+--=20
+2.23.0
 
-Martin
