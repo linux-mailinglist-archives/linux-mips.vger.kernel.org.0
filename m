@@ -2,105 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F130CEB27
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Oct 2019 19:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13981CEB52
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Oct 2019 19:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729375AbfJGRyK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Oct 2019 13:54:10 -0400
-Received: from mail-eopbgr770132.outbound.protection.outlook.com ([40.107.77.132]:24134
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        id S1728212AbfJGR7U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Oct 2019 13:59:20 -0400
+Received: from mail-eopbgr710135.outbound.protection.outlook.com ([40.107.71.135]:35603
+        "EHLO NAM05-BY2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728031AbfJGRyJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 7 Oct 2019 13:54:09 -0400
+        id S1728079AbfJGR7U (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 7 Oct 2019 13:59:20 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YKkYAo44WiLoj5h5g+IFj309k81gZTNh7OiO+u/pLO6JLXP2Mmv7HV7LE7596m6tKo9x7GxV/+Aw0zHmONETNgPIXjZTAp9ubOh7W/SXlqUvsU9GVw6hCnfEhAxcKppLsN8IAWyRm/k0kUYxAQ5CgnhVRXS+YEzOp/vUi0ffcR6U3ImXvI2s7FJ3FVRHcih15AW22wxLbR2dKJIUzGoaPmpR3QiqoQfBnmipiInpSwjwkKRWshTokSDOmkhUxXFuJ/uIPfTuwAu555kHo6yNNyLMsDMPe3IuW8XnpA5cjKqMqZCcT2APMfi9go0xcA6gOyK+N/5poHe4kvlm7M/tRA==
+ b=H9oUNSm8wAr8U4FKsnyjQQcpo9hf83F7ac+/bDqnC1SYDxDDH4+cW0exlLnF3GFR8V6VUV8C4EF8zu6CPpodV6OOn6oeBSrCvdfdLUDpPl0BR2K7erqlT5ICE4fag77G2NWAXdei/PkN+JaE45tz9SDjy2aqHFEnsk2tcVXuErHMx0IsWTmQyCSCNUxEvf9ilpXKl3KhNSzET+xgO3SaSJFLhXsahsYqI267ww4xebZw2gscgfXRem9uDu/MGePj48t9W3p/gJUsAY2GzZ8dwLpSz08i9vW6IcAtjzRLcGb31ROqcdT8XOGVKslMRnTQ9AKWgk3Izcws5uPiDsC56A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9RvPAO/fqVihpaIP37dSW4pf06JZ5G/EGSv7WbqSfuI=;
- b=BRcMoCGdwayLSQ5Z8Odv2rPWoX91tnCYrrIc1KRjxiYs+YFOq0Ov1IhRtoQ7X4ivwHU6FYW5+tSOu8gXEApRw69aONHyu9PCZn/4ZpFvcMlYThx1SQefO3RYIaTEhOVv4Sia4MEUdRDzIbI8/UvdkvlxbbHu/RIdUyEtXx/OzmLEALkEPocxoVJuUtAGX/9pjq0V2Q96cz/B99UDGcUqw/h0NWSAbfgyWogG0htbfwLgUlt68N8BbP1lyG35FtcVy1JIsp+wIfhNWb+P7neR2/MTkhAvunX6OcVCaMcdmrGKCzVeOm8ReqgdUMPj4Bvb1bF1x5L9lApyI45cBRWwMw==
+ bh=YpugprrxkpYyCFw31flchiDPUSvNqCsv1FxjbiTbckE=;
+ b=ZXNm3aK67PYosKiNxq8eEX5jS5a018BQ7ZNADFo2oUWQtkcbMK49e552AAmdOu5go3KnOlsN9uZcMrDhpmxnL1lQF8ZyFF/Q4Hy0GArXxyG+hsRgDR/+Gx4be6rOL6NpAphSHm0z1n/AGxcVyZZopvWpb7BiHGwT1YqT98Tpr6nLalAQvp4wva/8BUKtVhht8EgIFhS9VUpDri0nAyMZlOlm+F53kwRuNFeh2LMvfvVTRIRIqLaqEeXS6AkUbqK/yz3Xz1B+pOfFfk6fFLu7TLYEVWETgOmvbc4VJsgtyVMfgwYNVBwV8tFI4LOzMnWCQdZhP8dNBa+wk0/2VE69BQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9RvPAO/fqVihpaIP37dSW4pf06JZ5G/EGSv7WbqSfuI=;
- b=C5rq3Mi1hXMUER2AQutKMCcOUSd5Y2bhWRmeWWBLfKQsOuLaKE/ZFiUbOhpuRDlm7IxNldqXJFuEAazJFQZ0/Vg7lg7m641Ljp+aez5JIQrrI9WZMEm3RQ/6set+XC/V90EU25D+sb7IlQk4hdl1m/aqyojYCXOrJDW/kKTbJEk=
+ bh=YpugprrxkpYyCFw31flchiDPUSvNqCsv1FxjbiTbckE=;
+ b=F2owVDi7Ep01desXvKu6V0T9Ii8Wy4dIZLgNPwk8GLzK3dZ9AhN1hx7K9RlIRS988lljt1WbaWPNgocLXh5QounfcWC3QDCxBq6SxwSMuwIU0SxZTkrBXgJ73yz8SVZj6zEjc50kFEsc5Fazs5AH6o04MMBOE7+N3Bx4w/dmNT8=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1549.namprd22.prod.outlook.com (10.174.170.162) with Microsoft
+ MWHPR2201MB1470.namprd22.prod.outlook.com (10.174.170.143) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2327.24; Mon, 7 Oct 2019 17:54:07 +0000
+ 15.20.2327.24; Mon, 7 Oct 2019 17:59:18 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::3050:9a38:9d8e:8033]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::3050:9a38:9d8e:8033%5]) with mapi id 15.20.2327.025; Mon, 7 Oct 2019
- 17:54:07 +0000
+ 17:59:18 +0000
 From:   Paul Burton <paul.burton@mips.com>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-CC:     Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
+To:     Aurabindo Jayamohanan <mail@aurabindo.in>
+CC:     "ralf@linux-mips.org" <ralf@linux-mips.org>,
         Paul Burton <pburton@wavecomp.com>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jhogan@kernel.org" <jhogan@kernel.org>,
+        "alexios.zavras@intel.com" <alexios.zavras@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "armijn@tjaldur.nl" <armijn@tjaldur.nl>,
+        "allison@lohutok.net" <allison@lohutok.net>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
         "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH v7 2/5] MIPS: PCI: use information from 1-wire PROM for
- IOC3  detection
-Thread-Topic: [PATCH v7 2/5] MIPS: PCI: use information from 1-wire PROM for
- IOC3  detection
-Thread-Index: AQHVfTg24CyB7s+NSkO/VidtsBLaDA==
-Date:   Mon, 7 Oct 2019 17:54:07 +0000
-Message-ID: <MWHPR2201MB1277380FCFDEB8F78DD7742AC19B0@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20191003095235.5158-3-tbogendoerfer@suse.de>
-In-Reply-To: <20191003095235.5158-3-tbogendoerfer@suse.de>
+Subject: Re: [PATCH] mips: check for dsp presence only once before
+ save/restore
+Thread-Topic: [PATCH] mips: check for dsp presence only once before
+ save/restore
+Thread-Index: AQHVfTjwGrGVHbSFvECLy1pIiGJbFw==
+Date:   Mon, 7 Oct 2019 17:59:18 +0000
+Message-ID: <MWHPR2201MB1277E7B787B02B8ADB37E2D9C19B0@MWHPR2201MB1277.namprd22.prod.outlook.com>
+References: <20190913120206.9234-1-mail@aurabindo.in>
+In-Reply-To: <20190913120206.9234-1-mail@aurabindo.in>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: BY5PR13CA0003.namprd13.prod.outlook.com
- (2603:10b6:a03:180::16) To MWHPR2201MB1277.namprd22.prod.outlook.com
+x-clientproxiedby: BYAPR03CA0016.namprd03.prod.outlook.com
+ (2603:10b6:a02:a8::29) To MWHPR2201MB1277.namprd22.prod.outlook.com
  (2603:10b6:301:18::12)
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=pburton@wavecomp.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8d1fdfe8-200a-4efd-6325-08d74b4f5949
-x-ms-traffictypediagnostic: MWHPR2201MB1549:
+x-ms-office365-filtering-correlation-id: 57346c07-708f-4d0c-3e87-08d74b5012a6
+x-ms-traffictypediagnostic: MWHPR2201MB1470:
 x-ms-exchange-purlcount: 1
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB15491EDEEBDB34B777A87F54C19B0@MWHPR2201MB1549.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-microsoft-antispam-prvs: <MWHPR2201MB1470EC7A15495F3FC0802255C19B0@MWHPR2201MB1470.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
 x-forefront-prvs: 01834E39B7
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(136003)(346002)(396003)(366004)(39840400004)(189003)(199004)(52116002)(99286004)(476003)(7736002)(305945005)(54906003)(76176011)(25786009)(486006)(33656002)(42882007)(478600001)(2906002)(11346002)(446003)(52536014)(5660300002)(6246003)(7696005)(4744005)(71200400001)(71190400001)(66066001)(316002)(14454004)(229853002)(7416002)(102836004)(9686003)(81156014)(6436002)(81166006)(6116002)(55016002)(74316002)(3846002)(44832011)(4326008)(8676002)(186003)(6916009)(26005)(966005)(386003)(8936002)(6506007)(6306002)(5024004)(66946007)(66556008)(64756008)(66446008)(66476007)(256004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1549;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(39840400004)(396003)(376002)(366004)(136003)(199004)(189003)(52116002)(33656002)(7416002)(7696005)(76176011)(99286004)(6436002)(256004)(14444005)(476003)(74316002)(42882007)(11346002)(4326008)(446003)(229853002)(7736002)(305945005)(44832011)(486006)(102836004)(6116002)(3846002)(6246003)(71190400001)(71200400001)(6506007)(386003)(26005)(2906002)(186003)(1250700005)(52536014)(9686003)(4744005)(6916009)(54906003)(316002)(5660300002)(25786009)(66066001)(6306002)(14454004)(66446008)(55016002)(478600001)(8936002)(81156014)(66946007)(64756008)(66476007)(81166006)(966005)(8676002)(66556008);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1470;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Xl27fIRd2kYKARiSFl6U+R4ije02bxmrq1rjAKyEZhdoJ0dT1WOQH98Kgw4YCEOEggrKIzvEdJx4h8VB852vUR3ATOZr9swOnw9AmeE+S6aURLJZRondR41VimF8IyCts9kvy0LRJCLAIUKubT+2R3OgFh8NLyscBdSecJvpo6g+p7e8XiKc8sAdP2+PkIqWRAbjmoJD3G6x5GvDaeehs6kO4irgqSTq3ztn6yuX/fRgNlDCxc/4ts3uPdeU/3exnIaw/Ght45TXAyGZNZ+pq/3mUOVYwgnQIdQPfzbyNt90GFV1vQHhtTS+hX6wqj2EHxOyM+XXUjTvrKKDu5+V0btEejtkQW6dYLrzGXkPLlZKyl5CCGx4TXAFTmn5rhseggTsnXVZwOvw/tgw9SNLTaUgZyjdnr4khuTNp6bW0E2uZIdD/l3Kl17PCTD4yCELm4kH7WNEdwXeEa3X0NUFoA==
+x-microsoft-antispam-message-info: 1alN3vTzsY3RTyU0nGRudf5JMTk8sZm1JsEorVs7MmuNFoTnSYF8Nd4H9NbvnYZiS7zX3t8OKZMu+3jKVTvvXUCxQqFitkhmZhkin8hP4uG34MK/Ks8t5Ib1xRPBuSF5VhOXq96qmnPvKIQet9wBgLcfvtxkHpwsLKirlWpzgnauPp5VkmCV9J5+/45Dl/Elx5kTqU1JWg5MT+RbkI5ykZrBy4Ukgz+Ef48fybuldVAyknlL6lOpWpFmW01VyNaSetrEuzB+Lqp7Ao2i+Wouoj5+DJdFZZyN9KQd66cOcdbAnj2uAkRONfHw++rJIWBYGBbWDdwK/AtdkxDP5Wj12Oh0LRcjRjdYe8OCXj4arxpTSgBfka3yPdJS4BVoH1RqPtnjVgFuYhmTyG/iXkSNYBQCy8AgN44Bsblpg9Cm3xB/0x/Zb2c7pAcSJE86LFfEakmsGHuzBvP92cLv/Y6QYg==
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d1fdfe8-200a-4efd-6325-08d74b4f5949
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Oct 2019 17:54:07.1604
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57346c07-708f-4d0c-3e87-08d74b5012a6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Oct 2019 17:59:18.0935
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: z762+tNPLVXaw3/bbHz36e2rHevlxGAyorz+AaFqebpAkUYS8qxO0pLilOpCZqEXasw5CI0hqfMrUf0t1rO3/A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1549
+X-MS-Exchange-CrossTenant-userprincipalname: SzzS65YKhm6dYiHdazvzdXi9Ly8mJHJ5V8YXO0NITXGCY0MohgmEaV9wCj3Jp0znVfa9zp+AK3ICTTfy5rImfQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1470
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -108,18 +101,17 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hello,
 
-Thomas Bogendoerfer wrote:
-> IOC3 chips in SGI system are conntected to a bridge ASIC, which has
-> a 1-wire prom attached with part number information. This changeset
-> uses this information to create PCI subsystem information, which
-> the MFD driver uses for further platform device setup.
+Aurabindo Jayamohanan wrote:
+> {save,restore}_dsp() internally checks if the cpu has dsp support.
+> Therefore, explicit check is not required before calling them in
+> {save,restore}_processor_state()
 
 Applied to mips-next.
 
-> commit 5dc76a96e95a
-> https://git.kernel.org/mips/c/5dc76a96e95a
+> commit 9662dd752c14
+> https://git.kernel.org/mips/c/9662dd752c14
 >=20
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+> Signed-off-by: Aurabindo Jayamohanan <mail@aurabindo.in>
 > Signed-off-by: Paul Burton <paul.burton@mips.com>
 
 Thanks,
