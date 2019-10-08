@@ -2,142 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62321CF4B5
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Oct 2019 10:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00622CF524
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Oct 2019 10:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730457AbfJHINN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Oct 2019 04:13:13 -0400
-Received: from foss.arm.com ([217.140.110.172]:58144 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727724AbfJHINM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 8 Oct 2019 04:13:12 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8C2581570;
-        Tue,  8 Oct 2019 01:13:11 -0700 (PDT)
-Received: from [10.162.40.139] (p8cg001049571a15.blr.arm.com [10.162.40.139])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 28D403F6C4;
-        Tue,  8 Oct 2019 01:12:58 -0700 (PDT)
-Subject: Re: [PATCH V4 2/2] mm/pgtable/debug: Add test validating architecture
- page table helpers
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <1570427124-21887-1-git-send-email-anshuman.khandual@arm.com>
- <1570427124-21887-3-git-send-email-anshuman.khandual@arm.com>
- <20191007130617.GB56546@gmail.com> <20191007132607.4q537nauwfn5thol@box>
- <20191007135158.GA36360@gmail.com> <20191007140058.um5g44rvxyzyiref@box>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <881796fc-c35e-3790-a1ee-7031c6cdb38d@arm.com>
-Date:   Tue, 8 Oct 2019 13:43:22 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1730036AbfJHIim (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Oct 2019 04:38:42 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:41892 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730063AbfJHIil (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 8 Oct 2019 04:38:41 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 52ADD745F3E9E7BF8522;
+        Tue,  8 Oct 2019 16:38:39 +0800 (CST)
+Received: from [127.0.0.1] (10.74.191.121) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Tue, 8 Oct 2019
+ 16:38:37 +0800
+Subject: Re: [PATCH v6] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Michal Hocko <mhocko@kernel.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
+        <rth@twiddle.net>, <ink@jurassic.park.msu.ru>,
+        <mattst88@gmail.com>, <benh@kernel.crashing.org>,
+        <paulus@samba.org>, <mpe@ellerman.id.au>,
+        <heiko.carstens@de.ibm.com>, <gor@linux.ibm.com>,
+        <borntraeger@de.ibm.com>, <ysato@users.sourceforge.jp>,
+        <dalias@libc.org>, <davem@davemloft.net>, <ralf@linux-mips.org>,
+        <paul.burton@mips.com>, <jhogan@kernel.org>,
+        <jiaxun.yang@flygoat.com>, <chenhc@lemote.com>,
+        <akpm@linux-foundation.org>, <rppt@linux.ibm.com>,
+        <anshuman.khandual@arm.com>, <tglx@linutronix.de>, <cai@lca.pw>,
+        <robin.murphy@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <hpa@zytor.com>, <x86@kernel.org>,
+        <dave.hansen@linux.intel.com>, <luto@kernel.org>,
+        <len.brown@intel.com>, <axboe@kernel.dk>, <dledford@redhat.com>,
+        <jeffrey.t.kirsher@intel.com>, <linux-alpha@vger.kernel.org>,
+        <naveen.n.rao@linux.vnet.ibm.com>, <mwb@linux.vnet.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-s390@vger.kernel.org>,
+        <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
+        <tbogendoerfer@suse.de>, <linux-mips@vger.kernel.org>,
+        <rafael@kernel.org>, <gregkh@linuxfoundation.org>
+References: <20190924091714.GJ2369@hirez.programming.kicks-ass.net>
+ <20190924105622.GH23050@dhcp22.suse.cz>
+ <20190924112349.GJ2332@hirez.programming.kicks-ass.net>
+ <20190924115401.GM23050@dhcp22.suse.cz>
+ <20190924120943.GP2349@hirez.programming.kicks-ass.net>
+ <20190924122500.GP23050@dhcp22.suse.cz>
+ <20190924124325.GQ2349@hirez.programming.kicks-ass.net>
+ <20190924125936.GR2349@hirez.programming.kicks-ass.net>
+ <20190924131939.GS23050@dhcp22.suse.cz>
+ <1adcbe68-6753-3497-48a0-cc84ac503372@huawei.com>
+ <20190925104108.GE4553@hirez.programming.kicks-ass.net>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <47fa4cee-8528-7c23-c7de-7be1b65aa2ae@huawei.com>
+Date:   Tue, 8 Oct 2019 16:38:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-In-Reply-To: <20191007140058.um5g44rvxyzyiref@box>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20190925104108.GE4553@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.74.191.121]
+X-CFilter-Loop: Reflected
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 10/07/2019 07:30 PM, Kirill A. Shutemov wrote:
-> On Mon, Oct 07, 2019 at 03:51:58PM +0200, Ingo Molnar wrote:
->>
->> * Kirill A. Shutemov <kirill@shutemov.name> wrote:
->>
->>> On Mon, Oct 07, 2019 at 03:06:17PM +0200, Ingo Molnar wrote:
->>>>
->>>> * Anshuman Khandual <anshuman.khandual@arm.com> wrote:
->>>>
->>>>> This adds a test module which will validate architecture page table helpers
->>>>> and accessors regarding compliance with generic MM semantics expectations.
->>>>> This will help various architectures in validating changes to the existing
->>>>> page table helpers or addition of new ones.
->>>>>
->>>>> Test page table and memory pages creating it's entries at various level are
->>>>> all allocated from system memory with required alignments. If memory pages
->>>>> with required size and alignment could not be allocated, then all depending
->>>>> individual tests are skipped.
->>>>
->>>>> diff --git a/arch/x86/include/asm/pgtable_64_types.h b/arch/x86/include/asm/pgtable_64_types.h
->>>>> index 52e5f5f2240d..b882792a3999 100644
->>>>> --- a/arch/x86/include/asm/pgtable_64_types.h
->>>>> +++ b/arch/x86/include/asm/pgtable_64_types.h
->>>>> @@ -40,6 +40,8 @@ static inline bool pgtable_l5_enabled(void)
->>>>>  #define pgtable_l5_enabled() 0
->>>>>  #endif /* CONFIG_X86_5LEVEL */
->>>>>  
->>>>> +#define mm_p4d_folded(mm) (!pgtable_l5_enabled())
->>>>> +
->>>>>  extern unsigned int pgdir_shift;
->>>>>  extern unsigned int ptrs_per_p4d;
->>>>
->>>> Any deep reason this has to be a macro instead of proper C?
->>>
->>> It's a way to override the generic mm_p4d_folded(). It can be rewritten
->>> as inline function + define. Something like:
->>>
->>> #define mm_p4d_folded mm_p4d_folded
->>> static inline bool mm_p4d_folded(struct mm_struct *mm)
->>> {
->>> 	return !pgtable_l5_enabled();
->>> }
->>>
->>> But I don't see much reason to be more verbose here than needed.
->>
->> C type checking? Documentation? Yeah, I know it's just a one-liner, but 
->> the principle of the death by a thousand cuts applies here.
+On 2019/9/25 18:41, Peter Zijlstra wrote:
+> On Wed, Sep 25, 2019 at 05:14:20PM +0800, Yunsheng Lin wrote:
+>> From the discussion above, It seems making the node_to_cpumask_map()
+>> NUMA_NO_NODE aware is the most feasible way to move forwad.
 > 
-> Okay, if you think it worth it. Anshuman, could you fix it up for the next
-> submission?
+> That's still wrong.
 
-Sure, will do.
+Hi, Peter
+
+It seems this has trapped in the dead circle.
+
+From my understanding, NUMA_NO_NODE which means not node numa preference
+is the state to describe the node of virtual device or the physical device
+that has equal distance to all cpu.
+
+We can be stricter if the device does have a nearer node, but we can not
+deny that a device does not have a node numa preference or node affinity,
+which also means the control or data buffer can be allocated at the node where
+the process is running.
+
+As you has proposed, making it -2 and have dev_to_node() warn if the device does
+have a nearer node and not set by the fw is a way to be stricter.
+
+But I think maybe being stricter is not really relevant to NUMA_NO_NODE, because
+we does need a state to describe the device that have equal distance to all node,
+even if it is not physically scalable.
+
+Any better suggestion to move this forward?
 
 > 
+> .
 > 
->> BTW., any reason this must be in the low level pgtable_64_types.h type 
->> header, instead of one of the API level header files?
-> 
-> I defined it next pgtable_l5_enabled(). What is more appropriate place to
-> you? pgtable_64.h? Yeah, it makes sense.
 
-
-Needs to be moved to arch/x86/include/asm/pgtable_64.h as well ?
