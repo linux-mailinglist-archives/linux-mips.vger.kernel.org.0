@@ -2,126 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A52D0037
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Oct 2019 19:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C68D005D
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Oct 2019 20:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728465AbfJHRzo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Oct 2019 13:55:44 -0400
-Received: from mail-eopbgr800111.outbound.protection.outlook.com ([40.107.80.111]:55108
-        "EHLO NAM03-DM3-obe.outbound.protection.outlook.com"
+        id S1729670AbfJHSAb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Oct 2019 14:00:31 -0400
+Received: from mail-eopbgr700092.outbound.protection.outlook.com ([40.107.70.92]:28576
+        "EHLO NAM04-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726320AbfJHRzn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 8 Oct 2019 13:55:43 -0400
+        id S1728920AbfJHSAb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 8 Oct 2019 14:00:31 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nu5m4TwCUPU7NoL16PT/K9LvXTJlsif3TnnXDbtCFPdGFgIHk/FRrQBTjWKkNVVi0jmCy8j73OtQxzqIyJstMrJYv/Q9Ev0NzyMZDZOTrcs5J6rEaNv0jR2YarJNh3E8qpNxhRN6qAKkl4lU2CKDcdWlruW2xb2XWzqC/kkGOBXlZVVPmpgWmVWReIamO+YwUkIbe2KdRsDWqg+1ZJRw8e1IeVsBqlrTny/bouHsNR1ZQ5KUcZtJoS6v3EIQDa+vdipfBuXJ918kPgCs0nx3qvxxrJYPEJGriilzCUnkkF0XN+9tEbqGdKq0tiKql3+K6oB5Ue5AFNyjsqqBCOq47Q==
+ b=K1APfPmbgFxgQMqlbJTfNZa/jUEW/AECP2GLr8ZtJ8fQwmCERMr1JPkYrGPpv6n07lvFSOGBhZ228GsquuNz6vIDFFtUoDYnVE2PiOlE0M/31KVmXz6mcSDxjcwO4xebD7ATUwpVBxsWR3f0WXA+JjgdfSZgtTUuA2QapzO4q0fkMtEsGpRaaQH3YjwIiOkDyzDqUXVEV5HDaGwy/aWdg9kbqnbCnYdCqH/saYssVOxqj47g2DWZJYykTcd0PUwsagZtmPkfp5mzpvI3KIQPnJbW3FHE3/tLOOSR2NUrEQ80mMCyRX3HgFZa3ww4lD7iIkIK85AjhXyRNrlMVIUZfw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ma9otyuCs5QVRPOxyJHnPdQwB1znz2ict8ZxBQ7PGyw=;
- b=Y4DXpYbN1gLaMVxx45Sqvu9/D27C+aHM265ZiUdsWbfMcA3kc3xbLw9kDOtfhrHDMMMxuFZN7TxNrW0pCfrjAahiLSpK5uqxwwB5BvS7sm/fyv5DD1rLmgJvw3GUszhFXDNOCIfF/iqUqu8hdxNKTubtjAtr9tpLatlNTSQlkfN+vzAL6OrBl/on33HsUoSP5AHk+d509squfzpygq+GR2Qg/WtbUolz+5XDW/lCgQc6GPgTfAY7s9zuVHCCecq2ZkOdYQwn+kjMr1abcVCxfOjGKCppE9Zz2gpJXhpao1vx76jDZcQgN7O36jeWJnh7T0YlUQZ2tsQR+SKk2Hhbug==
+ bh=KggIE0QJw8POn5mDWzO3XOFmoX7Lkoaf1q+vx5oQSI4=;
+ b=GDayHM0+PJLmZYaPjC3LXGO/pbcEoiSUCqeemwvDksRBOTp7PR2hevSUkf8sUl2WBbPWkMMPF688EKiU7lqWPRlFKCBM1nEsKZAfT2UKNh6gbz8/B4x1AABk4HhhG76HlecOZ6WLDR9CQgGitjNDoEIxz/U3N28rRaDWNVRrRI+9rLmUi0h1Hq9Y/IA0Fpxgbvt7cAZEUkcIX4LwDw8nwf7W7boYpcEn7jaTD9TXuDsYidywugzaAGC/pGyKgfXBFRX/vQkjRafOQiJAo5XfxmwStd9SsABly3U9ccbRUwJ8uB2+uRQ2QL0LQRwTEfpLanYH8BwsMuZ5j0nnIsed2w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
  dkim=pass header.d=mips.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ma9otyuCs5QVRPOxyJHnPdQwB1znz2ict8ZxBQ7PGyw=;
- b=dHeIDJ5HtmIlAAIdkBeR9OGKXnplhlS6qf6qf7+CUVagsj8tI/7Gk32j4hgMh8iEqdhxVWs4r0DNOgetcxjSAt+RWHPXi6RhjLS0uziio5B4La1hwJj0bJstzxqB0LpwJkiNveFCxJGNr2SwFMTIQeckqqew+1yBGubLzbXbznI=
+ bh=KggIE0QJw8POn5mDWzO3XOFmoX7Lkoaf1q+vx5oQSI4=;
+ b=YaAjn/QJATmlXoIEwlGKH9rqr2h2bW5U6FJEeCVgff9kBACGIoiQdigI4TUwwo6hg1mqkdmde7sGbGnfHbvNBQRfCI1HGP89X09KGkDTQsUNJnCiYupn86guStQaibSZPVLVoUbyrCD2qCvK/pXrY0HIQ2G6DWP92JQUD0YlG5g=
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1648.namprd22.prod.outlook.com (10.174.167.37) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2327.24; Tue, 8 Oct 2019 17:55:32 +0000
+ MWHPR2201MB1501.namprd22.prod.outlook.com (10.174.170.150) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2327.24; Tue, 8 Oct 2019 18:00:27 +0000
 Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::c1dc:dba3:230c:e7f0]) by MWHPR2201MB1277.namprd22.prod.outlook.com
  ([fe80::c1dc:dba3:230c:e7f0%8]) with mapi id 15.20.2347.016; Tue, 8 Oct 2019
- 17:55:32 +0000
+ 18:00:27 +0000
 From:   Paul Burton <paul.burton@mips.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhc@lemote.com>
 CC:     Paul Burton <pburton@wavecomp.com>,
-        "ralf@linux-mips.org" <ralf@linux-mips.org>,
-        "jhogan@kernel.org" <jhogan@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        "linux-mips@linux-mips.org" <linux-mips@linux-mips.org>,
         "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH v2] MIPS: generic: Use __initconst for const init data
-Thread-Topic: [PATCH v2] MIPS: generic: Use __initconst for const init data
-Thread-Index: AQHVfgGU2pbwZN3FCEGkxfviXmdIeQ==
-Date:   Tue, 8 Oct 2019 17:55:32 +0000
-Message-ID: <MWHPR2201MB1277014C13FB6EB4AEE74A01C19A0@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <1570551309-21021-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1570551309-21021-1-git-send-email-yangtiezhu@loongson.cn>
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH V2 1/3] MIPS: Loongson: Add CFUCFG&CSR support
+Thread-Topic: [PATCH V2 1/3] MIPS: Loongson: Add CFUCFG&CSR support
+Thread-Index: AQHVfgJD7aQzoy7uTkWqi+86d0tu7Q==
+Date:   Tue, 8 Oct 2019 18:00:26 +0000
+Message-ID: <20191008180025.dtp2ingi6xgc5udu@pburton-laptop>
+References: <1569073828-13019-1-git-send-email-chenhc@lemote.com>
+ <MWHPR2201MB1277326D98BD1BFE0A5263BDC19B0@MWHPR2201MB1277.namprd22.prod.outlook.com>
+ <CAAhV-H5Lt8N5PQLXO7-VQbOkrWD3eRZC2sOKPcBb3LmK9GN-BQ@mail.gmail.com>
+In-Reply-To: <CAAhV-H5Lt8N5PQLXO7-VQbOkrWD3eRZC2sOKPcBb3LmK9GN-BQ@mail.gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR08CA0018.namprd08.prod.outlook.com
- (2603:10b6:a03:100::31) To MWHPR2201MB1277.namprd22.prod.outlook.com
+x-clientproxiedby: BY5PR13CA0004.namprd13.prod.outlook.com
+ (2603:10b6:a03:180::17) To MWHPR2201MB1277.namprd22.prod.outlook.com
  (2603:10b6:301:18::12)
+user-agent: NeoMutt/20180716
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=pburton@wavecomp.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
 x-originating-ip: [12.94.197.246]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: abc21239-a526-495e-051b-08d74c18b696
-x-ms-traffictypediagnostic: MWHPR2201MB1648:
-x-ms-exchange-purlcount: 1
+x-ms-office365-filtering-correlation-id: 864c5fce-aae8-4121-898d-08d74c1965e0
+x-ms-traffictypediagnostic: MWHPR2201MB1501:
+x-ms-exchange-purlcount: 3
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB164833F9D359181B6C15D225C19A0@MWHPR2201MB1648.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3631;
+x-microsoft-antispam-prvs: <MWHPR2201MB150104EEF979A8F8CC2D0332C19A0@MWHPR2201MB1501.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
 x-forefront-prvs: 01842C458A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39840400004)(346002)(366004)(136003)(396003)(376002)(189003)(199004)(8676002)(71190400001)(81156014)(2906002)(81166006)(7736002)(8936002)(66946007)(99286004)(476003)(64756008)(66556008)(66446008)(66476007)(6916009)(305945005)(74316002)(6306002)(55016002)(5660300002)(52536014)(9686003)(33656002)(6246003)(66066001)(186003)(229853002)(44832011)(446003)(11346002)(486006)(42882007)(26005)(6116002)(102836004)(6506007)(52116002)(3846002)(76176011)(7696005)(386003)(256004)(4326008)(6436002)(4744005)(25786009)(71200400001)(966005)(14454004)(478600001)(316002)(54906003)(41533002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1648;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(7916004)(136003)(396003)(376002)(346002)(366004)(39850400004)(199004)(189003)(14454004)(66556008)(42882007)(3846002)(52116002)(7736002)(53546011)(6506007)(386003)(476003)(11346002)(446003)(26005)(305945005)(66066001)(99286004)(76176011)(256004)(316002)(478600001)(58126008)(6116002)(1076003)(186003)(2906002)(64756008)(66446008)(66476007)(66946007)(8936002)(6246003)(229853002)(8676002)(81166006)(81156014)(33716001)(6512007)(9686003)(4326008)(966005)(71200400001)(71190400001)(486006)(54906003)(102836004)(44832011)(25786009)(5660300002)(6486002)(6436002)(6916009)(6306002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1501;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: wavecomp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XyTYRRckMm2Y+r7f8LmEU434RnuZ0k/lLjvHluD/kEvtSlKW5Fv9QjVBgZ5dZpG9zFyiknwQb8GohRIbYrKd55nqnNZrlwuvQRas9GvU0flsSM7NzqilUsM1DNFZGoWn0n32kRxqsTsMPvy3haeUIDRGhoqap6+UIUy6l7Q77+F7rn8AqQHj4PGS8WLOQiBZWp4bVRJWWC1Q19Zl9IUZM7IdVjzD02GhqkSiFjd4+gOyF3IyF26ksKuSd0jo/lQae2mqRXCVy+g/3kg3ULJG6t7CfLFw74fqxnxr1BI7YMYiLSL9l3bIxPkkIiGjfoyINnhefoh7LSIBXiNCq02QgzJsZmX8cxaxI/K64g6yjiT61pZzaoER5bu+sMLlQCfeVKRpQcwj83tbJzltRXrmXKbz2Yds42t3rD/H/Ss/2kuZBK+CpVWVhY3ikSnBed4qIi2Y4ECO92KsFIlFDWxRNg==
-Content-Type: text/plain; charset="iso-8859-1"
+x-microsoft-antispam-message-info: 9ZEBBha/pvX9SNn537+8T4s0gxrV7b9qCHYpX7Ff0t5VJ3dKMqBfoRbHg0GNdJMuyaQkQ2TPhYDwMSKmjdbM58DH6qWuSXPMJ6gC/ygGONG3Kq3k4mMoECCA/HGJqlVXjJWfQGvu/zK+Kvxp7qtlUZtMAcq2EgylcmSRWVu/TnOOWqeGpVhfZTw/zcnWqOQwDAK/VVE0jQQQkNSdzEoDYt4amNluB1ovU3xkQ6ZxLupj7cbLwA/BWHLMcInvkjefg8tOpmwr/kL66kkavWLD06IRiP+0AHsPV/74WdnqsmcYzkk7k6rOCxM2p+mtFa//SexCoUW+KVP9AhPF296tm8KXDEAb4p7cl4SVmxVA3ubJqR5w4rmRsfPlH4jxjRZL3CBYz/N/b1sAtd4v+Ematmjqudmi6uuFTa3dL/pQ/8RqN5zMXl63fRdLEXmxpNOXDPW5HwCOZdHwNcGvFAW71A==
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <420B6BAC92C2CA41986205A86E7880A5@namprd22.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: abc21239-a526-495e-051b-08d74c18b696
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Oct 2019 17:55:32.4444
+X-MS-Exchange-CrossTenant-Network-Message-Id: 864c5fce-aae8-4121-898d-08d74c1965e0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Oct 2019 18:00:26.8629
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zxXMKBaj0quauH3vdgY+WQJNp1LTtTbn/5uXvMcQ4L4rY5cvmSydOaDxXhAiJfQTflcl0jwRyXggcYxr98NY2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1648
+X-MS-Exchange-CrossTenant-userprincipalname: IgZD/ry/jogEJBXqs02eSO4s7v14CUMzpknz1McC6a0+RS4zvJ7o1gEN8drf7iZ/PrwBDgYCGUXZhAN/zjEZbA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1501
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+Hi Huacai,
 
-Tiezhu Yang wrote:
-> Fix the following checkpatch errors:
->=20
-> $ ./scripts/checkpatch.pl --no-tree -f arch/mips/generic/init.c
-> ERROR: Use of const init definition must use __initconst
-> #23: FILE: arch/mips/generic/init.c:23:
-> +static __initdata const void *fdt;
->=20
-> ERROR: Use of const init definition must use __initconst
-> #24: FILE: arch/mips/generic/init.c:24:
-> +static __initdata const struct mips_machine *mach;
->=20
-> ERROR: Use of const init definition must use __initconst
-> #25: FILE: arch/mips/generic/init.c:25:
-> +static __initdata const void *mach_match_data;
+[Quote munged to fix top posting]
 
-Applied to mips-next.
-
-> commit a14bf1dc494a
-> https://git.kernel.org/mips/c/a14bf1dc494a
+On Tue, Oct 08, 2019 at 03:09:27PM +0800, Huacai Chen wrote:
+> Hi, Paul,
 >=20
-> Fixes: eed0eabd12ef ("MIPS: generic: Introduce generic DT-based board sup=
-port")
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> Signed-off-by: Paul Burton <paul.burton@mips.com>
+> On Tue, Oct 8, 2019 at 1:51 AM Paul Burton <paul.burton@mips.com> wrote:
+> >
+> > Hello,
+> >
+> > Huacai Chen wrote:
+> > > Loongson-3A R4+ (Loongson-3A4000 and newer) has CPUCFG (CPU config) a=
+nd
+> > > CSR (Control and Status Register) extensions. This patch add read/wri=
+te
+> > > functionalities for them.
+> >
+> > Series applied to mips-next.
+> >
+> > > MIPS: Loongson: Add CFUCFG&CSR support
+> > >   commit 6a6f9b7dafd5
+> > >   https://git.kernel.org/mips/c/6a6f9b7dafd5
+> > >
+> > >   Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > >   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > >   Signed-off-by: Paul Burton <paul.burton@mips.com>
+> > >
+> > > MIPS: Loongson: Add Loongson-3A R4 basic support
+> > >   commit 7507445b1993
+> > >   https://git.kernel.org/mips/c/7507445b1993
+> > >
+> > >   Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > >   Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > >   Signed-off-by: Paul Burton <paul.burton@mips.com>
+> > >
+> > > MIPS: Loongson-3: Add CSR IPI support
+> > >   commit ffe59ee36aaa
+> > >   https://git.kernel.org/mips/c/ffe59ee36aaa
+> > >
+> > >   Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > >   Signed-off-by: Paul Burton <paul.burton@mips.com>
+> >
+> > Thanks,
+> >     Paul
+> >
+> > [ This message was auto-generated; if you believe anything is incorrect
+> >   then please email paul.burton@mips.com to report it. ]
+>=20
+> I found that there is a typo in the title, please change CFUCFG to
+> CPUCFG, thanks.
+>
+> Huacai
+
+It's too late for that - the email you replied to was telling you that
+the patches have already been applied to mips-next, and I'm not going to
+rewrite the mips-next branch for something so minor.
 
 Thanks,
     Paul
-
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paul.burton@mips.com to report it. ]
