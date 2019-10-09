@@ -2,111 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1426D0E94
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Oct 2019 14:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC43D0EA0
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Oct 2019 14:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729566AbfJIMU7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Oct 2019 08:20:59 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:32929 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727286AbfJIMU6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Oct 2019 08:20:58 -0400
-Received: by mail-wm1-f67.google.com with SMTP id r17so4649786wme.0
-        for <linux-mips@vger.kernel.org>; Wed, 09 Oct 2019 05:20:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qXCqBYPqV8kVHUxWuXAEkISLORWbnRzr+7PSMvDt4aI=;
-        b=aYKBEQFwDCXxujDKrJgGAhmBCYQ5T8sYzBdiaz9xylsz5tstpm9HdSi6Ih/luEO9qq
-         dwkfkVvSpO0/k5YoCoxwWsQAATA/U5YjGU4LxA7qd2t3Qw1E9CG3QuEV+MDlCvStvnW0
-         1GVbC/HWwyzJyREfEioCz8z2fzB0UUqoSsWFd/D/OSUeHrVfypRey1mu7IaDoVzpz/MP
-         3rvjiFNpOv2UrHJfqUA/FO1hRSFzlrxOobcrVi7rCStZJzweh1bu9uW4mLvo65vATYpk
-         dtDNYeSdgQRoswSsS6TpJPchbb8aayD8lsPoUCptytEYBnZ/Ayn06UGU4+GcMr4LoZyJ
-         4P9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qXCqBYPqV8kVHUxWuXAEkISLORWbnRzr+7PSMvDt4aI=;
-        b=r5OS3r7BNcROPDlfeyr0TReROPCs40dqMOXd0BtvOEwNhj9N2H4hKZMG5MQqIxHQYM
-         bFIWz0LSfCFOvJSb8EBUbV+aVM+sKC/1tdtewqlZpj/um0qXhcjrMfivbF8J1HfeHZHX
-         5HRvqHT3YoiSTZjgG29PXdWQPCbSKaJHTyCpYECWFM470XJJqaWlh1JaUeh7M+vZDPON
-         oPGM3NeXCKuyWd8Vj4V5qHsRVltmdUiEtoVkMbi4MohpMmDU0Xme9JGnerzK2HAQy4+P
-         yMBR2Qsf9ogftETvFUIcZ8S3mEGLQlovWsbi1XNhk+FI4YsP3cDR4hqalk0CmafLPY8a
-         bP7w==
-X-Gm-Message-State: APjAAAUCTZ9+aOan0hYYUJ6FR0kJcV6lDFvVsVX3Wsbl5EaRGCGZYbl4
-        JvR8h2AHswsCRRnwfwcdmqib69/a6rQ=
-X-Google-Smtp-Source: APXvYqyIMS2OnxulX7mYdcWpIRpNAE5kGJL+cDrGmdJ8U3Gn5Lwu2dVogYye7r1vrEUQzS19TIXSpw==
-X-Received: by 2002:a1c:2407:: with SMTP id k7mr2274957wmk.99.1570623656840;
-        Wed, 09 Oct 2019 05:20:56 -0700 (PDT)
-Received: from [192.168.1.35] (46.red-83-42-66.dynamicip.rima-tde.net. [83.42.66.46])
-        by smtp.gmail.com with ESMTPSA id p85sm3054696wme.23.2019.10.09.05.20.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Oct 2019 05:20:55 -0700 (PDT)
-Subject: Re: [PATCH 3/4] MIPS: cmdline: Remove redundant Kconfig defaults
-To:     Paul Burton <paul.burton@mips.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Cc:     Paul Burton <pburton@wavecomp.com>
-References: <20191007221951.1889661-1-paul.burton@mips.com>
- <20191007221951.1889661-3-paul.burton@mips.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
-Message-ID: <09be04a4-490d-75d9-2141-a7385f45f862@amsat.org>
-Date:   Wed, 9 Oct 2019 14:20:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        id S1730904AbfJIMZ0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Oct 2019 08:25:26 -0400
+Received: from foss.arm.com ([217.140.110.172]:33288 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730861AbfJIMZ0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 9 Oct 2019 08:25:26 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF15D142F;
+        Wed,  9 Oct 2019 05:25:24 -0700 (PDT)
+Received: from [10.37.12.37] (unknown [10.37.12.37])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E022B3F703;
+        Wed,  9 Oct 2019 05:25:16 -0700 (PDT)
+Subject: Re: [PATCH v6] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
+To:     Yunsheng Lin <linyunsheng@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Michal Hocko <mhocko@kernel.org>, catalin.marinas@arm.com,
+        will@kernel.org, mingo@redhat.com, bp@alien8.de, rth@twiddle.net,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
+        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
+        dalias@libc.org, davem@davemloft.net, ralf@linux-mips.org,
+        paul.burton@mips.com, jhogan@kernel.org, jiaxun.yang@flygoat.com,
+        chenhc@lemote.com, akpm@linux-foundation.org, rppt@linux.ibm.com,
+        anshuman.khandual@arm.com, tglx@linutronix.de, cai@lca.pw,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        hpa@zytor.com, x86@kernel.org, dave.hansen@linux.intel.com,
+        luto@kernel.org, len.brown@intel.com, axboe@kernel.dk,
+        dledford@redhat.com, jeffrey.t.kirsher@intel.com,
+        linux-alpha@vger.kernel.org, naveen.n.rao@linux.vnet.ibm.com,
+        mwb@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, tbogendoerfer@suse.de,
+        linux-mips@vger.kernel.org, rafael@kernel.org,
+        gregkh@linuxfoundation.org
+References: <20190924091714.GJ2369@hirez.programming.kicks-ass.net>
+ <20190924105622.GH23050@dhcp22.suse.cz>
+ <20190924112349.GJ2332@hirez.programming.kicks-ass.net>
+ <20190924115401.GM23050@dhcp22.suse.cz>
+ <20190924120943.GP2349@hirez.programming.kicks-ass.net>
+ <20190924122500.GP23050@dhcp22.suse.cz>
+ <20190924124325.GQ2349@hirez.programming.kicks-ass.net>
+ <20190924125936.GR2349@hirez.programming.kicks-ass.net>
+ <20190924131939.GS23050@dhcp22.suse.cz>
+ <1adcbe68-6753-3497-48a0-cc84ac503372@huawei.com>
+ <20190925104108.GE4553@hirez.programming.kicks-ass.net>
+ <47fa4cee-8528-7c23-c7de-7be1b65aa2ae@huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <bec80499-86d9-bf1f-df23-9044a8099992@arm.com>
+Date:   Wed, 9 Oct 2019 13:25:14 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-In-Reply-To: <20191007221951.1889661-3-paul.burton@mips.com>
+In-Reply-To: <47fa4cee-8528-7c23-c7de-7be1b65aa2ae@huawei.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/8/19 12:20 AM, Paul Burton wrote:
-> CMDLINE, CMDLINE_BOOL & CMDLINE_FORCE all explicitly specify default
-> values that are the same as the default value for their respective types
-> anyway (ie. n for booleans, and the empty string for strings).
+On 2019-10-08 9:38 am, Yunsheng Lin wrote:
+> On 2019/9/25 18:41, Peter Zijlstra wrote:
+>> On Wed, Sep 25, 2019 at 05:14:20PM +0800, Yunsheng Lin wrote:
+>>>  From the discussion above, It seems making the node_to_cpumask_map()
+>>> NUMA_NO_NODE aware is the most feasible way to move forwad.
+>>
+>> That's still wrong.
 > 
-> Remove the redundant defaults.
+> Hi, Peter
 > 
-> Signed-off-by: Paul Burton <paul.burton@mips.com>
-> ---
+> It seems this has trapped in the dead circle.
 > 
->   arch/mips/Kconfig.debug | 3 ---
->   1 file changed, 3 deletions(-)
+>  From my understanding, NUMA_NO_NODE which means not node numa preference
+> is the state to describe the node of virtual device or the physical device
+> that has equal distance to all cpu.
 > 
-> diff --git a/arch/mips/Kconfig.debug b/arch/mips/Kconfig.debug
-> index 0c86b2a2adfc..93a2974d2ab7 100644
-> --- a/arch/mips/Kconfig.debug
-> +++ b/arch/mips/Kconfig.debug
-> @@ -32,7 +32,6 @@ config USE_GENERIC_EARLY_PRINTK_8250
->   
->   config CMDLINE_BOOL
->   	bool "Built-in kernel command line"
-> -	default n
->   	help
->   	  For most systems, it is firmware or second stage bootloader that
->   	  by default specifies the kernel command line options.  However,
-> @@ -53,7 +52,6 @@ config CMDLINE_BOOL
->   config CMDLINE
->   	string "Default kernel command string"
->   	depends on CMDLINE_BOOL
-> -	default ""
->   	help
->   	  On some platforms, there is currently no way for the boot loader to
->   	  pass arguments to the kernel.  For these platforms, and for the cases
-> @@ -68,7 +66,6 @@ config CMDLINE
->   
->   config CMDLINE_OVERRIDE
->   	bool "Built-in command line overrides firmware arguments"
-> -	default n
->   	depends on CMDLINE_BOOL
->   	help
->   	  By setting this option to 'Y' you will have your kernel ignore
+> We can be stricter if the device does have a nearer node, but we can not
+> deny that a device does not have a node numa preference or node affinity,
+> which also means the control or data buffer can be allocated at the node where
+> the process is running.
 > 
+> As you has proposed, making it -2 and have dev_to_node() warn if the device does
+> have a nearer node and not set by the fw is a way to be stricter.
+> 
+> But I think maybe being stricter is not really relevant to NUMA_NO_NODE, because
+> we does need a state to describe the device that have equal distance to all node,
+> even if it is not physically scalable.
+> 
+> Any better suggestion to move this forward?
 
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+FWIW (since this is in my inbox), it sounds like the fundamental issue 
+is that NUMA_NO_NODE is conflated for at least two different purposes, 
+so trying to sort that out would be a good first step. AFAICS we have 
+genuine "don't care" cases like alloc_pages_node(), where if the 
+producer says it doesn't matter then the consumer is free to make its 
+own judgement on what to do, and fundamentally different "we expect this 
+thing to have an affinity but it doesn't, so we can't say what's 
+appropriate" cases which could really do with some separate indicator 
+like "NUMA_INVALID_NODE".
+
+The tricky part is then bestowed on the producers to decide whether they 
+can downgrade "invalid" to "don't care". You can technically build 'a 
+device' whose internal logic is distributed between nodes and thus 
+appears to have equal affinity - interrupt controllers, for example, may 
+have per-CPU or per-node interfaces that end up looking like that - so 
+although it's unlikely it's not outright nonsensical. Similarly a 
+'device' that's actually emulated behind a firmware call interface may 
+well effectively have no real affinity.
+
+Robin.
