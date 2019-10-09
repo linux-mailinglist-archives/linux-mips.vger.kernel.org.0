@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8911DD0FFF
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Oct 2019 15:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B224D100A
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Oct 2019 15:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731432AbfJIN1b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S1731434AbfJIN1b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Wed, 9 Oct 2019 09:27:31 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47452 "EHLO mx1.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:47464 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731357AbfJIN1a (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1731369AbfJIN1a (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Wed, 9 Oct 2019 09:27:30 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 362E7AF6B;
+        by mx1.suse.de (Postfix) with ESMTP id 5AB1BB01E;
         Wed,  9 Oct 2019 13:27:29 +0000 (UTC)
 From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
 To:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/6] MIPS: Kconfig: always select ARC_MEMORY and ARC_PROMLIB for platform
-Date:   Wed,  9 Oct 2019 15:27:14 +0200
-Message-Id: <20191009132718.25346-4-tbogendoerfer@suse.de>
+Subject: [PATCH 4/6] MIPS: fw: arc: workaround 64bit kernel/32bit ARC problems
+Date:   Wed,  9 Oct 2019 15:27:15 +0200
+Message-Id: <20191009132718.25346-5-tbogendoerfer@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191009132718.25346-1-tbogendoerfer@suse.de>
 References: <20191009132718.25346-1-tbogendoerfer@suse.de>
@@ -31,75 +31,67 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Instead of having a default y option with depends simply select
-options for the platforms where they are needed.
+Pointer arguments for 32bit ARC PROMs must reside in CKSEG0/1. While
+the initial stack resides in CKSEG0 the first kernel thread stack
+is already placed at a XKPHYS address, which ARC32 can't handle.
+The workaround here is to use static variables, which are placed
+into BSS and linked to a CKSEG0 address.
 
 Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
 ---
- arch/mips/Kconfig | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ arch/mips/fw/arc/promlib.c | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index f71699cd9f73..37336d4ab969 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -359,6 +359,8 @@ config MACH_DECSTATION
+diff --git a/arch/mips/fw/arc/promlib.c b/arch/mips/fw/arc/promlib.c
+index be381307fbb0..5e9e840a9314 100644
+--- a/arch/mips/fw/arc/promlib.c
++++ b/arch/mips/fw/arc/promlib.c
+@@ -11,6 +11,21 @@
+ #include <asm/bcache.h>
+ #include <asm/setup.h>
  
- config MACH_JAZZ
- 	bool "Jazz family of machines"
-+	select ARC_MEMORY
-+	select ARC_PROMLIB
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
- 	select FW_ARC
-@@ -631,6 +633,7 @@ config RALINK
++#if defined(CONFIG_64BIT) && defined(CONFIG_FW_ARC32)
++/*
++ * For 64bit kernels working with a 32bit ARC PROM pointer arguments
++ * for ARC calls need to reside in CKEG0/1. But as soon as the kernel
++ * switches to it's first kernel thread stack is set to an address in
++ * XKPHYS, so anything on stack can't be used anymore. This is solved
++ * by using a * static declartion variables are put into BSS, which is
++ * linked to a CKSEG0 address. Since this is only used on UP platforms
++ * there is not spinlock needed
++ */
++#define O32_STATIC	static
++#else
++#define O32_STATIC
++#endif
++
+ /*
+  * IP22 boardcache is not compatible with board caches.	 Thus we disable it
+  * during romvec action.  Since r4xx0.c is always compiled and linked with your
+@@ -23,8 +38,10 @@
  
- config SGI_IP22
- 	bool "SGI IP22 (Indy/Indigo2)"
-+	select ARC_PROMLIB
- 	select FW_ARC
- 	select FW_ARC32
- 	select ARCH_MIGHT_HAVE_PC_SERIO
-@@ -699,6 +702,7 @@ config SGI_IP27
+ void prom_putchar(char c)
+ {
+-	ULONG cnt;
+-	CHAR it = c;
++	O32_STATIC ULONG cnt;
++	O32_STATIC CHAR it;
++
++	it = c;
  
- config SGI_IP28
- 	bool "SGI IP28 (Indigo2 R10k)"
-+	select ARC_PROMLIB
- 	select FW_ARC
- 	select FW_ARC64
- 	select ARCH_MIGHT_HAVE_PC_SERIO
-@@ -737,6 +741,8 @@ config SGI_IP28
+ 	bc_disable();
+ 	ArcWrite(1, &it, 1, &cnt);
+@@ -33,8 +50,8 @@ void prom_putchar(char c)
  
- config SGI_IP32
- 	bool "SGI IP32 (O2)"
-+	select ARC_MEMORY
-+	select ARC_PROMLIB
- 	select ARCH_HAS_PHYS_TO_DMA
- 	select FW_ARC
- 	select FW_ARC32
-@@ -844,6 +850,8 @@ config SIBYTE_BIGSUR
+ char prom_getchar(void)
+ {
+-	ULONG cnt;
+-	CHAR c;
++	O32_STATIC ULONG cnt;
++	O32_STATIC CHAR c;
  
- config SNI_RM
- 	bool "SNI RM200/300/400"
-+	select ARC_MEMORY
-+	select ARC_PROMLIB
- 	select FW_ARC if CPU_LITTLE_ENDIAN
- 	select FW_ARC32 if CPU_LITTLE_ENDIAN
- 	select FW_SNIPROM if CPU_BIG_ENDIAN
-@@ -1360,13 +1368,9 @@ config ARC_CONSOLE
- 
- config ARC_MEMORY
- 	bool
--	depends on MACH_JAZZ || SNI_RM || SGI_IP32
--	default y
- 
- config ARC_PROMLIB
- 	bool
--	depends on MACH_JAZZ || SNI_RM || SGI_IP22 || SGI_IP28 || SGI_IP32
--	default y
- 
- config FW_ARC64
- 	bool
+ 	bc_disable();
+ 	ArcRead(0, &c, 1, &cnt);
 -- 
 2.16.4
 
