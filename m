@@ -2,39 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4C0D1605
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Oct 2019 19:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8EFD15A6
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Oct 2019 19:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732361AbfJIRYc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Oct 2019 13:24:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49262 "EHLO mail.kernel.org"
+        id S1732435AbfJIRYq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Oct 2019 13:24:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49648 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732355AbfJIRYc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 9 Oct 2019 13:24:32 -0400
+        id S1731916AbfJIRYo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 9 Oct 2019 13:24:44 -0400
 Received: from sasha-vm.mshome.net (unknown [167.220.2.234])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BAB42218AC;
-        Wed,  9 Oct 2019 17:24:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1A150218AC;
+        Wed,  9 Oct 2019 17:24:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570641871;
-        bh=OxtsmDZcRyjTy/TwgnZe5iInYm/ARc+kAq5vsnT/P2M=;
+        s=default; t=1570641884;
+        bh=E1p83cVGBh/VObNOpqqftqKRBwPpNj8M5LZKNYhZfR8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BkrYZNAKzZLPTcUM8vGRYVHwbAJS23QRahKtGvtepAG/rz7nZVJpa4gZzZ1VnTf8x
-         rFgBg5LxL+gkibvpBdEw11c0rskqXe8du16MsqxUmRGfLZNprTv6Yb8ZlKBiP0Kg5L
-         K4YhMJYmbaDmF1COO0Xj5ykRN3D4QpNTvy/7GM/Y=
+        b=G866P2qEJnSZsuER1Ha1BWAeYm2ZfeggwmAlF9rdaVDe7XTnpK1Aab4WKaSduPhqy
+         5wJ8hgavjzUzFAITvLaN+HwSoXSRjb5muwt9tGugbIUY1pImO3MuVxWdobKBeWuAhP
+         R+SozMK951zOt8AdUIW0nAcbuY30gfcq/kZAEXX0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Paul Burton <paul.burton@mips.com>, chenhc@lemote.com,
-        ralf@linux-mips.org, jhogan@kernel.org, linux-mips@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.14 16/21] mips: Loongson: Fix the link time qualifier of 'serial_exit()'
-Date:   Wed,  9 Oct 2019 13:06:09 -0400
-Message-Id: <20191009170615.32750-16-sashal@kernel.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Paul Burton <paul.burton@mips.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 06/13] MIPS: dts: ar9331: fix interrupt-controller size
+Date:   Wed,  9 Oct 2019 13:06:25 -0400
+Message-Id: <20191009170635.536-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191009170615.32750-1-sashal@kernel.org>
-References: <20191009170615.32750-1-sashal@kernel.org>
+In-Reply-To: <20191009170635.536-1-sashal@kernel.org>
+References: <20191009170635.536-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,39 +48,40 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Oleksij Rempel <o.rempel@pengutronix.de>
 
-[ Upstream commit 25b69a889b638b0b7e51e2c4fe717a66bec0e566 ]
+[ Upstream commit 0889d07f3e4b171c453b2aaf2b257f9074cdf624 ]
 
-'exit' functions should be marked as __exit, not __init.
+It is two registers each of 4 byte.
 
-Fixes: 85cc028817ef ("mips: make loongsoon serial driver explicitly modular")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 Signed-off-by: Paul Burton <paul.burton@mips.com>
-Cc: chenhc@lemote.com
-Cc: ralf@linux-mips.org
-Cc: jhogan@kernel.org
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: devicetree@vger.kernel.org
 Cc: linux-mips@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/loongson64/common/serial.c | 2 +-
+ arch/mips/boot/dts/qca/ar9331.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/loongson64/common/serial.c b/arch/mips/loongson64/common/serial.c
-index ffefc1cb26121..98c3a7feb10f8 100644
---- a/arch/mips/loongson64/common/serial.c
-+++ b/arch/mips/loongson64/common/serial.c
-@@ -110,7 +110,7 @@ static int __init serial_init(void)
- }
- module_init(serial_init);
+diff --git a/arch/mips/boot/dts/qca/ar9331.dtsi b/arch/mips/boot/dts/qca/ar9331.dtsi
+index cf47ed4d85694..1fda24fc18606 100644
+--- a/arch/mips/boot/dts/qca/ar9331.dtsi
++++ b/arch/mips/boot/dts/qca/ar9331.dtsi
+@@ -98,7 +98,7 @@
  
--static void __init serial_exit(void)
-+static void __exit serial_exit(void)
- {
- 	platform_device_unregister(&uart8250_device);
- }
+ 			miscintc: interrupt-controller@18060010 {
+ 				compatible = "qca,ar7240-misc-intc";
+-				reg = <0x18060010 0x4>;
++				reg = <0x18060010 0x8>;
+ 
+ 				interrupt-parent = <&cpuintc>;
+ 				interrupts = <6>;
 -- 
 2.20.1
 
