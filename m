@@ -2,81 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EAFD1663
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Oct 2019 19:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE84D17AD
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Oct 2019 20:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732527AbfJIR3j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Oct 2019 13:29:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48600 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732184AbfJIRYL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 9 Oct 2019 13:24:11 -0400
-Received: from sasha-vm.mshome.net (unknown [167.220.2.234])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 88DAA21920;
-        Wed,  9 Oct 2019 17:24:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570641850;
-        bh=OxtsmDZcRyjTy/TwgnZe5iInYm/ARc+kAq5vsnT/P2M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O0c67KjO3KueprQfFBsiqV0MlLgB055OZRqyjj3Ax1OKOJwoXdv2XT+PPz/Nl6fNL
-         TlqcSwCphIMx+oba40SNWE5jA1/mNHDoL/zNg+d5VUVrNzpHKlLkO0gYTpOICeDLfC
-         iHyl8MJEzyE6gndafq8CZAgKcbInySEwrNsPEi20=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Paul Burton <paul.burton@mips.com>, chenhc@lemote.com,
-        ralf@linux-mips.org, jhogan@kernel.org, linux-mips@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.19 20/26] mips: Loongson: Fix the link time qualifier of 'serial_exit()'
-Date:   Wed,  9 Oct 2019 13:05:52 -0400
-Message-Id: <20191009170558.32517-20-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191009170558.32517-1-sashal@kernel.org>
-References: <20191009170558.32517-1-sashal@kernel.org>
+        id S1730490AbfJISnO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Oct 2019 14:43:14 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:33612 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728804AbfJISnO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Oct 2019 14:43:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=4IINCFeaSJyuK///5d+ZVyEn9IR5HdVzFzHth3rJj94=; b=WNndJd8iEM1zprft3l27wvIsf
+        meIaoWTsmNDuGLgQZJ7VOmwlYs9l8Y1l8AkowGTHRJ1VfNpJvUVIZfCkr4gTvDcWTooV5KloG0czV
+        x8sXo2VRYn+K/fsyIGfoYSX34WcnneGFkDIIG6yaoEu5MR2I9dRjPw/JO25DXmGmTWQAxnPvfC0+R
+        ttVYbv7tLrm4gjTz3+MswMTyJ6zryiXjew9wDj4pLpJ2TLdVEeaTP6Ewjzbkv+QIxPaswGm2bUCwv
+        0S0axOq7ytdUaKGF1vbwUoJYlF8Uj0LF3NA/+KmQ/oBi80MtmKf/IGBRw1CqlYvo85ERvDgXD1/Zu
+        q92iUrevg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.2 #3 (Red Hat Linux))
+        id 1iIGvX-0001tD-Ee; Wed, 09 Oct 2019 18:43:11 +0000
+Date:   Wed, 9 Oct 2019 11:43:11 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: add support for SGI Octane (IP30)
+Message-ID: <20191009184311.GA20261@infradead.org>
+References: <20191009155928.3047-1-tbogendoerfer@suse.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191009155928.3047-1-tbogendoerfer@suse.de>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> +++ b/arch/mips/sgi-ip30/ip30-pci.c
+> @@ -0,0 +1,19 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * ip30-pci.c: misc PCI related helper code for IP30 architecture
+> + */
+> +
+> +#include <asm/pci/bridge.h>
+> +
+> +dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr)
+> +{
+> +	struct pci_dev *pdev = to_pci_dev(dev);
+> +	struct bridge_controller *bc = BRIDGE_CONTROLLER(pdev->bus);
+> +
+> +	return bc->baddr + paddr;
+> +}
+> +
+> +phys_addr_t __dma_to_phys(struct device *dev, dma_addr_t dma_addr)
+> +{
+> +	return dma_addr & ~(0xffUL << 56);
+> +}
 
-[ Upstream commit 25b69a889b638b0b7e51e2c4fe717a66bec0e566 ]
-
-'exit' functions should be marked as __exit, not __init.
-
-Fixes: 85cc028817ef ("mips: make loongsoon serial driver explicitly modular")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Cc: chenhc@lemote.com
-Cc: ralf@linux-mips.org
-Cc: jhogan@kernel.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/loongson64/common/serial.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/mips/loongson64/common/serial.c b/arch/mips/loongson64/common/serial.c
-index ffefc1cb26121..98c3a7feb10f8 100644
---- a/arch/mips/loongson64/common/serial.c
-+++ b/arch/mips/loongson64/common/serial.c
-@@ -110,7 +110,7 @@ static int __init serial_init(void)
- }
- module_init(serial_init);
- 
--static void __init serial_exit(void)
-+static void __exit serial_exit(void)
- {
- 	platform_device_unregister(&uart8250_device);
- }
--- 
-2.20.1
-
+This file is duplicated from ip27.  I think we should aim to share
+it given the common hardware even if it is mostly trivial.
