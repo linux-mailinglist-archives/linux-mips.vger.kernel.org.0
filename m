@@ -2,109 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E32D0F06
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Oct 2019 14:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9CCD0FFE
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Oct 2019 15:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729575AbfJIMnj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Oct 2019 08:43:39 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:42247 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727878AbfJIMnj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Oct 2019 08:43:39 -0400
-Received: by mail-wr1-f68.google.com with SMTP id n14so2774636wrw.9;
-        Wed, 09 Oct 2019 05:43:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2aP3QyiaeBnkG3DxeeYQ4nlgffh90nk86KCIg/jKuaU=;
-        b=cBeTh2vWr29qPnCY2i41SlQjI/XBacikQbSAfARZjWlXqMa4R0bf+DQEUlB2oKlYps
-         iealIxs9gvtcIqskd11+6UvPOgcd7wcX/O8YrOP2zvjXiDZEUW7iJYWr1r5nbVm91mD3
-         L4qXbiun3ZpgtKy4Rvj04jASWWV/3tLGIVq8VMhxXpNxzRq4kSl/ISHRiN0fSARF5MaX
-         nfy6dbj5T3cBpUQ3Zepj9sLhfGQ5bUpW8AC6DEWv9SsdmCx380Z+m2MNgLCbfX8bx2n/
-         8gzyan4ExcLnYW4P/ZJgrrwm0ZhkIZKS64TUjuIJRtONtN+gXnZReW0m6JFJ19hvnd+W
-         yY+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2aP3QyiaeBnkG3DxeeYQ4nlgffh90nk86KCIg/jKuaU=;
-        b=M4pf+Y+oz2TTQTcpBITMG1xUbyhIiwSP/QZMDVJ9DEsSnoLWlNgGcHOOBhNyJx4XMW
-         Q0BMst/m6iy1imE+x9vgdW0M3jISswbgxF+zvTVjI7pS8Nvoentu3CvUyQCwptAZMfDj
-         DTcviFWh77W9mCTDIg0522OkukcFEHNOdYQHcR6WRHyJ9sV1y4S/HJyMkjG6iFMVlyDp
-         r/ZDXJlwqNv6nDLLm4UgRNv7eyRUO7ilceQ2W1c8Wf9Wqu4Dld1Tw8SmgIec1N4mrsgF
-         appS6VF8U+lVuOHrwt8xBtrtqVm0oEmMFP5aRVlWnXQ1OyhS0KPrZCXNIRz+ohhQ1Gn8
-         JAuw==
-X-Gm-Message-State: APjAAAXvFqIrOKhGTuHC3T/s3kCsStN0u5PxTUq/bGEtZqewZ1kELC/Z
-        7jKCm5dO11Vn06Ca9eOsKL4=
-X-Google-Smtp-Source: APXvYqyg+4+QGfZoqRK4FuRALg+eUJqhWP99UpdMPJ7+2+soui8JmB5yzjg3klnpqUwKUnTcJwVpCw==
-X-Received: by 2002:a5d:654a:: with SMTP id z10mr2727157wrv.159.1570625017013;
-        Wed, 09 Oct 2019 05:43:37 -0700 (PDT)
-Received: from [192.168.1.35] (46.red-83-42-66.dynamicip.rima-tde.net. [83.42.66.46])
-        by smtp.gmail.com with ESMTPSA id g4sm2599857wrw.9.2019.10.09.05.43.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Oct 2019 05:43:36 -0700 (PDT)
-Subject: Re: [PATCH] MIPS: include: Mark __xchg as __always_inline
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        Ralf Baechle <ralf@linux-mips.org>,
+        id S1731416AbfJIN1a (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Oct 2019 09:27:30 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47412 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731152AbfJIN1a (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 9 Oct 2019 09:27:30 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 70562AC6E;
+        Wed,  9 Oct 2019 13:27:28 +0000 (UTC)
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20191009100600.10572-1-tbogendoerfer@suse.de>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
-Message-ID: <a685a8fe-7cd9-7d94-54c8-3b6e133cfd74@amsat.org>
-Date:   Wed, 9 Oct 2019 14:43:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
-MIME-Version: 1.0
-In-Reply-To: <20191009100600.10572-1-tbogendoerfer@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] Clean up ARC code and fix IP22/28 early printk
+Date:   Wed,  9 Oct 2019 15:27:11 +0200
+Message-Id: <20191009132718.25346-1-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/9/19 12:06 PM, Thomas Bogendoerfer wrote:
-> Commit ac7c3e4ff401 ("compiler: enable CONFIG_OPTIMIZE_INLINING
-> forcibly") allows compiler to uninline functions marked as 'inline'.
-> In cace of __xchg this would cause to reference function
+While fixing the problem of not working EARLY_PRINTK on IP22/IP28
+I've removed not used ARC function and made 32bit ARC PROMs working
+with 64bit kernels. By switching to memory detection via PROM calls
+EARLY_PRINTK works now. And by using the regular 64bit spaces
+maximum memory of 384MB on Indigo2 R4k machines is working, too.
 
-Typo: "in case of"
+Thomas Bogendoerfer (6):
+  MIPS: fw: arc: remove unused ARC code
+  MIPS: fw: arc: use call_o32 to call ARC prom from 64bit kernel
+  MIPS: Kconfig: always select ARC_MEMORY and ARC_PROMLIB for platform
+  MIPS: fw: arc: workaround 64bit kernel/32bit ARC problems
+  MIPS: SGI-IP22: set PHYS_OFFSET to memory start
+  MIPS: SGI-IP22/28: Use PROM for memory detection
 
-> __xchg_called_with_bad_pointer, which is an error case
-> for catching bugs and will not happen for correct code, if
-> __xchg is inlined.
-> 
+ arch/mips/Kconfig                        |  32 +++-----
+ arch/mips/fw/arc/Makefile                |   2 +-
+ arch/mips/fw/arc/env.c                   |   6 --
+ arch/mips/fw/arc/file.c                  |  49 ------------
+ arch/mips/fw/arc/identify.c              |   5 ++
+ arch/mips/fw/arc/init.c                  |   5 ++
+ arch/mips/fw/arc/memory.c                |   9 +++
+ arch/mips/fw/arc/misc.c                  |  59 --------------
+ arch/mips/fw/arc/promlib.c               |  25 +++++-
+ arch/mips/fw/arc/salone.c                |  25 ------
+ arch/mips/fw/arc/time.c                  |  25 ------
+ arch/mips/fw/arc/tree.c                  | 127 -------------------------------
+ arch/mips/include/asm/bootinfo.h         |   1 +
+ arch/mips/include/asm/mach-ip22/spaces.h |  12 +--
+ arch/mips/include/asm/sgialib.h          |  12 ---
+ arch/mips/include/asm/sgiarcs.h          | 103 ++++++++-----------------
+ arch/mips/sgi-ip22/ip22-mc.c             |  74 +++++-------------
+ 17 files changed, 105 insertions(+), 466 deletions(-)
+ delete mode 100644 arch/mips/fw/arc/salone.c
+ delete mode 100644 arch/mips/fw/arc/time.c
+ delete mode 100644 arch/mips/fw/arc/tree.c
 
-Ah, this is the equivalent of ARM commit 920fdab7b3c.
+-- 
+2.16.4
 
-Maybe add:
-
-Fixes: ac7c3e4ff401
-
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> ---
->   arch/mips/include/asm/cmpxchg.h | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/cmpxchg.h b/arch/mips/include/asm/cmpxchg.h
-> index 012dcf7046ad..f6136871561d 100644
-> --- a/arch/mips/include/asm/cmpxchg.h
-> +++ b/arch/mips/include/asm/cmpxchg.h
-> @@ -77,8 +77,8 @@ extern unsigned long __xchg_called_with_bad_pointer(void)
->   extern unsigned long __xchg_small(volatile void *ptr, unsigned long val,
->   				  unsigned int size);
->   
-> -static inline unsigned long __xchg(volatile void *ptr, unsigned long x,
-> -				   int size)
-> +static __always_inline
-> +unsigned long __xchg(volatile void *ptr, unsigned long x, int size)
->   {
->   	switch (size) {
->   	case 1:
-> 
-
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
