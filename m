@@ -2,124 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24674D30EF
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2019 20:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1B7D3268
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2019 22:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726793AbfJJSyq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Oct 2019 14:54:46 -0400
-Received: from mail-eopbgr820099.outbound.protection.outlook.com ([40.107.82.99]:35770
-        "EHLO NAM01-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726007AbfJJSyq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 10 Oct 2019 14:54:46 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HbixM2Sz+XAibzqkHNeoDp2jPIbSTwoMAPoGa4U6G7fDRzeCzEZUw9wKCBob6WvTksL8T7tFJNnnV9Mmvfd2wUHiPqoUBHhMGYMKgkN6hH214AKS7adCrAUQO+XTSWxQQhruj7jwt6VbMHIx8W4xiFhaeMeFgPouvQxND18H+W8KcZnQx5kXiVSjhnEep+tScH/1yVhwsXESeJ7amlOiWLNG00pOUfi1tM2PnWjJh9X2z0t4r+dfl504STEy/QNgYscLmYBsNJbm4bqlauCuZnmdLestsq2KD+I1TKlIqb4Q/v6jLoiFVgK0IEzlItPYKE4+JyeQWs/f3FmBp+m6zA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x+zRRoOihCScYNAIeakXbn3H+4ZnILFawPE4L8qPneQ=;
- b=EhW2OCULXKIkc0EK4HrYmVnTifWNwJ9uU6M2qAHGkX15egmjlb9uM/ClfFcaCAeMEAOVXe7udeUgz3m+OT3ShPx8BNVkwBvkPoLiovlmpdaJY7c60QUvByZseqsWJFXQ9F7CcDPCumjqJvBuilvFQCSa+hrpDZbrHSYbweo5Ds7wjIh95KfIGJTkVxmIdWfEidfwfF8nrUOD/alGbig0uICuYJj06g5/FmhhlDAQrZLpvf+kGvwij2YCxkNPz4RwbEY/7L+l004HNDLK2/rQQHB0zfBFDm03FeyV8izO+XJhXM/eb9OkR4vFDh35E3PhnGGQh+UWASY5urkWpEde2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
- dkim=pass header.d=mips.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x+zRRoOihCScYNAIeakXbn3H+4ZnILFawPE4L8qPneQ=;
- b=WexqWdJ6jdmvw91Im7Iw3ZJM/RhgsC5mczyPLLDlV7U/M0uU1DYkmrWIiK2PQOO8PLxvt9LaRs3p/M7KKjXVjsySS7qylbj6QVEMeOIGlXwSilttuqCFn/uBMgrGPHD2Mb9+ppfW9urLCHal4XF2tnIoPwFPFNMXqiEuFTgxTJw=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1726.namprd22.prod.outlook.com (10.164.206.156) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.17; Thu, 10 Oct 2019 18:54:03 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::c1dc:dba3:230c:e7f0]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::c1dc:dba3:230c:e7f0%8]) with mapi id 15.20.2347.016; Thu, 10 Oct 2019
- 18:54:03 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-CC:     Paul Burton <pburton@wavecomp.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCH] MIPS: Disable Loongson MMI instructions for kernel build
-Thread-Topic: [PATCH] MIPS: Disable Loongson MMI instructions for kernel build
-Thread-Index: AQHVf5wVKW7vpQ4uykW+vlSY7qdKrQ==
-Date:   Thu, 10 Oct 2019 18:54:03 +0000
-Message-ID: <20191010185324.2407578-1-paul.burton@mips.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR01CA0016.prod.exchangelabs.com (2603:10b6:a02:80::29)
- To MWHPR2201MB1277.namprd22.prod.outlook.com (2603:10b6:301:18::12)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.23.0
-x-originating-ip: [12.94.197.246]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ac950004-7d04-4c7d-908a-08d74db33814
-x-ms-traffictypediagnostic: MWHPR2201MB1726:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB1726D0429B7C6281A12B02ECC1940@MWHPR2201MB1726.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:510;
-x-forefront-prvs: 018632C080
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(346002)(39840400004)(366004)(396003)(136003)(52314003)(199004)(189003)(6436002)(99286004)(102836004)(52116002)(316002)(42882007)(26005)(186003)(6506007)(386003)(3846002)(6512007)(36756003)(5640700003)(6116002)(4326008)(476003)(44832011)(486006)(2906002)(2616005)(305945005)(7736002)(6916009)(66066001)(2501003)(2351001)(8676002)(81156014)(81166006)(8936002)(71200400001)(66946007)(64756008)(66556008)(66446008)(6486002)(66476007)(478600001)(5660300002)(50226002)(25786009)(1076003)(14444005)(71190400001)(14454004)(54906003)(256004);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1726;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8lSEk9lsrjQ/C9D5UKSw2rmj298NEAlezOOrx5DM9e8q7gvK6P2o8MNYTKkYJcaqYSXj5qMrlYvF8QZHaj6V85BEw0KOT48rFMk2SVdLe7WNFxbRtViy95IRe32yzxP/2IEx/eO4drHoihkIKn610MvvdCxA1tL0Jyvvt9fB9M/JwKeAd/U7aUyFMXgVj3dq+ZNnqy39daOfv8TK6C/xA20WHJtVspK53MCq78xuDhPd1cs0eHRcuTS4EnSKnpge2qT+Y+Ed+FFj/5GSfC2bGg/E+8m8MIhuyg7flHVWbY4YlFHHrOh6anqRnv8szJbDF6VupGPZUGaWR0LViiXLjG9/Z4mMJNWfnbTu6xEXcq6KC3Knt/CF+Ql4XucGeB74jYFMKanFuER1xo5V5ObS7DyV2TrIAhBsId6Fy+4T6Qk=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <036097482928BD46A3209E9254A65042@namprd22.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1726643AbfJJUc2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Oct 2019 16:32:28 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:40828 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726132AbfJJUc2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Oct 2019 16:32:28 -0400
+Received: by mail-ot1-f68.google.com with SMTP id y39so6067439ota.7;
+        Thu, 10 Oct 2019 13:32:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fWk3YhiiJHg8k8ptjSkAx7ItL9F1legAJpF+beihn+4=;
+        b=nzzPZFByrpOo0NvlBOUhGFQUZP2Zqe60DgnyztdpxgMoIpUWkyzpl5Z+TrlaDdjzRi
+         3NCJrGLGAb77NBhiFeC3ttL8yXBov+S8RXCOTej35+cZIUWTtSSc//r2RD4HD5Jfapcv
+         AvFTqMtDmnKbTguqLzRt76FOxK6iU7fhJdWPiPSNZcA5Nhay/TWmbiQn7moWj9jsEwPq
+         tka0fyspeegLizi+iUZSnwGF3Wyvv4G8HsUmOkPnfw2HFjvrEiFoTDAsKWrp6RLXmO3z
+         qs451Dr7MiITaSUZs9icAnNS5Y2nghpjMfHmV10zro8sq+SaayVxdvZ0AuFlXrGg96Br
+         PQ6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fWk3YhiiJHg8k8ptjSkAx7ItL9F1legAJpF+beihn+4=;
+        b=WMFaB94NjRL48tFhnbXF898YXn+IuO4Hs53HFPT5EppSvbRij9jNIvDr9i/BYbSrK1
+         Vj2jKUwGSoFW7izP3QJ7p8p0R6U2bTKU8hPLvyg+Ei8mtGCi3jd0x59Zr5QKl2MKG++V
+         0JRroIIqiwXzGMO4Hj8N/YAJ5DTqce8TNiulxNSLeyy6YYAFw144QGzSFr6TBmwWuV96
+         wCo+d9jGuMaqKC7lM1RjV+tXkhor2ZB4pciodc347ra8D1HPWqmofLsw54aiV82Zdrhv
+         FOyOPQXP0pYMXuHa30zH7K/frx7uInzevyMOfR0jxzxM8U7x2C54UGGZCvmMvlkUkNTP
+         avng==
+X-Gm-Message-State: APjAAAXkeCj9m5wwLiFJLs2tU8RDCHNY41q4stRHuJoQ7K8cJzYm7JNm
+        /VviRobJczkrL9SJoXDEfJ4=
+X-Google-Smtp-Source: APXvYqzrg7UULLxw4lPwCZO1r2RsOUHQycSN8nXrqfNDK/es35HP7CtBAATV5kvUXSHuW7tGYPg5cg==
+X-Received: by 2002:a9d:5605:: with SMTP id e5mr9056238oti.150.1570739546944;
+        Thu, 10 Oct 2019 13:32:26 -0700 (PDT)
+Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id l17sm1726636oic.24.2019.10.10.13.32.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2019 13:32:26 -0700 (PDT)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: [PATCH] mips: Fix unroll macro when building with Clang
+Date:   Thu, 10 Oct 2019 13:31:59 -0700
+Message-Id: <20191010203159.20565-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac950004-7d04-4c7d-908a-08d74db33814
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Oct 2019 18:54:03.3840
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: h+9GuZHn1AJkRBMJlBEKSMJ4iFOSaiSIcelE8+BjDPM8SW/dxuvYD2k9s/v+7G02psn6dF8Vlak21WM4RaVs8w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1726
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-R0NDIDkueCBhdXRvbWF0aWNhbGx5IGVuYWJsZXMgc3VwcG9ydCBmb3IgTG9vbmdzb24gTU1JIGlu
-c3RydWN0aW9ucyB3aGVuDQp1c2luZyBzb21lIC1tYXJjaD0gZmxhZ3MsIGFuZCB0aGVuIGVycm9y
-cyBvdXQgd2hlbiAtbXNvZnQtZmxvYXQgaXMNCnNwZWNpZmllZCB3aXRoOg0KDQogIGNjMTogZXJy
-b3I6IOKAmC1tbG9vbmdzb24tbW1p4oCZIG11c3QgYmUgdXNlZCB3aXRoIOKAmC1taGFyZC1mbG9h
-dOKAmQ0KDQpUaGUga2VybmVsIHNob3VsZG4ndCBiZSB1c2luZyB0aGVzZSBNTUkgaW5zdHJ1Y3Rp
-b25zIGFueXdheSwganVzdCBhcyBpdA0KZG9lc24ndCB1c2UgZmxvYXRpbmcgcG9pbnQgaW5zdHJ1
-Y3Rpb25zLiBFeHBsaWNpdGx5IGRpc2FibGUgdGhlbSBpbg0Kb3JkZXIgdG8gZml4IHRoZSBidWls
-ZCB3aXRoIEdDQyA5LnguDQoNClNpZ25lZC1vZmYtYnk6IFBhdWwgQnVydG9uIDxwYXVsLmJ1cnRv
-bkBtaXBzLmNvbT4NCkZpeGVzOiAzNzAyYmJhNWViNGYgKCJNSVBTOiBMb29uZ3NvbjogQWRkIEdD
-QyA0LjQgc3VwcG9ydCBmb3IgTG9vbmdzb24yRSIpDQpGaXhlczogNmY3YTI1MWEyNTllICgiTUlQ
-UzogTG9vbmdzb246IEFkZCBiYXNpYyBMb29uZ3NvbiAyRiBzdXBwb3J0IikNCkZpeGVzOiA1MTg4
-MTI5YjhjOWYgKCJNSVBTOiBMb29uZ3Nvbi0zOiBJbXByb3ZlIC1tYXJjaCBvcHRpb24gYW5kIG1v
-dmUgaXQgdG8gUGxhdGZvcm0iKQ0KQ2M6IEh1YWNhaSBDaGVuIDxjaGVuaGNAbGVtb3RlLmNvbT4N
-CkNjOiBKaWF4dW4gWWFuZyA8amlheHVuLnlhbmdAZmx5Z29hdC5jb20+DQpDYzogc3RhYmxlQHZn
-ZXIua2VybmVsLm9yZyAjIHYyLjYuMzIrDQotLS0NCg0KIGFyY2gvbWlwcy9sb29uZ3NvbjY0L1Bs
-YXRmb3JtIHwgNCArKysrDQogYXJjaC9taXBzL3Zkc28vTWFrZWZpbGUgICAgICAgfCAxICsNCiAy
-IGZpbGVzIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKQ0KDQpkaWZmIC0tZ2l0IGEvYXJjaC9taXBz
-L2xvb25nc29uNjQvUGxhdGZvcm0gYi9hcmNoL21pcHMvbG9vbmdzb242NC9QbGF0Zm9ybQ0KaW5k
-ZXggMjgxNzI1MDBmOTVhLi4yODU1ZGFmOTJmZTggMTAwNjQ0DQotLS0gYS9hcmNoL21pcHMvbG9v
-bmdzb242NC9QbGF0Zm9ybQ0KKysrIGIvYXJjaC9taXBzL2xvb25nc29uNjQvUGxhdGZvcm0NCkBA
-IC02Niw2ICs2NiwxMCBAQCBlbHNlDQogICAgICAgJChjYWxsIGNjLW9wdGlvbiwtbWFyY2g9bWlw
-czY0cjIsLW1pcHM2NHIyIC1VX01JUFNfSVNBIC1EX01JUFNfSVNBPV9NSVBTX0lTQV9NSVBTNjQp
-DQogZW5kaWYNCiANCisjIFNvbWUgLW1hcmNoPSBmbGFncyBlbmFibGUgTU1JIGluc3RydWN0aW9u
-cywgYW5kIEdDQyBjb21wbGFpbnMgYWJvdXQgdGhhdA0KKyMgc3VwcG9ydCBiZWluZyBlbmFibGVk
-IGFsb25nc2lkZSAtbXNvZnQtZmxvYXQuIFRodXMgZXhwbGljaXRseSBkaXNhYmxlIE1NSS4NCitj
-ZmxhZ3MteSArPSAkKGNhbGwgY2Mtb3B0aW9uLC1tbm8tbG9vbmdzb24tbW1pKQ0KKw0KICMNCiAj
-IExvb25nc29uIE1hY2hpbmVzJyBTdXBwb3J0DQogIw0KZGlmZiAtLWdpdCBhL2FyY2gvbWlwcy92
-ZHNvL01ha2VmaWxlIGIvYXJjaC9taXBzL3Zkc28vTWFrZWZpbGUNCmluZGV4IDgwN2YwZjc4MmY3
-NS4uOTk2YTkzNGVjZTdkIDEwMDY0NA0KLS0tIGEvYXJjaC9taXBzL3Zkc28vTWFrZWZpbGUNCisr
-KyBiL2FyY2gvbWlwcy92ZHNvL01ha2VmaWxlDQpAQCAtMTUsNiArMTUsNyBAQCBjY2ZsYWdzLXZk
-c28gOj0gXA0KIAkkKGZpbHRlciAtbW1pY3JvbWlwcywkKEtCVUlMRF9DRkxBR1MpKSBcDQogCSQo
-ZmlsdGVyIC1tYXJjaD0lLCQoS0JVSUxEX0NGTEFHUykpIFwNCiAJJChmaWx0ZXIgLW0lLWZsb2F0
-LCQoS0JVSUxEX0NGTEFHUykpIFwNCisJJChmaWx0ZXIgLW1uby1sb29uZ3Nvbi0lLCQoS0JVSUxE
-X0NGTEFHUykpIFwNCiAJLURfX1ZEU09fXw0KIA0KIGlmZGVmIENPTkZJR19DQ19JU19DTEFORw0K
-LS0gDQoyLjIzLjANCg0K
+Building with Clang errors after commit 6baaeadae911 ("MIPS: Provide
+unroll() macro, use it for cache ops") since the GCC_VERSION macro
+is defined in include/linux/compiler-gcc.h, which is only included
+in compiler.h when using GCC:
+
+In file included from arch/mips/kernel/mips-mt.c:20:
+./arch/mips/include/asm/r4kcache.h:254:1: error: use of undeclared
+identifier 'GCC_VERSION'; did you mean 'S_VERSION'?
+__BUILD_BLAST_CACHE(i, icache, Index_Invalidate_I, Hit_Invalidate_I, 32,
+)
+^
+./arch/mips/include/asm/r4kcache.h:219:4: note: expanded from macro
+'__BUILD_BLAST_CACHE'
+                        cache_unroll(32, kernel_cache, indexop,
+                        ^
+./arch/mips/include/asm/r4kcache.h:203:2: note: expanded from macro
+'cache_unroll'
+        unroll(times, _cache_op, insn, op, (addr) + (i++ * (lsize)));
+        ^
+./arch/mips/include/asm/unroll.h:28:15: note: expanded from macro
+'unroll'
+        BUILD_BUG_ON(GCC_VERSION >= 40700 &&                    \
+                     ^
+
+Use CONFIG_GCC_VERSION, which will always be set by Kconfig.
+Additionally, Clang 8 had improvements around __builtin_constant_p so
+use that as a lower limit for this check with Clang (although MIPS
+wasn't buildable until Clang 9); building a kernel with Clang 9.0.0
+has no issues after this change.
+
+Fixes: 6baaeadae911 ("MIPS: Provide unroll() macro, use it for cache ops")
+Link: https://github.com/ClangBuiltLinux/linux/issues/736
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+---
+ arch/mips/include/asm/unroll.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/mips/include/asm/unroll.h b/arch/mips/include/asm/unroll.h
+index df1cdcfc5a47..c628747d4ecd 100644
+--- a/arch/mips/include/asm/unroll.h
++++ b/arch/mips/include/asm/unroll.h
+@@ -25,7 +25,8 @@
+ 	 * generate reasonable code for the switch statement,	\
+ 	 * so we skip the sanity check for those compilers.	\
+ 	 */							\
+-	BUILD_BUG_ON(GCC_VERSION >= 40700 &&			\
++	BUILD_BUG_ON((CONFIG_GCC_VERSION >= 40700 ||		\
++		      CONFIG_CLANG_VERSION >= 80000) &&		\
+ 		     !__builtin_constant_p(times));		\
+ 								\
+ 	switch (times) {					\
+-- 
+2.23.0
+
