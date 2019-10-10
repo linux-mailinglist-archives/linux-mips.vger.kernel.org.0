@@ -2,133 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6886FD2CB0
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2019 16:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60BCD2CD2
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2019 16:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725971AbfJJOkS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Oct 2019 10:40:18 -0400
-Received: from forward100o.mail.yandex.net ([37.140.190.180]:60201 "EHLO
-        forward100o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725923AbfJJOkS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 10 Oct 2019 10:40:18 -0400
-Received: from forward100q.mail.yandex.net (forward100q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb97])
-        by forward100o.mail.yandex.net (Yandex) with ESMTP id CD53E4AC108C;
-        Thu, 10 Oct 2019 17:40:14 +0300 (MSK)
-Received: from mxback11q.mail.yandex.net (mxback11q.mail.yandex.net [IPv6:2a02:6b8:c0e:1b4:0:640:1f0c:10f2])
-        by forward100q.mail.yandex.net (Yandex) with ESMTP id C8F257080010;
-        Thu, 10 Oct 2019 17:40:14 +0300 (MSK)
-Received: from vla3-11710f0f0dbd.qloud-c.yandex.net (vla3-11710f0f0dbd.qloud-c.yandex.net [2a02:6b8:c15:2584:0:640:1171:f0f])
-        by mxback11q.mail.yandex.net (nwsmtp/Yandex) with ESMTP id jcBmc2PTK9-eECKUkkl;
-        Thu, 10 Oct 2019 17:40:14 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1570718414;
-        bh=ItG4PUK2mFQT3B+nOSpcLn8Q78SCtsVhq29/WQ2jmbY=;
-        h=Subject:To:From:Cc:Date:Message-Id;
-        b=Nw+nI/yoyCc3iy4yBFQkFzAzJ4/nfZ3tpNmo/XU1B00gP5hyVm5rdWfa6azYUv3tg
-         5T+v+PZZUzEYa+JREJ6eip4ixzytbpFI1Wg1Xjimm5ljtAoskH2c6cli+wirJxVBjc
-         kRgLWis7Wg3FO5PGo/5TZSpEyzUoh9NkHkPkE9is=
-Authentication-Results: mxback11q.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by vla3-11710f0f0dbd.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id jkcnUXP3Wb-e8qa76XE;
-        Thu, 10 Oct 2019 17:40:11 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Meng Zhou <mengzhuo1203@gmail.com>,
-        Paul Burton <paul.burton@mips.com>, stable@vger.kernel.org
-Subject: [PATCH] MIPS: elf_hwcap: Export userspace ASEs
-Date:   Thu, 10 Oct 2019 22:39:40 +0800
-Message-Id: <20191010143940.15725-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.23.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726084AbfJJOsw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 10 Oct 2019 10:48:52 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38142 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725862AbfJJOsw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 10 Oct 2019 10:48:52 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id EB287AC7B;
+        Thu, 10 Oct 2019 14:48:50 +0000 (UTC)
+Date:   Thu, 10 Oct 2019 16:48:50 +0200
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: add support for SGI Octane (IP30)
+Message-Id: <20191010164850.34a8d2274720e1bc26fd34d8@suse.de>
+In-Reply-To: <20191010135308.GA2052@infradead.org>
+References: <20191009155928.3047-1-tbogendoerfer@suse.de>
+        <20191009184311.GA20261@infradead.org>
+        <20191010150136.a30e47b37f8c8aed9e863a5e@suse.de>
+        <20191010135308.GA2052@infradead.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-A Golang developer reported MIPS hwcap isn't reflecting instructions
-that the processor actually supported so programs can't apply optimized
-code at runtime.
+On Thu, 10 Oct 2019 06:53:08 -0700
+Christoph Hellwig <hch@infradead.org> wrote:
 
-Thus we export the ASEs that can be used in userspace programs.
+> On Thu, Oct 10, 2019 at 03:01:36PM +0200, Thomas Bogendoerfer wrote:
+> > ok, as far as I can anticipate IP35 verion of this functions will be
+> > the same as well. So I'll move both into pci-xtalk-bridge.c in the
+> > next version of the patch.
+> 
+> Sounds good.  In fact you probably want to send a prep patch just
+> moving pci-ip27.c to pci-xtalk-bridge.c and adding a new
+> CONFIG_MIPS_PCI_XTALK_BRIDGE option that all these ports can select.
 
-Reported-by: Meng Zhou <mengzhuo1203@gmail.com>
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-mips@vger.kernel.org
-Cc: Paul Burton <paul.burton@mips.com>
-Cc: <stable@vger.kernel.org> # 4.14+
----
- arch/mips/include/uapi/asm/hwcap.h | 11 ++++++++++
- arch/mips/kernel/cpu-probe.c       | 33 ++++++++++++++++++++++++++++++
- 2 files changed, 44 insertions(+)
+the option is already there and used by IP27.
 
-diff --git a/arch/mips/include/uapi/asm/hwcap.h b/arch/mips/include/uapi/asm/hwcap.h
-index a2aba4b059e6..1ade1daa4921 100644
---- a/arch/mips/include/uapi/asm/hwcap.h
-+++ b/arch/mips/include/uapi/asm/hwcap.h
-@@ -6,5 +6,16 @@
- #define HWCAP_MIPS_R6		(1 << 0)
- #define HWCAP_MIPS_MSA		(1 << 1)
- #define HWCAP_MIPS_CRC32	(1 << 2)
-+#define HWCAP_MIPS_MIPS16	(1 << 3)
-+#define HWCAP_MIPS_MDMX     (1 << 4)
-+#define HWCAP_MIPS_MIPS3D   (1 << 5)
-+#define HWCAP_MIPS_SMARTMIPS (1 << 6)
-+#define HWCAP_MIPS_DSP      (1 << 7)
-+#define HWCAP_MIPS_DSP2     (1 << 8)
-+#define HWCAP_MIPS_DSP3     (1 << 9)
-+#define HWCAP_MIPS_MIPS16E2 (1 << 10)
-+#define HWCAP_LOONGSON_MMI  (1 << 11)
-+#define HWCAP_LOONGSON_EXT  (1 << 12)
-+#define HWCAP_LOONGSON_EXT2 (1 << 13)
- 
- #endif /* _UAPI_ASM_HWCAP_H */
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index c2eb392597bf..f521cbf934e7 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -2180,6 +2180,39 @@ void cpu_probe(void)
- 		elf_hwcap |= HWCAP_MIPS_MSA;
- 	}
- 
-+	if (cpu_has_mips16)
-+		elf_hwcap |= HWCAP_MIPS_MIPS16;
-+
-+	if (cpu_has_mdmx)
-+		elf_hwcap |= HWCAP_MIPS_MDMX;
-+
-+	if (cpu_has_mips3d)
-+		elf_hwcap |= HWCAP_MIPS_MIPS3D;
-+
-+	if (cpu_has_smartmips)
-+		elf_hwcap |= HWCAP_MIPS_SMARTMIPS;
-+
-+	if (cpu_has_dsp)
-+		elf_hwcap |= HWCAP_MIPS_DSP;
-+
-+	if (cpu_has_dsp2)
-+		elf_hwcap |= HWCAP_MIPS_DSP2;
-+
-+	if (cpu_has_dsp3)
-+		elf_hwcap |= HWCAP_MIPS_DSP3;
-+
-+	if (cpu_has_mips16e2)
-+		elf_hwcap |= HWCAP_MIPS_MIPS16E2;
-+
-+	if (cpu_has_loongson_mmi)
-+		elf_hwcap |= HWCAP_LOONGSON_MMI;
-+
-+	if (cpu_has_loongson_ext)
-+		elf_hwcap |= HWCAP_LOONGSON_EXT;
-+
-+	if (cpu_has_loongson_ext2)
-+		elf_hwcap |= HWCAP_LOONGSON_EXT2;
-+
- 	if (cpu_has_vz)
- 		cpu_probe_vz(c);
- 
+Thomas.
+
 -- 
-2.23.0
-
+SUSE Software Solutions Germany GmbH
+HRB 247165 (AG München)
+Geschäftsführer: Felix Imendörffer
