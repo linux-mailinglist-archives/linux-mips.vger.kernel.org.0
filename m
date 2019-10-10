@@ -2,111 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FE6D3328
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2019 23:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CFAD3411
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Oct 2019 00:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727379AbfJJVE5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Oct 2019 17:04:57 -0400
-Received: from mail-eopbgr760132.outbound.protection.outlook.com ([40.107.76.132]:53380
-        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726986AbfJJVE5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 10 Oct 2019 17:04:57 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DQSPKMakHNzlkq4uZ568zJxHWiBrUnoBEdJScnz5VRC5Sd7PUJTRKgRo5bpoPjhw9mqf6d2lXm+k+J8UGD+vmvNaP3sVS2+2F6/f10rbBuY+wesURSa1oe1IPCSqIEUnCM8lkIRArJDUvIsv/cyo7zMwV4bXWXsGs+YfYrgqBbOpyYm4aDxqsWYBp95k8QbbI6B2ERyi6w7leNz5+C3sLeshdz3hKihZR/s1pZNOpuif96nkPZ1euEad/1zJ8i5jJ/IKS9Orbwu8ju5E4n9kKf6oHDr5hl3txBcLCdRWN9GXWDyl/V6BYRmWLX3X05jt1lQXFEMTZg+MQlyNrRZh+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=of1tjHC8QdAJCEzUz05xnqkU77Tv9TwgwfgD/0yw/Q0=;
- b=nQEplTn+F/DVIlfhCRYDajxLj7FEzRK1onKf4lxjscrDEKdZy969+tNL2B5DMUQ14BMBqHMIECxAwdbLfIeErxl2MDStOnxy0JSpuXVEXKHK1aQublNeZc3nSuCD+cRFhn5n7MTJPSzukrjTqeAcZVytMWLqFF0YMY17kHIFQLzfiVIHHzoUfUPfnGu+5EXeaWVfS+HIl44vHgHEivCPY8J51VK/Rcq3w/ZPB1hipHDbIW72NaFCymgrlZfDVIdKr/R0xMSYFVT4hDKBkL9QI1/yp+HdIqi/i0cj2hNqgjkIZG8iiW05UHGkmypuqFrIVsboRn3C/O3YSDueUHNDnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
- dkim=pass header.d=mips.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=of1tjHC8QdAJCEzUz05xnqkU77Tv9TwgwfgD/0yw/Q0=;
- b=Dq+8vHizzIwmbGjAOnsUz+8v56eHnRHvCON/IZxjU52mL5DKo60E1dcgzdY4ye12nZX7YGjKm4Tz3cks6FC7SwmhUNEtzUzjmGyxtukR6v4osIDn2CgwQpMIKVwFmf1Lb+ERs+pAgB0hg9KnSBXQfs/9MtXEZvsVr/OsQkODjRk=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1408.namprd22.prod.outlook.com (10.172.61.140) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.16; Thu, 10 Oct 2019 21:04:54 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::c1dc:dba3:230c:e7f0]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::c1dc:dba3:230c:e7f0%8]) with mapi id 15.20.2347.016; Thu, 10 Oct 2019
- 21:04:54 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Paul Burton <pburton@wavecomp.com>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Paul Burton <pburton@wavecomp.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: Disable Loongson MMI instructions for kernel build
-Thread-Topic: [PATCH] MIPS: Disable Loongson MMI instructions for kernel build
-Thread-Index: AQHVf5wVKW7vpQ4uykW+vlSY7qdKradUXYCA
-Date:   Thu, 10 Oct 2019 21:04:54 +0000
-Message-ID: <MWHPR2201MB1277F28B1657BBA7821883A9C1940@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20191010185324.2407578-1-paul.burton@mips.com>
-In-Reply-To: <20191010185324.2407578-1-paul.burton@mips.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BY5PR17CA0030.namprd17.prod.outlook.com
- (2603:10b6:a03:1b8::43) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:18::12)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [12.94.197.246]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 18c93e24-7b05-47b9-86fb-08d74dc57f88
-x-ms-traffictypediagnostic: MWHPR2201MB1408:
-x-ms-exchange-purlcount: 1
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB140822D729215CDAB9DAD863C1940@MWHPR2201MB1408.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 018632C080
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(396003)(376002)(366004)(39840400004)(136003)(189003)(199004)(52314003)(66066001)(52536014)(6862004)(55016002)(9686003)(4326008)(5660300002)(6436002)(6116002)(66446008)(2906002)(3846002)(64756008)(66556008)(66476007)(8936002)(4744005)(66946007)(6246003)(7736002)(74316002)(305945005)(81156014)(81166006)(33656002)(8676002)(6306002)(14444005)(7696005)(476003)(256004)(52116002)(76176011)(71200400001)(71190400001)(99286004)(44832011)(42882007)(11346002)(229853002)(26005)(386003)(966005)(14454004)(478600001)(6506007)(486006)(102836004)(446003)(186003)(25786009)(316002)(54906003);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1408;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NhBwtQyCGsRiS6yYdz2LW53lMEgeVa6+iI6Lj/v/dNGLdc7QZtPbjSslvwCLonm+pf492+IBUnxC6oDW3JGkmQem3RmuQhh+MyhfhSILmP4Lw8Fz0KAY4yu3a7BCPGzQevPoAohaxU9qcac5geIfoO+K33LH3I4DLLSqoB5AWzySbY1VSOCmnS/guITPDycBRsaF5VL6uk5h8Cr28j7d4TOwtddrxC6vlPox8KLAifRYEvc2+m7YabqrcWSRODagyDQa9a0o5+BBSFoOSSZWNCLLUbRHBvW6lFA4paFeL/Ve67d68sSHKD5QJqObORZgmJyi8bWdVU6cIIdaGNG0pAGHNLj+4+sQ0XNPuyP5EPlwD6uQXudSIBLMhFQ2qiGl08tX4hsXRG59vCxBjaWSxm4ciC8aezz+05Fm/8bXzjgXR+bsfyfQuCZ3eCD+ZEELkdQ51ZhvLjDzQ7oecUviuw==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726458AbfJJWqu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Oct 2019 18:46:50 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:44719 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726071AbfJJWqu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Oct 2019 18:46:50 -0400
+Received: by mail-pf1-f196.google.com with SMTP id q21so4814893pfn.11
+        for <linux-mips@vger.kernel.org>; Thu, 10 Oct 2019 15:46:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=1bKGtbkU276Qic7083jH1GxErr25ze2mM6VPeh2J7GA=;
+        b=DyCP4NZI/zuNYDu7jY/ZZUEXHfDKMSazvkYJ6PuzJxjMRKhp+rAxzK5Dt2H01Pv6+m
+         LlMpUzTq+PUEEJZm/ab4gpJ3nZT0JvOiDbHG3GengQcNOIRuhA8pbDGv4navVXCn01qB
+         xpFAse9TBG8UdMjY262hjIHZRhZAMMC7WV7UM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=1bKGtbkU276Qic7083jH1GxErr25ze2mM6VPeh2J7GA=;
+        b=TRCwdko+mjvwi8tIn3KlLGWEYk32MMuj3mNn9ORTiXy5bCfk2VPxRm2PRlJt30ppY6
+         61uX8fmqHjrz5kqB/pFLSGr11ku0dN/YTKfyArFPnEk662f3veDrk+ja0XT51gNIe0f7
+         d2rtWCh67dxxYHfbozkvM5HWQ7t3YkXgN6avEuu51UIne05TlqaKxTYtMA7kr/igd/g0
+         5UKh3v/FQzZ0iyjwpwBRStP11HAp/2H39sW8BwDYw1umwR6XkJS8+Jq4lUmIVEIvXMbx
+         arn9DIHAmN9DiyX6bFfSeVWXlPi5KrrRwQwiteV0rE/QzQc9HVjcAH/i+qNvCtBAdXLd
+         paBQ==
+X-Gm-Message-State: APjAAAVEBt0xrVDg13sLh/5gZRHwMai0OZx1e2EM4fdnJgTS1TMZt6/F
+        zCj6Ds7TX1Vt5E7Cvdsm41uAlw==
+X-Google-Smtp-Source: APXvYqzPLTDHvgkpFIsRejZmoidbgu1xjUA2eDPKSvdkhsR2rKQm7kIBl5bRbTqnNTcfRoKBUArVEA==
+X-Received: by 2002:a17:90a:c383:: with SMTP id h3mr13985098pjt.122.1570747609862;
+        Thu, 10 Oct 2019 15:46:49 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w134sm6554453pfd.4.2019.10.10.15.46.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2019 15:46:49 -0700 (PDT)
+Date:   Thu, 10 Oct 2019 15:46:48 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Ralf Baechle <ralf@linux-mips.org>
+Cc:     Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: OCTEON: Replace SIZEOF_FIELD() macro
+Message-ID: <201910101545.586BCFC@keescook>
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 18c93e24-7b05-47b9-86fb-08d74dc57f88
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Oct 2019 21:04:54.2353
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dCu+5IJhBeJzwqeBkIOTX/2QP2SllPHZGYJa3LWyPLlTMLfjrWEAaI7AxeW1uKRDqZe3t/MhSWukLMGTkl+Bdg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1408
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-SGVsbG8sDQoNClBhdWwgQnVydG9uIHdyb3RlOg0KPiBHQ0MgOS54IGF1dG9tYXRpY2FsbHkgZW5h
-YmxlcyBzdXBwb3J0IGZvciBMb29uZ3NvbiBNTUkgaW5zdHJ1Y3Rpb25zIHdoZW4NCj4gdXNpbmcg
-c29tZSAtbWFyY2g9IGZsYWdzLCBhbmQgdGhlbiBlcnJvcnMgb3V0IHdoZW4gLW1zb2Z0LWZsb2F0
-IGlzDQo+IHNwZWNpZmllZCB3aXRoOg0KPiANCj4gICBjYzE6IGVycm9yOiDigJgtbWxvb25nc29u
-LW1taeKAmSBtdXN0IGJlIHVzZWQgd2l0aCDigJgtbWhhcmQtZmxvYXTigJkNCj4gDQo+IFRoZSBr
-ZXJuZWwgc2hvdWxkbid0IGJlIHVzaW5nIHRoZXNlIE1NSSBpbnN0cnVjdGlvbnMgYW55d2F5LCBq
-dXN0IGFzIGl0DQo+IGRvZXNuJ3QgdXNlIGZsb2F0aW5nIHBvaW50IGluc3RydWN0aW9ucy4gRXhw
-bGljaXRseSBkaXNhYmxlIHRoZW0gaW4NCj4gb3JkZXIgdG8gZml4IHRoZSBidWlsZCB3aXRoIEdD
-QyA5LnguDQoNCkFwcGxpZWQgdG8gbWlwcy1maXhlcy4NCg0KPiBjb21taXQgMmYyYjRmZDY3NGNh
-DQo+IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvbWlwcy9jLzJmMmI0ZmQ2NzRjYQ0KPiANCj4gU2ln
-bmVkLW9mZi1ieTogUGF1bCBCdXJ0b24gPHBhdWwuYnVydG9uQG1pcHMuY29tPg0KPiBGaXhlczog
-MzcwMmJiYTVlYjRmICgiTUlQUzogTG9vbmdzb246IEFkZCBHQ0MgNC40IHN1cHBvcnQgZm9yIExv
-b25nc29uMkUiKQ0KPiBGaXhlczogNmY3YTI1MWEyNTllICgiTUlQUzogTG9vbmdzb246IEFkZCBi
-YXNpYyBMb29uZ3NvbiAyRiBzdXBwb3J0IikNCj4gRml4ZXM6IDUxODgxMjliOGM5ZiAoIk1JUFM6
-IExvb25nc29uLTM6IEltcHJvdmUgLW1hcmNoIG9wdGlvbiBhbmQgbW92ZSBpdCB0byBQbGF0Zm9y
-bSIpDQoNClRoYW5rcywNCiAgICBQYXVsDQoNClsgVGhpcyBtZXNzYWdlIHdhcyBhdXRvLWdlbmVy
-YXRlZDsgaWYgeW91IGJlbGlldmUgYW55dGhpbmcgaXMgaW5jb3JyZWN0DQogIHRoZW4gcGxlYXNl
-IGVtYWlsIHBhdWwuYnVydG9uQG1pcHMuY29tIHRvIHJlcG9ydCBpdC4gXQ0K
+From: Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>
+
+In preparation for switching to a standard sizeof_member() macro to find the
+size of a member of a struct, remove the custom SIZEOF_FIELD() macro and use
+the more common FIELD_SIZEOF() instead. Later patches will globally replace
+FIELD_SIZEOF() and sizeof_field() with the more accurate sizeof_member().
+
+Signed-off-by: Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>
+Link: https://lore.kernel.org/r/20190924105839.110713-4-pankaj.laxminarayan.bharadiya@intel.com
+Co-developed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ arch/mips/cavium-octeon/executive/cvmx-bootmem.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/arch/mips/cavium-octeon/executive/cvmx-bootmem.c b/arch/mips/cavium-octeon/executive/cvmx-bootmem.c
+index ba8f82a29a81..44b506a14666 100644
+--- a/arch/mips/cavium-octeon/executive/cvmx-bootmem.c
++++ b/arch/mips/cavium-octeon/executive/cvmx-bootmem.c
+@@ -44,13 +44,6 @@ static struct cvmx_bootmem_desc *cvmx_bootmem_desc;
+ 
+ /* See header file for descriptions of functions */
+ 
+-/**
+- * This macro returns the size of a member of a structure.
+- * Logically it is the same as "sizeof(s::field)" in C++, but
+- * C lacks the "::" operator.
+- */
+-#define SIZEOF_FIELD(s, field) sizeof(((s *)NULL)->field)
+-
+ /**
+  * This macro returns a member of the
+  * cvmx_bootmem_named_block_desc_t structure. These members can't
+@@ -65,7 +58,7 @@ static struct cvmx_bootmem_desc *cvmx_bootmem_desc;
+ #define CVMX_BOOTMEM_NAMED_GET_FIELD(addr, field)			\
+ 	__cvmx_bootmem_desc_get(addr,					\
+ 		offsetof(struct cvmx_bootmem_named_block_desc, field),	\
+-		SIZEOF_FIELD(struct cvmx_bootmem_named_block_desc, field))
++		FIELD_SIZEOF(struct cvmx_bootmem_named_block_desc, field))
+ 
+ /**
+  * This function is the implementation of the get macros defined
+-- 
+2.17.1
+
+
+-- 
+Kees Cook
