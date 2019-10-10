@@ -2,106 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1B7D2B56
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2019 15:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399DFD2BCA
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2019 15:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387435AbfJJN3w convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 10 Oct 2019 09:29:52 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48462 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727489AbfJJN3w (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 10 Oct 2019 09:29:52 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 17B43AC40;
-        Thu, 10 Oct 2019 13:29:50 +0000 (UTC)
-Date:   Thu, 10 Oct 2019 15:29:49 +0200
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
+        id S1726014AbfJJNxL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Oct 2019 09:53:11 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:53898 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725905AbfJJNxL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Oct 2019 09:53:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=PhUnO+WIb25shMCfz6QmMOJuVwQTh3wAzjMfnDJXYUY=; b=Rdoak4lpexVX/qGtL9iLpUhgq
+        7QpVg+i60M+fTGmAQBz2tNMhVAt6eQUc5SHCu9lRUACtMz5kDJmZw5fAT55qaPlWM6zdCQeehHsVP
+        8F4ZAS+zWvgruin6D23DawDDv+fj2mCJN/WKy1sYLXLytXIfg8kQsDmUOvYszsgf8QEYQDvuyUQJj
+        zgDtiRqjyAzK4QWbEns3YlzH2xKFpAp6Vt7Zaq0I6Wdc3jbm3/zc6Ao+2a8qBkk7IEs1sqSI+ruSb
+        9Fz1HhZlWOSSWaMHD83c8tNUO2OHtFciCr6GODEBPrJaG+30Vp3WaI6v74MJ+KfhpvTSvite/m/8b
+        GJEVqRlWw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iIYsO-0000bh-V7; Thu, 10 Oct 2019 13:53:08 +0000
+Date:   Thu, 10 Oct 2019 06:53:08 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Christoph Hellwig <hch@infradead.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v8 3/5] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-Id: <20191010152949.f5049c2728beffa38f07c924@suse.de>
-In-Reply-To: <20191009201714.19296e3f@cakuba.netronome.com>
-References: <20191009101713.12238-1-tbogendoerfer@suse.de>
-        <20191009101713.12238-4-tbogendoerfer@suse.de>
-        <20191009201714.19296e3f@cakuba.netronome.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: add support for SGI Octane (IP30)
+Message-ID: <20191010135308.GA2052@infradead.org>
+References: <20191009155928.3047-1-tbogendoerfer@suse.de>
+ <20191009184311.GA20261@infradead.org>
+ <20191010150136.a30e47b37f8c8aed9e863a5e@suse.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191010150136.a30e47b37f8c8aed9e863a5e@suse.de>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 9 Oct 2019 20:17:14 -0700
-Jakub Kicinski <jakub.kicinski@netronome.com> wrote:
+On Thu, Oct 10, 2019 at 03:01:36PM +0200, Thomas Bogendoerfer wrote:
+> ok, as far as I can anticipate IP35 verion of this functions will be
+> the same as well. So I'll move both into pci-xtalk-bridge.c in the
+> next version of the patch.
 
-> On Wed,  9 Oct 2019 12:17:10 +0200, Thomas Bogendoerfer wrote:
-> [...]
-> > +static int ioc3_cad_duo_setup(struct ioc3_priv_data *ipd)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = ioc3_irq_domain_setup(ipd, ipd->pdev->irq);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = ioc3_eth_setup(ipd, true);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	return ioc3_kbd_setup(ipd);
-> > +}
-> 
-> None of these setup calls have a "cleanup" or un-setup call. Is this
-> really okay? I know nothing about MFD, but does mfd_add_devices() not
-> require a remove for example? Doesn't the IRQ handling need cleanup?
-
-good catch, I'll add that.
-
-> > +	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-> > +	if (ret) {
-> > +		dev_warn(&pdev->dev,
-> > +			 "Failed to set 64-bit DMA mask, trying 32-bit\n");
-> > +		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
-> > +		if (ret) {
-> > +			dev_err(&pdev->dev, "Can't set DMA mask, aborting\n");
-> > +			return ret;
-> 
-> So failing here we don't care about disabling the pci deivce..
-
-fixed in the next version.
-
-> > +
-> > +	/*
-> > +	 * Map all IOC3 registers.  These are shared between subdevices
-> > +	 * so the main IOC3 module manages them.
-> > +	 */
-> > +	regs = pci_ioremap_bar(pdev, 0);
-> 
-> This doesn't seem unmapped on error paths, nor remove?
-
-will fix.
-
-Thank you for the review.
-
-Thomas.
-
--- 
-SUSE Software Solutions Germany GmbH
-HRB 247165 (AG München)
-Geschäftsführer: Felix Imendörffer
+Sounds good.  In fact you probably want to send a prep patch just
+moving pci-ip27.c to pci-xtalk-bridge.c and adding a new
+CONFIG_MIPS_PCI_XTALK_BRIDGE option that all these ports can select.
