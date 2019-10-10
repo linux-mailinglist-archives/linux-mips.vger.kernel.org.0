@@ -2,97 +2,141 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7399D2D0F
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2019 16:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B3BD2D17
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2019 17:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725909AbfJJO64 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Oct 2019 10:58:56 -0400
-Received: from mail-yw1-f65.google.com ([209.85.161.65]:44143 "EHLO
-        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725901AbfJJO64 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Oct 2019 10:58:56 -0400
-Received: by mail-yw1-f65.google.com with SMTP id m13so2257267ywa.11;
-        Thu, 10 Oct 2019 07:58:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8UJVAVd9tVKum+aEXONwvAGLsYA36w9rZPqLYuWLasE=;
-        b=sOEsd8Kwch2+znDIjN/oXghsz7hbqTlimJTJT00inkT3BZcYds/bSHA7JnIci03J5D
-         G1ZLuF3ShSaWGr842VYsb5DqUMDybXxEUrmYD7LlN5SpEaMNF3CwbnBYK1hpejmN5nql
-         13qeLprE+hdOJgr4mWRxbiJ+4AgZlfYrsoXyarqeSDbkHPd2xGgA6K+a/4WJiZXOu2jO
-         7oY3kX+VwavRMg7IfBbx8Gdr2gy5xQXfHHCgSufekZKymGLhFVNTaxPaQPDrCTRX2YwW
-         rvcV6sJAV0wTiT28fjfc0QVRvw/rJYrN7mHvQZh0ZSz+AllOofD0QlxEuFPtFwjTDlAL
-         hBog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8UJVAVd9tVKum+aEXONwvAGLsYA36w9rZPqLYuWLasE=;
-        b=CsH4snkamSVBS7LVg2F0g7Neer1yWPeOScxbIBe+3e+3cu5OYGbmeIaotnO1jDS9aH
-         GiGGZm/cRxIYc+yMLB87h90mxV/ZzcQEDoBbN94n0hqliPBcVj7tYK3mogFRnQqbkH2U
-         7QhVAvSeeDJ8om7oNlWIyiq42aCriTXBWBiwM7RNs4Frrs50WLqmE6PK9Yzk+q3CR2XV
-         GF2arlAmLCtfaFro54CfqCm7QcQi+E1OWHRIr0x6BqYqAdaIc5XI+pm7oH8YAI6zE0kH
-         +vCckzscFrPEySSXSP7lcwORAiPQUcVLXZCRLznhzCwGCtN1huquxxilOXTCeLPBVudc
-         xXfQ==
-X-Gm-Message-State: APjAAAVdbBfs17dfjA35dmj6nR2mshjPCKQ3GfEyzWoFuROz6+0BjmrX
-        p9TdHaepjtiT4zqMCkq5fnKyNJUwzl4FUGcGuu60/rnZ
-X-Google-Smtp-Source: APXvYqzwdaF2b4NMce+fPnJQEiHyr1tsRlXvr37+bAPGZRjkX6sxjct6psuDgAamkwGelEt5kah/yQ3WttZohu6a8gk=
-X-Received: by 2002:a81:80c1:: with SMTP id q184mr7995099ywf.128.1570719535254;
- Thu, 10 Oct 2019 07:58:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191009155928.3047-1-tbogendoerfer@suse.de> <20191009184311.GA20261@infradead.org>
- <20191010150136.a30e47b37f8c8aed9e863a5e@suse.de> <20191010135308.GA2052@infradead.org>
- <20191010164850.34a8d2274720e1bc26fd34d8@suse.de>
-In-Reply-To: <20191010164850.34a8d2274720e1bc26fd34d8@suse.de>
-From:   Carlo Pisani <carlojpisani@gmail.com>
-Date:   Thu, 10 Oct 2019 16:58:45 +0200
-Message-ID: <CA+QBN9B6q3piiB+d1=+-5L5op-RYto2vKKEDUTQ=ShTd13RQaA@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: add support for SGI Octane (IP30)
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Christoph Hellwig <hch@infradead.org>,
+        id S1726229AbfJJPAD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Oct 2019 11:00:03 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46754 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726088AbfJJPAD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 10 Oct 2019 11:00:03 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 55639AEB3;
+        Thu, 10 Oct 2019 15:00:00 +0000 (UTC)
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        James Hogan <jhogan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v9 0/5] Use MFD framework for SGI IOC3 drivers
+Date:   Thu, 10 Oct 2019 16:59:46 +0200
+Message-Id: <20191010145953.21327-1-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-with my friends, I opened a forum here (1), where we are randomly
-reporting progress and problems.
-we fixed the machine_powerdown() function.
+SGI IOC3 ASIC includes support for ethernet, PS2 keyboard/mouse,
+NIC (number in a can), GPIO and a byte  bus. By attaching a
+SuperIO chip to it, it also supports serial lines and a parallel
+port. The chip is used on a variety of SGI systems with different
+configurations. This patchset moves code out of the network driver,
+which doesn't belong there, into its new place a MFD driver and
+specific platform drivers for the different subfunctions.
 
-ugly patch, anyway the ip30 can poweroff
+Changes in v9:
+ - remove generated MFD devices, when driver is removed or in case
+   of a mfd device setup error
+ - remove irq domain, if setup of mfd devices failed
+ - pci_iounmap on exit/error cases
+ - added irq domain unmap function
 
+Changes in v8:
+ - Re-worked comments in drivers/mfd/ioc3.c
+ - Added select CRC16 to ioc3-eth.c
+ - Patches 1 and 2 are already taken to mips-next, but
+   for completeness of the series they are still included.
+   What's missing to get the remaining 3 patches via the MIPS
+   tree is an ack from a network maintainer
 
+Changes in v7:
+ - added patch to enable ethernet phy for Origin 200 systems
+ - depend on 64bit for ioc3 mfd driver
 
+Changes in v6:
+ - dropped patches accepted for v5.4-rc1
+ - moved serio patch to ip30 patch series
+ - adapted nvmem patch
 
-(1) http://www.downthebunker.com/reloaded/space/viewforum.php?f=3D69
+Changes in v5:
+ - requested by Jakub I've splited ioc3 ethernet driver changes into
+   more steps to make the transition more visible; on the way there 
+   I've "checkpatched" the driver and reduced code reorderings
+ - dropped all uint16_t and uint32_t
+ - added nvmem API extension to the documenation file
+ - changed to use request_irq/free_irq in serio driver
+ - removed wrong kfree() in serio error path
 
-Il giorno gio 10 ott 2019 alle ore 16:49 Thomas Bogendoerfer
-<tbogendoerfer@suse.de> ha scritto:
->
-> On Thu, 10 Oct 2019 06:53:08 -0700
-> Christoph Hellwig <hch@infradead.org> wrote:
->
-> > On Thu, Oct 10, 2019 at 03:01:36PM +0200, Thomas Bogendoerfer wrote:
-> > > ok, as far as I can anticipate IP35 verion of this functions will be
-> > > the same as well. So I'll move both into pci-xtalk-bridge.c in the
-> > > next version of the patch.
-> >
-> > Sounds good.  In fact you probably want to send a prep patch just
-> > moving pci-ip27.c to pci-xtalk-bridge.c and adding a new
-> > CONFIG_MIPS_PCI_XTALK_BRIDGE option that all these ports can select.
->
-> the option is already there and used by IP27.
->
-> Thomas.
->
-> --
-> SUSE Software Solutions Germany GmbH
-> HRB 247165 (AG M=C3=BCnchen)
-> Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
+Changes in v4:
+ - added w1 drivers to the series after merge in 5.3 failed because
+   of no response from maintainer and other parts of this series
+   won't work without that drivers
+ - moved ip30 systemboard support to the ip30 series, which will
+   deal with rtc oddity Lee found
+ - converted to use devm_platform_ioremap_resource
+ - use PLATFORM_DEVID_AUTO for serial, ethernet and serio in mfd driver
+ - fixed reverse christmas order in ioc3-eth.c
+ - formating issue found by Lee
+ - re-worked irq request/free in serio driver to avoid crashes during
+   probe/remove
+
+Changes in v3:
+ - use 1-wire subsystem for handling proms
+ - pci-xtalk driver uses prom information to create PCI subsystem
+   ids for use in MFD driver
+ - changed MFD driver to only use static declared mfd_cells
+ - added IP30 system board setup to MFD driver
+ - mac address is now read from ioc3-eth driver with nvmem framework
+
+Changes in v2:
+ - fixed issue in ioc3kbd.c reported by Dmitry Torokhov
+ - merged IP27 RTC removal and 8250 serial driver addition into
+   main MFD patch to keep patches bisectable
+
+Thomas Bogendoerfer (5):
+  nvmem: core: add nvmem_device_find
+  MIPS: PCI: use information from 1-wire PROM for IOC3 detection
+  mfd: ioc3: Add driver for SGI IOC3 chip
+  MIPS: SGI-IP27: fix readb/writeb addressing
+  MIPS: SGI-IP27: Enable ethernet phy on second Origin 200 module
+
+ Documentation/driver-api/nvmem.rst            |   2 +
+ arch/mips/include/asm/mach-ip27/mangle-port.h |   4 +-
+ arch/mips/include/asm/pci/bridge.h            |   1 +
+ arch/mips/include/asm/sn/ioc3.h               |  47 +-
+ arch/mips/pci/pci-ip27.c                      |  22 +
+ arch/mips/pci/pci-xtalk-bridge.c              | 135 +++++-
+ arch/mips/sgi-ip27/ip27-timer.c               |  20 -
+ arch/mips/sgi-ip27/ip27-xtalk.c               |  38 +-
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/ioc3.c                            | 605 ++++++++++++++++++++++++++
+ drivers/net/ethernet/sgi/Kconfig              |   5 +-
+ drivers/net/ethernet/sgi/ioc3-eth.c           | 561 +++++-------------------
+ drivers/nvmem/core.c                          |  61 ++-
+ drivers/rtc/rtc-m48t35.c                      |  11 +
+ drivers/tty/serial/8250/8250_ioc3.c           |  98 +++++
+ drivers/tty/serial/8250/Kconfig               |  11 +
+ drivers/tty/serial/8250/Makefile              |   1 +
+ include/linux/nvmem-consumer.h                |   9 +
+ 19 files changed, 1097 insertions(+), 548 deletions(-)
+ create mode 100644 drivers/mfd/ioc3.c
+ create mode 100644 drivers/tty/serial/8250/8250_ioc3.c
+
+-- 
+2.16.4
+
