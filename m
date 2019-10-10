@@ -2,75 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA31D2A3B
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2019 15:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D6CD2AF2
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Oct 2019 15:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728339AbfJJNBi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 10 Oct 2019 09:01:38 -0400
-Received: from mx2.suse.de ([195.135.220.15]:57892 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728274AbfJJNBi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 10 Oct 2019 09:01:38 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 8B7CEAED6;
-        Thu, 10 Oct 2019 13:01:36 +0000 (UTC)
-Date:   Thu, 10 Oct 2019 15:01:36 +0200
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: add support for SGI Octane (IP30)
-Message-Id: <20191010150136.a30e47b37f8c8aed9e863a5e@suse.de>
-In-Reply-To: <20191009184311.GA20261@infradead.org>
-References: <20191009155928.3047-1-tbogendoerfer@suse.de>
-        <20191009184311.GA20261@infradead.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+        id S2388281AbfJJNRx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Oct 2019 09:17:53 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:44693 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388170AbfJJNRo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Oct 2019 09:17:44 -0400
+Received: by mail-ot1-f67.google.com with SMTP id 21so4802945otj.11
+        for <linux-mips@vger.kernel.org>; Thu, 10 Oct 2019 06:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ub-ac-id.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
+        b=kbDD0ETnfb+9T5ky4afnuU19WL5B3TgSTtrvr8/78l52RfSJ/bD7cjcm8C45XsJ4wr
+         kY8zUv/ms1sLDr56E/0rqAcpldgbTirzVsO1TqrlTRt5AL5IhxusLfWbWkCQZqSDApog
+         xVZixZPZF5pv+wD9wYHHFszyBuRJ0Z0/71+2E/SGgHwnMzv66/86w9uplcX1z0grTv9p
+         1TYZ7MtIagYr+hnMPgyspL8CH18dkY1RexU6NSgr6L6/lGHi7jHNMmmGOoiBuh2azqNd
+         aWHFVXbx5cxjkbX5kJe7PAp4IU2wf06fogqa+YoO9ylF7jna+POCU+xNsHXT6R2wFQg9
+         YqYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
+        b=Dj580eqzMN9MZlt28kLS+QPNQfYkt0i1CjlL7Slh7FLcOm9JMwhfxOIYuRqbxNl9Zj
+         qgqHuoS7ziO1REKLl7z6PmD76+iREoRRjb42aQYqVBp+9z1jD4ctTicf0+KAxsoPWQRT
+         dDUJALRLFgyyeAUf2+c/oGsOIGwbLNymcb0j4W3E7qPWX8yCnhvpHgrRCkUKNpR+DufG
+         t7VjE9ddcM8QdbPUU0iBIRoU46wgT/3+ncgckkNxfiulS5t1OHxHhZQ58DNIV+qBBOpg
+         81uBLJNvAfEiKb3A79V/FDUT7yJdWOQ0S06j3Phzqi5uvO2ZYJxHY11G0DCwAJHwfsV9
+         gACg==
+X-Gm-Message-State: APjAAAVHQ8yFzZ1pYYgTe4cUShRpxv8Lsqu1ZK6eJ5/06hcKuGWpdOmN
+        PouIZDk0QbxqYpuhKl9M17oZDRXjP6Ul1uBtpCAj
+X-Google-Smtp-Source: APXvYqwe5B6z/3dUuNDQtQ0n2oQYOsdY3HQR3dkIin1gqVhu0NNteov05tKzv4DhJBBR4bjK2RG7Phnj6WUHoBrkRYc=
+X-Received: by 2002:a05:6830:1103:: with SMTP id w3mr7909437otq.312.1570713462861;
+ Thu, 10 Oct 2019 06:17:42 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a4a:3346:0:0:0:0:0 with HTTP; Thu, 10 Oct 2019 06:17:41
+ -0700 (PDT)
+Reply-To: sunrisefundingltd50@gmail.com
+From:   Valentina Yurina <v_yurina@ub.ac.id>
+Date:   Thu, 10 Oct 2019 14:17:41 +0100
+Message-ID: <CAKoEkvu4vc5Yn9-hzxQ5dYmUL=oO69=GSP0FC7O+CGz9Jni8+Q@mail.gmail.com>
+Subject: Apply For Financial investment at a lower rate 2%
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 9 Oct 2019 11:43:11 -0700
-Christoph Hellwig <hch@infradead.org> wrote:
-
-> > +++ b/arch/mips/sgi-ip30/ip30-pci.c
-> > @@ -0,0 +1,19 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * ip30-pci.c: misc PCI related helper code for IP30 architecture
-> > + */
-> > +
-> > +#include <asm/pci/bridge.h>
-> > +
-> > +dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr)
-> > +{
-> > +	struct pci_dev *pdev = to_pci_dev(dev);
-> > +	struct bridge_controller *bc = BRIDGE_CONTROLLER(pdev->bus);
-> > +
-> > +	return bc->baddr + paddr;
-> > +}
-> > +
-> > +phys_addr_t __dma_to_phys(struct device *dev, dma_addr_t dma_addr)
-> > +{
-> > +	return dma_addr & ~(0xffUL << 56);
-> > +}
-> 
-> This file is duplicated from ip27.  I think we should aim to share
-> it given the common hardware even if it is mostly trivial.
-
-ok, as far as I can anticipate IP35 verion of this functions will be
-the same as well. So I'll move both into pci-xtalk-bridge.c in the
-next version of the patch.
-
-Thomas.
-
 -- 
-SUSE Software Solutions Germany GmbH
-HRB 247165 (AG München)
-Geschäftsführer: Felix Imendörffer
+Hello,
+
+We are private lenders based in UK.
+
+Do you need a loan (credit) as soon as possible. Are you in search of
+money to solve your personal needs or finance your business venture,
+then get Your desired loan today! Consult us at Sunrise Funding Ltd.
+
+* We offer personal loan & huge capital loan at 2% interest rate to
+the general public both locally and internationally.
+* Credit amount range from $5,000.00 -- $500,000.00 and above.
+* Special $10,000,000.00 Loan offer for huge project also available.
+* Loan period of 6 months -- 10 years.
+* Loan is granted 24 hours after approval and accredited, directly in
+hand or bank account.
+
+Please note that you are advised to contact us for more details via
+the following e-mail address below;
+
+EMAIL : sunrisefundingltd50@gmail.com
+FIRM : Sunrise Funding Ltd UK.
