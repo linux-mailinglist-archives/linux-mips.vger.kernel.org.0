@@ -2,23 +2,24 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 557A4D3B4B
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Oct 2019 10:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F62D3C45
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Oct 2019 11:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726728AbfJKIhO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 11 Oct 2019 04:37:14 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50344 "EHLO mx1.suse.de"
+        id S1727741AbfJKJ2H convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 11 Oct 2019 05:28:07 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55754 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726397AbfJKIhO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 11 Oct 2019 04:37:14 -0400
+        id S1727314AbfJKJ2H (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 11 Oct 2019 05:28:07 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id EB590ADDD;
-        Fri, 11 Oct 2019 08:37:11 +0000 (UTC)
-Date:   Fri, 11 Oct 2019 10:37:10 +0200
+        by mx1.suse.de (Postfix) with ESMTP id DC74DB175;
+        Fri, 11 Oct 2019 09:28:04 +0000 (UTC)
+Date:   Fri, 11 Oct 2019 11:28:04 +0200
 From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Cc:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
@@ -32,12 +33,13 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
         linux-serial@vger.kernel.org
-Subject: Re: [PATCH v9 3/5] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-Id: <20191011103710.6c45fdbc9a05fdd13177193e@suse.de>
-In-Reply-To: <20191010200002.5fe5f34f@cakuba.netronome.com>
+Subject: Re: [PATCH v9 5/5] MIPS: SGI-IP27: Enable ethernet phy on second
+ Origin 200 module
+Message-Id: <20191011112804.ef8079aa9bad5c81ce473fbd@suse.de>
+In-Reply-To: <102db20a-0c37-3e28-2d14-e9c6eaa55f5c@cogentembedded.com>
 References: <20191010145953.21327-1-tbogendoerfer@suse.de>
-        <20191010145953.21327-4-tbogendoerfer@suse.de>
-        <20191010200002.5fe5f34f@cakuba.netronome.com>
+        <20191010145953.21327-6-tbogendoerfer@suse.de>
+        <102db20a-0c37-3e28-2d14-e9c6eaa55f5c@cogentembedded.com>
 X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=ISO-8859-1
@@ -47,24 +49,19 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 10 Oct 2019 20:00:02 -0700
-Jakub Kicinski <jakub.kicinski@netronome.com> wrote:
+On Thu, 10 Oct 2019 19:37:15 +0300
+Sergei Shtylyov <sergei.shtylyov@cogentembedded.com> wrote:
 
-> On Thu, 10 Oct 2019 16:59:49 +0200, Thomas Bogendoerfer wrote:
-> >  	dev = alloc_etherdev(sizeof(struct ioc3_private));
-> > -	if (!dev) {
-> > -		err = -ENOMEM;
-> > -		goto out_disable;
-> > -	}
-> > -
-> > -	if (pci_using_dac)
-> > -		dev->features |= NETIF_F_HIGHDMA;
+> On 10/10/2019 05:59 PM, Thomas Bogendoerfer wrote:
+> > +	/* enable ethernet PHY on IP29 systemboard */
+> > +	pci_read_config_dword(dev, PCI_SUBSYSTEM_VENDOR_ID, &sid);
+> > +	if (sid == ((PCI_VENDOR_ID_SGI << 16) | IOC3_SUBSYS_IP29_SYSBOARD))
 > 
-> Looks like the NETIF_F_HIGHDMA feature will not longer be set, is that
-> okay?
+>    I thought PCI was little endian, thuis vendor ID at offset 0 and device ID
+> at offset 2?
 
-yes, all platforms where ioc3 is usable are running 64bit kernels without
-HIGHMEM.
+you are right. I already messed it up in pci-xtalk-bridge.c. As this is just a
+fake sub device id, there is no harm, but I'll fix it.
 
 Thomas.
 
