@@ -2,173 +2,157 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2153D37DC
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Oct 2019 05:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F8BD387C
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Oct 2019 06:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbfJKD2W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Oct 2019 23:28:22 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:46206 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726096AbfJKD2W (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 10 Oct 2019 23:28:22 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 4CAACAEB091A1C599140;
-        Fri, 11 Oct 2019 11:28:18 +0800 (CST)
-Received: from [127.0.0.1] (10.74.191.121) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Fri, 11 Oct 2019
- 11:28:13 +0800
-Subject: Re: [PATCH v6] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
-To:     Michal Hocko <mhocko@kernel.org>
-CC:     Robin Murphy <robin.murphy@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>, <mingo@redhat.com>,
-        <bp@alien8.de>, <rth@twiddle.net>, <ink@jurassic.park.msu.ru>,
-        <mattst88@gmail.com>, <benh@kernel.crashing.org>,
-        <paulus@samba.org>, <mpe@ellerman.id.au>,
-        <heiko.carstens@de.ibm.com>, <gor@linux.ibm.com>,
-        <borntraeger@de.ibm.com>, <ysato@users.sourceforge.jp>,
-        <dalias@libc.org>, <davem@davemloft.net>, <ralf@linux-mips.org>,
-        <paul.burton@mips.com>, <jhogan@kernel.org>,
-        <jiaxun.yang@flygoat.com>, <chenhc@lemote.com>,
-        <akpm@linux-foundation.org>, <rppt@linux.ibm.com>,
-        <anshuman.khandual@arm.com>, <tglx@linutronix.de>, <cai@lca.pw>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <hpa@zytor.com>, <x86@kernel.org>,
-        <dave.hansen@linux.intel.com>, <luto@kernel.org>,
-        <len.brown@intel.com>, <axboe@kernel.dk>, <dledford@redhat.com>,
-        <jeffrey.t.kirsher@intel.com>, <linux-alpha@vger.kernel.org>,
-        <naveen.n.rao@linux.vnet.ibm.com>, <mwb@linux.vnet.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-s390@vger.kernel.org>,
-        <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
-        <tbogendoerfer@suse.de>, <linux-mips@vger.kernel.org>,
-        <rafael@kernel.org>, <gregkh@linuxfoundation.org>
-References: <20190924120943.GP2349@hirez.programming.kicks-ass.net>
- <20190924122500.GP23050@dhcp22.suse.cz>
- <20190924124325.GQ2349@hirez.programming.kicks-ass.net>
- <20190924125936.GR2349@hirez.programming.kicks-ass.net>
- <20190924131939.GS23050@dhcp22.suse.cz>
- <1adcbe68-6753-3497-48a0-cc84ac503372@huawei.com>
- <20190925104108.GE4553@hirez.programming.kicks-ass.net>
- <47fa4cee-8528-7c23-c7de-7be1b65aa2ae@huawei.com>
- <bec80499-86d9-bf1f-df23-9044a8099992@arm.com>
- <a5f0fc80-8e88-b781-77ce-1213e5d62125@huawei.com>
- <20191010073212.GB18412@dhcp22.suse.cz>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <6cc94f9b-0d79-93a8-5ec2-4f6c21639268@huawei.com>
-Date:   Fri, 11 Oct 2019 11:27:54 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        id S1726243AbfJKEai (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Oct 2019 00:30:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51840 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726088AbfJKEai (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 11 Oct 2019 00:30:38 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 446332089F;
+        Fri, 11 Oct 2019 04:30:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570768236;
+        bh=ah1QHqRDMmfVWlvKmhrafxLbI4vaf9pTpDoMwJKs490=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bJZWVqwDvpM+I457dc4b5l1A+kdyV976hXWd7OS0DX/5VJeMRJ17dPrPA8puioz1+
+         rzerdOae8CqrMtuioEVYi75HaqjD2wupp3HMdcFC4rg67G7RrhFyhFgAWCtvEeLrg+
+         LhPXocKFqnSG8j+/LKXYnTwUes4Xl+/RggYeKa78=
+Date:   Fri, 11 Oct 2019 06:30:34 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Yunqiang Su <ysu@wavecomp.com>,
+        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org
+Subject: Re: [PATCH 4.14 17/61] MIPS: Treat Loongson Extensions as ASEs
+Message-ID: <20191011043034.GA941864@kroah.com>
+References: <20191010083449.500442342@linuxfoundation.org>
+ <20191010083459.461605528@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <20191010073212.GB18412@dhcp22.suse.cz>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.74.191.121]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191010083459.461605528@linuxfoundation.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2019/10/10 15:32, Michal Hocko wrote:
-> On Thu 10-10-19 14:07:21, Yunsheng Lin wrote:
->> On 2019/10/9 20:25, Robin Murphy wrote:
->>> On 2019-10-08 9:38 am, Yunsheng Lin wrote:
->>>> On 2019/9/25 18:41, Peter Zijlstra wrote:
->>>>> On Wed, Sep 25, 2019 at 05:14:20PM +0800, Yunsheng Lin wrote:
->>>>>>  From the discussion above, It seems making the node_to_cpumask_map()
->>>>>> NUMA_NO_NODE aware is the most feasible way to move forwad.
->>>>>
->>>>> That's still wrong.
->>>>
->>>> Hi, Peter
->>>>
->>>> It seems this has trapped in the dead circle.
->>>>
->>>>  From my understanding, NUMA_NO_NODE which means not node numa preference
->>>> is the state to describe the node of virtual device or the physical device
->>>> that has equal distance to all cpu.
->>>>
->>>> We can be stricter if the device does have a nearer node, but we can not
->>>> deny that a device does not have a node numa preference or node affinity,
->>>> which also means the control or data buffer can be allocated at the node where
->>>> the process is running.
->>>>
->>>> As you has proposed, making it -2 and have dev_to_node() warn if the device does
->>>> have a nearer node and not set by the fw is a way to be stricter.
->>>>
->>>> But I think maybe being stricter is not really relevant to NUMA_NO_NODE, because
->>>> we does need a state to describe the device that have equal distance to all node,
->>>> even if it is not physically scalable.
->>>>
->>>> Any better suggestion to move this forward?
->>>
->>> FWIW (since this is in my inbox), it sounds like the fundamental issue is that NUMA_NO_NODE is conflated for at least two different purposes, so trying to sort that out would be a good first step. AFAICS we have genuine "don't care" cases like alloc_pages_node(), where if the producer says it doesn't matter then the consumer is free to make its own judgement on what to do, and fundamentally different "we expect this thing to have an affinity but it doesn't, so we can't say what's appropriate" cases which could really do with some separate indicator like "NUMA_INVALID_NODE".
->>>
->>> The tricky part is then bestowed on the producers to decide whether they can downgrade "invalid" to "don't care". You can technically build 'a device' whose internal logic is distributed between nodes and thus appears to have equal affinity - interrupt controllers, for example, may have per-CPU or per-node interfaces that end up looking like that - so although it's unlikely it's not outright nonsensical. Similarly a 'device' that's actually emulated behind a firmware call interface may well effectively have no real affinity.
->>
->> We may set node of the physical device to NUMA_INVALID_NODE when fw does not
->> provide one.
->>
->> But what do we do about NUMA_INVALID_NODE when alloc_pages_node() is called
->> with nid being NUMA_INVALID_NODE?
+On Thu, Oct 10, 2019 at 10:36:42AM +0200, Greg Kroah-Hartman wrote:
+> From: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > 
-> There is nothing sensible the allocator can do. The only point of
-> NUMA_INVALID_NODE would be to catch potential misconfiguration and
-> report them to users so they can complain to their HW/FS suppliers.
+> commit d2f965549006acb865c4638f1f030ebcefdc71f6 upstream.
 > 
-> Pushing it to other susbystem doesn't make much sense IMHO because there
-> is nothing really actionable. Refusing an allocation altogether sounds
-> like a bad plan to me.
+> Recently, binutils had split Loongson-3 Extensions into four ASEs:
+> MMI, CAM, EXT, EXT2. This patch do the samething in kernel and expose
+> them in cpuinfo so applications can probe supported ASEs at runtime.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Cc: Huacai Chen <chenhc@lemote.com>
+> Cc: Yunqiang Su <ysu@wavecomp.com>
+> Cc: stable@vger.kernel.org # v4.14+
+> Signed-off-by: Paul Burton <paul.burton@mips.com>
+> Cc: linux-mips@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> 
+> ---
+>  arch/mips/include/asm/cpu-features.h |   16 ++++++++++++++++
+>  arch/mips/include/asm/cpu.h          |    4 ++++
+>  arch/mips/kernel/cpu-probe.c         |    6 ++++++
+>  arch/mips/kernel/proc.c              |    4 ++++
+>  4 files changed, 30 insertions(+)
+> 
+> --- a/arch/mips/include/asm/cpu-features.h
+> +++ b/arch/mips/include/asm/cpu-features.h
+> @@ -348,6 +348,22 @@
+>  #define cpu_has_dsp3		(cpu_data[0].ases & MIPS_ASE_DSP3)
+>  #endif
 >  
->> If we change the node to default one(like node 0) when node of device is
->> NUMA_INVALID_NODE in device_add(), how do we know the default one(like node 0)
->> is the right one to choose?
-> 
-> Exactly. We cannot really assume any node in that situation.
+> +#ifndef cpu_has_loongson_mmi
+> +#define cpu_has_loongson_mmi		__ase(MIPS_ASE_LOONGSON_MMI)
+> +#endif
+> +
+> +#ifndef cpu_has_loongson_cam
+> +#define cpu_has_loongson_cam		__ase(MIPS_ASE_LOONGSON_CAM)
+> +#endif
+> +
+> +#ifndef cpu_has_loongson_ext
+> +#define cpu_has_loongson_ext		__ase(MIPS_ASE_LOONGSON_EXT)
+> +#endif
+> +
+> +#ifndef cpu_has_loongson_ext2
+> +#define cpu_has_loongson_ext2		__ase(MIPS_ASE_LOONGSON_EXT2)
+> +#endif
+> +
+>  #ifndef cpu_has_mipsmt
+>  #define cpu_has_mipsmt		(cpu_data[0].ases & MIPS_ASE_MIPSMT)
+>  #endif
+> --- a/arch/mips/include/asm/cpu.h
+> +++ b/arch/mips/include/asm/cpu.h
+> @@ -433,5 +433,9 @@ enum cpu_type_enum {
+>  #define MIPS_ASE_MSA		0x00000100 /* MIPS SIMD Architecture */
+>  #define MIPS_ASE_DSP3		0x00000200 /* Signal Processing ASE Rev 3*/
+>  #define MIPS_ASE_MIPS16E2	0x00000400 /* MIPS16e2 */
+> +#define MIPS_ASE_LOONGSON_MMI	0x00000800 /* Loongson MultiMedia extensions Instructions */
+> +#define MIPS_ASE_LOONGSON_CAM	0x00001000 /* Loongson CAM */
+> +#define MIPS_ASE_LOONGSON_EXT	0x00002000 /* Loongson EXTensions */
+> +#define MIPS_ASE_LOONGSON_EXT2	0x00004000 /* Loongson EXTensions R2 */
 >  
->> >From the privous disccusion, the below seems not get to consensus yet:
->> 1) Do we need a state like NUMA_NO_NODE to describe that the device does not
->>    have any numa preference?
+>  #endif /* _ASM_CPU_H */
+> --- a/arch/mips/kernel/cpu-probe.c
+> +++ b/arch/mips/kernel/cpu-probe.c
+> @@ -1478,6 +1478,8 @@ static inline void cpu_probe_legacy(stru
+>  			__cpu_name[cpu] = "ICT Loongson-3";
+>  			set_elf_platform(cpu, "loongson3a");
+>  			set_isa(c, MIPS_CPU_ISA_M64R1);
+> +			c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
+> +				MIPS_ASE_LOONGSON_EXT);
+>  			break;
+>  		case PRID_REV_LOONGSON3B_R1:
+>  		case PRID_REV_LOONGSON3B_R2:
+> @@ -1485,6 +1487,8 @@ static inline void cpu_probe_legacy(stru
+>  			__cpu_name[cpu] = "ICT Loongson-3";
+>  			set_elf_platform(cpu, "loongson3b");
+>  			set_isa(c, MIPS_CPU_ISA_M64R1);
+> +			c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
+> +				MIPS_ASE_LOONGSON_EXT);
+>  			break;
+>  		}
+>  
+> @@ -1845,6 +1849,8 @@ static inline void cpu_probe_loongson(st
+>  		decode_configs(c);
+>  		c->options |= MIPS_CPU_FTLB | MIPS_CPU_TLBINV | MIPS_CPU_LDPTE;
+>  		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+> +		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
+> +			MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
+>  		break;
+>  	default:
+>  		panic("Unknown Loongson Processor ID!");
+> --- a/arch/mips/kernel/proc.c
+> +++ b/arch/mips/kernel/proc.c
+> @@ -124,6 +124,10 @@ static int show_cpuinfo(struct seq_file
+>  	if (cpu_has_eva)	seq_printf(m, "%s", " eva");
+>  	if (cpu_has_htw)	seq_printf(m, "%s", " htw");
+>  	if (cpu_has_xpa)	seq_printf(m, "%s", " xpa");
+> +	if (cpu_has_loongson_mmi)	seq_printf(m, "%s", " loongson-mmi");
+> +	if (cpu_has_loongson_cam)	seq_printf(m, "%s", " loongson-cam");
+> +	if (cpu_has_loongson_ext)	seq_printf(m, "%s", " loongson-ext");
+> +	if (cpu_has_loongson_ext2)	seq_printf(m, "%s", " loongson-ext2");
+>  	seq_printf(m, "\n");
+>  
+>  	if (cpu_has_mmips) {
 > 
-> This is a traditional meaning MM subsystem is using.
-> 
->> 2) What do we do if the fw does not provide a node for the device? Should
->>    we guess and pick one for it and how do we do the guessing? Or leave it
->>    as it is and handle it as NUMA_NO_NODE?
-> 
-> As already pointed several times, picking any node is rather error
-> prone. You can never assume topology. We used to assume that there
-> always be node 0 but that is not really the case (see 3e8589963773
-> ("memcg: make it work on sparse non-0-node systems")). Nodes might also
-> come and go so this might just lead to all sorts of subtle problems.
-> 
-> On the other hand using NUMA_NO_NODE as no preference could only lead to
-> slightly sub optimal performance.
-> 
-> I do agree with Peter that reporting a lack of affinity might be useful
-> but we shouldn't really try to clever and make up the affinity nilly
-> willy
-
-Ok, thanks for clarify.
-
-So it seems we need to do the below if I understand it correctly:
-1. fix up the node id of device that has a clear node affinity without it
-   being set as much as possible.
-2. catch the case when the device that should have a nearer node but without
-   being set and warn about it.
-
-But I failed to see why the above is related to making node_to_cpumask_map()
-NUMA_NO_NODE aware?
-
-There is clear bug here too when node_to_cpumask_map() is not handling
-NUMA_NO_NODE.
-
-Maybe we can make the node_to_cpumask_map() NUMA_NO_NODE aware first and then
-deal with the above because event after the above is handled, we still need to
-handle NUMA_NO_NODE in node_to_cpumask_map() and it may take times to deal with
-the above when it is tricky to decide whether or not a device has a clear node.
-
-.
 > 
 
+This patch is causing build errors in 4.14, so I am dropping it.  Please
+provide a working version if you all want to see it in here.
+
+thanks,
+
+greg k-h
