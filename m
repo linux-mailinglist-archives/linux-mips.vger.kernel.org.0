@@ -2,123 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB98D4D5C
-	for <lists+linux-mips@lfdr.de>; Sat, 12 Oct 2019 07:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087DCD4D7D
+	for <lists+linux-mips@lfdr.de>; Sat, 12 Oct 2019 08:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728855AbfJLF4t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 12 Oct 2019 01:56:49 -0400
-Received: from sender4-pp-o94.zoho.com ([136.143.188.94]:25499 "EHLO
-        sender4-pp-o94.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727014AbfJLF4s (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Oct 2019 01:56:48 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1570859698; cv=none; 
-        d=zoho.com; s=zohoarc; 
-        b=fbrsZxm+7TKVtfBaI9CgHN2IBxrQUnWVjVt1g208sqHAQL2H8pESojcxSzJTs9AGL9n4cNYZ/UguOymBnEoWnSymKk38/tEh94q6jtCt+v+qPGuThT+IjV73jyvmkLA0yHCh/C4hLPifLizIA2S0c+v8Q5pkANWx72dCd1q5Mu4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com; s=zohoarc; 
-        t=1570859698; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To; 
-        bh=9AsoSpojO4C74zbA2M3vz9rPBC36KFYTB+2fQ9Vp4gI=; 
-        b=RCCLWEjvhiN06MZySYEkaXh3Ytov+nuI07mag5pBuWn5L9qPkre0VOLclXinMggGOkpO02uwZxI1+HCrsq1gNLnWV5Wx254qtJJD1YqF47tzBjfZefy/EWwFY0hSr8sL//EFE4pjOb6TEF1n0GIbwpRg0KF4yksyOCNlMWBjZ9k=
-ARC-Authentication-Results: i=1; mx.zoho.com;
-        dkim=pass  header.i=zoho.com;
-        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
-        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
-DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
-  s=zapps768; d=zoho.com; 
-  h=from:to:cc:subject:date:message-id:in-reply-to:references; 
-  b=mNl1coxyT/xrBFcEUlhANEY+31SZf5sG9wBRrdRm1JFVU4i/+SFhuXS65DKOkNokmR6b6nKn/haQ
-    3+OnysTj0tldCIkEgdXdkx5MFYqmSod0c3tdKrx0Y4h9th3AnH1I  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1570859698;
-        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        l=2326; bh=9AsoSpojO4C74zbA2M3vz9rPBC36KFYTB+2fQ9Vp4gI=;
-        b=f2/7j/pnXvy/3Ewx3yOsWePr6AFOZYJ5jo45oCm/jLU7s5Xy0TlH8NHuCGGJo7MD
-        d14zx0DgPbG+rHpbJvZ11PwUPBVjUPipnQ5FEp9c0UKqFftsD/JE9XMzMf3B5ucV+MS
-        I1fRPcc5blwWscfRVfl2EkZ5lCWzmOizODyni25c=
-Received: from zhouyanjie-virtual-machine.localdomain (182.148.156.27 [182.148.156.27]) by mx.zohomail.com
-        with SMTPS id 1570859696276279.0728945796534; Fri, 11 Oct 2019 22:54:56 -0700 (PDT)
-From:   Zhou Yanjie <zhouyanjie@zoho.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jason@lakedaemon.net,
-        paul.burton@mips.com, allison@lohutok.net, syq@debian.org,
-        rfontana@redhat.com, tglx@linutronix.de, paul@crapouillou.net,
-        maz@kernel.org
-Subject: [PATCH 5/5 v6] irqchip: Ingenic: Add process for more than one irq at the same time.
-Date:   Sat, 12 Oct 2019 13:53:50 +0800
-Message-Id: <1570859630-50942-6-git-send-email-zhouyanjie@zoho.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1570859630-50942-1-git-send-email-zhouyanjie@zoho.com>
-References: <1548517123-60058-1-git-send-email-zhouyanjie@zoho.com>
- <1570859630-50942-1-git-send-email-zhouyanjie@zoho.com>
-X-ZohoMailClient: External
+        id S1728111AbfJLGR6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Oct 2019 02:17:58 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:50222 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726947AbfJLGR5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 12 Oct 2019 02:17:57 -0400
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 3323C80206F36887AE0D;
+        Sat, 12 Oct 2019 14:17:54 +0800 (CST)
+Received: from [127.0.0.1] (10.74.191.121) by DGGEMS409-HUB.china.huawei.com
+ (10.3.19.209) with Microsoft SMTP Server id 14.3.439.0; Sat, 12 Oct 2019
+ 14:17:52 +0800
+Subject: Re: [PATCH v6] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     Michal Hocko <mhocko@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
+        <rth@twiddle.net>, <ink@jurassic.park.msu.ru>,
+        <mattst88@gmail.com>, <benh@kernel.crashing.org>,
+        <paulus@samba.org>, <mpe@ellerman.id.au>,
+        <heiko.carstens@de.ibm.com>, <gor@linux.ibm.com>,
+        <borntraeger@de.ibm.com>, <ysato@users.sourceforge.jp>,
+        <dalias@libc.org>, <davem@davemloft.net>, <ralf@linux-mips.org>,
+        <paul.burton@mips.com>, <jhogan@kernel.org>,
+        <jiaxun.yang@flygoat.com>, <chenhc@lemote.com>,
+        <akpm@linux-foundation.org>, <rppt@linux.ibm.com>,
+        <anshuman.khandual@arm.com>, <tglx@linutronix.de>, <cai@lca.pw>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <hpa@zytor.com>, <x86@kernel.org>,
+        <dave.hansen@linux.intel.com>, <luto@kernel.org>,
+        <len.brown@intel.com>, <axboe@kernel.dk>, <dledford@redhat.com>,
+        <jeffrey.t.kirsher@intel.com>, <linux-alpha@vger.kernel.org>,
+        <naveen.n.rao@linux.vnet.ibm.com>, <mwb@linux.vnet.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-s390@vger.kernel.org>,
+        <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
+        <tbogendoerfer@suse.de>, <linux-mips@vger.kernel.org>,
+        <rafael@kernel.org>, <gregkh@linuxfoundation.org>,
+        <bhelgaas@google.com>, <linux-pci@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, <lenb@kernel.org>,
+        <linux-acpi@vger.kernel.org>
+References: <20190924124325.GQ2349@hirez.programming.kicks-ass.net>
+ <20190924125936.GR2349@hirez.programming.kicks-ass.net>
+ <20190924131939.GS23050@dhcp22.suse.cz>
+ <1adcbe68-6753-3497-48a0-cc84ac503372@huawei.com>
+ <20190925104108.GE4553@hirez.programming.kicks-ass.net>
+ <47fa4cee-8528-7c23-c7de-7be1b65aa2ae@huawei.com>
+ <bec80499-86d9-bf1f-df23-9044a8099992@arm.com>
+ <a5f0fc80-8e88-b781-77ce-1213e5d62125@huawei.com>
+ <20191010073212.GB18412@dhcp22.suse.cz>
+ <6cc94f9b-0d79-93a8-5ec2-4f6c21639268@huawei.com>
+ <20191011111539.GX2311@hirez.programming.kicks-ass.net>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <7fad58d6-5126-e8b8-a7d8-a91814da53ba@huawei.com>
+Date:   Sat, 12 Oct 2019 14:17:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
+MIME-Version: 1.0
+In-Reply-To: <20191011111539.GX2311@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.74.191.121]
+X-CFilter-Loop: Reflected
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add process for the situation that more than one irq is coming to
-a single chip at the same time. The original code will only respond
-to the lowest setted bit in JZ_REG_INTC_PENDING, and then exit the
-interrupt dispatch function. After exiting the interrupt dispatch
-function, since the second interrupt has not yet responded, the
-interrupt dispatch function is again entered to process the second
-interrupt. This creates additional unnecessary overhead, and the
-more interrupts that occur at the same time, the more overhead is
-added. The improved method in this patch is to check whether there
-are still unresponsive interrupts after processing the lowest
-setted bit interrupt. If there are any, the processing will be
-processed according to the bit in JZ_REG_INTC_PENDING, and the
-interrupt dispatch function will be exited until all processing
-is completed.
+add pci and acpi maintainer
+cc linux-pci@vger.kernel.org and linux-acpi@vger.kernel.org
 
-Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/irqchip/irq-ingenic.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+On 2019/10/11 19:15, Peter Zijlstra wrote:
+> On Fri, Oct 11, 2019 at 11:27:54AM +0800, Yunsheng Lin wrote:
+>> But I failed to see why the above is related to making node_to_cpumask_map()
+>> NUMA_NO_NODE aware?
+> 
+> Your initial bug is for hns3, which is a PCI device, which really _MUST_
+> have a node assigned.
+> 
+> It not having one, is a straight up bug. We must not silently accept
+> NO_NODE there, ever.
+> 
 
-diff --git a/drivers/irqchip/irq-ingenic.c b/drivers/irqchip/irq-ingenic.c
-index 06ab3ad..01d18b3 100644
---- a/drivers/irqchip/irq-ingenic.c
-+++ b/drivers/irqchip/irq-ingenic.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-  *  Copyright (C) 2009-2010, Lars-Peter Clausen <lars@metafoo.de>
-- *  JZ4740 platform IRQ support
-+ *  Ingenic XBurst platform IRQ support
-  */
- 
- #include <linux/errno.h>
-@@ -37,18 +37,23 @@ static irqreturn_t intc_cascade(int irq, void *data)
- 	struct ingenic_intc_data *intc = irq_get_handler_data(irq);
- 	struct irq_domain *domain = intc->domain;
- 	struct irq_chip_generic *gc;
--	uint32_t irq_reg;
-+	uint32_t pending;
- 	unsigned i;
- 
- 	for (i = 0; i < intc->num_chips; i++) {
- 		gc = irq_get_domain_generic_chip(domain, i * 32);
- 
--		irq_reg = irq_reg_readl(gc, JZ_REG_INTC_PENDING);
--		if (!irq_reg)
-+		pending = irq_reg_readl(gc, JZ_REG_INTC_PENDING);
-+		if (!pending)
- 			continue;
- 
--		irq = irq_find_mapping(domain, __fls(irq_reg) + (i * 32));
--		generic_handle_irq(irq);
-+		while (pending) {
-+			int bit = __fls(pending);
-+
-+			irq = irq_find_mapping(domain, bit + (i * 32));
-+			generic_handle_irq(irq);
-+			pending &= ~BIT(bit);
-+		}
- 	}
- 
- 	return IRQ_HANDLED;
--- 
-2.7.4
+I suppose you mean reporting a lack of affinity when the node of a pcie
+device is not set by "not silently accept NO_NODE".
 
+As Greg has asked about in [1]:
+what is a user to do when the user sees the kernel reporting that?
+
+We may tell user to contact their vendor for info or updates about
+that when they do not know about their system well enough, but their
+vendor may get away with this by quoting ACPI spec as the spec
+considering this optional. Should the user believe this is indeed a
+fw bug or a misreport from the kernel?
+
+If this kind of reporting is common pratice and will not cause any
+misunderstanding, then maybe we can report that.
+
+[1] https://lore.kernel.org/lkml/20190905055727.GB23826@kroah.com/
+
+> .
+> 
 
