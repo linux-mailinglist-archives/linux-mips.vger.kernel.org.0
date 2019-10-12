@@ -2,109 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 087DCD4D7D
-	for <lists+linux-mips@lfdr.de>; Sat, 12 Oct 2019 08:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E948D4E02
+	for <lists+linux-mips@lfdr.de>; Sat, 12 Oct 2019 09:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728111AbfJLGR6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 12 Oct 2019 02:17:58 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:50222 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726947AbfJLGR5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 12 Oct 2019 02:17:57 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 3323C80206F36887AE0D;
-        Sat, 12 Oct 2019 14:17:54 +0800 (CST)
-Received: from [127.0.0.1] (10.74.191.121) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.439.0; Sat, 12 Oct 2019
- 14:17:52 +0800
-Subject: Re: [PATCH v6] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     Michal Hocko <mhocko@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
-        <rth@twiddle.net>, <ink@jurassic.park.msu.ru>,
-        <mattst88@gmail.com>, <benh@kernel.crashing.org>,
-        <paulus@samba.org>, <mpe@ellerman.id.au>,
-        <heiko.carstens@de.ibm.com>, <gor@linux.ibm.com>,
-        <borntraeger@de.ibm.com>, <ysato@users.sourceforge.jp>,
-        <dalias@libc.org>, <davem@davemloft.net>, <ralf@linux-mips.org>,
-        <paul.burton@mips.com>, <jhogan@kernel.org>,
-        <jiaxun.yang@flygoat.com>, <chenhc@lemote.com>,
-        <akpm@linux-foundation.org>, <rppt@linux.ibm.com>,
-        <anshuman.khandual@arm.com>, <tglx@linutronix.de>, <cai@lca.pw>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <hpa@zytor.com>, <x86@kernel.org>,
-        <dave.hansen@linux.intel.com>, <luto@kernel.org>,
-        <len.brown@intel.com>, <axboe@kernel.dk>, <dledford@redhat.com>,
-        <jeffrey.t.kirsher@intel.com>, <linux-alpha@vger.kernel.org>,
-        <naveen.n.rao@linux.vnet.ibm.com>, <mwb@linux.vnet.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-s390@vger.kernel.org>,
-        <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
-        <tbogendoerfer@suse.de>, <linux-mips@vger.kernel.org>,
-        <rafael@kernel.org>, <gregkh@linuxfoundation.org>,
-        <bhelgaas@google.com>, <linux-pci@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, <lenb@kernel.org>,
-        <linux-acpi@vger.kernel.org>
-References: <20190924124325.GQ2349@hirez.programming.kicks-ass.net>
- <20190924125936.GR2349@hirez.programming.kicks-ass.net>
- <20190924131939.GS23050@dhcp22.suse.cz>
- <1adcbe68-6753-3497-48a0-cc84ac503372@huawei.com>
- <20190925104108.GE4553@hirez.programming.kicks-ass.net>
- <47fa4cee-8528-7c23-c7de-7be1b65aa2ae@huawei.com>
- <bec80499-86d9-bf1f-df23-9044a8099992@arm.com>
- <a5f0fc80-8e88-b781-77ce-1213e5d62125@huawei.com>
- <20191010073212.GB18412@dhcp22.suse.cz>
- <6cc94f9b-0d79-93a8-5ec2-4f6c21639268@huawei.com>
- <20191011111539.GX2311@hirez.programming.kicks-ass.net>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <7fad58d6-5126-e8b8-a7d8-a91814da53ba@huawei.com>
-Date:   Sat, 12 Oct 2019 14:17:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        id S1728732AbfJLHfh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Oct 2019 03:35:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38468 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727014AbfJLHfh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 12 Oct 2019 03:35:37 -0400
+Received: from localhost (unknown [62.119.166.9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 62B002067B;
+        Sat, 12 Oct 2019 07:35:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570865736;
+        bh=GxHn9HvGbNAY8QyAyt0bW9sVjM5iu68qu3vwy7Md6hw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wf0Chk14Q8JRdONhUFmvnnjQF+nf84HsjEcys57x/X2LyBiiaLSOL0wLH1SNjY7QJ
+         +AHjCBhflbxwGYJN8LBpK7MhTp3WmXkco4A7Ohj3HxZGNIrrFzJxzaeocaR0NYvcef
+         BoI72kqFgiRNidLDZIyhTQdnodkX8I4Ny1Ak2f6U=
+Date:   Sat, 12 Oct 2019 09:35:31 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Zhou Yanjie <zhouyanjie@zoho.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, paul.burton@mips.com, mark.rutland@arm.com,
+        syq@debian.org, ulf.hansson@linaro.org, linus.walleij@linaro.org,
+        armijn@tjaldur.nl, tglx@linutronix.de, yuehaibing@huawei.com,
+        malat@debian.org, ezequiel@collabora.com, paul@crapouillou.net,
+        linux-serial@vger.kernel.org, jslaby@suse.com,
+        jiaxun.yang@flygoat.com, 772753199@qq.com
+Subject: Re: [PATCH v3 1/2] Serial: Ingenic: Add support for the X1000.
+Message-ID: <20191012073531.GA2036970@kroah.com>
+References: <1548667176-119830-1-git-send-email-zhouyanjie@zoho.com>
+ <1548695029-11900-1-git-send-email-zhouyanjie@zoho.com>
+ <1548695029-11900-2-git-send-email-zhouyanjie@zoho.com>
 MIME-Version: 1.0
-In-Reply-To: <20191011111539.GX2311@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.74.191.121]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1548695029-11900-2-git-send-email-zhouyanjie@zoho.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-add pci and acpi maintainer
-cc linux-pci@vger.kernel.org and linux-acpi@vger.kernel.org
-
-On 2019/10/11 19:15, Peter Zijlstra wrote:
-> On Fri, Oct 11, 2019 at 11:27:54AM +0800, Yunsheng Lin wrote:
->> But I failed to see why the above is related to making node_to_cpumask_map()
->> NUMA_NO_NODE aware?
+On Sat, Oct 12, 2019 at 01:13:23PM +0800, Zhou Yanjie wrote:
+> Add support for probing the 8250_ingenic driver on the
+> X1000 Soc from Ingenic.
 > 
-> Your initial bug is for hns3, which is a PCI device, which really _MUST_
-> have a node assigned.
-> 
-> It not having one, is a straight up bug. We must not silently accept
-> NO_NODE there, ever.
-> 
+> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+> ---
+>  drivers/tty/serial/8250/8250_ingenic.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
 
-I suppose you mean reporting a lack of affinity when the node of a pcie
-device is not set by "not silently accept NO_NODE".
+<snip>
 
-As Greg has asked about in [1]:
-what is a user to do when the user sees the kernel reporting that?
+you seem to have two patches merged into one here, please fix up and
+resend.
 
-We may tell user to contact their vendor for info or updates about
-that when they do not know about their system well enough, but their
-vendor may get away with this by quoting ACPI spec as the spec
-considering this optional. Should the user believe this is indeed a
-fw bug or a misreport from the kernel?
+thanks,
 
-If this kind of reporting is common pratice and will not cause any
-misunderstanding, then maybe we can report that.
-
-[1] https://lore.kernel.org/lkml/20190905055727.GB23826@kroah.com/
-
-> .
-> 
-
+greg k-h
