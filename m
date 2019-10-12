@@ -2,105 +2,195 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAED5D4B5E
-	for <lists+linux-mips@lfdr.de>; Sat, 12 Oct 2019 02:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8084DD4C9C
+	for <lists+linux-mips@lfdr.de>; Sat, 12 Oct 2019 06:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726521AbfJLAds (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 11 Oct 2019 20:33:48 -0400
-Received: from smtp.gentoo.org ([140.211.166.183]:59150 "EHLO smtp.gentoo.org"
+        id S1727879AbfJLEIz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Oct 2019 00:08:55 -0400
+Received: from mx2a.mailbox.org ([80.241.60.219]:42745 "EHLO mx2a.mailbox.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726269AbfJLAds (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 11 Oct 2019 20:33:48 -0400
-Received: from [192.168.1.13] (c-76-114-240-162.hsd1.md.comcast.net [76.114.240.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727440AbfJLEIy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 12 Oct 2019 00:08:54 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kumba)
-        by smtp.gentoo.org (Postfix) with ESMTPSA id 3DB9F34BBE2;
-        Sat, 12 Oct 2019 00:33:46 +0000 (UTC)
-Subject: Re: [PATCH] MIPS: add support for SGI Octane (IP30)
-To:     Christoph Hellwig <hch@infradead.org>,
-        Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20191009155928.3047-1-tbogendoerfer@suse.de>
- <20191009184311.GA20261@infradead.org>
-From:   Joshua Kinard <kumba@gentoo.org>
-Openpgp: preference=signencrypt
-Message-ID: <5c6ab720-218a-14aa-9112-a12b88b63bc2@gentoo.org>
-Date:   Fri, 11 Oct 2019 20:33:43 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        by mx2a.mailbox.org (Postfix) with ESMTPS id 0485AA1104;
+        Sat, 12 Oct 2019 06:08:47 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by hefe.heinlein-support.de (hefe.heinlein-support.de [91.198.250.172]) (amavisd-new, port 10030)
+        with ESMTP id WQcjjXFgeVVi; Sat, 12 Oct 2019 06:08:40 +0200 (CEST)
+Date:   Sat, 12 Oct 2019 15:08:15 +1100
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v14 2/6] namei: LOOKUP_IN_ROOT: chroot-like path
+ resolution
+Message-ID: <20191012040815.gnc43cfmo5mnv67u@yavin.dot.cyphar.com>
+References: <20191010054140.8483-1-cyphar@cyphar.com>
+ <20191010054140.8483-3-cyphar@cyphar.com>
+ <CAHk-=wh8L50f31vW8BwRUXhLiq3eoCQ3tg8ER4Yp2dzuU1w5rQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20191009184311.GA20261@infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="t2fxesclfr677pzw"
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wh8L50f31vW8BwRUXhLiq3eoCQ3tg8ER4Yp2dzuU1w5rQ@mail.gmail.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/9/2019 14:43, Christoph Hellwig wrote:
->> +++ b/arch/mips/sgi-ip30/ip30-pci.c
->> @@ -0,0 +1,19 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * ip30-pci.c: misc PCI related helper code for IP30 architecture
->> + */
->> +
->> +#include <asm/pci/bridge.h>
->> +
->> +dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr)
->> +{
->> +	struct pci_dev *pdev = to_pci_dev(dev);
->> +	struct bridge_controller *bc = BRIDGE_CONTROLLER(pdev->bus);
->> +
->> +	return bc->baddr + paddr;
->> +}
->> +
->> +phys_addr_t __dma_to_phys(struct device *dev, dma_addr_t dma_addr)
->> +{
->> +	return dma_addr & ~(0xffUL << 56);
->> +}
-> 
-> This file is duplicated from ip27.  I think we should aim to share
-> it given the common hardware even if it is mostly trivial.
-> 
 
-It's possible that we may need to add an IP30-specific WAR here eventually.
- OpenBSD code has this to say about BRIDGE on IP30 systems:
+--t2fxesclfr677pzw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-http://bxr.su/OpenBSD/sys/arch/sgi/sgi/ip30_machdep.c
+On 2019-10-10, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> On Wed, Oct 9, 2019 at 10:42 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
+> >
+> > --- a/fs/namei.c
+> > +++ b/fs/namei.c
+> > @@ -2277,6 +2277,11 @@ static const char *path_init(struct nameidata *n=
+d, unsigned flags)
+> >
+> >         nd->m_seq =3D read_seqbegin(&mount_lock);
+> >
+> > +       /* LOOKUP_IN_ROOT treats absolute paths as being relative-to-di=
+rfd. */
+> > +       if (flags & LOOKUP_IN_ROOT)
+> > +               while (*s =3D=3D '/')
+> > +                       s++;
+> > +
+> >         /* Figure out the starting path and root (if needed). */
+> >         if (*s =3D=3D '/') {
+> >                 error =3D nd_jump_root(nd);
+>=20
+> Hmm. Wouldn't this make more sense all inside the if (*s =3D- '/') test?
+> That way if would be where we check for "should we start at the root",
+> which seems to make more sense conceptually.
 
-144    /*
-145     * Register DMA-reachable memory constraints.
-146     * The xbridge(4) is limited to a 31-bit region (its IOMMU features
-147     * are too restricted to be of use).
-148     */
-149    dma_constraint.ucr_low = 0;
-150    dma_constraint.ucr_high = (1UL << 31) - 1;
+I don't really agree (though I do think that both options are pretty
+ugly). Doing it before the block makes it clear that absolute paths are
+just treated relative-to-dirfd -- doing it inside the block makes it
+look more like "/" is a special-case for nd_jump_root(). And while that
+is somewhat true, this is just a side-effect of making the code more
+clean -- my earlier versions reworked the dirfd handling to always grab
+nd->root first if LOOKUP_IS_SCOPED. I switched to this method based on
+Al's review.
 
-I never figured out how in Linux one does something equivalent.  I knew it
-needed to be done in the older dma-coherence.h file, and now in the newer
-__phys_to_dma() function here.  This is, if memory recalls correctly,
-because >2GB RAM in Octane causes issues w/ BRIDGE DMA access.
+In fairness, I do agree that the lonely while loop looks ugly.
 
-OpenBSD applies this same limit to IP27, but I have a sneaking suspicion
-that it's strictly an IP30 hardware bug, because my Onyx2 has 8GB of RAM and
-it usually boots fine on its own.  Pop more than 2GB into an Octane, though,
-and, if it boots at all, disk or network I/O will usually bus error it at
-some point.
+> That test for '/' currently has a "} else if (..)", but that's
+> pointless since it ends with a "return" anyway. So the "else" logic is
+> just noise.
 
--- 
-Joshua Kinard
-Gentoo/MIPS
-kumba@gentoo.org
-rsa6144/5C63F4E3F5C6C943 2015-04-27
-177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
+This depends on the fact that LOOKUP_BENEATH always triggers -EXDEV for
+nd_jump_root() -- if we ever add another "scoped lookup" flag then the
+logic will have to be further reworked.
 
-"The past tempts us, the present confuses us, the future frightens us.  And
-our lives slip away, moment by moment, lost in that vast, terrible in-between."
+(It should be noted that the new version doesn't always end with a
+"return", but you could change it to act that way given the above
+assumption.)
 
---Emperor Turhan, Centauri Republic
+> And if you get rid of the unnecessary else, moving the LOOKUP_IN_ROOT
+> inside the if-statement works fine.
+>=20
+> So this could be something like
+>=20
+>     --- a/fs/namei.c
+>     +++ b/fs/namei.c
+>     @@ -2194,11 +2196,19 @@ static const char *path_init(struct
+> nameidata *nd, unsigned flags)
+>=20
+>         nd->m_seq =3D read_seqbegin(&mount_lock);
+>         if (*s =3D=3D '/') {
+>     -           set_root(nd);
+>     -           if (likely(!nd_jump_root(nd)))
+>     -                   return s;
+>     -           return ERR_PTR(-ECHILD);
+>     -   } else if (nd->dfd =3D=3D AT_FDCWD) {
+>     +           /* LOOKUP_IN_ROOT treats absolute paths as being
+> relative-to-dirfd. */
+>     +           if (!(flags & LOOKUP_IN_ROOT)) {
+>     +                   set_root(nd);
+>     +                   if (likely(!nd_jump_root(nd)))
+>     +                           return s;
+>     +                   return ERR_PTR(-ECHILD);
+>     +           }
+>     +
+>     +           /* Skip initial '/' for LOOKUP_IN_ROOT */
+>     +           do { s++; } while (*s =3D=3D '/');
+>     +   }
+>     +
+>     +   if (nd->dfd =3D=3D AT_FDCWD) {
+>                 if (flags & LOOKUP_RCU) {
+>                         struct fs_struct *fs =3D current->fs;
+>                         unsigned seq;
+>=20
+> instead. The patch ends up slightly bigger (due to the re-indentation)
+> but now it handles all the "start at root" in the same place. Doesn't
+> that make sense?
+
+It is correct (though I'd need to clean it up a bit to handle
+nd_jump_root() correctly), and if you really would like me to change it
+I will -- but I just don't agree that it's cleaner.
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--t2fxesclfr677pzw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXaFRqQAKCRCdlLljIbnQ
+El00AQDKyu1GNvL91tAxvDZP/2rrqVrUf7Ad1T8uobD+aKQbgwEAvz9eeuLveRVq
+aqnd3Ifu8HO4SYcqYn+hDFgDz5D5Kwo=
+=XXCi
+-----END PGP SIGNATURE-----
+
+--t2fxesclfr677pzw--
