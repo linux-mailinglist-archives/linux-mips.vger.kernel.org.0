@@ -2,22 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DF5D4D27
-	for <lists+linux-mips@lfdr.de>; Sat, 12 Oct 2019 07:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A87CD4D2B
+	for <lists+linux-mips@lfdr.de>; Sat, 12 Oct 2019 07:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbfJLFPu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 12 Oct 2019 01:15:50 -0400
-Received: from sender4-pp-o94.zoho.com ([136.143.188.94]:25412 "EHLO
+        id S1727231AbfJLFQX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Oct 2019 01:16:23 -0400
+Received: from sender4-pp-o94.zoho.com ([136.143.188.94]:25430 "EHLO
         sender4-pp-o94.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726177AbfJLFPu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Oct 2019 01:15:50 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1570857274; cv=none; 
+        with ESMTP id S1726177AbfJLFQW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Oct 2019 01:16:22 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1570857294; cv=none; 
         d=zoho.com; s=zohoarc; 
-        b=QeLsWy3lt0LjPqHfImMYFVVxd53Vsh1xflVauNzHcBq6NbV38SjwEd7fm6Fm5+SPGa6VjUIkhGPEKIYqT7FhCaKI/gV7m8fkTp74GUM4dTPwPBxzXN0oWdbTZqZXLVWUesg6F9reaJbbGOBJYAO4MfZkAcPV9x4+NhjiTgp6rtU=
+        b=ZTWaLQmc0gjhBy84aeTb3RYtvDuiYIFuAD/lUzcXoefgXHqwHS/Gql82SXd+QaStZCp8lnxgEm3kMaJJTIKsjXaxEaJpcNrPURbCyQ9bSBb06fmhSA3wAW0E/4mTliwtqkhR4+vykJO3k8pPSJY4CaxOKBNtn1v4AvkCENMK1bE=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com; s=zohoarc; 
-        t=1570857274; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To; 
-        bh=as6/lLUVaBlu4heB6IDs3nZKYIfHPEdzxPDiM55f+iE=; 
-        b=SeQ43zEeGWA0NMwUVPTUfBk79QQK4bhLVm/h1OGkFIevt9czYykYCj1zOkJ4J0Q/ntWtlHibpUmtRmMWglmYhhDjOTyYR6T+WrFAzAndtCrDmwWzyDSkOt1oU+Uk2CDbtyloQR0SKoSldEBHQYJbbue+milscV8zyL5kKC+UDzI=
+        t=1570857294; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To; 
+        bh=C0apDRgSc6LA8qMRVIi13ga9yNXfuBb7StrbdjX9Oiw=; 
+        b=bn3yCie7C0tC3JJntbdUCKm0XAyXhlu6aNhWRJE2XEd7FO6dWSWGJ1d1Z60QoJdWov9AGpKYA3gcji6p6ydKi1dcC9UEsnG4N8/Tpsz/Sik41Bm+phqfDI3VIw4pENpHMp8+SyZNwC/saTgMAwMsfokLxUOJ47oUa0d7oE2O4fM=
 ARC-Authentication-Results: i=1; mx.zoho.com;
         dkim=pass  header.i=zoho.com;
         spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
@@ -25,17 +25,17 @@ ARC-Authentication-Results: i=1; mx.zoho.com;
 DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
   s=zapps768; d=zoho.com; 
   h=from:to:cc:subject:date:message-id:in-reply-to:references; 
-  b=fRAKLVv8EtX/+wEP7ZpuVAcsL7911f5ip5Mj3dXlc4qbiQMeNNakOq4MYHj69p2l3vlqohH72Rru
-    cqRzivWyx1vdg/rVxaHk9rDMhbMtJGmFOrdnfYf8+aZIh/AcTgcu  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1570857274;
+  b=UssMQhHqA8isLkEmOs24Do3vgqgoIvrWaUpDiMvVe8AfqKa+AFwsQsWJ/GxXhOUZEmO863PGt6FJ
+    cF8gfX369YOCtcged+CAAWkL+LY1qtpgU2068q1szLjwrY6P5ciS  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1570857294;
         s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; l=914;
-        bh=as6/lLUVaBlu4heB6IDs3nZKYIfHPEdzxPDiM55f+iE=;
-        b=U6szIocdkwc14BjeZeaND6xlAOyMeZzIo5eumUMiYramn/wSFRwB0JDeNlLF6yo1
-        WOBG0CzINWbcOZm8WBP0r46ooEJoxBq4EcX+O5mK9wDxjZH1thGzb9zxmKu5BIPksN9
-        ntgxPjOoXRT/08bUOuFOog8i13jpAHdFEpG6wQnA=
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; l=961;
+        bh=C0apDRgSc6LA8qMRVIi13ga9yNXfuBb7StrbdjX9Oiw=;
+        b=K5+tkkNFQ521rAH7mIuZ88NPMjZpgzYN4YSCzCEXJaA3sS2EyN0XmxfFtTQmPbTy
+        V0Ii422nmQIAKJrC8xXC6dzUsp+xhKNqFYglc+Yp6LIdAKpuWWjKTEYTHnB7xy3Ff9i
+        yTdxfq3g+X3B3zJHNj3iVDLT8qRkPzahlouTLTHM=
 Received: from zhouyanjie-virtual-machine.localdomain (182.148.156.27 [182.148.156.27]) by mx.zohomail.com
-        with SMTPS id 1570857273287174.23289133560195; Fri, 11 Oct 2019 22:14:33 -0700 (PDT)
+        with SMTPS id 1570857293413883.9512660333022; Fri, 11 Oct 2019 22:14:53 -0700 (PDT)
 From:   Zhou Yanjie <zhouyanjie@zoho.com>
 To:     linux-mips@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
@@ -44,9 +44,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
         ulf.hansson@linaro.org, linus.walleij@linaro.org,
         armijn@tjaldur.nl, tglx@linutronix.de, yuehaibing@huawei.com,
         malat@debian.org, ezequiel@collabora.com, paul@crapouillou.net
-Subject: [PATCH 2/6 v2] dt-bindings: MMC: Add JZ4760 bindings.
-Date:   Sat, 12 Oct 2019 13:13:16 +0800
-Message-Id: <1570857203-49192-3-git-send-email-zhouyanjie@zoho.com>
+Subject: [PATCH 3/6 v2] MMC: JZ4740: Add support for the JZ4760.
+Date:   Sat, 12 Oct 2019 13:13:17 +0800
+Message-Id: <1570857203-49192-4-git-send-email-zhouyanjie@zoho.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1570857203-49192-1-git-send-email-zhouyanjie@zoho.com>
 References: <1567669089-88693-1-git-send-email-zhouyanjie@zoho.com>
@@ -57,26 +57,33 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add the MMC bindings for the JZ4760 Soc from Ingenic.
+Add support for probing mmc driver on the JZ4760 Soc from Ingenic.
 
 Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/mmc/jz4740.txt | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mmc/host/jz4740_mmc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mmc/jz4740.txt b/Documentation/devicetree/bindings/mmc/jz4740.txt
-index 8a6f87f..13796fe 100644
---- a/Documentation/devicetree/bindings/mmc/jz4740.txt
-+++ b/Documentation/devicetree/bindings/mmc/jz4740.txt
-@@ -8,6 +8,7 @@ Required properties:
- - compatible: Should be one of the following:
-   - "ingenic,jz4740-mmc" for the JZ4740
-   - "ingenic,jz4725b-mmc" for the JZ4725B
-+  - "ingenic,jz4760-mmc" for the JZ4760
-   - "ingenic,jz4780-mmc" for the JZ4780
- - reg: Should contain the MMC controller registers location and length.
- - interrupts: Should contain the interrupt specifier of the MMC controller.
+diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
+index 69c4a8b..f4c4890 100644
+--- a/drivers/mmc/host/jz4740_mmc.c
++++ b/drivers/mmc/host/jz4740_mmc.c
+@@ -107,6 +107,7 @@
+ enum jz4740_mmc_version {
+ 	JZ_MMC_JZ4740,
+ 	JZ_MMC_JZ4725B,
++	JZ_MMC_JZ4760,
+ 	JZ_MMC_JZ4780,
+ };
+ 
+@@ -935,6 +936,7 @@ static const struct mmc_host_ops jz4740_mmc_ops = {
+ static const struct of_device_id jz4740_mmc_of_match[] = {
+ 	{ .compatible = "ingenic,jz4740-mmc", .data = (void *) JZ_MMC_JZ4740 },
+ 	{ .compatible = "ingenic,jz4725b-mmc", .data = (void *)JZ_MMC_JZ4725B },
++	{ .compatible = "ingenic,jz4760-mmc", .data = (void *) JZ_MMC_JZ4760 },
+ 	{ .compatible = "ingenic,jz4780-mmc", .data = (void *) JZ_MMC_JZ4780 },
+ 	{},
+ };
 -- 
 2.7.4
 
