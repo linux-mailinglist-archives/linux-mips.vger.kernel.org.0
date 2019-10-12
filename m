@@ -2,205 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C27A8D4CB3
-	for <lists+linux-mips@lfdr.de>; Sat, 12 Oct 2019 06:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B2ED4D1F
+	for <lists+linux-mips@lfdr.de>; Sat, 12 Oct 2019 07:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727072AbfJLEQP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 12 Oct 2019 00:16:15 -0400
-Received: from mx2a.mailbox.org ([80.241.60.219]:64707 "EHLO mx2a.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726278AbfJLEQP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 12 Oct 2019 00:16:15 -0400
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2a.mailbox.org (Postfix) with ESMTPS id A095FA18A9;
-        Sat, 12 Oct 2019 06:16:08 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
-        with ESMTP id XP4SfIU7eOyJ; Sat, 12 Oct 2019 06:16:03 +0200 (CEST)
-Date:   Sat, 12 Oct 2019 15:15:41 +1100
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        GNU C Library <libc-alpha@sourceware.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v14 2/6] namei: LOOKUP_IN_ROOT: chroot-like path
- resolution
-Message-ID: <20191012041541.milbmfbjpj5bcl5a@yavin.dot.cyphar.com>
-References: <20191010054140.8483-1-cyphar@cyphar.com>
- <20191010054140.8483-3-cyphar@cyphar.com>
- <CAHk-=wh8L50f31vW8BwRUXhLiq3eoCQ3tg8ER4Yp2dzuU1w5rQ@mail.gmail.com>
- <20191012040815.gnc43cfmo5mnv67u@yavin.dot.cyphar.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2tj3n7ljtot3r57d"
-Content-Disposition: inline
-In-Reply-To: <20191012040815.gnc43cfmo5mnv67u@yavin.dot.cyphar.com>
+        id S1727231AbfJLFOy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Oct 2019 01:14:54 -0400
+Received: from sender4-pp-o94.zoho.com ([136.143.188.94]:25488 "EHLO
+        sender4-pp-o94.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725308AbfJLFOy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Oct 2019 01:14:54 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1570857256; cv=none; 
+        d=zoho.com; s=zohoarc; 
+        b=GrNQpEMLZsHG5+GY5yRGD8ynZ4VGkAbutmOs13E/62bwdXdIeHn2OpU2ZmbcQ1cx6Iy/92q6OnZeKuTWb/8nlsdtgQCfK9Vf+ZanXKq8SDk91p7ak0XM7rAmpE2D96S34URKCxhyu1nbP1phbEzv9bfEKO+/DCE4YPF7OSjG8Pk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com; s=zohoarc; 
+        t=1570857256; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To; 
+        bh=iCPDNrV6/YQoHj9l6MIIWc8hHGpQol2xBLbHcVZa9EA=; 
+        b=I3zYDSdGl56BmmQ23GraX856Y0mqgtLgM+j5G7748oBJGKo0uL7lnF6GVe13JwVKZAZ/2p9yawdjTQwwINNPTabDW9TRaGlSxTa0mPLRid2KFmJZZtHWShlg//OEn7QiTnpCCYlATsOnIhrZ8RSYcT+97NfDcUIxka4lW+3w/iE=
+ARC-Authentication-Results: i=1; mx.zoho.com;
+        dkim=pass  header.i=zoho.com;
+        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
+        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
+  s=zapps768; d=zoho.com; 
+  h=from:to:cc:subject:date:message-id:in-reply-to:references; 
+  b=O2Un9YsZx8k62f/NS4lXeTs30Os0d4S7QXwbnZue5kYPl5efEP5JwoRCVQugQCNFknih+J1ux15O
+    wUzmdV5WTPPkNGTjWexuemHf78IDTAO5CLpzUidUZRAPgHt555Km  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1570857256;
+        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; l=75;
+        bh=iCPDNrV6/YQoHj9l6MIIWc8hHGpQol2xBLbHcVZa9EA=;
+        b=ZgOSUAzFsts2rnHCIMsuCTxtHKn5UJR4KmhRvSVzwt61Y+VmzIAwddgqGTxAEbjp
+        TP06ppH9s7yq6/u4mlfBw5ISHkrvnxg6CbpiqMVsaWpIE9Xlrk4KVQbJmha4/rkgDFz
+        8hTbVQDcZEo0O1TSwNFGaY6KrzCJLsvGq/R3NpKU=
+Received: from zhouyanjie-virtual-machine.localdomain (182.148.156.27 [182.148.156.27]) by mx.zohomail.com
+        with SMTPS id 1570857254571857.8144339815013; Fri, 11 Oct 2019 22:14:14 -0700 (PDT)
+From:   Zhou Yanjie <zhouyanjie@zoho.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        paul.burton@mips.com, mark.rutland@arm.com, syq@debian.org,
+        ulf.hansson@linaro.org, linus.walleij@linaro.org,
+        armijn@tjaldur.nl, tglx@linutronix.de, yuehaibing@huawei.com,
+        malat@debian.org, ezequiel@collabora.com, paul@crapouillou.net
+Subject: MMC: JZ4740: Add support for 8bit mode and LPM and JZ4760 Soc v2
+Date:   Sat, 12 Oct 2019 13:13:14 +0800
+Message-Id: <1570857203-49192-1-git-send-email-zhouyanjie@zoho.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1567669089-88693-1-git-send-email-zhouyanjie@zoho.com>
+References: <1567669089-88693-1-git-send-email-zhouyanjie@zoho.com>
+X-ZohoMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+v1->v2: drop macro definition rename, split patch, add support for x1000.
 
---2tj3n7ljtot3r57d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 2019-10-12, Aleksa Sarai <cyphar@cyphar.com> wrote:
-> On 2019-10-10, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> > On Wed, Oct 9, 2019 at 10:42 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
-> > >
-> > > --- a/fs/namei.c
-> > > +++ b/fs/namei.c
-> > > @@ -2277,6 +2277,11 @@ static const char *path_init(struct nameidata =
-*nd, unsigned flags)
-> > >
-> > >         nd->m_seq =3D read_seqbegin(&mount_lock);
-> > >
-> > > +       /* LOOKUP_IN_ROOT treats absolute paths as being relative-to-=
-dirfd. */
-> > > +       if (flags & LOOKUP_IN_ROOT)
-> > > +               while (*s =3D=3D '/')
-> > > +                       s++;
-> > > +
-> > >         /* Figure out the starting path and root (if needed). */
-> > >         if (*s =3D=3D '/') {
-> > >                 error =3D nd_jump_root(nd);
-> >=20
-> > Hmm. Wouldn't this make more sense all inside the if (*s =3D- '/') test?
-> > That way if would be where we check for "should we start at the root",
-> > which seems to make more sense conceptually.
->=20
-> I don't really agree (though I do think that both options are pretty
-> ugly). Doing it before the block makes it clear that absolute paths are
-> just treated relative-to-dirfd -- doing it inside the block makes it
-> look more like "/" is a special-case for nd_jump_root(). And while that
-
-Sorry, I meant "special-case for LOOKUP_IN_ROOT".
-
-> is somewhat true, this is just a side-effect of making the code more
-> clean -- my earlier versions reworked the dirfd handling to always grab
-> nd->root first if LOOKUP_IS_SCOPED. I switched to this method based on
-> Al's review.
->=20
-> In fairness, I do agree that the lonely while loop looks ugly.
-
-And with the old way I did it (where we grabbed nd->root first) the
-semantics were slightly more clear -- stripping leading "/"s doesn't
-really look as "clearly obvious" as grabbing nd->root beforehand and
-treating "/"s normally. But the code was also needlessly more complex.
-
-> > That test for '/' currently has a "} else if (..)", but that's
-> > pointless since it ends with a "return" anyway. So the "else" logic is
-> > just noise.
->=20
-> This depends on the fact that LOOKUP_BENEATH always triggers -EXDEV for
-> nd_jump_root() -- if we ever add another "scoped lookup" flag then the
-> logic will have to be further reworked.
->=20
-> (It should be noted that the new version doesn't always end with a
-> "return", but you could change it to act that way given the above
-> assumption.)
->=20
-> > And if you get rid of the unnecessary else, moving the LOOKUP_IN_ROOT
-> > inside the if-statement works fine.
-> >=20
-> > So this could be something like
-> >=20
-> >     --- a/fs/namei.c
-> >     +++ b/fs/namei.c
-> >     @@ -2194,11 +2196,19 @@ static const char *path_init(struct
-> > nameidata *nd, unsigned flags)
-> >=20
-> >         nd->m_seq =3D read_seqbegin(&mount_lock);
-> >         if (*s =3D=3D '/') {
-> >     -           set_root(nd);
-> >     -           if (likely(!nd_jump_root(nd)))
-> >     -                   return s;
-> >     -           return ERR_PTR(-ECHILD);
-> >     -   } else if (nd->dfd =3D=3D AT_FDCWD) {
-> >     +           /* LOOKUP_IN_ROOT treats absolute paths as being
-> > relative-to-dirfd. */
-> >     +           if (!(flags & LOOKUP_IN_ROOT)) {
-> >     +                   set_root(nd);
-> >     +                   if (likely(!nd_jump_root(nd)))
-> >     +                           return s;
-> >     +                   return ERR_PTR(-ECHILD);
-> >     +           }
-> >     +
-> >     +           /* Skip initial '/' for LOOKUP_IN_ROOT */
-> >     +           do { s++; } while (*s =3D=3D '/');
-> >     +   }
-> >     +
-> >     +   if (nd->dfd =3D=3D AT_FDCWD) {
-> >                 if (flags & LOOKUP_RCU) {
-> >                         struct fs_struct *fs =3D current->fs;
-> >                         unsigned seq;
-> >=20
-> > instead. The patch ends up slightly bigger (due to the re-indentation)
-> > but now it handles all the "start at root" in the same place. Doesn't
-> > that make sense?
->=20
-> It is correct (though I'd need to clean it up a bit to handle
-> nd_jump_root() correctly), and if you really would like me to change it
-> I will -- but I just don't agree that it's cleaner.
-
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---2tj3n7ljtot3r57d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXaFTZwAKCRCdlLljIbnQ
-EsoyAQDTzuZiYFf1pW7tBymiBU+fSwe8/adLefrS9DH9oll0LQD+M2OnaEH8wDH5
-iC8HumWtmk7eUf1CcqNfwVk4mwQXYwU=
-=dEoe
------END PGP SIGNATURE-----
-
---2tj3n7ljtot3r57d--
