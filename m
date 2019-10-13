@@ -2,234 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8B9D5346
-	for <lists+linux-mips@lfdr.de>; Sun, 13 Oct 2019 01:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3396D5403
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Oct 2019 05:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727340AbfJLXWG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 12 Oct 2019 19:22:06 -0400
-Received: from smtp.gentoo.org ([140.211.166.183]:45390 "EHLO smtp.gentoo.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727189AbfJLXWG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 12 Oct 2019 19:22:06 -0400
-Received: from [192.168.1.13] (c-76-114-240-162.hsd1.md.comcast.net [76.114.240.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: kumba)
-        by smtp.gentoo.org (Postfix) with ESMTPSA id D1EC034BCAC;
-        Sat, 12 Oct 2019 23:22:03 +0000 (UTC)
-Subject: Re: [PATCH 3/3] rtc: ds1685: add indirect access method and remove
- plat_read/plat_write
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org
-References: <20191011150546.9186-1-tbogendoerfer@suse.de>
- <20191011150546.9186-3-tbogendoerfer@suse.de>
-From:   Joshua Kinard <kumba@gentoo.org>
-Openpgp: preference=signencrypt
-Message-ID: <0e160839-9038-6f74-fdb6-8128344fb4b8@gentoo.org>
-Date:   Sat, 12 Oct 2019 19:22:01 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191011150546.9186-3-tbogendoerfer@suse.de>
-Content-Type: text/plain; charset=utf-8
+        id S1728322AbfJMDbR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Oct 2019 23:31:17 -0400
+Received: from mail-eopbgr730095.outbound.protection.outlook.com ([40.107.73.95]:64839
+        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727492AbfJMDbQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 12 Oct 2019 23:31:16 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JHGaRtShuzS6IueVSZzMqO4okFv0zru/H1tRPd4c+CwfYha+cR2NurR5qhyN8ZX4fHsuRjW6ce4xImbt3zrU9+YYQSAvxA/sZbG+fzzfLax7KopPhXm5YqiB0ElOX0qivoEpKPeHJqD40UiyOh7oBCCkS1Y7KkuzhKfAQQ0JKxY3rrShcqnh+elju8b0Qk6hrDj2aLUhWVNUc0JDeyTvISTz+9m5/iLiPOUcZdmXRvPlVYEhjb8BaXC39QZD+nAg+JvlEsxnnDxaxlQs+nwuTUCBPZm1XlNInL2PIrbHpqY4VT1dSx3xAVTONswc4fDA+j3p3/wJJYaeD3ulDeDwiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fetFGMIsLh012ohcyZaNNtCEqutjHcXRXVrdIi17i+8=;
+ b=WcEsN2+4Mk7FtxxMMxfdjb2NnwhQFbCDTmkHdn1w/N25Ou6RCHYphqs4cFhD1Li7OySbsXJ76hCe5kLvXeMV7Ys5zozFB63dmNX4+DLN9g/AMXfJqBbfNSwYQYcFJxR58KBnKsBZp9zdHIUPYiKG5qu/VG1M8myX092ROjx3INvA+D3Kh0YH/bGTgAv/Vpeh5iMv+uD8l5MVC6oXh0wk2s9HX2GuxRLumFSfozhw9CfRBAYCmEoGcYrWgsR+39Vpb8UYv1ZVSJ7Pa1m9gJCKvu0NQNjHeXe7NVnlAAqxMJ8wy28H6rfsxUfd99SVaVissjjNiD/7pVVxRWMDF5u0Aw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
+ dkim=pass header.d=mips.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fetFGMIsLh012ohcyZaNNtCEqutjHcXRXVrdIi17i+8=;
+ b=iNf0wdCCknkcmMcV6WTYL5SghfaxCyn05v2lat4je1TixCKa+C7YbvdMVhtwIPnkRkAEtgQkYQbpl3fI8dmDEb41u3Q36fsWfu79BdsZA97Yg017RafxYep7bKTNrpX1DdFkq/j5+xLz4ZqLdtSX/lOApHUihbovipSGVc5ch6s=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
+ MWHPR2201MB1295.namprd22.prod.outlook.com (10.174.162.23) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2347.21; Sun, 13 Oct 2019 03:31:13 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::c1dc:dba3:230c:e7f0]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::c1dc:dba3:230c:e7f0%8]) with mapi id 15.20.2347.021; Sun, 13 Oct 2019
+ 03:31:13 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     Paul Burton <pburton@wavecomp.com>
+CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        Paul Burton <pburton@wavecomp.com>,
+        kbuild test robot <lkp@intel.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH 1/3] MIPS: Always define builtin_cmdline
+Thread-Topic: [PATCH 1/3] MIPS: Always define builtin_cmdline
+Thread-Index: AQHVgT248msMlm/E7UGQ68Q2elJDbqdX6tQA
+Date:   Sun, 13 Oct 2019 03:31:12 +0000
+Message-ID: <MWHPR2201MB1277901C92F089D28E22EAA9C1910@MWHPR2201MB1277.namprd22.prod.outlook.com>
+References: <20191012204326.2564623-1-paul.burton@mips.com>
+In-Reply-To: <20191012204326.2564623-1-paul.burton@mips.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR07CA0019.namprd07.prod.outlook.com
+ (2603:10b6:a02:bc::32) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:18::12)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2601:646:8a00:9810:9d6:9cca:ff8c:efe0]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4710ce72-da1c-448b-e247-08d74f8dcbeb
+x-ms-traffictypediagnostic: MWHPR2201MB1295:
+x-ms-exchange-purlcount: 3
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MWHPR2201MB1295F0D2FDEA6176C995CEE9C1910@MWHPR2201MB1295.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 01894AD3B8
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(136003)(396003)(346002)(39830400003)(366004)(189003)(199004)(186003)(44832011)(476003)(256004)(66556008)(64756008)(305945005)(99286004)(6436002)(76176011)(7696005)(52116002)(7736002)(66446008)(6862004)(25786009)(46003)(446003)(8676002)(4326008)(11346002)(486006)(42882007)(81166006)(81156014)(9686003)(66476007)(66946007)(71200400001)(6306002)(229853002)(8936002)(6116002)(2906002)(33656002)(52536014)(478600001)(71190400001)(55016002)(14454004)(316002)(6246003)(74316002)(102836004)(54906003)(966005)(6506007)(386003)(5660300002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1295;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: pbeLcQjEuPub5rqImHLibKUcODaZb7F7tTAFl6gZ7nWWqfYWjyPk8bV/WMYCUAw8oyd8qh6wXPRsMTiMzSv1W/mEuukXELp4Pa9/tc+ftmXEAHmrckxVvA9wxrVfz28JrdgtBH4QamhdKdTBiCJisT39jBmCbMfuHuh5s2VwBvZkORv0tKyH0cDeyvPProEKu29/hUgXCWbsqn/Z7TtezoJY/Br1IOKNSQzxJml01Q5A7zjgE7J34lcP5pt1i73GpPMUJAtdUKvd9xTeslVg7ABA23KYC2B9IQV0lyx05u3Kd0GAZIyc61gcwbJvVLBg6HCfWVPL5Et8nN7YzlZzyZ+pwJe0KV3jkbuUbTao++Fjc9rGbqbPDPzp61P8MEDFYZn50o5NVSGCl+tmoJJqR7fI9J5nRxDaHXEHeqdXwQNsiqiE+GdB69EGkhyJ3dydIGlia6/E6yepzeURTnQU6g==
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4710ce72-da1c-448b-e247-08d74f8dcbeb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Oct 2019 03:31:12.9799
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KVki8Z32RhXN8tm3aStsDQEfDZa9UURjkYaX62tYrRUnyEKjde4OGIxypY9F6I8iWIAdR7sA5whEvchDCMsaNA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1295
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/11/2019 11:05, Thomas Bogendoerfer wrote:
-> Use of provided plat_read/plat_write introduces the problem of possible
-> different lifetime of rtc driver and plat_XXX function provider. As
-> this was only intended for SGI Octane (IP30) this patchset implements
-> a register indirect access method for IP30 and introduces an
-> access_type field in platform data to select how registers are
-> accessed. And since there are no resource allocating stunts needed
-> anymore it also gets rid of alloc_io_resources from platform data.
-> 
+Hello,
 
-Actually, I did it this way because IP32 was already in-tree, and IP30 was
-not.  So the default ds1685_{read,write} functions were geared for the
-in-tree machine, and IP30 brought along its own versions.  If IP30 support
-gets merged into the kernel, this isn't needed anymore, but I don't think
-this explanation accurately captures that.
+Paul Burton wrote:
+> Commit 7784cac69735 ("MIPS: cmdline: Clean up boot_command_line
+> initialization") made use of builtin_cmdline conditional upon plain C if
+> statements rather than preprocessor #ifdef's. This caused build failures
+> for configurations with CONFIG_CMDLINE_BOOL=3Dn where builtin_cmdline
+> wasn't defined, for example:
+>=20
+>    arch/mips/kernel/setup.c: In function 'bootcmdline_init':
+> >> arch/mips/kernel/setup.c:582:30: error: 'builtin_cmdline' undeclared
+>     (first use in this function); did you mean 'builtin_driver'?
+>       strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+>                                  ^~~~~~~~~~~~~~~
+>                                  builtin_driver
+>    arch/mips/kernel/setup.c:582:30: note: each undeclared identifier is
+>     reported only once for each function it appears in
+>=20
+> Fix this by defining builtin_cmdline as an empty string in the affected
+> configurations. All of the paths that use it should be optimized out
+> anyway so the data itself gets optimized away too.
 
-The chief difference between IP32 and IP30's manner of accessing the RTC
-is that IP32 has a 256-byte gap between each RTC register for unknown
-reasons (this is documented in the IP32 hardware data sheets I have), and
-access has to be MMIO'ed, since the RTC is hanging off of the MACE PCI
-structs, like every other device in IP32's code.  IP30 doesn't have this
-register gap to worry about, and it accesses the RTC registers via PIO.
+Series applied to mips-next.
 
+> MIPS: Always define builtin_cmdline
+>   commit b7340422cc16
+>   https://git.kernel.org/mips/c/b7340422cc16
+>  =20
+>   Signed-off-by: Paul Burton <paul.burton@mips.com>
+>   Fixes: 7784cac69735 ("MIPS: cmdline: Clean up boot_command_line initial=
+ization")
+>   Reported-by: kbuild test robot <lkp@intel.com>
+>   Reported-by: Nathan Chancellor <natechancellor@gmail.com>
+>=20
+> MIPS: Fix CONFIG_OF_EARLY_FLATTREE=3Dn builds
+>   commit 972727766ee4
+>   https://git.kernel.org/mips/c/972727766ee4
+>  =20
+>   Signed-off-by: Paul Burton <paul.burton@mips.com>
+>   Fixes: 7784cac69735 ("MIPS: cmdline: Clean up boot_command_line initial=
+ization")
+>   Reported-by: kbuild test robot <lkp@intel.com>
+>=20
+> MIPS: Make builtin_cmdline const & variable length
+>   commit 9dd422f69777
+>   https://git.kernel.org/mips/c/9dd422f69777
+>  =20
+>   Signed-off-by: Paul Burton <paul.burton@mips.com>
 
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> ---
->  arch/mips/sgi-ip32/ip32-platform.c |  2 +-
->  drivers/rtc/rtc-ds1685.c           | 67 ++++++++++++++++++++++++--------------
->  include/linux/rtc/ds1685.h         |  8 +++--
->  3 files changed, 48 insertions(+), 29 deletions(-)
-> 
-> diff --git a/arch/mips/sgi-ip32/ip32-platform.c b/arch/mips/sgi-ip32/ip32-platform.c
-> index 5a2a82148d8d..c3909bd8dd1a 100644
-> --- a/arch/mips/sgi-ip32/ip32-platform.c
-> +++ b/arch/mips/sgi-ip32/ip32-platform.c
-> @@ -115,7 +115,7 @@ ip32_rtc_platform_data[] = {
->  		.bcd_mode = true,
->  		.no_irq = false,
->  		.uie_unsupported = false,
-> -		.alloc_io_resources = true,
-> +		.access_type = ds1685_reg_direct,
->  		.plat_prepare_poweroff = ip32_prepare_poweroff,
->  	},
->  };
-> diff --git a/drivers/rtc/rtc-ds1685.c b/drivers/rtc/rtc-ds1685.c
-> index 349a8d1caca1..9c5d064ebb6c 100644
-> --- a/drivers/rtc/rtc-ds1685.c
-> +++ b/drivers/rtc/rtc-ds1685.c
-> @@ -59,6 +59,32 @@ ds1685_write(struct ds1685_priv *rtc, int reg, u8 value)
->  }
->  /* ----------------------------------------------------------------------- */
->  
-> +/* Indirect read/write functions */
-> +
-> +/**
-> + * ds1685_indir_read - read a value from an rtc register.
-> + * @rtc: pointer to the ds1685 rtc structure.
-> + * @reg: the register address to read.
-> + */
-> +static u8
-> +ds1685_indir_read(struct ds1685_priv *rtc, int reg)
-> +{
-> +	writeb(reg, rtc->regs);
-> +	return readb(rtc->data);
-> +}
-> +
-> +/**
-> + * ds1685_indir_write - write a value to an rtc register.
-> + * @rtc: pointer to the ds1685 rtc structure.
-> + * @reg: the register address to write.
-> + * @value: value to write to the register.
-> + */
-> +static void
-> +ds1685_indir_write(struct ds1685_priv *rtc, int reg, u8 value)
-> +{
-> +	writeb(reg, rtc->regs);
-> +	writeb(value, rtc->data);
-> +}
+Thanks,
+    Paul
 
-IP30 applied a mask of 0x7f on the 'reg' parameter on both of its
-read/write functions, which was from Stan's original code.  Is this mask
-not needed any more with the other changes you made to the IP30 code?  I
-remember trying to do without this mask once long ago, and something broke,
-so I have left it in ever since.
-
->  
->  /* ----------------------------------------------------------------------- */
->  /* Inlined functions */
-> @@ -1062,16 +1088,25 @@ ds1685_rtc_probe(struct platform_device *pdev)
->  	if (!rtc)
->  		return -ENOMEM;
->  
-> -	/*
-> -	 * Allocate/setup any IORESOURCE_MEM resources, if required.  Not all
-> -	 * platforms put the RTC in an easy-access place.  Like the SGI Octane,
-> -	 * which attaches the RTC to a "ByteBus", hooked to a SuperIO chip
-> -	 * that sits behind the IOC3 PCI metadevice.
-> -	 */
-> -	if (pdata->alloc_io_resources) {
-> +	/* Setup resources and access functions */
-> +	switch (pdata->access_type) {
-> +	case ds1685_reg_direct:
-> +		rtc->regs = devm_platform_ioremap_resource(pdev, 0);
-> +		if (IS_ERR(rtc->regs))
-> +			return PTR_ERR(rtc->regs);
-> +		rtc->read = ds1685_read;
-> +		rtc->write = ds1685_write;
-> +		break;
-> +	case ds1685_reg_indirect:
->  		rtc->regs = devm_platform_ioremap_resource(pdev, 0);
->  		if (IS_ERR(rtc->regs))
->  			return PTR_ERR(rtc->regs);
-> +		rtc->data = devm_platform_ioremap_resource(pdev, 1);
-> +		if (IS_ERR(rtc->data))
-> +			return PTR_ERR(rtc->data);
-> +		rtc->read = ds1685_indir_read;
-> +		rtc->write = ds1685_indir_write;
-> +		break;
->  	}
-
-I believe there should be a default case in the switch statement to catch
-and return -ENXIO so that we don't wind up with rtc->{read,write} being
-NULL.
-
-I also think the "indir" name isn't really descriptive of why IP32 and
-IP30 effectively have different read/write mechanisms.  Might want to add
-some comments to explain that IP32 uses MMIO and can just directly
-read/write the registers, while IP30 uses PIO and has to go the route of
-writing to an 'addr' register, then reading the result from a 'data'
-register.
-
-
->  
->  	/* Get the register step size. */
-> @@ -1080,24 +1115,6 @@ ds1685_rtc_probe(struct platform_device *pdev)
->  	else
->  		rtc->regstep = 1;
->  
-> -	/* Platform read function, else default if mmio setup */
-> -	if (pdata->plat_read)
-> -		rtc->read = pdata->plat_read;
-> -	else
-> -		if (pdata->alloc_io_resources)
-> -			rtc->read = ds1685_read;
-> -		else
-> -			return -ENXIO;
-> -
-> -	/* Platform write function, else default if mmio setup */
-> -	if (pdata->plat_write)
-> -		rtc->write = pdata->plat_write;
-> -	else
-> -		if (pdata->alloc_io_resources)
-> -			rtc->write = ds1685_write;
-> -		else
-> -			return -ENXIO;
-> -
->  	/* Platform pre-shutdown function, if defined. */
->  	if (pdata->plat_prepare_poweroff)
->  		rtc->prepare_poweroff = pdata->plat_prepare_poweroff;
-> diff --git a/include/linux/rtc/ds1685.h b/include/linux/rtc/ds1685.h
-> index 101c7adc05a2..67ee9d20cc5a 100644
-> --- a/include/linux/rtc/ds1685.h
-> +++ b/include/linux/rtc/ds1685.h
-> @@ -42,6 +42,7 @@
->  struct ds1685_priv {
->  	struct rtc_device *dev;
->  	void __iomem *regs;
-> +	void __iomem *data;
->  	u32 regstep;
->  	int irq_num;
->  	bool bcd_mode;
-> @@ -70,12 +71,13 @@ struct ds1685_rtc_platform_data {
->  	const bool bcd_mode;
->  	const bool no_irq;
->  	const bool uie_unsupported;
-> -	const bool alloc_io_resources;
-> -	u8 (*plat_read)(struct ds1685_priv *, int);
-> -	void (*plat_write)(struct ds1685_priv *, int, u8);
->  	void (*plat_prepare_poweroff)(void);
->  	void (*plat_wake_alarm)(void);
->  	void (*plat_post_ram_clear)(void);
-> +	enum {
-> +		ds1685_reg_direct,
-> +		ds1685_reg_indirect
-> +	} access_type;
->  };
->  
->  
-> -- 2.16.4
+[ This message was auto-generated; if you believe anything is incorrect
+  then please email paul.burton@mips.com to report it. ]
