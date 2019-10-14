@@ -2,92 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9F3D67EC
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Oct 2019 19:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 279B8D693D
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Oct 2019 20:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726637AbfJNREf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Oct 2019 13:04:35 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:42679 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729900AbfJNREf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Oct 2019 13:04:35 -0400
-Received: by mail-pg1-f193.google.com with SMTP id f14so5337939pgi.9;
-        Mon, 14 Oct 2019 10:04:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=n/I1tVzEHS6pyPJoUPz4zmjBgF6u/gO332wS+Ob4sgk=;
-        b=X71N/mhkPQlqHWjqxVXffTOIjUSENPiZ2PEDEWcKonDRymcpUScdWomGeq6ejOQUnF
-         MjjkxiphZVq9y9n4/r9FxqZxokdjo8qD/f1NmhrvrVp9ti1szVInFc/D9Kr/sZI0GZcO
-         dbHh0GOI/UlNEjukQyBiOn0dB0wnu60JydxGFxoboxYdmRC/kuUAcCCPR0913aXj3F58
-         A/b6PY69lWNruKFsL27rT7Jff1HxmG3JCcC7XafvDtU0MiDiK9LqEAYueoJlHCP9i/0A
-         v50yrOFxUSyHRbPOrT0Zwgv/vfklDFSr4Y4cxFG+2ew6ferWCPzj/OkgWLobc/ppVP1f
-         9s3Q==
+        id S1733136AbfJNSPM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Oct 2019 14:15:12 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:42147 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732330AbfJNSPM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Oct 2019 14:15:12 -0400
+Received: by mail-ot1-f67.google.com with SMTP id c10so14596047otd.9;
+        Mon, 14 Oct 2019 11:15:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=n/I1tVzEHS6pyPJoUPz4zmjBgF6u/gO332wS+Ob4sgk=;
-        b=h10bnqTtvxEDac/C/rooPm6fkrE+GC3kyS74xn3GoxIjJetQePJ+rlHUfxPpTiLznb
-         o7F1faqzOE/MF/Gh2NvVj6a7o6aYAscc5yRTk2t3xl79xHo2wMzbCp0bTDEs7/SYbmln
-         6n/UnhOvymanK0Y5ieFfgMPBS1Sc06EyzdRWvQXjewePC9MteYM2PJy0qnB4Ac2yCqb4
-         kuITAniL3ExEEDLHs91UUJyq3M8dECP8D8xJLHLWGQ7TnS+zf/cMCcsafIl8OE7Q5hgW
-         DQQ8pZ+g0VqqLGryLCFAPgxQ2wYyt7bLxKwLBe468RJsc5WlSkmgMWWLeOPeY9+uE6iU
-         3Dfw==
-X-Gm-Message-State: APjAAAUKr+D1PLSf+4L5Rv33n6oGblUw+d7XD102DdjMHHXV50ROo8NM
-        5QGIHBKi+o6s5Vh4zs/M7I8=
-X-Google-Smtp-Source: APXvYqyWIlGqmcwCMd78vdOyECLPKhULsHip7DNsb6KkOVzbAMePLqfNtjmAzmRFhuCvqT9NoNVmKQ==
-X-Received: by 2002:a63:eb52:: with SMTP id b18mr8737374pgk.205.1571072673905;
-        Mon, 14 Oct 2019 10:04:33 -0700 (PDT)
-Received: from gmail.com ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id c10sm18544111pfo.49.2019.10.14.10.04.32
+        bh=73oJVS4+Wov4CaoNHWnI0N3ommx1nafBqtjG04AIdio=;
+        b=RZtpz++jl+XqSw6vWw205Hn1j35K3e0LDC3lQTF98kRMXn43JcIT/75W1p0teBw3WP
+         O0pRIcYPHlZ6XE53V4jwo20G3cQHKt3InILP25j5Hy/SBLwjs9xWeUTKskuS8o/SGeH1
+         4TroOqFKMs6TZ2Q2AEcsg68Qa0CtabV4IUUEI2/pz+Noko7VnAB71bj1Q8SMwtob0jJW
+         MXw0czk9MNn2iCWKDYYTJhRCSQlQsXCkcGUpF91fHEXu147VslEjbuI2wPmmPrX1LmfU
+         CXLJu42xq33wo4TeCWCUgom6p+7AvbLLZwAkoJbgc0mFU5GjfXJfcbk657FMQijUKUKe
+         fGYQ==
+X-Gm-Message-State: APjAAAVW+iSbVhj+ooUKCG1kCIm/pmaXwPZB6bUITap5KmV3tIJmpdFI
+        bsz+fcjbqNUKboKgf6qbLCu2vX8=
+X-Google-Smtp-Source: APXvYqxVyk1pbofRFhvENaXUJqEwHRpF+qQIjgRG5uIp2ILgHRUTeT7k/T8NtpvpVOA/wJ4MAVr/2A==
+X-Received: by 2002:a9d:6b82:: with SMTP id b2mr2740392otq.56.1571076911521;
+        Mon, 14 Oct 2019 11:15:11 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id o23sm5952876ote.67.2019.10.14.11.15.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2019 10:04:33 -0700 (PDT)
-From:   Paul Burton <paulburton89@gmail.com>
-X-Google-Original-From: Paul Burton <paul.burton@mips.com>
-Date:   Mon, 14 Oct 2019 10:04:40 -0700
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org
-Subject: Re: [EXTERNAL]Re: Build regressions/improvements in v5.4-rc3
-Message-ID: <20191014170440.mvwgnj4stpeuzzey@gmail.com>
-References: <20191014063507.5131-1-geert@linux-m68k.org>
- <CAMuHMdVm6WMQARNKyFEWybJHySJK0NSWEiy+Y=yXSwTsZrcXVA@mail.gmail.com>
+        Mon, 14 Oct 2019 11:15:10 -0700 (PDT)
+Date:   Mon, 14 Oct 2019 13:15:10 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Zhou Yanjie <zhouyanjie@zoho.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, paul.burton@mips.com, mark.rutland@arm.com,
+        syq@debian.org, ulf.hansson@linaro.org, linus.walleij@linaro.org,
+        armijn@tjaldur.nl, tglx@linutronix.de, yuehaibing@huawei.com,
+        malat@debian.org, ezequiel@collabora.com, paul@crapouillou.net
+Subject: Re: [PATCH 4/6 v2] dt-bindings: MMC: Add X1000 bindings.
+Message-ID: <20191014181510.GA10839@bogus>
+References: <1567669089-88693-1-git-send-email-zhouyanjie@zoho.com>
+ <1570857203-49192-1-git-send-email-zhouyanjie@zoho.com>
+ <1570857203-49192-5-git-send-email-zhouyanjie@zoho.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdVm6WMQARNKyFEWybJHySJK0NSWEiy+Y=yXSwTsZrcXVA@mail.gmail.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <1570857203-49192-5-git-send-email-zhouyanjie@zoho.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Geert, Greg,
-
-On Mon, Oct 14, 2019 at 09:04:21AM +0200, Geert Uytterhoeven wrote:
-> On Mon, Oct 14, 2019 at 8:53 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > JFYI, when comparing v5.4-rc3[1] to v5.4-rc2[3], the summaries are:
-> >   - build errors: +1/-0
+On Sat, 12 Oct 2019 13:13:18 +0800, Zhou Yanjie wrote:
+> Add the MMC bindings for the X1000 Soc from Ingenic.
 > 
->   + /kisskb/src/drivers/staging/octeon/ethernet-spi.c: error:
-> 'OCTEON_IRQ_RML' undeclared (first use in this function):  => 198:19,
-> 224:12
+> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+> ---
+>  Documentation/devicetree/bindings/mmc/jz4740.txt | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> mips-allmodconfig
-> 
-> > [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/4f5cafb5cb8471e54afdc9054d973535614f7675/ (232 out of 242 configs)
-> > [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/da0c9ea146cbe92b832f1b0f694840ea8eb33cce/ (233 out of 242 configs)
 
-I believe this should be fixed by this patch:
-
-  https://lore.kernel.org/lkml/20191007231741.2012860-1-paul.burton@mips.com/
-
-It's currently in staging-next as commit 17a29fea086b ("staging/octeon:
-Use stubs for MIPS && !CAVIUM_OCTEON_SOC"). Could we get that merged in
-the 5.4 cycle instead of 5.5?
-
-Thanks,
-    Paul
+Acked-by: Rob Herring <robh@kernel.org>
