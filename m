@@ -2,213 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 384E2D6B5A
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Oct 2019 23:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CB2D6CBA
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Oct 2019 03:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730392AbfJNVqi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Oct 2019 17:46:38 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53098 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729054AbfJNVqi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 14 Oct 2019 17:46:38 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 27535B2D8;
-        Mon, 14 Oct 2019 21:46:36 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH v2] rtc: ds1685: add indirect access method and remove plat_read/plat_write
-Date:   Mon, 14 Oct 2019 23:46:21 +0200
-Message-Id: <20191014214621.25257-1-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.16.4
+        id S1727268AbfJOBHv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Oct 2019 21:07:51 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:39844 "EHLO
+        mail.loongson.cn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727250AbfJOBHv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Oct 2019 21:07:51 -0400
+Received: from linux.loongson.cn (unknown [10.20.41.27])
+        by mail (Coremail) with SMTP id QMiowPDxr2PeG6Vd9scQAA--.3S2;
+        Tue, 15 Oct 2019 09:07:42 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     paul.burton@mips.com, ralf@linux-mips.org, jhogan@kernel.org,
+        chenhc@lemote.com
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Loongson: Make default kernel log buffer size as 128KB for Loongson3
+Date:   Tue, 15 Oct 2019 09:07:36 +0800
+Message-Id: <1571101656-871-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: QMiowPDxr2PeG6Vd9scQAA--.3S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZr1rXF45Ar4rtr1kury5twb_yoWftFc_Jr
+        W2kr1UWw45JrW7uw4xZa1rWr4UZa45Z3WFkr17XrW7XayYkr13Jw4Dtr4UG3Z8ua4qyr4f
+        Z3ykJF92kF1IqjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxxYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_JFC_Wr1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7VAKI48G6xCj
+        nVAKz4kxMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUx3
+        C7UUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-SGI Octane (IP30) doesn't have RTC register directly mapped into CPU
-address space, but accesses RTC registers with an address and data
-register.  This is now supported by additional access functions, which
-are selected by a new field in platform data. Removed plat_read/plat_write
-since there is no user and their usage could introduce lifetime issue,
-when functions are placed in different modules.
+When I update kernel with loongson3_defconfig based on the Loongson 3A3000
+platform, then using dmesg command to show kernel ring buffer, the initial
+kernel messages have disappeared due to the log buffer is too small, it is
+better to change the default kernel log buffer size from 16KB to 128KB.
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
-Changes in v2:
+ arch/mips/configs/loongson3_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-- check if rtc->read and rtc->write are setup
-- spell out indirect in function names and explain difference
-  between standard and indirect functions
-
- arch/mips/sgi-ip32/ip32-platform.c |  2 +-
- drivers/rtc/rtc-ds1685.c           | 78 +++++++++++++++++++++++++-------------
- include/linux/rtc/ds1685.h         |  8 ++--
- 3 files changed, 58 insertions(+), 30 deletions(-)
-
-diff --git a/arch/mips/sgi-ip32/ip32-platform.c b/arch/mips/sgi-ip32/ip32-platform.c
-index 5a2a82148d8d..c3909bd8dd1a 100644
---- a/arch/mips/sgi-ip32/ip32-platform.c
-+++ b/arch/mips/sgi-ip32/ip32-platform.c
-@@ -115,7 +115,7 @@ ip32_rtc_platform_data[] = {
- 		.bcd_mode = true,
- 		.no_irq = false,
- 		.uie_unsupported = false,
--		.alloc_io_resources = true,
-+		.access_type = ds1685_reg_direct,
- 		.plat_prepare_poweroff = ip32_prepare_poweroff,
- 	},
- };
-diff --git a/drivers/rtc/rtc-ds1685.c b/drivers/rtc/rtc-ds1685.c
-index 349a8d1caca1..98d06b3ee913 100644
---- a/drivers/rtc/rtc-ds1685.c
-+++ b/drivers/rtc/rtc-ds1685.c
-@@ -31,7 +31,10 @@
- 
- 
- /* ----------------------------------------------------------------------- */
--/* Standard read/write functions if platform does not provide overrides */
-+/*
-+ *  Standard read/write
-+ *  all registers are mapped in CPU address space
-+ */
- 
- /**
-  * ds1685_read - read a value from an rtc register.
-@@ -59,6 +62,35 @@ ds1685_write(struct ds1685_priv *rtc, int reg, u8 value)
- }
- /* ----------------------------------------------------------------------- */
- 
-+/*
-+ * Indirect read/write functions
-+ * access happens via address and data register mapped in CPU address space
-+ */
-+
-+/**
-+ * ds1685_indirect_read - read a value from an rtc register.
-+ * @rtc: pointer to the ds1685 rtc structure.
-+ * @reg: the register address to read.
-+ */
-+static u8
-+ds1685_indirect_read(struct ds1685_priv *rtc, int reg)
-+{
-+	writeb(reg, rtc->regs);
-+	return readb(rtc->data);
-+}
-+
-+/**
-+ * ds1685_indirect_write - write a value to an rtc register.
-+ * @rtc: pointer to the ds1685 rtc structure.
-+ * @reg: the register address to write.
-+ * @value: value to write to the register.
-+ */
-+static void
-+ds1685_indirect_write(struct ds1685_priv *rtc, int reg, u8 value)
-+{
-+	writeb(reg, rtc->regs);
-+	writeb(value, rtc->data);
-+}
- 
- /* ----------------------------------------------------------------------- */
- /* Inlined functions */
-@@ -1062,42 +1094,36 @@ ds1685_rtc_probe(struct platform_device *pdev)
- 	if (!rtc)
- 		return -ENOMEM;
- 
--	/*
--	 * Allocate/setup any IORESOURCE_MEM resources, if required.  Not all
--	 * platforms put the RTC in an easy-access place.  Like the SGI Octane,
--	 * which attaches the RTC to a "ByteBus", hooked to a SuperIO chip
--	 * that sits behind the IOC3 PCI metadevice.
--	 */
--	if (pdata->alloc_io_resources) {
-+	/* Setup resources and access functions */
-+	switch (pdata->access_type) {
-+	case ds1685_reg_direct:
-+		rtc->regs = devm_platform_ioremap_resource(pdev, 0);
-+		if (IS_ERR(rtc->regs))
-+			return PTR_ERR(rtc->regs);
-+		rtc->read = ds1685_read;
-+		rtc->write = ds1685_write;
-+		break;
-+	case ds1685_reg_indirect:
- 		rtc->regs = devm_platform_ioremap_resource(pdev, 0);
- 		if (IS_ERR(rtc->regs))
- 			return PTR_ERR(rtc->regs);
-+		rtc->data = devm_platform_ioremap_resource(pdev, 1);
-+		if (IS_ERR(rtc->data))
-+			return PTR_ERR(rtc->data);
-+		rtc->read = ds1685_indirect_read;
-+		rtc->write = ds1685_indirect_write;
-+		break;
- 	}
- 
-+	if (!rtc->read || !rtc->write)
-+		return -ENXIO;
-+
- 	/* Get the register step size. */
- 	if (pdata->regstep > 0)
- 		rtc->regstep = pdata->regstep;
- 	else
- 		rtc->regstep = 1;
- 
--	/* Platform read function, else default if mmio setup */
--	if (pdata->plat_read)
--		rtc->read = pdata->plat_read;
--	else
--		if (pdata->alloc_io_resources)
--			rtc->read = ds1685_read;
--		else
--			return -ENXIO;
--
--	/* Platform write function, else default if mmio setup */
--	if (pdata->plat_write)
--		rtc->write = pdata->plat_write;
--	else
--		if (pdata->alloc_io_resources)
--			rtc->write = ds1685_write;
--		else
--			return -ENXIO;
--
- 	/* Platform pre-shutdown function, if defined. */
- 	if (pdata->plat_prepare_poweroff)
- 		rtc->prepare_poweroff = pdata->plat_prepare_poweroff;
-diff --git a/include/linux/rtc/ds1685.h b/include/linux/rtc/ds1685.h
-index 101c7adc05a2..67ee9d20cc5a 100644
---- a/include/linux/rtc/ds1685.h
-+++ b/include/linux/rtc/ds1685.h
-@@ -42,6 +42,7 @@
- struct ds1685_priv {
- 	struct rtc_device *dev;
- 	void __iomem *regs;
-+	void __iomem *data;
- 	u32 regstep;
- 	int irq_num;
- 	bool bcd_mode;
-@@ -70,12 +71,13 @@ struct ds1685_rtc_platform_data {
- 	const bool bcd_mode;
- 	const bool no_irq;
- 	const bool uie_unsupported;
--	const bool alloc_io_resources;
--	u8 (*plat_read)(struct ds1685_priv *, int);
--	void (*plat_write)(struct ds1685_priv *, int, u8);
- 	void (*plat_prepare_poweroff)(void);
- 	void (*plat_wake_alarm)(void);
- 	void (*plat_post_ram_clear)(void);
-+	enum {
-+		ds1685_reg_direct,
-+		ds1685_reg_indirect
-+	} access_type;
- };
- 
- 
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index 90ee008..3aa2201 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -12,7 +12,7 @@ CONFIG_TASKSTATS=y
+ CONFIG_TASK_DELAY_ACCT=y
+ CONFIG_TASK_XACCT=y
+ CONFIG_TASK_IO_ACCOUNTING=y
+-CONFIG_LOG_BUF_SHIFT=14
++CONFIG_LOG_BUF_SHIFT=17
+ CONFIG_MEMCG=y
+ CONFIG_MEMCG_SWAP=y
+ CONFIG_BLK_CGROUP=y
 -- 
-2.16.4
+2.1.0
+
 
