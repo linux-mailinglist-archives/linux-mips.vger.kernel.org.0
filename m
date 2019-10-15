@@ -2,158 +2,154 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D8ED7F31
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Oct 2019 20:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 768B4D7F62
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Oct 2019 20:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389205AbfJOSmG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Oct 2019 14:42:06 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:40496 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389208AbfJOSmG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Oct 2019 14:42:06 -0400
-Received: by mail-qt1-f194.google.com with SMTP id m61so32051243qte.7
-        for <linux-mips@vger.kernel.org>; Tue, 15 Oct 2019 11:42:05 -0700 (PDT)
+        id S1726834AbfJOSxR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Oct 2019 14:53:17 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:35843 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726697AbfJOSxQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Oct 2019 14:53:16 -0400
+Received: by mail-pg1-f196.google.com with SMTP id 23so12691483pgk.3;
+        Tue, 15 Oct 2019 11:53:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YXiUOqo8ETclVClbFsr4YOWOeJ7XlxA5Qh2JOUOHtn0=;
-        b=ih4zeCbnEW9LSQmgDID0erLrP4wKSRd4quPFdjB7jDfMBRahOCBa+C67Dy1NqHkrCv
-         VJSNTqSrY43O2EJhupvXVshQ0BC82dIhxESVHTwLHkCEPN42OBS3yBTYdKusIr1FPyqX
-         wpUPZ/cGTRy5YK2T6ObGKxHp1+6vi2CjoWlyTCo/dPXrhBn0tNseTwJyJuKrduDqfttY
-         fd4SW/I4j0BpnaIdz6zO9hqQf6+agjiuheLCXQaQrYEDCeHJq0DF3gEtcT6Uvp1RF+B9
-         gDgx+ctEQBhsj7GuizlLnNWuM5pbIfjPRVvTdcRA7Ese4V0mQHl7lb1qg7KFEBXx5acS
-         G4wg==
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=gxBrl95Ves/UBT7JJY5pCxPb14GQ2WnyWP0Eh+ZW0mE=;
+        b=Bwp3mTn+ndpwnB5ppMeUJ3lxxt82iv/LnzNza53HhABvrWVvh/hbteZDEpq++KdV5U
+         1k3TKm1SuR7oG/g96k7VGJA5M9Waearj2E6bEJcYGVfFl2e4hlGAzm+Y/ooj34f3OThg
+         nBkZutOtVBo7cVOuc4T63WWDEdPMHoJ4N8NkRN9ITJ6BkM4k4yxYAnI3EDp3bjFkY62C
+         Ncu9+lGyPQobbIQMcvuIBisSRPO0ZHmEQl9J6iKHEqRj98SXJTU1yGDj/ZfzQNOxVsJ3
+         BLOTH1EtTt1v+MXgM8sHrFacYJphxTjBP3tcoRX1hlzHKtUIAaDrd9ePbdKGN37lFpKD
+         2H5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YXiUOqo8ETclVClbFsr4YOWOeJ7XlxA5Qh2JOUOHtn0=;
-        b=GVXbhF7Nj5ZEEoxhBUtog0LIgMgBet/8Q4bqjzqqff5heDA2h97SOotE7lJlmSVLSX
-         dG78RxkdvbBX/g1cKsl/XLeT2h59HVykxEV22Troigmem4EvHGUI9gIWHosBnfMJ0TNE
-         bCPnhaJOVjkp7rmNAcdtHZrcz+hdTD5L9wyAguTJqpf7v4WnEnShXdZ/DZZXDNlqbyyD
-         xenGjlB+oIUK2lwxfGLPAB39ciU3LO0tDHLnbhVNGjkctk+w9JPHj9BYwBzbYsOWR3f5
-         0Itfi+3RTJhigFuK3tolD51z7RguPNX2QuLHVbcuT/yth+4s44RRcoAu8f1kdXpN3qn+
-         eP/g==
-X-Gm-Message-State: APjAAAVozNGuRXJUIiaK+P9HbywLNUOvO5Q+xigr0q/zHbsgMYTJrOS7
-        /SlbIoHSSjS9uZ7bVq1P50NNtg==
-X-Google-Smtp-Source: APXvYqwar5I/V60pS57/UcDUw1cogFuq6+7hHVlNRpscniqz5EATufxt8kONpUilAAyTNCHiUcXZ9w==
-X-Received: by 2002:ac8:1c49:: with SMTP id j9mr41218038qtk.364.1571164924491;
-        Tue, 15 Oct 2019 11:42:04 -0700 (PDT)
-Received: from dhcp-41-57.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id o28sm9204198qkk.106.2019.10.15.11.42.01
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 15 Oct 2019 11:42:03 -0700 (PDT)
-Message-ID: <1571164920.5937.45.camel@lca.pw>
-Subject: Re: [PATCH V6 0/2] mm/debug: Add tests validating architecture page
- table helpers
-From:   Qian Cai <cai@lca.pw>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        James Hogan <jhogan@kernel.org>,
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=gxBrl95Ves/UBT7JJY5pCxPb14GQ2WnyWP0Eh+ZW0mE=;
+        b=nr2wfxtsjaiLnNihe576XstNxh2qqP3dAxJbsX1Hh0FNNDL3Or5ZsInm1bDnQzn6j1
+         cXmWJZ2VZzHhcXMsACoH8t7SIa53cETtW87KBJnTUAIxi8/1QRgvnIYMVih3BKMCYGqt
+         L/eoIifN7iwOnnjxwjjD5RFzlqcfzxBJ1tX0XhAxqjFSl+gKLvL33YNs1RVmd0GcVHmj
+         Bar5GhnHOjRHE9ACFgJtkcqLIo89reNL9bTJlRxOft8ZXK6tCqK+0gac/W3FDwtrXhIU
+         ZFC2Iabk/64QR3rHagYc8jir36NbbipeHQBGqdCIoSUxxujwC7vmMuS0kGKt7uG0ZB4W
+         /Ueg==
+X-Gm-Message-State: APjAAAWRc1+VXlrw1Ckrl+CJ/4QFynUCzW+rXZNrCPpaGxymTMPokPgd
+        VHdQElLEq64aZRSPS+E4TcI=
+X-Google-Smtp-Source: APXvYqzo5Gt/uMiVHyuN51jLi1A+BXy2FzWuZi6h/ALjPtXdFXuXFwsUsgP7pX292M0jSGuM4GbsTQ==
+X-Received: by 2002:a17:90a:8c02:: with SMTP id a2mr9570pjo.79.1571165593864;
+        Tue, 15 Oct 2019 11:53:13 -0700 (PDT)
+Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
+        by smtp.gmail.com with ESMTPSA id 19sm51467pjd.23.2019.10.15.11.53.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Oct 2019 11:53:13 -0700 (PDT)
+From:   Paul Burton <paulburton89@gmail.com>
+X-Google-Original-From: Paul Burton <paul.burton@mips.com>
+Date:   Tue, 15 Oct 2019 11:53:21 -0700
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Huacai Chen <chenhc@lemote.com>,
         Paul Burton <paul.burton@mips.com>,
         Ralf Baechle <ralf@linux-mips.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 15 Oct 2019 14:42:00 -0400
-In-Reply-To: <c052784a-a5d7-878e-cd97-01daa90c0ed8@arm.com>
-References: <1571131302-32290-1-git-send-email-anshuman.khandual@arm.com>
-         <1571150502.5937.39.camel@lca.pw>
-         <c052784a-a5d7-878e-cd97-01daa90c0ed8@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6 (3.22.6-10.el7) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        James Hogan <jhogan@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: Loongson: Make default kernel log buffer size as
+ 128KB for Loongson3
+Message-ID: <20191015184745.xxihqrcaezbazzgm@lantea.localdomain>
+References: <1571101656-871-1-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H573fv+NVqBRgU38BRDDX=syj3gUqnJqRp4CdBx+QcdpQ@mail.gmail.com>
+ <d897527b-3c36-41a8-b878-64a099cbdfa0@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d897527b-3c36-41a8-b878-64a099cbdfa0@loongson.cn>
+X-Mutt-References: <d897527b-3c36-41a8-b878-64a099cbdfa0@loongson.cn>
+X-Mutt-Fcc: ~/sent
+User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 2019-10-15 at 20:51 +0530, Anshuman Khandual wrote:
-> 
-> On 10/15/2019 08:11 PM, Qian Cai wrote:
-> > The x86 will crash with linux-next during boot due to this series (v5) with the
-> > config below plus CONFIG_DEBUG_VM_PGTABLE=y. I am not sure if v6 would address
-> > it.
+Hi Tiezhu & Huacai,
+
+On Tue, Oct 15, 2019 at 12:00:25PM +0800, Tiezhu Yang wrote:
+> On 10/15/2019 11:36 AM, Huacai Chen wrote:
+> > On Tue, Oct 15, 2019 at 10:12 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+> > > When I update kernel with loongson3_defconfig based on the Loongson 3A3000
+> > > platform, then using dmesg command to show kernel ring buffer, the initial
+> > > kernel messages have disappeared due to the log buffer is too small, it is
+> > > better to change the default kernel log buffer size from 16KB to 128KB.
+> > > 
+> > > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> > > ---
+> > >   arch/mips/configs/loongson3_defconfig | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+> > > index 90ee008..3aa2201 100644
+> > > --- a/arch/mips/configs/loongson3_defconfig
+> > > +++ b/arch/mips/configs/loongson3_defconfig
+> > > @@ -12,7 +12,7 @@ CONFIG_TASKSTATS=y
+> > >   CONFIG_TASK_DELAY_ACCT=y
+> > >   CONFIG_TASK_XACCT=y
+> > >   CONFIG_TASK_IO_ACCOUNTING=y
+> > > -CONFIG_LOG_BUF_SHIFT=14
+> > > +CONFIG_LOG_BUF_SHIFT=17
+> > Hi, Tiezhu,
 > > 
-> > https://raw.githubusercontent.com/cailca/linux-mm/master/x86.config
-> > 
-> > [   33.862600][    T1] page:ffffea0009000000 is uninitialized and poisoned
-> > [   33.862608][    T1] raw: ffffffffffffffff ffffffffffffffff ffffffffffffffff
-> > ffffff871140][    T1]  ? _raw_spin_unlock_irq+0x27/0x40
-> > [   33.871140][    T1]  ? rest_init+0x307/0x307
-> > [   33.871140][    T1]  kernel_init+0x11/0x139
-> > [   33.871140][    T1]  ? rest_init+0x307/0x307
-> > [   33.871140][    T1]  ret_from_fork+0x27/0x50
-> > [   33.871140][    T1] Modules linked in:
-> > [   33.871140][    T1] ---[ end trace e99d392b0f7befbd ]---
-> > [   33.871140][    T1] RIP: 0010:alloc_gigantic_page_order+0x3fe/0x490
+> > Why you choose 128KB but not 64KB or 256KB? I found 64KB is enough for
+> > our cases. And if you really need more, I think 256KB could be better
+> > because there are many platforms choose 256KB.
 > 
-> Hmm, with defconfig (DEBUG_VM=y and DEBUG_VM_PGTABLE=y) it does not crash but
-> with the config above, it does. Just wondering if it is possible that these
-> pages might not been initialized yet because DEFERRED_STRUCT_PAGE_INIT=y ?
-
-Yes, this patch works fine.
-
-diff --git a/init/main.c b/init/main.c
-index 676d8020dd29..591be8f9e8e0 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -1177,7 +1177,6 @@ static noinline void __init kernel_init_freeable(void)
-        workqueue_init();
- 
-        init_mm_internals();
--       debug_vm_pgtable();
- 
-        do_pre_smp_initcalls();
-        lockup_detector_init();
-@@ -1186,6 +1185,8 @@ static noinline void __init kernel_init_freeable(void)
-        sched_init_smp();
- 
-        page_alloc_init_late();
-+       debug_vm_pgtable();
-+
-        /* Initialize page ext after all struct pages are initialized. */
-        page_ext_init();
-
+> Hi Huacai,
 > 
-> [   13.898549][    T1] page:ffffea0005000000 is uninitialized and poisoned
-> [   13.898549][    T1] raw: ffffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffff
-> [   13.898549][    T1] raw: ffffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffff
-> [   13.898549][    T1] page dumped because: VM_BUG_ON_PAGE(PagePoisoned(p))
-> [   13.898549][    T1] ------------[ cut here ]------------
-> [   13.898549][    T1] kernel BUG at ./include/linux/mm.h:1107!
-> [   13.898549][    T1] invalid opcode: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN PTI
-> [   13.898549][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.4.0-rc3-next-20191015+ #
+> Thanks for your reply and suggestion, I will send a v2 patch.
+
+Thanks for the patches.
+
+I actually have a slight preference for 128KB if you've no specific
+need, since 128KB is the default. Some quick grepping says that of 405
+defconfigs in tree (as of v5.4-rc3), we have:
+
+  LOG_BUF_SHIFT  Count
+             12  1
+	     13  3
+	     14  235
+	     15  18
+	     16  39
+	     17  90
+	     18  13
+	     19  2
+	     20  4
+
+ie. 16KiB is by far the most common, then second most common is the
+default 128KiB. 256KiB is comparatively rare.
+
+However, I don't think your v1 patch is quite right Tiezhu - since 17 is
+the default it shouldn't be specified in the defconfig at all. Did you
+manually make the change in the loongson3_defconfig file? If so please
+take a look at the savedefconfig make target & try something like this:
+
+  make ARCH=mips loongson3_defconfig
+  make ARCH=mips menuconfig
+  # Change LOG_BUF_SHIFT
+  make ARCH=mips savedefconfig
+  mv defconfig arch/mips/configs/loongson3_defconfig
+  git add -i arch/mips/configs/loongson3_defconfig
+  # Stage the relevant changes, drop the others
+
+You should end up with the CONFIG_LOG_BUF_SHIFT line just getting
+deleted.
+
+If on the other hand you really do prefer 256KiB for these systems
+please describe why in the commit message. It could be something as
+simple as "we have lots of memory so using 256KiB isn't a big deal, and
+gives us a better chance of preserving boot messages until they're
+examined". But if your log is getting this big before you look at it (or
+before something like systemd copies it into its journal), there's
+probably something fishy going on.
+
+Thanks,
+    Paul
