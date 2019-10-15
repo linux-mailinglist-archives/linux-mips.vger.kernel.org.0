@@ -2,19 +2,19 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EAFD75DC
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Oct 2019 14:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289B2D75E3
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Oct 2019 14:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730697AbfJOMKF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Oct 2019 08:10:05 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58068 "EHLO mx1.suse.de"
+        id S1731104AbfJOMKI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Oct 2019 08:10:08 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58308 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730681AbfJOMKF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 15 Oct 2019 08:10:05 -0400
+        id S1730896AbfJOMKI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 15 Oct 2019 08:10:08 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id EEE54B395;
-        Tue, 15 Oct 2019 12:10:00 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id C7528B3BB;
+        Tue, 15 Oct 2019 12:10:01 +0000 (UTC)
 From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
 To:     Jakub Kicinski <jakub.kicinski@netronome.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -31,9 +31,9 @@ To:     Jakub Kicinski <jakub.kicinski@netronome.com>,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
         linux-serial@vger.kernel.org
-Subject: [PATCH v10 3/6] MIPS: PCI: Fix fake subdevice ID for IOC3
-Date:   Tue, 15 Oct 2019 14:09:48 +0200
-Message-Id: <20191015120953.2597-4-tbogendoerfer@suse.de>
+Subject: [PATCH v10 5/6] MIPS: SGI-IP27: fix readb/writeb addressing
+Date:   Tue, 15 Oct 2019 14:09:50 +0200
+Message-Id: <20191015120953.2597-6-tbogendoerfer@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191015120953.2597-1-tbogendoerfer@suse.de>
 References: <20191015120953.2597-1-tbogendoerfer@suse.de>
@@ -42,26 +42,166 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Generation of fake subdevice ID had vendor and device ID swapped.
+Our chosen byte swapping, which is what firmware already uses, is to
+do readl/writel by normal lw/sw intructions (data invariance). This
+also means we need to mangle addresses for u8 and u16 accesses. The
+mangling for 16bit has been done aready, but 8bit one was missing.
+Correcting this causes different addresses for accesses to the
+SuperIO and local bus of the IOC3 chip. This is fixed by changing
+byte order in ioc3 and m48rtc_rtc structs.
 
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
 ---
- arch/mips/pci/pci-xtalk-bridge.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/include/asm/mach-ip27/mangle-port.h |  4 +--
+ arch/mips/include/asm/sn/ioc3.h               | 38 +++++++++++++--------------
+ drivers/rtc/rtc-m48t35.c                      | 11 ++++++++
+ drivers/tty/serial/8250/8250_ioc3.c           |  4 +--
+ 4 files changed, 34 insertions(+), 23 deletions(-)
 
-diff --git a/arch/mips/pci/pci-xtalk-bridge.c b/arch/mips/pci/pci-xtalk-bridge.c
-index dcf6117a17c3..d1d5f54c2632 100644
---- a/arch/mips/pci/pci-xtalk-bridge.c
-+++ b/arch/mips/pci/pci-xtalk-bridge.c
-@@ -437,7 +437,7 @@ static int bridge_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
- 	return irq;
+diff --git a/arch/mips/include/asm/mach-ip27/mangle-port.h b/arch/mips/include/asm/mach-ip27/mangle-port.h
+index f6e4912ea062..27c56efa519f 100644
+--- a/arch/mips/include/asm/mach-ip27/mangle-port.h
++++ b/arch/mips/include/asm/mach-ip27/mangle-port.h
+@@ -8,7 +8,7 @@
+ #ifndef __ASM_MACH_IP27_MANGLE_PORT_H
+ #define __ASM_MACH_IP27_MANGLE_PORT_H
+ 
+-#define __swizzle_addr_b(port)	(port)
++#define __swizzle_addr_b(port)	((port) ^ 3)
+ #define __swizzle_addr_w(port)	((port) ^ 2)
+ #define __swizzle_addr_l(port)	(port)
+ #define __swizzle_addr_q(port)	(port)
+@@ -20,6 +20,6 @@
+ # define ioswabl(a, x)		(x)
+ # define __mem_ioswabl(a, x)	cpu_to_le32(x)
+ # define ioswabq(a, x)		(x)
+-# define __mem_ioswabq(a, x)	cpu_to_le32(x)
++# define __mem_ioswabq(a, x)	cpu_to_le64(x)
+ 
+ #endif /* __ASM_MACH_IP27_MANGLE_PORT_H */
+diff --git a/arch/mips/include/asm/sn/ioc3.h b/arch/mips/include/asm/sn/ioc3.h
+index 78ef760ddde4..3865d3225780 100644
+--- a/arch/mips/include/asm/sn/ioc3.h
++++ b/arch/mips/include/asm/sn/ioc3.h
+@@ -21,50 +21,50 @@ struct ioc3_serialregs {
+ 
+ /* SUPERIO uart register map */
+ struct ioc3_uartregs {
++	u8	iu_lcr;
+ 	union {
+-		u8	iu_rbr;	/* read only, DLAB == 0 */
+-		u8	iu_thr;	/* write only, DLAB == 0 */
+-		u8	iu_dll;	/* DLAB == 1 */
++		u8	iu_iir;	/* read only */
++		u8	iu_fcr;	/* write only */
+ 	};
+ 	union {
+ 		u8	iu_ier;	/* DLAB == 0 */
+ 		u8	iu_dlm;	/* DLAB == 1 */
+ 	};
+ 	union {
+-		u8	iu_iir;	/* read only */
+-		u8	iu_fcr;	/* write only */
++		u8	iu_rbr;	/* read only, DLAB == 0 */
++		u8	iu_thr;	/* write only, DLAB == 0 */
++		u8	iu_dll;	/* DLAB == 1 */
+ 	};
+-	u8	iu_lcr;
+-	u8	iu_mcr;
+-	u8	iu_lsr;
+-	u8	iu_msr;
+ 	u8	iu_scr;
++	u8	iu_msr;
++	u8	iu_lsr;
++	u8	iu_mcr;
+ };
+ 
+ struct ioc3_sioregs {
+ 	u8	fill[0x141];	/* starts at 0x141 */
+ 
+-	u8	uartc;
+ 	u8	kbdcg;
++	u8	uartc;
+ 
+-	u8	fill0[0x150 - 0x142 - 1];
++	u8	fill0[0x151 - 0x142 - 1];
+ 
+-	u8	pp_data;
+-	u8	pp_dsr;
+ 	u8	pp_dcr;
++	u8	pp_dsr;
++	u8	pp_data;
+ 
+-	u8	fill1[0x158 - 0x152 - 1];
++	u8	fill1[0x159 - 0x153 - 1];
+ 
+-	u8	pp_fifa;
+-	u8	pp_cfgb;
+ 	u8	pp_ecr;
++	u8	pp_cfgb;
++	u8	pp_fifa;
+ 
+-	u8	fill2[0x168 - 0x15a - 1];
++	u8	fill2[0x16a - 0x15b - 1];
+ 
+-	u8	rtcad;
+ 	u8	rtcdat;
++	u8	rtcad;
+ 
+-	u8	fill3[0x170 - 0x169 - 1];
++	u8	fill3[0x170 - 0x16b - 1];
+ 
+ 	struct ioc3_uartregs	uartb;	/* 0x20170  */
+ 	struct ioc3_uartregs	uarta;	/* 0x20178  */
+diff --git a/drivers/rtc/rtc-m48t35.c b/drivers/rtc/rtc-m48t35.c
+index d3a75d447fce..e8194f1f01a8 100644
+--- a/drivers/rtc/rtc-m48t35.c
++++ b/drivers/rtc/rtc-m48t35.c
+@@ -20,6 +20,16 @@
+ 
+ struct m48t35_rtc {
+ 	u8	pad[0x7ff8];    /* starts at 0x7ff8 */
++#ifdef CONFIG_SGI_IP27
++	u8	hour;
++	u8	min;
++	u8	sec;
++	u8	control;
++	u8	year;
++	u8	month;
++	u8	date;
++	u8	day;
++#else
+ 	u8	control;
+ 	u8	sec;
+ 	u8	min;
+@@ -28,6 +38,7 @@ struct m48t35_rtc {
+ 	u8	date;
+ 	u8	month;
+ 	u8	year;
++#endif
+ };
+ 
+ #define M48T35_RTC_SET		0x80
+diff --git a/drivers/tty/serial/8250/8250_ioc3.c b/drivers/tty/serial/8250/8250_ioc3.c
+index 2be6ed2967e0..4c405f1b9c67 100644
+--- a/drivers/tty/serial/8250/8250_ioc3.c
++++ b/drivers/tty/serial/8250/8250_ioc3.c
+@@ -23,12 +23,12 @@ struct ioc3_8250_data {
+ 
+ static unsigned int ioc3_serial_in(struct uart_port *p, int offset)
+ {
+-	return readb(p->membase + offset);
++	return readb(p->membase + (offset ^ 3));
  }
  
--#define IOC3_SID(sid)	(PCI_VENDOR_ID_SGI << 16 | (sid))
-+#define IOC3_SID(sid)	(PCI_VENDOR_ID_SGI | ((sid) << 16))
- 
- static void bridge_setup_ip27_baseio6g(struct bridge_controller *bc)
+ static void ioc3_serial_out(struct uart_port *p, int offset, int value)
  {
+-	writeb(value, p->membase + offset);
++	writeb(value, p->membase + (offset ^ 3));
+ }
+ 
+ static int serial8250_ioc3_probe(struct platform_device *pdev)
 -- 
 2.16.4
 
