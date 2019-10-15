@@ -2,73 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CB2D6CBA
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Oct 2019 03:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F301BD6DCC
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Oct 2019 05:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727268AbfJOBHv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Oct 2019 21:07:51 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:39844 "EHLO
-        mail.loongson.cn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727250AbfJOBHv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Oct 2019 21:07:51 -0400
-Received: from linux.loongson.cn (unknown [10.20.41.27])
-        by mail (Coremail) with SMTP id QMiowPDxr2PeG6Vd9scQAA--.3S2;
-        Tue, 15 Oct 2019 09:07:42 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     paul.burton@mips.com, ralf@linux-mips.org, jhogan@kernel.org,
-        chenhc@lemote.com
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Loongson: Make default kernel log buffer size as 128KB for Loongson3
-Date:   Tue, 15 Oct 2019 09:07:36 +0800
-Message-Id: <1571101656-871-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: QMiowPDxr2PeG6Vd9scQAA--.3S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZr1rXF45Ar4rtr1kury5twb_yoWftFc_Jr
-        W2kr1UWw45JrW7uw4xZa1rWr4UZa45Z3WFkr17XrW7XayYkr13Jw4Dtr4UG3Z8ua4qyr4f
-        Z3ykJF92kF1IqjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxxYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_JFC_Wr1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4
-        A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7VAKI48G6xCj
-        nVAKz4kxMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUx3
-        C7UUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S1727867AbfJODbk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Oct 2019 23:31:40 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:35570 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727807AbfJODbk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Oct 2019 23:31:40 -0400
+Received: by mail-io1-f67.google.com with SMTP id q10so42795031iop.2;
+        Mon, 14 Oct 2019 20:31:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zhEjQGNeUYnva0C6Q5TMD839svsRDx2jkIkGQy4YWS4=;
+        b=Q29zXeYiB8XHeZ1EqJMpyBXIhr7P1bR8RsUvqgKC0ZGwwOccYqrk29sfcD4ab3Yjgm
+         II7djmY7O8yVxx0Cnj3N3j0anX0qJFH2o7lqsOFrvZ+AtuB51dg51ujml9xofT6yNvlM
+         fGuaGlTNYoMlAwsy7lRt5Y1aOvNCYknmt68C95fiTpXoytGiJ/kQdELL0l6/oN0ONpBU
+         q5l6h0D9RRNOld4kNz/c8PGGgUpWL/nrDsAOEuB1EJoSJKlwPv71FdFaTDbwHQafPosO
+         JZIjIBvvvKR/YdUncmp+2+ID3urmvALLvIvbvULDJCvlNwWzw1JvHsCDFFr+4U89Sj5C
+         nq5g==
+X-Gm-Message-State: APjAAAUOyW+vgr9UGlmj/YCArZzV1d+zxRLkTZC4558Oft3mWiJkIsGB
+        yjCyT7mtZ45uvAInodwr5eeQyHzbPeBvmBMiS8M=
+X-Google-Smtp-Source: APXvYqx6Khf29rFvlzokKbjYXTWq9VNplO9R+e7oZ+ApgNX8SsNYz4bHuRktyfwncTAjBC/ILe8JSLAO9SkVFEvcWDs=
+X-Received: by 2002:a5d:9c03:: with SMTP id 3mr11251986ioe.134.1571110298671;
+ Mon, 14 Oct 2019 20:31:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <1571101656-871-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1571101656-871-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Tue, 15 Oct 2019 11:36:59 +0800
+Message-ID: <CAAhV-H573fv+NVqBRgU38BRDDX=syj3gUqnJqRp4CdBx+QcdpQ@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Loongson: Make default kernel log buffer size as
+ 128KB for Loongson3
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When I update kernel with loongson3_defconfig based on the Loongson 3A3000
-platform, then using dmesg command to show kernel ring buffer, the initial
-kernel messages have disappeared due to the log buffer is too small, it is
-better to change the default kernel log buffer size from 16KB to 128KB.
+On Tue, Oct 15, 2019 at 10:12 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+> When I update kernel with loongson3_defconfig based on the Loongson 3A3000
+> platform, then using dmesg command to show kernel ring buffer, the initial
+> kernel messages have disappeared due to the log buffer is too small, it is
+> better to change the default kernel log buffer size from 16KB to 128KB.
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  arch/mips/configs/loongson3_defconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+> index 90ee008..3aa2201 100644
+> --- a/arch/mips/configs/loongson3_defconfig
+> +++ b/arch/mips/configs/loongson3_defconfig
+> @@ -12,7 +12,7 @@ CONFIG_TASKSTATS=y
+>  CONFIG_TASK_DELAY_ACCT=y
+>  CONFIG_TASK_XACCT=y
+>  CONFIG_TASK_IO_ACCOUNTING=y
+> -CONFIG_LOG_BUF_SHIFT=14
+> +CONFIG_LOG_BUF_SHIFT=17
+Hi, Tiezhu,
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/configs/loongson3_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Why you choose 128KB but not 64KB or 256KB? I found 64KB is enough for
+our cases. And if you really need more, I think 256KB could be better
+because there are many platforms choose 256KB.
 
-diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
-index 90ee008..3aa2201 100644
---- a/arch/mips/configs/loongson3_defconfig
-+++ b/arch/mips/configs/loongson3_defconfig
-@@ -12,7 +12,7 @@ CONFIG_TASKSTATS=y
- CONFIG_TASK_DELAY_ACCT=y
- CONFIG_TASK_XACCT=y
- CONFIG_TASK_IO_ACCOUNTING=y
--CONFIG_LOG_BUF_SHIFT=14
-+CONFIG_LOG_BUF_SHIFT=17
- CONFIG_MEMCG=y
- CONFIG_MEMCG_SWAP=y
- CONFIG_BLK_CGROUP=y
--- 
-2.1.0
+Huacai
 
-
+>  CONFIG_MEMCG=y
+>  CONFIG_MEMCG_SWAP=y
+>  CONFIG_BLK_CGROUP=y
+> --
+> 2.1.0
+>
+>
