@@ -2,97 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD498D755F
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Oct 2019 13:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EAFD75DC
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Oct 2019 14:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbfJOLqP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Oct 2019 07:46:15 -0400
-Received: from mx2.suse.de ([195.135.220.15]:42162 "EHLO mx1.suse.de"
+        id S1730697AbfJOMKF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Oct 2019 08:10:05 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58068 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726208AbfJOLqP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 15 Oct 2019 07:46:15 -0400
+        id S1730681AbfJOMKF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 15 Oct 2019 08:10:05 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 41B27AD79;
-        Tue, 15 Oct 2019 11:46:12 +0000 (UTC)
-Date:   Tue, 15 Oct 2019 13:46:11 +0200
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
+        by mx1.suse.de (Postfix) with ESMTP id EEE54B395;
+        Tue, 15 Oct 2019 12:10:00 +0000 (UTC)
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Ralf Baechle <ralf@linux-mips.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V6 2/2] mm/debug: Add tests validating architecture page
- table helpers
-Message-ID: <20191015114611.GC317@dhcp22.suse.cz>
-References: <1571131302-32290-1-git-send-email-anshuman.khandual@arm.com>
- <1571131302-32290-3-git-send-email-anshuman.khandual@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1571131302-32290-3-git-send-email-anshuman.khandual@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v10 3/6] MIPS: PCI: Fix fake subdevice ID for IOC3
+Date:   Tue, 15 Oct 2019 14:09:48 +0200
+Message-Id: <20191015120953.2597-4-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.16.4
+In-Reply-To: <20191015120953.2597-1-tbogendoerfer@suse.de>
+References: <20191015120953.2597-1-tbogendoerfer@suse.de>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue 15-10-19 14:51:42, Anshuman Khandual wrote:
-> This adds tests which will validate architecture page table helpers and
-> other accessors in their compliance with expected generic MM semantics.
-> This will help various architectures in validating changes to existing
-> page table helpers or addition of new ones.
-> 
-> Test page table and memory pages creating it's entries at various level are
-> all allocated from system memory with required size and alignments. But if
-> memory pages with required size and alignment could not be allocated, then
-> all depending individual tests are just skipped afterwards. This test gets
-> called right after init_mm_internals() required for alloc_contig_range() to
-> work correctly.
-> 
-> This gets build and run when CONFIG_DEBUG_VM_PGTABLE is selected along with
-> CONFIG_VM_DEBUG. Architectures willing to subscribe this test also need to
-> select CONFIG_ARCH_HAS_DEBUG_VM_PGTABLE which for now is limited to x86 and
-> arm64. Going forward, other architectures too can enable this after fixing
-> build or runtime problems (if any) with their page table helpers.
+Generation of fake subdevice ID had vendor and device ID swapped.
 
-A highlevel description of tests and what they are testing for would be
-really appreciated. Who wants to run these tests and why/when? What kind
-of bugs would get detected? In short why do we really need/want this
-code in the tree?
+Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+---
+ arch/mips/pci/pci-xtalk-bridge.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/mips/pci/pci-xtalk-bridge.c b/arch/mips/pci/pci-xtalk-bridge.c
+index dcf6117a17c3..d1d5f54c2632 100644
+--- a/arch/mips/pci/pci-xtalk-bridge.c
++++ b/arch/mips/pci/pci-xtalk-bridge.c
+@@ -437,7 +437,7 @@ static int bridge_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+ 	return irq;
+ }
+ 
+-#define IOC3_SID(sid)	(PCI_VENDOR_ID_SGI << 16 | (sid))
++#define IOC3_SID(sid)	(PCI_VENDOR_ID_SGI | ((sid) << 16))
+ 
+ static void bridge_setup_ip27_baseio6g(struct bridge_controller *bc)
+ {
 -- 
-Michal Hocko
-SUSE Labs
+2.16.4
+
