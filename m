@@ -2,10 +2,10 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A117D846F
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE40D8470
 	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 01:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387937AbfJOX1Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S2387949AbfJOX1Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Tue, 15 Oct 2019 19:27:16 -0400
 Received: from eddie.linux-mips.org ([148.251.95.138]:46178 "EHLO
         cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
