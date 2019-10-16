@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 684ABD9E1B
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 23:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA935D9EEE
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2019 00:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406660AbfJPV4b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Oct 2019 17:56:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48192 "EHLO mail.kernel.org"
+        id S2438489AbfJPV7X (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Oct 2019 17:59:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54076 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406657AbfJPV4a (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 16 Oct 2019 17:56:30 -0400
+        id S2438485AbfJPV7X (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 16 Oct 2019 17:59:23 -0400
 Received: from localhost (unknown [192.55.54.58])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CE24021A49;
-        Wed, 16 Oct 2019 21:56:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8CEA021A49;
+        Wed, 16 Oct 2019 21:59:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571262990;
-        bh=L95EMHtNAx1++/FTWvOD8AFJ7l+KXtUK06uQ1uo1HIw=;
+        s=default; t=1571263162;
+        bh=34dwj3LqK+f/Pc6CdTWGf50hADG+/PaAMtm6ggm8DlM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ynwlWHHJyJqer7kYxICV018N7sUxdSVFSAuZdHoF3QUgVrRzXWkTc7Lock0v/I+AF
-         qM40yFlBh//j8lXBE7ax0HMHhZKOhnRAP2eUaB56kV2ovb6RpT5t0DBsSFG0Pqw7EA
-         3hNBZa5dbZ8zad7PE7ZwMpe7uAV38MFW8WA+6Bjg=
+        b=r+wuKtJKbK8wH8mBuvelYk7JSW9ipxZDXFH4BZbfH19c3zQG9BH2AuT3VKUkRKEaP
+         lEr1RQTj/YoSukfW2uo20zCm0JoU089rBero255AViI0wiCVYzbsTHVK0zEI9CtdK1
+         qoZg8Vm6kaZVeQSSo9r5F143mULtxKR9nqU6iY7I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -30,12 +30,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-mips@vger.kernel.org
-Subject: [PATCH 4.14 57/65] MIPS: Disable Loongson MMI instructions for kernel build
-Date:   Wed, 16 Oct 2019 14:51:11 -0700
-Message-Id: <20191016214838.518286192@linuxfoundation.org>
+Subject: [PATCH 5.3 090/112] MIPS: Disable Loongson MMI instructions for kernel build
+Date:   Wed, 16 Oct 2019 14:51:22 -0700
+Message-Id: <20191016214905.434758748@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191016214756.457746573@linuxfoundation.org>
-References: <20191016214756.457746573@linuxfoundation.org>
+In-Reply-To: <20191016214844.038848564@linuxfoundation.org>
+References: <20191016214844.038848564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -76,7 +76,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/arch/mips/loongson64/Platform
 +++ b/arch/mips/loongson64/Platform
-@@ -43,6 +43,10 @@ else
+@@ -66,6 +66,10 @@ else
        $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
  endif
  
@@ -95,7 +95,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	$(filter -m%-float,$(KBUILD_CFLAGS)) \
 +	$(filter -mno-loongson-%,$(KBUILD_CFLAGS)) \
  	-D__VDSO__
- cflags-vdso := $(ccflags-vdso) \
- 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
+ 
+ ifdef CONFIG_CC_IS_CLANG
 
 
