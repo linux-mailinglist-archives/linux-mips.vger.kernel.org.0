@@ -2,127 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E509D9916
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 20:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9967D9BB8
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 22:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388489AbfJPSX0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Oct 2019 14:23:26 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:35677 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726691AbfJPSX0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Oct 2019 14:23:26 -0400
-Received: by mail-pf1-f194.google.com with SMTP id 205so15257274pfw.2;
-        Wed, 16 Oct 2019 11:23:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q+VfwqglWVpaFadCaIJr0D3t4hhVVL9W1U7Pka0rge0=;
-        b=Et/N9Pj4J1Yx653ej6HZksTCPldOrjDf+rpkvi/nNT9aRHCYQHqcp/vu/WfmL6QxIQ
-         wZfzUHYDUczTrDS59++nI/D9dHSFY5LE89Nd+t+Z5lVvRI9AK+Do6w53iRCi01uYVrKH
-         k3Q9Js/+jVJFwopdsBkGUsXPGAeuJJToiKxNSMnwtge8uVbQXsUwS5832LWcfj0ZpepI
-         JUM6wXWUwLcL/doG9uH1nQZoosyY7WTtWPyWzr+nHcIjpXjNuciwBfEMEHwvTx6c2qza
-         Z/QfqYcaNrnFB/chSbuCG4HU32UoSFEL4MX+GcaBZ+SQ8B7uwat/BHxmnW20MxgKdWy3
-         AMEA==
-X-Gm-Message-State: APjAAAXXLUHuFj/1fESVH+HF1xiILm0GBtIM/fY3PV5SlaggH/d46Ajp
-        7hXqmlu2uTCmwHBdceyS5elrvIKHXy9h6Q==
-X-Google-Smtp-Source: APXvYqzk9l4j6SRRWV2mYSvjDpLyhvRTK5UWHrs3+KnUWj0EbROGGuciNTpr4U0uAIA2EIbeVGtPwA==
-X-Received: by 2002:a63:dd11:: with SMTP id t17mr9146920pgg.242.1571250204986;
-        Wed, 16 Oct 2019 11:23:24 -0700 (PDT)
-Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id 193sm26291834pfc.59.2019.10.16.11.23.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Oct 2019 11:23:24 -0700 (PDT)
-From:   Paul Burton <paulburton@kernel.org>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        Paul Burton <paulburton@kernel.org>
-Subject: [PATCH] MAINTAINERS: Use @kernel.org address for Paul Burton
-Date:   Wed, 16 Oct 2019 11:23:16 -0700
-Message-Id: <20191016182316.535398-1-paulburton@kernel.org>
-X-Mailer: git-send-email 2.23.0
+        id S2394640AbfJPUYM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Oct 2019 16:24:12 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:49306 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388251AbfJPUYM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 16 Oct 2019 16:24:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=lp9sGSeBUfNCINz8D0KXuszYBQzAqsZQkv+K4LudJSs=; b=l+GxzaXFjS8l3ToLipq/WrGhgo
+        8vvhof4mQ7FXr+CAR85chuh6HDr9DMnMBjTDb1eTmX4fZ9vysDuZgTkA5SGMU7GoKLD5AhbLjPWYb
+        yV1LrfjlU0Zo0E10BjUkZs0FtGhiCZOT9eUBDaPhWb0PNQHYKhZ9PvGMLMhosMCtMYqs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.92.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1iKpps-00017G-Bz; Wed, 16 Oct 2019 22:23:56 +0200
+Date:   Wed, 16 Oct 2019 22:23:56 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Chris Snook <chris.snook@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        James Hogan <jhogan@kernel.org>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v1 2/4] dt-bindings: net: dsa: qca,ar9331 switch
+ documentation
+Message-ID: <20191016202356.GM17013@lunn.ch>
+References: <20191014061549.3669-1-o.rempel@pengutronix.de>
+ <20191014061549.3669-3-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191014061549.3669-3-o.rempel@pengutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Burton <paul.burton@mips.com>
+On Mon, Oct 14, 2019 at 08:15:47AM +0200, Oleksij Rempel wrote:
+> Atheros AR9331 has built-in 5 port switch. The switch can be configured
+> to use all 5 or 4 ports. One of built-in PHYs can be used by first built-in
+> ethernet controller or to be used directly by the switch over second ethernet
+> controller.
 
-Switch to using my paulburton@kernel.org email address in order to avoid
-subject mangling that's being imposed on my previous address.
+Hi Oleksij
 
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Signed-off-by: Paul Burton <paulburton@kernel.org>
----
- .mailmap    |  3 ++-
- MAINTAINERS | 10 +++++-----
- 2 files changed, 7 insertions(+), 6 deletions(-)
+How exactly is this phy sharing controlled? I did not see anything in
+the driver. Is there a mux we need to set?
 
-diff --git a/.mailmap b/.mailmap
-index edcac87e76c8..10b27ecb61c0 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -196,7 +196,8 @@ Oleksij Rempel <linux@rempel-privat.de> <o.rempel@pengutronix.de>
- Oleksij Rempel <linux@rempel-privat.de> <ore@pengutronix.de>
- Paolo 'Blaisorblade' Giarrusso <blaisorblade@yahoo.it>
- Patrick Mochel <mochel@digitalimplant.org>
--Paul Burton <paul.burton@mips.com> <paul.burton@imgtec.com>
-+Paul Burton <paulburton@kernel.org> <paul.burton@imgtec.com>
-+Paul Burton <paulburton@kernel.org> <paul.burton@mips.com>
- Peter A Jonsson <pj@ludd.ltu.se>
- Peter Oruba <peter@oruba.de>
- Peter Oruba <peter.oruba@amd.com>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a69e6db80c79..6c4dc607074a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3096,7 +3096,7 @@ S:	Supported
- F:	arch/arm64/net/
- 
- BPF JIT for MIPS (32-BIT AND 64-BIT)
--M:	Paul Burton <paul.burton@mips.com>
-+M:	Paul Burton <paulburton@kernel.org>
- L:	netdev@vger.kernel.org
- L:	bpf@vger.kernel.org
- S:	Maintained
-@@ -8001,7 +8001,7 @@ S:	Maintained
- F:	drivers/usb/atm/ueagle-atm.c
- 
- IMGTEC ASCII LCD DRIVER
--M:	Paul Burton <paul.burton@mips.com>
-+M:	Paul Burton <paulburton@kernel.org>
- S:	Maintained
- F:	Documentation/devicetree/bindings/auxdisplay/img-ascii-lcd.txt
- F:	drivers/auxdisplay/img-ascii-lcd.c
-@@ -10828,7 +10828,7 @@ F:	drivers/usb/image/microtek.*
- 
- MIPS
- M:	Ralf Baechle <ralf@linux-mips.org>
--M:	Paul Burton <paul.burton@mips.com>
-+M:	Paul Burton <paulburton@kernel.org>
- M:	James Hogan <jhogan@kernel.org>
- L:	linux-mips@vger.kernel.org
- W:	http://www.linux-mips.org/
-@@ -10842,7 +10842,7 @@ F:	arch/mips/
- F:	drivers/platform/mips/
- 
- MIPS BOSTON DEVELOPMENT BOARD
--M:	Paul Burton <paul.burton@mips.com>
-+M:	Paul Burton <paulburton@kernel.org>
- L:	linux-mips@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/clock/img,boston-clock.txt
-@@ -10852,7 +10852,7 @@ F:	drivers/clk/imgtec/clk-boston.c
- F:	include/dt-bindings/clock/boston-clock.h
- 
- MIPS GENERIC PLATFORM
--M:	Paul Burton <paul.burton@mips.com>
-+M:	Paul Burton <paulburton@kernel.org>
- L:	linux-mips@vger.kernel.org
- S:	Supported
- F:	Documentation/devicetree/bindings/power/mti,mips-cpc.txt
--- 
-2.23.0
-
+    Andrew
