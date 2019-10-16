@@ -2,93 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D270D9E39
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2019 00:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CAED9F7A
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2019 00:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406673AbfJPV5J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Oct 2019 17:57:09 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54348 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2406644AbfJPV5I (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 16 Oct 2019 17:57:08 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id ACEE3B39C;
-        Wed, 16 Oct 2019 21:57:06 +0000 (UTC)
-From:   NeilBrown <neil@brown.name>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>, hauke@hauke-m.de
-Date:   Thu, 17 Oct 2019 08:57:00 +1100
-Cc:     paul.burton@mips.com, linux-mips@vger.kernel.org,
-        ralf@linux-mips.org
-Subject: Re: PCI support for SOC_MT7621
-In-Reply-To: <CAMhs-H93MvRBPpR2ra33wf667V_wyDmQGWY0n_rB=puq_aBGog@mail.gmail.com>
-References: <CAMhs-H93MvRBPpR2ra33wf667V_wyDmQGWY0n_rB=puq_aBGog@mail.gmail.com>
-Message-ID: <87v9sopd5f.fsf@notabene.neil.brown.name>
+        id S2390292AbfJPVz0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Oct 2019 17:55:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46054 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733200AbfJPVz0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 16 Oct 2019 17:55:26 -0400
+Received: from localhost (unknown [192.55.54.58])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 690C121A4C;
+        Wed, 16 Oct 2019 21:55:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571262925;
+        bh=yNitP2iKn20kPjUaPAMPUQgBIanvMDCJUVUCUUEFZbc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mCNoPUJ1mBrJ9+YdPUtmz9p/KUnoJhQm2tnft5IgzOImhv5qNrqesEppam24S2DTb
+         GetzTDRg9oWqjcfv8O+vAqoIT/XnoeJmyfYbuuMDau+44xonIKRaRUChkCNc3D++tR
+         l2DwQcji87atWsMEZIp9WjFP7VAw4KWE7sVKDSFo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH 4.9 85/92] MIPS: Disable Loongson MMI instructions for kernel build
+Date:   Wed, 16 Oct 2019 14:50:58 -0700
+Message-Id: <20191016214847.735987212@linuxfoundation.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191016214759.600329427@linuxfoundation.org>
+References: <20191016214759.600329427@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
+From: Paul Burton <paul.burton@mips.com>
 
-On Wed, Oct 16 2019, Sergio Paracuellos wrote:
+commit 2f2b4fd674cadd8c6b40eb629e140a14db4068fd upstream.
 
-> Hi all,
->
-> I have a concern about commit:
->
-> c4d48cf5e2f0 ("MIPS: ralink: deactivate PCI support for SOC_MT7621")
->
-> This commit make a regression for my kernel configuration for gnubee
-> board which is mt7621 SOC based and also has PCI. With this applied
-> PCI_DRIVERS_GENERIC is not selectable anymore and it becomes into a
-> PCI_DRIVERS_LEGACY configuration making impossible to compile
-> mt7621-pci driver for this board.
->
-> I think this should be reverted. Am I missing something here?
+GCC 9.x automatically enables support for Loongson MMI instructions when
+using some -march= flags, and then errors out when -msoft-float is
+specified with:
 
-The commit reports a build error without the patch, and we don't want
-that.
-Maybe change the
-  select HAVE_PCI
-to
-  select HAVE_PCI if STAGING
-or
-  select HAVE_PCI if PCI_MT7621
+  cc1: error: ‘-mloongson-mmi’ must be used with ‘-mhard-float’
 
-Hauke: do either of those fix your compile error?
+The kernel shouldn't be using these MMI instructions anyway, just as it
+doesn't use floating point instructions. Explicitly disable them in
+order to fix the build with GCC 9.x.
 
-Thanks,
-NeilBrown
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+Fixes: 3702bba5eb4f ("MIPS: Loongson: Add GCC 4.4 support for Loongson2E")
+Fixes: 6f7a251a259e ("MIPS: Loongson: Add basic Loongson 2F support")
+Fixes: 5188129b8c9f ("MIPS: Loongson-3: Improve -march option and move it to Platform")
+Cc: Huacai Chen <chenhc@lemote.com>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: stable@vger.kernel.org # v2.6.32+
+Cc: linux-mips@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+---
+ arch/mips/loongson64/Platform |    4 ++++
+ arch/mips/vdso/Makefile       |    1 +
+ 2 files changed, 5 insertions(+)
+
+--- a/arch/mips/loongson64/Platform
++++ b/arch/mips/loongson64/Platform
+@@ -43,6 +43,10 @@ else
+       $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
+ endif
+ 
++# Some -march= flags enable MMI instructions, and GCC complains about that
++# support being enabled alongside -msoft-float. Thus explicitly disable MMI.
++cflags-y += $(call cc-option,-mno-loongson-mmi)
++
+ #
+ # Loongson Machines' Support
+ #
+--- a/arch/mips/vdso/Makefile
++++ b/arch/mips/vdso/Makefile
+@@ -8,6 +8,7 @@ ccflags-vdso := \
+ 	$(filter -mmicromips,$(KBUILD_CFLAGS)) \
+ 	$(filter -march=%,$(KBUILD_CFLAGS)) \
+ 	$(filter -m%-float,$(KBUILD_CFLAGS)) \
++	$(filter -mno-loongson-%,$(KBUILD_CFLAGS)) \
+ 	-D__VDSO__
+ cflags-vdso := $(ccflags-vdso) \
+ 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
 
 
->
-> Thanks in advance for your time.
->
-> Best regards,
->     Sergio Paracuellos
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEG8Yp69OQ2HB7X0l6Oeye3VZigbkFAl2nkiwACgkQOeye3VZi
-gblQPg//Z5LD/4sXMKejfOyRB71IRuXIIikdvLVvOlbnhWPn4/by7QNGaBpEZB5j
-vU1W0MwsyGyAoiZvNzzBxFLzEDk44BHVHRzsVdgjTXSq5dEd0ywtybeh4/8SJMs8
-6CBNOuZllTyC0H+dE58OquOILW6ubl/wqBwrcRv6YxdDC57WfSbEEJD2oP3C5icm
-Js2WmynSaClPMWmy6E6Mxmh9+6AdkrLsb2ZvHzr83pHhdIkXBcWarr04OQJSmJN9
-aS7tTifRjiXY4cC8blYjU1G6E2LM3PVtl2nCZ1DQUZbAksYAqL9Nc5Pjbx5aDOmr
-D2Nwq4/MPHAJ8rKadQy+4KlrRPNAvSQGrYuYSIEjBovzMikiMzEDmQNFMExZ24yY
-7+3fuSE5F1F6HQULBl1MlOBhaXksgdKXqgkM//U4+EvmNB//s59iMUa+Q7/84jD9
-qIiNr5w5szad4Wqn5TdSRcAn0QV0zZPgFrRkpLPtiNxKuBAd5vbZj2XTgIesIMKP
-YBPK2LDGo860S0ltPM3iBTrzlGxoOoBUU0ofRdH/aXU5S8tNrjVGwF/h2AQN5VSv
-8oT/I9ZCq6pvmufpiuj2hOegJUhod9GzjguRzbDmk2QhOyOdtrtu9eCMd95IIp3A
-l6M9Exs6N04F2JhITX4elHEe1kWENbpnqFIXfATfHu0KInkkLK4=
-=t1wG
------END PGP SIGNATURE-----
---=-=-=--
