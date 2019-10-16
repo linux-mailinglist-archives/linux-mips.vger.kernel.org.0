@@ -2,68 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FA9D9395
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 16:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E65D93EE
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 16:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733190AbfJPOUN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Oct 2019 10:20:13 -0400
-Received: from ns.iliad.fr ([212.27.33.1]:49222 "EHLO ns.iliad.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727167AbfJPOUN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 16 Oct 2019 10:20:13 -0400
-Received: from ns.iliad.fr (localhost [127.0.0.1])
-        by ns.iliad.fr (Postfix) with ESMTP id 3BB6A2077F;
-        Wed, 16 Oct 2019 16:20:11 +0200 (CEST)
-Received: from sakura (freebox.vlq16.iliad.fr [213.36.7.13])
-        by ns.iliad.fr (Postfix) with ESMTP id 1A74B205F8;
-        Wed, 16 Oct 2019 16:20:11 +0200 (CEST)
-Message-ID: <a7ee05cbe4c3817081fcb1b28d6d0469864978d7.camel@freebox.fr>
-Subject: Re: [PATCH] mips: vdso: Fix __arch_get_hw_counter()
-From:   Maxime Bizon <mbizon@freebox.fr>
-Reply-To: mbizon@freebox.fr
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-mips@vger.kernel.org
-Cc:     pburton@wavecomp.com
-Date:   Wed, 16 Oct 2019 16:20:11 +0200
-In-Reply-To: <20191016134024.46671-1-vincenzo.frascino@arm.com>
-References: <20191016134024.46671-1-vincenzo.frascino@arm.com>
-Organization: Freebox
+        id S2394013AbfJPObv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Oct 2019 10:31:51 -0400
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:34705 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394117AbfJPObv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Oct 2019 10:31:51 -0400
+Received: by mail-ot1-f46.google.com with SMTP id m19so20349264otp.1
+        for <linux-mips@vger.kernel.org>; Wed, 16 Oct 2019 07:31:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=edtbDScedCzftAk7NNnkVZCbGagv2AScxtDF9ev1oVw=;
+        b=gXSrEqX+yu6ZoF2CbsnByJ2BKlgRqfhDcu+girdlrx8IwWau5o6fENtDj+3VN9z8Rh
+         WkgBhtVOVsfd/Sklz9H2yqm6Pabk7vrW6VIedR5S/+AX6yBCZFT5acx8vv8Z9glENV4i
+         Eje1x/L1ZKp0XxcZyuTZjU0mFkwSiEaKNVhSfuY2TDvnFzenkkrEcfoSDgnRHFbmoavV
+         hRdBkgIMxB/LKK16YZkhJWpoTBTZKhcHqeKicJp6QknJPuQ2C3ANgTGV/qn8ZRkWQtKJ
+         od/rc5v9N5DV0IT+d9MR1p3bzluxPrL14GlNGHfM0ku3maBKC91Rcsf4xttG+4P8BzwZ
+         80JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=edtbDScedCzftAk7NNnkVZCbGagv2AScxtDF9ev1oVw=;
+        b=OssDQPOTIoo8XqA4xst4cbU7eY0x4Ay+bQxHgKaMdbse1gDpeZqgaLuZ1r9ApesNz9
+         2yGk78TtHypVB0qjvCmZYUrvSzwJkcjbAFQFhKCO6JIg0QxQL2zopyrrsIX3pCh2qc+U
+         uE5wh1eYxkviPj0y1KuYkLoXZfgrJc3JdKrPL+llyCYUyTwHJsj890rU8Rirm/R6/Ep6
+         LgkIrFPieZ15IL4W+ydwDP1qFVH8yJ8G3gGbY6zB7ieUyBZIgqedm3kc4TAvvSWAJ9jd
+         N9YOiK4c/VmraDFsSF1KzYApHkQdcP2558Go4hmlTRFIq0aMLre3YoFd1h3/iLl0wN5V
+         CWAg==
+X-Gm-Message-State: APjAAAV0YaCoYYy9rVpuFHRYUGlQ1QQ/Xiy0HaiL6C2M6xAyDK2K9r9j
+        cDn4Ua89a5ngHxDxC/HeMrsOK1CETcegyJPyUFGnUUNu
+X-Google-Smtp-Source: APXvYqxIauZHyYDzt7e+6gkCoffE9lIAaGYV1bvV8nm6b8EdtXkdyBQcdtWMakmcAEMrmbnHdrJuinOSS8nzzpNUe+0=
+X-Received: by 2002:a9d:4b89:: with SMTP id k9mr18679243otf.273.1571236309683;
+ Wed, 16 Oct 2019 07:31:49 -0700 (PDT)
+MIME-Version: 1.0
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Wed, 16 Oct 2019 16:31:38 +0200
+Message-ID: <CAMhs-H93MvRBPpR2ra33wf667V_wyDmQGWY0n_rB=puq_aBGog@mail.gmail.com>
+Subject: PCI support for SOC_MT7621
+To:     hauke@hauke-m.de
+Cc:     paul.burton@mips.com, linux-mips@vger.kernel.org,
+        NeilBrown <neil@brown.name>, ralf@linux-mips.org
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Wed Oct 16 16:20:11 2019 +0200 (CEST)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi all,
 
-On Wed, 2019-10-16 at 14:40 +0100, Vincenzo Frascino wrote:
+I have a concern about commit:
 
-> On some MIPS variants (e.g. MIPS r1), vDSO clock_mode is set to
-> VDSO_CLOCK_NONE.
-> 
-> When VDSO_CLOCK_NONE is set the expected kernel behavior is to
-> fallback
-> on syscalls. To do that the generic vDSO library expects UULONG_MAX
-> as
-> return value of __arch_get_hw_counter().
-> 
-> Fix __arch_get_hw_counter() on MIPS defining a __VDSO_USE_SYSCALL
-> case
-> that addressed the described scenario.
-> 
-> Reported-by: Maxime Bizon <mbizon@freebox.fr>
-> Cc: Paul Burton <pburton@wavecomp.com>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+c4d48cf5e2f0 ("MIPS: ralink: deactivate PCI support for SOC_MT7621")
 
-Tested-by: Maxime Bizon <mbizon@freebox.fr>
+This commit make a regression for my kernel configuration for gnubee
+board which is mt7621 SOC based and also has PCI. With this applied
+PCI_DRIVERS_GENERIC is not selectable anymore and it becomes into a
+PCI_DRIVERS_LEGACY configuration making impossible to compile
+mt7621-pci driver for this board.
 
-Thanks,
+I think this should be reverted. Am I missing something here?
 
--- 
-Maxime
+Thanks in advance for your time.
 
-
-
+Best regards,
+    Sergio Paracuellos
