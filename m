@@ -2,111 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB09D888C
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 08:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18EF3D8AB1
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 10:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728515AbfJPGTB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Oct 2019 02:19:01 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:46374 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728091AbfJPGTB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Oct 2019 02:19:01 -0400
-Received: by mail-wr1-f66.google.com with SMTP id o18so26446653wrv.13
-        for <linux-mips@vger.kernel.org>; Tue, 15 Oct 2019 23:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=YRhrTB62D4V/UFoC3f7Dy9VxNzwea0kYw4JJIDyNnSU=;
-        b=gffNxPX59uLp8d/gUW5M7E6+ht3fLmLfSJgrgYUe1tI7Afeyq6CzJQ+74I6+AmU/z/
-         LCxua/tgSJOllX2PjdMVZeJvnP0ag9dr/fxDqwqp/VddGOOGCVTOTcUt0EU2EnzWOTqU
-         RxXnz4wgoSk81+fFaU14kCZSCs3zePHw0unCHMU0JPUBY5lIPVNvqiZnZ04YBtvQKgDQ
-         HpdVT8WRcKE9oDhNiAVcKWTT0LS3Yqc1Ultg55vUfNYknQMR/m9KWI0GKJlDKkLdc9rj
-         OdjIf4UnX2hBqQMJACFydhYY7OgZIs841Bu3TJXMwsNzfUGHuD6/H97Ls+FNG+P7MyTQ
-         zYKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=YRhrTB62D4V/UFoC3f7Dy9VxNzwea0kYw4JJIDyNnSU=;
-        b=E4a9VzNGVSrZZsa7EpDO/3Gb49Zp+Qg26dGTJh8q8MGoTTKZGY6sPYCKGPtFiYZZO1
-         8bzClkhl+FkBZoIpdcHliniPFwuFltUBvl1szZL7VWH9V7ZAn/XBZBJ0ydRwYqeyLsxD
-         uYs1cpiKe21oO2PkwIWIdwmZec1TtZRdRldMGpQ65rlWg0LxdN0kgeDHjlXnWO1atTem
-         Wx2IQPVmd1LOndj2/4ftWnfpTXgygCTQtrg/xKCePzGwTT1FwCGcDCOd8prFnixqFwvO
-         xvIV0sBVbRi1xcwj+OE8FjQufspqIudPBRqmqglV0/vNvrihwQjxInJkjIIovieaHqsS
-         QGCw==
-X-Gm-Message-State: APjAAAV4r1Yhpp8/Nnzy94n8ee2vpc9Sg25ponvlf0jJ4bRCpH1N5oD/
-        Phudf8AGraE9FKGYTx+8V/0fhQ==
-X-Google-Smtp-Source: APXvYqyKm24zfNyAXdbf8pS+DsTWKRvLuNz2vGQv6C7u2rAu4IGWRBvmbdVbgFvVvDmpGDOwl7yD5w==
-X-Received: by 2002:adf:c98b:: with SMTP id f11mr1155362wrh.274.1571206738605;
-        Tue, 15 Oct 2019 23:18:58 -0700 (PDT)
-Received: from dell ([95.149.164.86])
-        by smtp.gmail.com with ESMTPSA id a3sm3004392wmc.3.2019.10.15.23.18.57
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 15 Oct 2019 23:18:57 -0700 (PDT)
-Date:   Wed, 16 Oct 2019 07:18:56 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        id S2391437AbfJPIU2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Oct 2019 04:20:28 -0400
+Received: from mx2.suse.de ([195.135.220.15]:32772 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726949AbfJPIU2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 16 Oct 2019 04:20:28 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 8F4AEBA75;
+        Wed, 16 Oct 2019 08:20:24 +0000 (UTC)
+Date:   Wed, 16 Oct 2019 10:20:22 +0200
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Qian Cai <cai@lca.pw>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v10 4/6] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-ID: <20191016061856.GA4365@dell>
-References: <20191015120953.2597-1-tbogendoerfer@suse.de>
- <20191015120953.2597-5-tbogendoerfer@suse.de>
- <20191015122349.612a230b@cakuba.netronome.com>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Steven Price <Steven.Price@arm.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sri Krishna chowdary <schowdary@nvidia.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V6 0/2] mm/debug: Add tests validating architecture page
+ table helpers
+Message-ID: <20191016082022.GN317@dhcp22.suse.cz>
+References: <1571131302-32290-1-git-send-email-anshuman.khandual@arm.com>
+ <1571150502.5937.39.camel@lca.pw>
+ <c052784a-a5d7-878e-cd97-01daa90c0ed8@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191015122349.612a230b@cakuba.netronome.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <c052784a-a5d7-878e-cd97-01daa90c0ed8@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 15 Oct 2019, Jakub Kicinski wrote:
-
-> On Tue, 15 Oct 2019 14:09:49 +0200, Thomas Bogendoerfer wrote:
-> > SGI IOC3 chip has integrated ethernet, keyboard and mouse interface.
-> > It also supports connecting a SuperIO chip for serial and parallel
-> > interfaces. IOC3 is used inside various SGI systemboards and add-on
-> > cards with different equipped external interfaces.
-> > 
-> > Support for ethernet and serial interfaces were implemented inside
-> > the network driver. This patchset moves out the not network related
-> > parts to a new MFD driver, which takes care of card detection,
-> > setup of platform devices and interrupt distribution for the subdevices.
-> > 
-> > Serial portion: Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> > 
-> > Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+On Tue 15-10-19 20:51:11, Anshuman Khandual wrote:
 > 
-> Looks good, I think.
+> 
+> On 10/15/2019 08:11 PM, Qian Cai wrote:
+> > The x86 will crash with linux-next during boot due to this series (v5) with the
+> > config below plus CONFIG_DEBUG_VM_PGTABLE=y. I am not sure if v6 would address
+> > it.
+> > 
+> > https://raw.githubusercontent.com/cailca/linux-mm/master/x86.config
+> > 
+> > [†††33.862600][††††T1] page:ffffea0009000000 is uninitialized and poisoned
+> > [†††33.862608][††††T1] raw: ffffffffffffffff ffffffffffffffff ffffffffffffffff
+> > ffffff871140][††††T1]††? _raw_spin_unlock_irq+0x27/0x40
+> > [†††33.871140][††††T1]††? rest_init+0x307/0x307
+> > [†††33.871140][††††T1]††kernel_init+0x11/0x139
+> > [†††33.871140][††††T1]††? rest_init+0x307/0x307
+> > [†††33.871140][††††T1]††ret_from_fork+0x27/0x50
+> > [†††33.871140][††††T1] Modules linked in:
+> > [†††33.871140][††††T1] ---[ end trace e99d392b0f7befbd ]---
+> > [†††33.871140][††††T1] RIP: 0010:alloc_gigantic_page_order+0x3fe/0x490
+> 
+> Hmm, with defconfig (DEBUG_VM=y and DEBUG_VM_PGTABLE=y) it does not crash but
+> with the config above, it does. Just wondering if it is possible that these
+> pages might not been initialized yet because DEFERRED_STRUCT_PAGE_INIT=y ?
 
-Is that a Reviewed-by?
-
-If so, it doesn't sound like a very convincing one?
-
-If not, it's probably not worth replying at all.
+Quite likely. You need to wait for page_alloc_init_late to finish.
+> 
+> [   13.898549][    T1] page:ffffea0005000000 is uninitialized and poisoned
+> [   13.898549][    T1] raw: ffffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffff
+> [   13.898549][    T1] raw: ffffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffff
+> [   13.898549][    T1] page dumped because: VM_BUG_ON_PAGE(PagePoisoned(p))
+> [   13.898549][    T1] ------------[ cut here ]------------
+> [   13.898549][    T1] kernel BUG at ./include/linux/mm.h:1107!
+> [   13.898549][    T1] invalid opcode: 0000 [#1] SMP DEBUG_PAGEALLOC KASAN PTI
+> [   13.898549][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.4.0-rc3-next-20191015+ #
 
 -- 
-Lee Jones [ÊùéÁêºÊñØ]
-Linaro Services Technical Lead
-Linaro.org ‚îÇ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Michal Hocko
+SUSE Labs
