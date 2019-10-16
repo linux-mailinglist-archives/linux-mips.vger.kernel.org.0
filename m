@@ -2,80 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8322D9282
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 15:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0DFD92B9
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 15:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405364AbfJPNcb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Oct 2019 09:32:31 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:48400 "EHLO vps0.lunn.ch"
+        id S2388892AbfJPNkf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Oct 2019 09:40:35 -0400
+Received: from foss.arm.com ([217.140.110.172]:40244 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405363AbfJPNcb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 16 Oct 2019 09:32:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=bI3j/lNqd37v2UjsCOVjDYtbKavFToQzGAe5GTYyiDo=; b=CB6a2dFSBDFrSxogDUqW0XQkV4
-        hHU+dY+NSZ+cmUosWV13i2DVtvZfDilF3/4Uj3BHJxP182Rl6Evg77wG49m1LMzsbNMkQDLdGg8HV
-        vWP9jgzqcESxYmMq3VDDSign3wN24T7rzoGhxSHDLUTJXfkiZO/uNVXpEF4hGcA0FMRo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.92.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1iKjPT-0007bb-8z; Wed, 16 Oct 2019 15:32:15 +0200
-Date:   Wed, 16 Oct 2019 15:32:15 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Chris Snook <chris.snook@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        James Hogan <jhogan@kernel.org>,
-        Jay Cliburn <jcliburn@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v1 1/4] net: ag71xx: port to phylink
-Message-ID: <20191016133215.GA17013@lunn.ch>
-References: <20191014061549.3669-1-o.rempel@pengutronix.de>
- <20191014061549.3669-2-o.rempel@pengutronix.de>
- <20191016121216.GD4780@lunn.ch>
- <20191016122401.jnldnlwruv7h5kgy@pengutronix.de>
+        id S1730762AbfJPNkf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 16 Oct 2019 09:40:35 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8002C142F;
+        Wed, 16 Oct 2019 06:40:34 -0700 (PDT)
+Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B909B3F68E;
+        Wed, 16 Oct 2019 06:40:33 -0700 (PDT)
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     linux-mips@vger.kernel.org
+Cc:     pburton@wavecomp.com, mbizon@freebox.fr, vincenzo.frascino@arm.com
+Subject: [PATCH] mips: vdso: Fix __arch_get_hw_counter()
+Date:   Wed, 16 Oct 2019 14:40:24 +0100
+Message-Id: <20191016134024.46671-1-vincenzo.frascino@arm.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191016122401.jnldnlwruv7h5kgy@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 02:24:01PM +0200, Oleksij Rempel wrote:
-> On Wed, Oct 16, 2019 at 02:12:16PM +0200, Andrew Lunn wrote:
-> > On Mon, Oct 14, 2019 at 08:15:46AM +0200, Oleksij Rempel wrote:
-> > > The port to phylink was done as close as possible to initial
-> > > functionality.
-> > > Theoretically this HW can support flow control, practically seems to be not
-> > > enough to just enable it. So, more work should be done.
-> > > 
-> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > 
-> > Hi Oleksij
-> > 
-> > Please include Russell King in Cc: in future.
-> 
-> He was included in To:. Do you mean, I need to move him from To to Cc?
+On some MIPS variants (e.g. MIPS r1), vDSO clock_mode is set to
+VDSO_CLOCK_NONE.
 
-Ah, sorry. Missed him among all the other To:
+When VDSO_CLOCK_NONE is set the expected kernel behavior is to fallback
+on syscalls. To do that the generic vDSO library expects UULONG_MAX as
+return value of __arch_get_hw_counter().
 
-I don't know if there are any strict rules, but i tend to use To: for
-the maintainer you expect to merge the patch, and Cc: for everybody
-else, and the lists.
+Fix __arch_get_hw_counter() on MIPS defining a __VDSO_USE_SYSCALL case
+that addressed the described scenario.
 
-    Andrew
+Reported-by: Maxime Bizon <mbizon@freebox.fr>
+Cc: Paul Burton <pburton@wavecomp.com>
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+---
+ arch/mips/include/asm/vdso/gettimeofday.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/mips/include/asm/vdso/gettimeofday.h b/arch/mips/include/asm/vdso/gettimeofday.h
+index e78462e8ca2e..b08825531e9f 100644
+--- a/arch/mips/include/asm/vdso/gettimeofday.h
++++ b/arch/mips/include/asm/vdso/gettimeofday.h
+@@ -24,6 +24,8 @@
+ 
+ #define VDSO_HAS_CLOCK_GETRES		1
+ 
++#define __VDSO_USE_SYSCALL		ULLONG_MAX
++
+ #ifdef CONFIG_MIPS_CLOCK_VSYSCALL
+ 
+ static __always_inline long gettimeofday_fallback(
+@@ -205,7 +207,7 @@ static __always_inline u64 __arch_get_hw_counter(s32 clock_mode)
+ 		break;
+ #endif
+ 	default:
+-		cycle_now = 0;
++		cycle_now = __VDSO_USE_SYSCALL;
+ 		break;
+ 	}
+ 
+-- 
+2.23.0
+
