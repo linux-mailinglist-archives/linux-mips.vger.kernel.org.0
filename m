@@ -2,83 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D93B0D96D3
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 18:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE403D988F
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 19:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728316AbfJPQSY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Oct 2019 12:18:24 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:39029 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727154AbfJPQSY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Oct 2019 12:18:24 -0400
-Received: by mail-lf1-f67.google.com with SMTP id 195so5028907lfj.6;
-        Wed, 16 Oct 2019 09:18:21 -0700 (PDT)
+        id S2390504AbfJPRiT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Oct 2019 13:38:19 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:39919 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388899AbfJPRiT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Oct 2019 13:38:19 -0400
+Received: by mail-pl1-f193.google.com with SMTP id s17so11597971plp.6
+        for <linux-mips@vger.kernel.org>; Wed, 16 Oct 2019 10:38:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y1u4tBuRnd6ZjEytQ7zg9F82TRiFsD/C7WX2wqbch+8=;
-        b=Y7XnxeWv16vJcEIy56IkwtxL2LWSOOIclCzC6NanfV6A6wNIdsg7+3EZdMtgtnNVv7
-         xdIrJI/hLsYV97HRn2qp9huBjieN/OP5vRzMRErA11sJbn4U6/CdxhUJgtOMxIIDiElQ
-         Q3o+lJ42HjrYPICB6LWJXJSYr7Gt1dymkiTZHYUoowNdz7G2MKmqOtSOzRYOKdHts0Sn
-         6ZYcuo60ZcFiPCWA9rD4wKtWOlZs2u0XKR92+SqRdDkYyd6ChC8r4ZD3dXHF3k+BzLPQ
-         mD9kUuQ7qTanPS8PDIVPqvyS++w5wJyHLxpepf3r1TOh8chtfJJXsTQ3Tqrs+B0lXyoX
-         2rKw==
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=w7Ckq/LxQ3d6d7YYBCzcWPi1feQ60dLRf7cQPvCEhqo=;
+        b=RajRDVwInrMkZw010+5WbKCh97lZZR8zlKYfcMvWu6Qaw823RVFFZDEk+g1eW3o2dt
+         zwIX5ubRUcaaX1IsmogloK2MPrJOyEbvr7VtH04STFmKONS7jlPecBpDCZDI9z0CHnTC
+         b0l1sR3g9uHLhYVfkCy3w7YRRPZ+TTsZ7jBXN4ZdDJBGFuvNYs5dyMIglHIH00KxVlkw
+         0I6rHVkbqD0YujoyQmU1DsSS7kfQOiAUslXc84no2Q4VAP5yqB+7SwejktlpB3/d6qBQ
+         7TWeSqRONXgsuwHXVlkiljBeHi7K9CkAJYV4SNE3skYVBMmZ5u1823hOjji9dmxhQLnl
+         148w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y1u4tBuRnd6ZjEytQ7zg9F82TRiFsD/C7WX2wqbch+8=;
-        b=WfcuoQNzPv9bk+btBmuqoeGUlPpdXUg3rCVX+dtVuPnHDdLnI9PZ6Kd0peeBQSD5PW
-         ih7GOuRC9TvItyjnq98+atJYANsdx1nY7DMzPIc0Nzrag+IQGzO8Tt4cJ32BdsWaL93A
-         ZIvj4y4qIfEHInubsYaE/TTAi9UCTrO3na9cSy9FzSgC5gNS1CFGcnhNzpYaMk2b9TnD
-         n5egDMqSC9h6lB4/bvC0GoIRjdM4Htv6DgNiNRI2yu0y+EJj5t1V+vzASeaBfACSapXk
-         3RGI/3CNvA9GwGBNZWG19S6UAZsqwKyr3DH1CKUb1KkkVuhEsuaM4m1UGZe/DwwFJ63a
-         7mUg==
-X-Gm-Message-State: APjAAAX/O3x1HaqY1BI0tJMQx+F7bXfRZ8UOERDsDPZEwzaNQkgeQIHo
-        y8sk5Ff8JA5KYamGdLfHHK6c61CQ18nh1ahVPo0=
-X-Google-Smtp-Source: APXvYqyVZwfMVjw15XoxG0GOxNLuRAAnl9bDYbPMHaNMcwAzDZPkm7NBafCKz09RK7HbPatoJcJIcT8/B0ysUieaPvg=
-X-Received: by 2002:ac2:4888:: with SMTP id x8mr25064278lfc.90.1571242700210;
- Wed, 16 Oct 2019 09:18:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191014061549.3669-1-o.rempel@pengutronix.de>
- <20191014061549.3669-5-o.rempel@pengutronix.de> <20191016130057.GF4780@lunn.ch>
-In-Reply-To: <20191016130057.GF4780@lunn.ch>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 16 Oct 2019 13:20:31 -0300
-Message-ID: <CAOMZO5BRfkz+VBR6NRjSY6CymyuXRNqLnF_bOao90j64+sYZtQ@mail.gmail.com>
-Subject: Re: [PATCH v1 4/4] net: dsa: add support for Atheros AR9331 build-in switch
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Chris Snook <chris.snook@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        James Hogan <jhogan@kernel.org>,
-        Jay Cliburn <jcliburn@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Paul Burton <paul.burton@mips.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=w7Ckq/LxQ3d6d7YYBCzcWPi1feQ60dLRf7cQPvCEhqo=;
+        b=G5uDqNoe7WBAOROaPF3bnh69U1Im2/jPdc6qkmj5sMYrb8jHeg68S0Avhed/AF9Y8P
+         fSw/B860hkkiVG/NqiazjrRBofdV6gqqB4Mx8TpcsJJd3L8ws9s+chIthTUn3xwGv3bZ
+         9cIxpXh6r22eTjGS/AWjOt/qTNlT/L9i6l09EEeTHjC+9QYAtZYTyVSF+NUytzmirct4
+         hIh9Yzn5fzMdIEs7xItki3qAzkvTRdKseotH7+r73lQ2tm0sKj1YBjb6qKk8D/fF5h3w
+         JfQwDLfuittPBZfiOO5kSWCNSr1G89eth2k73dYXQ/ACSjpjVesyagEdGBgVV2zUmjdo
+         mAgg==
+X-Gm-Message-State: APjAAAUznSqykganPzEKmfQvYZijqAi+ydTZWaeb5idqgDKjpvZc8miH
+        txpEA4ylbycb7i+5kTta/n+l1w==
+X-Google-Smtp-Source: APXvYqwtBHxZgR00Q2Yn0ZnfFZxoy2/N+Bm4QyqqVaA3uzsnHpRyGeKpBGlUJRoAu6ZBqDkWWqmIJg==
+X-Received: by 2002:a17:902:ac88:: with SMTP id h8mr25087537plr.324.1571247498740;
+        Wed, 16 Oct 2019 10:38:18 -0700 (PDT)
+Received: from cakuba.netronome.com (c-73-202-202-92.hsd1.ca.comcast.net. [73.202.202.92])
+        by smtp.gmail.com with ESMTPSA id ep10sm11561976pjb.2.2019.10.16.10.38.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2019 10:38:18 -0700 (PDT)
+Date:   Wed, 16 Oct 2019 10:38:13 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v10 4/6] mfd: ioc3: Add driver for SGI IOC3 chip
+Message-ID: <20191016103813.24447c64@cakuba.netronome.com>
+In-Reply-To: <20191016192321.c1ef8ea7c2533d6c8e1b98a2@suse.de>
+References: <20191015120953.2597-1-tbogendoerfer@suse.de>
+        <20191015120953.2597-5-tbogendoerfer@suse.de>
+        <20191015122349.612a230b@cakuba.netronome.com>
+        <20191016192321.c1ef8ea7c2533d6c8e1b98a2@suse.de>
+Organization: Netronome Systems, Ltd.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 1:01 PM Andrew Lunn <andrew@lunn.ch> wrote:
+On Wed, 16 Oct 2019 19:23:21 +0200, Thomas Bogendoerfer wrote:
+> On Tue, 15 Oct 2019 12:23:49 -0700
+> Jakub Kicinski <jakub.kicinski@netronome.com> wrote:
+> 
+> > On Tue, 15 Oct 2019 14:09:49 +0200, Thomas Bogendoerfer wrote:  
+> > > SGI IOC3 chip has integrated ethernet, keyboard and mouse interface.
+> > > It also supports connecting a SuperIO chip for serial and parallel
+> > > interfaces. IOC3 is used inside various SGI systemboards and add-on
+> > > cards with different equipped external interfaces.
+> > > 
+> > > Support for ethernet and serial interfaces were implemented inside
+> > > the network driver. This patchset moves out the not network related
+> > > parts to a new MFD driver, which takes care of card detection,
+> > > setup of platform devices and interrupt distribution for the subdevices.
+> > > 
+> > > Serial portion: Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> > > 
+> > > Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>  
+> > 
+> > Looks good, I think.  
+> 
+> thank you. 
+> 
+> Now how do I get an Acked-by for the network part to merge it via
+> the MIPS tree ?
 
-> I think C files should use /*  */, and header files //, for SPDX.
+Oh, via the MIPS tree? It was quite unclear which these would land it,
+at least to an untrained mind like mine :) It could be useful to
+provide some info on how you want this merged and what you expect from
+whom in the cover letter in the future.
 
-Not really.
-
-From Documentation/process/license-rules.rst:
-
-"C source: // SPDX-License-Identifier: <SPDX License Expression>
- C header: /* SPDX-License-Identifier: <SPDX License Expression> */ "
+Hopefully Dave will be able to give you an official ack.
