@@ -2,71 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E65D93EE
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 16:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93B0D96D3
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 18:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394013AbfJPObv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Oct 2019 10:31:51 -0400
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:34705 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394117AbfJPObv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Oct 2019 10:31:51 -0400
-Received: by mail-ot1-f46.google.com with SMTP id m19so20349264otp.1
-        for <linux-mips@vger.kernel.org>; Wed, 16 Oct 2019 07:31:50 -0700 (PDT)
+        id S1728316AbfJPQSY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Oct 2019 12:18:24 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:39029 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727154AbfJPQSY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Oct 2019 12:18:24 -0400
+Received: by mail-lf1-f67.google.com with SMTP id 195so5028907lfj.6;
+        Wed, 16 Oct 2019 09:18:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=edtbDScedCzftAk7NNnkVZCbGagv2AScxtDF9ev1oVw=;
-        b=gXSrEqX+yu6ZoF2CbsnByJ2BKlgRqfhDcu+girdlrx8IwWau5o6fENtDj+3VN9z8Rh
-         WkgBhtVOVsfd/Sklz9H2yqm6Pabk7vrW6VIedR5S/+AX6yBCZFT5acx8vv8Z9glENV4i
-         Eje1x/L1ZKp0XxcZyuTZjU0mFkwSiEaKNVhSfuY2TDvnFzenkkrEcfoSDgnRHFbmoavV
-         hRdBkgIMxB/LKK16YZkhJWpoTBTZKhcHqeKicJp6QknJPuQ2C3ANgTGV/qn8ZRkWQtKJ
-         od/rc5v9N5DV0IT+d9MR1p3bzluxPrL14GlNGHfM0ku3maBKC91Rcsf4xttG+4P8BzwZ
-         80JA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y1u4tBuRnd6ZjEytQ7zg9F82TRiFsD/C7WX2wqbch+8=;
+        b=Y7XnxeWv16vJcEIy56IkwtxL2LWSOOIclCzC6NanfV6A6wNIdsg7+3EZdMtgtnNVv7
+         xdIrJI/hLsYV97HRn2qp9huBjieN/OP5vRzMRErA11sJbn4U6/CdxhUJgtOMxIIDiElQ
+         Q3o+lJ42HjrYPICB6LWJXJSYr7Gt1dymkiTZHYUoowNdz7G2MKmqOtSOzRYOKdHts0Sn
+         6ZYcuo60ZcFiPCWA9rD4wKtWOlZs2u0XKR92+SqRdDkYyd6ChC8r4ZD3dXHF3k+BzLPQ
+         mD9kUuQ7qTanPS8PDIVPqvyS++w5wJyHLxpepf3r1TOh8chtfJJXsTQ3Tqrs+B0lXyoX
+         2rKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=edtbDScedCzftAk7NNnkVZCbGagv2AScxtDF9ev1oVw=;
-        b=OssDQPOTIoo8XqA4xst4cbU7eY0x4Ay+bQxHgKaMdbse1gDpeZqgaLuZ1r9ApesNz9
-         2yGk78TtHypVB0qjvCmZYUrvSzwJkcjbAFQFhKCO6JIg0QxQL2zopyrrsIX3pCh2qc+U
-         uE5wh1eYxkviPj0y1KuYkLoXZfgrJc3JdKrPL+llyCYUyTwHJsj890rU8Rirm/R6/Ep6
-         LgkIrFPieZ15IL4W+ydwDP1qFVH8yJ8G3gGbY6zB7ieUyBZIgqedm3kc4TAvvSWAJ9jd
-         N9YOiK4c/VmraDFsSF1KzYApHkQdcP2558Go4hmlTRFIq0aMLre3YoFd1h3/iLl0wN5V
-         CWAg==
-X-Gm-Message-State: APjAAAV0YaCoYYy9rVpuFHRYUGlQ1QQ/Xiy0HaiL6C2M6xAyDK2K9r9j
-        cDn4Ua89a5ngHxDxC/HeMrsOK1CETcegyJPyUFGnUUNu
-X-Google-Smtp-Source: APXvYqxIauZHyYDzt7e+6gkCoffE9lIAaGYV1bvV8nm6b8EdtXkdyBQcdtWMakmcAEMrmbnHdrJuinOSS8nzzpNUe+0=
-X-Received: by 2002:a9d:4b89:: with SMTP id k9mr18679243otf.273.1571236309683;
- Wed, 16 Oct 2019 07:31:49 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y1u4tBuRnd6ZjEytQ7zg9F82TRiFsD/C7WX2wqbch+8=;
+        b=WfcuoQNzPv9bk+btBmuqoeGUlPpdXUg3rCVX+dtVuPnHDdLnI9PZ6Kd0peeBQSD5PW
+         ih7GOuRC9TvItyjnq98+atJYANsdx1nY7DMzPIc0Nzrag+IQGzO8Tt4cJ32BdsWaL93A
+         ZIvj4y4qIfEHInubsYaE/TTAi9UCTrO3na9cSy9FzSgC5gNS1CFGcnhNzpYaMk2b9TnD
+         n5egDMqSC9h6lB4/bvC0GoIRjdM4Htv6DgNiNRI2yu0y+EJj5t1V+vzASeaBfACSapXk
+         3RGI/3CNvA9GwGBNZWG19S6UAZsqwKyr3DH1CKUb1KkkVuhEsuaM4m1UGZe/DwwFJ63a
+         7mUg==
+X-Gm-Message-State: APjAAAX/O3x1HaqY1BI0tJMQx+F7bXfRZ8UOERDsDPZEwzaNQkgeQIHo
+        y8sk5Ff8JA5KYamGdLfHHK6c61CQ18nh1ahVPo0=
+X-Google-Smtp-Source: APXvYqyVZwfMVjw15XoxG0GOxNLuRAAnl9bDYbPMHaNMcwAzDZPkm7NBafCKz09RK7HbPatoJcJIcT8/B0ysUieaPvg=
+X-Received: by 2002:ac2:4888:: with SMTP id x8mr25064278lfc.90.1571242700210;
+ Wed, 16 Oct 2019 09:18:20 -0700 (PDT)
 MIME-Version: 1.0
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 16 Oct 2019 16:31:38 +0200
-Message-ID: <CAMhs-H93MvRBPpR2ra33wf667V_wyDmQGWY0n_rB=puq_aBGog@mail.gmail.com>
-Subject: PCI support for SOC_MT7621
-To:     hauke@hauke-m.de
-Cc:     paul.burton@mips.com, linux-mips@vger.kernel.org,
-        NeilBrown <neil@brown.name>, ralf@linux-mips.org
+References: <20191014061549.3669-1-o.rempel@pengutronix.de>
+ <20191014061549.3669-5-o.rempel@pengutronix.de> <20191016130057.GF4780@lunn.ch>
+In-Reply-To: <20191016130057.GF4780@lunn.ch>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 16 Oct 2019 13:20:31 -0300
+Message-ID: <CAOMZO5BRfkz+VBR6NRjSY6CymyuXRNqLnF_bOao90j64+sYZtQ@mail.gmail.com>
+Subject: Re: [PATCH v1 4/4] net: dsa: add support for Atheros AR9331 build-in switch
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Chris Snook <chris.snook@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        James Hogan <jhogan@kernel.org>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi all,
+On Wed, Oct 16, 2019 at 1:01 PM Andrew Lunn <andrew@lunn.ch> wrote:
 
-I have a concern about commit:
+> I think C files should use /*  */, and header files //, for SPDX.
 
-c4d48cf5e2f0 ("MIPS: ralink: deactivate PCI support for SOC_MT7621")
+Not really.
 
-This commit make a regression for my kernel configuration for gnubee
-board which is mt7621 SOC based and also has PCI. With this applied
-PCI_DRIVERS_GENERIC is not selectable anymore and it becomes into a
-PCI_DRIVERS_LEGACY configuration making impossible to compile
-mt7621-pci driver for this board.
+From Documentation/process/license-rules.rst:
 
-I think this should be reverted. Am I missing something here?
-
-Thanks in advance for your time.
-
-Best regards,
-    Sergio Paracuellos
+"C source: // SPDX-License-Identifier: <SPDX License Expression>
+ C header: /* SPDX-License-Identifier: <SPDX License Expression> */ "
