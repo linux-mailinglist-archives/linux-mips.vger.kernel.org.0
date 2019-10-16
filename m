@@ -2,114 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88179D8D04
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 11:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F33F6D8D2A
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Oct 2019 12:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404352AbfJPJyM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Oct 2019 05:54:12 -0400
-Received: from foss.arm.com ([217.140.110.172]:34420 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404266AbfJPJyM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 16 Oct 2019 05:54:12 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A6076142F;
-        Wed, 16 Oct 2019 02:54:11 -0700 (PDT)
-Received: from [10.163.1.216] (unknown [10.163.1.216])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DD8023F6C4;
-        Wed, 16 Oct 2019 02:53:56 -0700 (PDT)
-Subject: Re: [PATCH V6 2/2] mm/debug: Add tests validating architecture page
- table helpers
-To:     Qian Cai <cai@lca.pw>, linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <1571131302-32290-1-git-send-email-anshuman.khandual@arm.com>
- <1571131302-32290-3-git-send-email-anshuman.khandual@arm.com>
- <1571162982.5937.42.camel@lca.pw>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <7cd03155-6713-3116-1e88-f81f84dd794f@arm.com>
-Date:   Wed, 16 Oct 2019 15:24:23 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
-MIME-Version: 1.0
-In-Reply-To: <1571162982.5937.42.camel@lca.pw>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S2404478AbfJPKDR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Oct 2019 06:03:17 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:48799 "EHLO
+        mail.loongson.cn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404289AbfJPKDR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Oct 2019 06:03:17 -0400
+Received: from linux.loongson.cn (unknown [10.20.41.27])
+        by mail (Coremail) with SMTP id QMiowPDxb2Ld6qZdxwQSAA--.75S2;
+        Wed, 16 Oct 2019 18:03:09 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     paul.burton@mips.com, ralf@linux-mips.org, jhogan@kernel.org,
+        chenhc@lemote.com
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] MIPS: Loongson: Make default kernel log buffer size as 128KB for Loongson3
+Date:   Wed, 16 Oct 2019 18:03:00 +0800
+Message-Id: <1571220180-5478-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: QMiowPDxb2Ld6qZdxwQSAA--.75S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZr1rXF45Ar4rtr1kXw4fKrg_yoWkAFX_Jr
+        ZIkr1Uuw45JrW7uw4Iva1rur42ya4xA3WFyr47JrZrA3yakr15Jws0qr4UGwn8Zayqyr4f
+        Z3ykJF92kFn2qjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxxYjsxI4VWkCwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjcxG0xvY0x0EwIxGrVCF
+        72vEw4AK0wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWU
+        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUI3
+        C7UUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+When I update kernel with loongson3_defconfig based on the Loongson 3A3000
+platform, then using dmesg command to show kernel ring buffer, the initial
+kernel messages have disappeared due to the log buffer is too small, it is
+better to change the kernel log buffer size from 16KB to 128KB which is
+enough to save the boot messages.
+
+Since the default LOG_BUF_SHIFT value is 17, the default kernel log buffer
+size is 128KB, just delete the CONFIG_LOG_BUF_SHIFT line.
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+
+v3: use the default LOG_BUF_SHIFT value 17 and update the commit message
+
+ arch/mips/configs/loongson3_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index 90ee008..25e1179 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -12,7 +12,6 @@ CONFIG_TASKSTATS=y
+ CONFIG_TASK_DELAY_ACCT=y
+ CONFIG_TASK_XACCT=y
+ CONFIG_TASK_IO_ACCOUNTING=y
+-CONFIG_LOG_BUF_SHIFT=14
+ CONFIG_MEMCG=y
+ CONFIG_MEMCG_SWAP=y
+ CONFIG_BLK_CGROUP=y
+-- 
+2.1.0
 
 
-On 10/15/2019 11:39 PM, Qian Cai wrote:
-> On Tue, 2019-10-15 at 14:51 +0530, Anshuman Khandual wrote:
->> +static unsigned long __init get_random_vaddr(void)
->> +{
->> +	unsigned long random_vaddr, random_pages, total_user_pages;
->> +
->> +	total_user_pages = (TASK_SIZE - FIRST_USER_ADDRESS) / PAGE_SIZE;
->> +
->> +	random_pages = get_random_long() % total_user_pages;
->> +	random_vaddr = FIRST_USER_ADDRESS + random_pages * PAGE_SIZE;
->> +
->> +	WARN_ON(random_vaddr > TASK_SIZE);
->> +	WARN_ON(random_vaddr < FIRST_USER_ADDRESS);
-> 
-> It would be nice if this patch does not introduce a new W=1 GCC warning here on
-> x86 because FIRST_USER_ADDRESS is 0, and GCC think the code is dumb because
-> "random_vaddr" is unsigned,
-> 
-> In file included from ./arch/x86/include/asm/bug.h:83,
->                  from ./include/linux/bug.h:5,
->                  from ./include/linux/mmdebug.h:5,
->                  from ./include/linux/gfp.h:5,
->                  from mm/debug_vm_pgtable.c:13:
-> mm/debug_vm_pgtable.c: In function ‘get_random_vaddr’:
-> mm/debug_vm_pgtable.c:359:23: warning: comparison of unsigned expression < 0 is
-> always false [-Wtype-limits]
->   WARN_ON(random_vaddr < FIRST_USER_ADDRESS);
->                        ^
-> ./include/asm-generic/bug.h:113:25: note: in definition of macro ‘WARN_ON’
->   int __ret_warn_on = !!(condition);    \
->                          ^~~~~~~~~
-
-The test checks against an erroneous unsigned long overflow when
-FIRST_USER_ADDRESS is not 0 but a positive number. Wondering if
-the compiler will still complain if we merge both the WARN_ON()
-checks as || on a single statement.
