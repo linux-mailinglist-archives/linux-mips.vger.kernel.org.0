@@ -2,96 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1428DB648
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2019 20:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB88DB931
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2019 23:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438937AbfJQSgB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Oct 2019 14:36:01 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:33263 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438924AbfJQSgB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Oct 2019 14:36:01 -0400
-Received: by mail-wr1-f66.google.com with SMTP id b9so3520070wrs.0;
-        Thu, 17 Oct 2019 11:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=L/172PFesHWuvzNopt4c4XlSQQptfEWlNlsUsPCP8v8=;
-        b=UHG/4bLFtFCzmfzkVGc2ImqhRoK5hPPugYe10a7h/AHV34r//c3q8LQl4Uj67cTlbN
-         JoCk/UwGu+U8SRK2B1kbvqi4b1zjVtdw6qbWArTZsOG4XLgW34gTamVTiIoRw5JfAow7
-         o/7y+KYslgzzN/Vs8xkqNYoxXo8S98QVbnQry/NnNc9kdsybo+1TqjbpWc0156S9NjE/
-         QPp2znoHrt5f62rqIbsgH6NkXL6su3ENXfz9DmK8TQPazqy72sTIaisWe50NqX5JsEg6
-         Hfd4PuerKUUD/Pf5A8rdUty3wYr1lW+daPacXsvGVJ3/aOUhHtCLAFGlp46QbmB+a3GN
-         IFjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=L/172PFesHWuvzNopt4c4XlSQQptfEWlNlsUsPCP8v8=;
-        b=HiYL7h45vzGsQQ3790sHprLwSnZM/+wG3N+7iJSNRrO+II9lFf/fWFd5wKAv0bOEvA
-         zPQX+373akAhichskeG3maRRTGb92xUTkN0nrJyq2AyJJczih0YYN5SXY5/sUdWKhHei
-         rMRthONEUu17OT8iXNUlW5Cznt9pt1ZENiiVFIRUt2sAQ6qRPFDF+f1hN6u+nNwpEyvX
-         bxJ/3epNx1FNJ6RKimUy9vQTJvV9GsJGxsUt4HO3kSxOk9T/7Z3CEy6rj6FnmYeraOGO
-         I/wmEK/oghptcEd6BDcwAsHwKh/HlF5oLKQfglP9HghVx9QK99HdU1ZxUl+R0nuDzepm
-         R+aA==
-X-Gm-Message-State: APjAAAWPEaylYRwu4IygTC1S+/BKDsDL21ATcUbm+I9+eLxIcOpLrswD
-        fbjBZaLFA8HF8Bmkd69dj3qDTTDf
-X-Google-Smtp-Source: APXvYqxnhdYQusvYfFeUZHFuap0s7BvTLgqmJZXqKtYnH7Ct6SqR++6A5hhIRnW3QcZVratWlK/KXQ==
-X-Received: by 2002:adf:ee81:: with SMTP id b1mr3923610wro.58.1571337358592;
-        Thu, 17 Oct 2019 11:35:58 -0700 (PDT)
-Received: from [10.230.29.119] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id a14sm2540026wmm.44.2019.10.17.11.35.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Oct 2019 11:35:57 -0700 (PDT)
-Subject: Re: [PATCH v1 4/4] net: dsa: add support for Atheros AR9331 build-in
- switch
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Chris Snook <chris.snook@gmail.com>,
-        James Hogan <jhogan@kernel.org>,
-        Jay Cliburn <jcliburn@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Vivien Didelot <vivien.didelot@gmail.com>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20191014061549.3669-1-o.rempel@pengutronix.de>
- <20191014061549.3669-5-o.rempel@pengutronix.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <2ad26bdc-e099-ded6-1337-5793aba0958d@gmail.com>
-Date:   Thu, 17 Oct 2019 11:35:48 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S2441477AbfJQVmm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Oct 2019 17:42:42 -0400
+Received: from mail.sf-mail.de ([116.202.16.50]:37915 "EHLO mail.sf-mail.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2441565AbfJQVmm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 17 Oct 2019 17:42:42 -0400
+Received: (qmail 27079 invoked from network); 17 Oct 2019 21:31:57 -0000
+Received: from dslb-088-070-126-123.088.070.pools.vodafone-ip.de ([::ffff:88.70.126.123]:55060 HELO daneel.sf-tec.de) (auth=eike@sf-mail.de)
+        by mail.sf-mail.de (Qsmtpd 0.36dev) with (DHE-RSA-AES256-GCM-SHA384 encrypted) ESMTPSA
+        for <hch@lst.de>; Thu, 17 Oct 2019 23:31:57 +0200
+From:   Rolf Eike Beer <eike-kernel@sf-tec.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        nios2-dev@lists.rocketboards.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-mtd@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/21] parisc: remove __ioremap
+Date:   Thu, 17 Oct 2019 23:35:42 +0200
+Message-ID: <1650819.dOKmve5HLd@daneel.sf-tec.de>
+In-Reply-To: <20191017174554.29840-8-hch@lst.de>
+References: <20191017174554.29840-1-hch@lst.de> <20191017174554.29840-8-hch@lst.de>
 MIME-Version: 1.0
-In-Reply-To: <20191014061549.3669-5-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="nextPart3002460.JnYtLPdinj"; micalg="pgp-sha1"; protocol="application/pgp-signature"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+--nextPart3002460.JnYtLPdinj
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+
+Christoph Hellwig wrote:
+> __ioremap is always called with the _PAGE_NO_CACHE, so fold the whole
+> thing and rename it to ioremap.  This allows allows to remove the
+                                        ^^^^^^^^^^^^^
+> special EISA quirk to force _PAGE_NO_CACHE.
+
+Eike
+--nextPart3002460.JnYtLPdinj
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQSaYVDeqwKa3fTXNeNcpIk+abn8TgUCXajergAKCRBcpIk+abn8
+TkOlAJ46117xxLoFzZCiYYebEyVSrw/31gCeMRBoULeYp+iYijM534mn8tCGYHM=
+=d3J8
+-----END PGP SIGNATURE-----
+
+--nextPart3002460.JnYtLPdinj--
 
 
-On 10/13/2019 11:15 PM, Oleksij Rempel wrote:
-> Provide basic support for Atheros AR9331 build-in switch. So far it
-> works as port multiplexer without any hardware offloading support.
 
-I glanced through the functional parts of the code, and it looks pretty
-straight forward, since there is no offloading done so far, do you plan
-on adding bridge offload eventually if nothing more?
-
-When you submit v2, I would suggest splitting the tagger code from the
-switch driver code, just to make them easier to review.
-
-Thanks!
--- 
-Florian
