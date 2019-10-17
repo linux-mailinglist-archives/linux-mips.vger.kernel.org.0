@@ -2,59 +2,28 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5E0DA629
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2019 09:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 683BADA9CD
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Oct 2019 12:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731968AbfJQHOk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Oct 2019 03:14:40 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:51673 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731028AbfJQHOk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Oct 2019 03:14:40 -0400
-Received: by mail-wm1-f66.google.com with SMTP id 7so1343805wme.1
-        for <linux-mips@vger.kernel.org>; Thu, 17 Oct 2019 00:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=sjOmiSYuzMMV+1LmVtdqxL0iBZzQdBkGD8msyg4TZzA=;
-        b=U5NXOxzipe6Sm4dvuNHy1bbAlxNR6i3G6AXcJoFHuK4x4DpjbWmpjG9wAf/kk57VwP
-         vFzVY+0Sy6QRta4jrmLI4jzJeZxSI7TH5xYEv0XpUepoNUVp4158PE7S+mIWIfL78UOn
-         x4XsYQBM32c9GjdXoxPODAEWGI0a6ClaPgoTbjmxe+qzQZ3FeVqChVumjEpHLoUVTlev
-         vCktkOPmypsbZP4cWk4CIKPbSbRGSq8YLmW0+AS+a7Kj01mIVlf5AOiju0GG9Dm/lQQ9
-         Wr12Zxj+rSCyySdTy+zabujeKBurcO0OGi5HFPYOWW/8ZoiU4TE25ACS+bXhLDMMAsa+
-         LMwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=sjOmiSYuzMMV+1LmVtdqxL0iBZzQdBkGD8msyg4TZzA=;
-        b=o/vjn1ET3rFVOps6tlRZSHu10H/wmAG6n4sLaKGLDDzQsk7SLJWJ1M6Iyt0WHezkVD
-         HukcnBI+67JfBJGHo7T9TlcdPRrT34ZUUrtKM3nncNrEWkoCKtC/YPVlzCW/m4mX12qY
-         oFZoZyNVyzYv6oE6ySjYiwTDQyULwMmTPBWE3t8fAhXd7xc4jenllpSy/+3WZao63pi6
-         b8VymiQeFqYodQLdXJeZC9GmOm/fv45UQN7NQeyOf1cIMeKqfgVFVfqNsmxYl3Nlve3g
-         FewSK8SHeh0q4qKePzUijgEEx7wQZZPvNByMdNF22c6Q5EpoIWq8j10St9Hj0oDQIVd4
-         2kKQ==
-X-Gm-Message-State: APjAAAVETfBjvkxjJJT28zTs7P7hWECXJnxbMkeINX/6ISBdA/uQik6R
-        InjpRn+ISazwvfvvqEvuLOy+ag==
-X-Google-Smtp-Source: APXvYqyeNcmRYHZngtQtTdD0cPc/y8lTB9C1CXb6p9FdfbROYTVO8tNHzQNOw9g7MSgyyqDuMbeyXQ==
-X-Received: by 2002:a05:600c:2054:: with SMTP id p20mr1612482wmg.76.1571296477846;
-        Thu, 17 Oct 2019 00:14:37 -0700 (PDT)
-Received: from dell ([95.149.164.47])
-        by smtp.gmail.com with ESMTPSA id c17sm1375764wrc.60.2019.10.17.00.14.36
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 17 Oct 2019 00:14:37 -0700 (PDT)
-Date:   Thu, 17 Oct 2019 08:14:35 +0100
-From:   Lee Jones <lee.jones@linaro.org>
+        id S2501964AbfJQKTf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 17 Oct 2019 06:19:35 -0400
+Received: from mx2.suse.de ([195.135.220.15]:36378 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731515AbfJQKTe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 17 Oct 2019 06:19:34 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id B5E31B196;
+        Thu, 17 Oct 2019 10:19:31 +0000 (UTC)
+Date:   Thu, 17 Oct 2019 12:19:27 +0200
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
 To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        "David S. Miller" <davem@davemloft.net>,
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Jonathan Corbet <corbet@lwn.net>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -64,24 +33,24 @@ Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
         netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
         linux-serial@vger.kernel.org
 Subject: Re: [PATCH v10 4/6] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-ID: <20191017071435.GI4365@dell>
-References: <20191015120953.2597-1-tbogendoerfer@suse.de>
- <20191015120953.2597-5-tbogendoerfer@suse.de>
- <20191015122349.612a230b@cakuba.netronome.com>
- <20191016192321.c1ef8ea7c2533d6c8e1b98a2@suse.de>
- <20191016103813.24447c64@cakuba.netronome.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+Message-Id: <20191017121927.866d7d3b3bcec9ef570822eb@suse.de>
 In-Reply-To: <20191016103813.24447c64@cakuba.netronome.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20191015120953.2597-1-tbogendoerfer@suse.de>
+        <20191015120953.2597-5-tbogendoerfer@suse.de>
+        <20191015122349.612a230b@cakuba.netronome.com>
+        <20191016192321.c1ef8ea7c2533d6c8e1b98a2@suse.de>
+        <20191016103813.24447c64@cakuba.netronome.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 16 Oct 2019, Jakub Kicinski wrote:
+On Wed, 16 Oct 2019 10:38:13 -0700
+Jakub Kicinski <jakub.kicinski@netronome.com> wrote:
 
 > On Wed, 16 Oct 2019 19:23:21 +0200, Thomas Bogendoerfer wrote:
 > > On Tue, 15 Oct 2019 12:23:49 -0700
@@ -114,15 +83,21 @@ On Wed, 16 Oct 2019, Jakub Kicinski wrote:
 > at least to an untrained mind like mine :) It could be useful to
 > provide some info on how you want this merged and what you expect from
 > whom in the cover letter in the future.
-> 
+
+it's there in the cover letter under "Changes in v8":
+
+ - Patches 1 and 2 are already taken to mips-next, but
+   for completeness of the series they are still included.
+   What's missing to get the remaining 3 patches via the MIPS
+   tree is an ack from a network maintainer
+
 > Hopefully Dave will be able to give you an official ack.
 
-If this does go through the MIPS tree, I shall require a pull-request
-to an immutable branch.  However, I'm happy to do that if everyone's
-happen with it going in via MFD.
+/me hopes as well.
+
+Thomas.
 
 -- 
-Lee Jones [ÊùéÁêºÊñØ]
-Linaro Services Technical Lead
-Linaro.org ‚îÇ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+SUSE Software Solutions Germany GmbH
+HRB 36809 (AG N¸rnberg)
+Gesch‰ftsf¸hrer: Felix Imendˆrffer
