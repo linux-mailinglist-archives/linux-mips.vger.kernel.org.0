@@ -2,79 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCF4DD275
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2019 00:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C99DDD29F
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2019 00:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390450AbfJRWKg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Oct 2019 18:10:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43566 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390417AbfJRWKg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:10:36 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AE65A2248A;
-        Fri, 18 Oct 2019 22:10:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571436635;
-        bh=DuplhoRQredmAuojEW6TUPC1yPAM/K2dTnu2HW9tcM4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Aq77ZbIssFOVb3HNsZMeVE+0afuHXkmjw443EA8iv/vza7c9tzYIR1IaiALPAuXaA
-         Q5asNN91udoV28AXcHeO7nVMx/T6iqk0U/qOM5fj2rds2zJ//NXxr2MjnTdkcXM7W6
-         2O5R+h9OMOgJhMe5xQbvU8vmHIyOzuf3lSwX2g4k=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>, linux-mips@linux-mips.org
-Subject: [PATCH AUTOSEL 4.4 18/21] MIPS: fw: sni: Fix out of bounds init of o32 stack
-Date:   Fri, 18 Oct 2019 18:10:04 -0400
-Message-Id: <20191018221007.10851-18-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191018221007.10851-1-sashal@kernel.org>
-References: <20191018221007.10851-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S2391804AbfJRWNF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Oct 2019 18:13:05 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:46123 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389659AbfJRWNE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Oct 2019 18:13:04 -0400
+Received: by mail-pl1-f193.google.com with SMTP id q24so3479100plr.13;
+        Fri, 18 Oct 2019 15:13:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
+         :references:in-reply-to;
+        bh=LJ5OwWm1TmDzcWAMMg8LWHy3PtCXgtD6rnGsJm0sXXw=;
+        b=CpLeFHyEjaE7ES6d4HT8r7+ESJEWPOvf5ZGXDULpxG4TgaUAzaY6rnQxkYLOiPDDxZ
+         YVT7jG/f/wC33/CBUOroj/L8MWc2fIBtYj5Yif6v98AfLZ54sU17+wMrIBmBZ2qYzxbn
+         ImCPrRlr+Cue5n3m0KfnPJILwWJ6a819/YJUtcEfzqHDRhqN4BNo0ZOY8+hT+vvG+Fir
+         x5olysVbIRCbHNOAiCDbv8BvB5cSY6CB4TQN+ssrDFDiRHy4hF7aCC4aHgpBgW5PE7/u
+         sSE9LBdT/jZ+Rb8bCSrLj8UdZZT1HesIPvyKuE5vQiYNoGhWZfc9piLJL1E254GNNjlD
+         0nug==
+X-Gm-Message-State: APjAAAUAu1VrXljeROTF1dkuY5I8r7MOUcn6JHMtd/hNjM23F5BmvfAU
+        RatIBKvKdPscGShDat76wb8=
+X-Google-Smtp-Source: APXvYqyMYL+IS5XLskh7EtVaMTmbT57MDPd/VtnWQN1epa433p94XWh2FET+yxSTCX55G8Vkn6FPTQ==
+X-Received: by 2002:a17:902:aa41:: with SMTP id c1mr6795640plr.153.1571436783122;
+        Fri, 18 Oct 2019 15:13:03 -0700 (PDT)
+Received: from localhost ([172.58.38.188])
+        by smtp.gmail.com with ESMTPSA id e16sm6876437pgt.68.2019.10.18.15.13.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Oct 2019 15:13:02 -0700 (PDT)
+Message-ID: <5daa38ee.1c69fb81.fa39b.1bb9@mx.google.com>
+Date:   Fri, 18 Oct 2019 15:13:00 -0700
+From:   Paul Burton <paulburton@kernel.org>
+To:     Paul Burton <paulburton@kernel.org>
+CC:     linux-mips@vger.kernel.org
+CC:     linux-kernel@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
+        Paul Burton <paulburton@kernel.org>
+CC:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Use @kernel.org address for Paul Burton
+References:  <20191016182316.535398-1-paulburton@kernel.org>
+In-Reply-To:  <20191016182316.535398-1-paulburton@kernel.org>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Hello,
 
-[ Upstream commit efcb529694c3b707dc0471b312944337ba16e4dd ]
+Paul Burton wrote:
+> From: Paul Burton <paul.burton@mips.com>
+> 
+> Switch to using my paulburton@kernel.org email address in order to avoid
+> subject mangling that's being imposed on my previous address.
 
-Use ARRAY_SIZE to caluculate the top of the o32 stack.
+Applied to mips-fixes.
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: James Hogan <jhogan@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/fw/sni/sniprom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> commit 0ad8f7aa9f7e
+> https://git.kernel.org/mips/c/0ad8f7aa9f7e
+> 
+> Signed-off-by: Paul Burton <paul.burton@mips.com>
+> Signed-off-by: Paul Burton <paulburton@kernel.org>
 
-diff --git a/arch/mips/fw/sni/sniprom.c b/arch/mips/fw/sni/sniprom.c
-index 6aa264b9856ac..7c6151d412bd7 100644
---- a/arch/mips/fw/sni/sniprom.c
-+++ b/arch/mips/fw/sni/sniprom.c
-@@ -42,7 +42,7 @@
- 
- /* O32 stack has to be 8-byte aligned. */
- static u64 o32_stk[4096];
--#define O32_STK	  &o32_stk[sizeof(o32_stk)]
-+#define O32_STK	  (&o32_stk[ARRAY_SIZE(o32_stk)])
- 
- #define __PROM_O32(fun, arg) fun arg __asm__(#fun); \
- 				     __asm__(#fun " = call_o32")
--- 
-2.20.1
+Thanks,
+    Paul
 
+[ This message was auto-generated; if you believe anything is incorrect
+  then please email paulburton@kernel.org to report it. ]
