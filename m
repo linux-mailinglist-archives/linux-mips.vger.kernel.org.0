@@ -2,101 +2,209 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FA76DBD11
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Oct 2019 07:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A936DBD33
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Oct 2019 07:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390129AbfJRFbV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Oct 2019 01:31:21 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:41482 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727932AbfJRFbU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Oct 2019 01:31:20 -0400
-Received: by mail-il1-f193.google.com with SMTP id z10so4394243ilo.8
-        for <linux-mips@vger.kernel.org>; Thu, 17 Oct 2019 22:31:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=ofLqnhuaTacSfKe2YQoATYL+HC8rQjiCUNcY3XPivmE=;
-        b=N5x8bC5o7w6rADZFh4KHeDpeb6o3Jgm+KphbQhVkPqZz1Fd8E9M3PaWuoBNyLGjNby
-         FcCFIu+ox9T9DjhSC9heNZjMQrgm4xMjJ8TFBQCdlE86wvAdlBsUPOrsnGVYu9lKKeHQ
-         D7w1xDFzmUYo0NdnoKDfVHfBV9rDMkKr3XHd+n6zCsh3R453pBKlec2RqfraXt+7FOJg
-         3/bKBkC2vF8FVFJOQ2O0M59pBjRLRRSRz4XeMXB7o18TKzN8hqr5whm5Tas+OI+iIky7
-         4MLLxBvYd+AUGMn4Rl6c+9BDiHaJCgsFf4PgCwD87izM7iHj9N5OArKOuTr8d8G+a9R5
-         mQMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=ofLqnhuaTacSfKe2YQoATYL+HC8rQjiCUNcY3XPivmE=;
-        b=IaPJ7DH4gClBMfZghFdRvbxr2ilwGQ0LDkjqE/eMvOX/7yQNLbivzkcQVF/e1V9NWA
-         g3HwwjkPYyEglWicU/naucSlJ0kjxNn5cBP+k5RMnaBMJBWseHL5MYbp/R84s1uL2oFi
-         gL9TznMZpVZ0Utg9FIQ1OvFTYMWmnbTjx7mmInyPLrwLUE4ChHKbN7gv9kX2+v0+TIqt
-         iPSPFXSEVuyVvblvPwBDeSczd5XwSOSuM4J12hYqBB6Yl5JMwgnxMZu/b/8MbrHV7kMi
-         DAaRRESZqts56bwA0LsqxxX/82djeC452ExBw6vNZAs2xdGKTfHVDAiamA/+onO5jaON
-         UuVw==
-X-Gm-Message-State: APjAAAUPS6YQ67Dqx7dNwtiypLKuHAU+sxeG9mvjPBPNkxTDwcUqlvvB
-        x8JwA0QQXRlF0J2vRYy3qyb9YA==
-X-Google-Smtp-Source: APXvYqykkUrK0vrBdmDDbwAwwr+5ZePp14K9XbkSbU4CaVjxo7HzjYRIh3HQWncCN26aSDHosD7Fnw==
-X-Received: by 2002:a92:9a54:: with SMTP id t81mr8275762ili.197.1571370138242;
-        Thu, 17 Oct 2019 20:42:18 -0700 (PDT)
-Received: from localhost ([64.62.168.194])
-        by smtp.gmail.com with ESMTPSA id d6sm1356657iop.34.2019.10.17.20.42.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Oct 2019 20:42:16 -0700 (PDT)
-Date:   Thu, 17 Oct 2019 20:42:14 -0700 (PDT)
-From:   Paul Walmsley <paul.walmsley@sifive.com>
-X-X-Sender: paulw@viisi.sifive.com
-To:     Christoph Hellwig <hch@lst.de>
-cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        openrisc@lists.librecores.org, linux-mtd@lists.infradead.org,
-        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
-        nios2-dev@lists.rocketboards.org, linux-riscv@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 18/21] riscv: use the generic ioremap code
-In-Reply-To: <20191017174554.29840-19-hch@lst.de>
-Message-ID: <alpine.DEB.2.21.9999.1910172038040.3156@viisi.sifive.com>
-References: <20191017174554.29840-1-hch@lst.de> <20191017174554.29840-19-hch@lst.de>
-User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
+        id S2404250AbfJRFp6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Oct 2019 01:45:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36110 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2395467AbfJRFp6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 18 Oct 2019 01:45:58 -0400
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D4D521D80
+        for <linux-mips@vger.kernel.org>; Fri, 18 Oct 2019 03:15:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571368557;
+        bh=K46fsWJT9D1+AWm1pFeodlhdrS+ZbXUEAbNO4PFZkos=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oTk5HgZmwR/m3wWFVjN0KjiPWR/TopaLT9qTgWXL9wW6f4HyU2Ru7fOkIaS+WP83p
+         qAG1jdt3JcCPAzCQ0eKiUsGT2bV0SL7IyHy3GhvBhIppZcT7J7JJJNHdlGmaoSb5G5
+         qqdTpYOtr548j/39GmCspcO0VcOsTbEWt/M5AY4E=
+Received: by mail-wr1-f52.google.com with SMTP id j18so4528671wrq.10
+        for <linux-mips@vger.kernel.org>; Thu, 17 Oct 2019 20:15:57 -0700 (PDT)
+X-Gm-Message-State: APjAAAV842lwH72eHSAGTD7+rXuX8g3GDFilKqIUhMqWknyodoU/jUgU
+        18LUn0oy+zoLWzT0W41pZbQL/JDzaZ169owZ2Y4Pmw==
+X-Google-Smtp-Source: APXvYqxPYR0Xs4HvDX2a+NswkyKwNd/iYC0Fr2w0Px08DQM8gg5+S0IoMNHgotc3I2NumCMSrh9L0RMVQajKYML6/MY=
+X-Received: by 2002:a5d:56c4:: with SMTP id m4mr5409453wrw.195.1571368555553;
+ Thu, 17 Oct 2019 20:15:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <1571367619-13573-1-git-send-email-chenhc@lemote.com>
+In-Reply-To: <1571367619-13573-1-git-send-email-chenhc@lemote.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Thu, 17 Oct 2019 20:15:44 -0700
+X-Gmail-Original-Message-ID: <CALCETrWXRgkQOJGRqa_sOLAG2zhjsEX6b86T2VTsNYN9ECRrtA@mail.gmail.com>
+Message-ID: <CALCETrWXRgkQOJGRqa_sOLAG2zhjsEX6b86T2VTsNYN9ECRrtA@mail.gmail.com>
+Subject: Re: [PATCH] lib/vdso: Use __arch_use_vsyscall() to indicate fallback
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        chenhuacai@gmail.com, LKML <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 17 Oct 2019, Christoph Hellwig wrote:
+On Thu, Oct 17, 2019 at 7:57 PM Huacai Chen <chenhc@lemote.com> wrote:
+>
+> In do_hres(), we currently use whether the return value of __arch_get_
+> hw_counter() is negtive to indicate fallback, but this is not a good
+> idea. Because:
+>
+> 1, ARM64 returns ULL_MAX but MIPS returns 0 when clock_mode is invalid;
+> 2, For a 64bit counter, a "negtive" value of counter is actually valid.
 
-> Use the generic ioremap code instead of providing a local version.
-> Note that this relies on the asm-generic no-op definition of
-> pgprot_noncached.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+s/negtive/negative
 
-According to the series introduction E-mail:
+What's the actual bug?  Is it that MIPS is returning 0 but the check
+is < 0?  Sounds like MIPS should get fixed.
 
-https://lore.kernel.org/linux-riscv/20191017174554.29840-1-hch@lst.de/T/#m9ac4010fd725c8c84179fa99aa391a6f701a32de
+>
+> To solve this problem, we use U64_MAX as the only "invalid" return
+> value -- this is still not fully correct, but has no problem in most
+> cases.
 
-nothing substantive related to RISC-V or the common code has changed since 
-the first version of this series, and this RISC-V-specific patch appears 
-to be quite close (if not identical) to the first version of the patch:
+I'm sort of okay with that, but...
 
-https://lore.kernel.org/linux-riscv/alpine.DEB.2.21.9999.1908171421560.4130@viisi.sifive.com/
+> Moreover, all vdso time-related functions should rely on the
+> return value of __arch_use_vsyscall(), because update_vdso_data() and
+> update_vsyscall_tz() also rely on it. So, in the core functions of
+> __cvdso_gettimeofday(), __cvdso_clock_gettime() and __cvdso_clock_
+> getres(), if __arch_use_vsyscall() returns false, we use the fallback
+> functions directly.
 
-Thus the Tested-by, Reviewed-by, and Acked-by for RISC-V should all still 
-apply:
+__arch_use_vsyscall() is not currently intended for use in the vDSO at all.
 
-https://lore.kernel.org/linux-riscv/alpine.DEB.2.21.9999.1908171421560.4130@viisi.sifive.com/
+>
+> Fixes: 00b26474c2f1613d7ab894c5 ("lib/vdso: Provide generic VDSO implementation")
+> Cc: stable@vger.kernel.org
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Paul Burton <paul.burton@mips.com>
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> ---
+>  arch/arm64/include/asm/vdso/vsyscall.h |  2 +-
+>  arch/mips/include/asm/vdso/vsyscall.h  |  2 +-
+>  include/asm-generic/vdso/vsyscall.h    |  2 +-
+>  lib/vdso/gettimeofday.c                | 12 +++++++++++-
+>  4 files changed, 14 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/vdso/vsyscall.h b/arch/arm64/include/asm/vdso/vsyscall.h
+> index 0c731bf..406e6de 100644
+> --- a/arch/arm64/include/asm/vdso/vsyscall.h
+> +++ b/arch/arm64/include/asm/vdso/vsyscall.h
+> @@ -31,7 +31,7 @@ int __arm64_get_clock_mode(struct timekeeper *tk)
+>  #define __arch_get_clock_mode __arm64_get_clock_mode
+>
+>  static __always_inline
+> -int __arm64_use_vsyscall(struct vdso_data *vdata)
+> +int __arm64_use_vsyscall(const struct vdso_data *vdata)
+>  {
+>         return !vdata[CS_HRES_COARSE].clock_mode;
+>  }
+> diff --git a/arch/mips/include/asm/vdso/vsyscall.h b/arch/mips/include/asm/vdso/vsyscall.h
+> index 1953147..8b10dd7 100644
+> --- a/arch/mips/include/asm/vdso/vsyscall.h
+> +++ b/arch/mips/include/asm/vdso/vsyscall.h
+> @@ -29,7 +29,7 @@ int __mips_get_clock_mode(struct timekeeper *tk)
+>  #define __arch_get_clock_mode __mips_get_clock_mode
+>
+>  static __always_inline
+> -int __mips_use_vsyscall(struct vdso_data *vdata)
+> +int __mips_use_vsyscall(const struct vdso_data *vdata)
+>  {
+>         return (vdata[CS_HRES_COARSE].clock_mode != VDSO_CLOCK_NONE);
+>  }
+> diff --git a/include/asm-generic/vdso/vsyscall.h b/include/asm-generic/vdso/vsyscall.h
+> index e94b1978..ac05a625 100644
+> --- a/include/asm-generic/vdso/vsyscall.h
+> +++ b/include/asm-generic/vdso/vsyscall.h
+> @@ -26,7 +26,7 @@ static __always_inline int __arch_get_clock_mode(struct timekeeper *tk)
+>  #endif /* __arch_get_clock_mode */
+>
+>  #ifndef __arch_use_vsyscall
+> -static __always_inline int __arch_use_vsyscall(struct vdso_data *vdata)
+> +static __always_inline int __arch_use_vsyscall(const struct vdso_data *vdata)
+>  {
+>         return 1;
+>  }
+> diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+> index e630e7f..4ad062e 100644
+> --- a/lib/vdso/gettimeofday.c
+> +++ b/lib/vdso/gettimeofday.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/hrtimer_defs.h>
+>  #include <vdso/datapage.h>
+>  #include <vdso/helpers.h>
+> +#include <vdso/vsyscall.h>
+>
+>  /*
+>   * The generic vDSO implementation requires that gettimeofday.h
+> @@ -50,7 +51,7 @@ static int do_hres(const struct vdso_data *vd, clockid_t clk,
+>                 cycles = __arch_get_hw_counter(vd->clock_mode);
+>                 ns = vdso_ts->nsec;
+>                 last = vd->cycle_last;
+> -               if (unlikely((s64)cycles < 0))
+> +               if (unlikely(cycles == U64_MAX))
+>                         return -1;
 
+I would actually prefer:
 
-- Paul
+if (unlikely(cycles < last))
+
+or perhaps:
+
+if (unlikely((s64)(cycles-last) < 0))
+
+which would have the nice side effect of getting rid of the annoying
+x86 special case in vdso_calc_delta().  The former version is
+compatible with U64_MAX, whereas the latter version would need the
+error case to return last-1 or similar.  The benefit of the latter
+version is that it can survive wrap-around.
+
+>
+>                 ns += vdso_calc_delta(cycles, last, vd->mask, vd->mult);
+> @@ -91,6 +92,9 @@ __cvdso_clock_gettime_common(clockid_t clock, struct __kernel_timespec *ts)
+>         if (unlikely((u32) clock >= MAX_CLOCKS))
+>                 return -1;
+>
+> +       if (!__arch_use_vsyscall(vd))
+> +               return -1;
+> +
+
+NAK.  I don't think this is helpful or correct.  It doesn't appear to
+do anything valid, and it's racy.
+
+>         /*
+>          * Convert the clockid to a bitmask and use it to check which
+>          * clocks are handled in the VDSO directly.
+> @@ -145,6 +149,9 @@ __cvdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz)
+>  {
+>         const struct vdso_data *vd = __arch_get_vdso_data();
+>
+> +       if (!__arch_use_vsyscall(vd))
+> +               return gettimeofday_fallback(tv, tz);
+> +
+
+Ditto.
+
+>         if (likely(tv != NULL)) {
+>                 struct __kernel_timespec ts;
+>
+> @@ -189,6 +196,9 @@ int __cvdso_clock_getres_common(clockid_t clock, struct __kernel_timespec *res)
+>         if (unlikely((u32) clock >= MAX_CLOCKS))
+>                 return -1;
+>
+> +       if (!__arch_use_vsyscall(vd))
+> +               return -1;
+> +
+
+Ditto.
