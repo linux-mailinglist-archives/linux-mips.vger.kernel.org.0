@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 89006DD2FE
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2019 00:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 533F7DD29C
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2019 00:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388678AbfJRWJO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Oct 2019 18:09:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41904 "EHLO mail.kernel.org"
+        id S1729388AbfJRWNE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Oct 2019 18:13:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42864 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388664AbfJRWJO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:09:14 -0400
+        id S2389599AbfJRWKD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 18 Oct 2019 18:10:03 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B5048222D4;
-        Fri, 18 Oct 2019 22:09:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 987E92246D;
+        Fri, 18 Oct 2019 22:10:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571436553;
+        s=default; t=1571436602;
         bh=DuplhoRQredmAuojEW6TUPC1yPAM/K2dTnu2HW9tcM4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y61MRxGV2CrOm5ZKD6O8JZtpwo21RpobEOxk1vxQeWlj5/xjHARxXsAyvS2mGf02Z
-         pOVzPxf4SSjAsKuEI9YVijw36Vhe2PYH3saYGfSqYxzBWBxe3HL751Ig207gYcW+ih
-         Viz8VEwPhOVDeeFp/uL/ylDeqHYq5KfUIZ3cNZFA=
+        b=huokm79ebLYF1QOs1yrVWhFQpxe1f8T7KFVideN4/BmRzRHZxpWKfv4u0BjhvnoXW
+         xZmM1VbS3+5KUZahXQMdUdWQT7gXRRxaONaKkdTj32ywjNEHnFvIC73kj2CIDHlWAh
+         cFgrDGZY0q90V8pcdHdcPzYnJf33asht3nKAlhOY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
@@ -30,12 +30,12 @@ Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
         Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>, linux-mips@linux-mips.org
-Subject: [PATCH AUTOSEL 4.14 51/56] MIPS: fw: sni: Fix out of bounds init of o32 stack
-Date:   Fri, 18 Oct 2019 18:07:48 -0400
-Message-Id: <20191018220753.10002-51-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 25/29] MIPS: fw: sni: Fix out of bounds init of o32 stack
+Date:   Fri, 18 Oct 2019 18:09:16 -0400
+Message-Id: <20191018220920.10545-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191018220753.10002-1-sashal@kernel.org>
-References: <20191018220753.10002-1-sashal@kernel.org>
+In-Reply-To: <20191018220920.10545-1-sashal@kernel.org>
+References: <20191018220920.10545-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
