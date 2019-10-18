@@ -2,145 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E321BDC062
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Oct 2019 10:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BE3DC152
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Oct 2019 11:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388733AbfJRIx0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Oct 2019 04:53:26 -0400
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:37236 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731444AbfJRIxT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Oct 2019 04:53:19 -0400
-Received: by mail-vs1-f67.google.com with SMTP id p13so3529205vsr.4
-        for <linux-mips@vger.kernel.org>; Fri, 18 Oct 2019 01:53:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZFGj7CW4hdUtWSJdWVNaVmZMeTl6mFJ/pi0dDaNSBNI=;
-        b=Mue1fKqhFIuquMu+rQdYue5Ab10+aIYtB6Q9/0NGn6yqBrOgXLgFxSg9NHgyKSbFSE
-         P/wYniqUzElGGRUAv73GH8vxgzAqIkRFcXnKtK9ERXdptaI+2SGSIs/jXswG4speKbto
-         lvoSDiJeqxjuzOzIefrZ/deo7u6TdlJP7VTwxZFuteA/G4mV3V/aqdXyku3K8eU9Xoif
-         xAyZGXgX2NNhi62LjQKANeErNlNX/Za8ktqBzNRyqHutbskgjId182FjA9IqnNqFz+zm
-         ZXV01E9q9XPvlg0rZAq3Q2UEHuoAvj3+8z07VtkHMPYeXNncwhRl6aFysiNItkIHFYs1
-         L2bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZFGj7CW4hdUtWSJdWVNaVmZMeTl6mFJ/pi0dDaNSBNI=;
-        b=CJ/EWQ6A1DbOdyMRc+KraMKEj817nK10BVXKFzUm83V8YGtYDcpmWVLN16+jI2dQ+U
-         rNE/QHscvx8hd+e4KRTENqZAN2q/q2bzWNIaE5ZcJPO5adj9YKRYhQB9qvnJgMWE+FBm
-         CrHBr2v/coJZz5JWReG1YEll8RuYdX4+lVzuNbtfst29rNRvO2oH+8gkzmO0CxbH4Ui8
-         mPeOByc2Gac1lz2aC/K/i3VuY14qj2cyL8la9w0wLa8RNfFXRPQgaWiEY30KdxyC8A+I
-         InRa6C5uZGQpi/Noo6o0/fCA0VTH7KBfVjzccwZ/UiEQzzbqyQkJ9/fR7CebF15AAPea
-         yAsA==
-X-Gm-Message-State: APjAAAUXLtzaMdHN1eIgpVUphY76uDK8i3FBQyx/kAZOSlHTfJgK9Kf1
-        2kFjvMI9qxAWWwQjk/b2Ob7AWDYqLd1QuVIYRz0exw==
-X-Google-Smtp-Source: APXvYqxx1CtlN+u0DoDjVeLLVdh/4lNPYBI0SFJLfPUK/RX16/kP5dPKuMLW2YkmIBl0ktGJ57HLSuHmNeIqxg0/6RQ=
-X-Received: by 2002:a67:ebc2:: with SMTP id y2mr4733668vso.191.1571388797894;
- Fri, 18 Oct 2019 01:53:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <1567669089-88693-1-git-send-email-zhouyanjie@zoho.com>
- <1570857203-49192-1-git-send-email-zhouyanjie@zoho.com> <1570857203-49192-7-git-send-email-zhouyanjie@zoho.com>
-In-Reply-To: <1570857203-49192-7-git-send-email-zhouyanjie@zoho.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 18 Oct 2019 10:52:41 +0200
-Message-ID: <CAPDyKFo9juNmf6hrcBjzOprS6GwzAPBq8y3ReGu=ry+MdxT9Bg@mail.gmail.com>
-Subject: Re: [PATCH 6/6 v2] MMC: JZ4740: Add support for LPM.
-To:     Zhou Yanjie <zhouyanjie@zoho.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Cc:     linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S2442417AbfJRJju (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Oct 2019 05:39:50 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:46645 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2442377AbfJRJju (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Oct 2019 05:39:50 -0400
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1iLOjQ-0006Z4-Ty; Fri, 18 Oct 2019 11:39:36 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1iLOjN-0007gV-De; Fri, 18 Oct 2019 11:39:33 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>, Chris Snook <chris.snook@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        James Hogan <jhogan@kernel.org>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
         Paul Burton <paul.burton@mips.com>,
-        Mark Rutland <mark.rutland@arm.com>, syq@debian.org,
-        Linus Walleij <linus.walleij@linaro.org>, armijn@tjaldur.nl,
-        Thomas Gleixner <tglx@linutronix.de>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Mathieu Malaterre <malat@debian.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
+        Ralf Baechle <ralf@linux-mips.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, Russell King <linux@armlinux.org.uk>
+Subject: [PATCH v2 0/5] add dsa switch support for ar9331
+Date:   Fri, 18 Oct 2019 11:39:24 +0200
+Message-Id: <20191018093929.19299-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.23.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 12 Oct 2019 at 07:19, Zhou Yanjie <zhouyanjie@zoho.com> wrote:
->
-> add support for low power mode of Ingenic's MMC/SD Controller.
->
-> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+changes v2:
+- move Atheros AR9331 TAG format to separate patch
+- use netdev_warn_once in the tag driver to reduce potential message spam
+- typo fixes
+- reorder tag driver alphabetically 
+- configure switch to maximal frame size
+- use mdiobus_read/write
+- fail if mdio sub node is not found
+- add comment for post reset state
+- remove deprecated comment about device id
+- remove phy-handle option for node with fixed-link
+- ag71xx: set 1G support only for GMII mode
 
-I couldn't find a proper coverletter for the series, please provide
-that next time as it really helps review. Additionally, it seems like
-you forgot to change the prefix of the patches to "mmc: jz4740" (or at
-least you chosed upper case letters), but I will take care of that
-this time. So, I have applied the series for next, thanks!
+This patch series provides dsa switch support for Atheros ar9331 WiSoC.
+As side effect ag71xx needed to be ported to phylink to make the switch
+driver (as well phylink based) work properly.
 
-I also have a general question. Should we perhaps rename the driver
-from jz4740_mmc.c to ingenic.c (and the file for the DT bindings, the
-Kconfig, etc), as that seems like a more appropriate name? No?
+Oleksij Rempel (5):
+  net: ag71xx: port to phylink
+  dt-bindings: net: dsa: qca,ar9331 switch documentation
+  MIPS: ath79: ar9331: add ar9331-switch node
+  net: dsa: add support for Atheros AR9331 TAG format
+  net: dsa: add support for Atheros AR9331 build-in switch
 
-Kind regards
-Uffe
+ .../devicetree/bindings/net/dsa/ar9331.txt    | 148 ++++
+ arch/mips/boot/dts/qca/ar9331.dtsi            | 127 ++-
+ arch/mips/boot/dts/qca/ar9331_dpt_module.dts  |  13 +
+ drivers/net/dsa/Kconfig                       |   2 +
+ drivers/net/dsa/Makefile                      |   1 +
+ drivers/net/dsa/qca/Kconfig                   |  11 +
+ drivers/net/dsa/qca/Makefile                  |   2 +
+ drivers/net/dsa/qca/ar9331.c                  | 823 ++++++++++++++++++
+ drivers/net/ethernet/atheros/Kconfig          |   2 +-
+ drivers/net/ethernet/atheros/ag71xx.c         | 146 ++--
+ include/net/dsa.h                             |   2 +
+ net/dsa/Kconfig                               |   6 +
+ net/dsa/Makefile                              |   1 +
+ net/dsa/tag_ar9331.c                          |  97 +++
+ 14 files changed, 1319 insertions(+), 62 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/dsa/ar9331.txt
+ create mode 100644 drivers/net/dsa/qca/Kconfig
+ create mode 100644 drivers/net/dsa/qca/Makefile
+ create mode 100644 drivers/net/dsa/qca/ar9331.c
+ create mode 100644 net/dsa/tag_ar9331.c
 
+-- 
+2.23.0
 
-> ---
->  drivers/mmc/host/jz4740_mmc.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
-> index 44a04fe..4cbe7fb 100644
-> --- a/drivers/mmc/host/jz4740_mmc.c
-> +++ b/drivers/mmc/host/jz4740_mmc.c
-> @@ -43,6 +43,7 @@
->  #define JZ_REG_MMC_RESP_FIFO   0x34
->  #define JZ_REG_MMC_RXFIFO      0x38
->  #define JZ_REG_MMC_TXFIFO      0x3C
-> +#define JZ_REG_MMC_LPM         0x40
->  #define JZ_REG_MMC_DMAC                0x44
->
->  #define JZ_MMC_STRPCL_EXIT_MULTIPLE BIT(7)
-> @@ -102,6 +103,12 @@
->  #define JZ_MMC_DMAC_DMA_SEL BIT(1)
->  #define JZ_MMC_DMAC_DMA_EN BIT(0)
->
-> +#define        JZ_MMC_LPM_DRV_RISING BIT(31)
-> +#define        JZ_MMC_LPM_DRV_RISING_QTR_PHASE_DLY BIT(31)
-> +#define        JZ_MMC_LPM_DRV_RISING_1NS_DLY BIT(30)
-> +#define        JZ_MMC_LPM_SMP_RISING_QTR_OR_HALF_PHASE_DLY BIT(29)
-> +#define        JZ_MMC_LPM_LOW_POWER_MODE_EN BIT(0)
-> +
->  #define JZ_MMC_CLK_RATE 24000000
->
->  enum jz4740_mmc_version {
-> @@ -860,6 +867,22 @@ static int jz4740_mmc_set_clock_rate(struct jz4740_mmc_host *host, int rate)
->         }
->
->         writew(div, host->base + JZ_REG_MMC_CLKRT);
-> +
-> +       if (real_rate > 25000000) {
-> +               if (host->version >= JZ_MMC_X1000) {
-> +                       writel(JZ_MMC_LPM_DRV_RISING_QTR_PHASE_DLY |
-> +                                  JZ_MMC_LPM_SMP_RISING_QTR_OR_HALF_PHASE_DLY |
-> +                                  JZ_MMC_LPM_LOW_POWER_MODE_EN,
-> +                                  host->base + JZ_REG_MMC_LPM);
-> +               } else if (host->version >= JZ_MMC_JZ4760) {
-> +                       writel(JZ_MMC_LPM_DRV_RISING |
-> +                                  JZ_MMC_LPM_LOW_POWER_MODE_EN,
-> +                                  host->base + JZ_REG_MMC_LPM);
-> +               } else if (host->version >= JZ_MMC_JZ4725B)
-> +                       writel(JZ_MMC_LPM_LOW_POWER_MODE_EN,
-> +                                  host->base + JZ_REG_MMC_LPM);
-> +       }
-> +
->         return real_rate;
->  }
->
-> --
-> 2.7.4
->
->
