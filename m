@@ -2,78 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5746DD7DC
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2019 12:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7458EDDAF3
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Oct 2019 22:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725294AbfJSKBs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 19 Oct 2019 06:01:48 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:59086 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725283AbfJSKBs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Oct 2019 06:01:48 -0400
-Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1iLlYH-0004Fy-IZ; Sat, 19 Oct 2019 12:01:37 +0200
-Date:   Sat, 19 Oct 2019 12:01:32 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Huacai Chen <chenhc@lemote.com>
-cc:     Andy Lutomirski <luto@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Paul Burton <paul.burton@mips.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] lib/vdso: Use __arch_use_vsyscall() to indicate
- fallback
-In-Reply-To: <CAAhV-H6VkW5-hMOrzAQeyHT4pYGExZR6eTRbPHSPK50GAkigCw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.1910191156240.2098@nanos.tec.linutronix.de>
-References: <1571367619-13573-1-git-send-email-chenhc@lemote.com> <CALCETrWXRgkQOJGRqa_sOLAG2zhjsEX6b86T2VTsNYN9ECRrtA@mail.gmail.com> <CAAhV-H6VkW5-hMOrzAQeyHT4pYGExZR6eTRbPHSPK50GAkigCw@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1726313AbfJSUom convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Sat, 19 Oct 2019 16:44:42 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:49748 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726136AbfJSUol (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Oct 2019 16:44:41 -0400
+Received: from turkeyburger.collabora.co.uk (turkeyburger.collabora.co.uk [46.235.227.230])
+        by bhuna.collabora.co.uk (Postfix) with ESMTP id C2434263BB2;
+        Sat, 19 Oct 2019 21:44:38 +0100 (BST)
+Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <5DA9EE2F.4030603@zoho.com>
+From:   "Ezequiel Garcia" <ezequiel.garcia@collabora.com>
+X-Forward: 81.67.116.94
+Date:   Sat, 19 Oct 2019 21:44:38 +0100
+Cc:     "Ulf Hansson" <ulf.hansson@linaro.org>,
+        "Paul Cercueil" <paul@crapouillou.net>, linux-mips@vger.kernel.org,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        =?utf-8?q?linux-mmc=40vger=2Ekernel=2Eorg?= 
+        <linux-mmc@vger.kernel.org>, "DTML" <devicetree@vger.kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Paul Burton" <paul.burton@mips.com>,
+        "Mark Rutland" <mark.rutland@arm.com>, syq@debian.org,
+        "Linus Walleij" <linus.walleij@linaro.org>, armijn@tjaldur.nl,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "YueHaibing" <yuehaibing@huawei.com>,
+        "Mathieu Malaterre" <malat@debian.org>
+To:     "Zhou Yanjie" <zhouyanjie@zoho.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-ID: <47f6-5dab7580-33-5680128@176712317>
+Subject: =?utf-8?q?Re=3A?==?utf-8?q?_=5BPATCH?==?utf-8?q?_6=2F6?==?utf-8?q?_v2=5D?=
+ =?utf-8?q?_MMC=3A?==?utf-8?q?_JZ4740=3A?= Add support for 
+ =?utf-8?q?LPM=2E?=
+User-Agent: SOGoMail 4.0.7
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 19 Oct 2019, Huacai Chen wrote:
-> On Fri, Oct 18, 2019 at 11:15 AM Andy Lutomirski <luto@kernel.org> wrote:
+On Friday, October 18, 2019 13:54 -03, Zhou Yanjie <zhouyanjie@zoho.com> wrote: 
+ 
+
+> 
 > >
-> > On Thu, Oct 17, 2019 at 7:57 PM Huacai Chen <chenhc@lemote.com> wrote:
-> > >
-> > > In do_hres(), we currently use whether the return value of __arch_get_
-> > > hw_counter() is negtive to indicate fallback, but this is not a good
-> > > idea. Because:
-> > >
-> > > 1, ARM64 returns ULL_MAX but MIPS returns 0 when clock_mode is invalid;
-> > > 2, For a 64bit counter, a "negtive" value of counter is actually valid.
-> >
-> > s/negtive/negative
-> >
-> > What's the actual bug?  Is it that MIPS is returning 0 but the check
-> > is < 0?  Sounds like MIPS should get fixed.
-> My original bug is what Vincenzo said, MIPS has a boot failure if no
-> valid clock_mode, and surely MIPS need to fix. However, when I try to
-> fix it, I found that clock_getres() has another problem, because
-> __cvdso_clock_getres_common() get vd[CS_HRES_COARSE].hrtimer_res, but
-> hrtimer_res is set in update_vdso_data() which relies on
-> __arch_use_vsyscall().
+> > I also have a general question. Should we perhaps rename the driver
+> > from jz4740_mmc.c to ingenic.c (and the file for the DT bindings, the
+> > Kconfig, etc), as that seems like a more appropriate name? No?
+> 
+> I am very much in favor of this proposal. Now jz4740_mmc.c is not only used
+> for the JZ4740 processor, it is also used for JZ4725, JZ4760, JZ4770, JZ4780
+> and X1000, and now Ingenic's processor is no longer named after JZ47xx,
+> it is divided into three product lines: M, T, and X. It is easy to cause 
+> some
+> misunderstandings by using jz4740_mmc.c. At the same time, I think that
+> some register names also need to be adjusted. For example, the STLPPL
+> register name has only appeared in JZ4730 and JZ4740, and this register
+> in all subsequent processors is called CTRL. This time I was confused by
+> the STLPPL when I added drivers for the JZ4760's and X1000's LPM.
+> 
 
-__arch_use_vsyscall() is a pointless exercise TBH. The VDSO data should be
-updated unconditionally so all the trivial interfaces like time() and
-getres() just work independently of the functions which depend on the
-underlying clocksource.
+I am very much against renamings, for several reasons. As Paul already mentioned, it's pointless and just adds noise to the git-log, making history harder to recover. Driver file names don't really have to reflect the device exactly. For the compatibility list, it's far easier to just git-grep for compatible strings, or git-grep Documentation and/or Kconfig.
 
-This functions have a fallback operation already:
-
-Let __arch_get_hw_counter() return U64_MAX and the syscall fallback is
-invoked.
-
-__arch_use_vsyscall() should just be removed.
+Renaming macros and register names, is equally pointless and equally git-history invasive. Simply adding some documentation is enough.
 
 Thanks,
+Ezequiel
 
-	tglx
