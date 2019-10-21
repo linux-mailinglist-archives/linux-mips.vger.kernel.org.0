@@ -2,267 +2,233 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF72DE1A8
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2019 03:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C797BDE241
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2019 04:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726610AbfJUBC1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 20 Oct 2019 21:02:27 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:45725 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726597AbfJUBC1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 20 Oct 2019 21:02:27 -0400
-Received: by mail-io1-f66.google.com with SMTP id c25so13817343iot.12
-        for <linux-mips@vger.kernel.org>; Sun, 20 Oct 2019 18:02:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xXe1n7XIgUAnYxeb92+vsZU7v72Chi/nCgraaKRwP7I=;
-        b=OOcFqqoyYPz73clBKdB+m6QohpcOcm+kbiZGxqAGQPsU1YpwslUvNTHeVrJ4bB13oy
-         Cs2zCr7CBKCc+2+nV6RGBU+Kj7wORRWI2PzjcPsOsJ8Unv71YBK3hhUAmnmWXHt32Dey
-         zLEcxNuVtCZkDDSPSEssLdKyvWpa9JHGKa3hi5RPrCwxhJlwx3f5JQZcmyr1BPzafXc3
-         wjaT8r56tXW/iBhDflGz+w1grjTQXyHgII1T0cac4KYjfaxBNERKi4CuPMqKoawioJ/U
-         lvVpUiuip/hpfkz387EYfNZkK3m687DH6p0lq+FNmZiFbQ1fZAawVtwVApazfSZm7304
-         CgLQ==
-X-Gm-Message-State: APjAAAWEe5SKUX8UwcXSiBWfGcfPmiKzB3mbwVHcfbCu+VTK520UUR33
-        lyPCOJhsFeQdgKh/T/3qAruEiFy0ZrHy+xFjDGVVtlkK
-X-Google-Smtp-Source: APXvYqztqRL3O8cyxvaqI8AaPw4cTGkvGmy1fsDu2tFahA7AjUrv0Xi0PM29Npyg2LVRk5ksdm/N7dr21BtY0f+XZmM=
-X-Received: by 2002:a6b:7410:: with SMTP id s16mr472528iog.35.1571619746426;
- Sun, 20 Oct 2019 18:02:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191020144318.18341-1-jiaxun.yang@flygoat.com>
-In-Reply-To: <20191020144318.18341-1-jiaxun.yang@flygoat.com>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Mon, 21 Oct 2019 09:07:52 +0800
-Message-ID: <CAAhV-H49Gx4RXz1ahDcxd6zrSgcj74UjwN=xopC_YYutojP_0Q@mail.gmail.com>
-Subject: Re: [PATCH 0/5] MIPS: Loongson64: separate loongson2ef/loongson64 code
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Paul Burton <paul.burton@mips.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1727025AbfJUCmu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 20 Oct 2019 22:42:50 -0400
+Received: from [217.140.110.172] ([217.140.110.172]:39736 "EHLO foss.arm.com"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1726907AbfJUCmt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 20 Oct 2019 22:42:49 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4F668369;
+        Sun, 20 Oct 2019 19:42:16 -0700 (PDT)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.1.2])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0FF163F71F;
+        Sun, 20 Oct 2019 19:42:01 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Steven Price <Steven.Price@arm.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sri Krishna chowdary <schowdary@nvidia.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V7] mm/debug: Add tests validating architecture page table helpers
+Date:   Mon, 21 Oct 2019 08:12:18 +0530
+Message-Id: <1571625739-29943-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Jiaxun,
+This series adds a test validation for architecture exported page table
+helpers. Patch in the series adds basic transformation tests at various
+levels of the page table.
 
-Can we just "retire" the Loongson-2E/2F support? Let 5.4-lts be the
-last version which support Loongson-2E/2F.
+This test was originally suggested by Catalin during arm64 THP migration
+RFC discussion earlier. Going forward it can include more specific tests
+with respect to various generic MM functions like THP, HugeTLB etc and
+platform specific tests.
 
-Huacai
+https://lore.kernel.org/linux-mm/20190628102003.GA56463@arrakis.emea.arm.com/
 
-On Sun, Oct 20, 2019 at 10:44 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
-> Hi all,
->
-> This patchset is the successor of previous set "Modernize Loongson64 Machine".
-> It based on latest mips-next. But some Loongson related fixes in mips-fixes is
-> not contained as the mips-next is not aligned with the latest status of mips-fixes.
-> Please look after them at apply time.
->
-> Thanks
->
-> Jiaxun Yang (6):
->   MIPS: Loongson64: Rename CPU TYPES
->   MIPS: Fork loongson2ef from loongson64
->   MIPS: Loongson2ef: clean up loongson64 related code
->   MIPS: Loongson64: Cleanup unused code
->   MIPS: Loongson64: Move files to the top-level directory
->   MAINTAINERS: Fix entries for Loongson2EF and add myself to Loongson64
->
->  MAINTAINERS                                   |  10 +-
->  arch/mips/Kbuild.platforms                    |   1 +
->  arch/mips/Kconfig                             |  81 ++++++++----
->  arch/mips/configs/fuloong2e_defconfig         |   2 +-
->  arch/mips/configs/lemote2f_defconfig          |   2 +-
->  arch/mips/configs/loongson3_defconfig         |   1 -
->  arch/mips/include/asm/bootinfo.h              |   3 +-
->  arch/mips/include/asm/cop2.h                  |   2 +-
->  arch/mips/include/asm/cpu-type.h              |   9 +-
->  arch/mips/include/asm/cpu.h                   |   4 +-
->  arch/mips/include/asm/hazards.h               |   4 +-
->  arch/mips/include/asm/io.h                    |   2 +-
->  arch/mips/include/asm/irqflags.h              |   2 +-
->  .../cpu-feature-overrides.h                   |  15 +--
->  .../cs5536/cs5536.h                           |   0
->  .../cs5536/cs5536_mfgpt.h                     |   0
->  .../cs5536/cs5536_pci.h                       |   0
->  .../cs5536/cs5536_vsm.h                       |   0
->  .../loongson.h                                |  37 +-----
->  .../machine.h                                 |  12 +-
->  .../asm/mach-loongson2ef/mc146818rtc.h        |  36 ++++++
->  .../mem.h                                     |   6 +-
->  .../pci.h                                     |  12 +-
->  .../include/asm/mach-loongson2ef/spaces.h     |  10 ++
->  .../mach-loongson64/cpu-feature-overrides.h   |   3 -
->  arch/mips/include/asm/mach-loongson64/irq.h   |   4 -
->  .../asm/mach-loongson64/kernel-entry-init.h   |   4 -
->  .../include/asm/mach-loongson64/loongson.h    | 114 -----------------
->  .../mips/include/asm/mach-loongson64/mmzone.h |  29 +----
->  arch/mips/include/asm/mach-loongson64/pci.h   |  31 -----
->  .../include/asm/mach-loongson64/topology.h    |   4 +-
->  arch/mips/include/asm/module.h                |   8 +-
->  arch/mips/include/asm/processor.h             |   2 +-
->  arch/mips/include/asm/r4kcache.h              |   4 +-
->  arch/mips/kernel/cpu-probe.c                  |  16 +--
->  arch/mips/kernel/idle.c                       |   2 +-
->  arch/mips/kernel/perf_event_mipsxx.c          |   4 +-
->  arch/mips/kernel/setup.c                      |   2 +-
->  arch/mips/kernel/traps.c                      |   2 +-
->  arch/mips/lib/csum_partial.S                  |   4 +-
->  arch/mips/{loongson64 => loongson2ef}/Kconfig |  53 +-------
->  .../mips/{loongson64 => loongson2ef}/Makefile |   8 +-
->  arch/mips/loongson2ef/Platform                |  32 +++++
->  .../common/Makefile                           |   0
->  .../common/bonito-irq.c                       |   0
->  .../common/cmdline.c                          |   0
->  .../common/cs5536/Makefile                    |   0
->  .../common/cs5536/cs5536_acc.c                |   0
->  .../common/cs5536/cs5536_ehci.c               |   0
->  .../common/cs5536/cs5536_ide.c                |   0
->  .../common/cs5536/cs5536_isa.c                |   0
->  .../common/cs5536/cs5536_mfgpt.c              |   0
->  .../common/cs5536/cs5536_ohci.c               |   0
->  .../common/cs5536/cs5536_pci.c                |   0
->  .../common/early_printk.c                     |   2 +-
->  arch/mips/loongson2ef/common/env.c            |  71 +++++++++++
->  .../{loongson64 => loongson2ef}/common/init.c |   5 -
->  .../{loongson64 => loongson2ef}/common/irq.c  |   0
->  .../common/machtype.c                         |   1 -
->  .../{loongson64 => loongson2ef}/common/mem.c  |  37 ------
->  .../{loongson64 => loongson2ef}/common/pci.c  |   8 --
->  .../common/platform.c                         |   0
->  .../{loongson64 => loongson2ef}/common/pm.c   |   9 +-
->  .../common/reset.c                            |  21 ----
->  .../{loongson64 => loongson2ef}/common/rtc.c  |   0
->  arch/mips/loongson2ef/common/serial.c         |  86 +++++++++++++
->  .../common/setup.c                            |  21 ----
->  .../{loongson64 => loongson2ef}/common/time.c |   4 -
->  .../common/uart_base.c                        |  17 +--
->  .../fuloong-2e/Makefile                       |   0
->  .../fuloong-2e/dma.c                          |   0
->  .../fuloong-2e/irq.c                          |   0
->  .../fuloong-2e/reset.c                        |   0
->  .../lemote-2f/Makefile                        |   0
->  .../lemote-2f/clock.c                         |   6 +-
->  .../lemote-2f/dma.c                           |   0
->  .../lemote-2f/ec_kb3310b.c                    |   0
->  .../lemote-2f/ec_kb3310b.h                    |   0
->  .../lemote-2f/irq.c                           |   0
->  .../lemote-2f/machtype.c                      |   0
->  .../lemote-2f/pm.c                            |   0
->  .../lemote-2f/reset.c                         |   2 +-
->  arch/mips/loongson64/Kconfig                  | 119 +-----------------
->  arch/mips/loongson64/Makefile                 |  29 ++---
->  arch/mips/loongson64/Platform                 |  33 +----
->  .../loongson64/{loongson-3 => }/acpi_init.c   |   0
->  arch/mips/loongson64/{common => }/cmdline.c   |   2 -
->  arch/mips/loongson64/common/serial.c          | 117 -----------------
->  .../loongson64/{loongson-3 => }/cop2-ex.c     |   0
->  arch/mips/loongson64/{loongson-3 => }/dma.c   |   0
->  arch/mips/loongson64/{common => }/env.c       |  62 +--------
->  arch/mips/loongson64/{loongson-3 => }/hpet.c  |   0
->  arch/mips/loongson64/{common => }/init.c      |  17 +--
->  arch/mips/loongson64/{loongson-3 => }/irq.c   |   8 +-
->  arch/mips/loongson64/loongson-3/Makefile      |  11 --
->  arch/mips/loongson64/{loongson-3 => }/numa.c  |  11 +-
->  arch/mips/loongson64/{common => }/pci.c       |   5 +-
->  .../loongson64/{loongson-3 => }/platform.c    |   0
->  arch/mips/loongson64/{common => }/pm.c        |  53 --------
->  arch/mips/loongson64/{common => }/reset.c     |  30 -----
->  arch/mips/loongson64/{common => }/rtc.c       |   0
->  arch/mips/loongson64/{common => }/setup.c     |  21 ----
->  arch/mips/loongson64/{loongson-3 => }/smp.c   |   0
->  arch/mips/loongson64/{loongson-3 => }/smp.h   |   0
->  arch/mips/loongson64/{common => }/time.c      |   3 -
->  arch/mips/mm/c-r4k.c                          |  32 ++---
->  arch/mips/mm/page.c                           |   2 +-
->  arch/mips/mm/tlb-r4k.c                        |   4 +-
->  arch/mips/mm/tlbex.c                          |   6 +-
->  arch/mips/oprofile/Makefile                   |   4 +-
->  arch/mips/oprofile/common.c                   |   4 +-
->  arch/mips/pci/Makefile                        |   2 +-
->  drivers/cpufreq/loongson2_cpufreq.c           |   2 +-
->  drivers/gpio/Kconfig                          |   2 +-
->  drivers/gpio/gpio-loongson.c                  |   2 +-
->  drivers/platform/mips/Kconfig                 |   4 +-
->  include/drm/drm_cache.h                       |   2 +-
->  117 files changed, 447 insertions(+), 1007 deletions(-)
->  copy arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/cpu-feature-overrides.h (73%)
->  rename arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/cs5536/cs5536.h (100%)
->  rename arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/cs5536/cs5536_mfgpt.h (100%)
->  rename arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/cs5536/cs5536_pci.h (100%)
->  rename arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/cs5536/cs5536_vsm.h (100%)
->  copy arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/loongson.h (90%)
->  rename arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/machine.h (60%)
->  create mode 100644 arch/mips/include/asm/mach-loongson2ef/mc146818rtc.h
->  rename arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/mem.h (86%)
->  copy arch/mips/include/asm/{mach-loongson64 => mach-loongson2ef}/pci.h (84%)
->  create mode 100644 arch/mips/include/asm/mach-loongson2ef/spaces.h
->  copy arch/mips/{loongson64 => loongson2ef}/Kconfig (64%)
->  copy arch/mips/{loongson64 => loongson2ef}/Makefile (68%)
->  create mode 100644 arch/mips/loongson2ef/Platform
->  rename arch/mips/{loongson64 => loongson2ef}/common/Makefile (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/bonito-irq.c (100%)
->  copy arch/mips/{loongson64 => loongson2ef}/common/cmdline.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/Makefile (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_acc.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_ehci.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_ide.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_isa.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_mfgpt.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_ohci.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/cs5536/cs5536_pci.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/early_printk.c (93%)
->  create mode 100644 arch/mips/loongson2ef/common/env.c
->  copy arch/mips/{loongson64 => loongson2ef}/common/init.c (95%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/irq.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/machtype.c (96%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/mem.c (75%)
->  copy arch/mips/{loongson64 => loongson2ef}/common/pci.c (90%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/platform.c (100%)
->  copy arch/mips/{loongson64 => loongson2ef}/common/pm.c (93%)
->  copy arch/mips/{loongson64 => loongson2ef}/common/reset.c (79%)
->  copy arch/mips/{loongson64 => loongson2ef}/common/rtc.c (100%)
->  create mode 100644 arch/mips/loongson2ef/common/serial.c
->  copy arch/mips/{loongson64 => loongson2ef}/common/setup.c (57%)
->  copy arch/mips/{loongson64 => loongson2ef}/common/time.c (91%)
->  rename arch/mips/{loongson64 => loongson2ef}/common/uart_base.c (56%)
->  rename arch/mips/{loongson64 => loongson2ef}/fuloong-2e/Makefile (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/fuloong-2e/dma.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/fuloong-2e/irq.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/fuloong-2e/reset.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/Makefile (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/clock.c (96%)
->  rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/dma.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/ec_kb3310b.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/ec_kb3310b.h (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/irq.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/machtype.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/pm.c (100%)
->  rename arch/mips/{loongson64 => loongson2ef}/lemote-2f/reset.c (98%)
->  rename arch/mips/loongson64/{loongson-3 => }/acpi_init.c (100%)
->  rename arch/mips/loongson64/{common => }/cmdline.c (97%)
->  delete mode 100644 arch/mips/loongson64/common/serial.c
->  rename arch/mips/loongson64/{loongson-3 => }/cop2-ex.c (100%)
->  rename arch/mips/loongson64/{loongson-3 => }/dma.c (100%)
->  rename arch/mips/loongson64/{common => }/env.c (79%)
->  rename arch/mips/loongson64/{loongson-3 => }/hpet.c (100%)
->  rename arch/mips/loongson64/{common => }/init.c (69%)
->  rename arch/mips/loongson64/{loongson-3 => }/irq.c (96%)
->  delete mode 100644 arch/mips/loongson64/loongson-3/Makefile
->  rename arch/mips/loongson64/{loongson-3 => }/numa.c (96%)
->  rename arch/mips/loongson64/{common => }/pci.c (97%)
->  rename arch/mips/loongson64/{loongson-3 => }/platform.c (100%)
->  rename arch/mips/loongson64/{common => }/pm.c (68%)
->  rename arch/mips/loongson64/{common => }/reset.c (64%)
->  rename arch/mips/loongson64/{common => }/rtc.c (100%)
->  rename arch/mips/loongson64/{common => }/setup.c (57%)
->  rename arch/mips/loongson64/{loongson-3 => }/smp.c (100%)
->  rename arch/mips/loongson64/{loongson-3 => }/smp.h (100%)
->  rename arch/mips/loongson64/{common => }/time.c (90%)
->
-> --
-> 2.23.0
->
+Needs to be applied on linux-next (next-20191017) after reverting all commits
+from V5 of this series.
+
+Changes in V7:
+
+- Memory allocation and free routines for mapped pages have been droped
+- Mapped pfns are derived from standard kernel text symbol per Matthew
+- Moved debug_vm_pgtaable() after page_alloc_init_late() per Michal and Qian 
+- Updated the commit message per Michal
+- Updated W=1 GCC warning problem on x86 per Qian Cai
+- Addition of new alloc_contig_pages() helper has been submitted separately
+
+Changes in V6: (https://patchwork.kernel.org/project/linux-mm/list/?series=187589)
+
+- Moved alloc_gigantic_page_order() into mm/page_alloc.c per Michal
+- Moved alloc_gigantic_page_order() within CONFIG_CONTIG_ALLOC in the test
+- Folded Andrew's include/asm-generic/pgtable.h fix into the test patch 2/2
+
+Changes in V5: (https://patchwork.kernel.org/project/linux-mm/list/?series=185991)
+
+- Redefined and moved X86 mm_p4d_folded() into a different header per Kirill/Ingo
+- Updated the config option comment per Ingo and dropped 'kernel module' reference
+- Updated the commit message and dropped 'kernel module' reference
+- Changed DEBUG_ARCH_PGTABLE_TEST into DEBUG_VM_PGTABLE per Ingo
+- Moved config option from mm/Kconfig.debug into lib/Kconfig.debug
+- Renamed core test function arch_pgtable_tests() as debug_vm_pgtable()
+- Renamed mm/arch_pgtable_test.c as mm/debug_vm_pgtable.c
+- debug_vm_pgtable() gets called from kernel_init_freeable() after init_mm_internals()
+- Added an entry in Documentation/features/debug/ per Ingo
+- Enabled the test on arm64 and x86 platforms for now
+
+Changes in V4: (https://patchwork.kernel.org/project/linux-mm/list/?series=183465)
+
+- Disable DEBUG_ARCH_PGTABLE_TEST for ARM and IA64 platforms
+
+Changes in V3: (https://lore.kernel.org/patchwork/project/lkml/list/?series=411216)
+
+- Changed test trigger from module format into late_initcall()
+- Marked all functions with __init to be freed after completion
+- Changed all __PGTABLE_PXX_FOLDED checks as mm_pxx_folded()
+- Folded in PPC32 fixes from Christophe
+
+Changes in V2:
+
+https://lore.kernel.org/linux-mm/1568268173-31302-1-git-send-email-anshuman.khandual@arm.com/T/#t
+
+- Fixed small typo error in MODULE_DESCRIPTION()
+- Fixed m64k build problems for lvalue concerns in pmd_xxx_tests()
+- Fixed dynamic page table level folding problems on x86 as per Kirril
+- Fixed second pointers during pxx_populate_tests() per Kirill and Gerald
+- Allocate and free pte table with pte_alloc_one/pte_free per Kirill
+- Modified pxx_clear_tests() to accommodate s390 lower 12 bits situation
+- Changed RANDOM_NZVALUE value from 0xbe to 0xff
+- Changed allocation, usage, free sequence for saved_ptep
+- Renamed VMA_FLAGS as VMFLAGS
+- Implemented a new method for random vaddr generation
+- Implemented some other cleanups
+- Dropped extern reference to mm_alloc()
+- Created and exported new alloc_gigantic_page_order()
+- Dropped the custom allocator and used new alloc_gigantic_page_order()
+
+Changes in V1:
+
+https://lore.kernel.org/linux-mm/1567497706-8649-1-git-send-email-anshuman.khandual@arm.com/
+
+- Added fallback mechanism for PMD aligned memory allocation failure
+
+Changes in RFC V2:
+
+https://lore.kernel.org/linux-mm/1565335998-22553-1-git-send-email-anshuman.khandual@arm.com/T/#u
+
+- Moved test module and it's config from lib/ to mm/
+- Renamed config TEST_ARCH_PGTABLE as DEBUG_ARCH_PGTABLE_TEST
+- Renamed file from test_arch_pgtable.c to arch_pgtable_test.c
+- Added relevant MODULE_DESCRIPTION() and MODULE_AUTHOR() details
+- Dropped loadable module config option
+- Basic tests now use memory blocks with required size and alignment
+- PUD aligned memory block gets allocated with alloc_contig_range()
+- If PUD aligned memory could not be allocated it falls back on PMD aligned
+  memory block from page allocator and pud_* tests are skipped
+- Clear and populate tests now operate on real in memory page table entries
+- Dummy mm_struct gets allocated with mm_alloc()
+- Dummy page table entries get allocated with [pud|pmd|pte]_alloc_[map]()
+- Simplified [p4d|pgd]_basic_tests(), now has random values in the entries
+
+Original RFC V1:
+
+https://lore.kernel.org/linux-mm/1564037723-26676-1-git-send-email-anshuman.khandual@arm.com/
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Steven Price <Steven.Price@arm.com>
+Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Sri Krishna chowdary <schowdary@nvidia.com>
+Cc: Dave Hansen <dave.hansen@intel.com>
+Cc: Russell King - ARM Linux <linux@armlinux.org.uk>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
+Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Vineet Gupta <vgupta@synopsys.com>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: Paul Burton <paul.burton@mips.com>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Kirill A. Shutemov <kirill@shutemov.name>
+Cc: Gerald Schaefer <gerald.schaefer@de.ibm.com>
+Cc: Christophe Leroy <christophe.leroy@c-s.fr>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-ia64@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (1):
+  mm/debug: Add tests validating architecture page table helpers
+
+ .../debug/debug-vm-pgtable/arch-support.txt        |  34 ++
+ arch/arm64/Kconfig                                 |   1 +
+ arch/x86/Kconfig                                   |   1 +
+ arch/x86/include/asm/pgtable_64.h                  |   6 +
+ include/asm-generic/pgtable.h                      |   6 +
+ init/main.c                                        |   1 +
+ lib/Kconfig.debug                                  |  21 ++
+ mm/Makefile                                        |   1 +
+ mm/debug_vm_pgtable.c                              | 388 +++++++++++++++++++++
+ 9 files changed, 459 insertions(+)
+ create mode 100644 Documentation/features/debug/debug-vm-pgtable/arch-support.txt
+ create mode 100644 mm/debug_vm_pgtable.c
+
+-- 
+2.7.4
+
