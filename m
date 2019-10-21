@@ -2,71 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB2FDE2D2
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2019 05:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 114DADE3E1
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Oct 2019 07:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726888AbfJUDz7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 20 Oct 2019 23:55:59 -0400
-Received: from forward105p.mail.yandex.net ([77.88.28.108]:42319 "EHLO
-        forward105p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726819AbfJUDz6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 20 Oct 2019 23:55:58 -0400
-Received: from mxback10j.mail.yandex.net (mxback10j.mail.yandex.net [IPv6:2a02:6b8:0:1619::113])
-        by forward105p.mail.yandex.net (Yandex) with ESMTP id A19134D405EE;
-        Mon, 21 Oct 2019 06:55:56 +0300 (MSK)
-Received: from myt3-372f9bf9bd7d.qloud-c.yandex.net (myt3-372f9bf9bd7d.qloud-c.yandex.net [2a02:6b8:c12:70e:0:640:372f:9bf9])
-        by mxback10j.mail.yandex.net (nwsmtp/Yandex) with ESMTP id ByAnOWj9vt-tuAOQEWl;
-        Mon, 21 Oct 2019 06:55:56 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1571630156;
-        bh=DvFnsVlWrscYT7z3jtn14a7gUF8zHdPe5xVCgDgEQ9U=;
-        h=From:To:Subject:CC:References:Date:In-Reply-To:Message-ID;
-        b=dmkHxERrDXI+z2jMbtrxobvd9f8Q/bicNrg4eyNff7xn524tnOYre3BBdPoTg4BjQ
-         SbmzEOIO7m5FVteV2Q+QaZKQfmPJtj6yRKWV7hh3aLzJZ7tL9FoQMg0Gk3rZv6hof3
-         RuaTJbBvGNZryCPwFXmFYO1GG/sw+fZH355PNzDk=
-Authentication-Results: mxback10j.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by myt3-372f9bf9bd7d.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id bF6gIFGziN-tqq0h41d;
-        Mon, 21 Oct 2019 06:55:52 +0300
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client certificate not present)
-Date:   Mon, 21 Oct 2019 11:55:33 +0800
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAAhV-H49Gx4RXz1ahDcxd6zrSgcj74UjwN=xopC_YYutojP_0Q@mail.gmail.com>
-References: <20191020144318.18341-1-jiaxun.yang@flygoat.com> <CAAhV-H49Gx4RXz1ahDcxd6zrSgcj74UjwN=xopC_YYutojP_0Q@mail.gmail.com>
+        id S1727181AbfJUFii (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Oct 2019 01:38:38 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:48617 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727167AbfJUFi1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Oct 2019 01:38:27 -0400
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1iMQOX-0001dY-FG; Mon, 21 Oct 2019 07:38:17 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1iMQOS-0005Ad-KB; Mon, 21 Oct 2019 07:38:12 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>, Chris Snook <chris.snook@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        James Hogan <jhogan@kernel.org>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, Russell King <linux@armlinux.org.uk>
+Subject: [PATCH v3 0/5] add dsa switch support for ar9331
+Date:   Mon, 21 Oct 2019 07:38:06 +0200
+Message-Id: <20191021053811.19818-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 0/5] MIPS: Loongson64: separate loongson2ef/loongson64 code
-To:     Huacai Chen <chenhc@lemote.com>
-CC:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Paul Burton <paul.burton@mips.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <AF48876C-308C-46AD-B7B4-77BFA2413EDE@flygoat.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+changes v3:
+- ag71xx: ag71xx_mac_config: ignore MLO_AN_INBAND mode. It is not
+  supported by HW and SW.
+- ag71xx: ag71xx_mac_validate: return all supported bits on
+  PHY_INTERFACE_MODE_NA
 
+changes v2:
+- move Atheros AR9331 TAG format to separate patch
+- use netdev_warn_once in the tag driver to reduce potential message spam
+- typo fixes
+- reorder tag driver alphabetically 
+- configure switch to maximal frame size
+- use mdiobus_read/write
+- fail if mdio sub node is not found
+- add comment for post reset state
+- remove deprecated comment about device id
+- remove phy-handle option for node with fixed-link
+- ag71xx: set 1G support only for GMII mode
 
-=E4=BA=8E 2019=E5=B9=B410=E6=9C=8821=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=88=
-9:07:52, Huacai Chen <chenhc@lemote=2Ecom> =E5=86=99=E5=88=B0:
->Hi, Jiaxun,
->
->Can we just "retire" the Loongson-2E/2F support? Let 5=2E4-lts be the
->last version which support Loongson-2E/2F=2E
-Hi Huacai,
+This patch series provides dsa switch support for Atheros ar9331 WiSoC.
+As side effect ag71xx needed to be ported to phylink to make the switch
+driver (as well phylink based) work properly.
 
-There are still a lot of Loongson-2F users=2E Please don't leave them alon=
-e=2E
+Oleksij Rempel (5):
+  net: ag71xx: port to phylink
+  dt-bindings: net: dsa: qca,ar9331 switch documentation
+  MIPS: ath79: ar9331: add ar9331-switch node
+  net: dsa: add support for Atheros AR9331 TAG format
+  net: dsa: add support for Atheros AR9331 build-in switch
 
-I'm still going to maintain these code=2E Although might not be very activ=
-e=2E
+ .../devicetree/bindings/net/dsa/ar9331.txt    | 148 ++++
+ arch/mips/boot/dts/qca/ar9331.dtsi            | 127 ++-
+ arch/mips/boot/dts/qca/ar9331_dpt_module.dts  |  13 +
+ drivers/net/dsa/Kconfig                       |   2 +
+ drivers/net/dsa/Makefile                      |   1 +
+ drivers/net/dsa/qca/Kconfig                   |  11 +
+ drivers/net/dsa/qca/Makefile                  |   2 +
+ drivers/net/dsa/qca/ar9331.c                  | 823 ++++++++++++++++++
+ drivers/net/ethernet/atheros/Kconfig          |   2 +-
+ drivers/net/ethernet/atheros/ag71xx.c         | 146 ++--
+ include/net/dsa.h                             |   2 +
+ net/dsa/Kconfig                               |   6 +
+ net/dsa/Makefile                              |   1 +
+ net/dsa/tag_ar9331.c                          |  97 +++
+ 14 files changed, 1321 insertions(+), 60 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/dsa/ar9331.txt
+ create mode 100644 drivers/net/dsa/qca/Kconfig
+ create mode 100644 drivers/net/dsa/qca/Makefile
+ create mode 100644 drivers/net/dsa/qca/ar9331.c
+ create mode 100644 net/dsa/tag_ar9331.c
 
+-- 
+2.23.0
 
->
->Huacai
->
---=20
-Jiaxun Yang
