@@ -2,23 +2,23 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5926DFD42
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Oct 2019 07:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F6CDFD58
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Oct 2019 07:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730915AbfJVF56 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Oct 2019 01:57:58 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:44531 "EHLO
+        id S2387701AbfJVF6V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Oct 2019 01:58:21 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:46701 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730828AbfJVF55 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Oct 2019 01:57:57 -0400
+        with ESMTP id S2387664AbfJVF6D (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Oct 2019 01:58:03 -0400
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1iMnAo-00013W-QN; Tue, 22 Oct 2019 07:57:38 +0200
+        id 1iMnAw-00015J-UK; Tue, 22 Oct 2019 07:57:46 +0200
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1iMnAl-0001k3-TK; Tue, 22 Oct 2019 07:57:35 +0200
+        id 1iMnAw-0001nD-JG; Tue, 22 Oct 2019 07:57:46 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Andrew Lunn <andrew@lunn.ch>, Chris Snook <chris.snook@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -35,8 +35,8 @@ Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, Russell King <linux@armlinux.org.uk>
 Subject: [PATCH v4 0/5] add dsa switch support for ar9331
-Date:   Tue, 22 Oct 2019 07:57:30 +0200
-Message-Id: <20191022055735.6642-1-o.rempel@pengutronix.de>
+Date:   Tue, 22 Oct 2019 07:57:38 +0200
+Message-Id: <20191022055743.6832-1-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
