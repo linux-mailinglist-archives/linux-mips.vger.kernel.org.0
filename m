@@ -2,100 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61420DF7F2
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Oct 2019 00:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58700DF9D4
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Oct 2019 02:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730276AbfJUWVs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Oct 2019 18:21:48 -0400
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:32994 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727264AbfJUWVs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Oct 2019 18:21:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=6uc83vVbAQNL+hWSYNLKkGKf3OFD2g2M4EAFEdxCp8k=; b=036YnA8M35zh7oaZP5i2lrsye
-        EB0cDqf3F8uePuPil4Bamdbm8KtNRvsBdq07e1aHHJgDobEYpDojY9mOeX8YPPd1J2sC+mh+6VDxc
-        /V9CA6YUSYv9pEQ1D6eRYBtf0ymOBj8sxubqz1HIJtD2vM6dH1pOOQwIR9tY0McREESQviSLk1hDT
-        9Aad+EJGZHzyyUWVCsvOL2mAZKl5VCw9Vi52BbeATUdSZaXmXoUrg26XhJ0lkzlnbH06WL0VYhCfN
-        UvtH8sR/oeNe0DxU2hwkxapIuU4gWA+ug0hzwvSwDebQsKNrfX++HAyF36QsP7DTwur0NBbrWwgBa
-        pjPKOdWUg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57354)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1iMg3O-0003H1-0z; Mon, 21 Oct 2019 23:21:30 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1iMg3G-0003uw-Oy; Mon, 21 Oct 2019 23:21:22 +0100
-Date:   Mon, 21 Oct 2019 23:21:22 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Chris Snook <chris.snook@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        James Hogan <jhogan@kernel.org>,
-        Jay Cliburn <jcliburn@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 1/5] net: ag71xx: port to phylink
-Message-ID: <20191021222122.GM25745@shell.armlinux.org.uk>
-References: <20191021053811.19818-1-o.rempel@pengutronix.de>
- <20191021053811.19818-2-o.rempel@pengutronix.de>
+        id S1730266AbfJVAfk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Oct 2019 20:35:40 -0400
+Received: from mga07.intel.com ([134.134.136.100]:35281 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727953AbfJVAfk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 21 Oct 2019 20:35:40 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Oct 2019 17:35:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,325,1566889200"; 
+   d="scan'208";a="348897196"
+Received: from sjchrist-coffee.jf.intel.com ([10.54.74.41])
+  by orsmga004.jf.intel.com with ESMTP; 21 Oct 2019 17:35:38 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     James Hogan <jhogan@kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/15] KVM: Dynamically size memslot arrays
+Date:   Mon, 21 Oct 2019 17:35:22 -0700
+Message-Id: <20191022003537.13013-1-sean.j.christopherson@intel.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191021053811.19818-2-o.rempel@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 21, 2019 at 07:38:07AM +0200, Oleksij Rempel wrote:
-> +static void ag71xx_mac_validate(struct phylink_config *config,
-> +			    unsigned long *supported,
-> +			    struct phylink_link_state *state)
->  {
-> -	struct ag71xx *ag = netdev_priv(ndev);
-> +	__ETHTOOL_DECLARE_LINK_MODE_MASK(mask) = { 0, };
-> +
-> +	if (state->interface != PHY_INTERFACE_MODE_NA &&
-> +	    state->interface != PHY_INTERFACE_MODE_GMII &&
-> +	    state->interface != PHY_INTERFACE_MODE_MII) {
-> +		bitmap_zero(supported, __ETHTOOL_LINK_MODE_MASK_NBITS);
-> +		return;
-> +	}
-> +
-> +	phylink_set(mask, MII);
-> +
-> +	/* flow control is not supported */
-> +
-> +	phylink_set(mask, 10baseT_Half);
-> +	phylink_set(mask, 10baseT_Full);
-> +	phylink_set(mask, 100baseT_Half);
-> +	phylink_set(mask, 100baseT_Full);
->  
-> -	ag71xx_link_adjust(ag, true);
-> +	if (state->interface == PHY_INTERFACE_MODE_NA &&
-> +	    state->interface == PHY_INTERFACE_MODE_GMII) {
+The end goal of this series is to dynamically size the memslot array so
+that KVM allocates memory based on the number of memslots in use, as
+opposed to unconditionally allocating memory for the maximum number of
+memslots.  On x86, each memslot consumes 88 bytes, and so with 2 address
+spaces of 512 memslots, each VM consumes ~90k bytes for the memslots.
+E.g. given a VM that uses a total of 30 memslots, dynamic sizing reduces
+the memory footprint from 90k to ~2.6k bytes.
 
-This is always false.
+The changes required to support dynamic sizing are relatively small,
+e.g. are essentially contained in patches 12/13 and 13/13.  Patches 1-11
+clean up the memslot code, which has gotten quite crusy, especially
+__kvm_set_memory_region().  The clean up is likely not strictly necessary
+to switch to dynamic sizing, but I didn't have a remotely reasonable
+level of confidence in the correctness of the dynamic sizing without first
+doing the clean up.
 
-Apart from that, from just reading the patch I have no further concerns.
+Testing, especially non-x86 platforms, would be greatly appreciated.  The
+non-x86 changes are for all intents and purposes untested, e.g. I compile
+tested pieces of the code by copying them into x86, but that's it.  In
+theory, the vast majority of the functional changes are arch agnostic, in
+theory...
 
-Thanks.
+v2:
+  - Split "Drop kvm_arch_create_memslot()" into three patches to move
+    minor functional changes to standalone patches [Janosch].
+  - Rebase to latest kvm/queue (f0574a1cea5b, "KVM: x86: fix ...")
+  - Collect an Acked-by and a Reviewed-by
+
+Sean Christopherson (15):
+  KVM: Reinstall old memslots if arch preparation fails
+  KVM: Don't free new memslot if allocation of said memslot fails
+  KVM: PPC: Move memslot memory allocation into prepare_memory_region()
+  KVM: x86: Allocate memslot resources during prepare_memory_region()
+  KVM: Drop kvm_arch_create_memslot()
+  KVM: Explicitly free allocated-but-unused dirty bitmap
+  KVM: Refactor error handling for setting memory region
+  KVM: Move setting of memslot into helper routine
+  KVM: Move memslot deletion to helper function
+  KVM: Simplify kvm_free_memslot() and all its descendents
+  KVM: Clean up local variable usage in __kvm_set_memory_region()
+  KVM: Provide common implementation for generic dirty log functions
+  KVM: Ensure validity of memslot with respect to kvm_get_dirty_log()
+  KVM: Terminate memslot walks via used_slots
+  KVM: Dynamically size memslot array based on number of used slots
+
+ arch/mips/include/asm/kvm_host.h      |   2 +-
+ arch/mips/kvm/mips.c                  |  68 +---
+ arch/powerpc/include/asm/kvm_ppc.h    |  14 +-
+ arch/powerpc/kvm/book3s.c             |  22 +-
+ arch/powerpc/kvm/book3s_hv.c          |  36 +-
+ arch/powerpc/kvm/book3s_pr.c          |  20 +-
+ arch/powerpc/kvm/booke.c              |  17 +-
+ arch/powerpc/kvm/powerpc.c            |  13 +-
+ arch/s390/include/asm/kvm_host.h      |   2 +-
+ arch/s390/kvm/kvm-s390.c              |  21 +-
+ arch/x86/include/asm/kvm_page_track.h |   3 +-
+ arch/x86/kvm/page_track.c             |  15 +-
+ arch/x86/kvm/x86.c                    | 100 ++---
+ include/linux/kvm_host.h              |  48 +--
+ virt/kvm/arm/arm.c                    |  47 +--
+ virt/kvm/arm/mmu.c                    |  18 +-
+ virt/kvm/kvm_main.c                   | 546 ++++++++++++++++----------
+ 17 files changed, 467 insertions(+), 525 deletions(-)
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
+2.22.0
+
