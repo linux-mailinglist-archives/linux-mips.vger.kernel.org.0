@@ -2,49 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC2EDFD00
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Oct 2019 07:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5926DFD42
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Oct 2019 07:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731014AbfJVFMY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Oct 2019 01:12:24 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:53649 "EHLO
+        id S1730915AbfJVF56 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Oct 2019 01:57:58 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:44531 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725887AbfJVFMX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Oct 2019 01:12:23 -0400
-Received: from soja.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:13da])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        with ESMTP id S1730828AbfJVF55 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Oct 2019 01:57:57 -0400
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <o.rempel@pengutronix.de>)
-        id 1iMmT0-00060g-Df; Tue, 22 Oct 2019 07:12:22 +0200
-Subject: Re: [PATCH v3 1/5] net: ag71xx: port to phylink
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Mark Rutland <mark.rutland@arm.com>, Andrew Lunn <andrew@lunn.ch>,
-        Jay Cliburn <jcliburn@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, James Hogan <jhogan@kernel.org>,
-        linux-kernel@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paul Burton <paul.burton@mips.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Chris Snook <chris.snook@gmail.com>, netdev@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@gmail.com>
-References: <20191021053811.19818-1-o.rempel@pengutronix.de>
- <20191021053811.19818-2-o.rempel@pengutronix.de>
- <20191021222122.GM25745@shell.armlinux.org.uk>
+        (envelope-from <ore@pengutronix.de>)
+        id 1iMnAo-00013W-QN; Tue, 22 Oct 2019 07:57:38 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1iMnAl-0001k3-TK; Tue, 22 Oct 2019 07:57:35 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
-Message-ID: <bf684928-0800-69df-f5cd-5d1db6958804@pengutronix.de>
-Date:   Tue, 22 Oct 2019 07:12:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+To:     Andrew Lunn <andrew@lunn.ch>, Chris Snook <chris.snook@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        James Hogan <jhogan@kernel.org>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, Russell King <linux@armlinux.org.uk>
+Subject: [PATCH v4 0/5] add dsa switch support for ar9331
+Date:   Tue, 22 Oct 2019 07:57:30 +0200
+Message-Id: <20191022055735.6642-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <20191021222122.GM25745@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:13da
-X-SA-Exim-Mail-From: o.rempel@pengutronix.de
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 Sender: linux-mips-owner@vger.kernel.org
@@ -52,50 +49,62 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+changes v4:
+- ag71xx: ag71xx_mac_validate fix always false comparison (&& -> ||)
+- tag_ar9331: use skb_pull_rcsum() instead of skb_pull().
+- tag_ar9331: drop skb_set_mac_header()
 
+changes v3:
+- ag71xx: ag71xx_mac_config: ignore MLO_AN_INBAND mode. It is not
+  supported by HW and SW.
+- ag71xx: ag71xx_mac_validate: return all supported bits on
+  PHY_INTERFACE_MODE_NA
 
-On 22.10.19 00:21, Russell King - ARM Linux admin wrote:
-> On Mon, Oct 21, 2019 at 07:38:07AM +0200, Oleksij Rempel wrote:
->> +static void ag71xx_mac_validate(struct phylink_config *config,
->> +			    unsigned long *supported,
->> +			    struct phylink_link_state *state)
->>   {
->> -	struct ag71xx *ag = netdev_priv(ndev);
->> +	__ETHTOOL_DECLARE_LINK_MODE_MASK(mask) = { 0, };
->> +
->> +	if (state->interface != PHY_INTERFACE_MODE_NA &&
->> +	    state->interface != PHY_INTERFACE_MODE_GMII &&
->> +	    state->interface != PHY_INTERFACE_MODE_MII) {
->> +		bitmap_zero(supported, __ETHTOOL_LINK_MODE_MASK_NBITS);
->> +		return;
->> +	}
->> +
->> +	phylink_set(mask, MII);
->> +
->> +	/* flow control is not supported */
->> +
->> +	phylink_set(mask, 10baseT_Half);
->> +	phylink_set(mask, 10baseT_Full);
->> +	phylink_set(mask, 100baseT_Half);
->> +	phylink_set(mask, 100baseT_Full);
->>   
->> -	ag71xx_link_adjust(ag, true);
->> +	if (state->interface == PHY_INTERFACE_MODE_NA &&
->> +	    state->interface == PHY_INTERFACE_MODE_GMII) {
-> 
-> This is always false.
+changes v2:
+- move Atheros AR9331 TAG format to separate patch
+- use netdev_warn_once in the tag driver to reduce potential message spam
+- typo fixes
+- reorder tag driver alphabetically 
+- configure switch to maximal frame size
+- use mdiobus_read/write
+- fail if mdio sub node is not found
+- add comment for post reset state
+- remove deprecated comment about device id
+- remove phy-handle option for node with fixed-link
+- ag71xx: set 1G support only for GMII mode
 
-... I shame to myself :(
+This patch series provides dsa switch support for Atheros ar9331 WiSoC.
+As side effect ag71xx needed to be ported to phylink to make the switch
+driver (as well phylink based) work properly.
 
-> Apart from that, from just reading the patch I have no further concerns.
+Oleksij Rempel (5):
+  net: ag71xx: port to phylink
+  dt-bindings: net: dsa: qca,ar9331 switch documentation
+  MIPS: ath79: ar9331: add ar9331-switch node
+  net: dsa: add support for Atheros AR9331 TAG format
+  net: dsa: add support for Atheros AR9331 build-in switch
 
-ok. thx!
-
-Kind regards,
-Oleksij Rempel
+ .../devicetree/bindings/net/dsa/ar9331.txt    | 148 ++++
+ arch/mips/boot/dts/qca/ar9331.dtsi            | 127 ++-
+ arch/mips/boot/dts/qca/ar9331_dpt_module.dts  |  13 +
+ drivers/net/dsa/Kconfig                       |   2 +
+ drivers/net/dsa/Makefile                      |   1 +
+ drivers/net/dsa/qca/Kconfig                   |  11 +
+ drivers/net/dsa/qca/Makefile                  |   2 +
+ drivers/net/dsa/qca/ar9331.c                  | 823 ++++++++++++++++++
+ drivers/net/ethernet/atheros/Kconfig          |   2 +-
+ drivers/net/ethernet/atheros/ag71xx.c         | 146 ++--
+ include/net/dsa.h                             |   2 +
+ net/dsa/Kconfig                               |   6 +
+ net/dsa/Makefile                              |   1 +
+ net/dsa/tag_ar9331.c                          |  96 ++
+ 14 files changed, 1320 insertions(+), 60 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/dsa/ar9331.txt
+ create mode 100644 drivers/net/dsa/qca/Kconfig
+ create mode 100644 drivers/net/dsa/qca/Makefile
+ create mode 100644 drivers/net/dsa/qca/ar9331.c
+ create mode 100644 net/dsa/tag_ar9331.c
 
 -- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.23.0
+
