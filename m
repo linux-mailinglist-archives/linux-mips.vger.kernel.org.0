@@ -2,55 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BB5E05F4
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Oct 2019 16:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7335BE0730
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Oct 2019 17:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730676AbfJVOF6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Oct 2019 10:05:58 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:38798 "EHLO mx1.redhat.com"
+        id S2388172AbfJVPW0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Oct 2019 11:22:26 -0400
+Received: from mga09.intel.com ([134.134.136.24]:23876 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388089AbfJVOE6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 22 Oct 2019 10:04:58 -0400
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id A6E8D85537
-        for <linux-mips@vger.kernel.org>; Tue, 22 Oct 2019 14:04:57 +0000 (UTC)
-Received: by mail-wm1-f70.google.com with SMTP id u17so1972966wmd.3
-        for <linux-mips@vger.kernel.org>; Tue, 22 Oct 2019 07:04:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=GRXx0prZyWf8Ie3WBmFM/bIRv9+8DKKzcw/xRf9RZ/k=;
-        b=hhrbBEDRSVnVefqwDDvJQ6qO1A2pQg/HWUWyJqByZyPfaRuVE17nHyAESVVdHh+188
-         gCb80IP1Usv0E8p7mIMr/0ngCETK/on68adFRXv0nAd/N0qhmxzHS2WMZ9qKnsmXLsyV
-         q+rPAPHptaNsm5OEMghXoVSJyK2gyiWTO46DAXDuA8FJEpwlFvxUOp1BjUbSfB0ITaxe
-         xpwYMEDMZW/Vuk8TEjbxPQNHu/ku17fsrspvKZvDfbzVyeI//0yLFuIuQiJglaTV0B7h
-         qhP2bSahtHUsy8dgKFrNOsHvYEQX9iDvyY5SySZsxahBbt6jWn1OmoIaQ0jgz38vb/fL
-         ygWA==
-X-Gm-Message-State: APjAAAXTwNNXb2yOTdYighcxo8uhc9b+xwhFMPwJSPy5fbWQoNBdJJ3x
-        EAxKGi1lOw9FNnBOmOIMUIj6gWHciFUK77Zz5UKYWbeTbvO0PSpNTBDw8wtgilnuj8825nzMA7d
-        JwqvlIHsiBEj0BSb/cv98Hg==
-X-Received: by 2002:a1c:7e57:: with SMTP id z84mr3319578wmc.84.1571753096253;
-        Tue, 22 Oct 2019 07:04:56 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwWqRcFVSe00YfZqVULXyrnOBOt0DAtwntm2KhRrr6N6A/cSYud38QIAc8/I73DEBmlFbuFZw==
-X-Received: by 2002:a1c:7e57:: with SMTP id z84mr3319555wmc.84.1571753095982;
-        Tue, 22 Oct 2019 07:04:55 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c0e4:dcf4:b543:ce19? ([2001:b07:6468:f312:c0e4:dcf4:b543:ce19])
-        by smtp.gmail.com with ESMTPSA id b196sm11755492wmd.24.2019.10.22.07.04.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Oct 2019 07:04:55 -0700 (PDT)
-Subject: Re: [PATCH v2 00/15] KVM: Dynamically size memslot arrays
-To:     Sean Christopherson <sean.j.christopherson@intel.com>,
-        James Hogan <jhogan@kernel.org>,
+        id S2388081AbfJVPW0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 22 Oct 2019 11:22:26 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Oct 2019 08:22:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,216,1569308400"; 
+   d="scan'208";a="196468247"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
+  by fmsmga008.fm.intel.com with ESMTP; 22 Oct 2019 08:22:24 -0700
+Date:   Tue, 22 Oct 2019 08:22:24 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     James Hogan <jhogan@kernel.org>,
         Paul Mackerras <paulus@ozlabs.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     David Hildenbrand <david@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
         Cornelia Huck <cohuck@redhat.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
@@ -62,53 +42,35 @@ Cc:     David Hildenbrand <david@redhat.com>,
         linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
         kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 15/15] KVM: Dynamically size memslot array based on
+ number of used slots
+Message-ID: <20191022152223.GB2343@linux.intel.com>
 References: <20191022003537.13013-1-sean.j.christopherson@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Openpgp: preference=signencrypt
-Message-ID: <129444cc-5211-5b60-15fc-0f0fe998f023@redhat.com>
-Date:   Tue, 22 Oct 2019 16:04:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ <20191022003537.13013-16-sean.j.christopherson@intel.com>
+ <2609aedc-4fc9-ab92-8877-55c64cf19165@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20191022003537.13013-1-sean.j.christopherson@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2609aedc-4fc9-ab92-8877-55c64cf19165@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 22/10/19 02:35, Sean Christopherson wrote:
-> The end goal of this series is to dynamically size the memslot array so
-> that KVM allocates memory based on the number of memslots in use, as
-> opposed to unconditionally allocating memory for the maximum number of
-> memslots.  On x86, each memslot consumes 88 bytes, and so with 2 address
-> spaces of 512 memslots, each VM consumes ~90k bytes for the memslots.
-> E.g. given a VM that uses a total of 30 memslots, dynamic sizing reduces
-> the memory footprint from 90k to ~2.6k bytes.
+On Tue, Oct 22, 2019 at 04:04:21PM +0200, Paolo Bonzini wrote:
+> On 22/10/19 02:35, Sean Christopherson wrote:
+> > +	struct kvm_memory_slot memslots[];
+> > +	/*
+> > +	 * WARNING: 'memslots' is dynamically-sized.  It *MUST* be at the end.
+> > +	 */
 > 
-> The changes required to support dynamic sizing are relatively small,
-> e.g. are essentially contained in patches 12/13 and 13/13.  Patches 1-11
-> clean up the memslot code, which has gotten quite crusy, especially
-> __kvm_set_memory_region().  The clean up is likely not strictly necessary
-> to switch to dynamic sizing, but I didn't have a remotely reasonable
-> level of confidence in the correctness of the dynamic sizing without first
-> doing the clean up.
-> 
-> Testing, especially non-x86 platforms, would be greatly appreciated.  The
-> non-x86 changes are for all intents and purposes untested, e.g. I compile
-> tested pieces of the code by copying them into x86, but that's it.  In
-> theory, the vast majority of the functional changes are arch agnostic, in
-> theory...
-> 
-> v2:
->   - Split "Drop kvm_arch_create_memslot()" into three patches to move
->     minor functional changes to standalone patches [Janosch].
->   - Rebase to latest kvm/queue (f0574a1cea5b, "KVM: x86: fix ...")
->   - Collect an Acked-by and a Reviewed-by
+> Isn't that obvious from the flexible array member?
 
-I only have some cosmetic changes on patches 14-15.  Let's wait for
-testing results.
+Probably.  It's also unnecessary as the compiler (at least as of gcc 5.4)
+will throw an error if it's not at the end.  I think I even verified this
+during development and still decided to leave the obnoxious warning in for
+some reason...
 
-Paolo
+include/linux/kvm_host.h:436:25: error: flexible array member not at end of struct
+  struct kvm_memory_slot memslots[];
