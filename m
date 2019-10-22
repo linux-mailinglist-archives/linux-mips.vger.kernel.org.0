@@ -2,55 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DF6E0BAE
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Oct 2019 20:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B156E0C44
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Oct 2019 21:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732251AbfJVSp7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Oct 2019 14:45:59 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:45926 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731436AbfJVSp6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Oct 2019 14:45:58 -0400
-Received: by mail-wr1-f68.google.com with SMTP id q13so14258156wrs.12
-        for <linux-mips@vger.kernel.org>; Tue, 22 Oct 2019 11:45:57 -0700 (PDT)
+        id S1732564AbfJVTLH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Oct 2019 15:11:07 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:44181 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731436AbfJVTLH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Oct 2019 15:11:07 -0400
+Received: by mail-wr1-f67.google.com with SMTP id z9so19281523wrl.11
+        for <linux-mips@vger.kernel.org>; Tue, 22 Oct 2019 12:11:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=Gq9xxxm4KZmu62EdNW4n3rdsqHgpFLADsHpYJB7Jhgo=;
-        b=Uaxc/IOXwZy94FmGfM5Exx4XGSRpgEv8zUH6VN5K8UHK7nquwFtO+NdrSdOld3L8J4
-         mJ2n27d8iZo1YWl0WCNozmWvEOCh6NYJoAItI18HvBaS9UYstL0chVWkTGoKDdvstKYa
-         /FxM0l1qrYENmmwuzSr9glX85QGYPEBYYTiLv4/gX4DG1eRZTuhnnuEOmrYtO0QCY4PP
-         dlzUqswSyG267V+zYxosTAKynGpBuM0qpYKQqRs1Xd+n53+HrIRVTTmwdw1NaOVC0Rpi
-         vaIqJ7/RJiqSviJReG52DtKJW8+hI+k3Pf1QCk5QdzePpC/Zo8vlGYgCPxcbwDuQmXbW
-         la9A==
+        bh=9vziTHLGRySfTf7IJZ8RvDGitE1pSycSa0/YB41VIrg=;
+        b=a6+YfUM4UCT8QMNibszaLdROgK9/zT1Vxf3kJf+QB2pXmTviY+apzmEs+M7eSycRqI
+         vH+Yd5Xdqar5/RNlWYYjLA/0etADWD4ug/kUPkyX/Yzg4hXFt4XFAGBUEZ1MvdJ7mcIu
+         vr1XBdVwC01+CHE4PMfM93Qmyz+Tlkc0uAtNJvMbk8pCnsQ6QiXqUfc+0Cv1W2nq7ArI
+         AVGAY75zrcVVdzkfEKsVUAMJ6RgviQTZdoLspR16qMIrijzcnScJXfYjnUWX1X9MC9di
+         Km7V+kp4AKXCDq6CWcO/FYYWPdbH2jjs08UPSeVdqEmiMYsxxqynPVDynlwCSlsEGESt
+         x1lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Gq9xxxm4KZmu62EdNW4n3rdsqHgpFLADsHpYJB7Jhgo=;
-        b=bOKgdpsjZ862E43OqXFTkM/EN/0tLXearJqbaki/x4PrPb4m2kjRACAhX0Sn3qPKRS
-         6ikjdC+OopvuGg/cxSUBPT4r88SObK16yavcz9aS8IZ70a7B+tBASn3Uylh8jXoN93DD
-         dd11HfSM4YBI9ofEcCvAM8Oc2j2dZYlUGsuKJeIJewjU1Ornkbum0Rzi+vZk9Wegvw2l
-         1HYrlixNlBbp1ppxYuYLcGbYoaB95lWiIPgeNX34eUab76lDoU+ptOz8T/pWXBJGoJAi
-         QrJb1F4ESfgQSMlErmnJVr6OK2tvStIQI86+865gKk9ENH6I66xSIu+bRNcSRqP59gad
-         2aYg==
-X-Gm-Message-State: APjAAAVwg9DB+McHb3F9yK9nREMDhsbZn0Sfpg50+Qaf2wvUIbcdhnHs
-        Sp0zkzm4GqIiyNUg624/jK4MZUMn
-X-Google-Smtp-Source: APXvYqyUBy0rrb+AWH3E6IUSHT+6o9YfKT7HrKolCOnnXI8+1GsCwVVdeVxuXU6t4S4IvrEt5C21QA==
-X-Received: by 2002:adf:978a:: with SMTP id s10mr5020611wrb.264.1571769956262;
-        Tue, 22 Oct 2019 11:45:56 -0700 (PDT)
+        bh=9vziTHLGRySfTf7IJZ8RvDGitE1pSycSa0/YB41VIrg=;
+        b=GE4ApJmOASkGpekMoBtZPo0qjCUi6h3i697L/ZCvc87c+CpU64nr254PoiBUTVZg3z
+         miLAN1evzQ+kPiCG6baSE5Er2gkXS0UGyB1BBnA0/n3jtm91tgtaPh1f0wXc+F3veV+/
+         mopmlwNtB/DVHkERIcr8ER96ZrcG9mJI6U0lMm8Qapv4y5ebdNUuxcg73ehkGtEhudh2
+         V6SryvJO9UyxYwNct/PJkxWyL3JbEF3ZNmug6NLEfWujHbNUpk38OZ7WOHb4eXvu9Fa1
+         YBxLPlIbYl4gghUrXxZNm6ChTIMpVa5/2z4420iGMDXI0dqBWPD6TOxgmVNZkhgwhCMb
+         b/+Q==
+X-Gm-Message-State: APjAAAWMJEmZHnRTPNFyX2P+OQngS2XvjtwZ80Q6+I9TzgtHQLaJrYjR
+        gPhM5zBNgOL1Apkqd1Ig85owjp0K
+X-Google-Smtp-Source: APXvYqyEPoOKpAcJZcml8rsP0qFLCTL3O2pieju3gPy9SlVa/dwU/8Izv9LozONdu4BWX3gK0N7VLw==
+X-Received: by 2002:adf:fd08:: with SMTP id e8mr4670638wrr.42.1571771465203;
+        Tue, 22 Oct 2019 12:11:05 -0700 (PDT)
 Received: from localhost.localdomain ([2001:470:9e39::64])
-        by smtp.gmail.com with ESMTPSA id c144sm2580761wmd.1.2019.10.22.11.45.54
+        by smtp.gmail.com with ESMTPSA id 65sm15789366wrs.9.2019.10.22.12.11.03
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 22 Oct 2019 11:45:55 -0700 (PDT)
+        Tue, 22 Oct 2019 12:11:04 -0700 (PDT)
 From:   Jonas Gorski <jonas.gorski@gmail.com>
 To:     linux-mips@vger.kernel.org
 Cc:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
         James Hogan <jhogan@kernel.org>,
         Florian Fainelli <f.fainelli@gmail.com>
-Subject: [PATCH] MIPS: bmips: mark exception vectors as char arrays
-Date:   Tue, 22 Oct 2019 20:45:52 +0200
-Message-Id: <20191022184552.18899-1-jonas.gorski@gmail.com>
+Subject: [PATCH v2] MIPS: bmips: mark exception vectors as char arrays
+Date:   Tue, 22 Oct 2019 21:11:00 +0200
+Message-Id: <20191022191100.19373-1-jonas.gorski@gmail.com>
 X-Mailer: git-send-email 2.13.2
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
@@ -88,9 +88,29 @@ In file included from arch/mips/bcm63xx/prom.c:14:
 Fixes: 18a1eef92dcd ("MIPS: BMIPS: Introduce bmips.h")
 Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
 ---
- arch/mips/include/asm/bmips.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
 
+v1 -> v2:
+ * Actually update the callers as well, to not break the build in a
+   different way.
+
+ arch/mips/bcm63xx/prom.c      |  2 +-
+ arch/mips/include/asm/bmips.h | 10 +++++-----
+ arch/mips/kernel/smp-bmips.c  |  8 ++++----
+ 3 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/arch/mips/bcm63xx/prom.c b/arch/mips/bcm63xx/prom.c
+index 77a836e661c9..df69eaa453a1 100644
+--- a/arch/mips/bcm63xx/prom.c
++++ b/arch/mips/bcm63xx/prom.c
+@@ -84,7 +84,7 @@ void __init prom_init(void)
+ 		 * Here we will start up CPU1 in the background and ask it to
+ 		 * reconfigure itself then go back to sleep.
+ 		 */
+-		memcpy((void *)0xa0000200, &bmips_smp_movevec, 0x20);
++		memcpy((void *)0xa0000200, bmips_smp_movevec, 0x20);
+ 		__sync();
+ 		set_c0_cause(C_SW0);
+ 		cpumask_set_cpu(1, &bmips_booted_mask);
 diff --git a/arch/mips/include/asm/bmips.h b/arch/mips/include/asm/bmips.h
 index bf6a8afd7ad2..581a6a3c66e4 100644
 --- a/arch/mips/include/asm/bmips.h
@@ -112,6 +132,25 @@ index bf6a8afd7ad2..581a6a3c66e4 100644
  
  extern int bmips_smp_enabled;
  extern int bmips_cpu_offset;
+diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
+index 76fae9b79f13..712c15de6ab9 100644
+--- a/arch/mips/kernel/smp-bmips.c
++++ b/arch/mips/kernel/smp-bmips.c
+@@ -464,10 +464,10 @@ static void bmips_wr_vec(unsigned long dst, char *start, char *end)
+ 
+ static inline void bmips_nmi_handler_setup(void)
+ {
+-	bmips_wr_vec(BMIPS_NMI_RESET_VEC, &bmips_reset_nmi_vec,
+-		&bmips_reset_nmi_vec_end);
+-	bmips_wr_vec(BMIPS_WARM_RESTART_VEC, &bmips_smp_int_vec,
+-		&bmips_smp_int_vec_end);
++	bmips_wr_vec(BMIPS_NMI_RESET_VEC, bmips_reset_nmi_vec,
++		bmips_reset_nmi_vec_end);
++	bmips_wr_vec(BMIPS_WARM_RESTART_VEC, bmips_smp_int_vec,
++		bmips_smp_int_vec_end);
+ }
+ 
+ struct reset_vec_info {
 -- 
 2.13.2
 
