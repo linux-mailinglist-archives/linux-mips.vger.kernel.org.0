@@ -2,165 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D02E0368
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Oct 2019 13:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F270CE0492
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Oct 2019 15:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388858AbfJVLwR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Oct 2019 07:52:17 -0400
-Received: from [217.140.110.172] ([217.140.110.172]:50406 "EHLO foss.arm.com"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S2388204AbfJVLwR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 22 Oct 2019 07:52:17 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11D8F1045;
-        Tue, 22 Oct 2019 04:51:54 -0700 (PDT)
-Received: from localhost (e113682-lin.copenhagen.arm.com [10.32.145.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 98A073F71F;
-        Tue, 22 Oct 2019 04:51:53 -0700 (PDT)
-Date:   Tue, 22 Oct 2019 13:51:52 +0200
-From:   Christoffer Dall <christoffer.dall@arm.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Hogan <jhogan@kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        kvm-ppc@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        kvm@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        kvmarm@lists.cs.columbia.edu, Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH 00/45] KVM: Refactor vCPU creation
-Message-ID: <20191022115152.GC2652@e113682-lin.lund.arm.com>
-References: <20191022015925.31916-1-sean.j.christopherson@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191022015925.31916-1-sean.j.christopherson@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1731748AbfJVNJ1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Oct 2019 09:09:27 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51672 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727805AbfJVNJ1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 22 Oct 2019 09:09:27 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 17528B2DE;
+        Tue, 22 Oct 2019 13:09:26 +0000 (UTC)
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: include: remove unsued header file asm/sgi/sgi.h
+Date:   Tue, 22 Oct 2019 15:09:19 +0200
+Message-Id: <20191022130919.18582-1-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Sean,
+asm/sgi/sgi.h is unused, time to remove it.
 
-On Mon, Oct 21, 2019 at 06:58:40PM -0700, Sean Christopherson wrote:
-> *************************** DISCLAIMER **********************************
-> The non-x86 arch specific patches are completely untested.  Although the
-> changes are conceptually straightforward, I'm not remotely confident that
-> the patches are bug free, e.g. checkpatch caught several blatant typos
-> that would break compilation.
-> *************************************************************************
-> 
-> The end goal of this series is to strip down the interface between common
-> KVM code and arch specific code so that there is precisely one arch hook
-> for creating a vCPU and one hook for destroying a vCPU.  In addition to
-> cleaning up the code base, simplifying the interface gives architectures
-> more freedom to organize their vCPU creation code.
-> 
-> KVM's vCPU creation code is comically messy.  kvm_vm_ioctl_create_vcpu()
-> calls three separate arch hooks: init(), create() and setup().  The init()
-> call is especially nasty as it's hidden away in a common KVM function,
-> kvm_init_vcpu(), that for all intents and purposes must be immediately
-> invoked after the vcpu object is allocated.
-> 
-> Not to be outdone, vCPU destruction also has three arch hooks: uninit(),
-> destroy() and free(), the latter of which isn't actually invoked by common
-> KVM code, but the hook declaration still exists because architectures are
-> relying on its forward declaration.
-> 
-> Eliminating the extra arch hooks is relatively straightforward, just
-> tedious.  For the most part, there is no fundamental constraint that
-> necessitated the proliferation of arch hooks, rather they crept in over
-> time, usually when x86-centric code was moved out of generic KVM and into
-> x86 code.
-> 
-> E.g. kvm_arch_vcpu_setup() was added to allow x86 to do vcpu_load(), which
-> can only be done after preempt_notifier initialization, but adding setup()
-> overlooked the fact that the preempt_notifier was only initialized after
-> kvm_arch_vcpu_create() because preemption support was added when x86's MMU
-> setup (the vcpu_load() user) was called from common KVM code.
-> 
-> For all intents and purposes, there is no true functional change in this
-> series.  The order of some allocations will change, and a few memory leaks
-> are fixed, but the actual functionality of a guest should be unaffected.
-> 
-> Patches 01-03 are bug fixes in error handling paths that were found by
-> inspection when refactoring the associated code.
-> 
-> Patches 04-43 refactor each arch implementation so that the unwanted arch
-> hooks can be dropped without a functional change, e.g. move code out of
-> kvm_arch_vcpu_setup() so that all implementations are empty, then drop the
-> functions and caller.
-> 
-> Patches 44-45 are minor clean up to eliminate kvm_vcpu_uninit().
-> 
-> 
-> The net result is to go from this:
-> 
->         vcpu = kvm_arch_vcpu_create(kvm, id);
->                |
->                |-> kvm_vcpu_init()
->                    |
->                    |-> kvm_arch_vcpu_init()
-> 
->         if (IS_ERR(vcpu)) {
->                 r = PTR_ERR(vcpu);
->                 goto vcpu_decrement;
->         }
-> 
->         preempt_notifier_init(&vcpu->preempt_notifier, &kvm_preempt_ops);
-> 
->         r = kvm_arch_vcpu_setup(vcpu);
->         if (r)
->                 goto vcpu_destroy;
-> 
-> to this:
-> 
->         r = kvm_arch_vcpu_precreate(kvm, id);
->         if (r)
->                 goto vcpu_decrement;
-> 
->         vcpu = kmem_cache_zalloc(kvm_vcpu_cache, GFP_KERNEL);
->         if (!vcpu) {
->                 r = -ENOMEM;
->                 goto vcpu_decrement;
->         }
-> 
->         page = alloc_page(GFP_KERNEL | __GFP_ZERO);
->         if (!page) {
->                 r = -ENOMEM;
->                 goto vcpu_free;
->         }
->         vcpu->run = page_address(page);
-> 
->         kvm_vcpu_init(vcpu, kvm, id);
-> 
->         r = kvm_arch_vcpu_create(vcpu);
->         if (r)
->                 goto vcpu_free_run_page;
-> 
+Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+---
+ arch/mips/include/asm/sgi/sgi.h | 48 -----------------------------------------
+ 1 file changed, 48 deletions(-)
+ delete mode 100644 arch/mips/include/asm/sgi/sgi.h
 
-What a fantastically welcome piece of work!  Thanks for doing this,
-many's the time I waded through all those calls to ensure a patch was
-doing the right thing.
+diff --git a/arch/mips/include/asm/sgi/sgi.h b/arch/mips/include/asm/sgi/sgi.h
+deleted file mode 100644
+index b61557151e3f..000000000000
+--- a/arch/mips/include/asm/sgi/sgi.h
++++ /dev/null
+@@ -1,48 +0,0 @@
+-/*
+- * This file is subject to the terms and conditions of the GNU General Public
+- * License.  See the file "COPYING" in the main directory of this archive
+- * for more details.
+- *
+- * sgi.h: Definitions specific to SGI machines.
+- *
+- * Copyright (C) 1996 David S. Miller (dm@sgi.com)
+- */
+-#ifndef _ASM_SGI_SGI_H
+-#define _ASM_SGI_SGI_H
+-
+-/* UP=UniProcessor MP=MultiProcessor(capable) */
+-enum sgi_mach {
+-	ip4,	/* R2k UP */
+-	ip5,	/* R2k MP */
+-	ip6,	/* R3k UP */
+-	ip7,	/* R3k MP */
+-	ip9,	/* R3k UP */
+-	ip12,	/* R3kA UP, Indigo */
+-	ip15,	/* R3kA MP */
+-	ip17,	/* R4K UP */
+-	ip19,	/* R4K MP */
+-	ip20,	/* R4K UP, Indigo */
+-	ip21,	/* R8k/TFP MP */
+-	ip22,	/* R4x00 UP, Indy, Indigo2 */
+-	ip25,	/* R10k MP */
+-	ip26,	/* R8k/TFP UP, Indigo2 */
+-	ip27,	/* R10k MP, R12k MP, R14k MP, Origin 200/2k, Onyx2 */
+-	ip28,	/* R10k UP, Indigo2 Impact R10k */
+-	ip30,	/* R10k MP, R12k MP, R14k MP, Octane */
+-	ip32,	/* R5k UP, RM5200 UP, RM7k UP, R10k UP, R12k UP, O2 */
+-	ip35,   /* R14k MP, R16k MP, Origin 300/3k, Onyx3, Fuel, Tezro */
+-};
+-
+-extern enum sgi_mach sgimach;
+-extern void sgi_sysinit(void);
+-
+-/* Many I/O space registers are byte sized and are contained within
+- * one byte per word, specifically the MSB, this macro helps out.
+- */
+-#ifdef __MIPSEL__
+-#define SGI_MSB(regaddr)   (regaddr)
+-#else
+-#define SGI_MSB(regaddr)   ((regaddr) | 0x3)
+-#endif
+-
+-#endif /* _ASM_SGI_SGI_H */
+-- 
+2.16.4
 
-Modulo the nit in patch 42, the arm64 changes survive a guest boot +
-hackbench and build fine.  The lack of changing the arm-specific destroy
-function to a void also causes a series of warnings for a 32-bit arm
-build, but otherwise builds fine.
-
-You can add my:
-
-  Acked-by: Christoffer Dall <christoffer.dall@arm.com>
-
-To the arm/arm64 and generic parts.
-
-
-Thanks,
-
-    Christoffer
