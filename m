@@ -2,91 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5D2E1F41
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2019 17:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3D6E202A
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Oct 2019 18:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392434AbfJWP02 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 23 Oct 2019 11:26:28 -0400
-Received: from forward106j.mail.yandex.net ([5.45.198.249]:38850 "EHLO
-        forward106j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732725AbfJWP02 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 23 Oct 2019 11:26:28 -0400
-Received: from mxback27o.mail.yandex.net (mxback27o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::78])
-        by forward106j.mail.yandex.net (Yandex) with ESMTP id E05E611A07DB;
-        Wed, 23 Oct 2019 18:26:25 +0300 (MSK)
-Received: from sas1-e6a95a338f12.qloud-c.yandex.net (sas1-e6a95a338f12.qloud-c.yandex.net [2a02:6b8:c08:37a4:0:640:e6a9:5a33])
-        by mxback27o.mail.yandex.net (nwsmtp/Yandex) with ESMTP id 2HHJc5qrXO-QP38MIjQ;
-        Wed, 23 Oct 2019 18:26:25 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1571844385;
-        bh=pXHgoFEZjIhQb6wtUSotGvV+HIzXvVjUqGHw8fCPev0=;
-        h=Subject:To:From:Cc:Date:Message-Id;
-        b=u+/IVuEhnzCVdq1vXEfZw6OMBYG/663au1LeoOd3cD0fFS7VoPpctMojVkXXsCzXb
-         TuxoPX7gORVdPRk5+Vgzrpk7pa9kZLZaalN0sG18v9va1xNR5ZA0KIuJDxnDyBF4pl
-         Ah9toa8pKyXk+GfZCwjnKl/732qUfKsfTjx8EVrI=
-Authentication-Results: mxback27o.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by sas1-e6a95a338f12.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id U0vjoMzp4P-QEViFZBI;
-        Wed, 23 Oct 2019 18:26:17 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     paul.burton@mips.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] MIPS: elf_hwcap: Export microMIPS and vz
-Date:   Wed, 23 Oct 2019 23:25:51 +0800
-Message-Id: <20191023152551.10535-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.23.0
+        id S2407033AbfJWQId (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 23 Oct 2019 12:08:33 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:55278 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407029AbfJWQIc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Oct 2019 12:08:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1571846907; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TRZB4Hmo5/AC64REY0JMNENCt0f2esO31XyLdZy2uFQ=;
+        b=JYXpuEAAsoua8tBu2BljyqX08TmjmJrKr9tmjqGwvlUXK+4INzM7BKtakhifYk9LGFTzjo
+        8Vsh3TYUCWV6UK5pMpQtPq7n4kkA9/MPpx7u8AFEN8XgDRiRQ0fWvf/FTOTK3ho3gOYWGE
+        P+i8TVlHeb8OrSciyk8RaH53ka7KHw0=
+Date:   Wed, 23 Oct 2019 18:08:21 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH RESEND 2/2] dmaengine: JZ4780: Add support for the X1000.
+To:     Zhou Yanjie <zhouyanjie@zoho.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, paul.burton@mips.com, vkoul@kernel.org,
+        mark.rutland@arm.com, Zubair.Kakakhel@imgtec.com,
+        dan.j.williams@intel.com
+Message-Id: <1571846901.3.0@crapouillou.net>
+In-Reply-To: <1571814137-46002-3-git-send-email-zhouyanjie@zoho.com>
+References: <1571799903-44561-1-git-send-email-zhouyanjie@zoho.com>
+        <1571814137-46002-1-git-send-email-zhouyanjie@zoho.com>
+        <1571814137-46002-3-git-send-email-zhouyanjie@zoho.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After further discussion with userland library develpoer,
-we addressed another two ASEs that can be used runtimely in programs.
+Hi Zhou,
 
-Export them in hwcap as well to benefit userspace programs.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: <stable@vger.kernel.org> # 4.4+
----
- arch/mips/include/uapi/asm/hwcap.h | 2 ++
- arch/mips/kernel/cpu-probe.c       | 7 ++++++-
- 2 files changed, 8 insertions(+), 1 deletion(-)
+Le mer., oct. 23, 2019 at 15:02, Zhou Yanjie <zhouyanjie@zoho.com> a=20
+=E9crit :
+> Add support for probing the dma-jz4780 driver on the X1000 Soc.
+>=20
+> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+> ---
+>  drivers/dma/dma-jz4780.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>=20
+> diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
+> index cafb1cc0..f809a6e 100644
+> --- a/drivers/dma/dma-jz4780.c
+> +++ b/drivers/dma/dma-jz4780.c
+> @@ -1019,11 +1019,18 @@ static const struct jz4780_dma_soc_data=20
+> jz4780_dma_soc_data =3D {
+>  	.flags =3D JZ_SOC_DATA_ALLOW_LEGACY_DT | JZ_SOC_DATA_PROGRAMMABLE_DMA,
+>  };
+>=20
+> +static const struct jz4780_dma_soc_data x1000_dma_soc_data =3D {
+> +	.nb_channels =3D 8,
+> +	.transfer_ord_max =3D 7,
+> +	.flags =3D JZ_SOC_DATA_ALLOW_LEGACY_DT | JZ_SOC_DATA_PROGRAMMABLE_DMA,
 
-diff --git a/arch/mips/include/uapi/asm/hwcap.h b/arch/mips/include/uapi/asm/hwcap.h
-index 1ade1daa4921..e1a9bac62149 100644
---- a/arch/mips/include/uapi/asm/hwcap.h
-+++ b/arch/mips/include/uapi/asm/hwcap.h
-@@ -17,5 +17,7 @@
- #define HWCAP_LOONGSON_MMI  (1 << 11)
- #define HWCAP_LOONGSON_EXT  (1 << 12)
- #define HWCAP_LOONGSON_EXT2 (1 << 13)
-+#define HWCAP_MIPS_MICROMIPS (1 << 14)
-+#define HWCAP_MIPS_VZ       (1 << 15)
- 
- #endif /* _UAPI_ASM_HWCAP_H */
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index f521cbf934e7..11e853d88aae 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -2213,8 +2213,13 @@ void cpu_probe(void)
- 	if (cpu_has_loongson_ext2)
- 		elf_hwcap |= HWCAP_LOONGSON_EXT2;
- 
--	if (cpu_has_vz)
-+	if (cpu_has_mmips)
-+		elf_hwcap |= HWCAP_MIPS_MICROMIPS;
-+
-+	if (cpu_has_vz) {
-+		elf_hwcap |= HWCAP_MIPS_VZ;
- 		cpu_probe_vz(c);
-+	}
- 
- 	cpu_probe_vmbits(c);
- 
--- 
-2.23.0
+Please don't use JZ_SOC_DATA_ALLOW_LEGACY_DT for new bindings.
+
+With that flag removed:
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+
+
+> +};
+> +
+>  static const struct of_device_id jz4780_dma_dt_match[] =3D {
+>  	{ .compatible =3D "ingenic,jz4740-dma", .data =3D &jz4740_dma_soc_data=20
+> },
+>  	{ .compatible =3D "ingenic,jz4725b-dma", .data =3D=20
+> &jz4725b_dma_soc_data },
+>  	{ .compatible =3D "ingenic,jz4770-dma", .data =3D &jz4770_dma_soc_data=20
+> },
+>  	{ .compatible =3D "ingenic,jz4780-dma", .data =3D &jz4780_dma_soc_data=20
+> },
+> +	{ .compatible =3D "ingenic,x1000-dma", .data =3D &x1000_dma_soc_data },
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, jz4780_dma_dt_match);
+> --
+> 2.7.4
+>=20
+>=20
+
+=
 
