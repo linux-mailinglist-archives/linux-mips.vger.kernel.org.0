@@ -2,69 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6897BE29BF
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 07:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7511E2A74
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 08:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406707AbfJXFFH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Oct 2019 01:05:07 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:45333 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725298AbfJXFFH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 01:05:07 -0400
-Received: by mail-pg1-f193.google.com with SMTP id r1so13464610pgj.12;
-        Wed, 23 Oct 2019 22:05:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:to:cc:cc:subject:references
-         :in-reply-to;
-        bh=G+f5MPws5w1xb4+khTasH/MQ2+uZ0KNewuOhaLIpsww=;
-        b=Dr3bnTk8rnjcUeaYarJDwAErTuX9yRxbDM5RbAlbUUj9E8R2SVOy+JnHnpoHmihlQ9
-         M312EEHisbwStpTesq+CDapLURWyiOtCcEAzBiiJIe6zbGo2dM4Cyh+ASJNOeJUSMI6Z
-         xzjbBzx0Lc2cnWb6geQGT079SNHWbO03OoxtL2NwMRJaImgsqsiVGclV/lrTZmD0ufaE
-         Ef8sgSCZXAXhDLKm7VEert5gJquCjch9rPbrSvRObA+jB758kT+ttmlAWEfR2v3GEQH9
-         guqF2kzpitYbXum/lVHu9Vt3nhQkMkZ/dyAkn7QH/rCz1BDlHT0ikIuJoqvAYhA7CDlM
-         WUIA==
-X-Gm-Message-State: APjAAAUrqsmDcCNpwObtJR0A8YRZ6WxWRVOIiT3I+0jGcKc2DK7Pdft/
-        vBmh0lb3XBrHxGgM8twqHjI=
-X-Google-Smtp-Source: APXvYqyDtRl0L6anMSVVkm+9vOzgcwuMwgxtp4NPNVgz8PfjTaOKac5Cew56HQ+sw7L21FEQ9r8aHw==
-X-Received: by 2002:a17:90a:d991:: with SMTP id d17mr4731443pjv.73.1571893506599;
-        Wed, 23 Oct 2019 22:05:06 -0700 (PDT)
-Received: from localhost ([2601:646:8a00:9810:5cfa:8da3:1021:be72])
-        by smtp.gmail.com with ESMTPSA id e184sm26235280pfa.87.2019.10.23.22.05.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 22:05:06 -0700 (PDT)
-Message-ID: <5db13102.1c69fb81.21bba.4852@mx.google.com>
-Date:   Wed, 23 Oct 2019 22:05:05 -0700
-From:   Paul Burton <paulburton@kernel.org>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-CC:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-CC:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: include: remove unsued header file asm/sgi/sgi.h
-References:  <20191022130919.18582-1-tbogendoerfer@suse.de>
-In-Reply-To:  <20191022130919.18582-1-tbogendoerfer@suse.de>
+        id S2408552AbfJXGcR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Oct 2019 02:32:17 -0400
+Received: from forward101j.mail.yandex.net ([5.45.198.241]:44064 "EHLO
+        forward101j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2404377AbfJXGcR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 24 Oct 2019 02:32:17 -0400
+Received: from mxback27o.mail.yandex.net (mxback27o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::78])
+        by forward101j.mail.yandex.net (Yandex) with ESMTP id 411611BE0125;
+        Thu, 24 Oct 2019 09:32:14 +0300 (MSK)
+Received: from iva3-3f75f35f86d4.qloud-c.yandex.net (iva3-3f75f35f86d4.qloud-c.yandex.net [2a02:6b8:c0c:498f:0:640:3f75:f35f])
+        by mxback27o.mail.yandex.net (nwsmtp/Yandex) with ESMTP id KoqmSK881M-WDqGriqt;
+        Thu, 24 Oct 2019 09:32:14 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1571898734;
+        bh=ZEMULDmi68Ln7bpVQGgkzmUAobTz0pq0naePIbMZshw=;
+        h=From:To:Subject:CC:References:Date:In-Reply-To:Message-ID;
+        b=Jkj5bEawIxahuU705QS8Z8hrrCUw2eVLeO7jBWuH2jEv2UO1Xr0DuOlmyxionWD69
+         4v1+pTmSfrbCqi6xZlcy+Wrmk9Z+poul0fahxqmaDuQ3P6Orwe6G7pVDxdT0fWmD9k
+         ueRYrxN0iNAkypt62u/4/DwrlVyZ/dPhd7N8Qhnw=
+Authentication-Results: mxback27o.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by iva3-3f75f35f86d4.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id ioVuZtsd54-WC0CN0fH;
+        Thu, 24 Oct 2019 09:32:12 +0300
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client certificate not present)
+Date:   Thu, 24 Oct 2019 14:32:05 +0800
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20191024040624.eezpuusvhujfffud@lantea.localdomain>
+References: <20191023152551.10535-1-jiaxun.yang@flygoat.com> <20191024040624.eezpuusvhujfffud@lantea.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] MIPS: elf_hwcap: Export microMIPS and vz
+To:     Paul Burton <paulburton@kernel.org>
+CC:     linux-mips@vger.kernel.org, paul.burton@mips.com,
+        stable@vger.kernel.org
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <B1A8B4BF-FF80-4E6D-9B4F-8E45B0EF5FE5@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
 
-Thomas Bogendoerfer wrote:
-> asm/sgi/sgi.h is unused, time to remove it.
 
-Applied to mips-next.
+=E4=BA=8E 2019=E5=B9=B410=E6=9C=8824=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=88=
+12:06:24, Paul Burton <paulburton@kernel=2Eorg> =E5=86=99=E5=88=B0:
+>Hi Jiaxun,
+>
+>On Wed, Oct 23, 2019 at 11:25:51PM +0800, Jiaxun Yang wrote:
+>> After further discussion with userland library develpoer,
+>> we addressed another two ASEs that can be used runtimely in programs=2E
+>>=20
+>> Export them in hwcap as well to benefit userspace programs=2E
+>>=20
+>> Signed-off-by: Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom>
+>> Cc: <stable@vger=2Ekernel=2Eorg> # 4=2E4+
+>> ---
+>>  arch/mips/include/uapi/asm/hwcap=2Eh | 2 ++
+>>  arch/mips/kernel/cpu-probe=2Ec       | 7 ++++++-
+>>  2 files changed, 8 insertions(+), 1 deletion(-)
+>>=20
+>> diff --git a/arch/mips/include/uapi/asm/hwcap=2Eh
+>b/arch/mips/include/uapi/asm/hwcap=2Eh
+>> index 1ade1daa4921=2E=2Ee1a9bac62149 100644
+>> --- a/arch/mips/include/uapi/asm/hwcap=2Eh
+>> +++ b/arch/mips/include/uapi/asm/hwcap=2Eh
+>> @@ -17,5 +17,7 @@
+>>  #define HWCAP_LOONGSON_MMI  (1 << 11)
+>>  #define HWCAP_LOONGSON_EXT  (1 << 12)
+>>  #define HWCAP_LOONGSON_EXT2 (1 << 13)
+>> +#define HWCAP_MIPS_MICROMIPS (1 << 14)
+>> +#define HWCAP_MIPS_VZ       (1 << 15)
+>
+>What's the motivation for exposing VZ? Userland can't actually use it
+>without something like KVM, which already exposes a means of detecting
+>whether VZ is supported (try the creating a VM of type KVM_VM_MIPS_VZ &
+>see if it works)=2E I'm not sure what userland would be able to do with
+>this information in AT_HWCAP
 
-> commit 2409839ab6bf
-> https://git.kernel.org/mips/c/2409839ab6bf
-> 
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> Signed-off-by: Paul Burton <paulburton@kernel.org>
+Hi Paul,
 
-Thanks,
-    Paul
+Well, that was preposed by a kvm developer from Loongson=2E They want to u=
+se it to implement CPU_AUTOPROBE and load required modules automatically=2E
 
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paulburton@kernel.org to report it. ]
+As they said they will submit KVM support to mainline later, I'm just occu=
+pied a place for them=2E
+
+Out of tree commit:
+
+http://cgit=2Eloongnix=2Eorg/cgit/linux-3=2E10/commit/?id=3D4db9301cca3b49=
+358d46fd0da67c01ab2ae4a3e3
+
+--=20
+Jiaxun Yang
