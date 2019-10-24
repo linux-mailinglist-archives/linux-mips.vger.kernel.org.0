@@ -2,50 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D369E29BC
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 07:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6897BE29BF
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 07:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437438AbfJXFCn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Oct 2019 01:02:43 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44075 "EHLO
+        id S2406707AbfJXFFH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Oct 2019 01:05:07 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:45333 "EHLO
         mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725298AbfJXFCn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 01:02:43 -0400
-Received: by mail-pg1-f193.google.com with SMTP id e10so13462372pgd.11
-        for <linux-mips@vger.kernel.org>; Wed, 23 Oct 2019 22:02:42 -0700 (PDT)
+        with ESMTP id S1725298AbfJXFFH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 01:05:07 -0400
+Received: by mail-pg1-f193.google.com with SMTP id r1so13464610pgj.12;
+        Wed, 23 Oct 2019 22:05:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
-         :references:in-reply-to;
-        bh=IPZJyobdu7JiI0Yobf+//me9Y0rqIjfI49OV/2ZZO4g=;
-        b=cVjPv+uHP1PNi5w/S6aaAiTDYb7NAVf4cGTrYU8pZPUXYUh7Ss3iZy0noWLGJjlT39
-         cgm6Ie2pnT4OC0a4NUAnaFFBVuRnrXDhkbVUfLMmqKsx9U5tED8oJPu6jVOsUaCibZ91
-         PMCQDXmlu/ymSG+wmR82ABmIoctDKB77S+rOmLn/+F6ii86Zur+PglY6FyqR7LyLOule
-         kVwYoXecPCyar8ee1eibTOIedVYbYZa15oQvVgMLI5OQXeZc/Y0gYD1k1WXioZ2DUWzB
-         GTYpxoS6cS9ZqgkNqaKcXE190akeXIED1FEgr+8nnG35wot1R9WqtBgribqhKgefIfwF
-         8QkA==
-X-Gm-Message-State: APjAAAW51mQYMi9PPvimtrqMrcGsD0I38FqePTl8sEbgMGuHX0xpZfYG
-        Sj6uRGL1LuEZhytzKB2l4HU=
-X-Google-Smtp-Source: APXvYqyJXKOhXLnYkFkmhxPTJ4l/I/lPVKMHI0VZqsf2iKx98jjUhQGH9Xs/rQrNlpEZHwC1qtv6hQ==
-X-Received: by 2002:a17:90a:5d04:: with SMTP id s4mr4536266pji.125.1571893362373;
-        Wed, 23 Oct 2019 22:02:42 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:from:to:cc:cc:subject:references
+         :in-reply-to;
+        bh=G+f5MPws5w1xb4+khTasH/MQ2+uZ0KNewuOhaLIpsww=;
+        b=Dr3bnTk8rnjcUeaYarJDwAErTuX9yRxbDM5RbAlbUUj9E8R2SVOy+JnHnpoHmihlQ9
+         M312EEHisbwStpTesq+CDapLURWyiOtCcEAzBiiJIe6zbGo2dM4Cyh+ASJNOeJUSMI6Z
+         xzjbBzx0Lc2cnWb6geQGT079SNHWbO03OoxtL2NwMRJaImgsqsiVGclV/lrTZmD0ufaE
+         Ef8sgSCZXAXhDLKm7VEert5gJquCjch9rPbrSvRObA+jB758kT+ttmlAWEfR2v3GEQH9
+         guqF2kzpitYbXum/lVHu9Vt3nhQkMkZ/dyAkn7QH/rCz1BDlHT0ikIuJoqvAYhA7CDlM
+         WUIA==
+X-Gm-Message-State: APjAAAUrqsmDcCNpwObtJR0A8YRZ6WxWRVOIiT3I+0jGcKc2DK7Pdft/
+        vBmh0lb3XBrHxGgM8twqHjI=
+X-Google-Smtp-Source: APXvYqyDtRl0L6anMSVVkm+9vOzgcwuMwgxtp4NPNVgz8PfjTaOKac5Cew56HQ+sw7L21FEQ9r8aHw==
+X-Received: by 2002:a17:90a:d991:: with SMTP id d17mr4731443pjv.73.1571893506599;
+        Wed, 23 Oct 2019 22:05:06 -0700 (PDT)
 Received: from localhost ([2601:646:8a00:9810:5cfa:8da3:1021:be72])
-        by smtp.gmail.com with ESMTPSA id n23sm23322027pff.137.2019.10.23.22.02.41
+        by smtp.gmail.com with ESMTPSA id e184sm26235280pfa.87.2019.10.23.22.05.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 22:02:41 -0700 (PDT)
-Message-ID: <5db13071.1c69fb81.1458d.eae6@mx.google.com>
-Date:   Wed, 23 Oct 2019 22:02:41 -0700
+        Wed, 23 Oct 2019 22:05:06 -0700 (PDT)
+Message-ID: <5db13102.1c69fb81.21bba.4852@mx.google.com>
+Date:   Wed, 23 Oct 2019 22:05:05 -0700
 From:   Paul Burton <paulburton@kernel.org>
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
-CC:     chenhc@lemote.com
-CC:     chenhuacai@gmail.com, jhogan@kernel.org, jiaxun.yang@flygoat.com,
-        linux-mips@linux-mips.org, linux-mips@vger.kernel.org,
-        paul.burton@mips.com, ralf@linux-mips.org, wuzhangjin@gmail.com,
-        zhangfx@lemote.com, Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+CC:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 CC:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Loongson: Fix GENMASK misuse
-References:  <20191022192547.480095-1-rikard.falkeborn@gmail.com>
-In-Reply-To:  <20191022192547.480095-1-rikard.falkeborn@gmail.com>
+Subject: Re: [PATCH] MIPS: include: remove unsued header file asm/sgi/sgi.h
+References:  <20191022130919.18582-1-tbogendoerfer@suse.de>
+In-Reply-To:  <20191022130919.18582-1-tbogendoerfer@suse.de>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -53,17 +52,15 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hello,
 
-Rikard Falkeborn wrote:
-> Arguments are supposed to be ordered high then low.
+Thomas Bogendoerfer wrote:
+> asm/sgi/sgi.h is unused, time to remove it.
 
 Applied to mips-next.
 
-> commit e02d026f08f1
-> https://git.kernel.org/mips/c/e02d026f08f1
+> commit 2409839ab6bf
+> https://git.kernel.org/mips/c/2409839ab6bf
 > 
-> Fixes: 6a6f9b7dafd50efc1b2 ("MIPS: Loongson: Add CFUCFG&CSR support")
-> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
-> Reviewed-by: Huacai Chen <chenhc@lemote.com>
+> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
 > Signed-off-by: Paul Burton <paulburton@kernel.org>
 
 Thanks,
