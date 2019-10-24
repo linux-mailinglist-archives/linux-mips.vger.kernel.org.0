@@ -2,110 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF74E2942
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 06:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F80E29B6
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 07:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725865AbfJXEGJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Oct 2019 00:06:09 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46474 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725811AbfJXEGJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 00:06:09 -0400
-Received: by mail-pg1-f196.google.com with SMTP id e15so13376130pgu.13;
-        Wed, 23 Oct 2019 21:06:09 -0700 (PDT)
+        id S2408386AbfJXFCT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Oct 2019 01:02:19 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45578 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725298AbfJXFCS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 01:02:18 -0400
+Received: by mail-pf1-f195.google.com with SMTP id x28so866219pfi.12
+        for <linux-mips@vger.kernel.org>; Wed, 23 Oct 2019 22:02:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=atI3gS2MGyIOjrTR3VunsKklUxG6dRrAl/pbBtzsoWc=;
-        b=mmj2bmcy+JWI/uUf9GNnYjUK9DAwI76y/91IqmvFESwdIyvy/6ySLAQ/u8wKznhQ2r
-         QxHwYtbsAdPqQ2IS41S5Ih4Xav4Ig1H0flttKRwmjmE6uG2WVSXICYTYAfTbHYMclSsu
-         x9UqpOndh0xGHy90bagZ4AWwFXK1VN5BcSXEuOcZaBvMcqmYBg5bC19pCQ93ZQRucHFR
-         hjscDb0V4nOVDmV5vf5gnGevqHi9iarwvlpYy0qonUZ1DQ6gHSEsK+/ly3DEM+GvgZkr
-         ZUol4j5oQgN9dq2d0yln8XWSBydUbkL7xSQhwEtX9X8L/WppC37M1iRQcDCpjKUgISco
-         It6A==
-X-Gm-Message-State: APjAAAUVF+QnmDCxdWG3Tb5f0ZU0ywu97k4nJTjjA8QMLnSDhPOCsbfu
-        /TYW4G0yjz5SNJnq5kTqWaBmpeodkR9Frw==
-X-Google-Smtp-Source: APXvYqzFD35dvIj1is9aDYIJkqFuwSM9EbPEVTCqFA/d/Fsrill3EaFOFte4LDEAQR5p3TYTnG5Q/w==
-X-Received: by 2002:a63:f854:: with SMTP id v20mr8946190pgj.92.1571889968341;
-        Wed, 23 Oct 2019 21:06:08 -0700 (PDT)
-Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id l62sm26476097pfl.167.2019.10.23.21.06.07
+        h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
+         :references:in-reply-to;
+        bh=BXB78VbXFQjZx1szpcJAaPeZw2U1/hPLE/mI9jvNq3E=;
+        b=TELiurpkxmBpMVVt6MZsnyrlb0/eZzRltL5f59OW0P9liEXuiqRjrarBB3nskVW666
+         0cc5kWf+83DGvJOK3+QIsYYBeBYGPHz8Ja46SsoQmiAdHyRiKzM4sakwRYdkxELLD7pm
+         WeS1g4NtyN6fqNWnm2G5hogJ5fAKQ8s/UxlAT3EoKwAHAiiyMk+cn0Cui7DlzB5IRvFz
+         5jL6jlCSDqW1+YtHM6kdlbIFZK8ZSFDAJQYV+DzpRO0uScFLDLgun59VaXjChS3WfTq9
+         ArCvtTHIlF3KAuhtDp1wKoVgyr21czbkqnFRt77YY6z+Tj4tY5OTmT3eInXZ6f4Ekn/8
+         KOJg==
+X-Gm-Message-State: APjAAAUlWB2JlJb9dz1Om/7fgIfqhX3R8pisnyYvyNe52INyZWk/0bcm
+        moXGV5zoUXLILQ2QKJLGapk=
+X-Google-Smtp-Source: APXvYqw35bjXGFvuQmM2GfB6iyvWEw4IZUXiDrsgh78YK+gF6yen+esg3jmL0jalyMnkq1Er8UgqXA==
+X-Received: by 2002:a63:7051:: with SMTP id a17mr1248672pgn.121.1571893337651;
+        Wed, 23 Oct 2019 22:02:17 -0700 (PDT)
+Received: from localhost ([2601:646:8a00:9810:5cfa:8da3:1021:be72])
+        by smtp.gmail.com with ESMTPSA id s11sm804721pjp.26.2019.10.23.22.02.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 21:06:07 -0700 (PDT)
-Date:   Wed, 23 Oct 2019 21:06:24 -0700
+        Wed, 23 Oct 2019 22:02:17 -0700 (PDT)
+Message-ID: <5db13059.1c69fb81.8b85a.373d@mx.google.com>
+Date:   Wed, 23 Oct 2019 22:02:16 -0700
 From:   Paul Burton <paulburton@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, paul.burton@mips.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: elf_hwcap: Export microMIPS and vz
-Message-ID: <20191024040624.eezpuusvhujfffud@lantea.localdomain>
-References: <20191023152551.10535-1-jiaxun.yang@flygoat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191023152551.10535-1-jiaxun.yang@flygoat.com>
-User-Agent: NeoMutt/20180716
+To:     Jonas Gorski <jonas.gorski@gmail.com>
+CC:     linux-mips@vger.kernel.org
+CC:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+CC:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: bmips: mark exception vectors as char arrays
+References:  <20191022191100.19373-1-jonas.gorski@gmail.com>
+In-Reply-To:  <20191022191100.19373-1-jonas.gorski@gmail.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jiaxun,
+Hello,
 
-On Wed, Oct 23, 2019 at 11:25:51PM +0800, Jiaxun Yang wrote:
-> After further discussion with userland library develpoer,
-> we addressed another two ASEs that can be used runtimely in programs.
+Jonas Gorski wrote:
+> The vectors span more than one byte, so mark them as arrays.
 > 
-> Export them in hwcap as well to benefit userspace programs.
+> Fixes the following build error when building when using GCC 8.3:
 > 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: <stable@vger.kernel.org> # 4.4+
-> ---
->  arch/mips/include/uapi/asm/hwcap.h | 2 ++
->  arch/mips/kernel/cpu-probe.c       | 7 ++++++-
->  2 files changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/include/uapi/asm/hwcap.h b/arch/mips/include/uapi/asm/hwcap.h
-> index 1ade1daa4921..e1a9bac62149 100644
-> --- a/arch/mips/include/uapi/asm/hwcap.h
-> +++ b/arch/mips/include/uapi/asm/hwcap.h
-> @@ -17,5 +17,7 @@
->  #define HWCAP_LOONGSON_MMI  (1 << 11)
->  #define HWCAP_LOONGSON_EXT  (1 << 12)
->  #define HWCAP_LOONGSON_EXT2 (1 << 13)
-> +#define HWCAP_MIPS_MICROMIPS (1 << 14)
-> +#define HWCAP_MIPS_VZ       (1 << 15)
+> In file included from ./include/linux/string.h:19,
+>                  from ./include/linux/bitmap.h:9,
+>                  from ./include/linux/cpumask.h:12,
+>                  from ./arch/mips/include/asm/processor.h:15,
+>                  from ./arch/mips/include/asm/thread_info.h:16,
+>                  from ./include/linux/thread_info.h:38,
+>                  from ./include/asm-generic/preempt.h:5,
+>                  from ./arch/mips/include/generated/asm/preempt.h:1,
+>                  from ./include/linux/preempt.h:81,
+>                  from ./include/linux/spinlock.h:51,
+>                  from ./include/linux/mmzone.h:8,
+>                  from ./include/linux/bootmem.h:8,
+>                  from arch/mips/bcm63xx/prom.c:10:
+> arch/mips/bcm63xx/prom.c: In function 'prom_init':
+> ./arch/mips/include/asm/string.h:162:11: error: '__builtin_memcpy' forming offset [2, 32] is out of the bounds [0, 1] of object 'bmips_smp_movevec' with type 'char' [-Werror=array-bounds]
+>    __ret = __builtin_memcpy((dst), (src), __len); \
+>            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> arch/mips/bcm63xx/prom.c:97:3: note: in expansion of macro 'memcpy'
+>    memcpy((void *)0xa0000200, &bmips_smp_movevec, 0x20);
+>    ^~~~~~
+> In file included from arch/mips/bcm63xx/prom.c:14:
+> ./arch/mips/include/asm/bmips.h:80:13: note: 'bmips_smp_movevec' declared here
+>  extern char bmips_smp_movevec;
 
-What's the motivation for exposing VZ? Userland can't actually use it
-without something like KVM, which already exposes a means of detecting
-whether VZ is supported (try the creating a VM of type KVM_VM_MIPS_VZ &
-see if it works). I'm not sure what userland would be able to do with
-this information in AT_HWCAP.
+Applied to mips-fixes.
+
+> commit e4f5cb1a9b27
+> https://git.kernel.org/mips/c/e4f5cb1a9b27
+> 
+> Fixes: 18a1eef92dcd ("MIPS: BMIPS: Introduce bmips.h")
+> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Paul Burton <paulburton@kernel.org>
 
 Thanks,
     Paul
 
->  #endif /* _UAPI_ASM_HWCAP_H */
-> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-> index f521cbf934e7..11e853d88aae 100644
-> --- a/arch/mips/kernel/cpu-probe.c
-> +++ b/arch/mips/kernel/cpu-probe.c
-> @@ -2213,8 +2213,13 @@ void cpu_probe(void)
->  	if (cpu_has_loongson_ext2)
->  		elf_hwcap |= HWCAP_LOONGSON_EXT2;
->  
-> -	if (cpu_has_vz)
-> +	if (cpu_has_mmips)
-> +		elf_hwcap |= HWCAP_MIPS_MICROMIPS;
-> +
-> +	if (cpu_has_vz) {
-> +		elf_hwcap |= HWCAP_MIPS_VZ;
->  		cpu_probe_vz(c);
-> +	}
->  
->  	cpu_probe_vmbits(c);
->  
-> -- 
-> 2.23.0
-> 
+[ This message was auto-generated; if you believe anything is incorrect
+  then please email paulburton@kernel.org to report it. ]
