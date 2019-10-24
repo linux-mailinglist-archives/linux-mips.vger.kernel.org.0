@@ -2,96 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90942E2D6F
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 11:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803E7E2D54
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 11:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404261AbfJXJeV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Oct 2019 05:34:21 -0400
-Received: from 13.mo3.mail-out.ovh.net ([188.165.33.202]:50791 "EHLO
-        13.mo3.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732686AbfJXJeV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 05:34:21 -0400
-X-Greylist: delayed 8884 seconds by postgrey-1.27 at vger.kernel.org; Thu, 24 Oct 2019 05:34:21 EDT
-Received: from player737.ha.ovh.net (unknown [10.108.35.110])
-        by mo3.mail-out.ovh.net (Postfix) with ESMTP id 54E1E22C0C8
-        for <linux-mips@vger.kernel.org>; Thu, 24 Oct 2019 09:06:16 +0200 (CEST)
-Received: from kaod.org (lns-bzn-46-82-253-208-248.adsl.proxad.net [82.253.208.248])
-        (Authenticated sender: groug@kaod.org)
-        by player737.ha.ovh.net (Postfix) with ESMTPSA id DFAA11E5A0F5;
-        Thu, 24 Oct 2019 07:05:28 +0000 (UTC)
-Date:   Thu, 24 Oct 2019 09:05:27 +0200
-From:   Greg Kurz <groug@kaod.org>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Hogan <jhogan@kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?UTF-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/45] KVM: PPC: Book3S PR: Free shared page if mmu
- initialization fails
-Message-ID: <20191024090527.6b73a3bc@bahia.lan>
-In-Reply-To: <20191022015925.31916-3-sean.j.christopherson@intel.com>
-References: <20191022015925.31916-1-sean.j.christopherson@intel.com>
-        <20191022015925.31916-3-sean.j.christopherson@intel.com>
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 5577708138938931537
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedufedrledtgdduudegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddm
+        id S2390237AbfJXJaV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Oct 2019 05:30:21 -0400
+Received: from sender4-pp-o94.zoho.com ([136.143.188.94]:25401 "EHLO
+        sender4-pp-o94.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732032AbfJXJaV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 05:30:21 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1571909372; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=RGcytpkcewegJVEiw7Osb36GQgBJwXF7z4OYlbQODEOZn0zzLSaluebUjgyaN5BOXGpAzi/EeufFj4XgXB3ERZU4fi7RMd05VN6vsHG+KqwMMOB2hF72Vg/TzyZA238rny8h+zPvtoXQ/xdBkyE7srypocPD/2IkNYhiFrosInk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1571909372; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To; 
+        bh=Q/4rGbVZyQuUGq0iZ44tLzODrxmkBjBJWNbgus33LnQ=; 
+        b=l+iRk4R3inceE1/UKtNjQve/6Lw8XvgmWSKxprLcKEWYcgkFvzz7/S3E8XnC88gk3HINXlALwcJ2O3nXIi7kkTvvyVtJ0+JOZw5pXzAZGyhnKokh7hSwDjzVL342b5cJC1ViPVoHi38PvWu3JW55RNiSH7I5CP8l1Ht+0L9otuA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zoho.com;
+        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
+        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
+  s=zapps768; d=zoho.com; 
+  h=from:to:cc:subject:date:message-id:in-reply-to:references; 
+  b=nRMmBKVkrFjS71ZbWi8ka2B73mPbbbwkJjnU4kK0ItfZFl881GHbpltCanAoDkxR+F9bU2qKssqE
+    t5LZ827c3AWXP4PcC+pXK8Ppgk1PDPYrw4XzRapnMsLcBgTS6Z0q  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1571909372;
+        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; l=892;
+        bh=Q/4rGbVZyQuUGq0iZ44tLzODrxmkBjBJWNbgus33LnQ=;
+        b=fvXE2XfFwARSwikeEvk9KFVD1OpQHYe6IXpnrPcUJJH5WAeAfhL0jd0ByNyxXdW4
+        okBZIzGva9dfsFUvxYUTNXhtSfX5SdpJirruNM6tYiHdj7YA1Gt/UFmcLNEL+4lZ+xh
+        55me5nYU8zWGzZJkQMdNywAbM1tb2rYhh+5GyHQs=
+Received: from zhouyanjie-virtual-machine.localdomain (182.148.156.27 [182.148.156.27]) by mx.zohomail.com
+        with SMTPS id 1571909368329755.0229216143092; Thu, 24 Oct 2019 02:29:28 -0700 (PDT)
+From:   Zhou Yanjie <zhouyanjie@zoho.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, ralf@linux-mips.org,
+        jhogan@kernel.org, gregkh@linuxfoundation.org,
+        paul.burton@mips.com, chenhc@lemote.com, paul@crapouillou.net,
+        tglx@linutronix.de, jiaxun.yang@flygoat.com
+Subject: [PATCH 1/2] MIPS: Rename JZRISC to XBurst.
+Date:   Thu, 24 Oct 2019 17:29:00 +0800
+Message-Id: <1571909341-10108-2-git-send-email-zhouyanjie@zoho.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1571909341-10108-1-git-send-email-zhouyanjie@zoho.com>
+References: <1571909341-10108-1-git-send-email-zhouyanjie@zoho.com>
+X-ZohoMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 21 Oct 2019 18:58:42 -0700
-Sean Christopherson <sean.j.christopherson@intel.com> wrote:
+Now in addition to the JZ line, Ingenic has added three product
+lines X, T and M. and the real name of the CPU from Ingenic is
+XBurst, not JZRISC.
 
-> Explicitly free the shared page if kvmppc_mmu_init() fails during
-> kvmppc_core_vcpu_create(), as the page is freed only in
-> kvmppc_core_vcpu_free(), which is not reached via kvm_vcpu_uninit().
-> 
-> Fixes: 96bc451a15329 ("KVM: PPC: Introduce shared page")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> ---
+Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+---
+ arch/mips/kernel/cpu-probe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Greg Kurz <groug@kaod.org>
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index c2eb392..16033a4 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -1951,7 +1951,7 @@ static inline void cpu_probe_ingenic(struct cpuinfo_mips *c, unsigned int cpu)
+ 	case PRID_IMP_XBURST:
+ 		c->cputype = CPU_XBURST;
+ 		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+-		__cpu_name[cpu] = "Ingenic JZRISC";
++		__cpu_name[cpu] = "Ingenic XBurst";
+ 		/*
+ 		 * The XBurst core by default attempts to avoid branch target
+ 		 * buffer lookups by detecting & special casing loops. This
+-- 
+2.7.4
 
->  arch/powerpc/kvm/book3s_pr.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/powerpc/kvm/book3s_pr.c b/arch/powerpc/kvm/book3s_pr.c
-> index cc65af8fe6f7..3f6ad3f58628 100644
-> --- a/arch/powerpc/kvm/book3s_pr.c
-> +++ b/arch/powerpc/kvm/book3s_pr.c
-> @@ -1769,10 +1769,12 @@ static struct kvm_vcpu *kvmppc_core_vcpu_create_pr(struct kvm *kvm,
->  
->  	err = kvmppc_mmu_init(vcpu);
->  	if (err < 0)
-> -		goto uninit_vcpu;
-> +		goto free_shared_page;
->  
->  	return vcpu;
->  
-> +free_shared_page:
-> +	free_page((unsigned long)vcpu->arch.shared);
->  uninit_vcpu:
->  	kvm_vcpu_uninit(vcpu);
->  free_shadow_vcpu:
 
