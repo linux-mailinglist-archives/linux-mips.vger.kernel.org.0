@@ -2,139 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7950CE3658
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 17:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C516E38E1
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 18:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503028AbfJXPSK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Oct 2019 11:18:10 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:40052 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2503019AbfJXPSJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 11:18:09 -0400
-Received: by mail-il1-f196.google.com with SMTP id d83so14268302ilk.7
-        for <linux-mips@vger.kernel.org>; Thu, 24 Oct 2019 08:18:09 -0700 (PDT)
+        id S2409936AbfJXQwA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Oct 2019 12:52:00 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:34820 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2409929AbfJXQwA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 12:52:00 -0400
+Received: by mail-qt1-f195.google.com with SMTP id m15so38946408qtq.2
+        for <linux-mips@vger.kernel.org>; Thu, 24 Oct 2019 09:51:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=Ounxj9cfL6O+QVspuA41qPrL+dtHlnd6zlmABTsVbws=;
-        b=biNiyBsUq1oC7u5yogZy8N29MX7ATTQIXUIPIqqI6g2N8EA9QhwEC0gQemO8Cy5L6a
-         UCFg3RDAYG9lnvohF8+tXuDf+IXq7fLq3dVHXnLyE5vPEUz/DrCR7X3R288BYePyqXg3
-         oYLT/wTPksWncWN9bXdK0yZ0nbFI3oEoJl84Ht2i67n/365THu308Y+OSHFJ18vXXUqR
-         ENefMt09zBo4nBburoq/NmiNK2bRI59OT7KW1kTA/yDrLysLajr6fUNNc1LVC2TMXMzE
-         JIj7P2KKqLbrHsjaQFkGpARY6E99HHxeUwRHMbgsRgF/uSl1vSWl2lvW9K349Ga0HXcy
-         1zXA==
+        d=lca.pw; s=google;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=MD1pbzPN74Cooi+p6oJbLof2wiDKOMhFaRekjLXUrZs=;
+        b=sB2Jn2rl37IzEiSgyk42DahVjDex25NdgPPfI1R0zFA09tT7ZrEMPasarAoAIcvKxN
+         +n+x+G/+I18JPbiGrp5t2JZcqhYPVeiElEGSvhaL9nzJ8Ww77rBhXEczirB9UWDjC+HR
+         FGu6S9JSyxY5ETieOFNYQcEvWt2BfiJWwkUuEuoDsJvJztOWzJQGE+BFr2DaG5QlopyQ
+         ABJd/lChwAngBkE3q9AXNi+BbvxqNkFBoPMDPmKsYKQMDx8sAaTnfM/AZCbzTa94uXWS
+         F+ZruUfTIm9SwZJdBHY7xPH/3MaUjJC8g0ITbr2z/pLULsaIH5B4UY62/g4sqHyx5zRc
+         ID7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=Ounxj9cfL6O+QVspuA41qPrL+dtHlnd6zlmABTsVbws=;
-        b=GtJL7XYxkTbLwInoSTMb5XLIl1dOO9LxZiZ1GwLOFg2nffvvtr3QIjWlkan5TtQgT6
-         5kiAEQIDiwvyTHGpgpvMJkXdUAEFYzGqFRhae5NeWFU/KzkPR66iOwslhD8CI6kLO8NA
-         /2BJ1yMlZXjLxEdzj2aBhgTGcLKeBuN4MdJ/y20DdqB4sf4AcEjTB7Vu4bPWqHcHp9ls
-         0mnlgO9tZpSU45B65zY3va6qvCEBOxQN93K2767xbQdFudpCpmHN+Og3Hak+txEuLrN9
-         GFXSp+Ow/K7U3v9cOpBDJHtywpv9ukvZ9XQ96fiWtHF0LFxHCzQCrx6N5ifNJOtiAF8K
-         FjpQ==
-X-Gm-Message-State: APjAAAV4DIwOhKk4oRNlRh/tsIjuBHTfsDG56JxFXHPsHwqE2vw5nPTa
-        Q+66gBp8GITigmmd9tUqtzzqdA==
-X-Google-Smtp-Source: APXvYqxQ1LtEDnMpoN971luqOI7TbH4CJsi6LuiXRaB4c6bbMVkSBP/cjpjqc6MBqdQnstOla4Sq8g==
-X-Received: by 2002:a92:8fc6:: with SMTP id r67mr43423606ilk.5.1571930288560;
-        Thu, 24 Oct 2019 08:18:08 -0700 (PDT)
-Received: from localhost ([64.62.168.194])
-        by smtp.gmail.com with ESMTPSA id y5sm7755183ilm.63.2019.10.24.08.18.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2019 08:18:07 -0700 (PDT)
-Date:   Thu, 24 Oct 2019 08:17:59 -0700 (PDT)
-From:   Paul Walmsley <paul.walmsley@sifive.com>
-X-X-Sender: paulw@viisi.sifive.com
-To:     Michal Simek <michal.simek@xilinx.com>
-cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu, git@xilinx.com,
-        palmer@sifive.com, hch@infradead.org, longman@redhat.com,
-        helgaas@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jackie Liu <liuyun01@kylinos.cn>,
-        Wesley Terpstra <wesley@sifive.com>,
-        Firoz Khan <firoz.khan@linaro.org>, sparclinux@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        James Hogan <jhogan@kernel.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=MD1pbzPN74Cooi+p6oJbLof2wiDKOMhFaRekjLXUrZs=;
+        b=tQDRWlUgDfLxEX8AJ2C9hrMUwzLd9kI7wyWZIf/9HDyzxvmbF7uQ5MWjzv58vxrg5s
+         KbcWDvCsgSgRZItBFFyDFTx5hRiw6+aZ0u+w/kzXQVTa5uce0sltgBDEmRdyJVzdVQ7Q
+         27utbLlcWp+Of4XSy6JYgdwXj9l19HBgitOkvqi8rSoEfj2SJp9Ip/7xs3DRybajHtps
+         xQ78E6V77iSMFO9ZXjyvHdl2AjkXSxf8lNLH0zrucvAoa/Aj6X3NSws9bbxI5frRRCLF
+         vgu0cdh+zvk0EuhrvQmkndKueCR/nMYihsGeREZ3z+MIyQCdWRAKZ+Cn4S4Ug91QHIGv
+         HB1A==
+X-Gm-Message-State: APjAAAWik2VP94v89Ma4pz0EtQDkugrWn6OcW48aKt1je6KK4vGBDnJr
+        HbCogO/F7r8EWXyMiE5dD3JUcw==
+X-Google-Smtp-Source: APXvYqxQOBVx3ITKJVFCZM4JTBqxBQ++B+FV+OPeFAZHzhypJMMzaZu2sZwLWN1gjap9nOuKNtEYxQ==
+X-Received: by 2002:ac8:1b45:: with SMTP id p5mr1975446qtk.330.1571935918881;
+        Thu, 24 Oct 2019 09:51:58 -0700 (PDT)
+Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id u9sm1610352qkk.34.2019.10.24.09.51.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Oct 2019 09:51:58 -0700 (PDT)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+From:   Qian Cai <cai@lca.pw>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH V7] mm/debug: Add tests validating architecture page table helpers
+Date:   Thu, 24 Oct 2019 12:51:57 -0400
+Message-Id: <FCAFFD72-3781-4474-8393-A4E40264473A@lca.pw>
+References: <1571625739-29943-1-git-send-email-anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-snps-arc@lists.infradead.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-mips@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mark Rutland <Mark.Rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Steven Price <Steven.Price@arm.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sri Krishna chowdary <schowdary@nvidia.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 1/2] asm-generic: Make msi.h a mandatory include/asm
- header
-In-Reply-To: <a021f232968cfffe3f2d838da47214c6bbdeeedb.1571911976.git.michal.simek@xilinx.com>
-Message-ID: <alpine.DEB.2.21.9999.1910240810420.20010@viisi.sifive.com>
-References: <cover.1571911976.git.michal.simek@xilinx.com> <a021f232968cfffe3f2d838da47214c6bbdeeedb.1571911976.git.michal.simek@xilinx.com>
-User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-165076562-1571930279=:20010"
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <1571625739-29943-1-git-send-email-anshuman.khandual@arm.com>
+To:     Anshuman Khandual <Anshuman.Khandual@arm.com>
+X-Mailer: iPhone Mail (17A878)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-165076562-1571930279=:20010
-Content-Type: text/plain; charset=ISO-8859-2
-Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-On Thu, 24 Oct 2019, Michal Simek wrote:
-
-> msi.h is generic for all architectures expect of x86 which has own versio=
-n.
-> Enabling MSI by including msi.h to architecture Kbuild is just additional
-> step which doesn't need to be done.
-> The patch was created based on request to enable MSI for Microblaze.
+> On Oct 24, 2019, at 10:50 AM, Anshuman Khandual <Anshuman.Khandual@arm.com=
+> wrote:
 >=20
-> Suggested-by: Christoph Hellwig <hch@infradead.org>
-> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-> ---
+> Changes in V7:
 >=20
-> https://lore.kernel.org/linux-riscv/20191008154604.GA7903@infradead.org/
+> - Memory allocation and free routines for mapped pages have been droped
+> - Mapped pfns are derived from standard kernel text symbol per Matthew
+> - Moved debug_vm_pgtaable() after page_alloc_init_late() per Michal and Qi=
+an=20
+> - Updated the commit message per Michal
+> - Updated W=3D1 GCC warning problem on x86 per Qian Cai
 
-[ ... ]
-
-> diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbuil=
-d
-> index 16970f246860..1efaeddf1e4b 100644
-> --- a/arch/riscv/include/asm/Kbuild
-> +++ b/arch/riscv/include/asm/Kbuild
-> @@ -22,7 +22,6 @@ generic-y +=3D kvm_para.h
->  generic-y +=3D local.h
->  generic-y +=3D local64.h
->  generic-y +=3D mm-arch-hooks.h
-> -generic-y +=3D msi.h
->  generic-y +=3D percpu.h
->  generic-y +=3D preempt.h
->  generic-y +=3D sections.h
-
-Acked-by: Paul Walmsley <paul.walmsley@sifive.com> # arch/riscv
-Tested-by: Paul Walmsley <paul.walmsley@sifive.com> # build only, rv32/rv64
-
-Thanks Micha=B3,
-
-
-- Paul
---8323329-165076562-1571930279=:20010--
+It would be interesting to know if you actually tested  out to see if the wa=
+rning went away. As far I can tell, the GCC is quite stubborn there, so I am=
+ not going to insist.=
