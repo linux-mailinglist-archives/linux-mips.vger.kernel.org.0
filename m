@@ -2,49 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FD2E29BA
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 07:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D369E29BC
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 07:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437399AbfJXFCd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Oct 2019 01:02:33 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:39876 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725298AbfJXFCd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 01:02:33 -0400
-Received: by mail-pf1-f195.google.com with SMTP id v4so14335317pff.6;
-        Wed, 23 Oct 2019 22:02:32 -0700 (PDT)
+        id S2437438AbfJXFCn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Oct 2019 01:02:43 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44075 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725298AbfJXFCn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 01:02:43 -0400
+Received: by mail-pg1-f193.google.com with SMTP id e10so13462372pgd.11
+        for <linux-mips@vger.kernel.org>; Wed, 23 Oct 2019 22:02:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:to:cc:cc:subject:references
-         :in-reply-to;
-        bh=T+cg4jC/pyv+WL1IMPRAYUsbPvnCELFFTJ6x7ILWLzI=;
-        b=oTE05/sd7/Z7sgjIKB3hhfm4lLvuFWxkQZ9mp3UGU9ukNQZQ3TPJiLgHyNsV112IgT
-         Y6LicM5WAy0YzJYLPJJbFAxU5UfTaLzF7Mz5tn13TslW75MxFTyXuvV8382d0Ysb04Yf
-         sk7MP4scmrGFdJGUO0lmqpRL2Rs2pyFMK92nFxILbpEPPwfQSelctFdnMEtqjQqyqvjY
-         0dInw5E4OHqwpvN+iaihfzmFfgnf8ylwbc0VCz0eRaP4XvO/WieFXkoD2AdhE8sWbiyU
-         z0OvNWJmhI+S8l0NJ5LRjWdmBsqwWW2fwPWOLxEFgTaaQr0fHeYMOMilP9RKnQoNPE/D
-         TfFA==
-X-Gm-Message-State: APjAAAXJH3P9fWShvqses/OW4Ks3sv85PJugCuRIvOCxPC6cP1oXUCYy
-        bPODgUy7lbzdhHUuwPJUYlk=
-X-Google-Smtp-Source: APXvYqzlL08Rlx0pL4sDZ2s0vYurBk3w4NhJKVXUUWgU4/OhoZS2HFVVVD+aGkSpD+7Fc5y5Y+OtzQ==
-X-Received: by 2002:a65:6811:: with SMTP id l17mr14138612pgt.434.1571893352275;
-        Wed, 23 Oct 2019 22:02:32 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
+         :references:in-reply-to;
+        bh=IPZJyobdu7JiI0Yobf+//me9Y0rqIjfI49OV/2ZZO4g=;
+        b=cVjPv+uHP1PNi5w/S6aaAiTDYb7NAVf4cGTrYU8pZPUXYUh7Ss3iZy0noWLGJjlT39
+         cgm6Ie2pnT4OC0a4NUAnaFFBVuRnrXDhkbVUfLMmqKsx9U5tED8oJPu6jVOsUaCibZ91
+         PMCQDXmlu/ymSG+wmR82ABmIoctDKB77S+rOmLn/+F6ii86Zur+PglY6FyqR7LyLOule
+         kVwYoXecPCyar8ee1eibTOIedVYbYZa15oQvVgMLI5OQXeZc/Y0gYD1k1WXioZ2DUWzB
+         GTYpxoS6cS9ZqgkNqaKcXE190akeXIED1FEgr+8nnG35wot1R9WqtBgribqhKgefIfwF
+         8QkA==
+X-Gm-Message-State: APjAAAW51mQYMi9PPvimtrqMrcGsD0I38FqePTl8sEbgMGuHX0xpZfYG
+        Sj6uRGL1LuEZhytzKB2l4HU=
+X-Google-Smtp-Source: APXvYqyJXKOhXLnYkFkmhxPTJ4l/I/lPVKMHI0VZqsf2iKx98jjUhQGH9Xs/rQrNlpEZHwC1qtv6hQ==
+X-Received: by 2002:a17:90a:5d04:: with SMTP id s4mr4536266pji.125.1571893362373;
+        Wed, 23 Oct 2019 22:02:42 -0700 (PDT)
 Received: from localhost ([2601:646:8a00:9810:5cfa:8da3:1021:be72])
-        by smtp.gmail.com with ESMTPSA id 13sm25545646pgm.76.2019.10.23.22.02.31
+        by smtp.gmail.com with ESMTPSA id n23sm23322027pff.137.2019.10.23.22.02.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 22:02:31 -0700 (PDT)
-Message-ID: <5db13067.1c69fb81.a07a6.2167@mx.google.com>
-Date:   Wed, 23 Oct 2019 22:02:31 -0700
+        Wed, 23 Oct 2019 22:02:41 -0700 (PDT)
+Message-ID: <5db13071.1c69fb81.1458d.eae6@mx.google.com>
+Date:   Wed, 23 Oct 2019 22:02:41 -0700
 From:   Paul Burton <paulburton@kernel.org>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-CC:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
+CC:     chenhc@lemote.com
+CC:     chenhuacai@gmail.com, jhogan@kernel.org, jiaxun.yang@flygoat.com,
+        linux-mips@linux-mips.org, linux-mips@vger.kernel.org,
+        paul.burton@mips.com, ralf@linux-mips.org, wuzhangjin@gmail.com,
+        zhangfx@lemote.com, Rikard Falkeborn <rikard.falkeborn@gmail.com>
 CC:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH 1/5] MIPS: SGI-IP27: collect externs in new header file
-References:  <20191022161315.4194-1-tbogendoerfer@suse.de>
-In-Reply-To:  <20191022161315.4194-1-tbogendoerfer@suse.de>
+Subject: Re: [PATCH] MIPS: Loongson: Fix GENMASK misuse
+References:  <20191022192547.480095-1-rikard.falkeborn@gmail.com>
+In-Reply-To:  <20191022192547.480095-1-rikard.falkeborn@gmail.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -52,46 +53,18 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hello,
 
-Thomas Bogendoerfer wrote:
-> IP27 code has a few externs distributed over .c files. Collect them
-> together into one commcon header file.
+Rikard Falkeborn wrote:
+> Arguments are supposed to be ordered high then low.
 
-Series applied to mips-next.
+Applied to mips-next.
 
-> MIPS: SGI-IP27: collect externs in new header file
->   commit 249be5633cdb
->   https://git.kernel.org/mips/c/249be5633cdb
->   
->   Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
->   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> commit e02d026f08f1
+> https://git.kernel.org/mips/c/e02d026f08f1
 > 
-> MIPS: SGI-IP27: move registering of smp ops into IP27 specific code
->   commit c823f4160978
->   https://git.kernel.org/mips/c/c823f4160978
->   
->   Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
->   Signed-off-by: Paul Burton <paulburton@kernel.org>
-> 
-> MIPS: arc: remove unused stuff
->   commit cbd09241dd9d
->   https://git.kernel.org/mips/c/cbd09241dd9d
->   
->   Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
->   Signed-off-by: Paul Burton <paulburton@kernel.org>
-> 
-> MIPS: arc: use function argument for passing argc/argv to prom_init_cmdline
->   commit 7b16831d1eb1
->   https://git.kernel.org/mips/c/7b16831d1eb1
->   
->   Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
->   Signed-off-by: Paul Burton <paulburton@kernel.org>
-> 
-> MIPS: SGI-IP27: reduce ARC usage to a minimum
->   commit e942242784d0
->   https://git.kernel.org/mips/c/e942242784d0
->   
->   Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
->   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> Fixes: 6a6f9b7dafd50efc1b2 ("MIPS: Loongson: Add CFUCFG&CSR support")
+> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+> Reviewed-by: Huacai Chen <chenhc@lemote.com>
+> Signed-off-by: Paul Burton <paulburton@kernel.org>
 
 Thanks,
     Paul
