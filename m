@@ -2,50 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F80E29B6
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 07:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43794E29B9
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 07:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408386AbfJXFCT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Oct 2019 01:02:19 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45578 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725298AbfJXFCS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 01:02:18 -0400
-Received: by mail-pf1-f195.google.com with SMTP id x28so866219pfi.12
-        for <linux-mips@vger.kernel.org>; Wed, 23 Oct 2019 22:02:18 -0700 (PDT)
+        id S2408393AbfJXFCW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Oct 2019 01:02:22 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:43970 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725298AbfJXFCV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 01:02:21 -0400
+Received: by mail-pg1-f196.google.com with SMTP id l24so8539369pgh.10;
+        Wed, 23 Oct 2019 22:02:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
          :references:in-reply-to;
-        bh=BXB78VbXFQjZx1szpcJAaPeZw2U1/hPLE/mI9jvNq3E=;
-        b=TELiurpkxmBpMVVt6MZsnyrlb0/eZzRltL5f59OW0P9liEXuiqRjrarBB3nskVW666
-         0cc5kWf+83DGvJOK3+QIsYYBeBYGPHz8Ja46SsoQmiAdHyRiKzM4sakwRYdkxELLD7pm
-         WeS1g4NtyN6fqNWnm2G5hogJ5fAKQ8s/UxlAT3EoKwAHAiiyMk+cn0Cui7DlzB5IRvFz
-         5jL6jlCSDqW1+YtHM6kdlbIFZK8ZSFDAJQYV+DzpRO0uScFLDLgun59VaXjChS3WfTq9
-         ArCvtTHIlF3KAuhtDp1wKoVgyr21czbkqnFRt77YY6z+Tj4tY5OTmT3eInXZ6f4Ekn/8
-         KOJg==
-X-Gm-Message-State: APjAAAUlWB2JlJb9dz1Om/7fgIfqhX3R8pisnyYvyNe52INyZWk/0bcm
-        moXGV5zoUXLILQ2QKJLGapk=
-X-Google-Smtp-Source: APXvYqw35bjXGFvuQmM2GfB6iyvWEw4IZUXiDrsgh78YK+gF6yen+esg3jmL0jalyMnkq1Er8UgqXA==
-X-Received: by 2002:a63:7051:: with SMTP id a17mr1248672pgn.121.1571893337651;
-        Wed, 23 Oct 2019 22:02:17 -0700 (PDT)
+        bh=8F5ySKRZr9V5FEeQpHSOPXmmMaNr3Mx87NU9ELmhZRg=;
+        b=lr+7ZbCyrjy+yaZ0aCEKVdNJtdHCoJi8GUFJqQLUH7PnKAD3o2925gQqQBn0hkS5Vy
+         QMJv4OH869DUxdEIhXojQhoHpqOlUmRCYM4hIP8G3V+srqaZ772jYiCLrrLAmk8InSdX
+         /PVoFqJhM6gkCJ4wsDGrzIfd3qsnCk3bZsOefKWfJ1QBbclEaWBLY0UfTFje5pFf6L8x
+         oMCa9fUxXbxKY5jlZ123JTspCYKnKhB3n6oQyrQ+LIX7yHG+NclN9Czy0Ot/puYU3tAw
+         mqURt9ZlrxpQ92vYH7ESU1ThNR0tm88iL9803evkmfQsWoIN8dA+EgztmjzS4XGK4tAJ
+         UBww==
+X-Gm-Message-State: APjAAAVLLFYKZ9yY+Q26p7j1HG96o7EBJHkfWY8Vgg2yzLyHmFxdEjXo
+        X/G0DswLhoCVuQQ0FOOUunc=
+X-Google-Smtp-Source: APXvYqy7cMtcmkSp77OgFZBCPky6lqO8/DWsIDXUzPHZ7nfD7tr2WBu36bw90v+aFO2aTDUDvsn62Q==
+X-Received: by 2002:a17:90a:8c02:: with SMTP id a2mr4543343pjo.79.1571893340916;
+        Wed, 23 Oct 2019 22:02:20 -0700 (PDT)
 Received: from localhost ([2601:646:8a00:9810:5cfa:8da3:1021:be72])
-        by smtp.gmail.com with ESMTPSA id s11sm804721pjp.26.2019.10.23.22.02.16
+        by smtp.gmail.com with ESMTPSA id f21sm21876384pgh.85.2019.10.23.22.02.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 22:02:17 -0700 (PDT)
-Message-ID: <5db13059.1c69fb81.8b85a.373d@mx.google.com>
-Date:   Wed, 23 Oct 2019 22:02:16 -0700
+        Wed, 23 Oct 2019 22:02:20 -0700 (PDT)
+Message-ID: <5db1305c.1c69fb81.3345f.9763@mx.google.com>
+Date:   Wed, 23 Oct 2019 22:02:19 -0700
 From:   Paul Burton <paulburton@kernel.org>
-To:     Jonas Gorski <jonas.gorski@gmail.com>
+To:     Paul Burton <paulburton@kernel.org>
 CC:     linux-mips@vger.kernel.org
-CC:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
+CC:     linux-kernel@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
+        Dmitry Korotin <dkorotin@wavecomp.com>, stable@vger.kernel.org
 CC:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: bmips: mark exception vectors as char arrays
-References:  <20191022191100.19373-1-jonas.gorski@gmail.com>
-In-Reply-To:  <20191022191100.19373-1-jonas.gorski@gmail.com>
+Subject: Re: [PATCH] MIPS: tlbex: Fix build_restore_pagemask KScratch restore
+References:  <20191018223848.1128468-1-paulburton@kernel.org>
+In-Reply-To:  <20191018223848.1128468-1-paulburton@kernel.org>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -53,44 +51,41 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hello,
 
-Jonas Gorski wrote:
-> The vectors span more than one byte, so mark them as arrays.
+Paul Burton wrote:
+> build_restore_pagemask() will restore the value of register $1/$at when
+> its restore_scratch argument is non-zero, and aims to do so by filling a
+> branch delay slot. Commit 0b24cae4d535 ("MIPS: Add missing EHB in mtc0
+> -> mfc0 sequence.") added an EHB instruction (Execution Hazard Barrier)
+> prior to restoring $1 from a KScratch register, in order to resolve a
+> hazard that can result in stale values of the KScratch register being
+> observed. In particular, P-class CPUs from MIPS with out of order
+> execution pipelines such as the P5600 & P6600 are affected.
 > 
-> Fixes the following build error when building when using GCC 8.3:
+> Unfortunately this EHB instruction was inserted in the branch delay slot
+> causing the MFC0 instruction which performs the restoration to no longer
+> execute along with the branch. The result is that the $1 register isn't
+> actually restored, ie. the TLB refill exception handler clobbers it -
+> which is exactly the problem the EHB is meant to avoid for the P-class
+> CPUs.
 > 
-> In file included from ./include/linux/string.h:19,
->                  from ./include/linux/bitmap.h:9,
->                  from ./include/linux/cpumask.h:12,
->                  from ./arch/mips/include/asm/processor.h:15,
->                  from ./arch/mips/include/asm/thread_info.h:16,
->                  from ./include/linux/thread_info.h:38,
->                  from ./include/asm-generic/preempt.h:5,
->                  from ./arch/mips/include/generated/asm/preempt.h:1,
->                  from ./include/linux/preempt.h:81,
->                  from ./include/linux/spinlock.h:51,
->                  from ./include/linux/mmzone.h:8,
->                  from ./include/linux/bootmem.h:8,
->                  from arch/mips/bcm63xx/prom.c:10:
-> arch/mips/bcm63xx/prom.c: In function 'prom_init':
-> ./arch/mips/include/asm/string.h:162:11: error: '__builtin_memcpy' forming offset [2, 32] is out of the bounds [0, 1] of object 'bmips_smp_movevec' with type 'char' [-Werror=array-bounds]
->    __ret = __builtin_memcpy((dst), (src), __len); \
->            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> arch/mips/bcm63xx/prom.c:97:3: note: in expansion of macro 'memcpy'
->    memcpy((void *)0xa0000200, &bmips_smp_movevec, 0x20);
->    ^~~~~~
-> In file included from arch/mips/bcm63xx/prom.c:14:
-> ./arch/mips/include/asm/bmips.h:80:13: note: 'bmips_smp_movevec' declared here
->  extern char bmips_smp_movevec;
+> Similarly build_get_pgd_vmalloc() will restore the value of $1/$at when
+> its mode argument equals refill_scratch, and suffers from the same
+> problem.
+> 
+> Fix this by in both cases moving the EHB earlier in the emitted code.
+> There's no reason it needs to immediately precede the MFC0 - it simply
+> needs to be between the MTC0 & MFC0.
+> 
+> This bug only affects Cavium Octeon systems which use
+> build_fast_tlb_refill_handler().
 
 Applied to mips-fixes.
 
-> commit e4f5cb1a9b27
-> https://git.kernel.org/mips/c/e4f5cb1a9b27
+> commit b42aa3fd5957
+> https://git.kernel.org/mips/c/b42aa3fd5957
 > 
-> Fixes: 18a1eef92dcd ("MIPS: BMIPS: Introduce bmips.h")
-> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 > Signed-off-by: Paul Burton <paulburton@kernel.org>
+> Fixes: 0b24cae4d535 ("MIPS: Add missing EHB in mtc0 -> mfc0 sequence.")
 
 Thanks,
     Paul
