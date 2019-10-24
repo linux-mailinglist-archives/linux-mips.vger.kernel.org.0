@@ -2,101 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7511E2A74
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 08:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3BCE2B07
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Oct 2019 09:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408552AbfJXGcR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Oct 2019 02:32:17 -0400
-Received: from forward101j.mail.yandex.net ([5.45.198.241]:44064 "EHLO
-        forward101j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2404377AbfJXGcR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 24 Oct 2019 02:32:17 -0400
-Received: from mxback27o.mail.yandex.net (mxback27o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::78])
-        by forward101j.mail.yandex.net (Yandex) with ESMTP id 411611BE0125;
-        Thu, 24 Oct 2019 09:32:14 +0300 (MSK)
-Received: from iva3-3f75f35f86d4.qloud-c.yandex.net (iva3-3f75f35f86d4.qloud-c.yandex.net [2a02:6b8:c0c:498f:0:640:3f75:f35f])
-        by mxback27o.mail.yandex.net (nwsmtp/Yandex) with ESMTP id KoqmSK881M-WDqGriqt;
-        Thu, 24 Oct 2019 09:32:14 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1571898734;
-        bh=ZEMULDmi68Ln7bpVQGgkzmUAobTz0pq0naePIbMZshw=;
-        h=From:To:Subject:CC:References:Date:In-Reply-To:Message-ID;
-        b=Jkj5bEawIxahuU705QS8Z8hrrCUw2eVLeO7jBWuH2jEv2UO1Xr0DuOlmyxionWD69
-         4v1+pTmSfrbCqi6xZlcy+Wrmk9Z+poul0fahxqmaDuQ3P6Orwe6G7pVDxdT0fWmD9k
-         ueRYrxN0iNAkypt62u/4/DwrlVyZ/dPhd7N8Qhnw=
-Authentication-Results: mxback27o.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by iva3-3f75f35f86d4.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id ioVuZtsd54-WC0CN0fH;
-        Thu, 24 Oct 2019 09:32:12 +0300
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client certificate not present)
-Date:   Thu, 24 Oct 2019 14:32:05 +0800
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20191024040624.eezpuusvhujfffud@lantea.localdomain>
-References: <20191023152551.10535-1-jiaxun.yang@flygoat.com> <20191024040624.eezpuusvhujfffud@lantea.localdomain>
+        id S2392956AbfJXHYl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Oct 2019 03:24:41 -0400
+Received: from 4.mo2.mail-out.ovh.net ([87.98.172.75]:35354 "EHLO
+        4.mo2.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390783AbfJXHYl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Oct 2019 03:24:41 -0400
+X-Greylist: delayed 623 seconds by postgrey-1.27 at vger.kernel.org; Thu, 24 Oct 2019 03:24:41 EDT
+Received: from player788.ha.ovh.net (unknown [10.108.57.14])
+        by mo2.mail-out.ovh.net (Postfix) with ESMTP id E1A841ACDB1
+        for <linux-mips@vger.kernel.org>; Thu, 24 Oct 2019 09:04:46 +0200 (CEST)
+Received: from kaod.org (lns-bzn-46-82-253-208-248.adsl.proxad.net [82.253.208.248])
+        (Authenticated sender: groug@kaod.org)
+        by player788.ha.ovh.net (Postfix) with ESMTPSA id CA63BB4D6960;
+        Thu, 24 Oct 2019 07:04:07 +0000 (UTC)
+Date:   Thu, 24 Oct 2019 09:04:03 +0200
+From:   Greg Kurz <groug@kaod.org>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Hogan <jhogan@kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?UTF-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 01/45] KVM: PPC: Book3S HV: Uninit vCPU if vcore
+ creation fails
+Message-ID: <20191024090403.5e564e39@bahia.lan>
+In-Reply-To: <20191022015925.31916-2-sean.j.christopherson@intel.com>
+References: <20191022015925.31916-1-sean.j.christopherson@intel.com>
+        <20191022015925.31916-2-sean.j.christopherson@intel.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] MIPS: elf_hwcap: Export microMIPS and vz
-To:     Paul Burton <paulburton@kernel.org>
-CC:     linux-mips@vger.kernel.org, paul.burton@mips.com,
-        stable@vger.kernel.org
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <B1A8B4BF-FF80-4E6D-9B4F-8E45B0EF5FE5@flygoat.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Ovh-Tracer-Id: 5552375392181655889
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedufedrledtgdduudefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddm
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Mon, 21 Oct 2019 18:58:41 -0700
+Sean Christopherson <sean.j.christopherson@intel.com> wrote:
 
+> Call kvm_vcpu_uninit() if vcore creation fails to avoid leaking any
+> resources allocated by kvm_vcpu_init(), i.e. the vcpu->run page.
+> 
+> Fixes: 371fefd6f2dc4 ("KVM: PPC: Allow book3s_hv guests to use SMT processor modes")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> ---
 
-=E4=BA=8E 2019=E5=B9=B410=E6=9C=8824=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=88=
-12:06:24, Paul Burton <paulburton@kernel=2Eorg> =E5=86=99=E5=88=B0:
->Hi Jiaxun,
->
->On Wed, Oct 23, 2019 at 11:25:51PM +0800, Jiaxun Yang wrote:
->> After further discussion with userland library develpoer,
->> we addressed another two ASEs that can be used runtimely in programs=2E
->>=20
->> Export them in hwcap as well to benefit userspace programs=2E
->>=20
->> Signed-off-by: Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom>
->> Cc: <stable@vger=2Ekernel=2Eorg> # 4=2E4+
->> ---
->>  arch/mips/include/uapi/asm/hwcap=2Eh | 2 ++
->>  arch/mips/kernel/cpu-probe=2Ec       | 7 ++++++-
->>  2 files changed, 8 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/arch/mips/include/uapi/asm/hwcap=2Eh
->b/arch/mips/include/uapi/asm/hwcap=2Eh
->> index 1ade1daa4921=2E=2Ee1a9bac62149 100644
->> --- a/arch/mips/include/uapi/asm/hwcap=2Eh
->> +++ b/arch/mips/include/uapi/asm/hwcap=2Eh
->> @@ -17,5 +17,7 @@
->>  #define HWCAP_LOONGSON_MMI  (1 << 11)
->>  #define HWCAP_LOONGSON_EXT  (1 << 12)
->>  #define HWCAP_LOONGSON_EXT2 (1 << 13)
->> +#define HWCAP_MIPS_MICROMIPS (1 << 14)
->> +#define HWCAP_MIPS_VZ       (1 << 15)
->
->What's the motivation for exposing VZ? Userland can't actually use it
->without something like KVM, which already exposes a means of detecting
->whether VZ is supported (try the creating a VM of type KVM_VM_MIPS_VZ &
->see if it works)=2E I'm not sure what userland would be able to do with
->this information in AT_HWCAP
+Reviewed-by: Greg Kurz <groug@kaod.org>
 
-Hi Paul,
+>  arch/powerpc/kvm/book3s_hv.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
+> index 709cf1fd4cf4..36abbe3c346d 100644
+> --- a/arch/powerpc/kvm/book3s_hv.c
+> +++ b/arch/powerpc/kvm/book3s_hv.c
+> @@ -2354,7 +2354,7 @@ static struct kvm_vcpu *kvmppc_core_vcpu_create_hv(struct kvm *kvm,
+>  	mutex_unlock(&kvm->lock);
+>  
+>  	if (!vcore)
+> -		goto free_vcpu;
+> +		goto uninit_vcpu;
+>  
+>  	spin_lock(&vcore->lock);
+>  	++vcore->num_threads;
+> @@ -2371,6 +2371,8 @@ static struct kvm_vcpu *kvmppc_core_vcpu_create_hv(struct kvm *kvm,
+>  
+>  	return vcpu;
+>  
+> +uninit_vcpu:
+> +	kvm_vcpu_uninit(vcpu);
+>  free_vcpu:
+>  	kmem_cache_free(kvm_vcpu_cache, vcpu);
+>  out:
 
-Well, that was preposed by a kvm developer from Loongson=2E They want to u=
-se it to implement CPU_AUTOPROBE and load required modules automatically=2E
-
-As they said they will submit KVM support to mainline later, I'm just occu=
-pied a place for them=2E
-
-Out of tree commit:
-
-http://cgit=2Eloongnix=2Eorg/cgit/linux-3=2E10/commit/?id=3D4db9301cca3b49=
-358d46fd0da67c01ab2ae4a3e3
-
---=20
-Jiaxun Yang
