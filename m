@@ -2,155 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 863AAE4834
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2019 12:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A4FE4A2D
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2019 13:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409015AbfJYKKT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Oct 2019 06:10:19 -0400
-Received: from foss.arm.com ([217.140.110.172]:38382 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409013AbfJYKKS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 25 Oct 2019 06:10:18 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4365B28;
-        Fri, 25 Oct 2019 03:10:17 -0700 (PDT)
-Received: from [10.162.41.137] (p8cg001049571a15.blr.arm.com [10.162.41.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7FC723F6C4;
-        Fri, 25 Oct 2019 03:10:05 -0700 (PDT)
-Subject: Re: [PATCH V7] mm/debug: Add tests validating architecture page table
- helpers
-To:     Christophe Leroy <christophe.leroy@c-s.fr>, Qian Cai <cai@lca.pw>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <ccdd4f7a-c7dc-ca10-d30c-0bc05c7136c7@arm.com>
- <69256008-2235-4AF1-A3BA-0146C82CCB93@lca.pw>
- <3cfec421-4006-4159-ca32-313ff5196ff9@c-s.fr>
- <763d58b4-f532-0bba-bf2b-71433ac514fb@arm.com>
- <d811622e-0d35-3bc6-9568-36abc1bee355@c-s.fr>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <78d13292-0cfe-31b6-7a9c-daf7fb7f3d23@arm.com>
-Date:   Fri, 25 Oct 2019 15:40:36 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S2407262AbfJYLm1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Oct 2019 07:42:27 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:35962 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730125AbfJYLm1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Oct 2019 07:42:27 -0400
+Received: by mail-oi1-f195.google.com with SMTP id j7so1444038oib.3;
+        Fri, 25 Oct 2019 04:42:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BcGJu1l7UIRQ0EFIw5C2ACnhv/97dGEXhKfxlqmxdJM=;
+        b=onf2xCiF2+pRsnMG0g5fgBcDzdZh7UkmCitcHxvyAp2Oc71bM73NJ0rhWYwKQNm0ys
+         IykUwHE6qSwO1r0qqeq1Jm0pL6Qpv7KfcfyjznX/+M4ux/Ayou7ek5MFaoORhqZMBpKc
+         U4ZiTqs0PvLcPEZiLTvSGREwFg3SZqa66I0Txqh8lH0RQHarIcVzICmz2whJOmu1UwAC
+         rQii8gUvSFiOsqRXeRQdgp7KkCQG6sbsItjg6j4sm02EzdC3UcxJliCEHUWPiX7sokSO
+         8DFapfXfdWPyCdYLn9EUqexzesERmOvRIMHchkzh+ATu5VmypQCi2qrdZn588bmjKdMr
+         M/uQ==
+X-Gm-Message-State: APjAAAX6DlLLz3FwcnrrB/JublBT84AQZrm4ugNhcE6lAWRJbhzDLGAV
+        WyUbOi0Xw48a1rB/5KQ2EfcjW9ekDu83Sz8tMPw=
+X-Google-Smtp-Source: APXvYqx2AE+sN8UHL3sRoH6FX9kL2APsqTSX1ZwdK3PcIXZcG4Q4tRECEJxY7lT0jOw3NzCSETNK6NJH/5K0P+dzPf8=
+X-Received: by 2002:a05:6808:3b4:: with SMTP id n20mr2516418oie.131.1572003745968;
+ Fri, 25 Oct 2019 04:42:25 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <d811622e-0d35-3bc6-9568-36abc1bee355@c-s.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
+ <alpine.DEB.2.21.1906240142000.32342@nanos.tec.linutronix.de>
+ <alpine.DEB.2.21.1906241613280.32342@nanos.tec.linutronix.de>
+ <20190624142346.pxljv3m4npatdiyk@shell.armlinux.org.uk> <20190624144924.GE29120@arrakis.emea.arm.com>
+In-Reply-To: <20190624144924.GE29120@arrakis.emea.arm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 25 Oct 2019 13:42:14 +0200
+Message-ID: <CAMuHMdX_KzP9n=H4vL4J9ijT=2GYy9X1BBpAdomkchoxnCcjfA@mail.gmail.com>
+Subject: Re: [PATCH v7 00/25] Unify vDSOs across more architectures
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Russell King - ARM Linux admin <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Will Deacon <will.deacon@arm.com>, linux-mips@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Dmitry Safonov <dima@arista.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Peter Collingbourne <pcc@google.com>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Andrei Vagin <avagin@openvz.org>,
+        Huw Davies <huw@codeweavers.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Catalin,
 
+On Mon, Jun 24, 2019 at 4:51 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> On Mon, Jun 24, 2019 at 03:23:46PM +0100, Russell King wrote:
+> > On Mon, Jun 24, 2019 at 04:18:28PM +0200, Thomas Gleixner wrote:
+> > > I talked to Russell King and he suggested to file the ARM parts into his
+> > > patch system and he'll pick them up after 5.3-rc1.
+> > >
+> > >    https://www.arm.linux.org.uk/developer/patches/
+> > >
+> > > I paged out how to deal with it, but you'll surely manage :)
+> >
+> > Easy way: ask git to add the "KernelVersion" tag as a header to the
+> > email using --add-header to e.g. git format-patch, and just mail them
+> > to patches@armlinux.org.uk
+>
+> Although I haven't send patches to Russell in a while, I still have a
+> git alias in my .gitconfig (only works with one patch at a time IIRC,
+> sending multiple patches may arrive in a different order):
+>
+> [alias]
+>         send-rmk-email = !git send-email --add-header=\"KernelVersion: $(git describe --abbrev=0)\" --no-thread --suppress-cc=all --to="patches@arm.linux.org.uk"
 
-On 10/25/2019 02:22 PM, Christophe Leroy wrote:
-> 
-> 
-> Le 25/10/2019 à 10:24, Anshuman Khandual a écrit :
->>
->>
->> On 10/25/2019 12:41 PM, Christophe Leroy wrote:
->>>
->>>
->>> Le 25/10/2019 à 07:52, Qian Cai a écrit :
->>>>
->>>>
->>>>> On Oct 24, 2019, at 11:45 PM, Anshuman Khandual <Anshuman.Khandual@arm.com> wrote:
->>>>>
->>>>> Nothing specific. But just tested this with x86 defconfig with relevant configs
->>>>> which are required for this test. Not sure if it involved W=1.
->>>>
->>>> No, it will not. It needs to run like,
->>>>
->>>> make W=1 -j 64 2>/tmp/warns
->>>>
->>>
->>> Are we talking about this peace of code ?
->>>
->>> +static unsigned long __init get_random_vaddr(void)
->>> +{
->>> +    unsigned long random_vaddr, random_pages, total_user_pages;
->>> +
->>> +    total_user_pages = (TASK_SIZE - FIRST_USER_ADDRESS) / PAGE_SIZE;
->>> +
->>> +    random_pages = get_random_long() % total_user_pages;
->>> +    random_vaddr = FIRST_USER_ADDRESS + random_pages * PAGE_SIZE;
->>> +
->>> +    WARN_ON((random_vaddr > TASK_SIZE) ||
->>> +        (random_vaddr < FIRST_USER_ADDRESS));
->>> +    return random_vaddr;
->>> +}
->>> +
->>>
->>> ramdom_vaddr is unsigned,
->>> random_pages is unsigned and lower than total_user_pages
->>>
->>> So the max value random_vaddr can get is FIRST_USER_ADDRESS + ((TASK_SIZE - FIRST_USER_ADDRESS - 1) / PAGE_SIZE) * PAGE_SIZE = TASK_SIZE - 1
->>> And the min value random_vaddr can get is FIRST_USER_ADDRESS (that's when random_pages = 0)
->>
->> That's right.
->>
->>>
->>> So the WARN_ON() is just unneeded, isn't it ?
->>
->> It is just a sanity check on possible vaddr values before it's corresponding
->> page table mappings could be created. If it's worth to drop this in favor of
->> avoiding these unwanted warning messages on x86, will go ahead with it as it
->> is not super important.
->>
-> 
-> But you are checking what ? That the compiler does calculation correctly or what ?
+Doesn't seem to work: no header was added, and my patch was rejected.
+There does seem to be a "--add-header" option for git-format-patch, but
+it adds the header at the top, just below the "Subject:"-header, instead
+of below the "---", so that needs manual editing, too.
 
-IIRC, probably this was for later if and when the vaddr calculation becomes
-dependent on other factors rather than this simple arithmetic involving start
-and end of process address space on a platform.
+Gr{oetje,eeting}s,
 
-> As mentionned just above, based on the calculation done, what you are testing cannot happen, so I'm having a hard time understanding what kind of sanity check it can be.
+                        Geert
 
-You are right.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> 
-> Can you give an exemple of a situation which could trigger the warning ?
-
-I was mistaken. We dont need those checks for now, hence will drop them next time.
-
-> 
-> Christophe
-> 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
