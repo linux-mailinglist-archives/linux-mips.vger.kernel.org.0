@@ -2,93 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20BFAE513D
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2019 18:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C609AE555B
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2019 22:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2633031AbfJYQap (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Oct 2019 12:30:45 -0400
-Received: from inca-roads.misterjones.org ([213.251.177.50]:42492 "EHLO
-        inca-roads.misterjones.org" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1733010AbfJYQao (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 25 Oct 2019 12:30:44 -0400
-Received: from www-data by cheepnis.misterjones.org with local (Exim 4.80)
-        (envelope-from <maz@kernel.org>)
-        id 1iO2Tk-0008W8-Nd; Fri, 25 Oct 2019 18:30:20 +0200
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH v3 00/15] KVM: Dynamically size memslot arrays
-X-PHP-Originating-Script: 0:main.inc
+        id S1728733AbfJYUpF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Oct 2019 16:45:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51990 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726008AbfJYUpF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 25 Oct 2019 16:45:05 -0400
+Received: from localhost (unknown [69.71.4.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EDF862084C;
+        Fri, 25 Oct 2019 20:45:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572036304;
+        bh=NJ+WKmfKRhR8+SGv+N61qy5UYgwj40QkXtak7NdAe0E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=hAO/+ldMyc2wFvU1rB2jr0qbCqMxryeZV9hwR22nNQXYS8Yoc7HbfACHC2As3i6Vc
+         mkFJYj1DrtmY9EnT1zuXju84hh/PR6Qga5KZ/9gScxEENzgefDYJE/RDM8zXrzUvMC
+         M/ey0st6s4jumET4Gmw9cUl3goRr2Rat24VbPRnk=
+Date:   Fri, 25 Oct 2019 15:45:02 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu, git@xilinx.com,
+        palmer@sifive.com, hch@infradead.org, longman@redhat.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jackie Liu <liuyun01@kylinos.cn>,
+        Wesley Terpstra <wesley@sifive.com>,
+        Firoz Khan <firoz.khan@linaro.org>, sparclinux@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        James Hogan <jhogan@kernel.org>,
+        Vineet Gupta <vgupta@synopsys.com>, linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-snps-arc@lists.infradead.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-mips@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2 0/2] Enabling MSI for Microblaze
+Message-ID: <20191025204502.GA170580@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 25 Oct 2019 17:30:20 +0100
-From:   Marc Zyngier <maz@kernel.org>
-Cc:     James Hogan <jhogan@kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?Q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        <linux-mips@vger.kernel.org>, <kvm-ppc@vger.kernel.org>,
-        <kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <kvmarm@lists.cs.columbia.edu>, <linux-kernel@vger.kernel.org>,
-        Christoffer Dall <christoffer.dall@arm.com>
-In-Reply-To: <20191024230744.14543-1-sean.j.christopherson@intel.com>
-References: <20191024230744.14543-1-sean.j.christopherson@intel.com>
-Message-ID: <2fc05685467a01c2f1c2afeacefb2f68@www.loen.fr>
-X-Sender: maz@kernel.org
-User-Agent: Roundcube Webmail/0.7.2
-X-SA-Exim-Connect-IP: <locally generated>
-X-SA-Exim-Rcpt-To: sean.j.christopherson@intel.com, jhogan@kernel.org, paulus@ozlabs.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, pbonzini@redhat.com, rkrcmar@redhat.com, david@redhat.com, cohuck@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, christoffer.dall@arm.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on cheepnis.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1571983829.git.michal.simek@xilinx.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2019-10-25 00:07, Sean Christopherson wrote:
-> The end goal of this series is to dynamically size the memslot array 
-> so
-> that KVM allocates memory based on the number of memslots in use, as
-> opposed to unconditionally allocating memory for the maximum number 
-> of
-> memslots.  On x86, each memslot consumes 88 bytes, and so with 2 
-> address
-> spaces of 512 memslots, each VM consumes ~90k bytes for the memslots.
-> E.g. given a VM that uses a total of 30 memslots, dynamic sizing 
-> reduces
-> the memory footprint from 90k to ~2.6k bytes.
->
-> The changes required to support dynamic sizing are relatively small,
-> e.g. are essentially contained in patches 14/15 and 15/15.  Patches 
-> 1-13
-> clean up the memslot code, which has gotten quite crusty, especially
-> __kvm_set_memory_region().  The clean up is likely not strictly 
-> necessary
-> to switch to dynamic sizing, but I didn't have a remotely reasonable
-> level of confidence in the correctness of the dynamic sizing without 
-> first
-> doing the clean up.
+On Fri, Oct 25, 2019 at 08:10:36AM +0200, Michal Simek wrote:
+> Hi,
+> 
+> these two patches come from discussion with Christoph, Bjorn, Palmer and
+> Waiman. The first patch was suggestion by Christoph here
+> https://lore.kernel.org/linux-riscv/20191008154604.GA7903@infradead.org/
+> The second part was discussed
+> https://lore.kernel.org/linux-pci/mhng-5d9bcb53-225e-441f-86cc-b335624b3e7c@palmer-si-x1e/
+> and
+> https://lore.kernel.org/linux-pci/20191017181937.7004-1-palmer@sifive.com/
+> 
+> Thanks,
+> Michal
+> 
+> Changes in v2:
+> - Fix typo in commit message s/expect/except/ - Reported-by: Masahiro
+> 
+> Michal Simek (1):
+>   asm-generic: Make msi.h a mandatory include/asm header
+> 
+> Palmer Dabbelt (1):
+>   pci: Default to PCI_MSI_IRQ_DOMAIN
+> 
+>  arch/arc/include/asm/Kbuild     | 1 -
+>  arch/arm/include/asm/Kbuild     | 1 -
+>  arch/arm64/include/asm/Kbuild   | 1 -
+>  arch/mips/include/asm/Kbuild    | 1 -
+>  arch/powerpc/include/asm/Kbuild | 1 -
+>  arch/riscv/include/asm/Kbuild   | 1 -
+>  arch/sparc/include/asm/Kbuild   | 1 -
+>  drivers/pci/Kconfig             | 2 +-
+>  include/asm-generic/Kbuild      | 1 +
+>  9 files changed, 2 insertions(+), 8 deletions(-)
 
-I've finally found time to test this on a garden variety of arm64 
-boxes,
-and nothing caught fire. It surely must be doing something right!
-
-FWIW:
-
-Tested-by: Marc Zyngier <maz@kernel.org>
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
+I applied these to pci/msi for v5.5, thanks!
