@@ -2,167 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C36E4640
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2019 10:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB076E469D
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2019 11:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437458AbfJYIw7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Oct 2019 04:52:59 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:34737 "EHLO pegase1.c-s.fr"
+        id S2438229AbfJYJGG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Oct 2019 05:06:06 -0400
+Received: from foss.arm.com ([217.140.110.172]:37262 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437618AbfJYIw7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 25 Oct 2019 04:52:59 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 46zyYg6BYkz9vC0w;
-        Fri, 25 Oct 2019 10:52:55 +0200 (CEST)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=JXqe5sri; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id 6HbhFbyFhM8v; Fri, 25 Oct 2019 10:52:55 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 46zyYg4vJdz9vC0r;
-        Fri, 25 Oct 2019 10:52:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1571993575; bh=4oDjhDK0FsO59rFVGt7Y5o7o8C55+19qgM1BU+899t4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=JXqe5sriXNQaQXKes3qqbdy43NSrBpwRBpfMpDtkffnR5YWutoOVXs9BVvi7rzrMY
-         QG68soKwprXrLgOAJa7ilqd/FXQFpMspM1kp2DJjaecMsPUGWDU22R2zojRhkImahW
-         aYJ8xO9qWW+5AHxKxjlrTglXwCmCdHn/aPTlV1cw=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B9A698B868;
-        Fri, 25 Oct 2019 10:52:56 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id Z1aZY1cuISIS; Fri, 25 Oct 2019 10:52:56 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7BC128B895;
-        Fri, 25 Oct 2019 10:52:54 +0200 (CEST)
-Subject: Re: [PATCH V7] mm/debug: Add tests validating architecture page table
- helpers
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Qian Cai <cai@lca.pw>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <ccdd4f7a-c7dc-ca10-d30c-0bc05c7136c7@arm.com>
- <69256008-2235-4AF1-A3BA-0146C82CCB93@lca.pw>
- <3cfec421-4006-4159-ca32-313ff5196ff9@c-s.fr>
- <763d58b4-f532-0bba-bf2b-71433ac514fb@arm.com>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <d811622e-0d35-3bc6-9568-36abc1bee355@c-s.fr>
-Date:   Fri, 25 Oct 2019 10:52:54 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+        id S2438227AbfJYJGG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 25 Oct 2019 05:06:06 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 636DA28;
+        Fri, 25 Oct 2019 02:06:05 -0700 (PDT)
+Received: from [192.168.1.103] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F4AD3F71F;
+        Fri, 25 Oct 2019 02:06:04 -0700 (PDT)
+Subject: Re: v5.4-rcX: qemu-system-mips64 userspace segfault
+To:     Bruce Ashfield <bruce.ashfield@gmail.com>
+Cc:     linux-mips@vger.kernel.org, paul.burton@mips.com,
+        Richard Purdie <richard.purdie@linuxfoundation.org>
+References: <CADkTA4NT5MBzErPT5S49aswxH4bUi2KKCWEWppPpFgJ-ru3L=g@mail.gmail.com>
+ <40376b35-2220-67b6-7d9b-9a2c2a3874ef@arm.com>
+ <CADkTA4N1UzrHRZi4j6MUxxT4yWsv1BSHDb11SaKqtbW_gihZ-g@mail.gmail.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <f3257a1c-9946-c9a0-da1c-ff1b218b2e90@arm.com>
+Date:   Fri, 25 Oct 2019 10:08:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <763d58b4-f532-0bba-bf2b-71433ac514fb@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADkTA4N1UzrHRZi4j6MUxxT4yWsv1BSHDb11SaKqtbW_gihZ-g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Bruce,
 
-
-Le 25/10/2019 à 10:24, Anshuman Khandual a écrit :
-> 
-> 
-> On 10/25/2019 12:41 PM, Christophe Leroy wrote:
+On 10/24/19 5:37 PM, Bruce Ashfield wrote:
+> On Thu, Oct 24, 2019 at 9:29 AM Vincenzo Frascino
+> <vincenzo.frascino@arm.com> wrote:
 >>
+>> Hi Bruce,
 >>
->> Le 25/10/2019 à 07:52, Qian Cai a écrit :
+>> On 10/24/19 2:12 PM, Bruce Ashfield wrote:
+>>> Hi all,
 >>>
+>>> I'm not sure if anyone else is running qemu-system-mips64 regularly,
+>>> but for the past 4 (or more) years, it has been the primary way that
+>>> we run QA on the mips64 Yocto Project reference kernel(s). I take care
+>>> of the kernel for the project, so I always have the fun of running
+>>> into issues first :D
 >>>
->>>> On Oct 24, 2019, at 11:45 PM, Anshuman Khandual <Anshuman.Khandual@arm.com> wrote:
->>>>
->>>> Nothing specific. But just tested this with x86 defconfig with relevant configs
->>>> which are required for this test. Not sure if it involved W=1.
+>>> That's enough preamble ...
 >>>
->>> No, it will not. It needs to run like,
+>>> I wanted to see if anyone recognized the issue that I'm seeing when I
+>>> bumped the linux-yocto dev kernel to the v5.4-rc series.
 >>>
->>> make W=1 -j 64 2>/tmp/warns
->>>
+>>> The one line summary is that I'm seeing a segfault as soon as  the
+>>> kernel hands off to userspace during boot. It doesn't matter if it is
+>>> systemd, sysvinit, or init=/bin/sh .. I always get a segfault.
+>> [...]
 >>
->> Are we talking about this peace of code ?
->>
->> +static unsigned long __init get_random_vaddr(void)
->> +{
->> +    unsigned long random_vaddr, random_pages, total_user_pages;
->> +
->> +    total_user_pages = (TASK_SIZE - FIRST_USER_ADDRESS) / PAGE_SIZE;
->> +
->> +    random_pages = get_random_long() % total_user_pages;
->> +    random_vaddr = FIRST_USER_ADDRESS + random_pages * PAGE_SIZE;
->> +
->> +    WARN_ON((random_vaddr > TASK_SIZE) ||
->> +        (random_vaddr < FIRST_USER_ADDRESS));
->> +    return random_vaddr;
->> +}
->> +
->>
->> ramdom_vaddr is unsigned,
->> random_pages is unsigned and lower than total_user_pages
->>
->> So the max value random_vaddr can get is FIRST_USER_ADDRESS + ((TASK_SIZE - FIRST_USER_ADDRESS - 1) / PAGE_SIZE) * PAGE_SIZE = TASK_SIZE - 1
->> And the min value random_vaddr can get is FIRST_USER_ADDRESS (that's when random_pages = 0)
+>> Could you please share the .config you are using?
 > 
-> That's right.
-> 
->>
->> So the WARN_ON() is just unneeded, isn't it ?
-> 
-> It is just a sanity check on possible vaddr values before it's corresponding
-> page table mappings could be created. If it's worth to drop this in favor of
-> avoiding these unwanted warning messages on x86, will go ahead with it as it
-> is not super important.
+> attached (hopefully this won't cause my reply to bounce).
 > 
 
-But you are checking what ? That the compiler does calculation correctly 
-or what ?
-As mentionned just above, based on the calculation done, what you are 
-testing cannot happen, so I'm having a hard time understanding what kind 
-of sanity check it can be.
+It seems that the .config you shared was generated for a version of the kernel
+that is older then the one in which we introduced the unified vDSO hence, since
+the options to enable correctly the generic vdso library are selected by the
+architecture, this result in a mis-configuration of the vDSO library which leads
+to the issues you are seeing.
 
-Can you give an exemple of a situation which could trigger the warning ?
+My advise is to start from a fresh defconfig and then enable the options you
+need one by one. I did it with buildroot and it seems working.
 
-Christophe
+Another thing I noticed and this seems confirmed by the patch series you had to
+revert is that you are missing a fix that I submitted last week:
+
+8a1bef4193e81c8afae4d2f107f1c09c8ce89470
+("mips: vdso: Fix __arch_get_hw_counter()")
+
+Could you please apply it before regenerating the .config? Seems the qemu falls
+back on VDSO_CLOCK_NONE at least in the case I reproduced.
+
+> When debugging (and bisecting), as expected, the VDSO configs bounced
+> around a bit with the move to generic VDSO, etc.  So there very well
+> may be something that with 5.4 I need to enable now and missed in my
+> debug.
+> 
+> I don't have GENERIC_COMPAT_VDSO enabled, but can easily do a boot
+> test with it on, similarly with the different vdso boot option. I know
+> I had tried a lot of different combos, but would have to redo the
+> tests now.
+> 
+
+This seems confirming my suspect of the wrong .config.
+
+> 
+>>
+>> Do you know by any change which vdso clock_mode is set in this scenario?
+> 
+> Unfortunately not, it isn't something that we've explicitly set in the
+> past, so I haven't looked into it. But can do more digging.
+> 
+> Bruce
+> 
+>>
+>> --
+>> Regards,
+>> Vincenzo
+> 
+> 
+> 
+
+Please let us know how your investigation proceeds.
+
+-- 
+Regards,
+Vincenzo
