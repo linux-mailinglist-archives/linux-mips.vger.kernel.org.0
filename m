@@ -2,68 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B717DE5621
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Oct 2019 23:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD77EE5975
+	for <lists+linux-mips@lfdr.de>; Sat, 26 Oct 2019 11:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725955AbfJYVtG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Oct 2019 17:49:06 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:38913 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725811AbfJYVtF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Oct 2019 17:49:05 -0400
-Received: by mail-oi1-f196.google.com with SMTP id v138so2577503oif.6;
-        Fri, 25 Oct 2019 14:49:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wGm3OSExE/97BmM29xjH36/abWZ9nPYDMo8RkVIn7DU=;
-        b=ISKp1hthhRab8G1/BzjmgcJCtX2BtVilxMqR/GAIdLmwh8PuNwXtbk5XC5KwSZWhO6
-         a0pU3jvTPSFQCBKO8Fsz+R8oqem9R4JsvriLiO1abdJ9xO7pl5/2te7H6vEmiQ5dV4iU
-         32/eu0DWGnl7JMvtUD4JnE5ZsUAcGOvGSDqI5uw+eqWedniSEMgIpEHZUzvljwuYaxL8
-         U4f21bXknCiJr0aocYIxj8x+sbU9TYqXfCo+9O11Yi56tBIJSRgFo/1T5EwXeSFqScps
-         cwoPB44//bZ7u5+/4I9FBfMUBbbAlkRx4aursLyRMfUfWlZwy0xKFhGbcJns6Ovs5Pr0
-         dTZQ==
-X-Gm-Message-State: APjAAAVKPO7Yy1y6MrZ7iSO9mjF1GE0nIY3vcJxgUgfHiufiM8mxh6ys
-        yAl6l3/SQb6roQikEQDjmA==
-X-Google-Smtp-Source: APXvYqwLbnmVyTEOV9qgJJFVyWAeKISdHnloLOn/3BypbMbjV29PEr1S6ftViDUyEbH+5o61CqsHSw==
-X-Received: by 2002:a05:6808:7d9:: with SMTP id f25mr4933670oij.69.1572040144629;
-        Fri, 25 Oct 2019 14:49:04 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 34sm1139469otf.55.2019.10.25.14.49.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2019 14:49:03 -0700 (PDT)
-Date:   Fri, 25 Oct 2019 16:49:03 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Zhou Yanjie <zhouyanjie@zoho.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, paul.burton@mips.com, mturquette@baylibre.com,
-        sboyd@kernel.org, mark.rutland@arm.com, paul@crapouillou.net
-Subject: Re: [PATCH 1/2 v2] dt-bindings: clock: Add X1000 bindings.
-Message-ID: <20191025214903.GA14052@bogus>
-References: <1571421006-12771-1-git-send-email-zhouyanjie@zoho.com>
- <1571763389-43443-1-git-send-email-zhouyanjie@zoho.com>
- <1571763389-43443-2-git-send-email-zhouyanjie@zoho.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1571763389-43443-2-git-send-email-zhouyanjie@zoho.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726115AbfJZJjO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 26 Oct 2019 05:39:14 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:37506 "EHLO
+        mail.loongson.cn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726057AbfJZJjN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 26 Oct 2019 05:39:13 -0400
+Received: from localhost.cn (unknown [10.20.42.25])
+        by mail (Coremail) with SMTP id QMiowPDxv186FLRdB3wYAA--.19S2;
+        Sat, 26 Oct 2019 17:39:06 +0800 (CST)
+From:   Xing Li <lixing@loongson.cn>
+To:     jhogan@kernel.org, paul.burton@mips.com, ralf@linux-mips.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Change KVM_ENTRYHI_ASID to cpu_asid_mask(&current_cpu_data)
+Date:   Sat, 26 Oct 2019 17:39:04 +0800
+Message-Id: <1572082744-15586-1-git-send-email-lixing@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: QMiowPDxv186FLRdB3wYAA--.19S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtFWktw1rWw47uFW3ZF4xWFg_yoWkJFX_Z3
+        W7Zw4kur4fCrZFy39Iywn3WFWYgw1UWF92kr90gFyDu3sFyry5Wa9xJr9rAwsxuw4qyF4r
+        W34DJ34rZrnrGjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxkYjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjcxG0xvY0x0EwIxGrVCF
+        72vEw4AK0wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8
+        tGYPUUUUU==
+X-CM-SenderInfo: pol0x03j6o00pqjv00gofq/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 23 Oct 2019 00:56:28 +0800, Zhou Yanjie wrote:
-> Add the clock bindings for the X1000 Soc from Ingenic.
-> 
-> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
-> ---
->  .../devicetree/bindings/clock/ingenic,cgu.txt      |  1 +
->  include/dt-bindings/clock/x1000-cgu.h              | 41 ++++++++++++++++++++++
->  2 files changed, 42 insertions(+)
->  create mode 100644 include/dt-bindings/clock/x1000-cgu.h
-> 
+The code in decode_config4 of arch/mips/kernel/cpu-probe.c
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+        asid_mask = MIPS_ENTRYHI_ASID;
+        if (config4 & MIPS_CONF4_AE)
+                asid_mask |= MIPS_ENTRYHI_ASIDX;
+        set_cpu_asid_mask(c, asid_mask);
+
+set asid_mask to cpuinfo->asid_mask
+
+So KVM_ENTRYHI_ASID should change to cpu_asid_mask(&current_cpu_data).
+
+Signed-off-by: Xing Li <lixing@loongson.cn>
+---
+ arch/mips/include/asm/kvm_host.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+index 41204a4..6be70d5 100644
+--- a/arch/mips/include/asm/kvm_host.h
++++ b/arch/mips/include/asm/kvm_host.h
+@@ -275,7 +275,7 @@ enum emulation_result {
+ #define MIPS3_PG_FRAME		0x3fffffc0
+ 
+ #define VPN2_MASK		0xffffe000
+-#define KVM_ENTRYHI_ASID	MIPS_ENTRYHI_ASID
++#define KVM_ENTRYHI_ASID	cpu_asid_mask(&current_cpu_data)
+ #define TLB_IS_GLOBAL(x)	((x).tlb_lo[0] & (x).tlb_lo[1] & ENTRYLO_G)
+ #define TLB_VPN2(x)		((x).tlb_hi & VPN2_MASK)
+ #define TLB_ASID(x)		((x).tlb_hi & KVM_ENTRYHI_ASID)
+-- 
+2.1.0
+
+
