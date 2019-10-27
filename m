@@ -2,78 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E71E6180
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Oct 2019 08:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A264E625F
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Oct 2019 13:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726079AbfJ0Hqt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Oct 2019 03:46:49 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:48769 "EHLO
-        mail.loongson.cn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726030AbfJ0Hqt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Oct 2019 03:46:49 -0400
-Received: from localhost.cn (unknown [10.20.42.25])
-        by mail (Coremail) with SMTP id QMiowPAxmcRZS7VdbMQYAA--.12S2;
-        Sun, 27 Oct 2019 15:46:33 +0800 (CST)
-From:   Xing Li <lixing@loongson.cn>
-To:     jhogan@kernel.org, paulburton@kernel.org, ralf@linux-mips.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Change KVM_ENTRYHI_ASID to cpu_asid_mask(&current_cpu_data)
-Date:   Sun, 27 Oct 2019 15:46:31 +0800
-Message-Id: <1572162391-31139-1-git-send-email-lixing@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: QMiowPAxmcRZS7VdbMQYAA--.12S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtFWktw1rWw47uFW3ZF4xWFg_yoWkJFX_Z3
-        W7Zw4kur4fCrZFy39Iywn3WFWYgw1UWF92kr90gFyDu3sFyry5Wa9xJr9rAwsxuw4qyF4r
-        W34DJ34rZrnrGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxxYjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I
-        8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjcxG0xvY0x0EwIxGrVCF
-        72vEw4AK0wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUxJ
-        KsUUUUU
-X-CM-SenderInfo: pol0x03j6o00pqjv00gofq/
+        id S1726961AbfJ0MFg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Oct 2019 08:05:36 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:46963 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726964AbfJ0MFf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Oct 2019 08:05:35 -0400
+Received: by mail-lj1-f195.google.com with SMTP id w8so3885750lji.13
+        for <linux-mips@vger.kernel.org>; Sun, 27 Oct 2019 05:05:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3Zr1M0nCXlilSobwLkNmgKE2widPtGkZk30ZqC0Jsp4=;
+        b=d3QTzyBq1ltmtg4yGSZr5XtauvY/fALYcdqhiDEtFOl1dE9JCqjexjO52exODJRIVQ
+         Eh2Een6o4qvZdUFz/jDS+JnTxGr7PmGqPX7rFmA4YZFRZjrNKL/JZDN1nI+V4NXXs/c+
+         Hp/xfBUyMptBO5mKJ7+YknkxBRlijCGcU26uA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3Zr1M0nCXlilSobwLkNmgKE2widPtGkZk30ZqC0Jsp4=;
+        b=OpwuU8BLO4mParMVHHWUmZwE9VPU4zO8/1DMJaEkxRYb3jbeup1ZkXXbpwt7t825yK
+         iJTZ5K6E15Vm4KcpbmMZSsbdeSys8TxsmYyMP0ecYbwmPZi239wG1W5XWXzYA3RPkTNV
+         Uiq0EsOSWbeEmQhuQ3S6wf2ZTzJhhUP7SkRBaPhADgiCCdUF7Y2x7U/Er1TTYVB/+++6
+         Mbd/+SFLOA7OpsZDp42M1uh+MnX1RWU4FXnYXr2R6F+87IE7S12jVTmwhSbsAtvGx6T7
+         yO4zxw8h95gUBZ78jJEZprINl0dRVQ498H5GkcA60KUXuEfIWPLbjEPBNyEXvzU62Pgq
+         hByQ==
+X-Gm-Message-State: APjAAAWwP4M/Q4HSRx8RrU0LBvWsK4BEfT0eBYhPgRK+vkfXR02L6+rE
+        ozG6SWq6BaoCOWVAz4cZlSkZoDt368uf4A==
+X-Google-Smtp-Source: APXvYqx+eHB99rzUsuWOLPBkvG8gEZ1PACnRC3zmpwT51waTtlo0K4GLJBH+tYnTMgZvJhW6GfsvUA==
+X-Received: by 2002:a2e:999a:: with SMTP id w26mr8637535lji.200.1572177932273;
+        Sun, 27 Oct 2019 05:05:32 -0700 (PDT)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id 190sm4342549ljj.72.2019.10.27.05.05.29
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Oct 2019 05:05:30 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id v24so5662765lfe.10
+        for <linux-mips@vger.kernel.org>; Sun, 27 Oct 2019 05:05:29 -0700 (PDT)
+X-Received: by 2002:a19:5504:: with SMTP id n4mr8268196lfe.106.1572177927159;
+ Sun, 27 Oct 2019 05:05:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191026185700.10708-1-cyphar@cyphar.com> <20191026185700.10708-3-cyphar@cyphar.com>
+In-Reply-To: <20191026185700.10708-3-cyphar@cyphar.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 27 Oct 2019 08:05:11 -0400
+X-Gmail-Original-Message-ID: <CAHk-=wjPPWvm5_eR4uaHJaU1isTUk-4iXQV3Z2Px9A+w6j2nHg@mail.gmail.com>
+Message-ID: <CAHk-=wjPPWvm5_eR4uaHJaU1isTUk-4iXQV3Z2Px9A+w6j2nHg@mail.gmail.com>
+Subject: Re: [PATCH RESEND v14 2/6] namei: LOOKUP_IN_ROOT: chroot-like path resolution
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The code in decode_config4 of arch/mips/kernel/cpu-probe.c
+On Sat, Oct 26, 2019 at 2:58 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
+>
+> +       /* LOOKUP_IN_ROOT treats absolute paths as being relative-to-dirfd. */
+> +       if (flags & LOOKUP_IN_ROOT)
+> +               while (*s == '/')
+> +                       s++;
+> +
+>         /* Figure out the starting path and root (if needed). */
+>         if (*s == '/') {
+>                 error = nd_jump_root(nd);
 
-        asid_mask = MIPS_ENTRYHI_ASID;
-        if (config4 & MIPS_CONF4_AE)
-                asid_mask |= MIPS_ENTRYHI_ASIDX;
-        set_cpu_asid_mask(c, asid_mask);
+So I'm still hung up on this.
 
-set asid_mask to cpuinfo->asid_mask
+I guess I can't help it, but I look at the above, and it makes me go
+"whoever wrote those tests wasn't thinking".
 
-So KVM_ENTRYHI_ASID should change to cpu_asid_mask(&current_cpu_data).
+It just annoys me how it tests for '/' completely unnecessarily.
 
-Signed-off-by: Xing Li <lixing@loongson.cn>
----
- arch/mips/include/asm/kvm_host.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If LOOKUP_IN_ROOT is true, we know the subsequent test for '/' is not
+going to match, because we just removed it. So I look at that code and
+go "that code is doing stupid things".
 
-diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
-index 41204a4..6be70d5 100644
---- a/arch/mips/include/asm/kvm_host.h
-+++ b/arch/mips/include/asm/kvm_host.h
-@@ -275,7 +275,7 @@ enum emulation_result {
- #define MIPS3_PG_FRAME		0x3fffffc0
- 
- #define VPN2_MASK		0xffffe000
--#define KVM_ENTRYHI_ASID	MIPS_ENTRYHI_ASID
-+#define KVM_ENTRYHI_ASID	cpu_asid_mask(&current_cpu_data)
- #define TLB_IS_GLOBAL(x)	((x).tlb_lo[0] & (x).tlb_lo[1] & ENTRYLO_G)
- #define TLB_VPN2(x)		((x).tlb_hi & VPN2_MASK)
- #define TLB_ASID(x)		((x).tlb_hi & KVM_ENTRYHI_ASID)
--- 
-2.1.0
+That's why I suggested moving the LOOKUP_IN_ROOT check inside the '/' test.
 
+Alternatively, just make the logic be
 
+        if (flags & LOOKUP_IN_ROOT) {
+               .. remove '/'s ...
+        } else if (*s == '/') {
+                .. handl;e root ..
+
+and remove the next "else" clause
+
+    Linus
