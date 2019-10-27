@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56630E68D9
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Oct 2019 22:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D78BE6993
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Oct 2019 22:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729745AbfJ0VOf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Oct 2019 17:14:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33494 "EHLO mail.kernel.org"
+        id S1727888AbfJ0VhO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Oct 2019 17:37:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51522 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728939AbfJ0VOa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 27 Oct 2019 17:14:30 -0400
+        id S1728871AbfJ0VFl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 27 Oct 2019 17:05:41 -0400
 Received: from localhost (100.50.158.77.rev.sfr.net [77.158.50.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1EBCA208C0;
-        Sun, 27 Oct 2019 21:14:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C62E42064A;
+        Sun, 27 Oct 2019 21:05:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572210869;
-        bh=EJOQF7DRiGn4tKqSF37wvovTR3uTnUBMgugGdktf3ds=;
+        s=default; t=1572210340;
+        bh=72AteEuiA3s92RiBZZQiHOAbe8EZUTdP1wCu560U1tM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=re5uK3OF2Rs0LNvG0kCzh0YAXj5XXCwFLbaBqxkKVqF2mUUeqsk5AwdESvX3WPYya
-         KNnuFjL3+60ZAYG+zaIC2D//9DFK9wUiSZI8AnXdCHaCEX8DYeCi0WXeccdsUG2nzL
-         I9fGK8Prvqjaz2HYRM+93VNLBKQlSsLaDCxnZ3Nk=
+        b=lCMR/Uule7XIdBleX1O3YBJMvKG8rFEr14YW8eNM7xDLGi66gdCNH1mYGkzguI4YM
+         l+iNJyaO8qv7mjgZxo+Jo3f8ZLV2eY2lAKByvBh/IzeGLVH8eLpYIspA4Wwgda1uw0
+         db6OGP06Tm+oZQTLI4Av44NGUIwp0gYNZqOlZ00s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
         Dmitry Korotin <dkorotin@wavecomp.com>,
         linux-mips@vger.kernel.org
-Subject: [PATCH 4.19 46/93] MIPS: tlbex: Fix build_restore_pagemask KScratch restore
-Date:   Sun, 27 Oct 2019 22:00:58 +0100
-Message-Id: <20191027203259.733806213@linuxfoundation.org>
+Subject: [PATCH 4.9 30/49] MIPS: tlbex: Fix build_restore_pagemask KScratch restore
+Date:   Sun, 27 Oct 2019 22:01:08 +0100
+Message-Id: <20191027203143.757870099@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191027203251.029297948@linuxfoundation.org>
-References: <20191027203251.029297948@linuxfoundation.org>
+In-Reply-To: <20191027203119.468466356@linuxfoundation.org>
+References: <20191027203119.468466356@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -89,7 +89,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/arch/mips/mm/tlbex.c
 +++ b/arch/mips/mm/tlbex.c
-@@ -654,6 +654,13 @@ static void build_restore_pagemask(u32 *
+@@ -661,6 +661,13 @@ static void build_restore_pagemask(u32 *
  				   int restore_scratch)
  {
  	if (restore_scratch) {
@@ -103,7 +103,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  		/* Reset default page size */
  		if (PM_DEFAULT_MASK >> 16) {
  			uasm_i_lui(p, tmp, PM_DEFAULT_MASK >> 16);
-@@ -668,12 +675,10 @@ static void build_restore_pagemask(u32 *
+@@ -675,12 +682,10 @@ static void build_restore_pagemask(u32 *
  			uasm_i_mtc0(p, 0, C0_PAGEMASK);
  			uasm_il_b(p, r, lid);
  		}
