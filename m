@@ -2,40 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 136B1E65C1
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Oct 2019 22:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6316E6651
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Oct 2019 22:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728711AbfJ0VEz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Oct 2019 17:04:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50608 "EHLO mail.kernel.org"
+        id S1729753AbfJ0VKn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Oct 2019 17:10:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57192 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728723AbfJ0VEx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 27 Oct 2019 17:04:53 -0400
+        id S1727627AbfJ0VKn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 27 Oct 2019 17:10:43 -0400
 Received: from localhost (100.50.158.77.rev.sfr.net [77.158.50.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6BD85214E0;
-        Sun, 27 Oct 2019 21:04:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 062A02064A;
+        Sun, 27 Oct 2019 21:10:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572210292;
-        bh=JB3tIwZcKyZUS5HkCMBOxMN0T3oELjuwa6+ZCfmripg=;
+        s=default; t=1572210642;
+        bh=/gWfBVXQDmT55zrCrf1LNT8GyHRiPFyNAtoTtM6/C/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d4OfHfwpgin99rwt3Gg1WtS5cuWaFGiE+sVeBqXthSRR2UO8f9BiqIVlefzaqfufy
-         F0MuvpNKgupphtd6K/IqoKTCXayhKXJ9JFPsPwY9ENINmkVyuALNX8dgqUnCDylN39
-         eIk4ED4c8F3VyR5Y9rv3RQrpTsaVTRt++mkZQN4w=
+        b=U0W1WuVc+oLlB2XAgf/fgUi+uppGdstxA8W6V5MgaOgrEOmrOYcEkhoVDdk8WO5ez
+         RpTfqp0qs3xmP6SwnU671qAZj2EuZCBtyclaTbG7dDLMp3ijf5jkr5LdSEwF51V6hs
+         WItihrYCazK3C8V/LMns2ynVb1pAcSk0v1apow3g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Meng Zhuo <mengzhuo1203@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 15/49] MIPS: elf_hwcap: Export userspace ASEs
-Date:   Sun, 27 Oct 2019 22:00:53 +0100
-Message-Id: <20191027203129.665673387@linuxfoundation.org>
+        stable@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
+        Dmitry Korotin <dkorotin@wavecomp.com>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH 4.14 085/119] MIPS: tlbex: Fix build_restore_pagemask KScratch restore
+Date:   Sun, 27 Oct 2019 22:01:02 +0100
+Message-Id: <20191027203346.823276486@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191027203119.468466356@linuxfoundation.org>
-References: <20191027203119.468466356@linuxfoundation.org>
+In-Reply-To: <20191027203259.948006506@linuxfoundation.org>
+References: <20191027203259.948006506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,95 +44,105 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+From: Paul Burton <paulburton@kernel.org>
 
-[ Upstream commit 38dffe1e4dde1d3174fdce09d67370412843ebb5 ]
+commit b42aa3fd5957e4daf4b69129e5ce752a2a53e7d6 upstream.
 
-A Golang developer reported MIPS hwcap isn't reflecting instructions
-that the processor actually supported so programs can't apply optimized
-code at runtime.
+build_restore_pagemask() will restore the value of register $1/$at when
+its restore_scratch argument is non-zero, and aims to do so by filling a
+branch delay slot. Commit 0b24cae4d535 ("MIPS: Add missing EHB in mtc0
+-> mfc0 sequence.") added an EHB instruction (Execution Hazard Barrier)
+prior to restoring $1 from a KScratch register, in order to resolve a
+hazard that can result in stale values of the KScratch register being
+observed. In particular, P-class CPUs from MIPS with out of order
+execution pipelines such as the P5600 & P6600 are affected.
 
-Thus we export the ASEs that can be used in userspace programs.
+Unfortunately this EHB instruction was inserted in the branch delay slot
+causing the MFC0 instruction which performs the restoration to no longer
+execute along with the branch. The result is that the $1 register isn't
+actually restored, ie. the TLB refill exception handler clobbers it -
+which is exactly the problem the EHB is meant to avoid for the P-class
+CPUs.
 
-Reported-by: Meng Zhuo <mengzhuo1203@gmail.com>
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Similarly build_get_pgd_vmalloc() will restore the value of $1/$at when
+its mode argument equals refill_scratch, and suffers from the same
+problem.
+
+Fix this by in both cases moving the EHB earlier in the emitted code.
+There's no reason it needs to immediately precede the MFC0 - it simply
+needs to be between the MTC0 & MFC0.
+
+This bug only affects Cavium Octeon systems which use
+build_fast_tlb_refill_handler().
+
+Signed-off-by: Paul Burton <paulburton@kernel.org>
+Fixes: 0b24cae4d535 ("MIPS: Add missing EHB in mtc0 -> mfc0 sequence.")
+Cc: Dmitry Korotin <dkorotin@wavecomp.com>
+Cc: stable@vger.kernel.org # v3.15+
 Cc: linux-mips@vger.kernel.org
-Cc: Paul Burton <paul.burton@mips.com>
-Cc: <stable@vger.kernel.org> # 4.14+
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
 ---
- arch/mips/include/uapi/asm/hwcap.h | 11 ++++++++++
- arch/mips/kernel/cpu-probe.c       | 33 ++++++++++++++++++++++++++++++
- 2 files changed, 44 insertions(+)
+ arch/mips/mm/tlbex.c |   23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/arch/mips/include/uapi/asm/hwcap.h b/arch/mips/include/uapi/asm/hwcap.h
-index c7484a7ca686d..2b6f8d569d00f 100644
---- a/arch/mips/include/uapi/asm/hwcap.h
-+++ b/arch/mips/include/uapi/asm/hwcap.h
-@@ -4,5 +4,16 @@
- /* HWCAP flags */
- #define HWCAP_MIPS_R6		(1 << 0)
- #define HWCAP_MIPS_MSA		(1 << 1)
-+#define HWCAP_MIPS_MIPS16	(1 << 3)
-+#define HWCAP_MIPS_MDMX     (1 << 4)
-+#define HWCAP_MIPS_MIPS3D   (1 << 5)
-+#define HWCAP_MIPS_SMARTMIPS (1 << 6)
-+#define HWCAP_MIPS_DSP      (1 << 7)
-+#define HWCAP_MIPS_DSP2     (1 << 8)
-+#define HWCAP_MIPS_DSP3     (1 << 9)
-+#define HWCAP_MIPS_MIPS16E2 (1 << 10)
-+#define HWCAP_LOONGSON_MMI  (1 << 11)
-+#define HWCAP_LOONGSON_EXT  (1 << 12)
-+#define HWCAP_LOONGSON_EXT2 (1 << 13)
- 
- #endif /* _UAPI_ASM_HWCAP_H */
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index 0a7b3e513650f..1a1ab0a78ac05 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -2055,6 +2055,39 @@ void cpu_probe(void)
- 		elf_hwcap |= HWCAP_MIPS_MSA;
+--- a/arch/mips/mm/tlbex.c
++++ b/arch/mips/mm/tlbex.c
+@@ -658,6 +658,13 @@ static void build_restore_pagemask(u32 *
+ 				   int restore_scratch)
+ {
+ 	if (restore_scratch) {
++		/*
++		 * Ensure the MFC0 below observes the value written to the
++		 * KScratch register by the prior MTC0.
++		 */
++		if (scratch_reg >= 0)
++			uasm_i_ehb(p);
++
+ 		/* Reset default page size */
+ 		if (PM_DEFAULT_MASK >> 16) {
+ 			uasm_i_lui(p, tmp, PM_DEFAULT_MASK >> 16);
+@@ -672,12 +679,10 @@ static void build_restore_pagemask(u32 *
+ 			uasm_i_mtc0(p, 0, C0_PAGEMASK);
+ 			uasm_il_b(p, r, lid);
+ 		}
+-		if (scratch_reg >= 0) {
+-			uasm_i_ehb(p);
++		if (scratch_reg >= 0)
+ 			UASM_i_MFC0(p, 1, c0_kscratch(), scratch_reg);
+-		} else {
++		else
+ 			UASM_i_LW(p, 1, scratchpad_offset(0), 0);
+-		}
+ 	} else {
+ 		/* Reset default page size */
+ 		if (PM_DEFAULT_MASK >> 16) {
+@@ -926,6 +931,10 @@ build_get_pgd_vmalloc64(u32 **p, struct
  	}
+ 	if (mode != not_refill && check_for_high_segbits) {
+ 		uasm_l_large_segbits_fault(l, *p);
++
++		if (mode == refill_scratch && scratch_reg >= 0)
++			uasm_i_ehb(p);
++
+ 		/*
+ 		 * We get here if we are an xsseg address, or if we are
+ 		 * an xuseg address above (PGDIR_SHIFT+PGDIR_BITS) boundary.
+@@ -942,12 +951,10 @@ build_get_pgd_vmalloc64(u32 **p, struct
+ 		uasm_i_jr(p, ptr);
  
-+	if (cpu_has_mips16)
-+		elf_hwcap |= HWCAP_MIPS_MIPS16;
-+
-+	if (cpu_has_mdmx)
-+		elf_hwcap |= HWCAP_MIPS_MDMX;
-+
-+	if (cpu_has_mips3d)
-+		elf_hwcap |= HWCAP_MIPS_MIPS3D;
-+
-+	if (cpu_has_smartmips)
-+		elf_hwcap |= HWCAP_MIPS_SMARTMIPS;
-+
-+	if (cpu_has_dsp)
-+		elf_hwcap |= HWCAP_MIPS_DSP;
-+
-+	if (cpu_has_dsp2)
-+		elf_hwcap |= HWCAP_MIPS_DSP2;
-+
-+	if (cpu_has_dsp3)
-+		elf_hwcap |= HWCAP_MIPS_DSP3;
-+
-+	if (cpu_has_loongson_mmi)
-+		elf_hwcap |= HWCAP_LOONGSON_MMI;
-+
-+	if (cpu_has_loongson_mmi)
-+		elf_hwcap |= HWCAP_LOONGSON_CAM;
-+
-+	if (cpu_has_loongson_ext)
-+		elf_hwcap |= HWCAP_LOONGSON_EXT;
-+
-+	if (cpu_has_loongson_ext)
-+		elf_hwcap |= HWCAP_LOONGSON_EXT2;
-+
- 	if (cpu_has_vz)
- 		cpu_probe_vz(c);
- 
--- 
-2.20.1
-
+ 		if (mode == refill_scratch) {
+-			if (scratch_reg >= 0) {
+-				uasm_i_ehb(p);
++			if (scratch_reg >= 0)
+ 				UASM_i_MFC0(p, 1, c0_kscratch(), scratch_reg);
+-			} else {
++			else
+ 				UASM_i_LW(p, 1, scratchpad_offset(0), 0);
+-			}
+ 		} else {
+ 			uasm_i_nop(p);
+ 		}
 
 
