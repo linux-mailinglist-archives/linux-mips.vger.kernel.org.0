@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99382E689B
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Oct 2019 22:30:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 013C8E693D
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Oct 2019 22:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730574AbfJ0VSU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Oct 2019 17:18:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38412 "EHLO mail.kernel.org"
+        id S1728808AbfJ0VJG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Oct 2019 17:09:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55386 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730388AbfJ0VSR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 27 Oct 2019 17:18:17 -0400
+        id S1728951AbfJ0VJD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 27 Oct 2019 17:09:03 -0400
 Received: from localhost (100.50.158.77.rev.sfr.net [77.158.50.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 951B0205C9;
-        Sun, 27 Oct 2019 21:18:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 08B5A20B7C;
+        Sun, 27 Oct 2019 21:09:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572211097;
-        bh=meW55MlINg8cCAyxxV1Wps5B+gB7Zc5yAB2yAV0AaPo=;
+        s=default; t=1572210542;
+        bh=qfCF2CBKHLavLO5gpk2z0LNY6BLuAcfk78Lkz8xYQFc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SnFJncKwxifYAVrXoqks6MK8HGbK/b66joa1P9sQocKwxQjRRvASjYxvCPg5gtqWh
-         UJ+BWMXBXiGnMDvq2kA7QcSOSDvUJijNyWbAM2OzwZVlSC5hh3yNkoxya26nrPgeF3
-         rEk9Y1Df+UZYfkDu1u+EAW4i1bQk0YA1Vb3IN50Y=
+        b=LHV/LWQHSZKtYdJpI7x12mHZjqLcCNVmGKcBc5GTFQynFwMLLwH8VchJC6CBjHfH7
+         la7WtoTVV09El6uCF/gK9/MxYICvlblo1BIS3qyTHO8HA7uOoHH+G6oqi2peH8VsnE
+         q9j3w/xK5Vq55XZOJw/V1vwWM5o+1w8EBXKgYI6Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -34,12 +34,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.3 030/197] MIPS: dts: ar9331: fix interrupt-controller size
-Date:   Sun, 27 Oct 2019 21:59:08 +0100
-Message-Id: <20191027203353.370644790@linuxfoundation.org>
+Subject: [PATCH 4.14 008/119] MIPS: dts: ar9331: fix interrupt-controller size
+Date:   Sun, 27 Oct 2019 21:59:45 +0100
+Message-Id: <20191027203301.560229650@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191027203351.684916567@linuxfoundation.org>
-References: <20191027203351.684916567@linuxfoundation.org>
+In-Reply-To: <20191027203259.948006506@linuxfoundation.org>
+References: <20191027203259.948006506@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -71,7 +71,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/mips/boot/dts/qca/ar9331.dtsi b/arch/mips/boot/dts/qca/ar9331.dtsi
-index 63a9f33aa43e8..5cfc9d347826a 100644
+index efd5f07222060..39b6269610d41 100644
 --- a/arch/mips/boot/dts/qca/ar9331.dtsi
 +++ b/arch/mips/boot/dts/qca/ar9331.dtsi
 @@ -99,7 +99,7 @@
