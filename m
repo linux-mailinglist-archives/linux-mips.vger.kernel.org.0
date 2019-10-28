@@ -2,91 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD68E7307
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2019 15:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D30E751C
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Oct 2019 16:30:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389764AbfJ1N7e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Oct 2019 09:59:34 -0400
-Received: from foss.arm.com ([217.140.110.172]:40316 "EHLO foss.arm.com"
+        id S1729482AbfJ1PaC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Oct 2019 11:30:02 -0400
+Received: from verein.lst.de ([213.95.11.211]:35067 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389745AbfJ1N7d (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 28 Oct 2019 09:59:33 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B3E3337;
-        Mon, 28 Oct 2019 06:59:33 -0700 (PDT)
-Received: from e112269-lin.cambridge.arm.com (unknown [10.1.194.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B0C13F6C4;
-        Mon, 28 Oct 2019 06:59:30 -0700 (PDT)
-From:   Steven Price <steven.price@arm.com>
-To:     linux-mm@kvack.org
-Cc:     Steven Price <steven.price@arm.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        "Liang, Kan" <kan.liang@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH v14 05/22] mips: mm: Add p?d_leaf() definitions
-Date:   Mon, 28 Oct 2019 13:58:53 +0000
-Message-Id: <20191028135910.33253-6-steven.price@arm.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191028135910.33253-1-steven.price@arm.com>
-References: <20191028135910.33253-1-steven.price@arm.com>
+        id S1728132AbfJ1PaB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 28 Oct 2019 11:30:01 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id C147268B05; Mon, 28 Oct 2019 16:29:56 +0100 (CET)
+Date:   Mon, 28 Oct 2019 16:29:56 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
+        Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        nios2-dev@lists.rocketboards.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-mtd@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/21] x86: clean up ioremap
+Message-ID: <20191028152956.GA28048@lst.de>
+References: <20191017174554.29840-1-hch@lst.de> <20191017174554.29840-9-hch@lst.de> <alpine.DEB.2.21.1910211019540.1904@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.1910211019540.1904@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-walk_page_range() is going to be allowed to walk page tables other than
-those of user space. For this it needs to know when it has reached a
-'leaf' entry in the page tables. This information is provided by the
-p?d_leaf() functions/macros.
+On Mon, Oct 21, 2019 at 10:23:03AM +0200, Thomas Gleixner wrote:
+> Should this go with your larger series or can this be picked up
+> independently?
 
-If _PAGE_HUGE is defined we can simply look for it. When not defined we
-can be confident that there are no leaf pages in existence and fall back
-on the generic implementation (added in a later patch) which returns 0.
-
-CC: Ralf Baechle <ralf@linux-mips.org>
-CC: Paul Burton <paul.burton@mips.com>
-CC: James Hogan <jhogan@kernel.org>
-CC: linux-mips@vger.kernel.org
-Signed-off-by: Steven Price <steven.price@arm.com>
-Acked-by: Paul Burton <paul.burton@mips.com>
----
- arch/mips/include/asm/pgtable.h | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index f85bd5b15f51..fff392ea80c7 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -639,6 +639,11 @@ static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
- 
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
- 
-+#ifdef _PAGE_HUGE
-+#define pmd_leaf(pmd)	((pmd_val(pmd) & _PAGE_HUGE) != 0)
-+#define pud_leaf(pud)	((pud_val(pud) & _PAGE_HUGE) != 0)
-+#endif
-+
- #define gup_fast_permitted(start, end)	(!cpu_has_dc_aliases)
- 
- #include <asm-generic/pgtable.h>
--- 
-2.20.1
-
+This should all go together.
