@@ -2,47 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D88E866D
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2019 12:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7262E8856
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2019 13:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729183AbfJ2LQv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 29 Oct 2019 07:16:51 -0400
-Received: from s0090.ppsmtp.net ([91.90.154.91]:49008 "EHLO s0090.ppsmtp.net"
+        id S1732323AbfJ2MjH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 29 Oct 2019 08:39:07 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:40206 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729172AbfJ2LQu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 29 Oct 2019 07:16:50 -0400
-X-Greylist: delayed 31695 seconds by postgrey-1.27 at vger.kernel.org; Tue, 29 Oct 2019 07:16:49 EDT
-Received: from pps.filterd (s0090.ppsmtp.net [127.0.0.1])
-        by s0090.ppsmtp.net (8.16.0.27/8.16.0.27) with SMTP id x9T2ITAv017179;
-        Tue, 29 Oct 2019 03:21:15 +0100
-Received: from mail.schuetz.net ([212.185.169.233])
-        by s0090.ppsmtp.net with ESMTP id 2vx8bh858g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Oct 2019 03:21:15 +0100
-Received: from julia02 (localhost [127.0.0.1])
-        by mail.schuetz.net (Postfix) with ESMTP id 7EC3A201C370;
-        Tue, 29 Oct 2019 03:21:15 +0100 (CET)
+        id S1727039AbfJ2MjH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 29 Oct 2019 08:39:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=N+ehmygc9BxX7lvA6aGJbMWaouzap7HiKg9Ic+o14PY=; b=HUuX5n8dhPbVxklcvlDuEpP910
+        2rrsNVRDtRIw8JqhZZIZtKDKW3KskJktVniS2bR6T4YczrftrnaBNVRyuIcjmxQRcvtK3FmnHGg+V
+        +4Z8fxRY43XE3ox5a/XAlk7bYEsFboxxfF7KmzZqs+8P3hQUmkmNawSUeeX+B1/0i+z0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.92.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1iPQly-0004C1-Jz; Tue, 29 Oct 2019 13:38:54 +0100
+Date:   Tue, 29 Oct 2019 13:38:54 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        linux-kernel@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paul Burton <paul.burton@mips.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        James Hogan <jhogan@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>
+Subject: Re: [PATCH v4 5/5] net: dsa: add support for Atheros AR9331 build-in
+ switch
+Message-ID: <20191029123854.GN15259@lunn.ch>
+References: <20191022055743.6832-1-o.rempel@pengutronix.de>
+ <20191022055743.6832-6-o.rempel@pengutronix.de>
+ <20191023005850.GG5707@lunn.ch>
+ <20191029071404.pl34q4rmadusc2u5@pengutronix.de>
 MIME-Version: 1.0
-Subject: Dear Friend,
-To:     Recipients <infocarfer1@aim.com>
-From:   "Mr.R.C" <infocarfer1@aim.com>
-Date:   Tue, 29 Oct 2019 02:20:58 +0000
-Reply-To: infocarfer@aim.com
-X-TNEFEvaluated: 1
-Message-ID: <OF2BE98EAF.85660126-ON882584A2.000CEE6A@schuetz.net>
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Description: Mail message body
-X-Proofpoint-ID: SID=2vx8bh858g QID=2vx8bh858g-1
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-28_07:,,
- signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191029071404.pl34q4rmadusc2u5@pengutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dear Friend,
+Hi Oleksij
 
-I am Vice Chairman of Hang Seng Bank, I have Important Matter to Discuss with you concerning my late client, Died without a NEXT OF KIN. Send me your private email for full details information. email me at (infocarfer@aim.com)
-Mail:
-Regards
+> > > +static void ar9331_sw_port_disable(struct dsa_switch *ds, int port)
+> > > +{
+> > > +	struct ar9331_sw_priv *priv = (struct ar9331_sw_priv *)ds->priv;
+> > > +	struct regmap *regmap = priv->regmap;
+> > > +	int ret;
+> > > +
+> > > +	ret = regmap_write(regmap, AR9331_SW_REG_PORT_STATUS(port), 0);
+> > > +	if (ret)
+> > > +		dev_err_ratelimited(priv->dev, "%s: %i\n", __func__, ret);
+> > > +}
+> > 
+> > I've asked this before, but i don't remember the answer. Why are
+> > port_enable and port_disable the same?
+> 
+> I have only MAC TX/RX enable bit. This bit is set by phylink_mac_link_up and
+> removed by phylink_mac_link_down.
+> The port enable I use only to set predictable state of the port
+> register: all bits cleared. May be i should just drop port enable
+> function? What do you think? 
+
+At minimum, it needs a comment about why enable and disable are the
+same. If i keep asking, others will as well.
+
+If there is nothing useful to do, then drop it.
+
+   Andrew
+
