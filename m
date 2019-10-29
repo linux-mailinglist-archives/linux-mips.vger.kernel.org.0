@@ -2,212 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CB7E8615
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2019 11:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D88E866D
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2019 12:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728189AbfJ2Kux (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 29 Oct 2019 06:50:53 -0400
-Received: from forward105p.mail.yandex.net ([77.88.28.108]:35385 "EHLO
-        forward105p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726175AbfJ2Kux (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 29 Oct 2019 06:50:53 -0400
-Received: from mxback30g.mail.yandex.net (mxback30g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:330])
-        by forward105p.mail.yandex.net (Yandex) with ESMTP id 466B54D41890;
-        Tue, 29 Oct 2019 13:50:49 +0300 (MSK)
-Received: from sas1-e6a95a338f12.qloud-c.yandex.net (sas1-e6a95a338f12.qloud-c.yandex.net [2a02:6b8:c08:37a4:0:640:e6a9:5a33])
-        by mxback30g.mail.yandex.net (nwsmtp/Yandex) with ESMTP id prv0bwwOtD-ontqu6G0;
-        Tue, 29 Oct 2019 13:50:49 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1572346249;
-        bh=jduwSQJoGEIcWRg2hiWnE/M3uIcfKhtBYbUPGIA3qEI=;
-        h=In-Reply-To:From:To:Subject:Cc:Date:References:Message-ID;
-        b=p03N6vxVxS+eI7QMvFQ8rel15iQgyxucrjYAMK7I25h6P25uTkdjO6kX/+drF7Ucx
-         bEquFatGt17ECcIWsxBds+cR2Olw+lhB1mRipNOjU2uWPyqMOa28r7lBgWuG27TIED
-         flWIyKDdv/DC+PkQt79IY0wDgqdM8hmZ6rshpKRs=
-Authentication-Results: mxback30g.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by sas1-e6a95a338f12.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id zBH7CLbfZX-ogVeiGb9;
-        Tue, 29 Oct 2019 13:50:47 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-Subject: Re: [PATCH 4.14 027/119] MIPS: elf_hwcap: Export userspace ASEs
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, Meng Zhuo <mengzhuo1203@gmail.com>,
-        linux-mips@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        Sasha Levin <sashal@kernel.org>
-References: <20191027203259.948006506@linuxfoundation.org>
- <20191027203308.417745883@linuxfoundation.org>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <c7cea5a0-bb68-b8ad-0548-6f246465a8b6@flygoat.com>
-Date:   Tue, 29 Oct 2019 18:50:38 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1729183AbfJ2LQv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 29 Oct 2019 07:16:51 -0400
+Received: from s0090.ppsmtp.net ([91.90.154.91]:49008 "EHLO s0090.ppsmtp.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729172AbfJ2LQu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 29 Oct 2019 07:16:50 -0400
+X-Greylist: delayed 31695 seconds by postgrey-1.27 at vger.kernel.org; Tue, 29 Oct 2019 07:16:49 EDT
+Received: from pps.filterd (s0090.ppsmtp.net [127.0.0.1])
+        by s0090.ppsmtp.net (8.16.0.27/8.16.0.27) with SMTP id x9T2ITAv017179;
+        Tue, 29 Oct 2019 03:21:15 +0100
+Received: from mail.schuetz.net ([212.185.169.233])
+        by s0090.ppsmtp.net with ESMTP id 2vx8bh858g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Oct 2019 03:21:15 +0100
+Received: from julia02 (localhost [127.0.0.1])
+        by mail.schuetz.net (Postfix) with ESMTP id 7EC3A201C370;
+        Tue, 29 Oct 2019 03:21:15 +0100 (CET)
 MIME-Version: 1.0
-In-Reply-To: <20191027203308.417745883@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Subject: Dear Friend,
+To:     Recipients <infocarfer1@aim.com>
+From:   "Mr.R.C" <infocarfer1@aim.com>
+Date:   Tue, 29 Oct 2019 02:20:58 +0000
+Reply-To: infocarfer@aim.com
+X-TNEFEvaluated: 1
+Message-ID: <OF2BE98EAF.85660126-ON882584A2.000CEE6A@schuetz.net>
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Description: Mail message body
+X-Proofpoint-ID: SID=2vx8bh858g QID=2vx8bh858g-1
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-28_07:,,
+ signatures=0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Dear Friend,
 
-在 2019/10/28 上午5:00, Greg Kroah-Hartman 写道:
-> From: Jiaxun Yang <jiaxun.yang@flygoat.com>
->
-> [ Upstream commit 38dffe1e4dde1d3174fdce09d67370412843ebb5 ]
->
-> A Golang developer reported MIPS hwcap isn't reflecting instructions
-> that the processor actually supported so programs can't apply optimized
-> code at runtime.
->
-> Thus we export the ASEs that can be used in userspace programs.
->
-> Reported-by: Meng Zhuo <mengzhuo1203@gmail.com>
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: linux-mips@vger.kernel.org
-> Cc: Paul Burton <paul.burton@mips.com>
-> Cc: <stable@vger.kernel.org> # 4.14+
-> Signed-off-by: Paul Burton <paul.burton@mips.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   arch/mips/include/uapi/asm/hwcap.h | 11 ++++++++++
->   arch/mips/kernel/cpu-probe.c       | 33 ++++++++++++++++++++++++++++++
->   2 files changed, 44 insertions(+)
->
-> diff --git a/arch/mips/include/uapi/asm/hwcap.h b/arch/mips/include/uapi/asm/hwcap.h
-> index 600ad8fd68356..2475294c3d185 100644
-> --- a/arch/mips/include/uapi/asm/hwcap.h
-> +++ b/arch/mips/include/uapi/asm/hwcap.h
-> @@ -5,5 +5,16 @@
->   /* HWCAP flags */
->   #define HWCAP_MIPS_R6		(1 << 0)
->   #define HWCAP_MIPS_MSA		(1 << 1)
-> +#define HWCAP_MIPS_MIPS16	(1 << 3)
-> +#define HWCAP_MIPS_MDMX     (1 << 4)
-> +#define HWCAP_MIPS_MIPS3D   (1 << 5)
-> +#define HWCAP_MIPS_SMARTMIPS (1 << 6)
-> +#define HWCAP_MIPS_DSP      (1 << 7)
-> +#define HWCAP_MIPS_DSP2     (1 << 8)
-> +#define HWCAP_MIPS_DSP3     (1 << 9)
-> +#define HWCAP_MIPS_MIPS16E2 (1 << 10)
-> +#define HWCAP_LOONGSON_MMI  (1 << 11)
-> +#define HWCAP_LOONGSON_EXT  (1 << 12)
-> +#define HWCAP_LOONGSON_EXT2 (1 << 13)
->   
->   #endif /* _UAPI_ASM_HWCAP_H */
-> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-> index 3007ae1bb616a..c38cd62879f4e 100644
-> --- a/arch/mips/kernel/cpu-probe.c
-> +++ b/arch/mips/kernel/cpu-probe.c
-> @@ -2080,6 +2080,39 @@ void cpu_probe(void)
->   		elf_hwcap |= HWCAP_MIPS_MSA;
->   	}
->   
-> +	if (cpu_has_mips16)
-> +		elf_hwcap |= HWCAP_MIPS_MIPS16;
-> +
-> +	if (cpu_has_mdmx)
-> +		elf_hwcap |= HWCAP_MIPS_MDMX;
-> +
-> +	if (cpu_has_mips3d)
-> +		elf_hwcap |= HWCAP_MIPS_MIPS3D;
-> +
-> +	if (cpu_has_smartmips)
-> +		elf_hwcap |= HWCAP_MIPS_SMARTMIPS;
-> +
-> +	if (cpu_has_dsp)
-> +		elf_hwcap |= HWCAP_MIPS_DSP;
-> +
-> +	if (cpu_has_dsp2)
-> +		elf_hwcap |= HWCAP_MIPS_DSP2;
-> +
-> +	if (cpu_has_dsp3)
-> +		elf_hwcap |= HWCAP_MIPS_DSP3;
-> +
-> +	if (cpu_has_loongson_mmi)
-> +		elf_hwcap |= HWCAP_LOONGSON_MMI;
-> +
-> +	if (cpu_has_loongson_mmi)
-> +		elf_hwcap |= HWCAP_LOONGSON_CAM;
-
-Hi:
-
-Sorry, there is a typo causing build failure.
-
-Should be:
-
----
-  arch/mips/include/uapi/asm/hwcap.h | 11 ++++++++++
-  arch/mips/kernel/cpu-probe.c       | 33 ++++++++++++++++++++++++++++++
-  2 files changed, 44 insertions(+)
-
-diff --git a/arch/mips/include/uapi/asm/hwcap.h b/arch/mips/include/uapi/asm/hwcap.h
-index a2aba4b059e6..1ade1daa4921 100644
---- a/arch/mips/include/uapi/asm/hwcap.h
-+++ b/arch/mips/include/uapi/asm/hwcap.h
-@@ -6,5 +6,16 @@
-  #define HWCAP_MIPS_R6		(1 << 0)
-  #define HWCAP_MIPS_MSA		(1 << 1)
-  #define HWCAP_MIPS_CRC32	(1 << 2)
-+#define HWCAP_MIPS_MIPS16	(1 << 3)
-+#define HWCAP_MIPS_MDMX     (1 << 4)
-+#define HWCAP_MIPS_MIPS3D   (1 << 5)
-+#define HWCAP_MIPS_SMARTMIPS (1 << 6)
-+#define HWCAP_MIPS_DSP      (1 << 7)
-+#define HWCAP_MIPS_DSP2     (1 << 8)
-+#define HWCAP_MIPS_DSP3     (1 << 9)
-+#define HWCAP_MIPS_MIPS16E2 (1 << 10)
-+#define HWCAP_LOONGSON_MMI  (1 << 11)
-+#define HWCAP_LOONGSON_EXT  (1 << 12)
-+#define HWCAP_LOONGSON_EXT2 (1 << 13)
-  
-  #endif /* _UAPI_ASM_HWCAP_H */
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index c2eb392597bf..f521cbf934e7 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -2180,6 +2180,39 @@ void cpu_probe(void)
-  		elf_hwcap |= HWCAP_MIPS_MSA;
-  	}
-  
-+	if (cpu_has_mips16)
-+		elf_hwcap |= HWCAP_MIPS_MIPS16;
-+
-+	if (cpu_has_mdmx)
-+		elf_hwcap |= HWCAP_MIPS_MDMX;
-+
-+	if (cpu_has_mips3d)
-+		elf_hwcap |= HWCAP_MIPS_MIPS3D;
-+
-+	if (cpu_has_smartmips)
-+		elf_hwcap |= HWCAP_MIPS_SMARTMIPS;
-+
-+	if (cpu_has_dsp)
-+		elf_hwcap |= HWCAP_MIPS_DSP;
-+
-+	if (cpu_has_dsp2)
-+		elf_hwcap |= HWCAP_MIPS_DSP2;
-+
-+	if (cpu_has_dsp3)
-+		elf_hwcap |= HWCAP_MIPS_DSP3;
-+
-+	if (cpu_has_mips16e2)
-+		elf_hwcap |= HWCAP_MIPS_MIPS16E2;
-+
-+	if (cpu_has_loongson_mmi)
-+		elf_hwcap |= HWCAP_LOONGSON_MMI;
-+
-+	if (cpu_has_loongson_ext)
-+		elf_hwcap |= HWCAP_LOONGSON_EXT;
-+
-+	if (cpu_has_loongson_ext2)
-+		elf_hwcap |= HWCAP_LOONGSON_EXT2;
-+
-  	if (cpu_has_vz)
-  		cpu_probe_vz(c);
-  
--- 2.23.0
-
-
+I am Vice Chairman of Hang Seng Bank, I have Important Matter to Discuss with you concerning my late client, Died without a NEXT OF KIN. Send me your private email for full details information. email me at (infocarfer@aim.com)
+Mail:
+Regards
