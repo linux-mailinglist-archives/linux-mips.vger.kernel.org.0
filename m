@@ -2,146 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7C3E828F
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2019 08:34:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D43E0E838A
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Oct 2019 09:54:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725776AbfJ2Hee (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 29 Oct 2019 03:34:34 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:44089 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727024AbfJ2Hed (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 29 Oct 2019 03:34:33 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1iPM1G-0001xy-Aa; Tue, 29 Oct 2019 08:34:22 +0100
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1iPM1D-00040d-Ib; Tue, 29 Oct 2019 08:34:19 +0100
-Date:   Tue, 29 Oct 2019 08:34:19 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org,
-        Jay Cliburn <jcliburn@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Chris Snook <chris.snook@gmail.com>,
-        linux-kernel@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paul Burton <paul.burton@mips.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        James Hogan <jhogan@kernel.org>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@gmail.com>
-Subject: Re: [PATCH v4 2/5] dt-bindings: net: dsa: qca,ar9331 switch
- documentation
-Message-ID: <20191029073419.gjr4y7qsxx2javuf@pengutronix.de>
-References: <20191022055743.6832-1-o.rempel@pengutronix.de>
- <20191022055743.6832-3-o.rempel@pengutronix.de>
- <20191023003543.GE5707@lunn.ch>
+        id S1729580AbfJ2Ixv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 29 Oct 2019 04:53:51 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60248 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727377AbfJ2Ixv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 29 Oct 2019 04:53:51 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id A3A1DB43E;
+        Tue, 29 Oct 2019 08:53:44 +0000 (UTC)
+Date:   Tue, 29 Oct 2019 09:53:36 +0100
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Robin Murphy <robin.murphy@arm.com>, catalin.marinas@arm.com,
+        will@kernel.org, mingo@redhat.com, bp@alien8.de, rth@twiddle.net,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
+        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
+        dalias@libc.org, davem@davemloft.net, ralf@linux-mips.org,
+        paul.burton@mips.com, jhogan@kernel.org, jiaxun.yang@flygoat.com,
+        chenhc@lemote.com, akpm@linux-foundation.org, rppt@linux.ibm.com,
+        anshuman.khandual@arm.com, tglx@linutronix.de, cai@lca.pw,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        hpa@zytor.com, x86@kernel.org, dave.hansen@linux.intel.com,
+        luto@kernel.org, len.brown@intel.com, axboe@kernel.dk,
+        dledford@redhat.com, jeffrey.t.kirsher@intel.com,
+        linux-alpha@vger.kernel.org, naveen.n.rao@linux.vnet.ibm.com,
+        mwb@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, tbogendoerfer@suse.de,
+        linux-mips@vger.kernel.org, rafael@kernel.org, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        lenb@kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v6] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
+Message-ID: <20191029085336.GF31513@dhcp22.suse.cz>
+References: <20190925104108.GE4553@hirez.programming.kicks-ass.net>
+ <47fa4cee-8528-7c23-c7de-7be1b65aa2ae@huawei.com>
+ <bec80499-86d9-bf1f-df23-9044a8099992@arm.com>
+ <a5f0fc80-8e88-b781-77ce-1213e5d62125@huawei.com>
+ <20191010073212.GB18412@dhcp22.suse.cz>
+ <6cc94f9b-0d79-93a8-5ec2-4f6c21639268@huawei.com>
+ <20191011111539.GX2311@hirez.programming.kicks-ass.net>
+ <7fad58d6-5126-e8b8-a7d8-a91814da53ba@huawei.com>
+ <20191012074014.GA2037204@kroah.com>
+ <1ec704df-97a5-04b7-1f20-8e3db19440a3@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="u2f62fix5h57o5vr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191023003543.GE5707@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:14:36 up 164 days, 13:32, 99 users,  load average: 0.00, 0.02,
- 0.00
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+In-Reply-To: <1ec704df-97a5-04b7-1f20-8e3db19440a3@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Mon 28-10-19 17:20:33, Yunsheng Lin wrote:
+> On 2019/10/12 15:40, Greg KH wrote:
+> > On Sat, Oct 12, 2019 at 02:17:26PM +0800, Yunsheng Lin wrote:
+> >> add pci and acpi maintainer
+> >> cc linux-pci@vger.kernel.org and linux-acpi@vger.kernel.org
+> >>
+> >> On 2019/10/11 19:15, Peter Zijlstra wrote:
+> >>> On Fri, Oct 11, 2019 at 11:27:54AM +0800, Yunsheng Lin wrote:
+> >>>> But I failed to see why the above is related to making node_to_cpumask_map()
+> >>>> NUMA_NO_NODE aware?
+> >>>
+> >>> Your initial bug is for hns3, which is a PCI device, which really _MUST_
+> >>> have a node assigned.
+> >>>
+> >>> It not having one, is a straight up bug. We must not silently accept
+> >>> NO_NODE there, ever.
+> >>>
+> >>
+> >> I suppose you mean reporting a lack of affinity when the node of a pcie
+> >> device is not set by "not silently accept NO_NODE".
+> > 
+> > If the firmware of a pci device does not provide the node information,
+> > then yes, warn about that.
+> > 
+> >> As Greg has asked about in [1]:
+> >> what is a user to do when the user sees the kernel reporting that?
+> >>
+> >> We may tell user to contact their vendor for info or updates about
+> >> that when they do not know about their system well enough, but their
+> >> vendor may get away with this by quoting ACPI spec as the spec
+> >> considering this optional. Should the user believe this is indeed a
+> >> fw bug or a misreport from the kernel?
+> > 
+> > Say it is a firmware bug, if it is a firmware bug, that's simple.
+> > 
+> >> If this kind of reporting is common pratice and will not cause any
+> >> misunderstanding, then maybe we can report that.
+> > 
+> > Yes, please do so, that's the only way those boxes are ever going to get
+> > fixed.  And go add the test to the "firmware testing" tool that is based
+> > on Linux that Intel has somewhere, to give vendors a chance to fix this
+> > before they ship hardware.
+> > 
+> > This shouldn't be a big deal, we warn of other hardware bugs all the
+> > time.
+> 
+> Hi, all.
+> 
+> The warning for the above case has been added in [1].
+> 
+> So maybe it makes sense to make node_to_cpumask_map() NUMA_NO_NODE aware
+> now?
+> 
+> If Yes, this patch still can be applied to the latest linus' tree cleanly,
+> Do I need to resend it?
+> 
 
---u2f62fix5h57o5vr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+By this patch you mean http://lkml.kernel.org/r/1568724534-146242-1-git-send-email-linyunsheng@huawei.com
+right?
 
-On Wed, Oct 23, 2019 at 02:35:43AM +0200, Andrew Lunn wrote:
-> On Tue, Oct 22, 2019 at 07:57:40AM +0200, Oleksij Rempel wrote:
-> > Atheros AR9331 has built-in 5 port switch. The switch can be configured
-> > to use all 5 or 4 ports. One of built-in PHYs can be used by first buil=
-t-in
-> > ethernet controller or to be used directly by the switch over second et=
-hernet
-> > controller.
-> >=20
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
->=20
-> Hi Oleksij
->=20
-> What we never really discussed is how this MUXing of the PHY works.
->=20
-> What i'm worried about is that when we do understand how it works, we
-> cannot properly support it using this binding.
+I would just resend it unless there is still a clear disagreement over
+it.
 
-good point. i would prefer to make it properly.
+> [1] https://lore.kernel.org/linux-pci/1571467543-26125-1-git-send-email-linyunsheng@huawei.com/
 
-> Please could you try to find information about this.
-
-Documentation says:
-The PHY interfaces (PHY0, PHY1, PHY2, PHY3 and PHY4) can connect to the swi=
-tch
-in bridge mode. In this case GE0 must be under reset. All five LAN ports are
-switched together and connect to the CPU through the GMII interface (MAC0),
-which is controlled by the ETH_CFG register bit SW_ONLY_MODE. If GE0 connec=
-ts
-separately to PHY, then MAC5 should be under reset.
-
-There is no SW_ONLY_MODE bit in the documentation.
-I found:
-CFG_SW_PHY_SWAP - Used to switch the wires connection of PHY port 0 with th=
-at of
-port 4 in the Ethernet switch. MAC1 and PHY4 are paired while MAC5 and PHY0=
- are
-paired.
-
-CFG_SW_PHY_ADDR_SWAP - Exchanges the address of PHY port 0 with that of
-PHY port 4 in the Ethernet switch.
-
-It feels like this are the right bits. I'll try to test it after ELC-E
-conference (If you are here, please ping me).
-If this are the right bits, should it be registered as separate driver? This
-register is on MMIO and not part of the switches MDIO.
-
-Regards,
-Oleksij
---=20
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---u2f62fix5h57o5vr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEERBNZvwSgvmcMY/T74omh9DUaUbMFAl2363oACgkQ4omh9DUa
-UbMsrhAAyX9oqX95zGk5geXaRVZUQDgHyGWtzPV48YtCkqD1boETt+0rQAgMoNLg
-wVYewuMycs6BANMrjYq8wQJW0CrFkaOPW91yxMiUqITqEdYI8v+NS89Vd6/HDaZv
-GhNB7LNU7GPCZWsLG1Cu1TvLCiQncFIFadj+oLGm+SzmsfsRKcR2awp4P7O3YfU1
-qheNR9bNxD64YVQZB3n4+fXyZFjXST+w5cve5T4C4pttuVKQKVkW+ICgdv0AWj/3
-KMA9CF5vSpgDPYeDw3JoAGl7yEMYVlkEG1fP03X1fCdcc1ZQvmI8RL3GaYfuuy1c
-JNCQfARZu1BdKd2VYiVJx+qYW18fuKt5ywQo9HRITOS1l+8WBgDaN0dd/e1DK99H
-47SNlevcspoo2aj1ibt9Q0ZdO+rW+Oqtx9JjHpQC+zaqAMdHFtsB5GXgHaZx0iXr
-lqZs4Tc9PvwfuVDGRDUTNF1y8g+5PrgjdBPOHJ8J/0drrrt4gEPLyUvEZeHMm3K/
-x99GEN5gxAYKQmYyNydjmTqZmv0NwjniZoPIswAUrETZIMEoAh088eDQ3zLXUGgx
-GxGzl9Px7Omc7cJC5hQAimCIhjITGZMR+wF40rsoRrWcre1ZyPnDd1MGB0qik1Mz
-HyFe2nVfXrnSKD2UZc7y3nne0UCGJGmxl+jfELNAbJ7PBdtNOH0=
-=BzWE
------END PGP SIGNATURE-----
-
---u2f62fix5h57o5vr--
+-- 
+Michal Hocko
+SUSE Labs
