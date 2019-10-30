@@ -2,88 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A78E987C
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 09:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4225E98AF
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 10:02:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726184AbfJ3Ivw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Oct 2019 04:51:52 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:33636 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726032AbfJ3Ivw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Oct 2019 04:51:52 -0400
-Received: by mail-oi1-f195.google.com with SMTP id m193so1318164oig.0;
-        Wed, 30 Oct 2019 01:51:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mziza5J/MoDupcgI0RkmxCcsKm60Et3F2KLUw+t1RqQ=;
-        b=FX0Qpi9u4CqeUqqDJRv0OaUj52bbx/Xh9cSzN35AEx14RwvvFwdQiK/IxsR0X0gpIs
-         031snMs2K2ONh1aaFaDHcq8MCbuBVmJ5j1udrklDhi0pOVTbxJqEbHaJrqb7VdFsQXN/
-         Iy+R7kgA2dayPFHDNWCDgZ9OZNdEMTTLhUw49+Y2UGaUo8xvlARX+zUVqvdkHEfavtka
-         NdWKua2VdXBo0oypW7XJf3zNiPJ1tqYYp/EQwfG5wkTZpaTvVv13wo7K5tyOU9TkVHSF
-         UUdrcjbCwDnqWNKkIqSxlQHYkVbFVRkxs8xfzQf30Ia8GoP2VNwp4kTCh4uILnKkxi5r
-         3CbQ==
-X-Gm-Message-State: APjAAAVNjlNUyoh7BjJ+GtO+jgaxq2nfplYG4A5K6TAApapog6KVoq3n
-        UhCB7TPT5Ly5/F1KpOXj/5lWbazf5e5lxNztH2M=
-X-Google-Smtp-Source: APXvYqywm9C+CpnmelJ6SWQKVIah4mda9qPmB6OrDMq707nGOy+7YzCdX2/qccGqz5HinY9G/c8lSRqxbZE+WID7kSw=
-X-Received: by 2002:aca:4ac5:: with SMTP id x188mr4822487oia.148.1572425510897;
- Wed, 30 Oct 2019 01:51:50 -0700 (PDT)
+        id S1726665AbfJ3JCU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Oct 2019 05:02:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35346 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726084AbfJ3JCU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 30 Oct 2019 05:02:20 -0400
+Received: from localhost (unknown [91.217.168.176])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BE7742083E;
+        Wed, 30 Oct 2019 09:02:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572426138;
+        bh=qDDn6Pqi5gdg0xPqXhf/M0A/TQfM681Mptbd731RAOg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RC/Tpy5ZNRHF6PoKQHXz0uRgEcUe20OnXfZiM9/V4ayevaeTbGlZ8JzjHjG1AUlS9
+         8O0uw5k1oePaQb9QFj44dStIAfTgZQ83ebpLqpPJvdiXGIC8qx6cNmVXubeg6p56xz
+         FJykEcfDv0CQTfU91w/FA2gg0o47M6sP4JfcB294=
+Date:   Wed, 30 Oct 2019 10:02:14 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Meng Zhuo <mengzhuo1203@gmail.com>, linux-mips@vger.kernel.org,
+        Paul Burton <paul.burton@mips.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 4.14 027/119] MIPS: elf_hwcap: Export userspace ASEs
+Message-ID: <20191030090214.GA628862@kroah.com>
+References: <20191027203259.948006506@linuxfoundation.org>
+ <20191027203308.417745883@linuxfoundation.org>
+ <c7cea5a0-bb68-b8ad-0548-6f246465a8b6@flygoat.com>
 MIME-Version: 1.0
-References: <20191029064834.23438-1-hch@lst.de> <20191029064834.23438-14-hch@lst.de>
-In-Reply-To: <20191029064834.23438-14-hch@lst.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 30 Oct 2019 09:51:39 +0100
-Message-ID: <CAMuHMdWGiHhSv=xCqnsUXok7wYG7Wr1EQh+yuPOZBxPCskUFVw@mail.gmail.com>
-Subject: Re: [PATCH 13/21] m68k: rename __iounmap and mark it static
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org, linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        nios2-dev@lists.rocketboards.org, linux-riscv@lists.infradead.org,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c7cea5a0-bb68-b8ad-0548-6f246465a8b6@flygoat.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Oct 29, 2019 at 7:56 AM Christoph Hellwig <hch@lst.de> wrote:
-> m68k uses __iounmap as the name for an internal helper that is only
-> used for some CPU types.  Mark it static, give it a better name
-> and move it around a bit to avoid a forward declaration.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+On Tue, Oct 29, 2019 at 06:50:38PM +0800, Jiaxun Yang wrote:
+> 
+> 在 2019/10/28 上午5:00, Greg Kroah-Hartman 写道:
+> > From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > 
+> > [ Upstream commit 38dffe1e4dde1d3174fdce09d67370412843ebb5 ]
+> > 
+> > A Golang developer reported MIPS hwcap isn't reflecting instructions
+> > that the processor actually supported so programs can't apply optimized
+> > code at runtime.
+> > 
+> > Thus we export the ASEs that can be used in userspace programs.
+> > 
+> > Reported-by: Meng Zhuo <mengzhuo1203@gmail.com>
+> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: Paul Burton <paul.burton@mips.com>
+> > Cc: <stable@vger.kernel.org> # 4.14+
+> > Signed-off-by: Paul Burton <paul.burton@mips.com>
+> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > ---
+> >   arch/mips/include/uapi/asm/hwcap.h | 11 ++++++++++
+> >   arch/mips/kernel/cpu-probe.c       | 33 ++++++++++++++++++++++++++++++
+> >   2 files changed, 44 insertions(+)
+> > 
+> > diff --git a/arch/mips/include/uapi/asm/hwcap.h b/arch/mips/include/uapi/asm/hwcap.h
+> > index 600ad8fd68356..2475294c3d185 100644
+> > --- a/arch/mips/include/uapi/asm/hwcap.h
+> > +++ b/arch/mips/include/uapi/asm/hwcap.h
+> > @@ -5,5 +5,16 @@
+> >   /* HWCAP flags */
+> >   #define HWCAP_MIPS_R6		(1 << 0)
+> >   #define HWCAP_MIPS_MSA		(1 << 1)
+> > +#define HWCAP_MIPS_MIPS16	(1 << 3)
+> > +#define HWCAP_MIPS_MDMX     (1 << 4)
+> > +#define HWCAP_MIPS_MIPS3D   (1 << 5)
+> > +#define HWCAP_MIPS_SMARTMIPS (1 << 6)
+> > +#define HWCAP_MIPS_DSP      (1 << 7)
+> > +#define HWCAP_MIPS_DSP2     (1 << 8)
+> > +#define HWCAP_MIPS_DSP3     (1 << 9)
+> > +#define HWCAP_MIPS_MIPS16E2 (1 << 10)
+> > +#define HWCAP_LOONGSON_MMI  (1 << 11)
+> > +#define HWCAP_LOONGSON_EXT  (1 << 12)
+> > +#define HWCAP_LOONGSON_EXT2 (1 << 13)
+> >   #endif /* _UAPI_ASM_HWCAP_H */
+> > diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+> > index 3007ae1bb616a..c38cd62879f4e 100644
+> > --- a/arch/mips/kernel/cpu-probe.c
+> > +++ b/arch/mips/kernel/cpu-probe.c
+> > @@ -2080,6 +2080,39 @@ void cpu_probe(void)
+> >   		elf_hwcap |= HWCAP_MIPS_MSA;
+> >   	}
+> > +	if (cpu_has_mips16)
+> > +		elf_hwcap |= HWCAP_MIPS_MIPS16;
+> > +
+> > +	if (cpu_has_mdmx)
+> > +		elf_hwcap |= HWCAP_MIPS_MDMX;
+> > +
+> > +	if (cpu_has_mips3d)
+> > +		elf_hwcap |= HWCAP_MIPS_MIPS3D;
+> > +
+> > +	if (cpu_has_smartmips)
+> > +		elf_hwcap |= HWCAP_MIPS_SMARTMIPS;
+> > +
+> > +	if (cpu_has_dsp)
+> > +		elf_hwcap |= HWCAP_MIPS_DSP;
+> > +
+> > +	if (cpu_has_dsp2)
+> > +		elf_hwcap |= HWCAP_MIPS_DSP2;
+> > +
+> > +	if (cpu_has_dsp3)
+> > +		elf_hwcap |= HWCAP_MIPS_DSP3;
+> > +
+> > +	if (cpu_has_loongson_mmi)
+> > +		elf_hwcap |= HWCAP_LOONGSON_MMI;
+> > +
+> > +	if (cpu_has_loongson_mmi)
+> > +		elf_hwcap |= HWCAP_LOONGSON_CAM;
+> 
+> Hi:
+> 
+> Sorry, there is a typo causing build failure.
+> 
+> Should be:
 
-Thanks for the update!
+Can you resend this in a format we can apply it in?
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+thanks,
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+greg k-h
