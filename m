@@ -2,149 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6BF5EA124
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 17:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5010EEA4E0
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 21:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729302AbfJ3P60 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Oct 2019 11:58:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60270 "EHLO mail.kernel.org"
+        id S1726858AbfJ3Ug7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Oct 2019 16:36:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34986 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729291AbfJ3P6Z (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 30 Oct 2019 11:58:25 -0400
-Received: from sasha-vm.mshome.net (100.50.158.77.rev.sfr.net [77.158.50.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726785AbfJ3Ug7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 30 Oct 2019 16:36:59 -0400
+Received: from localhost (unknown [69.71.4.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 843F42173E;
-        Wed, 30 Oct 2019 15:58:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4155120656;
+        Wed, 30 Oct 2019 20:36:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572451104;
-        bh=WAau6IR/aThQUlLyDIXnoKCOCQz2hrk3FioonFNx534=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zpwrsymddOZbI5x0YKj3LWCkQrwVChSfLKwagvv5KKBXoLEO+V3bjnjAbcLh6dLg9
-         i08P7l5qOkvmXKdxViQccl2EVCmAmUQe6Q6WGlU3GryxLsOCY4szZ2LNnaKn0iZuqU
-         MSAeULamiF9YIEZoMiAAz8Pya6Bs/AW3z0MTdRIU=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Paul Burton <paulburton@kernel.org>,
-        linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.4 12/13] MIPS: bmips: mark exception vectors as char arrays
-Date:   Wed, 30 Oct 2019 11:57:50 -0400
-Message-Id: <20191030155751.10960-12-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191030155751.10960-1-sashal@kernel.org>
-References: <20191030155751.10960-1-sashal@kernel.org>
+        s=default; t=1572467818;
+        bh=n7Ze7BhEelOv8ugr9r7umjLdJR7IBqczK+65iIUvgJ8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=KzAaoh6ewPvi/yE6NDchWzkojwjbdY2LSG9Jx+fw2yg6w3z0CsSQ9byQ375jd8Y9v
+         U0/ZtrGHiWqt+JxkrcuDfKvjiC3fYDem9/1r18vTCbvzsMHNhhmLf8M1vedxCQFBIB
+         5snoxIVw7hvHkHkB6kgjGA2gwTiTd1ZakvDC+PRg=
+Date:   Wed, 30 Oct 2019 15:36:57 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, davem@davemloft.net,
+        robh+dt@kernel.org, mark.rutland@arm.com, axboe@kernel.dk,
+        peppe.cavallaro@st.com, alexandre.torgue@st.com,
+        joabreu@synopsys.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 3/5] net: stmmac: pci: Add Loongson GMAC
+Message-ID: <20191030203657.GA247440@google.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191030135347.3636-4-jiaxun.yang@flygoat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Jonas Gorski <jonas.gorski@gmail.com>
+On Wed, Oct 30, 2019 at 09:53:45PM +0800, Jiaxun Yang wrote:
+> This device will be setup by parsing DeviceTree node
+> of pci device.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-[ Upstream commit e4f5cb1a9b27c0f94ef4f5a0178a3fde2d3d0e9e ]
+> +static int loongson_pci_of_setup(struct pci_dev *pdev,
+> +			struct plat_stmmacenet_data *plat)
+> +{
+> +	struct device_node  *np;
+> +	np = pci_device_to_OF_node(pdev);
+> +
+> +	if(!np) {
 
-The vectors span more than one byte, so mark them as arrays.
+Please pay attention to the existing coding style in the file and
+follow it.  In this and other cases below, add a space in "if (".
 
-Fixes the following build error when building when using GCC 8.3:
+> +	if(!of_device_is_compatible(np, "loongson,pci-gmac")) {
 
-In file included from ./include/linux/string.h:19,
-                 from ./include/linux/bitmap.h:9,
-                 from ./include/linux/cpumask.h:12,
-                 from ./arch/mips/include/asm/processor.h:15,
-                 from ./arch/mips/include/asm/thread_info.h:16,
-                 from ./include/linux/thread_info.h:38,
-                 from ./include/asm-generic/preempt.h:5,
-                 from ./arch/mips/include/generated/asm/preempt.h:1,
-                 from ./include/linux/preempt.h:81,
-                 from ./include/linux/spinlock.h:51,
-                 from ./include/linux/mmzone.h:8,
-                 from ./include/linux/bootmem.h:8,
-                 from arch/mips/bcm63xx/prom.c:10:
-arch/mips/bcm63xx/prom.c: In function 'prom_init':
-./arch/mips/include/asm/string.h:162:11: error: '__builtin_memcpy' forming offset [2, 32] is out of the bounds [0, 1] of object 'bmips_smp_movevec' with type 'char' [-Werror=array-bounds]
-   __ret = __builtin_memcpy((dst), (src), __len); \
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-arch/mips/bcm63xx/prom.c:97:3: note: in expansion of macro 'memcpy'
-   memcpy((void *)0xa0000200, &bmips_smp_movevec, 0x20);
-   ^~~~~~
-In file included from arch/mips/bcm63xx/prom.c:14:
-./arch/mips/include/asm/bmips.h:80:13: note: 'bmips_smp_movevec' declared here
- extern char bmips_smp_movevec;
+> +	return  stmmac_parse_config_dt(np, plat);
 
-Fixes: 18a1eef92dcd ("MIPS: BMIPS: Introduce bmips.h")
-Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Paul Burton <paulburton@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: James Hogan <jhogan@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/bcm63xx/prom.c      |  2 +-
- arch/mips/include/asm/bmips.h | 10 +++++-----
- arch/mips/kernel/smp-bmips.c  |  8 ++++----
- 3 files changed, 10 insertions(+), 10 deletions(-)
+Remove the double space here.
 
-diff --git a/arch/mips/bcm63xx/prom.c b/arch/mips/bcm63xx/prom.c
-index 7019e2967009e..bbbf8057565b2 100644
---- a/arch/mips/bcm63xx/prom.c
-+++ b/arch/mips/bcm63xx/prom.c
-@@ -84,7 +84,7 @@ void __init prom_init(void)
- 		 * Here we will start up CPU1 in the background and ask it to
- 		 * reconfigure itself then go back to sleep.
- 		 */
--		memcpy((void *)0xa0000200, &bmips_smp_movevec, 0x20);
-+		memcpy((void *)0xa0000200, bmips_smp_movevec, 0x20);
- 		__sync();
- 		set_c0_cause(C_SW0);
- 		cpumask_set_cpu(1, &bmips_booted_mask);
-diff --git a/arch/mips/include/asm/bmips.h b/arch/mips/include/asm/bmips.h
-index 6d25ad33ec78f..860e4cef61be7 100644
---- a/arch/mips/include/asm/bmips.h
-+++ b/arch/mips/include/asm/bmips.h
-@@ -75,11 +75,11 @@ static inline int register_bmips_smp_ops(void)
- #endif
- }
- 
--extern char bmips_reset_nmi_vec;
--extern char bmips_reset_nmi_vec_end;
--extern char bmips_smp_movevec;
--extern char bmips_smp_int_vec;
--extern char bmips_smp_int_vec_end;
-+extern char bmips_reset_nmi_vec[];
-+extern char bmips_reset_nmi_vec_end[];
-+extern char bmips_smp_movevec[];
-+extern char bmips_smp_int_vec[];
-+extern char bmips_smp_int_vec_end[];
- 
- extern int bmips_smp_enabled;
- extern int bmips_cpu_offset;
-diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
-index 4874712b475e5..a62d24169d75c 100644
---- a/arch/mips/kernel/smp-bmips.c
-+++ b/arch/mips/kernel/smp-bmips.c
-@@ -451,10 +451,10 @@ static void bmips_wr_vec(unsigned long dst, char *start, char *end)
- 
- static inline void bmips_nmi_handler_setup(void)
- {
--	bmips_wr_vec(BMIPS_NMI_RESET_VEC, &bmips_reset_nmi_vec,
--		&bmips_reset_nmi_vec_end);
--	bmips_wr_vec(BMIPS_WARM_RESTART_VEC, &bmips_smp_int_vec,
--		&bmips_smp_int_vec_end);
-+	bmips_wr_vec(BMIPS_NMI_RESET_VEC, bmips_reset_nmi_vec,
-+		bmips_reset_nmi_vec_end);
-+	bmips_wr_vec(BMIPS_WARM_RESTART_VEC, bmips_smp_int_vec,
-+		bmips_smp_int_vec_end);
- }
- 
- struct reset_vec_info {
--- 
-2.20.1
+> +	if(info->of_irq) {
 
+> +	STMMAC_DEVICE(LOONGSON,  PCI_DEVICE_ID_LOONGSON_GMAC, loongson_of_pci_info),
+
+And here.
