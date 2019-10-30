@@ -2,150 +2,165 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8903E94E3
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 02:58:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3B8E9688
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 07:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbfJ3B6q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 29 Oct 2019 21:58:46 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:5221 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726108AbfJ3B6p (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 29 Oct 2019 21:58:45 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id BACE7FFFD70AD4B8F000;
-        Wed, 30 Oct 2019 09:58:41 +0800 (CST)
-Received: from [127.0.0.1] (10.74.191.121) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Wed, 30 Oct 2019
- 09:58:41 +0800
-Subject: Re: [PATCH v6] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
-To:     Michal Hocko <mhocko@kernel.org>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Robin Murphy <robin.murphy@arm.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <mingo@redhat.com>, <bp@alien8.de>,
-        <rth@twiddle.net>, <ink@jurassic.park.msu.ru>,
-        <mattst88@gmail.com>, <benh@kernel.crashing.org>,
-        <paulus@samba.org>, <mpe@ellerman.id.au>,
-        <heiko.carstens@de.ibm.com>, <gor@linux.ibm.com>,
-        <borntraeger@de.ibm.com>, <ysato@users.sourceforge.jp>,
-        <dalias@libc.org>, <davem@davemloft.net>, <ralf@linux-mips.org>,
-        <paul.burton@mips.com>, <jhogan@kernel.org>,
-        <jiaxun.yang@flygoat.com>, <chenhc@lemote.com>,
-        <akpm@linux-foundation.org>, <rppt@linux.ibm.com>,
-        <anshuman.khandual@arm.com>, <tglx@linutronix.de>, <cai@lca.pw>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <hpa@zytor.com>, <x86@kernel.org>,
-        <dave.hansen@linux.intel.com>, <luto@kernel.org>,
-        <len.brown@intel.com>, <axboe@kernel.dk>, <dledford@redhat.com>,
-        <jeffrey.t.kirsher@intel.com>, <linux-alpha@vger.kernel.org>,
-        <naveen.n.rao@linux.vnet.ibm.com>, <mwb@linux.vnet.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-s390@vger.kernel.org>,
-        <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
-        <tbogendoerfer@suse.de>, <linux-mips@vger.kernel.org>,
-        <rafael@kernel.org>, <bhelgaas@google.com>,
-        <linux-pci@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, <lenb@kernel.org>,
-        <linux-acpi@vger.kernel.org>
-References: <20190925104108.GE4553@hirez.programming.kicks-ass.net>
- <47fa4cee-8528-7c23-c7de-7be1b65aa2ae@huawei.com>
- <bec80499-86d9-bf1f-df23-9044a8099992@arm.com>
- <a5f0fc80-8e88-b781-77ce-1213e5d62125@huawei.com>
- <20191010073212.GB18412@dhcp22.suse.cz>
- <6cc94f9b-0d79-93a8-5ec2-4f6c21639268@huawei.com>
- <20191011111539.GX2311@hirez.programming.kicks-ass.net>
- <7fad58d6-5126-e8b8-a7d8-a91814da53ba@huawei.com>
- <20191012074014.GA2037204@kroah.com>
- <1ec704df-97a5-04b7-1f20-8e3db19440a3@huawei.com>
- <20191029085336.GF31513@dhcp22.suse.cz>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <6c822a7d-499a-a031-5f67-848f590d5257@huawei.com>
-Date:   Wed, 30 Oct 2019 09:58:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        id S1726269AbfJ3GnO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Oct 2019 02:43:14 -0400
+Received: from condef-09.nifty.com ([202.248.20.74]:40144 "EHLO
+        condef-09.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725855AbfJ3GnN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Oct 2019 02:43:13 -0400
+Received: from conuserg-12.nifty.com ([10.126.8.75])by condef-09.nifty.com with ESMTP id x9U6e0cH008806;
+        Wed, 30 Oct 2019 15:40:00 +0900
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id x9U6d6lu008465;
+        Wed, 30 Oct 2019 15:39:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com x9U6d6lu008465
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1572417548;
+        bh=erN8NTfq9fWEVgi8xPhCmDbhwPzMq4qz2bhybl41Cg0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TM26i1euSoeVGaEdy8R0NzTO1o4dQUOca5dvyYGaDnBx4xbW535BbcaPPU+o5qIRH
+         yv8o+Zx61AU21FB4Hk49ttXCxyvjnEtuMMaF/9lCOhe/R4mlpTb5ZFv1dX/xOzn7AW
+         vfczyxVvM6R8F48f5bgm/myaNsAnXbudj2UcGxafO3Rdsz29HV+yrShO0sIN0MyKvC
+         /MJcXMy2OlRmIh3mqBHm1elaix77JuGRYb3KQSDlYzTuF5sipdizh8/+v4T6SDB5T3
+         g2xqzkzP1TXUHJvZhlZmJBVzDNMHfa2p2szAuUliCtIW6ITi3wmMG8++rL9kWD1Fh/
+         Q+Kiz4ZxG+x5A==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, x86@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
+Subject: [PATCH 1/3] arch: ipcbuf.h: make uapi asm/ipcbuf.h self-contained
+Date:   Wed, 30 Oct 2019 15:38:53 +0900
+Message-Id: <20191030063855.9989-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20191029085336.GF31513@dhcp22.suse.cz>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.74.191.121]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2019/10/29 16:53, Michal Hocko wrote:
-> On Mon 28-10-19 17:20:33, Yunsheng Lin wrote:
->> On 2019/10/12 15:40, Greg KH wrote:
->>> On Sat, Oct 12, 2019 at 02:17:26PM +0800, Yunsheng Lin wrote:
->>>> add pci and acpi maintainer
->>>> cc linux-pci@vger.kernel.org and linux-acpi@vger.kernel.org
->>>>
->>>> On 2019/10/11 19:15, Peter Zijlstra wrote:
->>>>> On Fri, Oct 11, 2019 at 11:27:54AM +0800, Yunsheng Lin wrote:
->>>>>> But I failed to see why the above is related to making node_to_cpumask_map()
->>>>>> NUMA_NO_NODE aware?
->>>>>
->>>>> Your initial bug is for hns3, which is a PCI device, which really _MUST_
->>>>> have a node assigned.
->>>>>
->>>>> It not having one, is a straight up bug. We must not silently accept
->>>>> NO_NODE there, ever.
->>>>>
->>>>
->>>> I suppose you mean reporting a lack of affinity when the node of a pcie
->>>> device is not set by "not silently accept NO_NODE".
->>>
->>> If the firmware of a pci device does not provide the node information,
->>> then yes, warn about that.
->>>
->>>> As Greg has asked about in [1]:
->>>> what is a user to do when the user sees the kernel reporting that?
->>>>
->>>> We may tell user to contact their vendor for info or updates about
->>>> that when they do not know about their system well enough, but their
->>>> vendor may get away with this by quoting ACPI spec as the spec
->>>> considering this optional. Should the user believe this is indeed a
->>>> fw bug or a misreport from the kernel?
->>>
->>> Say it is a firmware bug, if it is a firmware bug, that's simple.
->>>
->>>> If this kind of reporting is common pratice and will not cause any
->>>> misunderstanding, then maybe we can report that.
->>>
->>> Yes, please do so, that's the only way those boxes are ever going to get
->>> fixed.  And go add the test to the "firmware testing" tool that is based
->>> on Linux that Intel has somewhere, to give vendors a chance to fix this
->>> before they ship hardware.
->>>
->>> This shouldn't be a big deal, we warn of other hardware bugs all the
->>> time.
->>
->> Hi, all.
->>
->> The warning for the above case has been added in [1].
->>
->> So maybe it makes sense to make node_to_cpumask_map() NUMA_NO_NODE aware
->> now?
->>
->> If Yes, this patch still can be applied to the latest linus' tree cleanly,
->> Do I need to resend it?
->>
-> 
-> By this patch you mean http://lkml.kernel.org/r/1568724534-146242-1-git-send-email-linyunsheng@huawei.com
-> right?
+The user-space cannot compile <asm/ipcbuf.h> due to some missing type
+definitions. For example, building it for x86 fails as follows:
 
-Yes.
+  CC      usr/include/asm/ipcbuf.h.s
+In file included from ./usr/include/asm/ipcbuf.h:1:0,
+                 from <command-line>:32:
+./usr/include/asm-generic/ipcbuf.h:21:2: error: unknown type name ‘__kernel_key_t’
+  __kernel_key_t  key;
+  ^~~~~~~~~~~~~~
+./usr/include/asm-generic/ipcbuf.h:22:2: error: unknown type name ‘__kernel_uid32_t’
+  __kernel_uid32_t uid;
+  ^~~~~~~~~~~~~~~~
+./usr/include/asm-generic/ipcbuf.h:23:2: error: unknown type name ‘__kernel_gid32_t’
+  __kernel_gid32_t gid;
+  ^~~~~~~~~~~~~~~~
+./usr/include/asm-generic/ipcbuf.h:24:2: error: unknown type name ‘__kernel_uid32_t’
+  __kernel_uid32_t cuid;
+  ^~~~~~~~~~~~~~~~
+./usr/include/asm-generic/ipcbuf.h:25:2: error: unknown type name ‘__kernel_gid32_t’
+  __kernel_gid32_t cgid;
+  ^~~~~~~~~~~~~~~~
+./usr/include/asm-generic/ipcbuf.h:26:2: error: unknown type name ‘__kernel_mode_t’
+  __kernel_mode_t  mode;
+  ^~~~~~~~~~~~~~~
+./usr/include/asm-generic/ipcbuf.h:28:35: error: ‘__kernel_mode_t’ undeclared here (not in a function)
+  unsigned char  __pad1[4 - sizeof(__kernel_mode_t)];
+                                   ^~~~~~~~~~~~~~~
+./usr/include/asm-generic/ipcbuf.h:31:2: error: unknown type name ‘__kernel_ulong_t’
+  __kernel_ulong_t __unused1;
+  ^~~~~~~~~~~~~~~~
+./usr/include/asm-generic/ipcbuf.h:32:2: error: unknown type name ‘__kernel_ulong_t’
+  __kernel_ulong_t __unused2;
+  ^~~~~~~~~~~~~~~~
 
-> 
-> I would just resend it unless there is still a clear disagreement over
-> it.
+It is just a matter of missing include directive.
 
-Ok, thanks.
+Include <asm/posix_types.h> to make it self-contained, and add it to
+the compile-test coverage.
 
-Will resend it to see if there is still a disagreement over it.
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
 
-> 
->> [1] https://lore.kernel.org/linux-pci/1571467543-26125-1-git-send-email-linyunsheng@huawei.com/
-> 
+ arch/s390/include/uapi/asm/ipcbuf.h   | 2 ++
+ arch/sparc/include/uapi/asm/ipcbuf.h  | 2 ++
+ arch/xtensa/include/uapi/asm/ipcbuf.h | 2 ++
+ include/uapi/asm-generic/ipcbuf.h     | 2 ++
+ usr/include/Makefile                  | 1 -
+ 5 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/arch/s390/include/uapi/asm/ipcbuf.h b/arch/s390/include/uapi/asm/ipcbuf.h
+index 5b1c4f47c656..1030cd186899 100644
+--- a/arch/s390/include/uapi/asm/ipcbuf.h
++++ b/arch/s390/include/uapi/asm/ipcbuf.h
+@@ -2,6 +2,8 @@
+ #ifndef __S390_IPCBUF_H__
+ #define __S390_IPCBUF_H__
+ 
++#include <linux/posix_types.h>
++
+ /*
+  * The user_ipc_perm structure for S/390 architecture.
+  * Note extra padding because this structure is passed back and forth
+diff --git a/arch/sparc/include/uapi/asm/ipcbuf.h b/arch/sparc/include/uapi/asm/ipcbuf.h
+index 9d0d125500e2..5b933a598a33 100644
+--- a/arch/sparc/include/uapi/asm/ipcbuf.h
++++ b/arch/sparc/include/uapi/asm/ipcbuf.h
+@@ -2,6 +2,8 @@
+ #ifndef __SPARC_IPCBUF_H
+ #define __SPARC_IPCBUF_H
+ 
++#include <linux/posix_types.h>
++
+ /*
+  * The ipc64_perm structure for sparc/sparc64 architecture.
+  * Note extra padding because this structure is passed back and forth
+diff --git a/arch/xtensa/include/uapi/asm/ipcbuf.h b/arch/xtensa/include/uapi/asm/ipcbuf.h
+index a57afa0b606f..3bd0642f6660 100644
+--- a/arch/xtensa/include/uapi/asm/ipcbuf.h
++++ b/arch/xtensa/include/uapi/asm/ipcbuf.h
+@@ -12,6 +12,8 @@
+ #ifndef _XTENSA_IPCBUF_H
+ #define _XTENSA_IPCBUF_H
+ 
++#include <linux/posix_types.h>
++
+ /*
+  * Pad space is left for:
+  * - 32-bit mode_t and seq
+diff --git a/include/uapi/asm-generic/ipcbuf.h b/include/uapi/asm-generic/ipcbuf.h
+index 7d80dbd336fb..41a01b494fc7 100644
+--- a/include/uapi/asm-generic/ipcbuf.h
++++ b/include/uapi/asm-generic/ipcbuf.h
+@@ -2,6 +2,8 @@
+ #ifndef __ASM_GENERIC_IPCBUF_H
+ #define __ASM_GENERIC_IPCBUF_H
+ 
++#include <linux/posix_types.h>
++
+ /*
+  * The generic ipc64_perm structure:
+  * Note extra padding because this structure is passed back and forth
+diff --git a/usr/include/Makefile b/usr/include/Makefile
+index 57b20f7b6729..70f8fe256aed 100644
+--- a/usr/include/Makefile
++++ b/usr/include/Makefile
+@@ -16,7 +16,6 @@ override c_flags = $(UAPI_CFLAGS) -Wp,-MD,$(depfile) -I$(objtree)/usr/include
+ # Please consider to fix the header first.
+ #
+ # Sorted alphabetically.
+-header-test- += asm/ipcbuf.h
+ header-test- += asm/msgbuf.h
+ header-test- += asm/sembuf.h
+ header-test- += asm/shmbuf.h
+-- 
+2.17.1
 
