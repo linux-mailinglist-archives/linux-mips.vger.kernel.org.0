@@ -2,92 +2,149 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BE7E9CBE
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 14:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F4CEA077
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 16:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbfJ3NzA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Oct 2019 09:55:00 -0400
-Received: from forward105o.mail.yandex.net ([37.140.190.183]:48141 "EHLO
-        forward105o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726171AbfJ3NzA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 30 Oct 2019 09:55:00 -0400
-Received: from mxback27g.mail.yandex.net (mxback27g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:327])
-        by forward105o.mail.yandex.net (Yandex) with ESMTP id 502484200ED8;
-        Wed, 30 Oct 2019 16:54:56 +0300 (MSK)
-Received: from iva8-e1a842234f87.qloud-c.yandex.net (iva8-e1a842234f87.qloud-c.yandex.net [2a02:6b8:c0c:77a0:0:640:e1a8:4223])
-        by mxback27g.mail.yandex.net (nwsmtp/Yandex) with ESMTP id 7uGwIg3QMS-st8S4JGH;
-        Wed, 30 Oct 2019 16:54:56 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1572443696;
-        bh=ARWVQLt1dWTnBId169FvLsAgeDt/XuDlOiFp1rFzjZQ=;
-        h=In-Reply-To:Subject:To:From:Cc:References:Date:Message-Id;
-        b=TK4EPcMd+uMyrwR/jJaCbKycYOzuQEY0ykw2BJkgg9+t2DcnYJ8TNZNbyIaRHnNIk
-         Rl3SPtnHGHxpUON23jol9EUi4qs0tLyY89XDe3HTbuiyJW8Zc0MA2vSEBG/8WVf3Mh
-         zm2t8a7h51ZVfX5351ynrY5gYQa+LZ1qJQy5G8r8=
-Authentication-Results: mxback27g.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by iva8-e1a842234f87.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id iQ85YfuBaZ-skUufJNa;
-        Wed, 30 Oct 2019 16:54:54 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     davem@davemloft.net, robh+dt@kernel.org, mark.rutland@arm.com,
-        axboe@kernel.dk, peppe.cavallaro@st.com, alexandre.torgue@st.com,
-        joabreu@synopsys.com, bhelgaas@google.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-pci@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 5/5] libata/ahci: Apply non-standard BAR fix for Loongson
-Date:   Wed, 30 Oct 2019 21:53:47 +0800
-Message-Id: <20191030135347.3636-6-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191030135347.3636-1-jiaxun.yang@flygoat.com>
-References: <20191030135347.3636-1-jiaxun.yang@flygoat.com>
+        id S1727241AbfJ3P4u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Oct 2019 11:56:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58424 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728902AbfJ3P4u (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 30 Oct 2019 11:56:50 -0400
+Received: from sasha-vm.mshome.net (100.50.158.77.rev.sfr.net [77.158.50.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3EF3F20650;
+        Wed, 30 Oct 2019 15:56:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572451009;
+        bh=ysw7QuSPH6w9H59lOO9u2sSxRofHAlj8WmxiEtXxzkY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=xuIPyUteCY19+bufh9mPpRtRs2agPnzSM/vLzKGgMYP4uT+9Wz+FikegCv+/i3T4b
+         n1MGCOYr3AHis9tbgzFXKx48EvB6ryMHD1rCKypkjyoPfucv5dj3sMVJ9bRq8ydlHQ
+         vA/esrrY9N8vYL+eq2xyUWMf3bOH0h/pU1o297Dc=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Paul Burton <paulburton@kernel.org>,
+        linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 20/24] MIPS: bmips: mark exception vectors as char arrays
+Date:   Wed, 30 Oct 2019 11:55:51 -0400
+Message-Id: <20191030155555.10494-20-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191030155555.10494-1-sashal@kernel.org>
+References: <20191030155555.10494-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Loongson is using BAR0 as AHCI registers BAR.
+From: Jonas Gorski <jonas.gorski@gmail.com>
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+[ Upstream commit e4f5cb1a9b27c0f94ef4f5a0178a3fde2d3d0e9e ]
+
+The vectors span more than one byte, so mark them as arrays.
+
+Fixes the following build error when building when using GCC 8.3:
+
+In file included from ./include/linux/string.h:19,
+                 from ./include/linux/bitmap.h:9,
+                 from ./include/linux/cpumask.h:12,
+                 from ./arch/mips/include/asm/processor.h:15,
+                 from ./arch/mips/include/asm/thread_info.h:16,
+                 from ./include/linux/thread_info.h:38,
+                 from ./include/asm-generic/preempt.h:5,
+                 from ./arch/mips/include/generated/asm/preempt.h:1,
+                 from ./include/linux/preempt.h:81,
+                 from ./include/linux/spinlock.h:51,
+                 from ./include/linux/mmzone.h:8,
+                 from ./include/linux/bootmem.h:8,
+                 from arch/mips/bcm63xx/prom.c:10:
+arch/mips/bcm63xx/prom.c: In function 'prom_init':
+./arch/mips/include/asm/string.h:162:11: error: '__builtin_memcpy' forming offset [2, 32] is out of the bounds [0, 1] of object 'bmips_smp_movevec' with type 'char' [-Werror=array-bounds]
+   __ret = __builtin_memcpy((dst), (src), __len); \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/mips/bcm63xx/prom.c:97:3: note: in expansion of macro 'memcpy'
+   memcpy((void *)0xa0000200, &bmips_smp_movevec, 0x20);
+   ^~~~~~
+In file included from arch/mips/bcm63xx/prom.c:14:
+./arch/mips/include/asm/bmips.h:80:13: note: 'bmips_smp_movevec' declared here
+ extern char bmips_smp_movevec;
+
+Fixes: 18a1eef92dcd ("MIPS: BMIPS: Introduce bmips.h")
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Paul Burton <paulburton@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/ata/ahci.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/mips/bcm63xx/prom.c      |  2 +-
+ arch/mips/include/asm/bmips.h | 10 +++++-----
+ arch/mips/kernel/smp-bmips.c  |  8 ++++----
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/ata/ahci.c b/drivers/ata/ahci.c
-index dd92faf197d5..db3d7b94ad53 100644
---- a/drivers/ata/ahci.c
-+++ b/drivers/ata/ahci.c
-@@ -42,6 +42,7 @@ enum {
- 	AHCI_PCI_BAR_CAVIUM	= 0,
- 	AHCI_PCI_BAR_ENMOTUS	= 2,
- 	AHCI_PCI_BAR_CAVIUM_GEN5	= 4,
-+	AHCI_PCI_BAR_LOONGSON	= 0,
- 	AHCI_PCI_BAR_STANDARD	= 5,
- };
+diff --git a/arch/mips/bcm63xx/prom.c b/arch/mips/bcm63xx/prom.c
+index 7019e2967009e..bbbf8057565b2 100644
+--- a/arch/mips/bcm63xx/prom.c
++++ b/arch/mips/bcm63xx/prom.c
+@@ -84,7 +84,7 @@ void __init prom_init(void)
+ 		 * Here we will start up CPU1 in the background and ask it to
+ 		 * reconfigure itself then go back to sleep.
+ 		 */
+-		memcpy((void *)0xa0000200, &bmips_smp_movevec, 0x20);
++		memcpy((void *)0xa0000200, bmips_smp_movevec, 0x20);
+ 		__sync();
+ 		set_c0_cause(C_SW0);
+ 		cpumask_set_cpu(1, &bmips_booted_mask);
+diff --git a/arch/mips/include/asm/bmips.h b/arch/mips/include/asm/bmips.h
+index b3e2975f83d36..a564915fddc40 100644
+--- a/arch/mips/include/asm/bmips.h
++++ b/arch/mips/include/asm/bmips.h
+@@ -75,11 +75,11 @@ static inline int register_bmips_smp_ops(void)
+ #endif
+ }
  
-@@ -575,6 +576,9 @@ static const struct pci_device_id ahci_pci_tbl[] = {
- 	/* Enmotus */
- 	{ PCI_DEVICE(0x1c44, 0x8000), board_ahci },
+-extern char bmips_reset_nmi_vec;
+-extern char bmips_reset_nmi_vec_end;
+-extern char bmips_smp_movevec;
+-extern char bmips_smp_int_vec;
+-extern char bmips_smp_int_vec_end;
++extern char bmips_reset_nmi_vec[];
++extern char bmips_reset_nmi_vec_end[];
++extern char bmips_smp_movevec[];
++extern char bmips_smp_int_vec[];
++extern char bmips_smp_int_vec_end[];
  
-+	/* Loongson */
-+	{ PCI_VDEVICE(LOONGSON, 0x7a08), board_ahci },
-+
- 	/* Generic, PCI class code for AHCI */
- 	{ PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
- 	  PCI_CLASS_STORAGE_SATA_AHCI, 0xffffff, board_ahci },
-@@ -1663,6 +1667,9 @@ static int ahci_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 			ahci_pci_bar = AHCI_PCI_BAR_CAVIUM;
- 		if (pdev->device == 0xa084)
- 			ahci_pci_bar = AHCI_PCI_BAR_CAVIUM_GEN5;
-+	} else if (pdev->vendor == PCI_VENDOR_ID_LOONGSON) {
-+		if (pdev->device == PCI_DEVICE_ID_LOONGSON_AHCI)
-+			ahci_pci_bar = AHCI_PCI_BAR_LOONGSON;
- 	}
+ extern int bmips_smp_enabled;
+ extern int bmips_cpu_offset;
+diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
+index 382d12eb88f0f..45fbcbbf2504e 100644
+--- a/arch/mips/kernel/smp-bmips.c
++++ b/arch/mips/kernel/smp-bmips.c
+@@ -457,10 +457,10 @@ static void bmips_wr_vec(unsigned long dst, char *start, char *end)
  
- 	/* acquire resources */
+ static inline void bmips_nmi_handler_setup(void)
+ {
+-	bmips_wr_vec(BMIPS_NMI_RESET_VEC, &bmips_reset_nmi_vec,
+-		&bmips_reset_nmi_vec_end);
+-	bmips_wr_vec(BMIPS_WARM_RESTART_VEC, &bmips_smp_int_vec,
+-		&bmips_smp_int_vec_end);
++	bmips_wr_vec(BMIPS_NMI_RESET_VEC, bmips_reset_nmi_vec,
++		bmips_reset_nmi_vec_end);
++	bmips_wr_vec(BMIPS_WARM_RESTART_VEC, bmips_smp_int_vec,
++		bmips_smp_int_vec_end);
+ }
+ 
+ struct reset_vec_info {
 -- 
-2.23.0
+2.20.1
 
