@@ -2,202 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E0DE9691
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 07:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A78E987C
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 09:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726555AbfJ3Gos (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Oct 2019 02:44:48 -0400
-Received: from condef-06.nifty.com ([202.248.20.71]:59010 "EHLO
-        condef-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725855AbfJ3Gos (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Oct 2019 02:44:48 -0400
-Received: from conuserg-12.nifty.com ([10.126.8.75])by condef-06.nifty.com with ESMTP id x9U6e0g7005739;
-        Wed, 30 Oct 2019 15:40:00 +0900
-Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id x9U6d6lw008465;
-        Wed, 30 Oct 2019 15:39:09 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com x9U6d6lw008465
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1572417549;
-        bh=iWfwrkLnJw9f051ci1qoVF6YYPkEv18Rb84fKuOp9+M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SxQDYGDKj8kELAyO+Kg1OLi3ibM8mnnEFLu13XD5s1Rg8tvPK+vRKhjeki00taZwW
-         PEJPfxq1TXEAKMTymfAlfi/SMw//cI5lA0HKUAENK0laBCT1LlMi5vA+cfKkW+sFq0
-         A6Sq+MM5TP7LFseOHFBiALS8CMXXn/rTfWgxkrtgKoFaJgW+IQG+CZTAWTjU1VXs7k
-         Htow4cGQb/N34CB9FjJzlr6CCajmKx8CJjDANnwMYsoRTkGByufw6D1e+K3tqcJjpR
-         7qvwzzeK38N6BTFRIwHbPk+uK2XZCp6QddApCCrUQzhB1TIBV5e89m7WpwnHa+1Pdf
-         WtbWumY9/TpZw==
-X-Nifty-SrcIP: [153.142.97.92]
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, x86@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-Subject: [PATCH 3/3] arch: sembuf.h: make uapi asm/sembuf.h self-contained
-Date:   Wed, 30 Oct 2019 15:38:55 +0900
-Message-Id: <20191030063855.9989-3-yamada.masahiro@socionext.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191030063855.9989-1-yamada.masahiro@socionext.com>
-References: <20191030063855.9989-1-yamada.masahiro@socionext.com>
+        id S1726184AbfJ3Ivw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Oct 2019 04:51:52 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:33636 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726032AbfJ3Ivw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Oct 2019 04:51:52 -0400
+Received: by mail-oi1-f195.google.com with SMTP id m193so1318164oig.0;
+        Wed, 30 Oct 2019 01:51:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mziza5J/MoDupcgI0RkmxCcsKm60Et3F2KLUw+t1RqQ=;
+        b=FX0Qpi9u4CqeUqqDJRv0OaUj52bbx/Xh9cSzN35AEx14RwvvFwdQiK/IxsR0X0gpIs
+         031snMs2K2ONh1aaFaDHcq8MCbuBVmJ5j1udrklDhi0pOVTbxJqEbHaJrqb7VdFsQXN/
+         Iy+R7kgA2dayPFHDNWCDgZ9OZNdEMTTLhUw49+Y2UGaUo8xvlARX+zUVqvdkHEfavtka
+         NdWKua2VdXBo0oypW7XJf3zNiPJ1tqYYp/EQwfG5wkTZpaTvVv13wo7K5tyOU9TkVHSF
+         UUdrcjbCwDnqWNKkIqSxlQHYkVbFVRkxs8xfzQf30Ia8GoP2VNwp4kTCh4uILnKkxi5r
+         3CbQ==
+X-Gm-Message-State: APjAAAVNjlNUyoh7BjJ+GtO+jgaxq2nfplYG4A5K6TAApapog6KVoq3n
+        UhCB7TPT5Ly5/F1KpOXj/5lWbazf5e5lxNztH2M=
+X-Google-Smtp-Source: APXvYqywm9C+CpnmelJ6SWQKVIah4mda9qPmB6OrDMq707nGOy+7YzCdX2/qccGqz5HinY9G/c8lSRqxbZE+WID7kSw=
+X-Received: by 2002:aca:4ac5:: with SMTP id x188mr4822487oia.148.1572425510897;
+ Wed, 30 Oct 2019 01:51:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20191029064834.23438-1-hch@lst.de> <20191029064834.23438-14-hch@lst.de>
+In-Reply-To: <20191029064834.23438-14-hch@lst.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 30 Oct 2019 09:51:39 +0100
+Message-ID: <CAMuHMdWGiHhSv=xCqnsUXok7wYG7Wr1EQh+yuPOZBxPCskUFVw@mail.gmail.com>
+Subject: Re: [PATCH 13/21] m68k: rename __iounmap and mark it static
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-xtensa@linux-xtensa.org, linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        nios2-dev@lists.rocketboards.org, linux-riscv@lists.infradead.org,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The user-space cannot compile <asm/sembuf.h> due to some missing type
-definitions. For example, building it for x86 fails as follows:
+On Tue, Oct 29, 2019 at 7:56 AM Christoph Hellwig <hch@lst.de> wrote:
+> m68k uses __iounmap as the name for an internal helper that is only
+> used for some CPU types.  Mark it static, give it a better name
+> and move it around a bit to avoid a forward declaration.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-  CC      usr/include/asm/sembuf.h.s
-In file included from <command-line>:32:0:
-./usr/include/asm/sembuf.h:17:20: error: field ‘sem_perm’ has incomplete type
-  struct ipc64_perm sem_perm; /* permissions .. see ipc.h */
-                    ^~~~~~~~
-./usr/include/asm/sembuf.h:24:2: error: unknown type name ‘__kernel_time_t’
-  __kernel_time_t sem_otime; /* last semop time */
-  ^~~~~~~~~~~~~~~
-./usr/include/asm/sembuf.h:25:2: error: unknown type name ‘__kernel_ulong_t’
-  __kernel_ulong_t __unused1;
-  ^~~~~~~~~~~~~~~~
-./usr/include/asm/sembuf.h:26:2: error: unknown type name ‘__kernel_time_t’
-  __kernel_time_t sem_ctime; /* last change time */
-  ^~~~~~~~~~~~~~~
-./usr/include/asm/sembuf.h:27:2: error: unknown type name ‘__kernel_ulong_t’
-  __kernel_ulong_t __unused2;
-  ^~~~~~~~~~~~~~~~
-./usr/include/asm/sembuf.h:29:2: error: unknown type name ‘__kernel_ulong_t’
-  __kernel_ulong_t sem_nsems; /* no. of semaphores in array */
-  ^~~~~~~~~~~~~~~~
-./usr/include/asm/sembuf.h:30:2: error: unknown type name ‘__kernel_ulong_t’
-  __kernel_ulong_t __unused3;
-  ^~~~~~~~~~~~~~~~
-./usr/include/asm/sembuf.h:31:2: error: unknown type name ‘__kernel_ulong_t’
-  __kernel_ulong_t __unused4;
-  ^~~~~~~~~~~~~~~~
+Thanks for the update!
 
-It is just a matter of missing include directive.
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Include <asm/ipcbuf.h> to make it self-contained, and add it to
-the compile-test coverage.
+Gr{oetje,eeting}s,
 
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
----
+                        Geert
 
- arch/mips/include/uapi/asm/sembuf.h    | 2 ++
- arch/parisc/include/uapi/asm/sembuf.h  | 1 +
- arch/powerpc/include/uapi/asm/sembuf.h | 2 ++
- arch/sparc/include/uapi/asm/sembuf.h   | 2 ++
- arch/x86/include/uapi/asm/sembuf.h     | 2 ++
- arch/xtensa/include/uapi/asm/sembuf.h  | 1 +
- include/uapi/asm-generic/sembuf.h      | 1 +
- usr/include/Makefile                   | 1 -
- 8 files changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/arch/mips/include/uapi/asm/sembuf.h b/arch/mips/include/uapi/asm/sembuf.h
-index 60c89e6cb25b..7d135b93bebd 100644
---- a/arch/mips/include/uapi/asm/sembuf.h
-+++ b/arch/mips/include/uapi/asm/sembuf.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_SEMBUF_H
- #define _ASM_SEMBUF_H
- 
-+#include <asm/ipcbuf.h>
-+
- /*
-  * The semid64_ds structure for the MIPS architecture.
-  * Note extra padding because this structure is passed back and forth
-diff --git a/arch/parisc/include/uapi/asm/sembuf.h b/arch/parisc/include/uapi/asm/sembuf.h
-index 3c31163b1241..b17a2460b184 100644
---- a/arch/parisc/include/uapi/asm/sembuf.h
-+++ b/arch/parisc/include/uapi/asm/sembuf.h
-@@ -3,6 +3,7 @@
- #define _PARISC_SEMBUF_H
- 
- #include <asm/bitsperlong.h>
-+#include <asm/ipcbuf.h>
- 
- /* 
-  * The semid64_ds structure for parisc architecture.
-diff --git a/arch/powerpc/include/uapi/asm/sembuf.h b/arch/powerpc/include/uapi/asm/sembuf.h
-index 3f60946f77e3..f42c9c3502c7 100644
---- a/arch/powerpc/include/uapi/asm/sembuf.h
-+++ b/arch/powerpc/include/uapi/asm/sembuf.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_POWERPC_SEMBUF_H
- #define _ASM_POWERPC_SEMBUF_H
- 
-+#include <asm/ipcbuf.h>
-+
- /*
-  * This program is free software; you can redistribute it and/or
-  * modify it under the terms of the GNU General Public License
-diff --git a/arch/sparc/include/uapi/asm/sembuf.h b/arch/sparc/include/uapi/asm/sembuf.h
-index f3d309c2e1cd..5d7764cdf80f 100644
---- a/arch/sparc/include/uapi/asm/sembuf.h
-+++ b/arch/sparc/include/uapi/asm/sembuf.h
-@@ -2,6 +2,8 @@
- #ifndef _SPARC_SEMBUF_H
- #define _SPARC_SEMBUF_H
- 
-+#include <asm/ipcbuf.h>
-+
- /*
-  * The semid64_ds structure for sparc architecture.
-  * Note extra padding because this structure is passed back and forth
-diff --git a/arch/x86/include/uapi/asm/sembuf.h b/arch/x86/include/uapi/asm/sembuf.h
-index 89de6cd9f0a7..da0464af7aa6 100644
---- a/arch/x86/include/uapi/asm/sembuf.h
-+++ b/arch/x86/include/uapi/asm/sembuf.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_X86_SEMBUF_H
- #define _ASM_X86_SEMBUF_H
- 
-+#include <asm/ipcbuf.h>
-+
- /*
-  * The semid64_ds structure for x86 architecture.
-  * Note extra padding because this structure is passed back and forth
-diff --git a/arch/xtensa/include/uapi/asm/sembuf.h b/arch/xtensa/include/uapi/asm/sembuf.h
-index 09f348d643f1..3b9cdd406dfe 100644
---- a/arch/xtensa/include/uapi/asm/sembuf.h
-+++ b/arch/xtensa/include/uapi/asm/sembuf.h
-@@ -22,6 +22,7 @@
- #define _XTENSA_SEMBUF_H
- 
- #include <asm/byteorder.h>
-+#include <asm/ipcbuf.h>
- 
- struct semid64_ds {
- 	struct ipc64_perm sem_perm;		/* permissions .. see ipc.h */
-diff --git a/include/uapi/asm-generic/sembuf.h b/include/uapi/asm-generic/sembuf.h
-index 0bae010f1b64..5807fcd643ba 100644
---- a/include/uapi/asm-generic/sembuf.h
-+++ b/include/uapi/asm-generic/sembuf.h
-@@ -3,6 +3,7 @@
- #define __ASM_GENERIC_SEMBUF_H
- 
- #include <asm/bitsperlong.h>
-+#include <asm/ipcbuf.h>
- 
- /*
-  * The semid64_ds structure for x86 architecture.
-diff --git a/usr/include/Makefile b/usr/include/Makefile
-index 099d7401aa23..107d04bd5ee3 100644
---- a/usr/include/Makefile
-+++ b/usr/include/Makefile
-@@ -16,7 +16,6 @@ override c_flags = $(UAPI_CFLAGS) -Wp,-MD,$(depfile) -I$(objtree)/usr/include
- # Please consider to fix the header first.
- #
- # Sorted alphabetically.
--header-test- += asm/sembuf.h
- header-test- += asm/shmbuf.h
- header-test- += asm/signal.h
- header-test- += asm/ucontext.h
 -- 
-2.17.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
