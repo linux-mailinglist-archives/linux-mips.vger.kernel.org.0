@@ -2,114 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBE4E9A89
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 11:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DDDE9AD5
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 12:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbfJ3K61 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Oct 2019 06:58:27 -0400
-Received: from mx2.suse.de ([195.135.220.15]:38294 "EHLO mx1.suse.de"
+        id S1726331AbfJ3Ldg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Oct 2019 07:33:36 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52524 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726150AbfJ3K61 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 30 Oct 2019 06:58:27 -0400
+        id S1726225AbfJ3Ldg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 30 Oct 2019 07:33:36 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 55919AD12;
-        Wed, 30 Oct 2019 10:58:25 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: SGI-IP27: fix exception handler replication
-Date:   Wed, 30 Oct 2019 11:58:19 +0100
-Message-Id: <20191030105819.11266-1-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.16.4
+        by mx1.suse.de (Postfix) with ESMTP id 09DEAADDD;
+        Wed, 30 Oct 2019 11:33:32 +0000 (UTC)
+Date:   Wed, 30 Oct 2019 12:33:28 +0100
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Yunsheng Lin <linyunsheng@huawei.com>, catalin.marinas@arm.com,
+        will@kernel.org, mingo@redhat.com, bp@alien8.de, rth@twiddle.net,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au,
+        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
+        dalias@libc.org, davem@davemloft.net, ralf@linux-mips.org,
+        paul.burton@mips.com, jhogan@kernel.org, jiaxun.yang@flygoat.com,
+        chenhc@lemote.com, akpm@linux-foundation.org, rppt@linux.ibm.com,
+        anshuman.khandual@arm.com, tglx@linutronix.de, cai@lca.pw,
+        robin.murphy@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, hpa@zytor.com, x86@kernel.org,
+        dave.hansen@linux.intel.com, luto@kernel.org, len.brown@intel.com,
+        axboe@kernel.dk, dledford@redhat.com, jeffrey.t.kirsher@intel.com,
+        linux-alpha@vger.kernel.org, naveen.n.rao@linux.vnet.ibm.com,
+        mwb@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, tbogendoerfer@suse.de,
+        linux-mips@vger.kernel.org, rafael@kernel.org,
+        gregkh@linuxfoundation.org, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, rjw@rjwysocki.net, lenb@kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v7] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
+Message-ID: <20191030113328.GA31513@dhcp22.suse.cz>
+References: <1572428068-180880-1-git-send-email-linyunsheng@huawei.com>
+ <20191030101449.GW4097@hirez.programming.kicks-ass.net>
+ <20191030102229.GY31513@dhcp22.suse.cz>
+ <20191030102800.GX4097@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191030102800.GX4097@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Commit b3ffcd0d800c ("mips/sgi-ip35: Initial rough-in of minimal platform
-definition.") removed generating tlb refill handlers for every CPU, which
-was needed for generating per node exception handlers on IP27. Instead
-of resurrecting (and fixing) refill handler generation, we simply copy
-all exception vectors from the boot node to the other nodes. Also
-remove the config option since the memory tradeoff for exception handler
-replication is just 8k per node.
+On Wed 30-10-19 11:28:00, Peter Zijlstra wrote:
+> On Wed, Oct 30, 2019 at 11:22:29AM +0100, Michal Hocko wrote:
+> > On Wed 30-10-19 11:14:49, Peter Zijlstra wrote:
+> > > On Wed, Oct 30, 2019 at 05:34:28PM +0800, Yunsheng Lin wrote:
+> > > > When passing the return value of dev_to_node() to cpumask_of_node()
+> > > > without checking if the device's node id is NUMA_NO_NODE, there is
+> > > > global-out-of-bounds detected by KASAN.
+> > > > 
+> > > > From the discussion [1], NUMA_NO_NODE really means no node affinity,
+> > > > which also means all cpus should be usable. So the cpumask_of_node()
+> > > > should always return all cpus online when user passes the node id as
+> > > > NUMA_NO_NODE, just like similar semantic that page allocator handles
+> > > > NUMA_NO_NODE.
+> > > > 
+> > > > But we cannot really copy the page allocator logic. Simply because the
+> > > > page allocator doesn't enforce the near node affinity. It just picks it
+> > > > up as a preferred node but then it is free to fallback to any other numa
+> > > > node. This is not the case here and node_to_cpumask_map will only restrict
+> > > > to the particular node's cpus which would have really non deterministic
+> > > > behavior depending on where the code is executed. So in fact we really
+> > > > want to return cpu_online_mask for NUMA_NO_NODE.
+> > > > 
+> > > > Also there is a debugging version of node_to_cpumask_map() for x86 and
+> > > > arm64, which is only used when CONFIG_DEBUG_PER_CPU_MAPS is defined, this
+> > > > patch changes it to handle NUMA_NO_NODE as normal node_to_cpumask_map().
+> > > > 
+> > > > [1] https://lkml.org/lkml/2019/9/11/66
+> > > > Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+> > > > Suggested-by: Michal Hocko <mhocko@kernel.org>
+> > > > Acked-by: Michal Hocko <mhocko@suse.com>
+> > > > Acked-by: Paul Burton <paul.burton@mips.com> # MIPS bits
+> > > 
+> > > Still:
+> > > 
+> > > Nacked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > 
+> > Do you have any other proposal that doesn't make any wild guesses about
+> > which node to use instead of the undefined one?
+> 
+> It only makes 'wild' guesses when the BIOS is shit and it complains
+> about that.
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
----
- arch/mips/sgi-ip27/Kconfig       |  7 -------
- arch/mips/sgi-ip27/ip27-init.c   | 23 +++++++----------------
- arch/mips/sgi-ip27/ip27-memory.c |  4 ----
- 3 files changed, 7 insertions(+), 27 deletions(-)
+I really do not see how this is any better than simply using the online
+cpu mask in the same "broken" situation. We are effectivelly talking
+about a suboptimal path for suboptimal setups. I haven't heard any
+actual technical argument why cpu_online_mask is any worse than adding
+some sort of failover guessing which node to use as a replacement.
 
-diff --git a/arch/mips/sgi-ip27/Kconfig b/arch/mips/sgi-ip27/Kconfig
-index ef3847e7aee0..e5b6cadbec85 100644
---- a/arch/mips/sgi-ip27/Kconfig
-+++ b/arch/mips/sgi-ip27/Kconfig
-@@ -38,10 +38,3 @@ config REPLICATE_KTEXT
- 	  Say Y here to enable replicating the kernel text across multiple
- 	  nodes in a NUMA cluster.  This trades memory for speed.
- 
--config REPLICATE_EXHANDLERS
--	bool "Exception handler replication support"
--	depends on SGI_IP27
--	help
--	  Say Y here to enable replicating the kernel exception handlers
--	  across multiple nodes in a NUMA cluster. This trades memory for
--	  speed.
-diff --git a/arch/mips/sgi-ip27/ip27-init.c b/arch/mips/sgi-ip27/ip27-init.c
-index 8fd3505e2b9c..7a269a088be9 100644
---- a/arch/mips/sgi-ip27/ip27-init.c
-+++ b/arch/mips/sgi-ip27/ip27-init.c
-@@ -64,23 +64,14 @@ static void per_hub_init(nasid_t nasid)
- 
- 	hub_rtc_init(nasid);
- 
--#ifdef CONFIG_REPLICATE_EXHANDLERS
--	/*
--	 * If this is not a headless node initialization,
--	 * copy over the caliased exception handlers.
--	 */
--	if (get_nasid() == nasid) {
--		extern char except_vec2_generic, except_vec3_generic;
--		extern void build_tlb_refill_handler(void);
--
--		memcpy((void *)(CKSEG0 + 0x100), &except_vec2_generic, 0x80);
--		memcpy((void *)(CKSEG0 + 0x180), &except_vec3_generic, 0x80);
--		build_tlb_refill_handler();
--		memcpy((void *)(CKSEG0 + 0x100), (void *) CKSEG0, 0x80);
--		memcpy((void *)(CKSEG0 + 0x180), &except_vec3_generic, 0x100);
--		__flush_cache_all();
-+	if (nasid) {
-+		/* copy exception handlers from first node to current node */
-+		memcpy((void *)NODE_OFFSET_TO_K0(nasid, 0),
-+		       (void *)CKSEG0, 0x200);
-+		/* switch to node local exception handlers */
-+		REMOTE_HUB_S(nasid, PI_CALIAS_SIZE, PI_CALIAS_SIZE_8K);
-+		local_flush_icache_range(CKSEG0, CKSEG0 + 0x200);
- 	}
--#endif
- }
- 
- void per_cpu_init(void)
-diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
-index f610fff592a6..563aad5e6398 100644
---- a/arch/mips/sgi-ip27/ip27-memory.c
-+++ b/arch/mips/sgi-ip27/ip27-memory.c
-@@ -311,11 +311,7 @@ static void __init mlreset(void)
- 		 * thinks it is a node 0 address.
- 		 */
- 		REMOTE_HUB_S(nasid, PI_REGION_PRESENT, (region_mask | 1));
--#ifdef CONFIG_REPLICATE_EXHANDLERS
--		REMOTE_HUB_S(nasid, PI_CALIAS_SIZE, PI_CALIAS_SIZE_8K);
--#else
- 		REMOTE_HUB_S(nasid, PI_CALIAS_SIZE, PI_CALIAS_SIZE_0);
--#endif
- 
- #ifdef LATER
- 		/*
+I completely do you point about complaining loud about broken BIOS/fw.
+It seems we just disagree where we should workaround those issues
+because as of now we simply do generate semi random behavior because of
+an uninitialized memory access.
+
+> Or do you like you BIOS broken?
+
+I do not see anything like that in my response nor in my previous
+communication. Moreover a patch to warn about this should be on the way
+to get merged AFAIK.
+
 -- 
-2.16.4
-
+Michal Hocko
+SUSE Labs
