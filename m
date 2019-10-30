@@ -2,81 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 463F6EA4E3
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 21:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2332EA53D
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Oct 2019 22:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726785AbfJ3Uk4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Oct 2019 16:40:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36154 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726483AbfJ3Uk4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 30 Oct 2019 16:40:56 -0400
-Received: from localhost (unknown [69.71.4.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7C21A2080F;
-        Wed, 30 Oct 2019 20:40:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572468055;
-        bh=uDzTuuW0eeNiIMtkt7NpH65MPpTxQGR0fvDGgA3VMI4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=UqNGd+ZTUpJFhDMfv4SJi/+Ag6YQuDIuqGDEH2hEJ1sXl1QquoHjHNRJcjOJgXZe5
-         cODQTCGliDN5izuvmxmqSeQlF77MS6TQqon4dFGAVw+hm+hNfjQ5yWp4VLP03VwqtJ
-         0mBFRh1OclJ7C8JEuD5pTRYODL2gC/iQGKnT5HhE=
-Date:   Wed, 30 Oct 2019 15:40:54 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, davem@davemloft.net,
-        robh+dt@kernel.org, mark.rutland@arm.com, axboe@kernel.dk,
-        peppe.cavallaro@st.com, alexandre.torgue@st.com,
-        joabreu@synopsys.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH 1/5] PCI: pci_ids: Add Loongson IDs
-Message-ID: <20191030204054.GA247856@google.com>
+        id S1727091AbfJ3VMn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 30 Oct 2019 17:12:43 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:60300 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726261AbfJ3VMn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 30 Oct 2019 17:12:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=uB/ttCoq5Iteycq7BZ4GHcsjNmFlWaU9Pnqx8IZNFhs=; b=LV8IOTKfV+r3NpIzxE6a2OKr/
+        21GPJZJAo8oxOxngdzMF+t75XSybq09LD6bzW/7PbHQqTQKvVFL/h1+9/+HnryM+7+c7Zflp1dd2N
+        +lapxpA5JpvBoNowsEmp/FkUoMNvf2LWo8LBi6sAogpV9EGPe+GVLCVDdytsLQRRKtSnFY5DbFMBm
+        djsBZjuXI+ybtRay+EqBuh+qCTfpWsAImc18TxU6HH2ZrDjQvDrk/t3ScqNzuaDCew8HJh7EfOtys
+        75GwI+lKa4Z+YVBXsztjDcXZXPw0GLu02ojuxt7IsUUev1DkEx2zkHpxXC/tI11aE47p6jp9umsip
+        gc656+5xw==;
+Received: from [199.255.44.128] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iPvGi-0007ci-MX; Wed, 30 Oct 2019 21:12:40 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     linux-mips@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: ioc3_eth DMA API fixes
+Date:   Wed, 30 Oct 2019 14:12:29 -0700
+Message-Id: <20191030211233.30157-1-hch@lst.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191030135347.3636-2-jiaxun.yang@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Please pay attention to the "git log --oneline
-include/linux/pci_ids.h" output and make yours match, e.g.,
+Hi Dave and Thomas,
 
-  PCI: Add Loongson Vendor and Device IDs
-
-On Wed, Oct 30, 2019 at 09:53:43PM +0800, Jiaxun Yang wrote:
-> Add Loongson device IDs that will be used by drivers later.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-With that change,
-
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-
-> ---
->  include/linux/pci_ids.h | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index 21a572469a4e..75f3336116eb 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -148,6 +148,10 @@
->  
->  /* Vendors and devices.  Sort key: vendor first, device next. */
->  
-> +#define PCI_VENDOR_ID_LOONGSON		0x0014
-> +#define PCI_DEVICE_ID_LOONGSON_GMAC	0x7a03
-> +#define PCI_DEVICE_ID_LOONGSON_AHCI	0x7a08
-> +
->  #define PCI_VENDOR_ID_TTTECH		0x0357
->  #define PCI_DEVICE_ID_TTTECH_MC322	0x000a
->  
-> -- 
-> 2.23.0
-> 
+please take a look at this series which fixes DMA API usage in the ioc3
+ethernet driver.  At least the first one is a nasty abuse of internal
+APIs introduced in 5.4-rc which I'd prefer to be fixed before 5.4 final.
