@@ -2,64 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F35EABE1
-	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2019 09:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B6AEAD0A
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2019 11:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727005AbfJaIyd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 31 Oct 2019 04:54:33 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47156 "EHLO mx1.suse.de"
+        id S1726884AbfJaKD6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 31 Oct 2019 06:03:58 -0400
+Received: from mx2.suse.de ([195.135.220.15]:35996 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726995AbfJaIyd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 31 Oct 2019 04:54:33 -0400
+        id S1726864AbfJaKD6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 31 Oct 2019 06:03:58 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 43E79AD5F;
-        Thu, 31 Oct 2019 08:54:31 +0000 (UTC)
-Date:   Thu, 31 Oct 2019 09:54:30 +0100
+        by mx1.suse.de (Postfix) with ESMTP id 369B9B227;
+        Thu, 31 Oct 2019 10:03:56 +0000 (UTC)
 From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        linux-mips@vger.kernel.org, netdev@vger.kernel.org,
+To:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] net: sgi: ioc3-eth: don't abuse dma_direct_* calls
-Message-Id: <20191031095430.148daca03517c00f3e2b32ff@suse.de>
-In-Reply-To: <20191030223818.GA23807@lst.de>
-References: <20191030211233.30157-1-hch@lst.de>
-        <20191030211233.30157-2-hch@lst.de>
-        <20191030230549.ef9b99b5d36b0a818d904eee@suse.de>
-        <20191030223818.GA23807@lst.de>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+Subject: [PATCH v2] MIPS: SGI-IP27: fix exception handler replication
+Date:   Thu, 31 Oct 2019 10:46:04 +0100
+Message-Id: <20191031094605.12380-1-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 30 Oct 2019 23:38:18 +0100
-Christoph Hellwig <hch@lst.de> wrote:
+Commit 775b089aeffa ("MIPS: tlbex: Remove cpu_has_local_ebase") removed
+generating tlb refill handlers for every CPU, which was needed for
+generating per node exception handlers on IP27. Instead of resurrecting
+(and fixing) refill handler generation, we simply copy all exception
+vectors from the boot node to the other nodes. Also remove the config
+option since the memory tradeoff for expection handler replication
+is just 8k per node.
 
-> On Wed, Oct 30, 2019 at 11:05:49PM +0100, Thomas Bogendoerfer wrote:
-> > On Wed, 30 Oct 2019 14:12:30 -0700
-> > Christoph Hellwig <hch@lst.de> wrote:
-> > 
-> > > dma_direct_ is a low-level API that must never be used by drivers
-> > > directly.  Switch to use the proper DMA API instead.
-> > 
-> > is the 4kb/16kb alignment still guaranteed ? If not how is the way
-> > to get such an alignment ?
-> 
-> The DMA API gives you page aligned memory. dma_direct doesn't give you
-> any gurantees as it is an internal API explicitly documented as not
-> for driver usage that can change at any time.
+Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+---
+Changes in v2:
+- use __flush_cache_all() to make sure copied handlers are flushed
+  to memory
+- fixed reference commit
 
-I didn't want to argue about that. What I'm interested in is a way how 
-to allocate dma memory, which is 16kB aligned, via the DMA API ?
+ arch/mips/sgi-ip27/Kconfig       |  7 -------
+ arch/mips/sgi-ip27/ip27-init.c   | 21 ++++++---------------
+ arch/mips/sgi-ip27/ip27-memory.c |  4 ----
+ 3 files changed, 6 insertions(+), 26 deletions(-)
 
-Thomas.
-
+diff --git a/arch/mips/sgi-ip27/Kconfig b/arch/mips/sgi-ip27/Kconfig
+index ef3847e7aee0..e5b6cadbec85 100644
+--- a/arch/mips/sgi-ip27/Kconfig
++++ b/arch/mips/sgi-ip27/Kconfig
+@@ -38,10 +38,3 @@ config REPLICATE_KTEXT
+ 	  Say Y here to enable replicating the kernel text across multiple
+ 	  nodes in a NUMA cluster.  This trades memory for speed.
+ 
+-config REPLICATE_EXHANDLERS
+-	bool "Exception handler replication support"
+-	depends on SGI_IP27
+-	help
+-	  Say Y here to enable replicating the kernel exception handlers
+-	  across multiple nodes in a NUMA cluster. This trades memory for
+-	  speed.
+diff --git a/arch/mips/sgi-ip27/ip27-init.c b/arch/mips/sgi-ip27/ip27-init.c
+index 8fd3505e2b9c..f597e1ee2df7 100644
+--- a/arch/mips/sgi-ip27/ip27-init.c
++++ b/arch/mips/sgi-ip27/ip27-init.c
+@@ -64,23 +64,14 @@ static void per_hub_init(nasid_t nasid)
+ 
+ 	hub_rtc_init(nasid);
+ 
+-#ifdef CONFIG_REPLICATE_EXHANDLERS
+-	/*
+-	 * If this is not a headless node initialization,
+-	 * copy over the caliased exception handlers.
+-	 */
+-	if (get_nasid() == nasid) {
+-		extern char except_vec2_generic, except_vec3_generic;
+-		extern void build_tlb_refill_handler(void);
+-
+-		memcpy((void *)(CKSEG0 + 0x100), &except_vec2_generic, 0x80);
+-		memcpy((void *)(CKSEG0 + 0x180), &except_vec3_generic, 0x80);
+-		build_tlb_refill_handler();
+-		memcpy((void *)(CKSEG0 + 0x100), (void *) CKSEG0, 0x80);
+-		memcpy((void *)(CKSEG0 + 0x180), &except_vec3_generic, 0x100);
++	if (nasid) {
++		/* copy exception handlers from first node to current node */
++		memcpy((void *)NODE_OFFSET_TO_K0(nasid, 0),
++		       (void *)CKSEG0, 0x200);
+ 		__flush_cache_all();
++		/* switch to node local exception handlers */
++		REMOTE_HUB_S(nasid, PI_CALIAS_SIZE, PI_CALIAS_SIZE_8K);
+ 	}
+-#endif
+ }
+ 
+ void per_cpu_init(void)
+diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
+index f610fff592a6..563aad5e6398 100644
+--- a/arch/mips/sgi-ip27/ip27-memory.c
++++ b/arch/mips/sgi-ip27/ip27-memory.c
+@@ -311,11 +311,7 @@ static void __init mlreset(void)
+ 		 * thinks it is a node 0 address.
+ 		 */
+ 		REMOTE_HUB_S(nasid, PI_REGION_PRESENT, (region_mask | 1));
+-#ifdef CONFIG_REPLICATE_EXHANDLERS
+-		REMOTE_HUB_S(nasid, PI_CALIAS_SIZE, PI_CALIAS_SIZE_8K);
+-#else
+ 		REMOTE_HUB_S(nasid, PI_CALIAS_SIZE, PI_CALIAS_SIZE_0);
+-#endif
+ 
+ #ifdef LATER
+ 		/*
 -- 
-SUSE Software Solutions Germany GmbH
-HRB 36809 (AG Nürnberg)
-Geschäftsführer: Felix Imendörffer
+2.16.4
+
