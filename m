@@ -2,192 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87346EAB9A
-	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2019 09:35:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F35EABE1
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2019 09:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbfJaIfO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 31 Oct 2019 04:35:14 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:52060 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726937AbfJaIfO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 31 Oct 2019 04:35:14 -0400
-Received: by mail-wm1-f68.google.com with SMTP id q70so4930985wme.1
-        for <linux-mips@vger.kernel.org>; Thu, 31 Oct 2019 01:35:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=rmDq6FxRuUYkoax7fknWg9lZtSi88FQnuHiD1s4eg5U=;
-        b=r19RbJrrR3TTQRFvNVgH7muc0VuAYAy6rKwAenBj+MBaMLmAwvooeA4uJPujOZH/3f
-         Z38+un06J7GpZ7qzlIBluqhhNCKQaWpQMA676w27Uq3/NB3ccSjBROSFDlaPHO1d4VHG
-         IJrmYs9psQzlLCLW1tNvWUHfZ5FD3R+nqfWbEJQWVUHNzGo1biYTUC47PS4wDJYYoNdB
-         efvLI/52efMQGN2fhxcU3VXQUIWQIzCIuhCef1hEsbPzN6iWNVoVX7W4Rx1VirV8VhAT
-         C6K1MLxvnxYyF2hCKEzWrb24APK5ufdQEoK8a7DMjJzeFDQQmPGQ5GSzPZ/glg65NJDL
-         kEJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rmDq6FxRuUYkoax7fknWg9lZtSi88FQnuHiD1s4eg5U=;
-        b=RVQ/AjEcC8Ag4LHEMB3DikCyTtv1lLjuiEpjPUMewSxQca8HfkPevgI9B2/exv+po4
-         fcUJ0rgO1bK3oh/N3N+Tcj0I0NAx6ANvThUdy+3wFAj1ya9oDOgbOaq7xl17nppUJYnY
-         1LK5XxJvo5QxR9kZB4+Gyp3fDVccmPmWMai07oBjOdU4wtHK/X/peJ0JqDIE6/2yMAGG
-         mny8YiOfzvbRDfvj9wUWKNAVkRGn/51ZOAv3d82cfoanScmstsANDsKefmhWVUa3f2A1
-         2eYsSoTy4mOy8rZGKgOmA5X1yxu/V1qmvIzeYGfv+o1q3quBIFe4GvBDLY4dct7r/H5v
-         QAkg==
-X-Gm-Message-State: APjAAAVtts61b+L7i7WrruV8cclB5PvBLTfbAs2nvCm5z5DgVTogNqTe
-        09FDqlVslXT262c1nRyYjQmYha2uF9w=
-X-Google-Smtp-Source: APXvYqzFt/7CmZZG28e813dIiqfXPdkh/FrOn1ZW0fYjE3EhnPpwhz4KlImOvd6t8BDPMhbuXOGzHQ==
-X-Received: by 2002:a1c:3b44:: with SMTP id i65mr3744553wma.1.1572510912455;
-        Thu, 31 Oct 2019 01:35:12 -0700 (PDT)
-Received: from netronome.com (fred-musen.rivierenbuurt.horms.nl. [2001:470:7eb3:404:a2a4:c5ff:fe4c:9ce9])
-        by smtp.gmail.com with ESMTPSA id 11sm3233576wmb.34.2019.10.31.01.35.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Oct 2019 01:35:12 -0700 (PDT)
-Date:   Thu, 31 Oct 2019 09:35:10 +0100
-From:   Simon Horman <simon.horman@netronome.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, davem@davemloft.net,
-        robh+dt@kernel.org, mark.rutland@arm.com, axboe@kernel.dk,
-        peppe.cavallaro@st.com, alexandre.torgue@st.com,
-        joabreu@synopsys.com, bhelgaas@google.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH 4/5] dt-bindings: net: document loongson.pci-gmac
-Message-ID: <20191031083509.GA30739@netronome.com>
-References: <20191030135347.3636-1-jiaxun.yang@flygoat.com>
- <20191030135347.3636-5-jiaxun.yang@flygoat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191030135347.3636-5-jiaxun.yang@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727005AbfJaIyd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 31 Oct 2019 04:54:33 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47156 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726995AbfJaIyd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 31 Oct 2019 04:54:33 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 43E79AD5F;
+        Thu, 31 Oct 2019 08:54:31 +0000 (UTC)
+Date:   Thu, 31 Oct 2019 09:54:30 +0100
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        linux-mips@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] net: sgi: ioc3-eth: don't abuse dma_direct_* calls
+Message-Id: <20191031095430.148daca03517c00f3e2b32ff@suse.de>
+In-Reply-To: <20191030223818.GA23807@lst.de>
+References: <20191030211233.30157-1-hch@lst.de>
+        <20191030211233.30157-2-hch@lst.de>
+        <20191030230549.ef9b99b5d36b0a818d904eee@suse.de>
+        <20191030223818.GA23807@lst.de>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jiaxun,
+On Wed, 30 Oct 2019 23:38:18 +0100
+Christoph Hellwig <hch@lst.de> wrote:
 
-thanks for your patch.
-
-On Wed, Oct 30, 2019 at 09:53:46PM +0800, Jiaxun Yang wrote:
-> This binding will provide extra information for PCI enabled
-> device.
+> On Wed, Oct 30, 2019 at 11:05:49PM +0100, Thomas Bogendoerfer wrote:
+> > On Wed, 30 Oct 2019 14:12:30 -0700
+> > Christoph Hellwig <hch@lst.de> wrote:
+> > 
+> > > dma_direct_ is a low-level API that must never be used by drivers
+> > > directly.  Switch to use the proper DMA API instead.
+> > 
+> > is the 4kb/16kb alignment still guaranteed ? If not how is the way
+> > to get such an alignment ?
 > 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> The DMA API gives you page aligned memory. dma_direct doesn't give you
+> any gurantees as it is an internal API explicitly documented as not
+> for driver usage that can change at any time.
 
-Please verify the bindings using dtbs_check as described in
-Documentation/devicetree/writing-schema.rst
+I didn't want to argue about that. What I'm interested in is a way how 
+to allocate dma memory, which is 16kB aligned, via the DMA API ?
 
-> ---
->  .../net/wireless/loongson,pci-gmac.yaml       | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/wireless/loongson,pci-gmac.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/wireless/loongson,pci-gmac.yaml b/Documentation/devicetree/bindings/net/wireless/loongson,pci-gmac.yaml
-> new file mode 100644
-> index 000000000000..5f764bd46735
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/wireless/loongson,pci-gmac.yaml
-> @@ -0,0 +1,71 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/allwinner,sun7i-a20-gmac.yaml#
+Thomas.
 
-The id does not match the filename of the schema.
-
-i.e. the above should be:
-
-	$id: http://devicetree.org/schemas/net/wireless/loongson,pci-gmac.yaml#
-
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson PCI GMAC Device Tree Bindings
-> +
-> +allOf:
-> +  - $ref: "snps,dwmac.yaml#"
-
-snps,dwmac.yaml# is in the parent directory relative to loongson,pci-gmac.yaml.
-So I think the above needs to be:
-
-	$ref: "../snps,dwmac.yaml#"
-
-> +
-> +maintainers:
-> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,pci-gmac
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    minItems: 1
-> +    maxItems: 3
-> +    items:
-> +      - description: Combined signal for various interrupt events
-> +      - description: The interrupt to manage the remote wake-up packet detection
-> +      - description: The interrupt that occurs when Rx exits the LPI state
-> +
-> +  interrupt-names:
-> +    minItems: 1
-> +    maxItems: 3
-> +    items:
-> +      - const: macirq
-> +      - const: eth_wake_irq
-> +      - const: eth_lpi
-> +
-> +  clocks:
-> +    items:
-> +      - description: GMAC main clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: stmmaceth
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-names
-> +  - clocks
-> +  - clock-names
-> +  - phy-mode
-> +
-> +examples:
-> +  - |
-> +    gmac: ethernet@ {
-
-I would have expected a bus address here, f.e.:
-
-	gmac: ethernet@0x00001800
-
-> +        compatible = "loongson,pci-irq";
-> +        reg = <0x00001800 0 0 0 0>;
-
-I think there is one to many cell in the above, perhaps it should be.
-
-	reg = <0x00001800 0 0 0>;
-
-Also, I would expect the registers to be wider than 0, i.e. no registers.
-
-`
-> +        interrupts = <12>, <13>;
-> +        interrupt-names = "macirq", "eth_lpi";
-> +        clocks =  <&clk_pch_gmac>;
-> +        clock-names = "stmmaceth";
-> +        phy-mode = "rgmii";
-> +    };
-> +
-> +# FIXME: We should set it, but it would report all the generic
-> +# properties as additional properties.
-> +# additionalProperties: false
-> +
-> +...
-> -- 
-> 2.23.0
-> 
+-- 
+SUSE Software Solutions Germany GmbH
+HRB 36809 (AG Nürnberg)
+Geschäftsführer: Felix Imendörffer
