@@ -2,125 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F55EA986
-	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2019 04:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B5BEAAE0
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2019 08:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726352AbfJaD0L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 30 Oct 2019 23:26:11 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:60838 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726336AbfJaD0K (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 30 Oct 2019 23:26:10 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id A11698C8659FB5227AE0;
-        Thu, 31 Oct 2019 11:26:07 +0800 (CST)
-Received: from [127.0.0.1] (10.74.191.121) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.439.0; Thu, 31 Oct 2019
- 11:26:05 +0800
-Subject: Re: [PATCH v7] numa: make node_to_cpumask_map() NUMA_NO_NODE aware
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <catalin.marinas@arm.com>, <will@kernel.org>, <mingo@redhat.com>,
-        <bp@alien8.de>, <rth@twiddle.net>, <ink@jurassic.park.msu.ru>,
-        <mattst88@gmail.com>, <benh@kernel.crashing.org>,
-        <paulus@samba.org>, <mpe@ellerman.id.au>,
-        <heiko.carstens@de.ibm.com>, <gor@linux.ibm.com>,
-        <borntraeger@de.ibm.com>, <ysato@users.sourceforge.jp>,
-        <dalias@libc.org>, <davem@davemloft.net>, <ralf@linux-mips.org>,
-        <paul.burton@mips.com>, <jhogan@kernel.org>,
-        <jiaxun.yang@flygoat.com>, <chenhc@lemote.com>,
-        <akpm@linux-foundation.org>, <rppt@linux.ibm.com>,
-        <anshuman.khandual@arm.com>, <tglx@linutronix.de>, <cai@lca.pw>,
-        <robin.murphy@arm.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <hpa@zytor.com>, <x86@kernel.org>,
-        <dave.hansen@linux.intel.com>, <luto@kernel.org>,
-        <len.brown@intel.com>, <axboe@kernel.dk>, <dledford@redhat.com>,
-        <jeffrey.t.kirsher@intel.com>, <linux-alpha@vger.kernel.org>,
-        <naveen.n.rao@linux.vnet.ibm.com>, <mwb@linux.vnet.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-s390@vger.kernel.org>,
-        <linux-sh@vger.kernel.org>, <sparclinux@vger.kernel.org>,
-        <tbogendoerfer@suse.de>, <linux-mips@vger.kernel.org>,
-        <rafael@kernel.org>, <mhocko@kernel.org>,
-        <gregkh@linuxfoundation.org>, <bhelgaas@google.com>,
-        <linux-pci@vger.kernel.org>, <rjw@rjwysocki.net>,
-        <lenb@kernel.org>, <linux-acpi@vger.kernel.org>
-References: <1572428068-180880-1-git-send-email-linyunsheng@huawei.com>
- <20191030101449.GW4097@hirez.programming.kicks-ass.net>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <f7aa833e-3ed3-aba0-8c6e-8753a68182c2@huawei.com>
-Date:   Thu, 31 Oct 2019 11:26:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        id S1726698AbfJaHL3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 31 Oct 2019 03:11:29 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:51935 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726575AbfJaHL3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 31 Oct 2019 03:11:29 -0400
+Received: by mail-wm1-f67.google.com with SMTP id q70so4685438wme.1
+        for <linux-mips@vger.kernel.org>; Thu, 31 Oct 2019 00:11:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TivsPEvFm4qaUB9G8rwk9q9OWD+p6K0607BhqzKZ9ao=;
+        b=JsRXkfs5o1eLmugUj28pSX6G/htlIQ7Hp/s1L2qJjBJjK65w3nT8uBRGPwv8/HHPOk
+         yC+48R7XvNH4OTyRHC+vee8SuW6v57dfMWE9EtKymjO/qnByXV50mmvXh1Q8zot85al6
+         /e/rze/mtV7LuRSPG+eINlO+k3z7p485TYjty2iqdXfHbe8iJLyxrPM7cF7um/3iA8LW
+         dGQiR0Pzytv2Dc5wxMHtqE0ddn3NC9M4Tm2DxwtkB/HhkQW8oiCSG1Cs7PRopXlJS1Uw
+         PK4GzhAE6IjBT/3gjzvaTfv0VaF6DU1rUVEbBhq4Re7Gmw28XL2+Ei4Ql7qbA///HE6u
+         /NjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TivsPEvFm4qaUB9G8rwk9q9OWD+p6K0607BhqzKZ9ao=;
+        b=hS/mbY78npPIyuye8KIpP3UnG7C0XICxxjT+U8cTaj/tfVfsl6q+/oESGr02Jab3OI
+         ERIMr/Gp8BFgPlJbm9SLysUdafvmRqOUzqxs+OddHl2z83Km8LS9RlMO+rlKEqZJDnQZ
+         3N1H1i2OwQi8MD9zF0LG9BBqTGgh+KFr6zQKU4OtAfgJ3Fc4uedboX84YDghlxSckJgL
+         /K2yOqaBXpQ08DQaxqzNRPeiXZZI/K20dH/MJhLwkes291zWr9tyV45ghEzDGQr7BEVj
+         UeUoqPjA5kwoXEKaIMmFY5kd1+FK5bKjiNbsVgnnFnW2piJ/S7I/g4Yr5vFO2cxrKxYT
+         KlDg==
+X-Gm-Message-State: APjAAAXK3/e0RfcSBVQV2FT++Vp05zJToFnMV07nKCqHRI28vJZSq/ja
+        u3qDi1FIFna9ga7P2BHhtsH77gkp
+X-Google-Smtp-Source: APXvYqweaMbtGaXotdr/RYUkmx5DkW1g/Qcrkt+Mdsunto9kE0y14/vhalFsAovIMcTkMnzXXuDWpQ==
+X-Received: by 2002:a7b:c011:: with SMTP id c17mr3583645wmb.95.1572505886745;
+        Thu, 31 Oct 2019 00:11:26 -0700 (PDT)
+Received: from localhost.localdomain (212.red-81-37-113.dynamicip.rima-tde.net. [81.37.113.212])
+        by smtp.gmail.com with ESMTPSA id v128sm3466115wmb.14.2019.10.31.00.11.25
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 31 Oct 2019 00:11:26 -0700 (PDT)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
+        Paul Burton <paul.burton@mips.com>, ralf@linux-mips.org,
+        jhogan@kernel.org, john@phrozen.org, NeilBrown <neil@brown.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH RESEND] MIPS: ralink: enable PCI support only if driver for mt7621 SoC is selected
+Date:   Thu, 31 Oct 2019 08:11:24 +0100
+Message-Id: <20191031071124.22102-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
-In-Reply-To: <20191030101449.GW4097@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.74.191.121]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2019/10/30 18:14, Peter Zijlstra wrote:
-> On Wed, Oct 30, 2019 at 05:34:28PM +0800, Yunsheng Lin wrote:
->> When passing the return value of dev_to_node() to cpumask_of_node()
->> without checking if the device's node id is NUMA_NO_NODE, there is
->> global-out-of-bounds detected by KASAN.
->>
->> From the discussion [1], NUMA_NO_NODE really means no node affinity,
->> which also means all cpus should be usable. So the cpumask_of_node()
->> should always return all cpus online when user passes the node id as
->> NUMA_NO_NODE, just like similar semantic that page allocator handles
->> NUMA_NO_NODE.
->>
->> But we cannot really copy the page allocator logic. Simply because the
->> page allocator doesn't enforce the near node affinity. It just picks it
->> up as a preferred node but then it is free to fallback to any other numa
->> node. This is not the case here and node_to_cpumask_map will only restrict
->> to the particular node's cpus which would have really non deterministic
->> behavior depending on where the code is executed. So in fact we really
->> want to return cpu_online_mask for NUMA_NO_NODE.
->>
->> Also there is a debugging version of node_to_cpumask_map() for x86 and
->> arm64, which is only used when CONFIG_DEBUG_PER_CPU_MAPS is defined, this
->> patch changes it to handle NUMA_NO_NODE as normal node_to_cpumask_map().
->>
->> [1] https://lkml.org/lkml/2019/9/11/66
->> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
->> Suggested-by: Michal Hocko <mhocko@kernel.org>
->> Acked-by: Michal Hocko <mhocko@suse.com>
->> Acked-by: Paul Burton <paul.burton@mips.com> # MIPS bits
-> 
-> Still:
-> 
-> Nacked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Some versions of SoC MT7621 have three PCI express hosts. Some boards
+make use of those PCI through the staging driver mt7621-pci. Recently
+PCI support has been removed from MT7621 Soc kernel configuration due
+to a build error. This makes imposible to compile staging driver and
+produces a regression for gnubee based boards. Enable support for PCI
+again but enable it only if staging mt7621-pci driver is selected.
 
-It seems I still misunderstood your meaning by "We must not silently accept
-NO_NODE there" in [1].
+Fixes: c4d48cf5e2f0 ("MIPS: ralink: deactivate PCI support for SOC_MT7621")
 
-I am not sure if there is still disagreement that the NO_NODE state for
-dev->numa_node should exist at all.
+Cc: Hauke Mehrtens <hauke@hauke-m.de>
+Cc: Paul Burton <paul.burton@mips.com>
+Cc: ralf@linux-mips.org
+Cc: jhogan@kernel.org
+Cc: john@phrozen.org
+Cc: NeilBrown <neil@brown.name>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-mips@vger.kernel.org
+Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+---
+ arch/mips/ralink/Kconfig           | 1 +
+ drivers/staging/mt7621-pci/Kconfig | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-From the previous disscussion [2], you seem to propose to do "wild guess" or
-"fixup" for all devices(including virtual and physcial) with NO_NODE, which means
-the NO_NODE is needed anymore and should be removed when the "wild guess" or "fixup"
-is done. So maybe the reason for your nack here it is that there should be no other
-NO_NODE handling or fixing related to NO_NODE before the "wild guess" or "fixup"
-process is finished, so making node_to_cpumask_map() NUMA_NO_NODE aware is unnecessary.
-
-Or your reason for the nack is still specific to the pcie device without a numa node,
-the "wild guess" need to be done for this case before making node_to_cpumask_map()
-NUMA_NO_NODE?
-
-Please help to clarify the reason for nack. Or is there still some other reason for the
-nack I missed from the previous disscussion?
-
-Thanks.
-
-[1] https://lore.kernel.org/lkml/20191011111539.GX2311@hirez.programming.kicks-ass.net/
-[2] https://lore.kernel.org/lkml/20191014094912.GY2311@hirez.programming.kicks-ass.net/
-> 
-> .
-> 
+diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
+index 1434fa60f3db..94e9ce994494 100644
+--- a/arch/mips/ralink/Kconfig
++++ b/arch/mips/ralink/Kconfig
+@@ -51,6 +51,7 @@ choice
+ 		select MIPS_GIC
+ 		select COMMON_CLK
+ 		select CLKSRC_MIPS_GIC
++		select HAVE_PCI if PCI_MT7621
+ endchoice
+ 
+ choice
+diff --git a/drivers/staging/mt7621-pci/Kconfig b/drivers/staging/mt7621-pci/Kconfig
+index af928b75a940..ce58042f2f21 100644
+--- a/drivers/staging/mt7621-pci/Kconfig
++++ b/drivers/staging/mt7621-pci/Kconfig
+@@ -2,7 +2,6 @@
+ config PCI_MT7621
+ 	tristate "MediaTek MT7621 PCI Controller"
+ 	depends on RALINK
+-	depends on PCI
+ 	select PCI_DRIVERS_GENERIC
+ 	help
+ 	  This selects a driver for the MediaTek MT7621 PCI Controller.
+-- 
+2.19.1
 
