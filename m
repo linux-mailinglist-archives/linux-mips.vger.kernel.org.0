@@ -2,113 +2,192 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B5BEAAE0
-	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2019 08:11:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87346EAB9A
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Oct 2019 09:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbfJaHL3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 31 Oct 2019 03:11:29 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:51935 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726575AbfJaHL3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 31 Oct 2019 03:11:29 -0400
-Received: by mail-wm1-f67.google.com with SMTP id q70so4685438wme.1
-        for <linux-mips@vger.kernel.org>; Thu, 31 Oct 2019 00:11:27 -0700 (PDT)
+        id S1727008AbfJaIfO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 31 Oct 2019 04:35:14 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:52060 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726937AbfJaIfO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 31 Oct 2019 04:35:14 -0400
+Received: by mail-wm1-f68.google.com with SMTP id q70so4930985wme.1
+        for <linux-mips@vger.kernel.org>; Thu, 31 Oct 2019 01:35:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TivsPEvFm4qaUB9G8rwk9q9OWD+p6K0607BhqzKZ9ao=;
-        b=JsRXkfs5o1eLmugUj28pSX6G/htlIQ7Hp/s1L2qJjBJjK65w3nT8uBRGPwv8/HHPOk
-         yC+48R7XvNH4OTyRHC+vee8SuW6v57dfMWE9EtKymjO/qnByXV50mmvXh1Q8zot85al6
-         /e/rze/mtV7LuRSPG+eINlO+k3z7p485TYjty2iqdXfHbe8iJLyxrPM7cF7um/3iA8LW
-         dGQiR0Pzytv2Dc5wxMHtqE0ddn3NC9M4Tm2DxwtkB/HhkQW8oiCSG1Cs7PRopXlJS1Uw
-         PK4GzhAE6IjBT/3gjzvaTfv0VaF6DU1rUVEbBhq4Re7Gmw28XL2+Ei4Ql7qbA///HE6u
-         /NjQ==
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rmDq6FxRuUYkoax7fknWg9lZtSi88FQnuHiD1s4eg5U=;
+        b=r19RbJrrR3TTQRFvNVgH7muc0VuAYAy6rKwAenBj+MBaMLmAwvooeA4uJPujOZH/3f
+         Z38+un06J7GpZ7qzlIBluqhhNCKQaWpQMA676w27Uq3/NB3ccSjBROSFDlaPHO1d4VHG
+         IJrmYs9psQzlLCLW1tNvWUHfZ5FD3R+nqfWbEJQWVUHNzGo1biYTUC47PS4wDJYYoNdB
+         efvLI/52efMQGN2fhxcU3VXQUIWQIzCIuhCef1hEsbPzN6iWNVoVX7W4Rx1VirV8VhAT
+         C6K1MLxvnxYyF2hCKEzWrb24APK5ufdQEoK8a7DMjJzeFDQQmPGQ5GSzPZ/glg65NJDL
+         kEJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TivsPEvFm4qaUB9G8rwk9q9OWD+p6K0607BhqzKZ9ao=;
-        b=hS/mbY78npPIyuye8KIpP3UnG7C0XICxxjT+U8cTaj/tfVfsl6q+/oESGr02Jab3OI
-         ERIMr/Gp8BFgPlJbm9SLysUdafvmRqOUzqxs+OddHl2z83Km8LS9RlMO+rlKEqZJDnQZ
-         3N1H1i2OwQi8MD9zF0LG9BBqTGgh+KFr6zQKU4OtAfgJ3Fc4uedboX84YDghlxSckJgL
-         /K2yOqaBXpQ08DQaxqzNRPeiXZZI/K20dH/MJhLwkes291zWr9tyV45ghEzDGQr7BEVj
-         UeUoqPjA5kwoXEKaIMmFY5kd1+FK5bKjiNbsVgnnFnW2piJ/S7I/g4Yr5vFO2cxrKxYT
-         KlDg==
-X-Gm-Message-State: APjAAAXK3/e0RfcSBVQV2FT++Vp05zJToFnMV07nKCqHRI28vJZSq/ja
-        u3qDi1FIFna9ga7P2BHhtsH77gkp
-X-Google-Smtp-Source: APXvYqweaMbtGaXotdr/RYUkmx5DkW1g/Qcrkt+Mdsunto9kE0y14/vhalFsAovIMcTkMnzXXuDWpQ==
-X-Received: by 2002:a7b:c011:: with SMTP id c17mr3583645wmb.95.1572505886745;
-        Thu, 31 Oct 2019 00:11:26 -0700 (PDT)
-Received: from localhost.localdomain (212.red-81-37-113.dynamicip.rima-tde.net. [81.37.113.212])
-        by smtp.gmail.com with ESMTPSA id v128sm3466115wmb.14.2019.10.31.00.11.25
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 31 Oct 2019 00:11:26 -0700 (PDT)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
-        Paul Burton <paul.burton@mips.com>, ralf@linux-mips.org,
-        jhogan@kernel.org, john@phrozen.org, NeilBrown <neil@brown.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH RESEND] MIPS: ralink: enable PCI support only if driver for mt7621 SoC is selected
-Date:   Thu, 31 Oct 2019 08:11:24 +0100
-Message-Id: <20191031071124.22102-1-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.19.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rmDq6FxRuUYkoax7fknWg9lZtSi88FQnuHiD1s4eg5U=;
+        b=RVQ/AjEcC8Ag4LHEMB3DikCyTtv1lLjuiEpjPUMewSxQca8HfkPevgI9B2/exv+po4
+         fcUJ0rgO1bK3oh/N3N+Tcj0I0NAx6ANvThUdy+3wFAj1ya9oDOgbOaq7xl17nppUJYnY
+         1LK5XxJvo5QxR9kZB4+Gyp3fDVccmPmWMai07oBjOdU4wtHK/X/peJ0JqDIE6/2yMAGG
+         mny8YiOfzvbRDfvj9wUWKNAVkRGn/51ZOAv3d82cfoanScmstsANDsKefmhWVUa3f2A1
+         2eYsSoTy4mOy8rZGKgOmA5X1yxu/V1qmvIzeYGfv+o1q3quBIFe4GvBDLY4dct7r/H5v
+         QAkg==
+X-Gm-Message-State: APjAAAVtts61b+L7i7WrruV8cclB5PvBLTfbAs2nvCm5z5DgVTogNqTe
+        09FDqlVslXT262c1nRyYjQmYha2uF9w=
+X-Google-Smtp-Source: APXvYqzFt/7CmZZG28e813dIiqfXPdkh/FrOn1ZW0fYjE3EhnPpwhz4KlImOvd6t8BDPMhbuXOGzHQ==
+X-Received: by 2002:a1c:3b44:: with SMTP id i65mr3744553wma.1.1572510912455;
+        Thu, 31 Oct 2019 01:35:12 -0700 (PDT)
+Received: from netronome.com (fred-musen.rivierenbuurt.horms.nl. [2001:470:7eb3:404:a2a4:c5ff:fe4c:9ce9])
+        by smtp.gmail.com with ESMTPSA id 11sm3233576wmb.34.2019.10.31.01.35.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Oct 2019 01:35:12 -0700 (PDT)
+Date:   Thu, 31 Oct 2019 09:35:10 +0100
+From:   Simon Horman <simon.horman@netronome.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, davem@davemloft.net,
+        robh+dt@kernel.org, mark.rutland@arm.com, axboe@kernel.dk,
+        peppe.cavallaro@st.com, alexandre.torgue@st.com,
+        joabreu@synopsys.com, bhelgaas@google.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 4/5] dt-bindings: net: document loongson.pci-gmac
+Message-ID: <20191031083509.GA30739@netronome.com>
+References: <20191030135347.3636-1-jiaxun.yang@flygoat.com>
+ <20191030135347.3636-5-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191030135347.3636-5-jiaxun.yang@flygoat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Some versions of SoC MT7621 have three PCI express hosts. Some boards
-make use of those PCI through the staging driver mt7621-pci. Recently
-PCI support has been removed from MT7621 Soc kernel configuration due
-to a build error. This makes imposible to compile staging driver and
-produces a regression for gnubee based boards. Enable support for PCI
-again but enable it only if staging mt7621-pci driver is selected.
+Hi Jiaxun,
 
-Fixes: c4d48cf5e2f0 ("MIPS: ralink: deactivate PCI support for SOC_MT7621")
+thanks for your patch.
 
-Cc: Hauke Mehrtens <hauke@hauke-m.de>
-Cc: Paul Burton <paul.burton@mips.com>
-Cc: ralf@linux-mips.org
-Cc: jhogan@kernel.org
-Cc: john@phrozen.org
-Cc: NeilBrown <neil@brown.name>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- arch/mips/ralink/Kconfig           | 1 +
- drivers/staging/mt7621-pci/Kconfig | 1 -
- 2 files changed, 1 insertion(+), 1 deletion(-)
+On Wed, Oct 30, 2019 at 09:53:46PM +0800, Jiaxun Yang wrote:
+> This binding will provide extra information for PCI enabled
+> device.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
-index 1434fa60f3db..94e9ce994494 100644
---- a/arch/mips/ralink/Kconfig
-+++ b/arch/mips/ralink/Kconfig
-@@ -51,6 +51,7 @@ choice
- 		select MIPS_GIC
- 		select COMMON_CLK
- 		select CLKSRC_MIPS_GIC
-+		select HAVE_PCI if PCI_MT7621
- endchoice
- 
- choice
-diff --git a/drivers/staging/mt7621-pci/Kconfig b/drivers/staging/mt7621-pci/Kconfig
-index af928b75a940..ce58042f2f21 100644
---- a/drivers/staging/mt7621-pci/Kconfig
-+++ b/drivers/staging/mt7621-pci/Kconfig
-@@ -2,7 +2,6 @@
- config PCI_MT7621
- 	tristate "MediaTek MT7621 PCI Controller"
- 	depends on RALINK
--	depends on PCI
- 	select PCI_DRIVERS_GENERIC
- 	help
- 	  This selects a driver for the MediaTek MT7621 PCI Controller.
--- 
-2.19.1
+Please verify the bindings using dtbs_check as described in
+Documentation/devicetree/writing-schema.rst
 
+> ---
+>  .../net/wireless/loongson,pci-gmac.yaml       | 71 +++++++++++++++++++
+>  1 file changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/wireless/loongson,pci-gmac.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/wireless/loongson,pci-gmac.yaml b/Documentation/devicetree/bindings/net/wireless/loongson,pci-gmac.yaml
+> new file mode 100644
+> index 000000000000..5f764bd46735
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/wireless/loongson,pci-gmac.yaml
+> @@ -0,0 +1,71 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/allwinner,sun7i-a20-gmac.yaml#
+
+The id does not match the filename of the schema.
+
+i.e. the above should be:
+
+	$id: http://devicetree.org/schemas/net/wireless/loongson,pci-gmac.yaml#
+
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson PCI GMAC Device Tree Bindings
+> +
+> +allOf:
+> +  - $ref: "snps,dwmac.yaml#"
+
+snps,dwmac.yaml# is in the parent directory relative to loongson,pci-gmac.yaml.
+So I think the above needs to be:
+
+	$ref: "../snps,dwmac.yaml#"
+
+> +
+> +maintainers:
+> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: loongson,pci-gmac
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 3
+> +    items:
+> +      - description: Combined signal for various interrupt events
+> +      - description: The interrupt to manage the remote wake-up packet detection
+> +      - description: The interrupt that occurs when Rx exits the LPI state
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    maxItems: 3
+> +    items:
+> +      - const: macirq
+> +      - const: eth_wake_irq
+> +      - const: eth_lpi
+> +
+> +  clocks:
+> +    items:
+> +      - description: GMAC main clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: stmmaceth
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-names
+> +  - clocks
+> +  - clock-names
+> +  - phy-mode
+> +
+> +examples:
+> +  - |
+> +    gmac: ethernet@ {
+
+I would have expected a bus address here, f.e.:
+
+	gmac: ethernet@0x00001800
+
+> +        compatible = "loongson,pci-irq";
+> +        reg = <0x00001800 0 0 0 0>;
+
+I think there is one to many cell in the above, perhaps it should be.
+
+	reg = <0x00001800 0 0 0>;
+
+Also, I would expect the registers to be wider than 0, i.e. no registers.
+
+`
+> +        interrupts = <12>, <13>;
+> +        interrupt-names = "macirq", "eth_lpi";
+> +        clocks =  <&clk_pch_gmac>;
+> +        clock-names = "stmmaceth";
+> +        phy-mode = "rgmii";
+> +    };
+> +
+> +# FIXME: We should set it, but it would report all the generic
+> +# properties as additional properties.
+> +# additionalProperties: false
+> +
+> +...
+> -- 
+> 2.23.0
+> 
