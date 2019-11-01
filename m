@@ -2,128 +2,215 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0287DEBCFE
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Nov 2019 06:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 451EFEC2A0
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Nov 2019 13:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729712AbfKAFI7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Nov 2019 01:08:59 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:46444 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728737AbfKAFI7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Nov 2019 01:08:59 -0400
-Received: by mail-ot1-f66.google.com with SMTP id 89so7399168oth.13
-        for <linux-mips@vger.kernel.org>; Thu, 31 Oct 2019 22:08:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=86dy+UvmqqhMa4o990r262R3NCWsufaFyCZcPiyIBG8=;
-        b=Ec8bn2d5x5Plx7wItl6XzxufaPRxVJwNpyxzu88zlfTmFe+a4z9sR/QgGwjTNrsn0W
-         B+qnkV/s3HZPEanmY03rLRgU99pZggxrb0FOZ4bRah6+Z+Y9QxHdQ6TqXLkjJ8C84wDB
-         sdEupEqwjca52TxoUcKE4cyXFMgmSSGCGhEmRsNtU/m7W+XgXjGReySm1OBxDQDBTbbE
-         YQ9wJ/0JFQL99S1dF9fk2FwXeGbbOexe28f+wrdBpXc84B1+kjmKEf/xT1yOqAmTQ9DT
-         4lWIWwLkKOBGmuQNAWcziSpQN/I/eQ787OmF1DsevMF2QT2MAw0jcakYL1q0hTCvQUlI
-         VnxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=86dy+UvmqqhMa4o990r262R3NCWsufaFyCZcPiyIBG8=;
-        b=BUfNoMYK7zc6TPXJbF7eCxdEqcfOa0ti3H6FHoWjJOXX1tSxwlxcefLbwvnff7qgK2
-         OmUqSO10u3PeqWRvseMPMF4cgtgoDwVijzr8Lw4WoG/tK5dkVTGVPDN/NdPiYb2fDwCP
-         dGew69Q8zv4LcuQMoclgRtJ6BoKby5LB/sbsrusuhpioB+4bxp9tDTsA5e69e0eJYlsp
-         k2p47pujXmt7+UUANeYHHLm9We1zkJZ8aj3XM3q8PIr9gdpRMisSHDgBF8UbL8aj+alb
-         IopAG84kuPzDF41cZ5oocntMg8R4wbRfaterRYLDMB2fujINl0Y2D/PtyMnw+xIRCluH
-         c0bA==
-X-Gm-Message-State: APjAAAXzoYF+xmHSRToomA4tRLiD1gOHd4iocjdcC2uL+QFI4aHO+VOk
-        OQmStu121FUhDHFo2fe3UXFiJNO6ZzzN5Pufrto=
-X-Google-Smtp-Source: APXvYqwTiqTTduhMxjahA81qEeMz1cRSxjGZujq79eVQdExbCMrCHmuVqXpo0B3B/NT12FP814KtFXzP5SVZ+0fnTZQ=
-X-Received: by 2002:a9d:4b89:: with SMTP id k9mr7404091otf.273.1572584938091;
- Thu, 31 Oct 2019 22:08:58 -0700 (PDT)
+        id S1728836AbfKAMSI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Nov 2019 08:18:08 -0400
+Received: from foss.arm.com ([217.140.110.172]:34540 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727989AbfKAMSI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 1 Nov 2019 08:18:08 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 314F31F1;
+        Fri,  1 Nov 2019 05:18:07 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.20])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8BBFD3F6C4;
+        Fri,  1 Nov 2019 05:18:06 -0700 (PDT)
+Date:   Fri, 1 Nov 2019 12:18:04 +0000
+From:   Andrew Murray <andrew.murray@arm.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, davem@davemloft.net,
+        robh+dt@kernel.org, mark.rutland@arm.com, axboe@kernel.dk,
+        peppe.cavallaro@st.com, alexandre.torgue@st.com,
+        joabreu@synopsys.com, bhelgaas@google.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 2/5] net: stmmac: Split devicetree parse
+Message-ID: <20191101121802.GD9723@e119886-lin.cambridge.arm.com>
+References: <20191030135347.3636-1-jiaxun.yang@flygoat.com>
+ <20191030135347.3636-3-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-References: <20191031071124.22102-1-sergio.paracuellos@gmail.com> <20191031213656.iycqiijz3nd5xtkr@lantea.localdomain>
-In-Reply-To: <20191031213656.iycqiijz3nd5xtkr@lantea.localdomain>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 1 Nov 2019 06:08:46 +0100
-Message-ID: <CAMhs-H82t8Rmr2Hz-SmQbw+KNyB_7-N+6Ys0LFA-mptGJ3YR1g@mail.gmail.com>
-Subject: Re: [PATCH RESEND] MIPS: ralink: enable PCI support only if driver
- for mt7621 SoC is selected
-To:     Paul Burton <paulburton@kernel.org>
-Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
-        Paul Burton <paul.burton@mips.com>, ralf@linux-mips.org,
-        jhogan@kernel.org, John Crispin <john@phrozen.org>,
-        NeilBrown <neil@brown.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191030135347.3636-3-jiaxun.yang@flygoat.com>
+User-Agent: Mutt/1.10.1+81 (426a6c1) (2018-08-26)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+On Wed, Oct 30, 2019 at 09:53:44PM +0800, Jiaxun Yang wrote:
+> PCI based devices can share devicetree info parse with platform
+> device based devices after split dt parse frpm dt probe.
 
-Thanks for the review.
+s/frpm/from/
 
-On Thu, Oct 31, 2019 at 10:36 PM Paul Burton <paulburton@kernel.org> wrote:
->
-> Hi Sergio,
->
-> On Thu, Oct 31, 2019 at 08:11:24AM +0100, Sergio Paracuellos wrote:
-> > diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
-> > index 1434fa60f3db..94e9ce994494 100644
-> > --- a/arch/mips/ralink/Kconfig
-> > +++ b/arch/mips/ralink/Kconfig
-> > @@ -51,6 +51,7 @@ choice
-> >               select MIPS_GIC
-> >               select COMMON_CLK
-> >               select CLKSRC_MIPS_GIC
-> > +             select HAVE_PCI if PCI_MT7621
-> >  endchoice
-> >
-> >  choice
-> > diff --git a/drivers/staging/mt7621-pci/Kconfig b/drivers/staging/mt7621-pci/Kconfig
-> > index af928b75a940..ce58042f2f21 100644
-> > --- a/drivers/staging/mt7621-pci/Kconfig
-> > +++ b/drivers/staging/mt7621-pci/Kconfig
-> > @@ -2,7 +2,6 @@
-> >  config PCI_MT7621
-> >       tristate "MediaTek MT7621 PCI Controller"
-> >       depends on RALINK
-> > -     depends on PCI
-> >       select PCI_DRIVERS_GENERIC
-> >       help
-> >         This selects a driver for the MediaTek MT7621 PCI Controller.
->
-> This doesn't seem right to me - doesn't this now allow the PCI
-> controller driver to build without PCI support enabled? Are you sure
-> that won't allow more build failures?
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  .../ethernet/stmicro/stmmac/stmmac_platform.c | 63 ++++++++++++++-----
+>  .../ethernet/stmicro/stmmac/stmmac_platform.h |  3 +
+>  2 files changed, 49 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+> index 170c3a052b14..7e29bc76b7c3 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+> @@ -385,25 +385,19 @@ static int stmmac_of_get_mac_mode(struct device_node *np)
+>  }
+>  
+>  /**
+> - * stmmac_probe_config_dt - parse device-tree driver parameters
+> - * @pdev: platform_device structure
+> - * @mac: MAC address to use
+> + * stmmac_parse_config_dt - parse device-tree driver parameters
+> + * @np: device_mode structure
+> + * @plat: plat_stmmacenet_data structure
+>   * Description:
+>   * this function is to read the driver parameters from device-tree and
+>   * set some private fields that will be used by the main at runtime.
+>   */
+> -struct plat_stmmacenet_data *
+> -stmmac_probe_config_dt(struct platform_device *pdev, const char **mac)
+> +int stmmac_parse_config_dt(struct device_node *np,
+> +				struct plat_stmmacenet_data *plat)
+>  {
+> -	struct device_node *np = pdev->dev.of_node;
+> -	struct plat_stmmacenet_data *plat;
+>  	struct stmmac_dma_cfg *dma_cfg;
+>  	int rc;
+>  
+> -	plat = devm_kzalloc(&pdev->dev, sizeof(*plat), GFP_KERNEL);
+> -	if (!plat)
+> -		return ERR_PTR(-ENOMEM);
+> -
+>  	*mac = of_get_mac_address(np);
+>  	if (IS_ERR(*mac)) {
+>  		if (PTR_ERR(*mac) == -EPROBE_DEFER)
+> @@ -414,7 +408,7 @@ stmmac_probe_config_dt(struct platform_device *pdev, const char **mac)
+>  
+>  	plat->phy_interface = of_get_phy_mode(np);
+>  	if (plat->phy_interface < 0)
+> -		return ERR_PTR(plat->phy_interface);
+> +		return plat->phy_interface;
+>  
+>  	plat->interface = stmmac_of_get_mac_mode(np);
+>  	if (plat->interface < 0)
+> @@ -453,7 +447,7 @@ stmmac_probe_config_dt(struct platform_device *pdev, const char **mac)
+>  	/* To Configure PHY by using all device-tree supported properties */
+>  	rc = stmmac_dt_phy(plat, np, &pdev->dev);
+>  	if (rc)
+> -		return ERR_PTR(rc);
+> +		return rc;
+>  
+>  	of_property_read_u32(np, "tx-fifo-depth", &plat->tx_fifo_size);
+>  
+> @@ -531,7 +525,7 @@ stmmac_probe_config_dt(struct platform_device *pdev, const char **mac)
+>  			       GFP_KERNEL);
+>  	if (!dma_cfg) {
+>  		stmmac_remove_config_dt(pdev, plat);
+> -		return ERR_PTR(-ENOMEM);
+> +		return -ENOMEM;
+>  	}
+>  	plat->dma_cfg = dma_cfg;
+>  
+> @@ -560,7 +554,7 @@ stmmac_probe_config_dt(struct platform_device *pdev, const char **mac)
+>  	rc = stmmac_mtl_setup(pdev, plat);
+>  	if (rc) {
+>  		stmmac_remove_config_dt(pdev, plat);
+> -		return ERR_PTR(rc);
+> +		return rc;
+>  	}
+>  
+>  	/* clock setup */
+> @@ -604,14 +598,43 @@ stmmac_probe_config_dt(struct platform_device *pdev, const char **mac)
+>  		plat->stmmac_rst = NULL;
+>  	}
+>  
+> -	return plat;
+> +	return 0;
+>  
+>  error_hw_init:
+>  	clk_disable_unprepare(plat->pclk);
+>  error_pclk_get:
+>  	clk_disable_unprepare(plat->stmmac_clk);
+>  
+> -	return ERR_PTR(-EPROBE_DEFER);
+> +	return -EPROBE_DEFER;
+> +}
+> +
+> +/**
+> + * stmmac_probe_config_dt - probe and setup stmmac platform data by devicetree
+> + * @pdev: platform_device structure
+> + * @mac: MAC address to use
+> + * Description:
+> + * this function is to set up plat_stmmacenet_data  private structure
+> + * for platform drivers.
+> + */
+> +struct plat_stmmacenet_data *
+> +stmmac_probe_config_dt(struct platform_device *pdev, const char **mac)
+> +{
+> +	struct device_node *np = pdev->dev.of_node;
+> +	struct plat_stmmacenet_data *plat;
+> +	int rc;
+> +
+> +	plat = devm_kzalloc(&pdev->dev, sizeof(*plat), GFP_KERNEL);
+> +	if (!plat)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	rc = stmmac_parse_config_dt(np, plat);
+> +
+> +	if (rc) {
+> +		free(plat);
 
-No, I am not really sure. I don't really know what is the best
-approach to be able to avoid the build failure reported in
-c4d48cf5e2f0 ("MIPS: ralink: deactivate PCI support for SOC_MT7621")
-but this commit is a regression and avoid to properly build the
-MediaTek MT7621 PCI Controller driver located in staging.
+Given the devm_kzalloc - is the free really needed here?
 
->
-> How does enabling the driver change whether or not the SoC has PCI
-> support? The SoC is always the same hardware regardless of whether you
-> enable the driver for it, so this doesn't seem right to me.
+Thanks,
 
-So, this SOC has three PCI's, so "select HAVE_PCI" seems the right
-thing to do for the SoC config but it seems in some versions that has
-build failures.
+Andrew Murray
 
->
-> Hauke - do you recall what the build failure you mentioned in commit
-> c4d48cf5e2f0 ("MIPS: ralink: deactivate PCI support for SOC_MT7621")
-> was?
-
-It would be awesome to know that to be able to get a general valid solution.
-
->
-> Thanks,
->     Paul
-
-Best regards,
-    Sergio Paracuellos
+> +		return ERR_PTR(rc);
+> +	}
+> +
+> +	return plat;
+>  }
+>  
+>  /**
+> @@ -628,6 +651,11 @@ void stmmac_remove_config_dt(struct platform_device *pdev,
+>  	of_node_put(plat->mdio_node);
+>  }
+>  #else
+> +int stmmac_parse_config_dt(struct device_node *np,
+> +				struct plat_stmmacenet_data *plat)
+> +{
+> +	return -EINVAL;
+> +}
+>  struct plat_stmmacenet_data *
+>  stmmac_probe_config_dt(struct platform_device *pdev, const char **mac)
+>  {
+> @@ -639,6 +667,7 @@ void stmmac_remove_config_dt(struct platform_device *pdev,
+>  {
+>  }
+>  #endif /* CONFIG_OF */
+> +EXPORT_SYMBOL_GPL(stmmac_parse_config_dt);
+>  EXPORT_SYMBOL_GPL(stmmac_probe_config_dt);
+>  EXPORT_SYMBOL_GPL(stmmac_remove_config_dt);
+>  
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h
+> index 3a4663b7b460..0e4aec1f502a 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h
+> @@ -11,6 +11,9 @@
+>  
+>  #include "stmmac.h"
+>  
+> +int stmmac_parse_config_dt(struct device_node *np,
+> +				struct plat_stmmacenet_data *plat);
+> +
+>  struct plat_stmmacenet_data *
+>  stmmac_probe_config_dt(struct platform_device *pdev, const char **mac);
+>  void stmmac_remove_config_dt(struct platform_device *pdev,
+> -- 
+> 2.23.0
+> 
