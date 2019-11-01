@@ -2,48 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FF0ECBE6
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Nov 2019 00:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F9CECBE7
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Nov 2019 00:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726230AbfKAX2A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Nov 2019 19:28:00 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:42840 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725989AbfKAX2A (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Nov 2019 19:28:00 -0400
-Received: by mail-pg1-f194.google.com with SMTP id s23so4004923pgo.9
-        for <linux-mips@vger.kernel.org>; Fri, 01 Nov 2019 16:27:59 -0700 (PDT)
+        id S1727269AbfKAX2D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Nov 2019 19:28:03 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:35846 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725989AbfKAX2C (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Nov 2019 19:28:02 -0400
+Received: by mail-pl1-f196.google.com with SMTP id g9so4997644plp.3
+        for <linux-mips@vger.kernel.org>; Fri, 01 Nov 2019 16:28:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
          :references:in-reply-to;
-        bh=CNPSxUe8IYDj8llAFgtwme8kxwBt9t4kpzeFxOQXh64=;
-        b=RL3cBlwK9fTU6lhYcUK6eWRmwSw/N13ztTUZA9Bfg921y+uXIzoPmj9LHJsfYvrudI
-         oX/UjDTKgVBCy/TL8rwfMU7Nr8EUf8fXRkH3NhiZ9CzYklkGWheXcGj4kr+zrAgiHFLG
-         xelDSoV0O/HCuMPnS/viHkrXVyT8GCwzOP5LNNu9jqgkoqisWt/kbzaUk8uGKLsj2F4+
-         GwzQXXTC9w61ipHdTdBKvJ4mLNTX1g6nuC0630Trs4YnLvoZgvsY2Jej7c74j+UjgHB7
-         SaZmOhVID8ilW1uHrqHhMDk9aO5nFXGN1OS2xrv22Go9wohj+q0nKxWHTMnNHAcFFrVS
-         0lXg==
-X-Gm-Message-State: APjAAAUiXczuoiAhqozE+t8/70QZ6euWcShV+0W2o+iZ1cTlSAl1C2Jl
-        j8zLOyW4UO+ce+9LRgG1eWU=
-X-Google-Smtp-Source: APXvYqwLaZfoMcLtnlz6VSiJzaIpYNip827bJ9X3aq85KzrmmZfrUeK9Xf+km5NHxc/KYiaPuj7Yvg==
-X-Received: by 2002:a65:6085:: with SMTP id t5mr16400847pgu.450.1572650879388;
-        Fri, 01 Nov 2019 16:27:59 -0700 (PDT)
+        bh=Sitk5lEqQu27AK/EpTTHuVCWiR7rvbBvIHITsD69UuQ=;
+        b=kqAkG/HAOY6HUibhWpPG6gAYRMh7RikIxMcgjJ2DInVrPYkLAB/H/U8eCVMIkavRig
+         aXTzy91iqLol7DOpWMYs5J9kVhFvRXw04YFVqcSjj+aVa4s/Vtc9wKkk9xVL/aobhsdg
+         ewXPzDLuvf/FZ1LfQSHIaE06pmEMt3vIznHJPkQKAIS7l/vaURpRbpq74pz3xLbkOztC
+         +qvzc/ust5fsdWuf+tdJLUh8KwyZdgqh8o1q8XYFm0C7P3sZ/0EWSw0jFcXFWEBvs9UA
+         oxQvEHSjrNL+tR/IuIxIvuAROLALij6p56UzLoJgS3ez6cv0xuDdNoLzqe1Xca8DFD72
+         W/hQ==
+X-Gm-Message-State: APjAAAVu7vNe+MNN5FKgcSrcjZLB5PBf6DQZ0xd8cA/Ow1xb0H/KiDXr
+        ES4qeJdvC6fqSI1AmHYXr2I4LFkwdwLm6w==
+X-Google-Smtp-Source: APXvYqy3O/GJR3lURm8ryIyI0koqU65uG+Vwa/UM2jv9IvfkYjCmqO386YeNdJx45tL+Le/uoxNZ7A==
+X-Received: by 2002:a17:902:547:: with SMTP id 65mr15169592plf.239.1572650882061;
+        Fri, 01 Nov 2019 16:28:02 -0700 (PDT)
 Received: from localhost ([2601:646:8a00:9810:9d6:9cca:ff8c:efe0])
-        by smtp.gmail.com with ESMTPSA id q3sm7634110pgj.54.2019.11.01.16.27.58
+        by smtp.gmail.com with ESMTPSA id s11sm8486333pjp.26.2019.11.01.16.28.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2019 16:27:58 -0700 (PDT)
-Message-ID: <5dbcbf7e.1c69fb81.51039.6513@mx.google.com>
-Date:   Fri, 01 Nov 2019 16:27:57 -0700
+        Fri, 01 Nov 2019 16:28:01 -0700 (PDT)
+Message-ID: <5dbcbf81.1c69fb81.23dfc.9b8a@mx.google.com>
+Date:   Fri, 01 Nov 2019 16:28:01 -0700
 From:   Paul Burton <paulburton@kernel.org>
 To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
 CC:     linux-mips@vger.kernel.org
 CC:     chenhc@lemote.com, paul.burton@mips.com,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
 CC:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH 3/6] MIPS: Loongson2ef: clean up loongson64 related code
-References:  <20191020144318.18341-4-jiaxun.yang@flygoat.com>
-In-Reply-To:  <20191020144318.18341-4-jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH 4/6] MIPS: Loongson64: Cleanup unused code
+References:  <20191020150137.19256-1-jiaxun.yang@flygoat.com>
+In-Reply-To:  <20191020150137.19256-1-jiaxun.yang@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -52,13 +52,12 @@ X-Mailing-List: linux-mips@vger.kernel.org
 Hello,
 
 Jiaxun Yang wrote:
-> Remove unrelevent macros, defines and codes from loongson2ef mach.
-> Also rename some defines to match new naming.
+> Clean up legacy code after stripping out Loongson2ef code.
 
 Applied to mips-next.
 
-> commit 5831fdb099dd
-> https://git.kernel.org/mips/c/5831fdb099dd
+> commit 1bdb7b76705a
+> https://git.kernel.org/mips/c/1bdb7b76705a
 > 
 > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > Signed-off-by: Paul Burton <paulburton@kernel.org>
