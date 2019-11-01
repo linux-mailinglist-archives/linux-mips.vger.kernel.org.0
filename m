@@ -2,49 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7A2ECBE9
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Nov 2019 00:28:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E25ECBEA
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Nov 2019 00:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727297AbfKAX2I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Nov 2019 19:28:08 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:43379 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725989AbfKAX2I (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Nov 2019 19:28:08 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 3so8025722pfb.10
-        for <linux-mips@vger.kernel.org>; Fri, 01 Nov 2019 16:28:08 -0700 (PDT)
+        id S1727307AbfKAX2M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Nov 2019 19:28:12 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:45360 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725989AbfKAX2L (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Nov 2019 19:28:11 -0400
+Received: by mail-pf1-f194.google.com with SMTP id z4so2001866pfn.12;
+        Fri, 01 Nov 2019 16:28:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
-         :references:in-reply-to;
-        bh=/hkV9yhsgqR6rPI5mttxkbMzorG5OsCV+JJz5ILqkpU=;
-        b=sjjMKHNUMOcsd3Ox7FZq/1qt/wJUeh6utsh8gI+z/DN657DrQZ5ZISjXnx9P2W8mxs
-         HUqbzzezbKSEfq51Nqo/wtY7nwO3f3HP6xGvily5KPP//FxRqvVX8hYeFptw+R2icr7g
-         da+DnmoCjW6idH+8BEJylJayHj1UzwCetucG8QWEGBbwFWBbRtBRZJLRc3YVoF9vzzr8
-         rYuvzBGOceeRCGNsZxSaRuHrCFqd4PwiQmhVQ43TjkmHuAyg2Polr93AmQYKe1u9CI7v
-         u4+TZTrsljzlnrxNIhDTy46QhUbBH/dV4JyNYICbAr978/yd3mjiVmJn2dUPxi4ffQS+
-         6D3w==
-X-Gm-Message-State: APjAAAXEMmKpFaB8Qua2pXd2qnG2rkdkGQFTvKQwNe5Z8m2nDSKTUQ7K
-        fMfPS6U9FUIM700TsUAmlMCLTvgqwOiwFQ==
-X-Google-Smtp-Source: APXvYqzJF/AMmxNoPMyoZLP9jnFtJxkX4c3kPE/fbioiGxWAYWpTLz2MQa+etwIm/h76FpbtoUV9xA==
-X-Received: by 2002:a17:90a:9a9:: with SMTP id 38mr19015987pjo.45.1572650887841;
-        Fri, 01 Nov 2019 16:28:07 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:from:to:cc:cc:subject:references
+         :in-reply-to;
+        bh=NP3ZrxcO1QpIKzwOZsROhhHcvICXJb13Z/S4bkxqVvk=;
+        b=VjBURhKMN9ZubjkLhS17ipo+kiaI49+qjMRLSgGY78uxzgjXvG1d8nG9qdUs9yT935
+         p1SC62/gRnXtMcB8G1ZuY9C+r7c5057KTn/lqJ/WKpWIIs7D8KEeWULKXk70ahVRUWGp
+         xLSL9PE2jcU07GpZUs7fEJLAOXOxnuHbglrIFNDPxkid2oAhoDhMCjGIwyPDkmxFqrQZ
+         ovKkdBxWG2Kz/viAJPSXm6tiKg9jq0yj+dJyEbRMcPNCwnEafBge+yMzq8EM1ERvEu7x
+         UZ1mCP9n1lhgnfdVLma4HWQaVXzOjC5ObVlUY2XK7UefzEbRkjz8f1TfrPDedSKhm21z
+         mg4Q==
+X-Gm-Message-State: APjAAAXficK03OOhzyfhnCaR+Lsrj+v5esUpMF2qXw9naiuJwLayI3wG
+        TMSVH/T6H8L8Ol6V6+ySQI8=
+X-Google-Smtp-Source: APXvYqzLgFXm1XDbHLFZUnRMMWPVE2HFoQzhnBSpv5Ds43AV+WBW3JEVOyIQIhFzbXgqI/L3jnXFcw==
+X-Received: by 2002:a63:311:: with SMTP id 17mr15896137pgd.327.1572650890852;
+        Fri, 01 Nov 2019 16:28:10 -0700 (PDT)
 Received: from localhost ([2601:646:8a00:9810:9d6:9cca:ff8c:efe0])
-        by smtp.gmail.com with ESMTPSA id w27sm7818394pgc.20.2019.11.01.16.28.07
+        by smtp.gmail.com with ESMTPSA id f25sm11426079pfk.10.2019.11.01.16.28.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2019 16:28:07 -0700 (PDT)
-Message-ID: <5dbcbf87.1c69fb81.695e7.6eaf@mx.google.com>
-Date:   Fri, 01 Nov 2019 16:28:06 -0700
+        Fri, 01 Nov 2019 16:28:10 -0700 (PDT)
+Message-ID: <5dbcbf8a.1c69fb81.57661.f47c@mx.google.com>
+Date:   Fri, 01 Nov 2019 16:28:09 -0700
 From:   Paul Burton <paulburton@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
 CC:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 CC:     linux-mips@vger.kernel.org
-CC:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH] mips/cavium-octeon: Fix typo *must* in comment
-References:  <3a1eda2f-bc4b-0958-d609-6376663faa9a@molgen.mpg.de>
-In-Reply-To:  <3a1eda2f-bc4b-0958-d609-6376663faa9a@molgen.mpg.de>
+Subject: Re: [PATCH] MIPS: SGI-IP27: replace MAX_COMPACT_NODE with MAX_NUMNODES
+References:  <20191030105144.10686-1-tbogendoerfer@suse.de>
+In-Reply-To:  <20191030105144.10686-1-tbogendoerfer@suse.de>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -52,16 +52,16 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hello,
 
-Paul Menzel wrote:
-> Date: Mon, 2 Sep 2019 11:55:06 +0200
+Thomas Bogendoerfer wrote:
+> MAX_COMPACT_NODE is a leftover from the compact node implementation,
+> which is removed now.  Use MAX_NUMNODES instead.
 
 Applied to mips-next.
 
-> commit 474435a05830
-> https://git.kernel.org/mips/c/474435a05830
+> commit c80b48965a3f
+> https://git.kernel.org/mips/c/c80b48965a3f
 > 
-> Fixes: 5b3b16880f ("MIPS: Add Cavium OCTEON processor support files to arch/mips/cavium-octeon.")
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
 > Signed-off-by: Paul Burton <paulburton@kernel.org>
 
 Thanks,
