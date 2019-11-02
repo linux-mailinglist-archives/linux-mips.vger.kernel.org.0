@@ -2,75 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF71BECBEC
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Nov 2019 00:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F249BECCE6
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Nov 2019 03:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727576AbfKAX2P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Nov 2019 19:28:15 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:34957 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727574AbfKAX2O (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Nov 2019 19:28:14 -0400
-Received: by mail-pf1-f195.google.com with SMTP id d13so8051323pfq.2;
-        Fri, 01 Nov 2019 16:28:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
-         :references:in-reply-to;
-        bh=cS4FjHovoa9iGebRrfyMIYWfQWXcuPGHDu34OuRwB9U=;
-        b=Y6SK6uPAOpE+oKRtHFDJZrZG3wDroX6pKZ0greCt5OMd4WJ0DNXaVvw6caqEVzbaUx
-         qHbxq89vvYFcRIPdgk6lQjqYTOREe1865J1x2bsCjujhRnb4Qwrm2UUmMXV3dBovPVAN
-         Tq5DPMRPcalKNzte48ZK3K/SHfFLur3wRcu/13RJHnkT/TKbw0BRYPaF4YOmZLNTo6Ag
-         9Ugn4lSATpfJLph2YBowN6Hk17NVIqCIiD28uhlLTW8cUzvD2LyQLwNnR8CepKrhJ3k2
-         V3ymB7vfRjsyIGJCJ4SRrthoXl2dmDV5/Oftcnl8wvZsUmIncicTwBsDop9F5dCBv7dY
-         cuRw==
-X-Gm-Message-State: APjAAAVKmJr6xyIN2LImFmXwmJMolSU6rppD10WL6khu2MKtm1VtROPi
-        KuWzIYUylP6njIrfkN3uqk8=
-X-Google-Smtp-Source: APXvYqxyWu5VJ+Mh3KaFxhEhry9upHWvRtIn+yyvAxPWBNWdthUH985WtUA9TniaDVN/Uq0/QmJ+7w==
-X-Received: by 2002:a17:90a:2942:: with SMTP id x2mr9437263pjf.119.1572650894035;
-        Fri, 01 Nov 2019 16:28:14 -0700 (PDT)
-Received: from localhost ([2601:646:8a00:9810:9d6:9cca:ff8c:efe0])
-        by smtp.gmail.com with ESMTPSA id 19sm8783182pjd.23.2019.11.01.16.28.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2019 16:28:13 -0700 (PDT)
-Message-ID: <5dbcbf8d.1c69fb81.d579.a9f1@mx.google.com>
-Date:   Fri, 01 Nov 2019 16:28:12 -0700
-From:   Paul Burton <paulburton@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-CC:     paul.burton@mips.com, ralf@linux-mips.org, jhogan@kernel.org,
-        chenhc@lemote.com
-CC:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-CC:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3] MIPS: Loongson: Make default kernel log buffer size as  128KB for Loongson3
-References:  <1571220180-5478-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To:  <1571220180-5478-1-git-send-email-yangtiezhu@loongson.cn>
+        id S1727184AbfKBCkz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Nov 2019 22:40:55 -0400
+Received: from forward106j.mail.yandex.net ([5.45.198.249]:57239 "EHLO
+        forward106j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727067AbfKBCkz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Nov 2019 22:40:55 -0400
+Received: from forward102q.mail.yandex.net (forward102q.mail.yandex.net [IPv6:2a02:6b8:c0e:1ba:0:640:516:4e7d])
+        by forward106j.mail.yandex.net (Yandex) with ESMTP id 6291B11A04ED;
+        Sat,  2 Nov 2019 05:40:51 +0300 (MSK)
+Received: from mxback8q.mail.yandex.net (mxback8q.mail.yandex.net [IPv6:2a02:6b8:c0e:42:0:640:b38f:32ec])
+        by forward102q.mail.yandex.net (Yandex) with ESMTP id 5B93D7F20013;
+        Sat,  2 Nov 2019 05:40:51 +0300 (MSK)
+Received: from vla5-dfb0352c045b.qloud-c.yandex.net (vla5-dfb0352c045b.qloud-c.yandex.net [2a02:6b8:c18:348f:0:640:dfb0:352c])
+        by mxback8q.mail.yandex.net (nwsmtp/Yandex) with ESMTP id Vmu3lmIoXI-eofSU3x0;
+        Sat, 02 Nov 2019 05:40:51 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1572662451;
+        bh=bLS5wzD5BpHdqD5b39TqcaTvrmJYKCzMdNKEQgmtXs8=;
+        h=In-Reply-To:From:To:Subject:Cc:Date:References:Message-ID;
+        b=LmS8jzuTgfVUjx+/dI3t7dtflrY50otNWULESgovTbUiv2cZ5lwfC0FIaOi167l6K
+         d/09YmnmFfGwzcbMyRmRoB0cAbd62tFELjKCgZsK2ImBPQi+BhVEvUzQJ+pkaQyH1E
+         MRLwczd3wCXIPm/3igBrOEouGd2YE699aVRc/5aE=
+Authentication-Results: mxback8q.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by vla5-dfb0352c045b.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id 0jFaYaZA5n-egVeYYD5;
+        Sat, 02 Nov 2019 05:40:49 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+Subject: Re: [PATCH] MIPS: Loongson: Add board_ebase_setup() support
+To:     Huacai Chen <chenhc@lemote.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>
+Cc:     Paul Burton <paul.burton@mips.com>, linux-mips@linux-mips.org,
+        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Huacai Chen <chenhuacai@gmail.com>
+References: <1571975104-5849-1-git-send-email-chenhc@lemote.com>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <e7b63b4e-a2c2-eaa2-50bd-d36bcf8c8faa@flygoat.com>
+Date:   Sat, 2 Nov 2019 10:40:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <1571975104-5849-1-git-send-email-chenhc@lemote.com>
+Content-Type: text/plain; charset=gbk
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
 
-Tiezhu Yang wrote:
-> When I update kernel with loongson3_defconfig based on the Loongson 3A3000
-> platform, then using dmesg command to show kernel ring buffer, the initial
-> kernel messages have disappeared due to the log buffer is too small, it is
-> better to change the kernel log buffer size from 16KB to 128KB which is
-> enough to save the boot messages.
+
+ÔÚ 2019/10/25 ÉÏÎç11:45, Huacai Chen Ð´µÀ:
+> Old processors before Loongson-3A2000 have a 32bit ebase register and
+> have no WG bit, new processors since Loongson-3A2000 have a 64bit ebase
+> register and do have the WG bit. Unfortunately, Loongson processors
+> which have the WG bit are slightly different from MIPS R2. This makes
+> the generic ebase setup not suitable for every scenarios.
 > 
-> Since the default LOG_BUF_SHIFT value is 17, the default kernel log buffer
-> size is 128KB, just delete the CONFIG_LOG_BUF_SHIFT line.
-
-Applied to mips-next.
-
-> commit 8a5a49987130
-> https://git.kernel.org/mips/c/8a5a49987130
+> To make Loongson's kernel be more robust, we add a board_ebase_setup()
+> hook to ensure that CKSEG0 is always used for ebase. This is also useful
+> on platforms where BIOS doesn't initialise an appropriate ebase.
 > 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> Signed-off-by: Paul Burton <paulburton@kernel.org>
-
-Thanks,
-    Paul
-
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paulburton@kernel.org to report it. ]
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+--
+Jiaxun Yang
