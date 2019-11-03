@@ -2,81 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8501CED20C
-	for <lists+linux-mips@lfdr.de>; Sun,  3 Nov 2019 06:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22702ED2E0
+	for <lists+linux-mips@lfdr.de>; Sun,  3 Nov 2019 11:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726408AbfKCFf6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 3 Nov 2019 01:35:58 -0400
-Received: from forward105j.mail.yandex.net ([5.45.198.248]:39283 "EHLO
-        forward105j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726354AbfKCFf5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 3 Nov 2019 01:35:57 -0400
-Received: from mxback10g.mail.yandex.net (mxback10g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:171])
-        by forward105j.mail.yandex.net (Yandex) with ESMTP id 53AE4B20C4B;
-        Sun,  3 Nov 2019 08:35:54 +0300 (MSK)
-Received: from myt4-6a59ac13d093.qloud-c.yandex.net (myt4-6a59ac13d093.qloud-c.yandex.net [2a02:6b8:c12:88f:0:640:6a59:ac13])
-        by mxback10g.mail.yandex.net (nwsmtp/Yandex) with ESMTP id BFTFgKt6xX-Zr9OKuog;
-        Sun, 03 Nov 2019 08:35:54 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1572759354;
-        bh=uz3RinoGmSAAZqjwvGNNBaDKLmlaS6ynpF2IStaDqmo=;
-        h=In-Reply-To:From:To:Subject:Cc:Date:References:Message-ID;
-        b=gSFtrtzQxxZzbWE1iDhav+to8lFRHy0q5HkWXMUVFCL5CrXOuC70BF6JVUPmqXXQI
-         4hRmBAW7tZ9fmgN37ppKYhoewUbrWPP/ZoAjgTIgUjC4ib7vxH0H+P7fsyykVrPdGr
-         +bZvEFOJEWHb/qajqyNOeH+9xx/9pfjDV817SDwE=
-Authentication-Results: mxback10g.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by myt4-6a59ac13d093.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id ZRlKR69yq6-Zf0eFbJZ;
-        Sun, 03 Nov 2019 08:35:51 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-Subject: Re: [PATCH 3/3] MIPS: Loongson: Unify LOONGSON3/LOONGSON64 Kconfig
- usage
-To:     Huacai Chen <chenhc@lemote.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>
-Cc:     Paul Burton <paul.burton@mips.com>, linux-mips@linux-mips.org,
-        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>
-References: <1572758417-29265-1-git-send-email-chenhc@lemote.com>
- <1572758417-29265-3-git-send-email-chenhc@lemote.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <73a53fb5-541b-24f0-8fba-fff4f3a4726e@flygoat.com>
-Date:   Sun, 3 Nov 2019 13:35:38 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <1572758417-29265-3-git-send-email-chenhc@lemote.com>
-Content-Type: text/plain; charset=gbk
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1727613AbfKCKfI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 3 Nov 2019 05:35:08 -0500
+Received: from mx2.suse.de ([195.135.220.15]:56864 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726408AbfKCKfG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 3 Nov 2019 05:35:06 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 3CAFAB13E;
+        Sun,  3 Nov 2019 10:35:04 +0000 (UTC)
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Ralf Baechle <ralf@linux-mips.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-mips@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Christoph Hellwig <hch@lst.de>
+Subject: [net v2 1/4] net: sgi: ioc3-eth: don't abuse dma_direct_* calls
+Date:   Sun,  3 Nov 2019 11:34:30 +0100
+Message-Id: <20191103103433.26826-1-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+From: Christoph Hellwig <hch@lst.de>
 
+dma_direct_ is a low-level API that must never be used by drivers
+directly.  Switch to use the proper DMA API instead.
 
-ÔÚ 2019/11/3 ÏÂÎç1:20, Huacai Chen Ð´µÀ:
-> There are mixed LOONGSON3/LOONGSON64 usages in recently changes, let's
-> establish some rules:
-> 
-> 1, In Kconfig symbols, we only use CPU_LOONGSON64, MACH_LOONGSON64 and
-> SYS_HAS_CPU_LOONGSON64, all other derived symbols use "LOONGSON3" since
-> they all not widely-used symbols and sometimes not suitable for all
-> 64-bit Loongson processors. E.g., we use symbols LOONGSON3_ENHANCEMENT,
-> CPU_LOONGSON3_WORKAROUNDS, etc.
-> 
-> 2, Hide GSx64/GSx64E in Kconfig title since it is not useful for
-> general users. However, in the full description we use a more detailed
-> manner. E.g., GS264/GS464/GS464E/GS464V.
-> 
-> All Kconfig titles and descriptions of Loongson processors and machines
-> have also been updated in this patch for consistency.
-> 
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> ---Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Change in v2:
+- ensure that tx ring is 16kB aligned
 
-Thanks!
-I'll obey your rules.
---
-Jiaxun Yang
+Fixes: ed870f6a7aa2 ("net: sgi: ioc3-eth: use dma-direct for dma allocations")
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+
+---
+ drivers/net/ethernet/sgi/ioc3-eth.c | 33 +++++++++++++++++----------------
+ 1 file changed, 17 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/net/ethernet/sgi/ioc3-eth.c b/drivers/net/ethernet/sgi/ioc3-eth.c
+index deb636d653f3..4879dedf1f60 100644
+--- a/drivers/net/ethernet/sgi/ioc3-eth.c
++++ b/drivers/net/ethernet/sgi/ioc3-eth.c
+@@ -48,7 +48,7 @@
+ #include <linux/etherdevice.h>
+ #include <linux/ethtool.h>
+ #include <linux/skbuff.h>
+-#include <linux/dma-direct.h>
++#include <linux/dma-mapping.h>
+ 
+ #include <net/ip.h>
+ 
+@@ -89,6 +89,7 @@ struct ioc3_private {
+ 	struct device *dma_dev;
+ 	u32 *ssram;
+ 	unsigned long *rxr;		/* pointer to receiver ring */
++	void *tx_ring;
+ 	struct ioc3_etxd *txr;
+ 	dma_addr_t rxr_dma;
+ 	dma_addr_t txr_dma;
+@@ -1242,8 +1243,8 @@ static int ioc3_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	ioc3_stop(ip);
+ 
+ 	/* Allocate rx ring.  4kb = 512 entries, must be 4kb aligned */
+-	ip->rxr = dma_direct_alloc_pages(ip->dma_dev, RX_RING_SIZE,
+-					 &ip->rxr_dma, GFP_ATOMIC, 0);
++	ip->rxr = dma_alloc_coherent(ip->dma_dev, RX_RING_SIZE, &ip->rxr_dma,
++				     GFP_ATOMIC);
+ 	if (!ip->rxr) {
+ 		pr_err("ioc3-eth: rx ring allocation failed\n");
+ 		err = -ENOMEM;
+@@ -1251,14 +1252,16 @@ static int ioc3_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	}
+ 
+ 	/* Allocate tx rings.  16kb = 128 bufs, must be 16kb aligned  */
+-	ip->txr = dma_direct_alloc_pages(ip->dma_dev, TX_RING_SIZE,
+-					 &ip->txr_dma,
+-					 GFP_KERNEL | __GFP_ZERO, 0);
+-	if (!ip->txr) {
++	ip->tx_ring = dma_alloc_coherent(ip->dma_dev, TX_RING_SIZE + SZ_16K - 1,
++					 &ip->txr_dma, GFP_KERNEL | __GFP_ZERO);
++	if (!ip->tx_ring) {
+ 		pr_err("ioc3-eth: tx ring allocation failed\n");
+ 		err = -ENOMEM;
+ 		goto out_stop;
+ 	}
++	/* Align TX ring */
++	ip->txr = PTR_ALIGN(ip->tx_ring, SZ_16K);
++	ip->txr_dma = ALIGN(ip->txr_dma, SZ_16K);
+ 
+ 	ioc3_init(dev);
+ 
+@@ -1313,11 +1316,11 @@ static int ioc3_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ out_stop:
+ 	del_timer_sync(&ip->ioc3_timer);
+ 	if (ip->rxr)
+-		dma_direct_free_pages(ip->dma_dev, RX_RING_SIZE, ip->rxr,
+-				      ip->rxr_dma, 0);
+-	if (ip->txr)
+-		dma_direct_free_pages(ip->dma_dev, TX_RING_SIZE, ip->txr,
+-				      ip->txr_dma, 0);
++		dma_free_coherent(ip->dma_dev, RX_RING_SIZE, ip->rxr,
++				  ip->rxr_dma);
++	if (ip->tx_ring)
++		dma_free_coherent(ip->dma_dev, TX_RING_SIZE, ip->tx_ring,
++				  ip->txr_dma);
+ out_res:
+ 	pci_release_regions(pdev);
+ out_free:
+@@ -1335,10 +1338,8 @@ static void ioc3_remove_one(struct pci_dev *pdev)
+ 	struct net_device *dev = pci_get_drvdata(pdev);
+ 	struct ioc3_private *ip = netdev_priv(dev);
+ 
+-	dma_direct_free_pages(ip->dma_dev, RX_RING_SIZE, ip->rxr,
+-			      ip->rxr_dma, 0);
+-	dma_direct_free_pages(ip->dma_dev, TX_RING_SIZE, ip->txr,
+-			      ip->txr_dma, 0);
++	dma_free_coherent(ip->dma_dev, RX_RING_SIZE, ip->rxr, ip->rxr_dma);
++	dma_free_coherent(ip->dma_dev, TX_RING_SIZE, ip->tx_ring, ip->txr_dma);
+ 
+ 	unregister_netdev(dev);
+ 	del_timer_sync(&ip->ioc3_timer);
+-- 
+2.16.4
+
