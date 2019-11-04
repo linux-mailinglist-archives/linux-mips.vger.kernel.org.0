@@ -2,94 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 813AEEE7DB
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2019 20:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8714FEE7F3
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2019 20:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729199AbfKDTDK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Nov 2019 14:03:10 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:47051 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728377AbfKDTDK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Nov 2019 14:03:10 -0500
-Received: by mail-pg1-f195.google.com with SMTP id f19so11972938pgn.13
-        for <linux-mips@vger.kernel.org>; Mon, 04 Nov 2019 11:03:09 -0800 (PST)
+        id S1728427AbfKDTGJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Nov 2019 14:06:09 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:39330 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728377AbfKDTGJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Nov 2019 14:06:09 -0500
+Received: by mail-pl1-f196.google.com with SMTP id o9so1354884plk.6;
+        Mon, 04 Nov 2019 11:06:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mZqxvkrtzPsRoZTI7aNkRzMMf5lWeHjBX/Hf0nx/9QM=;
-        b=plRjai3koIkh9PM6bipRrfL7g5R6jvxrR0QRD4cP6g++Kwhk7Wfd8GOKfKMPJsN7Sv
-         48+WUyC01NqKd3HciMDt7Hk0K9T2Nr7Dq9qZsBjXZ5VLcrT1Ftlo/DKYbYhn456XNL2q
-         TdQ5S6zOI7L74ZHW6T8wEFPXPCbGKJPta5zdi432r8E1Vi8ZSmHiIFz9zAEyYw4iMQJT
-         +wClvIbENmma0bxxgG1DBY2/wykYk9hqOTL4n2T8lKerbg/mogs6H1Um7UGIjhSD85cu
-         PQwqdgmKdcWh6avFsjWsMgmKsUekJd9dvyDvnIXO6s2fUTunDBRq6lP74TQD0P3BBbzp
-         znLw==
-X-Gm-Message-State: APjAAAVvFmcyf2aSRuaQyQz8tOpntvTDENMTMqKsA2/XBrCTvMnN1N4C
-        J65YbXy0ovnsCk24aEF8gDU=
-X-Google-Smtp-Source: APXvYqzddVRUSzrs4Weqi/EZwgQUw2pIzcHhSjhMPuyU1XRiONunV7NxmqgznFVWjvQ6GReqc1mBPA==
-X-Received: by 2002:a63:67c3:: with SMTP id b186mr31718285pgc.152.1572894188330;
-        Mon, 04 Nov 2019 11:03:08 -0800 (PST)
-Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id 6sm19206868pfy.43.2019.11.04.11.03.07
+        h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
+         :references:in-reply-to;
+        bh=PkVlV2Kz71aAlcTBdoUnpir/PBHm1J2bry8CrnLTwNs=;
+        b=fXGc4ds3UI8vOfPZTL2s66iJSnk0h/QOj9fjrrdgeqMi0Xul+8nGor0ZuuLing/Vo0
+         BU/1VjvJAuuaHP+mSH56nZi+mailf3WiM/c+QTD7UjeiBwGREMI4yIuQTp2k5f8i9xFI
+         U/8W2MGbBQH4Hm6usBXhWce771P/Yu8Cv98FSdI99ybRsKdaX1yEnVIvi0icxepD/AbY
+         qUFv/vI/kxDRajmEXlli8xJ53sW0B9EWl+yDs5dSXlAYO0pJxTAB4to1K3tNQea/6WRQ
+         +BkUEDa/ouiDF1lH8rFOEqcr8FwUUNfdABEN+IM1u6Z9DfSCuPC9d39GcCIDNPzjo09g
+         F/Ig==
+X-Gm-Message-State: APjAAAXVoQSudQKcKogX3fYGeIfHg2pHSM7Bcv9+VwN1Q8sUCRKtb7wB
+        l4yP1jXUXoX54WXVGRvRByY=
+X-Google-Smtp-Source: APXvYqwHYaIj/xZhKh09dH6XDZ2Wqs1GhAknR+TaXRPmeAelIzMYlAEzFBUVUr3GwV5/RJDPdzb3Ow==
+X-Received: by 2002:a17:902:9a01:: with SMTP id v1mr29523284plp.132.1572894368786;
+        Mon, 04 Nov 2019 11:06:08 -0800 (PST)
+Received: from localhost (MIPS-TECHNO.ear1.SanJose1.Level3.net. [4.15.122.74])
+        by smtp.gmail.com with ESMTPSA id y16sm17702772pfo.62.2019.11.04.11.06.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2019 11:03:07 -0800 (PST)
-Date:   Mon, 4 Nov 2019 11:03:30 -0800
+        Mon, 04 Nov 2019 11:06:08 -0800 (PST)
+Message-ID: <5dc076a0.1c69fb81.bd82b.3c69@mx.google.com>
+Date:   Mon, 04 Nov 2019 11:06:07 -0800
 From:   Paul Burton <paulburton@kernel.org>
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+CC:     Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@linux-mips.org,
-        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>
-Subject: Re: [PATCH 1/3] MIPS: Loongson: Remove Loongson-2E/2F support
-Message-ID: <20191104190330.hpzuqsyh5j5tkr4p@lantea.localdomain>
-References: <1572758417-29265-1-git-send-email-chenhc@lemote.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1572758417-29265-1-git-send-email-chenhc@lemote.com>
-User-Agent: NeoMutt/20180716
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+CC:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+CC:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Loongson: Fix return value of loongson_hwmon_init
+References:  <1572874430-28903-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To:  <1572874430-28903-1-git-send-email-yangtiezhu@loongson.cn>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Huacai,
+Hello,
 
-On Sun, Nov 03, 2019 at 01:20:15PM +0800, Huacai Chen wrote:
-> Loongson-2E/2F is old, inactive and a bit ugly, so let's remove them
-> and the world will be more comfortable.
+Tiezhu Yang wrote:
+> When call function hwmon_device_register failed, use the actual
+> return value instead of always -ENOMEM.
+
+Applied to mips-next.
+
+> commit dece3c2a320b
+> https://git.kernel.org/mips/c/dece3c2a320b
 > 
-> Old:
-> Products with Loongson-2E/2F are more than ten years old, there is no
-> new products.
-> 
-> Inactive:
-> There are not any updates for a long time, and the maintainer (Jiaxun
-> Yang) focuses on Loongson-3 now.
-
-Jiaxun just made changes to the 2E/2F code just a couple of weeks ago to
-separate it from other Loongson64 support & clean it up - he also
-indicated at the same time that he intends to contiue maintaining this
-code [1].
-
-> Ugly:
-> Loongson-2E/2F are not compatible with regular MIPS, e.g., ebase, cache
-> flush method and tlb refill handler.
-
-Sadly "quirks" like this aren't solely the domain of Loongson 2E/2F
-machines, so this isn't an unusual burden.
-
-> Linux-5.4.x is a LTS release, I think it is the suitable time to remove
-> Loongson-2E/2F.
-
-I disagree - Jiaxun says he's happy to maintain the platform & has
-recently been working on it. I'm not going to remove it & deny him that
-chance. If it does indeed become unmaintained then sure let's drop it,
-but that doesn't seem to be the case here.
+> Fixes: 64f09aa967e1 ("MIPS: Loongson-3: Add CPU Hwmon platform driver")
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> Signed-off-by: Paul Burton <paulburton@kernel.org>
 
 Thanks,
     Paul
 
-[1] https://lore.kernel.org/linux-mips/AF48876C-308C-46AD-B7B4-77BFA2413EDE@flygoat.com/
+[ This message was auto-generated; if you believe anything is incorrect
+  then please email paulburton@kernel.org to report it. ]
