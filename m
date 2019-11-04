@@ -2,94 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A27D2EDCCD
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2019 11:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B12DEE14E
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2019 14:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728581AbfKDKpf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Nov 2019 05:45:35 -0500
-Received: from mx2.suse.de ([195.135.220.15]:45102 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727663AbfKDKpY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 4 Nov 2019 05:45:24 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id E6E61B1D8;
-        Mon,  4 Nov 2019 10:45:22 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Ralf Baechle <ralf@linux-mips.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-mips@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [net v3 5/5] net: sgi: ioc3-eth: ensure tx ring is 16k aligned.
-Date:   Mon,  4 Nov 2019 11:45:15 +0100
-Message-Id: <20191104104515.7066-5-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20191104104515.7066-1-tbogendoerfer@suse.de>
-References: <20191104104515.7066-1-tbogendoerfer@suse.de>
+        id S1727430AbfKDNeS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Nov 2019 08:34:18 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:46782 "EHLO
+        mail.loongson.cn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727236AbfKDNeS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Nov 2019 08:34:18 -0500
+Received: from linux.loongson.cn (unknown [10.20.41.27])
+        by mail (Coremail) with SMTP id QMiowPDxf2DSKMBdOMMbAA--.11S2;
+        Mon, 04 Nov 2019 21:34:10 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Loongson: Fix return value of loongson_hwmon_init
+Date:   Mon,  4 Nov 2019 21:33:50 +0800
+Message-Id: <1572874430-28903-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: QMiowPDxf2DSKMBdOMMbAA--.11S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruryktryxtF1kCw48tFWkZwb_yoWfJFcE9r
+        409ryxXrn5KrnIyw4qkwnxury2kryvgF4fAr1ftw43A34F9rnYq3y5Za97A3Wjgr45Ar98
+        X3yqgryxCFy3ujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbakYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r1j6r4UMcIj6xIIjxv20xvE14v26r1Y6r
+        17McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAK
+        I48JM4x0Y48IcxkI7VAKI48G6xCjnVAKz4kxMxAIw28IcxkI7VAKI48JMxC20s026xCaFV
+        Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
+        x4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
+        1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j
+        6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8Jb
+        IYCTnIWIevJa73UjIFyTuYvjxUclApUUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-IOC3 hardware needs a 16k aligned TX ring.
+When call function hwmon_device_register failed, use the actual
+return value instead of always -ENOMEM.
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Fixes: 64f09aa967e1 ("MIPS: Loongson-3: Add CPU Hwmon platform driver")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- drivers/net/ethernet/sgi/ioc3-eth.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ drivers/platform/mips/cpu_hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/sgi/ioc3-eth.c b/drivers/net/ethernet/sgi/ioc3-eth.c
-index 1af68826810a..d242906ae233 100644
---- a/drivers/net/ethernet/sgi/ioc3-eth.c
-+++ b/drivers/net/ethernet/sgi/ioc3-eth.c
-@@ -89,6 +89,7 @@ struct ioc3_private {
- 	struct device *dma_dev;
- 	u32 *ssram;
- 	unsigned long *rxr;		/* pointer to receiver ring */
-+	void *tx_ring;
- 	struct ioc3_etxd *txr;
- 	dma_addr_t rxr_dma;
- 	dma_addr_t txr_dma;
-@@ -1236,13 +1237,16 @@ static int ioc3_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+diff --git a/drivers/platform/mips/cpu_hwmon.c b/drivers/platform/mips/cpu_hwmon.c
+index 1833b51..0d27cb7 100644
+--- a/drivers/platform/mips/cpu_hwmon.c
++++ b/drivers/platform/mips/cpu_hwmon.c
+@@ -176,7 +176,7 @@ static int __init loongson_hwmon_init(void)
+ 
+ 	cpu_hwmon_dev = hwmon_device_register(NULL);
+ 	if (IS_ERR(cpu_hwmon_dev)) {
+-		ret = -ENOMEM;
++		ret = PTR_ERR(cpu_hwmon_dev);
+ 		pr_err("hwmon_device_register fail!\n");
+ 		goto fail_hwmon_device_register;
  	}
- 
- 	/* Allocate tx rings.  16kb = 128 bufs, must be 16kb aligned  */
--	ip->txr = dma_alloc_coherent(ip->dma_dev, TX_RING_SIZE, &ip->txr_dma,
--				     GFP_KERNEL);
--	if (!ip->txr) {
-+	ip->tx_ring = dma_alloc_coherent(ip->dma_dev, TX_RING_SIZE + SZ_16K - 1,
-+					 &ip->txr_dma, GFP_KERNEL);
-+	if (!ip->tx_ring) {
- 		pr_err("ioc3-eth: tx ring allocation failed\n");
- 		err = -ENOMEM;
- 		goto out_stop;
- 	}
-+	/* Align TX ring */
-+	ip->txr = PTR_ALIGN(ip->tx_ring, SZ_16K);
-+	ip->txr_dma = ALIGN(ip->txr_dma, SZ_16K);
- 
- 	ioc3_init(dev);
- 
-@@ -1299,8 +1303,8 @@ static int ioc3_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	if (ip->rxr)
- 		dma_free_coherent(ip->dma_dev, RX_RING_SIZE, ip->rxr,
- 				  ip->rxr_dma);
--	if (ip->txr)
--		dma_free_coherent(ip->dma_dev, TX_RING_SIZE, ip->txr,
-+	if (ip->tx_ring)
-+		dma_free_coherent(ip->dma_dev, TX_RING_SIZE, ip->tx_ring,
- 				  ip->txr_dma);
- out_res:
- 	pci_release_regions(pdev);
-@@ -1320,7 +1324,7 @@ static void ioc3_remove_one(struct pci_dev *pdev)
- 	struct ioc3_private *ip = netdev_priv(dev);
- 
- 	dma_free_coherent(ip->dma_dev, RX_RING_SIZE, ip->rxr, ip->rxr_dma);
--	dma_free_coherent(ip->dma_dev, TX_RING_SIZE, ip->txr, ip->txr_dma);
-+	dma_free_coherent(ip->dma_dev, TX_RING_SIZE, ip->tx_ring, ip->txr_dma);
- 
- 	unregister_netdev(dev);
- 	del_timer_sync(&ip->ioc3_timer);
 -- 
-2.16.4
+2.1.0
+
 
