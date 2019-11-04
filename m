@@ -2,51 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F23ED659
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2019 00:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 400CBED6A6
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2019 01:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728307AbfKCXI3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 3 Nov 2019 18:08:29 -0500
-Received: from eddie.linux-mips.org ([148.251.95.138]:33308 "EHLO
-        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728059AbfKCXI3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 3 Nov 2019 18:08:29 -0500
-Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
-        with ESMTP id S23991035AbfKCXI0uVKha (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Nov 2019 00:08:26 +0100
-Date:   Sun, 3 Nov 2019 23:08:26 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Huacai Chen <chenhc@lemote.com>
-cc:     Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@linux-mips.org,
-        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>
-Subject: Re: [PATCH 1/3] MIPS: Loongson: Remove Loongson-2E/2F support
-In-Reply-To: <1572758417-29265-1-git-send-email-chenhc@lemote.com>
-Message-ID: <alpine.LFD.2.21.1911032301160.367459@eddie.linux-mips.org>
-References: <1572758417-29265-1-git-send-email-chenhc@lemote.com>
+        id S1728189AbfKDAez (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 3 Nov 2019 19:34:55 -0500
+Received: from verein.lst.de ([213.95.11.211]:36126 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728106AbfKDAez (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 3 Nov 2019 19:34:55 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 9838568BFE; Mon,  4 Nov 2019 01:34:52 +0100 (CET)
+Date:   Mon, 4 Nov 2019 01:34:52 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-mips@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: Re: [net v2 1/4] net: sgi: ioc3-eth: don't abuse dma_direct_* calls
+Message-ID: <20191104003452.GA2585@lst.de>
+References: <20191103103433.26826-1-tbogendoerfer@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191103103433.26826-1-tbogendoerfer@suse.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 3 Nov 2019, Huacai Chen wrote:
+On Sun, Nov 03, 2019 at 11:34:30AM +0100, Thomas Bogendoerfer wrote:
+> From: Christoph Hellwig <hch@lst.de>
+> 
+> dma_direct_ is a low-level API that must never be used by drivers
+> directly.  Switch to use the proper DMA API instead.
+> 
+> Change in v2:
+> - ensure that tx ring is 16kB aligned
 
-> Loongson-2E/2F is old, inactive and a bit ugly, so let's remove them
-> and the world will be more comfortable.
-
- People still use them, e.g. I do, and upstream removal causes an issue
-with the need to backport changes not specific to the platform.
-
- If you don't want to maintain the code, then just mark it orphan and rely 
-on the community to maintain it.  If it starts breaking and nobody picks 
-it to make fixes, then it can be removed.  There's no need to rush IMO.
-
- BTW, there used to be a patch somewhere to support more than 512MiB of 
-DRAM with the 2E, but I can't find it -- can you help me tracking it down?
-
-  Maciej
+FYI, I think this should be a separate patch.  The lack of explicitly
+alignment was just as broken before this patch as it is now.
