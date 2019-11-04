@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5FAEEF2E
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2019 23:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F143EF065
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2019 23:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388908AbfKDWA6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Nov 2019 17:00:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58898 "EHLO mail.kernel.org"
+        id S2387694AbfKDVuZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Nov 2019 16:50:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42526 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388351AbfKDWA5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 4 Nov 2019 17:00:57 -0500
+        id S2387689AbfKDVuY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 4 Nov 2019 16:50:24 -0500
 Received: from localhost (6.204-14-84.ripe.coltfrance.com [84.14.204.6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 835E620650;
-        Mon,  4 Nov 2019 22:00:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 51C87214D8;
+        Mon,  4 Nov 2019 21:50:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572904857;
-        bh=IEy/Uf64WWx5r28Ky/7zeFyYJNzL1e4yhFukKOfLYi8=;
+        s=default; t=1572904223;
+        bh=DuplhoRQredmAuojEW6TUPC1yPAM/K2dTnu2HW9tcM4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fPs2o/tUl4zp14y/su95q2/S1SjxxOhFOu/JvUE2QP8mID89UZVPwcTr3kDu0M8CL
-         Ko7McncsF6ffNpk68cafyjV3Bt8gkesbU+mHPr9OlwgZv7cfcbaCXbwPVheqhH5sLT
-         7kCcUb1ZzqXy85VD0IuGXxIxzHSNevPOzA2aBmFs=
+        b=1XaCdidX3cAqn0QGGO8VqZLygYyOoA7BlCfDnky9VRSXLuWYhheJHBrA4vc+7koTw
+         LHJuSjpGr5aFTezViQ+YwYK+PjlkCFWmBOgisjFI/2lhBjA0hVjT4K11XOGe38HMmZ
+         +ANgp89SSTxf3ISEPrHH+lyahFFxNSHxH3spZJWk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 096/149] MIPS: fw: sni: Fix out of bounds init of o32 stack
+Subject: [PATCH 4.9 27/62] MIPS: fw: sni: Fix out of bounds init of o32 stack
 Date:   Mon,  4 Nov 2019 22:44:49 +0100
-Message-Id: <20191104212143.263763593@linuxfoundation.org>
+Message-Id: <20191104211926.294578388@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191104212126.090054740@linuxfoundation.org>
-References: <20191104212126.090054740@linuxfoundation.org>
+In-Reply-To: <20191104211901.387893698@linuxfoundation.org>
+References: <20191104211901.387893698@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -65,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/mips/fw/sni/sniprom.c b/arch/mips/fw/sni/sniprom.c
-index 8772617b64cef..80112f2298b68 100644
+index 6aa264b9856ac..7c6151d412bd7 100644
 --- a/arch/mips/fw/sni/sniprom.c
 +++ b/arch/mips/fw/sni/sniprom.c
-@@ -43,7 +43,7 @@
+@@ -42,7 +42,7 @@
  
  /* O32 stack has to be 8-byte aligned. */
  static u64 o32_stk[4096];
