@@ -2,55 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F75EE861
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2019 20:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B7CEEC54
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2019 22:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728940AbfKDTap (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Nov 2019 14:30:45 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:50482 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728174AbfKDTap (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Nov 2019 14:30:45 -0500
-Received: from localhost (unknown [IPv6:2601:601:9f00:1e2::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id D55BE151D4FBA;
-        Mon,  4 Nov 2019 11:30:44 -0800 (PST)
-Date:   Mon, 04 Nov 2019 11:30:44 -0800 (PST)
-Message-Id: <20191104.113044.1639305550623277715.davem@davemloft.net>
-To:     tbogendoerfer@suse.de
-Cc:     ralf@linux-mips.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org, hch@lst.de
-Subject: Re: [net v3 1/5] net: sgi: ioc3-eth: don't abuse dma_direct_* calls
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20191104104515.7066-1-tbogendoerfer@suse.de>
-References: <20191104104515.7066-1-tbogendoerfer@suse.de>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 04 Nov 2019 11:30:45 -0800 (PST)
+        id S2388271AbfKDV4C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Nov 2019 16:56:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51432 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388243AbfKDV4A (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 4 Nov 2019 16:56:00 -0500
+Received: from localhost (6.204-14-84.ripe.coltfrance.com [84.14.204.6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 971B72053B;
+        Mon,  4 Nov 2019 21:55:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572904559;
+        bh=WEjXPYN/4z2tLd11WOkLYZH11e/S5V8qQlTCbEuf090=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=opCVYteknBXJSKCnUKH+LYL9AKMJKjH2+5VbcZg0SwP+7w4JSmLP2ErQbEDLx8Yu9
+         xzNst+hu+dwYTi1Q5dsopUTw5T2ukSjqof3EpzdZoHBZQkRyjuipC5PSXy9ZWj4Y2h
+         c4VoyCwNHzUMdclOndauH368zfqSdfHGZJohY3gY=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 51/95] MIPS: include: Mark __xchg as __always_inline
+Date:   Mon,  4 Nov 2019 22:44:49 +0100
+Message-Id: <20191104212104.338498240@linuxfoundation.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191104212038.056365853@linuxfoundation.org>
+References: <20191104212038.056365853@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Date: Mon,  4 Nov 2019 11:45:11 +0100
 
-> From: Christoph Hellwig <hch@lst.de>
-> 
-> dma_direct_ is a low-level API that must never be used by drivers
-> directly.  Switch to use the proper DMA API instead.
-> 
-> Fixes: ed870f6a7aa2 ("net: sgi: ioc3-eth: use dma-direct for dma allocations")
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+[ Upstream commit 46f1619500d022501a4f0389f9f4c349ab46bb86 ]
 
-Series applied to net-next.
+Commit ac7c3e4ff401 ("compiler: enable CONFIG_OPTIMIZE_INLINING
+forcibly") allows compiler to uninline functions marked as 'inline'.
+In cace of __xchg this would cause to reference function
+__xchg_called_with_bad_pointer, which is an error case
+for catching bugs and will not happen for correct code, if
+__xchg is inlined.
 
-Please provide a proper "[PATCH v3 0/5] ..." header posting next time when you
-post a patch series.
+Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/include/asm/cmpxchg.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thank you.
+diff --git a/arch/mips/include/asm/cmpxchg.h b/arch/mips/include/asm/cmpxchg.h
+index 895f91b9e89c3..520ca166cbed5 100644
+--- a/arch/mips/include/asm/cmpxchg.h
++++ b/arch/mips/include/asm/cmpxchg.h
+@@ -73,8 +73,8 @@ extern unsigned long __xchg_called_with_bad_pointer(void)
+ extern unsigned long __xchg_small(volatile void *ptr, unsigned long val,
+ 				  unsigned int size);
+ 
+-static inline unsigned long __xchg(volatile void *ptr, unsigned long x,
+-				   int size)
++static __always_inline
++unsigned long __xchg(volatile void *ptr, unsigned long x, int size)
+ {
+ 	switch (size) {
+ 	case 1:
+-- 
+2.20.1
+
+
+
