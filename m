@@ -2,118 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4688ED7A3
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2019 03:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5854EED8C6
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2019 07:00:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728355AbfKDCPl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 3 Nov 2019 21:15:41 -0500
-Received: from foss.arm.com ([217.140.110.172]:34396 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728227AbfKDCPk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 3 Nov 2019 21:15:40 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7F6631F;
-        Sun,  3 Nov 2019 18:15:39 -0800 (PST)
-Received: from [10.163.1.23] (unknown [10.163.1.23])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E4893F67D;
-        Sun,  3 Nov 2019 18:15:22 -0800 (PST)
-Subject: Re: [PATCH V8] mm/debug: Add tests validating architecture page table
- helpers
-To:     Qian Cai <cai@lca.pw>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
+        id S1727567AbfKDGAH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Nov 2019 01:00:07 -0500
+Received: from mail-il1-f195.google.com ([209.85.166.195]:32885 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726018AbfKDGAH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Nov 2019 01:00:07 -0500
+Received: by mail-il1-f195.google.com with SMTP id m5so4587078ilq.0
+        for <linux-mips@vger.kernel.org>; Sun, 03 Nov 2019 22:00:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SJewhF0QgPWY/yGtLd8oNL6N3AjMgWfg4DRTID6Um4w=;
+        b=GGdZdgcGgs7TATTf3DMBf4Y/GoAMJDcTK2UOb6lQ6k1luTpgwovK5M3xZxmheSVKlR
+         YjOxZMpNlqlqeE2UWqdmXyH5GnrXkVMR66f265DDPF2U0QvlDnLQqmG0zmU3HnmXApQv
+         Yd+GesfiDH0h/k8z7HdHYQ+AQ/3vQyR2tewYA/jkM3zFIq7ClwiWji57hXCOwIOpx1DH
+         dKWrfCy0bZJAep4jlcSKJg1I0L+2Xdh/+v9Z/U2NPSthkXBKYEyjgHtM8ui4VTsQFFxL
+         KMc4dNch+jHpiVmUWZr6TV0S2e3lKwdrQe+EcyiIzfqtiRAErKwk9EZYZX08K82lOvOm
+         Sd3Q==
+X-Gm-Message-State: APjAAAXDSpePDsakwEgkov9WLSmLujTs905pXY62RkSi8D5Dw2u/JYFT
+        srFFvKi/fpInlnFZCAIkl5idp1IdKYPgpFRRHvM=
+X-Google-Smtp-Source: APXvYqyGatsXVq2mh3zGUoaRZCP/zTCggiObT6coD8TR1IERWiQvHxTiWiSiLvmD5BqR92218aa5Z7XG6n4ea3QvIFA=
+X-Received: by 2002:a92:1d8d:: with SMTP id g13mr21349379ile.35.1572847206640;
+ Sun, 03 Nov 2019 22:00:06 -0800 (PST)
+MIME-Version: 1.0
+References: <1572758417-29265-1-git-send-email-chenhc@lemote.com> <alpine.LFD.2.21.1911032301160.367459@eddie.linux-mips.org>
+In-Reply-To: <alpine.LFD.2.21.1911032301160.367459@eddie.linux-mips.org>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Mon, 4 Nov 2019 14:05:49 +0800
+Message-ID: <CAAhV-H7R3Ci+Z1kMc2MXcK69JwoH5+bxvGGCjrLzBNbEki76zg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] MIPS: Loongson: Remove Loongson-2E/2F support
+To:     "Maciej W. Rozycki" <macro@linux-mips.org>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>,
         Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Ingo Molnar <mingo@kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <1572240562-23630-1-git-send-email-anshuman.khandual@arm.com>
- <B6AAFA3F-745D-48E2-98CC-CFB30934CE39@lca.pw>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <fdb72ac1-5f21-bcf1-ebab-411f56e67b56@arm.com>
-Date:   Mon, 4 Nov 2019 07:45:56 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
-MIME-Version: 1.0
-In-Reply-To: <B6AAFA3F-745D-48E2-98CC-CFB30934CE39@lca.pw>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Linux MIPS Mailing List <linux-mips@linux-mips.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi, Maciej,
 
+On Mon, Nov 4, 2019 at 7:08 AM Maciej W. Rozycki <macro@linux-mips.org> wrote:
+>
+> On Sun, 3 Nov 2019, Huacai Chen wrote:
+>
+> > Loongson-2E/2F is old, inactive and a bit ugly, so let's remove them
+> > and the world will be more comfortable.
+>
+>  People still use them, e.g. I do, and upstream removal causes an issue
+> with the need to backport changes not specific to the platform.
+>
+>  If you don't want to maintain the code, then just mark it orphan and rely
+> on the community to maintain it.  If it starts breaking and nobody picks
+> it to make fixes, then it can be removed.  There's no need to rush IMO.
+>
+>  BTW, there used to be a patch somewhere to support more than 512MiB of
+> DRAM with the 2E, but I can't find it -- can you help me tracking it down?
+>
+OK, we will keep Loongson-2E/2F in kernel for sometime, thanks.
 
-On 10/29/2019 04:01 PM, Qian Cai wrote:
-> 
-> 
->> On Oct 28, 2019, at 1:29 AM, Anshuman Khandual <Anshuman.Khandual@arm.com> wrote:
->>
->> This adds tests which will validate architecture page table helpers and
->> other accessors in their compliance with expected generic MM semantics.
->> This will help various architectures in validating changes to existing
->> page table helpers or addition of new ones.
->>
->> This test covers basic page table entry transformations including but not
->> limited to old, young, dirty, clean, write, write protect etc at various
->> level along with populating intermediate entries with next page table page
->> and validating them.
->>
->> Test page table pages are allocated from system memory with required size
->> and alignments. The mapped pfns at page table levels are derived from a
->> real pfn representing a valid kernel text symbol. This test gets called
->> right after page_alloc_init_late().
->>
->> This gets build and run when CONFIG_DEBUG_VM_PGTABLE is selected along with
->> CONFIG_VM_DEBUG. Architectures willing to subscribe this test also need to
->> select CONFIG_ARCH_HAS_DEBUG_VM_PGTABLE which for now is limited to x86 and
->> arm64. Going forward, other architectures too can enable this after fixing
->> build or runtime problems (if any) with their page table helpers.
->>
->> Folks interested in making sure that a given platform's page table helpers
->> conform to expected generic MM semantics should enable the above config
->> which will just trigger this test during boot. Any non conformity here will
->> be reported as an warning which would need to be fixed. This test will help
->> catch any changes to the agreed upon semantics expected from generic MM and
->> enable platforms to accommodate it thereafter.
-> 
-> This looks like a perfect candidate to streamline with the new kunit framework, no?
-
-I have not been following the kunit test framework. But being highly dependent on
-existing MM accessors (generic or platform) and very much page table modification
-centric, mm/ is the best place for this test IMHO. It is now also part of DEBUG_VM
-set of tests. Probably in future all existing MM tests (mm/ or lib/) might move to
-kunit framework but for now it should remain with DEBUG_VM set of tests.
+Huacai
+>   Maciej
