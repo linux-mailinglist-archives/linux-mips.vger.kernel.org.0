@@ -2,184 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDD9EEE2B
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Nov 2019 23:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EEEEF273
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Nov 2019 02:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389024AbfKDWKV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Nov 2019 17:10:21 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:39015 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390504AbfKDWKU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Nov 2019 17:10:20 -0500
-Received: from [5.158.153.53] (helo=tip-bot2.lab.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tip-bot2@linutronix.de>)
-        id 1iRkY0-0007oR-Jh; Mon, 04 Nov 2019 23:10:04 +0100
-Received: from [127.0.1.1] (localhost [IPv6:::1])
-        by tip-bot2.lab.linutronix.de (Postfix) with ESMTP id DEDDE1C0017;
-        Mon,  4 Nov 2019 23:10:03 +0100 (CET)
-Date:   Mon, 04 Nov 2019 22:10:03 -0000
-From:   "tip-bot2 for Huacai Chen" <tip-bot2@linutronix.de>
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/urgent] timekeeping/vsyscall: Update VDSO data unconditionally
-Cc:     Huacai Chen <chenhc@lemote.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org,
-        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <1571887709-11447-1-git-send-email-chenhc@lemote.com>
-References: <1571887709-11447-1-git-send-email-chenhc@lemote.com>
+        id S1729796AbfKEBIn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Nov 2019 20:08:43 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:42208 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728602AbfKEBIm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Nov 2019 20:08:42 -0500
+Received: by mail-io1-f65.google.com with SMTP id k1so20708498iom.9
+        for <linux-mips@vger.kernel.org>; Mon, 04 Nov 2019 17:08:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3iKTK9NDRXcOl8sogEDKyOwVRxBdTkLL2PgDkaYWwME=;
+        b=IsuJVeEUkSREle8ufiI2DRTQgLxzHJktbRhAy9Cw85+tsTqlsI7enIqKfR3FTsW5xz
+         5/+abrRt81IOcesFRqh7FvTx+goEnewQ50nTGVO1QGv9f8Cy272s3M+SchqjjMnlCnMB
+         MU4xcsAvR+vczoM17zSXJu2GiyYdHzKaRyEXYCYmS3xQQyY6LO4BvBBjbhjtRmhvixZV
+         wmxBLFmZIAJ5xPdBsyxtzIBXiqzDQqan25leMqodnh0ZCQOtWDgwvxsQ9lvEW60bfFhC
+         ciKKKGsIX8OnSYrmqo/TBkkPMVSFqo7mlza2dfYt0QH+cwvqV6DeswSbyHi6B9Fb6vNG
+         zwlw==
+X-Gm-Message-State: APjAAAWd357iGxujEJMaCKfYe0mWIHDTUC2dqcAc0xNo3KRJFmuVFWK1
+        HCh1q4YklX4tjIS8JmzZC0D60013PjxFpxDmGyM=
+X-Google-Smtp-Source: APXvYqzBYYv65fxO8N5aeRHVeHEu8yJeXGRSJoXCOZBt8mBZOzrrM8tEq6oC3yfr2/+3zX4LCA17avgyu0zHO1Bo/Lo=
+X-Received: by 2002:a5d:9b0f:: with SMTP id y15mr12428908ion.35.1572916121938;
+ Mon, 04 Nov 2019 17:08:41 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <157290540350.29376.5969235863179895531.tip-bot2@tip-bot2>
-X-Mailer: tip-git-log-daemon
-Robot-ID: <tip-bot2.linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+References: <1572758417-29265-1-git-send-email-chenhc@lemote.com> <20191104190330.hpzuqsyh5j5tkr4p@lantea.localdomain>
+In-Reply-To: <20191104190330.hpzuqsyh5j5tkr4p@lantea.localdomain>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Tue, 5 Nov 2019 09:14:22 +0800
+Message-ID: <CAAhV-H4tzoPu_iHh9aUVRtwmNsJTQLkOJRN2i2159m_L7m1YRQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] MIPS: Loongson: Remove Loongson-2E/2F support
+To:     Paul Burton <paulburton@kernel.org>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Linux MIPS Mailing List <linux-mips@linux-mips.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The following commit has been merged into the timers/urgent branch of tip:
+Hi, Paul
 
-Commit-ID:     52338415cf4d4064ae6b8dd972dadbda841da4fa
-Gitweb:        https://git.kernel.org/tip/52338415cf4d4064ae6b8dd972dadbda841da4fa
-Author:        Huacai Chen <chenhc@lemote.com>
-AuthorDate:    Thu, 24 Oct 2019 11:28:29 +08:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 04 Nov 2019 23:02:53 +01:00
+On Tue, Nov 5, 2019 at 3:03 AM Paul Burton <paulburton@kernel.org> wrote:
+>
+> Hi Huacai,
+>
+> On Sun, Nov 03, 2019 at 01:20:15PM +0800, Huacai Chen wrote:
+> > Loongson-2E/2F is old, inactive and a bit ugly, so let's remove them
+> > and the world will be more comfortable.
+> >
+> > Old:
+> > Products with Loongson-2E/2F are more than ten years old, there is no
+> > new products.
+> >
+> > Inactive:
+> > There are not any updates for a long time, and the maintainer (Jiaxun
+> > Yang) focuses on Loongson-3 now.
+>
+> Jiaxun just made changes to the 2E/2F code just a couple of weeks ago to
+> separate it from other Loongson64 support & clean it up - he also
+> indicated at the same time that he intends to contiue maintaining this
+> code [1].
+>
+> > Ugly:
+> > Loongson-2E/2F are not compatible with regular MIPS, e.g., ebase, cache
+> > flush method and tlb refill handler.
+>
+> Sadly "quirks" like this aren't solely the domain of Loongson 2E/2F
+> machines, so this isn't an unusual burden.
+>
+> > Linux-5.4.x is a LTS release, I think it is the suitable time to remove
+> > Loongson-2E/2F.
+>
+> I disagree - Jiaxun says he's happy to maintain the platform & has
+> recently been working on it. I'm not going to remove it & deny him that
+> chance. If it does indeed become unmaintained then sure let's drop it,
+> but that doesn't seem to be the case here.
+>
+OK, I will keep Loongson-2E/2F in the kernel, and please review my
+other patches. Thanks.
 
-timekeeping/vsyscall: Update VDSO data unconditionally
-
-The update of the VDSO data is depending on __arch_use_vsyscall() returning
-True. This is a leftover from the attempt to map the features of various
-architectures 1:1 into generic code.
-
-The usage of __arch_use_vsyscall() in the actual vsyscall implementations
-got dropped and replaced by the requirement for the architecture code to
-return U64_MAX if the global clocksource is not usable in the VDSO.
-
-But the __arch_use_vsyscall() check in the update code stayed which causes
-the VDSO data to be stale or invalid when an architecture actually
-implements that function and returns False when the current clocksource is
-not usable in the VDSO.
-
-As a consequence the VDSO implementations of clock_getres(), time(),
-clock_gettime(CLOCK_.*_COARSE) operate on invalid data and return bogus
-information.
-
-Remove the __arch_use_vsyscall() check from the VDSO update function and
-update the VDSO data unconditionally.
-
-[ tglx: Massaged changelog and removed the now useless implementations in
-  	asm-generic/ARM64/MIPS ]
-
-Fixes: 44f57d788e7deecb50 ("timekeeping: Provide a generic update_vsyscall() implementation")
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Paul Burton <paul.burton@mips.com>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: stable@vger.kernel.org
-Link: https://lkml.kernel.org/r/1571887709-11447-1-git-send-email-chenhc@lemote.com
----
- arch/arm64/include/asm/vdso/vsyscall.h |  7 -------
- arch/mips/include/asm/vdso/vsyscall.h  |  7 -------
- include/asm-generic/vdso/vsyscall.h    |  7 -------
- kernel/time/vsyscall.c                 |  9 +++------
- 4 files changed, 3 insertions(+), 27 deletions(-)
-
-diff --git a/arch/arm64/include/asm/vdso/vsyscall.h b/arch/arm64/include/asm/vdso/vsyscall.h
-index 0c731bf..0c20a7c 100644
---- a/arch/arm64/include/asm/vdso/vsyscall.h
-+++ b/arch/arm64/include/asm/vdso/vsyscall.h
-@@ -31,13 +31,6 @@ int __arm64_get_clock_mode(struct timekeeper *tk)
- #define __arch_get_clock_mode __arm64_get_clock_mode
- 
- static __always_inline
--int __arm64_use_vsyscall(struct vdso_data *vdata)
--{
--	return !vdata[CS_HRES_COARSE].clock_mode;
--}
--#define __arch_use_vsyscall __arm64_use_vsyscall
--
--static __always_inline
- void __arm64_update_vsyscall(struct vdso_data *vdata, struct timekeeper *tk)
- {
- 	vdata[CS_HRES_COARSE].mask	= VDSO_PRECISION_MASK;
-diff --git a/arch/mips/include/asm/vdso/vsyscall.h b/arch/mips/include/asm/vdso/vsyscall.h
-index 1953147..00d41b9 100644
---- a/arch/mips/include/asm/vdso/vsyscall.h
-+++ b/arch/mips/include/asm/vdso/vsyscall.h
-@@ -28,13 +28,6 @@ int __mips_get_clock_mode(struct timekeeper *tk)
- }
- #define __arch_get_clock_mode __mips_get_clock_mode
- 
--static __always_inline
--int __mips_use_vsyscall(struct vdso_data *vdata)
--{
--	return (vdata[CS_HRES_COARSE].clock_mode != VDSO_CLOCK_NONE);
--}
--#define __arch_use_vsyscall __mips_use_vsyscall
--
- /* The asm-generic header needs to be included after the definitions above */
- #include <asm-generic/vdso/vsyscall.h>
- 
-diff --git a/include/asm-generic/vdso/vsyscall.h b/include/asm-generic/vdso/vsyscall.h
-index e94b197..ce41032 100644
---- a/include/asm-generic/vdso/vsyscall.h
-+++ b/include/asm-generic/vdso/vsyscall.h
-@@ -25,13 +25,6 @@ static __always_inline int __arch_get_clock_mode(struct timekeeper *tk)
- }
- #endif /* __arch_get_clock_mode */
- 
--#ifndef __arch_use_vsyscall
--static __always_inline int __arch_use_vsyscall(struct vdso_data *vdata)
--{
--	return 1;
--}
--#endif /* __arch_use_vsyscall */
--
- #ifndef __arch_update_vsyscall
- static __always_inline void __arch_update_vsyscall(struct vdso_data *vdata,
- 						   struct timekeeper *tk)
-diff --git a/kernel/time/vsyscall.c b/kernel/time/vsyscall.c
-index 4bc37ac..5ee0f77 100644
---- a/kernel/time/vsyscall.c
-+++ b/kernel/time/vsyscall.c
-@@ -110,8 +110,7 @@ void update_vsyscall(struct timekeeper *tk)
- 	nsec		= nsec + tk->wall_to_monotonic.tv_nsec;
- 	vdso_ts->sec	+= __iter_div_u64_rem(nsec, NSEC_PER_SEC, &vdso_ts->nsec);
- 
--	if (__arch_use_vsyscall(vdata))
--		update_vdso_data(vdata, tk);
-+	update_vdso_data(vdata, tk);
- 
- 	__arch_update_vsyscall(vdata, tk);
- 
-@@ -124,10 +123,8 @@ void update_vsyscall_tz(void)
- {
- 	struct vdso_data *vdata = __arch_get_k_vdso_data();
- 
--	if (__arch_use_vsyscall(vdata)) {
--		vdata[CS_HRES_COARSE].tz_minuteswest = sys_tz.tz_minuteswest;
--		vdata[CS_HRES_COARSE].tz_dsttime = sys_tz.tz_dsttime;
--	}
-+	vdata[CS_HRES_COARSE].tz_minuteswest = sys_tz.tz_minuteswest;
-+	vdata[CS_HRES_COARSE].tz_dsttime = sys_tz.tz_dsttime;
- 
- 	__arch_sync_vdso_data(vdata);
- }
+Huacai
+> Thanks,
+>     Paul
+>
+> [1] https://lore.kernel.org/linux-mips/AF48876C-308C-46AD-B7B4-77BFA2413EDE@flygoat.com/
