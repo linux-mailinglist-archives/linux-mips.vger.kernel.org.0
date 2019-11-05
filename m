@@ -2,126 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7B5EF841
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Nov 2019 10:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B23EFF0D
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Nov 2019 14:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730667AbfKEJJ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Nov 2019 04:09:58 -0500
-Received: from mout-p-201.mailbox.org ([80.241.56.171]:9604 "EHLO
-        mout-p-201.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730555AbfKEJJ5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Nov 2019 04:09:57 -0500
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 476kQ90KYtzQlBP;
-        Tue,  5 Nov 2019 10:09:53 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter02.heinlein-hosting.de (spamfilter02.heinlein-hosting.de [80.241.56.116]) (amavisd-new, port 10030)
-        with ESMTP id fOLl1hihmqMD; Tue,  5 Nov 2019 10:09:46 +0100 (CET)
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, libc-alpha@sourceware.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: [PATCH v15 9/9] Documentation: path-lookup: mention LOOKUP_MAGICLINK_JUMPED
-Date:   Tue,  5 Nov 2019 20:05:53 +1100
-Message-Id: <20191105090553.6350-10-cyphar@cyphar.com>
-In-Reply-To: <20191105090553.6350-1-cyphar@cyphar.com>
-References: <20191105090553.6350-1-cyphar@cyphar.com>
+        id S2389326AbfKENy0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Nov 2019 08:54:26 -0500
+Received: from forward105j.mail.yandex.net ([5.45.198.248]:39976 "EHLO
+        forward105j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388000AbfKENy0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Nov 2019 08:54:26 -0500
+Received: from mxback21g.mail.yandex.net (mxback21g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:321])
+        by forward105j.mail.yandex.net (Yandex) with ESMTP id 9D17AB21B40;
+        Tue,  5 Nov 2019 16:54:24 +0300 (MSK)
+Received: from iva6-6f4302ae52e5.qloud-c.yandex.net (iva6-6f4302ae52e5.qloud-c.yandex.net [2a02:6b8:c0c:9a82:0:640:6f43:2ae])
+        by mxback21g.mail.yandex.net (nwsmtp/Yandex) with ESMTP id ZBm7sbOyma-sNBGlT5G;
+        Tue, 05 Nov 2019 16:54:24 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1572962064;
+        bh=TQqa08jA/tSCsuSUfu/tQBywDWyXH7Wco/2dW4hQIfI=;
+        h=From:To:Subject:CC:References:Date:In-Reply-To:Message-ID;
+        b=mEgXY4UmNSpGOjX2cEnZE9/Z+R5UT8O2qBhRXGjgVznI6EaTcqkX7LUPHsdg/0ZGV
+         yKB+W3b6mPQUL6BeszY7V7c7g4AfD78akoxAN5I8ua3F5FU9XhGideSdCJeCjHprLS
+         2nhYIn61BYsF0ayHe+p5rxBPtkhqsjWWEzebH8yM=
+Authentication-Results: mxback21g.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by iva6-6f4302ae52e5.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id iP7fy47uYU-sMVCFrTe;
+        Tue, 05 Nov 2019 16:54:22 +0300
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client certificate not present)
+Date:   Tue, 05 Nov 2019 21:54:05 +0800
+User-Agent: K-9 Mail for Android
+In-Reply-To: <alpine.LFD.2.21.1911032301160.367459@eddie.linux-mips.org>
+References: <1572758417-29265-1-git-send-email-chenhc@lemote.com> <alpine.LFD.2.21.1911032301160.367459@eddie.linux-mips.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/3] MIPS: Loongson: Remove Loongson-2E/2F support
+To:     "Maciej W. Rozycki" <macro@linux-mips.org>,
+        Huacai Chen <chenhc@lemote.com>
+CC:     Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Burton <paul.burton@mips.com>, linux-mips@linux-mips.org,
+        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Huacai Chen <chenhuacai@gmail.com>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <0279E7A7-197D-4D6B-9A4B-26E6791372E0@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Now that we have a special flag to signify magic-link jumps, mention it
-within the path-lookup docs. And now that "magic link" is the correct
-term for nd_jump_link()-style symlinks, clean up references to this type
-of "symlink".
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
----
- Documentation/filesystems/path-lookup.rst | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/filesystems/path-lookup.rst b/Documentation/filesystems/path-lookup.rst
-index 434a07b0002b..2c32795389bd 100644
---- a/Documentation/filesystems/path-lookup.rst
-+++ b/Documentation/filesystems/path-lookup.rst
-@@ -405,6 +405,10 @@ is requested.  Keeping a reference in the ``nameidata`` ensures that
- only one root is in effect for the entire path walk, even if it races
- with a ``chroot()`` system call.
- 
-+It should be noted that in the case of ``LOOKUP_IN_ROOT`` or
-+``LOOKUP_BENEATH``, the effective root becomes the directory file descriptor
-+passed to ``openat2()`` (which exposes these ``LOOKUP_`` flags).
-+
- The root is needed when either of two conditions holds: (1) either the
- pathname or a symbolic link starts with a "'/'", or (2) a "``..``"
- component is being handled, since "``..``" from the root must always stay
-@@ -1149,7 +1153,7 @@ so ``NULL`` is returned to indicate that the symlink can be released and
- the stack frame discarded.
- 
- The other case involves things in ``/proc`` that look like symlinks but
--aren't really::
-+aren't really (and are therefore commonly referred to as "magic-links")::
- 
-      $ ls -l /proc/self/fd/1
-      lrwx------ 1 neilb neilb 64 Jun 13 10:19 /proc/self/fd/1 -> /dev/pts/4
-@@ -1310,12 +1314,14 @@ longer needed.
- ``LOOKUP_JUMPED`` means that the current dentry was chosen not because
- it had the right name but for some other reason.  This happens when
- following "``..``", following a symlink to ``/``, crossing a mount point
--or accessing a "``/proc/$PID/fd/$FD``" symlink.  In this case the
--filesystem has not been asked to revalidate the name (with
--``d_revalidate()``).  In such cases the inode may still need to be
--revalidated, so ``d_op->d_weak_revalidate()`` is called if
-+or accessing a "``/proc/$PID/fd/$FD``" symlink (also known as a "magic
-+link"). In this case the filesystem has not been asked to revalidate the
-+name (with ``d_revalidate()``).  In such cases the inode may still need
-+to be revalidated, so ``d_op->d_weak_revalidate()`` is called if
- ``LOOKUP_JUMPED`` is set when the look completes - which may be at the
--final component or, when creating, unlinking, or renaming, at the penultimate component.
-+final component or, when creating, unlinking, or renaming, at the
-+penultimate component. ``LOOKUP_MAGICLINK_JUMPED`` is set alongside
-+``LOOKUP_JUMPED`` if a magic-link was traversed.
- 
- Final-component flags
- ~~~~~~~~~~~~~~~~~~~~~
--- 
-2.23.0
+=E4=BA=8E 2019=E5=B9=B411=E6=9C=884=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=887=
+:08:26, "Maciej W=2E Rozycki" <macro@linux-mips=2Eorg> =E5=86=99=E5=88=B0:
+>On Sun, 3 Nov 2019, Huacai Chen wrote:
+>
+>> Loongson-2E/2F is old, inactive and a bit ugly, so let's remove them
+>> and the world will be more comfortable=2E
+>
+> People still use them, e=2Eg=2E I do, and upstream removal causes an iss=
+ue
+>with the need to backport changes not specific to the platform=2E
+>
+>If you don't want to maintain the code, then just mark it orphan and
+>rely=20
+>on the community to maintain it=2E  If it starts breaking and nobody
+>picks=20
+>it to make fixes, then it can be removed=2E  There's no need to rush IMO=
+=2E
+>
+>BTW, there used to be a patch somewhere to support more than 512MiB of=20
+>DRAM with the 2E, but I can't find it -- can you help me tracking it
 
+Hi Maciej
+
+It seems like DRAM size issue is a firmware issue rather than kernel issue=
+, some early versions of PMON don't pass highmem size correctly to the Kern=
+el=2E
+Probably you can manually set it in loongson-2ef/common/mem=2Ec=EF=BC=9F
+
+Currently I can't find any working Fuloong-2E to test but the newest known=
+ PMON can be found here[1]=2E
+
+Thanks
+
+[1] https://mirrors4=2Etuna=2Etsinghua=2Eedu=2Ecn/loongson/pmon/pmon_2e=2E=
+bin
+https://mirrors4=2Etuna=2Etsinghua=2Eedu=2Ecn/loongson/pmon/pmon_2e=2Ebin=
+=2Emd5
+
+--=20
+Jiaxun Yang
