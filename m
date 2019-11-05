@@ -2,95 +2,205 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B23EFF0D
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Nov 2019 14:54:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E411EFFBD
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Nov 2019 15:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389326AbfKENy0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Nov 2019 08:54:26 -0500
-Received: from forward105j.mail.yandex.net ([5.45.198.248]:39976 "EHLO
-        forward105j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388000AbfKENy0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Nov 2019 08:54:26 -0500
-Received: from mxback21g.mail.yandex.net (mxback21g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:321])
-        by forward105j.mail.yandex.net (Yandex) with ESMTP id 9D17AB21B40;
-        Tue,  5 Nov 2019 16:54:24 +0300 (MSK)
-Received: from iva6-6f4302ae52e5.qloud-c.yandex.net (iva6-6f4302ae52e5.qloud-c.yandex.net [2a02:6b8:c0c:9a82:0:640:6f43:2ae])
-        by mxback21g.mail.yandex.net (nwsmtp/Yandex) with ESMTP id ZBm7sbOyma-sNBGlT5G;
-        Tue, 05 Nov 2019 16:54:24 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1572962064;
-        bh=TQqa08jA/tSCsuSUfu/tQBywDWyXH7Wco/2dW4hQIfI=;
-        h=From:To:Subject:CC:References:Date:In-Reply-To:Message-ID;
-        b=mEgXY4UmNSpGOjX2cEnZE9/Z+R5UT8O2qBhRXGjgVznI6EaTcqkX7LUPHsdg/0ZGV
-         yKB+W3b6mPQUL6BeszY7V7c7g4AfD78akoxAN5I8ua3F5FU9XhGideSdCJeCjHprLS
-         2nhYIn61BYsF0ayHe+p5rxBPtkhqsjWWEzebH8yM=
-Authentication-Results: mxback21g.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by iva6-6f4302ae52e5.qloud-c.yandex.net (nwsmtp/Yandex) with ESMTPSA id iP7fy47uYU-sMVCFrTe;
-        Tue, 05 Nov 2019 16:54:22 +0300
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client certificate not present)
-Date:   Tue, 05 Nov 2019 21:54:05 +0800
-User-Agent: K-9 Mail for Android
-In-Reply-To: <alpine.LFD.2.21.1911032301160.367459@eddie.linux-mips.org>
-References: <1572758417-29265-1-git-send-email-chenhc@lemote.com> <alpine.LFD.2.21.1911032301160.367459@eddie.linux-mips.org>
+        id S1731008AbfKEO3a (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Nov 2019 09:29:30 -0500
+Received: from mout.gmx.net ([212.227.17.22]:55725 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727858AbfKEO33 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 5 Nov 2019 09:29:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1572964151;
+        bh=1ccRhMfOjQfCWgxZtJzM4hP1zgDfrNPilzzEdo9nVpk=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=Y0fiQZVlL53W17TOlZbi6XyMv5zjwVPRrWuOHJMTc50mzth8UTL/m2E1lYcbSheEF
+         8jorhA7eYWbpK5PWaPEPGi/wJtl+L33sVAQqL300Yc0SHDjTKJjeHWLOB6GN35q3YS
+         +a7NPrubb/JJYnsmHtwYU8sEHifg8Yl87BpLmw98=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.150.99]) by mail.gmx.com (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MpUYu-1i9DSt0bLI-00pqwr; Tue, 05
+ Nov 2019 15:29:11 +0100
+Subject: Re: [PATCH 07/21] parisc: remove __ioremap
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        nios2-dev@lists.rocketboards.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191029064834.23438-1-hch@lst.de>
+ <20191029064834.23438-8-hch@lst.de>
+From:   Helge Deller <deller@gmx.de>
+Autocrypt: addr=deller@gmx.de; keydata=
+ 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
+ oiAieEtb6a/7+jPKZnRFTw==
+Message-ID: <23dd12c1-8af2-dd97-18f2-da3203d49a48@gmx.de>
+Date:   Tue, 5 Nov 2019 15:29:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+In-Reply-To: <20191029064834.23438-8-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 1/3] MIPS: Loongson: Remove Loongson-2E/2F support
-To:     "Maciej W. Rozycki" <macro@linux-mips.org>,
-        Huacai Chen <chenhc@lemote.com>
-CC:     Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@linux-mips.org,
-        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <0279E7A7-197D-4D6B-9A4B-26E6791372E0@flygoat.com>
+X-Provags-ID: V03:K1:K84d31/CVvwIJRKgEkYeLn7nG07Ceq3NW0dsqaiRS5IsUys1PNO
+ B3wZA6JSQUR3ASpFYkzv5n9DIUepkHMiZULCTf1KC+BWlAXPXnF8HuJwokTu9RHIoaGeecm
+ Ci3RRzeiRWquDPKN9RN+JUnecDqMAenupRgKRqv99/LWiBv0xQpgWSKokC8ejSoOAF87fIb
+ GlxUK3lSPzPHSDlD+KOEg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qywLIYXxQ6w=:uquN0cefM1Gv+iPhjMDm4y
+ WzeGInW3/ErqTG1UoKT/xRidojOzqlKb5yOcKxyKZooWk6bL0fIl5AhbM6blTwH8c66Kn8H1J
+ WGQc1ZJSoco0WhSHDXQ7118RQcJ0xrZYuyKBlHofDr66VPHNcDWKy5kH8jKybSP7WJTfqINRw
+ XxrfJB4efx2ltV+lzx058SbsYx4C2h/rBJPKR7Kqu12s97bSiY+nyblh2s/yxfeKFuFc/wjCs
+ lFYevasBI4YCaAngtQ6appEtRUuMVex0GquZfTkuN9kQa+RTc+z5tNk/7jbcLhxfdgxDb2A4Y
+ A/K7Bt5gq41M7Jn+KWZX/6P2XqsNOt+6inw4TwVnCWKxgaw4xs9j+1+zOqMQZiYL/+b0EeS0h
+ brYf9g9CAaFNjtMq6+/VAW2IOZ5Nv94fAwRDijmOwyrTdd18Y6DPZNsURYzGl5eEPOeFfkL/F
+ JQUcovMUYYj9ZyJXaUrtQ2Lv1lLkNS2AbR8d6Z/6jfAFZlQsxf8UPI82eUYeX00lWlgIp/SYH
+ cMXDYNrAgF3fA02cefaga+ToL9W+PJkdoWMNamBPYbInO41HfM4bO0JLXBJxLu8NxsIHwyYbL
+ jISx7DcFcwYuhtufHVwYQb2iUXssyinN3j5YlEUD5kcq0apbnaksTH/qQGR+n+GfJqmwZUeTP
+ LwRpD/4coGlhAyp/lmnCABsVRB5lwbpRNVUVoJzONql8z4AriXnPaX9nbHtB3uJ8FT1k1bImz
+ E56ha19Q0Hnmpw/rCFgb7UT4+4PlAIXgifeujs/4EfgAtwZeLMDSJkAL3PBHGUAs62iq2qh1m
+ vpSXwvx1tptIrnrGAtzQHlpMTiy3aP3TJHvhozmVGgOaIR3xRyA9CXUTBI+Hk0XuwymklVM5A
+ BvFZUGwg1Wb55/+OdgYFXa6p9XFxMk+XBpGa8NYWQXBZxnCXVRMf3ucDkauRT/6fdyMaVUBvx
+ qywVTNg1ILLrPVRP63jplKrFoDllanZJZNwQQgR0kyBWBaUMEBKRGhOn8wdgaWGOB5aC65RGx
+ AkhXGJIgOkrsNq3xEuYujqPxATUS2ohV5/RQJjOfpLXgeBUx7ZOhe063AQZ72pgAsRhU5l5bP
+ p/KTjTIG/oyqLgCyNVW9DucS2YjDRVYuPoK5r+qOQfF1oFXgONBCwUTL7hhhu/VtZ6J52BURA
+ uUYYBM/GzpGVcgiHzTrdtFtF4RDNhEibY8tLl2/IpBAL3fwmJg8W+IziWuaj77zX1IdQfs5WW
+ sY7znfNyevOrgCAOqWYYuW4MFkdA7qd6WtFYbUg==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-=E4=BA=8E 2019=E5=B9=B411=E6=9C=884=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=887=
-:08:26, "Maciej W=2E Rozycki" <macro@linux-mips=2Eorg> =E5=86=99=E5=88=B0:
->On Sun, 3 Nov 2019, Huacai Chen wrote:
+On 29.10.19 07:48, Christoph Hellwig wrote:
+> __ioremap is always called with the _PAGE_NO_CACHE, so fold the whole
+> thing and rename it to ioremap.  This also allows to remove the special
+> EISA quirk to force _PAGE_NO_CACHE.
 >
->> Loongson-2E/2F is old, inactive and a bit ugly, so let's remove them
->> and the world will be more comfortable=2E
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+
+Acked-by: Helge Deller <deller@gmx.de>
+
+Helge
+
+> ---
+>  arch/parisc/include/asm/io.h | 11 +----------
+>  arch/parisc/mm/ioremap.c     | 10 ++++------
+>  2 files changed, 5 insertions(+), 16 deletions(-)
 >
-> People still use them, e=2Eg=2E I do, and upstream removal causes an iss=
-ue
->with the need to backport changes not specific to the platform=2E
+> diff --git a/arch/parisc/include/asm/io.h b/arch/parisc/include/asm/io.h
+> index 93d37010b375..46212b52c23e 100644
+> --- a/arch/parisc/include/asm/io.h
+> +++ b/arch/parisc/include/asm/io.h
+> @@ -127,16 +127,7 @@ static inline void gsc_writeq(unsigned long long va=
+l, unsigned long addr)
+>  /*
+>   * The standard PCI ioremap interfaces
+>   */
+> -
+> -extern void __iomem * __ioremap(unsigned long offset, unsigned long siz=
+e, unsigned long flags);
+> -
+> -/* Most machines react poorly to I/O-space being cacheable... Instead l=
+et's
+> - * define ioremap() in terms of ioremap_nocache().
+> - */
+> -static inline void __iomem * ioremap(unsigned long offset, unsigned lon=
+g size)
+> -{
+> -	return __ioremap(offset, size, _PAGE_NO_CACHE);
+> -}
+> +void __iomem *ioremap(unsigned long offset, unsigned long size);
+>  #define ioremap_nocache(off, sz)	ioremap((off), (sz))
+>  #define ioremap_wc			ioremap_nocache
+>  #define ioremap_uc			ioremap_nocache
+> diff --git a/arch/parisc/mm/ioremap.c b/arch/parisc/mm/ioremap.c
+> index f29f682352f0..6e7c005aa09b 100644
+> --- a/arch/parisc/mm/ioremap.c
+> +++ b/arch/parisc/mm/ioremap.c
+> @@ -25,7 +25,7 @@
+>   * have to convert them into an offset in a page-aligned mapping, but t=
+he
+>   * caller shouldn't need to know that small detail.
+>   */
+> -void __iomem * __ioremap(unsigned long phys_addr, unsigned long size, u=
+nsigned long flags)
+> +void __iomem *ioremap(unsigned long phys_addr, unsigned long size)
+>  {
+>  	void __iomem *addr;
+>  	struct vm_struct *area;
+> @@ -36,10 +36,8 @@ void __iomem * __ioremap(unsigned long phys_addr, uns=
+igned long size, unsigned l
+>  	unsigned long end =3D phys_addr + size - 1;
+>  	/* Support EISA addresses */
+>  	if ((phys_addr >=3D 0x00080000 && end < 0x000fffff) ||
+> -	    (phys_addr >=3D 0x00500000 && end < 0x03bfffff)) {
+> +	    (phys_addr >=3D 0x00500000 && end < 0x03bfffff))
+>  		phys_addr |=3D F_EXTEND(0xfc000000);
+> -		flags |=3D _PAGE_NO_CACHE;
+> -	}
+>  #endif
 >
->If you don't want to maintain the code, then just mark it orphan and
->rely=20
->on the community to maintain it=2E  If it starts breaking and nobody
->picks=20
->it to make fixes, then it can be removed=2E  There's no need to rush IMO=
-=2E
+>  	/* Don't allow wraparound or zero size */
+> @@ -65,7 +63,7 @@ void __iomem * __ioremap(unsigned long phys_addr, unsi=
+gned long size, unsigned l
+>  	}
 >
->BTW, there used to be a patch somewhere to support more than 512MiB of=20
->DRAM with the 2E, but I can't find it -- can you help me tracking it
+>  	pgprot =3D __pgprot(_PAGE_PRESENT | _PAGE_RW | _PAGE_DIRTY |
+> -			  _PAGE_ACCESSED | flags);
+> +			  _PAGE_ACCESSED | _PAGE_NO_CACHE);
+>
+>  	/*
+>  	 * Mappings have to be page-aligned
+> @@ -90,7 +88,7 @@ void __iomem * __ioremap(unsigned long phys_addr, unsi=
+gned long size, unsigned l
+>
+>  	return (void __iomem *) (offset + (char __iomem *)addr);
+>  }
+> -EXPORT_SYMBOL(__ioremap);
+> +EXPORT_SYMBOL(ioremap);
+>
+>  void iounmap(const volatile void __iomem *io_addr)
+>  {
+>
 
-Hi Maciej
-
-It seems like DRAM size issue is a firmware issue rather than kernel issue=
-, some early versions of PMON don't pass highmem size correctly to the Kern=
-el=2E
-Probably you can manually set it in loongson-2ef/common/mem=2Ec=EF=BC=9F
-
-Currently I can't find any working Fuloong-2E to test but the newest known=
- PMON can be found here[1]=2E
-
-Thanks
-
-[1] https://mirrors4=2Etuna=2Etsinghua=2Eedu=2Ecn/loongson/pmon/pmon_2e=2E=
-bin
-https://mirrors4=2Etuna=2Etsinghua=2Eedu=2Ecn/loongson/pmon/pmon_2e=2Ebin=
-=2Emd5
-
---=20
-Jiaxun Yang
