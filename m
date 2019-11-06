@@ -2,25 +2,25 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A14FF0CBB
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2019 04:10:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25356F0CF1
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Nov 2019 04:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730722AbfKFDKo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Nov 2019 22:10:44 -0500
-Received: from foss.arm.com ([217.140.110.172]:32962 "EHLO foss.arm.com"
+        id S1731087AbfKFDWT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Nov 2019 22:22:19 -0500
+Received: from foss.arm.com ([217.140.110.172]:33116 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730562AbfKFDKo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 5 Nov 2019 22:10:44 -0500
+        id S1730839AbfKFDWT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 5 Nov 2019 22:22:19 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0480C30E;
-        Tue,  5 Nov 2019 19:10:43 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D732A30E;
+        Tue,  5 Nov 2019 19:22:18 -0800 (PST)
 Received: from [192.168.225.149] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DA843F719;
-        Tue,  5 Nov 2019 19:10:22 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A8D63F719;
+        Tue,  5 Nov 2019 19:21:57 -0800 (PST)
 Subject: Re: [PATCH V8] mm/debug: Add tests validating architecture page table
  helpers
-To:     Gerald Schaefer <gerald.schaefer@de.ibm.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+To:     linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -50,6 +50,7 @@ Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
         Paul Burton <paul.burton@mips.com>,
         Ralf Baechle <ralf@linux-mips.org>,
         "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
         Christophe Leroy <christophe.leroy@c-s.fr>,
         Ingo Molnar <mingo@kernel.org>,
         linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
@@ -58,14 +59,13 @@ Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         x86@kernel.org, linux-kernel@vger.kernel.org
 References: <1572240562-23630-1-git-send-email-anshuman.khandual@arm.com>
- <20191105203638.6889a994@thinkpad>
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <d9487d9b-7f23-6311-f432-d2271b961f00@arm.com>
-Date:   Wed, 6 Nov 2019 08:40:57 +0530
+Message-ID: <3229d68d-0b9d-0719-3370-c6e1df0ea032@arm.com>
+Date:   Wed, 6 Nov 2019 08:52:30 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.9.1
 MIME-Version: 1.0
-In-Reply-To: <20191105203638.6889a994@thinkpad>
+In-Reply-To: <1572240562-23630-1-git-send-email-anshuman.khandual@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -76,51 +76,39 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-On 11/06/2019 01:06 AM, Gerald Schaefer wrote:
-> On Mon, 28 Oct 2019 10:59:22 +0530
-> Anshuman Khandual <anshuman.khandual@arm.com> wrote:
-> 
->> This adds tests which will validate architecture page table helpers and
->> other accessors in their compliance with expected generic MM semantics.
->> This will help various architectures in validating changes to existing
->> page table helpers or addition of new ones.
->>
->> This test covers basic page table entry transformations including but not
->> limited to old, young, dirty, clean, write, write protect etc at various
->> level along with populating intermediate entries with next page table page
->> and validating them.
->>
->> Test page table pages are allocated from system memory with required size
->> and alignments. The mapped pfns at page table levels are derived from a
->> real pfn representing a valid kernel text symbol. This test gets called
->> right after page_alloc_init_late().
->>
->> This gets build and run when CONFIG_DEBUG_VM_PGTABLE is selected along with
->> CONFIG_VM_DEBUG. Architectures willing to subscribe this test also need to
->> select CONFIG_ARCH_HAS_DEBUG_VM_PGTABLE which for now is limited to x86 and
->> arm64. Going forward, other architectures too can enable this after fixing
->> build or runtime problems (if any) with their page table helpers.
-> 
-> I've prepared a couple of commits to our arch code to make this work on s390,
-> they will go upstream in the next merge window. After that, we can add s390
-> to the supported architectures.
+On 10/28/2019 10:59 AM, Anshuman Khandual wrote:
+> +    -----------------------
+> +    |         arch |status|
+> +    -----------------------
+> +    |       alpha: | TODO |
+> +    |         arc: | TODO |
+> +    |         arm: | TODO |
+> +    |       arm64: |  ok  |
+> +    |         c6x: | TODO |
+> +    |        csky: | TODO |
+> +    |       h8300: | TODO |
+> +    |     hexagon: | TODO |
+> +    |        ia64: | TODO |
+> +    |        m68k: | TODO |
+> +    |  microblaze: | TODO |
+> +    |        mips: | TODO |
+> +    |       nds32: | TODO |
+> +    |       nios2: | TODO |
+> +    |    openrisc: | TODO |
+> +    |      parisc: | TODO |
+> +    |     powerpc: | TODO |
+> +    |       ppc32: |  ok  |
+> +    |       riscv: | TODO |
+> +    |        s390: | TODO |
+> +    |          sh: | TODO |
+> +    |       sparc: | TODO |
+> +    |          um: | TODO |
+> +    |   unicore32: | TODO |
+> +    |         x86: |  ok  |
+> +    |      xtensa: | TODO |
+> +    -----------------------
 
-Thats good.
+While here, are there some volunteers to test this on any of the
+'yet to be tested and supported' platforms ?
 
-> 
-> We had some issues, e.g. because we do not report large entries as bad in
-> pxd_bad(), do not check for folded page tables in pxd_free(), or assume
-> that primitives like pmd_mkdirty() will only be called after pmd_mkhuge().
-> None of those should have any impact on current code, but your test module
-> revealed that we do not behave like other architectures in some aspects,
-> and it's good to find and fix such things to prevent possible future issues.
-
-Right and those s390 fixes are the testimony for the usefulness of this test.
-
-> 
-> Thanks a lot for the effort!
-> 
-> Regards,
-> Gerald
-> 
-> 
+- Anshuman
