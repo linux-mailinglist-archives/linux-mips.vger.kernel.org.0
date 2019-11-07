@@ -2,181 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F30E1F2D6E
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Nov 2019 12:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F54F2DB1
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Nov 2019 12:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727278AbfKGL2Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Nov 2019 06:28:25 -0500
-Received: from forward100j.mail.yandex.net ([5.45.198.240]:59980 "EHLO
-        forward100j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727178AbfKGL2Z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Nov 2019 06:28:25 -0500
-Received: from forward100q.mail.yandex.net (forward100q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb97])
-        by forward100j.mail.yandex.net (Yandex) with ESMTP id 1643D50E20DB;
-        Thu,  7 Nov 2019 14:28:21 +0300 (MSK)
-Received: from mxback12q.mail.yandex.net (mxback12q.mail.yandex.net [IPv6:2a02:6b8:c0e:1b3:0:640:3818:d096])
-        by forward100q.mail.yandex.net (Yandex) with ESMTP id 12F0C7080008;
-        Thu,  7 Nov 2019 14:28:21 +0300 (MSK)
-Received: from vla3-2bcfd5e94671.qloud-c.yandex.net (vla3-2bcfd5e94671.qloud-c.yandex.net [2a02:6b8:c15:350f:0:640:2bcf:d5e9])
-        by mxback12q.mail.yandex.net (mxback/Yandex) with ESMTP id 8dnNpwOQiV-SK3qqaGb;
-        Thu, 07 Nov 2019 14:28:20 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1573126101;
-        bh=j1KzLDE/nTHmQQFbg+MoNJVQOh55Uy5b1uE8Df6LdIk=;
-        h=Reply-to:Subject:To:From:Cc:Date:Message-Id;
-        b=eyns1n7OeOHGvdaDPtkpCLDSbIqLn+dyvv4IbABhRDdB8DPy5kPeDyp5MpMvnmt/U
-         bI95UH0ZzhFEXGHK0hqTvghJClpV7At7i9gj/XyLEQf+9CVrKRdQuHaJ/d0u4ydKvr
-         Z5HZ/EniqjqJ8vjrix9Uot6N96wpXcoPfgW2FsXI=
-Authentication-Results: mxback12q.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by vla3-2bcfd5e94671.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id a4NM0KkwfE-SGVGhG5w;
-        Thu, 07 Nov 2019 14:28:18 +0300
+        id S1727278AbfKGLrW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Nov 2019 06:47:22 -0500
+Received: from forward105j.mail.yandex.net ([5.45.198.248]:43251 "EHLO
+        forward105j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727178AbfKGLrW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Nov 2019 06:47:22 -0500
+Received: from forward101q.mail.yandex.net (forward101q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb98])
+        by forward105j.mail.yandex.net (Yandex) with ESMTP id CBD9AB22347;
+        Thu,  7 Nov 2019 14:47:19 +0300 (MSK)
+Received: from mxback3q.mail.yandex.net (mxback3q.mail.yandex.net [IPv6:2a02:6b8:c0e:39:0:640:4545:437c])
+        by forward101q.mail.yandex.net (Yandex) with ESMTP id C8DFBCF40014;
+        Thu,  7 Nov 2019 14:47:19 +0300 (MSK)
+Received: from vla1-b617950fbd54.qloud-c.yandex.net (vla1-b617950fbd54.qloud-c.yandex.net [2a02:6b8:c0d:3495:0:640:b617:950f])
+        by mxback3q.mail.yandex.net (mxback/Yandex) with ESMTP id 7Iix0pDqki-lJq8AxQu;
+        Thu, 07 Nov 2019 14:47:19 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1573127239;
+        bh=GbP+q3vNczyFL5igNpsNBuQtEr87kiPomvB6A7eQM4Y=;
+        h=In-Reply-To:From:To:Subject:Cc:Date:References:Message-ID;
+        b=fTqLKDMNDN3uyuE3MJNv83H0LAnXyXevqBcvOcXheAakhZiNTY6RobV1RsuAHsfjB
+         p5bO+SogDSRoDjvnLGV/kTanpZHh5In0ZpTCO9KHCEizK8TnYFZml32FgO439QBJzr
+         n/2t+cn7nA8u7+Ga62wMolpq5MgpyJKiRzbrLfFQ=
+Authentication-Results: mxback3q.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by vla1-b617950fbd54.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id stihQb0LaY-lDYSlFjg;
+        Thu, 07 Nov 2019 14:47:18 +0300
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (Client certificate not present)
+Subject: Re: [PATCH V2] MIPS: Loongson: Add board_ebase_setup() support
+To:     Huacai Chen <chenhc@lemote.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>
+Cc:     Paul Burton <paul.burton@mips.com>,
+        Paul Burton <paulburton@kernel.org>, linux-mips@linux-mips.org,
+        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Huacai Chen <chenhuacai@gmail.com>
+References: <1572847781-21652-1-git-send-email-chenhc@lemote.com>
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     yangtiezhu@loongson.cn
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yangyinglu@loongson.cn, jdelvare@suse.de,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH REPLY] MIPS: Scan the DMI system information
-Date:   Thu,  7 Nov 2019 19:28:01 +0800
-Message-Id: <20191107112801.7037-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.24.0.rc1
+Message-ID: <6f6ce0de-bad9-d1c4-f8d6-244b11eef0b1@flygoat.com>
+Date:   Thu, 7 Nov 2019 19:47:07 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Reply-to: 1573056341-21159-1-git-send-email-yangtiezhu@loongson.cn
+In-Reply-To: <1572847781-21652-1-git-send-email-chenhc@lemote.com>
+Content-Type: text/plain; charset=gbk
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Tiezhu and Jean,
 
-What about do like this?
-We shouldn't follow x86's Kconfig as most of MIPS devices
-don't support DMI.
+ÔÚ 2019/11/4 ÏÂÎç2:09, Huacai Chen Ð´µÀ:
+> Old processors before Loongson-3A2000 have a 32bit ebase register and
+> have no WG bit, new processors since Loongson-3A2000 have a 64bit ebase
+> register and do have the WG bit. Unfortunately, Loongson processors
+> which have the WG bit are slightly different from MIPS R2. This makes
+> the generic ebase setup not suitable for every scenarios.
+> 
+> To make Loongson's kernel be more robust, we add a board_ebase_setup()
+> hook to ensure that CKSEG0 is always used for ebase. This is also useful
+> on platforms where BIOS doesn't initialise an appropriate ebase.
+> 
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> ---
+Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-And, we can reuse map/unmap from io.h to reduce
-maintinance overhead.
+This patch is essential as most Loongson boards with Tianocore based
+UEFI firmware didn't set their ebase correctly.
 
-Thanks
+Should we backport it to stable?
 
-Jiaxun
-
->8------------------------------------------------------8<
-
-Enable DMI scanning on the MIPS architecture, this setups DMI identifiers
-(dmi_system_id) for printing it out on task dumps and prepares DIMM entry
-information (dmi_memdev_info) from the SMBIOS table. With this patch, the
-driver can easily match various of mainboards.
-
-In the SMBIOS reference specification, the table anchor string "_SM_" is
-present in the address range 0xF0000 to 0xFFFFF on a 16-byte boundary,
-but there exists a special case for loongson platform, when call function
-dmi_early_remap, it should specify the start address to 0xFFFE000 due to
-it is reserved for SMBIOS and can be normally access in the BIOS.
-
-Co-developed-by: Yinglu Yang <yangyinglu@loongson.cn>
-Signed-off-by: Yinglu Yang <yangyinglu@loongson.cn>
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-[jiaxun.yang@flygoat.com: Refine definitions and Kconfig]
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/Kconfig           |  9 +++++++++
- arch/mips/include/asm/dmi.h | 20 ++++++++++++++++++++
- arch/mips/kernel/setup.c    |  2 ++
- drivers/firmware/dmi_scan.c |  6 +++++-
- 4 files changed, 36 insertions(+), 1 deletion(-)
- create mode 100644 arch/mips/include/asm/dmi.h
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index c3a022ca3345..414f3a0ea397 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -2759,6 +2759,15 @@ config HW_PERF_EVENTS
- 	  Enable hardware performance counter support for perf events. If
- 	  disabled, perf events will use software events only.
- 
-+config DMI
-+	default y if MACH_LOONGSON64
-+	select DMI_SCAN_MACHINE_NON_EFI_FALLBACK
-+	bool "Enable DMI scanning"
-+	help
-+	  Enabled scanning of DMI to identify machine quirks. Say Y
-+	  here unless you have verified that your setup is not
-+	  affected by entries in the DMI blacklist.
-+
- config SMP
- 	bool "Multi-Processing support"
- 	depends on SYS_SUPPORTS_SMP
-diff --git a/arch/mips/include/asm/dmi.h b/arch/mips/include/asm/dmi.h
-new file mode 100644
-index 000000000000..5153ef6fe8a2
---- /dev/null
-+++ b/arch/mips/include/asm/dmi.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_MIPS_DMI_H
-+#define _ASM_MIPS_DMI_H
-+
-+#include <linux/io.h>
-+#include <linux/memblock.h>
-+
-+#define dmi_early_remap(x, l)		ioremap_cache(x, l)
-+#define dmi_early_unmap(x, l)		iounmap(x)
-+#define dmi_remap(x, l)		ioremap_cache(x, l)
-+#define dmi_unmap(x)			iounmap(x)
-+
-+/* MIPS initialize DMI scan before SLAB is ready, so we use memblock here */
-+#define dmi_alloc(l)			memblock_alloc_low(l, PAGE_SIZE)
-+
-+#if defined(CONFIG_MACH_LOONGSON64)
-+#define SMBIOS_ENTRY_POINT_SCAN_START	0xfffe000
-+#endif
-+
-+#endif /* _ASM_MIPS_DMI_H */
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index c3d4212b5f1d..da7d312e20eb 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -28,6 +28,7 @@
- #include <linux/decompress/generic.h>
- #include <linux/of_fdt.h>
- #include <linux/of_reserved_mem.h>
-+#include <linux/dmi.h>
- 
- #include <asm/addrspace.h>
- #include <asm/bootinfo.h>
-@@ -802,6 +803,7 @@ void __init setup_arch(char **cmdline_p)
- #endif
- 
- 	arch_mem_init(cmdline_p);
-+	dmi_setup();
- 
- 	resource_init();
- 	plat_smp_setup();
-diff --git a/drivers/firmware/dmi_scan.c b/drivers/firmware/dmi_scan.c
-index 35ed56b9c34f..ee2dbebf2063 100644
---- a/drivers/firmware/dmi_scan.c
-+++ b/drivers/firmware/dmi_scan.c
-@@ -11,6 +11,10 @@
- #include <asm/dmi.h>
- #include <asm/unaligned.h>
- 
-+#ifndef SMBIOS_ENTRY_POINT_SCAN_START
-+#define SMBIOS_ENTRY_POINT_SCAN_START 0xf0000
-+#endif
-+
- struct kobject *dmi_kobj;
- EXPORT_SYMBOL_GPL(dmi_kobj);
- 
-@@ -661,7 +665,7 @@ static void __init dmi_scan_machine(void)
- 			return;
- 		}
- 	} else if (IS_ENABLED(CONFIG_DMI_SCAN_MACHINE_NON_EFI_FALLBACK)) {
--		p = dmi_early_remap(0xF0000, 0x10000);
-+		p = dmi_early_remap(SMBIOS_ENTRY_POINT_SCAN_START, 0x10000);
- 		if (p == NULL)
- 			goto error;
- 
--- 
-2.24.0.rc1
-
+--
+Jiaxun Yang
