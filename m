@@ -2,189 +2,311 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5485F2F16
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Nov 2019 14:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC091F3195
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Nov 2019 15:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388506AbfKGNWT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Nov 2019 08:22:19 -0500
-Received: from foss.arm.com ([217.140.110.172]:56012 "EHLO foss.arm.com"
+        id S1726924AbfKGOfn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Nov 2019 09:35:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44782 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388368AbfKGNWT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 7 Nov 2019 08:22:19 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3172D31B;
-        Thu,  7 Nov 2019 05:22:18 -0800 (PST)
-Received: from [10.163.1.22] (unknown [10.163.1.22])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7406D3F6C4;
-        Thu,  7 Nov 2019 05:21:59 -0800 (PST)
-Subject: Re: [PATCH V8] mm/debug: Add tests validating architecture page table
- helpers
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@c-s.fr>, linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <1572240562-23630-1-git-send-email-anshuman.khandual@arm.com>
- <3229d68d-0b9d-0719-3370-c6e1df0ea032@arm.com>
- <42160baa-0e9d-73d0-bf72-58bdbacf10ff@c-s.fr>
- <0e0c2ce9-636d-1153-2451-baf7317ed45f@arm.com>
- <87tv7f4zkf.fsf@mpe.ellerman.id.au>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <83f14c65-035c-8387-3216-5dee8a287cfb@arm.com>
-Date:   Thu, 7 Nov 2019 18:52:34 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1726754AbfKGOfm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 7 Nov 2019 09:35:42 -0500
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DF5092187F;
+        Thu,  7 Nov 2019 14:35:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573137341;
+        bh=wwLmrh0U00tbD/J8CgxKi0nU5QepQNXQI2i3g4NanWQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AWCcCALH0IdprOT6EOBeEU2bRU74AF3nAR3TU+qhcwWqhk5AdhJUBTXXA3YrKyKDL
+         3d8mVl8+mx1evV26o9p+eJHp76Hqw26y5G8ca2dff3vbkeRbM7nz9j7ZcjgrvMvK64
+         gdyKMNy8gvUNajnjyzulJ9IqjLwI1awh3pXg2gqs=
+Received: by mail-qt1-f170.google.com with SMTP id y10so2617375qto.3;
+        Thu, 07 Nov 2019 06:35:40 -0800 (PST)
+X-Gm-Message-State: APjAAAVDWscfS84bfQssb8/vegV52JRll6a52RoDRFM4TN+bUC2zSekc
+        nrfn8mxflRLJZJRzb6I49xIgroTi0bvy33Cd8w==
+X-Google-Smtp-Source: APXvYqywGsSvcRTD5YG/9hLGCfgaArfaDxMX3Lkcr8Tk735sKkk8K0pZPwxkHFh8E/5JXs2wexLG2hxPzDM6/P4dwkc=
+X-Received: by 2002:ac8:73ce:: with SMTP id v14mr4149162qtp.136.1573137339809;
+ Thu, 07 Nov 2019 06:35:39 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <87tv7f4zkf.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <cover.1573124770.git.hns@goldelico.com> <4292cec1fd82cbd7d42742d749557adb01705574.1573124770.git.hns@goldelico.com>
+In-Reply-To: <4292cec1fd82cbd7d42742d749557adb01705574.1573124770.git.hns@goldelico.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 7 Nov 2019 08:35:27 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+ri3AXb=qhedBzQ6WufLm4aPrSqNxXiHd3_=mH3vJ8xw@mail.gmail.com>
+Message-ID: <CAL_Jsq+ri3AXb=qhedBzQ6WufLm4aPrSqNxXiHd3_=mH3vJ8xw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/8] RFC: dt-bindings: add img,pvrsgx.yaml for
+ Imagination GPUs
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?UTF-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        openpvrsgx-devgroup@letux.org,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
+        "open list:MIPS" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, Nov 7, 2019 at 5:06 AM H. Nikolaus Schaller <hns@goldelico.com> wrote:
+>
+> The Imagination PVR/SGX GPU is part of several SoC from
+> multiple vendors, e.g. TI OMAP, Ingenic JZ4780, Intel Poulsbo
+> and others.
+>
+> With this binding, we describe how the SGX processor is
+> interfaced to the SoC (registers, interrupt etc.).
+>
+> Clock, Reset and power management should be handled
+> by a parent node or elsewhere.
 
+That's probably TI specific...
 
-On 11/07/2019 06:24 PM, Michael Ellerman wrote:
-> Anshuman Khandual <anshuman.khandual@arm.com> writes:
->> On 11/06/2019 12:11 PM, Christophe Leroy wrote:
->>> Le 06/11/2019 à 04:22, Anshuman Khandual a écrit :
->>>> On 10/28/2019 10:59 AM, Anshuman Khandual wrote:
->>>>> +    -----------------------
->>>>> +    |         arch |status|
->>>>> +    -----------------------
->>>>> +    |       alpha: | TODO |
->>>>> +    |         arc: | TODO |
->>>>> +    |         arm: | TODO |
->>>>> +    |       arm64: |  ok  |
->>>>> +    |         c6x: | TODO |
->>>>> +    |        csky: | TODO |
->>>>> +    |       h8300: | TODO |
->>>>> +    |     hexagon: | TODO |
->>>>> +    |        ia64: | TODO |
->>>>> +    |        m68k: | TODO |
->>>>> +    |  microblaze: | TODO |
->>>>> +    |        mips: | TODO |
->>>>> +    |       nds32: | TODO |
->>>>> +    |       nios2: | TODO |
->>>>> +    |    openrisc: | TODO |
->>>>> +    |      parisc: | TODO |
->>>>> +    |     powerpc: | TODO |
->>>>> +    |       ppc32: |  ok  |
->>>
->>> Note that ppc32 is a part of powerpc, not a standalone arch.
->>
->> Right, I understand. But we are yet to hear about how this test
->> came about on powerpc server platforms. Will update 'powerpc'
->> arch listing above once we get some confirmation. May be once
->> this works on all relevant powerpc platforms, we can just merge
->> 'powerpc' and 'ppc32' entries here as just 'powerpc'.
-> 
-> On pseries:
-> 
->   watchdog: BUG: soft lockup - CPU#0 stuck for 23s! [swapper/0:1]
->   Modules linked in:
->   CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.4.0-rc6-gcc-8.2.0-next-20191107-00001-g250339d6747b-dirty #152
->   NIP:  c0000000010435a0 LR: c0000000010434b4 CTR: 0000000000000000
->   REGS: c00000003a403980 TRAP: 0901   Not tainted  (5.4.0-rc6-gcc-8.2.0-next-20191107-00001-g250339d6747b-dirty)
->   MSR:  8000000002009033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 44000222  XER: 00000000
->   CFAR: c0000000010435a8 IRQMASK: 0 
->   GPR00: c0000000010434b4 c00000003a403c10 c000000001295000 05210001000000c0 
->   GPR04: 8000000000000105 0000000000400dc0 000000003eb00000 0000000000000001 
->   GPR08: 0000000000000000 ffffffffffffffff 0000000000000001 0000000000000100 
->   GPR12: 0000000000000000 c0000000018f0000 
->   NIP [c0000000010435a0] debug_vm_pgtable+0x43c/0x82c
->   LR [c0000000010434b4] debug_vm_pgtable+0x350/0x82c
->   Call Trace:
->   [c00000003a403c10] [c00000000104346c] debug_vm_pgtable+0x308/0x82c (unreliable)
->   [c00000003a403ce0] [c000000001004310] kernel_init_freeable+0x1d0/0x39c
->   [c00000003a403db0] [c000000000010da0] kernel_init+0x24/0x174
->   [c00000003a403e20] [c00000000000bdc4] ret_from_kernel_thread+0x5c/0x78
->   Instruction dump:
->   7d075078 7ce74b78 7ce0f9ad 40c2fff0 38800000 7f83e378 4b02eee1 60000000 
->   48000080 3920ffff 39400001 39000000 <7ea0f8a8> 7ea75039 40c2fff8 7ea74878 
-> 
-> Looking at the asm I think it's stuck in hash__pte_update() waiting for
-> H_PAGE_BUSY to clear, but not sure why.
-> 
-> That's just using qemu TCG, instructions here if anyone wants to test it
-> themselves :)
-> 
->   https://github.com/linuxppc/wiki/wiki/Booting-with-Qemu
-> 
-> 
-> If I boot with -cpu power9 (using Radix MMU), I get a plain old BUG:
-> 
->   debug_vm_pgtable: debug_vm_pgtable: Validating architecture page table helpers
->   ------------[ cut here ]------------
->   kernel BUG at arch/powerpc/mm/pgtable.c:274!
->   Oops: Exception in kernel mode, sig: 5 [#1]
->   LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=32 NUMA pSeries
->   Modules linked in:
->   CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.4.0-rc6-gcc-8.2.0-next-20191107-00001-g250339d6747b-dirty #152
->   NIP:  c0000000000724e8 LR: c00000000104358c CTR: 0000000000000000
->   REGS: c00000003a483980 TRAP: 0700   Not tainted  (5.4.0-rc6-gcc-8.2.0-next-20191107-00001-g250339d6747b-dirty)
->   MSR:  8000000002029033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 24000224  XER: 20000000
->   CFAR: c000000001043588 IRQMASK: 0 
->   GPR00: c00000000104358c c00000003a483c10 c000000001295000 0000000000000009 
->   GPR04: 0000000000000000 0000000000000005 0000000000000000 0000000000000009 
->   GPR08: 0000000000000001 000000000000000e 0000000000000001 c00000003a5f0000 
->   GPR12: 0000000000000000 c0000000018f0000 c000000000010d84 0000000000000000 
->   GPR16: 0000000000000000 0000000000000000 c00000003a5f0000 8000000000000105 
->   GPR20: c000000001003ab8 0000000000000015 0500613a00000080 0900603a00000080 
->   GPR24: 09202e3a00000080 c00000000133bd90 c00000000133bd98 c00000000133bda0 
->   GPR28: c00000003a5e0000 c00000003a600af8 c00000003a2e2d48 c00000003a6100a0 
->   NIP [c0000000000724e8] assert_pte_locked+0x88/0x190
->   LR [c00000000104358c] debug_vm_pgtable+0x428/0x82c
->   Call Trace:
->   [c00000003a483c10] [c00000000104346c] debug_vm_pgtable+0x308/0x82c (unreliable)
->   [c00000003a483ce0] [c000000001004310] kernel_init_freeable+0x1d0/0x39c
->   [c00000003a483db0] [c000000000010da0] kernel_init+0x24/0x174
->   [c00000003a483e20] [c00000000000bdc4] ret_from_kernel_thread+0x5c/0x78
->   Instruction dump:
->   7d251a14 39070010 7d463030 7d084a14 38c6ffff 7c884436 7cc607b4 7d083038 
->   79081f24 7ccb402a 7cc80074 7908d182 <0b080000> 78cb0022 54c8c03e 7d473830 
->   ---[ end trace a694f1bc56529c0e ]---
+> ---
+>
+> I have used the doc2yaml script to get a first veryion
+> but I am still stuggling with the yaml thing. My impression
+> is that while it is human readable, it is not very human
+> writable... Unfortunately I haven't found a good tutorial
+> for Dummies (like me) for bindings in YAML.
 
-Oops. Does not seem like a quick problem to fix :) Though assert_pte_locked()
-gets checked only when DEBUG_VM is enabled. Probably will have to keep this
-test disabled on powerpc for now.
+Did you read .../bindings/example-schema.yaml? It explains the common
+cases and what schema are doing. I recently added to it, so look at
+the version in linux-next.
 
-> 
-> 
-> cheers
-> 
+> The big problem is not the YAML syntax but what the schema
+> should contain and how to correctly formulate ideas in this
+> new language.
+>
+> Specific questions for this RFC:
+>
+> * formatting: is space/tab indentation correct?
+
+YAML requires spaces.
+
+> * are strings with "" correct or without?
+
+Generally only keys or values starting with '#' need quotes. There's
+other cases, but we simply don't hit them with DT. We tend to quote
+$ref values, but that's not strictly needed.
+
+> * how do I specify that there is a list of compatible strings required in a specific order?
+
+An 'items' list defines the order.
+
+> * but there are multiple such lists, and only one of them is to be chosen?
+
+                                                ^^^^^^
+'oneOf' is the schema keyword you are looking for.
+
+> * how can be described in the binding that there should be certain values in
+>   the parent node (ranges) to make it work?
+
+You can't. Schemas match on a node and work down from there. So you
+can do it, but it's more complicated. You'd need a custom 'select'
+select that matches on the parent node having the child node you are
+looking for (assuming the parent is something generic like
+'simple-bus' which you can't match on). However, based on the example,
+I'd say checking 'ranges' is outside the scope of schema checks.
+'ranges' doesn't have to be a certain value any more than every case
+of 'reg' (except maybe i2c devices with fixed addresses). It's up to
+the .dts author how exactly to do address translation.
+
+I would like to have more ranges/reg checks such as bounds checks and
+overlapping addresses, but I think we'd do those with code, not
+schema.
+
+> I was not able to run
+>
+>         make dt_binding_check dtbs_check
+>
+> due to some missing dependencies (which I did not want to
+> invest time to research them) on my build host, so I could
+> not get automated help from those.
+
+Dependencies are documented in Documentation/devicetree/writing-schema.rst.
+
+> ---
+>  .../devicetree/bindings/gpu/img,pvrsgx.yaml   | 128 ++++++++++++++++++
+>  1 file changed, 128 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml b/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
+> new file mode 100644
+> index 000000000000..b1b021601c47
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
+> @@ -0,0 +1,128 @@
+> +# SPDX-License-Identifier: None
+
+Obviously not valid.
+
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/bindings/gpu/img,pvrsgx.yaml#
+
+This should have been correct with the script, but you need to drop 'bindings'.
+
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Imagination PVR/SGX GPU
+> +
+> +maintainers:
+> +  - H. Nikolaus Schaller <hns@goldelico.com>
+> +description: |+
+> +  This binding describes the Imagination SGX5 series of 3D accelerators which
+> +  are found in several different SoC like TI OMAP, Sitara, Ingenic JZ4780,
+> +  Allwinner A83, and Intel Poulsbo and CedarView.
+> +
+> +  Only the Imagination SGX530, SGX540 and SGX544 GPUs are currently covered by
+> +  this binding.
+> +
+> +  The SGX node is usually a child node of some DT node belonging to the SoC
+> +  which handles clocks, reset and general address space mapping of the SGX
+> +  register area.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - item:
+
+'item/items'
+
+> +        # BeagleBoard ABC, OpenPandora 600MHz
+> +        - const: "ti,omap3-sgx530-121", "img,sgx530-121", "img,sgx530", "img,sgx5"
+
+Not valid YAML nor json-schema. Each value needs to be list item with 'const:'
+
+Plenty of examples in bindings/arm/ with board/soc bindings.
+
+> +        # BeagleBoard XM, GTA04, OpenPandora 1GHz
+> +        - const: "ti,omap3-sgx530-125", "img,sgx530-125", "img,sgx530", "img,sgx5"
+
+This needs to be a new 'items' list under 'oneOf'.
+
+> +        # BeagleBone Black
+> +        - const: "ti,am335x-sgx530-125", "img,sgx530-125", "img,sgx530", "img,sgx5"
+> +        # Pandaboard (ES)
+> +        - const: "ti,omap4-sgx540-120", "img,sgx540-120", "img,sgx540", "img,sgx5"
+> +        - const "ti,omap4-sgx544-112", "img,sgx544-112", "img,sgx544", "img,sgx5"
+> +        # OMAP5 UEVM, Pyra Handheld
+> +        "ti,omap5-sgx544-116", "img,sgx544-116", "img,sgx544", "img,sgx5"
+> +        "ti,dra7-sgx544-116", "img,sgx544-116", "img,sgx544", "img,sgx5"
+
+Just gave up on trying to write a schema here?
+
+> +        # CI20
+> +        "ingenic,jz4780-sgx540-120", "img,sgx540-120", "img,sgx540", "img,sgx5";
+> +
+> +  reg:
+> +    items:
+> +      - description: physical base address and length of the register area
+
+For single entries, just 'maxItems: 1' is enough. Unless you have
+something special about this device, you don't need a description
+here.
+
+> +
+> +  interrupts:
+> +     items:
+> +      - description: interrupt from SGX subsystem to core processor
+> +
+> +  clocks:
+> +     items:
+> +      - description: optional clocks
+> +
+> +  required:
+> +    - compatible
+> +    - reg
+> +    - interrupts
+> +
+> +examples: |
+> +  gpu@fe00 {
+> +       compatible = "ti,omap-omap5-sgx544-116", "img,sgx544-116", "img,sgx544", "img,sgx5";
+> +       reg = <0xfe00 0x200>;
+> +       interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
+> +  };
+> +
+> +
+> +historical: |
+
+This should be dropped. It's just for reference as you write the schema.
+
+> +  Imagination PVR/SGX GPU
+> +
+> +  Only the Imagination SGX530, SGX540 and SGX544 GPUs are currently covered by this binding.
+> +
+> +  Required properties:
+> +  - compatible:        Should be one of
+> +               "ti,omap3-sgx530-121", "img,sgx530-121", "img,sgx530", "img,sgx5"; - BeagleBoard ABC, OpenPandora 600MHz
+> +               "ti,omap3-sgx530-125", "img,sgx530-125", "img,sgx530", "img,sgx5"; - BeagleBoard XM, GTA04, OpenPandora 1GHz
+> +               "ti,am3517-sgx530-125", "img,sgx530-125", "img,sgx530", "img,sgx5";
+> +               "ti,am335x-sgx530-125", "img,sgx530-125", "img,sgx530", "img,sgx5"; - BeagleBone Black
+> +               "ti,omap4-sgx540-120", "img,sgx540-120", "img,sgx540", "img,sgx5"; - Pandaboard (ES)
+> +               "ti,omap4-sgx544-112", "img,sgx544-112", "img,sgx544", "img,sgx5";
+> +               "ti,omap5-sgx544-116", "img,sgx544-116", "img,sgx544", "img,sgx5"; - OMAP5 UEVM, Pyra Handheld
+> +               "ti,dra7-sgx544-116", "img,sgx544-116", "img,sgx544", "img,sgx5";
+> +               "ti,am3517-sgx530-?", "img,sgx530-?", "img,sgx530", "img,sgx5";
+> +               "ti,am43xx-sgx530-?", "img,sgx530-?", "img,sgx530", "img,sgx5";
+> +               "ti,ti81xx-sgx530-?", "img,sgx530-?", "img,sgx530", "img,sgx5";
+> +               "img,jz4780-sgx540-?", "img,sgx540-?", "img,sgx540", "img,sgx5"; - CI20
+> +               "allwinner,sun8i-a83t-sgx544-?", "img,sgx544-116", "img,sgx544", "img,sgx5"; - Banana-Pi-M3 (Allwinner A83T)
+> +               "intel,poulsbo-gma500-sgx535", "img,sgx535-116", "img,sgx535", "img,sgx5"; - Atom Z5xx
+> +               "intel,medfield-gma-sgx540", "img,sgx540-116", "img,sgx540", "img,sgx5"; - Atom Z24xx
+> +               "intel,cedarview-gma3600-sgx545", "img,sgx545-116", "img,sgx545", "img,sgx5"; - Atom N2600, D2500
+> +
+> +               The "ti,omap..." entries are needed temporarily to handle SoC
+> +               specific builds of the kernel module.
+> +
+> +               In the long run, only the "img,sgx..." entry should suffice
+> +               to match a generic driver for all architectures and driver
+> +               code can dynamically find out on which SoC it is running.
+> +
+> +
+> +  - reg:               Physical base address and length of the register area.
+> +  - interrupts:        The interrupt numbers.
+> +
+> +  / {
+> +       ocp {
+> +               sgx_module: target-module@56000000 {
+> +                       compatible = "ti,sysc-omap4", "ti,sysc";
+> +                       reg = <0x5600fe00 0x4>,
+> +                             <0x5600fe10 0x4>;
+> +                       reg-names = "rev", "sysc";
+> +                       ti,sysc-midle = <SYSC_IDLE_FORCE>,
+> +                                       <SYSC_IDLE_NO>,
+> +                                       <SYSC_IDLE_SMART>;
+> +                       ti,sysc-sidle = <SYSC_IDLE_FORCE>,
+> +                                       <SYSC_IDLE_NO>,
+> +                                       <SYSC_IDLE_SMART>;
+> +                       clocks = <&gpu_clkctrl OMAP5_GPU_CLKCTRL 0>;
+> +                       clock-names = "fck";
+> +                       #address-cells = <1>;
+> +                       #size-cells = <1>;
+> +                       ranges = <0 0x56000000 0x2000000>;
+> +
+> +                       gpu@fe00 {
+> +                               compatible = "ti,omap-omap5-sgx544-116", "img,sgx544-116", "img,sgx544", "img,sgx5";
+> +                               reg = <0xfe00 0x200>;
+> +                               interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
+> +                       };
+> +               };
+> +       };
+> +  };
+> --
+> 2.23.0
+>
