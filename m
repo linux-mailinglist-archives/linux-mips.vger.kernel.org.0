@@ -2,33 +2,24 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 478ABF2E92
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Nov 2019 13:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5485F2F16
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Nov 2019 14:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388867AbfKGMy1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Nov 2019 07:54:27 -0500
-Received: from ozlabs.org ([203.11.71.1]:41487 "EHLO ozlabs.org"
+        id S2388506AbfKGNWT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Nov 2019 08:22:19 -0500
+Received: from foss.arm.com ([217.140.110.172]:56012 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388641AbfKGMy1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 7 Nov 2019 07:54:27 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4783J72b3Dz9sR7;
-        Thu,  7 Nov 2019 23:54:14 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1573131261;
-        bh=kVcSRWwnPjpL30z4/b6SOIlevawzxnLE8imaExIycJY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=J2h2GXut1G+LNf/hqVUky6Kv1okUdOEISaHZnkeLHqrnhlwT+bA9T64CihqGYeSi8
-         FHqUnJ0oF72N0INlgQid9nAvR37A00no52vbAalB76M0lCSA0BbkwPYukjEI9zgIqJ
-         tb7uzy0rwx9XsO7BF+60IISTFRNOQFeSPiO/N7vBTSKV/xk5TRX4wUogeJt5tridyc
-         ajDOlF9wzJOEvH9zg+9K3CNkwMLwmaLgT2Ak7loNO3/YuuIOYxxMGIE180Ya7SHWI7
-         TmxPjV3AUAn3SdBlwRrQJlfPszjY2prRFisV7GuIvzRBmAWb6K7cUfMqWt55qNZ9my
-         MCHuJ+1AEdMgw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        id S2388368AbfKGNWT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 7 Nov 2019 08:22:19 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3172D31B;
+        Thu,  7 Nov 2019 05:22:18 -0800 (PST)
+Received: from [10.163.1.22] (unknown [10.163.1.22])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7406D3F6C4;
+        Thu,  7 Nov 2019 05:21:59 -0800 (PST)
+Subject: Re: [PATCH V8] mm/debug: Add tests validating architecture page table
+ helpers
+To:     Michael Ellerman <mpe@ellerman.id.au>,
         Christophe Leroy <christophe.leroy@c-s.fr>, linux-mm@kvack.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
@@ -66,109 +57,134 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V8] mm/debug: Add tests validating architecture page table helpers
-In-Reply-To: <0e0c2ce9-636d-1153-2451-baf7317ed45f@arm.com>
-References: <1572240562-23630-1-git-send-email-anshuman.khandual@arm.com> <3229d68d-0b9d-0719-3370-c6e1df0ea032@arm.com> <42160baa-0e9d-73d0-bf72-58bdbacf10ff@c-s.fr> <0e0c2ce9-636d-1153-2451-baf7317ed45f@arm.com>
-Date:   Thu, 07 Nov 2019 23:54:08 +1100
-Message-ID: <87tv7f4zkf.fsf@mpe.ellerman.id.au>
+References: <1572240562-23630-1-git-send-email-anshuman.khandual@arm.com>
+ <3229d68d-0b9d-0719-3370-c6e1df0ea032@arm.com>
+ <42160baa-0e9d-73d0-bf72-58bdbacf10ff@c-s.fr>
+ <0e0c2ce9-636d-1153-2451-baf7317ed45f@arm.com>
+ <87tv7f4zkf.fsf@mpe.ellerman.id.au>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <83f14c65-035c-8387-3216-5dee8a287cfb@arm.com>
+Date:   Thu, 7 Nov 2019 18:52:34 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
+In-Reply-To: <87tv7f4zkf.fsf@mpe.ellerman.id.au>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: base64
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-QW5zaHVtYW4gS2hhbmR1YWwgPGFuc2h1bWFuLmtoYW5kdWFsQGFybS5jb20+IHdyaXRlczoNCj4g
-T24gMTEvMDYvMjAxOSAxMjoxMSBQTSwgQ2hyaXN0b3BoZSBMZXJveSB3cm90ZToNCj4+IExlIDA2
-LzExLzIwMTkgw6AgMDQ6MjIsIEFuc2h1bWFuIEtoYW5kdWFsIGEgw6ljcml0wqA6DQo+Pj4gT24g
-MTAvMjgvMjAxOSAxMDo1OSBBTSwgQW5zaHVtYW4gS2hhbmR1YWwgd3JvdGU6DQo+Pj4+ICvCoMKg
-wqAgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4+Pj4gK8KgwqDCoCB8wqDCoMKgwqDCoMKgwqDC
-oCBhcmNoIHxzdGF0dXN8DQo+Pj4+ICvCoMKgwqAgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4+
-Pj4gK8KgwqDCoCB8wqDCoMKgwqDCoMKgIGFscGhhOiB8IFRPRE8gfA0KPj4+PiArwqDCoMKgIHzC
-oMKgwqDCoMKgwqDCoMKgIGFyYzogfCBUT0RPIHwNCj4+Pj4gK8KgwqDCoCB8wqDCoMKgwqDCoMKg
-wqDCoCBhcm06IHwgVE9ETyB8DQo+Pj4+ICvCoMKgwqAgfMKgwqDCoMKgwqDCoCBhcm02NDogfMKg
-IG9rwqAgfA0KPj4+PiArwqDCoMKgIHzCoMKgwqDCoMKgwqDCoMKgIGM2eDogfCBUT0RPIHwNCj4+
-Pj4gK8KgwqDCoCB8wqDCoMKgwqDCoMKgwqAgY3NreTogfCBUT0RPIHwNCj4+Pj4gK8KgwqDCoCB8
-wqDCoMKgwqDCoMKgIGg4MzAwOiB8IFRPRE8gfA0KPj4+PiArwqDCoMKgIHzCoMKgwqDCoCBoZXhh
-Z29uOiB8IFRPRE8gfA0KPj4+PiArwqDCoMKgIHzCoMKgwqDCoMKgwqDCoCBpYTY0OiB8IFRPRE8g
-fA0KPj4+PiArwqDCoMKgIHzCoMKgwqDCoMKgwqDCoCBtNjhrOiB8IFRPRE8gfA0KPj4+PiArwqDC
-oMKgIHzCoCBtaWNyb2JsYXplOiB8IFRPRE8gfA0KPj4+PiArwqDCoMKgIHzCoMKgwqDCoMKgwqDC
-oCBtaXBzOiB8IFRPRE8gfA0KPj4+PiArwqDCoMKgIHzCoMKgwqDCoMKgwqAgbmRzMzI6IHwgVE9E
-TyB8DQo+Pj4+ICvCoMKgwqAgfMKgwqDCoMKgwqDCoCBuaW9zMjogfCBUT0RPIHwNCj4+Pj4gK8Kg
-wqDCoCB8wqDCoMKgIG9wZW5yaXNjOiB8IFRPRE8gfA0KPj4+PiArwqDCoMKgIHzCoMKgwqDCoMKg
-IHBhcmlzYzogfCBUT0RPIHwNCj4+Pj4gK8KgwqDCoCB8wqDCoMKgwqAgcG93ZXJwYzogfCBUT0RP
-IHwNCj4+Pj4gK8KgwqDCoCB8wqDCoMKgwqDCoMKgIHBwYzMyOiB8wqAgb2vCoCB8DQo+PiANCj4+
-IE5vdGUgdGhhdCBwcGMzMiBpcyBhIHBhcnQgb2YgcG93ZXJwYywgbm90IGEgc3RhbmRhbG9uZSBh
-cmNoLg0KPg0KPiBSaWdodCwgSSB1bmRlcnN0YW5kLiBCdXQgd2UgYXJlIHlldCB0byBoZWFyIGFi
-b3V0IGhvdyB0aGlzIHRlc3QNCj4gY2FtZSBhYm91dCBvbiBwb3dlcnBjIHNlcnZlciBwbGF0Zm9y
-bXMuIFdpbGwgdXBkYXRlICdwb3dlcnBjJw0KPiBhcmNoIGxpc3RpbmcgYWJvdmUgb25jZSB3ZSBn
-ZXQgc29tZSBjb25maXJtYXRpb24uIE1heSBiZSBvbmNlDQo+IHRoaXMgd29ya3Mgb24gYWxsIHJl
-bGV2YW50IHBvd2VycGMgcGxhdGZvcm1zLCB3ZSBjYW4ganVzdCBtZXJnZQ0KPiAncG93ZXJwYycg
-YW5kICdwcGMzMicgZW50cmllcyBoZXJlIGFzIGp1c3QgJ3Bvd2VycGMnLg0KDQpPbiBwc2VyaWVz
-Og0KDQogIHdhdGNoZG9nOiBCVUc6IHNvZnQgbG9ja3VwIC0gQ1BVIzAgc3R1Y2sgZm9yIDIzcyEg
-W3N3YXBwZXIvMDoxXQ0KICBNb2R1bGVzIGxpbmtlZCBpbjoNCiAgQ1BVOiAwIFBJRDogMSBDb21t
-OiBzd2FwcGVyLzAgTm90IHRhaW50ZWQgNS40LjAtcmM2LWdjYy04LjIuMC1uZXh0LTIwMTkxMTA3
-LTAwMDAxLWcyNTAzMzlkNjc0N2ItZGlydHkgIzE1Mg0KICBOSVA6ICBjMDAwMDAwMDAxMDQzNWEw
-IExSOiBjMDAwMDAwMDAxMDQzNGI0IENUUjogMDAwMDAwMDAwMDAwMDAwMA0KICBSRUdTOiBjMDAw
-MDAwMDNhNDAzOTgwIFRSQVA6IDA5MDEgICBOb3QgdGFpbnRlZCAgKDUuNC4wLXJjNi1nY2MtOC4y
-LjAtbmV4dC0yMDE5MTEwNy0wMDAwMS1nMjUwMzM5ZDY3NDdiLWRpcnR5KQ0KICBNU1I6ICA4MDAw
-MDAwMDAyMDA5MDMzIDxTRixWRUMsRUUsTUUsSVIsRFIsUkksTEU+ICBDUjogNDQwMDAyMjIgIFhF
-UjogMDAwMDAwMDANCiAgQ0ZBUjogYzAwMDAwMDAwMTA0MzVhOCBJUlFNQVNLOiAwIA0KICBHUFIw
-MDogYzAwMDAwMDAwMTA0MzRiNCBjMDAwMDAwMDNhNDAzYzEwIGMwMDAwMDAwMDEyOTUwMDAgMDUy
-MTAwMDEwMDAwMDBjMCANCiAgR1BSMDQ6IDgwMDAwMDAwMDAwMDAxMDUgMDAwMDAwMDAwMDQwMGRj
-MCAwMDAwMDAwMDNlYjAwMDAwIDAwMDAwMDAwMDAwMDAwMDEgDQogIEdQUjA4OiAwMDAwMDAwMDAw
-MDAwMDAwIGZmZmZmZmZmZmZmZmZmZmYgMDAwMDAwMDAwMDAwMDAwMSAwMDAwMDAwMDAwMDAwMTAw
-IA0KICBHUFIxMjogMDAwMDAwMDAwMDAwMDAwMCBjMDAwMDAwMDAxOGYwMDAwIA0KICBOSVAgW2Mw
-MDAwMDAwMDEwNDM1YTBdIGRlYnVnX3ZtX3BndGFibGUrMHg0M2MvMHg4MmMNCiAgTFIgW2MwMDAw
-MDAwMDEwNDM0YjRdIGRlYnVnX3ZtX3BndGFibGUrMHgzNTAvMHg4MmMNCiAgQ2FsbCBUcmFjZToN
-CiAgW2MwMDAwMDAwM2E0MDNjMTBdIFtjMDAwMDAwMDAxMDQzNDZjXSBkZWJ1Z192bV9wZ3RhYmxl
-KzB4MzA4LzB4ODJjICh1bnJlbGlhYmxlKQ0KICBbYzAwMDAwMDAzYTQwM2NlMF0gW2MwMDAwMDAw
-MDEwMDQzMTBdIGtlcm5lbF9pbml0X2ZyZWVhYmxlKzB4MWQwLzB4MzljDQogIFtjMDAwMDAwMDNh
-NDAzZGIwXSBbYzAwMDAwMDAwMDAxMGRhMF0ga2VybmVsX2luaXQrMHgyNC8weDE3NA0KICBbYzAw
-MDAwMDAzYTQwM2UyMF0gW2MwMDAwMDAwMDAwMGJkYzRdIHJldF9mcm9tX2tlcm5lbF90aHJlYWQr
-MHg1Yy8weDc4DQogIEluc3RydWN0aW9uIGR1bXA6DQogIDdkMDc1MDc4IDdjZTc0Yjc4IDdjZTBm
-OWFkIDQwYzJmZmYwIDM4ODAwMDAwIDdmODNlMzc4IDRiMDJlZWUxIDYwMDAwMDAwIA0KICA0ODAw
-MDA4MCAzOTIwZmZmZiAzOTQwMDAwMSAzOTAwMDAwMCA8N2VhMGY4YTg+IDdlYTc1MDM5IDQwYzJm
-ZmY4IDdlYTc0ODc4IA0KDQpMb29raW5nIGF0IHRoZSBhc20gSSB0aGluayBpdCdzIHN0dWNrIGlu
-IGhhc2hfX3B0ZV91cGRhdGUoKSB3YWl0aW5nIGZvcg0KSF9QQUdFX0JVU1kgdG8gY2xlYXIsIGJ1
-dCBub3Qgc3VyZSB3aHkuDQoNClRoYXQncyBqdXN0IHVzaW5nIHFlbXUgVENHLCBpbnN0cnVjdGlv
-bnMgaGVyZSBpZiBhbnlvbmUgd2FudHMgdG8gdGVzdCBpdA0KdGhlbXNlbHZlcyA6KQ0KDQogIGh0
-dHBzOi8vZ2l0aHViLmNvbS9saW51eHBwYy93aWtpL3dpa2kvQm9vdGluZy13aXRoLVFlbXUNCg0K
-DQpJZiBJIGJvb3Qgd2l0aCAtY3B1IHBvd2VyOSAodXNpbmcgUmFkaXggTU1VKSwgSSBnZXQgYSBw
-bGFpbiBvbGQgQlVHOg0KDQogIGRlYnVnX3ZtX3BndGFibGU6IGRlYnVnX3ZtX3BndGFibGU6IFZh
-bGlkYXRpbmcgYXJjaGl0ZWN0dXJlIHBhZ2UgdGFibGUgaGVscGVycw0KICAtLS0tLS0tLS0tLS1b
-IGN1dCBoZXJlIF0tLS0tLS0tLS0tLS0NCiAga2VybmVsIEJVRyBhdCBhcmNoL3Bvd2VycGMvbW0v
-cGd0YWJsZS5jOjI3NCENCiAgT29wczogRXhjZXB0aW9uIGluIGtlcm5lbCBtb2RlLCBzaWc6IDUg
-WyMxXQ0KICBMRSBQQUdFX1NJWkU9NjRLIE1NVT1SYWRpeCBTTVAgTlJfQ1BVUz0zMiBOVU1BIHBT
-ZXJpZXMNCiAgTW9kdWxlcyBsaW5rZWQgaW46DQogIENQVTogMCBQSUQ6IDEgQ29tbTogc3dhcHBl
-ci8wIE5vdCB0YWludGVkIDUuNC4wLXJjNi1nY2MtOC4yLjAtbmV4dC0yMDE5MTEwNy0wMDAwMS1n
-MjUwMzM5ZDY3NDdiLWRpcnR5ICMxNTINCiAgTklQOiAgYzAwMDAwMDAwMDA3MjRlOCBMUjogYzAw
-MDAwMDAwMTA0MzU4YyBDVFI6IDAwMDAwMDAwMDAwMDAwMDANCiAgUkVHUzogYzAwMDAwMDAzYTQ4
-Mzk4MCBUUkFQOiAwNzAwICAgTm90IHRhaW50ZWQgICg1LjQuMC1yYzYtZ2NjLTguMi4wLW5leHQt
-MjAxOTExMDctMDAwMDEtZzI1MDMzOWQ2NzQ3Yi1kaXJ0eSkNCiAgTVNSOiAgODAwMDAwMDAwMjAy
-OTAzMyA8U0YsVkVDLEVFLE1FLElSLERSLFJJLExFPiAgQ1I6IDI0MDAwMjI0ICBYRVI6IDIwMDAw
-MDAwDQogIENGQVI6IGMwMDAwMDAwMDEwNDM1ODggSVJRTUFTSzogMCANCiAgR1BSMDA6IGMwMDAw
-MDAwMDEwNDM1OGMgYzAwMDAwMDAzYTQ4M2MxMCBjMDAwMDAwMDAxMjk1MDAwIDAwMDAwMDAwMDAw
-MDAwMDkgDQogIEdQUjA0OiAwMDAwMDAwMDAwMDAwMDAwIDAwMDAwMDAwMDAwMDAwMDUgMDAwMDAw
-MDAwMDAwMDAwMCAwMDAwMDAwMDAwMDAwMDA5IA0KICBHUFIwODogMDAwMDAwMDAwMDAwMDAwMSAw
-MDAwMDAwMDAwMDAwMDBlIDAwMDAwMDAwMDAwMDAwMDEgYzAwMDAwMDAzYTVmMDAwMCANCiAgR1BS
-MTI6IDAwMDAwMDAwMDAwMDAwMDAgYzAwMDAwMDAwMThmMDAwMCBjMDAwMDAwMDAwMDEwZDg0IDAw
-MDAwMDAwMDAwMDAwMDAgDQogIEdQUjE2OiAwMDAwMDAwMDAwMDAwMDAwIDAwMDAwMDAwMDAwMDAw
-MDAgYzAwMDAwMDAzYTVmMDAwMCA4MDAwMDAwMDAwMDAwMTA1IA0KICBHUFIyMDogYzAwMDAwMDAw
-MTAwM2FiOCAwMDAwMDAwMDAwMDAwMDE1IDA1MDA2MTNhMDAwMDAwODAgMDkwMDYwM2EwMDAwMDA4
-MCANCiAgR1BSMjQ6IDA5MjAyZTNhMDAwMDAwODAgYzAwMDAwMDAwMTMzYmQ5MCBjMDAwMDAwMDAx
-MzNiZDk4IGMwMDAwMDAwMDEzM2JkYTAgDQogIEdQUjI4OiBjMDAwMDAwMDNhNWUwMDAwIGMwMDAw
-MDAwM2E2MDBhZjggYzAwMDAwMDAzYTJlMmQ0OCBjMDAwMDAwMDNhNjEwMGEwIA0KICBOSVAgW2Mw
-MDAwMDAwMDAwNzI0ZThdIGFzc2VydF9wdGVfbG9ja2VkKzB4ODgvMHgxOTANCiAgTFIgW2MwMDAw
-MDAwMDEwNDM1OGNdIGRlYnVnX3ZtX3BndGFibGUrMHg0MjgvMHg4MmMNCiAgQ2FsbCBUcmFjZToN
-CiAgW2MwMDAwMDAwM2E0ODNjMTBdIFtjMDAwMDAwMDAxMDQzNDZjXSBkZWJ1Z192bV9wZ3RhYmxl
-KzB4MzA4LzB4ODJjICh1bnJlbGlhYmxlKQ0KICBbYzAwMDAwMDAzYTQ4M2NlMF0gW2MwMDAwMDAw
-MDEwMDQzMTBdIGtlcm5lbF9pbml0X2ZyZWVhYmxlKzB4MWQwLzB4MzljDQogIFtjMDAwMDAwMDNh
-NDgzZGIwXSBbYzAwMDAwMDAwMDAxMGRhMF0ga2VybmVsX2luaXQrMHgyNC8weDE3NA0KICBbYzAw
-MDAwMDAzYTQ4M2UyMF0gW2MwMDAwMDAwMDAwMGJkYzRdIHJldF9mcm9tX2tlcm5lbF90aHJlYWQr
-MHg1Yy8weDc4DQogIEluc3RydWN0aW9uIGR1bXA6DQogIDdkMjUxYTE0IDM5MDcwMDEwIDdkNDYz
-MDMwIDdkMDg0YTE0IDM4YzZmZmZmIDdjODg0NDM2IDdjYzYwN2I0IDdkMDgzMDM4IA0KICA3OTA4
-MWYyNCA3Y2NiNDAyYSA3Y2M4MDA3NCA3OTA4ZDE4MiA8MGIwODAwMDA+IDc4Y2IwMDIyIDU0Yzhj
-MDNlIDdkNDczODMwIA0KICAtLS1bIGVuZCB0cmFjZSBhNjk0ZjFiYzU2NTI5YzBlIF0tLS0NCg0K
-DQpjaGVlcnMNCg==
+
+
+On 11/07/2019 06:24 PM, Michael Ellerman wrote:
+> Anshuman Khandual <anshuman.khandual@arm.com> writes:
+>> On 11/06/2019 12:11 PM, Christophe Leroy wrote:
+>>> Le 06/11/2019 à 04:22, Anshuman Khandual a écrit :
+>>>> On 10/28/2019 10:59 AM, Anshuman Khandual wrote:
+>>>>> +    -----------------------
+>>>>> +    |         arch |status|
+>>>>> +    -----------------------
+>>>>> +    |       alpha: | TODO |
+>>>>> +    |         arc: | TODO |
+>>>>> +    |         arm: | TODO |
+>>>>> +    |       arm64: |  ok  |
+>>>>> +    |         c6x: | TODO |
+>>>>> +    |        csky: | TODO |
+>>>>> +    |       h8300: | TODO |
+>>>>> +    |     hexagon: | TODO |
+>>>>> +    |        ia64: | TODO |
+>>>>> +    |        m68k: | TODO |
+>>>>> +    |  microblaze: | TODO |
+>>>>> +    |        mips: | TODO |
+>>>>> +    |       nds32: | TODO |
+>>>>> +    |       nios2: | TODO |
+>>>>> +    |    openrisc: | TODO |
+>>>>> +    |      parisc: | TODO |
+>>>>> +    |     powerpc: | TODO |
+>>>>> +    |       ppc32: |  ok  |
+>>>
+>>> Note that ppc32 is a part of powerpc, not a standalone arch.
+>>
+>> Right, I understand. But we are yet to hear about how this test
+>> came about on powerpc server platforms. Will update 'powerpc'
+>> arch listing above once we get some confirmation. May be once
+>> this works on all relevant powerpc platforms, we can just merge
+>> 'powerpc' and 'ppc32' entries here as just 'powerpc'.
+> 
+> On pseries:
+> 
+>   watchdog: BUG: soft lockup - CPU#0 stuck for 23s! [swapper/0:1]
+>   Modules linked in:
+>   CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.4.0-rc6-gcc-8.2.0-next-20191107-00001-g250339d6747b-dirty #152
+>   NIP:  c0000000010435a0 LR: c0000000010434b4 CTR: 0000000000000000
+>   REGS: c00000003a403980 TRAP: 0901   Not tainted  (5.4.0-rc6-gcc-8.2.0-next-20191107-00001-g250339d6747b-dirty)
+>   MSR:  8000000002009033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 44000222  XER: 00000000
+>   CFAR: c0000000010435a8 IRQMASK: 0 
+>   GPR00: c0000000010434b4 c00000003a403c10 c000000001295000 05210001000000c0 
+>   GPR04: 8000000000000105 0000000000400dc0 000000003eb00000 0000000000000001 
+>   GPR08: 0000000000000000 ffffffffffffffff 0000000000000001 0000000000000100 
+>   GPR12: 0000000000000000 c0000000018f0000 
+>   NIP [c0000000010435a0] debug_vm_pgtable+0x43c/0x82c
+>   LR [c0000000010434b4] debug_vm_pgtable+0x350/0x82c
+>   Call Trace:
+>   [c00000003a403c10] [c00000000104346c] debug_vm_pgtable+0x308/0x82c (unreliable)
+>   [c00000003a403ce0] [c000000001004310] kernel_init_freeable+0x1d0/0x39c
+>   [c00000003a403db0] [c000000000010da0] kernel_init+0x24/0x174
+>   [c00000003a403e20] [c00000000000bdc4] ret_from_kernel_thread+0x5c/0x78
+>   Instruction dump:
+>   7d075078 7ce74b78 7ce0f9ad 40c2fff0 38800000 7f83e378 4b02eee1 60000000 
+>   48000080 3920ffff 39400001 39000000 <7ea0f8a8> 7ea75039 40c2fff8 7ea74878 
+> 
+> Looking at the asm I think it's stuck in hash__pte_update() waiting for
+> H_PAGE_BUSY to clear, but not sure why.
+> 
+> That's just using qemu TCG, instructions here if anyone wants to test it
+> themselves :)
+> 
+>   https://github.com/linuxppc/wiki/wiki/Booting-with-Qemu
+> 
+> 
+> If I boot with -cpu power9 (using Radix MMU), I get a plain old BUG:
+> 
+>   debug_vm_pgtable: debug_vm_pgtable: Validating architecture page table helpers
+>   ------------[ cut here ]------------
+>   kernel BUG at arch/powerpc/mm/pgtable.c:274!
+>   Oops: Exception in kernel mode, sig: 5 [#1]
+>   LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=32 NUMA pSeries
+>   Modules linked in:
+>   CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.4.0-rc6-gcc-8.2.0-next-20191107-00001-g250339d6747b-dirty #152
+>   NIP:  c0000000000724e8 LR: c00000000104358c CTR: 0000000000000000
+>   REGS: c00000003a483980 TRAP: 0700   Not tainted  (5.4.0-rc6-gcc-8.2.0-next-20191107-00001-g250339d6747b-dirty)
+>   MSR:  8000000002029033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 24000224  XER: 20000000
+>   CFAR: c000000001043588 IRQMASK: 0 
+>   GPR00: c00000000104358c c00000003a483c10 c000000001295000 0000000000000009 
+>   GPR04: 0000000000000000 0000000000000005 0000000000000000 0000000000000009 
+>   GPR08: 0000000000000001 000000000000000e 0000000000000001 c00000003a5f0000 
+>   GPR12: 0000000000000000 c0000000018f0000 c000000000010d84 0000000000000000 
+>   GPR16: 0000000000000000 0000000000000000 c00000003a5f0000 8000000000000105 
+>   GPR20: c000000001003ab8 0000000000000015 0500613a00000080 0900603a00000080 
+>   GPR24: 09202e3a00000080 c00000000133bd90 c00000000133bd98 c00000000133bda0 
+>   GPR28: c00000003a5e0000 c00000003a600af8 c00000003a2e2d48 c00000003a6100a0 
+>   NIP [c0000000000724e8] assert_pte_locked+0x88/0x190
+>   LR [c00000000104358c] debug_vm_pgtable+0x428/0x82c
+>   Call Trace:
+>   [c00000003a483c10] [c00000000104346c] debug_vm_pgtable+0x308/0x82c (unreliable)
+>   [c00000003a483ce0] [c000000001004310] kernel_init_freeable+0x1d0/0x39c
+>   [c00000003a483db0] [c000000000010da0] kernel_init+0x24/0x174
+>   [c00000003a483e20] [c00000000000bdc4] ret_from_kernel_thread+0x5c/0x78
+>   Instruction dump:
+>   7d251a14 39070010 7d463030 7d084a14 38c6ffff 7c884436 7cc607b4 7d083038 
+>   79081f24 7ccb402a 7cc80074 7908d182 <0b080000> 78cb0022 54c8c03e 7d473830 
+>   ---[ end trace a694f1bc56529c0e ]---
+
+Oops. Does not seem like a quick problem to fix :) Though assert_pte_locked()
+gets checked only when DEBUG_VM is enabled. Probably will have to keep this
+test disabled on powerpc for now.
+
+> 
+> 
+> cheers
+> 
