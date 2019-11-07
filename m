@@ -2,117 +2,300 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B591F2632
-	for <lists+linux-mips@lfdr.de>; Thu,  7 Nov 2019 05:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3E0F2A95
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Nov 2019 10:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733118AbfKGECL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Nov 2019 23:02:11 -0500
-Received: from forward101j.mail.yandex.net ([5.45.198.241]:60452 "EHLO
-        forward101j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1733102AbfKGECK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Nov 2019 23:02:10 -0500
-Received: from mxback30j.mail.yandex.net (mxback30j.mail.yandex.net [IPv6:2a02:6b8:0:1619::230])
-        by forward101j.mail.yandex.net (Yandex) with ESMTP id D99941BE0E13;
-        Thu,  7 Nov 2019 07:02:07 +0300 (MSK)
-Received: from sas8-93a22d3a76f4.qloud-c.yandex.net (sas8-93a22d3a76f4.qloud-c.yandex.net [2a02:6b8:c1b:2988:0:640:93a2:2d3a])
-        by mxback30j.mail.yandex.net (mxback/Yandex) with ESMTP id sNgr661AJy-27quBTtL;
-        Thu, 07 Nov 2019 07:02:07 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1573099327;
-        bh=ABNYoeFbjFr6GJhXKkIl7kshYus453HnOTgEbmSAk10=;
-        h=In-Reply-To:Subject:To:From:Cc:References:Date:Message-Id;
-        b=bQZ/jf1sYK+qlYtelGo4Bus4PsjmHS/6R37d2JLLVMo9yjKiZA1G2cyD+UqspAu36
-         IJdyvL2t90/UVd+I1PjXfZymErdv9VmAMBzGuHczR3/2A2e/RELxn+qJ6wUvbk5ZC8
-         oZlzlPlzI6fzvBUF/LxX1IHFxj3YrRJNPR8Ns8+U=
-Authentication-Results: mxback30j.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by sas8-93a22d3a76f4.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id Z8DeRIVREY-24VmHglB;
-        Thu, 07 Nov 2019 07:02:06 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     paulburton@kernel.org, chenhe@lemote.com,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 5/5] MIPS: Loongson64: Drop setup_pcimap
-Date:   Thu,  7 Nov 2019 12:01:18 +0800
-Message-Id: <20191107040118.10685-6-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191107040118.10685-1-jiaxun.yang@flygoat.com>
-References: <20191107040118.10685-1-jiaxun.yang@flygoat.com>
+        id S1726866AbfKGJ10 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Nov 2019 04:27:26 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:58143 "EHLO
+        mail.loongson.cn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726734AbfKGJ10 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Nov 2019 04:27:26 -0500
+Received: from [10.20.41.27] (unknown [10.20.41.27])
+        by mail (Coremail) with SMTP id QMiowPBxc+h248NdE1wAAA--.26S3;
+        Thu, 07 Nov 2019 17:27:18 +0800 (CST)
+Subject: Re: [PATCH] MIPS: Scan the DMI system information
+References: <5959f904-5c46-30a7-7a4f-17f692aca320@loongson.cn>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Huacai Chen <chenhc@lemote.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yinglu Yang <yangyinglu@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+X-Forwarded-Message-Id: <5959f904-5c46-30a7-7a4f-17f692aca320@loongson.cn>
+Message-ID: <5c042bd8-40ad-e84f-588d-f3ee56f7216d@loongson.cn>
+Date:   Thu, 7 Nov 2019 17:26:58 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
+In-Reply-To: <5959f904-5c46-30a7-7a4f-17f692aca320@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: QMiowPBxc+h248NdE1wAAA--.26S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxKF18JrW3XFy8Ww1Uur4xCrg_yoWxJFyUpF
+        y8Ja1rKF48Xr17GF1Sq343Wr9Iyrs5tFZ0gFy7tF17u3s8Zw17AFs3KayUCFy8Ar1DJFy0
+        9a40gFW3uFs8CaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBa14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x
+        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
+        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF
+        04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUqeHgUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-setup_pcimap is used to setup address windows for Loongson-3
-built-in PCI-X controller, but this function is never been used
-in the real world and lack of support in kernel.
+Sorry to resend this email because the mail list server was denied
+due to it is not plain text.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/loongson64/pci.c | 43 --------------------------------------
- 1 file changed, 43 deletions(-)
+On 11/07/2019 11:42 AM, Jiaxun Yang wrote:
+> 于 2019年11月7日 GMT+08:00 上午10:42:23, Tiezhu Yang<yangtiezhu@loongson.cn>  写到:
+>> On 11/07/2019 08:35 AM, Jiaxun Yang wrote:
+>>> 于 2019年11月7日 GMT+08:00 上午12:05:41, Tiezhu Yang
+>> <yangtiezhu@loongson.cn>  写到:
+>>>> Enable DMI scanning on the MIPS architecture, this setups DMI
+>>>> identifiers
+>>>> (dmi_system_id) for printing it out on task dumps and prepares DIMM
+>>>> entry
+>>>> information (dmi_memdev_info) from the SMBIOS table. With this
+>> patch,
+>>>> the
+>>>> driver can easily match various of mainboards.
+>>>>
+>>>> In the SMBIOS reference specification, the table anchor string
+>> "_SM_"
+>>>> is
+>>>> present in the address range 0xF0000 to 0xFFFFF on a 16-byte
+>> boundary,
+>>>> but there exists a special case for loongson platform, when call
+>>>> function
+>>>> dmi_early_remap, it should specify the start address to 0xFFFE000
+>> due
+>>>> to
+>>>> it is reserved for SMBIOS and can be normally access in the BIOS.
+>>>>
+>>>> Co-developed-by: Yinglu Yang<yangyinglu@loongson.cn>
+>>>> Signed-off-by: Yinglu Yang<yangyinglu@loongson.cn>
+>>>> Signed-off-by: Tiezhu Yang<yangtiezhu@loongson.cn>
+>>>> ---
+>>>> arch/mips/Kconfig           | 12 ++++++++++++
+>>>> arch/mips/include/asm/dmi.h | 43
+>>>> +++++++++++++++++++++++++++++++++++++++++++
+>>>> arch/mips/kernel/setup.c    |  2 ++
+>>>> 3 files changed, 57 insertions(+)
+>>>> create mode 100644 arch/mips/include/asm/dmi.h
+>>>>
+>>>> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+>>>> index 7cb8947..0a67b18 100644
+>>>> --- a/arch/mips/Kconfig
+>>>> +++ b/arch/mips/Kconfig
+>>>> @@ -2757,6 +2757,18 @@ config HW_PERF_EVENTS
+>>>> 	  Enable hardware performance counter support for perf events. If
+>>>> 	  disabled, perf events will use software events only.
+>>>>
+>>>> +# Mark as expert because too many people got it wrong.
+>>>> +# The code disables itself when not needed.
+>>>> +config DMI
+>>>> +	default y
+>>>> +	select DMI_SCAN_MACHINE_NON_EFI_FALLBACK
+>>>> +	bool "Enable DMI scanning" if EXPERT
+>>>> +	help
+>>>> +	  Enabled scanning of DMI to identify machine quirks. Say Y
+>>>> +	  here unless you have verified that your setup is not
+>>>> +	  affected by entries in the DMI blacklist. Required by PNP
+>>>> +	  BIOS code.
+>>>> +
+>>>> config SMP
+>>>> 	bool "Multi-Processing support"
+>>>> 	depends on SYS_SUPPORTS_SMP
+>>>> diff --git a/arch/mips/include/asm/dmi.h
+>> b/arch/mips/include/asm/dmi.h
+>>>> new file mode 100644
+>>>> index 0000000..1f3da37
+>>>> --- /dev/null
+>>>> +++ b/arch/mips/include/asm/dmi.h
+>>>> @@ -0,0 +1,43 @@
+>>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>>> +#ifndef _ASM_MIPS_DMI_H
+>>>> +#define _ASM_MIPS_DMI_H
+>>>> +
+>>>> +#define dmi_early_remap		mips_early_memremap
+>>>> +#define dmi_early_unmap		mips_early_memunmap
+>>>> +#define dmi_remap(_x, _l)	mips_memremap(_x, _l, MEMREMAP_WB)
+>>>> +#define dmi_unmap(_x)		mips_memunmap(_x)
+>>>> +
+>>>> +#define dmi_alloc(l)		memblock_alloc_low(l, PAGE_SIZE)
+>>>> +
+>>>> +void __init *mips_early_memremap(resource_size_t phys_addr,
+>> unsigned
+>>>> long size)
+>>>> +{
+>>>> +#if defined(CONFIG_MACH_LOONGSON64)
+>>>> +	if (phys_addr == 0xF0000)
+>>>> +		phys_addr = 0xFFFE000;
+>>>> +
+>>>> +	return (void *)TO_CAC(phys_addr);
+>>>> +#else
+>>>> +	return NULL;
+>>>> +#endif
+>>>> +}
+>>> Hi Tiezhu,
+>>>
+>>> It is really tricky to hijack dmi address here during remap.
+>>> I think we should set the dmi table address at  dmi_scan.c by a marco
+>> or something else rather than hijack it during remap.
+>>
+>> Hi Jiaxun,
+>>
+>> Thanks for your review. I agree with you, let me think about it and try
+>> to
+>> find a proper way, and then I will send a v2 patch.
 
-diff --git a/arch/mips/loongson64/pci.c b/arch/mips/loongson64/pci.c
-index 7bbe2388f38e..e84ae20c3290 100644
---- a/arch/mips/loongson64/pci.c
-+++ b/arch/mips/loongson64/pci.c
-@@ -31,54 +31,11 @@ static struct pci_controller  loongson_pci_controller = {
- 	.io_offset	= 0x00000000UL,
- };
- 
--static void __init setup_pcimap(void)
--{
--	/*
--	 * local to PCI mapping for CPU accessing PCI space
--	 * CPU address space [256M,448M] is window for accessing pci space
--	 * we set pcimap_lo[0,1,2] to map it to pci space[0M,64M], [320M,448M]
--	 *
--	 * pcimap: PCI_MAP2  PCI_Mem_Lo2 PCI_Mem_Lo1 PCI_Mem_Lo0
--	 *	     [<2G]   [384M,448M] [320M,384M] [0M,64M]
--	 */
--	LOONGSON_PCIMAP = LOONGSON_PCIMAP_PCIMAP_2 |
--		LOONGSON_PCIMAP_WIN(2, LOONGSON_PCILO2_BASE) |
--		LOONGSON_PCIMAP_WIN(1, LOONGSON_PCILO1_BASE) |
--		LOONGSON_PCIMAP_WIN(0, 0);
--
--	/*
--	 * PCI-DMA to local mapping: [2G,2G+256M] -> [0M,256M]
--	 */
--	LOONGSON_PCIBASE0 = 0x80000000ul;   /* base: 2G -> mmap: 0M */
--	/* size: 256M, burst transmission, pre-fetch enable, 64bit */
--	LOONGSON_PCI_HIT0_SEL_L = 0xc000000cul;
--	LOONGSON_PCI_HIT0_SEL_H = 0xfffffffful;
--	LOONGSON_PCI_HIT1_SEL_L = 0x00000006ul; /* set this BAR as invalid */
--	LOONGSON_PCI_HIT1_SEL_H = 0x00000000ul;
--	LOONGSON_PCI_HIT2_SEL_L = 0x00000006ul; /* set this BAR as invalid */
--	LOONGSON_PCI_HIT2_SEL_H = 0x00000000ul;
--
--	/* avoid deadlock of PCI reading/writing lock operation */
--	LOONGSON_PCI_ISR4C = 0xd2000001ul;
--
--	/* can not change gnt to break pci transfer when device's gnt not
--	deassert for some broken device */
--	LOONGSON_PXARB_CFG = 0x00fe0105ul;
--
--#ifdef CONFIG_CPU_SUPPORTS_ADDRWINCFG
--	/*
--	 * set cpu addr window2 to map CPU address space to PCI address space
--	 */
--	LOONGSON_ADDRWIN_CPUTOPCI(ADDRWIN_WIN2, LOONGSON_CPU_MEM_SRC,
--		LOONGSON_PCI_MEM_DST, MMAP_CPUTOPCI_SIZE);
--#endif
--}
- 
- extern int sbx00_acpi_init(void);
- 
- static int __init pcibios_init(void)
- {
--	setup_pcimap();
- 
- 	loongson_pci_controller.io_map_base = mips_io_port_base;
- 	loongson_pci_mem_resource.start = loongson_sysconf.pci_mem_start_addr;
--- 
-2.20.1
+Hi Jiaxun,
+
+It seems that there is no absolutely better way to handle this case.
+
+1. use conditional compilation in drivers/firmware/dmi_scan.c:
+
+#if defined(CONFIG_MACH_LOONGSON64)
+
+p = dmi_early_remap(0xFFFE000, 0x10000);
+
+#else
+
+p = dmi_early_remap(0xF0000, 0x10000);
+
+#endif
+
+
+This will influence the common code.
+
+2. use callback function in arch/mips/include/asm/dmi.h:
+
+struct plat_dmi_ops {
+
+         void (*early_memremap)(void);
+
+         void (*memremap)(void);
+
+};
+
+extern struct plat_dmi_ops *dmi_ops;
+
+void __init *mips_early_memremap(resource_size_t phys_addr, unsigned long size)
+
+{
+
+         dmi_ops->early_memremap();
+
+}
+
+void *mips_memremap(resource_size_t offset, size_t size, unsigned long flags)
+
+{
+
+         dmi_ops->memremap();
+
+}
+
+
+we can implement the callback function in various of MIPS platforms,
+like this:
+
+struct plat_dmi_ops loongson3_dmi_ops = {
+
+         .early_memremap = loongson3_early_memremap,
+
+         .memremap = loongson3_memremap,
+
+};
+
+register_dmi_ops(&loongson3_dmi_ops);
+
+#ifdef CONFIG_DMI
+
+void __init *loongson3_early_memremap(resource_size_t phys_addr, unsigned long size)
+
+{
+
+         if (phys_addr == 0xF0000)
+
+                 phys_addr = 0xfffe000;
+
+         return (void *)TO_CAC(phys_addr);
+
+}
+
+void *loongson3_memremap(resource_size_t offset, size_t size, unsigned long flags)
+
+{
+
+         return (void *)TO_CAC(phys_addr);
+
+}
+
+#else
+
+void __init __iomem *loongson3_early_memremap(u64 phys_addr, unsigned long size)
+
+{
+
+         return NULL;
+
+}
+
+void __init __iomem *loongson3_memremap(u64 phys_addr, unsigned long size)
+
+{
+
+         return NULL;
+
+}
+
+#endif
+
+
+This will not influence the common code.
+
+What do you think?
+
+
+Hi Jean,
+
+Could you give some suggestions?
+
+>>> Btw: Probably we should set DMI default y when MACH_LOONGSON64 is
+>> set?
+>>
+>> CONFIG_DMI is set to y by default, I think there is no need to select
+>> DMI when
+>> set CONFIG_MACH_LOONGSON64.
+> Sorry, I meant only default to y when MACH_LOONGSON64 is set or even depends on MACH_LOONGSON64. As Loongson is the only known MIPS platform that supports DMI. Default y unconditionally may lead to regression on other MIPS platforms.
+
+OK, I prefer to select DMI when set MACH_LOONGSON64 instead of
+DMI depends on MACH_LOONGSON64, I will modify the Kconfig file.
+
+Thanks,
+
+Tiezhu Yang
+
+>> Thanks,
+>>
+>> Tiezhu Yang
+>>
+>>> Thanks.
+>>>
 
