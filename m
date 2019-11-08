@@ -2,204 +2,148 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BD2F5997
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Nov 2019 22:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 062CFF5BF1
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Nov 2019 00:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731335AbfKHVQM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Nov 2019 16:16:12 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:49463 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731181AbfKHVQL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Nov 2019 16:16:11 -0500
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1MCsDe-1ic1JZ3Rz6-008poH; Fri, 08 Nov 2019 22:16:01 +0100
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     y2038@lists.linaro.org, Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
+        id S1727233AbfKHXmj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Nov 2019 18:42:39 -0500
+Received: from www62.your-server.de ([213.133.104.62]:58932 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726394AbfKHXmj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Nov 2019 18:42:39 -0500
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iTDtk-0002o0-0v; Sat, 09 Nov 2019 00:42:36 +0100
+Received: from [178.197.248.27] (helo=pc-9.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iTDtj-0008v1-LY; Sat, 09 Nov 2019 00:42:35 +0100
+Subject: Fwd: [Bug 205459] New: mips: bpf: test_bpf failures, eBPF JIT on
+ mips32 outputs invalid 64-bit insns
+References: <bug-205459-65011@https.bugzilla.kernel.org/>
+To:     Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
+        Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        linux-mips@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH 15/23] y2038: elfcore: Use __kernel_old_timeval for process times
-Date:   Fri,  8 Nov 2019 22:12:14 +0100
-Message-Id: <20191108211323.1806194-6-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20191108210236.1296047-1-arnd@arndb.de>
-References: <20191108210236.1296047-1-arnd@arndb.de>
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        Matt Redfearn <matt.redfearn@mips.com>,
+        David Daney <david.daney@cavium.com>
+Cc:     bpf@vger.kernel.org, itugrok@yahoo.com
+From:   Daniel Borkmann <daniel@iogearbox.net>
+X-Forwarded-Message-Id: <bug-205459-65011@https.bugzilla.kernel.org/>
+Message-ID: <073db6b1-9f0e-4d2e-78bd-68698a63e608@iogearbox.net>
+Date:   Sat, 9 Nov 2019 00:42:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:jJojK3GiEOpLM7nwlbXZNSOESRosCVwj5pL0X9lm4+C8cBKFL1S
- Dgm24ZnjpoaIvukTU6X4jJfn96PXIzcY6MP6bjF62TfoHkAeQgzH49ROujOrn1fpIsoM09/
- HKTa02uW1U4TPcKiz4g9gPFN0Fa+heEeG/9P/EZq+4emvnDDomoY5uqxCtc8uZ30umxaNar
- ZBjGfTscleMnAJ5MoAZEw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:z4ZvUmxYbvk=:tdMp3SjJI1NixeGmYbfJi1
- FjhwWRH2/gb/09RHbThSA8EWr9HJj33qjeVhZwnt/bGUO7te3W9PkAy2rOO5/fyC6ObdbEytF
- tXdZ/OglNAHLMt+mdK5/3ayYW7Wo1VlFf1X7+bUshD0Gg8vRXSjPvhYJXxCg42V0rgb4DSK+P
- 9pw6S6Pz4T+fsw5ArKd1S97W3cpScnh8YItd65tyvbQV6cqqgUMQB3o2I3/P2NrzW8TKy21yT
- GIkNg6cnTALOmJgixhpr60A0W3V0LokMsZhOFFhlipifv63toB2cLBgC2S+0+rWBby3B429GJ
- FBMQCmgQ4xpvBVswkV+AVCVJ22DbC+4aWihAwqH1kmJbK0dXsH/YC/kjO6V2Ld8P8uBx+VWaU
- Sv0pg9mh8S2EdoailtDfaPxIP08cryt5pbM1jSFUUnA5NzRN0x0Dx1cHV3BxZnimCvE/4lfWy
- gMUF2olUoIIRGg9DKSXyyRa9/CC2Qo4sB3owLaZoa90zbnXwPvIUy1xkqCA4+M3w176fA7j19
- HnMbSCB5fHJwkAzND9qhijd9AZgGIAFHsCyZRk0QboVJQAqaPDlHlIiLIo89U2aaCv4a3aBlA
- 7cvcsSV2v+KYGc8EPn0ffryoObhQT/u7aRhYQnPLKo/vsRw/bfb2reWRad7eGbY7D+rhz+x9Z
- f6px8k300Q4cNH/UFOQO9GJoyTknzJEIlnGjwhgsXU4+gabUlKojJU/BnPL3IyHucwiXq1bde
- JZyBcT2IxQJTiY9RnxAE3vi15RScKIqutA0/jGROBiyrxYrJMsxOxIucHd+bg7/xsiC2B96Bl
- SammEu9W73fW1aNQrtZJkaDfe8mm2Vk/HDHulH9O8C96BQQT1YXlj3adbprjoTCK7mTq2lbKX
- xk7TJfpJIXabV0bRrP4Q==
+In-Reply-To: <bug-205459-65011@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25627/Fri Nov  8 11:02:39 2019)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-We store elapsed time for a crashed process in struct elf_prstatus using
-'timeval' structures. Once glibc starts using 64-bit time_t, this becomes
-incompatible with the kernel's idea of timeval since the structure layout
-no longer matches on 32-bit architectures.
+[ Cc MIPS folks ]
 
-This changes the definition of the elf_prstatus structure to use
-__kernel_old_timeval instead, which is hardcoded to the currently used
-binary layout. There is no risk of overflow in y2038 though, because
-the time values are all relative times, and can store up to 68 years
-of process elapsed time.
+Hassan, James, Paul, others, please take a look. Thanks!
 
-There is a risk of applications breaking at build time when they
-use the new kernel headers and expect the type to be exactly 'timeval'
-rather than a structure that has the same fields as before. Those
-applications have to be modified to deal with 64-bit time_t anyway.
+-------- Forwarded Message --------
+Subject: [Bug 205459] New: mips: bpf: test_bpf failures, eBPF JIT on mips32 outputs invalid 64-bit insns
+Date: Thu, 07 Nov 2019 06:41:21 +0000
+From: bugzilla-daemon@bugzilla.kernel.org
+To: daniel@iogearbox.net
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/mips/kernel/binfmt_elfn32.c |  4 ++--
- arch/mips/kernel/binfmt_elfo32.c |  4 ++--
- fs/binfmt_elf.c                  | 12 ++++++------
- fs/binfmt_elf_fdpic.c            | 12 ++++++------
- fs/compat_binfmt_elf.c           |  4 ++--
- include/uapi/linux/elfcore.h     |  8 ++++----
- 6 files changed, 22 insertions(+), 22 deletions(-)
+https://bugzilla.kernel.org/show_bug.cgi?id=205459
 
-diff --git a/arch/mips/kernel/binfmt_elfn32.c b/arch/mips/kernel/binfmt_elfn32.c
-index 7a12763d553a..6ee3f7218c67 100644
---- a/arch/mips/kernel/binfmt_elfn32.c
-+++ b/arch/mips/kernel/binfmt_elfn32.c
-@@ -100,7 +100,7 @@ jiffies_to_old_timeval32(unsigned long jiffies, struct old_timeval32 *value)
- #undef TASK_SIZE
- #define TASK_SIZE TASK_SIZE32
- 
--#undef ns_to_timeval
--#define ns_to_timeval ns_to_old_timeval32
-+#undef ns_to_kernel_old_timeval
-+#define ns_to_kernel_old_timeval ns_to_old_timeval32
- 
- #include "../../../fs/binfmt_elf.c"
-diff --git a/arch/mips/kernel/binfmt_elfo32.c b/arch/mips/kernel/binfmt_elfo32.c
-index e6db06a1d31a..6dd103d3cebb 100644
---- a/arch/mips/kernel/binfmt_elfo32.c
-+++ b/arch/mips/kernel/binfmt_elfo32.c
-@@ -103,7 +103,7 @@ jiffies_to_old_timeval32(unsigned long jiffies, struct old_timeval32 *value)
- #undef TASK_SIZE
- #define TASK_SIZE TASK_SIZE32
- 
--#undef ns_to_timeval
--#define ns_to_timeval ns_to_old_timeval32
-+#undef ns_to_kernel_old_timeval
-+#define ns_to_kernel_old_timeval ns_to_old_timeval32
- 
- #include "../../../fs/binfmt_elf.c"
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index c5642bcb6b46..5372eabd276a 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1489,18 +1489,18 @@ static void fill_prstatus(struct elf_prstatus *prstatus,
- 		 * group-wide total, not its individual thread total.
- 		 */
- 		thread_group_cputime(p, &cputime);
--		prstatus->pr_utime = ns_to_timeval(cputime.utime);
--		prstatus->pr_stime = ns_to_timeval(cputime.stime);
-+		prstatus->pr_utime = ns_to_kernel_old_timeval(cputime.utime);
-+		prstatus->pr_stime = ns_to_kernel_old_timeval(cputime.stime);
- 	} else {
- 		u64 utime, stime;
- 
- 		task_cputime(p, &utime, &stime);
--		prstatus->pr_utime = ns_to_timeval(utime);
--		prstatus->pr_stime = ns_to_timeval(stime);
-+		prstatus->pr_utime = ns_to_kernel_old_timeval(utime);
-+		prstatus->pr_stime = ns_to_kernel_old_timeval(stime);
- 	}
- 
--	prstatus->pr_cutime = ns_to_timeval(p->signal->cutime);
--	prstatus->pr_cstime = ns_to_timeval(p->signal->cstime);
-+	prstatus->pr_cutime = ns_to_kernel_old_timeval(p->signal->cutime);
-+	prstatus->pr_cstime = ns_to_kernel_old_timeval(p->signal->cstime);
- }
- 
- static int fill_psinfo(struct elf_prpsinfo *psinfo, struct task_struct *p,
-diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
-index d86ebd0dcc3d..240f66663543 100644
---- a/fs/binfmt_elf_fdpic.c
-+++ b/fs/binfmt_elf_fdpic.c
-@@ -1359,17 +1359,17 @@ static void fill_prstatus(struct elf_prstatus *prstatus,
- 		 * group-wide total, not its individual thread total.
- 		 */
- 		thread_group_cputime(p, &cputime);
--		prstatus->pr_utime = ns_to_timeval(cputime.utime);
--		prstatus->pr_stime = ns_to_timeval(cputime.stime);
-+		prstatus->pr_utime = ns_to_kernel_old_timeval(cputime.utime);
-+		prstatus->pr_stime = ns_to_kernel_old_timeval(cputime.stime);
- 	} else {
- 		u64 utime, stime;
- 
- 		task_cputime(p, &utime, &stime);
--		prstatus->pr_utime = ns_to_timeval(utime);
--		prstatus->pr_stime = ns_to_timeval(stime);
-+		prstatus->pr_utime = ns_to_kernel_old_timeval(utime);
-+		prstatus->pr_stime = ns_to_kernel_old_timeval(stime);
- 	}
--	prstatus->pr_cutime = ns_to_timeval(p->signal->cutime);
--	prstatus->pr_cstime = ns_to_timeval(p->signal->cstime);
-+	prstatus->pr_cutime = ns_to_kernel_old_timeval(p->signal->cutime);
-+	prstatus->pr_cstime = ns_to_kernel_old_timeval(p->signal->cstime);
- 
- 	prstatus->pr_exec_fdpic_loadmap = p->mm->context.exec_fdpic_loadmap;
- 	prstatus->pr_interp_fdpic_loadmap = p->mm->context.interp_fdpic_loadmap;
-diff --git a/fs/compat_binfmt_elf.c b/fs/compat_binfmt_elf.c
-index b7f9ffa1d5f1..aaad4ca1217e 100644
---- a/fs/compat_binfmt_elf.c
-+++ b/fs/compat_binfmt_elf.c
-@@ -48,8 +48,8 @@
- #define elf_prstatus	compat_elf_prstatus
- #define elf_prpsinfo	compat_elf_prpsinfo
- 
--#undef ns_to_timeval
--#define ns_to_timeval ns_to_old_timeval32
-+#undef ns_to_kernel_old_timeval
-+#define ns_to_kernel_old_timeval ns_to_old_timeval32
- 
- /*
-  * To use this file, asm/elf.h must define compat_elf_check_arch.
-diff --git a/include/uapi/linux/elfcore.h b/include/uapi/linux/elfcore.h
-index 0b2c9e16e345..baf03562306d 100644
---- a/include/uapi/linux/elfcore.h
-+++ b/include/uapi/linux/elfcore.h
-@@ -53,10 +53,10 @@ struct elf_prstatus
- 	pid_t	pr_ppid;
- 	pid_t	pr_pgrp;
- 	pid_t	pr_sid;
--	struct timeval pr_utime;	/* User time */
--	struct timeval pr_stime;	/* System time */
--	struct timeval pr_cutime;	/* Cumulative user time */
--	struct timeval pr_cstime;	/* Cumulative system time */
-+	struct __kernel_old_timeval pr_utime;	/* User time */
-+	struct __kernel_old_timeval pr_stime;	/* System time */
-+	struct __kernel_old_timeval pr_cutime;	/* Cumulative user time */
-+	struct __kernel_old_timeval pr_cstime;	/* Cumulative system time */
- #if 0
- 	long	pr_instr;		/* Current instruction */
- #endif
+             Bug ID: 205459
+            Summary: mips: bpf: test_bpf failures, eBPF JIT on mips32
+                     outputs invalid 64-bit insns
+            Product: Networking
+            Version: 2.5
+     Kernel Version: 5.2.17
+           Hardware: Mips32
+                 OS: Linux
+               Tree: Mainline
+             Status: NEW
+           Severity: high
+           Priority: P1
+          Component: Other
+           Assignee: stephen@networkplumber.org
+           Reporter: itugrok@yahoo.com
+         Regression: No
+
+Created attachment 285809
+   --> https://bugzilla.kernel.org/attachment.cgi?id=285809&action=edit
+EXCEPTION/failures: kernel 5.2.17/mips32 (Debian 10.1)
+
+Summary:
+========
+
+Linux 5.2.x added an eBPF JIT for MIPS32 (yay!). Based on discussion of the
+original submission (https://www.spinics.net/lists/mips/msg77008.html) I
+expected that:
+
+   (1) all tests from module test_bpf.ko would pass, and
+   (2) any previously JITed tests (i.e. cBPF) would still be JITed.
+
+However, I can't reproduce the above based on my testing as per the attached
+log.
+
+Point (2) doesn't stand since the first ~30 tests are not JITed, but were
+previously cBPF JITed for the most part.
+
+As for point (1), the full test set doesn't complete, but errors out early on
+with a "Reserved instruction in kernel code[#1]" error. Manually hopping
+through some of the tests yields the same error for many:
+
+   #68 ALU_MOV_K: 0x0000ffffffff0000 = 0x00000000ffffffff jited:1
+   #73 ALU_ADD_X: 1 + 2 = 3 jited:1
+   #74 ALU_ADD_X: 1 + 4294967294 = 4294967295 jited:1
+   #75 ALU_ADD_X: 2 + 4294967294 = 0 jited:1
+   #79 ALU_ADD_K: 1 + 2 = 3 jited:1
+   (.. and so on ...)
+
+Disassembling the JITed code for test #68 shows incorrect MIPS64 instructions:
+
+   24 03 00 20     li    v1,32
+   34 05 ff ff     li    a1,0xffff
+   00 05 2c 38     dsll  a1,a1,0x10      <=== MIPS64 insn
+   34 a5 ff ff     ori   a1,a1,0xffff
+   00 05 2c 38     dsll  a1,a1,0x10      <=== MIPS64 insn
+   34 06 ff ff     li    a2,0xffff
+   00 06 34 38     dsll  a2,a2,0x10      <=== MIPS64 insn
+   34 c6 ff ff     ori   a2,a2,0xffff
+
+Since this was tested in the past, I'm really hoping there's a simple solution
+to these problems, or else a case of "operator error". A review by someone more
+knowledgeable with the MIPS32 eBPF JIT would be appreciated.
+
+Steps to Reproduce:
+===================
+
+   # sysctl net.core.bpf_jit_enable=1
+   # modprobe test_bpf
+   <Kernel log with "Reserved instruction" exception>
+
+
+Affected Systems Tested:
+========================
+
+   Debian 10.1 on QEMU/malta(mips32_be) [distro kernel 5.2.17-1~bpo10+1
+(2019-09-30)]
+
+
+Kernel Logs:
+============
+
+Boot log with test results up to first failure is attached.
+
 -- 
-2.20.0
-
+You are receiving this mail because:
+You are watching the assignee of the bug.
