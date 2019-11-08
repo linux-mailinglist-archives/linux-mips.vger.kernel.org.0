@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D28AFF5738
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Nov 2019 21:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CADF554F
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Nov 2019 21:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390150AbfKHTTU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Nov 2019 14:19:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57276 "EHLO mail.kernel.org"
+        id S1731910AbfKHTBg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Nov 2019 14:01:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58944 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731387AbfKHTAK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 8 Nov 2019 14:00:10 -0500
+        id S2390233AbfKHTBf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 Nov 2019 14:01:35 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 514DB22466;
-        Fri,  8 Nov 2019 18:57:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 77B092067B;
+        Fri,  8 Nov 2019 19:01:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573239478;
-        bh=ysw7QuSPH6w9H59lOO9u2sSxRofHAlj8WmxiEtXxzkY=;
+        s=default; t=1573239694;
+        bh=aF3caouMCJR+I05UNHMA4nYiaKKB5pBJ0PHu03c3BEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ssNJ8MfYzqWhcNUoWBlo90NURN2Bk9BOVX1Velqsq5ZQ8jvHgI3zHWL2LmHZfZES7
-         6CYvaU2yKKbwrKuDVRvq94zXiF94PPsYBpLI7UnSbnBmQZougI+67XwrX8clAo3Dll
-         KWqFhrSzaxXMgQj7LGLfRu78pJykNbirlKyuJDLA=
+        b=yhrVnSOdjAMQhULbI9Uf2xX3SmEY+vXggIV8RMwWhfhu0mzf0NQpe+Z95jZDWo5wb
+         HVLNQ06GwU334MVCO6uikyvh2Y1NBRzNtITzamaC3DE/07P5roG7dH2jNAZu29l4zM
+         /mXIVhbHLUBD0YZehnAClvVf9Cid0ib8Zzsd52m0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 19/62] MIPS: bmips: mark exception vectors as char arrays
-Date:   Fri,  8 Nov 2019 19:50:07 +0100
-Message-Id: <20191108174735.046218064@linuxfoundation.org>
+Subject: [PATCH 4.19 29/79] MIPS: bmips: mark exception vectors as char arrays
+Date:   Fri,  8 Nov 2019 19:50:09 +0100
+Message-Id: <20191108174801.754009894@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191108174719.228826381@linuxfoundation.org>
-References: <20191108174719.228826381@linuxfoundation.org>
+In-Reply-To: <20191108174745.495640141@linuxfoundation.org>
+References: <20191108174745.495640141@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -107,7 +107,7 @@ index 7019e2967009e..bbbf8057565b2 100644
  		set_c0_cause(C_SW0);
  		cpumask_set_cpu(1, &bmips_booted_mask);
 diff --git a/arch/mips/include/asm/bmips.h b/arch/mips/include/asm/bmips.h
-index b3e2975f83d36..a564915fddc40 100644
+index bf6a8afd7ad27..581a6a3c66e40 100644
 --- a/arch/mips/include/asm/bmips.h
 +++ b/arch/mips/include/asm/bmips.h
 @@ -75,11 +75,11 @@ static inline int register_bmips_smp_ops(void)
@@ -128,7 +128,7 @@ index b3e2975f83d36..a564915fddc40 100644
  extern int bmips_smp_enabled;
  extern int bmips_cpu_offset;
 diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
-index 382d12eb88f0f..45fbcbbf2504e 100644
+index 159e83add4bb3..5ec546b5eed1c 100644
 --- a/arch/mips/kernel/smp-bmips.c
 +++ b/arch/mips/kernel/smp-bmips.c
 @@ -457,10 +457,10 @@ static void bmips_wr_vec(unsigned long dst, char *start, char *end)
