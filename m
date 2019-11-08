@@ -2,41 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F369AF499D
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Nov 2019 13:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F9CF4928
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Nov 2019 13:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389823AbfKHLmO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Nov 2019 06:42:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55918 "EHLO mail.kernel.org"
+        id S2390512AbfKHLnj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Nov 2019 06:43:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58200 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389788AbfKHLmN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 8 Nov 2019 06:42:13 -0500
+        id S2388679AbfKHLni (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 Nov 2019 06:43:38 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8872521D7B;
-        Fri,  8 Nov 2019 11:42:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DE2EC222C6;
+        Fri,  8 Nov 2019 11:43:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573213332;
-        bh=FReMmvb5mhGVKmc7T3QgYVpv0ScYqZMSvTTubSLgang=;
+        s=default; t=1573213417;
+        bh=csGxPfHGGw7vrgsXdVIZiGSXswdvnVTZni67Jb2fpOE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mzWpkg6LnACP5D9D1IEmSd3xybTvZQDCUgMQ4uCbth5IU+P47/umtN2R6ougtyfeI
-         S++XBPf4U7HebNsNcoOoW9pvaJYTTdEJVnHSJShJDYv7ikXNS9W/IDGZdvLZxISDEQ
-         ZW1YuReiaRw0WUCJGEw8TV49PPUnsAxUu63/Mjq0=
+        b=efux4aWnqPfkXGjYOPbBFWNCgF3+kLw8iSJrWYs/YgbTWALw6lFBgwi5uv5Hxr91a
+         e4XHnULJmMY2kTTuBMzSuTYmvgOUXH98cpfWnOA60cscY173ntjl35C8jN7z7Qtoe1
+         7aQjolwUViqfWrGdROlAETPS0O7Gxb5zJQBhm9rw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
+Cc:     Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
         Paul Burton <paul.burton@mips.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 171/205] MIPS: lantiq: Do not enable IRQs in dma open
-Date:   Fri,  8 Nov 2019 06:37:18 -0500
-Message-Id: <20191108113752.12502-171-sashal@kernel.org>
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        linux-mips@linux-mips.org, Sasha Levin <sashal@kernel.org>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 020/103] MIPS: BCM47XX: Enable USB power on Netgear WNDR3400v3
+Date:   Fri,  8 Nov 2019 06:41:45 -0500
+Message-Id: <20191108114310.14363-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191108113752.12502-1-sashal@kernel.org>
-References: <20191108113752.12502-1-sashal@kernel.org>
+In-Reply-To: <20191108114310.14363-1-sashal@kernel.org>
+References: <20191108114310.14363-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -45,48 +47,53 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Hauke Mehrtens <hauke@hauke-m.de>
+From: Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
 
-[ Upstream commit cc973aecf0b0541918c5ecabe6c90d1f709b5f89 ]
+[ Upstream commit feef7918667b84f9d5653c501542dd8d84ae32af ]
 
-When a DMA channel is opened the IRQ should not get activated
-automatically, this allows it to pull data out manually without the help
-of interrupts. This is needed for a workaround in the vrx200 Ethernet
-driver.
+Setting GPIO 21 high seems to be required to enable power to USB ports
+on the WNDR3400v3. As there is already similar code for WNR3500L,
+make the existing USB power GPIO code generic and use that.
 
-Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
-Acked-by: Paul Burton <paul.burton@mips.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
+Acked-by: Hauke Mehrtens <hauke@hauke-m.de>
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+Patchwork: https://patchwork.linux-mips.org/patch/20259/
+Cc: Rafał Miłecki <zajec5@gmail.com>
+Cc: linux-mips@linux-mips.org
+Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/lantiq/xway/dma.c        | 1 -
- drivers/net/ethernet/lantiq_etop.c | 1 +
- 2 files changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/bcm47xx/workarounds.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/lantiq/xway/dma.c b/arch/mips/lantiq/xway/dma.c
-index 664f2f7f55c1c..982859f2b2a38 100644
---- a/arch/mips/lantiq/xway/dma.c
-+++ b/arch/mips/lantiq/xway/dma.c
-@@ -106,7 +106,6 @@ ltq_dma_open(struct ltq_dma_channel *ch)
- 	spin_lock_irqsave(&ltq_dma_lock, flag);
- 	ltq_dma_w32(ch->nr, LTQ_DMA_CS);
- 	ltq_dma_w32_mask(0, DMA_CHAN_ON, LTQ_DMA_CCTRL);
--	ltq_dma_w32_mask(0, 1 << ch->nr, LTQ_DMA_IRNEN);
- 	spin_unlock_irqrestore(&ltq_dma_lock, flag);
- }
- EXPORT_SYMBOL_GPL(ltq_dma_open);
-diff --git a/drivers/net/ethernet/lantiq_etop.c b/drivers/net/ethernet/lantiq_etop.c
-index e08301d833e2e..379db19a303c8 100644
---- a/drivers/net/ethernet/lantiq_etop.c
-+++ b/drivers/net/ethernet/lantiq_etop.c
-@@ -439,6 +439,7 @@ ltq_etop_open(struct net_device *dev)
- 		if (!IS_TX(i) && (!IS_RX(i)))
- 			continue;
- 		ltq_dma_open(&ch->dma);
-+		ltq_dma_enable_irq(&ch->dma);
- 		napi_enable(&ch->napi);
- 	}
- 	phy_start(dev->phydev);
+diff --git a/arch/mips/bcm47xx/workarounds.c b/arch/mips/bcm47xx/workarounds.c
+index 1a8a07e7a5633..46eddbec8d9fd 100644
+--- a/arch/mips/bcm47xx/workarounds.c
++++ b/arch/mips/bcm47xx/workarounds.c
+@@ -5,9 +5,8 @@
+ #include <bcm47xx_board.h>
+ #include <bcm47xx.h>
+ 
+-static void __init bcm47xx_workarounds_netgear_wnr3500l(void)
++static void __init bcm47xx_workarounds_enable_usb_power(int usb_power)
+ {
+-	const int usb_power = 12;
+ 	int err;
+ 
+ 	err = gpio_request_one(usb_power, GPIOF_OUT_INIT_HIGH, "usb_power");
+@@ -23,7 +22,10 @@ void __init bcm47xx_workarounds(void)
+ 
+ 	switch (board) {
+ 	case BCM47XX_BOARD_NETGEAR_WNR3500L:
+-		bcm47xx_workarounds_netgear_wnr3500l();
++		bcm47xx_workarounds_enable_usb_power(12);
++		break;
++	case BCM47XX_BOARD_NETGEAR_WNDR3400_V3:
++		bcm47xx_workarounds_enable_usb_power(21);
+ 		break;
+ 	default:
+ 		/* No workaround(s) needed */
 -- 
 2.20.1
 
