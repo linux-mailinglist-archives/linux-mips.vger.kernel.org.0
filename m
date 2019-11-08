@@ -2,41 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C82F46F8
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Nov 2019 12:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB722F4790
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Nov 2019 12:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391330AbfKHLqW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Nov 2019 06:46:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34052 "EHLO mail.kernel.org"
+        id S2390709AbfKHLrd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Nov 2019 06:47:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36096 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391327AbfKHLqV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 8 Nov 2019 06:46:21 -0500
+        id S2391567AbfKHLrc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 Nov 2019 06:47:32 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 297ED2084D;
-        Fri,  8 Nov 2019 11:46:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 250B7222D4;
+        Fri,  8 Nov 2019 11:47:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573213581;
-        bh=w2JAkOrPiofgLKs2h0rKndbJj4/d5l6EqsvOSzuhnFs=;
+        s=default; t=1573213652;
+        bh=WvA7ooE23+rMcSXpkAwDLVyHFb12QEhAyN/XFwoVHjE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kuLr9nKVDFG5qmPLHok65a9eCE+N4mMzh1V+bIfumckLsVeHbLa8xYStn6OBnyPWq
-         eEBGcGb83Jtk4PFwtp4xta/03SKyxLEaiRG+5ca8gacb3i2hyLuEbkouMvBV1mCJOw
-         rD/0aWxSsIb8H0lNzmVmEm4mVqcyDLnmcJg5j+kY=
+        b=MVz7wcCVreFlO8CazsYgU2O+MsqodP/qTIGAQ041n0ow2HRqG9wQiAwg1ZAw6gYi3
+         kVUlLRqHPNZt9pnddUO1CdHWW6vwUXeuEwtTR9BBvPw2TAz5sJc7WazThR58wYQ6ba
+         9XA1GNznIREfOkRtxlz86w9jmfRes59z0EkwEUqw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ding Xiang <dingxiang@cmss.chinamobile.com>,
-        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
-        Paul Burton <paul.burton@mips.com>, ralf@linux-mips.org,
-        jhogan@kernel.org, linux-mips@linux-mips.org,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 25/64] mips: txx9: fix iounmap related issue
-Date:   Fri,  8 Nov 2019 06:45:06 -0500
-Message-Id: <20191108114545.15351-25-sashal@kernel.org>
+Cc:     Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Paul Burton <paul.burton@mips.com>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        linux-mips@linux-mips.org, Sasha Levin <sashal@kernel.org>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 07/44] MIPS: BCM47XX: Enable USB power on Netgear WNDR3400v3
+Date:   Fri,  8 Nov 2019 06:46:43 -0500
+Message-Id: <20191108114721.15944-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191108114545.15351-1-sashal@kernel.org>
-References: <20191108114545.15351-1-sashal@kernel.org>
+In-Reply-To: <20191108114721.15944-1-sashal@kernel.org>
+References: <20191108114721.15944-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -45,45 +47,53 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Ding Xiang <dingxiang@cmss.chinamobile.com>
+From: Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
 
-[ Upstream commit c6e1241a82e6e74d1ae5cc34581dab2ffd6022d0 ]
+[ Upstream commit feef7918667b84f9d5653c501542dd8d84ae32af ]
 
-if device_register return error, iounmap should be called, also iounmap
-need to call before put_device.
+Setting GPIO 21 high seems to be required to enable power to USB ports
+on the WNDR3400v3. As there is already similar code for WNR3500L,
+make the existing USB power GPIO code generic and use that.
 
-Signed-off-by: Ding Xiang <dingxiang@cmss.chinamobile.com>
-Reviewed-by: Atsushi Nemoto <anemo@mba.ocn.ne.jp>
+Signed-off-by: Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
+Acked-by: Hauke Mehrtens <hauke@hauke-m.de>
 Signed-off-by: Paul Burton <paul.burton@mips.com>
-Patchwork: https://patchwork.linux-mips.org/patch/20476/
-Cc: ralf@linux-mips.org
-Cc: jhogan@kernel.org
+Patchwork: https://patchwork.linux-mips.org/patch/20259/
+Cc: Rafał Miłecki <zajec5@gmail.com>
 Cc: linux-mips@linux-mips.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/txx9/generic/setup.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/mips/bcm47xx/workarounds.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/txx9/generic/setup.c b/arch/mips/txx9/generic/setup.c
-index a1d98b5c8fd67..5c53b8aa43d26 100644
---- a/arch/mips/txx9/generic/setup.c
-+++ b/arch/mips/txx9/generic/setup.c
-@@ -959,12 +959,11 @@ void __init txx9_sramc_init(struct resource *r)
- 		goto exit_put;
- 	err = sysfs_create_bin_file(&dev->dev.kobj, &dev->bindata_attr);
- 	if (err) {
--		device_unregister(&dev->dev);
- 		iounmap(dev->base);
--		kfree(dev);
-+		device_unregister(&dev->dev);
- 	}
- 	return;
- exit_put:
-+	iounmap(dev->base);
- 	put_device(&dev->dev);
--	return;
- }
+diff --git a/arch/mips/bcm47xx/workarounds.c b/arch/mips/bcm47xx/workarounds.c
+index e81ce4623070e..06fb94370c7c9 100644
+--- a/arch/mips/bcm47xx/workarounds.c
++++ b/arch/mips/bcm47xx/workarounds.c
+@@ -4,9 +4,8 @@
+ #include <bcm47xx_board.h>
+ #include <bcm47xx.h>
+ 
+-static void __init bcm47xx_workarounds_netgear_wnr3500l(void)
++static void __init bcm47xx_workarounds_enable_usb_power(int usb_power)
+ {
+-	const int usb_power = 12;
+ 	int err;
+ 
+ 	err = gpio_request_one(usb_power, GPIOF_OUT_INIT_HIGH, "usb_power");
+@@ -22,7 +21,10 @@ void __init bcm47xx_workarounds(void)
+ 
+ 	switch (board) {
+ 	case BCM47XX_BOARD_NETGEAR_WNR3500L:
+-		bcm47xx_workarounds_netgear_wnr3500l();
++		bcm47xx_workarounds_enable_usb_power(12);
++		break;
++	case BCM47XX_BOARD_NETGEAR_WNDR3400_V3:
++		bcm47xx_workarounds_enable_usb_power(21);
+ 		break;
+ 	default:
+ 		/* No workaround(s) needed */
 -- 
 2.20.1
 
