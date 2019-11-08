@@ -2,83 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E38F3D41
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Nov 2019 02:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA02FF3E09
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Nov 2019 03:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725930AbfKHBQJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 7 Nov 2019 20:16:09 -0500
-Received: from mail-io1-f66.google.com ([209.85.166.66]:46247 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725928AbfKHBQJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Nov 2019 20:16:09 -0500
-Received: by mail-io1-f66.google.com with SMTP id c6so4472634ioo.13
-        for <linux-mips@vger.kernel.org>; Thu, 07 Nov 2019 17:16:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2s8aKYlMchWkvO5nSejEGWqWohTEycz+sAPSFYJHNg8=;
-        b=HNudlAbvQW4qv72g28+tlb9UjiMzFCt54a2hRiHYEa9UDlvJR8qo0QtsCixJbA1zQ+
-         0SzoHfJ0wL4YEQFaukb3MXQ+7Rx6Y1cyy86Krlj/4xO115rdpzKJ17d72nqooMWWtn8N
-         wCZnXlLPZUkfyKgJoRSlAgaYGj0C1fl6sQ6nvNJs0WAF8GY/lMfARK+PRdn36ydYKfjM
-         iugRB4JWsNc5zCzQSl80er7oLE9VAqwSpEIEnkmlxq+XyZIzQ9JjTqXnHR1FQQwtShfs
-         0PRsyMwFz7QmEiB+/JLQoiGs7FVTO/HLttm8wGclU9Yl7n5dW0Y1EBUDu6HfwI3O0tbs
-         zPuw==
-X-Gm-Message-State: APjAAAW0iGcbutrlOAPqBqR9DOGQRn11ItlEmvV2RhoQIemuubiWIT6G
-        UkUfTElu0FE96vmbbkrAhUyh04DuUL8k/IcyGah5ghDb
-X-Google-Smtp-Source: APXvYqyy7XBkqS//+U2ZTy1K9qdKgUnqVix8BGtiHYpJMGq3hvcu1qbpLtebbY0iyHMhBXZLsRgNJxXBPXmKh2xVIAE=
-X-Received: by 2002:a02:c512:: with SMTP id s18mr7902220jam.92.1573175766557;
- Thu, 07 Nov 2019 17:16:06 -0800 (PST)
+        id S1729096AbfKHCUp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Nov 2019 21:20:45 -0500
+Received: from ozlabs.org ([203.11.71.1]:40749 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725940AbfKHCUp (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 7 Nov 2019 21:20:45 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 478PBS3PfSz9sPV;
+        Fri,  8 Nov 2019 13:20:31 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1573179640;
+        bh=S6Hvp/X50jZ7EFZZYb6XjoD8DIp7pBL6EOxbI/Y+OmY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=U4rtQaWysYr5ul3hUzj3tXyGWA+dGyTSnc3y2qfDAh4w887T0Hzfb8DdEqQP21j78
+         bLKePda8G55isteH/DTvpPd03ZK9+vFIP2iUGpxiv+3xIK9OuZtjmN/RAIpP15dfdj
+         0Ld5faxNX3hXehfbb36CbglNc4LqiXGpHLudhhFf9471GTQ/nh4M9Ia5iSSIjnNJxu
+         63CUKpyBsz0dhmHgaL3lh9b0hx4Rx9HV9YWgOC91UBjeJRdrNX18Qn75Ld9VMLlUVV
+         mTc9cTLqYFj2lbrszxLu+sBzbYPOLWb8hL6IZrY3G9dxk9CJ02Ie/8JWe6/omQo4Sy
+         vyjmwU0AmsEPQ==
+Date:   Fri, 8 Nov 2019 13:20:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, x86@kernel.org,
+        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        openrisc@lists.librecores.org, linux-mtd@lists.infradead.org,
+        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
+        nios2-dev@lists.rocketboards.org, linux-riscv@lists.infradead.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: generic-iomap tree for linux-next
+Message-ID: <20191108132000.3e7bd5b8@canb.auug.org.au>
+In-Reply-To: <20191107204743.GA22863@lst.de>
+References: <20191029064834.23438-1-hch@lst.de>
+        <20191107204743.GA22863@lst.de>
 MIME-Version: 1.0
-References: <1572847781-21652-1-git-send-email-chenhc@lemote.com> <6f6ce0de-bad9-d1c4-f8d6-244b11eef0b1@flygoat.com>
-In-Reply-To: <6f6ce0de-bad9-d1c4-f8d6-244b11eef0b1@flygoat.com>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Fri, 8 Nov 2019 09:21:51 +0800
-Message-ID: <CAAhV-H4eiwSOpK0qttOT-GiU1=tvrnWxfSPvH2e5umcogyAkaQ@mail.gmail.com>
-Subject: Re: [PATCH V2] MIPS: Loongson: Add board_ebase_setup() support
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Linux MIPS Mailing List <linux-mips@linux-mips.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/signed; boundary="Sig_/cPVZY9JpGW.gARWJr=rYvJb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Jiaxun,
+--Sig_/cPVZY9JpGW.gARWJr=rYvJb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 7, 2019 at 7:47 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
->
-> 在 2019/11/4 下午2:09, Huacai Chen 写道:
-> > Old processors before Loongson-3A2000 have a 32bit ebase register and
-> > have no WG bit, new processors since Loongson-3A2000 have a 64bit ebase
-> > register and do have the WG bit. Unfortunately, Loongson processors
-> > which have the WG bit are slightly different from MIPS R2. This makes
-> > the generic ebase setup not suitable for every scenarios.
-> >
-> > To make Loongson's kernel be more robust, we add a board_ebase_setup()
-> > hook to ensure that CKSEG0 is always used for ebase. This is also useful
-> > on platforms where BIOS doesn't initialise an appropriate ebase.
-> >
-> > Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> > ---
-> Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->
-> This patch is essential as most Loongson boards with Tianocore based
-> UEFI firmware didn't set their ebase correctly.
->
-> Should we backport it to stable?
-Yes, this patch should be backported as early as 4.9-lts.
+Hi Christoph,
 
-Huacai
+On Thu, 7 Nov 2019 21:47:43 +0100 Christoph Hellwig <hch@lst.de> wrote:
 >
-> --
-> Jiaxun Yang
+> can you add the generic-ioremap tree:
+>=20
+>    git://git.infradead.org/users/hch/ioremap.git
+>=20
+> to linux-next?=20
+
+I assume you mean the for-next branch?
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/cPVZY9JpGW.gARWJr=rYvJb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3E0NAACgkQAVBC80lX
+0GwJFAgAgWvXVOBZdx5Do4eCmZ0ZSFyBsTuUtYHPbtNtwQy/iB3LV9BkCAPS767N
+fkEYwRYkqSzUXOA/WIHUXJad89wLVEs1LjxmjeEqJQ2TvsUFGO8vjnTPyXDrfB3W
+VTmeqX0QVqJIwGn29lL9S3UqJ1r1FZVLCcSFLOZQzyRCWmgT+sF9Hofg/5Lwv6xV
+2c+V3LdCr0cTLB+ZHFOz0toYCQMeXlRJM82WAUPhV+jYc53MqEM2VxmJ2G51xIJm
+YEIGyjw5cgDkdJhgj0f+iXPoG7BZ7OM6KPpEVZHEv6pdVP2bcuz37swC+XmbpMAX
+PVoofTbgfmgGmqZ8GiRY+i/KHc43fg==
+=dI/j
+-----END PGP SIGNATURE-----
+
+--Sig_/cPVZY9JpGW.gARWJr=rYvJb--
