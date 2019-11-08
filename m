@@ -2,194 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECD4F3CA3
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Nov 2019 01:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E38F3D41
+	for <lists+linux-mips@lfdr.de>; Fri,  8 Nov 2019 02:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726504AbfKHARJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 Nov 2019 19:17:09 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:40270 "EHLO
-        mail.loongson.cn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725928AbfKHARJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Nov 2019 19:17:09 -0500
-Received: from [10.20.41.27] (unknown [10.20.41.27])
-        by mail (Coremail) with SMTP id QMiowPAxScj8s8RdYo4AAA--.116S3;
-        Fri, 08 Nov 2019 08:17:00 +0800 (CST)
-Subject: Re: [PATCH REPLY] MIPS: Scan the DMI system information
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20191107112801.7037-1-jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yangyinglu@loongson.cn, jdelvare@suse.de,
-        Xuefeng Li <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <acd64ec9-e471-6fee-6505-ae3286a2972e@loongson.cn>
-Date:   Fri, 8 Nov 2019 08:16:41 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1725930AbfKHBQJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 7 Nov 2019 20:16:09 -0500
+Received: from mail-io1-f66.google.com ([209.85.166.66]:46247 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725928AbfKHBQJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 Nov 2019 20:16:09 -0500
+Received: by mail-io1-f66.google.com with SMTP id c6so4472634ioo.13
+        for <linux-mips@vger.kernel.org>; Thu, 07 Nov 2019 17:16:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=2s8aKYlMchWkvO5nSejEGWqWohTEycz+sAPSFYJHNg8=;
+        b=HNudlAbvQW4qv72g28+tlb9UjiMzFCt54a2hRiHYEa9UDlvJR8qo0QtsCixJbA1zQ+
+         0SzoHfJ0wL4YEQFaukb3MXQ+7Rx6Y1cyy86Krlj/4xO115rdpzKJ17d72nqooMWWtn8N
+         wCZnXlLPZUkfyKgJoRSlAgaYGj0C1fl6sQ6nvNJs0WAF8GY/lMfARK+PRdn36ydYKfjM
+         iugRB4JWsNc5zCzQSl80er7oLE9VAqwSpEIEnkmlxq+XyZIzQ9JjTqXnHR1FQQwtShfs
+         0PRsyMwFz7QmEiB+/JLQoiGs7FVTO/HLttm8wGclU9Yl7n5dW0Y1EBUDu6HfwI3O0tbs
+         zPuw==
+X-Gm-Message-State: APjAAAW0iGcbutrlOAPqBqR9DOGQRn11ItlEmvV2RhoQIemuubiWIT6G
+        UkUfTElu0FE96vmbbkrAhUyh04DuUL8k/IcyGah5ghDb
+X-Google-Smtp-Source: APXvYqyy7XBkqS//+U2ZTy1K9qdKgUnqVix8BGtiHYpJMGq3hvcu1qbpLtebbY0iyHMhBXZLsRgNJxXBPXmKh2xVIAE=
+X-Received: by 2002:a02:c512:: with SMTP id s18mr7902220jam.92.1573175766557;
+ Thu, 07 Nov 2019 17:16:06 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191107112801.7037-1-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: QMiowPAxScj8s8RdYo4AAA--.116S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxuryrurW3Aw43ur4fGF4rXwb_yoWrtrWrpa
-        9xA3Zayr48GF17G34fA34fuF1Yqws3WF90kFyj9r1xZas8Zw17Jrs3Krs2kryDZrWkKay0
-        gF1SgF15CrZFkaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VCY1x0262k0Y48FwI0_Jr0_Gr1lYx0Ex4A2jsIE14v26r
-        4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I
-        648v4I1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCT
-        nIWIevJa73UjIFyTuYvjfU5eHqUUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+References: <1572847781-21652-1-git-send-email-chenhc@lemote.com> <6f6ce0de-bad9-d1c4-f8d6-244b11eef0b1@flygoat.com>
+In-Reply-To: <6f6ce0de-bad9-d1c4-f8d6-244b11eef0b1@flygoat.com>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Fri, 8 Nov 2019 09:21:51 +0800
+Message-ID: <CAAhV-H4eiwSOpK0qttOT-GiU1=tvrnWxfSPvH2e5umcogyAkaQ@mail.gmail.com>
+Subject: Re: [PATCH V2] MIPS: Loongson: Add board_ebase_setup() support
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Linux MIPS Mailing List <linux-mips@linux-mips.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/07/2019 07:28 PM, Jiaxun Yang wrote:
-> Hi Tiezhu and Jean,
->
-> What about do like this?
-> We shouldn't follow x86's Kconfig as most of MIPS devices
-> don't support DMI.
->
-> And, we can reuse map/unmap from io.h to reduce
-> maintinance overhead.
+Hi, Jiaxun,
 
-Hi Jiaxun,
-
-Thanks for your modification, it looks better, let me verify and test it,
-and then I will send a v2 patch.
-
-Thanks,
-
-Tiezhu Yang
-
+On Thu, Nov 7, 2019 at 7:47 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 >
-> Thanks
 >
-> Jiaxun
+> 在 2019/11/4 下午2:09, Huacai Chen 写道:
+> > Old processors before Loongson-3A2000 have a 32bit ebase register and
+> > have no WG bit, new processors since Loongson-3A2000 have a 64bit ebase
+> > register and do have the WG bit. Unfortunately, Loongson processors
+> > which have the WG bit are slightly different from MIPS R2. This makes
+> > the generic ebase setup not suitable for every scenarios.
+> >
+> > To make Loongson's kernel be more robust, we add a board_ebase_setup()
+> > hook to ensure that CKSEG0 is always used for ebase. This is also useful
+> > on platforms where BIOS doesn't initialise an appropriate ebase.
+> >
+> > Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > ---
+> Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 >
->> 8------------------------------------------------------8<
-> Enable DMI scanning on the MIPS architecture, this setups DMI identifiers
-> (dmi_system_id) for printing it out on task dumps and prepares DIMM entry
-> information (dmi_memdev_info) from the SMBIOS table. With this patch, the
-> driver can easily match various of mainboards.
+> This patch is essential as most Loongson boards with Tianocore based
+> UEFI firmware didn't set their ebase correctly.
 >
-> In the SMBIOS reference specification, the table anchor string "_SM_" is
-> present in the address range 0xF0000 to 0xFFFFF on a 16-byte boundary,
-> but there exists a special case for loongson platform, when call function
-> dmi_early_remap, it should specify the start address to 0xFFFE000 due to
-> it is reserved for SMBIOS and can be normally access in the BIOS.
->
-> Co-developed-by: Yinglu Yang <yangyinglu@loongson.cn>
-> Signed-off-by: Yinglu Yang <yangyinglu@loongson.cn>
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> [jiaxun.yang@flygoat.com: Refine definitions and Kconfig]
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->   arch/mips/Kconfig           |  9 +++++++++
->   arch/mips/include/asm/dmi.h | 20 ++++++++++++++++++++
->   arch/mips/kernel/setup.c    |  2 ++
->   drivers/firmware/dmi_scan.c |  6 +++++-
->   4 files changed, 36 insertions(+), 1 deletion(-)
->   create mode 100644 arch/mips/include/asm/dmi.h
->
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index c3a022ca3345..414f3a0ea397 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -2759,6 +2759,15 @@ config HW_PERF_EVENTS
->   	  Enable hardware performance counter support for perf events. If
->   	  disabled, perf events will use software events only.
->   
-> +config DMI
-> +	default y if MACH_LOONGSON64
-> +	select DMI_SCAN_MACHINE_NON_EFI_FALLBACK
-> +	bool "Enable DMI scanning"
-> +	help
-> +	  Enabled scanning of DMI to identify machine quirks. Say Y
-> +	  here unless you have verified that your setup is not
-> +	  affected by entries in the DMI blacklist.
-> +
->   config SMP
->   	bool "Multi-Processing support"
->   	depends on SYS_SUPPORTS_SMP
-> diff --git a/arch/mips/include/asm/dmi.h b/arch/mips/include/asm/dmi.h
-> new file mode 100644
-> index 000000000000..5153ef6fe8a2
-> --- /dev/null
-> +++ b/arch/mips/include/asm/dmi.h
-> @@ -0,0 +1,20 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_MIPS_DMI_H
-> +#define _ASM_MIPS_DMI_H
-> +
-> +#include <linux/io.h>
-> +#include <linux/memblock.h>
-> +
-> +#define dmi_early_remap(x, l)		ioremap_cache(x, l)
-> +#define dmi_early_unmap(x, l)		iounmap(x)
-> +#define dmi_remap(x, l)		ioremap_cache(x, l)
-> +#define dmi_unmap(x)			iounmap(x)
-> +
-> +/* MIPS initialize DMI scan before SLAB is ready, so we use memblock here */
-> +#define dmi_alloc(l)			memblock_alloc_low(l, PAGE_SIZE)
-> +
-> +#if defined(CONFIG_MACH_LOONGSON64)
-> +#define SMBIOS_ENTRY_POINT_SCAN_START	0xfffe000
-> +#endif
-> +
-> +#endif /* _ASM_MIPS_DMI_H */
-> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-> index c3d4212b5f1d..da7d312e20eb 100644
-> --- a/arch/mips/kernel/setup.c
-> +++ b/arch/mips/kernel/setup.c
-> @@ -28,6 +28,7 @@
->   #include <linux/decompress/generic.h>
->   #include <linux/of_fdt.h>
->   #include <linux/of_reserved_mem.h>
-> +#include <linux/dmi.h>
->   
->   #include <asm/addrspace.h>
->   #include <asm/bootinfo.h>
-> @@ -802,6 +803,7 @@ void __init setup_arch(char **cmdline_p)
->   #endif
->   
->   	arch_mem_init(cmdline_p);
-> +	dmi_setup();
->   
->   	resource_init();
->   	plat_smp_setup();
-> diff --git a/drivers/firmware/dmi_scan.c b/drivers/firmware/dmi_scan.c
-> index 35ed56b9c34f..ee2dbebf2063 100644
-> --- a/drivers/firmware/dmi_scan.c
-> +++ b/drivers/firmware/dmi_scan.c
-> @@ -11,6 +11,10 @@
->   #include <asm/dmi.h>
->   #include <asm/unaligned.h>
->   
-> +#ifndef SMBIOS_ENTRY_POINT_SCAN_START
-> +#define SMBIOS_ENTRY_POINT_SCAN_START 0xf0000
-> +#endif
-> +
->   struct kobject *dmi_kobj;
->   EXPORT_SYMBOL_GPL(dmi_kobj);
->   
-> @@ -661,7 +665,7 @@ static void __init dmi_scan_machine(void)
->   			return;
->   		}
->   	} else if (IS_ENABLED(CONFIG_DMI_SCAN_MACHINE_NON_EFI_FALLBACK)) {
-> -		p = dmi_early_remap(0xF0000, 0x10000);
-> +		p = dmi_early_remap(SMBIOS_ENTRY_POINT_SCAN_START, 0x10000);
->   		if (p == NULL)
->   			goto error;
->   
+> Should we backport it to stable?
+Yes, this patch should be backported as early as 4.9-lts.
 
-
+Huacai
+>
+> --
+> Jiaxun Yang
