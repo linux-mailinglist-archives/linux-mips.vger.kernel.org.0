@@ -2,99 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2A2F5E01
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Nov 2019 09:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBCFF5E17
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Nov 2019 09:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbfKIIIW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Nov 2019 03:08:22 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:47071 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726267AbfKIIIW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Nov 2019 03:08:22 -0500
-Received: by mail-oi1-f194.google.com with SMTP id n14so7342442oie.13
-        for <linux-mips@vger.kernel.org>; Sat, 09 Nov 2019 00:08:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=cLuf5qhAqnxIMQyCEVXLNIvwZZPG77RRwWJR4sxF6XY=;
-        b=eXxa5peYglmoTbUhgWQfNNtz2jBRPS1Oe9AfVIflRef/dTQHyJRRn8XsZnKthQc4As
-         mokCXLRVy/UT8hOlR65XdjNwJpsXzHhU1CbfwhJz/2pwRmjTWwxdX+gbi0i0YeJb2J4E
-         9b8vyM1pjDhI3MTNTDx9MEVrD9izEP5UezdQ/D+LuCI1lG/YDS+K7iqCLueez5HXPnA7
-         roy6SD00kQdxt+sJ6MvQH3IU5IsL4zny5CXCt9A9ZBqXmAOhPtkF0H/p0ZmQkfzk+Icq
-         REYgS89l8PNVtgMd/x/uSeMMdomS7M2ambBqCZF2J5eKKWOF9aeciWOOkgwtqGYhjqNu
-         bilQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=cLuf5qhAqnxIMQyCEVXLNIvwZZPG77RRwWJR4sxF6XY=;
-        b=WcBrEzquniaUrIr4UpIw4rMZTMBST1B2svxs249W3yikoHEvOGuH+5hoBqsFYPFFbg
-         HJZK2IZj4qId+ywa4NhfRY2Rl3PV1SiRUhsn9nbx8KUVjL17ruX2WSwTBS2pvDLx/L4/
-         cpochYAM/xJ8CUCEz3fmaHzL6wntidxKYiumC873tGY+hmNG00+yTWRtsLiKiSeqKOeq
-         vispsM80D+pcZphFnnlkCVbCNfCdxUwKKDMDsuoRdo/SriubH7FJ9D9D5/PMKzGpodIb
-         hRUPWid2t1RvmDS6cRKvjbw11eVyI7bubgbMxaOYex/LLwBooLdWHV2ij6LfXnZhXrpc
-         SYXg==
-X-Gm-Message-State: APjAAAVQgKmPDhdaHG24pIL1mRrOZF3Zd1XoNrxv0EL82WVLXJsNPMqs
-        zArpFfg6tkipgtzkHv+aklQVz9CdK5O5HnyRAvg=
-X-Google-Smtp-Source: APXvYqycKx/ceYHAetuJX0MSa9VogTrkkN8li8nDg6NrY1zEwrhv7guulQ17HavRo58r9idJpL5Vw3DtVOkU6tKSscE=
-X-Received: by 2002:a05:6808:6d8:: with SMTP id m24mr13718153oih.73.1573286901441;
- Sat, 09 Nov 2019 00:08:21 -0800 (PST)
+        id S1726194AbfKIIjd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Nov 2019 03:39:33 -0500
+Received: from forward103p.mail.yandex.net ([77.88.28.106]:35477 "EHLO
+        forward103p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726136AbfKIIjd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Nov 2019 03:39:33 -0500
+Received: from forward102q.mail.yandex.net (forward102q.mail.yandex.net [IPv6:2a02:6b8:c0e:1ba:0:640:516:4e7d])
+        by forward103p.mail.yandex.net (Yandex) with ESMTP id F0E8D18C1993;
+        Sat,  9 Nov 2019 11:39:30 +0300 (MSK)
+Received: from mxback12q.mail.yandex.net (mxback12q.mail.yandex.net [IPv6:2a02:6b8:c0e:1b3:0:640:3818:d096])
+        by forward102q.mail.yandex.net (Yandex) with ESMTP id EB3C07F20016;
+        Sat,  9 Nov 2019 11:39:30 +0300 (MSK)
+Received: from vla5-b45cc32a2812.qloud-c.yandex.net (vla5-b45cc32a2812.qloud-c.yandex.net [2a02:6b8:c18:3508:0:640:b45c:c32a])
+        by mxback12q.mail.yandex.net (mxback/Yandex) with ESMTP id 4PpOHksn4J-dUvivaKX;
+        Sat, 09 Nov 2019 11:39:30 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1573288770;
+        bh=/vVsB69BCB7Xa9e7UKmSDmMWYOxu0m7iUYqaNUJ3Vek=;
+        h=In-Reply-To:From:To:Subject:Cc:Date:References:Message-ID;
+        b=qElQqevgXykAs5Jf1fUFSMJccNbnIc9puZitGQTLQqskJ6jVARy+Hjm7WvYXB5Kpg
+         dvfvTyPFHCsbN7oO/QcubMWAktapaf/qegp/D1tM5xI/Kgp2X/rgFn1OdC7eiQ47dv
+         Oeh+dub7TNw0rR/tWA+3XZFqhk9KxImyBHEfhamo=
+Authentication-Results: mxback12q.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by vla5-b45cc32a2812.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id WdwEYhbn1u-dMVmp0sH;
+        Sat, 09 Nov 2019 11:39:29 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+Subject: Re: [PATCH V2 2/2] MIPS: Loongson: Unify LOONGSON3/LOONGSON64 Kconfig
+ usage
+To:     Huacai Chen <chenhc@lemote.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>
+Cc:     Paul Burton <paul.burton@mips.com>,
+        Paul Burton <paulburton@kernel.org>, linux-mips@linux-mips.org,
+        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Huacai Chen <chenhuacai@gmail.com>
+References: <1572847881-21712-1-git-send-email-chenhc@lemote.com>
+ <1572847881-21712-2-git-send-email-chenhc@lemote.com>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <d75e4fb1-7d24-4b4b-7f59-6a9cbb63316a@flygoat.com>
+Date:   Sat, 9 Nov 2019 16:39:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Received: by 2002:ac9:7402:0:0:0:0:0 with HTTP; Sat, 9 Nov 2019 00:08:21 -0800 (PST)
-Reply-To: elodieantoine76578@yahoo.com
-From:   Mrs Elodie Antoine <marriammichel85@gmail.com>
-Date:   Sat, 9 Nov 2019 00:08:21 -0800
-Message-ID: <CALu+k41eWVw6H91yJD9nGCjqCecnNmun1R2-jNDqaAAe-d-LXw@mail.gmail.com>
-Subject: Greetings From Mrs Elodie,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1572847881-21712-2-git-send-email-chenhc@lemote.com>
+Content-Type: text/plain; charset=gbk
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Greetings From Mrs Elodie,
-
-Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
-CHRIST the giver of every good thing. Good day,i know this letter will
-definitely come to you as a huge surprise, but I implore you to take
-the time to go through it carefully as the decision you make will go
-off a long way to determine my future and continued existence. I am
-Mrs Elodie Antoine
-aging widow of 59 years old suffering from long time illness. I have
-some funds I inherited from my late husband,
-
-The sum of (US$4.5 Million Dollars) and I needed a very honest and God
-fearing  who can withdraw this money then use the funds for Charity
-works. I WISH TO GIVE THIS FUNDS TO YOU FOR CHARITY WORKS. I found
-your email address from the internet after honest prayers  to the LORD
-to bring me a helper and i decided to contact you if you may be
-willing and interested to handle these trust funds in good faith
-before anything happens to me.
-I accept this decision because I do not have any child who will
-inherit this money after I die. I want your urgent reply to me so that
-I will give you the deposit receipt which the  COMPANY issued to me as
-next of kin for immediate transfer of the money to your account in
-your country, to start the good work of God, I want you to use the
-15/percent of the total amount to help yourself in doing the project.
 
 
-I am desperately in keen need of assistance and I have summoned up
-courage to contact you for this task, you must not fail me and the
-millions of the poor people in our todays WORLD. This is no stolen
-money and there are no dangers involved,100% RISK FREE with full legal
-proof. Please if you would be able to use the funds for the Charity
-works kindly let me know immediately.I will appreciate your utmost
-confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish. I
-want you to take 15 percent of the total money for your personal use
-while 85% of the money will go to charity.I will appreciate your
-utmost confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish.
+ÔÚ 2019/11/4 ÏÂÎç2:11, Huacai Chen Ð´µÀ:
+> There are mixed LOONGSON3/LOONGSON64 usages in recently changes, let's
+> establish some rules:
+> 
+> 1, In Kconfig symbols, we only use CPU_LOONGSON64, MACH_LOONGSON64 and
+> SYS_HAS_CPU_LOONGSON64, all other derived symbols use "LOONGSON3" since
+> they all not widely-used symbols and sometimes not suitable for all
+> 64-bit Loongson processors. E.g., we use symbols LOONGSON3_ENHANCEMENT,
+> CPU_LOONGSON3_WORKAROUNDS, etc.
+> 
+> 2, Hide GSx64/GSx64E in Kconfig title since it is not useful for
+> general users. However, in the full description we use a more detailed
+> manner. E.g., GS264/GS464/GS464E/GS464V.
+> 
+> All Kconfig titles and descriptions of Loongson processors and machines
+> have also been updated in this patch for consistency.
+> 
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> ---Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
+Thanks,
+I'll obey the rule you established.
 
-kindly respond for further details.
-
-Thanks and God bless you,
-
-Mrs Elodie Antoine
+--
+Jiaxun Yang
