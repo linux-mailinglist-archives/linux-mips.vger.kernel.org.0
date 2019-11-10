@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A22DF6647
-	for <lists+linux-mips@lfdr.de>; Sun, 10 Nov 2019 04:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 226B3F64FC
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Nov 2019 04:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728165AbfKJCnI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Nov 2019 21:43:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40476 "EHLO mail.kernel.org"
+        id S1729514AbfKJDDi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Nov 2019 22:03:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728162AbfKJCnI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:43:08 -0500
+        id S1729251AbfKJCrO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 9 Nov 2019 21:47:14 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 957D321882;
-        Sun, 10 Nov 2019 02:43:06 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6A408215EA;
+        Sun, 10 Nov 2019 02:47:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573353787;
+        s=default; t=1573354033;
         bh=8DD4osZh3pqSw/v3Z8lBeKCbS7/Ml7qR65jLNRSZyrc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QsYVMkQbEo5udnkXSa3Ydq9O20Fc/+IQO3nM6p1vkfIunxVnPvstudIjiKQdSk2T0
-         JohdIwrtu1GLG36Y9BGNO7FdsPb8Odc+274OKURPh9M3tdeVTE38AsbxNDmQJZen5F
-         NjLIooxGHaiGFfPv9GtYvp0RWl5uidDw6sdy9lm0=
+        b=WuiMuTiOcXSbCPgREiPK1DMSPQpGCXNjGr2LKgjnppMLrAeJ2KDn75B70yEF4ZLde
+         5IiUu0pK1dp4sKSK7G+ZrGF3VtN0Rlk7G1XSCeyDLEgkeuZdi1n6qI1OR35jj9J268
+         LfR4g53oVOWJV6VPsuzibLg/s8FJp29/cyIftSvY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dengcheng Zhu <dzhu@wavecomp.com>,
@@ -30,12 +30,12 @@ Cc:     Dengcheng Zhu <dzhu@wavecomp.com>,
         Paul Burton <paul.burton@mips.com>, pburton@wavecomp.com,
         ralf@linux-mips.org, linux-mips@linux-mips.org,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 089/191] MIPS: kexec: Relax memory restriction
-Date:   Sat,  9 Nov 2019 21:38:31 -0500
-Message-Id: <20191110024013.29782-89-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 048/109] MIPS: kexec: Relax memory restriction
+Date:   Sat,  9 Nov 2019 21:44:40 -0500
+Message-Id: <20191110024541.31567-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191110024013.29782-1-sashal@kernel.org>
-References: <20191110024013.29782-1-sashal@kernel.org>
+In-Reply-To: <20191110024541.31567-1-sashal@kernel.org>
+References: <20191110024541.31567-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
