@@ -2,383 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FCBF6C25
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Nov 2019 02:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8055FF7168
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Nov 2019 11:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726733AbfKKBQd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 Nov 2019 20:16:33 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:53900 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726275AbfKKBQd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Nov 2019 20:16:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1573434990; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UWU+5fTJTk/7+C5K9zyPet8lduz1ttBlAR7fHdRsMiE=;
-        b=o+HAYIYpoyfQbPmhjZZaSPxyLZJNNqtdkzQuUWjrem9LTFyEssoy6Vi3ZiMJqfJdjSKsM5
-        4+iiB5Lkm3SMwPgb1HGji0+Nda/9+Jq8yoT5bgg+zSaZOxy+ELL21NaTeJ9wyDTYpsJuYO
-        o8ZS8MX2vMoynRiTmREJ38TfZ1j5hnc=
-Date:   Mon, 11 Nov 2019 02:16:23 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 2/2 v3] clk: Ingenic: Add CGU driver for X1000.
-To:     Zhou Yanjie <zhouyanjie@zoho.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        mturquette@baylibre.com, paul.burton@mips.com, sboyd@kernel.org,
-        robh+dt@kernel.org, syq@debian.org, mark.rutland@arm.com
-Message-Id: <1573434983.3.2@crapouillou.net>
-In-Reply-To: <1573378102-72380-3-git-send-email-zhouyanjie@zoho.com>
-References: <1571421006-12771-1-git-send-email-zhouyanjie@zoho.com>
-        <1573378102-72380-1-git-send-email-zhouyanjie@zoho.com>
-        <1573378102-72380-3-git-send-email-zhouyanjie@zoho.com>
+        id S1726768AbfKKKJ1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Nov 2019 05:09:27 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:51191 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726791AbfKKKJ1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Nov 2019 05:09:27 -0500
+Received: from mail-qt1-f174.google.com ([209.85.160.174]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MplsZ-1i6pZu2YgP-00qAkb; Mon, 11 Nov 2019 11:09:23 +0100
+Received: by mail-qt1-f174.google.com with SMTP id p20so15068843qtq.5;
+        Mon, 11 Nov 2019 02:09:22 -0800 (PST)
+X-Gm-Message-State: APjAAAWMTElxLIn+TusbrWobNiXOjtpxQMS46Ez741GNIi710E9PfCEJ
+        U/6/TCNLB077W7zb1GM5toTYM3dBYCJyDVtd06o=
+X-Google-Smtp-Source: APXvYqwUFI9CNnIwrAVKasmsTd09tLHKshCq1NYJLSrtULcDmOA+h22x7/m2tzlDDqS3Yhkmt+6zqdhU/D75oBqf0Ro=
+X-Received: by 2002:aed:3e41:: with SMTP id m1mr16150881qtf.142.1573466961656;
+ Mon, 11 Nov 2019 02:09:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+References: <20191029064834.23438-1-hch@lst.de> <20191029064834.23438-11-hch@lst.de>
+In-Reply-To: <20191029064834.23438-11-hch@lst.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 11 Nov 2019 11:09:05 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2o4R+E2hTrHrmNy7K1ki3_98aWE5a-fjkQ_NWW=xd_gQ@mail.gmail.com>
+Message-ID: <CAK8P3a2o4R+E2hTrHrmNy7K1ki3_98aWE5a-fjkQ_NWW=xd_gQ@mail.gmail.com>
+Subject: Re: [PATCH 10/21] asm-generic: ioremap_uc should behave the same with
+ and without MMU
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guan Xuetao <gxt@pku.edu.cn>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-mips@vger.kernel.org,
+        "moderated list:NIOS2 ARCHITECTURE" 
+        <nios2-dev@lists.rocketboards.org>, openrisc@lists.librecores.org,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-riscv@lists.infradead.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-xtensa@linux-xtensa.org,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:WLrPbPJDqsNolBBa0EtV84o8X3QWGuIcje+jyjzvu8qxYvKalRW
+ vVo3TWozXagE9Gvkhv9RKhJCAXh4rrcVLnVGcy2T4hm5OBp58YkOEUFIh/Am/mvfM7WC+1g
+ 94Ejh/WA6YNMtjZhLH3lXLLLVeLx0FrPhlZupRdQqVfwuImvK9gIMd+COj25ZFAUArh4v9w
+ Wv1F7eDVgjndwTfa+DiwQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3DPxP3/AzH8=:DPOxQ1enriSFjxUu68vquX
+ eGUcgshsAuMmTHkBY5dxmuUJPWWz6fubUKJoFZWeGiMRwxNYkQUHc74ubpDvEsEBOlQQ5kT8u
+ f/aCJbLJc1CN7aYnn/FNDsbkGVuMUEpJE2tQVGEUyLPelCunzAJzsnukVx350hKhiVoG36wBL
+ F3M/LNcc4vQE2KyZ7k7dfwsNgMUyYkUuiumKsP7EyaFU21YGtAQQjDL2ESuolSjkyTiGN5+jH
+ G25CY3eWC9gJz/qY2zMyJ1QW1Mh46wHFF5wt+/j3PQHeltjdtINqad1SZ7OHQ/sEJkb9fbOBt
+ 9yyHmhrgWHj/dN55PM0GPvDdfe/5WlR3RDW46+W5XuZrPXJyk7FCNGxmtYlpvaA7D+PD1OPVR
+ Ynfbi7O0CwVvlXzkvcjkRSEFFt4NYYcQy38A8NuxlRKVD/KL3uiCpxULhcPefsOtyWv4ecOSd
+ CapTeIfnKNX7x8k3nxIrClwuCl01JQ1dHjqOwtbJSkf/JdQq1Mg+QRs1FmCVzafhM1mOL43Ab
+ joYrEOzkOqPXLk9jXVvPuhAaoLoA3mP+DzFLVi1LF2iteAkmCqwdYNxlozO5bWCKFDECBEKvS
+ ECBSQGX4K++EgBVd3QVoBipRwQMCLSpwD8tGk/dAPNG1cp6T00k88oSatqHkbN20tZrzvPnwz
+ SyXdghQoLAHldOS9pIwizYXHqPmexdevUFWkAvVI1jPN1DybWWAQxUy6kVswrrVaFLUYpqWEp
+ xr7k3KMT4BWFHMXUTuqI6PqyLm2zQou5Quti0hyT/vEOzOmrKm9cTozfJuvWjcGZ7dT+Gohp9
+ hTPghZ5YdHuzcD0z2FaoD+G3QwPOi6fjkvhrW/e7iOJ/phyVUx2hqY3mfT1NmmBL7muZMzFXl
+ nZROTB/e9eIAWJvNN9og==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On Tue, Oct 29, 2019 at 7:49 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> Whatever reason there is for the existence of ioremap_uc, and the fact
+> that it returns NULL by default on architectures with an MMU applies
+> equally to nommu architectures, so don't provide different defaults.
+
+Makes sense.
+
+> In practice the difference is meaningless as the only portable driver
+> that uses ioremap_uc is atyfb which probably doesn't show up on nommu
+> devices.
 
 
-Le dim., nov. 10, 2019 at 17:28, Zhou Yanjie <zhouyanjie@zoho.com> a=20
-=E9crit :
-> Add support for the clocks provided by the CGU in the Ingenic X1000
-> SoC, making use of the cgu code to do the heavy lifting.
->=20
-> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-
-> ---
->  drivers/clk/ingenic/Kconfig     |  10 ++
->  drivers/clk/ingenic/Makefile    |   1 +
->  drivers/clk/ingenic/x1000-cgu.c | 274=20
-> ++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 285 insertions(+)
->  create mode 100644 drivers/clk/ingenic/x1000-cgu.c
->=20
-> diff --git a/drivers/clk/ingenic/Kconfig b/drivers/clk/ingenic/Kconfig
-> index 1cb4899..fb7b399 100644
-> --- a/drivers/clk/ingenic/Kconfig
-> +++ b/drivers/clk/ingenic/Kconfig
-> @@ -45,6 +45,16 @@ config INGENIC_CGU_JZ4780
->=20
->  	  If building for a JZ4780 SoC, you want to say Y here.
->=20
-> +config INGENIC_CGU_X1000
-> +	bool "Ingenic X1000 CGU driver"
-> +	default MACH_X1000
-> +	select INGENIC_CGU_COMMON
-> +	help
-> +	  Support the clocks provided by the CGU hardware on Ingenic X1000
-> +	  and compatible SoCs.
-> +
-> +	  If building for a X1000 SoC, you want to say Y here.
-> +
->  config INGENIC_TCU_CLK
->  	bool "Ingenic JZ47xx TCU clocks driver"
->  	default MACH_INGENIC
-> diff --git a/drivers/clk/ingenic/Makefile=20
-> b/drivers/clk/ingenic/Makefile
-> index 097220b..8b1dad9 100644
-> --- a/drivers/clk/ingenic/Makefile
-> +++ b/drivers/clk/ingenic/Makefile
-> @@ -4,4 +4,5 @@ obj-$(CONFIG_INGENIC_CGU_JZ4740)	+=3D jz4740-cgu.o
->  obj-$(CONFIG_INGENIC_CGU_JZ4725B)	+=3D jz4725b-cgu.o
->  obj-$(CONFIG_INGENIC_CGU_JZ4770)	+=3D jz4770-cgu.o
->  obj-$(CONFIG_INGENIC_CGU_JZ4780)	+=3D jz4780-cgu.o
-> +obj-$(CONFIG_INGENIC_CGU_X1000)		+=3D x1000-cgu.o
->  obj-$(CONFIG_INGENIC_TCU_CLK)		+=3D tcu.o
-> diff --git a/drivers/clk/ingenic/x1000-cgu.c=20
-> b/drivers/clk/ingenic/x1000-cgu.c
-> new file mode 100644
-> index 00000000..b22d87b
-> --- /dev/null
-> +++ b/drivers/clk/ingenic/x1000-cgu.c
-> @@ -0,0 +1,274 @@
-> +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * X1000 SoC CGU driver
-> + * Copyright (c) 2019 Zhou Yanjie <zhouyanjie@zoho.com>
+> + * ioremap_uc is special in that we do require an explicit architecture
+> + * implementation.  In general you do now want to use this function in a
+> + * driver and use plain ioremap, which is uncached by default.  Similarly
+> + * architectures should not implement it unless they have a very good
+> + * reason.
 > + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/delay.h>
-> +#include <linux/of.h>
-> +#include <dt-bindings/clock/x1000-cgu.h>
-> +#include "cgu.h"
-> +#include "pm.h"
-> +
-> +/* CGU register offsets */
-> +#define CGU_REG_CPCCR		0x00
-> +#define CGU_REG_APLL		0x10
-> +#define CGU_REG_MPLL		0x14
-> +#define CGU_REG_CLKGR		0x20
-> +#define CGU_REG_OPCR		0x24
-> +#define CGU_REG_DDRCDR		0x2c
-> +#define CGU_REG_MACCDR		0x54
-> +#define CGU_REG_I2SCDR		0x60
-> +#define CGU_REG_LPCDR		0x64
-> +#define CGU_REG_MSC0CDR		0x68
-> +#define CGU_REG_I2SCDR1		0x70
-> +#define CGU_REG_SSICDR		0x74
-> +#define CGU_REG_CIMCDR		0x7c
-> +#define CGU_REG_PCMCDR		0x84
-> +#define CGU_REG_MSC1CDR		0xa4
-> +#define CGU_REG_CMP_INTR	0xb0
-> +#define CGU_REG_CMP_INTRE	0xb4
-> +#define CGU_REG_DRCG		0xd0
-> +#define CGU_REG_CPCSR		0xd4
-> +#define CGU_REG_PCMCDR1		0xe0
-> +#define CGU_REG_MACPHYC		0xe8
-> +
-> +/* bits within the OPCR register */
-> +#define OPCR_SPENDN0		BIT(7)
-> +#define OPCR_SPENDN1		BIT(6)
-> +
-> +static struct ingenic_cgu *cgu;
-> +
-> +static const s8 pll_od_encoding[8] =3D {
-> +	0x0, 0x1, -1, 0x2, -1, -1, -1, 0x3,
-> +};
-> +
-> +static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] =3D {
-> +
-> +	/* External clocks */
-> +
-> +	[X1000_CLK_EXCLK] =3D { "ext", CGU_CLK_EXT },
-> +	[X1000_CLK_RTCLK] =3D { "rtc", CGU_CLK_EXT },
-> +
-> +	/* PLLs */
-> +
-> +	[X1000_CLK_APLL] =3D {
-> +		"apll", CGU_CLK_PLL,
-> +		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.pll =3D {
-> +			.reg =3D CGU_REG_APLL,
-> +			.m_shift =3D 24,
-> +			.m_bits =3D 7,
-> +			.m_offset =3D 1,
-> +			.n_shift =3D 18,
-> +			.n_bits =3D 5,
-> +			.n_offset =3D 1,
-> +			.od_shift =3D 16,
-> +			.od_bits =3D 2,
-> +			.od_max =3D 8,
-> +			.od_encoding =3D pll_od_encoding,
-> +			.bypass_bit =3D 9,
-> +			.enable_bit =3D 8,
-> +			.stable_bit =3D 10,
-> +		},
-> +	},
-> +
-> +	[X1000_CLK_MPLL] =3D {
-> +		"mpll", CGU_CLK_PLL,
-> +		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.pll =3D {
-> +			.reg =3D CGU_REG_MPLL,
-> +			.m_shift =3D 24,
-> +			.m_bits =3D 7,
-> +			.m_offset =3D 1,
-> +			.n_shift =3D 18,
-> +			.n_bits =3D 5,
-> +			.n_offset =3D 1,
-> +			.od_shift =3D 16,
-> +			.od_bits =3D 2,
-> +			.od_max =3D 8,
-> +			.od_encoding =3D pll_od_encoding,
-> +			.bypass_bit =3D 6,
-> +			.enable_bit =3D 7,
-> +			.stable_bit =3D 0,
-> +		},
-> +	},
-> +
-> +	/* Muxes & dividers */
-> +
-> +	[X1000_CLK_SCLKA] =3D {
-> +		"sclk_a", CGU_CLK_MUX,
-> +		.parents =3D { -1, X1000_CLK_EXCLK, X1000_CLK_APLL, -1 },
-> +		.mux =3D { CGU_REG_CPCCR, 30, 2 },
-> +	},
-> +
-> +	[X1000_CLK_CPUMUX] =3D {
-> +		"cpu_mux", CGU_CLK_MUX,
-> +		.parents =3D { -1, X1000_CLK_SCLKA, X1000_CLK_MPLL, -1 },
-> +		.mux =3D { CGU_REG_CPCCR, 28, 2 },
-> +	},
-> +
-> +	[X1000_CLK_CPU] =3D {
-> +		"cpu", CGU_CLK_DIV,
-> +		.parents =3D { X1000_CLK_CPUMUX, -1, -1, -1 },
-> +		.div =3D { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
-> +	},
-> +
-> +	[X1000_CLK_L2CACHE] =3D {
-> +		"l2cache", CGU_CLK_DIV,
-> +		.parents =3D { X1000_CLK_CPUMUX, -1, -1, -1 },
-> +		.div =3D { CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1 },
-> +	},
-> +
-> +	[X1000_CLK_AHB0] =3D {
-> +		"ahb0", CGU_CLK_MUX | CGU_CLK_DIV,
-> +		.parents =3D { -1, X1000_CLK_SCLKA, X1000_CLK_MPLL, -1 },
-> +		.mux =3D { CGU_REG_CPCCR, 26, 2 },
-> +		.div =3D { CGU_REG_CPCCR, 8, 1, 4, 21, -1, -1 },
-> +	},
-> +
-> +	[X1000_CLK_AHB2PMUX] =3D {
-> +		"ahb2_apb_mux", CGU_CLK_MUX,
-> +		.parents =3D { -1, X1000_CLK_SCLKA, X1000_CLK_MPLL, -1 },
-> +		.mux =3D { CGU_REG_CPCCR, 24, 2 },
-> +	},
-> +
-> +	[X1000_CLK_AHB2] =3D {
-> +		"ahb2", CGU_CLK_DIV,
-> +		.parents =3D { X1000_CLK_AHB2PMUX, -1, -1, -1 },
-> +		.div =3D { CGU_REG_CPCCR, 12, 1, 4, 20, -1, -1 },
-> +	},
-> +
-> +	[X1000_CLK_PCLK] =3D {
-> +		"pclk", CGU_CLK_DIV,
-> +		.parents =3D { X1000_CLK_AHB2PMUX, -1, -1, -1 },
-> +		.div =3D { CGU_REG_CPCCR, 16, 1, 4, 20, -1, -1 },
-> +	},
-> +
-> +	[X1000_CLK_DDR] =3D {
-> +		"ddr", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-> +		.parents =3D { -1, X1000_CLK_SCLKA, X1000_CLK_MPLL, -1 },
-> +		.mux =3D { CGU_REG_DDRCDR, 30, 2 },
-> +		.div =3D { CGU_REG_DDRCDR, 0, 1, 4, 29, 28, 27 },
-> +		.gate =3D { CGU_REG_CLKGR, 31 },
-> +	},
-> +
-> +	[X1000_CLK_MAC] =3D {
-> +		"mac", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-> +		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL},
-> +		.mux =3D { CGU_REG_MACCDR, 31, 1 },
-> +		.div =3D { CGU_REG_MACCDR, 0, 1, 8, 29, 28, 27 },
-> +		.gate =3D { CGU_REG_CLKGR, 25 },
-> +	},
-> +
-> +	[X1000_CLK_MSCMUX] =3D {
-> +		"msc_mux", CGU_CLK_MUX,
-> +		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL},
-> +		.mux =3D { CGU_REG_MSC0CDR, 31, 1 },
-> +	},
-> +
-> +	[X1000_CLK_MSC0] =3D {
-> +		"msc0", CGU_CLK_DIV | CGU_CLK_GATE,
-> +		.parents =3D { X1000_CLK_MSCMUX, -1, -1, -1 },
-> +		.div =3D { CGU_REG_MSC0CDR, 0, 2, 8, 29, 28, 27 },
-> +		.gate =3D { CGU_REG_CLKGR, 4 },
-> +	},
-> +
-> +	[X1000_CLK_MSC1] =3D {
-> +		"msc1", CGU_CLK_DIV | CGU_CLK_GATE,
-> +		.parents =3D { X1000_CLK_MSCMUX, -1, -1, -1 },
-> +		.div =3D { CGU_REG_MSC1CDR, 0, 2, 8, 29, 28, 27 },
-> +		.gate =3D { CGU_REG_CLKGR, 5 },
-> +	},
-> +
-> +	[X1000_CLK_SSIPLL] =3D {
-> +		"ssi_pll", CGU_CLK_MUX | CGU_CLK_DIV,
-> +		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL, -1, -1 },
-> +		.mux =3D { CGU_REG_SSICDR, 31, 1 },
-> +		.div =3D { CGU_REG_SSICDR, 0, 1, 8, 29, 28, 27 },
-> +	},
-> +
-> +	[X1000_CLK_SSIMUX] =3D {
-> +		"ssi_mux", CGU_CLK_MUX,
-> +		.parents =3D { X1000_CLK_EXCLK, X1000_CLK_SSIPLL, -1, -1 },
-> +		.mux =3D { CGU_REG_SSICDR, 30, 1 },
-> +	},
-> +
-> +	/* Gate-only clocks */
-> +
-> +	[X1000_CLK_SFC] =3D {
-> +		"sfc", CGU_CLK_GATE,
-> +		.parents =3D { X1000_CLK_SSIPLL, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 2 },
-> +	},
-> +
-> +	[X1000_CLK_I2C0] =3D {
-> +		"i2c0", CGU_CLK_GATE,
-> +		.parents =3D { X1000_CLK_PCLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 7 },
-> +	},
-> +
-> +	[X1000_CLK_I2C1] =3D {
-> +		"i2c1", CGU_CLK_GATE,
-> +		.parents =3D { X1000_CLK_PCLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 8 },
-> +	},
-> +
-> +	[X1000_CLK_I2C2] =3D {
-> +		"i2c2", CGU_CLK_GATE,
-> +		.parents =3D { X1000_CLK_PCLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 9 },
-> +	},
-> +
-> +	[X1000_CLK_UART0] =3D {
-> +		"uart0", CGU_CLK_GATE,
-> +		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 14 },
-> +	},
-> +
-> +	[X1000_CLK_UART1] =3D {
-> +		"uart1", CGU_CLK_GATE,
-> +		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 15 },
-> +	},
-> +
-> +	[X1000_CLK_UART2] =3D {
-> +		"uart2", CGU_CLK_GATE,
-> +		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 16 },
-> +	},
-> +
-> +	[X1000_CLK_SSI] =3D {
-> +		"ssi", CGU_CLK_GATE,
-> +		.parents =3D { X1000_CLK_SSIMUX, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 19 },
-> +	},
-> +
-> +	[X1000_CLK_PDMA] =3D {
-> +		"pdma", CGU_CLK_GATE,
-> +		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
-> +		.gate =3D { CGU_REG_CLKGR, 21 },
-> +	},
-> +};
-> +
-> +static void __init x1000_cgu_init(struct device_node *np)
+> +#ifndef ioremap_uc
+> +#define ioremap_uc ioremap_uc
+> +static inline void __iomem *ioremap_uc(phys_addr_t offset, size_t size)
 > +{
-> +	int retval;
-> +
-> +	cgu =3D ingenic_cgu_new(x1000_cgu_clocks,
-> +			      ARRAY_SIZE(x1000_cgu_clocks), np);
-> +	if (!cgu) {
-> +		pr_err("%s: failed to initialise CGU\n", __func__);
-> +		return;
-> +	}
-> +
-> +	retval =3D ingenic_cgu_register_clocks(cgu);
-> +	if (retval) {
-> +		pr_err("%s: failed to register CGU Clocks\n", __func__);
-> +		return;
-> +	}
-> +
-> +	ingenic_cgu_register_syscore_ops(cgu);
+> +       return NULL;
 > +}
-> +CLK_OF_DECLARE(x1000_cgu, "ingenic,x1000-cgu", x1000_cgu_init);
-> --
-> 2.7.4
->=20
->=20
+> +#endif
 
-=
+Maybe we could move the definition into the atyfb driver itself?
 
+As I understand it, the difference between ioremap()/ioremap_nocache()
+and ioremap_uc() only exists on pre-PAT x86-32 systems (i.e. 486, P5,
+Ppro, PII, K6, VIA C3), while on more modern systems (all non-x86,
+PentiumIII, Athlon, VIA C7)  those three are meant to be synonyms
+anyway.
+
+      Arnd
