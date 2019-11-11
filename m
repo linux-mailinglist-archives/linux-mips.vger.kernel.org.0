@@ -2,100 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F70AF8025
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Nov 2019 20:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F32F807E
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Nov 2019 20:51:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727837AbfKKTdk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Nov 2019 14:33:40 -0500
-Received: from mout.kundenserver.de ([212.227.17.24]:39367 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727797AbfKKTdj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Nov 2019 14:33:39 -0500
-Received: from mail-qk1-f179.google.com ([209.85.222.179]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1N3bCH-1hmQ3w3kY7-010fCN; Mon, 11 Nov 2019 20:33:36 +0100
-Received: by mail-qk1-f179.google.com with SMTP id h15so12180561qka.13;
-        Mon, 11 Nov 2019 11:33:34 -0800 (PST)
-X-Gm-Message-State: APjAAAXXUehROR4hg16SrGsmLkhlWeNJFltpGV8/mDO3s1mh8skoqwjh
-        tY/46NCrVFjCjJg/qAPgy/4Ru1VJxk+kMV3sub8=
-X-Google-Smtp-Source: APXvYqzRT3LvGe5JvZLYKm1upZpHxk2xc9ns43ZUwTpi/JlFXD7dYhA8+4Mt4XVDG2f3/qLjEL/Ms2I9EThmbgvV8Jg=
-X-Received: by 2002:a37:58d:: with SMTP id 135mr2321779qkf.394.1573500813881;
- Mon, 11 Nov 2019 11:33:33 -0800 (PST)
-MIME-Version: 1.0
-References: <20191029064834.23438-1-hch@lst.de> <20191029064834.23438-11-hch@lst.de>
- <CAK8P3a2o4R+E2hTrHrmNy7K1ki3_98aWE5a-fjkQ_NWW=xd_gQ@mail.gmail.com>
- <20191111101531.GA12294@lst.de> <CAK8P3a0rTvfPP2LUMw8EC0xz5gfZP5+NUkoaZBJrtYYfr6YRig@mail.gmail.com>
- <20191111102923.GA12974@lst.de>
-In-Reply-To: <20191111102923.GA12974@lst.de>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 11 Nov 2019 20:33:17 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2b=td4JhYOcK1jUshh8Mp-5_w4v+dAr_JjnH783=ptBQ@mail.gmail.com>
-Message-ID: <CAK8P3a2b=td4JhYOcK1jUshh8Mp-5_w4v+dAr_JjnH783=ptBQ@mail.gmail.com>
-Subject: Re: [PATCH 10/21] asm-generic: ioremap_uc should behave the same with
- and without MMU
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org,
-        "moderated list:NIOS2 ARCHITECTURE" 
-        <nios2-dev@lists.rocketboards.org>, openrisc@lists.librecores.org,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-riscv@lists.infradead.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:VkzlYprmjLZkUUcNJ+eTrkc1uyTcHlM+BFAEE68s21ucomSZQaJ
- Mq1HsbOKR10W9ktsWQqC2d+1fxNFc++gSh355I/Sm9Nt0OELiCU5GE/ejcbxdc0XoKGFGOR
- lJT0aj3OKGGsrqrwmqhZcVjRTdGYhtUjAmaLqUrUWTfS9gPcJXopxjb/cHOb3V99Jjg8KyM
- BDe7AsIZLiGgQ+SW18UXg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hdS04Xdlzj8=:M/ucaK4r3dinqbK80C41xd
- FMDjqQL3YWPxy6jHWBpvqKj9qZWP8X6dfE8RQCodF9mGe6XJZOKEt4p5phfvsuDjwfDAuR77q
- 5sbXk3f1gGuA3fUl2kc50FhfPxqpKsTvCyJ9PMoA1vJWANud2ysKvaSTXrsxfuBDYbDYflWwD
- FkAIhnavF1mnucw3hAUZbu/DkQc78rhm6yA66+iyf0ibiFIB1fiFKcy3QWM1WJMSymvmz+Cik
- 0TMLecIni73LtmjHaEJqdQ07OpzRu6o2+nc6q2bAY8v58NfnuF4PC+RAMX5jsCwhiMQuTAAzH
- d9cCFvrdweO5pjBwUMsl1fDngiL0PhMkFoHuG2mp6WTu+9yigHaCDYkLBnzqo3wCtFy+yT589
- vZ/FGbV4Lx/67Cyy8ORfHd/Q4I+ytFVw6wwtG0/mHwHZbYfS5buusBz3lQKNPLkaAr33vhbEI
- HXyb+ZMaKffgQFt++5lnGgDgUJQspoUegjhdEeGEI5XiZQJLi3elBg+C5Gkccpc1LDKrpW2ka
- YjGgj5260Lt3d8KDG/qdbMttJAKgU/xdQzH2MW0jtDV/+7cUj/sApumoILyv1cXORKI+bqwSx
- ogfAEpKRHtcZ3qEtQueZhW8Xu+2e019UPGPVU0qRA4v2G6oIRAzpinHe15u698zmzbDymL58Y
- lwxjoo4VbkwFV/6Hr98ctBchu4Q9vloUQ/pqLZpaLK1ga8iZgXmf+PzlaojeIr0ObdDBvevEx
- 7OZcdxrTy7Y1NqggNs6PW94MGROjlUKfXkY5V9wZiL5kUIPMuEbzKs1fxUg2d59L21Tn3fP6m
- i7fEXDMKusM1lgLeJl9N0qIk4SBBs+5bFUkc1R6uO78ROGzNzWdO/juF7AjegP2MSh3mgCkLn
- JUwmUH8sWRrwHApJ0rkA==
+        id S1727460AbfKKTvg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Nov 2019 14:51:36 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:38698 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727428AbfKKTvg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Nov 2019 14:51:36 -0500
+Received: by mail-pf1-f196.google.com with SMTP id c13so11387649pfp.5
+        for <linux-mips@vger.kernel.org>; Mon, 11 Nov 2019 11:51:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
+         :references:in-reply-to;
+        bh=CddNZ82s23zfNH8RdAI7LmnuuBp5+KYyqQC6u7vveMs=;
+        b=H90H+F8w0ANVCxxIqslgtYJtBtOj+kfYYWS1NkfTrztEsf59HJhXB06YLxD5a3t+Yg
+         cDoF2ekKH+Ygq0g5cUF1vO0dkrCMZBV9ndYIb9AR9YZ76khRhLcFYjeQimWtaxSpcLwQ
+         uKttse7rZD0sBxvj81MwwXMAfHvHVq9NgtzjJjISjXMVP4+Ws4u3hEkQzzrl84ABKflT
+         cepU3d5as0OcW14fn6R4K3hFGcdeY2T/viqOnDjaLJQjUx1hAfZC7P9eKU73ySElm5GB
+         nNzLpkU3t41/T6RrnaLGoDLLqIxnR0C9Yr3An37zUDbdlzFVWKHq9gWI5pd/ijR0ZNQv
+         Aqew==
+X-Gm-Message-State: APjAAAWEpz4doJaYBkmIS4sCQWocBDKCbMPS/UlXXMBdtm4AwhGC0ain
+        EQp98xEc0k2FX9tDLdBM3hFd/G0EdsZ50A==
+X-Google-Smtp-Source: APXvYqxZ1iB0rqzFoHDZVpsC7zZLLd/YPv9GCqWpGhzvP5Xze57vOv99pAFdvYlER/Uvmo3rPWC2eQ==
+X-Received: by 2002:a62:53:: with SMTP id 80mr33120758pfa.192.1573501894711;
+        Mon, 11 Nov 2019 11:51:34 -0800 (PST)
+Received: from localhost (MIPS-TECHNO.ear1.SanJose1.Level3.net. [4.15.122.74])
+        by smtp.gmail.com with ESMTPSA id f19sm10993123pfk.109.2019.11.11.11.51.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2019 11:51:33 -0800 (PST)
+Message-ID: <5dc9bbc5.1c69fb81.ce9fe.f737@mx.google.com>
+Date:   Mon, 11 Nov 2019 11:51:33 -0800
+From:   Paul Burton <paulburton@kernel.org>
+To:     Huacai Chen <chenhc@lemote.com>
+CC:     Ralf Baechle <ralf@linux-mips.org>, James Hogan <jhogan@kernel.org>
+CC:     Paul Burton <paul.burton@mips.com>,
+        Paul Burton <paulburton@kernel.org>, linux-mips@linux-mips.org,
+        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Huacai Chen <chenhc@lemote.com>
+CC:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH V2 1/2] MIPS: Loongson: Rename LOONGSON1 to LOONGSON32
+References:  <1572847881-21712-1-git-send-email-chenhc@lemote.com>
+In-Reply-To:  <1572847881-21712-1-git-send-email-chenhc@lemote.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Nov 11, 2019 at 11:29 AM Christoph Hellwig <hch@lst.de> wrote:
->
-> On Mon, Nov 11, 2019 at 11:27:27AM +0100, Arnd Bergmann wrote:
-> > Ok, fair enough. Let's just go with your version for now, if only to not
-> > hold your series up more. I'd still suggest we change atyfb to only
-> > use ioremap_uc() on i386 and maybe ia64. I can send a patch for that.
->
-> I don't think we even need it on ia64.  But lets kick off a dicussion
-> with the atyfb, x86 and ia64 maintainers after this series is in.
-> Which was kinda my plan anyway.
+Hello,
 
-I missed your reply and already sent my patch now. I guess it doesn't
-hurt to discuss that in parallel. Anyway I think that this patch is the
-last one you want an Ack from me for (let me know if I missed one), so
+Huacai Chen wrote:
+> Now old Loongson-2E/2F use LOONGSON2EF and will be removed in future,
+> newer Loongson-2/3 use LOONGSON64. So rename LOONGSON1 to LOONGSON32
+> will make the naming style more unified.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Series applied to mips-next.
+
+> MIPS: Loongson: Rename LOONGSON1 to LOONGSON32
+>   commit b2afb64cccd2
+>   https://git.kernel.org/mips/c/b2afb64cccd2
+>   
+>   Signed-off-by: Huacai Chen <chenhc@lemote.com>
+>   [paulburton@kernel.org: Fix checkpatch whitespace warning in irqflags.h]
+>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> 
+> MIPS: Loongson: Unify LOONGSON3/LOONGSON64 Kconfig usage
+>   commit caed1d1b20cb
+>   https://git.kernel.org/mips/c/caed1d1b20cb
+>   
+>   Signed-off-by: Huacai Chen <chenhc@lemote.com>
+>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+
+Thanks,
+    Paul
+
+[ This message was auto-generated; if you believe anything is incorrect
+  then please email paulburton@kernel.org to report it. ]
