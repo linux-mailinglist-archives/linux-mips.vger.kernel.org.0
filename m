@@ -2,71 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8614F8093
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Nov 2019 20:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B696F85AC
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2019 01:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727073AbfKKTvx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 Nov 2019 14:51:53 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:35477 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727054AbfKKTvt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Nov 2019 14:51:49 -0500
-Received: by mail-pf1-f194.google.com with SMTP id d13so11416662pfq.2;
-        Mon, 11 Nov 2019 11:51:48 -0800 (PST)
+        id S1727151AbfKLAzq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 Nov 2019 19:55:46 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:37189 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726906AbfKLAzq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 Nov 2019 19:55:46 -0500
+Received: by mail-oi1-f195.google.com with SMTP id y194so13281971oie.4;
+        Mon, 11 Nov 2019 16:55:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
-         :references:in-reply-to;
-        bh=vHxH19IQgcbR4vgRpwh24Vc6rZkeJyB8LwC+yDOdkQ4=;
-        b=CA0qGfx1v6U5d4epIFs27NZyMp+N4AZowYpMqIWgiCFahwF+JlVAyxB0cP5Cpj+zVR
-         Y6nGnv5K61YCLyXZ2xxyexarWEECnfGRuQWO+sL3M9WQLr1nDkSgIEYsk/ZKCVliLNnj
-         fhI8UctipQDzXn1rmll3253b9SJfoEs/2sz5JkhqAmOfrmqWfKwRpJtWees9ky6qeIe2
-         f5K5/h4zprDJFAUFUeU5dhXRDbfg6vIxZ98bnTcGyKJbZlTOse1/RQlD5qHhd58/kpZg
-         Z0RQe4gKeJRHkqVhBeIpOCYxxaeAcNdRYBVF2Shmm2QiBIvPIf945goZ0NPk2Q/c9BIW
-         Rg/Q==
-X-Gm-Message-State: APjAAAVXRoVHdB+HhI1bagN9twp3iZZu6+yvwZ1wCxAKLPPGvouUuhXh
-        u19z/2xEj7D8MHkCamcV6I8=
-X-Google-Smtp-Source: APXvYqx/eIT+JhYVgguT+Zasw2XSSL8pmNNiDNZmWW+OrXIAwQEGtriZebB9kZFvTLrVCud569suBA==
-X-Received: by 2002:a17:90a:a384:: with SMTP id x4mr1021459pjp.116.1573501908028;
-        Mon, 11 Nov 2019 11:51:48 -0800 (PST)
-Received: from localhost (MIPS-TECHNO.ear1.SanJose1.Level3.net. [4.15.122.74])
-        by smtp.gmail.com with ESMTPSA id t1sm35420pfq.156.2019.11.11.11.51.47
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=S1Rkl+7YzBL7zyaCWJBYcYMMFhNkSGP8H9icKQ+dNa8=;
+        b=FfzluQdxz/qmBJz8mcVYsfOGfY11t2vYFVZzNXqRBBCu8qpHN0PYLk7ViIDuFkCk1y
+         dCnqcypa4LXo7LyCnN46J+jsZW4yDrCPSrgFkEMJzAFuMWunOD9MnVsk7UgF8K4X8oMh
+         GyIz4W5vPcs9Vw802589hhxiw0T2n0iYCjDN4HcBJLaF9DIwy+curm6+RvGAO7cdNvhf
+         N8z9BUV/lA1B5B8Mf9ABtN369EDHAsQnTwqs1ChTCGquP4UCbFhLG7nabYqFzqDmGQo+
+         8T54/XvAp31Fi0Kzjd42Bu/wbfdI45fNtDhennr9R5uKccRisfAzj12s4JHCq75MOwr1
+         Mrug==
+X-Gm-Message-State: APjAAAWK835qij3GSdVu9EAw6u/nGW9izmJaSfjrZv1iEkwX7VzyFxUB
+        9h6YxCSaMkbAJDKlH6VvrQ==
+X-Google-Smtp-Source: APXvYqwt7XIRcL/jlfvvYa/NNzx3/HJnxiWONynmSjKMMkTErHPnguu5aT+y+yjgDRvLGCRzhwmmOQ==
+X-Received: by 2002:aca:3e8a:: with SMTP id l132mr1559897oia.146.1573520145339;
+        Mon, 11 Nov 2019 16:55:45 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 63sm5620622oty.58.2019.11.11.16.55.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2019 11:51:47 -0800 (PST)
-Message-ID: <5dc9bbd3.1c69fb81.93722.069b@mx.google.com>
-Date:   Mon, 11 Nov 2019 11:51:47 -0800
-From:   Paul Burton <paulburton@kernel.org>
-To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
-CC:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>
-CC:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-CC:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: allow building with kcov coverage
-References:  <1573061322-455-1-git-send-email-khoroshilov@ispras.ru>
-In-Reply-To:  <1573061322-455-1-git-send-email-khoroshilov@ispras.ru>
+        Mon, 11 Nov 2019 16:55:44 -0800 (PST)
+Date:   Mon, 11 Nov 2019 18:55:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Zhou Yanjie <zhouyanjie@zoho.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        mturquette@baylibre.com, paul.burton@mips.com, sboyd@kernel.org,
+        robh+dt@kernel.org, syq@debian.org, mark.rutland@arm.com,
+        paul@crapouillou.net
+Subject: Re: [PATCH 1/2 v3] dt-bindings: clock: Add X1000 bindings.
+Message-ID: <20191112005544.GB7038@bogus>
+References: <1571421006-12771-1-git-send-email-zhouyanjie@zoho.com>
+ <1573378102-72380-1-git-send-email-zhouyanjie@zoho.com>
+ <1573378102-72380-2-git-send-email-zhouyanjie@zoho.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1573378102-72380-2-git-send-email-zhouyanjie@zoho.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
-
-Alexey Khoroshilov wrote:
-> Add ARCH_HAS_KCOV and HAVE_GCC_PLUGINS to MIPS config.
-> Disable instrumentation of vdso to avoid build failure.
-
-Applied to mips-next.
-
-> commit dcf78ee66088
-> https://git.kernel.org/mips/c/dcf78ee66088
+On Sun, 10 Nov 2019 17:28:21 +0800, Zhou Yanjie wrote:
+> Add the clock bindings for the X1000 Soc from Ingenic.
 > 
-> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-> Signed-off-by: Paul Burton <paulburton@kernel.org>
+> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+> ---
+>  .../devicetree/bindings/clock/ingenic,cgu.txt      |  1 +
+>  include/dt-bindings/clock/x1000-cgu.h              | 44 ++++++++++++++++++++++
+>  2 files changed, 45 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/x1000-cgu.h
+> 
 
-Thanks,
-    Paul
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paulburton@kernel.org to report it. ]
+If a tag was not added on purpose, please state why and what changed.
