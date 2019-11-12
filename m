@@ -2,51 +2,24 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E47DF888E
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2019 07:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D8CF890C
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Nov 2019 07:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725847AbfKLGaB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Nov 2019 01:30:01 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:34732 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725825AbfKLGaA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Nov 2019 01:30:00 -0500
-Received: by mail-wr1-f65.google.com with SMTP id e6so17208454wrw.1;
-        Mon, 11 Nov 2019 22:29:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=lAYMmo1eJk0nu5Pp/QFztO4nECppTXXyiwDmyLApAMU=;
-        b=CmNQS9o057m02iB3aVZCvD9IKuX8qvcKJgJUgyo4KExtj2bJGSViNfCsIbt5SiuwMO
-         vuoCblpkhQtIhImySY2l9xgcSalma2cLx/gmbDWtxOG+KeWeZqQREyCEiZtz2MaeiTEY
-         RldTTXX6x5mGp2gTJOMJKKnH3ErtuhTGJVb/oxnV4qflBhEKc0iGhFu9X9Z6Ewwj/nv7
-         RJ+bk94WWdoFyERGDm1828mxsXI6cvzgXYdmifbVY3rPGuNlfG2Jz7tz9D0yBEL7amvI
-         N9XaeSRhLvOl3rh+bmOKbDc4uYMU01us4xdrDKX0UOdp1yr6ys5I9p7y6gCnhALJgHcw
-         WXUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=lAYMmo1eJk0nu5Pp/QFztO4nECppTXXyiwDmyLApAMU=;
-        b=SuB+rEekAaU3uHUYMv0CsdK8pzV3QhZQiwcHCDzY3zz1Z7UAanvBUcGoqtJ0/Pd3n3
-         5VMEkbI57C0HVs00yDCEeHl9PhS0oqiFryZhGQ3fBNTSfLT/fOOZaMWu6Sr8OdnHGhN9
-         5c5tRQ7NTdxhsq37lhLHERvcIfTdQ7dNtvZVKB+aVwsKoQ9DAKbhltJuuaCyZWOE5eZU
-         3Zl3DiRM8HVujRcu9sfc8uNyALXnpunp1uGfP9BjZv4GnPxeYmqWJqGx39+8PxqYNLk6
-         8tIm7dz+nILDChTMsNPy9CCwbtOVj4+TGTTuBb77tW7vGZDFMEkIpavSjJkU12u/OLqY
-         8aNw==
-X-Gm-Message-State: APjAAAV3Wmoah0Y4hbrHKSAnZ3OTjgdbaYxT8z1SHVkHxYU8bA4gV1Y7
-        ABiT6Z44UZ9c5Wj3bRZM+so=
-X-Google-Smtp-Source: APXvYqwg7II6op5rkcQCA+kVGqp8JW9qmm3wOv2otknPBBGlW4hCTPNNQNQ0ueZUnows/DjxDY46Ng==
-X-Received: by 2002:adf:ab4c:: with SMTP id r12mr23079230wrc.3.1573540195668;
-        Mon, 11 Nov 2019 22:29:55 -0800 (PST)
-Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
-        by smtp.gmail.com with ESMTPSA id 19sm40418570wrc.47.2019.11.11.22.29.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2019 22:29:54 -0800 (PST)
-Date:   Tue, 12 Nov 2019 07:29:51 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
+        id S1727402AbfKLGwf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Nov 2019 01:52:35 -0500
+Received: from foss.arm.com ([217.140.110.172]:56522 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727399AbfKLGwe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 12 Nov 2019 01:52:34 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 741C81FB;
+        Mon, 11 Nov 2019 22:52:33 -0800 (PST)
+Received: from [10.163.1.187] (unknown [10.163.1.187])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6BA6A3F52E;
+        Mon, 11 Nov 2019 22:55:07 -0800 (PST)
+Subject: Re: [PATCH V9] mm/debug: Add tests validating architecture page table
+ helpers
+To:     Ingo Molnar <mingo@kernel.org>
 Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -84,46 +57,59 @@ Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
         linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V9] mm/debug: Add tests validating architecture page
- table helpers
-Message-ID: <20191112062951.GA100264@gmail.com>
 References: <1573532326-24084-1-git-send-email-anshuman.khandual@arm.com>
+ <20191112062951.GA100264@gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <fe6b8140-1017-d081-570c-62213fe39624@arm.com>
+Date:   Tue, 12 Nov 2019 12:22:45 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1573532326-24084-1-git-send-email-anshuman.khandual@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191112062951.GA100264@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
-* Anshuman Khandual <anshuman.khandual@arm.com> wrote:
 
-> +config DEBUG_VM_PGTABLE
-> +	bool "Debug arch page table for semantics compliance"
-> +	depends on MMU
-> +	depends on DEBUG_VM
-> +	depends on ARCH_HAS_DEBUG_VM_PGTABLE
-> +	help
-> +	  This option provides a debug method which can be used to test
-> +	  architecture page table helper functions on various platforms in
-> +	  verifying if they comply with expected generic MM semantics. This
-> +	  will help architecture code in making sure that any changes or
-> +	  new additions of these helpers still conform to expected
-> +	  semantics of the generic MM.
-> +
-> +	  If unsure, say N.
+On 11/12/2019 11:59 AM, Ingo Molnar wrote:
+> 
+> * Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+> 
+>> +config DEBUG_VM_PGTABLE
+>> +	bool "Debug arch page table for semantics compliance"
+>> +	depends on MMU
+>> +	depends on DEBUG_VM
+>> +	depends on ARCH_HAS_DEBUG_VM_PGTABLE
+>> +	help
+>> +	  This option provides a debug method which can be used to test
+>> +	  architecture page table helper functions on various platforms in
+>> +	  verifying if they comply with expected generic MM semantics. This
+>> +	  will help architecture code in making sure that any changes or
+>> +	  new additions of these helpers still conform to expected
+>> +	  semantics of the generic MM.
+>> +
+>> +	  If unsure, say N.
+> 
+> Since CONFIG_DEBUG_VM is generally disabled in distro kernel packages, 
+> why not make this 'default y' to maximize testing coverage? The code size 
+> increase should be minimal, and DEBUG_VM increases size anyway.
 
-Since CONFIG_DEBUG_VM is generally disabled in distro kernel packages, 
-why not make this 'default y' to maximize testing coverage? The code size 
-increase should be minimal, and DEBUG_VM increases size anyway.
+Sure, will do.
 
-Other than that this looks good to me:
+> 
+> Other than that this looks good to me:
+> 
+>   Reviewed-by: Ingo Molnar <mingo@kernel.org>
 
-  Reviewed-by: Ingo Molnar <mingo@kernel.org>
+Thank you.
 
-Thanks,
-
-	Ingo
+> 
+> Thanks,
+> 
+> 	Ingo
+> 
