@@ -2,102 +2,164 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E63FBA9D
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Nov 2019 22:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66321FBAFB
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Nov 2019 22:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbfKMVZI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Nov 2019 16:25:08 -0500
-Received: from foss.arm.com ([217.140.110.172]:58590 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726338AbfKMVZH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 13 Nov 2019 16:25:07 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7D87D7A7;
-        Wed, 13 Nov 2019 13:25:06 -0800 (PST)
-Received: from [192.168.1.123] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F30ED3F52E;
-        Wed, 13 Nov 2019 13:25:00 -0800 (PST)
-Subject: Re: [PATCH] dma-mapping: treat dev->bus_dma_mask as a DMA limit
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-mips@vger.kernel.org, linux-ide@vger.kernel.org,
-        Paul Mackerras <paulus@samba.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
-        phil@raspberrypi.org, linux-acpi@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>, linux-pci@vger.kernel.org,
-        James Hogan <jhogan@kernel.org>, Len Brown <lenb@kernel.org>,
-        devicetree@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org
-References: <20191113161340.27228-1-nsaenzjulienne@suse.de>
- <f74cd8a6-00bf-46c3-8e2e-d278e72d6e0e@arm.com>
- <48da05e0-5acf-8ab3-a6c9-be4988a9450b@gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <b8e4d303-f226-53d9-f383-73872e41002b@arm.com>
-Date:   Wed, 13 Nov 2019 21:24:52 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1726910AbfKMVlO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Nov 2019 16:41:14 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:50117 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726162AbfKMVlN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Nov 2019 16:41:13 -0500
+Received: from mail-qk1-f176.google.com ([209.85.222.176]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MA844-1ic77X1dpy-00Bazm; Wed, 13 Nov 2019 22:41:09 +0100
+Received: by mail-qk1-f176.google.com with SMTP id e2so3179980qkn.5;
+        Wed, 13 Nov 2019 13:41:08 -0800 (PST)
+X-Gm-Message-State: APjAAAWUlaX5k/dh9wFHu/VYQujHorLDE1tZJWRaiN7EqHBTtUHZdvuu
+        hnPzKvX07XhAG8FNwuxDaSTUA+kjnJYa92OjVQc=
+X-Google-Smtp-Source: APXvYqyjRd+a6foxC3+k9qUEopPf1CRknFxQHbHw9aZuys53MC+zVt0jx9JeruKLHIsAWsaGcA9LllqlMRQxiR5o4ug=
+X-Received: by 2002:a37:4f0a:: with SMTP id d10mr4703334qkb.286.1573681267104;
+ Wed, 13 Nov 2019 13:41:07 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <48da05e0-5acf-8ab3-a6c9-be4988a9450b@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+References: <20191108210236.1296047-1-arnd@arndb.de>
+In-Reply-To: <20191108210236.1296047-1-arnd@arndb.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 13 Nov 2019 22:40:50 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1CbDaPqNsOVOuq2UDPSOwzd2U_WEmmXBMwCOhv1=iaSQ@mail.gmail.com>
+Message-ID: <CAK8P3a1CbDaPqNsOVOuq2UDPSOwzd2U_WEmmXBMwCOhv1=iaSQ@mail.gmail.com>
+Subject: Re: [PATCH 00/23] y2038 cleanups
+To:     y2038 Mailman List <y2038@lists.linaro.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Tony Luck <tony.luck@intel.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        David Miller <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Eric Paris <eparis@parisplace.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        Christian Brauner <christian@brauner.io>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        christophe leroy <christophe.leroy@c-s.fr>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        alpha <linux-alpha@vger.kernel.org>, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um@lists.infradead.org,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        linux-aio <linux-aio@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        SElinux list <selinux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:t9jsa1d3irkSvjYT/rEVzAEkwZVcthQkNq7GL9PWrByG2yn/ofy
+ 8fgkWFb7yzBDhxggib3MFVAG5e4TExjEbTOk4rBmOFRV8Z0nAydeuemmrZedaWDRbilNXuy
+ NmTQNhL2f4T7/p0oM9CgHzRhNyXfyVm+jWuv44PuQ4PFfCAkqAjtWz90qM5ZdfkGAf4n22W
+ cO6/64/K+Hbl+/pD4TCAw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4GD3zQCUG/U=:u8KPHFHcLf73169L5bs8bd
+ Z3kilw5OQOJ51slVfyv48BfHKjUeXcr+fJ2u45Kzx18zYiu2AKmH6ZjNMBv8Z1Fi95V25C/TC
+ fpxwbADUtzoRKZwKTHxmLDwqc/bWFmkKgomoPalGRo18fIa8xiHrYanOdB9pr3ZlCYBpwne8/
+ ygyOCaAIeB+5EUMvMd4gTk4JL4j4Lyxr3ghbVkZ5VyqjZ+1EbBbxjw1BbAb32gMNbGLc6QnKD
+ XrM6i7uPvn5gDb8ckQDKQ1Zczz6PXXeXCUxXE/12lJNWRl+MJ9kyiHU4m+4JEL37n5bL7zhar
+ gqoCvFCmTY8Nirsdm0tNGa7oM70YXf2eD6Yr4ZphgxE0rlP5cht0ROBWRkB5Z67OvFSKPcyy9
+ q7aDiaGLMpVsX/TIk5GTKGw/9pr39C5aFcxXQDTsX/EO3Pks3UiL5zYbj7LATgElV/UAWLHNR
+ QcQAHYRRSfrrf0nCVnJhOZiuJwYS3i23RjFjF2ZUDtzy85NfJBRdus4N5VtexqszcSpgIqAB0
+ Z1helxbHW+pX4eff8B5DwM+xxkqLKVTbbGpbPRr+OyKQBEO5R4uzDHnBECPvkA7oHbAf9IoOG
+ Xx/ZdkY79cqP1duDzuGkU/obiqfWEJI4KiUJYg1LqP4RaCH1pHIYkE8ZnJBuq9+wBEvOjbFTi
+ BKOk4YBy22M0llu56auY0kznLVVknOE+fS4d2fpHG+skogpTkJ32csRy7QZDKKOHXCrSqIw0N
+ eJvSfpBVcYmPhOR6E127MVUrLiXsnZTrgBybVqltTDrEZPpsPPWrn3zQ9jZ5QgKEXuPmHrOVy
+ 7Txdt9e0cr1UEc6SEe5lI1nmxP/uOHf3iHGiloI5gi9g986J9+vuZ7Q04BEetmXhvJBQfPI7x
+ mbb7T23Q5o8NIb6sMiRw==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2019-11-13 8:41 pm, Florian Fainelli wrote:
-> On 11/13/19 12:34 PM, Robin Murphy wrote:
->> On 13/11/2019 4:13 pm, Nicolas Saenz Julienne wrote:
->>> Using a mask to represent bus DMA constraints has a set of limitations.
->>> The biggest one being it can only hold a power of two (minus one). The
->>> DMA mapping code is already aware of this and treats dev->bus_dma_mask
->>> as a limit. This quirk is already used by some architectures although
->>> still rare.
->>>
->>> With the introduction of the Raspberry Pi 4 we've found a new contender
->>> for the use of bus DMA limits, as its PCIe bus can only address the
->>> lower 3GB of memory (of a total of 4GB). This is impossible to represent
->>> with a mask. To make things worse the device-tree code rounds non power
->>> of two bus DMA limits to the next power of two, which is unacceptable in
->>> this case.
->>>
->>> In the light of this, rename dev->bus_dma_mask to dev->bus_dma_limit all
->>> over the tree and treat it as such. Note that dev->bus_dma_limit is
->>> meant to contain the higher accesible DMA address.
->>
->> Neat, you win a "why didn't I do it that way in the first place?" :)
->>
->> Looking at it without all the history of previous attempts, this looks
->> entirely reasonable, and definitely a step in the right direction.
-> 
-> And while you are changing those, would it make sense to not only rename
-> the structure member but introduce a getter and setter in order to ease
-> future work where this would no longer be a scalar?
+On Fri, Nov 8, 2019 at 10:04 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> This is a series of cleanups for the y2038 work, mostly intended
+> for namespace cleaning: the kernel defines the traditional
+> time_t, timeval and timespec types that often lead to y2038-unsafe
+> code. Even though the unsafe usage is mostly gone from the kernel,
+> having the types and associated functions around means that we
+> can still grow new users, and that we may be missing conversions
+> to safe types that actually matter.
+>
+> As there is no rush on any of these patches, I would either
+> queue them up in linux-next through my y2038 branch, or
+> Thomas could add them to the tip tree if he wants.
+>
+> As mentioned in another series, this is part of a larger
+> effort to fix all the remaining bits and pieces that are
+> not completed yet from the y2038 conversion, and the full
+> set can be found at:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=y2038-endgame
+>
+> Maintainers, please review and provide Acks.
+>
+> Let me know if you have any opinion on whether we should do
+> the include last two patches of this series or not.
+>
+>      Arnd
+>
+> Arnd Bergmann (23):
+>   y2038: remove CONFIG_64BIT_TIME
+>   y2038: add __kernel_old_timespec and __kernel_old_time_t
+>   y2038: vdso: change timeval to __kernel_old_timeval
+>   y2038: vdso: change timespec to __kernel_old_timespec
+>   y2038: vdso: change time_t to __kernel_old_time_t
+>   y2038: vdso: nds32: open-code timespec_add_ns()
+>   y2038: vdso: powerpc: avoid timespec references
+>   y2038: ipc: remove __kernel_time_t reference from headers
+>   y2038: stat: avoid 'time_t' in 'struct stat'
+>   y2038: uapi: change __kernel_time_t to __kernel_old_time_t
+>   y2038: rusage: use __kernel_old_timeval
+>   y2038: syscalls: change remaining timeval to __kernel_old_timeval
+>   y2038: socket: remove timespec reference in timestamping
+>   y2038: make ns_to_compat_timeval use __kernel_old_timeval
+>   y2038: elfcore: Use __kernel_old_timeval for process times
+>   y2038: timerfd: Use timespec64 internally
+>   y2038: time: avoid timespec usage in settimeofday()
+>   y2038: itimer: compat handling to itimer.c
+>   y2038: use compat_{get,set}_itimer on alpha
+>   y2038: move itimer reset into itimer.c
+>   y2038: itimer: change implementation to timespec64
+>   [RFC] y2038: itimer: use ktime_t internally
+>   y2038: allow disabling time32 system calls
 
-I doubt it - once we get as a far as supporting multiple DMA ranges, 
-there will be a whole load of infrastructure churn anyway if only to 
-replace dma_pfn_offset, and I'm not sure a simple get/set paradigm would 
-even be viable, so it's probably better to save that until clearly 
-necessary.
+I've dropped the "[RFC] y2038: itimer: use ktime_t internally" patch
+for the moment,
+and added two other patches from other series:
 
-Robin.
+y2038: remove CONFIG_64BIT_TIME
+y2038: socket: use __kernel_old_timespec instead of timespec
+
+Tentatively pushed out the patches with the Acks I have received so
+far to my y2038 branch on git.kernel.org so it gets included in linux-next.
+
+If I hear no complaints, I'll send a pull request for the merge window,
+along with the compat-ioctl series I have already queued up in the same
+branch.
+
+    Arnd
