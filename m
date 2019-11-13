@@ -2,118 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FBEFAB51
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Nov 2019 08:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF47EFAE57
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Nov 2019 11:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726521AbfKMHxD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Nov 2019 02:53:03 -0500
-Received: from mout-p-201.mailbox.org ([80.241.56.171]:42506 "EHLO
-        mout-p-201.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725976AbfKMHxD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Nov 2019 02:53:03 -0500
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 47CcKk24kPzQlBh;
-        Wed, 13 Nov 2019 08:52:58 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by spamfilter03.heinlein-hosting.de (spamfilter03.heinlein-hosting.de [80.241.56.117]) (amavisd-new, port 10030)
-        with ESMTP id Bp_N38N4yiqo; Wed, 13 Nov 2019 08:52:50 +0100 (CET)
-Date:   Wed, 13 Nov 2019 18:52:27 +1100
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Jann Horn <jannh@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, libc-alpha@sourceware.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v15 6/9] namei: LOOKUP_{IN_ROOT,BENEATH}: permit limited
- ".." resolution
-Message-ID: <20191113075227.lu5b5uvc2nuk76uk@yavin.dot.cyphar.com>
-References: <20191105090553.6350-1-cyphar@cyphar.com>
- <20191105090553.6350-7-cyphar@cyphar.com>
- <20191113020917.GC26530@ZenIV.linux.org.uk>
+        id S1726491AbfKMKS2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Nov 2019 05:18:28 -0500
+Received: from mx2.suse.de ([195.135.220.15]:43574 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726107AbfKMKS2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 13 Nov 2019 05:18:28 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id CE8D6B547;
+        Wed, 13 Nov 2019 10:18:26 +0000 (UTC)
+Message-ID: <fc488c5ff7dc7e1b9d96660f0da9b423b3f5094a.camel@suse.de>
+Subject: Re: unify the dma_capable definition
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Christoph Hellwig <hch@lst.de>, iommu@lists.linux-foundation.org,
+        Russell King <linux@armlinux.org.uk>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Wed, 13 Nov 2019 11:18:25 +0100
+In-Reply-To: <20191113073539.9660-1-hch@lst.de>
+References: <20191113073539.9660-1-hch@lst.de>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-cvyL9zADiQPcce4MqJVv"
+User-Agent: Evolution 3.34.1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qprdfpbfkuvffdu5"
-Content-Disposition: inline
-In-Reply-To: <20191113020917.GC26530@ZenIV.linux.org.uk>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
---qprdfpbfkuvffdu5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--=-cvyL9zADiQPcce4MqJVv
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On 2019-11-13, Al Viro <viro@zeniv.linux.org.uk> wrote:
-> On Tue, Nov 05, 2019 at 08:05:50PM +1100, Aleksa Sarai wrote:
+On Wed, 2019-11-13 at 08:35 +0100, Christoph Hellwig wrote:
+> Hi all,
 >=20
-> > One other possible alternative (which previous versions of this patch
-> > used) would be to check with path_is_under() if there was a racing
-> > rename or mount (after re-taking the relevant seqlocks). While this does
-> > work, it results in possible O(n*m) behaviour if there are many renames
-> > or mounts occuring *anywhere on the system*.
->=20
-> BTW, do you realize that open-by-fhandle (or working nfsd, for that matte=
-r)
-> will trigger arseloads of write_seqlock(&rename_lock) simply on d_splice_=
-alias()
-> bringing disconnected subtrees in contact with parent?
+> there is no good reason to have different version of dma_capable.
+> This series removes the arch overrides and also adds a few cleanups
+> in the same area.
 
-I wasn't aware of that -- that makes path_is_under() even less viable.
-I'll reword it to be clearer that path_is_under() isn't a good idea and
-why we went with -EAGAIN over an in-kernel retry.
+Reviewed-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
+for the whole series,
+Thanks!
 
---qprdfpbfkuvffdu5
+
+--=-cvyL9zADiQPcce4MqJVv
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXcu2OAAKCRCdlLljIbnQ
-EtqZAQCjNdiANKBF7WCOTHUeD48U+o/7WczR7I/1WTsCcSBp9gEA6HgEdHKRHmol
-+5Fvn3Eg1Tya83fWQgWoVLu8i6CUUwE=
-=voMa
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl3L2HEACgkQlfZmHno8
+x/4wSQf/XC3BfmBQXcl1ZtWzTr+4bUfUUlsKGdPH0jSKURaYqy7S86ww5oUlbFMC
+GIc3I7oN23Q6+p5XDoS/T+tZytUy7HyMB8Z6JRrMjigkV8t0gW58PbjzcHeYQxVL
+XnfiZTwo/uVYqJyaPQFDmeHn2H8FpeJkX9oGPohHAY4QX6Iw/dc4cO9S6be933vr
+ri4Hau+t8D6/9iT2Wkl7x7hUqinW1yo/6MXhyx44tCpT6RxAimXnK01Gb2G35hiO
+t+qRXCA6dvnKlkm4wBQExVT9w1hJt0rHQpcnA5Psb16thfClv3X7esvIMAS4NiJO
+mn9iwYlDzdlqgyHT8Qz+Q7qTS9YZog==
+=EWiZ
 -----END PGP SIGNATURE-----
 
---qprdfpbfkuvffdu5--
+--=-cvyL9zADiQPcce4MqJVv--
+
