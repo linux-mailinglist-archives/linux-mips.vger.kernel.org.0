@@ -2,92 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB3FFC7D5
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Nov 2019 14:37:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1277FCA93
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Nov 2019 17:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726678AbfKNNhk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Nov 2019 08:37:40 -0500
-Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25871 "EHLO
-        sender4-pp-o98.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726330AbfKNNhk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Nov 2019 08:37:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1573738644; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=FdOQiHFeC6aCmfyGmWisw36xuQYXQa4bK3Z1I6RlF0HbjWtTTPQmbVyaYTw7Jij1ZsTraydwLJ9Oioul/Uk23mX2pJZ8nw9gprNvxdNodtexjh473P3FSH6VhXmXvmX6o1TSpWNpjuWrPuy7a2f66SXC541tmyzho/eqJchnQQA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1573738644; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=NfiC+cinjSWRt41jD5jXQ2ueHOhgmVAdrHkxzjmGKlo=; 
-        b=Tpo7W7Pf/wO3m8cUa+1PW0oe7gHnV9eIsgkHTdmYOABxxuZ3Cm77pZeFr8okldtBDEFa+aSBn5jT1HH130Hv3RHin/U2aZC/sBvePcLHoT7BnmHfRYIPCwPVueEZ2KIvvr5SYFD8ReU7wj3QCcTrF6OoFjRvNaZ4JOtkk9gGZWc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zoho.com;
-        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
-        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
-DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
-  s=zapps768; d=zoho.com; 
-  h=subject:to:references:cc:from:message-id:date:user-agent:mime-version:in-reply-to:content-type; 
-  b=er0q6KMsXWMJx/9NDexN/JHCN4w07a93L/INEGkUfisGFkd5a3rnxXM6dDDB0Ues5385ZXxO5yGX
-    h7XxGVXuZZ7AF4ZsdJ1+jVk4Df7rqZDFvA7Jo+xolZ1+/tsxY7al  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1573738644;
-        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
-        h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        l=1056; bh=NfiC+cinjSWRt41jD5jXQ2ueHOhgmVAdrHkxzjmGKlo=;
-        b=jtcTtrw1onsboQFcintNiPlH2M8TzlpO6/Fuz7E0WVXcnxjOupxuYC4XojhVtISq
-        wvovWpBafiQQsjrm0jsgtimzF6OrElCGXNa397kUjmxc04wPLMwDMGDywWwxaxG0IMf
-        0VYkGfbE1Qr+Nldbcsg5rYJpEjnbm2JJfth17TIk=
-Received: from [192.168.10.218] (171.221.112.167 [171.221.112.167]) by mx.zohomail.com
-        with SMTPS id 15737386427141007.0962792641557; Thu, 14 Nov 2019 05:37:22 -0800 (PST)
-Subject: Re: [PATCH 1/2 v3] dt-bindings: clock: Add X1000 bindings.
-To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>
-References: <1571421006-12771-1-git-send-email-zhouyanjie@zoho.com>
- <1573378102-72380-1-git-send-email-zhouyanjie@zoho.com>
- <1573378102-72380-2-git-send-email-zhouyanjie@zoho.com>
- <20191112005544.GB7038@bogus> <20191113235955.927B6206EE@mail.kernel.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        mturquette@baylibre.com, paul.burton@mips.com, robh+dt@kernel.org,
-        syq@debian.org, mark.rutland@arm.com, paul@crapouillou.net
-From:   Zhou Yanjie <zhouyanjie@zoho.com>
-Message-ID: <5DCD5880.9090504@zoho.com>
-Date:   Thu, 14 Nov 2019 21:37:04 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
- Thunderbird/38.8.0
+        id S1726533AbfKNQLT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Nov 2019 11:11:19 -0500
+Received: from mail-io1-f66.google.com ([209.85.166.66]:38958 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726482AbfKNQLT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Nov 2019 11:11:19 -0500
+Received: by mail-io1-f66.google.com with SMTP id k1so7403529ioj.6
+        for <linux-mips@vger.kernel.org>; Thu, 14 Nov 2019 08:11:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m/6eJjoqatlkHX327WsvzFKy6FL3fKgPjPYcZivid0o=;
+        b=AiurrKxewNIgEi3Qc6AI4HYquUZOxMUDDDEB4z7QR5Qc3jretuIDN/CPqLL/KNil0+
+         uG62v8LYmfkf3YQQ+ZypHZUpDwShD0oQL4dCmML/1uNfP7DOAg/9G85ZtXxpPcKJ24y0
+         fmQVgK/gitIAxmcJYMo0YJjFbj5qdty2SABIs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m/6eJjoqatlkHX327WsvzFKy6FL3fKgPjPYcZivid0o=;
+        b=Tzk/6Ns8LXgBqptKihEJI9K9MrDVzCFKxL/1IKR0ZUw24/OzUTJcmMhXwJN3O/GiFu
+         anAHOr6vIwDjYbk/wHMEzSnopp8afBSoiUORLzsMQvP7Hkef3VKDU8mYNoPAiSkz0kcM
+         sHDMuGMbZRZNOqKTPzR9SV2WrXiJyibhGeGNGDz5CO6U8IFifqKSC3g/xHBQoRLfnQjh
+         /0HgnZKZmceB3av2FtqgmIVi8a1AWUSZLbcBlI6/+V9zHEgLzCTFuQ/edhqxhp1sPOzi
+         3uH3QHQJYjc7nVHx3SCs2HqAvc5x5kt6wHFaFTC+pnm82a75DQ+SBB+rDYeRRGHaSQj3
+         y5JA==
+X-Gm-Message-State: APjAAAUA54kZbvwf4SIloqBQdbHmdBaNx7Rhzw8oNdzpSp98obc/fbDQ
+        vPHZv23IUEk/2EdX4XKdXiI6Yp76crY=
+X-Google-Smtp-Source: APXvYqz2DQZncd2oxX2qFv7ihnut43XsAhnOEvU6EOWBSMgvq75fwdwIQCCLL4moEy/4CG9o6hY+1Q==
+X-Received: by 2002:a05:6638:219:: with SMTP id e25mr8655563jaq.105.1573747876281;
+        Thu, 14 Nov 2019 08:11:16 -0800 (PST)
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com. [209.85.166.54])
+        by smtp.gmail.com with ESMTPSA id z19sm808119ilj.49.2019.11.14.08.11.14
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Nov 2019 08:11:15 -0800 (PST)
+Received: by mail-io1-f54.google.com with SMTP id v17so7363406iol.12
+        for <linux-mips@vger.kernel.org>; Thu, 14 Nov 2019 08:11:14 -0800 (PST)
+X-Received: by 2002:a02:a813:: with SMTP id f19mr8010531jaj.12.1573747874146;
+ Thu, 14 Nov 2019 08:11:14 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191113235955.927B6206EE@mail.kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
+References: <20191109191644.191766-1-dianders@chromium.org>
+ <20191109111623.1.I30a0cac4d9880040c8d41495bd9a567fe3e24989@changeid> <20191114105125.t3jma3ghwj2wtv6w@holly.lan>
+In-Reply-To: <20191114105125.t3jma3ghwj2wtv6w@holly.lan>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 14 Nov 2019 08:10:56 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=Xkxm-eTXmU9s+Bu+biLmjkioVqmHZEBVguZ85cCQywog@mail.gmail.com>
+Message-ID: <CAD=FV=Xkxm-eTXmU9s+Bu+biLmjkioVqmHZEBVguZ85cCQywog@mail.gmail.com>
+Subject: Re: [PATCH 1/5] MIPS: kdb: Remove old workaround for backtracing on
+ other CPUs
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Paul Burton <paul.burton@mips.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        qiaochong <qiaochong@loongson.cn>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        James Hogan <jhogan@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Stephen,
+Hi,
 
-On 2019=E5=B9=B411=E6=9C=8814=E6=97=A5 07:59, Stephen Boyd wrote:
-> Quoting Rob Herring (2019-11-11 16:55:44)
->> On Sun, 10 Nov 2019 17:28:21 +0800, Zhou Yanjie wrote:
->>> Add the clock bindings for the X1000 Soc from Ingenic.
->>>
->>> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
->>> ---
->>>   .../devicetree/bindings/clock/ingenic,cgu.txt      |  1 +
->>>   include/dt-bindings/clock/x1000-cgu.h              | 44 +++++++++++++=
-+++++++++
->>>   2 files changed, 45 insertions(+)
->>>   create mode 100644 include/dt-bindings/clock/x1000-cgu.h
->>>
->> Please add Acked-by/Reviewed-by tags when posting new versions. However,
->> there's no need to repost patches *only* to add the tags. The upstream
->> maintainer will do that for acks received on the version they apply.
->>
->> If a tag was not added on purpose, please state why and what changed.
-> It looks like some extra defines were added. I carried forward your
-> review tag.
+On Thu, Nov 14, 2019 at 2:51 AM Daniel Thompson
+<daniel.thompson@linaro.org> wrote:
 >
+> On Sat, Nov 09, 2019 at 11:16:40AM -0800, Douglas Anderson wrote:
+> > As of commit 2277b492582d ("kdb: Fix stack crawling on 'running' CPUs
+> > that aren't the master") we no longer need any special case for doing
+> > stack dumps on CPUs that are not the kdb master.  Let's remove.
+> >
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > ---
+> > I have no way to test this personally, so hopefully someone who uses
+> > kdb/kgdb on MIPS can.
+>
+> I took this as a hint to add mips support to kgdbtest ;-)
+>
+> Support is added and working well. Unfortunately lack of familiarity
+> with mips means I have not yet figured out which mips defconfig gives
+> us working SMP (and what the corresponding qemu invocation should be).
 
-I'm sorry that my mistake has caused you extra work,
-I'll be careful to add tags next time.
-
-Best regards!
+Nice!
 
 
+> I think that means I still can't (quite) exercise this code fully.
+> The most appropriate test is bta on an SMP system, right?
+
+Yeah, or at least "btc".
+
+
+> > Ideally this patch should be Acked by MIPS folks and then land through
+> > the kdb/kgdb tree since the next patch in the series, ("kdb:
+> > kdb_current_regs should be private") depends on it.
+>
+> An Acked-by from a MIPS maintainer would be very welcome. Perhaps
+> with a bit of extra work on the above I might be able to provide
+> a Tested-by:.
+>
+> I didn't see anything that particularly bothered me in the patches but
+> given we're already at -rc7 I'm inclined to target this patchset for 5.6
+> rather than 5.5.
+
+That's fine.  This is all just cleanup stuff so targeting 5.6 is fine.
+
+-Doug
