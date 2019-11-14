@@ -2,71 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 987A4FBFE3
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Nov 2019 06:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFBBFC0D2
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Nov 2019 08:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725807AbfKNFxh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Nov 2019 00:53:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55048 "EHLO mail.kernel.org"
+        id S1725920AbfKNHfF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Nov 2019 02:35:05 -0500
+Received: from verein.lst.de ([213.95.11.211]:38005 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725601AbfKNFxg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 14 Nov 2019 00:53:36 -0500
-Received: from localhost (unknown [124.219.31.93])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0326D206EF;
-        Thu, 14 Nov 2019 05:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573710814;
-        bh=Xgz30iKxQRd0GmFUCyF7YPAyanz8lf1JP9Mom7yE9r4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J0XNmZ15b70yc2XNpvkSuw2RpGI9ylJQi9gba9NNc2hgj10ACl+ju8gaDUcDC0iFF
-         /aLH2/7VmLClSziGel24ZA0ABe50QYLZphMjNjc8+WVUyrJ9IEN/arvq0PZpmDa7Rg
-         Y5OzFGHsIEGDRlLlNTewvRr623ZX8mQiR7juuA04=
-Date:   Thu, 14 Nov 2019 13:53:21 +0800
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Amit Pundir <amit.pundir@linaro.org>
-Cc:     Sasha Levin <sashal@kernel.org>, Lee Jones <lee.jones@linaro.org>,
-        Stable <stable@vger.kernel.org>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
+        id S1725914AbfKNHfF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 14 Nov 2019 02:35:05 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 910B768AFE; Thu, 14 Nov 2019 08:34:59 +0100 (CET)
+Date:   Thu, 14 Nov 2019 08:34:59 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>, phil@raspberrypi.org,
         Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
         James Hogan <jhogan@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH] MIPS: BCM63XX: fix switch core reset on BCM6368
-Message-ID: <20191114055321.GA353293@kroah.com>
-References: <1573642620-31192-1-git-send-email-amit.pundir@linaro.org>
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ide@vger.kernel.org,
+        iommu@lists.linux-foundation.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] dma-mapping: treat dev->bus_dma_mask as a DMA limit
+Message-ID: <20191114073459.GB26546@lst.de>
+References: <20191113161340.27228-1-nsaenzjulienne@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1573642620-31192-1-git-send-email-amit.pundir@linaro.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20191113161340.27228-1-nsaenzjulienne@suse.de>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Nov 13, 2019 at 04:27:00PM +0530, Amit Pundir wrote:
-> From: Jonas Gorski <jonas.gorski@gmail.com>
+On Wed, Nov 13, 2019 at 05:13:39PM +0100, Nicolas Saenz Julienne wrote:
+> Using a mask to represent bus DMA constraints has a set of limitations.
+> The biggest one being it can only hold a power of two (minus one). The
+> DMA mapping code is already aware of this and treats dev->bus_dma_mask
+> as a limit. This quirk is already used by some architectures although
+> still rare.
 > 
-> commit 8a38dacf87180738d42b058334c951eba15d2d47 upstream.
+> With the introduction of the Raspberry Pi 4 we've found a new contender
+> for the use of bus DMA limits, as its PCIe bus can only address the
+> lower 3GB of memory (of a total of 4GB). This is impossible to represent
+> with a mask. To make things worse the device-tree code rounds non power
+> of two bus DMA limits to the next power of two, which is unacceptable in
+> this case.
 > 
-> The Ethernet Switch core mask was set to 0, causing the switch core to
-> be not reset on BCM6368 on boot. Provide the proper mask so the switch
-> core gets reset to a known good state.
+> In the light of this, rename dev->bus_dma_mask to dev->bus_dma_limit all
+> over the tree and treat it as such. Note that dev->bus_dma_limit is
+> meant to contain the higher accesible DMA address.
+
+This looks sensible modulo the minor comments in this thread.
+
 > 
-> Fixes: 799faa626c71 ("MIPS: BCM63XX: add core reset helper")
-> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
-> Signed-off-by: Paul Burton <paul.burton@mips.com>
-> Cc: linux-mips@vger.kernel.org
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: James Hogan <jhogan@kernel.org>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> 
 > ---
-> Cherry-picked from lede/openwrt https://git.lede-project.org/?p=source.git.
-> Build tested on v4.{19,14,9,4}.y and v3.18.y for ARCH=mips bcm63xx_defconfig.
+> 
+> Note this is rebased on top of Christoph's latest DMA series:
+> https://www.spinics.net/lists/arm-kernel/msg768600.html
 
-Now queued up, thanks.
-
-greg k-h
+FYI, I'll plan to merge those tonight unless anyone screams.
