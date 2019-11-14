@@ -2,116 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E758FBFD1
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Nov 2019 06:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 987A4FBFE3
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Nov 2019 06:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726060AbfKNFoy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Nov 2019 00:44:54 -0500
-Received: from zeniv.linux.org.uk ([195.92.253.2]:33296 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbfKNFox (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Nov 2019 00:44:53 -0500
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iV7v2-0000Ln-Fm; Thu, 14 Nov 2019 05:43:48 +0000
-Date:   Thu, 14 Nov 2019 05:43:48 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        David Drysdale <drysdale@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, libc-alpha@sourceware.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v15 3/9] namei: LOOKUP_NO_XDEV: block mountpoint crossing
-Message-ID: <20191114054348.GH26530@ZenIV.linux.org.uk>
-References: <20191105090553.6350-1-cyphar@cyphar.com>
- <20191105090553.6350-4-cyphar@cyphar.com>
- <20191113013630.GZ26530@ZenIV.linux.org.uk>
- <20191114044945.ldedzjrb4s7i7irr@yavin.dot.cyphar.com>
+        id S1725807AbfKNFxh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Nov 2019 00:53:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55048 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725601AbfKNFxg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 14 Nov 2019 00:53:36 -0500
+Received: from localhost (unknown [124.219.31.93])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0326D206EF;
+        Thu, 14 Nov 2019 05:53:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573710814;
+        bh=Xgz30iKxQRd0GmFUCyF7YPAyanz8lf1JP9Mom7yE9r4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J0XNmZ15b70yc2XNpvkSuw2RpGI9ylJQi9gba9NNc2hgj10ACl+ju8gaDUcDC0iFF
+         /aLH2/7VmLClSziGel24ZA0ABe50QYLZphMjNjc8+WVUyrJ9IEN/arvq0PZpmDa7Rg
+         Y5OzFGHsIEGDRlLlNTewvRr623ZX8mQiR7juuA04=
+Date:   Thu, 14 Nov 2019 13:53:21 +0800
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Amit Pundir <amit.pundir@linaro.org>
+Cc:     Sasha Levin <sashal@kernel.org>, Lee Jones <lee.jones@linaro.org>,
+        Stable <stable@vger.kernel.org>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH] MIPS: BCM63XX: fix switch core reset on BCM6368
+Message-ID: <20191114055321.GA353293@kroah.com>
+References: <1573642620-31192-1-git-send-email-amit.pundir@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191114044945.ldedzjrb4s7i7irr@yavin.dot.cyphar.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <1573642620-31192-1-git-send-email-amit.pundir@linaro.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Nov 14, 2019 at 03:49:45PM +1100, Aleksa Sarai wrote:
-> On 2019-11-13, Al Viro <viro@zeniv.linux.org.uk> wrote:
-> > On Tue, Nov 05, 2019 at 08:05:47PM +1100, Aleksa Sarai wrote:
-> > 
-> > > @@ -862,6 +870,8 @@ static int nd_jump_root(struct nameidata *nd)
-> > >  void nd_jump_link(struct path *path)
-> > >  {
-> > >  	struct nameidata *nd = current->nameidata;
-> > > +
-> > > +	nd->last_magiclink.same_mnt = (nd->path.mnt == path->mnt);
-> > >  	path_put(&nd->path);
-> > >  
-> > >  	nd->path = *path;
-> > > @@ -1082,6 +1092,10 @@ const char *get_link(struct nameidata *nd)
-> > >  		if (nd->flags & LOOKUP_MAGICLINK_JUMPED) {
-> > >  			if (unlikely(nd->flags & LOOKUP_NO_MAGICLINKS))
-> > >  				return ERR_PTR(-ELOOP);
-> > > +			if (unlikely(nd->flags & LOOKUP_NO_XDEV)) {
-> > > +				if (!nd->last_magiclink.same_mnt)
-> > > +					return ERR_PTR(-EXDEV);
-> > > +			}
-> > >  		}
-> > 
-> > Ugh...  Wouldn't it be better to take that logics (some equivalent thereof)
-> > into nd_jump_link()?  Or just have nd_jump_link() return an error...
+On Wed, Nov 13, 2019 at 04:27:00PM +0530, Amit Pundir wrote:
+> From: Jonas Gorski <jonas.gorski@gmail.com>
 > 
-> This could be done, but the reason for stashing it away in
-> last_magiclink is because of the future magic-link re-opening patches
-> which can't be implemented like that without putting the open_flags
-> inside nameidata (which was decided to be too ugly a while ago).
+> commit 8a38dacf87180738d42b058334c951eba15d2d47 upstream.
 > 
-> My point being that I could implement it this way for this series, but
-> I'd have to implement something like last_magiclink when I end up
-> re-posting the magic-link stuff in a few weeks.
+> The Ethernet Switch core mask was set to 0, causing the switch core to
+> be not reset on BCM6368 on boot. Provide the proper mask so the switch
+> core gets reset to a known good state.
 > 
-> Looking at all the nd_jump_link() users, the other option is to just
-> disallow magic-link crossings entirely for LOOKUP_NO_XDEV. The only
-> thing allowing them permits is to resolve file descriptors that are
-> pointing to the same procfs mount -- and it's unclear to me how useful
-> that really is (apparmorfs and nsfs will always give -EXDEV because
-> aafs_mnt and nsfs_mnt are internal kernel vfsmounts).
+> Fixes: 799faa626c71 ("MIPS: BCM63XX: add core reset helper")
+> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+> Signed-off-by: Paul Burton <paul.burton@mips.com>
+> Cc: linux-mips@vger.kernel.org
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: James Hogan <jhogan@kernel.org>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
+> ---
+> Cherry-picked from lede/openwrt https://git.lede-project.org/?p=source.git.
+> Build tested on v4.{19,14,9,4}.y and v3.18.y for ARCH=mips bcm63xx_defconfig.
 
-I would rather keep the entire if (nd->flags & LOOKUP_MAGICLINK_JUMPED)
-out of the get_link().  If you want to generate some error if
-nd_jump_link() has been called, just do it right there.  The fewer
-pieces of state need to be carried around, the better...
+Now queued up, thanks.
 
-And as for opening them...  Why would you need full open_flags in there?
-Details, please...
+greg k-h
