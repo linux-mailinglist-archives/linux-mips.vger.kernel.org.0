@@ -2,108 +2,167 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D754FC4AD
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Nov 2019 11:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C67FC760
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Nov 2019 14:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726474AbfKNKve (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Nov 2019 05:51:34 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:37903 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726106AbfKNKvc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Nov 2019 05:51:32 -0500
-Received: by mail-wr1-f68.google.com with SMTP id i12so5903641wro.5
-        for <linux-mips@vger.kernel.org>; Thu, 14 Nov 2019 02:51:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Em/ldcBTiCkH89iKxfabm8RKdGIliRRbSNYWY3rbkD4=;
-        b=M8nTD+rJCM8aJ5Gr+BGRla3e74JOsongzpE3NPb9CW5En3sYtp6dkkCANBdmu4Jz2s
-         3OovYM867yc+76ka0oIsnRZejqkVigTGWm/uX95LvJ9x/pfP7Ix456YKay2EgrcHPD7A
-         r9X7n5J9D009fVndtxJF4c+IIwCeUq2zUdrH+nIp1EvedN9F9mGioF+zdNxdEqdxrPUi
-         Qqr1SAFoGmSsxqs7etJR+8ZT+CjFyyrD0+ZkN9nH26YDuPtCvrmPheCA+N9ZpnjeddS4
-         e8mkvd7L7Re3XqcJxui7bEIxMOhn+iMBKr0rJR+nBxluy05X8FHUEGA5gZbei/8UixgF
-         1mVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Em/ldcBTiCkH89iKxfabm8RKdGIliRRbSNYWY3rbkD4=;
-        b=oJ3WQLR1wXvUKaGRvVTsSUzHu+nGznIukFhc5NgxygSPfkmH5wcCcnPEkgdx6TJ0Kw
-         R1WLthUkLsUJjOved1aHRNjCU76dVpAuE+9OPj0T03Ium1zE4Eek2nzdwWDN0b8wfl/j
-         NO14vmWshCG6WbRKvWN9HEINNEOPWx3dja9A+8Rhsoct+5cSQRJWOjqxmuBSvOw9DRfZ
-         F0+lVYdIYYQICQP9uXcBm6cW2GhuayFIirhdEvkj624wAGr06Iv1o5LN6CQ0J5boU2wV
-         YIwf/A/3E2tJXrj/rfTEi22GsgphLtNps+PnXGLPBtkFG73k9mH+CyPxV34TLKWCqqEi
-         eqPw==
-X-Gm-Message-State: APjAAAVlPA70ZGu2h8yNrrHcgYXxqkvGfjg946EYLMHQ6DO+gcq4IrXM
-        iz48E34UkBXe3W2ZWT/35aqt6g0UedI5lA==
-X-Google-Smtp-Source: APXvYqxaypmv9+7GkWChObVbu7wiDzQPNbv9TlnsTgRI+u9RhlgUkWuJB4t1Q8ZmN11y6dU12rOr2Q==
-X-Received: by 2002:a5d:4608:: with SMTP id t8mr7789448wrq.91.1573728688622;
-        Thu, 14 Nov 2019 02:51:28 -0800 (PST)
-Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
-        by smtp.gmail.com with ESMTPSA id k14sm7236681wrw.46.2019.11.14.02.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2019 02:51:27 -0800 (PST)
-Date:   Thu, 14 Nov 2019 10:51:25 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Paul Burton <paul.burton@mips.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        qiaochong@loongson.cn, kgdb-bugreport@lists.sourceforge.net,
-        ralf@linux-mips.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        James Hogan <jhogan@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 1/5] MIPS: kdb: Remove old workaround for backtracing on
- other CPUs
-Message-ID: <20191114105125.t3jma3ghwj2wtv6w@holly.lan>
-References: <20191109191644.191766-1-dianders@chromium.org>
- <20191109111623.1.I30a0cac4d9880040c8d41495bd9a567fe3e24989@changeid>
+        id S1726985AbfKNN0Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 Nov 2019 08:26:24 -0500
+Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25854 "EHLO
+        sender4-pp-o98.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726202AbfKNN0Y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Nov 2019 08:26:24 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1573737969; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Bx5L7Lah/e3c+eX3EeUsFiMuGQHLvnZunfGCkmZ2krBE7EztyD2/AUHrIum7zo3o6xpa46IJD0bgyKeNIxZg1+EPxsfbne0me21qwrcSMqnV8zd8P/uOhY907Hb11Tyo9jICnJe8Eu/5XAf6XWRBSDRp0PXbF00M2E8ZiwWHSho=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1573737969; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=/spMvY4R12FvcM3P4DlAhhuBGYXbyQfBjjePieWC0rs=; 
+        b=SzFUY5CtxJ3A8kl2G/P2+WfJYYxfc0B3nnGnB5OFjYBreE1hieXrZUZtj4pLPggJfEthM6zk+bZnCB1VVBgl+U889lI+eBDl2cDf5l7vNAjpC7RVccuWv78oba5dS6QniVwXOVgwrNMMWXSmuj4gwnBpZ8BDkkS2I1uDxoXZoDs=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zoho.com;
+        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
+        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
+  s=zapps768; d=zoho.com; 
+  h=subject:to:references:cc:from:message-id:date:user-agent:mime-version:in-reply-to:content-type; 
+  b=WvGdLrnCs2GT0t/qCA7IOjND69Uk1WTkciuEl4RHi8NfMzCtcS+iq1gdaa12MPUusDWpgTPNyi9v
+    lkJ16Dq0U1I4Y15kWs6+TK9kjtMcGk9L6RKyUukBUXhR/a7aSryv  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1573737969;
+        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
+        h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        l=3262; bh=/spMvY4R12FvcM3P4DlAhhuBGYXbyQfBjjePieWC0rs=;
+        b=Gf8gGp+1OwqntrmEIh9aDI3U1Uksv8VHIWtuyJY03H4M/OBKD8Yqu1fYq+pBi/WC
+        vkB9uGULkQ2Be/Nmi9axGza6nJhfhnr4/s8ZRHc+BjM1bNQM7ECKq2htc4SOL/hVgPo
+        vruBAjR5MQKZhlynbjsvOBUtE3tu/UULKfL2gm70=
+Received: from [192.168.10.218] (171.221.112.167 [171.221.112.167]) by mx.zohomail.com
+        with SMTPS id 1573737968568701.439592202719; Thu, 14 Nov 2019 05:26:08 -0800 (PST)
+Subject: Re: [PATCH 1/2 v3] dt-bindings: clock: Add X1000 bindings.
+To:     Paul Cercueil <paul@crapouillou.net>
+References: <1571421006-12771-1-git-send-email-zhouyanjie@zoho.com>
+ <1573378102-72380-1-git-send-email-zhouyanjie@zoho.com>
+ <1573378102-72380-2-git-send-email-zhouyanjie@zoho.com>
+ <1573434832.3.1@crapouillou.net>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        mturquette@baylibre.com, paul.burton@mips.com, sboyd@kernel.org,
+        robh+dt@kernel.org, syq@debian.org, mark.rutland@arm.com
+From:   Zhou Yanjie <zhouyanjie@zoho.com>
+Message-ID: <5DCD55E7.8080807@zoho.com>
+Date:   Thu, 14 Nov 2019 21:25:59 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191109111623.1.I30a0cac4d9880040c8d41495bd9a567fe3e24989@changeid>
+In-Reply-To: <1573434832.3.1@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Nov 09, 2019 at 11:16:40AM -0800, Douglas Anderson wrote:
-> As of commit 2277b492582d ("kdb: Fix stack crawling on 'running' CPUs
-> that aren't the master") we no longer need any special case for doing
-> stack dumps on CPUs that are not the kdb master.  Let's remove.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> I have no way to test this personally, so hopefully someone who uses
-> kdb/kgdb on MIPS can.
+Hi Paul,
 
-I took this as a hint to add mips support to kgdbtest ;-)
+On 2019=E5=B9=B411=E6=9C=8811=E6=97=A5 09:13, Paul Cercueil wrote:
+> Hi Zhou,
+>
+>
+> Le dim., nov. 10, 2019 at 17:28, Zhou Yanjie <zhouyanjie@zoho.com> a=20
+> =C3=A9crit :
+>> Add the clock bindings for the X1000 Soc from Ingenic.
+>>
+>> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+>
+> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+>
+>> ---
+>>  .../devicetree/bindings/clock/ingenic,cgu.txt      |  1 +
+>>  include/dt-bindings/clock/x1000-cgu.h              | 44=20
+>> ++++++++++++++++++++++
+>>  2 files changed, 45 insertions(+)
+>>  create mode 100644 include/dt-bindings/clock/x1000-cgu.h
+>
+> When you send a revised version of a patchset, it's common practice to=20
+> have a per-patch changelog right here. Then a cover letter is only=20
+> really needed for big patchsets that need extra information.
+>
 
-Support is added and working well. Unfortunately lack of familiarity
-with mips means I have not yet figured out which mips defconfig gives
-us working SMP (and what the corresponding qemu invocation should be).
+Thank you! I will pay attention to this next time.
 
-I think that means I still can't (quite) exercise this code fully.
-The most appropriate test is bta on an SMP system, right?
+>>
+>> diff --git a/Documentation/devicetree/bindings/clock/ingenic,cgu.txt=20
+>> b/Documentation/devicetree/bindings/clock/ingenic,cgu.txt
+>> index ba5a442..75598e6 100644
+>> --- a/Documentation/devicetree/bindings/clock/ingenic,cgu.txt
+>> +++ b/Documentation/devicetree/bindings/clock/ingenic,cgu.txt
+>> @@ -11,6 +11,7 @@ Required properties:
+>>    * ingenic,jz4725b-cgu
+>>    * ingenic,jz4770-cgu
+>>    * ingenic,jz4780-cgu
+>> +  * ingenic,x1000-cgu
+>>  - reg : The address & length of the CGU registers.
+>>  - clocks : List of phandle & clock specifiers for clocks external to=20
+>> the CGU.
+>>    Two such external clocks should be specified - first the external=20
+>> crystal
+>> diff --git a/include/dt-bindings/clock/x1000-cgu.h=20
+>> b/include/dt-bindings/clock/x1000-cgu.h
+>> new file mode 100644
+>> index 00000000..bbaebaf
+>> --- /dev/null
+>> +++ b/include/dt-bindings/clock/x1000-cgu.h
+>> @@ -0,0 +1,44 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * This header provides clock numbers for the ingenic,x1000-cgu DT=20
+>> binding.
+>> + *
+>> + * They are roughly ordered as:
+>> + *   - external clocks
+>> + *   - PLLs
+>> + *   - muxes/dividers in the order they appear in the x1000=20
+>> programmers manual
+>> + *   - gates in order of their bit in the CLKGR* registers
+>> + */
+>> +
+>> +#ifndef __DT_BINDINGS_CLOCK_X1000_CGU_H__
+>> +#define __DT_BINDINGS_CLOCK_X1000_CGU_H__
+>> +
+>> +#define X1000_CLK_EXCLK        0
+>> +#define X1000_CLK_RTCLK        1
+>> +#define X1000_CLK_APLL        2
+>> +#define X1000_CLK_MPLL        3
+>> +#define X1000_CLK_SCLKA        4
+>> +#define X1000_CLK_CPUMUX    5
+>> +#define X1000_CLK_CPU        6
+>> +#define X1000_CLK_L2CACHE    7
+>> +#define X1000_CLK_AHB0        8
+>> +#define X1000_CLK_AHB2PMUX    9
+>> +#define X1000_CLK_AHB2        10
+>> +#define X1000_CLK_PCLK        11
+>> +#define X1000_CLK_DDR        12
+>> +#define X1000_CLK_MAC        13
+>> +#define X1000_CLK_MSCMUX    14
+>> +#define X1000_CLK_MSC0        15
+>> +#define X1000_CLK_MSC1        16
+>> +#define X1000_CLK_SSIPLL    17
+>> +#define X1000_CLK_SSIMUX    18
+>> +#define X1000_CLK_SFC        19
+>> +#define X1000_CLK_I2C0        20
+>> +#define X1000_CLK_I2C1        21
+>> +#define X1000_CLK_I2C2        22
+>> +#define X1000_CLK_UART0        23
+>> +#define X1000_CLK_UART1        24
+>> +#define X1000_CLK_UART2        25
+>> +#define X1000_CLK_SSI        26
+>> +#define X1000_CLK_PDMA        27
+>> +
+>> +#endif /* __DT_BINDINGS_CLOCK_X1000_CGU_H__ */
+>> --=20
+>> 2.7.4
+>>
+>>
+>
+>
 
 
-> Ideally this patch should be Acked by MIPS folks and then land through
-> the kdb/kgdb tree since the next patch in the series, ("kdb:
-> kdb_current_regs should be private") depends on it.
-
-An Acked-by from a MIPS maintainer would be very welcome. Perhaps
-with a bit of extra work on the above I might be able to provide
-a Tested-by:.
-
-I didn't see anything that particularly bothered me in the patches but
-given we're already at -rc7 I'm inclined to target this patchset for 5.6
-rather than 5.5.
-
-
-Daniel.
