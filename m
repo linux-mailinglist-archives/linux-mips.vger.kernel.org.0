@@ -2,104 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01312FD3E4
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Nov 2019 06:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0676BFD656
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Nov 2019 07:24:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbfKOFE4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 Nov 2019 00:04:56 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:41972 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726308AbfKOFE4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Nov 2019 00:04:56 -0500
-Received: by mail-pf1-f196.google.com with SMTP id p26so5823320pfq.8;
-        Thu, 14 Nov 2019 21:04:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=GE6hQGhTHyMhnZauws25uJSkPSE0gyI3eS4kkDg4LbY=;
-        b=jwjQitG4mPk4I/rwoKlZTLvSKE8EYNuOR9HeBS3e6Yzlw2fSTLnVbhzI0JRTDK632W
-         UAKFTNWm2xYX393OCvjSX7IjRtGPrX4nn2LmYwlD/U3qG8LDGjAXmckITVOTwsTIs4j5
-         pd5lMpxNKuRQdLJtzMcTx8gon+3MINLJBUtLjTvGVI1PPphLEW2LAFb/FdnCh0tQIPnC
-         QjXPdj6PMV7LT7biwuJ5arXzrBXK2yuNFgTahwXuWP4i5NEUYq0lOVC1roQT/3LGuCsP
-         FNiftJ8raQqXlU9FBwpS64QYtEupSah+cT8/5OIr7arvrlEOkHXOhnC30FT/cMzEhTNu
-         loqQ==
-X-Gm-Message-State: APjAAAVdbzATFaEBIaxDlHRqihd4wW/Doy6Tg4pZVWV9BJmQhqzWBpZL
-        4wWcMIGI4hDb5lWHrYF30tp5L/suNmA=
-X-Google-Smtp-Source: APXvYqzvSdSzlDAanRSyD1+gCAKlRxwBmY9wZ3K7A1gRCQvAUTP7lL0PumlgCYaic91mNvz1oPwOog==
-X-Received: by 2002:a63:e145:: with SMTP id h5mr14385538pgk.447.1573794295347;
-        Thu, 14 Nov 2019 21:04:55 -0800 (PST)
-Received: from localhost ([2601:646:8a00:9810:9d6:9cca:ff8c:efe0])
-        by smtp.gmail.com with ESMTPSA id y16sm9078871pfo.62.2019.11.14.21.04.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2019 21:04:54 -0800 (PST)
-Date:   Thu, 14 Nov 2019 21:04:53 -0800
-From:   Paul Burton <paulburton@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS fixes
-Message-ID: <20191115050453.zcgijwj7qt7uvx2c@pburton-laptop>
+        id S1727363AbfKOGVh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Nov 2019 01:21:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50422 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727339AbfKOGVd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 15 Nov 2019 01:21:33 -0500
+Received: from localhost (unknown [104.132.150.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5155B20732;
+        Fri, 15 Nov 2019 06:21:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573798892;
+        bh=R/yEUO+q2waTOvNlrvQlDw37xD7IuqRvVUN46oEIu2w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=I9dfC5DJ7MwRQDZZBbroOJqEqXenEYzbeD0N+e/lufCrrrkAGLkSNo2d9zhXfAvX/
+         Nbd96WLa8+kpxhUQIJzvNBKg3HTX49+zDPrQu3+rBZjOMiga9cHG+bsANLI++IiiGY
+         +y3P2CUyhLYTY4zK/kj8d+Tt87+wUJWuysCmoFtU=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
+        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Amit Pundir <amit.pundir@linaro.org>
+Subject: [PATCH 4.4 02/20] MIPS: BCM63XX: fix switch core reset on BCM6368
+Date:   Fri, 15 Nov 2019 14:20:31 +0800
+Message-Id: <20191115062008.088360533@linuxfoundation.org>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191115062006.854443935@linuxfoundation.org>
+References: <20191115062006.854443935@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="pl2idvt5zzjql3wu"
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+From: Jonas Gorski <jonas.gorski@gmail.com>
 
---pl2idvt5zzjql3wu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+commit 8a38dacf87180738d42b058334c951eba15d2d47 upstream.
 
-Hi Linus,
+The Ethernet Switch core mask was set to 0, causing the switch core to
+be not reset on BCM6368 on boot. Provide the proper mask so the switch
+core gets reset to a known good state.
 
-Here's a single fix for SGI IP27 machines & a MAINTAINERS update; please
-pull.
+Fixes: 799faa626c71 ("MIPS: BCM63XX: add core reset helper")
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+Cc: linux-mips@vger.kernel.org
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Thanks,
-    Paul
+---
+ arch/mips/bcm63xx/reset.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/arch/mips/bcm63xx/reset.c
++++ b/arch/mips/bcm63xx/reset.c
+@@ -119,7 +119,7 @@
+ #define BCM6368_RESET_DSL	0
+ #define BCM6368_RESET_SAR	SOFTRESET_6368_SAR_MASK
+ #define BCM6368_RESET_EPHY	SOFTRESET_6368_EPHY_MASK
+-#define BCM6368_RESET_ENETSW	0
++#define BCM6368_RESET_ENETSW	SOFTRESET_6368_ENETSW_MASK
+ #define BCM6368_RESET_PCM	SOFTRESET_6368_PCM_MASK
+ #define BCM6368_RESET_MPI	SOFTRESET_6368_MPI_MASK
+ #define BCM6368_RESET_PCIE	0
 
 
-The following changes since commit d6d5df1db6e9d7f8f76d2911707f7d5877251b02:
-
-  Linux 5.4-rc5 (2019-10-27 13:19:19 -0400)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git tags/mips_fixes_5.4_4
-
-for you to fetch changes up to f6929c92e283a35b183c293574adcbca409bf144:
-
-  MAINTAINERS: Remove Kevin as maintainer of BMIPS generic platforms (2019-11-04 10:46:05 -0800)
-
-----------------------------------------------------------------
-A fix & simplification for SGI IP27 exception handlers, and a small
-MAINTAINERS update for Broadcom MIPS systems.
-
-----------------------------------------------------------------
-Florian Fainelli (1):
-      MAINTAINERS: Remove Kevin as maintainer of BMIPS generic platforms
-
-Thomas Bogendoerfer (1):
-      MIPS: SGI-IP27: fix exception handler replication
-
- MAINTAINERS                      |  1 -
- arch/mips/sgi-ip27/Kconfig       |  7 -------
- arch/mips/sgi-ip27/ip27-init.c   | 21 ++++++---------------
- arch/mips/sgi-ip27/ip27-memory.c |  4 ----
- 4 files changed, 6 insertions(+), 27 deletions(-)
-
---pl2idvt5zzjql3wu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQRgLjeFAZEXQzy86/s+p5+stXUA3QUCXc4x9QAKCRA+p5+stXUA
-3ScnAQCKK/Wzy90fKGnlhiXB2z+7Pdh0MLceC7rOkwdQJgs28wEA6DipbI11TQXU
-xe1El0zhm2K0aKV1hvHm7Q2ImjcYmAU=
-=0h92
------END PGP SIGNATURE-----
-
---pl2idvt5zzjql3wu--
