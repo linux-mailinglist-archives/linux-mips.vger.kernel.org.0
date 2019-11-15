@@ -2,83 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 610C0FD635
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Nov 2019 07:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF86FD74D
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Nov 2019 08:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727747AbfKOGWe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 Nov 2019 01:22:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51820 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727725AbfKOGW2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 15 Nov 2019 01:22:28 -0500
-Received: from localhost (unknown [104.132.150.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0374420637;
-        Fri, 15 Nov 2019 06:22:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573798947;
-        bh=R/yEUO+q2waTOvNlrvQlDw37xD7IuqRvVUN46oEIu2w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ppC1+6xATCY/0B63pAUn/9vsF5maHjERQpZDulcgtPe/oGlniGXbFxaDGAY+uzy1R
-         /qPBOW0VsIWUy7ZNoL5+7XMREtchEPpM1vy7QsGKWy7LRx/fOoefhCeZLf27PdUqWq
-         RSffTrI7xbd2cJMp95d3FFCZH71QTIPL6k4V+CW4=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Amit Pundir <amit.pundir@linaro.org>
-Subject: [PATCH 4.9 03/31] MIPS: BCM63XX: fix switch core reset on BCM6368
-Date:   Fri, 15 Nov 2019 14:20:32 +0800
-Message-Id: <20191115062010.879739177@linuxfoundation.org>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191115062009.813108457@linuxfoundation.org>
-References: <20191115062009.813108457@linuxfoundation.org>
-User-Agent: quilt/0.66
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S1726920AbfKOHr2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Nov 2019 02:47:28 -0500
+Received: from sender4-pp-o94.zoho.com ([136.143.188.94]:25410 "EHLO
+        sender4-pp-o94.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725829AbfKOHr2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Nov 2019 02:47:28 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1573804039; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=RkD1wjSMYuglEclXubH6+ki/IFE6TU5X1zcTUc7mW5DmUJmIaJk0FmWkE7X3sQSUzBDky4fOUvsYlrGED6plYDFeXpaHk8eEDBRwVkk8zMZaoK72ITtNr5K+Dfs512DpN3zkDspq6yADy1WRy1dwhCFXSPTtq1XKLFfdWC5/KW8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1573804039; h=Cc:Date:From:Message-ID:Subject:To; 
+        bh=QljwlDhpzIWWDLQ1rPZdvPj7kPoH65XoXCVpfyB3Qvc=; 
+        b=aVDzIeAzlfDs9fH6mRhnF2JKzBL8M+fi6ZCos7sDD5ijeC++UJTyOymBxKKyEQd/1WvB5EkQ79VWwo3qtfP/dIZoR+QTYDWlXeYVDmy6oJdLLpIG0xNafMgSqoUOM6VON080wgeK/4zdDqx5D1fykzPkoy69SvG/vo8ffkHgs5I=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zoho.com;
+        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
+        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
+  s=zapps768; d=zoho.com; 
+  h=from:to:cc:subject:date:message-id; 
+  b=d475j8PU33xsZChp/64FWfUoSqM7Ru19uVzghf7ToDDSv5+2sfG1rsWyXcUAXNeZrHNCWddCPgT6
+    WAaxkJ/rapMmRd7GrLPUicBKPcsY1mQieiinmMb1nh7XkPtwwiG3  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1573804039;
+        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
+        h=From:To:Cc:Subject:Date:Message-Id; l=89;
+        bh=QljwlDhpzIWWDLQ1rPZdvPj7kPoH65XoXCVpfyB3Qvc=;
+        b=kKGzGUxuakKxrlAiHj0s+bSVqWhI2HbbB4PkLWF+trUSvkoJfq1yp/WcMgIelv+I
+        5JeAuJ1Fw6RJqayUF11ygINXUlVlqAGDVVBXPzdMuofIYAYVpqyX7NlnBNuGNcPsEdu
+        MhDIsqRhC7WrrAIxvxV8/Ply1swP74o3Cvs4QYt0=
+Received: from zhouyanjie-virtual-machine.lan (182.148.156.27 [182.148.156.27]) by mx.zohomail.com
+        with SMTPS id 1573804037679489.1531984968743; Thu, 14 Nov 2019 23:47:17 -0800 (PST)
+From:   Zhou Yanjie <zhouyanjie@zoho.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org, paul@crapouillou.net,
+        paul.burton@mips.com
+Subject: Fix bugs in X1000 and X1500 pinctrl drivers.
+Date:   Fri, 15 Nov 2019 15:46:50 +0800
+Message-Id: <1573804011-2176-1-git-send-email-zhouyanjie@zoho.com>
+X-Mailer: git-send-email 2.7.4
+X-ZohoMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Jonas Gorski <jonas.gorski@gmail.com>
-
-commit 8a38dacf87180738d42b058334c951eba15d2d47 upstream.
-
-The Ethernet Switch core mask was set to 0, causing the switch core to
-be not reset on BCM6368 on boot. Provide the proper mask so the switch
-core gets reset to a known good state.
-
-Fixes: 799faa626c71 ("MIPS: BCM63XX: add core reset helper")
-Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Cc: linux-mips@vger.kernel.org
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: James Hogan <jhogan@kernel.org>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
- arch/mips/bcm63xx/reset.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/arch/mips/bcm63xx/reset.c
-+++ b/arch/mips/bcm63xx/reset.c
-@@ -119,7 +119,7 @@
- #define BCM6368_RESET_DSL	0
- #define BCM6368_RESET_SAR	SOFTRESET_6368_SAR_MASK
- #define BCM6368_RESET_EPHY	SOFTRESET_6368_EPHY_MASK
--#define BCM6368_RESET_ENETSW	0
-+#define BCM6368_RESET_ENETSW	SOFTRESET_6368_ENETSW_MASK
- #define BCM6368_RESET_PCM	SOFTRESET_6368_PCM_MASK
- #define BCM6368_RESET_MPI	SOFTRESET_6368_MPI_MASK
- #define BCM6368_RESET_PCIE	0
-
+Fix the wrong configuration of pull-up and pull-down,
+adjust some unreasonable naming.
 
