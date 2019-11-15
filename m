@@ -2,113 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C45FD1F8
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Nov 2019 01:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01312FD3E4
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Nov 2019 06:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727295AbfKOAaX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 Nov 2019 19:30:23 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:36524 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727020AbfKOAaX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 Nov 2019 19:30:23 -0500
-Received: by mail-pg1-f194.google.com with SMTP id k13so4856209pgh.3;
-        Thu, 14 Nov 2019 16:30:21 -0800 (PST)
+        id S1727041AbfKOFE4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Nov 2019 00:04:56 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:41972 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726308AbfKOFE4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Nov 2019 00:04:56 -0500
+Received: by mail-pf1-f196.google.com with SMTP id p26so5823320pfq.8;
+        Thu, 14 Nov 2019 21:04:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bRROesaeb887xsfxVtqXv2u2WV15FLCC+kH5tjbZrG4=;
-        b=rahj838TYFEVrCmHe0gH4QiWTRk4J4HGu0pIFSvO5x1a0HQZovDk8FQtaidt4Rw5YG
-         5vJ+jYIyP6CcJWTHsoAhuGuJ7Q7Kp3WojhPmVBDOj+B7GjmkLe94jwetzhrziI0VBQhZ
-         xkoAhVkKbDnuex2tvVLA40/+BwknEownVEZJXVsXjOXommRCUwsIyMNRL5MzaMZBlJLK
-         aUbMocugarGvpBA/OKTBv3CDnwG4S//9c9WMRu8ZoBiPJw+8FM2MhBJiblyfh631ptBp
-         es6NqZsP/4ApwJKQq1sMSjhGP5GOyNbv9K4b1797ta8Jd0AMSQBHK3WTo6ZHUxQY7+fi
-         UY7g==
-X-Gm-Message-State: APjAAAW7QiPpVxz/uCMkp4uyv97nhqBMN4VYHrSorV/4G7x4BDzFj+9t
-        N3yBb5A/DjnhCEyiQBzdS+Q=
-X-Google-Smtp-Source: APXvYqxRCiDHNwOwz8S2vHv+Vw1KysxP6MjchfjJ8RJjB+G4iXLq5xzmRwKDSWDpgbgjjVU/9UyUpw==
-X-Received: by 2002:a65:528b:: with SMTP id y11mr13072963pgp.420.1573777820863;
-        Thu, 14 Nov 2019 16:30:20 -0800 (PST)
-Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id y24sm9046884pfr.116.2019.11.14.16.30.18
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=GE6hQGhTHyMhnZauws25uJSkPSE0gyI3eS4kkDg4LbY=;
+        b=jwjQitG4mPk4I/rwoKlZTLvSKE8EYNuOR9HeBS3e6Yzlw2fSTLnVbhzI0JRTDK632W
+         UAKFTNWm2xYX393OCvjSX7IjRtGPrX4nn2LmYwlD/U3qG8LDGjAXmckITVOTwsTIs4j5
+         pd5lMpxNKuRQdLJtzMcTx8gon+3MINLJBUtLjTvGVI1PPphLEW2LAFb/FdnCh0tQIPnC
+         QjXPdj6PMV7LT7biwuJ5arXzrBXK2yuNFgTahwXuWP4i5NEUYq0lOVC1roQT/3LGuCsP
+         FNiftJ8raQqXlU9FBwpS64QYtEupSah+cT8/5OIr7arvrlEOkHXOhnC30FT/cMzEhTNu
+         loqQ==
+X-Gm-Message-State: APjAAAVdbzATFaEBIaxDlHRqihd4wW/Doy6Tg4pZVWV9BJmQhqzWBpZL
+        4wWcMIGI4hDb5lWHrYF30tp5L/suNmA=
+X-Google-Smtp-Source: APXvYqzvSdSzlDAanRSyD1+gCAKlRxwBmY9wZ3K7A1gRCQvAUTP7lL0PumlgCYaic91mNvz1oPwOog==
+X-Received: by 2002:a63:e145:: with SMTP id h5mr14385538pgk.447.1573794295347;
+        Thu, 14 Nov 2019 21:04:55 -0800 (PST)
+Received: from localhost ([2601:646:8a00:9810:9d6:9cca:ff8c:efe0])
+        by smtp.gmail.com with ESMTPSA id y16sm9078871pfo.62.2019.11.14.21.04.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2019 16:30:19 -0800 (PST)
-Date:   Thu, 14 Nov 2019 16:30:51 -0800
+        Thu, 14 Nov 2019 21:04:54 -0800 (PST)
+Date:   Thu, 14 Nov 2019 21:04:53 -0800
 From:   Paul Burton <paulburton@kernel.org>
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        qiaochong@loongson.cn, kgdb-bugreport@lists.sourceforge.net,
-        ralf@linux-mips.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        James Hogan <jhogan@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 1/5] MIPS: kdb: Remove old workaround for backtracing on
- other CPUs
-Message-ID: <20191115003051.blbbwr7hmuqyzjwb@lantea.localdomain>
-References: <20191109191644.191766-1-dianders@chromium.org>
- <20191109111623.1.I30a0cac4d9880040c8d41495bd9a567fe3e24989@changeid>
- <20191114105125.t3jma3ghwj2wtv6w@holly.lan>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS fixes
+Message-ID: <20191115050453.zcgijwj7qt7uvx2c@pburton-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="pl2idvt5zzjql3wu"
 Content-Disposition: inline
-In-Reply-To: <20191114105125.t3jma3ghwj2wtv6w@holly.lan>
-User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Daniel,
 
-On Thu, Nov 14, 2019 at 10:51:25AM +0000, Daniel Thompson wrote:
-> On Sat, Nov 09, 2019 at 11:16:40AM -0800, Douglas Anderson wrote:
-> > As of commit 2277b492582d ("kdb: Fix stack crawling on 'running' CPUs
-> > that aren't the master") we no longer need any special case for doing
-> > stack dumps on CPUs that are not the kdb master.  Let's remove.
-> > 
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> > I have no way to test this personally, so hopefully someone who uses
-> > kdb/kgdb on MIPS can.
-> 
-> I took this as a hint to add mips support to kgdbtest ;-)
+--pl2idvt5zzjql3wu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Wonderful! :)
+Hi Linus,
 
-> Support is added and working well. Unfortunately lack of familiarity
-> with mips means I have not yet figured out which mips defconfig gives
-> us working SMP (and what the corresponding qemu invocation should be).
-
-You can build 64r6el_defconfig & boot it something like this:
-
-$ qemu-system-mips64el \
-    -M boston -cpu I6500 -smp 4 \
-    -kernel arch/mips/boot/vmlinux.gz.itb \
-    -serial stdio \
-    -hda my-disk-image.bin \
-    -append "root=/dev/sda"
-
-Linux should see the system as a single core with 4 hardware threads
-(VPs or Virtual Processors in MIPS terminology).
-
-> > Ideally this patch should be Acked by MIPS folks and then land through
-> > the kdb/kgdb tree since the next patch in the series, ("kdb:
-> > kdb_current_regs should be private") depends on it.
-> 
-> An Acked-by from a MIPS maintainer would be very welcome. Perhaps
-> with a bit of extra work on the above I might be able to provide
-> a Tested-by:.
-
-The patches look reasonable to me; I was hoping to test them before
-giving an ack but haven't had the time yet. It seems you may be making
-that easier :)
+Here's a single fix for SGI IP27 machines & a MAINTAINERS update; please
+pull.
 
 Thanks,
     Paul
+
+
+The following changes since commit d6d5df1db6e9d7f8f76d2911707f7d5877251b02:
+
+  Linux 5.4-rc5 (2019-10-27 13:19:19 -0400)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git tags/mips_fixes_5.4_4
+
+for you to fetch changes up to f6929c92e283a35b183c293574adcbca409bf144:
+
+  MAINTAINERS: Remove Kevin as maintainer of BMIPS generic platforms (2019-11-04 10:46:05 -0800)
+
+----------------------------------------------------------------
+A fix & simplification for SGI IP27 exception handlers, and a small
+MAINTAINERS update for Broadcom MIPS systems.
+
+----------------------------------------------------------------
+Florian Fainelli (1):
+      MAINTAINERS: Remove Kevin as maintainer of BMIPS generic platforms
+
+Thomas Bogendoerfer (1):
+      MIPS: SGI-IP27: fix exception handler replication
+
+ MAINTAINERS                      |  1 -
+ arch/mips/sgi-ip27/Kconfig       |  7 -------
+ arch/mips/sgi-ip27/ip27-init.c   | 21 ++++++---------------
+ arch/mips/sgi-ip27/ip27-memory.c |  4 ----
+ 4 files changed, 6 insertions(+), 27 deletions(-)
+
+--pl2idvt5zzjql3wu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQRgLjeFAZEXQzy86/s+p5+stXUA3QUCXc4x9QAKCRA+p5+stXUA
+3ScnAQCKK/Wzy90fKGnlhiXB2z+7Pdh0MLceC7rOkwdQJgs28wEA6DipbI11TQXU
+xe1El0zhm2K0aKV1hvHm7Q2ImjcYmAU=
+=0h92
+-----END PGP SIGNATURE-----
+
+--pl2idvt5zzjql3wu--
