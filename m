@@ -2,211 +2,176 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C11FF716
-	for <lists+linux-mips@lfdr.de>; Sun, 17 Nov 2019 02:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96786FF94C
+	for <lists+linux-mips@lfdr.de>; Sun, 17 Nov 2019 12:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726599AbfKQB3h (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 16 Nov 2019 20:29:37 -0500
-Received: from mx2.suse.de ([195.135.220.15]:46212 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726174AbfKQB3h (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 16 Nov 2019 20:29:37 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id D918BAC31;
-        Sun, 17 Nov 2019 01:29:28 +0000 (UTC)
-Date:   Sun, 17 Nov 2019 12:28:58 +1100
-From:   Aleksa Sarai <asarai@suse.de>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        dev@opencontainers.org, containers@lists.linux-foundation.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-api@vger.kernel.org,
-        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: [PATCH v17 13/13] Documentation: path-lookup: include new LOOKUP
- flags
-Message-ID: <20191117012858.47t7zd3pbdlqz2mv@yavin.dot.cyphar.com>
-References: <20191117011713.13032-1-cyphar@cyphar.com>
+        id S1726043AbfKQLtm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 17 Nov 2019 06:49:42 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:38156 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726027AbfKQLtm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 17 Nov 2019 06:49:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1573991379; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bpOPdwdclOQJndI4A9z8Lf5rv9wEQQ9QPF87PUX4glg=;
+        b=hZrXlDN0aHp+mXHWmsSavxf9AB0qKQe0F7M/42X0+/j+mjOzZs9yqcu/mmzv9A08JTeba+
+        oGvU9gsJjo8Qr57rOLhgmEgOm/iEecfIjwUNRS10sIapRfUUiuuD6czSWG8r6nVwTz5SpH
+        VzqUS7EdiPFdG84AJLovFvOyFgPgsv8=
+Date:   Sun, 17 Nov 2019 12:49:30 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 2/2] MIPS: Ingenic: Disable abandoned HPTLB function.
+To:     Zhou Yanjie <zhouyanjie@zoho.com>
+Cc:     Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ralf@linux-mips.org,
+        jhogan@kernel.org, gregkh@linuxfoundation.org,
+        paul.burton@mips.com, chenhc@lemote.com, tglx@linutronix.de,
+        jiaxun.yang@flygoat.com
+Message-Id: <1573991370.3.0@crapouillou.net>
+In-Reply-To: <5DCFCB41.3090807@zoho.com>
+References: <1571909341-10108-1-git-send-email-zhouyanjie@zoho.com>
+        <1571909341-10108-3-git-send-email-zhouyanjie@zoho.com>
+        <20191115213716.wt4wn2moj3fup4dc@lantea.localdomain>
+        <5DCFCB41.3090807@zoho.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191117011713.13032-1-cyphar@cyphar.com>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Now that we have new LOOKUP flags, we should document them in the
-relevant path-walking documentation. And now that we've settled on a
-common name for nd_jump_link() style symlinks ("magic links"), use that
-term where magic-link semantics are described.
+Hi Zhou,
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
----
- Documentation/filesystems/path-lookup.rst | 68 +++++++++++++++++++++--
- 1 file changed, 62 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/filesystems/path-lookup.rst b/Documentation/filesystems/path-lookup.rst
-index 434a07b0002b..a3216979298b 100644
---- a/Documentation/filesystems/path-lookup.rst
-+++ b/Documentation/filesystems/path-lookup.rst
-@@ -13,6 +13,7 @@ It has subsequently been updated to reflect changes in the kernel
- including:
- 
- - per-directory parallel name lookup.
-+- ``openat2()`` resolution restriction flags.
- 
- Introduction to pathname lookup
- ===============================
-@@ -235,6 +236,13 @@ renamed.  If ``d_lookup`` finds that a rename happened while it
- unsuccessfully scanned a chain in the hash table, it simply tries
- again.
- 
-+``rename_lock`` is also used to detect and defend against potential attacks
-+against ``LOOKUP_BENEATH`` and ``LOOKUP_IN_ROOT`` when resolving ".." (where
-+the parent directory is moved outside the root, bypassing the ``path_equal()``
-+check). If ``rename_lock`` is updated during the lookup and the path encounters
-+a "..", a potential attack occurred and ``handle_dots()`` will bail out with
-+``-EAGAIN``.
-+
- inode->i_rwsem
- ~~~~~~~~~~~~~~
- 
-@@ -348,6 +356,13 @@ any changes to any mount points while stepping up.  This locking is
- needed to stabilize the link to the mounted-on dentry, which the
- refcount on the mount itself doesn't ensure.
- 
-+``mount_lock`` is also used to detect and defend against potential attacks
-+against ``LOOKUP_BENEATH`` and ``LOOKUP_IN_ROOT`` when resolving ".." (where
-+the parent directory is moved outside the root, bypassing the ``path_equal()``
-+check). If ``mount_lock`` is updated during the lookup and the path encounters
-+a "..", a potential attack occurred and ``handle_dots()`` will bail out with
-+``-EAGAIN``.
-+
- RCU
- ~~~
- 
-@@ -405,6 +420,10 @@ is requested.  Keeping a reference in the ``nameidata`` ensures that
- only one root is in effect for the entire path walk, even if it races
- with a ``chroot()`` system call.
- 
-+It should be noted that in the case of ``LOOKUP_IN_ROOT`` or
-+``LOOKUP_BENEATH``, the effective root becomes the directory file descriptor
-+passed to ``openat2()`` (which exposes these ``LOOKUP_`` flags).
-+
- The root is needed when either of two conditions holds: (1) either the
- pathname or a symbolic link starts with a "'/'", or (2) a "``..``"
- component is being handled, since "``..``" from the root must always stay
-@@ -1149,7 +1168,7 @@ so ``NULL`` is returned to indicate that the symlink can be released and
- the stack frame discarded.
- 
- The other case involves things in ``/proc`` that look like symlinks but
--aren't really::
-+aren't really (and are therefore commonly referred to as "magic-links")::
- 
-      $ ls -l /proc/self/fd/1
-      lrwx------ 1 neilb neilb 64 Jun 13 10:19 /proc/self/fd/1 -> /dev/pts/4
-@@ -1286,7 +1305,9 @@ A few flags
- A suitable way to wrap up this tour of pathname walking is to list
- the various flags that can be stored in the ``nameidata`` to guide the
- lookup process.  Many of these are only meaningful on the final
--component, others reflect the current state of the pathname lookup.
-+component, others reflect the current state of the pathname lookup, and some
-+apply restrictions to all path components encountered in the path lookup.
-+
- And then there is ``LOOKUP_EMPTY``, which doesn't fit conceptually with
- the others.  If this is not set, an empty pathname causes an error
- very early on.  If it is set, empty pathnames are not considered to be
-@@ -1310,13 +1331,48 @@ longer needed.
- ``LOOKUP_JUMPED`` means that the current dentry was chosen not because
- it had the right name but for some other reason.  This happens when
- following "``..``", following a symlink to ``/``, crossing a mount point
--or accessing a "``/proc/$PID/fd/$FD``" symlink.  In this case the
--filesystem has not been asked to revalidate the name (with
--``d_revalidate()``).  In such cases the inode may still need to be
--revalidated, so ``d_op->d_weak_revalidate()`` is called if
-+or accessing a "``/proc/$PID/fd/$FD``" symlink (also known as a "magic
-+link"). In this case the filesystem has not been asked to revalidate the
-+name (with ``d_revalidate()``).  In such cases the inode may still need
-+to be revalidated, so ``d_op->d_weak_revalidate()`` is called if
- ``LOOKUP_JUMPED`` is set when the look completes - which may be at the
- final component or, when creating, unlinking, or renaming, at the penultimate component.
- 
-+Resolution-restriction flags
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+In order to allow userspace to protect itself against certain race conditions
-+and attack scenarios involving changing path components, a series of flags are
-+available which apply restrictions to all path components encountered during
-+path lookup. These flags are exposed through ``openat2()``'s ``resolve`` field.
-+
-+``LOOKUP_NO_SYMLINKS`` blocks all symlink traversals (including magic-links).
-+This is distinctly different from ``LOOKUP_FOLLOW``, because the latter only
-+relates to restricting the following of trailing symlinks.
-+
-+``LOOKUP_NO_MAGICLINKS`` blocks all magic-link traversals. Filesystems must
-+ensure that they return errors from ``nd_jump_link()``, because that is how
-+``LOOKUP_NO_MAGICLINKS`` and other magic-link restrictions are implemented.
-+
-+``LOOKUP_NO_XDEV`` blocks all ``vfsmount`` traversals (this includes both
-+bind-mounts and ordinary mounts). Note that the ``vfsmount`` which contains the
-+lookup is determined by the first mountpoint the path lookup reaches --
-+absolute paths start with the ``vfsmount`` of ``/``, and relative paths start
-+with the ``dfd``'s ``vfsmount``. Magic-links are only permitted if the
-+``vfsmount`` of the path is unchanged.
-+
-+``LOOKUP_BENEATH`` blocks any path components which resolve outside the
-+starting point of the resolution. This is done by blocking ``nd_jump_root()``
-+as well as blocking ".." if it would jump outside the starting point.
-+``rename_lock`` and ``mount_lock`` are used to detect attacks against the
-+resolution of "..". Magic-links are also blocked.
-+
-+``LOOKUP_IN_ROOT`` resolves all path components as though the starting point
-+were the filesystem root. ``nd_jump_root()`` brings the resolution back to to
-+the starting point, and ".." at the starting point will act as a no-op. As with
-+``LOOKUP_BENEATH``, ``rename_lock`` and ``mount_lock`` are used to detect
-+attacks against ".." resolution. Magic-links are also blocked.
-+
- Final-component flags
- ~~~~~~~~~~~~~~~~~~~~~
- 
--- 
-2.24.0
+Le sam., nov. 16, 2019 at 18:11, Zhou Yanjie <zhouyanjie@zoho.com> a=20
+=C3=A9crit :
+> Hi Paul,
+>=20
+> On 2019=E5=B9=B411=E6=9C=8816=E6=97=A5 05:37, Paul Burton wrote:
+>> Hi Zhou,
+>>=20
+>> On Thu, Oct 24, 2019 at 05:29:01PM +0800, Zhou Yanjie wrote:
+>>> JZ4760/JZ4770/JZ4775/X1000/X1500 has an abandoned huge page
+>>> tlb, write 0xa9000000 to cp0 config5 sel4 to disable this
+>>> function to prevent getting stuck.
+>> Can you describe how we "get stuck"?
+>=20
+> When the kernel is started, it will be stuck in the "Run /init as=20
+> init process"
+> according to the log information. After using the debug probe, it is=20
+> found
+> that tlbmiss occurred when the run init was started, and entered the=20
+> infinite
+> loop in the "tlb-funcs.S".
+>=20
+>> What actually goes wrong on the
+>> affected CPUs? Do they misinterpret EntryLo values? Which bits do=20
+>> they
+>> misinterpret?
+>=20
+> According to Ingenic's explanation, this is because the=20
+> JZ4760/JZ4770/JZ4775/X1000
+> use the same core (both belong to PRID_COMP_INGENIC_D1). This core is=20
+> not fully
+> implemented in VTLB at design time, but only implements the 4K page=20
+> mode.
+
+Actually hugepages work fine on all Ingenic SoCs I tested with, from=20
+JZ4740 upwards, with the VTLB, so this is incorrect.
+
+
+> Support for larger pages was implemented by a component called HPTLB=20
+> that
+> they designed themselves, but this component was later discarded, so=20
+> write
+> 0xa9000000 to cp0 register5 sel4 to turn off HPTLB mode and return to=20
+> VTLB
+> mode. The actual test also shows that the kernel will no longer be=20
+> stuck in
+> the "Run / init as init process" after shutting down the HPTLB mode,=20
+> and can
+> boot to the shell normally.
+
+That's good info, please consider adding that in the comment and in the=20
+commit message, and maybe also change the last sentence to reflect=20
+what's actually going on with the infinite loop after the tlbmiss.
+
+Cheers,
+-Paul
+
+
+>=20
+>>=20
+>>> Confirmed by Ingenic,
+>>> this operation will not adversely affect processors
+>>> without HPTLB function.
+>>>=20
+>>> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+>>> ---
+>>>   arch/mips/kernel/cpu-probe.c | 16 ++++++++++++++--
+>>>   1 file changed, 14 insertions(+), 2 deletions(-)
+>>>=20
+>>> diff --git a/arch/mips/kernel/cpu-probe.c=20
+>>> b/arch/mips/kernel/cpu-probe.c
+>>> index 16033a4..cfebf8c 100644
+>>> --- a/arch/mips/kernel/cpu-probe.c
+>>> +++ b/arch/mips/kernel/cpu-probe.c
+>>> @@ -1966,11 +1966,23 @@ static inline void cpu_probe_ingenic(struct=20
+>>> cpuinfo_mips *c, unsigned int cpu)
+>>>   	}
+>>>   =7F=7F  	/*
+>>> -	 * The config0 register in the Xburst CPUs with a processor ID of
+>>> +	 * The config0 register in the XBurst CPUs with a processor ID of
+>>> +	 * PRID_COMP_INGENIC_D1 has an abandoned huge page tlb, write
+>>> +	 * 0xa9000000 to cp0 config5 sel4 to disable this function to
+>> Saying "config5" suggests $16 sel 5 to me - Config5 is after all an
+>> architecturally defined register & it's not this one. It'd be better=20
+>> to
+>> say "cop0 register 5 sel 4".
+>=20
+> Sure, I'll change it in v2.
+>=20
+>>> +	 * prevent getting stuck.
+>>> +	 */
+>>> +	if ((c->processor_id & PRID_COMP_MASK) =3D=3D PRID_COMP_INGENIC_D1) {
+>>> +		__asm__ (
+>>> +			"li    $2, 0xa9000000 \n\t"
+>>> +			"mtc0  $2, $5, 4      \n\t"
+>>> +			"nop                  \n\t"
+>>> +			::"r"(2));
+>> I'd prefer that you add #defines to asm/mipsregs.h to provide a
+>> write_c0_X() function where X is replaced with whatever the name of=20
+>> this
+>> register is, and preferably also #define macros describing the fields
+>> present in the register. Writing a magic number isn't ideal.
+>=20
+> Sure, I'll change it in v2.
+>=20
+>>> +	/*
+>>> +	 * The config0 register in the XBurst CPUs with a processor ID of
+>>>   	 * PRID_COMP_INGENIC_D0 report themselves as MIPS32r2 compatible,
+>>>   	 * but they don't actually support this ISA.
+>>>   	 */
+>>> -	if ((c->processor_id & PRID_COMP_MASK) =3D=3D PRID_COMP_INGENIC_D0)
+>>> +	} else if ((c->processor_id & PRID_COMP_MASK) =3D=3D=20
+>>> PRID_COMP_INGENIC_D0)
+>> It might be cleaner to use a switch statement rather than writing out
+>> the & PRID_COMP_MASK condition twice?
+>=20
+> Sure, I'll change it in v2.
+>=20
+> Thanks and best regards!
+>=20
+>>=20
+>> Thanks,
+>>      Paul
+>=20
+>=20
+>=20
+
+=
 
