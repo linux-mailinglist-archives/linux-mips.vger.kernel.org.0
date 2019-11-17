@@ -2,202 +2,214 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCA2FF9D2
-	for <lists+linux-mips@lfdr.de>; Sun, 17 Nov 2019 14:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E9DFFAC6
+	for <lists+linux-mips@lfdr.de>; Sun, 17 Nov 2019 17:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726046AbfKQNOb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 17 Nov 2019 08:14:31 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.218]:19072 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbfKQNOb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 17 Nov 2019 08:14:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1573996463;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=z7TwVxZs2EnNaRI5O7Pgh8WK4q6ghIyxAhe6RiJYSDo=;
-        b=irFK3+Gu7YEHrOEywGRndlHrH+ua5WHFXS/QB/9gZ3pUiuqh9EaAKDm5NVWP/4Ja1c
-        XH/Om2I6qzy7USRA3KZidQe0a4gf5wEihNQ4hFN9pV2BNwvcqLyJr0i8KFe7N4d4GPqr
-        4LgtMKxNWH8ngp+WZoQjDNwEWcGZUxE2lDXnFXrQtF3NL0chb79y0aI9OLYwiQQpKQrL
-        rqDHtmAX4s+v7gqVKl5Wsgj8TgVo7YEbKTwnT+4AVW+ezNmEjU6OYcQnqyYYq1iRpkzJ
-        mJ8MKMcFK0aHFeHDL4woQSWiUThPL6GSf4U46gIGJUqwmaNLK70GMongfnN1pWUsYDop
-        ud7Q==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlSaXA4JLWE="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-        by smtp.strato.de (RZmta 44.29.0 DYNA|AUTH)
-        with ESMTPSA id L09db3vAHDEEOai
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Sun, 17 Nov 2019 14:14:14 +0100 (CET)
-Content-Type: text/plain; charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Subject: Re: MIPS: bug: gettimeofday syscall broken on CI20 board
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <18788C50-F29B-4BD7-89F6-B056FF490214@goldelico.com>
-Date:   Sun, 17 Nov 2019 14:14:14 +0100
-Cc:     linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        MIPS Creator CI20 Development 
-        <mips-creator-ci20-dev@googlegroups.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>
+        id S1726171AbfKQQhY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 17 Nov 2019 11:37:24 -0500
+Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25807 "EHLO
+        sender4-pp-o98.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726069AbfKQQhY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 17 Nov 2019 11:37:24 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1574008614; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=iZvZaFt2TDN4F+bPGgxQLCYTfmtL12svU+BXnmGWAQkzPUidKWcixIK+jvPOudN5BfRdCF49nd5SbRzcFWdR0NTN9G5Hyc/bbyreSa//+eBNsNOrqBspfQnFSQ/rk1KepAMO0wwa0ntUyCpGKqClU5Pz6lfMDRXeZx5oyFcwBO8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1574008614; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=82IU1NUBXG2G+tAXsvrhPZDTikNtk3RE8tTPl9Uh1wY=; 
+        b=jzmCZ24wNbZU5Zq4ErheBliuqPgIb9hEpstkZ/YWKVB2dcYcNu5LDgZchphcoRQ1fH9gFvv3P2k4huj1Qn4s9noi5VZJm3ymu3gdp3MZffvZ60imkF1RczRNsvH4wbep+tJMoMDOV54EoMyXNaSvUMEm3ybzQSM7jDjvF1BwyvE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zoho.com;
+        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
+        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
+  s=zapps768; d=zoho.com; 
+  h=subject:to:references:cc:from:message-id:date:user-agent:mime-version:in-reply-to:content-type; 
+  b=CBMP1HfQWfMU89JNIaaATJeC427lNlhkq/Zag/M5bO3T7t8ztyLrXkYeYxxvR3h/hwXzku6J3Cra
+    ZhY9nS7jL+d7kgMLNJc2sBYf0/wbSYQXUnFHm0CuYlE02xZinDCe  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1574008614;
+        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
+        h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        l=4964; bh=82IU1NUBXG2G+tAXsvrhPZDTikNtk3RE8tTPl9Uh1wY=;
+        b=OBBKzJAQbQOnpqe70EQAv78yL4AV/6Vsa1I6gaoes9dEl+60TqV5IVrHa+DNjaPv
+        2zCdN5QLEmr68R8MJVThDtEY5F9VgQSdIFpVaAyIaLYzGkyumCr7C32veArLKWQYUo6
+        /btTkrU/clLts0jCcLcbm8cXC5pSXjm/n2FKTQUI=
+Received: from [192.168.88.128] (171.221.112.196 [171.221.112.196]) by mx.zohomail.com
+        with SMTPS id 1574008614125857.3636712250745; Sun, 17 Nov 2019 08:36:54 -0800 (PST)
+Subject: Re: [PATCH 2/2] MIPS: Ingenic: Disable abandoned HPTLB function.
+To:     Paul Cercueil <paul@crapouillou.net>
+References: <1571909341-10108-1-git-send-email-zhouyanjie@zoho.com>
+ <1571909341-10108-3-git-send-email-zhouyanjie@zoho.com>
+ <20191115213716.wt4wn2moj3fup4dc@lantea.localdomain>
+ <5DCFCB41.3090807@zoho.com> <1573991370.3.0@crapouillou.net>
+Cc:     Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ralf@linux-mips.org,
+        jhogan@kernel.org, gregkh@linuxfoundation.org,
+        paul.burton@mips.com, chenhc@lemote.com, tglx@linutronix.de,
+        jiaxun.yang@flygoat.com
+From:   Zhou Yanjie <zhouyanjie@zoho.com>
+Message-ID: <5DD1770F.7030300@zoho.com>
+Date:   Mon, 18 Nov 2019 00:36:31 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.8.0
+MIME-Version: 1.0
+In-Reply-To: <1573991370.3.0@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <703DC004-96E8-463D-8870-3CC410FE1C5E@goldelico.com>
-References: <18788C50-F29B-4BD7-89F6-B056FF490214@goldelico.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>
-X-Mailer: Apple Mail (2.3124)
+X-ZohoMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Vincenzo,
+Hi Paul,
 
-> Am 07.11.2019 um 17:21 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
->=20
-> Hi,
-> I am trying to run v5.4-rc6 on the CI20 board (jz4780) and it
-> is almost ok. Except one strange thing.
->=20
-> If I install a v4.19.81 kernel I can initialize the
-> ethernet interface and dhclient works.
->=20
-> If I install a v5.4-rc6 kernel on exactly the same
-> rootfs dhclient fails with
->=20
-> root@letux:~# dhclient
-> ../../../../lib/isc/unix/time.c:200: Operation not permitted
-> root@letux:~#
->=20
-> I have done some strace and the first significant difference
-> is that with v5.4-rc6 there is no gettimeofday syscall.
->=20
-> Another symptom pointing in the same direction is that
-> after manually assigning an IP address I can run ping
-> but get strange time values.
->=20
-> So it may be that
->=20
-> 24640f233b46 mips: Add support for generic vDSO
->=20
-> did break gettimeofday when used with latest Debian Stretch
-> libraries. I tried to git revert but there are conflicts.
->=20
-> Just a side-note: both kernels work with Debian Jessie,
-> which likely has an older gettimeofday wrapper that
-> is not influenced by some subtle change.
+On 2019=E5=B9=B411=E6=9C=8817=E6=97=A5 19:49, Paul Cercueil wrote:
+> Hi Zhou,
+>
+>
+> Le sam., nov. 16, 2019 at 18:11, Zhou Yanjie <zhouyanjie@zoho.com> a=20
+> =C3=A9crit :
+>> Hi Paul,
+>>
+>> On 2019=E5=B9=B411=E6=9C=8816=E6=97=A5 05:37, Paul Burton wrote:
+>>> Hi Zhou,
+>>>
+>>> On Thu, Oct 24, 2019 at 05:29:01PM +0800, Zhou Yanjie wrote:
+>>>> JZ4760/JZ4770/JZ4775/X1000/X1500 has an abandoned huge page
+>>>> tlb, write 0xa9000000 to cp0 config5 sel4 to disable this
+>>>> function to prevent getting stuck.
+>>> Can you describe how we "get stuck"?
+>>
+>> When the kernel is started, it will be stuck in the "Run /init as=20
+>> init process"
+>> according to the log information. After using the debug probe, it is=20
+>> found
+>> that tlbmiss occurred when the run init was started, and entered the=20
+>> infinite
+>> loop in the "tlb-funcs.S".
+>>
+>>> What actually goes wrong on the
+>>> affected CPUs? Do they misinterpret EntryLo values? Which bits do they
+>>> misinterpret?
+>>
+>> According to Ingenic's explanation, this is because the=20
+>> JZ4760/JZ4770/JZ4775/X1000
+>> use the same core (both belong to PRID_COMP_INGENIC_D1). This core is=20
+>> not fully
+>> implemented in VTLB at design time, but only implements the 4K page=20
+>> mode.
+>
+> Actually hugepages work fine on all Ingenic SoCs I tested with, from=20
+> JZ4740 upwards, with the VTLB, so this is incorrect.
 
-I finally found time to do a bisect and it confirms:
+It may be that I have misunderstood their explanation. I will check this=20
+with Ingenic
+again tomorrow. However, one thing is certain: these chips default to=20
+HPTLB mode
+after power-on, which will cause the kernel to be stuck (tested on=20
+JZ4770/JZ4775/X1000).
+Then need to shutdown HPTLB mode and use VTLB to start normally.
 
-24640f233b466051ad3a5d2786d2951e43026c9d is the first bad commit
-commit 24640f233b466051ad3a5d2786d2951e43026c9d
-Author: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Date:   Fri Jun 21 10:52:46 2019 +0100
+>
+>
+>> Support for larger pages was implemented by a component called HPTLB=20
+>> that
+>> they designed themselves, but this component was later discarded, so=20
+>> write
+>> 0xa9000000 to cp0 register5 sel4 to turn off HPTLB mode and return to=20
+>> VTLB
+>> mode. The actual test also shows that the kernel will no longer be=20
+>> stuck in
+>> the "Run / init as init process" after shutting down the HPTLB mode,=20
+>> and can
+>> boot to the shell normally.
+>
+> That's good info, please consider adding that in the comment and in=20
+> the commit message, and maybe also change the last sentence to reflect=20
+> what's actually going on with the infinite loop after the tlbmiss.
 
-    mips: Add support for generic vDSO
-   =20
-    The mips vDSO library requires some adaptations to take advantage of =
-the
-    newly introduced generic vDSO library.
-   =20
-    Introduce the following changes:
-     - Modification of vdso.c to be compliant with the common vdso =
-datapage
-     - Use of lib/vdso for gettimeofday
-   =20
-    Cc: Ralf Baechle <ralf@linux-mips.org>
-    Cc: Paul Burton <paul.burton@mips.com>
-    Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-    [paul.burton@mips.com: Prepend $(src) to config-n32-o32-env.c path.]
-    Signed-off-by: Paul Burton <paul.burton@mips.com>
+OK, I will add them to the v3's comment and commit message.
 
- arch/mips/Kconfig                         |   2 +
- arch/mips/include/asm/vdso.h              |  78 +--------------
- arch/mips/include/asm/vdso/gettimeofday.h | 151 =
-++++++++++++++++++++++++++++++
- arch/mips/include/asm/vdso/vdso.h         |  85 +++++++++++++++++
- arch/mips/include/asm/vdso/vsyscall.h     |  43 +++++++++
- arch/mips/kernel/vdso.c                   |  37 ++------
- arch/mips/vdso/Makefile                   |  33 ++++++-
- arch/mips/vdso/config-n32-o32-env.c       |  17 ++++
- arch/mips/vdso/elf.S                      |   2 +-
- arch/mips/vdso/sigreturn.S                |   2 +-
- arch/mips/vdso/vdso.h                     |  85 -----------------
- arch/mips/vdso/vgettimeofday.c            |  40 ++++++++
- 12 files changed, 378 insertions(+), 197 deletions(-)
- create mode 100644 arch/mips/include/asm/vdso/gettimeofday.h
- create mode 100644 arch/mips/include/asm/vdso/vdso.h
- create mode 100644 arch/mips/include/asm/vdso/vsyscall.h
- create mode 100644 arch/mips/vdso/config-n32-o32-env.c
- delete mode 100644 arch/mips/vdso/vdso.h
- create mode 100644 arch/mips/vdso/vgettimeofday.c
+Thanks and best regards=EF=BC=81
 
-So this patch intoruced in v5.4-rc1 breaks compatibility with Debian 9.9
-user space assumptions.
+>
+> Cheers,
+> -Paul
+>
+>
+>>
+>>>
+>>>> Confirmed by Ingenic,
+>>>> this operation will not adversely affect processors
+>>>> without HPTLB function.
+>>>>
+>>>> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+>>>> ---
+>>>>   arch/mips/kernel/cpu-probe.c | 16 ++++++++++++++--
+>>>>   1 file changed, 14 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/arch/mips/kernel/cpu-probe.c=20
+>>>> b/arch/mips/kernel/cpu-probe.c
+>>>> index 16033a4..cfebf8c 100644
+>>>> --- a/arch/mips/kernel/cpu-probe.c
+>>>> +++ b/arch/mips/kernel/cpu-probe.c
+>>>> @@ -1966,11 +1966,23 @@ static inline void cpu_probe_ingenic(struct=20
+>>>> cpuinfo_mips *c, unsigned int cpu)
+>>>>       }
+>>>>   =7F=7F      /*
+>>>> -     * The config0 register in the Xburst CPUs with a processor ID of
+>>>> +     * The config0 register in the XBurst CPUs with a processor ID of
+>>>> +     * PRID_COMP_INGENIC_D1 has an abandoned huge page tlb, write
+>>>> +     * 0xa9000000 to cp0 config5 sel4 to disable this function to
+>>> Saying "config5" suggests $16 sel 5 to me - Config5 is after all an
+>>> architecturally defined register & it's not this one. It'd be better to
+>>> say "cop0 register 5 sel 4".
+>>
+>> Sure, I'll change it in v2.
+>>
+>>>> +     * prevent getting stuck.
+>>>> +     */
+>>>> +    if ((c->processor_id & PRID_COMP_MASK) =3D=3D PRID_COMP_INGENIC_D=
+1) {
+>>>> +        __asm__ (
+>>>> +            "li    $2, 0xa9000000 \n\t"
+>>>> +            "mtc0  $2, $5, 4      \n\t"
+>>>> +            "nop                  \n\t"
+>>>> +            ::"r"(2));
+>>> I'd prefer that you add #defines to asm/mipsregs.h to provide a
+>>> write_c0_X() function where X is replaced with whatever the name of=20
+>>> this
+>>> register is, and preferably also #define macros describing the fields
+>>> present in the register. Writing a magic number isn't ideal.
+>>
+>> Sure, I'll change it in v2.
+>>
+>>>> +    /*
+>>>> +     * The config0 register in the XBurst CPUs with a processor ID of
+>>>>        * PRID_COMP_INGENIC_D0 report themselves as MIPS32r2=20
+>>>> compatible,
+>>>>        * but they don't actually support this ISA.
+>>>>        */
+>>>> -    if ((c->processor_id & PRID_COMP_MASK) =3D=3D PRID_COMP_INGENIC_D=
+0)
+>>>> +    } else if ((c->processor_id & PRID_COMP_MASK) =3D=3D=20
+>>>> PRID_COMP_INGENIC_D0)
+>>> It might be cleaner to use a switch statement rather than writing out
+>>> the & PRID_COMP_MASK condition twice?
+>>
+>> Sure, I'll change it in v2.
+>>
+>> Thanks and best regards!
+>>
+>>>
+>>> Thanks,
+>>>      Paul
+>>
+>>
+>>
+>
+>
 
-One thing seems strange to me:
 
--/**
-- * union mips_vdso_data - Data provided by the kernel for the VDSO.
-- * @xtime_sec:         Current real time (seconds part).
-- * @xtime_nsec:                Current real time (nanoseconds part, =
-shifted).
-- * @wall_to_mono_sec:  Wall-to-monotonic offset (seconds part).
-- * @wall_to_mono_nsec: Wall-to-monotonic offset (nanoseconds part).
-- * @seq_count:         Counter to synchronise updates (odd =3D =
-updating).
-- * @cs_shift:          Clocksource shift value.
-- * @clock_mode:                Clocksource to use for time functions.
-- * @cs_mult:           Clocksource multiplier value.
-- * @cs_cycle_last:     Clock cycle value at last update.
-- * @cs_mask:           Clocksource mask value.
-- * @tz_minuteswest:    Minutes west of Greenwich (from timezone).
-- * @tz_dsttime:                Type of DST correction (from timezone).
-- *
-- * This structure contains data needed by functions within the VDSO. It =
-is
-- * populated by the kernel and mapped read-only into user memory. The =
-time
-- * fields are mirrors of internal data from the timekeeping =
-infrastructure.
-- *
-- * Note: Care should be taken when modifying as the layout must remain =
-the same
-- * for both 64- and 32-bit (for 32-bit userland on 64-bit kernel).
-- */
- union mips_vdso_data {
--       struct {
--               u64 xtime_sec;
--               u64 xtime_nsec;
--               u64 wall_to_mono_sec;
--               u64 wall_to_mono_nsec;
--               u32 seq_count;
--               u32 cs_shift;
--               u8 clock_mode;
--               u32 cs_mult;
--               u64 cs_cycle_last;
--               u64 cs_mask;
--               s32 tz_minuteswest;
--               s32 tz_dsttime;
--       };
--
-+       struct vdso_data data[CS_BASES];
-        u8 page[PAGE_SIZE];
- };
-
-If I look at the definition of vdso_data it *is* significantly differen
-from mips_vdso_data.
-
-What I would assume is that the struct mips_vdso_data is embossed in =
-user
-space code and therefore using vdso_data instead is breaking API.
-
-Please advise what I should try or check to narrow down further.
-
-BR and thanks,
-Nikolaus Schaller
 
