@@ -2,62 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DAD102111
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Nov 2019 10:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7A81021F2
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Nov 2019 11:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725280AbfKSJob (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Nov 2019 04:44:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33442 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725798AbfKSJob (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 19 Nov 2019 04:44:31 -0500
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A8A44214D9;
-        Tue, 19 Nov 2019 09:44:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574156670;
-        bh=Co+9nC8LHf9nBgV61e+bLx69WUxnINaAQoKGyuVnzHc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=peQ3kYl60TH11ynsz5ARijEULfYL7BAYgDQ8ZfNZwof/kjHOOKPo+ehp0HB91ZWLp
-         VqPvMmSlAxbuLd+o2jFQfWUzfDFb0WrLZlxYdajczzSrhh5UAzTL2d+mgJYIC7oHQc
-         KmpTcYJLP1VePee6LQYXTToqaIb5rb+CC3iwF3/k=
-Received: by mail-lf1-f45.google.com with SMTP id b20so16489495lfp.4;
-        Tue, 19 Nov 2019 01:44:29 -0800 (PST)
-X-Gm-Message-State: APjAAAVV7hBryQN77t3WBBYos6tVG2NpN5aQj8Y12pBYkir6NpYTVtbd
-        /x/+oFf2PjGrlMv2ZviugriF20L4Dj6tAFr+2HE=
-X-Google-Smtp-Source: APXvYqx1eAge2ZT9e3zpuCY1yWpA8Sxtth7ftU+ZVwo02YeUdKA9ziLmKXgXlk5UaMG1Ci33IVhhMeQOZVNib9lZUgo=
-X-Received: by 2002:a19:82c4:: with SMTP id e187mr3041568lfd.106.1574156667828;
- Tue, 19 Nov 2019 01:44:27 -0800 (PST)
-MIME-Version: 1.0
-References: <20191113073539.9660-1-hch@lst.de> <CGME20191113073648epcas3p214f97ad5937559bebbc937e507fa54d9@epcas3p2.samsung.com>
- <20191113073539.9660-2-hch@lst.de> <1c227c91-512c-e871-0e03-a27b2c0435d7@samsung.com>
-In-Reply-To: <1c227c91-512c-e871-0e03-a27b2c0435d7@samsung.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Tue, 19 Nov 2019 17:44:16 +0800
-X-Gmail-Original-Message-ID: <CAJKOXPdM1+x_4PQ1AfoPY6GuV0e9bk3hv_1EfEdHcLjMwwYxgw@mail.gmail.com>
-Message-ID: <CAJKOXPdM1+x_4PQ1AfoPY6GuV0e9bk3hv_1EfEdHcLjMwwYxgw@mail.gmail.com>
+        id S1726555AbfKSKT7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Nov 2019 05:19:59 -0500
+Received: from mx2.suse.de ([195.135.220.15]:50404 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725798AbfKSKT7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 19 Nov 2019 05:19:59 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 405A9B301;
+        Tue, 19 Nov 2019 10:19:56 +0000 (UTC)
+Message-ID: <fb25b868bd49f368874d97dda7befc07e8db6057.camel@suse.de>
 Subject: Re: [PATCH 1/3] dma-direct: unify the dma_capable definitions
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Christoph Hellwig <hch@lst.de>,
         iommu@lists.linux-foundation.org,
-        Russell King <linux@armlinux.org.uk>,
-        linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        Robin Gong <yibin.gong@nxp.com>, Vinod Koul <vkoul@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
+Date:   Tue, 19 Nov 2019 11:19:54 +0100
+In-Reply-To: <1c227c91-512c-e871-0e03-a27b2c0435d7@samsung.com>
+References: <20191113073539.9660-1-hch@lst.de>
+         <CGME20191113073648epcas3p214f97ad5937559bebbc937e507fa54d9@epcas3p2.samsung.com>
+         <20191113073539.9660-2-hch@lst.de>
+         <1c227c91-512c-e871-0e03-a27b2c0435d7@samsung.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-9aduMZ9FwgNk+BtbhcTa"
+User-Agent: Evolution 3.34.1 
+MIME-Version: 1.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 19 Nov 2019 at 17:27, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
->
+
+--=-9aduMZ9FwgNk+BtbhcTa
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, 2019-11-19 at 10:27 +0100, Marek Szyprowski wrote:
 > Hi Christoph,
->
+>=20
 > On 13.11.2019 08:35, Christoph Hellwig wrote:
 > > Currently each architectures that wants to override dma_to_phys and
 > > phys_to_dma also has to provide dma_capable.  But there isn't really
@@ -65,92 +56,214 @@ On Tue, 19 Nov 2019 at 17:27, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
 > > generic one minus the latests fix, and the arm one was the inspiration
 > > for said fix, but misses the bus_dma_mask handling.
 > > Make all architectures use the generic version instead.
-> >
+> >=20
 > > Signed-off-by: Christoph Hellwig <hch@lst.de>
->
+>=20
 > This patch breaks DMAengine PL330 driver on Samsung Exynos SoCs:
+>=20
+> [    3.602338] dma-pl330 12690000.pdma: overflow 0x13810020+1 of DMA=20
+> mask ffffffff bus mask 0
+> [    3.605113] ------------[ cut here ]------------
+> [    3.609719] WARNING: CPU: 2 PID: 1 at kernel/dma/direct.c:36=20
+> report_addr+0xc0/0xfc
+> [    3.617226] Modules linked in:
+> [    3.620271] CPU: 2 PID: 1 Comm: init Not tainted=20
+> 5.4.0-rc5-00056-gb037b220e71d #6911
+> [    3.627986] Hardware name: SAMSUNG EXYNOS (Flattened Device Tree)
+> [    3.634094] [<c01124e8>] (unwind_backtrace) from [<c010dfcc>]=20
+> (show_stack+0x10/0x14)
+> [    3.641803] [<c010dfcc>] (show_stack) from [<c0ae9af8>]=20
+> (dump_stack+0xa8/0xd4)
+> [    3.649002] [<c0ae9af8>] (dump_stack) from [<c012746c>]=20
+> (__warn+0xf4/0x10c)
+> [    3.655940] [<c012746c>] (__warn) from [<c0127534>]=20
+> (warn_slowpath_fmt+0xb0/0xb8)
+> [    3.663404] [<c0127534>] (warn_slowpath_fmt) from [<c01b4ff4>]=20
+> (report_addr+0xc0/0xfc)
+> [    3.671303] [<c01b4ff4>] (report_addr) from [<c01b5264>]=20
+> (dma_direct_map_resource+0x98/0xa0)
+> [    3.679739] [<c01b5264>] (dma_direct_map_resource) from [<c04fbb58>]=
+=20
+> (pl330_prep_slave_fifo+0xe4/0x128)
+> [    3.689099] [<c04fbb58>] (pl330_prep_slave_fifo) from [<c04fe2b8>]=20
+> (pl330_prep_slave_sg+0x54/0x1cc)
+> [    3.698129] [<c04fe2b8>] (pl330_prep_slave_sg) from [<c053e5f0>]=20
+> (s3c24xx_serial_start_tx_dma+0x118/0x1e8)
+> [    3.707764] [<c053e5f0>] (s3c24xx_serial_start_tx_dma) from=20
+> [<c0535f70>] (uart_write+0xe4/0x1e0)
+> [    3.716532] [<c0535f70>] (uart_write) from [<c05186a0>]=20
+> (n_tty_write+0x1c8/0x474)
+> [    3.723992] [<c05186a0>] (n_tty_write) from [<c05163c0>]=20
+> (tty_write+0x154/0x314)
+> [    3.731380] [<c05163c0>] (tty_write) from [<c02a5748>]=20
+> (__vfs_write+0x30/0x1d0)
+> [    3.738662] [<c02a5748>] (__vfs_write) from [<c02a851c>]=20
+> (vfs_write+0xa4/0x180)
+> [    3.745949] [<c02a851c>] (vfs_write) from [<c02a8778>]=20
+> (ksys_write+0x60/0xd8)
+> [    3.753069] [<c02a8778>] (ksys_write) from [<c0101000>]=20
+> (ret_fast_syscall+0x0/0x28)
+> [    3.760705] Exception stack(0xee8dffa8 to 0xee8dfff0)
+> [    3.765739] ffa0:                   0000004a beca876c 00000002=20
+> beca876c 0000004a 00000000
+> [    3.773900] ffc0: 0000004a beca876c b6f02cf0 00000004 beca876c=20
+> 0000004a 00000000 b6f99010
+> [    3.782056] ffe0: 0000006c beca8628 b6e1d000 b6e7a634
+> [    3.787092] irq event stamp: 289740
+> [    3.790571] hardirqs last  enabled at (289739): [<c0b0d0c4>]=20
+> _raw_spin_unlock_irqrestore+0x6c/0x74
+> [    3.799503] hardirqs last disabled at (289740): [<c0b0caf8>]=20
+> _raw_spin_lock_irqsave+0x1c/0x58
+> [    3.808011] softirqs last  enabled at (289576): [<c01026bc>]=20
+> __do_softirq+0x4fc/0x5fc
+> [    3.815830] softirqs last disabled at (289567): [<c0130044>]=20
+> irq_exit+0x16c/0x170
+> [    3.823286] ---[ end trace b1432c658797b861 ]---
+> [    3.827898] samsung-uart 13810000.serial: Unable to get desc for Tx
+> [    3.834624] samsung-uart 13810000.serial: Unable to get desc for Tx
+> [    3.840487] samsung-uart 13810000.serial: Unable to get desc for Tx
+>=20
+> I'm checking now which part of it causes the issue.
+
+Hi Marek,
+is this a on a non LPAE ARM32 device?
+
+Regards,
+Nicolas
+
+> > ---
+> >   arch/arm/include/asm/dma-direct.h     | 19 -------------------
+> >   arch/mips/include/asm/dma-direct.h    |  8 --------
+> >   arch/powerpc/include/asm/dma-direct.h |  9 ---------
+> >   include/linux/dma-direct.h            |  2 +-
+> >   4 files changed, 1 insertion(+), 37 deletions(-)
+> >=20
+> > diff --git a/arch/arm/include/asm/dma-direct.h b/arch/arm/include/asm/d=
+ma-
+> > direct.h
+> > index b67e5fc1fe43..7c3001a6a775 100644
+> > --- a/arch/arm/include/asm/dma-direct.h
+> > +++ b/arch/arm/include/asm/dma-direct.h
+> > @@ -14,23 +14,4 @@ static inline phys_addr_t __dma_to_phys(struct devic=
+e
+> > *dev, dma_addr_t dev_addr)
+> >   	return __pfn_to_phys(dma_to_pfn(dev, dev_addr)) + offset;
+> >   }
+> >  =20
+> > -static inline bool dma_capable(struct device *dev, dma_addr_t addr, si=
+ze_t
+> > size)
+> > -{
+> > -	u64 limit, mask;
+> > -
+> > -	if (!dev->dma_mask)
+> > -		return 0;
+> > -
+> > -	mask =3D *dev->dma_mask;
+> > -
+> > -	limit =3D (mask + 1) & ~mask;
+> > -	if (limit && size > limit)
+> > -		return 0;
+> > -
+> > -	if ((addr | (addr + size - 1)) & ~mask)
+> > -		return 0;
+> > -
+> > -	return 1;
+> > -}
+> > -
+> >   #endif /* ASM_ARM_DMA_DIRECT_H */
+> > diff --git a/arch/mips/include/asm/dma-direct.h b/arch/mips/include/asm=
+/dma-
+> > direct.h
+> > index b5c240806e1b..14e352651ce9 100644
+> > --- a/arch/mips/include/asm/dma-direct.h
+> > +++ b/arch/mips/include/asm/dma-direct.h
+> > @@ -2,14 +2,6 @@
+> >   #ifndef _MIPS_DMA_DIRECT_H
+> >   #define _MIPS_DMA_DIRECT_H 1
+> >  =20
+> > -static inline bool dma_capable(struct device *dev, dma_addr_t addr, si=
+ze_t
+> > size)
+> > -{
+> > -	if (!dev->dma_mask)
+> > -		return false;
+> > -
+> > -	return addr + size - 1 <=3D *dev->dma_mask;
+> > -}
+> > -
+> >   dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr);
+> >   phys_addr_t __dma_to_phys(struct device *dev, dma_addr_t daddr);
+> >  =20
+> > diff --git a/arch/powerpc/include/asm/dma-direct.h
+> > b/arch/powerpc/include/asm/dma-direct.h
+> > index a2912b47102c..e29e8a236b8d 100644
+> > --- a/arch/powerpc/include/asm/dma-direct.h
+> > +++ b/arch/powerpc/include/asm/dma-direct.h
+> > @@ -2,15 +2,6 @@
+> >   #ifndef ASM_POWERPC_DMA_DIRECT_H
+> >   #define ASM_POWERPC_DMA_DIRECT_H 1
+> >  =20
+> > -static inline bool dma_capable(struct device *dev, dma_addr_t addr, si=
+ze_t
+> > size)
+> > -{
+> > -	if (!dev->dma_mask)
+> > -		return false;
+> > -
+> > -	return addr + size - 1 <=3D
+> > -		min_not_zero(*dev->dma_mask, dev->bus_dma_mask);
+> > -}
+> > -
+> >   static inline dma_addr_t __phys_to_dma(struct device *dev, phys_addr_=
+t
+> > paddr)
+> >   {
+> >   	if (!dev)
+> > diff --git a/include/linux/dma-direct.h b/include/linux/dma-direct.h
+> > index 6db863c3eb93..991f8aa2676e 100644
+> > --- a/include/linux/dma-direct.h
+> > +++ b/include/linux/dma-direct.h
+> > @@ -24,6 +24,7 @@ static inline phys_addr_t __dma_to_phys(struct device
+> > *dev, dma_addr_t dev_addr)
+> >  =20
+> >   	return paddr + ((phys_addr_t)dev->dma_pfn_offset << PAGE_SHIFT);
+> >   }
+> > +#endif /* !CONFIG_ARCH_HAS_PHYS_TO_DMA */
+> >  =20
+> >   static inline bool dma_capable(struct device *dev, dma_addr_t addr, s=
+ize_t
+> > size)
+> >   {
+> > @@ -38,7 +39,6 @@ static inline bool dma_capable(struct device *dev,
+> > dma_addr_t addr, size_t size)
+> >  =20
+> >   	return end <=3D min_not_zero(*dev->dma_mask, dev->bus_dma_mask);
+> >   }
+> > -#endif /* !CONFIG_ARCH_HAS_PHYS_TO_DMA */
+> >  =20
+> >   #ifdef CONFIG_ARCH_HAS_FORCE_DMA_UNENCRYPTED
+> >   bool force_dma_unencrypted(struct device *dev);
+>=20
+> Best regards
 
 
-Thanks Marek for bisecting it. I wonder whether it is also the cause
-for boot failures I see on NXP Vybrid VF50 SoC (NXP/Freescale
-fsl-edma) since few days:
+--=-9aduMZ9FwgNk+BtbhcTa
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-[ 2.853428] fsl-edma 40018000.dma-controller: overflow 0x40027007+1 of
-DMA mask ffffffff bus mask 0
-[ 2.862566] ------------[ cut here ]------------
-[ 2.867273] WARNING: CPU: 0 PID: 1 at
-/home/buildbot/worker/builddir_yocto/build/build/tmp/work-shared/col-vf50-proceq-mainline-next/kernel-source/kernel/dma/direct.c:35
-report_addr+0xc0/0xfc
-[ 2.884380] Modules linked in:
-[ 2.887486] CPU: 0 PID: 1 Comm: swapper Tainted: G W
-5.4.0-rc7-next-20191118-g519ead8f6a32 #1
-[ 2.897364] Hardware name: Freescale Vybrid VF5xx/VF6xx (Device Tree)
-[ 2.903892] [<8010ddfc>] (unwind_backtrace) from [<8010b4b8>]
-(show_stack+0x10/0x14)
-[ 2.911712] [<8010b4b8>] (show_stack) from [<8011b08c>] (__warn+0xd4/0xec)
-[ 2.918653] [<8011b08c>] (__warn) from [<8011b154>]
-(warn_slowpath_fmt+0xb0/0xb8)
-[ 2.926218] [<8011b154>] (warn_slowpath_fmt) from [<80155f7c>]
-(report_addr+0xc0/0xfc)
-[ 2.934221] [<80155f7c>] (report_addr) from [<801561f0>]
-(dma_direct_map_resource+0x98/0xa4)
-[ 2.942744] [<801561f0>] (dma_direct_map_resource) from [<8041d5d4>]
-(fsl_edma_prep_slave_dma+0x12c/0x150)
-[ 2.952475] [<8041d5d4>] (fsl_edma_prep_slave_dma) from [<8041d8cc>]
-(fsl_edma_prep_dma_cyclic+0x30/0x21c)
-[ 2.962213] [<8041d8cc>] (fsl_edma_prep_dma_cyclic) from [<80452e10>]
-(lpuart_rx_dma_startup+0x188/0x36c)
-[ 2.971871] [<80452e10>] (lpuart_rx_dma_startup) from [<80453058>]
-(lpuart_startup+0x64/0x78)
-[ 2.980477] [<80453058>] (lpuart_startup) from [<8044e924>]
-(uart_startup.part.7+0x110/0x23c)
-[ 2.989080] [<8044e924>] (uart_startup.part.7) from [<8044eaa0>]
-(uart_port_activate+0x50/0x7c)
-[ 2.997857] [<8044eaa0>] (uart_port_activate) from [<80438dc0>]
-(tty_port_open+0x74/0xc0)
-[ 3.006111] [<80438dc0>] (tty_port_open) from [<8044be30>] (uart_open+0x18/0x20)
-[ 3.013588] [<8044be30>] (uart_open) from [<80431b4c>] (tty_open+0x108/0x428)
-[ 3.020794] [<80431b4c>] (tty_open) from [<801edb48>] (chrdev_open+0xac/0x164)
-[ 3.028098] [<801edb48>] (chrdev_open) from [<801e55c8>]
-(do_dentry_open+0x22c/0x3e4)
-[ 3.036010] [<801e55c8>] (do_dentry_open) from [<801f72a8>]
-(path_openat+0x4a4/0xf78)
-[ 3.043912] [<801f72a8>] (path_openat) from [<801f8d34>]
-(do_filp_open+0x70/0xdc)
-[ 3.051472] [<801f8d34>] (do_filp_open) from [<801e6998>]
-(do_sys_open+0x128/0x1f4)
-[ 3.059217] [<801e6998>] (do_sys_open) from [<80a00ee0>]
-(kernel_init_freeable+0x150/0x1c4)
-[ 3.067658] [<80a00ee0>] (kernel_init_freeable) from [<8068e208>]
-(kernel_init+0x8/0x110)
-[ 3.075917] [<8068e208>] (kernel_init) from [<801010e8>]
-(ret_from_fork+0x14/0x2c)
-[ 3.083539] Exception stack(0x86843fb0 to 0x86843ff8)
-[ 3.088631] 3fa0: 00000000 00000000 00000000 00000000
-[ 3.096866] 3fc0: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[ 3.105103] 3fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[ 3.111752] ---[ end trace 6fb699802256a309 ]---
-[    3.116423] fsl-lpuart 40027000.serial: Cannot prepare cyclic DMA
-[    3.192968] VFS: Mounted root (nfs4 filesystem) on device 0:13.
-[    3.201432] devtmpfs: mounted
-[    3.210985] Freeing unused kernel memory: 1024K
-[    3.217854] Run /sbin/init as init process
-[    4.643355] systemd[1]: System time before build time, advancing clock.
-[    4.774106] random: systemd: uninitialized urandom read (16 bytes read)
-[    4.838361] systemd[1]: systemd 232 running in system mode. (-PAM
--AUDIT -SELINUX -IMA -APPARMOR -SMACK +SYSVINIT +UTMP -LIBCRYPTSETUP
--GCRYPT -GNUTLS +ACL +XZ -LZ4 -SECCOMP +BLKID -ELFUTILS +KMOD -IDN)
-[    4.858997] systemd[1]: Detected architecture arm.
-[    4.873438] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
-[    4.880138] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
-[    4.886585] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
-[    4.893124] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
-[    4.899679] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
-[    4.906110] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
-[    4.912616] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
+-----BEGIN PGP SIGNATURE-----
 
-Although maybe that's just the fsl-edma problem?
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl3TwcoACgkQlfZmHno8
+x/4hYggAgy09wSQ1ZdnrSCRXM/qq4EQzGTlWlNYjUCtT8eDcvo8fKm0pfdBpGStG
+QPbrAzJaKNlsIR6Tx/TEF/m1JX1I/QzNsng9h76ShOpn9CGshg57W91L82b57qT4
+vJDniIW8Gv3SQ+jSSspU8N2UVYLYCqOqpxxjyy8zTRkU0CtyaJCyLXeSQTLjGyab
+fs/5NI6u7gE4bLChR9+lkqu7t3ga1Wsxuoq2Fx/J8tio0q82ZFowbsevVWAFzb0b
+Nfm1YGv7BYtSYOldIHrYPwiwJzcJ5zv5tAJh+GaszzXMTIGk9Tpv2VpjymlSbLja
+HCVKkk0xkKPJrTOWzYpiiX4w6WeybA==
+=xWer
+-----END PGP SIGNATURE-----
 
-Best regards,
-Krzysztof
+--=-9aduMZ9FwgNk+BtbhcTa--
+
