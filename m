@@ -2,135 +2,193 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80C5F1026B3
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Nov 2019 15:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4178910291C
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Nov 2019 17:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726555AbfKSOam (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Nov 2019 09:30:42 -0500
-Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25845 "EHLO
-        sender4-pp-o98.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726409AbfKSOam (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Nov 2019 09:30:42 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1574173772; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=haNrHXmZ8f5gKg7Aqd56b9lZvE3/LWraVNamsBfZoS8jPJpkFaOs0er1j2Mu4/PoqEJ/sYA6Kl9/7GGNxs1E7s19QErXrQsgA+Je4xf92OE0/VQf12p1wYWpzOCS9QFqNu/xEcWhk/itJMQn6XeJJMxh3Ofgq1jcpVfdZULEVP8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1574173772; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To; 
-        bh=K3eeJlCStJlagedwM9bTo7SweAVG0wRCc805HZD/FBs=; 
-        b=MbNEHtCntZuO+9TwjZwLtaFw7zaAeOCVmsMwG+Vvb2N+O1oD/JZVqEDsdMCdQm3OebGeBzLL1njTsuHpUUyr9d+OLxmGwmLU/+iYzzubHiJR/9FQP+BVO10sfvoMT5db5wRbGRrDcxlinr7bdyMljpFfMdPpG51ewU9TK92b2LE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zoho.com;
-        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
-        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
-DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
-  s=zapps768; d=zoho.com; 
-  h=from:to:cc:subject:date:message-id:in-reply-to:references; 
-  b=T8f/CLB8BgSro3xqmKC80DFGsPE/+fTpkUE/V24jOrguijNYAB8KiQmA5WWm/SSdbaZC61BBsfzV
-    aXzzVeLfcjlqD4l1d8Yeid/W77hhTugcBE7PGKZE8ekvhlQbOEO+  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1574173772;
-        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        l=2889; bh=K3eeJlCStJlagedwM9bTo7SweAVG0wRCc805HZD/FBs=;
-        b=BeQiadmuk4U9Fs7d1JA24clkREYJ5QChKsuds4mHdVkjFIIbneUI3YCvpdijTejS
-        HwxzOJ7/MM6vofFbDtgE2n9o+EN1dVGkYl2WUk/JQXmDV5SveskYOUxKlXv6btEVi2t
-        PsVMrxxgjr+XDyAa07BeMCOycCPY8F12D0750I/I=
-Received: from zhouyanjie-virtual-machine.localdomain (171.221.113.24 [171.221.113.24]) by mx.zohomail.com
-        with SMTPS id 1574173771482827.3018728700847; Tue, 19 Nov 2019 06:29:31 -0800 (PST)
-From:   Zhou Yanjie <zhouyanjie@zoho.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, ralf@linux-mips.org,
-        paulburton@kernel.org, jhogan@kernel.org, paul@crapouillou.net,
-        jiaxun.yang@flygoat.com, gregkh@linuxfoundation.org,
-        malat@debian.org, tglx@linutronix.de, chenhc@lemote.com
-Subject: [PATCH 2/2 v3] MIPS: Ingenic: Disable abandoned HPTLB function.
-Date:   Tue, 19 Nov 2019 22:28:47 +0800
-Message-Id: <1574173727-123321-3-git-send-email-zhouyanjie@zoho.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1574173727-123321-1-git-send-email-zhouyanjie@zoho.com>
-References: <1571909341-10108-1-git-send-email-zhouyanjie@zoho.com>
- <1574173727-123321-1-git-send-email-zhouyanjie@zoho.com>
-X-ZohoMailClient: External
+        id S1728427AbfKSQQL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Nov 2019 11:16:11 -0500
+Received: from foss.arm.com ([217.140.110.172]:54824 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728341AbfKSQQL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 19 Nov 2019 11:16:11 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 674B131B;
+        Tue, 19 Nov 2019 08:16:10 -0800 (PST)
+Received: from [10.1.196.37] (e121345-lin.cambridge.arm.com [10.1.196.37])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A28AD3F6C4;
+        Tue, 19 Nov 2019 08:16:08 -0800 (PST)
+Subject: Re: [PATCH 1/3] dma-direct: unify the dma_capable definitions
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
+        linux-mips@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org,
+        Robin Gong <yibin.gong@nxp.com>, linuxppc-dev@lists.ozlabs.org,
+        Christoph Hellwig <hch@lst.de>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+References: <20191113073539.9660-1-hch@lst.de>
+ <CGME20191113073648epcas3p214f97ad5937559bebbc937e507fa54d9@epcas3p2.samsung.com>
+ <20191113073539.9660-2-hch@lst.de>
+ <1c227c91-512c-e871-0e03-a27b2c0435d7@samsung.com>
+ <CAJKOXPdM1+x_4PQ1AfoPY6GuV0e9bk3hv_1EfEdHcLjMwwYxgw@mail.gmail.com>
+ <a3e2d65b-7270-9555-a251-d7ed0c4fb85c@samsung.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <dd7f90e8-76cb-259f-cb48-2aac7bffb404@arm.com>
+Date:   Tue, 19 Nov 2019 16:16:03 +0000
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <a3e2d65b-7270-9555-a251-d7ed0c4fb85c@samsung.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-JZ4760/JZ4770/JZ4775/X1000/X1500 has an abandoned huge page tlb,
-this mode is not compatible with the MIPS standard, it will cause
-tlbmiss and into an infinite loop (line 21 in the tlb-funcs.S)
-when starting the init process. write 0xa9000000 to cp0 register 5
-sel 4 to disable this function to prevent getting stuck. Confirmed
-by Ingenic, this operation will not adversely affect processors
-without HPTLB function.
+On 19/11/2019 10:26 am, Marek Szyprowski wrote:
+> Hi Krzysztof,
+> 
+> On 19.11.2019 10:44, Krzysztof Kozlowski wrote:
+>> On Tue, 19 Nov 2019 at 17:27, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>>> Hi Christoph,
+>>>
+>>> On 13.11.2019 08:35, Christoph Hellwig wrote:
+>>>> Currently each architectures that wants to override dma_to_phys and
+>>>> phys_to_dma also has to provide dma_capable.  But there isn't really
+>>>> any good reason for that.  powerpc and mips just have copies of the
+>>>> generic one minus the latests fix, and the arm one was the inspiration
+>>>> for said fix, but misses the bus_dma_mask handling.
+>>>> Make all architectures use the generic version instead.
+>>>>
+>>>> Signed-off-by: Christoph Hellwig <hch@lst.de>
+>>> This patch breaks DMAengine PL330 driver on Samsung Exynos SoCs:
+>>
+>> Thanks Marek for bisecting it. I wonder whether it is also the cause
+>> for boot failures I see on NXP Vybrid VF50 SoC (NXP/Freescale
+>> fsl-edma) since few days:
+>>
+>> [ 2.853428] fsl-edma 40018000.dma-controller: overflow 0x40027007+1 of
+>> DMA mask ffffffff bus mask 0
+>> [ 2.862566] ------------[ cut here ]------------
+>> [ 2.867273] WARNING: CPU: 0 PID: 1 at
+>> /home/buildbot/worker/builddir_yocto/build/build/tmp/work-shared/col-vf50-proceq-mainline-next/kernel-source/kernel/dma/direct.c:35
+>> report_addr+0xc0/0xfc
+>> [ 2.884380] Modules linked in:
+>> [ 2.887486] CPU: 0 PID: 1 Comm: swapper Tainted: G W
+>> 5.4.0-rc7-next-20191118-g519ead8f6a32 #1
+>> [ 2.897364] Hardware name: Freescale Vybrid VF5xx/VF6xx (Device Tree)
+>> [ 2.903892] [<8010ddfc>] (unwind_backtrace) from [<8010b4b8>]
+>> (show_stack+0x10/0x14)
+>> [ 2.911712] [<8010b4b8>] (show_stack) from [<8011b08c>] (__warn+0xd4/0xec)
+>> [ 2.918653] [<8011b08c>] (__warn) from [<8011b154>]
+>> (warn_slowpath_fmt+0xb0/0xb8)
+>> [ 2.926218] [<8011b154>] (warn_slowpath_fmt) from [<80155f7c>]
+>> (report_addr+0xc0/0xfc)
+>> [ 2.934221] [<80155f7c>] (report_addr) from [<801561f0>]
+>> (dma_direct_map_resource+0x98/0xa4)
+>> [ 2.942744] [<801561f0>] (dma_direct_map_resource) from [<8041d5d4>]
+>> (fsl_edma_prep_slave_dma+0x12c/0x150)
+>> [ 2.952475] [<8041d5d4>] (fsl_edma_prep_slave_dma) from [<8041d8cc>]
+>> (fsl_edma_prep_dma_cyclic+0x30/0x21c)
+>> [ 2.962213] [<8041d8cc>] (fsl_edma_prep_dma_cyclic) from [<80452e10>]
+>> (lpuart_rx_dma_startup+0x188/0x36c)
+>> [ 2.971871] [<80452e10>] (lpuart_rx_dma_startup) from [<80453058>]
+>> (lpuart_startup+0x64/0x78)
+>> [ 2.980477] [<80453058>] (lpuart_startup) from [<8044e924>]
+>> (uart_startup.part.7+0x110/0x23c)
+>> [ 2.989080] [<8044e924>] (uart_startup.part.7) from [<8044eaa0>]
+>> (uart_port_activate+0x50/0x7c)
+>> [ 2.997857] [<8044eaa0>] (uart_port_activate) from [<80438dc0>]
+>> (tty_port_open+0x74/0xc0)
+>> [ 3.006111] [<80438dc0>] (tty_port_open) from [<8044be30>] (uart_open+0x18/0x20)
+>> [ 3.013588] [<8044be30>] (uart_open) from [<80431b4c>] (tty_open+0x108/0x428)
+>> [ 3.020794] [<80431b4c>] (tty_open) from [<801edb48>] (chrdev_open+0xac/0x164)
+>> [ 3.028098] [<801edb48>] (chrdev_open) from [<801e55c8>]
+>> (do_dentry_open+0x22c/0x3e4)
+>> [ 3.036010] [<801e55c8>] (do_dentry_open) from [<801f72a8>]
+>> (path_openat+0x4a4/0xf78)
+>> [ 3.043912] [<801f72a8>] (path_openat) from [<801f8d34>]
+>> (do_filp_open+0x70/0xdc)
+>> [ 3.051472] [<801f8d34>] (do_filp_open) from [<801e6998>]
+>> (do_sys_open+0x128/0x1f4)
+>> [ 3.059217] [<801e6998>] (do_sys_open) from [<80a00ee0>]
+>> (kernel_init_freeable+0x150/0x1c4)
+>> [ 3.067658] [<80a00ee0>] (kernel_init_freeable) from [<8068e208>]
+>> (kernel_init+0x8/0x110)
+>> [ 3.075917] [<8068e208>] (kernel_init) from [<801010e8>]
+>> (ret_from_fork+0x14/0x2c)
+>> [ 3.083539] Exception stack(0x86843fb0 to 0x86843ff8)
+>> [ 3.088631] 3fa0: 00000000 00000000 00000000 00000000
+>> [ 3.096866] 3fc0: 00000000 00000000 00000000 00000000 00000000
+>> 00000000 00000000 00000000
+>> [ 3.105103] 3fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+>> [ 3.111752] ---[ end trace 6fb699802256a309 ]---
+>> [    3.116423] fsl-lpuart 40027000.serial: Cannot prepare cyclic DMA
+>> [    3.192968] VFS: Mounted root (nfs4 filesystem) on device 0:13.
+>> [    3.201432] devtmpfs: mounted
+>> [    3.210985] Freeing unused kernel memory: 1024K
+>> [    3.217854] Run /sbin/init as init process
+>> [    4.643355] systemd[1]: System time before build time, advancing clock.
+>> [    4.774106] random: systemd: uninitialized urandom read (16 bytes read)
+>> [    4.838361] systemd[1]: systemd 232 running in system mode. (-PAM
+>> -AUDIT -SELINUX -IMA -APPARMOR -SMACK +SYSVINIT +UTMP -LIBCRYPTSETUP
+>> -GCRYPT -GNUTLS +ACL +XZ -LZ4 -SECCOMP +BLKID -ELFUTILS +KMOD -IDN)
+>> [    4.858997] systemd[1]: Detected architecture arm.
+>> [    4.873438] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
+>> [    4.880138] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
+>> [    4.886585] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
+>> [    4.893124] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
+>> [    4.899679] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
+>> [    4.906110] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
+>> [    4.912616] fsl-lpuart 40027000.serial: Cannot prepare TX slave DMA!
+>>
+>> Although maybe that's just the fsl-edma problem?
+> 
+> This is the same issue.
+> 
+> A quick looks at the dma-direct code revealed that the
+> dma_direct_map_resource() is broken after this unification, because it
+> calls dma_direct_possible(), which then calls dma_capable(). The generic
+> dma_capable() from include/linux/dma-direct.h checks if the provided
+> address is in RAM memory range, what in the case of
+> dma_direct_map_resource() is not true.
+> 
+> A quick fix for this issue is to inline dma_direct_possible() with a
+> modified dma_capable() directly to the dma_direct_map_resource()
+> function (without the min_low_pfn check):
+> 
+> diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+> index 077876ae5c74..b6dd6a0b338b 100644
+> --- a/kernel/dma/direct.c
+> +++ b/kernel/dma/direct.c
+> @@ -411,8 +411,10 @@ dma_addr_t dma_direct_map_resource(struct device
+> *dev, phys_addr_t paddr,
+>                   size_t size, enum dma_data_direction dir, unsigned long
+> attrs)
+>    {
+>           dma_addr_t dma_addr = paddr;
+> +       dma_addr_t end = dma_addr + size - 1;
+> 
+> -       if (unlikely(!dma_direct_possible(dev, dma_addr, size))) {
+> +       if (unlikely(swiotlb_force == SWIOTLB_FORCE || !dev->dma_mask ||
 
-Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
----
- arch/mips/include/asm/mipsregs.h |  6 ++++++
- arch/mips/kernel/cpu-probe.c     | 21 +++++++++++++++++++--
- 2 files changed, 25 insertions(+), 2 deletions(-)
+You don't want the swiotlb_force check in there - we can't bounce-buffer 
+device-to-device accesses, regardless of the SWIOTLB policy.
 
-diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
-index bdbdc19..0d5a309 100644
---- a/arch/mips/include/asm/mipsregs.h
-+++ b/arch/mips/include/asm/mipsregs.h
-@@ -689,6 +689,9 @@
- #define MIPS_CONF7_IAR		(_ULCAST_(1) << 10)
- #define MIPS_CONF7_AR		(_ULCAST_(1) << 16)
- 
-+/* Ingenic HPTLB off bits */
-+#define XBURST_PAGECTRL_HPTLB_DIS 0xa9000000
-+
- /* Ingenic Config7 bits */
- #define MIPS_CONF7_BTB_LOOP_EN	(_ULCAST_(1) << 4)
- 
-@@ -1971,6 +1974,9 @@ do {									\
- #define read_c0_brcm_sleepcount()	__read_32bit_c0_register($22, 7)
- #define write_c0_brcm_sleepcount(val)	__write_32bit_c0_register($22, 7, val)
- 
-+/* Ingenic page ctrl register */
-+#define write_c0_page_ctrl(val)	__write_32bit_c0_register($5, 4, val)
-+
- /*
-  * Macros to access the guest system control coprocessor
-  */
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index 7a0e33c..3b5f4fb 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -1965,13 +1965,30 @@ static inline void cpu_probe_ingenic(struct cpuinfo_mips *c, unsigned int cpu)
- 		break;
- 	}
- 
-+	switch (c->processor_id & PRID_COMP_MASK) {
-+	/*
-+	 * The config0 register in the XBurst CPUs with a processor ID of
-+	 * PRID_COMP_INGENIC_D1 has an abandoned huge page tlb mode, this
-+	 * mode is not compatible with the MIPS standard, it will cause
-+	 * tlbmiss and into an infinite loop (line 21 in the tlb-funcs.S)
-+	 * when starting the init process. After chip reset, the default
-+	 * is HPTLB mode, Write 0xa9000000 to cp0 register 5 sel 4 to
-+	 * switch back to VTLB mode to prevent getting stuck.
-+	 */
-+	case PRID_COMP_INGENIC_D1:
-+		write_c0_page_ctrl(XBURST_PAGECTRL_HPTLB_DIS);
-+		break;
- 	/*
--	 * The config0 register in the Xburst CPUs with a processor ID of
-+	 * The config0 register in the XBurst CPUs with a processor ID of
- 	 * PRID_COMP_INGENIC_D0 report themselves as MIPS32r2 compatible,
- 	 * but they don't actually support this ISA.
- 	 */
--	if ((c->processor_id & PRID_COMP_MASK) == PRID_COMP_INGENIC_D0)
-+	case PRID_COMP_INGENIC_D0:
- 		c->isa_level &= ~MIPS_CPU_ISA_M32R2;
-+		break;
-+	default:
-+		break;
-+	}
- }
- 
- static inline void cpu_probe_netlogic(struct cpuinfo_mips *c, int cpu)
--- 
-2.7.4
+Robin.
 
-
+> +                    end > min_not_zero(*dev->dma_mask,
+> dev->bus_dma_mask))) {
+>                   report_addr(dev, dma_addr, size);
+>                   return DMA_MAPPING_ERROR;
+>           }
+> 
+> Christoph: Let me know if this is a proper fix for you, then I will send
+> it as a full patch.
+> 
+> Best regards
+> 
