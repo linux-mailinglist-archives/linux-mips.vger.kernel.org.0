@@ -2,68 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B1110229D
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Nov 2019 12:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 945DE1024F9
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Nov 2019 13:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727432AbfKSLJG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Nov 2019 06:09:06 -0500
-Received: from mx2.suse.de ([195.135.220.15]:53472 "EHLO mx1.suse.de"
+        id S1727992AbfKSM5w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Nov 2019 07:57:52 -0500
+Received: from mx2.suse.de ([195.135.220.15]:53112 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726351AbfKSLJG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 19 Nov 2019 06:09:06 -0500
+        id S1727255AbfKSM5v (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 19 Nov 2019 07:57:51 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 8B88FB488;
-        Tue, 19 Nov 2019 11:09:04 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Ralf Baechle <ralf@linux-mips.org>,
+        by mx1.suse.de (Postfix) with ESMTP id 9B69FB1A0;
+        Tue, 19 Nov 2019 12:57:47 +0000 (UTC)
+Message-ID: <dd074ef5c23ba56598e92be19e8e25ae31b75f93.camel@suse.de>
+Subject: Re: [PATCH] dma-mapping: treat dev->bus_dma_mask as a DMA limit
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] MIPS: PCI: remember nasid changed by set interrupt affinity
-Date:   Tue, 19 Nov 2019 12:08:57 +0100
-Message-Id: <20191119110857.28540-2-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20191119110857.28540-1-tbogendoerfer@suse.de>
-References: <20191119110857.28540-1-tbogendoerfer@suse.de>
+        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
+        phil@raspberrypi.org, linux-acpi@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        James Hogan <jhogan@kernel.org>, Len Brown <lenb@kernel.org>,
+        devicetree@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
+        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org
+Date:   Tue, 19 Nov 2019 13:57:43 +0100
+In-Reply-To: <20191113161340.27228-1-nsaenzjulienne@suse.de>
+References: <20191113161340.27228-1-nsaenzjulienne@suse.de>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-KZ1OEZ2plCMDP0ydmpq5"
+User-Agent: Evolution 3.34.1 
+MIME-Version: 1.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When changing interrupt affinity remember the possible changed nasid,
-otherwise an interrupt deactivate/activate sequence will incorrectly
-setup interrupt.
 
-Fixes: e6308b6d35ea ("MIPS: SGI-IP27: abstract chipset irq from bridge")
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
----
- arch/mips/pci/pci-xtalk-bridge.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+--=-KZ1OEZ2plCMDP0ydmpq5
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/mips/pci/pci-xtalk-bridge.c b/arch/mips/pci/pci-xtalk-bridge.c
-index b475cf5aef2f..5c1a196be0c5 100644
---- a/arch/mips/pci/pci-xtalk-bridge.c
-+++ b/arch/mips/pci/pci-xtalk-bridge.c
-@@ -306,16 +306,15 @@ static int bridge_set_affinity(struct irq_data *d, const struct cpumask *mask,
- 	struct bridge_irq_chip_data *data = d->chip_data;
- 	int bit = d->parent_data->hwirq;
- 	int pin = d->hwirq;
--	nasid_t nasid;
- 	int ret, cpu;
- 
- 	ret = irq_chip_set_affinity_parent(d, mask, force);
- 	if (ret >= 0) {
- 		cpu = cpumask_first_and(mask, cpu_online_mask);
--		nasid = cpu_to_node(cpu);
-+		data->nasid = cpu_to_node(cpu);
- 		bridge_write(data->bc, b_int_addr[pin].addr,
- 			     (((data->bc->intr_addr >> 30) & 0x30000) |
--			      bit | (nasid << 8)));
-+			      bit | (data->nasid << 8)));
- 		bridge_read(data->bc, b_wid_tflush);
- 	}
- 	return ret;
--- 
-2.16.4
+On Wed, 2019-11-13 at 17:13 +0100, Nicolas Saenz Julienne wrote:
+> Using a mask to represent bus DMA constraints has a set of limitations.
+> The biggest one being it can only hold a power of two (minus one). The
+> DMA mapping code is already aware of this and treats dev->bus_dma_mask
+> as a limit. This quirk is already used by some architectures although
+> still rare.
+>=20
+> With the introduction of the Raspberry Pi 4 we've found a new contender
+> for the use of bus DMA limits, as its PCIe bus can only address the
+> lower 3GB of memory (of a total of 4GB). This is impossible to represent
+> with a mask. To make things worse the device-tree code rounds non power
+> of two bus DMA limits to the next power of two, which is unacceptable in
+> this case.
+>=20
+> In the light of this, rename dev->bus_dma_mask to dev->bus_dma_limit all
+> over the tree and treat it as such. Note that dev->bus_dma_limit is
+> meant to contain the higher accesible DMA address.
+>=20
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+>=20
+
+Hi Rob & Christoph,
+do you mind if I append v2 of this into my upcoming v3 RPi4 PCIe support
+series, I didn't do it initially as I thought this was going to be a
+contentious patch.  But as it turned out better than expected, I think it
+should go into the PCIe series. In the end it's the first explicit user of =
+the
+bus DMA limit.
+
+Here's v2 in case you don't know what I'm talking about:
+https://www.spinics.net/lists/arm-kernel/msg768459.html
+
+Regards,
+Nicolas
+
+
+--=-KZ1OEZ2plCMDP0ydmpq5
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl3T5scACgkQlfZmHno8
+x/7FNgf/TPvrVamDNHipGFKFiSr22YaNYJU4aGZyFuJab0Z9dF35ZbNQqx3sXA83
+gyltGXByQ4c747nqq+LWQTaXLvI4NEMDu/ueQ6T4Vgs0ijtKvI9hVjrjlKU7UVsR
+/v+6HHolAP4q5zxgJbL3PRMlFeJlLs9xRbikBEmGDbc4INP8nBSUiQmk4lrgCAwH
+xV11EcSTA5eKJPS1jpsEP/vKwfu7LQ9ASExtpK5Oud7ZBD8zq1qKQBSVMGXQ1m9L
+l0ok+gqBZtMgwKtigs9mAr0Y09evU1GOVS0ttcncZ854J6/+hr9nuK8eXyhLEm0J
+l/jpo2vtZH0gMy68b+P8LkDtGJisYg==
+=9wOf
+-----END PGP SIGNATURE-----
+
+--=-KZ1OEZ2plCMDP0ydmpq5--
 
