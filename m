@@ -2,76 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA2210482C
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Nov 2019 02:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E09104A94
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Nov 2019 07:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726454AbfKUBmV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Nov 2019 20:42:21 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:47540 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725936AbfKUBmU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 20 Nov 2019 20:42:20 -0500
-Received: from localhost (unknown [124.64.18.131])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx7xVm69VdVT0BAA--.303S2;
-        Thu, 21 Nov 2019 09:41:59 +0800 (CST)
-From:   Lichao Liu <liulichao@loongson.cn>
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        id S1725904AbfKUGMy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 Nov 2019 01:12:54 -0500
+Received: from forward104p.mail.yandex.net ([77.88.28.107]:42803 "EHLO
+        forward104p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725842AbfKUGMy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 21 Nov 2019 01:12:54 -0500
+Received: from mxback24g.mail.yandex.net (mxback24g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:324])
+        by forward104p.mail.yandex.net (Yandex) with ESMTP id ED4604B02103;
+        Thu, 21 Nov 2019 09:12:50 +0300 (MSK)
+Received: from myt2-853c0a8cbfab.qloud-c.yandex.net (myt2-853c0a8cbfab.qloud-c.yandex.net [2a02:6b8:c00:1796:0:640:853c:a8c])
+        by mxback24g.mail.yandex.net (mxback/Yandex) with ESMTP id hgCGn180GH-CnomQ2ex;
+        Thu, 21 Nov 2019 09:12:50 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1574316770;
+        bh=PXo65QxMlWhp/UDTIBmzqTf/sEd8JUruM/q7kIX5HZI=;
+        h=From:To:Subject:CC:References:Date:In-Reply-To:Message-ID;
+        b=PSMYM+fm7kL4yAFJPPDp2EMytG5DXU8lH/m5vYOkDBR3cOtKP3KzOw9sJSg4SsGv8
+         vKPrO4+INszoXlZB+bJjbZgSqHX/vj9XVYfZDGbm0RwteKDgZq2310nDEVZHgx6oTu
+         0t4PsUSxF/Zp2ui4sh81lLNuzzVGumxHSL3p6K/c=
+Authentication-Results: mxback24g.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by myt2-853c0a8cbfab.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id ELM35Wy97q-Cl1CZMtN;
+        Thu, 21 Nov 2019 09:12:48 +0300
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client certificate not present)
+Date:   Thu, 21 Nov 2019 14:12:40 +0800
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20191121014156.25618-1-liulichao@loongson.cn>
+References: <20191121014156.25618-1-liulichao@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] Use the macro CONFIG_I8259 to control whether to include the asm/i8259.h header file.
+To:     Lichao Liu <liulichao@loongson.cn>, Huacai Chen <chenhc@lemote.com>
+CC:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
         James Hogan <jhogan@kernel.org>,
         Marc Dionne <marc.dionne@auristor.com>,
         David Howells <dhowells@redhat.com>,
-        Lichao Liu <liulichao@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Use the macro CONFIG_I8259 to control whether to include the asm/i8259.h header file.
-Date:   Thu, 21 Nov 2019 09:41:56 +0800
-Message-Id: <20191121014156.25618-1-liulichao@loongson.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: AQAAf9Dx7xVm69VdVT0BAA--.303S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtr17ZryDJF1rWF4UXryxKrg_yoWxZrbEka
-        y2yw18G3yfAr48try7Zry3WrW2934UW3W3CFn5ArnIq3Z0qanIgaykAr4kJr13Crn0vr4f
-        XrW8KryrCr47CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb48FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVWk
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbLiSPUUUU
-        U==
-X-CM-SenderInfo: xolxzxpfkd0qxorr0wxvrqhubq/
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <61337744-0502-4245-8129-535B9125939C@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Not all platform config CONFIG_I8259, So Use the macro CONFIG_I8259
-to control whether to include the asm/i8259.h header file.
 
-Signed-off-by: Lichao Liu <liulichao@loongson.cn>
----
- arch/mips/loongson64/common/pm.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/loongson64/common/pm.c b/arch/mips/loongson64/common/pm.c
-index b8aed878d..bc619e4d0 100644
---- a/arch/mips/loongson64/common/pm.c
-+++ b/arch/mips/loongson64/common/pm.c
-@@ -9,7 +9,9 @@
- #include <linux/interrupt.h>
- #include <linux/pm.h>
- 
-+#ifdef CONFIG_I8259
- #include <asm/i8259.h>
-+#endif
- #include <asm/mipsregs.h>
- 
- #include <loongson.h>
--- 
-2.17.1
+=E4=BA=8E 2019=E5=B9=B411=E6=9C=8821=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=88=
+9:41:56, Lichao Liu <liulichao@loongson=2Ecn> =E5=86=99=E5=88=B0:
+>Not all platform config CONFIG_I8259, So Use the macro CONFIG_I8259
+>to control whether to include the asm/i8259=2Eh header file=2E
+>
+>Signed-off-by: Lichao Liu <liulichao@loongson=2Ecn>
 
+Acked-by: Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom>
+
+I'm glad to see Loongson guys finally get here=2E
+
+I will send v3 of my previous "modernize" set=2E
+Which will also refactor interrupt part=2E=20
+Do you have any comments based on v2 [1]?
+
+[1]: https://patchwork=2Ekernel=2Eorg/cover/11133237/
+>---
+> arch/mips/loongson64/common/pm=2Ec | 2 ++
+> 1 file changed, 2 insertions(+)
+>
+>diff --git a/arch/mips/loongson64/common/pm=2Ec
+>b/arch/mips/loongson64/common/pm=2Ec
+>index b8aed878d=2E=2Ebc619e4d0 100644
+>--- a/arch/mips/loongson64/common/pm=2Ec
+>+++ b/arch/mips/loongson64/common/pm=2Ec
+>@@ -9,7 +9,9 @@
+> #include <linux/interrupt=2Eh>
+> #include <linux/pm=2Eh>
+>=20
+>+#ifdef CONFIG_I8259
+> #include <asm/i8259=2Eh>
+>+#endif
+> #include <asm/mipsregs=2Eh>
+>=20
+> #include <loongson=2Eh>
+
+--=20
+Jiaxun Yang
