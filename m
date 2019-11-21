@@ -2,34 +2,37 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E09104A94
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Nov 2019 07:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E26104AA0
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Nov 2019 07:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725904AbfKUGMy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 Nov 2019 01:12:54 -0500
-Received: from forward104p.mail.yandex.net ([77.88.28.107]:42803 "EHLO
-        forward104p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725842AbfKUGMy (ORCPT
+        id S1725904AbfKUGRo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 Nov 2019 01:17:44 -0500
+Received: from forward106j.mail.yandex.net ([5.45.198.249]:48071 "EHLO
+        forward106j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725842AbfKUGRo (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 21 Nov 2019 01:12:54 -0500
-Received: from mxback24g.mail.yandex.net (mxback24g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:324])
-        by forward104p.mail.yandex.net (Yandex) with ESMTP id ED4604B02103;
-        Thu, 21 Nov 2019 09:12:50 +0300 (MSK)
-Received: from myt2-853c0a8cbfab.qloud-c.yandex.net (myt2-853c0a8cbfab.qloud-c.yandex.net [2a02:6b8:c00:1796:0:640:853c:a8c])
-        by mxback24g.mail.yandex.net (mxback/Yandex) with ESMTP id hgCGn180GH-CnomQ2ex;
-        Thu, 21 Nov 2019 09:12:50 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1574316770;
-        bh=PXo65QxMlWhp/UDTIBmzqTf/sEd8JUruM/q7kIX5HZI=;
+        Thu, 21 Nov 2019 01:17:44 -0500
+Received: from forward101q.mail.yandex.net (forward101q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb98])
+        by forward106j.mail.yandex.net (Yandex) with ESMTP id D140411A121D;
+        Thu, 21 Nov 2019 09:17:41 +0300 (MSK)
+Received: from mxback7q.mail.yandex.net (mxback7q.mail.yandex.net [IPv6:2a02:6b8:c0e:41:0:640:cbbf:d618])
+        by forward101q.mail.yandex.net (Yandex) with ESMTP id C9F7CCF40012;
+        Thu, 21 Nov 2019 09:17:41 +0300 (MSK)
+Received: from vla3-2bcfd5e94671.qloud-c.yandex.net (vla3-2bcfd5e94671.qloud-c.yandex.net [2a02:6b8:c15:350f:0:640:2bcf:d5e9])
+        by mxback7q.mail.yandex.net (mxback/Yandex) with ESMTP id y1BCvKFzf0-HfXOf6YF;
+        Thu, 21 Nov 2019 09:17:41 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1574317061;
+        bh=Op3BE2NZXtGbqpQuC/Bl23iPpO4DsoZfliQHQr+WNcc=;
         h=From:To:Subject:CC:References:Date:In-Reply-To:Message-ID;
-        b=PSMYM+fm7kL4yAFJPPDp2EMytG5DXU8lH/m5vYOkDBR3cOtKP3KzOw9sJSg4SsGv8
-         vKPrO4+INszoXlZB+bJjbZgSqHX/vj9XVYfZDGbm0RwteKDgZq2310nDEVZHgx6oTu
-         0t4PsUSxF/Zp2ui4sh81lLNuzzVGumxHSL3p6K/c=
-Authentication-Results: mxback24g.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by myt2-853c0a8cbfab.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id ELM35Wy97q-Cl1CZMtN;
-        Thu, 21 Nov 2019 09:12:48 +0300
+        b=ElaKvH6zLlcXAHQs6u81HnjurnY8Oa099yDiCRURVxjhMo5F9FKIKdZgUUuLNriSu
+         DUd/q40+pe1X/6Wn+GfkyQH+TdnnbcF772ML4ZbUvqQErtneCCrAKO/NfDkzCuVgq4
+         UPBGNK5Gny5LTo5pllFkA2LTI4YcKpjHOv0Cdqm4=
+Authentication-Results: mxback7q.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by vla3-2bcfd5e94671.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id USjOoAfIPR-HdV4BlZh;
+        Thu, 21 Nov 2019 09:17:39 +0300
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (Client certificate not present)
-Date:   Thu, 21 Nov 2019 14:12:40 +0800
+Date:   Thu, 21 Nov 2019 14:17:28 +0800
 User-Agent: K-9 Mail for Android
 In-Reply-To: <20191121014156.25618-1-liulichao@loongson.cn>
 References: <20191121014156.25618-1-liulichao@loongson.cn>
@@ -46,7 +49,7 @@ CC:     Ralf Baechle <ralf@linux-mips.org>,
         David Howells <dhowells@redhat.com>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <61337744-0502-4245-8129-535B9125939C@flygoat.com>
+Message-ID: <E3B6A677-013F-4431-B29C-8C069931C84C@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -58,18 +61,13 @@ X-Mailing-List: linux-mips@vger.kernel.org
 9:41:56, Lichao Liu <liulichao@loongson=2Ecn> =E5=86=99=E5=88=B0:
 >Not all platform config CONFIG_I8259, So Use the macro CONFIG_I8259
 >to control whether to include the asm/i8259=2Eh header file=2E
+
+You should have a dedicated short patch tittle=2E=20
+
+Like MIPS: Loongson64: Limit i8259 include by config
+
 >
 >Signed-off-by: Lichao Liu <liulichao@loongson=2Ecn>
-
-Acked-by: Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom>
-
-I'm glad to see Loongson guys finally get here=2E
-
-I will send v3 of my previous "modernize" set=2E
-Which will also refactor interrupt part=2E=20
-Do you have any comments based on v2 [1]?
-
-[1]: https://patchwork=2Ekernel=2Eorg/cover/11133237/
 >---
 > arch/mips/loongson64/common/pm=2Ec | 2 ++
 > 1 file changed, 2 insertions(+)
