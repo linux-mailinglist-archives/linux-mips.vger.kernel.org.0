@@ -2,101 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 928E810515C
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Nov 2019 12:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 397F1105464
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Nov 2019 15:28:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726343AbfKUL05 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 Nov 2019 06:26:57 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:34924 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726165AbfKUL05 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Nov 2019 06:26:57 -0500
-Received: by mail-pf1-f193.google.com with SMTP id q13so1533235pff.2
-        for <linux-mips@vger.kernel.org>; Thu, 21 Nov 2019 03:26:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=FUmMpkNLSpVuy7/qSq0o0YVmZJIU4QE3QbjeY7FH5+c=;
-        b=tG5QtpV5ZBcomJrrgQdVwPs7voMzdk9TqEapm63GuXSeGNgUwnyi2bqLUtEJDBCwJJ
-         P0fti5DZWKqCiG3qV3GnrlX9nV1rCXzdjQYnlpxnkgEqrMzE+W+9Z3GpPu/OOQZ2/5Q9
-         +XOW2zmZPGTlOHAGrFb1N9vdO5UNfdweiXMKlvBIrbmRxGCpRyXwBNpL135nEV0u7RDA
-         +/Y4Tg39YM2YTcPO3zwKxuvX7EjX+UKad7Vp0vdjsUb+femxNCFT7hvg1L4gE19tsRVo
-         2+mYvfqUmhQ8dRPj2qHGAy6aMXpD+L901qLJu7ePi4ivqlXREE86C22RzsNFVhZSRWBU
-         gSZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=FUmMpkNLSpVuy7/qSq0o0YVmZJIU4QE3QbjeY7FH5+c=;
-        b=Hc+gB8/1H352AJk2SbhkXFZ8YWFBO8+CEznGScvTd0NfsTpzoGK2NI1LFr1aOkYwKZ
-         2QJgyYXsHaKSjgymGEDTDTR9YD3vs8zIIOmJ196jaBx5qKjyZaZcpZ6sJ/H9izaNVbSE
-         Myn5fo6LEpbNrPTt4Rhg5Za1uX2FguYO1XD6mLBxNg+utg6Nt0THYMM/ZYqJU6cm9/2r
-         DdMmJmCnBazbavWi3dAhvzqs/CikPILDemOVo5iAbrpQshNgtP9qn0RHK0luy9eCiSKl
-         o2Qzn+UUaz6/oDBynkCHtNMjWI8U3v1Z9GXuo/hbFE9/bq/hYcegoZibNWmIv4R1TFj1
-         xsdg==
-X-Gm-Message-State: APjAAAX14ERGW2/PraA0+ITTOZPnhArlnf1p21Ij99lHQ5h4Tow4qMx+
-        QF4ielPPZNXrwJK4rX44xE8=
-X-Google-Smtp-Source: APXvYqxtwrgJWUQEyvQJ1Kk8c90VgEwgC+yeKLUev5jkYeL5kdS2DRMRVcubJPJ6uJGg2Mk53sLmVg==
-X-Received: by 2002:a65:5648:: with SMTP id m8mr9159030pgs.286.1574335616945;
-        Thu, 21 Nov 2019 03:26:56 -0800 (PST)
-Received: from software.domain.org (li566-100.members.linode.com. [192.155.80.100])
-        by smtp.gmail.com with ESMTPSA id v14sm2747834pja.22.2019.11.21.03.26.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 21 Nov 2019 03:26:56 -0800 (PST)
-From:   Huacai Chen <chenhc@lemote.com>
-To:     Paul Burton <paul.burton@mips.com>,
+        id S1726947AbfKUO2Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 Nov 2019 09:28:24 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:35207 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726396AbfKUO2X (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Nov 2019 09:28:23 -0500
+Received: from mail-qt1-f175.google.com ([209.85.160.175]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MhlbM-1hu2qb31Zg-00doDm; Thu, 21 Nov 2019 15:28:21 +0100
+Received: by mail-qt1-f175.google.com with SMTP id o11so3828152qtr.11;
+        Thu, 21 Nov 2019 06:28:21 -0800 (PST)
+X-Gm-Message-State: APjAAAVpE/RjHL+ncTjs8J92/qo5V8Y4lkqGlbPq37p3OVWARlA3KohO
+        XoqskO+3h16FUtM80skNMPwfCV718CVABjY2b8E=
+X-Google-Smtp-Source: APXvYqxB3fiYXtrETUp5EiMiQ9fb0AeisI+RwKyT7xggRKZinaPFWQOgz7hTMTjBH+1fCN1q48qajjrjZ95bUArYxrA=
+X-Received: by 2002:ac8:18eb:: with SMTP id o40mr2519477qtk.304.1574346500017;
+ Thu, 21 Nov 2019 06:28:20 -0800 (PST)
+MIME-Version: 1.0
+References: <20191108210236.1296047-1-arnd@arndb.de> <20191108210824.1534248-8-arnd@arndb.de>
+ <dd1a30609f05e800550097080c1d1b27065f91ff.camel@codethink.co.uk>
+In-Reply-To: <dd1a30609f05e800550097080c1d1b27065f91ff.camel@codethink.co.uk>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 21 Nov 2019 15:28:03 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0VORzqLLTFpt9VYn_SONsve+-q0fTrZrPbLMpX9T6SBQ@mail.gmail.com>
+Message-ID: <CAK8P3a0VORzqLLTFpt9VYn_SONsve+-q0fTrZrPbLMpX9T6SBQ@mail.gmail.com>
+Subject: Re: [Y2038] [PATCH 08/23] y2038: ipc: remove __kernel_time_t
+ reference from headers
+To:     Ben Hutchings <ben.hutchings@codethink.co.uk>
+Cc:     y2038 Mailman List <y2038@lists.linaro.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>
-Cc:     linux-mips@linux-mips.org, linux-mips@vger.kernel.org,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH] MIPS: Make sure ebase address is in KSEG0
-Date:   Thu, 21 Nov 2019 19:30:20 +0800
-Message-Id: <1574335820-15188-1-git-send-email-chenhc@lemote.com>
-X-Mailer: git-send-email 2.7.0
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:LnPyaKtdAcRIfsrfVOvLgTpY2NYcJVXxz9V2TfTsyIVjaxXXWXo
+ J0B/STj89T5mtEIVTc0DQpBVMrYNCU0NcRKyMbhUocUGEvCLRsv+tXSavgQ9f1ideIJ9QR/
+ Y5hh36oQ5DHX7KGoy+fvIxvqyEiOiRDO5LBnW77E+fjNVlQJvkzhlyATiPB5C1vEiZb5+oS
+ z+IMcyRaYAXzuuyPNj62w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8A/19T5M7NU=:IiGojC9BupST0/of+E3q2T
+ awxsjk77FWMnOwQ4nks8TRVJzj8MaemtAxeTd5LZ6AU026M7mvm1hvPPHZ4QB1SOCc3AYUgwj
+ JPVxeNksokjiewTxADZhlkQvmoHlH8s8IySCW9mTS2t5RD8o/IIkeCztir/MtztaDyYhZGCEF
+ rJutdeF8yCwCOVEmI7Ryya6bzcLeLgOMSoT5Xc8Tr9ih6rF+jVFaOUAXQMQ6sS/CqZm07Z50W
+ 7mFRhVnGeKtcmbTcT0NTLP401mk/Y8oiEAIVOQBfgMLuw2i+hxNpBaSfN4BVM41IYS3h0x3HD
+ uGGmN8Xg4IinXM7DMSUMDAzn6EMtVtq/QLtMgQqKk3tDFwE1zBuRSd44KbYWGHF3Q5aMOUzd8
+ 9Sz0SWtwZrbXJw+mhMw8rLqVMwp4yN0nU2VyHFcMDvtMFQ3BNUPTwIen5wbxdh2wWV5N7roDc
+ doz4p7AZTAPDJskv5JNv1EKjjCl6xvoqQ7wnIp+Al8cIJxYnH6J4UDx5XPfdsrRS4pa+71lbm
+ EWW0/i/p7///JQKDcKCh7ZZ4LPUrE/h1kYwBQP1MHg5hYP9OpFlu0k36Uv+f4AIeXpq+0CrfQ
+ /bVHc+NPvKLBmPdC+v6whkNTSXKYLqce/eejLUwRvJjXDpqKQ00siEcCr21Vy62/XMUgoTMP0
+ ruAJ3GS2Boof4iy+ow6k+pyZug2crvFBwPmgP5Um5R8Hg5YP1dPhXvfbkPFqPAfvGwOvoplet
+ J2AWy7clG4cWvOnoOy52qSRXi9wlksgco1NEKVg+ITDnHMNlDT01gV4H6HNCGkOncaZ02mV1f
+ WoJKk4TZPuzgJh5AqeiuSTyXXyIiy919eAAca+VxYDVUHKVsaVa633SN22EcLEV1YskVIIOMm
+ T2iRBlyk5NdX4Xcg6V7A==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dynamically allocated ebase address above 0x20000000 can be triggered
-by some special physical memory layout, or just by a "big kernel + big
-initrd + big swiotlb" configuration.
+On Wed, Nov 20, 2019 at 11:49 PM Ben Hutchings
+<ben.hutchings@codethink.co.uk> wrote:
+>
+> On Fri, 2019-11-08 at 22:07 +0100, Arnd Bergmann wrote:
+> [...]
+> > --- a/arch/x86/include/uapi/asm/sembuf.h
+> > +++ b/arch/x86/include/uapi/asm/sembuf.h
+> > @@ -21,9 +21,9 @@ struct semid64_ds {
+> >       unsigned long   sem_ctime;      /* last change time */
+> >       unsigned long   sem_ctime_high;
+> >  #else
+> > -     __kernel_time_t sem_otime;      /* last semop time */
+> > +     long            sem_otime;      /* last semop time */
+> >       __kernel_ulong_t __unused1;
+> > -     __kernel_time_t sem_ctime;      /* last change time */
+> > +     long            sem_ctime;      /* last change time */
+> >       __kernel_ulong_t __unused2;
+> >  #endif
+> >       __kernel_ulong_t sem_nsems;     /* no. of semaphores in array */
+> [...]
+>
+> We need to use __kernel_long_t here to do the right thing on x32.
 
-For MIPS32, ebase address above 0x20000000 is unusable, for MIPS64 it
-is usable but this case is warned. However, this warning is useless
-because it is unfixable in a specific system configuration. So we just
-use CKSEG0 as a fallback.
+Good catch, thanks for the review!
 
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
----
- arch/mips/kernel/traps.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+I applied the patch below now on top.
 
-diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index 9d9b2a4..7393f33 100644
---- a/arch/mips/kernel/traps.c
-+++ b/arch/mips/kernel/traps.c
-@@ -2306,10 +2306,15 @@ void __init trap_init(void)
- 		 * EVA is special though as it allows segments to be rearranged
- 		 * and to become uncached during cache error handling.
- 		 */
--		if (!IS_ENABLED(CONFIG_EVA) && !WARN_ON(ebase_pa >= 0x20000000))
-+		if (ebase_pa < 0x20000000)
- 			ebase = CKSEG0ADDR(ebase_pa);
--		else
-+		else if (IS_ENABLED(CONFIG_EVA))
- 			ebase = (unsigned long)phys_to_virt(ebase_pa);
-+		else {
-+			memblock_free(ebase_pa, vec_size);
-+			ebase = CKSEG0;
-+			memblock_reserve(virt_to_phys((void *)ebase), vec_size);
-+		}
- 	}
- 
- 	if (cpu_has_mmips) {
--- 
-2.7.0
+       Arnd
 
+commit c7ebd8a1c1825c3197732ea692cf3dde34a644f5 (HEAD)
+Author: Arnd Bergmann <arnd@arndb.de>
+Date:   Thu Nov 21 15:25:04 2019 +0100
+
+    y2038: ipc: fix x32 ABI breakage
+
+    The correct type on x32 is 64-bit wide, same as for the other struct
+    members around it, so use  __kernel_long_t in place of the original
+    __kernel_time_t here, corresponding to the rest of the structure.
+
+    Fixes: caf5e32d4ea7 ("y2038: ipc: remove __kernel_time_t reference
+from headers")
+    Reported-by: Ben Hutchings <ben.hutchings@codethink.co.uk>
+    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+diff --git a/arch/x86/include/uapi/asm/sembuf.h
+b/arch/x86/include/uapi/asm/sembuf.h
+index 7c1b156695ba..20cab43c4b15 100644
+--- a/arch/x86/include/uapi/asm/sembuf.h
++++ b/arch/x86/include/uapi/asm/sembuf.h
+@@ -21,9 +21,9 @@ struct semid64_ds {
+        unsigned long   sem_ctime;      /* last change time */
+        unsigned long   sem_ctime_high;
+ #else
+-       long            sem_otime;      /* last semop time */
++       __kernel_long_t sem_otime;      /* last semop time */
+        __kernel_ulong_t __unused1;
+-       long            sem_ctime;      /* last change time */
++       __kenrel_long_t sem_ctime;      /* last change time */
+        __kernel_ulong_t __unused2;
+ #endif
+        __kernel_ulong_t sem_nsems;     /* no. of semaphores in array */
