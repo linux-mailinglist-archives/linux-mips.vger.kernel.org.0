@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E481056DE
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Nov 2019 17:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1833C1056E0
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Nov 2019 17:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726967AbfKUQVk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 Nov 2019 11:21:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35380 "EHLO mail.kernel.org"
+        id S1727156AbfKUQVn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 Nov 2019 11:21:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726690AbfKUQVk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 21 Nov 2019 11:21:40 -0500
+        id S1726690AbfKUQVn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 21 Nov 2019 11:21:43 -0500
 Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9679A20692;
-        Thu, 21 Nov 2019 16:21:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6FBF3206CC;
+        Thu, 21 Nov 2019 16:21:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574353299;
-        bh=jRHPUdh/q+ZeknX4bTbCJ4Ve3ahDcrni2zelflzUwfU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=X+XtSni8UQeUXzHhQgLBpzMWbOSS8CDcezExjVyZM+2HukuGKwgWJlHLzo2LJ6NkH
-         0tbR4mVunKgjwM/eMIExSaRQytbZ8+LPWBzgxO0NCFs/SKNog22waUMeSJTSNCNZc/
-         NKJTA9eoEVY76IzqJD7YZrs9xWI1EzTDndq4KQr4=
+        s=default; t=1574353302;
+        bh=RnEFBHDdwEGFihJ8AzIy/xCeEYZct7GFoZ5Z9u+a4aI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pXHrARQDRu46esN1ekKRe4ytslAfURJlMOQ/+BshoqNvXxnAGzBc/D1wphvjRXmHR
+         nbL3K/rjOf9ydRBjxnnfw1jb6kbzWeSNZ3sz02AgER46nW5udYYtRyLgQdXY1y121D
+         WPxpstnDFphwMctEVNsP5nMLkLvV4j1/0v3FYZcc=
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
@@ -30,10 +30,12 @@ To:     Ralf Baechle <ralf@linux-mips.org>,
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Mike Rapoport <rppt@kernel.org>,
         Mike Rapoport <rppt@linux.ibm.com>
-Subject: [PATCH 0/3] mips: get rid of __ARCH_USE_5LEVEL_HACK
-Date:   Thu, 21 Nov 2019 18:21:30 +0200
-Message-Id: <20191121162133.15833-1-rppt@kernel.org>
+Subject: [PATCH 1/3] mips: fix build when "48 bits virtual memory" is enabled
+Date:   Thu, 21 Nov 2019 18:21:31 +0200
+Message-Id: <20191121162133.15833-2-rppt@kernel.org>
 X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191121162133.15833-1-rppt@kernel.org>
+References: <20191121162133.15833-1-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -43,33 +45,67 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Mike Rapoport <rppt@linux.ibm.com>
 
-Hi,
+With CONFIG_MIPS_VA_BITS_48=y the build fails miserably:
 
-These patches update the mips page table folding/unfolding to take into
-account the 5th level.
+  CC      arch/mips/kernel/asm-offsets.s
+In file included from arch/mips/include/asm/pgtable.h:644,
+                 from include/linux/mm.h:99,
+                 from arch/mips/kernel/asm-offsets.c:15:
+include/asm-generic/pgtable.h:16:2: error: #error CONFIG_PGTABLE_LEVELS is not consistent with __PAGETABLE_{P4D,PUD,PMD}_FOLDED
+ #error CONFIG_PGTABLE_LEVELS is not consistent with __PAGETABLE_{P4D,PUD,PMD}_FOLDED
+  ^~~~~
+include/asm-generic/pgtable.h:390:28: error: unknown type name 'p4d_t'; did you mean 'pmd_t'?
+ static inline int p4d_same(p4d_t p4d_a, p4d_t p4d_b)
+                            ^~~~~
+                            pmd_t
 
-Mike Rapoport (3):
-  mips: fix build when "48 bits virtual memory" is enabled
-  mips: drop __pXd_offset() macros that duplicate pXd_index() ones
-  mips: add support for folded p4d page tables
+[ ... more such errors ... ]
 
- arch/mips/include/asm/fixmap.h     |  2 +-
- arch/mips/include/asm/pgalloc.h    |  4 +--
- arch/mips/include/asm/pgtable-32.h |  6 +---
- arch/mips/include/asm/pgtable-64.h | 44 ++++++++++++++++--------------
- arch/mips/kvm/mmu.c                | 40 ++++++++++++++++-----------
- arch/mips/kvm/trap_emul.c          |  4 ++-
- arch/mips/mm/c-r3k.c               |  4 ++-
- arch/mips/mm/c-r4k.c               |  4 ++-
- arch/mips/mm/c-tx39.c              |  4 ++-
- arch/mips/mm/fault.c               | 12 ++++++--
- arch/mips/mm/hugetlbpage.c         | 14 +++++++---
- arch/mips/mm/init.c                |  6 ++--
- arch/mips/mm/ioremap.c             |  6 +++-
- arch/mips/mm/pgtable-32.c          |  6 ++--
- arch/mips/mm/tlb-r4k.c             |  4 ++-
- 15 files changed, 97 insertions(+), 63 deletions(-)
+scripts/Makefile.build:99: recipe for target 'arch/mips/kernel/asm-offsets.s' failed
+make[2]: *** [arch/mips/kernel/asm-offsets.s] Error 1
 
+This happens because when CONFIG_MIPS_VA_BITS_48 enables 4th level of the
+page tables, but neither pgtable-nop4d.h nor 5level-fixup.h are included to
+cope with the 5th level.
+
+Replace #ifdef conditions around includes of the pgtable-nop{m,u}d.h with
+explicit CONFIG_PGTABLE_LEVELS and add include of 5level-fixup.h for the
+case when CONFIG_PGTABLE_LEVELS==4
+
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+---
+ arch/mips/include/asm/pgtable-64.h | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
+index 93a9dce31f25..813dfe5f45a5 100644
+--- a/arch/mips/include/asm/pgtable-64.h
++++ b/arch/mips/include/asm/pgtable-64.h
+@@ -18,10 +18,12 @@
+ #include <asm/fixmap.h>
+ 
+ #define __ARCH_USE_5LEVEL_HACK
+-#if defined(CONFIG_PAGE_SIZE_64KB) && !defined(CONFIG_MIPS_VA_BITS_48)
++#if CONFIG_PGTABLE_LEVELS == 2
+ #include <asm-generic/pgtable-nopmd.h>
+-#elif !(defined(CONFIG_PAGE_SIZE_4KB) && defined(CONFIG_MIPS_VA_BITS_48))
++#elif CONFIG_PGTABLE_LEVELS == 3
+ #include <asm-generic/pgtable-nopud.h>
++#else
++#include <asm-generic/5level-fixup.h>
+ #endif
+ 
+ /*
+@@ -216,6 +218,9 @@ static inline unsigned long pgd_page_vaddr(pgd_t pgd)
+ 	return pgd_val(pgd);
+ }
+ 
++#define pgd_phys(pgd)		virt_to_phys((void *)pgd_val(pgd))
++#define pgd_page(pgd)		(pfn_to_page(pgd_phys(pgd) >> PAGE_SHIFT))
++
+ static inline pud_t *pud_offset(pgd_t *pgd, unsigned long address)
+ {
+ 	return (pud_t *)pgd_page_vaddr(*pgd) + pud_index(address);
 -- 
 2.24.0
 
