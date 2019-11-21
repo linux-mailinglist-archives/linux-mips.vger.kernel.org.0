@@ -2,69 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D85105655
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Nov 2019 17:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E481056DE
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Nov 2019 17:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726716AbfKUQCX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 Nov 2019 11:02:23 -0500
-Received: from verein.lst.de ([213.95.11.211]:46911 "EHLO verein.lst.de"
+        id S1726967AbfKUQVk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 Nov 2019 11:21:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35380 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726293AbfKUQCX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 21 Nov 2019 11:02:23 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id D87F268BFE; Thu, 21 Nov 2019 17:02:17 +0100 (CET)
-Date:   Thu, 21 Nov 2019 17:02:17 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
+        id S1726690AbfKUQVk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 21 Nov 2019 11:21:40 -0500
+Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9679A20692;
+        Thu, 21 Nov 2019 16:21:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574353299;
+        bh=jRHPUdh/q+ZeknX4bTbCJ4Ve3ahDcrni2zelflzUwfU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=X+XtSni8UQeUXzHhQgLBpzMWbOSS8CDcezExjVyZM+2HukuGKwgWJlHLzo2LJ6NkH
+         0tbR4mVunKgjwM/eMIExSaRQytbZ8+LPWBzgxO0NCFs/SKNog22waUMeSJTSNCNZc/
+         NKJTA9eoEVY76IzqJD7YZrs9xWI1EzTDndq4KQr4=
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ide@vger.kernel.org,
-        iommu@lists.linux-foundation.org, devicetree@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2] dma-mapping: treat dev->bus_dma_mask as a DMA limit
-Message-ID: <20191121160217.GA1583@lst.de>
-References: <20191121092646.8449-1-nsaenzjulienne@suse.de> <20191121152457.GA525@lst.de> <20191121152650.GA651@lst.de> <70359d2a-10c6-09c7-a857-805085affb0a@arm.com>
+        James Hogan <jhogan@kernel.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: [PATCH 0/3] mips: get rid of __ARCH_USE_5LEVEL_HACK
+Date:   Thu, 21 Nov 2019 18:21:30 +0200
+Message-Id: <20191121162133.15833-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <70359d2a-10c6-09c7-a857-805085affb0a@arm.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Nov 21, 2019 at 03:55:39PM +0000, Robin Murphy wrote:
-> Hmm, there's no functional dependency though, is there? AFAICS it's 
-> essentially just a context conflict. Is it worth simply dropping (or 
-> postponing) the local renaming in __dma_direct_optimal_gfp_mask(), or 
-> perhaps even cross-merging arm64/for-next/zone-dma into dma/for-next?
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-I would have no problem with pulling it in.  I'd kinda hate creating
-the conflict, though.  So if the arm64 maintainers are fine with it
-I'll pull it in, especially if I get an ACK from Robin.
+Hi,
+
+These patches update the mips page table folding/unfolding to take into
+account the 5th level.
+
+Mike Rapoport (3):
+  mips: fix build when "48 bits virtual memory" is enabled
+  mips: drop __pXd_offset() macros that duplicate pXd_index() ones
+  mips: add support for folded p4d page tables
+
+ arch/mips/include/asm/fixmap.h     |  2 +-
+ arch/mips/include/asm/pgalloc.h    |  4 +--
+ arch/mips/include/asm/pgtable-32.h |  6 +---
+ arch/mips/include/asm/pgtable-64.h | 44 ++++++++++++++++--------------
+ arch/mips/kvm/mmu.c                | 40 ++++++++++++++++-----------
+ arch/mips/kvm/trap_emul.c          |  4 ++-
+ arch/mips/mm/c-r3k.c               |  4 ++-
+ arch/mips/mm/c-r4k.c               |  4 ++-
+ arch/mips/mm/c-tx39.c              |  4 ++-
+ arch/mips/mm/fault.c               | 12 ++++++--
+ arch/mips/mm/hugetlbpage.c         | 14 +++++++---
+ arch/mips/mm/init.c                |  6 ++--
+ arch/mips/mm/ioremap.c             |  6 +++-
+ arch/mips/mm/pgtable-32.c          |  6 ++--
+ arch/mips/mm/tlb-r4k.c             |  4 ++-
+ 15 files changed, 97 insertions(+), 63 deletions(-)
+
+-- 
+2.24.0
+
