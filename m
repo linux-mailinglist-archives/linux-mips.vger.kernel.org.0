@@ -2,299 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2638010749C
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Nov 2019 16:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D33A9107768
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Nov 2019 19:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727319AbfKVPLH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Nov 2019 10:11:07 -0500
-Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25885 "EHLO
-        sender4-pp-o98.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726765AbfKVPLH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Nov 2019 10:11:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1574435431; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=F/UeNzZZIxxbeqSsXkX8t5pKeG3cpx0L+XjbMfJnBgZbQ0X6r/JUHpHaRRXIooYiVjvKEpzxt+HfO36TufGdPAykdaKQmlLE1kYYnID0XnHeDB75u3mdSgsK+tAbbyD45j1BHFDvJnjlInF3AXQm6cJM0UUsCCZZXHAqivi8k+k=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1574435431; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=nESsLvhzaQb1NGJ+1u9ZSjHrT1AthJvXPz55nH0Q2OQ=; 
-        b=aJE+kn42jl78ZHNnp5Mh5bQFKArdLGpbNuJ/+fmazUCvg7wDXLaAKOyXJ0whg/2X3dWaG3YDbrVjGKTKDVzF1NeV6f+LyS5kvpiIvpMf3s8puXFnScucrhwj/3fhF/HnsaHPS0NmB+rsNmIddYnzQgCDuMuH0DYlVDfM1aaQnZU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zoho.com;
-        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
-        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
-DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
-  s=zapps768; d=zoho.com; 
-  h=subject:to:references:cc:from:message-id:date:user-agent:mime-version:in-reply-to:content-type; 
-  b=tOpBGigrJUdJPA+iI6mAC3HsCgDZ4QsCnHz8akkwg7bmEyvKymB+ODIPaZVzYvnoBjVXYF3ZYv9P
-    wdEbe1MiWy2aVuSJQRl04ncv/kKmD2vS4lY/NeJwGsja9hGBmrtG  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1574435431;
-        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
-        h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        bh=nESsLvhzaQb1NGJ+1u9ZSjHrT1AthJvXPz55nH0Q2OQ=;
-        b=aR9QcJAtBZsmDoGuOOWS7WczN7aUJhhmQNvboAGIoKAc7X7ZFzGAcSKNJofMpglP
-        vUxZHDjro57ylyXE37QS7ov3KfuIxNk2CFLyT1PQWa9giTmbO1EoXf19IB62fDdoevS
-        kJez+dmFYQAjzY/jn/+7wCmCIhnOI+iPbGfES91w=
-Received: from [192.168.88.130] (171.221.113.177 [171.221.113.177]) by mx.zohomail.com
-        with SMTPS id 1574435431336248.96638470349205; Fri, 22 Nov 2019 07:10:31 -0800 (PST)
-Subject: Re: [PATCH 1/4] MIPS: Ingenic: initial X1000 support.
-To:     Paul Cercueil <paul@crapouillou.net>
-References: <1574428289-21764-1-git-send-email-zhouyanjie@zoho.com>
- <1574428289-21764-2-git-send-email-zhouyanjie@zoho.com>
- <1574433409.3.0@crapouillou.net>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        paul.burton@mips.com, paulburton@kernel.org, jhogan@kernel.org,
-        mripard@kernel.org, shawnguo@kernel.org, mark.rutland@arm.com,
-        syq@debian.org, ralf@linux-mips.org, heiko@sntech.de,
-        icenowy@aosc.io, laurent.pinchart@ideasonboard.com,
-        krzk@kernel.org, geert+renesas@glider.be,
-        prasannatsmkumar@gmail.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com
-From:   Zhou Yanjie <zhouyanjie@zoho.com>
-Message-ID: <5DD7FA57.7070209@zoho.com>
-Date:   Fri, 22 Nov 2019 23:10:15 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
- Thunderbird/38.8.0
+        id S1726695AbfKVSfn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Nov 2019 13:35:43 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:38475 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726638AbfKVSfn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Nov 2019 13:35:43 -0500
+Received: by mail-pg1-f195.google.com with SMTP id t3so3263486pgl.5;
+        Fri, 22 Nov 2019 10:35:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=C496R21wUL9ca4CtsQrqNT8rS3xWsFNgWAAHeXrAZps=;
+        b=n8nLnWy+o67EYWdosNVhPdW5U3vZ9/2ygaDthy1kGO/ljoymyc/kekWtI327mkENhq
+         dHCflQSONcF5Ic0s7NZKG5H61a4ZnpP7xbEqv0sVr0xikdo1Ogp+QaZj0+zT86Zs6/dI
+         RHubSY2jqD9QMzPZTia64QKh5ndoqw1fF71ZEIoeGRIu+I01YezsSoeSyGx0kBb01v4S
+         BSuDlUxcH94LsfWtVgQCfuWAW9swS/64kkHE3NKD9nhD49VbiDtrt8M+o4rDu5NjWYhJ
+         LjZenRWRb3Op60hFd9QdcjR6znGMiPDb5wqBi+6lWQBkQm2F0O13JpHXUu7fKVNOsVWL
+         2hag==
+X-Gm-Message-State: APjAAAWCV0TcNNRx+Gpj/yp7HQH27GX0/41GdKcB4Dm+GIUCscb8ZVYJ
+        B+aWmFdJiCcb5F4It6ZaxieTIUkrZi69tQ==
+X-Google-Smtp-Source: APXvYqzDXWJQrZuIC1f1s93w/jXpX0SxxCUgm3qLPAVjqBr/839u4wmTH6F6WvmyS4MIEmnILpQcnw==
+X-Received: by 2002:a62:1b50:: with SMTP id b77mr19201572pfb.187.1574447742174;
+        Fri, 22 Nov 2019 10:35:42 -0800 (PST)
+Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
+        by smtp.gmail.com with ESMTPSA id i13sm7949307pfo.39.2019.11.22.10.35.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Nov 2019 10:35:41 -0800 (PST)
+Date:   Fri, 22 Nov 2019 10:36:21 -0800
+From:   Paul Burton <paulburton@kernel.org>
+To:     Lichao Liu <liulichao@loongson.cn>
+Cc:     chenhc@lemote.com, jiaxun.yang@flygoat.com, ralf@linux-mips.org,
+        jhogan@kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS:Loongson64:Limit 8259.h by config
+Message-ID: <20191122183621.67p7vuvfzhpoldna@lantea.localdomain>
+References: <20191122135851.5145-1-liulichao@loongson.cn>
 MIME-Version: 1.0
-In-Reply-To: <1574433409.3.0@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191122135851.5145-1-liulichao@loongson.cn>
+User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+Hi Lichao,
 
-On 2019=E5=B9=B411=E6=9C=8822=E6=97=A5 22:36, Paul Cercueil wrote:
-> Hi Zhou,
->
->
-> Le ven., nov. 22, 2019 at 21:11, Zhou Yanjie <zhouyanjie@zoho.com> a=20
-> =C3=A9crit :
->> Support the Ingenic X1000 SoC using the code under arch/mips/jz4740.
->> This is left unselectable in Kconfig until a X1000 based board is
->> added in a later commit.
->>
->> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
->> ---
->>  arch/mips/boot/dts/ingenic/x1000.dtsi | 161=20
->> ++++++++++++++++++++++++++++++++++
->>  arch/mips/jz4740/Kconfig              |   6 ++
->>  arch/mips/jz4740/time.c               |   4 +-
->>  3 files changed, 170 insertions(+), 1 deletion(-)
->>  create mode 100644 arch/mips/boot/dts/ingenic/x1000.dtsi
->>
->> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi=20
->> b/arch/mips/boot/dts/ingenic/x1000.dtsi
->> new file mode 100644
->> index 0000000..b8658a6
->> --- /dev/null
->> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
->> @@ -0,0 +1,161 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +#include <dt-bindings/clock/x1000-cgu.h>
->> +
->> +/ {
->> +    #address-cells =3D <1>;
->> +    #size-cells =3D <1>;
->> +    compatible =3D "ingenic,x1000", "ingenic,x1000e";
->> +
->> +    cpuintc: interrupt-controller {
->> +        #address-cells =3D <0>;
->> +        #interrupt-cells =3D <1>;
->> +        interrupt-controller;
->> +        compatible =3D "mti,cpu-interrupt-controller";
->> +    };
->> +
->> +    intc: interrupt-controller@10001000 {
->> +        compatible =3D "ingenic,x1000-intc", "ingenic,jz4780-intc";
->> +        reg =3D <0x10001000 0x50>;
->> +
->> +        interrupt-controller;
->> +        #interrupt-cells =3D <1>;
->> +
->> +        interrupt-parent =3D <&cpuintc>;
->> +        interrupts =3D <2>;
->> +    };
->> +
->> +    exclk: ext {
->> +        compatible =3D "fixed-clock";
->> +        #clock-cells =3D <0>;
->> +    };
->> +
->> +    rtclk: rtc {
->> +        compatible =3D "fixed-clock";
->> +        #clock-cells =3D <0>;
->> +        clock-frequency =3D <32768>;
->> +    };
->> +
->> +    cgu: x1000-cgu@10000000 {
->> +        compatible =3D "ingenic,x1000-cgu";
->> +        reg =3D <0x10000000 0x100>;
->> +
->> +        clocks =3D <&exclk>, <&rtclk>;
->> +        clock-names =3D "ext", "rtc";
->> +
->> +        #clock-cells =3D <1>;
->> +    };
->> +
->> +    apb {
->> +        compatible =3D "simple-bus";
->> +        #address-cells =3D <1>;
->> +        #size-cells =3D <1>;
->> +        ranges =3D <>;
->> +
->> +        uart0: serial@10030000 {
->> +            compatible =3D "ingenic,x1000-uart";
->> +            reg =3D <0x10030000 0x100>;
->> +
->> +            interrupt-parent =3D <&intc>;
->> +            interrupts =3D <51>;
->> +
->> +            clocks =3D <&exclk>, <&cgu X1000_CLK_UART0>;
->> +            clock-names =3D "baud", "module";
->> +
->> +            status =3D "disabled";
->> +        };
->> +
->> +        uart1: serial@10031000 {
->> +            compatible =3D "ingenic,x1000-uart";
->> +            reg =3D <0x10031000 0x100>;
->> +
->> +            interrupt-parent =3D <&intc>;
->> +            interrupts =3D <50>;
->> +
->> +            clocks =3D <&exclk>, <&cgu X1000_CLK_UART1>;
->> +            clock-names =3D "baud", "module";
->> +
->> +            status =3D "disabled";
->> +        };
->> +
->> +        uart2: serial@10032000 {
->> +            compatible =3D "ingenic,x1000-uart";
->> +            reg =3D <0x10032000 0x100>;
->> +
->> +            interrupt-parent =3D <&intc>;
->> +            interrupts =3D <49>;
->> +
->> +            clocks =3D <&exclk>, <&cgu X1000_CLK_UART2>;
->> +            clock-names =3D "baud", "module";
->> +
->> +            status =3D "disabled";
->> +        };
->> +
->> +        pinctrl: pin-controller@10010000 {
->> +            compatible =3D "ingenic,x1000-pinctrl";
->> +            reg =3D <0x10010000 0x800>;
->> +
->> +            #address-cells =3D <1>;
->> +            #size-cells =3D <0>;
->> +
->> +            gpa: gpio@0 {
->> +                compatible =3D "ingenic,x1000-gpio";
->> +                reg =3D <0>;
->> +
->> +                gpio-controller;
->> +                gpio-ranges =3D <&pinctrl 0 0 32>;
->> +                #gpio-cells =3D <2>;
->> +
->> +                interrupt-controller;
->> +                #interrupt-cells =3D <2>;
->> +
->> +                interrupt-parent =3D <&intc>;
->> +                interrupts =3D <17>;
->> +            };
->> +
->> +            gpb: gpio@1 {
->> +                compatible =3D "ingenic,x1000-gpio";
->> +                reg =3D <1>;
->> +
->> +                gpio-controller;
->> +                gpio-ranges =3D <&pinctrl 0 32 32>;
->> +                #gpio-cells =3D <2>;
->> +
->> +                interrupt-controller;
->> +                #interrupt-cells =3D <2>;
->> +
->> +                interrupt-parent =3D <&intc>;
->> +                interrupts =3D <16>;
->> +            };
->> +
->> +            gpc: gpio@2 {
->> +                compatible =3D "ingenic,x1000-gpio";
->> +                reg =3D <2>;
->> +
->> +                gpio-controller;
->> +                gpio-ranges =3D <&pinctrl 0 64 32>;
->> +                #gpio-cells =3D <2>;
->> +
->> +                interrupt-controller;
->> +                #interrupt-cells =3D <2>;
->> +
->> +                interrupt-parent =3D <&intc>;
->> +                interrupts =3D <15>;
->> +            };
->> +
->> +            gpd: gpio@3 {
->> +                compatible =3D "ingenic,x1000-gpio";
->> +                reg =3D <3>;
->> +
->> +                gpio-controller;
->> +                gpio-ranges =3D <&pinctrl 0 96 32>;
->> +                #gpio-cells =3D <2>;
->> +
->> +                interrupt-controller;
->> +                #interrupt-cells =3D <2>;
->> +
->> +                interrupt-parent =3D <&intc>;
->> +                interrupts =3D <14>;
->> +            };
->> +        };
->> +    };
->> +};
->> diff --git a/arch/mips/jz4740/Kconfig b/arch/mips/jz4740/Kconfig
->> index 4dd0c44..6b96844 100644
->> --- a/arch/mips/jz4740/Kconfig
->> +++ b/arch/mips/jz4740/Kconfig
->> @@ -33,3 +33,9 @@ config MACH_JZ4780
->>      select MIPS_CPU_SCACHE
->>      select SYS_HAS_CPU_MIPS32_R2
->>      select SYS_SUPPORTS_HIGHMEM
->> +
->> +config MACH_X1000
->> +    bool
->> +    select MIPS_CPU_SCACHE
->> +    select SYS_HAS_CPU_MIPS32_R2
->> +    select SYS_SUPPORTS_HIGHMEM
->> diff --git a/arch/mips/jz4740/time.c b/arch/mips/jz4740/time.c
->> index cb768e5..3af6538 100644
->> --- a/arch/mips/jz4740/time.c
->> +++ b/arch/mips/jz4740/time.c
->> @@ -101,7 +101,9 @@ static struct clock_event_device=20
->> jz4740_clockevent =3D {
->>  #ifdef CONFIG_MACH_JZ4740
->>      .irq =3D JZ4740_IRQ_TCU0,
->>  #endif
->> -#if defined(CONFIG_MACH_JZ4770) || defined(CONFIG_MACH_JZ4780)
->> +#if defined(CONFIG_MACH_JZ4770) || \
->> +    defined(CONFIG_MACH_JZ4780) || \
->> +    defined(CONFIG_MACH_X1000)
->
-> That code was removed in the TCU patchset that was merged in time for=20
-> 5.4-rc1.
-> Please rebase your patchset on top mips-next.
->
+On Fri, Nov 22, 2019 at 09:58:51PM +0800, Lichao Liu wrote:
+> Not all platform config CONFIG_I8259, So Use the macro CONFIG_I8259
+> to control whether to include the asm/i8259.h header file.
 
-Thank you for your reminder, I will do it in v2.
+Generally including headers is harmless - it's quite common to include
+headers which might or might not be used, and if nothing from the header
+is used then its inclusion simply makes no difference. The compiler will
+see the header contents & discard them, no big deal.
 
-Thanks and best regards=EF=BC=81
+So can you describe why you want to add the #ifdef here? What's
+problematic about including asm/i8259.h when CONFIG_I8259=n?
 
-> Cheers,
-> -Paul
->
->
+Thanks,
+    Paul
 
-
-
+> Signed-off-by: Lichao Liu <liulichao@loongson.cn>
+> ---
+>  arch/mips/loongson64/pm.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/mips/loongson64/pm.c b/arch/mips/loongson64/pm.c
+> index 7c8556f09781..08238a58107f 100644
+> --- a/arch/mips/loongson64/pm.c
+> +++ b/arch/mips/loongson64/pm.c
+> @@ -9,7 +9,9 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/pm.h>
+>  
+> +#ifdef CONFIG_I8259
+>  #include <asm/i8259.h>
+> +#endif
+>  #include <asm/mipsregs.h>
+>  
+>  #include <loongson.h>
+> -- 
+> 2.17.1
+> 
