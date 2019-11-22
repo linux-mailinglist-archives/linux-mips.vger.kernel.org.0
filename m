@@ -2,51 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 051F0107A49
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Nov 2019 22:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A09107A5D
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Nov 2019 23:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726937AbfKVVy7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Nov 2019 16:54:59 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:44560 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726910AbfKVVy7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Nov 2019 16:54:59 -0500
-Received: by mail-pg1-f195.google.com with SMTP id e6so3939741pgi.11;
-        Fri, 22 Nov 2019 13:54:57 -0800 (PST)
+        id S1726880AbfKVWGV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Nov 2019 17:06:21 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:45743 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726852AbfKVWGU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Nov 2019 17:06:20 -0500
+Received: by mail-pj1-f67.google.com with SMTP id m71so3600426pjb.12;
+        Fri, 22 Nov 2019 14:06:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
          :references:in-reply-to;
-        bh=vUZH4y8eh4NB2dPAk/Cc1BhEazNVD7xMe1SSmflrcZo=;
-        b=K9wyh8aB003vb7au7D4M7pFLKCHopS8RgDkVkC5/54ankzU1PiuQo1wvV9lyU7AwCz
-         WGtrpb7TIfil3oYP/NPwKoi74w7/ciFoCZ6x+wp4t6EEMVP5uotY0IojxgJvzgLS8VLZ
-         P5YPLPqFllsaGeQFT5xWqPZsByqjI1Q8r6Uzqxhaft2CXP9Nd7f49VfegTJLy7gN1pqJ
-         rL9M/fegeXYemKJ7MbLYvzGrpEDH0ELTEPPj6VrAasiTcmFcUcheVwgnIm2HA77mt0ZG
-         CPcE2zzAo8lBAnL3qr0CkyRdTltWlmLFinrLvgs6gNjxMGABAWuumuOOhot138DQxdyI
-         PZzQ==
-X-Gm-Message-State: APjAAAU0Fc77ayTUB3nf3tsrep2N+N1q5loszyyFFMz5mIMDZrKFTRRQ
-        W+Dndldf6+fbF/G8+IDz6D0=
-X-Google-Smtp-Source: APXvYqwXXVtepuyNAEL3/jqrvqjkPhG10QkWZocQ7BGRU2iHUKyxhd063bjnvRsZgJBoxcyhA59Z7g==
-X-Received: by 2002:a63:5848:: with SMTP id i8mr18106137pgm.217.1574459696980;
-        Fri, 22 Nov 2019 13:54:56 -0800 (PST)
+        bh=gYwtUyjhfQJO55CeJjiXNQYOVnbnfsUZpOJ1fNxmnfo=;
+        b=WcvlM2QldpR5RCCPd2G24za8Gm0JxZGPm1Xr5jaKajO37rS1X1G1O86wYSYbuPTM+w
+         OUpRW+txv0rnzVOqwEiPiJy6fNKAz8aPZDOZSio0q+qq+MHMs4NAhkKBu9DUVT3QSNn/
+         D5pXSFhFiAhAF86jnPFoTTFZhbaX5v3+ADbYz8zERqh9yemwyPiWOiQdRRaBMo82NpxW
+         zuiuP52JF35w9ISOuJZfYplkTDuW/NliGu0H0ZKQT+0VL1z/XRDZ8CCcxTa5NFUITu/Y
+         qDcA4Jf0CPyxuKcbnTBMms8cZquGBYm03CostfP2SjofyNM99Y1dRBTXnhrr642CKdLy
+         hijA==
+X-Gm-Message-State: APjAAAWdY8UbmOmesyyyrv+IvD+ixHe2404Yw8NT2RcEza8P8HujOzzr
+        m1Puv24byibtP+quU0aJCNc=
+X-Google-Smtp-Source: APXvYqwpDtGaQ9U6/aBWqQU74N8yQmKh5r2GpaXppdqgMnTK2V1ydmdllaKGrVFFsHVt2aFFesh58g==
+X-Received: by 2002:a17:90a:1982:: with SMTP id 2mr22282116pji.30.1574460378513;
+        Fri, 22 Nov 2019 14:06:18 -0800 (PST)
 Received: from localhost (MIPS-TECHNO.ear1.SanJose1.Level3.net. [4.15.122.74])
-        by smtp.gmail.com with ESMTPSA id w2sm8778210pfj.22.2019.11.22.13.54.56
+        by smtp.gmail.com with ESMTPSA id y6sm8447744pfm.12.2019.11.22.14.06.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Nov 2019 13:54:56 -0800 (PST)
-Message-ID: <5dd85930.1c69fb81.6e760.64b7@mx.google.com>
-Date:   Fri, 22 Nov 2019 13:54:55 -0800
+        Fri, 22 Nov 2019 14:06:17 -0800 (PST)
+Message-ID: <5dd85bd9.1c69fb81.55be.599c@mx.google.com>
+Date:   Fri, 22 Nov 2019 14:06:17 -0800
 From:   Paul Burton <paulburton@kernel.org>
-To:     Mike Rapoport <rppt@kernel.org>
-CC:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>
-CC:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Mike Rapoport <rppt@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>
+To:     Zhou Yanjie <zhouyanjie@zoho.com>
 CC:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH 0/3] mips: get rid of __ARCH_USE_5LEVEL_HACK
-References:  <20191121162133.15833-1-rppt@kernel.org>
-In-Reply-To:  <20191121162133.15833-1-rppt@kernel.org>
+CC:     linux-kernel@vger.kernel.org, ralf@linux-mips.org,
+        paulburton@kernel.org, jhogan@kernel.org, paul@crapouillou.net,
+        jiaxun.yang@flygoat.com, gregkh@linuxfoundation.org,
+        malat@debian.org, tglx@linutronix.de, chenhc@lemote.com
+CC:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH 2/2 v3] MIPS: Ingenic: Disable abandoned HPTLB function.
+References:  <1574173727-123321-3-git-send-email-zhouyanjie@zoho.com>
+In-Reply-To:  <1574173727-123321-3-git-send-email-zhouyanjie@zoho.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -54,44 +53,23 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hello,
 
-Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> Hi,
-> 
-> These patches update the mips page table folding/unfolding to take into
-> account the 5th level.
-> 
-> Mike Rapoport (3):
->   mips: fix build when "48 bits virtual memory" is enabled
->   mips: drop __pXd_offset() macros that duplicate pXd_index() ones
->   mips: add support for folded p4d page tables
-> 
->  arch/mips/include/asm/fixmap.h     |  2 +-
->  arch/mips/include/asm/pgalloc.h    |  4 +--
+Zhou Yanjie wrote:
+> JZ4760/JZ4770/JZ4775/X1000/X1500 has an abandoned huge page tlb,
+> this mode is not compatible with the MIPS standard, it will cause
+> tlbmiss and into an infinite loop (line 21 in the tlb-funcs.S)
+> when starting the init process. write 0xa9000000 to cp0 register 5
+> sel 4 to disable this function to prevent getting stuck. Confirmed
+> by Ingenic, this operation will not adversely affect processors
+> without HPTLB function.
 
-Series applied to mips-next.
+Applied to mips-next.
 
-> mips: fix build when "48 bits virtual memory" is enabled
->   commit 3ed6751bb8fa
->   https://git.kernel.org/mips/c/3ed6751bb8fa
->   
->   Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
->   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> commit b02efeb05699
+> https://git.kernel.org/mips/c/b02efeb05699
 > 
-> mips: drop __pXd_offset() macros that duplicate pXd_index() ones
->   commit 31168f033e37
->   https://git.kernel.org/mips/c/31168f033e37
->   
->   Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
->   Signed-off-by: Paul Burton <paulburton@kernel.org>
-> 
-> mips: add support for folded p4d page tables
->   commit 2bee1b58484f
->   https://git.kernel.org/mips/c/2bee1b58484f
->   
->   Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
->   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+> Acked-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: Paul Burton <paulburton@kernel.org>
 
 Thanks,
     Paul
