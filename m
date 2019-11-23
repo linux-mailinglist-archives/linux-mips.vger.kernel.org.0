@@ -2,110 +2,216 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EFE107D44
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Nov 2019 07:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DCC107D71
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Nov 2019 08:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725973AbfKWGLv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 23 Nov 2019 01:11:51 -0500
-Received: from forward103o.mail.yandex.net ([37.140.190.177]:36964 "EHLO
-        forward103o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725800AbfKWGLv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 23 Nov 2019 01:11:51 -0500
-Received: from mxback22g.mail.yandex.net (mxback22g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:322])
-        by forward103o.mail.yandex.net (Yandex) with ESMTP id 07E3B5F80CB3;
-        Sat, 23 Nov 2019 09:11:47 +0300 (MSK)
-Received: from sas1-8413c76d2429.qloud-c.yandex.net (sas1-8413c76d2429.qloud-c.yandex.net [2a02:6b8:c08:2206:0:640:8413:c76d])
-        by mxback22g.mail.yandex.net (mxback/Yandex) with ESMTP id GXRpki0ZYh-Bkh01pa3;
-        Sat, 23 Nov 2019 09:11:46 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1574489506;
-        bh=8H4akx4Ymj74OsTfX4s060voJAow7/ASdcIk608TvkA=;
-        h=From:To:Subject:CC:References:Date:In-Reply-To:Message-ID;
-        b=TUvFt+7xzTExGDlG8L8sqDhyzE2Mg5aaivokwUUWfTMTloWyojYfaLKHf9aHZBQ1v
-         MYGjgVzskBR8Pyo8BN7wpzE60B4W9vVMdhpbW3ZQhCYe39gPb+8wgvTSH9rDW6lOxE
-         V5Iw8lVLJZdMRMIJ5Ieik/DrGrrCzdfsx6P94y2I=
-Authentication-Results: mxback22g.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by sas1-8413c76d2429.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id WHMbUqZSVo-BiVSh3mI;
-        Sat, 23 Nov 2019 09:11:44 +0300
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client certificate not present)
-Date:   Sat, 23 Nov 2019 14:11:32 +0800
-User-Agent: K-9 Mail for Android
-In-Reply-To: <EAC4F77C-88BE-47FA-83A5-5855A869425A@flygoat.com>
-References: <1574335820-15188-1-git-send-email-chenhc@lemote.com> <20191122184731.l7ttfg4evgi4tvcp@lantea.localdomain> <EAC4F77C-88BE-47FA-83A5-5855A869425A@flygoat.com>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+        id S1726208AbfKWH3o (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 23 Nov 2019 02:29:44 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.161]:35155 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725973AbfKWH3o (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Nov 2019 02:29:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1574494179;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=C3tq2C1FlgowlsVRn7oonUSXNm/jC4rx4yf32YwSpvI=;
+        b=EfL3LYRmMJw1RjNg2YKI853nLmp5hzI8EEaKDARdm0wmqYCGbrAIGlPvWQcE6fISYB
+        q9pDA65wyneoKfzqFtwca1uCS3IoGZGudhA9f5Qx/gdJgWysQqdhQc1sfyxDBtjA5/fM
+        zkLy2WuakQGxRhk1dpRix86+uCB6iAocjUdWojxrdbM4kOWE+D6nmuKMLmA1dc4mAIu4
+        z/QYn2re0KJA9iNL9kZNAwc+7eASEzKbGygjtMQUxuXsCVC8OpOcC5711XzUIDmOmlSK
+        wQtypcFXOwr+XUc6yYq3p/lCi1OLNo7ppoxuV1bKfH3uRSj47mElWkCQnIHl+ZNDRlWn
+        Ryvw==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NMGH/zrwDCoG68="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+        by smtp.strato.de (RZmta 44.29.0 DYNA|AUTH)
+        with ESMTPSA id L09db3vAN7TUtsN
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Sat, 23 Nov 2019 08:29:30 +0100 (CET)
+Content-Type: text/plain; charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Subject: Re:MIPS: bug: gettimeofday syscall broken on CI20 board
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <703DC004-96E8-463D-8870-3CC410FE1C5E@goldelico.com>
+Date:   Sat, 23 Nov 2019 08:29:30 +0100
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] MIPS: Make sure ebase address is in KSEG0
-To:     Paul Burton <paulburton@kernel.org>,
-        Huacai Chen <chenhc@lemote.com>
-CC:     Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>, linux-mips@linux-mips.org,
-        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <3C1D695B-09AA-4C2D-A94F-84DFC05C6F0C@flygoat.com>
+Message-Id: <69EFB859-ED05-4C47-AC69-76CBBEC7C2DE@goldelico.com>
+References: <18788C50-F29B-4BD7-89F6-B056FF490214@goldelico.com> <703DC004-96E8-463D-8870-3CC410FE1C5E@goldelico.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org,
+        MIPS Creator CI20 Development 
+        <mips-creator-ci20-dev@googlegroups.com>
+X-Mailer: Apple Mail (2.3124)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Nobody with an idea?
 
+> Am 17.11.2019 um 14:14 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>=20
+> Hi Vincenzo,
+>=20
+>> Am 07.11.2019 um 17:21 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>>=20
+>> Hi,
+>> I am trying to run v5.4-rc6 on the CI20 board (jz4780) and it
+>> is almost ok. Except one strange thing.
+>>=20
+>> If I install a v4.19.81 kernel I can initialize the
+>> ethernet interface and dhclient works.
+>>=20
+>> If I install a v5.4-rc6 kernel on exactly the same
+>> rootfs dhclient fails with
+>>=20
+>> root@letux:~# dhclient
+>> ../../../../lib/isc/unix/time.c:200: Operation not permitted
+>> root@letux:~#
+>>=20
+>> I have done some strace and the first significant difference
+>> is that with v5.4-rc6 there is no gettimeofday syscall.
+>>=20
+>> Another symptom pointing in the same direction is that
+>> after manually assigning an IP address I can run ping
+>> but get strange time values.
+>>=20
+>> So it may be that
+>>=20
+>> 24640f233b46 mips: Add support for generic vDSO
+>>=20
+>> did break gettimeofday when used with latest Debian Stretch
+>> libraries. I tried to git revert but there are conflicts.
+>>=20
+>> Just a side-note: both kernels work with Debian Jessie,
+>> which likely has an older gettimeofday wrapper that
+>> is not influenced by some subtle change.
+>=20
+> I finally found time to do a bisect and it confirms:
+>=20
+> 24640f233b466051ad3a5d2786d2951e43026c9d is the first bad commit
+> commit 24640f233b466051ad3a5d2786d2951e43026c9d
+> Author: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Date:   Fri Jun 21 10:52:46 2019 +0100
+>=20
+>    mips: Add support for generic vDSO
+>=20
+>    The mips vDSO library requires some adaptations to take advantage =
+of the
+>    newly introduced generic vDSO library.
+>=20
+>    Introduce the following changes:
+>     - Modification of vdso.c to be compliant with the common vdso =
+datapage
+>     - Use of lib/vdso for gettimeofday
+>=20
+>    Cc: Ralf Baechle <ralf@linux-mips.org>
+>    Cc: Paul Burton <paul.burton@mips.com>
+>    Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>    [paul.burton@mips.com: Prepend $(src) to config-n32-o32-env.c =
+path.]
+>    Signed-off-by: Paul Burton <paul.burton@mips.com>
+>=20
+> arch/mips/Kconfig                         |   2 +
+> arch/mips/include/asm/vdso.h              |  78 +--------------
+> arch/mips/include/asm/vdso/gettimeofday.h | 151 =
+++++++++++++++++++++++++++++++
+> arch/mips/include/asm/vdso/vdso.h         |  85 +++++++++++++++++
+> arch/mips/include/asm/vdso/vsyscall.h     |  43 +++++++++
+> arch/mips/kernel/vdso.c                   |  37 ++------
+> arch/mips/vdso/Makefile                   |  33 ++++++-
+> arch/mips/vdso/config-n32-o32-env.c       |  17 ++++
+> arch/mips/vdso/elf.S                      |   2 +-
+> arch/mips/vdso/sigreturn.S                |   2 +-
+> arch/mips/vdso/vdso.h                     |  85 -----------------
+> arch/mips/vdso/vgettimeofday.c            |  40 ++++++++
+> 12 files changed, 378 insertions(+), 197 deletions(-)
+> create mode 100644 arch/mips/include/asm/vdso/gettimeofday.h
+> create mode 100644 arch/mips/include/asm/vdso/vdso.h
+> create mode 100644 arch/mips/include/asm/vdso/vsyscall.h
+> create mode 100644 arch/mips/vdso/config-n32-o32-env.c
+> delete mode 100644 arch/mips/vdso/vdso.h
+> create mode 100644 arch/mips/vdso/vgettimeofday.c
+>=20
+> So this patch intoruced in v5.4-rc1 breaks compatibility with Debian =
+9.9
+> user space assumptions.
+>=20
+> One thing seems strange to me:
+>=20
+> -/**
+> - * union mips_vdso_data - Data provided by the kernel for the VDSO.
+> - * @xtime_sec:         Current real time (seconds part).
+> - * @xtime_nsec:                Current real time (nanoseconds part, =
+shifted).
+> - * @wall_to_mono_sec:  Wall-to-monotonic offset (seconds part).
+> - * @wall_to_mono_nsec: Wall-to-monotonic offset (nanoseconds part).
+> - * @seq_count:         Counter to synchronise updates (odd =3D =
+updating).
+> - * @cs_shift:          Clocksource shift value.
+> - * @clock_mode:                Clocksource to use for time functions.
+> - * @cs_mult:           Clocksource multiplier value.
+> - * @cs_cycle_last:     Clock cycle value at last update.
+> - * @cs_mask:           Clocksource mask value.
+> - * @tz_minuteswest:    Minutes west of Greenwich (from timezone).
+> - * @tz_dsttime:                Type of DST correction (from =
+timezone).
+> - *
+> - * This structure contains data needed by functions within the VDSO. =
+It is
+> - * populated by the kernel and mapped read-only into user memory. The =
+time
+> - * fields are mirrors of internal data from the timekeeping =
+infrastructure.
+> - *
+> - * Note: Care should be taken when modifying as the layout must =
+remain the same
+> - * for both 64- and 32-bit (for 32-bit userland on 64-bit kernel).
+> - */
+> union mips_vdso_data {
+> -       struct {
+> -               u64 xtime_sec;
+> -               u64 xtime_nsec;
+> -               u64 wall_to_mono_sec;
+> -               u64 wall_to_mono_nsec;
+> -               u32 seq_count;
+> -               u32 cs_shift;
+> -               u8 clock_mode;
+> -               u32 cs_mult;
+> -               u64 cs_cycle_last;
+> -               u64 cs_mask;
+> -               s32 tz_minuteswest;
+> -               s32 tz_dsttime;
+> -       };
+> -
+> +       struct vdso_data data[CS_BASES];
+>        u8 page[PAGE_SIZE];
+> };
+>=20
+> If I look at the definition of vdso_data it *is* significantly =
+differen
+> from mips_vdso_data.
+>=20
+> What I would assume is that the struct mips_vdso_data is embossed in =
+user
+> space code and therefore using vdso_data instead is breaking API.
+>=20
+> Please advise what I should try or check to narrow down further.
+>=20
+> BR and thanks,
+> Nikolaus Schaller
+>=20
+> _______________________________________________
+> http://projects.goldelico.com/p/gta04-kernel/
+> Letux-kernel mailing list
+> Letux-kernel@openphoenux.org
+> http://lists.goldelico.com/mailman/listinfo.cgi/letux-kernel
 
-=E4=BA=8E 2019=E5=B9=B411=E6=9C=8823=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=88=
-1:08:38, Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom> =E5=86=99=E5=88=B0:
->
->
->=E4=BA=8E 2019=E5=B9=B411=E6=9C=8823=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=
-=882:47:31, Paul Burton <paulburton@kernel=2Eorg>
->=E5=86=99=E5=88=B0:
->>Hi Huacai,
->>
->>On Thu, Nov 21, 2019 at 07:30:20PM +0800, Huacai Chen wrote:
->>> Dynamically allocated ebase address above 0x20000000 can be
->triggered
->>> by some special physical memory layout, or just by a "big kernel +
->>big
->>> initrd + big swiotlb" configuration=2E
->>>=20
->>> For MIPS32, ebase address above 0x20000000 is unusable, for MIPS64
->it
->>> is usable but this case is warned=2E However, this warning is useless
->>> because it is unfixable in a specific system configuration=2E So we
->>just
->>> use CKSEG0 as a fallback=2E
->>
->>I'd prefer that we don't assume there's memory at physical address
->zero
->>- that property doesn't hold for all systems=2E
->>
->>How about the change I suggested previously over here:
->>
->>https://lore=2Ekernel=2Eorg/linux-mips/20191108191149=2Ebbq3h4xp4famsh2n=
-@lantea=2Elocaldomain/
->>
->>Would that work for you?
->
->Hi Paul
->
->Our problem is, sometimes the ebase from firmware is totally a random
->address,=20
->even not inside the memory region=2E I'd prefer ignore address if it's
->not valid since the warning here can't deal with it=2E
-
-I'm sorry=2E I was wrong=2E Please ignore the noise=2E
-
-Thanks
-
->
->Thanks=2E
->>
->>Thanks,
->>    Paul
->>
-
---=20
-Jiaxun Yang
