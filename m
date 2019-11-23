@@ -2,75 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF03107C26
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Nov 2019 01:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A15107C76
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Nov 2019 03:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726833AbfKWAr0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Nov 2019 19:47:26 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:40691 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726089AbfKWAr0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Nov 2019 19:47:26 -0500
-Received: by mail-ot1-f66.google.com with SMTP id m15so7786935otq.7;
-        Fri, 22 Nov 2019 16:47:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=brIYs3WpNwPNTYUASSCYgUmn21fXdgxiC4cL9+e/ZoU=;
-        b=lJS0XmDrSSxnt9zFfqXO34rfEINyqbOAzI207zX61n7uYMuYxygohU7R/OyL0PgoR8
-         0JN9GEYfZoFrVopyXB0lk+KVN6NFJ5p+vc2jXCXBSezoJy64RFaYwHUEzzqb2cMixNfK
-         Yh3hJSCbDpcmzfphLoSPPxb5jhw1YOjDMNLCAQiX7Eht3n3i5zkc63g3K0Hvp8EDxSnO
-         eGyZD3Qt2Iy6wLbyYxpKDNhI/MQHX3TzTULPii+8Uj/+kd/oaZiuH51E0LQAZybTqgSu
-         Hdu1NiKVZtQHzHBIHhP08N4xJ1q1K4IeyVBBeeSXOq9CKo3JtHo7mdQGsUvwLpxh+JPm
-         oHhw==
-X-Gm-Message-State: APjAAAWVE0cJiaCNsoJkUGK/8R7/8IkMmJGYb2sRcsiqYNcjlsTzLQcy
-        zduNioTb0/rRQ/pRuVvsNw==
-X-Google-Smtp-Source: APXvYqw6tcGYWeMhNGOxHEWcIsKy6LxITdr43FYvOiWFOb9uG6Aw3huTBvnlV96BZiW0gQrBvZbOog==
-X-Received: by 2002:a05:6830:1af7:: with SMTP id c23mr12315972otd.247.1574470044033;
-        Fri, 22 Nov 2019 16:47:24 -0800 (PST)
-Received: from localhost (ip-70-5-93-147.ftwttx.spcsdns.net. [70.5.93.147])
-        by smtp.gmail.com with ESMTPSA id l12sm2751120oth.76.2019.11.22.16.47.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Nov 2019 16:47:23 -0800 (PST)
-Date:   Fri, 22 Nov 2019 18:47:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Zhou Yanjie <zhouyanjie@zoho.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        paulburton@kernel.org, paul.burton@mips.com,
-        linus.walleij@linaro.org, paul@crapouillou.net, robh+dt@kernel.org,
-        mark.rutland@arm.com, syq@debian.org
-Subject: Re: [PATCH v3 3/4] dt-bindings: pinctrl: Add bindings for Ingenic
- X1830.
-Message-ID: <20191123004722.GA24380@bogus>
-References: <1574317183-126374-1-git-send-email-zhouyanjie@zoho.com>
- <1574317183-126374-4-git-send-email-zhouyanjie@zoho.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1574317183-126374-4-git-send-email-zhouyanjie@zoho.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726525AbfKWCeg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Nov 2019 21:34:36 -0500
+Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25889 "EHLO
+        sender4-pp-o98.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfKWCeg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Nov 2019 21:34:36 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1574476438; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=g3lmfCqx3I2xWKQYAwHkZXCzXGzvyxZqzNzU7RymwUAnzIXNsmmKFb7E/wN1Mmi90vVkYmvQH0XeJCVpB71CEGBoUZqEpqdfFg93I/AcSs/i1NDz4I5AQJ6B4eoNg1HWvUqkdNn3V9Ro9vRLtfNPWsHX5FlSbWRRshWoephcIpI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1574476438; h=Cc:Date:From:Message-ID:Subject:To; 
+        bh=dCM44G4kUl5QOVe/uw5T8hO9Qh8KnzxxvZE4pOJAobM=; 
+        b=QRNq+v839lkg/hwt0s+Ul04xb+merU4Ka4ixGGzuqhqWJ1UlnvQBQrcWmW/xPac0/MKcFK/ySx4qJZOCyjVVQokIFe4l3KVSCyY+uj2Asp4ydAEhk3VxmCEm/GIb7yo4s8qwwGA0OPCJVmUytHaN+6jnXeikL2d1i19xy8zv4jU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zoho.com;
+        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
+        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
+  s=zapps768; d=zoho.com; 
+  h=from:to:cc:subject:date:message-id; 
+  b=otKbVOYI3dSiLZQ6dLS4BO1UXGkeoKXDofCo8ki18HiPhhr4sOjsVdnD2hF9p/pvrBDAxCEexe31
+    nQTTh7rtAYYUhY9gjK/vPUtSqoUzwOSiCCgBZJXpelwT11jmK9Km  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1574476438;
+        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
+        h=From:To:Cc:Subject:Date:Message-Id;
+        bh=dCM44G4kUl5QOVe/uw5T8hO9Qh8KnzxxvZE4pOJAobM=;
+        b=UHL82Wu7NsaWKU/egoA2Rt4qtmZnz0zaAvr3jbxwsJpRi7aIfPg8nTtfI5ERIEi+
+        NxlPK/jbVC1oUaDfoftTHVE+opws2b14grStdUvDOPUjRrsvJ6WmNjaoXyNYKiLIiRT
+        cL3f6ZcGdPaeKTLW8M5KqXWx0scDXsyhLPlDPgk8=
+Received: from zhouyanjie-virtual-machine.localdomain (182.148.48.217 [182.148.48.217]) by mx.zohomail.com
+        with SMTPS id 1574476437253956.326840571938; Fri, 22 Nov 2019 18:33:57 -0800 (PST)
+From:   Zhou Yanjie <zhouyanjie@zoho.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
+        jhogan@kernel.org, mripard@kernel.org, shawnguo@kernel.org,
+        mark.rutland@arm.com, syq@debian.org, ralf@linux-mips.org,
+        heiko@sntech.de, icenowy@aosc.io,
+        laurent.pinchart@ideasonboard.com, krzk@kernel.org,
+        geert+renesas@glider.be, paul@crapouillou.net,
+        prasannatsmkumar@gmail.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, 772753199@qq.com
+Subject: Add initial support for Ingenic X1000 SoC and Y&A CU Neo board v2.
+Date:   Sat, 23 Nov 2019 10:32:20 +0800
+Message-Id: <1574476344-62631-1-git-send-email-zhouyanjie@zoho.com>
+X-Mailer: git-send-email 2.7.4
+X-ZohoMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 21 Nov 2019 14:19:42 +0800, Zhou Yanjie wrote:
-> Add the pinctrl bindings for the X1830 Soc from Ingenic.
-> 
-> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
-> ---
-> 
-> Notes:
->     v2:
->     New patch.
-> 
-> 	v2->v3:
->     No change.
-> 
->  Documentation/devicetree/bindings/pinctrl/ingenic,pinctrl.txt | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
+v1->v2:
+Rebase on top of mips-next, use ingenic-timer driver
+for system timer and clocksource.
 
-Acked-by: Rob Herring <robh@kernel.org>
+
