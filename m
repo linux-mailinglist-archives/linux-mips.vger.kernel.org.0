@@ -2,59 +2,306 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 501FF107FF8
+	by mail.lfdr.de (Postfix) with ESMTP id 63D69107FF9
 	for <lists+linux-mips@lfdr.de>; Sat, 23 Nov 2019 19:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726775AbfKWSay (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 23 Nov 2019 13:30:54 -0500
-Received: from sender4-pp-o97.zoho.com ([136.143.188.97]:25778 "EHLO
+        id S1726494AbfKWSbH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 23 Nov 2019 13:31:07 -0500
+Received: from sender4-pp-o97.zoho.com ([136.143.188.97]:25784 "EHLO
         sender4-pp-o97.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726494AbfKWSay (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Nov 2019 13:30:54 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1574533844; cv=none; 
+        with ESMTP id S1726836AbfKWSbH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Nov 2019 13:31:07 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1574533848; cv=none; 
         d=zohomail.com; s=zohoarc; 
-        b=b658i1K/XsIfArfFVNPTkQQPieWkfJA7KoUr/lsTolYA8V1ysO9qCR+plLbzXa6kRZBH7m5NExwrmgbnkWrxF4go7uENDsJ4yH3NMKvkRjR1WG/07HLh8Gs5xEYW7o1Fbk0+HywI+g6AYgfi2lhmgOCiy1UzO3hXA9sMaMJwkcE=
+        b=KE5Bck1eDZi1XUBHgo69nVbcaIdHAyS74s2b9Zo2FeXbNe3aYvdDDvI5SKHN+9sBzNoiksrNBR9rjoNoxwJMtmC7FZo8SQJD0xh4loHrJHAAnU6AVvyAlDWGjOOdB7S5T906Clr39Pjpn66lRZhBFoXyugJZTwA/+hTM42y3VkM=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1574533844; h=Cc:Date:From:Message-ID:Subject:To; 
-        bh=H94x1tfJHQJNFBM0ErsvL0Uudwa/ZEgpUH9VtK3qs9s=; 
-        b=j0Td24ohUXjpF12sp/y6CccAi8BB7oVaDYIo4hIUVHs4hN7cax6DdGdAdgNBT8jj1535PQkVlQ7TydwjSSn2flB51ZgTW+TVSDyhjvjutSYqhkJcj7p+KCk7POuD3W+b9UFQs5Tpz3+zz2tbaK1O7uh1OAqCtORC0DZOew0yZkM=
+        t=1574533848; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To; 
+        bh=qrZzih6pFWECKAWeB39WJqpybDSJ8gSaoEmqEOnkH1k=; 
+        b=LRVU1sgNZHNM2wGIXYImlGAcmruyTR+k1/daIauEPV1N+9ImYucItwlFgFCXj52ipWW6HPpOl45u40ZNBAejMYUuQRq5Ei90FUjbiglzOowv6R3vUrqKd93hsvi1exCP7SGgfkgs63lkGZbcoqjL2K66EETWgqQE4ljSQTzWDy4=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
         dkim=pass  header.i=zoho.com;
         spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
         dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
 DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
   s=zapps768; d=zoho.com; 
-  h=from:to:cc:subject:date:message-id; 
-  b=HCSckvSqpbedPMJ/vK1nm9Hq5WkNXEukP+l3R7/vh/bjFD5GomuvuDpxfLRuhM70A9mtIQIu6Ic1
-    GVw7WBOYFt8Xo9QnQ1M0OYbH/iF7KcszodwwY2PTpNnILFsJTJCk  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1574533844;
+  h=from:to:cc:subject:date:message-id:in-reply-to:references; 
+  b=mG1QLwNBEaN1cEQReK4VoFD86PdqITiCaIypcdgTgaaZrYRmeuB/Lhf0GzVmN7PbDqY35QYueJtR
+    uzc5mIHHKEXsxniYVCUw3Ec+heNcdToQqRXd+oHnKCj21ET0O7Yh  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1574533848;
         s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
-        h=From:To:Cc:Subject:Date:Message-Id;
-        bh=H94x1tfJHQJNFBM0ErsvL0Uudwa/ZEgpUH9VtK3qs9s=;
-        b=bWyTKfoxNrKbA3csh4dH/67cvyi2JTjcXXnHSOUtZeI/sNjUq9Y4I5lMhOEqO+9k
-        LFuwGu1tKw9aX61yXQGCNpGhLY/0TVa6a+spwooe4BOEWOrHjzCRjD25Z3EP5GkPCTl
-        Wi6Op5I8oqNZfan6gBOQJqNekaN37mJa0U4fMqyA=
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
+        bh=qrZzih6pFWECKAWeB39WJqpybDSJ8gSaoEmqEOnkH1k=;
+        b=mUU51eYpZUKgzEJyGA0RWwdnU/AYgTfovPcPKRVZIQ8hY+0H6iibkkXiU91bsP7S
+        xDwwjcYyYHRfME9Il/6XI3UhDPJRqFQxI4S0Deheqe7nG+Lpf32ncza3bAKNSleFuVF
+        5/F/SxZBBqtf6GAHsB5vIKmKNx/qREdSEtPVvTVQ=
 Received: from localhost.localdomain (171.221.112.247 [171.221.112.247]) by mx.zohomail.com
-        with SMTPS id 157453384281543.77998308884901; Sat, 23 Nov 2019 10:30:42 -0800 (PST)
+        with SMTPS id 1574533847531677.0268549269194; Sat, 23 Nov 2019 10:30:47 -0800 (PST)
 From:   Zhou Yanjie <zhouyanjie@zoho.com>
 To:     linux-mips@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, robh+dt@kernel.org,
         paul.burton@mips.com, paulburton@kernel.org, mark.rutland@arm.com,
         linus.walleij@linaro.org, paul@crapouillou.net
-Subject: Fix bugs in X1000/X1500 and add X1830 pinctrl driver v4.
-Date:   Sun, 24 Nov 2019 02:30:02 +0800
-Message-Id: <1574533806-112333-1-git-send-email-zhouyanjie@zoho.com>
+Subject: [PATCH RESEND v4 1/4] pinctrl: Ingenic: Fix bugs in X1000 and X1500.
+Date:   Sun, 24 Nov 2019 02:30:03 +0800
+Message-Id: <1574533806-112333-2-git-send-email-zhouyanjie@zoho.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1574533806-112333-1-git-send-email-zhouyanjie@zoho.com>
+References: <1574533806-112333-1-git-send-email-zhouyanjie@zoho.com>
 X-ZohoMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-v3->v4:
-1.Use local variables to streamline code.
-2.Prevents processors older than X1830 from being
-  configured in HiZ mode.
+1.Fix the pullup parameter of X1000.
+2.X1000 and X1500 have only one set of uart1 hwflow pin mapping,
+  so modify "uart1_hwflow_d" to "uart1_hwflow".
+3.X1000 has only one set of mmc1 pin mapping, so modify
+  "mmc1-1bit-e/mmc1-4bit-e" to "mmc1-1bit/mmc1-4bit".
+4.X1000 has only one regular externel memory controller that
+  does not support nand flash, so change "nemc_" to "emc_".
+5.X1500 has only one set of mmc, so modify "mmc0_" to "mmc_".
+
+Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+---
+
+Notes:
+    v1->v2:
+    Modify "nemc_" to "emc_" because X1000 has only one regular externel
+    memory controller that does not support nand flash.
+    
+    v2->v3:
+    No change.
+    
+    v3->v4:
+    No change.
+
+ drivers/pinctrl/pinctrl-ingenic.c | 94 +++++++++++++++++++--------------------
+ 1 file changed, 47 insertions(+), 47 deletions(-)
+
+diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
+index 6e26830..059e39a 100644
+--- a/drivers/pinctrl/pinctrl-ingenic.c
++++ b/drivers/pinctrl/pinctrl-ingenic.c
+@@ -1017,7 +1017,7 @@ static const struct ingenic_chip_info jz4780_chip_info = {
+ };
+ 
+ static const u32 x1000_pull_ups[4] = {
+-	0xffffffff, 0x8dffffff, 0x7d3fffff, 0xffffffff,
++	0xffffffff, 0xfdffffff, 0x0dffffff, 0x0000003f,
+ };
+ 
+ static const u32 x1000_pull_downs[4] = {
+@@ -1028,7 +1028,7 @@ static int x1000_uart0_data_pins[] = { 0x4a, 0x4b, };
+ static int x1000_uart0_hwflow_pins[] = { 0x4c, 0x4d, };
+ static int x1000_uart1_data_a_pins[] = { 0x04, 0x05, };
+ static int x1000_uart1_data_d_pins[] = { 0x62, 0x63, };
+-static int x1000_uart1_hwflow_d_pins[] = { 0x64, 0x65, };
++static int x1000_uart1_hwflow_pins[] = { 0x64, 0x65, };
+ static int x1000_uart2_data_a_pins[] = { 0x02, 0x03, };
+ static int x1000_uart2_data_d_pins[] = { 0x65, 0x64, };
+ static int x1000_mmc0_1bit_pins[] = { 0x18, 0x19, 0x17, };
+@@ -1036,20 +1036,20 @@ static int x1000_mmc0_4bit_pins[] = { 0x16, 0x15, 0x14, };
+ static int x1000_mmc0_8bit_pins[] = { 0x13, 0x12, 0x11, 0x10, };
+ static int x1000_mmc1_1bit_pins[] = { 0x40, 0x41, 0x42, };
+ static int x1000_mmc1_4bit_pins[] = { 0x43, 0x44, 0x45, };
+-static int x1000_nemc_8bit_data_pins[] = {
++static int x1000_emc_8bit_data_pins[] = {
+ 	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+ };
+-static int x1000_nemc_16bit_data_pins[] = {
++static int x1000_emc_16bit_data_pins[] = {
+ 	0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
+ };
+-static int x1000_nemc_addr_pins[] = {
++static int x1000_emc_addr_pins[] = {
+ 	0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27,
+ 	0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f,
+ };
+-static int x1000_nemc_rd_we_pins[] = { 0x30, 0x31, };
+-static int x1000_nemc_wait_pins[] = { 0x34, };
+-static int x1000_nemc_cs1_pins[] = { 0x32, };
+-static int x1000_nemc_cs2_pins[] = { 0x33, };
++static int x1000_emc_rd_we_pins[] = { 0x30, 0x31, };
++static int x1000_emc_wait_pins[] = { 0x34, };
++static int x1000_emc_cs1_pins[] = { 0x32, };
++static int x1000_emc_cs2_pins[] = { 0x33, };
+ static int x1000_i2c0_pins[] = { 0x38, 0x37, };
+ static int x1000_i2c1_a_pins[] = { 0x01, 0x00, };
+ static int x1000_i2c1_c_pins[] = { 0x5b, 0x5a, };
+@@ -1078,7 +1078,7 @@ static int x1000_uart0_data_funcs[] = { 0, 0, };
+ static int x1000_uart0_hwflow_funcs[] = { 0, 0, };
+ static int x1000_uart1_data_a_funcs[] = { 2, 2, };
+ static int x1000_uart1_data_d_funcs[] = { 1, 1, };
+-static int x1000_uart1_hwflow_d_funcs[] = { 1, 1, };
++static int x1000_uart1_hwflow_funcs[] = { 1, 1, };
+ static int x1000_uart2_data_a_funcs[] = { 2, 2, };
+ static int x1000_uart2_data_d_funcs[] = { 0, 0, };
+ static int x1000_mmc0_1bit_funcs[] = { 1, 1, 1, };
+@@ -1086,15 +1086,15 @@ static int x1000_mmc0_4bit_funcs[] = { 1, 1, 1, };
+ static int x1000_mmc0_8bit_funcs[] = { 1, 1, 1, 1, 1, };
+ static int x1000_mmc1_1bit_funcs[] = { 0, 0, 0, };
+ static int x1000_mmc1_4bit_funcs[] = { 0, 0, 0, };
+-static int x1000_nemc_8bit_data_funcs[] = { 0, 0, 0, 0, 0, 0, 0, 0, };
+-static int x1000_nemc_16bit_data_funcs[] = { 0, 0, 0, 0, 0, 0, 0, 0, };
+-static int x1000_nemc_addr_funcs[] = {
++static int x1000_emc_8bit_data_funcs[] = { 0, 0, 0, 0, 0, 0, 0, 0, };
++static int x1000_emc_16bit_data_funcs[] = { 0, 0, 0, 0, 0, 0, 0, 0, };
++static int x1000_emc_addr_funcs[] = {
+ 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ };
+-static int x1000_nemc_rd_we_funcs[] = { 0, 0, };
+-static int x1000_nemc_wait_funcs[] = { 0, };
+-static int x1000_nemc_cs1_funcs[] = { 0, };
+-static int x1000_nemc_cs2_funcs[] = { 0, };
++static int x1000_emc_rd_we_funcs[] = { 0, 0, };
++static int x1000_emc_wait_funcs[] = { 0, };
++static int x1000_emc_cs1_funcs[] = { 0, };
++static int x1000_emc_cs2_funcs[] = { 0, };
+ static int x1000_i2c0_funcs[] = { 0, 0, };
+ static int x1000_i2c1_a_funcs[] = { 2, 2, };
+ static int x1000_i2c1_c_funcs[] = { 0, 0, };
+@@ -1116,7 +1116,7 @@ static const struct group_desc x1000_groups[] = {
+ 	INGENIC_PIN_GROUP("uart0-hwflow", x1000_uart0_hwflow),
+ 	INGENIC_PIN_GROUP("uart1-data-a", x1000_uart1_data_a),
+ 	INGENIC_PIN_GROUP("uart1-data-d", x1000_uart1_data_d),
+-	INGENIC_PIN_GROUP("uart1-hwflow-d", x1000_uart1_hwflow_d),
++	INGENIC_PIN_GROUP("uart1-hwflow", x1000_uart1_hwflow),
+ 	INGENIC_PIN_GROUP("uart2-data-a", x1000_uart2_data_a),
+ 	INGENIC_PIN_GROUP("uart2-data-d", x1000_uart2_data_d),
+ 	INGENIC_PIN_GROUP("mmc0-1bit", x1000_mmc0_1bit),
+@@ -1124,13 +1124,13 @@ static const struct group_desc x1000_groups[] = {
+ 	INGENIC_PIN_GROUP("mmc0-8bit", x1000_mmc0_8bit),
+ 	INGENIC_PIN_GROUP("mmc1-1bit", x1000_mmc1_1bit),
+ 	INGENIC_PIN_GROUP("mmc1-4bit", x1000_mmc1_4bit),
+-	INGENIC_PIN_GROUP("nemc-8bit-data", x1000_nemc_8bit_data),
+-	INGENIC_PIN_GROUP("nemc-16bit-data", x1000_nemc_16bit_data),
+-	INGENIC_PIN_GROUP("nemc-addr", x1000_nemc_addr),
+-	INGENIC_PIN_GROUP("nemc-rd-we", x1000_nemc_rd_we),
+-	INGENIC_PIN_GROUP("nemc-wait", x1000_nemc_wait),
+-	INGENIC_PIN_GROUP("nemc-cs1", x1000_nemc_cs1),
+-	INGENIC_PIN_GROUP("nemc-cs2", x1000_nemc_cs2),
++	INGENIC_PIN_GROUP("emc-8bit-data", x1000_emc_8bit_data),
++	INGENIC_PIN_GROUP("emc-16bit-data", x1000_emc_16bit_data),
++	INGENIC_PIN_GROUP("emc-addr", x1000_emc_addr),
++	INGENIC_PIN_GROUP("emc-rd-we", x1000_emc_rd_we),
++	INGENIC_PIN_GROUP("emc-wait", x1000_emc_wait),
++	INGENIC_PIN_GROUP("emc-cs1", x1000_emc_cs1),
++	INGENIC_PIN_GROUP("emc-cs2", x1000_emc_cs2),
+ 	INGENIC_PIN_GROUP("i2c0-data", x1000_i2c0),
+ 	INGENIC_PIN_GROUP("i2c1-data-a", x1000_i2c1_a),
+ 	INGENIC_PIN_GROUP("i2c1-data-c", x1000_i2c1_c),
+@@ -1149,21 +1149,21 @@ static const struct group_desc x1000_groups[] = {
+ 
+ static const char *x1000_uart0_groups[] = { "uart0-data", "uart0-hwflow", };
+ static const char *x1000_uart1_groups[] = {
+-	"uart1-data-a", "uart1-data-d", "uart1-hwflow-d",
++	"uart1-data-a", "uart1-data-d", "uart1-hwflow",
+ };
+ static const char *x1000_uart2_groups[] = { "uart2-data-a", "uart2-data-d", };
+ static const char *x1000_mmc0_groups[] = {
+ 	"mmc0-1bit", "mmc0-4bit", "mmc0-8bit",
+ };
+ static const char *x1000_mmc1_groups[] = {
+-	"mmc1-1bit-e", "mmc1-4bit-e",
++	"mmc1-1bit", "mmc1-4bit",
+ };
+-static const char *x1000_nemc_groups[] = {
+-	"nemc-8bit-data", "nemc-16bit-data",
+-	"nemc-addr", "nemc-rd-we", "nemc-wait",
++static const char *x1000_emc_groups[] = {
++	"emc-8bit-data", "emc-16bit-data",
++	"emc-addr", "emc-rd-we", "emc-wait",
+ };
+-static const char *x1000_cs1_groups[] = { "nemc-cs1", };
+-static const char *x1000_cs2_groups[] = { "nemc-cs2", };
++static const char *x1000_cs1_groups[] = { "emc-cs1", };
++static const char *x1000_cs2_groups[] = { "emc-cs2", };
+ static const char *x1000_i2c0_groups[] = { "i2c0-data", };
+ static const char *x1000_i2c1_groups[] = { "i2c1-data-a", "i2c1-data-c", };
+ static const char *x1000_i2c2_groups[] = { "i2c2-data", };
+@@ -1184,9 +1184,9 @@ static const struct function_desc x1000_functions[] = {
+ 	{ "uart2", x1000_uart2_groups, ARRAY_SIZE(x1000_uart2_groups), },
+ 	{ "mmc0", x1000_mmc0_groups, ARRAY_SIZE(x1000_mmc0_groups), },
+ 	{ "mmc1", x1000_mmc1_groups, ARRAY_SIZE(x1000_mmc1_groups), },
+-	{ "nemc", x1000_nemc_groups, ARRAY_SIZE(x1000_nemc_groups), },
+-	{ "nemc-cs1", x1000_cs1_groups, ARRAY_SIZE(x1000_cs1_groups), },
+-	{ "nemc-cs2", x1000_cs2_groups, ARRAY_SIZE(x1000_cs2_groups), },
++	{ "emc", x1000_emc_groups, ARRAY_SIZE(x1000_emc_groups), },
++	{ "emc-cs1", x1000_cs1_groups, ARRAY_SIZE(x1000_cs1_groups), },
++	{ "emc-cs2", x1000_cs2_groups, ARRAY_SIZE(x1000_cs2_groups), },
+ 	{ "i2c0", x1000_i2c0_groups, ARRAY_SIZE(x1000_i2c0_groups), },
+ 	{ "i2c1", x1000_i2c1_groups, ARRAY_SIZE(x1000_i2c1_groups), },
+ 	{ "i2c2", x1000_i2c2_groups, ARRAY_SIZE(x1000_i2c2_groups), },
+@@ -1224,11 +1224,11 @@ static int x1500_uart0_data_pins[] = { 0x4a, 0x4b, };
+ static int x1500_uart0_hwflow_pins[] = { 0x4c, 0x4d, };
+ static int x1500_uart1_data_a_pins[] = { 0x04, 0x05, };
+ static int x1500_uart1_data_d_pins[] = { 0x62, 0x63, };
+-static int x1500_uart1_hwflow_d_pins[] = { 0x64, 0x65, };
++static int x1500_uart1_hwflow_pins[] = { 0x64, 0x65, };
+ static int x1500_uart2_data_a_pins[] = { 0x02, 0x03, };
+ static int x1500_uart2_data_d_pins[] = { 0x65, 0x64, };
+-static int x1500_mmc0_1bit_pins[] = { 0x18, 0x19, 0x17, };
+-static int x1500_mmc0_4bit_pins[] = { 0x16, 0x15, 0x14, };
++static int x1500_mmc_1bit_pins[] = { 0x18, 0x19, 0x17, };
++static int x1500_mmc_4bit_pins[] = { 0x16, 0x15, 0x14, };
+ static int x1500_i2c0_pins[] = { 0x38, 0x37, };
+ static int x1500_i2c1_a_pins[] = { 0x01, 0x00, };
+ static int x1500_i2c1_c_pins[] = { 0x5b, 0x5a, };
+@@ -1247,11 +1247,11 @@ static int x1500_uart0_data_funcs[] = { 0, 0, };
+ static int x1500_uart0_hwflow_funcs[] = { 0, 0, };
+ static int x1500_uart1_data_a_funcs[] = { 2, 2, };
+ static int x1500_uart1_data_d_funcs[] = { 1, 1, };
+-static int x1500_uart1_hwflow_d_funcs[] = { 1, 1, };
++static int x1500_uart1_hwflow_funcs[] = { 1, 1, };
+ static int x1500_uart2_data_a_funcs[] = { 2, 2, };
+ static int x1500_uart2_data_d_funcs[] = { 0, 0, };
+-static int x1500_mmc0_1bit_funcs[] = { 1, 1, 1, };
+-static int x1500_mmc0_4bit_funcs[] = { 1, 1, 1, };
++static int x1500_mmc_1bit_funcs[] = { 1, 1, 1, };
++static int x1500_mmc_4bit_funcs[] = { 1, 1, 1, };
+ static int x1500_i2c0_funcs[] = { 0, 0, };
+ static int x1500_i2c1_a_funcs[] = { 2, 2, };
+ static int x1500_i2c1_c_funcs[] = { 0, 0, };
+@@ -1268,11 +1268,11 @@ static const struct group_desc x1500_groups[] = {
+ 	INGENIC_PIN_GROUP("uart0-hwflow", x1500_uart0_hwflow),
+ 	INGENIC_PIN_GROUP("uart1-data-a", x1500_uart1_data_a),
+ 	INGENIC_PIN_GROUP("uart1-data-d", x1500_uart1_data_d),
+-	INGENIC_PIN_GROUP("uart1-hwflow-d", x1500_uart1_hwflow_d),
++	INGENIC_PIN_GROUP("uart1-hwflow", x1500_uart1_hwflow),
+ 	INGENIC_PIN_GROUP("uart2-data-a", x1500_uart2_data_a),
+ 	INGENIC_PIN_GROUP("uart2-data-d", x1500_uart2_data_d),
+-	INGENIC_PIN_GROUP("mmc0-1bit", x1500_mmc0_1bit),
+-	INGENIC_PIN_GROUP("mmc0-4bit", x1500_mmc0_4bit),
++	INGENIC_PIN_GROUP("mmc-1bit", x1500_mmc_1bit),
++	INGENIC_PIN_GROUP("mmc-4bit", x1500_mmc_4bit),
+ 	INGENIC_PIN_GROUP("i2c0-data", x1500_i2c0),
+ 	INGENIC_PIN_GROUP("i2c1-data-a", x1500_i2c1_a),
+ 	INGENIC_PIN_GROUP("i2c1-data-c", x1500_i2c1_c),
+@@ -1288,10 +1288,10 @@ static const struct group_desc x1500_groups[] = {
+ 
+ static const char *x1500_uart0_groups[] = { "uart0-data", "uart0-hwflow", };
+ static const char *x1500_uart1_groups[] = {
+-	"uart1-data-a", "uart1-data-d", "uart1-hwflow-d",
++	"uart1-data-a", "uart1-data-d", "uart1-hwflow",
+ };
+ static const char *x1500_uart2_groups[] = { "uart2-data-a", "uart2-data-d", };
+-static const char *x1500_mmc0_groups[] = { "mmc0-1bit", "mmc0-4bit", };
++static const char *x1500_mmc_groups[] = { "mmc-1bit", "mmc-4bit", };
+ static const char *x1500_i2c0_groups[] = { "i2c0-data", };
+ static const char *x1500_i2c1_groups[] = { "i2c1-data-a", "i2c1-data-c", };
+ static const char *x1500_i2c2_groups[] = { "i2c2-data", };
+@@ -1307,7 +1307,7 @@ static const struct function_desc x1500_functions[] = {
+ 	{ "uart0", x1500_uart0_groups, ARRAY_SIZE(x1500_uart0_groups), },
+ 	{ "uart1", x1500_uart1_groups, ARRAY_SIZE(x1500_uart1_groups), },
+ 	{ "uart2", x1500_uart2_groups, ARRAY_SIZE(x1500_uart2_groups), },
+-	{ "mmc0", x1500_mmc0_groups, ARRAY_SIZE(x1500_mmc0_groups), },
++	{ "mmc", x1500_mmc_groups, ARRAY_SIZE(x1500_mmc_groups), },
+ 	{ "i2c0", x1500_i2c0_groups, ARRAY_SIZE(x1500_i2c0_groups), },
+ 	{ "i2c1", x1500_i2c1_groups, ARRAY_SIZE(x1500_i2c1_groups), },
+ 	{ "i2c2", x1500_i2c2_groups, ARRAY_SIZE(x1500_i2c2_groups), },
+-- 
+2.7.4
 
 
