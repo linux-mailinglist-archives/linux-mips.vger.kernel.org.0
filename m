@@ -2,34 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4132C108327
-	for <lists+linux-mips@lfdr.de>; Sun, 24 Nov 2019 12:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B632108336
+	for <lists+linux-mips@lfdr.de>; Sun, 24 Nov 2019 12:41:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbfKXLks (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 24 Nov 2019 06:40:48 -0500
-Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.101]:30691 "EHLO
+        id S1726851AbfKXLkm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 24 Nov 2019 06:40:42 -0500
+Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.100]:25205 "EHLO
         mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727071AbfKXLkr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 24 Nov 2019 06:40:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1574595645;
+        with ESMTP id S1726713AbfKXLkl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 24 Nov 2019 06:40:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1574595639;
         s=strato-dkim-0002; d=goldelico.com;
         h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=NjEWunQz10C58eQ0gQdyDLr+7iljKIOVsgB4xAjyIIk=;
-        b=VeaHnFWY6sZtG9jAXUJgxXo6DCnd4kZC10WL/56GCMrmp9rRu98HgGq9kD0Bgb4P7a
-        K7LcSSN5a82BfvN4iZxiJEvD5AmsAWOyGFTX+tWDd4wtDfSmfNq4+IMH+Ag/fmA47mE/
-        KXxatfxZJhRFATs2EHJum57YTLU2fr8BCe7veYl83Big2SonLtbPHr/LNATbGBp20GTF
-        Ym8nxzvtw9SVNrVv8IAVgTpGcdPagdWU7Jb+OYKaZDUYoCAv4eLymmv24rrInvHaTk+t
-        K8w3EDbBG7XPW+YzJIHnFESmFO5Ztn+dTIZu7VIBaJFgoGw6Axn3zQFF2FyPy8Mg4kXu
-        rulg==
+        bh=Rm4WywRiqIu8Cpj8mxp5+uUPO7vBAXz/YHalWG/YWBE=;
+        b=L/ru/6y0snDG9M++4Rn4jkrKlnxSLDCqMnxyLHE6Q9x7DYu107JOXpuKyb3Y1+EFzx
+        1gJLaBmlRplarKs2btj/431vyeb3qnTou3gxy3C5r2wcmmrnIk8K+rWotKaRYDwjrIQW
+        0LBqTnpjCbDsK7w6xIoeygLIk6ghMMxSoTZpn1jUrgb+Y5NuaVxosHbjqjJ/jzfj8Eqn
+        75VIguvQt3fsRxwFR98rxjEWuA+7FcTSa0ixRR5ol9SMWhM5G3jDX4bONctqvOQNUP+0
+        jRXEHLi66/w4Yg9pSWJrcRXhzDN8R5KakAq0TrXDtsmMhdK32TyXY+Wm0YoqIQlw+QTW
+        HIbg==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1mfYzBGHXH4HEaKeuIV"
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 44.29.0 DYNA|AUTH)
-        with ESMTPSA id L09db3vAOBeUwET
+        with ESMTPSA id L09db3vAOBeVwEV
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
         (Client did not present a certificate);
-        Sun, 24 Nov 2019 12:40:30 +0100 (CET)
+        Sun, 24 Nov 2019 12:40:31 +0100 (CET)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
@@ -45,9 +45,9 @@ Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         openpvrsgx-devgroup@letux.org, letux-kernel@openphoenux.org,
         kernel@pyra-handheld.com, linux-mips@vger.kernel.org,
         "H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: [PATCH v3 3/8] ARM: DTS: am3517: add sgx gpu child node
-Date:   Sun, 24 Nov 2019 12:40:23 +0100
-Message-Id: <47b2286c1b267102dbb2cb2313d858dc5f4e47d7.1574595627.git.hns@goldelico.com>
+Subject: [PATCH v3 4/8] ARM: DTS: omap3: add sgx gpu child node
+Date:   Sun, 24 Nov 2019 12:40:24 +0100
+Message-Id: <deaddbf0d29f30bfe675314e03e59cfc4749fad6.1574595627.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <cover.1574595627.git.hns@goldelico.com>
 References: <cover.1574595627.git.hns@goldelico.com>
@@ -58,27 +58,28 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-and add interrupt.
+and add interrupt
 
+Tested-by: H. Nikolaus Schaller <hns@goldelico.com> # OpenPandora 600 MHz.
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- arch/arm/boot/dts/am3517.dtsi | 11 ++++++-----
+ arch/arm/boot/dts/omap34xx.dtsi | 11 ++++++-----
  1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/boot/dts/am3517.dtsi b/arch/arm/boot/dts/am3517.dtsi
-index bf3002009b00..48d5a250fd40 100644
---- a/arch/arm/boot/dts/am3517.dtsi
-+++ b/arch/arm/boot/dts/am3517.dtsi
-@@ -97,7 +97,7 @@
- 		 * revision register instead of the unreadable OCP revision
- 		 * register.
+diff --git a/arch/arm/boot/dts/omap34xx.dtsi b/arch/arm/boot/dts/omap34xx.dtsi
+index 7b09cbee8bb8..9b050d71849b 100644
+--- a/arch/arm/boot/dts/omap34xx.dtsi
++++ b/arch/arm/boot/dts/omap34xx.dtsi
+@@ -111,7 +111,7 @@
+ 		 * are also different clocks, but we do not have any dts users
+ 		 * for it.
  		 */
 -		sgx_module: target-module@50000000 {
 +		target-module@50000000 {
  			compatible = "ti,sysc-omap2", "ti,sysc";
  			reg = <0x50000014 0x4>;
  			reg-names = "rev";
-@@ -107,10 +107,11 @@
+@@ -121,10 +121,11 @@
  			#size-cells = <1>;
  			ranges = <0 0x50000000 0x4000>;
  
@@ -87,13 +88,13 @@ index bf3002009b00..48d5a250fd40 100644
 -			 * binding or driver in mainline
 -			 */
 +			sgx: gpu@0 {
-+				compatible = "ti,am3517-sgx530-125", "img,sgx530-125", "img,sgx530";
-+				reg = <0x0 0x4000>;
++				compatible = "ti,omap3-sgx530-121", "img,sgx530-121", "img,sgx530";
++				reg = <0x0 0x4000>;	/* 64kB */
 +				interrupts = <21>;
 +			};
  		};
  	};
- };
+ 
 -- 
 2.23.0
 
