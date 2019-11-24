@@ -2,124 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD5B1081A0
-	for <lists+linux-mips@lfdr.de>; Sun, 24 Nov 2019 04:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB4210833B
+	for <lists+linux-mips@lfdr.de>; Sun, 24 Nov 2019 12:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726719AbfKXDyr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sat, 23 Nov 2019 22:54:47 -0500
-Received: from mail-io1-f67.google.com ([209.85.166.67]:40656 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726676AbfKXDyq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Nov 2019 22:54:46 -0500
-Received: by mail-io1-f67.google.com with SMTP id b26so10518926ion.7
-        for <linux-mips@vger.kernel.org>; Sat, 23 Nov 2019 19:54:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PZ/KE2hJprGqFwsV7+0s99EI+jTXk9VkSRz/9n+Yrow=;
-        b=ql+f4eq1/jPotwBuO7qq4jSo3rBU68jmS0FqwWIH85YcVxrYceXwy7AsI9ZAZX7zOB
-         mIZIy7LOT0HScCR4OinGkJce8z3NnwXCCrBP94y0yruEMKljBtpfOJa8xt2tQK9Uv3us
-         DCMRakDZozm90KOoW3cbjbDj4BQOof9d8G8JCRTCUdQfWtCE31Eb0lAMM5OtfkUm2Nhx
-         VmJDqMbGC9MzQKBMoSYBBZECw1XTPNMSo1jj2JgqgMBU+gXHTsuukkx3mmCvPWQRTf+1
-         2F5eqtW+GYfb0HFwjh5JjWGe7xwhRHyhrZb721hVvuBLK17o8WWiIOdp13L6J+MWtgms
-         YAQA==
-X-Gm-Message-State: APjAAAX8XCL05bYK8zKWAzdbcCOfaIvn7ZeEnPg00u16yOHlU6xT4spt
-        IKVXCPvoxLDyM71ghg1wgBKWxTz69OLdMdNW2SEZzk7m
-X-Google-Smtp-Source: APXvYqw5om0hdlNUAekobhlo7SO95tX8sAyy6KO/yg8RJluTP+zdD0VzvTbuSj9rZCswVfvGTY9dn6Dl1rk8qNAJ8F8=
-X-Received: by 2002:a02:ce5b:: with SMTP id y27mr22559747jar.38.1574567685414;
- Sat, 23 Nov 2019 19:54:45 -0800 (PST)
-MIME-Version: 1.0
-References: <1574335820-15188-1-git-send-email-chenhc@lemote.com>
- <20191122184731.l7ttfg4evgi4tvcp@lantea.localdomain> <EAC4F77C-88BE-47FA-83A5-5855A869425A@flygoat.com>
- <3C1D695B-09AA-4C2D-A94F-84DFC05C6F0C@flygoat.com>
-In-Reply-To: <3C1D695B-09AA-4C2D-A94F-84DFC05C6F0C@flygoat.com>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Sun, 24 Nov 2019 12:00:51 +0800
-Message-ID: <CAAhV-H4R1LqwLyehnTo89XPCeZo=ka=p29_rHVg=vJ_YiqqNCQ@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Make sure ebase address is in KSEG0
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Paul Burton <paulburton@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
+        id S1726765AbfKXLkl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 24 Nov 2019 06:40:41 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.81]:23309 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726705AbfKXLkl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 24 Nov 2019 06:40:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1574595638;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=Xz/eSV1DQtvQmnwSq2ae2J1MX8uxZYrtnzHz1rAuGSM=;
+        b=EoVYU7ButJgC/UtlY1aMHcWQYoloT8CM6OTn0E6HHduOPMEOZEg/2WWTXwC42nuMKs
+        Kjxe5iNT3KZYSqE+xpg9hpJHUmLILqc3WyvOwyfY5tiPW87conuqynJOk6SVQpFwj0u7
+        rQIYGP7W1v7Am0kk7Tle0KNhZ2KVuIEOf853J6SfprjNadgsMrJ105R0iE3xNeKe5GS1
+        NxIYBf9bvQJ0C6xFwaJFW2lvGo6BhNBu1nrNHHcOFiTBSPm7LzPdUnh8b6KKnePhpZUo
+        /SX/GuxWmHcqbVhUPvIQYVDo4fJfQyov85fg5yciL5EJ39eVWVKY0RbSVrtuRdlk86l3
+        C2eQ==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1mfYzBGHXH4HEaKeuIV"
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+        by smtp.strato.de (RZmta 44.29.0 DYNA|AUTH)
+        with ESMTPSA id L09db3vAOBeTwEQ
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Sun, 24 Nov 2019 12:40:29 +0100 (CET)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Cercueil <paul@crapouillou.net>,
         Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Linux MIPS Mailing List <linux-mips@linux-mips.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        openpvrsgx-devgroup@letux.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com, linux-mips@vger.kernel.org,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH v3 0/8] ARM/MIPS: DTS: add child nodes describing the PVRSGX GPU present in some OMAP SoC and JZ4780 (and many more)
+Date:   Sun, 24 Nov 2019 12:40:20 +0100
+Message-Id: <cover.1574595627.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.23.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Paul,
+* reworked YAML format with help by Rob Herring
+* removed .txt binding document
+* change compatible "ti,am335x-sgx" to "ti,am3352-sgx" - suggested by Tony Lindgren
 
-On Sat, Nov 23, 2019 at 2:11 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
->
->
-> 于 2019年11月23日 GMT+08:00 下午1:08:38, Jiaxun Yang <jiaxun.yang@flygoat.com> 写到:
-> >
-> >
-> >于 2019年11月23日 GMT+08:00 上午2:47:31, Paul Burton <paulburton@kernel.org>
-> >写到:
-> >>Hi Huacai,
-> >>
-> >>On Thu, Nov 21, 2019 at 07:30:20PM +0800, Huacai Chen wrote:
-> >>> Dynamically allocated ebase address above 0x20000000 can be
-> >triggered
-> >>> by some special physical memory layout, or just by a "big kernel +
-> >>big
-> >>> initrd + big swiotlb" configuration.
-> >>>
-> >>> For MIPS32, ebase address above 0x20000000 is unusable, for MIPS64
-> >it
-> >>> is usable but this case is warned. However, this warning is useless
-> >>> because it is unfixable in a specific system configuration. So we
-> >>just
-> >>> use CKSEG0 as a fallback.
-> >>
-> >>I'd prefer that we don't assume there's memory at physical address
-> >zero
-> >>- that property doesn't hold for all systems.
-> >>
-> >>How about the change I suggested previously over here:
-> >>
-> >>https://lore.kernel.org/linux-mips/20191108191149.bbq3h4xp4famsh2n@lantea.localdomain/
-> >>
-> >>Would that work for you?
-Now this patch has nothing to do with WG bit, and also has nothing to
-do with Loongson, it just a problem with ebase address -- on any
-MIPSr2 platforms where ebase is dynamically allocated.
+PATCH V2 2019-11-07 12:06:17:
+* tried to convert bindings to YAML format - suggested by Rob Herring
+* added JZ4780 DTS node (proven to load the driver)
+* removed timer and img,cores properties until we know we really need them - suggested by Rob Herring
 
-In the comments it is said that ebase address above 0x20000000 (which
-should be in XKphys) has problems to handle cache error. However, if
-we really treat it as a problem, we should avoid it (not just a
-warning); and if we don't think it is a problem, then we can remove
-the warning (because the warning is unfixable in a specific system
-configuration).
+PATCH V1 2019-10-18 20:46:35:
 
-Huacai
-> >
-> >Hi Paul
-> >
-> >Our problem is, sometimes the ebase from firmware is totally a random
-> >address,
-> >even not inside the memory region. I'd prefer ignore address if it's
-> >not valid since the warning here can't deal with it.
->
-> I'm sorry. I was wrong. Please ignore the noise.
->
-> Thanks
->
-> >
-> >Thanks.
-> >>
-> >>Thanks,
-> >>    Paul
-> >>
->
-> --
-> Jiaxun Yang
+This patch series defines child nodes for the SGX5xx interface inside
+different SoC so that a driver can be found and probed by the
+compatible strings and can retrieve information about the SGX revision
+that is included in a specific SoC. It also defines the interrupt number
+to be used by the SGX driver.
+
+There is currently no mainline driver for these GPUs, but a project [1]
+is ongoing with the goal to get the open-source part as provided by TI/IMG
+and others into drivers/gpu/drm/pvrsgx.
+
+The kernel modules built from this project have successfully demonstrated
+to work with the DTS definitions from this patch set on AM335x BeagleBone
+Black, DM3730 and OMAP5 Pyra and Droid 4. They partially work on OMAP3530 and
+PandaBoard ES but that is likely a problem in the kernel driver or the
+(non-free) user-space libraries and binaries.
+
+Wotk for JZ4780 (CI20 board) is in progress and there is potential to extend
+this work to e.g. BananaPi-M3 (A83) and  some Intel Poulsbo and CedarView
+devices.
+
+[1]: https://github.com/openpvrsgx-devgroup
+
+
+H. Nikolaus Schaller (8):
+  dt-bindings: add img,pvrsgx.yaml for Imagination GPUs
+  ARM: DTS: am33xx: add sgx gpu child node
+  ARM: DTS: am3517: add sgx gpu child node
+  ARM: DTS: omap3: add sgx gpu child node
+  ARM: DTS: omap36xx: add sgx gpu child node
+  ARM: DTS: omap4: add sgx gpu child node
+  ARM: DTS: omap5: add sgx gpu child node
+  MIPS: DTS: jz4780: add sgx gpu node
+
+ .../devicetree/bindings/gpu/img,pvrsgx.yaml   | 83 +++++++++++++++++++
+ arch/arm/boot/dts/am33xx.dtsi                 | 38 ++++++++-
+ arch/arm/boot/dts/am3517.dtsi                 | 11 +--
+ arch/arm/boot/dts/omap34xx.dtsi               | 11 +--
+ arch/arm/boot/dts/omap36xx.dtsi               | 11 +--
+ arch/arm/boot/dts/omap4.dtsi                  |  9 +-
+ arch/arm/boot/dts/omap4470.dts                | 15 ++++
+ arch/arm/boot/dts/omap5.dtsi                  |  9 +-
+ arch/mips/boot/dts/ingenic/jz4780.dtsi        | 11 +++
+ 9 files changed, 171 insertions(+), 27 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
+ create mode 100644 arch/arm/boot/dts/omap4470.dts
+
+-- 
+2.23.0
+
