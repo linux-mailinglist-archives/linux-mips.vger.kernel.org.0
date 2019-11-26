@@ -2,89 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7B210A328
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Nov 2019 18:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E9710A439
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Nov 2019 19:52:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728678AbfKZRKk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Nov 2019 12:10:40 -0500
-Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25885 "EHLO
-        sender4-pp-o98.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727674AbfKZRKj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Nov 2019 12:10:39 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1574788068; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=oIQe1PY4vGRM9TPEiTAsrAkTfKIqjn4z22/azPgO0cxcz/PmbKxhs5o8yvy3Zdg6Wb4RprVWH6HI20x+B7wqh+RecwDBYdiCQzOUF6Dx5rOfShwEEchlJi+SyRsVbBJUtOzDWt9LRiKhjjDmloLsA8H4+wqXl6rxfvvxGsXEycM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1574788068; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To; 
-        bh=yuMGxHMKAHxS16p3bQXnY0TEe3BCGLx/Srx8HskDs9w=; 
-        b=OowQ6wTM3xDrfvOEDclaYybFvKOFmnpLXn0FC7NscW+I1cuIHvsEFTz3UC5supkZkrKIRVvtO7hkbkq4ImHXF4FTq4hkCqA9cwo9wuuTsm5MDjnQGtnd3omNbjPJSNytp4U70n9MzBjia5xs9Ah8YlNDc3Sdz0QyOFZPI80GX4E=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zoho.com;
-        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
-        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
-DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
-  s=zapps768; d=zoho.com; 
-  h=from:to:cc:subject:date:message-id:in-reply-to:references; 
-  b=JsqhkJb1VfBMYa/vBi5UQK814q1qIloFBFpCyufV1Tv1kXZ9ZqiSnFmLgu5OZlOc34ozDxPn9toj
-    ij+9rIjE3qjxP9X2USgsaO8VgAYrzQnqNVS7yZILDQyA9DPw45MK  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1574788068;
-        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        bh=yuMGxHMKAHxS16p3bQXnY0TEe3BCGLx/Srx8HskDs9w=;
-        b=YZpyFUSYz08hsuTfrUsQrYV8aR6FSVqrVMoGpMEg5Y/BsYgCKqPpGvYs+CMEPWh0
-        roLGvak981ZWENIfkD75zSv7q5FG0j3B7ZfqGqgiQ6Rhu9kq3DsFob+hMueseA7mtOR
-        isytNAOvVkuP7Ax1pZYdzRb9lg5isAeJbDVYRRUE=
-Received: from zhouyanjie-virtual-machine.localdomain (171.221.112.214 [171.221.112.214]) by mx.zohomail.com
-        with SMTPS id 1574788067290799.8760784734405; Tue, 26 Nov 2019 09:07:47 -0800 (PST)
-From:   Zhou Yanjie <zhouyanjie@zoho.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
-        jhogan@kernel.org, mripard@kernel.org, shawnguo@kernel.org,
-        mark.rutland@arm.com, syq@debian.org, ralf@linux-mips.org,
-        heiko@sntech.de, icenowy@aosc.io,
-        laurent.pinchart@ideasonboard.com, krzk@kernel.org,
-        geert+renesas@glider.be, paul@crapouillou.net,
-        prasannatsmkumar@gmail.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, 772753199@qq.com
-Subject: [PATCH v4 6/6] MIPS: CU1000: Update defconfig for pdma controller.
-Date:   Wed, 27 Nov 2019 01:06:14 +0800
-Message-Id: <1574787974-58040-7-git-send-email-zhouyanjie@zoho.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1574787974-58040-1-git-send-email-zhouyanjie@zoho.com>
-References: <1574787974-58040-1-git-send-email-zhouyanjie@zoho.com>
-X-ZohoMailClient: External
+        id S1727059AbfKZSwM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Nov 2019 13:52:12 -0500
+Received: from mx2.suse.de ([195.135.220.15]:45252 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726052AbfKZSwL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 26 Nov 2019 13:52:11 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 38C30ABD6;
+        Tue, 26 Nov 2019 18:52:08 +0000 (UTC)
+Message-ID: <45feed391bbd95c46f64b31cf8817d4f773c8da1.camel@suse.de>
+Subject: Re: [PATCH v2] dma-mapping: treat dev->bus_dma_mask as a DMA limit
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Nathan Chancellor <natechancellor@gmail.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
+        linux-acpi@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        James Hogan <jhogan@kernel.org>, Len Brown <lenb@kernel.org>,
+        devicetree@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
+        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org
+Date:   Tue, 26 Nov 2019 19:51:59 +0100
+In-Reply-To: <0b851d0e-37c7-062e-c287-05f8c8a54c16@arm.com>
+References: <20191121092646.8449-1-nsaenzjulienne@suse.de>
+         <20191123165108.GA15306@ubuntu-x2-xlarge-x86>
+         <20191125074412.GA30595@lst.de>
+         <0b851d0e-37c7-062e-c287-05f8c8a54c16@arm.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-B9dp7hYRMOcivm0VMcWv"
+User-Agent: Evolution 3.34.1 
+MIME-Version: 1.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Selected pdma controller support by default.
 
-Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
----
+--=-B9dp7hYRMOcivm0VMcWv
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Notes:
-    v4:
-    New patch.
+On Mon, 2019-11-25 at 16:33 +0000, Robin Murphy wrote:
+> On 25/11/2019 7:44 am, Christoph Hellwig wrote:
+> > On Sat, Nov 23, 2019 at 09:51:08AM -0700, Nathan Chancellor wrote:
+> > > Just as an FYI, this introduces a warning on arm32 allyesconfig for m=
+e:
+> >=20
+> > I think the dma_limit argument to iommu_dma_alloc_iova should be a u64
+> > and/or we need to use min_t and open code the zero exception.
+> >=20
+> > Robin, Nicolas - any opinions?
+>=20
+> Yeah, given that it's always held a mask I'm not entirely sure why it=20
+> was ever a dma_addr_t rather than a u64. Unless anyone else is desperate=
+=20
+> to do it I'll get a cleanup patch ready for rc1.
 
- arch/mips/configs/cu1000_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+Sounds good to me too
 
-diff --git a/arch/mips/configs/cu1000_defconfig b/arch/mips/configs/cu1000_defconfig
-index 88729ee..9f26d00 100644
---- a/arch/mips/configs/cu1000_defconfig
-+++ b/arch/mips/configs/cu1000_defconfig
-@@ -62,6 +62,8 @@ CONFIG_GPIO_SYSFS=y
- # CONFIG_VGA_CONSOLE is not set
- # CONFIG_HID is not set
- # CONFIG_USB_SUPPORT is not set
-+CONFIG_DMADEVICES=y
-+CONFIG_DMA_JZ4780=y
- # CONFIG_IOMMU_SUPPORT is not set
- CONFIG_NVMEM=y
- CONFIG_NVMEM_SYSFS=y
--- 
-2.7.4
+Robin, since I started the mess, I'll be happy to do it if it helps offload=
+ing
+some work from you.
 
+Regards,
+Nicolas
+
+
+--=-B9dp7hYRMOcivm0VMcWv
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl3ddE8ACgkQlfZmHno8
+x/5fVwgAnN7cpWXNHEbGgqyZcMqmBWCtR0bMa/xIu1xNgr/CAwMMZj0Z3/+6d18p
+mlU5N6AqlkTxefP9mV5ZxBzugcsriGR4+qJ05kZZAMxAeG625qDkfhSEl0FmUZRT
+WmEv98IN0aFzHEjZJAyPDNV8Ff1a3JpoHKQmnYs5z438rMZt49CPBC0jNPFdaEuj
+v9ry1DkR+cGYuD1WRyBQJjtze14XoG7ZCu0o9Htc02GZHq3OuabxDikuTC+UJ1jR
+BZX4ak4qGpJUGYT8fQA7IOA94Sd/N/CHMrDp8yv5f/kRcprKqgGX8PnMCUOPf4ns
+PsCZZGhEKvVwZy3/+QzWSYQ7q20O8w==
+=WYKI
+-----END PGP SIGNATURE-----
+
+--=-B9dp7hYRMOcivm0VMcWv--
 
