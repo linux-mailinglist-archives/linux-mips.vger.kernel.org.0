@@ -2,43 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E117B10B3F7
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Nov 2019 17:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E95010B438
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Nov 2019 18:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727022AbfK0Q6G (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Nov 2019 11:58:06 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:39042 "EHLO
+        id S1726537AbfK0RQg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Nov 2019 12:16:36 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:54524 "EHLO
         crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726593AbfK0Q6F (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Nov 2019 11:58:05 -0500
+        with ESMTP id S1726510AbfK0RQg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Nov 2019 12:16:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1574873883; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1574874992; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FjJ4Tk/F0ZTC/74OfEsWallNIDhhgYWkjdNvGClSw0g=;
-        b=QLV9SF3Qae5S2dUgXBoj+DMcvlqzZbgg4HMeGWaVuo9sW45KZBQNT80R3txS3eFdekuCI1
-        gry4Q3vkaeTgboX8QFfmH5/qedncGRnzrcV46D1kNHRP8d4naVW4dmPckTGM+Q6MQtHV4+
-        5Qgg7rZhb62+iZF997PAwq5j+V1W57c=
-Date:   Wed, 27 Nov 2019 17:57:53 +0100
+        bh=Vf5lTT4aXK4iGAHqM++8R44k3yczLX4/UVbJOLnrOrw=;
+        b=IXbU5zBBeUFblckSDLHfsbBVogmD0Ly6Iz+D1Pl07qFpC1py7ULmMhQ6wopT33j1EGbsHM
+        /gF//4MyvrsCmU7IZ+4BgWLcHWMYYkW7w3LewkKaEOIaeNjMrZL5g/5V4W75bSIyT9g5CJ
+        IxtwQTyAZDlMvtsPMI1JGhMT6CBMS5g=
+Date:   Wed, 27 Nov 2019 18:16:24 +0100
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 4/6] MIPS: Ingenic: Initial YSH & ATIL CU Neo board
- support.
+Subject: Re: [PATCH] MIPS: X1830: Add X1830 system type.
 To:     Zhou Yanjie <zhouyanjie@zoho.com>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        paul.burton@mips.com, paulburton@kernel.org, jhogan@kernel.org,
-        mripard@kernel.org, shawnguo@kernel.org, mark.rutland@arm.com,
-        syq@debian.org, ralf@linux-mips.org, heiko@sntech.de,
-        icenowy@aosc.io, laurent.pinchart@ideasonboard.com,
-        krzk@kernel.org, geert+renesas@glider.be,
-        prasannatsmkumar@gmail.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, 772753199@qq.com
-Message-Id: <1574873873.3.1@crapouillou.net>
-In-Reply-To: <1574787974-58040-5-git-send-email-zhouyanjie@zoho.com>
-References: <1574787974-58040-1-git-send-email-zhouyanjie@zoho.com>
-        <1574787974-58040-5-git-send-email-zhouyanjie@zoho.com>
+        ralf@linux-mips.org, paul.burton@mips.com, paulburton@kernel.org,
+        jhogan@kernel.org, fancer.lancer@gmail.com, syq@debian.org,
+        yamada.masahiro@socionext.com, tglx@linutronix.de,
+        malat@debian.org, jiaxun.yang@flygoat.com, sernia.zhou@foxmail.com
+Message-Id: <1574874984.3.2@crapouillou.net>
+In-Reply-To: <1574749075-99329-2-git-send-email-zhouyanjie@zoho.com>
+References: <1574749075-99329-1-git-send-email-zhouyanjie@zoho.com>
+        <1574749075-99329-2-git-send-email-zhouyanjie@zoho.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -50,253 +45,179 @@ X-Mailing-List: linux-mips@vger.kernel.org
 Hi Zhou,
 
 
-Le mer., nov. 27, 2019 at 01:06, Zhou Yanjie <zhouyanjie@zoho.com> a=20
+Le mar., nov. 26, 2019 at 14:17, Zhou Yanjie <zhouyanjie@zoho.com> a=20
 =E9crit :
-> Add a device tree for the Ingenic X1000 based YSH & ATIL CU Neo board.
-> Note that this is unselectable via Kconfig until the X1000 SoC is made
-> selectable in a later commit.
+> Add X1830 system type for cat /proc/cpuinfo to give out X1830.
 >=20
 > Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
 > ---
+>  arch/mips/include/asm/bootinfo.h |  1 +
+>  arch/mips/include/asm/cpu.h      |  5 ++--
+>  arch/mips/jz4740/setup.c         |  4 +++
+>  arch/mips/kernel/cpu-probe.c     | 65=20
+> ++++++++++++++++++++++------------------
+>  4 files changed, 44 insertions(+), 31 deletions(-)
 >=20
-> Notes:
->     v1->v2:
->     Rebase on top of mips-next, use TCU for system timer and=20
-> clocksource.
+> diff --git a/arch/mips/include/asm/bootinfo.h=20
+> b/arch/mips/include/asm/bootinfo.h
+> index 34d6222..07f4cfe 100644
+> --- a/arch/mips/include/asm/bootinfo.h
+> +++ b/arch/mips/include/asm/bootinfo.h
+> @@ -82,6 +82,7 @@ enum loongson_machine_type {
+>  #define  MACH_INGENIC_JZ4770	2	/* JZ4770 SOC		*/
+>  #define  MACH_INGENIC_JZ4780	3	/* JZ4780 SOC		*/
+>  #define  MACH_INGENIC_X1000		4	/* X1000 SOC		*/
+> +#define  MACH_INGENIC_X1830		5	/* X1830 SOC		*/
 >=20
->     v2->v3:
->     No change.
+>  extern char *system_type;
+>  const char *get_system_type(void);
+> diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
+> index 7fddcb8..fa7c1e8 100644
+> --- a/arch/mips/include/asm/cpu.h
+> +++ b/arch/mips/include/asm/cpu.h
+> @@ -46,7 +46,7 @@
+>  #define PRID_COMP_NETLOGIC	0x0c0000
+>  #define PRID_COMP_CAVIUM	0x0d0000
+>  #define PRID_COMP_LOONGSON	0x140000
+> -#define PRID_COMP_INGENIC_D0	0xd00000	/* JZ4740, JZ4750 */
+> +#define PRID_COMP_INGENIC_D0	0xd00000	/* JZ4740, JZ4750, X1830 */
+>  #define PRID_COMP_INGENIC_D1	0xd10000	/* JZ4770, JZ4775, X1000 */
+>  #define PRID_COMP_INGENIC_E1	0xe10000	/* JZ4780 */
 >=20
->     v3->v4:
->     1.Adjust "model" in "cu1000.dts" to match the description in=20
-> "devices.yaml".
->     2.Adjust "bool" in "Kconfig" to avoid duplicate names with=20
-> subsequent boards.
+> @@ -183,7 +183,8 @@
+>   * These are the PRID's for when 23:16 =3D=3D PRID_COMP_INGENIC_*
+>   */
 >=20
->  arch/mips/boot/dts/ingenic/Makefile   |   1 +
->  arch/mips/boot/dts/ingenic/cu1000.dts |  52 ++++++++++++++++++
->  arch/mips/configs/cu1000_defconfig    | 100=20
-> ++++++++++++++++++++++++++++++++++
->  arch/mips/jz4740/Kconfig              |   4 ++
->  4 files changed, 157 insertions(+)
->  create mode 100644 arch/mips/boot/dts/ingenic/cu1000.dts
->  create mode 100644 arch/mips/configs/cu1000_defconfig
+> -#define PRID_IMP_XBURST	       0x0200
+> +#define PRID_IMP_XBURST_REV1	0x0200	/* XBurst with MXU SIMD ISA		*/
+> +#define PRID_IMP_XBURST_REV2	0x0100	/* XBurst with MXU2 SIMD ISA	*/
 >=20
-> diff --git a/arch/mips/boot/dts/ingenic/Makefile=20
-> b/arch/mips/boot/dts/ingenic/Makefile
-> index 9cc4844..f6db7bb 100644
-> --- a/arch/mips/boot/dts/ingenic/Makefile
-> +++ b/arch/mips/boot/dts/ingenic/Makefile
-> @@ -2,5 +2,6 @@
->  dtb-$(CONFIG_JZ4740_QI_LB60)	+=3D qi_lb60.dtb
->  dtb-$(CONFIG_JZ4770_GCW0)	+=3D gcw0.dtb
->  dtb-$(CONFIG_JZ4780_CI20)	+=3D ci20.dtb
-> +dtb-$(CONFIG_X1000_CU1000)	+=3D cu1000.dtb
+>  /*
+>   * These are the PRID's for when 23:16 =3D=3D PRID_COMP_NETLOGIC
+> diff --git a/arch/mips/jz4740/setup.c b/arch/mips/jz4740/setup.c
+> index dc8ee21..880c268 100644
+> --- a/arch/mips/jz4740/setup.c
+> +++ b/arch/mips/jz4740/setup.c
+> @@ -44,6 +44,8 @@ static void __init jz4740_detect_mem(void)
 >=20
->  obj-$(CONFIG_BUILTIN_DTB)	+=3D $(addsuffix .o, $(dtb-y))
-> diff --git a/arch/mips/boot/dts/ingenic/cu1000.dts=20
-> b/arch/mips/boot/dts/ingenic/cu1000.dts
-> new file mode 100644
-> index 00000000..f92f6af
-> --- /dev/null
-> +++ b/arch/mips/boot/dts/ingenic/cu1000.dts
-> @@ -0,0 +1,52 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/dts-v1/;
+>  static unsigned long __init get_board_mach_type(const void *fdt)
+>  {
+> +	if (!fdt_node_check_compatible(fdt, 0, "ingenic,x1830"))
+> +		return MACH_INGENIC_X1830;
+>  	if (!fdt_node_check_compatible(fdt, 0, "ingenic,x1000"))
+>  		return MACH_INGENIC_X1000;
+>  	if (!fdt_node_check_compatible(fdt, 0, "ingenic,jz4780"))
+> @@ -86,6 +88,8 @@ void __init device_tree_init(void)
+>  const char *get_system_type(void)
+>  {
+>  	switch (mips_machtype) {
+> +	case MACH_INGENIC_X1830:
+> +		return "X1830";
+>  	case MACH_INGENIC_X1000:
+>  		return "X1000";
+>  	case MACH_INGENIC_JZ4780:
+> diff --git a/arch/mips/kernel/cpu-probe.c=20
+> b/arch/mips/kernel/cpu-probe.c
+> index 8abadfe..94b3cc5 100644
+> --- a/arch/mips/kernel/cpu-probe.c
+> +++ b/arch/mips/kernel/cpu-probe.c
+> @@ -1948,10 +1948,8 @@ static inline void cpu_probe_ingenic(struct=20
+> cpuinfo_mips *c, unsigned int cpu)
+>  	BUG_ON(!__builtin_constant_p(cpu_has_counter) || cpu_has_counter);
+>=20
+>  	switch (c->processor_id & PRID_IMP_MASK) {
+> -	case PRID_IMP_XBURST:
+> -		c->cputype =3D CPU_XBURST;
+> -		c->writecombine =3D _CACHE_UNCACHED_ACCELERATED;
+> -		__cpu_name[cpu] =3D "Ingenic JZRISC";
+> +	case PRID_IMP_XBURST_REV1:
 > +
-> +#include "x1000.dtsi"
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/clock/ingenic,tcu.h>
+>  		/*
+>  		 * The XBurst core by default attempts to avoid branch target
+>  		 * buffer lookups by detecting & special casing loops. This
+> @@ -1959,34 +1957,43 @@ static inline void cpu_probe_ingenic(struct=20
+> cpuinfo_mips *c, unsigned int cpu)
+>  		 * Set cp0 config7 bit 4 to disable this feature.
+>  		 */
+>  		set_c0_config7(MIPS_CONF7_BTB_LOOP_EN);
+> -		break;
+> -	default:
+> -		panic("Unknown Ingenic Processor ID!");
+> -		break;
+> -	}
+>=20
+> -	switch (c->processor_id & PRID_COMP_MASK) {
+> -	/*
+> -	 * The config0 register in the XBurst CPUs with a processor ID of
+> -	 * PRID_COMP_INGENIC_D1 has an abandoned huge page tlb mode, this
+> -	 * mode is not compatible with the MIPS standard, it will cause
+> -	 * tlbmiss and into an infinite loop (line 21 in the tlb-funcs.S)
+> -	 * when starting the init process. After chip reset, the default
+> -	 * is HPTLB mode, Write 0xa9000000 to cp0 register 5 sel 4 to
+> -	 * switch back to VTLB mode to prevent getting stuck.
+> -	 */
+> -	case PRID_COMP_INGENIC_D1:
+> -		write_c0_page_ctrl(XBURST_PAGECTRL_HPTLB_DIS);
+> -		break;
+> -	/*
+> -	 * The config0 register in the XBurst CPUs with a processor ID of
+> -	 * PRID_COMP_INGENIC_D0 report themselves as MIPS32r2 compatible,
+> -	 * but they don't actually support this ISA.
+> -	 */
+> -	case PRID_COMP_INGENIC_D0:
+> -		c->isa_level &=3D ~MIPS_CPU_ISA_M32R2;
+> +		switch (c->processor_id & PRID_COMP_MASK) {
 > +
-> +/ {
-> +	compatible =3D "yna,cu1000", "ingenic,x1000";
-> +	model =3D "YSH & ATIL General Board CU Neo";
+> +		/*
+> +		 * The config0 register in the XBurst CPUs with a processor ID of
+> +		 * PRID_COMP_INGENIC_D0 report themselves as MIPS32r2 compatible,
+> +		 * but they don't actually support this ISA.
+> +		 */
+> +		case PRID_COMP_INGENIC_D0:
+> +			c->isa_level &=3D ~MIPS_CPU_ISA_M32R2;
+> +			break;
 > +
-> +	aliases {
-> +		serial2 =3D &uart2;
-> +	};
+> +		/*
+> +		 * The config0 register in the XBurst CPUs with a processor ID of
+> +		 * PRID_COMP_INGENIC_D1 has an abandoned huge page tlb mode, this
+> +		 * mode is not compatible with the MIPS standard, it will cause
+> +		 * tlbmiss and into an infinite loop (line 21 in the tlb-funcs.S)
+> +		 * when starting the init process. After chip reset, the default
+> +		 * is HPTLB mode, Write 0xa9000000 to cp0 register 5 sel 4 to
+> +		 * switch back to VTLB mode to prevent getting stuck.
+> +		 */
+> +		case PRID_COMP_INGENIC_D1:
+> +			write_c0_page_ctrl(XBURST_PAGECTRL_HPTLB_DIS);
+> +			break;
 > +
-> +	chosen {
-> +		stdout-path =3D &uart2;
-> +	};
-> +
-> +	memory {
-> +		device_type =3D "memory";
-> +		reg =3D <0x0 0x04000000>;
-> +	};
-> +};
-> +
-> +&exclk {
-> +	clock-frequency =3D <24000000>;
-> +};
-> +
-> +&tcu {
-> +	/* 1500 kHz for the system timer and clocksource */
-> +	assigned-clocks =3D <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER2>;
-> +	assigned-clock-rates =3D <1500000>, <1500000>;
-> +
-> +	/* Use channel #1 for the system timer channel #2 for the=20
-> clocksource */
-> +	ingenic,pwm-channels-mask =3D <0xfa>;
+> +		default:
+> +			break;
+> +		}
 
- From the mask used, I'm gessing that you're reserving channels #0 and=20
-#2, not #1 and #2.
+I see no "break" here. If that's intended, please add a /* fall-through=20
+*/ comment here. It will prevent GCC from issuing a warning when=20
+-Wimplicit-fallthrough is used.
 
-> +};
 > +
-> +&uart2 {
-> +	status =3D "okay";
-> +
-> +	pinctrl-names =3D "default";
-> +	pinctrl-0 =3D <&pins_uart2>;
-> +};
-> +
-> +&pinctrl {
-> +	pins_uart2: uart2 {
-> +		function =3D "uart2";
-> +		groups =3D "uart2-data-d";
-> +		bias-disable;
-> +	};
-> +};
-> diff --git a/arch/mips/configs/cu1000_defconfig=20
-> b/arch/mips/configs/cu1000_defconfig
-> new file mode 100644
-> index 00000000..88729ee
-> --- /dev/null
-> +++ b/arch/mips/configs/cu1000_defconfig
-> @@ -0,0 +1,100 @@
-> +CONFIG_LOCALVERSION_AUTO=3Dy
-> +CONFIG_KERNEL_GZIP=3Dy
-> +CONFIG_SYSVIPC=3Dy
-> +CONFIG_NO_HZ_IDLE=3Dy
-> +CONFIG_HIGH_RES_TIMERS=3Dy
-> +CONFIG_PREEMPT=3Dy
-> +CONFIG_IKCONFIG=3Dy
-> +CONFIG_IKCONFIG_PROC=3Dy
-> +CONFIG_LOG_BUF_SHIFT=3D14
-> +CONFIG_CGROUPS=3Dy
-> +CONFIG_MEMCG=3Dy
-> +CONFIG_MEMCG_KMEM=3Dy
-> +CONFIG_CGROUP_SCHED=3Dy
-> +CONFIG_CGROUP_FREEZER=3Dy
-> +CONFIG_CGROUP_DEVICE=3Dy
-> +CONFIG_CGROUP_CPUACCT=3Dy
-> +CONFIG_NAMESPACES=3Dy
-> +CONFIG_USER_NS=3Dy
-> +CONFIG_BLK_DEV_INITRD=3Dy
-> +CONFIG_INITRAMFS_SOURCE=3D"arch/mips/boot/ramdisk.cpio.gz"
-> +CONFIG_CC_OPTIMIZE_FOR_SIZE=3Dy
-> +CONFIG_SYSCTL_SYSCALL=3Dy
-> +CONFIG_KALLSYMS_ALL=3Dy
-> +CONFIG_EMBEDDED=3Dy
-> +# CONFIG_VM_EVENT_COUNTERS is not set
-> +# CONFIG_COMPAT_BRK is not set
-> +CONFIG_SLAB=3Dy
-> +CONFIG_MACH_INGENIC=3Dy
-> +CONFIG_X1000_CU1000=3Dy
-> +CONFIG_HIGHMEM=3Dy
-> +CONFIG_HZ_100=3Dy
-> +CONFIG_HZ=3D100
+> +	case PRID_IMP_XBURST_REV2:
+> +		c->cputype =3D CPU_XBURST;
+> +		c->writecombine =3D _CACHE_UNCACHED_ACCELERATED;
+> +		__cpu_name[cpu] =3D "Ingenic XBurst";
 
-This line looks malformed.
-
-> +# CONFIG_SECCOMP is not set
-> +# CONFIG_SUSPEND is not set
-> +# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-> +# CONFIG_COMPACTION is not set
-> +CONFIG_CMA=3Dy
-> +CONFIG_CMA_AREAS=3D7
-> +CONFIG_UEVENT_HELPER=3Dy
-> +CONFIG_UEVENT_HELPER_PATH=3D"/sbin/hotplug"
-> +CONFIG_DEVTMPFS=3Dy
-> +# CONFIG_FW_LOADER is not set
-> +# CONFIG_ALLOW_DEV_COREDUMP is not set
-> +# CONFIG_INPUT_MOUSEDEV is not set
-> +# CONFIG_INPUT_KEYBOARD is not set
-> +# CONFIG_INPUT_MOUSE is not set
-> +# CONFIG_SERIO is not set
-> +CONFIG_VT_HW_CONSOLE_BINDING=3Dy
-> +CONFIG_LEGACY_PTY_COUNT=3D2
-> +CONFIG_SERIAL_EARLYCON=3Dy
-> +CONFIG_SERIAL_8250=3Dy
-> +CONFIG_SERIAL_8250_CONSOLE=3Dy
-> +CONFIG_SERIAL_8250_NR_UARTS=3D3
-> +CONFIG_SERIAL_8250_RUNTIME_UARTS=3D3
-> +CONFIG_SERIAL_8250_INGENIC=3Dy
-> +CONFIG_SERIAL_OF_PLATFORM=3Dy
-> +# CONFIG_HW_RANDOM is not set
-> +CONFIG_GPIO_SYSFS=3Dy
-> +# CONFIG_HWMON is not set
-> +# CONFIG_LCD_CLASS_DEVICE is not set
-> +# CONFIG_BACKLIGHT_CLASS_DEVICE is not set
-> +# CONFIG_VGA_CONSOLE is not set
-> +# CONFIG_HID is not set
-> +# CONFIG_USB_SUPPORT is not set
-> +# CONFIG_IOMMU_SUPPORT is not set
-> +CONFIG_NVMEM=3Dy
-> +CONFIG_NVMEM_SYSFS=3Dy
-> +CONFIG_EXT4_FS=3Dy
-> +# CONFIG_DNOTIFY is not set
-> +CONFIG_PROC_KCORE=3Dy
-> +# CONFIG_PROC_PAGE_MONITOR is not set
-> +CONFIG_TMPFS=3Dy
-> +CONFIG_CONFIGFS_FS=3Dy
-> +CONFIG_NLS=3Dy
-> +CONFIG_NLS_CODEPAGE_936=3Dy
-> +CONFIG_NLS_CODEPAGE_950=3Dy
-> +CONFIG_NLS_ASCII=3Dy
-> +CONFIG_NLS_ISO8859_1=3Dy
-> +CONFIG_NLS_UTF8=3Dy
-> +CONFIG_CRYPTO_ECHAINIV=3Dy
-> +CONFIG_CRYPTO_AES=3Dy
-> +CONFIG_CRYPTO_DEFLATE=3Dy
-> +CONFIG_CRYPTO_LZO=3Dy
-> +CONFIG_PRINTK_TIME=3Dy
-> +CONFIG_CONSOLE_LOGLEVEL_DEFAULT=3D15
-> +CONFIG_CONSOLE_LOGLEVEL_QUIET=3D15
-> +CONFIG_MESSAGE_LOGLEVEL_DEFAULT=3D7
-> +CONFIG_DEBUG_INFO=3Dy
-> +CONFIG_STRIP_ASM_SYMS=3Dy
-> +CONFIG_DEBUG_FS=3Dy
-> +CONFIG_MAGIC_SYSRQ=3Dy
-> +CONFIG_PANIC_ON_OOPS=3Dy
-> +CONFIG_PANIC_TIMEOUT=3D10
-> +# CONFIG_SCHED_DEBUG is not set
-> +# CONFIG_DEBUG_PREEMPT is not set
-> +CONFIG_STACKTRACE=3Dy
-> +# CONFIG_FTRACE is not set
-> +CONFIG_CMDLINE_BOOL=3Dy
-> +CONFIG_CMDLINE=3D"console=3DttyS2,115200n8 mem=3D32M@0x0 earlycon=20
-> clk_ignore_unused"
-
-You already specify the stdout-path in the devicetree, no need to pass=20
-the "console" parameter.
-
-For the "mem" parameter, it's already set in the devicetree, so no need=20
-to set it again here.
-Besides, in the devicetree it is set to 64 MiB.
-
-Why is clk_ignore_unused needed?
+The CPU name switched from "Ingenic JZRISC" to "Ingenic XBurst". If=20
+that's intended (I believe it is) please mention it in the commit=20
+message.
 
 Cheers,
 -Paul
 
-> +CONFIG_CMDLINE_OVERRIDE=3Dy
-> diff --git a/arch/mips/jz4740/Kconfig b/arch/mips/jz4740/Kconfig
-> index 6b96844..ccaf507 100644
-> --- a/arch/mips/jz4740/Kconfig
-> +++ b/arch/mips/jz4740/Kconfig
-> @@ -16,6 +16,10 @@ config JZ4780_CI20
->  	bool "MIPS Creator CI20"
->  	select MACH_JZ4780
->=20
-> +config X1000_CU1000
-> +	bool "YSH & ATIL General Module CU1000"
-> +	select MACH_X1000
+>  		break;
 > +
->  endchoice
->=20
->  config MACH_JZ4740
+>  	default:
+> +		panic("Unknown Ingenic Processor ID!");
+>  		break;
+>  	}
+>  }
 > --
 > 2.7.4
 >=20
