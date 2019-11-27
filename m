@@ -2,108 +2,244 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACF610A928
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Nov 2019 04:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B1F10B0A1
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Nov 2019 14:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbfK0DfU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Nov 2019 22:35:20 -0500
-Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25832 "EHLO
-        sender4-pp-o98.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726346AbfK0DfT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Nov 2019 22:35:19 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1574825666; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=c723msFTwwst+/jaUbMyDXYSuJYXxa9G+8m3uqFqr96I6twi5wOskMXLg3AvEFOrWPSp3+aZ/DR0dkXoJxCCIiEJy8bi/khozU21DJKae1NSiy/ZRa//SAPRLneGoP7WJCaVxli/XdTdCY0EvzgvWwGuuOXMZ1tZOnYy0ge6gck=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1574825666; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To; 
-        bh=ZhfHT3Yd767Vb+SIOILoB057P7hth83ChUL4Ha7Q7oY=; 
-        b=I6Hjx2zvXCD5+Z8812104++IB2JTz1oWqcNiP8rdJDK2RPX9saWDk0IBcmuwKJ/6+GYqsyJyWkRsg2GaYGxZbKnoFNP5V1+D0COR4b+Gul/6Cg8oKUTPY1UvICrtseLO5JkAQX5bfLYDbTTK3izYI6Xu2iNqSRvXNJF3jzdG2Fg=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zoho.com;
-        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
-        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
-DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
-  s=zapps768; d=zoho.com; 
-  h=from:to:cc:subject:date:message-id:in-reply-to:references; 
-  b=mX8UXWeeHW7W8IlEdGOBz49zep1b+WTjhoKO46Z0aZlIW9lx7J4FD1Y+S4nUPTkFX2xpPlX/bpqY
-    YKaJuqS4exl5UD7Zx4LQsOUb32KLwWXCIyxIul8NhOy1glNZ7FWX  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1574825666;
-        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        bh=ZhfHT3Yd767Vb+SIOILoB057P7hth83ChUL4Ha7Q7oY=;
-        b=IClZZjitK/mFLBH+sTP+pke8e5GeCUyDxonqT8Z9D7BSo73/j6ee3NUA58ggZYYd
-        qhaM8M1nZX5qndU6rPRRp/nqtiM5xMfVJM8lgUYoojsZqLzK0y7pzd2bqMwzBJYVSfb
-        O0kvjzP107gQLVPUYWl/yv1CT7exvhviiMw6RkbY=
-Received: from zhouyanjie-virtual-machine.localdomain (139.207.174.158 [139.207.174.158]) by mx.zohomail.com
-        with SMTPS id 1574825665180493.9393258207798; Tue, 26 Nov 2019 19:34:25 -0800 (PST)
-From:   Zhou Yanjie <zhouyanjie@zoho.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        paul.burton@mips.com, paulburton@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, mark.rutland@arm.com,
-        syq@debian.org, paul@crapouillou.net, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com
-Subject: [PATCH 5/5] clk: Ingenic: Add USB OTG clock for X1000.
-Date:   Wed, 27 Nov 2019 11:32:56 +0800
-Message-Id: <1574825576-91028-6-git-send-email-zhouyanjie@zoho.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1574825576-91028-1-git-send-email-zhouyanjie@zoho.com>
-References: <1574825576-91028-1-git-send-email-zhouyanjie@zoho.com>
-X-ZohoMailClient: External
+        id S1726655AbfK0Nx3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Nov 2019 08:53:29 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.20]:13223 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726320AbfK0Nx3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Nov 2019 08:53:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1574862802;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=PPfP9mcJWSMHbHZqS0bO2czGghIr6I3dL5HsA0oLoIM=;
+        b=k/94Cqjbxx07BvkSczailp9egoLObssDj2r2bmrjjPCfw1x0YL7ay+Rx/Ylf8wS1oa
+        qa5elIZx45+g8uOfurXsGRKszzLaPInKdKXLCc8b8EcCvC+Zr1smpqXuWSHDKG+SUj4+
+        q3frNHcYVX0As3iJRe3ZppkN8DF5iyAjnDmt1Hgxm9w3WPjsNjoWqE+CfO6GMtcM2KSG
+        rr1jWdKcjiAOGhZEfT3ZDnQ7U0xzONsZcFZ+noL9yvM/zjbK6nCKusZZXnqABe5BpIPP
+        UF+KYtoECS4F/Vmy6PTdLMda9UQeSRnc4JIeRUhSJiEBMI6N5ajAomACmqGw+1+6IoHt
+        tBSQ==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHmMjw47pbCs="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+        by smtp.strato.de (RZmta 45.0.2 DYNA|AUTH)
+        with ESMTPSA id y07703vARDrKDnf
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Wed, 27 Nov 2019 14:53:20 +0100 (CET)
+Content-Type: text/plain; charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Subject: Re: MIPS: bug: gettimeofday syscall broken on CI20 board
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <3190d1a4-96c4-1843-3ae1-bae3a97af9fb@arm.com>
+Date:   Wed, 27 Nov 2019 14:53:20 +0100
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        MIPS Creator CI20 Development 
+        <mips-creator-ci20-dev@googlegroups.com>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <8D151C34-41A1-4DFE-92D6-D1B27AEC8730@goldelico.com>
+References: <18788C50-F29B-4BD7-89F6-B056FF490214@goldelico.com> <703DC004-96E8-463D-8870-3CC410FE1C5E@goldelico.com> <3190d1a4-96c4-1843-3ae1-bae3a97af9fb@arm.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+X-Mailer: Apple Mail (2.3124)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-1.Add the USB OTC clock driver for the X1000 Soc from Ingenic.
-2.Use the "CLK_OF_DECLARE_DRIVER" instead "CLK_OF_DECLARE" like
-  the other CGU drivers.
+Hi Vincenzo,
 
-Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
----
- drivers/clk/ingenic/x1000-cgu.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+> Am 26.11.2019 um 11:52 schrieb Vincenzo Frascino =
+<vincenzo.frascino@arm.com>:
+>=20
+> Hi Nikolaus,
+>=20
+> sorry for the delay in answering to your email but due to personal =
+reasons I had
+> to pull off the linux development for few weeks.
 
-diff --git a/drivers/clk/ingenic/x1000-cgu.c b/drivers/clk/ingenic/x1000-cgu.c
-index 7179b9f..7da7c69 100644
---- a/drivers/clk/ingenic/x1000-cgu.c
-+++ b/drivers/clk/ingenic/x1000-cgu.c
-@@ -18,6 +18,11 @@
- #define CGU_REG_CLKGR		0x20
- #define CGU_REG_OPCR		0x24
- #define CGU_REG_DDRCDR		0x2c
-+#define CGU_REG_USBPCR		0x3c
-+#define CGU_REG_USBRDT		0x40
-+#define CGU_REG_USBVBFIL	0x44
-+#define CGU_REG_USBPCR1		0x48
-+#define CGU_REG_USBCDR		0x50
- #define CGU_REG_MACCDR		0x54
- #define CGU_REG_I2SCDR		0x60
- #define CGU_REG_LPCDR		0x64
-@@ -184,6 +189,15 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		.gate = { CGU_REG_CLKGR, 5 },
- 	},
- 
-+	[X1000_CLK_OTG] = {
-+		"otg", CGU_CLK_DIV | CGU_CLK_GATE | CGU_CLK_MUX,
-+		.parents = { X1000_CLK_EXCLK, -1,
-+					 X1000_CLK_APLL, X1000_CLK_MPLL },
-+		.mux = { CGU_REG_USBCDR, 30, 2 },
-+		.div = { CGU_REG_USBCDR, 0, 1, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR, 3 },
-+	},
-+
- 	[X1000_CLK_SSIPLL] = {
- 		"ssi_pll", CGU_CLK_MUX | CGU_CLK_DIV,
- 		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL, -1, -1 },
-@@ -273,4 +287,4 @@ static void __init x1000_cgu_init(struct device_node *np)
- 
- 	ingenic_cgu_register_syscore_ops(cgu);
- }
--CLK_OF_DECLARE(x1000_cgu, "ingenic,x1000-cgu", x1000_cgu_init);
-+CLK_OF_DECLARE_DRIVER(x1000_cgu, "ingenic,x1000-cgu", x1000_cgu_init);
--- 
-2.7.4
+No problem.
 
+>=20
+> On 17/11/2019 13:14, H. Nikolaus Schaller wrote:
+>> Hi Vincenzo,
+>>=20
+>=20
+> [...]
+>=20
+>>=20
+>> If I look at the definition of vdso_data it *is* significantly =
+differen
+>> from mips_vdso_data.
+>>=20
+>> What I would assume is that the struct mips_vdso_data is embossed in =
+user
+>> space code and therefore using vdso_data instead is breaking API.
+>>=20
+>=20
+> vdso_data and mips_vdso_data before are not part of the ABI hence they =
+are not
+> bind by a contract with the userspace.
+>=20
+> This means that they can change at any point and if a userspace =
+software relies
+> on a specific layout of these data structures is doing something =
+wrong.
+
+Maybe the libs are clever enough to find that out dynamically but I have =
+no
+idea about how gettimeofday() and user-space VDSO is implemented to =
+handle such
+changes.
+
+>=20
+>> Please advise what I should try or check to narrow down further.
+>>=20
+>=20
+> I had a look at [1] line 200 and seems that the error you are seeing =
+is
+> generated by:
+>  if (gettimeofday(&tv, NULL) =3D=3D -1) { ... }
+
+Yes.
+
+> I do not have a CI20 hence I can't do the test myself: could you =
+please write a
+> small application that invokes gettimeofday() as per above and report =
+the
+> behavior (I am even interested in the value returned). If we can =
+reproduce the
+> problem in a smaller environment it is easier to debug and get to the =
+solution.
+>=20
+> [1] =
+http://users.isc.org/~each/doxygen/bind9/isc_2unix_2time_8c-source.html
+>=20
+>> BR and thanks,
+>> Nikolaus Schaller
+>>=20
+>=20
+> Let me know.
+
+I have done this and it seems as if tv_usec reports something that is =
+beyond 1e6 us
+or remains unchanged by the syscall. tv_sec seems to be set correctly. =
+And,
+gettimeofday() reports -1.
+
+hwclock isn't set on 45.4 kernel because I have no ethernet connection =
+due to the bug.
+
+BR,
+Nikolaus
+
+
+Here is the log
+
+a) with 5.4 kernel
+
+root@letux:~# cat gettime.c=20
+#include <stdio.h>
+#include <time.h>
+#include <sys/time.h>
+
+int main(void)
+{
+struct timeval tv;
+int r =3D gettimeofday(&tv, NULL);
+time_t t;
+int rt =3D time(&t);
+
+printf("r =3D %d\n", r);
+printf("tv.sec =3D %ld\n", tv.tv_sec);
+printf("tv.usec =3D %d\n", tv.tv_usec);
+printf("rt =3D %d\n", rt);
+printf("t =3D %ld\n", t);
+}
+root@letux:~# make gettime
+cc     gettime.c   -o gettime
+root@letux:~# ./gettime=20
+r =3D -1
+tv.sec =3D 1431857456
+tv.usec =3D 2012065500
+rt =3D 1478206565
+t =3D 1478206565
+root@letux:~# ./gettime=20
+r =3D -1
+tv.sec =3D 1431873840
+tv.usec =3D 2012065500
+rt =3D 1478206573
+t =3D 1478206573
+root@letux:~# uname -a
+Linux letux 5.4.0-letux-l400+ #1485 PREEMPT Wed Nov 27 10:23:16 CET 2019 =
+mips GNU/Linux
+root@letux:~# cat /proc/cpuinfo=20
+system type             : JZ4780
+machine                 : img,ci20
+processor               : 0
+cpu model               : Ingenic JZRISC V4.15  FPU V0.0
+BogoMIPS                : 1196.85
+wait instruction        : yes
+microsecond timers      : no
+tlb_entries             : 32
+extra interrupt vector  : yes
+hardware watchpoint     : yes, count: 1, address/irw mask: [0x0fff]
+isa                     : mips1 mips2 mips32r1 mips32r2
+ASEs implemented        :
+shadow register sets    : 1
+kscratch registers      : 0
+package                 : 0
+core                    : 0
+VCED exceptions         : not available
+VCEI exceptions         : not available
+
+root@letux:~# dpkg -l | grep libc6
+ii  libc6:mipsel                   2.24-11+deb9u4                 mipsel =
+      GNU C Library: Shared libraries
+ii  libc6-dev:mipsel               2.24-11+deb9u4                 mipsel =
+      GNU C Library: Development Libraries and Header Files
+root@letux:~# cat /etc/debian_version=20
+9.11
+root@letux:~#=20
+
+b) same system booted with 4.19 kernel:
+
+root@letux:~# ./gettime=20
+r =3D 0
+tv.sec =3D 1574862135
+tv.usec =3D 27974
+rt =3D 1574862135
+t =3D 1574862135
+root@letux:~# uname -a
+Linux letux 4.19.86-letux-l400+ #1450 PREEMPT Sun Nov 24 17:17:19 CET =
+2019 mips GNU/Linux
+root@letux:~# cat /proc/cpuinfo=20
+system type             : JZ4780
+machine                 : img,ci20
+processor               : 0
+cpu model               : Ingenic JZRISC V4.15  FPU V0.0
+BogoMIPS                : 1196.85
+wait instruction        : yes
+microsecond timers      : no
+tlb_entries             : 32
+extra interrupt vector  : yes
+hardware watchpoint     : yes, count: 1, address/irw mask: [0x0fff]
+isa                     : mips1 mips2 mips32r1 mips32r2
+ASEs implemented        :
+shadow register sets    : 1
+kscratch registers      : 0
+package                 : 0
+core                    : 0
+VCED exceptions         : not available
+VCEI exceptions         : not available
+
+root@letux:~# cat /etc/debian_version=20
+9.11
+root@letux:~#=20
 
