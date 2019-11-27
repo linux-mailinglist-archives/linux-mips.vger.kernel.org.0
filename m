@@ -2,103 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2543D10B444
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Nov 2019 18:19:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7882310B461
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Nov 2019 18:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbfK0RTS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Nov 2019 12:19:18 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:57226 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726576AbfK0RTS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Nov 2019 12:19:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1574875156; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qm4Bp6xEH4gzTSGf8XJZFyOKVD9Yc5lDueukFVsJXso=;
-        b=Mi2dC0jlfct8iYYCs7ItSb/0U2+YIl19k4On1OhvNLogkankzwOreiyd7g0mcWHjxkDyEx
-        g01ky6cTtGskvSI9EM/3RkMVmo0C+W3Yg+nEBki/9budh5NsuUBLaXdNyRqgQK0rONa7Er
-        HTeoT02ffCoO5+/1x/I2Wzlu90rJ2MM=
-Date:   Wed, 27 Nov 2019 18:19:08 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 4/5] dt-bindings: clock: Add USB OTG clock for X1000.
-To:     Zhou Yanjie <zhouyanjie@zoho.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, mark.rutland@arm.com,
-        syq@debian.org, sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-Message-Id: <1574875148.3.3@crapouillou.net>
-In-Reply-To: <1574825576-91028-5-git-send-email-zhouyanjie@zoho.com>
-References: <1574825576-91028-1-git-send-email-zhouyanjie@zoho.com>
-        <1574825576-91028-5-git-send-email-zhouyanjie@zoho.com>
+        id S1727092AbfK0RZ7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 27 Nov 2019 12:25:59 -0500
+Received: from mail-yw1-f65.google.com ([209.85.161.65]:37376 "EHLO
+        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726292AbfK0RZ7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Nov 2019 12:25:59 -0500
+Received: by mail-yw1-f65.google.com with SMTP id 4so8239113ywx.4;
+        Wed, 27 Nov 2019 09:25:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JRvuKyuIOQvF9AQSNTrj3uSPTaDg8FtRv0pACDML4ic=;
+        b=Ue553OTEDOmSKdKj13BlQ3Z69lqQ2WBe8thKchHE/+AwSLE3G+5Yz55kzDOX4tZ+dm
+         fKOOBIeCAuBX88pZXzmIfX0++hc/8qyAxkpZISKb65SpxEeDr7bO4MgNherMmlRooIoB
+         +95Die/3SWUGyaPPAs1wEboSw6k4ahBBuHx6JXCDD/D84l/2d8AT3oOvsxv2e15M/rGy
+         9C+CtpsD8VuSkQHFAmYbVDePS+AuofnV907BvJrdfOel0pAFC2QGGpUvWfs7HklYfxIM
+         2DNcS8JVbsspnA4Fq6+LGVGtyy2UpxbIwN2bwU02zQ3MgaTk1TjpzMCCkXb+nhwPpYDR
+         SMrw==
+X-Gm-Message-State: APjAAAV0CNh2TpBdxSSUdkucz/U2EQHl9pHFP3/SgjUpXhdSMTz+gPGS
+        w4ws/eCuk5U+nCMhsSP+o1GtgjgdvA4883tRISrbff72
+X-Google-Smtp-Source: APXvYqwmBHGxI5HEzDr+oN8T1Z4DLvRjLlJfDPqNUvL4LMPBhAs+G2Kng5SnQHBaBpEa8Ye8EpeV+KjxhxoJE1ANwZc=
+X-Received: by 2002:a81:c609:: with SMTP id l9mr3661232ywi.37.1574875558029;
+ Wed, 27 Nov 2019 09:25:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+References: <20191127152612.21945-1-linux@roeck-us.net>
+In-Reply-To: <20191127152612.21945-1-linux@roeck-us.net>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Wed, 27 Nov 2019 18:25:47 +0100
+Message-ID: <CAAdtpL7UVqY6LSbCBeB9FXGDt499xUV072ndXxZuiahTN6UU+A@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: Fix boot on Fuloong2 systems
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Zhou,
+On Wed, Nov 27, 2019 at 4:28 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> Commit 268a2d60013049 ("MIPS: Loongson64: Rename CPU TYPES") changed
+> Kconfig symbols as follows:
+>         CPU_LOONGSON2 to CPU_LOONGSON2EF
+>         CPU_LOONGSON3 to CPU_LOONGSON64
+>         SYS_HAS_CPU_LOONGSON3 to SYS_HAS_CPU_LOONGSON64
+>
+> It did not touch SYS_HAS_CPU_LOONGSON2E or SYS_HAS_CPU_LOONGSON2F.
+> However, the patch changed a conditional from
+>
+>  #if defined(CONFIG_SYS_HAS_CPU_LOONGSON2E) || \
+>      defined(CONFIG_SYS_HAS_CPU_LOONGSON2F)
+>
+> to
+>
+>  #if defined(CONFIG_SYS_HAS_CPU_LOONGSON2EF)
+>
+> SYS_HAS_CPU_LOONGSON2EF does not exist, resulting in boot failures
+> with the qemu fulong2e emulation. Revert to the original code.
 
+Thanks Guenter for running your test suite and catching this!
 
-Le mer., nov. 27, 2019 at 11:32, Zhou Yanjie <zhouyanjie@zoho.com> a=20
-=E9crit :
-> Add the USB OTC clock bindings for the X1000 Soc from Ingenic.
->=20
-> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+
+> Fixes: 268a2d60013049 ("MIPS: Loongson64: Rename CPU TYPES")
+> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->  include/dt-bindings/clock/x1000-cgu.h | 23 ++++++++++++-----------
->  1 file changed, 12 insertions(+), 11 deletions(-)
->=20
-> diff --git a/include/dt-bindings/clock/x1000-cgu.h=20
-> b/include/dt-bindings/clock/x1000-cgu.h
-> index bbaebaf..c401fce 100644
-> --- a/include/dt-bindings/clock/x1000-cgu.h
-> +++ b/include/dt-bindings/clock/x1000-cgu.h
-> @@ -29,16 +29,17 @@
->  #define X1000_CLK_MSCMUX	14
->  #define X1000_CLK_MSC0		15
->  #define X1000_CLK_MSC1		16
-> -#define X1000_CLK_SSIPLL	17
-> -#define X1000_CLK_SSIMUX	18
-> -#define X1000_CLK_SFC		19
-> -#define X1000_CLK_I2C0		20
-> -#define X1000_CLK_I2C1		21
-> -#define X1000_CLK_I2C2		22
-> -#define X1000_CLK_UART0		23
-> -#define X1000_CLK_UART1		24
-> -#define X1000_CLK_UART2		25
-> -#define X1000_CLK_SSI		26
-> -#define X1000_CLK_PDMA		27
-
-You can't do that. These macros are ABI now, since they are used in the=20
-devicetree. Just use the next valid number for your OTG clock.
-
-Cheers,
--Paul
-
-> +#define X1000_CLK_OTG		17
-> +#define X1000_CLK_SSIPLL	18
-> +#define X1000_CLK_SSIMUX	19
-> +#define X1000_CLK_SFC		20
-> +#define X1000_CLK_I2C0		21
-> +#define X1000_CLK_I2C1		22
-> +#define X1000_CLK_I2C2		23
-> +#define X1000_CLK_UART0		24
-> +#define X1000_CLK_UART1		25
-> +#define X1000_CLK_UART2		26
-> +#define X1000_CLK_SSI		27
-> +#define X1000_CLK_PDMA		28
->=20
->  #endif /* __DT_BINDINGS_CLOCK_X1000_CGU_H__ */
+>  arch/mips/include/asm/cpu-type.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/include/asm/cpu-type.h b/arch/mips/include/asm/cpu-type.h
+> index c46c59b0f1b4..49f0061a6051 100644
+> --- a/arch/mips/include/asm/cpu-type.h
+> +++ b/arch/mips/include/asm/cpu-type.h
+> @@ -15,7 +15,8 @@
+>  static inline int __pure __get_cpu_type(const int cpu_type)
+>  {
+>         switch (cpu_type) {
+> -#if defined(CONFIG_SYS_HAS_CPU_LOONGSON2EF)
+> +#if defined(CONFIG_SYS_HAS_CPU_LOONGSON2E) || \
+> +    defined(CONFIG_SYS_HAS_CPU_LOONGSON2F)
+>         case CPU_LOONGSON2EF:
+>  #endif
+>
 > --
-> 2.7.4
->=20
->=20
-
-=
-
+> 2.17.1
+>
