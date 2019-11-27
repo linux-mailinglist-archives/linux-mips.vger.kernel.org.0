@@ -2,92 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3C110A61F
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Nov 2019 22:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4964810A913
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Nov 2019 04:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726445AbfKZVpc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Nov 2019 16:45:32 -0500
-Received: from foss.arm.com ([217.140.110.172]:39712 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726033AbfKZVpc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 26 Nov 2019 16:45:32 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59F5431B;
-        Tue, 26 Nov 2019 13:45:31 -0800 (PST)
-Received: from [192.168.1.124] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 37D3B3F52E;
-        Tue, 26 Nov 2019 13:45:26 -0800 (PST)
-Subject: Re: [PATCH v2] dma-mapping: treat dev->bus_dma_mask as a DMA limit
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
-        linux-acpi@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        James Hogan <jhogan@kernel.org>, Len Brown <lenb@kernel.org>,
-        devicetree@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org
-References: <20191121092646.8449-1-nsaenzjulienne@suse.de>
- <20191123165108.GA15306@ubuntu-x2-xlarge-x86> <20191125074412.GA30595@lst.de>
- <0b851d0e-37c7-062e-c287-05f8c8a54c16@arm.com>
- <45feed391bbd95c46f64b31cf8817d4f773c8da1.camel@suse.de>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <935d65b4-a28e-d7b9-7392-42fec71b5150@arm.com>
-Date:   Tue, 26 Nov 2019 21:45:19 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
-MIME-Version: 1.0
-In-Reply-To: <45feed391bbd95c46f64b31cf8817d4f773c8da1.camel@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+        id S1726747AbfK0Dds (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Nov 2019 22:33:48 -0500
+Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25885 "EHLO
+        sender4-pp-o98.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726729AbfK0Dds (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Nov 2019 22:33:48 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1574825608; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=MurykgZIXLdz+OUVTTOoPhnDFLLScP3XNvDuJ3lHVW/19v66/AKi9bLhrJVKDwV4HWze35Hj/g6Jmd3F35joRsIgFZAO4k2x22SuxOT9VXZlECoxvaT7M8V2OqEx69OVxd4WsD24kPmZ/kOHbCKcm/8ZuD7U/cx4ZZk+JXcEshI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1574825608; h=Cc:Date:From:Message-ID:Subject:To; 
+        bh=TuRbAqCJtixX3GUqtL+gHnjT/Sm9uZHarcGIf7Ov5ZE=; 
+        b=ViHteWGIlE3+rTYb+Db0Lh6GJ54YF6oIEzBdOw3KWNWbh+5q6ICqSdUWBTiTrk0g+l09VtrCs8tBAu5GKT1czYdV0XPoR63AIksbl/0liOVGi9q0MrxOjjbww+P5WJCncquFXQXgfaJ/6kLsRln+oYOo0vf7K9FLpVZUBpiI3+E=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zoho.com;
+        spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
+        dmarc=pass header.from=<zhouyanjie@zoho.com> header.from=<zhouyanjie@zoho.com>
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
+  s=zapps768; d=zoho.com; 
+  h=from:to:cc:subject:date:message-id; 
+  b=A9HeLtKq2ekABrRsofmQJ++RrJDZJYOc4R5TMfDxofQ1wbhpLgzke4a32YDZX3IA5l77hOa8cFYY
+    BX2CEN2Rzue0nTSSLdMDxw6EL4yhaBmZ98GMVuHiDMJ5VAf2LkGM  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1574825608;
+        s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
+        h=From:To:Cc:Subject:Date:Message-Id;
+        bh=TuRbAqCJtixX3GUqtL+gHnjT/Sm9uZHarcGIf7Ov5ZE=;
+        b=C7LeFy5ZPg9NqLr+7PRUK8EOgHagcP9opkaiwwjVPPvJkVa6n3XLLCo3+EHBl68m
+        MwhH0MMIl2Y+3L0wj24+utLkLufQrRwnsInXRWqiJTgzGFp111bPV7YC/5Sa0IuheW1
+        uu270LUmhO5BfzmJO3CJLXSS1Qq+H5k6bTRWz0co=
+Received: from zhouyanjie-virtual-machine.localdomain (139.207.174.158 [139.207.174.158]) by mx.zohomail.com
+        with SMTPS id 1574825607870597.1454791514287; Tue, 26 Nov 2019 19:33:27 -0800 (PST)
+From:   Zhou Yanjie <zhouyanjie@zoho.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        paul.burton@mips.com, paulburton@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, mark.rutland@arm.com,
+        syq@debian.org, paul@crapouillou.net, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com
+Subject: clk: Ingenic: Add support for the X1830 and add USB clk for X1000.
+Date:   Wed, 27 Nov 2019 11:32:51 +0800
+Message-Id: <1574825576-91028-1-git-send-email-zhouyanjie@zoho.com>
+X-Mailer: git-send-email 2.7.4
+X-ZohoMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2019-11-26 6:51 pm, Nicolas Saenz Julienne wrote:
-> On Mon, 2019-11-25 at 16:33 +0000, Robin Murphy wrote:
->> On 25/11/2019 7:44 am, Christoph Hellwig wrote:
->>> On Sat, Nov 23, 2019 at 09:51:08AM -0700, Nathan Chancellor wrote:
->>>> Just as an FYI, this introduces a warning on arm32 allyesconfig for me:
->>>
->>> I think the dma_limit argument to iommu_dma_alloc_iova should be a u64
->>> and/or we need to use min_t and open code the zero exception.
->>>
->>> Robin, Nicolas - any opinions?
->>
->> Yeah, given that it's always held a mask I'm not entirely sure why it
->> was ever a dma_addr_t rather than a u64. Unless anyone else is desperate
->> to do it I'll get a cleanup patch ready for rc1.
-> 
-> Sounds good to me too
-> 
-> Robin, since I started the mess, I'll be happy to do it if it helps offloading
-> some work from you.
+1.Adjust existing code to make it compatible with Ingenic X1830 SoC.
+2.Add support for the clocks provided by the CGU in the Ingenic X1830
+  SoC, making use of the cgu code to do the heavy lifting.
+3.Add USB related clock for the Ingenic X1000 SoC, and use the
+  "CLK_OF_DECLARE_DRIVER" instead "CLK_OF_DECLARE" like the
+  other CGU drivers.
 
-No worries - your change only exposed my original weird decision ;)  On 
-second look the patch was literally a trivial one-liner, so I've written 
-it up already.
 
-Cheers,
-Robin.
