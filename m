@@ -2,26 +2,26 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51ED110C836
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Nov 2019 12:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B6E10C85B
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Nov 2019 13:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbfK1Lvx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Nov 2019 06:51:53 -0500
-Received: from foss.arm.com ([217.140.110.172]:34356 "EHLO foss.arm.com"
+        id S1726496AbfK1MFg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Nov 2019 07:05:36 -0500
+Received: from foss.arm.com ([217.140.110.172]:34452 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726191AbfK1Lvx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 28 Nov 2019 06:51:53 -0500
+        id S1726191AbfK1MFg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 Nov 2019 07:05:36 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C248D30E;
-        Thu, 28 Nov 2019 03:51:52 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EE1B30E;
+        Thu, 28 Nov 2019 04:05:35 -0800 (PST)
 Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B836F3F6C4;
-        Thu, 28 Nov 2019 03:51:51 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0ACB53F6C4;
+        Thu, 28 Nov 2019 04:05:33 -0800 (PST)
 Subject: Re: MIPS: bug: gettimeofday syscall broken on CI20 board
 To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
+Cc:     linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
         MIPS Creator CI20 Development 
         <mips-creator-ci20-dev@googlegroups.com>,
         Discussions about the Letux Kernel 
@@ -30,15 +30,16 @@ References: <18788C50-F29B-4BD7-89F6-B056FF490214@goldelico.com>
  <703DC004-96E8-463D-8870-3CC410FE1C5E@goldelico.com>
  <3190d1a4-96c4-1843-3ae1-bae3a97af9fb@arm.com>
  <8D151C34-41A1-4DFE-92D6-D1B27AEC8730@goldelico.com>
+ <3E2EEC19-F320-4320-9A85-67B4E615C74A@goldelico.com>
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <dbf536da-77a6-30a0-a380-9463f604d1a8@arm.com>
-Date:   Thu, 28 Nov 2019 11:51:50 +0000
+Message-ID: <96b53936-a288-91bc-a14b-a501c5231a03@arm.com>
+Date:   Thu, 28 Nov 2019 12:05:33 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <8D151C34-41A1-4DFE-92D6-D1B27AEC8730@goldelico.com>
+In-Reply-To: <3E2EEC19-F320-4320-9A85-67B4E615C74A@goldelico.com>
 Content-Type: multipart/mixed;
- boundary="------------CB7B820DB761F96FC367819E"
+ boundary="------------4711A9440292BB5F87F06AFB"
 Content-Language: en-US
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
@@ -46,43 +47,75 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 This is a multi-part message in MIME format.
---------------CB7B820DB761F96FC367819E
+--------------4711A9440292BB5F87F06AFB
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 Hi Nikolaus,
 
-On 27/11/2019 13:53, H. Nikolaus Schaller wrote:
+On 27/11/2019 14:29, H. Nikolaus Schaller wrote:
+> Hi Vincenco,
+>=20
 [...]
 
->> vdso_data and mips_vdso_data before are not part of the ABI hence they=
- are not
->> bind by a contract with the userspace.
 >>
->> This means that they can change at any point and if a userspace softwa=
-re relies
->> on a specific layout of these data structures is doing something wrong=
-=2E
->=20
-> Maybe the libs are clever enough to find that out dynamically but I hav=
-e no
-> idea about how gettimeofday() and user-space VDSO is implemented to han=
-dle such
-> changes.
->=20
-As I said userspace applications and libraries should not rely on the lay=
-out of
-vdso_data because this is not part of the ABI.
+>> a) with 5.4 kernel
+>>
 
-The only thing that userspace requires is to "know" that gettimeofday() e=
-xists,
-than it is gettimeofday() that internally accesses the data structure.
+Could you please report the hash of your top commit?
+
+[...]
+
+>=20
+> root@letux:~# ./gettime=20
+> r =3D -1 errno=3D1
+> tv.sec =3D 1
+> tv.usec =3D 1
+> rt =3D 1478193516 errno=3D1
+> t =3D 1478193516
+> root@letux:~#=20
+>=20
+
+On arm64 the output of your application is what follows:
+
+r =3D 0 errno=3D0
+tv.sec =3D 1574942449
+tv.usec =3D 348684
+rt =3D 1574942449 errno=3D0
+t =3D 1574942449
+
+Which seems what it is expected.
+
+On a previous email you mentioned what follows:
+
+root@letux:~# cat /proc/cpuinfo
+system type             : JZ4780
+machine                 : img,ci20
+processor               : 0
+cpu model               : Ingenic JZRISC V4.15  FPU V0.0
+BogoMIPS                : 1196.85
+wait instruction        : yes
+microsecond timers      : no
+tlb_entries             : 32
+extra interrupt vector  : yes
+hardware watchpoint     : yes, count: 1, address/irw mask: [0x0fff]
+isa                     : mips1 mips2 mips32r1 mips32r2
+ASEs implemented        :
+shadow register sets    : 1
+kscratch registers      : 0
+package                 : 0
+core                    : 0
+VCED exceptions         : not available
+VCEI exceptions         : not available
+
+I am not familiar with JZ4780, which HW clock is it using? (R4K, GIC or N=
+ONE)?
 
 --=20
 Regards,
 Vincenzo
 
---------------CB7B820DB761F96FC367819E
+--------------4711A9440292BB5F87F06AFB
 Content-Type: application/pgp-keys;
  name="pEpkey.asc"
 Content-Transfer-Encoding: quoted-printable
@@ -310,4 +343,4 @@ GrFxzNOCDuNG1w=3D=3D
 =3DVSiF
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------CB7B820DB761F96FC367819E--
+--------------4711A9440292BB5F87F06AFB--
