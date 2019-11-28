@@ -2,44 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9828210CA03
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Nov 2019 15:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 622B510CA14
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Nov 2019 15:04:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726670AbfK1OBF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Nov 2019 09:01:05 -0500
-Received: from foss.arm.com ([217.140.110.172]:35820 "EHLO foss.arm.com"
+        id S1726401AbfK1OEu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Nov 2019 09:04:50 -0500
+Received: from foss.arm.com ([217.140.110.172]:35896 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726320AbfK1OBF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 28 Nov 2019 09:01:05 -0500
+        id S1726320AbfK1OEu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 Nov 2019 09:04:50 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 65A8630E;
-        Thu, 28 Nov 2019 06:01:04 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7601D30E;
+        Thu, 28 Nov 2019 06:04:49 -0800 (PST)
 Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3C8D43F52E;
-        Thu, 28 Nov 2019 06:01:03 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 75CB43F52E;
+        Thu, 28 Nov 2019 06:04:48 -0800 (PST)
 Subject: Re: MIPS: bug: gettimeofday syscall broken on CI20 board
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Maarten ter Huurne <maarten@treewalker.org>
-Cc:     mips-creator-ci20-dev@googlegroups.com,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        MIPS Creator CI20 Development 
+        <mips-creator-ci20-dev@googlegroups.com>,
         Discussions about the Letux Kernel 
         <letux-kernel@openphoenux.org>
 References: <18788C50-F29B-4BD7-89F6-B056FF490214@goldelico.com>
- <7b6275c7-ab2b-a647-6bf7-d5e1c4523c98@arm.com>
- <D1CE4D1E-9A42-4FAE-90A9-615C38B979C0@goldelico.com>
- <4807842.gtHLO0kk0V@hyperion>
- <01D75E67-EC2E-4C74-B9BB-752773C481A9@goldelico.com>
+ <703DC004-96E8-463D-8870-3CC410FE1C5E@goldelico.com>
+ <3190d1a4-96c4-1843-3ae1-bae3a97af9fb@arm.com>
+ <8D151C34-41A1-4DFE-92D6-D1B27AEC8730@goldelico.com>
+ <3E2EEC19-F320-4320-9A85-67B4E615C74A@goldelico.com>
+ <96b53936-a288-91bc-a14b-a501c5231a03@arm.com>
+ <2966D06E-C754-4807-A48E-02D476EF1A24@goldelico.com>
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <64ee0c3e-9a54-f86a-daf5-32d54454b8ad@arm.com>
-Date:   Thu, 28 Nov 2019 14:01:01 +0000
+Message-ID: <091536b5-6c77-eed4-eec1-82b331332a74@arm.com>
+Date:   Thu, 28 Nov 2019 14:04:47 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <01D75E67-EC2E-4C74-B9BB-752773C481A9@goldelico.com>
+In-Reply-To: <2966D06E-C754-4807-A48E-02D476EF1A24@goldelico.com>
 Content-Type: multipart/mixed;
- boundary="------------A44DF93C5075073FA50FB03F"
+ boundary="------------C11B3E93988E5846E220984A"
 Content-Language: en-US
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
@@ -47,83 +49,24 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 This is a multi-part message in MIME format.
---------------A44DF93C5075073FA50FB03F
+--------------C11B3E93988E5846E220984A
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On 28/11/2019 13:48, H. Nikolaus Schaller wrote:
->=20
->> Am 28.11.2019 um 14:29 schrieb Maarten ter Huurne <maarten@treewalker.=
-org>:
->>
->> On Thursday, 28 November 2019 13:33:17 CET H. Nikolaus Schaller wrote:=
+On 28/11/2019 12:16, H. Nikolaus Schaller wrote:
+> Ah, good question. How do I find out? Checking defconfig did not show a=
+ny
+> config with R4K or GIC. So it is likely NONE. CONFIG_RTC_DRV_JZ4740=3Dy=
+ if that
+> helps.
 
->>> Hi Vincenzo,
->>>
->>>> Am 28.11.2019 um 13:21 schrieb Vincenzo Frascino
->>>> <vincenzo.frascino@arm.com>:>=20
->>>> [...]
->>>> The the lib that provides the gettimeofday() changes accordingly
->>>> with vdso_data. 5.4 and 4.19 have 2 different vdso libraries as
->>>> well.
->>>
->>> Yes, that is what I have assumed what happens. How do these libs go
->>> into an existing and working root-file-system with Debian Stretch?
->>
->> I'm a novice when it comes to vDSO, so someone please correct me if I'=
-m=20
->> wrong.
->>
->> From what I read vDSO is a library in the sense that it exports ELF=20
->> symbols that applications and other libraries (libc in particular) can=
-=20
->> use, but it is not a file on disk.
->=20
-> Ah, ok. This would mean that the libc providing the gettimeofday()
-> should be able to find out a modified changed vdso_data format by
-> inspecting these ELF symbols.
->
-
-I agree with Maarten here. There is a discovery mechanism in the libc bas=
-ed on
-AT_SYSINFO_EHDR. This contains the address at which the vdso library is m=
-apped
-by the kernel to the userspace process.
-
->>
->> As such, which rootfs you use shouldn't matter, since the vDSO is not =
-in=20
->> the rootfs. Instead, it is contained in the kernel image. Searching fo=
-r=20
->> "linux-vdso.so.1" on packages.debian.org indeed returns no hits.
->>
->> There is a check in arch/mips/vdso/Makefile that disables vDSO on MIPS=
-=20
->> when building the kernel with binutils < 2.25. I don't know if that is=
-=20
->> in any way related to this issue.
->=20
-> What still does not fit into the picture is the errno =3D 1 i.e. EPERM.=
-
-> Maybe I have to study the libc code that tries to read the ELF symbols
-> you have mentioned. It may fail for unknown reasons.
->=20
-
-This is what I was going to suggest next. It might be that something is n=
-ot
-working there.
-
-Let us know your findings.
-
-> BR and thanks,
-> Nikolaus
->=20
+Try to check what do you have in /sys/devices/system/clocksource.
 
 --=20
 Regards,
 Vincenzo
 
---------------A44DF93C5075073FA50FB03F
+--------------C11B3E93988E5846E220984A
 Content-Type: application/pgp-keys;
  name="pEpkey.asc"
 Content-Transfer-Encoding: quoted-printable
@@ -351,4 +294,4 @@ GrFxzNOCDuNG1w=3D=3D
 =3DVSiF
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------A44DF93C5075073FA50FB03F--
+--------------C11B3E93988E5846E220984A--
