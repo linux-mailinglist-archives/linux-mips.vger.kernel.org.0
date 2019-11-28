@@ -2,22 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7184310C3E4
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Nov 2019 07:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E606E10C429
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Nov 2019 08:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726565AbfK1GaE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Nov 2019 01:30:04 -0500
-Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25801 "EHLO
-        sender4-pp-o98.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725836AbfK1GaE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Nov 2019 01:30:04 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1574922582; cv=none; 
+        id S1726650AbfK1HCz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Nov 2019 02:02:55 -0500
+Received: from sender4-pp-o97.zoho.com ([136.143.188.97]:25743 "EHLO
+        sender4-pp-o97.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726565AbfK1HCz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Nov 2019 02:02:55 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1574924560; cv=none; 
         d=zohomail.com; s=zohoarc; 
-        b=HHhh0B7e9XWMMkwY3vm1vjuKjEqX/1lFwWNOPLDSaDXaXB4j0txh7HDijXJgHBvwoNF5tAbPQGwB/F+/JTHNE14/X0giVS/v12WQ3ALQPcUyIZNHF8ZSKCtLuzcu8L03R8yVKMxvcA71qgP0gF4KS2Zm9Kea4Wcg/cms+wQzjkI=
+        b=YYn9EsweFeQLyzj5TnJcbNmkqXkp4UKrthAolAxGjwE0wepoP2wS2jveQyCa3A7TM81nqzOzuarzfz12B0HUcpSgTudGdof5wkVwUenbAaB7uWEn4b4PK563JcyFkXHWxPXw6etfw1TgHiCnNZWtig2MJfiHy93iPrGHIRTPONI=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1574922582; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=LZ1fwYSthwwXBIubSeQ4jYvibE6vhIL9pimY/9c6mzk=; 
-        b=hXNTPW/oGM4HIAUwyfV+NrurBhh4MK688FNbXP7UNGOH4XjEPVdG4kprebE8nujEVElOobclJSI/pwcgDheGum8Si/H8mH5atOgPpnCs3xmBNx8v6NwE07HFvWHMsdg9r/p/hnDOso4YJryvetE/HBtrOAxRub5LkRMX/Nw7ChI=
+        t=1574924560; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=uk3DpYOK6RoAb3Zg5IZlmnRxMJTiwd6ILoT49IYxKks=; 
+        b=NYS9B3oqcCRiqj+/iw4juRyO9FmzzgdvZTrusofTqyW/Wv7ZrdAHYvM+/rPRm5RhzN/u63urZnWw5Bj9SePqfoAruO14dAQjrmb9LGAoM21kiEhAjj09W+53dp9batN/SV1kAmcnEpvZpVYXYIP/uNMQn98SEUEC+rMVrb+i+nQ=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
         dkim=pass  header.i=zoho.com;
         spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
@@ -25,35 +25,33 @@ ARC-Authentication-Results: i=1; mx.zohomail.com;
 DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
   s=zapps768; d=zoho.com; 
   h=subject:to:references:cc:from:message-id:date:user-agent:mime-version:in-reply-to:content-type; 
-  b=HCJj/OJmbMtb/eyCTs7UlCAJHBGN7lFbKu1qMbohy5UmvYuKwvGZFg9eb3vRLW2s6ZMJFd+zfHv/
-    6KkgYBHKaoRlDKRK6ymahqFNEZGiGwiitODQaPBWskTScoQbzGYr  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1574922582;
+  b=l9xSeMT3BfppTF8JaQPWwhIuC8V98nXPgyJDF8twgBTmEVsAoLTMsvXasuz4rwEqRoftybwC7E3o
+    5lVwVkwAaMUCzrUDYKp9TTDJ6iNimI/cwxNPIh117Vm7dV0ceJof  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1574924560;
         s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
         h=Subject:To:References:Cc:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        bh=LZ1fwYSthwwXBIubSeQ4jYvibE6vhIL9pimY/9c6mzk=;
-        b=q2hur5Z9qDWAE0KA6XcJtj1lgzy/gPSdoLpsssmmpDewzAl4RPUzh2I+//Cb+chI
-        g4GvIk0zKP/Lhb9i8BwD3ZSiKjX5oKzQb7P73oOMjkQfIEMnPrwX7HlYPsKdpDZR63z
-        Vg+/EofN/86tZ9Wbwgy7UDhTNKHESnEeqI7KndkA=
+        bh=uk3DpYOK6RoAb3Zg5IZlmnRxMJTiwd6ILoT49IYxKks=;
+        b=WFh0mEPe5aN9389ocYkRMAOTC4uLsJ37Gqdc+Ezrv3ChA1Ah2uP3dquyZlU90n/6
+        DVreNxSXcKvsHZjM0/mB2Z8DGQ6mVq+5ff0wjqFg7hSnSe9wgLvj06sOgAbAigX6PRX
+        8Ow0xQN08h/tR3dtkCmvOKVQ2IyoTa6pDZ913p+Q=
 Received: from [192.168.88.130] (125.71.5.36 [125.71.5.36]) by mx.zohomail.com
-        with SMTPS id 1574922580821765.3860581633037; Wed, 27 Nov 2019 22:29:40 -0800 (PST)
-Subject: Re: [PATCH 1/5] clk: Ingenic: Adjust code to make it compatible with
- X1830.
+        with SMTPS id 1574924559371952.5198735605144; Wed, 27 Nov 2019 23:02:39 -0800 (PST)
+Subject: Re: [PATCH v6 4/4] pinctrl: Ingenic: Add pinctrl driver for X1830.
 To:     Paul Cercueil <paul@crapouillou.net>
-References: <1574825576-91028-1-git-send-email-zhouyanjie@zoho.com>
- <1574825576-91028-2-git-send-email-zhouyanjie@zoho.com>
- <1574876253.3.4@crapouillou.net>
+References: <1574746436-80066-1-git-send-email-zhouyanjie@zoho.com>
+ <1574746436-80066-5-git-send-email-zhouyanjie@zoho.com>
+ <1574879153.3.5@crapouillou.net>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, mark.rutland@arm.com,
-        syq@debian.org, sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+        mark.rutland@arm.com, syq@debian.org
 From:   Zhou Yanjie <zhouyanjie@zoho.com>
-Message-ID: <5DDF694B.1000902@zoho.com>
-Date:   Thu, 28 Nov 2019 14:29:31 +0800
+Message-ID: <5DDF7107.6030109@zoho.com>
+Date:   Thu, 28 Nov 2019 15:02:31 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
  Thunderbird/38.8.0
 MIME-Version: 1.0
-In-Reply-To: <1574876253.3.4@crapouillou.net>
+In-Reply-To: <1574879153.3.5@crapouillou.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
 X-ZohoMailClient: External
@@ -64,350 +62,609 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Paul,
 
-On 2019=E5=B9=B411=E6=9C=8828=E6=97=A5 01:37, Paul Cercueil wrote:
+On 2019=E5=B9=B411=E6=9C=8828=E6=97=A5 02:25, Paul Cercueil wrote:
 > Hi Zhou,
 >
 >
-> Le mer., nov. 27, 2019 at 11:32, Zhou Yanjie <zhouyanjie@zoho.com> a=20
+> Le mar., nov. 26, 2019 at 13:33, Zhou Yanjie <zhouyanjie@zoho.com> a=20
 > =C3=A9crit :
->> 1.Adjust the PLL related code in "cgu.c" and "cgu.h" to make it
->>   compatible with the X1830 Soc from Ingenic.
->> 2.Adjust the code in "jz4740-cgu.c" to be compatible with the
->>   new cgu code.
->> 3.Adjust the code in "jz4725b-cgu.c" to be compatible with the
->>   new cgu code.
->> 4.Adjust the code in "jz4770-cgu.c" to be compatible with the
->>   new cgu code.
->> 5.Adjust the code in "jz4780-cgu.c" to be compatible with the
->>   new cgu code.
->> 6.Adjust the code in "x1000-cgu.c" to be compatible with the
->>   new cgu code.
+>> Add support for probing the pinctrl-ingenic driver on the
+>> X1830 Soc from Ingenic.
 >>
 >> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
 >> ---
->>  drivers/clk/ingenic/cgu.c         | 55=20
->> +++++++++++++++++++++++++++++----------
->>  drivers/clk/ingenic/cgu.h         | 12 ++++++++-
->>  drivers/clk/ingenic/jz4725b-cgu.c |  3 ++-
->>  drivers/clk/ingenic/jz4740-cgu.c  |  3 ++-
->>  drivers/clk/ingenic/jz4770-cgu.c  |  6 +++--
->>  drivers/clk/ingenic/jz4780-cgu.c  |  3 ++-
->>  drivers/clk/ingenic/x1000-cgu.c   |  6 +++--
->>  7 files changed, 66 insertions(+), 22 deletions(-)
 >>
->> diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
->> index 6e96303..c3c69a8 100644
->> --- a/drivers/clk/ingenic/cgu.c
->> +++ b/drivers/clk/ingenic/cgu.c
->> @@ -84,7 +84,7 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned=20
->> long parent_rate)
->>      pll_info =3D &clk_info->pll;
+>> Notes:
+>>     v2:
+>>     New patch.
 >>
->>      spin_lock_irqsave(&cgu->lock, flags);
->> -    ctl =3D readl(cgu->base + pll_info->reg);
->> +    ctl =3D readl(cgu->base + pll_info->reg[1]);
->
-> I really don't like this patch. There is no info on what reg[1] and=20
-> reg[0] are. First, don't use hardcoded numbers, use macros with=20
-> meaningful names. Second, why not just have two fields instead of one=20
-> 2-values array? That would remove a lot of the noise.
->
-
-Because the X1830's PLL has been greatly changed, the bypass control is
-placed in another register, so now two registers may needed to control the
-PLL. If two fields are used, all the PLL related code of jz47xx-cgu.c /=20
-x1000-cgu.c
-will be more verbose. Using array methods such as:
-.reg =3D { -1, CGU_REG_CPPCR0 },
-in jz4770-cgu.c,
-
-or :
-.reg =3D { CGU_REG_CPPCR, CGU_REG_APLL },
-in x1830-cgu.c,
-
-can let us intuitively see that how many control registers the PLL has.
-Maybe adding a corresponding comment to reg[0] and reg[1] is a better way?
-
->
->> spin_unlock_irqrestore(&cgu->lock, flags);
+>>     v2->v3:
+>>     Add pinctrl drivers for the PWM of X1830.
 >>
->>      m =3D (ctl >> pll_info->m_shift) & GENMASK(pll_info->m_bits - 1, 0)=
+>>     v3->v4:
+>>     1.Use local variables to streamline code.
+>>     2.Prevents processors older than X1830 from being
+>>       configured in HiZ mode.
+>>
+>>     v4->v5:
+>>     Fix compile-time warnings.
+>>     Reported-by: kbuild test robot <lkp@intel.com>
+>>
+>>     v5->v6:
+>>     1.Use local variables to streamline code.
+>>     2.Rename "GPIO_HIZ" to "GPIO_PULL_DIS", and adjust
+>>       related code.
+>>
+>>  drivers/pinctrl/pinctrl-ingenic.c | 341=20
+>> +++++++++++++++++++++++++++++++++++---
+>>  1 file changed, 321 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/drivers/pinctrl/pinctrl-ingenic.c=20
+>> b/drivers/pinctrl/pinctrl-ingenic.c
+>> index 38f7f147..7b1b7ee 100644
+>> --- a/drivers/pinctrl/pinctrl-ingenic.c
+>> +++ b/drivers/pinctrl/pinctrl-ingenic.c
+>> @@ -28,6 +28,10 @@
+>>  #define GPIO_PIN    0x00
+>>  #define GPIO_MSK    0x20
+>>
+>> +#define GPIO_PULL_DIS    0x00
+>> +#define GPIO_PULL_UP    0x01
+>> +#define GPIO_PULL_DOWN    0x10
+>> +
+>>  #define JZ4740_GPIO_DATA    0x10
+>>  #define JZ4740_GPIO_PULL_DIS    0x30
+>>  #define JZ4740_GPIO_FUNC    0x40
+>> @@ -45,6 +49,11 @@
+>>  #define X1000_GPIO_PZ_BASE        0x700
+>>  #define X1000_GPIO_PZ_GID2LD    0x7f0
+>>
+>> +#define X1830_GPIO_PEL            0x110
+>> +#define X1830_GPIO_PEH            0x120
+>> +#define X1830_GPIO_PZ_BASE        0x7000
+>> +#define X1830_GPIO_PZ_GID2LD    0x70f0
+>> +
+>>  #define REG_SET(x) ((x) + 0x4)
+>>  #define REG_CLEAR(x) ((x) + 0x8)
+>>
+>> @@ -60,6 +69,7 @@ enum jz_version {
+>>      ID_X1000,
+>>      ID_X1000E,
+>>      ID_X1500,
+>> +    ID_X1830,
+>>  };
+>>
+>>  struct ingenic_chip_info {
+>> @@ -1394,6 +1404,220 @@ static const struct ingenic_chip_info=20
+>> x1500_chip_info =3D {
+>>      .pull_downs =3D x1000_pull_downs,
+>>  };
+>>
+>> +static const u32 x1830_pull_ups[4] =3D {
+>> +    0x5fdfffc0, 0xffffefff, 0x1ffffbff, 0x0fcff3fc,
+>> +};
+>> +
+>> +static const u32 x1830_pull_downs[4] =3D {
+>> +    0x5fdfffc0, 0xffffefff, 0x1ffffbff, 0x0fcff3fc,
+>> +};
+>> +
+>> +static int x1830_uart0_data_pins[] =3D { 0x33, 0x36, };
+>> +static int x1830_uart0_hwflow_pins[] =3D { 0x34, 0x35, };
+>> +static int x1830_uart1_data_pins[] =3D { 0x38, 0x37, };
+>> +static int x1830_sfc_pins[] =3D { 0x17, 0x18, 0x1a, 0x19, 0x1b, 0x1c, }=
 ;
->> @@ -93,8 +93,17 @@ ingenic_pll_recalc_rate(struct clk_hw *hw,=20
->> unsigned long parent_rate)
->>      n +=3D pll_info->n_offset;
->>      od_enc =3D ctl >> pll_info->od_shift;
->>      od_enc &=3D GENMASK(pll_info->od_bits - 1, 0);
->> -    bypass =3D !pll_info->no_bypass_bit &&
->> -         !!(ctl & BIT(pll_info->bypass_bit));
+>> +static int x1830_ssi0_dt_pins[] =3D { 0x4c, };
+>> +static int x1830_ssi0_dr_pins[] =3D { 0x4b, };
+>> +static int x1830_ssi0_clk_pins[] =3D { 0x4f, };
+>> +static int x1830_ssi0_gpc_pins[] =3D { 0x4d, };
+>> +static int x1830_ssi0_ce0_pins[] =3D { 0x50, };
+>> +static int x1830_ssi0_ce1_pins[] =3D { 0x4e, };
+>> +static int x1830_ssi1_dt_c_pins[] =3D { 0x53, };
+>> +static int x1830_ssi1_dr_c_pins[] =3D { 0x54, };
+>> +static int x1830_ssi1_clk_c_pins[] =3D { 0x57, };
+>> +static int x1830_ssi1_gpc_c_pins[] =3D { 0x55, };
+>> +static int x1830_ssi1_ce0_c_pins[] =3D { 0x58, };
+>> +static int x1830_ssi1_ce1_c_pins[] =3D { 0x56, };
+>> +static int x1830_ssi1_dt_d_pins[] =3D { 0x62, };
+>> +static int x1830_ssi1_dr_d_pins[] =3D { 0x63, };
+>> +static int x1830_ssi1_clk_d_pins[] =3D { 0x66, };
+>> +static int x1830_ssi1_gpc_d_pins[] =3D { 0x64, };
+>> +static int x1830_ssi1_ce0_d_pins[] =3D { 0x67, };
+>> +static int x1830_ssi1_ce1_d_pins[] =3D { 0x65, };
+>> +static int x1830_mmc0_1bit_pins[] =3D { 0x24, 0x25, 0x20, };
+>> +static int x1830_mmc0_4bit_pins[] =3D { 0x21, 0x22, 0x23, };
+>> +static int x1830_mmc1_1bit_pins[] =3D { 0x42, 0x43, 0x44, };
+>> +static int x1830_mmc1_4bit_pins[] =3D { 0x45, 0x46, 0x47, };
+>> +static int x1830_i2c0_pins[] =3D { 0x0c, 0x0d, };
+>> +static int x1830_i2c1_pins[] =3D { 0x39, 0x3a, };
+>> +static int x1830_i2c2_pins[] =3D { 0x5b, 0x5c, };
+>> +static int x1830_pwm_pwm0_b_pins[] =3D { 0x31, };
+>> +static int x1830_pwm_pwm0_c_pins[] =3D { 0x4b, };
+>> +static int x1830_pwm_pwm1_b_pins[] =3D { 0x32, };
+>> +static int x1830_pwm_pwm1_c_pins[] =3D { 0x4c, };
+>> +static int x1830_pwm_pwm2_c_8_pins[] =3D { 0x48, };
+>> +static int x1830_pwm_pwm2_c_13_pins[] =3D { 0x4d, };
+>> +static int x1830_pwm_pwm3_c_9_pins[] =3D { 0x49, };
+>> +static int x1830_pwm_pwm3_c_14_pins[] =3D { 0x4e, };
+>> +static int x1830_pwm_pwm4_c_15_pins[] =3D { 0x4f, };
+>> +static int x1830_pwm_pwm4_c_25_pins[] =3D { 0x59, };
+>> +static int x1830_pwm_pwm5_c_16_pins[] =3D { 0x50, };
+>> +static int x1830_pwm_pwm5_c_26_pins[] =3D { 0x5a, };
+>> +static int x1830_pwm_pwm6_c_17_pins[] =3D { 0x51, };
+>> +static int x1830_pwm_pwm6_c_27_pins[] =3D { 0x5b, };
+>> +static int x1830_pwm_pwm7_c_18_pins[] =3D { 0x52, };
+>> +static int x1830_pwm_pwm7_c_28_pins[] =3D { 0x5c, };
+>> +static int x1830_mac_pins[] =3D {
+>> +    0x29, 0x30, 0x2f, 0x28, 0x2e, 0x2d, 0x2a, 0x2b, 0x26, 0x27,
+>> +};
 >> +
->> +    if (pll_info->version >=3D CGU_X1830) {
->> +        spin_lock_irqsave(&cgu->lock, flags);
->> +        ctl =3D readl(cgu->base + pll_info->reg[0]);
->> +        spin_unlock_irqrestore(&cgu->lock, flags);
->
-> Why the spinlock?
->
-
-The original code used spinlock when reading the control register,
-so when reading this new control register, I think it should also
-be added with spinlock.
-
->
+>> +static int x1830_uart0_data_funcs[] =3D { 0, 0, };
+>> +static int x1830_uart0_hwflow_funcs[] =3D { 0, 0, };
+>> +static int x1830_uart1_data_funcs[] =3D { 0, 0, };
+>> +static int x1830_sfc_funcs[] =3D { 1, 1, 1, 1, 1, 1, };
+>> +static int x1830_ssi0_dt_funcs[] =3D { 0, };
+>> +static int x1830_ssi0_dr_funcs[] =3D { 0, };
+>> +static int x1830_ssi0_clk_funcs[] =3D { 0, };
+>> +static int x1830_ssi0_gpc_funcs[] =3D { 0, };
+>> +static int x1830_ssi0_ce0_funcs[] =3D { 0, };
+>> +static int x1830_ssi0_ce1_funcs[] =3D { 0, };
+>> +static int x1830_ssi1_dt_c_funcs[] =3D { 1, };
+>> +static int x1830_ssi1_dr_c_funcs[] =3D { 1, };
+>> +static int x1830_ssi1_clk_c_funcs[] =3D { 1, };
+>> +static int x1830_ssi1_gpc_c_funcs[] =3D { 1, };
+>> +static int x1830_ssi1_ce0_c_funcs[] =3D { 1, };
+>> +static int x1830_ssi1_ce1_c_funcs[] =3D { 1, };
+>> +static int x1830_ssi1_dt_d_funcs[] =3D { 2, };
+>> +static int x1830_ssi1_dr_d_funcs[] =3D { 2, };
+>> +static int x1830_ssi1_clk_d_funcs[] =3D { 2, };
+>> +static int x1830_ssi1_gpc_d_funcs[] =3D { 2, };
+>> +static int x1830_ssi1_ce0_d_funcs[] =3D { 2, };
+>> +static int x1830_ssi1_ce1_d_funcs[] =3D { 2, };
+>> +static int x1830_mmc0_1bit_funcs[] =3D { 0, 0, 0, };
+>> +static int x1830_mmc0_4bit_funcs[] =3D { 0, 0, 0, };
+>> +static int x1830_mmc1_1bit_funcs[] =3D { 0, 0, 0, };
+>> +static int x1830_mmc1_4bit_funcs[] =3D { 0, 0, 0, };
+>> +static int x1830_i2c0_funcs[] =3D { 1, 1, };
+>> +static int x1830_i2c1_funcs[] =3D { 0, 0, };
+>> +static int x1830_i2c2_funcs[] =3D { 1, 1, };
+>> +static int x1830_pwm_pwm0_b_funcs[] =3D { 0, };
+>> +static int x1830_pwm_pwm0_c_funcs[] =3D { 1, };
+>> +static int x1830_pwm_pwm1_b_funcs[] =3D { 0, };
+>> +static int x1830_pwm_pwm1_c_funcs[] =3D { 1, };
+>> +static int x1830_pwm_pwm2_c_8_funcs[] =3D { 0, };
+>> +static int x1830_pwm_pwm2_c_13_funcs[] =3D { 1, };
+>> +static int x1830_pwm_pwm3_c_9_funcs[] =3D { 0, };
+>> +static int x1830_pwm_pwm3_c_14_funcs[] =3D { 1, };
+>> +static int x1830_pwm_pwm4_c_15_funcs[] =3D { 1, };
+>> +static int x1830_pwm_pwm4_c_25_funcs[] =3D { 0, };
+>> +static int x1830_pwm_pwm5_c_16_funcs[] =3D { 1, };
+>> +static int x1830_pwm_pwm5_c_26_funcs[] =3D { 0, };
+>> +static int x1830_pwm_pwm6_c_17_funcs[] =3D { 1, };
+>> +static int x1830_pwm_pwm6_c_27_funcs[] =3D { 0, };
+>> +static int x1830_pwm_pwm7_c_18_funcs[] =3D { 1, };
+>> +static int x1830_pwm_pwm7_c_28_funcs[] =3D { 0, };
+>> +static int x1830_mac_funcs[] =3D { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
 >> +
->> +        bypass =3D !pll_info->no_bypass_bit &&
->> +             !!(ctl & BIT(pll_info->bypass_bit));
->> +    } else
->
-> Please comply to the kernel coding style - use brackets after the else.
->
-
-My fault, I will fix this in v2.
-
->> +        bypass =3D !pll_info->no_bypass_bit &&
->> +             !!(ctl & BIT(pll_info->bypass_bit));
+>> +static const struct group_desc x1830_groups[] =3D {
+>> +    INGENIC_PIN_GROUP("uart0-data", x1830_uart0_data),
+>> +    INGENIC_PIN_GROUP("uart0-hwflow", x1830_uart0_hwflow),
+>> +    INGENIC_PIN_GROUP("uart1-data", x1830_uart1_data),
+>> +    INGENIC_PIN_GROUP("sfc", x1830_sfc),
+>> +    INGENIC_PIN_GROUP("ssi0-dt", x1830_ssi0_dt),
+>> +    INGENIC_PIN_GROUP("ssi0-dr", x1830_ssi0_dr),
+>> +    INGENIC_PIN_GROUP("ssi0-clk", x1830_ssi0_clk),
+>> +    INGENIC_PIN_GROUP("ssi0-gpc", x1830_ssi0_gpc),
+>> +    INGENIC_PIN_GROUP("ssi0-ce0", x1830_ssi0_ce0),
+>> +    INGENIC_PIN_GROUP("ssi0-ce1", x1830_ssi0_ce1),
+>> +    INGENIC_PIN_GROUP("ssi1-dt-c", x1830_ssi1_dt_c),
+>> +    INGENIC_PIN_GROUP("ssi1-dr-c", x1830_ssi1_dr_c),
+>> +    INGENIC_PIN_GROUP("ssi1-clk-c", x1830_ssi1_clk_c),
+>> +    INGENIC_PIN_GROUP("ssi1-gpc-c", x1830_ssi1_gpc_c),
+>> +    INGENIC_PIN_GROUP("ssi1-ce0-c", x1830_ssi1_ce0_c),
+>> +    INGENIC_PIN_GROUP("ssi1-ce1-c", x1830_ssi1_ce1_c),
+>> +    INGENIC_PIN_GROUP("ssi1-dt-d", x1830_ssi1_dt_d),
+>> +    INGENIC_PIN_GROUP("ssi1-dr-d", x1830_ssi1_dr_d),
+>> +    INGENIC_PIN_GROUP("ssi1-clk-d", x1830_ssi1_clk_d),
+>> +    INGENIC_PIN_GROUP("ssi1-gpc-d", x1830_ssi1_gpc_d),
+>> +    INGENIC_PIN_GROUP("ssi1-ce0-d", x1830_ssi1_ce0_d),
+>> +    INGENIC_PIN_GROUP("ssi1-ce1-d", x1830_ssi1_ce1_d),
+>> +    INGENIC_PIN_GROUP("mmc0-1bit", x1830_mmc0_1bit),
+>> +    INGENIC_PIN_GROUP("mmc0-4bit", x1830_mmc0_4bit),
+>> +    INGENIC_PIN_GROUP("mmc1-1bit", x1830_mmc1_1bit),
+>> +    INGENIC_PIN_GROUP("mmc1-4bit", x1830_mmc1_4bit),
+>> +    INGENIC_PIN_GROUP("i2c0-data", x1830_i2c0),
+>> +    INGENIC_PIN_GROUP("i2c1-data", x1830_i2c1),
+>> +    INGENIC_PIN_GROUP("i2c2-data", x1830_i2c2),
+>> +    INGENIC_PIN_GROUP("pwm0-b", x1830_pwm_pwm0_b),
+>> +    INGENIC_PIN_GROUP("pwm0-c", x1830_pwm_pwm0_c),
+>> +    INGENIC_PIN_GROUP("pwm1-b", x1830_pwm_pwm1_b),
+>> +    INGENIC_PIN_GROUP("pwm1-c", x1830_pwm_pwm1_c),
+>> +    INGENIC_PIN_GROUP("pwm2-c-8", x1830_pwm_pwm2_c_8),
+>> +    INGENIC_PIN_GROUP("pwm2-c-13", x1830_pwm_pwm2_c_13),
+>> +    INGENIC_PIN_GROUP("pwm3-c-9", x1830_pwm_pwm3_c_9),
+>> +    INGENIC_PIN_GROUP("pwm3-c-14", x1830_pwm_pwm3_c_14),
+>> +    INGENIC_PIN_GROUP("pwm4-c-15", x1830_pwm_pwm4_c_15),
+>> +    INGENIC_PIN_GROUP("pwm4-c-25", x1830_pwm_pwm4_c_25),
+>> +    INGENIC_PIN_GROUP("pwm5-c-16", x1830_pwm_pwm5_c_16),
+>> +    INGENIC_PIN_GROUP("pwm5-c-26", x1830_pwm_pwm5_c_26),
+>> +    INGENIC_PIN_GROUP("pwm6-c-17", x1830_pwm_pwm6_c_17),
+>> +    INGENIC_PIN_GROUP("pwm6-c-27", x1830_pwm_pwm6_c_27),
+>> +    INGENIC_PIN_GROUP("pwm7-c-18", x1830_pwm_pwm7_c_18),
+>> +    INGENIC_PIN_GROUP("pwm7-c-28", x1830_pwm_pwm7_c_28),
+>> +    INGENIC_PIN_GROUP("mac", x1830_mac),
+>> +};
+>> +
+>> +static const char *x1830_uart0_groups[] =3D { "uart0-data",=20
+>> "uart0-hwflow", };
+>> +static const char *x1830_uart1_groups[] =3D { "uart1-data", };
+>> +static const char *x1830_sfc_groups[] =3D { "sfc", };
+>> +static const char *x1830_ssi0_groups[] =3D {
+>> +    "ssi0-dt", "ssi0-dr", "ssi0-clk", "ssi0-gpc", "ssi0-ce0",=20
+>> "ssi0-ce1",
+>> +};
+>> +static const char *x1830_ssi1_groups[] =3D {
+>> +    "ssi1-dt-c", "ssi1-dt-d",
+>> +    "ssi1-dr-c", "ssi1-dr-d",
+>> +    "ssi1-clk-c", "ssi1-clk-d",
+>> +    "ssi1-gpc-c", "ssi1-gpc-d",
+>> +    "ssi1-ce0-c", "ssi1-ce0-d",
+>> +    "ssi1-ce1-c", "ssi1-ce1-d",
+>> +};
+>> +static const char *x1830_mmc0_groups[] =3D { "mmc0-1bit", "mmc0-4bit", =
+};
+>> +static const char *x1830_mmc1_groups[] =3D { "mmc1-1bit", "mmc1-4bit", =
+};
+>> +static const char *x1830_i2c0_groups[] =3D { "i2c0-data", };
+>> +static const char *x1830_i2c1_groups[] =3D { "i2c1-data", };
+>> +static const char *x1830_i2c2_groups[] =3D { "i2c2-data", };
+>> +static const char *x1830_pwm0_groups[] =3D { "pwm0-b", "pwm0-c", };
+>> +static const char *x1830_pwm1_groups[] =3D { "pwm1-b", "pwm1-c", };
+>> +static const char *x1830_pwm2_groups[] =3D { "pwm2-c-8", "pwm2-c-13", }=
+;
+>> +static const char *x1830_pwm3_groups[] =3D { "pwm3-c-9", "pwm3-c-14", }=
+;
+>> +static const char *x1830_pwm4_groups[] =3D { "pwm4-c-15", "pwm4-c-25", =
+};
+>> +static const char *x1830_pwm5_groups[] =3D { "pwm5-c-16", "pwm5-c-26", =
+};
+>> +static const char *x1830_pwm6_groups[] =3D { "pwm6-c-17", "pwm6-c-27", =
+};
+>> +static const char *x1830_pwm7_groups[] =3D { "pwm7-c-18", "pwm7-c-28", =
+};
+>> +static const char *x1830_mac_groups[] =3D { "mac", };
+>> +
+>> +static const struct function_desc x1830_functions[] =3D {
+>> +    { "uart0", x1830_uart0_groups, ARRAY_SIZE(x1830_uart0_groups), },
+>> +    { "uart1", x1830_uart1_groups, ARRAY_SIZE(x1830_uart1_groups), },
+>> +    { "sfc", x1830_sfc_groups, ARRAY_SIZE(x1830_sfc_groups), },
+>> +    { "ssi0", x1830_ssi0_groups, ARRAY_SIZE(x1830_ssi0_groups), },
+>> +    { "ssi1", x1830_ssi1_groups, ARRAY_SIZE(x1830_ssi1_groups), },
+>> +    { "mmc0", x1830_mmc0_groups, ARRAY_SIZE(x1830_mmc0_groups), },
+>> +    { "mmc1", x1830_mmc1_groups, ARRAY_SIZE(x1830_mmc1_groups), },
+>> +    { "i2c0", x1830_i2c0_groups, ARRAY_SIZE(x1830_i2c0_groups), },
+>> +    { "i2c1", x1830_i2c1_groups, ARRAY_SIZE(x1830_i2c1_groups), },
+>> +    { "i2c2", x1830_i2c2_groups, ARRAY_SIZE(x1830_i2c2_groups), },
+>> +    { "pwm0", x1830_pwm0_groups, ARRAY_SIZE(x1830_pwm0_groups), },
+>> +    { "pwm1", x1830_pwm1_groups, ARRAY_SIZE(x1830_pwm1_groups), },
+>> +    { "pwm2", x1830_pwm2_groups, ARRAY_SIZE(x1830_pwm2_groups), },
+>> +    { "pwm3", x1830_pwm3_groups, ARRAY_SIZE(x1830_pwm3_groups), },
+>> +    { "pwm4", x1830_pwm4_groups, ARRAY_SIZE(x1830_pwm4_groups), },
+>> +    { "pwm5", x1830_pwm5_groups, ARRAY_SIZE(x1830_pwm4_groups), },
+>> +    { "pwm6", x1830_pwm6_groups, ARRAY_SIZE(x1830_pwm4_groups), },
+>> +    { "pwm7", x1830_pwm7_groups, ARRAY_SIZE(x1830_pwm4_groups), },
+>> +    { "mac", x1830_mac_groups, ARRAY_SIZE(x1830_mac_groups), },
+>> +};
+>> +
+>> +static const struct ingenic_chip_info x1830_chip_info =3D {
+>> +    .num_chips =3D 4,
+>> +    .groups =3D x1830_groups,
+>> +    .num_groups =3D ARRAY_SIZE(x1830_groups),
+>> +    .functions =3D x1830_functions,
+>> +    .num_functions =3D ARRAY_SIZE(x1830_functions),
+>> +    .pull_ups =3D x1830_pull_ups,
+>> +    .pull_downs =3D x1830_pull_downs,
+>> +};
+>> +
+>>  static u32 ingenic_gpio_read_reg(struct ingenic_gpio_chip *jzgc, u8=20
+>> reg)
+>>  {
+>>      unsigned int val;
+>> @@ -1422,13 +1646,20 @@ static void=20
+>> ingenic_gpio_shadow_set_bit(struct ingenic_gpio_chip *jzgc,
+>>      else
+>>          reg =3D REG_CLEAR(reg);
 >>
->>      if (bypass)
->>          return parent_rate;
->> @@ -106,7 +115,10 @@ ingenic_pll_recalc_rate(struct clk_hw *hw,=20
->> unsigned long parent_rate)
->>      BUG_ON(od =3D=3D pll_info->od_max);
->>      od++;
+>> -    regmap_write(jzgc->jzpc->map, X1000_GPIO_PZ_BASE + reg,=20
+>> BIT(offset));
+>> +    if (jzgc->jzpc->version >=3D ID_X1830)
+>> +        regmap_write(jzgc->jzpc->map, X1830_GPIO_PZ_BASE + reg,=20
+>> BIT(offset));
+>> +    else
+>> +        regmap_write(jzgc->jzpc->map, X1000_GPIO_PZ_BASE + reg,=20
+>> BIT(offset));
+>>  }
 >>
->> -    return div_u64((u64)parent_rate * m, n * od);
->> +    if (pll_info->version >=3D CGU_X1830)
->> +        return div_u64((u64)parent_rate * m * 2, n * od);
+>>  static void ingenic_gpio_shadow_set_bit_load(struct=20
+>> ingenic_gpio_chip *jzgc)
+>>  {
+>> -    regmap_write(jzgc->jzpc->map, X1000_GPIO_PZ_GID2LD,
+>> -            jzgc->gc.base / PINS_PER_GPIO_CHIP);
+>> +    unsigned int offt =3D jzgc->gc.base / PINS_PER_GPIO_CHIP;
+>> +
+>> +    if (jzgc->jzpc->version >=3D ID_X1830)
+>> +        regmap_write(jzgc->jzpc->map, X1830_GPIO_PZ_GID2LD, offt);
+>> +    else
+>> +        regmap_write(jzgc->jzpc->map, X1000_GPIO_PZ_GID2LD, offt);
+>>  }
+>>
+>>  static inline bool ingenic_gpio_get_value(struct ingenic_gpio_chip=20
+>> *jzgc,
+>> @@ -1668,25 +1899,36 @@ static inline void ingenic_config_pin(struct=20
+>> ingenic_pinctrl *jzpc,
+>>          unsigned int pin, u8 reg, bool set)
+>>  {
+>>      unsigned int idx =3D pin % PINS_PER_GPIO_CHIP;
+>> -    unsigned int offt =3D pin / PINS_PER_GPIO_CHIP;
+>> +    unsigned int offt1 =3D pin / PINS_PER_GPIO_CHIP;
+>> +    unsigned int offt2 =3D set ? REG_SET(reg) : REG_CLEAR(reg);
+>>
+>> -    regmap_write(jzpc->map, offt * 0x100 +
+>> -            (set ? REG_SET(reg) : REG_CLEAR(reg)), BIT(idx));
+>> +    if (jzpc->version >=3D ID_X1830)
+>> +        regmap_write(jzpc->map, offt1 * 0x1000 + offt2, BIT(idx));
+>> +    else
+>> +        regmap_write(jzpc->map, offt1 * 0x100 + offt2, BIT(idx));
 >
-> Where does that *2 come from?
+> I'd prefer that you add a ingenic_chip_info.reg_offset and use that=20
+> here, instead of having 0x100 / 0x1000 hardcoded all over the place.=20
+> This should be a separate commit too.
+>
 
-This is because the calculation method of the PLL frequency multiplication
-of X1830 has changed, and a factor of 2 is added compared to the original
-method (on page 381 of the X1830's PM manual).
+Ok, I'll add it in v7.
+
+>>  }
+>>
+>>  static inline void ingenic_shadow_config_pin(struct ingenic_pinctrl=20
+>> *jzpc,
+>>          unsigned int pin, u8 reg, bool set)
+>>  {
+>>      unsigned int idx =3D pin % PINS_PER_GPIO_CHIP;
+>> +    unsigned int offt =3D set ? REG_SET(reg) : REG_CLEAR(reg);
+>>
+>> -    regmap_write(jzpc->map, X1000_GPIO_PZ_BASE +
+>> -            (set ? REG_SET(reg) : REG_CLEAR(reg)), BIT(idx));
+>> +    if (jzpc->version >=3D ID_X1830)
+>> +        regmap_write(jzpc->map, X1830_GPIO_PZ_BASE + offt, BIT(idx));
+>> +    else
+>> +        regmap_write(jzpc->map, X1000_GPIO_PZ_BASE + offt, BIT(idx));
+>
+> If you have a ingenic_chip_info.reg_offset, then you can add PZ_BASE()=20
+> / PZ_GID2LD() macros that return the right registers, since they are=20
+> at (nb_chips * reg_offset).
+>
+
+Sure, will add them in v7.
+
+>>  }
+>>
+>>  static inline void ingenic_shadow_config_pin_load(struct=20
+>> ingenic_pinctrl *jzpc,
+>>          unsigned int pin)
+>>  {
+>> -    regmap_write(jzpc->map, X1000_GPIO_PZ_GID2LD, pin /=20
+>> PINS_PER_GPIO_CHIP);
+>> +    unsigned int offt =3D pin / PINS_PER_GPIO_CHIP;
+>> +
+>> +    if (jzpc->version >=3D ID_X1830)
+>> +        regmap_write(jzpc->map, X1830_GPIO_PZ_GID2LD, offt);
+>> +    else
+>> +        regmap_write(jzpc->map, X1000_GPIO_PZ_GID2LD, offt);
+>>  }
+>>
+>>  static inline bool ingenic_get_pin_config(struct ingenic_pinctrl *jzpc,
+>> @@ -1696,7 +1938,10 @@ static inline bool=20
+>> ingenic_get_pin_config(struct ingenic_pinctrl *jzpc,
+>>      unsigned int offt =3D pin / PINS_PER_GPIO_CHIP;
+>>      unsigned int val;
+>>
+>> -    regmap_read(jzpc->map, offt * 0x100 + reg, &val);
+>> +    if (jzpc->version >=3D ID_X1830)
+>> +        regmap_read(jzpc->map, offt * 0x1000 + reg, &val);
+>> +    else
+>> +        regmap_read(jzpc->map, offt * 0x100 + reg, &val);
+>>
+>>      return val & BIT(idx);
+>>  }
+>> @@ -1857,12 +2102,60 @@ static int ingenic_pinconf_get(struct=20
+>> pinctrl_dev *pctldev,
+>>  }
+>>
+>>  static void ingenic_set_bias(struct ingenic_pinctrl *jzpc,
+>> -        unsigned int pin, bool enabled)
+>> +        unsigned int pin, unsigned int bias)
+>>  {
+>> -    if (jzpc->version >=3D ID_JZ4760)
+>> -        ingenic_config_pin(jzpc, pin, JZ4760_GPIO_PEN, !enabled);
+>> -    else
+>> -        ingenic_config_pin(jzpc, pin, JZ4740_GPIO_PULL_DIS, !enabled);
+>> +    if (jzpc->version >=3D ID_X1830) {
+>> +        unsigned int idx =3D pin % PINS_PER_GPIO_CHIP;
+>> +        unsigned int idxl =3D pin % PINS_PER_GPIO_CHIP * 2;
+>> +        unsigned int idxh =3D pin % PINS_PER_GPIO_CHIP % 16 * 2;
+>
+> You only access idxl when (idx < 16), so you could very well use idxh=20
+> everywhere then.
+>
+> And no need to % PINS_PER_GPIO_CHIP if you're going to apply a % 16=20
+> afterwards.
+>
+
+Sure, I will change it in v7.
+
+>> +        unsigned int offt =3D pin / PINS_PER_GPIO_CHIP;
+>> +        unsigned int half =3D PINS_PER_GPIO_CHIP / 2;
+>
+> You already hardcoded a %16 above, you could have done %half instead.
+>
+
+Ok, will change it in v7.
+
+>> +
+>> +        switch (bias) {
+>> +        case GPIO_PULL_UP:
+>> +            if (idx < half) {
+>> +                regmap_write(jzpc->map, offt * 0x1000 +
+>> +                        REG_CLEAR(X1830_GPIO_PEL), BIT(idxl) * 2);
+>> +                regmap_write(jzpc->map, offt * 0x1000 +
+>> +                        REG_SET(X1830_GPIO_PEL), BIT(idxl));
+>> +            } else {
+>> +                regmap_write(jzpc->map, offt * 0x1000 +
+>> +                        REG_CLEAR(X1830_GPIO_PEH), BIT(idxh) * 2);
+>> +                regmap_write(jzpc->map, offt * 0x1000 +
+>> +                        REG_SET(X1830_GPIO_PEH), BIT(idxh));
+>> +            }
+>> +            break;
+>> +
+>> +        case GPIO_PULL_DOWN:
+>> +            if (idx < half) {
+>> +                regmap_write(jzpc->map, offt * 0x1000 +
+>> +                        REG_CLEAR(X1830_GPIO_PEL), BIT(idxl));
+>> +                regmap_write(jzpc->map, offt * 0x1000 +
+>> +                        REG_SET(X1830_GPIO_PEL), BIT(idxl) * 2);
+>> +            } else {
+>> +                regmap_write(jzpc->map, offt * 0x1000 +
+>> +                        REG_CLEAR(X1830_GPIO_PEH), BIT(idxh));
+>> +                regmap_write(jzpc->map, offt * 0x1000 +
+>> +                        REG_SET(X1830_GPIO_PEH), BIT(idxh) * 2);
+>> +            }
+>> +            break;
+>> +
+>> +        case GPIO_PULL_DIS:
+>> +        default:
+>> +            if (idx < half)
+>> +                regmap_write(jzpc->map, offt * 0x1000 +
+>> +                        REG_CLEAR(X1830_GPIO_PEL), BIT(idxl) * 3);
+>> +            else
+>> +                regmap_write(jzpc->map, offt * 0x1000 +
+>> +                        REG_CLEAR(X1830_GPIO_PEH), BIT(idxh) * 3);
+>
+> Please write it as: 3 << idxh. Same for the other ones above. BIT()=20
+> should be used only when manipulating a 1-bit field.
+>
+> Also, you repeat three times the same code, while the only difference=20
+> I see, is the value written in the field. Drop the big switch,=20
+> unconditionally clear the field's two bits, then write either (1 <<=20
+> idx) or (2 << idx) if the bias is up/down. That should make the code=20
+> much cleaner.
+
+Sure, I will change this in v7.
 
 Thanks and best regards!
 
 >
->> +    else
->> +        return div_u64((u64)parent_rate * m, n * od);
->>  }
->>
->>  static unsigned long
->> @@ -139,7 +151,10 @@ ingenic_pll_calc(const struct=20
->> ingenic_cgu_clk_info *clk_info,
->>      if (pod)
->>          *pod =3D od;
->>
->> -    return div_u64((u64)parent_rate * m, n * od);
->> +    if (pll_info->version >=3D CGU_X1830)
->> +        return div_u64((u64)parent_rate * m * 2, n * od);
->> +    else
->> +        return div_u64((u64)parent_rate * m, n * od);
->>  }
->>
->>  static inline const struct ingenic_cgu_clk_info *to_clk_info(
->> @@ -183,7 +198,7 @@ ingenic_pll_set_rate(struct clk_hw *hw, unsigned=20
->> long req_rate,
->>              clk_info->name, req_rate, rate);
->>
->>      spin_lock_irqsave(&cgu->lock, flags);
->> -    ctl =3D readl(cgu->base + pll_info->reg);
->> +    ctl =3D readl(cgu->base + pll_info->reg[1]);
->>
->>      ctl &=3D ~(GENMASK(pll_info->m_bits - 1, 0) << pll_info->m_shift);
->>      ctl |=3D (m - pll_info->m_offset) << pll_info->m_shift;
->> @@ -194,7 +209,7 @@ ingenic_pll_set_rate(struct clk_hw *hw, unsigned=20
->> long req_rate,
->>      ctl &=3D ~(GENMASK(pll_info->od_bits - 1, 0) << pll_info->od_shift)=
-;
->>      ctl |=3D pll_info->od_encoding[od - 1] << pll_info->od_shift;
->>
->> -    writel(ctl, cgu->base + pll_info->reg);
->> +    writel(ctl, cgu->base + pll_info->reg[1]);
->>      spin_unlock_irqrestore(&cgu->lock, flags);
->>
->>      return 0;
->> @@ -212,16 +227,28 @@ static int ingenic_pll_enable(struct clk_hw *hw)
->>      u32 ctl;
->>
->>      spin_lock_irqsave(&cgu->lock, flags);
->> -    ctl =3D readl(cgu->base + pll_info->reg);
->>
->> -    ctl &=3D ~BIT(pll_info->bypass_bit);
->> +    if (pll_info->version >=3D CGU_X1830) {
->> +        ctl =3D readl(cgu->base + pll_info->reg[0]);
+> Cheers,
+> -Paul
+>
+>> +            break;
+>> +        }
 >> +
->> +        ctl &=3D ~BIT(pll_info->bypass_bit);
->> +
->> +        writel(ctl, cgu->base + pll_info->reg[0]);
->> +
->> +        ctl =3D readl(cgu->base + pll_info->reg[1]);
+>> +    } else if (jzpc->version >=3D ID_JZ4760) {
+>> +        ingenic_config_pin(jzpc, pin, JZ4760_GPIO_PEN, !bias);
 >> +    } else {
->> +        ctl =3D readl(cgu->base + pll_info->reg[1]);
->> +
->> +        ctl &=3D ~BIT(pll_info->bypass_bit);
+>> +        ingenic_config_pin(jzpc, pin, JZ4740_GPIO_PULL_DIS, !bias);
 >> +    }
->> +
->>      ctl |=3D BIT(pll_info->enable_bit);
->>
->> -    writel(ctl, cgu->base + pll_info->reg);
->> +    writel(ctl, cgu->base + pll_info->reg[1]);
->>
->>      /* wait for the PLL to stabilise */
->>      for (i =3D 0; i < timeout; i++) {
->> -        ctl =3D readl(cgu->base + pll_info->reg);
->> +        ctl =3D readl(cgu->base + pll_info->reg[1]);
->>          if (ctl & BIT(pll_info->stable_bit))
->>              break;
->>          mdelay(1);
->> @@ -245,11 +272,11 @@ static void ingenic_pll_disable(struct clk_hw *hw)
->>      u32 ctl;
->>
->>      spin_lock_irqsave(&cgu->lock, flags);
->> -    ctl =3D readl(cgu->base + pll_info->reg);
->> +    ctl =3D readl(cgu->base + pll_info->reg[1]);
->>
->>      ctl &=3D ~BIT(pll_info->enable_bit);
->>
->> -    writel(ctl, cgu->base + pll_info->reg);
->> +    writel(ctl, cgu->base + pll_info->reg[1]);
->>      spin_unlock_irqrestore(&cgu->lock, flags);
 >>  }
 >>
->> @@ -263,7 +290,7 @@ static int ingenic_pll_is_enabled(struct clk_hw *hw)
->>      u32 ctl;
+>>  static int ingenic_pinconf_set(struct pinctrl_dev *pctldev, unsigned=20
+>> int pin,
+>> @@ -1889,7 +2182,7 @@ static int ingenic_pinconf_set(struct=20
+>> pinctrl_dev *pctldev, unsigned int pin,
+>>          case PIN_CONFIG_BIAS_DISABLE:
+>>              dev_dbg(jzpc->dev, "disable pull-over for pin P%c%u\n",
+>>                      'A' + offt, idx);
+>> -            ingenic_set_bias(jzpc, pin, false);
+>> +            ingenic_set_bias(jzpc, pin, GPIO_PULL_DIS);
+>>              break;
 >>
->>      spin_lock_irqsave(&cgu->lock, flags);
->> -    ctl =3D readl(cgu->base + pll_info->reg);
->> +    ctl =3D readl(cgu->base + pll_info->reg[1]);
->>      spin_unlock_irqrestore(&cgu->lock, flags);
+>>          case PIN_CONFIG_BIAS_PULL_UP:
+>> @@ -1897,7 +2190,7 @@ static int ingenic_pinconf_set(struct=20
+>> pinctrl_dev *pctldev, unsigned int pin,
+>>                  return -EINVAL;
+>>              dev_dbg(jzpc->dev, "set pull-up for pin P%c%u\n",
+>>                      'A' + offt, idx);
+>> -            ingenic_set_bias(jzpc, pin, true);
+>> +            ingenic_set_bias(jzpc, pin, GPIO_PULL_UP);
+>>              break;
 >>
->>      return !!(ctl & BIT(pll_info->enable_bit));
->> diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
->> index 0dc8004..5f87be4 100644
->> --- a/drivers/clk/ingenic/cgu.h
->> +++ b/drivers/clk/ingenic/cgu.h
->> @@ -42,8 +42,18 @@
->>   * @stable_bit: the index of the stable bit in the PLL control register
->>   * @no_bypass_bit: if set, the PLL has no bypass functionality
->>   */
->> +enum ingenic_cgu_version {
->> +    CGU_JZ4740,
->> +    CGU_JZ4725B,
->> +    CGU_JZ4770,
->> +    CGU_JZ4780,
->> +    CGU_X1000,
->> +    CGU_X1830,
->> +};
->> +
->>  struct ingenic_cgu_pll_info {
->> -    unsigned reg;
->> +    enum ingenic_cgu_version version;
->> +    unsigned reg[2];
->>      const s8 *od_encoding;
->>      u8 m_shift, m_bits, m_offset;
->>      u8 n_shift, n_bits, n_offset;
->> diff --git a/drivers/clk/ingenic/jz4725b-cgu.c=20
->> b/drivers/clk/ingenic/jz4725b-cgu.c
->> index a3b4635..6da7b41 100644
->> --- a/drivers/clk/ingenic/jz4725b-cgu.c
->> +++ b/drivers/clk/ingenic/jz4725b-cgu.c
->> @@ -53,7 +53,8 @@ static const struct ingenic_cgu_clk_info=20
->> jz4725b_cgu_clocks[] =3D {
->>          "pll", CGU_CLK_PLL,
->>          .parents =3D { JZ4725B_CLK_EXT, -1, -1, -1 },
->>          .pll =3D {
->> -            .reg =3D CGU_REG_CPPCR,
->> +            .version =3D CGU_JZ4725B,
->> +            .reg =3D { -1, CGU_REG_CPPCR },
->>              .m_shift =3D 23,
->>              .m_bits =3D 9,
->>              .m_offset =3D 2,
->> diff --git a/drivers/clk/ingenic/jz4740-cgu.c=20
->> b/drivers/clk/ingenic/jz4740-cgu.c
->> index 4f0e92c..3cf800d 100644
->> --- a/drivers/clk/ingenic/jz4740-cgu.c
->> +++ b/drivers/clk/ingenic/jz4740-cgu.c
->> @@ -68,7 +68,8 @@ static const struct ingenic_cgu_clk_info=20
->> jz4740_cgu_clocks[] =3D {
->>          "pll", CGU_CLK_PLL,
->>          .parents =3D { JZ4740_CLK_EXT, -1, -1, -1 },
->>          .pll =3D {
->> -            .reg =3D CGU_REG_CPPCR,
->> +            .version =3D CGU_JZ4740,
->> +            .reg =3D { -1, CGU_REG_CPPCR },
->>              .m_shift =3D 23,
->>              .m_bits =3D 9,
->>              .m_offset =3D 2,
->> diff --git a/drivers/clk/ingenic/jz4770-cgu.c=20
->> b/drivers/clk/ingenic/jz4770-cgu.c
->> index 956dd65..a62dfb1 100644
->> --- a/drivers/clk/ingenic/jz4770-cgu.c
->> +++ b/drivers/clk/ingenic/jz4770-cgu.c
->> @@ -101,7 +101,8 @@ static const struct ingenic_cgu_clk_info=20
->> jz4770_cgu_clocks[] =3D {
->>          "pll0", CGU_CLK_PLL,
->>          .parents =3D { JZ4770_CLK_EXT },
->>          .pll =3D {
->> -            .reg =3D CGU_REG_CPPCR0,
->> +            .version =3D CGU_JZ4770,
->> +            .reg =3D { -1, CGU_REG_CPPCR0 },
->>              .m_shift =3D 24,
->>              .m_bits =3D 7,
->>              .m_offset =3D 1,
->> @@ -123,7 +124,8 @@ static const struct ingenic_cgu_clk_info=20
->> jz4770_cgu_clocks[] =3D {
->>          "pll1", CGU_CLK_PLL,
->>          .parents =3D { JZ4770_CLK_EXT },
->>          .pll =3D {
->> -            .reg =3D CGU_REG_CPPCR1,
->> +            .version =3D CGU_JZ4770,
->> +            .reg =3D { -1, CGU_REG_CPPCR1 },
->>              .m_shift =3D 24,
->>              .m_bits =3D 7,
->>              .m_offset =3D 1,
->> diff --git a/drivers/clk/ingenic/jz4780-cgu.c=20
->> b/drivers/clk/ingenic/jz4780-cgu.c
->> index ea905ff..59356d1b 100644
->> --- a/drivers/clk/ingenic/jz4780-cgu.c
->> +++ b/drivers/clk/ingenic/jz4780-cgu.c
->> @@ -220,7 +220,8 @@ static const struct ingenic_cgu_clk_info=20
->> jz4780_cgu_clocks[] =3D {
->>      /* PLLs */
+>>          case PIN_CONFIG_BIAS_PULL_DOWN:
+>> @@ -1905,7 +2198,7 @@ static int ingenic_pinconf_set(struct=20
+>> pinctrl_dev *pctldev, unsigned int pin,
+>>                  return -EINVAL;
+>>              dev_dbg(jzpc->dev, "set pull-down for pin P%c%u\n",
+>>                      'A' + offt, idx);
+>> -            ingenic_set_bias(jzpc, pin, true);
+>> +            ingenic_set_bias(jzpc, pin, GPIO_PULL_DOWN);
+>>              break;
 >>
->>  #define DEF_PLL(name) { \
->> -    .reg =3D CGU_REG_ ## name, \
->> +    .version =3D CGU_JZ4780, \
->> +    .reg =3D { -1, CGU_REG_ ## name }, \
->>      .m_shift =3D 19, \
->>      .m_bits =3D 13, \
->>      .m_offset =3D 1, \
->> diff --git a/drivers/clk/ingenic/x1000-cgu.c=20
->> b/drivers/clk/ingenic/x1000-cgu.c
->> index b22d87b..7179b9f 100644
->> --- a/drivers/clk/ingenic/x1000-cgu.c
->> +++ b/drivers/clk/ingenic/x1000-cgu.c
->> @@ -57,7 +57,8 @@ static const struct ingenic_cgu_clk_info=20
->> x1000_cgu_clocks[] =3D {
->>          "apll", CGU_CLK_PLL,
->>          .parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
->>          .pll =3D {
->> -            .reg =3D CGU_REG_APLL,
->> +            .version =3D CGU_X1000,
->> +            .reg =3D { -1, CGU_REG_APLL },
->>              .m_shift =3D 24,
->>              .m_bits =3D 7,
->>              .m_offset =3D 1,
->> @@ -78,7 +79,8 @@ static const struct ingenic_cgu_clk_info=20
->> x1000_cgu_clocks[] =3D {
->>          "mpll", CGU_CLK_PLL,
->>          .parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
->>          .pll =3D {
->> -            .reg =3D CGU_REG_MPLL,
->> +            .version =3D CGU_X1000,
->> +            .reg =3D { -1, CGU_REG_MPLL },
->>              .m_shift =3D 24,
->>              .m_bits =3D 7,
->>              .m_offset =3D 1,
+>>          default:
+>> @@ -1987,6 +2280,7 @@ static const struct of_device_id=20
+>> ingenic_pinctrl_of_match[] =3D {
+>>      { .compatible =3D "ingenic,x1000-pinctrl", .data =3D (void *)=20
+>> ID_X1000 },
+>>      { .compatible =3D "ingenic,x1000e-pinctrl", .data =3D (void *)=20
+>> ID_X1000E },
+>>      { .compatible =3D "ingenic,x1500-pinctrl", .data =3D (void *)=20
+>> ID_X1500 },
+>> +    { .compatible =3D "ingenic,x1830-pinctrl", .data =3D (void *)=20
+>> ID_X1830 },
+>>      {},
+>>  };
+>>
+>> @@ -1996,6 +2290,7 @@ static const struct of_device_id=20
+>> ingenic_gpio_of_match[] __initconst =3D {
+>>      { .compatible =3D "ingenic,jz4770-gpio", },
+>>      { .compatible =3D "ingenic,jz4780-gpio", },
+>>      { .compatible =3D "ingenic,x1000-gpio", },
+>> +    { .compatible =3D "ingenic,x1830-gpio", },
+>>      {},
+>>  };
+>>
+>> @@ -2018,7 +2313,10 @@ static int __init ingenic_gpio_probe(struct=20
+>> ingenic_pinctrl *jzpc,
+>>          return -ENOMEM;
+>>
+>>      jzgc->jzpc =3D jzpc;
+>> -    jzgc->reg_base =3D bank * 0x100;
+>> +    if (jzpc->version >=3D ID_X1830)
+>> +        jzgc->reg_base =3D bank * 0x1000;
+>> +    else
+>> +        jzgc->reg_base =3D bank * 0x100;
+>>
+>>      jzgc->gc.label =3D devm_kasprintf(dev, GFP_KERNEL, "GPIO%c", 'A' +=
+=20
+>> bank);
+>>      if (!jzgc->gc.label)
+>> @@ -2111,7 +2409,9 @@ static int __init ingenic_pinctrl_probe(struct=20
+>> platform_device *pdev)
+>>      else
+>>          jzpc->version =3D (enum jz_version)id->driver_data;
+>>
+>> -    if (jzpc->version >=3D ID_X1500)
+>> +    if (jzpc->version >=3D ID_X1830)
+>> +        chip_info =3D &x1830_chip_info;
+>> +    else if (jzpc->version >=3D ID_X1500)
+>>          chip_info =3D &x1500_chip_info;
+>>      else if (jzpc->version >=3D ID_X1000E)
+>>          chip_info =3D &x1000e_chip_info;
+>> @@ -2208,6 +2508,7 @@ static const struct platform_device_id=20
+>> ingenic_pinctrl_ids[] =3D {
+>>      { "x1000-pinctrl", ID_X1000 },
+>>      { "x1000e-pinctrl", ID_X1000E },
+>>      { "x1500-pinctrl", ID_X1500 },
+>> +    { "x1830-pinctrl", ID_X1830 },
+>>      {},
+>>  };
+>>
 >> --=20
 >> 2.7.4
 >>
