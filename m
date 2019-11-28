@@ -2,22 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDAC10C6F5
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Nov 2019 11:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED1E10C6F8
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Nov 2019 11:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726641AbfK1KnJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Nov 2019 05:43:09 -0500
-Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25888 "EHLO
+        id S1726556AbfK1Kni (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Nov 2019 05:43:38 -0500
+Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25805 "EHLO
         sender4-pp-o98.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726252AbfK1KnJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Nov 2019 05:43:09 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1574937545; cv=none; 
+        with ESMTP id S1726252AbfK1Kni (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Nov 2019 05:43:38 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1574937553; cv=none; 
         d=zohomail.com; s=zohoarc; 
-        b=MzCPwZq6gSOZN/FbTKXqQEGdvX0/NJ+dd5jXRJiBEsQWmDn4Y5p+DyGFoPoHc3X/xoIX/q/gq92uyLEY+HFrclp7WnGfMwOs0M9zhgL5U2cqORu7tLyd/25vhR2r+fQ41CVnUv8OIyV0/3fjLcOtRVqiw0vxG+2SM5AxOyCcGGI=
+        b=Psc+8CEyRPTGgLrD/yXU6u3DuQCoRAxQX4zRZ/fUgb5pVe7RpTdKp8ZKv8Um1H/CrcrcAivBtsfWqjTrkSwR0B/VxmRsltn+BS7qx/oluIrNySLfFv6JV4lU06Iqls000RCqzPKNzSxih5GwnN1+WecMEUb3XR0VkGxOZfvlYC4=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1574937545; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To; 
-        bh=PuoTjSzI3oNt1S7DZP6JaxcVA17s93onx3wsa54Pm0c=; 
-        b=nksQVw/GoOAxuzUPZbqd1xbMAT9YeJJvOUeV1FVVKYtTagvT0F5im7JTZKsQEktewKX2G7gyofdzD82+LYDpbqv2LgzgJnxwXYOV+pjAAFqwrYizDIs8t26thihTHxQMeJY00IZArpz53uZZ/NVlC6mNJz2v1XZassVISJ4U/4Q=
+        t=1574937553; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To; 
+        bh=GAQWeGd+h8VrekeWhUNwqLoHFFa2+G6t4HyTh3BtuYA=; 
+        b=DO2tPp6Hnihkg5/Z3tEhpyOA3ethbrpcozF5K8Dxm7KWXB6eN6NzHcIdlbB0ccKmcNomf3GnqK+wa2CczMVxXD3t15PrmepKtMpjySZeW3w7DWFy0mauZd8IT0tY0nWsfw9RU9abSmS+gVIgmIRubQWhsKzRKuS8tJakPUB7A/I=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
         dkim=pass  header.i=zoho.com;
         spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
@@ -25,17 +25,17 @@ ARC-Authentication-Results: i=1; mx.zohomail.com;
 DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
   s=zapps768; d=zoho.com; 
   h=from:to:cc:subject:date:message-id:in-reply-to:references; 
-  b=uhhK2hDQqZhQ9yfD5rRXp9b1+S2hIRE2vL2hBoaXD07GI0V0chy5dDokXM2XSiSvDsPmdr+k8Kuv
-    nUVQjl9ub3chfFHPZ6tcidPnzDkWWEWRe4c+Mc+uDxTOAAW/uiBy  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1574937545;
+  b=HN7fKinXmeNlQfkaNksbrBS8Dk3RShq+q9ggBi9jDzY7M4MYuFgPo43q4L92LXRMO2+kKBInzy9H
+    +6kaDmc13FNtsjBaoeuTtOZtJUoUUaUYT7LJVDwU/dhKx4MrEPQw  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1574937553;
         s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        bh=PuoTjSzI3oNt1S7DZP6JaxcVA17s93onx3wsa54Pm0c=;
-        b=faxm4Ebr2eqa0D/P0jL20ySySQ72Io4dEeYrkcmjSOTJfc3d1e/JVZb1vehbFG9B
-        tRDeZ1C81hR17jjA3s0LxcSwSTenOjnyeVWqmx5kJDiWRKkNBBwCAC4U0rKO4KfoN5a
-        FnXd04LeZvNiA+E/1d+6uBIC6kXRbTWM+eHvWWWw=
+        bh=GAQWeGd+h8VrekeWhUNwqLoHFFa2+G6t4HyTh3BtuYA=;
+        b=MtwFwSWnTXqGQ9P1KLSCqz4J1E5YXw/ZBYuh8gxMeLpI5m9285r+XFnvs9j4joC5
+        TIAqwpxSbR3jdI2Qx1FwYLQ+XuNQfBraqukfOAnNM0hX1NUCCf6k3fCeOtVdeEJws0q
+        l/Ps19GWqhVpbB4yuvLAjYkuqDwoYhJZDpvFF4LI=
 Received: from zhouyanjie-virtual-machine.localdomain (182.148.156.27 [182.148.156.27]) by mx.zohomail.com
-        with SMTPS id 1574937542992738.5858742788587; Thu, 28 Nov 2019 02:39:02 -0800 (PST)
+        with SMTPS id 157493755101472.99312942936126; Thu, 28 Nov 2019 02:39:11 -0800 (PST)
 From:   Zhou Yanjie <zhouyanjie@zoho.com>
 To:     linux-mips@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
@@ -47,9 +47,9 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         geert+renesas@glider.be, paul@crapouillou.net,
         prasannatsmkumar@gmail.com, sernia.zhou@foxmail.com,
         zhenwenjin@gmail.com
-Subject: [PATCH v5 07/10] MIPS: X1000: Add msc controller DT node.
-Date:   Thu, 28 Nov 2019 18:37:44 +0800
-Message-Id: <1574937467-101907-8-git-send-email-zhouyanjie@zoho.com>
+Subject: [PATCH v5 08/10] MIPS: CU1000: Update defconfig for msc controller.
+Date:   Thu, 28 Nov 2019 18:37:45 +0800
+Message-Id: <1574937467-101907-9-git-send-email-zhouyanjie@zoho.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1574937467-101907-1-git-send-email-zhouyanjie@zoho.com>
 References: <1574937467-101907-1-git-send-email-zhouyanjie@zoho.com>
@@ -59,8 +59,7 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add the appropriate DT node to probe the msc controller driver
-using the devicetree.
+Selected msc controller support by default.
 
 Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
 ---
@@ -69,92 +68,22 @@ Notes:
     v5:
     New patch.
 
- arch/mips/boot/dts/ingenic/cu1000-neo.dts | 16 ++++++++++++
- arch/mips/boot/dts/ingenic/x1000.dtsi     | 42 +++++++++++++++++++++++++++++++
- 2 files changed, 58 insertions(+)
+ arch/mips/configs/cu1000-neo_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/boot/dts/ingenic/cu1000-neo.dts b/arch/mips/boot/dts/ingenic/cu1000-neo.dts
-index aae60ce..846a2dc 100644
---- a/arch/mips/boot/dts/ingenic/cu1000-neo.dts
-+++ b/arch/mips/boot/dts/ingenic/cu1000-neo.dts
-@@ -43,10 +43,26 @@
- 	pinctrl-0 = <&pins_uart2>;
- };
- 
-+&msc0 {
-+	status = "okay";
-+
-+	bus-width = <8>;
-+	max-frequency = <50000000>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_msc0>;
-+};
-+
- &pinctrl {
- 	pins_uart2: uart2 {
- 		function = "uart2";
- 		groups = "uart2-data-d";
- 		bias-disable;
- 	};
-+
-+	pins_msc0: msc0 {
-+		function = "mmc0";
-+		groups = "mmc0-1bit", "mmc0-4bit", "mmc0-8bit";
-+		bias-disable;
-+	};
- };
-diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
-index c432828..8b8d335 100644
---- a/arch/mips/boot/dts/ingenic/x1000.dtsi
-+++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-@@ -186,4 +186,46 @@
- 
- 		clocks = <&cgu X1000_CLK_PDMA>;
- 	};
-+
-+	msc0: msc@13450000 {
-+		compatible = "ingenic,x1000-mmc";
-+		reg = <0x13450000 0x1000>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <37>;
-+
-+		clocks = <&cgu X1000_CLK_MSC0>;
-+		clock-names = "mmc";
-+
-+		cap-sd-highspeed;
-+		cap-mmc-highspeed;
-+		cap-sdio-irq;
-+
-+		dmas = <&pdma X1000_DMA_MSC0_RX 0xffffffff>,
-+			   <&pdma X1000_DMA_MSC0_TX 0xffffffff>;
-+		dma-names = "rx", "tx";
-+
-+		status = "disabled";
-+	};
-+
-+	msc1: msc@13460000 {
-+		compatible = "ingenic,x1000-mmc";
-+		reg = <0x13460000 0x1000>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <36>;
-+
-+		clocks = <&cgu X1000_CLK_MSC1>;
-+		clock-names = "mmc";
-+
-+		cap-sd-highspeed;
-+		cap-mmc-highspeed;
-+		cap-sdio-irq;
-+
-+		dmas = <&pdma X1000_DMA_MSC1_RX 0xffffffff>,
-+			   <&pdma X1000_DMA_MSC1_TX 0xffffffff>;
-+		dma-names = "rx", "tx";
-+
-+		status = "disabled";
-+	};
- };
+diff --git a/arch/mips/configs/cu1000-neo_defconfig b/arch/mips/configs/cu1000-neo_defconfig
+index 63903bf..565e9a0 100644
+--- a/arch/mips/configs/cu1000-neo_defconfig
++++ b/arch/mips/configs/cu1000-neo_defconfig
+@@ -61,6 +61,8 @@ CONFIG_GPIO_SYSFS=y
+ # CONFIG_VGA_CONSOLE is not set
+ # CONFIG_HID is not set
+ # CONFIG_USB_SUPPORT is not set
++CONFIG_MMC=y
++CONFIG_MMC_JZ4740=y
+ CONFIG_DMADEVICES=y
+ CONFIG_DMA_JZ4780=y
+ # CONFIG_IOMMU_SUPPORT is not set
 -- 
 2.7.4
 
