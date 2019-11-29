@@ -2,22 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D021A10D2A5
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Nov 2019 09:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 287B310D2A7
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Nov 2019 09:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726832AbfK2IvE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Nov 2019 03:51:04 -0500
-Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25831 "EHLO
+        id S1726778AbfK2Ivh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 Nov 2019 03:51:37 -0500
+Received: from sender4-pp-o98.zoho.com ([136.143.188.98]:25848 "EHLO
         sender4-pp-o98.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726684AbfK2IvE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Nov 2019 03:51:04 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1575017408; cv=none; 
+        with ESMTP id S1725892AbfK2Ivh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Nov 2019 03:51:37 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1575017432; cv=none; 
         d=zohomail.com; s=zohoarc; 
-        b=evDvCnoAa4bc6wobct7S9lmYOFVkw5EtvHA6lfHIjX/kvkB3U0i2kvh6h85CbIJBWB1N2mNiAy1g8UQ5cSB/c3n0hDNNDtsqWrX9s/jJKi7/0RjSTgYqZzeRo+C9x1+WbQ1OHDMdyiHyy4NWzrAXoETfsPOBZcdUv163kVYRomE=
+        b=LSYr/M+9wHznshlfolwm0DLElRchueotv8QGjVE4cCaYyoQ7ku4uZmHsjhIBwCqj0VWwBxol55jSU/CMFvQjbQuhbh2kNmf90Hx56a0ZLHctu1zXMFmnilElnqFecoECdFbhqLq+zsNzSO1sCBz3Z+wZWI3ASUhgcI4r8MNm1Q8=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1575017408; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To; 
-        bh=57iUclPlc7SKtkm64YOFwaTJlwVeSL46JJsM1xWPauE=; 
-        b=CcGHtvVH5hOHVS4+uENCaQWaGi6HVL1c+uSSM9DVDTzE7vA2ttQNB0IWdPj6VZmbQ06M/Cahsk/sG3Kv9McGD11i9k09SUzlrD4ZMR2+5+Dfo7Ub9JJ6D9VlumGHBuQg+uFc9bhMEPx7B6UItb3WjUd/f16JUxyIjP7JYwvyby8=
+        t=1575017432; h=Cc:Date:From:In-Reply-To:Message-ID:References:Subject:To; 
+        bh=pw0egvHiVYhWeoLwAgb0PomIYXZGRVshTmDHr4ijsP0=; 
+        b=DrSiOzWHuFZKS6PTUc6Zl4hfPqHdRnzF1tp97OTkAHaMkRsSlxk6gMa7LuoOGNTBTdCqgucvoDuo2KfSDqUoDX/ClHWhpecLSkHMpBC8yFy9NdE8vO5ooKr9F4ze9JUc3AnbEGI3x/DeffFMttZ1sWFTEkDFvOyDdoG6S6QtF4M=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
         dkim=pass  header.i=zoho.com;
         spf=pass  smtp.mailfrom=zhouyanjie@zoho.com;
@@ -25,17 +25,17 @@ ARC-Authentication-Results: i=1; mx.zohomail.com;
 DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
   s=zapps768; d=zoho.com; 
   h=from:to:cc:subject:date:message-id:in-reply-to:references; 
-  b=TNQUghc2JyNFyR/qWW1Nbi/rothz81E9UhavIdutKH4FKK5dwc7Jda57twMEd5OafKHWkW0XbVA4
-    3xri/k2Ax1u0F2kZZzVtEPS1u1PjG4ma6J9eREE4TMyE162Llsvm  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1575017408;
+  b=GRCNonozQ6UTQYflb9vuR6vQ/JabWMz4oObSachLGlDaMqCLG+Xi0miOf2VhsaxqAY+5kNGWvgaC
+    veoV092bQAzZL8N/dHmHqogFDjEnPEZofNTwtNTuK7BG55OCj7xk  
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1575017432;
         s=zm2019; d=zoho.com; i=zhouyanjie@zoho.com;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        bh=57iUclPlc7SKtkm64YOFwaTJlwVeSL46JJsM1xWPauE=;
-        b=m8PFldD9AUS4/nK6KGO6PK5pbgSKCsViWSzobFlgwaR6oIwSRopbDgFAy0gIlcH7
-        C86xvGiFVcEtAXRhTN7eJ5MYL/YRwj3PZZDu1DX9t5jGrVJZOmaFO5YjqzCMH56FHCv
-        wz17j1aQ8ZCLzcTYMe25M7f1GX52byKrMSZ+Bx30=
+        bh=pw0egvHiVYhWeoLwAgb0PomIYXZGRVshTmDHr4ijsP0=;
+        b=KFZsA7IUBhiGXBdF2y0dQ852Sa0QLsxW9D/GqNwFn8gM1k9FBd72v4XHHropninr
+        KOKFd8W/MpVyYNp6h1JfsgukahMHJwqtbLeHpTnRwmaXELCfe4uwul8kO2hSlUyrTS8
+        mHRxjk+M6uZPVy2xEr4XQjlBC6DMI0gBkMzu+xBY=
 Received: from zhouyanjie-virtual-machine.localdomain (139.207.146.46 [139.207.146.46]) by mx.zohomail.com
-        with SMTPS id 1575017406601866.7397569456067; Fri, 29 Nov 2019 00:50:06 -0800 (PST)
+        with SMTPS id 157501743029720.844468900447623; Fri, 29 Nov 2019 00:50:30 -0800 (PST)
 From:   Zhou Yanjie <zhouyanjie@zoho.com>
 To:     linux-mips@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
@@ -47,9 +47,9 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         geert+renesas@glider.be, paul@crapouillou.net,
         prasannatsmkumar@gmail.com, sernia.zhou@foxmail.com,
         zhenwenjin@gmail.com, 772753199@qq.com
-Subject: [PATCH v6 02/12] dt-bindings: Document yna vendor-prefix.
-Date:   Fri, 29 Nov 2019 16:48:43 +0800
-Message-Id: <1575017333-29020-3-git-send-email-zhouyanjie@zoho.com>
+Subject: [PATCH v6 03/12] dt-bindings: MIPS: Add Ingenic XBurst based boards.
+Date:   Fri, 29 Nov 2019 16:48:44 +0800
+Message-Id: <1575017333-29020-4-git-send-email-zhouyanjie@zoho.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1575017333-29020-1-git-send-email-zhouyanjie@zoho.com>
 References: <1575017333-29020-1-git-send-email-zhouyanjie@zoho.com>
@@ -59,7 +59,7 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The "yna" is an acronym of the "YSH & ATIL".
+Add Ingenic XBurst based boards, prepare for later dts.
 
 Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
 ---
@@ -72,30 +72,60 @@ Notes:
     No change.
     
     v3->v4:
-    No change.
+    Adjust the description to make it more reasonable.
     
     v4->v5:
-    No change.
+    Adjust item naming to prevent conflicts with
+    subsequent "CU Geo" boards.
     
     v5->v6:
     No change.
 
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../devicetree/bindings/mips/ingenic/devices.yaml  | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mips/ingenic/devices.yaml
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 967e78c..47ddd88 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1054,6 +1054,8 @@ patternProperties:
-     description: Xilinx
-   "^xunlong,.*":
-     description: Shenzhen Xunlong Software CO.,Limited
-+  "^yna,.*":
-+    description: YSH & ATIL
-   "^yones-toptech,.*":
-     description: Yones Toptech Co., Ltd.
-   "^ysoft,.*":
+diff --git a/Documentation/devicetree/bindings/mips/ingenic/devices.yaml b/Documentation/devicetree/bindings/mips/ingenic/devices.yaml
+new file mode 100644
+index 00000000..6bba181
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mips/ingenic/devices.yaml
+@@ -0,0 +1,35 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mips/ingenic/devices.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Ingenic XBurst based Platforms Device Tree Bindings
++
++maintainers:
++  - Zhou Yanjie <zhouyanjie@zoho.com>
++description: |
++  Devices with a Ingenic XBurst CPU shall have the following properties.
++
++properties:
++  $nodename:
++    const: '/'
++  compatible:
++    oneOf:
++
++      - description: Qi Hardware Ben NanoNote
++        items:
++          - const: qi,lb60
++
++      - description: Game Consoles Worldwide GCW Zero
++        items:
++          - const: gcw,zero
++
++      - description: MIPS Creator CI20
++        items:
++          - const: img,ci20
++
++      - description: YSH & ATIL General Board CU Neo
++        items:
++          - const: yna,cu1000-neo
++...
 -- 
 2.7.4
 
