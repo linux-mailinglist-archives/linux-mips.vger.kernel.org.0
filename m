@@ -2,153 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25574110622
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Dec 2019 21:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE6D111B78
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Dec 2019 23:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727295AbfLCUtK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Dec 2019 15:49:10 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:40551 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727244AbfLCUtK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Dec 2019 15:49:10 -0500
-Received: by mail-pl1-f194.google.com with SMTP id g6so2161217plp.7;
-        Tue, 03 Dec 2019 12:49:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1G+L1iXyg9WsvAhiBU0plOD98ZEEqTeAJKnio8PQGVI=;
-        b=VAn4c43hRYNSW9YkW6dId/qpM9dnxo4p4wAtBaWee3y7TG49LiyZXvkwVZBFFV2ZG+
-         9wYbscEz9tKyiJ+3Ir1QqSAjKkXYERWTucu8usmLXmFvdcJ9PuWFZQhz6IYhXOBqvwsq
-         cfe4qD0Mw5F6jDWComWSKa3tXnCmDlpbBH5wPQ9ne3S4C7/owKORmvfCiOtGxlrguBtM
-         Mn4wyEDpUpOVlijoeQYv+YiMlMTj3oRUD1fmxLXZ5cYekS9bpulDPnjn1nkD1+h1fbJB
-         g3FY8seMYL4r30oxZoeb3GIWqVgBrwf8tCnyQWIBIfwvtZ0yFsIbn5DcVygIYF6F/s/k
-         FTQQ==
-X-Gm-Message-State: APjAAAXHAklSrQyMYm10YoX+omDdL9558g2cHPHwicaCZh0mw/gB2Rzz
-        q2llT/doQK+I9unIMGxBMeCCEedwnqg=
-X-Google-Smtp-Source: APXvYqx4TZrkwIhqDQl9aBJXa/SKofSy+menGC9K2DEaF74w1ikQ3eXm3kKGaRz2rKzU4/MOI4G61A==
-X-Received: by 2002:a17:902:6b8a:: with SMTP id p10mr7129455plk.10.1575406149016;
-        Tue, 03 Dec 2019 12:49:09 -0800 (PST)
-Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id fz12sm3711580pjb.15.2019.12.03.12.49.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2019 12:49:08 -0800 (PST)
-From:   Paul Burton <paulburton@kernel.org>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
-        stable@vger.kernel.org
-Subject: [PATCH] MIPS: Use __copy_{to,from}_user() for emulated FP loads/stores
-Date:   Tue,  3 Dec 2019 12:49:33 -0800
-Message-Id: <20191203204933.1642259-1-paulburton@kernel.org>
-X-Mailer: git-send-email 2.24.0
+        id S1727781AbfLCWOe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Dec 2019 17:14:34 -0500
+Received: from mga01.intel.com ([192.55.52.88]:19309 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727502AbfLCWOe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 3 Dec 2019 17:14:34 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Dec 2019 14:14:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,275,1571727600"; 
+   d="scan'208";a="201159390"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
+  by orsmga007.jf.intel.com with ESMTP; 03 Dec 2019 14:14:33 -0800
+Date:   Tue, 3 Dec 2019 14:14:33 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     James Hogan <jhogan@kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        Christoffer Dall <christoffer.dall@arm.com>
+Subject: Re: [PATCH v3 00/15] KVM: Dynamically size memslot arrays
+Message-ID: <20191203221433.GK19877@linux.intel.com>
+References: <20191024230744.14543-1-sean.j.christopherson@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191024230744.14543-1-sean.j.christopherson@intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Our FPU emulator currently uses __get_user() & __put_user() to perform
-emulated loads & stores. This is problematic because __get_user() &
-__put_user() are only suitable for naturally aligned memory accesses,
-and the address we're accessing is entirely under the control of
-userland.
+On Thu, Oct 24, 2019 at 04:07:29PM -0700, Sean Christopherson wrote:
+> The end goal of this series is to dynamically size the memslot array so
+> that KVM allocates memory based on the number of memslots in use, as
+> opposed to unconditionally allocating memory for the maximum number of
+> memslots.  On x86, each memslot consumes 88 bytes, and so with 2 address
+> spaces of 512 memslots, each VM consumes ~90k bytes for the memslots.
+> E.g. given a VM that uses a total of 30 memslots, dynamic sizing reduces
+> the memory footprint from 90k to ~2.6k bytes.
+> 
+> The changes required to support dynamic sizing are relatively small,
+> e.g. are essentially contained in patches 14/15 and 15/15.  Patches 1-13
+> clean up the memslot code, which has gotten quite crusty, especially
+> __kvm_set_memory_region().  The clean up is likely not strictly necessary
+> to switch to dynamic sizing, but I didn't have a remotely reasonable
+> level of confidence in the correctness of the dynamic sizing without first
+> doing the clean up.
+> 
+> Christoffer, I added your Tested-by to the patches that I was confident
+> would be fully tested based on the desription of what you tested.  Let me
+> know if you disagree with any of 'em.
+> 
+> v3:
+>   - Fix build errors on PPC and MIPS due to missed params during
+>     refactoring [kbuild test robot].
+>   - Rename the helpers for update_memslots() and add comments describing
+>     the new algorithm and how it interacts with searching [Paolo].
+>   - Remove the unnecessary and obnoxious warning regarding memslots being
+>     a flexible array [Paolo].
+>   - Fix typos in the changelog of patch 09/15 [Christoffer].
+>   - Collect tags [Christoffer].
+> 
+> v2:
+>   - Split "Drop kvm_arch_create_memslot()" into three patches to move
+>     minor functional changes to standalone patches [Janosch].
+>   - Rebase to latest kvm/queue (f0574a1cea5b, "KVM: x86: fix ...")
+>   - Collect an Acked-by and a Reviewed-by
 
-This allows userland to cause a kernel panic by simply performing an
-unaligned floating point load or store - the kernel will handle the
-address error exception by attempting to emulate the instruction, and in
-the process it may generate another address error exception itself.
-This time the exception is taken with EPC pointing at the kernels FPU
-emulation code, and we hit a die_if_kernel() in
-emulate_load_store_insn().
-
-Fix this up by using __copy_from_user() instead of __get_user() and
-__copy_to_user() instead of __put_user(). These replacements will handle
-arbitrary alignment without problems.
-
-Signed-off-by: Paul Burton <paulburton@kernel.org>
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Cc: <stable@vger.kernel.org> # v2.6.12+
----
- arch/mips/math-emu/cp1emu.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/arch/mips/math-emu/cp1emu.c b/arch/mips/math-emu/cp1emu.c
-index 710e1f804a54..d2009b4b5209 100644
---- a/arch/mips/math-emu/cp1emu.c
-+++ b/arch/mips/math-emu/cp1emu.c
-@@ -1056,7 +1056,7 @@ static int cop1Emulate(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
- 			*fault_addr = dva;
- 			return SIGBUS;
- 		}
--		if (__get_user(dval, dva)) {
-+		if (__copy_from_user(&dval, dva, sizeof(u64))) {
- 			MIPS_FPU_EMU_INC_STATS(errors);
- 			*fault_addr = dva;
- 			return SIGSEGV;
-@@ -1074,7 +1074,7 @@ static int cop1Emulate(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
- 			*fault_addr = dva;
- 			return SIGBUS;
- 		}
--		if (__put_user(dval, dva)) {
-+		if (__copy_to_user(dva, &dval, sizeof(u64))) {
- 			MIPS_FPU_EMU_INC_STATS(errors);
- 			*fault_addr = dva;
- 			return SIGSEGV;
-@@ -1090,7 +1090,7 @@ static int cop1Emulate(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
- 			*fault_addr = wva;
- 			return SIGBUS;
- 		}
--		if (__get_user(wval, wva)) {
-+		if (__copy_from_user(&wval, wva, sizeof(u32))) {
- 			MIPS_FPU_EMU_INC_STATS(errors);
- 			*fault_addr = wva;
- 			return SIGSEGV;
-@@ -1108,7 +1108,7 @@ static int cop1Emulate(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
- 			*fault_addr = wva;
- 			return SIGBUS;
- 		}
--		if (__put_user(wval, wva)) {
-+		if (__copy_to_user(wva, &wval, sizeof(u32))) {
- 			MIPS_FPU_EMU_INC_STATS(errors);
- 			*fault_addr = wva;
- 			return SIGSEGV;
-@@ -1486,7 +1486,7 @@ static int fpux_emu(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
- 				*fault_addr = va;
- 				return SIGBUS;
- 			}
--			if (__get_user(val, va)) {
-+			if (__copy_from_user(&val, va, sizeof(u32))) {
- 				MIPS_FPU_EMU_INC_STATS(errors);
- 				*fault_addr = va;
- 				return SIGSEGV;
-@@ -1506,7 +1506,7 @@ static int fpux_emu(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
- 				*fault_addr = va;
- 				return SIGBUS;
- 			}
--			if (put_user(val, va)) {
-+			if (__copy_to_user(va, &val, sizeof(u32))) {
- 				MIPS_FPU_EMU_INC_STATS(errors);
- 				*fault_addr = va;
- 				return SIGSEGV;
-@@ -1583,7 +1583,7 @@ static int fpux_emu(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
- 				*fault_addr = va;
- 				return SIGBUS;
- 			}
--			if (__get_user(val, va)) {
-+			if (__copy_from_user(&val, va, sizeof(u64))) {
- 				MIPS_FPU_EMU_INC_STATS(errors);
- 				*fault_addr = va;
- 				return SIGSEGV;
-@@ -1602,7 +1602,7 @@ static int fpux_emu(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
- 				*fault_addr = va;
- 				return SIGBUS;
- 			}
--			if (__put_user(val, va)) {
-+			if (__copy_to_user(va, &val, sizeof(u64))) {
- 				MIPS_FPU_EMU_INC_STATS(errors);
- 				*fault_addr = va;
- 				return SIGSEGV;
--- 
-2.24.0
-
+Paolo, do you want me to rebase this to the latest kvm/queue?
