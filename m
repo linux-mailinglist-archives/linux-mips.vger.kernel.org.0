@@ -2,103 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 407E9112EB3
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2019 16:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D66112FCB
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2019 17:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728516AbfLDPkA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Dec 2019 10:40:00 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:43878 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728465AbfLDPj6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Dec 2019 10:39:58 -0500
-Received: by mail-pj1-f65.google.com with SMTP id g4so3130878pjs.10;
-        Wed, 04 Dec 2019 07:39:58 -0800 (PST)
+        id S1728378AbfLDQQq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Dec 2019 11:16:46 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:38647 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727912AbfLDQQq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Dec 2019 11:16:46 -0500
+Received: by mail-pj1-f68.google.com with SMTP id l4so20659pjt.5;
+        Wed, 04 Dec 2019 08:16:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pqU4igCndeG4UoCDSucNu4GwL3x2y+vfWi/Ebs1wzZc=;
+        b=J6wW9rQZNctPpcpaRobDFMExB93/ZEkzhTam2T23ewBpNq8vpq3su7cM3xksiLZRNj
+         VWPwta8xYcL1/FVMAdHrrQqm0c6LIyIsxgxue6Nal0v0DU7ls9RPDkIGRGiUemkCZKbz
+         42pJxBUytOxLa7bu52MpYJG4PcBntgRTHizCN1Yh/q1pnqXc3Uqc2I+E/MoFiC7fxL5k
+         wFc3uc1nXh85UFVB2mLGjIjtD49oKFf/fDu/OREA03+FCqWDtXvfnkLlcT93j4BX7+rC
+         hAV9eg9itNtdgLH1AOehHAfFNPjXTPeR9v8kLgmX3SQ0aTeAkM/nMKIeKGQ8GydaR7cm
+         lu5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=j0coACmS6cX4bpqEIAC6FvUjz2tQ6QO1d04l0/4uREE=;
-        b=lsvY4NBlwKoCDeXexA6iYMQuVyI8QL3dR5wb5XfIcZ6iT8/3F3Jhp7PHA9+e+1T1HB
-         sxNCk09kKv0v/wESWOiW0cWzSe/LrJ39i1EIijj0KHoBfDyIaSFu21h1IJn0xpQh/LFe
-         YbE7NVwRLwtf13wV37Q2rA1QN+ZmJPgBb6iGtOVKCxWtpuRXauYmxK6CVFBcyiCIFYcZ
-         swSgicuzn71hPEZksrEIZYlVK4McHiHKmXi9cePt6/wpjYkcWB1Q3lf1oiZgD3hNyHpu
-         q9JAmR0b/Anbt8liGTZSWOEMM6VH5yqh+uiXiD3EsYbXb5T0D4ghVNNtbr521PVZyqEa
-         cdvQ==
-X-Gm-Message-State: APjAAAVbVzkvA/7gW3r9GFH8j2aKwaj9h05f0zfHmESgleq3TIWHI9jL
-        PkMruGTLovbeosp4f60UDfgye6nziwQ=
-X-Google-Smtp-Source: APXvYqwRBUMgY8ItWArwVSMxfB0K+ay+Tb4jg30YdZl3x5bC9Mza98iPkCYSeYJjeRVjeVZUkJBwew==
-X-Received: by 2002:a17:90a:778a:: with SMTP id v10mr2140503pjk.26.1575473997542;
-        Wed, 04 Dec 2019 07:39:57 -0800 (PST)
-Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id s27sm8748361pfd.88.2019.12.04.07.39.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2019 07:39:56 -0800 (PST)
-Date:   Wed, 4 Dec 2019 07:40:48 -0800
-From:   Paul Burton <paulburton@kernel.org>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: Use __copy_{to,from}_user() for emulated FP
- loads/stores
-Message-ID: <20191204154048.eotzglp4rdlx4yzl@lantea.localdomain>
-References: <20191203204933.1642259-1-paulburton@kernel.org>
- <f5e09155580d417e9dcd07b1c20786ed@AcuMS.aculab.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pqU4igCndeG4UoCDSucNu4GwL3x2y+vfWi/Ebs1wzZc=;
+        b=Q+QHix0XoJSnVn8FahV+Jq82pMk0i1pRPv8+0rHqG6Ow5vCqFlCEBzUvx+oeAMyoef
+         bUa+cvPxga0d04543WrXXh5HAZM9IcuocNIANKooxc/hpIQPnr1xIHfL1cDWTY+l5I5o
+         hWlE0heWCUYoLMTO5L1ZJeqxqeen4feoARcx1gTEAC+1BQbmkF3DQTY6cLF0Pap3SOOT
+         bhzcCrGiUAhzU0VG7d+k8mhtCjwaA8z4BzPphC9uKJpWKX/FAWA7/TDSW4nY+w2/jNp+
+         Da3hB6e9XvlQZf6HuieZiWTwQ/ItnO0idb0yhY4WIK9NVG3A7dgWuar6ztODG0dpxyXe
+         Yq2Q==
+X-Gm-Message-State: APjAAAVMa6toSII94401IJUWWcoQBub29ptCtHGElbGrUc+w7h9s3Pzq
+        kojSSVuizCpR9s/y+DKAbVRsgnjx
+X-Google-Smtp-Source: APXvYqwdytT3wxqOWmWAUSezJYS9o3F9w3oCV/vG1Nqu53f+3nOnX41jUHMdU6TBi2uG6y1+LpWSnw==
+X-Received: by 2002:a17:90b:3011:: with SMTP id hg17mr4116854pjb.90.1575476205426;
+        Wed, 04 Dec 2019 08:16:45 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x186sm8346024pfx.105.2019.12.04.08.16.42
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 04 Dec 2019 08:16:43 -0800 (PST)
+Date:   Wed, 4 Dec 2019 08:16:41 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Andre Przywara <andre.przywara@arm.com>
+Subject: Re: [PATCH v7 16/25] arm: Add support for generic vDSO (causing
+ crash)
+Message-ID: <20191204161641.GA28130@roeck-us.net>
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
+ <20190621095252.32307-17-vincenzo.frascino@arm.com>
+ <20191204135159.GA7210@roeck-us.net>
+ <6cdf4734-4065-09c1-8623-1bf523b38c1b@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f5e09155580d417e9dcd07b1c20786ed@AcuMS.aculab.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <6cdf4734-4065-09c1-8623-1bf523b38c1b@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi David,
-
-On Wed, Dec 04, 2019 at 11:14:08AM +0000, David Laight wrote:
-> From: Paul Burton
-> > Sent: 03 December 2019 20:50
-> > Our FPU emulator currently uses __get_user() & __put_user() to perform
-> > emulated loads & stores. This is problematic because __get_user() &
-> > __put_user() are only suitable for naturally aligned memory accesses,
-> > and the address we're accessing is entirely under the control of
-> > userland.
+On Wed, Dec 04, 2019 at 01:58:25PM +0000, Vincenzo Frascino wrote:
+> Hi Guenter,
+> 
+> On 12/4/19 1:51 PM, Guenter Roeck wrote:
+> > On Fri, Jun 21, 2019 at 10:52:43AM +0100, Vincenzo Frascino wrote:
+> >> The arm vDSO library requires some adaptations to use to take advantage
+> >> of the newly introduced generic vDSO library.
+> >>
+> >> Introduce the following changes:
+> >>  - Modification vdso.c to be compliant with the common vdso datapage
+> >>  - Use of lib/vdso for gettimeofday
+> >>  - Implementation of elf note
+> >>
+> >> Cc: Russell King <linux@armlinux.org.uk>
+> >> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 > > 
-> > This allows userland to cause a kernel panic by simply performing an
-> > unaligned floating point load or store - the kernel will handle the
-> > address error exception by attempting to emulate the instruction, and in
-> > the process it may generate another address error exception itself.
-> > This time the exception is taken with EPC pointing at the kernels FPU
-> > emulation code, and we hit a die_if_kernel() in
-> > emulate_load_store_insn().
+> > This patch causes a crash with qemu's mcimx6ul-evk emulation while running
+> > imx_v6_v7_defconfig.
+> > 
 > 
-> Won't this be true of almost all code that uses get_user() and put_user()
-> (with or without the leading __).
-
-Only if the address being accessed is under the control of userland to
-the extent that it can create an unaligned address. You're right that
-may be more widespread though; it needs checking...
-
-We used to have separate get_user_unaligned() & put_user_unaligned()
-which would suggest that it's expected that get_user() & put_user()
-require their accesses be aligned, but they were removed by commit
-3170d8d226c2 ("kill {__,}{get,put}_user_unaligned()") in v4.13.
-
-But perhaps we should just take the second AdEL exception & recover via
-the fixups table. We definitely don't right now... Needs further
-investigation...
-
-> > Fix this up by using __copy_from_user() instead of __get_user() and
-> > __copy_to_user() instead of __put_user(). These replacements will handle
-> > arbitrary alignment without problems.
+> Thank you for reporting this. Could you please provide some details on how I can
+> reproduce the scenario you are describing?
 > 
-> They'll also kill performance.....
+- Build imx_v6_v7_defconfig
+- Get root file system or initrd, for example from
+  https://github.com/groeck/linux-build-test/tree/master/rootfs/arm
+- Run image. Example, with initrd:
+	qemu-system-arm -M mcimx6ul-evk -kernel arch/arm/boot/zImage \
+		-no-reboot -initrd rootfs-armv7a.cpio \
+		-m 256 -display none -serial null \
+		--append 'rdinit=/sbin/init earlycon=ec_imx6q,mmio,0x21e8000,115200n8 console=ttymxc1,115200'
+		-dtb arch/arm/boot/dts/imx6ul-14x14-evk.dtb \
+		-nographic -monitor null -serial stdio
 
-Sure they're heavier, but if you're hitting the FPU emulator you're
-already slow - trapping to the kernel for instruction emulation is
-hardly a hot path. If you care about performance at all then this is
-already a code path to avoid at all costs.
+qemu has to be v3.1 or later to support the machine.
 
-Thanks,
-    Paul
+Hope this helps,
+Guenter
