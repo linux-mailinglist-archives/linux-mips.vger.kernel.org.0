@@ -2,101 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F979112FD7
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2019 17:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 460E8113084
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2019 18:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbfLDQS4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Dec 2019 11:18:56 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:58346 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727867AbfLDQS4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Dec 2019 11:18:56 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-51-1dN_2ZUoNVmFbAyoH-JP6g-1; Wed, 04 Dec 2019 16:18:52 +0000
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Wed, 4 Dec 2019 16:18:52 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Wed, 4 Dec 2019 16:18:52 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Paul Burton' <paulburton@kernel.org>
-CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH] MIPS: Use __copy_{to,from}_user() for emulated FP
- loads/stores
-Thread-Topic: [PATCH] MIPS: Use __copy_{to,from}_user() for emulated FP
- loads/stores
-Thread-Index: AQHVqhshCXVq7CTTBEufX7LGTbPWHKep0u6ggABLQQCAAAO1QA==
-Date:   Wed, 4 Dec 2019 16:18:52 +0000
-Message-ID: <e220ba9a19da41abba599b5873afa494@AcuMS.aculab.com>
-References: <20191203204933.1642259-1-paulburton@kernel.org>
- <f5e09155580d417e9dcd07b1c20786ed@AcuMS.aculab.com>
- <20191204154048.eotzglp4rdlx4yzl@lantea.localdomain>
-In-Reply-To: <20191204154048.eotzglp4rdlx4yzl@lantea.localdomain>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1728735AbfLDRNA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Dec 2019 12:13:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:59112 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726934AbfLDRNA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 4 Dec 2019 12:13:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8FB7231B;
+        Wed,  4 Dec 2019 09:12:58 -0800 (PST)
+Received: from [10.37.12.197] (unknown [10.37.12.197])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B509D3F52E;
+        Wed,  4 Dec 2019 09:12:54 -0800 (PST)
+Subject: Re: [PATCH v7 16/25] arm: Add support for generic vDSO (causing
+ crash)
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Andre Przywara <andre.przywara@arm.com>
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
+ <20190621095252.32307-17-vincenzo.frascino@arm.com>
+ <20191204135159.GA7210@roeck-us.net>
+ <6cdf4734-4065-09c1-8623-1bf523b38c1b@arm.com>
+ <20191204161641.GA28130@roeck-us.net>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <e35a7f71-2477-fa52-01e4-301199e99c2e@arm.com>
+Date:   Wed, 4 Dec 2019 17:15:26 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-MC-Unique: 1dN_2ZUoNVmFbAyoH-JP6g-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+In-Reply-To: <20191204161641.GA28130@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-RnJvbTogUGF1bCBCdXJ0b24NCj4gU2VudDogMDQgRGVjZW1iZXIgMjAxOSAxNTo0MQ0KPiBPbiBX
-ZWQsIERlYyAwNCwgMjAxOSBhdCAxMToxNDowOEFNICswMDAwLCBEYXZpZCBMYWlnaHQgd3JvdGU6
-DQo+ID4gRnJvbTogUGF1bCBCdXJ0b24NCj4gPiA+IFNlbnQ6IDAzIERlY2VtYmVyIDIwMTkgMjA6
-NTANCj4gPiA+IE91ciBGUFUgZW11bGF0b3IgY3VycmVudGx5IHVzZXMgX19nZXRfdXNlcigpICYg
-X19wdXRfdXNlcigpIHRvIHBlcmZvcm0NCj4gPiA+IGVtdWxhdGVkIGxvYWRzICYgc3RvcmVzLiBU
-aGlzIGlzIHByb2JsZW1hdGljIGJlY2F1c2UgX19nZXRfdXNlcigpICYNCj4gPiA+IF9fcHV0X3Vz
-ZXIoKSBhcmUgb25seSBzdWl0YWJsZSBmb3IgbmF0dXJhbGx5IGFsaWduZWQgbWVtb3J5IGFjY2Vz
-c2VzLA0KPiA+ID4gYW5kIHRoZSBhZGRyZXNzIHdlJ3JlIGFjY2Vzc2luZyBpcyBlbnRpcmVseSB1
-bmRlciB0aGUgY29udHJvbCBvZg0KPiA+ID4gdXNlcmxhbmQuDQo+ID4gPg0KPiA+ID4gVGhpcyBh
-bGxvd3MgdXNlcmxhbmQgdG8gY2F1c2UgYSBrZXJuZWwgcGFuaWMgYnkgc2ltcGx5IHBlcmZvcm1p
-bmcgYW4NCj4gPiA+IHVuYWxpZ25lZCBmbG9hdGluZyBwb2ludCBsb2FkIG9yIHN0b3JlIC0gdGhl
-IGtlcm5lbCB3aWxsIGhhbmRsZSB0aGUNCj4gPiA+IGFkZHJlc3MgZXJyb3IgZXhjZXB0aW9uIGJ5
-IGF0dGVtcHRpbmcgdG8gZW11bGF0ZSB0aGUgaW5zdHJ1Y3Rpb24sIGFuZCBpbg0KPiA+ID4gdGhl
-IHByb2Nlc3MgaXQgbWF5IGdlbmVyYXRlIGFub3RoZXIgYWRkcmVzcyBlcnJvciBleGNlcHRpb24g
-aXRzZWxmLg0KPiA+ID4gVGhpcyB0aW1lIHRoZSBleGNlcHRpb24gaXMgdGFrZW4gd2l0aCBFUEMg
-cG9pbnRpbmcgYXQgdGhlIGtlcm5lbHMgRlBVDQo+ID4gPiBlbXVsYXRpb24gY29kZSwgYW5kIHdl
-IGhpdCBhIGRpZV9pZl9rZXJuZWwoKSBpbg0KPiA+ID4gZW11bGF0ZV9sb2FkX3N0b3JlX2luc24o
-KS4NCj4gPg0KPiA+IFdvbid0IHRoaXMgYmUgdHJ1ZSBvZiBhbG1vc3QgYWxsIGNvZGUgdGhhdCB1
-c2VzIGdldF91c2VyKCkgYW5kIHB1dF91c2VyKCkNCj4gPiAod2l0aCBvciB3aXRob3V0IHRoZSBs
-ZWFkaW5nIF9fKS4NCj4gDQo+IE9ubHkgaWYgdGhlIGFkZHJlc3MgYmVpbmcgYWNjZXNzZWQgaXMg
-dW5kZXIgdGhlIGNvbnRyb2wgb2YgdXNlcmxhbmQgdG8NCj4gdGhlIGV4dGVudCB0aGF0IGl0IGNh
-biBjcmVhdGUgYW4gdW5hbGlnbmVkIGFkZHJlc3MuIFlvdSdyZSByaWdodCB0aGF0DQo+IG1heSBi
-ZSBtb3JlIHdpZGVzcHJlYWQgdGhvdWdoOyBpdCBuZWVkcyBjaGVja2luZy4uLg0KDQpMb29rIGF0
-IChmb3IgZXhhbXBsZSkgdGhlIHJlY3ZtbXNnKCkgY29kZSBvciBlcG9sbF93YWl0KCkuDQoNCkkn
-ZCBleHBlY3QgYWxsIGdldC9wdXRfdXNlcigpIHRvIGJlIHBvdGVudGlhbGx5IHVuYWxpZ25lZC4N
-ClRoZSB1c2VyIG1pZ2h0IGhhdmUgdG8gdHJ5IGhhcmQgKHRvIGF2b2lkIGFsbCB0aGUgZmF1bHRz
-IGluIHVzZXJzcGFjZSkNCmJ1dCBhbnkgYnVmZmVyIHBhc3NlZCB0byB0aGUga2VybmVsIGNhbiBw
-b3RlbnRpYWxseSBiZSBtaXNhbGlnbmVkIGFuZA0Kbm90aGluZyAoSSd2ZSBzZWVuKSBpcyBkb2N1
-bWVudGVkIGFzIHJldHVybmluZyBFRkFVTFQvU0lHU0VHVg0KZm9yIHN1Y2ggdW5hbGlnbmVkIGJ1
-ZmZlcnMuDQoNCkluICdkYXlzIG9mIHlvcmUuLi4nIFNQQVJDIHN5c3RlbXMgd291bGQgaGF2ZSBk
-b25lIGEgU0lHU0VHViBmb3INCmFueSBtaXNhbGlnbmVkIGFjY2VzcyBpbiB1c2Vyc3BhY2UuDQpO
-b3Qgc3VyZSB3aHkgTGludXggZXZlciB0aG91Z2h0IGl0IHdhcyBuZWNlc3NhcnkgdG8gJ2ZpeHVw
-JyBzdWNoIGZhdWx0cy4NCk9UT0ggaXQgaXMgdG9vIGxhdGUgdG8gY2hhbmdlIHRoYXQgYmVoYXZp
-b3VyIChhdCBsZWFzdCBmb3IgZXhpc3RpbmcgcG9ydHMpLg0KDQo+IFdlIHVzZWQgdG8gaGF2ZSBz
-ZXBhcmF0ZSBnZXRfdXNlcl91bmFsaWduZWQoKSAmIHB1dF91c2VyX3VuYWxpZ25lZCgpDQo+IHdo
-aWNoIHdvdWxkIHN1Z2dlc3QgdGhhdCBpdCdzIGV4cGVjdGVkIHRoYXQgZ2V0X3VzZXIoKSAmIHB1
-dF91c2VyKCkNCj4gcmVxdWlyZSB0aGVpciBhY2Nlc3NlcyBiZSBhbGlnbmVkLCBidXQgdGhleSB3
-ZXJlIHJlbW92ZWQgYnkgY29tbWl0DQo+IDMxNzBkOGQyMjZjMiAoImtpbGwge19fLH17Z2V0LHB1
-dH1fdXNlcl91bmFsaWduZWQoKSIpIGluIHY0LjEzLg0KPiANCj4gQnV0IHBlcmhhcHMgd2Ugc2hv
-dWxkIGp1c3QgdGFrZSB0aGUgc2Vjb25kIEFkRUwgZXhjZXB0aW9uICYgcmVjb3ZlciB2aWENCj4g
-dGhlIGZpeHVwcyB0YWJsZS4gV2UgZGVmaW5pdGVseSBkb24ndCByaWdodCBub3cuLi4gTmVlZHMg
-ZnVydGhlcg0KPiBpbnZlc3RpZ2F0aW9uLi4uDQoNCmdldC9wdXRfdXNlciBjYW4gZmF1bHQgYmVj
-YXVzZSB0aGUgdXNlciBwYWdlIGlzIGFic2VudCAoZXRjKS4NClNvIHRoZXJlIG11c3QgYmUgY29k
-ZSB0byAnZXhwZWN0JyBhIGZhdWx0IG9uIHRob3NlIGluc3RydWN0aW9ucy4NCg0KCURhdmlkDQoN
-Ci0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJt
-LCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChX
-YWxlcykNCg==
+Hi Guenter,
+
+On 12/4/19 4:16 PM, Guenter Roeck wrote:
+> On Wed, Dec 04, 2019 at 01:58:25PM +0000, Vincenzo Frascino wrote:
+>> Hi Guenter,
+>>
+>> On 12/4/19 1:51 PM, Guenter Roeck wrote:
+>>> On Fri, Jun 21, 2019 at 10:52:43AM +0100, Vincenzo Frascino wrote:
+>>>> The arm vDSO library requires some adaptations to use to take advantage
+>>>> of the newly introduced generic vDSO library.
+>>>>
+>>>> Introduce the following changes:
+>>>>  - Modification vdso.c to be compliant with the common vdso datapage
+>>>>  - Use of lib/vdso for gettimeofday
+>>>>  - Implementation of elf note
+>>>>
+>>>> Cc: Russell King <linux@armlinux.org.uk>
+>>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>>>
+>>> This patch causes a crash with qemu's mcimx6ul-evk emulation while running
+>>> imx_v6_v7_defconfig.
+>>>
+>>
+>> Thank you for reporting this. Could you please provide some details on how I can
+>> reproduce the scenario you are describing?
+>>
+> - Build imx_v6_v7_defconfig
+> - Get root file system or initrd, for example from
+>   https://github.com/groeck/linux-build-test/tree/master/rootfs/arm
+> - Run image. Example, with initrd:
+> 	qemu-system-arm -M mcimx6ul-evk -kernel arch/arm/boot/zImage \
+> 		-no-reboot -initrd rootfs-armv7a.cpio \
+> 		-m 256 -display none -serial null \
+> 		--append 'rdinit=/sbin/init earlycon=ec_imx6q,mmio,0x21e8000,115200n8 console=ttymxc1,115200'
+> 		-dtb arch/arm/boot/dts/imx6ul-14x14-evk.dtb \
+> 		-nographic -monitor null -serial stdio
+> 
+> qemu has to be v3.1 or later to support the machine.
+> 
+
+Thanks for this. Could you please try the patch below the scissors? Seems fixing
+the issue for me.
+
+> Hope this helps,
+> Guenter
+> 
+
+-- 
+Regards,
+Vincenzo
+
+--->8---
+
+Author: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Date:   Wed Dec 4 16:58:55 2019 +0000
+
+    arm: Fix __arch_get_hw_counter() access to CNTVCT
+
+    __arch_get_hw_counter() should check clock_mode to see if it can access
+    CNTVCT. With the conversion to unified vDSO this check has been left out.
+
+    This causes on imx v6 and v7 (imx_v6_v7_defconfig) and other platforms to
+    hang at boot during the execution of the init process as per below:
+
+    [   19.976852] Run /sbin/init as init process
+    [   20.044931] Kernel panic - not syncing: Attempted to kill init!
+    exitcode=0x00000004
+
+    Fix the problem verifying that clock_mode is set coherently before
+    accessing CNTVCT.
+
+    Cc: Russell King <linux@armlinux.org.uk>
+    Reported-by: Guenter Roeck <linux@roeck-us.net>
+    Investigated-by: Arnd Bergmann <arnd@arndb.de>
+    Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+
+diff --git a/arch/arm/include/asm/vdso/gettimeofday.h
+b/arch/arm/include/asm/vdso/gettimeofday.h
+index 5b879ae7afc1..0ad2429c324f 100644
+--- a/arch/arm/include/asm/vdso/gettimeofday.h
++++ b/arch/arm/include/asm/vdso/gettimeofday.h
+@@ -75,6 +75,9 @@ static __always_inline u64 __arch_get_hw_counter(int clock_mode)
+ #ifdef CONFIG_ARM_ARCH_TIMER
+        u64 cycle_now;
+
++       if (!clock_mode)
++               return -EINVAL;
++
+        isb();
+        cycle_now = read_sysreg(CNTVCT);
+
 
