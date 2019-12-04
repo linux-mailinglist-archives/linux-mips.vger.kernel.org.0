@@ -2,95 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE6D111B78
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Dec 2019 23:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CF61120EC
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2019 02:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727781AbfLCWOe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Dec 2019 17:14:34 -0500
-Received: from mga01.intel.com ([192.55.52.88]:19309 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727502AbfLCWOe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 3 Dec 2019 17:14:34 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Dec 2019 14:14:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,275,1571727600"; 
-   d="scan'208";a="201159390"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
-  by orsmga007.jf.intel.com with ESMTP; 03 Dec 2019 14:14:33 -0800
-Date:   Tue, 3 Dec 2019 14:14:33 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     James Hogan <jhogan@kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        Christoffer Dall <christoffer.dall@arm.com>
-Subject: Re: [PATCH v3 00/15] KVM: Dynamically size memslot arrays
-Message-ID: <20191203221433.GK19877@linux.intel.com>
-References: <20191024230744.14543-1-sean.j.christopherson@intel.com>
+        id S1726079AbfLDBL1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Dec 2019 20:11:27 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:47860 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726008AbfLDBL0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 3 Dec 2019 20:11:26 -0500
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 327F0256F3BED4D30C70;
+        Wed,  4 Dec 2019 09:11:24 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
+ 14.3.439.0; Wed, 4 Dec 2019 09:11:14 +0800
+From:   Mao Wenan <maowenan@huawei.com>
+To:     <jiaxun.yang@flygoat.com>, <ralf@linux-mips.org>,
+        <paulburton@kernel.org>, <jhogan@kernel.org>,
+        <gregkh@linuxfoundation.org>, <tglx@linutronix.de>,
+        <maowenan@huawei.com>
+CC:     <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH -next] MIPS: Loongson2ef: drop pointless static qualifier in loongson_suspend_enter()
+Date:   Wed, 4 Dec 2019 09:08:51 +0800
+Message-ID: <20191204010851.160284-1-maowenan@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191024230744.14543-1-sean.j.christopherson@intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Oct 24, 2019 at 04:07:29PM -0700, Sean Christopherson wrote:
-> The end goal of this series is to dynamically size the memslot array so
-> that KVM allocates memory based on the number of memslots in use, as
-> opposed to unconditionally allocating memory for the maximum number of
-> memslots.  On x86, each memslot consumes 88 bytes, and so with 2 address
-> spaces of 512 memslots, each VM consumes ~90k bytes for the memslots.
-> E.g. given a VM that uses a total of 30 memslots, dynamic sizing reduces
-> the memory footprint from 90k to ~2.6k bytes.
-> 
-> The changes required to support dynamic sizing are relatively small,
-> e.g. are essentially contained in patches 14/15 and 15/15.  Patches 1-13
-> clean up the memslot code, which has gotten quite crusty, especially
-> __kvm_set_memory_region().  The clean up is likely not strictly necessary
-> to switch to dynamic sizing, but I didn't have a remotely reasonable
-> level of confidence in the correctness of the dynamic sizing without first
-> doing the clean up.
-> 
-> Christoffer, I added your Tested-by to the patches that I was confident
-> would be fully tested based on the desription of what you tested.  Let me
-> know if you disagree with any of 'em.
-> 
-> v3:
->   - Fix build errors on PPC and MIPS due to missed params during
->     refactoring [kbuild test robot].
->   - Rename the helpers for update_memslots() and add comments describing
->     the new algorithm and how it interacts with searching [Paolo].
->   - Remove the unnecessary and obnoxious warning regarding memslots being
->     a flexible array [Paolo].
->   - Fix typos in the changelog of patch 09/15 [Christoffer].
->   - Collect tags [Christoffer].
-> 
-> v2:
->   - Split "Drop kvm_arch_create_memslot()" into three patches to move
->     minor functional changes to standalone patches [Janosch].
->   - Rebase to latest kvm/queue (f0574a1cea5b, "KVM: x86: fix ...")
->   - Collect an Acked-by and a Reviewed-by
+There is no need to have the 'T *v' variable static
+since new value always be assigned before use it.
 
-Paolo, do you want me to rebase this to the latest kvm/queue?
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Mao Wenan <maowenan@huawei.com>
+---
+ arch/mips/loongson2ef/common/pm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/mips/loongson2ef/common/pm.c b/arch/mips/loongson2ef/common/pm.c
+index 11f4cfd581fb..bcb7ae9777cf 100644
+--- a/arch/mips/loongson2ef/common/pm.c
++++ b/arch/mips/loongson2ef/common/pm.c
+@@ -91,7 +91,7 @@ static inline void stop_perf_counters(void)
+ 
+ static void loongson_suspend_enter(void)
+ {
+-	static unsigned int cached_cpu_freq;
++	unsigned int cached_cpu_freq;
+ 
+ 	/* setup wakeup events via enabling the IRQs */
+ 	setup_wakeup_events();
+-- 
+2.20.1
+
