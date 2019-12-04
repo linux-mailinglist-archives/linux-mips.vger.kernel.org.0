@@ -2,64 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CF61120EC
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2019 02:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6FF1129EA
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2019 12:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726079AbfLDBL1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Dec 2019 20:11:27 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:47860 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726008AbfLDBL0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 3 Dec 2019 20:11:26 -0500
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 327F0256F3BED4D30C70;
-        Wed,  4 Dec 2019 09:11:24 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
- 14.3.439.0; Wed, 4 Dec 2019 09:11:14 +0800
-From:   Mao Wenan <maowenan@huawei.com>
-To:     <jiaxun.yang@flygoat.com>, <ralf@linux-mips.org>,
-        <paulburton@kernel.org>, <jhogan@kernel.org>,
-        <gregkh@linuxfoundation.org>, <tglx@linutronix.de>,
-        <maowenan@huawei.com>
-CC:     <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH -next] MIPS: Loongson2ef: drop pointless static qualifier in loongson_suspend_enter()
-Date:   Wed, 4 Dec 2019 09:08:51 +0800
-Message-ID: <20191204010851.160284-1-maowenan@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S1727469AbfLDLOO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 4 Dec 2019 06:14:14 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:51524 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727466AbfLDLON (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Dec 2019 06:14:13 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-171-xQ-iqH-0NqakegqgDHauPg-1; Wed, 04 Dec 2019 11:14:09 +0000
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Wed, 4 Dec 2019 11:14:08 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Wed, 4 Dec 2019 11:14:08 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Paul Burton' <paulburton@kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] MIPS: Use __copy_{to,from}_user() for emulated FP
+ loads/stores
+Thread-Topic: [PATCH] MIPS: Use __copy_{to,from}_user() for emulated FP
+ loads/stores
+Thread-Index: AQHVqhshCXVq7CTTBEufX7LGTbPWHKep0u6g
+Date:   Wed, 4 Dec 2019 11:14:08 +0000
+Message-ID: <f5e09155580d417e9dcd07b1c20786ed@AcuMS.aculab.com>
+References: <20191203204933.1642259-1-paulburton@kernel.org>
+In-Reply-To: <20191203204933.1642259-1-paulburton@kernel.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+X-MC-Unique: xQ-iqH-0NqakegqgDHauPg-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-There is no need to have the 'T *v' variable static
-since new value always be assigned before use it.
+From: Paul Burton
+> Sent: 03 December 2019 20:50
+> Our FPU emulator currently uses __get_user() & __put_user() to perform
+> emulated loads & stores. This is problematic because __get_user() &
+> __put_user() are only suitable for naturally aligned memory accesses,
+> and the address we're accessing is entirely under the control of
+> userland.
+> 
+> This allows userland to cause a kernel panic by simply performing an
+> unaligned floating point load or store - the kernel will handle the
+> address error exception by attempting to emulate the instruction, and in
+> the process it may generate another address error exception itself.
+> This time the exception is taken with EPC pointing at the kernels FPU
+> emulation code, and we hit a die_if_kernel() in
+> emulate_load_store_insn().
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Mao Wenan <maowenan@huawei.com>
----
- arch/mips/loongson2ef/common/pm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Won't this be true of almost all code that uses get_user() and put_user()
+(with or without the leading __).
 
-diff --git a/arch/mips/loongson2ef/common/pm.c b/arch/mips/loongson2ef/common/pm.c
-index 11f4cfd581fb..bcb7ae9777cf 100644
---- a/arch/mips/loongson2ef/common/pm.c
-+++ b/arch/mips/loongson2ef/common/pm.c
-@@ -91,7 +91,7 @@ static inline void stop_perf_counters(void)
- 
- static void loongson_suspend_enter(void)
- {
--	static unsigned int cached_cpu_freq;
-+	unsigned int cached_cpu_freq;
- 
- 	/* setup wakeup events via enabling the IRQs */
- 	setup_wakeup_events();
--- 
-2.20.1
+> Fix this up by using __copy_from_user() instead of __get_user() and
+> __copy_to_user() instead of __put_user(). These replacements will handle
+> arbitrary alignment without problems.
+
+They'll also kill performance.....
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
