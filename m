@@ -2,122 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D66112FCB
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2019 17:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F979112FD7
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2019 17:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728378AbfLDQQq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Dec 2019 11:16:46 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:38647 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727912AbfLDQQq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Dec 2019 11:16:46 -0500
-Received: by mail-pj1-f68.google.com with SMTP id l4so20659pjt.5;
-        Wed, 04 Dec 2019 08:16:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=pqU4igCndeG4UoCDSucNu4GwL3x2y+vfWi/Ebs1wzZc=;
-        b=J6wW9rQZNctPpcpaRobDFMExB93/ZEkzhTam2T23ewBpNq8vpq3su7cM3xksiLZRNj
-         VWPwta8xYcL1/FVMAdHrrQqm0c6LIyIsxgxue6Nal0v0DU7ls9RPDkIGRGiUemkCZKbz
-         42pJxBUytOxLa7bu52MpYJG4PcBntgRTHizCN1Yh/q1pnqXc3Uqc2I+E/MoFiC7fxL5k
-         wFc3uc1nXh85UFVB2mLGjIjtD49oKFf/fDu/OREA03+FCqWDtXvfnkLlcT93j4BX7+rC
-         hAV9eg9itNtdgLH1AOehHAfFNPjXTPeR9v8kLgmX3SQ0aTeAkM/nMKIeKGQ8GydaR7cm
-         lu5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pqU4igCndeG4UoCDSucNu4GwL3x2y+vfWi/Ebs1wzZc=;
-        b=Q+QHix0XoJSnVn8FahV+Jq82pMk0i1pRPv8+0rHqG6Ow5vCqFlCEBzUvx+oeAMyoef
-         bUa+cvPxga0d04543WrXXh5HAZM9IcuocNIANKooxc/hpIQPnr1xIHfL1cDWTY+l5I5o
-         hWlE0heWCUYoLMTO5L1ZJeqxqeen4feoARcx1gTEAC+1BQbmkF3DQTY6cLF0Pap3SOOT
-         bhzcCrGiUAhzU0VG7d+k8mhtCjwaA8z4BzPphC9uKJpWKX/FAWA7/TDSW4nY+w2/jNp+
-         Da3hB6e9XvlQZf6HuieZiWTwQ/ItnO0idb0yhY4WIK9NVG3A7dgWuar6ztODG0dpxyXe
-         Yq2Q==
-X-Gm-Message-State: APjAAAVMa6toSII94401IJUWWcoQBub29ptCtHGElbGrUc+w7h9s3Pzq
-        kojSSVuizCpR9s/y+DKAbVRsgnjx
-X-Google-Smtp-Source: APXvYqwdytT3wxqOWmWAUSezJYS9o3F9w3oCV/vG1Nqu53f+3nOnX41jUHMdU6TBi2uG6y1+LpWSnw==
-X-Received: by 2002:a17:90b:3011:: with SMTP id hg17mr4116854pjb.90.1575476205426;
-        Wed, 04 Dec 2019 08:16:45 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x186sm8346024pfx.105.2019.12.04.08.16.42
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 04 Dec 2019 08:16:43 -0800 (PST)
-Date:   Wed, 4 Dec 2019 08:16:41 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Huw Davies <huw@codeweavers.com>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Andre Przywara <andre.przywara@arm.com>
-Subject: Re: [PATCH v7 16/25] arm: Add support for generic vDSO (causing
- crash)
-Message-ID: <20191204161641.GA28130@roeck-us.net>
-References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
- <20190621095252.32307-17-vincenzo.frascino@arm.com>
- <20191204135159.GA7210@roeck-us.net>
- <6cdf4734-4065-09c1-8623-1bf523b38c1b@arm.com>
+        id S1727008AbfLDQS4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Dec 2019 11:18:56 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:58346 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727867AbfLDQS4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Dec 2019 11:18:56 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-51-1dN_2ZUoNVmFbAyoH-JP6g-1; Wed, 04 Dec 2019 16:18:52 +0000
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Wed, 4 Dec 2019 16:18:52 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Wed, 4 Dec 2019 16:18:52 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Paul Burton' <paulburton@kernel.org>
+CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] MIPS: Use __copy_{to,from}_user() for emulated FP
+ loads/stores
+Thread-Topic: [PATCH] MIPS: Use __copy_{to,from}_user() for emulated FP
+ loads/stores
+Thread-Index: AQHVqhshCXVq7CTTBEufX7LGTbPWHKep0u6ggABLQQCAAAO1QA==
+Date:   Wed, 4 Dec 2019 16:18:52 +0000
+Message-ID: <e220ba9a19da41abba599b5873afa494@AcuMS.aculab.com>
+References: <20191203204933.1642259-1-paulburton@kernel.org>
+ <f5e09155580d417e9dcd07b1c20786ed@AcuMS.aculab.com>
+ <20191204154048.eotzglp4rdlx4yzl@lantea.localdomain>
+In-Reply-To: <20191204154048.eotzglp4rdlx4yzl@lantea.localdomain>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6cdf4734-4065-09c1-8623-1bf523b38c1b@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-MC-Unique: 1dN_2ZUoNVmFbAyoH-JP6g-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Dec 04, 2019 at 01:58:25PM +0000, Vincenzo Frascino wrote:
-> Hi Guenter,
-> 
-> On 12/4/19 1:51 PM, Guenter Roeck wrote:
-> > On Fri, Jun 21, 2019 at 10:52:43AM +0100, Vincenzo Frascino wrote:
-> >> The arm vDSO library requires some adaptations to use to take advantage
-> >> of the newly introduced generic vDSO library.
-> >>
-> >> Introduce the following changes:
-> >>  - Modification vdso.c to be compliant with the common vdso datapage
-> >>  - Use of lib/vdso for gettimeofday
-> >>  - Implementation of elf note
-> >>
-> >> Cc: Russell King <linux@armlinux.org.uk>
-> >> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> > 
-> > This patch causes a crash with qemu's mcimx6ul-evk emulation while running
-> > imx_v6_v7_defconfig.
-> > 
-> 
-> Thank you for reporting this. Could you please provide some details on how I can
-> reproduce the scenario you are describing?
-> 
-- Build imx_v6_v7_defconfig
-- Get root file system or initrd, for example from
-  https://github.com/groeck/linux-build-test/tree/master/rootfs/arm
-- Run image. Example, with initrd:
-	qemu-system-arm -M mcimx6ul-evk -kernel arch/arm/boot/zImage \
-		-no-reboot -initrd rootfs-armv7a.cpio \
-		-m 256 -display none -serial null \
-		--append 'rdinit=/sbin/init earlycon=ec_imx6q,mmio,0x21e8000,115200n8 console=ttymxc1,115200'
-		-dtb arch/arm/boot/dts/imx6ul-14x14-evk.dtb \
-		-nographic -monitor null -serial stdio
+RnJvbTogUGF1bCBCdXJ0b24NCj4gU2VudDogMDQgRGVjZW1iZXIgMjAxOSAxNTo0MQ0KPiBPbiBX
+ZWQsIERlYyAwNCwgMjAxOSBhdCAxMToxNDowOEFNICswMDAwLCBEYXZpZCBMYWlnaHQgd3JvdGU6
+DQo+ID4gRnJvbTogUGF1bCBCdXJ0b24NCj4gPiA+IFNlbnQ6IDAzIERlY2VtYmVyIDIwMTkgMjA6
+NTANCj4gPiA+IE91ciBGUFUgZW11bGF0b3IgY3VycmVudGx5IHVzZXMgX19nZXRfdXNlcigpICYg
+X19wdXRfdXNlcigpIHRvIHBlcmZvcm0NCj4gPiA+IGVtdWxhdGVkIGxvYWRzICYgc3RvcmVzLiBU
+aGlzIGlzIHByb2JsZW1hdGljIGJlY2F1c2UgX19nZXRfdXNlcigpICYNCj4gPiA+IF9fcHV0X3Vz
+ZXIoKSBhcmUgb25seSBzdWl0YWJsZSBmb3IgbmF0dXJhbGx5IGFsaWduZWQgbWVtb3J5IGFjY2Vz
+c2VzLA0KPiA+ID4gYW5kIHRoZSBhZGRyZXNzIHdlJ3JlIGFjY2Vzc2luZyBpcyBlbnRpcmVseSB1
+bmRlciB0aGUgY29udHJvbCBvZg0KPiA+ID4gdXNlcmxhbmQuDQo+ID4gPg0KPiA+ID4gVGhpcyBh
+bGxvd3MgdXNlcmxhbmQgdG8gY2F1c2UgYSBrZXJuZWwgcGFuaWMgYnkgc2ltcGx5IHBlcmZvcm1p
+bmcgYW4NCj4gPiA+IHVuYWxpZ25lZCBmbG9hdGluZyBwb2ludCBsb2FkIG9yIHN0b3JlIC0gdGhl
+IGtlcm5lbCB3aWxsIGhhbmRsZSB0aGUNCj4gPiA+IGFkZHJlc3MgZXJyb3IgZXhjZXB0aW9uIGJ5
+IGF0dGVtcHRpbmcgdG8gZW11bGF0ZSB0aGUgaW5zdHJ1Y3Rpb24sIGFuZCBpbg0KPiA+ID4gdGhl
+IHByb2Nlc3MgaXQgbWF5IGdlbmVyYXRlIGFub3RoZXIgYWRkcmVzcyBlcnJvciBleGNlcHRpb24g
+aXRzZWxmLg0KPiA+ID4gVGhpcyB0aW1lIHRoZSBleGNlcHRpb24gaXMgdGFrZW4gd2l0aCBFUEMg
+cG9pbnRpbmcgYXQgdGhlIGtlcm5lbHMgRlBVDQo+ID4gPiBlbXVsYXRpb24gY29kZSwgYW5kIHdl
+IGhpdCBhIGRpZV9pZl9rZXJuZWwoKSBpbg0KPiA+ID4gZW11bGF0ZV9sb2FkX3N0b3JlX2luc24o
+KS4NCj4gPg0KPiA+IFdvbid0IHRoaXMgYmUgdHJ1ZSBvZiBhbG1vc3QgYWxsIGNvZGUgdGhhdCB1
+c2VzIGdldF91c2VyKCkgYW5kIHB1dF91c2VyKCkNCj4gPiAod2l0aCBvciB3aXRob3V0IHRoZSBs
+ZWFkaW5nIF9fKS4NCj4gDQo+IE9ubHkgaWYgdGhlIGFkZHJlc3MgYmVpbmcgYWNjZXNzZWQgaXMg
+dW5kZXIgdGhlIGNvbnRyb2wgb2YgdXNlcmxhbmQgdG8NCj4gdGhlIGV4dGVudCB0aGF0IGl0IGNh
+biBjcmVhdGUgYW4gdW5hbGlnbmVkIGFkZHJlc3MuIFlvdSdyZSByaWdodCB0aGF0DQo+IG1heSBi
+ZSBtb3JlIHdpZGVzcHJlYWQgdGhvdWdoOyBpdCBuZWVkcyBjaGVja2luZy4uLg0KDQpMb29rIGF0
+IChmb3IgZXhhbXBsZSkgdGhlIHJlY3ZtbXNnKCkgY29kZSBvciBlcG9sbF93YWl0KCkuDQoNCkkn
+ZCBleHBlY3QgYWxsIGdldC9wdXRfdXNlcigpIHRvIGJlIHBvdGVudGlhbGx5IHVuYWxpZ25lZC4N
+ClRoZSB1c2VyIG1pZ2h0IGhhdmUgdG8gdHJ5IGhhcmQgKHRvIGF2b2lkIGFsbCB0aGUgZmF1bHRz
+IGluIHVzZXJzcGFjZSkNCmJ1dCBhbnkgYnVmZmVyIHBhc3NlZCB0byB0aGUga2VybmVsIGNhbiBw
+b3RlbnRpYWxseSBiZSBtaXNhbGlnbmVkIGFuZA0Kbm90aGluZyAoSSd2ZSBzZWVuKSBpcyBkb2N1
+bWVudGVkIGFzIHJldHVybmluZyBFRkFVTFQvU0lHU0VHVg0KZm9yIHN1Y2ggdW5hbGlnbmVkIGJ1
+ZmZlcnMuDQoNCkluICdkYXlzIG9mIHlvcmUuLi4nIFNQQVJDIHN5c3RlbXMgd291bGQgaGF2ZSBk
+b25lIGEgU0lHU0VHViBmb3INCmFueSBtaXNhbGlnbmVkIGFjY2VzcyBpbiB1c2Vyc3BhY2UuDQpO
+b3Qgc3VyZSB3aHkgTGludXggZXZlciB0aG91Z2h0IGl0IHdhcyBuZWNlc3NhcnkgdG8gJ2ZpeHVw
+JyBzdWNoIGZhdWx0cy4NCk9UT0ggaXQgaXMgdG9vIGxhdGUgdG8gY2hhbmdlIHRoYXQgYmVoYXZp
+b3VyIChhdCBsZWFzdCBmb3IgZXhpc3RpbmcgcG9ydHMpLg0KDQo+IFdlIHVzZWQgdG8gaGF2ZSBz
+ZXBhcmF0ZSBnZXRfdXNlcl91bmFsaWduZWQoKSAmIHB1dF91c2VyX3VuYWxpZ25lZCgpDQo+IHdo
+aWNoIHdvdWxkIHN1Z2dlc3QgdGhhdCBpdCdzIGV4cGVjdGVkIHRoYXQgZ2V0X3VzZXIoKSAmIHB1
+dF91c2VyKCkNCj4gcmVxdWlyZSB0aGVpciBhY2Nlc3NlcyBiZSBhbGlnbmVkLCBidXQgdGhleSB3
+ZXJlIHJlbW92ZWQgYnkgY29tbWl0DQo+IDMxNzBkOGQyMjZjMiAoImtpbGwge19fLH17Z2V0LHB1
+dH1fdXNlcl91bmFsaWduZWQoKSIpIGluIHY0LjEzLg0KPiANCj4gQnV0IHBlcmhhcHMgd2Ugc2hv
+dWxkIGp1c3QgdGFrZSB0aGUgc2Vjb25kIEFkRUwgZXhjZXB0aW9uICYgcmVjb3ZlciB2aWENCj4g
+dGhlIGZpeHVwcyB0YWJsZS4gV2UgZGVmaW5pdGVseSBkb24ndCByaWdodCBub3cuLi4gTmVlZHMg
+ZnVydGhlcg0KPiBpbnZlc3RpZ2F0aW9uLi4uDQoNCmdldC9wdXRfdXNlciBjYW4gZmF1bHQgYmVj
+YXVzZSB0aGUgdXNlciBwYWdlIGlzIGFic2VudCAoZXRjKS4NClNvIHRoZXJlIG11c3QgYmUgY29k
+ZSB0byAnZXhwZWN0JyBhIGZhdWx0IG9uIHRob3NlIGluc3RydWN0aW9ucy4NCg0KCURhdmlkDQoN
+Ci0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJt
+LCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChX
+YWxlcykNCg==
 
-qemu has to be v3.1 or later to support the machine.
-
-Hope this helps,
-Guenter
