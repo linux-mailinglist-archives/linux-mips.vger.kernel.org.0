@@ -2,121 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A0311470F
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2019 19:44:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D8E114830
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2019 21:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729022AbfLESn7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Dec 2019 13:43:59 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:36787 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726028AbfLESn7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Dec 2019 13:43:59 -0500
-Received: by mail-pl1-f194.google.com with SMTP id k20so1605071pls.3;
-        Thu, 05 Dec 2019 10:43:59 -0800 (PST)
+        id S1729776AbfLEUiT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Dec 2019 15:38:19 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:44381 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729154AbfLEUiT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Dec 2019 15:38:19 -0500
+Received: by mail-oi1-f193.google.com with SMTP id d62so4011015oia.11;
+        Thu, 05 Dec 2019 12:38:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FCp49Ui27dydwY8694hG4UdI57V9y5xaYI+0ibAx9Mc=;
-        b=EwfdDzeJebLnKRGKcgosgHey0wK42t0sQk9CWjBY+NVVlAlon+T2fEoqLBaEy1HPlm
-         1Ri4tZacXbJy/6Se+pXlXRSyqyWISZlgfR0tYvZ9YFMrX29wvt4WUYNhjD0W5PL+puhg
-         upOMLVdycTmy3Et4J8+t2i/FldEusxTr3XIc1oWKFvAe03nrUey9uUzzCGc3K8UHL74A
-         8tQyIuYY7AOM3R/4/xX7pkDg7SZc5Eq75AX8LQnnJcJRg/gXQt+L4EAV83L8BDsFr9IK
-         hZTSQBqtUo3mDpHYt1Gxzkmq+CYURP3lukQHxSyYOZ94cUsHr1cNNEAak2GN1yUWt+QL
-         iHNw==
-X-Gm-Message-State: APjAAAVYeWv45aEyP5zMaEMhQqYoSorxaTokpTjGi+9kI59PAJRo7FxO
-        fxmMQtYFF4BgAAIqT8QHxms=
-X-Google-Smtp-Source: APXvYqxEGWkHqf3SoqS5JfOUeYQylUakgL3ONZFsTaapa4Y7GVYOM+MlCU3V6fpr61txQqIa5+ArzQ==
-X-Received: by 2002:a17:90a:23a9:: with SMTP id g38mr11278130pje.128.1575571438433;
-        Thu, 05 Dec 2019 10:43:58 -0800 (PST)
-Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id p68sm13748345pfp.149.2019.12.05.10.43.57
+        bh=74bslwr2DN1zCeo3ND+D4pQywMdZbBoCHyc8IyQISLI=;
+        b=hE0mfFC8J9r2HuPp3Il6e8pQywLUNA/aBB1kC1QDk9mjWVGDoh0T+ftSic3o3CGPP+
+         zGV6W4jo3VNLf6QSqXC+8BzAq3kohBqQM01aYBfk1Kiyqf8EkyigT1rotvVMVpKDQW8T
+         1qqRHyNh0piVeaXx1/fg3dfZPLSZA/nljAvbymKQ2KLzo+FqZC3ESknPGQ4qNGyWyGhS
+         KE4Gwzm7hPNBigMpTgRGGmkWL6dyQBDxO/0LLg6r6nG2A3vmr1P2gW35Ft3usoSdSWOL
+         cFJ4WkOO588w7iT9btFGpXSGzBz0obIeEkMLDjSH2d4zoi56uLPyjF7Ko76oP/TCVaFo
+         bkRg==
+X-Gm-Message-State: APjAAAVhbAK2oqyA497y2wyYz9Tl+fGXGERgG1WpPfpDHySe48YXyHDF
+        ZCpT5FgW//28lczsO++piA==
+X-Google-Smtp-Source: APXvYqw6k/qoeDxNK4Ffi3fcSBgKVBXoNd3CIqjOnqbICiI6Mu4iE4xT6+8vPcZIWZ6oOHNHTV4KVg==
+X-Received: by 2002:aca:c354:: with SMTP id t81mr9425585oif.149.1575578298263;
+        Thu, 05 Dec 2019 12:38:18 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id b3sm3907834oie.25.2019.12.05.12.38.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2019 10:43:57 -0800 (PST)
-Date:   Thu, 5 Dec 2019 10:44:50 -0800
-From:   Paul Burton <paulburton@kernel.org>
-To:     Alexander Lobakin <alobakin@dlink.ru>
-Cc:     Paul Burton <paul.burton@mips.com>,
-        Hassan Naveed <hnaveed@wavecomp.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: MIPS eBPF JIT support on pre-32R2
-Message-ID: <20191205184450.lbrkenmursz4zpdm@lantea.localdomain>
-References: <09d713a59665d745e21d021deeaebe0a@dlink.ru>
+        Thu, 05 Dec 2019 12:38:17 -0800 (PST)
+Date:   Thu, 5 Dec 2019 14:38:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Zhou Yanjie <zhouyanjie@zoho.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, mark.rutland@arm.com,
+        syq@debian.org, paul@crapouillou.net, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com
+Subject: Re: [PATCH 2/5] dt-bindings: clock: Add X1830 bindings.
+Message-ID: <20191205203817.GA3571@bogus>
+References: <1574825576-91028-1-git-send-email-zhouyanjie@zoho.com>
+ <1574825576-91028-3-git-send-email-zhouyanjie@zoho.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <09d713a59665d745e21d021deeaebe0a@dlink.ru>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <1574825576-91028-3-git-send-email-zhouyanjie@zoho.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Alexander,
-
-On Thu, Dec 05, 2019 at 03:45:27PM +0300, Alexander Lobakin wrote:
-> Hey all,
+On Wed, 27 Nov 2019 11:32:53 +0800, Zhou Yanjie wrote:
+> Add the clock bindings for the X1830 Soc from Ingenic.
 > 
-> I'm writing about lines arch/mips/net/ebpf_jit.c:1806-1807:
+> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
+> ---
+>  .../devicetree/bindings/clock/ingenic,cgu.txt      |  1 +
+>  include/dt-bindings/clock/x1830-cgu.h              | 46 ++++++++++++++++++++++
+>  2 files changed, 47 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/x1830-cgu.h
 > 
-> 	if (!prog->jit_requested || MIPS_ISA_REV < 2)
-> 		return prog;
-> 
-> Do pre-32R2 architectures (32R1, maybe even R3000-like) actually support
-> this eBPF JIT code?
 
-No, they don't; the eBPF JIT makes unconditional use of at least the
-(d)ins & (d)ext instructions which were added in MIPSr2, so it would
-result in reserved instruction exceptions & panics if enabled on
-pre-MIPSr2 CPUs.
-
-> If they do, then the condition 'MIPS_ISA_REV < 2'
-> should be removed as it is always true for them and tells CC to remove
-> JIT completely.
-> 
-> If they don't support instructions from this JIT, then the line
-> arch/mips/Kconfig:50:
-> 
-> 	select HAVE_EBPF_JIT if (!CPU_MICROMIPS)
-> 
-> should be changed to something like:
-> 
-> 	select HAVE_EBPF_JIT if !CPU_MICROMIPS && TARGET_ISA_REV >= 2
-> 
-> (and then the mentioned 'if' condition would become redundant)
-
-Good spot; I agree entirely, this dependency should be reflected in
-Kconfig.
-
-> At the moment it is possible to build a kernel without both JIT and
-> interpreter, but with CONFIG_BPF_SYSCALL=y (what should not be allowed
-> I suppose?) within the following configuration:
-> 
-> - select any pre-32R2 CPU (e.g. CONFIG_CPU_MIPS32_R1);
-> - enable CONFIG_BPF_JIT (CONFIG_MIPS_EBPF_JIT will be autoselected);
-> - enable CONFIG_BPF_JIT_ALWAYS_ON (this removes BPF interpreter from
->   the system).
-> 
-> I may prepare a proper patch by myself if needed (after clarification).
-
-That would be great, thanks!
-
-One thing to note is that I hope we'll restore the cBPF JIT with this
-patch:
-
-https://lore.kernel.org/linux-mips/20191205182318.2761605-1-paulburton@kernel.org/T/#u
-
-The cBPF JIT looks like it should work on older pre-MIPSr2 CPUs, so the
-only way this is relevant is that your patch might have a minor
-conflict. But I thought I'd mention it anyway :)
-
-Thanks,
-    Paul
+Reviewed-by: Rob Herring <robh@kernel.org>
