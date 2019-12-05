@@ -2,105 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F401D113FDA
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2019 12:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A09114106
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2019 13:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729096AbfLELCd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 5 Dec 2019 06:02:33 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:50379 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728735AbfLELCc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Dec 2019 06:02:32 -0500
-Received: from mail-lj1-f174.google.com ([209.85.208.174]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MPXta-1iQ7JE2e7G-00MgIi; Thu, 05 Dec 2019 12:02:30 +0100
-Received: by mail-lj1-f174.google.com with SMTP id u17so3056978lja.4;
-        Thu, 05 Dec 2019 03:02:30 -0800 (PST)
-X-Gm-Message-State: APjAAAUWH4PIwe+QeMJCxB97OoyKVGYHnrc7jhjqo7gUJsTeALTl8qvy
-        /3Y06Y0EmlLC9Eql0rTMdMA2Ac5Wh2bPQkPBjjU=
-X-Google-Smtp-Source: APXvYqzDYON/MBaEaa/M6IrL+iOGcm4xJQW0wdjdRvYG7K2lgdB2YeKajZPfIsCsDNe/lygpM40sVli0MtDQSfWZsds=
-X-Received: by 2002:a2e:2e14:: with SMTP id u20mr5178646lju.120.1575543750059;
- Thu, 05 Dec 2019 03:02:30 -0800 (PST)
+        id S1729096AbfLEMyt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Dec 2019 07:54:49 -0500
+Received: from fd.dlink.ru ([178.170.168.18]:35588 "EHLO fd.dlink.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729048AbfLEMys (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 5 Dec 2019 07:54:48 -0500
+X-Greylist: delayed 552 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Dec 2019 07:54:47 EST
+Received: by fd.dlink.ru (Postfix, from userid 5000)
+        id BA9151B2120E; Thu,  5 Dec 2019 15:45:34 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru BA9151B2120E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dlink.ru; s=mail;
+        t=1575549934; bh=/HwG0dFNg/hWKid+bfXzTVGWal/DPp90hVFX4aHbrbc=;
+        h=Date:From:To:Cc:Subject;
+        b=h0qVKVkg/afttyYI0TPqWQxoWE7CX/0o+OlWKNMDa38VoiEfPQIwqQ9gEzuxu3AuI
+         I+1TS9e8R/GXiVI+s2UXnwl76b7/Mugj7pyWAuMN3pdNxAtt2GEPvco0nwCjyd9T6v
+         EEL3gg/GLINRC37K0Zf5KkF1sgD13+VgW4Zzf0Vs=
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.dlink.ru
+X-Spam-Level: 
+X-Spam-Status: No, score=-99.2 required=7.5 tests=BAYES_50,USER_IN_WHITELIST
+        autolearn=disabled version=3.4.2
+Received: from mail.rzn.dlink.ru (mail.rzn.dlink.ru [178.170.168.13])
+        by fd.dlink.ru (Postfix) with ESMTP id 31A891B20153;
+        Thu,  5 Dec 2019 15:45:28 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru 31A891B20153
+Received: from mail.rzn.dlink.ru (localhost [127.0.0.1])
+        by mail.rzn.dlink.ru (Postfix) with ESMTP id CB0771B217D8;
+        Thu,  5 Dec 2019 15:45:27 +0300 (MSK)
+Received: from mail.rzn.dlink.ru (localhost [127.0.0.1])
+        by mail.rzn.dlink.ru (Postfix) with ESMTPA;
+        Thu,  5 Dec 2019 15:45:27 +0300 (MSK)
 MIME-Version: 1.0
-References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
- <20190621095252.32307-17-vincenzo.frascino@arm.com> <20191204135159.GA7210@roeck-us.net>
- <6cdf4734-4065-09c1-8623-1bf523b38c1b@arm.com> <20191204161641.GA28130@roeck-us.net>
- <e35a7f71-2477-fa52-01e4-301199e99c2e@arm.com> <CAAdtpL71ED3zbkHMqtd1XFQwToOctWJpy2WPqahxHR81fKdTkg@mail.gmail.com>
- <a391048e-f57c-159e-7174-d9d38d8f3825@arm.com>
-In-Reply-To: <a391048e-f57c-159e-7174-d9d38d8f3825@arm.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 5 Dec 2019 12:02:13 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1krE=nOi6Dy=QaWiE9VTgNpUVbrHUVm_3Cq+JGJyuwKQ@mail.gmail.com>
-Message-ID: <CAK8P3a1krE=nOi6Dy=QaWiE9VTgNpUVbrHUVm_3Cq+JGJyuwKQ@mail.gmail.com>
-Subject: Re: [PATCH v7 16/25] arm: Add support for generic vDSO (causing crash)
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Thu, 05 Dec 2019 15:45:27 +0300
+From:   Alexander Lobakin <alobakin@dlink.ru>
+To:     Paul Burton <paul.burton@mips.com>
+Cc:     Hassan Naveed <hnaveed@wavecomp.com>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Huw Davies <huw@codeweavers.com>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Andre Przywara <andre.przywara@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:Zn6CTbUEtRHLVAE3XDUBZa9tw1grzZNZ4Bh11aTqhSKPcCdLqF2
- duGWHTlB04bQu3q15eEAeoZP4GhzUriW8J1D+AdQ+zOqS5UyBx1bqTZGaKzHPEPgkXjbAyU
- CTy8fiZ/m/k7n/7nEgL2jt968G+3lPSL53Jy/CjBY8T4aiqPyk7HfSJDhMWJJ8LnEWlqvJV
- +xtzv92vRjVv/6dYh2K4Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Jh9jVCiv6Mk=:6IeZP/z8O/nZnV8dRQ5XQB
- jzHZggG1fhaUDD154kEgWcyZdMUcQ026S7t+wTqree211w/ALcwlOIk3gI67xPWilkIuMjzns
- VLy7os+VYu6ZlNAonP8g5iZDtHHgKCfVpyETZMV6WIinRz79HdC+qFXus5JtBSE5m9JoV33Ho
- ErSeXTRLs6x5lYkhconpSUA41dKMqwFuj952axq7FcyTV3AxS++nlK9A4F7RiMHnFzNsU0OXO
- MRuQ/YIbxZtzLdRPb91dK1M42Xa47JkYYgXcXsLK6N7Db5IcKqwy/GUhuwK/Fjt/o43wa/LEa
- dwx+5SunGarp1fqwLJYS85PCkTYfc97MG8yGmVxFqKkS+eBo4yy1NcT2Bjohyjzyp51R8ZoPt
- CAsFbSDnEpFhzWKUQecbiQWsCRo8Zyr6nCbvoJlcH4YEL/imaSmx+Q5D9Alu/DNbDFU5dsQgc
- 4ZV75Sx3OpZGy3O9Bj7BVsvFUeS8VUi7FfdwnP5K7FoHD4xK0DH99eA/3ZZ5tvQCsHI6zmuLf
- z+L2wZmRyTqzGXvX0z/wHcwYdCfk8Gvy2HFIsPeUMpXdouGF8zDryxHa0qg9QiATuNBMYNpG1
- Srg6IcRe+1eoF7WJK9MEHWWNXdeuj+X4WqTMyxMdniCS7/aodfZ0ajNIN2CvcTTRK9iRRbGP/
- qpqOCx6RgIucC4g1o2YuSqshk0PpppB96RtzVIa/+YOosWzOuddzcl+kjH2AaG0W+L0wYnr8R
- SEYa+S5jlVo47BiTkWB2rpbftH4i8DmSYwK3AfPntheqYfjizi5WWqTQth0B7VRoYI+DeteyF
- hW7puGorAICBgp17bRl30A9HLYD1wU8Z7xiW52UsvmM3E4bYyyWgVnkcUzgkXHw0ElfUQonNR
- Enscj6COPtJvinEeGS2g==
+        James Hogan <jhogan@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: MIPS eBPF JIT support on pre-32R2
+User-Agent: Roundcube Webmail/1.4.0
+Message-ID: <09d713a59665d745e21d021deeaebe0a@dlink.ru>
+X-Sender: alobakin@dlink.ru
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 5, 2019 at 11:00 AM Vincenzo Frascino
-<vincenzo.frascino@arm.com> wrote:
->
-> Hi Philippe,
->
-> On 05/12/2019 09:42, Philippe Mathieu-Daudé wrote:
-> > There are only 2 "Investigated-by" vs 7k+ "Suggested-by"... Is there a
-> > real difference?
->
-> Not sure about that. My take is that Suggested-by is used when someone suggests
-> you how to possibly implement a feature and you go and do that. Investigated-by
-> is when there is a fix to make and someone comes to you with the exact solution
-> like in this case Arnd did.
+Hey all,
 
-It's not a standard tag, but I suggested it because it does explain
-better what I did.
+I'm writing about lines arch/mips/net/ebpf_jit.c:1806-1807:
 
-You could also just explain in clear text that I did the analysis and then add
-the more normal Suggested-by tag, I don't care either way.
+	if (!prog->jit_requested || MIPS_ISA_REV < 2)
+		return prog;
 
-      Arnd
+Do pre-32R2 architectures (32R1, maybe even R3000-like) actually support
+this eBPF JIT code? If they do, then the condition 'MIPS_ISA_REV < 2'
+should be removed as it is always true for them and tells CC to remove
+JIT completely.
+
+If they don't support instructions from this JIT, then the line
+arch/mips/Kconfig:50:
+
+	select HAVE_EBPF_JIT if (!CPU_MICROMIPS)
+
+should be changed to something like:
+
+	select HAVE_EBPF_JIT if !CPU_MICROMIPS && TARGET_ISA_REV >= 2
+
+(and then the mentioned 'if' condition would become redundant)
+
+At the moment it is possible to build a kernel without both JIT and
+interpreter, but with CONFIG_BPF_SYSCALL=y (what should not be allowed
+I suppose?) within the following configuration:
+
+- select any pre-32R2 CPU (e.g. CONFIG_CPU_MIPS32_R1);
+- enable CONFIG_BPF_JIT (CONFIG_MIPS_EBPF_JIT will be autoselected);
+- enable CONFIG_BPF_JIT_ALWAYS_ON (this removes BPF interpreter from
+   the system).
+
+I may prepare a proper patch by myself if needed (after clarification).
+Thanks.
+
+Regards,
+ᚷ ᛖ ᚢ ᚦ ᚠ ᚱ
