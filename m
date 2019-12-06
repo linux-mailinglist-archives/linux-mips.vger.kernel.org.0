@@ -2,69 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D8E114830
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2019 21:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F7E114C95
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Dec 2019 08:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729776AbfLEUiT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Dec 2019 15:38:19 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:44381 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729154AbfLEUiT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Dec 2019 15:38:19 -0500
-Received: by mail-oi1-f193.google.com with SMTP id d62so4011015oia.11;
-        Thu, 05 Dec 2019 12:38:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=74bslwr2DN1zCeo3ND+D4pQywMdZbBoCHyc8IyQISLI=;
-        b=hE0mfFC8J9r2HuPp3Il6e8pQywLUNA/aBB1kC1QDk9mjWVGDoh0T+ftSic3o3CGPP+
-         zGV6W4jo3VNLf6QSqXC+8BzAq3kohBqQM01aYBfk1Kiyqf8EkyigT1rotvVMVpKDQW8T
-         1qqRHyNh0piVeaXx1/fg3dfZPLSZA/nljAvbymKQ2KLzo+FqZC3ESknPGQ4qNGyWyGhS
-         KE4Gwzm7hPNBigMpTgRGGmkWL6dyQBDxO/0LLg6r6nG2A3vmr1P2gW35Ft3usoSdSWOL
-         cFJ4WkOO588w7iT9btFGpXSGzBz0obIeEkMLDjSH2d4zoi56uLPyjF7Ko76oP/TCVaFo
-         bkRg==
-X-Gm-Message-State: APjAAAVhbAK2oqyA497y2wyYz9Tl+fGXGERgG1WpPfpDHySe48YXyHDF
-        ZCpT5FgW//28lczsO++piA==
-X-Google-Smtp-Source: APXvYqw6k/qoeDxNK4Ffi3fcSBgKVBXoNd3CIqjOnqbICiI6Mu4iE4xT6+8vPcZIWZ6oOHNHTV4KVg==
-X-Received: by 2002:aca:c354:: with SMTP id t81mr9425585oif.149.1575578298263;
-        Thu, 05 Dec 2019 12:38:18 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id b3sm3907834oie.25.2019.12.05.12.38.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2019 12:38:17 -0800 (PST)
-Date:   Thu, 5 Dec 2019 14:38:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Zhou Yanjie <zhouyanjie@zoho.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, mark.rutland@arm.com,
-        syq@debian.org, paul@crapouillou.net, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com
-Subject: Re: [PATCH 2/5] dt-bindings: clock: Add X1830 bindings.
-Message-ID: <20191205203817.GA3571@bogus>
-References: <1574825576-91028-1-git-send-email-zhouyanjie@zoho.com>
- <1574825576-91028-3-git-send-email-zhouyanjie@zoho.com>
+        id S1726225AbfLFHU6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Dec 2019 02:20:58 -0500
+Received: from mail.dlink.ru ([178.170.168.18]:39462 "EHLO fd.dlink.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725858AbfLFHU6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 6 Dec 2019 02:20:58 -0500
+Received: by fd.dlink.ru (Postfix, from userid 5000)
+        id 6F7E41B21545; Fri,  6 Dec 2019 10:20:53 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru 6F7E41B21545
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dlink.ru; s=mail;
+        t=1575616853; bh=YBcb2XIhpGvQl1++v0zJOJ1RxMw2N0RI5FMDXHCH0qA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=p5R61v4RR88Ijn3tXZdHEevK2Wg/cSQTyAZgPSNpcQ9ZAvQmfxseTgq5xYQXBhl40
+         TWLwSh4S8Y88vlPq2CK2Qi++JDSCaWwH6hp1WBL7rC6JP3CZ5KuyLLouRt/QBD2meU
+         GNSDYdNkkDLsOHOAAP7MeEF/Rp2uODW7Q4XXdYK0=
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.dlink.ru
+X-Spam-Level: 
+X-Spam-Status: No, score=-99.2 required=7.5 tests=BAYES_50,USER_IN_WHITELIST
+        autolearn=disabled version=3.4.2
+Received: from mail.rzn.dlink.ru (mail.rzn.dlink.ru [178.170.168.13])
+        by fd.dlink.ru (Postfix) with ESMTP id 54F6E1B21308;
+        Fri,  6 Dec 2019 10:20:41 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru 54F6E1B21308
+Received: from mail.rzn.dlink.ru (localhost [127.0.0.1])
+        by mail.rzn.dlink.ru (Postfix) with ESMTP id 0DBDB1B226AC;
+        Fri,  6 Dec 2019 10:20:41 +0300 (MSK)
+Received: from mail.rzn.dlink.ru (localhost [127.0.0.1])
+        by mail.rzn.dlink.ru (Postfix) with ESMTPA;
+        Fri,  6 Dec 2019 10:20:41 +0300 (MSK)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1574825576-91028-3-git-send-email-zhouyanjie@zoho.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Fri, 06 Dec 2019 10:20:40 +0300
+From:   Alexander Lobakin <alobakin@dlink.ru>
+To:     Paul Burton <paulburton@kernel.org>
+Cc:     Paul Burton <paul.burton@mips.com>,
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: MIPS eBPF JIT support on pre-32R2
+In-Reply-To: <20191205184450.lbrkenmursz4zpdm@lantea.localdomain>
+References: <09d713a59665d745e21d021deeaebe0a@dlink.ru>
+ <20191205184450.lbrkenmursz4zpdm@lantea.localdomain>
+User-Agent: Roundcube Webmail/1.4.0
+Message-ID: <647fa62c7111a27a2cc217cf06cbe355@dlink.ru>
+X-Sender: alobakin@dlink.ru
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 27 Nov 2019 11:32:53 +0800, Zhou Yanjie wrote:
-> Add the clock bindings for the X1830 Soc from Ingenic.
-> 
-> Signed-off-by: Zhou Yanjie <zhouyanjie@zoho.com>
-> ---
->  .../devicetree/bindings/clock/ingenic,cgu.txt      |  1 +
->  include/dt-bindings/clock/x1830-cgu.h              | 46 ++++++++++++++++++++++
->  2 files changed, 47 insertions(+)
->  create mode 100644 include/dt-bindings/clock/x1830-cgu.h
-> 
+Paul Burton wrote 05.12.2019 21:44:
+> Hi Alexander,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Hi Paul!
+
+> On Thu, Dec 05, 2019 at 03:45:27PM +0300, Alexander Lobakin wrote:
+>> Hey all,
+>> 
+>> I'm writing about lines arch/mips/net/ebpf_jit.c:1806-1807:
+>> 
+>> 	if (!prog->jit_requested || MIPS_ISA_REV < 2)
+>> 		return prog;
+>> 
+>> Do pre-32R2 architectures (32R1, maybe even R3000-like) actually 
+>> support
+>> this eBPF JIT code?
+> 
+> No, they don't; the eBPF JIT makes unconditional use of at least the
+> (d)ins & (d)ext instructions which were added in MIPSr2, so it would
+> result in reserved instruction exceptions & panics if enabled on
+> pre-MIPSr2 CPUs.
+> 
+>> If they do, then the condition 'MIPS_ISA_REV < 2'
+>> should be removed as it is always true for them and tells CC to remove
+>> JIT completely.
+>> 
+>> If they don't support instructions from this JIT, then the line
+>> arch/mips/Kconfig:50:
+>> 
+>> 	select HAVE_EBPF_JIT if (!CPU_MICROMIPS)
+>> 
+>> should be changed to something like:
+>> 
+>> 	select HAVE_EBPF_JIT if !CPU_MICROMIPS && TARGET_ISA_REV >= 2
+>> 
+>> (and then the mentioned 'if' condition would become redundant)
+> 
+> Good spot; I agree entirely, this dependency should be reflected in
+> Kconfig.
+> 
+>> At the moment it is possible to build a kernel without both JIT and
+>> interpreter, but with CONFIG_BPF_SYSCALL=y (what should not be allowed
+>> I suppose?) within the following configuration:
+>> 
+>> - select any pre-32R2 CPU (e.g. CONFIG_CPU_MIPS32_R1);
+>> - enable CONFIG_BPF_JIT (CONFIG_MIPS_EBPF_JIT will be autoselected);
+>> - enable CONFIG_BPF_JIT_ALWAYS_ON (this removes BPF interpreter from
+>>   the system).
+>> 
+>> I may prepare a proper patch by myself if needed (after 
+>> clarification).
+> 
+> That would be great, thanks!
+
+Great, I'll send it in about ~2-3 hours.
+
+> One thing to note is that I hope we'll restore the cBPF JIT with this
+> patch:
+> 
+> https://lore.kernel.org/linux-mips/20191205182318.2761605-1-paulburton@kernel.org/T/#u
+> 
+> The cBPF JIT looks like it should work on older pre-MIPSr2 CPUs, so the
+> only way this is relevant is that your patch might have a minor
+> conflict. But I thought I'd mention it anyway :)
+
+Yes, I thought about this too. If pre-32R2 CPUs don't support our eBPF
+JIT, we'd better restore cBPF for them, so they could speed-up at least
+"classic" instructions. Glad you've decided to do that.
+
+> Thanks,
+>     Paul
+
+Regards,
+ᚷ ᛖ ᚢ ᚦ ᚠ ᚱ
