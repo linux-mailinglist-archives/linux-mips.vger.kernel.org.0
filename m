@@ -2,29 +2,28 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B596B116FDC
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Dec 2019 16:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FFF11701B
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Dec 2019 16:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbfLIPHm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 Dec 2019 10:07:42 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:47868 "EHLO
+        id S1726683AbfLIPPa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 Dec 2019 10:15:30 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:49360 "EHLO
         crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbfLIPHm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Dec 2019 10:07:42 -0500
+        with ESMTP id S1725956AbfLIPPa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Dec 2019 10:15:30 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1575904058; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1575904528; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xwHOmmEeu2eYACHyX+W/1JmkDRO9vyXjLPc/BjErkck=;
-        b=YCqcLXE2zvQ3KaiUaxSq7tlr7q3DETPMjvUQ72aQfBuZhq56kpwgGbViI4A0q6x33sZUun
-        kjc6+vQCJEGccXOSBqOgzLggfl3CEAQGyy27kxDP5P5YY3l3xbbl5/bjgtkEP+mK1sSkaV
-        /fpHPvT7mJDAkIDWGiwLayoa9j1Lqb4=
-Date:   Mon, 09 Dec 2019 16:07:28 +0100
+        bh=8XfP90Nlwni1+fdvvtFIPCYN2PgxWebcTW6S+oGU2DU=;
+        b=fVrCyeXpmcJtkdaj0x6BgczRUtY+HTz3bmII6iUJGY1opRCHAqH3xVWglmKWNASEudvk/1
+        BqTNVK6oos0oalN6ZkKcmOJTWGKn8m0nNLhHuG6Kvrm/Z7VkiHQbyld/7ghubHKSOOjg7Y
+        k+DRmaAIl4KkrzK+aFIYe70rH/4xJiw=
+Date:   Mon, 09 Dec 2019 16:15:18 +0100
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v7 6/6] MIPS: CU1000: Add devicetree & config with
- PDMA/MSC/RTC/WDT/NET enabled.
+Subject: Re: [PATCH v7 5/6] MIPS: X1000: Add missing X1000 nodes.
 To:     =?UTF-8?b?5ZGo55Cw5p2w?= "(Zhou Yanjie)" 
         <zhouyanjie@wanyeetech.com>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -36,10 +35,10 @@ Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         krzk@kernel.org, geert+renesas@glider.be,
         prasannatsmkumar@gmail.com, sernia.zhou@foxmail.com,
         zhenwenjin@gmail.com, 772753199@qq.com
-Message-Id: <1575904048.3.2@crapouillou.net>
-In-Reply-To: <1575896438-9562-7-git-send-email-zhouyanjie@wanyeetech.com>
+Message-Id: <1575904518.3.3@crapouillou.net>
+In-Reply-To: <1575896438-9562-6-git-send-email-zhouyanjie@wanyeetech.com>
 References: <1575896438-9562-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1575896438-9562-7-git-send-email-zhouyanjie@wanyeetech.com>
+        <1575896438-9562-6-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -50,18 +49,12 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Zhou,
 
-You modify here in patch [06/06] two files that were introduced in=20
-[04/06]. Just merge the two patches into one then, and make it last in=20
-the patchset.
-
--Paul
-
 
 Le lun., d=C3=A9c. 9, 2019 at 21:00, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanj=
 ie)=20
 <zhouyanjie@wanyeetech.com> a =C3=A9crit :
-> Add the CU1000 Neo devicetree and defconfig with PDMA, MMC, RTC, WDT
-> and NET enabled.
+> Add the appropriate DT node to probe pdma/msc/rtc/watchdog/ethernet
+> driver using the devicetree.
 >=20
 > Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
 eetech.com>
@@ -69,136 +62,151 @@ eetech.com>
 >=20
 > Notes:
 >     v7:
->     New patch, merge[06/12],[08/12],[10/12],[12/12] in v6.
+>     New patch, merge[05/12],[07/12],[09/12],[11/12] in v6.
 >=20
->  arch/mips/boot/dts/ingenic/cu1000-neo.dts | 47=20
-> +++++++++++++++++++++++++++++++
->  arch/mips/configs/cu1000-neo_defconfig    | 17 +++++++++--
->  2 files changed, 62 insertions(+), 2 deletions(-)
+>  arch/mips/boot/dts/ingenic/x1000.dtsi | 96=20
+> +++++++++++++++++++++++++++++++++++
+>  1 file changed, 96 insertions(+)
 >=20
-> diff --git a/arch/mips/boot/dts/ingenic/cu1000-neo.dts=20
-> b/arch/mips/boot/dts/ingenic/cu1000-neo.dts
-> index 6f1a7e9..b0733da 100644
-> --- a/arch/mips/boot/dts/ingenic/cu1000-neo.dts
-> +++ b/arch/mips/boot/dts/ingenic/cu1000-neo.dts
-> @@ -43,10 +43,57 @@
->  	status =3D "okay";
->  };
+> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi=20
+> b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> index 13a6c9ff..398a756 100644
+> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> @@ -1,5 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  #include <dt-bindings/clock/x1000-cgu.h>
+> +#include <dt-bindings/dma/x1000-dma.h>
 >=20
-> +&mac {
-> +	phy-mode =3D "rmii";
-> +	phy-handle =3D <&lan8720a>;
+>  / {
+>  	#address-cells =3D <1>;
+> @@ -68,6 +69,25 @@
+>  		interrupts =3D <27 26 25>;
+>  	};
+>=20
+> +	wdt: watchdog@10002000 {
+> +		compatible =3D "ingenic,x1000-watchdog", "ingenic,jz4780-watchdog";
+> +		reg =3D <0x10002000 0x10>;
 > +
-> +	pinctrl-names =3D "default";
-> +	pinctrl-0 =3D <&pins_mac>;
-> +
-> +	snps,reset-gpio =3D <&gpc 23 GPIO_ACTIVE_LOW>; /* PC23 */
-> +	snps,reset-active-low;
-> +	snps,reset-delays-us =3D <0 10000 30000>;
-> +
-> +	status =3D "okay";
-> +};
-> +
-> +&mdio {
-> +	status =3D "okay";
-> +
-> +	lan8720a: ethernet-phy@0 {
-> +		compatible =3D "ethernet-phy-id0007.c0f0",=20
-> "ethernet-phy-ieee802.3-c22";
-> +		reg =3D <0>;
+> +		clocks =3D <&cgu X1000_CLK_RTCLK>;
+> +		clock-names =3D "rtc";
 > +	};
-> +};
+
+The watchdog node should be a children of the TCU node, see
+Documentation/devicetree/bindings/timer/ingenic,tcu.txt
+
+
 > +
-> +&msc0 {
-> +	bus-width =3D <8>;
-> +	max-frequency =3D <50000000>;
+> +	rtc: rtc@10003000 {
+> +		compatible =3D "ingenic,x1000-rtc", "ingenic,jz4780-rtc";
+> +		reg =3D <0x10003000 0x4c>;
 > +
-> +	pinctrl-names =3D "default";
-> +	pinctrl-0 =3D <&pins_msc0>;
+> +		interrupt-parent =3D <&intc>;
+> +		interrupts =3D <32>;
 > +
-> +	non-removable;
+> +		clocks =3D <&cgu X1000_CLK_RTCLK>;
+> +		clock-names =3D "rtc";
+> +	};
 > +
-> +	status =3D "okay";
-> +};
-> +
->  &pinctrl {
->  	pins_uart2: uart2 {
->  		function =3D "uart2";
->  		groups =3D "uart2-data-d";
->  		bias-disable;
+>  	pinctrl: pin-controller@10010000 {
+>  		compatible =3D "ingenic,x1000-pinctrl";
+>  		reg =3D <0x10010000 0x800>;
+> @@ -173,4 +193,80 @@
+>=20
+>  		status =3D "disabled";
 >  	};
 > +
-> +	pins_mac: mac {
-> +		function =3D "mac";
-> +		groups =3D "mac";
-> +		bias-disable;
+> +	pdma: dma-controller@13420000 {
+> +		compatible =3D "ingenic,x1000-dma";
+> +		reg =3D <0x13420000 0x400
+> +			   0x13421000 0x40>;
+> +		#dma-cells =3D <2>;
+> +
+> +		interrupt-parent =3D <&intc>;
+> +		interrupts =3D <10>;
+> +
+> +		clocks =3D <&cgu X1000_CLK_PDMA>;
 > +	};
 > +
-> +	pins_msc0: msc0 {
-> +		function =3D "mmc0";
-> +		groups =3D "mmc0-1bit", "mmc0-4bit", "mmc0-8bit";
-> +		bias-disable;
+> +	mac: mac@134b0000 {
+
+Please name the nodes according to the devicetree specification; this=20
+should be 'ethernet@134b0000'.
+
+
+> +		compatible =3D "ingenic,x1000-mac", "snps,dwmac";
+> +		reg =3D <0x134b0000 0x2000>;
+> +
+> +		interrupt-parent =3D <&intc>;
+> +		interrupts =3D <55>;
+> +		interrupt-names =3D "macirq";
+> +
+> +		clocks =3D <&cgu X1000_CLK_MAC>;
+> +		clock-names =3D "stmmaceth";
+> +
+> +		status =3D "disabled";
+> +
+> +		mdio: mdio {
+> +			compatible =3D "snps,dwmac-mdio";
+> +			#address-cells =3D <1>;
+> +			#size-cells =3D <0>;
+> +
+> +			status =3D "disabled";
+> +		};
+> +	};
+> +
+> +	msc0: msc@13450000 {
+
+This should be 'mmc@13450000'
+
+
+> +		compatible =3D "ingenic,x1000-mmc";
+> +		reg =3D <0x13450000 0x1000>;
+> +
+> +		interrupt-parent =3D <&intc>;
+> +		interrupts =3D <37>;
+> +
+> +		clocks =3D <&cgu X1000_CLK_MSC0>;
+> +		clock-names =3D "mmc";
+> +
+> +		cap-sd-highspeed;
+> +		cap-mmc-highspeed;
+> +		cap-sdio-irq;
+> +
+> +		dmas =3D <&pdma X1000_DMA_MSC0_RX 0xffffffff>,
+> +			   <&pdma X1000_DMA_MSC0_TX 0xffffffff>;
+> +		dma-names =3D "rx", "tx";
+> +
+> +		status =3D "disabled";
+> +	};
+> +
+> +	msc1: msc@13460000 {
+
+This should be 'mmc@13460000'.
+
+Cheers,
+-Paul
+
+> +		compatible =3D "ingenic,x1000-mmc";
+> +		reg =3D <0x13460000 0x1000>;
+> +
+> +		interrupt-parent =3D <&intc>;
+> +		interrupts =3D <36>;
+> +
+> +		clocks =3D <&cgu X1000_CLK_MSC1>;
+> +		clock-names =3D "mmc";
+> +
+> +		cap-sd-highspeed;
+> +		cap-mmc-highspeed;
+> +		cap-sdio-irq;
+> +
+> +		dmas =3D <&pdma X1000_DMA_MSC1_RX 0xffffffff>,
+> +			   <&pdma X1000_DMA_MSC1_TX 0xffffffff>;
+> +		dma-names =3D "rx", "tx";
+> +
+> +		status =3D "disabled";
 > +	};
 >  };
-> diff --git a/arch/mips/configs/cu1000-neo_defconfig=20
-> b/arch/mips/configs/cu1000-neo_defconfig
-> index 4fafe92..9f988ed 100644
-> --- a/arch/mips/configs/cu1000-neo_defconfig
-> +++ b/arch/mips/configs/cu1000-neo_defconfig
-> @@ -16,8 +16,6 @@ CONFIG_CGROUP_DEVICE=3Dy
->  CONFIG_CGROUP_CPUACCT=3Dy
->  CONFIG_NAMESPACES=3Dy
->  CONFIG_USER_NS=3Dy
-> -CONFIG_BLK_DEV_INITRD=3Dy
-> -CONFIG_INITRAMFS_SOURCE=3D"arch/mips/boot/ramdisk.cpio.gz"
->  CONFIG_CC_OPTIMIZE_FOR_SIZE=3Dy
->  CONFIG_SYSCTL_SYSCALL=3Dy
->  CONFIG_KALLSYMS_ALL=3Dy
-> @@ -35,11 +33,17 @@ CONFIG_HZ_100=3Dy
->  # CONFIG_COMPACTION is not set
->  CONFIG_CMA=3Dy
->  CONFIG_CMA_AREAS=3D7
-> +CONFIG_NET=3Dy
-> +CONFIG_UNIX=3Dy
-> +CONFIG_INET=3Dy
->  CONFIG_UEVENT_HELPER=3Dy
->  CONFIG_UEVENT_HELPER_PATH=3D"/sbin/hotplug"
->  CONFIG_DEVTMPFS=3Dy
->  # CONFIG_FW_LOADER is not set
->  # CONFIG_ALLOW_DEV_COREDUMP is not set
-> +CONFIG_NETDEVICES=3Dy
-> +CONFIG_STMMAC_ETH=3Dy
-> +CONFIG_SMSC_PHY=3Dy
->  # CONFIG_INPUT_MOUSEDEV is not set
->  # CONFIG_INPUT_KEYBOARD is not set
->  # CONFIG_INPUT_MOUSE is not set
-> @@ -55,17 +59,26 @@ CONFIG_SERIAL_8250_INGENIC=3Dy
->  CONFIG_SERIAL_OF_PLATFORM=3Dy
->  # CONFIG_HW_RANDOM is not set
->  CONFIG_GPIO_SYSFS=3Dy
-> +CONFIG_WATCHDOG=3Dy
-> +CONFIG_JZ4740_WDT=3Dy
->  # CONFIG_HWMON is not set
->  # CONFIG_LCD_CLASS_DEVICE is not set
->  # CONFIG_BACKLIGHT_CLASS_DEVICE is not set
->  # CONFIG_VGA_CONSOLE is not set
->  # CONFIG_HID is not set
->  # CONFIG_USB_SUPPORT is not set
-> +CONFIG_MMC=3Dy
-> +CONFIG_MMC_JZ4740=3Dy
-> +CONFIG_RTC_CLASS=3Dy
-> +CONFIG_RTC_DRV_JZ4740=3Dy
-> +CONFIG_DMADEVICES=3Dy
-> +CONFIG_DMA_JZ4780=3Dy
->  # CONFIG_IOMMU_SUPPORT is not set
->  CONFIG_NVMEM=3Dy
->  CONFIG_NVMEM_SYSFS=3Dy
->  CONFIG_EXT4_FS=3Dy
->  # CONFIG_DNOTIFY is not set
-> +CONFIG_AUTOFS_FS=3Dy
->  CONFIG_PROC_KCORE=3Dy
->  # CONFIG_PROC_PAGE_MONITOR is not set
->  CONFIG_TMPFS=3Dy
 > --
 > 2.7.4
 >=20
