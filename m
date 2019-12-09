@@ -2,72 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5A21170F8
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Dec 2019 16:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1561174C9
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Dec 2019 19:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbfLIP6f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 Dec 2019 10:58:35 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:53947 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726335AbfLIP6f (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Dec 2019 10:58:35 -0500
-Received: from mail-qv1-f46.google.com ([209.85.219.46]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MNLVU-1iOKkV20xW-00OnEP; Mon, 09 Dec 2019 16:58:33 +0100
-Received: by mail-qv1-f46.google.com with SMTP id q19so2809690qvy.9;
-        Mon, 09 Dec 2019 07:58:33 -0800 (PST)
-X-Gm-Message-State: APjAAAUoU8BF8ueQj5y/rcHN0vuvRTcah7uj4o3ISVyuScVYjdaxse4B
-        d9yL1JwXtd42IxgUdMzuHLajILp3ZQLrmIDAxK8=
-X-Google-Smtp-Source: APXvYqzfA+s4iigShH1OUpALL9pM7Gi5eTR9vcm3mrcT15Eg4/g1ot1Er+BU82thfTbRYCX8LBbFI+f6z63dKsAgo00=
-X-Received: by 2002:ad4:4021:: with SMTP id q1mr19050150qvp.211.1575907112236;
- Mon, 09 Dec 2019 07:58:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20191209135823.28465-1-hch@lst.de> <20191209135823.28465-3-hch@lst.de>
-In-Reply-To: <20191209135823.28465-3-hch@lst.de>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 9 Dec 2019 16:58:15 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0xD-kdKYzDp+hvN=uHwSJtzYE-YSyR3_mkxOTUEs-C3w@mail.gmail.com>
-Message-ID: <CAK8P3a0xD-kdKYzDp+hvN=uHwSJtzYE-YSyR3_mkxOTUEs-C3w@mail.gmail.com>
-Subject: Re: [PATCH 2/2] remove ioremap_nocache and devm_ioremap_nocache
+        id S1726379AbfLISp7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 Dec 2019 13:45:59 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:46627 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726335AbfLISp7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Dec 2019 13:45:59 -0500
+Received: by mail-pl1-f195.google.com with SMTP id k20so6144226pll.13;
+        Mon, 09 Dec 2019 10:45:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=1gFoYCa7AlAmnk1s1t8ozpJosgfJNX2bcZlbOW2olns=;
+        b=B7GHAHceaIHu0mkV4fG2IOZLANfvqJeH++PRmyZuN9BF0BdGyY9fbzP8CAf19RphpA
+         enTEVOtfxGKGaJ+W5mBSmeo1OQ2WpXi3pqPIgVHeC/qvyn1pkfVL48bClnDcwwtoZblD
+         Qo+NyY+yDxqU5gMYrqOW/9krYswZBD1hviP5lTbjj/ZBsDNxcPzI4VW7TI78m1aWtbKS
+         jyswImA3q4CJ5aOdxvx/5TJJawZH2JPwjLHhmwF7rCAGzms5aYQeFhyWdXJHjRIBxrDQ
+         gv22Dpyx1JploOH/iFy2Zhd/hCgqKw8cuS4odsuNvbZKbdyUdM/0WR+UMi6NxdOzBJo7
+         km+Q==
+X-Gm-Message-State: APjAAAXyLaTUqnjOVm7uW1uh/PQeOlivLx65RC7SvKryOqRLFAIM+0hE
+        rmcM3SMQw98iGOfyxU1ZzJoYwpyRLIAYFw==
+X-Google-Smtp-Source: APXvYqyl5p3COqmJGCQ+A4j4ybM0jJFj2GPBs8ZwFrQSwoz6aE/5l4nbS9i0rrQm6wjycJ92+k3zpw==
+X-Received: by 2002:a17:902:aa85:: with SMTP id d5mr31870248plr.16.1575917158044;
+        Mon, 09 Dec 2019 10:45:58 -0800 (PST)
+Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
+        by smtp.gmail.com with ESMTPSA id t63sm200318pfb.70.2019.12.09.10.45.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Dec 2019 10:45:57 -0800 (PST)
+Date:   Mon, 9 Dec 2019 10:46:54 -0800
+From:   Paul Burton <paulburton@kernel.org>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:9oSL+iTX1j7w13cDsj385o7u5nBN4GfwQ1WRH4zI6gesS0J8Cbb
- Rgr977O7tsEZTjTNTHkK8KypxssCzb2DSk39PAwgDTxfF8bhu1FDT7NWPLNWUnKr1u/g5Tr
- tciqyUWmL5W6F0F7ZkOo9U5L1cm4TYd7QvlhSG2SzakXGwJWGTli47oT5CtMPd1wwe5KMGn
- I2ZIHQrgZxmixxWj4eQCA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ICMB7ZLL84U=:FuzPXns+7fRA/FGWvTn8u7
- 8fpd1EWICrUsjMk/TeTeAyCqLSC8rK8zZpzjgXAf+1NWoR0l51c/UwrcLczXQHbyMdN3kO3Ng
- QVTB4pLzr19BuXrX/dK03W5L5xaJwZnDt8w8jyTIXDvWTSCtQktCNSSH9NshqjSmZuTasUZ6B
- PhIfa3Fq9d3hpaHeUMvcch/nWV3g+yemZYSHhYCR80ZEkxB3aUFN1vmDCSsPQ/caLodOttSZk
- zbeu9021Bx/nwew3sy5AHxjGOdJmMExTfMoVAUUTK6yoXftoJTPJEKAoQaYwaUhBUJUiCHGaj
- dPqiyZ1xjZzU6Yo8W/VTCfPDvocWJx9sG3purfVKHmZFrVUx0jpDvjOmGlETc2r2u1qfvlJCQ
- jgUO8gpJQXEXdPtEQNJrLUp7UcViLzNiceRrhqTYg22IZokGHd/lN+2h8mVPq5jBop/Im/uin
- rStShBnHmUMqXgU1rN1jseLKs2xLzTwyAhtOp9nxs6uUB5WheLfWAhfX9zyPg1f+q4OIelfcu
- rH+zUE3XVisx2aM/cq5ccnFw9C2C2DNBgfEHYQum51Y2PTYj8oiau/1LA13Abyqx0Mrm/Rt7Z
- t0abxaGIyC2h2JCBizE5WuyjO3Qlxy/LJ/5FudGdVOOs0e2EvKEGx/MTTGK2QyqPugSpvI+M3
- XCkrDa9n5icoMOw26gTpZVT1Wf2FCKq7lcBqbA/jSXiYmGmqzHb2kT5xUQnAvYg/KmRbINrf1
- khAzjiYdHrka/TsLLDoUN1yHMC7racxwF3GXXAbEmz/JlwNEMwga48Gtu1CdUnrk+teXQnymn
- p8VxDiJ6q4PtuJ8HK+jxAH0C96n57oJCKJDR9XnQmiiWBHRJBVcqbvF4TOm9YKrI74+7BnCFE
- PJLS1J/BUOG12HC/wUyg==
+        James Hogan <jhogan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] MIPS: define ioremap_nocache to ioremap
+Message-ID: <20191209184654.w2d7mguzfc5cyage@lantea.localdomain>
+References: <20191209135823.28465-1-hch@lst.de>
+ <20191209135823.28465-2-hch@lst.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191209135823.28465-2-hch@lst.de>
+User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 9, 2019 at 2:58 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> ioremap has provided non-cached semantics by default since the Linux 2.6
-> days, so remove the additional ioremap_nocache interface.
->
+Hi Christoph,
+
+On Mon, Dec 09, 2019 at 02:58:21PM +0100, Christoph Hellwig wrote:
+> They are both defined the same way, but this makes it easier to validate
+> the scripted ioremap_nocache removal following soon.
+> 
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Great work, thanks for getting this done!
+Acked-by: Paul Burton <paulburton@kernel.org>
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Thanks,
+    Paul
+
+> ---
+>  arch/mips/include/asm/io.h | 25 ++-----------------------
+>  1 file changed, 2 insertions(+), 23 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+> index 3f6ce74335b4..d9caa811a2fa 100644
+> --- a/arch/mips/include/asm/io.h
+> +++ b/arch/mips/include/asm/io.h
+> @@ -227,29 +227,8 @@ static inline void __iomem *ioremap_prot(phys_addr_t offset,
+>   */
+>  #define ioremap(offset, size)						\
+>  	__ioremap_mode((offset), (size), _CACHE_UNCACHED)
+> -
+> -/*
+> - * ioremap_nocache     -   map bus memory into CPU space
+> - * @offset:    bus address of the memory
+> - * @size:      size of the resource to map
+> - *
+> - * ioremap_nocache performs a platform specific sequence of operations to
+> - * make bus memory CPU accessible via the readb/readw/readl/writeb/
+> - * writew/writel functions and the other mmio helpers. The returned
+> - * address is not guaranteed to be usable directly as a virtual
+> - * address.
+> - *
+> - * This version of ioremap ensures that the memory is marked uncachable
+> - * on the CPU as well as honouring existing caching rules from things like
+> - * the PCI bus. Note that there are other caches and buffers on many
+> - * busses. In particular driver authors should read up on PCI writes
+> - *
+> - * It's useful if some control registers are in such an area and
+> - * write combining or read caching is not desirable:
+> - */
+> -#define ioremap_nocache(offset, size)					\
+> -	__ioremap_mode((offset), (size), _CACHE_UNCACHED)
+> -#define ioremap_uc ioremap_nocache
+> +#define ioremap_nocache		ioremap
+> +#define ioremap_uc		ioremap
+>  
+>  /*
+>   * ioremap_cache -	map bus memory into CPU space
+> -- 
+> 2.20.1
+> 
