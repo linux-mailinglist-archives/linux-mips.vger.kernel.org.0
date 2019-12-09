@@ -2,214 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FFF11701B
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Dec 2019 16:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5A21170F8
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Dec 2019 16:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726683AbfLIPPa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 Dec 2019 10:15:30 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:49360 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbfLIPPa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Dec 2019 10:15:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1575904528; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8XfP90Nlwni1+fdvvtFIPCYN2PgxWebcTW6S+oGU2DU=;
-        b=fVrCyeXpmcJtkdaj0x6BgczRUtY+HTz3bmII6iUJGY1opRCHAqH3xVWglmKWNASEudvk/1
-        BqTNVK6oos0oalN6ZkKcmOJTWGKn8m0nNLhHuG6Kvrm/Z7VkiHQbyld/7ghubHKSOOjg7Y
-        k+DRmaAIl4KkrzK+aFIYe70rH/4xJiw=
-Date:   Mon, 09 Dec 2019 16:15:18 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v7 5/6] MIPS: X1000: Add missing X1000 nodes.
-To:     =?UTF-8?b?5ZGo55Cw5p2w?= "(Zhou Yanjie)" 
-        <zhouyanjie@wanyeetech.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        paul.burton@mips.com, paulburton@kernel.org, jhogan@kernel.org,
-        mripard@kernel.org, shawnguo@kernel.org, mark.rutland@arm.com,
-        ebiederm@xmission.com, ralf@linux-mips.org, heiko@sntech.de,
-        icenowy@aosc.io, laurent.pinchart@ideasonboard.com,
-        krzk@kernel.org, geert+renesas@glider.be,
-        prasannatsmkumar@gmail.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, 772753199@qq.com
-Message-Id: <1575904518.3.3@crapouillou.net>
-In-Reply-To: <1575896438-9562-6-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1575896438-9562-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1575896438-9562-6-git-send-email-zhouyanjie@wanyeetech.com>
+        id S1726477AbfLIP6f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 Dec 2019 10:58:35 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:53947 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726335AbfLIP6f (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Dec 2019 10:58:35 -0500
+Received: from mail-qv1-f46.google.com ([209.85.219.46]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MNLVU-1iOKkV20xW-00OnEP; Mon, 09 Dec 2019 16:58:33 +0100
+Received: by mail-qv1-f46.google.com with SMTP id q19so2809690qvy.9;
+        Mon, 09 Dec 2019 07:58:33 -0800 (PST)
+X-Gm-Message-State: APjAAAUoU8BF8ueQj5y/rcHN0vuvRTcah7uj4o3ISVyuScVYjdaxse4B
+        d9yL1JwXtd42IxgUdMzuHLajILp3ZQLrmIDAxK8=
+X-Google-Smtp-Source: APXvYqzfA+s4iigShH1OUpALL9pM7Gi5eTR9vcm3mrcT15Eg4/g1ot1Er+BU82thfTbRYCX8LBbFI+f6z63dKsAgo00=
+X-Received: by 2002:ad4:4021:: with SMTP id q1mr19050150qvp.211.1575907112236;
+ Mon, 09 Dec 2019 07:58:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+References: <20191209135823.28465-1-hch@lst.de> <20191209135823.28465-3-hch@lst.de>
+In-Reply-To: <20191209135823.28465-3-hch@lst.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 9 Dec 2019 16:58:15 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0xD-kdKYzDp+hvN=uHwSJtzYE-YSyR3_mkxOTUEs-C3w@mail.gmail.com>
+Message-ID: <CAK8P3a0xD-kdKYzDp+hvN=uHwSJtzYE-YSyR3_mkxOTUEs-C3w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] remove ioremap_nocache and devm_ioremap_nocache
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:9oSL+iTX1j7w13cDsj385o7u5nBN4GfwQ1WRH4zI6gesS0J8Cbb
+ Rgr977O7tsEZTjTNTHkK8KypxssCzb2DSk39PAwgDTxfF8bhu1FDT7NWPLNWUnKr1u/g5Tr
+ tciqyUWmL5W6F0F7ZkOo9U5L1cm4TYd7QvlhSG2SzakXGwJWGTli47oT5CtMPd1wwe5KMGn
+ I2ZIHQrgZxmixxWj4eQCA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ICMB7ZLL84U=:FuzPXns+7fRA/FGWvTn8u7
+ 8fpd1EWICrUsjMk/TeTeAyCqLSC8rK8zZpzjgXAf+1NWoR0l51c/UwrcLczXQHbyMdN3kO3Ng
+ QVTB4pLzr19BuXrX/dK03W5L5xaJwZnDt8w8jyTIXDvWTSCtQktCNSSH9NshqjSmZuTasUZ6B
+ PhIfa3Fq9d3hpaHeUMvcch/nWV3g+yemZYSHhYCR80ZEkxB3aUFN1vmDCSsPQ/caLodOttSZk
+ zbeu9021Bx/nwew3sy5AHxjGOdJmMExTfMoVAUUTK6yoXftoJTPJEKAoQaYwaUhBUJUiCHGaj
+ dPqiyZ1xjZzU6Yo8W/VTCfPDvocWJx9sG3purfVKHmZFrVUx0jpDvjOmGlETc2r2u1qfvlJCQ
+ jgUO8gpJQXEXdPtEQNJrLUp7UcViLzNiceRrhqTYg22IZokGHd/lN+2h8mVPq5jBop/Im/uin
+ rStShBnHmUMqXgU1rN1jseLKs2xLzTwyAhtOp9nxs6uUB5WheLfWAhfX9zyPg1f+q4OIelfcu
+ rH+zUE3XVisx2aM/cq5ccnFw9C2C2DNBgfEHYQum51Y2PTYj8oiau/1LA13Abyqx0Mrm/Rt7Z
+ t0abxaGIyC2h2JCBizE5WuyjO3Qlxy/LJ/5FudGdVOOs0e2EvKEGx/MTTGK2QyqPugSpvI+M3
+ XCkrDa9n5icoMOw26gTpZVT1Wf2FCKq7lcBqbA/jSXiYmGmqzHb2kT5xUQnAvYg/KmRbINrf1
+ khAzjiYdHrka/TsLLDoUN1yHMC7racxwF3GXXAbEmz/JlwNEMwga48Gtu1CdUnrk+teXQnymn
+ p8VxDiJ6q4PtuJ8HK+jxAH0C96n57oJCKJDR9XnQmiiWBHRJBVcqbvF4TOm9YKrI74+7BnCFE
+ PJLS1J/BUOG12HC/wUyg==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Zhou,
+On Mon, Dec 9, 2019 at 2:58 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> ioremap has provided non-cached semantics by default since the Linux 2.6
+> days, so remove the additional ioremap_nocache interface.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
+Great work, thanks for getting this done!
 
-Le lun., d=C3=A9c. 9, 2019 at 21:00, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanj=
-ie)=20
-<zhouyanjie@wanyeetech.com> a =C3=A9crit :
-> Add the appropriate DT node to probe pdma/msc/rtc/watchdog/ethernet
-> driver using the devicetree.
->=20
-> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
-eetech.com>
-> ---
->=20
-> Notes:
->     v7:
->     New patch, merge[05/12],[07/12],[09/12],[11/12] in v6.
->=20
->  arch/mips/boot/dts/ingenic/x1000.dtsi | 96=20
-> +++++++++++++++++++++++++++++++++++
->  1 file changed, 96 insertions(+)
->=20
-> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi=20
-> b/arch/mips/boot/dts/ingenic/x1000.dtsi
-> index 13a6c9ff..398a756 100644
-> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
-> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include <dt-bindings/clock/x1000-cgu.h>
-> +#include <dt-bindings/dma/x1000-dma.h>
->=20
->  / {
->  	#address-cells =3D <1>;
-> @@ -68,6 +69,25 @@
->  		interrupts =3D <27 26 25>;
->  	};
->=20
-> +	wdt: watchdog@10002000 {
-> +		compatible =3D "ingenic,x1000-watchdog", "ingenic,jz4780-watchdog";
-> +		reg =3D <0x10002000 0x10>;
-> +
-> +		clocks =3D <&cgu X1000_CLK_RTCLK>;
-> +		clock-names =3D "rtc";
-> +	};
-
-The watchdog node should be a children of the TCU node, see
-Documentation/devicetree/bindings/timer/ingenic,tcu.txt
-
-
-> +
-> +	rtc: rtc@10003000 {
-> +		compatible =3D "ingenic,x1000-rtc", "ingenic,jz4780-rtc";
-> +		reg =3D <0x10003000 0x4c>;
-> +
-> +		interrupt-parent =3D <&intc>;
-> +		interrupts =3D <32>;
-> +
-> +		clocks =3D <&cgu X1000_CLK_RTCLK>;
-> +		clock-names =3D "rtc";
-> +	};
-> +
->  	pinctrl: pin-controller@10010000 {
->  		compatible =3D "ingenic,x1000-pinctrl";
->  		reg =3D <0x10010000 0x800>;
-> @@ -173,4 +193,80 @@
->=20
->  		status =3D "disabled";
->  	};
-> +
-> +	pdma: dma-controller@13420000 {
-> +		compatible =3D "ingenic,x1000-dma";
-> +		reg =3D <0x13420000 0x400
-> +			   0x13421000 0x40>;
-> +		#dma-cells =3D <2>;
-> +
-> +		interrupt-parent =3D <&intc>;
-> +		interrupts =3D <10>;
-> +
-> +		clocks =3D <&cgu X1000_CLK_PDMA>;
-> +	};
-> +
-> +	mac: mac@134b0000 {
-
-Please name the nodes according to the devicetree specification; this=20
-should be 'ethernet@134b0000'.
-
-
-> +		compatible =3D "ingenic,x1000-mac", "snps,dwmac";
-> +		reg =3D <0x134b0000 0x2000>;
-> +
-> +		interrupt-parent =3D <&intc>;
-> +		interrupts =3D <55>;
-> +		interrupt-names =3D "macirq";
-> +
-> +		clocks =3D <&cgu X1000_CLK_MAC>;
-> +		clock-names =3D "stmmaceth";
-> +
-> +		status =3D "disabled";
-> +
-> +		mdio: mdio {
-> +			compatible =3D "snps,dwmac-mdio";
-> +			#address-cells =3D <1>;
-> +			#size-cells =3D <0>;
-> +
-> +			status =3D "disabled";
-> +		};
-> +	};
-> +
-> +	msc0: msc@13450000 {
-
-This should be 'mmc@13450000'
-
-
-> +		compatible =3D "ingenic,x1000-mmc";
-> +		reg =3D <0x13450000 0x1000>;
-> +
-> +		interrupt-parent =3D <&intc>;
-> +		interrupts =3D <37>;
-> +
-> +		clocks =3D <&cgu X1000_CLK_MSC0>;
-> +		clock-names =3D "mmc";
-> +
-> +		cap-sd-highspeed;
-> +		cap-mmc-highspeed;
-> +		cap-sdio-irq;
-> +
-> +		dmas =3D <&pdma X1000_DMA_MSC0_RX 0xffffffff>,
-> +			   <&pdma X1000_DMA_MSC0_TX 0xffffffff>;
-> +		dma-names =3D "rx", "tx";
-> +
-> +		status =3D "disabled";
-> +	};
-> +
-> +	msc1: msc@13460000 {
-
-This should be 'mmc@13460000'.
-
-Cheers,
--Paul
-
-> +		compatible =3D "ingenic,x1000-mmc";
-> +		reg =3D <0x13460000 0x1000>;
-> +
-> +		interrupt-parent =3D <&intc>;
-> +		interrupts =3D <36>;
-> +
-> +		clocks =3D <&cgu X1000_CLK_MSC1>;
-> +		clock-names =3D "mmc";
-> +
-> +		cap-sd-highspeed;
-> +		cap-mmc-highspeed;
-> +		cap-sdio-irq;
-> +
-> +		dmas =3D <&pdma X1000_DMA_MSC1_RX 0xffffffff>,
-> +			   <&pdma X1000_DMA_MSC1_TX 0xffffffff>;
-> +		dma-names =3D "rx", "tx";
-> +
-> +		status =3D "disabled";
-> +	};
->  };
-> --
-> 2.7.4
->=20
-
-=
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
