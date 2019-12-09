@@ -2,220 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A315811660E
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Dec 2019 06:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC54116D31
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Dec 2019 13:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725819AbfLIFKq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 Dec 2019 00:10:46 -0500
-Received: from out28-97.mail.aliyun.com ([115.124.28.97]:44876 "EHLO
-        out28-97.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725842AbfLIFKp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Dec 2019 00:10:45 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436416|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.494672-0.0111643-0.494164;DS=CONTINUE|ham_alarm|0.0698833-0.000280942-0.929836;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03305;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.GDNCC0Y_1575868229;
-Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GDNCC0Y_1575868229)
-          by smtp.aliyun-inc.com(10.147.40.200);
-          Mon, 09 Dec 2019 13:10:37 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
+        id S1727502AbfLIMhQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 Dec 2019 07:37:16 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:37162 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727074AbfLIMhQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Dec 2019 07:37:16 -0500
+Received: by mail-lj1-f195.google.com with SMTP id u17so15443743lja.4
+        for <linux-mips@vger.kernel.org>; Mon, 09 Dec 2019 04:37:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unikie-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id;
+        bh=GiXpIaD3VJjUBpbqY25RmlTMgg78Egsv8eWQ1U/XvHg=;
+        b=DaTTSQGptwgzSUwlKMKpHnEdfmTG2Xk+NsFw6C7tL1ZfykE2sITGqwTjarUf4bs59K
+         Ao0WhZSU/uh0tzqOo455Q7C/Tm1BTWN1znZDtUryLQUs9lBf6ARkg9tjpmrgTnnpFsHr
+         9yhEZMBOyaP2D/BAOoucLDtc7lBpiBbZ4B5wOcYTHBjPDr+/Kr+K0mS2zTkTXaUnq3+b
+         a/L7haNvyEkXVlIue0E+Dq4KeEs9JVTo8CnIvBdrDBqIBodNR+F80eaZg4Qh+diXbr7Y
+         QLsTkTA6Ve2ZI3wIvvGjOHQ4grqNZmZph43H2CLYWcICvPbAbsnsjoRZiAdg1OsFJg/F
+         0xlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=GiXpIaD3VJjUBpbqY25RmlTMgg78Egsv8eWQ1U/XvHg=;
+        b=Q6b608D0ERoy2pQTUSyHlb8BCC0TyCZpA9zGnofKcOzk2Nxeh4oW0N5nfMpVu2uMh+
+         EQDfAGXDszlkW0aX/vrJL6U7+5jPbnkR3b0WzBQpWsjLB4AZ2CUtdBiX2yqTITYOibZK
+         uss+cqXW9qih2U5n+67BXJamnUIIceCkTUu1XE/Wnj7wXekQ4POsVPfdnA+xlleBDzzF
+         tNV/SmeWlWfIsv0FhxXmL7lGXuXy4Nxm1WiMvcKz8FGNiEgeNZMHqm1pDbkdw+X6nmSF
+         5iBiebBKwZ0Ll1F44uAlaelas+jZ0fsFUF7eCQaTzejLVxqSOTxIo4gRFLs4iv2h3ew9
+         Muvg==
+X-Gm-Message-State: APjAAAX/VOYX8mCAkJG6qAddjHdJ5BGWiY5iIsRwwi86J9tLGVE2SosB
+        +ZWkzAFV/aCuWuJIrMhMeZJK7jg5uY4=
+X-Google-Smtp-Source: APXvYqyDYCTARNmLB3hVS1u2JjHg9QFOOkVVghm1nD7khMV8TSOt9m8SflF0jnqfTN1jtfrdrRH3HA==
+X-Received: by 2002:a2e:8015:: with SMTP id j21mr17055063ljg.172.1575895034385;
+        Mon, 09 Dec 2019 04:37:14 -0800 (PST)
+Received: from localhost.localdomain ([109.204.235.119])
+        by smtp.gmail.com with ESMTPSA id d11sm10784501lfj.3.2019.12.09.04.37.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Dec 2019 04:37:13 -0800 (PST)
+From:   jouni.hogander@unikie.com
 To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, yamada.masahiro@socionext.com,
-        tglx@linutronix.de, chenhc@lemote.com, tbogendoerfer@suse.de,
-        paul.burton@mips.com, paulburton@kernel.org, paul@crapouillou.net,
-        jhogan@kernel.org, fancer.lancer@gmail.com, ralf@linux-mips.org,
-        jiaxun.yang@flygoat.com
-Subject: [PATCH v2] MIPS: X1830: Add X1830 system type.
-Date:   Mon,  9 Dec 2019 13:10:25 +0800
-Message-Id: <1575868225-57755-2-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1575868225-57755-1-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1575868225-57755-1-git-send-email-zhouyanjie@wanyeetech.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Cc:     Jouni Hogander <jouni.hogander@unikie.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MIPS: Prevent link failure with kcov instrumentation
+Date:   Mon,  9 Dec 2019 14:37:07 +0200
+Message-Id: <20191209123707.19693-1-jouni.hogander@unikie.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-1.Add X1830 system type for cat /proc/cpuinfo to give out X1830.
-2.Change "PRID_IMP_XBURST" to "PRID_IMP_XBURST_REV1" and add a
-  new "PRID_IMP_XBURST_REV2" for new Ingenic CPUs which has
-  XBurst with MXU2 SIMD ISA.
+From: Jouni Hogander <jouni.hogander@unikie.com>
 
-Notice:
-1."PRID_IMP_XBURST_REV2" is corresponds to the latest XBurst
-  processor with 128bit MXU2 SIMD instruction set, not the upcoming
-  XBurst2 processor. This version of the processors fixes issues
-  such as BTB and HPTLB.
-2.In order to simplify and reuse the code, the "c->cputype" and
-  the "c->writecombine" and the "__cpu_name[cpu]" in the original
-  "PRID_IMP_XBURST" (now is "PRID_IMP_XBURST_REV1") are removed,
-  and the corresponding settings are abtained through fall-through
-  to "PRID_IMP_XBURST_REV2", which will cause the name that was
-  previously mistakenly called "JZRISC" to become to the real name
-  "XBurst".
+__sanitizer_cov_trace_pc() is not linked in and causing link
+failure if KCOV_INSTRUMENT is enabled. Fix this by disabling
+instrumentation for compressed image.
 
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+
+Signed-off-by: Jouni Hogander <jouni.hogander@unikie.com>
 ---
+ arch/mips/boot/compressed/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Notes:
-    v1->v2:
-    1.Add more detailed commit message.
-    2.Add a /* fall-through */ comment to prevent GCC from issuing a
-      warning when -Wimplicit-fallthrough is used.
-    3.Change my Signed-off-by from "Zhou Yanjie <zhouyanjie@zoho.com>"
-      to "周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>" because
-      the old mailbox is in an unstable state.
-
- arch/mips/include/asm/bootinfo.h |  1 +
- arch/mips/include/asm/cpu.h      |  5 ++--
- arch/mips/jz4740/setup.c         |  4 +++
- arch/mips/kernel/cpu-probe.c     | 65 ++++++++++++++++++++++------------------
- 4 files changed, 44 insertions(+), 31 deletions(-)
-
-diff --git a/arch/mips/include/asm/bootinfo.h b/arch/mips/include/asm/bootinfo.h
-index d41a505..6172778 100644
---- a/arch/mips/include/asm/bootinfo.h
-+++ b/arch/mips/include/asm/bootinfo.h
-@@ -81,6 +81,7 @@ enum loongson2ef_machine_type {
- #define  MACH_INGENIC_JZ4770	2	/* JZ4770 SOC		*/
- #define  MACH_INGENIC_JZ4780	3	/* JZ4780 SOC		*/
- #define  MACH_INGENIC_X1000		4	/* X1000 SOC		*/
-+#define  MACH_INGENIC_X1830		5	/* X1830 SOC		*/
+diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+index 172801ed35b8..d859f079b771 100644
+--- a/arch/mips/boot/compressed/Makefile
++++ b/arch/mips/boot/compressed/Makefile
+@@ -29,6 +29,9 @@ KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
+ 	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) \
+ 	-DKERNEL_ENTRY=$(VMLINUX_ENTRY_ADDRESS)
  
- extern char *system_type;
- const char *get_system_type(void);
-diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
-index ea83078..0e10ffc 100644
---- a/arch/mips/include/asm/cpu.h
-+++ b/arch/mips/include/asm/cpu.h
-@@ -46,7 +46,7 @@
- #define PRID_COMP_NETLOGIC	0x0c0000
- #define PRID_COMP_CAVIUM	0x0d0000
- #define PRID_COMP_LOONGSON	0x140000
--#define PRID_COMP_INGENIC_D0	0xd00000	/* JZ4740, JZ4750 */
-+#define PRID_COMP_INGENIC_D0	0xd00000	/* JZ4740, JZ4750, X1830 */
- #define PRID_COMP_INGENIC_D1	0xd10000	/* JZ4770, JZ4775, X1000 */
- #define PRID_COMP_INGENIC_E1	0xe10000	/* JZ4780 */
- 
-@@ -185,7 +185,8 @@
-  * These are the PRID's for when 23:16 == PRID_COMP_INGENIC_*
-  */
- 
--#define PRID_IMP_XBURST	       0x0200
-+#define PRID_IMP_XBURST_REV1	0x0200	/* XBurst with MXU SIMD ISA		*/
-+#define PRID_IMP_XBURST_REV2	0x0100	/* XBurst with MXU2 SIMD ISA	*/
- 
- /*
-  * These are the PRID's for when 23:16 == PRID_COMP_NETLOGIC
-diff --git a/arch/mips/jz4740/setup.c b/arch/mips/jz4740/setup.c
-index dc8ee21..880c268 100644
---- a/arch/mips/jz4740/setup.c
-+++ b/arch/mips/jz4740/setup.c
-@@ -44,6 +44,8 @@ static void __init jz4740_detect_mem(void)
- 
- static unsigned long __init get_board_mach_type(const void *fdt)
- {
-+	if (!fdt_node_check_compatible(fdt, 0, "ingenic,x1830"))
-+		return MACH_INGENIC_X1830;
- 	if (!fdt_node_check_compatible(fdt, 0, "ingenic,x1000"))
- 		return MACH_INGENIC_X1000;
- 	if (!fdt_node_check_compatible(fdt, 0, "ingenic,jz4780"))
-@@ -86,6 +88,8 @@ void __init device_tree_init(void)
- const char *get_system_type(void)
- {
- 	switch (mips_machtype) {
-+	case MACH_INGENIC_X1830:
-+		return "X1830";
- 	case MACH_INGENIC_X1000:
- 		return "X1000";
- 	case MACH_INGENIC_JZ4780:
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index c543326..c063654 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -1960,10 +1960,8 @@ static inline void cpu_probe_ingenic(struct cpuinfo_mips *c, unsigned int cpu)
- 	BUG_ON(!__builtin_constant_p(cpu_has_counter) || cpu_has_counter);
- 
- 	switch (c->processor_id & PRID_IMP_MASK) {
--	case PRID_IMP_XBURST:
--		c->cputype = CPU_XBURST;
--		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
--		__cpu_name[cpu] = "Ingenic JZRISC";
-+	case PRID_IMP_XBURST_REV1:
++# Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
++KCOV_INSTRUMENT		:= n
 +
- 		/*
- 		 * The XBurst core by default attempts to avoid branch target
- 		 * buffer lookups by detecting & special casing loops. This
-@@ -1971,34 +1969,43 @@ static inline void cpu_probe_ingenic(struct cpuinfo_mips *c, unsigned int cpu)
- 		 * Set cp0 config7 bit 4 to disable this feature.
- 		 */
- 		set_c0_config7(MIPS_CONF7_BTB_LOOP_EN);
--		break;
--	default:
--		panic("Unknown Ingenic Processor ID!");
--		break;
--	}
+ # decompressor objects (linked with vmlinuz)
+ vmlinuzobjs-y := $(obj)/head.o $(obj)/decompress.o $(obj)/string.o
  
--	switch (c->processor_id & PRID_COMP_MASK) {
--	/*
--	 * The config0 register in the XBurst CPUs with a processor ID of
--	 * PRID_COMP_INGENIC_D1 has an abandoned huge page tlb mode, this
--	 * mode is not compatible with the MIPS standard, it will cause
--	 * tlbmiss and into an infinite loop (line 21 in the tlb-funcs.S)
--	 * when starting the init process. After chip reset, the default
--	 * is HPTLB mode, Write 0xa9000000 to cp0 register 5 sel 4 to
--	 * switch back to VTLB mode to prevent getting stuck.
--	 */
--	case PRID_COMP_INGENIC_D1:
--		write_c0_page_ctrl(XBURST_PAGECTRL_HPTLB_DIS);
--		break;
--	/*
--	 * The config0 register in the XBurst CPUs with a processor ID of
--	 * PRID_COMP_INGENIC_D0 report themselves as MIPS32r2 compatible,
--	 * but they don't actually support this ISA.
--	 */
--	case PRID_COMP_INGENIC_D0:
--		c->isa_level &= ~MIPS_CPU_ISA_M32R2;
-+		switch (c->processor_id & PRID_COMP_MASK) {
-+
-+		/*
-+		 * The config0 register in the XBurst CPUs with a processor ID of
-+		 * PRID_COMP_INGENIC_D0 report themselves as MIPS32r2 compatible,
-+		 * but they don't actually support this ISA.
-+		 */
-+		case PRID_COMP_INGENIC_D0:
-+			c->isa_level &= ~MIPS_CPU_ISA_M32R2;
-+			break;
-+
-+		/*
-+		 * The config0 register in the XBurst CPUs with a processor ID of
-+		 * PRID_COMP_INGENIC_D1 has an abandoned huge page tlb mode, this
-+		 * mode is not compatible with the MIPS standard, it will cause
-+		 * tlbmiss and into an infinite loop (line 21 in the tlb-funcs.S)
-+		 * when starting the init process. After chip reset, the default
-+		 * is HPTLB mode, Write 0xa9000000 to cp0 register 5 sel 4 to
-+		 * switch back to VTLB mode to prevent getting stuck.
-+		 */
-+		case PRID_COMP_INGENIC_D1:
-+			write_c0_page_ctrl(XBURST_PAGECTRL_HPTLB_DIS);
-+			break;
-+
-+		default:
-+			break;
-+		}
-+	/* fall-through */
-+	case PRID_IMP_XBURST_REV2:
-+		c->cputype = CPU_XBURST;
-+		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
-+		__cpu_name[cpu] = "Ingenic XBurst";
- 		break;
-+
- 	default:
-+		panic("Unknown Ingenic Processor ID!");
- 		break;
- 	}
- }
 -- 
-2.7.4
+2.17.1
 
