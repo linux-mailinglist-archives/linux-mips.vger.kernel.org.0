@@ -2,75 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B789B118026
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Dec 2019 07:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6461411878D
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Dec 2019 13:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727208AbfLJGF6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Dec 2019 01:05:58 -0500
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:37380 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727047AbfLJGF6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Dec 2019 01:05:58 -0500
-Received: by mail-ed1-f68.google.com with SMTP id cy15so14932068edb.4
-        for <linux-mips@vger.kernel.org>; Mon, 09 Dec 2019 22:05:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=lViM4etGs/pVF9jczQMDENMAQhRZxDQ8AmI8/T8PuXQ=;
-        b=VcuQ3/rMr6VSnTMbKkyKYd2aQpOqt4OvY/nydATOrFlXi2B+E8o4GLTkzNmD4mCJ3/
-         y9H/aJxtpcBdp5UyELJPDmzWRMcuwfLwFfOB+g4LZkni4aPw9+q8TZqMdKEOZ7fdBNwC
-         AedkNQ8gcZi6uZq2HLvd4wAdavzsMtuPxHMSaZhk2xVfNMkvn+M1KogLOMhdPRaOZUfG
-         6hbfzZFPji+3JAq9EJVU2T2z9O8zGDticlrSrzZtMBZN3ozgPpyES2gn+DOMbFytUACy
-         FnQq99CETLfL11gU4/poeqKE2wTIA6WXvDtWY8Y06MR8oqIaVa1GweoeHM39js8Z7Uhl
-         S9Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=lViM4etGs/pVF9jczQMDENMAQhRZxDQ8AmI8/T8PuXQ=;
-        b=AYNyLkCZO11IXLc5mrp+ll5orhAM8zAbaRBWS3nmhTIykRXtT60hKm77KcbGE5gDWy
-         jSftc1gjKmreSic0RlPMBVTIWfsIrsS91j+hTU4YqGJyt6A76rNB3NgjA/cfnVRcv1nF
-         3+221Pe+B5ljaSqYz/ApqWtyV9sGo2R2EOpfBxVViILeB2Ku5AX1lwDCu2LfvRCAePb/
-         s74MQgIxpjVS6pawWFc6lLtOSuHfUAmwgszpAZG1CoPQ3fOBfKTU5JpO4hujHFm94S6U
-         L17G5Q2nxPEZOF78eBZCSP7OC6s4/MnVOEwFOGlW0aMADIhlvKKUm4/Xxd4QAjKJYuTr
-         4v/w==
-X-Gm-Message-State: APjAAAX9d4Nwz1GlPubXRGQA9M4y9Swi0ShnMq+P4umWRzJkWECDZ9bc
-        lFajJcmHHyvCBuKRv5gYq58Kvd7T0wQ1o9KGXRI=
-X-Google-Smtp-Source: APXvYqyyMaeO9ZnAQFXALl97s4QF8U45UvNf6kc+iw3A7R3mla+LdVtS+jh+Z4y82/gGlLtExaMafjnD6suI9xx7B0U=
-X-Received: by 2002:aa7:d8c4:: with SMTP id k4mr36474561eds.299.1575957956838;
- Mon, 09 Dec 2019 22:05:56 -0800 (PST)
+        id S1727453AbfLJMDN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 Dec 2019 07:03:13 -0500
+Received: from out28-123.mail.aliyun.com ([115.124.28.123]:54022 "EHLO
+        out28-123.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727320AbfLJMDN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Dec 2019 07:03:13 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2567402|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.0330182-0.000441002-0.966541;DS=CONTINUE|ham_social|0.0819971-0.00124194-0.916761;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03307;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=25;RT=25;SR=0;TI=SMTPD_---.GEHd9lh_1575979374;
+Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GEHd9lh_1575979374)
+          by smtp.aliyun-inc.com(10.147.42.197);
+          Tue, 10 Dec 2019 20:03:01 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
+        jhogan@kernel.org, mripard@kernel.org, shawnguo@kernel.org,
+        mark.rutland@arm.com, alexandre.belloni@bootlin.com,
+        ralf@linux-mips.org, heiko@sntech.de, icenowy@aosc.io,
+        ak@linux.intel.com, laurent.pinchart@ideasonboard.com,
+        krzk@kernel.org, geert+renesas@glider.be, paul@crapouillou.net,
+        prasannatsmkumar@gmail.com, keescook@chromium.org,
+        ebiederm@xmission.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, 772753199@qq.com
+Subject: Add initial support for Ingenic X1000 SoC and Y&A CU Neo board v7.
+Date:   Tue, 10 Dec 2019 20:02:39 +0800
+Message-Id: <1575979363-25956-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Reply-To: kzakari04@gmail.com
-Received: by 2002:a05:6402:1a36:0:0:0:0 with HTTP; Mon, 9 Dec 2019 22:05:56
- -0800 (PST)
-From:   Karim Zakari <kariim1960z@gmail.com>
-Date:   Tue, 10 Dec 2019 07:05:56 +0100
-X-Google-Sender-Auth: QN0Wu5Og_kJZlgBz2twmVLRmQPw
-Message-ID: <CAA+qVkyXasdm7T-1fJZEVmxjCRcVgv8R7_oC--3iqmB-a2YYUw@mail.gmail.com>
-Subject: URGENT REPLY.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
--- 
-Dear  Friend,
+v7->v8:
+1.Change "mac@134b0000" to "ethernet@134b0000", change "msc@13450000"
+  to "mmc@13450000", change "msc@13460000" to "mmc@13460000".
+2.Merge [5/6] in v7 to [1/4] of v8, merge [6/6] in v7 to [4/4] of v8.
 
-  I know that this letter will come to you as surprise, I got your
-contact address while I am searching for foreign partner to assist me
-in  this business transaction that is present in our favor, My name is
-Mr. KARIM  ZAKARI, I am the Bill and Exchange (assistant)  Manager
-(BOA) BANK OF AFRICA. I'm proposing to lift in your name (US$16.5
-Million Dollars) that belong to our later customer, MR.  GORPUN
-VLADIMIR From Saratov Oblast Russia who died in Siber airline that
-crashed into sea  at Isreal on 4th October 2001.
-
-I want to present you to my bank here as the beneficiary to this fund
-and I Am waiting for your response for more details, As you are
-willing to execute this business appointunity with me.
-
-Thanks,
-Yours Sincerely,
-Mr. Karim Zakari.
