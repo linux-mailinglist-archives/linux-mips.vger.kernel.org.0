@@ -2,34 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E219C119431
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Dec 2019 22:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBDF8119A3A
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Dec 2019 22:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729497AbfLJVN7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Dec 2019 16:13:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40990 "EHLO mail.kernel.org"
+        id S1726568AbfLJVus (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 Dec 2019 16:50:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55548 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727376AbfLJVN7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:13:59 -0500
+        id S1727827AbfLJVIQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:08:16 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F24E9206EC;
-        Tue, 10 Dec 2019 21:13:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 556F72469A;
+        Tue, 10 Dec 2019 21:08:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012438;
-        bh=LPeNf+C9NhRIiQSMABV1XMqyuVoNoMCQgKrIxBmfE3w=;
+        s=default; t=1576012096;
+        bh=a4ZjSUbhdkUB9ysnpymNNPpDNmR+PGfGrZG2TExZ1qk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N9qfEyl9cVKMwCWRS63Hw89VYgGfTyrd61i4t/3tH70RcedeNQHyGR3cOuGZgwmxu
-         3p78RO7CcREwcof+jhpm/eOF+cwOBFGF/G27+lVt0qCqBoEjIDcg7cze7hM0cOWbSc
-         RqE45SxtUHdPpzr8OWPz+qGL8qFjGqNzgVTN7P/w=
+        b=VAhLs+IGevoH2pHKCa1vH29t/zzvUySlh2gaKad49eQVpE1LfQ+nsR0qrJI1NAknR
+         v1ES/HZv2GRsOLQ5ypP/xvAYQvf5r+agfBK5KP3WmVsoCcZC1N0MpZRN6zyZztvpf5
+         UIY0qHekoGJrGGxV2It2oWxCaWy+/s7mDBJVVqME=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Paul Burton <paul.burton@mips.com>,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 350/350] MIPS: futex: Restore \n after sync instructions
-Date:   Tue, 10 Dec 2019 16:07:35 -0500
-Message-Id: <20191210210735.9077-311-sashal@kernel.org>
+Cc:     Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 072/350] MIPS: syscall: Emit Loongson3 sync workarounds within asm
+Date:   Tue, 10 Dec 2019 16:02:57 -0500
+Message-Id: <20191210210735.9077-33-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -44,60 +46,50 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Paul Burton <paul.burton@mips.com>
 
-[ Upstream commit fd7710cb491f900eb63d2ce5aac0e682003e84e9 ]
+[ Upstream commit e84957e6ae043bb83ad6ae7e949a1ce97b6bbfef ]
 
-Commit 3c1d3f097972 ("MIPS: futex: Emit Loongson3 sync workarounds
-within asm") inadvertently removed the newlines following
-__WEAK_LLSC_MB, which causes build failures for configurations in which
-__WEAK_LLSC_MB expands to a sync instruction:
-
-  {standard input}: Assembler messages:
-  {standard input}:9346: Error: symbol `sync3' is already defined
-  {standard input}:9380: Error: symbol `sync3' is already defined
-  ...
-
-Fix this by restoring the newlines to separate the sync instruction from
-anything following it (such as the 3: label), preventing inadvertent
-concatenation.
+Generate the sync instructions required to workaround Loongson3 LL/SC
+errata within inline asm blocks, which feels a little safer than doing
+it from C where strictly speaking the compiler would be well within its
+rights to insert a memory access between the separate asm statements we
+previously had, containing sync & ll instructions respectively.
 
 Signed-off-by: Paul Burton <paul.burton@mips.com>
-Fixes: 3c1d3f097972 ("MIPS: futex: Emit Loongson3 sync workarounds within asm")
+Cc: linux-mips@vger.kernel.org
+Cc: Huacai Chen <chenhc@lemote.com>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/futex.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/mips/kernel/syscall.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/futex.h b/arch/mips/include/asm/futex.h
-index 54cf205309316..110220705e978 100644
---- a/arch/mips/include/asm/futex.h
-+++ b/arch/mips/include/asm/futex.h
-@@ -33,7 +33,7 @@
- 		"	.set	arch=r4000			\n"	\
- 		"2:	sc	$1, %2				\n"	\
- 		"	beqzl	$1, 1b				\n"	\
--		__stringify(__WEAK_LLSC_MB)				\
-+		__stringify(__WEAK_LLSC_MB) "			\n"	\
- 		"3:						\n"	\
- 		"	.insn					\n"	\
- 		"	.set	pop				\n"	\
-@@ -63,7 +63,7 @@
- 		"	.set	"MIPS_ISA_ARCH_LEVEL"		\n"	\
- 		"2:	"user_sc("$1", "%2")"			\n"	\
- 		"	beqz	$1, 1b				\n"	\
--		__stringify(__WEAK_LLSC_MB)				\
-+		__stringify(__WEAK_LLSC_MB) "			\n"	\
- 		"3:						\n"	\
- 		"	.insn					\n"	\
- 		"	.set	pop				\n"	\
-@@ -148,7 +148,7 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
- 		"	.set	arch=r4000				\n"
- 		"2:	sc	$1, %2					\n"
- 		"	beqzl	$1, 1b					\n"
--		__stringify(__WEAK_LLSC_MB)
-+		__stringify(__WEAK_LLSC_MB) "				\n"
- 		"3:							\n"
- 		"	.insn						\n"
- 		"	.set	pop					\n"
+diff --git a/arch/mips/kernel/syscall.c b/arch/mips/kernel/syscall.c
+index 3f16f38230310..c333e57886642 100644
+--- a/arch/mips/kernel/syscall.c
++++ b/arch/mips/kernel/syscall.c
+@@ -37,6 +37,7 @@
+ #include <asm/signal.h>
+ #include <asm/sim.h>
+ #include <asm/shmparam.h>
++#include <asm/sync.h>
+ #include <asm/sysmips.h>
+ #include <asm/switch_to.h>
+ 
+@@ -133,12 +134,12 @@ static inline int mips_atomic_set(unsigned long addr, unsigned long new)
+ 		  [efault] "i" (-EFAULT)
+ 		: "memory");
+ 	} else if (cpu_has_llsc) {
+-		loongson_llsc_mb();
+ 		__asm__ __volatile__ (
+ 		"	.set	push					\n"
+ 		"	.set	"MIPS_ISA_ARCH_LEVEL"			\n"
+ 		"	li	%[err], 0				\n"
+ 		"1:							\n"
++		"	" __SYNC(full, loongson3_war) "			\n"
+ 		user_ll("%[old]", "(%[addr])")
+ 		"	move	%[tmp], %[new]				\n"
+ 		"2:							\n"
 -- 
 2.20.1
 
