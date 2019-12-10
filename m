@@ -2,122 +2,255 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F681965FB
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2020 13:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5B119678A
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2020 17:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726225AbgC1MGe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 28 Mar 2020 08:06:34 -0400
-Received: from mx.0dd.nl ([5.2.79.48]:48116 "EHLO mx.0dd.nl"
+        id S1726661AbgC1Qov (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 28 Mar 2020 12:44:51 -0400
+Received: from mx.sdf.org ([205.166.94.20]:49729 "EHLO mx.sdf.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726199AbgC1MGe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 28 Mar 2020 08:06:34 -0400
-Received: from mail.vdorst.com (mail.vdorst.com [IPv6:fd01::250])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mx.0dd.nl (Postfix) with ESMTPS id D991D5FA80;
-        Sat, 28 Mar 2020 13:06:32 +0100 (CET)
-Authentication-Results: mx.0dd.nl;
-        dkim=pass (2048-bit key; secure) header.d=vdorst.com header.i=@vdorst.com header.b="d5KhzrfD";
-        dkim-atps=neutral
-Received: from www (www.vdorst.com [192.168.2.222])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.vdorst.com (Postfix) with ESMTPSA id 8898B26BF2F;
-        Sat, 28 Mar 2020 13:06:32 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.vdorst.com 8898B26BF2F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vdorst.com;
-        s=default; t=1585397192;
-        bh=SkFKJkY8E//tW+Dis4BsAeTtpnp5rok+icUiekyoMqY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=d5KhzrfDV2pYn4v8aUb10YcAM5RgQx4nRdo3rJTCOeAHtq8+6pxf3L4f3HVGG+axo
-         87VMnC2QH6MLM8mWm1brykFfcIHKmoCbVhvhZZ4uLXX2q2L0B21VUotG56b6W5tQOm
-         snd531SrzZjkzmZtFscmkYbSRTP4tGlJxp4E64sbbAm1mrWJuhQ8ogHP84WvLu+ljr
-         dNApJyDYX2qHBUW5acnQkuWfQ6AJohK5YTDs+kPno9UYpbTZrcO9uNMGdFcxgY6HhO
-         SmRoSc1JJhadIm+XFXwqHYJEm50RdF1GPRWrdgtueOKGdXRNt8iO5MB7EDqOS67foq
-         w65Q3uLdPs25A==
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1]) by
- www.vdorst.com (Horde Framework) with HTTPS; Sat, 28 Mar 2020 12:06:32 +0000
-Date:   Sat, 28 Mar 2020 12:06:32 +0000
-Message-ID: <20200328120632.Horde.u68iv-GbxRgnXZTYfkNn0hr@www.vdorst.com>
-From:   =?utf-8?b?UmVuw6k=?= van Dorst <opensource@vdorst.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     John Crispin <john@phrozen.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S1727699AbgC1Qou (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 28 Mar 2020 12:44:50 -0400
+Received: from sdf.org (IDENT:lkml@sdf.lonestar.org [205.166.94.16])
+        by mx.sdf.org (8.15.2/8.14.5) with ESMTPS id 02SGhMxY005915
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits) verified NO);
+        Sat, 28 Mar 2020 16:43:23 GMT
+Received: (from lkml@localhost)
+        by sdf.org (8.15.2/8.12.8/Submit) id 02SGhM0T009250;
+        Sat, 28 Mar 2020 16:43:22 GMT
+Message-Id: <202003281643.02SGhM0T009250@sdf.org>
+From:   George Spelvin <lkml@sdf.org>
+Date:   Tue, 10 Dec 2019 00:35:14 -0500
+Subject: [RFC PATCH v1 40/50] arch/*/include/asm/stackprotector.h: Use
+ get_random_canary() consistently
+To:     linux-kernel@vger.kernel.org, lkml@sdf.org
+Cc:     Russell King <linux@armlinux.org.uk>,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] MIPS: ralink: mt7621: Fix soc_device introduction
-In-Reply-To: <20200328102715.8309-1-tsbogend@alpha.franken.de>
-User-Agent: Horde Application Framework 5
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+... in boot_init_stack_canary().
 
-Thanks for fixing the compile issue for me.
-Now I can make a kernel again.
+This is the archetypical example of where the extra security of
+get_random_bytes() is wasted.  The canary is only important as
+long as it's stored in __stack_chk_guard.
 
-Tested-by: René van Dorst <opensource@vdorst.com>
+It's also a great example of code that has been copied around
+a lot and not updated.
 
-Greats,
+Remove the XOR with LINUX_VERSION_CODE as it's pointless; the inclusion
+of utsname() in init_std_data in the random seeding obviates it.
 
-René
+The XOR with the TSC on x86 and mtfb() on powerPC were left in,
+as I haven't proved them redundant yet.  For those, we call
+get_random_long(), xor, and mask manually.
 
-Quoting Thomas Bogendoerfer <tsbogend@alpha.franken.de>:
+FUNCTIONAL CHANGE: mips and xtensa were changed from 64-bit
+get_random_long() to 56-bit get_random_canary() to match the
+others, in accordance with the logic in CANARY_MASK.
 
-> Depending on selected SMP config options soc_device didn't get
-> initialised at all. With UP config vmlinux didn't link because
-> of missing soc bus.
->
-> Fixes: 71b9b5e0130d ("MIPS: ralink: mt7621: introduce 'soc_device'  
-> initialization")
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> ---
->  arch/mips/ralink/Kconfig  | 1 +
->  arch/mips/ralink/mt7621.c | 4 ++--
->  2 files changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
-> index 94e9ce994494..35c2ebd8f094 100644
-> --- a/arch/mips/ralink/Kconfig
-> +++ b/arch/mips/ralink/Kconfig
-> @@ -52,6 +52,7 @@ choice
->  		select COMMON_CLK
->  		select CLKSRC_MIPS_GIC
->  		select HAVE_PCI if PCI_MT7621
-> +		select SOC_BUS
->  endchoice
->
->  choice
-> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
-> index 905460aeeb1f..0accb80db709 100644
-> --- a/arch/mips/ralink/mt7621.c
-> +++ b/arch/mips/ralink/mt7621.c
-> @@ -243,12 +243,12 @@ void prom_soc_init(struct ralink_soc_info *soc_info)
->
->  	rt2880_pinmux_data = mt7621_pinmux_data;
->
-> +	soc_dev_init(soc_info, rev);
-> +
->  	if (!register_cps_smp_ops())
->  		return;
->  	if (!register_cmp_smp_ops())
->  		return;
->  	if (!register_vsmp_smp_ops())
->  		return;
-> -
-> -	soc_dev_init(soc_info, rev);
->  }
-> --
-> 2.16.4
+(We could do 1 bit better and zero *one* of the two high bytes.)
 
+Signed-off-by: George Spelvin <lkml@sdf.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
+Cc: linux-sh@vger.kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc:  "H. Peter Anvin" <hpa@zytor.com>
+Cc: x86@kernel.org
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: linux-xtensa@linux-xtensa.org
+---
+ arch/arm/include/asm/stackprotector.h     | 9 +++------
+ arch/arm64/include/asm/stackprotector.h   | 8 ++------
+ arch/mips/include/asm/stackprotector.h    | 7 ++-----
+ arch/powerpc/include/asm/stackprotector.h | 6 ++----
+ arch/sh/include/asm/stackprotector.h      | 8 ++------
+ arch/x86/include/asm/stackprotector.h     | 4 ++--
+ arch/xtensa/include/asm/stackprotector.h  | 7 ++-----
+ 7 files changed, 15 insertions(+), 34 deletions(-)
 
+diff --git a/arch/arm/include/asm/stackprotector.h b/arch/arm/include/asm/stackprotector.h
+index 72a20c3a0a90b..88c66fec1b5f4 100644
+--- a/arch/arm/include/asm/stackprotector.h
++++ b/arch/arm/include/asm/stackprotector.h
+@@ -30,17 +30,14 @@ extern unsigned long __stack_chk_guard;
+  */
+ static __always_inline void boot_init_stack_canary(void)
+ {
+-	unsigned long canary;
+-
+ 	/* Try to get a semi random initial value. */
+-	get_random_bytes(&canary, sizeof(canary));
+-	canary ^= LINUX_VERSION_CODE;
++	unsigned long canary = get_random_canary();
+ 
+ 	current->stack_canary = canary;
+ #ifndef CONFIG_STACKPROTECTOR_PER_TASK
+-	__stack_chk_guard = current->stack_canary;
++	__stack_chk_guard = canary;
+ #else
+-	current_thread_info()->stack_canary = current->stack_canary;
++	current_thread_info()->stack_canary = canary;
+ #endif
+ }
+ 
+diff --git a/arch/arm64/include/asm/stackprotector.h b/arch/arm64/include/asm/stackprotector.h
+index 5884a2b028277..705f60b9df85e 100644
+--- a/arch/arm64/include/asm/stackprotector.h
++++ b/arch/arm64/include/asm/stackprotector.h
+@@ -26,16 +26,12 @@ extern unsigned long __stack_chk_guard;
+  */
+ static __always_inline void boot_init_stack_canary(void)
+ {
+-	unsigned long canary;
+-
+ 	/* Try to get a semi random initial value. */
+-	get_random_bytes(&canary, sizeof(canary));
+-	canary ^= LINUX_VERSION_CODE;
+-	canary &= CANARY_MASK;
++	unsigned long canary = get_random_canary();
+ 
+ 	current->stack_canary = canary;
+ 	if (!IS_ENABLED(CONFIG_STACKPROTECTOR_PER_TASK))
+-		__stack_chk_guard = current->stack_canary;
++		__stack_chk_guard = canary;
+ }
+ 
+ #endif	/* _ASM_STACKPROTECTOR_H */
+diff --git a/arch/mips/include/asm/stackprotector.h b/arch/mips/include/asm/stackprotector.h
+index 68d4be9e12547..6d1e4652152bc 100644
+--- a/arch/mips/include/asm/stackprotector.h
++++ b/arch/mips/include/asm/stackprotector.h
+@@ -28,14 +28,11 @@ extern unsigned long __stack_chk_guard;
+  */
+ static __always_inline void boot_init_stack_canary(void)
+ {
+-	unsigned long canary;
+-
+ 	/* Try to get a semi random initial value. */
+-	get_random_bytes(&canary, sizeof(canary));
+-	canary ^= LINUX_VERSION_CODE;
++	unsigned long canary = get_random_canary();
+ 
+ 	current->stack_canary = canary;
+-	__stack_chk_guard = current->stack_canary;
++	__stack_chk_guard = canary;
+ }
+ 
+ #endif	/* _ASM_STACKPROTECTOR_H */
+diff --git a/arch/powerpc/include/asm/stackprotector.h b/arch/powerpc/include/asm/stackprotector.h
+index 1c8460e235838..76577b72ef736 100644
+--- a/arch/powerpc/include/asm/stackprotector.h
++++ b/arch/powerpc/include/asm/stackprotector.h
+@@ -21,12 +21,10 @@
+  */
+ static __always_inline void boot_init_stack_canary(void)
+ {
+-	unsigned long canary;
+-
+ 	/* Try to get a semi random initial value. */
+-	canary = get_random_canary();
++	unsigned long canary = get_random_long();
++
+ 	canary ^= mftb();
+-	canary ^= LINUX_VERSION_CODE;
+ 	canary &= CANARY_MASK;
+ 
+ 	current->stack_canary = canary;
+diff --git a/arch/sh/include/asm/stackprotector.h b/arch/sh/include/asm/stackprotector.h
+index 35616841d0a1c..a9ef619c8a0ec 100644
+--- a/arch/sh/include/asm/stackprotector.h
++++ b/arch/sh/include/asm/stackprotector.h
+@@ -15,15 +15,11 @@ extern unsigned long __stack_chk_guard;
+  */
+ static __always_inline void boot_init_stack_canary(void)
+ {
+-	unsigned long canary;
+-
+ 	/* Try to get a semi random initial value. */
+-	get_random_bytes(&canary, sizeof(canary));
+-	canary ^= LINUX_VERSION_CODE;
+-	canary &= CANARY_MASK;
++	unsigned long canary = get_random_canary();
+ 
+ 	current->stack_canary = canary;
+-	__stack_chk_guard = current->stack_canary;
++	__stack_chk_guard = canary;
+ }
+ 
+ #endif /* __ASM_SH_STACKPROTECTOR_H */
+diff --git a/arch/x86/include/asm/stackprotector.h b/arch/x86/include/asm/stackprotector.h
+index 91e29b6a86a5e..af74fd3130cf4 100644
+--- a/arch/x86/include/asm/stackprotector.h
++++ b/arch/x86/include/asm/stackprotector.h
+@@ -72,9 +72,9 @@ static __always_inline void boot_init_stack_canary(void)
+ 	 * there it already has some randomness on most systems. Later
+ 	 * on during the bootup the random pool has true entropy too.
+ 	 */
+-	get_random_bytes(&canary, sizeof(canary));
++	canary = get_random_u64();
+ 	tsc = rdtsc();
+-	canary += tsc + (tsc << 32UL);
++	canary += tsc + (tsc << 32);
+ 	canary &= CANARY_MASK;
+ 
+ 	current->stack_canary = canary;
+diff --git a/arch/xtensa/include/asm/stackprotector.h b/arch/xtensa/include/asm/stackprotector.h
+index e368f94fd2af3..9807fd80e5a8e 100644
+--- a/arch/xtensa/include/asm/stackprotector.h
++++ b/arch/xtensa/include/asm/stackprotector.h
+@@ -27,14 +27,11 @@ extern unsigned long __stack_chk_guard;
+  */
+ static __always_inline void boot_init_stack_canary(void)
+ {
+-	unsigned long canary;
+-
+ 	/* Try to get a semi random initial value. */
+-	get_random_bytes(&canary, sizeof(canary));
+-	canary ^= LINUX_VERSION_CODE;
++	unsigned long canary = get_random_canary();
+ 
+ 	current->stack_canary = canary;
+-	__stack_chk_guard = current->stack_canary;
++	__stack_chk_guard = canary;
+ }
+ 
+ #endif	/* _ASM_STACKPROTECTOR_H */
+-- 
+2.26.0
 
