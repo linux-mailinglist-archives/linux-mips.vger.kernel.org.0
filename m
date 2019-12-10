@@ -2,123 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4D1119B3A
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Dec 2019 23:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA074119E96
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Dec 2019 23:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729963AbfLJWFg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Dec 2019 17:05:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37188 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729930AbfLJWFf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 10 Dec 2019 17:05:35 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D93AE2053B;
-        Tue, 10 Dec 2019 22:05:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576015534;
-        bh=cOxQAlQhrI1Z5KvQ3Obr1WPfdYwz9OIUp2DHImVYAJ4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kgLyXl/+cRPTM0m3SpxGktw4ea4PVCQLVsu91BY1wKgUVlZwC8oIaOqlCXEeJLycN
-         BtH8FbOXNsrn8j1iq6vVycb1lwC3pwxdIhVBHJVEsntp8uQwG5/UL9irwxpYfYGxDB
-         3vzkPrHos+HrJkghe+eG3tBOP/zlsWbGdOVKIt78=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mike Rapoport <rppt@linux.ibm.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, Mike Rapoport <rppt@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.14 128/130] mips: fix build when "48 bits virtual memory" is enabled
-Date:   Tue, 10 Dec 2019 17:02:59 -0500
-Message-Id: <20191210220301.13262-128-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210220301.13262-1-sashal@kernel.org>
-References: <20191210220301.13262-1-sashal@kernel.org>
+        id S1727223AbfLJWyH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 10 Dec 2019 17:54:07 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:35845 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726892AbfLJWyH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Dec 2019 17:54:07 -0500
+Received: by mail-pg1-f193.google.com with SMTP id k3so8978234pgc.3;
+        Tue, 10 Dec 2019 14:54:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=Uc6nUyx0tWcpYbMt8ma4oxDDyJv0615QHHpUzzEGUYg=;
+        b=rxTdYtyGil11OqU8xmilGx2QIhnrRQcS1GdxFVeauU7mqgYLfkCMHh1d3sSWVL6NJl
+         ivjN7IxT979Jzm1kaPgtIi+QihFy4Oqn8D8VEreDwBd4voC4cOBRJw/hfBvT/Rj1Qg5o
+         DAI1vPVqmDnCXyX7pcRvgADjtky6zy/SzXGUv7SdPv7aqIJouSsxSjIXZVqOMA8hn90x
+         D34Al5YdmKeXNEvRde7WF4RCvVwVWdCxmUpX7xcrumDKwgdhNVmrqpiyP81cAYmWO1Ff
+         JVDBlvKxf52ZuWJoVUtTA+xr1XBh8dC1prX8OrjqzZMsyKNgnJws5sppaxegBVSsclTd
+         eDTw==
+X-Gm-Message-State: APjAAAUXkOvoij9bOIJndIpMr1fc5+Aw4gPwNVBnc5gKztuDC0LHY5wf
+        uAfJ/uDi5ppSEFqRfpJVFcM=
+X-Google-Smtp-Source: APXvYqzT4nRMuygUybmv0z7MJHp0Jn15ImWI/vUXkOVE8NMGjoWmLiq4x33grbemVSea0CIPzLKwZQ==
+X-Received: by 2002:aa7:9d0d:: with SMTP id k13mr344069pfp.254.1576018446035;
+        Tue, 10 Dec 2019 14:54:06 -0800 (PST)
+Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
+        by smtp.gmail.com with ESMTPSA id d4sm37554pjz.12.2019.12.10.14.54.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Dec 2019 14:54:05 -0800 (PST)
+Date:   Tue, 10 Dec 2019 14:55:03 -0800
+From:   Paul Burton <paulburton@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Zhou Yanjie <zhouyanjie@zoho.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, paul.burton@mips.com, mturquette@baylibre.com,
+        sboyd@kernel.org, mark.rutland@arm.com, syq@debian.org,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+Subject: Re: [PATCH 1/5] clk: Ingenic: Adjust code to make it compatible with
+ X1830.
+Message-ID: <20191210225503.nf77ksu2sznngbp2@lantea.localdomain>
+References: <1574825576-91028-1-git-send-email-zhouyanjie@zoho.com>
+ <1574825576-91028-2-git-send-email-zhouyanjie@zoho.com>
+ <1574876253.3.4@crapouillou.net>
+ <5DDF694B.1000902@zoho.com>
+ <1575026622.3.2@crapouillou.net>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <1575026622.3.2@crapouillou.net>
+User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Mike Rapoport <rppt@linux.ibm.com>
+Hi Paul, Zhou,
 
-[ Upstream commit 3ed6751bb8fa89c3014399bb0414348499ee202a ]
+On Fri, Nov 29, 2019 at 12:23:42PM +0100, Paul Cercueil wrote:
+> > > > @@ -93,8 +93,17 @@ ingenic_pll_recalc_rate(struct clk_hw *hw,
+> > > > unsigned long parent_rate)
+> > > >      n += pll_info->n_offset;
+> > > >      od_enc = ctl >> pll_info->od_shift;
+> > > >      od_enc &= GENMASK(pll_info->od_bits - 1, 0);
+> > > > -    bypass = !pll_info->no_bypass_bit &&
+> > > > -         !!(ctl & BIT(pll_info->bypass_bit));
+> > > > +
+> > > > +    if (pll_info->version >= CGU_X1830) {
+> > > > +        spin_lock_irqsave(&cgu->lock, flags);
+> > > > +        ctl = readl(cgu->base + pll_info->reg[0]);
+> > > > +        spin_unlock_irqrestore(&cgu->lock, flags);
+> > > 
+> > > Why the spinlock?
+> > > 
+> > 
+> > The original code used spinlock when reading the control register,
+> > so when reading this new control register, I think it should also
+> > be added with spinlock.
+> 
+> Well, the original code looks wrong to me. There's nothing to protect here.
+> 
+> Maybe @Paul Burton can shed some light?
 
-With CONFIG_MIPS_VA_BITS_48=y the build fails miserably:
+I wish I could remember, but I agree it seems pointless here. The only
+way I can think it could be of any use is if writes to the CGU register
+we're accessing aren't atomic (ie. if we could observe a partially
+completed write), but I don't believe that's the case.
 
-  CC      arch/mips/kernel/asm-offsets.s
-In file included from arch/mips/include/asm/pgtable.h:644,
-                 from include/linux/mm.h:99,
-                 from arch/mips/kernel/asm-offsets.c:15:
-include/asm-generic/pgtable.h:16:2: error: #error CONFIG_PGTABLE_LEVELS is not consistent with __PAGETABLE_{P4D,PUD,PMD}_FOLDED
- #error CONFIG_PGTABLE_LEVELS is not consistent with __PAGETABLE_{P4D,PUD,PMD}_FOLDED
-  ^~~~~
-include/asm-generic/pgtable.h:390:28: error: unknown type name 'p4d_t'; did you mean 'pmd_t'?
- static inline int p4d_same(p4d_t p4d_a, p4d_t p4d_b)
-                            ^~~~~
-                            pmd_t
+So Zhou, if you want to drop the spinlock here from your X1830 path &
+ideally also add a patch to remove it in the non-X1830 path that would
+be great.
 
-[ ... more such errors ... ]
-
-scripts/Makefile.build:99: recipe for target 'arch/mips/kernel/asm-offsets.s' failed
-make[2]: *** [arch/mips/kernel/asm-offsets.s] Error 1
-
-This happens because when CONFIG_MIPS_VA_BITS_48 enables 4th level of the
-page tables, but neither pgtable-nop4d.h nor 5level-fixup.h are included to
-cope with the 5th level.
-
-Replace #ifdef conditions around includes of the pgtable-nop{m,u}d.h with
-explicit CONFIG_PGTABLE_LEVELS and add include of 5level-fixup.h for the
-case when CONFIG_PGTABLE_LEVELS==4
-
-Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-Signed-off-by: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: James Hogan <jhogan@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: Mike Rapoport <rppt@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/include/asm/pgtable-64.h | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
-index a2252c2a9dede..d0b9912fb63fb 100644
---- a/arch/mips/include/asm/pgtable-64.h
-+++ b/arch/mips/include/asm/pgtable-64.h
-@@ -18,10 +18,12 @@
- #include <asm/fixmap.h>
- 
- #define __ARCH_USE_5LEVEL_HACK
--#if defined(CONFIG_PAGE_SIZE_64KB) && !defined(CONFIG_MIPS_VA_BITS_48)
-+#if CONFIG_PGTABLE_LEVELS == 2
- #include <asm-generic/pgtable-nopmd.h>
--#elif !(defined(CONFIG_PAGE_SIZE_4KB) && defined(CONFIG_MIPS_VA_BITS_48))
-+#elif CONFIG_PGTABLE_LEVELS == 3
- #include <asm-generic/pgtable-nopud.h>
-+#else
-+#include <asm-generic/5level-fixup.h>
- #endif
- 
- /*
-@@ -222,6 +224,9 @@ static inline unsigned long pgd_page_vaddr(pgd_t pgd)
- 	return pgd_val(pgd);
- }
- 
-+#define pgd_phys(pgd)		virt_to_phys((void *)pgd_val(pgd))
-+#define pgd_page(pgd)		(pfn_to_page(pgd_phys(pgd) >> PAGE_SHIFT))
-+
- static inline pud_t *pud_offset(pgd_t *pgd, unsigned long address)
- {
- 	return (pud_t *)pgd_page_vaddr(*pgd) + pud_index(address);
--- 
-2.20.1
-
+Thanks,
+    Paul
