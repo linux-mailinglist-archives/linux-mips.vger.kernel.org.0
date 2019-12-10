@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FDA11980B
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Dec 2019 22:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4D1119B3A
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Dec 2019 23:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728428AbfLJVf5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Dec 2019 16:35:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42006 "EHLO mail.kernel.org"
+        id S1729963AbfLJWFg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 Dec 2019 17:05:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37188 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730407AbfLJVfz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:35:55 -0500
+        id S1729930AbfLJWFf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:05:35 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D9A8424653;
-        Tue, 10 Dec 2019 21:35:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D93AE2053B;
+        Tue, 10 Dec 2019 22:05:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576013753;
-        bh=Sjk26Xenb9gbjd6XEYt8Eux0fap3BLo0eMdUgQ6sgSQ=;
+        s=default; t=1576015534;
+        bh=cOxQAlQhrI1Z5KvQ3Obr1WPfdYwz9OIUp2DHImVYAJ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ewOta2MiCbBOEBYSEst1fpo4TdDgWRyx/H3zM42mELX9edk0kHMUH5PTyweBQsZoq
-         LJn5jb/lH9vlEid1MtrYYaNFDU15IR7mwJxUEcO0N9+yH2LvYn7bL9vHEM9jjZYu6z
-         beGtrOzKs0N0weXktAKe2N9WEfOtHEUcfgNeH/fU=
+        b=kgLyXl/+cRPTM0m3SpxGktw4ea4PVCQLVsu91BY1wKgUVlZwC8oIaOqlCXEeJLycN
+         BtH8FbOXNsrn8j1iq6vVycb1lwC3pwxdIhVBHJVEsntp8uQwG5/UL9irwxpYfYGxDB
+         3vzkPrHos+HrJkghe+eG3tBOP/zlsWbGdOVKIt78=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mike Rapoport <rppt@linux.ibm.com>,
@@ -31,12 +31,12 @@ Cc:     Mike Rapoport <rppt@linux.ibm.com>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         linux-mm@kvack.org, Mike Rapoport <rppt@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.19 174/177] mips: fix build when "48 bits virtual memory" is enabled
-Date:   Tue, 10 Dec 2019 16:32:18 -0500
-Message-Id: <20191210213221.11921-174-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 128/130] mips: fix build when "48 bits virtual memory" is enabled
+Date:   Tue, 10 Dec 2019 17:02:59 -0500
+Message-Id: <20191210220301.13262-128-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210213221.11921-1-sashal@kernel.org>
-References: <20191210213221.11921-1-sashal@kernel.org>
+In-Reply-To: <20191210220301.13262-1-sashal@kernel.org>
+References: <20191210220301.13262-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -91,7 +91,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
-index 93a9dce31f255..813dfe5f45a59 100644
+index a2252c2a9dede..d0b9912fb63fb 100644
 --- a/arch/mips/include/asm/pgtable-64.h
 +++ b/arch/mips/include/asm/pgtable-64.h
 @@ -18,10 +18,12 @@
@@ -109,7 +109,7 @@ index 93a9dce31f255..813dfe5f45a59 100644
  #endif
  
  /*
-@@ -216,6 +218,9 @@ static inline unsigned long pgd_page_vaddr(pgd_t pgd)
+@@ -222,6 +224,9 @@ static inline unsigned long pgd_page_vaddr(pgd_t pgd)
  	return pgd_val(pgd);
  }
  
