@@ -2,41 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C85B11B4E6
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Dec 2019 16:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE6C11B7E2
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Dec 2019 17:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732688AbfLKPXQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Dec 2019 10:23:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54158 "EHLO mail.kernel.org"
+        id S1730965AbfLKPLj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Dec 2019 10:11:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60292 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732686AbfLKPXP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:23:15 -0500
+        id S1730947AbfLKPLj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 11 Dec 2019 10:11:39 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A8B7C2073D;
-        Wed, 11 Dec 2019 15:23:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 895AE2173E;
+        Wed, 11 Dec 2019 15:11:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576077795;
-        bh=NzS+thb2zRhKzX02D+ejkXOi1iRJq/6D5XAXZ6VOCSc=;
+        s=default; t=1576077098;
+        bh=9hkSsYRPRAWqxI8SaMw18ck/Ae/RkQLUV7K73205vVs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jM6yLucs6esBVqxUoclVP/rNQlTzcf7gX6KT4XWAX7fnqgDxQSytKM2SlU6n0g6MM
-         7D8vYBpxIkUBU0QCjwvotFLBTCk6egI0OSFYfobd8ZYZzkHgGRcWJvSn2+0k1Fs0S2
-         THe7bqqwIBzZzAJYBhDRP7nohlGTT+SneIJAYYRo=
+        b=KC1lg7Oz6x/g4zir1NTTFNWK60y5tmAkgthX42T01+adwhrm6V+YVOvr4xnhU3nDp
+         UBVvA19LL1NZMrR6dlBTUNIqasviSzestuFwzSLl/ybgtZImn+Z323RMzuH0HDFqXy
+         Z7sjCi9bMzV2A4Aip1pc3sB2KbbhFkY9EGT6+BPs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Paul Burton <paul.burton@mips.com>,
+        stable@vger.kernel.org,
+        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 173/243] MIPS: OCTEON: cvmx_pko_mem_debug8: use oldest forward compatible definition
-Date:   Wed, 11 Dec 2019 16:05:35 +0100
-Message-Id: <20191211150350.856090608@linuxfoundation.org>
+Subject: [PATCH 5.3 016/105] MIPS: SGI-IP27: fix exception handler replication
+Date:   Wed, 11 Dec 2019 16:05:05 +0100
+Message-Id: <20191211150224.498621488@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20191211150339.185439726@linuxfoundation.org>
-References: <20191211150339.185439726@linuxfoundation.org>
+In-Reply-To: <20191211150221.153659747@linuxfoundation.org>
+References: <20191211150221.153659747@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,50 +48,97 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Aaro Koskinen <aaro.koskinen@iki.fi>
+From: Thomas Bogendoerfer <tbogendoerfer@suse.de>
 
-[ Upstream commit 1c6121c39677175bd372076020948e184bad4b6b ]
+[ Upstream commit 637346748245e94c877aa746e6fe0d7079b7736a ]
 
-cn58xx is compatible with cn50xx, so use the latter.
+Commit 775b089aeffa ("MIPS: tlbex: Remove cpu_has_local_ebase") removed
+generating tlb refill handlers for every CPU, which was needed for
+generating per node exception handlers on IP27. Instead of resurrecting
+(and fixing) refill handler generation, we simply copy all exception
+vectors from the boot node to the other nodes. Also remove the config
+option since the memory tradeoff for expection handler replication
+is just 8k per node.
 
-Signed-off-by: Aaro Koskinen <aaro.koskinen@iki.fi>
-[paul.burton@mips.com: s/cn52xx/cn50xx/ in commit message.]
-Signed-off-by: Paul Burton <paul.burton@mips.com>
+Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Signed-off-by: Paul Burton <paulburton@kernel.org>
 Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Paul Burton <paul.burton@mips.com>
 Cc: James Hogan <jhogan@kernel.org>
 Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c | 2 +-
- arch/mips/include/asm/octeon/cvmx-pko.h            | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/mips/sgi-ip27/Kconfig       |  7 -------
+ arch/mips/sgi-ip27/ip27-init.c   | 21 ++++++---------------
+ arch/mips/sgi-ip27/ip27-memory.c |  4 ----
+ 3 files changed, 6 insertions(+), 26 deletions(-)
 
-diff --git a/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c b/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c
-index 8241fc6aa17d8..3839feba68f20 100644
---- a/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c
-+++ b/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c
-@@ -266,7 +266,7 @@ int cvmx_cmd_queue_length(cvmx_cmd_queue_id_t queue_id)
- 		} else {
- 			union cvmx_pko_mem_debug8 debug8;
- 			debug8.u64 = cvmx_read_csr(CVMX_PKO_MEM_DEBUG8);
--			return debug8.cn58xx.doorbell;
-+			return debug8.cn50xx.doorbell;
- 		}
- 	case CVMX_CMD_QUEUE_ZIP:
- 	case CVMX_CMD_QUEUE_DFA:
-diff --git a/arch/mips/include/asm/octeon/cvmx-pko.h b/arch/mips/include/asm/octeon/cvmx-pko.h
-index 5f47f76ed510a..20eb9c46a75ab 100644
---- a/arch/mips/include/asm/octeon/cvmx-pko.h
-+++ b/arch/mips/include/asm/octeon/cvmx-pko.h
-@@ -611,7 +611,7 @@ static inline void cvmx_pko_get_port_status(uint64_t port_num, uint64_t clear,
- 		pko_reg_read_idx.s.index = cvmx_pko_get_base_queue(port_num);
- 		cvmx_write_csr(CVMX_PKO_REG_READ_IDX, pko_reg_read_idx.u64);
- 		debug8.u64 = cvmx_read_csr(CVMX_PKO_MEM_DEBUG8);
--		status->doorbell = debug8.cn58xx.doorbell;
-+		status->doorbell = debug8.cn50xx.doorbell;
+diff --git a/arch/mips/sgi-ip27/Kconfig b/arch/mips/sgi-ip27/Kconfig
+index ef3847e7aee02..e5b6cadbec857 100644
+--- a/arch/mips/sgi-ip27/Kconfig
++++ b/arch/mips/sgi-ip27/Kconfig
+@@ -38,10 +38,3 @@ config REPLICATE_KTEXT
+ 	  Say Y here to enable replicating the kernel text across multiple
+ 	  nodes in a NUMA cluster.  This trades memory for speed.
+ 
+-config REPLICATE_EXHANDLERS
+-	bool "Exception handler replication support"
+-	depends on SGI_IP27
+-	help
+-	  Say Y here to enable replicating the kernel exception handlers
+-	  across multiple nodes in a NUMA cluster. This trades memory for
+-	  speed.
+diff --git a/arch/mips/sgi-ip27/ip27-init.c b/arch/mips/sgi-ip27/ip27-init.c
+index 066b33f50bcc4..db58ebf02870f 100644
+--- a/arch/mips/sgi-ip27/ip27-init.c
++++ b/arch/mips/sgi-ip27/ip27-init.c
+@@ -69,23 +69,14 @@ static void per_hub_init(cnodeid_t cnode)
+ 
+ 	hub_rtc_init(cnode);
+ 
+-#ifdef CONFIG_REPLICATE_EXHANDLERS
+-	/*
+-	 * If this is not a headless node initialization,
+-	 * copy over the caliased exception handlers.
+-	 */
+-	if (get_compact_nodeid() == cnode) {
+-		extern char except_vec2_generic, except_vec3_generic;
+-		extern void build_tlb_refill_handler(void);
+-
+-		memcpy((void *)(CKSEG0 + 0x100), &except_vec2_generic, 0x80);
+-		memcpy((void *)(CKSEG0 + 0x180), &except_vec3_generic, 0x80);
+-		build_tlb_refill_handler();
+-		memcpy((void *)(CKSEG0 + 0x100), (void *) CKSEG0, 0x80);
+-		memcpy((void *)(CKSEG0 + 0x180), &except_vec3_generic, 0x100);
++	if (nasid) {
++		/* copy exception handlers from first node to current node */
++		memcpy((void *)NODE_OFFSET_TO_K0(nasid, 0),
++		       (void *)CKSEG0, 0x200);
+ 		__flush_cache_all();
++		/* switch to node local exception handlers */
++		REMOTE_HUB_S(nasid, PI_CALIAS_SIZE, PI_CALIAS_SIZE_8K);
  	}
+-#endif
  }
  
+ void per_cpu_init(void)
+diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
+index fb077a9475756..8624a885d95bf 100644
+--- a/arch/mips/sgi-ip27/ip27-memory.c
++++ b/arch/mips/sgi-ip27/ip27-memory.c
+@@ -332,11 +332,7 @@ static void __init mlreset(void)
+ 		 * thinks it is a node 0 address.
+ 		 */
+ 		REMOTE_HUB_S(nasid, PI_REGION_PRESENT, (region_mask | 1));
+-#ifdef CONFIG_REPLICATE_EXHANDLERS
+-		REMOTE_HUB_S(nasid, PI_CALIAS_SIZE, PI_CALIAS_SIZE_8K);
+-#else
+ 		REMOTE_HUB_S(nasid, PI_CALIAS_SIZE, PI_CALIAS_SIZE_0);
+-#endif
+ 
+ #ifdef LATER
+ 		/*
 -- 
 2.20.1
 
