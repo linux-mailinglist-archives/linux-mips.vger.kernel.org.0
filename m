@@ -2,583 +2,400 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFFD11AB46
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Dec 2019 13:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D3B11AB5D
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Dec 2019 13:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727457AbfLKMvB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Dec 2019 07:51:01 -0500
-Received: from out28-194.mail.aliyun.com ([115.124.28.194]:39175 "EHLO
-        out28-194.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729225AbfLKMvB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Dec 2019 07:51:01 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.583594-0.00232842-0.414078;DS=CONTINUE|ham_system_inform|0.0497922-0.000182247-0.950026;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03304;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.GF0GTgF_1576068628;
-Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GF0GTgF_1576068628)
-          by smtp.aliyun-inc.com(10.147.40.200);
-          Wed, 11 Dec 2019 20:50:49 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        id S1728446AbfLKM4T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Dec 2019 07:56:19 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:50782 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727457AbfLKM4T (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Dec 2019 07:56:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1576068975; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MzbWFtPuCcnhFwOWpViIm3T0O0lp/iGewXYHGMpkmrY=;
+        b=ss9Wt906Q94x4yhCdeSjeDbeY8nQHc1TWPYeeR0CZZRNQwH/yzoCptKQlJCLXMDkWz2ufM
+        zGduJOyAAJ8aFywdohmHrmYnUWHI+WzL3jnQPthLx6jQWV8jQLMyyGV9iaoUGBFgdAqRa9
+        8l9Jm6wFpcHE+ram8FLswwBLDDN8FBg=
+Date:   Wed, 11 Dec 2019 13:56:04 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v8 4/4] MIPS: Ingenic: Add YSH & ATIL CU Neo board
+ support.
+To:     zhouyanjie <zhouyanjie@wanyeetech.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, robh+dt@kernel.org,
-        paul.burton@mips.com, paulburton@kernel.org, paul@crapouillou.net,
-        mark.rutland@arm.com, linus.walleij@linaro.org,
-        zhenwenjin@gmail.com, sernia.zhou@foxmail.com
-Subject: [PATCH v7 4/4] pinctrl: Ingenic: Add pinctrl driver for X1830.
-Date:   Wed, 11 Dec 2019 20:50:25 +0800
-Message-Id: <1576068625-125234-5-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1576068625-125234-1-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1576068625-125234-1-git-send-email-zhouyanjie@wanyeetech.com>
+        paul.burton@mips.com, paulburton@kernel.org, jhogan@kernel.org,
+        mripard@kernel.org, shawnguo@kernel.org, mark.rutland@arm.com,
+        alexandre.belloni@bootlin.com, ralf@linux-mips.org,
+        heiko@sntech.de, icenowy@aosc.io, ak@linux.intel.com,
+        laurent.pinchart@ideasonboard.com, krzk@kernel.org,
+        geert+renesas@glider.be, prasannatsmkumar@gmail.com,
+        keescook@chromium.org, ebiederm@xmission.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, 772753199@qq.com
+Message-Id: <1576068964.3.0@crapouillou.net>
+In-Reply-To: <5DF0CCCA.60404@wanyeetech.com>
+References: <1575979363-25956-1-git-send-email-zhouyanjie@wanyeetech.com>
+        <1575979363-25956-5-git-send-email-zhouyanjie@wanyeetech.com>
+        <1575998343.3.2@crapouillou.net> <5DF0CCCA.60404@wanyeetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add support for probing the pinctrl-ingenic driver on the
-X1830 Soc from Ingenic.
+Hi Zhou,
 
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
----
 
-Notes:
-    v2:
-    New patch.
-    
-    v2->v3:
-    Add pinctrl drivers for the PWM of X1830.
-    
-    v3->v4:
-    1.Use local variables to streamline code.
-    2.Prevents processors older than X1830 from being
-      configured in HiZ mode.
-    
-    v4->v5:
-    Fix compile-time warnings.
-    Reported-by: kbuild test robot <lkp@intel.com>
-    
-    v5->v6:
-    1.Use local variables to streamline code.
-    2.Rename "GPIO_HIZ" to "GPIO_PULL_DIS", and adjust
-      related code.
-    
-    v6->v7:
-    1.Change my Signed-off-by from "Zhou Yanjie <zhouyanjie@zoho.com>"
-      to "周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>" because
-      the old mailbox is in an unstable state.
-    2.Add "ingenic_chip_info.reg_offset", use it instead of having
-      hardcoded, and add "PZ_BASE()" / "PZ_GID2LD()" macros, use it
-      with "ingenic_chip_info.reg_offset" to simplify code related
-      to shadow registers.
-    3.Simplify the code of the "ingenic_set_bias" function.
+Le mer., d=C3=A9c. 11, 2019 at 19:02, zhouyanjie=20
+<zhouyanjie@wanyeetech.com> a =C3=A9crit :
+>=20
+>=20
+> On 2019=E5=B9=B412=E6=9C=8811=E6=97=A5 01:19, Paul Cercueil wrote:
+>> Hi Zhou,
+>>=20
+>>=20
+>> Le mar., d=C3=A9c. 10, 2019 at 20:02, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou =
+Yanjie)=20
+>> =7F<zhouyanjie@wanyeetech.com> a =C3=A9crit :
+>>> Add a device tree for the Ingenic X1000 based YSH & ATIL CU Neo=20
+>>> board.
+>>> Note that this is unselectable via Kconfig until the X1000 SoC is=20
+>>> made
+>>> selectable in a later commit.
+>>=20
+>> I believe it is now selectable via Kconfig, right?
+>>=20
+>=20
+> Oh, apologize for my careless, it should be selectable now.
+> Do I need to send a v9 to fix the commit message?
 
- drivers/pinctrl/pinctrl-ingenic.c | 297 +++++++++++++++++++++++++++++++++++---
- 1 file changed, 278 insertions(+), 19 deletions(-)
+Maybe Paul Burton can just remove the last sentence when merging.
 
-diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
-index ca947fa..e72c20b 100644
---- a/drivers/pinctrl/pinctrl-ingenic.c
-+++ b/drivers/pinctrl/pinctrl-ingenic.c
-@@ -3,7 +3,7 @@
-  * Ingenic SoCs pinctrl driver
-  *
-  * Copyright (c) 2017 Paul Cercueil <paul@crapouillou.net>
-- * Copyright (c) 2019 Zhou Yanjie <zhouyanjie@zoho.com>
-+ * Copyright (c) 2019 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-  */
- 
- #include <linux/compiler.h>
-@@ -42,12 +42,19 @@
- #define JZ4760_GPIO_FLAG	0x50
- #define JZ4760_GPIO_PEN		0x70
- 
--#define X1000_GPIO_PZ_BASE		0x700
--#define X1000_GPIO_PZ_GID2LD	0x7f0
-+#define X1830_GPIO_PEL			0x110
-+#define X1830_GPIO_PEH			0x120
- 
- #define REG_SET(x) ((x) + 0x4)
- #define REG_CLEAR(x) ((x) + 0x8)
- 
-+#define REG_PZ_BASE(x) ((x) * 7)
-+#define REG_PZ_GID2LD(x) ((x) * 7 + 0xf0)
-+
-+#define GPIO_PULL_DIS	0
-+#define GPIO_PULL_UP	1
-+#define GPIO_PULL_DOWN	2
-+
- #define PINS_PER_GPIO_CHIP 32
- 
- enum jz_version {
-@@ -60,10 +67,12 @@ enum jz_version {
- 	ID_X1000,
- 	ID_X1000E,
- 	ID_X1500,
-+	ID_X1830,
- };
- 
- struct ingenic_chip_info {
- 	unsigned int num_chips;
-+	unsigned int reg_offset;
- 
- 	const struct group_desc *groups;
- 	unsigned int num_groups;
-@@ -216,6 +225,7 @@ static const struct function_desc jz4740_functions[] = {
- 
- static const struct ingenic_chip_info jz4740_chip_info = {
- 	.num_chips = 4,
-+	.reg_offset = 0x100,
- 	.groups = jz4740_groups,
- 	.num_groups = ARRAY_SIZE(jz4740_groups),
- 	.functions = jz4740_functions,
-@@ -339,6 +349,7 @@ static const struct function_desc jz4725b_functions[] = {
- 
- static const struct ingenic_chip_info jz4725b_chip_info = {
- 	.num_chips = 4,
-+	.reg_offset = 0x100,
- 	.groups = jz4725b_groups,
- 	.num_groups = ARRAY_SIZE(jz4725b_groups),
- 	.functions = jz4725b_functions,
-@@ -592,6 +603,7 @@ static const struct function_desc jz4760_functions[] = {
- 
- static const struct ingenic_chip_info jz4760_chip_info = {
- 	.num_chips = 6,
-+	.reg_offset = 0x100,
- 	.groups = jz4760_groups,
- 	.num_groups = ARRAY_SIZE(jz4760_groups),
- 	.functions = jz4760_functions,
-@@ -602,6 +614,7 @@ static const struct ingenic_chip_info jz4760_chip_info = {
- 
- static const struct ingenic_chip_info jz4760b_chip_info = {
- 	.num_chips = 6,
-+	.reg_offset = 0x100,
- 	.groups = jz4760_groups,
- 	.num_groups = ARRAY_SIZE(jz4760_groups),
- 	.functions = jz4760_functions,
-@@ -880,6 +893,7 @@ static const struct function_desc jz4770_functions[] = {
- 
- static const struct ingenic_chip_info jz4770_chip_info = {
- 	.num_chips = 6,
-+	.reg_offset = 0x100,
- 	.groups = jz4770_groups,
- 	.num_groups = ARRAY_SIZE(jz4770_groups),
- 	.functions = jz4770_functions,
-@@ -1013,6 +1027,7 @@ static const struct function_desc jz4780_functions[] = {
- 
- static const struct ingenic_chip_info jz4780_chip_info = {
- 	.num_chips = 6,
-+	.reg_offset = 0x100,
- 	.groups = jz4780_groups,
- 	.num_groups = ARRAY_SIZE(jz4780_groups),
- 	.functions = jz4780_functions,
-@@ -1269,6 +1284,7 @@ static const struct function_desc x1000_functions[] = {
- 
- static const struct ingenic_chip_info x1000_chip_info = {
- 	.num_chips = 4,
-+	.reg_offset = 0x100,
- 	.groups = x1000_groups,
- 	.num_groups = ARRAY_SIZE(x1000_groups),
- 	.functions = x1000_functions,
-@@ -1279,6 +1295,7 @@ static const struct ingenic_chip_info x1000_chip_info = {
- 
- static const struct ingenic_chip_info x1000e_chip_info = {
- 	.num_chips = 4,
-+	.reg_offset = 0x100,
- 	.groups = x1000_groups,
- 	.num_groups = ARRAY_SIZE(x1000_groups),
- 	.functions = x1000_functions,
-@@ -1391,6 +1408,7 @@ static const struct function_desc x1500_functions[] = {
- 
- static const struct ingenic_chip_info x1500_chip_info = {
- 	.num_chips = 4,
-+	.reg_offset = 0x100,
- 	.groups = x1500_groups,
- 	.num_groups = ARRAY_SIZE(x1500_groups),
- 	.functions = x1500_functions,
-@@ -1399,6 +1417,221 @@ static const struct ingenic_chip_info x1500_chip_info = {
- 	.pull_downs = x1000_pull_downs,
- };
- 
-+static const u32 x1830_pull_ups[4] = {
-+	0x5fdfffc0, 0xffffefff, 0x1ffffbff, 0x0fcff3fc,
-+};
-+
-+static const u32 x1830_pull_downs[4] = {
-+	0x5fdfffc0, 0xffffefff, 0x1ffffbff, 0x0fcff3fc,
-+};
-+
-+static int x1830_uart0_data_pins[] = { 0x33, 0x36, };
-+static int x1830_uart0_hwflow_pins[] = { 0x34, 0x35, };
-+static int x1830_uart1_data_pins[] = { 0x38, 0x37, };
-+static int x1830_sfc_pins[] = { 0x17, 0x18, 0x1a, 0x19, 0x1b, 0x1c, };
-+static int x1830_ssi0_dt_pins[] = { 0x4c, };
-+static int x1830_ssi0_dr_pins[] = { 0x4b, };
-+static int x1830_ssi0_clk_pins[] = { 0x4f, };
-+static int x1830_ssi0_gpc_pins[] = { 0x4d, };
-+static int x1830_ssi0_ce0_pins[] = { 0x50, };
-+static int x1830_ssi0_ce1_pins[] = { 0x4e, };
-+static int x1830_ssi1_dt_c_pins[] = { 0x53, };
-+static int x1830_ssi1_dr_c_pins[] = { 0x54, };
-+static int x1830_ssi1_clk_c_pins[] = { 0x57, };
-+static int x1830_ssi1_gpc_c_pins[] = { 0x55, };
-+static int x1830_ssi1_ce0_c_pins[] = { 0x58, };
-+static int x1830_ssi1_ce1_c_pins[] = { 0x56, };
-+static int x1830_ssi1_dt_d_pins[] = { 0x62, };
-+static int x1830_ssi1_dr_d_pins[] = { 0x63, };
-+static int x1830_ssi1_clk_d_pins[] = { 0x66, };
-+static int x1830_ssi1_gpc_d_pins[] = { 0x64, };
-+static int x1830_ssi1_ce0_d_pins[] = { 0x67, };
-+static int x1830_ssi1_ce1_d_pins[] = { 0x65, };
-+static int x1830_mmc0_1bit_pins[] = { 0x24, 0x25, 0x20, };
-+static int x1830_mmc0_4bit_pins[] = { 0x21, 0x22, 0x23, };
-+static int x1830_mmc1_1bit_pins[] = { 0x42, 0x43, 0x44, };
-+static int x1830_mmc1_4bit_pins[] = { 0x45, 0x46, 0x47, };
-+static int x1830_i2c0_pins[] = { 0x0c, 0x0d, };
-+static int x1830_i2c1_pins[] = { 0x39, 0x3a, };
-+static int x1830_i2c2_pins[] = { 0x5b, 0x5c, };
-+static int x1830_pwm_pwm0_b_pins[] = { 0x31, };
-+static int x1830_pwm_pwm0_c_pins[] = { 0x4b, };
-+static int x1830_pwm_pwm1_b_pins[] = { 0x32, };
-+static int x1830_pwm_pwm1_c_pins[] = { 0x4c, };
-+static int x1830_pwm_pwm2_c_8_pins[] = { 0x48, };
-+static int x1830_pwm_pwm2_c_13_pins[] = { 0x4d, };
-+static int x1830_pwm_pwm3_c_9_pins[] = { 0x49, };
-+static int x1830_pwm_pwm3_c_14_pins[] = { 0x4e, };
-+static int x1830_pwm_pwm4_c_15_pins[] = { 0x4f, };
-+static int x1830_pwm_pwm4_c_25_pins[] = { 0x59, };
-+static int x1830_pwm_pwm5_c_16_pins[] = { 0x50, };
-+static int x1830_pwm_pwm5_c_26_pins[] = { 0x5a, };
-+static int x1830_pwm_pwm6_c_17_pins[] = { 0x51, };
-+static int x1830_pwm_pwm6_c_27_pins[] = { 0x5b, };
-+static int x1830_pwm_pwm7_c_18_pins[] = { 0x52, };
-+static int x1830_pwm_pwm7_c_28_pins[] = { 0x5c, };
-+static int x1830_mac_pins[] = {
-+	0x29, 0x30, 0x2f, 0x28, 0x2e, 0x2d, 0x2a, 0x2b, 0x26, 0x27,
-+};
-+
-+static int x1830_uart0_data_funcs[] = { 0, 0, };
-+static int x1830_uart0_hwflow_funcs[] = { 0, 0, };
-+static int x1830_uart1_data_funcs[] = { 0, 0, };
-+static int x1830_sfc_funcs[] = { 1, 1, 1, 1, 1, 1, };
-+static int x1830_ssi0_dt_funcs[] = { 0, };
-+static int x1830_ssi0_dr_funcs[] = { 0, };
-+static int x1830_ssi0_clk_funcs[] = { 0, };
-+static int x1830_ssi0_gpc_funcs[] = { 0, };
-+static int x1830_ssi0_ce0_funcs[] = { 0, };
-+static int x1830_ssi0_ce1_funcs[] = { 0, };
-+static int x1830_ssi1_dt_c_funcs[] = { 1, };
-+static int x1830_ssi1_dr_c_funcs[] = { 1, };
-+static int x1830_ssi1_clk_c_funcs[] = { 1, };
-+static int x1830_ssi1_gpc_c_funcs[] = { 1, };
-+static int x1830_ssi1_ce0_c_funcs[] = { 1, };
-+static int x1830_ssi1_ce1_c_funcs[] = { 1, };
-+static int x1830_ssi1_dt_d_funcs[] = { 2, };
-+static int x1830_ssi1_dr_d_funcs[] = { 2, };
-+static int x1830_ssi1_clk_d_funcs[] = { 2, };
-+static int x1830_ssi1_gpc_d_funcs[] = { 2, };
-+static int x1830_ssi1_ce0_d_funcs[] = { 2, };
-+static int x1830_ssi1_ce1_d_funcs[] = { 2, };
-+static int x1830_mmc0_1bit_funcs[] = { 0, 0, 0, };
-+static int x1830_mmc0_4bit_funcs[] = { 0, 0, 0, };
-+static int x1830_mmc1_1bit_funcs[] = { 0, 0, 0, };
-+static int x1830_mmc1_4bit_funcs[] = { 0, 0, 0, };
-+static int x1830_i2c0_funcs[] = { 1, 1, };
-+static int x1830_i2c1_funcs[] = { 0, 0, };
-+static int x1830_i2c2_funcs[] = { 1, 1, };
-+static int x1830_pwm_pwm0_b_funcs[] = { 0, };
-+static int x1830_pwm_pwm0_c_funcs[] = { 1, };
-+static int x1830_pwm_pwm1_b_funcs[] = { 0, };
-+static int x1830_pwm_pwm1_c_funcs[] = { 1, };
-+static int x1830_pwm_pwm2_c_8_funcs[] = { 0, };
-+static int x1830_pwm_pwm2_c_13_funcs[] = { 1, };
-+static int x1830_pwm_pwm3_c_9_funcs[] = { 0, };
-+static int x1830_pwm_pwm3_c_14_funcs[] = { 1, };
-+static int x1830_pwm_pwm4_c_15_funcs[] = { 1, };
-+static int x1830_pwm_pwm4_c_25_funcs[] = { 0, };
-+static int x1830_pwm_pwm5_c_16_funcs[] = { 1, };
-+static int x1830_pwm_pwm5_c_26_funcs[] = { 0, };
-+static int x1830_pwm_pwm6_c_17_funcs[] = { 1, };
-+static int x1830_pwm_pwm6_c_27_funcs[] = { 0, };
-+static int x1830_pwm_pwm7_c_18_funcs[] = { 1, };
-+static int x1830_pwm_pwm7_c_28_funcs[] = { 0, };
-+static int x1830_mac_funcs[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
-+
-+static const struct group_desc x1830_groups[] = {
-+	INGENIC_PIN_GROUP("uart0-data", x1830_uart0_data),
-+	INGENIC_PIN_GROUP("uart0-hwflow", x1830_uart0_hwflow),
-+	INGENIC_PIN_GROUP("uart1-data", x1830_uart1_data),
-+	INGENIC_PIN_GROUP("sfc", x1830_sfc),
-+	INGENIC_PIN_GROUP("ssi0-dt", x1830_ssi0_dt),
-+	INGENIC_PIN_GROUP("ssi0-dr", x1830_ssi0_dr),
-+	INGENIC_PIN_GROUP("ssi0-clk", x1830_ssi0_clk),
-+	INGENIC_PIN_GROUP("ssi0-gpc", x1830_ssi0_gpc),
-+	INGENIC_PIN_GROUP("ssi0-ce0", x1830_ssi0_ce0),
-+	INGENIC_PIN_GROUP("ssi0-ce1", x1830_ssi0_ce1),
-+	INGENIC_PIN_GROUP("ssi1-dt-c", x1830_ssi1_dt_c),
-+	INGENIC_PIN_GROUP("ssi1-dr-c", x1830_ssi1_dr_c),
-+	INGENIC_PIN_GROUP("ssi1-clk-c", x1830_ssi1_clk_c),
-+	INGENIC_PIN_GROUP("ssi1-gpc-c", x1830_ssi1_gpc_c),
-+	INGENIC_PIN_GROUP("ssi1-ce0-c", x1830_ssi1_ce0_c),
-+	INGENIC_PIN_GROUP("ssi1-ce1-c", x1830_ssi1_ce1_c),
-+	INGENIC_PIN_GROUP("ssi1-dt-d", x1830_ssi1_dt_d),
-+	INGENIC_PIN_GROUP("ssi1-dr-d", x1830_ssi1_dr_d),
-+	INGENIC_PIN_GROUP("ssi1-clk-d", x1830_ssi1_clk_d),
-+	INGENIC_PIN_GROUP("ssi1-gpc-d", x1830_ssi1_gpc_d),
-+	INGENIC_PIN_GROUP("ssi1-ce0-d", x1830_ssi1_ce0_d),
-+	INGENIC_PIN_GROUP("ssi1-ce1-d", x1830_ssi1_ce1_d),
-+	INGENIC_PIN_GROUP("mmc0-1bit", x1830_mmc0_1bit),
-+	INGENIC_PIN_GROUP("mmc0-4bit", x1830_mmc0_4bit),
-+	INGENIC_PIN_GROUP("mmc1-1bit", x1830_mmc1_1bit),
-+	INGENIC_PIN_GROUP("mmc1-4bit", x1830_mmc1_4bit),
-+	INGENIC_PIN_GROUP("i2c0-data", x1830_i2c0),
-+	INGENIC_PIN_GROUP("i2c1-data", x1830_i2c1),
-+	INGENIC_PIN_GROUP("i2c2-data", x1830_i2c2),
-+	INGENIC_PIN_GROUP("pwm0-b", x1830_pwm_pwm0_b),
-+	INGENIC_PIN_GROUP("pwm0-c", x1830_pwm_pwm0_c),
-+	INGENIC_PIN_GROUP("pwm1-b", x1830_pwm_pwm1_b),
-+	INGENIC_PIN_GROUP("pwm1-c", x1830_pwm_pwm1_c),
-+	INGENIC_PIN_GROUP("pwm2-c-8", x1830_pwm_pwm2_c_8),
-+	INGENIC_PIN_GROUP("pwm2-c-13", x1830_pwm_pwm2_c_13),
-+	INGENIC_PIN_GROUP("pwm3-c-9", x1830_pwm_pwm3_c_9),
-+	INGENIC_PIN_GROUP("pwm3-c-14", x1830_pwm_pwm3_c_14),
-+	INGENIC_PIN_GROUP("pwm4-c-15", x1830_pwm_pwm4_c_15),
-+	INGENIC_PIN_GROUP("pwm4-c-25", x1830_pwm_pwm4_c_25),
-+	INGENIC_PIN_GROUP("pwm5-c-16", x1830_pwm_pwm5_c_16),
-+	INGENIC_PIN_GROUP("pwm5-c-26", x1830_pwm_pwm5_c_26),
-+	INGENIC_PIN_GROUP("pwm6-c-17", x1830_pwm_pwm6_c_17),
-+	INGENIC_PIN_GROUP("pwm6-c-27", x1830_pwm_pwm6_c_27),
-+	INGENIC_PIN_GROUP("pwm7-c-18", x1830_pwm_pwm7_c_18),
-+	INGENIC_PIN_GROUP("pwm7-c-28", x1830_pwm_pwm7_c_28),
-+	INGENIC_PIN_GROUP("mac", x1830_mac),
-+};
-+
-+static const char *x1830_uart0_groups[] = { "uart0-data", "uart0-hwflow", };
-+static const char *x1830_uart1_groups[] = { "uart1-data", };
-+static const char *x1830_sfc_groups[] = { "sfc", };
-+static const char *x1830_ssi0_groups[] = {
-+	"ssi0-dt", "ssi0-dr", "ssi0-clk", "ssi0-gpc", "ssi0-ce0", "ssi0-ce1",
-+};
-+static const char *x1830_ssi1_groups[] = {
-+	"ssi1-dt-c", "ssi1-dt-d",
-+	"ssi1-dr-c", "ssi1-dr-d",
-+	"ssi1-clk-c", "ssi1-clk-d",
-+	"ssi1-gpc-c", "ssi1-gpc-d",
-+	"ssi1-ce0-c", "ssi1-ce0-d",
-+	"ssi1-ce1-c", "ssi1-ce1-d",
-+};
-+static const char *x1830_mmc0_groups[] = { "mmc0-1bit", "mmc0-4bit", };
-+static const char *x1830_mmc1_groups[] = { "mmc1-1bit", "mmc1-4bit", };
-+static const char *x1830_i2c0_groups[] = { "i2c0-data", };
-+static const char *x1830_i2c1_groups[] = { "i2c1-data", };
-+static const char *x1830_i2c2_groups[] = { "i2c2-data", };
-+static const char *x1830_pwm0_groups[] = { "pwm0-b", "pwm0-c", };
-+static const char *x1830_pwm1_groups[] = { "pwm1-b", "pwm1-c", };
-+static const char *x1830_pwm2_groups[] = { "pwm2-c-8", "pwm2-c-13", };
-+static const char *x1830_pwm3_groups[] = { "pwm3-c-9", "pwm3-c-14", };
-+static const char *x1830_pwm4_groups[] = { "pwm4-c-15", "pwm4-c-25", };
-+static const char *x1830_pwm5_groups[] = { "pwm5-c-16", "pwm5-c-26", };
-+static const char *x1830_pwm6_groups[] = { "pwm6-c-17", "pwm6-c-27", };
-+static const char *x1830_pwm7_groups[] = { "pwm7-c-18", "pwm7-c-28", };
-+static const char *x1830_mac_groups[] = { "mac", };
-+
-+static const struct function_desc x1830_functions[] = {
-+	{ "uart0", x1830_uart0_groups, ARRAY_SIZE(x1830_uart0_groups), },
-+	{ "uart1", x1830_uart1_groups, ARRAY_SIZE(x1830_uart1_groups), },
-+	{ "sfc", x1830_sfc_groups, ARRAY_SIZE(x1830_sfc_groups), },
-+	{ "ssi0", x1830_ssi0_groups, ARRAY_SIZE(x1830_ssi0_groups), },
-+	{ "ssi1", x1830_ssi1_groups, ARRAY_SIZE(x1830_ssi1_groups), },
-+	{ "mmc0", x1830_mmc0_groups, ARRAY_SIZE(x1830_mmc0_groups), },
-+	{ "mmc1", x1830_mmc1_groups, ARRAY_SIZE(x1830_mmc1_groups), },
-+	{ "i2c0", x1830_i2c0_groups, ARRAY_SIZE(x1830_i2c0_groups), },
-+	{ "i2c1", x1830_i2c1_groups, ARRAY_SIZE(x1830_i2c1_groups), },
-+	{ "i2c2", x1830_i2c2_groups, ARRAY_SIZE(x1830_i2c2_groups), },
-+	{ "pwm0", x1830_pwm0_groups, ARRAY_SIZE(x1830_pwm0_groups), },
-+	{ "pwm1", x1830_pwm1_groups, ARRAY_SIZE(x1830_pwm1_groups), },
-+	{ "pwm2", x1830_pwm2_groups, ARRAY_SIZE(x1830_pwm2_groups), },
-+	{ "pwm3", x1830_pwm3_groups, ARRAY_SIZE(x1830_pwm3_groups), },
-+	{ "pwm4", x1830_pwm4_groups, ARRAY_SIZE(x1830_pwm4_groups), },
-+	{ "pwm5", x1830_pwm5_groups, ARRAY_SIZE(x1830_pwm4_groups), },
-+	{ "pwm6", x1830_pwm6_groups, ARRAY_SIZE(x1830_pwm4_groups), },
-+	{ "pwm7", x1830_pwm7_groups, ARRAY_SIZE(x1830_pwm4_groups), },
-+	{ "mac", x1830_mac_groups, ARRAY_SIZE(x1830_mac_groups), },
-+};
-+
-+static const struct ingenic_chip_info x1830_chip_info = {
-+	.num_chips = 4,
-+	.reg_offset = 0x1000,
-+	.groups = x1830_groups,
-+	.num_groups = ARRAY_SIZE(x1830_groups),
-+	.functions = x1830_functions,
-+	.num_functions = ARRAY_SIZE(x1830_functions),
-+	.pull_ups = x1830_pull_ups,
-+	.pull_downs = x1830_pull_downs,
-+};
-+
- static u32 ingenic_gpio_read_reg(struct ingenic_gpio_chip *jzgc, u8 reg)
- {
- 	unsigned int val;
-@@ -1427,12 +1660,13 @@ static void ingenic_gpio_shadow_set_bit(struct ingenic_gpio_chip *jzgc,
- 	else
- 		reg = REG_CLEAR(reg);
- 
--	regmap_write(jzgc->jzpc->map, X1000_GPIO_PZ_BASE + reg, BIT(offset));
-+	regmap_write(jzgc->jzpc->map, REG_PZ_BASE(jzgc->jzpc->info->reg_offset) +
-+			reg, BIT(offset));
- }
- 
- static void ingenic_gpio_shadow_set_bit_load(struct ingenic_gpio_chip *jzgc)
- {
--	regmap_write(jzgc->jzpc->map, X1000_GPIO_PZ_GID2LD,
-+	regmap_write(jzgc->jzpc->map, REG_PZ_GID2LD(jzgc->jzpc->info->reg_offset),
- 			jzgc->gc.base / PINS_PER_GPIO_CHIP);
- }
- 
-@@ -1675,7 +1909,7 @@ static inline void ingenic_config_pin(struct ingenic_pinctrl *jzpc,
- 	unsigned int idx = pin % PINS_PER_GPIO_CHIP;
- 	unsigned int offt = pin / PINS_PER_GPIO_CHIP;
- 
--	regmap_write(jzpc->map, offt * 0x100 +
-+	regmap_write(jzpc->map, offt * jzpc->info->reg_offset +
- 			(set ? REG_SET(reg) : REG_CLEAR(reg)), BIT(idx));
- }
- 
-@@ -1684,14 +1918,15 @@ static inline void ingenic_shadow_config_pin(struct ingenic_pinctrl *jzpc,
- {
- 	unsigned int idx = pin % PINS_PER_GPIO_CHIP;
- 
--	regmap_write(jzpc->map, X1000_GPIO_PZ_BASE +
-+	regmap_write(jzpc->map, REG_PZ_BASE(jzpc->info->reg_offset) +
- 			(set ? REG_SET(reg) : REG_CLEAR(reg)), BIT(idx));
- }
- 
- static inline void ingenic_shadow_config_pin_load(struct ingenic_pinctrl *jzpc,
- 		unsigned int pin)
- {
--	regmap_write(jzpc->map, X1000_GPIO_PZ_GID2LD, pin / PINS_PER_GPIO_CHIP);
-+	regmap_write(jzpc->map, REG_PZ_GID2LD(jzpc->info->reg_offset),
-+			pin / PINS_PER_GPIO_CHIP);
- }
- 
- static inline bool ingenic_get_pin_config(struct ingenic_pinctrl *jzpc,
-@@ -1701,7 +1936,7 @@ static inline bool ingenic_get_pin_config(struct ingenic_pinctrl *jzpc,
- 	unsigned int offt = pin / PINS_PER_GPIO_CHIP;
- 	unsigned int val;
- 
--	regmap_read(jzpc->map, offt * 0x100 + reg, &val);
-+	regmap_read(jzpc->map, offt * jzpc->info->reg_offset + reg, &val);
- 
- 	return val & BIT(idx);
- }
-@@ -1862,12 +2097,31 @@ static int ingenic_pinconf_get(struct pinctrl_dev *pctldev,
- }
- 
- static void ingenic_set_bias(struct ingenic_pinctrl *jzpc,
--		unsigned int pin, bool enabled)
-+		unsigned int pin, unsigned int bias)
- {
--	if (jzpc->version >= ID_JZ4760)
--		ingenic_config_pin(jzpc, pin, JZ4760_GPIO_PEN, !enabled);
--	else
--		ingenic_config_pin(jzpc, pin, JZ4740_GPIO_PULL_DIS, !enabled);
-+	if (jzpc->version >= ID_X1830) {
-+		unsigned int idx = pin % PINS_PER_GPIO_CHIP;
-+		unsigned int half = PINS_PER_GPIO_CHIP / 2;
-+		unsigned int idxh = pin % half * 2;
-+		unsigned int offt = pin / PINS_PER_GPIO_CHIP;
-+
-+		if (idx < half) {
-+			regmap_write(jzpc->map, offt * jzpc->info->reg_offset +
-+					REG_CLEAR(X1830_GPIO_PEL), 3 << idxh);
-+			regmap_write(jzpc->map, offt * jzpc->info->reg_offset +
-+					REG_SET(X1830_GPIO_PEL), bias << idxh);
-+		} else {
-+			regmap_write(jzpc->map, offt * jzpc->info->reg_offset +
-+					REG_CLEAR(X1830_GPIO_PEH), 3 << idxh);
-+			regmap_write(jzpc->map, offt * jzpc->info->reg_offset +
-+					REG_SET(X1830_GPIO_PEH), bias << idxh);
-+		}
-+
-+	} else if (jzpc->version >= ID_JZ4760) {
-+		ingenic_config_pin(jzpc, pin, JZ4760_GPIO_PEN, !bias);
-+	} else {
-+		ingenic_config_pin(jzpc, pin, JZ4740_GPIO_PULL_DIS, !bias);
-+	}
- }
- 
- static void ingenic_set_output_level(struct ingenic_pinctrl *jzpc,
-@@ -1907,7 +2161,7 @@ static int ingenic_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 		case PIN_CONFIG_BIAS_DISABLE:
- 			dev_dbg(jzpc->dev, "disable pull-over for pin P%c%u\n",
- 					'A' + offt, idx);
--			ingenic_set_bias(jzpc, pin, false);
-+			ingenic_set_bias(jzpc, pin, GPIO_PULL_DIS);
- 			break;
- 
- 		case PIN_CONFIG_BIAS_PULL_UP:
-@@ -1915,7 +2169,7 @@ static int ingenic_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 				return -EINVAL;
- 			dev_dbg(jzpc->dev, "set pull-up for pin P%c%u\n",
- 					'A' + offt, idx);
--			ingenic_set_bias(jzpc, pin, true);
-+			ingenic_set_bias(jzpc, pin, GPIO_PULL_UP);
- 			break;
- 
- 		case PIN_CONFIG_BIAS_PULL_DOWN:
-@@ -1923,7 +2177,7 @@ static int ingenic_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 				return -EINVAL;
- 			dev_dbg(jzpc->dev, "set pull-down for pin P%c%u\n",
- 					'A' + offt, idx);
--			ingenic_set_bias(jzpc, pin, true);
-+			ingenic_set_bias(jzpc, pin, GPIO_PULL_DOWN);
- 			break;
- 
- 		case PIN_CONFIG_OUTPUT:
-@@ -2013,6 +2267,7 @@ static const struct of_device_id ingenic_pinctrl_of_match[] = {
- 	{ .compatible = "ingenic,x1000-pinctrl", .data = (void *) ID_X1000 },
- 	{ .compatible = "ingenic,x1000e-pinctrl", .data = (void *) ID_X1000E },
- 	{ .compatible = "ingenic,x1500-pinctrl", .data = (void *) ID_X1500 },
-+	{ .compatible = "ingenic,x1830-pinctrl", .data = (void *) ID_X1830 },
- 	{},
- };
- 
-@@ -2022,6 +2277,7 @@ static const struct of_device_id ingenic_gpio_of_match[] __initconst = {
- 	{ .compatible = "ingenic,jz4770-gpio", },
- 	{ .compatible = "ingenic,jz4780-gpio", },
- 	{ .compatible = "ingenic,x1000-gpio", },
-+	{ .compatible = "ingenic,x1830-gpio", },
- 	{},
- };
- 
-@@ -2045,7 +2301,7 @@ static int __init ingenic_gpio_probe(struct ingenic_pinctrl *jzpc,
- 		return -ENOMEM;
- 
- 	jzgc->jzpc = jzpc;
--	jzgc->reg_base = bank * 0x100;
-+	jzgc->reg_base = bank * jzpc->info->reg_offset;
- 
- 	jzgc->gc.label = devm_kasprintf(dev, GFP_KERNEL, "GPIO%c", 'A' + bank);
- 	if (!jzgc->gc.label)
-@@ -2143,7 +2399,9 @@ static int __init ingenic_pinctrl_probe(struct platform_device *pdev)
- 	else
- 		jzpc->version = (enum jz_version)id->driver_data;
- 
--	if (jzpc->version >= ID_X1500)
-+	if (jzpc->version >= ID_X1830)
-+		chip_info = &x1830_chip_info;
-+	else if (jzpc->version >= ID_X1500)
- 		chip_info = &x1500_chip_info;
- 	else if (jzpc->version >= ID_X1000E)
- 		chip_info = &x1000e_chip_info;
-@@ -2240,6 +2498,7 @@ static const struct platform_device_id ingenic_pinctrl_ids[] = {
- 	{ "x1000-pinctrl", ID_X1000 },
- 	{ "x1000e-pinctrl", ID_X1000E },
- 	{ "x1500-pinctrl", ID_X1500 },
-+	{ "x1830-pinctrl", ID_X1830 },
- 	{},
- };
- 
--- 
-2.7.4
+-Paul
+
+
+>> For the whole series:
+>> Acked-by: Paul Cercueil <paul@crapouillou.net>
+>>=20
+>> Cheers,
+>> Paul
+>>=20
+>>=20
+>>> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wa=
+nyeetech.com>
+>>> ---
+>>>=20
+>>> Notes:
+>>>     v1->v2:
+>>>     Rebase on top of mips-next, use TCU for system timer and=20
+>>> =7F=7Fclocksource.
+>>>=20
+>>>     v2->v3:
+>>>     No change.
+>>>=20
+>>>     v3->v4:
+>>>     1.Adjust "model" in "cu1000.dts" to match the description in=20
+>>> =7F=7F"devices.yaml".
+>>>     2.Adjust "bool" in "Kconfig" to avoid duplicate names with=20
+>>> =7F=7Fsubsequent boards.
+>>>=20
+>>>     v4->v5:
+>>>     1.Rename "cu1000" to "cu1000-neo" to prevent conflicts with=20
+>>> =7F=7Fsubsequent boards
+>>>       such as "cu1000-geo", and so on.
+>>>     2.Remove "CONFIG_HZ=3D100" and "mem=3D32M@0x0" from defconfg.
+>>>     3.Modify incorrect comments in DT.
+>>>=20
+>>>     v5->v6:
+>>>     1.Use "stdout-path =3D "serial2:115200n8"" instead "stdout-path =3D=
+=20
+>>> =7F=7F&uart2" in DT.
+>>>     2.Remove "console=3DttyS2,115200n8" and=20
+>>> "CONFIG_CMDLINE_OVERRIDE=3Dy" =7F=7Ffrom defconfg.
+>>>=20
+>>>     v6->v7:
+>>>     Change my Signed-off-by from "Zhou Yanjie <zhouyanjie@zoho.com>"
+>>>     to "=E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wanyeetec=
+h.com>" because
+>>>     the old mailbox is in an unstable state.
+>>>=20
+>>>     v7->v8:
+>>>     Merge [6/6] in v7 to this patch.
+>>>=20
+>>>  arch/mips/boot/dts/ingenic/Makefile       |   1 +
+>>>  arch/mips/boot/dts/ingenic/cu1000-neo.dts |  99=20
+>>> =7F=7F++++++++++++++++++++++++++
+>>>  arch/mips/configs/cu1000-neo_defconfig    | 111=20
+>>> =7F=7F++++++++++++++++++++++++++++++
+>>>  arch/mips/jz4740/Kconfig                  |   4 ++
+>>>  4 files changed, 215 insertions(+)
+>>>  create mode 100644 arch/mips/boot/dts/ingenic/cu1000-neo.dts
+>>>  create mode 100644 arch/mips/configs/cu1000-neo_defconfig
+>>>=20
+>>> diff --git a/arch/mips/boot/dts/ingenic/Makefile=20
+>>> =7F=7Fb/arch/mips/boot/dts/ingenic/Makefile
+>>> index 9cc4844..e165429 100644
+>>> --- a/arch/mips/boot/dts/ingenic/Makefile
+>>> +++ b/arch/mips/boot/dts/ingenic/Makefile
+>>> @@ -2,5 +2,6 @@
+>>>  dtb-$(CONFIG_JZ4740_QI_LB60)    +=3D qi_lb60.dtb
+>>>  dtb-$(CONFIG_JZ4770_GCW0)    +=3D gcw0.dtb
+>>>  dtb-$(CONFIG_JZ4780_CI20)    +=3D ci20.dtb
+>>> +dtb-$(CONFIG_X1000_CU1000_NEO)    +=3D cu1000-neo.dtb
+>>>=20
+>>>  obj-$(CONFIG_BUILTIN_DTB)    +=3D $(addsuffix .o, $(dtb-y))
+>>> diff --git a/arch/mips/boot/dts/ingenic/cu1000-neo.dts=20
+>>> =7F=7Fb/arch/mips/boot/dts/ingenic/cu1000-neo.dts
+>>> new file mode 100644
+>>> index 00000000..b0733da
+>>> --- /dev/null
+>>> +++ b/arch/mips/boot/dts/ingenic/cu1000-neo.dts
+>>> @@ -0,0 +1,99 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/dts-v1/;
+>>> +
+>>> +#include "x1000.dtsi"
+>>> +#include <dt-bindings/gpio/gpio.h>
+>>> +#include <dt-bindings/clock/ingenic,tcu.h>
+>>> +
+>>> +/ {
+>>> +    compatible =3D "yna,cu1000-neo", "ingenic,x1000";
+>>> +    model =3D "YSH & ATIL General Board CU Neo";
+>>> +
+>>> +    aliases {
+>>> +        serial2 =3D &uart2;
+>>> +    };
+>>> +
+>>> +    chosen {
+>>> +        stdout-path =3D "serial2:115200n8";
+>>> +    };
+>>> +
+>>> +    memory {
+>>> +        device_type =3D "memory";
+>>> +        reg =3D <0x0 0x04000000>;
+>>> +    };
+>>> +};
+>>> +
+>>> +&exclk {
+>>> +    clock-frequency =3D <24000000>;
+>>> +};
+>>> +
+>>> +&tcu {
+>>> +    /* 1500 kHz for the system timer and clocksource */
+>>> +    assigned-clocks =3D <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER2>;
+>>> +    assigned-clock-rates =3D <1500000>, <1500000>;
+>>> +
+>>> +    /* Use channel #0 for the system timer channel #2 for the=20
+>>> =7F=7Fclocksource */
+>>> +    ingenic,pwm-channels-mask =3D <0xfa>;
+>>> +};
+>>> +
+>>> +&uart2 {
+>>> +    pinctrl-names =3D "default";
+>>> +    pinctrl-0 =3D <&pins_uart2>;
+>>> +
+>>> +    status =3D "okay";
+>>> +};
+>>> +
+>>> +&mac {
+>>> +    phy-mode =3D "rmii";
+>>> +    phy-handle =3D <&lan8720a>;
+>>> +
+>>> +    pinctrl-names =3D "default";
+>>> +    pinctrl-0 =3D <&pins_mac>;
+>>> +
+>>> +    snps,reset-gpio =3D <&gpc 23 GPIO_ACTIVE_LOW>; /* PC23 */
+>>> +    snps,reset-active-low;
+>>> +    snps,reset-delays-us =3D <0 10000 30000>;
+>>> +
+>>> +    status =3D "okay";
+>>> +};
+>>> +
+>>> +&mdio {
+>>> +    status =3D "okay";
+>>> +
+>>> +    lan8720a: ethernet-phy@0 {
+>>> +        compatible =3D "ethernet-phy-id0007.c0f0",=20
+>>> =7F=7F"ethernet-phy-ieee802.3-c22";
+>>> +        reg =3D <0>;
+>>> +    };
+>>> +};
+>>> +
+>>> +&msc0 {
+>>> +    bus-width =3D <8>;
+>>> +    max-frequency =3D <50000000>;
+>>> +
+>>> +    pinctrl-names =3D "default";
+>>> +    pinctrl-0 =3D <&pins_msc0>;
+>>> +
+>>> +    non-removable;
+>>> +
+>>> +    status =3D "okay";
+>>> +};
+>>> +
+>>> +&pinctrl {
+>>> +    pins_uart2: uart2 {
+>>> +        function =3D "uart2";
+>>> +        groups =3D "uart2-data-d";
+>>> +        bias-disable;
+>>> +    };
+>>> +
+>>> +    pins_mac: mac {
+>>> +        function =3D "mac";
+>>> +        groups =3D "mac";
+>>> +        bias-disable;
+>>> +    };
+>>> +
+>>> +    pins_msc0: msc0 {
+>>> +        function =3D "mmc0";
+>>> +        groups =3D "mmc0-1bit", "mmc0-4bit", "mmc0-8bit";
+>>> +        bias-disable;
+>>> +    };
+>>> +};
+>>> diff --git a/arch/mips/configs/cu1000-neo_defconfig=20
+>>> =7F=7Fb/arch/mips/configs/cu1000-neo_defconfig
+>>> new file mode 100644
+>>> index 00000000..9f988ed
+>>> --- /dev/null
+>>> +++ b/arch/mips/configs/cu1000-neo_defconfig
+>>> @@ -0,0 +1,111 @@
+>>> +CONFIG_LOCALVERSION_AUTO=3Dy
+>>> +CONFIG_KERNEL_GZIP=3Dy
+>>> +CONFIG_SYSVIPC=3Dy
+>>> +CONFIG_NO_HZ_IDLE=3Dy
+>>> +CONFIG_HIGH_RES_TIMERS=3Dy
+>>> +CONFIG_PREEMPT=3Dy
+>>> +CONFIG_IKCONFIG=3Dy
+>>> +CONFIG_IKCONFIG_PROC=3Dy
+>>> +CONFIG_LOG_BUF_SHIFT=3D14
+>>> +CONFIG_CGROUPS=3Dy
+>>> +CONFIG_MEMCG=3Dy
+>>> +CONFIG_MEMCG_KMEM=3Dy
+>>> +CONFIG_CGROUP_SCHED=3Dy
+>>> +CONFIG_CGROUP_FREEZER=3Dy
+>>> +CONFIG_CGROUP_DEVICE=3Dy
+>>> +CONFIG_CGROUP_CPUACCT=3Dy
+>>> +CONFIG_NAMESPACES=3Dy
+>>> +CONFIG_USER_NS=3Dy
+>>> +CONFIG_CC_OPTIMIZE_FOR_SIZE=3Dy
+>>> +CONFIG_SYSCTL_SYSCALL=3Dy
+>>> +CONFIG_KALLSYMS_ALL=3Dy
+>>> +CONFIG_EMBEDDED=3Dy
+>>> +# CONFIG_VM_EVENT_COUNTERS is not set
+>>> +# CONFIG_COMPAT_BRK is not set
+>>> +CONFIG_SLAB=3Dy
+>>> +CONFIG_MACH_INGENIC=3Dy
+>>> +CONFIG_X1000_CU1000_NEO=3Dy
+>>> +CONFIG_HIGHMEM=3Dy
+>>> +CONFIG_HZ_100=3Dy
+>>> +# CONFIG_SECCOMP is not set
+>>> +# CONFIG_SUSPEND is not set
+>>> +# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+>>> +# CONFIG_COMPACTION is not set
+>>> +CONFIG_CMA=3Dy
+>>> +CONFIG_CMA_AREAS=3D7
+>>> +CONFIG_NET=3Dy
+>>> +CONFIG_UNIX=3Dy
+>>> +CONFIG_INET=3Dy
+>>> +CONFIG_UEVENT_HELPER=3Dy
+>>> +CONFIG_UEVENT_HELPER_PATH=3D"/sbin/hotplug"
+>>> +CONFIG_DEVTMPFS=3Dy
+>>> +# CONFIG_FW_LOADER is not set
+>>> +# CONFIG_ALLOW_DEV_COREDUMP is not set
+>>> +CONFIG_NETDEVICES=3Dy
+>>> +CONFIG_STMMAC_ETH=3Dy
+>>> +CONFIG_SMSC_PHY=3Dy
+>>> +# CONFIG_INPUT_MOUSEDEV is not set
+>>> +# CONFIG_INPUT_KEYBOARD is not set
+>>> +# CONFIG_INPUT_MOUSE is not set
+>>> +# CONFIG_SERIO is not set
+>>> +CONFIG_VT_HW_CONSOLE_BINDING=3Dy
+>>> +CONFIG_LEGACY_PTY_COUNT=3D2
+>>> +CONFIG_SERIAL_EARLYCON=3Dy
+>>> +CONFIG_SERIAL_8250=3Dy
+>>> +CONFIG_SERIAL_8250_CONSOLE=3Dy
+>>> +CONFIG_SERIAL_8250_NR_UARTS=3D3
+>>> +CONFIG_SERIAL_8250_RUNTIME_UARTS=3D3
+>>> +CONFIG_SERIAL_8250_INGENIC=3Dy
+>>> +CONFIG_SERIAL_OF_PLATFORM=3Dy
+>>> +# CONFIG_HW_RANDOM is not set
+>>> +CONFIG_GPIO_SYSFS=3Dy
+>>> +CONFIG_WATCHDOG=3Dy
+>>> +CONFIG_JZ4740_WDT=3Dy
+>>> +# CONFIG_HWMON is not set
+>>> +# CONFIG_LCD_CLASS_DEVICE is not set
+>>> +# CONFIG_BACKLIGHT_CLASS_DEVICE is not set
+>>> +# CONFIG_VGA_CONSOLE is not set
+>>> +# CONFIG_HID is not set
+>>> +# CONFIG_USB_SUPPORT is not set
+>>> +CONFIG_MMC=3Dy
+>>> +CONFIG_MMC_JZ4740=3Dy
+>>> +CONFIG_RTC_CLASS=3Dy
+>>> +CONFIG_RTC_DRV_JZ4740=3Dy
+>>> +CONFIG_DMADEVICES=3Dy
+>>> +CONFIG_DMA_JZ4780=3Dy
+>>> +# CONFIG_IOMMU_SUPPORT is not set
+>>> +CONFIG_NVMEM=3Dy
+>>> +CONFIG_NVMEM_SYSFS=3Dy
+>>> +CONFIG_EXT4_FS=3Dy
+>>> +# CONFIG_DNOTIFY is not set
+>>> +CONFIG_AUTOFS_FS=3Dy
+>>> +CONFIG_PROC_KCORE=3Dy
+>>> +# CONFIG_PROC_PAGE_MONITOR is not set
+>>> +CONFIG_TMPFS=3Dy
+>>> +CONFIG_CONFIGFS_FS=3Dy
+>>> +CONFIG_NLS=3Dy
+>>> +CONFIG_NLS_CODEPAGE_936=3Dy
+>>> +CONFIG_NLS_CODEPAGE_950=3Dy
+>>> +CONFIG_NLS_ASCII=3Dy
+>>> +CONFIG_NLS_ISO8859_1=3Dy
+>>> +CONFIG_NLS_UTF8=3Dy
+>>> +CONFIG_CRYPTO_ECHAINIV=3Dy
+>>> +CONFIG_CRYPTO_AES=3Dy
+>>> +CONFIG_CRYPTO_DEFLATE=3Dy
+>>> +CONFIG_CRYPTO_LZO=3Dy
+>>> +CONFIG_PRINTK_TIME=3Dy
+>>> +CONFIG_CONSOLE_LOGLEVEL_DEFAULT=3D15
+>>> +CONFIG_CONSOLE_LOGLEVEL_QUIET=3D15
+>>> +CONFIG_MESSAGE_LOGLEVEL_DEFAULT=3D7
+>>> +CONFIG_DEBUG_INFO=3Dy
+>>> +CONFIG_STRIP_ASM_SYMS=3Dy
+>>> +CONFIG_DEBUG_FS=3Dy
+>>> +CONFIG_MAGIC_SYSRQ=3Dy
+>>> +CONFIG_PANIC_ON_OOPS=3Dy
+>>> +CONFIG_PANIC_TIMEOUT=3D10
+>>> +# CONFIG_SCHED_DEBUG is not set
+>>> +# CONFIG_DEBUG_PREEMPT is not set
+>>> +CONFIG_STACKTRACE=3Dy
+>>> +# CONFIG_FTRACE is not set
+>>> +CONFIG_CMDLINE_BOOL=3Dy
+>>> +CONFIG_CMDLINE=3D"earlycon clk_ignore_unused"
+>>> diff --git a/arch/mips/jz4740/Kconfig b/arch/mips/jz4740/Kconfig
+>>> index 6b96844..412d2fa 100644
+>>> --- a/arch/mips/jz4740/Kconfig
+>>> +++ b/arch/mips/jz4740/Kconfig
+>>> @@ -16,6 +16,10 @@ config JZ4780_CI20
+>>>      bool "MIPS Creator CI20"
+>>>      select MACH_JZ4780
+>>>=20
+>>> +config X1000_CU1000_NEO
+>>> +    bool "YSH & ATIL CU1000 Module with Neo backplane"
+>>> +    select MACH_X1000
+>>> +
+>>>  endchoice
+>>>=20
+>>>  config MACH_JZ4740
+>>> --
+>>> 2.7.4
+>>>=20
+>>=20
+>=20
+
+=
 
