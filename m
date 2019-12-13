@@ -2,29 +2,30 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9565511EA34
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2019 19:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 913AE11EACC
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2019 20:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728793AbfLMS14 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 Dec 2019 13:27:56 -0500
-Received: from inca-roads.misterjones.org ([213.251.177.50]:36299 "EHLO
-        inca-roads.misterjones.org" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728800AbfLMS1z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 13 Dec 2019 13:27:55 -0500
-Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.lan)
-        by cheepnis.misterjones.org with esmtpsa (TLSv1.2:DHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.80)
-        (envelope-from <maz@kernel.org>)
-        id 1ifpdJ-0001O7-JV; Fri, 13 Dec 2019 19:25:45 +0100
-From:   Marc Zyngier <maz@kernel.org>
+        id S1728852AbfLMS7g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Dec 2019 13:59:36 -0500
+Received: from foss.arm.com ([217.140.110.172]:42230 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728591AbfLMS7g (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 13 Dec 2019 13:59:36 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C33DE106F;
+        Fri, 13 Dec 2019 10:59:35 -0800 (PST)
+Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AD07C3F718;
+        Fri, 13 Dec 2019 10:59:33 -0800 (PST)
+Subject: Re: [PATCH 1/7] KVM: Pass mmu_notifier_range down to
+ kvm_unmap_hva_range()
+To:     Marc Zyngier <maz@kernel.org>
 Cc:     James Morse <james.morse@arm.com>,
         Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
         James Hogan <jhogan@kernel.org>,
         Paul Mackerras <paulus@ozlabs.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
         Sean Christopherson <sean.j.christopherson@intel.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
@@ -33,62 +34,75 @@ Cc:     James Morse <james.morse@arm.com>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
         kvm@vger.kernel.org
-Subject: [PATCH 7/7] KVM: arm/arm64: Elide CMOs when unmapping a range
-Date:   Fri, 13 Dec 2019 18:25:03 +0000
-Message-Id: <20191213182503.14460-8-maz@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191213182503.14460-1-maz@kernel.org>
 References: <20191213182503.14460-1-maz@kernel.org>
+ <20191213182503.14460-2-maz@kernel.org>
+From:   Suzuki Kuruppassery Poulose <suzuki.poulose@arm.com>
+Message-ID: <c347df67-6cc3-9d5c-0dd9-72ebb8fa9712@arm.com>
+Date:   Fri, 13 Dec 2019 18:59:32 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 62.31.163.78
-X-SA-Exim-Rcpt-To: james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, jhogan@kernel.org, paulus@ozlabs.org, pbonzini@redhat.com, rkrcmar@redhat.com, sean.j.christopherson@intel.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org, kvm@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on cheepnis.misterjones.org); SAEximRunCond expanded to false
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20191213182503.14460-2-maz@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-If userspace issues a munmap() on a set of pages, there is no
-expectation that the pages are cleaned to the PoC. So let's
-not do more work than strictly necessary, and set the magic
-flag that avoids CMOs in this case.
+Hi Marc,
 
-Signed-off-by: Marc Zyngier <maz@kernel.org>
----
- virt/kvm/arm/mmu.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/virt/kvm/arm/mmu.c b/virt/kvm/arm/mmu.c
-index c55022dbac89..6749be33d822 100644
---- a/virt/kvm/arm/mmu.c
-+++ b/virt/kvm/arm/mmu.c
-@@ -2056,7 +2056,13 @@ static int handle_hva_to_gpa(struct kvm *kvm,
- 
- static int kvm_unmap_hva_handler(struct kvm *kvm, gpa_t gpa, u64 size, void *data)
- {
--	unmap_stage2_range(kvm, gpa, size, 0);
-+	struct mmu_notifier_range *range = data;
-+	unsigned long flags = 0;
-+
-+	if (range->event == MMU_NOTIFY_UNMAP)
-+		flags = KVM_UNMAP_ELIDE_CMO;
-+
-+	unmap_stage2_range(kvm, gpa, size, flags);
- 	return 0;
- }
- 
-@@ -2067,7 +2073,7 @@ int kvm_unmap_hva_range(struct kvm *kvm, const struct mmu_notifier_range *range)
- 
- 	trace_kvm_unmap_hva_range(range->start, range->end);
- 	handle_hva_to_gpa(kvm, range->start, range->end,
--			  &kvm_unmap_hva_handler, NULL);
-+			  &kvm_unmap_hva_handler, (void *)range);
- 	return 0;
- }
- 
--- 
-2.20.1
+On 13/12/2019 18:24, Marc Zyngier wrote:
+> kvm_unmap_hva_range() is currently passed both start and end
+> fields from the mmu_notifier_range structure. As this struct
+> now contains important information about the reason of the
+> unmap (the event field), replace the start/end parameters
+> with the range struct, and update all architectures.
+> 
+> No functionnal change.
+> 
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
 
+
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 00268290dcbd..7c3665ad1035 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -158,7 +158,7 @@ static unsigned long long kvm_createvm_count;
+>   static unsigned long long kvm_active_vms;
+>   
+>   __weak int kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
+> -		unsigned long start, unsigned long end, bool blockable)
+> +		const struct mmu_notifier_range *range, bool blockable)
+>   {
+>   	return 0;
+>   }
+> @@ -415,7 +415,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>   	 * count is also read inside the mmu_lock critical section.
+>   	 */
+>   	kvm->mmu_notifier_count++;
+> -	need_tlb_flush = kvm_unmap_hva_range(kvm, range->start, range->end);
+> +	need_tlb_flush = kvm_unmap_hva_range(kvm, range);
+>   	need_tlb_flush |= kvm->tlbs_dirty;
+>   	/* we've to flush the tlb before the pages can be freed */
+>   	if (need_tlb_flush)
+> @@ -423,8 +423,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>   
+>   	spin_unlock(&kvm->mmu_lock);
+>   
+> -	ret = kvm_arch_mmu_notifier_invalidate_range(kvm, range->start,
+> -					range->end,
+> +	ret = kvm_arch_mmu_notifier_invalidate_range(kvm, range,
+>   					mmu_notifier_range_blockable(range));
+
+minor nit:
+
+Since we now have the range passed on to the arch hooks, we could get
+rid of the "blockable" too, as it is something you can deduce from the
+range.
+
+Otherwise looks good to me.
+
+Suzuki
