@@ -2,396 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7454111D16C
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Dec 2019 16:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0061211DE29
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2019 07:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729700AbfLLPvQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Dec 2019 10:51:16 -0500
-Received: from out28-98.mail.aliyun.com ([115.124.28.98]:55781 "EHLO
-        out28-98.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729599AbfLLPvQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Dec 2019 10:51:16 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.696685-0.00271529-0.3006;DS=CONTINUE|ham_system_inform|0.00946848-0.000206421-0.990325;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03300;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.GFo2FEj_1576165852;
-Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GFo2FEj_1576165852)
-          by smtp.aliyun-inc.com(10.147.40.7);
-          Thu, 12 Dec 2019 23:51:00 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, paul@crapouillou.net, paul.burton@mips.com,
-        paulburton@kernel.org, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com
-Subject: [PATCH 2/2] I2C: JZ4780: Add support for the X1000.
-Date:   Thu, 12 Dec 2019 23:50:50 +0800
-Message-Id: <1576165850-20727-4-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1576165850-20727-1-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1576165850-20727-1-git-send-email-zhouyanjie@wanyeetech.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S1731762AbfLMGPq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Dec 2019 01:15:46 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:40382 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731920AbfLMGPq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 13 Dec 2019 01:15:46 -0500
+Received: from localhost.loongson.cn (unknown [10.40.23.36])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx_xRpLPNdqFcKAA--.3S2;
+        Fri, 13 Dec 2019 14:15:05 +0800 (CST)
+From:   Guoyun Sun <sunguoyun@loongson.cn>
+To:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Firoz Khan <firoz.khan@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Guoyun Sun <sunguoyun@loongson.cn>
+Subject: [PATCH] MIPS: Add get_thread_area syscall
+Date:   Fri, 13 Dec 2019 14:15:05 +0800
+Message-Id: <1576217705-2634-1-git-send-email-sunguoyun@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dx_xRpLPNdqFcKAA--.3S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGrW5urykXw18Gr43KFW3ZFb_yoW5Cr17pF
+        48Aw1kKr4rur18Aas3uF1kWrWxJr1DXw4jgF4kt398Z3WrXryrtr1Sgas8XF1a9ry2kay0
+        gF4Fqry5tw4v9F7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUb0D73UUUUU==
+X-CM-SenderInfo: 5vxqw3hr1x0qxorr0wxvrqhubq/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add support for probing i2c driver on the X1000 Soc from Ingenic.
-call the corresponding fifo parameter according to the device
-model obtained from the devicetree.
+CRIU(https://criu.org/) tools will dump TLS(Thread Local Storage) by
+get_thread_area during checkpoint and restore TLS by set_thread_area during
+restore. without syscall get_thread_area, criu restore will fail on MIPS
+platform.because a variable with GCC __thread is invalid.
 
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+The following function will be called when criu restore
+
+static inline void restore_tls(tls_t *ptls) {
+        asm volatile(
+                     "move $4, %0                                   \n"
+                     "li $2,  "__stringify(__NR_set_thread_area)"  \n"
+                     "syscall                                       \n"
+                     :
+                     : "r"(*ptls)
+                     : "$4","$2","memory");
+
+With this patch, the *ptls can be obtained by get_thread_area on MIPS
+platform when criu checkpoint. just like this:
+
+static inline void arch_get_tls(tls_t *ptls)
+{
+	asm volatile(
+		     "move $4, %0				    \n"
+		     "li $2,  "__stringify(__NR_get_thread_area)"  \n"
+		     "syscall					    \n"
+		     :
+		     : "r"(ptls)
+		     : "$4","$2","memory");
+
+}
+
+Signed-off-by: Guoyun Sun <sunguoyun@loongson.cn>
 ---
- drivers/i2c/busses/i2c-jz4780.c | 159 +++++++++++++++++++++++++++++-----------
- 1 file changed, 117 insertions(+), 42 deletions(-)
+ arch/mips/kernel/syscall.c                | 10 ++++++++++
+ arch/mips/kernel/syscalls/syscall_n32.tbl |  1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl |  1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl |  1 +
+ 4 files changed, 13 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-jz4780.c b/drivers/i2c/busses/i2c-jz4780.c
-index 25dcd73..3b21896 100644
---- a/drivers/i2c/busses/i2c-jz4780.c
-+++ b/drivers/i2c/busses/i2c-jz4780.c
-@@ -4,6 +4,7 @@
-  *
-  * Copyright (C) 2006 - 2009 Ingenic Semiconductor Inc.
-  * Copyright (C) 2015 Imagination Technologies
-+ * Copyright (C) 2019 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-  */
- 
- #include <linux/bitops.h>
-@@ -17,6 +18,7 @@
- #include <linux/io.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-+#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-@@ -55,6 +57,7 @@
- #define JZ4780_I2C_ACKGC	0x98
- #define JZ4780_I2C_ENSTA	0x9C
- #define JZ4780_I2C_SDAHD	0xD0
-+#define X1000_I2C_SDAHD		0x7C
- 
- #define JZ4780_I2C_CTRL_STPHLD		BIT(7)
- #define JZ4780_I2C_CTRL_SLVDIS		BIT(6)
-@@ -73,6 +76,8 @@
- #define JZ4780_I2C_STA_TFNF		BIT(1)
- #define JZ4780_I2C_STA_ACT		BIT(0)
- 
-+#define X1000_I2C_DC_STOP		BIT(9)
-+
- static const char * const jz4780_i2c_abrt_src[] = {
- 	"ABRT_7B_ADDR_NOACK",
- 	"ABRT_10ADDR1_NOACK",
-@@ -130,18 +135,32 @@ static const char * const jz4780_i2c_abrt_src[] = {
- #define JZ4780_I2CFLCNT_ADJUST(n)	(((n) - 1) < 8 ? 8 : ((n) - 1))
- 
- #define JZ4780_I2C_FIFO_LEN	16
--#define TX_LEVEL		3
--#define RX_LEVEL		(JZ4780_I2C_FIFO_LEN - TX_LEVEL - 1)
-+
-+#define X1000_I2C_FIFO_LEN	64
- 
- #define JZ4780_I2C_TIMEOUT	300
- 
- #define BUFSIZE 200
- 
-+enum ingenic_i2c_version {
-+	ID_JZ4780,
-+	ID_X1000,
-+};
-+
-+/** ingenic_i2c_config: SOC specific config data. */
-+struct ingenic_i2c_config {
-+	int fifosize;
-+	int tx_level;
-+	int rx_level;
-+};
-+
- struct jz4780_i2c {
- 	void __iomem		*iomem;
- 	int			 irq;
- 	struct clk		*clk;
- 	struct i2c_adapter	 adap;
-+	enum ingenic_i2c_version version;
-+	const struct ingenic_i2c_config *cdata;
- 
- 	/* lock to protect rbuf and wbuf between xfer_rd/wr and irq handler */
- 	spinlock_t		lock;
-@@ -340,11 +359,18 @@ static int jz4780_i2c_set_speed(struct jz4780_i2c *i2c)
- 
- 	if (hold_time >= 0) {
- 		/*i2c hold time enable */
--		hold_time |= JZ4780_I2C_SDAHD_HDENB;
--		jz4780_i2c_writew(i2c, JZ4780_I2C_SDAHD, hold_time);
-+		if (i2c->version >= ID_X1000)
-+			jz4780_i2c_writew(i2c, X1000_I2C_SDAHD, hold_time);
-+		else {
-+			hold_time |= JZ4780_I2C_SDAHD_HDENB;
-+			jz4780_i2c_writew(i2c, JZ4780_I2C_SDAHD, hold_time);
-+		}
- 	} else {
- 		/* disable hold time */
--		jz4780_i2c_writew(i2c, JZ4780_I2C_SDAHD, 0);
-+		if (i2c->version >= ID_X1000)
-+			jz4780_i2c_writew(i2c, X1000_I2C_SDAHD, 0);
-+		else
-+			jz4780_i2c_writew(i2c, JZ4780_I2C_SDAHD, 0);
- 	}
- 
+diff --git a/arch/mips/kernel/syscall.c b/arch/mips/kernel/syscall.c
+index c333e57..20bf4c5 100644
+--- a/arch/mips/kernel/syscall.c
++++ b/arch/mips/kernel/syscall.c
+@@ -94,6 +94,16 @@ SYSCALL_DEFINE1(set_thread_area, unsigned long, addr)
  	return 0;
-@@ -359,9 +385,11 @@ static int jz4780_i2c_cleanup(struct jz4780_i2c *i2c)
- 	spin_lock_irqsave(&i2c->lock, flags);
- 
- 	/* can send stop now if need */
--	tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
--	tmp &= ~JZ4780_I2C_CTRL_STPHLD;
--	jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	if (i2c->version < ID_X1000) {
-+		tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
-+		tmp &= ~JZ4780_I2C_CTRL_STPHLD;
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	}
- 
- 	/* disable all interrupts first */
- 	jz4780_i2c_writew(i2c, JZ4780_I2C_INTM, 0);
-@@ -399,11 +427,18 @@ static int jz4780_i2c_prepare(struct jz4780_i2c *i2c)
- 	return jz4780_i2c_enable(i2c);
  }
  
--static void jz4780_i2c_send_rcmd(struct jz4780_i2c *i2c, int cmd_count)
-+static void jz4780_i2c_send_rcmd(struct jz4780_i2c *i2c,
-+				       int cmd_count, int cmd_left)
++SYSCALL_DEFINE1(get_thread_area, unsigned long __user *, u_info)
++{
++	struct thread_info *ti = task_thread_info(current);
++
++	if (copy_to_user(u_info, &(ti->tp_value), sizeof(ti->tp_value)))
++		return -EFAULT;
++
++	return 0;
++}
++
+ static inline int mips_atomic_set(unsigned long addr, unsigned long new)
  {
- 	int i;
- 
--	for (i = 0; i < cmd_count; i++)
-+	for (i = 0; i < cmd_count - 1; i++)
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_DC, JZ4780_I2C_DC_READ);
-+
-+	if ((cmd_left == 0) && (i2c->version >= ID_X1000))
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_DC,
-+				JZ4780_I2C_DC_READ | X1000_I2C_DC_STOP);
-+	else
- 		jz4780_i2c_writew(i2c, JZ4780_I2C_DC, JZ4780_I2C_DC_READ);
- }
- 
-@@ -458,37 +493,40 @@ static irqreturn_t jz4780_i2c_irq(int irqno, void *dev_id)
- 
- 		rd_left = i2c->rd_total_len - i2c->rd_data_xfered;
- 
--		if (rd_left <= JZ4780_I2C_FIFO_LEN)
-+		if (rd_left <= i2c->cdata->fifosize)
- 			jz4780_i2c_writew(i2c, JZ4780_I2C_RXTL, rd_left - 1);
- 	}
- 
- 	if (intst & JZ4780_I2C_INTST_TXEMP) {
- 		if (i2c->is_write == 0) {
- 			int cmd_left = i2c->rd_total_len - i2c->rd_cmd_xfered;
--			int max_send = (JZ4780_I2C_FIFO_LEN - 1)
-+			int max_send = (i2c->cdata->fifosize - 1)
- 					 - (i2c->rd_cmd_xfered
- 					 - i2c->rd_data_xfered);
- 			int cmd_to_send = min(cmd_left, max_send);
- 
- 			if (i2c->rd_cmd_xfered != 0)
- 				cmd_to_send = min(cmd_to_send,
--						  JZ4780_I2C_FIFO_LEN
--						  - TX_LEVEL - 1);
-+						  i2c->cdata->fifosize
-+						  - i2c->cdata->tx_level - 1);
- 
- 			if (cmd_to_send) {
--				jz4780_i2c_send_rcmd(i2c, cmd_to_send);
- 				i2c->rd_cmd_xfered += cmd_to_send;
-+				cmd_left = i2c->rd_total_len - i2c->rd_cmd_xfered;
-+				jz4780_i2c_send_rcmd(i2c, cmd_to_send, cmd_left);
-+
- 			}
- 
--			cmd_left = i2c->rd_total_len - i2c->rd_cmd_xfered;
- 			if (cmd_left == 0) {
- 				intmsk = jz4780_i2c_readw(i2c, JZ4780_I2C_INTM);
- 				intmsk &= ~JZ4780_I2C_INTM_MTXEMP;
- 				jz4780_i2c_writew(i2c, JZ4780_I2C_INTM, intmsk);
- 
--				tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
--				tmp &= ~JZ4780_I2C_CTRL_STPHLD;
--				jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+				if (i2c->version < ID_X1000) {
-+					tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
-+					tmp &= ~JZ4780_I2C_CTRL_STPHLD;
-+					jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+				}
- 			}
- 		} else {
- 			unsigned short data;
-@@ -496,24 +534,22 @@ static irqreturn_t jz4780_i2c_irq(int irqno, void *dev_id)
- 
- 			i2c_sta = jz4780_i2c_readw(i2c, JZ4780_I2C_STA);
- 
--			while ((i2c_sta & JZ4780_I2C_STA_TFNF) &&
--			       (i2c->wt_len > 0)) {
-+			while ((i2c_sta & JZ4780_I2C_STA_TFNF) && (i2c->wt_len > 0)) {
- 				i2c_sta = jz4780_i2c_readw(i2c, JZ4780_I2C_STA);
- 				data = *i2c->wbuf;
- 				data &= ~JZ4780_I2C_DC_READ;
--				jz4780_i2c_writew(i2c, JZ4780_I2C_DC,
--						  data);
-+				if ((!i2c->stop_hold) && (i2c->version >= ID_X1000))
-+					data |= X1000_I2C_DC_STOP;
-+				jz4780_i2c_writew(i2c, JZ4780_I2C_DC, data);
- 				i2c->wbuf++;
- 				i2c->wt_len--;
- 			}
- 
- 			if (i2c->wt_len == 0) {
--				if (!i2c->stop_hold) {
--					tmp = jz4780_i2c_readw(i2c,
--							       JZ4780_I2C_CTRL);
-+				if ((!i2c->stop_hold) && (i2c->version < ID_X1000)) {
-+					tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
- 					tmp &= ~JZ4780_I2C_CTRL_STPHLD;
--					jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL,
--							  tmp);
-+					jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
- 				}
- 
- 				jz4780_i2c_trans_done(i2c);
-@@ -567,20 +603,22 @@ static inline int jz4780_i2c_xfer_read(struct jz4780_i2c *i2c,
- 	i2c->rd_data_xfered = 0;
- 	i2c->rd_cmd_xfered = 0;
- 
--	if (len <= JZ4780_I2C_FIFO_LEN)
-+	if (len <= i2c->cdata->fifosize)
- 		jz4780_i2c_writew(i2c, JZ4780_I2C_RXTL, len - 1);
- 	else
--		jz4780_i2c_writew(i2c, JZ4780_I2C_RXTL, RX_LEVEL);
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_RXTL, i2c->cdata->rx_level);
- 
--	jz4780_i2c_writew(i2c, JZ4780_I2C_TXTL, TX_LEVEL);
-+	jz4780_i2c_writew(i2c, JZ4780_I2C_TXTL, i2c->cdata->tx_level);
- 
- 	jz4780_i2c_writew(i2c, JZ4780_I2C_INTM,
- 			  JZ4780_I2C_INTM_MRXFL | JZ4780_I2C_INTM_MTXEMP
- 			  | JZ4780_I2C_INTM_MTXABT | JZ4780_I2C_INTM_MRXOF);
- 
--	tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
--	tmp |= JZ4780_I2C_CTRL_STPHLD;
--	jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	if (i2c->version < ID_X1000) {
-+		tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
-+		tmp |= JZ4780_I2C_CTRL_STPHLD;
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	}
- 
- 	spin_unlock_irqrestore(&i2c->lock, flags);
- 
-@@ -626,14 +664,16 @@ static inline int jz4780_i2c_xfer_write(struct jz4780_i2c *i2c,
- 	i2c->wbuf = buf;
- 	i2c->wt_len = len;
- 
--	jz4780_i2c_writew(i2c, JZ4780_I2C_TXTL, TX_LEVEL);
-+	jz4780_i2c_writew(i2c, JZ4780_I2C_TXTL, i2c->cdata->tx_level);
- 
- 	jz4780_i2c_writew(i2c, JZ4780_I2C_INTM, JZ4780_I2C_INTM_MTXEMP
- 					| JZ4780_I2C_INTM_MTXABT);
- 
--	tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
--	tmp |= JZ4780_I2C_CTRL_STPHLD;
--	jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	if (i2c->version < ID_X1000) {
-+		tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
-+		tmp |= JZ4780_I2C_CTRL_STPHLD;
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	}
- 
- 	spin_unlock_irqrestore(&i2c->lock, flags);
- 
-@@ -716,8 +756,21 @@ static const struct i2c_algorithm jz4780_i2c_algorithm = {
- 	.functionality	= jz4780_i2c_functionality,
- };
- 
-+static const struct ingenic_i2c_config jz4780_i2c_config = {
-+	.fifosize = JZ4780_I2C_FIFO_LEN,
-+	.tx_level = JZ4780_I2C_FIFO_LEN / 2,
-+	.rx_level = JZ4780_I2C_FIFO_LEN / 2 - 1,
-+};
-+
-+static const struct ingenic_i2c_config x1000_i2c_config = {
-+	.fifosize = X1000_I2C_FIFO_LEN,
-+	.tx_level = X1000_I2C_FIFO_LEN / 2,
-+	.rx_level = X1000_I2C_FIFO_LEN / 2 - 1,
-+};
-+
- static const struct of_device_id jz4780_i2c_of_matches[] = {
--	{ .compatible = "ingenic,jz4780-i2c", },
-+	{ .compatible = "ingenic,jz4780-i2c", .data = (void *) ID_JZ4780 },
-+	{ .compatible = "ingenic,x1000-i2c", .data = (void *) ID_X1000 },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, jz4780_i2c_of_matches);
-@@ -729,11 +782,24 @@ static int jz4780_i2c_probe(struct platform_device *pdev)
- 	unsigned short tmp;
- 	struct resource *r;
- 	struct jz4780_i2c *i2c;
-+	const struct platform_device_id *id = platform_get_device_id(pdev);
-+	const struct of_device_id  *of_id = of_match_device(
-+			jz4780_i2c_of_matches, &pdev->dev);
- 
- 	i2c = devm_kzalloc(&pdev->dev, sizeof(struct jz4780_i2c), GFP_KERNEL);
- 	if (!i2c)
- 		return -ENOMEM;
- 
-+	if (of_id)
-+		i2c->version = (enum ingenic_i2c_version)of_id->data;
-+	else
-+		i2c->version = (enum ingenic_i2c_version)id->driver_data;
-+
-+	if (i2c->version >= ID_X1000)
-+		i2c->cdata = &x1000_i2c_config;
-+	else
-+		i2c->cdata = &jz4780_i2c_config;
-+
- 	i2c->adap.owner		= THIS_MODULE;
- 	i2c->adap.algo		= &jz4780_i2c_algorithm;
- 	i2c->adap.algo_data	= i2c;
-@@ -777,9 +843,11 @@ static int jz4780_i2c_probe(struct platform_device *pdev)
- 
- 	dev_info(&pdev->dev, "Bus frequency is %d KHz\n", i2c->speed);
- 
--	tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
--	tmp &= ~JZ4780_I2C_CTRL_STPHLD;
--	jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	if (i2c->version < ID_X1000) {
-+		tmp = jz4780_i2c_readw(i2c, JZ4780_I2C_CTRL);
-+		tmp &= ~JZ4780_I2C_CTRL_STPHLD;
-+		jz4780_i2c_writew(i2c, JZ4780_I2C_CTRL, tmp);
-+	}
- 
- 	jz4780_i2c_writew(i2c, JZ4780_I2C_INTM, 0x0);
- 
-@@ -809,6 +877,12 @@ static int jz4780_i2c_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct platform_device_id ingenic_i2c_ids[] = {
-+	{ "jz4780-i2c", ID_JZ4780 },
-+	{ "x1000-i2c", ID_X1000 },
-+	{},
-+};
-+
- static struct platform_driver jz4780_i2c_driver = {
- 	.probe		= jz4780_i2c_probe,
- 	.remove		= jz4780_i2c_remove,
-@@ -816,6 +890,7 @@ static struct platform_driver jz4780_i2c_driver = {
- 		.name	= "jz4780-i2c",
- 		.of_match_table = of_match_ptr(jz4780_i2c_of_matches),
- 	},
-+	.id_table = ingenic_i2c_ids,
- };
- 
- module_platform_driver(jz4780_i2c_driver);
+ 	unsigned long old, tmp;
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index e7c5ab3..7da83d0 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -374,3 +374,4 @@
+ 433	n32	fspick				sys_fspick
+ 434	n32	pidfd_open			sys_pidfd_open
+ 435	n32	clone3				__sys_clone3
++436	n32	get_thread_area			sys_get_thread_area
+diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+index 13cd665..4f04bf0 100644
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -350,3 +350,4 @@
+ 433	n64	fspick				sys_fspick
+ 434	n64	pidfd_open			sys_pidfd_open
+ 435	n64	clone3				__sys_clone3
++436	n64	get_thread_area			sys_get_thread_area
+diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+index 353539e..9d79abe 100644
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -423,3 +423,4 @@
+ 433	o32	fspick				sys_fspick
+ 434	o32	pidfd_open			sys_pidfd_open
+ 435	o32	clone3				__sys_clone3
++436	o32	get_thread_area			sys_get_thread_area
 -- 
-2.7.4
+2.1.0
 
