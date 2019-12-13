@@ -2,92 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F9211DE3F
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2019 07:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC89411DF78
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2019 09:31:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725912AbfLMGnC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 Dec 2019 01:43:02 -0500
-Received: from mout.kundenserver.de ([212.227.126.187]:43887 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbfLMGnC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Dec 2019 01:43:02 -0500
-Received: from mail-qk1-f174.google.com ([209.85.222.174]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MCska-1iWoxY3YJM-008vea; Fri, 13 Dec 2019 07:43:01 +0100
-Received: by mail-qk1-f174.google.com with SMTP id z14so889619qkg.9;
-        Thu, 12 Dec 2019 22:43:00 -0800 (PST)
-X-Gm-Message-State: APjAAAUUF72Tq10G7S60O2ZAGl9Rzlxbu7FtY5CzS7lSVjDNIY8Q7sFB
-        IkEW5t37aIQvOv1ApZrbUrfsei7GxYtS0WvH1tU=
-X-Google-Smtp-Source: APXvYqwHyIjH4VLQFxLMz1S1d7sFNTr1dHj2eC4zrzxLpZcvGQkCa/gHpActn9wF7EYJ0RiDspowztRBpqmdKYRtruI=
-X-Received: by 2002:a37:4e4e:: with SMTP id c75mr11775015qkb.3.1576219379648;
- Thu, 12 Dec 2019 22:42:59 -0800 (PST)
-MIME-Version: 1.0
-References: <1576217705-2634-1-git-send-email-sunguoyun@loongson.cn>
-In-Reply-To: <1576217705-2634-1-git-send-email-sunguoyun@loongson.cn>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 13 Dec 2019 07:42:43 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2Nz10L2pQPE3L5-d0wKGD6BBKCT5HMc4Nyo-56ORSheg@mail.gmail.com>
-Message-ID: <CAK8P3a2Nz10L2pQPE3L5-d0wKGD6BBKCT5HMc4Nyo-56ORSheg@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Add get_thread_area syscall
-To:     Guoyun Sun <sunguoyun@loongson.cn>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        id S1725882AbfLMIbK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Dec 2019 03:31:10 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:36384 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725980AbfLMIbK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 13 Dec 2019 03:31:10 -0500
+Received: from localhost.loongson.cn (unknown [10.40.23.36])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxOtEqTPNdV2IKAA--.179S2;
+        Fri, 13 Dec 2019 16:30:35 +0800 (CST)
+From:   Guoyun Sun <sunguoyun@loongson.cn>
+To:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
         James Hogan <jhogan@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Christian Brauner <christian.brauner@ubuntu.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
         David Howells <dhowells@redhat.com>,
-        Firoz Khan <firoz.khan@linaro.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:kKOcqBvTequokhAvitowVT4xVP+Ot/8nUOIZAFUQD3r/V70Fowq
- q3d81o+TIpRBAMt58xZX5rWyxOgvbdljKRaXPetyyuNaCgUBchmqfgfkCZn4XOgaYa9ljt0
- 7iis7JMrYP+NR4kxqVzphE0HeeKqXSyXlOYwqe4aOEyExWGukpaMuZVVTv5LpWVCI8WKoQI
- BAUt7IC6f0m0ymteqfVhQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:L900IOD6uTI=:5cwsRAuLtwoNqjJDDsxAF6
- G2oSk7XPNfNegT6Wn/6XTRRhDKq3306AJuQsvpzk35Us91UVf46gC3lsLJaOYZvsVEM6YZkXA
- GCRW907gIDqUVbJBrwAb4U+WNrCIrpHZ0hk3ChYPbPhW/RedigfgxXx+/V/V1fUmrauC6SCix
- TiBlx5Jj+1EVkogoX5egrkJCcB4+OvjLKq9fd0Y2cADgWBUxVRlFvvOjImVgOZqzogYKwl0vK
- lw6lSYETEGdgL3F2bP1fVmdOkenQ8QCvDaikw5iDhaZhF/DlU1mIo/diASUDall49rlt0268g
- Pl1hm6CFn4CvL+ZZPu3HWapWnQJuSSz+ANBMKDN3Uh59V5veFYvkT19otvdfCn0vvw3tdscFG
- pd7q0KeWf48i6OGfvyAvNopxdfZrAi9aKHbz2HYGVpV4fodmRziPdsEcUmZTZ+ZEr7uMc6Wnx
- e00pNUY/AUpOQudjax4/+oyo2MRZc62xg85Ij+7SqHbkXSkcJzplTDt89wuUOyafYiJCv2PHD
- CuxZB39VUH5kcwF0ihLKHw0wY9QR3Uo2TWOjIqsrJbjoRtx/FUg1M9Asl4388nKsmMJubK8pN
- bjBtmCQDC14Itg/OEWBsrUUAsE/BItMR8V6s5iKlHpGw1e5rhvkhpmJuzpIwv9JJsGTjrSZKv
- 3DUXCbs0o/7FUhJvyyywUhE2ciTqo1Mcihf+luc9uWdcp3eBLNdNxHnHUaURkwuBU6RgfDZNL
- DkK+uqb0UtCZsA/RaOlw5ABy/KrejbQPwfLxbkchX6/uP16Q6MTXE+U+gX+mXpyMfM2v71ewC
- 3iYSrct4Aa9Zi4dlv15nie81Qv1e41oUFi1IlvOduUvB/TTBb6AnjnMPG5puENigN0g6LT/Q8
- jzOOmU1X+FSGP2H4EYJw==
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guoyun Sun <sunguoyun@loongson.cn>
+Subject: [PATCH V2] MIPS: Add get_thread_area syscall
+Date:   Fri, 13 Dec 2019 16:30:34 +0800
+Message-Id: <1576225834-16389-1-git-send-email-sunguoyun@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9AxOtEqTPNdV2IKAA--.179S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGrW5urykXw18Gr43KFW3ZFb_yoW5tw47pr
+        WUAw1kKw4rury8Aa4fWFykWrWxJr1kXrWjgFs7trZ5Z3W8Xry5tr1Sga4rXFya9ryIkay0
+        qF4F9ry5t3yvvFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUHnQUUUUUU=
+X-CM-SenderInfo: 5vxqw3hr1x0qxorr0wxvrqhubq/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Dec 13, 2019 at 7:15 AM Guoyun Sun <sunguoyun@loongson.cn> wrote:
->
-> CRIU(https://criu.org/) tools will dump TLS(Thread Local Storage) by
-> get_thread_area during checkpoint and restore TLS by set_thread_area during
-> restore. without syscall get_thread_area, criu restore will fail on MIPS
-> platform.because a variable with GCC __thread is invalid.
->
-> The following function will be called when criu restore
+CRIU(https://criu.org/) tools will dump TLS(Thread Local Storage) by
+get_thread_area during checkpoint and restore TLS by set_thread_area during
+restore. without syscall get_thread_area, criu restore will fail on MIPS
+platform.because a variable with GCC __thread is invalid.
 
-> diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> index e7c5ab3..7da83d0 100644
-> --- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> @@ -374,3 +374,4 @@
->  433    n32     fspick                          sys_fspick
->  434    n32     pidfd_open                      sys_pidfd_open
->  435    n32     clone3                          __sys_clone3
-> +436    n32     get_thread_area                 sys_get_thread_area
+The following function will be called when criu restore
 
-Please use a number in the arch-specific range below 393. The numbers
-at the bottom are meant for syscalls that are common for all
-architectures.
+static inline void restore_tls(tls_t *ptls) {
+        asm volatile(
+                     "move $4, %0                                   \n"
+                     "li $2,  "__stringify(__NR_set_thread_area)"  \n"
+                     "syscall                                       \n"
+                     :
+                     : "r"(*ptls)
+                     : "$4","$2","memory");
 
-        Arnd
+With this patch, the *ptls can be obtained by get_thread_area on MIPS
+platform when criu checkpoint. just like this:
+
+static inline void arch_get_tls(tls_t *ptls)
+{
+	asm volatile(
+		     "move $4, %0				    \n"
+		     "li $2,  "__stringify(__NR_get_thread_area)"  \n"
+		     "syscall					    \n"
+		     :
+		     : "r"(ptls)
+		     : "$4","$2","memory");
+
+}
+
+Signed-off-by: Guoyun Sun <sunguoyun@loongson.cn>
+---
+ arch/mips/kernel/syscall.c                | 10 ++++++++++
+ arch/mips/kernel/syscalls/syscall_n32.tbl |  2 ++
+ arch/mips/kernel/syscalls/syscall_n64.tbl |  2 ++
+ arch/mips/kernel/syscalls/syscall_o32.tbl |  2 ++
+ 4 files changed, 16 insertions(+)
+
+diff --git a/arch/mips/kernel/syscall.c b/arch/mips/kernel/syscall.c
+index c333e57..20bf4c5 100644
+--- a/arch/mips/kernel/syscall.c
++++ b/arch/mips/kernel/syscall.c
+@@ -94,6 +94,16 @@ SYSCALL_DEFINE1(set_thread_area, unsigned long, addr)
+ 	return 0;
+ }
+ 
++SYSCALL_DEFINE1(get_thread_area, unsigned long __user *, u_info)
++{
++	struct thread_info *ti = task_thread_info(current);
++
++	if (copy_to_user(u_info, &(ti->tp_value), sizeof(ti->tp_value)))
++		return -EFAULT;
++
++	return 0;
++}
++
+ static inline int mips_atomic_set(unsigned long addr, unsigned long new)
+ {
+ 	unsigned long old, tmp;
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index e7c5ab3..3aa4858 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -341,6 +341,8 @@
+ 330	n32	statx				sys_statx
+ 331	n32	rseq				sys_rseq
+ 332	n32	io_pgetevents			compat_sys_io_pgetevents
++333	n32	get_thread_area			sys_get_thread_area
++
+ # 333 through 402 are unassigned to sync up with generic numbers
+ 403	n32	clock_gettime64			sys_clock_gettime
+ 404	n32	clock_settime64			sys_clock_settime
+diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+index 13cd665..14b6796 100644
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -337,6 +337,8 @@
+ 326	n64	statx				sys_statx
+ 327	n64	rseq				sys_rseq
+ 328	n64	io_pgetevents			sys_io_pgetevents
++329	n64	get_thread_area			sys_get_thread_area
++
+ # 329 through 423 are reserved to sync up with other architectures
+ 424	n64	pidfd_send_signal		sys_pidfd_send_signal
+ 425	n64	io_uring_setup			sys_io_uring_setup
+diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+index 353539e..bb4e050 100644
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -380,6 +380,8 @@
+ 366	o32	statx				sys_statx
+ 367	o32	rseq				sys_rseq
+ 368	o32	io_pgetevents			sys_io_pgetevents_time32	compat_sys_io_pgetevents
++369	o32	get_thread_area			sys_get_thread_area
++
+ # room for arch specific calls
+ 393	o32	semget				sys_semget
+ 394	o32	semctl				sys_semctl			compat_sys_semctl
+-- 
+2.1.0
+
