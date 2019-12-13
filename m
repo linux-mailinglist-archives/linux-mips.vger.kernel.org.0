@@ -2,100 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC2711E661
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2019 16:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B4911EA41
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2019 19:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727894AbfLMPVj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 Dec 2019 10:21:39 -0500
-Received: from out28-52.mail.aliyun.com ([115.124.28.52]:42509 "EHLO
-        out28-52.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727872AbfLMPVi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Dec 2019 10:21:38 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07670759|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.826969-0.0200583-0.152973;DS=CONTINUE|ham_system_inform|0.423128-0.00153908-0.575333;FP=12401601434723292222|1|1|1|0|-1|-1|-1;HT=e02c03306;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.GGSxanS_1576250475;
-Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GGSxanS_1576250475)
-          by smtp.aliyun-inc.com(10.147.40.233);
-          Fri, 13 Dec 2019 23:21:29 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        paul.burton@mips.com, paulburton@kernel.org, paul@crapouillou.net,
-        mturquette@baylibre.com, sboyd@kernel.org, mark.rutland@arm.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-Subject: [PATCH v2 5/5] clk: Ingenic: Remove unnecessary spinlock when reading registers.
-Date:   Fri, 13 Dec 2019 23:21:12 +0800
-Message-Id: <1576250472-124315-7-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1576250472-124315-1-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1576250472-124315-1-git-send-email-zhouyanjie@wanyeetech.com>
+        id S1728746AbfLMS1w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Dec 2019 13:27:52 -0500
+Received: from inca-roads.misterjones.org ([213.251.177.50]:34659 "EHLO
+        inca-roads.misterjones.org" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726404AbfLMS1w (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 13 Dec 2019 13:27:52 -0500
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.lan)
+        by cheepnis.misterjones.org with esmtpsa (TLSv1.2:DHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.80)
+        (envelope-from <maz@kernel.org>)
+        id 1ifpdD-0001O7-Ur; Fri, 13 Dec 2019 19:25:40 +0100
+From:   Marc Zyngier <maz@kernel.org>
+Cc:     James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: [PATCH 0/7] KVM: arm/arm64: Help VMs dying quicker
+Date:   Fri, 13 Dec 2019 18:24:56 +0000
+Message-Id: <20191213182503.14460-1-maz@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, jhogan@kernel.org, paulus@ozlabs.org, pbonzini@redhat.com, rkrcmar@redhat.com, sean.j.christopherson@intel.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org, kvm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on cheepnis.misterjones.org); SAEximRunCond expanded to false
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-It is not necessary to use spinlock when reading registers,
-so remove it from cgu.c.
+[Yes, the subject is deliberately provocative!]
 
-Suggested-by: Paul Cercueil <paul@crapouillou.net>
-Suggested-by: Paul Burton <paulburton@kernel.org>
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
----
+Having recently played with large, memory intensive, and very short lived
+VMs, I have realised that we spend a substantial amount of time cleaning up
+when a VM has terminated.
 
-Notes:
-    v2:
-    New Patch.
+It turns out that 99% of the overhead is due to the unnecessary cache
+cleaning that we perform when pages get unmapped from Stage-2, which
+only serves a single purpose: to make the page visible to a non-coherent
+IO subsystem when the page is being swapped out.
 
- drivers/clk/ingenic/cgu.c | 8 --------
- 1 file changed, 8 deletions(-)
+It would make sense to drop these cache maintenance operations when
+userspace is either unmapping a VMA or simply exiting. Detecting the
+latter is easy, as KVM calls kvm_arch_flush_shadow_all(). The unmap
+case is harder, or at least it was until 5.2 gained the MMU notifier
+event, which allows subsystems to find out about the reason of an
+change in the page tables.
 
-diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
-index ae1ddcb..3c95451 100644
---- a/drivers/clk/ingenic/cgu.c
-+++ b/drivers/clk/ingenic/cgu.c
-@@ -76,16 +76,13 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 	const struct ingenic_cgu_pll_info *pll_info;
- 	unsigned m, n, od_enc, od;
- 	bool bypass;
--	unsigned long flags;
- 	u32 ctl;
- 
- 	clk_info = &cgu->clock_info[ingenic_clk->idx];
- 	BUG_ON(clk_info->type != CGU_CLK_PLL);
- 	pll_info = &clk_info->pll;
- 
--	spin_lock_irqsave(&cgu->lock, flags);
- 	ctl = readl(cgu->base + pll_info->pll_reg);
--	spin_unlock_irqrestore(&cgu->lock, flags);
- 
- 	m = (ctl >> pll_info->m_shift) & GENMASK(pll_info->m_bits - 1, 0);
- 	m += pll_info->m_offset;
-@@ -94,9 +91,7 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 	od_enc = ctl >> pll_info->od_shift;
- 	od_enc &= GENMASK(pll_info->od_bits - 1, 0);
- 
--	spin_lock_irqsave(&cgu->lock, flags);
- 	ctl = readl(cgu->base + pll_info->bypass_reg);
--	spin_unlock_irqrestore(&cgu->lock, flags);
- 
- 	bypass = !pll_info->no_bypass_bit &&
- 		 !!(ctl & BIT(pll_info->bypass_bit));
-@@ -269,12 +264,9 @@ static int ingenic_pll_is_enabled(struct clk_hw *hw)
- 	struct ingenic_cgu *cgu = ingenic_clk->cgu;
- 	const struct ingenic_cgu_clk_info *clk_info = to_clk_info(ingenic_clk);
- 	const struct ingenic_cgu_pll_info *pll_info = &clk_info->pll;
--	unsigned long flags;
- 	u32 ctl;
- 
--	spin_lock_irqsave(&cgu->lock, flags);
- 	ctl = readl(cgu->base + pll_info->pll_reg);
--	spin_unlock_irqrestore(&cgu->lock, flags);
- 
- 	return !!(ctl & BIT(pll_info->enable_bit));
- }
+And it turns out we can do even better: We can also avoid invalidating
+individual page mappings if we're tearing down the VM altogether, and
+replace it with a single TLBI VMALL, which will be much lighter on the
+whole system (specially if your interconnect is a bit flimsy).
+
+With the above, terminating a 64GB VM that has most of its memory
+mapped at S2 goes from several seconds (I've seen up to 12s) to less
+than a second on my D05. In general, multi-socket systems seem to
+benefit from this more than single socket machines (based on a
+non-representative sample of 4 random machines I have access to).
+
+The first patch affects most architectures, as it changes one of the
+core architecture hooks (in a fairly mechanical way). The rest is
+definitely ARM-specific.
+
+Marc Zyngier (7):
+  KVM: Pass mmu_notifier_range down to kvm_unmap_hva_range()
+  KVM: arm/arm64: Pass flags along Stage-2 unmapping functions
+  KVM: arm/arm64: Condition cache maintenance on unmap with a flag
+  KVM: arm/arm64: Condition TLB maintenance on unmap with a flag
+  KVM: arm/arm64: Elide both CMOs and TBLIs on freeing the whole Stage-2
+  KVM: arm/arm64: Elide CMOs when retrying a block mapping
+  KVM: arm/arm64: Elide CMOs when unmapping a range
+
+ arch/arm/include/asm/kvm_host.h     |  2 +-
+ arch/arm64/include/asm/kvm_host.h   |  2 +-
+ arch/mips/include/asm/kvm_host.h    |  2 +-
+ arch/mips/kvm/mmu.c                 |  6 +-
+ arch/powerpc/include/asm/kvm_host.h |  2 +-
+ arch/powerpc/kvm/book3s.c           |  5 +-
+ arch/powerpc/kvm/e500_mmu_host.c    |  4 +-
+ arch/x86/include/asm/kvm_host.h     |  3 +-
+ arch/x86/kvm/mmu/mmu.c              |  5 +-
+ arch/x86/kvm/x86.c                  |  4 +-
+ include/linux/kvm_host.h            |  2 +-
+ virt/kvm/arm/mmu.c                  | 97 +++++++++++++++++++----------
+ virt/kvm/kvm_main.c                 |  7 +--
+ 13 files changed, 88 insertions(+), 53 deletions(-)
+
 -- 
-2.7.4
+2.20.1
 
