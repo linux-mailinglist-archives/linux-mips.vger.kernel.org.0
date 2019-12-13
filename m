@@ -2,107 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 913AE11EACC
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2019 20:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229F611EB71
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2019 21:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728852AbfLMS7g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 Dec 2019 13:59:36 -0500
-Received: from foss.arm.com ([217.140.110.172]:42230 "EHLO foss.arm.com"
+        id S1728936AbfLMUBw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Dec 2019 15:01:52 -0500
+Received: from mga09.intel.com ([134.134.136.24]:62763 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728591AbfLMS7g (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 13 Dec 2019 13:59:36 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C33DE106F;
-        Fri, 13 Dec 2019 10:59:35 -0800 (PST)
-Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AD07C3F718;
-        Fri, 13 Dec 2019 10:59:33 -0800 (PST)
-Subject: Re: [PATCH 1/7] KVM: Pass mmu_notifier_range down to
- kvm_unmap_hva_range()
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        James Hogan <jhogan@kernel.org>,
+        id S1728736AbfLMUBw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 13 Dec 2019 15:01:52 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Dec 2019 12:01:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,311,1571727600"; 
+   d="scan'208";a="208563026"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
+  by orsmga008.jf.intel.com with ESMTP; 13 Dec 2019 12:01:51 -0800
+Date:   Fri, 13 Dec 2019 12:01:51 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     James Hogan <jhogan@kernel.org>,
         Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
         Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
         linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20191213182503.14460-1-maz@kernel.org>
- <20191213182503.14460-2-maz@kernel.org>
-From:   Suzuki Kuruppassery Poulose <suzuki.poulose@arm.com>
-Message-ID: <c347df67-6cc3-9d5c-0dd9-72ebb8fa9712@arm.com>
-Date:   Fri, 13 Dec 2019 18:59:32 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        Christoffer Dall <christoffer.dall@arm.com>
+Subject: Re: [PATCH v3 00/15] KVM: Dynamically size memslot arrays
+Message-ID: <20191213200151.GF31552@linux.intel.com>
+References: <20191024230744.14543-1-sean.j.christopherson@intel.com>
+ <20191203221433.GK19877@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20191213182503.14460-2-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191203221433.GK19877@linux.intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Marc,
-
-
-On 13/12/2019 18:24, Marc Zyngier wrote:
-> kvm_unmap_hva_range() is currently passed both start and end
-> fields from the mmu_notifier_range structure. As this struct
-> now contains important information about the reason of the
-> unmap (the event field), replace the start/end parameters
-> with the range struct, and update all architectures.
+On Tue, Dec 03, 2019 at 02:14:33PM -0800, Sean Christopherson wrote:
+> On Thu, Oct 24, 2019 at 04:07:29PM -0700, Sean Christopherson wrote:
+> > The end goal of this series is to dynamically size the memslot array so
+> > that KVM allocates memory based on the number of memslots in use, as
+> > opposed to unconditionally allocating memory for the maximum number of
+> > memslots.  On x86, each memslot consumes 88 bytes, and so with 2 address
+> > spaces of 512 memslots, each VM consumes ~90k bytes for the memslots.
+> > E.g. given a VM that uses a total of 30 memslots, dynamic sizing reduces
+> > the memory footprint from 90k to ~2.6k bytes.
+> > 
+> > The changes required to support dynamic sizing are relatively small,
+> > e.g. are essentially contained in patches 14/15 and 15/15.  Patches 1-13
+> > clean up the memslot code, which has gotten quite crusty, especially
+> > __kvm_set_memory_region().  The clean up is likely not strictly necessary
+> > to switch to dynamic sizing, but I didn't have a remotely reasonable
+> > level of confidence in the correctness of the dynamic sizing without first
+> > doing the clean up.
+> > 
+> > Christoffer, I added your Tested-by to the patches that I was confident
+> > would be fully tested based on the desription of what you tested.  Let me
+> > know if you disagree with any of 'em.
+> > 
+> > v3:
+> >   - Fix build errors on PPC and MIPS due to missed params during
+> >     refactoring [kbuild test robot].
+> >   - Rename the helpers for update_memslots() and add comments describing
+> >     the new algorithm and how it interacts with searching [Paolo].
+> >   - Remove the unnecessary and obnoxious warning regarding memslots being
+> >     a flexible array [Paolo].
+> >   - Fix typos in the changelog of patch 09/15 [Christoffer].
+> >   - Collect tags [Christoffer].
+> > 
+> > v2:
+> >   - Split "Drop kvm_arch_create_memslot()" into three patches to move
+> >     minor functional changes to standalone patches [Janosch].
+> >   - Rebase to latest kvm/queue (f0574a1cea5b, "KVM: x86: fix ...")
+> >   - Collect an Acked-by and a Reviewed-by
 > 
-> No functionnal change.
-> 
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Paolo, do you want me to rebase this to the latest kvm/queue?
 
+Ping.
 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 00268290dcbd..7c3665ad1035 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -158,7 +158,7 @@ static unsigned long long kvm_createvm_count;
->   static unsigned long long kvm_active_vms;
->   
->   __weak int kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
-> -		unsigned long start, unsigned long end, bool blockable)
-> +		const struct mmu_notifier_range *range, bool blockable)
->   {
->   	return 0;
->   }
-> @@ -415,7 +415,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
->   	 * count is also read inside the mmu_lock critical section.
->   	 */
->   	kvm->mmu_notifier_count++;
-> -	need_tlb_flush = kvm_unmap_hva_range(kvm, range->start, range->end);
-> +	need_tlb_flush = kvm_unmap_hva_range(kvm, range);
->   	need_tlb_flush |= kvm->tlbs_dirty;
->   	/* we've to flush the tlb before the pages can be freed */
->   	if (need_tlb_flush)
-> @@ -423,8 +423,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
->   
->   	spin_unlock(&kvm->mmu_lock);
->   
-> -	ret = kvm_arch_mmu_notifier_invalidate_range(kvm, range->start,
-> -					range->end,
-> +	ret = kvm_arch_mmu_notifier_invalidate_range(kvm, range,
->   					mmu_notifier_range_blockable(range));
-
-minor nit:
-
-Since we now have the range passed on to the arch hooks, we could get
-rid of the "blockable" too, as it is something you can deduce from the
-range.
-
-Otherwise looks good to me.
-
-Suzuki
+Applies cleanly on the current kvm/queue and nothing caught fire in
+testing (though I only re-tested the series as a whole).
