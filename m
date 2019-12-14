@@ -2,19 +2,19 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7720B11F287
-	for <lists+linux-mips@lfdr.de>; Sat, 14 Dec 2019 16:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE45F11F27F
+	for <lists+linux-mips@lfdr.de>; Sat, 14 Dec 2019 16:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726837AbfLNPeP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 14 Dec 2019 10:34:15 -0500
-Received: from out28-146.mail.aliyun.com ([115.124.28.146]:45354 "EHLO
-        out28-146.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726794AbfLNPeM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 14 Dec 2019 10:34:12 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1281181|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.0264408-0.000762456-0.972797;DS=CONTINUE|ham_system_inform|0.170943-0.000454232-0.828603;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03306;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.GH4QmPi_1576337632;
+        id S1726795AbfLNPeJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 14 Dec 2019 10:34:09 -0500
+Received: from out28-1.mail.aliyun.com ([115.124.28.1]:51126 "EHLO
+        out28-1.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726704AbfLNPeJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 14 Dec 2019 10:34:09 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1788901|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.577685-0.041398-0.380917;DS=CONTINUE|ham_system_inform|0.0169362-0.000812821-0.982251;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03301;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.GH4QmPi_1576337632;
 Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GH4QmPi_1576337632)
           by smtp.aliyun-inc.com(10.147.41.143);
-          Sat, 14 Dec 2019 23:33:57 +0800
+          Sat, 14 Dec 2019 23:33:58 +0800
 From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
         <zhouyanjie@wanyeetech.com>
 To:     linux-mips@vger.kernel.org
@@ -23,10 +23,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         paul.burton@mips.com, paulburton@kernel.org, paul@crapouillou.net,
         mturquette@baylibre.com, sboyd@kernel.org, mark.rutland@arm.com,
         sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-Subject: Add support for the X1830 v3
-Date:   Sat, 14 Dec 2019 23:33:44 +0800
-Message-Id: <1576337630-78576-1-git-send-email-zhouyanjie@wanyeetech.com>
+Subject: [PATCH v3 0/5] clk: Ingenic: Add support for the X1830 v3
+Date:   Sat, 14 Dec 2019 23:33:45 +0800
+Message-Id: <1576337630-78576-2-git-send-email-zhouyanjie@wanyeetech.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1576337630-78576-1-git-send-email-zhouyanjie@wanyeetech.com>
+References: <1576337630-78576-1-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -49,4 +51,30 @@ v1->v2:
 
 v2-v3:
 Adjust the order of patches.
+
+周琰杰 (Zhou Yanjie) (5):
+  clk: Ingenic: Remove unnecessary spinlock when reading registers.
+  clk: Ingenic: Adjust cgu code to make it compatible with X1830.
+  clk: Ingenic: Adjust code to make it compatible with new cgu code.
+  dt-bindings: clock: Add X1830 bindings.
+  clk: Ingenic: Add CGU driver for X1830.
+
+ .../devicetree/bindings/clock/ingenic,cgu.txt      |   1 +
+ drivers/clk/ingenic/Kconfig                        |  10 +
+ drivers/clk/ingenic/Makefile                       |   1 +
+ drivers/clk/ingenic/cgu.c                          |  36 +--
+ drivers/clk/ingenic/cgu.h                          |   8 +-
+ drivers/clk/ingenic/jz4725b-cgu.c                  |   4 +-
+ drivers/clk/ingenic/jz4740-cgu.c                   |   4 +-
+ drivers/clk/ingenic/jz4770-cgu.c                   |   8 +-
+ drivers/clk/ingenic/jz4780-cgu.c                   |   4 +-
+ drivers/clk/ingenic/x1000-cgu.c                    |   8 +-
+ drivers/clk/ingenic/x1830-cgu.c                    | 340 +++++++++++++++++++++
+ include/dt-bindings/clock/x1830-cgu.h              |  46 +++
+ 12 files changed, 444 insertions(+), 26 deletions(-)
+ create mode 100644 drivers/clk/ingenic/x1830-cgu.c
+ create mode 100644 include/dt-bindings/clock/x1830-cgu.h
+
+-- 
+2.7.4
 
