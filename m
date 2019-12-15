@@ -2,240 +2,218 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B2011F364
-	for <lists+linux-mips@lfdr.de>; Sat, 14 Dec 2019 19:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E5211F72C
+	for <lists+linux-mips@lfdr.de>; Sun, 15 Dec 2019 11:28:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726541AbfLNSJ4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 14 Dec 2019 13:09:56 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:57900 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725972AbfLNSJ4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 14 Dec 2019 13:09:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1576346992; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kjxytof43EwC/NCcO7/Oddxq3k1AJWoIntsJ65bazro=;
-        b=tDyiQ5J4mDcbQ7n1Ws1TdW82WBe/kq0hrCHXRDypyUG5z7Xo1mQ9GO9qenauBVo4s+T15h
-        jN8zxNcPN5DIXvp8FRC/KTzpXkVuznERcyz6re7OGILIUkVZwWwBLDz94sufvhTtI7lwif
-        0tRT4o+IBk6ShxouANXs++F8Xn+ErTg=
-Date:   Sat, 14 Dec 2019 19:09:47 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v3 2/5] clk: Ingenic: Adjust cgu code to make it
- compatible with X1830.
-To:     =?UTF-8?b?5ZGo55Cw5p2w?= "(Zhou Yanjie)" 
-        <zhouyanjie@wanyeetech.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, mark.rutland@arm.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-Message-Id: <1576346987.3.2@crapouillou.net>
-In-Reply-To: <1576337630-78576-4-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1576337630-78576-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1576337630-78576-4-git-send-email-zhouyanjie@wanyeetech.com>
+        id S1726089AbfLOK2D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 15 Dec 2019 05:28:03 -0500
+Received: from inca-roads.misterjones.org ([213.251.177.50]:57743 "EHLO
+        inca-roads.misterjones.org" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726061AbfLOK2D (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 15 Dec 2019 05:28:03 -0500
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why)
+        by cheepnis.misterjones.org with esmtpsa (TLSv1.2:AES256-GCM-SHA384:256)
+        (Exim 4.80)
+        (envelope-from <maz@kernel.org>)
+        id 1igR7x-0007eF-3A; Sun, 15 Dec 2019 11:27:53 +0100
+Date:   Sun, 15 Dec 2019 10:27:51 +0000
+From:   Marc Zyngier <maz@kernel.org>
+Cc:     kvm-ppc@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        kvm@vger.kernel.org, James Hogan <jhogan@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, linux-mips@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        kvmarm@lists.cs.columbia.edu, Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH 1/7] KVM: Pass mmu_notifier_range down to
+ kvm_unmap_hva_range()
+Message-ID: <20191215102751.197b7d81@why>
+In-Reply-To: <20191213182503.14460-2-maz@kernel.org>
+References: <20191213182503.14460-1-maz@kernel.org>
+        <20191213182503.14460-2-maz@kernel.org>
+Organization: Approximate
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: kvm-ppc@vger.kernel.org, wanpengli@tencent.com, kvm@vger.kernel.org, jhogan@kernel.org, joro@8bytes.org, linux-mips@vger.kernel.org, sean.j.christopherson@intel.com, paulus@ozlabs.org, linux-arm-kernel@lists.infradead.org, pbonzini@redhat.com, vkuznets@redhat.com, kvmarm@lists.cs.columbia.edu, jmattson@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on cheepnis.misterjones.org); SAEximRunCond expanded to false
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Zhou,
+On Fri, 13 Dec 2019 18:24:57 +0000
+Marc Zyngier <maz@kernel.org> wrote:
 
-The patch looks good but it should be merged with [3/5]. Because right=20
-now it is not atomic, if you only have the first two patches applied=20
-the kernel won't compile.
-
--Paul
-
-
-Le sam., d=C3=A9c. 14, 2019 at 23:33, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yan=
-jie)=20
-<zhouyanjie@wanyeetech.com> a =C3=A9crit :
-> The PLL of X1830 Soc from Ingenic has been greatly changed,
-> the bypass control is placed in another register, so now two
-> registers may needed to control the PLL. To this end, the
-> original "reg" was changed to "pll_reg", and a new "bypass_reg"
-> was introduced. In addition, when calculating rate, the PLL of
-> X1830 introduced an extra 2x multiplier, so a new "rate_multiplier"
-> was introduced.
->=20
-> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
-eetech.com>
+> kvm_unmap_hva_range() is currently passed both start and end
+> fields from the mmu_notifier_range structure. As this struct
+> now contains important information about the reason of the
+> unmap (the event field), replace the start/end parameters
+> with the range struct, and update all architectures.
+> 
+> No functionnal change.
+> 
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
 > ---
->=20
-> Notes:
->     v1->v2:
->     1.Use two fields (pll_reg & bypass_reg) instead of the 2-values
->       array (reg[2]).
->     2.Remove the "pll_info->version" and add a=20
-> "pll_info->rate_multiplier".
->     3.Fix the coding style and add more detailed commit message.
->     4.Change my Signed-off-by from "Zhou Yanjie <zhouyanjie@zoho.com>"
->       to "=E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wanyeetec=
-h.com>" because
->       the old mailbox is in an unstable state.
->=20
->     v2->v3:
->     Adjust order from [1/5] in v2 to [2/5] in v3.
->=20
->  drivers/clk/ingenic/cgu.c | 30 +++++++++++++++++++-----------
->  drivers/clk/ingenic/cgu.h |  8 ++++++--
->  2 files changed, 25 insertions(+), 13 deletions(-)
->=20
-> diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
-> index 8bd3998..3c95451 100644
-> --- a/drivers/clk/ingenic/cgu.c
-> +++ b/drivers/clk/ingenic/cgu.c
-> @@ -82,7 +82,7 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned=20
-> long parent_rate)
->  	BUG_ON(clk_info->type !=3D CGU_CLK_PLL);
->  	pll_info =3D &clk_info->pll;
->=20
-> -	ctl =3D readl(cgu->base + pll_info->reg);
-> +	ctl =3D readl(cgu->base + pll_info->pll_reg);
->=20
->  	m =3D (ctl >> pll_info->m_shift) & GENMASK(pll_info->m_bits - 1, 0);
->  	m +=3D pll_info->m_offset;
-> @@ -90,6 +90,9 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned=20
-> long parent_rate)
->  	n +=3D pll_info->n_offset;
->  	od_enc =3D ctl >> pll_info->od_shift;
->  	od_enc &=3D GENMASK(pll_info->od_bits - 1, 0);
-> +
-> +	ctl =3D readl(cgu->base + pll_info->bypass_reg);
-> +
->  	bypass =3D !pll_info->no_bypass_bit &&
->  		 !!(ctl & BIT(pll_info->bypass_bit));
->=20
-> @@ -103,7 +106,7 @@ ingenic_pll_recalc_rate(struct clk_hw *hw,=20
-> unsigned long parent_rate)
->  	BUG_ON(od =3D=3D pll_info->od_max);
->  	od++;
->=20
-> -	return div_u64((u64)parent_rate * m, n * od);
-> +	return div_u64((u64)parent_rate * m * pll_info->rate_multiplier, n=20
-> * od);
+>  arch/arm/include/asm/kvm_host.h     | 2 +-
+>  arch/arm64/include/asm/kvm_host.h   | 2 +-
+>  arch/mips/include/asm/kvm_host.h    | 2 +-
+>  arch/mips/kvm/mmu.c                 | 6 ++++--
+>  arch/powerpc/include/asm/kvm_host.h | 2 +-
+>  arch/powerpc/kvm/book3s.c           | 5 +++--
+>  arch/powerpc/kvm/e500_mmu_host.c    | 4 ++--
+>  arch/x86/include/asm/kvm_host.h     | 3 ++-
+>  arch/x86/kvm/mmu/mmu.c              | 5 +++--
+>  arch/x86/kvm/x86.c                  | 4 ++--
+>  include/linux/kvm_host.h            | 2 +-
+>  virt/kvm/arm/mmu.c                  | 8 ++++----
+>  virt/kvm/kvm_main.c                 | 7 +++----
+>  13 files changed, 28 insertions(+), 24 deletions(-)
+> 
+> diff --git a/arch/arm/include/asm/kvm_host.h b/arch/arm/include/asm/kvm_host.h
+> index 556cd818eccf..621c71594499 100644
+> --- a/arch/arm/include/asm/kvm_host.h
+> +++ b/arch/arm/include/asm/kvm_host.h
+> @@ -276,7 +276,7 @@ int __kvm_arm_vcpu_set_events(struct kvm_vcpu *vcpu,
+>  
+>  #define KVM_ARCH_WANT_MMU_NOTIFIER
+>  int kvm_unmap_hva_range(struct kvm *kvm,
+> -			unsigned long start, unsigned long end);
+> +			const struct mmu_notifier_range *range);
+>  int kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte);
+>  
+>  unsigned long kvm_arm_num_regs(struct kvm_vcpu *vcpu);
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index c61260cf63c5..dd850f5e81e3 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -441,7 +441,7 @@ int __kvm_arm_vcpu_set_events(struct kvm_vcpu *vcpu,
+>  
+>  #define KVM_ARCH_WANT_MMU_NOTIFIER
+>  int kvm_unmap_hva_range(struct kvm *kvm,
+> -			unsigned long start, unsigned long end);
+> +			const struct mmu_notifier_range *range);
+>  int kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte);
+>  int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end);
+>  int kvm_test_age_hva(struct kvm *kvm, unsigned long hva);
+> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+> index 41204a49cf95..0ed065870f1b 100644
+> --- a/arch/mips/include/asm/kvm_host.h
+> +++ b/arch/mips/include/asm/kvm_host.h
+> @@ -935,7 +935,7 @@ enum kvm_mips_fault_result kvm_trap_emul_gva_fault(struct kvm_vcpu *vcpu,
+>  
+>  #define KVM_ARCH_WANT_MMU_NOTIFIER
+>  int kvm_unmap_hva_range(struct kvm *kvm,
+> -			unsigned long start, unsigned long end);
+> +			const struct mmu_notifier_range *range);
+>  int kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte);
+>  int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end);
+>  int kvm_test_age_hva(struct kvm *kvm, unsigned long hva);
+> diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
+> index 7dad7a293eae..32ef868258b9 100644
+> --- a/arch/mips/kvm/mmu.c
+> +++ b/arch/mips/kvm/mmu.c
+> @@ -518,9 +518,11 @@ static int kvm_unmap_hva_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+>  	return 1;
 >  }
->=20
->  static unsigned long
-> @@ -136,7 +139,7 @@ ingenic_pll_calc(const struct=20
-> ingenic_cgu_clk_info *clk_info,
->  	if (pod)
->  		*pod =3D od;
->=20
-> -	return div_u64((u64)parent_rate * m, n * od);
-> +	return div_u64((u64)parent_rate * m * pll_info->rate_multiplier, n=20
-> * od);
->  }
->=20
->  static inline const struct ingenic_cgu_clk_info *to_clk_info(
-> @@ -180,7 +183,7 @@ ingenic_pll_set_rate(struct clk_hw *hw, unsigned=20
-> long req_rate,
->  			clk_info->name, req_rate, rate);
->=20
->  	spin_lock_irqsave(&cgu->lock, flags);
-> -	ctl =3D readl(cgu->base + pll_info->reg);
-> +	ctl =3D readl(cgu->base + pll_info->pll_reg);
->=20
->  	ctl &=3D ~(GENMASK(pll_info->m_bits - 1, 0) << pll_info->m_shift);
->  	ctl |=3D (m - pll_info->m_offset) << pll_info->m_shift;
-> @@ -191,7 +194,7 @@ ingenic_pll_set_rate(struct clk_hw *hw, unsigned=20
-> long req_rate,
->  	ctl &=3D ~(GENMASK(pll_info->od_bits - 1, 0) << pll_info->od_shift);
->  	ctl |=3D pll_info->od_encoding[od - 1] << pll_info->od_shift;
->=20
-> -	writel(ctl, cgu->base + pll_info->reg);
-> +	writel(ctl, cgu->base + pll_info->pll_reg);
->  	spin_unlock_irqrestore(&cgu->lock, flags);
->=20
+>  
+> -int kvm_unmap_hva_range(struct kvm *kvm, unsigned long start, unsigned long end)
+> +int kvm_unmap_hva_range(struct kvm *kvm,
+> +			const struct mmu_notifier_range *range)
+>  {
+> -	handle_hva_to_gpa(kvm, start, end, &kvm_unmap_hva_handler, NULL);
+> +	handle_hva_to_gpa(kvm, range->start, range->end,
+> +			  &kvm_unmap_hva_handler, NULL);
+>  
+>  	kvm_mips_callbacks->flush_shadow_all(kvm);
 >  	return 0;
-> @@ -209,16 +212,21 @@ static int ingenic_pll_enable(struct clk_hw *hw)
->  	u32 ctl;
->=20
->  	spin_lock_irqsave(&cgu->lock, flags);
-> -	ctl =3D readl(cgu->base + pll_info->reg);
-> +	ctl =3D readl(cgu->base + pll_info->bypass_reg);
->=20
->  	ctl &=3D ~BIT(pll_info->bypass_bit);
-> +
-> +	writel(ctl, cgu->base + pll_info->bypass_reg);
-> +
-> +	ctl =3D readl(cgu->base + pll_info->pll_reg);
-> +
->  	ctl |=3D BIT(pll_info->enable_bit);
->=20
-> -	writel(ctl, cgu->base + pll_info->reg);
-> +	writel(ctl, cgu->base + pll_info->pll_reg);
->=20
->  	/* wait for the PLL to stabilise */
->  	for (i =3D 0; i < timeout; i++) {
-> -		ctl =3D readl(cgu->base + pll_info->reg);
-> +		ctl =3D readl(cgu->base + pll_info->pll_reg);
->  		if (ctl & BIT(pll_info->stable_bit))
->  			break;
->  		mdelay(1);
-> @@ -242,11 +250,11 @@ static void ingenic_pll_disable(struct clk_hw=20
-> *hw)
->  	u32 ctl;
->=20
->  	spin_lock_irqsave(&cgu->lock, flags);
-> -	ctl =3D readl(cgu->base + pll_info->reg);
-> +	ctl =3D readl(cgu->base + pll_info->pll_reg);
->=20
->  	ctl &=3D ~BIT(pll_info->enable_bit);
->=20
-> -	writel(ctl, cgu->base + pll_info->reg);
-> +	writel(ctl, cgu->base + pll_info->pll_reg);
->  	spin_unlock_irqrestore(&cgu->lock, flags);
+> diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/include/asm/kvm_host.h
+> index 0a398f2321c2..8cef585e0abe 100644
+> --- a/arch/powerpc/include/asm/kvm_host.h
+> +++ b/arch/powerpc/include/asm/kvm_host.h
+> @@ -58,7 +58,7 @@
+>  #define KVM_ARCH_WANT_MMU_NOTIFIER
+>  
+>  extern int kvm_unmap_hva_range(struct kvm *kvm,
+> -			       unsigned long start, unsigned long end);
+> +			       const struct mmu_notifier_range *range);
+>  extern int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end);
+>  extern int kvm_test_age_hva(struct kvm *kvm, unsigned long hva);
+>  extern int kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte);
+> diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
+> index 58a59ee998e2..a1529a0dd656 100644
+> --- a/arch/powerpc/kvm/book3s.c
+> +++ b/arch/powerpc/kvm/book3s.c
+> @@ -842,9 +842,10 @@ void kvmppc_core_commit_memory_region(struct kvm *kvm,
+>  	kvm->arch.kvm_ops->commit_memory_region(kvm, mem, old, new, change);
 >  }
->=20
-> @@ -258,7 +266,7 @@ static int ingenic_pll_is_enabled(struct clk_hw=20
-> *hw)
->  	const struct ingenic_cgu_pll_info *pll_info =3D &clk_info->pll;
->  	u32 ctl;
->=20
-> -	ctl =3D readl(cgu->base + pll_info->reg);
-> +	ctl =3D readl(cgu->base + pll_info->pll_reg);
->=20
->  	return !!(ctl & BIT(pll_info->enable_bit));
+>  
+> -int kvm_unmap_hva_range(struct kvm *kvm, unsigned long start, unsigned long end)
+> +int kvm_unmap_hva_range(struct kvm *kvm,
+> +			const struct mmu_notifier_range *range)
+>  {
+> -	return kvm->arch.kvm_ops->unmap_hva_range(kvm, start, end);
+> +	return kvm->arch.kvm_ops->unmap_hva_range(kvm, range->start, range->end);
 >  }
-> diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
-> index 0dc8004..f7b6908 100644
-> --- a/drivers/clk/ingenic/cgu.h
-> +++ b/drivers/clk/ingenic/cgu.h
-> @@ -16,7 +16,9 @@
->=20
->  /**
->   * struct ingenic_cgu_pll_info - information about a PLL
-> - * @reg: the offset of the PLL's control register within the CGU
-> + * @pll_reg: the offset of the PLL's control register within the CGU
-> + * @bypass_reg: the offset of the bypass control register within the=20
-> CGU
-> + * @rate_multiplier: the multiplier needed by pll rate calculation
->   * @m_shift: the number of bits to shift the multiplier value by=20
-> (ie. the
->   *           index of the lowest bit of the multiplier value in the=20
-> PLL's
->   *           control register)
-> @@ -43,7 +45,9 @@
->   * @no_bypass_bit: if set, the PLL has no bypass functionality
->   */
->  struct ingenic_cgu_pll_info {
-> -	unsigned reg;
-> +	unsigned pll_reg;
-> +	unsigned bypass_reg;
-> +	unsigned rate_multiplier;
->  	const s8 *od_encoding;
->  	u8 m_shift, m_bits, m_offset;
->  	u8 n_shift, n_bits, n_offset;
-> --
-> 2.7.4
->=20
+>  
+>  int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end)
+> diff --git a/arch/powerpc/kvm/e500_mmu_host.c b/arch/powerpc/kvm/e500_mmu_host.c
+> index 425d13806645..5a7211901063 100644
+> --- a/arch/powerpc/kvm/e500_mmu_host.c
+> +++ b/arch/powerpc/kvm/e500_mmu_host.c
+> @@ -734,10 +734,10 @@ static int kvm_unmap_hva(struct kvm *kvm, unsigned long hva)
+>  	return 0;
+>  }
+>  
+> -int kvm_unmap_hva_range(struct kvm *kvm, unsigned long start, unsigned long end)
+> +int kvm_unmap_hva_range(struct kvm *kvm, const struct mmu_notifier_range *range)
+>  {
+>  	/* kvm_unmap_hva flushes everything anyways */
+> -	kvm_unmap_hva(kvm, start);
+> +	kvm_unmap_hva(kvm, range->start);
+>  
+>  	return 0;
+>  }
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index b79cd6aa4075..c479fa845d72 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1569,7 +1569,8 @@ asmlinkage void kvm_spurious_fault(void);
+>  	_ASM_EXTABLE(666b, 667b)
+>  
+>  #define KVM_ARCH_WANT_MMU_NOTIFIER
+> -int kvm_unmap_hva_range(struct kvm *kvm, unsigned long start, unsigned long end);
+> +int kvm_unmap_hva_range(struct kvm *kvm,
+> +			const struct mmu_notifier_range *range);
+>  int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end);
+>  int kvm_test_age_hva(struct kvm *kvm, unsigned long hva);
+>  int kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte);
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 6f92b40d798c..86831be07c17 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -2040,9 +2040,10 @@ static int kvm_handle_hva(struct kvm *kvm, unsigned long hva,
+>  	return kvm_handle_hva_range(kvm, hva, hva + 1, data, handler);
+>  }
+>  
+> -int kvm_unmap_hva_range(struct kvm *kvm, unsigned long start, unsigned long end)
+> +int kvm_unmap_hva_range(struct kvm *kvm,
+> +			const struct mmu_notifier_range *range);
+>  {
+> -	return kvm_handle_hva_range(kvm, start, end, 0, kvm_unmap_rmapp);
+> +	return kvm_handle_hva_range(kvm, range->start, range->end, 0, kvm_unmap_rmapp);
+>  }
 
-=
+As kindly pointed out by the kbuild robot, this doesn't even compile...
+I've fixed it locally, incorporating Suzuki's feedback at the same time.
 
+	M.
+-- 
+Jazz is not dead. It just smells funny...
