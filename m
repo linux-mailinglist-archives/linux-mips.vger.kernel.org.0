@@ -2,236 +2,171 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F23E111F81E
-	for <lists+linux-mips@lfdr.de>; Sun, 15 Dec 2019 15:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF7211F83B
+	for <lists+linux-mips@lfdr.de>; Sun, 15 Dec 2019 15:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726112AbfLOON0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 15 Dec 2019 09:13:26 -0500
-Received: from out28-5.mail.aliyun.com ([115.124.28.5]:40820 "EHLO
-        out28-5.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726103AbfLOON0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 15 Dec 2019 09:13:26 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436489|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.477822-0.00910106-0.513076;DS=CONTINUE|ham_regular_dialog|0.288924-0.00126952-0.709806;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03301;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.GHd2RIv_1576419196;
-Received: from 192.168.88.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GHd2RIv_1576419196)
-          by smtp.aliyun-inc.com(10.147.42.135);
-          Sun, 15 Dec 2019 22:13:17 +0800
-Subject: Re: [PATCH v3 2/5] clk: Ingenic: Adjust cgu code to make it
- compatible with X1830.
-To:     Paul Cercueil <paul@crapouillou.net>
-References: <1576337630-78576-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1576337630-78576-4-git-send-email-zhouyanjie@wanyeetech.com>
- <1576346987.3.2@crapouillou.net>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, mark.rutland@arm.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <5DF63F7E.4040106@wanyeetech.com>
-Date:   Sun, 15 Dec 2019 22:13:18 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
- Thunderbird/38.8.0
+        id S1726512AbfLOO5c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 15 Dec 2019 09:57:32 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:47863 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726103AbfLOO5b (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 15 Dec 2019 09:57:31 -0500
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1igVKh-0000Uj-Jm; Sun, 15 Dec 2019 15:57:19 +0100
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1igVKc-0006G3-En; Sun, 15 Dec 2019 15:57:14 +0100
+Date:   Sun, 15 Dec 2019 15:57:14 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        linux-kernel@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paul Burton <paul.burton@mips.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        James Hogan <jhogan@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>
+Subject: Re: [PATCH v4 2/5] dt-bindings: net: dsa: qca,ar9331 switch
+ documentation
+Message-ID: <20191215145714.i22b5ndusnxo2rxy@pengutronix.de>
+References: <20191022055743.6832-1-o.rempel@pengutronix.de>
+ <20191022055743.6832-3-o.rempel@pengutronix.de>
+ <20191023003543.GE5707@lunn.ch>
+ <20191029073419.gjr4y7qsxx2javuf@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <1576346987.3.2@crapouillou.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="vwadkjf67645dxog"
+Content-Disposition: inline
+In-Reply-To: <20191029073419.gjr4y7qsxx2javuf@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 15:48:57 up 30 days,  6:07, 38 users,  load average: 0.33, 0.14,
+ 0.05
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
 
-On 2019年12月15日 02:09, Paul Cercueil wrote:
-> Hi Zhou,
->
-> The patch looks good but it should be merged with [3/5]. Because right 
-> now it is not atomic, if you only have the first two patches applied 
-> the kernel won't compile.
->
+--vwadkjf67645dxog
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-OK, I will merge it in v4.
+Hi Andrew,
 
-> -Paul
->
->
-> Le sam., déc. 14, 2019 at 23:33, 周琰杰 (Zhou Yanjie) 
-> <zhouyanjie@wanyeetech.com> a écrit :
->> The PLL of X1830 Soc from Ingenic has been greatly changed,
->> the bypass control is placed in another register, so now two
->> registers may needed to control the PLL. To this end, the
->> original "reg" was changed to "pll_reg", and a new "bypass_reg"
->> was introduced. In addition, when calculating rate, the PLL of
->> X1830 introduced an extra 2x multiplier, so a new "rate_multiplier"
->> was introduced.
->>
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> ---
->>
->> Notes:
->>     v1->v2:
->>     1.Use two fields (pll_reg & bypass_reg) instead of the 2-values
->>       array (reg[2]).
->>     2.Remove the "pll_info->version" and add a 
->> "pll_info->rate_multiplier".
->>     3.Fix the coding style and add more detailed commit message.
->>     4.Change my Signed-off-by from "Zhou Yanjie <zhouyanjie@zoho.com>"
->>       to "周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>" because
->>       the old mailbox is in an unstable state.
->>
->>     v2->v3:
->>     Adjust order from [1/5] in v2 to [2/5] in v3.
->>
->>  drivers/clk/ingenic/cgu.c | 30 +++++++++++++++++++-----------
->>  drivers/clk/ingenic/cgu.h |  8 ++++++--
->>  2 files changed, 25 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
->> index 8bd3998..3c95451 100644
->> --- a/drivers/clk/ingenic/cgu.c
->> +++ b/drivers/clk/ingenic/cgu.c
->> @@ -82,7 +82,7 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned 
->> long parent_rate)
->>      BUG_ON(clk_info->type != CGU_CLK_PLL);
->>      pll_info = &clk_info->pll;
->>
->> -    ctl = readl(cgu->base + pll_info->reg);
->> +    ctl = readl(cgu->base + pll_info->pll_reg);
->>
->>      m = (ctl >> pll_info->m_shift) & GENMASK(pll_info->m_bits - 1, 0);
->>      m += pll_info->m_offset;
->> @@ -90,6 +90,9 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned 
->> long parent_rate)
->>      n += pll_info->n_offset;
->>      od_enc = ctl >> pll_info->od_shift;
->>      od_enc &= GENMASK(pll_info->od_bits - 1, 0);
->> +
->> +    ctl = readl(cgu->base + pll_info->bypass_reg);
->> +
->>      bypass = !pll_info->no_bypass_bit &&
->>           !!(ctl & BIT(pll_info->bypass_bit));
->>
->> @@ -103,7 +106,7 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, 
->> unsigned long parent_rate)
->>      BUG_ON(od == pll_info->od_max);
->>      od++;
->>
->> -    return div_u64((u64)parent_rate * m, n * od);
->> +    return div_u64((u64)parent_rate * m * pll_info->rate_multiplier, 
->> n * od);
->>  }
->>
->>  static unsigned long
->> @@ -136,7 +139,7 @@ ingenic_pll_calc(const struct 
->> ingenic_cgu_clk_info *clk_info,
->>      if (pod)
->>          *pod = od;
->>
->> -    return div_u64((u64)parent_rate * m, n * od);
->> +    return div_u64((u64)parent_rate * m * pll_info->rate_multiplier, 
->> n * od);
->>  }
->>
->>  static inline const struct ingenic_cgu_clk_info *to_clk_info(
->> @@ -180,7 +183,7 @@ ingenic_pll_set_rate(struct clk_hw *hw, unsigned 
->> long req_rate,
->>              clk_info->name, req_rate, rate);
->>
->>      spin_lock_irqsave(&cgu->lock, flags);
->> -    ctl = readl(cgu->base + pll_info->reg);
->> +    ctl = readl(cgu->base + pll_info->pll_reg);
->>
->>      ctl &= ~(GENMASK(pll_info->m_bits - 1, 0) << pll_info->m_shift);
->>      ctl |= (m - pll_info->m_offset) << pll_info->m_shift;
->> @@ -191,7 +194,7 @@ ingenic_pll_set_rate(struct clk_hw *hw, unsigned 
->> long req_rate,
->>      ctl &= ~(GENMASK(pll_info->od_bits - 1, 0) << pll_info->od_shift);
->>      ctl |= pll_info->od_encoding[od - 1] << pll_info->od_shift;
->>
->> -    writel(ctl, cgu->base + pll_info->reg);
->> +    writel(ctl, cgu->base + pll_info->pll_reg);
->>      spin_unlock_irqrestore(&cgu->lock, flags);
->>
->>      return 0;
->> @@ -209,16 +212,21 @@ static int ingenic_pll_enable(struct clk_hw *hw)
->>      u32 ctl;
->>
->>      spin_lock_irqsave(&cgu->lock, flags);
->> -    ctl = readl(cgu->base + pll_info->reg);
->> +    ctl = readl(cgu->base + pll_info->bypass_reg);
->>
->>      ctl &= ~BIT(pll_info->bypass_bit);
->> +
->> +    writel(ctl, cgu->base + pll_info->bypass_reg);
->> +
->> +    ctl = readl(cgu->base + pll_info->pll_reg);
->> +
->>      ctl |= BIT(pll_info->enable_bit);
->>
->> -    writel(ctl, cgu->base + pll_info->reg);
->> +    writel(ctl, cgu->base + pll_info->pll_reg);
->>
->>      /* wait for the PLL to stabilise */
->>      for (i = 0; i < timeout; i++) {
->> -        ctl = readl(cgu->base + pll_info->reg);
->> +        ctl = readl(cgu->base + pll_info->pll_reg);
->>          if (ctl & BIT(pll_info->stable_bit))
->>              break;
->>          mdelay(1);
->> @@ -242,11 +250,11 @@ static void ingenic_pll_disable(struct clk_hw *hw)
->>      u32 ctl;
->>
->>      spin_lock_irqsave(&cgu->lock, flags);
->> -    ctl = readl(cgu->base + pll_info->reg);
->> +    ctl = readl(cgu->base + pll_info->pll_reg);
->>
->>      ctl &= ~BIT(pll_info->enable_bit);
->>
->> -    writel(ctl, cgu->base + pll_info->reg);
->> +    writel(ctl, cgu->base + pll_info->pll_reg);
->>      spin_unlock_irqrestore(&cgu->lock, flags);
->>  }
->>
->> @@ -258,7 +266,7 @@ static int ingenic_pll_is_enabled(struct clk_hw *hw)
->>      const struct ingenic_cgu_pll_info *pll_info = &clk_info->pll;
->>      u32 ctl;
->>
->> -    ctl = readl(cgu->base + pll_info->reg);
->> +    ctl = readl(cgu->base + pll_info->pll_reg);
->>
->>      return !!(ctl & BIT(pll_info->enable_bit));
->>  }
->> diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
->> index 0dc8004..f7b6908 100644
->> --- a/drivers/clk/ingenic/cgu.h
->> +++ b/drivers/clk/ingenic/cgu.h
->> @@ -16,7 +16,9 @@
->>
->>  /**
->>   * struct ingenic_cgu_pll_info - information about a PLL
->> - * @reg: the offset of the PLL's control register within the CGU
->> + * @pll_reg: the offset of the PLL's control register within the CGU
->> + * @bypass_reg: the offset of the bypass control register within the 
->> CGU
->> + * @rate_multiplier: the multiplier needed by pll rate calculation
->>   * @m_shift: the number of bits to shift the multiplier value by 
->> (ie. the
->>   *           index of the lowest bit of the multiplier value in the 
->> PLL's
->>   *           control register)
->> @@ -43,7 +45,9 @@
->>   * @no_bypass_bit: if set, the PLL has no bypass functionality
->>   */
->>  struct ingenic_cgu_pll_info {
->> -    unsigned reg;
->> +    unsigned pll_reg;
->> +    unsigned bypass_reg;
->> +    unsigned rate_multiplier;
->>      const s8 *od_encoding;
->>      u8 m_shift, m_bits, m_offset;
->>      u8 n_shift, n_bits, n_offset;
->> -- 
->> 2.7.4
->>
->
+On Tue, Oct 29, 2019 at 08:34:19AM +0100, Oleksij Rempel wrote:
+> On Wed, Oct 23, 2019 at 02:35:43AM +0200, Andrew Lunn wrote:
+> > On Tue, Oct 22, 2019 at 07:57:40AM +0200, Oleksij Rempel wrote:
+> > > Atheros AR9331 has built-in 5 port switch. The switch can be configur=
+ed
+> > > to use all 5 or 4 ports. One of built-in PHYs can be used by first bu=
+ilt-in
+> > > ethernet controller or to be used directly by the switch over second =
+ethernet
+> > > controller.
+> > >=20
+> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> >=20
+> > Hi Oleksij
+> >=20
+> > What we never really discussed is how this MUXing of the PHY works.
+> >=20
+> > What i'm worried about is that when we do understand how it works, we
+> > cannot properly support it using this binding.
+>=20
+> good point. i would prefer to make it properly.
+>=20
+> > Please could you try to find information about this.
+>=20
+> Documentation says:
+> The PHY interfaces (PHY0, PHY1, PHY2, PHY3 and PHY4) can connect to the s=
+witch
+> in bridge mode. In this case GE0 must be under reset. All five LAN ports =
+are
+> switched together and connect to the CPU through the GMII interface (MAC0=
+),
+> which is controlled by the ETH_CFG register bit SW_ONLY_MODE. If GE0 conn=
+ects
+> separately to PHY, then MAC5 should be under reset.
+>=20
+> There is no SW_ONLY_MODE bit in the documentation.
+> I found:
+> CFG_SW_PHY_SWAP - Used to switch the wires connection of PHY port 0 with =
+that of
+> port 4 in the Ethernet switch. MAC1 and PHY4 are paired while MAC5 and PH=
+Y0 are
+> paired.
+>=20
+> CFG_SW_PHY_ADDR_SWAP - Exchanges the address of PHY port 0 with that of
+> PHY port 4 in the Ethernet switch.
+>=20
+> It feels like this are the right bits. I'll try to test it after ELC-E
+> conference (If you are here, please ping me).
+> If this are the right bits, should it be registered as separate driver? T=
+his
+> register is on MMIO and not part of the switches MDIO.
 
+I spend some tine on investigating and testing it. So, the result is
+pretty simple. It looks like *MII lines of ethernet controller GMAC0 and
+MAC of switch port5 are just connected together and wired to the PHY4.
+Something like this:
+
+GMAC1-->switch--mac5-+--->phy4
+                     ^
+GMAC0---------------/
+
+
+So, both of MACs can be enabled at same time and introduce resource
+conflict. If one is enabled, other one should be set in to reset mode.
+
+The questions are:
+- how this can be reflected in devicetree?
+- how this can be properly implemented in kernel?
+
+Regards,
+Oleksij
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--vwadkjf67645dxog
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEERBNZvwSgvmcMY/T74omh9DUaUbMFAl32SckACgkQ4omh9DUa
+UbMMXxAAhKsfNjbqFhnopjET9rCssWXRZZu4+sBhH74iw2dRZwe0HgCBy332bqn3
+Gf3MYilGiaGPdBjVMNz2i3PLCW0VsrseiOOWGPf1kekqmMjZvb5JJ9YSDBENqypy
+lWDH0lDIzr+k8m3AOJQCyEY0IEJauESpjqPsPCwMsZhTJY9mltCEeX9LfhGdtXz7
+WLb6QO37AwLD96ZRfHBiGDv4zhl4qaZPQWqCJ6wuxA4GvXCABpSjXj9ytw1+IXPr
+qFg7KwS/sZJv7dfAcEu5iB84g4TWbUu18fSpcvvuvmyozKtu9IVeij3OTrrKY1R/
+9WTod40W+vtTOwwH0b48UmGqIdo6cT9zHpWoRnKO/x0sz/lGvLik+/Y8vKVIDPOH
+YHEY8uYjQ3Vuq+hzNCKGzh6ilSaBs4zvpRU4jAFiiMvMWAHtFSfFdF8rN+Z+E4vy
+AFSSlpDZ7TjhwvD6A1nBe1/kPvgy9LSfPPxNxP1TKxS6fc3LGdzy9OiVxj6XnwXv
+VEmnycqyFSUBCLKnM6G/odDqWQjUishLiAJ6WheSn6vDJI2OOC1wz3FxutIqKjAw
+1PD0D1Xw+sVUpdC3nr+gyXz8O9ud43hR6LpZCtOt4PQk3xO0Pkt0Gegq7deLkYY0
+Sf69fxGWjWCeccZdzdPDjPs3R9lB+cn6PmpKNZpe7vvm8t/J1hQ=
+=+uQu
+-----END PGP SIGNATURE-----
+
+--vwadkjf67645dxog--
