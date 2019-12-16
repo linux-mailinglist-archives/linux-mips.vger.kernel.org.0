@@ -2,106 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F98C11FDB7
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Dec 2019 05:56:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BD011FF29
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Dec 2019 08:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726735AbfLPE4x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 15 Dec 2019 23:56:53 -0500
-Received: from foss.arm.com ([217.140.110.172]:39820 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726437AbfLPE4w (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 15 Dec 2019 23:56:52 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 67E561007;
-        Sun, 15 Dec 2019 20:56:51 -0800 (PST)
-Received: from [10.163.1.75] (unknown [10.163.1.75])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 158D03F718;
-        Sun, 15 Dec 2019 20:56:09 -0800 (PST)
-Subject: Re: [PATCH V11] mm/debug: Add tests validating architecture page
- table helpers
-To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
+        id S1726922AbfLPHoe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 16 Dec 2019 02:44:34 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:53089 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726875AbfLPHoU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 Dec 2019 02:44:20 -0500
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1igl32-0003MA-3O; Mon, 16 Dec 2019 08:44:08 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1igl2z-00006X-OL; Mon, 16 Dec 2019 08:44:05 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>, Chris Snook <chris.snook@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         James Hogan <jhogan@kernel.org>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
         Paul Burton <paul.burton@mips.com>,
         Ralf Baechle <ralf@linux-mips.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Ingo Molnar <mingo@kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <1575364731-18131-1-git-send-email-anshuman.khandual@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <d433f5a8-20a5-2862-8228-9ca72633b530@arm.com>
-Date:   Mon, 16 Dec 2019 10:27:10 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        Rob Herring <robh+dt@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, Russell King <linux@armlinux.org.uk>
+Subject: [PATCH v5 0/5] add dsa switch support for ar9331
+Date:   Mon, 16 Dec 2019 08:43:58 +0100
+Message-Id: <20191216074403.313-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <1575364731-18131-1-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+changes v5:
+- remote support for port5. The effort of using this port is
+  questionable. Currently, it is better to not use it at all, then
+  adding buggy support.
+- remove port enable call back. There is nothing what we actually need
+  to enable.
+- rebase it against v5.5-rc1 
 
+changes v4:
+- ag71xx: ag71xx_mac_validate fix always false comparison (&& -> ||)
+- tag_ar9331: use skb_pull_rcsum() instead of skb_pull().
+- tag_ar9331: drop skb_set_mac_header()
 
-On 12/03/2019 02:48 PM, Anshuman Khandual wrote:
-> This adds tests which will validate architecture page table helpers and
-> other accessors in their compliance with expected generic MM semantics.
-> This will help various architectures in validating changes to existing
-> page table helpers or addition of new ones.
-> 
-> This test covers basic page table entry transformations including but not
-> limited to old, young, dirty, clean, write, write protect etc at various
-> level along with populating intermediate entries with next page table page
-> and validating them.
-> 
-> Test page table pages are allocated from system memory with required size
-> and alignments. The mapped pfns at page table levels are derived from a
-> real pfn representing a valid kernel text symbol. This test gets called
-> right after page_alloc_init_late().
-> 
-> This gets build and run when CONFIG_DEBUG_VM_PGTABLE is selected along with
-> CONFIG_VM_DEBUG. Architectures willing to subscribe this test also need to
-> select CONFIG_ARCH_HAS_DEBUG_VM_PGTABLE which for now is limited to x86 and
-> arm64. Going forward, other architectures too can enable this after fixing
-> build or runtime problems (if any) with their page table helpers.
-> 
-> Folks interested in making sure that a given platform's page table helpers
-> conform to expected generic MM semantics should enable the above config
-> which will just trigger this test during boot. Any non conformity here will
-> be reported as an warning which would need to be fixed. This test will help
-> catch any changes to the agreed upon semantics expected from generic MM and
-> enable platforms to accommodate it thereafter.
+changes v3:
+- ag71xx: ag71xx_mac_config: ignore MLO_AN_INBAND mode. It is not
+  supported by HW and SW.
+- ag71xx: ag71xx_mac_validate: return all supported bits on
+  PHY_INTERFACE_MODE_NA
 
-Any updates on this ?
+changes v2:
+- move Atheros AR9331 TAG format to separate patch
+- use netdev_warn_once in the tag driver to reduce potential message spam
+- typo fixes
+- reorder tag driver alphabetically 
+- configure switch to maximal frame size
+- use mdiobus_read/write
+- fail if mdio sub node is not found
+- add comment for post reset state
+- remove deprecated comment about device id
+- remove phy-handle option for node with fixed-link
+- ag71xx: set 1G support only for GMII mode
+
+This patch series provides dsa switch support for Atheros ar9331 WiSoC.
+As side effect ag71xx needed to be ported to phylink to make the switch
+driver (as well phylink based) work properly.
+
+Oleksij Rempel (5):
+  net: ag71xx: port to phylink
+  dt-bindings: net: dsa: qca,ar9331 switch documentation
+  MIPS: ath79: ar9331: add ar9331-switch node
+  net: dsa: add support for Atheros AR9331 TAG format
+  net: dsa: add support for Atheros AR9331 built-in switch
+
+ .../devicetree/bindings/net/dsa/ar9331.txt    | 148 ++++
+ arch/mips/boot/dts/qca/ar9331.dtsi            | 119 ++-
+ arch/mips/boot/dts/qca/ar9331_dpt_module.dts  |  13 +
+ drivers/net/dsa/Kconfig                       |   2 +
+ drivers/net/dsa/Makefile                      |   1 +
+ drivers/net/dsa/qca/Kconfig                   |  11 +
+ drivers/net/dsa/qca/Makefile                  |   2 +
+ drivers/net/dsa/qca/ar9331.c                  | 817 ++++++++++++++++++
+ drivers/net/ethernet/atheros/Kconfig          |   2 +-
+ drivers/net/ethernet/atheros/ag71xx.c         | 147 ++--
+ include/net/dsa.h                             |   2 +
+ net/dsa/Kconfig                               |   6 +
+ net/dsa/Makefile                              |   1 +
+ net/dsa/tag_ar9331.c                          |  96 ++
+ 14 files changed, 1307 insertions(+), 60 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/dsa/ar9331.txt
+ create mode 100644 drivers/net/dsa/qca/Kconfig
+ create mode 100644 drivers/net/dsa/qca/Makefile
+ create mode 100644 drivers/net/dsa/qca/ar9331.c
+ create mode 100644 net/dsa/tag_ar9331.c
+
+-- 
+2.24.0
+
