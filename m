@@ -2,73 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B44F122DDA
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2019 15:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42CE1233F7
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2019 18:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728672AbfLQOAA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 Dec 2019 09:00:00 -0500
-Received: from out28-53.mail.aliyun.com ([115.124.28.53]:56526 "EHLO
-        out28-53.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728546AbfLQOAA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Dec 2019 09:00:00 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.3617134|-1;CH=green;DM=SPAM|CONTINUE|true|0.912045-0.000889018-0.087066;DS=CONTINUE|ham_system_inform|0.0175439-0.000412785-0.982043;FP=0|0|0|0|0|-1|-1|-1;HT=e01a16367;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.GJ3eyQr_1576591147;
-Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GJ3eyQr_1576591147)
-          by smtp.aliyun-inc.com(10.147.41.137);
-          Tue, 17 Dec 2019 21:59:35 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        paul.burton@mips.com, paulburton@kernel.org, mark.rutland@arm.com,
-        paul@crapouillou.net, vkoul@kernel.org, Zubair.Kakakhel@imgtec.com,
-        dan.j.williams@intel.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, 2374286503@qq.com
-Subject: [PATCH 2/2] dmaengine: JZ4780: Add support for the X1830.
-Date:   Tue, 17 Dec 2019 21:59:00 +0800
-Message-Id: <1576591140-125668-4-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1576591140-125668-1-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1576591140-125668-1-git-send-email-zhouyanjie@wanyeetech.com>
+        id S1726876AbfLQRzJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 17 Dec 2019 12:55:09 -0500
+Received: from mga14.intel.com ([192.55.52.115]:47079 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726722AbfLQRzJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 17 Dec 2019 12:55:09 -0500
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Dec 2019 09:55:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,326,1571727600"; 
+   d="scan'208";a="227576274"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
+  by orsmga002.jf.intel.com with ESMTP; 17 Dec 2019 09:55:08 -0800
+Date:   Tue, 17 Dec 2019 09:55:08 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     James Hogan <jhogan@kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        Christoffer Dall <christoffer.dall@arm.com>
+Subject: Re: [PATCH v3 00/15] KVM: Dynamically size memslot arrays
+Message-ID: <20191217175507.GA8052@linux.intel.com>
+References: <20191024230744.14543-1-sean.j.christopherson@intel.com>
+ <20191203221433.GK19877@linux.intel.com>
+ <20191213200151.GF31552@linux.intel.com>
+ <ca928a38-4bc0-88cd-dc70-62aec8695c77@de.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca928a38-4bc0-88cd-dc70-62aec8695c77@de.ibm.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add support for probing the dma-jz4780 driver on the X1830 Soc.
+On Mon, Dec 16, 2019 at 09:25:24AM +0100, Christian Borntraeger wrote:
+> 
+> On 13.12.19 21:01, Sean Christopherson wrote:
+> > Applies cleanly on the current kvm/queue and nothing caught fire in
+> > testing (though I only re-tested the series as a whole).
+> 
+> Do you have the latest version somewhere on a branch? The version on the
+> list no longer applies cleanly.
 
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
----
- drivers/dma/dma-jz4780.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Ah, I only tested with my sparse x86-only tree.  The result with three-way
+merging, i.e. 'git am -3', looks correct at a glance.
 
-diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
-index fa626ac..f8ee4b7 100644
---- a/drivers/dma/dma-jz4780.c
-+++ b/drivers/dma/dma-jz4780.c
-@@ -1020,12 +1020,19 @@ static const struct jz4780_dma_soc_data x1000_dma_soc_data = {
- 	.flags = JZ_SOC_DATA_PROGRAMMABLE_DMA,
- };
- 
-+static const struct jz4780_dma_soc_data x1830_dma_soc_data = {
-+	.nb_channels = 32,
-+	.transfer_ord_max = 7,
-+	.flags = JZ_SOC_DATA_PROGRAMMABLE_DMA,
-+};
-+
- static const struct of_device_id jz4780_dma_dt_match[] = {
- 	{ .compatible = "ingenic,jz4740-dma", .data = &jz4740_dma_soc_data },
- 	{ .compatible = "ingenic,jz4725b-dma", .data = &jz4725b_dma_soc_data },
- 	{ .compatible = "ingenic,jz4770-dma", .data = &jz4770_dma_soc_data },
- 	{ .compatible = "ingenic,jz4780-dma", .data = &jz4780_dma_soc_data },
- 	{ .compatible = "ingenic,x1000-dma", .data = &x1000_dma_soc_data },
-+	{ .compatible = "ingenic,x1830-dma", .data = &x1830_dma_soc_data },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, jz4780_dma_dt_match);
--- 
-2.7.4
-
+Regardless, I need to spin a new version to handle a conflict with an
+unrelated in-flight memslots bug fix, I'll get that sent out today.
