@@ -2,56 +2,28 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B413A123917
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2019 23:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941241239D1
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2019 23:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726470AbfLQWHZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 Dec 2019 17:07:25 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:46888 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726387AbfLQWHZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Dec 2019 17:07:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1576620443;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=slGVCNmnwx0F1K+nCa+cID8Tdy/RHxQkOhSUfY0VX6I=;
-        b=CX0x0e6HVeTxGXIkedJwytxVeqMF8bXkTPMZfNXdt5IzzzUHj0e3SpRy0EF0yW8qlz5LZY
-        lNDJk0Nkp4E5PoVlcdFdqgHHDQdN+LSbOV8K0lU+71sz1cfEOy2uvQI9C3f4qZ2foQBB31
-        amuOGYhpkmqxwRjYrj5Vyx7A/ycpPbY=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-324-UdKm8m_UPQW4hOkYSpOT8A-1; Tue, 17 Dec 2019 17:07:22 -0500
-X-MC-Unique: UdKm8m_UPQW4hOkYSpOT8A-1
-Received: by mail-qv1-f70.google.com with SMTP id e14so91427qvr.6
-        for <linux-mips@vger.kernel.org>; Tue, 17 Dec 2019 14:07:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=slGVCNmnwx0F1K+nCa+cID8Tdy/RHxQkOhSUfY0VX6I=;
-        b=aR8HhCqZjk4kFzpLDujnlNPmtYN2AZOINSNb+vuIUDSW7V+BJTDlu5dc5MUqaj6gtT
-         /rJV9BSYswzXZ3JgL6gp3QvbAU8ShFiSm+dELVXLSI1yVb2YktYJx2y2D+Uiu87zSwjY
-         mDAEagru3NtGa3fCNQUmbdUnURCE8LRtDPfb7Entn9kd+ELZSCvEu+paszvUu0K7SWhC
-         qDOoBNQsBGJfmCr1DegrOFu4IzHlcDh1/DEYBoIAd7BgJzz5hrdO3Ouvck6nPJ4hijUy
-         nJ5HM7OiHHJteLkWEYyLsOJ+911d3858cUCPgF+TtTroP6dqVbHxr2pDkv0W4sMBT5Iq
-         6mrQ==
-X-Gm-Message-State: APjAAAUXZZQxO68Lovg1fucQ7F+293p+pO2rbBQN7JDfvqUmfTfSXvd6
-        Kfm4s6eDBYSKhUU8vPAgNk1HVKs/3ildZB2uA2VYZKQvcXZuw7lri59kfTEsuNtHhl2GwbNXpHn
-        JD+cCiMAYlbMzw7sy2RUK/Q==
-X-Received: by 2002:a0c:f68f:: with SMTP id p15mr6885117qvn.79.1576620441552;
-        Tue, 17 Dec 2019 14:07:21 -0800 (PST)
-X-Google-Smtp-Source: APXvYqyYYchEVtwDwgk4Pr56pOeSJtWkuin1D2pVTuKZ433b4vaBfoHv6+mbPiSSnU54NveRu8NnwQ==
-X-Received: by 2002:a0c:f68f:: with SMTP id p15mr6885088qvn.79.1576620441243;
-        Tue, 17 Dec 2019 14:07:21 -0800 (PST)
-Received: from xz-x1 ([104.156.64.74])
-        by smtp.gmail.com with ESMTPSA id o9sm7592950qko.16.2019.12.17.14.07.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Dec 2019 14:07:20 -0800 (PST)
-Date:   Tue, 17 Dec 2019 17:07:18 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
+        id S1726671AbfLQWVA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 17 Dec 2019 17:21:00 -0500
+Received: from mga01.intel.com ([192.55.52.88]:26022 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726638AbfLQWVA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 17 Dec 2019 17:21:00 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Dec 2019 14:20:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,327,1571727600"; 
+   d="scan'208";a="209859511"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
+  by orsmga008.jf.intel.com with ESMTP; 17 Dec 2019 14:20:58 -0800
+Date:   Tue, 17 Dec 2019 14:20:59 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Peter Xu <peterx@redhat.com>
 Cc:     James Hogan <jhogan@kernel.org>,
         Paul Mackerras <paulus@ozlabs.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
@@ -60,44 +32,82 @@ Cc:     James Hogan <jhogan@kernel.org>,
         Marc Zyngier <maz@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         Wanpeng Li <wanpengli@tencent.com>,
-        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
         kvm@vger.kernel.org, David Hildenbrand <david@redhat.com>,
         Joerg Roedel <joro@8bytes.org>,
         Cornelia Huck <cohuck@redhat.com>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, kvm-ppc@vger.kernel.org,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
-        kvmarm@lists.cs.columbia.edu, Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v4 05/19] KVM: x86: Allocate memslot resources during
- prepare_memory_region()
-Message-ID: <20191217220718.GJ7258@xz-x1>
+        kvmarm@lists.cs.columbia.edu, Jim Mattson <jmattson@google.com>,
+        David Gibson <david@gibson.dropbear.id.au>
+Subject: Re: [PATCH v4 01/19] KVM: x86: Allocate new rmap and large page
+ tracking when moving memslot
+Message-ID: <20191217222058.GD11771@linux.intel.com>
 References: <20191217204041.10815-1-sean.j.christopherson@intel.com>
- <20191217204041.10815-6-sean.j.christopherson@intel.com>
+ <20191217204041.10815-2-sean.j.christopherson@intel.com>
+ <20191217215640.GI7258@xz-x1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191217204041.10815-6-sean.j.christopherson@intel.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20191217215640.GI7258@xz-x1>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 12:40:27PM -0800, Sean Christopherson wrote:
-> Allocate the various metadata structures associated with a new memslot
-> during kvm_arch_prepare_memory_region(), which paves the way for
-> removing kvm_arch_create_memslot() altogether.  Moving x86's memory
-> allocation only changes the order of kernel memory allocations between
-> x86 and common KVM code.
+On Tue, Dec 17, 2019 at 04:56:40PM -0500, Peter Xu wrote:
+> On Tue, Dec 17, 2019 at 12:40:23PM -0800, Sean Christopherson wrote:
+> > Reallocate a rmap array and recalcuate large page compatibility when
+> > moving an existing memslot to correctly handle the alignment properties
+> > of the new memslot.  The number of rmap entries required at each level
+> > is dependent on the alignment of the memslot's base gfn with respect to
+> > that level, e.g. moving a large-page aligned memslot so that it becomes
+> > unaligned will increase the number of rmap entries needed at the now
+> > unaligned level.
+
+...
+
+> I think the error-prone part is:
 > 
-> No functional change intended.
+> 	new = old = *slot;
 
-(I still think it's a functional change, though...)
+Lol, IMO the error-prone part is the entire memslot mess :-)
 
+> Where IMHO it would be better if we only copy pointers explicitly when
+> under control, rather than blindly copying all the pointers in the
+> structure which even contains sub-structures.
+
+Long term, yes, that would be ideal.  For the immediate bug fix, reworking
+common KVM and other arch code would be unnecessarily dangerous and would
+make it more difficult to backport the fix to stable branches.
+
+I actually briefly considered moving the slot->arch handling into arch
+code as part of the bug fix, but the memslot code has many subtle
+dependencies, e.g. PPC and x86 rely on common KVM code to copy slot->arch
+when flags are being changed.
+
+I'll happily clean up the slot->arch code once this series is merged.
+There is refactoring in this series that will make it a lot easier to do
+additional clean up.
+
+> For example, I see PPC has this:
 > 
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> struct kvm_arch_memory_slot {
+> #ifdef CONFIG_KVM_BOOK3S_HV_POSSIBLE
+> 	unsigned long *rmap;
+> #endif /* CONFIG_KVM_BOOK3S_HV_POSSIBLE */
+> };
+> 
+> I started to look into HV code of it a bit, then I see...
+> 
+>  - kvm_arch_create_memslot(kvmppc_core_create_memslot_hv) init slot->arch.rmap,
+>  - kvm_arch_flush_shadow_memslot(kvmppc_core_flush_memslot_hv) didn't free it,
+>  - kvm_arch_prepare_memory_region(kvmppc_core_prepare_memory_region_hv) is nop.
+> 
+> So Does it have similar issue?
 
-Reviewed-by: Peter Xu <peterx@redhat.com>
-
--- 
-Peter Xu
-
+No, KVM doesn't allow a memslot's size to be changed, and PPC's rmap
+allocation is directly tied to the size of the memslot.  The x86 bug exists
+because the size of its metadata arrays varies based on the alignment of
+the base gfn.
