@@ -2,54 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D7F1239ED
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2019 23:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E77123A22
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2019 23:37:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725946AbfLQWYv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 Dec 2019 17:24:51 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:38157 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726143AbfLQWYv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Dec 2019 17:24:51 -0500
+        id S1726463AbfLQWhj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 17 Dec 2019 17:37:39 -0500
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:44956 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725812AbfLQWhj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 17 Dec 2019 17:37:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1576621490;
+        s=mimecast20190719; t=1576622257;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=n1zc/BAvLiuzmjBuBeyM8c5OGj4eP3sDEL7oyAZ0h/8=;
-        b=X19A+Vjvdkn65pCiqPmgpKJiMdivoequi0ELkOFXT4Yvhn804d+BZlRPPWgKmY+sjtxFag
-        HobsGik7ynP/7VV2i4oW2kKE0afZKZQ3VRISes3vySDq4NpmKX5ABLlh9XSURJZg7x6PMY
-        UuOkwkXhKpCKYeU0jDn+e2lX6ysomVg=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-384-sUg-D0TFNqq_p5EN1Hk2Xw-1; Tue, 17 Dec 2019 17:24:49 -0500
-X-MC-Unique: sUg-D0TFNqq_p5EN1Hk2Xw-1
-Received: by mail-qk1-f198.google.com with SMTP id a73so37070qkg.5
-        for <linux-mips@vger.kernel.org>; Tue, 17 Dec 2019 14:24:49 -0800 (PST)
+        bh=4AxsEtCek/f0aziPe+wCZz9Hjxg7TgpaT9NrNyuqheA=;
+        b=BatrOPaVjML0/vaIPnEkp6q+ChBwlBt4lQKCInNdJperUZtLuZKH3e+IGO/aOb4JGDTUb/
+        8A8OQ9tB99uCQOnbu3obUhIceDOcQp/5P9xNWeO8+dpKgr4EDQePoWVem3fyxHEr0xmF0e
+        ZqnNh/QtFVLVwayavNNDOgM5a4SYFGU=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-121-bElv6kM7Mz-RPrVcz3DlFg-1; Tue, 17 Dec 2019 17:37:36 -0500
+X-MC-Unique: bElv6kM7Mz-RPrVcz3DlFg-1
+Received: by mail-qv1-f70.google.com with SMTP id v5so121389qvn.21
+        for <linux-mips@vger.kernel.org>; Tue, 17 Dec 2019 14:37:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=n1zc/BAvLiuzmjBuBeyM8c5OGj4eP3sDEL7oyAZ0h/8=;
-        b=dtOSX0rw6GWyW1XiHGxwITHbeXHVuj3KnxGNnHsDHUnf7sAv023E3o2aBwHkvyUOMJ
-         TwcDa+YC+uGTDpO251q5B4D8pY2Kx2uKBJ/RSgePOKxcttkl3TbMXIBZ1DL4G/wuCOxR
-         CuoaxSMMzl1Xzu4RgpdJdNpbiniggdnriY3PrAsnus6LCrUjwlbCMrxPMXL/45St/GHk
-         UbuX4pzsGX3nxnbWJbdunSiyLXgRhwpIVbbcUKVSBPsQsJeJJiim9WziT6xUdrzO46Nh
-         59A7++dSSl4n02umoux3IC9OdrMgMb8/V2hybY69MbXnibNJltE2T7hQqktrEvsjebpF
-         U8YQ==
-X-Gm-Message-State: APjAAAWjuhQTwxsbHnMEVbc7c5MMjtUtRM/Wkl1OKPRHEW9wFTCaWxCY
-        xyxlDDKG9d1jiAjNybkIWM/j/ie+T/z94J93O4BYUszoRS1Uy+w5oxfeeOGnYTX8yMgDVWD/PwS
-        qx6o+KGBGszEARdL/6IicJw==
-X-Received: by 2002:ac8:3177:: with SMTP id h52mr248059qtb.264.1576621488937;
-        Tue, 17 Dec 2019 14:24:48 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxa9aGwr5mHm2Cm0VxXNZlZXqTAo8dq2kd9eCG/gVR+l9nUybMoSUNtPMwlIhbLMlDgqBEiTQ==
-X-Received: by 2002:ac8:3177:: with SMTP id h52mr248020qtb.264.1576621488653;
-        Tue, 17 Dec 2019 14:24:48 -0800 (PST)
+        bh=4AxsEtCek/f0aziPe+wCZz9Hjxg7TgpaT9NrNyuqheA=;
+        b=GczUkotCHq0JJdc1XYK1Ruv9+yMZokSqNduzRg3ZKSmD9D+CZL5d1eTA1WqtVU0tOh
+         SBXuerAYCcqhVtPAKcC9tHLdynx2nqUaNmxGSBtLLgW51wxefHt5k2s4nSbcDIsu5jQF
+         9MxTk5XKIHbGhKB/uj132hHxuPiz2d+LgNGzK48bhxNVgoMgadMKTybEUMgygHmeuWLB
+         hi3nQQjXNcdQG7Ky/dHpx63hkQEWwnleMWJVGH55aDIs2aPabtvLEFp3sisChAFqPb9G
+         78fxE8WpPd0lbEPgWyxypztMuvU/JTb8N5+B7du/9aA4QwZAGz5zcELv5n1yTN9Ts2PG
+         OWqg==
+X-Gm-Message-State: APjAAAUNUaUFDbIT1K7prBslVfwu53gAQ+Fq0Rdf9Sj5XNRLpynoVib/
+        /6geH6rbP6bjzEcsDGtF5b40taX8ias+peOm/kWtH/30fIpjDybJg3qU+iUD8RMfz2XK9/uhEMM
+        aP9SkHFmkAfKIRccuu1gzZA==
+X-Received: by 2002:a37:4d45:: with SMTP id a66mr374440qkb.65.1576622256393;
+        Tue, 17 Dec 2019 14:37:36 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxl93uuG9B4gn7WP+rric6T9Je7Dj1Ol6DxMKHs7+zQRPC1qeoFeX2QtpGDhXhtHyWXATL+iw==
+X-Received: by 2002:a37:4d45:: with SMTP id a66mr374408qkb.65.1576622256150;
+        Tue, 17 Dec 2019 14:37:36 -0800 (PST)
 Received: from xz-x1 ([104.156.64.74])
-        by smtp.gmail.com with ESMTPSA id c84sm7565689qkg.78.2019.12.17.14.24.47
+        by smtp.gmail.com with ESMTPSA id g62sm11961qkd.25.2019.12.17.14.37.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Dec 2019 14:24:47 -0800 (PST)
-Date:   Tue, 17 Dec 2019 17:24:46 -0500
+        Tue, 17 Dec 2019 14:37:35 -0800 (PST)
+Date:   Tue, 17 Dec 2019 17:37:34 -0500
 From:   Peter Xu <peterx@redhat.com>
 To:     Sean Christopherson <sean.j.christopherson@intel.com>
 Cc:     James Hogan <jhogan@kernel.org>,
@@ -66,64 +67,52 @@ Cc:     James Hogan <jhogan@kernel.org>,
         Cornelia Huck <cohuck@redhat.com>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, kvm-ppc@vger.kernel.org,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
-        kvmarm@lists.cs.columbia.edu, Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v4 07/19] KVM: Explicitly free allocated-but-unused dirty
- bitmap
-Message-ID: <20191217222446.GK7258@xz-x1>
+        kvmarm@lists.cs.columbia.edu, Jim Mattson <jmattson@google.com>,
+        David Gibson <david@gibson.dropbear.id.au>
+Subject: Re: [PATCH v4 01/19] KVM: x86: Allocate new rmap and large page
+ tracking when moving memslot
+Message-ID: <20191217223734.GL7258@xz-x1>
 References: <20191217204041.10815-1-sean.j.christopherson@intel.com>
- <20191217204041.10815-8-sean.j.christopherson@intel.com>
+ <20191217204041.10815-2-sean.j.christopherson@intel.com>
+ <20191217215640.GI7258@xz-x1>
+ <20191217222058.GD11771@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191217204041.10815-8-sean.j.christopherson@intel.com>
+In-Reply-To: <20191217222058.GD11771@linux.intel.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 12:40:29PM -0800, Sean Christopherson wrote:
-> Explicitly free an allocated-but-unused dirty bitmap instead of relying
-> on kvm_free_memslot() if an error occurs in __kvm_set_memory_region().
-> There is no longer a need to abuse kvm_free_memslot() to free arch
-> specific resources as arch specific code is now called only after the
-> common flow is guaranteed to succeed.  Arch code can still fail, but
-> it's responsible for its own cleanup in that case.
+On Tue, Dec 17, 2019 at 02:20:59PM -0800, Sean Christopherson wrote:
+> > For example, I see PPC has this:
+> > 
+> > struct kvm_arch_memory_slot {
+> > #ifdef CONFIG_KVM_BOOK3S_HV_POSSIBLE
+> > 	unsigned long *rmap;
+> > #endif /* CONFIG_KVM_BOOK3S_HV_POSSIBLE */
+> > };
+> > 
+> > I started to look into HV code of it a bit, then I see...
+> > 
+> >  - kvm_arch_create_memslot(kvmppc_core_create_memslot_hv) init slot->arch.rmap,
+> >  - kvm_arch_flush_shadow_memslot(kvmppc_core_flush_memslot_hv) didn't free it,
+> >  - kvm_arch_prepare_memory_region(kvmppc_core_prepare_memory_region_hv) is nop.
+> > 
+> > So Does it have similar issue?
 > 
-> Eliminating the error path's abuse of kvm_free_memslot() paves the way
-> for simplifying kvm_free_memslot(), i.e. dropping its @dont param.
-> 
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> ---
->  virt/kvm/kvm_main.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index d403e93e3028..6b2261a9e139 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -1096,7 +1096,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
->  
->  	slots = kvzalloc(sizeof(struct kvm_memslots), GFP_KERNEL_ACCOUNT);
->  	if (!slots)
-> -		goto out_free;
-> +		goto out_bitmap;
->  	memcpy(slots, __kvm_memslots(kvm, as_id), sizeof(struct kvm_memslots));
->  
->  	if ((change == KVM_MR_DELETE) || (change == KVM_MR_MOVE)) {
-> @@ -1144,8 +1144,9 @@ int __kvm_set_memory_region(struct kvm *kvm,
->  	if (change == KVM_MR_DELETE || change == KVM_MR_MOVE)
->  		slots = install_new_memslots(kvm, as_id, slots);
->  	kvfree(slots);
-> -out_free:
-> -	kvm_free_memslot(kvm, &new, &old);
-> +out_bitmap:
-> +	if (new.dirty_bitmap && !old.dirty_bitmap)
-> +		kvm_destroy_dirty_bitmap(&new);
+> No, KVM doesn't allow a memslot's size to be changed, and PPC's rmap
+> allocation is directly tied to the size of the memslot.  The x86 bug exists
+> because the size of its metadata arrays varies based on the alignment of
+> the base gfn.
 
-What if both the old and new have KVM_MEM_LOG_DIRTY_PAGES set?
-kvm_free_memslot() did cover that but I see that you explicitly
-dropped it.  Could I ask why?  Thanks,
+Yes, I was actually thinking those rmap would be invalid rather than
+the size after the move.  But I think kvm_arch_flush_shadow_memslot()
+will flush all of them anyways... So yes it seems fine.
+
+Thanks,
 
 -- 
 Peter Xu
