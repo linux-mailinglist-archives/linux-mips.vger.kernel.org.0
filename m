@@ -2,110 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2994E1219FA
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Dec 2019 20:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12980122026
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2019 01:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727071AbfLPTc1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 16 Dec 2019 14:32:27 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:34207 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726752AbfLPTc1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 Dec 2019 14:32:27 -0500
-Received: by mail-pl1-f194.google.com with SMTP id x17so4941010pln.1;
-        Mon, 16 Dec 2019 11:32:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=p1Dk/uxDRKui8W0LqfQ73djMdEqTqi9jnFoG51P1wjo=;
-        b=EIuRnzritM3CMAC/FBFu5Twspg4VZcyD3egOunmKacKDYmNSWrhFPLPjxUzJ9FU1oK
-         yd21YQvSz9c6TJz3Oq5m7Tr0rmgBwkW5UXHa6NBBR/KYcZW2Inhz/7kLcLdc0k18WErt
-         H96mZbyVQJrMsianxLL6E1olmhYJ/IRJjJBHDDilGzRqiCadATRHqLbvwgSuwlbC4c5/
-         PnRx8qJ+xhcPhjTJJlrR7Wu9LjIoR/PX9KWiaX+WuEYS8CbeSSr/X1pUfJKI7Rt2TwUg
-         fArB1W+O3nGFRycEa2MLPFZPHG8OugbNTwjsAfftAmT56esX4EzjmjVDT+xoCgZ0iAx7
-         NlQQ==
-X-Gm-Message-State: APjAAAXQFB1gxHy95J+cGjYEAARp4NbOKoeoradfGzgwWk9zGDBNgCeG
-        x9Bt/H9KEJy7f87DXkSWp38=
-X-Google-Smtp-Source: APXvYqzWFpgda/n3hyW2AY7dDtew32u+Tc7ZMiV/e94JqghFfAk0nFmKw2E3vxCgqzXT4AwgnvCgSA==
-X-Received: by 2002:a17:902:9b84:: with SMTP id y4mr17337869plp.13.1576524746306;
-        Mon, 16 Dec 2019 11:32:26 -0800 (PST)
-Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id e16sm22539831pff.181.2019.12.16.11.32.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2019 11:32:25 -0800 (PST)
-Date:   Mon, 16 Dec 2019 11:33:33 -0800
-From:   Paul Burton <paulburton@kernel.org>
-To:     Guoyun Sun <sunguoyun@loongson.cn>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH V3] MIPS: Add get_thread_area syscall
-Message-ID: <20191216193333.up4qqzxno23pbzix@lantea.localdomain>
-References: <1576462671-7226-1-git-send-email-sunguoyun@loongson.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        id S1726656AbfLQAwd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 16 Dec 2019 19:52:33 -0500
+Received: from shadbolt.e.decadent.org.uk ([88.96.1.126]:35652 "EHLO
+        shadbolt.e.decadent.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727221AbfLQAvq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 16 Dec 2019 19:51:46 -0500
+Received: from [192.168.4.242] (helo=deadeye)
+        by shadbolt.decadent.org.uk with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1ih15K-0003N2-Pi; Tue, 17 Dec 2019 00:51:34 +0000
+Received: from ben by deadeye with local (Exim 4.93-RC7)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1ih15I-0005a6-Uk; Tue, 17 Dec 2019 00:51:32 +0000
+Content-Type: text/plain; charset="UTF-8"
 Content-Disposition: inline
-In-Reply-To: <1576462671-7226-1-git-send-email-sunguoyun@loongson.cn>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+From:   Ben Hutchings <ben@decadent.org.uk>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+CC:     akpm@linux-foundation.org, Denis Kirjanov <kda@linux-powerpc.org>,
+        "Jonas Gorski" <jonas.gorski@gmail.com>,
+        linux-mips@vger.kernel.org, "James Hogan" <jhogan@kernel.org>,
+        "Ralf Baechle" <ralf@linux-mips.org>,
+        "Paul Burton" <paulburton@kernel.org>,
+        "Florian Fainelli" <f.fainelli@gmail.com>
+Date:   Tue, 17 Dec 2019 00:47:02 +0000
+Message-ID: <lsq.1576543535.456304494@decadent.org.uk>
+X-Mailer: LinuxStableQueue (scripts by bwh)
+X-Patchwork-Hint: ignore
+Subject: [PATCH 3.16 088/136] MIPS: bmips: mark exception vectors as char
+ arrays
+In-Reply-To: <lsq.1576543534.33060804@decadent.org.uk>
+X-SA-Exim-Connect-IP: 192.168.4.242
+X-SA-Exim-Mail-From: ben@decadent.org.uk
+X-SA-Exim-Scanned: No (on shadbolt.decadent.org.uk); SAEximRunCond expanded to false
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Guoyun,
+3.16.80-rc1 review patch.  If anyone has any objections, please let me know.
 
-On Mon, Dec 16, 2019 at 10:17:51AM +0800, Guoyun Sun wrote:
-> CRIU(https://criu.org/) tools will dump TLS(Thread Local Storage) by
-> get_thread_area during checkpoint and restore TLS by set_thread_area during
-> restore. without this syscall, criu restore will fail on MIPS platform
-> because a variable with GCC __thread will be invalid.
-> 
-> The following function will be called when criu restore
-> 
-> static inline void restore_tls(tls_t *ptls) {
->         asm volatile(
->                      "move $4, %0                                   \n"
->                      "li $2,  "__stringify(__NR_set_thread_area)"  \n"
->                      "syscall                                       \n"
->                      :
->                      : "r"(*ptls)
->                      : "$4","$2","memory");
-> 
-> the *ptls can be obtained by get_thread_area on MIPS platform when criu
-> checkpoint. just like this:
-> 
-> static inline void arch_get_tls(tls_t *ptls)
-> {
-> 	asm volatile(
-> 		     "move $4, %0				    \n"
-> 		     "li $2,  "__stringify(__NR_get_thread_area)"  \n"
-> 		     "syscall					    \n"
-> 		     :
-> 		     : "r"(ptls)
-> 		     : "$4","$2","memory");
-> 
-> }
+------------------
 
-Why would you need a syscall for this?
+From: Jonas Gorski <jonas.gorski@gmail.com>
 
-Why not retrieve the value using the rdhwr instruction just like every
-other bit of code using thread-local storage does?
+commit e4f5cb1a9b27c0f94ef4f5a0178a3fde2d3d0e9e upstream.
 
-ie. something like:
+The vectors span more than one byte, so mark them as arrays.
 
-static inline void arch_get_tls(tls_t *ptls)
-{
-	asm("rdhwr %0, $29" : "=r"(*ptls));
-}
+Fixes the following build error when building when using GCC 8.3:
 
-Thanks,
-    Paul
+In file included from ./include/linux/string.h:19,
+                 from ./include/linux/bitmap.h:9,
+                 from ./include/linux/cpumask.h:12,
+                 from ./arch/mips/include/asm/processor.h:15,
+                 from ./arch/mips/include/asm/thread_info.h:16,
+                 from ./include/linux/thread_info.h:38,
+                 from ./include/asm-generic/preempt.h:5,
+                 from ./arch/mips/include/generated/asm/preempt.h:1,
+                 from ./include/linux/preempt.h:81,
+                 from ./include/linux/spinlock.h:51,
+                 from ./include/linux/mmzone.h:8,
+                 from ./include/linux/bootmem.h:8,
+                 from arch/mips/bcm63xx/prom.c:10:
+arch/mips/bcm63xx/prom.c: In function 'prom_init':
+./arch/mips/include/asm/string.h:162:11: error: '__builtin_memcpy' forming offset [2, 32] is out of the bounds [0, 1] of object 'bmips_smp_movevec' with type 'char' [-Werror=array-bounds]
+   __ret = __builtin_memcpy((dst), (src), __len); \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+arch/mips/bcm63xx/prom.c:97:3: note: in expansion of macro 'memcpy'
+   memcpy((void *)0xa0000200, &bmips_smp_movevec, 0x20);
+   ^~~~~~
+In file included from arch/mips/bcm63xx/prom.c:14:
+./arch/mips/include/asm/bmips.h:80:13: note: 'bmips_smp_movevec' declared here
+ extern char bmips_smp_movevec;
+
+Fixes: 18a1eef92dcd ("MIPS: BMIPS: Introduce bmips.h")
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Paul Burton <paulburton@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+---
+ arch/mips/bcm63xx/prom.c      |  2 +-
+ arch/mips/include/asm/bmips.h | 10 +++++-----
+ arch/mips/kernel/smp-bmips.c  |  8 ++++----
+ 3 files changed, 10 insertions(+), 10 deletions(-)
+
+--- a/arch/mips/bcm63xx/prom.c
++++ b/arch/mips/bcm63xx/prom.c
+@@ -88,7 +88,7 @@ void __init prom_init(void)
+ 		 * Here we will start up CPU1 in the background and ask it to
+ 		 * reconfigure itself then go back to sleep.
+ 		 */
+-		memcpy((void *)0xa0000200, &bmips_smp_movevec, 0x20);
++		memcpy((void *)0xa0000200, bmips_smp_movevec, 0x20);
+ 		__sync();
+ 		set_c0_cause(C_SW0);
+ 		cpumask_set_cpu(1, &bmips_booted_mask);
+--- a/arch/mips/include/asm/bmips.h
++++ b/arch/mips/include/asm/bmips.h
+@@ -75,11 +75,11 @@ static inline int register_bmips_smp_ops
+ #endif
+ }
+ 
+-extern char bmips_reset_nmi_vec;
+-extern char bmips_reset_nmi_vec_end;
+-extern char bmips_smp_movevec;
+-extern char bmips_smp_int_vec;
+-extern char bmips_smp_int_vec_end;
++extern char bmips_reset_nmi_vec[];
++extern char bmips_reset_nmi_vec_end[];
++extern char bmips_smp_movevec[];
++extern char bmips_smp_int_vec[];
++extern char bmips_smp_int_vec_end[];
+ 
+ extern int bmips_smp_enabled;
+ extern int bmips_cpu_offset;
+--- a/arch/mips/kernel/smp-bmips.c
++++ b/arch/mips/kernel/smp-bmips.c
+@@ -467,10 +467,10 @@ static void bmips_wr_vec(unsigned long d
+ 
+ static inline void bmips_nmi_handler_setup(void)
+ {
+-	bmips_wr_vec(BMIPS_NMI_RESET_VEC, &bmips_reset_nmi_vec,
+-		&bmips_reset_nmi_vec_end);
+-	bmips_wr_vec(BMIPS_WARM_RESTART_VEC, &bmips_smp_int_vec,
+-		&bmips_smp_int_vec_end);
++	bmips_wr_vec(BMIPS_NMI_RESET_VEC, bmips_reset_nmi_vec,
++		bmips_reset_nmi_vec_end);
++	bmips_wr_vec(BMIPS_WARM_RESTART_VEC, bmips_smp_int_vec,
++		bmips_smp_int_vec_end);
+ }
+ 
+ void bmips_ebase_setup(void)
+
