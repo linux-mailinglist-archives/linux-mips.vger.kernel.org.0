@@ -2,106 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DE612505C
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2019 19:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D34D1252C0
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2019 21:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727110AbfLRSLM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 18 Dec 2019 13:11:12 -0500
-Received: from inca-roads.misterjones.org ([213.251.177.50]:44619 "EHLO
-        inca-roads.misterjones.org" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726960AbfLRSLM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 18 Dec 2019 13:11:12 -0500
-Received: from www-data by cheepnis.misterjones.org with local (Exim 4.80)
-        (envelope-from <maz@kernel.org>)
-        id 1ihdmZ-0007pw-8W; Wed, 18 Dec 2019 19:10:47 +0100
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH v4 00/19] KVM: Dynamically size memslot arrays
-X-PHP-Originating-Script: 0:main.inc
+        id S1725897AbfLRUJq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 18 Dec 2019 15:09:46 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:44352 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725818AbfLRUJq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Dec 2019 15:09:46 -0500
+Received: by mail-ot1-f66.google.com with SMTP id h9so1374508otj.11;
+        Wed, 18 Dec 2019 12:09:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=0ZSxO98aPLLC/x4t0APo2oe/C+Fl49wOHPK8QDcSVcs=;
+        b=FzYqfy0K1d5bn861vfKxwC9D8NPtZdTEqygjPPm+GBJK64xJEa21LoVaWLUiKuP4a9
+         5HMuYrJ8DZfrZDMLVApZJ6F7XHOHxZDL0bNOf9Ob+nvOSuQrTaMgpwrKdBG5K5J4Ihq4
+         8BvCh9nhC72vJH3EA9d0Latc9j0fn9TknZEq7DN9jIUbgl4FLAt/NudkIff8gyutobWm
+         NeuffH+iOEH/Uc+y4Z6zPOIA2e1GJG9qYXXy01KtBWZ+YAbA2faugxKkqzLbw+dFXIZI
+         +imuwGvLKLndg58S8I8Ys9jNHGF1yQdtJUc4+Vp2dBExRag+J9P7XlW1mzJVXGBSkyd0
+         MtDQ==
+X-Gm-Message-State: APjAAAWe2YEMedt5nGwyLUJ2fpXm42QFzEntRBsHFCVl46lz+GS0s3TW
+        aQRTB2vl/uEqJi+pJ145CQ==
+X-Google-Smtp-Source: APXvYqw4HOFv+5SFjVJ9zdWA5YDbnoRffSIopcau3o/VDEg9lnuJl+5wWlK8tmDGOr9t+0bL0exxdQ==
+X-Received: by 2002:a05:6830:20d3:: with SMTP id z19mr4240310otq.330.1576699785137;
+        Wed, 18 Dec 2019 12:09:45 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id g5sm1162477otp.10.2019.12.18.12.09.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2019 12:09:44 -0800 (PST)
+Date:   Wed, 18 Dec 2019 14:09:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Chris Snook <chris.snook@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        James Hogan <jhogan@kernel.org>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH v6 2/5] dt-bindings: net: dsa: qca,ar9331 switch
+ documentation
+Message-ID: <20191218200943.GA7130@bogus>
+References: <20191217072325.4177-1-o.rempel@pengutronix.de>
+ <20191217072325.4177-3-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 18 Dec 2019 18:10:47 +0000
-From:   Marc Zyngier <maz@kernel.org>
-Cc:     James Hogan <jhogan@kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        <linux-mips@vger.kernel.org>, <kvm-ppc@vger.kernel.org>,
-        <kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <kvmarm@lists.cs.columbia.edu>, <linux-kernel@vger.kernel.org>,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <f4bug@amsat.org>
-In-Reply-To: <20191217204041.10815-1-sean.j.christopherson@intel.com>
-References: <20191217204041.10815-1-sean.j.christopherson@intel.com>
-Message-ID: <3a6b03cc1300bc3cffd3904e22c09478@www.loen.fr>
-X-Sender: maz@kernel.org
-User-Agent: Roundcube Webmail/0.7.2
-X-SA-Exim-Connect-IP: <locally generated>
-X-SA-Exim-Rcpt-To: sean.j.christopherson@intel.com, jhogan@kernel.org, paulus@ozlabs.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, pbonzini@redhat.com, david@redhat.com, cohuck@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, christoffer.dall@arm.com, f4bug@amsat.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on cheepnis.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191217072325.4177-3-o.rempel@pengutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2019-12-17 20:40, Sean Christopherson wrote:
-> The end goal of this series is to dynamically size the memslot array 
-> so
-> that KVM allocates memory based on the number of memslots in use, as
-> opposed to unconditionally allocating memory for the maximum number 
-> of
-> memslots.  On x86, each memslot consumes 88 bytes, and so with 2 
-> address
-> spaces of 512 memslots, each VM consumes ~90k bytes for the memslots.
-> E.g. given a VM that uses a total of 30 memslots, dynamic sizing 
-> reduces
-> the memory footprint from 90k to ~2.6k bytes.
->
-> The changes required to support dynamic sizing are relatively small,
-> e.g. are essentially contained in patches 17/19 and 18/19.
->
-> Patches 2-16 clean up the memslot code, which has gotten quite 
-> crusty,
-> especially __kvm_set_memory_region().  The clean up is likely not 
-> strictly
-> necessary to switch to dynamic sizing, but I didn't have a remotely
-> reasonable level of confidence in the correctness of the dynamic 
-> sizing
-> without first doing the clean up.
->
-> The only functional change in v4 is the addition of an x86-specific 
-> bug
-> fix in x86's handling of KVM_MR_MOVE.  The bug fix is not directly 
-> related
-> to dynamically allocating memslots, but it has subtle and hidden 
-> conflicts
-> with the cleanup patches, and the fix is higher priority than 
-> anything
-> else in the series, i.e. should be merged first.
->
-> On non-x86 architectures, v3 and v4 should be functionally 
-> equivalent,
-> the only non-x86 change in v4 is the dropping of a "const" in
-> kvm_arch_commit_memory_region().
+On Tue, 17 Dec 2019 08:23:22 +0100, Oleksij Rempel wrote:
+> Atheros AR9331 has built-in 5 port switch. The switch can be configured
+> to use all 5 or 4 ports. One of built-in PHYs can be used by first built-in
+> ethernet controller or to be used directly by the switch over second ethernet
+> controller.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  .../devicetree/bindings/net/dsa/ar9331.txt    | 148 ++++++++++++++++++
+>  1 file changed, 148 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/dsa/ar9331.txt
+> 
 
-Gave it another go on top of 5.5-rc2 on an arm64 box, and nothing
-exploded. So thumbs up from me.
-
-Thanks,
-
-        M.
--- 
-Jazz is not dead. It just smells funny...
+Reviewed-by: Rob Herring <robh@kernel.org>
