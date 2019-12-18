@@ -2,90 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCF8124D37
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2019 17:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95B6124DFE
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2019 17:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727720AbfLRQYk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 18 Dec 2019 11:24:40 -0500
-Received: from foss.arm.com ([217.140.110.172]:52002 "EHLO foss.arm.com"
+        id S1727381AbfLRQkA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 18 Dec 2019 11:40:00 -0500
+Received: from mga07.intel.com ([134.134.136.100]:30982 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726980AbfLRQYj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 18 Dec 2019 11:24:39 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C973E12FC;
-        Wed, 18 Dec 2019 08:24:38 -0800 (PST)
-Received: from e112269-lin.arm.com (e112269-lin.cambridge.arm.com [10.1.196.56])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF92C3F719;
-        Wed, 18 Dec 2019 08:24:35 -0800 (PST)
-From:   Steven Price <steven.price@arm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     Steven Price <steven.price@arm.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
+        id S1727124AbfLRQkA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 18 Dec 2019 11:40:00 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Dec 2019 08:39:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,330,1571727600"; 
+   d="scan'208";a="205898318"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
+  by orsmga007.jf.intel.com with ESMTP; 18 Dec 2019 08:39:59 -0800
+Date:   Wed, 18 Dec 2019 08:39:59 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     James Hogan <jhogan@kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         James Morse <james.morse@arm.com>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        "Liang, Kan" <kan.liang@linux.intel.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH v17 05/23] mips: mm: Add p?d_leaf() definitions
-Date:   Wed, 18 Dec 2019 16:23:44 +0000
-Message-Id: <20191218162402.45610-6-steven.price@arm.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191218162402.45610-1-steven.price@arm.com>
-References: <20191218162402.45610-1-steven.price@arm.com>
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>
+Subject: Re: [PATCH v4 19/19] KVM: selftests: Add test for
+ KVM_SET_USER_MEMORY_REGION
+Message-ID: <20191218163958.GC25201@linux.intel.com>
+References: <20191217204041.10815-1-sean.j.christopherson@intel.com>
+ <20191217204041.10815-20-sean.j.christopherson@intel.com>
+ <f962fafb-3956-746f-d077-3dbcefaae7c8@de.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f962fafb-3956-746f-d077-3dbcefaae7c8@de.ibm.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-walk_page_range() is going to be allowed to walk page tables other than
-those of user space. For this it needs to know when it has reached a
-'leaf' entry in the page tables. This information is provided by the
-p?d_leaf() functions/macros.
+On Wed, Dec 18, 2019 at 12:39:43PM +0100, Christian Borntraeger wrote:
+> 
+> On 17.12.19 21:40, Sean Christopherson wrote:
+> > Add a KVM selftest to test moving the base gfn of a userspace memory
+> > region.  The test is primarily targeted at x86 to verify its memslot
+> > metadata is correctly updated, but also provides basic functionality
+> > coverage on other architectures.
+> > +static void *vcpu_worker(void *data)
+> > +{
+> > +	struct kvm_vm *vm = data;
+> > +	struct kvm_run *run;
+> > +	struct ucall uc;
+> > +	uint64_t cmd;
+> > +
+> > +	/*
+> > +	 * Loop until the guest is done.  Re-enter the guest on all MMIO exits,
+> > +	 * which will occur if the guest attempts to access a memslot while it
+> > +	 * is being moved.
+> > +	 */
+> > +	run = vcpu_state(vm, VCPU_ID);
+> > +	do {
+> > +		vcpu_run(vm, VCPU_ID);
+> > +	} while (run->exit_reason == KVM_EXIT_MMIO);
+> > +
+> > +	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
+> > +		    "Unexpected exit reason = %d", run->exit_reason);
+> 
+> 
+> This will also not work for s390. Maybe just make this test x86 specific for now?
 
-If _PAGE_HUGE is defined we can simply look for it. When not defined we
-can be confident that there are no leaf pages in existence and fall back
-on the generic implementation (added in a later patch) which returns 0.
-
-CC: Ralf Baechle <ralf@linux-mips.org>
-CC: Paul Burton <paul.burton@mips.com>
-CC: James Hogan <jhogan@kernel.org>
-CC: linux-mips@vger.kernel.org
-Signed-off-by: Steven Price <steven.price@arm.com>
-Acked-by: Paul Burton <paul.burton@mips.com>
----
- arch/mips/include/asm/pgtable.h | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index 91b89aab1787..aef5378f909c 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -639,6 +639,11 @@ static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
- 
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
- 
-+#ifdef _PAGE_HUGE
-+#define pmd_leaf(pmd)	((pmd_val(pmd) & _PAGE_HUGE) != 0)
-+#define pud_leaf(pud)	((pud_val(pud) & _PAGE_HUGE) != 0)
-+#endif
-+
- #define gup_fast_permitted(start, end)	(!cpu_has_dc_aliases)
- 
- #include <asm-generic/pgtable.h>
--- 
-2.20.1
-
+Doh, that's obvious in hindsight.  I think the basic premise is also
+broken on arm64 as it returns -EFAULT on is_error_noslot_pfn(pfn).  So
+yeah, x86 only for now :-(
