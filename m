@@ -2,981 +2,399 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 017761240F2
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2019 09:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 624B81245C9
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2019 12:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726881AbfLRICm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 18 Dec 2019 03:02:42 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:54737 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726736AbfLRICl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Dec 2019 03:02:41 -0500
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ihUHj-0004em-JI; Wed, 18 Dec 2019 09:02:19 +0100
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1ihUHg-0000aY-IN; Wed, 18 Dec 2019 09:02:16 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>, Chris Snook <chris.snook@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        id S1725785AbfLRLaO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 18 Dec 2019 06:30:14 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14146 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726545AbfLRLaM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 18 Dec 2019 06:30:12 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBIBMCXI053529
+        for <linux-mips@vger.kernel.org>; Wed, 18 Dec 2019 06:30:09 -0500
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2wyj6payub-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-mips@vger.kernel.org>; Wed, 18 Dec 2019 06:30:09 -0500
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-mips@vger.kernel.org> from <borntraeger@de.ibm.com>;
+        Wed, 18 Dec 2019 11:30:07 -0000
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 18 Dec 2019 11:29:59 -0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xBIBTxSR53608522
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Dec 2019 11:29:59 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0564D4C046;
+        Wed, 18 Dec 2019 11:29:59 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4FE024C044;
+        Wed, 18 Dec 2019 11:29:58 +0000 (GMT)
+Received: from oc7455500831.ibm.com (unknown [9.152.224.119])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 18 Dec 2019 11:29:58 +0000 (GMT)
+Subject: Re: [PATCH v4 19/19] KVM: selftests: Add test for
+ KVM_SET_USER_MEMORY_REGION
+To:     Sean Christopherson <sean.j.christopherson@intel.com>,
         James Hogan <jhogan@kernel.org>,
-        Jay Cliburn <jcliburn@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, Russell King <linux@armlinux.org.uk>
-Subject: [PATCH v7 4/4] net: dsa: add support for Atheros AR9331 built-in switch
-Date:   Wed, 18 Dec 2019 09:02:15 +0100
-Message-Id: <20191218080215.2151-5-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191218080215.2151-1-o.rempel@pengutronix.de>
-References: <20191218080215.2151-1-o.rempel@pengutronix.de>
+        Paul Mackerras <paulus@ozlabs.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
+References: <20191217204041.10815-1-sean.j.christopherson@intel.com>
+ <20191217204041.10815-20-sean.j.christopherson@intel.com>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
+ 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
+ nS4h0HDFPrrp1C2EMVYIQrMokWvlFZbCpsdYbBI=
+Date:   Wed, 18 Dec 2019 12:29:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
+In-Reply-To: <20191217204041.10815-20-sean.j.christopherson@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-TM-AS-GCONF: 00
+x-cbid: 19121811-0028-0000-0000-000003C9DCC7
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19121811-0029-0000-0000-0000248D28FA
+Message-Id: <028948db-b59c-08bf-b2ce-29d8745ab9c7@de.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-18_03:2019-12-17,2019-12-18 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ mlxscore=0 malwarescore=0 suspectscore=2 phishscore=0 mlxlogscore=999
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 clxscore=1011
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1912180095
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Provide basic support for Atheros AR9331 built-in switch. So far it
-works as port multiplexer without any hardware offloading support.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Vivien Didelot <vivien.didelot@gmail.com>
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/dsa/Kconfig      |   2 +
- drivers/net/dsa/Makefile     |   1 +
- drivers/net/dsa/qca/Kconfig  |  11 +
- drivers/net/dsa/qca/Makefile |   2 +
- drivers/net/dsa/qca/ar9331.c | 855 +++++++++++++++++++++++++++++++++++
- 5 files changed, 871 insertions(+)
- create mode 100644 drivers/net/dsa/qca/Kconfig
- create mode 100644 drivers/net/dsa/qca/Makefile
- create mode 100644 drivers/net/dsa/qca/ar9331.c
 
-diff --git a/drivers/net/dsa/Kconfig b/drivers/net/dsa/Kconfig
-index c7667645f04a..cbd74a72d0a1 100644
---- a/drivers/net/dsa/Kconfig
-+++ b/drivers/net/dsa/Kconfig
-@@ -54,6 +54,8 @@ source "drivers/net/dsa/mv88e6xxx/Kconfig"
- 
- source "drivers/net/dsa/ocelot/Kconfig"
- 
-+source "drivers/net/dsa/qca/Kconfig"
-+
- source "drivers/net/dsa/sja1105/Kconfig"
- 
- config NET_DSA_QCA8K
-diff --git a/drivers/net/dsa/Makefile b/drivers/net/dsa/Makefile
-index 9d384a32b3a2..4a943ccc2ca4 100644
---- a/drivers/net/dsa/Makefile
-+++ b/drivers/net/dsa/Makefile
-@@ -21,4 +21,5 @@ obj-y				+= b53/
- obj-y				+= microchip/
- obj-y				+= mv88e6xxx/
- obj-y				+= ocelot/
-+obj-y				+= qca/
- obj-y				+= sja1105/
-diff --git a/drivers/net/dsa/qca/Kconfig b/drivers/net/dsa/qca/Kconfig
-new file mode 100644
-index 000000000000..8bdc9adffdba
---- /dev/null
-+++ b/drivers/net/dsa/qca/Kconfig
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+config NET_DSA_AR9331
-+	tristate "Qualcomm Atheros AR9331 Ethernet switch support"
-+	depends on NET_DSA
-+	select NET_DSA_TAG_AR9331
-+	select REGMAP
-+	---help---
-+	  This enables support for the Qualcomm Atheros AR9331 built-in Ethernet
-+	  switch.
-+
-+
-diff --git a/drivers/net/dsa/qca/Makefile b/drivers/net/dsa/qca/Makefile
-new file mode 100644
-index 000000000000..274022319066
---- /dev/null
-+++ b/drivers/net/dsa/qca/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_NET_DSA_AR9331)	+= ar9331.o
-diff --git a/drivers/net/dsa/qca/ar9331.c b/drivers/net/dsa/qca/ar9331.c
-new file mode 100644
-index 000000000000..0d1a7cd85fe8
---- /dev/null
-+++ b/drivers/net/dsa/qca/ar9331.c
-@@ -0,0 +1,855 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2019 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
-+/*
-+ *                   +----------------------+
-+ * GMAC1----RGMII----|--MAC0                |
-+ *      \---MDIO1----|--REGs                |----MDIO3----\
-+ *                   |                      |             |  +------+
-+ *                   |                      |             +--|      |
-+ *                   |                 MAC1-|----RMII--M-----| PHY0 |-o P0
-+ *                   |                      |          |  |  +------+
-+ *                   |                      |          |  +--|      |
-+ *                   |                 MAC2-|----RMII--------| PHY1 |-o P1
-+ *                   |                      |          |  |  +------+
-+ *                   |                      |          |  +--|      |
-+ *                   |                 MAC3-|----RMII--------| PHY2 |-o P2
-+ *                   |                      |          |  |  +------+
-+ *                   |                      |          |  +--|      |
-+ *                   |                 MAC4-|----RMII--------| PHY3 |-o P3
-+ *                   |                      |          |  |  +------+
-+ *                   |                      |          |  +--|      |
-+ *                   |                 MAC5-|--+-RMII--M-----|-PHY4-|-o P4
-+ *                   |                      |  |       |     +------+
-+ *                   +----------------------+  |       \--CFG_SW_PHY_SWAP
-+ * GMAC0---------------RMII--------------------/        \-CFG_SW_PHY_ADDR_SWAP
-+ *      \---MDIO0--NC
-+ *
-+ * GMAC0 and MAC5 are connected together and use same PHY. Depending on
-+ * configuration it can be PHY4 (default) or PHY0. Only GMAC0 or MAC5 can be
-+ * used at same time. If GMAC0 is used (default) then MAC5 should be disabled.
-+ *
-+ * CFG_SW_PHY_SWAP - swap connections of PHY0 and PHY4. If this bit is not set
-+ * PHY4 is connected to GMAC0/MAC5 bundle and PHY0 is connected to MAC1. If this
-+ * bit is set, PHY4 is connected to MAC1 and PHY0 is connected to GMAC0/MAC5
-+ * bundle.
-+ *
-+ * CFG_SW_PHY_ADDR_SWAP - swap addresses of PHY0 and PHY4
-+ *
-+ * CFG_SW_PHY_SWAP and CFG_SW_PHY_ADDR_SWAP are part of SoC specific register
-+ * set and not related to switch internal registers.
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/module.h>
-+#include <linux/of_irq.h>
-+#include <linux/of_mdio.h>
-+#include <linux/regmap.h>
-+#include <linux/reset.h>
-+#include <net/dsa.h>
-+
-+#define AR9331_SW_NAME				"ar9331_switch"
-+#define AR9331_SW_PORTS				6
-+
-+/* dummy reg to change page */
-+#define AR9331_SW_REG_PAGE			0x40000
-+
-+/* Global Interrupt */
-+#define AR9331_SW_REG_GINT			0x10
-+#define AR9331_SW_REG_GINT_MASK			0x14
-+#define AR9331_SW_GINT_PHY_INT			BIT(2)
-+
-+#define AR9331_SW_REG_FLOOD_MASK		0x2c
-+#define AR9331_SW_FLOOD_MASK_BROAD_TO_CPU	BIT(26)
-+
-+#define AR9331_SW_REG_GLOBAL_CTRL		0x30
-+#define AR9331_SW_GLOBAL_CTRL_MFS_M		GENMASK(13, 0)
-+
-+#define AR9331_SW_REG_MDIO_CTRL			0x98
-+#define AR9331_SW_MDIO_CTRL_BUSY		BIT(31)
-+#define AR9331_SW_MDIO_CTRL_MASTER_EN		BIT(30)
-+#define AR9331_SW_MDIO_CTRL_CMD_READ		BIT(27)
-+#define AR9331_SW_MDIO_CTRL_PHY_ADDR_M		GENMASK(25, 21)
-+#define AR9331_SW_MDIO_CTRL_REG_ADDR_M		GENMASK(20, 16)
-+#define AR9331_SW_MDIO_CTRL_DATA_M		GENMASK(16, 0)
-+
-+#define AR9331_SW_REG_PORT_STATUS(_port)	(0x100 + (_port) * 0x100)
-+
-+/* FLOW_LINK_EN - enable mac flow control config auto-neg with phy.
-+ * If not set, mac can be config by software.
-+ */
-+#define AR9331_SW_PORT_STATUS_FLOW_LINK_EN	BIT(12)
-+
-+/* LINK_EN - If set, MAC is configured from PHY link status.
-+ * If not set, MAC should be configured by software.
-+ */
-+#define AR9331_SW_PORT_STATUS_LINK_EN		BIT(9)
-+#define AR9331_SW_PORT_STATUS_DUPLEX_MODE	BIT(6)
-+#define AR9331_SW_PORT_STATUS_RX_FLOW_EN	BIT(5)
-+#define AR9331_SW_PORT_STATUS_TX_FLOW_EN	BIT(4)
-+#define AR9331_SW_PORT_STATUS_RXMAC		BIT(3)
-+#define AR9331_SW_PORT_STATUS_TXMAC		BIT(2)
-+#define AR9331_SW_PORT_STATUS_SPEED_M		GENMASK(1, 0)
-+#define AR9331_SW_PORT_STATUS_SPEED_1000	2
-+#define AR9331_SW_PORT_STATUS_SPEED_100		1
-+#define AR9331_SW_PORT_STATUS_SPEED_10		0
-+
-+#define AR9331_SW_PORT_STATUS_MAC_MASK \
-+	(AR9331_SW_PORT_STATUS_TXMAC | AR9331_SW_PORT_STATUS_RXMAC)
-+
-+#define AR9331_SW_PORT_STATUS_LINK_MASK \
-+	(AR9331_SW_PORT_STATUS_LINK_EN | AR9331_SW_PORT_STATUS_FLOW_LINK_EN | \
-+	 AR9331_SW_PORT_STATUS_DUPLEX_MODE | \
-+	 AR9331_SW_PORT_STATUS_RX_FLOW_EN | AR9331_SW_PORT_STATUS_TX_FLOW_EN | \
-+	 AR9331_SW_PORT_STATUS_SPEED_M)
-+
-+/* Phy bypass mode
-+ * ------------------------------------------------------------------------
-+ * Bit:   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |10 |11 |12 |13 |14 |15 |
-+ *
-+ * real   | start |   OP  | PhyAddr           |  Reg Addr         |  TA   |
-+ * atheros| start |   OP  | 2'b00 |PhyAdd[2:0]|  Reg Addr[4:0]    |  TA   |
-+ *
-+ *
-+ * Bit:   |16 |17 |18 |19 |20 |21 |22 |23 |24 |25 |26 |27 |28 |29 |30 |31 |
-+ * real   |  Data                                                         |
-+ * atheros|  Data                                                         |
-+ *
-+ * ------------------------------------------------------------------------
-+ * Page address mode
-+ * ------------------------------------------------------------------------
-+ * Bit:   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |10 |11 |12 |13 |14 |15 |
-+ * real   | start |   OP  | PhyAddr           |  Reg Addr         |  TA   |
-+ * atheros| start |   OP  | 2'b11 |                          8'b0 |  TA   |
-+ *
-+ * Bit:   |16 |17 |18 |19 |20 |21 |22 |23 |24 |25 |26 |27 |28 |29 |30 |31 |
-+ * real   |  Data                                                         |
-+ * atheros|                       | Page [9:0]                            |
-+ */
-+/* In case of Page Address mode, Bit[18:9] of 32 bit register address should be
-+ * written to bits[9:0] of mdio data register.
-+ */
-+#define AR9331_SW_ADDR_PAGE			GENMASK(18, 9)
-+
-+/* ------------------------------------------------------------------------
-+ * Normal register access mode
-+ * ------------------------------------------------------------------------
-+ * Bit:   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |10 |11 |12 |13 |14 |15 |
-+ * real   | start |   OP  | PhyAddr           |  Reg Addr         |  TA   |
-+ * atheros| start |   OP  | 2'b10 |  low_addr[7:0]                |  TA   |
-+ *
-+ * Bit:   |16 |17 |18 |19 |20 |21 |22 |23 |24 |25 |26 |27 |28 |29 |30 |31 |
-+ * real   |  Data                                                         |
-+ * atheros|  Data                                                         |
-+ * ------------------------------------------------------------------------
-+ */
-+#define AR9331_SW_LOW_ADDR_PHY			GENMASK(8, 6)
-+#define AR9331_SW_LOW_ADDR_REG			GENMASK(5, 1)
-+
-+#define AR9331_SW_MDIO_PHY_MODE_M		GENMASK(4, 3)
-+#define AR9331_SW_MDIO_PHY_MODE_PAGE		3
-+#define AR9331_SW_MDIO_PHY_MODE_REG		2
-+#define AR9331_SW_MDIO_PHY_MODE_BYPASS		0
-+#define AR9331_SW_MDIO_PHY_ADDR_M		GENMASK(2, 0)
-+
-+/* Empirical determined values */
-+#define AR9331_SW_MDIO_POLL_SLEEP_US		1
-+#define AR9331_SW_MDIO_POLL_TIMEOUT_US		20
-+
-+struct ar9331_sw_priv {
-+	struct device *dev;
-+	struct dsa_switch ds;
-+	struct dsa_switch_ops ops;
-+	struct irq_domain *irqdomain;
-+	struct mii_bus *mbus; /* mdio master */
-+	struct mii_bus *sbus; /* mdio slave */
-+	struct regmap *regmap;
-+	struct reset_control *sw_reset;
-+};
-+
-+/* Warning: switch reset will reset last AR9331_SW_MDIO_PHY_MODE_PAGE request
-+ * If some kind of optimization is used, the request should be repeated.
-+ */
-+static int ar9331_sw_reset(struct ar9331_sw_priv *priv)
-+{
-+	int ret;
-+
-+	ret = reset_control_assert(priv->sw_reset);
-+	if (ret)
-+		goto error;
-+
-+	/* AR9331 doc do not provide any information about proper reset
-+	 * sequence. The AR8136 (the closes switch to the AR9331) doc says:
-+	 * reset duration should be greater than 10ms. So, let's use this value
-+	 * for now.
-+	 */
-+	usleep_range(10000, 15000);
-+	ret = reset_control_deassert(priv->sw_reset);
-+	if (ret)
-+		goto error;
-+	/* There is no information on how long should we wait after reset.
-+	 * AR8136 has an EEPROM and there is an Interrupt for EEPROM load
-+	 * status. AR9331 has no EEPROM support.
-+	 * For now, do not wait. In case AR8136 will be needed, the after
-+	 * reset delay can be added as well.
-+	 */
-+
-+	return 0;
-+error:
-+	dev_err_ratelimited(priv->dev, "%s: %i\n", __func__, ret);
-+	return ret;
-+}
-+
-+static int ar9331_sw_mbus_write(struct mii_bus *mbus, int port, int regnum,
-+				u16 data)
-+{
-+	struct ar9331_sw_priv *priv = mbus->priv;
-+	struct regmap *regmap = priv->regmap;
-+	u32 val;
-+	int ret;
-+
-+	ret = regmap_write(regmap, AR9331_SW_REG_MDIO_CTRL,
-+			   AR9331_SW_MDIO_CTRL_BUSY |
-+			   AR9331_SW_MDIO_CTRL_MASTER_EN |
-+			   FIELD_PREP(AR9331_SW_MDIO_CTRL_PHY_ADDR_M, port) |
-+			   FIELD_PREP(AR9331_SW_MDIO_CTRL_REG_ADDR_M, regnum) |
-+			   FIELD_PREP(AR9331_SW_MDIO_CTRL_DATA_M, data));
-+	if (ret)
-+		goto error;
-+
-+	ret = regmap_read_poll_timeout(regmap, AR9331_SW_REG_MDIO_CTRL, val,
-+				       !(val & AR9331_SW_MDIO_CTRL_BUSY),
-+				       AR9331_SW_MDIO_POLL_SLEEP_US,
-+				       AR9331_SW_MDIO_POLL_TIMEOUT_US);
-+	if (ret)
-+		goto error;
-+
-+	return 0;
-+error:
-+	dev_err_ratelimited(priv->dev, "PHY write error: %i\n", ret);
-+	return ret;
-+}
-+
-+static int ar9331_sw_mbus_read(struct mii_bus *mbus, int port, int regnum)
-+{
-+	struct ar9331_sw_priv *priv = mbus->priv;
-+	struct regmap *regmap = priv->regmap;
-+	u32 val;
-+	int ret;
-+
-+	ret = regmap_write(regmap, AR9331_SW_REG_MDIO_CTRL,
-+			   AR9331_SW_MDIO_CTRL_BUSY |
-+			   AR9331_SW_MDIO_CTRL_MASTER_EN |
-+			   AR9331_SW_MDIO_CTRL_CMD_READ |
-+			   FIELD_PREP(AR9331_SW_MDIO_CTRL_PHY_ADDR_M, port) |
-+			   FIELD_PREP(AR9331_SW_MDIO_CTRL_REG_ADDR_M, regnum));
-+	if (ret)
-+		goto error;
-+
-+	ret = regmap_read_poll_timeout(regmap, AR9331_SW_REG_MDIO_CTRL, val,
-+				       !(val & AR9331_SW_MDIO_CTRL_BUSY),
-+				       AR9331_SW_MDIO_POLL_SLEEP_US,
-+				       AR9331_SW_MDIO_POLL_TIMEOUT_US);
-+	if (ret)
-+		goto error;
-+
-+	ret = regmap_read(regmap, AR9331_SW_REG_MDIO_CTRL, &val);
-+	if (ret)
-+		goto error;
-+
-+	return FIELD_GET(AR9331_SW_MDIO_CTRL_DATA_M, val);
-+
-+error:
-+	dev_err_ratelimited(priv->dev, "PHY read error: %i\n", ret);
-+	return ret;
-+}
-+
-+static int ar9331_sw_mbus_init(struct ar9331_sw_priv *priv)
-+{
-+	struct device *dev = priv->dev;
-+	static struct mii_bus *mbus;
-+	struct device_node *np, *mnp;
-+	int ret;
-+
-+	np = dev->of_node;
-+
-+	mbus = devm_mdiobus_alloc(dev);
-+	if (!mbus)
-+		return -ENOMEM;
-+
-+	mbus->name = np->full_name;
-+	snprintf(mbus->id, MII_BUS_ID_SIZE, "%pOF", np);
-+
-+	mbus->read = ar9331_sw_mbus_read;
-+	mbus->write = ar9331_sw_mbus_write;
-+	mbus->priv = priv;
-+	mbus->parent = dev;
-+
-+	mnp = of_get_child_by_name(np, "mdio");
-+	if (!mnp)
-+		return -ENODEV;
-+
-+	ret = of_mdiobus_register(mbus, mnp);
-+	of_node_put(mnp);
-+	if (ret)
-+		return ret;
-+
-+	priv->mbus = mbus;
-+
-+	return 0;
-+}
-+
-+static int ar9331_sw_setup(struct dsa_switch *ds)
-+{
-+	struct ar9331_sw_priv *priv = (struct ar9331_sw_priv *)ds->priv;
-+	struct regmap *regmap = priv->regmap;
-+	int ret;
-+
-+	ret = ar9331_sw_reset(priv);
-+	if (ret)
-+		return ret;
-+
-+	/* Reset will set proper defaults. CPU - Port0 will be enabled and
-+	 * configured. All other ports (ports 1 - 5) are disabled
-+	 */
-+	ret = ar9331_sw_mbus_init(priv);
-+	if (ret)
-+		return ret;
-+
-+	/* Do not drop broadcast frames */
-+	ret = regmap_write_bits(regmap, AR9331_SW_REG_FLOOD_MASK,
-+				AR9331_SW_FLOOD_MASK_BROAD_TO_CPU,
-+				AR9331_SW_FLOOD_MASK_BROAD_TO_CPU);
-+	if (ret)
-+		goto error;
-+
-+	/* Set max frame size to the maximum supported value */
-+	ret = regmap_write_bits(regmap, AR9331_SW_REG_GLOBAL_CTRL,
-+				AR9331_SW_GLOBAL_CTRL_MFS_M,
-+				AR9331_SW_GLOBAL_CTRL_MFS_M);
-+	if (ret)
-+		goto error;
-+
-+	return 0;
-+error:
-+	dev_err_ratelimited(priv->dev, "%s: %i\n", __func__, ret);
-+	return ret;
-+}
-+
-+static void ar9331_sw_port_disable(struct dsa_switch *ds, int port)
-+{
-+	struct ar9331_sw_priv *priv = (struct ar9331_sw_priv *)ds->priv;
-+	struct regmap *regmap = priv->regmap;
-+	int ret;
-+
-+	ret = regmap_write(regmap, AR9331_SW_REG_PORT_STATUS(port), 0);
-+	if (ret)
-+		dev_err_ratelimited(priv->dev, "%s: %i\n", __func__, ret);
-+}
-+
-+static enum dsa_tag_protocol ar9331_sw_get_tag_protocol(struct dsa_switch *ds,
-+							int port)
-+{
-+	return DSA_TAG_PROTO_AR9331;
-+}
-+
-+static void ar9331_sw_phylink_validate(struct dsa_switch *ds, int port,
-+				       unsigned long *supported,
-+				       struct phylink_link_state *state)
-+{
-+	__ETHTOOL_DECLARE_LINK_MODE_MASK(mask) = { 0, };
-+
-+	switch (port) {
-+	case 0:
-+		if (state->interface != PHY_INTERFACE_MODE_GMII)
-+			goto unsupported;
-+
-+		phylink_set(mask, 1000baseT_Full);
-+		phylink_set(mask, 1000baseT_Half);
-+		break;
-+	case 1:
-+	case 2:
-+	case 3:
-+	case 4:
-+	case 5:
-+		if (state->interface != PHY_INTERFACE_MODE_INTERNAL)
-+			goto unsupported;
-+		break;
-+	default:
-+		bitmap_zero(supported, __ETHTOOL_LINK_MODE_MASK_NBITS);
-+		dev_err(ds->dev, "Unsupported port: %i\n", port);
-+		return;
-+	}
-+
-+	phylink_set_port_modes(mask);
-+	phylink_set(mask, Pause);
-+	phylink_set(mask, Asym_Pause);
-+
-+	phylink_set(mask, 10baseT_Half);
-+	phylink_set(mask, 10baseT_Full);
-+	phylink_set(mask, 100baseT_Half);
-+	phylink_set(mask, 100baseT_Full);
-+
-+	bitmap_and(supported, supported, mask,
-+		   __ETHTOOL_LINK_MODE_MASK_NBITS);
-+	bitmap_and(state->advertising, state->advertising, mask,
-+		   __ETHTOOL_LINK_MODE_MASK_NBITS);
-+
-+	return;
-+
-+unsupported:
-+	bitmap_zero(supported, __ETHTOOL_LINK_MODE_MASK_NBITS);
-+	dev_err(ds->dev, "Unsupported interface: %d, port: %d\n",
-+		state->interface, port);
-+}
-+
-+static void ar9331_sw_phylink_mac_config(struct dsa_switch *ds, int port,
-+					 unsigned int mode,
-+					 const struct phylink_link_state *state)
-+{
-+	struct ar9331_sw_priv *priv = (struct ar9331_sw_priv *)ds->priv;
-+	struct regmap *regmap = priv->regmap;
-+	int ret;
-+	u32 val;
-+
-+	switch (state->speed) {
-+	case SPEED_1000:
-+		val = AR9331_SW_PORT_STATUS_SPEED_1000;
-+		break;
-+	case SPEED_100:
-+		val = AR9331_SW_PORT_STATUS_SPEED_100;
-+		break;
-+	case SPEED_10:
-+		val = AR9331_SW_PORT_STATUS_SPEED_10;
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	if (state->duplex)
-+		val |= AR9331_SW_PORT_STATUS_DUPLEX_MODE;
-+
-+	if (state->pause & MLO_PAUSE_TX)
-+		val |= AR9331_SW_PORT_STATUS_TX_FLOW_EN;
-+
-+	if (state->pause & MLO_PAUSE_RX)
-+		val |= AR9331_SW_PORT_STATUS_RX_FLOW_EN;
-+
-+	ret = regmap_update_bits(regmap, AR9331_SW_REG_PORT_STATUS(port),
-+				 AR9331_SW_PORT_STATUS_LINK_MASK, val);
-+	if (ret)
-+		dev_err_ratelimited(priv->dev, "%s: %i\n", __func__, ret);
-+}
-+
-+static void ar9331_sw_phylink_mac_link_down(struct dsa_switch *ds, int port,
-+					    unsigned int mode,
-+					    phy_interface_t interface)
-+{
-+	struct ar9331_sw_priv *priv = (struct ar9331_sw_priv *)ds->priv;
-+	struct regmap *regmap = priv->regmap;
-+	int ret;
-+
-+	ret = regmap_update_bits(regmap, AR9331_SW_REG_PORT_STATUS(port),
-+				 AR9331_SW_PORT_STATUS_MAC_MASK, 0);
-+	if (ret)
-+		dev_err_ratelimited(priv->dev, "%s: %i\n", __func__, ret);
-+}
-+
-+static void ar9331_sw_phylink_mac_link_up(struct dsa_switch *ds, int port,
-+					  unsigned int mode,
-+					  phy_interface_t interface,
-+					  struct phy_device *phydev)
-+{
-+	struct ar9331_sw_priv *priv = (struct ar9331_sw_priv *)ds->priv;
-+	struct regmap *regmap = priv->regmap;
-+	int ret;
-+
-+	ret = regmap_update_bits(regmap, AR9331_SW_REG_PORT_STATUS(port),
-+				 AR9331_SW_PORT_STATUS_MAC_MASK,
-+				 AR9331_SW_PORT_STATUS_MAC_MASK);
-+	if (ret)
-+		dev_err_ratelimited(priv->dev, "%s: %i\n", __func__, ret);
-+}
-+
-+static const struct dsa_switch_ops ar9331_sw_ops = {
-+	.get_tag_protocol	= ar9331_sw_get_tag_protocol,
-+	.setup			= ar9331_sw_setup,
-+	.port_disable		= ar9331_sw_port_disable,
-+	.phylink_validate	= ar9331_sw_phylink_validate,
-+	.phylink_mac_config	= ar9331_sw_phylink_mac_config,
-+	.phylink_mac_link_down	= ar9331_sw_phylink_mac_link_down,
-+	.phylink_mac_link_up	= ar9331_sw_phylink_mac_link_up,
-+};
-+
-+static irqreturn_t ar9331_sw_irq(int irq, void *data)
-+{
-+	struct ar9331_sw_priv *priv = data;
-+	struct regmap *regmap = priv->regmap;
-+	u32 stat;
-+	int ret;
-+
-+	ret = regmap_read(regmap, AR9331_SW_REG_GINT, &stat);
-+	if (ret) {
-+		dev_err(priv->dev, "can't read interrupt status\n");
-+		return IRQ_NONE;
-+	}
-+
-+	if (!stat)
-+		return IRQ_NONE;
-+
-+	if (stat & AR9331_SW_GINT_PHY_INT) {
-+		int child_irq;
-+
-+		child_irq = irq_find_mapping(priv->irqdomain, 0);
-+		handle_nested_irq(child_irq);
-+	}
-+
-+	ret = regmap_write(regmap, AR9331_SW_REG_GINT, stat);
-+	if (ret) {
-+		dev_err(priv->dev, "can't write interrupt status\n");
-+		return IRQ_NONE;
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void ar9331_sw_mask_irq(struct irq_data *d)
-+{
-+	struct ar9331_sw_priv *priv = irq_data_get_irq_chip_data(d);
-+	struct regmap *regmap = priv->regmap;
-+	int ret;
-+
-+	ret = regmap_update_bits(regmap, AR9331_SW_REG_GINT_MASK,
-+				 AR9331_SW_GINT_PHY_INT, 0);
-+	if (ret)
-+		dev_err(priv->dev, "could not mask IRQ\n");
-+}
-+
-+static void ar9331_sw_unmask_irq(struct irq_data *d)
-+{
-+	struct ar9331_sw_priv *priv = irq_data_get_irq_chip_data(d);
-+	struct regmap *regmap = priv->regmap;
-+	int ret;
-+
-+	ret = regmap_update_bits(regmap, AR9331_SW_REG_GINT_MASK,
-+				 AR9331_SW_GINT_PHY_INT,
-+				 AR9331_SW_GINT_PHY_INT);
-+	if (ret)
-+		dev_err(priv->dev, "could not unmask IRQ\n");
-+}
-+
-+static struct irq_chip ar9331_sw_irq_chip = {
-+	.name = AR9331_SW_NAME,
-+	.irq_mask = ar9331_sw_mask_irq,
-+	.irq_unmask = ar9331_sw_unmask_irq,
-+};
-+
-+static int ar9331_sw_irq_map(struct irq_domain *domain, unsigned int irq,
-+			     irq_hw_number_t hwirq)
-+{
-+	irq_set_chip_data(irq, domain->host_data);
-+	irq_set_chip_and_handler(irq, &ar9331_sw_irq_chip, handle_simple_irq);
-+	irq_set_nested_thread(irq, 1);
-+	irq_set_noprobe(irq);
-+
-+	return 0;
-+}
-+
-+static void ar9331_sw_irq_unmap(struct irq_domain *d, unsigned int irq)
-+{
-+	irq_set_nested_thread(irq, 0);
-+	irq_set_chip_and_handler(irq, NULL, NULL);
-+	irq_set_chip_data(irq, NULL);
-+}
-+
-+static const struct irq_domain_ops ar9331_sw_irqdomain_ops = {
-+	.map = ar9331_sw_irq_map,
-+	.unmap = ar9331_sw_irq_unmap,
-+	.xlate = irq_domain_xlate_onecell,
-+};
-+
-+static int ar9331_sw_irq_init(struct ar9331_sw_priv *priv)
-+{
-+	struct device_node *np = priv->dev->of_node;
-+	struct device *dev = priv->dev;
-+	int ret, irq;
-+
-+	irq = of_irq_get(np, 0);
-+	if (irq <= 0) {
-+		dev_err(dev, "failed to get parent IRQ\n");
-+		return irq ? irq : -EINVAL;
-+	}
-+
-+	ret = devm_request_threaded_irq(dev, irq, NULL, ar9331_sw_irq,
-+					IRQF_ONESHOT, AR9331_SW_NAME, priv);
-+	if (ret) {
-+		dev_err(dev, "unable to request irq: %d\n", ret);
-+		return ret;
-+	}
-+
-+	priv->irqdomain = irq_domain_add_linear(np, 1, &ar9331_sw_irqdomain_ops,
-+						priv);
-+	if (!priv->irqdomain) {
-+		dev_err(dev, "failed to create IRQ domain\n");
-+		return -EINVAL;
-+	}
-+
-+	irq_set_parent(irq_create_mapping(priv->irqdomain, 0), irq);
-+
-+	return 0;
-+}
-+
-+static int __ar9331_mdio_write(struct mii_bus *sbus, u8 mode, u16 reg, u16 val)
-+{
-+	u8 r, p;
-+
-+	p = FIELD_PREP(AR9331_SW_MDIO_PHY_MODE_M, mode) |
-+		FIELD_GET(AR9331_SW_LOW_ADDR_PHY, reg);
-+	r = FIELD_GET(AR9331_SW_LOW_ADDR_REG, reg);
-+
-+	return mdiobus_write(sbus, p, r, val);
-+}
-+
-+static int __ar9331_mdio_read(struct mii_bus *sbus, u16 reg)
-+{
-+	u8 r, p;
-+
-+	p = FIELD_PREP(AR9331_SW_MDIO_PHY_MODE_M, AR9331_SW_MDIO_PHY_MODE_REG) |
-+		FIELD_GET(AR9331_SW_LOW_ADDR_PHY, reg);
-+	r = FIELD_GET(AR9331_SW_LOW_ADDR_REG, reg);
-+
-+	return mdiobus_read(sbus, p, r);
-+}
-+
-+static int ar9331_mdio_read(void *ctx, const void *reg_buf, size_t reg_len,
-+			    void *val_buf, size_t val_len)
-+{
-+	struct ar9331_sw_priv *priv = ctx;
-+	struct mii_bus *sbus = priv->sbus;
-+	u32 reg = *(u32 *)reg_buf;
-+	int ret;
-+
-+	if (reg == AR9331_SW_REG_PAGE) {
-+		/* We cannot read the page selector register from hardware and
-+		 * we cache its value in regmap. Return all bits set here,
-+		 * that regmap will always write the page on first use.
-+		 */
-+		*(u32 *)val_buf = GENMASK(9, 0);
-+		return 0;
-+	}
-+
-+	ret = __ar9331_mdio_read(sbus, reg);
-+	if (ret < 0)
-+		goto error;
-+
-+	*(u32 *)val_buf = ret;
-+	ret = __ar9331_mdio_read(sbus, reg + 2);
-+	if (ret < 0)
-+		goto error;
-+
-+	*(u32 *)val_buf |= ret << 16;
-+
-+	return 0;
-+error:
-+	dev_err_ratelimited(&sbus->dev, "Bus error. Failed to read register.\n");
-+	return ret;
-+}
-+
-+static int ar9331_mdio_write(void *ctx, u32 reg, u32 val)
-+{
-+	struct ar9331_sw_priv *priv = (struct ar9331_sw_priv *)ctx;
-+	struct mii_bus *sbus = priv->sbus;
-+	int ret;
-+
-+	if (reg == AR9331_SW_REG_PAGE) {
-+		ret = __ar9331_mdio_write(sbus, AR9331_SW_MDIO_PHY_MODE_PAGE,
-+					  0, val);
-+		if (ret < 0)
-+			goto error;
-+
-+		return 0;
-+	}
-+
-+	ret = __ar9331_mdio_write(sbus, AR9331_SW_MDIO_PHY_MODE_REG, reg, val);
-+	if (ret < 0)
-+		goto error;
-+
-+	ret = __ar9331_mdio_write(sbus, AR9331_SW_MDIO_PHY_MODE_REG, reg + 2,
-+				  val >> 16);
-+	if (ret < 0)
-+		goto error;
-+
-+	return 0;
-+error:
-+	dev_err_ratelimited(&sbus->dev, "Bus error. Failed to write register.\n");
-+	return ret;
-+}
-+
-+static int ar9331_sw_bus_write(void *context, const void *data, size_t count)
-+{
-+	u32 reg = *(u32 *)data;
-+	u32 val = *((u32 *)data + 1);
-+
-+	return ar9331_mdio_write(context, reg, val);
-+}
-+
-+static const struct regmap_range ar9331_valid_regs[] = {
-+	regmap_reg_range(0x0, 0x0),
-+	regmap_reg_range(0x10, 0x14),
-+	regmap_reg_range(0x20, 0x24),
-+	regmap_reg_range(0x2c, 0x30),
-+	regmap_reg_range(0x40, 0x44),
-+	regmap_reg_range(0x50, 0x78),
-+	regmap_reg_range(0x80, 0x98),
-+
-+	regmap_reg_range(0x100, 0x120),
-+	regmap_reg_range(0x200, 0x220),
-+	regmap_reg_range(0x300, 0x320),
-+	regmap_reg_range(0x400, 0x420),
-+	regmap_reg_range(0x500, 0x520),
-+	regmap_reg_range(0x600, 0x620),
-+
-+	regmap_reg_range(0x20000, 0x200a4),
-+	regmap_reg_range(0x20100, 0x201a4),
-+	regmap_reg_range(0x20200, 0x202a4),
-+	regmap_reg_range(0x20300, 0x203a4),
-+	regmap_reg_range(0x20400, 0x204a4),
-+	regmap_reg_range(0x20500, 0x205a4),
-+
-+	/* dummy page selector reg */
-+	regmap_reg_range(AR9331_SW_REG_PAGE, AR9331_SW_REG_PAGE),
-+};
-+
-+static const struct regmap_range ar9331_nonvolatile_regs[] = {
-+	regmap_reg_range(AR9331_SW_REG_PAGE, AR9331_SW_REG_PAGE),
-+};
-+
-+static const struct regmap_range_cfg ar9331_regmap_range[] = {
-+	{
-+		.selector_reg = AR9331_SW_REG_PAGE,
-+		.selector_mask = GENMASK(9, 0),
-+		.selector_shift = 0,
-+
-+		.window_start = 0,
-+		.window_len = 512,
-+
-+		.range_min = 0,
-+		.range_max = AR9331_SW_REG_PAGE - 4,
-+	},
-+};
-+
-+static const struct regmap_access_table ar9331_register_set = {
-+	.yes_ranges = ar9331_valid_regs,
-+	.n_yes_ranges = ARRAY_SIZE(ar9331_valid_regs),
-+};
-+
-+static const struct regmap_access_table ar9331_volatile_set = {
-+	.no_ranges = ar9331_nonvolatile_regs,
-+	.n_no_ranges = ARRAY_SIZE(ar9331_nonvolatile_regs),
-+};
-+
-+static const struct regmap_config ar9331_mdio_regmap_config = {
-+	.reg_bits = 32,
-+	.val_bits = 32,
-+	.reg_stride = 4,
-+	.max_register = AR9331_SW_REG_PAGE,
-+
-+	.ranges = ar9331_regmap_range,
-+	.num_ranges = ARRAY_SIZE(ar9331_regmap_range),
-+
-+	.volatile_table = &ar9331_volatile_set,
-+	.wr_table = &ar9331_register_set,
-+	.rd_table = &ar9331_register_set,
-+
-+	.cache_type = REGCACHE_RBTREE,
-+};
-+
-+static struct regmap_bus ar9331_sw_bus = {
-+	.reg_format_endian_default = REGMAP_ENDIAN_NATIVE,
-+	.val_format_endian_default = REGMAP_ENDIAN_NATIVE,
-+	.read = ar9331_mdio_read,
-+	.write = ar9331_sw_bus_write,
-+	.max_raw_read = 4,
-+	.max_raw_write = 4,
-+};
-+
-+static int ar9331_sw_probe(struct mdio_device *mdiodev)
-+{
-+	struct ar9331_sw_priv *priv;
-+	struct dsa_switch *ds;
-+	int ret;
-+
-+	priv = devm_kzalloc(&mdiodev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->regmap = devm_regmap_init(&mdiodev->dev, &ar9331_sw_bus, priv,
-+					&ar9331_mdio_regmap_config);
-+	if (IS_ERR(priv->regmap)) {
-+		ret = PTR_ERR(priv->regmap);
-+		dev_err(&mdiodev->dev, "regmap init failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	priv->sw_reset = devm_reset_control_get(&mdiodev->dev, "switch");
-+	if (IS_ERR(priv->sw_reset)) {
-+		dev_err(&mdiodev->dev, "missing switch reset\n");
-+		return PTR_ERR(priv->sw_reset);
-+	}
-+
-+	priv->sbus = mdiodev->bus;
-+	priv->dev = &mdiodev->dev;
-+
-+	ret = ar9331_sw_irq_init(priv);
-+	if (ret)
-+		return ret;
-+
-+	ds = &priv->ds;
-+	ds->dev = &mdiodev->dev;
-+	ds->num_ports = AR9331_SW_PORTS;
-+	ds->priv = priv;
-+	priv->ops = ar9331_sw_ops;
-+	ds->ops = &priv->ops;
-+	dev_set_drvdata(&mdiodev->dev, priv);
-+
-+	ret = dsa_register_switch(ds);
-+	if (ret)
-+		goto err_remove_irq;
-+
-+	return 0;
-+
-+err_remove_irq:
-+	irq_domain_remove(priv->irqdomain);
-+
-+	return ret;
-+}
-+
-+static void ar9331_sw_remove(struct mdio_device *mdiodev)
-+{
-+	struct ar9331_sw_priv *priv = dev_get_drvdata(&mdiodev->dev);
-+
-+	irq_domain_remove(priv->irqdomain);
-+	mdiobus_unregister(priv->mbus);
-+	dsa_unregister_switch(&priv->ds);
-+
-+	reset_control_assert(priv->sw_reset);
-+}
-+
-+static const struct of_device_id ar9331_sw_of_match[] = {
-+	{ .compatible = "qca,ar9331-switch" },
-+	{ },
-+};
-+
-+static struct mdio_driver ar9331_sw_mdio_driver = {
-+	.probe = ar9331_sw_probe,
-+	.remove = ar9331_sw_remove,
-+	.mdiodrv.driver = {
-+		.name = AR9331_SW_NAME,
-+		.of_match_table = ar9331_sw_of_match,
-+	},
-+};
-+
-+mdio_module_driver(ar9331_sw_mdio_driver);
-+
-+MODULE_AUTHOR("Oleksij Rempel <kernel@pengutronix.de>");
-+MODULE_DESCRIPTION("Driver for Atheros AR9331 switch");
-+MODULE_LICENSE("GPL v2");
--- 
-2.24.0
+On 17.12.19 21:40, Sean Christopherson wrote:
+> Add a KVM selftest to test moving the base gfn of a userspace memory
+> region.  The test is primarily targeted at x86 to verify its memslot
+> metadata is correctly updated, but also provides basic functionality
+> coverage on other architectures.
+
+This fails to build on s390 (and probably others)
+
+set_memory_region_test.c: In function ‘test_move_memory_region’:
+set_memory_region_test.c:78:2: warning: implicit declaration of function ‘vcpu_set_cpuid’ [-Wimplicit-function-declaration]
+   78 |  vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
+      |  ^~~~~~~~~~~~~~
+set_memory_region_test.c:78:30: warning: implicit declaration of function ‘kvm_get_supported_cpuid’ [-Wimplicit-function-declaration]
+   78 |  vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~
+
+
+> 
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> ---
+>  tools/testing/selftests/kvm/.gitignore        |   1 +
+>  tools/testing/selftests/kvm/Makefile          |   3 +
+>  .../testing/selftests/kvm/include/kvm_util.h  |   1 +
+>  tools/testing/selftests/kvm/lib/kvm_util.c    |  30 ++++
+>  .../selftests/kvm/set_memory_region_test.c    | 142 ++++++++++++++++++
+>  5 files changed, 177 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/set_memory_region_test.c
+> 
+> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+> index 30072c3f52fb..6f60ceb81440 100644
+> --- a/tools/testing/selftests/kvm/.gitignore
+> +++ b/tools/testing/selftests/kvm/.gitignore
+> @@ -17,3 +17,4 @@
+>  /clear_dirty_log_test
+>  /dirty_log_test
+>  /kvm_create_max_vcpus
+> +/set_memory_region_test
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 3138a916574a..01c79e02c5b7 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -29,15 +29,18 @@ TEST_GEN_PROGS_x86_64 += x86_64/xss_msr_test
+>  TEST_GEN_PROGS_x86_64 += clear_dirty_log_test
+>  TEST_GEN_PROGS_x86_64 += dirty_log_test
+>  TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
+> +TEST_GEN_PROGS_x86_64 += set_memory_region_test
+>  
+>  TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
+>  TEST_GEN_PROGS_aarch64 += dirty_log_test
+>  TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
+> +TEST_GEN_PROGS_aarch64 += set_memory_region_test
+>  
+>  TEST_GEN_PROGS_s390x = s390x/memop
+>  TEST_GEN_PROGS_s390x += s390x/sync_regs_test
+>  TEST_GEN_PROGS_s390x += dirty_log_test
+>  TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
+> +TEST_GEN_PROGS_s390x += set_memory_region_test
+>  
+>  TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
+>  LIBKVM += $(LIBKVM_$(UNAME_M))
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index 29cccaf96baf..15d3b8690ffb 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -100,6 +100,7 @@ int _vcpu_ioctl(struct kvm_vm *vm, uint32_t vcpuid, unsigned long ioctl,
+>  		void *arg);
+>  void vm_ioctl(struct kvm_vm *vm, unsigned long ioctl, void *arg);
+>  void vm_mem_region_set_flags(struct kvm_vm *vm, uint32_t slot, uint32_t flags);
+> +void vm_mem_region_move(struct kvm_vm *vm, uint32_t slot, uint64_t new_gpa);
+>  void vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpuid);
+>  vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min,
+>  			  uint32_t data_memslot, uint32_t pgd_memslot);
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 41cf45416060..464a75ce9843 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -756,6 +756,36 @@ void vm_mem_region_set_flags(struct kvm_vm *vm, uint32_t slot, uint32_t flags)
+>  		ret, errno, slot, flags);
+>  }
+>  
+> +/*
+> + * VM Memory Region Move
+> + *
+> + * Input Args:
+> + *   vm - Virtual Machine
+> + *   slot - Slot of the memory region to move
+> + *   flags - Starting guest physical address
+> + *
+> + * Output Args: None
+> + *
+> + * Return: None
+> + *
+> + * Change the gpa of a memory region.
+> + */
+> +void vm_mem_region_move(struct kvm_vm *vm, uint32_t slot, uint64_t new_gpa)
+> +{
+> +	struct userspace_mem_region *region;
+> +	int ret;
+> +
+> +	region = memslot2region(vm, slot);
+> +
+> +	region->region.guest_phys_addr = new_gpa;
+> +
+> +	ret = ioctl(vm->fd, KVM_SET_USER_MEMORY_REGION, &region->region);
+> +
+> +	TEST_ASSERT(!ret, "KVM_SET_USER_MEMORY_REGION failed\n"
+> +		    "ret: %i errno: %i slot: %u flags: 0x%x",
+> +		    ret, errno, slot, new_gpa);
+> +}
+> +
+>  /*
+>   * VCPU mmap Size
+>   *
+> diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+> new file mode 100644
+> index 000000000000..c9603b95ccf7
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+> @@ -0,0 +1,142 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define _GNU_SOURCE /* for program_invocation_short_name */
+> +#include <fcntl.h>
+> +#include <pthread.h>
+> +#include <sched.h>
+> +#include <signal.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <sys/ioctl.h>
+> +
+> +#include <linux/compiler.h>
+> +
+> +#include <test_util.h>
+> +#include <kvm_util.h>
+> +#include <processor.h>
+> +
+> +#define VCPU_ID 0
+> +
+> +/*
+> + * Somewhat arbitrary location and slot, intended to not overlap anything.  The
+> + * location and size are specifically 2mb sized/aligned so that the initial
+> + * region corresponds to exactly one large page (on x86 and arm64).
+> + */
+> +#define MEM_REGION_GPA		0xc0000000
+> +#define MEM_REGION_SIZE		0x200000
+> +#define MEM_REGION_SLOT		10
+> +
+> +static void guest_code(void)
+> +{
+> +	uint64_t val;
+> +
+> +	do {
+> +		val = READ_ONCE(*((uint64_t *)MEM_REGION_GPA));
+> +	} while (!val);
+> +
+> +	if (val != 1)
+> +		ucall(UCALL_ABORT, 1, val);
+> +
+> +	GUEST_DONE();
+> +}
+> +
+> +static void *vcpu_worker(void *data)
+> +{
+> +	struct kvm_vm *vm = data;
+> +	struct kvm_run *run;
+> +	struct ucall uc;
+> +	uint64_t cmd;
+> +
+> +	/*
+> +	 * Loop until the guest is done.  Re-enter the guest on all MMIO exits,
+> +	 * which will occur if the guest attempts to access a memslot while it
+> +	 * is being moved.
+> +	 */
+> +	run = vcpu_state(vm, VCPU_ID);
+> +	do {
+> +		vcpu_run(vm, VCPU_ID);
+> +	} while (run->exit_reason == KVM_EXIT_MMIO);
+> +
+> +	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
+> +		    "Unexpected exit reason = %d", run->exit_reason);
+> +
+> +	cmd = get_ucall(vm, VCPU_ID, &uc);
+> +	TEST_ASSERT(cmd == UCALL_DONE, "Unexpected val in guest = %llu",
+> +		    uc.args[0]);
+> +	return NULL;
+> +}
+> +
+> +static void test_move_memory_region(void)
+> +{
+> +	pthread_t vcpu_thread;
+> +	struct kvm_vm *vm;
+> +	uint64_t *hva;
+> +	uint64_t gpa;
+> +
+> +	vm = vm_create_default(VCPU_ID, 0, guest_code);
+> +
+> +	vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
+> +
+> +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_THP,
+> +				    MEM_REGION_GPA, MEM_REGION_SLOT,
+> +				    MEM_REGION_SIZE / getpagesize(), 0);
+> +
+> +	/*
+> +	 * Allocate and map two pages so that the GPA accessed by guest_code()
+> +	 * stays valid across the memslot move.
+> +	 */
+> +	gpa = vm_phy_pages_alloc(vm, 2, MEM_REGION_GPA, MEM_REGION_SLOT);
+> +	TEST_ASSERT(gpa == MEM_REGION_GPA, "Failed vm_phy_pages_alloc\n");
+> +
+> +	virt_map(vm, MEM_REGION_GPA, MEM_REGION_GPA, 2 * 4096, 0);
+> +
+> +	/* Ditto for the host mapping so that both pages can be zeroed. */
+> +	hva = addr_gpa2hva(vm, MEM_REGION_GPA);
+> +	memset(hva, 0, 2 * 4096);
+> +
+> +	pthread_create(&vcpu_thread, NULL, vcpu_worker, vm);
+> +
+> +	/* Ensure the guest thread is spun up. */
+> +	usleep(100000);
+> +
+> +	/*
+> +	 * Shift the region's base GPA.  The guest should not see "2" as the
+> +	 * hva->gpa translation is misaligned, i.e. the guest is accessing a
+> +	 * different host pfn.
+> +	 */
+> +	vm_mem_region_move(vm, MEM_REGION_SLOT, MEM_REGION_GPA - 4096);
+> +	WRITE_ONCE(*hva, 2);
+> +
+> +	usleep(100000);
+> +
+> +	/*
+> +	 * Note, value in memory needs to be changed *before* restoring the
+> +	 * memslot, else the guest could race the update and see "2".
+> +	 */
+> +	WRITE_ONCE(*hva, 1);
+> +
+> +	/* Restore the original base, the guest should see "1". */
+> +	vm_mem_region_move(vm, MEM_REGION_SLOT, MEM_REGION_GPA);
+> +
+> +	pthread_join(vcpu_thread, NULL);
+> +
+> +	kvm_vm_free(vm);
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	int i, loops;
+> +
+> +	/* Tell stdout not to buffer its content */
+> +	setbuf(stdout, NULL);
+> +
+> +	if (argc > 1)
+> +		loops = atoi(argv[1]);
+> +	else
+> +		loops = 10;
+> +
+> +	for (i = 0; i < loops; i++)
+> +		test_move_memory_region();
+> +
+> +	return 0;
+> +}
+> 
 
