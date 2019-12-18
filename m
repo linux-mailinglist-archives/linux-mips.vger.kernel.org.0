@@ -2,143 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84600123A39
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2019 23:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358A2123D5D
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2019 03:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726692AbfLQWvU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 Dec 2019 17:51:20 -0500
-Received: from mga14.intel.com ([192.55.52.115]:3230 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725870AbfLQWvU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 17 Dec 2019 17:51:20 -0500
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Dec 2019 14:51:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,327,1571727600"; 
-   d="scan'208";a="247654290"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
-  by fmsmga002.fm.intel.com with ESMTP; 17 Dec 2019 14:51:18 -0800
-Date:   Tue, 17 Dec 2019 14:51:18 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     James Hogan <jhogan@kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
-        kvm@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        kvmarm@lists.cs.columbia.edu, Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v4 07/19] KVM: Explicitly free allocated-but-unused dirty
- bitmap
-Message-ID: <20191217225118.GF11771@linux.intel.com>
-References: <20191217204041.10815-1-sean.j.christopherson@intel.com>
- <20191217204041.10815-8-sean.j.christopherson@intel.com>
- <20191217222446.GK7258@xz-x1>
+        id S1726496AbfLRCqH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 17 Dec 2019 21:46:07 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:40855 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726467AbfLRCqH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Dec 2019 21:46:07 -0500
+Received: by mail-ed1-f67.google.com with SMTP id b8so372640edx.7;
+        Tue, 17 Dec 2019 18:46:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vxwj4gd/9Empd7D3FvHODrnvOnRhpeyanogRcG726ys=;
+        b=WJzS6aI/wz3VLuL/0FDfwQQAAqsOUxcJv7nKo1hhzCtoU84k665aVrGSuMqkvY7De+
+         lqlMehJDU5TRD0Q4lZqTgYB6/4F/0DI8CXmKVzcgR+0/MRq6FTDa5ZqLLnTaX49b1tn8
+         +y/6cOFtVDY75CTr+JWiXbgeBmmAkXk1lgZHPzkK9SjgBtWQaPIifZyd6Rs2bGc2ywcg
+         wC6ORMysZYgBRY3lLc5a0QGsNl8UjWsyKAzqHokMvun/8oV/Ujz7+xnPaaRQC3fGf8Gs
+         cn58q2JQhzrCHhS3zsIyLrXsO+F8xHyV0Cvq27hhndThBhynZVvEQif2Pmcb/bhY80KC
+         jaIg==
+X-Gm-Message-State: APjAAAWfsZeyHnrI1ECc5AjIu3PFkkP+62jiBLBaK+saoqo3+i9ugbTS
+        KOU59SsrqSms7oyFqbbDGnveuYUJj0E=
+X-Google-Smtp-Source: APXvYqxNBeHbe8zvqdXNfrw2aVLabdey2tYFz15BBeGGlqJ8LSmJufGAd+R0F+AyIdfxYOriQgDlxA==
+X-Received: by 2002:a17:906:260b:: with SMTP id h11mr1669980ejc.327.1576637164922;
+        Tue, 17 Dec 2019 18:46:04 -0800 (PST)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id d4sm36660ejd.57.2019.12.17.18.46.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Dec 2019 18:46:04 -0800 (PST)
+Received: by mail-wr1-f51.google.com with SMTP id w15so608541wru.4;
+        Tue, 17 Dec 2019 18:46:04 -0800 (PST)
+X-Received: by 2002:adf:81e3:: with SMTP id 90mr1136437wra.23.1576637164034;
+ Tue, 17 Dec 2019 18:46:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191217222446.GK7258@xz-x1>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+References: <20191214175447.25482-1-tiny.windzz@gmail.com>
+In-Reply-To: <20191214175447.25482-1-tiny.windzz@gmail.com>
+From:   Chen-Yu Tsai <wens@csie.org>
+Date:   Wed, 18 Dec 2019 10:45:52 +0800
+X-Gmail-Original-Message-ID: <CAGb2v67kgMcV5hhURYzMCggeTSnOoupmYKDPViS0tiYFSxOfjA@mail.gmail.com>
+Message-ID: <CAGb2v67kgMcV5hhURYzMCggeTSnOoupmYKDPViS0tiYFSxOfjA@mail.gmail.com>
+Subject: Re: [PATCH 01/10] soc: sunxi: convert to devm_platform_ioremap_resource
+To:     Yangtao Li <tiny.windzz@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     Kevin Hilman <khilman@baylibre.com>, leoyang.li@nxp.com,
+        khalasa@piap.pl, John Crispin <john@phrozen.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Jun Nie <jun.nie@linaro.org>, Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "moderated list:ARM/SAMSUNG EXYNO..." 
+        <linux-samsung-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 05:24:46PM -0500, Peter Xu wrote:
-> On Tue, Dec 17, 2019 at 12:40:29PM -0800, Sean Christopherson wrote:
-> > Explicitly free an allocated-but-unused dirty bitmap instead of relying
-> > on kvm_free_memslot() if an error occurs in __kvm_set_memory_region().
-> > There is no longer a need to abuse kvm_free_memslot() to free arch
-> > specific resources as arch specific code is now called only after the
-> > common flow is guaranteed to succeed.  Arch code can still fail, but
-> > it's responsible for its own cleanup in that case.
-> > 
-> > Eliminating the error path's abuse of kvm_free_memslot() paves the way
-> > for simplifying kvm_free_memslot(), i.e. dropping its @dont param.
-> > 
-> > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> > ---
-> >  virt/kvm/kvm_main.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index d403e93e3028..6b2261a9e139 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -1096,7 +1096,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
-> >  
-> >  	slots = kvzalloc(sizeof(struct kvm_memslots), GFP_KERNEL_ACCOUNT);
-> >  	if (!slots)
-> > -		goto out_free;
-> > +		goto out_bitmap;
-> >  	memcpy(slots, __kvm_memslots(kvm, as_id), sizeof(struct kvm_memslots));
-> >  
-> >  	if ((change == KVM_MR_DELETE) || (change == KVM_MR_MOVE)) {
-> > @@ -1144,8 +1144,9 @@ int __kvm_set_memory_region(struct kvm *kvm,
-> >  	if (change == KVM_MR_DELETE || change == KVM_MR_MOVE)
-> >  		slots = install_new_memslots(kvm, as_id, slots);
-> >  	kvfree(slots);
-> > -out_free:
-> > -	kvm_free_memslot(kvm, &new, &old);
-> > +out_bitmap:
-> > +	if (new.dirty_bitmap && !old.dirty_bitmap)
-> > +		kvm_destroy_dirty_bitmap(&new);
-> 
-> What if both the old and new have KVM_MEM_LOG_DIRTY_PAGES set?
-> kvm_free_memslot() did cover that but I see that you explicitly
-> dropped it.  Could I ask why?  Thanks,
+On Sun, Dec 15, 2019 at 1:54 AM Yangtao Li <tiny.windzz@gmail.com> wrote:
+>
+> Use devm_platform_ioremap_resource() to simplify code.
+>
+> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
 
-In that case, old.dirty_bitmap == new.dirty_bitmap, i.e. shouldn't be freed
-by this error path since doing so would result in a use-after-free via the
-old memslot.
+Acked-by: Chen-Yu Tsai <wens@csie.org>
 
-The kvm_free_memslot() logic is the same, albeit in a very twisted way.
-
-In __kvm_set_memory_region(), @old and @new start with the same dirty_bitmap.
-
-	new = old = *slot;
-
-And @new is modified based on KVM_MEM_LOG_DIRTY_PAGES.  If LOG_DIRTY_PAGES
-is set in both @new and @old, then both the "if" and "else if" evaluate
-false, i.e. new.dirty_bitmap == old.dirty_bitmap.
-
-	/* Allocate/free page dirty bitmap as needed */
-	if (!(new.flags & KVM_MEM_LOG_DIRTY_PAGES))
-		new.dirty_bitmap = NULL;
-	else if (!new.dirty_bitmap) {
-		r = kvm_create_dirty_bitmap(&new);
-		if (r)
-			return r;
-	}
-
-Subbing "@free <= @new" and "@dont <= @old" in kvm_free_memslot()
-
-  static void kvm_free_memslot(struct kvm *kvm, struct kvm_memory_slot *free,
-			       struct kvm_memory_slot *dont)
-  {
-	if (!dont || free->dirty_bitmap != dont->dirty_bitmap)
-		kvm_destroy_dirty_bitmap(free);
-
-
-yeids this, since @old is obviously non-NULL
-
-	if (new.dirty_bitmap != old.dirty_bitmap)
-		kvm_destroy_dirty_bitmap(&new);
-
-The dirty_bitmap allocation logic guarantees that new.dirty_bitmap is
-  a) NULL (the "if" case")
-  b) != old.dirty_bitmap iff old.dirty_bitmap == NULL (the "else if" case)
-  c) == old.dirty_bitmap (the implicit "else" case).
-
-kvm_free_memslot() frees @new.dirty_bitmap iff its != @old.dirty_bitmap,
-thus the explicit destroy only needs to check for (b).
+> ---
+>  drivers/soc/sunxi/sunxi_sram.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
+> index 1b0d50f36349..f73fbcc73f51 100644
+> --- a/drivers/soc/sunxi/sunxi_sram.c
+> +++ b/drivers/soc/sunxi/sunxi_sram.c
+> @@ -320,7 +320,6 @@ static struct regmap_config sunxi_sram_emac_clock_regmap = {
+>
+>  static int sunxi_sram_probe(struct platform_device *pdev)
+>  {
+> -       struct resource *res;
+>         struct dentry *d;
+>         struct regmap *emac_clock;
+>         const struct sunxi_sramc_variant *variant;
+> @@ -331,8 +330,7 @@ static int sunxi_sram_probe(struct platform_device *pdev)
+>         if (!variant)
+>                 return -EINVAL;
+>
+> -       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -       base = devm_ioremap_resource(&pdev->dev, res);
+> +       base = devm_platform_ioremap_resource(pdev, 0);
+>         if (IS_ERR(base))
+>                 return PTR_ERR(base);
+>
+> --
+> 2.17.1
+>
