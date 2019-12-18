@@ -2,109 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 358A2123D5D
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2019 03:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D7B1240F7
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2019 09:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726496AbfLRCqH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 Dec 2019 21:46:07 -0500
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:40855 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726467AbfLRCqH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Dec 2019 21:46:07 -0500
-Received: by mail-ed1-f67.google.com with SMTP id b8so372640edx.7;
-        Tue, 17 Dec 2019 18:46:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vxwj4gd/9Empd7D3FvHODrnvOnRhpeyanogRcG726ys=;
-        b=WJzS6aI/wz3VLuL/0FDfwQQAAqsOUxcJv7nKo1hhzCtoU84k665aVrGSuMqkvY7De+
-         lqlMehJDU5TRD0Q4lZqTgYB6/4F/0DI8CXmKVzcgR+0/MRq6FTDa5ZqLLnTaX49b1tn8
-         +y/6cOFtVDY75CTr+JWiXbgeBmmAkXk1lgZHPzkK9SjgBtWQaPIifZyd6Rs2bGc2ywcg
-         wC6ORMysZYgBRY3lLc5a0QGsNl8UjWsyKAzqHokMvun/8oV/Ujz7+xnPaaRQC3fGf8Gs
-         cn58q2JQhzrCHhS3zsIyLrXsO+F8xHyV0Cvq27hhndThBhynZVvEQif2Pmcb/bhY80KC
-         jaIg==
-X-Gm-Message-State: APjAAAWfsZeyHnrI1ECc5AjIu3PFkkP+62jiBLBaK+saoqo3+i9ugbTS
-        KOU59SsrqSms7oyFqbbDGnveuYUJj0E=
-X-Google-Smtp-Source: APXvYqxNBeHbe8zvqdXNfrw2aVLabdey2tYFz15BBeGGlqJ8LSmJufGAd+R0F+AyIdfxYOriQgDlxA==
-X-Received: by 2002:a17:906:260b:: with SMTP id h11mr1669980ejc.327.1576637164922;
-        Tue, 17 Dec 2019 18:46:04 -0800 (PST)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id d4sm36660ejd.57.2019.12.17.18.46.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Dec 2019 18:46:04 -0800 (PST)
-Received: by mail-wr1-f51.google.com with SMTP id w15so608541wru.4;
-        Tue, 17 Dec 2019 18:46:04 -0800 (PST)
-X-Received: by 2002:adf:81e3:: with SMTP id 90mr1136437wra.23.1576637164034;
- Tue, 17 Dec 2019 18:46:04 -0800 (PST)
+        id S1726795AbfLRICt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 18 Dec 2019 03:02:49 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:45353 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726794AbfLRICa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Dec 2019 03:02:30 -0500
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1ihUHj-0004ei-JI; Wed, 18 Dec 2019 09:02:19 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1ihUHg-0000Ze-C8; Wed, 18 Dec 2019 09:02:16 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>, Chris Snook <chris.snook@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        James Hogan <jhogan@kernel.org>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, Russell King <linux@armlinux.org.uk>
+Subject: [PATCH v7 0/4] add dsa switch support for ar9331
+Date:   Wed, 18 Dec 2019 09:02:11 +0100
+Message-Id: <20191218080215.2151-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-References: <20191214175447.25482-1-tiny.windzz@gmail.com>
-In-Reply-To: <20191214175447.25482-1-tiny.windzz@gmail.com>
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Wed, 18 Dec 2019 10:45:52 +0800
-X-Gmail-Original-Message-ID: <CAGb2v67kgMcV5hhURYzMCggeTSnOoupmYKDPViS0tiYFSxOfjA@mail.gmail.com>
-Message-ID: <CAGb2v67kgMcV5hhURYzMCggeTSnOoupmYKDPViS0tiYFSxOfjA@mail.gmail.com>
-Subject: Re: [PATCH 01/10] soc: sunxi: convert to devm_platform_ioremap_resource
-To:     Yangtao Li <tiny.windzz@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Kevin Hilman <khilman@baylibre.com>, leoyang.li@nxp.com,
-        khalasa@piap.pl, John Crispin <john@phrozen.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Jun Nie <jun.nie@linaro.org>, Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG EXYNO..." 
-        <linux-samsung-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Dec 15, 2019 at 1:54 AM Yangtao Li <tiny.windzz@gmail.com> wrote:
->
-> Use devm_platform_ioremap_resource() to simplify code.
->
-> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
+changes v6:
+- remove ag71xx changes from this patch set. It needs more work.
+- ar9331: fix register definition and add ASCII art switch documentation.
 
-Acked-by: Chen-Yu Tsai <wens@csie.org>
+changes v6:
+- rebase against net-next
 
-> ---
->  drivers/soc/sunxi/sunxi_sram.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-> index 1b0d50f36349..f73fbcc73f51 100644
-> --- a/drivers/soc/sunxi/sunxi_sram.c
-> +++ b/drivers/soc/sunxi/sunxi_sram.c
-> @@ -320,7 +320,6 @@ static struct regmap_config sunxi_sram_emac_clock_regmap = {
->
->  static int sunxi_sram_probe(struct platform_device *pdev)
->  {
-> -       struct resource *res;
->         struct dentry *d;
->         struct regmap *emac_clock;
->         const struct sunxi_sramc_variant *variant;
-> @@ -331,8 +330,7 @@ static int sunxi_sram_probe(struct platform_device *pdev)
->         if (!variant)
->                 return -EINVAL;
->
-> -       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -       base = devm_ioremap_resource(&pdev->dev, res);
-> +       base = devm_platform_ioremap_resource(pdev, 0);
->         if (IS_ERR(base))
->                 return PTR_ERR(base);
->
-> --
-> 2.17.1
->
+changes v5:
+- remote support for port5. The effort of using this port is
+  questionable. Currently, it is better to not use it at all, then
+  adding buggy support.
+- remove port enable call back. There is nothing what we actually need
+  to enable.
+- rebase it against v5.5-rc1 
+
+changes v4:
+- ag71xx: ag71xx_mac_validate fix always false comparison (&& -> ||)
+- tag_ar9331: use skb_pull_rcsum() instead of skb_pull().
+- tag_ar9331: drop skb_set_mac_header()
+
+changes v3:
+- ag71xx: ag71xx_mac_config: ignore MLO_AN_INBAND mode. It is not
+  supported by HW and SW.
+- ag71xx: ag71xx_mac_validate: return all supported bits on
+  PHY_INTERFACE_MODE_NA
+
+changes v2:
+- move Atheros AR9331 TAG format to separate patch
+- use netdev_warn_once in the tag driver to reduce potential message spam
+- typo fixes
+- reorder tag driver alphabetically 
+- configure switch to maximal frame size
+- use mdiobus_read/write
+- fail if mdio sub node is not found
+- add comment for post reset state
+- remove deprecated comment about device id
+- remove phy-handle option for node with fixed-link
+- ag71xx: set 1G support only for GMII mode
+
+This patch series provides dsa switch support for Atheros ar9331 WiSoC.
+As side effect ag71xx needed to be ported to phylink to make the switch
+driver (as well phylink based) work properly.
+
+Oleksij Rempel (4):
+  dt-bindings: net: dsa: qca,ar9331 switch documentation
+  MIPS: ath79: ar9331: add ar9331-switch node
+  net: dsa: add support for Atheros AR9331 TAG format
+  net: dsa: add support for Atheros AR9331 built-in switch
+
+ .../devicetree/bindings/net/dsa/ar9331.txt    | 148 +++
+ arch/mips/boot/dts/qca/ar9331.dtsi            | 119 ++-
+ arch/mips/boot/dts/qca/ar9331_dpt_module.dts  |  13 +
+ drivers/net/dsa/Kconfig                       |   2 +
+ drivers/net/dsa/Makefile                      |   1 +
+ drivers/net/dsa/qca/Kconfig                   |  11 +
+ drivers/net/dsa/qca/Makefile                  |   2 +
+ drivers/net/dsa/qca/ar9331.c                  | 855 ++++++++++++++++++
+ include/net/dsa.h                             |   2 +
+ net/dsa/Kconfig                               |   6 +
+ net/dsa/Makefile                              |   1 +
+ net/dsa/tag_ar9331.c                          |  96 ++
+ 12 files changed, 1255 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/net/dsa/ar9331.txt
+ create mode 100644 drivers/net/dsa/qca/Kconfig
+ create mode 100644 drivers/net/dsa/qca/Makefile
+ create mode 100644 drivers/net/dsa/qca/ar9331.c
+ create mode 100644 net/dsa/tag_ar9331.c
+
+-- 
+2.24.0
+
