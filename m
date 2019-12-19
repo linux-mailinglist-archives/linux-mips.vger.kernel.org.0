@@ -2,107 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5CD1263DA
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Dec 2019 14:46:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA2D126467
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Dec 2019 15:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726744AbfLSNqX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 19 Dec 2019 08:46:23 -0500
-Received: from foss.arm.com ([217.140.110.172]:38852 "EHLO foss.arm.com"
+        id S1726751AbfLSORO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 19 Dec 2019 09:17:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726695AbfLSNqX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 19 Dec 2019 08:46:23 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E151131B;
-        Thu, 19 Dec 2019 05:46:22 -0800 (PST)
-Received: from [10.1.196.105] (eglon.cambridge.arm.com [10.1.196.105])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A8C063F6CF;
-        Thu, 19 Dec 2019 05:46:20 -0800 (PST)
-Subject: Re: [PATCH 7/7] KVM: arm/arm64: Elide CMOs when unmapping a range
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20191213182503.14460-1-maz@kernel.org>
- <20191213182503.14460-8-maz@kernel.org>
- <0c832b27-7041-a6c8-31c0-d71a25c6f5b8@arm.com>
- <de462fe29fb40fb1644e6a071e6c0c69@www.loen.fr>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <01c9439f-0de1-78ca-632b-f662876cc4a1@arm.com>
-Date:   Thu, 19 Dec 2019 13:46:19 +0000
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726695AbfLSORO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 19 Dec 2019 09:17:14 -0500
+Received: from jamesdev.lan (jahogan.plus.com [212.159.75.221])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BC7B1206D8;
+        Thu, 19 Dec 2019 14:17:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576765033;
+        bh=sR0y9zONxNC7kusimqGWdIYHbl3Xg5Sku/xgDA/vPKY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XcI1AVxPisF9vWVar6I48pnXGr2ZmrQyvMGRINgbiwbFQEC0EgMaiIjiLlz9TT03F
+         O4d9d0iHaVXahkCh4qbIduf1I9q8zL920ULGrJiB/UR94L4OH2CbgcMu6SWIAgv5/k
+         mqLlAR7ET7r8Wpeui4aGdK66JNICnGEwhPdqB77U=
+From:   James Hogan <jhogan@kernel.org>
+To:     Paul Burton <paulburton@kernel.org>
+Cc:     James Hogan <jhogan@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: Drop James Hogan as MIPS maintainer
+Date:   Thu, 19 Dec 2019 14:16:58 +0000
+Message-Id: <20191219141658.43818-1-jhogan@kernel.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <de462fe29fb40fb1644e6a071e6c0c69@www.loen.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Marc,
+I haven't been active for 18 months, and Paul seems to be doing a grand
+job, so drop me from MIPS maintainership.
 
-On 18/12/2019 15:30, Marc Zyngier wrote:
-> On 2019-12-18 15:07, James Morse wrote:
->> On 13/12/2019 18:25, Marc Zyngier wrote:
->>> If userspace issues a munmap() on a set of pages, there is no
->>> expectation that the pages are cleaned to the PoC.
+Signed-off-by: James Hogan <jhogan@kernel.org>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: linux-mips@vger.kernel.org
+---
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
 
->>> So let's
->>> not do more work than strictly necessary, and set the magic
->>> flag that avoids CMOs in this case.
->>
->> I think this assumes the pages went from anonymous->free, so no-one
->> cares about the contents.
->>
->> If the pages are backed by a file, won't dirty pages will still get
->> written back before the page is free? (e.g. EFI flash 'file' mmap()ed in)
-> 
-> I believe so. Is that a problem?
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a049abccaa26..80a6cf8c20c0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10999,7 +10999,6 @@ F:	drivers/usb/image/microtek.*
+ MIPS
+ M:	Ralf Baechle <ralf@linux-mips.org>
+ M:	Paul Burton <paulburton@kernel.org>
+-M:	James Hogan <jhogan@kernel.org>
+ L:	linux-mips@vger.kernel.org
+ W:	http://www.linux-mips.org/
+ T:	git git://git.linux-mips.org/pub/scm/ralf/linux.git
+-- 
+2.24.0
 
-If we skipped the dcache maintenance on unmap, when the the dirty page is later reclaimed
-the clean+stale lines are written back to the file. File-backed dirty pages will stick
-around in the page cache in the hope someone else needs them.
-
-This would happen for a guest:device-mapping that is written to, but is actually backed by
-a mmap()d file. I think the EFI flash emulation does exactly this.
-
-
->> What if this isn't the only mapping of the page? Can't it be swapped
->> out from another VMA? (tenuous example, poor man's memory mirroring?)
-> 
-> Swap-out wouldn't trigger this code path, as it would use a different
-> MMU notifier event (MMU_NOTIFY_CLEAR vs MMU_NOTIFY_UNMAP), I believe.
-
-This was a half thought-through special case of the above. The sequence would be:
-
-VM-A and VM-B both share a mapping of $page.
-
-1. VM-A writes to $page through a device mapping
-2. The kernel unmaps $page from VM-A for swap. KVM does the maintenance
-
-3. VM-B writes to $page through a device mapping
-4. VM-B exits, KVM skips the maintenance, $page may have clean+stale lines
-
-5. Swap finds no further mappings, and writes $page and its clean+stale lines to disk.
-
-Two VMs with a shared mapping is the 'easy' example. I think you just need a second
-mapping for this to happen: it means the page isn't really free after the VM has exited.
-
-
-
-Thanks,
-
-James
