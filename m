@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C77126A1E
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Dec 2019 19:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1162126D89
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Dec 2019 20:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728736AbfLSSoV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 19 Dec 2019 13:44:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36246 "EHLO mail.kernel.org"
+        id S1727229AbfLSShE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 19 Dec 2019 13:37:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54372 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728966AbfLSSoT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 19 Dec 2019 13:44:19 -0500
+        id S1727125AbfLSShD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 19 Dec 2019 13:37:03 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 08FE124672;
-        Thu, 19 Dec 2019 18:44:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7150224679;
+        Thu, 19 Dec 2019 18:37:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576781058;
+        s=default; t=1576780622;
         bh=NzS+thb2zRhKzX02D+ejkXOi1iRJq/6D5XAXZ6VOCSc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0e566Pxn3cKxX5R9OJ1tIxkOaxiZTlsTHj2F4VsETZbcbz7JDqf65ihJADeaUq2vT
-         /zuIbM/ty4Tq5zkgFF8sy6ZItOipqvobIeYl3i+07kjmhZxfqQBuEOruyhnCakp9bk
-         n0RfXeu4KGqs9fPirl9sDYmXEumTKXIzSm5Y+k+g=
+        b=TaTOLYfwguwpzyO23FfEYcB8NNVow5JVjcP9hz1sin1TjVNfsUTM4F9gqYivVi/ao
+         KWWALJxqdaI7aQlnT2LFHs1giFGasB+l3eOq7D+TbXmWbnxcF6aHdAVxuxHJj3roGV
+         MEHwXR4pSQ5HivGXOMgm6s0cIhDSaYB2g5RBb640=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -31,12 +31,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 065/199] MIPS: OCTEON: cvmx_pko_mem_debug8: use oldest forward compatible definition
-Date:   Thu, 19 Dec 2019 19:32:27 +0100
-Message-Id: <20191219183218.605427662@linuxfoundation.org>
+Subject: [PATCH 4.4 049/162] MIPS: OCTEON: cvmx_pko_mem_debug8: use oldest forward compatible definition
+Date:   Thu, 19 Dec 2019 19:32:37 +0100
+Message-Id: <20191219183210.878655332@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20191219183214.629503389@linuxfoundation.org>
-References: <20191219183214.629503389@linuxfoundation.org>
+In-Reply-To: <20191219183150.477687052@linuxfoundation.org>
+References: <20191219183150.477687052@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
