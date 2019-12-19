@@ -2,77 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C6D12567A
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2019 23:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D9E125C99
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Dec 2019 09:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726742AbfLRWSl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 18 Dec 2019 17:18:41 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:43255 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726387AbfLRWSj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Dec 2019 17:18:39 -0500
-Received: by mail-oi1-f195.google.com with SMTP id x14so2026621oic.10;
-        Wed, 18 Dec 2019 14:18:38 -0800 (PST)
+        id S1726744AbfLSI24 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 19 Dec 2019 03:28:56 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:35254 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726498AbfLSI2z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 19 Dec 2019 03:28:55 -0500
+Received: by mail-lf1-f65.google.com with SMTP id 15so3730289lfr.2
+        for <linux-mips@vger.kernel.org>; Thu, 19 Dec 2019 00:28:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EYVpTAvfKwHHKmlAPuGRsZ3iezpd785NjyR9OVcUj6E=;
+        b=MJZ/DNtFXAxxKUZKDxH+hao28YTyE5NOXtuQ0Z3/ibWy8zpn9idcT5fZSA3qlJswY1
+         Yijm5VvGd/xFqGL1v6NZGRxBXBKHV016m5JvvGWQlY0M4LINXT2A+VMv/c7K+z0FglYN
+         FkcONe7Byj4YXGeofGkBJBC9L9BYhWz0U/7T5uj+m7cWbGsUIxhMxvZYjxq9RmDbTAeo
+         5FOeLkOvfmFeFbQ9FneVOLbyy+1qTeqa2lenupHqbbfkraaI8ywbs0EUp3VJNPMnGg4z
+         8lysTRj1vQ/4vBUWcuSX068OiI8cXcTJLEVHZYJzOCkkKrvNMEEtnJ4J5TdoqJk3xzfJ
+         RFyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=/4DCBGTzV25UqwiiGbHriQAr3E9Rn3IXXhGkvh3a7hY=;
-        b=BREEZcCPj36BE8OL53AQ3mt3dRIZkN/CTNHC+FjFicSGOusz39qUsKLKrNHWZ98UHa
-         sMAxcoMbWDN5vQApNbkN4OxhLhdFozrJ/y8LTFc072XePZHeCuB4Gxc9/0V0YzXF0ejA
-         eH/UehlU8HR7v+8xcgV0qbdBnwLgTxDKGMlx9L3TewCBgKl4oDizA8xA/6SqywXSILMV
-         I1AFUOPJlRhGIOFpc0Csso+sAh4AiWoTnls0toG5L2NQQDtOVtvAFQoT5YvWeW2wJHT9
-         jpULjMV0CbZGHYLSx0fWIT9ljkVXI5BuUZFLzSNanTvbLcXfmrP4MjcLxTAgshlua4rA
-         DV9w==
-X-Gm-Message-State: APjAAAU39tVsW9QaB7k0Bb2WK5ElDAvu2focxUvBWDDqAzrkz7TWg9PM
-        nVy3ZrwROwyH63yE0nX+5Q==
-X-Google-Smtp-Source: APXvYqxn0yvz4TRVwtiUKNKpafKpf6Hjnbe2ieMd81LDvcEqkQUy8kwzMvieUr8SBs9uriNVboNWpw==
-X-Received: by 2002:aca:f305:: with SMTP id r5mr1618542oih.174.1576707518439;
-        Wed, 18 Dec 2019 14:18:38 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v25sm413787ote.61.2019.12.18.14.18.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2019 14:18:37 -0800 (PST)
-Date:   Wed, 18 Dec 2019 16:18:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
-        mark.rutland@arm.com, paul@crapouillou.net,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, 2374286503@qq.com
-Subject: Re: [PATCH v3 1/2] dt-bindings: I2C: Add X1000 bindings.
-Message-ID: <20191218221836.GA24317@bogus>
-References: <1576570450-122556-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1576570450-122556-3-git-send-email-zhouyanjie@wanyeetech.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EYVpTAvfKwHHKmlAPuGRsZ3iezpd785NjyR9OVcUj6E=;
+        b=W3Tjc9Vwd74I2UrwEWW1zxVCshMEV8GvL8oGb50mpK2cs8ZVGolkrRI1ogw0WDPae0
+         dlMl0qMDV0OgYpqx+WV2HPTvStrLnSDRmGrV66F9CdNRd2CB7ZsWRuTFKGwc1ZF9wpIK
+         M0s3/1PBq9z/SVY2cqcZQpd7PiYO7hVmiMr62WNErV/Ss60t3wshF9X2WklDlPo41Ro0
+         P3257U/+AON1Xd9zetV4hSUZkPMLwbRoNgG4NjJVqxZqdGD2UKb45fmkyzQtXAQcu3H4
+         wBrE+4Lh4d/mgsb6S94HDeqSU3VJJZZbOQ7Xo4t5edSd7FT7NxtreO6blEUJcRMh7CX3
+         tF4Q==
+X-Gm-Message-State: APjAAAUuksYwRZKtAhQIhXY5a6RgAVxQt8/OiIifO0TukVgK2a4f6wiy
+        9GJLfczP6sKGsF2bkRIJpj8iC7LUtKxVXsWqrf8qAA==
+X-Google-Smtp-Source: APXvYqynTJm9GoZtkT/ox5Ee2KtmtUCBm2Ol3fEci7a1RBI4FjyF3QqGMde1dsSwXQ7lWCCv/YG69H6YPlbklmRCDWQ=
+X-Received: by 2002:a19:8a41:: with SMTP id m62mr4543898lfd.5.1576744133697;
+ Thu, 19 Dec 2019 00:28:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1576570450-122556-3-git-send-email-zhouyanjie@wanyeetech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191213124221.25775-1-tbogendoerfer@suse.de> <20191213124221.25775-3-tbogendoerfer@suse.de>
+In-Reply-To: <20191213124221.25775-3-tbogendoerfer@suse.de>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 19 Dec 2019 09:28:42 +0100
+Message-ID: <CACRpkdY+2Z90n6zNZbQpmGCWYAH4PzEOv8puOkwbrcxCk_Eq2A@mail.gmail.com>
+Subject: Re: [PATCH v11 net-next 2/2] mfd: ioc3: Add driver for SGI IOC3 chip
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, linux-rtc@vger.kernel.org,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 17 Dec 2019 16:14:09 +0800, =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= wrote:
-> Add the I2C bindings for the X1000 Soc from Ingenic.
-> 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> ---
-> 
-> Notes:
->     v1->v2:
->     No change.
->     
->     v2->v3:
->     No change.
-> 
->  Documentation/devicetree/bindings/i2c/i2c-jz4780.txt | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
+On Fri, Dec 13, 2019 at 1:43 PM Thomas Bogendoerfer
+<tbogendoerfer@suse.de> wrote:
 
-Acked-by: Rob Herring <robh@kernel.org>
+> SGI IOC3 chip has integrated ethernet, keyboard and mouse interface.
+> It also supports connecting a SuperIO chip for serial and parallel
+> interfaces. IOC3 is used inside various SGI systemboards and add-on
+> cards with different equipped external interfaces.
+>
+> Support for ethernet and serial interfaces were implemented inside
+> the network driver. This patchset moves out the not network related
+> parts to a new MFD driver, which takes care of card detection,
+> setup of platform devices and interrupt distribution for the subdevices.
+>
+> Serial portion: Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+>
+> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+
+This makes the kernel a better place:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+
+Will there be a GPIO driver arriving later?
+
+Yours,
+Linus Walleij
