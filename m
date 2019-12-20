@@ -2,40 +2,28 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D11D6127960
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Dec 2019 11:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A99128010
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Dec 2019 16:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727317AbfLTKbG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 20 Dec 2019 05:31:06 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:35780 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727184AbfLTKbG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 Dec 2019 05:31:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1576837865;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hXRURjDIno09T/7uerhfWk5aEa64vSqR0QJi3eOkKRg=;
-        b=TSszHccR7g0oCzCDbq75qFw7a5MPliVJf4rI8b+boVhOOKz5/nuQwDzFGU9Kydr4glXjzS
-        J+KavhpEbdQQuAG7pLLfvjNxWweEC+Nyap6CcSw4bD/8yyK16JzXv9PGruBekzE+JEWIRN
-        DuTrGA8OTBbc6sCpG9c29C9EwtRcP/k=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-92-acyk5wgqMtGGRknL5kTE3g-1; Fri, 20 Dec 2019 05:30:58 -0500
-X-MC-Unique: acyk5wgqMtGGRknL5kTE3g-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 21A67107ACC4;
-        Fri, 20 Dec 2019 10:30:56 +0000 (UTC)
-Received: from gondolin (dhcp-192-245.str.redhat.com [10.33.192.245])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CA6FF26FC5;
-        Fri, 20 Dec 2019 10:30:49 +0000 (UTC)
-Date:   Fri, 20 Dec 2019 11:30:47 +0100
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
+        id S1727391AbfLTPxb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 20 Dec 2019 10:53:31 -0500
+Received: from mga11.intel.com ([192.55.52.93]:27731 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727359AbfLTPxb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 20 Dec 2019 10:53:31 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 07:53:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,336,1571727600"; 
+   d="scan'208";a="222513815"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Dec 2019 07:53:30 -0800
+Date:   Fri, 20 Dec 2019 07:53:30 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Cornelia Huck <cohuck@redhat.com>
 Cc:     Marc Zyngier <maz@kernel.org>, James Hogan <jhogan@kernel.org>,
         Paul Mackerras <paulus@ozlabs.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
@@ -53,34 +41,136 @@ Cc:     Marc Zyngier <maz@kernel.org>, James Hogan <jhogan@kernel.org>,
         linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
         kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Greg Kurz <groug@kaod.org>
-Subject: Re: [PATCH v2 45/45] KVM: Move vcpu->run page allocation out of
- kvm_vcpu_init()
-Message-ID: <20191220113047.2865074a.cohuck@redhat.com>
-In-Reply-To: <20191218215530.2280-46-sean.j.christopherson@intel.com>
+Subject: Re: [PATCH v2 30/45] KVM: Move vcpu alloc and init invocation to
+ common code
+Message-ID: <20191220155330.GA21021@linux.intel.com>
 References: <20191218215530.2280-1-sean.j.christopherson@intel.com>
-        <20191218215530.2280-46-sean.j.christopherson@intel.com>
-Organization: Red Hat GmbH
+ <20191218215530.2280-31-sean.j.christopherson@intel.com>
+ <20191220103325.34fc2bf0.cohuck@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191220103325.34fc2bf0.cohuck@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 18 Dec 2019 13:55:30 -0800
-Sean Christopherson <sean.j.christopherson@intel.com> wrote:
-
-> Open code the allocation and freeing of the vcpu->run page in
-> kvm_vm_ioctl_create_vcpu() and kvm_vcpu_destroy() respectively.  Doing
-> so allows kvm_vcpu_init() to be a pure init function and eliminates
-> kvm_vcpu_uninit() entirely.
+On Fri, Dec 20, 2019 at 10:33:25AM +0100, Cornelia Huck wrote:
+> On Wed, 18 Dec 2019 13:55:15 -0800
+> Sean Christopherson <sean.j.christopherson@intel.com> wrote:
+> > +int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+> >  {
+> > -	struct kvm_vcpu *vcpu;
+> >  	struct sie_page *sie_page;
+> >  	int rc;
+> >  
+> > -	rc = -ENOMEM;
+> > -
+> > -	vcpu = kmem_cache_zalloc(kvm_vcpu_cache, GFP_KERNEL);
+> > -	if (!vcpu)
+> > -		goto out;
+> > -
+> > -	rc = kvm_vcpu_init(vcpu, kvm, id);
+> > -	if (rc)
+> > -		goto out_free_cpu;
+> > -
+> > -	rc = -ENOMEM;
+> > -
+> >  	BUILD_BUG_ON(sizeof(struct sie_page) != 4096);
+> >  	sie_page = (struct sie_page *) get_zeroed_page(GFP_KERNEL);
+> >  	if (!sie_page)
+> > -		goto out_uninit_vcpu;
+> > +		return -ENOMEM;
+> >  
+> >  	vcpu->arch.sie_block = &sie_page->sie_block;
+> >  	vcpu->arch.sie_block->itdba = (unsigned long) &sie_page->itdb;
+> > @@ -3087,15 +3070,11 @@ struct kvm_vcpu *kvm_arch_vcpu_create(struct kvm *kvm,
+> >  		 vcpu->arch.sie_block);
+> >  	trace_kvm_s390_create_vcpu(id, vcpu, vcpu->arch.sie_block);
+> >  
+> > -	return vcpu;
+> > +	return 0;
+> > +
+> >  out_free_sie_block:
+> >  	free_page((unsigned long)(vcpu->arch.sie_block));
+> > -out_uninit_vcpu:
+> > -	kvm_vcpu_uninit(vcpu);
+> > -out_free_cpu:
+> > -	kmem_cache_free(kvm_vcpu_cache, vcpu);
+> > -out:
+> > -	return ERR_PTR(rc);
+> > +	return rc;
 > 
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> ---
->  virt/kvm/kvm_main.c | 34 +++++++++++++---------------------
->  1 file changed, 13 insertions(+), 21 deletions(-)
+> This is getting a bit hard to follow across the patches, but I think rc
+> is now only set for ucontrol guests. So this looks correct right now,
+> but feels a bit brittle... should we maybe init rc to 0 and always
+> return rc instead?
 
-Reviewed-by: Cornelia Huck <cohuck@redhat.com>
+Yes, but only for a few patches until kvm_s390_vcpu_setup() is introduced,
+at which point @rc is unconditionally set at the end.
 
+        rc = kvm_s390_vcpu_setup(vcpu);
+        if (rc)
+                goto out_free_ucontrol_gmap;
+        return 0;
+
+My personal preference is to use "return 0;" when the return is known to
+be zero as it makes the success path obvious at a glance.  I also didn't
+want to intialize @rc at he beginning because then the sie_page allocation
+would look a bit funky:
+
+	int rc = 0;
+
+        BUILD_BUG_ON(sizeof(struct sie_page) != 4096);
+        sie_page = (struct sie_page *) get_zeroed_page(GFP_KERNEL);
+        if (!sie_page)
+                return -ENOMEM;
+
+
+An alternative would be to init @rc to -ENOMEM:
+
+        int rc = -ENOMEM;
+
+        BUILD_BUG_ON(sizeof(struct sie_page) != 4096);
+        sie_page = (struct sie_page *) get_zeroed_page(GFP_KERNEL);
+        if (!sie_page)
+                return rc;
+
+This would be my preference if you'd prefer to init @rc right away,
+especially if  __kvm_ucontrol_vcpu_init() is open coded here (discussion
+in patch 35, "KVM: s390: Manually invoke vcpu setup during 
+kvm_arch_vcpu_create()", e.g.:
+
+        int rc = -ENOMEM;
+
+        BUILD_BUG_ON(sizeof(struct sie_page) != 4096);
+        sie_page = (struct sie_page *) get_zeroed_page(GFP_KERNEL);
+        if (!sie_page)
+                return rc;
+
+	...
+
+        if (kvm_is_ucontrol(vcpu->kvm)) {
+                vcpu->arch.gmap = gmap_create(current->mm, -1UL);
+                if (!vcpu->arch.gmap)
+                        goto out_free_sie_block;
+                vcpu->arch.gmap->private = vcpu->kvm;
+        }
+
+        VM_EVENT(kvm, 3, "create cpu %d at 0x%pK, sie block at 0x%pK", id, vcpu,
+                 vcpu->arch.sie_block);
+        trace_kvm_s390_create_vcpu(id, vcpu, vcpu->arch.sie_block);
+
+        rc = kvm_s390_vcpu_setup(vcpu);
+        if (rc)
+                goto out_free_ucontrol_gmap;
+        return 0;
+
+out_free_ucontrol_gmap:
+        if (kvm_is_ucontrol(vcpu->kvm))
+                gmap_remove(vcpu->arch.gmap);
+out_free_sie_block:
+        free_page((unsigned long)(vcpu->arch.sie_block));
+        return rc;
