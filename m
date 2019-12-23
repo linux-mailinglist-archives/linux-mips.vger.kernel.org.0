@@ -2,98 +2,148 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 768F9129643
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Dec 2019 14:08:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8808412977D
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Dec 2019 15:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbfLWNIt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 Dec 2019 08:08:49 -0500
-Received: from frisell.zx2c4.com ([192.95.5.64]:54811 "EHLO frisell.zx2c4.com"
+        id S1726840AbfLWOby (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 Dec 2019 09:31:54 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:24560 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726680AbfLWNIt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 23 Dec 2019 08:08:49 -0500
-Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTP id aa521add;
-        Mon, 23 Dec 2019 12:11:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=date:from:to
-        :subject:message-id:mime-version:content-type
-        :content-transfer-encoding; s=mail; bh=wTgMZEUZRBvg+FUoKnmV0TjLF
-        8I=; b=Rt2oBm5E2RxTXUBuozP/1P1v98X3S9goVj0mzdIcdw4ytPXNbMEI0baOY
-        yct2I4vk2Q73mG49juZG8pVeRTX+TTovyfItnVqEmsYD/fttWcBWVlOiAF/M1Wnk
-        mEpwyggN4aHlDwVcilPwEwtdQIh2U16L/S474tLtAMFPZekPMrHxuabD4eeZrd91
-        25joYEuzf044lXgEiW5l3nDXtXaOvVquiwWhryjhBecegGWfnEJUmrsYkFFlMoco
-        HbHLW6rZEKijZBug3Sr5aOV48F+fvemwmyrzHDZESNbA/cgCqdd/tR1MaPWJ9Q9o
-        GzPAOpOkH1K7oYRlGBEs+ppCMl4wA==
-Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3fc974c8 (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256:NO);
-        Mon, 23 Dec 2019 12:11:34 +0000 (UTC)
-Date:   Mon, 23 Dec 2019 14:08:34 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arnd@arndb.de, paulburton@kernel.org
-Subject: vdso-related userspace crashes on 5.5 mips64
-Message-ID: <20191223130834.GA102399@zx2c4.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+        id S1726777AbfLWObD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 23 Dec 2019 09:31:03 -0500
+Received: from localhost (mailhub1-ext [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 47hMGS5T4sz9txjw;
+        Mon, 23 Dec 2019 15:30:56 +0100 (CET)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=cfApg9sH; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id NGVhIXcP7bQ8; Mon, 23 Dec 2019 15:30:56 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 47hMGS4B7Wz9txjv;
+        Mon, 23 Dec 2019 15:30:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1577111456; bh=yVxuGmQR051J6pETL5q29uPkTsP81kEW/OmeuvlbY/k=;
+        h=From:Subject:To:Cc:Date:From;
+        b=cfApg9sH1a9HHa55YFyf8L755JhqvakH05NG+R/qHkWzE5LUPrg24rswTt4CXyRyC
+         2bhyW8BcRvrp/qnckgOME1s7wI6VFu8a2RSUlLqOrq/21c00ILlXV1sAzj+xe5fgf+
+         5bND3VhxVxgMSsmr0NGgo6eGrLt7/vsuVuvx9Kh4=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AD3658B7AB;
+        Mon, 23 Dec 2019 15:31:01 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id AbT8jpQZojIw; Mon, 23 Dec 2019 15:31:01 +0100 (CET)
+Received: from po16098vm.idsi0.si.c-s.fr (po15451.idsi0.si.c-s.fr [172.25.230.100])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7C04C8B7A1;
+        Mon, 23 Dec 2019 15:31:01 +0100 (CET)
+Received: by po16098vm.idsi0.si.c-s.fr (Postfix, from userid 0)
+        id 57F2B637D4; Mon, 23 Dec 2019 14:31:01 +0000 (UTC)
+Message-Id: <cover.1577111363.git.christophe.leroy@c-s.fr>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Subject: [RFC PATCH v2 00/10] powerpc/32: switch VDSO to C implementation.
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, arnd@arndb.de,
+        tglx@linutronix.de, vincenzo.frascino@arm.com, luto@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        x86@kernel.org
+Date:   Mon, 23 Dec 2019 14:31:01 +0000 (UTC)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+This is a second tentative to switch powerpc/32 vdso to generic C implementation.
 
-I'm experiencing VDSO-related crashes on 5.5 with MIPS64. The MIPS64
-builders on build.wireguard.com are all red at the moment.
+It will likely not work on 64 bits or even build properly at the moment.
 
-It looks like libc is crashing with a null pointer dereference when
-doing any work after returning from clock_gettime. This manifests
-itself, for me, with calls to clock_gettime(CLOCK_PROCESS_CPUTIME_ID),
-because CLOCK_PROCESS_CPUTIME_ID is not in the VDSO. It looks in the
-VDSO, doesn't find it, and then proceeds to make the real syscall, when
-it crashes. I can simulate the same crash by simply adding a printf
-after a successful call to the vdso before returning. For example:
+powerpc is a bit special for VDSO as well as system calls in the
+way that it requires setting CR SO bit which cannot be done in C.
+Therefore, entry/exit and fallback needs to be performed in ASM.
 
-int __clock_gettime(clockid_t clk, struct timespec *ts)
-{
-  int r;
+To allow that, the fallback calls are moved out of the common code
+and left to the arches.
 
-#ifdef VDSO_CGT_SYM
-  int (*f)(clockid_t, struct timespec *) =
-    (int (*)(clockid_t, struct timespec *))vdso_func;
-  printf("vdso %p\n", f); // <-- this line does NOT crash.
-  if (f) {
-    r = f(clk, ts);
-    if (!r) {
-      printf("ret %d\n", r); // <-- this line DOES crash.
-      return r;
-    }
-    if (r == -EINVAL)
-      return __syscall_ret(r);
-  }
-#endif
-  printf("falling through\n"); // <--- this line DOES crash.
-  r = __syscall(SYS_clock_gettime, clk, ts); // <-- also, this line will crash too
-  if (r == -ENOSYS) {
-    if (clk == CLOCK_REALTIME) {
-      __syscall(SYS_gettimeofday, ts, 0);
-      ts->tv_nsec = (int)ts->tv_nsec * 1000;
-      return 0;
-    }
-    r = -EINVAL;
-  }
-  return __syscall_ret(r);
-}
+A few other changes in the common code have allowed performance improvement.
 
-It seems like somehow the stack frame is corrupted/unusable after a call
-to the vdso. But, returning immediately from clock_gettime after a call
-to the vdso allows the program to continue. Thus, this problem only
-manifests itself when using clocks that aren't handled by the vdso.
+The performance has improved since first RFC, but it is still lower than
+current assembly VDSO.
 
-It's possible this is due to some compiler ABI mismatch situation
-between userspace and kernelspace. However, I've only started seeing
-this happen with 5.5 and not on 5.4.
+On a powerpc8xx, with current powerpc/32 ASM VDSO:
 
-Does the above description immediately point to some recognizable
-change? If not, I'll keep debugging.
+gettimeofday:    vdso: 737 nsec/call
+clock-getres-realtime:    vdso: 475 nsec/call
+clock-gettime-realtime:    vdso: 892 nsec/call
+clock-getres-monotonic:    vdso: 475 nsec/call
+clock-gettime-monotonic:    vdso: 1014 nsec/call
 
-Thanks,
-Jason
+First try of C implementation:
+
+gettimeofday:    vdso: 1533 nsec/call
+clock-getres-realtime:    vdso: 853 nsec/call
+clock-gettime-realtime:    vdso: 1570 nsec/call
+clock-getres-monotonic:    vdso: 835 nsec/call
+clock-gettime-monotonic:    vdso: 1605 nsec/call
+
+With this series:
+
+gettimeofday:    vdso: 1016 nsec/call
+clock-getres-realtime:    vdso: 560 nsec/call
+clock-gettime-realtime:    vdso: 1192 nsec/call
+clock-getres-monotonic:    vdso: 560 nsec/call
+clock-gettime-monotonic:    vdso: 1192 nsec/call
+
+
+Changes made to other arches are untested, not even compiled.
+
+
+Christophe Leroy (10):
+  lib: vdso: ensure all arches have 32bit fallback
+  lib: vdso: move call to fallback out of common code.
+  lib: vdso: Change __cvdso_clock_gettime/getres_common() to
+    __cvdso_clock_gettime/getres()
+  lib: vdso: get pointer to vdso data from the arch
+  lib: vdso: inline do_hres()
+  lib: vdso: make do_coarse() return 0
+  lib: vdso: don't use READ_ONCE() in __c_kernel_time()
+  lib: vdso: Avoid duplication in __cvdso_clock_getres()
+  powerpc/vdso32: inline __get_datapage()
+  powerpc/32: Switch VDSO to C implementation.
+
+ arch/arm/include/asm/vdso/gettimeofday.h          |  26 +++
+ arch/arm/vdso/vgettimeofday.c                     |  32 ++-
+ arch/arm64/include/asm/vdso/compat_gettimeofday.h |   2 -
+ arch/arm64/include/asm/vdso/gettimeofday.h        |  26 +++
+ arch/arm64/kernel/vdso/vgettimeofday.c            |  24 +-
+ arch/arm64/kernel/vdso32/vgettimeofday.c          |  39 +++-
+ arch/mips/include/asm/vdso/gettimeofday.h         |  28 ++-
+ arch/mips/vdso/vgettimeofday.c                    |  56 ++++-
+ arch/powerpc/Kconfig                              |   2 +
+ arch/powerpc/include/asm/vdso/gettimeofday.h      |  45 ++++
+ arch/powerpc/include/asm/vdso/vsyscall.h          |  27 +++
+ arch/powerpc/include/asm/vdso_datapage.h          |  28 +--
+ arch/powerpc/kernel/asm-offsets.c                 |  23 +-
+ arch/powerpc/kernel/time.c                        |  92 +-------
+ arch/powerpc/kernel/vdso.c                        |  19 +-
+ arch/powerpc/kernel/vdso32/Makefile               |  19 +-
+ arch/powerpc/kernel/vdso32/cacheflush.S           |   9 +-
+ arch/powerpc/kernel/vdso32/datapage.S             |  28 +--
+ arch/powerpc/kernel/vdso32/gettimeofday.S         | 265 +++-------------------
+ arch/powerpc/kernel/vdso32/vgettimeofday.c        |  32 +++
+ arch/x86/entry/vdso/vclock_gettime.c              |  52 ++++-
+ arch/x86/include/asm/vdso/gettimeofday.h          |  28 ++-
+ lib/vdso/gettimeofday.c                           | 100 +++-----
+ 23 files changed, 505 insertions(+), 497 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/vdso/gettimeofday.h
+ create mode 100644 arch/powerpc/include/asm/vdso/vsyscall.h
+ create mode 100644 arch/powerpc/kernel/vdso32/vgettimeofday.c
+
+-- 
+2.13.3
+
