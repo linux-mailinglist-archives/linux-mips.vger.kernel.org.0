@@ -2,84 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8374212929D
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Dec 2019 09:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 768F9129643
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Dec 2019 14:08:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725822AbfLWIHp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 Dec 2019 03:07:45 -0500
-Received: from out28-75.mail.aliyun.com ([115.124.28.75]:43820 "EHLO
-        out28-75.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbfLWIHp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 Dec 2019 03:07:45 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09333964|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.139352-0.00420118-0.856447;DS=CONTINUE|ham_enroll_verification|0.00822306-0.000359199-0.991418;FP=0|0|0|0|0|-1|-1|-1;HT=e01a16370;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.GN20IFV_1577088451;
-Received: from 192.168.10.110(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GN20IFV_1577088451)
-          by smtp.aliyun-inc.com(10.147.41.231);
-          Mon, 23 Dec 2019 16:07:32 +0800
-Subject: Re: [BUG] CI20: interrupt-controller@10001000 didn't like hwirq-0x0
- to VIRQ8 mapping (rc=-19)
-To:     Paul Cercueil <paul@crapouillou.net>, Marc Zyngier <maz@kernel.org>
-References: <8BA39E30-53CB-47DB-8890-465ACB760402@goldelico.com>
- <1576861276.3.1@crapouillou.net>
- <4ea8fd0952b940b37a174fded9b5ebda@www.loen.fr>
- <1576862814.3.2@crapouillou.net>
-Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        MIPS Creator CI20 Development 
-        <mips-creator-ci20-dev@googlegroups.com>,
-        Zhou Yanjie <zhouyanjie@zoho.com>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <5E0075C4.60800@wanyeetech.com>
-Date:   Mon, 23 Dec 2019 16:07:32 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
- Thunderbird/38.8.0
+        id S1726709AbfLWNIt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 Dec 2019 08:08:49 -0500
+Received: from frisell.zx2c4.com ([192.95.5.64]:54811 "EHLO frisell.zx2c4.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726680AbfLWNIt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 23 Dec 2019 08:08:49 -0500
+Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTP id aa521add;
+        Mon, 23 Dec 2019 12:11:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=date:from:to
+        :subject:message-id:mime-version:content-type
+        :content-transfer-encoding; s=mail; bh=wTgMZEUZRBvg+FUoKnmV0TjLF
+        8I=; b=Rt2oBm5E2RxTXUBuozP/1P1v98X3S9goVj0mzdIcdw4ytPXNbMEI0baOY
+        yct2I4vk2Q73mG49juZG8pVeRTX+TTovyfItnVqEmsYD/fttWcBWVlOiAF/M1Wnk
+        mEpwyggN4aHlDwVcilPwEwtdQIh2U16L/S474tLtAMFPZekPMrHxuabD4eeZrd91
+        25joYEuzf044lXgEiW5l3nDXtXaOvVquiwWhryjhBecegGWfnEJUmrsYkFFlMoco
+        HbHLW6rZEKijZBug3Sr5aOV48F+fvemwmyrzHDZESNbA/cgCqdd/tR1MaPWJ9Q9o
+        GzPAOpOkH1K7oYRlGBEs+ppCMl4wA==
+Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3fc974c8 (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256:NO);
+        Mon, 23 Dec 2019 12:11:34 +0000 (UTC)
+Date:   Mon, 23 Dec 2019 14:08:34 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, paulburton@kernel.org
+Subject: vdso-related userspace crashes on 5.5 mips64
+Message-ID: <20191223130834.GA102399@zx2c4.com>
 MIME-Version: 1.0
-In-Reply-To: <1576862814.3.2@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Paul,
+Hi,
 
-On 2019年12月21日 01:26, Paul Cercueil wrote:
-> Hi Marc,
->
-> I wasn't aware of the bug, that's why there is no tag.
-> I can send a V2 with a fix tag (and Cc linux-stable) if Nikolaus 
-> reports it working.
->
+I'm experiencing VDSO-related crashes on 5.5 with MIPS64. The MIPS64
+builders on build.wireguard.com are all red at the moment.
 
-I also encountered similar problem on X1000. After applying the patch, 
-the problem is resolved. You can add:
+It looks like libc is crashing with a null pointer dereference when
+doing any work after returning from clock_gettime. This manifests
+itself, for me, with calls to clock_gettime(CLOCK_PROCESS_CPUTIME_ID),
+because CLOCK_PROCESS_CPUTIME_ID is not in the VDSO. It looks in the
+VDSO, doesn't find it, and then proceeds to make the real syscall, when
+it crashes. I can simulate the same crash by simply adding a printf
+after a successful call to the vdso before returning. For example:
 
-Tested-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+int __clock_gettime(clockid_t clk, struct timespec *ts)
+{
+  int r;
 
+#ifdef VDSO_CGT_SYM
+  int (*f)(clockid_t, struct timespec *) =
+    (int (*)(clockid_t, struct timespec *))vdso_func;
+  printf("vdso %p\n", f); // <-- this line does NOT crash.
+  if (f) {
+    r = f(clk, ts);
+    if (!r) {
+      printf("ret %d\n", r); // <-- this line DOES crash.
+      return r;
+    }
+    if (r == -EINVAL)
+      return __syscall_ret(r);
+  }
+#endif
+  printf("falling through\n"); // <--- this line DOES crash.
+  r = __syscall(SYS_clock_gettime, clk, ts); // <-- also, this line will crash too
+  if (r == -ENOSYS) {
+    if (clk == CLOCK_REALTIME) {
+      __syscall(SYS_gettimeofday, ts, 0);
+      ts->tv_nsec = (int)ts->tv_nsec * 1000;
+      return 0;
+    }
+    r = -EINVAL;
+  }
+  return __syscall_ret(r);
+}
 
-Thanks and best regards!
+It seems like somehow the stack frame is corrupted/unusable after a call
+to the vdso. But, returning immediately from clock_gettime after a call
+to the vdso allows the program to continue. Thus, this problem only
+manifests itself when using clocks that aren't handled by the vdso.
 
-> -Paul
->
->
-> Le ven., déc. 20, 2019 at 17:09, Marc Zyngier <maz@kernel.org> a écrit :
->> On 2019-12-20 17:01, Paul Cercueil wrote:
->>> Hi Nikolaus,
->>>
->>> Try with this: https://lkml.org/lkml/2019/11/22/1831
->>>
->>> And don't hesitate to add your Tested-by :)
->>
->> Is that an actual fix? It wasn't tagged as such, which is why
->> I didn't send it right away... It'd  be good to find out.
->>
->> Thanks,
->>
->>         M.
->> -- 
->> Jazz is not dead. It just smells funny...
->
+It's possible this is due to some compiler ABI mismatch situation
+between userspace and kernelspace. However, I've only started seeing
+this happen with 5.5 and not on 5.4.
 
+Does the above description immediately point to some recognizable
+change? If not, I'll keep debugging.
+
+Thanks,
+Jason
