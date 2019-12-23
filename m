@@ -2,61 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54222129256
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Dec 2019 08:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8374212929D
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Dec 2019 09:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725947AbfLWHnT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 Dec 2019 02:43:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53628 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725810AbfLWHnS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 23 Dec 2019 02:43:18 -0500
-Received: from localhost (unknown [223.226.34.186])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3F848206CB;
-        Mon, 23 Dec 2019 07:43:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577086998;
-        bh=KJEPHrjo3IgJEL5dK6b/sVo8088uqNTjG1eAtaxoMVA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TpSoWCVv2sM7iiHmW88m4qBrqTEPcxnHv3Cl8oPfm/OsbAThcfB25xvB0d5cmMyM8
-         ISqHnk2h6ive+3jgUPMhGxpJJEl/iZ59IYeP/UDzLewqaOTHi9yaw5IhhVwNQI6pbr
-         YSH472q+KzFVUuzM/BhOzVjYLcUiRfo7jVZGl0XM=
-Date:   Mon, 23 Dec 2019 13:13:13 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
-        mark.rutland@arm.com, paul@crapouillou.net,
-        Zubair.Kakakhel@imgtec.com, dan.j.williams@intel.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, 2374286503@qq.com
-Subject: Re: Add dmaengine driver for X1830.
-Message-ID: <20191223074313.GW2536@vkoul-mobl>
-References: <1576591140-125668-1-git-send-email-zhouyanjie@wanyeetech.com>
+        id S1725822AbfLWIHp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 Dec 2019 03:07:45 -0500
+Received: from out28-75.mail.aliyun.com ([115.124.28.75]:43820 "EHLO
+        out28-75.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725810AbfLWIHp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 23 Dec 2019 03:07:45 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09333964|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.139352-0.00420118-0.856447;DS=CONTINUE|ham_enroll_verification|0.00822306-0.000359199-0.991418;FP=0|0|0|0|0|-1|-1|-1;HT=e01a16370;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.GN20IFV_1577088451;
+Received: from 192.168.10.110(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GN20IFV_1577088451)
+          by smtp.aliyun-inc.com(10.147.41.231);
+          Mon, 23 Dec 2019 16:07:32 +0800
+Subject: Re: [BUG] CI20: interrupt-controller@10001000 didn't like hwirq-0x0
+ to VIRQ8 mapping (rc=-19)
+To:     Paul Cercueil <paul@crapouillou.net>, Marc Zyngier <maz@kernel.org>
+References: <8BA39E30-53CB-47DB-8890-465ACB760402@goldelico.com>
+ <1576861276.3.1@crapouillou.net>
+ <4ea8fd0952b940b37a174fded9b5ebda@www.loen.fr>
+ <1576862814.3.2@crapouillou.net>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        MIPS Creator CI20 Development 
+        <mips-creator-ci20-dev@googlegroups.com>,
+        Zhou Yanjie <zhouyanjie@zoho.com>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <5E0075C4.60800@wanyeetech.com>
+Date:   Mon, 23 Dec 2019 16:07:32 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <1576862814.3.2@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1576591140-125668-1-git-send-email-zhouyanjie@wanyeetech.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 17-12-19, 21:58, 周琰杰 (Zhou Yanjie) wrote:
-> 1.Modify the documentation description to make it more relevant.
-> 2.Add the dmaengine bindings for the X1830 SoC from Ingenic.
-> 3.Add support for probing the dma-jz4780 driver on the
->   X1830 SoC from Ingenic.
-> Notice:
-> The X1830's dma controller is very similar to the X1000, the
-> difference is that the X1830 has 32 dma channels and the
-> X1000 has only 8.
+Hi, Paul,
 
-Applied, thanks
+On 2019年12月21日 01:26, Paul Cercueil wrote:
+> Hi Marc,
+>
+> I wasn't aware of the bug, that's why there is no tag.
+> I can send a V2 with a fix tag (and Cc linux-stable) if Nikolaus 
+> reports it working.
+>
 
--- 
-~Vinod
+I also encountered similar problem on X1000. After applying the patch, 
+the problem is resolved. You can add:
+
+Tested-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+
+
+Thanks and best regards!
+
+> -Paul
+>
+>
+> Le ven., déc. 20, 2019 at 17:09, Marc Zyngier <maz@kernel.org> a écrit :
+>> On 2019-12-20 17:01, Paul Cercueil wrote:
+>>> Hi Nikolaus,
+>>>
+>>> Try with this: https://lkml.org/lkml/2019/11/22/1831
+>>>
+>>> And don't hesitate to add your Tested-by :)
+>>
+>> Is that an actual fix? It wasn't tagged as such, which is why
+>> I didn't send it right away... It'd  be good to find out.
+>>
+>> Thanks,
+>>
+>>         M.
+>> -- 
+>> Jazz is not dead. It just smells funny...
+>
+
