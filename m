@@ -2,43 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A7B129CB1
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Dec 2019 03:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E886E129CBC
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Dec 2019 03:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727105AbfLXCYV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 Dec 2019 21:24:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50130 "EHLO mail.kernel.org"
+        id S1727007AbfLXC1z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 Dec 2019 21:27:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51004 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726853AbfLXCYU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 23 Dec 2019 21:24:20 -0500
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+        id S1726853AbfLXC1z (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 23 Dec 2019 21:27:55 -0500
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 24B9A20715
-        for <linux-mips@vger.kernel.org>; Tue, 24 Dec 2019 02:24:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6EA0E2073A
+        for <linux-mips@vger.kernel.org>; Tue, 24 Dec 2019 02:27:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577154260;
-        bh=SPQ7Bj4a4eNp21OAcqYrY8SxuFJJaC2a6yGdIeeRS1o=;
+        s=default; t=1577154474;
+        bh=urdNwQ/OTeq2Z4hdgMEm4P258E+sy9JNDdnsxX/A+m0=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oPvK6VPzi1k2yyEjQny+BqytBOGY+Pvm5TAIa+d74eS8hvsJFnqaOLMcPbR1MVHcg
-         TJAbv69cwFBjDUU1LcTUwFGC1sdBHfjcRbhYXPuD/8fDpRJfQhxnnenWDdYNTNMhtK
-         WQtdttyNyw+EIZ8phdY7Uk7eLt21kAD5fLV0wvro=
-Received: by mail-wr1-f44.google.com with SMTP id y17so18645451wrh.5
-        for <linux-mips@vger.kernel.org>; Mon, 23 Dec 2019 18:24:20 -0800 (PST)
-X-Gm-Message-State: APjAAAVQ23ipwpMaoLC//ra57mAMnkJ3Tu06POlwoe2LI8ZiDoCDckE4
-        bzTp/5lcGEjN94NJJnGUBRvDCg9pHixEmVOMJvRROA==
-X-Google-Smtp-Source: APXvYqxjzD58lmej1/f4cJSP7HhlmKnh8jXfi6lwDjHJL4b+9GZQPe+XjiFw3YmwCo3ewdHy4fkwT46pqN+EiY2Rfws=
-X-Received: by 2002:adf:f491:: with SMTP id l17mr32117348wro.149.1577154258620;
- Mon, 23 Dec 2019 18:24:18 -0800 (PST)
+        b=e5/A2TMzWmvgBVcYJhSASriiw23lUwDkTKRRrtVzBPcnxYy86U7OFXx0HfahVlJoE
+         gR4r6zzD7UbCJZ6hzzKPUkP9RiRaHMYXHegUwL+YEO5JXAbwTkd+koSfO5sdzwK5Kg
+         cSsvwQzIEipkLbhYGIOw86xV4zgHkcuJxD1NzlXU=
+Received: by mail-wr1-f41.google.com with SMTP id y11so18624637wrt.6
+        for <linux-mips@vger.kernel.org>; Mon, 23 Dec 2019 18:27:54 -0800 (PST)
+X-Gm-Message-State: APjAAAUY2CFBaO+dEbxYlz0qHT7eUAh1TAJ4VKaUhyZUYTE5OI/DfjwM
+        X34e5yMQuQmEeRCbItfA/IwXa1nXz+UUfExAByXXBQ==
+X-Google-Smtp-Source: APXvYqzX7Wx0WQQGQxSsSx/rylu702E8XhFQtmBzrPd/vN45dmJAZ0EePwEz406rgBkEgebEu04CDi9IHkjEhDWde+I=
+X-Received: by 2002:adf:f20b:: with SMTP id p11mr31631213wro.195.1577154472974;
+ Mon, 23 Dec 2019 18:27:52 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1577111363.git.christophe.leroy@c-s.fr> <de073962c1a5911343e13c183fbbdef0fe95449e.1577111365.git.christophe.leroy@c-s.fr>
-In-Reply-To: <de073962c1a5911343e13c183fbbdef0fe95449e.1577111365.git.christophe.leroy@c-s.fr>
+References: <cover.1577111363.git.christophe.leroy@c-s.fr> <02861d0a05c2d48db4e9ee9093e2e2598093c372.1577111366.git.christophe.leroy@c-s.fr>
+In-Reply-To: <02861d0a05c2d48db4e9ee9093e2e2598093c372.1577111366.git.christophe.leroy@c-s.fr>
 From:   Andy Lutomirski <luto@kernel.org>
-Date:   Mon, 23 Dec 2019 18:24:05 -0800
-X-Gmail-Original-Message-ID: <CALCETrXWHk9J-pYm+eopMuW3x7Jr_LnzRjr94gq8g66xOO6SBg@mail.gmail.com>
-Message-ID: <CALCETrXWHk9J-pYm+eopMuW3x7Jr_LnzRjr94gq8g66xOO6SBg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 02/10] lib: vdso: move call to fallback out of
- common code.
+Date:   Mon, 23 Dec 2019 18:27:40 -0800
+X-Gmail-Original-Message-ID: <CALCETrW9hsrVVzudvRY22AqakcsrVzqp=SdwOTwW2zRBK+kEaA@mail.gmail.com>
+Message-ID: <CALCETrW9hsrVVzudvRY22AqakcsrVzqp=SdwOTwW2zRBK+kEaA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 04/10] lib: vdso: get pointer to vdso data from the arch
 To:     Christophe Leroy <christophe.leroy@c-s.fr>
 Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
@@ -61,51 +60,19 @@ X-Mailing-List: linux-mips@vger.kernel.org
 On Mon, Dec 23, 2019 at 6:31 AM Christophe Leroy
 <christophe.leroy@c-s.fr> wrote:
 >
-> On powerpc, VDSO functions and syscalls cannot be implemented in C
-> because the Linux kernel ABI requires that CR[SO] bit is set in case
-> of error and cleared when no error.
+> On powerpc, __arch_get_vdso_data() clobbers the link register,
+> requiring the caller to set a stack frame in order to save it.
 >
-> As this cannot be done in C, C VDSO functions and syscall'based
-> fallback need a trampoline in ASM.
->
-> By moving the fallback calls out of the common code, arches like
-> powerpc can implement both the call to C VDSO and the fallback call
-> in a single trampoline function.
+> As the parent function already has to set a stack frame and save
+> the link register to call the C vdso function, retriving the
+> vdso data pointer there is lighter.
 
-Maybe the issue is that I'm not a powerpc person, but I don't
-understand this.  The common vDSO code is in C.  Presumably this means
-that you need an asm trampoline no matter what to call the C code.  Is
-the improvement that, with this change, you can have the asm
-trampoline do a single branch, so it's logically:
+I'm confused.  Can't you inline __arch_get_vdso_data()?  Or is the
+issue that you can't retrieve the program counter on power without
+clobbering the link register?
 
-ret = [call the C code];
-if (ret == 0) {
- set success bit;
-} else {
- ret = fallback;
- if (ret == 0)
-  set success bit;
-else
-  set failure bit;
-}
+I would imagine that this patch generates worse code on any
+architecture with PC-relative addressing modes (which includes at
+least x86_64, and I would guess includes most modern architectures).
 
-return ret;
-
-instead of:
-
-ret = [call the C code, which includes the fallback];
-if (ret == 0)
-  set success bit;
-else
-  set failure bit;
-
-It's not obvious to me that the former ought to be faster.
-
->
-> The two advantages are:
-> - No need play back and forth with CR[SO] and negative return value.
-> - No stack frame is required in VDSO C functions for the fallbacks.
-
-How is no stack frame required?  Do you mean that the presence of the
-fallback causes worse code generation?  Can you improve the fallback
-instead?
+--Andy
