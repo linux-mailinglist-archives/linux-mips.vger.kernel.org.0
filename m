@@ -2,61 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5430812AA06
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Dec 2019 04:35:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FED512AF47
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Dec 2019 23:30:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726908AbfLZDfe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 25 Dec 2019 22:35:34 -0500
-Received: from eddie.linux-mips.org ([148.251.95.138]:49492 "EHLO
-        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726741AbfLZDfe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 25 Dec 2019 22:35:34 -0500
-X-Greylist: delayed 2064 seconds by postgrey-1.27 at vger.kernel.org; Wed, 25 Dec 2019 22:35:33 EST
-Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
-        with ESMTP id S23991197AbfLZDBGcj560 (ORCPT
-        <rfc822;stable@vger.kernel.org> + 2 others);
-        Thu, 26 Dec 2019 04:01:06 +0100
-Date:   Thu, 26 Dec 2019 03:01:06 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-cc:     'Paul Burton' <paulburton@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH] MIPS: Use __copy_{to,from}_user() for emulated FP
- loads/stores
-In-Reply-To: <e220ba9a19da41abba599b5873afa494@AcuMS.aculab.com>
-Message-ID: <alpine.LFD.2.21.1912260251520.3762799@eddie.linux-mips.org>
-References: <20191203204933.1642259-1-paulburton@kernel.org> <f5e09155580d417e9dcd07b1c20786ed@AcuMS.aculab.com> <20191204154048.eotzglp4rdlx4yzl@lantea.localdomain> <e220ba9a19da41abba599b5873afa494@AcuMS.aculab.com>
+        id S1726885AbfLZWaa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 26 Dec 2019 17:30:30 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:34626 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726653AbfLZWaa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 26 Dec 2019 17:30:30 -0500
+Received: by mail-io1-f67.google.com with SMTP id z193so24320366iof.1;
+        Thu, 26 Dec 2019 14:30:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=oXj0egOLEipXvK+Cz50CdkjFGq0EgLBghdmBZ/5exkA=;
+        b=BaM0Kv9PitrssQO4/B6aM9d1d2nm86iTYsvEAFl43U2yJ+W7z2dteG4zllHXMzH+Gy
+         E9gpMYNbg1shBDkfqlqJNLXxt9BtgnjChgh8j/0DMLtX4RRPWvq0JJgWDxM5oC0zP3tj
+         HviaSLP8+HUEJ51IJSjmZJ6oBb2/qsMtYqohZNyL6zk8aYYPQBi3UvDGY8JbN1eiSTCs
+         JTx4LOpb4C7FfBDJkKJx97v8CC975hLm4L07JjEcIOCnO9vUks9t+kO0LL5A9cdgzRwD
+         jU5d1f+mTRbyC4gESq4AcGR4Tz7pmZj4mr96f6dLMUh2pvK8liwuQzcKLrWWx3CKjS6a
+         KC8A==
+X-Gm-Message-State: APjAAAXXmMeAtRHeeX/4OUGZMg6lIqgzwAS7qQTz/1T6grl1CFFnUjOB
+        TM1h5sevwPIFgWc0qZLlXg==
+X-Google-Smtp-Source: APXvYqybilZELhr0wxtYJ1otx4J19UA6rDSIOcsvRrEk+czzp4qNmJFh99eChtoX3LmtuL9hvrlJFg==
+X-Received: by 2002:a5e:8b06:: with SMTP id g6mr31032706iok.61.1577399429555;
+        Thu, 26 Dec 2019 14:30:29 -0800 (PST)
+Received: from localhost ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id t88sm12617185ill.51.2019.12.26.14.30.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Dec 2019 14:30:28 -0800 (PST)
+Date:   Thu, 26 Dec 2019 15:30:27 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
+        mark.rutland@arm.com, paul@crapouillou.net, vkoul@kernel.org,
+        Zubair.Kakakhel@imgtec.com, dan.j.williams@intel.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, 2374286503@qq.com
+Subject: Re: [PATCH 1/2] dt-bindings: dmaengine: Add X1830 bindings.
+Message-ID: <20191226223027.GA29959@bogus>
+References: <1576591140-125668-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1576591140-125668-3-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1576591140-125668-3-git-send-email-zhouyanjie@wanyeetech.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 4 Dec 2019, David Laight wrote:
-
-> > We used to have separate get_user_unaligned() & put_user_unaligned()
-> > which would suggest that it's expected that get_user() & put_user()
-> > require their accesses be aligned, but they were removed by commit
-> > 3170d8d226c2 ("kill {__,}{get,put}_user_unaligned()") in v4.13.
-> > 
-> > But perhaps we should just take the second AdEL exception & recover via
-> > the fixups table. We definitely don't right now... Needs further
-> > investigation...
+On Tue, 17 Dec 2019 21:58:59 +0800, =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?=          wrote:
+> Add the dmaengine bindings for the X1830 Soc from Ingenic.
 > 
-> get/put_user can fault because the user page is absent (etc).
-> So there must be code to 'expect' a fault on those instructions.
+> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> ---
+>  .../devicetree/bindings/dma/jz4780-dma.txt         |  6 ++--
+>  include/dt-bindings/dma/x1830-dma.h                | 39 ++++++++++++++++++++++
+>  2 files changed, 43 insertions(+), 2 deletions(-)
+>  create mode 100644 include/dt-bindings/dma/x1830-dma.h
+> 
 
- As I recall we only emulate unaligned accesses with a subset of integer 
-load/store instructions (and then only if TIF_FIXADE is set, which is the 
-default), and never with FP load/store instructions.  Consequently I see 
-no point in doing this in the FP emulator either and I think these ought 
-to just send SIGBUS instead.  Otherwise you'll end up with user code that 
-works differently depending on whether the FP hardware is real or 
-emulated, which is really bad.
-
- FWIW,
-
-  Maciej
+Reviewed-by: Rob Herring <robh@kernel.org>
