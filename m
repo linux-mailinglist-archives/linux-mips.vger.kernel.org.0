@@ -2,68 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A192412A823
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Dec 2019 14:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFAE12A97D
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Dec 2019 02:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726388AbfLYNQI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 25 Dec 2019 08:16:08 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:39600 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726353AbfLYNQI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 25 Dec 2019 08:16:08 -0500
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 64C181EDCB8BF8285E13;
-        Wed, 25 Dec 2019 21:16:02 +0800 (CST)
-Received: from huawei.com (10.175.124.28) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.439.0; Wed, 25 Dec 2019
- 21:15:54 +0800
-From:   yu kuai <yukuai3@huawei.com>
-To:     <john@phrozen.org>, <ralf@linux-mips.org>, <paulburton@kernel.org>,
-        <jhogan@kernel.org>
-CC:     <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yukuai3@huawei.com>, <zhengbin13@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH] MIPS: ralink: add missing put_device in ill_acc_of_setup
-Date:   Wed, 25 Dec 2019 21:15:20 +0800
-Message-ID: <20191225131520.2505-1-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.17.2
+        id S1726885AbfLZBYr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 25 Dec 2019 20:24:47 -0500
+Received: from mail-il1-f176.google.com ([209.85.166.176]:42106 "EHLO
+        mail-il1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726881AbfLZBYq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 25 Dec 2019 20:24:46 -0500
+Received: by mail-il1-f176.google.com with SMTP id t2so3835470ilq.9;
+        Wed, 25 Dec 2019 17:24:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=L3yExkyYf6AESriKTXJcACWF6QhUwoYQa3Qvzxjf6dE=;
+        b=mx9/DkZH/xrpgTDi5fDyajlPr3ZqGZ1YCq8++8GarrixDwcOmKMarBlLP7okJYj/9A
+         EcmlL9Mkeo1sex07iFkM0ElQTxF191tH2WsJOo0iQ0liO3d7G3xDbAeH6E8dvNCaiA/1
+         TMTj3j8vvB5Jpk4psMrEI8YgIppujPTIwbyiqvo5Q0ppvTBCvoGgD+9s2QiHsoYPGZEd
+         5kTUJ8H+Nk/TEev4bAEqvpTu0jAaSD0Ops0ArSo1d2N+HKDhvSx42WQbnkIZocGRlRnx
+         reyebFPk383hIuS1IeQtITWPEoT3Fa6R+oVC4BLrFcABtgHrt6CbjVnOYFHuhvFxNpN/
+         JTpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L3yExkyYf6AESriKTXJcACWF6QhUwoYQa3Qvzxjf6dE=;
+        b=VnIXBTxthh1kmRcKPylj6FotzRlCnfO5BH85/OQXPn0krP8ihMfzqRInK4970+AY4u
+         LK6Db6wFwSEW+7O3f5ANlww51gubdUN6fxDW/wB3MS3891uxk0N18HbcQ1UJvaeVaXRn
+         ZX7fGL6ITCrNriNUTCVCPJvgUZ5GTdmg0l5sgdz/7xFew1+gP0/o0u/81Scn1srNxNIj
+         v95S2rThICbkSvbMY0xDbi1PhZkcTbqcBGwdOgFNCMC/KDooYsy24alNPCvgCB2JBgcI
+         sa8itoBPKufXSh4hGmMcQuHuqZy+mWvpy1L+QzMcuZcZvyhF7Ds72+kAjNOGgpD9esqr
+         06wA==
+X-Gm-Message-State: APjAAAVASeZ/e6HS+oRFgNLm1iixugMMp3G0dQIJmwRnKVlXAtT7Eow8
+        cHArhRdPHWoY2MwnDQwgS5VYuXlE3CQSqSVlsXw=
+X-Google-Smtp-Source: APXvYqx98UNNAob773r6Ac+yM8P9GornmaYZmT5aug84ibVLD7iMI0T1aiL3GQDclD9nllF4eprKp6MU+H4kEex6exo=
+X-Received: by 2002:a92:601:: with SMTP id x1mr34241177ilg.35.1577323486078;
+ Wed, 25 Dec 2019 17:24:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.124.28]
-X-CFilter-Loop: Reflected
+References: <1573478985-3535-1-git-send-email-yangtiezhu@loongson.cn> <a45b4f64-6685-c0d8-da81-5536246be2c4@loongson.cn>
+In-Reply-To: <a45b4f64-6685-c0d8-da81-5536246be2c4@loongson.cn>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 26 Dec 2019 09:29:35 +0800
+Message-ID: <CAAhV-H4EYpMAB1twRXWQaQuUPkys7K1jTs1vzAK5nYL+uiE4PQ@mail.gmail.com>
+Subject: Re: [PATCH v2] MIPS: Scan the DMI system information
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Jean Delvare <jdelvare@suse.com>, James Hogan <jhogan@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>, yangyinglu@loongson.cn
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-If of_find_device_by_node return 0 and ill_acc_of_setup return error,
-pdev don't have a corresponding object release.
+Reviewed-by: Huacai Chen <chenhc@lemote.com>
 
-Fix it by adding put_device.
+Huacai
 
-Signed-off-by: yu kuai <yukuai3@huawei.com>
----
- arch/mips/ralink/ill_acc.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/mips/ralink/ill_acc.c b/arch/mips/ralink/ill_acc.c
-index 0ddeb31afa93..bdf53807d7c2 100644
---- a/arch/mips/ralink/ill_acc.c
-+++ b/arch/mips/ralink/ill_acc.c
-@@ -67,11 +67,13 @@ static int __init ill_acc_of_setup(void)
- 	irq = irq_of_parse_and_map(np, 0);
- 	if (!irq) {
- 		dev_err(&pdev->dev, "failed to get irq\n");
-+		put_device(&pdev->dev);
- 		return -EINVAL;
- 	}
- 
- 	if (request_irq(irq, ill_acc_irq_handler, 0, "ill_acc", &pdev->dev)) {
- 		dev_err(&pdev->dev, "failed to request irq\n");
-+		put_device(&pdev->dev);
- 		return -EINVAL;
- 	}
- 
--- 
-2.17.2
-
+On Tue, Dec 17, 2019 at 12:11 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+> Ping,
+>
+> Any problem in this patch?
+>
+> Thanks,
+>
+> Tiezhu Yang
+>
