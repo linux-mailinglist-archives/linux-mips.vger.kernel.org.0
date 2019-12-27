@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5587012B85B
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Dec 2019 18:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 862DD12B766
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Dec 2019 18:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728098AbfL0RzF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 27 Dec 2019 12:55:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39270 "EHLO mail.kernel.org"
+        id S1728037AbfL0RtH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 27 Dec 2019 12:49:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42822 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727838AbfL0RmY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:42:24 -0500
+        id S1727612AbfL0Rof (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:44:35 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EF31820740;
-        Fri, 27 Dec 2019 17:42:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B961722522;
+        Fri, 27 Dec 2019 17:44:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577468544;
-        bh=0K9cbE1aPc4/ll3AYgNd+gIeX0L4S01M2CUtmrNS0QA=;
+        s=default; t=1577468674;
+        bh=YgJ1Rj9xwayAqRHWe+d8iXp2E6DpWtapNBQW+ENO0ok=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N4Jy1Osjijb/2yyaAOY1RRuglTfzHrPSpWFyMQn3kgHv9u+nHSpubxgNThP3xcD/9
-         Wqiw9scunyNSRSPjVLECKxlHf+pa1Wp7Tg7XtktDlbFR2dvS8MH8v13573RhmOgQgJ
-         MFYmKbUPtBFTLO7Qs8p1Qux7kDz4lDUwmnfBL6Hk=
+        b=KjtNQ0xFmWGUiaXa15XJvFLbxnB6XjejKN8/f7mpv8GqMN+U/wVfioD5zH1FRWDJi
+         p5EN8vwnOP3gMuumb6tpMgnu3FI03R538GIyTd2fyoKdOBCLHsEDrLjNV1zInTsNjW
+         i2mKC8jkmchHtrLbb+AcIJTt3MWGmDJ0j4Csufww=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Paul Chaignon <paul.chaignon@orange.com>,
@@ -31,12 +31,12 @@ Cc:     Paul Chaignon <paul.chaignon@orange.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 072/187] bpf, mips: Limit to 33 tail calls
-Date:   Fri, 27 Dec 2019 12:39:00 -0500
-Message-Id: <20191227174055.4923-72-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 34/84] bpf, mips: Limit to 33 tail calls
+Date:   Fri, 27 Dec 2019 12:43:02 -0500
+Message-Id: <20191227174352.6264-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
-References: <20191227174055.4923-1-sashal@kernel.org>
+In-Reply-To: <20191227174352.6264-1-sashal@kernel.org>
+References: <20191227174352.6264-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -69,10 +69,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/arch/mips/net/ebpf_jit.c b/arch/mips/net/ebpf_jit.c
-index 46b76751f3a5..3ec69d9cbe88 100644
+index 9bda82ed75eb..3832c4628608 100644
 --- a/arch/mips/net/ebpf_jit.c
 +++ b/arch/mips/net/ebpf_jit.c
-@@ -604,6 +604,7 @@ static void emit_const_to_reg(struct jit_ctx *ctx, int dst, u64 value)
+@@ -586,6 +586,7 @@ static void emit_const_to_reg(struct jit_ctx *ctx, int dst, u64 value)
  static int emit_bpf_tail_call(struct jit_ctx *ctx, int this_idx)
  {
  	int off, b_off;
@@ -80,7 +80,7 @@ index 46b76751f3a5..3ec69d9cbe88 100644
  
  	ctx->flags |= EBPF_SEEN_TC;
  	/*
-@@ -616,14 +617,14 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int this_idx)
+@@ -598,14 +599,14 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int this_idx)
  	b_off = b_imm(this_idx + 1, ctx);
  	emit_instr(ctx, bne, MIPS_R_AT, MIPS_R_ZERO, b_off);
  	/*
