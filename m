@@ -2,72 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FED512AF47
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Dec 2019 23:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5587012B85B
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Dec 2019 18:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbfLZWaa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 26 Dec 2019 17:30:30 -0500
-Received: from mail-io1-f67.google.com ([209.85.166.67]:34626 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726653AbfLZWaa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 26 Dec 2019 17:30:30 -0500
-Received: by mail-io1-f67.google.com with SMTP id z193so24320366iof.1;
-        Thu, 26 Dec 2019 14:30:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=oXj0egOLEipXvK+Cz50CdkjFGq0EgLBghdmBZ/5exkA=;
-        b=BaM0Kv9PitrssQO4/B6aM9d1d2nm86iTYsvEAFl43U2yJ+W7z2dteG4zllHXMzH+Gy
-         E9gpMYNbg1shBDkfqlqJNLXxt9BtgnjChgh8j/0DMLtX4RRPWvq0JJgWDxM5oC0zP3tj
-         HviaSLP8+HUEJ51IJSjmZJ6oBb2/qsMtYqohZNyL6zk8aYYPQBi3UvDGY8JbN1eiSTCs
-         JTx4LOpb4C7FfBDJkKJx97v8CC975hLm4L07JjEcIOCnO9vUks9t+kO0LL5A9cdgzRwD
-         jU5d1f+mTRbyC4gESq4AcGR4Tz7pmZj4mr96f6dLMUh2pvK8liwuQzcKLrWWx3CKjS6a
-         KC8A==
-X-Gm-Message-State: APjAAAXXmMeAtRHeeX/4OUGZMg6lIqgzwAS7qQTz/1T6grl1CFFnUjOB
-        TM1h5sevwPIFgWc0qZLlXg==
-X-Google-Smtp-Source: APXvYqybilZELhr0wxtYJ1otx4J19UA6rDSIOcsvRrEk+czzp4qNmJFh99eChtoX3LmtuL9hvrlJFg==
-X-Received: by 2002:a5e:8b06:: with SMTP id g6mr31032706iok.61.1577399429555;
-        Thu, 26 Dec 2019 14:30:29 -0800 (PST)
-Received: from localhost ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id t88sm12617185ill.51.2019.12.26.14.30.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Dec 2019 14:30:28 -0800 (PST)
-Date:   Thu, 26 Dec 2019 15:30:27 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
-        mark.rutland@arm.com, paul@crapouillou.net, vkoul@kernel.org,
-        Zubair.Kakakhel@imgtec.com, dan.j.williams@intel.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, 2374286503@qq.com
-Subject: Re: [PATCH 1/2] dt-bindings: dmaengine: Add X1830 bindings.
-Message-ID: <20191226223027.GA29959@bogus>
-References: <1576591140-125668-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1576591140-125668-3-git-send-email-zhouyanjie@wanyeetech.com>
+        id S1728098AbfL0RzF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 27 Dec 2019 12:55:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39270 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727838AbfL0RmY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:42:24 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EF31820740;
+        Fri, 27 Dec 2019 17:42:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1577468544;
+        bh=0K9cbE1aPc4/ll3AYgNd+gIeX0L4S01M2CUtmrNS0QA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=N4Jy1Osjijb/2yyaAOY1RRuglTfzHrPSpWFyMQn3kgHv9u+nHSpubxgNThP3xcD/9
+         Wqiw9scunyNSRSPjVLECKxlHf+pa1Wp7Tg7XtktDlbFR2dvS8MH8v13573RhmOgQgJ
+         MFYmKbUPtBFTLO7Qs8p1Qux7kDz4lDUwmnfBL6Hk=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Paul Chaignon <paul.chaignon@orange.com>,
+        Mahshid Khezri <khezri.mahshid@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 072/187] bpf, mips: Limit to 33 tail calls
+Date:   Fri, 27 Dec 2019 12:39:00 -0500
+Message-Id: <20191227174055.4923-72-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
+References: <20191227174055.4923-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1576591140-125668-3-git-send-email-zhouyanjie@wanyeetech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 17 Dec 2019 21:58:59 +0800, =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?=          wrote:
-> Add the dmaengine bindings for the X1830 Soc from Ingenic.
-> 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> ---
->  .../devicetree/bindings/dma/jz4780-dma.txt         |  6 ++--
->  include/dt-bindings/dma/x1830-dma.h                | 39 ++++++++++++++++++++++
->  2 files changed, 43 insertions(+), 2 deletions(-)
->  create mode 100644 include/dt-bindings/dma/x1830-dma.h
-> 
+From: Paul Chaignon <paul.chaignon@orange.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+[ Upstream commit e49e6f6db04e915dccb494ae10fa14888fea6f89 ]
+
+All BPF JIT compilers except RISC-V's and MIPS' enforce a 33-tail calls
+limit at runtime.  In addition, a test was recently added, in tailcalls2,
+to check this limit.
+
+This patch updates the tail call limit in MIPS' JIT compiler to allow
+33 tail calls.
+
+Fixes: b6bd53f9c4e8 ("MIPS: Add missing file for eBPF JIT.")
+Reported-by: Mahshid Khezri <khezri.mahshid@gmail.com>
+Signed-off-by: Paul Chaignon <paul.chaignon@orange.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Link: https://lore.kernel.org/bpf/b8eb2caac1c25453c539248e56ca22f74b5316af.1575916815.git.paul.chaignon@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/net/ebpf_jit.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/arch/mips/net/ebpf_jit.c b/arch/mips/net/ebpf_jit.c
+index 46b76751f3a5..3ec69d9cbe88 100644
+--- a/arch/mips/net/ebpf_jit.c
++++ b/arch/mips/net/ebpf_jit.c
+@@ -604,6 +604,7 @@ static void emit_const_to_reg(struct jit_ctx *ctx, int dst, u64 value)
+ static int emit_bpf_tail_call(struct jit_ctx *ctx, int this_idx)
+ {
+ 	int off, b_off;
++	int tcc_reg;
+ 
+ 	ctx->flags |= EBPF_SEEN_TC;
+ 	/*
+@@ -616,14 +617,14 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int this_idx)
+ 	b_off = b_imm(this_idx + 1, ctx);
+ 	emit_instr(ctx, bne, MIPS_R_AT, MIPS_R_ZERO, b_off);
+ 	/*
+-	 * if (--TCC < 0)
++	 * if (TCC-- < 0)
+ 	 *     goto out;
+ 	 */
+ 	/* Delay slot */
+-	emit_instr(ctx, daddiu, MIPS_R_T5,
+-		   (ctx->flags & EBPF_TCC_IN_V1) ? MIPS_R_V1 : MIPS_R_S4, -1);
++	tcc_reg = (ctx->flags & EBPF_TCC_IN_V1) ? MIPS_R_V1 : MIPS_R_S4;
++	emit_instr(ctx, daddiu, MIPS_R_T5, tcc_reg, -1);
+ 	b_off = b_imm(this_idx + 1, ctx);
+-	emit_instr(ctx, bltz, MIPS_R_T5, b_off);
++	emit_instr(ctx, bltz, tcc_reg, b_off);
+ 	/*
+ 	 * prog = array->ptrs[index];
+ 	 * if (prog == NULL)
+-- 
+2.20.1
+
