@@ -2,37 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6D112C7B9
-	for <lists+linux-mips@lfdr.de>; Sun, 29 Dec 2019 19:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B494212C855
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Dec 2019 19:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730988AbfL2Rpx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 29 Dec 2019 12:45:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55248 "EHLO mail.kernel.org"
+        id S1732498AbfL2Rxf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 Dec 2019 12:53:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40656 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730680AbfL2Rpx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 29 Dec 2019 12:45:53 -0500
+        id S1732496AbfL2Rxf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 29 Dec 2019 12:53:35 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 26CBD207FF;
-        Sun, 29 Dec 2019 17:45:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0E290206DB;
+        Sun, 29 Dec 2019 17:53:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577641552;
-        bh=mIdzJkIw2OYgLtqSIPrHvNBRvba93PhJp+islfrOncg=;
+        s=default; t=1577642014;
+        bh=aZoWN10Nz1jaXQcyMMAW7mBPOrCR5zcxUc8nfzrtGUU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TIKoP9YSLbeL5B5LRrdlsNYbq4IU7O1+Oj2m3pJsSuc3cQg+sOuzqhXbJUwAJAr3g
-         rWmcTn86o1Y4LMYNJD08a9EWUNt1udkSBMAyNU9/vU4PM6+FRVMBdrAjEZpqN10BaJ
-         Wwv/9nmkebkiUeo6hUO5PFxoJ2hZmxQH2DJPN3Ag=
+        b=lZSh7JnnpPBJl6GoZJUFkEvweZCguN4P8QnOkMz1lGQaoTYxRg8gdDwn/B2MdN5rm
+         wwOPJiXSKkFM8EMRQO6BHCMeEFUdDTeqF1oNw+uCT/melK34TRknHwON+wklSAz3Gb
+         S8CS5WAUbM9wZ/IKIG9VpO/cCpYB3SvwrE11n1oI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        linux-mips@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        stable@vger.kernel.org, Hauke Mehrtens <hauke@hauke-m.de>,
+        ralf@linux-mips.org, jhogan@kernel.org, john@phrozen.org,
+        NeilBrown <neil@brown.name>, linux-mips@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 114/434] MIPS: futex: Emit Loongson3 sync workarounds within asm
-Date:   Sun, 29 Dec 2019 18:22:47 +0100
-Message-Id: <20191229172709.236339830@linuxfoundation.org>
+Subject: [PATCH 5.4 306/434] MIPS: ralink: enable PCI support only if driver for mt7621 SoC is selected
+Date:   Sun, 29 Dec 2019 18:25:59 +0100
+Message-Id: <20191229172722.278894483@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20191229172702.393141737@linuxfoundation.org>
 References: <20191229172702.393141737@linuxfoundation.org>
@@ -45,137 +46,57 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Burton <paul.burton@mips.com>
+From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-[ Upstream commit 3c1d3f0979721a39dd2980c97466127ce65aa130 ]
+[ Upstream commit 3b2fa0c92686562ac0b8cf00c0326a45814f8e18 ]
 
-Generate the sync instructions required to workaround Loongson3 LL/SC
-errata within inline asm blocks, which feels a little safer than doing
-it from C where strictly speaking the compiler would be well within its
-rights to insert a memory access between the separate asm statements we
-previously had, containing sync & ll instructions respectively.
+Some versions of SoC MT7621 have three PCI express hosts. Some boards
+make use of those PCI through the staging driver mt7621-pci. Recently
+PCI support has been removed from MT7621 Soc kernel configuration due
+to a build error. This makes imposible to compile staging driver and
+produces a regression for gnubee based boards. Enable support for PCI
+again but enable it only if staging mt7621-pci driver is selected.
 
-Signed-off-by: Paul Burton <paul.burton@mips.com>
+Fixes: c4d48cf5e2f0 ("MIPS: ralink: deactivate PCI support for SOC_MT7621")
+Cc: Hauke Mehrtens <hauke@hauke-m.de>
+Cc: ralf@linux-mips.org
+Cc: jhogan@kernel.org
+Cc: john@phrozen.org
+Cc: NeilBrown <neil@brown.name>
 Cc: linux-mips@vger.kernel.org
-Cc: Huacai Chen <chenhc@lemote.com>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Link: https://lore.kernel.org/r/20191019081233.7337-1-sergio.paracuellos@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/barrier.h | 13 +++++++------
- arch/mips/include/asm/futex.h   | 15 +++++++--------
- 2 files changed, 14 insertions(+), 14 deletions(-)
+ arch/mips/ralink/Kconfig           | 1 +
+ drivers/staging/mt7621-pci/Kconfig | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/barrier.h b/arch/mips/include/asm/barrier.h
-index 9228f7386220..fb842965d541 100644
---- a/arch/mips/include/asm/barrier.h
-+++ b/arch/mips/include/asm/barrier.h
-@@ -218,13 +218,14 @@
-  * ordering will be done by smp_llsc_mb() and friends.
-  */
- #if defined(CONFIG_WEAK_REORDERING_BEYOND_LLSC) && defined(CONFIG_SMP)
--#define __WEAK_LLSC_MB		"	sync	\n"
--#define smp_llsc_mb()		__asm__ __volatile__(__WEAK_LLSC_MB : : :"memory")
--#define __LLSC_CLOBBER
-+# define __WEAK_LLSC_MB		sync
-+# define smp_llsc_mb() \
-+	__asm__ __volatile__(__stringify(__WEAK_LLSC_MB) : : :"memory")
-+# define __LLSC_CLOBBER
- #else
--#define __WEAK_LLSC_MB		"		\n"
--#define smp_llsc_mb()		do { } while (0)
--#define __LLSC_CLOBBER		"memory"
-+# define __WEAK_LLSC_MB
-+# define smp_llsc_mb()		do { } while (0)
-+# define __LLSC_CLOBBER		"memory"
- #endif
+diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
+index 1434fa60f3db..94e9ce994494 100644
+--- a/arch/mips/ralink/Kconfig
++++ b/arch/mips/ralink/Kconfig
+@@ -51,6 +51,7 @@ choice
+ 		select MIPS_GIC
+ 		select COMMON_CLK
+ 		select CLKSRC_MIPS_GIC
++		select HAVE_PCI if PCI_MT7621
+ endchoice
  
- #ifdef CONFIG_CPU_CAVIUM_OCTEON
-diff --git a/arch/mips/include/asm/futex.h b/arch/mips/include/asm/futex.h
-index b83b0397462d..54cf20530931 100644
---- a/arch/mips/include/asm/futex.h
-+++ b/arch/mips/include/asm/futex.h
-@@ -16,6 +16,7 @@
- #include <asm/barrier.h>
- #include <asm/compiler.h>
- #include <asm/errno.h>
-+#include <asm/sync.h>
- #include <asm/war.h>
- 
- #define __futex_atomic_op(insn, ret, oldval, uaddr, oparg)		\
-@@ -32,7 +33,7 @@
- 		"	.set	arch=r4000			\n"	\
- 		"2:	sc	$1, %2				\n"	\
- 		"	beqzl	$1, 1b				\n"	\
--		__WEAK_LLSC_MB						\
-+		__stringify(__WEAK_LLSC_MB)				\
- 		"3:						\n"	\
- 		"	.insn					\n"	\
- 		"	.set	pop				\n"	\
-@@ -50,19 +51,19 @@
- 		  "i" (-EFAULT)						\
- 		: "memory");						\
- 	} else if (cpu_has_llsc) {					\
--		loongson_llsc_mb();					\
- 		__asm__ __volatile__(					\
- 		"	.set	push				\n"	\
- 		"	.set	noat				\n"	\
- 		"	.set	push				\n"	\
- 		"	.set	"MIPS_ISA_ARCH_LEVEL"		\n"	\
-+		"	" __SYNC(full, loongson3_war) "		\n"	\
- 		"1:	"user_ll("%1", "%4")" # __futex_atomic_op\n"	\
- 		"	.set	pop				\n"	\
- 		"	" insn	"				\n"	\
- 		"	.set	"MIPS_ISA_ARCH_LEVEL"		\n"	\
- 		"2:	"user_sc("$1", "%2")"			\n"	\
- 		"	beqz	$1, 1b				\n"	\
--		__WEAK_LLSC_MB						\
-+		__stringify(__WEAK_LLSC_MB)				\
- 		"3:						\n"	\
- 		"	.insn					\n"	\
- 		"	.set	pop				\n"	\
-@@ -147,7 +148,7 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
- 		"	.set	arch=r4000				\n"
- 		"2:	sc	$1, %2					\n"
- 		"	beqzl	$1, 1b					\n"
--		__WEAK_LLSC_MB
-+		__stringify(__WEAK_LLSC_MB)
- 		"3:							\n"
- 		"	.insn						\n"
- 		"	.set	pop					\n"
-@@ -164,13 +165,13 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
- 		  "i" (-EFAULT)
- 		: "memory");
- 	} else if (cpu_has_llsc) {
--		loongson_llsc_mb();
- 		__asm__ __volatile__(
- 		"# futex_atomic_cmpxchg_inatomic			\n"
- 		"	.set	push					\n"
- 		"	.set	noat					\n"
- 		"	.set	push					\n"
- 		"	.set	"MIPS_ISA_ARCH_LEVEL"			\n"
-+		"	" __SYNC(full, loongson3_war) "			\n"
- 		"1:	"user_ll("%1", "%3")"				\n"
- 		"	bne	%1, %z4, 3f				\n"
- 		"	.set	pop					\n"
-@@ -178,8 +179,7 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
- 		"	.set	"MIPS_ISA_ARCH_LEVEL"			\n"
- 		"2:	"user_sc("$1", "%2")"				\n"
- 		"	beqz	$1, 1b					\n"
--		__WEAK_LLSC_MB
--		"3:							\n"
-+		"3:	" __SYNC_ELSE(full, loongson3_war, __WEAK_LLSC_MB) "\n"
- 		"	.insn						\n"
- 		"	.set	pop					\n"
- 		"	.section .fixup,\"ax\"				\n"
-@@ -194,7 +194,6 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
- 		: GCC_OFF_SMALL_ASM() (*uaddr), "Jr" (oldval), "Jr" (newval),
- 		  "i" (-EFAULT)
- 		: "memory");
--		loongson_llsc_mb();
- 	} else
- 		return -ENOSYS;
- 
+ choice
+diff --git a/drivers/staging/mt7621-pci/Kconfig b/drivers/staging/mt7621-pci/Kconfig
+index af928b75a940..ce58042f2f21 100644
+--- a/drivers/staging/mt7621-pci/Kconfig
++++ b/drivers/staging/mt7621-pci/Kconfig
+@@ -2,7 +2,6 @@
+ config PCI_MT7621
+ 	tristate "MediaTek MT7621 PCI Controller"
+ 	depends on RALINK
+-	depends on PCI
+ 	select PCI_DRIVERS_GENERIC
+ 	help
+ 	  This selects a driver for the MediaTek MT7621 PCI Controller.
 -- 
 2.20.1
 
