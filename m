@@ -2,103 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 826F112B997
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Dec 2019 19:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DABC712C417
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Dec 2019 18:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727189AbfL0SGN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 27 Dec 2019 13:06:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59870 "EHLO mail.kernel.org"
+        id S1727734AbfL2R0T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 Dec 2019 12:26:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47188 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728192AbfL0SCv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 27 Dec 2019 13:02:51 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1728165AbfL2R0T (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 29 Dec 2019 12:26:19 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F14B421744;
-        Fri, 27 Dec 2019 18:02:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8390721744;
+        Sun, 29 Dec 2019 17:26:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577469771;
-        bh=++ratIWmAhE5tE4tsd1sFbpNc6dWgtnuWykcqSCiRKg=;
+        s=default; t=1577640378;
+        bh=siKNwuh2zRW0dKAyJxEQER2/TqmLDXbV0rH2BnzudpM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rjwyIwsX+1lBK0+Z7AiIBsLo94RJsJateN5Js3oKTDzF5wGYoZxHuX/eNiDOZ4xqK
-         j5LIGhh1nl+yStOyxD6rbfpU2rNrN+9GMGDFS6Hcn3qI4TUNpPH8FVuWav+FvKF3UA
-         w1FHojhN/zjgi4XZjaSHsVqKuYmdGoHZT/iZEkU8=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Paul Chaignon <paul.chaignon@orange.com>,
-        Mahshid Khezri <khezri.mahshid@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 22/57] bpf, mips: Limit to 33 tail calls
-Date:   Fri, 27 Dec 2019 13:01:47 -0500
-Message-Id: <20191227180222.7076-22-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191227180222.7076-1-sashal@kernel.org>
-References: <20191227180222.7076-1-sashal@kernel.org>
+        b=RYaXYrykyxp72E+Kqdwfr9O9VwClc5Iuc92swMvEKp1Nl3aXTfYATuswx6uIoEsuX
+         moFvRS0pKOtmffn6b4HpPrUAR1am1NAbPFOKGODV2TwZtx9J8Hp3F2PrSD/x/QUPas
+         QVtoqJmDCulzupDmikCmEGMGOwGguXyia1nbjIrI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, Mike Rapoport <rppt@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 134/161] mips: fix build when "48 bits virtual memory" is enabled
+Date:   Sun, 29 Dec 2019 18:19:42 +0100
+Message-Id: <20191229162439.416974712@linuxfoundation.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20191229162355.500086350@linuxfoundation.org>
+References: <20191229162355.500086350@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Chaignon <paul.chaignon@orange.com>
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-[ Upstream commit e49e6f6db04e915dccb494ae10fa14888fea6f89 ]
+[ Upstream commit 3ed6751bb8fa89c3014399bb0414348499ee202a ]
 
-All BPF JIT compilers except RISC-V's and MIPS' enforce a 33-tail calls
-limit at runtime.  In addition, a test was recently added, in tailcalls2,
-to check this limit.
+With CONFIG_MIPS_VA_BITS_48=y the build fails miserably:
 
-This patch updates the tail call limit in MIPS' JIT compiler to allow
-33 tail calls.
+  CC      arch/mips/kernel/asm-offsets.s
+In file included from arch/mips/include/asm/pgtable.h:644,
+                 from include/linux/mm.h:99,
+                 from arch/mips/kernel/asm-offsets.c:15:
+include/asm-generic/pgtable.h:16:2: error: #error CONFIG_PGTABLE_LEVELS is not consistent with __PAGETABLE_{P4D,PUD,PMD}_FOLDED
+ #error CONFIG_PGTABLE_LEVELS is not consistent with __PAGETABLE_{P4D,PUD,PMD}_FOLDED
+  ^~~~~
+include/asm-generic/pgtable.h:390:28: error: unknown type name 'p4d_t'; did you mean 'pmd_t'?
+ static inline int p4d_same(p4d_t p4d_a, p4d_t p4d_b)
+                            ^~~~~
+                            pmd_t
 
-Fixes: b6bd53f9c4e8 ("MIPS: Add missing file for eBPF JIT.")
-Reported-by: Mahshid Khezri <khezri.mahshid@gmail.com>
-Signed-off-by: Paul Chaignon <paul.chaignon@orange.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Link: https://lore.kernel.org/bpf/b8eb2caac1c25453c539248e56ca22f74b5316af.1575916815.git.paul.chaignon@gmail.com
+[ ... more such errors ... ]
+
+scripts/Makefile.build:99: recipe for target 'arch/mips/kernel/asm-offsets.s' failed
+make[2]: *** [arch/mips/kernel/asm-offsets.s] Error 1
+
+This happens because when CONFIG_MIPS_VA_BITS_48 enables 4th level of the
+page tables, but neither pgtable-nop4d.h nor 5level-fixup.h are included to
+cope with the 5th level.
+
+Replace #ifdef conditions around includes of the pgtable-nop{m,u}d.h with
+explicit CONFIG_PGTABLE_LEVELS and add include of 5level-fixup.h for the
+case when CONFIG_PGTABLE_LEVELS==4
+
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+Signed-off-by: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: Mike Rapoport <rppt@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/net/ebpf_jit.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ arch/mips/include/asm/pgtable-64.h | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/net/ebpf_jit.c b/arch/mips/net/ebpf_jit.c
-index 42faa95ce664..57a7a9d68475 100644
---- a/arch/mips/net/ebpf_jit.c
-+++ b/arch/mips/net/ebpf_jit.c
-@@ -612,6 +612,7 @@ static void emit_const_to_reg(struct jit_ctx *ctx, int dst, u64 value)
- static int emit_bpf_tail_call(struct jit_ctx *ctx, int this_idx)
- {
- 	int off, b_off;
-+	int tcc_reg;
+diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
+index a2252c2a9ded..d0b9912fb63f 100644
+--- a/arch/mips/include/asm/pgtable-64.h
++++ b/arch/mips/include/asm/pgtable-64.h
+@@ -18,10 +18,12 @@
+ #include <asm/fixmap.h>
  
- 	ctx->flags |= EBPF_SEEN_TC;
- 	/*
-@@ -624,14 +625,14 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int this_idx)
- 	b_off = b_imm(this_idx + 1, ctx);
- 	emit_instr(ctx, bne, MIPS_R_AT, MIPS_R_ZERO, b_off);
- 	/*
--	 * if (--TCC < 0)
-+	 * if (TCC-- < 0)
- 	 *     goto out;
- 	 */
- 	/* Delay slot */
--	emit_instr(ctx, daddiu, MIPS_R_T5,
--		   (ctx->flags & EBPF_TCC_IN_V1) ? MIPS_R_V1 : MIPS_R_S4, -1);
-+	tcc_reg = (ctx->flags & EBPF_TCC_IN_V1) ? MIPS_R_V1 : MIPS_R_S4;
-+	emit_instr(ctx, daddiu, MIPS_R_T5, tcc_reg, -1);
- 	b_off = b_imm(this_idx + 1, ctx);
--	emit_instr(ctx, bltz, MIPS_R_T5, b_off);
-+	emit_instr(ctx, bltz, tcc_reg, b_off);
- 	/*
- 	 * prog = array->ptrs[index];
- 	 * if (prog == NULL)
+ #define __ARCH_USE_5LEVEL_HACK
+-#if defined(CONFIG_PAGE_SIZE_64KB) && !defined(CONFIG_MIPS_VA_BITS_48)
++#if CONFIG_PGTABLE_LEVELS == 2
+ #include <asm-generic/pgtable-nopmd.h>
+-#elif !(defined(CONFIG_PAGE_SIZE_4KB) && defined(CONFIG_MIPS_VA_BITS_48))
++#elif CONFIG_PGTABLE_LEVELS == 3
+ #include <asm-generic/pgtable-nopud.h>
++#else
++#include <asm-generic/5level-fixup.h>
+ #endif
+ 
+ /*
+@@ -222,6 +224,9 @@ static inline unsigned long pgd_page_vaddr(pgd_t pgd)
+ 	return pgd_val(pgd);
+ }
+ 
++#define pgd_phys(pgd)		virt_to_phys((void *)pgd_val(pgd))
++#define pgd_page(pgd)		(pfn_to_page(pgd_phys(pgd) >> PAGE_SHIFT))
++
+ static inline pud_t *pud_offset(pgd_t *pgd, unsigned long address)
+ {
+ 	return (pud_t *)pgd_page_vaddr(*pgd) + pud_index(address);
 -- 
 2.20.1
+
+
 
