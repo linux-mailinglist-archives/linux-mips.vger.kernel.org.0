@@ -2,37 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E58F212C474
-	for <lists+linux-mips@lfdr.de>; Sun, 29 Dec 2019 18:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F8712C53D
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Dec 2019 18:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728899AbfL2R3z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 29 Dec 2019 12:29:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55070 "EHLO mail.kernel.org"
+        id S1729747AbfL2Re7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 Dec 2019 12:34:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38774 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728892AbfL2R3y (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 29 Dec 2019 12:29:54 -0500
+        id S1729745AbfL2Re7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 29 Dec 2019 12:34:59 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0B37220722;
-        Sun, 29 Dec 2019 17:29:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7A587206DB;
+        Sun, 29 Dec 2019 17:34:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577640593;
-        bh=FoAkvQ84Aqr7ov3qxU+UYFel2j4aZ8kOa2zDHZChO/M=;
+        s=default; t=1577640897;
+        bh=fNiXTEGDcvUF3M392SCaoc00rIAL2EBcPiYfH/i1u/w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xITgH2RjjCPOHwbVSaYDgQlyhUREQ/FNu1CoD1KMYO8I2Tb3jpbi636fnlilXV1RL
-         YioMeZTgwPkgGd7luyL3F7yx/WLQDvYzhRPZwVOyzivqB1z13peBgVuW1TqoP37Dp8
-         MEVZIgLm7J54fGBm8gfxYqaUOITOnwDhx0hMgGCo=
+        b=FiSLG2Vbbf6ZNGwu0u4vVr6AIw7rs8D3YeFUEvItJer6bkH+hlpu2YOgiAoHWDNEO
+         jZ4w57tKXJzLDpK9lJX6gvwmHOwzlLdUaRWsc72JJH6ibJSaOASuATvu/YpdhZXaIp
+         9CCuzCooguOmqqdvVuWOoyvHkYGyRjE9OBaGXEeI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        linux-mips@vger.kernel.org, Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        stable@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, Mike Rapoport <rppt@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 060/219] MIPS: syscall: Emit Loongson3 sync workarounds within asm
-Date:   Sun, 29 Dec 2019 18:17:42 +0100
-Message-Id: <20191229162515.892321194@linuxfoundation.org>
+Subject: [PATCH 4.19 185/219] mips: fix build when "48 bits virtual memory" is enabled
+Date:   Sun, 29 Dec 2019 18:19:47 +0100
+Message-Id: <20191229162537.238599739@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20191229162508.458551679@linuxfoundation.org>
 References: <20191229162508.458551679@linuxfoundation.org>
@@ -45,46 +47,79 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Burton <paul.burton@mips.com>
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-[ Upstream commit e84957e6ae043bb83ad6ae7e949a1ce97b6bbfef ]
+[ Upstream commit 3ed6751bb8fa89c3014399bb0414348499ee202a ]
 
-Generate the sync instructions required to workaround Loongson3 LL/SC
-errata within inline asm blocks, which feels a little safer than doing
-it from C where strictly speaking the compiler would be well within its
-rights to insert a memory access between the separate asm statements we
-previously had, containing sync & ll instructions respectively.
+With CONFIG_MIPS_VA_BITS_48=y the build fails miserably:
 
-Signed-off-by: Paul Burton <paul.burton@mips.com>
+  CC      arch/mips/kernel/asm-offsets.s
+In file included from arch/mips/include/asm/pgtable.h:644,
+                 from include/linux/mm.h:99,
+                 from arch/mips/kernel/asm-offsets.c:15:
+include/asm-generic/pgtable.h:16:2: error: #error CONFIG_PGTABLE_LEVELS is not consistent with __PAGETABLE_{P4D,PUD,PMD}_FOLDED
+ #error CONFIG_PGTABLE_LEVELS is not consistent with __PAGETABLE_{P4D,PUD,PMD}_FOLDED
+  ^~~~~
+include/asm-generic/pgtable.h:390:28: error: unknown type name 'p4d_t'; did you mean 'pmd_t'?
+ static inline int p4d_same(p4d_t p4d_a, p4d_t p4d_b)
+                            ^~~~~
+                            pmd_t
+
+[ ... more such errors ... ]
+
+scripts/Makefile.build:99: recipe for target 'arch/mips/kernel/asm-offsets.s' failed
+make[2]: *** [arch/mips/kernel/asm-offsets.s] Error 1
+
+This happens because when CONFIG_MIPS_VA_BITS_48 enables 4th level of the
+page tables, but neither pgtable-nop4d.h nor 5level-fixup.h are included to
+cope with the 5th level.
+
+Replace #ifdef conditions around includes of the pgtable-nop{m,u}d.h with
+explicit CONFIG_PGTABLE_LEVELS and add include of 5level-fixup.h for the
+case when CONFIG_PGTABLE_LEVELS==4
+
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+Signed-off-by: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
 Cc: linux-mips@vger.kernel.org
-Cc: Huacai Chen <chenhc@lemote.com>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc: linux-kernel@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: Mike Rapoport <rppt@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/kernel/syscall.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/mips/include/asm/pgtable-64.h | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/kernel/syscall.c b/arch/mips/kernel/syscall.c
-index 69c17b549fd3..10990434bf94 100644
---- a/arch/mips/kernel/syscall.c
-+++ b/arch/mips/kernel/syscall.c
-@@ -37,6 +37,7 @@
- #include <asm/signal.h>
- #include <asm/sim.h>
- #include <asm/shmparam.h>
-+#include <asm/sync.h>
- #include <asm/sysmips.h>
- #include <asm/switch_to.h>
+diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
+index 93a9dce31f25..813dfe5f45a5 100644
+--- a/arch/mips/include/asm/pgtable-64.h
++++ b/arch/mips/include/asm/pgtable-64.h
+@@ -18,10 +18,12 @@
+ #include <asm/fixmap.h>
  
-@@ -135,6 +136,7 @@ static inline int mips_atomic_set(unsigned long addr, unsigned long new)
- 		"	.set	"MIPS_ISA_ARCH_LEVEL"			\n"
- 		"	li	%[err], 0				\n"
- 		"1:							\n"
-+		"	" __SYNC(full, loongson3_war) "			\n"
- 		user_ll("%[old]", "(%[addr])")
- 		"	move	%[tmp], %[new]				\n"
- 		"2:							\n"
+ #define __ARCH_USE_5LEVEL_HACK
+-#if defined(CONFIG_PAGE_SIZE_64KB) && !defined(CONFIG_MIPS_VA_BITS_48)
++#if CONFIG_PGTABLE_LEVELS == 2
+ #include <asm-generic/pgtable-nopmd.h>
+-#elif !(defined(CONFIG_PAGE_SIZE_4KB) && defined(CONFIG_MIPS_VA_BITS_48))
++#elif CONFIG_PGTABLE_LEVELS == 3
+ #include <asm-generic/pgtable-nopud.h>
++#else
++#include <asm-generic/5level-fixup.h>
+ #endif
+ 
+ /*
+@@ -216,6 +218,9 @@ static inline unsigned long pgd_page_vaddr(pgd_t pgd)
+ 	return pgd_val(pgd);
+ }
+ 
++#define pgd_phys(pgd)		virt_to_phys((void *)pgd_val(pgd))
++#define pgd_page(pgd)		(pfn_to_page(pgd_phys(pgd) >> PAGE_SHIFT))
++
+ static inline pud_t *pud_offset(pgd_t *pgd, unsigned long address)
+ {
+ 	return (pud_t *)pgd_page_vaddr(*pgd) + pud_index(address);
 -- 
 2.20.1
 
