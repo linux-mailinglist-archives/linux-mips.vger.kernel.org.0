@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F8712C53D
-	for <lists+linux-mips@lfdr.de>; Sun, 29 Dec 2019 18:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5E712C739
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Dec 2019 18:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729747AbfL2Re7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 29 Dec 2019 12:34:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38774 "EHLO mail.kernel.org"
+        id S1732860AbfL2RzT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 Dec 2019 12:55:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43784 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729745AbfL2Re7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 29 Dec 2019 12:34:59 -0500
+        id S1732867AbfL2RzQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 29 Dec 2019 12:55:16 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7A587206DB;
-        Sun, 29 Dec 2019 17:34:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EEEF7206A4;
+        Sun, 29 Dec 2019 17:55:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577640897;
+        s=default; t=1577642115;
         bh=fNiXTEGDcvUF3M392SCaoc00rIAL2EBcPiYfH/i1u/w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FiSLG2Vbbf6ZNGwu0u4vVr6AIw7rs8D3YeFUEvItJer6bkH+hlpu2YOgiAoHWDNEO
-         jZ4w57tKXJzLDpK9lJX6gvwmHOwzlLdUaRWsc72JJH6ibJSaOASuATvu/YpdhZXaIp
-         9CCuzCooguOmqqdvVuWOoyvHkYGyRjE9OBaGXEeI=
+        b=mMFayy8FTisEOcSSwWIGMniEf7m8KT9b0Me6YoUGn7d1jUpICeTlxDVCh3FnUfeVv
+         O4CLePUqsNRWtGQCO6XQzdnl2hhB3GFxc3+iR9TnhXbu0ikAfXKNXy3Zi5g8Nhvus/
+         ZcsRzZxtsabPy1qdN0eCktGgxaHdNL9liYSiDOvY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         linux-mm@kvack.org, Mike Rapoport <rppt@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 185/219] mips: fix build when "48 bits virtual memory" is enabled
-Date:   Sun, 29 Dec 2019 18:19:47 +0100
-Message-Id: <20191229162537.238599739@linuxfoundation.org>
+Subject: [PATCH 5.4 348/434] mips: fix build when "48 bits virtual memory" is enabled
+Date:   Sun, 29 Dec 2019 18:26:41 +0100
+Message-Id: <20191229172725.087362055@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20191229162508.458551679@linuxfoundation.org>
-References: <20191229162508.458551679@linuxfoundation.org>
+In-Reply-To: <20191229172702.393141737@linuxfoundation.org>
+References: <20191229172702.393141737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
