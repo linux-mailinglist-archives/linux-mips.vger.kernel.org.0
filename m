@@ -2,95 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8019512D1A0
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Dec 2019 16:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E6812D1A2
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Dec 2019 16:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727604AbfL3P6b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Dec 2019 10:58:31 -0500
-Received: from frisell.zx2c4.com ([192.95.5.64]:35709 "EHLO frisell.zx2c4.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727565AbfL3P6b (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 30 Dec 2019 10:58:31 -0500
-Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTP id 32ec708b;
-        Mon, 30 Dec 2019 15:00:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=mime-version
-        :references:in-reply-to:from:date:message-id:subject:to:cc
-        :content-type; s=mail; bh=sfGSg1ph2K9yCG/ddlHTxH291Oc=; b=KtCHhD
-        GDRYs8AgWk7Gcyc4QT476Y3pSHGgVTKVGoloLFJDicO/xbVQpkTcE94ZJuPD9FWL
-        C4u1S+5j0j8pdp2GPHpMt1noUG0ZtKD3vXJkp+5M73+G2YvuBAJXOtlpqEe7zrpk
-        FuGIrEhVlEziz2ozhpN4nQJIg08OJt0sUQ68UNbxlDYGdEeUeTE5HNoAMfZb83Lg
-        tL1EmQZqq0PAecqjPPVRpLMAz/G5fPE5nhjN9oZvu3bXs30cm/yijljqe6zSL6Ln
-        s+cxuVp/ToYFlZRadEONtYpMP8ZiQZ9eLcnSNjArkVCjlvXB9br7ySY7TtSsX62j
-        DPZ4KVmY/7GHM/qA==
-Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ef9ae089 (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256:NO);
-        Mon, 30 Dec 2019 15:00:22 +0000 (UTC)
-Received: by mail-oi1-f172.google.com with SMTP id c16so11083508oic.3;
-        Mon, 30 Dec 2019 07:58:29 -0800 (PST)
-X-Gm-Message-State: APjAAAVHfm9qMUvkXhmSHh67SaFbd2XADml3iWa2rU+UNMmDvqDcTqfT
-        W4BNVCVm+lGQCrL8p8LvzPuFWrM0wpdv7RhMmzY=
-X-Google-Smtp-Source: APXvYqx2Bgs+rMfJMj1kBfGo509i02hB+VENci6B2mCd7te+hTiAzBTfmOh5qSER2YqiLKf0XG8qj2PMjO90ib4sFHQ=
-X-Received: by 2002:aca:815:: with SMTP id 21mr5726820oii.52.1577721508987;
- Mon, 30 Dec 2019 07:58:28 -0800 (PST)
+        id S1727588AbfL3P6u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Dec 2019 10:58:50 -0500
+Received: from mout.kundenserver.de ([217.72.192.74]:45645 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727565AbfL3P6u (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Dec 2019 10:58:50 -0500
+Received: from mail-qt1-f176.google.com ([209.85.160.176]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MOzjW-1j6tZE3XOW-00PNNQ; Mon, 30 Dec 2019 16:58:49 +0100
+Received: by mail-qt1-f176.google.com with SMTP id n15so29895809qtp.5;
+        Mon, 30 Dec 2019 07:58:48 -0800 (PST)
+X-Gm-Message-State: APjAAAVXolJAtjoV8SRDBpBX1olLw7mm1FpCLXhriYwOHzkaLly2QdyS
+        lxHorSCH/u3BzoShwDRvDnmeMpti+7QaUlZLud0=
+X-Google-Smtp-Source: APXvYqzWuwkpOhaRZUxVS/1QPSlNYQtFi8ZBlYcOwq9YyLHR7qDGoSI2EKo1viYBs7DWtSGazM0rQP6EBkuiz4NaBxE=
+X-Received: by 2002:ac8:47d3:: with SMTP id d19mr48206264qtr.142.1577721527571;
+ Mon, 30 Dec 2019 07:58:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20191223130834.GA102399@zx2c4.com> <20191224135404.389039-1-Jason@zx2c4.com>
- <CAK8P3a1fVFDkHe=gLy55rHxwfZ8YKcUSYvnhSoMbcAgWy6Nm9w@mail.gmail.com>
- <CAHmME9o07dQV_MmWmtBFCKp=sdsO-scC6-UbXNi=dpU6umCoPg@mail.gmail.com>
- <CAK8P3a0sWObusG3xO_JE9CXCyNfFN0p6OgPjUyU2CHLBBZNpZw@mail.gmail.com>
- <CAHmME9o==nBONywVgSjsmjs2H_A8itgmwibqzPmvivcSocKWRQ@mail.gmail.com>
- <CAK8P3a11g-UXcYdudDtp0TWCQAfotpc-63BqYwn-a9LDxV-b+Q@mail.gmail.com>
- <CAHmME9pnBtjJ86gsWgK8DCYKo_HFpyViHoGpJPTrYBONT01YVA@mail.gmail.com> <CAK8P3a0NBuqDX63+920q7Q+yO2xCoSd0O7xUDJv6BBoco2kVOg@mail.gmail.com>
-In-Reply-To: <CAK8P3a0NBuqDX63+920q7Q+yO2xCoSd0O7xUDJv6BBoco2kVOg@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 30 Dec 2019 16:58:17 +0100
-X-Gmail-Original-Message-ID: <CAHmME9rnnoFwh=EHAgdQFM+c33D9mgCoVML_+d=Js=pXPnsxKQ@mail.gmail.com>
-Message-ID: <CAHmME9rnnoFwh=EHAgdQFM+c33D9mgCoVML_+d=Js=pXPnsxKQ@mail.gmail.com>
-Subject: Re: [PATCH] mips: vdso: conditionalize 32-bit time functions on COMPAT_32BIT_TIME
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+References: <20191223130834.GA102399@zx2c4.com> <20191223232945.a3sbzfj6uw2sokba@lantea.localdomain>
+ <CAHmME9qg8+xdM7Uo=XydwsOV27BWYK8fV44oimqiosBvH_-UDg@mail.gmail.com>
+In-Reply-To: <CAHmME9qg8+xdM7Uo=XydwsOV27BWYK8fV44oimqiosBvH_-UDg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 30 Dec 2019 16:58:31 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0ojj7mYg0-gBG8a=CWubBE-0XtDSw-B4nqmqHcmE34pw@mail.gmail.com>
+Message-ID: <CAK8P3a0ojj7mYg0-gBG8a=CWubBE-0XtDSw-B4nqmqHcmE34pw@mail.gmail.com>
+Subject: Re: vdso-related userspace crashes on 5.5 mips64
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Paul Burton <paulburton@kernel.org>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Christian Brauner <christian.brauner@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:FGETlgARtieMiI5fujwnbSVL7EwWN79ybt9tzhw5o7S8zOVwRWP
+ rDogsPL2GV1eV2xb8tIOozTbblXarG6Pa8rsDsQd4lS9iJ1/5p09+yUcAqqETp1I9NoPGQr
+ 9O3zm3WDhAtpr4BWRHDRbzQ2FepI4Zz/5IE0CZQKzLFXzMQ1p8vwwK80Ui6x+7psUBspigI
+ lwGKoGq0cgrBxsapEjeWQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:k3VfbXMTM9k=:2iYAMgj5A1Mxllson8wbkE
+ EBpZDMqIkAamb3dPh2fUZMonmJYi+9NXGQGZpe0SKOHreCUdow8SjbkNag5O3YZyAw/Q9qNKl
+ 8WNPSSfCANOD5zzfqfhHZtZ0Q72iRAsWCHhfbPz1MPFd5w4z3kvfiaNYV4PMLmKvWeCLMeJNV
+ XNCg4hC/iHGBFuk20bfq54RmKDHFfqpPxqei7R56nmdvP0MoRZIPiB/Oq2xmcZtN5+ZL6IKhp
+ lQuINjcSXYhN3QSzqztoXSQocX4GqdEzl2aOOc8J20VlERgpnNv02K2SxD75DpXzp+9FCkkn/
+ vOzCMqHL7RDL8HHGKyJEfctvd4Mhpjcemmc1t/+IcTXCrQPGJ3nhdjoQDFvr6+e0SCfovALCQ
+ Y8kSGHcVO9rV1EnB+qxYZSdMmghNHHkTagAeXi7U9VyeXci7m7uXJFZgauhkjTplfvT6X0qBU
+ nmbiW87HYn++/9ChNpSUoSuPfyTCgsCMxRKD+tfgavJ0bYXHWrcSn8RrLFPwAiKYj20j5FEvm
+ YjVt5NLihT6NVEVgG7KQEBDvvZtH1Utg4GbjlWoABrjcbjtpde4hukhmRo7djZzCiGD7E8t+5
+ WHI57YwClI7jCJR9hhVF77BeZUXAgnWVeF8MMy6C0/3HGWtcAekgzliAkfJw1p+hIQQQotn4Z
+ qmY/3WzUhDujKEqyLX8ZLox+UfxS9ljyluZL04xD1LFBAcLvAeowgDkbIf31z8eb5Ox7FMBAk
+ b08BFza224iz4Nd2B+gv4pQsVggAOaXtsRHJBT2w4K5BfSGJDQmQdhY570EkXKL/lrDWwOoau
+ ZoFYU+zdN5ZoXWSU0J4BmzvQU6GhonRSR8uoIY3UF2vl59cwMvw5/Wl8cqmpj1J7B8+fMzRUR
+ ZE17OapbRUE2c+RIGUhw==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Makes sense w.r.t. time32 situation.
+On Tue, Dec 24, 2019 at 2:37 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> More details forthcoming, but I just bisected this to:
+>
+> commit 942437c97fd9ff23a17c13118f50bd0490f6868c (refs/bisect/bad)
+> Author: Arnd Bergmann <arnd@arndb.de>
+> Date:   Mon Jul 15 11:46:10 2019 +0200
+>
+>    y2038: allow disabling time32 system calls
+>
+>    At the moment, the compilation of the old time32 system calls depends
+>    purely on the architecture. As systems with new libc based on 64-bit
+>    time_t are getting deployed, even architectures that previously supported
+>    these (notably x86-32 and arm32 but also many others) no longer depend on
+>    them, and removing them from a kernel image results in a smaller kernel
+>    binary, the same way we can leave out many other optional system calls.
 
-I still think that in spite of that there's still something weird
-happening with the mips VDSO.
+My best guess right now is that there is a bug in the error handling
+inside the mips vdso: clock_gettime32_fallback() is defined like
 
-Here's a register dump before the call:
+static __always_inline long clock_gettime32_fallback(
+                                        clockid_t _clkid,
+                                        struct old_timespec32 *_ts)
+{
+        register struct old_timespec32 *ts asm("a1") = _ts;
+        register clockid_t clkid asm("a0") = _clkid;
+        register long ret asm("v0");
+        register long nr asm("v0") = __NR_clock_gettime;
+        register long error asm("a3");
 
- $ 0   : 0000000000000000 0000000000000001 0000000010000000 fffffffffffffffc
- $ 4   : 0000000000000002 000000007fff2e40 0000000000000000 0000000000000001
- $ 8   : 0000000000000000 0000000000000000 0000000000000000 0000000000000000
- $12   : 0000000000000000 000000000000000a ffffffff80000000 000000007fffffda
- $16   : 0000000010001ba8 0000005800000015 0000000010000000 0000000010000000
- $20   : 0000000010000000 0000000010000000 0000000000000000 0000000077ff2ae8
- $24   : 0000000000000005 0000000077fa1d18
- $28   : 0000000010019cf0 000000007fff2e40 0000000000000000 0000000010000c30
- Hi    : 0000000000000000
- Lo    : 0000000000000000
- epc   : 0000000077fa1d18 0x77fa1d18
- ra    : 0000000010000c30 0x10000c30
+        asm volatile(
+        "       syscall\n"
+        : "=r" (ret), "=r" (error)
+        : "r" (clkid), "r" (ts), "r" (nr)
+        : "$1", "$3", "$8", "$9", "$10", "$11", "$12", "$13",
+          "$14", "$15", "$24", "$25", "hi", "lo", "memory");
 
-And here it is immediately after:
+        return error ? -ret : ret;
+}
 
- $ 0   : 0000000000000000 0000000000000001 ffffffffffffffa7 000000007fff5000
- $ 4   : 0000000000000002 000000007fff2e40 0000000077ff2000 0000000000000001
- $ 8   : 0000000000000006 0000000000000020 0000000000000002 0000000000000000
- $12   : 0000000000000000 0000000000001852 ffffffff80156160 000000007fffffda
- $16   : 0000000010001ba8 0000005800000015 0000000010000000 0000000010000000
- $20   : 0000000010000000 0000000010000000 0000000000000000 0000000077ff2b00
- $24   : 0000000000000005 0000000000000000
- $28   : 000000007fff5000 000000007fff2e30 0000000000000000 0000000077fa1e00
- Hi    : 0000000000000000
- Lo    : 0000000000000000
- epc   : 0000000077fa1e00 0x77fa1e00
- ra    : 0000000077fa1e00 0x77fa1e00
+and it's possible that this does not work correctly when the system
+call fails. With my patch, the __NR_clock_gettime syscall always
+fails, and this may end up corrupting the registers or the stack
+in some way.
 
-I wonder if a toolchain option or compiler bug or something is causing
-the vdso to not restore certain registers (gp? ra?).
+One thing you could try is to use a working kernel version (before
+my patch, with my patch reverted, or with your workaround applied)
+and pass an invalid _clkid argument to make the system call
+fail in a different way. Does this cause the same crash?
+
+I see that the previous vdso implementation (added in
+180902e08f05, fixed in b399ee28c29c07, removed in
+90800281e761) had an issue with the clobber list originally,
+but the current version looks identical to the version after
+the fix.
+
+        Arnd
