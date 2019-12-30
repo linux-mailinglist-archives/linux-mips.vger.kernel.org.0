@@ -2,123 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C196812CFCE
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Dec 2019 12:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CBA12CFE1
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Dec 2019 13:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727376AbfL3L6T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Dec 2019 06:58:19 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:46813 "EHLO
+        id S1727400AbfL3MIC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Dec 2019 07:08:02 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:39487 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726196AbfL3L6S (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Dec 2019 06:58:18 -0500
-Received: from mail-qk1-f172.google.com ([209.85.222.172]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MLAAs-1j3yVH10x0-00IAEi; Mon, 30 Dec 2019 12:58:17 +0100
-Received: by mail-qk1-f172.google.com with SMTP id t129so26064714qke.10;
-        Mon, 30 Dec 2019 03:58:16 -0800 (PST)
-X-Gm-Message-State: APjAAAVMiyVtXV/+kbCMWFGoHfQnRzBjT9l92VEp+9YnGivmbWc1HQH5
-        teSn2LW2cHeUgkdSy+Xlw91eLAadFyXfFzKjc/U=
-X-Google-Smtp-Source: APXvYqwReU6KI+hEZNY1rvE7ncOKdyI/QwFC2pLA7OkGLJknUDKQqjXFuqpjgMyzRIXnVBzHyY0P2OQTFMUGAvc4FCU=
-X-Received: by 2002:a05:620a:a5b:: with SMTP id j27mr54486692qka.286.1577707096044;
- Mon, 30 Dec 2019 03:58:16 -0800 (PST)
+        with ESMTP id S1726196AbfL3MIC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Dec 2019 07:08:02 -0500
+Received: from mail-qv1-f53.google.com ([209.85.219.53]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1M3loZ-1imB5X3ixX-000s7o; Mon, 30 Dec 2019 13:08:01 +0100
+Received: by mail-qv1-f53.google.com with SMTP id f16so12280764qvi.4;
+        Mon, 30 Dec 2019 04:08:00 -0800 (PST)
+X-Gm-Message-State: APjAAAVAiYT1SyrwaX0nP7JnD526OQKBqHvToyxBHP5ybX52jLH9Dhel
+        L4MRX7x9qOVnew375bm8HFLufLyWiPYnbjH4XLk=
+X-Google-Smtp-Source: APXvYqwgYmUQwo+iL/k4m54VB6r1wV0E9Nq8yE/j4nb6YZD4J7kjH+UJKaDQYBMfOQwb9P/Z8xhYwMz7551bLxAPNPc=
+X-Received: by 2002:a0c:bd20:: with SMTP id m32mr50936334qvg.197.1577707679673;
+ Mon, 30 Dec 2019 04:07:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20191223130834.GA102399@zx2c4.com> <20191224135404.389039-1-Jason@zx2c4.com>
-In-Reply-To: <20191224135404.389039-1-Jason@zx2c4.com>
+References: <cover.1577111363.git.christophe.leroy@c-s.fr> <d0f8dfb26c025d3e3eee1b5f610161ca19b942df.1577111367.git.christophe.leroy@c-s.fr>
+In-Reply-To: <d0f8dfb26c025d3e3eee1b5f610161ca19b942df.1577111367.git.christophe.leroy@c-s.fr>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 30 Dec 2019 12:57:59 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1fVFDkHe=gLy55rHxwfZ8YKcUSYvnhSoMbcAgWy6Nm9w@mail.gmail.com>
-Message-ID: <CAK8P3a1fVFDkHe=gLy55rHxwfZ8YKcUSYvnhSoMbcAgWy6Nm9w@mail.gmail.com>
-Subject: Re: [PATCH] mips: vdso: conditionalize 32-bit time functions on COMPAT_32BIT_TIME
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
+Date:   Mon, 30 Dec 2019 13:07:43 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a36OgFuY72b_i6+0xBNGnaxS1SsRid+HrgQHPZtUJp3LQ@mail.gmail.com>
+Message-ID: <CAK8P3a36OgFuY72b_i6+0xBNGnaxS1SsRid+HrgQHPZtUJp3LQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 05/10] lib: vdso: inline do_hres()
+To:     Christophe Leroy <christophe.leroy@c-s.fr>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Christian Brauner <christian.brauner@canonical.com>
+        Andy Lutomirski <luto@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:9VNsB/0hV+uE9zUbhnqLZ6nurlkV2+Py0P0PFGmNrhG80WpHmRM
- X77X2nwlZHYi/To/p16EOLRgfwnnqAnGvcMG/VZEHeXKRArVYQbC1hhx3cd2nvbeq6KOpQd
- u73ajuKjYbjn2ONuh+c0xo49lcdBaFuws7Lp7hgZfpx5Mj0f4VYKeFeHsQO3lrsV23Mf523
- RKuU1siU/zZrRLLKCB5Zw==
+X-Provags-ID: V03:K1:jDOKdGxcK76WzzT4FAh+MO1q4e3xUlQLbmdYdbLmtxxWBIHJ/HL
+ AWqfVJIHOYCNfF/hNIR+TyMp3ebgudZbn9tYY1SkQvIDEewDaci2GB8uCfFmTn1XKnEnQmh
+ zGS6m1w/fbUv1tLbzRxkELzHwATLt1+D+RF+PG/PvtofNcSoRKS7EWu1LXwfSUmbuDzC27o
+ gduCYI7G+WktYInkzmHpA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Kso8zCSd2bA=:jMb7H0gBZZ4sMXVuHy6w9T
- Lr6JTxyoKWk0SgMA2EJScqQoiA2ZFX8e4JY5BYQ5Po6b6w7AJTj48dZoVZRo1v5Bpl5rNKPoQ
- AmzCEGoH7LcpphD6i1u9+Fn3l2xl0DHlhmo6MJIbyIa1OmubDodffmSmCslji+AdMx/fIJx37
- gYj57dSYaGatpCulyfNvJVrf9BqjXfeEKZQhRdhsEU9P5eXIfIBaG6zAhyT+uPTbt4g7WfpE9
- LXZ6qJIInFy6bPvMjkXyolibuCND42XmXRvsm1RyBPyo5t71KlrSWch2dTpMRwx5HlzcDkxfe
- 7Qxx2b3iWm0iYhGXAeS7KryFPup3svVRxq9uReEBfFnyE54iSvTJPHJk4gPF26KGZUC8P7QRG
- 8LtZCHia9xQHnvZi9YSjZfbp1qBen7EcRoKtLHgAe1zeh+PFuqk7NmuqjRa+n2vaApIaTY2Gw
- JSQxibZ6fZjppy+SkEgtgUbvjNRne3oUogcATAGMo4E40VGV+wnXCu4n+sV6K/Xo3KhKYA6QD
- yTOlDwOYpOUTQRyj058qETqz5WTSmCc9wzv+7U8IpvSd/JCJ2Rxdoknn+vQ8LPrbrmdFZyFQt
- fth8nAg7OmKhVCpcLUaMl8EcDbh6xrFetTOS0iW0oDvfueMSvDSokrUxD5Ncs/kRyFhb5eGKe
- k4QvZuxIxVLEsRkK1F5wP00fTjND2G9k5vaW2CZrKJitsf7JznJZRi2deMrMf84A893S0LipT
- rDpEmEW4OgzHWsWLmwS8JwyhgHdOhw6lkf56NxRFnM9c+cHGcb02SNubkZs+NpUc+Nx2H3iDI
- bvW/YdUxvsbgRMqb8RIZGG9m0jaing4rbcQTp5j5fZmMmoByWZNkPLjaSWODrHO8kMMJB9JDV
- R3JehtGBI1ymV1mYOMMw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xVsLO1llwLY=:3k24IvDRwIWli6yX+yQfJP
+ rwMQO0q+ila9fFJvhyEXqGGdBDLJR6Ef+VmOEGx8RFCJS08qHU3UzR1soing+CxYmooVFDTDa
+ Tdj7MzAbvoqAC0adVVmZCEgloHjUUgnaZJ0NT2/i6DaLQJ48ZwdS+o7jWBGOKKXzCeu/gCABt
+ qmDcqvz8/5mflEhRLGjzLBCp3cAgQUSOpn7eCVQlBd99G4U6tUDgvs76NQWLcHxo0owv9BAwD
+ 8S7yvT6aylYPCpwyhvFJlLBmVO8y9Nfp/mqFmyMzT/dH7q2f1wdrkrV+lOnr4y8tlJo3GwWHn
+ +vnlT1o7tG/Hib4ob1Mc5zzdiyE3uCQUUaZVbw9WzBWffn6SbVzIp9e2YV2/tXTTb/8sJkPpF
+ sTUX++I6h1TsgMq7yxLMNUiul5gChmNXRMyTLxi4liaVL9RWRGxZo15zafy98rkMDoaoiuqmF
+ gC2Y6C2P4GtrQ8kBulmrkChtz+Ev8ZkiZ+dLNfSqcEPSnuO4FZknK/rswvK7hqeXXh/RoK9Jd
+ A5QRf3oUKcQ15LVNHGEWkJaHsXMaw5cFvnbHT2QanH6k2iJBlv95B+G/Wbb5QwFxMeOLywqSf
+ imm1Eg6IHW6gyghCueaZqdtlSiQKONxnQLxVCxIv+eF94Y/OD9I2GNeU64zAeIv8mm8fsNqwp
+ a3JDWA+spiaxQhLkyoPQdk8fPt7QzOktzCcx7WD5fS2SWV/Pb5wVRWFNr5N4NSRJBipELsZTB
+ tLWKsz82ONkBdzweVDx5mKdVoORA/lzHwpMNprk1w57mtAgBXbnRARNHKESb2fRilHRldYuek
+ Kr/OPZ23K3FyC1EKbVo0aLLXvTdn1JZ/wtsLCecO/VwG4uHSold4W9vJkZcuyBmKgZ1q3CDGD
+ K5s+xhcAYEf+XlNDuM4g==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Dec 24, 2019 at 2:54 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+On Mon, Dec 23, 2019 at 3:31 PM Christophe Leroy
+<christophe.leroy@c-s.fr> wrote:
 >
-> When the VDSO falls back to 32-bit time functions on kernels with
-> COMPAT_32BIT_TIME=n, userspace becomes corrupted and appears to crash
-> shortly after, with something like:
+> do_hres() is called from several places, so GCC doesn't inline
+> it at first.
 >
-> [    0.359617] do_page_fault(): sending SIGSEGV to init for invalid read access from 000000007ff790d0
-> [    0.359843] epc = 0000000077e45df4 in libc.so[77da6000+de000]
-> [    0.360319] ra  = 0000000010000c50 in init[10000000+2000]
-> [    0.364456] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+> do_hres() takes a struct __kernel_timespec * parameter for
+> passing the result. In the 32 bits case, this parameter corresponds
+> to a local var in the caller. In order to provide a pointer
+> to this structure, the caller has to put it in its stack and
+> do_hres() has to write the result in the stack. This is suboptimal,
+> especially on RISC processor like powerpc.
 >
-> This can be reproduced with simply calling `clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts)`,
-> since `CLOCK_PROCESS_CPUTIME_ID` is not exported to the VDSO, invoking
-> the syscall callback branch. This crash was observed with musl 1.20's
-> clock_gettime implementation:
-
-Thanks for the bug report! I'm not completely sure why this fails in
-this particular
-way though. I assume you are using musl-1.1.20, not a musl-1.2.0 snapshot
-(the version 1.20 you list does not exist), so the combination you are testing
-is supposed to just return -ENOSYS here to match the behavior of hte
-system call.
-
-> --- a/arch/mips/include/asm/vdso/gettimeofday.h
-> +++ b/arch/mips/include/asm/vdso/gettimeofday.h
-> @@ -107,7 +107,7 @@ static __always_inline int clock_getres_fallback(
->        return error ? -ret : ret;
-> }
+> By making GCC inline the function, the struct __kernel_timespec
+> remains a local var using registers, avoiding the need to write and
+> read stack.
 >
-> -#if _MIPS_SIM != _MIPS_SIM_ABI64
-> +#if _MIPS_SIM != _MIPS_SIM_ABI64 && defined(CONFIG_COMPAT_32BIT_TIME)
+> The improvement is significant on powerpc.
 >
->  #define VDSO_HAS_32BIT_FALLBACK        1
->
+> Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
 
-I don't think this is the correct fix, it may actually make it worse
-by changing the vdso implementation for clock_gettime32()
-to fall back to clock_gettime64(), which would appear to work
-correctly before y2038 but fail afterwards.  How about this one:
+Good idea, I can see how this ends up being an improvement
+for most of the callers.
 
-diff --git a/arch/mips/vdso/vdso.lds.S b/arch/mips/vdso/vdso.lds.S
-index da4627430aba..0bdc6a026be8 100644
---- a/arch/mips/vdso/vdso.lds.S
-+++ b/arch/mips/vdso/vdso.lds.S
-@@ -93,9 +93,11 @@ VERSION
-        LINUX_2.6 {
- #ifndef DISABLE_MIPS_VDSO
-        global:
-+#if (_MIPS_SIM == _MIPS_SIM_ABI64) || defined(CONFIG_COMPAT_32BIT_TIME)
-                __vdso_clock_gettime;
-                __vdso_gettimeofday;
-                __vdso_clock_getres;
-+#endif
- #if _MIPS_SIM != _MIPS_SIM_ABI64
-                __vdso_clock_gettime64;
- #endif
-
-That should ensure that no user space can call the old vdso
-functions on a kernel that intentionally breaks the actual
-syscalls.
-
-      Arnd
+Acked-by: Arnd Bergmann <arnd@arndb.de>
