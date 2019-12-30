@@ -2,93 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD81412D194
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Dec 2019 16:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8019512D1A0
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Dec 2019 16:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727531AbfL3Pr4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Dec 2019 10:47:56 -0500
-Received: from mout.kundenserver.de ([217.72.192.74]:37727 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727397AbfL3Prz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Dec 2019 10:47:55 -0500
-Received: from mail-qt1-f172.google.com ([209.85.160.172]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1M58SY-1in3CY0kHk-0017mD; Mon, 30 Dec 2019 16:47:54 +0100
-Received: by mail-qt1-f172.google.com with SMTP id e5so29857594qtm.6;
-        Mon, 30 Dec 2019 07:47:53 -0800 (PST)
-X-Gm-Message-State: APjAAAWxHvcFVLv1Cs8FC/eIa2GG266m8Xis5ID6vHSqXu5Z4p9FpFIa
-        c+fl+Dknj+BkC7PFHSeEYqHfKCim6NBrEhAwzfM=
-X-Google-Smtp-Source: APXvYqzS9Daau4V6KdFtMzVDpaHEdaxphNfcAOGaF7CR6jf69NGaa3wFFDLjiwkZ+wtx1QS+13hvCMDyUD2ID479i1E=
-X-Received: by 2002:ac8:709a:: with SMTP id y26mr49110478qto.304.1577720873024;
- Mon, 30 Dec 2019 07:47:53 -0800 (PST)
+        id S1727604AbfL3P6b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Dec 2019 10:58:31 -0500
+Received: from frisell.zx2c4.com ([192.95.5.64]:35709 "EHLO frisell.zx2c4.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727565AbfL3P6b (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 30 Dec 2019 10:58:31 -0500
+Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTP id 32ec708b;
+        Mon, 30 Dec 2019 15:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=mime-version
+        :references:in-reply-to:from:date:message-id:subject:to:cc
+        :content-type; s=mail; bh=sfGSg1ph2K9yCG/ddlHTxH291Oc=; b=KtCHhD
+        GDRYs8AgWk7Gcyc4QT476Y3pSHGgVTKVGoloLFJDicO/xbVQpkTcE94ZJuPD9FWL
+        C4u1S+5j0j8pdp2GPHpMt1noUG0ZtKD3vXJkp+5M73+G2YvuBAJXOtlpqEe7zrpk
+        FuGIrEhVlEziz2ozhpN4nQJIg08OJt0sUQ68UNbxlDYGdEeUeTE5HNoAMfZb83Lg
+        tL1EmQZqq0PAecqjPPVRpLMAz/G5fPE5nhjN9oZvu3bXs30cm/yijljqe6zSL6Ln
+        s+cxuVp/ToYFlZRadEONtYpMP8ZiQZ9eLcnSNjArkVCjlvXB9br7ySY7TtSsX62j
+        DPZ4KVmY/7GHM/qA==
+Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ef9ae089 (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256:NO);
+        Mon, 30 Dec 2019 15:00:22 +0000 (UTC)
+Received: by mail-oi1-f172.google.com with SMTP id c16so11083508oic.3;
+        Mon, 30 Dec 2019 07:58:29 -0800 (PST)
+X-Gm-Message-State: APjAAAVHfm9qMUvkXhmSHh67SaFbd2XADml3iWa2rU+UNMmDvqDcTqfT
+        W4BNVCVm+lGQCrL8p8LvzPuFWrM0wpdv7RhMmzY=
+X-Google-Smtp-Source: APXvYqx2Bgs+rMfJMj1kBfGo509i02hB+VENci6B2mCd7te+hTiAzBTfmOh5qSER2YqiLKf0XG8qj2PMjO90ib4sFHQ=
+X-Received: by 2002:aca:815:: with SMTP id 21mr5726820oii.52.1577721508987;
+ Mon, 30 Dec 2019 07:58:28 -0800 (PST)
 MIME-Version: 1.0
 References: <20191223130834.GA102399@zx2c4.com> <20191224135404.389039-1-Jason@zx2c4.com>
  <CAK8P3a1fVFDkHe=gLy55rHxwfZ8YKcUSYvnhSoMbcAgWy6Nm9w@mail.gmail.com>
  <CAHmME9o07dQV_MmWmtBFCKp=sdsO-scC6-UbXNi=dpU6umCoPg@mail.gmail.com>
  <CAK8P3a0sWObusG3xO_JE9CXCyNfFN0p6OgPjUyU2CHLBBZNpZw@mail.gmail.com>
  <CAHmME9o==nBONywVgSjsmjs2H_A8itgmwibqzPmvivcSocKWRQ@mail.gmail.com>
- <CAK8P3a11g-UXcYdudDtp0TWCQAfotpc-63BqYwn-a9LDxV-b+Q@mail.gmail.com> <CAHmME9pnBtjJ86gsWgK8DCYKo_HFpyViHoGpJPTrYBONT01YVA@mail.gmail.com>
-In-Reply-To: <CAHmME9pnBtjJ86gsWgK8DCYKo_HFpyViHoGpJPTrYBONT01YVA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 30 Dec 2019 16:47:37 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0NBuqDX63+920q7Q+yO2xCoSd0O7xUDJv6BBoco2kVOg@mail.gmail.com>
-Message-ID: <CAK8P3a0NBuqDX63+920q7Q+yO2xCoSd0O7xUDJv6BBoco2kVOg@mail.gmail.com>
+ <CAK8P3a11g-UXcYdudDtp0TWCQAfotpc-63BqYwn-a9LDxV-b+Q@mail.gmail.com>
+ <CAHmME9pnBtjJ86gsWgK8DCYKo_HFpyViHoGpJPTrYBONT01YVA@mail.gmail.com> <CAK8P3a0NBuqDX63+920q7Q+yO2xCoSd0O7xUDJv6BBoco2kVOg@mail.gmail.com>
+In-Reply-To: <CAK8P3a0NBuqDX63+920q7Q+yO2xCoSd0O7xUDJv6BBoco2kVOg@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 30 Dec 2019 16:58:17 +0100
+X-Gmail-Original-Message-ID: <CAHmME9rnnoFwh=EHAgdQFM+c33D9mgCoVML_+d=Js=pXPnsxKQ@mail.gmail.com>
+Message-ID: <CAHmME9rnnoFwh=EHAgdQFM+c33D9mgCoVML_+d=Js=pXPnsxKQ@mail.gmail.com>
 Subject: Re: [PATCH] mips: vdso: conditionalize 32-bit time functions on COMPAT_32BIT_TIME
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
         Paul Burton <paulburton@kernel.org>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Christian Brauner <christian.brauner@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:evaCvZk8IUe5DvZ2WF2ej/4JZiaCp6VDfXgAASc3StzTy+WWyux
- 9q/Fe1VLxcTyurCjEbpHcvcGJiwvUYV582B9WHcgfaGRc/9SPpeqDlQuECyaylFN3lxXK66
- 7WGy4AstLRmSndFk78TaiQZfLzQciuyELEZCvMZAr/YBJoZiBljgZYQKSdPWW/W89SY7qSk
- 53MuPvPSxgt8bRz8Ium4w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/oHvFZngoeg=:Xo2Ww0CgxaMTEALgxQtEFW
- 3R2fS9honTvQy9E6Dlg+ok2VaaaCKbHQEagpbNtNX3ramhc+0FFM+MvLAR5hSlqDI3emjV13J
- tnviOrVt9AzEZHayALsgC15Q2GpnPDNZ1CvWSQ8XMwlgACkGBJhYjaMWKGU8aQ+5dGVw3HbJq
- TYyv/urUvyiOObm3Sed+/mCAPZzxemMPLZWw39TWY1oizXiMdXNh/giobItiwwLWSxG3LDZCn
- M8OOCFgaLAJQoAr/BcdZ7HdADXpycgkX2W2mYBv1CwNkDf3Wtv5dcciyFByOQr/rs2kX4T7UW
- UybFKrsmIVDBK8PowVMEZcDlVcrQ27JImyAQehm2CA8yVjgQMg2qdK4EtKSt9zb/kiILhNiZF
- ulCs20ibaCs+qO1XGPcZedqB9TTmQrEA5mvAxj3CyBe60iNQZqzmiZ+2cbmTuJwuzAVfTk6jB
- d5+AQI2EkDUN5VTzeyNpw5+Hjp/YQzczhuBhK9ak2ajOapb3bG+BFTnkJXsYBlposab5kwVKL
- BagpAHwUdIjgcEDvwVrdc+U3YUG0zgn37dKZ7ZO9Ms+/KQLkIqDuZrZYL4pcB/5467IY1arOT
- T5Qn58IMUbjIN98r1tvtxRDDBWe224mSIzXMlIjuukDa3X2WDGJB0CgrJgcms/2h7vMqEWQlr
- mCwdhDAdPJWDr+05gFETuiubBNSrxbrKQafPZ36rVBxbssPCKl1Et6SSJCHbTsGizrVz1kGhM
- e+VAlry16Fn7qRCSz5//EvdB4D6HfcfgTIb+F5LyO8QwfTZmfrEMJC6QcKxIg/ewkvtG4/ynd
- hPqNmsymey24asg8Zft48oBfklJuqoVCTyy0BmEmACsGiXByRRIK8JyMMRwNwNcyvoQPXoUmv
- zmLxS8ZhhSyS0+GDUf7g==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 30, 2019 at 4:39 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> On Mon, Dec 30, 2019 at 4:37 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Mon, Dec 30, 2019 at 3:37 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > >
-> > > On Mon, Dec 30, 2019 at 1:34 PM Arnd Bergmann <arnd@arndb.de> wrote:
+Makes sense w.r.t. time32 situation.
 
-> > Returning success from clock_gettime() on a kernel with only
-> > time64 support and a libc with only time32 support (or vice
-> > versa) would be a bug.
->
-> Ah, right, hence why the 32-bit compat code is behind a
-> still-on-by-default-but-not-for-long menu option.
+I still think that in spite of that there's still something weird
+happening with the mips VDSO.
 
-I expect this to remain on-by-default for a rather long time, as we still
-to run old binaries well into 2030s. Making it configurable is done for
-two reasons:
+Here's a register dump before the call:
 
-- on embedded systems that have all user space built with time64,
-  turning this off can make the kernel slightly smaller
+ $ 0   : 0000000000000000 0000000000000001 0000000010000000 fffffffffffffffc
+ $ 4   : 0000000000000002 000000007fff2e40 0000000000000000 0000000000000001
+ $ 8   : 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+ $12   : 0000000000000000 000000000000000a ffffffff80000000 000000007fffffda
+ $16   : 0000000010001ba8 0000005800000015 0000000010000000 0000000010000000
+ $20   : 0000000010000000 0000000010000000 0000000000000000 0000000077ff2ae8
+ $24   : 0000000000000005 0000000077fa1d18
+ $28   : 0000000010019cf0 000000007fff2e40 0000000000000000 0000000010000c30
+ Hi    : 0000000000000000
+ Lo    : 0000000000000000
+ epc   : 0000000077fa1d18 0x77fa1d18
+ ra    : 0000000010000c30 0x10000c30
 
-- turning it off lets you check that no code relies on calling the old
-  interfaces internally, bypassing the C library, in a way that works
-  at the moment but may break after 2038.
+And here it is immediately after:
 
-         Arnd
+ $ 0   : 0000000000000000 0000000000000001 ffffffffffffffa7 000000007fff5000
+ $ 4   : 0000000000000002 000000007fff2e40 0000000077ff2000 0000000000000001
+ $ 8   : 0000000000000006 0000000000000020 0000000000000002 0000000000000000
+ $12   : 0000000000000000 0000000000001852 ffffffff80156160 000000007fffffda
+ $16   : 0000000010001ba8 0000005800000015 0000000010000000 0000000010000000
+ $20   : 0000000010000000 0000000010000000 0000000000000000 0000000077ff2b00
+ $24   : 0000000000000005 0000000000000000
+ $28   : 000000007fff5000 000000007fff2e30 0000000000000000 0000000077fa1e00
+ Hi    : 0000000000000000
+ Lo    : 0000000000000000
+ epc   : 0000000077fa1e00 0x77fa1e00
+ ra    : 0000000077fa1e00 0x77fa1e00
+
+I wonder if a toolchain option or compiler bug or something is causing
+the vdso to not restore certain registers (gp? ra?).
