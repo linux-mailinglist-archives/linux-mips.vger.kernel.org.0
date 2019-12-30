@@ -2,104 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BF112D00C
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Dec 2019 13:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE7012D0D5
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Dec 2019 15:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727412AbfL3MeT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Dec 2019 07:34:19 -0500
-Received: from mout.kundenserver.de ([212.227.126.133]:46745 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727397AbfL3MeT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Dec 2019 07:34:19 -0500
-Received: from mail-qv1-f44.google.com ([209.85.219.44]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1N2Ujn-1jkQEQ1z4B-013xVI; Mon, 30 Dec 2019 13:34:17 +0100
-Received: by mail-qv1-f44.google.com with SMTP id z3so12315547qvn.0;
-        Mon, 30 Dec 2019 04:34:17 -0800 (PST)
-X-Gm-Message-State: APjAAAVxg9/Va+7Lxa53J1oJEUS5unQ0od8K+WOzs4vwlTz68xbQRo/f
-        UZF0ILfphuBq1xjYh+5pNRI0+5T9Zz6pQcGURCM=
-X-Google-Smtp-Source: APXvYqzVAo+ZyEfJF+byazHBzyw1r81fYUkb+lIcfsfvEl5CCNv0HGBgtp71HHEqcuQmiYrP+noYzqN24cAaxpdyDYQ=
-X-Received: by 2002:a0c:8e08:: with SMTP id v8mr37832199qvb.4.1577709256287;
- Mon, 30 Dec 2019 04:34:16 -0800 (PST)
+        id S1727569AbfL3Ohd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Dec 2019 09:37:33 -0500
+Received: from frisell.zx2c4.com ([192.95.5.64]:41067 "EHLO frisell.zx2c4.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727445AbfL3Ohd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 30 Dec 2019 09:37:33 -0500
+Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTP id 68ac53d3;
+        Mon, 30 Dec 2019 13:39:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=mime-version
+        :references:in-reply-to:from:date:message-id:subject:to:cc
+        :content-type; s=mail; bh=7aEjW/TsXgUR/0HTMYxt13eFkHc=; b=kFXRtf
+        BfiEqmjri0y3PshcHLuAZ/aW4UQrCX7AYD3/cbLACA2HthDm7tcbO9E1n9witAxx
+        VQpvpaJdRs9BWpdiAZQFTkGmQHK8Rs1K3LcMfFfOrNKW5fM3hoMG+4/NzFy++TSt
+        xH5IcjOMnUrV3EyNKupV2X92h1jYfJs21D+pR3aZJDdwmg1Q1QiDUNeYo8TYE/wv
+        fCh1wtolDJPbftWos3BAwP1/LHhnlO3OlqNJGWcmbLWwc1cJ5L9qKMw8RxL9UBOH
+        nPB3iF/tHbPnoNIng8aUvfz95ps2bTxkTtVoxCGtawoI75LQaEnbf6bZiqomGbnP
+        jMRMCoIAN8Qg4FIw==
+Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id ae90a694 (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256:NO);
+        Mon, 30 Dec 2019 13:39:22 +0000 (UTC)
+Received: by mail-ot1-f54.google.com with SMTP id 66so46453276otd.9;
+        Mon, 30 Dec 2019 06:37:29 -0800 (PST)
+X-Gm-Message-State: APjAAAVfb16z4i5fR4cGD92vvOVfrbF5bzOmTyXBEVjNCX6y96gXMul9
+        sUyKYeZPlVVkv/mT50DQTx9Bw058MFcLR88G3qE=
+X-Google-Smtp-Source: APXvYqyHFHLNrxuP48Lg+YeZE5/Amk7fGJf1A1hYpoeI6AJ4i7Pj3sKwYh0lazl5X3mtDZORoUvWany3TCUvhtDzQTg=
+X-Received: by 2002:a05:6830:1141:: with SMTP id x1mr401529otq.120.1577716648710;
+ Mon, 30 Dec 2019 06:37:28 -0800 (PST)
 MIME-Version: 1.0
 References: <20191223130834.GA102399@zx2c4.com> <20191224135404.389039-1-Jason@zx2c4.com>
- <CAK8P3a1fVFDkHe=gLy55rHxwfZ8YKcUSYvnhSoMbcAgWy6Nm9w@mail.gmail.com> <CAHmME9o07dQV_MmWmtBFCKp=sdsO-scC6-UbXNi=dpU6umCoPg@mail.gmail.com>
-In-Reply-To: <CAHmME9o07dQV_MmWmtBFCKp=sdsO-scC6-UbXNi=dpU6umCoPg@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 30 Dec 2019 13:34:00 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0sWObusG3xO_JE9CXCyNfFN0p6OgPjUyU2CHLBBZNpZw@mail.gmail.com>
-Message-ID: <CAK8P3a0sWObusG3xO_JE9CXCyNfFN0p6OgPjUyU2CHLBBZNpZw@mail.gmail.com>
+ <CAK8P3a1fVFDkHe=gLy55rHxwfZ8YKcUSYvnhSoMbcAgWy6Nm9w@mail.gmail.com>
+ <CAHmME9o07dQV_MmWmtBFCKp=sdsO-scC6-UbXNi=dpU6umCoPg@mail.gmail.com> <CAK8P3a0sWObusG3xO_JE9CXCyNfFN0p6OgPjUyU2CHLBBZNpZw@mail.gmail.com>
+In-Reply-To: <CAK8P3a0sWObusG3xO_JE9CXCyNfFN0p6OgPjUyU2CHLBBZNpZw@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 30 Dec 2019 15:37:17 +0100
+X-Gmail-Original-Message-ID: <CAHmME9o==nBONywVgSjsmjs2H_A8itgmwibqzPmvivcSocKWRQ@mail.gmail.com>
+Message-ID: <CAHmME9o==nBONywVgSjsmjs2H_A8itgmwibqzPmvivcSocKWRQ@mail.gmail.com>
 Subject: Re: [PATCH] mips: vdso: conditionalize 32-bit time functions on COMPAT_32BIT_TIME
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
         Paul Burton <paulburton@kernel.org>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Christian Brauner <christian.brauner@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Moo4o+r9ZXyOcQLpJBeMNmEX74RKaHhRTEX+rPGRUfwsVxXGuEO
- wqPV8DCbcTF5AGcgUSOaKy3SbeHqkLvg4UnsWUzMB+6ucXrwP+3t9votLoo2cAJiwU4/yA1
- zPLALZCZ3QT3CGJegxuIe70Mu3k6E5tAW2JaDzJuBFCvUs55F3cCq7QYsnOT5zhl4v9RVJ2
- tqyLiPugFvYVYWQCQ5FzQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yNMXuiXTtMY=:LPMAgjEFvqvDIBLQq2+iLz
- tVFPJilUKTV1NBbipEgxDabgGPyrKNPhFbahyWC+c1m+OsqrX6NFo6PnhnjaduLdPRIGyR+Rs
- RLxMhhGBfm/AruwKQXOnSQaV9bDzYEejhqO0vuh/vonmoOJtAo+DJdMv8hibKdDqcgsIIRr0G
- 0nJBRHX2iYDt950KG7gMsdI4CEXrKL3muy7y5GvaHTviEx3s6l3fPsp808fhXrIdErdzBx5pF
- vGOoXAc9ZSxWZVR3zTajBEPNIEL4yrov1VzzQtP9qOzOV8aGWy1H3yF/mZoFusEzLsOqFEtNo
- fHexeGXEYV+C9W10T8FHA3Fo+l3U87HXo00tRgN0OZSRok45UIjtR0TDnrWYWgw/g/aIF15gN
- ZRv60bKKw/V07IUmwl066S0dJusTL1xAFSFRtJxh2ahvQ4IkP8LsRrUndX2sU4mTEMXHni4pF
- TuEajA9U87jswJaj3+KUN47zKaiIGbCFp9Vo1Az91XGvEgneAM6DwiLqlLc/ctScK5gGVq2ES
- GtJim8+tb7dVpt3gn/ZLSP1DLmCtrawDgeOZ9tcnHrSlrLD6TscQiWTO+X4RvkOBvi9T0ftJq
- BKKt7Z3O1gxA7Q7WJSEDrMjwBTQIO7Ucxp0rGgp564go8V8kdMCMkfrlZClUki8LbGXR1L6Y2
- fbNMOt5+vE5uL0gamLadYNZw+iZWpHQyLCEUNiBqDyYbPtk85ox4oi64B7lAe8MBMuoYmPFZw
- WJLkQV4q/0jDkaj5kijhew8SslXA9TeCmxc8VPc75vaqxMkGt7iqtOPTHii8UM++fzQjVTNAH
- QTRnnAAQcb7tbckDD6gDuihCVVq3YiZCGQSBgr9buRyDgT6adO9JmH6fe9AIXZJ5+H3HNH7jI
- I+XN9AEENbtOh7gZy70w==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 30, 2019 at 1:27 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+On Mon, Dec 30, 2019 at 1:34 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> On Mon, Dec 30, 2019 at 12:58 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > Thanks for the bug report! I'm not completely sure why this fails in
-> > this particular
-> > way though. I assume you are using musl-1.1.20, not a musl-1.2.0 snapshot
+> - Why does it crash in the first place rather than returning -ENOSYS?
+
+There's a bit of speculation about this in the original thread that
+prompted this patch (you're CC'd).
+
 >
-> Yes, that's the one, sorry.
->
-> > diff --git a/arch/mips/vdso/vdso.lds.S b/arch/mips/vdso/vdso.lds.S
-> > index da4627430aba..0bdc6a026be8 100644
-> > --- a/arch/mips/vdso/vdso.lds.S
-> > +++ b/arch/mips/vdso/vdso.lds.S
-> > @@ -93,9 +93,11 @@ VERSION
-> >         LINUX_2.6 {
-> >  #ifndef DISABLE_MIPS_VDSO
-> >         global:
-> > +#if (_MIPS_SIM == _MIPS_SIM_ABI64) || defined(CONFIG_COMPAT_32BIT_TIME)
-> >                 __vdso_clock_gettime;
-> >                 __vdso_gettimeofday;
-> >                 __vdso_clock_getres;
-> > +#endif
-> >  #if _MIPS_SIM != _MIPS_SIM_ABI64
-> >                 __vdso_clock_gettime64;
-> >  #endif
-> >
-> > That should ensure that no user space can call the old vdso
-> > functions on a kernel that intentionally breaks the actual
-> > syscalls.
->
-> I can confirm that patch fixes things. Thanks.
+> - How does it actually work if you run an application built against
+>   an old musl version on a kernel that tries to make this not work?
+>   Do you just get a random time (uninitialized user space stack) and
+>   work with that without checking the error code?
 
-Ok, that's good news, but I think we still need to answer two questions:
+Actually, your patch fails here. The ts struct remains as it was
+before, filled with garbage. No good. My original patch in this
+thread, though, does result in the correct value being written to ts.
 
-- Why does it crash in the first place rather than returning -ENOSYS?
-
-- How does it actually work if you run an application built against
-  an old musl version on a kernel that tries to make this not work?
-  Do you just get a random time (uninitialized user space stack) and
-  work with that without checking the error code?
-
-      Arnd
+Jason
