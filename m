@@ -2,105 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C16112CA83
-	for <lists+linux-mips@lfdr.de>; Sun, 29 Dec 2019 19:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C196812CFCE
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Dec 2019 12:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727180AbfL2S7Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 29 Dec 2019 13:59:16 -0500
-Received: from mail-pj1-f44.google.com ([209.85.216.44]:37871 "EHLO
-        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726455AbfL2S7Q (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 29 Dec 2019 13:59:16 -0500
-Received: by mail-pj1-f44.google.com with SMTP id m13so7228435pjb.2;
-        Sun, 29 Dec 2019 10:59:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tAjd1uiPZsuPFI/UJM6eJ4os9/hBTboJTt1j2UJRT1M=;
-        b=CZARm84kbG98zgPD5UEbtdUgulL4TlM3icq008J2nAAx+xWwAu+V2hFdpFhNXfRidJ
-         rkVYLty8+lKTh6WWWjKpTE0wHpdl2Cq0gZdYryQFVmlVKTqviKTVl93wzhZxEZhg2Vu3
-         GfQzxGDwgoazbEkXTYmlDmccSvWGP8ataVVjw9xiQ1ApTKVOvbxTed2MrHojaaxH+qIA
-         DP4s1B05quEMoVNMVhjOF83ExM3F/7N1OuOyxBSQSmBrrQr/43PXrteGwPULwXmRc7mM
-         jQD2QroDMdMEDGNMt52dIEzShskUrMgQX3NQIvAjraxfIWOFBjQtPXGh5L1rtZNL4Nd0
-         82Gw==
-X-Gm-Message-State: APjAAAWvphhCHwDDYC/yex8bMfGNHoyLznxTp0/QuXRGNEKdfYkMLPO3
-        EsgrKaKNqANMvj35WvWeT6c=
-X-Google-Smtp-Source: APXvYqwNnq8UfTWxUB2h/uWEnMcyWZc+0Mp6MkMobyfFljo3YKHA1N3Eon4lNDmSua+qHM/hvsx2bw==
-X-Received: by 2002:a17:902:8f96:: with SMTP id z22mr62219611plo.11.1577645954756;
-        Sun, 29 Dec 2019 10:59:14 -0800 (PST)
-Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id v13sm48565741pgc.54.2019.12.29.10.59.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Dec 2019 10:59:13 -0800 (PST)
-Date:   Sun, 29 Dec 2019 11:01:23 -0800
-From:   Paul Burton <paulburton@kernel.org>
-To:     "Maciej W. Rozycki" <macro@linux-mips.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH] MIPS: Use __copy_{to,from}_user() for emulated FP
- loads/stores
-Message-ID: <20191229190123.ju24cz7thuvybejs@lantea.localdomain>
-References: <20191203204933.1642259-1-paulburton@kernel.org>
- <f5e09155580d417e9dcd07b1c20786ed@AcuMS.aculab.com>
- <20191204154048.eotzglp4rdlx4yzl@lantea.localdomain>
- <e220ba9a19da41abba599b5873afa494@AcuMS.aculab.com>
- <alpine.LFD.2.21.1912260251520.3762799@eddie.linux-mips.org>
+        id S1727376AbfL3L6T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Dec 2019 06:58:19 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:46813 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726196AbfL3L6S (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Dec 2019 06:58:18 -0500
+Received: from mail-qk1-f172.google.com ([209.85.222.172]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MLAAs-1j3yVH10x0-00IAEi; Mon, 30 Dec 2019 12:58:17 +0100
+Received: by mail-qk1-f172.google.com with SMTP id t129so26064714qke.10;
+        Mon, 30 Dec 2019 03:58:16 -0800 (PST)
+X-Gm-Message-State: APjAAAVMiyVtXV/+kbCMWFGoHfQnRzBjT9l92VEp+9YnGivmbWc1HQH5
+        teSn2LW2cHeUgkdSy+Xlw91eLAadFyXfFzKjc/U=
+X-Google-Smtp-Source: APXvYqwReU6KI+hEZNY1rvE7ncOKdyI/QwFC2pLA7OkGLJknUDKQqjXFuqpjgMyzRIXnVBzHyY0P2OQTFMUGAvc4FCU=
+X-Received: by 2002:a05:620a:a5b:: with SMTP id j27mr54486692qka.286.1577707096044;
+ Mon, 30 Dec 2019 03:58:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.LFD.2.21.1912260251520.3762799@eddie.linux-mips.org>
+References: <20191223130834.GA102399@zx2c4.com> <20191224135404.389039-1-Jason@zx2c4.com>
+In-Reply-To: <20191224135404.389039-1-Jason@zx2c4.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 30 Dec 2019 12:57:59 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1fVFDkHe=gLy55rHxwfZ8YKcUSYvnhSoMbcAgWy6Nm9w@mail.gmail.com>
+Message-ID: <CAK8P3a1fVFDkHe=gLy55rHxwfZ8YKcUSYvnhSoMbcAgWy6Nm9w@mail.gmail.com>
+Subject: Re: [PATCH] mips: vdso: conditionalize 32-bit time functions on COMPAT_32BIT_TIME
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Christian Brauner <christian.brauner@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:9VNsB/0hV+uE9zUbhnqLZ6nurlkV2+Py0P0PFGmNrhG80WpHmRM
+ X77X2nwlZHYi/To/p16EOLRgfwnnqAnGvcMG/VZEHeXKRArVYQbC1hhx3cd2nvbeq6KOpQd
+ u73ajuKjYbjn2ONuh+c0xo49lcdBaFuws7Lp7hgZfpx5Mj0f4VYKeFeHsQO3lrsV23Mf523
+ RKuU1siU/zZrRLLKCB5Zw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Kso8zCSd2bA=:jMb7H0gBZZ4sMXVuHy6w9T
+ Lr6JTxyoKWk0SgMA2EJScqQoiA2ZFX8e4JY5BYQ5Po6b6w7AJTj48dZoVZRo1v5Bpl5rNKPoQ
+ AmzCEGoH7LcpphD6i1u9+Fn3l2xl0DHlhmo6MJIbyIa1OmubDodffmSmCslji+AdMx/fIJx37
+ gYj57dSYaGatpCulyfNvJVrf9BqjXfeEKZQhRdhsEU9P5eXIfIBaG6zAhyT+uPTbt4g7WfpE9
+ LXZ6qJIInFy6bPvMjkXyolibuCND42XmXRvsm1RyBPyo5t71KlrSWch2dTpMRwx5HlzcDkxfe
+ 7Qxx2b3iWm0iYhGXAeS7KryFPup3svVRxq9uReEBfFnyE54iSvTJPHJk4gPF26KGZUC8P7QRG
+ 8LtZCHia9xQHnvZi9YSjZfbp1qBen7EcRoKtLHgAe1zeh+PFuqk7NmuqjRa+n2vaApIaTY2Gw
+ JSQxibZ6fZjppy+SkEgtgUbvjNRne3oUogcATAGMo4E40VGV+wnXCu4n+sV6K/Xo3KhKYA6QD
+ yTOlDwOYpOUTQRyj058qETqz5WTSmCc9wzv+7U8IpvSd/JCJ2Rxdoknn+vQ8LPrbrmdFZyFQt
+ fth8nAg7OmKhVCpcLUaMl8EcDbh6xrFetTOS0iW0oDvfueMSvDSokrUxD5Ncs/kRyFhb5eGKe
+ k4QvZuxIxVLEsRkK1F5wP00fTjND2G9k5vaW2CZrKJitsf7JznJZRi2deMrMf84A893S0LipT
+ rDpEmEW4OgzHWsWLmwS8JwyhgHdOhw6lkf56NxRFnM9c+cHGcb02SNubkZs+NpUc+Nx2H3iDI
+ bvW/YdUxvsbgRMqb8RIZGG9m0jaing4rbcQTp5j5fZmMmoByWZNkPLjaSWODrHO8kMMJB9JDV
+ R3JehtGBI1ymV1mYOMMw==
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Maciej,
+On Tue, Dec 24, 2019 at 2:54 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> When the VDSO falls back to 32-bit time functions on kernels with
+> COMPAT_32BIT_TIME=n, userspace becomes corrupted and appears to crash
+> shortly after, with something like:
+>
+> [    0.359617] do_page_fault(): sending SIGSEGV to init for invalid read access from 000000007ff790d0
+> [    0.359843] epc = 0000000077e45df4 in libc.so[77da6000+de000]
+> [    0.360319] ra  = 0000000010000c50 in init[10000000+2000]
+> [    0.364456] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+>
+> This can be reproduced with simply calling `clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts)`,
+> since `CLOCK_PROCESS_CPUTIME_ID` is not exported to the VDSO, invoking
+> the syscall callback branch. This crash was observed with musl 1.20's
+> clock_gettime implementation:
 
-On Thu, Dec 26, 2019 at 03:01:06AM +0000, Maciej W. Rozycki wrote:
-> On Wed, 4 Dec 2019, David Laight wrote:
-> > > We used to have separate get_user_unaligned() & put_user_unaligned()
-> > > which would suggest that it's expected that get_user() & put_user()
-> > > require their accesses be aligned, but they were removed by commit
-> > > 3170d8d226c2 ("kill {__,}{get,put}_user_unaligned()") in v4.13.
-> > > 
-> > > But perhaps we should just take the second AdEL exception & recover via
-> > > the fixups table. We definitely don't right now... Needs further
-> > > investigation...
-> > 
-> > get/put_user can fault because the user page is absent (etc).
-> > So there must be code to 'expect' a fault on those instructions.
-> 
->  As I recall we only emulate unaligned accesses with a subset of integer 
-> load/store instructions (and then only if TIF_FIXADE is set, which is the 
-> default), and never with FP load/store instructions.  Consequently I see 
-> no point in doing this in the FP emulator either and I think these ought 
-> to just send SIGBUS instead.  Otherwise you'll end up with user code that 
-> works differently depending on whether the FP hardware is real or 
-> emulated, which is really bad.
+Thanks for the bug report! I'm not completely sure why this fails in
+this particular
+way though. I assume you are using musl-1.1.20, not a musl-1.2.0 snapshot
+(the version 1.20 you list does not exist), so the combination you are testing
+is supposed to just return -ENOSYS here to match the behavior of hte
+system call.
 
-That might simplify things here, but it's incorrect. I'm fairly certain
-the intent is that emulate_load_store_insn() handles all non-FP loads &
-stores (though looking at it we're missing some instructions added in
-r6). More importantly though we've been emulating FP loads & stores
-since v3.10 which introduced the change alongside microMIPS support in
-commit 102cedc32a6e ("MIPS: microMIPS: Floating point support."). The
-commit contains no description of why, and I'm not aware of any reason
-microMIPS specifically would need this so I suspect that commit bundled
-this change for no good reason...
+> --- a/arch/mips/include/asm/vdso/gettimeofday.h
+> +++ b/arch/mips/include/asm/vdso/gettimeofday.h
+> @@ -107,7 +107,7 @@ static __always_inline int clock_getres_fallback(
+>        return error ? -ret : ret;
+> }
+>
+> -#if _MIPS_SIM != _MIPS_SIM_ABI64
+> +#if _MIPS_SIM != _MIPS_SIM_ABI64 && defined(CONFIG_COMPAT_32BIT_TIME)
+>
+>  #define VDSO_HAS_32BIT_FALLBACK        1
+>
 
-It's also worth noting that some hardware will handle unaligned FP
-loads/stores, which means having the emulator reject them will result in
-more of a visible difference to userland. ie. on some hardware they'll
-work just fine, but on some you'd get SIGBUS. So I do think emulating
-them makes some sense - just as for non-FP loads & stores it lets
-userland not care whether the hardware will handle them, so long as it's
-not performance critical code. If we knew that had never been used then
-perhaps we could enforce the alignment requirement (and maybe that's
-what you recall doing), but since we've been emulating them for the past
-6 years it's too late for that now.
+I don't think this is the correct fix, it may actually make it worse
+by changing the vdso implementation for clock_gettime32()
+to fall back to clock_gettime64(), which would appear to work
+correctly before y2038 but fail afterwards.  How about this one:
 
-Thanks,
-    Paul
+diff --git a/arch/mips/vdso/vdso.lds.S b/arch/mips/vdso/vdso.lds.S
+index da4627430aba..0bdc6a026be8 100644
+--- a/arch/mips/vdso/vdso.lds.S
++++ b/arch/mips/vdso/vdso.lds.S
+@@ -93,9 +93,11 @@ VERSION
+        LINUX_2.6 {
+ #ifndef DISABLE_MIPS_VDSO
+        global:
++#if (_MIPS_SIM == _MIPS_SIM_ABI64) || defined(CONFIG_COMPAT_32BIT_TIME)
+                __vdso_clock_gettime;
+                __vdso_gettimeofday;
+                __vdso_clock_getres;
++#endif
+ #if _MIPS_SIM != _MIPS_SIM_ABI64
+                __vdso_clock_gettime64;
+ #endif
+
+That should ensure that no user space can call the old vdso
+functions on a kernel that intentionally breaks the actual
+syscalls.
+
+      Arnd
