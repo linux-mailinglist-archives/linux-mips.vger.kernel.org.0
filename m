@@ -2,175 +2,216 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5777612F190
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Jan 2020 00:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2EAF12F245
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Jan 2020 01:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727206AbgABWLl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Jan 2020 17:11:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50098 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726823AbgABWLl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 2 Jan 2020 17:11:41 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B343D21582;
-        Thu,  2 Jan 2020 22:11:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578003100;
-        bh=MgInnI9rBtUuTBZbaRpOVlK8CZPmjqXevC8yS5bKwYo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LbF+e/fiK7p6xUv+W3kzPzeNvL3vUCzKXzgwv2Ujtx1n9zqhDKeyNEA0qIpaJcuZv
-         dDTfganEtx1YYU7w3RRnRuB9toNzDSmMCgt+2YEUflrWckrNPBUgS0+qshxJbI1miE
-         Fc3vWgyJX1wgWdGV3RVKj30vHmIlnQto87J1nDO4=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 002/191] Revert "MIPS: futex: Emit Loongson3 sync workarounds within asm"
-Date:   Thu,  2 Jan 2020 23:04:44 +0100
-Message-Id: <20200102215830.136388186@linuxfoundation.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200102215829.911231638@linuxfoundation.org>
-References: <20200102215829.911231638@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1725916AbgACAkH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Jan 2020 19:40:07 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41045 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725872AbgACAkG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Jan 2020 19:40:06 -0500
+Received: by mail-pf1-f193.google.com with SMTP id w62so22789569pfw.8;
+        Thu, 02 Jan 2020 16:40:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3XbpzRISsRnAWo64hPWxTD8VrNV6vVLizRH94il6B8k=;
+        b=Iwerr1DZ1TVJmzzy7+Mcn37Ss9n7XF5c/1Yf7A+uGaM58TUM+79fqfWGlelMwd9X/U
+         m3X1mexxrA+l4dHeoAu+a4nJc2VjgYafOjbyDU+bv6o0MM17fhCvKbv4mKrYuiE8cF/9
+         EGYIxkpTZ6yzjLUTZzMqx7bPG/GxK73MAr2EOXW0MPBKVp+HPA29N56oc4gZOyamE6Aw
+         MIKv0EGJGnUeuLjxRBdqBK5QAOPvNWhZLuT89hckJtlOo5PBnM6ILVzMIG623+e5MYa/
+         jnVV0EZmwfkhAQSQ15jgwB1DLCzBb5r6gRmkAoSZqWIOrZF6J/RzI2MpfAe18v9yhPN3
+         uAEg==
+X-Gm-Message-State: APjAAAX5MMcq0yATiLMCSSDtB+DA1EYG18g9FmMJs1Uzk4+LKblbfyfa
+        kjswGLsJQZaKlVm8l0P1c/figlFFf+kXSg==
+X-Google-Smtp-Source: APXvYqxOJlFAIsECPVgAenHPkXPibhyFtyFPPpux79kjO3NLhnr/S5rUcdmPtNvFUj9QJjX2MmQ2aw==
+X-Received: by 2002:a63:597:: with SMTP id 145mr89378717pgf.384.1578012005481;
+        Thu, 02 Jan 2020 16:40:05 -0800 (PST)
+Received: from localhost ([2601:646:8a00:9810::55])
+        by smtp.gmail.com with ESMTPSA id k1sm12225897pjl.21.2020.01.02.16.40.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jan 2020 16:40:04 -0800 (PST)
+Date:   Thu, 2 Jan 2020 16:42:29 -0800
+From:   Paul Burton <paulburton@kernel.org>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian.brauner@canonical.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: Avoid VDSO ABI breakage due to global register
+ variable
+Message-ID: <20200103004229.lpbhocebuny6vxmf@lantea.localdomain>
+References: <20200102005343.GA495913@rani.riverdale.lan>
+ <20200102045038.102772-1-paulburton@kernel.org>
+ <754c5d05-4455-5ce1-475d-55c2191a06cf@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <754c5d05-4455-5ce1-475d-55c2191a06cf@arm.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hi Vincenzo,
 
-This reverts commit d754a529a8be55f009c6679d772c472c1632cd5b which was
-commit 3c1d3f0979721a39dd2980c97466127ce65aa130 upstream.
+On Thu, Jan 02, 2020 at 04:56:00PM +0000, Vincenzo Frascino wrote:
+> Hi Paul,
+> 
+> Happy new year.
 
-This breaks the build and should be reverted.
+Thanks; happy new year to you too!
 
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Paul Burton <paul.burton@mips.com>
-Cc: linux-mips@vger.kernel.org
-Cc: Huacai Chen <chenhc@lemote.com>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: Sasha Levin <sashal@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/mips/include/asm/barrier.h |   13 ++++++-------
- arch/mips/include/asm/futex.h   |   15 ++++++++-------
- 2 files changed, 14 insertions(+), 14 deletions(-)
+> On 02/01/2020 04:50, Paul Burton wrote:
+> > Declaring __current_thread_info as a global register variable has the
+> > effect of preventing GCC from saving & restoring its value in cases
+> > where the ABI would typically do so.
+> > 
+> > To quote GCC documentation:
+> > 
+> >> If the register is a call-saved register, call ABI is affected: the
+> >> register will not be restored in function epilogue sequences after the
+> >> variable has been assigned. Therefore, functions cannot safely return
+> >> to callers that assume standard ABI.
+> > 
+> > When our position independent VDSO is built for the n32 or n64 ABIs all
+> > functions it exposes should be preserving the value of $gp/$28 for their
+> > caller, but in the presence of the __current_thread_info global register
+> > variable GCC stops doing so & simply clobbers $gp/$28 when calculating
+> > the address of the GOT.
+> > 
+> > In cases where the VDSO returns success this problem will typically be
+> > masked by the caller in libc returning & restoring $gp/$28 itself, but
+> > that is by no means guaranteed. In cases where the VDSO returns an error
+> > libc will typically contain a fallback path which will now fail
+> > (typically with a bad memory access) if it attempts anything which
+> > relies upon the value of $gp/$28 - eg. accessing anything via the GOT.
+> > 
+> 
+> First of all good catch. I just came back from holidays and seems that you guys
+> had fun without me :)
 
---- a/arch/mips/include/asm/barrier.h
-+++ b/arch/mips/include/asm/barrier.h
-@@ -218,14 +218,13 @@
-  * ordering will be done by smp_llsc_mb() and friends.
-  */
- #if defined(CONFIG_WEAK_REORDERING_BEYOND_LLSC) && defined(CONFIG_SMP)
--# define __WEAK_LLSC_MB		sync
--# define smp_llsc_mb() \
--	__asm__ __volatile__(__stringify(__WEAK_LLSC_MB) : : :"memory")
--# define __LLSC_CLOBBER
-+#define __WEAK_LLSC_MB		"	sync	\n"
-+#define smp_llsc_mb()		__asm__ __volatile__(__WEAK_LLSC_MB : : :"memory")
-+#define __LLSC_CLOBBER
- #else
--# define __WEAK_LLSC_MB
--# define smp_llsc_mb()		do { } while (0)
--# define __LLSC_CLOBBER		"memory"
-+#define __WEAK_LLSC_MB		"		\n"
-+#define smp_llsc_mb()		do { } while (0)
-+#define __LLSC_CLOBBER		"memory"
- #endif
- 
- #ifdef CONFIG_CPU_CAVIUM_OCTEON
---- a/arch/mips/include/asm/futex.h
-+++ b/arch/mips/include/asm/futex.h
-@@ -16,7 +16,6 @@
- #include <asm/barrier.h>
- #include <asm/compiler.h>
- #include <asm/errno.h>
--#include <asm/sync.h>
- #include <asm/war.h>
- 
- #define __futex_atomic_op(insn, ret, oldval, uaddr, oparg)		\
-@@ -33,7 +32,7 @@
- 		"	.set	arch=r4000			\n"	\
- 		"2:	sc	$1, %2				\n"	\
- 		"	beqzl	$1, 1b				\n"	\
--		__stringify(__WEAK_LLSC_MB)				\
-+		__WEAK_LLSC_MB						\
- 		"3:						\n"	\
- 		"	.insn					\n"	\
- 		"	.set	pop				\n"	\
-@@ -51,19 +50,19 @@
- 		  "i" (-EFAULT)						\
- 		: "memory");						\
- 	} else if (cpu_has_llsc) {					\
-+		loongson_llsc_mb();					\
- 		__asm__ __volatile__(					\
- 		"	.set	push				\n"	\
- 		"	.set	noat				\n"	\
- 		"	.set	push				\n"	\
- 		"	.set	"MIPS_ISA_ARCH_LEVEL"		\n"	\
--		"	" __SYNC(full, loongson3_war) "		\n"	\
- 		"1:	"user_ll("%1", "%4")" # __futex_atomic_op\n"	\
- 		"	.set	pop				\n"	\
- 		"	" insn	"				\n"	\
- 		"	.set	"MIPS_ISA_ARCH_LEVEL"		\n"	\
- 		"2:	"user_sc("$1", "%2")"			\n"	\
- 		"	beqz	$1, 1b				\n"	\
--		__stringify(__WEAK_LLSC_MB)				\
-+		__WEAK_LLSC_MB						\
- 		"3:						\n"	\
- 		"	.insn					\n"	\
- 		"	.set	pop				\n"	\
-@@ -148,7 +147,7 @@ futex_atomic_cmpxchg_inatomic(u32 *uval,
- 		"	.set	arch=r4000				\n"
- 		"2:	sc	$1, %2					\n"
- 		"	beqzl	$1, 1b					\n"
--		__stringify(__WEAK_LLSC_MB)
-+		__WEAK_LLSC_MB
- 		"3:							\n"
- 		"	.insn						\n"
- 		"	.set	pop					\n"
-@@ -165,13 +164,13 @@ futex_atomic_cmpxchg_inatomic(u32 *uval,
- 		  "i" (-EFAULT)
- 		: "memory");
- 	} else if (cpu_has_llsc) {
-+		loongson_llsc_mb();
- 		__asm__ __volatile__(
- 		"# futex_atomic_cmpxchg_inatomic			\n"
- 		"	.set	push					\n"
- 		"	.set	noat					\n"
- 		"	.set	push					\n"
- 		"	.set	"MIPS_ISA_ARCH_LEVEL"			\n"
--		"	" __SYNC(full, loongson3_war) "			\n"
- 		"1:	"user_ll("%1", "%3")"				\n"
- 		"	bne	%1, %z4, 3f				\n"
- 		"	.set	pop					\n"
-@@ -179,7 +178,8 @@ futex_atomic_cmpxchg_inatomic(u32 *uval,
- 		"	.set	"MIPS_ISA_ARCH_LEVEL"			\n"
- 		"2:	"user_sc("$1", "%2")"				\n"
- 		"	beqz	$1, 1b					\n"
--		"3:	" __SYNC_ELSE(full, loongson3_war, __WEAK_LLSC_MB) "\n"
-+		__WEAK_LLSC_MB
-+		"3:							\n"
- 		"	.insn						\n"
- 		"	.set	pop					\n"
- 		"	.section .fixup,\"ax\"				\n"
-@@ -194,6 +194,7 @@ futex_atomic_cmpxchg_inatomic(u32 *uval,
- 		: GCC_OFF_SMALL_ASM() (*uaddr), "Jr" (oldval), "Jr" (newval),
- 		  "i" (-EFAULT)
- 		: "memory");
-+		loongson_llsc_mb();
- 	} else
- 		return -ENOSYS;
- 
+The fun never stops ;)
+
+> Did you consider the option to use "-ffixed-gp -ffixed-28" as a compilation
+> flags for the vDSO library (Arvind was mentioning it as well in his reply)?
+> According to the GCC manual "treats the register as a fixed register; generated
+> code should never refer to it"
+> (https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#Code-Gen-Options)
+> 
+> I did some experiments this morning an seems that on MIPS the convention is not
+> honored at least on GCC-9. Do you know who to contact to get it enabled/fixed in
+> the compiler?
+> 
+> With this:
+> 
+> Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Tested-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+
+Using -ffixed-gp wouldn't be correct for the VDSO - the VDSO itself is
+position independent code, and will need to use $gp to access the GOT
+which is part of how position-independence is achieved (technically you
+could access the GOT using another register of course but you'd need
+some way to persuade the compiler to break with convention & you'd gain
+nothing meaningful since you'd need to use some other register anyway).
+If we use -ffixed-gp then we're telling GCC not to use $gp, and that
+doesn't make sense. If we consider -ffixed-gp as telling GCC not to use
+$gp as a general purpose register then it's meaningless because $gp
+already has a specific use & isn't used as a general purpose register.
+If we consider -ffixed-gp as telling GCC not to use $gp at all then it
+doesn't make sense because it needs to in order to access the GOT.
+
+In terms of GCC's flags we'd want to use -fcall-saved-gp, but that would
+just be telling GCC information it already knows about the n32 & n64
+ABIs & indeed it seems to have no effect at all on the way GCC handles
+the global register variable - it doesn't cause gcc to save & restore
+$gp with the global register variable present, so you gain nothing.
+
+We could use -ffixed-gp for the kernel proper (& not the VDSO), but:
+
+1) The kernel builds as non-PIC code with no $gp-based optimizations
+   enabled, and since this has been fine forever it seems safe to expect
+   the compiler not to start using $gp in new ways.
+
+2) It would be a separate issue to fixing the VDSO anyway.
+
+So I'll go ahead with the v2 patch without changing compiler flags for
+now.
+
+Thanks,
+    Paul
+
+> > One fix for this would be to move the declaration of
+> > __current_thread_info inside the current_thread_info() function,
+> > demoting it from global register variable to local register variable &
+> > avoiding inadvertently creating a non-standard calling ABI for the VDSO.
+> > Unfortunately this causes issues for clang, which doesn't support local
+> > register variables as pointed out by commit fe92da0f355e ("MIPS: Changed
+> > current_thread_info() to an equivalent supported by both clang and GCC")
+> > which introduced the global register variable before we had a VDSO to
+> > worry about.
+> > 
+> > Instead, fix this by continuing to use the global register variable for
+> > the kernel proper but declare __current_thread_info as a simple extern
+> > variable when building the VDSO. It should never be referenced, and will
+> > cause a link error if it is. This resolves the calling convention issue
+> > for the VDSO without having any impact upon the build of the kernel
+> > itself for either clang or gcc.
+> > 
+> > Signed-off-by: Paul Burton <paulburton@kernel.org>
+> > Reported-by: "Jason A. Donenfeld" <Jason@zx2c4.com>
+> > Fixes: ebb5e78cc634 ("MIPS: Initial implementation of a VDSO")
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Christian Brauner <christian.brauner@canonical.com>
+> > Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> > Cc: <stable@vger.kernel.org> # v4.4+
+> > ---
+> > Changes in v2:
+> > - Switch to the #ifdef __VDSO__ approach rather than using a local
+> >   register variable which clang doesn't support.
+> > ---
+> >  arch/mips/include/asm/thread_info.h | 20 +++++++++++++++++++-
+> >  1 file changed, 19 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/mips/include/asm/thread_info.h b/arch/mips/include/asm/thread_info.h
+> > index 4993db40482c..ee26f9a4575d 100644
+> > --- a/arch/mips/include/asm/thread_info.h
+> > +++ b/arch/mips/include/asm/thread_info.h
+> > @@ -49,8 +49,26 @@ struct thread_info {
+> >  	.addr_limit	= KERNEL_DS,		\
+> >  }
+> >  
+> > -/* How to get the thread information struct from C.  */
+> > +/*
+> > + * A pointer to the struct thread_info for the currently executing thread is
+> > + * held in register $28/$gp.
+> > + *
+> > + * We declare __current_thread_info as a global register variable rather than a
+> > + * local register variable within current_thread_info() because clang doesn't
+> > + * support explicit local register variables.
+> > + *
+> > + * When building the VDSO we take care not to declare the global register
+> > + * variable because this causes GCC to not preserve the value of $28/$gp in
+> > + * functions that change its value (which is common in the PIC VDSO when
+> > + * accessing the GOT). Since the VDSO shouldn't be accessing
+> > + * __current_thread_info anyway we declare it extern in order to cause a link
+> > + * failure if it's referenced.
+> > + */
+> > +#ifdef __VDSO__
+> > +extern struct thread_info *__current_thread_info;
+> > +#else
+> >  register struct thread_info *__current_thread_info __asm__("$28");
+> > +#endif
+> >  
+> >  static inline struct thread_info *current_thread_info(void)
+> >  {
+> > 
+> 
+> -- 
+> Regards,
+> Vincenzo
 
 
