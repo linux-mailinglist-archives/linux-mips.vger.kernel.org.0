@@ -2,80 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6499C12F5F5
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Jan 2020 10:12:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DC412FA17
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Jan 2020 17:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726390AbgACJMU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Jan 2020 04:12:20 -0500
-Received: from foss.arm.com ([217.140.110.172]:54020 "EHLO foss.arm.com"
+        id S1727742AbgACQGU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Jan 2020 11:06:20 -0500
+Received: from www.linuxtv.org ([130.149.80.248]:56118 "EHLO www.linuxtv.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725972AbgACJMU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 3 Jan 2020 04:12:20 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 264C61FB;
-        Fri,  3 Jan 2020 01:12:19 -0800 (PST)
-Received: from [192.168.1.18] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 918673F703;
-        Fri,  3 Jan 2020 01:12:17 -0800 (PST)
-Subject: Re: [PATCH v2] MIPS: Avoid VDSO ABI breakage due to global register
- variable
-To:     Paul Burton <paulburton@kernel.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian.brauner@canonical.com>,
-        stable@vger.kernel.org
-References: <20200102005343.GA495913@rani.riverdale.lan>
- <20200102045038.102772-1-paulburton@kernel.org>
- <754c5d05-4455-5ce1-475d-55c2191a06cf@arm.com>
- <20200103004229.lpbhocebuny6vxmf@lantea.localdomain>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <fce2be75-9a68-37eb-723a-99d010e77132@arm.com>
-Date:   Fri, 3 Jan 2020 09:15:10 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20200103004229.lpbhocebuny6vxmf@lantea.localdomain>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1727539AbgACQGU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 3 Jan 2020 11:06:20 -0500
+X-Greylist: delayed 2124 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Jan 2020 11:06:20 EST
+Received: from mchehab by www.linuxtv.org with local (Exim 4.92)
+        (envelope-from <mchehab@linuxtv.org>)
+        id 1inOtr-00AOvB-Dl; Fri, 03 Jan 2020 15:30:07 +0000
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Date:   Fri, 03 Jan 2020 15:28:04 +0000
+Subject: [git:media_tree/master] media: MAINTAINERS: Orphan img-ir driver
+To:     linuxtv-commits@linuxtv.org
+Cc:     James Hartley <james.hartley@sondrel.com>,
+        Sean Young <sean@mess.org>, James Hogan <jhogan@kernel.org>,
+        Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org
+Mail-followup-to: linux-media@vger.kernel.org
+Forward-to: linux-media@vger.kernel.org
+Reply-to: linux-media@vger.kernel.org
+Message-Id: <E1inOtr-00AOvB-Dl@www.linuxtv.org>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+This is an automatic generated email to let you know that the following patch were queued:
 
-On 1/3/20 12:42 AM, Paul Burton wrote:
-> Using -ffixed-gp wouldn't be correct for the VDSO - the VDSO itself is
-> position independent code, and will need to use $gp to access the GOT
-> which is part of how position-independence is achieved (technically you
-> could access the GOT using another register of course but you'd need
-> some way to persuade the compiler to break with convention & you'd gain
-> nothing meaningful since you'd need to use some other register anyway).
-> If we use -ffixed-gp then we're telling GCC not to use $gp, and that
-> doesn't make sense. If we consider -ffixed-gp as telling GCC not to use
-> $gp as a general purpose register then it's meaningless because $gp
-> already has a specific use & isn't used as a general purpose register.
-> If we consider -ffixed-gp as telling GCC not to use $gp at all then it
-> doesn't make sense because it needs to in order to access the GOT.
-> 
-> In terms of GCC's flags we'd want to use -fcall-saved-gp, but that would
-> just be telling GCC information it already knows about the n32 & n64
-> ABIs & indeed it seems to have no effect at all on the way GCC handles
-> the global register variable - it doesn't cause gcc to save & restore
-> $gp with the global register variable present, so you gain nothing.
-> 
-> We could use -ffixed-gp for the kernel proper (& not the VDSO), but:
-> 
-> 1) The kernel builds as non-PIC code with no $gp-based optimizations
->    enabled, and since this has been fine forever it seems safe to expect
->    the compiler not to start using $gp in new ways.
-> 
-> 2) It would be a separate issue to fixing the VDSO anyway.
+Subject: media: MAINTAINERS: Orphan img-ir driver
+Author:  James Hogan <jhogan@kernel.org>
+Date:    Thu Dec 19 15:52:57 2019 +0100
 
-Makes totally sense. Thanks for the explanation.
+I haven't been active for 18 months, and don't have the hardware set up
+to test the img-ir driver, so mark it as orphaned and remove myself as
+maintainer.
 
--- 
-Regards,
-Vincenzo
+I used to test this driver using a Minimorph board with Meta based
+TZ1090 SoC, but the Meta arch port is long gone from the kernel. The
+only remaining platform in-tree using this driver is the Imagination
+Pistachio SoC, and the only Pistachio based board with DTS in-tree (MIPS
+Creator Ci40) doesn't bring the IR out.
+
+However I presume the IP persists under the guardianship of Sondrel, and
+its possible current & future SoCs/boards may continue to use this IP.
+
+Signed-off-by: James Hogan <jhogan@kernel.org>
+Cc: James Hartley <james.hartley@sondrel.com>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+
+ MAINTAINERS | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+---
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 87f3d89d44a2..0dd2431bf239 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8099,8 +8099,7 @@ F:	Documentation/devicetree/bindings/auxdisplay/img-ascii-lcd.txt
+ F:	drivers/auxdisplay/img-ascii-lcd.c
+ 
+ IMGTEC IR DECODER DRIVER
+-M:	James Hogan <jhogan@kernel.org>
+-S:	Maintained
++S:	Orphan
+ F:	drivers/media/rc/img-ir/
+ 
+ IMON SOUNDGRAPH USB IR RECEIVER
