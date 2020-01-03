@@ -2,114 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C80F12F251
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Jan 2020 01:42:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9AB12F506
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Jan 2020 08:38:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbgACAmk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Jan 2020 19:42:40 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:45198 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725872AbgACAmk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Jan 2020 19:42:40 -0500
-Received: by mail-pg1-f194.google.com with SMTP id b9so22658581pgk.12;
-        Thu, 02 Jan 2020 16:42:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
-         :references:in-reply-to;
-        bh=HyioXBGMqcLyFY2JDZv6ThS3RXGTigbfy51ANMut3ps=;
-        b=Sc3CyVcU6/AGm54p0XXNxboyeI6gizD/2cRP+H0OctZ/NtP17WDNxbVqFG4tl45MNk
-         C9rPUP81qBw1t3zhuXE9HjE8W9EBZGHvqQJtthdYxoBdUZ91CYE8krJDmXRsbjOy0omK
-         btZq3HLPFK6MLzhvWqOFP8UnjCHCE+8H7y4khnx8Cn+MRdnd2ayfmFAyjPU+tPFChkp6
-         ZgyQIUvevUn9tDMKPtI3KlHsBVl9r8yHXcZ8SwucGD6w9tR6USmGseakzToYwk0e7PDR
-         /h/eiV/ZEPqqVMuDtM8o6eggrVRvz7eqVDUx01Mtvj9v1nGZ1/Tahjr9q404qPVmPIHP
-         BsDQ==
-X-Gm-Message-State: APjAAAU6cN+hhad1hytKACqFsEYEI91/+oe3E8pqbkHND4khySAxwg4p
-        rdfw259IEelYGG86LJnbA6Q=
-X-Google-Smtp-Source: APXvYqyQ01PVHaEoHE1LVHKgmLKjo0PVf9o02f/5W8ZOiX0AXapPjCsNxxSOPSv2GtC8UFVjo0n2zg==
-X-Received: by 2002:a65:56c9:: with SMTP id w9mr89389023pgs.296.1578012159672;
-        Thu, 02 Jan 2020 16:42:39 -0800 (PST)
-Received: from localhost ([73.93.152.206])
-        by smtp.gmail.com with ESMTPSA id o7sm68110625pfg.138.2020.01.02.16.42.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2020 16:42:39 -0800 (PST)
-Message-ID: <5e0e8dff.1c69fb81.86508.5dbe@mx.google.com>
-Date:   Thu, 02 Jan 2020 16:42:38 -0800
-From:   Paul Burton <paulburton@kernel.org>
-To:     Paul Burton <paulburton@kernel.org>
-CC:     linux-mips@vger.kernel.org
-CC:     linux-kernel@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian.brauner@canonical.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        stable@vger.kernel.org
-CC:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: Avoid VDSO ABI breakage due to global register  variable
-References:  <20200102045038.102772-1-paulburton@kernel.org>
-In-Reply-To:  <20200102045038.102772-1-paulburton@kernel.org>
+        id S1727227AbgACHiA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Jan 2020 02:38:00 -0500
+Received: from sonic301-30.consmr.mail.ne1.yahoo.com ([66.163.184.199]:41313
+        "EHLO sonic301-30.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726528AbgACHiA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Jan 2020 02:38:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1578037079; bh=MJdpASvZnpj3gXKZxrNskiGAl+hYYwdjGUMDZ9fMpsI=; h=Date:From:Reply-To:Subject:References:From:Subject; b=QSzh+FyK+PQqbNd1K5cuBfArUFqLiHiJAQkXv9ezOJqgEXC8QGQMQgZAHUyU4Q0YcLWtuY4D2Sr0/dr6OjadKmrFpRakTwV7xCp1Dw9f3Q8q2/NkQ+4lnuwCSU6ZzF+/SD5BmTiB2snpNWbd/vjroSKHRXVe13Ijb3DEHq61gm+41ZOBxaPDbGxUDpkZ8SREJ0VaTp1sKxjjUlqQ71XhzeDKepMbeP55ACCKICPw3k8vC84jh5JeEVKUf4+ADYt70sDmqegTPKmZMC9QOWyFjc5PX3rjn6/D10NDWKEFrjS7h/8J9Y+dKohuMDQAzRvoNR6eF6qw7FzJN6TwUm1t6Q==
+X-YMail-OSG: yXnmVBcVM1nFNSolob2gHkbHPZ3yfZSyZjIbiwo.24pXbh3OORIC9CiEzjjKfH6
+ 8rSqYYnETRF7LhGLdUPzfYxNL6Gya8Ka3CCZWTtjqUbND6M5a2wBG3Y7vYCztdFqeu78uLMNZC5m
+ b7EeHWZ4xaoadYgjjjfuitcXMc36jsOezDOKkecQ9TRe6DtHyC5EvQqVsYwapO8tlf4JYG6EG.FO
+ fpu2auCbIRLs2MMA4vMibGMiLjZrSyX1kCZbgDexAdD_u8b6KDCrEjd.8YF8F5qs3Fs_VGdMsOR0
+ jZsb6E8Efoq_Si6fVJggXbZQTFHf8MpBVXhO5euMma_ZBUlsoQi2o0U1Odi4aNmPfRfOEgmR90h.
+ jdRum8_.6VtYtI_pOGkH2YCHRtFFd476aeEECdrF.AFtyXeOxs2o7H749gRc9BNV6sXxBwgMOj2E
+ ShP09eiehvu.hKrhwu6x6yrDIIpsTqX7LCK0nHuyzZs1uvNd2EfdAbHabW7zBrJJLPT5PaIY4ovG
+ p0Szss.hm_6Pz4O9p5anMdPoK43XMHT03yxf6swDbirj_O98EUYSPd9C6B1LXMD0iWHjuSl4tu4z
+ GIkIvc5lErAM8tTr24dgvhNxDUiJjvDKO8aA9jRuhSAko29MJ2iRVxJezRLqhuWEeVdzlkskH9EI
+ ZD_4G3.v4_qxcPOSs4ITL4lFHkQ3bJ1Y3Sy7rM5os5jjdtpUycMyD5TDpD__0Zyv.rpIlc3Kp6oq
+ ina.QJE1E6rtxYYhIcDId1NSX8jEd6EvQxUOBktCleihXRVNPm2g0PWI_eEw1eFFFD7gOcvtR7WD
+ BH75SicEpJ4UxtblvYRCgbF4nBbu07TsJlDBqpoYhXjSllQlGGLt66pzu0itIp62Il08vY2UkuvB
+ 47aUc1oLbRxxjU.ZjgJiYHzj6rspZAMCHXwdber4wpv4kbkhO7B1ErJ9czk266z92WRVUmIXubFy
+ xoCO4fNiGxGSeULLlJXDzuatxKFNeZOshtAHHZsIYIpy8hqudstdD960GzqSzolnSothWFrZ9lPk
+ fdpDXQjhh_Bhq4AyRjbclegvE0E2Q6oVs48sZAx4e9.9jOD53UK9T51iW.8Qg4gQ7WDyjiFU097R
+ zRDteTFA2hFNqSihVhw0S70tRmOJUBWFF02lceT0zzN5czDm.R0ujSijrvskZZ8FRh6voapbwD2b
+ 2ZlGVZU0NAjdPxBL5xsAIPzLSSlYf_w7Z.xyZ7MCtzl.LRHZTR7.FX2iNvzladPYgxttJZOgLMCI
+ m7qk3S8Vtp3MqstvSjUF8K5e9axmV8qc4Htq4lQZhpUQ8zddeP2QVwyQbhsfIP2LKdUbWexqI
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ne1.yahoo.com with HTTP; Fri, 3 Jan 2020 07:37:59 +0000
+Date:   Fri, 3 Jan 2020 07:37:55 +0000 (UTC)
+From:   Brian Gilvary <1brian.gilvary@gmail.com>
+Reply-To: gilvarybrian@aol.com
+Message-ID: <466166173.6197256.1578037075711@mail.yahoo.com>
+Subject: Happy New Year For Our Mutual Benefits
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+References: <466166173.6197256.1578037075711.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.14873 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:71.0) Gecko/20100101 Firefox/71.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+Hi
 
-Paul Burton wrote:
-> Declaring __current_thread_info as a global register variable has the
-> effect of preventing GCC from saving & restoring its value in cases
-> where the ABI would typically do so.
-> 
-> To quote GCC documentation:
-> 
-> > If the register is a call-saved register, call ABI is affected: the
-> > register will not be restored in function epilogue sequences after the
-> > variable has been assigned. Therefore, functions cannot safely return
-> > to callers that assume standard ABI.
-> 
-> When our position independent VDSO is built for the n32 or n64 ABIs all
-> functions it exposes should be preserving the value of $gp/$28 for their
-> caller, but in the presence of the __current_thread_info global register
-> variable GCC stops doing so & simply clobbers $gp/$28 when calculating
-> the address of the GOT.
-> 
-> In cases where the VDSO returns success this problem will typically be
-> masked by the caller in libc returning & restoring $gp/$28 itself, but
-> that is by no means guaranteed. In cases where the VDSO returns an error
-> libc will typically contain a fallback path which will now fail
-> (typically with a bad memory access) if it attempts anything which
-> relies upon the value of $gp/$28 - eg. accessing anything via the GOT.
-> 
-> One fix for this would be to move the declaration of
-> __current_thread_info inside the current_thread_info() function,
-> demoting it from global register variable to local register variable &
-> avoiding inadvertently creating a non-standard calling ABI for the VDSO.
-> Unfortunately this causes issues for clang, which doesn't support local
-> register variables as pointed out by commit fe92da0f355e ("MIPS: Changed
-> current_thread_info() to an equivalent supported by both clang and GCC")
-> which introduced the global register variable before we had a VDSO to
-> worry about.
-> 
-> Instead, fix this by continuing to use the global register variable for
-> the kernel proper but declare __current_thread_info as a simple extern
-> variable when building the VDSO. It should never be referenced, and will
-> cause a link error if it is. This resolves the calling convention issue
-> for the VDSO without having any impact upon the build of the kernel
-> itself for either clang or gcc.
+As the Chief Financial Officer, British Petroleum Company plc (BP), I am in=
+ a position to facilitate immediate transfer of =C2=A3 48,000,000.00 (Forty=
+ Eight Million British Pounds Sterling), to any of your nominated Bank Acco=
+unt.
 
-Applied to mips-fixes.
+Source of Funds: An over-invoiced payment from a past project executed in m=
+y department. I cannot successfully achieve this transaction without presen=
+ting you as foreign contractor who will provide the bank account to receive=
+ the funds. Every documentation for the claim of the funds will be legally =
+processed and documented, so I will need your full co-operation for our mut=
+ual benefits.
 
-> commit bbcc5672b006
-> https://git.kernel.org/mips/c/bbcc5672b006
-> 
-> Signed-off-by: Paul Burton <paulburton@kernel.org>
-> Fixes: ebb5e78cc634 ("MIPS: Initial implementation of a VDSO")
-> Reported-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> Tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
+We will discuss details if you are interested to work with me to secure thi=
+s funds, as I said for our mutual benefits. I will be looking forward to yo=
+ur prompt response.
 
-Thanks,
-    Paul
-
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paulburton@kernel.org to report it. ]
+Best regards
+Brian Gilvary
+Chief financial officer
+BP, Plc.
