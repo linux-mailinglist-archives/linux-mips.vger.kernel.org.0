@@ -2,70 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9AB12F506
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Jan 2020 08:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6499C12F5F5
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Jan 2020 10:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727227AbgACHiA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Jan 2020 02:38:00 -0500
-Received: from sonic301-30.consmr.mail.ne1.yahoo.com ([66.163.184.199]:41313
-        "EHLO sonic301-30.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726528AbgACHiA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Jan 2020 02:38:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1578037079; bh=MJdpASvZnpj3gXKZxrNskiGAl+hYYwdjGUMDZ9fMpsI=; h=Date:From:Reply-To:Subject:References:From:Subject; b=QSzh+FyK+PQqbNd1K5cuBfArUFqLiHiJAQkXv9ezOJqgEXC8QGQMQgZAHUyU4Q0YcLWtuY4D2Sr0/dr6OjadKmrFpRakTwV7xCp1Dw9f3Q8q2/NkQ+4lnuwCSU6ZzF+/SD5BmTiB2snpNWbd/vjroSKHRXVe13Ijb3DEHq61gm+41ZOBxaPDbGxUDpkZ8SREJ0VaTp1sKxjjUlqQ71XhzeDKepMbeP55ACCKICPw3k8vC84jh5JeEVKUf4+ADYt70sDmqegTPKmZMC9QOWyFjc5PX3rjn6/D10NDWKEFrjS7h/8J9Y+dKohuMDQAzRvoNR6eF6qw7FzJN6TwUm1t6Q==
-X-YMail-OSG: yXnmVBcVM1nFNSolob2gHkbHPZ3yfZSyZjIbiwo.24pXbh3OORIC9CiEzjjKfH6
- 8rSqYYnETRF7LhGLdUPzfYxNL6Gya8Ka3CCZWTtjqUbND6M5a2wBG3Y7vYCztdFqeu78uLMNZC5m
- b7EeHWZ4xaoadYgjjjfuitcXMc36jsOezDOKkecQ9TRe6DtHyC5EvQqVsYwapO8tlf4JYG6EG.FO
- fpu2auCbIRLs2MMA4vMibGMiLjZrSyX1kCZbgDexAdD_u8b6KDCrEjd.8YF8F5qs3Fs_VGdMsOR0
- jZsb6E8Efoq_Si6fVJggXbZQTFHf8MpBVXhO5euMma_ZBUlsoQi2o0U1Odi4aNmPfRfOEgmR90h.
- jdRum8_.6VtYtI_pOGkH2YCHRtFFd476aeEECdrF.AFtyXeOxs2o7H749gRc9BNV6sXxBwgMOj2E
- ShP09eiehvu.hKrhwu6x6yrDIIpsTqX7LCK0nHuyzZs1uvNd2EfdAbHabW7zBrJJLPT5PaIY4ovG
- p0Szss.hm_6Pz4O9p5anMdPoK43XMHT03yxf6swDbirj_O98EUYSPd9C6B1LXMD0iWHjuSl4tu4z
- GIkIvc5lErAM8tTr24dgvhNxDUiJjvDKO8aA9jRuhSAko29MJ2iRVxJezRLqhuWEeVdzlkskH9EI
- ZD_4G3.v4_qxcPOSs4ITL4lFHkQ3bJ1Y3Sy7rM5os5jjdtpUycMyD5TDpD__0Zyv.rpIlc3Kp6oq
- ina.QJE1E6rtxYYhIcDId1NSX8jEd6EvQxUOBktCleihXRVNPm2g0PWI_eEw1eFFFD7gOcvtR7WD
- BH75SicEpJ4UxtblvYRCgbF4nBbu07TsJlDBqpoYhXjSllQlGGLt66pzu0itIp62Il08vY2UkuvB
- 47aUc1oLbRxxjU.ZjgJiYHzj6rspZAMCHXwdber4wpv4kbkhO7B1ErJ9czk266z92WRVUmIXubFy
- xoCO4fNiGxGSeULLlJXDzuatxKFNeZOshtAHHZsIYIpy8hqudstdD960GzqSzolnSothWFrZ9lPk
- fdpDXQjhh_Bhq4AyRjbclegvE0E2Q6oVs48sZAx4e9.9jOD53UK9T51iW.8Qg4gQ7WDyjiFU097R
- zRDteTFA2hFNqSihVhw0S70tRmOJUBWFF02lceT0zzN5czDm.R0ujSijrvskZZ8FRh6voapbwD2b
- 2ZlGVZU0NAjdPxBL5xsAIPzLSSlYf_w7Z.xyZ7MCtzl.LRHZTR7.FX2iNvzladPYgxttJZOgLMCI
- m7qk3S8Vtp3MqstvSjUF8K5e9axmV8qc4Htq4lQZhpUQ8zddeP2QVwyQbhsfIP2LKdUbWexqI
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ne1.yahoo.com with HTTP; Fri, 3 Jan 2020 07:37:59 +0000
-Date:   Fri, 3 Jan 2020 07:37:55 +0000 (UTC)
-From:   Brian Gilvary <1brian.gilvary@gmail.com>
-Reply-To: gilvarybrian@aol.com
-Message-ID: <466166173.6197256.1578037075711@mail.yahoo.com>
-Subject: Happy New Year For Our Mutual Benefits
+        id S1726390AbgACJMU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Jan 2020 04:12:20 -0500
+Received: from foss.arm.com ([217.140.110.172]:54020 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725972AbgACJMU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 3 Jan 2020 04:12:20 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 264C61FB;
+        Fri,  3 Jan 2020 01:12:19 -0800 (PST)
+Received: from [192.168.1.18] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 918673F703;
+        Fri,  3 Jan 2020 01:12:17 -0800 (PST)
+Subject: Re: [PATCH v2] MIPS: Avoid VDSO ABI breakage due to global register
+ variable
+To:     Paul Burton <paulburton@kernel.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian.brauner@canonical.com>,
+        stable@vger.kernel.org
+References: <20200102005343.GA495913@rani.riverdale.lan>
+ <20200102045038.102772-1-paulburton@kernel.org>
+ <754c5d05-4455-5ce1-475d-55c2191a06cf@arm.com>
+ <20200103004229.lpbhocebuny6vxmf@lantea.localdomain>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <fce2be75-9a68-37eb-723a-99d010e77132@arm.com>
+Date:   Fri, 3 Jan 2020 09:15:10 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <466166173.6197256.1578037075711.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.14873 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:71.0) Gecko/20100101 Firefox/71.0
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20200103004229.lpbhocebuny6vxmf@lantea.localdomain>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi
+Hi Paul,
 
-As the Chief Financial Officer, British Petroleum Company plc (BP), I am in=
- a position to facilitate immediate transfer of =C2=A3 48,000,000.00 (Forty=
- Eight Million British Pounds Sterling), to any of your nominated Bank Acco=
-unt.
+On 1/3/20 12:42 AM, Paul Burton wrote:
+> Using -ffixed-gp wouldn't be correct for the VDSO - the VDSO itself is
+> position independent code, and will need to use $gp to access the GOT
+> which is part of how position-independence is achieved (technically you
+> could access the GOT using another register of course but you'd need
+> some way to persuade the compiler to break with convention & you'd gain
+> nothing meaningful since you'd need to use some other register anyway).
+> If we use -ffixed-gp then we're telling GCC not to use $gp, and that
+> doesn't make sense. If we consider -ffixed-gp as telling GCC not to use
+> $gp as a general purpose register then it's meaningless because $gp
+> already has a specific use & isn't used as a general purpose register.
+> If we consider -ffixed-gp as telling GCC not to use $gp at all then it
+> doesn't make sense because it needs to in order to access the GOT.
+> 
+> In terms of GCC's flags we'd want to use -fcall-saved-gp, but that would
+> just be telling GCC information it already knows about the n32 & n64
+> ABIs & indeed it seems to have no effect at all on the way GCC handles
+> the global register variable - it doesn't cause gcc to save & restore
+> $gp with the global register variable present, so you gain nothing.
+> 
+> We could use -ffixed-gp for the kernel proper (& not the VDSO), but:
+> 
+> 1) The kernel builds as non-PIC code with no $gp-based optimizations
+>    enabled, and since this has been fine forever it seems safe to expect
+>    the compiler not to start using $gp in new ways.
+> 
+> 2) It would be a separate issue to fixing the VDSO anyway.
 
-Source of Funds: An over-invoiced payment from a past project executed in m=
-y department. I cannot successfully achieve this transaction without presen=
-ting you as foreign contractor who will provide the bank account to receive=
- the funds. Every documentation for the claim of the funds will be legally =
-processed and documented, so I will need your full co-operation for our mut=
-ual benefits.
+Makes totally sense. Thanks for the explanation.
 
-We will discuss details if you are interested to work with me to secure thi=
-s funds, as I said for our mutual benefits. I will be looking forward to yo=
-ur prompt response.
-
-Best regards
-Brian Gilvary
-Chief financial officer
-BP, Plc.
+-- 
+Regards,
+Vincenzo
