@@ -2,89 +2,158 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3676712FA3C
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Jan 2020 17:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 928BC13044F
+	for <lists+linux-mips@lfdr.de>; Sat,  4 Jan 2020 21:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727975AbgACQW0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Jan 2020 11:22:26 -0500
-Received: from mail-wr1-f54.google.com ([209.85.221.54]:40350 "EHLO
-        mail-wr1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727974AbgACQW0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Jan 2020 11:22:26 -0500
-Received: by mail-wr1-f54.google.com with SMTP id c14so42925958wrn.7
-        for <linux-mips@vger.kernel.org>; Fri, 03 Jan 2020 08:22:25 -0800 (PST)
+        id S1726135AbgADUHt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 4 Jan 2020 15:07:49 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:46307 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726118AbgADUHt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 4 Jan 2020 15:07:49 -0500
+Received: by mail-pl1-f194.google.com with SMTP id y8so20268678pll.13;
+        Sat, 04 Jan 2020 12:07:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oF6knoEIXIh5/2ho9eTkMDQ7i4T1em2sODYcYmaIN5c=;
-        b=DtYrm5MUavfkQB19MOkx+e5+C6/cUcDApFUtzA9WpER0cVl9741KQrWYWRUtX6n6Gs
-         fFoxSyYEmQBKM1VecUnS5KUvtYBX/TeLISjUuwRuPFf/PC3MCNpPylQ0tY4D8EmDQbil
-         GGP1ypD3cqATXzVXaH5cgIExNEKkc3p903rtk=
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=b1kS8vLLxH+4vuJg2IabnHI/ekmjCC3BWGHgeYGsuEM=;
+        b=bzBJeX1D8MNFJgd0awEstuyFH5D6i8ny8uRt3JuVi8elyM2N546yMBRUnBKTOO1cTP
+         ylUw2uQkAbNeDlBjBGUedfHTSQ0+rg9IQ9wXh/0HqkOYkYRU6etBrlqYtSE+2AnocbFA
+         qSQ+FwakcnFxNDAmdxAVk2q7K/h35M4k2ND2JZaNs/u+9MF1GRWx1Y1kUdpUYYvoOWRB
+         xPQqgQRHAKosOYamVly+M7QO9cnv27b5lcK8zuZosS8KLkEgRH3c824DmVmqjezz0sS1
+         vv9DUuk+j5oKo7ozqM7NPSdw8xw1uz4iHcCkMkJUUIcozVeMsG6yTRCZ5a60WRRH2RSt
+         x18w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oF6knoEIXIh5/2ho9eTkMDQ7i4T1em2sODYcYmaIN5c=;
-        b=F4uQxTo/COS0xfHD+1esEJk16JI1VNXuZ0Wa/aOmy5oye1gxuvPBhGPJtd3CL3ohdz
-         Up5KpgV9qsf1qHD22sHuQOST1CktDKRKIsdp50zVKQEbcgAbfyiXQIvCMdPfj0RbSETf
-         M8Zjw95IaGsrlHrUwQzYGnyYpB8OWL2Pkf11dvY4xe/sew7TWsqSQeWpNeOSw0NwRnwa
-         MHI39O3lhlUEO3ScdaNLgHYRjS0rbO1pYUrmZAZfX9HozsgtJ1wRrQp+TaKK4FOephTm
-         QnLLENk8+N8gtKaHW/Wo9+82ITTZ5SMjhuxy4P+0h4bPB+W94BC3TR62iOdLSK58sbLh
-         27cg==
-X-Gm-Message-State: APjAAAX+O6DD24nsHJk10JNJry5cS0jlQRBIhM4q1OnsUL0QuBb9vBPB
-        EZUhJNqjxbhjkTfuN8Q64xZbxw==
-X-Google-Smtp-Source: APXvYqxvBE16IVnnlgPkedV5XAxfpmeejqjdDd74lI7Zi2q0EV/30uX7B9ylxWLNiSGHHHvtMdqAog==
-X-Received: by 2002:a5d:6048:: with SMTP id j8mr88887949wrt.41.1578068544506;
-        Fri, 03 Jan 2020 08:22:24 -0800 (PST)
-Received: from Ninja.ibn.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id n8sm61348706wrx.42.2020.01.03.08.22.20
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 03 Jan 2020 08:22:24 -0800 (PST)
-From:   Vikas Gupta <vikas.gupta@broadcom.com>
-To:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sheetal Tigadoli <sheetal.tigadoli@broadcom.com>,
-        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sumit Garg <sumit.garg@linaro.org>
-Cc:     vasundhara-v.volam@broadcom.com, vikram.prakash@broadcom.com,
-        Vikas Gupta <vikas.gupta@broadcom.com>
-Subject: [PATCH INTERNAL v2] firmware: tee_bnxt: Reduce shm mem size to 4K
-Date:   Fri,  3 Jan 2020 21:50:04 +0530
-Message-Id: <1578068404-26195-2-git-send-email-vikas.gupta@broadcom.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1578068404-26195-1-git-send-email-vikas.gupta@broadcom.com>
-References: <1578068404-26195-1-git-send-email-vikas.gupta@broadcom.com>
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=b1kS8vLLxH+4vuJg2IabnHI/ekmjCC3BWGHgeYGsuEM=;
+        b=UOnPOcHJYWDPtMQsHC0iEIjPYS27JdpXG36f38c61KOM2TKEKbbEwQvMT7xK6TrTSn
+         FjGFvlWrarrxYoQzVN8+MNu3yXroyxXjZGtge63RHZVwHgUVDJquOlN6TLo+0UzH1AfR
+         gaSArFINLqVDG3wK+y2h8hBZmUmcLg2hAVUBdtafQLRG+iB2Gam3S8RHV3pH1kf8slk4
+         nXEFtFo0rIydmAUTLlXa9vDkCwCOoMNlgphxj0i4hmq5OKNizeaOCewX9xYx/pvSi470
+         FuMk+sx+5Ci13J1uKzZTMDKXCC6s44qJFlD3FThhUmpN5nvY37UECDUWGRiAUaUBLZcV
+         /QUg==
+X-Gm-Message-State: APjAAAVCBsVQKPogjouxUgdSGI592VCGxHXVQK2usDrnupA5YEYbq5fY
+        gYzFVA2scp1Sx/502FurPGs=
+X-Google-Smtp-Source: APXvYqwG9e1Fi0ErEe2MKf+tkoMuAZ96ttyrs4dZi6OTW4BKM5MuzUzmthYoAbzHA+PuclHk4LtVhw==
+X-Received: by 2002:a17:902:6bca:: with SMTP id m10mr99318980plt.212.1578168468597;
+        Sat, 04 Jan 2020 12:07:48 -0800 (PST)
+Received: from localhost ([2601:646:8a80:3eb0::9760])
+        by smtp.gmail.com with ESMTPSA id p12sm19055183pjo.5.2020.01.04.12.07.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Jan 2020 12:07:47 -0800 (PST)
+From:   Paul Burton <paulburton89@gmail.com>
+X-Google-Original-From: Paul Burton <paul.burton@mips.com>
+Date:   Sat, 4 Jan 2020 12:07:46 -0800
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [GIT PULL] MIPS fixes
+Message-ID: <20200104200746.imnkglnarvkhzrtw@pburton-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2ai2goydcsnlwrgd"
+Content-Disposition: inline
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Reduce shm memory size as maximum size supported by optee_shm_register
-API is 4K.
 
-Fixes: 246880958ac9 (“firmware: broadcom: add OP-TEE based BNXT f/w manager”)
-Signed-off-by: Vikas Gupta <vikas.gupta@broadcom.com>
----
- drivers/firmware/broadcom/tee_bnxt_fw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--2ai2goydcsnlwrgd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
-index 5b7ef89..8f0c61c6 100644
---- a/drivers/firmware/broadcom/tee_bnxt_fw.c
-+++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
-@@ -12,7 +12,7 @@
- 
- #include <linux/firmware/broadcom/tee_bnxt_fw.h>
- 
--#define MAX_SHM_MEM_SZ	SZ_4M
-+#define MAX_SHM_MEM_SZ	SZ_4K
- 
- #define MAX_TEE_PARAM_ARRY_MEMB		4
- 
--- 
-2.7.4
+Hi Linus,
 
+Here is a collection of MIPS fixes for the 5.5 cycle; please pull.
+
+Thanks,
+    Paul
+
+
+The following changes since commit a8d0f11ee50ddbd9f243c7a8b1a393a4f23ba093:
+
+  MIPS: SGI-IP27: Enable ethernet phy on second Origin 200 module (2019-11-23 14:20:30 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git tags/mips_fixes_5.5_1
+
+for you to fetch changes up to bbcc5672b0063b0e9d65dc8787a4f09c3b5bb5cc:
+
+  MIPS: Avoid VDSO ABI breakage due to global register variable (2020-01-02 16:41:16 -0800)
+
+----------------------------------------------------------------
+A collection of MIPS fixes:
+
+- Fill the struct cacheinfo shared_cpu_map field with sensible values,
+  notably avoiding issues with perf which was unhappy in the absence of
+  these values.
+
+- A boot fix for Loongson 2E & 2F machines which was fallout from some
+  refactoring performed this cycle.
+
+- A Kconfig dependency fix for the Loongson CPU HWMon driver.
+
+- A couple of VDSO fixes, ensuring gettimeofday() behaves appropriately
+  for kernel configurations that don't include support for a clocksource
+  the VDSO can use & fixing the calling convention for the n32 & n64
+  VDSOs which would previously clobber the $gp/$28 register.
+
+- A build fix for vmlinuz compressed images which were inappropriately
+  building with -fsanitize-coverage despite not being part of the kernel
+  proper, then failing to link due to the missing
+  __sanitizer_cov_trace_pc() function.
+
+- A couple of eBPF JIT fixes, including disabling it for MIPS32 due to a
+  large number of issues with the code generated there & reflecting ISA
+  dependencies in Kconfig to enforce that systems which don't support
+  the JIT must include the interpreter.
+
+----------------------------------------------------------------
+Alexander Lobakin (1):
+      MIPS: BPF: eBPF JIT: check for MIPS ISA compliance in Kconfig
+
+Guenter Roeck (1):
+      MIPS: Fix boot on Fuloong2 systems
+
+Joe Perches (1):
+      MIPS: Kconfig: Use correct form for 'depends on'
+
+Jouni Hogander (1):
+      MIPS: Prevent link failure with kcov instrumentation
+
+Paul Burton (2):
+      MIPS: BPF: Disable MIPS32 eBPF JIT
+      MIPS: Avoid VDSO ABI breakage due to global register variable
+
+Vincenzo Frascino (1):
+      mips: Fix gettimeofday() in the vdso library
+
+Vladimir Kondratiev (1):
+      mips: cacheinfo: report shared CPU map
+
+ arch/mips/Kconfig                         |  2 +-
+ arch/mips/boot/compressed/Makefile        |  3 +++
+ arch/mips/include/asm/cpu-type.h          |  3 ++-
+ arch/mips/include/asm/thread_info.h       | 20 +++++++++++++++++++-
+ arch/mips/include/asm/vdso/gettimeofday.h | 13 -------------
+ arch/mips/kernel/cacheinfo.c              | 27 ++++++++++++++++++++++++++-
+ arch/mips/net/ebpf_jit.c                  |  2 +-
+ arch/mips/vdso/vgettimeofday.c            | 20 ++++++++++++++++++++
+ drivers/platform/mips/Kconfig             |  2 +-
+ 9 files changed, 73 insertions(+), 19 deletions(-)
+
+--2ai2goydcsnlwrgd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQRgLjeFAZEXQzy86/s+p5+stXUA3QUCXhDwkgAKCRA+p5+stXUA
+3WA+AP4gipdFlYw9AY80dvui8y9ph7DmF+IWucVh8tR/JSloYwEAq536C46uZUVK
+2Um1a69eqD+VNQj7Q9svBs4j2n9xYgg=
+=e6VX
+-----END PGP SIGNATURE-----
+
+--2ai2goydcsnlwrgd--
