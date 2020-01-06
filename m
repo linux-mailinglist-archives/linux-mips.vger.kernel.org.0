@@ -2,66 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 410B8131ABC
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Jan 2020 22:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9D1131BC8
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Jan 2020 23:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727001AbgAFVw2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Jan 2020 16:52:28 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:50200 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726939AbgAFVw2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Jan 2020 16:52:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1578347547;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y61KpsVyl/YLbt8otiT+45kb3aY1xMUXUKipAqqJL54=;
-        b=d386VcVhgGFD2qSwLMB6RqxGY39x5lsSnA/z8XhRPlg+QXKXf1xc0eMnIij0lvcjArgW1u
-        H82a7RBHXWLF+ajnWnvflsOSzz6fpMdbp52uhpvvtUCQPcg6+js4hWVB3+u8HtdN6Qtu8U
-        GskbeN5Qozfs7W6yq53K6cZYuuHFP50=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-147-lslrMzDTPYufy8jxzDjGkw-1; Mon, 06 Jan 2020 16:52:21 -0500
-X-MC-Unique: lslrMzDTPYufy8jxzDjGkw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 61ED710054E3;
-        Mon,  6 Jan 2020 21:52:19 +0000 (UTC)
-Received: from localhost (ovpn-112-4.rdu2.redhat.com [10.10.112.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B8F3F7C017;
-        Mon,  6 Jan 2020 21:52:16 +0000 (UTC)
-Date:   Mon, 06 Jan 2020 13:52:15 -0800 (PST)
-Message-Id: <20200106.135215.943336427582010563.davem@redhat.com>
-To:     vikas.gupta@broadcom.com
-Cc:     zajec5@gmail.com, sheetal.tigadoli@broadcom.com,
-        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sumit.garg@linaro.org,
-        vikram.prakash@broadcom.com, vasundhara-v.volam@broadcom.com
-Subject: Re: [PATCH v1] firmware: tee_bnxt: Fix multiple call to
- tee_client_close_context
-From:   David Miller <davem@redhat.com>
-In-Reply-To: <1578291843-27613-1-git-send-email-vikas.gupta@broadcom.com>
-References: <1578291843-27613-1-git-send-email-vikas.gupta@broadcom.com>
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=iso-2022-jp
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+        id S1727226AbgAFWrO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Jan 2020 17:47:14 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:42462 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727236AbgAFWrO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Jan 2020 17:47:14 -0500
+Received: by mail-lj1-f194.google.com with SMTP id y4so38279652ljj.9
+        for <linux-mips@vger.kernel.org>; Mon, 06 Jan 2020 14:47:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iINXiMFidNPmE7c3AtxT3THDZ1hEuF3OMM13Pg6sk6w=;
+        b=g0z+DSnklv6iu5J3Afvb/fXFAHDuKf7PzDA3LoC2ygbFu0coxpdCIpffPdp82RveZi
+         cxryO/aUuIb0EuNFY1w/n7kDCOM7UzXHAV0vuSths54Yk3/4ciJbNe0FhvUUW2KJSGzu
+         AMY4hSpKCEmEOOMceh+ndpGA/p1Jl+K7DK8G8Y2RWW3VXr77AbKNU+2h1w6vO9VxpY/6
+         IEfb2xnPwuQqLNBwdriTJsu5OLJ4oxpyLDAtNH83LXZopMOmpJRnqlwKBW+rHFlbMncF
+         UI3c4G4AVCT8yI4HVpksGA9rdtH0CrgOQBk+zoJEPb24vN3aVTasxKrKGAWkQjxKMCPv
+         CKHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iINXiMFidNPmE7c3AtxT3THDZ1hEuF3OMM13Pg6sk6w=;
+        b=ZY064gSXsZ8phus0gb4QDIQdoJiuvQD6RX46/ENGvMudRziphJYep4UGdcxb+jPvaV
+         zyfb1/w/dhlq6hv8QK7h2S3QiVckl+Vmrj2rqBUP4KZEHNx/ta/+PARMSG0c5IuCVCF7
+         JsZbgO9lJXjKA6nPG2FsGvfqwhi39UOuIp98t7C/vEilzW9odRGyNKEIlgCnywU1hzM4
+         jbMc41vhDA3Qufhy1W76gbegXwnXCvOBKXTfwu4ilLZqxL78mlPQnuEXq19gtfYTU3S6
+         HK4bw1fFwpQG79PJTa1JCq3JrAnQZnTShKp7eUFQaaZfZBh0YozKgyFM3hu55DS/urgS
+         KzwA==
+X-Gm-Message-State: APjAAAW9SabtNOFD6Se5b2Pqthb2tBlmW5lza39tPZ3BSvGO9QzVKygI
+        qlexTadDqVpBKly6xZlBCyfyETD/F9ypLtAwAqMm9A==
+X-Google-Smtp-Source: APXvYqyb4+z1PnlvO0PT0IM3lRyC4AM5S5O/rRzCFuE2xIcizWcFowXRhyD9waT90956XcAyA0plvbvrQ5LOJyWoZwA=
+X-Received: by 2002:a2e:86d6:: with SMTP id n22mr50441415ljj.77.1578350830450;
+ Mon, 06 Jan 2020 14:47:10 -0800 (PST)
+MIME-Version: 1.0
+References: <1576426864-35348-1-git-send-email-zhouyanjie@wanyeetech.com> <1576426864-35348-2-git-send-email-zhouyanjie@wanyeetech.com>
+In-Reply-To: <1576426864-35348-2-git-send-email-zhouyanjie@wanyeetech.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 6 Jan 2020 23:46:59 +0100
+Message-ID: <CACRpkdbfZjqd_ChPhX52wwu56TwXQJhHyUvRVRKw6WUD33utCw@mail.gmail.com>
+Subject: Re: [PATCH v8 0/5] Fix bugs in X1000/X1500 and add X1830 pinctrl
+ driver v8
+To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     linux-mips@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Mark Rutland <mark.rutland@arm.com>, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Vikas Gupta <vikas.gupta@broadcom.com>
-Date: Mon,  6 Jan 2020 11:54:02 +0530
+On Sun, Dec 15, 2019 at 5:21 PM =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)
+<zhouyanjie@wanyeetech.com> wrote:
 
-> Fix calling multiple tee_client_close_context in case of shm allocation
-> fails.
-> 
-> Fixes: 246880958ac9 (“firmware: broadcom: add OP-TEE based BNXT f/w manager”)
-> Signed-off-by: Vikas Gupta <vikas.gupta@broadcom.com>
+> v7->v8:
+> Separate the part of introduce reg_offset in [4/4] in v7 into [3/5] in v8=
+.
 
-Applied.
+Patches applied. Sorry it took so long.
 
+Yours,
+Linus Walleij
