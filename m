@@ -2,89 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 979CF130D86
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Jan 2020 07:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75691130D7E
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Jan 2020 07:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727457AbgAFG0I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Jan 2020 01:26:08 -0500
-Received: from mail-pl1-f173.google.com ([209.85.214.173]:34206 "EHLO
-        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727435AbgAFG0H (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Jan 2020 01:26:07 -0500
-Received: by mail-pl1-f173.google.com with SMTP id x17so21469996pln.1
-        for <linux-mips@vger.kernel.org>; Sun, 05 Jan 2020 22:26:07 -0800 (PST)
+        id S1726818AbgAFGZ1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Jan 2020 01:25:27 -0500
+Received: from mail-lf1-f48.google.com ([209.85.167.48]:40246 "EHLO
+        mail-lf1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726770AbgAFGZ0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Jan 2020 01:25:26 -0500
+Received: by mail-lf1-f48.google.com with SMTP id i23so35660508lfo.7
+        for <linux-mips@vger.kernel.org>; Sun, 05 Jan 2020 22:25:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oF6knoEIXIh5/2ho9eTkMDQ7i4T1em2sODYcYmaIN5c=;
-        b=Qx9hJxqSoeByPnDu5I6N8nLqYmnD/n/TFizYFSxkokDBcGr9HZGOz/YmHxE9KWiBQQ
-         vTMdnGLmUbAzuVa8C8/5DsVHVYPsom3mnAZ6P2Y7g6qzv53Ycovd58KswcOdQStRrPEx
-         QhDffY24zViPnDYARO/2ujDursTTjRJTfXW48=
+        h=from:references:in-reply-to:mime-version:thread-index:date
+         :message-id:subject:to:cc;
+        bh=ktz53LcM4NbiHQEM/ryy99m1nMVxEfn9yjDtHJKQSMU=;
+        b=CVsQXYPjSsqQqpDGIAoEBmGyyeGfBLpX6cre6IrzUWX1ycmguYir2YAdTjcygSNQyT
+         dSM99q7x0fsNo6GdzsLuvCy9SxwTp0BanpX2D9uCVewELf7/N+fvyursGHqicBLyGGw7
+         cKpCd0d0LfJW8KumaFhpabw8KSLDkKAEGRLPg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oF6knoEIXIh5/2ho9eTkMDQ7i4T1em2sODYcYmaIN5c=;
-        b=HyIDrqlurm2JCWa/UZzJxl9qbo8YiXc0N6330JoP4hmJ3+Qc3j6HwxvZdLkqVwEYcx
-         igX8NggO+3amKM0XpzBu+ol0y+GVYa+TiWItaW9z3+oInliGBj4DJaMU5m6/SV18oQWv
-         FfVqe9Cx8+Ep3mX0mFN8qi2xe8eYLYvCdb7qrzVtXIfIA1l94w+KkuzoiCDg1nK18l/X
-         0Ra6+geXyiJZrPAjkAJXLaLhpEgE4LgxKp4RqCKILOG8HnzJ6Gw+YbU3nput8Nx4n2kF
-         bq1wbfjQbbcIK7vfTQ4lmhnylO0VL0MtVVzxVkalJgoRxHADhNvad6dpLTJL4jttwMmv
-         /3vg==
-X-Gm-Message-State: APjAAAX+31+0SNcDilsR3a1iQx+N9/dBZYfTl6ilfobIRLeSFabE5mXz
-        YR/lc+UgFUzPqocKWTx0eyqeXg==
-X-Google-Smtp-Source: APXvYqyoEbhHG23Net99CSVTZkoLeCXvBLndpYwq4e+TTbG9IrD3BVjtQW9FzAL0L05mswcPYvmoLw==
-X-Received: by 2002:a17:90a:b10b:: with SMTP id z11mr42304735pjq.132.1578291967278;
-        Sun, 05 Jan 2020 22:26:07 -0800 (PST)
-Received: from Ninja.ibn.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id o16sm70704250pgl.58.2020.01.05.22.26.03
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sun, 05 Jan 2020 22:26:06 -0800 (PST)
+        h=x-gm-message-state:from:references:in-reply-to:mime-version
+         :thread-index:date:message-id:subject:to:cc;
+        bh=ktz53LcM4NbiHQEM/ryy99m1nMVxEfn9yjDtHJKQSMU=;
+        b=RK8wmsJk6t1xqLvOL/mN7HthrNUKBfUpTxzIwOu0gWlmDv6lZk89uFeiZei/Di5+Ct
+         6/0WKN7JFA064HpsvjAYEgTYINaCtzxiJfxmnRxjz7msy0wYxCxPPT5xcNCXeEYaXppX
+         fIxwPYmb+NCEAgjsZkg6SwVh5QVWy/A6xJwLqhl7Kvy7r0RT/uijxZ8kHSQkP/oybiNT
+         FJkL5MNNs9ovFekDguL17/haYRrk9W2/SW2YlTde/+17GLJ/ePX0AJntnWzPWzezlZcw
+         518k6iASGLB8KAftWvBMxOBNG+yLgIYDiR3P+Wbm1Yx3l4XzNY/pxHfg6ODnr2jJs+jK
+         Z5Jg==
+X-Gm-Message-State: APjAAAXNIniOAvDyg33acYj7XK9oVJ2HYulRBGv+eAHVtBCpF6p04GXn
+        dMdW/+7oJDxX1bZAWG2q68+L+f9FBKyWpFerlvgwLg==
+X-Google-Smtp-Source: APXvYqwbDPjRkFQER5ywOqBUAAP0W3suQ+ZwUfvvcHPkNQ7+ZGioF35HQnWVcvEQPVCxES0oQyETmwPLORs5PbGzfow=
+X-Received: by 2002:ac2:43a7:: with SMTP id t7mr51923621lfl.125.1578291924686;
+ Sun, 05 Jan 2020 22:25:24 -0800 (PST)
 From:   Vikas Gupta <vikas.gupta@broadcom.com>
-To:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sheetal Tigadoli <sheetal.tigadoli@broadcom.com>,
-        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sumit Garg <sumit.garg@linaro.org>
-Cc:     vikram.prakash@broadcom.com, vasundhara-v.volam@broadcom.com,
-        Vikas Gupta <vikas.gupta@broadcom.com>
-Subject: [PATCH v1] firmware: tee_bnxt: Reduce shm mem size to 4K
-Date:   Mon,  6 Jan 2020 11:54:03 +0530
-Message-Id: <1578291843-27613-2-git-send-email-vikas.gupta@broadcom.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1578291843-27613-1-git-send-email-vikas.gupta@broadcom.com>
-References: <1578291843-27613-1-git-send-email-vikas.gupta@broadcom.com>
+References: <1578068404-26195-1-git-send-email-vikas.gupta@broadcom.com> <20200105.144746.2055568145717937218.davem@davemloft.net>
+In-Reply-To: <20200105.144746.2055568145717937218.davem@davemloft.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQE0opalCUsV5BygIsNN/3ef1GQcaQLm0oerqQg2PjA=
+Date:   Mon, 6 Jan 2020 11:55:22 +0530
+Message-ID: <96059280a7ebeb4e1ec92c78d053ccfe@mail.gmail.com>
+Subject: RE: [PATCH INTERNAL v2] firmware: tee_bnxt: Fix multiple call to tee_client_close_context
+To:     David Miller <davem@davemloft.net>
+Cc:     zajec5@gmail.com, Sheetal Tigadoli <sheetal.tigadoli@broadcom.com>,
+        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sumit.garg@linaro.org,
+        Vasundhara Volam <vasundhara-v.volam@broadcom.com>,
+        Vikram Prakash <vikram.prakash@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Reduce shm memory size as maximum size supported by optee_shm_register
-API is 4K.
+ "INTERNAL" and version "v2" added accidently. Please ignore this. I`ll
+send updated patch.
 
-Fixes: 246880958ac9 (“firmware: broadcom: add OP-TEE based BNXT f/w manager”)
-Signed-off-by: Vikas Gupta <vikas.gupta@broadcom.com>
----
- drivers/firmware/broadcom/tee_bnxt_fw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-----Original Message-----
+From: David Miller [mailto:davem@davemloft.net]
+Sent: Monday, January 06, 2020 4:18 AM
+To: vikas.gupta@broadcom.com
+Cc: zajec5@gmail.com; sheetal.tigadoli@broadcom.com;
+netdev@vger.kernel.org; linux-mips@vger.kernel.org;
+linux-kernel@vger.kernel.org; sumit.garg@linaro.org;
+vasundhara-v.volam@broadcom.com; vikram.prakash@broadcom.com
+Subject: Re: [PATCH INTERNAL v2] firmware: tee_bnxt: Fix multiple call to
+tee_client_close_context
 
-diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
-index 5b7ef89..8f0c61c6 100644
---- a/drivers/firmware/broadcom/tee_bnxt_fw.c
-+++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
-@@ -12,7 +12,7 @@
- 
- #include <linux/firmware/broadcom/tee_bnxt_fw.h>
- 
--#define MAX_SHM_MEM_SZ	SZ_4M
-+#define MAX_SHM_MEM_SZ	SZ_4K
- 
- #define MAX_TEE_PARAM_ARRY_MEMB		4
- 
--- 
-2.7.4
 
+What does "INTERNAL" mean in these patch Subject lines?
