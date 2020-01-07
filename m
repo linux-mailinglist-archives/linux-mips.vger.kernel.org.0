@@ -2,39 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9996133143
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Jan 2020 21:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDB513348F
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Jan 2020 22:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727636AbgAGU7J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Jan 2020 15:59:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59694 "EHLO mail.kernel.org"
+        id S1728019AbgAGU7D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Jan 2020 15:59:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59456 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728071AbgAGU7H (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 7 Jan 2020 15:59:07 -0500
+        id S1727582AbgAGU7C (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 7 Jan 2020 15:59:02 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2BEC1214D8;
-        Tue,  7 Jan 2020 20:59:06 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 56C5E21744;
+        Tue,  7 Jan 2020 20:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578430746;
-        bh=w7hS21l4Ab8SljiLavSQJM154nNNKvNmXLEasB/FU8A=;
+        s=default; t=1578430741;
+        bh=vCIHg4nrV33PHnHUdiahTM63gn1eC2OQrBoSflm+lEc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L3QO+wRPXOoG6dc/y/TXyBt+G1gyyzcjHvuXM1gp780beIDzwvhyAFpK/tD8wRuQJ
-         JcegRWlyj5PPE54O1JZEgRAI2ekYtoPsyaE77iccumG7oPrBep+vBn1oinxKW7ADit
-         UpM15AwTG6H74uNGdoVE167xm89pWDyzyxE5AUzw=
+        b=XE0fMj9GPucGYOqbV42hvUywagg9WEeVCGw3q9SvVGjmHcS6eKIEsaYkguR5CHIdP
+         739AgbqOGWQerSgddUKux/PtCo+0IriRZahGhZG4epgCYZtjYY/YcF+ve3x8BRM7Iw
+         JXihfkezJ8cS/MpFCK3aYcMh4VED+kZAEHoLV7oo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian.brauner@canonical.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH 5.4 078/191] MIPS: Avoid VDSO ABI breakage due to global register variable
-Date:   Tue,  7 Jan 2020 21:53:18 +0100
-Message-Id: <20200107205337.156961744@linuxfoundation.org>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        Tony Ambardar <itugrok@yahoo.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH 5.4 076/191] MIPS: BPF: Disable MIPS32 eBPF JIT
+Date:   Tue,  7 Jan 2020 21:53:16 +0100
+Message-Id: <20200107205337.048444554@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200107205332.984228665@linuxfoundation.org>
 References: <20200107205332.984228665@linuxfoundation.org>
@@ -49,95 +48,83 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Paul Burton <paulburton@kernel.org>
 
-commit bbcc5672b0063b0e9d65dc8787a4f09c3b5bb5cc upstream.
+commit f8fffebdea752a25757b906f3dffecf1a59a6194 upstream.
 
-Declaring __current_thread_info as a global register variable has the
-effect of preventing GCC from saving & restoring its value in cases
-where the ABI would typically do so.
+Commit 716850ab104d ("MIPS: eBPF: Initial eBPF support for MIPS32
+architecture.") enabled our eBPF JIT for MIPS32 kernels, whereas it has
+previously only been availailable for MIPS64. It was my understanding at
+the time that the BPF test suite was passing & JITing a comparable
+number of tests to our cBPF JIT [1], but it turns out that was not the
+case.
 
-To quote GCC documentation:
+The eBPF JIT has a number of problems on MIPS32:
 
-> If the register is a call-saved register, call ABI is affected: the
-> register will not be restored in function epilogue sequences after the
-> variable has been assigned. Therefore, functions cannot safely return
-> to callers that assume standard ABI.
+- Most notably various code paths still result in emission of MIPS64
+  instructions which will cause reserved instruction exceptions & kernel
+  panics when run on MIPS32 CPUs.
 
-When our position independent VDSO is built for the n32 or n64 ABIs all
-functions it exposes should be preserving the value of $gp/$28 for their
-caller, but in the presence of the __current_thread_info global register
-variable GCC stops doing so & simply clobbers $gp/$28 when calculating
-the address of the GOT.
+- The eBPF JIT doesn't account for differences between the O32 ABI used
+  by MIPS32 kernels versus the N64 ABI used by MIPS64 kernels. Notably
+  arguments beyond the first 4 are passed on the stack in O32, and this
+  is entirely unhandled when JITing a BPF_CALL instruction. Stack space
+  must be reserved for arguments even if they all fit in registers, and
+  the callee is free to assume that stack space has been reserved for
+  its use - with the eBPF JIT this is not the case, so calling any
+  function can result in clobbering values on the stack & unpredictable
+  behaviour. Function arguments in eBPF are always 64-bit values which
+  is also entirely unhandled - the JIT still uses a single (32-bit)
+  register per argument. As a result all function arguments are always
+  passed incorrectly when JITing a BPF_CALL instruction, leading to
+  kernel crashes or strange behavior.
 
-In cases where the VDSO returns success this problem will typically be
-masked by the caller in libc returning & restoring $gp/$28 itself, but
-that is by no means guaranteed. In cases where the VDSO returns an error
-libc will typically contain a fallback path which will now fail
-(typically with a bad memory access) if it attempts anything which
-relies upon the value of $gp/$28 - eg. accessing anything via the GOT.
+- The JIT attempts to bail our on use of ALU64 instructions or 64-bit
+  memory access instructions. The code doing this at the start of
+  build_one_insn() incorrectly checks whether BPF_OP() equals BPF_DW,
+  when it should really be checking BPF_SIZE() & only doing so when
+  BPF_CLASS() is one of BPF_{LD,LDX,ST,STX}. This results in false
+  positives that cause more bailouts than intended, and that in turns
+  hides some of the problems described above.
 
-One fix for this would be to move the declaration of
-__current_thread_info inside the current_thread_info() function,
-demoting it from global register variable to local register variable &
-avoiding inadvertently creating a non-standard calling ABI for the VDSO.
-Unfortunately this causes issues for clang, which doesn't support local
-register variables as pointed out by commit fe92da0f355e ("MIPS: Changed
-current_thread_info() to an equivalent supported by both clang and GCC")
-which introduced the global register variable before we had a VDSO to
-worry about.
+- The kernel's cBPF->eBPF translation makes heavy use of 64-bit eBPF
+  instructions that the MIPS32 eBPF JIT bails out on, leading to most
+  cBPF programs not being JITed at all.
 
-Instead, fix this by continuing to use the global register variable for
-the kernel proper but declare __current_thread_info as a simple extern
-variable when building the VDSO. It should never be referenced, and will
-cause a link error if it is. This resolves the calling convention issue
-for the VDSO without having any impact upon the build of the kernel
-itself for either clang or gcc.
+Until these problems are resolved, revert the enabling of the eBPF JIT
+on MIPS32 done by commit 716850ab104d ("MIPS: eBPF: Initial eBPF support
+for MIPS32 architecture.").
+
+Note that this does not undo the changes made to the eBPF JIT by that
+commit, since they are a useful starting point to providing MIPS32
+support - they're just not nearly complete.
+
+[1] https://lore.kernel.org/linux-mips/MWHPR2201MB13583388481F01A422CE7D66D4410@MWHPR2201MB1358.namprd22.prod.outlook.com/
 
 Signed-off-by: Paul Burton <paulburton@kernel.org>
-Fixes: ebb5e78cc634 ("MIPS: Initial implementation of a VDSO")
-Reported-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Christian Brauner <christian.brauner@canonical.com>
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: <stable@vger.kernel.org> # v4.4+
+Fixes: 716850ab104d ("MIPS: eBPF: Initial eBPF support for MIPS32 architecture.")
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Hassan Naveed <hnaveed@wavecomp.com>
+Cc: Tony Ambardar <itugrok@yahoo.com>
+Cc: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: <stable@vger.kernel.org> # v5.2+
 Cc: linux-mips@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ---
- arch/mips/include/asm/thread_info.h |   20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ arch/mips/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/mips/include/asm/thread_info.h
-+++ b/arch/mips/include/asm/thread_info.h
-@@ -49,8 +49,26 @@ struct thread_info {
- 	.addr_limit	= KERNEL_DS,		\
- }
- 
--/* How to get the thread information struct from C.  */
-+/*
-+ * A pointer to the struct thread_info for the currently executing thread is
-+ * held in register $28/$gp.
-+ *
-+ * We declare __current_thread_info as a global register variable rather than a
-+ * local register variable within current_thread_info() because clang doesn't
-+ * support explicit local register variables.
-+ *
-+ * When building the VDSO we take care not to declare the global register
-+ * variable because this causes GCC to not preserve the value of $28/$gp in
-+ * functions that change its value (which is common in the PIC VDSO when
-+ * accessing the GOT). Since the VDSO shouldn't be accessing
-+ * __current_thread_info anyway we declare it extern in order to cause a link
-+ * failure if it's referenced.
-+ */
-+#ifdef __VDSO__
-+extern struct thread_info *__current_thread_info;
-+#else
- register struct thread_info *__current_thread_info __asm__("$28");
-+#endif
- 
- static inline struct thread_info *current_thread_info(void)
- {
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -46,7 +46,7 @@ config MIPS
+ 	select HAVE_ARCH_TRACEHOOK
+ 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if CPU_SUPPORTS_HUGEPAGES
+ 	select HAVE_ASM_MODVERSIONS
+-	select HAVE_EBPF_JIT if (!CPU_MICROMIPS)
++	select HAVE_EBPF_JIT if (64BIT && !CPU_MICROMIPS)
+ 	select HAVE_CONTEXT_TRACKING
+ 	select HAVE_COPY_THREAD_TLS
+ 	select HAVE_C_RECORDMCOUNT
 
 
