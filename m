@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 321EC13331A
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Jan 2020 22:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 054E91332D8
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Jan 2020 22:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729457AbgAGVHA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Jan 2020 16:07:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56980 "EHLO mail.kernel.org"
+        id S1729850AbgAGVJk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Jan 2020 16:09:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35350 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729450AbgAGVG7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 7 Jan 2020 16:06:59 -0500
+        id S1729557AbgAGVJj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 7 Jan 2020 16:09:39 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B1F0F2077B;
-        Tue,  7 Jan 2020 21:06:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7D7852077B;
+        Tue,  7 Jan 2020 21:09:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578431219;
-        bh=w7hS21l4Ab8SljiLavSQJM154nNNKvNmXLEasB/FU8A=;
+        s=default; t=1578431379;
+        bh=Q76nd1rY7PubR1tz37aB6Z90FHySurzEY50SY9L8GaY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vmFKB4ThTurjLmMQnivbl99hwWMU3Dp1r7gXrKh+XORjMFO+ePWoXpY7Kc0husiPs
-         XZ20FBgQGfRcFTuijRXAaFjJPvRIbjitni1ClNodIWSoypMGaav99f0mMP1/heesLe
-         Rj4lu4MblFP/s10b+e9LYR8DhAbWMnKB1YyWFw7I=
+        b=oVe7QEpAmDElS216yw8J25jZekq+lUc4pC/2HO1T/WDnOWC33w0HZo8s/cbHfzgDG
+         pRm1f44AtkXbqF5hEogw9R3yK2wU+Ot52s4TPVjXEacjZlBGbAxgFDJP0Fe68zJg1+
+         xUq8dgxLjEdpXMj8BjLQ9f8eQozD0B8lPbTebyOQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Christian Brauner <christian.brauner@canonical.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         linux-mips@vger.kernel.org
-Subject: [PATCH 4.19 047/115] MIPS: Avoid VDSO ABI breakage due to global register variable
-Date:   Tue,  7 Jan 2020 21:54:17 +0100
-Message-Id: <20200107205302.249016566@linuxfoundation.org>
+Subject: [PATCH 4.14 25/74] MIPS: Avoid VDSO ABI breakage due to global register variable
+Date:   Tue,  7 Jan 2020 21:54:50 +0100
+Message-Id: <20200107205155.093712308@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200107205240.283674026@linuxfoundation.org>
-References: <20200107205240.283674026@linuxfoundation.org>
+In-Reply-To: <20200107205135.369001641@linuxfoundation.org>
+References: <20200107205135.369001641@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -111,9 +111,9 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/arch/mips/include/asm/thread_info.h
 +++ b/arch/mips/include/asm/thread_info.h
-@@ -49,8 +49,26 @@ struct thread_info {
- 	.addr_limit	= KERNEL_DS,		\
- }
+@@ -52,8 +52,26 @@ struct thread_info {
+ #define init_thread_info	(init_thread_union.thread_info)
+ #define init_stack		(init_thread_union.stack)
  
 -/* How to get the thread information struct from C.  */
 +/*
