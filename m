@@ -2,117 +2,142 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 308ED132D8B
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Jan 2020 18:51:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9996133143
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Jan 2020 21:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728457AbgAGRvg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Jan 2020 12:51:36 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:61666 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728409AbgAGRvg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Jan 2020 12:51:36 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 007HhQs8086384
-        for <linux-mips@vger.kernel.org>; Tue, 7 Jan 2020 12:51:35 -0500
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xb925rn64-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-mips@vger.kernel.org>; Tue, 07 Jan 2020 12:51:35 -0500
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-mips@vger.kernel.org> from <heiko.carstens@de.ibm.com>;
-        Tue, 7 Jan 2020 17:51:33 -0000
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 7 Jan 2020 17:51:24 -0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 007HpN7f58654844
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Jan 2020 17:51:23 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 485AFA405C;
-        Tue,  7 Jan 2020 17:51:23 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4789EA4062;
-        Tue,  7 Jan 2020 17:51:22 +0000 (GMT)
-Received: from osiris (unknown [9.145.85.21])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue,  7 Jan 2020 17:51:22 +0000 (GMT)
-Date:   Tue, 7 Jan 2020 18:51:20 +0100
-From:   Heiko Carstens <heiko.carstens@de.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Robert Richter <rric@kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        oprofile-list@lists.sf.net, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org
-Subject: Re: [PATCH v3 02/22] compat: provide compat_ptr() on all
- architectures
-References: <20200102145552.1853992-1-arnd@arndb.de>
- <20200102145552.1853992-3-arnd@arndb.de>
+        id S1727636AbgAGU7J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Jan 2020 15:59:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59694 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728071AbgAGU7H (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 7 Jan 2020 15:59:07 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2BEC1214D8;
+        Tue,  7 Jan 2020 20:59:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578430746;
+        bh=w7hS21l4Ab8SljiLavSQJM154nNNKvNmXLEasB/FU8A=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=L3QO+wRPXOoG6dc/y/TXyBt+G1gyyzcjHvuXM1gp780beIDzwvhyAFpK/tD8wRuQJ
+         JcegRWlyj5PPE54O1JZEgRAI2ekYtoPsyaE77iccumG7oPrBep+vBn1oinxKW7ADit
+         UpM15AwTG6H74uNGdoVE167xm89pWDyzyxE5AUzw=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christian Brauner <christian.brauner@canonical.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH 5.4 078/191] MIPS: Avoid VDSO ABI breakage due to global register variable
+Date:   Tue,  7 Jan 2020 21:53:18 +0100
+Message-Id: <20200107205337.156961744@linuxfoundation.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200107205332.984228665@linuxfoundation.org>
+References: <20200107205332.984228665@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200102145552.1853992-3-arnd@arndb.de>
-X-TM-AS-GCONF: 00
-x-cbid: 20010717-0016-0000-0000-000002DB3EDC
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20010717-0017-0000-0000-0000333DB70D
-Message-Id: <20200107175120.GC4684@osiris>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-07_06:2020-01-07,2020-01-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- malwarescore=0 bulkscore=0 adultscore=0 phishscore=0 mlxscore=0
- mlxlogscore=393 priorityscore=1501 suspectscore=1 lowpriorityscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001070140
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jan 02, 2020 at 03:55:20PM +0100, Arnd Bergmann wrote:
-> In order to avoid needless #ifdef CONFIG_COMPAT checks,
-> move the compat_ptr() definition to linux/compat.h
-> where it can be seen by any file regardless of the
-> architecture.
-> 
-> Only s390 needs a special definition, this can use the
-> self-#define trick we have elsewhere.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm64/include/asm/compat.h   | 17 -----------------
->  arch/mips/include/asm/compat.h    | 18 ------------------
->  arch/parisc/include/asm/compat.h  | 17 -----------------
->  arch/powerpc/include/asm/compat.h | 17 -----------------
->  arch/powerpc/oprofile/backtrace.c |  2 +-
->  arch/s390/include/asm/compat.h    |  6 +-----
->  arch/sparc/include/asm/compat.h   | 17 -----------------
->  arch/x86/include/asm/compat.h     | 17 -----------------
->  include/linux/compat.h            | 18 ++++++++++++++++++
->  9 files changed, 20 insertions(+), 109 deletions(-)
+From: Paul Burton <paulburton@kernel.org>
 
-For s390:
+commit bbcc5672b0063b0e9d65dc8787a4f09c3b5bb5cc upstream.
 
-Acked-by: Heiko Carstens <heiko.carstens@de.ibm.com>
+Declaring __current_thread_info as a global register variable has the
+effect of preventing GCC from saving & restoring its value in cases
+where the ABI would typically do so.
+
+To quote GCC documentation:
+
+> If the register is a call-saved register, call ABI is affected: the
+> register will not be restored in function epilogue sequences after the
+> variable has been assigned. Therefore, functions cannot safely return
+> to callers that assume standard ABI.
+
+When our position independent VDSO is built for the n32 or n64 ABIs all
+functions it exposes should be preserving the value of $gp/$28 for their
+caller, but in the presence of the __current_thread_info global register
+variable GCC stops doing so & simply clobbers $gp/$28 when calculating
+the address of the GOT.
+
+In cases where the VDSO returns success this problem will typically be
+masked by the caller in libc returning & restoring $gp/$28 itself, but
+that is by no means guaranteed. In cases where the VDSO returns an error
+libc will typically contain a fallback path which will now fail
+(typically with a bad memory access) if it attempts anything which
+relies upon the value of $gp/$28 - eg. accessing anything via the GOT.
+
+One fix for this would be to move the declaration of
+__current_thread_info inside the current_thread_info() function,
+demoting it from global register variable to local register variable &
+avoiding inadvertently creating a non-standard calling ABI for the VDSO.
+Unfortunately this causes issues for clang, which doesn't support local
+register variables as pointed out by commit fe92da0f355e ("MIPS: Changed
+current_thread_info() to an equivalent supported by both clang and GCC")
+which introduced the global register variable before we had a VDSO to
+worry about.
+
+Instead, fix this by continuing to use the global register variable for
+the kernel proper but declare __current_thread_info as a simple extern
+variable when building the VDSO. It should never be referenced, and will
+cause a link error if it is. This resolves the calling convention issue
+for the VDSO without having any impact upon the build of the kernel
+itself for either clang or gcc.
+
+Signed-off-by: Paul Burton <paulburton@kernel.org>
+Fixes: ebb5e78cc634 ("MIPS: Initial implementation of a VDSO")
+Reported-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Christian Brauner <christian.brauner@canonical.com>
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: <stable@vger.kernel.org> # v4.4+
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+---
+ arch/mips/include/asm/thread_info.h |   20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
+
+--- a/arch/mips/include/asm/thread_info.h
++++ b/arch/mips/include/asm/thread_info.h
+@@ -49,8 +49,26 @@ struct thread_info {
+ 	.addr_limit	= KERNEL_DS,		\
+ }
+ 
+-/* How to get the thread information struct from C.  */
++/*
++ * A pointer to the struct thread_info for the currently executing thread is
++ * held in register $28/$gp.
++ *
++ * We declare __current_thread_info as a global register variable rather than a
++ * local register variable within current_thread_info() because clang doesn't
++ * support explicit local register variables.
++ *
++ * When building the VDSO we take care not to declare the global register
++ * variable because this causes GCC to not preserve the value of $28/$gp in
++ * functions that change its value (which is common in the PIC VDSO when
++ * accessing the GOT). Since the VDSO shouldn't be accessing
++ * __current_thread_info anyway we declare it extern in order to cause a link
++ * failure if it's referenced.
++ */
++#ifdef __VDSO__
++extern struct thread_info *__current_thread_info;
++#else
+ register struct thread_info *__current_thread_info __asm__("$28");
++#endif
+ 
+ static inline struct thread_info *current_thread_info(void)
+ {
+
 
