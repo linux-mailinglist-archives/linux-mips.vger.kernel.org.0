@@ -2,96 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46538135FDB
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jan 2020 18:52:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C9B136083
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jan 2020 19:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388327AbgAIRwh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Jan 2020 12:52:37 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:55070 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730326AbgAIRwh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 9 Jan 2020 12:52:37 -0500
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 47ttxG2WM3z9txHp;
-        Thu,  9 Jan 2020 18:52:34 +0100 (CET)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=F2yrOYUt; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id D9ctLdBUZqbw; Thu,  9 Jan 2020 18:52:34 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 47ttxG1NMwz9txHl;
-        Thu,  9 Jan 2020 18:52:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1578592354; bh=FYx4kyu0guKehGok9fASqGVuxxVoy/XJcQO7YPTYaQc=;
-        h=From:Subject:To:Cc:References:Date:In-Reply-To:From;
-        b=F2yrOYUt44TvH+5O/nMl5vMshj2XKIRHohr5s+oeadn2dM2WIQzI2nCl/M7lAIkXW
-         JxBLJ5s3We6Cyg3fWHtSz+ys/3or+bNkpzqXxrzX1drGWe8AHYgvp4LxAr7x2nNkum
-         EEx91AF9jbgNwX3yge3UCqm+YIsT3UIhyIUywk4Y=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E09AE8B82E;
-        Thu,  9 Jan 2020 18:52:35 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id za-1hAB_sfui; Thu,  9 Jan 2020 18:52:35 +0100 (CET)
-Received: from po14934vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0F7B48B82D;
-        Thu,  9 Jan 2020 18:52:35 +0100 (CET)
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Subject: Surprising code generated for vdso_read_begin()
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, arnd@arndb.de,
-        tglx@linutronix.de, vincenzo.frascino@arm.com, luto@kernel.org,
-        Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org
-References: <cover.1577111363.git.christophe.leroy@c-s.fr>
-Message-ID: <bd4557a7-9715-59aa-5d8e-488c5e516a98@c-s.fr>
-Date:   Thu, 9 Jan 2020 17:52:34 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.7.0
-MIME-Version: 1.0
-In-Reply-To: <cover.1577111363.git.christophe.leroy@c-s.fr>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S2388590AbgAISwb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Jan 2020 13:52:31 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:36551 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730273AbgAISwb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Jan 2020 13:52:31 -0500
+Received: by mail-pg1-f193.google.com with SMTP id k3so3641243pgc.3;
+        Thu, 09 Jan 2020 10:52:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
+         :references:in-reply-to;
+        bh=/BAqD0l+U83NH1RGSfzcWZQsiJzjl7183QqqyS1Fo7Q=;
+        b=M4eGhbsgisg+94qlBajzj3M2JwTjI9PiYDGiso3fenQa2TcMmjODG8jcYkc9i8ZOI8
+         wf4vRzVtNXUkmwLlSvelx1IMNEqHcLfL0bpKtFKGKS5m/YHjwJzownKjSreEUUUASUVV
+         JvI7CZI9TohaWXinZWIwJrukflTnbaclF3683MK5xvNLLUUJWhaQ9CIDukGTEHHYXJtc
+         0kzqKcV8BWO/TvBE6NJgJA1xnEcsIJfpM/3qtP7TDethzzJ6OIrf/FmHA6NoZhwLQuLt
+         YX4THryXr5Y/vrnVvfS43cvabygL2rzYZw0LGiAItMxMVWd3t4XJp6XOy41TrmnazufD
+         PHMw==
+X-Gm-Message-State: APjAAAWvpQSD7KR5VL8ESebWYtcwDXcJvNU+IZdPI+/2Jmgn9X9QsfTo
+        lIg3R68dZMzfmQ173CA9GNg=
+X-Google-Smtp-Source: APXvYqyZpF90AQBz/1Us2pQyaSH42OFP5AqFZ5uOYa6ViVC/ACpU6AhH3y1g8yuh7AoDADOMEIndAw==
+X-Received: by 2002:aa7:96c7:: with SMTP id h7mr12316286pfq.211.1578595950166;
+        Thu, 09 Jan 2020 10:52:30 -0800 (PST)
+Received: from localhost (MIPS-TECHNO.ear1.SanJose1.Level3.net. [4.15.122.74])
+        by smtp.gmail.com with ESMTPSA id z64sm8902610pfz.23.2020.01.09.10.52.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jan 2020 10:52:29 -0800 (PST)
+Message-ID: <5e17766d.1c69fb81.71d2b.581c@mx.google.com>
+Date:   Thu, 09 Jan 2020 10:52:28 -0800
+From:   Paul Burton <paulburton@kernel.org>
+To:     =?utf-8?b?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+CC:     linux-mips@vger.kernel.org
+CC:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
+        jhogan@kernel.org, mripard@kernel.org, shawnguo@kernel.org,
+        mark.rutland@arm.com, alexandre.belloni@bootlin.com,
+        ralf@linux-mips.org, heiko@sntech.de, icenowy@aosc.io,
+        ak@linux.intel.com, laurent.pinchart@ideasonboard.com,
+        krzk@kernel.org, geert+renesas@glider.be, paul@crapouillou.net,
+        prasannatsmkumar@gmail.com, keescook@chromium.org,
+        ebiederm@xmission.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, 772753199@qq.com
+CC:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH v8 1/4] MIPS: Ingenic: Add Ingenic X1000 support.
+References:  <1575979363-25956-2-git-send-email-zhouyanjie@wanyeetech.com>
+In-Reply-To:  <1575979363-25956-2-git-send-email-zhouyanjie@wanyeetech.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Wondering why we get something so complicated/redundant for 
-vdso_read_begin() <include/vdso/helpers.h>
+Hello,
 
-static __always_inline u32 vdso_read_begin(const struct vdso_data *vd)
-{
-	u32 seq;
+周琰杰 (Zhou Yanjie) wrote:
+> Support the Ingenic X1000 SoC using the code under arch/mips/jz4740.
+> This is left unselectable in Kconfig until a X1000 based board is
+> added in a later commit.
 
-	while ((seq = READ_ONCE(vd->seq)) & 1)
-		cpu_relax();
+Series applied to mips-next.
 
-	smp_rmb();
-	return seq;
-}
+> MIPS: Ingenic: Add Ingenic X1000 support.
+>   commit 7a16ccd300c2
+>   https://git.kernel.org/mips/c/7a16ccd300c2
+>   
+>   Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> 
+> dt-bindings: Document yna vendor-prefix.
+>   commit 9d022be3c192
+>   https://git.kernel.org/mips/c/9d022be3c192
+>   
+>   Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>   Acked-by: Rob Herring <robh@kernel.org>
+>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> 
+> dt-bindings: MIPS: Add Ingenic XBurst based boards.
+>   commit 4b396e56a0b8
+>   https://git.kernel.org/mips/c/4b396e56a0b8
+>   
+>   Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>   Reviewed-by: Rob Herring <robh@kernel.org>
+>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> 
+> MIPS: Ingenic: Add YSH & ATIL CU Neo board support.
+>   commit 0cd2c6e5701e
+>   https://git.kernel.org/mips/c/0cd2c6e5701e
+>   
+>   Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>   Acked-by: Paul Cercueil <paul@crapouillou.net>
+>   [paulburton@kernel.org:
+>     Drop stale mention of previously unselectable Kconfig entry.]
+>   Signed-off-by: Paul Burton <paulburton@kernel.org>
 
+Thanks,
+    Paul
 
-  6e0:   81 05 00 f0     lwz     r8,240(r5)
-  6e4:   71 09 00 01     andi.   r9,r8,1
-  6e8:   41 82 00 10     beq     6f8 <__c_kernel_clock_gettime+0x158>
-  6ec:   81 05 00 f0     lwz     r8,240(r5)
-  6f0:   71 0a 00 01     andi.   r10,r8,1
-  6f4:   40 82 ff f8     bne     6ec <__c_kernel_clock_gettime+0x14c>
-  6f8:
-
-r5 being vd pointer
-
-Why the first triplet, not only the second triplet ? Something wrong 
-with using READ_ONCE() for that ?
-
-Christophe
+[ This message was auto-generated; if you believe anything is incorrect
+  then please email paulburton@kernel.org to report it. ]
