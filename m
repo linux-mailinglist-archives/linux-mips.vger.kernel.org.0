@@ -2,76 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F01F136189
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jan 2020 21:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939F41362EC
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jan 2020 22:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728693AbgAIUI0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Jan 2020 15:08:26 -0500
-Received: from gate.crashing.org ([63.228.1.57]:55777 "EHLO gate.crashing.org"
+        id S1725791AbgAIV6D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Jan 2020 16:58:03 -0500
+Received: from hall.aurel32.net ([195.154.113.88]:58764 "EHLO hall.aurel32.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725763AbgAIUIZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 9 Jan 2020 15:08:25 -0500
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 009K7ZKP004645;
-        Thu, 9 Jan 2020 14:07:35 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 009K7XMf004644;
-        Thu, 9 Jan 2020 14:07:33 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Thu, 9 Jan 2020 14:07:33 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, arnd@arndb.de,
-        tglx@linutronix.de, vincenzo.frascino@arm.com, luto@kernel.org,
-        x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        id S1725775AbgAIV6D (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 9 Jan 2020 16:58:03 -0500
+X-Greylist: delayed 2033 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 Jan 2020 16:58:03 EST
+Received: from [2a01:e35:2fdd:a4e1:fe91:fc89:bc43:b814] (helo=ohm.rr44.fr)
+        by hall.aurel32.net with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1ipfHh-0006YQ-JJ; Thu, 09 Jan 2020 22:24:05 +0100
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.92.3)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1ipfHg-007LRk-7h; Thu, 09 Jan 2020 22:24:04 +0100
+Date:   Thu, 9 Jan 2020 22:24:04 +0100
+From:   Aurelien Jarno <aurelien@aurel32.net>
+To:     Jun Sun <jsun@junsun.net>
+Cc:     qemu-discuss@nongnu.org, debian-mips@lists.debian.org,
         linux-mips@vger.kernel.org
-Subject: Re: Surprising code generated for vdso_read_begin()
-Message-ID: <20200109200733.GS3191@gate.crashing.org>
-References: <cover.1577111363.git.christophe.leroy@c-s.fr> <bd4557a7-9715-59aa-5d8e-488c5e516a98@c-s.fr>
-Mime-Version: 1.0
+Subject: Re: debian bootup hangs on qemu-system-mips64el
+Message-ID: <20200109212404.GA1750666@aurel32.net>
+Mail-Followup-To: Jun Sun <jsun@junsun.net>, qemu-discuss@nongnu.org,
+        debian-mips@lists.debian.org, linux-mips@vger.kernel.org
+References: <CAP5Nno5CPjV2mcf2ny8AtcC2ziqDkv6Kc7f4hCq1TF4DvKvJkw@mail.gmail.com>
+ <CAP5Nno466s9M_7E0keMP3s=rDuZ48hrAb9-xAv52SsADr910XA@mail.gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bd4557a7-9715-59aa-5d8e-488c5e516a98@c-s.fr>
-User-Agent: Mutt/1.4.2.3i
+In-Reply-To: <CAP5Nno466s9M_7E0keMP3s=rDuZ48hrAb9-xAv52SsADr910XA@mail.gmail.com>
+User-Agent: Mutt/1.13.2 (2019-12-18)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jan 09, 2020 at 05:52:34PM +0000, Christophe Leroy wrote:
-> Wondering why we get something so complicated/redundant for 
-> vdso_read_begin() <include/vdso/helpers.h>
-> 
-> static __always_inline u32 vdso_read_begin(const struct vdso_data *vd)
-> {
-> 	u32 seq;
-> 
-> 	while ((seq = READ_ONCE(vd->seq)) & 1)
-> 		cpu_relax();
-> 
-> 	smp_rmb();
-> 	return seq;
-> }
-> 
-> 
->  6e0:   81 05 00 f0     lwz     r8,240(r5)
->  6e4:   71 09 00 01     andi.   r9,r8,1
->  6e8:   41 82 00 10     beq     6f8 <__c_kernel_clock_gettime+0x158>
->  6ec:   81 05 00 f0     lwz     r8,240(r5)
->  6f0:   71 0a 00 01     andi.   r10,r8,1
->  6f4:   40 82 ff f8     bne     6ec <__c_kernel_clock_gettime+0x14c>
->  6f8:
-> 
-> r5 being vd pointer
-> 
-> Why the first triplet, not only the second triplet ? Something wrong 
-> with using READ_ONCE() for that ?
+On 2020-01-04 20:46, Jun Sun wrote:
+> On Wed, Jan 1, 2020 at 6:50 PM Jun Sun <jsun@junsun.net> wrote:
+> >
+> > Hi, all,
+> >
+> > Debian/mips64el runs well on qemu-system-mips64el until I turned on smp option with a number of 2 or higher.  See the error message below.  It usually hangs pretty early on.
+> >
 
-It looks like the compiler did loop peeling.  What GCC version is this?
-Please try current trunk (to become GCC 10), or at least GCC 9?
+QEMU/mips doesn't really support SMP. The -smp option used to be for
+SMT, but I am not even sure it really worked.
 
+All that said, it's still a bug in QEMU to accept this option.
 
-Segher
+-- 
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                 http://www.aurel32.net
