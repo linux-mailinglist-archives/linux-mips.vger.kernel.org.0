@@ -2,35 +2,30 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F16135711
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jan 2020 11:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8349D135700
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jan 2020 11:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730280AbgAIKgR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Jan 2020 05:36:17 -0500
-Received: from mx2.suse.de ([195.135.220.15]:55516 "EHLO mx2.suse.de"
+        id S1729471AbgAIKfJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Jan 2020 05:35:09 -0500
+Received: from mx2.suse.de ([195.135.220.15]:55314 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729326AbgAIKgF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 9 Jan 2020 05:36:05 -0500
+        id S1729165AbgAIKfJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 9 Jan 2020 05:35:09 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 079C46A057;
+        by mx2.suse.de (Postfix) with ESMTP id 7D0176A051;
         Thu,  9 Jan 2020 10:34:45 +0000 (UTC)
 From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
 To:     Paul Burton <paulburton@kernel.org>
 Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH v12 0/3] Use MFD framework for SGI IOC3 drivers
-Date:   Thu,  9 Jan 2020 11:34:26 +0100
-Message-Id: <20200109103430.12057-1-tbogendoerfer@suse.de>
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v12 1/3] MIPS: PCI: Support mapping of INTB/C/D for pci-xtalk-bridge
+Date:   Thu,  9 Jan 2020 11:34:27 +0100
+Message-Id: <20200109103430.12057-2-tbogendoerfer@suse.de>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200109103430.12057-1-tbogendoerfer@suse.de>
+References: <20200109103430.12057-1-tbogendoerfer@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -38,108 +33,105 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-SGI IOC3 ASIC includes support for ethernet, PS2 keyboard/mouse,
-NIC (number in a can), GPIO and a byte  bus. By attaching a
-SuperIO chip to it, it also supports serial lines and a parallel
-port. The chip is used on a variety of SGI systems with different
-configurations. This patchset moves code out of the network driver,
-which doesn't belong there, into its new place a MFD driver and
-specific platform drivers for the different subfunctions.
+Implented mapping of PCI INTB/C/D, which is needed for PCI multifunction
+devices, PCI-PCI bridges and IOC3.
 
-Changes in v12:
- - added support for mapping all PCI interrupts as ioc3 uses INTB,
-   if both ethernet and superio is used
+Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+---
+ arch/mips/include/asm/pci/bridge.h |  3 ++-
+ arch/mips/pci/pci-xtalk-bridge.c   | 28 ++++++++++++++++++++++++----
+ 2 files changed, 26 insertions(+), 5 deletions(-)
 
-Changes in v11:
- - dropped accepted patches out of the series
- - moved byte swapping patch first in series
- - added ip30 system board support
-
-Changes in v10:
- - generation of fake subdevice ID had vendor and device ID swapped
-
-Changes in v9:
- - remove generated MFD devices, when driver is removed or in case
-   of a mfd device setup error
- - remove irq domain, if setup of mfd devices failed
- - pci_iounmap on exit/error cases
- - added irq domain unmap function
-
-Changes in v8:
- - Re-worked comments in drivers/mfd/ioc3.c
- - Added select CRC16 to ioc3-eth.c
- - Patches 1 and 2 are already taken to mips-next, but
-   for completeness of the series they are still included.
-   What's missing to get the remaining 3 patches via the MIPS
-   tree is an ack from a network maintainer
-
-Changes in v7:
- - added patch to enable ethernet phy for Origin 200 systems
- - depend on 64bit for ioc3 mfd driver
-
-Changes in v6:
- - dropped patches accepted for v5.4-rc1
- - moved serio patch to ip30 patch series
- - adapted nvmem patch
-
-Changes in v5:
- - requested by Jakub I've splited ioc3 ethernet driver changes into
-   more steps to make the transition more visible; on the way there 
-   I've "checkpatched" the driver and reduced code reorderings
- - dropped all uint16_t and uint32_t
- - added nvmem API extension to the documenation file
- - changed to use request_irq/free_irq in serio driver
- - removed wrong kfree() in serio error path
-
-Changes in v4:
- - added w1 drivers to the series after merge in 5.3 failed because
-   of no response from maintainer and other parts of this series
-   won't work without that drivers
- - moved ip30 systemboard support to the ip30 series, which will
-   deal with rtc oddity Lee found
- - converted to use devm_platform_ioremap_resource
- - use PLATFORM_DEVID_AUTO for serial, ethernet and serio in mfd driver
- - fixed reverse christmas order in ioc3-eth.c
- - formating issue found by Lee
- - re-worked irq request/free in serio driver to avoid crashes during
-   probe/remove
-
-Changes in v3:
- - use 1-wire subsystem for handling proms
- - pci-xtalk driver uses prom information to create PCI subsystem
-   ids for use in MFD driver
- - changed MFD driver to only use static declared mfd_cells
- - added IP30 system board setup to MFD driver
- - mac address is now read from ioc3-eth driver with nvmem framework
-
-Changes in v2:
- - fixed issue in ioc3kbd.c reported by Dmitry Torokhov
- - merged IP27 RTC removal and 8250 serial driver addition into
-   main MFD patch to keep patches bisectable
-
-Thomas Bogendoerfer (3):
-  MIPS: PCI: Support mapping of INTB/C/D for pci-xtalk-bridge
-  MIPS: SGI-IP27: fix readb/writeb addressing
-  mfd: ioc3: Add driver for SGI IOC3 chip
-
- arch/mips/include/asm/mach-ip27/mangle-port.h |   4 +-
- arch/mips/include/asm/pci/bridge.h            |   3 +-
- arch/mips/include/asm/sn/ioc3.h               |  38 +-
- arch/mips/pci/pci-xtalk-bridge.c              |  28 +-
- arch/mips/sgi-ip27/ip27-timer.c               |  20 -
- drivers/mfd/Kconfig                           |  13 +
- drivers/mfd/Makefile                          |   1 +
- drivers/mfd/ioc3.c                            | 669 ++++++++++++++++++
- drivers/net/ethernet/sgi/Kconfig              |   5 +-
- drivers/net/ethernet/sgi/ioc3-eth.c           | 544 +++-----------
- drivers/rtc/rtc-m48t35.c                      |  11 +
- drivers/tty/serial/8250/8250_ioc3.c           |  98 +++
- drivers/tty/serial/8250/Kconfig               |  11 +
- drivers/tty/serial/8250/Makefile              |   1 +
- 14 files changed, 951 insertions(+), 495 deletions(-)
- create mode 100644 drivers/mfd/ioc3.c
- create mode 100644 drivers/tty/serial/8250/8250_ioc3.c
-
+diff --git a/arch/mips/include/asm/pci/bridge.h b/arch/mips/include/asm/pci/bridge.h
+index 3bc630ff9ad4..9c476a0400e0 100644
+--- a/arch/mips/include/asm/pci/bridge.h
++++ b/arch/mips/include/asm/pci/bridge.h
+@@ -806,7 +806,8 @@ struct bridge_controller {
+ 	unsigned long		baddr;
+ 	unsigned long		intr_addr;
+ 	struct irq_domain	*domain;
+-	unsigned int		pci_int[8];
++	unsigned int		pci_int[8][2];
++	unsigned int		int_mapping[8][2];
+ 	u32			ioc3_sid[8];
+ 	nasid_t			nasid;
+ };
+diff --git a/arch/mips/pci/pci-xtalk-bridge.c b/arch/mips/pci/pci-xtalk-bridge.c
+index 5c1a196be0c5..ef5ca7c13ca5 100644
+--- a/arch/mips/pci/pci-xtalk-bridge.c
++++ b/arch/mips/pci/pci-xtalk-bridge.c
+@@ -437,17 +437,28 @@ static int bridge_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+ 	struct irq_alloc_info info;
+ 	int irq;
+ 
+-	irq = bc->pci_int[slot];
++	switch (pin) {
++	case PCI_INTERRUPT_UNKNOWN:
++	case PCI_INTERRUPT_INTA:
++	case PCI_INTERRUPT_INTC:
++		pin = 0;
++		break;
++	case PCI_INTERRUPT_INTB:
++	case PCI_INTERRUPT_INTD:
++		pin = 1;
++	}
++
++	irq = bc->pci_int[slot][pin];
+ 	if (irq == -1) {
+ 		info.ctrl = bc;
+ 		info.nasid = bc->nasid;
+-		info.pin = slot;
++		info.pin = bc->int_mapping[slot][pin];
+ 
+ 		irq = irq_domain_alloc_irqs(bc->domain, 1, bc->nasid, &info);
+ 		if (irq < 0)
+ 			return irq;
+ 
+-		bc->pci_int[slot] = irq;
++		bc->pci_int[slot][pin] = irq;
+ 	}
+ 	return irq;
+ }
+@@ -458,21 +469,26 @@ static void bridge_setup_ip27_baseio6g(struct bridge_controller *bc)
+ {
+ 	bc->ioc3_sid[2] = IOC3_SID(IOC3_SUBSYS_IP27_BASEIO6G);
+ 	bc->ioc3_sid[6] = IOC3_SID(IOC3_SUBSYS_IP27_MIO);
++	bc->int_mapping[2][1] = 4;
++	bc->int_mapping[6][1] = 6;
+ }
+ 
+ static void bridge_setup_ip27_baseio(struct bridge_controller *bc)
+ {
+ 	bc->ioc3_sid[2] = IOC3_SID(IOC3_SUBSYS_IP27_BASEIO);
++	bc->int_mapping[2][1] = 4;
+ }
+ 
+ static void bridge_setup_ip29_baseio(struct bridge_controller *bc)
+ {
+ 	bc->ioc3_sid[2] = IOC3_SID(IOC3_SUBSYS_IP29_SYSBOARD);
++	bc->int_mapping[2][1] = 3;
+ }
+ 
+ static void bridge_setup_ip30_sysboard(struct bridge_controller *bc)
+ {
+ 	bc->ioc3_sid[2] = IOC3_SID(IOC3_SUBSYS_IP30_SYSBOARD);
++	bc->int_mapping[2][1] = 4;
+ }
+ 
+ static void bridge_setup_menet(struct bridge_controller *bc)
+@@ -655,7 +671,11 @@ static int bridge_probe(struct platform_device *pdev)
+ 
+ 	for (slot = 0; slot < 8; slot++) {
+ 		bridge_set(bc, b_device[slot].reg, BRIDGE_DEV_SWAP_DIR);
+-		bc->pci_int[slot] = -1;
++		bc->pci_int[slot][0] = -1;
++		bc->pci_int[slot][1] = -1;
++		/* default interrupt pin mapping */
++		bc->int_mapping[slot][0] = slot;
++		bc->int_mapping[slot][1] = slot ^ 4;
+ 	}
+ 	bridge_read(bc, b_wid_tflush);	  /* wait until Bridge PIO complete */
+ 
 -- 
 2.24.1
 
