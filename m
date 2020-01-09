@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 185AE135950
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Jan 2020 13:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40609135943
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jan 2020 13:35:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731050AbgAIMeg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Jan 2020 07:34:36 -0500
-Received: from mx2.suse.de ([195.135.220.15]:38020 "EHLO mx2.suse.de"
+        id S1730981AbgAIMeL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Jan 2020 07:34:11 -0500
+Received: from mx2.suse.de ([195.135.220.15]:38022 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729485AbgAIMeK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 9 Jan 2020 07:34:10 -0500
+        id S1730963AbgAIMeL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 9 Jan 2020 07:34:11 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 44771B220A;
+        by mx2.suse.de (Postfix) with ESMTP id 8110DB220B;
         Thu,  9 Jan 2020 12:34:05 +0000 (UTC)
 From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
 To:     Paul Burton <paulburton@kernel.org>
 Cc:     Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 05/14] MIPS: SGI-IP27: move IP27 specific macro to IP27 specific header file
-Date:   Thu,  9 Jan 2020 13:33:42 +0100
-Message-Id: <20200109123353.5656-6-tbogendoerfer@suse.de>
+Subject: [PATCH 06/14] MIPS: SGI-IP27: Move get_nasid() to a IP27 specific file
+Date:   Thu,  9 Jan 2020 13:33:43 +0100
+Message-Id: <20200109123353.5656-7-tbogendoerfer@suse.de>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200109123353.5656-1-tbogendoerfer@suse.de>
 References: <20200109123353.5656-1-tbogendoerfer@suse.de>
@@ -33,57 +33,73 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Extracting node id from HUB register is specific to IP27 alias SN0.
-Move the macro definition to a SN0 header file.
+get_nasid() will be different for SGI-IP35, therefore move IP27
+implementation to IP27 specific file.
 
 Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
 ---
- arch/mips/include/asm/mach-ip27/kernel-entry-init.h | 10 ----------
- arch/mips/include/asm/sn/sn0/hub.h                  | 12 ++++++++++++
- 2 files changed, 12 insertions(+), 10 deletions(-)
+ arch/mips/include/asm/sn/arch.h    |  6 ------
+ arch/mips/include/asm/sn/sn0/hub.h | 10 ++++++++++
+ arch/mips/sgi-ip27/ip27-init.c     | 10 ----------
+ 3 files changed, 10 insertions(+), 16 deletions(-)
 
-diff --git a/arch/mips/include/asm/mach-ip27/kernel-entry-init.h b/arch/mips/include/asm/mach-ip27/kernel-entry-init.h
-index ef31d9fcf806..3e54f605a70b 100644
---- a/arch/mips/include/asm/mach-ip27/kernel-entry-init.h
-+++ b/arch/mips/include/asm/mach-ip27/kernel-entry-init.h
-@@ -13,16 +13,6 @@
- #include <asm/sn/agent.h>
- #include <asm/sn/klkernvars.h>
+diff --git a/arch/mips/include/asm/sn/arch.h b/arch/mips/include/asm/sn/arch.h
+index afe9fcf36198..9a9682543e89 100644
+--- a/arch/mips/include/asm/sn/arch.h
++++ b/arch/mips/include/asm/sn/arch.h
+@@ -25,10 +25,4 @@
+ #define INVALID_MODULE		(moduleid_t)-1
+ #define INVALID_PARTID		(partid_t)-1
  
--/*
-- * Returns the local nasid into res.
-- */
--	.macro GET_NASID_ASM res
--	dli	\res, LOCAL_HUB_ADDR(NI_STATUS_REV_ID)
--	ld	\res, (\res)
--	and	\res, NSRI_NODEID_MASK
--	dsrl	\res, NSRI_NODEID_SHFT
--	.endm
+-#ifndef __ASSEMBLY__
 -
- /*
-  * TLB bits
-  */
+-extern nasid_t get_nasid(void);
+-
+-#endif
+-
+ #endif /* _ASM_SN_ARCH_H */
 diff --git a/arch/mips/include/asm/sn/sn0/hub.h b/arch/mips/include/asm/sn/sn0/hub.h
-index d78dd76d5dcf..82cadd785b9c 100644
+index 82cadd785b9c..c84adde36d41 100644
 --- a/arch/mips/include/asm/sn/sn0/hub.h
 +++ b/arch/mips/include/asm/sn/sn0/hub.h
-@@ -37,4 +37,16 @@
- #define UATTR_MSPEC	2
- #define UATTR_UNCAC	3
- 
-+#ifdef __ASSEMBLY__
-+/*
-+ * Returns the local nasid into res.
-+ */
-+	.macro GET_NASID_ASM res
-+	dli	\res, LOCAL_HUB_ADDR(NI_STATUS_REV_ID)
-+	ld	\res, (\res)
-+	and	\res, NSRI_NODEID_MASK
-+	dsrl	\res, NSRI_NODEID_SHFT
-+	.endm
-+#endif
+@@ -47,6 +47,16 @@
+ 	and	\res, NSRI_NODEID_MASK
+ 	dsrl	\res, NSRI_NODEID_SHFT
+ 	.endm
++#else
 +
++/*
++ * get_nasid() returns the physical node id number of the caller.
++ */
++static inline nasid_t get_nasid(void)
++{
++	return (nasid_t)((LOCAL_HUB_L(NI_STATUS_REV_ID) & NSRI_NODEID_MASK)
++			 >> NSRI_NODEID_SHFT);
++}
+ #endif
+ 
  #endif /* _ASM_SN_SN0_HUB_H */
+diff --git a/arch/mips/sgi-ip27/ip27-init.c b/arch/mips/sgi-ip27/ip27-init.c
+index 484db3b73b7d..a2da78bc9f76 100644
+--- a/arch/mips/sgi-ip27/ip27-init.c
++++ b/arch/mips/sgi-ip27/ip27-init.c
+@@ -94,16 +94,6 @@ void per_cpu_init(void)
+ 	enable_percpu_irq(IP27_HUB_PEND1_IRQ, IRQ_TYPE_NONE);
+ }
+ 
+-/*
+- * get_nasid() returns the physical node id number of the caller.
+- */
+-nasid_t
+-get_nasid(void)
+-{
+-	return (nasid_t)((LOCAL_HUB_L(NI_STATUS_REV_ID) & NSRI_NODEID_MASK)
+-			 >> NSRI_NODEID_SHFT);
+-}
+-
+ void __init plat_mem_setup(void)
+ {
+ 	u64 p, e, n_mode;
 -- 
 2.24.1
 
