@@ -2,65 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFFD137855
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jan 2020 22:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDD81378D6
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jan 2020 23:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726836AbgAJVMQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Jan 2020 16:12:16 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:59809 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726762AbgAJVMQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jan 2020 16:12:16 -0500
-Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1iq1Zf-0004pl-7v; Fri, 10 Jan 2020 22:12:07 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id BAA67105BDB; Fri, 10 Jan 2020 22:12:06 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, arnd@arndb.de,
-        vincenzo.frascino@arm.com, luto@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [RFC PATCH v2 07/10] lib: vdso: don't use READ_ONCE() in __c_kernel_time()
-In-Reply-To: <fc1ff722c7cbe63a63ae02ade3a714d2049d54a5.1577111367.git.christophe.leroy@c-s.fr>
-References: <cover.1577111363.git.christophe.leroy@c-s.fr> <fc1ff722c7cbe63a63ae02ade3a714d2049d54a5.1577111367.git.christophe.leroy@c-s.fr>
-Date:   Fri, 10 Jan 2020 22:12:06 +0100
-Message-ID: <87lfqfrp7d.fsf@nanos.tec.linutronix.de>
+        id S1727185AbgAJWDL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Jan 2020 17:03:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48628 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727183AbgAJWDL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 10 Jan 2020 17:03:11 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 864E420838;
+        Fri, 10 Jan 2020 22:03:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578693790;
+        bh=Jas9M4NC9WttapCSqzQTQUihydt2rWA4eNC4cFlbr/U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=D+UzHqREC2Yb9M5TSjWruMTkJCA1rrSmNm7VYiSal9KDEXdE5pxCYIGXpjxAN77dE
+         /KnVZuEQtIv3yF1OMYL5WtFuM7KJgBekYxUin9Pjjr/zJOqZJnb04EWTbHIGXk3ng3
+         G95bE0PljPnW9eebM9U6ps90cwr8AZSnEW/PluS8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 01/26] mips: cacheinfo: report shared CPU map
+Date:   Fri, 10 Jan 2020 17:02:43 -0500
+Message-Id: <20200110220308.27784-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@c-s.fr> writes:
->
-> diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-> index 17b4cff6e5f0..5a17a9d2e6cd 100644
-> --- a/lib/vdso/gettimeofday.c
-> +++ b/lib/vdso/gettimeofday.c
-> @@ -144,7 +144,7 @@ __cvdso_gettimeofday(const struct vdso_data *vd, struct __kernel_old_timeval *tv
->  static __maybe_unused __kernel_old_time_t
->  __cvdso_time(const struct vdso_data *vd, __kernel_old_time_t *time)
->  {
-> -	__kernel_old_time_t t = READ_ONCE(vd[CS_HRES_COARSE].basetime[CLOCK_REALTIME].sec);
-> +	__kernel_old_time_t t = vd[CS_HRES_COARSE].basetime[CLOCK_REALTIME].sec;
->  
->  	if (time)
->  		*time = t;
+From: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
 
-Allows the compiler to load twice, i.e. the returned value might be different from the
-stored value. So no.
+[ Upstream commit 3b1313eb32c499d46dc4c3e896d19d9564c879c4 ]
 
-Thanks,
+Report L1 caches as shared per core; L2 - per cluster.
 
-        tglx
+This fixes "perf" that went crazy if shared_cpu_map attribute not
+reported on sysfs, in form of
+
+/sys/devices/system/cpu/cpu*/cache/index*/shared_cpu_list
+/sys/devices/system/cpu/cpu*/cache/index*/shared_cpu_map
+
+Signed-off-by: Vladimir Kondratiev <vladimir.kondratiev@intel.com>
+Signed-off-by: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/kernel/cacheinfo.c | 27 ++++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/arch/mips/kernel/cacheinfo.c b/arch/mips/kernel/cacheinfo.c
+index f777e44653d5..47312c529410 100644
+--- a/arch/mips/kernel/cacheinfo.c
++++ b/arch/mips/kernel/cacheinfo.c
+@@ -50,6 +50,25 @@ static int __init_cache_level(unsigned int cpu)
+ 	return 0;
+ }
+ 
++static void fill_cpumask_siblings(int cpu, cpumask_t *cpu_map)
++{
++	int cpu1;
++
++	for_each_possible_cpu(cpu1)
++		if (cpus_are_siblings(cpu, cpu1))
++			cpumask_set_cpu(cpu1, cpu_map);
++}
++
++static void fill_cpumask_cluster(int cpu, cpumask_t *cpu_map)
++{
++	int cpu1;
++	int cluster = cpu_cluster(&cpu_data[cpu]);
++
++	for_each_possible_cpu(cpu1)
++		if (cpu_cluster(&cpu_data[cpu1]) == cluster)
++			cpumask_set_cpu(cpu1, cpu_map);
++}
++
+ static int __populate_cache_leaves(unsigned int cpu)
+ {
+ 	struct cpuinfo_mips *c = &current_cpu_data;
+@@ -57,14 +76,20 @@ static int __populate_cache_leaves(unsigned int cpu)
+ 	struct cacheinfo *this_leaf = this_cpu_ci->info_list;
+ 
+ 	if (c->icache.waysize) {
++		/* L1 caches are per core */
++		fill_cpumask_siblings(cpu, &this_leaf->shared_cpu_map);
+ 		populate_cache(dcache, this_leaf, 1, CACHE_TYPE_DATA);
++		fill_cpumask_siblings(cpu, &this_leaf->shared_cpu_map);
+ 		populate_cache(icache, this_leaf, 1, CACHE_TYPE_INST);
+ 	} else {
+ 		populate_cache(dcache, this_leaf, 1, CACHE_TYPE_UNIFIED);
+ 	}
+ 
+-	if (c->scache.waysize)
++	if (c->scache.waysize) {
++		/* L2 cache is per cluster */
++		fill_cpumask_cluster(cpu, &this_leaf->shared_cpu_map);
+ 		populate_cache(scache, this_leaf, 2, CACHE_TYPE_UNIFIED);
++	}
+ 
+ 	if (c->tcache.waysize)
+ 		populate_cache(tcache, this_leaf, 3, CACHE_TYPE_UNIFIED);
+-- 
+2.20.1
+
