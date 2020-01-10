@@ -2,40 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 948F513784C
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jan 2020 22:08:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFFD137855
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jan 2020 22:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727160AbgAJVIB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Jan 2020 16:08:01 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:59790 "EHLO
+        id S1726836AbgAJVMQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Jan 2020 16:12:16 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:59809 "EHLO
         Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726842AbgAJVIB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jan 2020 16:08:01 -0500
+        with ESMTP id S1726762AbgAJVMQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Jan 2020 16:12:16 -0500
 Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
         by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
         (Exim 4.80)
         (envelope-from <tglx@linutronix.de>)
-        id 1iq1VU-0004ld-Ub; Fri, 10 Jan 2020 22:07:49 +0100
+        id 1iq1Zf-0004pl-7v; Fri, 10 Jan 2020 22:12:07 +0100
 Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id 6009B105BDB; Fri, 10 Jan 2020 22:07:48 +0100 (CET)
+        id BAA67105BDB; Fri, 10 Jan 2020 22:12:06 +0100 (CET)
 From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+To:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list\:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [RFC PATCH v2 05/10] lib: vdso: inline do_hres()
-In-Reply-To: <CAK8P3a36OgFuY72b_i6+0xBNGnaxS1SsRid+HrgQHPZtUJp3LQ@mail.gmail.com>
-References: <cover.1577111363.git.christophe.leroy@c-s.fr> <d0f8dfb26c025d3e3eee1b5f610161ca19b942df.1577111367.git.christophe.leroy@c-s.fr> <CAK8P3a36OgFuY72b_i6+0xBNGnaxS1SsRid+HrgQHPZtUJp3LQ@mail.gmail.com>
-Date:   Fri, 10 Jan 2020 22:07:48 +0100
-Message-ID: <87o8vbrpej.fsf@nanos.tec.linutronix.de>
+        Michael Ellerman <mpe@ellerman.id.au>, arnd@arndb.de,
+        vincenzo.frascino@arm.com, luto@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH v2 07/10] lib: vdso: don't use READ_ONCE() in __c_kernel_time()
+In-Reply-To: <fc1ff722c7cbe63a63ae02ade3a714d2049d54a5.1577111367.git.christophe.leroy@c-s.fr>
+References: <cover.1577111363.git.christophe.leroy@c-s.fr> <fc1ff722c7cbe63a63ae02ade3a714d2049d54a5.1577111367.git.christophe.leroy@c-s.fr>
+Date:   Fri, 10 Jan 2020 22:12:06 +0100
+Message-ID: <87lfqfrp7d.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Linutronix-Spam-Score: -1.0
@@ -46,36 +42,24 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Arnd Bergmann <arnd@arndb.de> writes:
-> On Mon, Dec 23, 2019 at 3:31 PM Christophe Leroy
-> <christophe.leroy@c-s.fr> wrote:
->>
->> do_hres() is called from several places, so GCC doesn't inline
->> it at first.
->>
->> do_hres() takes a struct __kernel_timespec * parameter for
->> passing the result. In the 32 bits case, this parameter corresponds
->> to a local var in the caller. In order to provide a pointer
->> to this structure, the caller has to put it in its stack and
->> do_hres() has to write the result in the stack. This is suboptimal,
->> especially on RISC processor like powerpc.
->>
->> By making GCC inline the function, the struct __kernel_timespec
->> remains a local var using registers, avoiding the need to write and
->> read stack.
->>
->> The improvement is significant on powerpc.
->>
->> Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
+Christophe Leroy <christophe.leroy@c-s.fr> writes:
 >
-> Good idea, I can see how this ends up being an improvement
-> for most of the callers.
->
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+> index 17b4cff6e5f0..5a17a9d2e6cd 100644
+> --- a/lib/vdso/gettimeofday.c
+> +++ b/lib/vdso/gettimeofday.c
+> @@ -144,7 +144,7 @@ __cvdso_gettimeofday(const struct vdso_data *vd, struct __kernel_old_timeval *tv
+>  static __maybe_unused __kernel_old_time_t
+>  __cvdso_time(const struct vdso_data *vd, __kernel_old_time_t *time)
+>  {
+> -	__kernel_old_time_t t = READ_ONCE(vd[CS_HRES_COARSE].basetime[CLOCK_REALTIME].sec);
+> +	__kernel_old_time_t t = vd[CS_HRES_COARSE].basetime[CLOCK_REALTIME].sec;
+>  
+>  	if (time)
+>  		*time = t;
 
-  https://lore.kernel.org/r/20191112012724.250792-3-dima@arista.com
-
-On the way to be applied.
+Allows the compiler to load twice, i.e. the returned value might be different from the
+stored value. So no.
 
 Thanks,
 
