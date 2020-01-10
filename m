@@ -2,38 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D82B11378E0
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Jan 2020 23:03:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F7B1378E2
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Jan 2020 23:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727376AbgAJWDP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S1727356AbgAJWDP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Fri, 10 Jan 2020 17:03:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48708 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:48810 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727183AbgAJWDM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 10 Jan 2020 17:03:12 -0500
+        id S1727317AbgAJWDO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 10 Jan 2020 17:03:14 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA93020721;
-        Fri, 10 Jan 2020 22:03:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 55F082082E;
+        Fri, 10 Jan 2020 22:03:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578693791;
-        bh=NbGATb5s7hBwbGFwF2RTukJhnBKMnGwdp/jYrhC7C2A=;
+        s=default; t=1578693794;
+        bh=7SrXtY3zhTAIs5OpgjwMMDDZzdGmV1xifK4ax0OnMDI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vcCY4uy0on65Oux66F7zUt/tSUsqaxQhbByOgv0BbtmaaiE7LtOaTXdOyGiqaKv20
-         zbWike2tdV/fZjEuOAlKskFSjQnX4fmIM3LOecwYuk3Lb4VTDap2N7+f3Vbbxs99Au
-         aMvOIEGm/Ll7sg5HbCz2wRHRdaMZlU5OLqy5Kexs=
+        b=IFuhvM3nsvNvlFkyPMZ+qUldb/kJ6X8nWN5xH+yUASL7cnXpVd8Fn4dCd8zQX35c0
+         /plHbuhsWhm/V5SBGCYMoM+zqN8a0hEzBbN5rge2G+fWs6HAEZfk65wlSWSugMq2et
+         t19sRRuu/zsrcdzzXzYmT7tRJE6S53sq7Jxrb7jA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        "H . Nikolaus Schaller" <hns@goldelico.com>,
+Cc:     Jouni Hogander <jouni.hogander@unikie.com>,
         Paul Burton <paulburton@kernel.org>,
-        mips-creator-ci20-dev@googlegroups.com,
-        letux-kernel@openphoenux.org, linux-mips@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.4 02/26] mips: Fix gettimeofday() in the vdso library
-Date:   Fri, 10 Jan 2020 17:02:44 -0500
-Message-Id: <20200110220308.27784-2-sashal@kernel.org>
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 04/26] MIPS: Prevent link failure with kcov instrumentation
+Date:   Fri, 10 Jan 2020 17:02:46 -0500
+Message-Id: <20200110220308.27784-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200110220308.27784-1-sashal@kernel.org>
 References: <20200110220308.27784-1-sashal@kernel.org>
@@ -46,121 +44,37 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Vincenzo Frascino <vincenzo.frascino@arm.com>
+From: Jouni Hogander <jouni.hogander@unikie.com>
 
-[ Upstream commit 7d2aa4bb90f5f6f1b8de8848c26042403f2d7bf9 ]
+[ Upstream commit a4a3893114a41e365274d5fab5d9ff5acc235ff0 ]
 
-The libc provides a discovery mechanism for vDSO library and its
-symbols. When a symbol is not exposed by the vDSOs the libc falls back
-on the system calls.
+__sanitizer_cov_trace_pc() is not linked in and causing link
+failure if KCOV_INSTRUMENT is enabled. Fix this by disabling
+instrumentation for compressed image.
 
-With the introduction of the unified vDSO library on mips this behavior
-is not honored anymore by the kernel in the case of gettimeofday().
-
-The issue has been noticed and reported due to a dhclient failure on the
-CI20 board:
-
-root@letux:~# dhclient
-../../../../lib/isc/unix/time.c:200: Operation not permitted
-root@letux:~#
-
-Restore the original behavior fixing gettimeofday() in the vDSO library.
-
-Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
-Tested-by: H. Nikolaus Schaller <hns@goldelico.com> # CI20 with JZ4780
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Signed-off-by: Jouni Hogander <jouni.hogander@unikie.com>
 Signed-off-by: Paul Burton <paulburton@kernel.org>
-Cc: mips-creator-ci20-dev@googlegroups.com
-Cc: letux-kernel@openphoenux.org
+Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/vdso/gettimeofday.h | 13 -------------
- arch/mips/vdso/vgettimeofday.c            | 20 ++++++++++++++++++++
- 2 files changed, 20 insertions(+), 13 deletions(-)
+ arch/mips/boot/compressed/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/mips/include/asm/vdso/gettimeofday.h b/arch/mips/include/asm/vdso/gettimeofday.h
-index b08825531e9f..0ae9b4cbc153 100644
---- a/arch/mips/include/asm/vdso/gettimeofday.h
-+++ b/arch/mips/include/asm/vdso/gettimeofday.h
-@@ -26,8 +26,6 @@
+diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+index 172801ed35b8..d859f079b771 100644
+--- a/arch/mips/boot/compressed/Makefile
++++ b/arch/mips/boot/compressed/Makefile
+@@ -29,6 +29,9 @@ KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
+ 	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) \
+ 	-DKERNEL_ENTRY=$(VMLINUX_ENTRY_ADDRESS)
  
- #define __VDSO_USE_SYSCALL		ULLONG_MAX
- 
--#ifdef CONFIG_MIPS_CLOCK_VSYSCALL
--
- static __always_inline long gettimeofday_fallback(
- 				struct __kernel_old_timeval *_tv,
- 				struct timezone *_tz)
-@@ -48,17 +46,6 @@ static __always_inline long gettimeofday_fallback(
- 	return error ? -ret : ret;
- }
- 
--#else
--
--static __always_inline long gettimeofday_fallback(
--				struct __kernel_old_timeval *_tv,
--				struct timezone *_tz)
--{
--	return -1;
--}
--
--#endif
--
- static __always_inline long clock_gettime_fallback(
- 					clockid_t _clkid,
- 					struct __kernel_timespec *_ts)
-diff --git a/arch/mips/vdso/vgettimeofday.c b/arch/mips/vdso/vgettimeofday.c
-index 6ebdc37c89fc..6b83b6376a4b 100644
---- a/arch/mips/vdso/vgettimeofday.c
-+++ b/arch/mips/vdso/vgettimeofday.c
-@@ -17,12 +17,22 @@ int __vdso_clock_gettime(clockid_t clock,
- 	return __cvdso_clock_gettime32(clock, ts);
- }
- 
-+#ifdef CONFIG_MIPS_CLOCK_VSYSCALL
++# Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
++KCOV_INSTRUMENT		:= n
 +
-+/*
-+ * This is behind the ifdef so that we don't provide the symbol when there's no
-+ * possibility of there being a usable clocksource, because there's nothing we
-+ * can do without it. When libc fails the symbol lookup it should fall back on
-+ * the standard syscall path.
-+ */
- int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
- 			struct timezone *tz)
- {
- 	return __cvdso_gettimeofday(tv, tz);
- }
+ # decompressor objects (linked with vmlinuz)
+ vmlinuzobjs-y := $(obj)/head.o $(obj)/decompress.o $(obj)/string.o
  
-+#endif /* CONFIG_MIPS_CLOCK_VSYSCALL */
-+
- int __vdso_clock_getres(clockid_t clock_id,
- 			struct old_timespec32 *res)
- {
-@@ -43,12 +53,22 @@ int __vdso_clock_gettime(clockid_t clock,
- 	return __cvdso_clock_gettime(clock, ts);
- }
- 
-+#ifdef CONFIG_MIPS_CLOCK_VSYSCALL
-+
-+/*
-+ * This is behind the ifdef so that we don't provide the symbol when there's no
-+ * possibility of there being a usable clocksource, because there's nothing we
-+ * can do without it. When libc fails the symbol lookup it should fall back on
-+ * the standard syscall path.
-+ */
- int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
- 			struct timezone *tz)
- {
- 	return __cvdso_gettimeofday(tv, tz);
- }
- 
-+#endif /* CONFIG_MIPS_CLOCK_VSYSCALL */
-+
- int __vdso_clock_getres(clockid_t clock_id,
- 			struct __kernel_timespec *res)
- {
 -- 
 2.20.1
 
