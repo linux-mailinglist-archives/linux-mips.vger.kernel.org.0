@@ -2,142 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E05B7137D9A
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2020 11:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B52137DAC
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2020 11:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729142AbgAKJ7a (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 11 Jan 2020 04:59:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54066 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729147AbgAKJ73 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 11 Jan 2020 04:59:29 -0500
-Received: from localhost (unknown [62.119.166.9])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4027C2077C;
-        Sat, 11 Jan 2020 09:59:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578736768;
-        bh=Q76nd1rY7PubR1tz37aB6Z90FHySurzEY50SY9L8GaY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VBZnxWgvKtAMa4Jw088gzdghZNDGNV68v1wclghMmG+tw0eq8u42rG7RnDR0U/bF+
-         3VeGeON18bkwrcEM9wus8UaR9AGPFtGk8TXq7ykzom8k2KOYZf/Tkv2BYOFRY4iMA6
-         ysNVPiqe0iqXgBuLUs6rFUNTKglv+TZVx9pzoS5c=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian.brauner@canonical.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH 4.9 20/91] MIPS: Avoid VDSO ABI breakage due to global register variable
-Date:   Sat, 11 Jan 2020 10:49:13 +0100
-Message-Id: <20200111094851.289779602@linuxfoundation.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200111094844.748507863@linuxfoundation.org>
-References: <20200111094844.748507863@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1729362AbgAKKAE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 11 Jan 2020 05:00:04 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:38764 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729351AbgAKKAC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Jan 2020 05:00:02 -0500
+Received: by mail-il1-f199.google.com with SMTP id i67so3557073ilf.5
+        for <linux-mips@vger.kernel.org>; Sat, 11 Jan 2020 02:00:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=DrXkIWbrBX7Fd3/gNLvsOw44mmxpzBLe8lrnfiRlxxU=;
+        b=flbP15VkrlI0RATnfPXuQ0ZLV/6r7es0zVa5rAs8XEucQVu9pJBB5NJ8Mm8BKVfZWN
+         tXGIWo0juUixXgQwp45ohUyUv7YiMX0GVJJaUM+DXIo4VzbjDUnS5jCUcdDOamo5NDYv
+         2kd/4oICRRJ9iJTBzukLT3rWYb/2ckLL1/MaBm67PR7DpIvpHZYTdd6o7I5kxAtd1ZUG
+         HqWTMlN7qGgpBEAlICHn75qSOrq+Erh19NgooqNCnAdecTg12ICvvu/bwbxAw7tFR5g0
+         G2ClMGqcfQxMwFml1oguxTUpTlN3eEvQyEsaapcLWUJFIsbAuiZi2sC7KyAJsc/NXrS3
+         F8bQ==
+X-Gm-Message-State: APjAAAVpycAOKKdqlEVi4FEwrm/6pTirtUvbrjV7Tw4o2KwEtta3/nhc
+        6T1zxDzETKIWFSYKeuMeeBPV8AMpqu1gZCRz61RyY6tpDNwP
+X-Google-Smtp-Source: APXvYqyyzAXe87hNpCj8KaNkoKxDWd8rM9/pHrdZJgUyZW+0chTRAqzVJVUlQ1uS+a/5JliEf7yngQJ01ZzullfmzWMeqcTDBvPj
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:5c3:: with SMTP id l3mr6947066ils.260.1578736801574;
+ Sat, 11 Jan 2020 02:00:01 -0800 (PST)
+Date:   Sat, 11 Jan 2020 02:00:01 -0800
+In-Reply-To: <0000000000007a5aad057e7748c9@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004078ac059bda4ef9@google.com>
+Subject: Re: KASAN: use-after-free Read in lock_sock_nested
+From:   syzbot <syzbot+500c69d1e21d970e461b@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, jhogan@kernel.org, linux-hams@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org, paul.burton@mips.com,
+        paulburton@kernel.org, ralf@linux-mips.org,
+        syzkaller-bugs@googlegroups.com, tbogendoerfer@suse.de
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Burton <paulburton@kernel.org>
+syzbot suspects this bug was fixed by commit:
 
-commit bbcc5672b0063b0e9d65dc8787a4f09c3b5bb5cc upstream.
+commit a07e3324538a989b7cdbf2c679be6a7f9df2544f
+Author: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Date:   Mon May 13 11:47:25 2019 +0000
 
-Declaring __current_thread_info as a global register variable has the
-effect of preventing GCC from saving & restoring its value in cases
-where the ABI would typically do so.
+     MIPS: kernel: only use i8253 clocksource with periodic clockevent
 
-To quote GCC documentation:
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11dd033ee00000
+start commit:   3ea54d9b Merge tag 'docs-5.3-1' of git://git.lwn.net/linux
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=195ab3ca46c2e324
+dashboard link: https://syzkaller.appspot.com/bug?extid=500c69d1e21d970e461b
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=145318b4600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ac7b78600000
 
-> If the register is a call-saved register, call ABI is affected: the
-> register will not be restored in function epilogue sequences after the
-> variable has been assigned. Therefore, functions cannot safely return
-> to callers that assume standard ABI.
+If the result looks correct, please mark the bug fixed by replying with:
 
-When our position independent VDSO is built for the n32 or n64 ABIs all
-functions it exposes should be preserving the value of $gp/$28 for their
-caller, but in the presence of the __current_thread_info global register
-variable GCC stops doing so & simply clobbers $gp/$28 when calculating
-the address of the GOT.
+#syz fix: MIPS: kernel: only use i8253 clocksource with periodic clockevent
 
-In cases where the VDSO returns success this problem will typically be
-masked by the caller in libc returning & restoring $gp/$28 itself, but
-that is by no means guaranteed. In cases where the VDSO returns an error
-libc will typically contain a fallback path which will now fail
-(typically with a bad memory access) if it attempts anything which
-relies upon the value of $gp/$28 - eg. accessing anything via the GOT.
-
-One fix for this would be to move the declaration of
-__current_thread_info inside the current_thread_info() function,
-demoting it from global register variable to local register variable &
-avoiding inadvertently creating a non-standard calling ABI for the VDSO.
-Unfortunately this causes issues for clang, which doesn't support local
-register variables as pointed out by commit fe92da0f355e ("MIPS: Changed
-current_thread_info() to an equivalent supported by both clang and GCC")
-which introduced the global register variable before we had a VDSO to
-worry about.
-
-Instead, fix this by continuing to use the global register variable for
-the kernel proper but declare __current_thread_info as a simple extern
-variable when building the VDSO. It should never be referenced, and will
-cause a link error if it is. This resolves the calling convention issue
-for the VDSO without having any impact upon the build of the kernel
-itself for either clang or gcc.
-
-Signed-off-by: Paul Burton <paulburton@kernel.org>
-Fixes: ebb5e78cc634 ("MIPS: Initial implementation of a VDSO")
-Reported-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Christian Brauner <christian.brauner@canonical.com>
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: <stable@vger.kernel.org> # v4.4+
-Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
- arch/mips/include/asm/thread_info.h |   20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
-
---- a/arch/mips/include/asm/thread_info.h
-+++ b/arch/mips/include/asm/thread_info.h
-@@ -52,8 +52,26 @@ struct thread_info {
- #define init_thread_info	(init_thread_union.thread_info)
- #define init_stack		(init_thread_union.stack)
- 
--/* How to get the thread information struct from C.  */
-+/*
-+ * A pointer to the struct thread_info for the currently executing thread is
-+ * held in register $28/$gp.
-+ *
-+ * We declare __current_thread_info as a global register variable rather than a
-+ * local register variable within current_thread_info() because clang doesn't
-+ * support explicit local register variables.
-+ *
-+ * When building the VDSO we take care not to declare the global register
-+ * variable because this causes GCC to not preserve the value of $28/$gp in
-+ * functions that change its value (which is common in the PIC VDSO when
-+ * accessing the GOT). Since the VDSO shouldn't be accessing
-+ * __current_thread_info anyway we declare it extern in order to cause a link
-+ * failure if it's referenced.
-+ */
-+#ifdef __VDSO__
-+extern struct thread_info *__current_thread_info;
-+#else
- register struct thread_info *__current_thread_info __asm__("$28");
-+#endif
- 
- static inline struct thread_info *current_thread_info(void)
- {
-
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
