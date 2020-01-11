@@ -2,70 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B52137DAC
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2020 11:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFA7138109
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2020 12:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729362AbgAKKAE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 11 Jan 2020 05:00:04 -0500
-Received: from mail-il1-f199.google.com ([209.85.166.199]:38764 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729351AbgAKKAC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Jan 2020 05:00:02 -0500
-Received: by mail-il1-f199.google.com with SMTP id i67so3557073ilf.5
-        for <linux-mips@vger.kernel.org>; Sat, 11 Jan 2020 02:00:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=DrXkIWbrBX7Fd3/gNLvsOw44mmxpzBLe8lrnfiRlxxU=;
-        b=flbP15VkrlI0RATnfPXuQ0ZLV/6r7es0zVa5rAs8XEucQVu9pJBB5NJ8Mm8BKVfZWN
-         tXGIWo0juUixXgQwp45ohUyUv7YiMX0GVJJaUM+DXIo4VzbjDUnS5jCUcdDOamo5NDYv
-         2kd/4oICRRJ9iJTBzukLT3rWYb/2ckLL1/MaBm67PR7DpIvpHZYTdd6o7I5kxAtd1ZUG
-         HqWTMlN7qGgpBEAlICHn75qSOrq+Erh19NgooqNCnAdecTg12ICvvu/bwbxAw7tFR5g0
-         G2ClMGqcfQxMwFml1oguxTUpTlN3eEvQyEsaapcLWUJFIsbAuiZi2sC7KyAJsc/NXrS3
-         F8bQ==
-X-Gm-Message-State: APjAAAVpycAOKKdqlEVi4FEwrm/6pTirtUvbrjV7Tw4o2KwEtta3/nhc
-        6T1zxDzETKIWFSYKeuMeeBPV8AMpqu1gZCRz61RyY6tpDNwP
-X-Google-Smtp-Source: APXvYqyyzAXe87hNpCj8KaNkoKxDWd8rM9/pHrdZJgUyZW+0chTRAqzVJVUlQ1uS+a/5JliEf7yngQJ01ZzullfmzWMeqcTDBvPj
+        id S1729386AbgAKLHy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 11 Jan 2020 06:07:54 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:32947 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729302AbgAKLHy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Jan 2020 06:07:54 -0500
+Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1iqEcB-0000Ef-0n; Sat, 11 Jan 2020 12:07:35 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id 45B3D100C52; Sat, 11 Jan 2020 12:07:34 +0100 (CET)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, arnd@arndb.de,
+        vincenzo.frascino@arm.com, luto@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH v2 07/10] lib: vdso: don't use READ_ONCE() in __c_kernel_time()
+In-Reply-To: <a995445f-9b00-ca13-d23a-1aea3b345718@c-s.fr>
+References: <cover.1577111363.git.christophe.leroy@c-s.fr> <fc1ff722c7cbe63a63ae02ade3a714d2049d54a5.1577111367.git.christophe.leroy@c-s.fr> <87lfqfrp7d.fsf@nanos.tec.linutronix.de> <a995445f-9b00-ca13-d23a-1aea3b345718@c-s.fr>
+Date:   Sat, 11 Jan 2020 12:07:34 +0100
+Message-ID: <878smes13d.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:5c3:: with SMTP id l3mr6947066ils.260.1578736801574;
- Sat, 11 Jan 2020 02:00:01 -0800 (PST)
-Date:   Sat, 11 Jan 2020 02:00:01 -0800
-In-Reply-To: <0000000000007a5aad057e7748c9@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004078ac059bda4ef9@google.com>
-Subject: Re: KASAN: use-after-free Read in lock_sock_nested
-From:   syzbot <syzbot+500c69d1e21d970e461b@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, jhogan@kernel.org, linux-hams@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org, paul.burton@mips.com,
-        paulburton@kernel.org, ralf@linux-mips.org,
-        syzkaller-bugs@googlegroups.com, tbogendoerfer@suse.de
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-syzbot suspects this bug was fixed by commit:
+Christophe Leroy <christophe.leroy@c-s.fr> writes:
+>
+> With READ_ONCE() the 64 bits are being read:
+>
+> Without the READ_ONCE() only 32 bits are read. That's the most optimal.
+>
+> Without READ_ONCE() but with a barrier() after the read, we should get 
+> the same result but GCC (GCC 8.1) does less good:
+>
+> Assuming both part of the 64 bits data will fall into a single 
+> cacheline, the second read is in the noise.
 
-commit a07e3324538a989b7cdbf2c679be6a7f9df2544f
-Author: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Date:   Mon May 13 11:47:25 2019 +0000
+They definitely are in the same cacheline.
 
-     MIPS: kernel: only use i8253 clocksource with periodic clockevent
+> So agreed to drop this change.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11dd033ee00000
-start commit:   3ea54d9b Merge tag 'docs-5.3-1' of git://git.lwn.net/linux
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=195ab3ca46c2e324
-dashboard link: https://syzkaller.appspot.com/bug?extid=500c69d1e21d970e461b
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=145318b4600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ac7b78600000
+We could be smart about this and force the compiler to issue a 32bit
+read for 32bit builds. See below. Not sure whether it's worth it, but
+OTOH it will take quite a while until the 32bit time interfaces die
+completely.
 
-If the result looks correct, please mark the bug fixed by replying with:
+Thanks,
 
-#syz fix: MIPS: kernel: only use i8253 clocksource with periodic clockevent
+        tglx
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+8<------------
+--- a/include/vdso/datapage.h
++++ b/include/vdso/datapage.h
+@@ -21,6 +21,18 @@
+ #define CS_RAW		1
+ #define CS_BASES	(CS_RAW + 1)
+ 
++#ifdef __LITTLE_ENDIAN
++struct sec_hl {
++	u32	sec_l;
++	u32	sec_h;
++};
++#else
++struct sec_hl {
++	u32	sec_h;
++	u32	sec_l;
++};
++#endif
++
+ /**
+  * struct vdso_timestamp - basetime per clock_id
+  * @sec:	seconds
+@@ -35,7 +47,10 @@
+  * vdso_data.cs[x].shift.
+  */
+ struct vdso_timestamp {
+-	u64	sec;
++	union {
++		u64		sec;
++		struct sec_hl	sec_hl;
++	};
+ 	u64	nsec;
+ };
+ 
+--- a/lib/vdso/gettimeofday.c
++++ b/lib/vdso/gettimeofday.c
+@@ -165,8 +165,13 @@ static __maybe_unused int
+ static __maybe_unused __kernel_old_time_t __cvdso_time(__kernel_old_time_t *time)
+ {
+ 	const struct vdso_data *vd = __arch_get_vdso_data();
+-	__kernel_old_time_t t = READ_ONCE(vd[CS_HRES_COARSE].basetime[CLOCK_REALTIME].sec);
++	__kernel_old_time_t t;
+ 
++#if BITS_PER_LONG == 32
++	t = READ_ONCE(vd[CS_HRES_COARSE].basetime[CLOCK_REALTIME].sec_hl.sec_l);
++#else
++	t = READ_ONCE(vd[CS_HRES_COARSE].basetime[CLOCK_REALTIME].sec);
++#endif
+ 	if (time)
+ 		*time = t;
+ 
