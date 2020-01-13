@@ -2,52 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77646139710
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2020 18:09:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F12139714
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2020 18:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728824AbgAMRIs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Jan 2020 12:08:48 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:40965 "EHLO pegase1.c-s.fr"
+        id S1728946AbgAMRJR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Jan 2020 12:09:17 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:44559 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728800AbgAMRIr (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 13 Jan 2020 12:08:47 -0500
+        id S1728813AbgAMRIt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 13 Jan 2020 12:08:49 -0500
 Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 47xKmn129Rz9tyXK;
-        Mon, 13 Jan 2020 18:08:41 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 47xKmp0qNrz9tyXm;
+        Mon, 13 Jan 2020 18:08:42 +0100 (CET)
 Authentication-Results: localhost; dkim=pass
         reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=CqmvIS6J; dkim-adsp=pass;
+        header.d=c-s.fr header.i=@c-s.fr header.b=QXDttb7T; dkim-adsp=pass;
         dkim-atps=neutral
 X-Virus-Scanned: Debian amavisd-new at c-s.fr
 Received: from pegase1.c-s.fr ([192.168.12.234])
         by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id D6isRLbwP5q0; Mon, 13 Jan 2020 18:08:41 +0100 (CET)
+        with ESMTP id Mc_QosJO-mW7; Mon, 13 Jan 2020 18:08:42 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 47xKmm7170z9txyq;
-        Mon, 13 Jan 2020 18:08:40 +0100 (CET)
+        by pegase1.c-s.fr (Postfix) with ESMTP id 47xKmn6v83z9tyXf;
+        Mon, 13 Jan 2020 18:08:41 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1578935321; bh=EIMY8bcz3Kggh/rQrqzeXyhyN/ypWY7RKWhqCLsPPhA=;
+        t=1578935322; bh=JanAVwbfNrKMTHQ/SPAcOrXRwMktvfccR82GG0SlEYo=;
         h=In-Reply-To:References:From:Subject:To:Cc:Date:From;
-        b=CqmvIS6JbyuqyA3GCncKQJMFbinRn3Dw3ltqtKJiosCeBimJJOVjun2205YvZdY+q
-         iUvT5PAUlSF1WVWLchDDxgfxu1/Ce4onQZmprizKXjewdDsHiIO7YpPQ5+uWDSEO/O
-         Q3nNcxdb2kUSvTgr0XSHOi4+QkS7qqqlh+zC2SBs=
+        b=QXDttb7ToEKfY2gd8XNY7XB93hxx/aeTMiIVlXLs/0Y83dLW1ty70gGR5EWJQ+cJt
+         J0Hmeex0AZuZDUOzTs9PzDmQ77FGZDp3DoRG06cEavNftLwvWtFUmiA3SGHkK4LJrz
+         tUQ3nMsAQorHOQj2uWGEk5C4cVX+0To9zf2SzZjY=
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4C10F8B7C9;
-        Mon, 13 Jan 2020 18:08:46 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4909C8B7C9;
+        Mon, 13 Jan 2020 18:08:47 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id frAMeUV7d6Nn; Mon, 13 Jan 2020 18:08:46 +0100 (CET)
+        with ESMTP id 9c-CErJ1jcq7; Mon, 13 Jan 2020 18:08:47 +0100 (CET)
 Received: from po14934vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id F23D38B7BE;
-        Mon, 13 Jan 2020 18:08:45 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 00EC78B7BE;
+        Mon, 13 Jan 2020 18:08:46 +0100 (CET)
 Received: by localhost.localdomain (Postfix, from userid 0)
-        id C372C64A1D; Mon, 13 Jan 2020 17:08:45 +0000 (UTC)
-Message-Id: <0cb594bc696cc195996733004907aefc3a6e596c.1578934751.git.christophe.leroy@c-s.fr>
+        id C95E864A1D; Mon, 13 Jan 2020 17:08:46 +0000 (UTC)
+Message-Id: <381e547dbb3c48fd39d6cf208033bba38ad048fb.1578934751.git.christophe.leroy@c-s.fr>
 In-Reply-To: <cover.1578934751.git.christophe.leroy@c-s.fr>
 References: <cover.1578934751.git.christophe.leroy@c-s.fr>
 From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Subject: [RFC PATCH v3 07/12] powerpc/vdso: simplify __get_datapage()
+Subject: [RFC PATCH v3 08/12] lib: vdso: allow arches to provide vdso data
+ pointer
 To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Michael Ellerman <mpe@ellerman.id.au>, arnd@arndb.de,
@@ -55,259 +56,173 @@ To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
 Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         x86@kernel.org
-Date:   Mon, 13 Jan 2020 17:08:45 +0000 (UTC)
+Date:   Mon, 13 Jan 2020 17:08:46 +0000 (UTC)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The VDSO datapage and the text pages are always located immediately
-next to each other, so it can be hardcoded without an indirection
-through __kernel_datapage_offset
+On powerpc, __arch_get_vdso_data() clobbers the link register,
+requiring the caller to save it.
 
-In order to ease things, move the data page in front like other
-arches, that way there is no need to know the size of the library
-to locate the data page.
+As the parent function already has to set a stack frame and saves
+the link register before calling the C vdso function, retriving the
+vdso data pointer there is lighter.
 
-Before:
-clock-getres-realtime-coarse:    vdso: 714 nsec/call
-clock-gettime-realtime-coarse:    vdso: 792 nsec/call
-clock-gettime-realtime:    vdso: 1243 nsec/call
+Give arches the opportunity to hand the vdso data pointer
+to C vdso functions.
 
-After:
-clock-getres-realtime-coarse:    vdso: 699 nsec/call
-clock-gettime-realtime-coarse:    vdso: 784 nsec/call
-clock-gettime-realtime:    vdso: 1231 nsec/call
 Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
 ---
- arch/powerpc/kernel/vdso.c              | 53 +++++----------------------------
- arch/powerpc/kernel/vdso32/datapage.S   | 10 +++----
- arch/powerpc/kernel/vdso32/vdso32.lds.S |  7 ++---
- arch/powerpc/kernel/vdso64/datapage.S   | 10 +++----
- arch/powerpc/kernel/vdso64/vdso64.lds.S |  7 ++---
- 5 files changed, 19 insertions(+), 68 deletions(-)
+ lib/vdso/gettimeofday.c | 56 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-diff --git a/arch/powerpc/kernel/vdso.c b/arch/powerpc/kernel/vdso.c
-index 16a44bffe698..c093d90a222a 100644
---- a/arch/powerpc/kernel/vdso.c
-+++ b/arch/powerpc/kernel/vdso.c
-@@ -191,7 +191,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- 	 * install_special_mapping or the perf counter mmap tracking code
- 	 * will fail to recognise it as a vDSO (since arch_vma_name fails).
- 	 */
--	current->mm->context.vdso_base = vdso_base;
-+	current->mm->context.vdso_base = vdso_base + PAGE_SIZE;
- 
- 	/*
- 	 * our vma flags don't have VM_WRITE so by default, the process isn't
-@@ -488,42 +488,6 @@ static __init void vdso_setup_trampolines(struct lib32_elfinfo *v32,
- 	vdso32_rt_sigtramp = find_function32(v32, "__kernel_sigtramp_rt32");
+diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+index da15a8842825..ea1a55507af5 100644
+--- a/lib/vdso/gettimeofday.c
++++ b/lib/vdso/gettimeofday.c
+@@ -104,9 +104,15 @@ static __always_inline int do_coarse(const struct vdso_data *vd, clockid_t clk,
  }
  
--static __init int vdso_fixup_datapage(struct lib32_elfinfo *v32,
--				       struct lib64_elfinfo *v64)
--{
--#ifdef CONFIG_VDSO32
--	Elf32_Sym *sym32;
--#endif
--#ifdef CONFIG_PPC64
--	Elf64_Sym *sym64;
--
--       	sym64 = find_symbol64(v64, "__kernel_datapage_offset");
--	if (sym64 == NULL) {
--		printk(KERN_ERR "vDSO64: Can't find symbol "
--		       "__kernel_datapage_offset !\n");
--		return -1;
--	}
--	*((int *)(vdso64_kbase + sym64->st_value - VDSO64_LBASE)) =
--		(vdso64_pages << PAGE_SHIFT) -
--		(sym64->st_value - VDSO64_LBASE);
--#endif /* CONFIG_PPC64 */
--
--#ifdef CONFIG_VDSO32
--	sym32 = find_symbol32(v32, "__kernel_datapage_offset");
--	if (sym32 == NULL) {
--		printk(KERN_ERR "vDSO32: Can't find symbol "
--		       "__kernel_datapage_offset !\n");
--		return -1;
--	}
--	*((int *)(vdso32_kbase + (sym32->st_value - VDSO32_LBASE))) =
--		(vdso32_pages << PAGE_SHIFT) -
--		(sym32->st_value - VDSO32_LBASE);
--#endif
--
--	return 0;
--}
--
--
- static __init int vdso_fixup_features(struct lib32_elfinfo *v32,
- 				      struct lib64_elfinfo *v64)
+ static __maybe_unused int
++#ifdef VDSO_GETS_VD_PTR_FROM_ARCH
++__cvdso_clock_gettime_common(const struct vdso_data *vd, clockid_t clock,
++		      struct __kernel_timespec *ts)
++{
++#else
+ __cvdso_clock_gettime_common(clockid_t clock, struct __kernel_timespec *ts)
  {
-@@ -624,9 +588,6 @@ static __init int vdso_setup(void)
- 	if (vdso_do_find_sections(&v32, &v64))
- 		return -1;
- 
--	if (vdso_fixup_datapage(&v32, &v64))
--		return -1;
--
- 	if (vdso_fixup_features(&v32, &v64))
- 		return -1;
- 
-@@ -771,26 +732,26 @@ static int __init vdso_init(void)
- 	vdso32_pagelist = kcalloc(vdso32_pages + 2, sizeof(struct page *),
- 				  GFP_KERNEL);
- 	BUG_ON(vdso32_pagelist == NULL);
-+	vdso32_pagelist[0] = virt_to_page(vdso_data);
- 	for (i = 0; i < vdso32_pages; i++) {
- 		struct page *pg = virt_to_page(vdso32_kbase + i*PAGE_SIZE);
- 		get_page(pg);
--		vdso32_pagelist[i] = pg;
-+		vdso32_pagelist[i + 1] = pg;
- 	}
--	vdso32_pagelist[i++] = virt_to_page(vdso_data);
--	vdso32_pagelist[i] = NULL;
-+	vdso32_pagelist[i + 1] = NULL;
- #endif
- 
- #ifdef CONFIG_PPC64
- 	vdso64_pagelist = kcalloc(vdso64_pages + 2, sizeof(struct page *),
- 				  GFP_KERNEL);
- 	BUG_ON(vdso64_pagelist == NULL);
-+	vdso64_pagelist[0] = virt_to_page(vdso_data);
- 	for (i = 0; i < vdso64_pages; i++) {
- 		struct page *pg = virt_to_page(vdso64_kbase + i*PAGE_SIZE);
- 		get_page(pg);
--		vdso64_pagelist[i] = pg;
-+		vdso64_pagelist[i + 1] = pg;
- 	}
--	vdso64_pagelist[i++] = virt_to_page(vdso_data);
--	vdso64_pagelist[i] = NULL;
-+	vdso64_pagelist[i + 1] = NULL;
- #endif /* CONFIG_PPC64 */
- 
- 	get_page(virt_to_page(vdso_data));
-diff --git a/arch/powerpc/kernel/vdso32/datapage.S b/arch/powerpc/kernel/vdso32/datapage.S
-index 6c7401bd284e..d839aa1a4f01 100644
---- a/arch/powerpc/kernel/vdso32/datapage.S
-+++ b/arch/powerpc/kernel/vdso32/datapage.S
-@@ -12,9 +12,6 @@
- #include <asm/vdso.h>
- 
- 	.text
--	.global	__kernel_datapage_offset;
--__kernel_datapage_offset:
--	.long	0
- 
- V_FUNCTION_BEGIN(__get_datapage)
-   .cfi_startproc
-@@ -31,10 +28,11 @@ V_FUNCTION_BEGIN(__get_datapage)
- data_page_branch:
- 	mflr	r3
- 	mtlr	r0
--	addi	r3, r3, __kernel_datapage_offset-data_page_branch
--	lwz	r0,0(r3)
-+#if CONFIG_PPC_PAGE_SHIFT > 14
-+	addis	r3, r3, (_vdso_datapage - data_page_branch)@ha
+ 	const struct vdso_data *vd = __arch_get_vdso_data();
 +#endif
-+	addi	r3, r3, (_vdso_datapage - data_page_branch)@l
-   .cfi_restore lr
--	add	r3,r0,r3
- 	blr
-   .cfi_endproc
- V_FUNCTION_END(__get_datapage)
-diff --git a/arch/powerpc/kernel/vdso32/vdso32.lds.S b/arch/powerpc/kernel/vdso32/vdso32.lds.S
-index 9400b182e163..f09c2354bd21 100644
---- a/arch/powerpc/kernel/vdso32/vdso32.lds.S
-+++ b/arch/powerpc/kernel/vdso32/vdso32.lds.S
-@@ -4,6 +4,7 @@
-  * library
-  */
- #include <asm/vdso.h>
-+#include <asm/page.h>
+ 	u32 msk;
  
- #ifdef __LITTLE_ENDIAN__
- OUTPUT_FORMAT("elf32-powerpcle", "elf32-powerpcle", "elf32-powerpcle")
-@@ -15,6 +16,7 @@ ENTRY(_start)
+ 	/* Check for negative values or invalid clocks */
+@@ -131,9 +137,16 @@ __cvdso_clock_gettime_common(clockid_t clock, struct __kernel_timespec *ts)
+ }
  
- SECTIONS
+ static __maybe_unused int
++#ifdef VDSO_GETS_VD_PTR_FROM_ARCH
++__cvdso_clock_gettime(const struct vdso_data *vd, clockid_t clock,
++		      struct __kernel_timespec *ts)
++{
++	int ret = __cvdso_clock_gettime_common(vd, clock, ts);
++#else
+ __cvdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts)
  {
-+	PROVIDE(_vdso_datapage = . - PAGE_SIZE);
- 	. = VDSO32_LBASE + SIZEOF_HEADERS;
- 
- 	.hash          	: { *(.hash) }			:text
-@@ -138,11 +140,6 @@ VERSION
- {
- 	VDSO_VERSION_STRING {
- 	global:
--		/*
--		 * Has to be there for the kernel to find
--		 */
--		__kernel_datapage_offset;
--
- 		__kernel_get_syscall_map;
- #if defined(CONFIG_PPC32) && !defined(CONFIG_PPC_BOOK3S_601)
- 		__kernel_gettimeofday;
-diff --git a/arch/powerpc/kernel/vdso64/datapage.S b/arch/powerpc/kernel/vdso64/datapage.S
-index 4808ce9eeb3d..8c41e1a93980 100644
---- a/arch/powerpc/kernel/vdso64/datapage.S
-+++ b/arch/powerpc/kernel/vdso64/datapage.S
-@@ -12,9 +12,6 @@
- #include <asm/vdso.h>
- 
- 	.text
--.global	__kernel_datapage_offset;
--__kernel_datapage_offset:
--	.long	0
- 
- _GLOBAL(__get_datapage)
-   .cfi_startproc
-@@ -31,10 +28,11 @@ _GLOBAL(__get_datapage)
- data_page_branch:
- 	mflr	r3
- 	mtlr	r0
--	addi	r3, r3, __kernel_datapage_offset-data_page_branch
--	lwz	r0,0(r3)
-+#if CONFIG_PPC_PAGE_SHIFT > 14
-+	addis	r3, r3, (_vdso_datapage - data_page_branch)@ha
+ 	int ret = __cvdso_clock_gettime_common(clock, ts);
 +#endif
-+	addi	r3, r3, (_vdso_datapage - data_page_branch)@l
-   .cfi_restore lr
--	add	r3,r0,r3
- 	blr
-   .cfi_endproc
  
-diff --git a/arch/powerpc/kernel/vdso64/vdso64.lds.S b/arch/powerpc/kernel/vdso64/vdso64.lds.S
-index 256fb9720298..f58c7e2e9cbd 100644
---- a/arch/powerpc/kernel/vdso64/vdso64.lds.S
-+++ b/arch/powerpc/kernel/vdso64/vdso64.lds.S
-@@ -4,6 +4,7 @@
-  * library
-  */
- #include <asm/vdso.h>
-+#include <asm/page.h>
+ 	if (unlikely(ret))
+ 		return clock_gettime_fallback(clock, ts);
+@@ -141,12 +154,21 @@ __cvdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts)
+ }
  
- #ifdef __LITTLE_ENDIAN__
- OUTPUT_FORMAT("elf64-powerpcle", "elf64-powerpcle", "elf64-powerpcle")
-@@ -15,6 +16,7 @@ ENTRY(_start)
- 
- SECTIONS
+ static __maybe_unused int
++#ifdef VDSO_GETS_VD_PTR_FROM_ARCH
++__cvdso_clock_gettime32(const struct vdso_data *vd, clockid_t clock,
++			struct old_timespec32 *res)
++#else
+ __cvdso_clock_gettime32(clockid_t clock, struct old_timespec32 *res)
++#endif
  {
-+	PROVIDE(_vdso_datapage = . - PAGE_SIZE);
- 	. = VDSO64_LBASE + SIZEOF_HEADERS;
+ 	struct __kernel_timespec ts;
+ 	int ret;
  
- 	.hash		: { *(.hash) }			:text
-@@ -138,11 +140,6 @@ VERSION
++#ifdef VDSO_GETS_VD_PTR_FROM_ARCH
++	ret = __cvdso_clock_gettime_common(vd, clock, &ts);
++#else
+ 	ret = __cvdso_clock_gettime_common(clock, &ts);
++#endif
+ 
+ #ifdef VDSO_HAS_32BIT_FALLBACK
+ 	if (unlikely(ret))
+@@ -164,9 +186,15 @@ __cvdso_clock_gettime32(clockid_t clock, struct old_timespec32 *res)
+ }
+ 
+ static __maybe_unused int
++#ifdef VDSO_GETS_VD_PTR_FROM_ARCH
++__cvdso_gettimeofday(const struct vdso_data *vd, struct __kernel_old_timeval *tv,
++		     struct timezone *tz)
++{
++#else
+ __cvdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz)
  {
- 	VDSO_VERSION_STRING {
- 	global:
--		/*
--		 * Has to be there for the kernel to find
--		 */
--		__kernel_datapage_offset;
--
- 		__kernel_get_syscall_map;
- 		__kernel_gettimeofday;
- 		__kernel_clock_gettime;
+ 	const struct vdso_data *vd = __arch_get_vdso_data();
++#endif
+ 
+ 	if (likely(tv != NULL)) {
+ 		struct __kernel_timespec ts;
+@@ -187,9 +215,15 @@ __cvdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz)
+ }
+ 
+ #ifdef VDSO_HAS_TIME
++#ifdef VDSO_GETS_VD_PTR_FROM_ARCH
++static __maybe_unused __kernel_old_time_t
++__cvdso_time(const struct vdso_data *vd, __kernel_old_time_t *time)
++{
++#else
+ static __maybe_unused __kernel_old_time_t __cvdso_time(__kernel_old_time_t *time)
+ {
+ 	const struct vdso_data *vd = __arch_get_vdso_data();
++#endif
+ 	__kernel_old_time_t t = READ_ONCE(vd[CS_HRES_COARSE].basetime[CLOCK_REALTIME].sec);
+ 
+ 	if (time)
+@@ -201,9 +235,15 @@ static __maybe_unused __kernel_old_time_t __cvdso_time(__kernel_old_time_t *time
+ 
+ #ifdef VDSO_HAS_CLOCK_GETRES
+ static __maybe_unused
++#ifdef VDSO_GETS_VD_PTR_FROM_ARCH
++int __cvdso_clock_getres_common(const struct vdso_data *vd, clockid_t clock,
++				struct __kernel_timespec *res)
++{
++#else
+ int __cvdso_clock_getres_common(clockid_t clock, struct __kernel_timespec *res)
+ {
+ 	const struct vdso_data *vd = __arch_get_vdso_data();
++#endif
+ 	u32 msk;
+ 	u64 ns;
+ 
+@@ -238,9 +278,16 @@ int __cvdso_clock_getres_common(clockid_t clock, struct __kernel_timespec *res)
+ }
+ 
+ static __maybe_unused
++#ifdef VDSO_GETS_VD_PTR_FROM_ARCH
++int __cvdso_clock_getres(const struct vdso_data *vd, clockid_t clock,
++			 struct __kernel_timespec *res)
++{
++	int ret = __cvdso_clock_getres_common(vd, clock, res);
++#else
+ int __cvdso_clock_getres(clockid_t clock, struct __kernel_timespec *res)
+ {
+ 	int ret = __cvdso_clock_getres_common(clock, res);
++#endif
+ 
+ 	if (unlikely(ret))
+ 		return clock_getres_fallback(clock, res);
+@@ -248,12 +295,21 @@ int __cvdso_clock_getres(clockid_t clock, struct __kernel_timespec *res)
+ }
+ 
+ static __maybe_unused int
++#ifdef VDSO_GETS_VD_PTR_FROM_ARCH
++__cvdso_clock_getres_time32(const struct vdso_data *vd, clockid_t clock,
++			    struct old_timespec32 *res)
++#else
+ __cvdso_clock_getres_time32(clockid_t clock, struct old_timespec32 *res)
++#endif
+ {
+ 	struct __kernel_timespec ts;
+ 	int ret;
+ 
++#ifdef VDSO_GETS_VD_PTR_FROM_ARCH
++	ret = __cvdso_clock_getres_common(vd, clock, &ts);
++#else
+ 	ret = __cvdso_clock_getres_common(clock, &ts);
++#endif
+ 
+ #ifdef VDSO_HAS_32BIT_FALLBACK
+ 	if (unlikely(ret))
 -- 
 2.13.3
 
