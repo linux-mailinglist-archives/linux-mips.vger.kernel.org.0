@@ -2,93 +2,147 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C911389B8
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2020 04:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A651389BF
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2020 04:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733103AbgAMD3j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 12 Jan 2020 22:29:39 -0500
-Received: from forward103j.mail.yandex.net ([5.45.198.246]:43328 "EHLO
-        forward103j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1733091AbgAMD3j (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 12 Jan 2020 22:29:39 -0500
-Received: from mxback29g.mail.yandex.net (mxback29g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:329])
-        by forward103j.mail.yandex.net (Yandex) with ESMTP id C97BC674102D;
-        Mon, 13 Jan 2020 06:29:35 +0300 (MSK)
-Received: from myt6-016ca1315a73.qloud-c.yandex.net (myt6-016ca1315a73.qloud-c.yandex.net [2a02:6b8:c12:4e0e:0:640:16c:a131])
-        by mxback29g.mail.yandex.net (mxback/Yandex) with ESMTP id hpkNKU8PuF-TYOOR1Sc;
-        Mon, 13 Jan 2020 06:29:35 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1578886175;
-        bh=VOgMDGdvTzv5y4W/TbHrKqKQQ6yp8jZMoFl2RcSABik=;
-        h=From:To:Subject:CC:References:Date:In-Reply-To:Message-ID;
-        b=ogakWJEJZR8Jt2QzfMJKuKLr6Pif+C6CW/6nBlP32UKQCFl96FVTZQSEnuCAm3muc
-         gODFB/lClBD4H5BUT+XzUVT8yZmg0Sk8LHC9D3SvyT8YseGUWXRhKMb54W6264/leE
-         /0RoASXtCN6hTA4ArPSlwMt/1SEMGZd/zIem1JpU=
-Authentication-Results: mxback29g.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by myt6-016ca1315a73.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id yxSOjOv5nm-TXVigarp;
-        Mon, 13 Jan 2020 06:29:33 +0300
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client certificate not present)
-Date:   Mon, 13 Jan 2020 11:29:28 +0800
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAP5Nno5aBir+DSFTrcGfenuo1s+UTGr5LKU6YDNYREjwahnXKA@mail.gmail.com>
-References: <CAP5Nno5CPjV2mcf2ny8AtcC2ziqDkv6Kc7f4hCq1TF4DvKvJkw@mail.gmail.com> <CAP5Nno466s9M_7E0keMP3s=rDuZ48hrAb9-xAv52SsADr910XA@mail.gmail.com> <20200109212404.GA1750666@aurel32.net> <CAP5Nno4d4r+yaARLGYd==5wznOMXf1Ufc2P-DjsVc-FavxLvUw@mail.gmail.com> <783FE963-FE06-40FA-8F8B-980B912A9602@flygoat.com> <CAP5Nno5aBir+DSFTrcGfenuo1s+UTGr5LKU6YDNYREjwahnXKA@mail.gmail.com>
+        id S1733187AbgAMDcz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 12 Jan 2020 22:32:55 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:46212 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732961AbgAMDcz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 12 Jan 2020 22:32:55 -0500
+Received: by mail-io1-f65.google.com with SMTP id t26so8298489ioi.13;
+        Sun, 12 Jan 2020 19:32:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jtJ5n8bvLyOE+deBSBgZkyAEPr+Moq3BE/Wzkoo8Gwc=;
+        b=DecjkbC4A5B80De2Y//7TaLVOnf4MRht3jJCHdfa8Iy171xkOqRDBMhQZeLI2UNzsG
+         jXz+4FkfbyfzFMJAggS/GtNNtipRvfKWr5B/V7L6IDJ3U4zGDEeAzrTPO7fkUalALRAx
+         tsH88r/IwmoCv3lokb6YuG6DvQl0JUp7sjpzkwTgbKDk/4yIDzqPFmVJEZAO6irdBp5J
+         Hi9hkA7mhpZR2vo4S6zpr2ntHrk2FP3S5AAppj8kIBMUplBP7tXFBQTG6d/2DR/z1w0B
+         bRIxqVSje4RYQTjLYA4572cWf4DysoyYkLde7DidW1U1vyJ79ZKCMKmuJv1CHIXkZMSW
+         FjqQ==
+X-Gm-Message-State: APjAAAV5tX4wIddUdtuIlqqGLB1KbrE/EUQVmxwZAefu3qpdLmRIztUr
+        /5xxTrLHgHO7X4pSO3hSUqd3EhgTPVKEe05IWc4=
+X-Google-Smtp-Source: APXvYqza8aMS/tYZ+uop2NYOv26ngRJNYJPtaRsA2dDhrQBDYih57vE/XL5eneMMy8BoheZ2FasTsR2fVAXey3NLiOc=
+X-Received: by 2002:a6b:4e0b:: with SMTP id c11mr9716656iob.143.1578886374641;
+ Sun, 12 Jan 2020 19:32:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: debian bootup hangs on qemu-system-mips64el
-To:     Jun Sun <jsun@junsun.net>
-CC:     qemu-discuss@nongnu.org, debian-mips@lists.debian.org,
-        linux-mips@vger.kernel.org, lixing <13699171092@139.com>,
-        Aurelien Jarno <aurelien@aurel32.net>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <6D105399-ECD4-49C1-B789-2334BB2B65AE@flygoat.com>
+References: <20190827085302.5197-1-jiaxun.yang@flygoat.com> <20200112081416.722218-1-jiaxun.yang@flygoat.com>
+In-Reply-To: <20200112081416.722218-1-jiaxun.yang@flygoat.com>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Mon, 13 Jan 2020 11:38:04 +0800
+Message-ID: <CAAhV-H4Q0z6R6RrUwDdNYj++YkqrAWRpC=RfhGY6-5_Kj1O-jA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/10] Modernize Loongson64 Machine
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.co>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi, Jiaxun,
 
-
-=E4=BA=8E 2020=E5=B9=B41=E6=9C=8813=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=881=
-0:35:18, Jun Sun <jsun@junsun=2Enet> =E5=86=99=E5=88=B0:
->Thanks, Jiaxun=2E  See more questions below=2E
+On Sun, Jan 12, 2020 at 4:21 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 >
->Jun
+> Loongson have a long history of contributing their code to mainline kernel.
+> However, it seems like recent years, they are focusing on maintain a kernel by themselves
+> rather than contribute there code to the community.
 >
->On Sun, Jan 12, 2020 at 5:17 PM Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom>
->wrote:
->>
->>
->>
->> =E4=BA=8E 2020=E5=B9=B41=E6=9C=8813=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=
-=883:34:18, Jun Sun <jsun@junsun=2Enet> =E5=86=99=E5=88=B0:
->> >Are you sure QEMU/MIPS does not support SMP?  Below link written in
->> >2016 clearly shows something was working then=2E
->> >
->>
->>https://www=2Emips=2Ecom/blog/how-to-run-smp-linux-in-qemu-on-a-mips64-r=
-elease-6-cpu/
->> >
->> >Also, as Lixing mentioned in our private exchange, there is SMP
->> >support for loongson=2E  Lixing, I assume loongson SMP support is
->> >already merged in QEMU repo, right?  Can you point out the relevant
->> >source code directories?
->> Hi Jun,
->>
->> As far as I known, Loongson is using there own SMP IPI implementation
->instead of MIPS MT One=2E
->> There QEMU implementation could be found here [1]=2E
->> QEMU have implemented MIPS MT ASE for SMP=2E
->>
+> Kernel is progress rapidly too. Their code slept in mainline for a long peroid without proper
+> maintainance and became outdated.
 >
->Do you know how to enable and run MIPS MT ASE in qemu?  For with CPU
->options?
+> This patchset brings modern DeviceTree and irqchip support to the Loongson64 machine, and leaves
+> Loongson 2e/f alone since they are too legacy to touch.
+I think you can provide a irqchip hierarchy for Loongson3 here. i.e.,
+the flowchart of cpuintc, iointc, htpic, i8259, and so on.
 
-I tried maxcpus=3D2 cpu=3D34kf for malta long ago and it was working=2E
-But I'm not sure whether it still works now=2E
+Huacai
 
-
---=20
-Jiaxun Yang
+>
+> PCI and some legacy I/O device will be converted later, together with LS7A PCH support.
+>
+> v1:
+> - dt-bindings fixup according to Rob's comments
+> - irqchip fixup according to Marc's comments
+> - ls3-iointc: Make Core&IP map per-IRQ
+> - Regenerate kconfigs
+> - Typo & style improvements
+>
+> v2:
+> - dt-bindings: Fix IOINTC, collect Rob's review tag
+> - dtbs: Drop CPU Node, merge different ways according to Huacai and Paul's comments
+>
+> v3:
+> - Split code have been merged
+> - Fix IOINTC binding to allow map any child IRQ to and parent
+> - Convert "HTINTC" into "HTPIC", which mixed HT vectors processing and i8259
+> - Naming style fix according to Huacai's suggestions
+>
+> Jiaxun Yang (10):
+>   dt-bindings: Document loongson vendor-prefix
+>   irqchip: Add driver for Loongson I/O interrupt controller
+>   dt-bindings: interrupt-controller: Add Loongson IOINTC
+>   irqchip: Add driver for Loongson-3 HyperTransport PIC controller
+>   dt-bindings: interrupt-controller: Add Loongson-3 HTPIC
+>   irqchip: mips-cpu: Convert to simple domain
+>   MIPS: Loongson64: Drop legacy IRQ code
+>   dt-bindings: mips: Add loongson boards
+>   MIPS: Loongson64: Add generic dts
+>   MIPS: Loongson64: Load built-in dtbs
+>
+>  .../interrupt-controller/loongson,htpic.yaml  |  59 +++
+>  .../interrupt-controller/loongson,iointc.yaml |  92 +++++
+>  .../bindings/mips/loongson/devices.yaml       |  29 ++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>  arch/mips/Kconfig                             |   6 +-
+>  arch/mips/boot/dts/Makefile                   |   1 +
+>  arch/mips/boot/dts/loongson/Makefile          |   5 +
+>  .../boot/dts/loongson/loongson3-package.dtsi  |  62 ++++
+>  .../dts/loongson/loongson3_4core_rs780e.dts   |  25 ++
+>  .../dts/loongson/loongson3_8core_rs780e.dts   |  25 ++
+>  arch/mips/boot/dts/loongson/rs780e-pch.dtsi   |  26 ++
+>  arch/mips/include/asm/i8259.h                 |   1 +
+>  .../include/asm/mach-loongson64/boot_param.h  |   2 +
+>  .../asm/mach-loongson64/builtin_dtbs.h        |  13 +
+>  arch/mips/include/asm/mach-loongson64/irq.h   |  32 +-
+>  .../include/asm/mach-loongson64/loongson.h    |   1 +
+>  arch/mips/loongson64/Makefile                 |   2 +-
+>  arch/mips/loongson64/env.c                    |  23 ++
+>  arch/mips/loongson64/init.c                   |   6 +
+>  arch/mips/loongson64/irq.c                    | 162 ---------
+>  arch/mips/loongson64/setup.c                  |  16 +
+>  arch/mips/loongson64/smp.c                    |  28 +-
+>  drivers/irqchip/Kconfig                       |  18 +
+>  drivers/irqchip/Makefile                      |   2 +
+>  drivers/irqchip/irq-i8259.c                   |   6 +-
+>  drivers/irqchip/irq-loongson-htpic.c          | 147 ++++++++
+>  drivers/irqchip/irq-loongson-iointc.c         | 338 ++++++++++++++++++
+>  drivers/irqchip/irq-mips-cpu.c                |   2 +-
+>  28 files changed, 915 insertions(+), 216 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,htpic.yaml
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,iointc.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mips/loongson/devices.yaml
+>  create mode 100644 arch/mips/boot/dts/loongson/Makefile
+>  create mode 100644 arch/mips/boot/dts/loongson/loongson3-package.dtsi
+>  create mode 100644 arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dts
+>  create mode 100644 arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dts
+>  create mode 100644 arch/mips/boot/dts/loongson/rs780e-pch.dtsi
+>  create mode 100644 arch/mips/include/asm/mach-loongson64/builtin_dtbs.h
+>  delete mode 100644 arch/mips/loongson64/irq.c
+>  create mode 100644 drivers/irqchip/irq-loongson-htpic.c
+>  create mode 100644 drivers/irqchip/irq-loongson-iointc.c
+>
+> --
+> 2.24.1
+>
