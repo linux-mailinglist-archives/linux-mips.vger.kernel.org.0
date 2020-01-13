@@ -2,93 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B570138956
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2020 02:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64524138972
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2020 03:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727494AbgAMBr5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 12 Jan 2020 20:47:57 -0500
-Received: from forward103o.mail.yandex.net ([37.140.190.177]:40499 "EHLO
-        forward103o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727222AbgAMBr5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 12 Jan 2020 20:47:57 -0500
-Received: from mxback10o.mail.yandex.net (mxback10o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::24])
-        by forward103o.mail.yandex.net (Yandex) with ESMTP id 377F65F80487;
-        Mon, 13 Jan 2020 04:47:54 +0300 (MSK)
-Received: from myt6-efff10c3476a.qloud-c.yandex.net (myt6-efff10c3476a.qloud-c.yandex.net [2a02:6b8:c12:13a3:0:640:efff:10c3])
-        by mxback10o.mail.yandex.net (mxback/Yandex) with ESMTP id ygvO1sjgVw-lqrmCHnr;
-        Mon, 13 Jan 2020 04:47:54 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1578880074;
-        bh=PLhMpYqOw4aw3N/8SD58bKwThXqXU7ZtZuisIgPcR10=;
-        h=From:To:Subject:CC:References:Date:In-Reply-To:Message-ID;
-        b=a3XVq9sFcup/ZfB098XaM8DneoIw++AYw7y3/MYiShaIXfSHbNXwNusycdsu1luln
-         AZPaxMABplS/QvwSqgNtEypHlyIXd8Y9iEQ9B7FzZorSQmbmp8L4+4p/HLNnzWgG2u
-         XMu1fk/gRYZnHdL3yIRWYJ6Wz39xJdH+NaI1RPng=
-Authentication-Results: mxback10o.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by myt6-efff10c3476a.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id plB9c1Sp5E-loWSxFax;
-        Mon, 13 Jan 2020 04:47:50 +0300
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client certificate not present)
-Date:   Mon, 13 Jan 2020 09:47:45 +0800
-User-Agent: K-9 Mail for Android
-In-Reply-To: <1578647320-14391-2-git-send-email-lixing@loongson.cn>
-References: <1578647320-14391-1-git-send-email-lixing@loongson.cn> <1578647320-14391-2-git-send-email-lixing@loongson.cn>
+        id S1732594AbgAMCOX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 12 Jan 2020 21:14:23 -0500
+Received: from mail-il1-f195.google.com ([209.85.166.195]:37923 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732487AbgAMCOX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 12 Jan 2020 21:14:23 -0500
+Received: by mail-il1-f195.google.com with SMTP id f5so6850978ilq.5
+        for <linux-mips@vger.kernel.org>; Sun, 12 Jan 2020 18:14:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=junsun-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=uu9cpveCjC++SwrXuVfI/d2rBW9dQUNmew56IojSvZE=;
+        b=YgrOPDivmcxDLOeUPrpXDmild3JZE+IHxwhsPZBYvB2PynsV1T/ooGSe5hK+o34FE1
+         Nji8UZU0d6Q0ZBShXlNLgB+NGaROmkLZFZNoAk5Hlz5t41xRJ2lEzk1Qxs2teg5DhYGe
+         qLbgrszIo335WULK5IcQXRmMgvh8BiRcTP6FWpTlBCppBghPxCTxryrlzX1zEYCPPige
+         mftzBmJe85/yXlx4YuCtuIcXR+DKQYxVnSTo1BMpteZ4q143bz4DuySzkj5DZFYLaCNC
+         3GH23v90TAgG/jaTzB6IeeoivlAxz3EaEu6EFvRaW+XHtnavMa7KblwW7S4mCXzI0qKV
+         nvRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=uu9cpveCjC++SwrXuVfI/d2rBW9dQUNmew56IojSvZE=;
+        b=UCgNeoifuMIVZalPM8EtwWLnmDP+6tMR40Cx/v+JozMWVd9yvvBMLjsqXKzydVNPqn
+         RIDQ51zR+0ve1+zT9poULQEwj0kICyP0YEOfsazm44gtTN+cnXCGlbclafaNOMi+e/C8
+         pfVzfZFLENCBXHTYQ7Z8KmN4gjXMgr8wTpzf4GeEewyDVkUpQ0pcMCqyB0UdKw+dfegw
+         keiyviCOIjNIEsJEs9W35xA7JrsdD0FGi6+Aah7HU/sCpDaNKliLygCKXsHtgIPTDfqi
+         eQ0cuAmXH4S55qJewpB9VKc+wmWvtYiYHzO36wQrEgKM7I+OL/ulsWKzggbJ9XO7io0v
+         iTWg==
+X-Gm-Message-State: APjAAAVrdsmPeQgbMH4k/J7UXIgy102MRyTwDnjuU8lUInutlUQH5m2L
+        nzSPdUHouPgfMJtyYTc1VNYUKQ2PCQVzFIisUwpyGg==
+X-Google-Smtp-Source: APXvYqxcaFqdU6ucVK7O5mIP9kYoA5blOqeGgnqOLUqHciDCgSYiJC0Ua2N8r3KC9g/fac3JItTAa4ZEX1D9eODKDqg=
+X-Received: by 2002:a92:8f4b:: with SMTP id j72mr13385664ild.1.1578881662652;
+ Sun, 12 Jan 2020 18:14:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 2/3] KVM: MIPS: Fixup VPN2_MASK definition over 32bits virtual address
-To:     Xing Li <lixing@loongson.cn>, Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>
-CC:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <1E098715-90D3-4732-8F6D-1ED88D06F96C@flygoat.com>
+References: <CAP5Nno5CPjV2mcf2ny8AtcC2ziqDkv6Kc7f4hCq1TF4DvKvJkw@mail.gmail.com>
+ <CAP5Nno466s9M_7E0keMP3s=rDuZ48hrAb9-xAv52SsADr910XA@mail.gmail.com>
+ <20200109212404.GA1750666@aurel32.net> <CAP5Nno4d4r+yaARLGYd==5wznOMXf1Ufc2P-DjsVc-FavxLvUw@mail.gmail.com>
+ <20200112195752.GA18154@aurel32.net>
+In-Reply-To: <20200112195752.GA18154@aurel32.net>
+From:   Jun Sun <jsun@junsun.net>
+Date:   Sun, 12 Jan 2020 18:14:12 -0800
+Message-ID: <CAP5Nno5jXhgbryGqDX9j3TAUwXmsBnRnvNuh2MJpDHs-bSG1Cg@mail.gmail.com>
+Subject: Re: debian bootup hangs on qemu-system-mips64el
+To:     Jun Sun <jsun@junsun.net>, qemu-discuss@nongnu.org,
+        debian-mips@lists.debian.org, linux-mips@vger.kernel.org,
+        lixing <13699171092@139.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+See below.
 
-
-=E4=BA=8E 2020=E5=B9=B41=E6=9C=8810=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=885=
-:08:39, Xing Li <lixing@loongson=2Ecn> =E5=86=99=E5=88=B0:
->If the cpu support more than 32bits vmbits, VPN2_MASK set to fixed
->0xffffe000 will lead to wrong entryhi for _kvm_mips_host_tlb_inv
+On Sun, Jan 12, 2020 at 11:58 AM Aurelien Jarno <aurelien@aurel32.net> wrote:
 >
->Signed-off-by: Xing Li <lixing@loongson=2Ecn>
->---
-> arch/mips/include/asm/kvm_host=2Eh | 5 +++++
-> 1 file changed, 5 insertions(+)
+> Hi,
 >
->diff --git a/arch/mips/include/asm/kvm_host=2Eh
->b/arch/mips/include/asm/kvm_host=2Eh
->index 6be70d5=2E=2Ece9546c 100644
->--- a/arch/mips/include/asm/kvm_host=2Eh
->+++ b/arch/mips/include/asm/kvm_host=2Eh
->@@ -274,7 +274,12 @@ enum emulation_result {
-> #define MIPS3_PG_SHIFT		6
-> #define MIPS3_PG_FRAME		0x3fffffc0
->=20
->+#if defined(CONFIG_64BIT)
->+#define VPN2_MASK		(((1UL << cpu_vmbits) - 1) &	\
->+						   0x3fffffffffffe000UL)
->+#else
-> #define VPN2_MASK		0xffffe000
+> On 2020-01-12 11:34, Jun Sun wrote:
+> > Are you sure QEMU/MIPS does not support SMP?  Below link written in
+> > 2016 clearly shows something was working then.
+> >
+> > https://www.mips.com/blog/how-to-run-smp-linux-in-qemu-on-a-mips64-release-6-cpu/
+>
+> It's not supported for the malta/mips64r2 combination you are trying to
+> use. It's clearly possible that it is supported for mips64r6, but it's a
+> different instruction set, so you can't run a standard Debian
+> distribution on it.
+>
 
-Hi Lixing,
-It could be more reasonable to do like:
+How do I specify mips64r6 cpu to start qemu?  A simple cpu listing
+below shows no such CPU.  If mips64r6 is indeed supported with SMP, I
+would think mips64r2 userland should run fine.
 
-#define VPN2_MASK GENMASK(vm_bits, 13)
+$ qemu-system-mips64el -cpu ?
+MIPS '4Kc'
+MIPS '4Km'
+MIPS '4KEcR1'
+MIPS '4KEmR1'
+MIPS '4KEc'
+MIPS '4KEm'
+MIPS '24Kc'
+MIPS '24KEc'
+MIPS '24Kf'
+MIPS '34Kf'
+MIPS '74Kf'
+MIPS 'M14K'
+MIPS 'M14Kc'
+MIPS 'P5600'
+MIPS 'mips32r6-generic'
+MIPS 'R4000'
+MIPS 'VR5432'
+MIPS '5Kc'
+MIPS '5Kf'
+MIPS '20Kc'
+MIPS 'MIPS64R2-generic'
+MIPS '5KEc'
+MIPS '5KEf'
+MIPS 'I6400'
+MIPS 'Loongson-2E'
+MIPS 'Loongson-2F'
+MIPS 'mips64dspr2'
 
-So we can avoid ugly ifdef=2E
+> > Also, as Lixing mentioned in our private exchange, there is SMP
+> > support for loongson.  Lixing, I assume loongson SMP support is
+> > already merged in QEMU repo, right?  Can you point out the relevant
+> > source code directories?
+>
+> Lixing mentioned virtualization. In that case it is indeed supported
+> like on other mips64r5 CPUs. For that you need to use add the -enable-kvm
+> option to the qemu command.
 
-Thanks
-
-
->+#endif
-> #define KVM_ENTRYHI_ASID	cpu_asid_mask(&current_cpu_data)
-> #define TLB_IS_GLOBAL(x)	((x)=2Etlb_lo[0] & (x)=2Etlb_lo[1] & ENTRYLO_G)
-> #define TLB_VPN2(x)		((x)=2Etlb_hi & VPN2_MASK)
-
---=20
-Jiaxun Yang
+I'm not sure if loongson support has to be kvm.  Maybe Lixing can clarify.
