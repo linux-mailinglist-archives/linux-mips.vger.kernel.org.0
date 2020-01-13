@@ -2,70 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3224F1399D3
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2020 20:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D81ED139C6D
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2020 23:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729352AbgAMTK6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Jan 2020 14:10:58 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34135 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729347AbgAMTK5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Jan 2020 14:10:57 -0500
-Received: by mail-pf1-f194.google.com with SMTP id i6so5321394pfc.1;
-        Mon, 13 Jan 2020 11:10:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
-         :references:in-reply-to;
-        bh=jTHJmlgWlvAPFQCB9Io3MPGggb4HLJiN3T7qmewcyc4=;
-        b=g3WWCowZqfd9Cq1tSFDglxWkM3AEBIigWG0c5WkB4eFxinTwC8B5q4w63woyc8Ynhd
-         u+/0D7ggtCuqzw9pxMKr9WL67FiATYDAo+RWoSz4YYP18oeE1GiybgJvzD7ipmMom1nE
-         21vGMsBy4dJSbn05c4FaA+7o6btToqihJcDq3prWsMdhpDF7rcG2DIOKcNgpFgqYHs+R
-         Y6jpDug+b956lRdUYXcnWk9OjrsR6yc0MwWJY+A9e9/n0TkEDRFJZI3Ptc1oA9FJNoqS
-         bFDDPpHIKjYlpRYaHVg4rbbPDcRQPW4DnvmZ7tYynjSyRTr/QD7vnDVPcSdCKom8C3Eo
-         q1ow==
-X-Gm-Message-State: APjAAAXFvAzcppmRxm3ByPTGic/FOGJQovMg57ATdrVtx+1+DVUWj6PG
-        CbvDBtwz5T2L/fk/pl1nTa8=
-X-Google-Smtp-Source: APXvYqyz3nXvBn+dYOeugnrUILRd9W3o5j47cX3X77TgWPnRTx2NKlIix87cMbioUxbaly8p+7BtMQ==
-X-Received: by 2002:a63:4b50:: with SMTP id k16mr22588647pgl.386.1578942656431;
-        Mon, 13 Jan 2020 11:10:56 -0800 (PST)
-Received: from localhost (MIPS-TECHNO.ear1.SanJose1.Level3.net. [4.15.122.74])
-        by smtp.gmail.com with ESMTPSA id x197sm15590626pfc.1.2020.01.13.11.10.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2020 11:10:55 -0800 (PST)
-Message-ID: <5e1cc0bf.1c69fb81.65bf6.48ee@mx.google.com>
-Date:   Mon, 13 Jan 2020 11:10:55 -0800
-From:   Paul Burton <paulburton@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     "Maciej W . Rozycki" <macro@linux-mips.org>,
-        Ralf Baechle <ralf@linux-mips.org>
-CC:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH] tc: Make tc_match_device() static
-References:  <20200112165229.20567-1-geert@linux-m68k.org>
-In-Reply-To:  <20200112165229.20567-1-geert@linux-m68k.org>
+        id S1728872AbgAMW2l convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 13 Jan 2020 17:28:41 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:40483 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728819AbgAMW2l (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Jan 2020 17:28:41 -0500
+Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1ir8CG-0004Yk-9j; Mon, 13 Jan 2020 23:28:32 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id 40F6F105BE6; Mon, 13 Jan 2020 23:28:31 +0100 (CET)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, paul.burton@mips.com,
+        salyzyn@android.com, 0x7f454c46@gmail.com, luto@kernel.org
+Subject: Re: [PATCH v2 2/8] lib: vdso: Build 32 bit specific functions in the right context
+In-Reply-To: <20190830135902.20861-3-vincenzo.frascino@arm.com>
+References: <20190830135902.20861-1-vincenzo.frascino@arm.com> <20190830135902.20861-3-vincenzo.frascino@arm.com>
+Date:   Mon, 13 Jan 2020 23:28:31 +0100
+Message-ID: <87tv4zq9dc.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+Vincenzo Frascino <vincenzo.frascino@arm.com> writes:
 
-Geert Uytterhoeven wrote:
-> Unlike its PCI counterpart, tc_match_device() was never used outside
-> the TURBOchannel bus code.
+> clock_gettime32 and clock_getres_time32 should be compiled only with a
+> 32 bit vdso library.
+>
+> Exclude these symbols when BUILD_VDSO32 is not defined.
 
-Applied to mips-next.
+This breaks the ARM build with:
 
-> commit 3d9f44ef7553
-> https://git.kernel.org/mips/c/3d9f44ef7553
-> 
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Paul Burton <paulburton@kernel.org>
+arch/arm/vdso/vgettimeofday.c: In function ‘__vdso_clock_gettime’:
+arch/arm/vdso/vgettimeofday.c:15:9: error: implicit declaration of function ‘__cvdso_clock_gettime32’; did you mean ‘__cvdso_clock_gettime’? [-Werror=implicit-function-declaration]
+  return __cvdso_clock_gettime32(clock, ts);
+         ^~~~~~~~~~~~~~~~~~~~~~~
+         __cvdso_clock_gettime
+arch/arm/vdso/vgettimeofday.c: In function ‘__vdso_clock_getres’:
+arch/arm/vdso/vgettimeofday.c:33:9: error: implicit declaration of function ‘__cvdso_clock_getres_time32’; did you mean ‘__cvdso_clock_getres_common’? [-Werror=implicit-function-declaration]
+  return __cvdso_clock_getres_time32(clock_id, res);
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         __cvdso_clock_getres_common
+cc1: some warnings being treated as errors
+
+The patch below 'fixes' at least the build. Can someone please confirm
+the correctness?
 
 Thanks,
-    Paul
 
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paulburton@kernel.org to report it. ]
+        tglx
+
+8<----------------
+--- a/arch/arm/vdso/Makefile
++++ b/arch/arm/vdso/Makefile
+@@ -14,7 +14,7 @@ targets := $(obj-vdso) vdso.so vdso.so.d
+ obj-vdso := $(addprefix $(obj)/, $(obj-vdso))
+ 
+ ccflags-y := -fPIC -fno-common -fno-builtin -fno-stack-protector
+-ccflags-y += -DDISABLE_BRANCH_PROFILING
++ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO32
+ 
+ ldflags-$(CONFIG_CPU_ENDIAN_BE8) := --be8
+ ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
