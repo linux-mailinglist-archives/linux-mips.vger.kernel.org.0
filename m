@@ -2,164 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F4F139706
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2020 18:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1370A139952
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2020 19:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728800AbgAMRIy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Jan 2020 12:08:54 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:1604 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728863AbgAMRIx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 13 Jan 2020 12:08:53 -0500
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 47xKmt35Q3z9v0Y1;
-        Mon, 13 Jan 2020 18:08:46 +0100 (CET)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=smBvGj76; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id yShFRHkN_wHb; Mon, 13 Jan 2020 18:08:46 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 47xKmt1vdMz9v0Xy;
-        Mon, 13 Jan 2020 18:08:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1578935326; bh=9JszdThPZcrKbLGagNxNFoOFX49AMCE1MJAxuQq15/c=;
-        h=In-Reply-To:References:From:Subject:To:Cc:Date:From;
-        b=smBvGj76nnUT7O2Nerwb6Dkjq6/LDayrszAQt4gYAGJB+rfKJvztU7Yk9aCxFTZM9
-         YMw56Fdhnx91BJpdaXwcfImT1m2o4G7CLGwE1sCAphGj+SbPcBphYgtegj1EIJY5cm
-         fTnCa3CWZa3EDb6DBUiihGDdLzpRHC+HBoneX+9c=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6542F8B7C9;
-        Mon, 13 Jan 2020 18:08:51 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id F_EW3T2xMF7m; Mon, 13 Jan 2020 18:08:51 +0100 (CET)
-Received: from po14934vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 231D38B7BE;
-        Mon, 13 Jan 2020 18:08:51 +0100 (CET)
-Received: by localhost.localdomain (Postfix, from userid 0)
-        id EBBBC64A1D; Mon, 13 Jan 2020 17:08:50 +0000 (UTC)
-Message-Id: <980b880ed9a86342e05cee18e1b2ce66fbe92d4c.1578934751.git.christophe.leroy@c-s.fr>
-In-Reply-To: <cover.1578934751.git.christophe.leroy@c-s.fr>
-References: <cover.1578934751.git.christophe.leroy@c-s.fr>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Subject: [RFC PATCH v3 12/12] powerpc/vdso: provide
- __arch_is_hw_counter_valid()
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, arnd@arndb.de,
-        tglx@linutronix.de, vincenzo.frascino@arm.com, luto@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        x86@kernel.org
-Date:   Mon, 13 Jan 2020 17:08:50 +0000 (UTC)
+        id S1728714AbgAMSws (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Jan 2020 13:52:48 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:46627 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728633AbgAMSws (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Jan 2020 13:52:48 -0500
+Received: by mail-pg1-f196.google.com with SMTP id z124so5105810pgb.13;
+        Mon, 13 Jan 2020 10:52:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OejaDp/PtovUjNqTYwQR8/+Ob40Nm9cyB96j7j566Wg=;
+        b=sAknIcAxDU9dyT80OVk8uYwaiZhZ/9KtVgbOYf3IsEhdZDLqo0YDUKtws8dZ7PJ6T6
+         K5AOB4iMAlr/BiRctstIZoDZ9QeqyigXu1vvGg5ZetPkejr365QS4reBPu6ezCT2RUlL
+         pZn6gKoOb+Iz0z6NgjImKvYFNUgshRn9JUPqwQ8/3cwdV961kaZ5XKQkcrG/pPdM0Vud
+         hiL/z7INGmlQVMO6Rt6PfEaeSyLBpS3v7Hwx2/tSNG7GCedrX5o7sqoIbwLMpYYtylNQ
+         n3T7+tw61yDkpdzcrg2BKG6zKNvgWaKnTzSqNMrTzEMLfxGmKyXG3QipdU+fkTZ+j8Hh
+         AF0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OejaDp/PtovUjNqTYwQR8/+Ob40Nm9cyB96j7j566Wg=;
+        b=EzoSi4awJYqN95Ocz2DictkR1UMyPnnzria1fPU3+oF/9paxRyI6+hKtFB7BKuxWVM
+         KqLbRB1sp4qxrYjVVF0+w7OsvDeUq2ffnL5uizXCTrQqnknGsaWJv7wEQMj/8swnteen
+         leBjf0UHkxU/75TBXTmobg3WfN+/LOkqVU14yQthcoyg0wLE36sQ4/G/zivbMOCNIFiJ
+         YzAJjZFzjJTF8goSEdM7TG2ri8qmIeEOD6pZiXUX1JTxhGP9T9OcdgAAp2nIjloTSiGe
+         nJ7sPOAGrklcy4W7vzVzkgIlxqEBEMnrGzZU1qu0eDjhVC/nOYEZqBYCHviSRPHms34v
+         romg==
+X-Gm-Message-State: APjAAAU+14wLmhRnBrKrHDj5qTivLbkKUxts9eaQwHNPnqpLCQ5Wpy98
+        SNb/boysZV1fW+FvaP/PgxL0f1Tx3Ec=
+X-Google-Smtp-Source: APXvYqxhcQ/lr6IXonkIYwS46bv4iuXGXhIWft3L6uDy6PooO/C3WYdEXY6wNI/XmbRUJoHA4XZPeg==
+X-Received: by 2002:aa7:93c1:: with SMTP id y1mr20114255pff.200.1578941567724;
+        Mon, 13 Jan 2020 10:52:47 -0800 (PST)
+Received: from localhost (MIPS-TECHNO.ear1.SanJose1.Level3.net. [4.15.122.74])
+        by smtp.gmail.com with ESMTPSA id y203sm15660002pfb.65.2020.01.13.10.52.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2020 10:52:46 -0800 (PST)
+From:   Paul Burton <paulburton89@gmail.com>
+X-Google-Original-From: Paul Burton <paul.burton@mips.com>
+Date:   Mon, 13 Jan 2020 10:52:46 -0800
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, chenhc@lemote.com,
+        linux-kernel@vger.kernel.org, hch@lst.de
+Subject: Re: [PATCH 2/2] MIPS: Loongson64: Add dma iocoherency detection
+ support
+Message-ID: <20200113185246.zvsahaeh36gdfsv2@pburton-laptop>
+References: <20200113140705.74605-1-jiaxun.yang@flygoat.com>
+ <20200113140705.74605-2-jiaxun.yang@flygoat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200113140705.74605-2-jiaxun.yang@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-To avoid a double verification of the hw_counter validity,
-provide __arch_is_hw_counter_valid()
+Hi Jiaxun,
 
-Before:
-clock-gettime-realtime:    vdso: 1078 nsec/call
+On Mon, Jan 13, 2020 at 10:07:05PM +0800, Jiaxun Yang wrote:
+> diff --git a/arch/mips/include/asm/mach-loongson64/boot_param.h b/arch/mips/include/asm/mach-loongson64/boot_param.h
+> index 8c286bedff3e..2da2be40ad81 100644
+> --- a/arch/mips/include/asm/mach-loongson64/boot_param.h
+> +++ b/arch/mips/include/asm/mach-loongson64/boot_param.h
+> @@ -115,7 +115,8 @@ struct irq_source_routing_table {
+>  	u64 pci_io_start_addr;
+>  	u64 pci_io_end_addr;
+>  	u64 pci_config_addr;
+> -	u32 dma_mask_bits;
+> +	u16 dma_mask_bits;
+> +	u16 dma_noncoherent;
+>  } __packed;
 
-After:
-clock-gettime-realtime:    vdso: 1064 nsec/call
+This struct is generated by the firmware, right? So does this change
+require that firmware be updated along with the kernel? Or was the
+kernel's definition always incorrect/incomplete?
 
-The * shows the test of the clock type.
-The > shows the additional test on the counter,
-that goes away with this patch
-
-Before:
- 5e0:	81 25 00 04 	lwz     r9,4(r5)
-*5e4:	2f 89 00 00 	cmpwi   cr7,r9,0
-*5e8:	40 9e 01 3c 	bne     cr7,724 <__c_kernel_clock_gettime+0x17c>
- 5ec:	94 21 ff e0 	stwu    r1,-32(r1)
- 5f0:	93 61 00 0c 	stw     r27,12(r1)
- 5f4:	93 81 00 10 	stw     r28,16(r1)
- 5f8:	93 a1 00 14 	stw     r29,20(r1)
- 5fc:	93 c1 00 18 	stw     r30,24(r1)
- 600:	93 e1 00 1c 	stw     r31,28(r1)
- 604:	7d 8d 42 e6 	mftbu   r12
- 608:	7f ac 42 e6 	mftb    r29
- 60c:	7c cd 42 e6 	mftbu   r6
- 610:	7f 8c 30 40 	cmplw   cr7,r12,r6
- 614:	40 9e ff f0 	bne     cr7,604 <__c_kernel_clock_gettime+0x5c>
->618:	2f 8c 00 00 	cmpwi   cr7,r12,0
- 61c:	83 6b 00 28 	lwz     r27,40(r11)
- 620:	83 8b 00 2c 	lwz     r28,44(r11)
- 624:	81 45 00 08 	lwz     r10,8(r5)
- 628:	80 e5 00 0c 	lwz     r7,12(r5)
->62c:	41 9c 00 b4 	blt     cr7,6e0 <__c_kernel_clock_gettime+0x138>
- 630:	81 05 00 18 	lwz     r8,24(r5)
- 634:	83 c5 00 1c 	lwz     r30,28(r5)
- 638:	80 cb 00 24 	lwz     r6,36(r11)
- 63c:	83 e5 00 00 	lwz     r31,0(r5)
- 640:	7f 9f 00 40 	cmplw   cr7,r31,r0
- 644:	40 9e 00 84 	bne     cr7,6c8 <__c_kernel_clock_gettime+0x120>
-
-After:
- 5e0:	81 25 00 04 	lwz     r9,4(r5)
-*5e4:	2f 89 00 00 	cmpwi   cr7,r9,0
-*5e8:	40 9e 01 88 	bne     cr7,770 <__c_kernel_clock_gettime+0x1c8>
- 5ec:	94 21 ff e0 	stwu    r1,-32(r1)
- 5f0:	93 61 00 0c 	stw     r27,12(r1)
- 5f4:	93 81 00 10 	stw     r28,16(r1)
- 5f8:	93 a1 00 14 	stw     r29,20(r1)
- 5fc:	93 c1 00 18 	stw     r30,24(r1)
- 600:	93 e1 00 1c 	stw     r31,28(r1)
- 604:	7f cd 42 e6 	mftbu   r30
- 608:	7f ac 42 e6 	mftb    r29
- 60c:	7c cd 42 e6 	mftbu   r6
- 610:	7f 9e 30 40 	cmplw   cr7,r30,r6
- 614:	40 9e ff f0 	bne     cr7,604 <__c_kernel_clock_gettime+0x5c>
- 618:	83 6b 00 28 	lwz     r27,40(r11)
- 61c:	83 8b 00 2c 	lwz     r28,44(r11)
- 620:	81 45 00 08 	lwz     r10,8(r5)
- 624:	80 e5 00 0c 	lwz     r7,12(r5)
- 628:	81 05 00 18 	lwz     r8,24(r5)
- 62c:	83 e5 00 1c 	lwz     r31,28(r5)
- 630:	80 cb 00 24 	lwz     r6,36(r11)
- 634:	81 85 00 00 	lwz     r12,0(r5)
- 638:	7f 8c 00 40 	cmplw   cr7,r12,r0
- 63c:	40 9e 00 84 	bne     cr7,6c0 <__c_kernel_clock_gettime+0x118>
-
-Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
----
- arch/powerpc/include/asm/vdso/gettimeofday.h | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h b/arch/powerpc/include/asm/vdso/gettimeofday.h
-index d1e702e0ea86..c5a24f31382e 100644
---- a/arch/powerpc/include/asm/vdso/gettimeofday.h
-+++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
-@@ -69,15 +69,18 @@ int clock_getres32_fallback(clockid_t _clkid, struct old_timespec32 *_ts)
- }
- #endif
- 
--static __always_inline u64 __arch_get_hw_counter(s32 clock_mode)
-+static __always_inline bool __arch_is_hw_counter_valid(s32 clock_mode)
- {
- 	/*
- 	 * clock_mode == 0 implies that vDSO are enabled otherwise
- 	 * fallback on syscall.
- 	 */
--	if (clock_mode != 0)
--		return U64_MAX;
-+	return clock_mode == 0 ? true : false;
-+}
-+#define __arch_is_hw_counter_valid __arch_is_hw_counter_valid
- 
-+static __always_inline u64 __arch_get_hw_counter(s32 clock_mode)
-+{
- 	return get_tb();
- }
- 
--- 
-2.13.3
-
+Thanks,
+    Paul
