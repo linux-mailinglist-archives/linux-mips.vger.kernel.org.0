@@ -2,69 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49115138ED6
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2020 11:16:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB5D1390AD
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2020 13:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725992AbgAMKQn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Jan 2020 05:16:43 -0500
-Received: from forward101p.mail.yandex.net ([77.88.28.101]:56700 "EHLO
-        forward101p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725978AbgAMKQn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 13 Jan 2020 05:16:43 -0500
-Received: from mxback4g.mail.yandex.net (mxback4g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:165])
-        by forward101p.mail.yandex.net (Yandex) with ESMTP id D0E003281803;
-        Mon, 13 Jan 2020 13:16:40 +0300 (MSK)
-Received: from myt2-ea6a2e0cbf34.qloud-c.yandex.net (myt2-ea6a2e0cbf34.qloud-c.yandex.net [2a02:6b8:c00:2e8e:0:640:ea6a:2e0c])
-        by mxback4g.mail.yandex.net (mxback/Yandex) with ESMTP id 94SFeUVJlu-Gea40tpZ;
-        Mon, 13 Jan 2020 13:16:40 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1578910600;
-        bh=TtPY94kS/Jzho/m65vWlpQBxzkqIZAkf5noHgvGvswQ=;
-        h=In-Reply-To:Subject:To:From:Cc:References:Date:Message-Id;
-        b=mx/nQW3Q8UTSzOK7maLX4bWqx3bVN2Fglw5ALSbOj0Tl3NgGgu6bx1pBLamjKjhzv
-         CmlWU+GmTgKFhcxbCdaM3h3A0wjSMHVW+UwIrUA7+nt3sV19E/CLQOqnbfWANLulv7
-         Aftey9+PBv5KIN9vwASdNcoH4Z5BTIxqnKQx7GJU=
-Authentication-Results: mxback4g.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by myt2-ea6a2e0cbf34.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id u1kiDDYFMW-GVV4YIvR;
-        Mon, 13 Jan 2020 13:16:39 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     chenhc@lemote.com, paul.burton@mips.com,
-        linux-kernel@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 2/2] MIPS: Loongson64: Select mac2008 only feature
-Date:   Mon, 13 Jan 2020 18:16:12 +0800
-Message-Id: <20200113101612.38335-2-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200113101612.38335-1-jiaxun.yang@flygoat.com>
-References: <20200113101612.38335-1-jiaxun.yang@flygoat.com>
+        id S1726236AbgAMMES (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Jan 2020 07:04:18 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:9166 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728641AbgAMMES (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 13 Jan 2020 07:04:18 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 47xC1R5FbGz9txxD;
+        Mon, 13 Jan 2020 13:04:11 +0100 (CET)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=RYPWm/IX; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id Hval_bWc400h; Mon, 13 Jan 2020 13:04:11 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 47xC1R4CpHz9txxC;
+        Mon, 13 Jan 2020 13:04:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1578917051; bh=MvSTc3YCiZWGwG0qnYB8ibq5lqkALByXbfzJloZm6VI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=RYPWm/IXQ/KxMHRniZs4sJA0UPIhBFyVBryEW3BKqF+e4rY1+/0Wr9KTb1Oy2Acmm
+         QrU95xCviWgxho42vEOCHJ/Ec2LbEtDqIZJ4fGcLpTEgDDzqFJ3q5Tte95EDnP9ZWN
+         /49rH0RisWsJHOGyX6JNukoKDcuHt44/tBSegBbY=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 82B088B7B7;
+        Mon, 13 Jan 2020 13:04:16 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 5C6xgoSYmG2P; Mon, 13 Jan 2020 13:04:16 +0100 (CET)
+Received: from [172.25.230.100] (po15451.idsi0.si.c-s.fr [172.25.230.100])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 47C788B79F;
+        Mon, 13 Jan 2020 13:04:16 +0100 (CET)
+Subject: Re: [PATCH] lib: vdso: mark __cvdso_clock_getres() as static
+To:     Thomas Gleixner <tglx@linutronix.de>, arnd@arndb.de,
+        vincenzo.frascino@arm.com, luto@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        x86@kernel.org
+References: <e7becc50bee355e3872b84d91cc68ae8d7776bb9.1578764712.git.christophe.leroy@c-s.fr>
+ <875zhhsr0h.fsf@nanos.tec.linutronix.de>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <658045cd-3f97-946d-6920-bea772e9be24@c-s.fr>
+Date:   Mon, 13 Jan 2020 13:04:14 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
+In-Reply-To: <875zhhsr0h.fsf@nanos.tec.linutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Some Loongson-64 processor didn't set MAC2008 bit in fcsr,
-but actually all Loongson64 processors are MAC2008 only.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h b/arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h
-index 23aa8ed7cb9e..6e4ff2063971 100644
---- a/arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h
-+++ b/arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h
-@@ -47,5 +47,6 @@
- #define cpu_has_ic_fills_f_dc	1
- #define cpu_hwrena_impl_bits	0xc0000000
- #define cpu_has_mips_r2_exec_hazard 0
-+#define cpu_has_mac2008_only	1
- 
- #endif /* __ASM_MACH_LOONGSON64_CPU_FEATURE_OVERRIDES_H */
--- 
-2.24.1
+Le 11/01/2020 à 20:59, Thomas Gleixner a écrit :
+> Christophe Leroy <christophe.leroy@c-s.fr> writes:
+>> When __cvdso_clock_getres() became __cvdso_clock_getres_common()
+>> and a new __cvdso_clock_getres() was added, static qualifier was
+>> forgotten.
+>>
+>> Fixes: 502a590a170b ("lib/vdso: Move fallback invocation to the callers")
+>> Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
+> 
+> I've already queued:
+> 
+>       https://lore.kernel.org/r/20191128111719.8282-1-vincenzo.frascino@arm.com
+> 
+> but thanks for caring!
+> 
 
+
+Is there a git tree with the latest VDSO status ?
+
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git?h=timers%2Fvdso 
+is 6 monthes old.
+
+Christophe
