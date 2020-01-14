@@ -2,82 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D81ED139C6D
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2020 23:28:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9849139FFA
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2020 04:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728872AbgAMW2l convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 13 Jan 2020 17:28:41 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:40483 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728819AbgAMW2l (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Jan 2020 17:28:41 -0500
-Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1ir8CG-0004Yk-9j; Mon, 13 Jan 2020 23:28:32 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id 40F6F105BE6; Mon, 13 Jan 2020 23:28:31 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will@kernel.org, paul.burton@mips.com,
-        salyzyn@android.com, 0x7f454c46@gmail.com, luto@kernel.org
-Subject: Re: [PATCH v2 2/8] lib: vdso: Build 32 bit specific functions in the right context
-In-Reply-To: <20190830135902.20861-3-vincenzo.frascino@arm.com>
-References: <20190830135902.20861-1-vincenzo.frascino@arm.com> <20190830135902.20861-3-vincenzo.frascino@arm.com>
-Date:   Mon, 13 Jan 2020 23:28:31 +0100
-Message-ID: <87tv4zq9dc.fsf@nanos.tec.linutronix.de>
+        id S1729139AbgANDaY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Jan 2020 22:30:24 -0500
+Received: from forward500o.mail.yandex.net ([37.140.190.195]:35601 "EHLO
+        forward500o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728802AbgANDaX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 13 Jan 2020 22:30:23 -0500
+Received: from mxback18o.mail.yandex.net (mxback18o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::69])
+        by forward500o.mail.yandex.net (Yandex) with ESMTP id 9554360637;
+        Tue, 14 Jan 2020 06:30:20 +0300 (MSK)
+Received: from localhost (localhost [::1])
+        by mxback18o.mail.yandex.net (mxback/Yandex) with ESMTP id 9JPZXyJDt7-UJVWLU2i;
+        Tue, 14 Jan 2020 06:30:19 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1578972619;
+        bh=yTsm5oMcLHPTAmSkdzNgo7hZnZ7/5IAdpa6CtG/274w=;
+        h=Message-Id:Cc:Subject:In-Reply-To:Date:References:To:From;
+        b=giDRAfeB9QXiDljnK2KNb1EVEJyzM/LRlKBBOaeQuYnxjYC1NycTLEyAlGb3RqQEZ
+         ZF1yFADe6B3G4QuG2dpc394xbfJupKA2SntipcVoZ8ozkBn2vJSlCFJnLUr6TAlewg
+         HjIqFhN+uziGgS0q6TZvMWeZbXWRx6hkQIvpq0rc=
+Authentication-Results: mxback18o.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by iva4-6593cae50902.qloud-c.yandex.net with HTTP;
+        Tue, 14 Jan 2020 06:30:19 +0300
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Envelope-From: yjx@flygoat.com
+To:     Paul Burton <paulburton89@gmail.com>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "chenhc@lemote.com" <chenhc@lemote.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hch@lst.de" <hch@lst.de>
+In-Reply-To: <20200113185246.zvsahaeh36gdfsv2@pburton-laptop>
+References: <20200113140705.74605-1-jiaxun.yang@flygoat.com>
+         <20200113140705.74605-2-jiaxun.yang@flygoat.com> <20200113185246.zvsahaeh36gdfsv2@pburton-laptop>
+Subject: Re: [PATCH 2/2] MIPS: Loongson64: Add dma iocoherency detection support
 MIME-Version: 1.0
+X-Mailer: Yamail [ http://yandex.ru ] 5.0
+Date:   Tue, 14 Jan 2020 11:30:19 +0800
+Message-Id: <29582761578972619@iva4-6593cae50902.qloud-c.yandex.net>
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Vincenzo Frascino <vincenzo.frascino@arm.com> writes:
 
-> clock_gettime32 and clock_getres_time32 should be compiled only with a
-> 32 bit vdso library.
+
+14.01.2020, 02:52, "Paul Burton" <paulburton89@gmail.com>:
+> Hi Jiaxun,
 >
-> Exclude these symbols when BUILD_VDSO32 is not defined.
+> On Mon, Jan 13, 2020 at 10:07:05PM +0800, Jiaxun Yang wrote:
+>>  diff --git a/arch/mips/include/asm/mach-loongson64/boot_param.h b/arch/mips/include/asm/mach-loongson64/boot_param.h
+>>  index 8c286bedff3e..2da2be40ad81 100644
+>>  --- a/arch/mips/include/asm/mach-loongson64/boot_param.h
+>>  +++ b/arch/mips/include/asm/mach-loongson64/boot_param.h
+>>  @@ -115,7 +115,8 @@ struct irq_source_routing_table {
+>>           u64 pci_io_start_addr;
+>>           u64 pci_io_end_addr;
+>>           u64 pci_config_addr;
+>>  - u32 dma_mask_bits;
+>>  + u16 dma_mask_bits;
+>>  + u16 dma_noncoherent;
+>>   } __packed;
+>
+> This struct is generated by the firmware, right? So does this change
+> require that firmware be updated along with the kernel? Or was the
+> kernel's definition always incorrect/incomplete?
+Hi Paul,
 
-This breaks the ARM build with:
+This define added to the firmware by 2013 but somehow never upstream.
+That's what Loongson always doing.
 
-arch/arm/vdso/vgettimeofday.c: In function ‘__vdso_clock_gettime’:
-arch/arm/vdso/vgettimeofday.c:15:9: error: implicit declaration of function ‘__cvdso_clock_gettime32’; did you mean ‘__cvdso_clock_gettime’? [-Werror=implicit-function-declaration]
-  return __cvdso_clock_gettime32(clock, ts);
-         ^~~~~~~~~~~~~~~~~~~~~~~
-         __cvdso_clock_gettime
-arch/arm/vdso/vgettimeofday.c: In function ‘__vdso_clock_getres’:
-arch/arm/vdso/vgettimeofday.c:33:9: error: implicit declaration of function ‘__cvdso_clock_getres_time32’; did you mean ‘__cvdso_clock_getres_common’? [-Werror=implicit-function-declaration]
-  return __cvdso_clock_getres_time32(clock_id, res);
-         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-         __cvdso_clock_getres_common
-cc1: some warnings being treated as errors
+Some versions of Loongson-3B1500 failed to maintain DMA coherent.
+So they add this parameter to the firmware.
+As the maximum dma_mask_bits is 64, the upper 16bit of the old u32 will always
+be zero. Which means coherent DMA transformed into the new definition,
+that's the expected default behavior. Thus it's safe to do so even if firmware
+doesn't understand this parameter.
 
-The patch below 'fixes' at least the build. Can someone please confirm
-the correctness?
+Thanks
 
-Thanks,
-
-        tglx
-
-8<----------------
---- a/arch/arm/vdso/Makefile
-+++ b/arch/arm/vdso/Makefile
-@@ -14,7 +14,7 @@ targets := $(obj-vdso) vdso.so vdso.so.d
- obj-vdso := $(addprefix $(obj)/, $(obj-vdso))
- 
- ccflags-y := -fPIC -fno-common -fno-builtin -fno-stack-protector
--ccflags-y += -DDISABLE_BRANCH_PROFILING
-+ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO32
- 
- ldflags-$(CONFIG_CPU_ENDIAN_BE8) := --be8
- ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
+>
+> Thanks,
+>     Paul
+--
+Jiaxun
