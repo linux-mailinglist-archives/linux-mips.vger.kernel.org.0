@@ -2,127 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0AA13A073
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2020 06:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1BC13A0BA
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2020 06:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726297AbgANFNv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jan 2020 00:13:51 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:34640 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725306AbgANFNv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 14 Jan 2020 00:13:51 -0500
-Received: from localhost.cn (unknown [10.40.23.12])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj2j4TR1e4dYEAA--.9S2;
-        Tue, 14 Jan 2020 13:13:29 +0800 (CST)
-From:   Guoyun Sun <sunguoyun@loongson.cn>
-To:     Paul Burton <paulburton@kernel.org>,
+        id S1728640AbgANFkA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Jan 2020 00:40:00 -0500
+Received: from eddie.linux-mips.org ([148.251.95.138]:44658 "EHLO
+        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725820AbgANFkA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jan 2020 00:40:00 -0500
+Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
+        with ESMTP id S23990431AbgANFj45Upcz (ORCPT
+        <rfc822;stable@vger.kernel.org> + 2 others);
+        Tue, 14 Jan 2020 06:39:56 +0100
+Date:   Tue, 14 Jan 2020 05:39:56 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     Paul Burton <paulburton@kernel.org>
+cc:     David Laight <David.Laight@aculab.com>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Allison Randal <allison@lohutok.net>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guoyun Sun <sunguoyun@loongson.cn>
-Subject: [PATCH]  mips/vdso: Support mremap() for vDSO
-Date:   Tue, 14 Jan 2020 13:13:28 +0800
-Message-Id: <1578978808-18633-1-git-send-email-sunguoyun@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dxj2j4TR1e4dYEAA--.9S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWr1UKw4xKFy7Jw1ruFW3Jrb_yoW5GF4xpw
-        s8AFn5Kw48Xr1UGrySyr95Za9xW3ykX3y5JrWqq3y5Aw18KryjyF4Fyan7ZrWUCFyvy3WS
-        gw45ZFWrK3WYyaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        64x0Y40En7xvr7AKxVWUJVW8JwAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI
-        0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CE
-        Vc8vx2IErcIFxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF
-        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2Kf
-        nxnUUI43ZEXa7VUbUGYJUUUUU==
-X-CM-SenderInfo: 5vxqw3hr1x0qxorr0wxvrqhubq/
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] MIPS: Use __copy_{to,from}_user() for emulated FP
+ loads/stores
+In-Reply-To: <20191229190123.ju24cz7thuvybejs@lantea.localdomain>
+Message-ID: <alpine.LFD.2.21.2001140508250.1162854@eddie.linux-mips.org>
+References: <20191203204933.1642259-1-paulburton@kernel.org> <f5e09155580d417e9dcd07b1c20786ed@AcuMS.aculab.com> <20191204154048.eotzglp4rdlx4yzl@lantea.localdomain> <e220ba9a19da41abba599b5873afa494@AcuMS.aculab.com> <alpine.LFD.2.21.1912260251520.3762799@eddie.linux-mips.org>
+ <20191229190123.ju24cz7thuvybejs@lantea.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-vDSO VMA address is saved in mm_context for the purpose of using
-restorer from vDSO page to return to userspace after signal handling.
+Hi Paul,
 
-In Checkpoint Restore in Userspace (CRIU) project we place vDSO VMA
-on restore back to the place where it was on the dump.
+ Sorry to take so long; it took me a while to track down the discussion I 
+had in mind, and I was quite busy too.  Also greetings from linux.conf.au!
 
-Make vDSO code track the VMA address by supplying .mremap() fops
-the same way it's done for x86 and arm by:
-commit b059a453b1cf ("x86/vdso: Add mremap hook to vm_special_mapping")
-commit 739586951b8a ("arm64/vdso: Support mremap() for vDSO").
+> >  As I recall we only emulate unaligned accesses with a subset of integer 
+> > load/store instructions (and then only if TIF_FIXADE is set, which is the 
+> > default), and never with FP load/store instructions.  Consequently I see 
+> > no point in doing this in the FP emulator either and I think these ought 
+> > to just send SIGBUS instead.  Otherwise you'll end up with user code that 
+> > works differently depending on whether the FP hardware is real or 
+> > emulated, which is really bad.
+> 
+> That might simplify things here, but it's incorrect. I'm fairly certain
+> the intent is that emulate_load_store_insn() handles all non-FP loads &
+> stores (though looking at it we're missing some instructions added in
+> r6). More importantly though we've been emulating FP loads & stores
+> since v3.10 which introduced the change alongside microMIPS support in
+> commit 102cedc32a6e ("MIPS: microMIPS: Floating point support."). The
+> commit contains no description of why, and I'm not aware of any reason
+> microMIPS specifically would need this so I suspect that commit bundled
+> this change for no good reason...
 
-Signed-off-by: Guoyun Sun <sunguoyun@loongson.cn>
----
- arch/mips/kernel/vdso.c  | 22 ++++++++++++++++++++++
- arch/mips/vdso/genvdso.c |  5 +++++
- 2 files changed, 27 insertions(+)
+ See the thread of discussion starting from this submission:
 
-diff --git a/arch/mips/kernel/vdso.c b/arch/mips/kernel/vdso.c
-index bc35f84..eac3982 100644
---- a/arch/mips/kernel/vdso.c
-+++ b/arch/mips/kernel/vdso.c
-@@ -38,6 +38,28 @@ static struct vm_special_mapping vdso_vvar_mapping = {
- 	.pages = no_pages,
- };
- 
-+int vdso_mremap(const struct vm_special_mapping *sm,
-+		       struct vm_area_struct *new_vma)
-+{
-+	unsigned long new_size = new_vma->vm_end - new_vma->vm_start;
-+
-+#ifdef CONFIG_MIPS32_O32
-+	if (vdso_image_o32.size != new_size)
-+		return -EINVAL;
-+#endif
-+
-+#ifdef CONFIG_MIPS32_N32
-+	if (vdso_image_n32.size != new_size)
-+		return -EINVAL;
-+#endif
-+
-+	if (vdso_image.size != new_size)
-+		return -EINVAL;
-+
-+	current->mm->context.vdso = (void __user *)(new_vma->vm_start);
-+	return 0;
-+}
-+
- static void __init init_vdso_image(struct mips_vdso_image *image)
- {
- 	unsigned long num_pages, i;
-diff --git a/arch/mips/vdso/genvdso.c b/arch/mips/vdso/genvdso.c
-index b66b6b1..50ea516 100644
---- a/arch/mips/vdso/genvdso.c
-+++ b/arch/mips/vdso/genvdso.c
-@@ -251,6 +251,10 @@ int main(int argc, char **argv)
- 	fprintf(out_file, "#include <linux/linkage.h>\n");
- 	fprintf(out_file, "#include <linux/mm.h>\n");
- 	fprintf(out_file, "#include <asm/vdso.h>\n");
-+	fprintf(out_file, "\n");
-+	fprintf(out_file, "extern int vdso_mremap(\n");
-+	fprintf(out_file, "	const struct vm_special_mapping *sm,\n");
-+	fprintf(out_file, "	struct vm_area_struct *new_vma);\n\n");
- 
- 	/* Write out the stripped VDSO data. */
- 	fprintf(out_file,
-@@ -275,6 +279,7 @@ int main(int argc, char **argv)
- 	fprintf(out_file, "\t.mapping = {\n");
- 	fprintf(out_file, "\t\t.name = \"[vdso]\",\n");
- 	fprintf(out_file, "\t\t.pages = vdso_pages,\n");
-+	fprintf(out_file, "\t\t.mremap = vdso_mremap,\n");
- 	fprintf(out_file, "\t},\n");
- 
- 	/* Calculate and write symbol offsets to <output file> */
--- 
-2.1.0
+<https://www.linux-mips.org/cgi-bin/mesg.cgi?a=linux-mips&i=20120615234641.6938B58FE7C%40mail.viric.name>
 
+and in particular Ralf's response (not referred directly due to the 
+monthly archive rollover):
+
+<https://www.linux-mips.org/cgi-bin/mesg.cgi?a=linux-mips&i=20120731134001.GA14151%40linux-mips.org>
+
+I think Ralf's argument still stands and I find it regrettable that an 
+unwanted feature was sneaked in with a trick along with a submission 
+supposed to only add a different, unrelated feature.
+
+ I can't even track down a public submission/review of the change you 
+refer, which is not how things are supposed to work with Linux!  And 
+neither the `Signed-off-by' tags help figuring out what the route of the 
+change was to get there upstream.  At that time there was supposed to be 
+Ralf's tag there, as it was him who was the sole port maintainer.
+
+> It's also worth noting that some hardware will handle unaligned FP
+> loads/stores, which means having the emulator reject them will result in
+> more of a visible difference to userland. ie. on some hardware they'll
+> work just fine, but on some you'd get SIGBUS. So I do think emulating
+> them makes some sense - just as for non-FP loads & stores it lets
+> userland not care whether the hardware will handle them, so long as it's
+> not performance critical code. If we knew that had never been used then
+> perhaps we could enforce the alignment requirement (and maybe that's
+> what you recall doing), but since we've been emulating them for the past
+> 6 years it's too late for that now.
+
+ I don't think it's ever too late to remove a broken feature that everyone 
+knows is not a part of the architecture and the emulation of which has 
+never been advertised as a part of the Linux ABI either.  You just don't 
+make it a part of the ABI when you sneak in a feature without a proper 
+review, we do not accept the fait accompli method in Linux development.
+
+ The presence of unaligned FP data is a sign of user code breakage and 
+whoever caused that breakage will best know that ASAP by seeing their 
+program trap (they can emulate the trap in their software by installing a 
+suitable signal handler if they are so desperate to have unaligned FP data 
+handled).
+
+ So I think that not only the new submission should be rejected, but also 
+parts of commit 102cedc32a6e ("MIPS: microMIPS: Floating point support.") 
+reverted that are not a part of actual microMIPS support.  If someone 
+relied on it by accident or ignorance, they'll simply have to adjust.
+
+  Maciej
