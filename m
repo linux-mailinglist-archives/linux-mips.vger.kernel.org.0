@@ -2,76 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF8313B5A0
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jan 2020 00:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E699913B5DE
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jan 2020 00:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728759AbgANXGV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jan 2020 18:06:21 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:45372 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728650AbgANXGU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jan 2020 18:06:20 -0500
-Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1irVG6-0000Gr-Ci; Wed, 15 Jan 2020 00:06:02 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id D20E7105BC2; Wed, 15 Jan 2020 00:06:01 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, arnd@arndb.de,
-        vincenzo.frascino@arm.com, luto@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [RFC PATCH v3 08/12] lib: vdso: allow arches to provide vdso data pointer
-In-Reply-To: <381e547dbb3c48fd39d6cf208033bba38ad048fb.1578934751.git.christophe.leroy@c-s.fr>
-References: <cover.1578934751.git.christophe.leroy@c-s.fr> <381e547dbb3c48fd39d6cf208033bba38ad048fb.1578934751.git.christophe.leroy@c-s.fr>
-Date:   Wed, 15 Jan 2020 00:06:01 +0100
-Message-ID: <87ftghbpuu.fsf@nanos.tec.linutronix.de>
+        id S1728774AbgANXa2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Jan 2020 18:30:28 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:41994 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728759AbgANXa2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jan 2020 18:30:28 -0500
+Received: by mail-pg1-f196.google.com with SMTP id s64so7144123pgb.9;
+        Tue, 14 Jan 2020 15:30:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=xtay45JSoYDoBInOvIBkON2umcFhUQpYehz+90UqGzQ=;
+        b=TjpglJOOlC/4jLwV42ppWnmffTIgwiSgCGYqV636ES1IcvGsUupi4hBriH1agzg3J2
+         bdC5qkm1aVR0dWn86nMu2Nank7VGSMm5DQ4GfzxWnNKrVNKm9I2qmbOpu/Ggo419iBAh
+         1wgYJA0kkKbbPCWkK2rFIjllOp6s1OpwzLDdAoq7g+Krwn8EsLAibUmCTw0F5f0Up7Zx
+         9WIHcBsYRfFFEcE0aL+Rm2iX+tl0wQoISvJzoElVccPoc51HxZ1pI0VqE6Lv7Xgb5NBn
+         AKJwrIqlObTns8ph8iHIrxpWA6cNwK6bgYNaFee/A+GtaGCqoXM3DskWog4BkZ4OWXI5
+         dR5w==
+X-Gm-Message-State: APjAAAXnmuCHwnn7EbdsLQ+0sQjRLjHtRASAornxOPk4rABmqUZ6hx9N
+        BcA4cZrV/Z5lyOFLDcSp4MY=
+X-Google-Smtp-Source: APXvYqxfDRELNDfkiKLOjOnc8yn+X0p9GiSoBZA2079ouTSIRqhfvb98Ufu56YKWqXMwxsmfg6bA5g==
+X-Received: by 2002:a62:486:: with SMTP id 128mr28162928pfe.236.1579044627249;
+        Tue, 14 Jan 2020 15:30:27 -0800 (PST)
+Received: from localhost (MIPS-TECHNO.ear1.SanJose1.Level3.net. [4.15.122.74])
+        by smtp.gmail.com with ESMTPSA id dw10sm14376039pjb.11.2020.01.14.15.30.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jan 2020 15:30:26 -0800 (PST)
+Date:   Tue, 14 Jan 2020 15:30:25 -0800
+From:   Paul Burton <paulburton@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, chenhc@lemote.com,
+        paul.burton@mips.com, tglx@linutronix.de, jason@lakedaemon.net,
+        maz@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip: mips-cpu: Remove eoi operation
+Message-ID: <20200114233025.y4azwvivqo7kg7i5@pburton-laptop>
+References: <20200113101251.37471-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200113101251.37471-1-jiaxun.yang@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@c-s.fr> writes:
->  
->  static __maybe_unused int
-> +#ifdef VDSO_GETS_VD_PTR_FROM_ARCH
-> +__cvdso_clock_gettime_common(const struct vdso_data *vd, clockid_t clock,
-> +		      struct __kernel_timespec *ts)
-> +{
-> +#else
->  __cvdso_clock_gettime_common(clockid_t clock, struct __kernel_timespec *ts)
->  {
->  	const struct vdso_data *vd = __arch_get_vdso_data();
-> +#endif
->  	u32 msk;
+Hi Jiaxun,
 
-If we do that, then there is no point in propagating this to the inner
-functions. It's perfectly fine to have this distinction at the outermost
-level.
+On Mon, Jan 13, 2020 at 06:12:51PM +0800, Jiaxun Yang wrote:
+> The eoi opreation in mips_cpu_irq_controller caused chained_irq_enter
+> falsely consider CPU IP interrupt as a FastEOI type IRQ. So the interrupt
+> won't be masked during in handler. Which might lead to spurious interrupt.
+> 
+> Thus we simply remove eoi operation for mips_cpu_irq_controller,
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  drivers/irqchip/irq-mips-cpu.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-mips-cpu.c b/drivers/irqchip/irq-mips-cpu.c
+> index 95d4fd8f7a96..0ad7f1f9a58b 100644
+> --- a/drivers/irqchip/irq-mips-cpu.c
+> +++ b/drivers/irqchip/irq-mips-cpu.c
+> @@ -55,7 +55,6 @@ static struct irq_chip mips_cpu_irq_controller = {
+>  	.irq_mask	= mask_mips_irq,
+>  	.irq_mask_ack	= mask_mips_irq,
+>  	.irq_unmask	= unmask_mips_irq,
+> -	.irq_eoi	= unmask_mips_irq,
+>  	.irq_disable	= mask_mips_irq,
+>  	.irq_enable	= unmask_mips_irq,
+>  };
 
-As a related question, I noticed that you keep all that ASM voodoo in
-the PPC specific code which provides the actual entry points. Is that
-ASM code really still necessary? All current users of the generic VDSO
-just do something like:
+This one scares me; something doesn't seem right. The irq_eoi (née eoi)
+callback was first added way back in commit 1417836e81c0 ("[MIPS] use
+generic_handle_irq, handle_level_irq, handle_percpu_irq"). The commit
+message there states that the motivation was to allow use of
+handle_percpu_irq(), and indeed handle_percpu_irq() does:
 
-int __vdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts)
-{
-        return __cvdso_clock_gettime(clock, ts);
-}
+    irq_ack() (ie. mask)
+    invoke the handler(s)
+    irq_eoi() (ie. unmask)
 
-in the architecture code. Is there a reason why this can't work on PPC?
+By removing the irq_eoi callback I don't see how we'd ever unmask the
+interrupt again..?
 
 Thanks,
-
-        tglx
+    Paul
