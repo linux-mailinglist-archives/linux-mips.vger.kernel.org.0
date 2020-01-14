@@ -2,19 +2,19 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 885C513B053
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2020 18:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E655213B058
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2020 18:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728904AbgANREy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jan 2020 12:04:54 -0500
-Received: from out28-172.mail.aliyun.com ([115.124.28.172]:44572 "EHLO
-        out28-172.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726450AbgANREx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jan 2020 12:04:53 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.0744315|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.348141-0.00561474-0.646245;DS=CONTINUE|ham_system_inform|0.0586062-0.000217884-0.941176;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03301;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=20;RT=20;SR=0;TI=SMTPD_---.Gc2hy8j_1579021451;
+        id S1728879AbgANRFK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Jan 2020 12:05:10 -0500
+Received: from out28-97.mail.aliyun.com ([115.124.28.97]:54322 "EHLO
+        out28-97.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728880AbgANRFK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jan 2020 12:05:10 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1414993|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.0564114-0.00543623-0.938152;DS=CONTINUE|ham_system_inform|0.0788228-0.00257501-0.918602;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03308;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=20;RT=20;SR=0;TI=SMTPD_---.Gc2hy8j_1579021451;
 Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Gc2hy8j_1579021451)
           by smtp.aliyun-inc.com(10.147.41.120);
-          Wed, 15 Jan 2020 01:04:40 +0800
+          Wed, 15 Jan 2020 01:04:42 +0800
 From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
         <zhouyanjie@wanyeetech.com>
 To:     linux-mips@vger.kernel.org
@@ -26,9 +26,9 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         paul@crapouillou.net, prasannatsmkumar@gmail.com,
         sernia.zhou@foxmail.com, zhenwenjin@gmail.com,
         ebiederm@xmission.com
-Subject: [PATCH 1/2] MIPS: Ingenic: Add missing nodes for X1000 and CU1000-Neo.
-Date:   Wed, 15 Jan 2020 01:03:47 +0800
-Message-Id: <1579021428-43535-3-git-send-email-zhouyanjie@wanyeetech.com>
+Subject: [PATCH 2/2] MIPS: CU1000-Neo: Refresh defconfig to support HWMON and WiFi.
+Date:   Wed, 15 Jan 2020 01:03:48 +0800
+Message-Id: <1579021428-43535-4-git-send-email-zhouyanjie@wanyeetech.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1579021428-43535-1-git-send-email-zhouyanjie@wanyeetech.com>
 References: <1579021428-43535-1-git-send-email-zhouyanjie@wanyeetech.com>
@@ -40,180 +40,59 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add I2C0/I2C1/I2C2 nodes for X1000 and add I2C0, ADS7830,
-MSC1, AP6212A, wlan_pwrseq nodes for CU1000-Neo.
+Refresh CU1000-Neo's defconfig to support ADS7830 based HWMON
+and AP6212A WiFi module.
 
 Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 ---
- arch/mips/boot/dts/ingenic/cu1000-neo.dts | 71 +++++++++++++++++++++++++++++++
- arch/mips/boot/dts/ingenic/x1000.dtsi     | 45 ++++++++++++++++++++
- 2 files changed, 116 insertions(+)
+ arch/mips/configs/cu1000-neo_defconfig | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/boot/dts/ingenic/cu1000-neo.dts b/arch/mips/boot/dts/ingenic/cu1000-neo.dts
-index b0733da..03abd94 100644
---- a/arch/mips/boot/dts/ingenic/cu1000-neo.dts
-+++ b/arch/mips/boot/dts/ingenic/cu1000-neo.dts
-@@ -4,6 +4,7 @@
- #include "x1000.dtsi"
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/clock/ingenic,tcu.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
- 
- / {
- 	compatible = "yna,cu1000-neo", "ingenic,x1000";
-@@ -21,6 +22,22 @@
- 		device_type = "memory";
- 		reg = <0x0 0x04000000>;
- 	};
-+
-+	wlan_pwrseq: msc1-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+
-+		clocks = <&lpoclk>;
-+		clock-names = "ext_clock";
-+
-+		reset-gpios = <&gpc 17 GPIO_ACTIVE_LOW>;
-+		post-power-on-delay-ms = <200>;
-+
-+		lpoclk: ap6212a {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <32768>;
-+		};
-+	};
- };
- 
- &exclk {
-@@ -36,6 +53,20 @@
- 	ingenic,pwm-channels-mask = <0xfa>;
- };
- 
-+&i2c0 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_i2c0>;
-+
-+	ads7830@48 {
-+		compatible = "ti,ads7830";
-+		reg = <0x48>;
-+	};
-+};
-+
- &uart2 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pins_uart2>;
-@@ -78,7 +109,41 @@
- 	status = "okay";
- };
- 
-+&msc1 {
-+	bus-width = <4>;
-+	max-frequency = <50000000>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_msc1>;
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	non-removable;
-+
-+	mmc-pwrseq = <&wlan_pwrseq>;
-+
-+	status = "okay";
-+
-+	ap6212a: wifi@1 {
-+		compatible = "brcm,bcm4329-fmac";
-+		reg = <1>;
-+
-+		interrupt-parent = <&gpc>;
-+		interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
-+		interrupt-names = "host-wake";
-+
-+		brcm,drive-strength = <10>;
-+	};
-+};
-+
- &pinctrl {
-+	pins_i2c0: i2c0 {
-+		function = "i2c0";
-+		groups = "i2c0-data";
-+		bias-disable;
-+	};
-+
- 	pins_uart2: uart2 {
- 		function = "uart2";
- 		groups = "uart2-data-d";
-@@ -96,4 +161,10 @@
- 		groups = "mmc0-1bit", "mmc0-4bit", "mmc0-8bit";
- 		bias-disable;
- 	};
-+
-+	pins_msc1: msc1 {
-+		function = "mmc1";
-+		groups = "mmc1-1bit", "mmc1-4bit";
-+		bias-disable;
-+	};
- };
-diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
-index ea54263..376df1b 100644
---- a/arch/mips/boot/dts/ingenic/x1000.dtsi
-+++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-@@ -169,6 +169,51 @@
- 		};
- 	};
- 
-+	i2c0: i2c-controller@10050000 {
-+		compatible = "ingenic,x1000-i2c";
-+		reg = <0x10050000 0x1000>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <60>;
-+
-+		clocks = <&cgu X1000_CLK_I2C0>;
-+
-+		status = "disabled";
-+	};
-+
-+	i2c1: i2c-controller@10051000 {
-+		compatible = "ingenic,x1000-i2c";
-+		reg = <0x10051000 0x1000>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <59>;
-+
-+		clocks = <&cgu X1000_CLK_I2C1>;
-+
-+		status = "disabled";
-+	};
-+
-+	i2c2: i2c-controller@10052000 {
-+		compatible = "ingenic,x1000-i2c";
-+		reg = <0x10052000 0x1000>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <58>;
-+
-+		clocks = <&cgu X1000_CLK_I2C2>;
-+
-+		status = "disabled";
-+	};
-+
- 	uart0: serial@10030000 {
- 		compatible = "ingenic,x1000-uart";
- 		reg = <0x10030000 0x100>;
+diff --git a/arch/mips/configs/cu1000-neo_defconfig b/arch/mips/configs/cu1000-neo_defconfig
+index 9f988ed..9b05a8f 100644
+--- a/arch/mips/configs/cu1000-neo_defconfig
++++ b/arch/mips/configs/cu1000-neo_defconfig
+@@ -34,8 +34,10 @@ CONFIG_HZ_100=y
+ CONFIG_CMA=y
+ CONFIG_CMA_AREAS=7
+ CONFIG_NET=y
++CONFIG_PACKET=y
+ CONFIG_UNIX=y
+ CONFIG_INET=y
++CONFIG_CFG80211=y
+ CONFIG_UEVENT_HELPER=y
+ CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+ CONFIG_DEVTMPFS=y
+@@ -44,6 +46,7 @@ CONFIG_DEVTMPFS=y
+ CONFIG_NETDEVICES=y
+ CONFIG_STMMAC_ETH=y
+ CONFIG_SMSC_PHY=y
++CONFIG_BRCMFMAC=y
+ # CONFIG_INPUT_MOUSEDEV is not set
+ # CONFIG_INPUT_KEYBOARD is not set
+ # CONFIG_INPUT_MOUSE is not set
+@@ -58,10 +61,12 @@ CONFIG_SERIAL_8250_RUNTIME_UARTS=3
+ CONFIG_SERIAL_8250_INGENIC=y
+ CONFIG_SERIAL_OF_PLATFORM=y
+ # CONFIG_HW_RANDOM is not set
++CONFIG_I2C=y
++CONFIG_I2C_JZ4780=y
+ CONFIG_GPIO_SYSFS=y
++CONFIG_SENSORS_ADS7828=y
+ CONFIG_WATCHDOG=y
+ CONFIG_JZ4740_WDT=y
+-# CONFIG_HWMON is not set
+ # CONFIG_LCD_CLASS_DEVICE is not set
+ # CONFIG_BACKLIGHT_CLASS_DEVICE is not set
+ # CONFIG_VGA_CONSOLE is not set
+@@ -83,6 +88,7 @@ CONFIG_PROC_KCORE=y
+ # CONFIG_PROC_PAGE_MONITOR is not set
+ CONFIG_TMPFS=y
+ CONFIG_CONFIGFS_FS=y
++CONFIG_NFS_FS=y
+ CONFIG_NLS=y
+ CONFIG_NLS_CODEPAGE_936=y
+ CONFIG_NLS_CODEPAGE_950=y
 -- 
 2.7.4
 
