@@ -2,132 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CAF113B205
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2020 19:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF8313B5A0
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jan 2020 00:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728797AbgANSZM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jan 2020 13:25:12 -0500
-Received: from mga04.intel.com ([192.55.52.120]:28001 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726491AbgANSZM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 14 Jan 2020 13:25:12 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Jan 2020 10:25:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,319,1574150400"; 
-   d="scan'208";a="225636474"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
-  by orsmga006.jf.intel.com with ESMTP; 14 Jan 2020 10:25:07 -0800
-Date:   Tue, 14 Jan 2020 10:25:07 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     James Hogan <jhogan@kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
-        kvm@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        kvmarm@lists.cs.columbia.edu, Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v4 16/19] KVM: Ensure validity of memslot with respect to
- kvm_get_dirty_log()
-Message-ID: <20200114182506.GF16784@linux.intel.com>
-References: <20191217204041.10815-1-sean.j.christopherson@intel.com>
- <20191217204041.10815-17-sean.j.christopherson@intel.com>
- <20191224181930.GC17176@xz-x1>
+        id S1728759AbgANXGV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Jan 2020 18:06:21 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:45372 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728650AbgANXGU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jan 2020 18:06:20 -0500
+Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1irVG6-0000Gr-Ci; Wed, 15 Jan 2020 00:06:02 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id D20E7105BC2; Wed, 15 Jan 2020 00:06:01 +0100 (CET)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, arnd@arndb.de,
+        vincenzo.frascino@arm.com, luto@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH v3 08/12] lib: vdso: allow arches to provide vdso data pointer
+In-Reply-To: <381e547dbb3c48fd39d6cf208033bba38ad048fb.1578934751.git.christophe.leroy@c-s.fr>
+References: <cover.1578934751.git.christophe.leroy@c-s.fr> <381e547dbb3c48fd39d6cf208033bba38ad048fb.1578934751.git.christophe.leroy@c-s.fr>
+Date:   Wed, 15 Jan 2020 00:06:01 +0100
+Message-ID: <87ftghbpuu.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191224181930.GC17176@xz-x1>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Dec 24, 2019 at 01:19:30PM -0500, Peter Xu wrote:
-> On Tue, Dec 17, 2019 at 12:40:38PM -0800, Sean Christopherson wrote:
-> > +int kvm_get_dirty_log(struct kvm *kvm, struct kvm_dirty_log *log,
-> > +		      int *is_dirty, struct kvm_memory_slot **memslot)
-> >  {
-> >  	struct kvm_memslots *slots;
-> > -	struct kvm_memory_slot *memslot;
-> >  	int i, as_id, id;
-> >  	unsigned long n;
-> >  	unsigned long any = 0;
-> >  
-> > +	*memslot = NULL;
-> > +	*is_dirty = 0;
-> > +
-> >  	as_id = log->slot >> 16;
-> >  	id = (u16)log->slot;
-> >  	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_USER_MEM_SLOTS)
-> >  		return -EINVAL;
-> >  
-> >  	slots = __kvm_memslots(kvm, as_id);
-> > -	memslot = id_to_memslot(slots, id);
-> > -	if (!memslot->dirty_bitmap)
-> > +	*memslot = id_to_memslot(slots, id);
-> > +	if (!(*memslot)->dirty_bitmap)
-> >  		return -ENOENT;
-> >  
-> > -	n = kvm_dirty_bitmap_bytes(memslot);
-> > +	kvm_arch_sync_dirty_log(kvm, *memslot);
-> 
-> Should this line belong to previous patch?
+Christophe Leroy <christophe.leroy@c-s.fr> writes:
+>  
+>  static __maybe_unused int
+> +#ifdef VDSO_GETS_VD_PTR_FROM_ARCH
+> +__cvdso_clock_gettime_common(const struct vdso_data *vd, clockid_t clock,
+> +		      struct __kernel_timespec *ts)
+> +{
+> +#else
+>  __cvdso_clock_gettime_common(clockid_t clock, struct __kernel_timespec *ts)
+>  {
+>  	const struct vdso_data *vd = __arch_get_vdso_data();
+> +#endif
+>  	u32 msk;
 
-No.
+If we do that, then there is no point in propagating this to the inner
+functions. It's perfectly fine to have this distinction at the outermost
+level.
 
-The previous patch, "KVM: Provide common implementation for generic dirty
-log functions", is consolidating the implementation of dirty log functions
-for architectures with CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT=y.
+As a related question, I noticed that you keep all that ASM voodoo in
+the PPC specific code which provides the actual entry points. Is that
+ASM code really still necessary? All current users of the generic VDSO
+just do something like:
 
-This code is being moved from s390's kvm_vm_ioctl_get_dirty_log(), as s390
-doesn't select KVM_GENERIC_DIRTYLOG_READ_PROTECT.  It's functionally a nop
-as kvm_arch_sync_dirty_log() is empty for PowerPC, the only other arch that
-doesn't select KVM_GENERIC_DIRTYLOG_READ_PROTECT.
+int __vdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts)
+{
+        return __cvdso_clock_gettime(clock, ts);
+}
 
-Arguably, the call to kvm_arch_sync_dirty_log() should be moved in a
-separate prep patch.  It can't be a follow-on patch as that would swap the
-ordering of kvm_arch_sync_dirty_log() and kvm_dirty_bitmap_bytes(), etc...
+in the architecture code. Is there a reason why this can't work on PPC?
 
-My reasoning for not splitting it to a separate patch is that prior to this
-patch, the common code and arch specific code are doing separate memslot
-lookups via id_to_memslot(), i.e. moving the kvm_arch_sync_dirty_log() call
-would operate on a "different" memslot.   It can't actually be a different
-memslot because slots_lock is held, it just felt weird.
+Thanks,
 
-All that being said, I don't have a strong opinion on moving the call to
-kvm_arch_sync_dirty_log() in a separate patch; IIRC, I vascillated between
-the two options when writing the code.  If anyone wants it to be a separate
-patch I'll happily split it out.
-
-> 
-> > +
-> > +	n = kvm_dirty_bitmap_bytes(*memslot);
-> >  
-> >  	for (i = 0; !any && i < n/sizeof(long); ++i)
-> > -		any = memslot->dirty_bitmap[i];
-> > +		any = (*memslot)->dirty_bitmap[i];
-> >  
-> > -	if (copy_to_user(log->dirty_bitmap, memslot->dirty_bitmap, n))
-> > +	if (copy_to_user(log->dirty_bitmap, (*memslot)->dirty_bitmap, n))
-> >  		return -EFAULT;
-> >  
-> >  	if (any)
-> > -- 
-> > 2.24.1
-> 
-> -- 
-> Peter Xu
-> 
+        tglx
