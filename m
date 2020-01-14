@@ -2,68 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 062F313A34B
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2020 09:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE2113A3E0
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2020 10:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726044AbgANIzv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jan 2020 03:55:51 -0500
-Received: from mx2a.mailbox.org ([80.241.60.219]:26811 "EHLO mx2a.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725820AbgANIzv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 14 Jan 2020 03:55:51 -0500
-X-Greylist: delayed 455 seconds by postgrey-1.27 at vger.kernel.org; Tue, 14 Jan 2020 03:55:50 EST
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id C18C5A337B;
-        Tue, 14 Jan 2020 09:48:16 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
-        with ESMTP id 609VJiKcwcyL; Tue, 14 Jan 2020 09:48:10 +0100 (CET)
-From:   Stefan Roese <sr@denx.de>
-To:     linux-mips@vger.kernel.org
-Cc:     Reto Schneider <reto.schneider@husqvarnagroup.com>,
-        Paul Burton <paul.burton@mips.com>
-Subject: [PATCH 3/3] MIPS: ralink: dts: gardena_smart_gateway_mt7688: Limit UART1
-Date:   Tue, 14 Jan 2020 09:48:06 +0100
-Message-Id: <20200114084806.2420-3-sr@denx.de>
-In-Reply-To: <20200114084806.2420-1-sr@denx.de>
-References: <20200114084806.2420-1-sr@denx.de>
+        id S1726169AbgANJeB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 14 Jan 2020 04:34:01 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:42106 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725956AbgANJeB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jan 2020 04:34:01 -0500
+Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1irIa7-0006V0-A2; Tue, 14 Jan 2020 10:33:51 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id 90C00101DEE; Tue, 14 Jan 2020 10:33:50 +0100 (CET)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, paul.burton@mips.com,
+        salyzyn@android.com, 0x7f454c46@gmail.com, luto@kernel.org
+Subject: Re: [PATCH v2 2/8] lib: vdso: Build 32 bit specific functions in the right context
+In-Reply-To: <87tv4zq9dc.fsf@nanos.tec.linutronix.de>
+References: <20190830135902.20861-1-vincenzo.frascino@arm.com> <20190830135902.20861-3-vincenzo.frascino@arm.com> <87tv4zq9dc.fsf@nanos.tec.linutronix.de>
+Date:   Tue, 14 Jan 2020 10:33:50 +0100
+Message-ID: <87r202qt4x.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Reto Schneider <reto.schneider@husqvarnagroup.com>
+Thomas Gleixner <tglx@linutronix.de> writes:
 
-The radio module asserts CTS when its RX buffer has 10 bytes left.
-Putting just 8 instead of 16 bytes into the UART1 TX buffer on the Linux
-side ensures to not overflow the RX buffer on the radio module side.
+> Vincenzo Frascino <vincenzo.frascino@arm.com> writes:
+>
+>> clock_gettime32 and clock_getres_time32 should be compiled only with a
+>> 32 bit vdso library.
+>>
+>> Exclude these symbols when BUILD_VDSO32 is not defined.
+>
+> This breaks the ARM build with:
+>
+> arch/arm/vdso/vgettimeofday.c: In function ‘__vdso_clock_gettime’:
+> arch/arm/vdso/vgettimeofday.c:15:9: error: implicit declaration of function ‘__cvdso_clock_gettime32’; did you mean ‘__cvdso_clock_gettime’? [-Werror=implicit-function-declaration]
+>   return __cvdso_clock_gettime32(clock, ts);
+>          ^~~~~~~~~~~~~~~~~~~~~~~
+>          __cvdso_clock_gettime
+> arch/arm/vdso/vgettimeofday.c: In function ‘__vdso_clock_getres’:
+> arch/arm/vdso/vgettimeofday.c:33:9: error: implicit declaration of function ‘__cvdso_clock_getres_time32’; did you mean ‘__cvdso_clock_getres_common’? [-Werror=implicit-function-declaration]
+>   return __cvdso_clock_getres_time32(clock_id, res);
+>          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>          __cvdso_clock_getres_common
+> cc1: some warnings being treated as errors
+>
+> The patch below 'fixes' at least the build. Can someone please confirm
+> the correctness?
 
-Signed-off-by: Reto Schneider <reto.schneider@husqvarnagroup.com>
-Signed-off-by: Stefan Roese <sr@denx.de>
-Cc: Paul Burton <paul.burton@mips.com>
----
- arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-index 2d979eb744dc..6069b33cf09f 100644
---- a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-+++ b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-@@ -177,6 +177,9 @@ &uart1 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinmux_i2s_gpio>;		/* GPIO0..3 */
- 
-+	fifo-size = <8>;
-+	tx-threshold = <8>;
-+
- 	rts-gpios = <&gpio 1 GPIO_ACTIVE_LOW>;
- 	cts-gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
- };
--- 
-2.25.0
-
+Bah, it's not fixing it. That's what you get when you compile the wrong
+tree...
