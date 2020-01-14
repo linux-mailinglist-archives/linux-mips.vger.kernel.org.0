@@ -2,108 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1BC13A0BA
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2020 06:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5C413A34D
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2020 09:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728640AbgANFkA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jan 2020 00:40:00 -0500
-Received: from eddie.linux-mips.org ([148.251.95.138]:44658 "EHLO
-        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725820AbgANFkA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jan 2020 00:40:00 -0500
-Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
-        with ESMTP id S23990431AbgANFj45Upcz (ORCPT
-        <rfc822;stable@vger.kernel.org> + 2 others);
-        Tue, 14 Jan 2020 06:39:56 +0100
-Date:   Tue, 14 Jan 2020 05:39:56 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Paul Burton <paulburton@kernel.org>
-cc:     David Laight <David.Laight@aculab.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH] MIPS: Use __copy_{to,from}_user() for emulated FP
- loads/stores
-In-Reply-To: <20191229190123.ju24cz7thuvybejs@lantea.localdomain>
-Message-ID: <alpine.LFD.2.21.2001140508250.1162854@eddie.linux-mips.org>
-References: <20191203204933.1642259-1-paulburton@kernel.org> <f5e09155580d417e9dcd07b1c20786ed@AcuMS.aculab.com> <20191204154048.eotzglp4rdlx4yzl@lantea.localdomain> <e220ba9a19da41abba599b5873afa494@AcuMS.aculab.com> <alpine.LFD.2.21.1912260251520.3762799@eddie.linux-mips.org>
- <20191229190123.ju24cz7thuvybejs@lantea.localdomain>
+        id S1725820AbgANIzv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Jan 2020 03:55:51 -0500
+Received: from mx2a.mailbox.org ([80.241.60.219]:33423 "EHLO mx2a.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725842AbgANIzv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 14 Jan 2020 03:55:51 -0500
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id C82BCA190C;
+        Tue, 14 Jan 2020 09:48:14 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
+        with ESMTP id 3zG1dFLUe3yx; Tue, 14 Jan 2020 09:48:08 +0100 (CET)
+From:   Stefan Roese <sr@denx.de>
+To:     linux-mips@vger.kernel.org
+Cc:     Reto Schneider <reto.schneider@husqvarnagroup.com>,
+        Paul Burton <paul.burton@mips.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>
+Subject: [PATCH 1/3] MIPS: ralink: dts: mt7628a.dtsi: Add WMAC DT node
+Date:   Tue, 14 Jan 2020 09:48:04 +0100
+Message-Id: <20200114084806.2420-1-sr@denx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+From: Reto Schneider <reto.schneider@husqvarnagroup.com>
 
- Sorry to take so long; it took me a while to track down the discussion I 
-had in mind, and I was quite busy too.  Also greetings from linux.conf.au!
+This patch adds the WMAC controller description to the MT7628A dtsi file.
 
-> >  As I recall we only emulate unaligned accesses with a subset of integer 
-> > load/store instructions (and then only if TIF_FIXADE is set, which is the 
-> > default), and never with FP load/store instructions.  Consequently I see 
-> > no point in doing this in the FP emulator either and I think these ought 
-> > to just send SIGBUS instead.  Otherwise you'll end up with user code that 
-> > works differently depending on whether the FP hardware is real or 
-> > emulated, which is really bad.
-> 
-> That might simplify things here, but it's incorrect. I'm fairly certain
-> the intent is that emulate_load_store_insn() handles all non-FP loads &
-> stores (though looking at it we're missing some instructions added in
-> r6). More importantly though we've been emulating FP loads & stores
-> since v3.10 which introduced the change alongside microMIPS support in
-> commit 102cedc32a6e ("MIPS: microMIPS: Floating point support."). The
-> commit contains no description of why, and I'm not aware of any reason
-> microMIPS specifically would need this so I suspect that commit bundled
-> this change for no good reason...
+Signed-off-by: Reto Schneider <reto.schneider@husqvarnagroup.com>
+Signed-off-by: Stefan Roese <sr@denx.de>
+Cc: Paul Burton <paul.burton@mips.com>
+Cc: John Crispin <john@phrozen.org>
+Cc: Felix Fietkau <nbd@nbd.name>
+---
+ arch/mips/boot/dts/ralink/mt7628a.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
- See the thread of discussion starting from this submission:
+diff --git a/arch/mips/boot/dts/ralink/mt7628a.dtsi b/arch/mips/boot/dts/ralink/mt7628a.dtsi
+index 742bcc1dc2e0..892e8ab863c5 100644
+--- a/arch/mips/boot/dts/ralink/mt7628a.dtsi
++++ b/arch/mips/boot/dts/ralink/mt7628a.dtsi
+@@ -285,4 +285,14 @@ ehci@101c0000 {
+ 		interrupt-parent = <&intc>;
+ 		interrupts = <18>;
+ 	};
++
++	wmac: wmac@10300000 {
++		compatible = "mediatek,mt7628-wmac";
++		reg = <0x10300000 0x100000>;
++
++		interrupt-parent = <&cpuintc>;
++		interrupts = <6>;
++
++		status = "disabled";
++	};
+ };
+-- 
+2.25.0
 
-<https://www.linux-mips.org/cgi-bin/mesg.cgi?a=linux-mips&i=20120615234641.6938B58FE7C%40mail.viric.name>
-
-and in particular Ralf's response (not referred directly due to the 
-monthly archive rollover):
-
-<https://www.linux-mips.org/cgi-bin/mesg.cgi?a=linux-mips&i=20120731134001.GA14151%40linux-mips.org>
-
-I think Ralf's argument still stands and I find it regrettable that an 
-unwanted feature was sneaked in with a trick along with a submission 
-supposed to only add a different, unrelated feature.
-
- I can't even track down a public submission/review of the change you 
-refer, which is not how things are supposed to work with Linux!  And 
-neither the `Signed-off-by' tags help figuring out what the route of the 
-change was to get there upstream.  At that time there was supposed to be 
-Ralf's tag there, as it was him who was the sole port maintainer.
-
-> It's also worth noting that some hardware will handle unaligned FP
-> loads/stores, which means having the emulator reject them will result in
-> more of a visible difference to userland. ie. on some hardware they'll
-> work just fine, but on some you'd get SIGBUS. So I do think emulating
-> them makes some sense - just as for non-FP loads & stores it lets
-> userland not care whether the hardware will handle them, so long as it's
-> not performance critical code. If we knew that had never been used then
-> perhaps we could enforce the alignment requirement (and maybe that's
-> what you recall doing), but since we've been emulating them for the past
-> 6 years it's too late for that now.
-
- I don't think it's ever too late to remove a broken feature that everyone 
-knows is not a part of the architecture and the emulation of which has 
-never been advertised as a part of the Linux ABI either.  You just don't 
-make it a part of the ABI when you sneak in a feature without a proper 
-review, we do not accept the fait accompli method in Linux development.
-
- The presence of unaligned FP data is a sign of user code breakage and 
-whoever caused that breakage will best know that ASAP by seeing their 
-program trap (they can emulate the trap in their software by installing a 
-suitable signal handler if they are so desperate to have unaligned FP data 
-handled).
-
- So I think that not only the new submission should be rejected, but also 
-parts of commit 102cedc32a6e ("MIPS: microMIPS: Floating point support.") 
-reverted that are not a part of actual microMIPS support.  If someone 
-relied on it by accident or ignorance, they'll simply have to adjust.
-
-  Maciej
