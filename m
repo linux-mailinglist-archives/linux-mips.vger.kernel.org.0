@@ -2,96 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E699913B5DE
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jan 2020 00:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5414E13B650
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jan 2020 01:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728774AbgANXa2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jan 2020 18:30:28 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:41994 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728759AbgANXa2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Jan 2020 18:30:28 -0500
-Received: by mail-pg1-f196.google.com with SMTP id s64so7144123pgb.9;
-        Tue, 14 Jan 2020 15:30:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=xtay45JSoYDoBInOvIBkON2umcFhUQpYehz+90UqGzQ=;
-        b=TjpglJOOlC/4jLwV42ppWnmffTIgwiSgCGYqV636ES1IcvGsUupi4hBriH1agzg3J2
-         bdC5qkm1aVR0dWn86nMu2Nank7VGSMm5DQ4GfzxWnNKrVNKm9I2qmbOpu/Ggo419iBAh
-         1wgYJA0kkKbbPCWkK2rFIjllOp6s1OpwzLDdAoq7g+Krwn8EsLAibUmCTw0F5f0Up7Zx
-         9WIHcBsYRfFFEcE0aL+Rm2iX+tl0wQoISvJzoElVccPoc51HxZ1pI0VqE6Lv7Xgb5NBn
-         AKJwrIqlObTns8ph8iHIrxpWA6cNwK6bgYNaFee/A+GtaGCqoXM3DskWog4BkZ4OWXI5
-         dR5w==
-X-Gm-Message-State: APjAAAXnmuCHwnn7EbdsLQ+0sQjRLjHtRASAornxOPk4rABmqUZ6hx9N
-        BcA4cZrV/Z5lyOFLDcSp4MY=
-X-Google-Smtp-Source: APXvYqxfDRELNDfkiKLOjOnc8yn+X0p9GiSoBZA2079ouTSIRqhfvb98Ufu56YKWqXMwxsmfg6bA5g==
-X-Received: by 2002:a62:486:: with SMTP id 128mr28162928pfe.236.1579044627249;
-        Tue, 14 Jan 2020 15:30:27 -0800 (PST)
-Received: from localhost (MIPS-TECHNO.ear1.SanJose1.Level3.net. [4.15.122.74])
-        by smtp.gmail.com with ESMTPSA id dw10sm14376039pjb.11.2020.01.14.15.30.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2020 15:30:26 -0800 (PST)
-Date:   Tue, 14 Jan 2020 15:30:25 -0800
-From:   Paul Burton <paulburton@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, chenhc@lemote.com,
+        id S1728791AbgAOAED (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Jan 2020 19:04:03 -0500
+Received: from forward101o.mail.yandex.net ([37.140.190.181]:52163 "EHLO
+        forward101o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726495AbgAOAED (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 14 Jan 2020 19:04:03 -0500
+Received: from mxback25j.mail.yandex.net (mxback25j.mail.yandex.net [IPv6:2a02:6b8:0:1619::225])
+        by forward101o.mail.yandex.net (Yandex) with ESMTP id 2B73E3C01446;
+        Wed, 15 Jan 2020 03:03:59 +0300 (MSK)
+Received: from iva8-6403930b9beb.qloud-c.yandex.net (iva8-6403930b9beb.qloud-c.yandex.net [2a02:6b8:c0c:2c9a:0:640:6403:930b])
+        by mxback25j.mail.yandex.net (mxback/Yandex) with ESMTP id wzJH2vWcK5-3wU0wH5c;
+        Wed, 15 Jan 2020 03:03:59 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1579046639;
+        bh=U1yeE+6PNkzLSEHV/lmBHZ+D39YAzSVkTdd4zGgzOag=;
+        h=From:To:Subject:CC:References:Date:In-Reply-To:Message-ID;
+        b=r3pBSmdSK1xDjz9U895uDkZGJQEmrJ9z1vU+OgzEYTn6+XU8nKrhzKUMXcyD9AZra
+         L1hxTGw53eMLUmRNQphJbEhNUc3VFWmvphgRtJhDR1wrUN6xLY7s1fWZq5W2D4XIr1
+         VjOyRSti/dUe+NFBQiuqivd59AOX/yb/nZ40IIyA=
+Authentication-Results: mxback25j.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by iva8-6403930b9beb.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id n2I95QOlNV-3uWKriqf;
+        Wed, 15 Jan 2020 03:03:56 +0300
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client certificate not present)
+Date:   Wed, 15 Jan 2020 08:03:45 +0800
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20200114233025.y4azwvivqo7kg7i5@pburton-laptop>
+References: <20200113101251.37471-1-jiaxun.yang@flygoat.com> <20200114233025.y4azwvivqo7kg7i5@pburton-laptop>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] irqchip: mips-cpu: Remove eoi operation
+To:     Paul Burton <paulburton@kernel.org>
+CC:     linux-mips@vger.kernel.org, chenhc@lemote.com,
         paul.burton@mips.com, tglx@linutronix.de, jason@lakedaemon.net,
         maz@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] irqchip: mips-cpu: Remove eoi operation
-Message-ID: <20200114233025.y4azwvivqo7kg7i5@pburton-laptop>
-References: <20200113101251.37471-1-jiaxun.yang@flygoat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200113101251.37471-1-jiaxun.yang@flygoat.com>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <8AEFA134-76BC-4AE9-9229-718B5C58B862@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jiaxun,
 
-On Mon, Jan 13, 2020 at 06:12:51PM +0800, Jiaxun Yang wrote:
-> The eoi opreation in mips_cpu_irq_controller caused chained_irq_enter
-> falsely consider CPU IP interrupt as a FastEOI type IRQ. So the interrupt
-> won't be masked during in handler. Which might lead to spurious interrupt.
-> 
-> Thus we simply remove eoi operation for mips_cpu_irq_controller,
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  drivers/irqchip/irq-mips-cpu.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/irqchip/irq-mips-cpu.c b/drivers/irqchip/irq-mips-cpu.c
-> index 95d4fd8f7a96..0ad7f1f9a58b 100644
-> --- a/drivers/irqchip/irq-mips-cpu.c
-> +++ b/drivers/irqchip/irq-mips-cpu.c
-> @@ -55,7 +55,6 @@ static struct irq_chip mips_cpu_irq_controller = {
->  	.irq_mask	= mask_mips_irq,
->  	.irq_mask_ack	= mask_mips_irq,
->  	.irq_unmask	= unmask_mips_irq,
-> -	.irq_eoi	= unmask_mips_irq,
->  	.irq_disable	= mask_mips_irq,
->  	.irq_enable	= unmask_mips_irq,
->  };
 
-This one scares me; something doesn't seem right. The irq_eoi (née eoi)
-callback was first added way back in commit 1417836e81c0 ("[MIPS] use
-generic_handle_irq, handle_level_irq, handle_percpu_irq"). The commit
-message there states that the motivation was to allow use of
-handle_percpu_irq(), and indeed handle_percpu_irq() does:
+=E4=BA=8E 2020=E5=B9=B41=E6=9C=8815=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=887=
+:30:25, Paul Burton <paulburton@kernel=2Eorg> =E5=86=99=E5=88=B0:
+>Hi Jiaxun,
+>
+>On Mon, Jan 13, 2020 at 06:12:51PM +0800, Jiaxun Yang wrote:
+>> The eoi opreation in mips_cpu_irq_controller caused chained_irq_enter
+>> falsely consider CPU IP interrupt as a FastEOI type IRQ=2E So the
+>interrupt
+>> won't be masked during in handler=2E Which might lead to spurious
+>interrupt=2E
+>>=20
+>> Thus we simply remove eoi operation for mips_cpu_irq_controller,
+>>=20
+>> Signed-off-by: Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom>
+>> ---
+>>  drivers/irqchip/irq-mips-cpu=2Ec | 1 -
+>>  1 file changed, 1 deletion(-)
+>>=20
+>> diff --git a/drivers/irqchip/irq-mips-cpu=2Ec
+>b/drivers/irqchip/irq-mips-cpu=2Ec
+>> index 95d4fd8f7a96=2E=2E0ad7f1f9a58b 100644
+>> --- a/drivers/irqchip/irq-mips-cpu=2Ec
+>> +++ b/drivers/irqchip/irq-mips-cpu=2Ec
+>> @@ -55,7 +55,6 @@ static struct irq_chip mips_cpu_irq_controller =3D {
+>>  	=2Eirq_mask	=3D mask_mips_irq,
+>>  	=2Eirq_mask_ack	=3D mask_mips_irq,
+>>  	=2Eirq_unmask	=3D unmask_mips_irq,
+>> -	=2Eirq_eoi	=3D unmask_mips_irq,
+>>  	=2Eirq_disable	=3D mask_mips_irq,
+>>  	=2Eirq_enable	=3D unmask_mips_irq,
+>>  };
+>
+>This one scares me; something doesn't seem right=2E The irq_eoi (n=C3=A9e=
+ eoi)
+>callback was first added way back in commit 1417836e81c0 ("[MIPS] use
+>generic_handle_irq, handle_level_irq, handle_percpu_irq")=2E The commit
+>message there states that the motivation was to allow use of
+>handle_percpu_irq(), and indeed handle_percpu_irq() does:
+>
+>    irq_ack() (ie=2E mask)
+>    invoke the handler(s)
+>    irq_eoi() (ie=2E unmask)
+>
+>By removing the irq_eoi callback I don't see how we'd ever unmask the
+>interrupt again=2E=2E?
 
-    irq_ack() (ie. mask)
-    invoke the handler(s)
-    irq_eoi() (ie. unmask)
+Hi Paul,
+Sorry I didn't discover that by myself as all of my drivers are using chai=
+ned handler=2E
 
-By removing the irq_eoi callback I don't see how we'd ever unmask the
-interrupt again..?
+So how should we deal with the chained case?
+Probably we need a check in percpu IRQ handler to determine whether it's o=
+r not
+level type?
 
-Thanks,
-    Paul
+>
+>Thanks,
+>    Paul
+
+--=20
+Jiaxun Yang
