@@ -2,134 +2,342 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0CB13C75B
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jan 2020 16:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E85A13CBB8
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jan 2020 19:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726483AbgAOPW0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Jan 2020 10:22:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37598 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726165AbgAOPWZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 15 Jan 2020 10:22:25 -0500
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D267C222C3;
-        Wed, 15 Jan 2020 15:22:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579101745;
-        bh=cvfRqz1ibhGwd9Bfq/ipsNjUM/YLm6PWajSturlDpO8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=xGMd7qdbDcW1VDnyBCw2hPfD+W9TQNoiAvP9y8xdKT11kvcJo8JgawblBxEbP2678
-         jFLFvUCAT2PfIKBVMQOHVku0RoTHaAK1vCbDTQQ3F/jPpwhlWKSPGb63cj6re2PGoz
-         uVom/N0+FPpx4gPipu8HWG6SeKiaMNfVOMZFefPk=
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1irkUx-00026g-4Y; Wed, 15 Jan 2020 15:22:23 +0000
+        id S1729045AbgAOSKs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Jan 2020 13:10:48 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:23536 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729009AbgAOSKs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 15 Jan 2020 13:10:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579111846;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F3aO5PkILN1crhSTaPEdvT5WmQo42DjPqkjHlLcxuT4=;
+        b=KwUlMJOkTZeQD4EiryAUMg9GXtIjnXzBRboek2maAlffOerQWA55JVdK/JN2bgZ45tWqgN
+        75l9NmI6/U923/An1RCqRMxjv5BvQLs4eOwWCsuoODXJw9PXs7DHhmyQGKq+tAQIQmVLQ6
+        0B5D1tlBOp2gjp2VUUPFvAg+skZEAds=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-137-6X-eVrtaP0-qQfgRWNZthA-1; Wed, 15 Jan 2020 13:10:44 -0500
+X-MC-Unique: 6X-eVrtaP0-qQfgRWNZthA-1
+Received: by mail-wm1-f70.google.com with SMTP id q206so232517wme.9
+        for <linux-mips@vger.kernel.org>; Wed, 15 Jan 2020 10:10:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=F3aO5PkILN1crhSTaPEdvT5WmQo42DjPqkjHlLcxuT4=;
+        b=al2lcyWJQNg6fj8vxnXfEp1KUCXRbcSYa3WpJdnqV9q35QWxp8coiQZCZbKQUmXgXb
+         pI2SbmU/k54wEq2BgC0TCLQbSxlAdEP0Tgi8WT0omh80lExdHR1cuQz/EKO/r64EeqV8
+         6Ar2UhjnHD4EWai7Dc4p/eMd+p3LS1NCGjz/rqxMgqysK88Z7H9DKqPmdkBSQX9i9Rqa
+         e9JeYNPMFWsMBjozCHXosULuZodQNbsyxdaKMVB99vzYTAz1yWTwqbevBwsgeMEuDGGx
+         o0LpApooewE5ALKk4dceMPEvgOkZnfQzFOtlb9MAw/XmMaxTwfviVMMzQY/Hmy9nbJn+
+         wmnw==
+X-Gm-Message-State: APjAAAU4IAwIudZkP+1GuTw2BhsSs5jhRG/bMZ8ey64yBAm3feZ+UOLp
+        kegk5wabxfMpVFkJqFnqaTfRYJADg0i6XNG48ZGQnuaKErAbyIsOKRDPyO3MLqcQpJ5N64kyWIU
+        Uxkk9CbjbT8xxJyVkrpTjOg==
+X-Received: by 2002:adf:cd0a:: with SMTP id w10mr31982372wrm.107.1579111843297;
+        Wed, 15 Jan 2020 10:10:43 -0800 (PST)
+X-Google-Smtp-Source: APXvYqz8x3DkVeTz18rgSm4jyxO1ipgrVjTCJXipQWmAHuXPHQsuhP0bjqS5Dn7vgMZER6uxOHdYzQ==
+X-Received: by 2002:adf:cd0a:: with SMTP id w10mr31982336wrm.107.1579111842954;
+        Wed, 15 Jan 2020 10:10:42 -0800 (PST)
+Received: from ?IPv6:2001:b07:6468:f312:436:e17d:1fd9:d92a? ([2001:b07:6468:f312:436:e17d:1fd9:d92a])
+        by smtp.gmail.com with ESMTPSA id x11sm26263134wre.68.2020.01.15.10.10.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jan 2020 10:10:41 -0800 (PST)
+Subject: Re: [PATCH 1/7] KVM: Pass mmu_notifier_range down to
+ kvm_unmap_hva_range()
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        James Hogan <jhogan@kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20191213182503.14460-1-maz@kernel.org>
+ <20191213182503.14460-2-maz@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <0e2290e4-287f-f3fc-98e0-082056c91511@redhat.com>
+Date:   Wed, 15 Jan 2020 19:10:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Wed, 15 Jan 2020 15:22:23 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
-        chenhc@lemote.com, paul.burton@mips.com, tglx@linutronix.de,
-        jason@lakedaemon.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] irqchip: mips-cpu: Remove eoi operation
-In-Reply-To: <C7C70199-38CC-473E-B20D-C1782F08CA2E@flygoat.com>
-References: <20200113101251.37471-1-jiaxun.yang@flygoat.com>
- <20200114233025.y4azwvivqo7kg7i5@pburton-laptop>
- <9cd8df72fc3a7dfcdd88eb1fb56bbe35@kernel.org>
- <C7C70199-38CC-473E-B20D-C1782F08CA2E@flygoat.com>
-Message-ID: <f6ebc43da6de4e7e346ac4c807748ae8@kernel.org>
-X-Sender: maz@kernel.org
-User-Agent: Roundcube Webmail/1.3.8
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: jiaxun.yang@flygoat.com, paulburton@kernel.org, linux-mips@vger.kernel.org, chenhc@lemote.com, paul.burton@mips.com, tglx@linutronix.de, jason@lakedaemon.net, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+In-Reply-To: <20191213182503.14460-2-maz@kernel.org>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2020-01-15 14:23, Jiaxun Yang wrote:
-> 于 2020年1月15日 GMT+08:00 下午9:40:31, Marc Zyngier <maz@kernel.org> 写到:
->> On 2020-01-14 23:30, Paul Burton wrote:
->>> Hi Jiaxun,
->>> 
->>> On Mon, Jan 13, 2020 at 06:12:51PM +0800, Jiaxun Yang wrote:
->>>> The eoi opreation in mips_cpu_irq_controller caused
->> chained_irq_enter
->>>> falsely consider CPU IP interrupt as a FastEOI type IRQ. So the
->>>> interrupt
->>>> won't be masked during in handler. Which might lead to spurious
->>>> interrupt.
->>>> 
->>>> Thus we simply remove eoi operation for mips_cpu_irq_controller,
->>>> 
->>>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->>>> ---
->>>>  drivers/irqchip/irq-mips-cpu.c | 1 -
->>>>  1 file changed, 1 deletion(-)
->>>> 
->>>> diff --git a/drivers/irqchip/irq-mips-cpu.c
->>>> b/drivers/irqchip/irq-mips-cpu.c
->>>> index 95d4fd8f7a96..0ad7f1f9a58b 100644
->>>> --- a/drivers/irqchip/irq-mips-cpu.c
->>>> +++ b/drivers/irqchip/irq-mips-cpu.c
->>>> @@ -55,7 +55,6 @@ static struct irq_chip mips_cpu_irq_controller = {
->>>>  	.irq_mask	= mask_mips_irq,
->>>>  	.irq_mask_ack	= mask_mips_irq,
->>>>  	.irq_unmask	= unmask_mips_irq,
->>>> -	.irq_eoi	= unmask_mips_irq,
->>>>  	.irq_disable	= mask_mips_irq,
->>>>  	.irq_enable	= unmask_mips_irq,
->>>>  };
->>> 
->>> This one scares me; something doesn't seem right. The irq_eoi (née
->> eoi)
->>> callback was first added way back in commit 1417836e81c0 ("[MIPS] use
->>> generic_handle_irq, handle_level_irq, handle_percpu_irq"). The commit
->>> message there states that the motivation was to allow use of
->>> handle_percpu_irq(), and indeed handle_percpu_irq() does:
->>> 
->>>     irq_ack() (ie. mask)
->>>     invoke the handler(s)
->>>     irq_eoi() (ie. unmask)
->>> 
->>> By removing the irq_eoi callback I don't see how we'd ever unmask the
->>> interrupt again..?
->> 
->> To be completely blunt, the fact that unmask and eoi are implemented
->> the
->> same way is a clear sign that this is a bit broken.
->> 
->> irq_eoi is used if the irqchip tracks the IRQ life-cycle in HW, and
->> it's
->> not obvious that this is the case. The fact that ack is also mapped to
->> mask
+On 13/12/19 19:24, Marc Zyngier wrote:
+> kvm_unmap_hva_range() is currently passed both start and end
+> fields from the mmu_notifier_range structure. As this struct
+> now contains important information about the reason of the
+> unmap (the event field), replace the start/end parameters
+> with the range struct, and update all architectures.
 > 
-> It's just a kind of hack to workaround the fact that our current
-> percpu irq handler assumed
-> all percpu irqs are edge triggered or fasteoi type.
+> No functionnal change.
 > 
-> However MIPS processor implemented it in level triggered way.
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> ---
+>  arch/arm/include/asm/kvm_host.h     | 2 +-
+>  arch/arm64/include/asm/kvm_host.h   | 2 +-
+>  arch/mips/include/asm/kvm_host.h    | 2 +-
+>  arch/mips/kvm/mmu.c                 | 6 ++++--
+>  arch/powerpc/include/asm/kvm_host.h | 2 +-
+>  arch/powerpc/kvm/book3s.c           | 5 +++--
+>  arch/powerpc/kvm/e500_mmu_host.c    | 4 ++--
+>  arch/x86/include/asm/kvm_host.h     | 3 ++-
+>  arch/x86/kvm/mmu/mmu.c              | 5 +++--
+>  arch/x86/kvm/x86.c                  | 4 ++--
+>  include/linux/kvm_host.h            | 2 +-
+>  virt/kvm/arm/mmu.c                  | 8 ++++----
+>  virt/kvm/kvm_main.c                 | 7 +++----
+>  13 files changed, 28 insertions(+), 24 deletions(-)
 > 
-> My solution would be add a check. If neither ack nor eoi exist for the 
-> chip,
-> than we assume it's level triggered and process precpu irq in 
-> mask/unmask way.
+> diff --git a/arch/arm/include/asm/kvm_host.h b/arch/arm/include/asm/kvm_host.h
+> index 556cd818eccf..621c71594499 100644
+> --- a/arch/arm/include/asm/kvm_host.h
+> +++ b/arch/arm/include/asm/kvm_host.h
+> @@ -276,7 +276,7 @@ int __kvm_arm_vcpu_set_events(struct kvm_vcpu *vcpu,
+>  
+>  #define KVM_ARCH_WANT_MMU_NOTIFIER
+>  int kvm_unmap_hva_range(struct kvm *kvm,
+> -			unsigned long start, unsigned long end);
+> +			const struct mmu_notifier_range *range);
+>  int kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte);
+>  
+>  unsigned long kvm_arm_num_regs(struct kvm_vcpu *vcpu);
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index c61260cf63c5..dd850f5e81e3 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -441,7 +441,7 @@ int __kvm_arm_vcpu_set_events(struct kvm_vcpu *vcpu,
+>  
+>  #define KVM_ARCH_WANT_MMU_NOTIFIER
+>  int kvm_unmap_hva_range(struct kvm *kvm,
+> -			unsigned long start, unsigned long end);
+> +			const struct mmu_notifier_range *range);
+>  int kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte);
+>  int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end);
+>  int kvm_test_age_hva(struct kvm *kvm, unsigned long hva);
+> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+> index 41204a49cf95..0ed065870f1b 100644
+> --- a/arch/mips/include/asm/kvm_host.h
+> +++ b/arch/mips/include/asm/kvm_host.h
+> @@ -935,7 +935,7 @@ enum kvm_mips_fault_result kvm_trap_emul_gva_fault(struct kvm_vcpu *vcpu,
+>  
+>  #define KVM_ARCH_WANT_MMU_NOTIFIER
+>  int kvm_unmap_hva_range(struct kvm *kvm,
+> -			unsigned long start, unsigned long end);
+> +			const struct mmu_notifier_range *range);
+>  int kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte);
+>  int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end);
+>  int kvm_test_age_hva(struct kvm *kvm, unsigned long hva);
+> diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
+> index 7dad7a293eae..32ef868258b9 100644
+> --- a/arch/mips/kvm/mmu.c
+> +++ b/arch/mips/kvm/mmu.c
+> @@ -518,9 +518,11 @@ static int kvm_unmap_hva_handler(struct kvm *kvm, gfn_t gfn, gfn_t gfn_end,
+>  	return 1;
+>  }
+>  
+> -int kvm_unmap_hva_range(struct kvm *kvm, unsigned long start, unsigned long end)
+> +int kvm_unmap_hva_range(struct kvm *kvm,
+> +			const struct mmu_notifier_range *range)
+>  {
+> -	handle_hva_to_gpa(kvm, start, end, &kvm_unmap_hva_handler, NULL);
+> +	handle_hva_to_gpa(kvm, range->start, range->end,
+> +			  &kvm_unmap_hva_handler, NULL);
+>  
+>  	kvm_mips_callbacks->flush_shadow_all(kvm);
+>  	return 0;
+> diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/include/asm/kvm_host.h
+> index 0a398f2321c2..8cef585e0abe 100644
+> --- a/arch/powerpc/include/asm/kvm_host.h
+> +++ b/arch/powerpc/include/asm/kvm_host.h
+> @@ -58,7 +58,7 @@
+>  #define KVM_ARCH_WANT_MMU_NOTIFIER
+>  
+>  extern int kvm_unmap_hva_range(struct kvm *kvm,
+> -			       unsigned long start, unsigned long end);
+> +			       const struct mmu_notifier_range *range);
+>  extern int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end);
+>  extern int kvm_test_age_hva(struct kvm *kvm, unsigned long hva);
+>  extern int kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte);
+> diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
+> index 58a59ee998e2..a1529a0dd656 100644
+> --- a/arch/powerpc/kvm/book3s.c
+> +++ b/arch/powerpc/kvm/book3s.c
+> @@ -842,9 +842,10 @@ void kvmppc_core_commit_memory_region(struct kvm *kvm,
+>  	kvm->arch.kvm_ops->commit_memory_region(kvm, mem, old, new, change);
+>  }
+>  
+> -int kvm_unmap_hva_range(struct kvm *kvm, unsigned long start, unsigned long end)
+> +int kvm_unmap_hva_range(struct kvm *kvm,
+> +			const struct mmu_notifier_range *range)
+>  {
+> -	return kvm->arch.kvm_ops->unmap_hva_range(kvm, start, end);
+> +	return kvm->arch.kvm_ops->unmap_hva_range(kvm, range->start, range->end);
+>  }
+>  
+>  int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end)
+> diff --git a/arch/powerpc/kvm/e500_mmu_host.c b/arch/powerpc/kvm/e500_mmu_host.c
+> index 425d13806645..5a7211901063 100644
+> --- a/arch/powerpc/kvm/e500_mmu_host.c
+> +++ b/arch/powerpc/kvm/e500_mmu_host.c
+> @@ -734,10 +734,10 @@ static int kvm_unmap_hva(struct kvm *kvm, unsigned long hva)
+>  	return 0;
+>  }
+>  
+> -int kvm_unmap_hva_range(struct kvm *kvm, unsigned long start, unsigned long end)
+> +int kvm_unmap_hva_range(struct kvm *kvm, const struct mmu_notifier_range *range)
+>  {
+>  	/* kvm_unmap_hva flushes everything anyways */
+> -	kvm_unmap_hva(kvm, start);
+> +	kvm_unmap_hva(kvm, range->start);
+>  
+>  	return 0;
+>  }
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index b79cd6aa4075..c479fa845d72 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1569,7 +1569,8 @@ asmlinkage void kvm_spurious_fault(void);
+>  	_ASM_EXTABLE(666b, 667b)
+>  
+>  #define KVM_ARCH_WANT_MMU_NOTIFIER
+> -int kvm_unmap_hva_range(struct kvm *kvm, unsigned long start, unsigned long end);
+> +int kvm_unmap_hva_range(struct kvm *kvm,
+> +			const struct mmu_notifier_range *range);
+>  int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end);
+>  int kvm_test_age_hva(struct kvm *kvm, unsigned long hva);
+>  int kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte);
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 6f92b40d798c..86831be07c17 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -2040,9 +2040,10 @@ static int kvm_handle_hva(struct kvm *kvm, unsigned long hva,
+>  	return kvm_handle_hva_range(kvm, hva, hva + 1, data, handler);
+>  }
+>  
+> -int kvm_unmap_hva_range(struct kvm *kvm, unsigned long start, unsigned long end)
+> +int kvm_unmap_hva_range(struct kvm *kvm,
+> +			const struct mmu_notifier_range *range);
+>  {
+> -	return kvm_handle_hva_range(kvm, start, end, 0, kvm_unmap_rmapp);
+> +	return kvm_handle_hva_range(kvm, range->start, range->end, 0, kvm_unmap_rmapp);
+>  }
+>  
+>  int kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte)
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index cf917139de6b..c1a238f4ee35 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -7942,7 +7942,7 @@ static void vcpu_load_eoi_exitmap(struct kvm_vcpu *vcpu)
+>  }
+>  
+>  int kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
+> -		unsigned long start, unsigned long end,
+> +		const struct mmu_notifier_range *range,
+>  		bool blockable)
+>  {
+>  	unsigned long apic_address;
+> @@ -7952,7 +7952,7 @@ int kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
+>  	 * Update it when it becomes invalid.
+>  	 */
+>  	apic_address = gfn_to_hva(kvm, APIC_DEFAULT_PHYS_BASE >> PAGE_SHIFT);
+> -	if (start <= apic_address && apic_address < end)
+> +	if (range->start <= apic_address && apic_address < range->end)
+>  		kvm_make_all_cpus_request(kvm, KVM_REQ_APIC_PAGE_RELOAD);
+>  
+>  	return 0;
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 7ed1e2f8641e..d6e2ae2accc4 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1391,7 +1391,7 @@ static inline long kvm_arch_vcpu_async_ioctl(struct file *filp,
+>  #endif /* CONFIG_HAVE_KVM_VCPU_ASYNC_IOCTL */
+>  
+>  int kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
+> -		unsigned long start, unsigned long end, bool blockable);
+> +		const struct mmu_notifier_range *range, bool blockable);
+>  
+>  #ifdef CONFIG_HAVE_KVM_VCPU_RUN_PID_CHANGE
+>  int kvm_arch_vcpu_run_pid_change(struct kvm_vcpu *vcpu);
+> diff --git a/virt/kvm/arm/mmu.c b/virt/kvm/arm/mmu.c
+> index 38b4c910b6c3..078e10c5650e 100644
+> --- a/virt/kvm/arm/mmu.c
+> +++ b/virt/kvm/arm/mmu.c
+> @@ -2035,14 +2035,14 @@ static int kvm_unmap_hva_handler(struct kvm *kvm, gpa_t gpa, u64 size, void *dat
+>  	return 0;
+>  }
+>  
+> -int kvm_unmap_hva_range(struct kvm *kvm,
+> -			unsigned long start, unsigned long end)
+> +int kvm_unmap_hva_range(struct kvm *kvm, const struct mmu_notifier_range *range)
+>  {
+>  	if (!kvm->arch.pgd)
+>  		return 0;
+>  
+> -	trace_kvm_unmap_hva_range(start, end);
+> -	handle_hva_to_gpa(kvm, start, end, &kvm_unmap_hva_handler, NULL);
+> +	trace_kvm_unmap_hva_range(range->start, range->end);
+> +	handle_hva_to_gpa(kvm, range->start, range->end,
+> +			  &kvm_unmap_hva_handler, NULL);
+>  	return 0;
+>  }
+>  
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 00268290dcbd..7c3665ad1035 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -158,7 +158,7 @@ static unsigned long long kvm_createvm_count;
+>  static unsigned long long kvm_active_vms;
+>  
+>  __weak int kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
+> -		unsigned long start, unsigned long end, bool blockable)
+> +		const struct mmu_notifier_range *range, bool blockable)
+>  {
+>  	return 0;
+>  }
+> @@ -415,7 +415,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>  	 * count is also read inside the mmu_lock critical section.
+>  	 */
+>  	kvm->mmu_notifier_count++;
+> -	need_tlb_flush = kvm_unmap_hva_range(kvm, range->start, range->end);
+> +	need_tlb_flush = kvm_unmap_hva_range(kvm, range);
+>  	need_tlb_flush |= kvm->tlbs_dirty;
+>  	/* we've to flush the tlb before the pages can be freed */
+>  	if (need_tlb_flush)
+> @@ -423,8 +423,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>  
+>  	spin_unlock(&kvm->mmu_lock);
+>  
+> -	ret = kvm_arch_mmu_notifier_invalidate_range(kvm, range->start,
+> -					range->end,
+> +	ret = kvm_arch_mmu_notifier_invalidate_range(kvm, range,
+>  					mmu_notifier_range_blockable(range));
+>  
+>  	srcu_read_unlock(&kvm->srcu, idx);
 > 
-> Could it be a possible option?
 
-Post the patch, and we'll discuss it.
+Acked-by: Paolo Bonzini <pbonzini@redhat.com>
 
-Thanks,
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
