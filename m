@@ -2,79 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 397BE13BEAD
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jan 2020 12:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A0C13C35F
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jan 2020 14:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730107AbgAOLlX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Jan 2020 06:41:23 -0500
-Received: from foss.arm.com ([217.140.110.172]:35530 "EHLO foss.arm.com"
+        id S1729009AbgAONke (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Jan 2020 08:40:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51866 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729900AbgAOLlW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 15 Jan 2020 06:41:22 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1E1931B;
-        Wed, 15 Jan 2020 03:41:21 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2ABE23F6C4;
-        Wed, 15 Jan 2020 03:41:18 -0800 (PST)
-Date:   Wed, 15 Jan 2020 11:41:12 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Pavankumar Kondeti <pkondeti@codeaurora.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Aaro Koskinen <aaro.koskinen@nokia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, Sudeep Holla <sudeep.holla@arm.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5] reboot: support offline CPUs before reboot
-Message-ID: <20200115114112.GA3663@bogus>
-References: <20200115063410.131692-1-hsinyi@chromium.org>
+        id S1726474AbgAONke (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 15 Jan 2020 08:40:34 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2DB9D222C3;
+        Wed, 15 Jan 2020 13:40:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579095633;
+        bh=yEvYDgP0hc8sIQw49jsuC8Li1BERDoQiLHX4I+8npEU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=yUBid8+OSRibkxQojKsX7U3nIkQ7ueJEq+o1uKTakja28wR4D9oyApWN9B7jIKciZ
+         UOxa2zAJNDRE2yc5+w91idP+kk9v4zoYM5Q7Tz33MW0wHXmyI0h/aQf/EIxXp3jqHl
+         g2S/w8EfgByVvLY3hywPz6T2VPLlDqmXjYeTBUv8=
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1iriuN-0008Ry-FJ; Wed, 15 Jan 2020 13:40:31 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200115063410.131692-1-hsinyi@chromium.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Wed, 15 Jan 2020 13:40:31 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Paul Burton <paulburton@kernel.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
+        chenhc@lemote.com, paul.burton@mips.com, tglx@linutronix.de,
+        jason@lakedaemon.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip: mips-cpu: Remove eoi operation
+In-Reply-To: <20200114233025.y4azwvivqo7kg7i5@pburton-laptop>
+References: <20200113101251.37471-1-jiaxun.yang@flygoat.com>
+ <20200114233025.y4azwvivqo7kg7i5@pburton-laptop>
+Message-ID: <9cd8df72fc3a7dfcdd88eb1fb56bbe35@kernel.org>
+X-Sender: maz@kernel.org
+User-Agent: Roundcube Webmail/1.3.8
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: paulburton@kernel.org, jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org, chenhc@lemote.com, paul.burton@mips.com, tglx@linutronix.de, jason@lakedaemon.net, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jan 15, 2020 at 02:34:10PM +0800, Hsin-Yi Wang wrote:
-> Currently system reboots uses architecture specific codes (smp_send_stop)
-> to offline non reboot CPUs. Most architecture's implementation is looping
-> through all non reboot online CPUs and call ipi function to each of them. Some
-> architecture like arm64, arm, and x86... would set offline masks to cpu without
-> really offline them. This causes some race condition and kernel warning comes
-> out sometimes when system reboots.
->
-> This patch adds a config ARCH_OFFLINE_CPUS_ON_REBOOT, which would offline cpus in
-> migrate_to_reboot_cpu(). If non reboot cpus are all offlined here, the loop for
-> checking online cpus would be an empty loop. If architecture don't enable this
-> config, or some cpus somehow fails to offline, it would fallback to ipi
-> function.
->
+On 2020-01-14 23:30, Paul Burton wrote:
+> Hi Jiaxun,
+> 
+> On Mon, Jan 13, 2020 at 06:12:51PM +0800, Jiaxun Yang wrote:
+>> The eoi opreation in mips_cpu_irq_controller caused chained_irq_enter
+>> falsely consider CPU IP interrupt as a FastEOI type IRQ. So the 
+>> interrupt
+>> won't be masked during in handler. Which might lead to spurious 
+>> interrupt.
+>> 
+>> Thus we simply remove eoi operation for mips_cpu_irq_controller,
+>> 
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> ---
+>>  drivers/irqchip/irq-mips-cpu.c | 1 -
+>>  1 file changed, 1 deletion(-)
+>> 
+>> diff --git a/drivers/irqchip/irq-mips-cpu.c 
+>> b/drivers/irqchip/irq-mips-cpu.c
+>> index 95d4fd8f7a96..0ad7f1f9a58b 100644
+>> --- a/drivers/irqchip/irq-mips-cpu.c
+>> +++ b/drivers/irqchip/irq-mips-cpu.c
+>> @@ -55,7 +55,6 @@ static struct irq_chip mips_cpu_irq_controller = {
+>>  	.irq_mask	= mask_mips_irq,
+>>  	.irq_mask_ack	= mask_mips_irq,
+>>  	.irq_unmask	= unmask_mips_irq,
+>> -	.irq_eoi	= unmask_mips_irq,
+>>  	.irq_disable	= mask_mips_irq,
+>>  	.irq_enable	= unmask_mips_irq,
+>>  };
+> 
+> This one scares me; something doesn't seem right. The irq_eoi (née eoi)
+> callback was first added way back in commit 1417836e81c0 ("[MIPS] use
+> generic_handle_irq, handle_level_irq, handle_percpu_irq"). The commit
+> message there states that the motivation was to allow use of
+> handle_percpu_irq(), and indeed handle_percpu_irq() does:
+> 
+>     irq_ack() (ie. mask)
+>     invoke the handler(s)
+>     irq_eoi() (ie. unmask)
+> 
+> By removing the irq_eoi callback I don't see how we'd ever unmask the
+> interrupt again..?
 
-What's the timing impact on systems with large number of CPUs(say 256 or
-more) ? I remember we added some change to reduce the wait times for
-offlining CPUs in system suspend path on arm64, still not negligible.
+To be completely blunt, the fact that unmask and eoi are implemented the
+same way is a clear sign that this is a bit broken.
 
---
-Regards,
-Sudeep
+irq_eoi is used if the irqchip tracks the IRQ life-cycle in HW, and it's
+not obvious that this is the case. The fact that ack is also mapped to 
+mask
+just adds to my feeling...
+
+         M.
+-- 
+Jazz is not dead. It just smells funny...
