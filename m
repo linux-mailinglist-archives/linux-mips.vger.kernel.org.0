@@ -2,100 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF5F13B82A
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Jan 2020 04:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A34513B963
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Jan 2020 07:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728879AbgAODfS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Jan 2020 22:35:18 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:59598 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728884AbgAODfS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 14 Jan 2020 22:35:18 -0500
-Received: from localhost.cn (unknown [10.40.23.12])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx39lkiB5e_EQFAA--.3S2;
-        Wed, 15 Jan 2020 11:35:01 +0800 (CST)
-From:   Guoyun Sun <sunguoyun@loongson.cn>
-To:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guoyun Sun <sunguoyun@loongson.cn>
-Subject: [PATCH V2] mips/vdso: Support mremap() for vDSO
-Date:   Wed, 15 Jan 2020 11:35:00 +0800
-Message-Id: <1579059300-6636-1-git-send-email-sunguoyun@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9Dx39lkiB5e_EQFAA--.3S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7trWfWFWrAr1xWw4fGFyrCrg_yoW8uF17pw
-        nIyF1qg3ykZw1UGr9rtr4rZa98Jw48JFW5Jryjqr1Yyw48GrWUArWFya1xurykCFyqya1F
-        gw45AFyrGF98CF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VACjcxG62k0Y48FwI0_Jr0_Gr1lYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14
-        v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E
-        6IAqYI8I648v4I1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JUDrcfUUUUU=
-X-CM-SenderInfo: 5vxqw3hr1x0qxorr0wxvrqhubq/
+        id S1725962AbgAOGPt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Jan 2020 01:15:49 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:35869 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725999AbgAOGPt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 15 Jan 2020 01:15:49 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 47yHBT0bNKz9v9Dm;
+        Wed, 15 Jan 2020 07:15:45 +0100 (CET)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=UntR+ovd; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id uRhu0hEJc6dc; Wed, 15 Jan 2020 07:15:45 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 47yHBS5m1Pz9v9Dk;
+        Wed, 15 Jan 2020 07:15:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1579068944; bh=dLb+n74DT6jZUD4ec0gfhmKuZ7wdMUymXTZD+f3ESjs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=UntR+ovdUgNuiOCdaG492qpGkB1inQlUzwXmUjovM/oqM/Vp3a/K3ppEYvczfO2ls
+         w8S4Mabi06ZQ75T5HTmKpob6aRUwzfUY5vsQRUL7Zw5MJvFZAX1RNry5Mv2FWFVr5b
+         rxL2XadbeDGNcEyFm+pdcDnM/FQoG26VHqpC1L64=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9A0E88B77E;
+        Wed, 15 Jan 2020 07:15:45 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 3sLM6Sb2GP2Q; Wed, 15 Jan 2020 07:15:45 +0100 (CET)
+Received: from [172.25.230.100] (po15451.idsi0.si.c-s.fr [172.25.230.100])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6976D8B774;
+        Wed, 15 Jan 2020 07:15:45 +0100 (CET)
+Subject: Re: [RFC PATCH v3 08/12] lib: vdso: allow arches to provide vdso data
+ pointer
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, arnd@arndb.de,
+        vincenzo.frascino@arm.com, luto@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        x86@kernel.org
+References: <cover.1578934751.git.christophe.leroy@c-s.fr>
+ <381e547dbb3c48fd39d6cf208033bba38ad048fb.1578934751.git.christophe.leroy@c-s.fr>
+ <87ftghbpuu.fsf@nanos.tec.linutronix.de>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <d2de3211-9d7c-513e-fe0f-8bdce623fb65@c-s.fr>
+Date:   Wed, 15 Jan 2020 07:15:44 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
+MIME-Version: 1.0
+In-Reply-To: <87ftghbpuu.fsf@nanos.tec.linutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-vDSO VMA address is saved in mm_context for the purpose of using
-restorer from vDSO page to return to userspace after signal handling.
 
-In Checkpoint Restore in Userspace (CRIU) project we place vDSO VMA
-on restore back to the place where it was on the dump.
 
-Make vDSO code track the VMA address by supplying .mremap() fops
-the same way it's done for x86 and arm by:
-commit b059a453b1cf ("x86/vdso: Add mremap hook to vm_special_mapping")
-commit 739586951b8a ("arm64/vdso: Support mremap() for vDSO").
+Le 15/01/2020 à 00:06, Thomas Gleixner a écrit :
+> Christophe Leroy <christophe.leroy@c-s.fr> writes:
+>>   
+>>   static __maybe_unused int
+>> +#ifdef VDSO_GETS_VD_PTR_FROM_ARCH
+>> +__cvdso_clock_gettime_common(const struct vdso_data *vd, clockid_t clock,
+>> +		      struct __kernel_timespec *ts)
+>> +{
+>> +#else
+>>   __cvdso_clock_gettime_common(clockid_t clock, struct __kernel_timespec *ts)
+>>   {
+>>   	const struct vdso_data *vd = __arch_get_vdso_data();
+>> +#endif
+>>   	u32 msk;
+> 
+> If we do that, then there is no point in propagating this to the inner
+> functions. It's perfectly fine to have this distinction at the outermost
+> level.
 
-Signed-off-by: Guoyun Sun <sunguoyun@loongson.cn>
----
- arch/mips/vdso/genvdso.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+In v2, I did it at the arch level (see 
+https://patchwork.ozlabs.org/patch/1214983/). Andy was concerned about 
+it being suboptimal for arches which (unlike powerpc) have PC related 
+data addressing mode.
 
-diff --git a/arch/mips/vdso/genvdso.c b/arch/mips/vdso/genvdso.c
-index b66b6b1..be57b83 100644
---- a/arch/mips/vdso/genvdso.c
-+++ b/arch/mips/vdso/genvdso.c
-@@ -251,6 +251,18 @@ int main(int argc, char **argv)
- 	fprintf(out_file, "#include <linux/linkage.h>\n");
- 	fprintf(out_file, "#include <linux/mm.h>\n");
- 	fprintf(out_file, "#include <asm/vdso.h>\n");
-+	fprintf(out_file, "static int vdso_mremap(\n");
-+	fprintf(out_file, "	const struct vm_special_mapping *sm,\n");
-+	fprintf(out_file, "	struct vm_area_struct *new_vma)\n");
-+	fprintf(out_file, "{\n");
-+	fprintf(out_file, "	unsigned long new_size =\n");
-+	fprintf(out_file, "	new_vma->vm_end - new_vma->vm_start;\n");
-+	fprintf(out_file, "	if (vdso_image.size != new_size)\n");
-+	fprintf(out_file, "		return -EINVAL;\n");
-+	fprintf(out_file, "	current->mm->context.vdso =\n");
-+	fprintf(out_file, "	(void __user *)(new_vma->vm_start);\n");
-+	fprintf(out_file, "	return 0;\n");
-+	fprintf(out_file, "}\n");
- 
- 	/* Write out the stripped VDSO data. */
- 	fprintf(out_file,
-@@ -275,6 +287,7 @@ int main(int argc, char **argv)
- 	fprintf(out_file, "\t.mapping = {\n");
- 	fprintf(out_file, "\t\t.name = \"[vdso]\",\n");
- 	fprintf(out_file, "\t\t.pages = vdso_pages,\n");
-+	fprintf(out_file, "\t\t.mremap = vdso_mremap,\n");
- 	fprintf(out_file, "\t},\n");
- 
- 	/* Calculate and write symbol offsets to <output file> */
--- 
-2.1.0
+Wouldn't it be the same issue if doing it at the outermost level of 
+generic VDSO ?
 
+> 
+> As a related question, I noticed that you keep all that ASM voodoo in
+> the PPC specific code which provides the actual entry points. Is that
+> ASM code really still necessary? All current users of the generic VDSO
+> just do something like:
+> 
+> int __vdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts)
+> {
+>          return __cvdso_clock_gettime(clock, ts);
+> }
+> 
+> in the architecture code. Is there a reason why this can't work on PPC?
+
+The problem with powerpc is that VDSO functions have to (just like 
+system calls) set the SO bit in CR register in case of error, or clear 
+it if no error. There is no way to do that from the C function, because 
+there is no way to tell GCC to not play up with CR register on function 
+return.
+
+Refer discussion at https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92769
+
+Christophe
