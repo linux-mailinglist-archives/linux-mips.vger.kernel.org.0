@@ -2,94 +2,141 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC37913D8BD
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2020 12:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C07D113DA03
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2020 13:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726418AbgAPLLY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Jan 2020 06:11:24 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:51303 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbgAPLLY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Jan 2020 06:11:24 -0500
-Received: from [5.158.153.52] (helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1is33A-00050C-K7; Thu, 16 Jan 2020 12:10:56 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id 3D46D101B66; Thu, 16 Jan 2020 12:10:56 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jiri Kosina <jkosina@suse.cz>,
-        Pavankumar Kondeti <pkondeti@codeaurora.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Aaro Koskinen <aaro.koskinen@nokia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Will Deacon <will@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "moderated list\:ARM\/FREESCALE IMX \/ MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v5] reboot: support offline CPUs before reboot
-In-Reply-To: <CAJMQK-jDi+AACE1Cv_hKSMq8VhGTBeh+kyHO2U4sx9w=9bO2mA@mail.gmail.com>
-References: <20200115063410.131692-1-hsinyi@chromium.org> <8736cgxmxi.fsf@nanos.tec.linutronix.de> <CAJMQK-jDi+AACE1Cv_hKSMq8VhGTBeh+kyHO2U4sx9w=9bO2mA@mail.gmail.com>
-Date:   Thu, 16 Jan 2020 12:10:56 +0100
-Message-ID: <87h80vwta7.fsf@nanos.tec.linutronix.de>
+        id S1726864AbgAPM3y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Jan 2020 07:29:54 -0500
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:38079 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726684AbgAPM3x (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Jan 2020 07:29:53 -0500
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200116122951euoutp0214cf1aead6a8f7249559b7db14de9508~qXdW39HfR0644306443euoutp02W
+        for <linux-mips@vger.kernel.org>; Thu, 16 Jan 2020 12:29:51 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200116122951euoutp0214cf1aead6a8f7249559b7db14de9508~qXdW39HfR0644306443euoutp02W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1579177791;
+        bh=9smxSwk2JX5E045fPogk/LSOgeGj4lDoUVspfYuU4Do=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=YckGHTbVL3T7wB1KdbCl4YZU9uniSHNyenKBea0AsCvjA0O2WQndPWEr/QQ3CK/l4
+         iVWAEbZRV8CqCsNdiRXXRuAffP/Kjk1TLIHSkqs+KcbZjtugcQ12PVWwquFgjJn6nX
+         ZUhRvyJ+GwquixbiCOafq3eCA2kYsz1soMlOsnMA=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200116122951eucas1p1a80018be5cd8fc18e358f6a72b71ce62~qXdWghTn71717617176eucas1p1V;
+        Thu, 16 Jan 2020 12:29:51 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id DC.2F.60698.F37502E5; Thu, 16
+        Jan 2020 12:29:51 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200116122951eucas1p1d36493f2b496bb13dca4fd1a17abad49~qXdWMkQMn1718617186eucas1p1c;
+        Thu, 16 Jan 2020 12:29:51 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200116122951eusmtrp22589902b42e5cdb84cbbe6668e393695~qXdWL78CO1149911499eusmtrp2E;
+        Thu, 16 Jan 2020 12:29:51 +0000 (GMT)
+X-AuditID: cbfec7f5-a29ff7000001ed1a-d8-5e20573fb24e
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id E2.32.08375.F37502E5; Thu, 16
+        Jan 2020 12:29:51 +0000 (GMT)
+Received: from AMDC3058.digital.local (unknown [106.120.51.71]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200116122950eusmtip1fe10a41302d87854f36386f1033f69ec~qXdVjUpIb0460004600eusmtip1b;
+        Thu, 16 Jan 2020 12:29:50 +0000 (GMT)
+From:   Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-ide@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        b.zolnierkie@samsung.com
+Subject: [PATCH 0/3] ide/MIPS/docs: remove no longer used au1xxx-ide driver
+Date:   Thu, 16 Jan 2020 13:29:35 +0100
+Message-Id: <20200116122938.20789-1-b.zolnierkie@samsung.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFKsWRmVeSWpSXmKPExsWy7djP87r24QpxBjfnSFhsnLGe1eLJgXZG
+        iznnW1gsJp74xGKxsG0Ji8WxHY+YLC7vmsNm0blpK6NF3+tjzBaX9qg4cHlsWXmTyWPTqk42
+        j6Mr1zJ5LO6bzOrx+shDFo++LasYPT5vkgtgj+KySUnNySxLLdK3S+DKeHK0nblgPXfFzPk3
+        mRoYb3N0MXJySAiYSDS032DuYuTiEBJYwShx/dJ8FgjnC6PE4+6jbBDOZ0aJL+vXs8O0vLx8
+        ECqxnFHi7+fTjHAtU5sPsoJUsQlYSUxsXwWWEBHYzSjx8/lusC3MAhMYJfadmcAMUiUs4C1x
+        o+kWE4jNIqAqsae7kw3E5hWwlZi24BLUPnmJrd8+sULEBSVOznzCAmIzA8Wbt84GGyohMI9d
+        4uW0+8wQDS4SV48th7KFJV4d3wI1SEbi/875TBAN64AO73gB1b2dUWL55H9sEFXWEnfO/QKy
+        OYBWaEqs36UPEXaUaOk9CBaWEOCTuPFWEOIIPolJ26YzQ4R5JTrahCCq1SQ2LNvABrO2a+dK
+        qHM8JP5dmA8WFxKIlZh4/injBEaFWUhem4XktVkINyxgZF7FKJ5aWpybnlpsnJdarlecmFtc
+        mpeul5yfu4kRmKJO/zv+dQfjvj9JhxgFOBiVeHg/hCjECbEmlhVX5h5ilOBgVhLhPTlDNk6I
+        NyWxsiq1KD++qDQntfgQozQHi5I4r/Gil7FCAumJJanZqakFqUUwWSYOTqkGxu2sR0v/rbt9
+        gOHFm2fq7NW3z1UpTiufd3PftG79eqFPUYfSVxQlsV/Z/fi/9ibDf882Plt/qvNu4bpZ9kof
+        01xcJgjolkYnis2JrPR6qbXFvVshcp5tUQRXcp74p+aFVx7unFRUknfqtcWMT1ekDli0OPyx
+        vKP27vay3C+xUvYrPxz4ZSoQ0KTEUpyRaKjFXFScCACDGjezTQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjkeLIzCtJLcpLzFFi42I5/e/4XV37cIU4g/0zWCw2zljPavHkQDuj
+        xZzzLSwWE098YrFY2LaExeLYjkdMFpd3zWGz6Ny0ldGi7/UxZotLe1QcuDy2rLzJ5LFpVSeb
+        x9GVa5k8FvdNZvV4feQhi0ffllWMHp83yQWwR+nZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY
+        6hkam8daGZkq6dvZpKTmZJalFunbJehlPDnazlywnrti5vybTA2Mtzm6GDk5JARMJF5ePsjW
+        xcjFISSwlFHiad8y9i5GDqCEjMTx9WUQNcISf651QdV8YpTYsuMYE0iCTcBKYmL7KkaQhIjA
+        fkaJyQsPMIE4zAJTGCVWnGkFqxIW8Ja40XQLzGYRUJXY093JBmLzCthKTFtwiR1ihbzE1m+f
+        WCHighInZz5hAbGZgeLNW2czT2Dkm4UkNQtJagEj0ypGkdTS4tz03GJDveLE3OLSvHS95Pzc
+        TYzAuNh27OfmHYyXNgYfYhTgYFTi4Z0RpBAnxJpYVlyZe4hRgoNZSYT35AzZOCHelMTKqtSi
+        /Pii0pzU4kOMpkDHTmSWEk3OB8ZsXkm8oamhuYWlobmxubGZhZI4b4fAwRghgfTEktTs1NSC
+        1CKYPiYOTqkGRsdWNe5117p1pdPn3zpsJ7c1tbz+8n3DowsuBchqr++xD1NobXsZ/3Vq0OnD
+        Z+U/rf1p93VBAJ+rE1OHecm6ete7a8ReiTAeOvW3PH7lDY9Ol21v5gtLBGTbx2xyLKy8s93p
+        Zf/24E0ebfZcQY93eaiuK1HX3PUrdQ7X/rfTPp4NvBEyjdejRImlOCPRUIu5qDgRADDN8euh
+        AgAA
+X-CMS-MailID: 20200116122951eucas1p1d36493f2b496bb13dca4fd1a17abad49
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200116122951eucas1p1d36493f2b496bb13dca4fd1a17abad49
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200116122951eucas1p1d36493f2b496bb13dca4fd1a17abad49
+References: <CGME20200116122951eucas1p1d36493f2b496bb13dca4fd1a17abad49@eucas1p1.samsung.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hsin-Yi Wang <hsinyi@chromium.org> writes:
-> On Thu, Jan 16, 2020 at 8:30 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> We saw this issue on regular reboot (not panic) on arm64: If tick
-> broadcast and smp_send_stop() happen together and the first broadcast
-> arrives to some idled CPU that hasn't already executed reboot ipi to
-> run in spinloop, it would try to broadcast to another CPU, but that
-> target CPU is already marked as offline by set_cpu_online() in reboot
-> ipi, and a warning comes out since tick_handle_oneshot_broadcast()
-> would check if it tries to broadcast to offline cpus. Most of the time
-> the CPU getting the broadcast interrupt is already in the spinloop and
-> thus isn't going to receive interrupts from the broadcast timer.
+Hi,
 
-The timer broadcasting is obviously broken by the existing reboot unplug
-mechanism as the outgoing CPU should remove itself from the broadcast.
+Commit 54ff4a1d1732 ("MIPS: Alchemy: pata_platform for DB1200")
+from year 2014 converted the only user of au1xxx-ide IDE host
+driver (MIPS Alchemy DB1200 platform) to use pata_platform libata
+host driver instead. This patch series removes dead au1xxx-ide
+driver code & co.
 
-Just addressing the broadcast issue is not sufficient as there are tons
-of other places which rely on consistency of the various cpu masks.
+Since patch #2 depends on patch #1 (and it is also the best to
+apply patch #3 after driver code removal) it would be probably
+easiest to merge everything through MIPS tree (after getting
+necessary ACKs, from David for the first patch and Jonathan for
+the third one).
 
-> If system supports hotplug, _cpu_down() would properly handle tasks
-> termination such as remove CPU from timer broadcasting by
-> tick_offline_cpu()...etc, as well as some interrupt handling.
+Best regards,
+--
+Bartlomiej Zolnierkiewicz
+Samsung R&D Institute Poland
+Samsung Electronics
 
-Well, emphasis on 'if system supports hotplug'. If not, then you are
-back to square one. On ARM64 hotplug is selectable by a config option.
 
-So either we mandate HOTPLUG_CPU for SMP and get rid of all the
-ifdeffery or we need to have a mechanism which works on !HOTPLUG_CPU as
-well.
+Bartlomiej Zolnierkiewicz (3):
+  ide: remove no longer used au1xxx-ide driver
+  MIPS: Alchemy: remove no longer used au1xxx_ide.h header
+  docs: mips: remove no longer needed au1xxx_ide.rst documentation
 
-That whole reboot/shutdown stuff is an unpenetrable mess of notifiers
-and architecture hackery, so something generic and understandable is
-really required.
+ Documentation/mips/au1xxx_ide.rst             | 130 ----
+ Documentation/mips/index.rst                  |   2 -
+ .../mips/include/asm/mach-au1x00/au1xxx_ide.h | 178 ------
+ drivers/ide/Kconfig                           |  17 -
+ drivers/ide/Makefile                          |   2 -
+ drivers/ide/au1xxx-ide.c                      | 597 ------------------
+ 6 files changed, 926 deletions(-)
+ delete mode 100644 Documentation/mips/au1xxx_ide.rst
+ delete mode 100644 arch/mips/include/asm/mach-au1x00/au1xxx_ide.h
+ delete mode 100644 drivers/ide/au1xxx-ide.c
 
-Thanks,
+-- 
+2.24.1
 
-        tglx
