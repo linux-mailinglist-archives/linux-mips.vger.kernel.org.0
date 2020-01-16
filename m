@@ -2,130 +2,151 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEA013ECCE
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2020 18:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5ED13EFCC
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2020 19:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730051AbgAPR6q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Jan 2020 12:58:46 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:64763 "EHLO pegase1.c-s.fr"
+        id S2404256AbgAPR3C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Jan 2020 12:29:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40514 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394674AbgAPR6i (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:58:38 -0500
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 47zBky4VNBz9v4gv;
-        Thu, 16 Jan 2020 18:58:34 +0100 (CET)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=mvz9xrLo; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id 1jI1zVr3Jr4A; Thu, 16 Jan 2020 18:58:34 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 47zBky3SmDz9v4gc;
-        Thu, 16 Jan 2020 18:58:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1579197514; bh=Q6VcAWUVvKepnLf+FFNXtla3CmiLjseY/gtHLv0ppEk=;
-        h=In-Reply-To:References:From:Subject:To:Cc:Date:From;
-        b=mvz9xrLoDf0x9ZlRq7P/56z1YhzUJALo3sg1YXCoFGHBXpwEiqEWD2vNUYaVeXaqM
-         HYDPZtGmygVj1DPIUGjZPFe3z+lhw+HicfayDrRiDhPSzKuwkBeiCfW5vjXVXqm5f/
-         g1fS2mNXaEY/h0bq58iMBkV7Q/TExNK6gb7mWlbE=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1E37F8B82D;
-        Thu, 16 Jan 2020 18:58:36 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id ioD9o1OpiPdY; Thu, 16 Jan 2020 18:58:36 +0100 (CET)
-Received: from po14934vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D80428B82A;
-        Thu, 16 Jan 2020 18:58:35 +0100 (CET)
-Received: by po14934vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id AC38F64A33; Thu, 16 Jan 2020 17:58:35 +0000 (UTC)
-Message-Id: <29f979e09c84c95f08fcd15386576e32c546d04b.1579196675.git.christophe.leroy@c-s.fr>
-In-Reply-To: <cover.1579196675.git.christophe.leroy@c-s.fr>
-References: <cover.1579196675.git.christophe.leroy@c-s.fr>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Subject: [RFC PATCH v4 11/11] powerpc/32: provide vdso_shift_ns()
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com,
-        arnd@arndb.de, tglx@linutronix.de, vincenzo.frascino@arm.com,
-        luto@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        x86@kernel.org
-Date:   Thu, 16 Jan 2020 17:58:35 +0000 (UTC)
+        id S2404247AbgAPR3C (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:29:02 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E4F9B246F1;
+        Thu, 16 Jan 2020 17:28:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579195740;
+        bh=D1hglT0VmcDmTpb/u5xfn01OYM5eyCOUNzL/09zR85k=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=1J+3+xwp5G9Z4sVk1aHFprms34FBMqymKCVnkfZ+l5reH1kkN+iek9O5F9FBUtCZy
+         xf1ncNJraXUC2XXCeIDPrOtyb1xk8PSKVCez8HjJ8YhfdHie1TFi5Xm8CgdbQETpE3
+         C/zd7F3KavxA/K8u94d7h90jBQ/8ck4Jk6N1q84A=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Eli Friedman <efriedma@quicinc.com>,
+        Paul Burton <paul.burton@mips.com>, ralf@linux-mips.org,
+        jhogan@kernel.org, "Maciej W . Rozycki" <macro@linux-mips.org>,
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        Stephen Kitt <steve@sk2.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, linux-mips@vger.kernel.org,
+        clang-built-linux@googlegroups.com, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 276/371] mips: avoid explicit UB in assignment of mips_io_port_base
+Date:   Thu, 16 Jan 2020 12:22:28 -0500
+Message-Id: <20200116172403.18149-219-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
+References: <20200116172403.18149-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The generic x >> s gives the following result:
+From: Nick Desaulniers <ndesaulniers@google.com>
 
-  18:	35 25 ff e0 	addic.  r9,r5,-32
-  1c:	41 80 00 10 	blt     2c <shift+0x14>
-  20:	7c 64 4c 30 	srw     r4,r3,r9
-  24:	38 60 00 00 	li      r3,0
-...
-  2c:	54 69 08 3c 	rlwinm  r9,r3,1,0,30
-  30:	21 45 00 1f 	subfic  r10,r5,31
-  34:	7c 84 2c 30 	srw     r4,r4,r5
-  38:	7d 29 50 30 	slw     r9,r9,r10
-  3c:	7c 63 2c 30 	srw     r3,r3,r5
-  40:	7d 24 23 78 	or      r4,r9,r4
+[ Upstream commit 12051b318bc3ce5b42d6d786191008284b067d83 ]
 
-In our case the shift is always < 32. In addition,  the upper 32 bits
-of the result are likely nul. Lets GCC know it, it also optimises the
-following calculations.
+The code in question is modifying a variable declared const through
+pointer manipulation.  Such code is explicitly undefined behavior, and
+is the lone issue preventing malta_defconfig from booting when built
+with Clang:
 
-With the patch, we get:
-   0:	21 25 00 20 	subfic  r9,r5,32
-   4:	7c 69 48 30 	slw     r9,r3,r9
-   8:	7c 84 2c 30 	srw     r4,r4,r5
-   c:	7d 24 23 78 	or      r4,r9,r4
-  10:	7c 63 2c 30 	srw     r3,r3,r5
+If an attempt is made to modify an object defined with a const-qualified
+type through use of an lvalue with non-const-qualified type, the
+behavior is undefined.
 
-Performance before the patch:
-clock-gettime-realtime:    vdso: 1033 nsec/call
+LLVM is removing such assignments. A simple fix is to not declare
+variables const that you plan on modifying.  Limiting the scope would be
+a better method of preventing unwanted writes to such a variable.
 
-After the patch:
-clock-gettime-realtime:    vdso: 941 nsec/call
+Further, the code in question mentions "compiler bugs" without any links
+to bug reports, so it is difficult to know if the issue is resolved in
+GCC. The patch was authored in 2006, which would have been GCC 4.0.3 or
+4.1.1. The minimal supported version of GCC in the Linux kernel is
+currently 4.6.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
+For what its worth, there was UB before the commit in question, it just
+added a barrier and got lucky IRT codegen. I don't think there's any
+actual compiler bugs related, just runtime bugs due to UB.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/610
+Fixes: 966f4406d903 ("[MIPS] Work around bad code generation for <asm/io.h>.")
+Reported-by: Nathan Chancellor <natechancellor@gmail.com>
+Debugged-by: Nathan Chancellor <natechancellor@gmail.com>
+Suggested-by: Eli Friedman <efriedma@quicinc.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+Tested-by: Nathan Chancellor <natechancellor@gmail.com>
+Signed-off-by: Paul Burton <paul.burton@mips.com>
+Cc: ralf@linux-mips.org
+Cc: jhogan@kernel.org
+Cc: Maciej W. Rozycki <macro@linux-mips.org>
+Cc: Hassan Naveed <hnaveed@wavecomp.com>
+Cc: Stephen Kitt <steve@sk2.org>
+Cc: Serge Semin <fancer.lancer@gmail.com>
+Cc: Mike Rapoport <rppt@linux.ibm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: clang-built-linux@googlegroups.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/include/asm/vdso/gettimeofday.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ arch/mips/include/asm/io.h | 14 ++------------
+ arch/mips/kernel/setup.c   |  2 +-
+ 2 files changed, 3 insertions(+), 13 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h b/arch/powerpc/include/asm/vdso/gettimeofday.h
-index 74b6eef8fbe9..716a137ab166 100644
---- a/arch/powerpc/include/asm/vdso/gettimeofday.h
-+++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
-@@ -95,6 +95,23 @@ static __always_inline u64 vdso_calc_delta(u64 cycles, u64 last, u64 mask, u32 m
+diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+index 57b34257be2b..98eb15b0524c 100644
+--- a/arch/mips/include/asm/io.h
++++ b/arch/mips/include/asm/io.h
+@@ -60,21 +60,11 @@
+  * instruction, so the lower 16 bits must be zero.  Should be true on
+  * on any sane architecture; generic code does not use this assumption.
+  */
+-extern const unsigned long mips_io_port_base;
++extern unsigned long mips_io_port_base;
+ 
+-/*
+- * Gcc will generate code to load the value of mips_io_port_base after each
+- * function call which may be fairly wasteful in some cases.  So we don't
+- * play quite by the book.  We tell gcc mips_io_port_base is a long variable
+- * which solves the code generation issue.  Now we need to violate the
+- * aliasing rules a little to make initialization possible and finally we
+- * will need the barrier() to fight side effects of the aliasing chat.
+- * This trickery will eventually collapse under gcc's optimizer.  Oh well.
+- */
+ static inline void set_io_port_base(unsigned long base)
+ {
+-	* (unsigned long *) &mips_io_port_base = base;
+-	barrier();
++	mips_io_port_base = base;
  }
- #define vdso_calc_delta vdso_calc_delta
  
-+#ifndef __powerpc64__
-+static __always_inline u64 vdso_shift_ns(u64 ns, unsigned long shift)
-+{
-+	u32 hi = ns >> 32;
-+	u32 lo = ns;
-+
-+	lo = (lo >> shift) | (hi << (32 - shift));
-+	hi >>= shift;
-+
-+	if (likely(hi == 0))
-+		return lo;
-+
-+	return ((u64)hi << 32) | lo;
-+}
-+#define vdso_shift_ns vdso_shift_ns
-+#endif
-+
- #endif /* !__ASSEMBLY__ */
+ /*
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index 795caa763da3..05ed4ed411c7 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -75,7 +75,7 @@ static char __initdata builtin_cmdline[COMMAND_LINE_SIZE] = CONFIG_CMDLINE;
+  * mips_io_port_base is the begin of the address space to which x86 style
+  * I/O ports are mapped.
+  */
+-const unsigned long mips_io_port_base = -1;
++unsigned long mips_io_port_base = -1;
+ EXPORT_SYMBOL(mips_io_port_base);
  
- #endif /* __ASM_VDSO_GETTIMEOFDAY_H */
+ static struct resource code_resource = { .name = "Kernel code", };
 -- 
-2.13.3
+2.20.1
 
