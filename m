@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B48A413FF3F
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jan 2020 00:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5F513FEBC
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jan 2020 00:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390502AbgAPXlH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Jan 2020 18:41:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59306 "EHLO mail.kernel.org"
+        id S2404143AbgAPXak (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Jan 2020 18:30:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37316 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390151AbgAPX12 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Jan 2020 18:27:28 -0500
+        id S2403924AbgAPXa1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 16 Jan 2020 18:30:27 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 71A39206D9;
-        Thu, 16 Jan 2020 23:27:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F1F372072B;
+        Thu, 16 Jan 2020 23:30:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579217247;
+        s=default; t=1579217427;
         bh=7SrXtY3zhTAIs5OpgjwMMDDZzdGmV1xifK4ax0OnMDI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aK35KKi/8+FU8UlxIBMXGpqCGWZM5eDi9BsSv9OtzJZpHPJvnM+gj6Bdi6MJnDerg
-         CbDFTgQxi6y61p+05+lxph3pOhRQDF/0YePt6/qm5B3uol+FL+DL1ep+kCc9oHr9W9
-         PEBa6SFAxsnDcOBXvayRx3py4WEk6ScGk9PFl7fA=
+        b=DQoCpW/x9fREcrz7GcKC33WwKl/plsl5S123mapuGSVtJFTe4SalJt9jkFTumy3De
+         29TRAloAvrcW5hMvownm8zaX/q0tAaRBjWrLsh5zKr1SeabZ8mfIB7kXF/7YLMPgLT
+         oyqTTEVAZH1AulSNMzzUGekMYs9zY3jZxdG4Gpe4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -30,12 +30,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Paul Burton <paulburton@kernel.org>,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 190/203] MIPS: Prevent link failure with kcov instrumentation
-Date:   Fri, 17 Jan 2020 00:18:27 +0100
-Message-Id: <20200116231800.868696235@linuxfoundation.org>
+Subject: [PATCH 4.19 78/84] MIPS: Prevent link failure with kcov instrumentation
+Date:   Fri, 17 Jan 2020 00:18:52 +0100
+Message-Id: <20200116231722.693197398@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200116231745.218684830@linuxfoundation.org>
-References: <20200116231745.218684830@linuxfoundation.org>
+In-Reply-To: <20200116231713.087649517@linuxfoundation.org>
+References: <20200116231713.087649517@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
