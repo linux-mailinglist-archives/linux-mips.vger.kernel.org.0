@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5ED13EFCC
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2020 19:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB68413EDBB
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2020 19:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404256AbgAPR3C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Jan 2020 12:29:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40514 "EHLO mail.kernel.org"
+        id S2406919AbgAPSEs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Jan 2020 13:04:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57332 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404247AbgAPR3C (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:29:02 -0500
+        id S2390966AbgAPRkR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:40:17 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E4F9B246F1;
-        Thu, 16 Jan 2020 17:28:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 12B08246FC;
+        Thu, 16 Jan 2020 17:40:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195740;
-        bh=D1hglT0VmcDmTpb/u5xfn01OYM5eyCOUNzL/09zR85k=;
+        s=default; t=1579196416;
+        bh=Qr0wkqr2KRNdVxa33gp2rpu1dx+1sNPi3PcUBz2+qF8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1J+3+xwp5G9Z4sVk1aHFprms34FBMqymKCVnkfZ+l5reH1kkN+iek9O5F9FBUtCZy
-         xf1ncNJraXUC2XXCeIDPrOtyb1xk8PSKVCez8HjJ8YhfdHie1TFi5Xm8CgdbQETpE3
-         C/zd7F3KavxA/K8u94d7h90jBQ/8ck4Jk6N1q84A=
+        b=anSQtWC7994j79MxpgDqtHnSRUTzSSwCsKiF88x2ZnbzZoA90JrkRezmlAFu10G4w
+         MKbLWsvpcsT7YDnAqIS5NqMYcaqw47VJmV738KtOB0H2qB27+lCEU61OWhmceHsLEp
+         80AzSZdgk2Q3k+4sgJ5wHqvmMdkyg57b+MZms6Cg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Nick Desaulniers <ndesaulniers@google.com>,
@@ -37,12 +37,12 @@ Cc:     Nick Desaulniers <ndesaulniers@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Michal Hocko <mhocko@suse.com>, linux-mips@vger.kernel.org,
         clang-built-linux@googlegroups.com, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.14 276/371] mips: avoid explicit UB in assignment of mips_io_port_base
-Date:   Thu, 16 Jan 2020 12:22:28 -0500
-Message-Id: <20200116172403.18149-219-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 187/251] mips: avoid explicit UB in assignment of mips_io_port_base
+Date:   Thu, 16 Jan 2020 12:35:36 -0500
+Message-Id: <20200116173641.22137-147-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
-References: <20200116172403.18149-1-sashal@kernel.org>
+In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
+References: <20200116173641.22137-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -107,7 +107,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 3 insertions(+), 13 deletions(-)
 
 diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index 57b34257be2b..98eb15b0524c 100644
+index 06049b6b3ddd..5dfae80264b9 100644
 --- a/arch/mips/include/asm/io.h
 +++ b/arch/mips/include/asm/io.h
 @@ -60,21 +60,11 @@
@@ -135,10 +135,10 @@ index 57b34257be2b..98eb15b0524c 100644
  
  /*
 diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 795caa763da3..05ed4ed411c7 100644
+index 695950361d2a..7cc1d29334ee 100644
 --- a/arch/mips/kernel/setup.c
 +++ b/arch/mips/kernel/setup.c
-@@ -75,7 +75,7 @@ static char __initdata builtin_cmdline[COMMAND_LINE_SIZE] = CONFIG_CMDLINE;
+@@ -74,7 +74,7 @@ static char __initdata builtin_cmdline[COMMAND_LINE_SIZE] = CONFIG_CMDLINE;
   * mips_io_port_base is the begin of the address space to which x86 style
   * I/O ports are mapped.
   */
