@@ -2,89 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 403EF13FA81
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2020 21:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8017813FB12
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2020 22:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387471AbgAPUWz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Jan 2020 15:22:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40250 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729314AbgAPUWz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Jan 2020 15:22:55 -0500
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 905CE206D7
-        for <linux-mips@vger.kernel.org>; Thu, 16 Jan 2020 20:22:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579206174;
-        bh=AWTq77yPH1eJXFHw5c/ihwZ/W+ttmiGY+qYVIL2DNXo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WjiY6Fz2v1BRFwTw8CEV+ZGeTVwybGg7qEvOG+e6kceB8oCBxevUtjC+sxHFejHAw
-         +oKShNXbfNSUG124nEjNg9pxFVCYhjNP142xTdOd2FqkhnrKlA/xPHMGsS+TxqWkRE
-         U5OV05EgZIcNAZu83S6Cza9kPCZDXt9/fFQCjNYE=
-Received: by mail-wm1-f47.google.com with SMTP id 20so5196385wmj.4
-        for <linux-mips@vger.kernel.org>; Thu, 16 Jan 2020 12:22:54 -0800 (PST)
-X-Gm-Message-State: APjAAAUOf7Xoy6k7dq2nuod/U7NA5N7zF/0XtcHqoPS+MYoL9UhzgefN
-        SpJDB9lRDkKFXXRLWkS++AOsG8CSewN28k5sfarnNA==
-X-Google-Smtp-Source: APXvYqye2EDj0a90ApFnSVIDyfTmrBlVCmi50h4FuEffTXlFfhQYLFZAcgiL0SS3ilsUicD1HIv6uxzlc43xpc781uA=
-X-Received: by 2002:a05:600c:20c7:: with SMTP id y7mr802627wmm.21.1579206173156;
- Thu, 16 Jan 2020 12:22:53 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1578934751.git.christophe.leroy@c-s.fr> <381e547dbb3c48fd39d6cf208033bba38ad048fb.1578934751.git.christophe.leroy@c-s.fr>
- <87ftghbpuu.fsf@nanos.tec.linutronix.de> <d2de3211-9d7c-513e-fe0f-8bdce623fb65@c-s.fr>
- <b5fddcf8-99ff-fc0d-40c0-0eb81ad4e94a@c-s.fr> <87k15rwuxm.fsf@nanos.tec.linutronix.de>
-In-Reply-To: <87k15rwuxm.fsf@nanos.tec.linutronix.de>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Thu, 16 Jan 2020 12:22:41 -0800
-X-Gmail-Original-Message-ID: <CALCETrWOENu2k3aGNO-oiY1Sj8=cG9mMZ8eOepHOzdu25vFVVA@mail.gmail.com>
-Message-ID: <CALCETrWOENu2k3aGNO-oiY1Sj8=cG9mMZ8eOepHOzdu25vFVVA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 08/12] lib: vdso: allow arches to provide vdso data pointer
-To:     Thomas Gleixner <tglx@linutronix.de>
+        id S2387510AbgAPVIH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Jan 2020 16:08:07 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:53423 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729509AbgAPVIG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Jan 2020 16:08:06 -0500
+Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1isCMp-0001BF-Vb; Thu, 16 Jan 2020 22:07:52 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id 0F3B5101226; Thu, 16 Jan 2020 22:07:51 +0100 (CET)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Andy Lutomirski <luto@kernel.org>
 Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Andrew Lutomirski <luto@kernel.org>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com,
         Arnd Bergmann <arnd@arndb.de>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        X86 ML <x86@kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Andrew Lutomirski <luto@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "open list\:MIPS" <linux-mips@vger.kernel.org>,
+        X86 ML <x86@kernel.org>
+Subject: Re: [RFC PATCH v4 08/11] lib: vdso: allow fixed clock mode
+In-Reply-To: <CALCETrX9+PZ1h6xex2WZcSqNT7W-6R-E95jv9hLhSdAzhMCrTA@mail.gmail.com>
+References: <cover.1579196675.git.christophe.leroy@c-s.fr> <1b278bc1f6859d4df734fb2cde61cf298e6e07fd.1579196675.git.christophe.leroy@c-s.fr> <874kwvf9by.fsf@nanos.tec.linutronix.de> <CALCETrX9+PZ1h6xex2WZcSqNT7W-6R-E95jv9hLhSdAzhMCrTA@mail.gmail.com>
+Date:   Thu, 16 Jan 2020 22:07:51 +0100
+Message-ID: <871rrzf6u0.fsf@nanos.tec.linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jan 16, 2020 at 2:35 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+Andy Lutomirski <luto@kernel.org> writes:
+> On Thu, Jan 16, 2020 at 12:14 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>> Some architectures have a fixed clocksource which is known at compile
+>> time and cannot be replaced or disabled at runtime, e.g. timebase on
+>> PowerPC. For such cases the clock mode check in the VDSO code is
+>> pointless.
+>>
+> I wonder if we should use this on x86 bare-metal if we have
+> sufficiently invariant TSC.  (Via static_cpu_has(), not compiled in.)
 >
-> static __maybe_unused int
-> __cvdso_data_clock_gettime(clockid_t clock, struct __kernel_timespec *ts,
->                            const struct vdso_data *vd)
-> {
->         .....
-> }
->
-> static __maybe_unused int
-> __cvdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts)
-> {
->         const struct vdso_data *vd = __arch_get_vdso_data();
->
->         return __cvdso_data_clock_gettime(clock, ts, vd);
-> }
->
-> and then use __cvdso_data_clock_gettime on PPC and let the other archs
-> unmodified.
->
->
+> Maybe there is no such x86 machine.
 
-FWIW, I did some experiments on x86 with gcc 9.2.  gcc 9.2 uses
-rip-relative accesses if I simplify the config enough and otherwise
-materializes the pointer.  Presumably it decides that the code size
-reduction is worth it if there are a lot of accesses.
+There might be some, but every time I started to trust the TSC a bit
+more someone reported the next variant of brokenness.
 
-I suspect that tglx's suggestion will be fine or at worst will add
-negligible overhead on x86_64.
+Admittedly it has become better at least up to two sockets.
+
+For a start we could do that when the TSC is considered reliable, which
+is the case when:
+
+  - The TSC is the only available clocksource
+
+  - tsc=reliable is on the kernel command line
+
+> I really really want Intel or AMD to introduce machines where the TSC
+> pinky-swears to count in actual nanoseconds.
+
+and is guaranteed to be synchronized across any number of sockets/cpus
+and has an enforcable protection against BIOS writers.
+
+Ideally it'd have a writeable MSR attached which allows us to tweak the
+frequency in the PPM range via NTP/PTP.
+
+Guess how long quite some people including Linus and myself are asking
+for this?
+
+I know that Linus started bitching about the TSC before me, but it's
+already a bit over 20 years on my side when I first talked to Intel and
+AMD about the requirements for a reliable clocksource.
+
+Just to set the time lines straight.
+
+Constant frequency TSC surfaced on Intel in 2006 with the Core brand and
+on AMD in 2007 with Barcelona (Fam 10h).
+
+In 2008 the first TSC surfaced which was not affected by C-States and 5
+years later in 2013 some Atoms came out where TSC even worked accross
+S3.
+
+The > 2 socket issue is still not resolved AFAICT, but we got at least
+the TSC ADJUST MSR around 2012 which allowed us for the first time to
+reliably detect and mitigate BIOS wreckage.
+
+All the years I was envy on architectures which had simple designed and
+just reliably working timers forever.
+
+So now you can extrapolate how long it will take until you get your
+pinky-swearing pony :)
+
+Thanks,
+
+        tglx
