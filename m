@@ -2,91 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A5E140258
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jan 2020 04:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7BC1402E3
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jan 2020 05:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727065AbgAQDgX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Jan 2020 22:36:23 -0500
-Received: from forward103j.mail.yandex.net ([5.45.198.246]:57347 "EHLO
-        forward103j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726366AbgAQDgX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Jan 2020 22:36:23 -0500
-Received: from forward100q.mail.yandex.net (forward100q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb97])
-        by forward103j.mail.yandex.net (Yandex) with ESMTP id 66D146740FD7;
-        Fri, 17 Jan 2020 06:36:19 +0300 (MSK)
-Received: from mxback12q.mail.yandex.net (mxback12q.mail.yandex.net [IPv6:2a02:6b8:c0e:1b3:0:640:3818:d096])
-        by forward100q.mail.yandex.net (Yandex) with ESMTP id 5F53D7080002;
-        Fri, 17 Jan 2020 06:36:19 +0300 (MSK)
-Received: from vla5-e763f15c6769.qloud-c.yandex.net (vla5-e763f15c6769.qloud-c.yandex.net [2a02:6b8:c18:340b:0:640:e763:f15c])
-        by mxback12q.mail.yandex.net (mxback/Yandex) with ESMTP id a1MeNzqhuk-aHdai45h;
-        Fri, 17 Jan 2020 06:36:19 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1579232179;
-        bh=o7C7QSp1tNndF9dhHqVnBtCm952xn76Pe6J9wt1IgLE=;
-        h=From:To:Subject:CC:References:Date:In-Reply-To:Message-ID;
-        b=kWipAHvojJC7ky63S86/CHCuZ2KWqiyYeY++7GTfxJ0qvWhfFKmtX9M61/QKW4/3V
-         QAPvjKGK5U8s8JOW2X3m48uxn//nthBXZWM51Mmo98jszuS3mV7jWZHh7/cvhHLhvv
-         nRKQcMCsg4aU3n4Aldzd3JPkOQNEXv4NtfVTAGMU=
-Authentication-Results: mxback12q.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by vla5-e763f15c6769.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id BHG1m4ySsO-aEW427WJ;
-        Fri, 17 Jan 2020 06:36:15 +0300
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client certificate not present)
-Date:   Fri, 17 Jan 2020 11:36:04 +0800
-User-Agent: K-9 Mail for Android
-In-Reply-To: <1579195429-59828-3-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1579195429-59828-1-git-send-email-zhouyanjie@wanyeetech.com> <1579195429-59828-3-git-send-email-zhouyanjie@wanyeetech.com>
+        id S1726925AbgAQEQc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Jan 2020 23:16:32 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38315 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729559AbgAQEQb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Jan 2020 23:16:31 -0500
+Received: by mail-pg1-f193.google.com with SMTP id a33so11010704pgm.5
+        for <linux-mips@vger.kernel.org>; Thu, 16 Jan 2020 20:16:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=mRpBlfriiKBtpHdle3gY+6OvDi0xi+PHO3+1yxBhNW0=;
+        b=YpgoWq+f5KBHqJRceCkoXiAZ2cahZQK+2UyaAJe+K9OIe+XXcWUZL8U209yNlM3H75
+         KA7pvnOh+24zjdkJ7WMUJ3KA1+3nkIcrRF31rPO++SI7wQlThs4GJGs5B3nYoQLKW5HT
+         2eh3iHvTi3Xy88JGMBRbo122EsU8mcdZ/ksMWQv5AaykeNtw4L241TPf0aaaNgQ6oplO
+         UcCJxtf9XAGTsWbYYHU+gy2NpZnW2+Cl0nQVAovymBpgWIrdrUczQb4tNfSu/jIOSSvr
+         fG9ZirxeCQXz5lZPNcJRcNLxJM6Wbp3fKAwDJBz0ddZdtMZOh9o+PFBxxH/QKym4+LGz
+         VCIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mRpBlfriiKBtpHdle3gY+6OvDi0xi+PHO3+1yxBhNW0=;
+        b=MZVSrk891EI1PF2xon8zTprxcfrq3Uy77E9GSG07AuZv7T6YKdtdLP7oVlTVxEXab6
+         ZoTmMFY83vvWiUpAuWj6mB2mXSGqhcB3bY3zwSVziLFldDtl2hgKejnbRvVIhwQcd1Lj
+         T4YG8YjpcPlMBGvrOQtwCxJBo8qMyrcciX9dWKnIUPcIOMLouDCtKkWEqqTNth7c3sRN
+         UaoYUaN+eQNG1WaXDinJliQb5HIOri5+p1HRZeaNX7gS/OrmLw/imRNJLNKo2F2y9TeS
+         OIPavTrR9CxMPdsFBJWzUXh9SehLDM9WLv1J/44cEvGUCeoqeQ9mRvhVK/CB2phb0TeX
+         vxlg==
+X-Gm-Message-State: APjAAAU7JpQiok7f34oKrQ9Hv/iQlrcBBNGI4e4dPi6tktkKq++txSjM
+        LOB7RU3B00rMmhi7o20dUiThhA==
+X-Google-Smtp-Source: APXvYqxeLUKQP31a9O4MOSQTYDXXhKgO23RrfuN2OHejqkFLLCBgUZ8QQnxFYMZQ3Ktxo8BDhU+O2Q==
+X-Received: by 2002:a62:e30d:: with SMTP id g13mr1054005pfh.92.1579234591085;
+        Thu, 16 Jan 2020 20:16:31 -0800 (PST)
+Received: from [192.168.11.4] (softbank126112255110.biz.bbtec.net. [126.112.255.110])
+        by smtp.googlemail.com with ESMTPSA id l66sm26355096pga.30.2020.01.16.20.16.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 16 Jan 2020 20:16:30 -0800 (PST)
+Subject: Re: [PATCH RESEND v4] reboot: support offline CPUs before reboot
+To:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jiri Kosina <jkosina@suse.cz>,
+        Pavankumar Kondeti <pkondeti@codeaurora.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Aaro Koskinen <aaro.koskinen@nokia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Will Deacon <will@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-pm@vger.kernel.org
+References: <20200114110620.164861-1-hsinyi@chromium.org>
+From:   Rob Landley <rob@landley.net>
+Message-ID: <a701522f-73aa-2277-4a25-f84a27f38118@landley.net>
+Date:   Thu, 16 Jan 2020 22:20:28 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 1/6] MIPS: JZ4780: Introduce SMP support.
-To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>, linux-mips@vger.kernel.org
-CC:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        mips-creator-ci20-dev@googlegroups.com, robh+dt@kernel.org,
-        paul.burton@mips.com, paulburton@kernel.org, jhogan@kernel.org,
-        mark.rutland@arm.com, syq@debian.org, ralf@linux-mips.org,
-        rick.tyliu@ingenic.com, jason@lakedaemon.net,
-        keescook@chromium.org, geert+renesas@glider.be, krzk@kernel.org,
-        paul@crapouillou.net, prasannatsmkumar@gmail.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com,
-        ebiederm@xmission.com, hns@goldelico.com, paul@boddie.org.uk
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <D9108DBE-BA95-47C6-81B3-74FBC44E04FE@flygoat.com>
+In-Reply-To: <20200114110620.164861-1-hsinyi@chromium.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 1/14/20 5:06 AM, Hsin-Yi Wang wrote:
+> This patch adds a config ARCH_OFFLINE_CPUS_ON_REBOOT, which would offline cpus in
+> migrate_to_reboot_cpu(). If non reboot cpus are all offlined here, the loop for
+> checking online cpus would be an empty loop. If architecture don't enable this
+> config, or some cpus somehow fails to offline, it would fallback to ipi
+> function.
 
+I'm curious:
 
-=E4=BA=8E 2020=E5=B9=B41=E6=9C=8817=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=881=
-:23:44, "=E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)" <zhouyanjie@wanyeetech=
-=2Ecom> =E5=86=99=E5=88=B0:
->Forward port smp support from kernel 3=2E18=2E3 of CI20_linux
->to upstream kernel 5=2E5=2E
->
->Tested-by: H=2E Nikolaus Schaller <hns@goldelico=2Ecom>
->Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
-eetech=2Ecom>
+> +# Select to do a full offline on secondary CPUs before reboot.
+> +config ARCH_OFFLINE_CPUS_ON_REBOOT
+> +	bool "Support for offline CPUs before reboot"
+> +	depends on HOTPLUG_CPU
 
-Btw: I'm not clear with others attitude but personally I think we should a=
-void non-ASCII
-characters in kernel=2E
+The new symbol can't be selected without the other symbol.
 
-Many people work on kernel with command line tools and a lot of terminals =
-didn't
-configured to display CJK characters properly=2E
+> +	select ARCH_OFFLINE_CPUS_ON_REBOOT if HOTPLUG_CPU
 
-Pinyin or Wade=E2=80=93Giles of your name is enough for others to recogniz=
-e or
-credit you=2E
+And the other symbol automatically selects the new one.
 
-Thanks=2E
+Why are you adding a second symbol that means the same thing as the existing symbol?
 
->---
->
->
---=20
-Jiaxun Yang
+> +#if defined(CONFIG_PM_SLEEP_SMP) || defined(CONFIG_ARCH_OFFLINE_CPUS_ON_REBOOT)
+> +extern int freeze_secondary_cpus(int primary, bool reboot);
+> +#endif
+
+Couldn't that just test HOTPLUG_CPU? What's the second symbol for? (You can have
+empty stub functions when architectures don't support a thing...)
+
+Rob
