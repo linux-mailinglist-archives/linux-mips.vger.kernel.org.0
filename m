@@ -2,48 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CA21401D7
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jan 2020 03:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A5E140258
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jan 2020 04:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730154AbgAQCXt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Jan 2020 21:23:49 -0500
-Received: from forward501o.mail.yandex.net ([37.140.190.203]:59631 "EHLO
-        forward501o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726726AbgAQCXt (ORCPT
+        id S1727065AbgAQDgX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Jan 2020 22:36:23 -0500
+Received: from forward103j.mail.yandex.net ([5.45.198.246]:57347 "EHLO
+        forward103j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726366AbgAQDgX (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Jan 2020 21:23:49 -0500
-Received: from mxback26j.mail.yandex.net (mxback26j.mail.yandex.net [IPv6:2a02:6b8:0:1619::226])
-        by forward501o.mail.yandex.net (Yandex) with ESMTP id C63321E80128;
-        Fri, 17 Jan 2020 05:23:46 +0300 (MSK)
-Received: from localhost (localhost [::1])
-        by mxback26j.mail.yandex.net (mxback/Yandex) with ESMTP id ZU3RfPQi61-Nje07Xe4;
-        Fri, 17 Jan 2020 05:23:46 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1579227826;
-        bh=u1Ex/dm008pS0Rs3HBPfLNJc8QRnk3C4G8W3JONuMQ0=;
-        h=Message-Id:Cc:Subject:In-Reply-To:Date:References:To:From;
-        b=TvhvRYJmVavbRIFYjpuWxnmMqAq6Hqy3kRZignk0nQTItrm2EQ0tXyql7Cxxtd7Ve
-         fyILr7EMwJo/6vD7ghdo5ju+bgYl2lyEAs+oopfXK+Grx4cFqCMcdGcy/QAu6Qs+4L
-         2Y6CrVLxDEK0Mv46Us5mR7lJ3CF7WpO7x310VAEA=
-Authentication-Results: mxback26j.mail.yandex.net; dkim=pass header.i=@flygoat.com
-Received: by sas1-e05fd3bc78f9.qloud-c.yandex.net with HTTP;
-        Fri, 17 Jan 2020 05:23:45 +0300
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Envelope-From: yjx@flygoat.com
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Cc:     "chenhc@lemote.com" <chenhc@lemote.com>,
-        "paul.burton@mips.com" <paul.burton@mips.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>
-In-Reply-To: <875zhaeupr.fsf@nanos.tec.linutronix.de>
-References: <20200113101251.37471-1-jiaxun.yang@flygoat.com> <20200117001706.40620-1-jiaxun.yang@flygoat.com> <875zhaeupr.fsf@nanos.tec.linutronix.de>
-Subject: Re: [PATCH v1 1/2] genirq: Check for level based percpu irq
+        Thu, 16 Jan 2020 22:36:23 -0500
+Received: from forward100q.mail.yandex.net (forward100q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb97])
+        by forward103j.mail.yandex.net (Yandex) with ESMTP id 66D146740FD7;
+        Fri, 17 Jan 2020 06:36:19 +0300 (MSK)
+Received: from mxback12q.mail.yandex.net (mxback12q.mail.yandex.net [IPv6:2a02:6b8:c0e:1b3:0:640:3818:d096])
+        by forward100q.mail.yandex.net (Yandex) with ESMTP id 5F53D7080002;
+        Fri, 17 Jan 2020 06:36:19 +0300 (MSK)
+Received: from vla5-e763f15c6769.qloud-c.yandex.net (vla5-e763f15c6769.qloud-c.yandex.net [2a02:6b8:c18:340b:0:640:e763:f15c])
+        by mxback12q.mail.yandex.net (mxback/Yandex) with ESMTP id a1MeNzqhuk-aHdai45h;
+        Fri, 17 Jan 2020 06:36:19 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1579232179;
+        bh=o7C7QSp1tNndF9dhHqVnBtCm952xn76Pe6J9wt1IgLE=;
+        h=From:To:Subject:CC:References:Date:In-Reply-To:Message-ID;
+        b=kWipAHvojJC7ky63S86/CHCuZ2KWqiyYeY++7GTfxJ0qvWhfFKmtX9M61/QKW4/3V
+         QAPvjKGK5U8s8JOW2X3m48uxn//nthBXZWM51Mmo98jszuS3mV7jWZHh7/cvhHLhvv
+         nRKQcMCsg4aU3n4Aldzd3JPkOQNEXv4NtfVTAGMU=
+Authentication-Results: mxback12q.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by vla5-e763f15c6769.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id BHG1m4ySsO-aEW427WJ;
+        Fri, 17 Jan 2020 06:36:15 +0300
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (Client certificate not present)
+Date:   Fri, 17 Jan 2020 11:36:04 +0800
+User-Agent: K-9 Mail for Android
+In-Reply-To: <1579195429-59828-3-git-send-email-zhouyanjie@wanyeetech.com>
+References: <1579195429-59828-1-git-send-email-zhouyanjie@wanyeetech.com> <1579195429-59828-3-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-X-Mailer: Yamail [ http://yandex.ru ] 5.0
-Date:   Fri, 17 Jan 2020 10:23:45 +0800
-Message-Id: <1440861579227825@sas1-e05fd3bc78f9.qloud-c.yandex.net>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 1/6] MIPS: JZ4780: Introduce SMP support.
+To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>, linux-mips@vger.kernel.org
+CC:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        mips-creator-ci20-dev@googlegroups.com, robh+dt@kernel.org,
+        paul.burton@mips.com, paulburton@kernel.org, jhogan@kernel.org,
+        mark.rutland@arm.com, syq@debian.org, ralf@linux-mips.org,
+        rick.tyliu@ingenic.com, jason@lakedaemon.net,
+        keescook@chromium.org, geert+renesas@glider.be, krzk@kernel.org,
+        paul@crapouillou.net, prasannatsmkumar@gmail.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com,
+        ebiederm@xmission.com, hns@goldelico.com, paul@boddie.org.uk
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <D9108DBE-BA95-47C6-81B3-74FBC44E04FE@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -51,24 +61,32 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-17.01.2020, 09:29, "Thomas Gleixner" <tglx@linutronix.de>:
-> Jiaxun Yang <jiaxun.yang@flygoat.com> writes:
->>  MIPS processors implemented their IPI IRQ and CPU interrupt line
->>  as level triggered IRQ. However, our current percpu_irq flow is trying
->>  do it in a level triggered manner.
+=E4=BA=8E 2020=E5=B9=B41=E6=9C=8817=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=881=
+:23:44, "=E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)" <zhouyanjie@wanyeetech=
+=2Ecom> =E5=86=99=E5=88=B0:
+>Forward port smp support from kernel 3=2E18=2E3 of CI20_linux
+>to upstream kernel 5=2E5=2E
 >
+>Tested-by: H=2E Nikolaus Schaller <hns@goldelico=2Ecom>
+>Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
+eetech=2Ecom>
 
-Hi Thomas,
+Btw: I'm not clear with others attitude but personally I think we should a=
+void non-ASCII
+characters in kernel=2E
 
-Thanks for your kind explanation.
+Many people work on kernel with command line tools and a lot of terminals =
+didn't
+configured to display CJK characters properly=2E
 
-That appears to be my misunderstanding of the trigger type.
+Pinyin or Wade=E2=80=93Giles of your name is enough for others to recogniz=
+e or
+credit you=2E
 
-Paul, I have confirmed it seems fine to handle percpu IRQ without mask
-it on both Ingenic and Loongson processors. How about other MIPS Cores?
-Could you please help check that?
+Thanks=2E
 
-Thanks.
-
---
+>---
+>
+>
+--=20
 Jiaxun Yang
