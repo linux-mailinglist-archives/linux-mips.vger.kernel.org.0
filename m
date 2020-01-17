@@ -2,105 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42291140BFA
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Jan 2020 15:03:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F05140EFB
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Jan 2020 17:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728827AbgAQOCq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Jan 2020 09:02:46 -0500
-Received: from mail.dlink.ru ([178.170.168.18]:55836 "EHLO fd.dlink.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728998AbgAQOCp (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 17 Jan 2020 09:02:45 -0500
-Received: by fd.dlink.ru (Postfix, from userid 5000)
-        id 6EE6F1B21576; Fri, 17 Jan 2020 17:02:42 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru 6EE6F1B21576
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dlink.ru; s=mail;
-        t=1579269762; bh=5ylIyyrZHlzb5tLPn4yy5E0L0D4VwPrmEFZ7BGuuHO8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=EWBPsPwsX/FBRAeYsYwLjo7CLzvkeykEkH6W4hPSin3x4nVpHbx8dB0zBAd3+ybfw
-         lPzxQX4Y/M5STsdDec+7dQ7JLXXIQuEPYvS6W8a3nFCJoj8oitsGYK/lorWNkw2e4c
-         OB+UNMEDAhllfdOQFY64LqnJ0WuHq5oyN2/1aP4k=
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.dlink.ru
-X-Spam-Level: 
-X-Spam-Status: No, score=-99.2 required=7.5 tests=BAYES_50,URIBL_BLOCKED,
-        USER_IN_WHITELIST autolearn=disabled version=3.4.2
-Received: from mail.rzn.dlink.ru (mail.rzn.dlink.ru [178.170.168.13])
-        by fd.dlink.ru (Postfix) with ESMTP id 0A6A61B214CE;
-        Fri, 17 Jan 2020 17:02:32 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru 0A6A61B214CE
-Received: from mail.rzn.dlink.ru (localhost [127.0.0.1])
-        by mail.rzn.dlink.ru (Postfix) with ESMTP id 5DADB1B20AE9;
-        Fri, 17 Jan 2020 17:02:31 +0300 (MSK)
-Received: from localhost.localdomain (unknown [196.196.203.126])
-        by mail.rzn.dlink.ru (Postfix) with ESMTPA;
-        Fri, 17 Jan 2020 17:02:31 +0300 (MSK)
-From:   Alexander Lobakin <alobakin@dlink.ru>
-To:     Paul Burton <paulburton@kernel.org>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Rob Herring <robh@kernel.org>,
-        Alexander Lobakin <alobakin@dlink.ru>,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH mips-fixes 3/3] MIPS: syscalls: fix indentation of the 'SYSNR' message
-Date:   Fri, 17 Jan 2020 17:02:09 +0300
-Message-Id: <20200117140209.17672-4-alobakin@dlink.ru>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200117140209.17672-1-alobakin@dlink.ru>
-References: <20200117140209.17672-1-alobakin@dlink.ru>
+        id S1726554AbgAQQb7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Jan 2020 11:31:59 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:42165 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726506AbgAQQb7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Jan 2020 11:31:59 -0500
+Received: by mail-oi1-f194.google.com with SMTP id 18so22695123oin.9;
+        Fri, 17 Jan 2020 08:31:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=5gj1/chJ9sV8kpdyataWFH+xbqAvecJvMET5S/FO4BY=;
+        b=KrQHPGEKwzzDNTU84uZNuV3KRKyhW7T0CMRw3iN7rG1VTQ5qmiAZnMkNLfgcFJz56T
+         8ZwIol13oaHidE4d9eeB9Dh3mzYvkZ06w4oeitVQjKwdPDA3raalGz6wJpV8NoTcN2aF
+         toVNlNjnKJCb/gP0MEmyUgRfr+dNAtlY+AkNGKD7X9nt53iVKTbJxmwgLaHmDhuPqfgw
+         soS91F9P5nba+fb/WYKMzR69T47peb5VtxsC/t4OiNS9nRWJ2TCdFdvC7AO2uWjUQTkJ
+         q12kP1EgQRB1uPsEA4/C6yWdvHjOQ4PuJN4WnB+GBdBDg4VTtfRwrzxxQTrc6ZxvtsfQ
+         VZfw==
+X-Gm-Message-State: APjAAAVhaFjZ3FMr3mU8ZWQSqb8Cnzek4rqy0OW5UVIvcs4byKmVAoea
+        98UOpJilbTJ+PpsNaz1NFw==
+X-Google-Smtp-Source: APXvYqxs5kEVxVAuMPNxBDE0jWIqvD8uzgfpnztY5yy6y+7ElSVcbkmwv+bYZcJhO8bAItMve31emQ==
+X-Received: by 2002:aca:fcd1:: with SMTP id a200mr3911032oii.74.1579278718422;
+        Fri, 17 Jan 2020 08:31:58 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id a24sm7933178oic.10.2020.01.17.08.31.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jan 2020 08:31:57 -0800 (PST)
+Received: (nullmailer pid 25438 invoked by uid 1000);
+        Fri, 17 Jan 2020 16:31:56 -0000
+Date:   Fri, 17 Jan 2020 10:31:56 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, mips-creator-ci20-dev@googlegroups.com,
+        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
+        jhogan@kernel.org, mark.rutland@arm.com, syq@debian.org,
+        ralf@linux-mips.org, rick.tyliu@ingenic.com, jason@lakedaemon.net,
+        keescook@chromium.org, geert+renesas@glider.be, krzk@kernel.org,
+        paul@crapouillou.net, prasannatsmkumar@gmail.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com,
+        ebiederm@xmission.com, hns@goldelico.com, paul@boddie.org.uk
+Subject: Re: [PATCH v2 3/6] dt-bindings: MIPS: Document Ingenic SoCs binding.
+Message-ID: <20200117163156.GA24497@bogus>
+References: <1579195429-59828-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1579195429-59828-5-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <1579195429-59828-5-git-send-email-zhouyanjie@wanyeetech.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-It also lacks a whitespace (copy'n'paste error?) and also messes up the
-output:
+On Fri, 17 Jan 2020 01:23:46 +0800, =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= wrote:
+> Document the available properties for the SoC root node and the
+> CPU nodes of the devicetree for the Ingenic XBurst SoCs.
+> 
+> Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> ---
+> 
+> Notes:
+>     v1->v2:
+>     Change the two Document from txt to yaml.
+> 
+>  .../bindings/mips/ingenic/ingenic,cpu.yaml         | 53 ++++++++++++++++++++++
+>  .../bindings/mips/ingenic/ingenic,soc,yaml         | 35 ++++++++++++++
+>  2 files changed, 88 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,soc,yaml
+> 
 
-  SYSHDR  arch/mips/include/generated/uapi/asm/unistd_n32.h
-  SYSHDR  arch/mips/include/generated/uapi/asm/unistd_n64.h
-  SYSHDR  arch/mips/include/generated/uapi/asm/unistd_o32.h
-  SYSNR  arch/mips/include/generated/uapi/asm/unistd_nr_n32.h
-  SYSNR  arch/mips/include/generated/uapi/asm/unistd_nr_n64.h
-  SYSNR  arch/mips/include/generated/uapi/asm/unistd_nr_o32.h
-  WRAP    arch/mips/include/generated/uapi/asm/bpf_perf_event.h
-  WRAP    arch/mips/include/generated/uapi/asm/ipcbuf.h
+My bot found errors running 'make dt_binding_check' on your patch:
 
-After:
+Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml:  while parsing a block collection
+  in "<unicode string>", line 17, column 7
+did not find expected '-' indicator
+  in "<unicode string>", line 17, column 25
+Documentation/devicetree/bindings/Makefile:12: recipe for target 'Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.example.dts' failed
+make[1]: *** [Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.example.dts] Error 1
+Makefile:1263: recipe for target 'dt_binding_check' failed
+make: *** [dt_binding_check] Error 2
 
-  SYSHDR  arch/mips/include/generated/uapi/asm/unistd_n32.h
-  SYSHDR  arch/mips/include/generated/uapi/asm/unistd_n64.h
-  SYSHDR  arch/mips/include/generated/uapi/asm/unistd_o32.h
-  SYSNR   arch/mips/include/generated/uapi/asm/unistd_nr_n32.h
-  SYSNR   arch/mips/include/generated/uapi/asm/unistd_nr_n64.h
-  SYSNR   arch/mips/include/generated/uapi/asm/unistd_nr_o32.h
-  WRAP    arch/mips/include/generated/uapi/asm/bpf_perf_event.h
-  WRAP    arch/mips/include/generated/uapi/asm/ipcbuf.h
-
-Present since day 0 of syscall table generation introduction for MIPS.
-
-Fixes: 9bcbf97c6293 ("mips: add system call table generation support")
-Cc: <stable@vger.kernel.org> # v5.0+
-Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
----
- arch/mips/kernel/syscalls/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/mips/kernel/syscalls/Makefile b/arch/mips/kernel/syscalls/Makefile
-index a3d4bec695c6..6efb2f6889a7 100644
---- a/arch/mips/kernel/syscalls/Makefile
-+++ b/arch/mips/kernel/syscalls/Makefile
-@@ -18,7 +18,7 @@ quiet_cmd_syshdr = SYSHDR  $@
- 		   '$(syshdr_pfx_$(basetarget))'		\
- 		   '$(syshdr_offset_$(basetarget))'
- 
--quiet_cmd_sysnr = SYSNR  $@
-+quiet_cmd_sysnr = SYSNR   $@
-       cmd_sysnr = $(CONFIG_SHELL) '$(sysnr)' '$<' '$@'		\
- 		  '$(sysnr_abis_$(basetarget))'			\
- 		  '$(sysnr_pfx_$(basetarget))'			\
--- 
-2.25.0
-
+See https://patchwork.ozlabs.org/patch/1224371
+Please check and re-submit.
