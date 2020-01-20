@@ -2,90 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C0A142244
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2020 05:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F466142E2F
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2020 15:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729030AbgATEEU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 19 Jan 2020 23:04:20 -0500
-Received: from ozlabs.org ([203.11.71.1]:51483 "EHLO ozlabs.org"
+        id S1727031AbgATO4q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Jan 2020 09:56:46 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:56792 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729011AbgATEEU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 19 Jan 2020 23:04:20 -0500
-Received: by ozlabs.org (Postfix, from userid 1003)
-        id 481J2T5VvKz9sRQ; Mon, 20 Jan 2020 15:04:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ozlabs.org; s=201707;
-        t=1579493057; bh=GlIncoWYmOYv5Dni23RSwo6uZojZl918YWnmGeGzyJI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V/Pa+sHEae+jG71OR9r2A404DaS5UBDnEl6W5GR08hXip3iEYMnPJKOgSS38mznMS
-         QFzFYRElYmpf39vGFlmcBXqAVGdMsLFjm/U25lpx6q0fNhotMfBPwIAqSNRKv/jocP
-         A5kGrOXz8juIsyZkgL8m65HZO5Fh3mx4+Y9Ux1ecPuIMT+sYjoMy+YSKDxMsJPTVPp
-         HQfIaljJGxLrxk3xUQeJAE38M8fGC3e1O4wLIfYvDRR2aZSLUNac6unBI8qCtwWfOb
-         HgwP/Q9WG5+8ApO9XCFy1bxiLQ13UNNmnGOK8PeEgB/i16xsXwKAaVRbebZ2djABCZ
-         zP8/aQGwqo1nw==
-Date:   Mon, 20 Jan 2020 15:04:12 +1100
-From:   Paul Mackerras <paulus@ozlabs.org>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Hogan <jhogan@kernel.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kurz <groug@kaod.org>
-Subject: Re: [PATCH v2 12/45] KVM: PPC: Allocate vcpu struct in common PPC
- code
-Message-ID: <20200120040412.GF14307@blackberry>
-References: <20191218215530.2280-1-sean.j.christopherson@intel.com>
- <20191218215530.2280-13-sean.j.christopherson@intel.com>
+        id S1726860AbgATO4q (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 20 Jan 2020 09:56:46 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 481ZWC44c9z9v1xD;
+        Mon, 20 Jan 2020 15:56:39 +0100 (CET)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=iuBLQmw4; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id kzvItXeAdApu; Mon, 20 Jan 2020 15:56:39 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 481ZWC2dgDz9v1xC;
+        Mon, 20 Jan 2020 15:56:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1579532199; bh=7a7pH0OuPJ37Tokg90N9GbyIEViwQm3IBxxlGbRco4U=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=iuBLQmw4SdLFu8wXBuDZ2Hk+qOZ7RlDsSCIdnPQ/fwTAZttl5QD/WEybExnxVKYpn
+         zKGmHcCaDYFBT0aF1DolPqjYevZoXPMFPjzQfN5g9anMJruv0gr2/LYX0xiPvp2Wln
+         Wbfm7ED4pN8P0a3f4DeDkE6qqIZRKgkXlMJlv6SY=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 50E548B7CA;
+        Mon, 20 Jan 2020 15:56:44 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 7yXE7xArml9v; Mon, 20 Jan 2020 15:56:44 +0100 (CET)
+Received: from po14934vm.idsi0.si.c-s.fr (po15451.idsi0.si.c-s.fr [172.25.230.100])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id F37C98B7BD;
+        Mon, 20 Jan 2020 15:56:43 +0100 (CET)
+Subject: Re: [RFC PATCH v4 00/11] powerpc: switch VDSO to C implementation.
+To:     Segher Boessenkool <segher@kernel.crashing.org>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com,
+        arnd@arndb.de, tglx@linutronix.de, vincenzo.frascino@arm.com,
+        luto@kernel.org, x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org
+References: <cover.1579196675.git.christophe.leroy@c-s.fr>
+ <20200117085851.GS3191@gate.crashing.org>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <3027b6d2-47a9-a871-7c52-050a5f9c6ab7@c-s.fr>
+Date:   Mon, 20 Jan 2020 14:56:00 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191218215530.2280-13-sean.j.christopherson@intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20200117085851.GS3191@gate.crashing.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 01:54:57PM -0800, Sean Christopherson wrote:
-> Move allocation of all flavors of PPC vCPUs to common PPC code.  All
-> variants either allocate 'struct kvm_vcpu' directly, or require that
-> the embedded 'struct kvm_vcpu' member be located at offset 0, i.e.
-> guarantee that the allocation can be directly interpreted as a 'struct
-> kvm_vcpu' object.
+Hi
+
+On 01/17/2020 08:58 AM, Segher Boessenkool wrote:
+> Hi!
 > 
-> Remove the message from the build-time assertion regarding placement of
-> the struct, as compatibility with the arch usercopy region is no longer
-> the sole dependent on 'struct kvm_vcpu' being at offset zero.
+> On Thu, Jan 16, 2020 at 05:58:24PM +0000, Christophe Leroy wrote:
+>> On a powerpc8xx, with current powerpc/32 ASM VDSO:
+>>
+>> gettimeofday:    vdso: 907 nsec/call
+>> clock-getres-realtime:    vdso: 484 nsec/call
+>> clock-gettime-realtime:    vdso: 899 nsec/call
+>>
+>> The first patch adds VDSO generic C support without any changes to common code.
+>> Performance is as follows:
+>>
+>> gettimeofday:    vdso: 1211 nsec/call
+>> clock-getres-realtime:    vdso: 722 nsec/call
+>> clock-gettime-realtime:    vdso: 1216 nsec/call
+>>
+>> Then a few changes in the common code have allowed performance improvement. At
+>> the end of the series we have:
+>>
+>> gettimeofday:    vdso: 974 nsec/call
+>> clock-getres-realtime:    vdso: 545 nsec/call
+>> clock-gettime-realtime:    vdso: 941 nsec/call
+>>
+>> The final result is rather close to pure ASM VDSO:
+>> * 7% more on gettimeofday (9 cycles)
+>> * 5% more on clock-gettime-realtime (6 cycles)
+>> * 12% more on clock-getres-realtime (8 cycles)
 > 
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Nice!  Much better.
+> 
+> It should be tested on more representative hardware, too, but this looks
+> promising alright :-)
+> 
 
-This fails to compile for Book E configs:
+mpc832x (e300c2 core) at 333 MHz:
 
-  CC      arch/powerpc/kvm/e500.o
-/home/paulus/kernel/kvm/arch/powerpc/kvm/e500.c: In function ‘kvmppc_core_vcpu_create_e500’:
-/home/paulus/kernel/kvm/arch/powerpc/kvm/e500.c:464:9: error: return makes integer from pointer without a cast [-Werror=int-conversion]
-  return vcpu;
-         ^
-cc1: all warnings being treated as errors
-make[3]: *** [/home/paulus/kernel/kvm/scripts/Makefile.build:266: arch/powerpc/kvm/e500.o] Error 1
+Before:
 
-There is a "return vcpu" statement in kvmppc_core_vcpu_create_e500(),
-and another in kvmppc_core_vcpu_create_e500mc(), which both need to be
-changed to "return 0".
+gettimeofday:    vdso: 235 nsec/call
+clock-getres-realtime-coarse:    vdso: 1668 nsec/call
+clock-gettime-realtime-coarse:    vdso: 1338 nsec/call
+clock-getres-realtime:    vdso: 135 nsec/call
+clock-gettime-realtime:    vdso: 244 nsec/call
+clock-getres-boottime:    vdso: 1232 nsec/call
+clock-gettime-boottime:    vdso: 1935 nsec/call
+clock-getres-tai:    vdso: 1257 nsec/call
+clock-gettime-tai:    vdso: 1898 nsec/call
+clock-getres-monotonic-raw:    vdso: 1229 nsec/call
+clock-gettime-monotonic-raw:    vdso: 1541 nsec/call
+clock-getres-monotonic-coarse:    vdso: 1699 nsec/call
+clock-gettime-monotonic-coarse:    vdso: 1477 nsec/call
+clock-getres-monotonic:    vdso: 135 nsec/call
+clock-gettime-monotonic:    vdso: 283 nsec/call
 
-(By the way, I do appreciate you fixing the PPC code, even if there
-are some errors.)
+With the series:
 
-Paul.
+gettimeofday:    vdso: 271 nsec/call
+clock-getres-realtime-coarse:    vdso: 159 nsec/call
+clock-gettime-realtime-coarse:    vdso: 184 nsec/call
+clock-getres-realtime:    vdso: 163 nsec/call
+clock-gettime-realtime:    vdso: 281 nsec/call
+clock-getres-boottime:    vdso: 169 nsec/call
+clock-gettime-boottime:    vdso: 274 nsec/call
+clock-getres-tai:    vdso: 163 nsec/call
+clock-gettime-tai:    vdso: 277 nsec/call
+clock-getres-monotonic-raw:    vdso: 166 nsec/call
+clock-gettime-monotonic-raw:    vdso: 302 nsec/call
+clock-getres-monotonic-coarse:    vdso: 159 nsec/call
+clock-gettime-monotonic-coarse:    vdso: 184 nsec/call
+clock-getres-monotonic:    vdso: 166 nsec/call
+clock-gettime-monotonic:    vdso: 274 nsec/call
+
+Christophe
