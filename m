@@ -2,93 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A15B51430CB
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2020 18:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BEE143142
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2020 19:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726942AbgATR2T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Jan 2020 12:28:19 -0500
-Received: from gate.crashing.org ([63.228.1.57]:54272 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726642AbgATR2T (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 20 Jan 2020 12:28:19 -0500
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 00KHRXcN008864;
-        Mon, 20 Jan 2020 11:27:33 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 00KHRW40008862;
-        Mon, 20 Jan 2020 11:27:32 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Mon, 20 Jan 2020 11:27:32 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com,
-        arnd@arndb.de, tglx@linutronix.de, vincenzo.frascino@arm.com,
-        luto@kernel.org, x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [RFC PATCH v4 00/11] powerpc: switch VDSO to C implementation.
-Message-ID: <20200120172732.GC3191@gate.crashing.org>
-References: <cover.1579196675.git.christophe.leroy@c-s.fr> <20200117085851.GS3191@gate.crashing.org> <3027b6d2-47a9-a871-7c52-050a5f9c6ab7@c-s.fr> <20200120151936.GB3191@gate.crashing.org> <4b0e5941-c37e-3c85-3809-45f33ce35657@c-s.fr>
-Mime-Version: 1.0
+        id S1728665AbgATSGP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Jan 2020 13:06:15 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:34590 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726642AbgATSGP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Jan 2020 13:06:15 -0500
+Received: by mail-pl1-f193.google.com with SMTP id c9so178785plo.1;
+        Mon, 20 Jan 2020 10:06:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aiI98fgZ/Z1LosIGL/70Sm6kSYvFhqQxigL0/FAxBUQ=;
+        b=lbEPmBJt+pcHaQB+olLvRG2KgqvapOGVcZVfLByFG+nYZl5AKOhHCBLPzgdxFNjd0N
+         nQLfOOXEKCMw0Nt/PduXnJ1xx49hpf0Y9Dfh4zwTmGtYOAhNbxFHu5bU3ULx647gGtLg
+         cWYfP9TtlcAC6fOkds6H0i9g0Lpi1zqnIM3kGmLu/KZu7Xv0TOmZIDgDgrUWJksmDFi2
+         hYZNIlX9NSveUJxkjnClpBtY7Kqcrpz6disr3MwvAR8gdjxjyhCdsqvc4kbaOWKDDAEA
+         +zLi8c3ir7vUgIN4KC9RabHfRWjWnYobBvu1049mysgjdh3oevVkA+Ru/TTYBMPSYEN/
+         XdGw==
+X-Gm-Message-State: APjAAAWOntpSvSrq3aXFM27cCr6yOR/vyoapmN58fF7suG8E7KBuPOc1
+        McMbHLQ6Xvow9/NrwHSH0Kk5N9dwsfp/fw==
+X-Google-Smtp-Source: APXvYqxo+75Mpun1uPa3aOc2yV6S0hqDlGzn1BlZCoEJwFpw+h1+oP5UMWUQpOt82Vq3zvT8CKCFDQ==
+X-Received: by 2002:a17:902:74cc:: with SMTP id f12mr978204plt.330.1579543574503;
+        Mon, 20 Jan 2020 10:06:14 -0800 (PST)
+Received: from localhost (MIPS-TECHNO.ear1.SanJose1.Level3.net. [4.15.122.74])
+        by smtp.gmail.com with ESMTPSA id k12sm37591661pgm.65.2020.01.20.10.06.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jan 2020 10:06:13 -0800 (PST)
+Date:   Mon, 20 Jan 2020 10:06:12 -0800
+From:   Paul Burton <paulburton@kernel.org>
+To:     Alexandre Oliva <lxoliva@fsfla.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
+        paul.burton@mips.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] [Loongson2F] adjust cpufreq uses of LOONGSON_CHIPCFG
+Message-ID: <20200120180612.gurkikzbh77stk4v@pburton-laptop>
+References: <or5zh9l5ok.fsf@livre.home>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4b0e5941-c37e-3c85-3809-45f33ce35657@c-s.fr>
-User-Agent: Mutt/1.4.2.3i
+In-Reply-To: <or5zh9l5ok.fsf@livre.home>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jan 20, 2020 at 06:08:23PM +0100, Christophe Leroy wrote:
-> Not easy I think.
+Hi Alexandre,
+
+On Sat, Jan 18, 2020 at 02:00:43AM -0300, Alexandre Oliva wrote:
 > 
-> First we have the unavoidable ASM entry function that can't be dropped 
-> because of the CR[SO] bit the set on error or clear on no error and that 
-> can't be done in C.
-
-Yup.
-
-> In our ASM VDSO, fixed shifts are used, while in generic C VDSO, shifts 
-> are generic and read from the VDSO data.
-
-Does that cost more than just a few cycles?
-
-> And there is still some funny code generated by GCC (8.1), like:
+> The post-fork cleanup of loongson2ef from loongson64 changed
+> LOONGSON_CHIPCFG from a single-argument functional macro to a
+> non-functional macro with an mmio address in loongson2ef, but
+> loongson2_cpufreq still uses the notation of a functional macro call
+> expecting it to be an lvalue.  Fixed based on loongson_suspend_enter.
 > 
->  620:	7d 29 3c 30 	srw     r9,r9,r7
->  624:	21 87 00 20 	subfic  r12,r7,32
->  628:	7d 07 3c 31 	srw.    r7,r8,r7
->  62c:	7d 08 60 30 	slw     r8,r8,r12
->  630:	7d 0b 4b 78 	or      r11,r8,r9
+> Signed-off-by: Alexandre Oliva <lxoliva@fsfla.org>
+> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Cc: linux-mips@vger.kernel.org
+> Cc: paul.burton@mips.com
 
-(This can be done cheaper for fixed shifts, you can use rlwimi then).
+This patch looks good to me, but you need to copy the cpufreq
+maintainers:
 
->  634:	39 40 00 00 	li      r10,0
->  638:	40 82 00 84 	bne     6bc <__c_kernel_clock_gettime+0x114>
->  63c:	81 23 00 24 	lwz     r9,36(r3)
->  640:	81 05 00 00 	lwz     r8,0(r5)
-> ...
->  6bc:	7d 69 5b 78 	mr      r9,r11
->  6c0:	7c ea 3b 78 	mr      r10,r7
->  6c4:	7d 2b 4b 78 	mr      r11,r9
->  6c8:	4b ff ff 74 	b       63c <__c_kernel_clock_gettime+0x94>
+$ ./scripts/get_maintainer.pl -f drivers/cpufreq/loongson2_cpufreq.c
+Jiaxun Yang <jiaxun.yang@flygoat.com> (maintainer:MIPS/LOONGSON2EF ARCHITECTURE)
+"Rafael J. Wysocki" <rjw@rjwysocki.net> (maintainer:CPU FREQUENCY SCALING FRAMEWORK)
+Viresh Kumar <viresh.kumar@linaro.org> (maintainer:CPU FREQUENCY SCALING FRAMEWORK)
+linux-mips@vger.kernel.org (open list:MIPS/LOONGSON2EF ARCHITECTURE)
+linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK)
+linux-kernel@vger.kernel.org (open list)
+
+I've CC'd them now, but they might want the patch resending.
+
+Thanks,
+    Paul
+
+> ---
+>  drivers/cpufreq/loongson2_cpufreq.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> This branch to 6bc is totally useless:
-> - copying r11 into r9 is pointless as r9 is overwritten in 63c
-> - copying back r9 into r11 is pointless as r11 has not been modified 
-> inbetween.
-
-Yeah, huh, how did that happen.
-
-> - loading r10 with 0 then overwritting r10 with r7 when r7 is not 0 is 
-> pointless as well, could have directly put the result of srw. in r10.
-
-This may be harder to make the compiler do.
-
-But the r9/r11 thing suggests you are preventing optimisation somewhere,
-maybe with some asm?  Do you have some small testcase I can compile?
-
-
-Segher
+> diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
+> index 84f0eee..ace2d46 100644
+> --- a/drivers/cpufreq/loongson2_cpufreq.c
+> +++ b/drivers/cpufreq/loongson2_cpufreq.c
+> @@ -144,9 +144,11 @@ static void loongson2_cpu_wait(void)
+>  	u32 cpu_freq;
+>  
+>  	spin_lock_irqsave(&loongson2_wait_lock, flags);
+> -	cpu_freq = LOONGSON_CHIPCFG(0);
+> -	LOONGSON_CHIPCFG(0) &= ~0x7;	/* Put CPU into wait mode */
+> -	LOONGSON_CHIPCFG(0) = cpu_freq;	/* Restore CPU state */
+> +	cpu_freq = readl(LOONGSON_CHIPCFG);
+> +	/* Put CPU into wait mode */
+> +	writel(readl(LOONGSON_CHIPCFG) & ~0x7, LOONGSON_CHIPCFG);
+> +	/* Restore CPU state */
+> +	writel(cpu_freq, LOONGSON_CHIPCFG);
+>  	spin_unlock_irqrestore(&loongson2_wait_lock, flags);
+>  	local_irq_enable();
+>  }
+> -- 
+> 2.7.4
+> 
+> 
+> -- 
+> Alexandre Oliva, freedom fighter   he/him   https://FSFLA.org/blogs/lxo
+> Free Software Evangelist           Stallman was right, but he's left :(
+> GNU Toolchain Engineer    FSMatrix: It was he who freed the first of us
+> FSF & FSFLA board member                The Savior shall return (true);
