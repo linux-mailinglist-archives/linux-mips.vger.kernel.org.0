@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56197143B98
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Jan 2020 12:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADDB6143BA9
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Jan 2020 12:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728741AbgAULFG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Jan 2020 06:05:06 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:40315 "EHLO
+        id S1727255AbgAULIJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Jan 2020 06:08:09 -0500
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:37279 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727255AbgAULFG (ORCPT
+        by vger.kernel.org with ESMTP id S1727817AbgAULIJ (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 21 Jan 2020 06:05:06 -0500
+        Tue, 21 Jan 2020 06:08:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579604705;
+        s=mimecast20190719; t=1579604887;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=d9MsVbaNk7uS2Z+64id6QtYbk8dUZDS6e1+y0CQGu/U=;
-        b=ZKp24iBGCt+3zyrHYZVdp2H73Ixhe5CSWfXp10IsdJrFXXOENfm7ywZcdThMBa8KllAcwm
-        GbW65C+VNcPmsOK59916ruWQRbjJoVXuA6TJXarJhYXO5DpvIgEcsKeEQ5U6w5hoZ1r4SQ
-        WEANir1A9KoluhZmjlPE7Bs0SOOlj3c=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-198-_loRk99eMnmyZ3cRSSAdVg-1; Tue, 21 Jan 2020 06:05:04 -0500
-X-MC-Unique: _loRk99eMnmyZ3cRSSAdVg-1
-Received: by mail-wr1-f70.google.com with SMTP id 90so1151885wrq.6
-        for <linux-mips@vger.kernel.org>; Tue, 21 Jan 2020 03:05:03 -0800 (PST)
+        bh=x7jZw/H2y5zeqQuje6kJm5arA3TA0C7bKtuRivqDv8Y=;
+        b=OF6cHrE17mRhhzRqdCGGV665WKU9jAcbHWfdytXrkkiXYy3xoWFIMbOG415iCjLnITKfdL
+        Yc0HCp3DhQ5SutO9Y3pLXmPGek7sjiofFNnLBVBRaRz7GXxprrWXs7ITeXBXt0xe0RbPUL
+        AoY1BMcxA59336j3HRCl3VHAY3c9Jpc=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-336-b0CJ4AFoPH-LJROcgvTcpg-1; Tue, 21 Jan 2020 06:08:06 -0500
+X-MC-Unique: b0CJ4AFoPH-LJROcgvTcpg-1
+Received: by mail-wr1-f71.google.com with SMTP id b13so1137100wrx.22
+        for <linux-mips@vger.kernel.org>; Tue, 21 Jan 2020 03:08:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=d9MsVbaNk7uS2Z+64id6QtYbk8dUZDS6e1+y0CQGu/U=;
-        b=PNcpTj53/szJ/IQBPpES9giqoopZtf/Rvsp5O2GbnDtx0ajEnk5elUuMruToHChbOq
-         1XmXzsNu5MX5QSsQq5S710pO1thZT9SB14ZQU4HSXHau8KXAIvpiIy2kGqveUlH/L4S3
-         XViogdXudgsvogO4mvYyxFLTgDhFxUXbIW0hWk7qwoLtVL2ijwA0I+S0LLaVAMUJhEVq
-         XQqhKLENWsnTIxyhK3bTpRWGT1ZPUxHMu30RmEUHsv9s/EkoZnssbFH+OUcLnsj7E6fF
-         P6oA9Y7s68s5IWCyO5+OVYBEhFGPnyNoyqzMKud5c8BO44hsSeRURJMkjYmpMLyyapF2
-         5MLg==
-X-Gm-Message-State: APjAAAW0nK440/yMzlyo4mUJUd3HHB9wWfJ3XZXCOrJ87StaPrM4cJ6p
-        YqYbFOqS0BZkBwq5xnwJhHK6DFtojj/nLQoN17VD5qcW9NXe/gQE+3DGvYEgjWwpUoiwFTWgjmP
-        p6ccFEtROkxsHAQlaCLIIbA==
-X-Received: by 2002:adf:978c:: with SMTP id s12mr4583936wrb.408.1579604702660;
-        Tue, 21 Jan 2020 03:05:02 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxC6B3CUIhPHui5yyVc53K8mg8DvgmB+n/aXEy4G4Rxw9ic8vDj4v06pAmlaTd9zgfxWEA28g==
-X-Received: by 2002:adf:978c:: with SMTP id s12mr4583882wrb.408.1579604702280;
-        Tue, 21 Jan 2020 03:05:02 -0800 (PST)
+        bh=x7jZw/H2y5zeqQuje6kJm5arA3TA0C7bKtuRivqDv8Y=;
+        b=rU28FXtRj/vJpouPTbMXllmSpA2kixGTOIRsBngUDmKsA8jD1Md/9uDUXexcZKCylb
+         WazxyPo+EoRmP7B3u+BIPV1MMJYUudnumbw0xJh293rr6GlHB1bt1HDhtxd78h9ilz2R
+         DfG/yZ0mSJ7n/Ii2fTT53ugWpTWv1f2uFI+lgj41D4v77i2mraTghQBImIW/jUZ8BwRR
+         E5qp3g6Ae2C8aJ3c5kjBABnfZE8gTPmip3MDiNTRYbDD0XZaStpUa4ZgKIfb39OITrO6
+         FXLt6rE9Gzk+CpvLtD9jo1Z3uz04K/Ze9POlpdI8qCJkCeRtxFHstuhJ9Dz/Amko1+P7
+         Dylg==
+X-Gm-Message-State: APjAAAXqrdZkKEa3+QE9RLc7ZQEBBlxZlHaH/VQsQ+4VKkQ/mIBB168k
+        CUVswt9Am/jqvvcq5ITKSO095zyAKBauTNE53zqKhVW/bTvMEdIuhK4dRwG4J9Ea3NMVmnIe2tv
+        VMlFbGvmZso1d95mAucJszA==
+X-Received: by 2002:a5d:5091:: with SMTP id a17mr4584305wrt.362.1579604884296;
+        Tue, 21 Jan 2020 03:08:04 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyrSJw1xVD8KtI/DVSDHhO4SUvtdN2Xqf5CmpjkIe8Jj2CEEstdjLnJnkKwuFepClVNL9qC7A==
+X-Received: by 2002:a5d:5091:: with SMTP id a17mr4584254wrt.362.1579604883939;
+        Tue, 21 Jan 2020 03:08:03 -0800 (PST)
 Received: from ?IPv6:2001:b07:6468:f312:b509:fc01:ee8a:ca8a? ([2001:b07:6468:f312:b509:fc01:ee8a:ca8a])
-        by smtp.gmail.com with ESMTPSA id s8sm50551793wrt.57.2020.01.21.03.05.00
+        by smtp.gmail.com with ESMTPSA id l15sm49716775wrv.39.2020.01.21.03.08.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jan 2020 03:05:01 -0800 (PST)
-Subject: Re: [PATCH v2 12/45] KVM: PPC: Allocate vcpu struct in common PPC
- code
+        Tue, 21 Jan 2020 03:08:03 -0800 (PST)
+Subject: Re: [PATCH v2 15/45] KVM: PPC: Move kvm_vcpu_init() invocation to
+ common code
 To:     Paul Mackerras <paulus@ozlabs.org>,
         Sean Christopherson <sean.j.christopherson@intel.com>
 Cc:     Marc Zyngier <maz@kernel.org>, James Hogan <jhogan@kernel.org>,
@@ -73,15 +73,15 @@ Cc:     Marc Zyngier <maz@kernel.org>, James Hogan <jhogan@kernel.org>,
         kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Greg Kurz <groug@kaod.org>
 References: <20191218215530.2280-1-sean.j.christopherson@intel.com>
- <20191218215530.2280-13-sean.j.christopherson@intel.com>
- <20200120040412.GF14307@blackberry>
+ <20191218215530.2280-16-sean.j.christopherson@intel.com>
+ <20200120033402.GC14307@blackberry>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <fcd2aaf1-6f6e-303a-d7c6-f6b0c0a4555c@redhat.com>
-Date:   Tue, 21 Jan 2020 12:05:00 +0100
+Message-ID: <07329402-25a3-874a-5e79-d35900668f1d@redhat.com>
+Date:   Tue, 21 Jan 2020 12:08:01 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.1
 MIME-Version: 1.0
-In-Reply-To: <20200120040412.GF14307@blackberry>
+In-Reply-To: <20200120033402.GC14307@blackberry>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -90,64 +90,89 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 20/01/20 05:04, Paul Mackerras wrote:
-> On Wed, Dec 18, 2019 at 01:54:57PM -0800, Sean Christopherson wrote:
->> Move allocation of all flavors of PPC vCPUs to common PPC code.  All
->> variants either allocate 'struct kvm_vcpu' directly, or require that
->> the embedded 'struct kvm_vcpu' member be located at offset 0, i.e.
->> guarantee that the allocation can be directly interpreted as a 'struct
->> kvm_vcpu' object.
+On 20/01/20 04:34, Paul Mackerras wrote:
+> On Wed, Dec 18, 2019 at 01:55:00PM -0800, Sean Christopherson wrote:
+>> Move the kvm_cpu_{un}init() calls to common PPC code as an intermediate
+>> step towards removing kvm_cpu_{un}init() altogether.
 >>
->> Remove the message from the build-time assertion regarding placement of
->> the struct, as compatibility with the arch usercopy region is no longer
->> the sole dependent on 'struct kvm_vcpu' being at offset zero.
+>> No functional change intended.
 >>
 >> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> This fails to compile for Book E configs:
+> This doesn't compile:
 > 
->   CC      arch/powerpc/kvm/e500.o
-> /home/paulus/kernel/kvm/arch/powerpc/kvm/e500.c: In function ‘kvmppc_core_vcpu_create_e500’:
-> /home/paulus/kernel/kvm/arch/powerpc/kvm/e500.c:464:9: error: return makes integer from pointer without a cast [-Werror=int-conversion]
->   return vcpu;
+>   CC [M]  arch/powerpc/kvm/book3s.o
+> /home/paulus/kernel/kvm/arch/powerpc/kvm/book3s.c: In function ‘kvmppc_core_vcpu_create’:
+> /home/paulus/kernel/kvm/arch/powerpc/kvm/book3s.c:794:9: error: ‘kvm’ undeclared (first use in this function)
+>   return kvm->arch.kvm_ops->vcpu_create(vcpu);
 >          ^
-> cc1: all warnings being treated as errors
-> make[3]: *** [/home/paulus/kernel/kvm/scripts/Makefile.build:266: arch/powerpc/kvm/e500.o] Error 1
+> /home/paulus/kernel/kvm/arch/powerpc/kvm/book3s.c:794:9: note: each undeclared identifier is reported only once for each function it appears in
+> /home/paulus/kernel/kvm/arch/powerpc/kvm/book3s.c:795:1: warning: control reaches end of non-void function [-Wreturn-type]
+>  }
+>  ^
+> make[3]: *** [/home/paulus/kernel/kvm/scripts/Makefile.build:266: arch/powerpc/kvm/book3s.o] Error 1
 > 
-> There is a "return vcpu" statement in kvmppc_core_vcpu_create_e500(),
-> and another in kvmppc_core_vcpu_create_e500mc(), which both need to be
-> changed to "return 0".
+>> diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
+>> index 13385656b90d..5ad20fc0c6a1 100644
+>> --- a/arch/powerpc/kvm/book3s.c
+>> +++ b/arch/powerpc/kvm/book3s.c
+>> @@ -789,10 +789,9 @@ void kvmppc_decrementer_func(struct kvm_vcpu *vcpu)
+>>  	kvm_vcpu_kick(vcpu);
+>>  }
+>>  
+>> -int kvmppc_core_vcpu_create(struct kvm *kvm, struct kvm_vcpu *vcpu,
+>> -			    unsigned int id)
+>> +int kvmppc_core_vcpu_create(struct kvm_vcpu *vcpu)
+>>  {
+>> -	return kvm->arch.kvm_ops->vcpu_create(kvm, vcpu, id);
+>> +	return kvm->arch.kvm_ops->vcpu_create(vcpu);
 > 
-> (By the way, I do appreciate you fixing the PPC code, even if there
-> are some errors.)
+> Needs s/kvm/vcpu->kvm/ here.
+> 
+> You also need to change the declaration of the vcpu_create function
+> pointer in the kvmppc_ops struct in kvm_ppc.h to have just the vcpu
+> parameter instead of 3 parameters.
 
 Squashed:
 
-diff --git a/arch/powerpc/kvm/e500.c b/arch/powerpc/kvm/e500.c
-index 96d9cde3d2e3..f5dd2c7adcd4 100644
---- a/arch/powerpc/kvm/e500.c
-+++ b/arch/powerpc/kvm/e500.c
-@@ -461,7 +461,7 @@ static int kvmppc_core_vcpu_create_e500(struct kvm *kvm, struct kvm_vcpu *vcpu,
- 		goto uninit_tlb;
- 	}
+diff --git a/arch/powerpc/include/asm/kvm_ppc.h b/arch/powerpc/include/asm/kvm_ppc.h
+index 374e4b835ff0..bc2494e5710a 100644
+--- a/arch/powerpc/include/asm/kvm_ppc.h
++++ b/arch/powerpc/include/asm/kvm_ppc.h
+@@ -273,8 +273,7 @@ struct kvmppc_ops {
+ 	void (*inject_interrupt)(struct kvm_vcpu *vcpu, int vec, u64 srr1_flags);
+ 	void (*set_msr)(struct kvm_vcpu *vcpu, u64 msr);
+ 	int (*vcpu_run)(struct kvm_run *run, struct kvm_vcpu *vcpu);
+-	int (*vcpu_create)(struct kvm *kvm, struct kvm_vcpu *vcpu,
+-			   unsigned int id);
++	int (*vcpu_create)(struct kvm_vcpu *vcpu);
+ 	void (*vcpu_free)(struct kvm_vcpu *vcpu);
+ 	int (*check_requests)(struct kvm_vcpu *vcpu);
+ 	int (*get_dirty_log)(struct kvm *kvm, struct kvm_dirty_log *log);
+diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
+index 5ad20fc0c6a1..3f7adcb0ff63 100644
+--- a/arch/powerpc/kvm/book3s.c
++++ b/arch/powerpc/kvm/book3s.c
+@@ -791,7 +791,7 @@ void kvmppc_decrementer_func(struct kvm_vcpu *vcpu)
  
--	return vcpu;
-+	return 0;
+ int kvmppc_core_vcpu_create(struct kvm_vcpu *vcpu)
+ {
+-	return kvm->arch.kvm_ops->vcpu_create(vcpu);
++	return vcpu->kvm->arch.kvm_ops->vcpu_create(vcpu);
+ }
  
- uninit_tlb:
- 	kvmppc_e500_tlb_uninit(vcpu_e500);
-diff --git a/arch/powerpc/kvm/e500mc.c b/arch/powerpc/kvm/e500mc.c
-index aea588f73bf7..7c0d392f667a 100644
---- a/arch/powerpc/kvm/e500mc.c
-+++ b/arch/powerpc/kvm/e500mc.c
-@@ -327,7 +327,7 @@ static int kvmppc_core_vcpu_create_e500mc(struct kvm *kvm, struct kvm_vcpu *vcpu
- 		goto uninit_tlb;
- 	}
+ void kvmppc_core_vcpu_free(struct kvm_vcpu *vcpu)
+diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
+index dd7440e50c7a..d41765157f0e 100644
+--- a/arch/powerpc/kvm/booke.c
++++ b/arch/powerpc/kvm/booke.c
+@@ -2116,7 +2116,7 @@ int kvmppc_core_init_vm(struct kvm *kvm)
  
--	return vcpu;
-+	return 0;
+ int kvmppc_core_vcpu_create(struct kvm_vcpu *vcpu)
+ {
+-	return kvm->arch.kvm_ops->vcpu_create(vcpu);
++	return vcpu->kvm->arch.kvm_ops->vcpu_create(vcpu);
+ }
  
- uninit_tlb:
- 	kvmppc_e500_tlb_uninit(vcpu_e500);
-
+ void kvmppc_core_vcpu_free(struct kvm_vcpu *vcpu)
 
