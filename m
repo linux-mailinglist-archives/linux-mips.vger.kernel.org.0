@@ -2,95 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDBF144686
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Jan 2020 22:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FBE14468C
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Jan 2020 22:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728925AbgAUVg0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Jan 2020 16:36:26 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:37919 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728827AbgAUVg0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Jan 2020 16:36:26 -0500
-Received: by mail-pg1-f196.google.com with SMTP id a33so2222302pgm.5;
-        Tue, 21 Jan 2020 13:36:26 -0800 (PST)
+        id S1728896AbgAUVhU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Jan 2020 16:37:20 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:36178 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728831AbgAUVhU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Jan 2020 16:37:20 -0500
+Received: by mail-pj1-f66.google.com with SMTP id n59so2262435pjb.1;
+        Tue, 21 Jan 2020 13:37:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5E3leOx8mkDeLNWMdug8yTuuSxcBJ1PUjfQJE88tDM4=;
-        b=bCEpghtS+P14O8QiseXoCxBdMIG/XChBWV1/a3uUE3Wbb1u8IwwtB6GBG3UJvVGSPE
-         Fp4NPedroDcY5jzGSKZyCliG2lo8hm4njAMvtcSZ2npRC7/b+rclvpW94k3//Nbzeaoj
-         xzeriL9RTp7oNYt9a6+iSo60oXSFTzmY8TfavPkVvYCfzUv4n5GL0pmiXHYt3kz/9rk3
-         3ouVf1TQFg7IJe0whqerBmgyF4lBxKWgGmLElE6BZRqxn9+sWqDDa4A2G6Lb9LHd9pUL
-         usHDJuoOZ8EgTclW0W3w/LmGsk+45+hXqWxp8dGD32r7hmWKgz6wNEpZbILntN4pugLi
-         21Xg==
-X-Gm-Message-State: APjAAAW+y8mYYYRPdbErX3K9LJZJurTj4OoHnvJxrzEaRfZ/dFKEKG5f
-        ih2Nm/pvSxZRwynjGcCPMsU=
-X-Google-Smtp-Source: APXvYqxsUHAjAyitLEiDaPpJCe7u+UqiIWSvSSQ37YpJNgMu144R9j4TyoyRpzpeVvHls0KTjJ5jWw==
-X-Received: by 2002:a63:2a49:: with SMTP id q70mr7371095pgq.265.1579642585629;
-        Tue, 21 Jan 2020 13:36:25 -0800 (PST)
+        h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
+         :references:in-reply-to;
+        bh=PwqtkEgxr4YZPsm04tb22IQNHlC+pPCtuqRKSuGvfTs=;
+        b=U6CHXRs3Vwu2iQUbpN9tym4gsaU6BoRxACxBSx6LTuaiHmGhsn24SZyaCGqWzNR3pr
+         H7z3fwbD/XJqJmh3SgbFKwiMcrLM+jnxO80qnQMnuxqvR8w0p4tTPFsBTjQ4YevMgXaP
+         XC0ibc4HnS90kImhPG7oCtdq2WAlf5d5M02Sn0NCARj0YtE0ABq0PrCYHzQ+zR1uovRk
+         o7Iq3yVf2lEnr4YDcnzBmOn075EFVqIZBWASrBm+0fR4SrbJZY5wolfgKCyh74sm2mEz
+         n7URnI5leI2RdfiMl+VcUaGNA5d1w3v03AVjSLyk3BTDtJswwGTMkCl71VPuWDi03hzk
+         ZvdQ==
+X-Gm-Message-State: APjAAAWs1Z+C4py3dy2MDsdFa/XpR6hW52UqSwQHRywnW3+CER6LqBhh
+        jUy7jWSp8BDpwjjHS6MEUuA=
+X-Google-Smtp-Source: APXvYqwUT722uG1/KO2UrZ1qw5g5VBi0Eth40HOt628WFPBSNGURS3s3CITlb4ao5vkIup4flmWOqA==
+X-Received: by 2002:a17:902:9a08:: with SMTP id v8mr7604268plp.134.1579642639598;
+        Tue, 21 Jan 2020 13:37:19 -0800 (PST)
 Received: from localhost (MIPS-TECHNO.ear1.SanJose1.Level3.net. [4.15.122.74])
-        by smtp.gmail.com with ESMTPSA id k21sm43078123pgt.22.2020.01.21.13.36.24
+        by smtp.gmail.com with ESMTPSA id gc1sm372130pjb.20.2020.01.21.13.37.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jan 2020 13:36:24 -0800 (PST)
-Date:   Tue, 21 Jan 2020 13:36:24 -0800
+        Tue, 21 Jan 2020 13:37:18 -0800 (PST)
+Message-ID: <5e276f0e.1c69fb81.7e73d.180a@mx.google.com>
+Date:   Tue, 21 Jan 2020 13:37:17 -0800
 From:   Paul Burton <paulburton@kernel.org>
-To:     Kamal Dasu <kdasu.kdev@gmail.com>
-Cc:     linux-mtd@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH V2 2/3] arch: mips: brcm: Add 7425 flash-edu support
-Message-ID: <20200121213624.iy2zcmixdea4iwqg@pburton-laptop>
-References: <20200121200011.32296-1-kdasu.kdev@gmail.com>
- <20200121200011.32296-2-kdasu.kdev@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200121200011.32296-2-kdasu.kdev@gmail.com>
+To:     Alexander Lobakin <alobakin@dlink.ru>
+CC:     Paul Burton <paulburton@kernel.org>
+CC:     Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Rob Herring <robh@kernel.org>,
+        Alexander Lobakin <alobakin@dlink.ru>,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+CC:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH mips-fixes 0/3] MIPS: a set of tiny Kbuild fixes
+References:  <20200117140209.17672-1-alobakin@dlink.ru>
+In-Reply-To:  <20200117140209.17672-1-alobakin@dlink.ru>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Kamal,
+Hello,
 
-On Tue, Jan 21, 2020 at 03:00:07PM -0500, Kamal Dasu wrote:
-> Nand controller v5.0 and v6.0 have nand edu blocks that enable
-> dma nand flash transfers. This allows for faster read and write
-> access.
+Alexander Lobakin wrote:
+> These three fix two command output messages and a typo which leads
+> to constant rebuild of vmlinux.lzma.its and all dependants on every
+> make invocation.
+> Nothing critical, and can be backported without manual intervention.
 > 
-> Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
-> ---
->  arch/mips/boot/dts/brcm/bcm7425.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Alexander Lobakin (3):
+>   MIPS: fix indentation of the 'RELOCS' message
+>   MIPS: boot: fix typo in 'vmlinux.lzma.its' target
+>   MIPS: syscalls: fix indentation of the 'SYSNR' message
 > 
-> diff --git a/arch/mips/boot/dts/brcm/bcm7425.dtsi b/arch/mips/boot/dts/brcm/bcm7425.dtsi
-> index 410e61ebaf9e..aa0b2d39c902 100644
-> --- a/arch/mips/boot/dts/brcm/bcm7425.dtsi
-> +++ b/arch/mips/boot/dts/brcm/bcm7425.dtsi
-> @@ -403,8 +403,8 @@
->  			compatible = "brcm,brcmnand-v5.0", "brcm,brcmnand";
->  			#address-cells = <1>;
->  			#size-cells = <0>;
-> -			reg-names = "nand";
-> -			reg = <0x41b800 0x400>;
-> +			reg-names = "nand", "flash-edu";
-> +			reg = <0x41b800 0x400>, <0x41bc00 0x24>;
->  			interrupt-parent = <&hif_l2_intc>;
->  			interrupts = <24>;
->  			status = "disabled";
+>  arch/mips/Makefile.postlink        | 2 +-
+>  arch/mips/boot/Makefile            | 2 +-
+>  arch/mips/kernel/syscalls/Makefile | 2 +-
 
-I wasn't copied on the rest of the series, but presuming patch 1
-documents flash-edu in the binding documentation at
-Documentation/devicetree/bindings/mtd/brcm,brcmnand.txt:
+Series applied to mips-next.
 
-    Acked-by: Paul Burton <paulburton@kernel.org>
+> MIPS: fix indentation of the 'RELOCS' message
+>   commit a53998802e17
+>   https://git.kernel.org/mips/c/a53998802e17
+>   
+>   Fixes: 44079d3509ae ("MIPS: Use Makefile.postlink to insert relocations into vmlinux")
+>   Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
+>   [paulburton@kernel.org: Fixup commit references in commit message.]
+>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> 
+> MIPS: boot: fix typo in 'vmlinux.lzma.its' target
+>   commit 16202c09577f
+>   https://git.kernel.org/mips/c/16202c09577f
+>   
+>   Fixes: 92b34a976348 ("MIPS: boot: add missing targets for vmlinux.*.its")
+>   Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
+>   [paulburton@kernel.org: s/invokation/invocation/]
+>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> 
+> MIPS: syscalls: fix indentation of the 'SYSNR' message
+>   commit 4f29ad200f7b
+>   https://git.kernel.org/mips/c/4f29ad200f7b
+>   
+>   Fixes: 9bcbf97c6293 ("mips: add system call table generation support")
+>   Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
+>   Signed-off-by: Paul Burton <paulburton@kernel.org>
 
 Thanks,
     Paul
+
+[ This message was auto-generated; if you believe anything is incorrect
+  then please email paulburton@kernel.org to report it. ]
