@@ -2,59 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A009145351
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2020 12:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1A1145476
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2020 13:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729208AbgAVLAZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Jan 2020 06:00:25 -0500
-Received: from mail.dlink.ru ([178.170.168.18]:55596 "EHLO fd.dlink.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726191AbgAVLAZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 22 Jan 2020 06:00:25 -0500
-Received: by fd.dlink.ru (Postfix, from userid 5000)
-        id 677201B217DC; Wed, 22 Jan 2020 14:00:22 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru 677201B217DC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dlink.ru; s=mail;
-        t=1579690822; bh=E2dXwvQfR3it5MyIm/cP9a8wE1o/rgxNa0wXkLbsxxU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Qe300mp5igW6uIUUeaKKePxa+vVeOPPyZH8Kttfq+oMpe2MW9TUvfWgGUk2XvKWc8
-         zLIZ+zPF9AJVJK1Gmy9VgcO48or5brmys8tWNDX+MnAWXeFGL+/Jo0VgMwIPZSGVvc
-         4zoNnevpUkLuH7WTaclPY23SsM9QIyEhZIBQ1ACg=
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.dlink.ru
-X-Spam-Level: 
-X-Spam-Status: No, score=-99.2 required=7.5 tests=BAYES_50,URIBL_BLOCKED,
-        USER_IN_WHITELIST autolearn=disabled version=3.4.2
-Received: from mail.rzn.dlink.ru (mail.rzn.dlink.ru [178.170.168.13])
-        by fd.dlink.ru (Postfix) with ESMTP id 044FB1B21777;
-        Wed, 22 Jan 2020 13:59:26 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru 044FB1B21777
-Received: from mail.rzn.dlink.ru (localhost [127.0.0.1])
-        by mail.rzn.dlink.ru (Postfix) with ESMTP id D7DE01B217EA;
-        Wed, 22 Jan 2020 13:59:24 +0300 (MSK)
-Received: from localhost.localdomain (unknown [196.196.203.126])
-        by mail.rzn.dlink.ru (Postfix) with ESMTPA;
-        Wed, 22 Jan 2020 13:59:24 +0300 (MSK)
-From:   Alexander Lobakin <alobakin@dlink.ru>
-To:     Paul Burton <paulburton@kernel.org>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alexander Lobakin <alobakin@dlink.ru>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH mips-next 5/5] Revert "MIPS: Add custom serial.h with BASE_BAUD override for generic kernel"
-Date:   Wed, 22 Jan 2020 13:58:52 +0300
-Message-Id: <20200122105852.8788-6-alobakin@dlink.ru>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200122105852.8788-1-alobakin@dlink.ru>
-References: <20200122105852.8788-1-alobakin@dlink.ru>
+        id S1728931AbgAVMkC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Jan 2020 07:40:02 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:37024 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728731AbgAVMkB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Jan 2020 07:40:01 -0500
+Received: by mail-wr1-f66.google.com with SMTP id w15so7127179wru.4
+        for <linux-mips@vger.kernel.org>; Wed, 22 Jan 2020 04:40:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndmsystems-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1VxX43mS0iWUpbkE5n95NgX2FTZO3NdGDZP/Z4S/IGE=;
+        b=Fb5pQoU1ctZ9lPR9YUEJPAibeMCFTCP8VrleQodfeto8e/z9pbKmbymipTUPDjyZid
+         l+rWGRxRAAh8RoeDMZIk30KoclIWAZh5UqmBzPiesZmToJp3OJ6dxtkQqkH6Ljb2g7m5
+         1B/5b6FgTRfwK1Bwk6NEBrR2iw78BxWZiLC5V9g+dR+ypODibZSNR7aNvxgu2INGXuGs
+         UNnyT9iRE6M/Tu/k4oASO9I+pPC+2R3j4pK8fiiTlcYYDHFb58cp6tDr97X8H7rOpF05
+         R0I4DpZRpM3s11WHuBss9pb8T/MzuSSp3LMqhMLpVVo5pDhoANDpIYJohQ3QlJS7uIrw
+         F/wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1VxX43mS0iWUpbkE5n95NgX2FTZO3NdGDZP/Z4S/IGE=;
+        b=WjEywCdC5KJma3boQMkDAGgiFM7F1MJnTh8srCDsA110JLaTg4eOwOvyEvvRCuaPLm
+         y3q0VN8YkmsKdhzKxSJPcb7PZbKcME8SElgAo4WsWND+dvdfxQrNjolqZjmf0/sPxuSS
+         eY4sthqh7xnAY5d1uMK370j0vL/uhJSbYiflzzYokpSo9SYzPwMnqDHp+XcZ5szbfgzH
+         yIvRhD9I+A7oqtytMYParnl7e40boq2+QF0uxddnc0irgnnfmivPADciVVCNoVsHoFYT
+         MLvWDc/6VuZkrfQfR6tkDIPyfD+mRP1e00FQ2+f1cdoUpsZ2y2csQ1mHlGBQUY81huAj
+         eXjg==
+X-Gm-Message-State: APjAAAUuq6xn9CB79aP1oFzthL97pfZgB6LjfbGyyQMUgURI2fkIkMsW
+        +Z2nnV6DsoUdSlzrRW3/yg0Xme98YObvqwVt+gP5kA==
+X-Google-Smtp-Source: APXvYqxEei9vxIzoKTMFvJrKoh4gJ306MA/qsmhlSCdtv2ugncchWijKTkwhZpCwyJxcDFKnKuY0Pg==
+X-Received: by 2002:adf:ec4c:: with SMTP id w12mr11534785wrn.124.1579696799115;
+        Wed, 22 Jan 2020 04:39:59 -0800 (PST)
+Received: from cbox-EPYC.ndm9.net ([2a01:4f8:13b:67::2])
+        by smtp.googlemail.com with ESMTPSA id g25sm4833490wmh.3.2020.01.22.04.39.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jan 2020 04:39:58 -0800 (PST)
+From:   Sergey Korolev <s.korolev@ndmsystems.com>
+To:     linux-mips@vger.kernel.org
+Cc:     s.korolev@ndmsystems.com, Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: sync-r4k: do slave counter synchronization with disabled HW interrupts
+Date:   Wed, 22 Jan 2020 15:39:08 +0300
+Message-Id: <20200122123909.8188-1-s.korolev@ndmsystems.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -62,57 +60,36 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This reverts commit c8ec2041f549e7f2dee0c34d25381be6f7805f99.
+synchronise_count_slave() called with an enabled in mips_clockevent_init()
+timer interrupt which may decrease synchronization precision.
 
-There's no more need to set BASE_BAUD to 0 to make earlycon work
-properly on DTS-based boards since such cases were handled in commit
-182ead3e418a ("earlycon: Remove hardcoded port->uartclk initialization
-in of_setup_earlycon"). earlycon no longer initializes port->uartclk
-with a value of BASE_BAUD * 16 when starting from FDT/OF.
-
-Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
+Signed-off-by: Sergey Korolev <s.korolev@ndmsystems.com>
 ---
- arch/mips/include/asm/Kbuild   |  1 +
- arch/mips/include/asm/serial.h | 18 ------------------
- 2 files changed, 1 insertion(+), 18 deletions(-)
- delete mode 100644 arch/mips/include/asm/serial.h
+ arch/mips/kernel/sync-r4k.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/mips/include/asm/Kbuild b/arch/mips/include/asm/Kbuild
-index 61b0fc2026e6..16d1eb4c8fe6 100644
---- a/arch/mips/include/asm/Kbuild
-+++ b/arch/mips/include/asm/Kbuild
-@@ -19,6 +19,7 @@ generic-y += preempt.h
- generic-y += qrwlock.h
- generic-y += qspinlock.h
- generic-y += sections.h
-+generic-y += serial.h
- generic-y += trace_clock.h
- generic-y += unaligned.h
- generic-y += user.h
-diff --git a/arch/mips/include/asm/serial.h b/arch/mips/include/asm/serial.h
-deleted file mode 100644
-index 2777148dbfc5..000000000000
---- a/arch/mips/include/asm/serial.h
-+++ /dev/null
-@@ -1,18 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Copyright (C) 2017 MIPS Tech, LLC
-- */
--#ifndef __ASM__SERIAL_H
--#define __ASM__SERIAL_H
--
--#ifdef CONFIG_MIPS_GENERIC
--/*
-- * Generic kernels cannot know a correct value for all platforms at
-- * compile time. Set it to 0 to prevent 8250_early using it
-- */
--#define BASE_BAUD 0
--#else
--#include <asm-generic/serial.h>
--#endif
--
--#endif /* __ASM__SERIAL_H */
+diff --git a/arch/mips/kernel/sync-r4k.c b/arch/mips/kernel/sync-r4k.c
+index f2973ce87f53..abdd7aaa3311 100644
+--- a/arch/mips/kernel/sync-r4k.c
++++ b/arch/mips/kernel/sync-r4k.c
+@@ -90,6 +90,9 @@ void synchronise_count_master(int cpu)
+ void synchronise_count_slave(int cpu)
+ {
+ 	int i;
++	unsigned long flags;
++
++	local_irq_save(flags);
+ 
+ 	/*
+ 	 * Not every cpu is online at the time this gets called,
+@@ -113,5 +116,7 @@ void synchronise_count_slave(int cpu)
+ 	}
+ 	/* Arrange for an interrupt in a short while */
+ 	write_c0_compare(read_c0_count() + COUNTON);
++
++	local_irq_restore(flags);
+ }
+ #undef NR_LOOPS
 -- 
-2.25.0
+2.20.1
 
