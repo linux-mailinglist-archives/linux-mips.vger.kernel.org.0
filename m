@@ -2,38 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C16E145345
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2020 11:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9507E145347
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2020 11:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728931AbgAVK7e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Jan 2020 05:59:34 -0500
-Received: from mail.dlink.ru ([178.170.168.18]:54914 "EHLO fd.dlink.ru"
+        id S1729076AbgAVK7n (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Jan 2020 05:59:43 -0500
+Received: from mail.dlink.ru ([178.170.168.18]:55022 "EHLO fd.dlink.ru"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726219AbgAVK7e (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 22 Jan 2020 05:59:34 -0500
+        id S1726049AbgAVK7m (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 22 Jan 2020 05:59:42 -0500
 Received: by fd.dlink.ru (Postfix, from userid 5000)
-        id D56191B2025C; Wed, 22 Jan 2020 13:59:31 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru D56191B2025C
+        id 324241B217CB; Wed, 22 Jan 2020 13:59:40 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru 324241B217CB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dlink.ru; s=mail;
-        t=1579690772; bh=q9dD2Cr59uR3VZnrDzVBjRZfBPQ42Iq20hp5A0NIbfM=;
-        h=From:To:Cc:Subject:Date;
-        b=bj5rSvCSaAQYN8nKQtedqE3otEt+XcbfBX4n4ivOTeJKRB/dfY2pguBTs9l6Tsk8w
-         Lrzfv9/3bLsdP9N4fNxM8tgH9lZ6sq4qvibz8cm/1tsCTNvCMyFG0n/2HB7TWPbFFX
-         KEDYtvnjYsowDwtIX9DG8GWodrWT/hH9sycM5AmU=
+        t=1579690780; bh=ZEJs7Ofvumd4HgCuDKzNlbT1obTfsLuvRcS9WcKspuA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=WQCLpI/wNeTHSbQbLwvlWZFRrOinAJXEaWoVXHlEHqj0dt/HAqg3mnLUDQ5rucnVr
+         BwcemHfcr1UetiFa8Gm+H5GZX0ISiixoPxcGAfiC+bdxXV/UgLfSMn4IQ4LVcPX9BJ
+         wd8yP2dGoYTH0uy5Z/HxqmoFrNPeIkf/iZ/AjDsI=
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.dlink.ru
 X-Spam-Level: 
-X-Spam-Status: No, score=-99.2 required=7.5 tests=BAYES_50,USER_IN_WHITELIST
-        autolearn=disabled version=3.4.2
+X-Spam-Status: No, score=-99.2 required=7.5 tests=BAYES_50,URIBL_BLOCKED,
+        USER_IN_WHITELIST autolearn=disabled version=3.4.2
 Received: from mail.rzn.dlink.ru (mail.rzn.dlink.ru [178.170.168.13])
-        by fd.dlink.ru (Postfix) with ESMTP id 319741B204A3;
-        Wed, 22 Jan 2020 13:59:20 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru 319741B204A3
+        by fd.dlink.ru (Postfix) with ESMTP id 472F21B2130C;
+        Wed, 22 Jan 2020 13:59:21 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru 472F21B2130C
 Received: from mail.rzn.dlink.ru (localhost [127.0.0.1])
-        by mail.rzn.dlink.ru (Postfix) with ESMTP id CF9EC1B217C5;
-        Wed, 22 Jan 2020 13:59:18 +0300 (MSK)
+        by mail.rzn.dlink.ru (Postfix) with ESMTP id 325901B217F1;
+        Wed, 22 Jan 2020 13:59:20 +0300 (MSK)
 Received: from localhost.localdomain (unknown [196.196.203.126])
         by mail.rzn.dlink.ru (Postfix) with ESMTPA;
-        Wed, 22 Jan 2020 13:59:18 +0300 (MSK)
+        Wed, 22 Jan 2020 13:59:20 +0300 (MSK)
 From:   Alexander Lobakin <alobakin@dlink.ru>
 To:     Paul Burton <paulburton@kernel.org>
 Cc:     Ralf Baechle <ralf@linux-mips.org>,
@@ -49,10 +49,12 @@ Cc:     Ralf Baechle <ralf@linux-mips.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH mips-next 0/5] MIPS: a set of misc Kconfig/Kbuild improvements
-Date:   Wed, 22 Jan 2020 13:58:47 +0300
-Message-Id: <20200122105852.8788-1-alobakin@dlink.ru>
+Subject: [PATCH mips-next 1/5] MIPS: don't explicitly select LIBFDT in Kconfig
+Date:   Wed, 22 Jan 2020 13:58:48 +0300
+Message-Id: <20200122105852.8788-2-alobakin@dlink.ru>
 X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200122105852.8788-1-alobakin@dlink.ru>
+References: <20200122105852.8788-1-alobakin@dlink.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -60,32 +62,58 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This patchset aims mainly at MIPS and Generic MIPS Kconfig optimizations
-except for the last patch that removes redundant BASE_BAUD override for
-Generic MIPS. If it should go out of this series, please let me know.
-All changes were fully tested on Generic MIPS32R2 board, but I admit
-there potentionally might be any non-critical issues on other systems
-(unlikely though).
+It gets selected anyway through USE_OF -> OF_EARLY_FLATTREE ->
+OF_FLATTREE -> LIBFDT, no need to double-check.
 
-Alexander Lobakin (5):
-  MIPS: don't explicitly select LIBFDT in Kconfig
-  MIPS: generic: don't unconditionally select PINCTRL
-  MIPS: make CPU_HAS_LOAD_STORE_LR opt-out
-  MIPS: sort MIPS and MIPS_GENERIC Kconfig selects alphabetically
-    (again)
-  Revert "MIPS: Add custom serial.h with BASE_BAUD override for generic
-    kernel"
+Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
+---
+ arch/mips/Kconfig | 5 -----
+ 1 file changed, 5 deletions(-)
 
- arch/mips/Kconfig                             | 60 ++++++-------------
- arch/mips/configs/generic/board-ocelot.config |  1 +
- arch/mips/include/asm/Kbuild                  |  1 +
- arch/mips/include/asm/serial.h                | 18 ------
- arch/mips/kernel/unaligned.c                  | 36 +++++------
- arch/mips/lib/memcpy.S                        | 14 ++---
- arch/mips/lib/memset.S                        | 16 ++---
- 7 files changed, 52 insertions(+), 94 deletions(-)
- delete mode 100644 arch/mips/include/asm/serial.h
-
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 4b83507499f4..b937a883b029 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -111,7 +111,6 @@ config MIPS_GENERIC
+ 	select DMA_PERDEV_COHERENT
+ 	select HAVE_PCI
+ 	select IRQ_MIPS_CPU
+-	select LIBFDT
+ 	select MIPS_AUTO_PFN_OFFSET
+ 	select MIPS_CPU_SCACHE
+ 	select MIPS_GIC
+@@ -404,7 +403,6 @@ config MACH_INGENIC
+ 	select GENERIC_IRQ_CHIP
+ 	select BUILTIN_DTB if MIPS_NO_APPENDED_DTB
+ 	select USE_OF
+-	select LIBFDT
+ 
+ config LANTIQ
+ 	bool "Lantiq based platforms"
+@@ -511,7 +509,6 @@ config MACH_PISTACHIO
+ 	select DMA_NONCOHERENT
+ 	select GPIOLIB
+ 	select IRQ_MIPS_CPU
+-	select LIBFDT
+ 	select MFD_SYSCON
+ 	select MIPS_CPU_SCACHE
+ 	select MIPS_GIC
+@@ -549,7 +546,6 @@ config MIPS_MALTA
+ 	select I8253
+ 	select I8259
+ 	select IRQ_MIPS_CPU
+-	select LIBFDT
+ 	select MIPS_BONITO64
+ 	select MIPS_CPU_SCACHE
+ 	select MIPS_GIC
+@@ -981,7 +977,6 @@ config CAVIUM_OCTEON_SOC
+ 	select ZONE_DMA32
+ 	select HOLES_IN_ZONE
+ 	select GPIOLIB
+-	select LIBFDT
+ 	select USE_OF
+ 	select ARCH_SPARSEMEM_ENABLE
+ 	select SYS_SUPPORTS_SMP
 -- 
 2.25.0
 
