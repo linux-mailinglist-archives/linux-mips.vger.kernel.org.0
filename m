@@ -2,120 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED451144CCA
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2020 09:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE80714515A
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2020 10:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729085AbgAVIDC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Jan 2020 03:03:02 -0500
-Received: from fd.dlink.ru ([178.170.168.18]:53514 "EHLO fd.dlink.ru"
+        id S1731131AbgAVJfK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Jan 2020 04:35:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50078 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728912AbgAVIDC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 22 Jan 2020 03:03:02 -0500
-Received: by fd.dlink.ru (Postfix, from userid 5000)
-        id D594B1B20B06; Wed, 22 Jan 2020 11:02:57 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru D594B1B20B06
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dlink.ru; s=mail;
-        t=1579680178; bh=YrB26L+7TvmLoiEcbn5M3lNei+TBGOHZvTncVnB6+O0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=hUhXo1/nazSdC10nNX/FBdFtvMVTqbdLN2u23yIkYzw6481k04KFCpvrzNzmau2d+
-         VMzLgsjeTHOdsOecKe040xt85pkxaCj6cOnxP8CsOlRyPXzrZ8mwUO8RnabaORSQ09
-         Fu3Ob1pghSoS1K0aFF915WuDrwGIHoVd+SAuBklk=
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.dlink.ru
-X-Spam-Level: 
-X-Spam-Status: No, score=-99.2 required=7.5 tests=BAYES_50,URIBL_BLOCKED,
-        USER_IN_WHITELIST autolearn=disabled version=3.4.2
-Received: from mail.rzn.dlink.ru (mail.rzn.dlink.ru [178.170.168.13])
-        by fd.dlink.ru (Postfix) with ESMTP id 97E451B201C1;
-        Wed, 22 Jan 2020 11:02:54 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru 97E451B201C1
-Received: from mail.rzn.dlink.ru (localhost [127.0.0.1])
-        by mail.rzn.dlink.ru (Postfix) with ESMTP id E69151B217C5;
-        Wed, 22 Jan 2020 11:02:53 +0300 (MSK)
-Received: from mail.rzn.dlink.ru (localhost [127.0.0.1])
-        by mail.rzn.dlink.ru (Postfix) with ESMTPA;
-        Wed, 22 Jan 2020 11:02:53 +0300 (MSK)
+        id S1731123AbgAVJfK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 22 Jan 2020 04:35:10 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 077C32071E;
+        Wed, 22 Jan 2020 09:35:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579685709;
+        bh=Q5653fpa3ijpZTYcOhg1IEB8ey1XF1cto6FMBRl6nvo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=H/fTuUWyy64Y/0xUb3mYdpHc+JPfPM8NTVb9YAysBY3HTMzNSSKuOO7tcZ3K1gVXv
+         66hhLmd5MD3VApw3579ohGiQkPPiqUOfMSd03Op8mnvdb3grINZUWgS/xhdaNtJh4E
+         6xe31hGN9/0CNs2oXPd3K1vUEH8PnkTVMgE/hI2M=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Jouni Hogander <jouni.hogander@unikie.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 46/97] MIPS: Prevent link failure with kcov instrumentation
+Date:   Wed, 22 Jan 2020 10:28:50 +0100
+Message-Id: <20200122092803.929005812@linuxfoundation.org>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200122092755.678349497@linuxfoundation.org>
+References: <20200122092755.678349497@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Date:   Wed, 22 Jan 2020 11:02:53 +0300
-From:   Alexander Lobakin <alobakin@dlink.ru>
-To:     Paul Burton <paulburton@kernel.org>
-Cc:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH mips-fixes 0/3] MIPS: a set of tiny Kbuild fixes
-In-Reply-To: <5e276f0e.1c69fb81.7e73d.180a@mx.google.com>
-References: <20200117140209.17672-1-alobakin@dlink.ru>
- <5e276f0e.1c69fb81.7e73d.180a@mx.google.com>
-User-Agent: Roundcube Webmail/1.4.0
-Message-ID: <d99a6d22ca91ea0c251c731446c419ec@dlink.ru>
-X-Sender: alobakin@dlink.ru
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Paul Burton wrote 22.01.2020 00:37:
-> Hello,
+From: Jouni Hogander <jouni.hogander@unikie.com>
 
-Hi Paul,
+[ Upstream commit a4a3893114a41e365274d5fab5d9ff5acc235ff0 ]
 
-> Alexander Lobakin wrote:
->> These three fix two command output messages and a typo which leads
->> to constant rebuild of vmlinux.lzma.its and all dependants on every
->> make invocation.
->> Nothing critical, and can be backported without manual intervention.
->> 
->> Alexander Lobakin (3):
->>   MIPS: fix indentation of the 'RELOCS' message
->>   MIPS: boot: fix typo in 'vmlinux.lzma.its' target
->>   MIPS: syscalls: fix indentation of the 'SYSNR' message
->> 
->>  arch/mips/Makefile.postlink        | 2 +-
->>  arch/mips/boot/Makefile            | 2 +-
->>  arch/mips/kernel/syscalls/Makefile | 2 +-
-> 
-> Series applied to mips-next.
-> 
->> MIPS: fix indentation of the 'RELOCS' message
->>   commit a53998802e17
->>   https://git.kernel.org/mips/c/a53998802e17
->> 
->>   Fixes: 44079d3509ae ("MIPS: Use Makefile.postlink to insert 
->> relocations into vmlinux")
->>   Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
->>   [paulburton@kernel.org: Fixup commit references in commit message.]
->>   Signed-off-by: Paul Burton <paulburton@kernel.org>
->> 
->> MIPS: boot: fix typo in 'vmlinux.lzma.its' target
->>   commit 16202c09577f
->>   https://git.kernel.org/mips/c/16202c09577f
->> 
->>   Fixes: 92b34a976348 ("MIPS: boot: add missing targets for 
->> vmlinux.*.its")
->>   Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
->>   [paulburton@kernel.org: s/invokation/invocation/]
+__sanitizer_cov_trace_pc() is not linked in and causing link
+failure if KCOV_INSTRUMENT is enabled. Fix this by disabling
+instrumentation for compressed image.
 
-Thanks for fixing these two weird issues for me, I don't know where
-I was looking.
+Signed-off-by: Jouni Hogander <jouni.hogander@unikie.com>
+Signed-off-by: Paul Burton <paulburton@kernel.org>
+Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc: linux-mips@vger.kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/boot/compressed/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
->>   Signed-off-by: Paul Burton <paulburton@kernel.org>
->> 
->> MIPS: syscalls: fix indentation of the 'SYSNR' message
->>   commit 4f29ad200f7b
->>   https://git.kernel.org/mips/c/4f29ad200f7b
->> 
->>   Fixes: 9bcbf97c6293 ("mips: add system call table generation 
->> support")
->>   Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
->>   Signed-off-by: Paul Burton <paulburton@kernel.org>
-> 
-> Thanks,
->     Paul
+diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+index ad31c76c7a29..2f77e250b91d 100644
+--- a/arch/mips/boot/compressed/Makefile
++++ b/arch/mips/boot/compressed/Makefile
+@@ -29,6 +29,9 @@ KBUILD_AFLAGS := $(LINUXINCLUDE) $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
+ 	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) \
+ 	-DKERNEL_ENTRY=$(VMLINUX_ENTRY_ADDRESS)
+ 
++# Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
++KCOV_INSTRUMENT		:= n
++
+ # decompressor objects (linked with vmlinuz)
+ vmlinuzobjs-y := $(obj)/head.o $(obj)/decompress.o $(obj)/string.o
+ 
+-- 
+2.20.1
 
-Thank you!
 
-> [ This message was auto-generated; if you believe anything is incorrect
->   then please email paulburton@kernel.org to report it. ]
 
-Regards,
-ᚷ ᛖ ᚢ ᚦ ᚠ ᚱ
