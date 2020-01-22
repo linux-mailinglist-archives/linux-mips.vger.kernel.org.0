@@ -2,256 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 260DF144BEB
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2020 07:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED451144CCA
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2020 09:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725871AbgAVGrs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Jan 2020 01:47:48 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:52244 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725877AbgAVGrs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Jan 2020 01:47:48 -0500
-Received: by mail-wm1-f66.google.com with SMTP id p9so5595667wmc.2
-        for <linux-mips@vger.kernel.org>; Tue, 21 Jan 2020 22:47:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to;
-        bh=RlZojd1SiUbb/OeinLf3J4JHQYZOcdIDU8W+cj9iulk=;
-        b=y3SDRICUNCTGVEfhGZo3blD0LEuV77fDMIPVvItjjaewXSwlnd2aurAbs4B6f2ZfO9
-         noTpfd/TLhRPe73LaqAlVAlUpe9wyusPNWjzu6vJFZa2BynslasKCb7iA/W6a0OtVXEb
-         YxA0s37yA5jB/OS9ued6UM66oYP0dbwc47AWnfGEFj34PV7BBCI0X7qn8Y7f4e2k3c88
-         WOx8BMTixv+0jHe4TSUTmJYaLdx+0xE9RP3llvtF4/XJKNvYwpb6AqmKUOikzdnec5Bx
-         i5iCXi2jcxrUBOHnA0Gzz3mt7fRahb+yu5yXcDkPoIYs2Ti6M32/nnTIP7g7e4wRI1D0
-         7u2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to;
-        bh=RlZojd1SiUbb/OeinLf3J4JHQYZOcdIDU8W+cj9iulk=;
-        b=E640RD+GeK8d/7s8FXtAmbCEYmdyMCWthpAt8a+yYQOJLw6fUgAf1dz39hSJWzpl4A
-         +dBK3cK97lCzbYvVSaHeGH9HurbcmbhOeZry9ruyLLJAu/dk/G2aGZq+PHToXmzqYYSk
-         KHhuRlL8HLGAnBR+1WishHngVMnQ8E3wcjKFcblzqrRNsldF3DpJiDEc2bfS86pWMD9r
-         IXWvFSrV7o+Ja1o11A0z2BQoYghKqiBR4bkI5/dYI+t4MMnm6wYLLp3tMfWZ+3xzjJaN
-         k2oUHleZ8EIuLBN0p/yZudIVQ3TYnsW/Biu0REY3wBkJgnV8B4E/4OkhIhoajJ6qMPjy
-         YJjQ==
-X-Gm-Message-State: APjAAAWg441//ARQc5KYd3n1Hzo1uyZQWtTroFr+oyn1RwT8831gIww+
-        WPMJ5kj4dIpOivsI53iuXm6nVA==
-X-Google-Smtp-Source: APXvYqxE0JBWhtarBcJMiWajDjZfirf67dUMAGz9LTC5QD8210pTuLsvsl7JRG+MChOSyTnzZODhrQ==
-X-Received: by 2002:a7b:cf08:: with SMTP id l8mr1124469wmg.169.1579675665355;
-        Tue, 21 Jan 2020 22:47:45 -0800 (PST)
-Received: from [173.194.76.108] ([149.199.62.130])
-        by smtp.gmail.com with ESMTPSA id q19sm2532169wmc.12.2020.01.21.22.47.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jan 2020 22:47:44 -0800 (PST)
-Subject: Re: [PATCH v2 1/2] asm-generic: Make dma-contiguous.h a mandatory
- include/asm header
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        git@xilinx.com, Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        linux-mips@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "open list:SIFIVE DRIVERS" <linux-riscv@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>, X86 ML <x86@kernel.org>,
-        Guo Ren <guoren@kernel.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Wesley Terpstra <wesley@sifive.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
-        Chris Zankel <chris@zankel.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        James Hogan <jhogan@kernel.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>
-References: <cover.1579248206.git.michal.simek@xilinx.com>
- <0274919c5e3b134df19d943f99cb7e84e5135ccd.1579248206.git.michal.simek@xilinx.com>
- <CAK7LNARdiTxajZcXH0g7t6nEis-1ebv7Ta6wBdgGgS6O29O7+A@mail.gmail.com>
-From:   Michal Simek <monstr@monstr.eu>
-Autocrypt: addr=monstr@monstr.eu; keydata=
- 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
- 0Z1MQlmNcq2bhOMzTxuXX2NDzUZs4aqEyZQ=
-Message-ID: <5dac2fdd-6e4e-dd16-a149-fbdd8117ac1c@monstr.eu>
-Date:   Wed, 22 Jan 2020 07:47:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1729085AbgAVIDC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Jan 2020 03:03:02 -0500
+Received: from fd.dlink.ru ([178.170.168.18]:53514 "EHLO fd.dlink.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728912AbgAVIDC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 22 Jan 2020 03:03:02 -0500
+Received: by fd.dlink.ru (Postfix, from userid 5000)
+        id D594B1B20B06; Wed, 22 Jan 2020 11:02:57 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru D594B1B20B06
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dlink.ru; s=mail;
+        t=1579680178; bh=YrB26L+7TvmLoiEcbn5M3lNei+TBGOHZvTncVnB6+O0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=hUhXo1/nazSdC10nNX/FBdFtvMVTqbdLN2u23yIkYzw6481k04KFCpvrzNzmau2d+
+         VMzLgsjeTHOdsOecKe040xt85pkxaCj6cOnxP8CsOlRyPXzrZ8mwUO8RnabaORSQ09
+         Fu3Ob1pghSoS1K0aFF915WuDrwGIHoVd+SAuBklk=
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.dlink.ru
+X-Spam-Level: 
+X-Spam-Status: No, score=-99.2 required=7.5 tests=BAYES_50,URIBL_BLOCKED,
+        USER_IN_WHITELIST autolearn=disabled version=3.4.2
+Received: from mail.rzn.dlink.ru (mail.rzn.dlink.ru [178.170.168.13])
+        by fd.dlink.ru (Postfix) with ESMTP id 97E451B201C1;
+        Wed, 22 Jan 2020 11:02:54 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru 97E451B201C1
+Received: from mail.rzn.dlink.ru (localhost [127.0.0.1])
+        by mail.rzn.dlink.ru (Postfix) with ESMTP id E69151B217C5;
+        Wed, 22 Jan 2020 11:02:53 +0300 (MSK)
+Received: from mail.rzn.dlink.ru (localhost [127.0.0.1])
+        by mail.rzn.dlink.ru (Postfix) with ESMTPA;
+        Wed, 22 Jan 2020 11:02:53 +0300 (MSK)
 MIME-Version: 1.0
-In-Reply-To: <CAK7LNARdiTxajZcXH0g7t6nEis-1ebv7Ta6wBdgGgS6O29O7+A@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha1;
- protocol="application/pgp-signature";
- boundary="2dbNcSDggiI5dxMnAV22UCPQ9muiAKI4S"
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Wed, 22 Jan 2020 11:02:53 +0300
+From:   Alexander Lobakin <alobakin@dlink.ru>
+To:     Paul Burton <paulburton@kernel.org>
+Cc:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH mips-fixes 0/3] MIPS: a set of tiny Kbuild fixes
+In-Reply-To: <5e276f0e.1c69fb81.7e73d.180a@mx.google.com>
+References: <20200117140209.17672-1-alobakin@dlink.ru>
+ <5e276f0e.1c69fb81.7e73d.180a@mx.google.com>
+User-Agent: Roundcube Webmail/1.4.0
+Message-ID: <d99a6d22ca91ea0c251c731446c419ec@dlink.ru>
+X-Sender: alobakin@dlink.ru
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---2dbNcSDggiI5dxMnAV22UCPQ9muiAKI4S
-Content-Type: multipart/mixed; boundary="FbunjY3XOg7TLNQEYAVrl68e0gK20Tj5W";
- protected-headers="v1"
-From: Michal Simek <monstr@monstr.eu>
-To: Masahiro Yamada <masahiroy@kernel.org>,
- Michal Simek <michal.simek@xilinx.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, git@xilinx.com,
- Christoph Hellwig <hch@lst.de>, Christoph Hellwig <hch@infradead.org>,
- Paul Burton <paulburton@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Borislav Petkov <bp@alien8.de>, linux-mips@vger.kernel.org,
- Thomas Gleixner <tglx@linutronix.de>,
- Catalin Marinas <catalin.marinas@arm.com>,
- "open list:SIFIVE DRIVERS" <linux-riscv@lists.infradead.org>,
- linux-arch <linux-arch@vger.kernel.org>,
- linux-s390 <linux-s390@vger.kernel.org>, Palmer Dabbelt
- <palmer@dabbelt.com>, X86 ML <x86@kernel.org>, Guo Ren <guoren@kernel.org>,
- Kate Stewart <kstewart@linuxfoundation.org>,
- Wesley Terpstra <wesley@sifive.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Ralf Baechle <ralf@linux-mips.org>, Paul Walmsley
- <paul.walmsley@sifive.com>, Max Filippov <jcmvbkbc@gmail.com>,
- linux-xtensa@linux-xtensa.org, "H. Peter Anvin" <hpa@zytor.com>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- Will Deacon <will@kernel.org>, Christian Borntraeger
- <borntraeger@de.ibm.com>, Deepa Dinamani <deepa.kernel@gmail.com>,
- Chris Zankel <chris@zankel.net>, Ingo Molnar <mingo@redhat.com>,
- Waiman Long <longman@redhat.com>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- Albert Ou <aou@eecs.berkeley.edu>, Vasily Gorbik <gor@linux.ibm.com>,
- James Hogan <jhogan@kernel.org>, Heiko Carstens <heiko.carstens@de.ibm.com>
-Message-ID: <5dac2fdd-6e4e-dd16-a149-fbdd8117ac1c@monstr.eu>
-Subject: Re: [PATCH v2 1/2] asm-generic: Make dma-contiguous.h a mandatory
- include/asm header
-References: <cover.1579248206.git.michal.simek@xilinx.com>
- <0274919c5e3b134df19d943f99cb7e84e5135ccd.1579248206.git.michal.simek@xilinx.com>
- <CAK7LNARdiTxajZcXH0g7t6nEis-1ebv7Ta6wBdgGgS6O29O7+A@mail.gmail.com>
-In-Reply-To: <CAK7LNARdiTxajZcXH0g7t6nEis-1ebv7Ta6wBdgGgS6O29O7+A@mail.gmail.com>
+Paul Burton wrote 22.01.2020 00:37:
+> Hello,
 
---FbunjY3XOg7TLNQEYAVrl68e0gK20Tj5W
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Hi Paul,
 
-On 21. 01. 20 16:43, Masahiro Yamada wrote:
-> Hi.
->=20
-> On Fri, Jan 17, 2020 at 5:03 PM Michal Simek <michal.simek@xilinx.com> =
-wrote:
->>
->> dma-continuguous.h is generic for all architectures except arm32 which=
- has
->> its own version.
->=20
->=20
->=20
-> Currently, <asm/dma-contiguous.h> is present
-> for only architectures that select HAVE_DMA_CONTIGUOUS.
->=20
-> After this commit, the other architectures will end
-> up with generating the unused header.
->=20
-> That would not be a big deal, but
-> it could be mentioned in the commit message?
+> Alexander Lobakin wrote:
+>> These three fix two command output messages and a typo which leads
+>> to constant rebuild of vmlinux.lzma.its and all dependants on every
+>> make invocation.
+>> Nothing critical, and can be backported without manual intervention.
+>> 
+>> Alexander Lobakin (3):
+>>   MIPS: fix indentation of the 'RELOCS' message
+>>   MIPS: boot: fix typo in 'vmlinux.lzma.its' target
+>>   MIPS: syscalls: fix indentation of the 'SYSNR' message
+>> 
+>>  arch/mips/Makefile.postlink        | 2 +-
+>>  arch/mips/boot/Makefile            | 2 +-
+>>  arch/mips/kernel/syscalls/Makefile | 2 +-
+> 
+> Series applied to mips-next.
+> 
+>> MIPS: fix indentation of the 'RELOCS' message
+>>   commit a53998802e17
+>>   https://git.kernel.org/mips/c/a53998802e17
+>> 
+>>   Fixes: 44079d3509ae ("MIPS: Use Makefile.postlink to insert 
+>> relocations into vmlinux")
+>>   Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
+>>   [paulburton@kernel.org: Fixup commit references in commit message.]
+>>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+>> 
+>> MIPS: boot: fix typo in 'vmlinux.lzma.its' target
+>>   commit 16202c09577f
+>>   https://git.kernel.org/mips/c/16202c09577f
+>> 
+>>   Fixes: 92b34a976348 ("MIPS: boot: add missing targets for 
+>> vmlinux.*.its")
+>>   Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
+>>   [paulburton@kernel.org: s/invokation/invocation/]
 
-I have not a problem with mentioning it but not sure if this was done in
-past.
+Thanks for fixing these two weird issues for me, I don't know where
+I was looking.
 
-Thanks,
-Michal
+>>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+>> 
+>> MIPS: syscalls: fix indentation of the 'SYSNR' message
+>>   commit 4f29ad200f7b
+>>   https://git.kernel.org/mips/c/4f29ad200f7b
+>> 
+>>   Fixes: 9bcbf97c6293 ("mips: add system call table generation 
+>> support")
+>>   Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
+>>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> 
+> Thanks,
+>     Paul
 
+Thank you!
 
---=20
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+> [ This message was auto-generated; if you believe anything is incorrect
+>   then please email paulburton@kernel.org to report it. ]
 
-
-
---FbunjY3XOg7TLNQEYAVrl68e0gK20Tj5W--
-
---2dbNcSDggiI5dxMnAV22UCPQ9muiAKI4S
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EARECAB0WIQQbPNTMvXmYlBPRwx7KSWXLKUoMIQUCXifv/wAKCRDKSWXLKUoM
-IVUkAJ9gJ/92v49cM3s26jCgIZyQ1BDZJwCggrGUMIoHH0J6KEp9UuM3wHKXoAo=
-=zquH
------END PGP SIGNATURE-----
-
---2dbNcSDggiI5dxMnAV22UCPQ9muiAKI4S--
+Regards,
+ᚷ ᛖ ᚢ ᚦ ᚠ ᚱ
