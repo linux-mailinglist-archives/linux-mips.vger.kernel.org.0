@@ -2,91 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF46F145206
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2020 11:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C16E145345
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2020 11:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729078AbgAVKEO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Jan 2020 05:04:14 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:46892 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729074AbgAVKEO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Jan 2020 05:04:14 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00MA3dNt106729;
-        Wed, 22 Jan 2020 10:04:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=/QA6AfPHVwozNWFEEdXxQ8+/e88nFGzoSR63Xa4pjWg=;
- b=DtbMSR5cLZV56NvujvLrzqJt//P9Ktq32BEszHP0nUELfdmeqUTPXQIFupy6BlVmJ8X4
- AYLxLuB3Mwh40N7o5s0GuOkL7fbTutSTghxPwCg58mG91nj2/TQgI8qrFwVnEXF3wji2
- ZBB6X/jmILH+6qK94o6GYIx01I+1bs/Fq5k+bweJZ+tmCtHeKxk1xM4EpHRRgaR3ZRt3
- wZf0IgCKfrnvdTafgQSUSy/0MlJ8ItCupi0YbMLxHkiXKH8uiaOdDsJ0OW8L42Skkfgv
- Ltj/VbWqGrab5FcURrWU8j+0m9p9P3TEbsCv1pGrqMHIkipRAz3EbT5FoYH7G9XvkYpF Ig== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 2xktnrah90-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Jan 2020 10:04:10 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00MA46Ew037588;
-        Wed, 22 Jan 2020 10:04:10 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2xnsaaq3r6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 22 Jan 2020 10:04:09 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 00MA3WsC031159;
-        Wed, 22 Jan 2020 10:03:33 GMT
-Received: from kili.mountain (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 22 Jan 2020 02:03:31 -0800
-Date:   Wed, 22 Jan 2020 13:03:24 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     tbogendoerfer@suse.de
-Cc:     linux-mips@vger.kernel.org
-Subject: [bug report] MIPS: add support for SGI Octane (IP30)
-Message-ID: <20200122100324.xo67qbzzx6et6cbs@kili.mountain>
+        id S1728931AbgAVK7e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Jan 2020 05:59:34 -0500
+Received: from mail.dlink.ru ([178.170.168.18]:54914 "EHLO fd.dlink.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726219AbgAVK7e (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 22 Jan 2020 05:59:34 -0500
+Received: by fd.dlink.ru (Postfix, from userid 5000)
+        id D56191B2025C; Wed, 22 Jan 2020 13:59:31 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru D56191B2025C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dlink.ru; s=mail;
+        t=1579690772; bh=q9dD2Cr59uR3VZnrDzVBjRZfBPQ42Iq20hp5A0NIbfM=;
+        h=From:To:Cc:Subject:Date;
+        b=bj5rSvCSaAQYN8nKQtedqE3otEt+XcbfBX4n4ivOTeJKRB/dfY2pguBTs9l6Tsk8w
+         Lrzfv9/3bLsdP9N4fNxM8tgH9lZ6sq4qvibz8cm/1tsCTNvCMyFG0n/2HB7TWPbFFX
+         KEDYtvnjYsowDwtIX9DG8GWodrWT/hH9sycM5AmU=
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.dlink.ru
+X-Spam-Level: 
+X-Spam-Status: No, score=-99.2 required=7.5 tests=BAYES_50,USER_IN_WHITELIST
+        autolearn=disabled version=3.4.2
+Received: from mail.rzn.dlink.ru (mail.rzn.dlink.ru [178.170.168.13])
+        by fd.dlink.ru (Postfix) with ESMTP id 319741B204A3;
+        Wed, 22 Jan 2020 13:59:20 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fd.dlink.ru 319741B204A3
+Received: from mail.rzn.dlink.ru (localhost [127.0.0.1])
+        by mail.rzn.dlink.ru (Postfix) with ESMTP id CF9EC1B217C5;
+        Wed, 22 Jan 2020 13:59:18 +0300 (MSK)
+Received: from localhost.localdomain (unknown [196.196.203.126])
+        by mail.rzn.dlink.ru (Postfix) with ESMTPA;
+        Wed, 22 Jan 2020 13:59:18 +0300 (MSK)
+From:   Alexander Lobakin <alobakin@dlink.ru>
+To:     Paul Burton <paulburton@kernel.org>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Alexander Lobakin <alobakin@dlink.ru>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH mips-next 0/5] MIPS: a set of misc Kconfig/Kbuild improvements
+Date:   Wed, 22 Jan 2020 13:58:47 +0300
+Message-Id: <20200122105852.8788-1-alobakin@dlink.ru>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9507 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=359
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001220092
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9507 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=436 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001220092
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Thomas Bogendoerfer,
+This patchset aims mainly at MIPS and Generic MIPS Kconfig optimizations
+except for the last patch that removes redundant BASE_BAUD override for
+Generic MIPS. If it should go out of this series, please let me know.
+All changes were fully tested on Generic MIPS32R2 board, but I admit
+there potentionally might be any non-critical issues on other systems
+(unlikely though).
 
-This is a semi-automatic email about new static checker warnings.
+Alexander Lobakin (5):
+  MIPS: don't explicitly select LIBFDT in Kconfig
+  MIPS: generic: don't unconditionally select PINCTRL
+  MIPS: make CPU_HAS_LOAD_STORE_LR opt-out
+  MIPS: sort MIPS and MIPS_GENERIC Kconfig selects alphabetically
+    (again)
+  Revert "MIPS: Add custom serial.h with BASE_BAUD override for generic
+    kernel"
 
-The patch 7505576d1c1a: "MIPS: add support for SGI Octane (IP30)"
-from Oct 24, 2019, leads to the following Smatch complaint:
+ arch/mips/Kconfig                             | 60 ++++++-------------
+ arch/mips/configs/generic/board-ocelot.config |  1 +
+ arch/mips/include/asm/Kbuild                  |  1 +
+ arch/mips/include/asm/serial.h                | 18 ------
+ arch/mips/kernel/unaligned.c                  | 36 +++++------
+ arch/mips/lib/memcpy.S                        | 14 ++---
+ arch/mips/lib/memset.S                        | 16 ++---
+ 7 files changed, 52 insertions(+), 94 deletions(-)
+ delete mode 100644 arch/mips/include/asm/serial.h
 
-    ./arch/mips/sgi-ip30/ip30-irq.c:236 heart_domain_free()
-     warn: variable dereferenced before check 'irqd' (see line 235)
+-- 
+2.25.0
 
-./arch/mips/sgi-ip30/ip30-irq.c
-   234		irqd = irq_domain_get_irq_data(domain, virq);
-   235		clear_bit(irqd->hwirq, heart_irq_map);
-                          ^^^^^^^^^^^
-Dereference
-
-   236		if (irqd && irqd->chip_data)
-                    ^^^^
-Check too late.
-
-   237			kfree(irqd->chip_data);
-   238	}
-
-regards,
-dan carpenter
