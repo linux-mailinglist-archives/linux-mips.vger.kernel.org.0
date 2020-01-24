@@ -2,99 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D832F1485C6
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Jan 2020 14:16:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E021487B2
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Jan 2020 15:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387452AbgAXNQU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Jan 2020 08:16:20 -0500
-Received: from mx2.suse.de ([195.135.220.15]:51772 "EHLO mx2.suse.de"
+        id S2387684AbgAXOYm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Jan 2020 09:24:42 -0500
+Received: from elvis.franken.de ([193.175.24.41]:59877 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387445AbgAXNQT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 24 Jan 2020 08:16:19 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 0F1E6AF3F;
-        Fri, 24 Jan 2020 13:16:18 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        id S2389799AbgAXOYm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 24 Jan 2020 09:24:42 -0500
+X-Greylist: delayed 980 seconds by postgrey-1.27 at vger.kernel.org; Fri, 24 Jan 2020 09:24:41 EST
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1iuzdC-0003XT-00; Fri, 24 Jan 2020 15:08:18 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 454FCC0784; Fri, 24 Jan 2020 15:07:51 +0100 (CET)
+Date:   Fri, 24 Jan 2020 15:07:51 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Paul Burton <paulburton@kernel.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
+        chenhc@lemote.com, paul.burton@mips.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: PCI: Add detection of IOC3 on IO7, IO8, IO9 and Fuel
-Date:   Fri, 24 Jan 2020 14:16:08 +0100
-Message-Id: <20200124131609.4569-1-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.24.1
+Subject: Re: [PATCH] MIPS: Introduce aligned IO memory operations
+Message-ID: <20200124140751.GA17030@alpha.franken.de>
+References: <20200114122343.163685-1-jiaxun.yang@flygoat.com>
+ <20200122184506.7zbzetn5xturxamj@pburton-laptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200122184506.7zbzetn5xturxamj@pburton-laptop>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add detection for IOC3 chips in IP35 machines.
+On Wed, Jan 22, 2020 at 10:45:06AM -0800, Paul Burton wrote:
+> Hi Jiaxun,
+> 
+> On Tue, Jan 14, 2020 at 08:23:43PM +0800, Jiaxun Yang wrote:
+> > Some platforms, such as Loongson64 or QEMU/KVM, don't support unaligned
+> > instructions like lwl or lwr in IO memory access. However, our current
+> > IO memcpy/memset is wired to the generic implementation, which leads
+> > to a fatal result.
+> 
+> Hmm, I wonder if we should just do this unconditionally on all systems.
+> I can't think of a reason it'd ever be a good idea to use lwl/lwr on an
+> MMIO device. Any thoughts on that?
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
----
- arch/mips/include/asm/sn/ioc3.h  |  4 ++++
- arch/mips/pci/pci-xtalk-bridge.c | 24 ++++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
+depends on the type of device. I can see benefits for framebuffers
+and memory devices since memset/memcpy are more optimised than the
+function in this patch.
 
-diff --git a/arch/mips/include/asm/sn/ioc3.h b/arch/mips/include/asm/sn/ioc3.h
-index 3865d3225780..2c09c17cadcd 100644
---- a/arch/mips/include/asm/sn/ioc3.h
-+++ b/arch/mips/include/asm/sn/ioc3.h
-@@ -598,5 +598,9 @@ struct ioc3_etxd {
- #define	IOC3_SUBSYS_IP30_SYSBOARD	0xc304
- #define	IOC3_SUBSYS_MENET		0xc305
- #define	IOC3_SUBSYS_MENET4		0xc306
-+#define	IOC3_SUBSYS_IO7			0xc307
-+#define	IOC3_SUBSYS_IO8			0xc308
-+#define	IOC3_SUBSYS_IO9			0xc309
-+#define	IOC3_SUBSYS_IP34_SYSBOARD	0xc30A
- 
- #endif /* MIPS_SN_IOC3_H */
-diff --git a/arch/mips/pci/pci-xtalk-bridge.c b/arch/mips/pci/pci-xtalk-bridge.c
-index ef5ca7c13ca5..3b2552fb7735 100644
---- a/arch/mips/pci/pci-xtalk-bridge.c
-+++ b/arch/mips/pci/pci-xtalk-bridge.c
-@@ -499,6 +499,26 @@ static void bridge_setup_menet(struct bridge_controller *bc)
- 	bc->ioc3_sid[3] = IOC3_SID(IOC3_SUBSYS_MENET4);
- }
- 
-+static void bridge_setup_io7(struct bridge_controller *bc)
-+{
-+	bc->ioc3_sid[4] = IOC3_SID(IOC3_SUBSYS_IO7);
-+}
-+
-+static void bridge_setup_io8(struct bridge_controller *bc)
-+{
-+	bc->ioc3_sid[4] = IOC3_SID(IOC3_SUBSYS_IO8);
-+}
-+
-+static void bridge_setup_io9(struct bridge_controller *bc)
-+{
-+	bc->ioc3_sid[1] = IOC3_SID(IOC3_SUBSYS_IO9);
-+}
-+
-+static void bridge_setup_ip34_fuel_sysboard(struct bridge_controller *bc)
-+{
-+	bc->ioc3_sid[4] = IOC3_SID(IOC3_SUBSYS_IP34_SYSBOARD);
-+}
-+
- #define BRIDGE_BOARD_SETUP(_partno, _setup)	\
- 	{ .match = _partno, .setup = _setup }
- 
-@@ -516,6 +536,10 @@ static const struct {
- 	BRIDGE_BOARD_SETUP("030-0887-", bridge_setup_ip30_sysboard),
- 	BRIDGE_BOARD_SETUP("030-1467-", bridge_setup_ip30_sysboard),
- 	BRIDGE_BOARD_SETUP("030-0873-", bridge_setup_menet),
-+	BRIDGE_BOARD_SETUP("030-1557-", bridge_setup_io7),
-+	BRIDGE_BOARD_SETUP("030-1673-", bridge_setup_io8),
-+	BRIDGE_BOARD_SETUP("030-1771-", bridge_setup_io9),
-+	BRIDGE_BOARD_SETUP("030-1707-", bridge_setup_ip34_fuel_sysboard),
- };
- 
- static void bridge_setup_board(struct bridge_controller *bc, char *partnum)
+Thomas.
+
 -- 
-2.24.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
