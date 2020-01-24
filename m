@@ -2,69 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 764AE148EC0
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Jan 2020 20:38:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD31B14918E
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Jan 2020 00:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391246AbgAXTi4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Jan 2020 14:38:56 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:55243 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390186AbgAXTiz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Jan 2020 14:38:55 -0500
-Received: by mail-pj1-f67.google.com with SMTP id kx11so255782pjb.4;
-        Fri, 24 Jan 2020 11:38:55 -0800 (PST)
+        id S1729260AbgAXXDs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Jan 2020 18:03:48 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:37292 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729182AbgAXXDr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Jan 2020 18:03:47 -0500
+Received: by mail-pl1-f195.google.com with SMTP id c23so1387859plz.4;
+        Fri, 24 Jan 2020 15:03:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:to:cc:cc:subject:references
-         :in-reply-to;
-        bh=DXdOMyfkOERTPkCfrxYPudbmkrJHKSqSlys3/OUpdf8=;
-        b=Yg2QNpfEbKpFoVQsFsTavMjPoT1KPIlnnVaXMtNBU44oB81kbz0DOIMYujnFqgyYFD
-         HY4+JiEd5knUMApuTKfQkzIkVG/OjYVYL5kVcoovdn1zayUt7EmnDeTdDGIJtryHTIQM
-         pTicCaoo0ojWB6FGWPtSutEzCo0qsTb+z6dKK7S9Jov2jXS2MuHWI8p7GUpWnhLT/IDU
-         HQ2evAR5vshnFgVxIaltVXDZbLUhHC6tCeZcJoWLohYBvtDHl81DIsg94FrIvGVvzDZ5
-         Wqj2Eb53VZxlIaeqObwB2PC0gZ3bL+bgXp0OYwfpqwq7pan1J0YKnT/1vB6Oi807ef8R
-         5AAQ==
-X-Gm-Message-State: APjAAAX4Ttxo5Bejm1nHJ3k6zxeNzLGSUjyx62QrEzSqqlO01/S25BR0
-        Ykk78uFYVHvkvzaM5zcxl80=
-X-Google-Smtp-Source: APXvYqxOCgCW2i/RX0z25iq5+UgvghYEUhtCRsARbnCn4S/HFKwFLjpfYvp6TRzNLLFJPpJREomx2A==
-X-Received: by 2002:a17:90a:a48c:: with SMTP id z12mr934560pjp.38.1579894735169;
-        Fri, 24 Jan 2020 11:38:55 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MGRq2AwVFd4DWNsp7d7HFpzZlRbQ0ZEgqyNAkNe3J5M=;
+        b=T2dnSFG4VA2vnPZpfzkw4yn9JywADHhYTfKD4mgqoMFBYi+4OZZa2ZxvmK/eJI4xLt
+         hMV157cOO0o5B2rILrrDUAbO6Uuk1GKS5UL5aAE3Ow1RLD9QfpGD8ZGSjLlkiS5abh9U
+         0/CfdgAsW++0EAqWSouOVUtkOuSas5f7kqNaFUJC3iERqSLSVGkq1BaKOjftG/kwZ/CJ
+         mgxCl/DYCLz0D0BXSI+2ufQZV6YqIC/9WbX/VQCkyByE+oRjQOqoOTfnruScn3ppCbV9
+         Uw+NdCI5JOiIwfrdMZtoGprneOZ+B4eKeFhhpRo2dBGO8blMK+rTS76Tg0ceItsfx3KP
+         Sj5A==
+X-Gm-Message-State: APjAAAWNWlvy68FbZT5ULwGjGcfnlVYqPlc7UT0cy1Iztpmn+0eFZjG6
+        PItmOpPFsE07G64A2lZH53Y=
+X-Google-Smtp-Source: APXvYqxRiq2ERDzSNYLx4Td68ALF8xKHPHga/5pBcCGxCccQkad/3g/y+5tRl662fUbnwVu3Wc4PPw==
+X-Received: by 2002:a17:90a:5206:: with SMTP id v6mr1779319pjh.136.1579907026837;
+        Fri, 24 Jan 2020 15:03:46 -0800 (PST)
 Received: from localhost (MIPS-TECHNO.ear1.SanJose1.Level3.net. [4.15.122.74])
-        by smtp.gmail.com with ESMTPSA id d3sm6693586pfn.113.2020.01.24.11.38.54
+        by smtp.gmail.com with ESMTPSA id v10sm7726710pgk.24.2020.01.24.15.03.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2020 11:38:54 -0800 (PST)
-Message-ID: <5e2b47ce.1c69fb81.ab192.126e@mx.google.com>
-Date:   Fri, 24 Jan 2020 11:38:53 -0800
+        Fri, 24 Jan 2020 15:03:46 -0800 (PST)
+Date:   Fri, 24 Jan 2020 15:03:45 -0800
 From:   Paul Burton <paulburton@kernel.org>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-CC:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>, linux-ide@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-CC:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: PCI: Add detection of IOC3 on IO7, IO8, IO9 and Fuel
-References:  <20200124131609.4569-1-tbogendoerfer@suse.de>
-In-Reply-To:  <20200124131609.4569-1-tbogendoerfer@suse.de>
+Subject: Re: [PATCH 0/3] ide/MIPS/docs: remove no longer used au1xxx-ide
+ driver
+Message-ID: <20200124230345.m3i223nazraoont3@pburton-laptop>
+References: <CGME20200116122951eucas1p1d36493f2b496bb13dca4fd1a17abad49@eucas1p1.samsung.com>
+ <20200116122938.20789-1-b.zolnierkie@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200116122938.20789-1-b.zolnierkie@samsung.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+Hi David & Jonathan,
 
-Thomas Bogendoerfer wrote:
-> Add detection for IOC3 chips in IP35 machines.
+On Thu, Jan 16, 2020 at 01:29:35PM +0100, Bartlomiej Zolnierkiewicz wrote:
+> Since patch #2 depends on patch #1 (and it is also the best to
+> apply patch #3 after driver code removal) it would be probably
+> easiest to merge everything through MIPS tree (after getting
+> necessary ACKs, from David for the first patch and Jonathan for
+> the third one).
 
-Applied to mips-next.
+Does that sound good to you? If so could you ack the patches as
+appropriate?
 
-> commit 2c4288719806
-> https://git.kernel.org/mips/c/2c4288719806
-> 
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> Signed-off-by: Paul Burton <paulburton@kernel.org>
+Alternatively I have no problem if you'd rather take this through the
+IDE tree David, in which case for patch 2:
+
+    Acked-by: Paul Burton <paulburton@kernel.org>
 
 Thanks,
     Paul
-
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paulburton@kernel.org to report it. ]
