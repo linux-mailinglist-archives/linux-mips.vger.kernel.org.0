@@ -2,44 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B13314835B
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Jan 2020 12:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E70B1484EB
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Jan 2020 13:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404580AbgAXLfc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Jan 2020 06:35:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55532 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388424AbgAXLfb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 24 Jan 2020 06:35:31 -0500
-Received: from localhost (ip-213-127-102-57.ip.prioritytelecom.net [213.127.102.57])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 004CA206D4;
-        Fri, 24 Jan 2020 11:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579865730;
-        bh=pd/qIKtPgckZAMIldyVkQ5zIky2l2yZfKCFKZb3UNHg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bTSweiKJ2WayI4TWXujJ8IQrsW5reN9PdiJhcZ46DHSgjsxTwZQXkucrN0SlKfzyI
-         g0rvjre04HH2Hhx1tyZWVL7omF14YI3YWkpyOKdJ3kLeB0P3ObSBPrKGt6CNuQXI2R
-         OsMbsEnEzN5nI/4HGAim5Um5m+iQH6A9YU9idpfQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 622/639] MIPS: Loongson: Fix return value of loongson_hwmon_init
-Date:   Fri, 24 Jan 2020 10:33:12 +0100
-Message-Id: <20200124093207.538374289@linuxfoundation.org>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200124093047.008739095@linuxfoundation.org>
-References: <20200124093047.008739095@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1730665AbgAXMGD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Jan 2020 07:06:03 -0500
+Received: from out28-221.mail.aliyun.com ([115.124.28.221]:40757 "EHLO
+        out28-221.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725767AbgAXMGD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Jan 2020 07:06:03 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.4006393|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.0419989-0.00740679-0.950594;DS=CONTINUE|ham_system_inform|0.0534944-0.164739-0.781767;FP=0|0|0|0|0|-1|-1|-1;HT=e01l07447;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=30;RT=30;SR=0;TI=SMTPD_---.Gh-0wLC_1579867533;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Gh-0wLC_1579867533)
+          by smtp.aliyun-inc.com(10.147.40.2);
+          Fri, 24 Jan 2020 20:05:55 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, paul.burton@mips.com, paulburton@kernel.org,
+        jhogan@kernel.org, tglx@linutronix.de, daniel.lezcano@linaro.org,
+        shawnguo@kernel.org, mark.rutland@arm.com, syq@debian.org,
+        ralf@linux-mips.org, miquel.raynal@bootlin.com,
+        keescook@chromium.org, ebiederm@xmission.com, krzk@kernel.org,
+        geert+renesas@glider.be, paul@crapouillou.net,
+        prasannatsmkumar@gmail.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, mturquette@baylibre.com, sboyd@kernel.org,
+        chenhc@lemote.com, jiaxun.yang@flygoat.com, paul@boddie.org.uk,
+        hns@goldelico.com, mips-creator-ci20-dev@googlegroups.com,
+        rick.tyliu@ingenic.com
+Subject: Introduce SMP support for CI20 (based on JZ4780) v3.
+Date:   Fri, 24 Jan 2020 20:05:01 +0800
+Message-Id: <1579867508-81499-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -48,42 +42,8 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Introduce SMP support for MIPS Creator CI20, which is
+based on Ingenic JZ4780 SoC.
 
-[ Upstream commit dece3c2a320b0a6d891da6ff774ab763969b6860 ]
-
-When call function hwmon_device_register failed, use the actual
-return value instead of always -ENOMEM.
-
-Fixes: 64f09aa967e1 ("MIPS: Loongson-3: Add CPU Hwmon platform driver")
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Signed-off-by: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: James Hogan <jhogan@kernel.org>
-Cc: Huacai Chen <chenhc@lemote.com>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/platform/mips/cpu_hwmon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/platform/mips/cpu_hwmon.c b/drivers/platform/mips/cpu_hwmon.c
-index f66521c7f8462..98128374d710a 100644
---- a/drivers/platform/mips/cpu_hwmon.c
-+++ b/drivers/platform/mips/cpu_hwmon.c
-@@ -159,7 +159,7 @@ static int __init loongson_hwmon_init(void)
- 
- 	cpu_hwmon_dev = hwmon_device_register(NULL);
- 	if (IS_ERR(cpu_hwmon_dev)) {
--		ret = -ENOMEM;
-+		ret = PTR_ERR(cpu_hwmon_dev);
- 		pr_err("hwmon_device_register fail!\n");
- 		goto fail_hwmon_device_register;
- 	}
--- 
-2.20.1
-
-
+Happy Chinese New Year! 
 
