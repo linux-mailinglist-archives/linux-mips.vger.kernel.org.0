@@ -2,48 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 208D114B3FF
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jan 2020 13:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8601A14B427
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jan 2020 13:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726024AbgA1MKS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Jan 2020 07:10:18 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:60042 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726034AbgA1MKS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Jan 2020 07:10:18 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00SC7IKw078857
-        for <linux-mips@vger.kernel.org>; Tue, 28 Jan 2020 07:10:16 -0500
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2xrg63benf-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-mips@vger.kernel.org>; Tue, 28 Jan 2020 07:10:16 -0500
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-mips@vger.kernel.org> from <rppt@linux.ibm.com>;
-        Tue, 28 Jan 2020 12:10:12 -0000
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 28 Jan 2020 12:10:02 -0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00SCA17u41681050
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jan 2020 12:10:01 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5A00D11C04A;
-        Tue, 28 Jan 2020 12:10:01 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0B8F411C050;
-        Tue, 28 Jan 2020 12:09:58 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.148.59.112])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 28 Jan 2020 12:09:57 +0000 (GMT)
-Date:   Tue, 28 Jan 2020 14:09:56 +0200
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Qian Cai <cai@lca.pw>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        id S1726059AbgA1MaQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Jan 2020 07:30:16 -0500
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:34246 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726010AbgA1MaQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Jan 2020 07:30:16 -0500
+Received: by mail-qk1-f195.google.com with SMTP id d10so13134294qke.1
+        for <linux-mips@vger.kernel.org>; Tue, 28 Jan 2020 04:30:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lca.pw; s=google;
+        h=content-transfer-encoding:from:mime-version:date:subject:message-id
+         :cc:to;
+        bh=8GwDVchQDE0RRDd6Z1x4gzFv6pXtLF378PeW6dBbf+w=;
+        b=Rbz1P8X1bfckF8p5+fQPfltDNpYpc5sp5fHqq9u1T5/uhK6rRW78SfwJEw2v28znfV
+         wPfmUeOnrz7CBbeIgQixtLq2TPQmdgtO1vVi6z9urV65HN1x4ZK0nWUORD8codoMVkS8
+         rPApC12IYdkgP3grHEjFihd/Jh4OgeLy2QqFihiQOoNERJPGlH4ggjAY8evnQXoqrTaN
+         KqoP6/pkU7BjH0xE18gbhqENWpt3g5gz/4WQxHhB9FaTgVokGRGk0m2PJgFNbLse/V1Q
+         DUm5C86KbFXNmme7COzfebOm4aubFGvujqheNY2AxjxXyz7y4nv8h1Ou8ChS1lBEdbUk
+         SJNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version:date
+         :subject:message-id:cc:to;
+        bh=8GwDVchQDE0RRDd6Z1x4gzFv6pXtLF378PeW6dBbf+w=;
+        b=otlvORtXklCwoCVQAGDM7Xlb91VU+Vg5ErgfQiWYhBXWubtOV/caR1LErPugu2RU3a
+         IfEjVtnyxKv0/MH3u6BBW+pWd7YzY6yNFCYZD/O4PUNQn7Jni8e+9O8caGYp7gp/iDzT
+         hStR813/7KCxiesHhFii+cYJZr8DMSVSJYV5TQXOcNVk8CQ12HrbhMNTMdOlvDA4iR9U
+         sWWMC6VOHLZEw4qJGXH2XK2ZV8roYXjZmG+fWYxAZp4/ITtiDgQKrOOEu3RBOY59iQDV
+         la2Wf9Z3ZJhPXpSojVthUOBJI69FZCCJ+ZZ8D00opJaDB9ley+rdwHPcfPf4P+4eSOzQ
+         paPw==
+X-Gm-Message-State: APjAAAU6qdwraAub4gYD3U57TK8f+5H63RIbzNfJLNMzv8SkT7Rq0cDD
+        ValA4bNfKA3sMKtnslH2vEoV+g==
+X-Google-Smtp-Source: APXvYqw4NHHH616JlS/IrWEyv4wSaDB7EoG4ap5GXk6Z++ZZIlsdVUcHztpJPWJHmyylARL29R+hpQ==
+X-Received: by 2002:a37:9ce:: with SMTP id 197mr22314564qkj.194.1580214614838;
+        Tue, 28 Jan 2020 04:30:14 -0800 (PST)
+Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id 69sm11862264qkk.106.2020.01.28.04.30.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jan 2020 04:30:14 -0800 (PST)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+From:   Qian Cai <cai@lca.pw>
+Mime-Version: 1.0 (1.0)
+Date:   Tue, 28 Jan 2020 07:30:13 -0500
+Subject: Re: [PATCH V12] mm/debug: Add tests validating architecture page table helpers
+Message-Id: <0C97A195-CBF2-43EF-88A0-7683BB9EF892@lca.pw>
+Cc:     Anshuman Khandual <Anshuman.Khandual@arm.com>,
         Linux-MM <linux-mm@kvack.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
@@ -83,53 +91,24 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V12] mm/debug: Add tests validating architecture page
- table helpers
-References: <1580174873-18117-1-git-send-email-anshuman.khandual@arm.com>
- <14882A91-17DE-4ABD-ABF2-08E7CCEDF660@lca.pw>
- <214c0d53-eb34-9b0c-2e4e-1aa005146331@arm.com>
- <016A776F-EFD9-4D2B-A3A9-788008617D95@lca.pw>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <016A776F-EFD9-4D2B-A3A9-788008617D95@lca.pw>
-X-TM-AS-GCONF: 00
-x-cbid: 20012812-0028-0000-0000-000003D5276E
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20012812-0029-0000-0000-000024996EC2
-Message-Id: <20200128120956.GB6363@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-28_03:2020-01-24,2020-01-28 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=820
- malwarescore=0 suspectscore=56 phishscore=0 adultscore=0 mlxscore=0
- lowpriorityscore=0 clxscore=1011 bulkscore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1911200001 definitions=main-2001280098
+To:     Mike Rapoport <rppt@linux.ibm.com>
+X-Mailer: iPhone Mail (17C54)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Qian,
 
-On Mon, Jan 27, 2020 at 10:33:08PM -0500, Qian Cai wrote:
-> 
-> > On Jan 27, 2020, at 10:06 PM, Anshuman Khandual <anshuman.khandual@arm.com> wrote:
-> >
-> > enablement of this test (for the moment) but then the goal is to integrate all
-> > of them going forward. The test not only validates platform's adherence to the
-> > expected semantics from generic MM but also helps in keeping it that way during
-> > code changes in future as well.
-> 
-> Another option maybe to get some decent arches on board first before merging this
-> thing, so it have more changes to catch regressions for developers who might run this. 
 
-Aren't x86 and arm64 not decent enough?
-Even if this test could be used to detect regressions only on these two
-platforms, the test is valuable.
- 
+> On Jan 28, 2020, at 7:10 AM, Mike Rapoport <rppt@linux.ibm.com> wrote:
+>=20
+> Aren't x86 and arm64 not decent enough?
+> Even if this test could be used to detect regressions only on these two
+> platforms, the test is valuable.
 
--- 
-Sincerely yours,
-Mike.
+The question is does it detect regressions good enough? Where is the list of=
+ past bugs that it had found?
 
+It is an usual deal for unproven debugging features remain out of tree first=
+ and keep gathering unique bugs it found and then justify for a mainline inc=
+lusion with enough data.=
