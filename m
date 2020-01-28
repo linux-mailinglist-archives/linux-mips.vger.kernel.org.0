@@ -2,50 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8139914AFA8
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jan 2020 07:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCC514AFD8
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jan 2020 07:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725839AbgA1GRj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Jan 2020 01:17:39 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:56701 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725776AbgA1GRj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Jan 2020 01:17:39 -0500
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 486Gcc0WVCz9v22Q;
-        Tue, 28 Jan 2020 07:17:36 +0100 (CET)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=lgZskWmS; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id UkHPZqpb554O; Tue, 28 Jan 2020 07:17:35 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 486Gcb627Gz9v22N;
-        Tue, 28 Jan 2020 07:17:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1580192255; bh=+DPt49RKHi9mO1gnM2058SFaj+Fq0ceAMy7haYJU1NM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=lgZskWmSj1VA5v5b98S9ZEmr7USU9rrof5MnKymq+rXgWJyl99vDSXQIZX47bFjeC
-         /6k5GZov6uOPE4UU+Xi9hVhZlNd3ZPIeokTTE6E9eAr6ycFttvMUe986W6/vBNtjV8
-         Ykd6Kd6ETlhEILSsCQYi5j6eBswWvSBhAxwf3fzs=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8873F8B7C2;
-        Tue, 28 Jan 2020 07:17:36 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id RqoGVOoiJ5M4; Tue, 28 Jan 2020 07:17:36 +0100 (CET)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id DC9498B75B;
-        Tue, 28 Jan 2020 07:17:33 +0100 (CET)
-Subject: Re: [PATCH V12] mm/debug: Add tests validating architecture page
- table helpers
-To:     Qian Cai <cai@lca.pw>,
-        Anshuman Khandual <Anshuman.Khandual@arm.com>
-Cc:     Linux-MM <linux-mm@kvack.org>,
+        id S1725853AbgA1Gg7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Jan 2020 01:36:59 -0500
+Received: from mail-qv1-f66.google.com ([209.85.219.66]:44874 "EHLO
+        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725839AbgA1Gg7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Jan 2020 01:36:59 -0500
+Received: by mail-qv1-f66.google.com with SMTP id n8so5739767qvg.11
+        for <linux-mips@vger.kernel.org>; Mon, 27 Jan 2020 22:36:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lca.pw; s=google;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=0abVuQRiEoEWLaCFKSSRqYpNWOPktE+d1wvOzU3Y5QQ=;
+        b=dX5ri6JWeqf2OD9HUY9VaB/KwNs/qrzPVG/Mkk6o9PIOqw2H/gbYXWgmg5n/T9sQZi
+         Iu9x9L3POLnl1YchVinwocuu9ounpYF8/kx5Kl6xkZvkINd+J3VgmAAsMM4XdNmOQpGF
+         n/A6miYs2pl1z68bmOVHF16tPK0qb+EWBTpkY/wDARN4JMfLDfXWnSNw6qljowznZeLw
+         nC2mDCu/xZdzLMzffrfLowRJu9L4pvo4bnAdA6EAug7bCreb8yqSCB9NBnvi8MDOIkJC
+         NhZM5PfIKH0yrTiGcHzwETXhAcZRM4FxAKgtCYb9TW9qoZDA0+sfnlblbnN56jONvpa4
+         1ytQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=0abVuQRiEoEWLaCFKSSRqYpNWOPktE+d1wvOzU3Y5QQ=;
+        b=UxFxtxwY07Mjpp5RY2vB2Vk4U9vfJuWJVjWtn21ICaLTPFktjZSFuEj6RUOemf95xU
+         o/f4aK5V5HSELzBSVoIFKnUav6uYsUQkgQpQfwoCYWUvGXWoROciRqqaYn+58XHhucKO
+         reahURhgu65N2EH54aZrce8c/Ccs49Dj0tacAHG31xmSXvygucU0LmmL/JO4ylRHoDKH
+         aiAl1Qxb5VHmg7PDktlXrjfhTaSkYO46cJkM8GlTAcSXyZ9jpsH0L/zu+mDGCPfVK/q9
+         rRlsnOX0iZ+nqB+uI8Z0wpYZK1mqRggJkFBu5ZbD5dQZLJgiOkFzBW2s8LnVgJB6eyeK
+         LSQg==
+X-Gm-Message-State: APjAAAVpNJudPCVEd6o76d1So+mxsbkTnrKpqZ/2nE8BF9haDjqxgC3Z
+        o+D5pzE4nila2VZf1ZM5Vgsvfw==
+X-Google-Smtp-Source: APXvYqyOYFD97tfKGnmPwPmfp2w3pbVQzr1Mc0RjmsOaGaxOYR1oH4beASJJ2LsvEzXBpFE4wXV4hg==
+X-Received: by 2002:a05:6214:1189:: with SMTP id t9mr20389607qvv.153.1580193418367;
+        Mon, 27 Jan 2020 22:36:58 -0800 (PST)
+Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id z126sm11703882qka.34.2020.01.27.22.36.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jan 2020 22:36:57 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Qian Cai <cai@lca.pw>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH V12] mm/debug: Add tests validating architecture page table helpers
+Date:   Tue, 28 Jan 2020 01:36:56 -0500
+Message-Id: <F90DA0AA-4D27-4346-8D8D-D9A7871E2C07@lca.pw>
+References: <115c187b-73ce-30b2-0694-999db1f2183b@c-s.fr>
+Cc:     Anshuman Khandual <Anshuman.Khandual@arm.com>,
+        Linux-MM <linux-mm@kvack.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -83,18 +91,9 @@ Cc:     Linux-MM <linux-mm@kvack.org>,
         linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         x86@kernel.org, linux-kernel@vger.kernel.org
-References: <012158b7-a40e-050f-cd1b-d6ce7faf042f@arm.com>
- <EE5B936C-121E-4322-A285-603D82D59B3A@lca.pw>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <115c187b-73ce-30b2-0694-999db1f2183b@c-s.fr>
-Date:   Tue, 28 Jan 2020 07:17:33 +0100
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
-MIME-Version: 1.0
-In-Reply-To: <EE5B936C-121E-4322-A285-603D82D59B3A@lca.pw>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <115c187b-73ce-30b2-0694-999db1f2183b@c-s.fr>
+To:     Christophe Leroy <christophe.leroy@c-s.fr>
+X-Mailer: iPhone Mail (17C54)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -102,24 +101,12 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-Le 28/01/2020 à 06:48, Qian Cai a écrit :
-> 
-> 
->> On Jan 27, 2020, at 11:58 PM, Anshuman Khandual <Anshuman.Khandual@arm.com> wrote:
->>
->> As I had mentioned before, the test attempts to formalize page table helper semantics
->> as expected from generic MM code paths and intend to catch deviations when enabled on
->> a given platform. How else should we test semantics errors otherwise ? There are past
->> examples of usefulness for this procedure on arm64 and on s390. I am wondering how
->> else to prove the usefulness of a debug feature if these references are not enough.
-> 
-> Not saying it will not be useful. As you mentioned it actually found a bug or two in the past. The problem is that there is always a cost to maintain something like this, and nobody knew how things could be broken even for the isolated code you mentioned in the future given how complicated the kernel code base is. I am not so positive that many developers would enable this debug feature and use it on a regular basis from the information you gave so far.
-> 
-> On the other hand, it might just be good at maintaining this thing out of tree by yourself anyway, because if there isn’t going to be used by many developers, few people is going to contribute to this and even noticed when it is broken. What’s the point of getting this merged apart from being getting some meaningless credits?
-> 
+> On Jan 28, 2020, at 1:17 AM, Christophe Leroy <christophe.leroy@c-s.fr> wr=
+ote:
+>=20
+> It is 'default y' so there is no much risk that it is forgotten, at least a=
+ll test suites run with 'allyes_defconfig' will trigger the test, so I think=
+ it is really a good feature.
 
-It is 'default y' so there is no much risk that it is forgotten, at 
-least all test suites run with 'allyes_defconfig' will trigger the test, 
-so I think it is really a good feature.
-
-Christophe
+This thing depends on DEBUG_VM which I don=E2=80=99t see it is selected by a=
+ny defconfig. Am I missing anything?=
