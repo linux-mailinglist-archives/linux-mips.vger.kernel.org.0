@@ -2,119 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2842014C092
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jan 2020 20:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E96514C477
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Jan 2020 02:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727129AbgA1THN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Jan 2020 14:07:13 -0500
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:34825 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727161AbgA1THN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Jan 2020 14:07:13 -0500
-Received: by mail-qt1-f194.google.com with SMTP id t8so5682418qtr.2
-        for <linux-mips@vger.kernel.org>; Tue, 28 Jan 2020 11:07:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=ZSIv5JurPysNixS3YWSkJ+cqh/2vHLB/JAVHcGR/4Zo=;
-        b=rZzl+qEAYLTBtMp9ssPK9Ejc0IQXfIjcMlCwc8RZJ/Poapm8WZnOmSKjpPGU/CRTsz
-         s49j6egQsNv+bATXo82MSoiXpQi3N3QHvgnyq6VfzcooOemBU6djud+xflwQG7RGqoPc
-         L5M9+QbKcXOUUg0U09rJgFyuy4M0BvZq0fS3S49pfbq8xDC/uRvuAV9T3NJ2dNoyS3t+
-         r0VLb2Wpo+pntt9bwsRP15mZe1cOZg5vc4u8F4VRwv/pqDLOhfKGv0d7nyNY7llsOI2p
-         sOz+jYkbLFQ6oe89WgJeyG/Pa023GcDt5lsRxS1gRMmySONFqvaE1MUA5AHjPWyKvzIK
-         /yww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=ZSIv5JurPysNixS3YWSkJ+cqh/2vHLB/JAVHcGR/4Zo=;
-        b=XaUkt6Obr+E4+XVjoH3vwVBuFTQESzE51ZTLhtMA7gEErkw2oe8hM8x/AKJfn8T4K+
-         Cf94C6LnHh00yFQmJ7OJBcph//Pg+xalxJ88nPwvnR1S0r4aUgfOfSMuagtbuvQ6mofU
-         avLJILhJMm8660nEYgeMcCh1kAfjGwRY4vCDZHabpb5Hyys8siTaemDZeMpMA4ZFystu
-         va1MpwtLJqyMjEnT/Q1caA5CCK1/ja/2N9afZr3zbUwunjjLj33XaiQVfVoomMEkiAAZ
-         0Q9wfPQYjCPtclCvmCBrTV6FPFQd6qqlFWvS5RWeeQdpEsByRS811AIbp/pSm1Y/rRid
-         FCxQ==
-X-Gm-Message-State: APjAAAXOv3mWH9NQy1W7y7KtRB3bSCBgZ9Xxq68BE4QREAIh3TLFEQuN
-        hHcPJWbDiMLyGQPmJdLa+yQmXA==
-X-Google-Smtp-Source: APXvYqwfcEAdtsZ+rCamZtj0MvoXkHQbqikImH2K21Z7lN9o0ZlEjUgJncOajxaQBGEujZOyMJYZkQ==
-X-Received: by 2002:ac8:2b86:: with SMTP id m6mr23384923qtm.190.1580238432152;
-        Tue, 28 Jan 2020 11:07:12 -0800 (PST)
-Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
-        by smtp.gmail.com with ESMTPSA id f7sm13273329qtp.86.2020.01.28.11.07.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jan 2020 11:07:10 -0800 (PST)
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-From:   Qian Cai <cai@lca.pw>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH V12] mm/debug: Add tests validating architecture page table helpers
-Date:   Tue, 28 Jan 2020 14:07:10 -0500
-Message-Id: <69091BA4-18C4-4425-A5E2-31FBE4654AF9@lca.pw>
-References: <20200128174709.GK655507@arrakis.emea.arm.com>
-Cc:     Anshuman Khandual <Anshuman.Khandual@arm.com>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        linux-ia64@vger.kernel.org, linux-sh@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
+        id S1726363AbgA2Bmw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Jan 2020 20:42:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49034 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726333AbgA2Bmw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 28 Jan 2020 20:42:52 -0500
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1914B2051A;
+        Wed, 29 Jan 2020 01:42:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580262171;
+        bh=Dm5O1JcZZZn4Fmmh8ZEVuwwpAngNiF+PCJfRS/Xf9zw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IuNPIsR0oGrUykv480vwdj6CsOazTln5Bw1n/BEKw1a/AsxXikVYbWTsDoZHVn1NH
+         t/EI5lRCJXpmAa1YAwlsAfg3SXA/vfAdzvcPXlErBoR7v2HI9/sbLaWbGUKdyFKt2C
+         ZB09jVEnfNltBzwVSCZDK1MGtariwNUd7/U93c4E=
+Date:   Tue, 28 Jan 2020 17:42:48 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Paul Burton <paul.burton@mips.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        qiaochong <qiaochong@loongson.cn>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Chuhong Yuan <hslester96@gmail.com>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        Nicholas Mc Guire <hofrat@osadl.org>,
         James Hogan <jhogan@kernel.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Michal Hocko <mhocko@kernel.org>, linux-mm@kvack.org,
-        Dave Hansen <dave.hansen@intel.com>,
-        Paul Mackerras <paulus@samba.org>, sparclinux@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-s390@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        x86@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Ingo Molnar <mingo@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Christophe Leroy <christophe.leroy@c-s.fr>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        linux-kernel@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>
-In-Reply-To: <20200128174709.GK655507@arrakis.emea.arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-X-Mailer: iPhone Mail (17C54)
+        Philippe =?ISO-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH 0/5] kdb: Don't implicitly change tasks; plus misc
+ fixups
+Message-Id: <20200128174248.756f18d713e759be2b4273db@linux-foundation.org>
+In-Reply-To: <CAD=FV=WcjHMzRE0yHm4uRFYj=Zoxz_v1FgiZETOwjzMtkjJcfQ@mail.gmail.com>
+References: <20191109191644.191766-1-dianders@chromium.org>
+        <CAD=FV=WcjHMzRE0yHm4uRFYj=Zoxz_v1FgiZETOwjzMtkjJcfQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Tue, 28 Jan 2020 08:59:01 -0800 Doug Anderson <dianders@chromium.org> wrote:
 
+> Hi
+> 
+> On Sat, Nov 9, 2019 at 11:17 AM Douglas Anderson <dianders@chromium.org> wrote:
+> >
+> > This started out as just a follow-up to Daniel's post [1].  I wanted
+> > to stop implicitly changing the current task in kdb.  ...but, of
+> > course, everywhere you look in kdb there are things to cleanup, so
+> > this gets a few misc cleanups I found along the way.  Enjoy.
+> >
+> > [1] https://lore.kernel.org/r/20191010150735.dhrj3pbjgmjrdpwr@holly.lan
+> >
+> >
+> > Douglas Anderson (5):
+> >   MIPS: kdb: Remove old workaround for backtracing on other CPUs
+> >   kdb: kdb_current_regs should be private
+> >   kdb: kdb_current_task shouldn't be exported
+> >   kdb: Gid rid of implicit setting of the current task / regs
+> >   kdb: Get rid of confusing diag msg from "rd" if current task has no
+> >     regs
+> >
+> >  arch/mips/kernel/traps.c       |  5 -----
+> >  include/linux/kdb.h            |  2 --
+> >  kernel/debug/kdb/kdb_bt.c      |  8 +-------
+> >  kernel/debug/kdb/kdb_main.c    | 31 ++++++++++++++-----------------
+> >  kernel/debug/kdb/kdb_private.h |  2 +-
+> >  5 files changed, 16 insertions(+), 32 deletions(-)
+> 
+> I noticed that this series doesn't seem to be in linux-next, but I
+> think it was supposed to target v5.6?  Do you know if there is
+> anything outstanding or if it'll be queued up sometime soon?
+> 
 
-> On Jan 28, 2020, at 12:47 PM, Catalin Marinas <catalin.marinas@arm.com> wr=
-ote:
->=20
-> The primary goal here is not finding regressions but having clearly
-> defined semantics of the page table accessors across architectures. x86
-> and arm64 are a good starting point and other architectures will be
-> enabled as they are aligned to the same semantics.
+I grabbed them.
 
-This still does not answer the fundamental question. If this test is simply i=
-nefficient to find bugs, who wants to spend time to use it regularly?  If th=
-is is just one off test that may get running once in a few years (when intro=
-ducing a new arch), how does it justify the ongoing cost to maintain it?
-
-I do agree there could be a need to clearly define this thing but that belon=
-gs to documentation rather than testing purpose. It is confusing to mix this=
- with other config options which have somewhat a different purpose, it will t=
-hen be a waste of time for people who mistakenly enable this for regular aut=
-omatic testing and never found any bug from it.=
+Are there any updates on the testing status, particularly on MIPS?
