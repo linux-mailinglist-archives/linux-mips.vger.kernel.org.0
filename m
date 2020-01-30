@@ -2,48 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D8914DC9D
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2020 15:13:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A95214DD8B
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2020 16:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727417AbgA3ONW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Jan 2020 09:13:22 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:30980 "EHLO pegase1.c-s.fr"
+        id S1727238AbgA3PHN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Jan 2020 10:07:13 -0500
+Received: from foss.arm.com ([217.140.110.172]:54190 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726902AbgA3ONW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 30 Jan 2020 09:13:22 -0500
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 487j4Z2bp9z9v2Nx;
-        Thu, 30 Jan 2020 15:13:18 +0100 (CET)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=qICZOrjf; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id uOkb5XiF-zPA; Thu, 30 Jan 2020 15:13:18 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 487j4Z13FJz9v2Nw;
-        Thu, 30 Jan 2020 15:13:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1580393598; bh=jiy8q+DLF/cyz8x0j+2VD0K/r6LzapCGUAMM8PPwAqg=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=qICZOrjfjgKU41D9G6qwOhWQ3f07+KjLwpAHo5DoCMTyruxB3bymqHi8naihrjRrd
-         VNgNmAI2BgWTRJKP0fo15DiJvJYT/IAWdqQGaK6fSFCsfnDbh4zU2Oj9aR7VXIDKWw
-         S5BQleimwSbi1BQRePhLQirIhOLqknAgD+VG9wXI=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 606438B875;
-        Thu, 30 Jan 2020 15:13:19 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id v9YV4qhIXl9S; Thu, 30 Jan 2020 15:13:19 +0100 (CET)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id CC2F68B874;
-        Thu, 30 Jan 2020 15:13:16 +0100 (CET)
+        id S1727107AbgA3PHN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 30 Jan 2020 10:07:13 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00F0FFEC;
+        Thu, 30 Jan 2020 07:07:12 -0800 (PST)
+Received: from [192.168.0.129] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F053F3F68E;
+        Thu, 30 Jan 2020 07:06:51 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
 Subject: Re: [PATCH V12] mm/debug: Add tests validating architecture page
  table helpers
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
+To:     linux-mm@kvack.org, linux-alpha@vger.kernel.org,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-c6x-dev@linux-c6x.org,
+        Mark Salter <msalter@redhat.com>,
+        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
+        uclinux-h8-devel@lists.sourceforge.jp,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-hexagon@vger.kernel.org, Brian Cain <bcain@codeaurora.org>,
+        linux-m68k@lists.linux-m68k.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Guan Xuetao <gxt@pku.edu.cn>, linux-xtensa@linux-xtensa.org,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -61,7 +55,6 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Kees Cook <keescook@chromium.org>,
         Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
         Matthew Wilcox <willy@infradead.org>,
-        Sri Krishna chowdary <schowdary@nvidia.com>,
         Dave Hansen <dave.hansen@intel.com>,
         Russell King - ARM Linux <linux@armlinux.org.uk>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -75,6 +68,7 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         "Kirill A . Shutemov" <kirill@shutemov.name>,
         Gerald Schaefer <gerald.schaefer@de.ibm.com>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
         Ingo Molnar <mingo@kernel.org>,
         linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
@@ -82,229 +76,144 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         x86@kernel.org, linux-kernel@vger.kernel.org
 References: <1580174873-18117-1-git-send-email-anshuman.khandual@arm.com>
- <68ed6488-aa25-ab41-8da6-f0ddeb15d52b@c-s.fr>
- <49754f74-53a7-0e4a-bb16-53617f8c902c@arm.com>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <473d8198-3ac4-af3b-e2ec-c0698a3565d3@c-s.fr>
-Date:   Thu, 30 Jan 2020 15:13:16 +0100
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+Message-ID: <fe26671a-7f26-17d7-402b-5e01fdca773e@arm.com>
+Date:   Thu, 30 Jan 2020 20:36:47 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-In-Reply-To: <49754f74-53a7-0e4a-bb16-53617f8c902c@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1580174873-18117-1-git-send-email-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-Le 30/01/2020 à 14:04, Anshuman Khandual a écrit :
+On 01/28/2020 06:57 AM, Anshuman Khandual wrote:
+> This adds tests which will validate architecture page table helpers and
+> other accessors in their compliance with expected generic MM semantics.
+> This will help various architectures in validating changes to existing
+> page table helpers or addition of new ones.
 > 
-> On 01/28/2020 10:35 PM, Christophe Leroy wrote:
->>
->>
->> Le 28/01/2020 à 02:27, Anshuman Khandual a écrit :
->>> diff --git a/arch/x86/include/asm/pgtable_64.h b/arch/x86/include/asm/pgtable_64.h
->>> index 0b6c4042942a..fb0e76d254b3 100644
->>> --- a/arch/x86/include/asm/pgtable_64.h
->>> +++ b/arch/x86/include/asm/pgtable_64.h
->>> @@ -53,6 +53,12 @@ static inline void sync_initial_page_table(void) { }
->>>      struct mm_struct;
->>>    +#define mm_p4d_folded mm_p4d_folded
->>> +static inline bool mm_p4d_folded(struct mm_struct *mm)
->>> +{
->>> +    return !pgtable_l5_enabled();
->>> +}
->>> +
->>
->> For me this should be part of another patch, it is not directly linked to the tests.
+> This test covers basic page table entry transformations including but not
+> limited to old, young, dirty, clean, write, write protect etc at various
+> level along with populating intermediate entries with next page table page
+> and validating them.
 > 
-> We did discuss about this earlier and Kirril mentioned its not worth
-> a separate patch.
+> Test page table pages are allocated from system memory with required size
+> and alignments. The mapped pfns at page table levels are derived from a
+> real pfn representing a valid kernel text symbol. This test gets called
+> right after page_alloc_init_late().
 > 
-> https://lore.kernel.org/linux-arm-kernel/20190913091305.rkds4f3fqv3yjhjy@box/
-
-For me it would make sense to not mix this patch which implement tests, 
-and changes that are needed for the test to work (or even build) on the 
-different architectures.
-
-But that's up to you.
-
+> This gets build and run when CONFIG_DEBUG_VM_PGTABLE is selected along with
+> CONFIG_VM_DEBUG. Architectures willing to subscribe this test also need to
+> select CONFIG_ARCH_HAS_DEBUG_VM_PGTABLE which for now is limited to x86 and
+> arm64. Going forward, other architectures too can enable this after fixing
+> build or runtime problems (if any) with their page table helpers.
 > 
->>
->>>    void set_pte_vaddr_p4d(p4d_t *p4d_page, unsigned long vaddr, pte_t new_pte);
->>>    void set_pte_vaddr_pud(pud_t *pud_page, unsigned long vaddr, pte_t new_pte);
->>>    diff --git a/include/asm-generic/pgtable.h b/include/asm-generic/pgtable.h
->>> index 798ea36a0549..e0b04787e789 100644
->>> --- a/include/asm-generic/pgtable.h
->>> +++ b/include/asm-generic/pgtable.h
->>> @@ -1208,6 +1208,12 @@ static inline bool arch_has_pfn_modify_check(void)
->>>    # define PAGE_KERNEL_EXEC PAGE_KERNEL
->>>    #endif
->>>    +#ifdef CONFIG_DEBUG_VM_PGTABLE
->>
->> Not sure it is a good idea to put that in include/asm-generic/pgtable.h
+> Folks interested in making sure that a given platform's page table helpers
+> conform to expected generic MM semantics should enable the above config
+> which will just trigger this test during boot. Any non conformity here will
+> be reported as an warning which would need to be fixed. This test will help
+> catch any changes to the agreed upon semantics expected from generic MM and
+> enable platforms to accommodate it thereafter.
 > 
-> Logically that is the right place, as it is related to page table but
-> not something platform related.
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Steven Price <Steven.Price@arm.com>
+> Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Sri Krishna chowdary <schowdary@nvidia.com>
+> Cc: Dave Hansen <dave.hansen@intel.com>
+> Cc: Russell King - ARM Linux <linux@armlinux.org.uk>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
+> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Vineet Gupta <vgupta@synopsys.com>
+> Cc: James Hogan <jhogan@kernel.org>
+> Cc: Paul Burton <paul.burton@mips.com>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Kirill A. Shutemov <kirill@shutemov.name>
+> Cc: Gerald Schaefer <gerald.schaefer@de.ibm.com>
+> Cc: Christophe Leroy <christophe.leroy@c-s.fr>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: linux-snps-arc@lists.infradead.org
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-ia64@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-s390@vger.kernel.org
+> Cc: linux-sh@vger.kernel.org
+> Cc: sparclinux@vger.kernel.org
+> Cc: x86@kernel.org
+> Cc: linux-kernel@vger.kernel.org
 
-I can't see any debug related features in that file.
+I should have included mailing lists for all missing platforms here.
+Will add them in the patch next time around but for now just adding
+them here explicitly so that hopefully in case some of them can build
+and run the test successfully on respective platforms.
 
-> 
->>
->> By doing this you are forcing a rebuild of almost all files, whereas only init/main.o and mm/debug_vm_pgtable.o should be rebuilt when activating this config option.
-> 
-> I agreed but whats the alternative ? We could move these into init/main.c
-> to make things simpler but will that be a right place, given its related
-> to generic page table.
+ALPHA:
 
-What about linux/mmdebug.h instead ? (I have not checked if it would 
-reduce the impact, but that's where things related to CONFIG_DEBUG_VM 
-seems to be).
++ linux-alpha@vger.kernel.org
++ Richard Henderson <rth@twiddle.net>
++ Ivan Kokshaysky <ink@jurassic.park.msu.ru>
++ Matt Turner <mattst88@gmail.com>
 
-Otherwise, you can just create new file, for instance 
-<linux/mmdebug-pgtable.h> and include that file only in the init/main.c 
-and mm/debug_vm_pgtable.c
+C6X:
 
++ linux-c6x-dev@linux-c6x.org
++ Mark Salter <msalter@redhat.com>
++ Aurelien Jacquiot <jacquiot.aurelien@gmail.com>
 
+H8300:
 
-> 
->>
->>> +extern void debug_vm_pgtable(void);
->>
->> Please don't use the 'extern' keyword, it is useless and not to be used for functions declaration.
-> 
-> Really ? But, there are tons of examples doing the same thing both in
-> generic and platform code as well.
++ uclinux-h8-devel@lists.sourceforge.jp
++ Yoshinori Sato <ysato@users.sourceforge.jp>
 
-Yes, but how can we improve if we blindly copy the errors from the past 
-? Having tons of 'extern' doesn't mean we must add more.
+HEXAGON:
 
-I think checkpatch.pl usually complains when a patch brings a new 
-unreleval extern symbol.
++ linux-hexagon@vger.kernel.org
++ Brian Cain <bcain@codeaurora.org>
 
-> 
->>
->>> +#else
->>> +static inline void debug_vm_pgtable(void) { }
->>> +#endif
->>> +
->>>    #endif /* !__ASSEMBLY__ */
->>>      #ifndef io_remap_pfn_range
->>> diff --git a/init/main.c b/init/main.c
->>> index da1bc0b60a7d..5e59e6ac0780 100644
->>> --- a/init/main.c
->>> +++ b/init/main.c
->>> @@ -1197,6 +1197,7 @@ static noinline void __init kernel_init_freeable(void)
->>>        sched_init_smp();
->>>          page_alloc_init_late();
->>> +    debug_vm_pgtable();
->>
->> Wouldn't it be better to call debug_vm_pgtable() in kernel_init() between the call to async_synchronise_full() and ftrace_free_init_mem() ?
-> 
-> IIRC, proposed location is the earliest we could call debug_vm_pgtable().
-> Is there any particular benefit or reason to move it into kernel_init() ?
+M68K:
 
-It would avoid having it lost in the middle of drivers logs, would be 
-close to the end of init, at a place we can't miss it, close to the 
-result of other tests like CONFIG_DEBUG_RODATA_TEST for instance.
++ linux-m68k@lists.linux-m68k.org
++ Geert Uytterhoeven <geert@linux-m68k.org>
 
-At the moment, you have to look for it to be sure the test is done and 
-what the result is.
+MICROBLAZE:
 
-> 
->>
->>>        /* Initialize page ext after all struct pages are initialized. */
->>>        page_ext_init();
->>>    diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
->>> index 5ffe144c9794..7cceae923c05 100644
->>> --- a/lib/Kconfig.debug
->>> +++ b/lib/Kconfig.debug
->>> @@ -653,6 +653,12 @@ config SCHED_STACK_END_CHECK
->>>          data corruption or a sporadic crash at a later stage once the region
->>>          is examined. The runtime overhead introduced is minimal.
->>>    +config ARCH_HAS_DEBUG_VM_PGTABLE
->>> +    bool
->>> +    help
->>> +      An architecture should select this when it can successfully
->>> +      build and run DEBUG_VM_PGTABLE.
->>> +
->>>    config DEBUG_VM
->>>        bool "Debug VM"
->>>        depends on DEBUG_KERNEL
->>> @@ -688,6 +694,22 @@ config DEBUG_VM_PGFLAGS
->>>            If unsure, say N.
->>>    +config DEBUG_VM_PGTABLE
->>> +    bool "Debug arch page table for semantics compliance"
->>> +    depends on MMU
->>> +    depends on DEBUG_VM
->>
->> Does it really need to depend on DEBUG_VM ?
-> 
-> No. It seemed better to package this test along with DEBUG_VM (although I
-> dont remember the conversation around it) and hence this dependency.
++ Michal Simek <monstr@monstr.eu>
 
-Yes but it perfectly work as standalone. The more easy it is to activate 
-and the more people will use it. DEBUG_VM obliges to rebuild the kernel 
-entirely and could modify the behaviour. Could the helpers we are 
-testing behave differently when DEBUG_VM is not set ? I think it's good 
-the test things as close as possible to final config.
+RISCV:
 
-> 
->> I think we could make it standalone and 'default y if DEBUG_VM' instead.
-> 
-> Which will yield the same result like before but in a different way. But
-> yes, this test could go about either way but unless there is a good enough
-> reason why change the current one.
++ linux-riscv@lists.infradead.org
++ Paul Walmsley <paul.walmsley@sifive.com>
++ Palmer Dabbelt <palmer@dabbelt.com>
 
-I think if we want people to really use it on other architectures it 
-must be possible to activate it without having to modify Kconfig. 
-Otherwise people won't even know the test exists and the architecture 
-fails the test.
+UNICORE32:
 
-The purpose of a test suite is to detect bugs. If you can't run the test 
-until you have fixed the bugs, I guess nobody will ever detect the bugs 
-and they will never be fixed.
++ Guan Xuetao <gxt@pku.edu.cn>
 
-So I think:
-- the test should be 'default y' when ARCH_HAS_DEBUG_VM_PGTABLE is selected
-- the test should be 'default n' when ARCH_HAS_DEBUG_VM_PGTABLE is not 
-selected, and it should be user selectable if EXPERT is selected.
+XTENSA:
 
-Something like:
++ linux-xtensa@linux-xtensa.org
++ Chris Zankel <chris@zankel.net>
++ Max Filippov <jcmvbkbc@gmail.com>
 
-config DEBUG_VM_PGTABLE
-     bool "Debug arch page table for semantics compliance" if 
-ARCH_HAS_DEBUG_VM_PGTABLE || EXPERT
-     depends on MMU
-     default 'n' if !ARCH_HAS_DEBUG_VM_PGTABLE
-     default 'y' if DEBUG_VM
-
-
-> 
->>
->>> +    depends on ARCH_HAS_DEBUG_VM_PGTABLE
->>> +    default y
->>> +    help
->>> +      This option provides a debug method which can be used to test
->>> +      architecture page table helper functions on various platforms in
->>> +      verifying if they comply with expected generic MM semantics. This
->>> +      will help architecture code in making sure that any changes or
->>> +      new additions of these helpers still conform to expected
->>> +      semantics of the generic MM.
->>> +
->>> +      If unsure, say N.
->>> +
->>
->> Does it make sense to make it 'default y' and say 'If unsure, say N' ?
-> 
-> No it does. Not when it defaults 'y' unconditionally. Will drop the last
-> sentence "If unsure, say N". Nice catch, thank you.
-
-Well I was not asking if 'default y' was making sense but only if 'If 
-unsure say N' was making sense due to the 'default y'. You got it.
-
-Christophe
+Please feel free to add others if I have missed.
