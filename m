@@ -2,218 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A95214DD8B
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2020 16:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4AC14DE68
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2020 17:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727238AbgA3PHN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Jan 2020 10:07:13 -0500
-Received: from foss.arm.com ([217.140.110.172]:54190 "EHLO foss.arm.com"
+        id S1727270AbgA3QIh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Jan 2020 11:08:37 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:1502 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727107AbgA3PHN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 30 Jan 2020 10:07:13 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00F0FFEC;
-        Thu, 30 Jan 2020 07:07:12 -0800 (PST)
-Received: from [192.168.0.129] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F053F3F68E;
-        Thu, 30 Jan 2020 07:06:51 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: Re: [PATCH V12] mm/debug: Add tests validating architecture page
- table helpers
-To:     linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>, linux-c6x-dev@linux-c6x.org,
-        Mark Salter <msalter@redhat.com>,
-        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
-        uclinux-h8-devel@lists.sourceforge.jp,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-hexagon@vger.kernel.org, Brian Cain <bcain@codeaurora.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Guan Xuetao <gxt@pku.edu.cn>, linux-xtensa@linux-xtensa.org,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Steven Price <Steven.Price@arm.com>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        id S1727158AbgA3QIh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 30 Jan 2020 11:08:37 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 487ldY3xydz9v6KM;
+        Thu, 30 Jan 2020 17:08:33 +0100 (CET)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=FQUlvhVm; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id wIEqw9oDIA6F; Thu, 30 Jan 2020 17:08:33 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 487ldY2t0xz9v6KL;
+        Thu, 30 Jan 2020 17:08:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1580400513; bh=4gy05PHuez6bivrIGkJNuEVnZ24TDpRGy3B+DHczM3E=;
+        h=From:Subject:To:Cc:Date:From;
+        b=FQUlvhVmZKvZxXxg7cK4U5Cfll3ntifWapTKxoZctIQ9egTmZuqdjZGKPp9nTug6Y
+         SFhbCQOntoMGKsAkvyYbYKF1dVGaz47UChW4nIF7Q8ug/ClNbVsLD3QigiDc3CoiJ3
+         0QSsV+tT2aHX7KbBaYenl5hgYHuwpiiX8gCCS4LI=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E0CFD8B87B;
+        Thu, 30 Jan 2020 17:08:34 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id paLKA8Pe3ank; Thu, 30 Jan 2020 17:08:34 +0100 (CET)
+Received: from po14934vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9C3CD8B877;
+        Thu, 30 Jan 2020 17:08:34 +0100 (CET)
+Received: by po14934vm.idsi0.si.c-s.fr (Postfix, from userid 0)
+        id 2FE7465283; Thu, 30 Jan 2020 16:08:34 +0000 (UTC)
+Message-Id: <cover.1580399657.git.christophe.leroy@c-s.fr>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Subject: [PATCH v5 0/6] powerpc: switch VDSO to C implementation.
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Gerald Schaefer <gerald.schaefer@de.ibm.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Ingo Molnar <mingo@kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <1580174873-18117-1-git-send-email-anshuman.khandual@arm.com>
-Message-ID: <fe26671a-7f26-17d7-402b-5e01fdca773e@arm.com>
-Date:   Thu, 30 Jan 2020 20:36:47 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
-MIME-Version: 1.0
-In-Reply-To: <1580174873-18117-1-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Michael Ellerman <mpe@ellerman.id.au>, nathanl@linux.ibm.com,
+        arnd@arndb.de, tglx@linutronix.de, vincenzo.frascino@arm.com,
+        luto@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        x86@kernel.org
+Date:   Thu, 30 Jan 2020 16:08:34 +0000 (UTC)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 01/28/2020 06:57 AM, Anshuman Khandual wrote:
-> This adds tests which will validate architecture page table helpers and
-> other accessors in their compliance with expected generic MM semantics.
-> This will help various architectures in validating changes to existing
-> page table helpers or addition of new ones.
-> 
-> This test covers basic page table entry transformations including but not
-> limited to old, young, dirty, clean, write, write protect etc at various
-> level along with populating intermediate entries with next page table page
-> and validating them.
-> 
-> Test page table pages are allocated from system memory with required size
-> and alignments. The mapped pfns at page table levels are derived from a
-> real pfn representing a valid kernel text symbol. This test gets called
-> right after page_alloc_init_late().
-> 
-> This gets build and run when CONFIG_DEBUG_VM_PGTABLE is selected along with
-> CONFIG_VM_DEBUG. Architectures willing to subscribe this test also need to
-> select CONFIG_ARCH_HAS_DEBUG_VM_PGTABLE which for now is limited to x86 and
-> arm64. Going forward, other architectures too can enable this after fixing
-> build or runtime problems (if any) with their page table helpers.
-> 
-> Folks interested in making sure that a given platform's page table helpers
-> conform to expected generic MM semantics should enable the above config
-> which will just trigger this test during boot. Any non conformity here will
-> be reported as an warning which would need to be fixed. This test will help
-> catch any changes to the agreed upon semantics expected from generic MM and
-> enable platforms to accommodate it thereafter.
-> 
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Michal Hocko <mhocko@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Steven Price <Steven.Price@arm.com>
-> Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Sri Krishna chowdary <schowdary@nvidia.com>
-> Cc: Dave Hansen <dave.hansen@intel.com>
-> Cc: Russell King - ARM Linux <linux@armlinux.org.uk>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
-> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Vineet Gupta <vgupta@synopsys.com>
-> Cc: James Hogan <jhogan@kernel.org>
-> Cc: Paul Burton <paul.burton@mips.com>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Kirill A. Shutemov <kirill@shutemov.name>
-> Cc: Gerald Schaefer <gerald.schaefer@de.ibm.com>
-> Cc: Christophe Leroy <christophe.leroy@c-s.fr>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: linux-snps-arc@lists.infradead.org
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-ia64@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-s390@vger.kernel.org
-> Cc: linux-sh@vger.kernel.org
-> Cc: sparclinux@vger.kernel.org
-> Cc: x86@kernel.org
-> Cc: linux-kernel@vger.kernel.org
+This is a fifth version of a series to switch powerpc VDSO to generic
+C implementation. All previous where RFCs. This one has reached a
+mature status.
 
-I should have included mailing lists for all missing platforms here.
-Will add them in the patch next time around but for now just adding
-them here explicitly so that hopefully in case some of them can build
-and run the test successfully on respective platforms.
+It is tested on PPC32 (mpc885 and mpc8321E).
+It is build tested on kisskb
+(http://kisskb.ellerman.id.au/kisskb/head/abf15916bd65f808b07fe9a2377db965a37071e4/)
+In PPC64 mode it now builds both VDSO64 and VDSO32.
 
-ALPHA:
+The two first patches are optimisation around the way vdso datapage is
+handled. They are worth merging now even if we want to wait a little
+more for the entire series.
 
-+ linux-alpha@vger.kernel.org
-+ Richard Henderson <rth@twiddle.net>
-+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-+ Matt Turner <mattst88@gmail.com>
+The next three patches are optimisations to the GENERIC C VDSO code.
+Without them, the performance of the VDSO time functions are too
+degraded compared to the current ASM version to be worth switching
+the C VDSO.
 
-C6X:
+This series applies on today's powerpc/merge branch.
 
-+ linux-c6x-dev@linux-c6x.org
-+ Mark Salter <msalter@redhat.com>
-+ Aurelien Jacquiot <jacquiot.aurelien@gmail.com>
+See the last patch for details on changes and performance.
 
-H8300:
+Christophe Leroy (6):
+  powerpc/vdso64: Switch from __get_datapage() to get_datapage inline
+    macro
+  powerpc/vdso: Remove __kernel_datapage_offset and simplify
+    __get_datapage()
+  lib/vdso: Allow architectures to provide the vdso data pointer
+  lib/vdso: Allow fixed clock mode
+  lib/vdso: Allow architectures to override the ns shift operation
+  powerpc/vdso: Switch VDSO to generic C implementation.
 
-+ uclinux-h8-devel@lists.sourceforge.jp
-+ Yoshinori Sato <ysato@users.sourceforge.jp>
+ arch/powerpc/Kconfig                         |   2 +
+ arch/powerpc/include/asm/vdso/gettimeofday.h | 158 ++++++++++
+ arch/powerpc/include/asm/vdso/vsyscall.h     |  25 ++
+ arch/powerpc/include/asm/vdso_datapage.h     |  51 ++--
+ arch/powerpc/kernel/asm-offsets.c            |  49 +---
+ arch/powerpc/kernel/time.c                   |  90 ------
+ arch/powerpc/kernel/vdso.c                   |  58 +---
+ arch/powerpc/kernel/vdso32/Makefile          |  32 +-
+ arch/powerpc/kernel/vdso32/cacheflush.S      |   2 +-
+ arch/powerpc/kernel/vdso32/config-fake32.h   |  34 +++
+ arch/powerpc/kernel/vdso32/datapage.S        |   7 +-
+ arch/powerpc/kernel/vdso32/gettimeofday.S    | 291 +------------------
+ arch/powerpc/kernel/vdso32/vdso32.lds.S      |   7 +-
+ arch/powerpc/kernel/vdso32/vgettimeofday.c   |  29 ++
+ arch/powerpc/kernel/vdso64/Makefile          |  23 +-
+ arch/powerpc/kernel/vdso64/cacheflush.S      |   9 +-
+ arch/powerpc/kernel/vdso64/datapage.S        |  31 +-
+ arch/powerpc/kernel/vdso64/gettimeofday.S    | 243 +---------------
+ arch/powerpc/kernel/vdso64/vdso64.lds.S      |   7 +-
+ arch/powerpc/kernel/vdso64/vgettimeofday.c   |  29 ++
+ lib/vdso/gettimeofday.c                      |  98 +++++--
+ 21 files changed, 467 insertions(+), 808 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/vdso/gettimeofday.h
+ create mode 100644 arch/powerpc/include/asm/vdso/vsyscall.h
+ create mode 100644 arch/powerpc/kernel/vdso32/config-fake32.h
+ create mode 100644 arch/powerpc/kernel/vdso32/vgettimeofday.c
+ create mode 100644 arch/powerpc/kernel/vdso64/vgettimeofday.c
 
-HEXAGON:
+-- 
+2.25.0
 
-+ linux-hexagon@vger.kernel.org
-+ Brian Cain <bcain@codeaurora.org>
-
-M68K:
-
-+ linux-m68k@lists.linux-m68k.org
-+ Geert Uytterhoeven <geert@linux-m68k.org>
-
-MICROBLAZE:
-
-+ Michal Simek <monstr@monstr.eu>
-
-RISCV:
-
-+ linux-riscv@lists.infradead.org
-+ Paul Walmsley <paul.walmsley@sifive.com>
-+ Palmer Dabbelt <palmer@dabbelt.com>
-
-UNICORE32:
-
-+ Guan Xuetao <gxt@pku.edu.cn>
-
-XTENSA:
-
-+ linux-xtensa@linux-xtensa.org
-+ Chris Zankel <chris@zankel.net>
-+ Max Filippov <jcmvbkbc@gmail.com>
-
-Please feel free to add others if I have missed.
