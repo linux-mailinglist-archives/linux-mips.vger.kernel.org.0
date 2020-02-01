@@ -2,52 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 153FC14F2CC
-	for <lists+linux-mips@lfdr.de>; Fri, 31 Jan 2020 20:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3676514F5D6
+	for <lists+linux-mips@lfdr.de>; Sat,  1 Feb 2020 02:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727382AbgAaTfS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 31 Jan 2020 14:35:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55530 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726593AbgAaTfS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 31 Jan 2020 14:35:18 -0500
-Subject: Re: [GIT PULL] MIPS changes
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580499317;
-        bh=4mgYS0AdpRA7BOUvrgkicXbBKz0g9VpGUzSaXTafwHg=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=byOPl4TzXyxzVIi/QLpR45/QfUTgebz7XIg0tXaBvmM1Xg5zvCsCRmqib/IWiU2TD
-         za4wxi2IUZsxXpeGwFD0Fvl446leYx2B5gca45RkKfgZexCVTqHetCLOSSxj9kgqVQ
-         JcWPxbfgEP4fymswVthIaK2sJDiU6oFk/bUyu4w0=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200131175528.m7t6bpd74cuknyht@pburton-laptop>
-References: <20200131175528.m7t6bpd74cuknyht@pburton-laptop>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200131175528.m7t6bpd74cuknyht@pburton-laptop>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git tags/mips_5.6
-X-PR-Tracked-Commit-Id: 2c4288719806ca0b3de1b742ada26b25a60d6a45
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c5951e7c8ee5cb04b8b41c32bf567b90117a2124
-Message-Id: <158049931780.14867.13739565161470599168.pr-tracker-bot@kernel.org>
-Date:   Fri, 31 Jan 2020 19:35:17 +0000
-To:     Paul Burton <paulburton@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+        id S1726636AbgBABzp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 31 Jan 2020 20:55:45 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:53758 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726567AbgBABzp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 31 Jan 2020 20:55:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=1PKGGrJbH+yDuKFV2kginutGKJI4kg35LvNPD/VL3Mc=; b=q30T6ANAPJJ1W8IMvG1LTwEZc
+        jhMQUwJ6wAyOGARcu5yOMa/ttVmD8ACirDDqzoJ9O3/sqew6Lkf6GIirmH8w+JKWU1GHE/llWElGw
+        FYIQ1y6ljJVsfn6rMjBIMvSGKoAUExx0bCpbW+fI+b25ZHoem+GWmI6T3gFpK878pWnnYgsgIAQ10
+        RziY73nq7KRHkNAX7f9po79Pw9EmZPoOTd8m6jffIJfFIeLpA4zsKtgm827jkmUkMsxMmv5J5sK7z
+        wbkYFKvX6q+W6+OKKWfy7iW7dNuZtHNa9hIDswdBu76VvOWJ6P7n57iMeYQbZrWOkAluvrD8FD1ao
+        jAmrcS6Lw==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1ixi0e-0007DO-Kc; Sat, 01 Feb 2020 01:55:44 +0000
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] arch/mips: change duplicated word in NUMA help text
+Message-ID: <8e127f9a-6c73-e0f5-4fb5-f3ab3656221f@infradead.org>
+Date:   Fri, 31 Jan 2020 17:55:43 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Fri, 31 Jan 2020 09:55:28 -0800:
+From: Randy Dunlap <rdunlap@infradead.org>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git tags/mips_5.6
+Fix wording in NUMA help text.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c5951e7c8ee5cb04b8b41c32bf567b90117a2124
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: linux-mips@vger.kernel.org
+---
+ arch/mips/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thank you!
+--- linux-next-20200131.orig/arch/mips/Kconfig
++++ linux-next-20200131/arch/mips/Kconfig
+@@ -2676,7 +2676,7 @@ config NUMA
+ 	  Say Y to compile the kernel to support NUMA (Non-Uniform Memory
+ 	  Access).  This option improves performance on systems with more
+ 	  than two nodes; on two node systems it is generally better to
+-	  leave it disabled; on single node systems disable this option
++	  leave it disabled; on single node systems leave this option
+ 	  disabled.
+ 
+ config SYS_SUPPORTS_NUMA
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
