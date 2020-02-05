@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D73815257E
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Feb 2020 05:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8C4152580
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Feb 2020 05:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727846AbgBEEId (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Feb 2020 23:08:33 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:42316 "EHLO loongson.cn"
+        id S1727949AbgBEEIj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Feb 2020 23:08:39 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:42346 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727832AbgBEEId (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 4 Feb 2020 23:08:33 -0500
+        id S1727832AbgBEEIj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 4 Feb 2020 23:08:39 -0500
 Received: from linux.HaierAP (unknown [111.18.44.203])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax1um3Pzpeh44MAA--.150S2;
-        Wed, 05 Feb 2020 12:08:24 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax1um3Pzpeh44MAA--.150S3;
+        Wed, 05 Feb 2020 12:08:29 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
@@ -21,40 +21,64 @@ To:     Paul Burton <paulburton@kernel.org>,
         Jean Delvare <jdelvare@suse.de>
 Cc:     Huacai Chen <chenhc@lemote.com>,
         Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/2] firmware: dmi: Add macro SMBIOS_ENTRY_POINT_SCAN_START
-Date:   Wed,  5 Feb 2020 12:08:32 +0800
-Message-Id: <1580875713-18252-1-git-send-email-yangtiezhu@loongson.cn>
+        linux-kernel@vger.kernel.org, Yinglu Yang <yangyinglu@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v3 2/2] MIPS: Add support for Desktop Management Interface (DMI)
+Date:   Wed,  5 Feb 2020 12:08:33 +0800
+Message-Id: <1580875713-18252-2-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9Ax1um3Pzpeh44MAA--.150S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4ktF13Xr4rAF15CF15Jwb_yoW8JFyDpF
-        yUGFW5ZrsrJF47t3s5J3WrZF15Xa9aqF98KFWUAr1ruas8Za4fJr4kJaykGr1DArZ5tayS
-        9r1Sqr4FkF1qkaUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AF
-        wI0_GFv_Wrylc2xSY4AK67AK6r45MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
-        wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjx
-        v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20E
-        Y4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0pRxb18UUUUU=
+In-Reply-To: <1580875713-18252-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1580875713-18252-1-git-send-email-yangtiezhu@loongson.cn>
+X-CM-TRANSID: AQAAf9Ax1um3Pzpeh44MAA--.150S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxCr4xAw4rtFy7Zw45AF17GFg_yoWrXryfpa
+        1DA3Z5tr4DGF17Ga4fAFyI9r13Cws3WrWYkFWj9r17Zas8X348Jrs3KrsxZFyUAr4kKa40
+        9a4a9F4UCFZFv3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUPE14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
+        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
+        8EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4U
+        JwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
+        IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
+        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
+        kIc2xKxwCY02Avz4vE14v_Gryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+        Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
+        CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
+        I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
+        8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73
+        UjIFyTuYvjfU08nYUUUUU
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use SMBIOS_ENTRY_POINT_SCAN_START instead of 0xF0000, because other
-archtecture maybe use a special start address such as 0xFFFE000 for
-Loongson platform.
+Enable DMI scanning on the MIPS architecture, this setups DMI identifiers
+(dmi_system_id) for printing it out on task dumps and prepares DIMM entry
+information (dmi_memdev_info) from the SMBIOS table. With this patch, the
+driver can easily match various of mainboards.
 
+In the SMBIOS reference specification, the table anchor string "_SM_" is
+present in the address range 0xF0000 to 0xFFFFF on a 16-byte boundary,
+but there exists a special case for Loongson platform, when call function
+dmi_early_remap, it should specify the start address to 0xFFFE000 due to
+it is reserved for SMBIOS and can be normally access in the BIOS.
+
+This patch works fine on the Loongson 3A3000 platform which belongs to
+MIPS architecture and has no influence on the other architectures such
+as x86 and ARM.
+
+Additionally, in order to avoid the unknown risks on the mips platform
+which is not MACH_LOONGSON64, the DMI config is better to depend on
+MACH_LOONGSON64. If other mips platform also needs this DMI feature in
+the future, the "depends on" condition can be modified.
+
+Co-developed-by: Yinglu Yang <yangyinglu@loongson.cn>
+Signed-off-by: Yinglu Yang <yangyinglu@loongson.cn>
+[jiaxun.yang@flygoat.com: Refine definitions and Kconfig]
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+Reviewed-by: Huacai Chen <chenhc@lemote.com>
 ---
 
 v3:
@@ -65,33 +89,80 @@ v2:
   - add SMBIOS_ENTRY_POINT_SCAN_START suggested by Jean
   - refine definitions and Kconfig by Jiaxun
 
- drivers/firmware/dmi_scan.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/mips/Kconfig           | 11 +++++++++++
+ arch/mips/include/asm/dmi.h | 20 ++++++++++++++++++++
+ arch/mips/kernel/setup.c    |  2 ++
+ 3 files changed, 33 insertions(+)
+ create mode 100644 arch/mips/include/asm/dmi.h
 
-diff --git a/drivers/firmware/dmi_scan.c b/drivers/firmware/dmi_scan.c
-index 2045566..f59163c 100644
---- a/drivers/firmware/dmi_scan.c
-+++ b/drivers/firmware/dmi_scan.c
-@@ -11,6 +11,10 @@
- #include <asm/dmi.h>
- #include <asm/unaligned.h>
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 08b6f34..d84cb32 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -2758,6 +2758,17 @@ config HW_PERF_EVENTS
+ 	  Enable hardware performance counter support for perf events. If
+ 	  disabled, perf events will use software events only.
  
-+#ifndef SMBIOS_ENTRY_POINT_SCAN_START
-+#define SMBIOS_ENTRY_POINT_SCAN_START 0xF0000
++config DMI
++	bool "Enable DMI scanning"
++	depends on MACH_LOONGSON64
++	select DMI_SCAN_MACHINE_NON_EFI_FALLBACK
++	default y
++	help
++	  Enabled scanning of DMI to identify machine quirks. Say Y
++	  here unless you have verified that your setup is not
++	  affected by entries in the DMI blacklist. Required by PNP
++	  BIOS code.
++
+ config SMP
+ 	bool "Multi-Processing support"
+ 	depends on SYS_SUPPORTS_SMP
+diff --git a/arch/mips/include/asm/dmi.h b/arch/mips/include/asm/dmi.h
+new file mode 100644
+index 0000000..27415a2
+--- /dev/null
++++ b/arch/mips/include/asm/dmi.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_DMI_H
++#define _ASM_DMI_H
++
++#include <linux/io.h>
++#include <linux/memblock.h>
++
++#define dmi_early_remap(x, l)		ioremap_cache(x, l)
++#define dmi_early_unmap(x, l)		iounmap(x)
++#define dmi_remap(x, l)			ioremap_cache(x, l)
++#define dmi_unmap(x)			iounmap(x)
++
++/* MIPS initialize DMI scan before SLAB is ready, so we use memblock here */
++#define dmi_alloc(l)			memblock_alloc_low(l, PAGE_SIZE)
++
++#if defined(CONFIG_MACH_LOONGSON64)
++#define SMBIOS_ENTRY_POINT_SCAN_START	0xFFFE000
 +#endif
 +
- struct kobject *dmi_kobj;
- EXPORT_SYMBOL_GPL(dmi_kobj);
++#endif /* _ASM_DMI_H */
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index 701f4bc..d9bd841 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -28,6 +28,7 @@
+ #include <linux/decompress/generic.h>
+ #include <linux/of_fdt.h>
+ #include <linux/of_reserved_mem.h>
++#include <linux/dmi.h>
  
-@@ -663,7 +667,7 @@ static void __init dmi_scan_machine(void)
- 			return;
- 		}
- 	} else if (IS_ENABLED(CONFIG_DMI_SCAN_MACHINE_NON_EFI_FALLBACK)) {
--		p = dmi_early_remap(0xF0000, 0x10000);
-+		p = dmi_early_remap(SMBIOS_ENTRY_POINT_SCAN_START, 0x10000);
- 		if (p == NULL)
- 			goto error;
+ #include <asm/addrspace.h>
+ #include <asm/bootinfo.h>
+@@ -800,6 +801,7 @@ void __init setup_arch(char **cmdline_p)
+ #endif
  
+ 	arch_mem_init(cmdline_p);
++	dmi_setup();
+ 
+ 	resource_init();
+ 	plat_smp_setup();
 -- 
 1.8.3.1
 
