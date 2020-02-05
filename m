@@ -2,91 +2,169 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7C41532DE
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Feb 2020 15:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFD815372B
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Feb 2020 19:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726534AbgBEOaL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Feb 2020 09:30:11 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:42706 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726413AbgBEOaL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Feb 2020 09:30:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1580913010;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RcBQTT6GLODG/bayLzSATYtu3RyNvIBwuV6XGUJB/88=;
-        b=QeEW+fHIA4LdgKmHHqyhAjfBicIQoRVpnW6cCnAz57tIcEgFKdCSgOlcCHr97H5/T1bVbl
-        ZsZrZ+UFqHgKzO/IaP0thdh6zzjr7L4uWLrCXLbrFb05YSvFLu1wXsd0bnUYHYr+4EOtfZ
-        KoiIaglefNrqn9aFAIZ+p9MaCRQ69eY=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-298-ea9q7dOVMaydPRBHX97ong-1; Wed, 05 Feb 2020 09:30:08 -0500
-X-MC-Unique: ea9q7dOVMaydPRBHX97ong-1
-Received: by mail-wr1-f71.google.com with SMTP id v17so1252431wrm.17
-        for <linux-mips@vger.kernel.org>; Wed, 05 Feb 2020 06:30:08 -0800 (PST)
+        id S1727149AbgBESCY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 5 Feb 2020 13:02:24 -0500
+Received: from mail-yw1-f68.google.com ([209.85.161.68]:37980 "EHLO
+        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726957AbgBESCY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Feb 2020 13:02:24 -0500
+Received: by mail-yw1-f68.google.com with SMTP id 10so3220455ywv.5;
+        Wed, 05 Feb 2020 10:02:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RcBQTT6GLODG/bayLzSATYtu3RyNvIBwuV6XGUJB/88=;
-        b=H45UXxEWJl6JkXdIMwfFgn+s3tlCAVQumcEh4bc+iA+so/UDcUvk9Fyl2vXcMlpFZw
-         Go2m8hRgCPFFgQVbNiJ9sZjSKsrs28a/5/9ndAIEMQBh2SxzAmNiarG0Bff/K9+Ys8hx
-         jeIzVWiNekZqACynaLI20uX51AbNPZuQskDI+bG9nON0L3o6xctMEt2MnZ7hjEowh4mD
-         SfI9/AfFg6yocp8HxGbpmA//HA9Zr/cPmg7UrRDYqnSw5ARw/r/pfhy1tQ/l1uocf1uB
-         6dYW41cmaO8o0zTv5Mq+6NZdzho2GT3Sl07vWRAg/ZzwSofi5baQTjzFH2Hpg2vfHbjP
-         sBkw==
-X-Gm-Message-State: APjAAAVpLPhNQGBMoRa4DiWUES140hV3beBWM9pctACk1LyAfdptgo1t
-        H45buzA7ZXvsZXVRhFvPKh4x92SBj/3nTL6A++tGhtfk+v8QGjOwRqfbwetmZXN73t0baSJdw5z
-        VlXnn9BzztuE4uu8EZGMWmw==
-X-Received: by 2002:a5d:6a88:: with SMTP id s8mr28458455wru.173.1580913007777;
-        Wed, 05 Feb 2020 06:30:07 -0800 (PST)
-X-Google-Smtp-Source: APXvYqyPyNlBB+QY4QitNu3rZNQx8P+4lrTaxsMdCLh9PQg7zNm4xD+igmbXS51wFovwRHZ40ooAKQ==
-X-Received: by 2002:a5d:6a88:: with SMTP id s8mr28458439wru.173.1580913007609;
-        Wed, 05 Feb 2020 06:30:07 -0800 (PST)
-Received: from ?IPv6:2001:b07:6468:f312:a9f0:cbc3:a8a6:fc56? ([2001:b07:6468:f312:a9f0:cbc3:a8a6:fc56])
-        by smtp.gmail.com with ESMTPSA id v14sm16285wrm.28.2020.02.05.06.30.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Feb 2020 06:30:07 -0800 (PST)
-Subject: Re: [PATCH 0/2] KVM: MIPS: Bug fix and cleanup
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Davidlohr Bueso <dbueso@suse.de>
-References: <20200203184200.23585-1-sean.j.christopherson@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <2b35c83d-07ed-00da-9fcf-d0d5594a1310@redhat.com>
-Date:   Wed, 5 Feb 2020 15:30:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=D8m3zpziTMf/1DK49oOTnKVovL2jn4pQ/YQP25fOkNM=;
+        b=Ypjh5SB/RW49YJWn7G7gMd7QmGSzXdi7rMgkcIyhZuNdSKX4F5NsmAttgjN09erHGw
+         rrHjbKnPupz5TDJIfhDMoKKJA4x3gnz4Ut/YeAx0V3wjCAOYZI/TGgpgsJJzem7SUINg
+         xbuUIG6PT22aCz447r2g8S+Myl2qmBHUoR3r3jeiwimPNi0ruuwDu8HhpsrLysKf6Qz3
+         SsGe3wu7VJk6HxUKGvYcAaAh6YVcPe4lBY+hVkEOJrNvVMcWfSof4AYH+MwIeRamWnnx
+         shfamKVQ78pF61lIQQq2rp6IbwV0533wdOnJbFqCD0jwx/qIgDU/9/oms043LAmX710n
+         BLxA==
+X-Gm-Message-State: APjAAAWrwml6sjqR0CQe6uRjbajZYg5MJcw2SjCuV+nNY71+htNl6KQr
+        Fz/zpONHMSjnJUPU50VBd/Vzh6H2I5i3+P4QndE=
+X-Google-Smtp-Source: APXvYqy1c38uBLDGGJ341PM5j5TAAE218gACbT2CX03aRP9JBZDvgjxAa+vHL8pEHWA2sJuLGbVLFN8YC44c7Jnxe0Q=
+X-Received: by 2002:a25:8804:: with SMTP id c4mr7889151ybl.387.1580925742108;
+ Wed, 05 Feb 2020 10:02:22 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200203184200.23585-1-sean.j.christopherson@intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <cover.1580610812.git.fthain@telegraphics.com.au> <d8f19ebc00a7688da739d41d584d081d1559f0d2.1580610812.git.fthain@telegraphics.com.au>
+In-Reply-To: <d8f19ebc00a7688da739d41d584d081d1559f0d2.1580610812.git.fthain@telegraphics.com.au>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Wed, 5 Feb 2020 19:02:10 +0100
+Message-ID: <CAAdtpL7SpzfqSmEcuVszNyXfrRegC20txoS5j7Ss3WkCmyRH+g@mail.gmail.com>
+Subject: Re: [PATCH 1/3] fbdev/g364fb: Fix build failure
+To:     Finn Thain <fthain@telegraphics.com.au>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        Laurent Vivier <laurent@vivier.eu>,
+        Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/02/20 19:41, Sean Christopherson wrote:
-> Fix for a compilation error introduced by the vCPU create refactoring, and
-> a patch on top to cleanup some ugliness in the relocated code.
-> 
-> Untested, really need to setup a cross-compiling environment...
-> 
-> Sean Christopherson (2):
->   KVM: MIPS: Fix a build error due to referencing not-yet-defined
->     function
->   KVM: MIPS: Fold comparecount_func() into comparecount_wakeup()
-> 
->  arch/mips/kvm/mips.c | 37 ++++++++++++++++---------------------
->  1 file changed, 16 insertions(+), 21 deletions(-)
-> 
+On Sun, Feb 2, 2020 at 3:41 AM Finn Thain <fthain@telegraphics.com.au> wrote:
+>
+> This patch resolves these compiler errors and warnings --
+>
+>   CC      drivers/video/fbdev/g364fb.o
+> drivers/video/fbdev/g364fb.c: In function 'g364fb_cursor':
+> drivers/video/fbdev/g364fb.c:137:9: error: 'x' undeclared (first use in this function)
+> drivers/video/fbdev/g364fb.c:137:9: note: each undeclared identifier is reported only once for each function it appears in
+> drivers/video/fbdev/g364fb.c:137:7: error: implicit declaration of function 'fontwidth' [-Werror=implicit-function-declaration]
+> drivers/video/fbdev/g364fb.c:137:23: error: 'p' undeclared (first use in this function)
+> drivers/video/fbdev/g364fb.c:137:38: error: 'y' undeclared (first use in this function)
+> drivers/video/fbdev/g364fb.c:137:7: error: implicit declaration of function 'fontheight' [-Werror=implicit-function-declaration]
+> drivers/video/fbdev/g364fb.c: In function 'g364fb_init':
+> drivers/video/fbdev/g364fb.c:233:24: error: 'fbvar' undeclared (first use in this function)
+> drivers/video/fbdev/g364fb.c:234:24: error: 'xres' undeclared (first use in this function)
 
-Queued, thanks.
+18 years unnoticed...
 
-Paolo
+> drivers/video/fbdev/g364fb.c:201:14: warning: unused variable 'j' [-Wunused-variable]
+> drivers/video/fbdev/g364fb.c:197:25: warning: unused variable 'pal_ptr' [-Wunused-variable]
+>
+> The MIPS Magnum framebuffer console now works when tested in QEMU.
+>
+> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 
+This commit is the kernel 'git origin' import, not the proper reference.
+
+The actual change is between v2.5.17/2.5.19:
+https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/diff/drivers/video/g364fb.c?id=b30e6e183a728923267
+Date: 2002-05-22 07:52:33...
+
+The same commit introduced the changes in g364fb_cursor(), which was
+implemented previous to v2.4.0 so it is hard to follow from there.
+
+Nobody complains during 18 years so I doubt anyone care that
+g364fb_cursor() is removed.
+And by removing it, you improve the kernel quality, so:
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+(Maybe remove the unhelpful 'Fixes' tag).
+
+> Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
+> ---
+>  drivers/video/fbdev/g364fb.c | 29 +++--------------------------
+>  1 file changed, 3 insertions(+), 26 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/g364fb.c b/drivers/video/fbdev/g364fb.c
+> index 223896cc5f7d..fb26230a3c7b 100644
+> --- a/drivers/video/fbdev/g364fb.c
+> +++ b/drivers/video/fbdev/g364fb.c
+> @@ -108,7 +108,6 @@ static int g364fb_pan_display(struct fb_var_screeninfo *var,
+>  static int g364fb_setcolreg(u_int regno, u_int red, u_int green,
+>                             u_int blue, u_int transp,
+>                             struct fb_info *info);
+> -static int g364fb_cursor(struct fb_info *info, struct fb_cursor *cursor);
+>  static int g364fb_blank(int blank, struct fb_info *info);
+>
+>  static struct fb_ops g364fb_ops = {
+> @@ -119,28 +118,8 @@ static struct fb_ops g364fb_ops = {
+>         .fb_fillrect    = cfb_fillrect,
+>         .fb_copyarea    = cfb_copyarea,
+>         .fb_imageblit   = cfb_imageblit,
+> -       .fb_cursor      = g364fb_cursor,
+>  };
+>
+> -int g364fb_cursor(struct fb_info *info, struct fb_cursor *cursor)
+> -{
+> -
+> -       switch (cursor->enable) {
+> -       case CM_ERASE:
+> -               *(unsigned int *) CTLA_REG |= CURS_TOGGLE;
+> -               break;
+> -
+> -       case CM_MOVE:
+> -       case CM_DRAW:
+> -               *(unsigned int *) CTLA_REG &= ~CURS_TOGGLE;
+> -               *(unsigned int *) CURS_POS_REG =
+> -                   ((x * fontwidth(p)) << 12) | ((y * fontheight(p)) -
+> -                                                 info->var.yoffset);
+> -               break;
+> -       }
+> -       return 0;
+> -}
+> -
+>  /*
+>   *  Pan or Wrap the Display
+>   *
+> @@ -194,11 +173,9 @@ static int g364fb_setcolreg(u_int regno, u_int red, u_int green,
+>   */
+>  int __init g364fb_init(void)
+>  {
+> -       volatile unsigned int *pal_ptr =
+> -           (volatile unsigned int *) CLR_PAL_REG;
+>         volatile unsigned int *curs_pal_ptr =
+>             (volatile unsigned int *) CURS_PAL_REG;
+> -       int mem, i, j;
+> +       int mem, i;
+>
+>         if (fb_get_options("g364fb", NULL))
+>                 return -ENODEV;
+> @@ -230,8 +207,8 @@ int __init g364fb_init(void)
+>          */
+>         *(unsigned short *) (CURS_PAT_REG + 14 * 64) = 0xffff;
+>         *(unsigned short *) (CURS_PAT_REG + 15 * 64) = 0xffff;
+> -       fb_var.xres_virtual = fbvar.xres;
+> -       fb_fix.line_length = (xres / 8) * fb_var.bits_per_pixel;
+> +       fb_var.xres_virtual = fb_var.xres;
+> +       fb_fix.line_length = fb_var.xres_virtual * fb_var.bits_per_pixel / 8;
+>         fb_fix.smem_start = 0x40000000; /* physical address */
+>         /* get size of video memory; this is special for the JAZZ hardware */
+>         mem = (r4030_read_reg32(JAZZ_R4030_CONFIG) >> 8) & 3;
+> --
+> 2.24.1
+>
