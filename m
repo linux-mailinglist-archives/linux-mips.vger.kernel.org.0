@@ -2,52 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8D8153759
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Feb 2020 19:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F55153761
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Feb 2020 19:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727657AbgBESSP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 Feb 2020 13:18:15 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:46161 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727626AbgBESSP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Feb 2020 13:18:15 -0500
-Received: by mail-wr1-f65.google.com with SMTP id z7so3903045wrl.13;
-        Wed, 05 Feb 2020 10:18:13 -0800 (PST)
+        id S1727450AbgBESSh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Feb 2020 13:18:37 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:38001 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727452AbgBESSh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Feb 2020 13:18:37 -0500
+Received: by mail-wm1-f67.google.com with SMTP id a9so3999020wmj.3;
+        Wed, 05 Feb 2020 10:18:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=0xXgn0Do0GhpwRUuTgBo4i1n9olCsjalmhiTFCPOUD0=;
-        b=vh9/kegTdIiS6WhtFKiXz68r6aFabtABqG9yBhHUwwsRt8wAYgcSdARvrlyrl9HiKr
-         +A3gf4S+C+gKWHam3u+X6CA176yizn7/WFjnjkemdKl7Hr16K/gOmbNGKFB/okUqRnHN
-         mYFIAlDkw3XyYnPPRP9EBSDigfuR8ce5SuPpIw8LBv44Aa1ih3jIEeZvWi3RN2qV3CkJ
-         wfYzQhgOqCEKJkXciXhoa1KLHHxl00cYEN0XhztoEgHI1hw9D6vafyMTaGuqMRcT6vfp
-         wy8LLk3pd9kAYqht1tfjR6GIF0idv/8yTYNz0bGj/1hyOC4HORFch1S8WMZAiDzCg3Gx
-         CwPg==
+        bh=zRat+qyp62rqX1dHNawmHI+S4EdW2pDZ71ZlraaGzu0=;
+        b=qDDqSn8MWh5m4Np0dBmzzoPFq80KhGa3PRBOXGqZVj7fWi9JdP+qij1Z6++zNJCsby
+         jA0+K8Nyifu1+08e3FQ0gubyfpFZYFHuwR04HH0A7b4zbZALs8bEKmdXLdHbYsYJsW/z
+         WjAVDkjh40+W0oJ0W/KxxgeVSO7tz9qFbdqmTNT2gvzvSZ+Yu9vmpRGbHjDP/hpyu13H
+         aXnhrLMxsJmjb9p8fnkPM3E19ExxDzI67iIUvGhzVd5K+URPMJVlUVG0p+M5Ke/y7CR3
+         EAsqYLYs/qIPOy61un5hhB9rKivckquzfvT4vmUNYEG6yyRV8k336FdFQFK2KEy7V1X7
+         V5lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=0xXgn0Do0GhpwRUuTgBo4i1n9olCsjalmhiTFCPOUD0=;
-        b=jI4lPsOljtVxTxEQgXs/JrL9QhBuWv/9hCTryDQuHdd4pEK/3z/Ajh3Csny4srI7i9
-         qB+ZOirvLDc7XUMgAuRCU4zg1LNRuZOHPerL0THUNHKMZbBfrPzZsBlAPU6o+sbMqaZR
-         /u/4a2XeyZ/zhVNfFzTqVLDOHa8HS4zHy1d/VK3xieud2ovFLKX1tIa2v+xlgAA7PaJJ
-         vPqQmDBn1+SMaJEWmAH0mlDLp3bHVzxtWz4tMeEzIuzOj+C0FT5OoIJp15jCH9/S5rV+
-         SLDOFHeuzTdN7eX+Pi87lcOWm6G5XDmPxiOfFYnq7DIq8RYThuuetNf9bnu5RueyQIS2
-         x5NQ==
-X-Gm-Message-State: APjAAAUKx7yFS6hr1ZDndyKCxLKphaRtGBv8O/OJLfDn2MAy0srK806T
-        233CsaB+p5ry5BFeCJw2YnfKiYbg
-X-Google-Smtp-Source: APXvYqzxpuHhJ2ER0WgondNapYoXr+YwBhHjwi3acPeUMI+DDwhF2FxPipDy6Q0WO+J6VMvsJPIEig==
-X-Received: by 2002:a5d:51c9:: with SMTP id n9mr30713569wrv.334.1580926692626;
-        Wed, 05 Feb 2020 10:18:12 -0800 (PST)
+        bh=zRat+qyp62rqX1dHNawmHI+S4EdW2pDZ71ZlraaGzu0=;
+        b=F29yptFVsF1niK2Pux+G4C9tWG2jpTZX0JduxbjbTWMGODXv/m8IWPFlnFeeyWgXht
+         jnpBlkdU7g1mUpfhmxqRk8ZpER8nEQIRVEo/T66GilbUpixVhkQrEf4HVFUrOQR1Uzxd
+         ngpLDX3A1ZYezNwTb3AX2WCg+llv1F+Y4swFHgmtrJvf+PD/Avag09Zhpks++uhBmAVN
+         f2SpEV3CwOyon4oDoZHWzLxkUqIKvQRgXVxYphYOWMQZ2nZXOYxhy+GG6t4zwvaeNZlL
+         SLpzcAlQNHyH6HLAnUo64RXiFs5YcJ9wByDo0hET9OFTFb/sQnWmmz4+8TWzaXVgGWr+
+         FpZA==
+X-Gm-Message-State: APjAAAVa+0oLyZ419XbsHn5FXNf7VlrwppwN2MGtUbpgNX2jbcRNWTfr
+        bgJ8muvmEVIsx4Ww7zTVmBnQezTv
+X-Google-Smtp-Source: APXvYqz/5U1k9xjfA2F5TDgY7XJ5iP452t6q0eV71bxaJU8eFcVWgNBCYD4jQ2o1m75F1BQ7bQR96Q==
+X-Received: by 2002:a7b:cf35:: with SMTP id m21mr7447047wmg.144.1580926713883;
+        Wed, 05 Feb 2020 10:18:33 -0800 (PST)
 Received: from [192.168.1.35] (162.red-83-52-55.dynamicip.rima-tde.net. [83.52.55.162])
-        by smtp.gmail.com with ESMTPSA id 18sm445678wmf.1.2020.02.05.10.18.11
+        by smtp.gmail.com with ESMTPSA id m3sm742548wrs.53.2020.02.05.10.18.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Feb 2020 10:18:11 -0800 (PST)
-Subject: Re: [PATCH 2/3] mips/jazz: Remove redundant settings and shrink
- jazz_defconfig
+        Wed, 05 Feb 2020 10:18:33 -0800 (PST)
+Subject: Re: [PATCH 3/3] mips/jazz: Update jazz_defconfig for MIPS Magnum
 To:     Finn Thain <fthain@telegraphics.com.au>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
@@ -55,7 +54,7 @@ To:     Finn Thain <fthain@telegraphics.com.au>,
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <cover.1580610812.git.fthain@telegraphics.com.au>
- <9cb6a8a2eb5995bb3f16d0c2990c2ca3b170b544.1580610812.git.fthain@telegraphics.com.au>
+ <a39b20bfa8ee493a9fd26a5f7a8ce0bf3aa20ed7.1580610812.git.fthain@telegraphics.com.au>
 From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
 Autocrypt: addr=f4bug@amsat.org; keydata=
  mQINBDU8rLoBEADb5b5dyglKgWF9uDbIjFXU4gDtcwiga9wJ/wX6xdhBqU8tlQ4BroH7AeRl
@@ -80,12 +79,12 @@ Autocrypt: addr=f4bug@amsat.org; keydata=
  K5WmpNFTNi6yiBbNjJA5E2qUKbIT/RwQFQvhrxBUcRCuK4x/5uOZrysjFvhtR8YGm08h+8vS
  n0JCnJD5aBhiVdkohEFAz7e5YNrAg6kOA5IVRHB44lTBOatLqz7ntwdGD0rteKuHaUuXpTYy
  CRqCVAKqFJtxhvJvaX0vLS1Z2dwtDwhjfIdgPiKEGOgCNGH7R8l+aaM4OPOd
-Message-ID: <842e81cf-1885-c061-ee72-c395c9872abb@amsat.org>
-Date:   Wed, 5 Feb 2020 19:18:10 +0100
+Message-ID: <bc985d31-f325-637e-562b-741fc5895f8d@amsat.org>
+Date:   Wed, 5 Feb 2020 19:18:32 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <9cb6a8a2eb5995bb3f16d0c2990c2ca3b170b544.1580610812.git.fthain@telegraphics.com.au>
+In-Reply-To: <a39b20bfa8ee493a9fd26a5f7a8ce0bf3aa20ed7.1580610812.git.fthain@telegraphics.com.au>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -95,341 +94,76 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 2/2/20 3:33 AM, Finn Thain wrote:
-> Remove some redundant assignments, that have no effect on
-> 'make jazz_defconfig':
+> Enable some options for machine type, framebuffer, serial controller and
+> ATA interfaces.
 > 
-> CONFIG_INET_XFRM_MODE_TRANSPORT=m
-> CONFIG_INET_XFRM_MODE_TUNNEL=m
-> CONFIG_CRYPTO_HMAC=y
-> 
-> Also drop the settings relating to crypto, wireless, advanced
-> networking etc. The Kconfig defaults for these options are fine.
-> 
-> This reduces the size of vmlinux so it can be launched by
-> "NetBSD/arc Bootstrap, Revision 1.1", which is conveniently available
-> on NetBSD/arc 5.1 ISO images.
+> This allows a jazz_defconfig build to work on the emulated MIPS Magnum
+> machine provided by qemu-system-mips64el.
 > 
 > Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
 > ---
->  arch/mips/configs/jazz_defconfig | 254 -------------------------------
->  1 file changed, 254 deletions(-)
+> This patch enables CONFIG_FB_G364. This depends upon the build fix at
+> the beginning of this patch series.
+> ---
+>  arch/mips/configs/jazz_defconfig | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
 > 
 > diff --git a/arch/mips/configs/jazz_defconfig b/arch/mips/configs/jazz_defconfig
-> index 328d4dfeb4cb..b13b2396a8a9 100644
+> index b13b2396a8a9..92085df3e367 100644
 > --- a/arch/mips/configs/jazz_defconfig
 > +++ b/arch/mips/configs/jazz_defconfig
-> @@ -2,8 +2,6 @@ CONFIG_SYSVIPC=y
+> @@ -1,5 +1,7 @@
+>  CONFIG_SYSVIPC=y
 >  CONFIG_POSIX_MQUEUE=y
+> +CONFIG_NO_HZ=y
+> +CONFIG_HIGH_RES_TIMERS=y
 >  CONFIG_PREEMPT_VOLUNTARY=y
 >  CONFIG_BSD_PROCESS_ACCT=y
-> -CONFIG_IKCONFIG=y
-> -CONFIG_IKCONFIG_PROC=y
 >  CONFIG_LOG_BUF_SHIFT=14
->  CONFIG_RELAY=y
->  CONFIG_EXPERT=y
-> @@ -18,168 +16,16 @@ CONFIG_BINFMT_MISC=m
->  CONFIG_NET=y
->  CONFIG_PACKET=m
->  CONFIG_UNIX=y
-> -CONFIG_NET_KEY=m
-> -CONFIG_NET_KEY_MIGRATE=y
->  CONFIG_INET=y
->  CONFIG_IP_MULTICAST=y
->  CONFIG_NET_IPIP=m
-> -CONFIG_IP_MROUTE=y
-> -CONFIG_IP_PIMSM_V1=y
-> -CONFIG_IP_PIMSM_V2=y
-> -CONFIG_INET_XFRM_MODE_TRANSPORT=m
-> -CONFIG_INET_XFRM_MODE_TUNNEL=m
-> -CONFIG_TCP_MD5SIG=y
-> -CONFIG_IPV6_ROUTER_PREF=y
-> -CONFIG_IPV6_ROUTE_INFO=y
->  CONFIG_INET6_AH=m
->  CONFIG_INET6_ESP=m
->  CONFIG_INET6_IPCOMP=m
-> -CONFIG_IPV6_TUNNEL=m
-> -CONFIG_NETWORK_SECMARK=y
-> -CONFIG_NETFILTER=y
-> -CONFIG_NF_CONNTRACK=m
-> -CONFIG_NF_CONNTRACK_SECMARK=y
-> -CONFIG_NF_CONNTRACK_EVENTS=y
-> -CONFIG_NF_CONNTRACK_AMANDA=m
-> -CONFIG_NF_CONNTRACK_FTP=m
-> -CONFIG_NF_CONNTRACK_H323=m
-> -CONFIG_NF_CONNTRACK_IRC=m
-> -CONFIG_NF_CONNTRACK_PPTP=m
-> -CONFIG_NF_CONNTRACK_SANE=m
-> -CONFIG_NF_CONNTRACK_SIP=m
-> -CONFIG_NF_CONNTRACK_TFTP=m
-> -CONFIG_NF_CT_NETLINK=m
-> -CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
-> -CONFIG_NETFILTER_XT_TARGET_CONNMARK=m
-> -CONFIG_NETFILTER_XT_TARGET_MARK=m
-> -CONFIG_NETFILTER_XT_TARGET_NFLOG=m
-> -CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
-> -CONFIG_NETFILTER_XT_TARGET_SECMARK=m
-> -CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
-> -CONFIG_NETFILTER_XT_MATCH_COMMENT=m
-> -CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
-> -CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
-> -CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
-> -CONFIG_NETFILTER_XT_MATCH_DCCP=m
-> -CONFIG_NETFILTER_XT_MATCH_ESP=m
-> -CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
-> -CONFIG_NETFILTER_XT_MATCH_HELPER=m
-> -CONFIG_NETFILTER_XT_MATCH_LENGTH=m
-> -CONFIG_NETFILTER_XT_MATCH_LIMIT=m
-> -CONFIG_NETFILTER_XT_MATCH_MAC=m
-> -CONFIG_NETFILTER_XT_MATCH_MARK=m
-> -CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
-> -CONFIG_NETFILTER_XT_MATCH_POLICY=m
-> -CONFIG_NETFILTER_XT_MATCH_PHYSDEV=m
-> -CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
-> -CONFIG_NETFILTER_XT_MATCH_QUOTA=m
-> -CONFIG_NETFILTER_XT_MATCH_REALM=m
-> -CONFIG_NETFILTER_XT_MATCH_STATE=m
-> -CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
-> -CONFIG_NETFILTER_XT_MATCH_STRING=m
-> -CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
-> -CONFIG_IP_NF_IPTABLES=m
-> -CONFIG_IP_NF_MATCH_AH=m
-> -CONFIG_IP_NF_MATCH_ECN=m
-> -CONFIG_IP_NF_MATCH_TTL=m
-> -CONFIG_IP_NF_FILTER=m
-> -CONFIG_IP_NF_TARGET_REJECT=m
-> -CONFIG_IP_NF_MANGLE=m
-> -CONFIG_IP_NF_TARGET_CLUSTERIP=m
-> -CONFIG_IP_NF_TARGET_ECN=m
-> -CONFIG_IP_NF_TARGET_TTL=m
-> -CONFIG_IP_NF_RAW=m
-> -CONFIG_IP_NF_ARPTABLES=m
-> -CONFIG_IP_NF_ARPFILTER=m
-> -CONFIG_IP_NF_ARP_MANGLE=m
-> -CONFIG_IP6_NF_IPTABLES=m
-> -CONFIG_IP6_NF_MATCH_AH=m
-> -CONFIG_IP6_NF_MATCH_EUI64=m
-> -CONFIG_IP6_NF_MATCH_FRAG=m
-> -CONFIG_IP6_NF_MATCH_OPTS=m
-> -CONFIG_IP6_NF_MATCH_HL=m
-> -CONFIG_IP6_NF_MATCH_IPV6HEADER=m
-> -CONFIG_IP6_NF_MATCH_MH=m
-> -CONFIG_IP6_NF_MATCH_RT=m
-> -CONFIG_IP6_NF_TARGET_HL=m
-> -CONFIG_IP6_NF_FILTER=m
-> -CONFIG_IP6_NF_TARGET_REJECT=m
-> -CONFIG_IP6_NF_MANGLE=m
-> -CONFIG_IP6_NF_RAW=m
-> -CONFIG_DECNET_NF_GRABULATOR=m
-> -CONFIG_BRIDGE_NF_EBTABLES=m
-> -CONFIG_BRIDGE_EBT_BROUTE=m
-> -CONFIG_BRIDGE_EBT_T_FILTER=m
-> -CONFIG_BRIDGE_EBT_T_NAT=m
-> -CONFIG_BRIDGE_EBT_802_3=m
-> -CONFIG_BRIDGE_EBT_AMONG=m
-> -CONFIG_BRIDGE_EBT_ARP=m
-> -CONFIG_BRIDGE_EBT_IP=m
-> -CONFIG_BRIDGE_EBT_LIMIT=m
-> -CONFIG_BRIDGE_EBT_MARK=m
-> -CONFIG_BRIDGE_EBT_PKTTYPE=m
-> -CONFIG_BRIDGE_EBT_STP=m
-> -CONFIG_BRIDGE_EBT_VLAN=m
-> -CONFIG_BRIDGE_EBT_ARPREPLY=m
-> -CONFIG_BRIDGE_EBT_DNAT=m
-> -CONFIG_BRIDGE_EBT_MARK_T=m
-> -CONFIG_BRIDGE_EBT_REDIRECT=m
-> -CONFIG_BRIDGE_EBT_SNAT=m
-> -CONFIG_BRIDGE_EBT_LOG=m
-> -CONFIG_BRIDGE=m
-> -CONFIG_DECNET=m
-> -CONFIG_NET_SCHED=y
-> -CONFIG_NET_SCH_CBQ=m
-> -CONFIG_NET_SCH_HTB=m
-> -CONFIG_NET_SCH_HFSC=m
-> -CONFIG_NET_SCH_PRIO=m
-> -CONFIG_NET_SCH_RED=m
-> -CONFIG_NET_SCH_SFQ=m
-> -CONFIG_NET_SCH_TEQL=m
-> -CONFIG_NET_SCH_TBF=m
-> -CONFIG_NET_SCH_GRED=m
-> -CONFIG_NET_SCH_DSMARK=m
-> -CONFIG_NET_SCH_NETEM=m
-> -CONFIG_NET_CLS_BASIC=m
-> -CONFIG_NET_CLS_TCINDEX=m
-> -CONFIG_NET_CLS_ROUTE4=m
-> -CONFIG_NET_CLS_FW=m
-> -CONFIG_NET_CLS_U32=m
-> -CONFIG_NET_CLS_RSVP=m
-> -CONFIG_NET_CLS_RSVP6=m
-> -CONFIG_HAMRADIO=y
-> -CONFIG_AX25=m
-> -CONFIG_NETROM=m
-> -CONFIG_ROSE=m
-> -CONFIG_MKISS=m
-> -CONFIG_6PACK=m
-> -CONFIG_BPQETHER=m
-> -CONFIG_CONNECTOR=m
+> @@ -8,6 +10,8 @@ CONFIG_EXPERT=y
+>  CONFIG_SLAB=y
+>  CONFIG_MACH_JAZZ=y
+>  CONFIG_OLIVETTI_M700=y
+> +CONFIG_MIPS_MAGNUM_4000=y
+> +CONFIG_CPU_LITTLE_ENDIAN=y
+>  CONFIG_MODULES=y
+>  CONFIG_MODULE_UNLOAD=y
+>  CONFIG_MODVERSIONS=y
+> @@ -25,6 +29,7 @@ CONFIG_INET6_IPCOMP=m
 >  CONFIG_PARPORT=m
 >  CONFIG_PARPORT_PC=m
 >  CONFIG_PARPORT_1284=y
+> +CONFIG_DEVTMPFS=y
 >  CONFIG_BLK_DEV_FD=m
-> -CONFIG_PARIDE=m
-> -CONFIG_PARIDE_PD=m
-> -CONFIG_PARIDE_PCD=m
-> -CONFIG_PARIDE_PF=m
-> -CONFIG_PARIDE_PT=m
-> -CONFIG_PARIDE_PG=m
-> -CONFIG_PARIDE_ATEN=m
-> -CONFIG_PARIDE_BPCK=m
-> -CONFIG_PARIDE_BPCK6=m
-> -CONFIG_PARIDE_COMM=m
-> -CONFIG_PARIDE_DSTR=m
-> -CONFIG_PARIDE_FIT2=m
-> -CONFIG_PARIDE_FIT3=m
-> -CONFIG_PARIDE_EPAT=m
-> -CONFIG_PARIDE_EPIA=m
-> -CONFIG_PARIDE_FRIQ=m
-> -CONFIG_PARIDE_FRPW=m
-> -CONFIG_PARIDE_KBIC=m
-> -CONFIG_PARIDE_KTTI=m
-> -CONFIG_PARIDE_ON20=m
-> -CONFIG_PARIDE_ON26=m
 >  CONFIG_BLK_DEV_LOOP=m
 >  CONFIG_BLK_DEV_CRYPTOLOOP=m
->  CONFIG_BLK_DEV_NBD=m
-> @@ -194,26 +40,10 @@ CONFIG_BLK_DEV_SR=m
->  CONFIG_BLK_DEV_SR_VENDOR=y
->  CONFIG_SCSI_CONSTANTS=y
->  CONFIG_SCSI_SCAN_ASYNC=y
-> -CONFIG_SCSI_FC_ATTRS=y
-> -CONFIG_SCSI_SAS_ATTRS=m
->  CONFIG_ISCSI_TCP=m
+> @@ -44,6 +49,8 @@ CONFIG_ISCSI_TCP=m
 >  CONFIG_SCSI_PPA=m
 >  CONFIG_SCSI_IMM=m
 >  CONFIG_JAZZ_ESP=y
-> -CONFIG_MD=y
-> -CONFIG_BLK_DEV_MD=m
-> -CONFIG_MD_LINEAR=m
-> -CONFIG_MD_RAID0=m
-> -CONFIG_MD_RAID1=m
-> -CONFIG_MD_RAID10=m
-> -CONFIG_MD_RAID456=m
-> -CONFIG_MD_MULTIPATH=m
-> -CONFIG_MD_FAULTY=m
-> -CONFIG_BLK_DEV_DM=m
-> -CONFIG_DM_SNAPSHOT=m
-> -CONFIG_DM_MIRROR=m
-> -CONFIG_DM_ZERO=m
-> -CONFIG_DM_MULTIPATH=m
+> +CONFIG_ATA=y
+> +CONFIG_PATA_LEGACY=y
 >  CONFIG_NETDEVICES=y
 >  CONFIG_BONDING=m
 >  CONFIG_DUMMY=m
-> @@ -221,16 +51,6 @@ CONFIG_EQUALIZER=m
->  CONFIG_TUN=m
->  CONFIG_MIPS_JAZZ_SONIC=y
->  CONFIG_NE2000=m
-> -CONFIG_PHYLIB=m
-> -CONFIG_CICADA_PHY=m
-> -CONFIG_DAVICOM_PHY=m
-> -CONFIG_LXT_PHY=m
-> -CONFIG_MARVELL_PHY=m
-> -CONFIG_QSEMI_PHY=m
-> -CONFIG_SMSC_PHY=m
-> -CONFIG_VITESSE_PHY=m
-> -CONFIG_PLIP=m
-> -CONFIG_INPUT_FF_MEMLESS=m
+> @@ -54,11 +61,15 @@ CONFIG_NE2000=m
 >  CONFIG_SERIO_PARKBD=m
 >  CONFIG_SERIO_RAW=m
 >  CONFIG_VT_HW_CONSOLE_BINDING=y
-> @@ -239,10 +59,6 @@ CONFIG_SERIAL_8250_EXTENDED=y
+> -CONFIG_SERIAL_8250=m
+> +CONFIG_SERIAL_8250=y
+> +CONFIG_SERIAL_8250_CONSOLE=y
+>  CONFIG_SERIAL_8250_EXTENDED=y
 >  CONFIG_SERIAL_8250_SHARE_IRQ=y
 >  CONFIG_SERIAL_8250_DETECT_IRQ=y
 >  CONFIG_SERIAL_8250_RSA=y
-> -CONFIG_PRINTER=m
-> -CONFIG_PPDEV=m
-> -# CONFIG_HW_RANDOM is not set
-> -CONFIG_W1=m
+> +CONFIG_FB=y
+> +CONFIG_FB_G364=y
+> +CONFIG_FRAMEBUFFER_CONSOLE=y
 >  # CONFIG_HWMON is not set
 >  CONFIG_EXT2_FS=m
 >  CONFIG_EXT3_FS=y
-> @@ -263,78 +79,8 @@ CONFIG_VFAT_FS=m
->  CONFIG_NTFS_FS=m
->  CONFIG_PROC_KCORE=y
->  CONFIG_TMPFS=y
-> -CONFIG_ADFS_FS=m
-> -CONFIG_AFFS_FS=m
-> -CONFIG_HFS_FS=m
-> -CONFIG_BEFS_FS=m
-> -CONFIG_BFS_FS=m
-> -CONFIG_EFS_FS=m
-> -CONFIG_CRAMFS=m
-> -CONFIG_VXFS_FS=m
-> -CONFIG_MINIX_FS=m
-> -CONFIG_HPFS_FS=m
-> -CONFIG_QNX4FS_FS=m
-> -CONFIG_ROMFS_FS=m
-> -CONFIG_SYSV_FS=m
->  CONFIG_UFS_FS=m
->  CONFIG_NFS_FS=m
->  CONFIG_NFSD=m
->  CONFIG_NFSD_V3=y
->  CONFIG_CIFS=m
-> -CONFIG_CODA_FS=m
-> -CONFIG_AFS_FS=m
-> -CONFIG_NLS_CODEPAGE_437=m
-> -CONFIG_NLS_CODEPAGE_737=m
-> -CONFIG_NLS_CODEPAGE_775=m
-> -CONFIG_NLS_CODEPAGE_850=m
-> -CONFIG_NLS_CODEPAGE_852=m
-> -CONFIG_NLS_CODEPAGE_855=m
-> -CONFIG_NLS_CODEPAGE_857=m
-> -CONFIG_NLS_CODEPAGE_860=m
-> -CONFIG_NLS_CODEPAGE_861=m
-> -CONFIG_NLS_CODEPAGE_862=m
-> -CONFIG_NLS_CODEPAGE_863=m
-> -CONFIG_NLS_CODEPAGE_864=m
-> -CONFIG_NLS_CODEPAGE_865=m
-> -CONFIG_NLS_CODEPAGE_866=m
-> -CONFIG_NLS_CODEPAGE_869=m
-> -CONFIG_NLS_CODEPAGE_936=m
-> -CONFIG_NLS_CODEPAGE_950=m
-> -CONFIG_NLS_CODEPAGE_932=m
-> -CONFIG_NLS_CODEPAGE_949=m
-> -CONFIG_NLS_CODEPAGE_874=m
-> -CONFIG_NLS_ISO8859_8=m
-> -CONFIG_NLS_CODEPAGE_1250=m
-> -CONFIG_NLS_CODEPAGE_1251=m
-> -CONFIG_NLS_ASCII=m
-> -CONFIG_NLS_ISO8859_1=m
-> -CONFIG_NLS_ISO8859_2=m
-> -CONFIG_NLS_ISO8859_3=m
-> -CONFIG_NLS_ISO8859_4=m
-> -CONFIG_NLS_ISO8859_5=m
-> -CONFIG_NLS_ISO8859_6=m
-> -CONFIG_NLS_ISO8859_7=m
-> -CONFIG_NLS_ISO8859_9=m
-> -CONFIG_NLS_ISO8859_13=m
-> -CONFIG_NLS_ISO8859_14=m
-> -CONFIG_NLS_ISO8859_15=m
-> -CONFIG_NLS_KOI8_R=m
-> -CONFIG_NLS_KOI8_U=m
-> -CONFIG_NLS_UTF8=m
-> -CONFIG_CRYPTO_LRW=m
-> -CONFIG_CRYPTO_PCBC=m
-> -CONFIG_CRYPTO_HMAC=y
-> -CONFIG_CRYPTO_XCBC=m
-> -CONFIG_CRYPTO_MICHAEL_MIC=m
-> -CONFIG_CRYPTO_TGR192=m
-> -CONFIG_CRYPTO_WP512=m
-> -CONFIG_CRYPTO_ANUBIS=m
-> -CONFIG_CRYPTO_BLOWFISH=m
-> -CONFIG_CRYPTO_CAMELLIA=m
-> -CONFIG_CRYPTO_CAST6=m
-> -CONFIG_CRYPTO_FCRYPT=m
-> -CONFIG_CRYPTO_KHAZAD=m
-> -CONFIG_CRYPTO_SERPENT=m
-> -CONFIG_CRYPTO_TEA=m
-> -CONFIG_CRYPTO_TWOFISH=m
-> -CONFIG_CRC_CCITT=m
 > 
 
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
 Tested-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
