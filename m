@@ -2,169 +2,434 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFD815372B
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Feb 2020 19:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8D8153759
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Feb 2020 19:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727149AbgBESCY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 5 Feb 2020 13:02:24 -0500
-Received: from mail-yw1-f68.google.com ([209.85.161.68]:37980 "EHLO
-        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726957AbgBESCY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Feb 2020 13:02:24 -0500
-Received: by mail-yw1-f68.google.com with SMTP id 10so3220455ywv.5;
-        Wed, 05 Feb 2020 10:02:22 -0800 (PST)
+        id S1727657AbgBESSP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Feb 2020 13:18:15 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46161 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727626AbgBESSP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 Feb 2020 13:18:15 -0500
+Received: by mail-wr1-f65.google.com with SMTP id z7so3903045wrl.13;
+        Wed, 05 Feb 2020 10:18:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0xXgn0Do0GhpwRUuTgBo4i1n9olCsjalmhiTFCPOUD0=;
+        b=vh9/kegTdIiS6WhtFKiXz68r6aFabtABqG9yBhHUwwsRt8wAYgcSdARvrlyrl9HiKr
+         +A3gf4S+C+gKWHam3u+X6CA176yizn7/WFjnjkemdKl7Hr16K/gOmbNGKFB/okUqRnHN
+         mYFIAlDkw3XyYnPPRP9EBSDigfuR8ce5SuPpIw8LBv44Aa1ih3jIEeZvWi3RN2qV3CkJ
+         wfYzQhgOqCEKJkXciXhoa1KLHHxl00cYEN0XhztoEgHI1hw9D6vafyMTaGuqMRcT6vfp
+         wy8LLk3pd9kAYqht1tfjR6GIF0idv/8yTYNz0bGj/1hyOC4HORFch1S8WMZAiDzCg3Gx
+         CwPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=D8m3zpziTMf/1DK49oOTnKVovL2jn4pQ/YQP25fOkNM=;
-        b=Ypjh5SB/RW49YJWn7G7gMd7QmGSzXdi7rMgkcIyhZuNdSKX4F5NsmAttgjN09erHGw
-         rrHjbKnPupz5TDJIfhDMoKKJA4x3gnz4Ut/YeAx0V3wjCAOYZI/TGgpgsJJzem7SUINg
-         xbuUIG6PT22aCz447r2g8S+Myl2qmBHUoR3r3jeiwimPNi0ruuwDu8HhpsrLysKf6Qz3
-         SsGe3wu7VJk6HxUKGvYcAaAh6YVcPe4lBY+hVkEOJrNvVMcWfSof4AYH+MwIeRamWnnx
-         shfamKVQ78pF61lIQQq2rp6IbwV0533wdOnJbFqCD0jwx/qIgDU/9/oms043LAmX710n
-         BLxA==
-X-Gm-Message-State: APjAAAWrwml6sjqR0CQe6uRjbajZYg5MJcw2SjCuV+nNY71+htNl6KQr
-        Fz/zpONHMSjnJUPU50VBd/Vzh6H2I5i3+P4QndE=
-X-Google-Smtp-Source: APXvYqy1c38uBLDGGJ341PM5j5TAAE218gACbT2CX03aRP9JBZDvgjxAa+vHL8pEHWA2sJuLGbVLFN8YC44c7Jnxe0Q=
-X-Received: by 2002:a25:8804:: with SMTP id c4mr7889151ybl.387.1580925742108;
- Wed, 05 Feb 2020 10:02:22 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1580610812.git.fthain@telegraphics.com.au> <d8f19ebc00a7688da739d41d584d081d1559f0d2.1580610812.git.fthain@telegraphics.com.au>
-In-Reply-To: <d8f19ebc00a7688da739d41d584d081d1559f0d2.1580610812.git.fthain@telegraphics.com.au>
-From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Wed, 5 Feb 2020 19:02:10 +0100
-Message-ID: <CAAdtpL7SpzfqSmEcuVszNyXfrRegC20txoS5j7Ss3WkCmyRH+g@mail.gmail.com>
-Subject: Re: [PATCH 1/3] fbdev/g364fb: Fix build failure
-To:     Finn Thain <fthain@telegraphics.com.au>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=0xXgn0Do0GhpwRUuTgBo4i1n9olCsjalmhiTFCPOUD0=;
+        b=jI4lPsOljtVxTxEQgXs/JrL9QhBuWv/9hCTryDQuHdd4pEK/3z/Ajh3Csny4srI7i9
+         qB+ZOirvLDc7XUMgAuRCU4zg1LNRuZOHPerL0THUNHKMZbBfrPzZsBlAPU6o+sbMqaZR
+         /u/4a2XeyZ/zhVNfFzTqVLDOHa8HS4zHy1d/VK3xieud2ovFLKX1tIa2v+xlgAA7PaJJ
+         vPqQmDBn1+SMaJEWmAH0mlDLp3bHVzxtWz4tMeEzIuzOj+C0FT5OoIJp15jCH9/S5rV+
+         SLDOFHeuzTdN7eX+Pi87lcOWm6G5XDmPxiOfFYnq7DIq8RYThuuetNf9bnu5RueyQIS2
+         x5NQ==
+X-Gm-Message-State: APjAAAUKx7yFS6hr1ZDndyKCxLKphaRtGBv8O/OJLfDn2MAy0srK806T
+        233CsaB+p5ry5BFeCJw2YnfKiYbg
+X-Google-Smtp-Source: APXvYqzxpuHhJ2ER0WgondNapYoXr+YwBhHjwi3acPeUMI+DDwhF2FxPipDy6Q0WO+J6VMvsJPIEig==
+X-Received: by 2002:a5d:51c9:: with SMTP id n9mr30713569wrv.334.1580926692626;
+        Wed, 05 Feb 2020 10:18:12 -0800 (PST)
+Received: from [192.168.1.35] (162.red-83-52-55.dynamicip.rima-tde.net. [83.52.55.162])
+        by smtp.gmail.com with ESMTPSA id 18sm445678wmf.1.2020.02.05.10.18.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Feb 2020 10:18:11 -0800 (PST)
+Subject: Re: [PATCH 2/3] mips/jazz: Remove redundant settings and shrink
+ jazz_defconfig
+To:     Finn Thain <fthain@telegraphics.com.au>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Laurent Vivier <laurent@vivier.eu>,
-        Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        James Hogan <jhogan@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1580610812.git.fthain@telegraphics.com.au>
+ <9cb6a8a2eb5995bb3f16d0c2990c2ca3b170b544.1580610812.git.fthain@telegraphics.com.au>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
+Autocrypt: addr=f4bug@amsat.org; keydata=
+ mQINBDU8rLoBEADb5b5dyglKgWF9uDbIjFXU4gDtcwiga9wJ/wX6xdhBqU8tlQ4BroH7AeRl
+ u4zXP0QnBDAG7EetxlQzcfYbPmxFISWjckDBFvDbFsojrZmwF2/LkFSzlvKiN5KLghzzJhLO
+ HhjGlF8deEZz/d/G8qzO9mIw8GIBS8uuWh6SIcG/qq7+y+2+aifaj92EdwU79apZepT/U3vN
+ YrfcAuo1Ycy7/u0hJ7rlaFUn2Fu5KIgV2O++hHYtCCQfdPBg/+ujTL+U+sCDawCyq+9M5+LJ
+ ojCzP9rViLZDd/gS6jX8T48hhidtbtsFRj/e9QpdZgDZfowRMVsRx+TB9yzjFdMO0YaYybXp
+ dg/wCUepX5xmDBrle6cZ8VEe00+UQCAU1TY5Hs7QFfBbjgR3k9pgJzVXNUKcJ9DYQP0OBH9P
+ ZbZvM0Ut2Bk6bLBO5iCVDOco0alrPkX7iJul2QWBy3Iy9j02GnA5jZ1Xtjr9kpCqQT+sRXso
+ Vpm5TPGWaWljIeLWy/qL8drX1eyJzwTB3A36Ck4r3YmjMjfmvltSZB1uAdo1elHTlFEULpU/
+ HiwvvqXQ9koB15U154VCuguvx/Qnboz8GFb9Uw8VyawzVxYVNME7xw7CQF8FYxzj6eI7rBf2
+ Dj/II6wxWPgDEy3oUzuNOxTB7sT3b/Ym76yOJzWX5BylXQIJ5wARAQABtDFQaGlsaXBwZSBN
+ YXRoaWV1LURhdWTDqSAoRjRCVUcpIDxmNGJ1Z0BhbXNhdC5vcmc+iQJVBBMBCAA/AhsPBgsJ
+ CAcDAgYVCAIJCgsEFgIDAQIeAQIXgBYhBPqr514SkXIh3P1rsuPjLCzercDeBQJd660aBQks
+ klzgAAoJEOPjLCzercDe2iMP+gMG2dUf+qHz2uG8nTBGMjgK0aEJrKVPodFA+iedQ5Kp3BMo
+ jrTg3/DG1HMYdcvQu/NFLYwamUfUasyor1k+3dB23hY09O4xOsYJBWdilkBGsJTKErUmkUO2
+ 3J/kawosvYtJJSHUpw3N6mwz/iWnjkT8BPp7fFXSujV63aZWZINueTbK7Y8skFHI0zpype9s
+ loU8xc4JBrieGccy3n4E/kogGrTG5jcMTNHZ106DsQkhFnjhWETp6g9xOKrzZQbETeRBOe4P
+ sRsY9YSG2Sj+ZqmZePvO8LyzGRjYU7T6Z80S1xV0lH6KTMvq7vvz5rd92f3pL4YrXq+e//HZ
+ JsiLen8LH/FRhTsWRgBtNYkOsd5F9NvfJtSM0qbX32cSXMAStDVnS4U+H2vCVCWnfNug2TdY
+ 7v4NtdpaCi4CBBa3ZtqYVOU05IoLnlx0miKTBMqmI05kpgX98pi2QUPJBYi/+yNu3fjjcuS9
+ K5WmpNFTNi6yiBbNjJA5E2qUKbIT/RwQFQvhrxBUcRCuK4x/5uOZrysjFvhtR8YGm08h+8vS
+ n0JCnJD5aBhiVdkohEFAz7e5YNrAg6kOA5IVRHB44lTBOatLqz7ntwdGD0rteKuHaUuXpTYy
+ CRqCVAKqFJtxhvJvaX0vLS1Z2dwtDwhjfIdgPiKEGOgCNGH7R8l+aaM4OPOd
+Message-ID: <842e81cf-1885-c061-ee72-c395c9872abb@amsat.org>
+Date:   Wed, 5 Feb 2020 19:18:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <9cb6a8a2eb5995bb3f16d0c2990c2ca3b170b544.1580610812.git.fthain@telegraphics.com.au>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Feb 2, 2020 at 3:41 AM Finn Thain <fthain@telegraphics.com.au> wrote:
->
-> This patch resolves these compiler errors and warnings --
->
->   CC      drivers/video/fbdev/g364fb.o
-> drivers/video/fbdev/g364fb.c: In function 'g364fb_cursor':
-> drivers/video/fbdev/g364fb.c:137:9: error: 'x' undeclared (first use in this function)
-> drivers/video/fbdev/g364fb.c:137:9: note: each undeclared identifier is reported only once for each function it appears in
-> drivers/video/fbdev/g364fb.c:137:7: error: implicit declaration of function 'fontwidth' [-Werror=implicit-function-declaration]
-> drivers/video/fbdev/g364fb.c:137:23: error: 'p' undeclared (first use in this function)
-> drivers/video/fbdev/g364fb.c:137:38: error: 'y' undeclared (first use in this function)
-> drivers/video/fbdev/g364fb.c:137:7: error: implicit declaration of function 'fontheight' [-Werror=implicit-function-declaration]
-> drivers/video/fbdev/g364fb.c: In function 'g364fb_init':
-> drivers/video/fbdev/g364fb.c:233:24: error: 'fbvar' undeclared (first use in this function)
-> drivers/video/fbdev/g364fb.c:234:24: error: 'xres' undeclared (first use in this function)
-
-18 years unnoticed...
-
-> drivers/video/fbdev/g364fb.c:201:14: warning: unused variable 'j' [-Wunused-variable]
-> drivers/video/fbdev/g364fb.c:197:25: warning: unused variable 'pal_ptr' [-Wunused-variable]
->
-> The MIPS Magnum framebuffer console now works when tested in QEMU.
->
-> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-
-This commit is the kernel 'git origin' import, not the proper reference.
-
-The actual change is between v2.5.17/2.5.19:
-https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/diff/drivers/video/g364fb.c?id=b30e6e183a728923267
-Date: 2002-05-22 07:52:33...
-
-The same commit introduced the changes in g364fb_cursor(), which was
-implemented previous to v2.4.0 so it is hard to follow from there.
-
-Nobody complains during 18 years so I doubt anyone care that
-g364fb_cursor() is removed.
-And by removing it, you improve the kernel quality, so:
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-(Maybe remove the unhelpful 'Fixes' tag).
-
+On 2/2/20 3:33 AM, Finn Thain wrote:
+> Remove some redundant assignments, that have no effect on
+> 'make jazz_defconfig':
+> 
+> CONFIG_INET_XFRM_MODE_TRANSPORT=m
+> CONFIG_INET_XFRM_MODE_TUNNEL=m
+> CONFIG_CRYPTO_HMAC=y
+> 
+> Also drop the settings relating to crypto, wireless, advanced
+> networking etc. The Kconfig defaults for these options are fine.
+> 
+> This reduces the size of vmlinux so it can be launched by
+> "NetBSD/arc Bootstrap, Revision 1.1", which is conveniently available
+> on NetBSD/arc 5.1 ISO images.
+> 
 > Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
 > ---
->  drivers/video/fbdev/g364fb.c | 29 +++--------------------------
->  1 file changed, 3 insertions(+), 26 deletions(-)
->
-> diff --git a/drivers/video/fbdev/g364fb.c b/drivers/video/fbdev/g364fb.c
-> index 223896cc5f7d..fb26230a3c7b 100644
-> --- a/drivers/video/fbdev/g364fb.c
-> +++ b/drivers/video/fbdev/g364fb.c
-> @@ -108,7 +108,6 @@ static int g364fb_pan_display(struct fb_var_screeninfo *var,
->  static int g364fb_setcolreg(u_int regno, u_int red, u_int green,
->                             u_int blue, u_int transp,
->                             struct fb_info *info);
-> -static int g364fb_cursor(struct fb_info *info, struct fb_cursor *cursor);
->  static int g364fb_blank(int blank, struct fb_info *info);
->
->  static struct fb_ops g364fb_ops = {
-> @@ -119,28 +118,8 @@ static struct fb_ops g364fb_ops = {
->         .fb_fillrect    = cfb_fillrect,
->         .fb_copyarea    = cfb_copyarea,
->         .fb_imageblit   = cfb_imageblit,
-> -       .fb_cursor      = g364fb_cursor,
->  };
->
-> -int g364fb_cursor(struct fb_info *info, struct fb_cursor *cursor)
-> -{
-> -
-> -       switch (cursor->enable) {
-> -       case CM_ERASE:
-> -               *(unsigned int *) CTLA_REG |= CURS_TOGGLE;
-> -               break;
-> -
-> -       case CM_MOVE:
-> -       case CM_DRAW:
-> -               *(unsigned int *) CTLA_REG &= ~CURS_TOGGLE;
-> -               *(unsigned int *) CURS_POS_REG =
-> -                   ((x * fontwidth(p)) << 12) | ((y * fontheight(p)) -
-> -                                                 info->var.yoffset);
-> -               break;
-> -       }
-> -       return 0;
-> -}
-> -
->  /*
->   *  Pan or Wrap the Display
->   *
-> @@ -194,11 +173,9 @@ static int g364fb_setcolreg(u_int regno, u_int red, u_int green,
->   */
->  int __init g364fb_init(void)
->  {
-> -       volatile unsigned int *pal_ptr =
-> -           (volatile unsigned int *) CLR_PAL_REG;
->         volatile unsigned int *curs_pal_ptr =
->             (volatile unsigned int *) CURS_PAL_REG;
-> -       int mem, i, j;
-> +       int mem, i;
->
->         if (fb_get_options("g364fb", NULL))
->                 return -ENODEV;
-> @@ -230,8 +207,8 @@ int __init g364fb_init(void)
->          */
->         *(unsigned short *) (CURS_PAT_REG + 14 * 64) = 0xffff;
->         *(unsigned short *) (CURS_PAT_REG + 15 * 64) = 0xffff;
-> -       fb_var.xres_virtual = fbvar.xres;
-> -       fb_fix.line_length = (xres / 8) * fb_var.bits_per_pixel;
-> +       fb_var.xres_virtual = fb_var.xres;
-> +       fb_fix.line_length = fb_var.xres_virtual * fb_var.bits_per_pixel / 8;
->         fb_fix.smem_start = 0x40000000; /* physical address */
->         /* get size of video memory; this is special for the JAZZ hardware */
->         mem = (r4030_read_reg32(JAZZ_R4030_CONFIG) >> 8) & 3;
-> --
-> 2.24.1
->
+>  arch/mips/configs/jazz_defconfig | 254 -------------------------------
+>  1 file changed, 254 deletions(-)
+> 
+> diff --git a/arch/mips/configs/jazz_defconfig b/arch/mips/configs/jazz_defconfig
+> index 328d4dfeb4cb..b13b2396a8a9 100644
+> --- a/arch/mips/configs/jazz_defconfig
+> +++ b/arch/mips/configs/jazz_defconfig
+> @@ -2,8 +2,6 @@ CONFIG_SYSVIPC=y
+>  CONFIG_POSIX_MQUEUE=y
+>  CONFIG_PREEMPT_VOLUNTARY=y
+>  CONFIG_BSD_PROCESS_ACCT=y
+> -CONFIG_IKCONFIG=y
+> -CONFIG_IKCONFIG_PROC=y
+>  CONFIG_LOG_BUF_SHIFT=14
+>  CONFIG_RELAY=y
+>  CONFIG_EXPERT=y
+> @@ -18,168 +16,16 @@ CONFIG_BINFMT_MISC=m
+>  CONFIG_NET=y
+>  CONFIG_PACKET=m
+>  CONFIG_UNIX=y
+> -CONFIG_NET_KEY=m
+> -CONFIG_NET_KEY_MIGRATE=y
+>  CONFIG_INET=y
+>  CONFIG_IP_MULTICAST=y
+>  CONFIG_NET_IPIP=m
+> -CONFIG_IP_MROUTE=y
+> -CONFIG_IP_PIMSM_V1=y
+> -CONFIG_IP_PIMSM_V2=y
+> -CONFIG_INET_XFRM_MODE_TRANSPORT=m
+> -CONFIG_INET_XFRM_MODE_TUNNEL=m
+> -CONFIG_TCP_MD5SIG=y
+> -CONFIG_IPV6_ROUTER_PREF=y
+> -CONFIG_IPV6_ROUTE_INFO=y
+>  CONFIG_INET6_AH=m
+>  CONFIG_INET6_ESP=m
+>  CONFIG_INET6_IPCOMP=m
+> -CONFIG_IPV6_TUNNEL=m
+> -CONFIG_NETWORK_SECMARK=y
+> -CONFIG_NETFILTER=y
+> -CONFIG_NF_CONNTRACK=m
+> -CONFIG_NF_CONNTRACK_SECMARK=y
+> -CONFIG_NF_CONNTRACK_EVENTS=y
+> -CONFIG_NF_CONNTRACK_AMANDA=m
+> -CONFIG_NF_CONNTRACK_FTP=m
+> -CONFIG_NF_CONNTRACK_H323=m
+> -CONFIG_NF_CONNTRACK_IRC=m
+> -CONFIG_NF_CONNTRACK_PPTP=m
+> -CONFIG_NF_CONNTRACK_SANE=m
+> -CONFIG_NF_CONNTRACK_SIP=m
+> -CONFIG_NF_CONNTRACK_TFTP=m
+> -CONFIG_NF_CT_NETLINK=m
+> -CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
+> -CONFIG_NETFILTER_XT_TARGET_CONNMARK=m
+> -CONFIG_NETFILTER_XT_TARGET_MARK=m
+> -CONFIG_NETFILTER_XT_TARGET_NFLOG=m
+> -CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
+> -CONFIG_NETFILTER_XT_TARGET_SECMARK=m
+> -CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
+> -CONFIG_NETFILTER_XT_MATCH_COMMENT=m
+> -CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
+> -CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
+> -CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
+> -CONFIG_NETFILTER_XT_MATCH_DCCP=m
+> -CONFIG_NETFILTER_XT_MATCH_ESP=m
+> -CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
+> -CONFIG_NETFILTER_XT_MATCH_HELPER=m
+> -CONFIG_NETFILTER_XT_MATCH_LENGTH=m
+> -CONFIG_NETFILTER_XT_MATCH_LIMIT=m
+> -CONFIG_NETFILTER_XT_MATCH_MAC=m
+> -CONFIG_NETFILTER_XT_MATCH_MARK=m
+> -CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
+> -CONFIG_NETFILTER_XT_MATCH_POLICY=m
+> -CONFIG_NETFILTER_XT_MATCH_PHYSDEV=m
+> -CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
+> -CONFIG_NETFILTER_XT_MATCH_QUOTA=m
+> -CONFIG_NETFILTER_XT_MATCH_REALM=m
+> -CONFIG_NETFILTER_XT_MATCH_STATE=m
+> -CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
+> -CONFIG_NETFILTER_XT_MATCH_STRING=m
+> -CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
+> -CONFIG_IP_NF_IPTABLES=m
+> -CONFIG_IP_NF_MATCH_AH=m
+> -CONFIG_IP_NF_MATCH_ECN=m
+> -CONFIG_IP_NF_MATCH_TTL=m
+> -CONFIG_IP_NF_FILTER=m
+> -CONFIG_IP_NF_TARGET_REJECT=m
+> -CONFIG_IP_NF_MANGLE=m
+> -CONFIG_IP_NF_TARGET_CLUSTERIP=m
+> -CONFIG_IP_NF_TARGET_ECN=m
+> -CONFIG_IP_NF_TARGET_TTL=m
+> -CONFIG_IP_NF_RAW=m
+> -CONFIG_IP_NF_ARPTABLES=m
+> -CONFIG_IP_NF_ARPFILTER=m
+> -CONFIG_IP_NF_ARP_MANGLE=m
+> -CONFIG_IP6_NF_IPTABLES=m
+> -CONFIG_IP6_NF_MATCH_AH=m
+> -CONFIG_IP6_NF_MATCH_EUI64=m
+> -CONFIG_IP6_NF_MATCH_FRAG=m
+> -CONFIG_IP6_NF_MATCH_OPTS=m
+> -CONFIG_IP6_NF_MATCH_HL=m
+> -CONFIG_IP6_NF_MATCH_IPV6HEADER=m
+> -CONFIG_IP6_NF_MATCH_MH=m
+> -CONFIG_IP6_NF_MATCH_RT=m
+> -CONFIG_IP6_NF_TARGET_HL=m
+> -CONFIG_IP6_NF_FILTER=m
+> -CONFIG_IP6_NF_TARGET_REJECT=m
+> -CONFIG_IP6_NF_MANGLE=m
+> -CONFIG_IP6_NF_RAW=m
+> -CONFIG_DECNET_NF_GRABULATOR=m
+> -CONFIG_BRIDGE_NF_EBTABLES=m
+> -CONFIG_BRIDGE_EBT_BROUTE=m
+> -CONFIG_BRIDGE_EBT_T_FILTER=m
+> -CONFIG_BRIDGE_EBT_T_NAT=m
+> -CONFIG_BRIDGE_EBT_802_3=m
+> -CONFIG_BRIDGE_EBT_AMONG=m
+> -CONFIG_BRIDGE_EBT_ARP=m
+> -CONFIG_BRIDGE_EBT_IP=m
+> -CONFIG_BRIDGE_EBT_LIMIT=m
+> -CONFIG_BRIDGE_EBT_MARK=m
+> -CONFIG_BRIDGE_EBT_PKTTYPE=m
+> -CONFIG_BRIDGE_EBT_STP=m
+> -CONFIG_BRIDGE_EBT_VLAN=m
+> -CONFIG_BRIDGE_EBT_ARPREPLY=m
+> -CONFIG_BRIDGE_EBT_DNAT=m
+> -CONFIG_BRIDGE_EBT_MARK_T=m
+> -CONFIG_BRIDGE_EBT_REDIRECT=m
+> -CONFIG_BRIDGE_EBT_SNAT=m
+> -CONFIG_BRIDGE_EBT_LOG=m
+> -CONFIG_BRIDGE=m
+> -CONFIG_DECNET=m
+> -CONFIG_NET_SCHED=y
+> -CONFIG_NET_SCH_CBQ=m
+> -CONFIG_NET_SCH_HTB=m
+> -CONFIG_NET_SCH_HFSC=m
+> -CONFIG_NET_SCH_PRIO=m
+> -CONFIG_NET_SCH_RED=m
+> -CONFIG_NET_SCH_SFQ=m
+> -CONFIG_NET_SCH_TEQL=m
+> -CONFIG_NET_SCH_TBF=m
+> -CONFIG_NET_SCH_GRED=m
+> -CONFIG_NET_SCH_DSMARK=m
+> -CONFIG_NET_SCH_NETEM=m
+> -CONFIG_NET_CLS_BASIC=m
+> -CONFIG_NET_CLS_TCINDEX=m
+> -CONFIG_NET_CLS_ROUTE4=m
+> -CONFIG_NET_CLS_FW=m
+> -CONFIG_NET_CLS_U32=m
+> -CONFIG_NET_CLS_RSVP=m
+> -CONFIG_NET_CLS_RSVP6=m
+> -CONFIG_HAMRADIO=y
+> -CONFIG_AX25=m
+> -CONFIG_NETROM=m
+> -CONFIG_ROSE=m
+> -CONFIG_MKISS=m
+> -CONFIG_6PACK=m
+> -CONFIG_BPQETHER=m
+> -CONFIG_CONNECTOR=m
+>  CONFIG_PARPORT=m
+>  CONFIG_PARPORT_PC=m
+>  CONFIG_PARPORT_1284=y
+>  CONFIG_BLK_DEV_FD=m
+> -CONFIG_PARIDE=m
+> -CONFIG_PARIDE_PD=m
+> -CONFIG_PARIDE_PCD=m
+> -CONFIG_PARIDE_PF=m
+> -CONFIG_PARIDE_PT=m
+> -CONFIG_PARIDE_PG=m
+> -CONFIG_PARIDE_ATEN=m
+> -CONFIG_PARIDE_BPCK=m
+> -CONFIG_PARIDE_BPCK6=m
+> -CONFIG_PARIDE_COMM=m
+> -CONFIG_PARIDE_DSTR=m
+> -CONFIG_PARIDE_FIT2=m
+> -CONFIG_PARIDE_FIT3=m
+> -CONFIG_PARIDE_EPAT=m
+> -CONFIG_PARIDE_EPIA=m
+> -CONFIG_PARIDE_FRIQ=m
+> -CONFIG_PARIDE_FRPW=m
+> -CONFIG_PARIDE_KBIC=m
+> -CONFIG_PARIDE_KTTI=m
+> -CONFIG_PARIDE_ON20=m
+> -CONFIG_PARIDE_ON26=m
+>  CONFIG_BLK_DEV_LOOP=m
+>  CONFIG_BLK_DEV_CRYPTOLOOP=m
+>  CONFIG_BLK_DEV_NBD=m
+> @@ -194,26 +40,10 @@ CONFIG_BLK_DEV_SR=m
+>  CONFIG_BLK_DEV_SR_VENDOR=y
+>  CONFIG_SCSI_CONSTANTS=y
+>  CONFIG_SCSI_SCAN_ASYNC=y
+> -CONFIG_SCSI_FC_ATTRS=y
+> -CONFIG_SCSI_SAS_ATTRS=m
+>  CONFIG_ISCSI_TCP=m
+>  CONFIG_SCSI_PPA=m
+>  CONFIG_SCSI_IMM=m
+>  CONFIG_JAZZ_ESP=y
+> -CONFIG_MD=y
+> -CONFIG_BLK_DEV_MD=m
+> -CONFIG_MD_LINEAR=m
+> -CONFIG_MD_RAID0=m
+> -CONFIG_MD_RAID1=m
+> -CONFIG_MD_RAID10=m
+> -CONFIG_MD_RAID456=m
+> -CONFIG_MD_MULTIPATH=m
+> -CONFIG_MD_FAULTY=m
+> -CONFIG_BLK_DEV_DM=m
+> -CONFIG_DM_SNAPSHOT=m
+> -CONFIG_DM_MIRROR=m
+> -CONFIG_DM_ZERO=m
+> -CONFIG_DM_MULTIPATH=m
+>  CONFIG_NETDEVICES=y
+>  CONFIG_BONDING=m
+>  CONFIG_DUMMY=m
+> @@ -221,16 +51,6 @@ CONFIG_EQUALIZER=m
+>  CONFIG_TUN=m
+>  CONFIG_MIPS_JAZZ_SONIC=y
+>  CONFIG_NE2000=m
+> -CONFIG_PHYLIB=m
+> -CONFIG_CICADA_PHY=m
+> -CONFIG_DAVICOM_PHY=m
+> -CONFIG_LXT_PHY=m
+> -CONFIG_MARVELL_PHY=m
+> -CONFIG_QSEMI_PHY=m
+> -CONFIG_SMSC_PHY=m
+> -CONFIG_VITESSE_PHY=m
+> -CONFIG_PLIP=m
+> -CONFIG_INPUT_FF_MEMLESS=m
+>  CONFIG_SERIO_PARKBD=m
+>  CONFIG_SERIO_RAW=m
+>  CONFIG_VT_HW_CONSOLE_BINDING=y
+> @@ -239,10 +59,6 @@ CONFIG_SERIAL_8250_EXTENDED=y
+>  CONFIG_SERIAL_8250_SHARE_IRQ=y
+>  CONFIG_SERIAL_8250_DETECT_IRQ=y
+>  CONFIG_SERIAL_8250_RSA=y
+> -CONFIG_PRINTER=m
+> -CONFIG_PPDEV=m
+> -# CONFIG_HW_RANDOM is not set
+> -CONFIG_W1=m
+>  # CONFIG_HWMON is not set
+>  CONFIG_EXT2_FS=m
+>  CONFIG_EXT3_FS=y
+> @@ -263,78 +79,8 @@ CONFIG_VFAT_FS=m
+>  CONFIG_NTFS_FS=m
+>  CONFIG_PROC_KCORE=y
+>  CONFIG_TMPFS=y
+> -CONFIG_ADFS_FS=m
+> -CONFIG_AFFS_FS=m
+> -CONFIG_HFS_FS=m
+> -CONFIG_BEFS_FS=m
+> -CONFIG_BFS_FS=m
+> -CONFIG_EFS_FS=m
+> -CONFIG_CRAMFS=m
+> -CONFIG_VXFS_FS=m
+> -CONFIG_MINIX_FS=m
+> -CONFIG_HPFS_FS=m
+> -CONFIG_QNX4FS_FS=m
+> -CONFIG_ROMFS_FS=m
+> -CONFIG_SYSV_FS=m
+>  CONFIG_UFS_FS=m
+>  CONFIG_NFS_FS=m
+>  CONFIG_NFSD=m
+>  CONFIG_NFSD_V3=y
+>  CONFIG_CIFS=m
+> -CONFIG_CODA_FS=m
+> -CONFIG_AFS_FS=m
+> -CONFIG_NLS_CODEPAGE_437=m
+> -CONFIG_NLS_CODEPAGE_737=m
+> -CONFIG_NLS_CODEPAGE_775=m
+> -CONFIG_NLS_CODEPAGE_850=m
+> -CONFIG_NLS_CODEPAGE_852=m
+> -CONFIG_NLS_CODEPAGE_855=m
+> -CONFIG_NLS_CODEPAGE_857=m
+> -CONFIG_NLS_CODEPAGE_860=m
+> -CONFIG_NLS_CODEPAGE_861=m
+> -CONFIG_NLS_CODEPAGE_862=m
+> -CONFIG_NLS_CODEPAGE_863=m
+> -CONFIG_NLS_CODEPAGE_864=m
+> -CONFIG_NLS_CODEPAGE_865=m
+> -CONFIG_NLS_CODEPAGE_866=m
+> -CONFIG_NLS_CODEPAGE_869=m
+> -CONFIG_NLS_CODEPAGE_936=m
+> -CONFIG_NLS_CODEPAGE_950=m
+> -CONFIG_NLS_CODEPAGE_932=m
+> -CONFIG_NLS_CODEPAGE_949=m
+> -CONFIG_NLS_CODEPAGE_874=m
+> -CONFIG_NLS_ISO8859_8=m
+> -CONFIG_NLS_CODEPAGE_1250=m
+> -CONFIG_NLS_CODEPAGE_1251=m
+> -CONFIG_NLS_ASCII=m
+> -CONFIG_NLS_ISO8859_1=m
+> -CONFIG_NLS_ISO8859_2=m
+> -CONFIG_NLS_ISO8859_3=m
+> -CONFIG_NLS_ISO8859_4=m
+> -CONFIG_NLS_ISO8859_5=m
+> -CONFIG_NLS_ISO8859_6=m
+> -CONFIG_NLS_ISO8859_7=m
+> -CONFIG_NLS_ISO8859_9=m
+> -CONFIG_NLS_ISO8859_13=m
+> -CONFIG_NLS_ISO8859_14=m
+> -CONFIG_NLS_ISO8859_15=m
+> -CONFIG_NLS_KOI8_R=m
+> -CONFIG_NLS_KOI8_U=m
+> -CONFIG_NLS_UTF8=m
+> -CONFIG_CRYPTO_LRW=m
+> -CONFIG_CRYPTO_PCBC=m
+> -CONFIG_CRYPTO_HMAC=y
+> -CONFIG_CRYPTO_XCBC=m
+> -CONFIG_CRYPTO_MICHAEL_MIC=m
+> -CONFIG_CRYPTO_TGR192=m
+> -CONFIG_CRYPTO_WP512=m
+> -CONFIG_CRYPTO_ANUBIS=m
+> -CONFIG_CRYPTO_BLOWFISH=m
+> -CONFIG_CRYPTO_CAMELLIA=m
+> -CONFIG_CRYPTO_CAST6=m
+> -CONFIG_CRYPTO_FCRYPT=m
+> -CONFIG_CRYPTO_KHAZAD=m
+> -CONFIG_CRYPTO_SERPENT=m
+> -CONFIG_CRYPTO_TEA=m
+> -CONFIG_CRYPTO_TWOFISH=m
+> -CONFIG_CRC_CCITT=m
+> 
+
+Tested-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
