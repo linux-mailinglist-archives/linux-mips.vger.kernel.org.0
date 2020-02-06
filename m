@@ -2,244 +2,374 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB0F154F2A
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Feb 2020 00:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD334154F32
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Feb 2020 00:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbgBFXAz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 6 Feb 2020 18:00:55 -0500
-Received: from mail-yb1-f195.google.com ([209.85.219.195]:47061 "EHLO
-        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726502AbgBFXAz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Feb 2020 18:00:55 -0500
-Received: by mail-yb1-f195.google.com with SMTP id p129so283451ybc.13;
-        Thu, 06 Feb 2020 15:00:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VQYnEkzdsx6FcrPlo/D/oQKv9dN+G7wSduoN4f5PK8M=;
-        b=ug5LAawbJXxGhu9pqVPQRZlGLuXTRaUxcms89eTohEXyh8dNUBk6rrIqcloMMhCxvF
-         28BX8wKn6tLa9a4Vc8doUkcLc7M9R7mHnPFraHtmyt4nnFrdhv/EYWhxGtacn5TqOtp/
-         /vkHSYq62rtzDWEFILR5iO/SuDlzL7/9K9b9Q0QVItnJip9PjxMrJxWQispwRNx9lbA4
-         IuLsj82sUrLA5EWaq9Xnbf1ulUDcgg25mRsVrXKCtY6gAccmn/Gvr0lYcHIGvHPk/EXo
-         vZiPu4X6RFIoyqRzv496La3zva7P/HotY2dSu0DYnTeMJbbkPAJLoMe7euNRyWdHMsXM
-         vNuQ==
-X-Gm-Message-State: APjAAAXAmyPcmhhXyxmxY3UgvQLdyq/quoI7LCLKVMV3aiw5uYk+Dd4T
-        KFopE8ccXJXtMQyjz0OG/cYrzT2l8ED8NnF+/2c=
-X-Google-Smtp-Source: APXvYqyOB0JukSiXvpxti6fIGil3NzpwdBO3vGFGVcPJKWqMTSvfKT3wEmNZMFtDMAByjGMe2TA9r8AsZw8mPtb6prE=
-X-Received: by 2002:a25:ccc6:: with SMTP id l189mr5166473ybf.312.1581030052579;
- Thu, 06 Feb 2020 15:00:52 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1580610812.git.fthain@telegraphics.com.au>
- <d8f19ebc00a7688da739d41d584d081d1559f0d2.1580610812.git.fthain@telegraphics.com.au>
- <CAAdtpL7SpzfqSmEcuVszNyXfrRegC20txoS5j7Ss3WkCmyRH+g@mail.gmail.com> <alpine.LNX.2.22.394.2002060829410.8@nippy.intranet>
-In-Reply-To: <alpine.LNX.2.22.394.2002060829410.8@nippy.intranet>
-From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Fri, 7 Feb 2020 00:00:41 +0100
-Message-ID: <CAAdtpL5Cz5YGKZVfbA=X8qMtP7jDc0G7igSj3EB=PfazM5JoDg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] fbdev/g364fb: Fix build failure
-To:     Finn Thain <fthain@telegraphics.com.au>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        id S1727317AbgBFXGy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 6 Feb 2020 18:06:54 -0500
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:45242 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726543AbgBFXGy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Feb 2020 18:06:54 -0500
+Received: by kvm5.telegraphics.com.au (Postfix, from userid 502)
+        id 179D329A9C; Thu,  6 Feb 2020 18:06:53 -0500 (EST)
+To:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Laurent Vivier <laurent@vivier.eu>,
-        Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        James Hogan <jhogan@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <81e4698eeaa1f84aef1c4b65c540c0c9cafa4993.1581030073.git.fthain@telegraphics.com.au>
+In-Reply-To: <cover.1581030073.git.fthain@telegraphics.com.au>
+References: <cover.1581030073.git.fthain@telegraphics.com.au>
+From:   Finn Thain <fthain@telegraphics.com.au>
+Subject: [PATCH v2 2/3] mips/jazz: Remove redundant settings and shrink
+ jazz_defconfig
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Date:   Fri, 07 Feb 2020 10:01:13 +1100
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 5, 2020 at 11:18 PM Finn Thain <fthain@telegraphics.com.au> wrote:
-> On Wed, 5 Feb 2020, Philippe Mathieu-Daudé wrote:
-> > On Sun, Feb 2, 2020 at 3:41 AM Finn Thain <fthain@telegraphics.com.au> wrote:
-> > >
-> > > This patch resolves these compiler errors and warnings --
-> > >
-> > >   CC      drivers/video/fbdev/g364fb.o
-> > > drivers/video/fbdev/g364fb.c: In function 'g364fb_cursor':
-> > > drivers/video/fbdev/g364fb.c:137:9: error: 'x' undeclared (first use in this function)
-> > > drivers/video/fbdev/g364fb.c:137:9: note: each undeclared identifier is reported only once for each function it appears in
-> > > drivers/video/fbdev/g364fb.c:137:7: error: implicit declaration of function 'fontwidth' [-Werror=implicit-function-declaration]
-> > > drivers/video/fbdev/g364fb.c:137:23: error: 'p' undeclared (first use in this function)
-> > > drivers/video/fbdev/g364fb.c:137:38: error: 'y' undeclared (first use in this function)
-> > > drivers/video/fbdev/g364fb.c:137:7: error: implicit declaration of function 'fontheight' [-Werror=implicit-function-declaration]
-> > > drivers/video/fbdev/g364fb.c: In function 'g364fb_init':
-> > > drivers/video/fbdev/g364fb.c:233:24: error: 'fbvar' undeclared (first use in this function)
-> > > drivers/video/fbdev/g364fb.c:234:24: error: 'xres' undeclared (first use in this function)
-> >
-> > 18 years unnoticed...
-> >
->
-> More likely, it was noticed by those without the skills or time to get it
-> fixed upstream.
->
-> Those with the hardware skills and platform knowledge to be affected by an
-> obscure bug aren't necessarily also capable of fixing a kernel bug,
-> sending a patch upstream and getting it past code review.
->
-> Getting a patch into the Linux kernel is itself a lot of work, unless
-> you've had years of experience with that constantly changing process
-> (which varies significantly between subsystems).
+Remove some redundant assignments, that have no effect on
+'make jazz_defconfig':
 
-I see, I'm not custom to kernel workflow.
+CONFIG_INET_XFRM_MODE_TRANSPORT=m
+CONFIG_INET_XFRM_MODE_TUNNEL=m
+CONFIG_CRYPTO_HMAC=y
 
-> Kernel developers are only human and do accidentally introduce breakage in
-> their work (as contributors) while ironically (as reviewers) they raise
-> the bar for random fixes from users not versed in the 10000+ lines of
-> Documentation/process/*.rst
->
-> Broken code does not mean zero potential users or zero frustrated users
-> yet I often hear kernel developers disingenuously claim that it does.
-> They have an incentive to make that claim and often there's no-one reading
-> the mailing lists to push back.
+Also drop the settings relating to crypto, wireless, advanced
+networking etc. The Kconfig defaults for these options are fine.
 
-But broken code is also bad example of code. The removed code is still
-buried in the git tree.
+This reduces the size of vmlinux so it can be launched by
+"NetBSD/arc Bootstrap, Revision 1.1", which is conveniently available
+on NetBSD/arc 5.1 ISO images.
 
-> > > drivers/video/fbdev/g364fb.c:201:14: warning: unused variable 'j' [-Wunused-variable]
-> > > drivers/video/fbdev/g364fb.c:197:25: warning: unused variable 'pal_ptr' [-Wunused-variable]
-> > >
-> > > The MIPS Magnum framebuffer console now works when tested in QEMU.
-> > >
-> > > Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-> > > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> >
-> > This commit is the kernel 'git origin' import, not the proper reference.
-> >
-> > The actual change is between v2.5.17/2.5.19:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/diff/drivers/video/g364fb.c?id=b30e6e183a728923267
-> > Date: 2002-05-22 07:52:33...
-> >
->
-> I think the driver was broken before that point. I didn't compile it, but
-> it seems that "xres" still has no declaration.
->
-> BTW, is it wise to cite a sha-1 that doesn't exist in mainline?
+Tested-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
+---
+ arch/mips/configs/jazz_defconfig | 254 -------------------------------
+ 1 file changed, 254 deletions(-)
 
-I didn't want to suggest referencing an external sha1, but rather the full link.
-Anyway I later figured out your reference isn't incorrect, this code
-was really added in commit 1da177e4c3f4.
+diff --git a/arch/mips/configs/jazz_defconfig b/arch/mips/configs/jazz_defconfig
+index 328d4dfeb4cb..b13b2396a8a9 100644
+--- a/arch/mips/configs/jazz_defconfig
++++ b/arch/mips/configs/jazz_defconfig
+@@ -2,8 +2,6 @@ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
+ CONFIG_PREEMPT_VOLUNTARY=y
+ CONFIG_BSD_PROCESS_ACCT=y
+-CONFIG_IKCONFIG=y
+-CONFIG_IKCONFIG_PROC=y
+ CONFIG_LOG_BUF_SHIFT=14
+ CONFIG_RELAY=y
+ CONFIG_EXPERT=y
+@@ -18,168 +16,16 @@ CONFIG_BINFMT_MISC=m
+ CONFIG_NET=y
+ CONFIG_PACKET=m
+ CONFIG_UNIX=y
+-CONFIG_NET_KEY=m
+-CONFIG_NET_KEY_MIGRATE=y
+ CONFIG_INET=y
+ CONFIG_IP_MULTICAST=y
+ CONFIG_NET_IPIP=m
+-CONFIG_IP_MROUTE=y
+-CONFIG_IP_PIMSM_V1=y
+-CONFIG_IP_PIMSM_V2=y
+-CONFIG_INET_XFRM_MODE_TRANSPORT=m
+-CONFIG_INET_XFRM_MODE_TUNNEL=m
+-CONFIG_TCP_MD5SIG=y
+-CONFIG_IPV6_ROUTER_PREF=y
+-CONFIG_IPV6_ROUTE_INFO=y
+ CONFIG_INET6_AH=m
+ CONFIG_INET6_ESP=m
+ CONFIG_INET6_IPCOMP=m
+-CONFIG_IPV6_TUNNEL=m
+-CONFIG_NETWORK_SECMARK=y
+-CONFIG_NETFILTER=y
+-CONFIG_NF_CONNTRACK=m
+-CONFIG_NF_CONNTRACK_SECMARK=y
+-CONFIG_NF_CONNTRACK_EVENTS=y
+-CONFIG_NF_CONNTRACK_AMANDA=m
+-CONFIG_NF_CONNTRACK_FTP=m
+-CONFIG_NF_CONNTRACK_H323=m
+-CONFIG_NF_CONNTRACK_IRC=m
+-CONFIG_NF_CONNTRACK_PPTP=m
+-CONFIG_NF_CONNTRACK_SANE=m
+-CONFIG_NF_CONNTRACK_SIP=m
+-CONFIG_NF_CONNTRACK_TFTP=m
+-CONFIG_NF_CT_NETLINK=m
+-CONFIG_NETFILTER_XT_TARGET_CLASSIFY=m
+-CONFIG_NETFILTER_XT_TARGET_CONNMARK=m
+-CONFIG_NETFILTER_XT_TARGET_MARK=m
+-CONFIG_NETFILTER_XT_TARGET_NFLOG=m
+-CONFIG_NETFILTER_XT_TARGET_NFQUEUE=m
+-CONFIG_NETFILTER_XT_TARGET_SECMARK=m
+-CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
+-CONFIG_NETFILTER_XT_MATCH_COMMENT=m
+-CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
+-CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
+-CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
+-CONFIG_NETFILTER_XT_MATCH_DCCP=m
+-CONFIG_NETFILTER_XT_MATCH_ESP=m
+-CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
+-CONFIG_NETFILTER_XT_MATCH_HELPER=m
+-CONFIG_NETFILTER_XT_MATCH_LENGTH=m
+-CONFIG_NETFILTER_XT_MATCH_LIMIT=m
+-CONFIG_NETFILTER_XT_MATCH_MAC=m
+-CONFIG_NETFILTER_XT_MATCH_MARK=m
+-CONFIG_NETFILTER_XT_MATCH_MULTIPORT=m
+-CONFIG_NETFILTER_XT_MATCH_POLICY=m
+-CONFIG_NETFILTER_XT_MATCH_PHYSDEV=m
+-CONFIG_NETFILTER_XT_MATCH_PKTTYPE=m
+-CONFIG_NETFILTER_XT_MATCH_QUOTA=m
+-CONFIG_NETFILTER_XT_MATCH_REALM=m
+-CONFIG_NETFILTER_XT_MATCH_STATE=m
+-CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
+-CONFIG_NETFILTER_XT_MATCH_STRING=m
+-CONFIG_NETFILTER_XT_MATCH_TCPMSS=m
+-CONFIG_IP_NF_IPTABLES=m
+-CONFIG_IP_NF_MATCH_AH=m
+-CONFIG_IP_NF_MATCH_ECN=m
+-CONFIG_IP_NF_MATCH_TTL=m
+-CONFIG_IP_NF_FILTER=m
+-CONFIG_IP_NF_TARGET_REJECT=m
+-CONFIG_IP_NF_MANGLE=m
+-CONFIG_IP_NF_TARGET_CLUSTERIP=m
+-CONFIG_IP_NF_TARGET_ECN=m
+-CONFIG_IP_NF_TARGET_TTL=m
+-CONFIG_IP_NF_RAW=m
+-CONFIG_IP_NF_ARPTABLES=m
+-CONFIG_IP_NF_ARPFILTER=m
+-CONFIG_IP_NF_ARP_MANGLE=m
+-CONFIG_IP6_NF_IPTABLES=m
+-CONFIG_IP6_NF_MATCH_AH=m
+-CONFIG_IP6_NF_MATCH_EUI64=m
+-CONFIG_IP6_NF_MATCH_FRAG=m
+-CONFIG_IP6_NF_MATCH_OPTS=m
+-CONFIG_IP6_NF_MATCH_HL=m
+-CONFIG_IP6_NF_MATCH_IPV6HEADER=m
+-CONFIG_IP6_NF_MATCH_MH=m
+-CONFIG_IP6_NF_MATCH_RT=m
+-CONFIG_IP6_NF_TARGET_HL=m
+-CONFIG_IP6_NF_FILTER=m
+-CONFIG_IP6_NF_TARGET_REJECT=m
+-CONFIG_IP6_NF_MANGLE=m
+-CONFIG_IP6_NF_RAW=m
+-CONFIG_DECNET_NF_GRABULATOR=m
+-CONFIG_BRIDGE_NF_EBTABLES=m
+-CONFIG_BRIDGE_EBT_BROUTE=m
+-CONFIG_BRIDGE_EBT_T_FILTER=m
+-CONFIG_BRIDGE_EBT_T_NAT=m
+-CONFIG_BRIDGE_EBT_802_3=m
+-CONFIG_BRIDGE_EBT_AMONG=m
+-CONFIG_BRIDGE_EBT_ARP=m
+-CONFIG_BRIDGE_EBT_IP=m
+-CONFIG_BRIDGE_EBT_LIMIT=m
+-CONFIG_BRIDGE_EBT_MARK=m
+-CONFIG_BRIDGE_EBT_PKTTYPE=m
+-CONFIG_BRIDGE_EBT_STP=m
+-CONFIG_BRIDGE_EBT_VLAN=m
+-CONFIG_BRIDGE_EBT_ARPREPLY=m
+-CONFIG_BRIDGE_EBT_DNAT=m
+-CONFIG_BRIDGE_EBT_MARK_T=m
+-CONFIG_BRIDGE_EBT_REDIRECT=m
+-CONFIG_BRIDGE_EBT_SNAT=m
+-CONFIG_BRIDGE_EBT_LOG=m
+-CONFIG_BRIDGE=m
+-CONFIG_DECNET=m
+-CONFIG_NET_SCHED=y
+-CONFIG_NET_SCH_CBQ=m
+-CONFIG_NET_SCH_HTB=m
+-CONFIG_NET_SCH_HFSC=m
+-CONFIG_NET_SCH_PRIO=m
+-CONFIG_NET_SCH_RED=m
+-CONFIG_NET_SCH_SFQ=m
+-CONFIG_NET_SCH_TEQL=m
+-CONFIG_NET_SCH_TBF=m
+-CONFIG_NET_SCH_GRED=m
+-CONFIG_NET_SCH_DSMARK=m
+-CONFIG_NET_SCH_NETEM=m
+-CONFIG_NET_CLS_BASIC=m
+-CONFIG_NET_CLS_TCINDEX=m
+-CONFIG_NET_CLS_ROUTE4=m
+-CONFIG_NET_CLS_FW=m
+-CONFIG_NET_CLS_U32=m
+-CONFIG_NET_CLS_RSVP=m
+-CONFIG_NET_CLS_RSVP6=m
+-CONFIG_HAMRADIO=y
+-CONFIG_AX25=m
+-CONFIG_NETROM=m
+-CONFIG_ROSE=m
+-CONFIG_MKISS=m
+-CONFIG_6PACK=m
+-CONFIG_BPQETHER=m
+-CONFIG_CONNECTOR=m
+ CONFIG_PARPORT=m
+ CONFIG_PARPORT_PC=m
+ CONFIG_PARPORT_1284=y
+ CONFIG_BLK_DEV_FD=m
+-CONFIG_PARIDE=m
+-CONFIG_PARIDE_PD=m
+-CONFIG_PARIDE_PCD=m
+-CONFIG_PARIDE_PF=m
+-CONFIG_PARIDE_PT=m
+-CONFIG_PARIDE_PG=m
+-CONFIG_PARIDE_ATEN=m
+-CONFIG_PARIDE_BPCK=m
+-CONFIG_PARIDE_BPCK6=m
+-CONFIG_PARIDE_COMM=m
+-CONFIG_PARIDE_DSTR=m
+-CONFIG_PARIDE_FIT2=m
+-CONFIG_PARIDE_FIT3=m
+-CONFIG_PARIDE_EPAT=m
+-CONFIG_PARIDE_EPIA=m
+-CONFIG_PARIDE_FRIQ=m
+-CONFIG_PARIDE_FRPW=m
+-CONFIG_PARIDE_KBIC=m
+-CONFIG_PARIDE_KTTI=m
+-CONFIG_PARIDE_ON20=m
+-CONFIG_PARIDE_ON26=m
+ CONFIG_BLK_DEV_LOOP=m
+ CONFIG_BLK_DEV_CRYPTOLOOP=m
+ CONFIG_BLK_DEV_NBD=m
+@@ -194,26 +40,10 @@ CONFIG_BLK_DEV_SR=m
+ CONFIG_BLK_DEV_SR_VENDOR=y
+ CONFIG_SCSI_CONSTANTS=y
+ CONFIG_SCSI_SCAN_ASYNC=y
+-CONFIG_SCSI_FC_ATTRS=y
+-CONFIG_SCSI_SAS_ATTRS=m
+ CONFIG_ISCSI_TCP=m
+ CONFIG_SCSI_PPA=m
+ CONFIG_SCSI_IMM=m
+ CONFIG_JAZZ_ESP=y
+-CONFIG_MD=y
+-CONFIG_BLK_DEV_MD=m
+-CONFIG_MD_LINEAR=m
+-CONFIG_MD_RAID0=m
+-CONFIG_MD_RAID1=m
+-CONFIG_MD_RAID10=m
+-CONFIG_MD_RAID456=m
+-CONFIG_MD_MULTIPATH=m
+-CONFIG_MD_FAULTY=m
+-CONFIG_BLK_DEV_DM=m
+-CONFIG_DM_SNAPSHOT=m
+-CONFIG_DM_MIRROR=m
+-CONFIG_DM_ZERO=m
+-CONFIG_DM_MULTIPATH=m
+ CONFIG_NETDEVICES=y
+ CONFIG_BONDING=m
+ CONFIG_DUMMY=m
+@@ -221,16 +51,6 @@ CONFIG_EQUALIZER=m
+ CONFIG_TUN=m
+ CONFIG_MIPS_JAZZ_SONIC=y
+ CONFIG_NE2000=m
+-CONFIG_PHYLIB=m
+-CONFIG_CICADA_PHY=m
+-CONFIG_DAVICOM_PHY=m
+-CONFIG_LXT_PHY=m
+-CONFIG_MARVELL_PHY=m
+-CONFIG_QSEMI_PHY=m
+-CONFIG_SMSC_PHY=m
+-CONFIG_VITESSE_PHY=m
+-CONFIG_PLIP=m
+-CONFIG_INPUT_FF_MEMLESS=m
+ CONFIG_SERIO_PARKBD=m
+ CONFIG_SERIO_RAW=m
+ CONFIG_VT_HW_CONSOLE_BINDING=y
+@@ -239,10 +59,6 @@ CONFIG_SERIAL_8250_EXTENDED=y
+ CONFIG_SERIAL_8250_SHARE_IRQ=y
+ CONFIG_SERIAL_8250_DETECT_IRQ=y
+ CONFIG_SERIAL_8250_RSA=y
+-CONFIG_PRINTER=m
+-CONFIG_PPDEV=m
+-# CONFIG_HW_RANDOM is not set
+-CONFIG_W1=m
+ # CONFIG_HWMON is not set
+ CONFIG_EXT2_FS=m
+ CONFIG_EXT3_FS=y
+@@ -263,78 +79,8 @@ CONFIG_VFAT_FS=m
+ CONFIG_NTFS_FS=m
+ CONFIG_PROC_KCORE=y
+ CONFIG_TMPFS=y
+-CONFIG_ADFS_FS=m
+-CONFIG_AFFS_FS=m
+-CONFIG_HFS_FS=m
+-CONFIG_BEFS_FS=m
+-CONFIG_BFS_FS=m
+-CONFIG_EFS_FS=m
+-CONFIG_CRAMFS=m
+-CONFIG_VXFS_FS=m
+-CONFIG_MINIX_FS=m
+-CONFIG_HPFS_FS=m
+-CONFIG_QNX4FS_FS=m
+-CONFIG_ROMFS_FS=m
+-CONFIG_SYSV_FS=m
+ CONFIG_UFS_FS=m
+ CONFIG_NFS_FS=m
+ CONFIG_NFSD=m
+ CONFIG_NFSD_V3=y
+ CONFIG_CIFS=m
+-CONFIG_CODA_FS=m
+-CONFIG_AFS_FS=m
+-CONFIG_NLS_CODEPAGE_437=m
+-CONFIG_NLS_CODEPAGE_737=m
+-CONFIG_NLS_CODEPAGE_775=m
+-CONFIG_NLS_CODEPAGE_850=m
+-CONFIG_NLS_CODEPAGE_852=m
+-CONFIG_NLS_CODEPAGE_855=m
+-CONFIG_NLS_CODEPAGE_857=m
+-CONFIG_NLS_CODEPAGE_860=m
+-CONFIG_NLS_CODEPAGE_861=m
+-CONFIG_NLS_CODEPAGE_862=m
+-CONFIG_NLS_CODEPAGE_863=m
+-CONFIG_NLS_CODEPAGE_864=m
+-CONFIG_NLS_CODEPAGE_865=m
+-CONFIG_NLS_CODEPAGE_866=m
+-CONFIG_NLS_CODEPAGE_869=m
+-CONFIG_NLS_CODEPAGE_936=m
+-CONFIG_NLS_CODEPAGE_950=m
+-CONFIG_NLS_CODEPAGE_932=m
+-CONFIG_NLS_CODEPAGE_949=m
+-CONFIG_NLS_CODEPAGE_874=m
+-CONFIG_NLS_ISO8859_8=m
+-CONFIG_NLS_CODEPAGE_1250=m
+-CONFIG_NLS_CODEPAGE_1251=m
+-CONFIG_NLS_ASCII=m
+-CONFIG_NLS_ISO8859_1=m
+-CONFIG_NLS_ISO8859_2=m
+-CONFIG_NLS_ISO8859_3=m
+-CONFIG_NLS_ISO8859_4=m
+-CONFIG_NLS_ISO8859_5=m
+-CONFIG_NLS_ISO8859_6=m
+-CONFIG_NLS_ISO8859_7=m
+-CONFIG_NLS_ISO8859_9=m
+-CONFIG_NLS_ISO8859_13=m
+-CONFIG_NLS_ISO8859_14=m
+-CONFIG_NLS_ISO8859_15=m
+-CONFIG_NLS_KOI8_R=m
+-CONFIG_NLS_KOI8_U=m
+-CONFIG_NLS_UTF8=m
+-CONFIG_CRYPTO_LRW=m
+-CONFIG_CRYPTO_PCBC=m
+-CONFIG_CRYPTO_HMAC=y
+-CONFIG_CRYPTO_XCBC=m
+-CONFIG_CRYPTO_MICHAEL_MIC=m
+-CONFIG_CRYPTO_TGR192=m
+-CONFIG_CRYPTO_WP512=m
+-CONFIG_CRYPTO_ANUBIS=m
+-CONFIG_CRYPTO_BLOWFISH=m
+-CONFIG_CRYPTO_CAMELLIA=m
+-CONFIG_CRYPTO_CAST6=m
+-CONFIG_CRYPTO_FCRYPT=m
+-CONFIG_CRYPTO_KHAZAD=m
+-CONFIG_CRYPTO_SERPENT=m
+-CONFIG_CRYPTO_TEA=m
+-CONFIG_CRYPTO_TWOFISH=m
+-CONFIG_CRC_CCITT=m
+-- 
+2.24.1
 
-Maybe you can use:
-Fixes: 1da177e4c3f4 (code modified earlier during v2.5.17-v2.5.19)
-
-Anyway I'm bike-shedding, whichever reference you choose will be fine, even
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-
->
-> $ git show b30e6e183a728923267
-> fatal: ambiguous argument 'b30e6e183a728923267': unknown revision or path
-> not in the working tree.
->
-> I'd prefer to use a tag like this,
-> References: https://git.kernel.org/tglx/history/c/b30e6e183a728923267
->
-> FWIW, if you search for "tglx.history" in git log, you can find other
-> stuff, like "Histroy Tree:" [sic] and "History-tree:". I don't know what
-> the canonical form is.
->
-> > The same commit introduced the changes in g364fb_cursor(), which was
-> > implemented previous to v2.4.0 so it is hard to follow from there.
-> >
-> > Nobody complains during 18 years so I doubt anyone care that
-> > g364fb_cursor() is removed.
->
-> Right. The .fb_cursor method is optional (not all framebuffers have a
-> hardware cursor).
->
-> > And by removing it, you improve the kernel quality, so:
-> > Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-> > (Maybe remove the unhelpful 'Fixes' tag).
-> >
->
-> In the past I've seen other reviewers of other patches say the same thing
-> ("Please remove Fixes: Linux 2.6.12-rc2"). I don't know why.
->
-> I used that tag because it indicates that the patch can be backported at
-> least as far as the stated commit. Certainly the bug exists in Linux
-> 2.6.12-rc2, so the "Fixes" tag is meaningful in that sense.
-
-Yes, agreed.
-
->
-> > > Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
-> > > ---
-> > >  drivers/video/fbdev/g364fb.c | 29 +++--------------------------
-> > >  1 file changed, 3 insertions(+), 26 deletions(-)
-> > >
-> > > diff --git a/drivers/video/fbdev/g364fb.c b/drivers/video/fbdev/g364fb.c
-> > > index 223896cc5f7d..fb26230a3c7b 100644
-> > > --- a/drivers/video/fbdev/g364fb.c
-> > > +++ b/drivers/video/fbdev/g364fb.c
-> > > @@ -108,7 +108,6 @@ static int g364fb_pan_display(struct fb_var_screeninfo *var,
-> > >  static int g364fb_setcolreg(u_int regno, u_int red, u_int green,
-> > >                             u_int blue, u_int transp,
-> > >                             struct fb_info *info);
-> > > -static int g364fb_cursor(struct fb_info *info, struct fb_cursor *cursor);
-> > >  static int g364fb_blank(int blank, struct fb_info *info);
-> > >
-> > >  static struct fb_ops g364fb_ops = {
-> > > @@ -119,28 +118,8 @@ static struct fb_ops g364fb_ops = {
-> > >         .fb_fillrect    = cfb_fillrect,
-> > >         .fb_copyarea    = cfb_copyarea,
-> > >         .fb_imageblit   = cfb_imageblit,
-> > > -       .fb_cursor      = g364fb_cursor,
-> > >  };
-> > >
-> > > -int g364fb_cursor(struct fb_info *info, struct fb_cursor *cursor)
-> > > -{
-> > > -
-> > > -       switch (cursor->enable) {
-> > > -       case CM_ERASE:
-> > > -               *(unsigned int *) CTLA_REG |= CURS_TOGGLE;
-> > > -               break;
-> > > -
-> > > -       case CM_MOVE:
-> > > -       case CM_DRAW:
-> > > -               *(unsigned int *) CTLA_REG &= ~CURS_TOGGLE;
-> > > -               *(unsigned int *) CURS_POS_REG =
-> > > -                   ((x * fontwidth(p)) << 12) | ((y * fontheight(p)) -
-> > > -                                                 info->var.yoffset);
-> > > -               break;
-> > > -       }
-> > > -       return 0;
-> > > -}
-> > > -
-> > >  /*
-> > >   *  Pan or Wrap the Display
-> > >   *
-> > > @@ -194,11 +173,9 @@ static int g364fb_setcolreg(u_int regno, u_int red, u_int green,
-> > >   */
-> > >  int __init g364fb_init(void)
-> > >  {
-> > > -       volatile unsigned int *pal_ptr =
-> > > -           (volatile unsigned int *) CLR_PAL_REG;
-> > >         volatile unsigned int *curs_pal_ptr =
-> > >             (volatile unsigned int *) CURS_PAL_REG;
-> > > -       int mem, i, j;
-> > > +       int mem, i;
-> > >
-> > >         if (fb_get_options("g364fb", NULL))
-> > >                 return -ENODEV;
-> > > @@ -230,8 +207,8 @@ int __init g364fb_init(void)
-> > >          */
-> > >         *(unsigned short *) (CURS_PAT_REG + 14 * 64) = 0xffff;
-> > >         *(unsigned short *) (CURS_PAT_REG + 15 * 64) = 0xffff;
-> > > -       fb_var.xres_virtual = fbvar.xres;
-> > > -       fb_fix.line_length = (xres / 8) * fb_var.bits_per_pixel;
-> > > +       fb_var.xres_virtual = fb_var.xres;
-> > > +       fb_fix.line_length = fb_var.xres_virtual * fb_var.bits_per_pixel / 8;
-> > >         fb_fix.smem_start = 0x40000000; /* physical address */
-> > >         /* get size of video memory; this is special for the JAZZ hardware */
-> > >         mem = (r4030_read_reg32(JAZZ_R4030_CONFIG) >> 8) & 3;
-> > > --
-> > > 2.24.1
-> > >
-> >
