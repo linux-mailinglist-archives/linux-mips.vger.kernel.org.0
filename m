@@ -2,121 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E1C153E00
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Feb 2020 06:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C34BF153F12
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Feb 2020 08:04:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726538AbgBFFFV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 6 Feb 2020 00:05:21 -0500
-Received: from mga05.intel.com ([192.55.52.43]:37740 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725792AbgBFFFU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 6 Feb 2020 00:05:20 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Feb 2020 21:05:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,408,1574150400"; 
-   d="scan'208";a="254987822"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
-  by fmsmga004.fm.intel.com with ESMTP; 05 Feb 2020 21:05:19 -0800
-Date:   Wed, 5 Feb 2020 21:05:19 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>
-Subject: Re: [PATCH v5 01/19] KVM: x86: Allocate new rmap and large page
- tracking when moving memslot
-Message-ID: <20200206050518.GA9401@linux.intel.com>
-References: <20200121223157.15263-1-sean.j.christopherson@intel.com>
- <20200121223157.15263-2-sean.j.christopherson@intel.com>
- <20200205214952.GD387680@xz-x1>
- <20200205235533.GA7631@linux.intel.com>
- <20200206020031.GJ387680@xz-x1>
- <20200206021714.GB7631@linux.intel.com>
- <20200206025858.GK387680@xz-x1>
+        id S1727500AbgBFHEz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 6 Feb 2020 02:04:55 -0500
+Received: from forward500p.mail.yandex.net ([77.88.28.110]:51342 "EHLO
+        forward500p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727358AbgBFHEz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Feb 2020 02:04:55 -0500
+Received: from mxback26o.mail.yandex.net (mxback26o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::77])
+        by forward500p.mail.yandex.net (Yandex) with ESMTP id B040B940D26;
+        Thu,  6 Feb 2020 10:04:51 +0300 (MSK)
+Received: from localhost (localhost [::1])
+        by mxback26o.mail.yandex.net (mxback/Yandex) with ESMTP id csCvbGO9TV-4nMWtpu2;
+        Thu, 06 Feb 2020 10:04:51 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; s=mail; t=1580972691;
+        bh=4nPjw2SJ9FHKnglEe7z2mY1y5AkRLAt9Tl9x5mboVSk=;
+        h=Message-Id:Cc:Subject:In-Reply-To:Date:References:To:From;
+        b=qePsjYwANrQ8cUr/W21ldawSDjIDt/AXQp38EdKMiq6eGu2kMf2KYOfcsjg3Lnak/
+         VNdQ1xZTzDWtWxCUipn8ukx78c7vbwMcdU/ifwMv8HQQzh0MRQV2X6FuOhq72mSfE/
+         q9OqT2ZmBo456cMGUqH0sDF6cL0yIswQUTObYx+o=
+Authentication-Results: mxback26o.mail.yandex.net; dkim=pass header.i=@flygoat.com
+Received: by iva7-49db472ac642.qloud-c.yandex.net with HTTP;
+        Thu, 06 Feb 2020 10:04:49 +0300
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Envelope-From: yjx@flygoat.com
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Huacai Chen <chenhc@lemote.com>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yinglu Yang <yangyinglu@loongson.cn>
+In-Reply-To: <20200205101126.4fad0946@endymion>
+References: <1579181165-2493-1-git-send-email-yangtiezhu@loongson.cn>
+        <a267161f-c8b3-a11c-7416-3ab9ba19aa82@loongson.cn>
+        <20200203131422.384cd168@endymion>
+        <609c7042-0e44-2bd4-5e03-97465621b184@loongson.cn>
+        <17537451580871338@vla4-87a00c2d2b1b.qloud-c.yandex.net> <20200205101126.4fad0946@endymion>
+Subject: Re: [PATCH v2,RESEND] MIPS: Scan the DMI system information
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200206025858.GK387680@xz-x1>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Mailer: Yamail [ http://yandex.ru ] 5.0
+Date:   Thu, 06 Feb 2020 15:04:49 +0800
+Message-Id: <2072641580972689@iva7-49db472ac642.qloud-c.yandex.net>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 05, 2020 at 09:58:58PM -0500, Peter Xu wrote:
-> On Wed, Feb 05, 2020 at 06:17:15PM -0800, Sean Christopherson wrote:
-> > On Wed, Feb 05, 2020 at 09:00:31PM -0500, Peter Xu wrote:
-> > > On Wed, Feb 05, 2020 at 03:55:33PM -0800, Sean Christopherson wrote:
-> > > > On Wed, Feb 05, 2020 at 04:49:52PM -0500, Peter Xu wrote:
-> > > > > Instead of calling kvm_arch_create_memslot() explicitly again here,
-> > > > > can it be replaced by below?
-> > > > > 
-> > > > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > > > > index 72b45f491692..85a7b02fd752 100644
-> > > > > --- a/virt/kvm/kvm_main.c
-> > > > > +++ b/virt/kvm/kvm_main.c
-> > > > > @@ -1144,7 +1144,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
-> > > > >                 new.dirty_bitmap = NULL;
-> > > > >  
-> > > > >         r = -ENOMEM;
-> > > > > -       if (change == KVM_MR_CREATE) {
-> > > > > +       if (change == KVM_MR_CREATE || change == KVM_MR_MOVE) {
-> > > > >                 new.userspace_addr = mem->userspace_addr;
-> > > > >  
-> > > > >                 if (kvm_arch_create_memslot(kvm, &new, npages))
-> > > > 
-> > > > No, because other architectures don't need to re-allocate new metadata on
-> > > > MOVE and rely on __kvm_set_memory_region() to copy @arch from old to new,
-> > > > e.g. see kvmppc_core_create_memslot_hv().
-> > > 
-> > > Yes it's only required in x86, but iiuc it also will still work for
-> > > ppc?  Say, in that case ppc won't copy @arch from old to new, and
-> > > kvmppc_core_free_memslot_hv() will free the old, however it should
-> > > still work.
-> > 
-> > No, calling kvm_arch_create_memslot() for MOVE will result in PPC leaking
-> > memory due to overwriting slot->arch.rmap with a new allocation.
+
+
+> On Wed, 05 Feb 2020 10:55:38 +0800, Jiaxun Yang wrote:
 > 
-> Why?  For the MOVE case, kvm_arch_create_memslot() will create a new
-> rmap for the "new" memslot.  If the whole procedure succeeded,
-> kvm_free_memslot() will free the old rmap.  If it failed,
-> kvm_free_memslot() will free the new rmap if !NULL.  Looks fine?
+>>> I think it is better to split it into the following two patches?
+>>> [PATCH v3 1/2] firmware: dmi: Add macro SMBIOS_ENTRY_POINT_SCAN_START
+>>> [PATCH v3 2/2] MIPS: Add support for Desktop Management Interface (DMI)
+>>
+>> That way will break bisect.
+> 
+> Are you sure? As far as I can see, each patch builds individually. The
+> dmi patch is a no-op alone. The mips patch will not work alone,
+> obviously, however according to Tiezhu dmi_scan_machine() will fail
+> with a harmless error message if the base address is 0xF0000. If that's
+> correct then it's not breaking bisect.
 
-Oh, I see what you're suggesting.   Please god no.
+Sorry, I even forgot that it's my modification :-)
+Just don't want to trouble maintainers so much.
 
-This is a bug fix that needs to be backported to stable.  Arbitrarily
-changing PPC behavior is a bad idea, especially since I don't know squat
-about the PPC rmap behavior.
-
-If it happens to fix a PPC rmap bug, then PPC should get an explicit fix.
-If it's not a bug fix, then at best it is a minor performance hit due to an
-extra allocation and the need to refill the rmap.  Worst case scenario it
-breaks PPC.
-
-And unless this were a temporary change, which would be silly, I would have
-to carry forward the change into "KVM: PPC: Move memslot memory allocation
-into prepare_memory_region()", and again, I don't know squat about PPC.
-
-I also don't want to effectively introduce a misnamed function, even if
-only temporarily, e.g. it's kvm_arch_create_memslot(), not
-kvm_arch_create_or_move_memslot(), because the whole flow gets reworked a
-few patches later.
+> 
+> --
+> Jean Delvare
+> SUSE L3 Support
+--
+Jiaxun Yang
