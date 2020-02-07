@@ -2,56 +2,28 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBE4155DB1
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Feb 2020 19:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5BF155E23
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Feb 2020 19:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727558AbgBGSR7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Feb 2020 13:17:59 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:59889 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727803AbgBGSRz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Feb 2020 13:17:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1581099474;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cPT63VS6JkFJRjpL5MMsWxNfN8Beu47vJy8tbC2r7XM=;
-        b=Y/cdiXS9qg198XeYOe6OfszY8IiD737uVmSUJE64TzYvg13u9ESEGkmZF/72192DBYdQL7
-        6/T7/mO1JCuDDQjRzkApSoIq1OhrLPvdDdCt1QZxCBDOmdTL/j4gr7tzbI8xPLS+NSxjZ0
-        TPF5KfngjJMm20SkOCKHiCB1ZJ8FSQI=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-349-bFyCxqm_M4W_qaDt5AFPRQ-1; Fri, 07 Feb 2020 13:17:52 -0500
-X-MC-Unique: bFyCxqm_M4W_qaDt5AFPRQ-1
-Received: by mail-qv1-f71.google.com with SMTP id v3so83408qvm.2
-        for <linux-mips@vger.kernel.org>; Fri, 07 Feb 2020 10:17:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cPT63VS6JkFJRjpL5MMsWxNfN8Beu47vJy8tbC2r7XM=;
-        b=E6kGi9HDVcN4EYUvGcP6Ao0ooJjUBI1q+JaFPB1IXrLvX/8Y1zUrtsuZOYvic/KeG2
-         oD4oSXhuTeD5KtySCU5S3DpKZbZfzLuu5Y71KFf2iofQym7G2A1m17FNZZcWN+XJniNB
-         +Ip+fvja4Rf2JoeQJt4PY6HljNUzdxURXT3baXYvExOq6uNAnvWM9aXO7Y71HHD8kOr7
-         YwtGdXXdcaCsAjJvHx66bGWVA3Li8Bs0Uuo544d4cuuwrHZek00TQ5TeEkMxQ1wqwGvM
-         36GI6znM9TEnS3Aqgg6BmPI0404IJC6HDo7Rt8VVPcInWBwfRvkoOmRZ8FXJlKlPQPqp
-         sRCQ==
-X-Gm-Message-State: APjAAAUgoxq+Lqeb9/PoVBVwsbXxlQEoP6Yr5+oiWUPdQgFgJ4K4Vdnu
-        k5kH46bW47FGfD+DXMIBRT2mVstfdVZr6eT88J33tm9AItAJPCT17zM/7KzAzrm2d0yI/STfK0z
-        oteetch/RzL+V/AletRREbQ==
-X-Received: by 2002:a05:6214:1253:: with SMTP id q19mr106742qvv.75.1581099472154;
-        Fri, 07 Feb 2020 10:17:52 -0800 (PST)
-X-Google-Smtp-Source: APXvYqzRox8Bo7fyFYmNOjYNh/V3B0M3O5rtHPF6if8Y080MuT3a3U4ayt/3NWDSUCkErG4IzY/vdw==
-X-Received: by 2002:a05:6214:1253:: with SMTP id q19mr106704qvv.75.1581099471868;
-        Fri, 07 Feb 2020 10:17:51 -0800 (PST)
-Received: from xz-x1 ([2607:9880:19c8:32::2])
-        by smtp.gmail.com with ESMTPSA id b24sm1725899qto.71.2020.02.07.10.17.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Feb 2020 10:17:51 -0800 (PST)
-Date:   Fri, 7 Feb 2020 13:17:48 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
+        id S1727005AbgBGSdf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Feb 2020 13:33:35 -0500
+Received: from mga17.intel.com ([192.55.52.151]:2218 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726951AbgBGSdf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 7 Feb 2020 13:33:35 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Feb 2020 10:33:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,414,1574150400"; 
+   d="scan'208";a="430918451"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
+  by fmsmga005.fm.intel.com with ESMTP; 07 Feb 2020 10:33:25 -0800
+Date:   Fri, 7 Feb 2020 10:33:25 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Peter Xu <peterx@redhat.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Paul Mackerras <paulus@ozlabs.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
@@ -69,99 +41,237 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
         Christoffer Dall <christoffer.dall@arm.com>,
-        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <f4bug@amsat.org>
-Subject: Re: [PATCH v5 12/19] KVM: Move memslot deletion to helper function
-Message-ID: <20200207181748.GC720553@xz-x1>
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>
+Subject: Re: [PATCH v5 17/19] KVM: Terminate memslot walks via used_slots
+Message-ID: <20200207183325.GI2401@linux.intel.com>
 References: <20200121223157.15263-1-sean.j.christopherson@intel.com>
- <20200121223157.15263-13-sean.j.christopherson@intel.com>
- <20200206161415.GA695333@xz-x1>
- <20200206162818.GD13067@linux.intel.com>
- <20200206165116.GE695333@xz-x1>
- <20200207175912.GG2401@linux.intel.com>
+ <20200121223157.15263-18-sean.j.christopherson@intel.com>
+ <20200206210944.GD700495@xz-x1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200207175912.GG2401@linux.intel.com>
+In-Reply-To: <20200206210944.GD700495@xz-x1>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Feb 07, 2020 at 09:59:12AM -0800, Sean Christopherson wrote:
-> On Thu, Feb 06, 2020 at 11:51:16AM -0500, Peter Xu wrote:
-> > On Thu, Feb 06, 2020 at 08:28:18AM -0800, Sean Christopherson wrote:
-> > > On Thu, Feb 06, 2020 at 11:14:15AM -0500, Peter Xu wrote:
-> > > > On Tue, Jan 21, 2020 at 02:31:50PM -0800, Sean Christopherson wrote:
-> > > > > Move memslot deletion into its own routine so that the success path for
-> > > > > other memslot updates does not need to use kvm_free_memslot(), i.e. can
-> > > > > explicitly destroy the dirty bitmap when necessary.  This paves the way
-> > > > > for dropping @dont from kvm_free_memslot(), i.e. all callers now pass
-> > > > > NULL for @dont.
-> > > > > 
-> > > > > Add a comment above the code to make a copy of the existing memslot
-> > > > > prior to deletion, it is not at all obvious that the pointer will become
-> > > > > stale during sorting and/or installation of new memslots.
-> > > > 
-> > > > Could you help explain a bit on this explicit comment?  I can follow
-> > > > up with the patch itself which looks all correct to me, but I failed
-> > > > to catch what this extra comment wants to emphasize...
-> > > 
-> > > It's tempting to write the code like this (I know, because I did it):
-> > > 
-> > > 	if (!mem->memory_size)
-> > > 		return kvm_delete_memslot(kvm, mem, slot, as_id);
-> > > 
-> > > 	new = *slot;
-> > > 
-> > > Where @slot is a pointer to the memslot to be deleted.  At first, second,
-> > > and third glances, this seems perfectly sane.
-> > > 
-> > > The issue is that slot was pulled from struct kvm_memslots.memslots, e.g.
-> > > 
-> > > 	slot = &slots->memslots[index];
-> > > 
-> > > Note that slots->memslots holds actual "struct kvm_memory_slot" objects,
-> > > not pointers to slots.  When update_memslots() sorts the slots, it swaps
-> > > the actual slot objects, not pointers.  I.e. after update_memslots(), even
-> > > though @slot points at the same address, it's could be pointing at a
-> > > different slot.  As a result kvm_free_memslot() in kvm_delete_memslot()
-> > > will free the dirty page info and arch-specific points for some random
-> > > slot, not the intended slot, and will set npages=0 for that random slot.
+On Thu, Feb 06, 2020 at 04:09:44PM -0500, Peter Xu wrote:
+> On Tue, Jan 21, 2020 at 02:31:55PM -0800, Sean Christopherson wrote:
+> > @@ -9652,13 +9652,13 @@ int __x86_set_memory_region(struct kvm *kvm, int id, gpa_t gpa, u32 size)
+> >  		if (IS_ERR((void *)hva))
+> >  			return PTR_ERR((void *)hva);
+> >  	} else {
+> > -		if (!slot->npages)
+> > +		if (!slot || !slot->npages)
+> >  			return 0;
+> >  
+> > -		hva = 0;
+> > +		hva = slot->userspace_addr;
+> 
+> Is this intended?
+
+Yes.  It's possible to allow VA=0 for userspace mappings.  It's extremely
+uncommon, but possible.  Therefore "hva == 0" shouldn't be used to
+indicate an invalid slot.
+
+> > +		old_npages = slot->npages;
+> >  	}
+> >  
+> > -	old = *slot;
+> >  	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
+> >  		struct kvm_userspace_memory_region m;
+> >  
+
+...
+
+> > @@ -869,63 +869,162 @@ static int kvm_create_dirty_bitmap(struct kvm_memory_slot *memslot)
+> >  }
+> >  
+> >  /*
+> > - * Insert memslot and re-sort memslots based on their GFN,
+> > - * so binary search could be used to lookup GFN.
+> > - * Sorting algorithm takes advantage of having initially
+> > - * sorted array and known changed memslot position.
+> > + * Delete a memslot by decrementing the number of used slots and shifting all
+> > + * other entries in the array forward one spot.
+> > + */
+> > +static inline void kvm_memslot_delete(struct kvm_memslots *slots,
+> > +				      struct kvm_memory_slot *memslot)
+> > +{
+> > +	struct kvm_memory_slot *mslots = slots->memslots;
+> > +	int i;
+> > +
+> > +	if (WARN_ON(slots->id_to_index[memslot->id] == -1))
+> > +		return;
+> > +
+> > +	slots->used_slots--;
+> > +
+> > +	for (i = slots->id_to_index[memslot->id]; i < slots->used_slots; i++) {
+> > +		mslots[i] = mslots[i + 1];
+> > +		slots->id_to_index[mslots[i].id] = i;
+> > +	}
+> > +	mslots[i] = *memslot;
+> > +	slots->id_to_index[memslot->id] = -1;
+> > +}
+> > +
+> > +/*
+> > + * "Insert" a new memslot by incrementing the number of used slots.  Returns
+> > + * the new slot's initial index into the memslots array.
+> > + */
+> > +static inline int kvm_memslot_insert_back(struct kvm_memslots *slots)
+> 
+> The naming here didn't help me to understand but a bit more
+> confused...
+> 
+> How about "kvm_memslot_insert_end"?  Or even unwrap it.
+
+It's not guaranteed to be the end, as there could be multiple unused
+entries at the back of the array.  I agree the naming isn't perfect, but
+IMO it's the least crappy option and will be familiar to anyone with C++
+STL (and other languages?) experience.  Arguably it would be better to
+follow kernel naming for lists, e.g. head/tail, but there are no
+convenient adverbs for the move helpers, e.g. kvm_memslot_move_backward()
+would be kvm_memslot_move_towards_tail().
+
+I'm very strongly opposed to unwrapping it.
+
+The code would look like this.  Without a beefy comment, the high level
+semantics of the KVM_MR_CREATE case are not at all clear.  Adding a
+comment gets messy because putting it above the entire if-else makes it
+difficult to understand that its *only* for the CREATE case, and I hate
+having multi-line comments in if-else statements without brackets.
+
+                if (change == KVM_MR_CREATE)
+                        i = slots->used_slots++
+                else
+                        i = kvm_memslot_move_backward(slots, memslot);
+
+> > +{
+> > +	return slots->used_slots++;
+> > +}
+> > +
+> > +/*
+> > + * Move a changed memslot backwards in the array by shifting existing slots
+> > + * with a higher GFN toward the front of the array.  Note, the changed memslot
+> > + * itself is not preserved in the array, i.e. not swapped at this time, only
+> > + * its new index into the array is tracked.  Returns the changed memslot's
+> > + * current index into the memslots array.
+> > + */
+> > +static inline int kvm_memslot_move_backward(struct kvm_memslots *slots,
+> > +					    struct kvm_memory_slot *memslot)
+> 
+> "backward" makes me feel like it's moving towards smaller index,
+> instead it's moving to bigger index.  Same applies to "forward" below.
+> I'm not sure whether I'm the only one, though...
+
+Move forward towards the front, and backward towards the back.  In the
+languages I am familiar with, e.g. C++ STL, JavaScript, Python, and Golang,
+front==container[0] and back==container[len() - 1].
+
+> > +{
+> > +	struct kvm_memory_slot *mslots = slots->memslots;
+> > +	int i;
+> > +
+> > +	if (WARN_ON_ONCE(slots->id_to_index[memslot->id] == -1) ||
+> > +	    WARN_ON_ONCE(!slots->used_slots))
+> > +		return -1;
+> > +
+> > +	/*
+> > +	 * Move the target memslot backward in the array by shifting existing
+> > +	 * memslots with a higher GFN (than the target memslot) towards the
+> > +	 * front of the array.
+> > +	 */
+> > +	for (i = slots->id_to_index[memslot->id]; i < slots->used_slots - 1; i++) {
+> > +		if (memslot->base_gfn > mslots[i + 1].base_gfn)
+> > +			break;
+> > +
+> > +		WARN_ON_ONCE(memslot->base_gfn == mslots[i + 1].base_gfn);
+> 
+> Will this trigger?  Note that in __kvm_set_memory_region() we have
+> already checked overlap of memslots.
+
+If you screw up the code it will :-)  In a perfect world, no WARN() will
+*ever* trigger.  All of the added WARN_ON_ONCE() are to help the next poor
+soul that wants to modify this code.
+ 
+> > +
+> > +		/* Shift the next memslot forward one and update its index. */
+> > +		mslots[i] = mslots[i + 1];
+> > +		slots->id_to_index[mslots[i].id] = i;
+> > +	}
+> > +	return i;
+> > +}
+> > @@ -1104,8 +1203,13 @@ int __kvm_set_memory_region(struct kvm *kvm,
+
+...
+
+> >  	 * when the memslots are re-sorted by update_memslots().
+> >  	 */
+> >  	tmp = id_to_memslot(__kvm_memslots(kvm, as_id), id);
+> > -	old = *tmp;
+> > -	tmp = NULL;
+> 
+> I was confused in that patch, then...
+> 
+> > +	if (tmp) {
+> > +		old = *tmp;
+> > +		tmp = NULL;
+> 
+> ... now I still don't know why it needs to set to NULL?
+
+To make it abundantly clear that though shall not use @tmp, i.e. to force
+using the copy and not the pointer.  Note, @tmp is also reused as an
+iterator below.
+
+> 
+> > +	} else {
+> > +		memset(&old, 0, sizeof(old));
+> > +		old.id = id;
+> > +	}
+> >  
+> >  	if (!mem->memory_size)
+> >  		return kvm_delete_memslot(kvm, mem, &old, as_id);
+> > @@ -1223,7 +1327,7 @@ int kvm_get_dirty_log(struct kvm *kvm, struct kvm_dirty_log *log,
+> >  
+> >  	slots = __kvm_memslots(kvm, as_id);
+> >  	*memslot = id_to_memslot(slots, id);
+> > -	if (!(*memslot)->dirty_bitmap)
+> > +	if (!(*memslot) || !(*memslot)->dirty_bitmap)
+> >  		return -ENOENT;
+> >  
+> >  	kvm_arch_sync_dirty_log(kvm, *memslot);
+> > @@ -1281,10 +1385,10 @@ static int kvm_get_dirty_log_protect(struct kvm *kvm, struct kvm_dirty_log *log)
+> >  
+> >  	slots = __kvm_memslots(kvm, as_id);
+> >  	memslot = id_to_memslot(slots, id);
+> > +	if (!memslot || !memslot->dirty_bitmap)
+> > +		return -ENOENT;
+> >  
+> >  	dirty_bitmap = memslot->dirty_bitmap;
+> > -	if (!dirty_bitmap)
+> > -		return -ENOENT;
+> >  
+> >  	kvm_arch_sync_dirty_log(kvm, memslot);
+> >  
+> > @@ -1392,10 +1496,10 @@ static int kvm_clear_dirty_log_protect(struct kvm *kvm,
+> >  
+> >  	slots = __kvm_memslots(kvm, as_id);
+> >  	memslot = id_to_memslot(slots, id);
+> > +	if (!memslot || !memslot->dirty_bitmap)
+> > +		return -ENOENT;
+> >  
+> >  	dirty_bitmap = memslot->dirty_bitmap;
+> > -	if (!dirty_bitmap)
+> > -		return -ENOENT;
+> >  
+> >  	n = ALIGN(log->num_pages, BITS_PER_LONG) / 8;
+> >  
+> > -- 
+> > 2.24.1
 > > 
-> > Ah I see, thanks.  Another alternative is we move the "old = *slot"
-> > copy into kvm_delete_memslot(), which could be even clearer imo.
 > 
-> The copy is also needed in __kvm_set_memory_region() for the MOVE case.
-
-Right.  I actually meant to do all "old = *slot" in any function we
-need to cache the data explicitly, with that we also need another one
-after calling kvm_delete_memslot() for move.  But with the comment as
-you suggested below it looks good to me too.
-
-Thanks,
-
+> -- 
+> Peter Xu
 > 
-> > However I'm not sure whether it's a good idea to drop the test-by for
-> > this.  Considering that comment change should not affect it, would you
-> > mind enrich the comment into something like this (or anything better)?
-> > 
-> > /*
-> >  * Make a full copy of the old memslot, the pointer will become stale
-> >  * when the memslots are re-sorted by update_memslots() in
-> >  * kvm_delete_memslot(), while to make the kvm_free_memslot() work as
-> >  * expected later on, we still need the cached memory slot.
-> >  */
-> 
-> As above, it's more subtle than just the kvm_delete_memslot() case.
-> 
-> 	/*
-> 	 * Make a full copy of the old memslot, the pointer will become stale
-> 	 * when the memslots are re-sorted by update_memslots() when deleting
-> 	 * or moving a memslot, and additional modifications to the old memslot
-> 	 * need to be made after calling update_memslots().
-> 	 */
-> 
-
--- 
-Peter Xu
-
