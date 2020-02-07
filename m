@@ -2,126 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52572155E71
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Feb 2020 19:52:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92201155EB6
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Feb 2020 20:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727138AbgBGSwt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Feb 2020 13:52:49 -0500
-Received: from mga06.intel.com ([134.134.136.31]:58053 "EHLO mga06.intel.com"
+        id S1727117AbgBGTpd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Feb 2020 14:45:33 -0500
+Received: from mga01.intel.com ([192.55.52.88]:21548 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726900AbgBGSwt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 7 Feb 2020 13:52:49 -0500
+        id S1726900AbgBGTpd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 7 Feb 2020 14:45:33 -0500
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Feb 2020 10:52:48 -0800
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Feb 2020 11:45:32 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,414,1574150400"; 
-   d="scan'208";a="265095893"
+   d="scan'208";a="312123734"
 Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Feb 2020 10:52:47 -0800
-Date:   Fri, 7 Feb 2020 10:52:47 -0800
+  by orsmga001.jf.intel.com with ESMTP; 07 Feb 2020 11:45:32 -0800
+Date:   Fri, 7 Feb 2020 11:45:32 -0800
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     James Hogan <jhogan@kernel.org>,
+To:     Peter Xu <peterx@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Paul Mackerras <paulus@ozlabs.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
-        kvm@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Cornelia Huck <cohuck@redhat.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
-        kvmarm@lists.cs.columbia.edu, Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH v4 16/19] KVM: Ensure validity of memslot with respect to
- kvm_get_dirty_log()
-Message-ID: <20200207185247.GJ2401@linux.intel.com>
-References: <20191217204041.10815-1-sean.j.christopherson@intel.com>
- <20191217204041.10815-17-sean.j.christopherson@intel.com>
- <20191224181930.GC17176@xz-x1>
- <20200114182506.GF16784@linux.intel.com>
- <20200206220355.GH700495@xz-x1>
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>
+Subject: Re: [PATCH v5 15/19] KVM: Provide common implementation for generic
+ dirty log functions
+Message-ID: <20200207194532.GK2401@linux.intel.com>
+References: <20200121223157.15263-1-sean.j.christopherson@intel.com>
+ <20200121223157.15263-16-sean.j.christopherson@intel.com>
+ <20200206200200.GC700495@xz-x1>
+ <20200206212120.GF13067@linux.intel.com>
+ <20200206214106.GG700495@xz-x1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200206220355.GH700495@xz-x1>
+In-Reply-To: <20200206214106.GG700495@xz-x1>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Feb 06, 2020 at 05:03:55PM -0500, Peter Xu wrote:
-> On Tue, Jan 14, 2020 at 10:25:07AM -0800, Sean Christopherson wrote:
-> > On Tue, Dec 24, 2019 at 01:19:30PM -0500, Peter Xu wrote:
-> > > On Tue, Dec 17, 2019 at 12:40:38PM -0800, Sean Christopherson wrote:
-> > > > +int kvm_get_dirty_log(struct kvm *kvm, struct kvm_dirty_log *log,
-> > > > +		      int *is_dirty, struct kvm_memory_slot **memslot)
-> > > >  {
-> > > >  	struct kvm_memslots *slots;
-> > > > -	struct kvm_memory_slot *memslot;
-> > > >  	int i, as_id, id;
-> > > >  	unsigned long n;
-> > > >  	unsigned long any = 0;
-> > > >  
-> > > > +	*memslot = NULL;
-> > > > +	*is_dirty = 0;
-> > > > +
-> > > >  	as_id = log->slot >> 16;
-> > > >  	id = (u16)log->slot;
-> > > >  	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_USER_MEM_SLOTS)
-> > > >  		return -EINVAL;
-> > > >  
-> > > >  	slots = __kvm_memslots(kvm, as_id);
-> > > > -	memslot = id_to_memslot(slots, id);
-> > > > -	if (!memslot->dirty_bitmap)
-> > > > +	*memslot = id_to_memslot(slots, id);
-> > > > +	if (!(*memslot)->dirty_bitmap)
-> > > >  		return -ENOENT;
-> > > >  
-> > > > -	n = kvm_dirty_bitmap_bytes(memslot);
-> > > > +	kvm_arch_sync_dirty_log(kvm, *memslot);
-> > > 
-> > > Should this line belong to previous patch?
-> > 
-> > No.
-> > 
-> > The previous patch, "KVM: Provide common implementation for generic dirty
-> > log functions", is consolidating the implementation of dirty log functions
-> > for architectures with CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT=y.
-> > 
-> > This code is being moved from s390's kvm_vm_ioctl_get_dirty_log(), as s390
-> > doesn't select KVM_GENERIC_DIRTYLOG_READ_PROTECT.  It's functionally a nop
-> > as kvm_arch_sync_dirty_log() is empty for PowerPC, the only other arch that
-> > doesn't select KVM_GENERIC_DIRTYLOG_READ_PROTECT.
-> > 
-> > Arguably, the call to kvm_arch_sync_dirty_log() should be moved in a
-> > separate prep patch.  It can't be a follow-on patch as that would swap the
-> > ordering of kvm_arch_sync_dirty_log() and kvm_dirty_bitmap_bytes(), etc...
-> > 
-> > My reasoning for not splitting it to a separate patch is that prior to this
-> > patch, the common code and arch specific code are doing separate memslot
-> > lookups via id_to_memslot(), i.e. moving the kvm_arch_sync_dirty_log() call
-> > would operate on a "different" memslot.   It can't actually be a different
-> > memslot because slots_lock is held, it just felt weird.
-> > 
-> > All that being said, I don't have a strong opinion on moving the call to
-> > kvm_arch_sync_dirty_log() in a separate patch; IIRC, I vascillated between
-> > the two options when writing the code.  If anyone wants it to be a separate
-> > patch I'll happily split it out.
-> 
-> (Sorry to respond so late)
-> 
-> I think the confusing part is the subject, where you only mentioned
-> the memslot change.  IMHO you can split the change to make it clearer,
-> or at least would you mind mention that kvm_arch_sync_dirty_log() move
-> in the commit message?  Thanks,
++Vitaly for HyperV
 
-I'll add a few paragraphs to the changelog.  Splitting it out still feels
-weird.
+On Thu, Feb 06, 2020 at 04:41:06PM -0500, Peter Xu wrote:
+> On Thu, Feb 06, 2020 at 01:21:20PM -0800, Sean Christopherson wrote:
+> > On Thu, Feb 06, 2020 at 03:02:00PM -0500, Peter Xu wrote:
+> > > But that matters to this patch because if MIPS can use
+> > > kvm_flush_remote_tlbs(), then we probably don't need this
+> > > arch-specific hook any more and we can directly call
+> > > kvm_flush_remote_tlbs() after sync dirty log when flush==true.
+> > 
+> > Ya, the asid_flush_mask in kvm_vz_flush_shadow_all() is the only thing
+> > that prevents calling kvm_flush_remote_tlbs() directly, but I have no
+> > clue as to the important of that code.
+> 
+> As said above I think the x86 lockdep is really not necessary, then
+> considering MIPS could be the only one that will use the new hook
+> introduced in this patch...  Shall we figure that out first?
+
+So I prepped a follow-up patch to make kvm_arch_dirty_log_tlb_flush() a
+MIPS-only hook and use kvm_flush_remote_tlbs() directly for arm and x86,
+but then I realized x86 *has* a hook to do a precise remote TLB flush.
+There's even an existing kvm_flush_remote_tlbs_with_address() call on a
+memslot, i.e. this exact scenario.  So arguably, x86 should be using the
+more precise flush and should keep kvm_arch_dirty_log_tlb_flush().
+
+But, the hook is only used when KVM is running as an L1 on top of HyperV,
+and I assume dirty logging isn't used much, if at all, for L1 KVM on
+HyperV?
+
+I see three options:
+
+  1. Make kvm_arch_dirty_log_tlb_flush() MIPS-only and call
+     kvm_flush_remote_tlbs() directly for arm and x86.  Add comments to
+     explain when an arch should implement kvm_arch_dirty_log_tlb_flush().
+
+  2. Change x86 to use kvm_flush_remote_tlbs_with_address() when flushing
+     a memslot after the dirty log is grabbed by userspace.
+
+  3. Keep the resulting code as is, but add a comment in x86's
+     kvm_arch_dirty_log_tlb_flush() to explain why it uses
+     kvm_flush_remote_tlbs() instead of the with_address() variant.
+
+I strongly prefer to (2) or (3), but I'll defer to Vitaly as to which of
+those is preferable.
+
+I don't like (1) because (a) it requires more lines code (well comments),
+to explain why kvm_flush_remote_tlbs() is the default, and (b) it would
+require even more comments, which would be x86-specific in generic KVM,
+to explain why x86 doesn't use its with_address() flush, or we'd lost that
+info altogether.
