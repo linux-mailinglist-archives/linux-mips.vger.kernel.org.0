@@ -2,26 +2,26 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F3E155C15
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Feb 2020 17:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 534CA155D3C
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Feb 2020 18:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727071AbgBGQrx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Feb 2020 11:47:53 -0500
-Received: from mga02.intel.com ([134.134.136.20]:25168 "EHLO mga02.intel.com"
+        id S1727076AbgBGR7O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Feb 2020 12:59:14 -0500
+Received: from mga01.intel.com ([192.55.52.88]:13793 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726867AbgBGQrx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 7 Feb 2020 11:47:53 -0500
+        id S1726900AbgBGR7O (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 7 Feb 2020 12:59:14 -0500
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Feb 2020 08:47:52 -0800
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Feb 2020 09:59:13 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,414,1574150400"; 
-   d="scan'208";a="430886400"
+   d="scan'208";a="280038037"
 Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
-  by fmsmga005.fm.intel.com with ESMTP; 07 Feb 2020 08:47:51 -0800
-Date:   Fri, 7 Feb 2020 08:47:48 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Feb 2020 09:59:13 -0800
+Date:   Fri, 7 Feb 2020 09:59:12 -0800
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
 To:     Peter Xu <peterx@redhat.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -42,32 +42,84 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
         Christoffer Dall <christoffer.dall@arm.com>,
         Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>
-Subject: Re: [PATCH v5 18/19] KVM: Dynamically size memslot array based on
- number of used slots
-Message-ID: <20200207164748.GF2401@linux.intel.com>
+Subject: Re: [PATCH v5 12/19] KVM: Move memslot deletion to helper function
+Message-ID: <20200207175912.GG2401@linux.intel.com>
 References: <20200121223157.15263-1-sean.j.christopherson@intel.com>
- <20200121223157.15263-19-sean.j.christopherson@intel.com>
- <20200206221208.GI700495@xz-x1>
- <20200207153829.GA2401@linux.intel.com>
- <20200207160546.GA707371@xz-x1>
- <20200207161553.GE2401@linux.intel.com>
- <20200207163740.GA720553@xz-x1>
+ <20200121223157.15263-13-sean.j.christopherson@intel.com>
+ <20200206161415.GA695333@xz-x1>
+ <20200206162818.GD13067@linux.intel.com>
+ <20200206165116.GE695333@xz-x1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200207163740.GA720553@xz-x1>
+In-Reply-To: <20200206165116.GE695333@xz-x1>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Feb 07, 2020 at 11:37:40AM -0500, Peter Xu wrote:
-> Sorry again for not being able to identify the meaning of that
-> sentence myself.
+On Thu, Feb 06, 2020 at 11:51:16AM -0500, Peter Xu wrote:
+> On Thu, Feb 06, 2020 at 08:28:18AM -0800, Sean Christopherson wrote:
+> > On Thu, Feb 06, 2020 at 11:14:15AM -0500, Peter Xu wrote:
+> > > On Tue, Jan 21, 2020 at 02:31:50PM -0800, Sean Christopherson wrote:
+> > > > Move memslot deletion into its own routine so that the success path for
+> > > > other memslot updates does not need to use kvm_free_memslot(), i.e. can
+> > > > explicitly destroy the dirty bitmap when necessary.  This paves the way
+> > > > for dropping @dont from kvm_free_memslot(), i.e. all callers now pass
+> > > > NULL for @dont.
+> > > > 
+> > > > Add a comment above the code to make a copy of the existing memslot
+> > > > prior to deletion, it is not at all obvious that the pointer will become
+> > > > stale during sorting and/or installation of new memslots.
+> > > 
+> > > Could you help explain a bit on this explicit comment?  I can follow
+> > > up with the patch itself which looks all correct to me, but I failed
+> > > to catch what this extra comment wants to emphasize...
+> > 
+> > It's tempting to write the code like this (I know, because I did it):
+> > 
+> > 	if (!mem->memory_size)
+> > 		return kvm_delete_memslot(kvm, mem, slot, as_id);
+> > 
+> > 	new = *slot;
+> > 
+> > Where @slot is a pointer to the memslot to be deleted.  At first, second,
+> > and third glances, this seems perfectly sane.
+> > 
+> > The issue is that slot was pulled from struct kvm_memslots.memslots, e.g.
+> > 
+> > 	slot = &slots->memslots[index];
+> > 
+> > Note that slots->memslots holds actual "struct kvm_memory_slot" objects,
+> > not pointers to slots.  When update_memslots() sorts the slots, it swaps
+> > the actual slot objects, not pointers.  I.e. after update_memslots(), even
+> > though @slot points at the same address, it's could be pointing at a
+> > different slot.  As a result kvm_free_memslot() in kvm_delete_memslot()
+> > will free the dirty page info and arch-specific points for some random
+> > slot, not the intended slot, and will set npages=0 for that random slot.
+> 
+> Ah I see, thanks.  Another alternative is we move the "old = *slot"
+> copy into kvm_delete_memslot(), which could be even clearer imo.
 
-No worries.  
+The copy is also needed in __kvm_set_memory_region() for the MOVE case.
 
-> My English is probably even worse than I thought...
+> However I'm not sure whether it's a good idea to drop the test-by for
+> this.  Considering that comment change should not affect it, would you
+> mind enrich the comment into something like this (or anything better)?
+> 
+> /*
+>  * Make a full copy of the old memslot, the pointer will become stale
+>  * when the memslots are re-sorted by update_memslots() in
+>  * kvm_delete_memslot(), while to make the kvm_free_memslot() work as
+>  * expected later on, we still need the cached memory slot.
+>  */
 
-I'm pretty sure this is true for everyone :-)
+As above, it's more subtle than just the kvm_delete_memslot() case.
+
+	/*
+	 * Make a full copy of the old memslot, the pointer will become stale
+	 * when the memslots are re-sorted by update_memslots() when deleting
+	 * or moving a memslot, and additional modifications to the old memslot
+	 * need to be made after calling update_memslots().
+	 */
