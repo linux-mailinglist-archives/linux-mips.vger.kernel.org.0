@@ -2,127 +2,154 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A56015616A
-	for <lists+linux-mips@lfdr.de>; Sat,  8 Feb 2020 00:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B086C1561E2
+	for <lists+linux-mips@lfdr.de>; Sat,  8 Feb 2020 01:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727048AbgBGXAa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Feb 2020 18:00:30 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:46380 "EHLO
+        id S1727118AbgBHASn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Feb 2020 19:18:43 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:27324 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727243AbgBGXAa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Feb 2020 18:00:30 -0500
+        with ESMTP id S1727065AbgBHASn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Feb 2020 19:18:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1581116429;
+        s=mimecast20190719; t=1581121121;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Mg3ZsC4pgFdFBM7wdlAk9wteMT5/edAs8oS1GJ/WtPQ=;
-        b=Px9/Dybu8CRw7hOLsAMfmhNI6t/iyrgxV1/R5XrWFp7MJjBUjXGVISm1mPxa0wCnp6lBq7
-        1xFdvVRBxfidT8tlW/or7TtBHA7OtzL0nPw0j5QXY+fzAhSLYt6ReEBh6EAfbe3iI4ezax
-        G6sNodKPCXZyXehQ0AdWSjgJ3Qc3SNs=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-181-DVL5ru_1Olagzzow8vJ3bw-1; Fri, 07 Feb 2020 18:00:21 -0500
-X-MC-Unique: DVL5ru_1Olagzzow8vJ3bw-1
-Received: by mail-qt1-f200.google.com with SMTP id m8so552732qta.20
-        for <linux-mips@vger.kernel.org>; Fri, 07 Feb 2020 15:00:21 -0800 (PST)
+        bh=FliTqS6db2UW8mSq2D177P6p0LFTqK9NtxjpkxKtGhE=;
+        b=Z5fZWauLRjSF9yHJhWjstu4p0aZ6V8Qet47SbHiHxcvcDYM0axCoP6xa1p/Ne+V88qjdNS
+        YWP6ItTIHm3e5Brgi+GO47px7usCkMjUdjFPSDwTjapk4zaG2g+keZz3K3ItHP+VXu02fm
+        0uI7VUK+/0wWFrPhAfgCZIum7OPG4M8=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-357-xY9kAkpfOF-fsZpO_W7U7w-1; Fri, 07 Feb 2020 19:18:37 -0500
+X-MC-Unique: xY9kAkpfOF-fsZpO_W7U7w-1
+Received: by mail-qt1-f198.google.com with SMTP id z11so693401qts.1
+        for <linux-mips@vger.kernel.org>; Fri, 07 Feb 2020 16:18:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Mg3ZsC4pgFdFBM7wdlAk9wteMT5/edAs8oS1GJ/WtPQ=;
-        b=SxV30k5tQT1Kb0JYG36eDvrjqVRFaZT942+iQeNy0wezU5fZ24LVcK7tahfutjCQ49
-         tulLrdB7OAYWPHe2WdKQhoQMJQEz8RZ8+hPSp6F5WxHorW+BeVm7/6w/OBREI6tpR8g6
-         n+G7ZDgsdl6j0GgH8dvT95uYH17QVABWr1Gv3mwhl6GDRSlUvSQ3BldZM+PdpwzipvVK
-         WvmoerpQAAb0tqmItKV1uVL8rSyxwAEghzQFIQPm31JfXCWqKyBBdE/h1tZzBG5u3C30
-         uux2bZsaDdkPS1XSrGxOglUBuMkf0HJ57+TB7xK7j6Ezi8xzlWUwZLBTbNrC2KEQtZ4k
-         Lp9Q==
-X-Gm-Message-State: APjAAAUWiDy9bP8MW2XEl9VgxvkjNWVTH56v5TeVrXhistoqQr6vuwEa
-        IHs0EgbcAvwsNb7FUAFVieRFACFC6HCtlRO/CgOc/9azKSRoXv3/7SUUjKzi+QpaD0kerACE5s7
-        LkmNI94Rbnuag0AO98sm5Ww==
-X-Received: by 2002:a05:620a:4e:: with SMTP id t14mr1267816qkt.396.1581116420705;
-        Fri, 07 Feb 2020 15:00:20 -0800 (PST)
-X-Google-Smtp-Source: APXvYqzuF1LLIxUFKrrOHlnN6saW0tHnTBvZDP+QG2258sOq7kKKURMnwYV9pi8GIsHumI9LY+ZCrQ==
-X-Received: by 2002:a05:620a:4e:: with SMTP id t14mr1267793qkt.396.1581116420453;
-        Fri, 07 Feb 2020 15:00:20 -0800 (PST)
+        bh=FliTqS6db2UW8mSq2D177P6p0LFTqK9NtxjpkxKtGhE=;
+        b=dtaHnTH8vFc/tvq//DysLnCdS9Tiy+dnwbSsGSxSZ4V+1M5drEJNVHSiGHy8ETfufm
+         rEEYe6Q4MzwkuyidSG9UE5VaB8c0vUZGDpiNOAuvXRjD2x+sYDdsBndWXyW1TwZodP5r
+         hRNjPnaM1pwGSACpGRXeVSF4OuYL99RcnfulHtdHJTWMaAkfwxEIXiI166eUs47sAcrg
+         4BkyNmzX5+wAqj2NhiR52h4iV//GwbevY2NKWP8Loj50ZfqATuMafCakP3Deq0P938vf
+         I+mSk7O6u+rGb2wgKLCF14DhJ/zEAKOag619sxxlQCI4WICclgJIqOGpl+/iv22f210f
+         PtVQ==
+X-Gm-Message-State: APjAAAXrdzUSpucDSiUt66Ulrthu+UpfOLbyjfdWP1rhEv+LcnkjkNyy
+        /9vaEeQMEclr47ZZgHyr89hM213Do6E3kGWLHG+RJAku4VGe95K4a5UHrZPAgHfoLJXiprVGuu8
+        8+7ugNVS+7G/KrWG2bgvEww==
+X-Received: by 2002:a37:8cc:: with SMTP id 195mr1462268qki.456.1581121117033;
+        Fri, 07 Feb 2020 16:18:37 -0800 (PST)
+X-Google-Smtp-Source: APXvYqzAkXLXCBlBGfr3jniMMbcCpWv44CMlkznbhHCioVsTu+8iTId/2cuSvhY/ok33KerrRsEvMw==
+X-Received: by 2002:a37:8cc:: with SMTP id 195mr1462239qki.456.1581121116707;
+        Fri, 07 Feb 2020 16:18:36 -0800 (PST)
 Received: from xz-x1 ([2607:9880:19c8:32::2])
-        by smtp.gmail.com with ESMTPSA id g201sm709092qke.110.2020.02.07.15.00.18
+        by smtp.gmail.com with ESMTPSA id n32sm2271790qtk.66.2020.02.07.16.18.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Feb 2020 15:00:19 -0800 (PST)
-Date:   Fri, 7 Feb 2020 18:00:15 -0500
+        Fri, 07 Feb 2020 16:18:35 -0800 (PST)
+Date:   Fri, 7 Feb 2020 19:18:32 -0500
 From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Sean Christopherson <sean.j.christopherson@intel.com>,
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        linux-mips@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>
-Subject: Re: [PATCH RFC 0/4] KVM: MIPS: Provide arch-specific
- kvm_flush_remote_tlbs()
-Message-ID: <20200207230015.GI720553@xz-x1>
-References: <20200207223520.735523-1-peterx@redhat.com>
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <f4bug@amsat.org>
+Subject: Re: [PATCH v5 15/19] KVM: Provide common implementation for generic
+ dirty log functions
+Message-ID: <20200208001832.GA823968@xz-x1>
+References: <20200121223157.15263-1-sean.j.christopherson@intel.com>
+ <20200121223157.15263-16-sean.j.christopherson@intel.com>
+ <20200206200200.GC700495@xz-x1>
+ <20200206212120.GF13067@linux.intel.com>
+ <20200206214106.GG700495@xz-x1>
+ <20200207194532.GK2401@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200207223520.735523-1-peterx@redhat.com>
+In-Reply-To: <20200207194532.GK2401@linux.intel.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Feb 07, 2020 at 05:35:16PM -0500, Peter Xu wrote:
-> [This series is RFC because I don't have MIPS to compile and test]
+On Fri, Feb 07, 2020 at 11:45:32AM -0800, Sean Christopherson wrote:
+> +Vitaly for HyperV
 > 
-> kvm_flush_remote_tlbs() can be arch-specific, by either:
+> On Thu, Feb 06, 2020 at 04:41:06PM -0500, Peter Xu wrote:
+> > On Thu, Feb 06, 2020 at 01:21:20PM -0800, Sean Christopherson wrote:
+> > > On Thu, Feb 06, 2020 at 03:02:00PM -0500, Peter Xu wrote:
+> > > > But that matters to this patch because if MIPS can use
+> > > > kvm_flush_remote_tlbs(), then we probably don't need this
+> > > > arch-specific hook any more and we can directly call
+> > > > kvm_flush_remote_tlbs() after sync dirty log when flush==true.
+> > > 
+> > > Ya, the asid_flush_mask in kvm_vz_flush_shadow_all() is the only thing
+> > > that prevents calling kvm_flush_remote_tlbs() directly, but I have no
+> > > clue as to the important of that code.
+> > 
+> > As said above I think the x86 lockdep is really not necessary, then
+> > considering MIPS could be the only one that will use the new hook
+> > introduced in this patch...  Shall we figure that out first?
 > 
-> - Completely replace kvm_flush_remote_tlbs(), like ARM, who is the
->   only user of CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL so far
+> So I prepped a follow-up patch to make kvm_arch_dirty_log_tlb_flush() a
+> MIPS-only hook and use kvm_flush_remote_tlbs() directly for arm and x86,
+> but then I realized x86 *has* a hook to do a precise remote TLB flush.
+> There's even an existing kvm_flush_remote_tlbs_with_address() call on a
+> memslot, i.e. this exact scenario.  So arguably, x86 should be using the
+> more precise flush and should keep kvm_arch_dirty_log_tlb_flush().
 > 
-> - Doing something extra before kvm_flush_remote_tlbs(), like MIPS VZ
->   support, however still wants to have the common tlb flush to be part
->   of the process.  Could refer to kvm_vz_flush_shadow_all().  Then in
->   MIPS it's awkward to flush remote TLBs: we'll need to call the mips
->   hooks.
+> But, the hook is only used when KVM is running as an L1 on top of HyperV,
+> and I assume dirty logging isn't used much, if at all, for L1 KVM on
+> HyperV?
 > 
-> It's awkward to have different ways to specialize this procedure,
-> especially MIPS cannot use the genenal interface which is quite a
-> pity.  It's good to make it a common interface.
+> I see three options:
 > 
-> This patch series removes the 2nd MIPS usage above, and let it also
-> use the common kvm_flush_remote_tlbs() interface.  It should be
-> suggested that we always keep kvm_flush_remote_tlbs() be a common
-> entrance for tlb flushing on all archs.
+>   1. Make kvm_arch_dirty_log_tlb_flush() MIPS-only and call
+>      kvm_flush_remote_tlbs() directly for arm and x86.  Add comments to
+>      explain when an arch should implement kvm_arch_dirty_log_tlb_flush().
 > 
-> This idea comes from the reading of Sean's patchset on dynamic memslot
-> allocation, where a new dirty log specific hook is added for flushing
-> TLBs only for the MIPS code [1].  With this patchset, logically the
+>   2. Change x86 to use kvm_flush_remote_tlbs_with_address() when flushing
+>      a memslot after the dirty log is grabbed by userspace.
+> 
+>   3. Keep the resulting code as is, but add a comment in x86's
+>      kvm_arch_dirty_log_tlb_flush() to explain why it uses
+>      kvm_flush_remote_tlbs() instead of the with_address() variant.
+> 
+> I strongly prefer to (2) or (3), but I'll defer to Vitaly as to which of
+> those is preferable.
+> 
+> I don't like (1) because (a) it requires more lines code (well comments),
+> to explain why kvm_flush_remote_tlbs() is the default, and (b) it would
+> require even more comments, which would be x86-specific in generic KVM,
+> to explain why x86 doesn't use its with_address() flush, or we'd lost that
+> info altogether.
+> 
 
-[1] https://lore.kernel.org/kvm/20200207194532.GK2401@linux.intel.com/T/#m2da733d75dab5e54e2ae68de94fe8411166d6274
+I proposed the 4th solution here:
 
-> new hook in that patch can be dropped so we can directly use
-> kvm_flush_remote_tlbs().
-> 
-> TODO: We can even extend another common interface for ranged TLB, but
-> let's see how we think about this series first.
-> 
-> Any comment is welcomed, thanks.
-> 
-> Peter Xu (4):
->   KVM: Provide kvm_flush_remote_tlbs_common()
->   KVM: MIPS: Drop flush_shadow_memslot() callback
->   KVM: MIPS: Replace all the kvm_flush_remote_tlbs() references
->   KVM: MIPS: Define arch-specific kvm_flush_remote_tlbs()
-> 
->  arch/mips/include/asm/kvm_host.h |  7 -------
->  arch/mips/kvm/Kconfig            |  1 +
->  arch/mips/kvm/mips.c             | 22 ++++++++++------------
->  arch/mips/kvm/trap_emul.c        | 15 +--------------
->  arch/mips/kvm/vz.c               | 14 ++------------
->  include/linux/kvm_host.h         |  1 +
->  virt/kvm/kvm_main.c              | 10 ++++++++--
->  7 files changed, 23 insertions(+), 47 deletions(-)
-> 
-> -- 
-> 2.24.1
-> 
+https://lore.kernel.org/kvm/20200207223520.735523-1-peterx@redhat.com/
+
+I'm not sure whether that's acceptable, but if it can, then we can
+drop the kvm_arch_dirty_log_tlb_flush() hook, or even move on to
+per-slot tlb flushing.
+
+Thanks,
 
 -- 
 Peter Xu
