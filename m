@@ -2,182 +2,191 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A07B4156240
-	for <lists+linux-mips@lfdr.de>; Sat,  8 Feb 2020 02:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C866F1565B3
+	for <lists+linux-mips@lfdr.de>; Sat,  8 Feb 2020 18:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727131AbgBHB3j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Feb 2020 20:29:39 -0500
-Received: from mga17.intel.com ([192.55.52.151]:12331 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726743AbgBHB3j (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 7 Feb 2020 20:29:39 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Feb 2020 17:29:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,415,1574150400"; 
-   d="scan'208";a="280139370"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Feb 2020 17:29:38 -0800
-Date:   Fri, 7 Feb 2020 17:29:38 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>
-Subject: Re: [PATCH v5 15/19] KVM: Provide common implementation for generic
- dirty log functions
-Message-ID: <20200208012938.GC15581@linux.intel.com>
-References: <20200121223157.15263-1-sean.j.christopherson@intel.com>
- <20200121223157.15263-16-sean.j.christopherson@intel.com>
- <20200206200200.GC700495@xz-x1>
- <20200206212120.GF13067@linux.intel.com>
- <20200206214106.GG700495@xz-x1>
- <20200207194532.GK2401@linux.intel.com>
- <20200208001832.GA823968@xz-x1>
- <20200208004233.GA15581@linux.intel.com>
- <20200208005334.GB823968@xz-x1>
+        id S1727392AbgBHRRE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 8 Feb 2020 12:17:04 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:39706 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727341AbgBHRRD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 8 Feb 2020 12:17:03 -0500
+Received: by mail-wm1-f67.google.com with SMTP id c84so6050253wme.4;
+        Sat, 08 Feb 2020 09:17:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tlJ/vckZeI91VzkDgxtSb4e3JuionnABQlaSnybK7BM=;
+        b=X+85D0vwhKbejNfGqazNfql0+7igwTNm40FiKu8te2gKExwu87WTQehulNKLHDhkrM
+         rH/dy56qJhQNmxl3KtZv2s+2dIkKYp4oUnciZpKvGfjko2tZaVj3fzd/VvcXlaYYaI5V
+         P6J9bdKhuRWhpEdFRnTnuHEr4pdH1Xwxx7TNdk07QfwcaeZZISUqPnNPuBzVpPxBaYCV
+         onCOPWuZtxsseCaHM2nKBGMcXQoBt4c+39w20kQUmFOYZUhfoyOt2+E4CxZ7gnTypJIL
+         TZhgg0ho8PXdjh5X7QtrCD400IMfNR6PDQ2j0xaO7NX0X6kocOp6KDoLDxGyvAIOAFKC
+         Lbag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=tlJ/vckZeI91VzkDgxtSb4e3JuionnABQlaSnybK7BM=;
+        b=t4clssszuFT/V78kqK3KNZf4M1cUXWYDjjknXZN/09z9hefdqNDeJzG779W1qE/cly
+         20ZDkbD5a0p+I8F+o4sCEh39qLbVxiflUi3Ii9SrtoujXzYxISoWaB+KEm8eoDI+kr+s
+         Ll6CYyosj4mPkC/q/mH+fLySY3SGa2dVYgYxrd2jxZ8FLX169mTbL+ctUxT20hZkXD4L
+         ffU22+i5O9LYigvtTyh219V2RbvHQlqaeJiwHbtMGBgXSZ0zEt+BvjMBw8OroVDQKZqV
+         CdW5HeO0tQ43ev86Ei1PINtTEXY4xy72hKGMvGIpgB9gbYQinvQ4IkQNKJiSgPvx2TL2
+         K1Bg==
+X-Gm-Message-State: APjAAAW6XNFNHRS7riv2hAx70q39ZBB5bpwEFv0rJW2etuwgatmbkAkC
+        0abmg2UIvMQrRw9/arhjp2gHYKWl
+X-Google-Smtp-Source: APXvYqx+d48ubAFBGX5Uw/lQDSK93Q8wRHqwB3BmhCdqWWIE6x2xPOPFq7PeUn6xHddhNGEg2nzVJA==
+X-Received: by 2002:a1c:a1c3:: with SMTP id k186mr2156509wme.179.1581182220222;
+        Sat, 08 Feb 2020 09:17:00 -0800 (PST)
+Received: from [192.168.1.35] (78.red-88-21-202.staticip.rima-tde.net. [88.21.202.78])
+        by smtp.gmail.com with ESMTPSA id b18sm8405621wru.50.2020.02.08.09.16.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Feb 2020 09:16:59 -0800 (PST)
+Subject: Re: [PATCH v2 1/3] fbdev/g364fb: Fix build failure
+To:     Finn Thain <fthain@telegraphics.com.au>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+References: <cover.1581030073.git.fthain@telegraphics.com.au>
+ <5504c0c416525ed8c7b8440e5f9971f2a7b59f28.1581030073.git.fthain@telegraphics.com.au>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
+Autocrypt: addr=f4bug@amsat.org; keydata=
+ mQINBDU8rLoBEADb5b5dyglKgWF9uDbIjFXU4gDtcwiga9wJ/wX6xdhBqU8tlQ4BroH7AeRl
+ u4zXP0QnBDAG7EetxlQzcfYbPmxFISWjckDBFvDbFsojrZmwF2/LkFSzlvKiN5KLghzzJhLO
+ HhjGlF8deEZz/d/G8qzO9mIw8GIBS8uuWh6SIcG/qq7+y+2+aifaj92EdwU79apZepT/U3vN
+ YrfcAuo1Ycy7/u0hJ7rlaFUn2Fu5KIgV2O++hHYtCCQfdPBg/+ujTL+U+sCDawCyq+9M5+LJ
+ ojCzP9rViLZDd/gS6jX8T48hhidtbtsFRj/e9QpdZgDZfowRMVsRx+TB9yzjFdMO0YaYybXp
+ dg/wCUepX5xmDBrle6cZ8VEe00+UQCAU1TY5Hs7QFfBbjgR3k9pgJzVXNUKcJ9DYQP0OBH9P
+ ZbZvM0Ut2Bk6bLBO5iCVDOco0alrPkX7iJul2QWBy3Iy9j02GnA5jZ1Xtjr9kpCqQT+sRXso
+ Vpm5TPGWaWljIeLWy/qL8drX1eyJzwTB3A36Ck4r3YmjMjfmvltSZB1uAdo1elHTlFEULpU/
+ HiwvvqXQ9koB15U154VCuguvx/Qnboz8GFb9Uw8VyawzVxYVNME7xw7CQF8FYxzj6eI7rBf2
+ Dj/II6wxWPgDEy3oUzuNOxTB7sT3b/Ym76yOJzWX5BylXQIJ5wARAQABtDFQaGlsaXBwZSBN
+ YXRoaWV1LURhdWTDqSAoRjRCVUcpIDxmNGJ1Z0BhbXNhdC5vcmc+iQJVBBMBCAA/AhsPBgsJ
+ CAcDAgYVCAIJCgsEFgIDAQIeAQIXgBYhBPqr514SkXIh3P1rsuPjLCzercDeBQJd660aBQks
+ klzgAAoJEOPjLCzercDe2iMP+gMG2dUf+qHz2uG8nTBGMjgK0aEJrKVPodFA+iedQ5Kp3BMo
+ jrTg3/DG1HMYdcvQu/NFLYwamUfUasyor1k+3dB23hY09O4xOsYJBWdilkBGsJTKErUmkUO2
+ 3J/kawosvYtJJSHUpw3N6mwz/iWnjkT8BPp7fFXSujV63aZWZINueTbK7Y8skFHI0zpype9s
+ loU8xc4JBrieGccy3n4E/kogGrTG5jcMTNHZ106DsQkhFnjhWETp6g9xOKrzZQbETeRBOe4P
+ sRsY9YSG2Sj+ZqmZePvO8LyzGRjYU7T6Z80S1xV0lH6KTMvq7vvz5rd92f3pL4YrXq+e//HZ
+ JsiLen8LH/FRhTsWRgBtNYkOsd5F9NvfJtSM0qbX32cSXMAStDVnS4U+H2vCVCWnfNug2TdY
+ 7v4NtdpaCi4CBBa3ZtqYVOU05IoLnlx0miKTBMqmI05kpgX98pi2QUPJBYi/+yNu3fjjcuS9
+ K5WmpNFTNi6yiBbNjJA5E2qUKbIT/RwQFQvhrxBUcRCuK4x/5uOZrysjFvhtR8YGm08h+8vS
+ n0JCnJD5aBhiVdkohEFAz7e5YNrAg6kOA5IVRHB44lTBOatLqz7ntwdGD0rteKuHaUuXpTYy
+ CRqCVAKqFJtxhvJvaX0vLS1Z2dwtDwhjfIdgPiKEGOgCNGH7R8l+aaM4OPOd
+Message-ID: <22d69fb6-ef2c-e4db-43e0-bf34a8fc17dc@amsat.org>
+Date:   Sat, 8 Feb 2020 18:16:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200208005334.GB823968@xz-x1>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <5504c0c416525ed8c7b8440e5f9971f2a7b59f28.1581030073.git.fthain@telegraphics.com.au>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Feb 07, 2020 at 07:53:34PM -0500, Peter Xu wrote:
-> On Fri, Feb 07, 2020 at 04:42:33PM -0800, Sean Christopherson wrote:
-> > On Fri, Feb 07, 2020 at 07:18:32PM -0500, Peter Xu wrote:
-> > > On Fri, Feb 07, 2020 at 11:45:32AM -0800, Sean Christopherson wrote:
-> > > > +Vitaly for HyperV
-> > > > 
-> > > > On Thu, Feb 06, 2020 at 04:41:06PM -0500, Peter Xu wrote:
-> > > > > On Thu, Feb 06, 2020 at 01:21:20PM -0800, Sean Christopherson wrote:
-> > > > > > On Thu, Feb 06, 2020 at 03:02:00PM -0500, Peter Xu wrote:
-> > > > > > > But that matters to this patch because if MIPS can use
-> > > > > > > kvm_flush_remote_tlbs(), then we probably don't need this
-> > > > > > > arch-specific hook any more and we can directly call
-> > > > > > > kvm_flush_remote_tlbs() after sync dirty log when flush==true.
-> > > > > > 
-> > > > > > Ya, the asid_flush_mask in kvm_vz_flush_shadow_all() is the only thing
-> > > > > > that prevents calling kvm_flush_remote_tlbs() directly, but I have no
-> > > > > > clue as to the important of that code.
-> > > > > 
-> > > > > As said above I think the x86 lockdep is really not necessary, then
-> > > > > considering MIPS could be the only one that will use the new hook
-> > > > > introduced in this patch...  Shall we figure that out first?
-> > > > 
-> > > > So I prepped a follow-up patch to make kvm_arch_dirty_log_tlb_flush() a
-> > > > MIPS-only hook and use kvm_flush_remote_tlbs() directly for arm and x86,
-> > > > but then I realized x86 *has* a hook to do a precise remote TLB flush.
-> > > > There's even an existing kvm_flush_remote_tlbs_with_address() call on a
-> > > > memslot, i.e. this exact scenario.  So arguably, x86 should be using the
-> > > > more precise flush and should keep kvm_arch_dirty_log_tlb_flush().
-> > > > 
-> > > > But, the hook is only used when KVM is running as an L1 on top of HyperV,
-> > > > and I assume dirty logging isn't used much, if at all, for L1 KVM on
-> > > > HyperV?
-> > > > 
-> > > > I see three options:
-> > > > 
-> > > >   1. Make kvm_arch_dirty_log_tlb_flush() MIPS-only and call
-> > > >      kvm_flush_remote_tlbs() directly for arm and x86.  Add comments to
-> > > >      explain when an arch should implement kvm_arch_dirty_log_tlb_flush().
-> > > > 
-> > > >   2. Change x86 to use kvm_flush_remote_tlbs_with_address() when flushing
-> > > >      a memslot after the dirty log is grabbed by userspace.
-> > > > 
-> > > >   3. Keep the resulting code as is, but add a comment in x86's
-> > > >      kvm_arch_dirty_log_tlb_flush() to explain why it uses
-> > > >      kvm_flush_remote_tlbs() instead of the with_address() variant.
-> > > > 
-> > > > I strongly prefer to (2) or (3), but I'll defer to Vitaly as to which of
-> > > > those is preferable.
-> > > > 
-> > > > I don't like (1) because (a) it requires more lines code (well comments),
-> > > > to explain why kvm_flush_remote_tlbs() is the default, and (b) it would
-> > > > require even more comments, which would be x86-specific in generic KVM,
-> > > > to explain why x86 doesn't use its with_address() flush, or we'd lost that
-> > > > info altogether.
-> > > > 
-> > > 
-> > > I proposed the 4th solution here:
-> > > 
-> > > https://lore.kernel.org/kvm/20200207223520.735523-1-peterx@redhat.com/
-> > > 
-> > > I'm not sure whether that's acceptable, but if it can, then we can
-> > > drop the kvm_arch_dirty_log_tlb_flush() hook, or even move on to
-> > > per-slot tlb flushing.
-> > 
-> > This effectively is per-slot TLB flushing, it just has a different name.
-> > I.e. s/kvm_arch_dirty_log_tlb_flush/kvm_arch_flush_remote_tlbs_memslot.
-> > I'm not opposed to that name change.  And on second and third glance, I
-> > probably prefer it.  That would more or less follow the naming of
-> > kvm_arch_flush_shadow_all() and kvm_arch_flush_shadow_memslot().
+On 2/7/20 12:01 AM, Finn Thain wrote:
+> This patch resolves these compiler errors and warnings --
 > 
-> Note that the major point of the above patchset is not about doing tlb
-> flush per-memslot or globally.  It's more about whether we can provide
-> a common entrance for TLB flushing.  Say, after that series, we should
-> be able to flush TLB on all archs (majorly, including MIPS) as:
+>   CC      drivers/video/fbdev/g364fb.o
+> drivers/video/fbdev/g364fb.c: In function 'g364fb_cursor':
+> drivers/video/fbdev/g364fb.c:137:9: error: 'x' undeclared (first use in this function)
+> drivers/video/fbdev/g364fb.c:137:9: note: each undeclared identifier is reported only once for each function it appears in
+> drivers/video/fbdev/g364fb.c:137:7: error: implicit declaration of function 'fontwidth' [-Werror=implicit-function-declaration]
+> drivers/video/fbdev/g364fb.c:137:23: error: 'p' undeclared (first use in this function)
+> drivers/video/fbdev/g364fb.c:137:38: error: 'y' undeclared (first use in this function)
+> drivers/video/fbdev/g364fb.c:137:7: error: implicit declaration of function 'fontheight' [-Werror=implicit-function-declaration]
+> drivers/video/fbdev/g364fb.c: In function 'g364fb_init':
+> drivers/video/fbdev/g364fb.c:233:24: error: 'fbvar' undeclared (first use in this function)
+> drivers/video/fbdev/g364fb.c:234:24: error: 'xres' undeclared (first use in this function)
+> drivers/video/fbdev/g364fb.c:201:14: warning: unused variable 'j' [-Wunused-variable]
+> drivers/video/fbdev/g364fb.c:197:25: warning: unused variable 'pal_ptr' [-Wunused-variable]
 > 
->   kvm_flush_remote_tlbs(kvm);
+> The MIPS Magnum framebuffer console now works when tested in QEMU.
 > 
-> And with the same idea we can also introduce the ranged version.
+> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+> Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
+> ---
+>  drivers/video/fbdev/g364fb.c | 29 +++--------------------------
+>  1 file changed, 3 insertions(+), 26 deletions(-)
 > 
-> > 
-> > I don't want to go straight to kvm_arch_flush_remote_tlb_with_address()
-> > because that loses the important distinction (on x86) that slots_lock is
-> > expected to be held.
+> diff --git a/drivers/video/fbdev/g364fb.c b/drivers/video/fbdev/g364fb.c
+> index 845b79da2a7c..05837a3b985c 100644
+> --- a/drivers/video/fbdev/g364fb.c
+> +++ b/drivers/video/fbdev/g364fb.c
+> @@ -108,7 +108,6 @@ static int g364fb_pan_display(struct fb_var_screeninfo *var,
+>  static int g364fb_setcolreg(u_int regno, u_int red, u_int green,
+>  			    u_int blue, u_int transp,
+>  			    struct fb_info *info);
+> -static int g364fb_cursor(struct fb_info *info, struct fb_cursor *cursor);
+>  static int g364fb_blank(int blank, struct fb_info *info);
+>  
+>  static const struct fb_ops g364fb_ops = {
+> @@ -119,28 +118,8 @@ static const struct fb_ops g364fb_ops = {
+>  	.fb_fillrect	= cfb_fillrect,
+>  	.fb_copyarea	= cfb_copyarea,
+>  	.fb_imageblit	= cfb_imageblit,
+> -	.fb_cursor	= g364fb_cursor,
+>  };
+>  
+> -int g364fb_cursor(struct fb_info *info, struct fb_cursor *cursor)
+> -{
+> -	
+> -	switch (cursor->enable) {
+> -	case CM_ERASE:
+> -		*(unsigned int *) CTLA_REG |= CURS_TOGGLE;
+> -		break;
+> -
+> -	case CM_MOVE:
+> -	case CM_DRAW:
+> -		*(unsigned int *) CTLA_REG &= ~CURS_TOGGLE;
+> -		*(unsigned int *) CURS_POS_REG =
+> -		    ((x * fontwidth(p)) << 12) | ((y * fontheight(p)) -
+> -						  info->var.yoffset);
+> -		break;
+> -	}
+> -	return 0;
+> -}
+> -
+>  /*
+>   *  Pan or Wrap the Display
+>   *
+> @@ -194,11 +173,9 @@ static int g364fb_setcolreg(u_int regno, u_int red, u_int green,
+>   */
+>  int __init g364fb_init(void)
+>  {
+> -	volatile unsigned int *pal_ptr =
+> -	    (volatile unsigned int *) CLR_PAL_REG;
+>  	volatile unsigned int *curs_pal_ptr =
+>  	    (volatile unsigned int *) CURS_PAL_REG;
+> -	int mem, i, j;
+> +	int mem, i;
+>  
+>  	if (fb_get_options("g364fb", NULL))
+>  		return -ENODEV;
+> @@ -230,8 +207,8 @@ int __init g364fb_init(void)
+>  	 */
+>  	*(unsigned short *) (CURS_PAT_REG + 14 * 64) = 0xffff;
+>  	*(unsigned short *) (CURS_PAT_REG + 15 * 64) = 0xffff;
+> -	fb_var.xres_virtual = fbvar.xres;
+> -	fb_fix.line_length = (xres / 8) * fb_var.bits_per_pixel;
+> +	fb_var.xres_virtual = fb_var.xres;
+> +	fb_fix.line_length = fb_var.xres_virtual * fb_var.bits_per_pixel / 8;
+>  	fb_fix.smem_start = 0x40000000;	/* physical address */
+>  	/* get size of video memory; this is special for the JAZZ hardware */
+>  	mem = (r4030_read_reg32(JAZZ_R4030_CONFIG) >> 8) & 3;
 > 
-> Sorry I'm still puzzled on why that lockdep is so important and
-> special for x86...  For example, what if we move that lockdep to the
-> callers of the kvm_arch_dirty_log_tlb_flush() calls so it protects
-> even more arch (where we do get/clear dirty log)?  IMHO the callers
-> must be with the slots_lock held anyways no matter for x86 or not.
 
-
-Following the breadcrumbs leads to the comment in
-kvm_mmu_slot_remove_write_access(), which says:
-
-        /*
-         * kvm_mmu_slot_remove_write_access() and kvm_vm_ioctl_get_dirty_log()
-         * which do tlb flush out of mmu-lock should be serialized by
-         * kvm->slots_lock otherwise tlb flush would be missed.
-         */
-
-I.e. write-protecting a memslot and grabbing the dirty log for the memslot
-need to be serialized.  It's quite obvious *now* that get_dirty_log() holds
-slots_lock, but the purpose of lockdep assertions isn't just to verify the
-current functionality, it's to help ensure the correctness for future code
-and to document assumptions in the code.
-
-Digging deeper, there are four functions, all related to dirty logging, in
-the x86 mmu that basically open code what x86's
-kvm_arch_flush_remote_tlbs_memslot() would look like if it uses the range
-based flushing.
-
-Unless it's functionally incorrect (Vitaly?), going with option (2) and
-naming the hook kvm_arch_flush_remote_tlbs_memslot() seems like the obvious
-choice, e.g. the final cleanup gives this diff stat:
-
- arch/x86/kvm/mmu/mmu.c | 34 +++++++++-------------------------
- 1 file changed, 9 insertions(+), 25 deletions(-)
+Tested-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
