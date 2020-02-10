@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4DF157C35
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Feb 2020 14:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F376F157C2C
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Feb 2020 14:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727843AbgBJNfp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Feb 2020 08:35:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51476 "EHLO mail.kernel.org"
+        id S1727849AbgBJMfT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Feb 2020 07:35:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52024 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727828AbgBJMfS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1727836AbgBJMfS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Mon, 10 Feb 2020 07:35:18 -0500
 Received: from localhost (unknown [209.37.97.194])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D42C22467D;
-        Mon, 10 Feb 2020 12:35:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5CCD624680;
+        Mon, 10 Feb 2020 12:35:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581338117;
-        bh=zSg6T09HqcBiqYeTqt4FTCQO6B5h/IbyxlbEvz0yLW8=;
+        s=default; t=1581338118;
+        bh=NtsZhrgDJIlTF5zSo7Bs2rx2dneDPsrJqbQN4iPbGGg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NZ3BevvA4ZkHJlQv9JKDrDRcxHKwcZ9jMLmQv13iNzUkF9NXvzME620vVmNM1Avos
-         vFw6nwM1ii6vd2uEbDWb7wHWkWXqGpwnTxrxnqUA9m65rlA/HFAZ6mUKt1GdNzG39M
-         w9aL3pAn5Q17z2OyzdDHgOcFLMkemyIUvKXYqkOU=
+        b=dNhr77tMuzLb2yj7AuSL74Iw60GhAANdxGJjzrs97cE7lRALkCheNGwiMk1azqQQa
+         /aJ8zs2bUCSOGmKkyEx9vB1Ssv+yGXnWxecuy2nqk8yR2EOxC1GKS2ApbIHitBhHqC
+         PW7M59T+qma+DSkbGyKMnkaWa4tVWM5EbtlQYf44=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,9 +32,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         James Hogan <jhogan@kernel.org>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
         Rob Herring <robh@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH 4.19 051/195] MIPS: fix indentation of the RELOCS message
-Date:   Mon, 10 Feb 2020 04:31:49 -0800
-Message-Id: <20200210122311.030291166@linuxfoundation.org>
+Subject: [PATCH 4.19 052/195] MIPS: boot: fix typo in vmlinux.lzma.its target
+Date:   Mon, 10 Feb 2020 04:31:50 -0800
+Message-Id: <20200210122311.112142227@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200210122305.731206734@linuxfoundation.org>
 References: <20200210122305.731206734@linuxfoundation.org>
@@ -49,36 +49,16 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Alexander Lobakin <alobakin@dlink.ru>
 
-commit a53998802e178451701d59d38e36f551422977ba upstream.
+commit 16202c09577f3d0c533274c0410b7de05fb0d458 upstream.
 
-quiet_cmd_relocs lacks a whitespace which results in:
+Commit 92b34a976348 ("MIPS: boot: add missing targets for vmlinux.*.its")
+fixed constant rebuild of *.its files on every make invocation, but due
+to typo ("lzmo") it made no sense for vmlinux.lzma.its.
 
-  LD      vmlinux
-  SORTEX  vmlinux
-  SYSMAP  System.map
-  RELOCS vmlinux
-  Building modules, stage 2.
-  MODPOST 64 modules
-
-After this patch:
-
-  LD      vmlinux
-  SORTEX  vmlinux
-  SYSMAP  System.map
-  RELOCS  vmlinux
-  Building modules, stage 2.
-  MODPOST 64 modules
-
-Typo is present in kernel tree since the introduction of relocatable
-kernel support in commit e818fac595ab ("MIPS: Generate relocation table
-when CONFIG_RELOCATABLE"), but the relocation scripts were moved to
-Makefile.postlink later with commit 44079d3509ae ("MIPS: Use
-Makefile.postlink to insert relocations into vmlinux").
-
-Fixes: 44079d3509ae ("MIPS: Use Makefile.postlink to insert relocations into vmlinux")
-Cc: <stable@vger.kernel.org> # v4.11+
+Fixes: 92b34a976348 ("MIPS: boot: add missing targets for vmlinux.*.its")
+Cc: <stable@vger.kernel.org> # v4.19+
 Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
-[paulburton@kernel.org: Fixup commit references in commit message.]
+[paulburton@kernel.org: s/invokation/invocation/]
 Signed-off-by: Paul Burton <paulburton@kernel.org>
 Cc: Ralf Baechle <ralf@linux-mips.org>
 Cc: James Hogan <jhogan@kernel.org>
@@ -89,19 +69,19 @@ Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ---
- arch/mips/Makefile.postlink |    2 +-
+ arch/mips/boot/Makefile |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/mips/Makefile.postlink
-+++ b/arch/mips/Makefile.postlink
-@@ -12,7 +12,7 @@ __archpost:
- include scripts/Kbuild.include
+--- a/arch/mips/boot/Makefile
++++ b/arch/mips/boot/Makefile
+@@ -123,7 +123,7 @@ $(obj)/vmlinux.its.S: $(addprefix $(srct
+ targets += vmlinux.its
+ targets += vmlinux.gz.its
+ targets += vmlinux.bz2.its
+-targets += vmlinux.lzmo.its
++targets += vmlinux.lzma.its
+ targets += vmlinux.lzo.its
  
- CMD_RELOCS = arch/mips/boot/tools/relocs
--quiet_cmd_relocs = RELOCS $@
-+quiet_cmd_relocs = RELOCS  $@
-       cmd_relocs = $(CMD_RELOCS) $@
- 
- # `@true` prevents complaint when there is nothing to be done
+ quiet_cmd_cpp_its_S = ITS     $@
 
 
