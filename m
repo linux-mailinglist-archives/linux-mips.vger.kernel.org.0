@@ -2,257 +2,307 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CA515949F
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2020 17:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B4A15956C
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2020 17:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729923AbgBKQPy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Feb 2020 11:15:54 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:37850 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729925AbgBKQPy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Feb 2020 11:15:54 -0500
-Received: by mail-pj1-f67.google.com with SMTP id m13so1438588pjb.2
-        for <linux-mips@vger.kernel.org>; Tue, 11 Feb 2020 08:15:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=eWLMBgpnK7PE1vm+QMrBQXRtcHMP7nLx7lndIaKLkg0=;
-        b=bk/+e2t3desQpp9plD5VOIdRv15kRdFIp3x+BmFNSUtaUOSdLhA+QNfwPwc7LyFg5R
-         MIOUE0EE/bY1jiv8YdI/osEY6xMFegPoNiwKdx9gnONPBo/2Wf+i+tFCLR7iZDYr8xY9
-         ldw6zIlM1GmF94itP9HzdGSOG0f1TutHaKePMmAz9pYGO6kaQqasYibOqVrFyIF28vT2
-         xcz2NAxX8iTnrUfAaOeyIR360tobvsOCN0TzppR93Nyw3+TlGkATdruw1fpIxhpIlmNw
-         ff5xf368eE6WZ+Yg4wl4k8vMUpV6mrq18mIqIdmwVs5WiSYIINySIgZOwaqCdZgytHX6
-         w/lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=eWLMBgpnK7PE1vm+QMrBQXRtcHMP7nLx7lndIaKLkg0=;
-        b=pAIXANApGkzdT2LEWKg5/cc0zj2qgn00JKRIb+xYXb8HQalbWkq4NKPnJUqy6I8ysy
-         Li1zuA8/mIw38y0nrIJZ3nVQeNXX9qjuUvet6slQ9uYCeNsyewk6kQo314fO3uBL2Ius
-         EGkFcsGxwiXnC8Kl6d9EdozpBqXrVnf3Jm5meDAgylbGI6QFqazjY65cXKubkYhKwm/w
-         3rtMRhVY4G8F8+wHxkkUcMVXwuo1YdscrddzzwaEckNS1iSgtgGPdC767V2LkEsL84+c
-         S+4/gVYTjj25tnxktywE3Tw1C6Xmy2B+F10jsyEC5C5aW8DZmETl88VnkytHSkiFm7Ij
-         9KbQ==
-X-Gm-Message-State: APjAAAV8FycH3zwZwSnn/qbT4hEXSLqdOPgYFBpjT7IZlTldC/D7J2ov
-        JYpnJ6BfbJVjiK+1rdvyPENYCtcA
-X-Google-Smtp-Source: APXvYqzhFYN7c8m33rsVnKjqNZSNrYIZp7HArCSIjlnEJ3wOvA8aZ5+epfAixtQYAt12VkX/vWyoVg==
-X-Received: by 2002:a17:902:d885:: with SMTP id b5mr4011461plz.215.1581437753303;
-        Tue, 11 Feb 2020 08:15:53 -0800 (PST)
-Received: from ziggy.stardust ([37.223.145.31])
-        by smtp.gmail.com with ESMTPSA id f43sm3905424pje.23.2020.02.11.08.15.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Feb 2020 08:15:52 -0800 (PST)
-Subject: Re: Enabling MMC on MT7628 SoC
-To:     Mauro Condarelli <mc5686@mclink.it>,
-        linux-mediatek@lists.infradead.org,
-        John Crispin <john@phrozen.org>,
+        id S1728213AbgBKQzu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Feb 2020 11:55:50 -0500
+Received: from rcdn-iport-3.cisco.com ([173.37.86.74]:41649 "EHLO
+        rcdn-iport-3.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727264AbgBKQzu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Feb 2020 11:55:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=7335; q=dns/txt; s=iport;
+  t=1581440148; x=1582649748;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=brm5vKduK0k6gkTwy+Jp6X4Ybzm1VuTWv2oA+58KdVM=;
+  b=eYlzfTtkv1zl8TULGJnJXZeSbwvgRYxjCUIeO4fW62bLPWE5+20DiRlS
+   QGNMqpIOIsCeALt+gD+9cNaLDGj+xrZqth7tI/1CzB+z/tM5wsdmWbo3v
+   Fcla3P6TYu2ryau2Ylmz1VCGiB9BZ7zCnWOkbspoj3n7ishjoAwr59z1l
+   s=;
+IronPort-PHdr: =?us-ascii?q?9a23=3AvwjJNBf1HqYfbqmiUcq3OrOrlGMj4e+mNxMJ6p?=
+ =?us-ascii?q?chl7NFe7ii+JKnJkHE+PFxlwGQD57D5adCjOzb++D7VGoM7IzJkUhKcYcEFn?=
+ =?us-ascii?q?pnwd4TgxRmBceEDUPhK/u/bCU/EcJZV05N9HCgOk8TE8H7NBXf?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0AYAgDA20Je/4kNJK1mHAEBAQEBBwE?=
+ =?us-ascii?q?BEQEEBAEBgWoEAQELAYFTJCwFbFggBAsqh1sDiwNOghGJYo4wgUKBEANUCQE?=
+ =?us-ascii?q?BAQwBAScGAgEBhEACgkckNwYOAgMNAQEEAQEBAgEFBG2FNwyFZgEBAQMBEi4?=
+ =?us-ascii?q?BATcBBAsCAQgRBAEBARUZIREdCAIEDgUIGoMFgkoDDiABDqBoAoE5iGKCJ4J?=
+ =?us-ascii?q?/AQEFhRINC4IMCYE4AYwiGoIAgRFHgkw+ghtJBBqBAkcCPYMDgiyNQoJehyW?=
+ =?us-ascii?q?XbUQKgjqHTIpUhEeCSIgRkDaXUIIokBECBAIEBQIOAQEFgWgjgVhwFYMnCUc?=
+ =?us-ascii?q?YDY4dDBeDUIUUgV2DYnQCgSeNPwEB?=
+X-IronPort-AV: E=Sophos;i="5.70,428,1574121600"; 
+   d="scan'208";a="706354089"
+Received: from alln-core-4.cisco.com ([173.36.13.137])
+  by rcdn-iport-3.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 11 Feb 2020 16:55:26 +0000
+Received: from XCH-ALN-001.cisco.com (xch-aln-001.cisco.com [173.36.7.11])
+        by alln-core-4.cisco.com (8.15.2/8.15.2) with ESMTPS id 01BGtPBU027840
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=FAIL);
+        Tue, 11 Feb 2020 16:55:25 GMT
+Received: from xhs-aln-002.cisco.com (173.37.135.119) by XCH-ALN-001.cisco.com
+ (173.36.7.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 11 Feb
+ 2020 10:55:24 -0600
+Received: from xhs-rtp-003.cisco.com (64.101.210.230) by xhs-aln-002.cisco.com
+ (173.37.135.119) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 11 Feb
+ 2020 10:55:23 -0600
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (64.101.32.56) by
+ xhs-rtp-003.cisco.com (64.101.210.230) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Tue, 11 Feb 2020 11:55:23 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AbjW/LZ+niTF4ajPC98KU09X57YK9jwy10WGzAm0H5OU/AfEk/IVHYdUScPlauQr8N0U5zFPJHjfTY1VYptiNt0oegB+1dXh9gY9AVI1bGxhBQAEebTS8EXYV2JJkEcfxWs2p7dXMg3KxR1rwQfrPY7d5QE0718sYhW8lzBefTf74KMLaSaWLylPFKqkPYbQAyWvb95KdaHIv5STt4lSkVX2kA5/YbWMfi1B4cS5zGHd52PQqJybAHWZTudDz73lJLLmyx+XEZ62D6pQrqerDxSX4ck816/jfvYcfBcHsVbBji1+bdAvxIBWf59sTOcAM5YFDKN+VtxWaJ3mfW2hlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XpjVkjeXcAQRM+mIJPVNdC16peA2nBPzdJyyQgyStb0=;
+ b=oLB/ZmSB+h6Du60cuFU2sS9E4cbQ1NLPDBZZWklNE+oXFnq1CINRyKyVgX9p8D72iYEhUWHeZrOc88+1iO4ssxRirJMJffCP/j8QYIOe9dBiRiYO6z7Y7MKjRDw5O8iA3kkteg6mO/daYlCbxhnCh1iNdwBaaw5ILEvKZ0Hj2vVp7Ym2rQaS9VkZq2vUncG4VF/fpPoSKLfk5XJmDPRwMGPg4Xt4zotthJ0QSDL/O4j0wVAj4oCRllbNKu58uasGTtyHuPTGwvFdi55yywsS98WT+tQyzez/Giq3VJQfHLE7VQ3kxoG0k3MKYUAemE/a/dPCgtwOOV6cRUoD/ZKt6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cisco.com; dmarc=pass action=none header.from=cisco.com;
+ dkim=pass header.d=cisco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cisco.onmicrosoft.com;
+ s=selector2-cisco-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XpjVkjeXcAQRM+mIJPVNdC16peA2nBPzdJyyQgyStb0=;
+ b=eSsGpeTSaJn59fSfNmiMNp1S7W+kg/eNKwfNDM8EKnXwbvI/iMgj8FfxuyhUU/C8PAKOHQFtCV0Yu4bLfziAftpwcK+muNzRtcuM5AFMxkO43zmZ9ZecJxOztDwuNhdWR+8M5TQNDeGV0DImPTG27UHq4mm03iof0nnMNXCeVPw=
+Received: from BL0PR11MB3219.namprd11.prod.outlook.com (10.167.233.23) by
+ BL0PR11MB3297.namprd11.prod.outlook.com (10.167.235.29) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2707.25; Tue, 11 Feb 2020 16:55:22 +0000
+Received: from BL0PR11MB3219.namprd11.prod.outlook.com
+ ([fe80::f4ee:122a:9daf:1783]) by BL0PR11MB3219.namprd11.prod.outlook.com
+ ([fe80::f4ee:122a:9daf:1783%7]) with mapi id 15.20.2707.030; Tue, 11 Feb 2020
+ 16:55:22 +0000
+From:   "Victor Kamensky (kamensky)" <kamensky@cisco.com>
+To:     Paul Burton <paulburton@kernel.org>
+CC:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org
-References: <e6c30f55-5f65-b165-4c5d-1d25a425e744@mclink.it>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <ae707c5d-3c3c-724d-1eba-adcb1db52eb9@gmail.com>
-Date:   Tue, 11 Feb 2020 17:15:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <e6c30f55-5f65-b165-4c5d-1d25a425e744@mclink.it>
-Content-Type: text/plain; charset=utf-8
+        James Hogan <jhogan@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "bruce.ashfield@gmail.com" <bruce.ashfield@gmail.com>,
+        "richard.purdie@linuxfoundation.org" 
+        <richard.purdie@linuxfoundation.org>
+Subject: Re: [PATCH 1/2] mips: vdso: fix 'jalr t9' crash in vdso code
+Thread-Topic: [PATCH 1/2] mips: vdso: fix 'jalr t9' crash in vdso code
+Thread-Index: AQHV2u078/VVzhEDo0WR9ouK+wmFgKgU1sEAgAAFNICAAAolC4AALZaAgAEYEJ0=
+Date:   Tue, 11 Feb 2020 16:55:21 +0000
+Message-ID: <BL0PR11MB3219D6C91AAD980EC3BFED14CD180@BL0PR11MB3219.namprd11.prod.outlook.com>
+References: <20200203233133.38613-1-kamensky@cisco.com>
+ <20200203233133.38613-2-kamensky@cisco.com>
+ <20200210191424.brqyxs5lq7eqounl@lantea.localdomain>
+ <20200210193301.ella5mokkudw3qgs@lantea.localdomain>
+ <BL0PR11MB3219374C9349EE1B4F174777CD190@BL0PR11MB3219.namprd11.prod.outlook.com>,<20200210225229.4px5rljkici4mlrj@lantea.localdomain>
+In-Reply-To: <20200210225229.4px5rljkici4mlrj@lantea.localdomain>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=kamensky@cisco.com; 
+x-originating-ip: [2601:641:8080:3530::2353]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e8a865e7-cfee-4f32-f85e-08d7af132ef1
+x-ms-traffictypediagnostic: BL0PR11MB3297:
+x-microsoft-antispam-prvs: <BL0PR11MB32970DB6FF5B0A1E393E710ECD180@BL0PR11MB3297.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 0310C78181
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(136003)(396003)(366004)(39860400002)(376002)(189003)(199004)(316002)(53546011)(6916009)(478600001)(86362001)(6506007)(966005)(7696005)(66476007)(52536014)(33656002)(5660300002)(66946007)(76116006)(64756008)(66446008)(66556008)(81166006)(186003)(81156014)(8676002)(54906003)(71200400001)(8936002)(2906002)(9686003)(4326008)(55016002);DIR:OUT;SFP:1101;SCL:1;SRVR:BL0PR11MB3297;H:BL0PR11MB3219.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: cisco.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: K8uyIVwuZZfeVgOBs/hbUAgCLEK3xmjvwxBjqANY5Bmm0Q4fAsU+dFvokWBXr9VGZCSCWcxnVLBMWRKmC2a/iR6bA0iyH6li+BxOE8B4RJj/OzrFR7s3tEwHkSGLPlAzAYatrlYwgYVBsXsSEjlFaslCCKqX9Iu3vfFFlqRVZKmsG1eEyuEi9f/ptBunoBHGNsJy0X6Zpq0lgz7EQpAobCZm+AYhLSJFqvijW4v3YkFvO5lDvAJIPOe+v2JbIBTduvLZniXyNcmMGl34lZN3V2ydkmnJ9xQsRR1v5kZH5PGXVwmHZpaKo4R9ib6rwpeHfVN0Ganj0mrKmpr9b/pWC+XJdnxh8fg+kdlWbbZkhYzDQSW+pA7yqogaPsDipZ2acwXqT8Huvv3WtPcjhdJx4j8CQ80KQXqYeGa+96i6LlTT8u3sN/ZPtwK5uvi88xi3YipYIFcxB7OMR5MOLfADbfKFo6E6Speq56ePQTPFiMga6bq4qUiAbfBEUEjgT18zSst0ujxacF8QwB3fyl8DaA==
+x-ms-exchange-antispam-messagedata: n7f7Yk07aTeWQHU/KGYwo+NdQ53v0dnxhiEZdhBUmUIlwLzEAVKR/MGV4ie6MUIOunfQZs9EGspqAYDKVNiNeMAHnSel3tfgEZi0kQ0MaAj4SGhUs9uxOHidguywBUswyUKN7EaSCIiz45ph6p3VYNlNnxUyw4U2twM/4te093XXA7D4Yu6lUGQr/5ssYEjZ
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: e8a865e7-cfee-4f32-f85e-08d7af132ef1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Feb 2020 16:55:22.0025
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5ae1af62-9505-4097-a69a-c1553ef7840e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CBINXBztwvUyL2QRblS/QWWXYKYQyGiM7KCiUAhRfPW8++AJ+oKuUlpjkSZt/eTkrhAObdEwBgwV0Melj/VdEA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR11MB3297
+X-OriginatorOrg: cisco.com
+X-Outbound-SMTP-Client: 173.36.7.11, xch-aln-001.cisco.com
+X-Outbound-Node: alln-core-4.cisco.com
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-[Adding MIPS people to the loop]
-
-On 01/02/2020 17:06, Mauro Condarelli wrote:
-> Hi,
-> I'm trying to enable MMC/SD access on a VoCore2 SOM (based on MT7628)
-> using mtk_sd driver.
-> 
-> Just enabling mtk_sd will bomb wit undefined function `clk_get_parent`;
-> this can be trivially cured with:
-> 
-> diff --git a/arch/mips/ralink/clk.c b/arch/mips/ralink/clk.c
-> index 2f9d5acb38ea..930c2776f6fd 100644
-> --- a/arch/mips/ralink/clk.c
-> +++ b/arch/mips/ralink/clk.c
-> @@ -85,3 +85,9 @@ void __init plat_time_init(void)
->         clk_put(clk);
->         timer_probe();
->  }
-> +
-> +struct clk *clk_get_parent(struct clk *clk)
-> +{
-> +       return NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(clk_get_parent);
-> 
-> 
-> Naive implementation fails runtime with ENOENT in
-> devm_clk_get("10130000.mmc", "source") in spite of clock definition in .dts.
-> 
-> I traced the problem to CONFIG_COMMON_CLK not being defined for RALINK.
-> It cannot be enabled because it will lead to multiple definition of
-> several clock-related functions (e.g.: `clk_get_rate`).
-> I found completely disabling clock handling in mtk_sd.c leads to a (for
-> me) fully working SD card.
-
-That's probably because the boot FW already enables the clocks as needed...
-
-> 
-> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-> index 7726dcf48f2c..464f64bea7c6 100644
-> --- a/drivers/mmc/host/mtk-sd.c
-> +++ b/drivers/mmc/host/mtk-sd.c
-> @@ -730,18 +730,22 @@ static void msdc_set_timeout(struct msdc_host
-> *host, u32 ns, u32 clks)
->  
->  static void msdc_gate_clock(struct msdc_host *host)
->  {
-> +#ifdef CONFIG_COMMON_CLK
->      clk_disable_unprepare(host->src_clk_cg);
->      clk_disable_unprepare(host->src_clk);
->      clk_disable_unprepare(host->bus_clk);
->      clk_disable_unprepare(host->h_clk);
-> +#endif
->  }
->  
->  static void msdc_ungate_clock(struct msdc_host *host)
->  {
-> +#ifdef CONFIG_COMMON_CLK
->      clk_prepare_enable(host->h_clk);
->      clk_prepare_enable(host->bus_clk);
->      clk_prepare_enable(host->src_clk);
->      clk_prepare_enable(host->src_clk_cg);
-> +#endif
->      while (!(readl(host->base + MSDC_CFG) & MSDC_CFG_CKSTB))
->          cpu_relax();
->  }
-> @@ -2211,6 +2215,7 @@ static int msdc_drv_probe(struct platform_device
-> *pdev)
->      if (ret)
->          goto host_free;
->  
-> +#ifdef CONFIG_COMMON_CLK
->      host->src_clk = devm_clk_get(&pdev->dev, "source");
->      if (IS_ERR(host->src_clk)) {
->          ret = PTR_ERR(host->src_clk);
-> @@ -2230,6 +2235,12 @@ static int msdc_drv_probe(struct platform_device
-> *pdev)
->      host->src_clk_cg = devm_clk_get(&pdev->dev, "source_cg");
->      if (IS_ERR(host->src_clk_cg))
->          host->src_clk_cg = NULL;
-> +#else
-> +    host->src_clk = NULL;
-> +    host->h_clk = NULL;
-> +    host->bus_clk = NULL;
-> +    host->src_clk_cg = NULL;
-> +#endif
->  
->      host->irq = platform_get_irq(pdev, 0);
->      if (host->irq < 0) {
-> 
-> 
-> ... but I'm unsure this hack-and-slash approach is the Right Thing to do ;)
-> 
-
-I think the correct approach would be to write a clock driver which supports the
-common clock framework.
-
-The arch/mips/ralink/clk.c basically overwrites any calls to this so that things
-somehow work.
-
-Regards,
-Matthias
-
-> As said: this works for me, but I would like to fix it properly and have
-> the fix sent upstream together with my SoM defconfig.
-> 
-> Any hint welcome
-> Regards
-> Mauro Condarelli
-> 
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
-> 
+Hi Paul,=0A=
+=0A=
+Please see inline look for 'kamensky2>'=0A=
+=0A=
+________________________________________=0A=
+From: linux-mips-owner@vger.kernel.org <linux-mips-owner@vger.kernel.org> o=
+n behalf of Paul Burton <paulburton@kernel.org>=0A=
+Sent: Monday, February 10, 2020 2:52 PM=0A=
+To: Victor Kamensky (kamensky)=0A=
+Cc: linux-mips@vger.kernel.org; Ralf Baechle; James Hogan; Vincenzo Frascin=
+o; bruce.ashfield@gmail.com; richard.purdie@linuxfoundation.org=0A=
+Subject: Re: [PATCH 1/2] mips: vdso: fix 'jalr t9' crash in vdso code=0A=
+=0A=
+Hi Victor,=0A=
+=0A=
+On Mon, Feb 10, 2020 at 09:12:59PM +0000, Victor Kamensky (kamensky) wrote:=
+=0A=
+> On Mon, Feb 10, 2020 at 11:14:24AM -0800, Paul Burton wrote:=0A=
+> > Which kernel version did you find this issue with? Could you check=0A=
+> > whether you have commit bbcc5672b006 ("MIPS: Avoid VDSO ABI breakage du=
+e=0A=
+> > to global register variable")? That was merged for v5.5-rc5.=0A=
+>=0A=
+> Ah, I just spotted your detailed cover letter - my bad :)=0A=
+>=0A=
+> Please try moving from v5.4 to v5.4.18 or higher, or just cherry-picking=
+=0A=
+> the commit I mentioned.=0A=
+>=0A=
+> Double commit that you mentioned is present in 5.4.15 (since=0A=
+> v5.4.9) that I use. It is 5b004a238460113276319536534928c58d95e599=0A=
+>=0A=
+> [kamensky@kamensky-p53s linux]$ git tag --contains 5b004a2384601132763195=
+36534928c58d95e599=0A=
+> v5.4.10=0A=
+> v5.4.11=0A=
+> v5.4.12=0A=
+> v5.4.13=0A=
+> v5.4.14=0A=
+> v5.4.15=0A=
+> v5.4.16=0A=
+> v5.4.17=0A=
+> v5.4.18=0A=
+> v5.4.9=0A=
+=0A=
+Right you are; I don't know how I picked up v5.4.18 as the version it=0A=
+made it into.=0A=
+=0A=
+OK, so you're using v5.4.15.=0A=
+=0A=
+> You can check your tree: disassemble arch/mips/vdso/vgettimeofday-n32.o=
+=0A=
+> you would see 'jalr t9' calls, then disassemble arsm/mips/vdso/vdos-n32.s=
+o=0A=
+> and check that those 'jalr t9' places got converted into 'bal' instructio=
+ns,=0A=
+> even though t9 set up instructions are there. This conversion happens by=
+=0A=
+> ld during relocation processing if code was compiled with options I propo=
+se=0A=
+> to add explicitly. Walk through gcc and binutils places that do that are =
+in my=0A=
+> cover letter write up.=0A=
+>=0A=
+> You can reproduce the issue by doing opposite of what I propose:=0A=
+> disable -mrelax-pic-calls and -mexplicit-relocs defaults in your=0A=
+> toolchain by either using negate variant of option, ie=0A=
+> -mno-relax-pic-calls or -mno-explicit-relocs or both. Something=0A=
+> like in diff below. I've tried it on mips-poky-linux-gcc toolchain=0A=
+> that got correct defaults and worked for us before, after adding=0A=
+> no variants it shows the same 'jalr t9' crash as with other yocto=0A=
+> mips toolchains.=0A=
+=0A=
+OK, I see what's happening here but I think focusing in on the "jalr=0A=
+$t9" instructions as the explanation is misleading. Those aren't a=0A=
+problem in & of themselves, but the fact that the GOT is being used is=0A=
+problematic because we don't apply relocations for the VDSO. That,=0A=
+combined with the fact that the VDSO is position-independent, means the=0A=
+GOT can't possibly contain the right address for the function being=0A=
+called & indeed contains zero.=0A=
+=0A=
+kamensky2> Created GOT entry and corresponding 'jalr t9' are for=0A=
+kamensky2> static function call. I've tried diff where I add __always_inlin=
+e=0A=
+kamensky2> for do_hres and few other places in lib/vdso/gettimeofday.c.=0A=
+kamensky2> When everything inlined I was able to get rid of 'jalr t9'=0A=
+kamensky3> but resulting patch is ugly and size of vdso grew up to 40%=0A=
+=0A=
+I'm a little puzzled by how we got into this state of trying to use the=0A=
+GOT without relocations though.=0A=
+=0A=
+kamensky2> Yes, I agree it is a bit perplexing.=0A=
+=0A=
+Does your VDSO image contain relocations? =0A=
+=0A=
+kamensky2> No, it does not. It would fail cmd_vdso_check that looks for=0A=
+kamensky2> the same. Double checked manually - no relocations.=0A=
+=0A=
+Could you try running "objdump -rR vdso-n32.so.dbg.raw"? We=0A=
+have a check in the genvdso tool for reloc sections that should cause=0A=
+the build to fail if they're present, and I'd expect the toolchain to be=0A=
+emitting relocs if it's using the GOT. GOT with no relocs makes no=0A=
+sense.=0A=
+=0A=
+kamensky2> I did some digging - looked at glibc sysdeps/mips/dl-machine.h=
+=0A=
+kamensky2> line 209=0A=
+=0A=
+https://sourceware.org/git/?p=3Dglibc.git;a=3Dblob;f=3Dsysdeps/mips/dl-mach=
+ine.h;h=3D06021ea9abcfcc598b2204ce37d643a4809735da;hb=3DHEAD#l209=0A=
+=0A=
+kamensky2> new 3rd entry that got created in our case to call static=0A=
+kamensky2> functions is so called local got entry and it is supposed to be=
+=0A=
+kamensky2> filled with 'start of DSO' value by run-time linker without any=
+=0A=
+kamensky2> run-time relocations present.=0A=
+=0A=
+kamensky2> Here is value of MIPS_LOCAL_GOTNO in dynamic section:=0A=
+=0A=
+[root@svarog-cisco-com vdso]# mips64-poky-linux-gnun32-readelf -S vdso-n32.=
+so | grep .got=0A=
+  [11] .got              PROGBITS        000009c0 0009c0 00000c 04 WAp  0  =
+ 0 16=0A=
+[root@svarog-cisco-com vdso]# mips64-poky-linux-gnun32-readelf --dynamic vd=
+so-n32.so | grep MIPS_LOCAL_GOTNO=0A=
+ 0x7000000a (MIPS_LOCAL_GOTNO)           3=0A=
+=0A=
+I also expect that reverting commit 4467f7ad7dbb ("MIPS: genvdso: Remove=0A=
+GOT checks") would flag the problem & cause your build to fail. Perhaps=0A=
+we should bring that check back & either special case lld or require its=0A=
+users to have a very recent version of it.=0A=
+=0A=
+kamensky2> I've tried to revert it - it starts failing even in cases where =
+it=0A=
+kamensky2> used to work before: because it detects additional got entry -=
+=0A=
+kamensky2> pretty much original issue that drove 4467f7ad7dbb commit.=0A=
+kamesnky2> We could improve the check with taking in account LOCAL_GOTNO.=
+=0A=
+kamensky2> But I don't see much sense in it: since for global got entries c=
+ode=0A=
+kamensky2> dynamic relocations will be present and it would be covered by=
+=0A=
+kamensky2> cmd_vdso_check ('objdump -R' check from lib/vdso/Makefile).=0A=
+kamensky2> And when we allow local GOT entries we still would rely on=0A=
+kamensky2> -mrelax-pic-calls magic of converting those 'jalr t9' into 'bal'=
+=0A=
+kamensky2> instructions.=0A=
+=0A=
+It would be good to submit a v2 of this patch with the commit message=0A=
+updated to explain that some toolchains attempt to use the GOT without=0A=
+these flags being specified, and even better if you can figure out why=0A=
+that happens.=0A=
+=0A=
+kamensky2> I will add few sentences to my commit message explaining why=0A=
+kamensky2> we don't have dynamic relocations for static functions case.=0A=
+kamensky2> And as you asked in follow up message I will add those options=
+=0A=
+kamensky2> unconditionally.=0A=
+kamensky2> I believe my second patch: build time check for 'jalr t9' in cod=
+e=0A=
+kamensky2> should still be useful, since it verifies that conversion to 'ba=
+l' driven=0A=
+kamensky2> by -mrelax-pic-calls does happen.=0A=
+=0A=
+kamensky2> Please let me know if you have any additional feedback before=0A=
+kamensky2> I post v2 set of patches.=0A=
+=0A=
+Thanks,=0A=
+Victor=0A=
+=0A=
+Thanks,=0A=
+    Paul=0A=
