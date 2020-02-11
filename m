@@ -2,84 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D42B71595CF
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2020 18:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679DD1599AC
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2020 20:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729028AbgBKRBS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 Feb 2020 12:01:18 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35202 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728353AbgBKRBR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Feb 2020 12:01:17 -0500
-Received: by mail-pg1-f196.google.com with SMTP id l24so6032696pgk.2
-        for <linux-mips@vger.kernel.org>; Tue, 11 Feb 2020 09:01:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=H7iuRM8yHTFvyxReMmW4tCVEvKQHXWOuGOxHsaAC9vo=;
-        b=EykSddE1jrYUv0gaLie7j8H7kqxw6qUbl8wUy+xUxbMggxW8oLjbARlv/WbNxTIw8i
-         ZS+TWOF16qaCkXYKterCGUEMSlcnOyQYzlzQuKF7INqJkfYVb3v/Njq/65wKRixjkdx3
-         okUyhNYjhhQ7IW2rivxkBYlRfGUklOmLEFTX+VHzT2UYtAXXyQ0BxNcay6YSkjqQ9kyW
-         DAlSv3vls/7S9TtHnRIhK8tt2aGb86W7vyxcTe33t1yz/idA4iQWDEGJ4EQi5FVTNabQ
-         e42jYzBYBNsSVmX7hXFUN1Zrk/MoMLzVraOAfVlNbAozezA7OLKy6XHguZs6iPghseOv
-         IYNA==
-X-Gm-Message-State: APjAAAWPxdLBCtbV2Q8soS3oz2Jx4ccXYtwzvGYevqryHVAqlY9PShn+
-        Nk3GkmuYJvexDA3o+OInSzk=
-X-Google-Smtp-Source: APXvYqz1waNYC3vbwNif+u0bb42PML/ZPlywR9JeKFILVFe+bYycI+uFD/62ARUg+USbM0OFPW4Ojg==
-X-Received: by 2002:a63:de0b:: with SMTP id f11mr7488798pgg.89.1581440477065;
-        Tue, 11 Feb 2020 09:01:17 -0800 (PST)
-Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id d3sm3767219pjx.10.2020.02.11.09.01.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2020 09:01:16 -0800 (PST)
-Date:   Tue, 11 Feb 2020 09:01:10 -0800
-From:   Paul Burton <paulburton@kernel.org>
-To:     "Victor Kamensky (kamensky)" <kamensky@cisco.com>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
+        id S1729770AbgBKTYs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 Feb 2020 14:24:48 -0500
+Received: from alln-iport-6.cisco.com ([173.37.142.93]:38144 "EHLO
+        alln-iport-6.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729586AbgBKTYr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 Feb 2020 14:24:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=951; q=dns/txt; s=iport;
+  t=1581449087; x=1582658687;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=S4HEuedO9+25hzESHq6yr9Cl6XUXPj8Ik00xGUFYRvA=;
+  b=doEVsDqGilEoE3znhVYtIq2HohW2vPXYNCEz97KQ1teDce8FzskKLs+7
+   PFMYSGohkYztyumYo66nXXtnHCFTT7jMGqFI2svgMPoA7l5/flIiZ2Cc2
+   FYJGvBMGgIouN9IS4k7fUbI9N4+aJRBAI5VPNKLeX0xRpqXXZSEnffvpM
+   M=;
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0BZAAAJ/0Je/49dJa1mHAEBAQEBBwE?=
+ =?us-ascii?q?BEQEEBAEBgWkFAQELAYIobFUyKq5/gXsJAQEBDAEBJQoBAYRAgkkkNgcOAgM?=
+ =?us-ascii?q?NAQEEAQEBAgEFBG2FNwyGHwFGgT4BEoMmAYJ7D6sngieENQGGAwaBOAGHRIR?=
+ =?us-ascii?q?eGoIAg29zhBKGJwSNUIo4l2qCRIJOhH6OdAwbmw+OZIhskjkCBAYFAhWBWQU?=
+ =?us-ascii?q?tgVhNIxWDJxM9GA2XJIVgIAMwAgGMIoJDAQE?=
+X-IronPort-AV: E=Sophos;i="5.70,428,1574121600"; 
+   d="scan'208";a="448978575"
+Received: from rcdn-core-7.cisco.com ([173.37.93.143])
+  by alln-iport-6.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 11 Feb 2020 19:24:46 +0000
+Received: from kamensky-p53s.cisco.com ([10.24.40.152])
+        (authenticated bits=0)
+        by rcdn-core-7.cisco.com (8.15.2/8.15.2) with ESMTPSA id 01BJObLT004796
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 11 Feb 2020 19:24:46 GMT
+From:   Victor Kamensky <kamensky@cisco.com>
+To:     linux-mips@vger.kernel.org, Paul Burton <paulburton@kernel.org>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        "bruce.ashfield@gmail.com" <bruce.ashfield@gmail.com>,
-        "richard.purdie@linuxfoundation.org" 
-        <richard.purdie@linuxfoundation.org>
-Subject: Re: [PATCH 1/2] mips: vdso: fix 'jalr t9' crash in vdso code
-Message-ID: <20200211170110.ewrndsh7zzx7ocqi@lantea.localdomain>
-References: <20200203233133.38613-1-kamensky@cisco.com>
- <20200203233133.38613-2-kamensky@cisco.com>
- <20200210191424.brqyxs5lq7eqounl@lantea.localdomain>
- <20200210193301.ella5mokkudw3qgs@lantea.localdomain>
- <BL0PR11MB3219374C9349EE1B4F174777CD190@BL0PR11MB3219.namprd11.prod.outlook.com>
- <20200210225229.4px5rljkici4mlrj@lantea.localdomain>
- <BL0PR11MB3219D6C91AAD980EC3BFED14CD180@BL0PR11MB3219.namprd11.prod.outlook.com>
+        bruce.ashfield@gmail.com, richard.purdie@linuxfoundation.org
+Subject: [PATCH v2 0/2] mips: vdso: fix 'jalr t9' crash in vdso code
+Date:   Tue, 11 Feb 2020 11:24:32 -0800
+Message-Id: <20200211192434.24871-1-kamensky@cisco.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <BL0PR11MB3219D6C91AAD980EC3BFED14CD180@BL0PR11MB3219.namprd11.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+X-Authenticated-User: kamensky@cisco.com
+X-Outbound-SMTP-Client: 10.24.40.152, [10.24.40.152]
+X-Outbound-Node: rcdn-core-7.cisco.com
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Victor,
+Hi Paul and all,
 
-Thanks for your detailed debug & explanations :)
+Here is the second version of patch set dealing with 'jalr t9'
+crash in vdso code. Root cause and investigation details could be
+found in first version cover letter for this patch series [1].
 
-On Tue, Feb 11, 2020 at 04:55:21PM +0000, Victor Kamensky (kamensky) wrote:
-> I will add few sentences to my commit message explaining why
-> we don't have dynamic relocations for static functions case.
-> And as you asked in follow up message I will add those options
-> unconditionally.
->
-> I believe my second patch: build time check for 'jalr t9' in code
-> should still be useful, since it verifies that conversion to 'bal' driven
-> by -mrelax-pic-calls does happen.
-> 
-> Please let me know if you have any additional feedback before
-> I post v2 set of patches.
-
-That sounds great, and nothing else springs to mind. I'll look out for
-v2.
+Changes in v2:
+   - added -mrelax-pic-calls -mexplicit-relocs unconditionally
+     (dropped 'call cc-option') since minimal supported gcc version
+     already has them
+   - fixed few misspellings in commit messages
+   - added explanation in commit messages about handling static
+     functions PIC calls through mips local GOT and absence of dynamic
+     relocations in this case
 
 Thanks,
-    Paul
+Victor
+
+[1] https://lore.kernel.org/linux-mips/20200203233133.38613-1-kamensky@cisco.com
+
+Victor Kamensky (2):
+  mips: vdso: fix 'jalr t9' crash in vdso code
+  mips: vdso: add build time check that no 'jalr t9' calls left
+
+ arch/mips/vdso/Makefile | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+-- 
+2.24.1
+
