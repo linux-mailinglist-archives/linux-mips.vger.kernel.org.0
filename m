@@ -2,74 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CE415AD88
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2020 17:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 896FA15AEFC
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2020 18:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727582AbgBLQko (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 Feb 2020 11:40:44 -0500
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:27057 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727372AbgBLQkn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 12 Feb 2020 11:40:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1581525642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NrzhUur53Q4Y2ZEl1kiuBFTu/KwLXcTXVoqRdvHJiBI=;
-        b=MmT6dKzIFED2xhfqhOBjly+jhYXiP1wFlnVwK+4da6z35cIqLUZEyrDvnfQqFh8nH2rw9O
-        8hHQPz48rA3YiLWxNpia0pGSfrRJ1K/z+eps2lM4jCNEDHIQiyWJxwo0/xeJ7rxkM5w1CF
-        YNFbI1rPmbILrpTIJfmyhLz5ENm1eGQ=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-201-6q9Na0liM4CgFdu_ZBKTRQ-1; Wed, 12 Feb 2020 11:40:40 -0500
-X-MC-Unique: 6q9Na0liM4CgFdu_ZBKTRQ-1
-Received: by mail-wr1-f70.google.com with SMTP id 90so1042844wrq.6
-        for <linux-mips@vger.kernel.org>; Wed, 12 Feb 2020 08:40:40 -0800 (PST)
+        id S1727372AbgBLRqD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 Feb 2020 12:46:03 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:32812 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726728AbgBLRqD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Feb 2020 12:46:03 -0500
+Received: by mail-pf1-f194.google.com with SMTP id n7so1602621pfn.0;
+        Wed, 12 Feb 2020 09:46:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jhxZ16ICZ7BKOOIZh21ad0/16HMzBC5TZPUDc1xeyE4=;
+        b=c/ZKsY9G86TjHDIascLIq5khY9OBWGEISL6eZmSwnazQnWjKhu3c9iGn3K39Ow7drV
+         eWgrfK0AUgjR2P02l9HIEgPzjoUtnrAWc5oNSxq6A560i0/Lawa6ZlvSHScxxPK/ucY0
+         WvRkoDPv5ZE8qOUf5GRJqfA88Jzo7DLMuuWuEzrvKSEM/WHnw/Gh7klPDsje3BGhkkWw
+         T8742K7Nh6ak7DKY9yVh5Dp/M5Ygjl0+tTvyXUgv3P3Fr34h3AiKrWjMuZFALbfZosF+
+         clbQbxGIgBB2V//y6HEDZY9reAnh75GoAlKGS0yj/hx7y3EvSRD6BX1Kw06170iVxspy
+         x8gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NrzhUur53Q4Y2ZEl1kiuBFTu/KwLXcTXVoqRdvHJiBI=;
-        b=Z8PujCZxo4KWJqa7L+NqWhbUvV59NVXPFfmY/Jnmd4PqIrRCyT1wL/j3T7dw1t0WZV
-         iskfy9KkXKis7q1RBZXzVJPLnOY+gpI4UV2xeBhhbMfdlKiIyXD5glHHDHr3WVjRZ/Rt
-         Glup8KiB3iAa+EzFu3I+enb/Mfx2lh2T/lOM4/DWE6Y5DFOxLoVTyQ+ZQrIsbwj7rzi2
-         uKBuvttLH9kKzjwPeiOQqq2Jz231oG3+fn10rOo0xtyi1tVrkZJbn3RtKwlEew5rYksZ
-         EkafssJw2gjuypiu+s/0mW7wZ66sbbiLnpbeYjDfGOfR7/csUKCjXgdxl0c2ifiVOFlK
-         3G0Q==
-X-Gm-Message-State: APjAAAXJYU1Mzp5nUOaJpht0qE+01RM9ywj9ChiTG8tWPyY9F2CIlieU
-        TwrUD8NnupHv+epLC6DxG/mC0ng/EM+nnC/X5gwqTw3sBIwZdRIxJtH9ZZ29BO4/ykyP+aEin6z
-        hiTT5HTCR+71q/Lv59rcwTw==
-X-Received: by 2002:adf:f288:: with SMTP id k8mr17060153wro.301.1581525639840;
-        Wed, 12 Feb 2020 08:40:39 -0800 (PST)
-X-Google-Smtp-Source: APXvYqzXp2B+0mO+xq5e6mZFerIe0v8m3gwrAdj/HKSYiJvdfgdAfcAjS2vwUxPN1hDCGYWFBWWsgQ==
-X-Received: by 2002:adf:f288:: with SMTP id k8mr17060137wro.301.1581525639611;
-        Wed, 12 Feb 2020 08:40:39 -0800 (PST)
-Received: from [192.168.178.40] ([151.30.86.140])
-        by smtp.gmail.com with ESMTPSA id n8sm1179999wrx.42.2020.02.12.08.40.38
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=jhxZ16ICZ7BKOOIZh21ad0/16HMzBC5TZPUDc1xeyE4=;
+        b=YpSNiB7BCnOlQTTFCNYJ2SIUwHvoS2PMSLlnl+IpZMxzc8djNHGy0WRUdPYe2aPDL5
+         Btw+VePDrPqlvbv6t+RM9EWXDgtV8Kwk2RTFd9ZRE5ajQpZw5xKfpSp0f1OFpYZk+XUD
+         t4cFJk9EIUMX3icCsLFC7iZX/ebsjFNqUyHfTi8Idi625ui1aON4h2Qr0tOhW/pnr8Pe
+         zDVsZJjsFQh60qCMi69AA8zlo4KNUn479G82kAi7mde6yjIz6SVK3U2zRptJEZ7Q6HT5
+         5b+8rgFa8ZKhpEjAVQC7vnLH8vuAG1s82YbRTpGgzE50jyY40c5A645UAV8V/heADBRu
+         q2Dg==
+X-Gm-Message-State: APjAAAW7IM2sQWLGwevClRaA26lZncJtWTOKQ2WqNFYeScJAFLPrZMRJ
+        5a3NvgGRYh8DWSdOprb9mWULotE0
+X-Google-Smtp-Source: APXvYqw6jv5cYnVwJDDVyW6eYwL2CYYUaSaIrPdEzg6cSLr4TleKpR6T/I1kTQzsyTY1fzhIwvwDBw==
+X-Received: by 2002:a63:798a:: with SMTP id u132mr3091012pgc.203.1581529562187;
+        Wed, 12 Feb 2020 09:46:02 -0800 (PST)
+Received: from [10.67.50.49] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id s13sm7059993pjp.1.2020.02.12.09.46.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Feb 2020 08:40:39 -0800 (PST)
-Subject: Re: [PATCH RFC 0/4] KVM: MIPS: Provide arch-specific
- kvm_flush_remote_tlbs()
-To:     Paul Burton <paulburton@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        linux-mips@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>
-References: <20200207223520.735523-1-peterx@redhat.com>
- <44ba59d6-39a5-4221-1ae6-41e5a305d316@redhat.com>
- <20200212163004.cpd33ux4zslfc3es@lantea.localdomain>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <66e0a38c-a7f5-dcd1-d06b-b317588fad7a@redhat.com>
-Date:   Wed, 12 Feb 2020 17:40:37 +0100
+        Wed, 12 Feb 2020 09:46:01 -0800 (PST)
+Subject: Re: [PATCH 2/7] MIPS: BMIPS: Replace <linux/clk-provider.h> by
+ <linux/of_clk.h>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        James Hartley <james.hartley@sondrel.com>,
+        John Crispin <john@phrozen.org>
+Cc:     linux-mips@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200212101544.8793-1-geert+renesas@glider.be>
+ <20200212101544.8793-3-geert+renesas@glider.be>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
+ 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
+ G10n8gCguORqNGMsVRxrlLs7/himep7MrCc=
+Message-ID: <aaf2ce0d-a083-52c7-acae-269b6e1f95e4@gmail.com>
+Date:   Wed, 12 Feb 2020 09:45:59 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200212163004.cpd33ux4zslfc3es@lantea.localdomain>
+In-Reply-To: <20200212101544.8793-3-geert+renesas@glider.be>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -78,28 +126,14 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 12/02/20 17:30, Paul Burton wrote:
-> Hi Paolo,
+On 2/12/20 2:15 AM, Geert Uytterhoeven wrote:
+> The Broadcom BMIPS platform code is not a clock provider, and just needs
+> to call of_clk_init().
 > 
-> On Wed, Feb 12, 2020 at 01:25:30PM +0100, Paolo Bonzini wrote:
->> MIPS folks, I see that arch/mips/kvm/mmu.c uses pud_index, so it's not
->> clear to me if it's meant to only work if CONFIG_PGTABLE_LEVELS=4 or
->> it's just bit rot.  Should I add a "depends on PGTABLE_LEVEL=4" to
->> arch/mips/Kconfig?
+> Hence it can include <linux/of_clk.h> instead of <linux/clk-provider.h>.
 > 
-> I'm no expert on this bit of code, but I'm pretty sure the systems
-> KVM/VZ has been used on the most internally had PGTABLE_LEVEL=3.
-> 
-> I suspect this is actually a regression from commit 31168f033e37 ("mips:
-> drop __pXd_offset() macros that duplicate pXd_index() ones"). Whilst
-> that commit is correct that pud_index() & __pud_offset() are the same
-> when pud_index() is actually provided, it doesn't take into account the
-> __PAGETABLE_PUD_FOLDED case. There __pud_offset() was available but
-> would always evaluate to zero, whereas pud_index() isn't defined...
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Ok, I'll try to whip out a patch that handles __PAGETABLE_PUD_FOLDED.
-On the other hand this makes me worry about how much KVM is being tested
-by people that care about MIPS (even just compile-tested).
-
-Paolo
-
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
