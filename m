@@ -2,76 +2,175 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFD615AD6A
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2020 17:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4037615AD8E
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2020 17:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728575AbgBLQaO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 Feb 2020 11:30:14 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:38628 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727439AbgBLQaN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Feb 2020 11:30:13 -0500
-Received: by mail-pl1-f195.google.com with SMTP id t6so1150603plj.5;
-        Wed, 12 Feb 2020 08:30:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1IlVs+PoyqskVeOryq4nWg0BV3ImUVF+jcq3kxeboTk=;
-        b=jgjqfu+MGvVk/djwqmpMh+YXZSNvoqlNm7J1vPLx6BjvwWiupsIax8Rfuj01WRBSzE
-         Q5bnRMRZzTulTZifiRb66wgYUbJEEBT7KxbE9uS5mbfVA0lwRmr7aUXUPLn39jtRGcCH
-         6ZjxCftEQI09ldAaWF9X9htWJIZBAZGpC5ytkHexgDUbW2NXcGYLKXElRKLAg5HRGCth
-         lu+0F7c/7USoLo6uylTzLIl+Czj/lT2iPI7WvfrWtuhAfy5UdC4U3Amp8co/EmgsIXaj
-         8TxYmGPkWr+P+khIhzBEPepji1QakrW/U7Lb93qJNRTP3OVZaxddoltw2z/uu1iHYSc5
-         ceVg==
-X-Gm-Message-State: APjAAAXA++fLwSJVg0QVMTSe+4G95EhkJQc0PtsW+ErVO0RUgey2zZSp
-        GO2MK7+gAqNNWUQqXtg5Mb0=
-X-Google-Smtp-Source: APXvYqx5Wx6WVU8t/C3lzNyGG1nBbFeYXoZreqRsnGRq3J0F0tUSVkJseGopg+0FRqyzGnmuRBdpPg==
-X-Received: by 2002:a17:902:d692:: with SMTP id v18mr9369625ply.9.1581525011511;
-        Wed, 12 Feb 2020 08:30:11 -0800 (PST)
-Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id j14sm968499pgs.57.2020.02.12.08.30.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2020 08:30:10 -0800 (PST)
-Date:   Wed, 12 Feb 2020 08:30:04 -0800
-From:   Paul Burton <paulburton@kernel.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        linux-mips@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>
-Subject: Re: [PATCH RFC 0/4] KVM: MIPS: Provide arch-specific
- kvm_flush_remote_tlbs()
-Message-ID: <20200212163004.cpd33ux4zslfc3es@lantea.localdomain>
-References: <20200207223520.735523-1-peterx@redhat.com>
- <44ba59d6-39a5-4221-1ae6-41e5a305d316@redhat.com>
+        id S1727054AbgBLQmb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 Feb 2020 11:42:31 -0500
+Received: from relaygw4-3.mclink.it ([213.21.178.146]:45267 "EHLO
+        relaygw4-3.mclink.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726351AbgBLQmb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Feb 2020 11:42:31 -0500
+X-Greylist: delayed 900 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Feb 2020 11:42:29 EST
+Received: from [172.24.30.41] (HELO smtpoutgw1.mclink.it)
+  by relaygw4-3.mclink.it (CommuniGate Pro SMTP 6.0.6)
+  with ESMTP id 168229636 for linux-mips@vger.kernel.org; Wed, 12 Feb 2020 17:27:28 +0100
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2DCAQD2JkRe/yslA1cNWBwBAQEBAQcBA?=
+ =?us-ascii?q?REBBAQBAYF7gxWBMYQUkQUlg26GAoE+ilGFOwkBAQEBAQEBAQEgCwwEAQGEQAK?=
+ =?us-ascii?q?CbTgTAhABAQYBAQEBAQUEhiSFcgEBAQECAQEBIQQLATsQCwkCGAICJgICJwEvB?=
+ =?us-ascii?q?gEMBgIBAYMiAYJWBS+QA5sEdX8zhUqDQ4E+gQ4qjH2BQYERJwyCYD6BBIFgAQS?=
+ =?us-ascii?q?EcoJeBIE/AQEBrjMBBgKBYlqHTYkrhVMGHINCl1OOaIhujjOGHYF6gUCBHoFOC?=
+ =?us-ascii?q?UcljikMC4hkhUBzkWEBAQ?=
+Received: from host43-37-dynamic.3-87-r.retail.telecomitalia.it (HELO [192.168.7.101]) ([87.3.37.43])
+  by smtpoutgw1.mclink.it with ESMTP; 12 Feb 2020 17:27:27 +0100
+Subject: Re: Enabling MMC on MT7628 SoC
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        John Crispin <john@phrozen.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org
+References: <e6c30f55-5f65-b165-4c5d-1d25a425e744@mclink.it>
+ <ae707c5d-3c3c-724d-1eba-adcb1db52eb9@gmail.com>
+From:   Mauro Condarelli <mc5686@mclink.it>
+Message-ID: <38cf727e-4694-ab09-ab10-04d48660c838@mclink.it>
+Date:   Wed, 12 Feb 2020 17:27:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
+In-Reply-To: <ae707c5d-3c3c-724d-1eba-adcb1db52eb9@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <44ba59d6-39a5-4221-1ae6-41e5a305d316@redhat.com>
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paolo,
+Thanks Matthias,
 
-On Wed, Feb 12, 2020 at 01:25:30PM +0100, Paolo Bonzini wrote:
-> MIPS folks, I see that arch/mips/kvm/mmu.c uses pud_index, so it's not
-> clear to me if it's meant to only work if CONFIG_PGTABLE_LEVELS=4 or
-> it's just bit rot.  Should I add a "depends on PGTABLE_LEVEL=4" to
-> arch/mips/Kconfig?
+On 2/11/20 5:15 PM, Matthias Brugger wrote:
+> [Adding MIPS people to the loop]
+>
+> On 01/02/2020 17:06, Mauro Condarelli wrote:
+>> Hi,
+>> I'm trying to enable MMC/SD access on a VoCore2 SOM (based on MT7628)
+>> using mtk_sd driver.
+>>
+>> Just enabling mtk_sd will bomb wit undefined function `clk_get_parent`;
+>> this can be trivially cured with:
+>>
+>> diff --git a/arch/mips/ralink/clk.c b/arch/mips/ralink/clk.c
+>> index 2f9d5acb38ea..930c2776f6fd 100644
+>> --- a/arch/mips/ralink/clk.c
+>> +++ b/arch/mips/ralink/clk.c
+>> @@ -85,3 +85,9 @@ void __init plat_time_init(void)
+>>         clk_put(clk);
+>>         timer_probe();
+>>  }
+>> +
+>> +struct clk *clk_get_parent(struct clk *clk)
+>> +{
+>> +       return NULL;
+>> +}
+>> +EXPORT_SYMBOL_GPL(clk_get_parent);
+>>
+>>
+>> Naive implementation fails runtime with ENOENT in
+>> devm_clk_get("10130000.mmc", "source") in spite of clock definition in .dts.
+>>
+>> I traced the problem to CONFIG_COMMON_CLK not being defined for RALINK.
+>> It cannot be enabled because it will lead to multiple definition of
+>> several clock-related functions (e.g.: `clk_get_rate`).
+>> I found completely disabling clock handling in mtk_sd.c leads to a (for
+>> me) fully working SD card.
+> That's probably because the boot FW already enables the clocks as needed...
+>
+>> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+>> index 7726dcf48f2c..464f64bea7c6 100644
+>> --- a/drivers/mmc/host/mtk-sd.c
+>> +++ b/drivers/mmc/host/mtk-sd.c
+>> @@ -730,18 +730,22 @@ static void msdc_set_timeout(struct msdc_host
+>> *host, u32 ns, u32 clks)
+>>  
+>>  static void msdc_gate_clock(struct msdc_host *host)
+>>  {
+>> +#ifdef CONFIG_COMMON_CLK
+>>      clk_disable_unprepare(host->src_clk_cg);
+>>      clk_disable_unprepare(host->src_clk);
+>>      clk_disable_unprepare(host->bus_clk);
+>>      clk_disable_unprepare(host->h_clk);
+>> +#endif
+>>  }
+>>  
+>>  static void msdc_ungate_clock(struct msdc_host *host)
+>>  {
+>> +#ifdef CONFIG_COMMON_CLK
+>>      clk_prepare_enable(host->h_clk);
+>>      clk_prepare_enable(host->bus_clk);
+>>      clk_prepare_enable(host->src_clk);
+>>      clk_prepare_enable(host->src_clk_cg);
+>> +#endif
+>>      while (!(readl(host->base + MSDC_CFG) & MSDC_CFG_CKSTB))
+>>          cpu_relax();
+>>  }
+>> @@ -2211,6 +2215,7 @@ static int msdc_drv_probe(struct platform_device
+>> *pdev)
+>>      if (ret)
+>>          goto host_free;
+>>  
+>> +#ifdef CONFIG_COMMON_CLK
+>>      host->src_clk = devm_clk_get(&pdev->dev, "source");
+>>      if (IS_ERR(host->src_clk)) {
+>>          ret = PTR_ERR(host->src_clk);
+>> @@ -2230,6 +2235,12 @@ static int msdc_drv_probe(struct platform_device
+>> *pdev)
+>>      host->src_clk_cg = devm_clk_get(&pdev->dev, "source_cg");
+>>      if (IS_ERR(host->src_clk_cg))
+>>          host->src_clk_cg = NULL;
+>> +#else
+>> +    host->src_clk = NULL;
+>> +    host->h_clk = NULL;
+>> +    host->bus_clk = NULL;
+>> +    host->src_clk_cg = NULL;
+>> +#endif
+>>  
+>>      host->irq = platform_get_irq(pdev, 0);
+>>      if (host->irq < 0) {
+>>
+>>
+>> ... but I'm unsure this hack-and-slash approach is the Right Thing to do ;)
+>>
+> I think the correct approach would be to write a clock driver which supports the
+> common clock framework.
+I'm afraid writing such a driver from scratch is over my time
+allowance (and, most likely, also above my technical skills).
+I can't, thus, volunteer for the task, but I'm surely available to help,
+both with coding, reviewing and testing, if deemed useful.
+Let me know if I can help somehow.
 
-I'm no expert on this bit of code, but I'm pretty sure the systems
-KVM/VZ has been used on the most internally had PGTABLE_LEVEL=3.
+> The arch/mips/ralink/clk.c basically overwrites any calls to this so that things
+> somehow work.
+I've seen this is an almost-empty shell, but I have only vague
+idea about what should actually be needed, sorry.
 
-I suspect this is actually a regression from commit 31168f033e37 ("mips:
-drop __pXd_offset() macros that duplicate pXd_index() ones"). Whilst
-that commit is correct that pud_index() & __pud_offset() are the same
-when pud_index() is actually provided, it doesn't take into account the
-__PAGETABLE_PUD_FOLDED case. There __pud_offset() was available but
-would always evaluate to zero, whereas pud_index() isn't defined...
+> Regards,
+> Matthias
+>
+>> As said: this works for me, but I would like to fix it properly and have
+>> the fix sent upstream together with my SoM defconfig.
+I am cooperating with U-Boot folks to port it to this board (and,
+apparently, with some success); I will check if some code can
+be ported from there as MMC/SD seems to be working.
 
-Thanks,
-    Paul
+>> Any hint welcome
+>> Regards
+>> Mauro Condarelli
+>>
+>> _______________________________________________
+>> Linux-mediatek mailing list
+>> Linux-mediatek@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+Best Regards
+Mauro Condarelli
+
