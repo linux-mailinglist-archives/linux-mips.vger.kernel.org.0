@@ -2,104 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4986F15AB90
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2020 16:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFD615AD6A
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2020 17:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727851AbgBLPAK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 Feb 2020 10:00:10 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.171]:27493 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727231AbgBLPAK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Feb 2020 10:00:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581519607;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=3yrlgbwpWQZTwSSfMKPtb8XHqELW1Q2VHBhevB4Ahuo=;
-        b=n429HJfv3UUpI05fIeMj5pZySRovNjCWs/mlTHPY+2+mACKh0bhGjfxbGJrfUAshNP
-        9bR6+nSvSeKKjaLtITuNv/9MnO0ssUXjkmrHv2umT4GRSLLNvZeHudT7H4V5c+z6N6EL
-        zgMBehjnm4A9DyQ40ciyNiO86Z2ga3HJiv6siiI7WFVggOo0gWCoLBhDRnBXsrDRcjPe
-        j1vvF8xgtYRJx9oEvrjFeqCde/2rsitarfdvVILBiwNaUWmpQTYU0jtBjKuXr5XB+zvU
-        BV4CJjcngBim0w6cHTw9yxthudI2coByo3DVCOatFrz+dM+xWKM1gTbEucs67OCYn8ro
-        T80A==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlSbXAgODw=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-        by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1CExt59j
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Wed, 12 Feb 2020 15:59:55 +0100 (CET)
-Content-Type: text/plain; charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Subject: Re: i2c: jz4780: silence log flood on txabrt
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20200212145356.GB2492@ninjato>
-Date:   Wed, 12 Feb 2020 15:59:55 +0100
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Alex Smith <alex.smith@imgtec.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        =?utf-8?Q?Petr_=C5=A0tetiar?= <ynezz@true.cz>,
-        Richard Fontana <rfontana@redhat.com>,
-        Allison Randal <allison@lohutok.net>,
-        Stephen Boyd <swboyd@chromium.org>, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        letux-kernel@openphoenux.org, kernel@pyra-handheld.com
-Content-Transfer-Encoding: 7bit
-Message-Id: <0C9F4243-159B-418C-B481-4B45B210F9F6@goldelico.com>
-References: <cover.1581457290.git.hns@goldelico.com> <7facef52af9cff6ebe26ff321a7fd4f1ac640f74.1581457290.git.hns@goldelico.com> <20200212094628.GB1143@ninjato> <213C52CC-E5DC-4641-BE68-3D5C4FEA1FB5@goldelico.com> <20200212145356.GB2492@ninjato>
-To:     Wolfram Sang <wsa@the-dreams.de>
-X-Mailer: Apple Mail (2.3124)
+        id S1728575AbgBLQaO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 Feb 2020 11:30:14 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:38628 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727439AbgBLQaN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Feb 2020 11:30:13 -0500
+Received: by mail-pl1-f195.google.com with SMTP id t6so1150603plj.5;
+        Wed, 12 Feb 2020 08:30:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1IlVs+PoyqskVeOryq4nWg0BV3ImUVF+jcq3kxeboTk=;
+        b=jgjqfu+MGvVk/djwqmpMh+YXZSNvoqlNm7J1vPLx6BjvwWiupsIax8Rfuj01WRBSzE
+         Q5bnRMRZzTulTZifiRb66wgYUbJEEBT7KxbE9uS5mbfVA0lwRmr7aUXUPLn39jtRGcCH
+         6ZjxCftEQI09ldAaWF9X9htWJIZBAZGpC5ytkHexgDUbW2NXcGYLKXElRKLAg5HRGCth
+         lu+0F7c/7USoLo6uylTzLIl+Czj/lT2iPI7WvfrWtuhAfy5UdC4U3Amp8co/EmgsIXaj
+         8TxYmGPkWr+P+khIhzBEPepji1QakrW/U7Lb93qJNRTP3OVZaxddoltw2z/uu1iHYSc5
+         ceVg==
+X-Gm-Message-State: APjAAAXA++fLwSJVg0QVMTSe+4G95EhkJQc0PtsW+ErVO0RUgey2zZSp
+        GO2MK7+gAqNNWUQqXtg5Mb0=
+X-Google-Smtp-Source: APXvYqx5Wx6WVU8t/C3lzNyGG1nBbFeYXoZreqRsnGRq3J0F0tUSVkJseGopg+0FRqyzGnmuRBdpPg==
+X-Received: by 2002:a17:902:d692:: with SMTP id v18mr9369625ply.9.1581525011511;
+        Wed, 12 Feb 2020 08:30:11 -0800 (PST)
+Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
+        by smtp.gmail.com with ESMTPSA id j14sm968499pgs.57.2020.02.12.08.30.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Feb 2020 08:30:10 -0800 (PST)
+Date:   Wed, 12 Feb 2020 08:30:04 -0800
+From:   Paul Burton <paulburton@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        linux-mips@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>
+Subject: Re: [PATCH RFC 0/4] KVM: MIPS: Provide arch-specific
+ kvm_flush_remote_tlbs()
+Message-ID: <20200212163004.cpd33ux4zslfc3es@lantea.localdomain>
+References: <20200207223520.735523-1-peterx@redhat.com>
+ <44ba59d6-39a5-4221-1ae6-41e5a305d316@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <44ba59d6-39a5-4221-1ae6-41e5a305d316@redhat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Paolo,
 
-> Am 12.02.2020 um 15:53 schrieb Wolfram Sang <wsa@the-dreams.de>:
-> 
-> Hi,
-> 
->>> Sorry, normally I don't do counter patches. Yet, this time I realized
->>> that it would be faster to actually do what I envisioned than to
->>> describe it in words. I hope you don't feel offended.
->> 
->> No problem. I had thought a little about that myself, but did not
->> dare to solve more than my problem...
-> 
-> Glad you like it. Well, it still kinda solves your problem only, because
-> there are still too many dev_err in there, but I think this is good
-> enough for now.
-> 
->>> Obviously, I can't test, does it work for you?
->> 
->> Yes,it works.
-> 
-> Good!
-> 
->> Do you want to push your patch yourself, or should I add it to my
->> patch series and resubmit in a v2?
-> 
-> I'll apply the patch to my tree directly as a bugfix for 5.6. You can
-> drop the I2C list from V2 then.
+On Wed, Feb 12, 2020 at 01:25:30PM +0100, Paolo Bonzini wrote:
+> MIPS folks, I see that arch/mips/kvm/mmu.c uses pud_index, so it's not
+> clear to me if it's meant to only work if CONFIG_PGTABLE_LEVELS=4 or
+> it's just bit rot.  Should I add a "depends on PGTABLE_LEVEL=4" to
+> arch/mips/Kconfig?
 
-Ok, fine.
+I'm no expert on this bit of code, but I'm pretty sure the systems
+KVM/VZ has been used on the most internally had PGTABLE_LEVEL=3.
 
-BR and thanks,
-Nikolaus
+I suspect this is actually a regression from commit 31168f033e37 ("mips:
+drop __pXd_offset() macros that duplicate pXd_index() ones"). Whilst
+that commit is correct that pud_index() & __pud_offset() are the same
+when pud_index() is actually provided, it doesn't take into account the
+__PAGETABLE_PUD_FOLDED case. There __pud_offset() was available but
+would always evaluate to zero, whereas pud_index() isn't defined...
 
+Thanks,
+    Paul
