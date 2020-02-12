@@ -2,133 +2,172 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EDC15AA18
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2020 14:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 663CF15AB39
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2020 15:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727790AbgBLNdB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 Feb 2020 08:33:01 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:60750 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727698AbgBLNdB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Feb 2020 08:33:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1581514381;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e4bOQL/UoLkr49ZKqo0O/BFOCGX6CyzTc0e1NCwjejI=;
-        b=MjM8WkGL4NEySplijAg9DJXyBLoUFgTqhfM4fD5q670pAtRBbQtJgtWyzcDYmsugb/nV4e
-        tyDrpTW1ug1/Nt4CL/7CfQUtwYlYiGylfT/xNCcYBHliSc/rPKK0g/mzSKZpFJgnBK/br6
-        wOyKv27DDFQr/NrThpFnJsvAwd7e/Yg=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-237-HCgvpZUUM8azGFJGMF-Nmg-1; Wed, 12 Feb 2020 08:32:59 -0500
-X-MC-Unique: HCgvpZUUM8azGFJGMF-Nmg-1
-Received: by mail-wm1-f72.google.com with SMTP id 7so714291wmf.9
-        for <linux-mips@vger.kernel.org>; Wed, 12 Feb 2020 05:32:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=e4bOQL/UoLkr49ZKqo0O/BFOCGX6CyzTc0e1NCwjejI=;
-        b=qpWBjDcezkVGKDKmTYLMh/+0mZM1ryRFLQF+IO7l/c2RwTcs68Kx5Rp0KcYbq04J2j
-         BbpkQiFNjmLUeqDAp3MtfWJJfLyK+nsQdebFJ1q/blZewjTxgCugCwkd4A0tk0hhRwA9
-         zW5TVs7OAhKIyq3bBwhaWlChh0t9CU85Bag32hoKJZV5MWAbWriMNevJbFX+nFH4Yc6K
-         9Bkm/OxCbLOdjGYAAzDnpxrT6mIyOASILvpRM3hRKj8GczyS1Cp2o6AvxlxyLsZcHu2P
-         HDKVZW2t+LxNN3SlMxBA2+WfrgnTQVVObdPHUH726iGDOmnJ5JNFYNCT7qrtC04l4Tyf
-         lQ+Q==
-X-Gm-Message-State: APjAAAXDLrDTMgYWH/ngqWEyqJ6oWbV5JmoK48+qCD6WiTp6N+wzYrcZ
-        HXMtQTpWR4ElJBmlnNGvOHXLUNiVbw5pMpciLYaiF+PcnEwRmvEt6QLxmdRLTk9q041LfjBXCpm
-        aUoy2+eWebeJmUo1k4HpEXA==
-X-Received: by 2002:a1c:a382:: with SMTP id m124mr12809069wme.90.1581514378071;
-        Wed, 12 Feb 2020 05:32:58 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxAiJj4wSVeSVUkZduqtNVDQSCnCIY2kaA/PLl2NFBnzNHI2iwUhcPTT8a9mdJu8hwpEpD2/Q==
-X-Received: by 2002:a1c:a382:: with SMTP id m124mr12809048wme.90.1581514377743;
-        Wed, 12 Feb 2020 05:32:57 -0800 (PST)
-Received: from ?IPv6:2001:b07:6468:f312:652c:29a6:517b:66d9? ([2001:b07:6468:f312:652c:29a6:517b:66d9])
-        by smtp.gmail.com with ESMTPSA id a198sm768814wme.12.2020.02.12.05.32.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Feb 2020 05:32:56 -0800 (PST)
-Subject: Re: [PATCH RFC 1/4] KVM: Provide kvm_flush_remote_tlbs_common()
-To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     Sean Christopherson <sean.j.christopherson@intel.com>,
-        linux-mips@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>
-References: <20200207223520.735523-1-peterx@redhat.com>
- <20200207223520.735523-2-peterx@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <c83a9193-d91b-0f64-d0c9-40b2bad86bdc@redhat.com>
-Date:   Wed, 12 Feb 2020 14:33:02 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
-MIME-Version: 1.0
-In-Reply-To: <20200207223520.735523-2-peterx@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1728384AbgBLOqg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 Feb 2020 09:46:36 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:12465 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727092AbgBLOqf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 Feb 2020 09:46:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581518792;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=eF0eU+wT6Jz3VQhXmG5csiS9c3rSC4Z9DeL2XQYqdFw=;
+        b=SCsGmzWDrloScq92rU+PXSYfAOu0RbAOZ7agPUad+rT+j1Pxyx3f5duf4L0nRwk5mq
+        Ms349kTulXSgOtFYrxgy9fRdKaWvGo0wMPOlBKgA/pdpUcHZWVOVcazrl+v76CBuSx6n
+        fqmnkzGxlu0fKPkrsui8bbTF7FagUzUESnORojltiAyJMRDel7TpT7MuBuRyfIbEc2sd
+        Bos3qm9owufelou5Uk9Ov8wjoATpYpUcoOtCJ6aB4JfFhJGFr9rztH/9K9rzw3OEKwXh
+        Jf83TygUD4bZ55MZBFg7838F0xDjroI2h4ynbVy5iGY/wF5aNlIa8aO6Y7EmCXVunOWf
+        KqIg==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlSbXAgODw=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+        by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
+        with ESMTPSA id U06217w1CEkJ4uk
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Wed, 12 Feb 2020 15:46:19 +0100 (CET)
+Content-Type: text/plain; charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Subject: Re: i2c: jz4780: silence log flood on txabrt
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <20200212094628.GB1143@ninjato>
+Date:   Wed, 12 Feb 2020 15:46:19 +0100
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Alex Smith <alex.smith@imgtec.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        =?utf-8?Q?Petr_=C5=A0tetiar?= <ynezz@true.cz>,
+        Richard Fontana <rfontana@redhat.com>,
+        Allison Randal <allison@lohutok.net>,
+        Stephen Boyd <swboyd@chromium.org>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        letux-kernel@openphoenux.org, kernel@pyra-handheld.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <213C52CC-E5DC-4641-BE68-3D5C4FEA1FB5@goldelico.com>
+References: <cover.1581457290.git.hns@goldelico.com> <7facef52af9cff6ebe26ff321a7fd4f1ac640f74.1581457290.git.hns@goldelico.com> <20200212094628.GB1143@ninjato>
+To:     Wolfram Sang <wsa@the-dreams.de>
+X-Mailer: Apple Mail (2.3124)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 07/02/20 23:35, Peter Xu wrote:
-> It's exactly kvm_flush_remote_tlbs() now but a internal wrapper of the
-> common code path.  With this, an arch can then optionally select
-> CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL=y and will be able to use the
-> common flushing code.
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
+Hi,
 
-Slightly more efficient, making it an inline function:
+> Am 12.02.2020 um 10:46 schrieb Wolfram Sang <wsa@the-dreams.de>:
+>=20
+>=20
+> The printout for txabrt is way too talkative. Reduce it to the =
+minimum,
+> the rest can be gained by I2C core debugging and datasheet =
+information.
+> Also, make it a debug printout, it won't help the regular user.
+>=20
+> Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+> ---
+>=20
+> Sorry, normally I don't do counter patches. Yet, this time I realized
+> that it would be faster to actually do what I envisioned than to
+> describe it in words. I hope you don't feel offended.
 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index e89eb67356cb..f92180eeffc6 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -802,9 +802,18 @@ int kvm_vcpu_write_guest(struct kvm_vcpu *vcpu, gpa_t gpa, const void *data,
- int kvm_vcpu_yield_to(struct kvm_vcpu *target);
- void kvm_vcpu_on_spin(struct kvm_vcpu *vcpu, bool usermode_vcpu_not_eligible);
- 
--void kvm_flush_remote_tlbs(struct kvm *kvm);
-+void kvm_flush_remote_tlbs_common(struct kvm *kvm);
- void kvm_reload_remote_mmus(struct kvm *kvm);
- 
-+#ifdef CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
-+void kvm_flush_remote_tlbs(struct kvm *kvm);
-+#else
-+static inline void kvm_flush_remote_tlbs(struct kvm *kvm)
-+{
-+	kvm_flush_remote_tlbs_common(kvm);
-+}
-+#endif
-+
- bool kvm_make_vcpus_request_mask(struct kvm *kvm, unsigned int req,
- 				 unsigned long *vcpu_bitmap, cpumask_var_t tmp);
- bool kvm_make_all_cpus_request(struct kvm *kvm, unsigned int req);
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 70f03ce0e5c1..027259af883e 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -303,8 +303,7 @@ bool kvm_make_all_cpus_request(struct kvm *kvm, unsigned int req)
- 	return called;
- }
- 
--#ifndef CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL
--void kvm_flush_remote_tlbs(struct kvm *kvm)
-+void kvm_flush_remote_tlbs_common(struct kvm *kvm)
- {
- 	/*
- 	 * Read tlbs_dirty before setting KVM_REQ_TLB_FLUSH in
-@@ -328,8 +327,7 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
- 		++kvm->stat.remote_tlb_flush;
- 	cmpxchg(&kvm->tlbs_dirty, dirty_count, 0);
- }
--EXPORT_SYMBOL_GPL(kvm_flush_remote_tlbs);
--#endif
-+EXPORT_SYMBOL_GPL(kvm_flush_remote_tlbs_common);
- 
- void kvm_reload_remote_mmus(struct kvm *kvm)
- {
+No problem. I had thought a little about that myself, but did not
+dare to solve more than my problem...
+
+> This driver has
+> way too many dev_err anyhow, so this may be a start.
+>=20
+> Obviously, I can't test, does it work for you?
+
+Yes,it works.
+
+Do you want to push your patch yourself, or should I add it to my
+patch series and resubmit in a v2?
+
+BR and thanks,
+Nikolaus
+
+>=20
+> drivers/i2c/busses/i2c-jz4780.c | 36 ++-------------------------------
+> 1 file changed, 2 insertions(+), 34 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-jz4780.c =
+b/drivers/i2c/busses/i2c-jz4780.c
+> index 16a67a64284a..b426fc956938 100644
+> --- a/drivers/i2c/busses/i2c-jz4780.c
+> +++ b/drivers/i2c/busses/i2c-jz4780.c
+> @@ -78,25 +78,6 @@
+>=20
+> #define X1000_I2C_DC_STOP		BIT(9)
+>=20
+> -static const char * const jz4780_i2c_abrt_src[] =3D {
+> -	"ABRT_7B_ADDR_NOACK",
+> -	"ABRT_10ADDR1_NOACK",
+> -	"ABRT_10ADDR2_NOACK",
+> -	"ABRT_XDATA_NOACK",
+> -	"ABRT_GCALL_NOACK",
+> -	"ABRT_GCALL_READ",
+> -	"ABRT_HS_ACKD",
+> -	"SBYTE_ACKDET",
+> -	"ABRT_HS_NORSTRT",
+> -	"SBYTE_NORSTRT",
+> -	"ABRT_10B_RD_NORSTRT",
+> -	"ABRT_MASTER_DIS",
+> -	"ARB_LOST",
+> -	"SLVFLUSH_TXFIFO",
+> -	"SLV_ARBLOST",
+> -	"SLVRD_INTX",
+> -};
+> -
+> #define JZ4780_I2C_INTST_IGC		BIT(11)
+> #define JZ4780_I2C_INTST_ISTT		BIT(10)
+> #define JZ4780_I2C_INTST_ISTP		BIT(9)
+> @@ -576,21 +557,8 @@ static irqreturn_t jz4780_i2c_irq(int irqno, void =
+*dev_id)
+>=20
+> static void jz4780_i2c_txabrt(struct jz4780_i2c *i2c, int src)
+> {
+> -	int i;
+> -
+> -	dev_err(&i2c->adap.dev, "txabrt: 0x%08x\n", src);
+> -	dev_err(&i2c->adap.dev, "device addr=3D%x\n",
+> -		jz4780_i2c_readw(i2c, JZ4780_I2C_TAR));
+> -	dev_err(&i2c->adap.dev, "send cmd count:%d  %d\n",
+> -		i2c->cmd, i2c->cmd_buf[i2c->cmd]);
+> -	dev_err(&i2c->adap.dev, "receive data count:%d  %d\n",
+> -		i2c->cmd, i2c->data_buf[i2c->cmd]);
+> -
+> -	for (i =3D 0; i < 16; i++) {
+> -		if (src & BIT(i))
+> -			dev_dbg(&i2c->adap.dev, "I2C TXABRT[%d]=3D%s\n",
+> -				i, jz4780_i2c_abrt_src[i]);
+> -	}
+> +	dev_dbg(&i2c->adap.dev, "txabrt: 0x%08x, cmd: %d, send: %d, =
+recv: %d\n",
+> +		src, i2c->cmd, i2c->cmd_buf[i2c->cmd], =
+i2c->data_buf[i2c->cmd]);
+> }
+>=20
+> static inline int jz4780_i2c_xfer_read(struct jz4780_i2c *i2c,
+> --=20
+> 2.20.1
+>=20
 
