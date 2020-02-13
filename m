@@ -2,88 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B9B15C2D2
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Feb 2020 16:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7DD15C5CC
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Feb 2020 17:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728451AbgBMPgm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Feb 2020 10:36:42 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:48818 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728323AbgBMPgm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Feb 2020 10:36:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1581608199; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iKjxGSNeDcBxV7nToyUB21fty1jGDd6Iqnl1fd+HIIs=;
-        b=lZb8yl9UE96+GZJeqOksy6FWcEmxfRWcQ8G1i7Uov8S3xUG/5lRVgtUj/zS/OhZtmeBWLB
-        FWrbkP0mQj0jo80+qDUKri5z6y+0byDkV9qvtXj1cpNskfQR1RZkjcbsnsh4mcZhRLJVf0
-        AQMrw9RHFpT9Tyqtg+NM0+A8QffhHEo=
-Date:   Thu, 13 Feb 2020 12:36:22 -0300
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 4/7] MIPS: jz4740: Replace <linux/clk-provider.h> by
- <linux/of_clk.h>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        id S1728872AbgBMPY6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 13 Feb 2020 10:24:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39614 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728869AbgBMPY6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 13 Feb 2020 10:24:58 -0500
+Received: from localhost (unknown [104.132.1.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 306AC246C0;
+        Thu, 13 Feb 2020 15:24:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581607497;
+        bh=zSg6T09HqcBiqYeTqt4FTCQO6B5h/IbyxlbEvz0yLW8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=xQ4LtvXRi8Ex3Xa/t6/YwEktHJCrzcny16RXETW0HiMdW36jHLxLc9Awi4qT+AJQJ
+         80NOChK5pIkVRPijkAXW35lNRc8wycUiseKosC8xjJFK9Bgir20kalO3YMGGpazAdp
+         5FIGoA0g8orX02QV4h1YSXEkZHp0/JjOIgZTRkk0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Alexander Lobakin <alobakin@dlink.ru>,
         Paul Burton <paulburton@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        James Hartley <james.hartley@sondrel.com>,
-        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <1581608182.3.0@crapouillou.net>
-In-Reply-To: <20200212101544.8793-5-geert+renesas@glider.be>
-References: <20200212101544.8793-1-geert+renesas@glider.be>
-        <20200212101544.8793-5-geert+renesas@glider.be>
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Rob Herring <robh@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH 4.14 032/173] MIPS: fix indentation of the RELOCS message
+Date:   Thu, 13 Feb 2020 07:18:55 -0800
+Message-Id: <20200213151941.675722065@linuxfoundation.org>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200213151931.677980430@linuxfoundation.org>
+References: <20200213151931.677980430@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+From: Alexander Lobakin <alobakin@dlink.ru>
 
+commit a53998802e178451701d59d38e36f551422977ba upstream.
 
-Le mer., f=E9vr. 12, 2020 at 11:15, Geert Uytterhoeven=20
-<geert+renesas@glider.be> a =E9crit :
-> The Ingenic JZ4740 platform code is not a clock provider, and just=20
-> needs
-> to call of_clk_init().
->=20
-> Hence it can include <linux/of_clk.h> instead of=20
-> <linux/clk-provider.h>.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+quiet_cmd_relocs lacks a whitespace which results in:
 
-Looks good to me.
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+  LD      vmlinux
+  SORTEX  vmlinux
+  SYSMAP  System.map
+  RELOCS vmlinux
+  Building modules, stage 2.
+  MODPOST 64 modules
 
+After this patch:
 
-> ---
->  arch/mips/jz4740/time.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/mips/jz4740/time.c b/arch/mips/jz4740/time.c
-> index 5476899f0882a4b4..605a84a250bfb299 100644
-> --- a/arch/mips/jz4740/time.c
-> +++ b/arch/mips/jz4740/time.c
-> @@ -4,8 +4,8 @@
->   *  JZ4740 platform time support
->   */
->=20
-> -#include <linux/clk-provider.h>
->  #include <linux/clocksource.h>
-> +#include <linux/of_clk.h>
->=20
->  #include <asm/mach-jz4740/timer.h>
->=20
-> --
-> 2.17.1
->=20
+  LD      vmlinux
+  SORTEX  vmlinux
+  SYSMAP  System.map
+  RELOCS  vmlinux
+  Building modules, stage 2.
+  MODPOST 64 modules
 
-=
+Typo is present in kernel tree since the introduction of relocatable
+kernel support in commit e818fac595ab ("MIPS: Generate relocation table
+when CONFIG_RELOCATABLE"), but the relocation scripts were moved to
+Makefile.postlink later with commit 44079d3509ae ("MIPS: Use
+Makefile.postlink to insert relocations into vmlinux").
+
+Fixes: 44079d3509ae ("MIPS: Use Makefile.postlink to insert relocations into vmlinux")
+Cc: <stable@vger.kernel.org> # v4.11+
+Signed-off-by: Alexander Lobakin <alobakin@dlink.ru>
+[paulburton@kernel.org: Fixup commit references in commit message.]
+Signed-off-by: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+---
+ arch/mips/Makefile.postlink |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/arch/mips/Makefile.postlink
++++ b/arch/mips/Makefile.postlink
+@@ -12,7 +12,7 @@ __archpost:
+ include scripts/Kbuild.include
+ 
+ CMD_RELOCS = arch/mips/boot/tools/relocs
+-quiet_cmd_relocs = RELOCS $@
++quiet_cmd_relocs = RELOCS  $@
+       cmd_relocs = $(CMD_RELOCS) $@
+ 
+ # `@true` prevents complaint when there is nothing to be done
+
 
