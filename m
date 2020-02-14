@@ -2,127 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E154515CA9E
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Feb 2020 19:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06DF415DCF0
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2020 16:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727725AbgBMSo7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 13 Feb 2020 13:44:59 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:39409 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725781AbgBMSo6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 13 Feb 2020 13:44:58 -0500
-Received: by mail-oi1-f193.google.com with SMTP id z2so6828929oih.6;
-        Thu, 13 Feb 2020 10:44:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=VMfn8PswbJmJdlO37QEJbyEduZmdzRHRACLwl4PEk8k=;
-        b=rXsK2+iVg+xAfKgvi8EJ+xRiZDZt0bawe08UY4AzUK/QxcpXAUmYzPuw5Qe7XCMnPS
-         tZmzuVkVUVXxEupPwU/YXXodbsdKtthv4T+BBBq8URGrUJ1o7hAfIh0Sd9dohGvv5EIQ
-         f53iQUD4rXqVzeH6ddG3CL1x4L51BMbJzNbBLADFJYxR4/0bW/ybjDX/REtyW/700YaR
-         5oseD972Bfj3ZCtTInx+MQVCKJbE8Hka8ka9o7uuUqI5tAlVmhZ/zt5x5KcBppLqgUBF
-         U6UrSKM3wIKl8sXU0LUGs+T/ABgd9EWNoteBxkwYi/Wo3FlcS8spkr8gU1uTDGoDHDgc
-         O3jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=VMfn8PswbJmJdlO37QEJbyEduZmdzRHRACLwl4PEk8k=;
-        b=qUumq25N5+qeblBsL+BZkYd+56+/WLJDa1vrHR4ZzTz8ihhD2iQIeB6sJgVWuj8JGH
-         hjswJHeCBU5egAiyZhfcsQi8tC7i+t6Pl0vWldvbvCiEUlc/yIN6qbb4dlLJCs/7uuvS
-         l+63VmGmxX678/+6F+DIyIX0LZYb9uZACodEN0i1Zfjwegj8qhd+/gv4RMM48f98tMTQ
-         8VixzxEUrRr1DapnfW7kmSI4qIrNVHgNzCKXXUozn1dCBaNTrtJnTz3paa9n+DsGjoLC
-         4e8Ybn/HdEmKMWqkkE3FU/cO5X3ba2uCyB6s2MSRNUwLVgGH9QHPASf7xurbkafIs2VO
-         5u0A==
-X-Gm-Message-State: APjAAAXUN6fOtbn3+jghYF8eUo+vA+yk4CDTLuIhf3b11ZnhcKiIZLr5
-        7t/W3pb5o12M9eRxUvasglc=
-X-Google-Smtp-Source: APXvYqynTIfheT81Tmv6YGZbDN/SxN5IZ1aShJnYqGSRbGS5am4J0OAyqhZh6lHjOP9ROpiUTekYoA==
-X-Received: by 2002:a05:6808:218:: with SMTP id l24mr3689993oie.108.1581619496475;
-        Thu, 13 Feb 2020 10:44:56 -0800 (PST)
-Received: from ubuntu-m2-xlarge-x86 ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id q5sm951383oia.21.2020.02.13.10.44.55
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 13 Feb 2020 10:44:56 -0800 (PST)
-Date:   Thu, 13 Feb 2020 11:44:54 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        clang-built-linux@googlegroups.com, x86@kernel.org,
-        catalin.marinas@arm.com, will.deacon@arm.com, arnd@arndb.de,
-        linux@armlinux.org.uk, paul.burton@mips.com, tglx@linutronix.de,
-        luto@kernel.org, mingo@redhat.com, bp@alien8.de, sboyd@kernel.org,
-        salyzyn@android.com, pcc@google.com, 0x7f454c46@gmail.com,
-        ndesaulniers@google.com, avagin@openvz.org
-Subject: Re: [PATCH 19/19] arm64: vdso32: Enable Clang Compilation
-Message-ID: <20200213184454.GA4663@ubuntu-m2-xlarge-x86>
-References: <20200213161614.23246-1-vincenzo.frascino@arm.com>
- <20200213161614.23246-20-vincenzo.frascino@arm.com>
+        id S2387869AbgBNP4e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 Feb 2020 10:56:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38386 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387858AbgBNP4d (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:56:33 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3147B24654;
+        Fri, 14 Feb 2020 15:56:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581695792;
+        bh=3wGW2BrunnOgr3U/ABE1pDq4qPc9Y4WepmDP45PXgNs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MNc/SvIhgdJ2jd1P2vPZh7PXLAPS+QejE4UNR8kaNkyGSPXqSTaHIuV06sgzEon9i
+         8cnYtf+ylw//A/vwcDSeeEa4kdj3oHiXHJjSDw9Y4P/wMD+tL8T1Hul0KqRSYH4a91
+         4q2FF1AsrU5IpnBpqiKPQMcpTOp5w8wgdMN2NYCg=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Reto Schneider <reto.schneider@husqvarnagroup.com>,
+        Stefan Roese <sr@denx.de>, Paul Burton <paul.burton@mips.com>,
+        Paul Burton <paulburton@kernel.org>,
+        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.5 354/542] MIPS: ralink: dts: gardena_smart_gateway_mt7688: Limit UART1
+Date:   Fri, 14 Feb 2020 10:45:46 -0500
+Message-Id: <20200214154854.6746-354-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
+References: <20200214154854.6746-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200213161614.23246-20-vincenzo.frascino@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Feb 13, 2020 at 04:16:14PM +0000, Vincenzo Frascino wrote:
-> Enable Clang Compilation for the vdso32 library.
-> 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> ---
->  arch/arm64/kernel/vdso32/Makefile | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
-> index 04df57b43cb1..209639101044 100644
-> --- a/arch/arm64/kernel/vdso32/Makefile
-> +++ b/arch/arm64/kernel/vdso32/Makefile
-> @@ -11,8 +11,10 @@ include $(srctree)/lib/vdso/Makefile
->  # Same as cc-*option, but using CC_COMPAT instead of CC
->  ifeq ($(CONFIG_CC_IS_CLANG), y)
->  CC_COMPAT ?= $(CC)
-> +LD_COMPAT ?= $(CROSS_COMPILE_COMPAT)gcc
+From: Reto Schneider <reto.schneider@husqvarnagroup.com>
 
-Well this is unfortunate :/
+[ Upstream commit e8c192011c920517e5578d51c7aff0ecadd25de3 ]
 
-It looks like adding the --target flag to VDSO_LDFLAGS allows
-clang to link the vDSO just fine although it does warn that -nostdinc
-is unused:
+The radio module asserts CTS when its RX buffer has 10 bytes left.
+Putting just 8 instead of 16 bytes into the UART1 TX buffer on the Linux
+side ensures to not overflow the RX buffer on the radio module side.
 
-clang-11: warning: argument unused during compilation: '-nostdinc'
-[-Wunused-command-line-argument]
+Signed-off-by: Reto Schneider <reto.schneider@husqvarnagroup.com>
+Signed-off-by: Stefan Roese <sr@denx.de>
+Cc: Paul Burton <paul.burton@mips.com>
+Signed-off-by: Paul Burton <paulburton@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts | 3 +++
+ 1 file changed, 3 insertions(+)
 
-It would be nice if the logic of commit fe00e50b2db8 ("ARM: 8858/1:
-vdso: use $(LD) instead of $(CC) to link VDSO") could be adopted here
-but I get that this Makefile is its own beast :) at the very least, I
-think that the --target flag should be added to VDSO_LDFLAGS so that gcc
-is not a requirement for this but I am curious if you tried that already
-and noticed any issues with it.
+diff --git a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
+index aa5caaa311047..aad9a8a8669b4 100644
+--- a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
++++ b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
+@@ -177,6 +177,9 @@
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinmux_i2s_gpio>;		/* GPIO0..3 */
+ 
++	fifo-size = <8>;
++	tx-threshold = <8>;
++
+ 	rts-gpios = <&gpio 1 GPIO_ACTIVE_LOW>;
+ 	cts-gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
+ };
+-- 
+2.20.1
 
-Cheers,
-Nathan
-
->  else
->  CC_COMPAT ?= $(CROSS_COMPILE_COMPAT)gcc
-> +LD_COMPAT ?= $(CC_COMPAT)
->  endif
->  
->  cc32-option = $(call try-run,\
-> @@ -171,7 +173,7 @@ quiet_cmd_vdsold_and_vdso_check = LD32    $@
->        cmd_vdsold_and_vdso_check = $(cmd_vdsold); $(cmd_vdso_check)
->  
->  quiet_cmd_vdsold = LD32    $@
-> -      cmd_vdsold = $(CC_COMPAT) -Wp,-MD,$(depfile) $(VDSO_LDFLAGS) \
-> +      cmd_vdsold = $(LD_COMPAT) -Wp,-MD,$(depfile) $(VDSO_LDFLAGS) \
->                     -Wl,-T $(filter %.lds,$^) $(filter %.o,$^) -o $@
->  quiet_cmd_vdsocc = CC32    $@
->        cmd_vdsocc = $(CC_COMPAT) -Wp,-MD,$(depfile) $(VDSO_CFLAGS) -c -o $@ $<
-> -- 
-> 2.25.0
-> 
