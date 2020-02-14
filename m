@@ -2,41 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DF415DCF0
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2020 16:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F6115DE3E
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2020 17:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387869AbgBNP4e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Feb 2020 10:56:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38386 "EHLO mail.kernel.org"
+        id S2389559AbgBNQDI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 Feb 2020 11:03:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49952 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387858AbgBNP4d (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:56:33 -0500
+        id S2389550AbgBNQDH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:03:07 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3147B24654;
-        Fri, 14 Feb 2020 15:56:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5DCFC24654;
+        Fri, 14 Feb 2020 16:03:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695792;
-        bh=3wGW2BrunnOgr3U/ABE1pDq4qPc9Y4WepmDP45PXgNs=;
+        s=default; t=1581696187;
+        bh=SADULr2v8CoS9zmj1WlBhdagSQ+W/CvrBu4siprNm2E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MNc/SvIhgdJ2jd1P2vPZh7PXLAPS+QejE4UNR8kaNkyGSPXqSTaHIuV06sgzEon9i
-         8cnYtf+ylw//A/vwcDSeeEa4kdj3oHiXHJjSDw9Y4P/wMD+tL8T1Hul0KqRSYH4a91
-         4q2FF1AsrU5IpnBpqiKPQMcpTOp5w8wgdMN2NYCg=
+        b=jdG+HDEZJbo6Dw/egrZwLbcIDvCbqxzCLBxCULMR+jpkGgcdnQZMfDzGBBdoSEa7M
+         5I7PEbxqInQ417938gocuHuyKp1xW+SOxKo47LoHe6oyarAj4KEWy0qgx9yZ0L7RH9
+         okIZm56215X3iQGAyBdTX/KG1N//mUSj58FqoX9U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Reto Schneider <reto.schneider@husqvarnagroup.com>,
-        Stefan Roese <sr@denx.de>, Paul Burton <paul.burton@mips.com>,
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
         Paul Burton <paulburton@kernel.org>,
-        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.5 354/542] MIPS: ralink: dts: gardena_smart_gateway_mt7688: Limit UART1
-Date:   Fri, 14 Feb 2020 10:45:46 -0500
-Message-Id: <20200214154854.6746-354-sashal@kernel.org>
+        Ralf Baechle <ralf@linux-mips.org>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 056/459] MIPS: Loongson: Fix potential NULL dereference in loongson3_platform_init()
+Date:   Fri, 14 Feb 2020 10:55:06 -0500
+Message-Id: <20200214160149.11681-56-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
-References: <20200214154854.6746-1-sashal@kernel.org>
+In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
+References: <20200214160149.11681-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -46,38 +46,40 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Reto Schneider <reto.schneider@husqvarnagroup.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-[ Upstream commit e8c192011c920517e5578d51c7aff0ecadd25de3 ]
+[ Upstream commit 72d052e28d1d2363f9107be63ef3a3afdea6143c ]
 
-The radio module asserts CTS when its RX buffer has 10 bytes left.
-Putting just 8 instead of 16 bytes into the UART1 TX buffer on the Linux
-side ensures to not overflow the RX buffer on the radio module side.
+If kzalloc fails, it should return -ENOMEM, otherwise may trigger a NULL
+pointer dereference.
 
-Signed-off-by: Reto Schneider <reto.schneider@husqvarnagroup.com>
-Signed-off-by: Stefan Roese <sr@denx.de>
-Cc: Paul Burton <paul.burton@mips.com>
+Fixes: 3adeb2566b9b ("MIPS: Loongson: Improve LEFI firmware interface")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 Signed-off-by: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Huacai Chen <chenhc@lemote.com>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts | 3 +++
+ arch/mips/loongson64/loongson-3/platform.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-index aa5caaa311047..aad9a8a8669b4 100644
---- a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-+++ b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-@@ -177,6 +177,9 @@
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinmux_i2s_gpio>;		/* GPIO0..3 */
+diff --git a/arch/mips/loongson64/loongson-3/platform.c b/arch/mips/loongson64/loongson-3/platform.c
+index 13f3404f00300..9674ae1361a85 100644
+--- a/arch/mips/loongson64/loongson-3/platform.c
++++ b/arch/mips/loongson64/loongson-3/platform.c
+@@ -27,6 +27,9 @@ static int __init loongson3_platform_init(void)
+ 			continue;
  
-+	fifo-size = <8>;
-+	tx-threshold = <8>;
+ 		pdev = kzalloc(sizeof(struct platform_device), GFP_KERNEL);
++		if (!pdev)
++			return -ENOMEM;
 +
- 	rts-gpios = <&gpio 1 GPIO_ACTIVE_LOW>;
- 	cts-gpios = <&gpio 2 GPIO_ACTIVE_LOW>;
- };
+ 		pdev->name = loongson_sysconf.sensors[i].name;
+ 		pdev->id = loongson_sysconf.sensors[i].id;
+ 		pdev->dev.platform_data = &loongson_sysconf.sensors[i];
 -- 
 2.20.1
 
