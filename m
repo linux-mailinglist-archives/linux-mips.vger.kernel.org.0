@@ -2,34 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9795F15DFD4
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2020 17:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BA015DFD2
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2020 17:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391616AbgBNQKo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Feb 2020 11:10:44 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.168]:34182 "EHLO
+        id S2391613AbgBNQKn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 Feb 2020 11:10:43 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.83]:14012 "EHLO
         mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391571AbgBNQKn (ORCPT
+        with ESMTP id S2391573AbgBNQKn (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Feb 2020 11:10:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581696638;
         s=strato-dkim-0002; d=goldelico.com;
         h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=RzFvreAROfD8+Za4+h0pzFXVuRYDasxapojPV71TMVg=;
-        b=UGS4CVZespYZ0uCisY3LWO0PZnLe7Ngh77CmMpZl+Jsf4FnKJuFo9/bsmiIFLTPyQd
-        lZ3cm25jJ+vaFbsFZSenKS9WlMsfrjtMDB643pxCLxGF1azQ+MIcXyBdrmts5fgNeksl
-        /tiOEEUiXyc/QJk8LOJ5/ibhIW5Eq9ke7dQGdHoLqchMOUE9GHjyT2mG6LSdkbhkUd+b
-        YcSdIjvjW6ScmyL7KETKTQLppMUGtk7ja8jk9lVbfAyq8auBgb+8ZiJcF4xCHC0GWShf
-        Zc4OlgxwqnTjwFv4eQPEhm97FeFPcUKVu4vaav4uLbAzEi+XXJgys6lKdgmfW48sG3GF
-        FaUg==
+        bh=l2ioSw/GBEgoEsJDqdX898kUDDw9CYiqWmti4ETUA48=;
+        b=fqmZXBoIsAPESbIJWYhBGNmG3oQIKsP4I5KOyZmSJNJA9jy2pyfvQr0F3q20KRG0MB
+        ME5Ac97r0cY6547NuoWhzKAkCWwxXWSRzAcoNmApreiT4u5jKcX4yOjpZ68d+hOhsrfc
+        cNDKhHPt1YiomGPQ0mSWAhatUaYxzlS4ieanQRQK+dxui8YdfdbUojrZxqcuPUtqNSgw
+        dMPrtGUrCbd6ZwiR7pdPk3TagHKzBYXlPU2N24eYnSy+ZcBk/jtL3ImJtTsim3gapmJd
+        UoWZddH4FODlZXfDXS8WSQ5VTXKBHBOtYRGnfrVnm6hJM8RjbIacBkryLmeNHON45HX1
+        V+iw==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2M7OMfsfQx3"
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1EGARFkx
+        with ESMTPSA id U06217w1EGASFky
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Fri, 14 Feb 2020 17:10:27 +0100 (CET)
+        Fri, 14 Feb 2020 17:10:28 +0100 (CET)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     Paul Boddie <paul@boddie.org.uk>,
         Paul Cercueil <paul@crapouillou.net>,
@@ -46,9 +46,9 @@ To:     Paul Boddie <paul@boddie.org.uk>,
 Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         letux-kernel@openphoenux.org, kernel@pyra-handheld.com
-Subject: [PATCH v2 02/12] MIPS: DTS: jz4780: add #includes for irq.h and gpio.h
-Date:   Fri, 14 Feb 2020 17:10:14 +0100
-Message-Id: <9d1791de4af5fb669441b3b7c1cf3f7515490d67.1581696624.git.hns@goldelico.com>
+Subject: [PATCH v2 03/12] MIPS: CI20: defconfig: configure for supporting modules
+Date:   Fri, 14 Feb 2020 17:10:15 +0100
+Message-Id: <db4db9e0b024aa3051a6f1f7be07323418d1d453.1581696624.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <cover.1581696624.git.hns@goldelico.com>
 References: <cover.1581696624.git.hns@goldelico.com>
@@ -59,27 +59,24 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The constants from irq.h and gpio.h can be used in the
-jz4780.dtsi and derived DTS like ci20.dts.
+Not all drivers need to be compiled into the kernel.
+Support building and loading of kernel modules.
 
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/mips/configs/ci20_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-index f928329b034b..112a24deff71 100644
---- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-@@ -1,6 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <dt-bindings/clock/jz4780-cgu.h>
- #include <dt-bindings/dma/jz4780-dma.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
- 
- / {
- 	#address-cells = <1>;
+diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
+index be41df2a81fb..e0d3c9d4c2ae 100644
+--- a/arch/mips/configs/ci20_defconfig
++++ b/arch/mips/configs/ci20_defconfig
+@@ -1,4 +1,5 @@
+ # CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_MODULES=y
+ CONFIG_KERNEL_XZ=y
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
 -- 
 2.23.0
 
