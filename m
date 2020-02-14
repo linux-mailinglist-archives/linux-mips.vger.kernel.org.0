@@ -2,87 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8530D15EB32
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2020 18:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E296615EC9E
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2020 18:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394638AbgBNRTP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Feb 2020 12:19:15 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.124]:19639 "EHLO
-        mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391607AbgBNQKx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Feb 2020 11:10:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581696642;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=3oO7x2A3vdUHmUPMqDNJJ9DsdN1nPGYoXmW4gDFFS+k=;
-        b=DPm2fp5U1fSACRGiAgOjmYWs7+jNqufvSiK2JUET9VWvfbKBXUFnSFfk+CQdH5v8kS
-        sfxtQ7ne5Mg9dh6kacDYiRNiDY1D40MAx4Bv2eXxTZLRkS1wkXoTFEKMdfs4OmbOMwgJ
-        CZQy0eIldUQPPsN2UyMYS2coPHDQF0T+cIgnksQHuGnYVZxMDWG4JzyROEfxCDjkoWzd
-        OydLAWUqPizxg7CiHF9x4FbCi65mK4FgjAYmDgKw3K/tTw1/1fSCK436IasMtR0dMhiy
-        T7ZKmek8AivltBVTZ1bL+5mabQuODbeV9VZh/LCXn7LWIUSdafwWz26d2lHmEYiCiWwg
-        tZRg==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2M7OMfsfQx3"
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-        by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1EGAXFl7
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Fri, 14 Feb 2020 17:10:33 +0100 (CET)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     Paul Boddie <paul@boddie.org.uk>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        letux-kernel@openphoenux.org, kernel@pyra-handheld.com
-Subject: [PATCH v2 12/12] MIPS: DTS: CI20: fix interrupt for pcf8563 RTC
-Date:   Fri, 14 Feb 2020 17:10:24 +0100
-Message-Id: <42aed0c7c063fa6c289fcbf361645056e15f513c.1581696624.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <cover.1581696624.git.hns@goldelico.com>
-References: <cover.1581696624.git.hns@goldelico.com>
+        id S2394643AbgBNR2Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 Feb 2020 12:28:25 -0500
+Received: from out28-197.mail.aliyun.com ([115.124.28.197]:50278 "EHLO
+        out28-197.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390971AbgBNR2W (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Feb 2020 12:28:22 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.3562688|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.0420594-0.000702339-0.957238;DS=CONTINUE|ham_system_inform|0.10361-0.00045707-0.895933;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03300;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.Go9djQb_1581701284;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Go9djQb_1581701284)
+          by smtp.aliyun-inc.com(10.147.41.231);
+          Sat, 15 Feb 2020 01:28:16 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, paul@crapouillou.net,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.com
+Subject: Add support for the X1830 and fix bugs for X1000 v5.
+Date:   Sat, 15 Feb 2020 01:27:35 +0800
+Message-Id: <1581701262-110556-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Interrupts should not be specified by interrupt line but by
-gpio parent and reference.
-
-Fixes: 73f2b940474d ("MIPS: CI20: DTS: Add I2C nodes")
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- arch/mips/boot/dts/ingenic/ci20.dts | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index 8f9d182566db..4bacefa2cfce 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -298,7 +298,9 @@ Optional input supply properties:
- 		rtc@51 {
- 			compatible = "nxp,pcf8563";
- 			reg = <0x51>;
--			interrupts = <110>;
-+
-+			interrupt-parent = <&gpf>;
-+			interrupts = <30 IRQ_TYPE_LEVEL_LOW>;
- 		};
- };
- 
--- 
-2.23.0
+v4->v5:
+1.Rebase on top of kernel 5.6-rc1.
+2.Fix bugs for X1000.
 
