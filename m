@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F2A15E5A4
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2020 17:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4CA915EAA0
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2020 18:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393082AbgBNQVq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Feb 2020 11:21:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56614 "EHLO mail.kernel.org"
+        id S2392165AbgBNRPG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 Feb 2020 12:15:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39760 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393079AbgBNQVq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:21:46 -0500
+        id S2391978AbgBNQMW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:12:22 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 59AB8246BF;
-        Fri, 14 Feb 2020 16:21:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 850F8246AD;
+        Fri, 14 Feb 2020 16:12:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697305;
+        s=default; t=1581696741;
         bh=KNL8q96VW054YfXBZfeHGlfLCZJ5LleWzR+KoB/9j4w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BuxFGYAYjyP7ybq323UEzMEuTgl1m5ICFRLK2theYcftkEChrdA/VOm2LOU39gjuh
-         dukJHaPEFd6+hNylFyfwWUi2RhAhFL4tTD/UzMsr2n+QYPaP0PwwYzeQ1txqBbM28N
-         XrbpNxFUzSgZEHol9QYXHAflCcyrgYu+xKtUicis=
+        b=JP+i+K7FIY27LRRPQM/NXX2a5dQXLLVUimHUFPdpYZsh3s02DfzlENgMm7+jAuVRq
+         mY8NUBBVVgWzwXxSZ0hCHTY5FIa2vN7BI6KKElSlwc1brCpniQL2lrrGV/Ox7464i6
+         0q73Tt/Hqs3+ttIWwpjUDNDtq7fwXC2lzZggWbRY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
@@ -31,12 +31,12 @@ Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
         Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.9 017/141] MIPS: Loongson: Fix potential NULL dereference in loongson3_platform_init()
-Date:   Fri, 14 Feb 2020 11:19:17 -0500
-Message-Id: <20200214162122.19794-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 025/252] MIPS: Loongson: Fix potential NULL dereference in loongson3_platform_init()
+Date:   Fri, 14 Feb 2020 11:08:00 -0500
+Message-Id: <20200214161147.15842-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214162122.19794-1-sashal@kernel.org>
-References: <20200214162122.19794-1-sashal@kernel.org>
+In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
+References: <20200214161147.15842-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
