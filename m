@@ -2,19 +2,19 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C173115FFDA
-	for <lists+linux-mips@lfdr.de>; Sat, 15 Feb 2020 19:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC1715FFD5
+	for <lists+linux-mips@lfdr.de>; Sat, 15 Feb 2020 19:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727880AbgBOS4V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 15 Feb 2020 13:56:21 -0500
-Received: from out28-217.mail.aliyun.com ([115.124.28.217]:44121 "EHLO
-        out28-217.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726233AbgBOS4U (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 15 Feb 2020 13:56:20 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07452023|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.208385-0.00957184-0.782043;DS=CONTINUE|ham_system_inform|0.028472-0.000402336-0.971126;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03305;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=24;RT=24;SR=0;TI=SMTPD_---.GoTIZgt_1581792955;
+        id S1727894AbgBOS4X (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 15 Feb 2020 13:56:23 -0500
+Received: from out28-123.mail.aliyun.com ([115.124.28.123]:37629 "EHLO
+        out28-123.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727780AbgBOS4W (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 15 Feb 2020 13:56:22 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2654309|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.0742753-0.00614346-0.919581;DS=CONTINUE|ham_system_inform|0.00902531-0.000445777-0.990529;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03278;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=24;RT=24;SR=0;TI=SMTPD_---.GoTIZgt_1581792955;
 Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GoTIZgt_1581792955)
           by smtp.aliyun-inc.com(10.147.42.241);
-          Sun, 16 Feb 2020 02:56:14 +0800
+          Sun, 16 Feb 2020 02:56:16 +0800
 From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
         <zhouyanjie@wanyeetech.com>
 To:     linux-mips@vger.kernel.org
@@ -28,9 +28,9 @@ Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
         ebiederm@xmission.com, miquel.raynal@bootlin.com,
         paul@boddie.org.uk, hns@goldelico.com,
         mips-creator-ci20-dev@googlegroups.com
-Subject: [PATCH v5 6/7] MIPS: Ingenic: Add 'cpus' node for Ingenic SoCs.
-Date:   Sun, 16 Feb 2020 02:55:31 +0800
-Message-Id: <1581792932-108032-8-git-send-email-zhouyanjie@wanyeetech.com>
+Subject: [PATCH v5 7/7] MIPS: CI20: Update defconfig to support SMP.
+Date:   Sun, 16 Feb 2020 02:55:32 +0800
+Message-Id: <1581792932-108032-9-git-send-email-zhouyanjie@wanyeetech.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1581792932-108032-1-git-send-email-zhouyanjie@wanyeetech.com>
 References: <1581792932-108032-1-git-send-email-zhouyanjie@wanyeetech.com>
@@ -42,8 +42,7 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add 'cpus' node to the jz4740.dtsi, jz4770.dtsi, jz4780.dtsi
-and x1000.dtsi files.
+Add "CONFIG_SMP=y" and "CONFIG_NR_CPUS=2" to support SMP.
 
 Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
 Tested-by: Paul Boddie <paul@boddie.org.uk>
@@ -63,127 +62,19 @@ Notes:
     v4->v5:
     No change.
 
- arch/mips/boot/dts/ingenic/jz4740.dtsi | 14 ++++++++++++++
- arch/mips/boot/dts/ingenic/jz4770.dtsi | 15 ++++++++++++++-
- arch/mips/boot/dts/ingenic/jz4780.dtsi | 23 +++++++++++++++++++++++
- arch/mips/boot/dts/ingenic/x1000.dtsi  | 14 ++++++++++++++
- 4 files changed, 65 insertions(+), 1 deletion(-)
+ arch/mips/configs/ci20_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/boot/dts/ingenic/jz4740.dtsi b/arch/mips/boot/dts/ingenic/jz4740.dtsi
-index 5accda2..9627d95 100644
---- a/arch/mips/boot/dts/ingenic/jz4740.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4740.dtsi
-@@ -6,6 +6,20 @@
- 	#size-cells = <1>;
- 	compatible = "ingenic,jz4740";
- 
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "ingenic,xburst";
-+			reg = <0>;
-+
-+			clocks = <&cgu JZ4740_CLK_CCLK>;
-+			clock-names = "cpu";
-+		};
-+	};
-+
- 	cpuintc: interrupt-controller {
- 		#address-cells = <0>;
- 		#interrupt-cells = <1>;
-diff --git a/arch/mips/boot/dts/ingenic/jz4770.dtsi b/arch/mips/boot/dts/ingenic/jz4770.dtsi
-index 0bfb9ed..1b8114d 100644
---- a/arch/mips/boot/dts/ingenic/jz4770.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4770.dtsi
-@@ -1,5 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0
--
- #include <dt-bindings/clock/jz4770-cgu.h>
- 
- / {
-@@ -7,6 +6,20 @@
- 	#size-cells = <1>;
- 	compatible = "ingenic,jz4770";
- 
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "ingenic,xburst";
-+			reg = <0>;
-+
-+			clocks = <&cgu JZ4770_CLK_CCLK>;
-+			clock-names = "cpu";
-+		};
-+	};
-+
- 	cpuintc: interrupt-controller {
- 		#address-cells = <0>;
- 		#interrupt-cells = <1>;
-diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-index f928329..93a0604 100644
---- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-@@ -7,6 +7,29 @@
- 	#size-cells = <1>;
- 	compatible = "ingenic,jz4780";
- 
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "ingenic,xburst";
-+			reg = <0>;
-+
-+			clocks = <&cgu JZ4780_CLK_CPU>;
-+			clock-names = "cpu";
-+		};
-+
-+		cpu1: cpu@1 {
-+			device_type = "cpu";
-+			compatible = "ingenic,xburst";
-+			reg = <1>;
-+
-+			clocks = <&cgu JZ4780_CLK_CORE1>;
-+			clock-names = "cpu";
-+		};
-+	};
-+
- 	cpuintc: interrupt-controller {
- 		#address-cells = <0>;
- 		#interrupt-cells = <1>;
-diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
-index 4994c69..376df1b 100644
---- a/arch/mips/boot/dts/ingenic/x1000.dtsi
-+++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-@@ -7,6 +7,20 @@
- 	#size-cells = <1>;
- 	compatible = "ingenic,x1000", "ingenic,x1000e";
- 
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "ingenic,xburst";
-+			reg = <0>;
-+
-+			clocks = <&cgu X1000_CLK_CPU>;
-+			clock-names = "cpu";
-+		};
-+	};
-+
- 	cpuintc: interrupt-controller {
- 		#address-cells = <0>;
- 		#interrupt-cells = <1>;
+diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
+index be41df2..3aadb2e 100644
+--- a/arch/mips/configs/ci20_defconfig
++++ b/arch/mips/configs/ci20_defconfig
+@@ -1,3 +1,5 @@
++CONFIG_SMP=y
++CONFIG_NR_CPUS=2
+ # CONFIG_LOCALVERSION_AUTO is not set
+ CONFIG_KERNEL_XZ=y
+ CONFIG_SYSVIPC=y
 -- 
 2.7.4
 
