@@ -2,92 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA75160533
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Feb 2020 19:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3691605B9
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Feb 2020 20:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725899AbgBPSLO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sun, 16 Feb 2020 13:11:14 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:43101 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbgBPSLO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Feb 2020 13:11:14 -0500
-Received: from mail-qv1-f52.google.com ([209.85.219.52]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MC2wN-1jAr2z21oT-00CPB6; Sun, 16 Feb 2020 19:11:12 +0100
-Received: by mail-qv1-f52.google.com with SMTP id p2so6627875qvo.10;
-        Sun, 16 Feb 2020 10:11:12 -0800 (PST)
-X-Gm-Message-State: APjAAAVdAhhTXGBVMxgMhlinMFl8qxvoz+FGEi4vwpbT8vMIN8Hait9+
-        smgBddOrmaIFqF1v5j8umdU+g1E335ROqP2UhmE=
-X-Google-Smtp-Source: APXvYqzvtOyO80NGJ0NQzbdKQvJf1lkKW8T220YClkzb69MFsE4nIeROks8Hz90TjXKc5YYn+5v58NnqAVTN3OLIhHE=
-X-Received: by 2002:a05:6214:524:: with SMTP id x4mr10124633qvw.4.1581876671327;
- Sun, 16 Feb 2020 10:11:11 -0800 (PST)
+        id S1726962AbgBPTVI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 16 Feb 2020 14:21:08 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.82]:8080 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726009AbgBPTVI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Feb 2020 14:21:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581880864;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=qdsEU1tijR2EZWmrheyTEaZJuHGGV+71AB0rwGM8mBs=;
+        b=Ybak2fu4h+vOZwp5Q2OUHizMeL9z6/pS6yhFGPLWwKkzIAQwQxiA83zaCe4+vCeBZn
+        sRkGbeEa1cMszH5QjlfO/CF591Rk5QP2cduUBKT51S+IyV5haF/JR+liGzf2uXicREcU
+        n9p5NccUFa6vYNO6OSUWNQTdW80EUND7ah+NQKCGa/vAiknKZoDyd7BcYtV253El5vRk
+        /egu+SCmYUHzq1qTLXfv+YZUCEMkFB25NOCK1+9JJbjL831MYoDtbwz9JiMnJ72i5n19
+        AkX6JHTOKoOQgdkDP8QlCFscKtD8QAoAZAMdBIUi8ZY8jXFopVOjW8kC3Yi3FrMngl2e
+        Pq2Q==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2M0OoPPevMB"
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+        by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
+        with ESMTPSA id U06217w1GJKqJlX
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Sun, 16 Feb 2020 20:20:52 +0100 (CET)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Mathieu Malaterre <malat@debian.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com
+Subject: [RFC v3 0/9] MIPS: CI20: Add efuse driver for Ingenic JZ4780 and attach to DM9000 for stable MAC addresses
+Date:   Sun, 16 Feb 2020 20:20:42 +0100
+Message-Id: <cover.1581880851.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-References: <cover.1577111363.git.christophe.leroy@c-s.fr> <bd4557a7-9715-59aa-5d8e-488c5e516a98@c-s.fr>
- <20200109200733.GS3191@gate.crashing.org> <77a8bf25-6615-6c0a-56d4-eae7aa8a8f09@c-s.fr>
- <20200111113328.GX3191@gate.crashing.org>
-In-Reply-To: <20200111113328.GX3191@gate.crashing.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sun, 16 Feb 2020 19:10:55 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a11wX1zJ+TAacDTkYsrzvfdVmNrcB6OC23aFvCxF57opQ@mail.gmail.com>
-Message-ID: <CAK8P3a11wX1zJ+TAacDTkYsrzvfdVmNrcB6OC23aFvCxF57opQ@mail.gmail.com>
-Subject: Re: Surprising code generated for vdso_read_begin()
-To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:HLqAkIdoPfiPyFHDmbvrtr7n5xYGZph2jMmE62iSDBEnJFcP4Qc
- /SnGSw2icyqhgyrplUKr8475IJrVw8nnHseRauGk4BEdX1ZxxVYn7cydGBYeWj3jBAax9Hb
- WkLyZIbs6QouruTACgn8W6ljRDG3ctdYHnqdTmww8WpSgBHO4GPc4LxGGMxhj5qA7mqGVoK
- MmLLeVohRb/RD/yXVbwOw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TogwV+iRtEQ=:cU9tZONLF1toHxisqha2Fb
- KzA/Yaf3sW5bq2jYKfVL9Dg6sef78hInu/lOHeohFGLDnfLlOi67PvhWEzDXQ8ljDc3o/mRKC
- rHSMe7X08knS3o6SHgg46AQ/RIocNdco1Nr+RE4zM5AKNK3ZjfCgs0aGFl3oUBp8/bWCfv/Rz
- sPxbdMf1KmoOnXyzm6n+XijtBDA991owf073r/xmk14kgK+FYKLGGWB7lxFCZp7Uwcs981Ud3
- g60zYQ8RicLHPwwiMlUDlZ6B1F5fsyncH36B1dtR0NYcuKuAf8e3vNKcWdRIUHNkNrlXEz6Q1
- Sf/xlFDheBhryTBIW+xcGfB51Ze6u4qrMkVf6GJ6mwmIu29kwUnM8xJ5m0CNwo2frkfgaqrJ4
- Bbh09sG0X9+gwAi5MeEqXciInTnz77zYSOSdK95G4O/n0cASKkHaCICLnQSkLajpQEpQVK5yc
- DZ+4Tzv2t/lmOdd8KsF3Tq5z2GZww7Zi/2YeCGv1tdQXx5a34KiLltsNIauHIvf9fPYG3uj0R
- KvzWtc//q6opalb2/MWhlq/vDcVI8B6qnUUBJgNnQHm8q2wpXMXxAAUIz9LFM3vpd+f8S2x8S
- feak26XmKB8ofpLlQareojXGbbdUmKkxETNxvWG3mrabe070PyDSKuE5j7kQwDpQHIA2OIhgy
- Ie0m9k86ZBM9BuAQ8puc3ciPng5G+QrpOIPoU9hrK8RDw6JFE6FdX7Y8U6aytk6JMIrN2WVhG
- GPycFqA1LqgXc0P1zcDj1/ci6mBYmkt+Q9RaQwpsoRPvL3cNwmL8vF4zNbIdDf260+x0dvvZg
- zaYgIbCTw2Xo2mDM6n/GhN3Thk0jde791M+5ND5VRc+X4PIw5M=
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jan 11, 2020 at 12:33 PM Segher Boessenkool
-<segher@kernel.crashing.org> wrote:
->
-> On Fri, Jan 10, 2020 at 07:45:44AM +0100, Christophe Leroy wrote:
-> > Le 09/01/2020 à 21:07, Segher Boessenkool a écrit :
-> > >It looks like the compiler did loop peeling.  What GCC version is this?
-> > >Please try current trunk (to become GCC 10), or at least GCC 9?
-> >
-> > It is with GCC 5.5
-> >
-> > https://mirrors.edge.kernel.org/pub/tools/crosstool/ doesn't have more
-> > recent than 8.1
->
-> Arnd, can you update the tools?  We are at 8.3 and 9.2 now :-)  Or is
-> this hard and/or painful to do?
+This series is based on and a follow up for
 
-To follow up on this older thread, I have now uploaded 6.5, 7.5, 8.3 and 9.2
-binaries, as well as a recent 10.0 snapshot.
+https://lore.kernel.org/patchwork/cover/868157/
 
-I hope these work, let me know if there are problems.
+("[v2,0/2] Add efuse driver for Ingenic JZ4780 SoC")
 
-       Arnd
+Original authors were
+PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
+Mathieu Malaterre <malat@debian.org>
+
+and there are additions / code improvements by
+H. Nikolaus Schaller <hns@goldelico.com>
+Paul Cercueil <paul@crapouillou.net>
+
+This setup works, if the dm9000 driver is compiled
+as a module.
+
+Therefore it is all RFC level. It is also not completely
+checkpatched.
+
+
+H. Nikolaus Schaller (2):
+  MIPS: DTS: CI20: make DM9000 Ethernet controller use NVMEM to find the
+    default MAC address
+  MIPS: CI20 defconfig: DEMO HACK: make DM9000 a module
+
+Mathieu Malaterre (1):
+  MIPS: CI20 defconfig: Probe efuse for CI20
+
+Paul Cercueil (1):
+  rework to use regmap
+
+PrasannaKumar Muralidharan (5):
+  nvmem: add driver for JZ4780 efuse
+  Bindings: nvmem: add bindings for JZ4780 efuse
+  Documentation: ABI: nvmem: add documentation for JZ4780 efuse ABI
+  nvmem: MAINTAINERS: add maintainer for JZ4780 efuse driver
+  MIPS: DTS: JZ4780: define node for JZ4780 efuse
+
+ .../ABI/testing/sysfs-driver-jz4780-efuse     |  16 ++
+ .../bindings/nvmem/ingenic,jz4780-efuse.txt   |  17 ++
+ MAINTAINERS                                   |   5 +
+ arch/mips/boot/dts/ingenic/ci20.dts           |   3 +
+ arch/mips/boot/dts/ingenic/jz4780.dtsi        |  17 +-
+ arch/mips/configs/ci20_defconfig              |   4 +-
+ drivers/nvmem/Kconfig                         |  10 +
+ drivers/nvmem/Makefile                        |   2 +
+ drivers/nvmem/jz4780-efuse.c                  | 238 ++++++++++++++++++
+ 9 files changed, 310 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-jz4780-efuse
+ create mode 100644 Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.txt
+ create mode 100644 drivers/nvmem/jz4780-efuse.c
+
+-- 
+2.23.0
+
