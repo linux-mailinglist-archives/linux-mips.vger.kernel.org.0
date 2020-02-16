@@ -2,34 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8500A1605C9
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Feb 2020 20:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 483AA1605CF
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Feb 2020 20:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726020AbgBPTVY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 16 Feb 2020 14:21:24 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.124]:20790 "EHLO
+        id S1728043AbgBPTVg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 16 Feb 2020 14:21:36 -0500
+Received: from mo4-p04-ob.smtp.rzone.de ([81.169.146.177]:31410 "EHLO
         mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726701AbgBPTVK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Feb 2020 14:21:10 -0500
+        with ESMTP id S1726656AbgBPTVJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Feb 2020 14:21:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581880866;
         s=strato-dkim-0002; d=goldelico.com;
         h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=3MxmeyOPuBNsjQw7Sua8KxvKXNHTrqUU51j9mzRygRA=;
-        b=ZGVJy+CLGg7qMFtQq3wGiOilylMgo58v2sfpj/bwcu5ucKUPP+BDAMZ1tnPo1hV4QG
-        OsqG3jafK9VlyrJ7YdMWvNFYauX/kX1c5On0bUr5qPiMkAdQug4LIAHGsK3m5BKmZvid
-        KYThqp3ig10DgzPMWElgM12htqpzonUF/+OTfeMo4Vj4i5NuwyGq42Zo5YJVOnIAVIPY
-        l9NhlmOCp5+eDCajvYNlGksQM+AhArs3WfqTJ4VMum8stYXjd3/CC3mxJ8M7bYWzoMJY
-        BeCeK3dgBy07L75CFrPK0EQwC1ArFro+noxkJrfOv5diPyHX5ZGH+eMitD7LDVWmUCyE
-        Zkkg==
+        bh=kPUcf/GvZL1nupNS3IZr+BX1pSqIjowqBPh5G4yQp6A=;
+        b=sMYcLkKYljzx3CW+K12/ySPKYORsogyLsfboQogkNpay+H6AwI2azhykbL0uia4qhg
+        sEQRTMOyyDLg3XsXIb4bFLdC7OR6vaOthPbYAX/xKKdCB25QnYfVVzlBbTxhpS2yTE8L
+        h59Yeocjk4SOhO001gQi1nzHTanTYLGR0FpTQ+bsjUH58HqVhfF59hjwSdp4I2P6MATD
+        A4ynOl5lBdH/nGuGsmHAFWCG5WJhpslQxTlYjVA7Woxyi5OjjZr55i81niSCGgbQtemB
+        yZC1toxlW2A8cAZUPl6aPO+42ifavIz2abIFo+Auc7HpCxY6hdDgS8/WgNQBWG7BA9AE
+        x7SA==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2M0OoPPevMB"
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1GJKvJle
+        with ESMTPSA id U06217w1GJKwJlf
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Sun, 16 Feb 2020 20:20:57 +0100 (CET)
+        Sun, 16 Feb 2020 20:20:58 +0100 (CET)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
         Paul Cercueil <paul@crapouillou.net>,
@@ -51,9 +51,9 @@ To:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
         kernel@pyra-handheld.com
-Subject: [RFC v3 7/9] MIPS: DTS: CI20: make DM9000 Ethernet controller use NVMEM to find the default MAC address
-Date:   Sun, 16 Feb 2020 20:20:49 +0100
-Message-Id: <544dd607622a87741e3c02d61d581e42288ab960.1581880851.git.hns@goldelico.com>
+Subject: [RFC v3 8/9] MIPS: CI20 defconfig: Probe efuse for CI20
+Date:   Sun, 16 Feb 2020 20:20:50 +0100
+Message-Id: <c8446d39be45131541a295e9ac7c9ee2553b12ec.1581880851.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <cover.1581880851.git.hns@goldelico.com>
 References: <cover.1581880851.git.hns@goldelico.com>
@@ -64,30 +64,27 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-There is a default MAC address factory programmed into
-the eFuses of the JZ4780 chip. By using this every CI20
-board has an individual but stable MAC address and DHCP
-can assing stable IP addresses.
+From: Mathieu Malaterre <malat@debian.org>
 
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+MIPS Creator CI20 comes with JZ4780 SoC. Provides access to the efuse block
+using jz4780 efuse driver.
+
+Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
+Signed-off-by: Mathieu Malaterre <malat@debian.org>
 ---
- arch/mips/boot/dts/ingenic/ci20.dts | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/mips/configs/ci20_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index 1166f3203ff8..63b4b53b5df5 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -428,6 +428,9 @@ Optional input supply properties:
- 
- 		interrupt-parent = <&gpe>;
- 		interrupts = <19 4>;
-+
-+		nvmem-cells = <&eth0_addr>;
-+		nvmem-cell-names = "mac-address";
- 	};
- };
- 
+diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
+index 6e613bbb6807..614dc18211bc 100644
+--- a/arch/mips/configs/ci20_defconfig
++++ b/arch/mips/configs/ci20_defconfig
+@@ -193,3 +193,5 @@ CONFIG_RC_DEVICES=y
+ CONFIG_IR_GPIO_CIR=m
+ CONFIG_IR_GPIO_TX=m
+ CONFIG_RTC_DRV_PCF8563=m
++CONFIG_NVMEM=y
++CONFIG_JZ4780_EFUSE=y
 -- 
 2.23.0
 
