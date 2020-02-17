@@ -2,102 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C790161CA7
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Feb 2020 22:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7909161D76
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Feb 2020 23:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729906AbgBQVLz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Feb 2020 16:11:55 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:39797 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729894AbgBQVLz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Feb 2020 16:11:55 -0500
-Received: by mail-oi1-f196.google.com with SMTP id z2so18011728oih.6;
-        Mon, 17 Feb 2020 13:11:54 -0800 (PST)
+        id S1725853AbgBQWkI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Feb 2020 17:40:08 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:38334 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725959AbgBQWkG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Feb 2020 17:40:06 -0500
+Received: by mail-wr1-f65.google.com with SMTP id y17so21617591wrh.5
+        for <linux-mips@vger.kernel.org>; Mon, 17 Feb 2020 14:40:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xK3Q/4PcpI8MJ4XOzIXcS+rMbt29+yBpzx5WYzRqjFw=;
-        b=C+Y9J3F7hCeKE2UrdmV5oEk9QN3EPirr6aTHNd7poyqXHlPKK0tSfnv8fze2AX1BY2
-         TSxFrowQQmKkCsMjI2alVDrL7Z/IicYi+n1DK5INEURwPLEBxOLOFitzwDoYfFqDmk0c
-         z+GjPV3fzt+pBQkgMbaxrRVIvP1cRqs85fTSVT5yf/oWkqaGnCLpZTWNXblvcC5V34fX
-         Lw/xJV+jl/1q8vgoyvZ91EiSlWMWc97IHzVFvgigvOxSUwsZ0h5co2CCnM5/NeaCKhr/
-         7xiW9rcrq6IK7yaqbaydtaoyysWcKutcn5Lzudod/ILf45eQCzMykFBSw4l3p+QkCXUZ
-         +WnQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=76Z6CK20GgcJDSbhtaVsIFc+JofKd4d7bU36INZrWq8=;
+        b=kxzPl+66GzU0tsmDlLsFrMwRER4GjmMjrCsQ8WBsJpK7WvBK66WgF+Za2d5YquYg0F
+         56RJP+B7UnTuynnPArjOIS1mmcoVxNYTlc14JckbL5FQk3LgaTbIghYssIHIN6EAxt+U
+         t8iJ5dQuIFhTYJQhYFKFKc0tUg1isJ4xiyna6ZbcvPum0pst/kjre1zEdMQWE4DGB6Qx
+         ywSlGjIKeXfeyfQuvaTNBYECdGcYQGdrc6GKo7gxv7XmTTW/Vv6OhAGMH8kp9Z+ytHGc
+         86TWTERacFcFKshU+EVa4AX9mCL/p8VC4HwrbpCPGflRZljZRLqzoRQLprmBJyPhQaMl
+         9QWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xK3Q/4PcpI8MJ4XOzIXcS+rMbt29+yBpzx5WYzRqjFw=;
-        b=gJdIvMu0k9mrRPVc5B5R084n2oxTk9Kq37vaknPSB+TPYplE4nRAhK+nNA8jHvplvr
-         dgZrucF2TeCfmGUxoGHSW2sHXTtt779GPdlcy+2vQa32z7HjHEwwT9i5ZczcYAWfKlOi
-         fPSp/LUznjm8nT5wjMvVfrGmWmeZiZt2TU+wHuJQOzgo09GxgtXkHDpUPYn/vvwWvkOh
-         JX4pY2wBDZXwNPA2P++cxEBKC5oepQRgh3yjlvBcC4IzkBBWIb8G84VzLdRHNqoZrvCE
-         1XYGmC/m/51UcR9RPDAzcGqyAIe3FrYetSy51osA2rsRtM/hA1MdkNL4SPCr8q5vXNkF
-         giFQ==
-X-Gm-Message-State: APjAAAVNNp43R5zEb4sqmtZKuSv6/jnRd/Vtv6aQZEDMHelPYunGGnzP
-        WGoZCn2GN6ZFMk95AcWtCjY=
-X-Google-Smtp-Source: APXvYqwq6Q9t2ypTAPDCqs+NdTrtHzXBzQIMBMFV2yKoF+DcfhxGWNYSbM1ZaJwagWH+94hONWTdGQ==
-X-Received: by 2002:aca:3354:: with SMTP id z81mr602935oiz.129.1581973914489;
-        Mon, 17 Feb 2020 13:11:54 -0800 (PST)
-Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id v14sm579927oto.16.2020.02.17.13.11.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2020 13:11:53 -0800 (PST)
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Ralf Baechle <ralf@linux-mips.org>
-Cc:     Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH] MIPS: vdso: Wrap -mexplicit-relocs in cc-option
-Date:   Mon, 17 Feb 2020 14:11:49 -0700
-Message-Id: <20200217211149.44132-1-natechancellor@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=76Z6CK20GgcJDSbhtaVsIFc+JofKd4d7bU36INZrWq8=;
+        b=NuROV0KAcS8CjkPJwJ/n4hhOD+Fz8h2EqT3zbL4Jq8aPW8K/+btulS5fT76cv4vU8T
+         YCP9na+lGdml7MQ3InvjuckaEygShqsU5MeTi18lTMn++YENPjhqAshCj/LNkF+lJvlc
+         gkyJow2MKbkOs3/YWLeqvdLZVXjb9dHbf9r7hSt/oFy3TtgOydLyHtEIdKEMXTyCYROR
+         8lN7X0Spz1IgkVCX0/FJQAEk2NFpjNoSTyce5E7VeNTe/FhYu43Oo+4fYVxTefLA+zRU
+         p5bAQzbPUmzSmonbZBmrKiRH1ZCUrlQ3FV/v+qbItWjzxZ/znbOQNm+y+qz59RWoWYE+
+         PRjA==
+X-Gm-Message-State: APjAAAWnJTD2AP0yJAqHHpHC1rhv4f3wZwEKAY8cJuj46/laV0BNViPu
+        ILCWxOJYPMdqnYEd2EShStDfol7rI4Zz4uKUzgcCIQ==
+X-Google-Smtp-Source: APXvYqwNZrDDXyuSSAFRXCKsy/wiMe0qfoB8DAfRSRnoO8OLRY0g8yoVJOVwgE7xeIdVzjRpZGxBZ5gLv8/0K5cJ2j4=
+X-Received: by 2002:a5d:6a4b:: with SMTP id t11mr24090235wrw.262.1581979204034;
+ Mon, 17 Feb 2020 14:40:04 -0800 (PST)
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+References: <20200213161614.23246-1-vincenzo.frascino@arm.com>
+ <20200213161614.23246-20-vincenzo.frascino@arm.com> <20200213184454.GA4663@ubuntu-m2-xlarge-x86>
+ <0cee3707-d526-3766-3dde-543c8dbd8e68@arm.com> <20200217164608.GA2708@willie-the-truck>
+In-Reply-To: <20200217164608.GA2708@willie-the-truck>
+From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Date:   Mon, 17 Feb 2020 23:39:53 +0100
+Message-ID: <CAKv+Gu8Qh495twz-3UQrFiKfPq-Kt_o+JrCNwEcdMedV2DqPEA@mail.gmail.com>
+Subject: Re: [PATCH 19/19] arm64: vdso32: Enable Clang Compilation
+To:     Will Deacon <will@kernel.org>
+Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        0x7f454c46@gmail.com, linux-mips@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Will Deacon <will.deacon@arm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>, pcc@google.com,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        avagin@openvz.org, Stephen Boyd <sboyd@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        salyzyn@android.com, Paul Burton <paul.burton@mips.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Clang does not support this option and errors out:
+On Mon, 17 Feb 2020 at 17:46, Will Deacon <will@kernel.org> wrote:
+>
+> On Mon, Feb 17, 2020 at 12:26:16PM +0000, Vincenzo Frascino wrote:
+> > On 13/02/2020 18:44, Nathan Chancellor wrote:
+> > > On Thu, Feb 13, 2020 at 04:16:14PM +0000, Vincenzo Frascino wrote:
+> > >> Enable Clang Compilation for the vdso32 library.
+> >
+> > [...]
+> >
+> > >> +LD_COMPAT ?= $(CROSS_COMPILE_COMPAT)gcc
+> > >
+> > > Well this is unfortunate :/
+> > >
+> > > It looks like adding the --target flag to VDSO_LDFLAGS allows
+> > > clang to link the vDSO just fine although it does warn that -nostdinc
+> > > is unused:
+> > >
+> > > clang-11: warning: argument unused during compilation: '-nostdinc'
+> > > [-Wunused-command-line-argument]
+> > >
+> >
+> > This is why ended up in this "unfortunate" situation :) I wanted to avoid the
+> > warning.
+> >
+> > > It would be nice if the logic of commit fe00e50b2db8 ("ARM: 8858/1:
+> > > vdso: use $(LD) instead of $(CC) to link VDSO") could be adopted here
+> > > but I get that this Makefile is its own beast :) at the very least, I
+> > > think that the --target flag should be added to VDSO_LDFLAGS so that gcc
+> > > is not a requirement for this but I am curious if you tried that already
+> > > and noticed any issues with it.
+> > >
+> >
+> > --target is my preferred way as well, I can try to play another little bit with
+> > the flags and see what I can come up with in the next version.
+>
+> Yes, please. I'd even prefer the warning rather than silently assuming that
+> a cross gcc is kicking around on the path.
+>
 
-clang-11: error: unknown argument: '-mexplicit-relocs'
-
-Clang does not appear to need this flag like GCC does because the jalr
-check that was added in commit 976c23af3ee5 ("mips: vdso: add build
-time check that no 'jalr t9' calls left") passes just fine with
-
-$ make ARCH=mips CC=clang CROSS_COMPILE=mipsel-linux-gnu- malta_defconfig arch/mips/vdso/
-
-even before commit d3f703c4359f ("mips: vdso: fix 'jalr t9' crash in
-vdso code").
-
--mrelax-pic-calls has been supported since clang 9, which is the
-earliest version that could build a working MIPS kernel, and it is the
-default for clang so just leave it be.
-
-Fixes: d3f703c4359f ("mips: vdso: fix 'jalr t9' crash in vdso code")
-Link: https://github.com/ClangBuiltLinux/linux/issues/890
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
----
- arch/mips/vdso/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index 77374c1f0c77..d7fe8408603e 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -33,7 +33,7 @@ endif
- cflags-vdso := $(ccflags-vdso) \
- 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
- 	-O3 -g -fPIC -fno-strict-aliasing -fno-common -fno-builtin -G 0 \
--	-mrelax-pic-calls -mexplicit-relocs \
-+	-mrelax-pic-calls $(call cc-option, -mexplicit-relocs) \
- 	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
- 	$(call cc-option, -fno-asynchronous-unwind-tables) \
- 	$(call cc-option, -fno-stack-protector)
--- 
-2.25.1
-
+Doesn't Clang have -Qunused-arguments for that?
