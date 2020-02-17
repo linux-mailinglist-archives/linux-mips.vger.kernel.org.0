@@ -2,291 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DDE16185A
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Feb 2020 17:56:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1998161C0E
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Feb 2020 21:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbgBQQ4m (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Feb 2020 11:56:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45078 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726492AbgBQQ4m (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 17 Feb 2020 11:56:42 -0500
-Received: from localhost.localdomain (unknown [194.230.155.125])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4FFAF20725;
-        Mon, 17 Feb 2020 16:56:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581958601;
-        bh=Edvx6KbF8UjElss9iYmaIvA5mtFtMhntgr5ab8Lgl/g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ubA0du5n7XqckDVKPrx7Qs0rSXq/UUmcCp2JKGCl94grdLcYnBovlzl8TDo2OKbqG
-         3KUiYJSkRAi48djgR1lqqqTuhXc7ey4fbEEbRmVanG3Sg2A8szJI9APB+9rM4JAJ9i
-         OoZjr23gp8ovaUWEpjCbo96KbShIe1kACeUmMBg8=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v2] MIPS: configs: Cleanup old Kconfig options
-Date:   Mon, 17 Feb 2020 17:56:34 +0100
-Message-Id: <20200217165634.5362-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        id S1728543AbgBQUBM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Feb 2020 15:01:12 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:48205 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727241AbgBQUBM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Feb 2020 15:01:12 -0500
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 498DA886BF;
+        Tue, 18 Feb 2020 09:01:07 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1581969667;
+        bh=QBZPpGPjuA/DDMDV0sM2afefWCRCvpxYLsolO5GIkv0=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=YrmI6q0gyPOAp9eR4YFYwB17cKkBzP2GkPtwKonl9meJuGOu/DquZwadL+TBOP+Yp
+         RWg5upyoZhHudGlDGn8iJKP98ItCo4c1ja7r5ZfqIqpQM5YefZeCWqNQsZxUhxTygZ
+         oSetJ6Xd/Oaf88WM2h88fUQWnvSXL76wLfF6K3YQr+bqXnynLj7KzbqSlPvHETyJc3
+         2N/HqhPnZ0WG7aN5S8PyGmSvPxW+97zyFO6cF3QdDS0LDLq0m77pZTqcpbIt9DcNHa
+         IdHrdVHhoGogRNcHtUMuVvUpu2CoNS0KT8o/uR8JAvNCC1Jfza7G25bLDQHA39/aUx
+         Xt3HM66vl0cLA==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5e4af1030001>; Tue, 18 Feb 2020 09:01:07 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 18 Feb 2020 09:01:07 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1473.005; Tue, 18 Feb 2020 09:01:07 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Mark Tomlinson <Mark.Tomlinson@alliedtelesis.co.nz>,
+        "f4bug@amsat.org" <f4bug@amsat.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "clang-built-linux@googlegroups.com" 
+        <clang-built-linux@googlegroups.com>,
+        "paulburton@kernel.org" <paulburton@kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: cavium_octeon: Fix syncw generation.
+Thread-Topic: [PATCH] MIPS: cavium_octeon: Fix syncw generation.
+Thread-Index: AQHV4SHSo52AlyiF50aUibwtU28qqagdtJQAgABM4QCAAPxTAA==
+Date:   Mon, 17 Feb 2020 20:01:06 +0000
+Message-ID: <8cb14684e2f774d9573c062f2d82ad5348c5fee7.camel@alliedtelesis.co.nz>
+References: <20200211212455.3307-1-mark.tomlinson@alliedtelesis.co.nz>
+         <CAAdtpL5Tf-8O=xMKO33DWDs=2_Hsdk=FQSNO5Gsrx=9hWvENdg@mail.gmail.com>
+         <8e852d84c8b0c6b35faa3b3f2a1034d93a6e8967.camel@alliedtelesis.co.nz>
+In-Reply-To: <8e852d84c8b0c6b35faa3b3f2a1034d93a6e8967.camel@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [2001:df5:b000:22:cd0e:b78d:99a2:dcbf]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3503B8CCE2A3E142B2D2FF8E27366A7A@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-CONFIG_MTD_NAND_IDS is gone and not needed (part of CONFIG_MTD_NAND)
-since commit f16bd7ca0457 ("mtd: nand: Kill the MTD_NAND_IDS Kconfig
-option").
-
-CONFIG_IOSCHED_DEADLINE, CONFIG_IOSCHED_CFQ and CONFIG_DEFAULT_NOOP are
-gone since commit f382fb0bcef4 ("block: remove legacy IO schedulers").
-
-The IOSCHED_DEADLINE was replaced by MQ_IOSCHED_DEADLINE and it will be
-now enabled by default (along with MQ_IOSCHED_KYBER).
-
-The BFQ_GROUP_IOSCHED is the only multiqueue scheduler which comes with
-group scheduling so select it in configs previously choosing
-CFQ_GROUP_IOSCHED.
-
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-
----
-
-Changes since v1:
-1. Add Philippe's review.
----
- arch/mips/configs/ar7_defconfig                 | 1 -
- arch/mips/configs/ath25_defconfig               | 1 -
- arch/mips/configs/ath79_defconfig               | 1 -
- arch/mips/configs/bcm63xx_defconfig             | 2 --
- arch/mips/configs/bmips_be_defconfig            | 2 --
- arch/mips/configs/bmips_stb_defconfig           | 2 --
- arch/mips/configs/db1xxx_defconfig              | 1 -
- arch/mips/configs/generic/board-ni169445.config | 1 -
- arch/mips/configs/lasat_defconfig               | 2 --
- arch/mips/configs/lemote2f_defconfig            | 2 +-
- arch/mips/configs/loongson3_defconfig           | 5 +++--
- arch/mips/configs/msp71xx_defconfig             | 2 --
- arch/mips/configs/pnx8335_stb225_defconfig      | 2 --
- arch/mips/configs/rb532_defconfig               | 1 -
- arch/mips/configs/rt305x_defconfig              | 1 -
- arch/mips/configs/xway_defconfig                | 1 -
- 16 files changed, 4 insertions(+), 23 deletions(-)
-
-diff --git a/arch/mips/configs/ar7_defconfig b/arch/mips/configs/ar7_defconfig
-index cef2754bd408..cf9c6329b807 100644
---- a/arch/mips/configs/ar7_defconfig
-+++ b/arch/mips/configs/ar7_defconfig
-@@ -21,7 +21,6 @@ CONFIG_MODULE_UNLOAD=y
- # CONFIG_BLK_DEV_BSG is not set
- CONFIG_PARTITION_ADVANCED=y
- CONFIG_BSD_DISKLABEL=y
--# CONFIG_IOSCHED_CFQ is not set
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
-diff --git a/arch/mips/configs/ath25_defconfig b/arch/mips/configs/ath25_defconfig
-index c35add2fd716..7143441f5476 100644
---- a/arch/mips/configs/ath25_defconfig
-+++ b/arch/mips/configs/ath25_defconfig
-@@ -22,7 +22,6 @@ CONFIG_HZ_100=y
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- # CONFIG_BLK_DEV_BSG is not set
--# CONFIG_IOSCHED_CFQ is not set
- # CONFIG_COMPACTION is not set
- CONFIG_NET=y
- CONFIG_PACKET=y
-diff --git a/arch/mips/configs/ath79_defconfig b/arch/mips/configs/ath79_defconfig
-index 4ffc59cab436..3d14d67dc746 100644
---- a/arch/mips/configs/ath79_defconfig
-+++ b/arch/mips/configs/ath79_defconfig
-@@ -23,7 +23,6 @@ CONFIG_PCI=y
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- # CONFIG_BLK_DEV_BSG is not set
--# CONFIG_IOSCHED_CFQ is not set
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
-diff --git a/arch/mips/configs/bcm63xx_defconfig b/arch/mips/configs/bcm63xx_defconfig
-index 54e2f9a659fb..861f680184b9 100644
---- a/arch/mips/configs/bcm63xx_defconfig
-+++ b/arch/mips/configs/bcm63xx_defconfig
-@@ -21,8 +21,6 @@ CONFIG_PCI=y
- CONFIG_PCCARD=y
- CONFIG_PCMCIA_BCM63XX=y
- # CONFIG_BLK_DEV_BSG is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--# CONFIG_IOSCHED_CFQ is not set
- CONFIG_NET=y
- CONFIG_UNIX=y
- CONFIG_INET=y
-diff --git a/arch/mips/configs/bmips_be_defconfig b/arch/mips/configs/bmips_be_defconfig
-index f669a40e085b..032bb51defe8 100644
---- a/arch/mips/configs/bmips_be_defconfig
-+++ b/arch/mips/configs/bmips_be_defconfig
-@@ -12,8 +12,6 @@ CONFIG_NR_CPUS=4
- # CONFIG_SECCOMP is not set
- CONFIG_MIPS_O32_FP64_SUPPORT=y
- # CONFIG_BLK_DEV_BSG is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--# CONFIG_IOSCHED_CFQ is not set
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_PACKET_DIAG=y
-diff --git a/arch/mips/configs/bmips_stb_defconfig b/arch/mips/configs/bmips_stb_defconfig
-index a0b775893dba..625bd2d7e685 100644
---- a/arch/mips/configs/bmips_stb_defconfig
-+++ b/arch/mips/configs/bmips_stb_defconfig
-@@ -21,8 +21,6 @@ CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
- CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
- CONFIG_BMIPS_CPUFREQ=y
- # CONFIG_BLK_DEV_BSG is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--# CONFIG_IOSCHED_CFQ is not set
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_PACKET_DIAG=y
-diff --git a/arch/mips/configs/db1xxx_defconfig b/arch/mips/configs/db1xxx_defconfig
-index bc9b6ae046b2..e6f3e8e3da39 100644
---- a/arch/mips/configs/db1xxx_defconfig
-+++ b/arch/mips/configs/db1xxx_defconfig
-@@ -28,7 +28,6 @@ CONFIG_PCMCIA_ALCHEMY_DEVBOARD=y
- CONFIG_FIRMWARE_MEMMAP=y
- CONFIG_BLK_DEV_BSGLIB=y
- CONFIG_PARTITION_ADVANCED=y
--CONFIG_DEFAULT_NOOP=y
- CONFIG_CMA=y
- CONFIG_CMA_DEBUG=y
- CONFIG_NET=y
-diff --git a/arch/mips/configs/generic/board-ni169445.config b/arch/mips/configs/generic/board-ni169445.config
-index 1ed0d3e8715e..fc3580e4e6bc 100644
---- a/arch/mips/configs/generic/board-ni169445.config
-+++ b/arch/mips/configs/generic/board-ni169445.config
-@@ -19,7 +19,6 @@ CONFIG_MTD_NAND_ECC_SW_HAMMING=y
- CONFIG_MTD_NAND_ECC_SW_BCH=y
- CONFIG_MTD_RAW_NAND=y
- CONFIG_MTD_NAND_GPIO=y
--CONFIG_MTD_NAND_IDS=y
- 
- CONFIG_MTD_UBI=y
- CONFIG_MTD_UBI_BLOCK=y
-diff --git a/arch/mips/configs/lasat_defconfig b/arch/mips/configs/lasat_defconfig
-index c66ca3785655..00cf461db971 100644
---- a/arch/mips/configs/lasat_defconfig
-+++ b/arch/mips/configs/lasat_defconfig
-@@ -16,8 +16,6 @@ CONFIG_HZ_1000=y
- # CONFIG_SECCOMP is not set
- CONFIG_PCI=y
- # CONFIG_BLK_DEV_BSG is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--# CONFIG_IOSCHED_CFQ is not set
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
-diff --git a/arch/mips/configs/lemote2f_defconfig b/arch/mips/configs/lemote2f_defconfig
-index f9f93427c9bd..8254d7d1396f 100644
---- a/arch/mips/configs/lemote2f_defconfig
-+++ b/arch/mips/configs/lemote2f_defconfig
-@@ -26,7 +26,7 @@ CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- CONFIG_MODVERSIONS=y
- CONFIG_BLK_DEV_INTEGRITY=y
--CONFIG_IOSCHED_DEADLINE=m
-+CONFIG_MQ_IOSCHED_DEADLINE=m
- CONFIG_BINFMT_MISC=m
- CONFIG_NET=y
- CONFIG_PACKET=y
-diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
-index 360c6b2d397a..51675f5000d6 100644
---- a/arch/mips/configs/loongson3_defconfig
-+++ b/arch/mips/configs/loongson3_defconfig
-@@ -38,8 +38,9 @@ CONFIG_MODULE_UNLOAD=y
- CONFIG_MODULE_FORCE_UNLOAD=y
- CONFIG_MODVERSIONS=y
- CONFIG_PARTITION_ADVANCED=y
--CONFIG_IOSCHED_DEADLINE=m
--CONFIG_CFQ_GROUP_IOSCHED=y
-+CONFIG_MQ_IOSCHED_DEADLINE=m
-+CONFIG_IOSCHED_BFQ=y
-+CONFIG_BFQ_GROUP_IOSCHED=y
- CONFIG_BINFMT_MISC=m
- CONFIG_KSM=y
- CONFIG_NET=y
-diff --git a/arch/mips/configs/msp71xx_defconfig b/arch/mips/configs/msp71xx_defconfig
-index 0fdc03fda12e..6ad1a2381226 100644
---- a/arch/mips/configs/msp71xx_defconfig
-+++ b/arch/mips/configs/msp71xx_defconfig
-@@ -14,8 +14,6 @@ CONFIG_PCI=y
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- CONFIG_MODVERSIONS=y
--# CONFIG_IOSCHED_DEADLINE is not set
--# CONFIG_IOSCHED_CFQ is not set
- CONFIG_NET=y
- CONFIG_UNIX=y
- CONFIG_XFRM_USER=y
-diff --git a/arch/mips/configs/pnx8335_stb225_defconfig b/arch/mips/configs/pnx8335_stb225_defconfig
-index 738ba3b1374b..d06db6b87959 100644
---- a/arch/mips/configs/pnx8335_stb225_defconfig
-+++ b/arch/mips/configs/pnx8335_stb225_defconfig
-@@ -14,8 +14,6 @@ CONFIG_HZ_128=y
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- # CONFIG_BLK_DEV_BSG is not set
--# CONFIG_IOSCHED_DEADLINE is not set
--# CONFIG_IOSCHED_CFQ is not set
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
-diff --git a/arch/mips/configs/rb532_defconfig b/arch/mips/configs/rb532_defconfig
-index 5b947183852b..252d472387aa 100644
---- a/arch/mips/configs/rb532_defconfig
-+++ b/arch/mips/configs/rb532_defconfig
-@@ -23,7 +23,6 @@ CONFIG_MODULE_UNLOAD=y
- CONFIG_PARTITION_ADVANCED=y
- CONFIG_MAC_PARTITION=y
- CONFIG_BSD_DISKLABEL=y
--# CONFIG_IOSCHED_CFQ is not set
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
-diff --git a/arch/mips/configs/rt305x_defconfig b/arch/mips/configs/rt305x_defconfig
-index 110948bc6b39..8c2ead53007a 100644
---- a/arch/mips/configs/rt305x_defconfig
-+++ b/arch/mips/configs/rt305x_defconfig
-@@ -21,7 +21,6 @@ CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- # CONFIG_BLK_DEV_BSG is not set
- CONFIG_PARTITION_ADVANCED=y
--# CONFIG_IOSCHED_CFQ is not set
- # CONFIG_COREDUMP is not set
- # CONFIG_COMPACTION is not set
- CONFIG_NET=y
-diff --git a/arch/mips/configs/xway_defconfig b/arch/mips/configs/xway_defconfig
-index 49b5ea6eff62..9abbc0debc2a 100644
---- a/arch/mips/configs/xway_defconfig
-+++ b/arch/mips/configs/xway_defconfig
-@@ -23,7 +23,6 @@ CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- # CONFIG_BLK_DEV_BSG is not set
- CONFIG_PARTITION_ADVANCED=y
--# CONFIG_IOSCHED_CFQ is not set
- # CONFIG_COREDUMP is not set
- # CONFIG_COMPACTION is not set
- CONFIG_NET=y
--- 
-2.17.1
-
+T24gTW9uLCAyMDIwLTAyLTE3IGF0IDE3OjU4ICsxMzAwLCBNYXJrIFRvbWxpbnNvbiB3cm90ZToN
+Cj4gSGkgUGhpbCwNCj4gDQo+IE9uIE1vbiwgMjAyMC0wMi0xNyBhdCAwMToyMiArMDEwMCwgUGhp
+bGlwcGUgTWF0aGlldS1EYXVkw6kgd3JvdGU6DQo+ID4gSGkgTWFyaywNCj4gPiANCj4gPiBPbiBU
+dWUsIEZlYiAxMSwgMjAyMCBhdCAxMDo0MiBQTSBNYXJrIFRvbWxpbnNvbg0KPiA+IDxtYXJrLnRv
+bWxpbnNvbkBhbGxpZWR0ZWxlc2lzLmNvLm56PiB3cm90ZToNCj4gPiA+IA0KPiA+ID4gVGhlIENh
+dml1bSBPY3Rlb24gQ1BVIHVzZXMgYSBzcGVjaWFsIHN5bmMgaW5zdHJ1Y3Rpb24gZm9yIGltcGxl
+bWVudGluZw0KPiA+ID4gd21iLCBhbmQgZHVlIHRvIGEgQ1BVIGJ1ZywgdGhlIGluc3RydWN0aW9u
+IG11c3QgYXBwZWFyIHR3aWNlLiBBIG1hY3JvDQo+ID4gPiBoYWQgYmVlbiBkZWZpbmVkIHRvIGhp
+ZGUgdGhpczoNCj4gPiA+IA0KPiA+ID4gICNkZWZpbmUgX19TWU5DX3JwdCh0eXBlKSAgICAgKDEg
+KyAodHlwZSA9PSBfX1NZTkNfd21iKSkNCj4gPiA+IA0KPiA+ID4gd2hpY2ggd2FzIGludGVuZGVk
+IHRvIGV2YWx1YXRlIHRvIDIgZm9yIF9fU1lOQ193bWIsIGFuZCAxIGZvciBhbnkgb3RoZXINCj4g
+PiA+IHR5cGUgb2Ygc3luYy4gSG93ZXZlciwgdGhpcyBleHByZXNzaW9uIGlzIGV2YWx1YXRlZCBi
+eSB0aGUgYXNzZW1ibGVyLA0KPiA+ID4gYW5kIG5vdCB0aGUgY29tcGlsZXIsIGFuZCB0aGUgcmVz
+dWx0IG9mICc9PScgaW4gdGhlIGFzc2VtYmxlciBpcyAwIG9yDQo+ID4gPiAtMSwgbm90IDAgb3Ig
+MSBhcyBpdCBpcyBpbiBDLiBUaGUgbmV0IHJlc3VsdCB3YXMgd21iKCkgcHJvZHVjaW5nIG5vIGNv
+ZGUNCj4gPiA+IGF0IGFsbC4gVGhlIHNpbXBsZSBmaXggaW4gdGhpcyBwYXRjaCBpcyB0byBjaGFu
+Z2UgdGhlICcrJyB0byAnLScuDQo+ID4gDQo+ID4gSXNuJ3QgdGhpcyBwYXJ0aWN1bGFyIHRvIHRo
+ZSBhc3NlbWJsZXIgaW1wbGVtZW50YXRpb24/DQo+ID4gQ2FuIHlvdSBleHBsaWNpdCB0aGUgYXNz
+ZW1ibGVyIHlvdSBhcmUgdXNpbmcgaW4gdGhlIGNvbW1pdCBkZXNjcmlwdGlvbj8NCj4gPiBBc3N1
+bWluZyB3ZSBoYXZlIHRvIGxvb2sgYXQgeW91ciBjb21taXQgaW4gMyB5ZWFycyBmcm9tIG5vdywg
+d2UnbGwNCj4gPiB3b25kZXIgd2hhdCBhc3NlbWJsZXIgeW91IHdlcmUgdXNpbmcuDQo+ID4gDQo+
+ID4gVGhhbmtzLA0KPiA+IA0KPiA+IFBoaWwuDQo+IA0KPiBZZXMsIGl0IGlzIHRpZWQgdG8gdGhl
+IGFzc2VtYmxlci4gQnV0IHRoZSBMaW51eCBrZXJuZWwgaXMgdGllZCB0byBHQ0MsDQo+IGFuZCBH
+Q0MgKEkgYmVsaWV2ZSkgaXMgdGllZCB0byBHTlUgYXMuIEkgY2FuJ3Qgc2VlIHRoZSBzcGVjaWZp
+Y2F0aW9uIG9mDQo+IEdOVSBhcyBjaGFuZ2luZywgc2luY2UgdGhhdCBjb3VsZCBicmVhayBhbnl0
+aGluZyB3cml0dGVuIGZvciBpdC4NCj4gDQoNClRoZXJlIGlzIGFuIGVmZm9ydCB1bmRlcndheSB0
+byBidWlsZCB0aGUga2VybmVsIHdpdGggY2xhbmdbMV0uIEknbSBub3QNCnN1cmUgd2hhdCB0aGF0
+IGVuZHMgdXAgdXNpbmcgZm9yIGFuIGFzc2VtYmxlciBvciBpZiBpdCdsbCBldmVuIGJlIGFibGUN
+CnRvIHRhcmdldCBtaXBzNjQgYW55dGltZSBzb29uLg0KDQpGb3IgcmVmZXJlbmNlIHRoZSByZWxl
+dmFudCBzZWN0aW9uIGZyb20gdGhlIEdOVSBhcyBtYW51YWxbMl0gc2F5cyAiQQ0KdHJ1ZSByZXN1
+bHRzIGhhcyBhIHZhbHVlIG9mIC0xIHdoZXJlYXMgYSBmYWxzZSByZXN1bHQgaGFzIGEgdmFsdWUg
+b2YNCjAiLg0KDQpbMV0gLSBodHRwczovL2NsYW5nYnVpbHRsaW51eC5naXRodWIuaW8vDQpbMl0g
+LSBodHRwczovL3NvdXJjZXdhcmUub3JnL2JpbnV0aWxzL2RvY3MvYXMvSW5maXgtT3BzLmh0bWwj
+SW5maXgtT3BzDQoNCg0KDQo+IA0KPiA+ID4gRml4ZXM6IGJmOTI5MjcyNTFiMyAoIk1JUFM6IGJh
+cnJpZXI6IEFkZCBfX1NZTkMoKSBpbmZyYXN0cnVjdHVyZSIpDQo+ID4gPiBTaWduZWQtb2ZmLWJ5
+OiBNYXJrIFRvbWxpbnNvbiA8bWFyay50b21saW5zb25AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4g
+PiA+IC0tLQ0KPiA+ID4gIGFyY2gvbWlwcy9pbmNsdWRlL2FzbS9zeW5jLmggfCA0ICsrKy0NCj4g
+PiA+ICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+ID4g
+PiANCj4gPiA+IGRpZmYgLS1naXQgYS9hcmNoL21pcHMvaW5jbHVkZS9hc20vc3luYy5oIGIvYXJj
+aC9taXBzL2luY2x1ZGUvYXNtL3N5bmMuaA0KPiA+ID4gaW5kZXggN2M2YTEwOTVmNS4uYWFiZDA5
+NzkzMyAxMDA2NDQNCj4gPiA+IC0tLSBhL2FyY2gvbWlwcy9pbmNsdWRlL2FzbS9zeW5jLmgNCj4g
+PiA+ICsrKyBiL2FyY2gvbWlwcy9pbmNsdWRlL2FzbS9zeW5jLmgNCj4gPiA+IEBAIC0xNTUsOSAr
+MTU1LDExIEBADQo+ID4gPiAgICogZWZmZWN0aXZlIGJhcnJpZXIgYXMgbm90ZWQgYnkgY29tbWl0
+IDZiMDdkMzhhYWE1MiAoIk1JUFM6IE9jdGVvbjogVXNlDQo+ID4gPiAgICogb3B0aW1pemVkIG1l
+bW9yeSBiYXJyaWVyIHByaW1pdGl2ZXMuIikuIEhlcmUgd2Ugc3BlY2lmeSB0aGF0IHRoZSBhZmZl
+Y3RlZA0KPiA+ID4gICAqIHN5bmMgaW5zdHJ1Y3Rpb25zIHNob3VsZCBiZSBlbWl0dGVkIHR3aWNl
+Lg0KPiA+ID4gKyAqIE5vdGUgdGhhdCB0aGlzIGV4cHJlc3Npb24gaXMgZXZhbHVhdGVkIGJ5IHRo
+ZSBhc3NlbWJsZXIgKG5vdCB0aGUgY29tcGlsZXIpLA0KPiA+ID4gKyAqIGFuZCB0aGF0IHRoZSBh
+c3NlbWJsZXIgZXZhbHVhdGVzICc9PScgYXMgMCBvciAtMSwgbm90IDAgb3IgMS4NCj4gPiA+ICAg
+Ki8NCj4gPiA+ICAjaWZkZWYgQ09ORklHX0NQVV9DQVZJVU1fT0NURU9ODQo+ID4gPiAtIyBkZWZp
+bmUgX19TWU5DX3JwdCh0eXBlKSAgICAgICgxICsgKHR5cGUgPT0gX19TWU5DX3dtYikpDQo+ID4g
+PiArIyBkZWZpbmUgX19TWU5DX3JwdCh0eXBlKSAgICAgICgxIC0gKHR5cGUgPT0gX19TWU5DX3dt
+YikpDQo+ID4gPiAgI2Vsc2UNCj4gPiA+ICAjIGRlZmluZSBfX1NZTkNfcnB0KHR5cGUpICAgICAg
+MQ0KPiA+ID4gICNlbmRpZg0KPiA+ID4gLS0NCj4gPiA+IDIuMjUuMA0KPiA+ID4gDQo+IA0KPiAN
+Cg==
