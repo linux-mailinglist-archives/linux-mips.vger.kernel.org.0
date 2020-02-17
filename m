@@ -2,45 +2,26 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED85160BA7
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Feb 2020 08:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B95E160E7A
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Feb 2020 10:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725985AbgBQHg2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Feb 2020 02:36:28 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:41995 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726029AbgBQHg2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Feb 2020 02:36:28 -0500
-Received: by mail-oi1-f196.google.com with SMTP id j132so15806714oih.9;
-        Sun, 16 Feb 2020 23:36:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SuOiO3WgSyJKnxTjJOQN1meORdYh4/iYGl3q0xfpi6g=;
-        b=lwVDQYb2modr4q2GgEpSvbkqRMWo1/agGejwMn+dDFAFMltLrsjz5vmrChPV/hkMsY
-         M0ixASaJS2i1sUVlQWUewYPRkq73DTnyEAb6qwMbU97XXYyMBt82fqR9p6KcprVj2QP0
-         SgQyan9Ltu+WjKK9I2C9oy0mys5SIWs055YAbViuz0n00Cg5ufqdRNWTLhp/unZJWEES
-         mGujjexNSyIFDCE1JPJ6rLb1GscDjI4uB95Hhvcji04zk932lnvtr4g9opc3/r3eM2b3
-         ZB2VUcKTGj4V4LS3aeVwG0n5O8TianOytz2cI9dpuz9wQlqXkYOYzfvuG10TZIU0eKfX
-         yPrQ==
-X-Gm-Message-State: APjAAAUANc/TcO2eBQ9a6eEcChfVG9nit+tIRtexncSpf04sCe34Ozfv
-        /ChahXXioFsuyFzEAEf5cynxJvX8k+FvmAIbseQ=
-X-Google-Smtp-Source: APXvYqxKa9A1iXEoFtvs2SQx0wwpyI+D+8O+BpCQT5TTiBwESFO3k3MigqRo69thtGMj1kz+e9do4m1f9fB6IxLYpJM=
-X-Received: by 2002:aca:1a06:: with SMTP id a6mr8802173oia.148.1581924987398;
- Sun, 16 Feb 2020 23:36:27 -0800 (PST)
-MIME-Version: 1.0
-References: <1581915833-21984-1-git-send-email-anshuman.khandual@arm.com> <1581915833-21984-3-git-send-email-anshuman.khandual@arm.com>
-In-Reply-To: <1581915833-21984-3-git-send-email-anshuman.khandual@arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 17 Feb 2020 08:36:16 +0100
-Message-ID: <CAMuHMdU0DSTZMn6akY8qZR3SDxVEruEsd3Q3sYf-tn_ooXDDBw@mail.gmail.com>
+        id S1728873AbgBQJ2H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Feb 2020 04:28:07 -0500
+Received: from foss.arm.com ([217.140.110.172]:60446 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728819AbgBQJ2H (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 17 Feb 2020 04:28:07 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE993328;
+        Mon, 17 Feb 2020 01:28:06 -0800 (PST)
+Received: from [10.162.16.95] (p8cg001049571a15.blr.arm.com [10.162.16.95])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 23A033F6CF;
+        Mon, 17 Feb 2020 01:28:00 -0800 (PST)
 Subject: Re: [PATCH 2/5] mm/vma: Make vma_is_accessible() available for
  general use
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@kernel.org>,
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -55,23 +36,32 @@ Cc:     Linux MM <linux-mm@kvack.org>,
         Ingo Molnar <mingo@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Mel Gorman <mgorman@suse.de>, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org
+References: <1581915833-21984-1-git-send-email-anshuman.khandual@arm.com>
+ <1581915833-21984-3-git-send-email-anshuman.khandual@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <1d28a706-3232-2660-f2f2-2faca999a3ff@arm.com>
+Date:   Mon, 17 Feb 2020 14:58:01 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
+MIME-Version: 1.0
+In-Reply-To: <1581915833-21984-3-git-send-email-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 6:04 AM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
+
+On 02/17/2020 10:33 AM, Anshuman Khandual wrote:
 > Lets move vma_is_accessible() helper to include/linux/mm.h which makes it
 > available for general use. While here, this replaces all remaining open
 > encodings for VMA access check with vma_is_accessible().
->
+> 
 > Cc: Guo Ren <guoren@kernel.org>
 > Cc: Geert Uytterhoeven <geert@linux-m68k.org
 > Cc: Ralf Baechle <ralf@linux-mips.org>
@@ -96,19 +86,44 @@ On Mon, Feb 17, 2020 at 6:04 AM Anshuman Khandual
 > Cc: linux-sh@vger.kernel.org
 > Cc: linux-mm@kvack.org
 > Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-
+> ---
+>  arch/csky/mm/fault.c    | 2 +-
 >  arch/m68k/mm/fault.c    | 2 +-
+>  arch/mips/mm/fault.c    | 2 +-
+>  arch/powerpc/mm/fault.c | 2 +-
+>  arch/sh/mm/fault.c      | 2 +-
+>  arch/x86/mm/fault.c     | 2 +-
+>  include/linux/mm.h      | 5 +++++
+>  kernel/sched/fair.c     | 2 +-
+>  mm/gup.c                | 2 +-
+>  mm/memory.c             | 5 -----
+>  mm/mempolicy.c          | 3 +--
+>  11 files changed, 14 insertions(+), 15 deletions(-)
 
-For m68k:
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+There are couple of places in mm/mmap.c which could use vma_is_accessible()
+as well. Probably missed them, as the order of the VMA flags were different.
+Will fold the following changes next time around.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 6756b8bb0033..9b9bb4031fd4 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2338,8 +2338,7 @@ int expand_upwards(struct vm_area_struct *vma, unsigned long address)
+                gap_addr = TASK_SIZE;
+ 
+        next = vma->vm_next;
+-       if (next && next->vm_start < gap_addr &&
+-                       (next->vm_flags & (VM_WRITE|VM_READ|VM_EXEC))) {
++       if (next && next->vm_start < gap_addr && vma_is_accessible(next)) {
+                if (!(next->vm_flags & VM_GROWSUP))
+                        return -ENOMEM;
+                /* Check that both stack segments have the same anon_vma? */
+@@ -2420,7 +2419,7 @@ int expand_downwards(struct vm_area_struct *vma,
+        prev = vma->vm_prev;
+        /* Check that both stack segments have the same anon_vma? */
+        if (prev && !(prev->vm_flags & VM_GROWSDOWN) &&
+-                       (prev->vm_flags & (VM_WRITE|VM_READ|VM_EXEC))) {
++                       vma_is_accessible(prev)) {
+                if (address - prev->vm_end < stack_guard_gap)
+                        return -ENOMEM;
+        }
