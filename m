@@ -2,159 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9781633FC
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2020 22:08:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 907291634D3
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2020 22:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727655AbgBRVHy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Feb 2020 16:07:54 -0500
-Received: from mga07.intel.com ([134.134.136.100]:6399 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727624AbgBRVHx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 18 Feb 2020 16:07:53 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Feb 2020 13:07:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,457,1574150400"; 
-   d="scan'208";a="253856472"
-Received: from sjchrist-coffee.jf.intel.com ([10.54.74.202])
-  by orsmga002.jf.intel.com with ESMTP; 18 Feb 2020 13:07:47 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Peter Xu <peterx@redhat.com>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>
-Subject: [PATCH v6 22/22] KVM: x86/mmu: Consolidate open coded variants of memslot TLB flushes
-Date:   Tue, 18 Feb 2020 13:07:36 -0800
-Message-Id: <20200218210736.16432-23-sean.j.christopherson@intel.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200218210736.16432-1-sean.j.christopherson@intel.com>
-References: <20200218210736.16432-1-sean.j.christopherson@intel.com>
+        id S1726595AbgBRV0M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Feb 2020 16:26:12 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:43762 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726339AbgBRV0M (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Feb 2020 16:26:12 -0500
+Received: by mail-oi1-f193.google.com with SMTP id p125so21628764oif.10;
+        Tue, 18 Feb 2020 13:26:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=FBPkXpeYhwlQjEm8h9p4qJHC0WNjgbFbJ3Ke8WGyPBM=;
+        b=Rqgh2LWnOAPWjZ8KZl94JfvxtMHxu6vbYlVrPNWEsgs/AALWVNsh1NtJ5KrwOFWm1i
+         NLim4Zcq0WJQkSHrLATBvI2mmSTjeUo3OvnKT+fL0niepXSbV/kd3hnGFZvLJ+53/FaP
+         xLZUwd1R52xOB5xDF72l40ioriID9ov8XcF5Cqen+bvhEUtHy6d9f4o11zYYzg/YWh6s
+         18ipi9sdUShAgmm+GMvW01FO+/vFNie/Mll1i1n8eB1DvOAWGYasrtnJZxlXftQFlXwL
+         qK1in00QK5wQJLCW7fYrUm/xbQwZk10H7IttL26VcFzwtA/0twAiY2bur5iLtYUav4Hi
+         ArSA==
+X-Gm-Message-State: APjAAAWhwukuNfN/5Xyxzv9heQ34JG883/0wioVHAxV2f0iUSvBUfMus
+        dZL9esWYdlFTV5prnDzFrA==
+X-Google-Smtp-Source: APXvYqz+09mjoyPzbo4w/ESpYhcZUDvhBc+W905MCab1uX/0MfjKD0RzIRARpXpes5JkXIfdeYENDw==
+X-Received: by 2002:aca:e106:: with SMTP id y6mr2629105oig.131.1582061171568;
+        Tue, 18 Feb 2020 13:26:11 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id y22sm1756180otq.31.2020.02.18.13.26.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Feb 2020 13:26:10 -0800 (PST)
+Received: (nullmailer pid 32562 invoked by uid 1000);
+        Tue, 18 Feb 2020 21:26:09 -0000
+Date:   Tue, 18 Feb 2020 15:26:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Mathieu Malaterre <malat@debian.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com
+Subject: Re: [RFC v4 2/6] Bindings: nvmem: add bindings for JZ4780 efuse
+Message-ID: <20200218212609.GA30081@bogus>
+References: <cover.1581958529.git.hns@goldelico.com>
+ <86b78db4d607e0bdda6def018bc7f73207ce82e8.1581958529.git.hns@goldelico.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86b78db4d607e0bdda6def018bc7f73207ce82e8.1581958529.git.hns@goldelico.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Replace open coded instances of kvm_arch_flush_remote_tlbs_memslot()'s
-functionality with calls to the aforementioned function.  Update the
-comment in kvm_arch_flush_remote_tlbs_memslot() to elaborate on how it
-is used and why it asserts that slots_lock is held.
+On Mon, Feb 17, 2020 at 05:55:26PM +0100, H. Nikolaus Schaller wrote:
+> From: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
+> 
+> This patch brings support for the JZ4780 efuse. Currently it only expose
+> a read only access to the entire 8K bits efuse memory.
+> 
+> Tested-by: Mathieu Malaterre <malat@debian.org>
+> Signed-off-by: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
+> Signed-off-by: Mathieu Malaterre <malat@debian.org>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>  .../bindings/nvmem/ingenic,jz4780-efuse.txt     | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.txt
 
-No functional change intended.
+Please convert to a DT schema.
 
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
----
- arch/x86/kvm/mmu/mmu.c | 34 +++++++++-------------------------
- 1 file changed, 9 insertions(+), 25 deletions(-)
+> diff --git a/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.txt b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.txt
+> new file mode 100644
+> index 000000000000..339e74daa9a9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.txt
+> @@ -0,0 +1,17 @@
+> +Ingenic JZ EFUSE driver bindings
+> +
+> +Required properties:
+> +- "compatible"		Must be set to "ingenic,jz4780-efuse"
+> +- "reg"			Register location and length
+> +- "clocks"		Handle for the ahb clock for the efuse.
+> +- "clock-names"		Must be "bus_clk"
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 8a6516ce2983..1eb8654cc9d0 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -5870,13 +5870,6 @@ void kvm_mmu_slot_remove_write_access(struct kvm *kvm,
- 				      false);
- 	spin_unlock(&kvm->mmu_lock);
- 
--	/*
--	 * kvm_mmu_slot_remove_write_access() and kvm_vm_ioctl_get_dirty_log()
--	 * which do tlb flush out of mmu-lock should be serialized by
--	 * kvm->slots_lock otherwise tlb flush would be missed.
--	 */
--	lockdep_assert_held(&kvm->slots_lock);
--
- 	/*
- 	 * We can flush all the TLBs out of the mmu lock without TLB
- 	 * corruption since we just change the spte from writable to
-@@ -5889,8 +5882,7 @@ void kvm_mmu_slot_remove_write_access(struct kvm *kvm,
- 	 * on PT_WRITABLE_MASK anymore.
- 	 */
- 	if (flush)
--		kvm_flush_remote_tlbs_with_address(kvm, memslot->base_gfn,
--			memslot->npages);
-+		kvm_arch_flush_remote_tlbs_memslot(kvm, memslot);
- }
- 
- static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
-@@ -5946,8 +5938,11 @@ void kvm_arch_flush_remote_tlbs_memslot(struct kvm *kvm,
- 					struct kvm_memory_slot *memslot)
- {
- 	/*
--	 * All the TLBs can be flushed out of mmu lock, see the comments in
--	 * kvm_mmu_slot_remove_write_access().
-+	 * All current use cases for flushing the TLBs for a specific memslot
-+	 * are related to dirty logging, and do the TLB flush out of mmu_lock.
-+	 * The interaction between the various operations on memslot must be
-+	 * serialized by slots_locks to ensure the TLB flush from one operation
-+	 * is observed by any other operation on the same memslot.
- 	 */
- 	lockdep_assert_held(&kvm->slots_lock);
- 	kvm_flush_remote_tlbs_with_address(kvm, memslot->base_gfn,
-@@ -5963,8 +5958,6 @@ void kvm_mmu_slot_leaf_clear_dirty(struct kvm *kvm,
- 	flush = slot_handle_leaf(kvm, memslot, __rmap_clear_dirty, false);
- 	spin_unlock(&kvm->mmu_lock);
- 
--	lockdep_assert_held(&kvm->slots_lock);
--
- 	/*
- 	 * It's also safe to flush TLBs out of mmu lock here as currently this
- 	 * function is only used for dirty logging, in which case flushing TLB
-@@ -5972,8 +5965,7 @@ void kvm_mmu_slot_leaf_clear_dirty(struct kvm *kvm,
- 	 * dirty_bitmap.
- 	 */
- 	if (flush)
--		kvm_flush_remote_tlbs_with_address(kvm, memslot->base_gfn,
--				memslot->npages);
-+		kvm_arch_flush_remote_tlbs_memslot(kvm, memslot);
- }
- EXPORT_SYMBOL_GPL(kvm_mmu_slot_leaf_clear_dirty);
- 
-@@ -5987,12 +5979,8 @@ void kvm_mmu_slot_largepage_remove_write_access(struct kvm *kvm,
- 					false);
- 	spin_unlock(&kvm->mmu_lock);
- 
--	/* see kvm_mmu_slot_remove_write_access */
--	lockdep_assert_held(&kvm->slots_lock);
--
- 	if (flush)
--		kvm_flush_remote_tlbs_with_address(kvm, memslot->base_gfn,
--				memslot->npages);
-+		kvm_arch_flush_remote_tlbs_memslot(kvm, memslot);
- }
- EXPORT_SYMBOL_GPL(kvm_mmu_slot_largepage_remove_write_access);
- 
-@@ -6005,12 +5993,8 @@ void kvm_mmu_slot_set_dirty(struct kvm *kvm,
- 	flush = slot_handle_all_level(kvm, memslot, __rmap_set_dirty, false);
- 	spin_unlock(&kvm->mmu_lock);
- 
--	lockdep_assert_held(&kvm->slots_lock);
--
--	/* see kvm_mmu_slot_leaf_clear_dirty */
- 	if (flush)
--		kvm_flush_remote_tlbs_with_address(kvm, memslot->base_gfn,
--				memslot->npages);
-+		kvm_arch_flush_remote_tlbs_memslot(kvm, memslot);
- }
- EXPORT_SYMBOL_GPL(kvm_mmu_slot_set_dirty);
- 
--- 
-2.24.1
+'clk' is redundant. How about 'ahb'?
 
+> +
+> +Example:
+> +
+> +efuse: efuse@134100d0 {
+> +	compatible = "ingenic,jz4780-efuse";
+> +	reg = <0x134100d0 0x2c>;
+> +
+> +	clocks = <&cgu JZ4780_CLK_AHB2>;
+> +	clock-names = "bus_clk";
+> +};
+> -- 
+> 2.23.0
+> 
