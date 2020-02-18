@@ -2,81 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97713162BC1
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2020 18:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 759A7162E7C
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2020 19:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727232AbgBRRKz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Feb 2020 12:10:55 -0500
-Received: from mga02.intel.com ([134.134.136.20]:33131 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726617AbgBRRKy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 18 Feb 2020 12:10:54 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Feb 2020 09:10:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,456,1574150400"; 
-   d="scan'208";a="408131622"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
-  by orsmga005.jf.intel.com with ESMTP; 18 Feb 2020 09:10:54 -0800
-Date:   Tue, 18 Feb 2020 09:10:52 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Peter Xu <peterx@redhat.com>, Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>
-Subject: Re: [PATCH v5 15/19] KVM: Provide common implementation for generic
- dirty log functions
-Message-ID: <20200218171052.GE27565@linux.intel.com>
-References: <20200121223157.15263-16-sean.j.christopherson@intel.com>
- <20200206200200.GC700495@xz-x1>
- <20200206212120.GF13067@linux.intel.com>
- <20200206214106.GG700495@xz-x1>
- <20200207194532.GK2401@linux.intel.com>
- <20200208001832.GA823968@xz-x1>
- <20200208004233.GA15581@linux.intel.com>
- <20200208005334.GB823968@xz-x1>
- <20200208012938.GC15581@linux.intel.com>
- <87sgj99q9w.fsf@vitty.brq.redhat.com>
+        id S1726422AbgBRS21 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Feb 2020 13:28:27 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:39134 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726333AbgBRS21 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Feb 2020 13:28:27 -0500
+Received: by mail-pf1-f194.google.com with SMTP id 84so11065691pfy.6
+        for <linux-mips@vger.kernel.org>; Tue, 18 Feb 2020 10:28:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d3KSdYVbADc8vhuPRBnMJ0Olj+WzBHR91Wg/nozFRYA=;
+        b=IaQVxnR3uw31I9KunUQW5x8fXVHpy/6d/88oLvKBtPts2zAXC4WAIdJJWQN8rU7XFZ
+         F9zes4nbRbK4WtDCM3SHBBblZhNRP6VwotM4uwx/Wy2m0TO6Ps/fsNWL3WO7Y8CmBYJV
+         H4XDlwgzFvNsxnyzezcpPqGpDAbmOtjnpj8zYaDld/s2Z7y+qqodtC/Zefvx7tg/s80J
+         2KYLk3CgN1goeYX3nnng1hDTQqCJk2NwClrXveS8dbtg4abUilguyuJcQA8wWr9l4kIQ
+         pgaHPCredNAnrNtlgdUt4o3RF/s5wlfgY9h3wpZL0cbnXyK5ZGnkuJdxRduDs7pQqboV
+         22Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d3KSdYVbADc8vhuPRBnMJ0Olj+WzBHR91Wg/nozFRYA=;
+        b=jFopXFXDsKjKRWNBpegOm1ezyHekGzB5fwTMkNwqDJV/H5nHvpGdqh8E8yYh7K1yRr
+         BU8HoL7rxWa8wiSKpKmLo/xSUKi7+qOMckbxzGhJS4HfEo6XKDigNNqdfsJCXMIVFoC5
+         7tRfbtP0rk0c9YRRMhtwTv3v0eIbqQ+QI10Rt0/k5vb9tr1oqfWG/z77248JrXZ1nRyb
+         pYmCkDUSS777RZhmm7IRjq9QD8NqL7pEpatlrq+20Qt5qGcbGURZkWaPX3V8mQQZuxSh
+         IQGHkWtN4vTINFMFwrQrENcm4didneSf/eEsHIgg1TQM/YtIfmOh0EDNX64oudClIHGf
+         LKHQ==
+X-Gm-Message-State: APjAAAUnPbz8Z44C26M2PPjsJh/nVnNeq0m0rca43toXU+1mOlqoyzcs
+        3zCCHm7pdvrbgECf1swZjFguR0bWcxdMEa7thzLc+w==
+X-Google-Smtp-Source: APXvYqzxsWCTzcp7XmEp9QyDTP0RELzLF7tqcKNPMkp2zhqxWNZwVbTFpSte6uGJE1AFtMU4DAqfxwEbLUnJyq5Bg/M=
+X-Received: by 2002:a63:64c5:: with SMTP id y188mr23652916pgb.10.1582050506059;
+ Tue, 18 Feb 2020 10:28:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87sgj99q9w.fsf@vitty.brq.redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+References: <20200217211149.44132-1-natechancellor@gmail.com>
+In-Reply-To: <20200217211149.44132-1-natechancellor@gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 18 Feb 2020 10:28:15 -0800
+Message-ID: <CAKwvOdnRbMrXNSMAA20UnoAUKBu5X7JO+DvNTb9pebuzQbRVcw@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: vdso: Wrap -mexplicit-relocs in cc-option
+To:     Nathan Chancellor <natechancellor@gmail.com>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        linux-mips@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 04:39:39PM +0100, Vitaly Kuznetsov wrote:
-> Sean Christopherson <sean.j.christopherson@intel.com> writes:
-> > Unless it's functionally incorrect (Vitaly?), going with option (2) and
-> > naming the hook kvm_arch_flush_remote_tlbs_memslot() seems like the obvious
-> > choice, e.g. the final cleanup gives this diff stat:
-> 
-> (I apologize again for not replying in time)
+On Mon, Feb 17, 2020 at 1:11 PM Nathan Chancellor
+<natechancellor@gmail.com> wrote:
+>
+> Clang does not support this option and errors out:
+>
+> clang-11: error: unknown argument: '-mexplicit-relocs'
+>
+> Clang does not appear to need this flag like GCC does because the jalr
+> check that was added in commit 976c23af3ee5 ("mips: vdso: add build
+> time check that no 'jalr t9' calls left") passes just fine with
+>
+> $ make ARCH=mips CC=clang CROSS_COMPILE=mipsel-linux-gnu- malta_defconfig arch/mips/vdso/
+>
+> even before commit d3f703c4359f ("mips: vdso: fix 'jalr t9' crash in
+> vdso code").
+>
+> -mrelax-pic-calls has been supported since clang 9, which is the
+> earliest version that could build a working MIPS kernel, and it is the
+> default for clang so just leave it be.
+>
+> Fixes: d3f703c4359f ("mips: vdso: fix 'jalr t9' crash in vdso code")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/890
+> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 
-No worries, didn't hinder me in the slightest as I was buried in other
-stuff last week anyways.
+Thanks for the patch, and detailed context.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-> I think this is a valid approach and your option (2) would also be my
-> choice. I also don't think there's going to be a problem when (if)
-> Hyper-V adds support for PML (eVMCSv2?).
+With this patch applied:
+$ make ARCH=mips CC=clang CROSS_COMPILE=mipsel-linux-gnu-
+malta_defconfig arch/mips/vdso/
+$ lvm-objdump --disassemble arch/mips/vdso/vdso.so.dbg.raw | egrep -h "jarl.*t9"
+$ llvm-objdump --disassemble arch/mips/vdso/vdso.so.dbg.raw | grep jarl
+So jarl instructions aren't emitted.
 
-Cool, thanks!
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> ---
+>  arch/mips/vdso/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+> index 77374c1f0c77..d7fe8408603e 100644
+> --- a/arch/mips/vdso/Makefile
+> +++ b/arch/mips/vdso/Makefile
+> @@ -33,7 +33,7 @@ endif
+>  cflags-vdso := $(ccflags-vdso) \
+>         $(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
+>         -O3 -g -fPIC -fno-strict-aliasing -fno-common -fno-builtin -G 0 \
+> -       -mrelax-pic-calls -mexplicit-relocs \
+> +       -mrelax-pic-calls $(call cc-option, -mexplicit-relocs) \
+>         -fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
+>         $(call cc-option, -fno-asynchronous-unwind-tables) \
+>         $(call cc-option, -fno-stack-protector)
+> --
+
+-- 
+Thanks,
+~Nick Desaulniers
