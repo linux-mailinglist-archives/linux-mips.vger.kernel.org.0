@@ -2,115 +2,277 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7909161D76
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Feb 2020 23:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4114E161EEE
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2020 03:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725853AbgBQWkI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Feb 2020 17:40:08 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:38334 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725959AbgBQWkG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Feb 2020 17:40:06 -0500
-Received: by mail-wr1-f65.google.com with SMTP id y17so21617591wrh.5
-        for <linux-mips@vger.kernel.org>; Mon, 17 Feb 2020 14:40:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=76Z6CK20GgcJDSbhtaVsIFc+JofKd4d7bU36INZrWq8=;
-        b=kxzPl+66GzU0tsmDlLsFrMwRER4GjmMjrCsQ8WBsJpK7WvBK66WgF+Za2d5YquYg0F
-         56RJP+B7UnTuynnPArjOIS1mmcoVxNYTlc14JckbL5FQk3LgaTbIghYssIHIN6EAxt+U
-         t8iJ5dQuIFhTYJQhYFKFKc0tUg1isJ4xiyna6ZbcvPum0pst/kjre1zEdMQWE4DGB6Qx
-         ywSlGjIKeXfeyfQuvaTNBYECdGcYQGdrc6GKo7gxv7XmTTW/Vv6OhAGMH8kp9Z+ytHGc
-         86TWTERacFcFKshU+EVa4AX9mCL/p8VC4HwrbpCPGflRZljZRLqzoRQLprmBJyPhQaMl
-         9QWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=76Z6CK20GgcJDSbhtaVsIFc+JofKd4d7bU36INZrWq8=;
-        b=NuROV0KAcS8CjkPJwJ/n4hhOD+Fz8h2EqT3zbL4Jq8aPW8K/+btulS5fT76cv4vU8T
-         YCP9na+lGdml7MQ3InvjuckaEygShqsU5MeTi18lTMn++YENPjhqAshCj/LNkF+lJvlc
-         gkyJow2MKbkOs3/YWLeqvdLZVXjb9dHbf9r7hSt/oFy3TtgOydLyHtEIdKEMXTyCYROR
-         8lN7X0Spz1IgkVCX0/FJQAEk2NFpjNoSTyce5E7VeNTe/FhYu43Oo+4fYVxTefLA+zRU
-         p5bAQzbPUmzSmonbZBmrKiRH1ZCUrlQ3FV/v+qbItWjzxZ/znbOQNm+y+qz59RWoWYE+
-         PRjA==
-X-Gm-Message-State: APjAAAWnJTD2AP0yJAqHHpHC1rhv4f3wZwEKAY8cJuj46/laV0BNViPu
-        ILCWxOJYPMdqnYEd2EShStDfol7rI4Zz4uKUzgcCIQ==
-X-Google-Smtp-Source: APXvYqwNZrDDXyuSSAFRXCKsy/wiMe0qfoB8DAfRSRnoO8OLRY0g8yoVJOVwgE7xeIdVzjRpZGxBZ5gLv8/0K5cJ2j4=
-X-Received: by 2002:a5d:6a4b:: with SMTP id t11mr24090235wrw.262.1581979204034;
- Mon, 17 Feb 2020 14:40:04 -0800 (PST)
+        id S1726299AbgBRCV4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Feb 2020 21:21:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50370 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726182AbgBRCV4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 17 Feb 2020 21:21:56 -0500
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3B29A2465D;
+        Tue, 18 Feb 2020 02:21:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581992514;
+        bh=UFm8ktdZhblu/2s0ozFeAb4+2Rlmv3TL7j0nOVximz0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PEjs99KqMCb92Wk1M7ayKtUXgPiXb6a6dacanXMhKN3X7z8L+Cz0w2BVaE9c0lCaZ
+         LyfwA8H6aLbB2uEYNoNrEedS7L6KUhhtxCx3d86P/WAoReitv9/CxEH8jK18jLmsZc
+         YnCh6IVgQrm1txL3nvx1nek6grRsjJ2XJXdnqhRM=
+Received: by mail-lj1-f175.google.com with SMTP id x14so21035842ljd.13;
+        Mon, 17 Feb 2020 18:21:54 -0800 (PST)
+X-Gm-Message-State: APjAAAXOlTyL4bMDkP8vL+7ftRh9Zs+6tG3jyQxTRJ9yyQgy2jBEJMiF
+        t/PQh2YEUCoKQIylSulg2BsvkczsYDP8DIdKggo=
+X-Google-Smtp-Source: APXvYqwLxeMgM+mSk0yU+FYSCGy3AfSLs0zCZ4mYg0byKooBHPWU4rt3UmuGmS6NBw9sW9r0FPIiyiQYYxAAvpvgI18=
+X-Received: by 2002:a2e:81c3:: with SMTP id s3mr11214674ljg.168.1581992512158;
+ Mon, 17 Feb 2020 18:21:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20200213161614.23246-1-vincenzo.frascino@arm.com>
- <20200213161614.23246-20-vincenzo.frascino@arm.com> <20200213184454.GA4663@ubuntu-m2-xlarge-x86>
- <0cee3707-d526-3766-3dde-543c8dbd8e68@arm.com> <20200217164608.GA2708@willie-the-truck>
-In-Reply-To: <20200217164608.GA2708@willie-the-truck>
-From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Date:   Mon, 17 Feb 2020 23:39:53 +0100
-Message-ID: <CAKv+Gu8Qh495twz-3UQrFiKfPq-Kt_o+JrCNwEcdMedV2DqPEA@mail.gmail.com>
-Subject: Re: [PATCH 19/19] arm64: vdso32: Enable Clang Compilation
-To:     Will Deacon <will@kernel.org>
-Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        0x7f454c46@gmail.com, linux-mips@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Will Deacon <will.deacon@arm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>, pcc@google.com,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        avagin@openvz.org, Stephen Boyd <sboyd@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+References: <1581915833-21984-1-git-send-email-anshuman.khandual@arm.com> <1581915833-21984-3-git-send-email-anshuman.khandual@arm.com>
+In-Reply-To: <1581915833-21984-3-git-send-email-anshuman.khandual@arm.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 18 Feb 2020 10:21:40 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSj9aOhkNo5eZQD0a7vWJ1-6_CX4LSuhm54odQsxqV37Q@mail.gmail.com>
+Message-ID: <CAJF2gTSj9aOhkNo5eZQD0a7vWJ1-6_CX4LSuhm54odQsxqV37Q@mail.gmail.com>
+Subject: Re: [PATCH 2/5] mm/vma: Make vma_is_accessible() available for
+ general use
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        salyzyn@android.com, Paul Burton <paul.burton@mips.com>
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 17 Feb 2020 at 17:46, Will Deacon <will@kernel.org> wrote:
+csky:
+
+Acked-by: Guo Ren <guoren@kernel.org>
+
+
+On Mon, Feb 17, 2020 at 1:04 PM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
 >
-> On Mon, Feb 17, 2020 at 12:26:16PM +0000, Vincenzo Frascino wrote:
-> > On 13/02/2020 18:44, Nathan Chancellor wrote:
-> > > On Thu, Feb 13, 2020 at 04:16:14PM +0000, Vincenzo Frascino wrote:
-> > >> Enable Clang Compilation for the vdso32 library.
-> >
-> > [...]
-> >
-> > >> +LD_COMPAT ?= $(CROSS_COMPILE_COMPAT)gcc
-> > >
-> > > Well this is unfortunate :/
-> > >
-> > > It looks like adding the --target flag to VDSO_LDFLAGS allows
-> > > clang to link the vDSO just fine although it does warn that -nostdinc
-> > > is unused:
-> > >
-> > > clang-11: warning: argument unused during compilation: '-nostdinc'
-> > > [-Wunused-command-line-argument]
-> > >
-> >
-> > This is why ended up in this "unfortunate" situation :) I wanted to avoid the
-> > warning.
-> >
-> > > It would be nice if the logic of commit fe00e50b2db8 ("ARM: 8858/1:
-> > > vdso: use $(LD) instead of $(CC) to link VDSO") could be adopted here
-> > > but I get that this Makefile is its own beast :) at the very least, I
-> > > think that the --target flag should be added to VDSO_LDFLAGS so that gcc
-> > > is not a requirement for this but I am curious if you tried that already
-> > > and noticed any issues with it.
-> > >
-> >
-> > --target is my preferred way as well, I can try to play another little bit with
-> > the flags and see what I can come up with in the next version.
+> Lets move vma_is_accessible() helper to include/linux/mm.h which makes it
+> available for general use. While here, this replaces all remaining open
+> encodings for VMA access check with vma_is_accessible().
 >
-> Yes, please. I'd even prefer the warning rather than silently assuming that
-> a cross gcc is kicking around on the path.
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-m68k@lists.linux-m68k.org
+> Cc: linux-mips@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-sh@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  arch/csky/mm/fault.c    | 2 +-
+>  arch/m68k/mm/fault.c    | 2 +-
+>  arch/mips/mm/fault.c    | 2 +-
+>  arch/powerpc/mm/fault.c | 2 +-
+>  arch/sh/mm/fault.c      | 2 +-
+>  arch/x86/mm/fault.c     | 2 +-
+>  include/linux/mm.h      | 5 +++++
+>  kernel/sched/fair.c     | 2 +-
+>  mm/gup.c                | 2 +-
+>  mm/memory.c             | 5 -----
+>  mm/mempolicy.c          | 3 +--
+>  11 files changed, 14 insertions(+), 15 deletions(-)
+>
+> diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
+> index f76618b630f9..4b3511b8298d 100644
+> --- a/arch/csky/mm/fault.c
+> +++ b/arch/csky/mm/fault.c
+> @@ -137,7 +137,7 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
+>                 if (!(vma->vm_flags & VM_WRITE))
+>                         goto bad_area;
+>         } else {
+> -               if (!(vma->vm_flags & (VM_READ | VM_WRITE | VM_EXEC)))
+> +               if (!vma_is_accessible(vma))
+>                         goto bad_area;
+>         }
+>
+> diff --git a/arch/m68k/mm/fault.c b/arch/m68k/mm/fault.c
+> index e9b1d7585b43..d5131ec5d923 100644
+> --- a/arch/m68k/mm/fault.c
+> +++ b/arch/m68k/mm/fault.c
+> @@ -125,7 +125,7 @@ int do_page_fault(struct pt_regs *regs, unsigned long address,
+>                 case 1:         /* read, present */
+>                         goto acc_err;
+>                 case 0:         /* read, not present */
+> -                       if (!(vma->vm_flags & (VM_READ | VM_EXEC | VM_WRITE)))
+> +                       if (!vma_is_accessible(vma))
+>                                 goto acc_err;
+>         }
+>
+> diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
+> index 1e8d00793784..5b9f947bfa32 100644
+> --- a/arch/mips/mm/fault.c
+> +++ b/arch/mips/mm/fault.c
+> @@ -142,7 +142,7 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
+>                                 goto bad_area;
+>                         }
+>                 } else {
+> -                       if (!(vma->vm_flags & (VM_READ | VM_WRITE | VM_EXEC)))
+> +                       if (!vma_is_accessible(vma))
+>                                 goto bad_area;
+>                 }
+>         }
+> diff --git a/arch/powerpc/mm/fault.c b/arch/powerpc/mm/fault.c
+> index 8db0507619e2..71a3658c516b 100644
+> --- a/arch/powerpc/mm/fault.c
+> +++ b/arch/powerpc/mm/fault.c
+> @@ -314,7 +314,7 @@ static bool access_error(bool is_write, bool is_exec,
+>                 return false;
+>         }
+>
+> -       if (unlikely(!(vma->vm_flags & (VM_READ | VM_EXEC | VM_WRITE))))
+> +       if (unlikely(!vma_is_accessible(vma)))
+>                 return true;
+>         /*
+>          * We should ideally do the vma pkey access check here. But in the
+> diff --git a/arch/sh/mm/fault.c b/arch/sh/mm/fault.c
+> index 5f51456f4fc7..a8c4253f37d7 100644
+> --- a/arch/sh/mm/fault.c
+> +++ b/arch/sh/mm/fault.c
+> @@ -355,7 +355,7 @@ static inline int access_error(int error_code, struct vm_area_struct *vma)
+>                 return 1;
+>
+>         /* read, not present: */
+> -       if (unlikely(!(vma->vm_flags & (VM_READ | VM_EXEC | VM_WRITE))))
+> +       if (unlikely(!vma_is_accessible(vma)))
+>                 return 1;
+>
+>         return 0;
+> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+> index fa4ea09593ab..c461eaab0306 100644
+> --- a/arch/x86/mm/fault.c
+> +++ b/arch/x86/mm/fault.c
+> @@ -1200,7 +1200,7 @@ access_error(unsigned long error_code, struct vm_area_struct *vma)
+>                 return 1;
+>
+>         /* read, not present: */
+> -       if (unlikely(!(vma->vm_flags & (VM_READ | VM_EXEC | VM_WRITE))))
+> +       if (unlikely(!vma_is_accessible(vma)))
+>                 return 1;
+>
+>         return 0;
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 52269e56c514..b0e53ef13ff1 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -541,6 +541,11 @@ static inline bool vma_is_anonymous(struct vm_area_struct *vma)
+>         return !vma->vm_ops;
+>  }
+>
+> +static inline bool vma_is_accessible(struct vm_area_struct *vma)
+> +{
+> +       return vma->vm_flags & (VM_READ | VM_WRITE | VM_EXEC);
+> +}
+> +
+>  #ifdef CONFIG_SHMEM
+>  /*
+>   * The vma_is_shmem is not inline because it is used only by slow
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index fe4e0d775375..6ce54d57dd09 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -2573,7 +2573,7 @@ static void task_numa_work(struct callback_head *work)
+>                  * Skip inaccessible VMAs to avoid any confusion between
+>                  * PROT_NONE and NUMA hinting ptes
+>                  */
+> -               if (!(vma->vm_flags & (VM_READ | VM_EXEC | VM_WRITE)))
+> +               if (!vma_is_accessible(vma))
+>                         continue;
+>
+>                 do {
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 1b521e0ac1de..c8ffe2e61f03 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -1171,7 +1171,7 @@ long populate_vma_page_range(struct vm_area_struct *vma,
+>          * We want mlock to succeed for regions that have any permissions
+>          * other than PROT_NONE.
+>          */
+> -       if (vma->vm_flags & (VM_READ | VM_WRITE | VM_EXEC))
+> +       if (vma_is_accessible(vma))
+>                 gup_flags |= FOLL_FORCE;
+>
+>         /*
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 0bccc622e482..2f07747612b7 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3942,11 +3942,6 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf, pmd_t orig_pmd)
+>         return VM_FAULT_FALLBACK;
+>  }
+>
+> -static inline bool vma_is_accessible(struct vm_area_struct *vma)
+> -{
+> -       return vma->vm_flags & (VM_READ | VM_EXEC | VM_WRITE);
+> -}
+> -
+>  static vm_fault_t create_huge_pud(struct vm_fault *vmf)
+>  {
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> index 977c641f78cf..91c1ad6ab8ea 100644
+> --- a/mm/mempolicy.c
+> +++ b/mm/mempolicy.c
+> @@ -649,8 +649,7 @@ static int queue_pages_test_walk(unsigned long start, unsigned long end,
+>
+>         if (flags & MPOL_MF_LAZY) {
+>                 /* Similar to task_numa_work, skip inaccessible VMAs */
+> -               if (!is_vm_hugetlb_page(vma) &&
+> -                       (vma->vm_flags & (VM_READ | VM_EXEC | VM_WRITE)) &&
+> +               if (!is_vm_hugetlb_page(vma) && vma_is_accessible(vma) &&
+>                         !(vma->vm_flags & VM_MIXEDMAP))
+>                         change_prot_numa(vma, start, endvma);
+>                 return 1;
+> --
+> 2.20.1
 >
 
-Doesn't Clang have -Qunused-arguments for that?
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
