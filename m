@@ -2,144 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D2A162EAF
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2020 19:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D21F1632F6
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2020 21:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726352AbgBRShM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Feb 2020 13:37:12 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:36420 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726346AbgBRShM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Feb 2020 13:37:12 -0500
-Received: by mail-pl1-f194.google.com with SMTP id a6so8425794plm.3
-        for <linux-mips@vger.kernel.org>; Tue, 18 Feb 2020 10:37:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ccXZcPHgblgsQ7szhI146C2Fb020S8Uq8EN9Auab0l4=;
-        b=WuPXMTeklZQs1oW0RE5IlOhPNzD6lbppOClBV6i0Ns8aeFerqCD3HXxAL6SQmOZv5L
-         T1Eztw2uppZlUEDdP+rbVrNRHxUhjrKsSs3AYg+rGVsfuBrs/+X5YDGxx4LHJQzsRqEU
-         FBb/sBVAkLgg1I8GCSI03WSVMahh9xEo0IikKesZX34MbFAvkVxQel80aQeoKFjuo339
-         hbVA3VFfaCseBdGYbE8pwDZZFc09cCdr7DmcEKrbGhCYfEnjZtWDNRPGSoZ193bniHrY
-         Y81NQnOo5edZ5MgDyG67f51BmuzxhIYka3sK4u0x/GkWRGLkrePBhKz8RLGRvUon9yC9
-         Yg5w==
+        id S1726595AbgBRUWE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Feb 2020 15:22:04 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:45847 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726403AbgBRUWD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Feb 2020 15:22:03 -0500
+Received: by mail-ot1-f68.google.com with SMTP id 59so20838397otp.12;
+        Tue, 18 Feb 2020 12:22:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ccXZcPHgblgsQ7szhI146C2Fb020S8Uq8EN9Auab0l4=;
-        b=If1OoWaHLOqjdixcenkFZcJgoRgvO7Fz+4tWCbDMlvvQthTMxYs3ZxgtKVmmeCTwMy
-         xi58ucnuEkTk/LcxgBYT9hG59Ehx8zV+Svs0t1q+sPFzLb5DCN/m5/AnRenyL3POFWCM
-         Bnrl6jphCfxd+G/WCvysih+kZORm6V6fLKvfCmZNYshNCs6i5J/F+kp9BICYmjT9FQ12
-         NAjGUQP6XTB4bpZ6QDsWoxmRxDipGhctzEJE8x0ykdIVv2rZrxo63HlRpfAHBO6U1M0q
-         nHa49/wMVHp7E2RKJjDtRafMcdg5BqP1uveEVpejfuhovRR/Q7bLm7d2uqWA3KniiywU
-         xk7g==
-X-Gm-Message-State: APjAAAWZQgWaaQWWTnee+rx0ZdtsXa7Nr1Sv7Iwq4pqJYm2CtJZaFbE1
-        1YHhZlrBiT1S7LIOqLjFuU3u3xVxctwm1VhZ45mlxQ==
-X-Google-Smtp-Source: APXvYqzZgsU+a3pD+9mNeeHD5Yzed7d/Zb2r/b92wg4B+RpYyN4zpLjcE6hVEt6mGDkskCHevectGcMJtuyrWa0g6tU=
-X-Received: by 2002:a17:902:760e:: with SMTP id k14mr20968051pll.119.1582051031642;
- Tue, 18 Feb 2020 10:37:11 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=6bhlYFbTU31k44CeyF0cp+l2NnzkZFlb1NdHHQJJpQc=;
+        b=rbv4vK6QcuQ+O/YjvO01DZXJriMXnl6DI8PeRysvXqZjS6FsJk+zbB3CgqKS+lJCsa
+         GnldoiGTjt3MwAxLBRL+EHCVA45NMecYqfpBQGaTQd3Rcd0nLQxbiCayiCe1I4qKQIfr
+         b7XpPCgS8PSMRut01TRSvsB34Ycyd6lXuKJv3GS4tCPWKnFrB2zIYUKNhjeL4z5k5Ngy
+         zKnaDNLGD0O6rF0RiQ4SuN816qz1h49eAWhbZyubjdplbzfuw8sNqPbDuMZVaexKZi3k
+         p9YK/xD1pL0/JZom2QY78yCrM91l/svwhSCQEXihrpU9kGeGYM/7RsdGIBdfSqdgc/oW
+         uQ3A==
+X-Gm-Message-State: APjAAAW1/MEN3WJpBmfIWGVSRlTGrBgX0bZs+m8swSds53p9L1OTz+Cx
+        WYBycnGJWZOvv9FlqTSo2w==
+X-Google-Smtp-Source: APXvYqxT+CIgJyZ9ZV3zhU/dPm0cNLpPF5jFMryAjazLFUuf50hbJ2n2d8O+6N3EFn9+aeh2f/Dydw==
+X-Received: by 2002:a9d:63d6:: with SMTP id e22mr17382781otl.185.1582057322748;
+        Tue, 18 Feb 2020 12:22:02 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 108sm1719452oti.1.2020.02.18.12.22.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Feb 2020 12:22:02 -0800 (PST)
+Received: (nullmailer pid 2334 invoked by uid 1000);
+        Tue, 18 Feb 2020 20:22:00 -0000
+Date:   Tue, 18 Feb 2020 14:22:00 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        paul@crapouillou.net, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, mark.rutland@arm.com, ralf@linux-mips.org,
+        paulburton@kernel.org, jiaxun.yang@flygoat.com, chenhc@lemote.com,
+        allison@lohutok.net, tglx@linutronix.de, daniel.lezcano@linaro.org,
+        geert+renesas@glider.be, krzk@kernel.org, keescook@chromium.org,
+        ebiederm@xmission.com, miquel.raynal@bootlin.com,
+        paul@boddie.org.uk, hns@goldelico.com,
+        mips-creator-ci20-dev@googlegroups.com
+Subject: Re: [PATCH v5 5/7] dt-bindings: MIPS: Document Ingenic SoCs binding.
+Message-ID: <20200218202200.GA1533@bogus>
+References: <1581792932-108032-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1581792932-108032-7-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-References: <20200211212455.3307-1-mark.tomlinson@alliedtelesis.co.nz>
- <CAAdtpL5Tf-8O=xMKO33DWDs=2_Hsdk=FQSNO5Gsrx=9hWvENdg@mail.gmail.com>
- <8e852d84c8b0c6b35faa3b3f2a1034d93a6e8967.camel@alliedtelesis.co.nz> <8cb14684e2f774d9573c062f2d82ad5348c5fee7.camel@alliedtelesis.co.nz>
-In-Reply-To: <8cb14684e2f774d9573c062f2d82ad5348c5fee7.camel@alliedtelesis.co.nz>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 18 Feb 2020 10:37:00 -0800
-Message-ID: <CAKwvOdkaLRE0Ek3PnmqE2P3Urn4+pwfAp-qQdsLurwERcqNXfQ@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: cavium_octeon: Fix syncw generation.
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     Mark Tomlinson <Mark.Tomlinson@alliedtelesis.co.nz>,
-        "f4bug@amsat.org" <f4bug@amsat.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "clang-built-linux@googlegroups.com" 
-        <clang-built-linux@googlegroups.com>,
-        "paulburton@kernel.org" <paulburton@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1581792932-108032-7-git-send-email-zhouyanjie@wanyeetech.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 12:01 PM Chris Packham
-<Chris.Packham@alliedtelesis.co.nz> wrote:
->
-> On Mon, 2020-02-17 at 17:58 +1300, Mark Tomlinson wrote:
-> > Hi Phil,
-> >
-> > On Mon, 2020-02-17 at 01:22 +0100, Philippe Mathieu-Daud=C3=A9 wrote:
-> > > Hi Mark,
-> > >
-> > > On Tue, Feb 11, 2020 at 10:42 PM Mark Tomlinson
-> > > <mark.tomlinson@alliedtelesis.co.nz> wrote:
-> > > >
-> > > > The Cavium Octeon CPU uses a special sync instruction for implement=
-ing
-> > > > wmb, and due to a CPU bug, the instruction must appear twice. A mac=
-ro
-> > > > had been defined to hide this:
-> > > >
-> > > >  #define __SYNC_rpt(type)     (1 + (type =3D=3D __SYNC_wmb))
-> > > >
-> > > > which was intended to evaluate to 2 for __SYNC_wmb, and 1 for any o=
-ther
-> > > > type of sync. However, this expression is evaluated by the assemble=
-r,
-> > > > and not the compiler, and the result of '=3D=3D' in the assembler i=
-s 0 or
-> > > > -1, not 0 or 1 as it is in C. The net result was wmb() producing no=
- code
-> > > > at all. The simple fix in this patch is to change the '+' to '-'.
-> > >
-> > > Isn't this particular to the assembler implementation?
-> > > Can you explicit the assembler you are using in the commit descriptio=
-n?
-> > > Assuming we have to look at your commit in 3 years from now, we'll
-> > > wonder what assembler you were using.
-> > >
-> > > Thanks,
-> > >
-> > > Phil.
-> >
-> > Yes, it is tied to the assembler. But the Linux kernel is tied to GCC,
-> > and GCC (I believe) is tied to GNU as. I can't see the specification of
-> > GNU as changing, since that could break anything written for it.
-> >
->
-> There is an effort underway to build the kernel with clang[1]. I'm not
-> sure what that ends up using for an assembler or if it'll even be able
-> to target mips64 anytime soon.
->
-> For reference the relevant section from the GNU as manual[2] says "A
-> true results has a value of -1 whereas a false result has a value of
-> 0".
->
-> [1] - https://clangbuiltlinux.github.io/
-> [2] - https://sourceware.org/binutils/docs/as/Infix-Ops.html#Infix-Ops
+On Sun, 16 Feb 2020 02:55:30 +0800, =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= wrote:
+> Document the available properties for the SoC root node and the
+> CPU nodes of the devicetree for the Ingenic XBurst SoCs.
+> 
+> Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Tested-by: Paul Boddie <paul@boddie.org.uk>
+> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> ---
+> 
+> Notes:
+>     v1->v2:
+>     Change the two Document from txt to yaml.
+>     
+>     v2->v3:
+>     Fix formatting errors.
+>     
+>     v3->v4:
+>     Fix bugs in the two yaml files.
+>     
+>     v4->v5:
+>     No change.
+> 
+>  .../bindings/mips/ingenic/ingenic,cpu.yaml         | 53 ++++++++++++++++++++++
+>  .../bindings/mips/ingenic/ingenic,soc.yaml         | 35 ++++++++++++++
+>  2 files changed, 88 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,soc.yaml
+> 
 
-Chris, thanks for CC'ing us.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Mark, we're building 32 bit MIPS kernels with Clang under CI (just
-added big endian builds this morning).  We're actively looking into
-supporting 64b MIPS.
+Documentation/devicetree/bindings/display/simple-framebuffer.example.dts:21.16-37.11: Warning (chosen_node_is_root): /example-0/chosen: chosen node must be at root node
+Error: Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.example.dts:26.26-27 syntax error
+FATAL ERROR: Unable to parse input tree
+scripts/Makefile.lib:300: recipe for target 'Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.example.dt.yaml' failed
+make[1]: *** [Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.example.dt.yaml] Error 1
+Makefile:1263: recipe for target 'dt_binding_check' failed
+make: *** [dt_binding_check] Error 2
 
-The kernel uses GCC by default, but supports using any compiler via
-`make CC=3D<foo>`.  There is extensive support in the kernel for
-building with Clang.
-
-GCC and Clang (when doing kernel builds, for clang we set
-`-no-integrated-as`) will invoke GAS for inline assembly, but you can
-set `AS=3Dclang` for example for the out of line assembly files.  If the
-C source files don't contain inline assembly (or `-no-integrated-as`
-wasn't set) then Clang will skip invoking the assembler and stream out
-an object file.
-
-If you're actively supporting 64b mips, and want to give a Clang build
-a try, we'd appreciate the bug reports:
-https://github.com/ClangBuiltLinux/linux/issues
---=20
-Thanks,
-~Nick Desaulniers
+See https://patchwork.ozlabs.org/patch/1238592
+Please check and re-submit.
