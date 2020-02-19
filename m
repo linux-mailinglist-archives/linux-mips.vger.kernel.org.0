@@ -2,112 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86EE9163F8C
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2020 09:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2DE164048
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2020 10:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726260AbgBSIps (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Feb 2020 03:45:48 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:29343 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726265AbgBSIps (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 19 Feb 2020 03:45:48 -0500
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 48MrsP1rpLz9v6b8;
-        Wed, 19 Feb 2020 09:45:45 +0100 (CET)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=Z05PqepO; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id keiKTMYSteB4; Wed, 19 Feb 2020 09:45:45 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 48MrsN71T3z9v6b7;
-        Wed, 19 Feb 2020 09:45:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1582101945; bh=5A070PBG/NLKWQpTrZybAuA+otVPzj/KnbWKO2e8w8o=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Z05PqepONeujNziQ5YL8gnf1Z3+G6cb6ihOxmxz8uWdJtZ5jvdl2W5nDGv6hQ627P
-         yeH79Ly2Y6BDHEAClz4F0Sl7Ug7F7nBhocpqGaYZNQCnKXBAU1M4joGRYAVfpvCCT5
-         7XWc5FDRGFtiGRD1v2TVtmoHayh/6+4PxTcYWAOs=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 055918B829;
-        Wed, 19 Feb 2020 09:45:46 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 39Yl18DznLEK; Wed, 19 Feb 2020 09:45:45 +0100 (CET)
-Received: from [172.25.230.102] (unknown [172.25.230.102])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id BA9888B756;
-        Wed, 19 Feb 2020 09:45:45 +0100 (CET)
-Subject: Re: Surprising code generated for vdso_read_begin()
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
-References: <cover.1577111363.git.christophe.leroy@c-s.fr>
- <bd4557a7-9715-59aa-5d8e-488c5e516a98@c-s.fr>
- <20200109200733.GS3191@gate.crashing.org>
- <77a8bf25-6615-6c0a-56d4-eae7aa8a8f09@c-s.fr>
- <20200111113328.GX3191@gate.crashing.org>
- <CAK8P3a11wX1zJ+TAacDTkYsrzvfdVmNrcB6OC23aFvCxF57opQ@mail.gmail.com>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <305fcee5-2e1b-ea4d-9a2a-a0e8034d40a8@c-s.fr>
-Date:   Wed, 19 Feb 2020 09:45:45 +0100
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+        id S1726495AbgBSJXY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Feb 2020 04:23:24 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:34921 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726491AbgBSJXX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Feb 2020 04:23:23 -0500
+Received: by mail-lj1-f193.google.com with SMTP id q8so26245915ljb.2
+        for <linux-mips@vger.kernel.org>; Wed, 19 Feb 2020 01:23:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=VYACtOJzFbdHHzYAV0uoJeRPRBCCx7IkeDn63MpNOyk=;
+        b=CCiBJDOQ5P0k1bJLD9sFKDMpZF6oQoNIKRBF2hY/zXle6ThFUJbx+Uw8FDu0XhSKfM
+         OuqwMUedhFw6kO9+gKhw/6icCcP+A1cD3RRqIU+Ltyo+5MXfiNboB6NEenFFQkECXJSw
+         HlqWyXSXGIYk7hjq0bEsC0KfXWoorwMeFCYx5lS9L+O2m1PrE/Mxpv9BiEvaaYuzmkCO
+         7KkriufHpAT98/br77i3qzpcE9ZZG4qN3h5EIF9lJTl/9rGRYzUQHtq41R/8I0ruZ9VH
+         WItNmhMtbZVQ9Byk+iw+zfqs7wj3lJgUVGnUyEJC4J7jpW874hnI2f7thaU/GlZFqFVm
+         rVTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=VYACtOJzFbdHHzYAV0uoJeRPRBCCx7IkeDn63MpNOyk=;
+        b=sAqAPpvSiksZ4ydzY73aBIGbGQPNmHLcr5E92c3/ZS7NJeswaj6iWwA3exEXb+zgtD
+         tukw0em07QgfrusKfdpukSv8vFtFWI5wPmwhjGDEZACvoGxG45ai56NgSFxon2rLl8v2
+         fjGfP+9xHq7pwiYBWIwjjQdGC8jpyKfGbUD4jki34EXhex7HJJLW0x0fveEjqkibqgnx
+         hh3uH/Cf/v9vx0E/uxqMCg7BlEr1Pd9H6CfI+1U0e13I+IXJnroBWcw7DqR93n+zcpmr
+         l1dZMiYvxNFVRX86TIwDGQlrpKi/cBkyGyyiUJLJB+92V022CmOiUncvkM8MheuIZUvh
+         mbgA==
+X-Gm-Message-State: APjAAAUg6rjptuPGgbKjwhAO/0gN8Szr3gc3mTwnD8zEXphx1RJhMRAU
+        pT/PU4p1/qtk+0QYktLULcEPpw==
+X-Google-Smtp-Source: APXvYqwYpw0gDCHzJar4JQhf+hD+uQHtynXxiIGrOaO+rkxoRcCGQ2R/zdsyaYtZedMgWq+L5SluAA==
+X-Received: by 2002:a2e:b044:: with SMTP id d4mr14981358ljl.159.1582104201028;
+        Wed, 19 Feb 2020 01:23:21 -0800 (PST)
+Received: from ?IPv6:2a00:1fa0:26e:a51f:ed1d:2717:41f:4f76? ([2a00:1fa0:26e:a51f:ed1d:2717:41f:4f76])
+        by smtp.gmail.com with ESMTPSA id q26sm843539lfp.85.2020.02.19.01.23.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Feb 2020 01:23:20 -0800 (PST)
+Subject: Re: [PATCH v6 21/22] KVM: x86/mmu: Use ranged-based TLB flush for
+ dirty log memslot flush
+To:     Sean Christopherson <sean.j.christopherson@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Peter Xu <peterx@redhat.com>,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
+References: <20200218210736.16432-1-sean.j.christopherson@intel.com>
+ <20200218210736.16432-22-sean.j.christopherson@intel.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <fdb72ab9-18d4-5719-2863-78cde4e97fae@cogentembedded.com>
+Date:   Wed, 19 Feb 2020 12:22:58 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a11wX1zJ+TAacDTkYsrzvfdVmNrcB6OC23aFvCxF57opQ@mail.gmail.com>
+In-Reply-To: <20200218210736.16432-22-sean.j.christopherson@intel.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hello!
 
+On 19.02.2020 0:07, Sean Christopherson wrote:
 
-Le 16/02/2020 à 19:10, Arnd Bergmann a écrit :
-> On Sat, Jan 11, 2020 at 12:33 PM Segher Boessenkool
-> <segher@kernel.crashing.org> wrote:
->>
->> On Fri, Jan 10, 2020 at 07:45:44AM +0100, Christophe Leroy wrote:
->>> Le 09/01/2020 à 21:07, Segher Boessenkool a écrit :
->>>> It looks like the compiler did loop peeling.  What GCC version is this?
->>>> Please try current trunk (to become GCC 10), or at least GCC 9?
->>>
->>> It is with GCC 5.5
->>>
->>> https://mirrors.edge.kernel.org/pub/tools/crosstool/ doesn't have more
->>> recent than 8.1
->>
->> Arnd, can you update the tools?  We are at 8.3 and 9.2 now :-)  Or is
->> this hard and/or painful to do?
+> Use the with_address() variant to when performing a TLB flush for a
+                                  ^^ is it really needed here?
+
+> specific memslot via kvm_arch_flush_remote_tlbs_memslot(), i.e. when
+> flushing after clearing dirty bits during KVM_{GET,CLEAR}_DIRTY_LOG.
+> This aligns all dirty log memslot-specific TLB flushes to use the
+> with_address() variant and paves the way for consolidating the relevant
+> code.
 > 
-> To follow up on this older thread, I have now uploaded 6.5, 7.5, 8.3 and 9.2
-> binaries, as well as a recent 10.0 snapshot.
+> Note, moving to the with_address() variant only affects functionality
+> when running as a HyperV guest.
 > 
+> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+[...]
 
-Thanks Arnd,
-
-I have built the VDSO with 9.2, I get less performant result than with 
-8.2 (same performance as with 5.5).
-
-After a quick look, I see:
-- Irrelevant NOPs to align loops and stuff, allthough -mpcu=860 should 
-avoid that.
-- A stack frame is set for saving r31 in __c_kernel_clock_gettime. GCC 
-8.1 don't need that, all VDSO functions are frameless with 8.1
-
-Christophe
+MBR, Sergei
