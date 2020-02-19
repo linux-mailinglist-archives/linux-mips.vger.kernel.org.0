@@ -2,121 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AF4163CCD
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2020 06:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5214163E2D
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2020 08:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbgBSFtI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Feb 2020 00:49:08 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.167]:11182 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725994AbgBSFtI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Feb 2020 00:49:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582091344;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=alpNl+QogLXB42TE03qgaGa0z0wDQj+d62gUywp3S5A=;
-        b=gUDoMSdW6YuIkmZ1jMtThaM78Tob0DWmoyyzqlDnevMz5t8SNbCVClfVXfAH11WihO
-        PpDjA4HRPc2U2ua1q4/Q6PTwI0Hdzvpziq6MgEoiNDvJkhFuFfTQ6EOu1ZkYfphIud7w
-        08eNoGYbNp0O731QDLTK+CBQZO7INRXmfLHajgvrF0z/GrUuBgavlV5ax2OW5pIeAptq
-        U2/AkE/s7/fjhLh+XykUEmVwuByJCcbbSju/BlW7oE1uFOW84ksd4EH73LV0b7FQ8ATp
-        DpJ29TpFG9cRlw+qKhIV1zrJ9bPl9ZncIDdmT4d9X9TR5kEN40JML91XPV9tlHqPdlbY
-        Qglw==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlSZXA4LLQg="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-        by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1J5mvVzS
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Wed, 19 Feb 2020 06:48:57 +0100 (CET)
-Content-Type: text/plain; charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Subject: Re: [RFC v4 2/6] Bindings: nvmem: add bindings for JZ4780 efuse
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20200218212609.GA30081@bogus>
-Date:   Wed, 19 Feb 2020 06:48:56 +0100
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-mips@vger.kernel.org,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <CFE9AEF5-FFF9-44A9-90D8-DE6AC7E7DD4F@goldelico.com>
-References: <cover.1581958529.git.hns@goldelico.com> <86b78db4d607e0bdda6def018bc7f73207ce82e8.1581958529.git.hns@goldelico.com> <20200218212609.GA30081@bogus>
-To:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Mathieu Malaterre <malat@debian.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-X-Mailer: Apple Mail (2.3124)
+        id S1726270AbgBSHwH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Feb 2020 02:52:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57624 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726213AbgBSHwH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 19 Feb 2020 02:52:07 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3803C21D56;
+        Wed, 19 Feb 2020 07:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582098726;
+        bh=DXyXsIYD/jYMp5sCM+tq/z3Z1WPUdlaBaxmFssTcyyk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=puwrlXZUSL5xRYpx2wIoU8h9QkrBUiVtzWPTGdxijB1ZcG7ShYLc1DOiSySfjK+GW
+         iB3x43EXqv5h/6X5wzz9ixQpc0i8haradG6gGPu6McnsLLpgCy1vVtxOrh8qgcKxUA
+         2//XNmC5oXIrYiWGmSYvuSPoToXrOrCwIrzErJug=
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1j4K9M-006RyY-FM; Wed, 19 Feb 2020 07:52:04 +0000
+Date:   Wed, 19 Feb 2020 07:52:02 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/9] KVM: Pass kvm_init()'s opaque param to
+ additional arch funcs
+Message-ID: <20200219075202.1a6ed865@why>
+In-Reply-To: <20200218235437.20533-2-sean.j.christopherson@intel.com>
+References: <20200218235437.20533-1-sean.j.christopherson@intel.com>
+        <20200218235437.20533-2-sean.j.christopherson@intel.com>
+Organization: Approximate
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: sean.j.christopherson@intel.com, pbonzini@redhat.com, paulus@ozlabs.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, linux-mips@vger.kernel.org, kvm@vger.kernel.org, kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Tue, 18 Feb 2020 15:54:29 -0800
+Sean Christopherson <sean.j.christopherson@intel.com> wrote:
 
-> Am 18.02.2020 um 22:26 schrieb Rob Herring <robh@kernel.org>:
->=20
-> On Mon, Feb 17, 2020 at 05:55:26PM +0100, H. Nikolaus Schaller wrote:
->> From: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
->>=20
->> This patch brings support for the JZ4780 efuse. Currently it only =
-expose
->> a read only access to the entire 8K bits efuse memory.
->>=20
->> Tested-by: Mathieu Malaterre <malat@debian.org>
->> Signed-off-by: PrasannaKumar Muralidharan =
-<prasannatsmkumar@gmail.com>
->> Signed-off-by: Mathieu Malaterre <malat@debian.org>
->> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->> ---
->> .../bindings/nvmem/ingenic,jz4780-efuse.txt     | 17 =
-+++++++++++++++++
->> 1 file changed, 17 insertions(+)
->> create mode 100644 =
-Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.txt
->=20
-> Please convert to a DT schema.
+> Pass @opaque to kvm_arch_hardware_setup() and
+> kvm_arch_check_processor_compat() to allow architecture specific code to
+> reference @opaque without having to stash it away in a temporary global
+> variable.  This will enable x86 to separate its vendor specific callback
+> ops, which are passed via @opaque, into "init" and "runtime" ops without
+> having to stash away the "init" ops.
+> 
+> No functional change intended.
+> 
+> Reviewed-by: Cornelia Huck <cohuck@redhat.com>
+> Tested-by: Cornelia Huck <cohuck@redhat.com> #s390
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 
-Is there someone of you who can help to do that?
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-DT schemas are still like a Chinese dialect for me (i.e. I can decipher =
-with help but neither speak nor write).
-
-BR and thanks,
-Nikolaus
-
->=20
->> diff --git =
-a/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.txt =
-b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.txt
->> new file mode 100644
->> index 000000000000..339e74daa9a9
->> --- /dev/null
->> +++ =
-b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.txt
->> @@ -0,0 +1,17 @@
->> +Ingenic JZ EFUSE driver bindings
->> +
->> +Required properties:
->> +- "compatible"		Must be set to "ingenic,jz4780-efuse"
->> +- "reg"			Register location and length
->> +- "clocks"		Handle for the ahb clock for the efuse.
->> +- "clock-names"		Must be "bus_clk"
->=20
-> 'clk' is redundant. How about 'ahb'?
->=20
->> +
->> +Example:
->> +
->> +efuse: efuse@134100d0 {
->> +	compatible =3D "ingenic,jz4780-efuse";
->> +	reg =3D <0x134100d0 0x2c>;
->> +
->> +	clocks =3D <&cgu JZ4780_CLK_AHB2>;
->> +	clock-names =3D "bus_clk";
->> +};
->> --=20
->> 2.23.0
->>=20
-
+	M.
+-- 
+Jazz is not dead. It just smells funny...
