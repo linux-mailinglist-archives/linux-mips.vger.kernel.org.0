@@ -2,106 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F56B164506
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2020 14:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9582916484C
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2020 16:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726962AbgBSNI5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Feb 2020 08:08:57 -0500
-Received: from gate.crashing.org ([63.228.1.57]:38973 "EHLO gate.crashing.org"
+        id S1726648AbgBSPSP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Feb 2020 10:18:15 -0500
+Received: from mga04.intel.com ([192.55.52.120]:22682 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726558AbgBSNI5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 19 Feb 2020 08:08:57 -0500
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 01JD8ATq027345;
-        Wed, 19 Feb 2020 07:08:10 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 01JD88xt027342;
-        Wed, 19 Feb 2020 07:08:08 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Wed, 19 Feb 2020 07:08:08 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
-Subject: Re: Surprising code generated for vdso_read_begin()
-Message-ID: <20200219130808.GU22482@gate.crashing.org>
-References: <cover.1577111363.git.christophe.leroy@c-s.fr> <bd4557a7-9715-59aa-5d8e-488c5e516a98@c-s.fr> <20200109200733.GS3191@gate.crashing.org> <77a8bf25-6615-6c0a-56d4-eae7aa8a8f09@c-s.fr> <20200111113328.GX3191@gate.crashing.org> <CAK8P3a11wX1zJ+TAacDTkYsrzvfdVmNrcB6OC23aFvCxF57opQ@mail.gmail.com> <305fcee5-2e1b-ea4d-9a2a-a0e8034d40a8@c-s.fr> <CAK8P3a0SfCwP04CJPThCuDmngGhwtejN8Px_UQpSwi=s_ww=bw@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        id S1726691AbgBSPSP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 19 Feb 2020 10:18:15 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Feb 2020 07:18:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,459,1574150400"; 
+   d="scan'208";a="235919620"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
+  by orsmga003.jf.intel.com with ESMTP; 19 Feb 2020 07:18:14 -0800
+Date:   Wed, 19 Feb 2020 07:18:14 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Peter Xu <peterx@redhat.com>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>
+Subject: Re: [PATCH v6 21/22] KVM: x86/mmu: Use ranged-based TLB flush for
+ dirty log memslot flush
+Message-ID: <20200219151814.GC15888@linux.intel.com>
+References: <20200218210736.16432-1-sean.j.christopherson@intel.com>
+ <20200218210736.16432-22-sean.j.christopherson@intel.com>
+ <fdb72ab9-18d4-5719-2863-78cde4e97fae@cogentembedded.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK8P3a0SfCwP04CJPThCuDmngGhwtejN8Px_UQpSwi=s_ww=bw@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
+In-Reply-To: <fdb72ab9-18d4-5719-2863-78cde4e97fae@cogentembedded.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 10:52:16AM +0100, Arnd Bergmann wrote:
-> On Wed, Feb 19, 2020 at 9:45 AM Christophe Leroy
-> <christophe.leroy@c-s.fr> wrote:
-> > Le 16/02/2020 à 19:10, Arnd Bergmann a écrit :
-> > > On Sat, Jan 11, 2020 at 12:33 PM Segher Boessenkool
-> > > <segher@kernel.crashing.org> wrote:
-> > >>
-> > >> On Fri, Jan 10, 2020 at 07:45:44AM +0100, Christophe Leroy wrote:
-> > >>> Le 09/01/2020 à 21:07, Segher Boessenkool a écrit :
-> > >>>> It looks like the compiler did loop peeling.  What GCC version is this?
-> > >>>> Please try current trunk (to become GCC 10), or at least GCC 9?
-> > >>>
-> > >>> It is with GCC 5.5
-> > >>>
-> > >>> https://mirrors.edge.kernel.org/pub/tools/crosstool/ doesn't have more
-> > >>> recent than 8.1
-> > >>
-> > >> Arnd, can you update the tools?  We are at 8.3 and 9.2 now :-)  Or is
-> > >> this hard and/or painful to do?
-> > >
-> > > To follow up on this older thread, I have now uploaded 6.5, 7.5, 8.3 and 9.2
-> > > binaries, as well as a recent 10.0 snapshot.
-> > >
-> >
-> > Thanks Arnd,
-> >
-> > I have built the VDSO with 9.2, I get less performant result than with
-> > 8.2 (same performance as with 5.5).
-> >
-> > After a quick look, I see:
-> > - Irrelevant NOPs to align loops and stuff, allthough -mpcu=860 should
-> > avoid that.
-> > - A stack frame is set for saving r31 in __c_kernel_clock_gettime. GCC
-> > 8.1 don't need that, all VDSO functions are frameless with 8.1
+On Wed, Feb 19, 2020 at 12:22:58PM +0300, Sergei Shtylyov wrote:
+> Hello!
 > 
-> If you think it should be fixed in gcc, maybe try to reproduce it in
-> https://godbolt.org/
+> On 19.02.2020 0:07, Sean Christopherson wrote:
+> 
+> >Use the with_address() variant to when performing a TLB flush for a
+>                                  ^^ is it really needed here?
 
-(Feel free to skip this step; and don't put links to godbolt (or anything
-else external) in our bugzilla, please; such links go stale before you
-know it.)
+Doh, thanks.  The subject also has a typo, it should be "range-based", not
+"ranged-based".
 
-> and open a gcc bug against that.
-
-Yes please :-)
-
-> Also, please try the gcc-10 snapshot, which has the highest chance
-> of getting fixes if it shows the same issue (or worse).
-
-If it is a regression, chances are it will be backported.  (But not to
-9.3, which is due in just a few weeks, just like 8.4).  If it is just a
-side effect of some other change, it will probably *not* be undone, not
-on trunk (GCC 10) either.  It depends.
-
-But sure, always test trunk if you can.
-
-
-Segher
+> >specific memslot via kvm_arch_flush_remote_tlbs_memslot(), i.e. when
+> >flushing after clearing dirty bits during KVM_{GET,CLEAR}_DIRTY_LOG.
+> >This aligns all dirty log memslot-specific TLB flushes to use the
+> >with_address() variant and paves the way for consolidating the relevant
+> >code.
+> >
+> >Note, moving to the with_address() variant only affects functionality
+> >when running as a HyperV guest.
+> >
+> >Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+> >Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> [...]
+> 
+> MBR, Sergei
