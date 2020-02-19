@@ -2,54 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6C1164E54
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2020 20:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 788C3164E5D
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2020 20:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726710AbgBSTEA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Feb 2020 14:04:00 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:43960 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726643AbgBSTD7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Feb 2020 14:03:59 -0500
-Received: by mail-pg1-f194.google.com with SMTP id u12so548405pgb.10;
-        Wed, 19 Feb 2020 11:03:59 -0800 (PST)
+        id S1726682AbgBSTEz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Feb 2020 14:04:55 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:45555 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726634AbgBSTEz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Feb 2020 14:04:55 -0500
+Received: by mail-pg1-f193.google.com with SMTP id b9so546583pgk.12;
+        Wed, 19 Feb 2020 11:04:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:from:to:cc:cc:cc:subject
          :references:in-reply-to;
-        bh=DiJoVOfQs//1PaWZFtx2QcGxz7nAwr47TsQFS3rNJQE=;
-        b=PyBg1YXmPsU3qt0mtm2/q/MSn94DN4XK1POgkvqYJu429EAvsawZzE1HpBWRX1egmg
-         dRZZPCeaMXU9ZgUWXs7zqprC0a2NnvmFijj/7OmTkpavVkyQ9nLlwto5Co4nE/aDUP5Y
-         vN5wAzRKNWZ8mIfyyKQW5wneAsVFcN3uCVtudwEyUrvn3wa6W/eD6GDQ29OaOqr5eUtf
-         zoDFmfPy6GjKRRcypnGpZCRnQ+TxEZZYrWIuoARB9VLQ60TE5tNIu6CGJeKobaNAeTde
-         95cN6TiagLo08ClC07owTTL9pbL1MTBEgHBk1BOhv5Vx4aoRidqtK1jgiA+Iax5cmA+4
-         NSRg==
-X-Gm-Message-State: APjAAAVljcdgMQmWzsznfBHLNAKFqXFc8ihKNNRVZEkKh0r2Ly4VqWQF
-        NLtweieTxM9aPVVbrKLmjN7MsrSFLyPePA==
-X-Google-Smtp-Source: APXvYqx7/YKjuAjwK+VacNMDKFITTSWWqrTmLtv3O6oHG+s4MiEScrKPPtXEjw473ZTHkP0IX51N7Q==
-X-Received: by 2002:a63:ec07:: with SMTP id j7mr28908332pgh.187.1582139038703;
-        Wed, 19 Feb 2020 11:03:58 -0800 (PST)
+        bh=kocwF+O1vACVeOoTXVC1r2xPM1rk+Pt4gRCOCoHb59E=;
+        b=cYPO+iWTtuyAskWSnsdw8ExnxgEA0l+N6EIMo8b7KvOe99+vxvWTuEaETkVe+E3uP6
+         uygDfsdu6iBlwmV8xXUQVnDQhuHcVaT+Dcw4hqjLCV6sx+PqTPDmkOOCR/EQFWTuAkZm
+         76mXlDxznUXUSwJ42oiyQhFJMcLwl2XMkYSXBmA39Jj2Wd0GP5LcvbQYZhnSQ9Y8WlCH
+         YbjG8doOpyZUJ5vzQTLgRTBajvgrHPEkmW6moxiGhNeFIQc7w73h7h38aSimOp0FVjbm
+         oRoJUruZQhylrfZiV2D++3z52s3I04hezvhZCnZaAS1ESyffufF9AYHtKMtudRKF5yHB
+         gKbg==
+X-Gm-Message-State: APjAAAWOmYPiHmjJttpJ/1ddB6yLjRFNpsPcJ1p+6CLqspAd2ueL4Qi5
+        NANZZP3xWdK5ShNT9xJF6ts=
+X-Google-Smtp-Source: APXvYqxILDyWPG2jl5KZXH15mkHqxLILbJsULM1VSWJlyw8FlDzdNiR5dyq43yKarParaxT6eqFZpA==
+X-Received: by 2002:a65:420c:: with SMTP id c12mr28177977pgq.270.1582139094170;
+        Wed, 19 Feb 2020 11:04:54 -0800 (PST)
 Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id p23sm428286pgn.92.2020.02.19.11.03.57
+        by smtp.gmail.com with ESMTPSA id a13sm385320pfg.65.2020.02.19.11.04.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2020 11:03:57 -0800 (PST)
-Message-ID: <5e4d869d.1c69fb81.aa02.151b@mx.google.com>
-Date:   Wed, 19 Feb 2020 11:03:52 -0800
+        Wed, 19 Feb 2020 11:04:53 -0800 (PST)
+Message-ID: <5e4d86d5.1c69fb81.85d93.1371@mx.google.com>
+Date:   Wed, 19 Feb 2020 11:04:48 -0800
 From:   Paul Burton <paulburton@kernel.org>
-To:     Finn Thain <fthain@telegraphics.com.au>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
 CC:     Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>
-CC:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        =?utf-8?q?Philippe_Math?= =?utf-8?q?ieu-Daud=C3=A9?= 
-        <f4bug@amsat.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Bartlomiej Zolnierkiewicz" <b.zolnierkie@samsung.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        James Hartley <james.hartley@sondrel.com>,
+        John Crispin <john@phrozen.org>
+CC:     linux-mips@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
 CC:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] Improve MIPS Magnum support
-References:  <cover.1581030073.git.fthain@telegraphics.com.au>
-In-Reply-To:  <cover.1581030073.git.fthain@telegraphics.com.au>
+Subject: Re: [PATCH 0/7] MIPS: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+References:  <20200212101544.8793-1-geert+renesas@glider.be>
+In-Reply-To:  <20200212101544.8793-1-geert+renesas@glider.be>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -57,54 +57,104 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hello,
 
-Finn Thain wrote:
-> A few minor patches are needed to more easily boot a MIPS Magnum build
-> under QEMU. This series fixes a build failure in the g364fb driver and
-> modifies jazz_defconfig for use with 'qemu-system-mips64el -M magnum'.
+Geert Uytterhoeven wrote:
+> Hi all,
 > 
-> Note that QEMU's dp8393x implementation has bugs, one of which prevents
-> the Linux jazzsonic driver from probing the chip. I have fixed the bugs
-> that I know of in a series of patches at,
-> https://github.com/fthain/qemu/commits/sonic
+> The OF clock helpers were moved to <linux/of_clk.h> a while ago.
+> Hence code that is not a clock provider, but just needs to call
+> of_clk_init(), can (and should) include <linux/of_clk.h> instead of
+> <linux/clk-provider.h>.
 > 
-> Changed since v1:
->  - Added reviewed-by and tested-by tags from Philippe Mathieu-Daudé.
->  - Rebased.
+> All these patches are independent of each others, and thus can be
+> applied by the corresponding subsystem maintainers.
 > 
+> Thanks!
 > 
-> Finn Thain (3):
->   fbdev/g364fb: Fix build failure
->   mips/jazz: Remove redundant settings and shrink jazz_defconfig
->   mips/jazz: Update jazz_defconfig for MIPS Magnum
+> Geert Uytterhoeven (7):
+>   MIPS: ath79: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>   MIPS: BMIPS: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>   MIPS: generic: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>   MIPS: jz4740: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>   MIPS: pic32mzda: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>   MIPS: Pistachio: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>   MIPS: ralink: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+> 
+>  arch/mips/ath79/setup.c          | 2 +-
+>  arch/mips/bmips/setup.c          | 2 +-
+>  arch/mips/generic/init.c         | 2 +-
+>  arch/mips/jz4740/time.c          | 2 +-
+>  arch/mips/pic32/pic32mzda/time.c | 2 +-
+>  arch/mips/pistachio/time.c       | 2 +-
+>  arch/mips/ralink/timer-gic.c     | 2 +-
+>  7 files changed, 7 insertions(+), 7 deletions(-)
 
 Series applied to mips-next.
 
-> fbdev/g364fb: Fix build failure
->   commit c584f9532115
->   https://git.kernel.org/mips/c/c584f9532115
+> MIPS: ath79: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>   commit d2936bd02b19
+>   https://git.kernel.org/mips/c/d2936bd02b19
 >   
->   Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+>   Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 >   Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
->   Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
->   Acked-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
->   Tested-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+>   Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 >   Signed-off-by: Paul Burton <paulburton@kernel.org>
 > 
-> mips/jazz: Remove redundant settings and shrink jazz_defconfig
->   commit a7047b8dd098
->   https://git.kernel.org/mips/c/a7047b8dd098
+> MIPS: BMIPS: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>   commit e40b3deff7af
+>   https://git.kernel.org/mips/c/e40b3deff7af
 >   
->   Tested-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
->   Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
+>   Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>   Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+>   Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+>   Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 >   Signed-off-by: Paul Burton <paulburton@kernel.org>
 > 
-> mips/jazz: Update jazz_defconfig for MIPS Magnum
->   commit 91f40e896444
->   https://git.kernel.org/mips/c/91f40e896444
+> MIPS: generic: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>   commit 089a792c750d
+>   https://git.kernel.org/mips/c/089a792c750d
 >   
+>   Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 >   Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
->   Tested-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
->   Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
+>   Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> 
+> MIPS: jz4740: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>   commit 3a94afc68947
+>   https://git.kernel.org/mips/c/3a94afc68947
+>   
+>   Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>   Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+>   Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+>   Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> 
+> MIPS: pic32mzda: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>   commit 071cec1bfe1f
+>   https://git.kernel.org/mips/c/071cec1bfe1f
+>   
+>   Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>   Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+>   Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> 
+> MIPS: Pistachio: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>   commit 97e04ea15fd5
+>   https://git.kernel.org/mips/c/97e04ea15fd5
+>   
+>   Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>   Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+>   Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+>   Acked-by: James Hartley <james.hartley@sondrel.com>
+>   Signed-off-by: Paul Burton <paulburton@kernel.org>
+> 
+> MIPS: ralink: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>   commit 9926108f799a
+>   https://git.kernel.org/mips/c/9926108f799a
+>   
+>   Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>   Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+>   Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+>   Acked-by: John Crispin <john@phrozen.org>
 >   Signed-off-by: Paul Burton <paulburton@kernel.org>
 
 Thanks,
