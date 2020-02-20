@@ -2,95 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7DE51657EE
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Feb 2020 07:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B521658EA
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Feb 2020 09:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726379AbgBTGp2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Feb 2020 01:45:28 -0500
-Received: from mail-il1-f193.google.com ([209.85.166.193]:33186 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbgBTGp1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Feb 2020 01:45:27 -0500
-Received: by mail-il1-f193.google.com with SMTP id s18so22766337iln.0;
-        Wed, 19 Feb 2020 22:45:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Im+z9BpxgrtGOkJ+iJIGy2bwVRagdiXEKkPgtWVmzAI=;
-        b=kS8sPzcCHKfCH0EjHnhVB2wAIDK2IWKTgeJLse8OO4CcMISN9LlCicg5zSDWghpdKQ
-         xg5Tw8/EqXuKsLDMyTSWJvBbbwHklHhcDsoZNUpG6rllz2wzcV4quTN1IJMdQ95xSEIJ
-         VZWcJFGa0+yV7z3Ev3p7PcHZqKbPSrcrpfgmoItb1LAvrwQ6Ugy8iSrkCqGyDPyGHMsX
-         wjEwvzF8vQKMjbc/Ak5Y3alZSEf1KfK+WpOv3yVQ5BYxDtDwD2iZaifIhlDXhAEwq9SD
-         TTPybypiRM7NNYxVOB7xyr+q6wZ9YSFWCZl1Ut9ZGjKt4wKVq02SNzsHEZxxFvSIyAK/
-         Spyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Im+z9BpxgrtGOkJ+iJIGy2bwVRagdiXEKkPgtWVmzAI=;
-        b=GKkh4I4lMnt++HIVTSnYNjdbY4s+toS7MHYMcm9nteiDWFyxuVCSdhElfW/6uXzBfs
-         6MIzF95KlQI2zVS5Ggij8qcmJ+vP6BmzNliod44Iajklc7UnoE43dt9Lz0+KMxHN+ii6
-         OiaS5GuKQvW6+uTGHa2wqrKDgi4hCf2Ig1UwZy8aNwdMabXybxUTqRBujHq2gXax40Gq
-         1FYYNrZhbRRjfQKyk0stN2QHAy/A2nZ3GQz+H5YDE8+ET/RhOsFln6fC2ouNPu66jmvF
-         dO3ltvm0m9D5J8lkSDs4qPJaPJztANq2OMDOyRZGxgbhnbHC3Cd0xdPZiylbw5IFqLKN
-         nx4A==
-X-Gm-Message-State: APjAAAUDgc0aGaxSO4u1+E4oBSZ6fwbBf76EE6p1E8TxtKvDWiAPDUWY
-        8SKb8F2Jhb7rb0obSgN1KQeaxGo6iYoDTGZud/gAvU70zmo=
-X-Google-Smtp-Source: APXvYqyd+49YVrH/RNEem9De5EU7pIuYMV/dKpioMc6ldrO+SbEDSr38Vy/jYjP+bok8uBMJI7+8zG1TRby1mRRUOQE=
-X-Received: by 2002:a92:cd52:: with SMTP id v18mr28468412ilq.134.1582181127140;
- Wed, 19 Feb 2020 22:45:27 -0800 (PST)
+        id S1726669AbgBTIMi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Feb 2020 03:12:38 -0500
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17930 "EHLO
+        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726541AbgBTIMh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 20 Feb 2020 03:12:37 -0500
+X-Greylist: delayed 914 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Feb 2020 03:11:48 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1582185365;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=Date:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Subject:To:CC:From:Message-ID;
+        bh=vDUle+bK9nzmqA7ZpDE8hM/Wdy0/mDXfft5rPIpoVc4=;
+        b=ILKrNT93qUbRKgQJ4HfWwuDw3BjRJmv4M2hUbdDHWbVg96M76uVMUmkd6DntmP2v
+        SL7DXbSroEAL2EMn0FMqi46OuFTItDP2WFG9tvX6lsXShS2vYjtVP/w6TGBJ95IMUsj
+        Dl/bbcrIEXxYbVdqJabWKK7kZz+ns7l1kcSVpYDo=
+Received: from [26.26.26.1] (183.156.46.156 [183.156.46.156]) by mx.zoho.com.cn
+        with SMTPS id 1582185359940116.59226967139227; Thu, 20 Feb 2020 15:55:59 +0800 (CST)
+Date:   Thu, 20 Feb 2020 15:55:58 +0800
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAAhV-H62BKFeh3h7xE3LQLYwLRukG5dE3gu4F7RGZdJcdoNCjg@mail.gmail.com>
+References: <20200219191730.1277800-1-paulburton@kernel.org> <20200219191730.1277800-3-paulburton@kernel.org> <cfeab22c0f332418d25e56fa86f5420f5470e4ee.camel@perches.com> <CAAhV-H62BKFeh3h7xE3LQLYwLRukG5dE3gu4F7RGZdJcdoNCjg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20200219191730.1277800-1-paulburton@kernel.org>
- <20200219191730.1277800-3-paulburton@kernel.org> <cfeab22c0f332418d25e56fa86f5420f5470e4ee.camel@perches.com>
-In-Reply-To: <cfeab22c0f332418d25e56fa86f5420f5470e4ee.camel@perches.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Thu, 20 Feb 2020 14:44:03 +0800
-Message-ID: <CAAhV-H62BKFeh3h7xE3LQLYwLRukG5dE3gu4F7RGZdJcdoNCjg@mail.gmail.com>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Subject: Re: [PATCH 2/2] MAINTAINERS: Set MIPS status to Odd Fixes
-To:     Joe Perches <joe@perches.com>
-Cc:     Paul Burton <paulburton@kernel.org>,
+To:     Huacai Chen <chenhuacai@gmail.com>
+CC:     Paul Burton <paulburton@kernel.org>,
         "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        LKML <linux-kernel@vger.kernel.org>, ysu@wavecomp.com
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <2A286117-5B5C-4B4D-ADC7-86850AE1FA39@flygoat.com>
+X-ZohoCNMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, all,
 
-I suggest Jiaxun Yang to be the new Linux/MIPS maintainer because of
-the following reasons:
 
-1. He is familiar with Linux kernel & MIPS architecture.
-2. He is active and has already contributed many patches.
-3. He is not an employee of any corporation, so people can expect him
-to be neutral.
-4. He is young and has enough free time to follow the mainstream
-development closely.
-5. His English is good and is willing to maintain a good level of
-communication with other contributors.
-
-Jiaxun, what's your opinion?
-
-Regards,
-Huacai Chen
-
-On Thu, Feb 20, 2020 at 11:16 AM Joe Perches <joe@perches.com> wrote:
+=E4=BA=8E 2020=E5=B9=B42=E6=9C=8820=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=882=
+:44:03, Huacai Chen <chenhuacai@gmail=2Ecom> =E5=86=99=E5=88=B0:
+>Hi, all,
 >
-> On Wed, 2020-02-19 at 11:17 -0800, Paul Burton wrote:
-> > My time with MIPS the company has reached its end, and so at best I'll
-> > have little time spend on maintaining arch/mips/. Reflect that in
-> > MAINTAINERS by changing status to Odd Fixes. Hopefully this might spur
-> > the involvement of someone with more time, but even if not it should
-> > help serve to avoid unrealistic expectations.
-> []
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> []
-> > @@ -11120,7 +11120,7 @@ W:    http://www.linux-mips.org/
-> >  T:   git git://git.linux-mips.org/pub/scm/ralf/linux.git
+>I suggest Jiaxun Yang to be the new Linux/MIPS maintainer because of
+>the following reasons:
 >
-> Maybe Ralf's T: entry should be removed too.
+>1=2E He is familiar with Linux kernel & MIPS architecture=2E
+>2=2E He is active and has already contributed many patches=2E
+>3=2E He is not an employee of any corporation, so people can expect him
+>to be neutral=2E
+>4=2E He is young and has enough free time to follow the mainstream
+>development closely=2E
+>5=2E His English is good and is willing to maintain a good level of
+>communication with other contributors=2E
 >
+>Jiaxun, what's your opinion?
+
+Thanks for your recommendation=2E
+
+It's my pleasure to take this duty if I'm eligible=2E
+
+I have experience in MIPS chips and have already involved in some review p=
+rocesses=2E
+i=2Ee=2Eloongson, Ingenic/MediaTec & etc=2E
+
+As what Huacai has said, I'm a pure contributor from community,
+which means I will able to be neutral
+to MIPS family members=2E
+
+[Also added Yunqiang Su to Cc list as he is the
+only current MIPS company employee I know=2E]
+
+Thanks=2E
 >
+>Regards,
+>Huacai Chen
+--=20
+Jiaxun Yang
