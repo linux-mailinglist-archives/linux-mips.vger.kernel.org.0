@@ -2,77 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F19164EB8
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2020 20:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D59E0165532
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Feb 2020 03:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbgBSTSG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Feb 2020 14:18:06 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:41817 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726634AbgBSTSG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Feb 2020 14:18:06 -0500
-Received: by mail-pg1-f195.google.com with SMTP id 70so573502pgf.8;
-        Wed, 19 Feb 2020 11:18:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WjEJ75Ye0Px+T+08crOm28z729fnyGWMYQ2FM654cdM=;
-        b=LXTFA8QU7YqlW5QVdE8nUWafdfEyB7iDP9nMAUiIK3mJwRd1wuBgkhxMlN4a4L6nHR
-         OEQMT03smzkT5USsTiZ7YTg7Bivubu7FcVKHpa1IVF93Qrwt2J5R1V6bGcTq8imOLtRV
-         52SQpkj8A1C1IWvk0w1LCAUQi2af7XVWbxPlxNc/Ghgz4/wzqCMTOmuYnJg7rjZgUEij
-         5mBKwpeNBmBej7RNwqqbBpnRnDlRxB5K2o8dbgwm/kT2LuML6E5KW/606QiFRHEntRXw
-         Cu/70Srr0YR9zofjXhjt0ZuFXfZ94It9DiFHXlx2Yw5532tl24XS9GVmccyCT2Ll2jSB
-         qT6w==
-X-Gm-Message-State: APjAAAVDwK+uLPLZTIP8ld9Kvn5wqqZu8VtFJ1YbsTs50PUFUQln0Z0u
-        sq5xjRNX+LWxJz1ViiWPyZl0HeJu1fFaHw==
-X-Google-Smtp-Source: APXvYqxMJP7zsU+LEWgFm/T5jDWqZepBIh7DYXHBXaH7TpzvrycIeP+yIVKnp3OrbEO3gNI9QVWduA==
-X-Received: by 2002:a63:d207:: with SMTP id a7mr29492847pgg.225.1582139884856;
-        Wed, 19 Feb 2020 11:18:04 -0800 (PST)
-Received: from localhost ([2601:646:8a00:9810:5af3:56d9:f882:39d4])
-        by smtp.gmail.com with ESMTPSA id i64sm476502pgc.51.2020.02.19.11.18.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2020 11:18:04 -0800 (PST)
-From:   Paul Burton <paulburton@kernel.org>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Paul Burton <paulburton@kernel.org>
-Subject: [PATCH 2/2] MAINTAINERS: Set MIPS status to Odd Fixes
-Date:   Wed, 19 Feb 2020 11:17:30 -0800
-Message-Id: <20200219191730.1277800-3-paulburton@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200219191730.1277800-1-paulburton@kernel.org>
-References: <20200219191730.1277800-1-paulburton@kernel.org>
+        id S1727576AbgBTCoa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Feb 2020 21:44:30 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:37488 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727402AbgBTCo3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 19 Feb 2020 21:44:29 -0500
+Received: from [192.168.68.111] (unknown [111.18.94.191])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxz9108k1ev6IRAA--.27S3;
+        Thu, 20 Feb 2020 10:44:15 +0800 (CST)
+To:     jdelvare@suse.com, jdelvare@suse.de
+References: <1580875713-18252-1-git-send-email-yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v3 1/2] firmware: dmi: Add macro
+ SMBIOS_ENTRY_POINT_SCAN_START
+Cc:     jiaxun.yang@flygoat.com, chenhc@lemote.com,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        lixuefeng@loongson.cn, paulburton@kernel.org, ralf@linux-mips.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <8ee01022-d3d1-8145-1a0b-ba77c5bb7101@loongson.cn>
+Date:   Thu, 20 Feb 2020 10:43:56 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1580875713-18252-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxz9108k1ev6IRAA--.27S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYz7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z2
+        80aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l
+        c7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-My time with MIPS the company has reached its end, and so at best I'll
-have little time spend on maintaining arch/mips/. Reflect that in
-MAINTAINERS by changing status to Odd Fixes. Hopefully this might spur
-the involvement of someone with more time, but even if not it should
-help serve to avoid unrealistic expectations.
+Hi Jean,
 
-Signed-off-by: Paul Burton <paulburton@kernel.org>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Since this patch is independent and it has no any negative influence,
+could you apply it to your DMI tree first?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index afa228ade18e..67f05f6dbf77 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11120,7 +11120,7 @@ W:	http://www.linux-mips.org/
- T:	git git://git.linux-mips.org/pub/scm/ralf/linux.git
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
- Q:	http://patchwork.linux-mips.org/project/linux-mips/list/
--S:	Supported
-+S:	Odd Fixes
- F:	Documentation/devicetree/bindings/mips/
- F:	Documentation/mips/
- F:	arch/mips/
--- 
-2.25.1
+Thanks,
+
+Tiezhu Yang
 
