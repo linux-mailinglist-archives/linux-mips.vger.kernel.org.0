@@ -2,84 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A8B8165DC9
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Feb 2020 13:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 764BE165F59
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Feb 2020 14:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728111AbgBTMpH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Feb 2020 07:45:07 -0500
-Received: from out28-218.mail.aliyun.com ([115.124.28.218]:43039 "EHLO
-        out28-218.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726885AbgBTMpG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Feb 2020 07:45:06 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1386076|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.196715-0.0112271-0.792058;DS=CONTINUE|ham_regular_dialog|0.189735-0.00256273-0.807702;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03293;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.Gq8NPLt_1582202431;
-Received: from 192.168.10.227(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Gq8NPLt_1582202431)
-          by smtp.aliyun-inc.com(10.147.41.138);
-          Thu, 20 Feb 2020 20:40:31 +0800
-Subject: Re: [PATCH 2/2] MAINTAINERS: Set MIPS status to Odd Fixes
-To:     YunQiang Su <wzssyqa@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <20200219191730.1277800-1-paulburton@kernel.org>
- <20200219191730.1277800-3-paulburton@kernel.org>
- <20200220112330.GA3053@alpha.franken.de>
- <CAKcpw6UDik=K6MdEayDPVaZP+BsqrbKoKAXJaHLERrxDmFF7+A@mail.gmail.com>
-Cc:     Paul Burton <paulburton@kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, wayne.sun@cipunited.com,
-        chris.wang@neocore.cn, Yunqiang Su <ysu@wavecomp.com>,
-        dongsheng.qiu@ingenic.com, xuwanhao@wanyeetech.com
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <5E4E7E3E.6070608@wanyeetech.com>
-Date:   Thu, 20 Feb 2020 20:40:30 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
- Thunderbird/38.8.0
+        id S1728079AbgBTN6r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Feb 2020 08:58:47 -0500
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17856 "EHLO
+        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727943AbgBTN6r (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 20 Feb 2020 08:58:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1582207017;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=7yL9Udn53NkbbgUNkqIPdZQE2bNWaYqwiXCqgYxMS5Y=;
+        b=NNkK0BjfSIAsfOgAsMzTkc55olp44bNnAHJOPTOovKNX/ufBvPqYla7q3fYpkKSG
+        3BnepCcG8wGsfC3D4rIF9/DyZN//NIrL8K+M5GhB61KA7ZhYJky5aMdq/cTQdBxSr/7
+        I2bMmzxm/KpElJgRlcQUYZ2+xr3zTuWx0tgTMdSE=
+Received: from mail.baihui.com by mx.zoho.com.cn
+        with SMTP id 158220701284843.8168629100137; Thu, 20 Feb 2020 21:56:52 +0800 (CST)
+Date:   Thu, 20 Feb 2020 21:56:52 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     "PrasannaKumar Muralidharan" <prasannatsmkumar@gmail.com>,
+        "Paul Cercueil" <paul@crapouillou.net>,
+        "Mathieu Malaterre" <malat@debian.org>,
+        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-mips" <linux-mips@vger.kernel.org>,
+        "Discussions about the Letux Kernel" <letux-kernel@openphoenux.org>
+Message-ID: <17062e30fec.12ef478cf6311.3456058528169872039@flygoat.com>
+In-Reply-To: <CFE9AEF5-FFF9-44A9-90D8-DE6AC7E7DD4F@goldelico.com>
+References: <cover.1581958529.git.hns@goldelico.com> <86b78db4d607e0bdda6def018bc7f73207ce82e8.1581958529.git.hns@goldelico.com> <20200218212609.GA30081@bogus> <CFE9AEF5-FFF9-44A9-90D8-DE6AC7E7DD4F@goldelico.com>
+Subject: Re: [RFC v4 2/6] Bindings: nvmem: add bindings for JZ4780 efuse
 MIME-Version: 1.0
-In-Reply-To: <CAKcpw6UDik=K6MdEayDPVaZP+BsqrbKoKAXJaHLERrxDmFF7+A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Priority: Medium
+User-Agent: ZohoCN Mail
+X-Mailer: ZohoCN Mail
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
 
-CC people from Ingenic Semi and Wanyee Tech.
 
-On 2020年02月20日 20:11, YunQiang Su wrote:
-> CC people from NeoCore and CIP United, and my Wave Computing's mail address.
->
-> Thomas Bogendoerfer <tsbogend@alpha.franken.de> 于2020年2月20日周四 下午7:23写道：
->> On Wed, Feb 19, 2020 at 11:17:30AM -0800, Paul Burton wrote:
->>> My time with MIPS the company has reached its end, and so at best I'll
->>> have little time spend on maintaining arch/mips/. Reflect that in
->>> MAINTAINERS by changing status to Odd Fixes. Hopefully this might spur
->>> the involvement of someone with more time, but even if not it should
->>> help serve to avoid unrealistic expectations.
->> I'd like to jump in as MIPS maintainer. I'm doing Linux MIPS kernel
-> It is a great news that you are willing to act as maintainer as Linux-MIPS.
->
->> development since ages (started with an Olivetti M700 and kernel version
->> 2.x) and right now time for doing the jobs isn't issue:-)
->>
-> I noticed that you are mainly working some old machines.
-> And recently years, there are some new machines from Ingenic, Loongson, MTK etc.
-> MIPS Inc also have some MIPSr6 IPs.
-> I think that you need some of these machines.
+--
+Jiaxun Yang
 
-I can provide some new Ingenic platform machines as a gift to Thomas.
-Ingenic X1000 can be provided in a short time, it has been directly 
-supported by kernel 5.6.
-X1830 and X2000 will be available later.
+ ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=B8=89, 2020-02-19 13:48:56 H. Nikolau=
+s Schaller <hns@goldelico.com> =E6=92=B0=E5=86=99 ----
+ >=20
+ > > Am 18.02.2020 um 22:26 schrieb Rob Herring <robh@kernel.org>:
+ > >=20
+ > > On Mon, Feb 17, 2020 at 05:55:26PM +0100, H. Nikolaus Schaller wrote:
+ > >> From: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
+ > >>=20
+ > >> This patch brings support for the JZ4780 efuse. Currently it only exp=
+ose
+ > >> a read only access to the entire 8K bits efuse memory.
+ > >>=20
+ > >> Tested-by: Mathieu Malaterre <malat@debian.org>
+ > >> Signed-off-by: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com=
+>
+ > >> Signed-off-by: Mathieu Malaterre <malat@debian.org>
+ > >> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+ > >> ---
+ > >> .../bindings/nvmem/ingenic,jz4780-efuse.txt     | 17 ++++++++++++++++=
++
+ > >> 1 file changed, 17 insertions(+)
+ > >> create mode 100644 Documentation/devicetree/bindings/nvmem/ingenic,jz=
+4780-efuse.txt
+ > >=20
+ > > Please convert to a DT schema.
+ >=20
+ > Is there someone of you who can help to do that?
+ >=20
+ > DT schemas are still like a Chinese dialect for me (i.e. I can decipher =
+with help but neither speak nor write).
 
-> In the last years, we see that the single maintainer is not enough as people may
-> quite busy.
-> Do you think that we need co-maintainers?
->
->> Thomas.
->>
->> --
->> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
->> good idea.                                                [ RFC1925, 2.3 ]
->
->
+I just had a try.
+
+https://paste.ubuntu.com/p/xgDdmwnGsz/
+
+Not sure if it's correct.
+
+Thanks.
+
+ --
+Jiaxun Yang
 
