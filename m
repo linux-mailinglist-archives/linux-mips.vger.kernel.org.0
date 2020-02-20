@@ -2,61 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CE7165580
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Feb 2020 04:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D14516573F
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Feb 2020 07:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727370AbgBTDQu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 19 Feb 2020 22:16:50 -0500
-Received: from smtprelay0049.hostedemail.com ([216.40.44.49]:48533 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727208AbgBTDQu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 19 Feb 2020 22:16:50 -0500
-X-Greylist: delayed 414 seconds by postgrey-1.27 at vger.kernel.org; Wed, 19 Feb 2020 22:16:49 EST
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave02.hostedemail.com (Postfix) with ESMTP id E838818013824
-        for <linux-mips@vger.kernel.org>; Thu, 20 Feb 2020 03:09:55 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 67E1B182CED28;
-        Thu, 20 Feb 2020 03:09:54 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,:::::,RULES_HIT:41:355:379:408:599:967:968:973:988:989:1260:1263:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1539:1593:1594:1711:1714:1730:1747:1777:1792:2194:2199:2393:2525:2560:2563:2682:2685:2828:2859:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3351:3622:3865:3866:3867:3868:3870:3872:3874:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4250:4321:5007:7754:7903:9025:9108:10004:10400:10848:11232:11658:11914:12043:12297:12555:12740:12760:12895:13069:13311:13357:13439:14181:14346:14659:14721:14764:21080:21611:21627:30014:30046:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: tank61_1c33f32e6735c
-X-Filterd-Recvd-Size: 1433
-Received: from XPS-9350.home (unknown [47.151.143.254])
-        (Authenticated sender: joe@perches.com)
-        by omf12.hostedemail.com (Postfix) with ESMTPA;
-        Thu, 20 Feb 2020 03:09:53 +0000 (UTC)
-Message-ID: <cfeab22c0f332418d25e56fa86f5420f5470e4ee.camel@perches.com>
-Subject: Re: [PATCH 2/2] MAINTAINERS: Set MIPS status to Odd Fixes
-From:   Joe Perches <joe@perches.com>
-To:     Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Date:   Wed, 19 Feb 2020 19:08:30 -0800
-In-Reply-To: <20200219191730.1277800-3-paulburton@kernel.org>
-References: <20200219191730.1277800-1-paulburton@kernel.org>
-         <20200219191730.1277800-3-paulburton@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.34.1-2 
+        id S1726149AbgBTGAr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Feb 2020 01:00:47 -0500
+Received: from mail.andi.de1.cc ([85.214.55.253]:55158 "EHLO mail.andi.de1.cc"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725942AbgBTGAr (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 20 Feb 2020 01:00:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=GGaI48ID+RANcSnbSgDavldeijLO9g3YzgPX5PpG8fI=; b=ijPjguYP7Zt3epKkXf4L+PGD+o
+        c+7c8P7oEmieCGXVUeVhZ101mqBnhqONhJq77kzfHl8hPbqjKpo8xLDgv4o5TGAq69fdqMT2s9ngz
+        W09rbd2kuPFK4ID32zV4qssJsccAQbsrg0mY64zEXMykYKf5nYgxRwT3hKFCbaODPYak=;
+Received: from [77.247.85.102] (helo=localhost)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1j4et8-0002hm-8L; Thu, 20 Feb 2020 07:00:42 +0100
+Received: from andi by localhost with local (Exim 4.92)
+        (envelope-from <andreas@kemnade.info>)
+        id 1j4et6-0006jD-Nf; Thu, 20 Feb 2020 07:00:40 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Mathieu Malaterre <malat@debian.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org
+Cc:     Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH RFC] Bindings: nvmem: add bindings for JZ4780 efuse
+Date:   Thu, 20 Feb 2020 07:00:01 +0100
+Message-Id: <20200220060001.25807-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <CFE9AEF5-FFF9-44A9-90D8-DE6AC7E7DD4F@goldelico.com>
+References: <CFE9AEF5-FFF9-44A9-90D8-DE6AC7E7DD4F@goldelico.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.0 (-)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 2020-02-19 at 11:17 -0800, Paul Burton wrote:
-> My time with MIPS the company has reached its end, and so at best I'll
-> have little time spend on maintaining arch/mips/. Reflect that in
-> MAINTAINERS by changing status to Odd Fixes. Hopefully this might spur
-> the involvement of someone with more time, but even if not it should
-> help serve to avoid unrealistic expectations.
-[]
-> diff --git a/MAINTAINERS b/MAINTAINERS
-[]
-> @@ -11120,7 +11120,7 @@ W:	http://www.linux-mips.org/
->  T:	git git://git.linux-mips.org/pub/scm/ralf/linux.git
+From: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
 
-Maybe Ralf's T: entry should be removed too.
+This patch brings support for the JZ4780 efuse. Currently it only expose
+a read only access to the entire 8K bits efuse memory.
 
+Tested-by: Mathieu Malaterre <malat@debian.org>
+Signed-off-by: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
+Signed-off-by: Mathieu Malaterre <malat@debian.org>
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+[converted to yaml]
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+I will not update/maintain this, just have the impression that here some
+more work is needed to make somebody comfortable with yaml than stick
+to the usual pointing to documentation and I have not the ingredients 
+for doing
+cat  Antihistamines >/dev/brain ;-)
+and I do not want to see the other patches get lost.
+
+ .../bindings/nvmem/ingenic,jz4780-efuse.yaml  | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
+
+diff --git a/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
+new file mode 100644
+index 000000000000..ad56c17b0bd5
+--- /dev/null
++++ b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
+@@ -0,0 +1,51 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/nvmem/ingenic,jz4780-efuse.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Ingenic JZ EFUSE driver bindings
++
++maintainers:
++  - tbd <tbd@tbd>
++
++allOf:
++  - $ref: "nvmem.yaml#"
++
++properties:
++  compatible:
++    enum:
++      - ingenic,jz4780-efuse
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    # Handle for the ahb for the efuse.
++    maxItems: 1
++
++  clock-names:
++   items:
++     - const:  bus_clk
++
++required:
++  - compatible
++  - reg
++  - clock
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/jz4780-cgu.h>
++
++    efuse@134100d0 {
++        compatible = "ingenic,jz4780-efuse";
++        reg = <0x134100d0 0x2c>;
++
++        clocks = <&cgu JZ4780_CLK_AHB2>;
++        clock-names = "bus_clk";
++    };
++
++...
+-- 
+2.20.1
 
