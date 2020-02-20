@@ -2,258 +2,395 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED004166659
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Feb 2020 19:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92BE716665E
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Feb 2020 19:33:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728162AbgBTSco (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Feb 2020 13:32:44 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2453 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726959AbgBTSco (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 20 Feb 2020 13:32:44 -0500
-Received: from lhreml703-cah.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id AAE45F551FDEC5F153F4;
-        Thu, 20 Feb 2020 18:32:41 +0000 (GMT)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- lhreml703-cah.china.huawei.com (10.201.108.44) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Thu, 20 Feb 2020 18:32:41 +0000
-Received: from [127.0.0.1] (10.210.167.244) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Thu, 20 Feb
- 2020 18:32:40 +0000
-Subject: Re: Questions about logic_pio
-From:   John Garry <john.garry@huawei.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-CC:     "xuwei (O)" <xuwei5@huawei.com>, bhelgaas <bhelgaas@google.com>,
-        andyshevchenko <andy.shevchenko@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux Mips <linux-mips@vger.kernel.org>
-References: <1705dbe62ce.10ae800394772.9222265269135747883@flygoat.com>
- <5E4E55F7.70800@hisilicon.com>
- <e3ddd7de-54b2-bdba-2233-6ace40072430@huawei.com>
- <17062738bc0.c380503c6222.6801557833645076299@flygoat.com>
- <1ebf4461-eb37-ff58-1faf-dd24d83f85cf@huawei.com>
- <170632822e1.12fede49a6919.5706082545515934736@flygoat.com>
- <e54a9936-5cf3-777d-3e91-58d2be96bf1c@huawei.com>
-Message-ID: <6c49e5e0-b6f2-fe23-caec-4742c3d1d3a0@huawei.com>
-Date:   Thu, 20 Feb 2020 18:32:39 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1728162AbgBTSd3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Feb 2020 13:33:29 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:43970 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726959AbgBTSd3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Feb 2020 13:33:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1582223606; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+QCaP4eRw7Wm0jz0Gb7txDdWwktRYZfcHIYjEbdwCHA=;
+        b=EBtPW47JvELJNe1b30hNYJu+ngAM6b3D+s9f1YdkrY3lRYFpsMbLEiU2z5SYab45GdiMxv
+        sjkRNjL5ZhnIHd1SwHeeVO3Yt9FR7wa8KwW3MAc24apmu6nqHEsFYCd2LqNMb2ewe6L7rH
+        /v2kja1yYfxKRbPi4QS1uz32G20EXzw=
+Date:   Thu, 20 Feb 2020 15:33:04 -0300
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v6 4/7] clocksource: Ingenic: Add high resolution timer
+ support for SMP.
+To:     =?UTF-8?b?5ZGo55Cw5p2w?= "(Zhou Yanjie)" 
+        <zhouyanjie@wanyeetech.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        tglx@linutronix.de, ralf@linux-mips.org, paulburton@kernel.org,
+        jiaxun.yang@flygoat.com, chenhc@lemote.com, sboyd@kernel.org,
+        mturquette@baylibre.com, mark.rutland@arm.com, robh+dt@kernel.org,
+        daniel.lezcano@linaro.org, geert+renesas@glider.be,
+        krzk@kernel.org, ebiederm@xmission.com, miquel.raynal@bootlin.com,
+        keescook@chromium.org, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, dongsheng.qiu@ingenic.com
+Message-Id: <1582223584.3.2@crapouillou.net>
+In-Reply-To: <1582215889-113034-6-git-send-email-zhouyanjie@wanyeetech.com>
+References: <1582215889-113034-1-git-send-email-zhouyanjie@wanyeetech.com>
+        <1582215889-113034-6-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-In-Reply-To: <e54a9936-5cf3-777d-3e91-58d2be96bf1c@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.210.167.244]
-X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 20/02/2020 17:39, John Garry wrote:
-> On 20/02/2020 15:12, Jiaxun Yang wrote:
->>
->>   ---- 在 星期四, 2020-02-20 22:23:57 John Garry 
->> <john.garry@huawei.com> 撰写 ----
->>   > > Also Cc MIPS list to check other's opinions.
->>   > >
->>   > > Hi John.
->>   > >
->>   >
->>   > Hi Jiaxun Yang,
->>   >
->>   > > Thanks for your kind explanation, however, I think this way is
->>   > > violating how I/O ports supposed to work, at least in MIPS world.
->>   >
->>   > For a bit more history, please understand that the core PCI code was
->>   > managing non-native IO port space in the same way before we added the
->>   > logic PIO framework. The only real functional change here was that we
->>   > introduced the indirect-io region within the IO port space, under
->>   > CONFIG_INDIRECT_PIO.
->>
->> I'm going to do more investigation. Thanks.
->>
->>   >
->>   > >
->>   > >   > >>
->>   > >   > >> After dig into logic pio logic, I found that logic pio is 
->> trying to "allocate" an io_start
->>   > >   > >> for MMIO ranges, the allocation starts from 0x0. And 
->> later the io_start is used to calculate
->>   > >   > >> cpu_address.  In my opinion, for direct MMIO access, 
->> logic_pio address should always
->>   > >   > >> equal to hw address,
->>   > >   >
->>   > >   > I'm not sure what you mean by simply the hw address.
->>   > >   >
->>   > >
->>   > > I meant  hw_start should always equal to io_start.
->>   > >
->>   > >
->>   > > MIPS have their own wrapped inl/outl functions,
->>   >
->>   > Can you please point me to these? I could not find them in arch/mips
->>
->> They are built by __BUILD_IOPORT_PFX(bus, bwlq, type) macro.
->> Just using mips_io_port_base + offset to handle inl/outl, the same way 
->> PCI_IOBASE.
-> 
-> Right, so I had a glance through the code and mips has it own management 
-> of this IO port space. And, like you say, mips_io_port_base is 
-> equivalent to PCI_IOBASE.
-> 
->>
->>   >
->>   > I will also note that arch/mips/include/asm/io.h does not include
->>   > asm-generic io.h today
->>
->> Yes, and I'm attempting to take advantage of asm-generic.
-> 
-> I just don't think it's as simple as saying we want to take advantage of 
-> asm-generic. asm-generic io.h includes logic_pio.h, which uses logical 
-> PIO to manage IO port space and relies on PIO_IOBASE. This is 
-> incompatible with having some other framework - like mips_io_port_base - 
-> managing IO port space at the same time.
-> 
-> The core PCI code relies on logical PIO to manage IO port space for when 
-> PCI_IOBASE is defined.
-> 
->>
->>   >
->>   > doing the samething with
->>   > > PCI_IOBASE enabled one. I was just trying to use PCI_IOBASE 
->> instead.
->>   > >
->>   > > Originally, the I/O ports layout seems like this:
->>   > >
->>   > > 00000020-00000021 : pic1
->>   > > 00000060-0000006f : i8042
->>   > > 00000070-00000077 : rtc0
->>   > > 000000a0-000000a1 : pic2
->>   > > 00000170-00000177 : pata_atiixp
->>   > > 000001f0-000001f7 : pata_atiixp
->>   > > 00000376-00000376 : pata_atiixp
->>   > > 000003f6-000003f6 : pata_atiixp
->>   > > 00000800-000008ff : acpi
->>   > > 00001000-00001008 : piix4_smbus
->>   > > 00004000-0003ffff : pci io space
->>   > >    00004000-00004fff : PCI Bus 0000:01
->>   > >      00004000-000040ff : 0000:01:05.0
->>   > >    00005000-00005fff : PCI Bus 0000:03
->>   > >      00005000-0000501f : 0000:03:00.0
->>   > >
->>   > > But with PCI_IOBASE defined, I got this:
->>   > >
->>   > > host bridge /bus@10000000/pci@10000000 ranges:
->>   > >        MEM 0x0040000000..0x007fffffff -> 0x0040000000
->>   > >         IO 0x0000004000..0x0000007fff -> 0x0000004000
->>   > > resource collision: [io  0x0000-0x3fff] conflicts with pic1 [io  
->> 0x0020-0x0021]
->>   > >
->>   > > Because io_start was allocated to 0x0 by Logic PIO.
->>   > >
->>   > > There are a lot of devices that have fixed ioports thanks to 
->> x86's legacy.
->>   >
->>   > Well, yes, I'm not so surprised.
->>   >
->>   > So if MIPS does not have native IO port access, then surely you need
->>   > some host bridge to translate host CPU MMIO accesses to port I/O
->>   > accesses, right? Where are these CPU addresses defined?
->>
->> It is defined by the variable mips_io_port_base.
->>
->>   >
->>   > > For example, in my hardware, ioports for RTC, PIC, I8042 are 
->> unmoveable,
->>   > > and they can't be managed by logic pio subsystem. > Also, the 
->> PCI Hostbridge got implied by DeviceTree that it's I/O range
->>   > > started from 0x4000 in bus side
->>   >
->>   > which bus is this?
->>
->> They're all located under "ISA Range".  Just an MMIO range that will 
->> resend
->> the request to ISA I/O. --ioports for both PCI and some legacy devices.
->>
->> In that range, base + 0x0000 to 0x4000 is preserved for PIO devices 
->> (e.g.) I8259
->> and base + 0x4000 to MMIO_LIMIT are for PCI devices under host bridge.
->> For the host bridge, ioports it can decode starts from 0x4000.
->>
->> My intentional behavior is that when I'm specifying in dts that the IO 
->> Range of PCI host
->> bridge is 0x4000 to 0x7fff, it would request the IO_RESOURCE start 
->> from 0x4000
->> to 0x7fff, also tell the host driver to decode  0x4000 to 0x7fff in IO 
->> BAR, And let the drivers
->> access 0x4000 to 0x7fff via inl/outl, rather than allocate from PIO 
->> 0x0 to 0x3fff.
->>
->>   >
->>   > , but then, Logic PIO remapped to PCI_IOBASE + 0x0.
->>   > > The real address should be PCI_IOBASE + 0x4000,
->>   >
->>   > You seem to be using two methods to manage IO port space, and they 
->> seem
->>   > to be conflicting.
->>
->> So... Are there any way to handle these unmoveable devices in logic 
->> pio world?
-> 
-> When you say that they are unmovable, they are at a fixed address on 
-> this "ISA Range", right? If so, yes, you should be able to handle it in 
-> logical PIO. You just need to deal with translating logical PIO 
-> addresses to ISA bus addresses. We do this very thing in our LPC driver 
-> - see drivers/bus/hisi_lpc.c
-
-I will add this may not cover your need, as you probably cannot deal 
-with any logical PIO <-> ISA translation without modifying the device 
-driver. For this, we may need to reserve the first 0x4000 in logical PIO 
-space for this sort of legacy host.
-
-That would not be a bad thing - see 
-https://lore.kernel.org/linux-pci/1560262374-67875-1-git-send-email-john.garry@huawei.com/
+Hi Zhou,
 
 
-> 
-> This driver deals with legacy IO ports where we need to bitbang 
-> accesses, i.e. we don't support MMIO for this.
->>
->>   >
->>   > > hardware never got correctly informed about that. And there is 
->> still no way to
->>   > > transform to correct address as it's inside the MMIO_LIMIT.
->>   > >
->>   > > So the question comes to why we're allocating io_start for MMIO 
->> PCI_IOBASE
->>   > > rather than just check the range provided doesn't overlap each 
->> other or exceed
->>   > > the MMIO_LIMIT.
->>   >
->>   > When PCI_IOBASE is defined, we work on the basis that any IO port 
->> range
->>   > in the system is registered for a logical PIO region, which 
->> manages the
->>   > actual IO port addresses - see logic_pio_trans_cpuaddr().
->>
->> The port is not the actual port.. It makes me confusing about what 
->> it's actually doing..
->> Sorry but probably I'm still thinking in a vintage way -- need some 
->> hints about how to
->> deal with these legacy cases in a modern way.
->>
->> Thanks.
->>
->>   >
->>   > Thanks,
->>   > John
->>   >
->>
-> 
-> 
+Le ven., f=C3=A9vr. 21, 2020 at 00:24, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Ya=
+njie)=20
+<zhouyanjie@wanyeetech.com> a =C3=A9crit :
+> Enable clock event handling on per CPU core basis.
+> Make sure that interrupts raised on the first core execute
+> event handlers on the correct CPU core.
+>=20
+> Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Tested-by: Paul Boddie <paul@boddie.org.uk>
+> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
+eetech.com>
+> ---
+>=20
+> Notes:
+>     v1->v2:
+>     1.Adjust function naming to make it more reasonable.
+>     2.Replace function smp_call_function_single() with
+>       smp_call_function_single_async() in order to resolve
+>       the warning below:
+>=20
+>     [    0.350942] smp: Brought up 1 node, 2 CPUs
+>     [    0.365497] ------------[ cut here ]------------
+>     [    0.365522] WARNING: CPU: 0 PID: 1 at kernel/smp.c:300=20
+> smp_call_function_single+0x110/0x200
+>     [    0.365533] CPU: 0 PID: 1 Comm: swapper/0 Not tainted=20
+> 5.5.0-rc1+ #5
+>     [    0.365537] Stack : 00000000 59c73bcd 00000037 80074e80=20
+> 80000000 80670000 805a0000 80620590
+>     [    0.365557]         8065ce38 8fc0dc8c 806d0000 00000000=20
+> 80670000 00000001 8fc0dc20 59c73bcd
+>     [    0.365574]         00000000 00000000 806f0000 80670000=20
+> 00000000 806dab00 00000000 2d302e35
+>     [    0.365591]         203a6d6d 806e0000 806e0000 70617773=20
+> 80670000 00000000 00000000 00000009
+>     [    0.365610]         00000000 8fc94e20 8fc0de30 80690000=20
+> 00000018 803592dc 00000000 806d0000
+>     [    0.365627]         ...
+>     [    0.365634] Call Trace:
+>     [    0.365647] [<8001b9a0>] show_stack+0x6c/0x12c
+>     [    0.365663] [<804aed20>] dump_stack+0x98/0xc8
+>     [    0.365673] [<8003044c>] __warn+0xc4/0xe8
+>     [    0.365682] [<800304f4>] warn_slowpath_fmt+0x84/0xb8
+>     [    0.365690] [<800a886c>] smp_call_function_single+0x110/0x200
+>     [    0.365703] ---[ end trace 5785856ca39c79d5 ]---
+>     [    0.365557]         8065ce38 8fc0dc8c 806d0000 00000000=20
+> 80670000 00000001 8fc0dc20 59c73bcd
+>     [    0.365574]         00000000 00000000 806f0000 80670000=20
+> 00000000 806dab00 00000000 2d302e35
+>     [    0.365591]         203a6d6d 806e0000 806e0000 70617773=20
+> 80670000 00000000 00000000 00000009
+>     [    0.365610]         00000000 8fc94e20 8fc0de30 80690000=20
+> 00000018 803592dc 00000000 806d0000
+>     [    0.365627]         ...
+>     [    0.365634] Call Trace:
+>     [    0.365647] [<8001b9a0>] show_stack+0x6c/0x12c
+>     [    0.365663] [<804aed20>] dump_stack+0x98/0xc8
+>     [    0.365673] [<8003044c>] __warn+0xc4/0xe8
+>     [    0.365682] [<800304f4>] warn_slowpath_fmt+0x84/0xb8
+>     [    0.365690] [<800a886c>] smp_call_function_single+0x110/0x200
+>     [    0.365703] ---[ end trace 5785856ca39c79d5 ]---
+>=20
+>     v2->v3:
+>     No Change.
+>=20
+>     v3->v4:
+>     Rebase on top of kernel 5.6-rc1.
+>=20
+>     v4->v5:
+>     Move the check for (evt->event_handler) from=20
+> "ingenic_per_cpu_event_handler"
+>     to "ingenic_tcu_cevt_cb".
+>=20
+>     v5->v6:
+>     No change.
+>=20
+>  drivers/clocksource/ingenic-timer.c | 113=20
+> +++++++++++++++++++++++++++++-------
+>  1 file changed, 91 insertions(+), 22 deletions(-)
+>=20
+> diff --git a/drivers/clocksource/ingenic-timer.c=20
+> b/drivers/clocksource/ingenic-timer.c
+> index 4bbdb3d..e396326 100644
+> --- a/drivers/clocksource/ingenic-timer.c
+> +++ b/drivers/clocksource/ingenic-timer.c
+> @@ -1,7 +1,8 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+> - * JZ47xx SoCs TCU IRQ driver
+> + * XBurst SoCs TCU IRQ driver
+>   * Copyright (C) 2019 Paul Cercueil <paul@crapouillou.net>
+> + * Copyright (C) 2020 =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)=20
+> <zhouyanjie@wanyeetech.com>
+>   */
+>=20
+>  #include <linux/bitops.h>
+> @@ -21,18 +22,23 @@
+>=20
+>  #include <dt-bindings/clock/ingenic,tcu.h>
+>=20
+> +static DEFINE_PER_CPU(call_single_data_t, ingenic_cevt_csd);
+> +
+>  struct ingenic_soc_info {
+>  	unsigned int num_channels;
+>  };
+>=20
+>  struct ingenic_tcu {
+>  	struct regmap *map;
+> +	struct device_node *np;
+>  	struct clk *timer_clk, *cs_clk;
+> +	unsigned int timer_local[NR_CPUS];
+>  	unsigned int timer_channel, cs_channel;
+>  	struct clock_event_device cevt;
+>  	struct clocksource cs;
+> -	char name[4];
+> +	char name[8];
+>  	unsigned long pwm_channels_mask;
+> +	int cpu;
+>  };
+>=20
+>  static struct ingenic_tcu *ingenic_tcu;
+> @@ -81,6 +87,24 @@ static int ingenic_tcu_cevt_set_next(unsigned long=20
+> next,
+>  	return 0;
+>  }
+>=20
+> +static void ingenic_per_cpu_event_handler(void *info)
+> +{
+> +	struct clock_event_device *cevt =3D (struct clock_event_device *)=20
+> info;
+> +
+> +	cevt->event_handler(cevt);
+> +}
+> +
+> +static void ingenic_tcu_per_cpu_cb(struct clock_event_device *evt)
+> +{
+> +	struct ingenic_tcu *tcu =3D to_ingenic_tcu(evt);
+> +	call_single_data_t *csd;
+> +
+> +	csd =3D &per_cpu(ingenic_cevt_csd, tcu->cpu);
+> +	csd->info =3D (void *) evt;
+> +	csd->func =3D ingenic_per_cpu_event_handler;
+> +	smp_call_function_single_async(tcu->cpu, csd);
+> +}
+> +
+>  static irqreturn_t ingenic_tcu_cevt_cb(int irq, void *dev_id)
+>  {
+>  	struct clock_event_device *evt =3D dev_id;
+> @@ -89,7 +113,7 @@ static irqreturn_t ingenic_tcu_cevt_cb(int irq,=20
+> void *dev_id)
+>  	regmap_write(tcu->map, TCU_REG_TECR, BIT(tcu->timer_channel));
+>=20
+>  	if (evt->event_handler)
+> -		evt->event_handler(evt);
+> +		ingenic_tcu_per_cpu_cb(evt);
+>=20
+>  	return IRQ_HANDLED;
+>  }
+> @@ -105,14 +129,21 @@ static struct clk * __init=20
+> ingenic_tcu_get_clock(struct device_node *np, int id)
+>  	return of_clk_get_from_provider(&args);
+>  }
+>=20
+> -static int __init ingenic_tcu_timer_init(struct device_node *np,
+> -					 struct ingenic_tcu *tcu)
+> +static int ingenic_tcu_setup_per_cpu_cevt(struct device_node *np,
+> +				     unsigned int channel)
+>  {
+> -	unsigned int timer_virq, channel =3D tcu->timer_channel;
+> +	unsigned int timer_virq;
+>  	struct irq_domain *domain;
+> +	struct ingenic_tcu *tcu;
+>  	unsigned long rate;
+>  	int err;
+>=20
+> +	tcu =3D kzalloc(sizeof(*tcu), GFP_KERNEL);
+> +	if (!tcu)
+> +		return -ENOMEM;
+> +
+> +	tcu->map =3D ingenic_tcu->map;
+> +
+>  	tcu->timer_clk =3D ingenic_tcu_get_clock(np, channel);
+>  	if (IS_ERR(tcu->timer_clk))
+>  		return PTR_ERR(tcu->timer_clk);
+> @@ -139,13 +170,15 @@ static int __init ingenic_tcu_timer_init(struct=20
+> device_node *np,
+>  		goto err_clk_disable;
+>  	}
+>=20
+> -	snprintf(tcu->name, sizeof(tcu->name), "TCU");
+> +	snprintf(tcu->name, sizeof(tcu->name), "TCU%u", channel);
+>=20
+>  	err =3D request_irq(timer_virq, ingenic_tcu_cevt_cb, IRQF_TIMER,
+>  			  tcu->name, &tcu->cevt);
+>  	if (err)
+>  		goto err_irq_dispose_mapping;
+>=20
+> +	tcu->cpu =3D smp_processor_id();
+> +	tcu->timer_channel =3D channel;
+>  	tcu->cevt.cpumask =3D cpumask_of(smp_processor_id());
+>  	tcu->cevt.features =3D CLOCK_EVT_FEAT_ONESHOT;
+>  	tcu->cevt.name =3D tcu->name;
+> @@ -166,6 +199,25 @@ static int __init ingenic_tcu_timer_init(struct=20
+> device_node *np,
+>  	return err;
+>  }
+>=20
+> +static int ingenic_tcu_setup_cevt(unsigned int cpu)
+> +{
+> +	int ret;
+> +
+> +	ret =3D ingenic_tcu_setup_per_cpu_cevt(ingenic_tcu->np,
+> +						ingenic_tcu->timer_local[cpu]);
+> +	if (ret)
+> +		goto err_tcu_clocksource_cleanup;
+> +
+> +	return 0;
+> +
+> +err_tcu_clocksource_cleanup:
+> +	clocksource_unregister(&ingenic_tcu->cs);
+> +	clk_disable_unprepare(ingenic_tcu->cs_clk);
+> +	clk_put(ingenic_tcu->cs_clk);
+> +	kfree(ingenic_tcu);
+> +	return ret;
+> +}
+> +
+>  static int __init ingenic_tcu_clocksource_init(struct device_node=20
+> *np,
+>  					       struct ingenic_tcu *tcu)
+>  {
+> @@ -239,6 +291,7 @@ static int __init ingenic_tcu_init(struct=20
+> device_node *np)
+>  	const struct ingenic_soc_info *soc_info =3D id->data;
+>  	struct ingenic_tcu *tcu;
+>  	struct regmap *map;
+> +	unsigned cpu =3D 0;
+>  	long rate;
+>  	int ret;
+>=20
+> @@ -252,13 +305,18 @@ static int __init ingenic_tcu_init(struct=20
+> device_node *np)
+>  	if (!tcu)
+>  		return -ENOMEM;
+>=20
+> -	/* Enable all TCU channels for PWM use by default except channels=20
+> 0/1 */
+> -	tcu->pwm_channels_mask =3D GENMASK(soc_info->num_channels - 1, 2);
+> +	/*
+> +	 * Enable all TCU channels for PWM use by default except channels=20
+> 0/1,
+> +	 * and channel 2 if target CPU is JZ4780 and SMP is selected.
+> +	 */
+> +	tcu->pwm_channels_mask =3D GENMASK(soc_info->num_channels - 1,
+> +								NR_CPUS + 1);
+>  	of_property_read_u32(np, "ingenic,pwm-channels-mask",
+>  			     (u32 *)&tcu->pwm_channels_mask);
+>=20
+> -	/* Verify that we have at least two free channels */
+> -	if (hweight8(tcu->pwm_channels_mask) > soc_info->num_channels - 2) {
+> +	/* Verify that we have at least NR_CPUS + 1 free channels */
+> +	if (hweight8(tcu->pwm_channels_mask) >
+> +			soc_info->num_channels - NR_CPUS + 1) {
+
+NR_CPUS can be up to 256. You want to use num_online_cpus() here, I=20
+believe.
+
+>  		pr_crit("%s: Invalid PWM channel mask: 0x%02lx\n", __func__,
+>  			tcu->pwm_channels_mask);
+>  		ret =3D -EINVAL;
+> @@ -266,13 +324,27 @@ static int __init ingenic_tcu_init(struct=20
+> device_node *np)
+>  	}
+>=20
+>  	tcu->map =3D map;
+> +	tcu->np =3D np;
+>  	ingenic_tcu =3D tcu;
+>=20
+> -	tcu->timer_channel =3D find_first_zero_bit(&tcu->pwm_channels_mask,
+> +	tcu->timer_local[cpu] =3D find_first_zero_bit(&tcu->pwm_channels_mask,
+>  						 soc_info->num_channels);
+> -	tcu->cs_channel =3D find_next_zero_bit(&tcu->pwm_channels_mask,
+> -					     soc_info->num_channels,
+> -					     tcu->timer_channel + 1);
+> +
+> +	if (NR_CPUS > 1) {
+> +		for (cpu =3D 1; cpu < NR_CPUS; cpu++)
+> +			tcu->timer_local[cpu] =3D find_next_zero_bit(
+> +						&tcu->pwm_channels_mask,
+> +						soc_info->num_channels,
+> +						tcu->timer_local[cpu - 1] + 1);
+> +
+> +		tcu->cs_channel =3D find_next_zero_bit(&tcu->pwm_channels_mask,
+> +					soc_info->num_channels,
+> +					tcu->timer_local[cpu-1] + 1);
+> +	} else {
+> +		tcu->cs_channel =3D find_next_zero_bit(&tcu->pwm_channels_mask,
+> +					soc_info->num_channels,
+> +					tcu->timer_local[cpu] + 1);
+> +	}
+
+I believe you can factorize the code a bit here - don't check for=20
+NR_CPUS > 1, and have a for (cpu =3D 0; cpu < num_online_cpus(); cpu++)=20
+loop. You could use a temporary variable to store the 'next bit' value.
+
+-Paul
+
+>=20
+>  	ret =3D ingenic_tcu_clocksource_init(np, tcu);
+>  	if (ret) {
+> @@ -280,9 +352,10 @@ static int __init ingenic_tcu_init(struct=20
+> device_node *np)
+>  		goto err_free_ingenic_tcu;
+>  	}
+>=20
+> -	ret =3D ingenic_tcu_timer_init(np, tcu);
+> -	if (ret)
+> -		goto err_tcu_clocksource_cleanup;
+> +	/* Setup clock events on each CPU core */
+> +	ret =3D cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "Ingenic XBurst:=20
+> online",
+> +				ingenic_tcu_setup_cevt, NULL);
+> +	WARN_ON(ret < 0);
+>=20
+>  	/* Register the sched_clock at the end as there's no way to undo it=20
+> */
+>  	rate =3D clk_get_rate(tcu->cs_clk);
+> @@ -290,10 +363,6 @@ static int __init ingenic_tcu_init(struct=20
+> device_node *np)
+>=20
+>  	return 0;
+>=20
+> -err_tcu_clocksource_cleanup:
+> -	clocksource_unregister(&tcu->cs);
+> -	clk_disable_unprepare(tcu->cs_clk);
+> -	clk_put(tcu->cs_clk);
+>  err_free_ingenic_tcu:
+>  	kfree(tcu);
+>  	return ret;
+> --
+> 2.7.4
+>=20
+
+=
 
