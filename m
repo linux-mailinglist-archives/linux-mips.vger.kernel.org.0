@@ -2,58 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EE616854C
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2020 18:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA90816855C
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2020 18:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727855AbgBURnl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Feb 2020 12:43:41 -0500
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:27082 "EHLO
+        id S1726541AbgBURsD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Feb 2020 12:48:03 -0500
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:54370 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726150AbgBURnl (ORCPT
+        by vger.kernel.org with ESMTP id S1726789AbgBURsD (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 21 Feb 2020 12:43:41 -0500
+        Fri, 21 Feb 2020 12:48:03 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1582307020;
+        s=mimecast20190719; t=1582307282;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DRklp/EGbzKFbnLcWYfCTJYwspK96XjQokoDYirC2jo=;
-        b=CwEu5SNqPbnkKVYFS1f81c12pLL0xamgYlmINLUdYLySmeTvlbmyI5TffrgHlVYMlz86Ag
-        VCE9AE813HFBsv2MJwvjjPBVf9huudGTtteQe12aNVhkl98tXK6RsRMmJN064X0AA6a5Lr
-        2a5YU0XoiWgLa0XlDHjaJ7RXQSDu5Ww=
+        bh=RrMvZJoVJBWqnzqNr9KyLlzqZ46CEJlOdAIqg//g6XU=;
+        b=dIe+RgCzUCc+j7/6priU5r1awTTJQpfHKW2bI2qO6EjtMl47Qz3hE64Uw/VgBVyGkzxC42
+        2zU1dBq0ERQMUFnIFWtvhrgWHJRJfV3GxpUdsIJ1MhKCGjYxobTul+jQSvkfmgaPas+dOm
+        /FAGwnA7Pd7J02ViLqFWSUZZGWvZkEY=
 Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
  [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-125-eY_DlmDBOI27JdFq4QqiMQ-1; Fri, 21 Feb 2020 12:43:38 -0500
-X-MC-Unique: eY_DlmDBOI27JdFq4QqiMQ-1
-Received: by mail-wr1-f69.google.com with SMTP id u18so1320804wrn.11
-        for <linux-mips@vger.kernel.org>; Fri, 21 Feb 2020 09:43:37 -0800 (PST)
+ us-mta-300-1GvKsuEMM5ay7z4zJivOsg-1; Fri, 21 Feb 2020 12:47:56 -0500
+X-MC-Unique: 1GvKsuEMM5ay7z4zJivOsg-1
+Received: by mail-wr1-f69.google.com with SMTP id o9so1334989wrw.14
+        for <linux-mips@vger.kernel.org>; Fri, 21 Feb 2020 09:47:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=DRklp/EGbzKFbnLcWYfCTJYwspK96XjQokoDYirC2jo=;
-        b=XjDug160qZBRyQQdliKgFDA4+J8hgv5/a98XT9Tt7ORwAxJZ/mGoP0p+4WP/4BF1PD
-         Xn+Z+6xqj03LWgaUa/OarPfXmy0PW+X++jRdrCqzYP+JWDK/IhQovwF9ja0dhSRTFoRB
-         i534P1SEZhHuT66bMlIGUNi5TOvzh5u/nmkCcBRCtsRJzoO4eQWTmlPF6A9QjoIigwDo
-         IIKx6zrOVJdNg1vADJKc85pvLKbYoHBDomMxgVze/9GJECIq8Z+IDKMWFajCC3Fl83km
-         mqi8I2aOTzY5CWhJ1Fhifz2RhD99eZt5m7FRTj9SsCV+KOPJR3s2ccQWgA1bLL0SJM3I
-         JfCg==
-X-Gm-Message-State: APjAAAUdA6UFN7/8WMIQJxEa/ll43wSw7cF07DahVlnlEMrR3HRu/CHP
-        tnMbZYS+3eJ9Nceg6wlmfkVQmwdj6zOhVoxgZO4kOdorsiJItzpIHjcQJLH9I76rCbAVGo915xm
-        RxzXHWYNTt3d1wdIAY91HXA==
-X-Received: by 2002:a5d:4289:: with SMTP id k9mr51196987wrq.280.1582307017029;
-        Fri, 21 Feb 2020 09:43:37 -0800 (PST)
-X-Google-Smtp-Source: APXvYqx2hj716qxeeRUnhWk7oLWJU5fIlTs2+zZOl+uuyj1LRQkzfullhSLke4OG8g9MBweopRblWg==
-X-Received: by 2002:a5d:4289:: with SMTP id k9mr51196974wrq.280.1582307016828;
-        Fri, 21 Feb 2020 09:43:36 -0800 (PST)
+        bh=RrMvZJoVJBWqnzqNr9KyLlzqZ46CEJlOdAIqg//g6XU=;
+        b=iqTSYKlSg6u39UIKNEA9rY7xqhq+DnKWSjXfumdjINlEjKc5w7xuwpMsCR/N1PIbGB
+         vWcy/BrikHDGWGeYVRHvtWwuaCk4IjOJAlMIlxq8q5qgKLgRLQkBOEYl7dyKX9nNt15k
+         Kk01f90EkLqRXoVuI4c9dLOa2TYWpTTs8lRTEKN3MBYJ83Iw7f69UP5JFnWqF1sRlu++
+         76e92Z6uRZL49vs8RtZvo1zbIUh6tLtG56/ed4Ya4S76QcN++hjcq8MPeFuC74VMikqe
+         3WYc6YTmiWWzrbz8woiL6aUiRl7IoG4lOGuULjgOYQZWFSnIcT62sKJ8y9jtmJWo5Ljh
+         XHeg==
+X-Gm-Message-State: APjAAAUiiJCTeGWGIOGiFjtkjBbcO9Q75TnU+McEhGHMIpHbFw9y0cVc
+        V3sgcZktsnJsB6qKayn0S0DP53BmBrJqGWQOBdQGHA6NX53nkurREVYgJKtb2R+uxO3o/5YA9tn
+        EqmwqOXt92+XQnsbCAlLQIA==
+X-Received: by 2002:adf:e68d:: with SMTP id r13mr49225894wrm.349.1582307275644;
+        Fri, 21 Feb 2020 09:47:55 -0800 (PST)
+X-Google-Smtp-Source: APXvYqzI29TQnMTxhegOPTR5SZPy7HDTeZP8mdmwqeW3b3wvRv6t/VcN7GX1ZnOVCmuZ9M9Iv9A8Vg==
+X-Received: by 2002:adf:e68d:: with SMTP id r13mr49225876wrm.349.1582307275388;
+        Fri, 21 Feb 2020 09:47:55 -0800 (PST)
 Received: from [192.168.178.40] ([151.20.135.128])
-        by smtp.gmail.com with ESMTPSA id l131sm4908318wmf.31.2020.02.21.09.43.35
+        by smtp.gmail.com with ESMTPSA id x6sm4531952wmi.44.2020.02.21.09.47.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2020 09:43:36 -0800 (PST)
-Subject: Re: [PATCH v6 14/22] KVM: Clean up local variable usage in
- __kvm_set_memory_region()
+        Fri, 21 Feb 2020 09:47:54 -0800 (PST)
+Subject: Re: [PATCH v6 17/22] KVM: Terminate memslot walks via used_slots
 To:     Sean Christopherson <sean.j.christopherson@intel.com>
 Cc:     Paul Mackerras <paulus@ozlabs.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
@@ -74,14 +73,14 @@ Cc:     Paul Mackerras <paulus@ozlabs.org>,
         Peter Xu <peterx@redhat.com>,
         =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
 References: <20200218210736.16432-1-sean.j.christopherson@intel.com>
- <20200218210736.16432-15-sean.j.christopherson@intel.com>
+ <20200218210736.16432-18-sean.j.christopherson@intel.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <1467b8cd-3631-b5da-b285-dbdf31b75af7@redhat.com>
-Date:   Fri, 21 Feb 2020 18:43:34 +0100
+Message-ID: <216d647a-e598-d5d6-e20f-9c44c9ca157f@redhat.com>
+Date:   Fri, 21 Feb 2020 18:47:52 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.1
 MIME-Version: 1.0
-In-Reply-To: <20200218210736.16432-15-sean.j.christopherson@intel.com>
+In-Reply-To: <20200218210736.16432-18-sean.j.christopherson@intel.com>
 Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -91,19 +90,19 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 18/02/20 22:07, Sean Christopherson wrote:
-> -sorted by update_memslots(), and the old
->  	 * memslot needs to be referenced after calling update_memslots(), e.g.
-> -	 * to free its resources and for arch specific behavior.
-> +	 * to free its resources and for arch specific behavior.  Kill @tmp
-> +	 * after making a copy to deter potentially dangerous usage.
->  	 */
-> -	old = *slot;
-> +	tmp = id_to_memslot(__kvm_memslots(kvm, as_id), id);
-> +	old = *tmp;
-> +	tmp = NULL;
-> +
+>  	tmp = id_to_memslot(__kvm_memslots(kvm, as_id), id);
+> -	old = *tmp;
+> -	tmp = NULL;
+> +	if (tmp) {
+> +		old = *tmp;
+> +		tmp = NULL;
+> +	} else {
+> +		memset(&old, 0, sizeof(old));
+> +		old.id = id;
+> +	}
+>  
 
-Also: old = *id_to_memslot(...).
+So much for my previous brilliant suggestion. :)
 
 Paolo
 
