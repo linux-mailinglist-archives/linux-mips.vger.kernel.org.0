@@ -2,102 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 065C2167C82
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2020 12:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B49168010
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2020 15:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727077AbgBULtz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Feb 2020 06:49:55 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2454 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726934AbgBULtz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 21 Feb 2020 06:49:55 -0500
-Received: from lhreml709-cah.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 07C42219BF6427A28D49;
-        Fri, 21 Feb 2020 11:49:53 +0000 (GMT)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- lhreml709-cah.china.huawei.com (10.201.108.32) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Fri, 21 Feb 2020 11:49:52 +0000
-Received: from [127.0.0.1] (10.202.226.45) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Fri, 21 Feb
- 2020 11:49:51 +0000
-From:   John Garry <john.garry@huawei.com>
-Subject: Re: Questions about logic_pio
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-CC:     "xuwei (O)" <xuwei5@huawei.com>, bhelgaas <bhelgaas@google.com>,
-        andyshevchenko <andy.shevchenko@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux Mips <linux-mips@vger.kernel.org>
-References: <1705dbe62ce.10ae800394772.9222265269135747883@flygoat.com>
- <5E4E55F7.70800@hisilicon.com>
- <e3ddd7de-54b2-bdba-2233-6ace40072430@huawei.com>
- <17062738bc0.c380503c6222.6801557833645076299@flygoat.com>
- <1ebf4461-eb37-ff58-1faf-dd24d83f85cf@huawei.com>
- <170632822e1.12fede49a6919.5706082545515934736@flygoat.com>
- <e54a9936-5cf3-777d-3e91-58d2be96bf1c@huawei.com>
- <6c49e5e0-b6f2-fe23-caec-4742c3d1d3a0@huawei.com>
- <1706531b3a8.108e582396993.7792774458896054798@flygoat.com>
-Message-ID: <65fffffa-2c74-aa09-7fdb-29a7200d7ac4@huawei.com>
-Date:   Fri, 21 Feb 2020 11:49:45 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1728425AbgBUOVp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Feb 2020 09:21:45 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:34887 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728380AbgBUOVp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Feb 2020 09:21:45 -0500
+Received: by mail-lf1-f67.google.com with SMTP id l16so1624259lfg.2
+        for <linux-mips@vger.kernel.org>; Fri, 21 Feb 2020 06:21:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LzKEMSRm7aMhbsD4FLHQVZNBKfPqY5ZNIMagLE7b27A=;
+        b=zsnxq6A6AvCzyiGsP5PWzf+udVD1jQS/2saJCH+nR88fIRw0unQSUP++Rkfd5sfrf3
+         63Odo9vcMh/eXewq38ibkJ1zAQ2XWX6dpxB0JJcPabvSmgDjJRC5Kou7PPy1Y3opByhh
+         KSkTfPDsfmJB7xZ3BMmTpBKdQdz89FNs56yBrqtEQKqZY6vbtZWVPk/o8YuLpInm92zK
+         dqqaq61KzXrF7vBNf6jnMFIX0Sxnwqi5aFvV7T4nAtFd9Lf37IL2QKH3yC7R5ZlOo9KZ
+         9hhyJZtlyOTLlKFquzaoF4vwjdgdZZVrqiCHqBBKYBYpRAAedbT45Vu3fc79G6DiNgPM
+         4sYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LzKEMSRm7aMhbsD4FLHQVZNBKfPqY5ZNIMagLE7b27A=;
+        b=tIPcHQ7fvrJHzTQIzWWR0UFRDDhsgebqLYv01mLWhhg03S5uAtXz40T/rMZxAABES1
+         wMmsjzIEjfUZyDO6ukaN/8fRRHAqaQHO6BdSVL0cXBCrAIPa1ihok5WbltIhvZeNdH41
+         o+gmHQy0FOcQgOxf74+xboV5bRze8jNQQEeswhs2tIjr2MLkl1JvKc7y7/acou9kIM+5
+         D5hhlWdQtUNYz9fjN+x4CQDsqPnqVm9r4jikeDzVaQ40F1jT4yyay4bajrrOrpMTcwnt
+         zHlzhLEmvQWt/WLEh36cDahLvm6q3UK8RVwmjNU53zSwlJd7qWdViMSzW++91yHsHms8
+         M8zA==
+X-Gm-Message-State: APjAAAU0TRUJ7tVuKp6N0G1urn59qgD8ot3VA5J9U0pa3Mn1Lf1442Il
+        8SDHzibOLVCJx8zSGPXwSU4Oo7OKZ8ogWShFWrIM1w==
+X-Google-Smtp-Source: APXvYqyW4oBegi1hgs7WkmxGYjpV5GzFLky4el1v6dyD6KVQEdFEh3C2ql6oeVhPQ5VbCKKZC+kBcUpA3K20qa7gUd0=
+X-Received: by 2002:ac2:44a5:: with SMTP id c5mr8132945lfm.4.1582294903260;
+ Fri, 21 Feb 2020 06:21:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1706531b3a8.108e582396993.7792774458896054798@flygoat.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.45]
-X-ClientProxiedBy: lhreml712-chm.china.huawei.com (10.201.108.63) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+References: <1581851828-3493-1-git-send-email-zhouyanjie@wanyeetech.com> <1581851828-3493-3-git-send-email-zhouyanjie@wanyeetech.com>
+In-Reply-To: <1581851828-3493-3-git-send-email-zhouyanjie@wanyeetech.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 21 Feb 2020 15:21:31 +0100
+Message-ID: <CACRpkdbvc=HtaFnWHOhD=HquNCpbL04-6tTZ8yqwHBQcK+8tHw@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: Ingenic: Add missing parts for X1830.
+To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     linux-mips@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, dongsheng.qiu@ingenic.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 21/02/2020 00:42, Jiaxun Yang wrote:
->   >
->   > I will add this may not cover your need, as you probably cannot deal
->   > with any logical PIO <-> ISA translation without modifying the device
->   > driver. For this, we may need to reserve the first 0x4000 in logical PIO
->   > space for this sort of legacy host.
-> 
-> Hi,
-> 
-> After thinking twice, I realized that the most convenient way for me is
-> adding an option to get rid of the mess of logic PIO. MIPS system is emulating
-> x86's behavior, while logic PIO isn't designed for such platform.
+On Sun, Feb 16, 2020 at 12:17 PM =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)
+<zhouyanjie@wanyeetech.com> wrote:
 
-It was designed for archs which define PCI_IOBASE for PCI MMIO-based or 
-IndirectIO-based IO port access.
+> Add lcd pinctrl driver for X1830.
+>
+> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
+eetech.com>
 
-> 
-> Or probably I need a variation of Logic PIO, which leave MMIO space AS-IS
-> (not try to reallocate it)
+Patch applied.
 
-That does not work if add a PCI host with MMIO-based IO port regions 
-into the mix.
-
-It only so happens today that for mips you have a single MMIO-based IO 
-port region, and you have IO port base for that region conveniently @ 
-0x0. Then your drivers can have fixed IO port addresses.
-
-For dealing with multiple MMIO-based IO ports regions - which is the 
-case for PCI host bridges - then you need to map those MMIO-based IO 
-port regions to different regions in IO port space.
-
-> but still preserving higher 0x4000 for indirect access.
-
-Then there is no space for PCI MMIO-based IO ports.
-
-> 
-> Thanks a lot!
->   >
->   > That would not be a bad thing - see
->   >https://lore.kernel.org/linux-pci/1560262374-67875-1-git-send-email-john.garry@huawei.com/
->   >
->   >
->   > >
->   > > This driver deals with legacy IO ports where we need to bitbang
-
+Yours,
+Linus Walleij
