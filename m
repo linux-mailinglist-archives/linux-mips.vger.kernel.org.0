@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C44616726A
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2020 09:03:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFA61674D2
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2020 09:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731440AbgBUIDS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Feb 2020 03:03:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35988 "EHLO mail.kernel.org"
+        id S2387692AbgBUIRe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Feb 2020 03:17:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55072 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731324AbgBUIDR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 21 Feb 2020 03:03:17 -0500
+        id S2387686AbgBUIRd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 21 Feb 2020 03:17:33 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 408A7206ED;
-        Fri, 21 Feb 2020 08:03:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E0CB92468C;
+        Fri, 21 Feb 2020 08:17:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582272195;
-        bh=SADULr2v8CoS9zmj1WlBhdagSQ+W/CvrBu4siprNm2E=;
+        s=default; t=1582273053;
+        bh=KNL8q96VW054YfXBZfeHGlfLCZJ5LleWzR+KoB/9j4w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z9sEmRjfmDDlPq65d2kbN2+u5m4oCWUdbsfBNjt6TUSihMhS4ljoIyh8CrFyCy3s/
-         Vt5+HDUbnAoY9Ji26xodqrvpqPY5eK8tnWU5xQrUg8e8rT/+yY6jO5Bk/7ic6Xo9+E
-         UT1W+NOMdbguyd/F70KjuIs+D/I+PLnepu3oSKC4=
+        b=EKiAagVb9r91HEr065nbHOYlHW1apmxv3xAtPhrLsaAv24H4QZUcvR/BBabMmPkTq
+         Onu8/2FN4a01Pq0gZgjc6sUU91qXOKeKC0H8Ly4wRu34KarP8KAWVQ8IxVIKYpXuUd
+         OMVR95YdRtdu5i/CMZuFv2X4tQAkKivg05fE9oDw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 051/344] MIPS: Loongson: Fix potential NULL dereference in loongson3_platform_init()
-Date:   Fri, 21 Feb 2020 08:37:30 +0100
-Message-Id: <20200221072353.716410465@linuxfoundation.org>
+Subject: [PATCH 4.19 029/191] MIPS: Loongson: Fix potential NULL dereference in loongson3_platform_init()
+Date:   Fri, 21 Feb 2020 08:40:02 +0100
+Message-Id: <20200221072254.750279305@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200221072349.335551332@linuxfoundation.org>
-References: <20200221072349.335551332@linuxfoundation.org>
+In-Reply-To: <20200221072250.732482588@linuxfoundation.org>
+References: <20200221072250.732482588@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -68,10 +68,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/arch/mips/loongson64/loongson-3/platform.c b/arch/mips/loongson64/loongson-3/platform.c
-index 13f3404f00300..9674ae1361a85 100644
+index 25a97cc0ee336..0db4cc3196ebd 100644
 --- a/arch/mips/loongson64/loongson-3/platform.c
 +++ b/arch/mips/loongson64/loongson-3/platform.c
-@@ -27,6 +27,9 @@ static int __init loongson3_platform_init(void)
+@@ -31,6 +31,9 @@ static int __init loongson3_platform_init(void)
  			continue;
  
  		pdev = kzalloc(sizeof(struct platform_device), GFP_KERNEL);
