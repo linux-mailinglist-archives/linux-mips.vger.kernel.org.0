@@ -2,34 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A65168E3A
+	by mail.lfdr.de (Postfix) with ESMTP id DA869168E3B
 	for <lists+linux-mips@lfdr.de>; Sat, 22 Feb 2020 11:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727318AbgBVK0P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S1727304AbgBVK0P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Sat, 22 Feb 2020 05:26:15 -0500
-Received: from mo4-p03-ob.smtp.rzone.de ([81.169.146.175]:16448 "EHLO
+Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.100]:11238 "EHLO
         mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727100AbgBVK0B (ORCPT
+        with ESMTP id S1727124AbgBVK0B (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Feb 2020 05:26:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582367157;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582367158;
         s=strato-dkim-0002; d=goldelico.com;
         h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=UhK6kPx1izFEDwGPZRQ8Vz3EeWwMJdEuEzrh1rnL18s=;
-        b=g3Ldxpr+Vf+GgTpIVu6HJWcbvZMrD4POZOedoFvAJgaopY3fMNa/ynn7zcrYMrlyen
-        A4t9d9r5Y4tgwdA2LOa397ZQAPBTNrOwzx9gKeMbSZSN5fu2ebFGg33C44v9sxV+E7BN
-        PlBuQSb8YirhEsRXXx/WBOpVeLpqKMeq40vXZrfZ+P132wAFHS0SGt4OKpyG1FyMWuuA
-        C3rOSgwjmJGw2PUmnQsYDcBCot4XdVJ1haEh2H0MIkxL/NWTB55qtyS7lVxF4E6+p9Ly
-        D2coNTWtwLuZ6m4iXL9VC9nkd2oY2ajSdXBOhbAkSm7wWKdCjSVkB0SSOKoOtW5DuKCI
-        Gn2g==
+        bh=V1+Q4JesqWcFYmt/4rldi7rtX4QsYdV77esVgLGK1a4=;
+        b=Gr3HjOMYR2wjg+I8qajMOSRxldcCJmwWve/0wTk0GoAIz0vRPBOjZKoCxOUqaU7XjX
+        epUvCFCd9nuvptu65ttsmCrSJVn7qmJS/CKGURH9IeW55iMLVJsixoAlXRxxAmcbPY8W
+        SCIvH50vsN2WlQDle9czv5WeMjyiPVN8WBI34eLAkpCN/Gs+iyDtJ/eqwhTkPY/cwR1A
+        5u4hQlpwVM35s8ke9NWlFiKzcFapy7XxFRbK4FKZRy6PL/CnJSTBpij95QxYFB38ekSr
+        m3iy1YONRUgtKNx01yj+VnwG4RE755v2NwzHjKXec0m42aDV31gFGYWk1fLdUl3SaS/7
+        nrtA==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0pAz7pC6Q5M"
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1MAPkjMd
+        with ESMTPSA id U06217w1MAPljMe
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Sat, 22 Feb 2020 11:25:46 +0100 (CET)
+        Sat, 22 Feb 2020 11:25:47 +0100 (CET)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
         Andreas Kemnade <andreas@kemnade.info>,
@@ -52,9 +52,9 @@ To:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
         kernel@pyra-handheld.com
-Subject: [PATCH v5 4/6] nvmem: MAINTAINERS: add maintainer for JZ4780 efuse driver
-Date:   Sat, 22 Feb 2020 11:25:39 +0100
-Message-Id: <2ccdf9e354e12a10cb5f5c6cda9f81065306471e.1582367141.git.hns@goldelico.com>
+Subject: [PATCH v5 5/6] MIPS: DTS: JZ4780: define node for JZ4780 efuse
+Date:   Sat, 22 Feb 2020 11:25:40 +0100
+Message-Id: <a37450ad5702d0e02a7ff494d69bc1b2c9fa3c17.1582367141.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <cover.1582367141.git.hns@goldelico.com>
 References: <cover.1582367141.git.hns@goldelico.com>
@@ -68,31 +68,54 @@ X-Mailing-List: linux-mips@vger.kernel.org
 From: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
 
 This patch brings support for the JZ4780 efuse. Currently it only exposes
-a read only access to the entire 8K bits efuse memory.
+a read only access to the entire 8K bits efuse memory and the
+ethernet mac address for the davicom dm9000 chip on the CI20 board.
+
+It also changes the nemc reg range to avoid overlap.
 
 Tested-by: Mathieu Malaterre <malat@debian.org>
 Signed-off-by: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
 Signed-off-by: Mathieu Malaterre <malat@debian.org>
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- MAINTAINERS | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/mips/boot/dts/ingenic/jz4780.dtsi | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a0d86490c2c6..5bab216d8fe9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8270,6 +8270,11 @@ M:	Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
- S:	Maintained
- F:	drivers/dma/dma-jz4780.c
+diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+index f928329b034b..1e266be28096 100644
+--- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+@@ -358,7 +358,7 @@
  
-+INGENIC JZ4780 EFUSE Driver
-+M:	PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
-+S:	Maintained
-+F:	drivers/nvmem/jz4780-efuse.c
+ 	nemc: nemc@13410000 {
+ 		compatible = "ingenic,jz4780-nemc";
+-		reg = <0x13410000 0x10000>;
++		reg = <0x13410000 0x4c>;
+ 		#address-cells = <2>;
+ 		#size-cells = <1>;
+ 		ranges = <1 0 0x1b000000 0x1000000
+@@ -373,6 +373,21 @@
+ 		status = "disabled";
+ 	};
+ 
++	efuse: efuse@134100d0 {
++		compatible = "ingenic,jz4780-efuse";
++		reg = <0x134100d0 0x2c>;
 +
- INGENIC JZ4780 NAND DRIVER
- M:	Harvey Hunt <harveyhuntnexus@gmail.com>
- L:	linux-mtd@lists.infradead.org
++		clocks = <&cgu JZ4780_CLK_AHB2>;
++		clock-names = "ahb2";
++
++		#address-cells = <1>;
++		#size-cells = <1>;
++
++		eth0_addr: eth-mac-addr@0x22 {
++			reg = <0x22 0x6>;
++		};
++	};
++
+ 	dma: dma@13420000 {
+ 		compatible = "ingenic,jz4780-dma";
+ 		reg = <0x13420000 0x400
 -- 
 2.23.0
 
