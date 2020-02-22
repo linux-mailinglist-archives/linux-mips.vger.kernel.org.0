@@ -2,171 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BF31690A9
-	for <lists+linux-mips@lfdr.de>; Sat, 22 Feb 2020 18:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F41C1169113
+	for <lists+linux-mips@lfdr.de>; Sat, 22 Feb 2020 18:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726631AbgBVRRz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 22 Feb 2020 12:17:55 -0500
-Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.100]:28049 "EHLO
-        mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726198AbgBVRRz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Feb 2020 12:17:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582391872;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=HPDPreE9UVNTnqFOXyZ+31E5RMMnmqZ+gBEpi7rZ8nc=;
-        b=Rwa2EDXBldQIyrPctsvJkCD6CCcc9Ek1rfSnIOjSmJETwYWBa41HSBzt9SXFGPPoFZ
-        U+kIDOMp4tASADrJDozIWucu4l5aeGLHPXYfErP21S5+Tp4oabcu4CLHoMlam/BoZLQv
-        V43sRP2r+8ZzuE5YrnfSjGjvSH0sJO2XCCwC2DKEctHCKiVKAVq9xj1XPAjJaPZEDegh
-        Gv2zv6DxqKZIGlyC1suepv9uFCdfQX2PyPyRF4pLQhlGZEY66wNucC1zc1KXGMhrrPrI
-        HRfO+OFAFNDLl6VVNgd5FjhHBVQLqOJFAhA+nVVMJJtVkkWTMTeXFD7DD45vX1xY+8ds
-        XPUA==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHmAiw43swGE="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-        by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1MHHjk3G
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Sat, 22 Feb 2020 18:17:45 +0100 (CET)
-Subject: Re: [PATCH v5 2/6] Bindings: nvmem: add bindings for JZ4780 efuse
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: text/plain; charset=us-ascii
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20200222174408.10588e32@kemnade.info>
-Date:   Sat, 22 Feb 2020 18:17:44 +0100
-Cc:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Mathieu Malaterre <malat@debian.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
-        kernel@pyra-handheld.com
+        id S1726550AbgBVRzZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 22 Feb 2020 12:55:25 -0500
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17952 "EHLO
+        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726310AbgBVRzZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 22 Feb 2020 12:55:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1582394088;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=Date:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Subject:To:CC:From:Message-ID;
+        bh=YFad9zuR8StHw8egh96QPLS0XGUOUsUoNOQH4WGQF8Q=;
+        b=HCxX1orIKgWPevpzyibr7jFT19ZptsX5dAzW649+vSBptMTLSi9aUtOYlrJhnVte
+        zU+/eQUWw0NpCo4dqd351RzlsGcX7wLjOBoTOMFe9Mcd2eLoyJ4o08qUsbp6zPigNMZ
+        AbPYKiZwonntsQlmbPUKk1J3UkGlwRCbJDwEnB8k=
+Received: from Galaxy-Note9.202.net.flygoat.com (183.156.46.156 [183.156.46.156]) by mx.zoho.com.cn
+        with SMTPS id 1582394085608759.8716354985457; Sun, 23 Feb 2020 01:54:45 +0800 (CST)
+Date:   Sun, 23 Feb 2020 01:54:43 +0800
+User-Agent: K-9 Mail for Android
+In-Reply-To: <1582387719.3.1@crapouillou.net>
+References: <20200219191730.1277800-1-paulburton@kernel.org> <20200219191730.1277800-3-paulburton@kernel.org> <1582387719.3.1@crapouillou.net>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <7EA5C99C-094E-43FC-BF04-A9056C8BB2B6@goldelico.com>
-References: <cover.1582367141.git.hns@goldelico.com> <51642368a064073ab99bb3110863b5fadc382f82.1582367141.git.hns@goldelico.com> <20200222165738.61cde2a0@kemnade.info> <D59DC84C-837E-4856-8FED-580381F748FF@goldelico.com> <20200222174408.10588e32@kemnade.info>
-To:     Andreas Kemnade <andreas@kemnade.info>
-X-Mailer: Apple Mail (2.3124)
+Subject: Re: [PATCH 2/2] MAINTAINERS: Set MIPS status to Odd Fixes
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Paul Burton <paulburton@kernel.org>
+CC:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <5CF20000-7E47-49B3-8B35-E13753AABBBD@flygoat.com>
+X-ZohoCNMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
-> Am 22.02.2020 um 17:46 schrieb Andreas Kemnade <andreas@kemnade.info>:
->=20
-> On Sat, 22 Feb 2020 17:34:06 +0100
-> "H. Nikolaus Schaller" <hns@goldelico.com> wrote:
->=20
->>> Am 22.02.2020 um 16:57 schrieb Andreas Kemnade =
-<andreas@kemnade.info>:
->>>=20
->>> On Sat, 22 Feb 2020 11:25:37 +0100
->>> "H. Nikolaus Schaller" <hns@goldelico.com> wrote:
->>>=20
->>>> From: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
->>>>=20
->>>> This patch brings support for the JZ4780 efuse. Currently it only =
-exposes
->>>> a read only access to the entire 8K bits efuse memory.
->>>>=20
->>>> Tested-by: Mathieu Malaterre <malat@debian.org>
->>>> Signed-off-by: PrasannaKumar Muralidharan =
-<prasannatsmkumar@gmail.com>
->>>> Signed-off-by: Mathieu Malaterre <malat@debian.org>
->>>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->>>> [converted to yaml]
->>>> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
->>>> ---
->>>> .../bindings/nvmem/ingenic,jz4780-efuse.yaml  | 50 =
-+++++++++++++++++++
->>>> 1 file changed, 50 insertions(+)
->>>> create mode 100644 =
-Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
->>>>=20
->>>> diff --git =
-a/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml =
-b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
->>>> new file mode 100644
->>>> index 000000000000..09a8ef937750
->>>> --- /dev/null
->>>> +++ =
-b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
->>>> @@ -0,0 +1,50 @@
->>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: =
-http://devicetree.org/schemas/nvmem/ingenic,jz4780-efuse.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Ingenic JZ EFUSE driver bindings
->>>> +
->>>> +maintainers:
->>>> +  - PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
->>>> +
->>>> +allOf:
->>>> +  - $ref: "nvmem.yaml#"
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    enum:
->>>> +      - ingenic,jz4780-efuse
->>>> +
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +
->>>> +  clocks:
->>>> +    # Handle for the ahb for the efuse.
->>>> +    maxItems: 1
->>>> +
->>>> +  clock-names:
->>>> +   items:
->>>> +     - const:  ahb2 =20
->>> as Rob said: probably not needed, since it is a single
->>> clock, and the driver uses devm_clk_get(dev, NULL), so it should be =
-prepared
->>> for that without any extra work. =20
->>=20
->> The question is if a specific driver implementation should determine
->> what the DT requires or the other way round. I don't know...
->>=20
->> I did interpret Rob's comment differently: there was
->>=20
->>> - "clock-names"		Must be "bus_clk" =20
->>=20
->> and he did say:=20
->>=20
->> 	'clk' is redundant. How about 'ahb'?
->>=20
->> So I thought he refers to the _clk suffix?
->>=20
->=20
-> and he said to my first try:
-> ---
->> +  clock-names:
->> +   items:
->> +     - const:  bus_clk =20
->=20
-> My prior comment still applies.
->=20
-> Also, for a single clock, you don't really need a name.
 
-Ah, ok. I may have missed that.
+=E4=BA=8E 2020=E5=B9=B42=E6=9C=8823=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=881=
+2:08:39, Paul Cercueil <paul@crapouillou=2Enet> =E5=86=99=E5=88=B0:
+>Hi,
+>
+>So I think Thomas is the best candidate to be maintainer, since he has=20
+>both experience and free time ;)
 
-BR and thanks,
-Nikolaus
+So do I!
 
+>
+>I'm sort-of the maintainer for the Ingenic platform and drivers, if=20
+>Jiaxun wants to do the same for Loongson hardware, that would make=20
+>Thomas' job easier=2E Having three co-maintainers with equal rights would
+>
+>be a total mess=2E
+
+Sure=2E I'm still going to take care Loongson code=2E
+Probably we can help with reviewing MIPS common code too=2E
+
+Thanks
+
+>
+>-Paul
+>
+>
+>Le mer=2E, f=C3=A9vr=2E 19, 2020 at 11:17, Paul Burton <paulburton@kernel=
+=2Eorg>=20
+>a =C3=A9crit :
+>> My time with MIPS the company has reached its end, and so at best
+>I'll
+>> have little time spend on maintaining arch/mips/=2E Reflect that in
+>> MAINTAINERS by changing status to Odd Fixes=2E Hopefully this might
+>spur
+>> the involvement of someone with more time, but even if not it should
+>> help serve to avoid unrealistic expectations=2E
+>>=20
+>> Signed-off-by: Paul Burton <paulburton@kernel=2Eorg>
+>> ---
+>>  MAINTAINERS | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>=20
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index afa228ade18e=2E=2E67f05f6dbf77 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -11120,7 +11120,7 @@ W:	http://www=2Elinux-mips=2Eorg/
+>>  T:	git git://git=2Elinux-mips=2Eorg/pub/scm/ralf/linux=2Egit
+>>  T:	git git://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/mips/linux=2E=
+git
+>>  Q:	http://patchwork=2Elinux-mips=2Eorg/project/linux-mips/list/
+>> -S:	Supported
+>> +S:	Odd Fixes
+>>  F:	Documentation/devicetree/bindings/mips/
+>>  F:	Documentation/mips/
+>>  F:	arch/mips/
+
+--=20
+Jiaxun Yang
