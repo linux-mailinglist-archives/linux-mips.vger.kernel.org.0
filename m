@@ -2,40 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C71AD16905A
-	for <lists+linux-mips@lfdr.de>; Sat, 22 Feb 2020 17:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1DA169062
+	for <lists+linux-mips@lfdr.de>; Sat, 22 Feb 2020 17:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726853AbgBVQ3F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 22 Feb 2020 11:29:05 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.168]:28326 "EHLO
+        id S1726706AbgBVQeT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 22 Feb 2020 11:34:19 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.169]:25157 "EHLO
         mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726550AbgBVQ3F (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Feb 2020 11:29:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582388943;
+        with ESMTP id S1726713AbgBVQeT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 Feb 2020 11:34:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582389256;
         s=strato-dkim-0002; d=goldelico.com;
         h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=zAvMFq9lL3ySMXeZOGYNoXXsphK30TkbKVrcXyeb2SA=;
-        b=U07K+VOIuEO1VjWG2QOIel4+iZw1lwGHw+JTlPGaV2yyj7tVgmB0BIBZAh4Lq/JSNn
-        y0MOOyd2nq3Tpm8EMcvSqu4C+nx3R9Vl1nq8R4K5Ea1wStPGWnz95zJpixSTvpfMe8J5
-        +a7qdRFg2W2orl+owKOvBLuP0cPlPZ9u0WQElABq49OA/9Wlv1QdI/NxR9nIbwjQ+uZn
-        skRLk1iswZyGMrcJBVU9qgqWbVBgNySSQcVANiFc44VZEExOYc8rql3SslH7bPq1ipvX
-        TRYMLH07B3MY8ThyoLgHcaE9fhuus3UbWL+ciRleoBEIlcv/pllwQ6dtq8caoK6y86u0
-        tzCQ==
+        bh=ePY/0rqkwbjes1xzte1Wwpv9uM/lZL6ji/jWOu/uZgA=;
+        b=aSwjEhs+p8LISnTw2M+kyDupep2B0ttJr5i05FLi4csUh227uXbiwdJKLduvsAzWTB
+        t+mrOSpTM7uPssUSJ7a5kaO+qKwnPsB73Knf9gmyYENqMh2FvpZDuQmxuWvtElyAt7L3
+        BKL9k8lzMkNCAox5R36cedBRP8FoHIki3Ar9Ix8Oyy4jiXumT4RHTfIx1KFkfsK0mhX0
+        bhGfbFwAmROHCQ/rqp1kdhYoIUBBTpNOpdEsOFlNYyIaAZHRMflkObyaqCval7wL0qTf
+        lzOYnc7mdJWR1UkOXmxmucCLc2NDFL4yKTGw/b9z5ag85zyuIkq+lfl7pFJtamX7r5zj
+        ZiHQ==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHmAiw43swGE="
 X-RZG-CLASS-ID: mo00
 Received: from imac.fritz.box
         by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1MGSijzG
+        with ESMTPSA id U06217w1MGY6jzd
         (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
         (Client did not present a certificate);
-        Sat, 22 Feb 2020 17:28:44 +0100 (CET)
+        Sat, 22 Feb 2020 17:34:06 +0100 (CET)
 Subject: Re: [PATCH v5 2/6] Bindings: nvmem: add bindings for JZ4780 efuse
 Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
 Content-Type: text/plain; charset=us-ascii
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20200222115425.50f66b08@kemnade.info>
-Date:   Sat, 22 Feb 2020 17:28:44 +0100
+In-Reply-To: <20200222165738.61cde2a0@kemnade.info>
+Date:   Sat, 22 Feb 2020 17:34:06 +0100
 Cc:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Mathieu Malaterre <malat@debian.org>,
@@ -56,8 +56,8 @@ Cc:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
         kernel@pyra-handheld.com
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <6FC01B9A-4252-48DA-9D24-911C0B0401A6@goldelico.com>
-References: <cover.1582367141.git.hns@goldelico.com> <51642368a064073ab99bb3110863b5fadc382f82.1582367141.git.hns@goldelico.com> <20200222115425.50f66b08@kemnade.info>
+Message-Id: <D59DC84C-837E-4856-8FED-580381F748FF@goldelico.com>
+References: <cover.1582367141.git.hns@goldelico.com> <51642368a064073ab99bb3110863b5fadc382f82.1582367141.git.hns@goldelico.com> <20200222165738.61cde2a0@kemnade.info>
 To:     Andreas Kemnade <andreas@kemnade.info>
 X-Mailer: Apple Mail (2.3124)
 Sender: linux-mips-owner@vger.kernel.org
@@ -66,7 +66,7 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
-> Am 22.02.2020 um 11:54 schrieb Andreas Kemnade <andreas@kemnade.info>:
+> Am 22.02.2020 um 16:57 schrieb Andreas Kemnade <andreas@kemnade.info>:
 >=20
 > On Sat, 22 Feb 2020 11:25:37 +0100
 > "H. Nikolaus Schaller" <hns@goldelico.com> wrote:
@@ -129,17 +129,39 @@ b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
 >> +  clock-names:
 >> +   items:
 >> +     - const:  ahb2
+> as Rob said: probably not needed, since it is a single
+> clock, and the driver uses devm_clk_get(dev, NULL), so it should be =
+prepared
+> for that without any extra work.
+
+The question is if a specific driver implementation should determine
+what the DT requires or the other way round. I don't know...
+
+I did interpret Rob's comment differently: there was
+
+> - "clock-names"		Must be "bus_clk"
+
+and he did say:=20
+
+	'clk' is redundant. How about 'ahb'?
+
+So I thought he refers to the _clk suffix?
+
+>=20
 >> +
 >> +required:
 >> +  - compatible
 >> +  - reg
 >> +  - clock-names
-> - clocks ?
->=20
-> In my first try there was "clock" without s which
-> caused the trouble.
+> so it is not required here (but "- clocks" (not "- clock") as said in =
+earlier
+> mail).
 
-Ah, ok. Seems I have mis-interpreted this.
+Well, this is another example where I do not yet see any improvement by =
+yaml.
+It is the same amount of guessing what should be written where. Is this =
+to
+be added or not? When is it and why, when not and why?
 
 BR and thanks,
 Nikolaus
