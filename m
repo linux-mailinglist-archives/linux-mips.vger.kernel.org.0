@@ -2,106 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3ACD169E55
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Feb 2020 07:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD766169EC4
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Feb 2020 07:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726628AbgBXGV7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Feb 2020 01:21:59 -0500
-Received: from foss.arm.com ([217.140.110.172]:58612 "EHLO foss.arm.com"
+        id S1726765AbgBXGs4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Feb 2020 01:48:56 -0500
+Received: from mail.andi.de1.cc ([85.214.55.253]:58500 "EHLO mail.andi.de1.cc"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726509AbgBXGV7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 24 Feb 2020 01:21:59 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ED65D30E;
-        Sun, 23 Feb 2020 22:21:58 -0800 (PST)
-Received: from p8cg001049571a15.blr.arm.com (p8cg001049571a15.blr.arm.com [10.162.16.95])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B2B4E3F534;
-        Sun, 23 Feb 2020 22:25:45 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mm/vma: Append unlikely() while testing VMA access permissions
-Date:   Mon, 24 Feb 2020 11:51:44 +0530
-Message-Id: <1582525304-32113-1-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726452AbgBXGs4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 24 Feb 2020 01:48:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Type:MIME-Version:References:
+        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=aPzPOEhOYS+oQENKbcZiCCH54g8sQ13jYUVbMT5jUEE=; b=MKauvzKyrpIiXp8VhkLghbILf
+        MVXZusn70gwuzUAU2tFUA8nRd4jSqsAQl5I1jKm+iirmod1+Rs2XqhHSjCxzFTFpcoGO1k0bUXQP+
+        pqj4/MrcMf10j4vMAc55KsrOU5G3koQkLUuncnfHK0/kFAl9qoZsQFVvZ8h4DkE+6R5KM=;
+Received: from [77.247.85.102] (helo=localhost)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1j67Xu-0001bc-0B; Mon, 24 Feb 2020 07:48:50 +0100
+Received: from localhost ([127.0.0.1])
+        by localhost with esmtp (Exim 4.92)
+        (envelope-from <andreas@kemnade.info>)
+        id 1j67Xr-0007GL-Je; Mon, 24 Feb 2020 07:48:47 +0100
+Date:   Mon, 24 Feb 2020 07:48:04 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Rob Herring <robh@kernel.org>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Mathieu Malaterre <malat@debian.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH RFC] Bindings: nvmem: add bindings for JZ4780 efuse
+Message-ID: <20200224074804.3a5999ca@kemnade.info>
+In-Reply-To: <CAL_JsqKTdpbLfPq_eGUf-w-0s8JMndbMrQ2BsMt+8y+eqQ-kZw@mail.gmail.com>
+References: <CFE9AEF5-FFF9-44A9-90D8-DE6AC7E7DD4F@goldelico.com>
+        <20200220060001.25807-1-andreas@kemnade.info>
+        <CAL_JsqKTdpbLfPq_eGUf-w-0s8JMndbMrQ2BsMt+8y+eqQ-kZw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ boundary="Sig_/qC/AVLdY9Jg/Kbhrq+v8j_Q"; protocol="application/pgp-signature"
+X-Spam-Score: -1.0 (-)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-It is unlikely that an inaccessible VMA without required permission flags
-will get a page fault. Hence lets just append unlikely() directive to such
-checks in order to improve performance while also standardizing it across
-various platforms.
+--Sig_/qC/AVLdY9Jg/Kbhrq+v8j_Q
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Cc: Guo Ren <guoren@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Mike Rapoport <rppt@linux.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-m68k@lists.linux-m68k.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-csky@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
-This patch applies on v5.6-rc3 along with the recent VMA series V2
-(https://patchwork.kernel.org/cover/11399319/). This has only been
-build tested for mips and m68k platforms.
+On Thu, 20 Feb 2020 13:53:55 -0600
+Rob Herring <robh@kernel.org> wrote:
 
- arch/csky/mm/fault.c | 2 +-
- arch/m68k/mm/fault.c | 2 +-
- arch/mips/mm/fault.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+[...]
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - clock =20
+>=20
+> 'make dt_binding_check' would have pointed the error here for you:
+>=20
+I did run make dt_binding_check...
+It stopped because the jz4780-cgu.h included was missing. Then I have added
+that line and have started dt_binding_check again.
+At least here it is doing a full rerun in the second part.
+After some time I scrolled back and noticed DTC passed
+and missed that
 
-diff --git a/arch/csky/mm/fault.c b/arch/csky/mm/fault.c
-index 4b3511b8298d..01caae98c350 100644
---- a/arch/csky/mm/fault.c
-+++ b/arch/csky/mm/fault.c
-@@ -137,7 +137,7 @@ asmlinkage void do_page_fault(struct pt_regs *regs, unsigned long write,
- 		if (!(vma->vm_flags & VM_WRITE))
- 			goto bad_area;
- 	} else {
--		if (!vma_is_accessible(vma))
-+		if (unlikely(!vma_is_accessible(vma)))
- 			goto bad_area;
- 	}
- 
-diff --git a/arch/m68k/mm/fault.c b/arch/m68k/mm/fault.c
-index d5131ec5d923..d5dd75ed77f1 100644
---- a/arch/m68k/mm/fault.c
-+++ b/arch/m68k/mm/fault.c
-@@ -125,7 +125,7 @@ int do_page_fault(struct pt_regs *regs, unsigned long address,
- 		case 1:		/* read, present */
- 			goto acc_err;
- 		case 0:		/* read, not present */
--			if (!vma_is_accessible(vma))
-+			if (unlikely(!vma_is_accessible(vma)))
- 				goto acc_err;
- 	}
- 
-diff --git a/arch/mips/mm/fault.c b/arch/mips/mm/fault.c
-index 5b9f947bfa32..db4b51a40c58 100644
---- a/arch/mips/mm/fault.c
-+++ b/arch/mips/mm/fault.c
-@@ -142,7 +142,7 @@ static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
- 				goto bad_area;
- 			}
- 		} else {
--			if (!vma_is_accessible(vma))
-+			if (unlikely(!vma_is_accessible(vma)))
- 				goto bad_area;
- 		}
- 	}
--- 
-2.20.1
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/nvme=
+m/ingenic,jz4780-efuse.example.dt.yaml:
+> efuse@134100d0: 'clock' is a required property
+>=20
+in the CHECKS line. Well, dt_binding_check is a bit noisy. I guess I should
+have redirected all output to a text file, before and after my changes. and
+diffed the results.=20
+Is there any script ready for that?
 
+Regards,
+Andreas
+
+--Sig_/qC/AVLdY9Jg/Kbhrq+v8j_Q
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEPIWxmAFyOaBcwCpFl4jFM1s/ye8FAl5TcaQACgkQl4jFM1s/
+ye+qEg//RuC/awIoIvvNfAs0LvNMWhnRjEmuJCXPJv7SqCNMbgwxLpFpr8II3bid
+R0XiugVmlY6N6bWBy4C2WI2Y/CYX0FxmSzD9MhhPqbD+TxuiB8PmlWdnMCbqmM8b
+RWFDS1xdh3G3iEGO8+gu0arCysRAsEazkLv0PMKHX9n2Y6+qJYgPy8rbZ8ObG7tp
+dJmhZQYv6FjQJ0VGl/L6RNdwBOoNX1Q3QEP/RLRLn+VAIkWWqGrAGXNMA3FznN2u
+JwJZkXLUJaBi3docdXpPjtsEhZryuIjBfprsI5Q38+ot5SSboe7xUq5XzsCYzRfw
+fDqhhOmdW3sou7KEBcr0NPapAnEB3PJXqaunsrgNH9oIVUudVa0FC+PVk/jZ5vk7
+wO/Z349eo3lGGrKQQhxNd/sErrJi2pdRT1RqjelyFssQ7QeOOBHp8EQLeQV+R29x
+q9xnDCMs5XQnxWl0+r2YlbXo0ibpe45o5jJGRjJokUFKqv6bjFlcdVtMjPhh2dK/
+BrWoGGrj42ts+ZTKVt0Y2I8djhuUrc2YtXjwUv/JAAly0bE5o2acuOcKMNJMQLXM
+vlieSRzztvqI8Be94byPJURtT3qSxNpHu5CYoi/cDxdWvt++LmdryRYZF7wswFO/
+gtiBSIG3Xsvb6Q8poDwlcwGAxu09cdHRUm9XLzaEP3vBuo+R7RY=
+=R3/0
+-----END PGP SIGNATURE-----
+
+--Sig_/qC/AVLdY9Jg/Kbhrq+v8j_Q--
