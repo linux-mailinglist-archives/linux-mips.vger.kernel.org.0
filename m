@@ -2,90 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 543C416A72C
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Feb 2020 14:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3008316A794
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Feb 2020 14:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727348AbgBXNTk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Feb 2020 08:19:40 -0500
-Received: from foss.arm.com ([217.140.110.172]:36978 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727281AbgBXNTk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 24 Feb 2020 08:19:40 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3790730E;
-        Mon, 24 Feb 2020 05:19:40 -0800 (PST)
-Received: from [10.163.1.29] (unknown [10.163.1.29])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DD26E3F534;
-        Mon, 24 Feb 2020 05:19:35 -0800 (PST)
-Subject: Re: [PATCH] mm/vma: Append unlikely() while testing VMA access
- permissions
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux MM <linux-mm@kvack.org>, Guo Ren <guoren@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <1582525304-32113-1-git-send-email-anshuman.khandual@arm.com>
- <CAMuHMdXMSTLevTH1gkM8B53LtRUQ80o=t+W27z0QT-dNKkkYgQ@mail.gmail.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <f23b808a-d71f-de44-b31b-057ec883b92f@arm.com>
-Date:   Mon, 24 Feb 2020 18:49:34 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1727489AbgBXNuT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Feb 2020 08:50:19 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:44106 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727310AbgBXNuT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Feb 2020 08:50:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1582552217; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gayg0dvW7Vxh44527/5/QBVVwgamIXCkDGSKwc5wh8w=;
+        b=L6ubBwVUI9l2GUxjJRsIXFgTlgmiqPeEY/Ds8x9vSobalTK9GybsBhSdLfkjsMyxSliMl+
+        t5nsDtaGy4eJtwcBn0zxeoTZpnAuNvVu9n54j3xa/DJRuN2sH9O2XUCXpUBSPltLEcpzRm
+        wKGju+jBzSc4pTRK2ZtM6VZGpPr3RQI=
+Date:   Mon, 24 Feb 2020 10:50:04 -0300
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 2/2] MAINTAINERS: Set MIPS status to Odd Fixes
+To:     Philippe =?iso-8859-1?q?Mathieu-Daud=E9?= <f4bug@amsat.org>
+Cc:     Paul Burton <paulburton@kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Message-Id: <1582552204.3.0@crapouillou.net>
+In-Reply-To: <CAAdtpL5JgO0Wtned6KKKKYyM7ZWQ6Y=9X=EQRWYYXgOZ7nbWBg@mail.gmail.com>
+References: <20200219191730.1277800-1-paulburton@kernel.org>
+        <20200219191730.1277800-3-paulburton@kernel.org>
+        <1582387719.3.1@crapouillou.net>
+        <CAAdtpL5JgO0Wtned6KKKKYyM7ZWQ6Y=9X=EQRWYYXgOZ7nbWBg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdXMSTLevTH1gkM8B53LtRUQ80o=t+W27z0QT-dNKkkYgQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Philippe,
 
-On 02/24/2020 03:39 PM, Geert Uytterhoeven wrote:
-> Hi Anshuman,
-> 
-> Thanks for your patch!
-> 
-> On Mon, Feb 24, 2020 at 7:22 AM Anshuman Khandual
-> <anshuman.khandual@arm.com> wrote:
->> It is unlikely that an inaccessible VMA without required permission flags
->> will get a page fault. Hence lets just append unlikely() directive to such
-> 
-> Why? Isn't it the idea that you get a page fault when the page is not
-> accessible?
 
-Yeah it is. But the point here is to have a directive indicating that it is
-unlikely that such scenarios will exist frequently even though they are very
-much possible.
+Le lun., f=E9vr. 24, 2020 at 09:37, Philippe Mathieu-Daud=E9=20
+<f4bug@amsat.org> a =E9crit :
+> On Sat, Feb 22, 2020 at 5:08 PM Paul Cercueil <paul@crapouillou.net>=20
+> wrote:
+>>=20
+>>  Hi,
+>>=20
+>>  So I think Thomas is the best candidate to be maintainer, since he=20
+>> has
+>>  both experience and free time ;)
+>>=20
+>>  I'm sort-of the maintainer for the Ingenic platform and drivers, if
+>>  Jiaxun wants to do the same for Loongson hardware, that would make
+>>  Thomas' job easier. Having three co-maintainers with equal rights=20
+>> would
+>>  be a total mess.
+>=20
+> You might want to add yourself a R: entry in MAINTAINERS, to be listed
+> as designated reviewer on the Ingenic patches.
+> (Similarly for Jiaxun with Loongson).
 
-> 
->> checks in order to improve performance while also standardizing it across
->> various platforms.
-> 
-> Does it make a difference to add these? Have you benchmarked this?
-> https://lwn.net/Articles/420019/
+I'm in there already as a M: entry.
 
-I dont have access to these platforms. As I had noted down previously, this
-was only build tested. The primary motivation was that the likeliness or
-rather unlikeliness for page faults on inaccessible VMAs are more workload
-specific. Hence should not be platform dependent and this change was just
-trying to make it similar in some platforms.
+-Paul
 
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
-> 
+>>=20
+>>  Le mer., f=E9vr. 19, 2020 at 11:17, Paul Burton=20
+>> <paulburton@kernel.org>
+>>  a =E9crit :
+>>  > My time with MIPS the company has reached its end, and so at best=20
+>> I'll
+>>  > have little time spend on maintaining arch/mips/. Reflect that in
+>>  > MAINTAINERS by changing status to Odd Fixes. Hopefully this might=20
+>> spur
+>>  > the involvement of someone with more time, but even if not it=20
+>> should
+>>  > help serve to avoid unrealistic expectations.
+>>  >
+>>  > Signed-off-by: Paul Burton <paulburton@kernel.org>
+>>  > ---
+>>  >  MAINTAINERS | 2 +-
+>>  >  1 file changed, 1 insertion(+), 1 deletion(-)
+>>  >
+>>  > diff --git a/MAINTAINERS b/MAINTAINERS
+>>  > index afa228ade18e..67f05f6dbf77 100644
+>>  > --- a/MAINTAINERS
+>>  > +++ b/MAINTAINERS
+>>  > @@ -11120,7 +11120,7 @@ W:    http://www.linux-mips.org/
+>>  >  T:   git git://git.linux-mips.org/pub/scm/ralf/linux.git
+>>  >  T:   git=20
+>> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
+>>  >  Q:   http://patchwork.linux-mips.org/project/linux-mips/list/
+>>  > -S:   Supported
+>>  > +S:   Odd Fixes
+>>  >  F:   Documentation/devicetree/bindings/mips/
+>>  >  F:   Documentation/mips/
+>>  >  F:   arch/mips/
+>>=20
+>>=20
+
+=
+
