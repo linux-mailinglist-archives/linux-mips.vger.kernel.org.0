@@ -2,117 +2,201 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD766169EC4
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Feb 2020 07:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B45AE169F65
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Feb 2020 08:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgBXGs4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Feb 2020 01:48:56 -0500
-Received: from mail.andi.de1.cc ([85.214.55.253]:58500 "EHLO mail.andi.de1.cc"
+        id S1727197AbgBXHiO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Feb 2020 02:38:14 -0500
+Received: from mail.andi.de1.cc ([85.214.55.253]:49762 "EHLO mail.andi.de1.cc"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726452AbgBXGs4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 24 Feb 2020 01:48:56 -0500
+        id S1727183AbgBXHiN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 24 Feb 2020 02:38:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=kemnade.info; s=20180802; h=Content-Type:MIME-Version:References:
         In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=aPzPOEhOYS+oQENKbcZiCCH54g8sQ13jYUVbMT5jUEE=; b=MKauvzKyrpIiXp8VhkLghbILf
-        MVXZusn70gwuzUAU2tFUA8nRd4jSqsAQl5I1jKm+iirmod1+Rs2XqhHSjCxzFTFpcoGO1k0bUXQP+
-        pqj4/MrcMf10j4vMAc55KsrOU5G3koQkLUuncnfHK0/kFAl9qoZsQFVvZ8h4DkE+6R5KM=;
-Received: from [77.247.85.102] (helo=localhost)
+         bh=451vApj/9D7x1KWh4ddIWyxRkUvpD9CgPV5nIaS4pg8=; b=KtY/YwwrUmK+tuG8zoyRvRTIJ
+        pq2X+lzhaJ1cHUq/lJhqBVnIzeaAxq+CaQU7AnlTTjWrQ7+89qicwrmxEDbh9YIu6rmNDHyCdy1v0
+        EWPbjWxdd53ySVmT1PJ+NCG7WHA3Ght0BVs1kdgbT7Ffmdakqn25D1iGxFOqsbY1QizTo=;
+Received: from p578b2b7d.dip0.t-ipconnect.de ([87.139.43.125] helo=localhost)
         by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <andreas@kemnade.info>)
-        id 1j67Xu-0001bc-0B; Mon, 24 Feb 2020 07:48:50 +0100
-Received: from localhost ([127.0.0.1])
+        id 1j68JF-00021S-3e; Mon, 24 Feb 2020 08:37:45 +0100
+Received: from localhost ([::1])
         by localhost with esmtp (Exim 4.92)
         (envelope-from <andreas@kemnade.info>)
-        id 1j67Xr-0007GL-Je; Mon, 24 Feb 2020 07:48:47 +0100
-Date:   Mon, 24 Feb 2020 07:48:04 +0100
+        id 1j68GR-0007vf-WD; Mon, 24 Feb 2020 08:34:52 +0100
+Date:   Mon, 24 Feb 2020 08:33:35 +0100
 From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Rob Herring <robh@kernel.org>
-Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Mathieu Malaterre <malat@debian.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH RFC] Bindings: nvmem: add bindings for JZ4780 efuse
-Message-ID: <20200224074804.3a5999ca@kemnade.info>
-In-Reply-To: <CAL_JsqKTdpbLfPq_eGUf-w-0s8JMndbMrQ2BsMt+8y+eqQ-kZw@mail.gmail.com>
-References: <CFE9AEF5-FFF9-44A9-90D8-DE6AC7E7DD4F@goldelico.com>
-        <20200220060001.25807-1-andreas@kemnade.info>
-        <CAL_JsqKTdpbLfPq_eGUf-w-0s8JMndbMrQ2BsMt+8y+eqQ-kZw@mail.gmail.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com
+Subject: Re: [PATCH v5 2/6] Bindings: nvmem: add bindings for JZ4780 efuse
+Message-ID: <20200224083335.06a352f8@kemnade.info>
+In-Reply-To: <D59DC84C-837E-4856-8FED-580381F748FF@goldelico.com>
+References: <cover.1582367141.git.hns@goldelico.com>
+        <51642368a064073ab99bb3110863b5fadc382f82.1582367141.git.hns@goldelico.com>
+        <20200222165738.61cde2a0@kemnade.info>
+        <D59DC84C-837E-4856-8FED-580381F748FF@goldelico.com>
 X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
- boundary="Sig_/qC/AVLdY9Jg/Kbhrq+v8j_Q"; protocol="application/pgp-signature"
+ boundary="Sig_/jAuKxTh/ki.VbCviTA9NKWw"; protocol="application/pgp-signature"
 X-Spam-Score: -1.0 (-)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
---Sig_/qC/AVLdY9Jg/Kbhrq+v8j_Q
+--Sig_/jAuKxTh/ki.VbCviTA9NKWw
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, 20 Feb 2020 13:53:55 -0600
-Rob Herring <robh@kernel.org> wrote:
+On Sat, 22 Feb 2020 17:34:06 +0100
+"H. Nikolaus Schaller" <hns@goldelico.com> wrote:
 
-[...]
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clock =20
+> > Am 22.02.2020 um 16:57 schrieb Andreas Kemnade <andreas@kemnade.info>:
+> >=20
+> > On Sat, 22 Feb 2020 11:25:37 +0100
+> > "H. Nikolaus Schaller" <hns@goldelico.com> wrote:
+> >  =20
+> >> From: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
+> >>=20
+> >> This patch brings support for the JZ4780 efuse. Currently it only expo=
+ses
+> >> a read only access to the entire 8K bits efuse memory.
+> >>=20
+> >> Tested-by: Mathieu Malaterre <malat@debian.org>
+> >> Signed-off-by: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
+> >> Signed-off-by: Mathieu Malaterre <malat@debian.org>
+> >> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> >> [converted to yaml]
+> >> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> >> ---
+> >> .../bindings/nvmem/ingenic,jz4780-efuse.yaml  | 50 +++++++++++++++++++
+> >> 1 file changed, 50 insertions(+)
+> >> create mode 100644 Documentation/devicetree/bindings/nvmem/ingenic,jz4=
+780-efuse.yaml
+> >>=20
+> >> diff --git a/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-ef=
+use.yaml b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
+> >> new file mode 100644
+> >> index 000000000000..09a8ef937750
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
+> >> @@ -0,0 +1,50 @@
+> >> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/nvmem/ingenic,jz4780-efuse.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: Ingenic JZ EFUSE driver bindings
+> >> +
+> >> +maintainers:
+> >> +  - PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
+> >> +
+> >> +allOf:
+> >> +  - $ref: "nvmem.yaml#"
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    enum:
+> >> +      - ingenic,jz4780-efuse
+> >> +
+> >> +  reg:
+> >> +    maxItems: 1
+> >> +
+> >> +  clocks:
+> >> +    # Handle for the ahb for the efuse.
+> >> +    maxItems: 1
+> >> +
+> >> +  clock-names:
+> >> +   items:
+> >> +     - const:  ahb2 =20
+> > as Rob said: probably not needed, since it is a single
+> > clock, and the driver uses devm_clk_get(dev, NULL), so it should be pre=
+pared
+> > for that without any extra work. =20
 >=20
-> 'make dt_binding_check' would have pointed the error here for you:
+> The question is if a specific driver implementation should determine
+> what the DT requires or the other way round. I don't know...
 >=20
-I did run make dt_binding_check...
-It stopped because the jz4780-cgu.h included was missing. Then I have added
-that line and have started dt_binding_check again.
-At least here it is doing a full rerun in the second part.
-After some time I scrolled back and noticed DTC passed
-and missed that
-
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/nvme=
-m/ingenic,jz4780-efuse.example.dt.yaml:
-> efuse@134100d0: 'clock' is a required property
+> I did interpret Rob's comment differently: there was
 >=20
-in the CHECKS line. Well, dt_binding_check is a bit noisy. I guess I should
-have redirected all output to a text file, before and after my changes. and
-diffed the results.=20
-Is there any script ready for that?
+> > - "clock-names"		Must be "bus_clk" =20
+>=20
+> and he did say:=20
+>=20
+> 	'clk' is redundant. How about 'ahb'?
+>=20
+> So I thought he refers to the _clk suffix?
+>=20
+> >  =20
+> >> +
+> >> +required:
+> >> +  - compatible
+> >> +  - reg
+> >> +  - clock-names =20
+> > so it is not required here (but "- clocks" (not "- clock") as said in e=
+arlier
+> > mail). =20
+>=20
+> Well, this is another example where I do not yet see any improvement by y=
+aml.
+> It is the same amount of guessing what should be written where. Is this to
+> be added or not? When is it and why, when not and why?
+>=20
+well, this is the list of required properties which have to be an any
+devicetree using that device, the conversion of the comments for the proper=
+ties
+in the .txt-file.
+So, if you do not declare a property before, you cannot specify that it is
+required. So if we drop the definition of clock-names we cannot declare it
+as required.=20
 
 Regards,
 Andreas
 
---Sig_/qC/AVLdY9Jg/Kbhrq+v8j_Q
+--Sig_/jAuKxTh/ki.VbCviTA9NKWw
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEPIWxmAFyOaBcwCpFl4jFM1s/ye8FAl5TcaQACgkQl4jFM1s/
-ye+qEg//RuC/awIoIvvNfAs0LvNMWhnRjEmuJCXPJv7SqCNMbgwxLpFpr8II3bid
-R0XiugVmlY6N6bWBy4C2WI2Y/CYX0FxmSzD9MhhPqbD+TxuiB8PmlWdnMCbqmM8b
-RWFDS1xdh3G3iEGO8+gu0arCysRAsEazkLv0PMKHX9n2Y6+qJYgPy8rbZ8ObG7tp
-dJmhZQYv6FjQJ0VGl/L6RNdwBOoNX1Q3QEP/RLRLn+VAIkWWqGrAGXNMA3FznN2u
-JwJZkXLUJaBi3docdXpPjtsEhZryuIjBfprsI5Q38+ot5SSboe7xUq5XzsCYzRfw
-fDqhhOmdW3sou7KEBcr0NPapAnEB3PJXqaunsrgNH9oIVUudVa0FC+PVk/jZ5vk7
-wO/Z349eo3lGGrKQQhxNd/sErrJi2pdRT1RqjelyFssQ7QeOOBHp8EQLeQV+R29x
-q9xnDCMs5XQnxWl0+r2YlbXo0ibpe45o5jJGRjJokUFKqv6bjFlcdVtMjPhh2dK/
-BrWoGGrj42ts+ZTKVt0Y2I8djhuUrc2YtXjwUv/JAAly0bE5o2acuOcKMNJMQLXM
-vlieSRzztvqI8Be94byPJURtT3qSxNpHu5CYoi/cDxdWvt++LmdryRYZF7wswFO/
-gtiBSIG3Xsvb6Q8poDwlcwGAxu09cdHRUm9XLzaEP3vBuo+R7RY=
-=R3/0
+iQIzBAEBCAAdFiEEPIWxmAFyOaBcwCpFl4jFM1s/ye8FAl5TfE8ACgkQl4jFM1s/
+ye+aFQ//eslMTAbmAQ0DqEVfmmyBhqkH057WoRaE73bxRve/4YpLAdx9IFVnaznl
+vdFg1N8Z2FAnktyM5rZJ0BUFt4U5U61DcCYrFUSg7MRWu74DxMQIhx/e0s9IMJM2
+CldWXozOxoT1sYQ/eb4e6Gu9P9F2yu1qgsSDxRn+4hriUkXLI1x8BJz0myZyp32m
+I1MTHTP9n5aVWKj1xo/FwrF2FNWRgLFAFsPwV0/Q7UWld/175hbYKnH5kcyho7sA
+sNu0RnnG3Oh1gAiHbUlWLAZIT/3hwmR8yZ6EVYTmFEwxnb3nOQrI91NomP5wHBYf
+tp+f2EDYJMZCC0Sopnzm/Vw8etxSSxMtViyVltSr7D798O9nMBhpSrqvttCNPC9o
+0v2lJcTGxsilklPXZ7cJJyoiyKTMacv6JOZk7skDtpaojCdb/tDdutsN8i1CMcYC
+yorhcdlDAHdB/JaSw0qXocir4UAwlmJHA4chSuPmhbBCpXl29QW3tMi4IGbYerCk
+iMZWJV0prIsXQRUoxsV65rnuAIhtaPNadjJvSdd4tC5YZ1KwaCg5nr1Oh+Ja8Sen
+Tx/QYAeLT5bdQYpgENgunibR7m8c+WUUhLs7sdEU6pfDGzQS2YFlR6pXAdH2bPzn
+2S8jAKo8sxOGVzAcDfBALaendEYoVDv9ElnffqemmRDhumzlnAI=
+=QwX9
 -----END PGP SIGNATURE-----
 
---Sig_/qC/AVLdY9Jg/Kbhrq+v8j_Q--
+--Sig_/jAuKxTh/ki.VbCviTA9NKWw--
