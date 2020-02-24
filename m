@@ -2,137 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F2816A4F0
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Feb 2020 12:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 543C416A72C
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Feb 2020 14:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727256AbgBXLc0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Feb 2020 06:32:26 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:37463 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727240AbgBXLc0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Feb 2020 06:32:26 -0500
-Received: by mail-ed1-f66.google.com with SMTP id t7so11502400edr.4;
-        Mon, 24 Feb 2020 03:32:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AfrimxhNpVIP3+bGsNCdKoq84x3eL8XHOriR3+8j0Ms=;
-        b=OZsng7PbGu7nmQgVf0EtJ4UWk9brlGfX7GQV6ScV8Un4zIbnEmMQo3K75kfZv2R4de
-         xn5deO8iu6mqROEspIXv4C7rytvd5C0l81vNnQ68QvJE/3rUTisCUF13AeFSF/ItpxLl
-         5+WzaVr95eOKF1VDrIwhwlQYOyo3rsiwqBRiwvZYpIQTtHGoBpL3vTWEe1ot1PvW8sVj
-         gLGBY3nytSKGi+JjFUhai8H+diT/G7IqNMgelKUAYJC2dD1glW01knXX957H1t72VZlB
-         Vg9twX8zXS+4S5y1bcD4RGzTFKaISbSHlUJ/SxtszwziKDtnEv3CZT1Uibr+BQkrcOIk
-         awgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AfrimxhNpVIP3+bGsNCdKoq84x3eL8XHOriR3+8j0Ms=;
-        b=Y2LGRI6hWRb8H89sCLBIv9vKYXo/jnO6CXe/fjB4qJ37CBtdpTmEYLn1DZXQGS0GOc
-         5OcdLzBDLpOS4YY+/zCWrLMeMxWz9890+jKH51ZtAr1x+iO9cOwqMIVU1sWZJQqzVATw
-         V4MbbTlXFhstH83I072WMLAHYOWr/FcGTvXOl0cJbQ9WE0+2b4pMKVtRP91beelDlEny
-         EGQzd+hG3Rv6t0tvsVLbUHi+uduepKY9Mztcbt8fkAUn94HE4+6uuauc9OTtDVCC3NDi
-         CHbGIkFxdR5YDHaQPxlhKuibfHifkSd7rjinQdbt0rM5BXRgI+M2/NihP8q9L/r+56aX
-         XdIQ==
-X-Gm-Message-State: APjAAAVk9LjqaJGDzwhHqTfrgkEljbhBzrToSFPO59otg2uehbkgQt4F
-        V8vzeld83CKfX3Vg3deBmAkXytzQGyNr4v/XBFI=
-X-Google-Smtp-Source: APXvYqx9zeCTXG6L2u/50zzr6HLZumNTp5QAGjJPhbCfCsxqyl+CRJ3+VOhlW4+ONQ2A4mxbmAR07pHS25KnPjt6JdU=
-X-Received: by 2002:aa7:d3cb:: with SMTP id o11mr46447702edr.145.1582543944370;
- Mon, 24 Feb 2020 03:32:24 -0800 (PST)
-MIME-Version: 1.0
-References: <1559287017-32397-1-git-send-email-horatiu.vultur@microchip.com>
- <1559287017-32397-2-git-send-email-horatiu.vultur@microchip.com>
- <CA+h21hoSA5DECsA+faJ91n0jBhAR5BZnkMm=Dx4JfNDp8J+xbw@mail.gmail.com> <20200224110350.7kdzf4kml4iaem4i@soft-dev3.microsemi.net>
-In-Reply-To: <20200224110350.7kdzf4kml4iaem4i@soft-dev3.microsemi.net>
-From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Mon, 24 Feb 2020 13:32:13 +0200
-Message-ID: <CA+h21hrWqdvfApodpKbBXNH83cFT4uCgBmAtnzs+t63bhktO2g@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 1/2] net: mscc: ocelot: Add support for tcam
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1727348AbgBXNTk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Feb 2020 08:19:40 -0500
+Received: from foss.arm.com ([217.140.110.172]:36978 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727281AbgBXNTk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 24 Feb 2020 08:19:40 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3790730E;
+        Mon, 24 Feb 2020 05:19:40 -0800 (PST)
+Received: from [10.163.1.29] (unknown [10.163.1.29])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DD26E3F534;
+        Mon, 24 Feb 2020 05:19:35 -0800 (PST)
+Subject: Re: [PATCH] mm/vma: Append unlikely() while testing VMA access
+ permissions
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux MM <linux-mm@kvack.org>, Guo Ren <guoren@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Paul Burton <paulburton@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <1582525304-32113-1-git-send-email-anshuman.khandual@arm.com>
+ <CAMuHMdXMSTLevTH1gkM8B53LtRUQ80o=t+W27z0QT-dNKkkYgQ@mail.gmail.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <f23b808a-d71f-de44-b31b-057ec883b92f@arm.com>
+Date:   Mon, 24 Feb 2020 18:49:34 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
+MIME-Version: 1.0
+In-Reply-To: <CAMuHMdXMSTLevTH1gkM8B53LtRUQ80o=t+W27z0QT-dNKkkYgQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Horatiu,
 
-On Mon, 24 Feb 2020 at 13:03, Horatiu Vultur
-<horatiu.vultur@microchip.com> wrote:
->
-> Hi Vladimir,
->
-> The 02/24/2020 12:38, Vladimir Oltean wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >
-> > Hi Horatiu,
-> >
-> > On Fri, 31 May 2019 at 10:18, Horatiu Vultur
-> > <horatiu.vultur@microchip.com> wrote:
-> > >
-> > > Add ACL support using the TCAM. Using ACL it is possible to create rules
-> > > in hardware to filter/redirect frames.
-> > >
-> > > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > > ---
-> > >  arch/mips/boot/dts/mscc/ocelot.dtsi      |   5 +-
-> > >  drivers/net/ethernet/mscc/Makefile       |   2 +-
-> > >  drivers/net/ethernet/mscc/ocelot.c       |  13 +
-> > >  drivers/net/ethernet/mscc/ocelot.h       |   8 +
-> > >  drivers/net/ethernet/mscc/ocelot_ace.c   | 777 +++++++++++++++++++++++++++++++
-> > >  drivers/net/ethernet/mscc/ocelot_ace.h   | 227 +++++++++
-> > >  drivers/net/ethernet/mscc/ocelot_board.c |   1 +
-> > >  drivers/net/ethernet/mscc/ocelot_regs.c  |  11 +
-> > >  drivers/net/ethernet/mscc/ocelot_s2.h    |  64 +++
-> > >  drivers/net/ethernet/mscc/ocelot_vcap.h  | 403 ++++++++++++++++
-> > >  10 files changed, 1508 insertions(+), 3 deletions(-)
-> > >  create mode 100644 drivers/net/ethernet/mscc/ocelot_ace.c
-> > >  create mode 100644 drivers/net/ethernet/mscc/ocelot_ace.h
-> > >  create mode 100644 drivers/net/ethernet/mscc/ocelot_s2.h
-> > >  create mode 100644 drivers/net/ethernet/mscc/ocelot_vcap.h
-> > >
-> >
-> > I was testing this functionality and it looks like the MAC_ETYPE keys
-> > (src_mac, dst_mac) only match non-IP frames.
-> > Example, this rule doesn't drop ping traffic:
-> >
-> > tc qdisc add dev swp0 clsact
-> > tc filter add dev swp0 ingress flower skip_sw dst_mac
-> > 96:e1:ef:64:1b:44 action drop
-> >
-> > Would it be possible to do anything about that?
->
-> What you could do is to configure each port in such a way, to treat IP
-> frames as MAC_ETYPE frames. Have a look in ANA:PORT[0-11]:VCAP_S2_CFG.
->
-> There might be a problem with this approach. If you configure the port
-> in such a way, then all your rules with the keys IP6, IP4 will not be
-> match on that port.
->
+On 02/24/2020 03:39 PM, Geert Uytterhoeven wrote:
+> Hi Anshuman,
+> 
+> Thanks for your patch!
+> 
+> On Mon, Feb 24, 2020 at 7:22 AM Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
+>> It is unlikely that an inaccessible VMA without required permission flags
+>> will get a page fault. Hence lets just append unlikely() directive to such
+> 
+> Why? Isn't it the idea that you get a page fault when the page is not
+> accessible?
 
-Thanks for the quick answer.
-Doing that is indeed problematic and would not be my first choice. I
-was expecting MAC_ETYPE rules to always match an Ethernet frame
-regardless of higher-level protocols, and that the user would decide
-the behavior via rule ordering.
+Yeah it is. But the point here is to have a directive indicating that it is
+unlikely that such scenarios will exist frequently even though they are very
+much possible.
 
-> >
-> > Thanks,
-> > -Vladimir
->
+> 
+>> checks in order to improve performance while also standardizing it across
+>> various platforms.
+> 
+> Does it make a difference to add these? Have you benchmarked this?
+> https://lwn.net/Articles/420019/
+
+I dont have access to these platforms. As I had noted down previously, this
+was only build tested. The primary motivation was that the likeliness or
+rather unlikeliness for page faults on inaccessible VMAs are more workload
+specific. Hence should not be platform dependent and this change was just
+trying to make it similar in some platforms.
+
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> 
 > --
-> /Horatiu
-
--Vladimir
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+> 
