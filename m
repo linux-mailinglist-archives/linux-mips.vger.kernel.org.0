@@ -2,68 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A9516EA0E
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2020 16:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6789216EE6B
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2020 19:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729817AbgBYP2V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Feb 2020 10:28:21 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:35836 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730900AbgBYP2V (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Feb 2020 10:28:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1582644498; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=yVuOmBJWZzHIWYiiB34lmWOpjCeJmYGne24gcLJDlVM=;
-        b=KMBo+P8WR/EsI4REQQa6i/hMnhdZLGpmKN0BoygmdCNNKWXnfmmZDsXTlk0O5nFhC74Ect
-        CP32nuhtD9W2KrI8dR9+KrfEni6KlVrif6CcvMHHE9a1dzskuHUxjkjcVIb+e424oJpklS
-        K9+xsOFz5dBVH6JX+oGsYSJ2qYOHh/g=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     od@zcrc.me, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        stable@vger.kernel.org
-Subject: [PATCH] MIPS: Fix CONFIG_MIPS_CMDLINE_DTB_EXTEND handling
-Date:   Tue, 25 Feb 2020 12:28:09 -0300
-Message-Id: <20200225152810.45048-1-paul@crapouillou.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1728162AbgBYSzJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Feb 2020 13:55:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34954 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728051AbgBYSzI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 25 Feb 2020 13:55:08 -0500
+Subject: Re: [GIT PULL] MIPS fixes
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582656908;
+        bh=c8zyBx7HxuaJRDwqirCzo/sxWNXouVjdNgOmTIWzH5M=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=tLveQi3ZMxvgUVLr3oQv/yg9EzzbvKA2DxwdtLkEP1aizOMGx8gfwwOn5Pc52nGIp
+         sGds8aWWI9wXbeq4ZVGB4wIf2UiOoArWbRuKYQywZrW9PQgSkC4FiU/EuBVFoigo5G
+         7d51pXbkeXc34if4uEjYYsmXIKUfJk2Hxc5qLv2Y=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200225065831.hl7ewk2s5trvhp4a@lantea.localdomain>
+References: <20200225065831.hl7ewk2s5trvhp4a@lantea.localdomain>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200225065831.hl7ewk2s5trvhp4a@lantea.localdomain>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git mips-fixes
+X-PR-Tracked-Commit-Id: 3234f4ed3066a58cd5ce8edcf752fa4fe0c95cb5
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d67f250e96344f006e3a6be148def4c6537d05a0
+Message-Id: <158265690824.32229.6706240051293071978.pr-tracker-bot@kernel.org>
+Date:   Tue, 25 Feb 2020 18:55:08 +0000
+To:     Paul Burton <paulburton@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The CONFIG_MIPS_CMDLINE_DTB_EXTEND option is used so that the kernel
-arguments provided in the 'bootargs' property in devicetree are extended
-with the kernel arguments provided by the bootloader.
+The pull request you sent on Mon, 24 Feb 2020 22:58:31 -0800:
 
-The code was broken, as it didn't actually take any of the kernel
-arguments provided in devicetree when that option was set.
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git mips-fixes
 
-Fixes: 7784cac69735 ("MIPS: cmdline: Clean up boot_command_line
-initialization")
-Cc: stable@vger.kernel.org
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- arch/mips/kernel/setup.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d67f250e96344f006e3a6be148def4c6537d05a0
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 1ac2752fb791..a7b469d89e2c 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -605,7 +605,8 @@ static void __init bootcmdline_init(char **cmdline_p)
- 	 * If we're configured to take boot arguments from DT, look for those
- 	 * now.
- 	 */
--	if (IS_ENABLED(CONFIG_MIPS_CMDLINE_FROM_DTB))
-+	if (IS_ENABLED(CONFIG_MIPS_CMDLINE_FROM_DTB) ||
-+	    IS_ENABLED(CONFIG_MIPS_CMDLINE_DTB_EXTEND))
- 		of_scan_flat_dt(bootcmdline_scan_chosen, &dt_bootargs);
- #endif
- 
+Thank you!
+
 -- 
-2.25.0
-
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
