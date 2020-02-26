@@ -2,94 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE08716FD30
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2020 12:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FAF1701B5
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2020 15:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728320AbgBZLQU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Feb 2020 06:16:20 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([81.169.146.176]:8023 "EHLO
-        mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728297AbgBZLQT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Feb 2020 06:16:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582715773;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=ex+tP/S3jJM/1n8mzovxtL99ooZIHpji+z8Ck9o3ixM=;
-        b=rIr6xdAi6NeHqjeHXL7VFoZgT1foOkC+fGMXzFY7vac77OYl0xMoXGneNQGFXLWfpv
-        dg6hiY47YZB/WOM4gH4kGo641EYjPlwUaM85MYS9249oW1bqzTI4q0zcL8aGDTxjaHbC
-        zUKVh8OqaDGM4Fc/HdugympXC8lUCDXnFWCD4Gb4N7soCI1LILUGxpVlbjib5P4J4XPm
-        Mu7qVNwWdNJg6gmgYJ0/Ybqzv23X8HeUC75cyiyvzV9l6CHh502CUr3xtTOZOWF8GUoF
-        XzQmvPopbmWKqBNI4ggKGlTq2YkcS4LXzq5eHjgnKItSaVxZOynALc5ef5CbFLE5oZbz
-        kaCA==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0pAzoz/Oc2x"
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-        by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1QBG64Cj
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Wed, 26 Feb 2020 12:16:06 +0100 (CET)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Mathieu Malaterre <malat@debian.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
-        kernel@pyra-handheld.com
-Subject: [PATCH v6 6/6] MIPS: DTS: CI20: make DM9000 Ethernet controller use NVMEM to find the default MAC address
-Date:   Wed, 26 Feb 2020 12:16:01 +0100
-Message-Id: <c2a0489032033570922ac8c0c5f43bfb7fe8b46f.1582715761.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <cover.1582715761.git.hns@goldelico.com>
-References: <cover.1582715761.git.hns@goldelico.com>
+        id S1726366AbgBZO7g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Feb 2020 09:59:36 -0500
+Received: from elvis.franken.de ([193.175.24.41]:38970 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726063AbgBZO7g (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 26 Feb 2020 09:59:36 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1j6y9t-0001cq-00; Wed, 26 Feb 2020 15:59:33 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 4FF4BC0E99; Wed, 26 Feb 2020 15:59:17 +0100 (CET)
+Date:   Wed, 26 Feb 2020 15:59:17 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Paul Burton <paulburton@kernel.org>, od@zcrc.me,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Fix CONFIG_MIPS_CMDLINE_DTB_EXTEND handling
+Message-ID: <20200226145917.GA12722@alpha.franken.de>
+References: <20200225152810.45048-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200225152810.45048-1-paul@crapouillou.net>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-There is a unique MAC address programmed into the eFuses
-of the JZ4780 chip in the CI20 factory. By using this
-for initializing the DM9000 Ethernet controller, every
-CI20 board has an individual - but stable - MAC address
-and DHCP can assign stable IP addresses.
+On Tue, Feb 25, 2020 at 12:28:09PM -0300, Paul Cercueil wrote:
+> The CONFIG_MIPS_CMDLINE_DTB_EXTEND option is used so that the kernel
+> arguments provided in the 'bootargs' property in devicetree are extended
+> with the kernel arguments provided by the bootloader.
+> 
+> The code was broken, as it didn't actually take any of the kernel
+> arguments provided in devicetree when that option was set.
+> 
+> Fixes: 7784cac69735 ("MIPS: cmdline: Clean up boot_command_line
+> initialization")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  arch/mips/kernel/setup.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- arch/mips/boot/dts/ingenic/ci20.dts | 3 +++
- 1 file changed, 3 insertions(+)
+applied to mips-fixes.
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index 37b93166bf22..6dc1f9eeff00 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -355,6 +355,9 @@
- 
- 		interrupt-parent = <&gpe>;
- 		interrupts = <19 4>;
-+
-+		nvmem-cells = <&eth0_addr>;
-+		nvmem-cell-names = "mac-address";
- 	};
- };
- 
+Thomas.
+
 -- 
-2.23.0
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
