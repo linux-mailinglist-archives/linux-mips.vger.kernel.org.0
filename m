@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 469A31708B8
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2020 20:13:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2EFE1708BF
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2020 20:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727668AbgBZTNk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Feb 2020 14:13:40 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.83]:17245 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727242AbgBZTNO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Feb 2020 14:13:14 -0500
+        id S1727242AbgBZTNo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Feb 2020 14:13:44 -0500
+Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.101]:28202 "EHLO
+        mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727287AbgBZTNN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Feb 2020 14:13:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582744391;
         s=strato-dkim-0002; d=goldelico.com;
         h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=ZlvegWKzEL7p+n4163sWKIEhQycTr4lr1NjcravaYHg=;
-        b=IUc7Um8RzLdtGTCofgIF2dUh7AUimtVkMFl4o6KngChErr0MelHCTxxh9GB/+nPvFE
-        miqU/7qt2FgCUbSNY4V15W/Kn12yn+q3LHll7qcbPM7JJz/bHByievqTCkJK+EGQ7chU
-        8SZFClum+4tR66VWk2/6r3HwsnCDIsBgEoZSxYnPhW/s4BTjRwwaRdgOEb8Bq3GrJ7T8
-        uaJ0Z7XgGFl5l76NRQwG60ivP1kgSgfm9Pd8zdd57MUxuHSv5EF3W/c2FfZJ+oV9bJeR
-        rAnZig5WWMVzEvXzFvF0+Tf4612OUWCgQlG5ohpAwRRnUsGqnps2jbFuzdQPxr6xwhF+
-        OnwA==
+        bh=0KwFWogrkYd3WbP4B9tFSDqdj5/ZkSqbBbEVxlZwGEA=;
+        b=a3j6DMoHnyFV5JohDO304EjH+kmJqX6FaYH5XNaYMFXdMvHq6JuEDM8JRr6G49R54U
+        ETepDUDRMHGKp5+Hib2Fn1N91+jZ4OM5ye8e2BCsBO7IA3+/vVU3+3cg9EIyJ/JKQEZO
+        p/fb/aW+6yfMqz5cmTkJZGJ0wXgbjVS8sD/ni8pXJgxZoAd/xmwOfXjZZnPFItubV90B
+        5Rii1ZUgbdlXZyZyxEpSkqJMmEA2caYj8prxnko814fn9fq5UlP4LFN3Kz3603i93lNq
+        5fcr6c2hc2hlAI1IiqTypiMY9JALpOqOBTSqeNPry39V5MHMXO5TBkkm3wyMncSv4V6K
+        54JA==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0pAzoz/Oc2x"
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id U06217w1QJD26bL
+        with ESMTPSA id U06217w1QJD26bM
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
         Wed, 26 Feb 2020 20:13:02 +0100 (CET)
@@ -48,10 +48,10 @@ Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-gpio@vger.kernel.org, letux-kernel@openphoenux.org,
         kernel@pyra-handheld.com,
-        Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
-Subject: [RFC 2/8] dt-bindings: video: Add jz4780-hdmi binding
-Date:   Wed, 26 Feb 2020 20:12:54 +0100
-Message-Id: <2d7202155bae3fa9c7097275d4c9a1ccab569aea.1582744379.git.hns@goldelico.com>
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [RFC 3/8] drm: ingenic-drm: add MODULE_DEVICE_TABLE
+Date:   Wed, 26 Feb 2020 20:12:55 +0100
+Message-Id: <d59ba39a17f052b6d3ca1947bd62467224fac2d0.1582744379.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <cover.1582744379.git.hns@goldelico.com>
 References: <cover.1582744379.git.hns@goldelico.com>
@@ -62,63 +62,27 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
+so that the driver can load by matching the device tree
+if compiled as module.
 
-Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
-
-Signed-off-by: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- .../bindings/display/ingenic-jz4780-hdmi.txt  | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.txt
+ drivers/gpu/drm/ingenic/ingenic-drm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.txt b/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.txt
-new file mode 100644
-index 000000000000..f02e59fbdd5a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.txt
-@@ -0,0 +1,41 @@
-+Device-Tree bindings for Ingenic JZ4780 HDMI Transmitter
+diff --git a/drivers/gpu/drm/ingenic/ingenic-drm.c b/drivers/gpu/drm/ingenic/ingenic-drm.c
+index 6d47ef7b148c..d8617096dd8e 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-drm.c
++++ b/drivers/gpu/drm/ingenic/ingenic-drm.c
+@@ -844,6 +844,8 @@ static const struct of_device_id ingenic_drm_of_match[] = {
+ 	{ /* sentinel */ },
+ };
+ 
++MODULE_DEVICE_TABLE(of, ingenic_drm_of_match);
 +
-+The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys DesignWare HDMI 1.4
-+TX controller IP with accompanying PHY IP.
-+
-+Required properties:
-+ - #address-cells : should be <1>
-+ - #size-cells : should be <0>
-+ - compatible : should be "ingenic,jz4780-hdmi"
-+ - reg-io-width: must be <4>
-+ - clocks: phandle to isrf and iahb clocks
-+ - clock-names : must be "isrf" and "iahb"
-+ - ports: Port nodes with endpoint definitions as defined in
-+   Documentation/devicetree/bindings/media/video-interfaces.txt,
-+
-+Optional properties:
-+ - ddc-i2c-bus: phandle of an I2C controller used for DDC EDID probing
-+
-+example:
-+
-+hdmi: hdmi@10180000 {
-+	compatible = "ingenic,jz4780-hdmi";
-+	reg = <0x10180000 0x8000>;
-+	reg-io-width = <4>;
-+	ddc-i2c-bus = <&i2c4>;
-+	interrupt-parent = <&intc>;
-+	interrupts = <3>;
-+	clocks = <&cgu JZ4780_CLK_HDMI>, <&cgu JZ4780_CLK_AHB0>;
-+	clock-names = "isfr", "iahb";
-+
-+	ports {
-+		hdmi_in: port {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			hdmi_in_lcd: endpoint@0 {
-+				reg = <0>;
-+				remote-endpoint = <&jz4780_out_hdmi>;
-+			};
-+		};
-+	};
-+};
+ static struct platform_driver ingenic_drm_driver = {
+ 	.driver = {
+ 		.name = "ingenic-drm",
 -- 
 2.23.0
 
