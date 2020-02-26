@@ -2,108 +2,341 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B600516F5AF
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2020 03:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2542816F796
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2020 06:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729045AbgBZCiS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Feb 2020 21:38:18 -0500
-Received: from eddie.linux-mips.org ([148.251.95.138]:49704 "EHLO
-        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728989AbgBZCiR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Feb 2020 21:38:17 -0500
-Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
-        with ESMTP id S23993114AbgBZCiNQSZht (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 26 Feb 2020 03:38:13 +0100
-Date:   Wed, 26 Feb 2020 02:38:13 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc:     Huacai Chen <chenhc@lemote.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paul.burton@mips.com>, linux-mips@linux-mips.org,
-        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>
-Subject: Re: [PATCH 1/3] MIPS: Loongson: Remove Loongson-2E/2F support
-In-Reply-To: <0279E7A7-197D-4D6B-9A4B-26E6791372E0@flygoat.com>
-Message-ID: <alpine.LFD.2.21.1911130315010.367459@eddie.linux-mips.org>
-References: <1572758417-29265-1-git-send-email-chenhc@lemote.com> <alpine.LFD.2.21.1911032301160.367459@eddie.linux-mips.org> <0279E7A7-197D-4D6B-9A4B-26E6791372E0@flygoat.com>
+        id S1727023AbgBZFqg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Feb 2020 00:46:36 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:57079 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725789AbgBZFqg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Feb 2020 00:46:36 -0500
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1j6pWe-00029i-1M; Wed, 26 Feb 2020 06:46:28 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1j6pWb-0003hy-DZ; Wed, 26 Feb 2020 06:46:25 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Chris Snook <chris.snook@gmail.com>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>
+Subject: [PATCH v8 1/1] net: ag71xx: port to phylink
+Date:   Wed, 26 Feb 2020 06:46:24 +0100
+Message-Id: <20200226054624.14199-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jiaxun,
+The port to phylink was done as close as possible to initial
+functionality.
 
-On Tue, 5 Nov 2019, Jiaxun Yang wrote:
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+changes v8:
+- set the autoneg bit
+- provide implementations for the mac_pcs_get_state and mac_an_restart
+  methods
+- do phylink_disconnect_phy() on _stop()
+- rename ag71xx_phy_setup() to ag71xx_phylink_setup() 
 
-> >BTW, there used to be a patch somewhere to support more than 512MiB of 
-> >DRAM with the 2E, but I can't find it -- can you help me tracking it
-> 
-> Hi Maciej
-> 
-> It seems like DRAM size issue is a firmware issue rather than kernel 
-> issue, some early versions of PMON don't pass highmem size correctly to 
-> the Kernel.
-> Probably you can manually set it in loongson-2ef/common/mem.c？
+ drivers/net/ethernet/atheros/Kconfig  |   2 +-
+ drivers/net/ethernet/atheros/ag71xx.c | 150 +++++++++++++++++---------
+ 2 files changed, 98 insertions(+), 54 deletions(-)
 
- Not really, the size was passed correctly, but something was set wrong in 
-the chipset that caused the kernel to crash if access to upper 512MiB was 
-allowed with a 1GiB SODIMM.  I had to strap memory regions manually to 
-keep the system working, as follows:
+diff --git a/drivers/net/ethernet/atheros/Kconfig b/drivers/net/ethernet/atheros/Kconfig
+index 0058051ba925..2720bde5034e 100644
+--- a/drivers/net/ethernet/atheros/Kconfig
++++ b/drivers/net/ethernet/atheros/Kconfig
+@@ -20,7 +20,7 @@ if NET_VENDOR_ATHEROS
+ config AG71XX
+ 	tristate "Atheros AR7XXX/AR9XXX built-in ethernet mac support"
+ 	depends on ATH79
+-	select PHYLIB
++	select PHYLINK
+ 	help
+ 	  If you wish to compile a kernel for AR7XXX/91XXX and enable
+ 	  ethernet support, then you should always answer Y to this.
+diff --git a/drivers/net/ethernet/atheros/ag71xx.c b/drivers/net/ethernet/atheros/ag71xx.c
+index e95687a780fb..9692ae1734a8 100644
+--- a/drivers/net/ethernet/atheros/ag71xx.c
++++ b/drivers/net/ethernet/atheros/ag71xx.c
+@@ -32,6 +32,7 @@
+ #include <linux/of_mdio.h>
+ #include <linux/of_net.h>
+ #include <linux/of_platform.h>
++#include <linux/phylink.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
+ #include <linux/clk.h>
+@@ -314,6 +315,8 @@ struct ag71xx {
+ 	dma_addr_t stop_desc_dma;
+ 
+ 	phy_interface_t phy_if_mode;
++	struct phylink *phylink;
++	struct phylink_config phylink_config;
+ 
+ 	struct delayed_work restart_work;
+ 	struct timer_list oom_timer;
+@@ -845,24 +848,23 @@ static void ag71xx_hw_start(struct ag71xx *ag)
+ 	netif_wake_queue(ag->ndev);
+ }
+ 
+-static void ag71xx_link_adjust(struct ag71xx *ag, bool update)
++static void ag71xx_mac_config(struct phylink_config *config, unsigned int mode,
++			      const struct phylink_link_state *state)
+ {
+-	struct phy_device *phydev = ag->ndev->phydev;
++	struct ag71xx *ag = netdev_priv(to_net_dev(config->dev));
+ 	u32 cfg2;
+ 	u32 ifctl;
+ 	u32 fifo5;
+ 
+-	if (!phydev->link && update) {
+-		ag71xx_hw_stop(ag);
++	if (phylink_autoneg_inband(mode))
+ 		return;
+-	}
+ 
+ 	if (!ag71xx_is(ag, AR7100) && !ag71xx_is(ag, AR9130))
+ 		ag71xx_fast_reset(ag);
+ 
+ 	cfg2 = ag71xx_rr(ag, AG71XX_REG_MAC_CFG2);
+ 	cfg2 &= ~(MAC_CFG2_IF_1000 | MAC_CFG2_IF_10_100 | MAC_CFG2_FDX);
+-	cfg2 |= (phydev->duplex) ? MAC_CFG2_FDX : 0;
++	cfg2 |= (state->duplex) ? MAC_CFG2_FDX : 0;
+ 
+ 	ifctl = ag71xx_rr(ag, AG71XX_REG_MAC_IFCTL);
+ 	ifctl &= ~(MAC_IFCTL_SPEED);
+@@ -870,7 +872,7 @@ static void ag71xx_link_adjust(struct ag71xx *ag, bool update)
+ 	fifo5 = ag71xx_rr(ag, AG71XX_REG_FIFO_CFG5);
+ 	fifo5 &= ~FIFO_CFG5_BM;
+ 
+-	switch (phydev->speed) {
++	switch (state->speed) {
+ 	case SPEED_1000:
+ 		cfg2 |= MAC_CFG2_IF_1000;
+ 		fifo5 |= FIFO_CFG5_BM;
+@@ -883,7 +885,6 @@ static void ag71xx_link_adjust(struct ag71xx *ag, bool update)
+ 		cfg2 |= MAC_CFG2_IF_10_100;
+ 		break;
+ 	default:
+-		WARN(1, "not supported speed %i\n", phydev->speed);
+ 		return;
+ 	}
+ 
+@@ -897,58 +898,91 @@ static void ag71xx_link_adjust(struct ag71xx *ag, bool update)
+ 	ag71xx_wr(ag, AG71XX_REG_MAC_CFG2, cfg2);
+ 	ag71xx_wr(ag, AG71XX_REG_FIFO_CFG5, fifo5);
+ 	ag71xx_wr(ag, AG71XX_REG_MAC_IFCTL, ifctl);
++}
+ 
+-	ag71xx_hw_start(ag);
++static void ag71xx_mac_validate(struct phylink_config *config,
++			    unsigned long *supported,
++			    struct phylink_link_state *state)
++{
++	__ETHTOOL_DECLARE_LINK_MODE_MASK(mask) = { 0, };
++
++	if (state->interface != PHY_INTERFACE_MODE_NA &&
++	    state->interface != PHY_INTERFACE_MODE_GMII &&
++	    state->interface != PHY_INTERFACE_MODE_MII) {
++		bitmap_zero(supported, __ETHTOOL_LINK_MODE_MASK_NBITS);
++		return;
++	}
++
++	phylink_set(mask, MII);
++
++	phylink_set(mask, Autoneg);
++	phylink_set(mask, 10baseT_Half);
++	phylink_set(mask, 10baseT_Full);
++	phylink_set(mask, 100baseT_Half);
++	phylink_set(mask, 100baseT_Full);
++
++	if (state->interface == PHY_INTERFACE_MODE_NA ||
++	    state->interface == PHY_INTERFACE_MODE_GMII) {
++		phylink_set(mask, 1000baseT_Full);
++		phylink_set(mask, 1000baseX_Full);
++	}
+ 
+-	if (update)
+-		phy_print_status(phydev);
++	bitmap_and(supported, supported, mask,
++		   __ETHTOOL_LINK_MODE_MASK_NBITS);
++	bitmap_and(state->advertising, state->advertising, mask,
++		   __ETHTOOL_LINK_MODE_MASK_NBITS);
+ }
+ 
+-static void ag71xx_phy_link_adjust(struct net_device *ndev)
++static void ag71xx_mac_pcs_get_state(struct phylink_config *config,
++				     struct phylink_link_state *state)
+ {
+-	struct ag71xx *ag = netdev_priv(ndev);
++	state->link = 0;
++}
+ 
+-	ag71xx_link_adjust(ag, true);
++static void ag71xx_mac_an_restart(struct phylink_config *config)
++{
++	/* Not Supported */
+ }
+ 
+-static int ag71xx_phy_connect(struct ag71xx *ag)
++static void ag71xx_mac_link_down(struct phylink_config *config,
++				 unsigned int mode, phy_interface_t interface)
+ {
+-	struct device_node *np = ag->pdev->dev.of_node;
+-	struct net_device *ndev = ag->ndev;
+-	struct device_node *phy_node;
+-	struct phy_device *phydev;
+-	int ret;
++	struct ag71xx *ag = netdev_priv(to_net_dev(config->dev));
+ 
+-	if (of_phy_is_fixed_link(np)) {
+-		ret = of_phy_register_fixed_link(np);
+-		if (ret < 0) {
+-			netif_err(ag, probe, ndev, "Failed to register fixed PHY link: %d\n",
+-				  ret);
+-			return ret;
+-		}
++	ag71xx_hw_stop(ag);
++}
+ 
+-		phy_node = of_node_get(np);
+-	} else {
+-		phy_node = of_parse_phandle(np, "phy-handle", 0);
+-	}
++static void ag71xx_mac_link_up(struct phylink_config *config, unsigned int mode,
++			       phy_interface_t interface,
++			       struct phy_device *phy)
++{
++	struct ag71xx *ag = netdev_priv(to_net_dev(config->dev));
+ 
+-	if (!phy_node) {
+-		netif_err(ag, probe, ndev, "Could not find valid phy node\n");
+-		return -ENODEV;
+-	}
++	ag71xx_hw_start(ag);
++}
+ 
+-	phydev = of_phy_connect(ag->ndev, phy_node, ag71xx_phy_link_adjust,
+-				0, ag->phy_if_mode);
++static const struct phylink_mac_ops ag71xx_phylink_mac_ops = {
++	.validate = ag71xx_mac_validate,
++	.mac_pcs_get_state = ag71xx_mac_pcs_get_state,
++	.mac_an_restart = ag71xx_mac_an_restart,
++	.mac_config = ag71xx_mac_config,
++	.mac_link_down = ag71xx_mac_link_down,
++	.mac_link_up = ag71xx_mac_link_up,
++};
+ 
+-	of_node_put(phy_node);
++static int ag71xx_phylink_setup(struct ag71xx *ag)
++{
++	struct phylink *phylink;
+ 
+-	if (!phydev) {
+-		netif_err(ag, probe, ndev, "Could not connect to PHY device\n");
+-		return -ENODEV;
+-	}
++	ag->phylink_config.dev = &ag->ndev->dev;
++	ag->phylink_config.type = PHYLINK_NETDEV;
+ 
+-	phy_attached_info(phydev);
++	phylink = phylink_create(&ag->phylink_config, ag->pdev->dev.fwnode,
++				 ag->phy_if_mode, &ag71xx_phylink_mac_ops);
++	if (IS_ERR(phylink))
++		return PTR_ERR(phylink);
+ 
++	ag->phylink = phylink;
+ 	return 0;
+ }
+ 
+@@ -1239,6 +1273,13 @@ static int ag71xx_open(struct net_device *ndev)
+ 	unsigned int max_frame_len;
+ 	int ret;
+ 
++	ret = phylink_of_phy_connect(ag->phylink, ag->pdev->dev.of_node, 0);
++	if (ret) {
++		netif_err(ag, link, ndev, "phylink_of_phy_connect filed with err: %i\n",
++			  ret);
++		goto err;
++	}
++
+ 	max_frame_len = ag71xx_max_frame_len(ndev->mtu);
+ 	ag->rx_buf_size =
+ 		SKB_DATA_ALIGN(max_frame_len + NET_SKB_PAD + NET_IP_ALIGN);
+@@ -1251,11 +1292,7 @@ static int ag71xx_open(struct net_device *ndev)
+ 	if (ret)
+ 		goto err;
+ 
+-	ret = ag71xx_phy_connect(ag);
+-	if (ret)
+-		goto err;
+-
+-	phy_start(ndev->phydev);
++	phylink_start(ag->phylink);
+ 
+ 	return 0;
+ 
+@@ -1268,8 +1305,8 @@ static int ag71xx_stop(struct net_device *ndev)
+ {
+ 	struct ag71xx *ag = netdev_priv(ndev);
+ 
+-	phy_stop(ndev->phydev);
+-	phy_disconnect(ndev->phydev);
++	phylink_stop(ag->phylink);
++	phylink_disconnect_phy(ag->phylink);
+ 	ag71xx_hw_disable(ag);
+ 
+ 	return 0;
+@@ -1414,13 +1451,14 @@ static void ag71xx_restart_work_func(struct work_struct *work)
+ {
+ 	struct ag71xx *ag = container_of(work, struct ag71xx,
+ 					 restart_work.work);
+-	struct net_device *ndev = ag->ndev;
+ 
+ 	rtnl_lock();
+ 	ag71xx_hw_disable(ag);
+ 	ag71xx_hw_enable(ag);
+-	if (ndev->phydev->link)
+-		ag71xx_link_adjust(ag, false);
++
++	phylink_stop(ag->phylink);
++	phylink_start(ag->phylink);
++
+ 	rtnl_unlock();
+ }
+ 
+@@ -1759,6 +1797,12 @@ static int ag71xx_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, ndev);
+ 
++	err = ag71xx_phylink_setup(ag);
++	if (err) {
++		netif_err(ag, probe, ndev, "failed to setup phylink (%d)\n", err);
++		goto err_mdio_remove;
++	}
++
+ 	err = register_netdev(ndev);
+ 	if (err) {
+ 		netif_err(ag, probe, ndev, "unable to register net device\n");
+-- 
+2.25.0
 
-      karg = "console=tty root=/dev/hda2 mem=256M@0 mem=256M@512M"
-
- Yeah, I knew upgrading the firmware was the right way, but I was being a 
-coward about flashing, fearing I could brick the machine.
-
-> Currently I can't find any working Fuloong-2E to test but the newest 
-> known PMON can be found here[1].
-> 
-> Thanks
-> 
-> [1] https://mirrors4.tuna.tsinghua.edu.cn/loongson/pmon/pmon_2e.bin
-> https://mirrors4.tuna.tsinghua.edu.cn/loongson/pmon/pmon_2e.bin.md5
-
- So I went ahead and I have now actually flashed the newer firmware.  My 
-cowardice still told me not to take it lightly, so I waited until I 
-travelled to my other site where I could power the machine via a UPS.
-
- Results have been good and the extra RAM let me upgrade the 32-bit Debian 
-system installed to Debian 7 "Wheezy" without making the system swap to 
-death.  This is actually the final Debian release to support Fuloong-2E, 
-as the MIPS port was skipped with Debian 8 "Jessie" and Debian 9 "Stretch" 
-requires a MIPS R2 processor to run, and Fuloong-2E only supports the MIPS 
-III ISA (plus vendor extensions).  It would have saved me a lot of hassle, 
-if it was more clearly stated at: <https://www.debian.org/ports/mips/>.
-
- A further issue that caused me some pain was with Firefox, which did not 
-run and crashed with SIGILL right away.  Eventually I figured out it was 
-on a MIPS IV FPU instruction (MOVT IIRC) despite Firefox having been built 
-for MIPS II.  After a further research I realised a JIT compiler had been 
-added to the browser at one point for JavaScript execution, and it must 
-have been incorrectly set to produce code for an ISA beyond one Firefox 
-has been built for.
-
- As I think it's unlikely anyone will backport a fix let alone build a 
-MIPS Firefox binary for Debian 7, I went for a workaround instead and 
-disabled JIT compilation with a:
-
-user_pref("javascript.options.baselinejit", false);
-
-entry added to `prefs.js'.  That let Firefox run normally.
-
- I guess these bits of information may still be useful to someone, so I 
-decided to post them; after so many years I still find Fuloong-2E a great 
-machine and still very usable.  I'll try to find some time to polish this 
-a little and include with <https://www.linux-mips.org/wiki/Fuloong_2E>.  
-I think it would make sense to have a copy of the firmware image there 
-too.
-
- Thanks for encouraging me to upgrade the firmware and providing a link!
-
-  Maciej
