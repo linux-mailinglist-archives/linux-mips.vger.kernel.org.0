@@ -2,120 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7441704D7
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2020 17:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1D2170646
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2020 18:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbgBZQwO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 Feb 2020 11:52:14 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:46096 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726366AbgBZQwO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Feb 2020 11:52:14 -0500
-Received: by mail-oi1-f193.google.com with SMTP id a22so114718oid.13;
-        Wed, 26 Feb 2020 08:52:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CT/DItuaw3l7e50kJnxY0hxdVtAyvWVe9vwmyIht9Vk=;
-        b=cLvf5gcfXl9dYhWCR+lSPdru8aPS2oppMuXJjqnTmRgfoNTN4PKCRE0wef1ayyJLVN
-         Eo+5Cehlxv6a9dBF3/M3zDz6Hl4TrYTHpo8QYWYLXCa+Wqw773ph8nfKu3/RH1O/CexJ
-         DMfFlaDVicUq2BDrhQmxeJfsRWEGAhAtW+7PT0EKq/d5NsVyafCtB9W2yfdZt6ZbMAcZ
-         bUapXyWzKxf/Uu7I6f5FDFhriTLuwbUek4vXoj3fRjcIfAtSEE3xGglM5/OGHgG9mXsR
-         mtMYN1G334SU2EVueZTdXC4RdnyDcZDa9ZClHcbHmrYnqGSlEwGQqrerSqAdym1gBbHq
-         uqZg==
-X-Gm-Message-State: APjAAAXR7lQXusVp7lDrZAZiPjlCKjCPBerkBsD4O7l0JcRcnw9Gg0sj
-        KlbhgXUv8D2AZc217nLavg==
-X-Google-Smtp-Source: APXvYqxEE7ByWeDuhPUb4V+kWugwfZsSqUl0AI3AjBihCF1X5fH3wv9zsrqmq9nmfmvQQ7aDM+oCSQ==
-X-Received: by 2002:aca:2307:: with SMTP id e7mr3849467oie.163.1582735933081;
-        Wed, 26 Feb 2020 08:52:13 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id u66sm975100oie.17.2020.02.26.08.52.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2020 08:52:12 -0800 (PST)
-Received: (nullmailer pid 25334 invoked by uid 1000);
-        Wed, 26 Feb 2020 16:52:11 -0000
-Date:   Wed, 26 Feb 2020 10:52:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1726889AbgBZRjb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Feb 2020 12:39:31 -0500
+Received: from mx2.suse.de ([195.135.220.15]:54830 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726752AbgBZRjb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 26 Feb 2020 12:39:31 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 764CFAC66;
+        Wed, 26 Feb 2020 17:39:29 +0000 (UTC)
+Subject: Re: [PATCH V2 2/4] mm/vma: Make vma_is_accessible() available for
+ general use
+To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
-        Huacai Chen <chenhc@lemote.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 07/10] dt-bindings: mips: Add loongson boards
-Message-ID: <20200226165211.GA20809@bogus>
-References: <20200221050942.507775-1-jiaxun.yang@flygoat.com>
- <20200221050942.507775-8-jiaxun.yang@flygoat.com>
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org
+References: <1582520593-30704-1-git-send-email-anshuman.khandual@arm.com>
+ <1582520593-30704-3-git-send-email-anshuman.khandual@arm.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Message-ID: <c2a38ca8-1134-6e7d-c10a-658e282fcd4e@suse.cz>
+Date:   Wed, 26 Feb 2020 18:39:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200221050942.507775-8-jiaxun.yang@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1582520593-30704-3-git-send-email-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 01:09:22PM +0800, Jiaxun Yang wrote:
-> Prepare for later dts.
+On 2/24/20 6:03 AM, Anshuman Khandual wrote:
+> Lets move vma_is_accessible() helper to include/linux/mm.h which makes it
+> available for general use. While here, this replaces all remaining open
+> encodings for VMA access check with vma_is_accessible().
 > 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  .../bindings/mips/loongson/devices.yaml       | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mips/loongson/devices.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mips/loongson/devices.yaml b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
-> new file mode 100644
-> index 000000000000..32bec784da87
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
-> @@ -0,0 +1,29 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mips/loongson/devices.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson based Platforms Device Tree Bindings
-> +
-> +maintainers:
-> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
-> +description: |
-> +  Devices with a Loongson CPU shall have the following properties.
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-m68k@lists.linux-m68k.org
+> Cc: linux-mips@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-sh@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Acked-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-Perhaps some details about the platform.
-
-> +  Note that generic device is used for built-in dtbs and will be
-> +  patched during boot on firmware without OF support.
-
-That's a kernel detail that doesn't belong here. (BTW, built-in dtb 
-support is intended as a transition step for bootloaders without dtb 
-knowledge. It's not the recommended way and shouldn't be used on new 
-platforms).
-
-> +
-> +properties:
-> +  $nodename:
-> +    const: '/'
-> +  compatible:
-> +    oneOf:
-> +
-> +      - description: Generic Loongson3 4Core + RS780E
-> +        items:
-> +          - const: loongson,loongson3-4core-rs780e
-> +
-> +      - description: Generic Loongson3 8Core + RS780E
-> +        items:
-> +          - const: loongson,loongson3-8core-rs780e
-> +...
-> -- 
-> 2.25.0
-> 
-> 
+Acked-by: Vlastimil Babka <vbabka@suse.cz
