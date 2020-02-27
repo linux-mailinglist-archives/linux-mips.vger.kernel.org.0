@@ -2,39 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D92C17225A
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2020 16:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993B417225F
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2020 16:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729155AbgB0PiV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Feb 2020 10:38:21 -0500
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17909 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729089AbgB0PiV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 27 Feb 2020 10:38:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1582817836;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Subject:To:From:Message-ID;
-        bh=OnRQ9NxWyqFj05IySYZq3Pu/2eEC6LBFz8UWXHJhJIk=;
-        b=PrzIrA63Ce6nXM4ayqkimIXuagY0wF2CulQQTaqweeAnvdtarxe3/fgjDfx1sEcL
-        Z+HTxe0VSGxvAh3hllAq97xetuOY2rDLBlf/n4iGBO9AjrqEveKZi9xF9BjEpTA/Vjw
-        tz/7U1ecRodkP3gX0F0/K93mHKV28f3X7q2wxFdk=
-Received: from [10.233.233.252] (115.196.12.109 [115.196.12.109]) by mx.zoho.com.cn
-        with SMTPS id 1582817832165501.28613937076807; Thu, 27 Feb 2020 23:37:12 +0800 (CST)
-Date:   Thu, 27 Feb 2020 23:37:07 +0800
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20200227144910.GA25011@alpha.franken.de>
-References: <20200227144910.GA25011@alpha.franken.de>
+        id S1729267AbgB0Pjl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Feb 2020 10:39:41 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:50486 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729089AbgB0Pjl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Feb 2020 10:39:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1582817978; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3eSJUdHUOebLRYmbf4KgJLlfHEkgSJDeAo7KzMcKMN0=;
+        b=TGKvqL+3KLRGn2YYCLBOUiPc2R6eNx4XAagPUwJ7ukLTCUDLBjuh1L3mLfljBk0IT5XjtE
+        EKHapTe+v/XgnwKQ2lIxeIjjnLCQnWnp00yUjSs18GUA4ITcKp9ojUSXlVdV2/RNT2kMFV
+        OwIw7HUCZsyMTtXTnEqaJR9w3Cmkor8=
+Date:   Thu, 27 Feb 2020 12:39:14 -0300
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v6 5/6] MIPS: DTS: JZ4780: define node for JZ4780 efuse
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Mathieu Malaterre <malat@debian.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com
+Message-Id: <1582817954.3.5@crapouillou.net>
+In-Reply-To: <8CEAF117-8667-4616-B08D-211E2705B67B@goldelico.com>
+References: <cover.1582715761.git.hns@goldelico.com>
+        <c6177ff663b6f8e16dc41169a76ba5dac091e7bd.1582715761.git.hns@goldelico.com>
+        <1582815472.3.4@crapouillou.net>
+        <8CEAF117-8667-4616-B08D-211E2705B67B@goldelico.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: MIPS Hardware support
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <2FD88A63-1873-469F-9AF9-27FCB803E839@flygoat.com>
-X-ZohoCNMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -42,96 +60,109 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-=E4=BA=8E 2020=E5=B9=B42=E6=9C=8827=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=881=
-0:49:10, Thomas Bogendoerfer <tsbogend@alpha=2Efranken=2Ede> =E5=86=99=E5=
-=88=B0:
->Hi,
->
->we have 47 MIPS system types and I'd like to get an overview how alive
->they really are=2E I've already grouped the 47 systems a little bit by
->hardware I already own and regulary test kernels=2E Could you please
->give me some feedback about the "unclassified" systems ? What systems
->are supported by qemu (real test not just repeating qemu docs) ?
->Thank you for your help=2E
->
->Thomas=2E
->
->Hardware I own and regulary boot current kernels:
->
->Jazz family of machines (MACH_JAZZ)	/* runs with qemu */
->SGI IP22 (Indy/Indigo2) (SGI_IP22)
->SGI IP27 (Origin200/2000) (SGI_IP27)
->SGI IP28 (Indigo2 R10k) (SGI_IP28)
->SGI IP30 (Octane/Octane2) (SGI_IP30)=20
->SGI IP32 (O2) (SGI_IP32)
->SNI RM200/300/400 (SNI_RM)
->
->Hardware I own, but not booted for a while:
->
->Texas Instruments AR7 (AR7)
->Cobalt Server (MIPS_COBALT)
->DECstations (MACH_DECSTATION)
->Lantiq based platforms (LANTIQ)
->Ralink based machines (RALINK)
->Sibyte BCM91480B-BigSur (SIBYTE_BIGSUR)
->
->Unclassified:
->
->Generic board-agnostic MIPS kernel (MIPS_GENERIC)
->Alchemy processor based machines (MIPS_ALCHEMY)
->Atheros AR231x/AR531x SoC support (ATH25)
->Atheros AR71XX/AR724X/AR913X based boards (ATH79)
->Broadcom Generic BMIPS kernel (BMIPS_GENERIC)
->Broadcom BCM47XX based boards (BCM47XX)
->Broadcom BCM63XX based boards (BCM63XX)
->Ingenic SoC based machines (MACH_INGENIC)
-Ingeic X1000 now boots thanks to Yanjie's effort=2E
-I owned a board given by Yanjie, and sometimes test MIPS32 functions on it=
-=2E
+Le jeu., f=E9vr. 27, 2020 at 16:26, H. Nikolaus Schaller=20
+<hns@goldelico.com> a =E9crit :
+> Hi Paul,
+>=20
+>>  Am 27.02.2020 um 15:57 schrieb Paul Cercueil <paul@crapouillou.net>:
+>>=20
+>>  Hi Nikolaus,
+>>=20
+>>=20
+>>  Le mer., f=E9vr. 26, 2020 at 12:16, H. Nikolaus Schaller=20
+>> <hns@goldelico.com> a =E9crit :
+>>>  From: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
+>>>  This patch brings support for the JZ4780 efuse. Currently it only=20
+>>> exposes
+>>>  a read only access to the entire 8K bits efuse memory and the
+>>>  ethernet mac address for the davicom dm9000 chip on the CI20 board.
+>>>  It also changes the nemc reg range to avoid overlap.
+>>>  Tested-by: Mathieu Malaterre <malat@debian.org>
+>>>  Signed-off-by: PrasannaKumar Muralidharan=20
+>>> <prasannatsmkumar@gmail.com>
+>>>  Signed-off-by: Mathieu Malaterre <malat@debian.org>
+>>>  Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>>>  ---
+>>>  arch/mips/boot/dts/ingenic/jz4780.dtsi | 17 ++++++++++++++++-
+>>>  1 file changed, 16 insertions(+), 1 deletion(-)
+>>>  diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi=20
+>>> b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>>>  index f928329b034b..1e266be28096 100644
+>>>  --- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>>>  +++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>>>  @@ -358,7 +358,7 @@
+>>>  	nemc: nemc@13410000 {
+>>>  		compatible =3D "ingenic,jz4780-nemc";
+>>>  -		reg =3D <0x13410000 0x10000>;
+>>>  +		reg =3D <0x13410000 0x4c>;
+>>=20
+>>  This is wrong, the real size of the register area is 1x15c.
+>=20
+> It should not overlap with the efuse reg range which is:
+>=20
+> <0x134100d0 0x2c>
+>=20
+> If I look at JZ4780 Mobile Application Processor Programming Manual
+> section 16.4.1 Register Description Table 16-4 Static Memory=20
+> Interface Registers,
+> I see
+>=20
+> SMCR1 at 0x13410014 and
+> SACR6 at 0x13410048 and all 32 bits wide. I.e. a total size of 0x4c.
+>=20
+> Ah, now I see. There is also Table 16-5 NAND Flash Interface Registers
+> starting with NFCSR at 0x13410050 and ending with TGHH register at=20
+> 0x13410154.
+>=20
+> Hm. With this we are probably at "go back and start over"...
+>=20
+> Either nemc must be separated into two drivers for Static Memory and=20
+> one
+> for NAND Flash. Or must become able to handle two register ranges.
+>=20
+> Or the e-fuse driver must become a part of the nemc driver.
 
->LASAT Networks platforms (LASAT)
->Loongson 32-bit family of machines (MACH_LOONGSON32)
-I owned a Loongson 1C board, and can confirm 5=2E4 is still bootable=2E
+Nothing that bad. I'll make the NEMC driver request only the area it=20
+needs, out of the 0x10000 register space.
 
->Loongson-2E/F family of machines (MACH_LOONGSON2EF)
-QEMU Fuloong-2E works fine, tested last year=2E
-And I owned Fuloong-2F=2E Just tested 5=2E5 recently=2E
+Then, you can move the efuse node *inside* the nemc node (with proper=20
+#address-cells/#size-cells/ranges and "simple-mfd" compatible string)=20
+and everything will work.
 
->Loongson 64-bit family of machines (MACH_LOONGSON64)
-No QEMU available=2E
-I owned a Loongson-3B1500 with RS780E PCH system=2E=20
-It works well with yesterday's mips-next=2E
+> Well, another assumption is that there is no NAND driver. AFAIR it
+> was even removed from the kernel because the maintainer did say
+> it is not fixable (if I really remember correctly).
 
-I also have Loongson-3A4000 + 7A system,
-which should belongs to this type=2E
-However, Loongson-7A PCH support is still missing in mainline
-and I'm going to work on that=2E
+It's still there:
+drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
 
->IMG Pistachio SoC based boards (MACH_PISTACHIO)
->MIPS Malta board (MIPS_MALTA)
-I use QEMU Malta for regular tests=2E
-It works smoothly=2E
+What was dropped from the kernel is MLC NAND support in UBI.
 
->Microchip PIC32 Family (MACH_PIC32)
->NEC EMMA2RH Mark-eins board (NEC_MARKEINS)
->NEC VR4100 series based machines (MACH_VR41XX)
->NXP STB220 board (NXP_STB220)
->NXP 225 board (NXP_STB225)
->PMC-Sierra MSP chipsets (PMC_MSP)
->Sibyte BCM91120C-CRhine (SIBYTE_CRHINE)
->Sibyte BCM91120x-Carmel (SIBYTE_CARMEL)
->Sibyte BCM91125C-CRhone (SIBYTE_CRHONE)
->Sibyte BCM91125E-Rhone (SIBYTE_RHONE)
->Sibyte BCM91250A-SWARM (SIBYTE_SWARM)
->Sibyte BCM91250C2-LittleSur (SIBYTE_LITTLESUR)
->Sibyte BCM91250E-Sentosa (SIBYTE_SENTOSA)
->Toshiba TX39 series based machines (MACH_TX39XX)
->Toshiba TX49 series based machines (MACH_TX49XX)
->Mikrotik RB532 boards (MIKROTIK_RB532)
->Cavium Networks Octeon SoC based boards (CAVIUM_OCTEON_SOC)
->Netlogic XLR/XLS based systems (NLM_XLR_BOARD)
->Netlogic XLP based systems (NLM_XLP_BOARD)
->Para-Virtualized guest system (MIPS_PARAVIRT)
+Cheers,
+-Paul
 
---=20
-Jiaxun Yang
+>>=20
+>>>  		#address-cells =3D <2>;
+>>>  		#size-cells =3D <1>;
+>>>  		ranges =3D <1 0 0x1b000000 0x1000000
+>>>  @@ -373,6 +373,21 @@
+>>>  		status =3D "disabled";
+>>>  	};
+>>>  +	efuse: efuse@134100d0 {
+>>>  +		compatible =3D "ingenic,jz4780-efuse";
+>>>  +		reg =3D <0x134100d0 0x2c>;
+>>>  +
+>>>  +		clocks =3D <&cgu JZ4780_CLK_AHB2>;
+>>>  +		clock-names =3D "ahb2";
+>>=20
+>>  As explained in my response to the other patch, 'clock-names' can=20
+>> go away.
+>=20
+> Yes.
+>=20
+> BR,
+> Nikolaus
+>=20
+
+=
+
