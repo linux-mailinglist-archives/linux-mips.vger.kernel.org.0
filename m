@@ -2,335 +2,244 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2915C172462
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2020 18:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0502D17257F
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2020 18:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729633AbgB0RCt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Feb 2020 12:02:49 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.82]:21812 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729223AbgB0RCt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Feb 2020 12:02:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582822966;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=yeUIqaAJ7VXFqwVruCWqy0jWCc6j1Qnr2zUWCdNbA7g=;
-        b=E9YYRu+6ZOvtLW+QoUfpSQ6RwEnQVBPNstXKvZBzVUPGQeRPgwIJO9LY0SjZiJgY+z
-        jy++uGJ+VdfJitrnBGIFrTGOiZaevL6i3a5PGQJthn0XzvdgQA7aQKZG8hvYdQsDboU/
-        Y1ghwzUKZlbaJV8+WXbw5ChvCce+clM+mn+bUndtaZzvxEvK3TNDnxFHdrhpUMjtzcO7
-        rwPJjgVPv4XUC3GFE8hi/XECfwcbWXC5qd6q8kWxXwFCnLTwvrfn7l8R7vy2ZqeEO6+V
-        3AsZuWmZcR/Uzpac+ruz/m+WwtLKRauRhe05EKgYzFHth5MxpFqKkpML7wgKIqW+mj3w
-        pHNg==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBp5hRw/qOxWRk4dCygV4+2OGxpoAD/iZZ4UvO7sJFY5u171hM7FV7f"
-X-RZG-CLASS-ID: mo00
-Received: from [IPv6:2001:16b8:2655:a800:246e:381e:f646:1249]
-        by smtp.strato.de (RZmta 46.1.12 AUTH)
-        with ESMTPSA id U06217w1RH2bCKd
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Thu, 27 Feb 2020 18:02:37 +0100 (CET)
-Subject: Re: [RFC 0/8] MIPS: CI20: add HDMI out support
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: text/plain; charset=us-ascii
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20200227165706.GA20296@ravnborg.org>
-Date:   Thu, 27 Feb 2020 18:02:44 +0100
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Paul Boddie <paul@boddie.org.uk>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, kernel@pyra-handheld.com,
-        letux-kernel@openphoenux.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <514B0D8F-E503-4643-BC4C-7EBAAB78213A@goldelico.com>
-References: <cover.1582744379.git.hns@goldelico.com> <20200227122325.GA7587@ravnborg.org> <8EE60F87-415A-44EA-AA49-632E232095FF@goldelico.com> <20200227165706.GA20296@ravnborg.org>
-To:     Sam Ravnborg <sam@ravnborg.org>
-X-Mailer: Apple Mail (2.3124)
+        id S1730680AbgB0Roj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Feb 2020 12:44:39 -0500
+Received: from out28-5.mail.aliyun.com ([115.124.28.5]:52317 "EHLO
+        out28-5.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730627AbgB0Roh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Feb 2020 12:44:37 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07441786|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.411568-0.0104174-0.578014;DS=CONTINUE|ham_regular_dialog|0.0594824-0.00168407-0.938833;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03305;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=23;RT=23;SR=0;TI=SMTPD_---.GtKZqhO_1582825466;
+Received: from 192.168.10.227(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GtKZqhO_1582825466)
+          by smtp.aliyun-inc.com(10.147.41.199);
+          Fri, 28 Feb 2020 01:44:28 +0800
+Subject: Re: [PATCH v6 5/7] dt-bindings: MIPS: Document Ingenic SoCs binding.
+To:     Paul Cercueil <paul@crapouillou.net>
+References: <1582215889-113034-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1582215889-113034-7-git-send-email-zhouyanjie@wanyeetech.com>
+ <20200226162907.GA13489@bogus> <1582811295.3.1@crapouillou.net>
+Cc:     Rob Herring <robh@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, tglx@linutronix.de,
+        ralf@linux-mips.org, paulburton@kernel.org,
+        jiaxun.yang@flygoat.com, chenhc@lemote.com, sboyd@kernel.org,
+        mturquette@baylibre.com, mark.rutland@arm.com,
+        daniel.lezcano@linaro.org, geert+renesas@glider.be,
+        krzk@kernel.org, ebiederm@xmission.com, miquel.raynal@bootlin.com,
+        keescook@chromium.org, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, dongsheng.qiu@ingenic.com
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <5E57FFF9.2030804@wanyeetech.com>
+Date:   Fri, 28 Feb 2020 01:44:25 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.8.0
+MIME-Version: 1.0
+In-Reply-To: <1582811295.3.1@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Sam,
-great. Thank you very much!
+Hi Paul,
 
-> Am 27.02.2020 um 17:57 schrieb Sam Ravnborg <sam@ravnborg.org>:
->=20
-> Hi Nikolaus.
->=20
->>>> Zubair Lutfullah Kakakhel (2):
->>>> dt-bindings: video: Add jz4780-lcd binding
->>>> dt-bindings: video: Add jz4780-hdmi binding
->>>>=20
->>>> .../bindings/display/ingenic-jz4780-hdmi.txt  |  41 ++++++
->>>> .../bindings/display/ingenic-jz4780-lcd.txt   |  39 ++++++
->>> New bindings in DT Schema format please...
->>> We want to have then in a formal launguage so we can use these
->>> to verify the DT files.
->>=20
->> Yes, I know. And I fully support the goal.
->>=20
->> But I personally do not have the time to learn the (IMHO =
-brain-twisting)
->> way the Schema format is working. Especially, I am not interested
->> in becoming volunteer translator for .txt based schemas developed
->> by someone else.
->>=20
->> So I hope that someone from the community can and is willing to do
->> that.
->=20
-> I went ahead and typed them - please review and use these if OK.
->=20
-> 	Sam
->=20
-> =46rom 6fee276807dfe4a502ff760e7c7840480d275052 Mon Sep 17 00:00:00 =
-2001
-> From: Sam Ravnborg <sam@ravnborg.org>
-> Date: Thu, 27 Feb 2020 17:18:29 +0100
-> Subject: [PATCH 1/2] dt-bindings: display: add ingenic-jz4780-lcd DT =
-Schema
->=20
-> Add DT bindings for the LCD controller on the jz4780 SoC
-> Based on .txt binding from Zubair Lutfullah Kakakhel
->=20
-> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
-> Cc: H. Nikolaus Schaller <hns@goldelico.com>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> ---
-> .../bindings/display/ingenic-jz4780-lcd.yaml  | 78 +++++++++++++++++++
-> 1 file changed, 78 insertions(+)
-> create mode 100644 =
-Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.yaml
->=20
-> diff --git =
-a/Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.yaml =
-b/Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.yaml
-> new file mode 100644
-> index 000000000000..c71415a3a342
-> --- /dev/null
-> +++ =
-b/Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.yaml
-> @@ -0,0 +1,78 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/ingenic-jz4780-lcd.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Bindings for Ingenic JZ4780 LCD Controller
-> +
-> +maintainers:
-> +  - Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
-> +  - H. Nikolaus Schaller <hns@goldelico.com>
-> +
-> +description: |
-> +  LCD Controller is the Display Controller for the Ingenic JZ4780 SoC
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: ingenic,jz4780-lcd
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: the address & size of the LCD controller registers
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description: Specifies the interrupt provided by parent
-> +
-> +  clocks:
-> +    maxItems: 2
-> +    description: Clock specifiers for the JZ4780_CLK_TVE =
-JZ4780_CLK_LCD0PIXCLK
-> +
-> +  clock-names:
-> +    items:
-> +      - const: lcd_clk
-> +      - const: lcd_pixclk
-> +
-> +  port:
-> +    type: object
-> +    description: |
-> +      A port node with endpoint definitions as defined in
-> +      Documentation/devicetree/bindings/media/video-interfaces.txt
-> +
-> +required:
-> +    - compatible
-> +    - reg
-> +    - interrupts
-> +    - clocks
-> +    - clock-names
-> +    - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/jz4780-cgu.h>
-> +    lcd: jz4780-lcdk@0x13050000 {
-> +        compatible =3D "ingenic,jz4780-lcd";
-> +        reg =3D <0x13050000 0x1800>;
-> +
-> +        clocks =3D <&cgu JZ4780_CLK_TVE>, <&cgu =
-JZ4780_CLK_LCD0PIXCLK>;
-> +        clock-names =3D "lcd_clk", "lcd_pixclk";
-> +
-> +        interrupt-parent =3D <&intc>;
-> +        interrupts =3D <31>;
-> +
-> +        jz4780_lcd_out: port {
-> +            #address-cells =3D <1>;
-> +            #size-cells =3D <0>;
-> +
-> +            jz4780_out_hdmi: endpoint@0 {
-> +                reg =3D <0>;
-> +                remote-endpoint =3D <&hdmi_in_lcd>;
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> --=20
-> 2.20.1
->=20
-> =46rom f4d01a657e07d468eb0bc811ed8edae0b58d66d7 Mon Sep 17 00:00:00 =
-2001
-> From: Sam Ravnborg <sam@ravnborg.org>
-> Date: Thu, 27 Feb 2020 17:52:34 +0100
-> Subject: [PATCH 2/2] dt-bindings: display: add ingenic-jz4780-ihdmi DT =
-Schema
->=20
-> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
-> Based on .txt binding from Zubair Lutfullah Kakakhel
->=20
-> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
-> Cc: H. Nikolaus Schaller <hns@goldelico.com>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> ---
-> .../bindings/display/ingenic-jz4780-hdmi.yaml | 83 +++++++++++++++++++
-> 1 file changed, 83 insertions(+)
-> create mode 100644 =
-Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
->=20
-> diff --git =
-a/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml =
-b/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
-> new file mode 100644
-> index 000000000000..9b71c427bd69
-> --- /dev/null
-> +++ =
-b/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
-> @@ -0,0 +1,83 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/ingenic-jz4780-hdmi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Bindings for Ingenic JZ4780 HDMI Transmitter
-> +
-> +maintainers:
-> +  - Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
-> +  - H. Nikolaus Schaller <hns@goldelico.com>
-> +
-> +description: |
-> +  The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys DesignWare =
-HDMI 1.4
-> +  TX controller IP with accompanying PHY IP.
-> +
-> +allOf:
-> +  - $ref: panel/panel-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: ingenic,jz4780-hdmi
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: the address & size of the LCD controller registers
-> +
-> +  reg-io-width:
-> +    const: 4
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description: Specifies the interrupt provided by parent
-> +
-> +  clocks:
-> +    maxItems: 2
-> +    description: Clock specifiers for isrf and iahb clocks
-> +
-> +  clock-names:
-> +    items:
-> +      - const: isfr
-> +      - const: iahb
-> +
-> +  ddc-i2c-bus: true
-> +  ports: true
-> +
-> +required:
-> +    - compatible
-> +    - clocks
-> +    - clock-names
-> +    - ports
-> +    - reg-io-width
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/jz4780-cgu.h>
-> +
-> +    hdmi: hdmi@10180000 {
-> +        compatible =3D "ingenic,jz4780-hdmi";
-> +        reg =3D <0x10180000 0x8000>;
-> +        reg-io-width =3D <4>;
-> +        ddc-i2c-bus =3D <&i2c4>;
-> +        interrupt-parent =3D <&intc>;
-> +        interrupts =3D <3>;
-> +        clocks =3D <&cgu JZ4780_CLK_HDMI>, <&cgu JZ4780_CLK_AHB0>;
-> +        clock-names =3D "isfr", "iahb";
-> +
-> +        ports {
-> +            hdmi_in: port {
-> +                #address-cells =3D <1>;
-> +                #size-cells =3D <0>;
-> +                hdmi_in_lcd: endpoint@0 {
-> +                    reg =3D <0>;
-> +                    remote-endpoint =3D <&jz4780_out_hdmi>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> --=20
-> 2.20.1
->=20
+On 2020年02月27日 21:48, Paul Cercueil wrote:
+> Hi,
+>
+> Le mer., févr. 26, 2020 at 10:29, Rob Herring <robh@kernel.org> a écrit :
+>> On Fri, Feb 21, 2020 at 12:24:47AM +0800, 周琰杰 (Zhou Yanjie) wrote:
+>>>  Document the available properties for the SoC root node and the
+>>>  CPU nodes of the devicetree for the Ingenic XBurst SoCs.
+>>>
+>>>  Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
+>>>  Tested-by: Paul Boddie <paul@boddie.org.uk>
+>>>  Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>>>  ---
+>>>
+>>>  Notes:
+>>>      v1->v2:
+>>>      Change the two Document from txt to yaml.
+>>>
+>>>      v2->v3:
+>>>      Fix formatting errors.
+>>>
+>>>      v3->v4:
+>>>      Fix bugs in the two yaml files.
+>>>
+>>>      v4->v5:
+>>>      No change.
+>>>
+>>>      v5->v6:
+>>>      Rewrite the two yaml files.
+>>>
+>>>   .../bindings/mips/ingenic/ingenic,cpu.yaml         | 61 
+>>> ++++++++++++++++++++++
+>>>   .../bindings/mips/ingenic/ingenic,soc.yaml         | 34 ++++++++++++
+>>>   2 files changed, 95 insertions(+)
+>>>   create mode 100644 
+>>> Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+>>>   create mode 100644 
+>>> Documentation/devicetree/bindings/mips/ingenic/ingenic,soc.yaml
+>>>
+>>>  diff --git 
+>>> a/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml 
+>>> b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+>>>  new file mode 100644
+>>>  index 00000000..ad1fd86
+>>>  --- /dev/null
+>>>  +++ b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+>>>  @@ -0,0 +1,61 @@
+>>>  +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>  +%YAML 1.2
+>>>  +---
+>>>  +$id: http://devicetree.org/schemas/mips/ingenic/ingenic,cpu.yaml#
+>>>  +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>  +
+>>>  +title: Bindings for Ingenic XBurst family CPUs
+>>>  +
+>>>  +maintainers:
+>>>  +  - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>>
+>> Blank line here.
+>>
+>>>  +description: |
+>>
+>> Drop the '|'.
+>>
+>>>  +  Ingenic XBurst family CPUs shall have the following properties.
+>>>  +
+>>>  +properties:
+>>>  +  compatible:
+>>>  +    oneOf:
+>>>  +
+>>>  +      - description: Ingenic XBurst®1 CPU Core
+>>>  +        items:
+>>>  +          - const: ingenic,xburst
+>>>  +
+>>>  +      - description: Ingenic XBurst®2 CPU Core
+>>>  +        items:
+>>>  +          - const: ingenic,xburst2
+>>
+>> enum:
+>>   - ingenic,xburst  # Ingenic XBurst®1 CPU Core
+>>   - ingenic,xburst2 # Ingenic XBurst®2 CPU Core
+>>
+>> Though I don't find the description really adds much.
+>
+> About the enum values: shouldn't they be a bit more descriptive? There 
+> has been various versions of the Xburst1 chip, with slightly different 
+> instruction sets and hardware (FPU).
 
+Sure, will change in next version.
 
-I'll integrate into v2.
-
-Now we need to make the HDMI output show something...
-
-BR,
-Nikolaus
+>
+> -Paul
+>
+>>>  +
+>>>  +  reg:
+>>>  +    description: |
+>>>  +      The number of the CPU.
+>>
+>> Drop this.
+>>
+>> Add:
+>>
+>> maxItems: 1
+>>
+>>>  +
+>>>  +required:
+>>>  +  - device_type
+>>>  +  - compatible
+>>>  +  - reg
+>>>  +
+>>>  +examples:
+>>>  +  - |
+>>>  +    #include <dt-bindings/clock/jz4780-cgu.h>
+>>>  +
+>>>  +    cpus {
+>>>  +        #address-cells = <1>;
+>>>  +        #size-cells = <0>;
+>>>  +
+>>>  +        cpu0: cpu@0 {
+>>>  +            device_type = "cpu";
+>>>  +            compatible = "ingenic,xburst";
+>>>  +            reg = <0>;
+>>>  +
+>>
+>>>  +            clocks = <&cgu JZ4780_CLK_CPU>;
+>>>  +            clock-names = "cpu";
+>>
+>> Not documented.
+>>
+>>>  +        };
+>>>  +
+>>>  +        cpu1: cpu@1 {
+>>>  +            device_type = "cpu";
+>>>  +            compatible = "ingenic,xburst";
+>>>  +            reg = <1>;
+>>>  +
+>>>  +            clocks = <&cgu JZ4780_CLK_CORE1>;
+>>>  +            clock-names = "cpu";
+>>>  +        };
+>>>  +    };
+>>>  +...
+>>>  diff --git 
+>>> a/Documentation/devicetree/bindings/mips/ingenic/ingenic,soc.yaml 
+>>> b/Documentation/devicetree/bindings/mips/ingenic/ingenic,soc.yaml
+>>>  new file mode 100644
+>>>  index 00000000..8943e73
+>>>  --- /dev/null
+>>>  +++ b/Documentation/devicetree/bindings/mips/ingenic/ingenic,soc.yaml
+>>>  @@ -0,0 +1,34 @@
+>>>  +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>  +%YAML 1.2
+>>>  +---
+>>>  +$id: http://devicetree.org/schemas/mips/ingenic/ingenic,soc.yaml#
+>>>  +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>  +
+>>>  +title: Bindings for Ingenic SoCs with XBurst CPU inside.
+>>>  +
+>>>  +maintainers:
+>>>  +  - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>>
+>> Blank line.
+>>
+>>>  +description: |
+>>>  +  Ingenic SoCs with XBurst CPU inside shall have the following 
+>>> properties.
+>>>  +
+>>>  +properties:
+>>>  +  $nodename:
+>>>  +    const: '/'
+>>>  +  compatible:
+>>>  +    oneOf:
+>>>  +
+>>>  +      - description: Ingenic JZ47 Series Mobile Application Processor
+>>>  +        items:
+>>>  +          - const: ingenic,jz4740
+>>>  +          - const: ingenic,jz4725b
+>>>  +          - const: ingenic,jz4760
+>>>  +          - const: ingenic,jz4760b
+>>>  +          - const: ingenic,jz4770
+>>>  +          - const: ingenic,jz4780
+>>
+>> This is defining the root compatible is 6 strings. You want a enum here
+>> I think.
+>>
+>>>  +
+>>>  +      - description: Ingenic X Series IoT Application Processor
+>>>  +        items:
+>>>  +          - const: ingenic,x1000
+>>>  +          - const: ingenic,x1000e
+>>>  +          - const: ingenic,x1500
+>>
+>> Same here.
+>>
+>> Did you validate your dts file with this schema using 'make dtbs_check'?
+>>
+>> Rob
+>
 
