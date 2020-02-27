@@ -2,136 +2,167 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 846F81717ED
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2020 13:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B99171D99
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2020 15:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729072AbgB0M5M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Feb 2020 07:57:12 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.164]:16197 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729052AbgB0M5M (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Feb 2020 07:57:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582808229;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=EHgVmvZBm7FfOuRidNTu7QhYG4ewtZHDd8hCpQzwN2Q=;
-        b=c2wVMIZTfqD2nSvBfByPStDh8GB9l6h/fSUPzIguOqBArUUUg6DJNI0MK378VPNOrb
-        vKxq1AMza6s3e96demUW0X8AAZuJElKKWwcRa+JIWIjOGRx6QuLpIKEzzcKfz3oNQ9nD
-        A0OR5rMfqAq3IZ2IoEUOoNzcthusMRUg1XYZy24yRtgsVjxMTKTMo3NLpP5rUDRqJ5xD
-        MopDATaaEO4UdIaJx2ljDd3hrAlAVVfSESc9VQEL0M2ATZivvgiO5emV4LnDnizSmkkD
-        NrkDDPzBor3odLbO/cfV7D/SR+WZWgst9CERkMmU4eN4Joy4b344C6Eq7W4ELUVBYsDG
-        cElA==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBp5hRw/qOxWRk4dCygV4+2OGxpoAr2x7EvFYqujh1U+3K41Uc/x8xM"
-X-RZG-CLASS-ID: mo00
-Received: from [IPv6:2001:16b8:2655:a800:8035:ee61:8f08:2eb7]
-        by smtp.strato.de (RZmta 46.1.12 AUTH)
-        with ESMTPSA id U06217w1RCuoAsJ
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Thu, 27 Feb 2020 13:56:50 +0100 (CET)
-Subject: Re: [RFC 0/8] MIPS: CI20: add HDMI out support
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: text/plain; charset=us-ascii
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20200227122325.GA7587@ravnborg.org>
-Date:   Thu, 27 Feb 2020 13:56:56 +0100
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Paul Boddie <paul@boddie.org.uk>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        id S2389376AbgB0OVu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Feb 2020 09:21:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56448 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389485AbgB0OQV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 27 Feb 2020 09:16:21 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5D2482469F;
+        Thu, 27 Feb 2020 14:16:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582812980;
+        bh=A82Y9A3U3/P7mYTp+rSrNOhL2WJfvMTsvO8YMvEjdtk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Y0gd5iGwQNI5jynl7KeijZ4g1eGd5j5qSF5Mp8HbExmLQEPe4saPrSoMRPKgqtTlX
+         krZVdYH7RgZF2mKWi9P02IVlBEvNqe/4mho7FyTaUqVU1jDBP1jcIQ5cGrukoA30y7
+         50qqx21/LKOFAXN2AEZ7l0iXurdo4YJvqsEG9YuA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, kernel@pyra-handheld.com,
-        letux-kernel@openphoenux.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <8EE60F87-415A-44EA-AA49-632E232095FF@goldelico.com>
-References: <cover.1582744379.git.hns@goldelico.com> <20200227122325.GA7587@ravnborg.org>
-To:     Sam Ravnborg <sam@ravnborg.org>
-X-Mailer: Apple Mail (2.3124)
+        Zhou Yanjie <zhouyanjie@wanyeetech.com>, od@zcrc.me,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 5.5 063/150] MIPS: ingenic: DTS: Fix watchdog nodes
+Date:   Thu, 27 Feb 2020 14:36:40 +0100
+Message-Id: <20200227132242.322641300@linuxfoundation.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200227132232.815448360@linuxfoundation.org>
+References: <20200227132232.815448360@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Sam,
+From: Paul Cercueil <paul@crapouillou.net>
 
-> Am 27.02.2020 um 13:23 schrieb Sam Ravnborg <sam@ravnborg.org>:
-> 
-> Hi Nikolaus.
-> 
-> On Wed, Feb 26, 2020 at 08:12:52PM +0100, H. Nikolaus Schaller wrote:
->> This patch series adds HDMI output to the jz4780/CI20 board.
->> 
->> It is based on taking the old 3.18 vendor kernel and trying
->> to achieve the same with modern DTS setup and new/modified
->> drivers.
->> 
->> Unfortunately, in this first RFC, only EDID and creation of
->> /dev/fb0 are working. Also, HDMI hot plugging is detected.
->> 
->> But there is no HDMI output signal. So some tiny piece seems
->> to be missing to enable/configure the Synposys HDMI controller.
->> 
->> We need help from the community to fix this.
->> 
->> Note: device tree bindings are from 2015 and still seem to
->> fit - except they are not in yaml format.
->> 
->> Original authors of most patches are
->> * Paul Boddie <paul@boddie.org.uk>
->> * Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
->> 
->> 
->> H. Nikolaus Schaller (2):
->>  drm: ingenic-drm: add MODULE_DEVICE_TABLE
->>  MIPS: CI20: defconfig: configure for DRM_DW_HDMI_JZ4780
->> 
->> Paul Boddie (4):
->>  drm: ingenic: add jz4780 Synopsys HDMI driver.
->>  pinctrl: ingenic: add hdmi-ddc pin control group
->>  MIPS: DTS: jz4780: account for Synopsys HDMI driver and LCD controller
->>  MIPS: DTS: CI20: add HDMI setup
->> 
->> Zubair Lutfullah Kakakhel (2):
->>  dt-bindings: video: Add jz4780-lcd binding
->>  dt-bindings: video: Add jz4780-hdmi binding
->> 
->> .../bindings/display/ingenic-jz4780-hdmi.txt  |  41 ++++++
->> .../bindings/display/ingenic-jz4780-lcd.txt   |  39 ++++++
-> New bindings in DT Schema format please...
-> We want to have then in a formal launguage so we can use these
-> to verify the DT files.
+commit 11479e8e3cd896673a15af21cd0f145a4752f01a upstream.
 
-Yes, I know. And I fully support the goal.
+The devicetree ABI was broken on purpose by commit 6d532143c915
+("watchdog: jz4740: Use regmap provided by TCU driver"), and
+commit 1d9c30745455 ("watchdog: jz4740: Use WDT clock provided
+by TCU driver"). The commit message of the latter explains why the ABI
+was broken.
 
-But I personally do not have the time to learn the (IMHO brain-twisting)
-way the Schema format is working. Especially, I am not interested
-in becoming volunteer translator for .txt based schemas developed
-by someone else.
+However, the current devicetree files were not updated to the new ABI
+described in Documentation/devicetree/bindings/timer/ingenic,tcu.txt,
+so the watchdog driver would not probe.
 
-So I hope that someone from the community can and is willing to do
-that.
+Fix this problem by updating the watchdog nodes to comply with the new
+ABI.
 
-Or that there will appear good tools soon. E.g. some GUI
-based editor tool would be very helpful so that you don't have
-to fight with the yaml indentation rules. Like there are XML
-and DTD editors. And even HTML is rarely written manually any more.
+Fixes: 6d532143c915 ("watchdog: jz4740: Use regmap provided by TCU driver")
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Signed-off-by: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Cc: od@zcrc.me
+Cc: linux-mips@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: <stable@vger.kernel.org> # v5.5+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-IMHO such tools should have been developed and in place *before*
-the rule to provide DT schemata is enforced.
+---
+ arch/mips/boot/dts/ingenic/jz4740.dtsi |   17 +++++++++--------
+ arch/mips/boot/dts/ingenic/jz4780.dtsi |   17 +++++++++--------
+ 2 files changed, 18 insertions(+), 16 deletions(-)
 
-Anyways, I have requested for comments (and did expect this one).
+--- a/arch/mips/boot/dts/ingenic/jz4740.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4740.dtsi
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <dt-bindings/clock/jz4740-cgu.h>
++#include <dt-bindings/clock/ingenic,tcu.h>
+ 
+ / {
+ 	#address-cells = <1>;
+@@ -45,14 +46,6 @@
+ 		#clock-cells = <1>;
+ 	};
+ 
+-	watchdog: watchdog@10002000 {
+-		compatible = "ingenic,jz4740-watchdog";
+-		reg = <0x10002000 0x10>;
+-
+-		clocks = <&cgu JZ4740_CLK_RTC>;
+-		clock-names = "rtc";
+-	};
+-
+ 	tcu: timer@10002000 {
+ 		compatible = "ingenic,jz4740-tcu", "simple-mfd";
+ 		reg = <0x10002000 0x1000>;
+@@ -73,6 +66,14 @@
+ 
+ 		interrupt-parent = <&intc>;
+ 		interrupts = <23 22 21>;
++
++		watchdog: watchdog@0 {
++			compatible = "ingenic,jz4740-watchdog";
++			reg = <0x0 0xc>;
++
++			clocks = <&tcu TCU_CLK_WDT>;
++			clock-names = "wdt";
++		};
+ 	};
+ 
+ 	rtc_dev: rtc@10003000 {
+--- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <dt-bindings/clock/jz4780-cgu.h>
++#include <dt-bindings/clock/ingenic,tcu.h>
+ #include <dt-bindings/dma/jz4780-dma.h>
+ 
+ / {
+@@ -67,6 +68,14 @@
+ 
+ 		interrupt-parent = <&intc>;
+ 		interrupts = <27 26 25>;
++
++		watchdog: watchdog@0 {
++			compatible = "ingenic,jz4780-watchdog";
++			reg = <0x0 0xc>;
++
++			clocks = <&tcu TCU_CLK_WDT>;
++			clock-names = "wdt";
++		};
+ 	};
+ 
+ 	rtc_dev: rtc@10003000 {
+@@ -348,14 +357,6 @@
+ 		status = "disabled";
+ 	};
+ 
+-	watchdog: watchdog@10002000 {
+-		compatible = "ingenic,jz4780-watchdog";
+-		reg = <0x10002000 0x10>;
+-
+-		clocks = <&cgu JZ4780_CLK_RTCLK>;
+-		clock-names = "rtc";
+-	};
+-
+ 	nemc: nemc@13410000 {
+ 		compatible = "ingenic,jz4780-nemc";
+ 		reg = <0x13410000 0x10000>;
 
-BR and thanks,
-Nikolaus
 
