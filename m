@@ -2,153 +2,223 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E57172271
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2020 16:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B38901722F5
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2020 17:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729155AbgB0PoF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Feb 2020 10:44:05 -0500
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:42354 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727592AbgB0PoF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Feb 2020 10:44:05 -0500
-Received: by mail-qk1-f196.google.com with SMTP id o28so3526130qkj.9
-        for <linux-mips@vger.kernel.org>; Thu, 27 Feb 2020 07:44:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wn7yl2Jq2Fl2viHR/z3oycBlaCFeKLGqA/GdW8BUipY=;
-        b=pRwZc/IBC1UN7pBp5P6PVA2NTAFM5oS+T0rbCG13+mHAMIjtgKxdkjsgOabejAi/uI
-         0BwcR7HVAxjsXnolNYqxUyMmDILICIHnks8YtMKpS6KunQFr+kvJ97y+PFZUr8D3/gQM
-         oaxWU9xsSBci++MQw6cO35wlMZbT2KvBCCpafkrb0MvCcFDHftZ65q3i4BW2Y0yuS0w1
-         6OexoDsTryL5QC+cfNHWL23AgYgHzpnctg2GVM5PvTM18+ZVDz+AFhC//FAubfjf4S+o
-         9eAvSv2yhhYmXuNCoMkixywbw5XSHDd00BDRCf/mriLabyGhiTYc//GjbxYGgOTx5v4o
-         PsjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wn7yl2Jq2Fl2viHR/z3oycBlaCFeKLGqA/GdW8BUipY=;
-        b=q4yg+2ccB2CqHvvvBJJMJso/3LnXlRF7ztDO8chtS+K7LICmB2KHSCnx8gzrorZVY0
-         iXIm7twvO0IpADvKd30npIfQIeV97u0mfmmhNimH7S49jRSQt9u37JISEz1dNc7LJOgp
-         +HRElqxzzVgIEA8nlT46sLt18eBo+obgm+9YkyGeK99dI0ZhQnu7LwFzBKqGTd15LSzK
-         JABserkrv3eRpC8L8M9mEreFQugmjj717hHw0MFpwPK6VSxhpC3PQnoThapissWOkvQX
-         EUXqHKK6/By+Htqmn/5SfClFoCbttQM0iusKH6duld+T9q+cNw4AfxUqW/o6P/0p0Z32
-         TIwA==
-X-Gm-Message-State: APjAAAXJ8Y52nY59nCpWNl2T5juvIcYHWxsr2cuHGyy5QB1BqiHCcOG1
-        Vz4S+XYkkTatC1Nv99sFqqiNJh8O7490AVGZq1pcPYAnOGlMYw==
-X-Google-Smtp-Source: APXvYqxpyafFsFsvCDsYp8nP8iI/0tXCZ+wxP4DWz7dKkeh7Pwc6VKy3mMkLfuRKTgPUtwyfb6Vd2uVgaowDwce41i4=
-X-Received: by 2002:a05:620a:13b5:: with SMTP id m21mr5811381qki.469.1582818244582;
- Thu, 27 Feb 2020 07:44:04 -0800 (PST)
+        id S1729258AbgB0QOG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Feb 2020 11:14:06 -0500
+Received: from out28-100.mail.aliyun.com ([115.124.28.100]:48667 "EHLO
+        out28-100.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728059AbgB0QOG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Feb 2020 11:14:06 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07442147|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.342885-0.0140584-0.643056;DS=CONTINUE|ham_regular_dialog|0.0309896-0.00151637-0.967494;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03295;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=23;RT=23;SR=0;TI=SMTPD_---.GtIG5Hb_1582820033;
+Received: from 192.168.10.227(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GtIG5Hb_1582820033)
+          by smtp.aliyun-inc.com(10.147.43.95);
+          Fri, 28 Feb 2020 00:13:54 +0800
+Subject: Re: [PATCH v6 5/7] dt-bindings: MIPS: Document Ingenic SoCs binding.
+To:     Rob Herring <robh@kernel.org>
+References: <1582215889-113034-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1582215889-113034-7-git-send-email-zhouyanjie@wanyeetech.com>
+ <20200226162907.GA13489@bogus>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        tglx@linutronix.de, ralf@linux-mips.org, paulburton@kernel.org,
+        jiaxun.yang@flygoat.com, chenhc@lemote.com, sboyd@kernel.org,
+        mturquette@baylibre.com, mark.rutland@arm.com,
+        daniel.lezcano@linaro.org, paul@crapouillou.net,
+        geert+renesas@glider.be, krzk@kernel.org, ebiederm@xmission.com,
+        miquel.raynal@bootlin.com, keescook@chromium.org,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com,
+        dongsheng.qiu@ingenic.com
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <5E57EAC0.8040806@wanyeetech.com>
+Date:   Fri, 28 Feb 2020 00:13:52 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.8.0
 MIME-Version: 1.0
-References: <20200227144910.GA25011@alpha.franken.de>
-In-Reply-To: <20200227144910.GA25011@alpha.franken.de>
-From:   YunQiang Su <wzssyqa@gmail.com>
-Date:   Thu, 27 Feb 2020 23:43:53 +0800
-Message-ID: <CAKcpw6Vt2dDm2D8kv_zyShNH=tSoaOiCabR-gZZmGGavg+19mQ@mail.gmail.com>
-Subject: Re: MIPS Hardware support
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200226162907.GA13489@bogus>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Thomas Bogendoerfer <tsbogend@alpha.franken.de> =E4=BA=8E2020=E5=B9=B42=E6=
-=9C=8827=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8B=E5=8D=8810:49=E5=86=99=E9=81=
-=93=EF=BC=9A
->
-> Hi,
->
-> we have 47 MIPS system types and I'd like to get an overview how alive
-> they really are. I've already grouped the 47 systems a little bit by
-> hardware I already own and regulary test kernels. Could you please
-> give me some feedback about the "unclassified" systems ? What systems
-> are supported by qemu (real test not just repeating qemu docs) ?
-> Thank you for your help.
->
-> Thomas.
->
-> Hardware I own and regulary boot current kernels:
->
-> Jazz family of machines (MACH_JAZZ)     /* runs with qemu */
-> SGI IP22 (Indy/Indigo2) (SGI_IP22)
-> SGI IP27 (Origin200/2000) (SGI_IP27)
-> SGI IP28 (Indigo2 R10k) (SGI_IP28)
-> SGI IP30 (Octane/Octane2) (SGI_IP30)
-> SGI IP32 (O2) (SGI_IP32)
-> SNI RM200/300/400 (SNI_RM)
->
-> Hardware I own, but not booted for a while:
->
-> Texas Instruments AR7 (AR7)
-> Cobalt Server (MIPS_COBALT)
-> DECstations (MACH_DECSTATION)
-> Lantiq based platforms (LANTIQ)
-> Ralink based machines (RALINK)
-> Sibyte BCM91480B-BigSur (SIBYTE_BIGSUR)
->
-> Unclassified:
->
-> Generic board-agnostic MIPS kernel (MIPS_GENERIC)
-> Alchemy processor based machines (MIPS_ALCHEMY)
-> Atheros AR231x/AR531x SoC support (ATH25)
-> Atheros AR71XX/AR724X/AR913X based boards (ATH79)
-> Broadcom Generic BMIPS kernel (BMIPS_GENERIC)
-> Broadcom BCM47XX based boards (BCM47XX)
-> Broadcom BCM63XX based boards (BCM63XX)
-> Ingenic SoC based machines (MACH_INGENIC)
-> LASAT Networks platforms (LASAT)
-> Loongson 32-bit family of machines (MACH_LOONGSON32)
-> Loongson-2E/F family of machines (MACH_LOONGSON2EF)
-> Loongson 64-bit family of machines (MACH_LOONGSON64)
-> IMG Pistachio SoC based boards (MACH_PISTACHIO)
-> MIPS Malta board (MIPS_MALTA)
+Hi Rob,
 
-I am using it with MIPS I6500/I6400(r6) and MIPS64R2-generic CPU
-to test Debian.
-
-> Microchip PIC32 Family (MACH_PIC32)
-> NEC EMMA2RH Mark-eins board (NEC_MARKEINS)
-> NEC VR4100 series based machines (MACH_VR41XX)
-> NXP STB220 board (NXP_STB220)
-> NXP 225 board (NXP_STB225)
-> PMC-Sierra MSP chipsets (PMC_MSP)
-> Sibyte BCM91120C-CRhine (SIBYTE_CRHINE)
-> Sibyte BCM91120x-Carmel (SIBYTE_CARMEL)
-> Sibyte BCM91125C-CRhone (SIBYTE_CRHONE)
-> Sibyte BCM91125E-Rhone (SIBYTE_RHONE)
-> Sibyte BCM91250A-SWARM (SIBYTE_SWARM)
-> Sibyte BCM91250C2-LittleSur (SIBYTE_LITTLESUR)
-> Sibyte BCM91250E-Sentosa (SIBYTE_SENTOSA)
-> Toshiba TX39 series based machines (MACH_TX39XX)
-> Toshiba TX49 series based machines (MACH_TX49XX)
-> Mikrotik RB532 boards (MIKROTIK_RB532)
-> Cavium Networks Octeon SoC based boards (CAVIUM_OCTEON_SOC)
-
-Debian has some to work as build farm and porterbox.
-https://db.debian.org/machines.cgi
-Search mips there.
-
-> Netlogic XLR/XLS based systems (NLM_XLR_BOARD)
-> Netlogic XLP based systems (NLM_XLP_BOARD)
-> Para-Virtualized guest system (MIPS_PARAVIRT)
+On 2020年02月27日 00:29, Rob Herring wrote:
+> On Fri, Feb 21, 2020 at 12:24:47AM +0800, 周琰杰 (Zhou Yanjie) wrote:
+>> Document the available properties for the SoC root node and the
+>> CPU nodes of the devicetree for the Ingenic XBurst SoCs.
+>>
+>> Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
+>> Tested-by: Paul Boddie <paul@boddie.org.uk>
+>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>> ---
+>>
+>> Notes:
+>>      v1->v2:
+>>      Change the two Document from txt to yaml.
+>>      
+>>      v2->v3:
+>>      Fix formatting errors.
+>>      
+>>      v3->v4:
+>>      Fix bugs in the two yaml files.
+>>      
+>>      v4->v5:
+>>      No change.
+>>      
+>>      v5->v6:
+>>      Rewrite the two yaml files.
+>>
+>>   .../bindings/mips/ingenic/ingenic,cpu.yaml         | 61 ++++++++++++++++++++++
+>>   .../bindings/mips/ingenic/ingenic,soc.yaml         | 34 ++++++++++++
+>>   2 files changed, 95 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+>>   create mode 100644 Documentation/devicetree/bindings/mips/ingenic/ingenic,soc.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+>> new file mode 100644
+>> index 00000000..ad1fd86
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mips/ingenic/ingenic,cpu.yaml
+>> @@ -0,0 +1,61 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mips/ingenic/ingenic,cpu.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Bindings for Ingenic XBurst family CPUs
+>> +
+>> +maintainers:
+>> +  - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> Blank line here.
 >
+>> +description: |
+> Drop the '|'.
+>
+>> +  Ingenic XBurst family CPUs shall have the following properties.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    oneOf:
+>> +
+>> +      - description: Ingenic XBurst®1 CPU Core
+>> +        items:
+>> +          - const: ingenic,xburst
+>> +
+>> +      - description: Ingenic XBurst®2 CPU Core
+>> +        items:
+>> +          - const: ingenic,xburst2
+> enum:
+>    - ingenic,xburst  # Ingenic XBurst®1 CPU Core
+>    - ingenic,xburst2 # Ingenic XBurst®2 CPU Core
+>
+> Though I don't find the description really adds much.
+>
+>> +
+>> +  reg:
+>> +    description: |
+>> +      The number of the CPU.
+> Drop this.
+>
+> Add:
+>
+> maxItems: 1
+>
+>> +
+>> +required:
+>> +  - device_type
+>> +  - compatible
+>> +  - reg
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/clock/jz4780-cgu.h>
+>> +
+>> +    cpus {
+>> +    	#address-cells = <1>;
+>> +    	#size-cells = <0>;
+>> +
+>> +    	cpu0: cpu@0 {
+>> +    		device_type = "cpu";
+>> +    		compatible = "ingenic,xburst";
+>> +    		reg = <0>;
+>> +
+>> +    		clocks = <&cgu JZ4780_CLK_CPU>;
+>> +    		clock-names = "cpu";
+> Not documented.
+>
+>> +    	};
+>> +
+>> +    	cpu1: cpu@1 {
+>> +    		device_type = "cpu";
+>> +    		compatible = "ingenic,xburst";
+>> +    		reg = <1>;
+>> +
+>> +    		clocks = <&cgu JZ4780_CLK_CORE1>;
+>> +    		clock-names = "cpu";
+>> +    	};
+>> +    };
+>> +...
+>> diff --git a/Documentation/devicetree/bindings/mips/ingenic/ingenic,soc.yaml b/Documentation/devicetree/bindings/mips/ingenic/ingenic,soc.yaml
+>> new file mode 100644
+>> index 00000000..8943e73
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mips/ingenic/ingenic,soc.yaml
+>> @@ -0,0 +1,34 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mips/ingenic/ingenic,soc.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Bindings for Ingenic SoCs with XBurst CPU inside.
+>> +
+>> +maintainers:
+>> +  - 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> Blank line.
+>
+>> +description: |
+>> +  Ingenic SoCs with XBurst CPU inside shall have the following properties.
+>> +
+>> +properties:
+>> +  $nodename:
+>> +    const: '/'
+>> +  compatible:
+>> +    oneOf:
+>> +
+>> +      - description: Ingenic JZ47 Series Mobile Application Processor
+>> +        items:
+>> +          - const: ingenic,jz4740
+>> +          - const: ingenic,jz4725b
+>> +          - const: ingenic,jz4760
+>> +          - const: ingenic,jz4760b
+>> +          - const: ingenic,jz4770
+>> +          - const: ingenic,jz4780
+> This is defining the root compatible is 6 strings. You want a enum here
+> I think.
+>
+>> +
+>> +      - description: Ingenic X Series IoT Application Processor
+>> +        items:
+>> +          - const: ingenic,x1000
+>> +          - const: ingenic,x1000e
+>> +          - const: ingenic,x1500
+> Same here.
+>
+> Did you validate your dts file with this schema using 'make dtbs_check'?
 
-A Russian company have a MIPS P5600. It is not supported by upstream kernel=
-.
-https://www.mips.com/products/warrior/p-class-p5600-multiprocessor-core/
-https://en.wikichip.org/wiki/baikal/baikal-t1
+I am very sorry, to be honest, because I was not familiar with yaml before,
+the previous versions have not been verified, but when v6, I have set up
+the environment and checked it with "make dt_binding_check", but I
+don't know why the problems you pointed out above were not prompted
+during the check. I will fix these problems in the next version.
 
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
-y a
-> good idea.                                                [ RFC1925, 2.3 =
-]
+Thanks and best regards!
 
+>
+> Rob
 
-
---=20
-YunQiang Su
