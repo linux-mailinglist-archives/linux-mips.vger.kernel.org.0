@@ -2,98 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C60451715AA
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2020 12:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 302EF17170B
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2020 13:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728854AbgB0LHT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Feb 2020 06:07:19 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:36781 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728761AbgB0LHS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Feb 2020 06:07:18 -0500
-Received: by mail-pl1-f193.google.com with SMTP id a6so1000999plm.3;
-        Thu, 27 Feb 2020 03:07:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=lmJQ36No1Gca/vcFrG4Eq9htTy7KPRzUbksdwrxz8LI=;
-        b=FY89/SsX+eLNCZfl66UEb1ue7T2rDlxc39BUUNyQcUvYHLhQYmTZm8AV265dDcZriC
-         n+pnoFgE+Sf8zXMbshaCCS6PUdHyFAtJ6zdH/VH1FXYuwfzu7iVLsjLF6SXNOrrDux5S
-         VamD+96xP7YyeTt6xJaJYHlRfPSsbdooqEZo5JblB/xTNMzIpcuEBudbBh1o9hd+8Pp3
-         VCC1Cl49y6FD+xnV0DQbsVUKowy7XWxJSXmwRChAoXpyUp1BbPkGQQ1IWMsgmCulUb0i
-         idnYS7ecLxRWLTUTaFORqK3tstLgLRTwqSSk0D4o9TOL/U8ZbVv3Bk/xfDvuCNpgSmSI
-         BGEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=lmJQ36No1Gca/vcFrG4Eq9htTy7KPRzUbksdwrxz8LI=;
-        b=B7feNdwjh5TqNbMKHGaFRUmb0LEZVI3udn9LqR1WtmSU5BNehdbZhO/LCW4wWt2kY1
-         Hd1M62LNST72ZMH62bJjgFdhYY2HIp5yoDZYDU3e8p/6kKQ25gQJ4xLHHrS+P7TXNO5d
-         k/NHR+dO7Y5iBrR1ViLPHNwZmDmpBHIqY7jnMYNnQ8fXD3VLcqwy3gnlROLGnP8etXRo
-         RfqOrOcNltSWjfMAAb6BS60kh9eH3v7oZpoStYmlEYMYScYgusAjiSw/XGsnPsG62b7+
-         3zNVbGXiELxRCmpALBIb7VZzpUI0L6x4tlTrohpnKBGzqvA7nMoQzxQy+GsciFBx+FlC
-         zlkw==
-X-Gm-Message-State: APjAAAUOf6w8sbfVyKcn0SEoeoz1+JCCGXDTdudsgVdtGnZSJFgmIeZV
-        fY0MeI1uRkSmdKBE3G+S6QI=
-X-Google-Smtp-Source: APXvYqxWerA+MNtWPhmtZePrzWtN41f/X1PPHbm1Zy+BYl6m6MsiGmn5uHRszUhnUu+SXUCNhUoPbQ==
-X-Received: by 2002:a17:902:8b89:: with SMTP id ay9mr3891143plb.309.1582801636613;
-        Thu, 27 Feb 2020 03:07:16 -0800 (PST)
-Received: from localhost ([106.51.232.35])
-        by smtp.gmail.com with ESMTPSA id c5sm6662799pfi.10.2020.02.27.03.07.15
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 27 Feb 2020 03:07:15 -0800 (PST)
-Date:   Thu, 27 Feb 2020 16:37:13 +0530
-From:   afzal mohammed <afzal.mohd.ma@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, x86@kernel.org,
-        linux-sh@vger.kernel.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-ia64@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-c6x-dev@linux-c6x.org, linux-omap@vger.kernel.org,
-        linux-alpha@vger.kernel.org, Julia Lawall <Julia.Lawall@lip6.fr>,
-        Gilles Muller <Gilles.Muller@lip6.fr>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Michal Marek <michal.lkml@markovi.net>
-Subject: Re: [PATCH 00/18] genirq: Remove setup_irq()
-Message-ID: <20200227110713.GA5708@afzalpc>
-References: <cover.1581478323.git.afzal.mohd.ma@gmail.com>
- <87y2somido.fsf@nanos.tec.linutronix.de>
+        id S1729010AbgB0MXg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Feb 2020 07:23:36 -0500
+Received: from asavdk4.altibox.net ([109.247.116.15]:56864 "EHLO
+        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728929AbgB0MXg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 Feb 2020 07:23:36 -0500
+Received: from ravnborg.org (unknown [158.248.194.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk4.altibox.net (Postfix) with ESMTPS id 0E14C804D0;
+        Thu, 27 Feb 2020 13:23:26 +0100 (CET)
+Date:   Thu, 27 Feb 2020 13:23:25 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Paul Boddie <paul@boddie.org.uk>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, kernel@pyra-handheld.com,
+        letux-kernel@openphoenux.org
+Subject: Re: [RFC 0/8] MIPS: CI20: add HDMI out support
+Message-ID: <20200227122325.GA7587@ravnborg.org>
+References: <cover.1582744379.git.hns@goldelico.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87y2somido.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.9.3 (2018-01-21)
+In-Reply-To: <cover.1582744379.git.hns@goldelico.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=XpTUx2N9 c=1 sm=1 tr=0
+        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
+        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10 a=ptjrNaXRAAAA:8
+        a=r_1tXGB3AAAA:8 a=ewWNKpoYB36fyWn1uZ8A:9 a=CjuIK1q_8ugA:10
+        a=6TjziPoOuUJhFL2Tmcc1:22 a=t8nPyN_e6usw4ciXM-Pk:22
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+Hi Nikolaus.
 
-On Thu, Feb 27, 2020 at 11:31:15AM +0100, Thomas Gleixner wrote:
-
-> Vs. merging this series, I suggest the following approach:
+On Wed, Feb 26, 2020 at 08:12:52PM +0100, H. Nikolaus Schaller wrote:
+> This patch series adds HDMI output to the jz4780/CI20 board.
 > 
->    - Resubmit the individual changes as single patches or small series
->      to the relevant maintainers and subsystem mailing lists. They have
->      no dependency on a core change and can be applied where they belong
->      to.
+> It is based on taking the old 3.18 vendor kernel and trying
+> to achieve the same with modern DTS setup and new/modified
+> drivers.
 > 
->    - After 5.6-rc6, verify which parts have made their way into
->      linux-next and resubmit the ignored ones as a series to me along
->      with the removal of the core parts.
+> Unfortunately, in this first RFC, only EDID and creation of
+> /dev/fb0 are working. Also, HDMI hot plugging is detected.
 > 
-> That way we can avoid conflicting changes between subsystems and the tip
-> irq/core branch as much as possible.
+> But there is no HDMI output signal. So some tiny piece seems
+> to be missing to enable/configure the Synposys HDMI controller.
+> 
+> We need help from the community to fix this.
+> 
+> Note: device tree bindings are from 2015 and still seem to
+> fit - except they are not in yaml format.
+> 
+> Original authors of most patches are
+> * Paul Boddie <paul@boddie.org.uk>
+> * Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
+> 
+> 
+> H. Nikolaus Schaller (2):
+>   drm: ingenic-drm: add MODULE_DEVICE_TABLE
+>   MIPS: CI20: defconfig: configure for DRM_DW_HDMI_JZ4780
+> 
+> Paul Boddie (4):
+>   drm: ingenic: add jz4780 Synopsys HDMI driver.
+>   pinctrl: ingenic: add hdmi-ddc pin control group
+>   MIPS: DTS: jz4780: account for Synopsys HDMI driver and LCD controller
+>   MIPS: DTS: CI20: add HDMI setup
+> 
+> Zubair Lutfullah Kakakhel (2):
+>   dt-bindings: video: Add jz4780-lcd binding
+>   dt-bindings: video: Add jz4780-hdmi binding
+> 
+>  .../bindings/display/ingenic-jz4780-hdmi.txt  |  41 ++++++
+>  .../bindings/display/ingenic-jz4780-lcd.txt   |  39 ++++++
+New bindings in DT Schema format please...
+We want to have then in a formal launguage so we can use these
+to verify the DT files.
 
-Okay, i will do accordingly.
-
-[ your mail crossed my v3 (only one patch) posting ]
-
-Regards
-afzal
+	Sam
