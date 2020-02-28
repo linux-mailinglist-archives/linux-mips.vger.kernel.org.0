@@ -2,22 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C73F173FD4
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2020 19:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5151741CA
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2020 23:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbgB1Smz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Feb 2020 13:42:55 -0500
-Received: from asavdk3.altibox.net ([109.247.116.14]:44760 "EHLO
-        asavdk3.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbgB1Smz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Feb 2020 13:42:55 -0500
-Received: from ravnborg.org (unknown [158.248.194.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by asavdk3.altibox.net (Postfix) with ESMTPS id 2EED82004C;
-        Fri, 28 Feb 2020 19:42:44 +0100 (CET)
-Date:   Fri, 28 Feb 2020 19:42:42 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
+        id S1726287AbgB1WF5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Feb 2020 17:05:57 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:35741 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726077AbgB1WF5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Feb 2020 17:05:57 -0500
+Received: by mail-lf1-f66.google.com with SMTP id z9so3239917lfa.2
+        for <linux-mips@vger.kernel.org>; Fri, 28 Feb 2020 14:05:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C8LpeFRkJkAVGCGFA7ZkDQ8EDfylVrvQYhKNrzB5Agw=;
+        b=ojCXi//c/Oh73F5Il6IazTwlBEsFoNfw47/YGyUECYl4dvUC6WgxSI3iyIlBLbz3mZ
+         OSWB0BXF+JhGvD/zk+/GTAVNuJymMfHWiE5Sv3OzrtLzD8wvItVwx6Rc09jJQNdTPYzX
+         r+nTnXjxGnxb2Xi53R4UsUcTjKMg0E5gsaEkeqNNdoLNPTlR4pZw9KtGmo/qhkaQZY0q
+         Ebc8ul2qrGS9XuhqUFeb5gUHcchMPES2yWxB5pCRDT3o5006DzOBQ6kNkjHlHYrGFg3y
+         /wC1+1VRU56iKegko8xSykYkKhnvdO+/IIHG94etItcj9WvTOxgl9cgYOkx6IiaBsY6G
+         TagQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C8LpeFRkJkAVGCGFA7ZkDQ8EDfylVrvQYhKNrzB5Agw=;
+        b=hk/+fl/ymX6cgEjsZAsDC21E13cT4sT4bsaepzFNY+7cyoC02lUBonEepDepXIs4AY
+         tfSI1k+w6e0ZtszVwWlGMeO8bjHmOwawe7SRy0Lc/6elVaLYTvZZ7R0ctmyVtXqZZcjz
+         x1AA4ylsBpeuMpLrlnxNHekDe1ObDVDABBCoPY9l4T4vlPRBWkk3c3zY6HEs35p3ycVJ
+         QRjy8TiWerRDEWaPet3oZ/lX7pPqluprDDV/oP1jTU84HstHcEeM938Gb4FbsHvw7jhy
+         7Asu382h77kdYf2W8S25MyMGrI7SMoYyarvl96weBtSRasyhrPwJNalgKYmK8SzXe7Ax
+         CB5g==
+X-Gm-Message-State: ANhLgQ2mQAU194mCm4vHkPoqmCdKBmadWue/mRod+oZe4MGv19XztvrX
+        zjDWmvq/Pku0BKrX4VtX9FKaZxHsTv4zUtMQ8rnqaA==
+X-Google-Smtp-Source: ADFU+vsnW+F7X3gpdEz8AQTDqD1Tj7f66W9FTRZOnyRHh9OXBDCJ69RY3C5fHJ4DyNMTzylusEt2hk5oPHgCphc0DMY=
+X-Received: by 2002:a19:87:: with SMTP id 129mr3655815lfa.217.1582927553833;
+ Fri, 28 Feb 2020 14:05:53 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1582913973.git.hns@goldelico.com> <010d6ad3473fb4b1f1041888a071796180cdd838.1582913973.git.hns@goldelico.com>
+In-Reply-To: <010d6ad3473fb4b1f1041888a071796180cdd838.1582913973.git.hns@goldelico.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 28 Feb 2020 23:05:42 +0100
+Message-ID: <CACRpkdYSde=6JBBbe3sL3hDHhGAeOfwadT0BvL0n+-F0O2vX0g@mail.gmail.com>
+Subject: Re: [RFC v2 5/8] pinctrl: ingenic: add hdmi-ddc pin control group
 To:     "H. Nikolaus Schaller" <hns@goldelico.com>
 Cc:     Paul Cercueil <paul@crapouillou.net>,
         Paul Boddie <paul@boddie.org.uk>,
@@ -27,158 +56,33 @@ Cc:     Paul Cercueil <paul@crapouillou.net>,
         Mark Rutland <mark.rutland@arm.com>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
         Andi Kleen <ak@linux.intel.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, letux-kernel@openphoenux.org,
-        kernel@pyra-handheld.com,
-        Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [RFC v2 1/8] dt-bindings: display: add ingenic-jz4780-lcd DT
- Schema
-Message-ID: <20200228184242.GA20089@ravnborg.org>
-References: <cover.1582913973.git.hns@goldelico.com>
- <b4a73a1c542fab9d05d12b56c547b555b6a9b062.1582913973.git.hns@goldelico.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b4a73a1c542fab9d05d12b56c547b555b6a9b062.1582913973.git.hns@goldelico.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=eMA9ckh1 c=1 sm=1 tr=0
-        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
-        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10 a=7gkXJVJtAAAA:8
-        a=r_1tXGB3AAAA:8 a=ztCEdXhiAAAA:8 a=VwQbUJbxAAAA:8 a=gEfo2CItAAAA:8
-        a=pSfg_kgG_YkFMEKRir4A:9 a=qn4TxXM_sh0ilUaX:21 a=kcv_VjDv9XC6Jkun:21
-        a=CjuIK1q_8ugA:10 a=E9Po1WZjFZOl8hwRPBS3:22 a=t8nPyN_e6usw4ciXM-Pk:22
-        a=nCm3ceeH17rKjHWsMeRo:22 a=AjGcO6oz07-iQ99wixmX:22
-        a=sptkURWiP4Gy88Gu7hUp:22
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nikolaus.
+On Fri, Feb 28, 2020 at 7:19 PM H. Nikolaus Schaller <hns@goldelico.com> wrote:
 
-On Fri, Feb 28, 2020 at 07:19:26PM +0100, H. Nikolaus Schaller wrote:
-> From: Sam Ravnborg <sam@ravnborg.org>
-> 
-> Add DT bindings for the LCD controller on the jz4780 SoC
-> Based on .txt binding from Zubair Lutfullah Kakakhel
-> 
-> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
-> Cc: H. Nikolaus Schaller <hns@goldelico.com>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
+> From: Paul Boddie <paul@boddie.org.uk>
+>
+> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 
-As this patch was sent to you and you forward it you need to
-testify that this is OK.
-To do so follow the rules of the Developemnt Certificate of Origin
-as can be found in SubmittingPatches.rst.
+This looks good, can I just apply this to the pinctrl tree?
 
-In other words - you need to add your Signed-off-by: xxx <mail>
-to the patch.
-In the end we want to be able to see the patch the patch has taken
-reading the Signed-off-by: lines from top to bottom.
-
-Please check other patches in this series for the same issue.
-
-	Sam
-
-> ---
->  .../bindings/display/ingenic-jz4780-lcd.yaml  | 78 +++++++++++++++++++
->  1 file changed, 78 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.yaml b/Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.yaml
-> new file mode 100644
-> index 000000000000..c71415a3a342
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.yaml
-> @@ -0,0 +1,78 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/ingenic-jz4780-lcd.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Bindings for Ingenic JZ4780 LCD Controller
-> +
-> +maintainers:
-> +  - Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
-> +  - H. Nikolaus Schaller <hns@goldelico.com>
-> +
-> +description: |
-> +  LCD Controller is the Display Controller for the Ingenic JZ4780 SoC
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: ingenic,jz4780-lcd
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: the address & size of the LCD controller registers
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description: Specifies the interrupt provided by parent
-> +
-> +  clocks:
-> +    maxItems: 2
-> +    description: Clock specifiers for the JZ4780_CLK_TVE JZ4780_CLK_LCD0PIXCLK
-> +
-> +  clock-names:
-> +    items:
-> +      - const: lcd_clk
-> +      - const: lcd_pixclk
-> +
-> +  port:
-> +    type: object
-> +    description: |
-> +      A port node with endpoint definitions as defined in
-> +      Documentation/devicetree/bindings/media/video-interfaces.txt
-> +
-> +required:
-> +    - compatible
-> +    - reg
-> +    - interrupts
-> +    - clocks
-> +    - clock-names
-> +    - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/jz4780-cgu.h>
-> +    lcd: jz4780-lcdk@0x13050000 {
-> +        compatible = "ingenic,jz4780-lcd";
-> +        reg = <0x13050000 0x1800>;
-> +
-> +        clocks = <&cgu JZ4780_CLK_TVE>, <&cgu JZ4780_CLK_LCD0PIXCLK>;
-> +        clock-names = "lcd_clk", "lcd_pixclk";
-> +
-> +        interrupt-parent = <&intc>;
-> +        interrupts = <31>;
-> +
-> +        jz4780_lcd_out: port {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            jz4780_out_hdmi: endpoint@0 {
-> +                reg = <0>;
-> +                remote-endpoint = <&hdmi_in_lcd>;
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> -- 
-> 2.23.0
+Yours,
+Linus Walleij
