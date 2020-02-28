@@ -2,34 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF02F173C69
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2020 17:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4820173C70
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2020 17:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727206AbgB1QBD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Feb 2020 11:01:03 -0500
-Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.103]:33668 "EHLO
+        id S1727305AbgB1QBJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Feb 2020 11:01:09 -0500
+Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.103]:33566 "EHLO
         mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727173AbgB1QBC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Feb 2020 11:01:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582905660;
+        with ESMTP id S1727176AbgB1QBI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Feb 2020 11:01:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582905666;
         s=strato-dkim-0002; d=goldelico.com;
         h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=gbizeSabj1SA3R/yYEBCTuuOG7bMiftKSlGUj+fFwyY=;
-        b=WlxMPV0ImmhxV2wlP9v+eCctIi14LDAECsmXnNMg+P37NefcgwjMROnDwCiLgciIQ6
-        hv4aH45xJ4VPkeftrb3x010LNmOcUIsxbFFm7jgdX1oRRbJnp553yf2W1/BSTN+CdKVj
-        cDlo/7Zha1Dpisa/uoeph6pAEZK/mXKhZuJ1362+VPiht89Ty0IfI2CWMTIqAL+zILp+
-        v903J6rRfqr4pSVVDd6S8YnfLt7JWpju9c4ugnwkB33QrtdfhTlcAgC4dkqU86pzdiK9
-        YXOnA5SSZ2/qqjEbLV5Q0ymt2RoPjysKbKzEjVFs0qeD1UpdxaMP7YD3eS/J6UbHYEXS
-        LHmw==
+        bh=Ay31G7exAkSbg3PL1nOzfK8qqlNf1gmdrl8NmheHFD8=;
+        b=EkQ5dMEOfGDQHO6gCTfYD/RC/vUI0V/6tQgBxMhJK9BCaWu+pUBJT533EFcMgguNw9
+        D5m7FoNNxXWw9EiD3382vG7sO72FeWynJObHctMNzF2P/KyycZxqf+eW9C/rvxykddQr
+        dwtLaZjrLYnvORd2K+f5Ql+2ZWyFVhd91RvSwkugOCYkDCE7W5DKWD4mKZexI3RsezgD
+        XyKfC4/o2lx34FCeYzoouXxxDRtQxMD8rNM9drWFO+WTG1sEZ+RvJnXpaOTWdrpRNFaK
+        +595XDsTjCArILb1R7fQLZ56vZLfie+jopiZJC/qbSvn3hZ+d18U673x7reAuLygQZpR
+        PSLw==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1mfYzBGHXH6G1+ULkA="
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 46.2.0 DYNA|AUTH)
-        with ESMTPSA id y0a02cw1SG0u1l9
+        with ESMTPSA id y0a02cw1SG0v1lB
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Fri, 28 Feb 2020 17:00:56 +0100 (CET)
+        Fri, 28 Feb 2020 17:00:57 +0100 (CET)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
         Andreas Kemnade <andreas@kemnade.info>,
@@ -52,9 +52,9 @@ To:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
         kernel@pyra-handheld.com
-Subject: [PATCH v8 3/7] Bindings: nvmem: add bindings for JZ4780 efuse
-Date:   Fri, 28 Feb 2020 17:00:49 +0100
-Message-Id: <37d3b9e4c60692215fff0e75a78ac1e7792aaf75.1582905653.git.hns@goldelico.com>
+Subject: [PATCH v8 4/7] Documentation: ABI: nvmem: add documentation for JZ4780 efuse ABI
+Date:   Fri, 28 Feb 2020 17:00:50 +0100
+Message-Id: <08f3bb4e0fe5499907c4e07fa6751bfb2016f23d.1582905653.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <cover.1582905653.git.hns@goldelico.com>
 References: <cover.1582905653.git.hns@goldelico.com>
@@ -73,65 +73,33 @@ a read only access to the entire 8K bits efuse memory.
 Tested-by: Mathieu Malaterre <malat@debian.org>
 Signed-off-by: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
 Signed-off-by: Mathieu Malaterre <malat@debian.org>
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-[converted to yaml]
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 ---
- .../bindings/nvmem/ingenic,jz4780-efuse.yaml  | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
+ .../ABI/testing/sysfs-driver-jz4780-efuse        | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-jz4780-efuse
 
-diff --git a/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
+diff --git a/Documentation/ABI/testing/sysfs-driver-jz4780-efuse b/Documentation/ABI/testing/sysfs-driver-jz4780-efuse
 new file mode 100644
-index 000000000000..1485d3fbabfd
+index 000000000000..bb6f5d6ceea0
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
-@@ -0,0 +1,45 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/nvmem/ingenic,jz4780-efuse.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Ingenic JZ EFUSE driver bindings
-+
-+maintainers:
-+  - PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
-+
-+allOf:
-+  - $ref: "nvmem.yaml#"
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ingenic,jz4780-efuse
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    # Handle for the ahb for the efuse.
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/jz4780-cgu.h>
-+
-+    efuse@134100d0 {
-+        compatible = "ingenic,jz4780-efuse";
-+        reg = <0x134100d0 0x2c>;
-+
-+        clocks = <&cgu JZ4780_CLK_AHB2>;
-+    };
-+
-+...
++++ b/Documentation/ABI/testing/sysfs-driver-jz4780-efuse
+@@ -0,0 +1,16 @@
++What:		/sys/devices/*/<our-device>/nvmem
++Date:		December 2017
++Contact:	PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
++Description:	read-only access to the efuse on the Ingenic JZ4780 SoC
++		The SoC has a one time programmable 8K efuse that is
++		split into segments. The driver supports read only.
++		The segments are
++		0x000   64 bit Random Number
++		0x008  128 bit Ingenic Chip ID
++		0x018  128 bit Customer ID
++		0x028 3520 bit Reserved
++		0x1E0    8 bit Protect Segment
++		0x1E1 2296 bit HDMI Key
++		0x300 2048 bit Security boot key
++Users:		any user space application which wants to read the Chip
++		and Customer ID
 -- 
 2.23.0
 
