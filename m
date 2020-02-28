@@ -2,48 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C78A8173652
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2020 12:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C18817364F
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2020 12:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726063AbgB1LqW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Feb 2020 06:46:22 -0500
-Received: from elvis.franken.de ([193.175.24.41]:42092 "EHLO elvis.franken.de"
+        id S1725911AbgB1LqV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Feb 2020 06:46:21 -0500
+Received: from elvis.franken.de ([193.175.24.41]:42085 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725906AbgB1LqW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 28 Feb 2020 06:46:22 -0500
+        id S1725536AbgB1LqV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 28 Feb 2020 06:46:21 -0500
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1j7e5y-0008UT-00; Fri, 28 Feb 2020 12:46:18 +0100
+        id 1j7e5y-0008UT-01; Fri, 28 Feb 2020 12:46:18 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 9D8EAC0EC0; Fri, 28 Feb 2020 12:45:44 +0100 (CET)
-Date:   Fri, 28 Feb 2020 12:45:44 +0100
+        id 94C2AC0EC3; Fri, 28 Feb 2020 12:46:08 +0100 (CET)
+Date:   Fri, 28 Feb 2020 12:46:08 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     ralf@linux-mips.org, paulburton@kernel.org, tglx@linutronix.de,
-        sboyd@kernel.org, geert+renesas@glider.be, f4bug@amsat.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH -next] MIPS: pic32mzda: Drop pointless static qualifier
-Message-ID: <20200228114544.GA10905@alpha.franken.de>
-References: <20200227070502.106762-1-yuehaibing@huawei.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v1] MIPS: reduce print level for cache information
+Message-ID: <20200228114608.GB10905@alpha.franken.de>
+References: <20200228055238.11140-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200227070502.106762-1-yuehaibing@huawei.com>
+In-Reply-To: <20200228055238.11140-1-o.rempel@pengutronix.de>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Feb 27, 2020 at 07:05:02AM +0000, YueHaibing wrote:
-> There is no need to have the 'struct device_node *node' variable static
-> since new value always be assigned before use it.
+On Fri, Feb 28, 2020 at 06:52:38AM +0100, Oleksij Rempel wrote:
+> Default printk log level is KERN_WARNING. This makes automatic log
+> parsing problematic, since we get false positive alarms on not critical
+> information.
 > 
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> Set all not critical cache related information to KERN_INFO, the same level
+> as used on most kernel drivers.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 > ---
->  arch/mips/pic32/pic32mzda/time.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/mips/mm/c-octeon.c | 18 +++++++++---------
+>  arch/mips/mm/c-r3k.c    |  4 ++--
+>  arch/mips/mm/c-r4k.c    | 20 ++++++++++----------
+>  arch/mips/mm/c-tx39.c   |  4 ++--
+>  4 files changed, 23 insertions(+), 23 deletions(-)
 
 applied to mips-next.
 
