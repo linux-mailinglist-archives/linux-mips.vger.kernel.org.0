@@ -2,103 +2,148 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC0B173A0B
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2020 15:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3540E173A10
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2020 15:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726974AbgB1Okg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Feb 2020 09:40:36 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([81.169.146.179]:30010 "EHLO
-        mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726926AbgB1Okf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Feb 2020 09:40:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582900833;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=Jh82InUV2upNUyEKq5fyvNlau0sOPuIK2LHzeIGPEiE=;
-        b=hGxPnYVdUwJWRk4xvDAXNqoGO5b0y5LN6A7XCnko5/nYXJn4D3WZVutnKr/GUpwwf5
-        SeCyNG4eCEh3rFBMOgRxwtVF84NxqjBm65f6AnphP69W8yKtATVhpnDQRJx6qgTWTIjo
-        xrke0aITeQ2nkpRRQfJyKI2fXiYBpIDqPwuLTQ/Z2l0Ps4M8Ys8OJ5TSW4hhoYiFim/i
-        5lhBSDWnJGJdWfRghtXH0UN3pZUo9LurViFy/7ywJdVb+xtYGbZpZMdjM7oby3gnpVtM
-        zvxAbrsRhDxBb8dgn6agdqhx/Apt6U4pV8J7dK0p7YrXAhzJKxqfpML4COgUfDJMZk2+
-        b/2w==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlaYXAcKqg=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-        by smtp.strato.de (RZmta 46.2.0 DYNA|AUTH)
-        with ESMTPSA id y0a02cw1SEeG1KW
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Fri, 28 Feb 2020 15:40:16 +0100 (CET)
-Subject: Re: [PATCH v3 3/6] MIPS: DTS: CI20: fix PMU definitions for ACT8600
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: text/plain; charset=iso-8859-1
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <1582900444.3.1@crapouillou.net>
-Date:   Fri, 28 Feb 2020 15:40:15 +0100
-Cc:     Paul Boddie <paul@boddie.org.uk>, Rob Herring <robh+dt@kernel.org>,
+        id S1726788AbgB1OlD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Feb 2020 09:41:03 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:43576 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726738AbgB1OlD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Feb 2020 09:41:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1582900859; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QVBICVTonYAb4LLd3t5iiG7odOUu1CunmFhCqjBBfuY=;
+        b=X7Fb7+RYlcThpjdvM7Uo6AHq1dU2RzV6TKtEIeBZqg1st+3vkkTq5+WiqCymAKYR0KDu6F
+        YVUy1+hGjDwqMix9+9HT1AbHkjbhgD9D5SaTb8JJbvSUHpiWGckAeqY/O7pOJ7VmMeNGuf
+        omqAZNSnE9AY4iu/GQP5bps98myZZ9g=
+Date:   Fri, 28 Feb 2020 11:40:37 -0300
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v7 3/7] Bindings: nvmem: add bindings for JZ4780 efuse
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Mathieu Malaterre <malat@debian.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        kernel@pyra-handheld.com, stable@vger.kernel.org
+        Kees Cook <keescook@chromium.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com
+Message-Id: <1582900837.3.3@crapouillou.net>
+In-Reply-To: <ebd523e39aac31b087affcfa984738204fa8b542.1582898302.git.hns@goldelico.com>
+References: <cover.1582898302.git.hns@goldelico.com>
+        <ebd523e39aac31b087affcfa984738204fa8b542.1582898302.git.hns@goldelico.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <D609AAD9-C068-449C-9CB6-044999A9CC99@goldelico.com>
-References: <cover.1581884459.git.hns@goldelico.com> <36aa1e80153fbb29eeb56f65cac9e3672165f7b7.1581884459.git.hns@goldelico.com> <1582900444.3.1@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3124)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Nikolaus,
 
-> Am 28.02.2020 um 15:34 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Hi Nikolaus,
->=20
->=20
-> Le dim., f=E9vr. 16, 2020 at 21:20, H. Nikolaus Schaller =
+
+Le ven., f=E9vr. 28, 2020 at 14:58, H. Nikolaus Schaller=20
 <hns@goldelico.com> a =E9crit :
->> There is a ACT8600 on the CI20 board and the bindings of the
->> ACT8865 driver have changed without updating the CI20 device
->> tree. Therefore the PMU can not be probed successfully and
->> is running in power-on reset state.
->> Fix DT to match the latest act8865-regulator bindings.
->> Fixes: 73f2b940474d ("MIPS: CI20: DTS: Add I2C nodes")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->> ---
->> arch/mips/boot/dts/ingenic/ci20.dts | 48 =
-++++++++++++++++++++---------
->> 1 file changed, 33 insertions(+), 15 deletions(-)
->> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts =
-b/arch/mips/boot/dts/ingenic/ci20.dts
->> index 59c104289ece..4f48bc16fb52 100644
->> --- a/arch/mips/boot/dts/ingenic/ci20.dts
->> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
->> @@ -153,6 +153,8 @@
->> 	pinctrl-0 =3D <&pins_uart4>;
->> };
->> +#include <dt-bindings/regulator/active-semi,8865-regulator.h>
+> From: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
 >=20
-> Includes at the beginning of the file please. Keeps it tidy.
+> This patch brings support for the JZ4780 efuse. Currently it only=20
+> exposes
+> a read only access to the entire 8K bits efuse memory.
+>=20
+> Tested-by: Mathieu Malaterre <malat@debian.org>
+> Signed-off-by: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
+> Signed-off-by: Mathieu Malaterre <malat@debian.org>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> [converted to yaml]
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> ---
+>  .../bindings/nvmem/ingenic,jz4780-efuse.yaml  | 49=20
+> +++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644=20
+> Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
+>=20
+> diff --git=20
+> a/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml=20
+> b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
+> new file mode 100644
+> index 000000000000..ce6690c50a34
+> --- /dev/null
+> +++=20
+> b/Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/nvmem/ingenic,jz4780-efuse.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Ingenic JZ EFUSE driver bindings
+> +
+> +maintainers:
+> +  - PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
+> +
+> +allOf:
+> +  - $ref: "nvmem.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ingenic,jz4780-efuse
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    # Handle for the ahb for the efuse.
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ahb2
 
-Ok.
+You still have clock-names here. You can remove it completely.
 
-Well, I am infected by omap boards where this is not uncommon:
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/jz4780-cgu.h>
+> +
+> +    efuse@134100d0 {
+> +        compatible =3D "ingenic,jz4780-efuse";
+> +        reg =3D <0x134100d0 0x2c>;
+> +
+> +        clocks =3D <&cgu JZ4780_CLK_AHB2>;
+> +    };
+> +
+> +...
+> --
+> 2.23.0
+>=20
 
 =
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/ar=
-ch/arm/boot/dts/omap3-beagle-xm.dts?h=3Dv5.6-rc3#n294
-
-But it may be historic and not a good style.
-
-BR and thanks,
-Nikolaus
 
