@@ -2,123 +2,148 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 527AA173846
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2020 14:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E75217392D
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2020 15:01:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726811AbgB1N0x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Feb 2020 08:26:53 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:56977 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726673AbgB1N0x (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Feb 2020 08:26:53 -0500
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1j7ffG-00051B-1D; Fri, 28 Feb 2020 14:26:50 +0100
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1j7ffE-0006RR-91; Fri, 28 Feb 2020 14:26:48 +0100
-Date:   Fri, 28 Feb 2020 14:26:48 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     devicetree@vger.kernel.org, Jay Cliburn <jcliburn@gmail.com>,
-        Chris Snook <chris.snook@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, Vivien Didelot <vivien.didelot@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v8 1/1] net: ag71xx: port to phylink
-Message-ID: <20200228132648.fgeoify3qdeb53qn@pengutronix.de>
-References: <20200226054624.14199-1-o.rempel@pengutronix.de>
- <20200226092138.GV25745@shell.armlinux.org.uk>
- <20200228114753.GN18808@shell.armlinux.org.uk>
+        id S1726897AbgB1N6b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Feb 2020 08:58:31 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.170]:17266 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725892AbgB1N6b (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Feb 2020 08:58:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1582898308;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=wrldJyxJYIOAEtXdPjbfxM3DEq4MJZ0QuMAfUsB2SbM=;
+        b=LQfko0aZ7wxR41b6P2eDMMVp0pClwrTsKI7NDvLy4JeRdQQmGMU44gHDH+cFOsZqpJ
+        xw+eLUdtvqf9jTL0Gykqz4w3XFXfJZVtH9AvLOgQQ6ApkyYTCnG39ktqi7jzA7L5mTw/
+        dPEgx2Yq6Y37tVvstOUHL7E/HOTkLiMl9lBChBpnY98lujeK5jCUj2ZlHraZq+oIUty7
+        kFd9AVs51WneDJ+hb5qoPbm5/7r5ypNdfuxSJLsINczked1/eW83yuIlGXDik0Mn+EI4
+        laRMmbsvZWGhihliVCJya/+UwUxNQVtdn8yIQOOi1/CKwzMUZbePz+Yaxa1yFDk30Bi4
+        m7YQ==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1mfYzBGHXH6G1+ULkA="
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+        by smtp.strato.de (RZmta 46.2.0 DYNA|AUTH)
+        with ESMTPSA id y0a02cw1SDwN1A4
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Fri, 28 Feb 2020 14:58:23 +0100 (CET)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Mathieu Malaterre <malat@debian.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com
+Subject: [PATCH v7 0/7] MIPS: CI20: Add efuse driver for Ingenic JZ4780 and attach to DM9000 for stable MAC addresses
+Date:   Fri, 28 Feb 2020 14:58:16 +0100
+Message-Id: <cover.1582898302.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4s5yhyplebixnzcf"
-Content-Disposition: inline
-In-Reply-To: <20200228114753.GN18808@shell.armlinux.org.uk>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 14:25:56 up 105 days,  4:44, 122 users,  load average: 0.47, 0.18,
- 0.11
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+* use devm_add_action_or_reset to unprepare clock in case of error (suggested by Paul Cercueil <paul@crapouillou.net>)
+* use already existing constants to check for overflow of rd_adj and rd_strobe
+* remove clock-names from bindings example and DTS (suggested by Paul Cercueil <paul@crapouillou.net>)
+* addition for nemc driver to handle this correctly (contributed by Paul Cercueil <paul@crapouillou.net>)
+* make efuse a child node of nemc to avoid problems with overlapping
+  reg address ranges (suggested by Paul Cercueil <paul@crapouillou.net>)
 
---4s5yhyplebixnzcf
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+PATCH V6 2020-02-26 12:16:07:
+* add dependency on CONFIG_OF and select REGMAP_MMIO (suggested by Paul Cercueil <paul@crapouillou.net>)
+* add clk_prepare_enable() (suggested by Paul Cercueil <paul@crapouillou.net>)
+* inline jz4780_efuse_read_32bytes() since it is only used once
+* remove read optimization for full block (suggested by Paul Cercueil <paul@crapouillou.net>)
+* simplify calculations for rd_adj and rd_strobe (suggested by Paul Cercueil <paul@crapouillou.net>)
+* do calculations for rd_adj and rd_strobe in local variables
+* fix overflow check (did allow for 5 bit values although register is 4 bit wide)
+* fixes for yaml (sugested by Andreas Kemnade <andreas@kemnade.info>)
 
-On Fri, Feb 28, 2020 at 11:47:53AM +0000, Russell King - ARM Linux admin wr=
-ote:
-> On Wed, Feb 26, 2020 at 09:21:38AM +0000, Russell King - ARM Linux admin =
-wrote:
-> > On Wed, Feb 26, 2020 at 06:46:24AM +0100, Oleksij Rempel wrote:
-> > > The port to phylink was done as close as possible to initial
-> > > functionality.
-> > >=20
-> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > > ---
-> > > changes v8:
-> > > - set the autoneg bit
-> > > - provide implementations for the mac_pcs_get_state and mac_an_restart
-> > >   methods
-> > > - do phylink_disconnect_phy() on _stop()
-> > > - rename ag71xx_phy_setup() to ag71xx_phylink_setup()=20
-> >=20
-> > There will be one more change required; I'm changing the prototype for
-> > the mac_link_up() function, and I suggest as you don't support in-band
-> > AN that most of the setup for speed and duplex gets moved out of your
-> > mac_config() implementation to mac_link_up().
-> >=20
-> > The patches have been available on netdev for just over a week now.
->=20
-> The patches are now in net-next.  Please respin your patch against these
-> changes, which basically means the code which programs the speed and
-> duplex in ag71xx_mac_config() needs to be moved to ag71xx_mac_link_up().
+PATCH V5 2020-02-22 11:25:35:
+* no longer RFC but PATCH
+* add yaml bindings (by Andreas Kemnade <andreas@kemnade.info>)
+* fixes to yaml (suggested by Rob Herring <robh@kernel.org>)
 
-OK, Thank you!
-I'll  update it.
+RFC V4 2020-02-17 17:55:35:
+* removed read_only for nvmem config because there is no write method
+* Kconfig: replaced depends MACH_JZ4780 with MACH_INGENIC
+* run through checkpatch and fixed issues
+* made use of devm_nvram_register() and get rid of jz4780_efuse_remove()
+  (suggested by Srinivas Kandagatla <srinivas.kandagatla@linaro.org>)
+* squashed previous patch 1/9 and 2/9 into single (regmap based) driver
 
-Regards,
-Oleksij
+RFC V3 2020-02-16 20:20:59:
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+This series is based on and a follow up for
 
---4s5yhyplebixnzcf
-Content-Type: application/pgp-signature; name="signature.asc"
+https://lore.kernel.org/patchwork/cover/868157/
 
------BEGIN PGP SIGNATURE-----
+("[v2,0/2] Add efuse driver for Ingenic JZ4780 SoC")
 
-iQIzBAABCAAdFiEERBNZvwSgvmcMY/T74omh9DUaUbMFAl5ZFRMACgkQ4omh9DUa
-UbNtTxAAhCmNOMd5vUqbiJM1/w/s11cV8lfHjVZxuDKKrAeo6h+/L1xs+/Aw8ybN
-AFt2LojGejRo96MkotlhDcM5XjRpG2J7SA5tnPziTaRXwTuuyhItsxJtHcCJJrf7
-HFRnVmrEOclwfzGXFhnUsttaNgtTQrheEVgQzzfZi22o0qLOVp8jtnMoRk5XUWFB
-YtWCGMxsGyK72L3UpyXufYalpTKWnIAcWcEtL0SzAkrMIg55MoJDq3lHrecvyP1/
-FnjCToGwFDYBA0/ym0gQtlsGCeMJ4+qfgnHnMz1H8nUd9t7T5uXJOENXo3Ua/a/c
-d2BEbtgXX42QsDz3SEQDWdeQtpZv5lWPiO3xmBentFjpqkXldhLdVSSXOT+lwF0K
-puY8vSQqOt0OLoPedABEFLhUUrjndcndERdAzfuyjAtbUgSDKgiDnBW8ihjfVt9n
-Q3yWtrnSlltE8QgRlbok8DpyjZ1SoTnm3GIvlaZbHVnVWLSC1d8OY4Ev4fRr78K3
-JwmstQibR0AWWvKUsil0IPGrrNPk+AzR2lDJbdLCpnXOEHHpPLYL0dSVk103G9mx
-ntVYCNfd6BARiT55cwWrLU9zVb0n3Or8KMryTZZ9G0Vr6f+HTWr1bu7q5QrfY+Md
-c4NDy37wq1UelojjiYIg5Heli/nR6VSCvYfJyhcmp0Q9Dz56rpg=
-=vVIQ
------END PGP SIGNATURE-----
+Original authors were
+PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
+Mathieu Malaterre <malat@debian.org>
 
---4s5yhyplebixnzcf--
+and there are additions / code improvements by
+H. Nikolaus Schaller <hns@goldelico.com>
+Paul Cercueil <paul@crapouillou.net>
+
+This setup works, if the dm9000 driver is compiled
+as a module.
+
+Therefore it is all RFC level. It is also not completely
+checkpatched.
+
+
+H. Nikolaus Schaller (1):
+  MIPS: DTS: CI20: make DM9000 Ethernet controller use NVMEM to find the
+    default MAC address
+
+Paul Cercueil (1):
+  memory: jz4780_nemc: Only request IO memory the driver will use
+
+PrasannaKumar Muralidharan (5):
+  nvmem: add driver for JZ4780 efuse
+  Bindings: nvmem: add bindings for JZ4780 efuse
+  Documentation: ABI: nvmem: add documentation for JZ4780 efuse ABI
+  nvmem: MAINTAINERS: add maintainer for JZ4780 efuse driver
+  MIPS: DTS: JZ4780: define node for JZ4780 efuse
+
+ .../ABI/testing/sysfs-driver-jz4780-efuse     |  16 ++
+ .../bindings/nvmem/ingenic,jz4780-efuse.yaml  |  49 ++++
+ MAINTAINERS                                   |   5 +
+ arch/mips/boot/dts/ingenic/ci20.dts           |   3 +
+ arch/mips/boot/dts/ingenic/jz4780.dtsi        |  19 +-
+ drivers/memory/jz4780-nemc.c                  |  15 +-
+ drivers/nvmem/Kconfig                         |  12 +
+ drivers/nvmem/Makefile                        |   2 +
+ drivers/nvmem/jz4780-efuse.c                  | 234 ++++++++++++++++++
+ 9 files changed, 352 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-jz4780-efuse
+ create mode 100644 Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
+ create mode 100644 drivers/nvmem/jz4780-efuse.c
+
+-- 
+2.23.0
+
