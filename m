@@ -2,34 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 174BE174901
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Feb 2020 20:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A26161748EF
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Feb 2020 20:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727305AbgB2TqC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Feb 2020 14:46:02 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.84]:10852 "EHLO
+        id S1727283AbgB2TqB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Feb 2020 14:46:01 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.168]:32620 "EHLO
         mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727247AbgB2TqB (ORCPT
+        with ESMTP id S1727102AbgB2TqB (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Feb 2020 14:46:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1583005558;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1583005559;
         s=strato-dkim-0002; d=goldelico.com;
-        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
-        Subject:Sender;
-        bh=xdkhHoapj+i8xiRTHbgczZlcZb+EHj6Fb4qMXccy0T8=;
-        b=DZk73q4NgoNlJezy/kw4DvKaHRIJCl4bSrgYzcw5RhvyQEew49dDfJgDpogTDJNki4
-        20eG+JBGn1fjvS1wXg1B34QCB8BtGdO4Sx+zrCtFYtF7Uw0JiI0Bn9r+EEqs9jg8MujQ
-        Ktgm/m10WEmHulZD5S6CoQlMm7pPsePFuVb/NUBoInznFHLN9Ko0PmUO8H+/vfvoemsJ
-        +8m6Z+4t/U/83qWHF74hTRUxyhas3U+S4+xnX1tkAaEMUkxRZPSitT95c0sEJzFmiAWC
-        yAYw4zkopCUofoshwYI/ptydDJo4v+sxngpGV+qScj6KC5xzaqqdOq5JZ9Wlswb1ZdFQ
-        TLcw==
+        h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=9aj0iNXW9sT+vgaHhh3H7qCB3K/FWvtt+HP6Njt4Sik=;
+        b=CD5kPTYGuf0p1tRtJTfE7tOAplcBITiGhzsCCxR3stN/7TgFJwBwF3TUYvfuTnYYU3
+        n3RJgqXYtTxSxppxR6jKgiUp72EZ4JJ5+I9hXEe4eoym3P+c0zCV1YJjpEjrEDADoA2Y
+        8lvjzdtGyt0SQm3vitkqCmoRwkzAUTGZL6yJdw7VnNRI9OvflHR3ffem3CEJ8bsJ0UVk
+        zqwOPf3nA5Rdkxu3NcojuSWrk1ogW3MlKFPGClGlt8/TbKoKOBtmkW4RoCj6v1OCEE3P
+        0pfo3C+4o1WRKqRcIFvgCPSPwznLk8wfSXtfvSfdCfwIDD4Eg204vSARUFc9NGpfDpef
+        3ACA==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1mfYzBGHXH6HGqvi2w="
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 46.2.0 DYNA|AUTH)
-        with ESMTPSA id y0a02cw1TJjn6m1
+        with ESMTPSA id y0a02cw1TJjo6m2
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Sat, 29 Feb 2020 20:45:49 +0100 (CET)
+        Sat, 29 Feb 2020 20:45:50 +0100 (CET)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     Paul Boddie <paul@boddie.org.uk>,
         Paul Cercueil <paul@crapouillou.net>,
@@ -46,11 +46,13 @@ To:     Paul Boddie <paul@boddie.org.uk>,
         "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        kernel@pyra-handheld.com
-Subject: [PATCH v5 0/5] MIPS: Fixes and improvements for CI20 board (JZ4780)
-Date:   Sat, 29 Feb 2020 20:45:43 +0100
-Message-Id: <cover.1583005548.git.hns@goldelico.com>
+        kernel@pyra-handheld.com, Alex Smith <alex.smith@imgtec.com>
+Subject: [PATCH v5 1/5] MIPS: DTS: CI20: add DT node for IR sensor
+Date:   Sat, 29 Feb 2020 20:45:44 +0100
+Message-Id: <b058cb1aadbc63eb8c0c35abc6366f552263cf1b.1583005548.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <cover.1583005548.git.hns@goldelico.com>
+References: <cover.1583005548.git.hns@goldelico.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -58,62 +60,35 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-* add #include irq.h not in PMU patch but in RTC patch
-* added Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+From: Alex Smith <alex.smith@imgtec.com>
 
-PATCH V4 2020-02-28 19:02:57:
-* use KEY_F13 for SW1 button to avoid conflict with Enter of an USB keyboard (suggested by Paul Cercueil <paul@crapouillou.net>)
-* tidy up all new #includes to be at beginning of file and alphabetically sorted (suggested by Paul Cercueil <paul@crapouillou.net>)
-* add new #include to DTS only when needed (suggested by Paul Cercueil <paul@crapouillou.net>)
+The infrared sensor on the CI20 board is connected to a GPIO and can
+be operated by using the gpio-ir-recv driver. Add a DT node for the
+sensor to allow that driver to be used.
 
-PATCH V3 2020-02-16 21:21:07:
-* dropped "drm: ingenic-drm: add MODULE_DEVICE_TABLE" because it will be resubmitted
-  with a HDMI driver solution
-* added Cc: stable@vger.kernel.org where appropriate (suggested by Paul Cercueil <paul@crapouillou.net>)
-* squashed all other DTS and CONFIG changes into single patches (suggested by Paul Cercueil <paul@crapouillou.net>)
-
-PATCH V2 2020-02-14 17:10:33:
-* dropped "net: davicom: dm9000: allow to pass MAC address through mac_addr module parameter"
-  from this series because it goes through the netdev tree
-  (suggested by Andrew Lunn <andrew@lunn.ch>)
-* added a "fixes:" for "MIPS: DTS: CI20: fix PMU definitions for ACT8600"
-  and "MIPS: DTS: CI20: fix interrupt for pcf8563 RTC"
-  (suggested by Andreas Kemnade <andreas@kemnade.info>)
-* "i2c: jz4780: silence log flood on txabrt" dropped because it is
-  replaced by a new version in v5.6 by Wolfram Sang <wsa@the-dreams.de>
-
-PATCH V1 2020-02-11 22:41:43:
-This patch set provides several improvements for the CI20 board:
-
-* suppress warnings from i2c if device is not responding
-* make ingenic-drm found through DT
-* allow davicom dm9000 ethernet controller to use MAC address provided by U-Boot
-* fix #include in jz4780.dtsi
-* configure for loadable kernel modules
-* add DTS for IR sensor and SW1 button
-* configure so that LEDs, IR sensor, SW1 button have drivers
-* fix DTS for ACT8600 PMU and configure driver
-* fix interrupt of nxp,pcf8563
-
-There is another patch set in our queue to add HDMI support on top of this work.
-
-Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+Signed-off-by: Alex Smith <alex.smith@imgtec.com>
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+---
+ arch/mips/boot/dts/ingenic/ci20.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-
-Alex Smith (1):
-  MIPS: DTS: CI20: add DT node for IR sensor
-
-H. Nikolaus Schaller (4):
-  MIPS: DTS: CI20: fix PMU definitions for ACT8600
-  MIPS: DTS: CI20: fix interrupt for pcf8563 RTC
-  MIPS: DTS: CI20: multiple DTS improvements
-  MIPS: CI20: defconfig: multiple improvements
-
- arch/mips/boot/dts/ingenic/ci20.dts | 71 ++++++++++++++++++++++-------
- arch/mips/configs/ci20_defconfig    | 21 +++++++++
- 2 files changed, 76 insertions(+), 16 deletions(-)
-
+diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
+index 37b93166bf22..59c104289ece 100644
+--- a/arch/mips/boot/dts/ingenic/ci20.dts
++++ b/arch/mips/boot/dts/ingenic/ci20.dts
+@@ -60,6 +60,11 @@
+ 		enable-active-high;
+ 	};
+ 
++	ir: ir-receiver {
++		compatible = "gpio-ir-receiver";
++		gpios = <&gpe 3 GPIO_ACTIVE_LOW>;
++	};
++
+ 	wlan0_power: fixedregulator@1 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "wlan0_power";
 -- 
 2.23.0
 
