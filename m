@@ -2,37 +2,37 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D25177F26
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2020 19:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C81177F2F
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2020 19:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730411AbgCCRs7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Mar 2020 12:48:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56166 "EHLO mail.kernel.org"
+        id S1730785AbgCCRtJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Mar 2020 12:49:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56380 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731702AbgCCRs7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 3 Mar 2020 12:48:59 -0500
+        id S1730830AbgCCRtI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 3 Mar 2020 12:49:08 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F106F20870;
-        Tue,  3 Mar 2020 17:48:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 138E1208C3;
+        Tue,  3 Mar 2020 17:49:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583257737;
-        bh=rMQn7kjsa7T0S3IBhZrsTg2HDBVaXevtNP7v9XkF4Dg=;
+        s=default; t=1583257747;
+        bh=2iJwWasVf+CDL+1GCCg+dC8safmJqLUpKJYeW7tEWz8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l08/7ShVYV1H1oGMAuCJdOEHAou/6kB0A3IU+bhwrKxxHvQOpP/uIXwxQxbba70ZM
-         22OogBjUKIDB5DoU2M6xHfCLNaXCm2VUJNJ6wajMigX/IKYqw04eEfD9g6LNVAiSCC
-         TitTdc3V69YxdA51c8oEXB3y94RY6u8vPW+THoGQ=
+        b=eZslrvy0Ba4gQV2SbhU4DRKilc+eQqDArk8aqPVs5+6wI4UFKWsfcmpoBjbO7kknX
+         flXF+RX4z6qiYsa3oA4JoR4PPaRFHwhNxP77VQhHOR+6VNtB+n2uiFWejSsg70lXRD
+         XhthIfxzzuiOPUmsKWhYx2VumXf3WQJ1YilkmOjw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Paul Burton <paulburton@kernel.org>, ralf@linux-mips.org,
-        linux-mips@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH 5.5 110/176] MIPS: VPE: Fix a double free and a memory leak in release_vpe()
-Date:   Tue,  3 Mar 2020 18:42:54 +0100
-Message-Id: <20200303174317.555620066@linuxfoundation.org>
+        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH 5.5 114/176] MIPS: cavium_octeon: Fix syncw generation.
+Date:   Tue,  3 Mar 2020 18:42:58 +0100
+Message-Id: <20200303174318.020233777@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200303174304.593872177@linuxfoundation.org>
 References: <20200303174304.593872177@linuxfoundation.org>
@@ -45,42 +45,48 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
 
-commit bef8e2dfceed6daeb6ca3e8d33f9c9d43b926580 upstream.
+commit 97e914b7de3c943011779b979b8093fdc0d85722 upstream.
 
-Pointer on the memory allocated by 'alloc_progmem()' is stored in
-'v->load_addr'. So this is this memory that should be freed by
-'release_progmem()'.
+The Cavium Octeon CPU uses a special sync instruction for implementing
+wmb, and due to a CPU bug, the instruction must appear twice. A macro
+had been defined to hide this:
 
-'release_progmem()' is only a call to 'kfree()'.
+ #define __SYNC_rpt(type)     (1 + (type == __SYNC_wmb))
 
-With the current code, there is both a double free and a memory leak.
-Fix it by passing the correct pointer to 'release_progmem()'.
+which was intended to evaluate to 2 for __SYNC_wmb, and 1 for any other
+type of sync. However, this expression is evaluated by the assembler,
+and not the compiler, and the result of '==' in the assembler is 0 or
+-1, not 0 or 1 as it is in C. The net result was wmb() producing no code
+at all. The simple fix in this patch is to change the '+' to '-'.
 
-Fixes: e01402b115ccc ("More AP / SP bits for the 34K, the Malta bits and things. Still wants")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Fixes: bf92927251b3 ("MIPS: barrier: Add __SYNC() infrastructure")
+Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 Signed-off-by: Paul Burton <paulburton@kernel.org>
-Cc: ralf@linux-mips.org
 Cc: linux-mips@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ---
- arch/mips/kernel/vpe.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/include/asm/sync.h |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/arch/mips/kernel/vpe.c
-+++ b/arch/mips/kernel/vpe.c
-@@ -134,7 +134,7 @@ void release_vpe(struct vpe *v)
- {
- 	list_del(&v->list);
- 	if (v->load_addr)
--		release_progmem(v);
-+		release_progmem(v->load_addr);
- 	kfree(v);
- }
- 
+--- a/arch/mips/include/asm/sync.h
++++ b/arch/mips/include/asm/sync.h
+@@ -155,9 +155,11 @@
+  * effective barrier as noted by commit 6b07d38aaa52 ("MIPS: Octeon: Use
+  * optimized memory barrier primitives."). Here we specify that the affected
+  * sync instructions should be emitted twice.
++ * Note that this expression is evaluated by the assembler (not the compiler),
++ * and that the assembler evaluates '==' as 0 or -1, not 0 or 1.
+  */
+ #ifdef CONFIG_CPU_CAVIUM_OCTEON
+-# define __SYNC_rpt(type)	(1 + (type == __SYNC_wmb))
++# define __SYNC_rpt(type)	(1 - (type == __SYNC_wmb))
+ #else
+ # define __SYNC_rpt(type)	1
+ #endif
 
 
