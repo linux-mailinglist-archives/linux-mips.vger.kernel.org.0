@@ -2,40 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A744A177952
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2020 15:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7338517795E
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2020 15:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729417AbgCCOku (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Mar 2020 09:40:50 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:34194 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728933AbgCCOku (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Mar 2020 09:40:50 -0500
-Received: by mail-oi1-f194.google.com with SMTP id g6so3264737oiy.1;
-        Tue, 03 Mar 2020 06:40:49 -0800 (PST)
+        id S1729291AbgCCOmn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Mar 2020 09:42:43 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:38525 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728933AbgCCOmn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Mar 2020 09:42:43 -0500
+Received: by mail-ot1-f67.google.com with SMTP id i14so3210698otp.5;
+        Tue, 03 Mar 2020 06:42:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pBPgC25ubKS5wPAN+uT8vJ9mnR6iCFqlpOC1P57sXK4=;
-        b=b/mv7Xnf/rxY3UZFUp4Oqt0ljveaMBQnfClAIulPVvDDJEEVLbm1f3k69cEdsxjIae
-         OAvdfUMoR0Mf68yaMoaVmrgCAtX5D3RAu87nNyWvsCCxXc3sOasEpqNdRhN1GTVLdwrc
-         otppVsuN5amwqbajLnHPTDzw7TN0cmX41mx/zSz+F8eYNOEtMKobAm0KOSBOqBsEl4nI
-         PJMQg8YePLSfFIi+2N2GBbPA+wGb15NaqotRolqcCfSnusKNU44w2aX1pLeSS2iCr5DP
-         eO4ohmbduuAe2PdYByETzT8gIWq0dMSLmqSw1wieCJ6t3Q449rBJlp5yf/5qKygzhdpd
-         RWPQ==
-X-Gm-Message-State: ANhLgQ1HhBLyeYWFlBd1SEoSyr+JYh6+utUaZYkAkbm4wpgHZP54BvUs
-        NyAiImWhNIOb5RDk1pztWw==
-X-Google-Smtp-Source: ADFU+vv05XHH/grNWOM44+Loiz7eSQ7oRdXeA6SR+r3YHZMxgPfK8MbbrKBZbP66Sthy2ocwKowBzg==
-X-Received: by 2002:a54:4006:: with SMTP id x6mr2678057oie.145.1583246449504;
-        Tue, 03 Mar 2020 06:40:49 -0800 (PST)
+        bh=ksT/wtaEoqeTN1KHOE8aetE606Rk22N2PLcG6a01LS8=;
+        b=OHqfWn4sJ0GwDENkm+gINzLclAV/AsfOYol2oVqBPlyHfgi+Cnui6fhNyVc+8Q875X
+         fY5DBIjLxs3GsrRbLEX3mz72Fa9hFdp7ntrc0yQWW+5I6NpxEiIA699XDkOWcNwCTcSa
+         O+UQZ1pJuFPFL7/ucWEwsJ1LSF/jaVcuSMHemCcqZz37kCjKVv+BcHhKWf/4FCr1Qjtg
+         DkQiwdBeLrNmg/laFBjiIbQneLSVVCROz43IlMYZx3d7XK/alu19V/I0YKNuAZtUS/nR
+         9QL8fQ1WuLtTu+dsDar8CpnxzIpuhSenrGX9uoauHndzCUqM+l9zjzbIuSrmkwERweve
+         KS2A==
+X-Gm-Message-State: ANhLgQ3dg8zSkgQQMQDMAuNz0GfL/D3+UOTmZhN95ZlgEOE+o1tslQqs
+        ZmmpCWMleljQhSKrXJ1Grg==
+X-Google-Smtp-Source: ADFU+vtZr4p2NRYC43S+DOX0tBm8RXxT6xe9atzAn2pCgAHYItWK3P3s4o97cZ5EPhX2trhg/h5qWw==
+X-Received: by 2002:a05:6830:22ca:: with SMTP id q10mr3896085otc.280.1583246562491;
+        Tue, 03 Mar 2020 06:42:42 -0800 (PST)
 Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id a26sm6034251oid.17.2020.03.03.06.40.47
+        by smtp.gmail.com with ESMTPSA id t193sm4828281oif.34.2020.03.03.06.42.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 06:40:48 -0800 (PST)
-Received: (nullmailer pid 5880 invoked by uid 1000);
-        Tue, 03 Mar 2020 14:40:47 -0000
-Date:   Tue, 3 Mar 2020 08:40:47 -0600
+        Tue, 03 Mar 2020 06:42:41 -0800 (PST)
+Received: (nullmailer pid 8497 invoked by uid 1000);
+        Tue, 03 Mar 2020 14:42:40 -0000
+Date:   Tue, 3 Mar 2020 08:42:40 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     "H. Nikolaus Schaller" <hns@goldelico.com>
 Cc:     Paul Cercueil <paul@crapouillou.net>,
@@ -55,88 +55,85 @@ Cc:     Paul Cercueil <paul@crapouillou.net>,
         linux-gpio@vger.kernel.org, letux-kernel@openphoenux.org,
         kernel@pyra-handheld.com,
         Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
-Subject: Re: [RFC 2/8] dt-bindings: video: Add jz4780-hdmi binding
-Message-ID: <20200303144047.GA24762@bogus>
+Subject: Re: [RFC 1/8] dt-bindings: video: Add jz4780-lcd binding
+Message-ID: <20200303144240.GB24762@bogus>
 References: <cover.1582744379.git.hns@goldelico.com>
- <2d7202155bae3fa9c7097275d4c9a1ccab569aea.1582744379.git.hns@goldelico.com>
+ <d7dd7c52a9f6cb4e31bce69bb6879e46bfba530c.1582744379.git.hns@goldelico.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2d7202155bae3fa9c7097275d4c9a1ccab569aea.1582744379.git.hns@goldelico.com>
+In-Reply-To: <d7dd7c52a9f6cb4e31bce69bb6879e46bfba530c.1582744379.git.hns@goldelico.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 26, 2020 at 08:12:54PM +0100, H. Nikolaus Schaller wrote:
+On Wed, Feb 26, 2020 at 08:12:53PM +0100, H. Nikolaus Schaller wrote:
 > From: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
 > 
-> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
+> Add DT bindings for the LCD controller on the jz4780 SoC
 > 
 > Signed-off-by: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
 > ---
->  .../bindings/display/ingenic-jz4780-hdmi.txt  | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.txt
+>  .../bindings/display/ingenic-jz4780-lcd.txt   | 39 +++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.txt
 > 
-> diff --git a/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.txt b/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.txt
+> diff --git a/Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.txt b/Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.txt
 > new file mode 100644
-> index 000000000000..f02e59fbdd5a
+> index 000000000000..8512ce3f93df
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.txt
-> @@ -0,0 +1,41 @@
-> +Device-Tree bindings for Ingenic JZ4780 HDMI Transmitter
+> +++ b/Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.txt
+> @@ -0,0 +1,39 @@
+> +Bindings for Ingenic JZ4780 LCD Controller
 > +
-> +The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys DesignWare HDMI 1.4
-> +TX controller IP with accompanying PHY IP.
+> +LCD Controller is the Display Controller for the Ingenic JZ4780 SoC
 > +
 > +Required properties:
-> + - #address-cells : should be <1>
-> + - #size-cells : should be <0>
-
-These aren't in the example.
-
-> + - compatible : should be "ingenic,jz4780-hdmi"
-> + - reg-io-width: must be <4>
-
-If it can only be 4, then you can just assume that from the compatible.
-
-> + - clocks: phandle to isrf and iahb clocks
-> + - clock-names : must be "isrf" and "iahb"
-> + - ports: Port nodes with endpoint definitions as defined in
-> +   Documentation/devicetree/bindings/media/video-interfaces.txt,
+> +- compatible: should be "ingenic,jz4780-lcd"
+> +- reg: Should contain the address & size of the LCD controller registers.
+> +- interrupts: Should specify the interrupt provided by parent.
+> +- clocks: Should contain two clock specifiers for the JZ4780_CLK_TVE JZ4780_CLK_LCD0PIXCLK.
+> +- clock-names : Must be "lcd_clk", "lcd_pixclk";
+> +- port: A port node with endpoint definitions as defined in
+> +  Documentation/devicetree/bindings/media/video-interfaces.txt.
 > +
 > +Optional properties:
-> + - ddc-i2c-bus: phandle of an I2C controller used for DDC EDID probing
+> +- interrupt-parent: phandle to parent interrupt controller
 
-This goes in a connector node. It's not part of the HDMI block.
-
-That also means you need an out port to the connector.
+Drop this. 'interrupt-parent' is always valid and could be in a parent 
+node.
 
 > +
-> +example:
+> +Example:
 > +
-> +hdmi: hdmi@10180000 {
-> +	compatible = "ingenic,jz4780-hdmi";
-> +	reg = <0x10180000 0x8000>;
-> +	reg-io-width = <4>;
-> +	ddc-i2c-bus = <&i2c4>;
+> +lcd: jz4780-lcdk@0x13050000 {
+
+Drop the '0x'.
+
+> +	compatible = "ingenic,jz4780-lcd";
+> +	reg = <0x13050000 0x1800>;
+> +
+> +	clocks = <&cgu JZ4780_CLK_TVE>, <&cgu JZ4780_CLK_LCD0PIXCLK>;
+> +	clock-names = "lcd_clk", "lcd_pixclk";
+> +
 > +	interrupt-parent = <&intc>;
-> +	interrupts = <3>;
-> +	clocks = <&cgu JZ4780_CLK_HDMI>, <&cgu JZ4780_CLK_AHB0>;
-> +	clock-names = "isfr", "iahb";
+> +	interrupts = <31>;
 > +
-> +	ports {
-> +		hdmi_in: port {
+> +	jz4780_lcd_out: port {
 > +			#address-cells = <1>;
 > +			#size-cells = <0>;
-> +			hdmi_in_lcd: endpoint@0 {
+> +
+> +			jz4780_out_hdmi: endpoint@0 {
 > +				reg = <0>;
-> +				remote-endpoint = <&jz4780_out_hdmi>;
+
+Don't need an address as there's only 1 endpoint.
+
+> +				remote-endpoint = <&hdmi_in_lcd>;
 > +			};
 > +		};
-> +	};
+> +
 > +};
 > -- 
 > 2.23.0
