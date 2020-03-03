@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E85B0178097
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2020 20:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5225A178126
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2020 20:01:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733121AbgCCR5j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Mar 2020 12:57:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40264 "EHLO mail.kernel.org"
+        id S2387570AbgCCSA4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Mar 2020 13:00:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44816 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732834AbgCCR5j (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 3 Mar 2020 12:57:39 -0500
+        id S2387861AbgCCSAx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 3 Mar 2020 13:00:53 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 158D12072D;
-        Tue,  3 Mar 2020 17:57:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 60AFF20656;
+        Tue,  3 Mar 2020 18:00:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583258258;
+        s=default; t=1583258452;
         bh=rMQn7kjsa7T0S3IBhZrsTg2HDBVaXevtNP7v9XkF4Dg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xyMJncZ96Z/bNhIaE4L9NRGDtGpX2D8+byn/yuwGSxxpC01gEltZlr/gD8BeJGA/+
-         rQl4OpB8suRN+697OnJ61EpXyC1WhUtmaDwH/afhNWeBSNX71nYhO8WULve1tEyify
-         S9s8KZ1bAvNgri+F1Njjd3J2aWcje4sNSfD+8Efo=
+        b=mijGe8m1m8P3anIBopwTfzLRv00gHoazw4qF+j/Pt9hX7Mkue7/j+TVzVsrCeJ+5H
+         MQmWUqig7A/cGz8jLhksqR8ERvtfcbw1Mu0Xsly1gJxKHwnulL19GE+IAm74CJcVx5
+         +NicDymf0rQOJFMvHk9t0PVcT6ziO7hzhFo+M6E8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -30,12 +30,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Paul Burton <paulburton@kernel.org>, ralf@linux-mips.org,
         linux-mips@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH 5.4 094/152] MIPS: VPE: Fix a double free and a memory leak in release_vpe()
-Date:   Tue,  3 Mar 2020 18:43:12 +0100
-Message-Id: <20200303174313.271395649@linuxfoundation.org>
+Subject: [PATCH 4.19 54/87] MIPS: VPE: Fix a double free and a memory leak in release_vpe()
+Date:   Tue,  3 Mar 2020 18:43:45 +0100
+Message-Id: <20200303174355.218566706@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200303174302.523080016@linuxfoundation.org>
-References: <20200303174302.523080016@linuxfoundation.org>
+In-Reply-To: <20200303174349.075101355@linuxfoundation.org>
+References: <20200303174349.075101355@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
