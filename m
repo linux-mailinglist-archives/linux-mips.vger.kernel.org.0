@@ -2,83 +2,217 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBEB176860
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2020 00:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D315176FF2
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2020 08:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726758AbgCBXlP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 2 Mar 2020 18:41:15 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:40586 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726752AbgCBXlO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 Mar 2020 18:41:14 -0500
-Received: by mail-ot1-f66.google.com with SMTP id x19so1169158otp.7;
-        Mon, 02 Mar 2020 15:41:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0C7KbIrNsdK55X+XBECBVpZklmhln+kZr6VyUlPfaOg=;
-        b=FZHPe3gMase4bYHT2m/r3pwCkj0Th0tOzSosyqtgh9jDZouJNUxDXKVIJa9ChzHg01
-         J+Hf3pR3TlYcxJrtdVoLnipjDzC44ZACUPJLcEhQXScSXz8X5LGbRzMaBwbQ7y09Fdn3
-         RHj6CR8nD6wj+lot9a2q0frJvYhcTAMqOcv9t7855rhg5BgcZwz3cVElnom3jX7EmK/b
-         RlxZF88VvB9P9oQg3869F+71VSxZ9f/h7HB9pQwFjdf5C80rPWchd/NcXH2ZWKD2RrIe
-         rXq7exNJHAolNtGZf1ILltIc6VqZ3YDYCX9hfukgRdm/nDF5Q0wvOTanUT1+j05sTrzB
-         3Vtg==
-X-Gm-Message-State: ANhLgQ25Wl1ypVbHPyCiFCNCUD6MAmfq4ZwCqWLmuTNpYJ4Nkf1q7tUc
-        eAkbFejK20xqyKxrYUVMGw==
-X-Google-Smtp-Source: ADFU+vvRNTwOIvYWej38IX/q9s2fFMVV+Tr53mzpWuzaWObBRVFixrBQrnrBtVRBMjR5Mq1mWiO3hA==
-X-Received: by 2002:a9d:6a4f:: with SMTP id h15mr1326265otn.86.1583192473868;
-        Mon, 02 Mar 2020 15:41:13 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 67sm6924948oid.30.2020.03.02.15.41.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2020 15:41:13 -0800 (PST)
-Received: (nullmailer pid 21716 invoked by uid 1000);
-        Mon, 02 Mar 2020 23:41:12 -0000
-Date:   Mon, 2 Mar 2020 17:41:12 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Mathieu Malaterre <malat@debian.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
+        id S1727663AbgCCHWI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Mar 2020 02:22:08 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.168]:8795 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727528AbgCCHWI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Mar 2020 02:22:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1583220123;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=/FFJp29E0bM3pvHTu+JTqNaYJ7aZHkmiAWb7IBx82t4=;
+        b=tDly5Q0rgQXnp5SE2SQtiMZKkTKELlzQ1ExyaOKdk/JoMKZ/DZBhDg8xmu35Lg87dN
+        5fydczeSnZWO1+K96MiJpNJLQIA7Ma8+/D886QNuh4IdNw/wnXVn4c5QRGBd9ifyDbI/
+        FmEUAbpBOnJ9LHcARrsiVTZUln+0+vbyDmsWwzHQD0oOy+UVQIjNje/dFijBC82/IgmJ
+        nfn9UYWGMbclQEkRtvmxwC0/9cbFBuEtimt/3AAKpAMPMgCA0Ry1wfYKaFP7yrJqMwm/
+        Bn4G6zAmNzctHUlbgIf+pa5zmExYU5U+wW5r9ry+YcTxMHFRAhAPp3rImrxp3zPELszD
+        N50Q==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NMGHPrpwDGvxw=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+        by smtp.strato.de (RZmta 46.2.0 DYNA|AUTH)
+        with ESMTPSA id y0a02cw237LkFyR
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Tue, 3 Mar 2020 08:21:46 +0100 (CET)
+Subject: Re: [RFC v2 1/8] dt-bindings: display: add ingenic-jz4780-lcd DT Schema
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Content-Type: text/plain; charset=iso-8859-1
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <1583176247.3.2@crapouillou.net>
+Date:   Tue, 3 Mar 2020 08:21:37 +0100
+Cc:     Paul Boddie <paul@boddie.org.uk>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Andi Kleen <ak@linux.intel.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
-        kernel@pyra-handheld.com
-Subject: Re: [PATCH v8 3/7] Bindings: nvmem: add bindings for JZ4780 efuse
-Message-ID: <20200302234112.GA21654@bogus>
-References: <cover.1582905653.git.hns@goldelico.com>
- <37d3b9e4c60692215fff0e75a78ac1e7792aaf75.1582905653.git.hns@goldelico.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <37d3b9e4c60692215fff0e75a78ac1e7792aaf75.1582905653.git.hns@goldelico.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, Sam Ravnborg <sam@ravnborg.org>,
+        Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>,
+        Rob Herring <robh@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <12E78333-0940-4F20-863E-91272C477B58@goldelico.com>
+References: <cover.1582913973.git.hns@goldelico.com> <b4a73a1c542fab9d05d12b56c547b555b6a9b062.1582913973.git.hns@goldelico.com> <1583176247.3.2@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3124)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 28 Feb 2020 17:00:49 +0100, "H. Nikolaus Schaller" wrote:
-> From: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
-> 
-> This patch brings support for the JZ4780 efuse. Currently it only exposes
-> a read only access to the entire 8K bits efuse memory.
-> 
-> Tested-by: Mathieu Malaterre <malat@debian.org>
-> Signed-off-by: PrasannaKumar Muralidharan <prasannatsmkumar@gmail.com>
-> Signed-off-by: Mathieu Malaterre <malat@debian.org>
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> [converted to yaml]
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> ---
->  .../bindings/nvmem/ingenic,jz4780-efuse.yaml  | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml
-> 
+Hi Paul,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> Am 02.03.2020 um 20:10 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi Nikolaus,
+>=20
+>=20
+> Le ven., f=E9vr. 28, 2020 at 19:19, H. Nikolaus Schaller =
+<hns@goldelico.com> a =E9crit :
+>> From: Sam Ravnborg <sam@ravnborg.org>
+>> Add DT bindings for the LCD controller on the jz4780 SoC
+>> Based on .txt binding from Zubair Lutfullah Kakakhel
+>=20
+> If you mean Documentation/devicetree/bindings/display/ingenic,lcd.txt =
+then it was written by me.
+
+Ah, ok. We didn't recognise this before. 6 eyes see more than 4...
+
+I just did cherry-pick this old 4.0 patch from 2015 by Zubair
+and it created a ingenic-jz4780-lcd.txt:
+
+https://lore.kernel.org/patchwork/patch/547872/
+
+and Sam was so kind to convert it to yaml.
+
+>=20
+>> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+>> Cc: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
+>> Cc: H. Nikolaus Schaller <hns@goldelico.com>
+>> Cc: Rob Herring <robh@kernel.org>
+>> Cc: devicetree@vger.kernel.org
+>> ---
+>> .../bindings/display/ingenic-jz4780-lcd.yaml  | 78 =
++++++++++++++++++++
+>> 1 file changed, 78 insertions(+)
+>> create mode 100644 =
+Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.yaml
+>> diff --git =
+a/Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.yaml =
+b/Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.yaml
+>> new file mode 100644
+>> index 000000000000..c71415a3a342
+>> --- /dev/null
+>> +++ =
+b/Documentation/devicetree/bindings/display/ingenic-jz4780-lcd.yaml
+>> @@ -0,0 +1,78 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/display/ingenic-jz4780-lcd.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Bindings for Ingenic JZ4780 LCD Controller
+>> +
+>> +maintainers:
+>> +  - Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
+>> +  - H. Nikolaus Schaller <hns@goldelico.com>
+>=20
+> I'm the author of the driver, please put me here; and remove Zubair, =
+which 1. didn't touch the DRM driver at all, and 2. isn't working at =
+ImgTec anymore.
+
+Yes that is true.
+
+> Also, no need to put yourself here, unless you maintain the Ingenic =
+DRM/KMS driver.
+
+Agreed. That was suggested by Sam.
+
+>=20
+>> +
+>> +description: |
+>> +  LCD Controller is the Display Controller for the Ingenic JZ4780 =
+SoC
+>> +
+>> +properties:
+>=20
+> You should add a '$nodename' property.
+>=20
+>> +  compatible:
+>> +    items:
+>> +      - const: ingenic,jz4780-lcd
+>=20
+> The .txt lists more compatible strings. Please add them all.
+>=20
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +    description: the address & size of the LCD controller registers
+>=20
+> Drop the description here,
+>=20
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +    description: Specifies the interrupt provided by parent
+>=20
+> and here.
+>=20
+>> +
+>> +  clocks:
+>> +    maxItems: 2
+>> +    description: Clock specifiers for the JZ4780_CLK_TVE =
+JZ4780_CLK_LCD0PIXCLK
+>=20
+> Add one 'description:' per item.
+>=20
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: lcd_clk
+>> +      - const: lcd_pixclk
+>> +
+>> +  port:
+>> +    type: object
+>> +    description: |
+>> +      A port node with endpoint definitions as defined in
+>> +      Documentation/devicetree/bindings/media/video-interfaces.txt
+>> +
+>> +required:
+>> +    - compatible
+>> +    - reg
+>> +    - interrupts
+>> +    - clocks
+>> +    - clock-names
+>> +    - port
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/clock/jz4780-cgu.h>
+>> +    lcd: jz4780-lcdk@0x13050000 {
+>=20
+> The node name does not comply with the DT spec, it should be =
+'lcd-controller'.
+
+Ok, I think I'll review all so that it does match/replace
+Documentation/devicetree/bindings/display/ingenic,lcd.txt
+and no information is lost.
+=20
+>=20
+> Cheers,
+> -Paul
+
+BR and thanks,
+Nikolaus
+
