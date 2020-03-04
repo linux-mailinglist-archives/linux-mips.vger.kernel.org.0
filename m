@@ -2,81 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1552178FD0
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Mar 2020 12:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEFCE179530
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Mar 2020 17:28:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729275AbgCDLum (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Mar 2020 06:50:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34666 "EHLO mail.kernel.org"
+        id S2388042AbgCDQ2E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Mar 2020 11:28:04 -0500
+Received: from elvis.franken.de ([193.175.24.41]:50872 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729232AbgCDLul (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 4 Mar 2020 06:50:41 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ADACE21739;
-        Wed,  4 Mar 2020 11:50:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583322641;
-        bh=Vv6tft/6s8eTaR5uE07e77E4tzR7PioLaiDjnjzQ9zc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eTt62EEXLCsVOdW25+cJSe6hfk0qTill6PuVYnucUMt4ktfYuQaDM6AW4txeL8prc
-         B25VHRJ7FHHueVSR1xEUMBnOTzr/1weoh0FaSlU9OaBo/dIuKYD9+tDB5Dkye9pYs0
-         IEFzAE8DwUpgDh45aajZCuOq0onApZrMejyqzNiI=
-Date:   Wed, 4 Mar 2020 12:50:38 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     YunQiang Su <wzssyqa@gmail.com>
-Cc:     devel@driverdev.osuosl.org, Paul Burton <paulburton@kernel.org>,
-        linux-kernel@vger.kernel.org, willy@infradead.org,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Ralf Baechle <ralf@linux-mips.org>, dan.carpenter@oracle.com,
-        linux@roeck-us.net
-Subject: Re: [PATCH 0/6] Re-instate octeon staging drivers
-Message-ID: <20200304115038.GB1581141@kroah.com>
-References: <20200205001116.14096-1-chris.packham@alliedtelesis.co.nz>
- <20200212215200.GA2367959@kroah.com>
- <CAKcpw6VczRuMC_KRzP6VRPeZPtmEpVOJE5Fc+JhDH4mWU7jUVg@mail.gmail.com>
- <20200304063910.GA1203555@kroah.com>
- <CAKcpw6Vt1wUGcps2b86YGU8gGijvKTa6ERL5F1Nk=utaJyz+kg@mail.gmail.com>
+        id S2388019AbgCDQ2D (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 4 Mar 2020 11:28:03 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1j9WsL-000509-00; Wed, 04 Mar 2020 17:28:01 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id B264DC0EF6; Wed,  4 Mar 2020 17:22:49 +0100 (CET)
+Date:   Wed, 4 Mar 2020 17:22:49 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     "dtb ." <carlojpisani@gmail.com>
+Cc:     linux-mips@vger.kernel.org
+Subject: Re: MIPS Hardware support
+Message-ID: <20200304162249.GA14388@alpha.franken.de>
+References: <20200227144910.GA25011@alpha.franken.de>
+ <CA+QBN9DRUMkd+cOvHMJfe_-7rdhUpb=BiC7BBWN2ZS5-fNXtfw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKcpw6Vt1wUGcps2b86YGU8gGijvKTa6ERL5F1Nk=utaJyz+kg@mail.gmail.com>
+In-Reply-To: <CA+QBN9DRUMkd+cOvHMJfe_-7rdhUpb=BiC7BBWN2ZS5-fNXtfw@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 04, 2020 at 06:25:34PM +0800, YunQiang Su wrote:
-> Greg KH <gregkh@linuxfoundation.org> 于2020年3月4日周三 下午2:39写道：
-> >
-> > On Wed, Mar 04, 2020 at 09:48:46AM +0800, YunQiang Su wrote:
-> > > Greg KH <gregkh@linuxfoundation.org> 于2020年2月13日周四 上午5:52写道：
-> > > >
-> > > > On Wed, Feb 05, 2020 at 01:11:10PM +1300, Chris Packham wrote:
-> > > > > This series re-instates the octeon drivers that were recently removed and
-> > > > > addresses the build issues that lead to that decision.
-> > > > >
-> > > > > I've approached Cavium/Marvell about taking a more active interest in getting
-> > > > > the code out of staging and into their proper location. No reply on that (yet).
-> > > >
-> > > > Good luck with talking to the companies, hopefully that will work.
-> > > >
-> > > > Anyway, I've applied this series, thanks for this, let's see what breaks
-> > > > now :)
-> > >
-> > > Did you meet any problem to merge Chris's patchset?
-> >
-> > They are all in linux-next, so you can see for yourself :)
-> 
-> Thank you so much. I found it.
-> It is very important for Debian MIPS Ports as we are using some of
-> Octeon machines.
+On Mon, Mar 02, 2020 at 09:35:09AM +0100, dtb . wrote:
+> when (which kernel future release?) do you think it will be possible
+> to have a working PCI subsystem with SGI IP30? I'd love to use a
+> PCI_EHCI card, and a PCI_SATA card for a couple of practical projects.
 
-If it is so important, why is no one working on fixing these drivers up?
+32bit DMA support for bridge (which is needed at least for EHCI) is
+on my todo list, but it's not top priority.
 
-thanks,
+Thomas.
 
-greg k-h
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
