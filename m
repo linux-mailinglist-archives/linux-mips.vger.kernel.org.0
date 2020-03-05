@@ -2,40 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3CE17ACF9
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Mar 2020 18:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4720317AC93
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Mar 2020 18:21:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727174AbgCERNi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Mar 2020 12:13:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39166 "EHLO mail.kernel.org"
+        id S1727783AbgCERV1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Mar 2020 12:21:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40762 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727137AbgCERNi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 5 Mar 2020 12:13:38 -0500
+        id S1727714AbgCEROe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 5 Mar 2020 12:14:34 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B051321D56;
-        Thu,  5 Mar 2020 17:13:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3023C21556;
+        Thu,  5 Mar 2020 17:14:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583428417;
-        bh=Tkr/6mrr1glEaInkhIb3wjUGtu3WF0DzZoe3urzNmhE=;
+        s=default; t=1583428473;
+        bh=2+JddXm05lMAvMt7a5HtaUlUsXMzX06xKsrUO7VAvF8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q2TSkB9w4oyi2LrOeheG+d0zFjonUHScMUqZYYJuflBbYjFe6rPgpPES3LRRxfKxj
-         7pPgivaE9k0sd2/aKhri8iA/AzK8sVi8zBihqNQqE5qRyQTXrkgcKw3pDlmjlX+4r9
-         dS6qkasJvIV8b+K85BiijVzSo1TuGWcMc9KuC9W4=
+        b=FJZM2Xzz7o5MDoypOMM8DijfrZFSaU2BAqINYfgsh+IjQcS3uf8UbgXnE/uTeF7Uj
+         uVbDNjt+O/7KNzoakYoLYlSR2KnvyLmpCDmrgbXJ6p32sDU1cA9u0ZArX4lhlXxy9t
+         yoqQS+07JV65OoWTiahaJhMQpDwOGWOPv4oopBq0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+Cc:     Victor Kamensky <kamensky@cisco.com>,
+        Bruce Ashfield <bruce.ashfield@gmail.com>,
         Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org,
-        clang-built-linux@googlegroups.com, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.5 20/67] MIPS: vdso: Wrap -mexplicit-relocs in cc-option
-Date:   Thu,  5 Mar 2020 12:12:21 -0500
-Message-Id: <20200305171309.29118-20-sashal@kernel.org>
+        linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        richard.purdie@linuxfoundation.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 10/58] mips: vdso: fix 'jalr t9' crash in vdso code
+Date:   Thu,  5 Mar 2020 12:13:31 -0500
+Message-Id: <20200305171420.29595-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200305171309.29118-1-sashal@kernel.org>
-References: <20200305171309.29118-1-sashal@kernel.org>
+In-Reply-To: <20200305171420.29595-1-sashal@kernel.org>
+References: <20200305171420.29595-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,52 +47,59 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+From: Victor Kamensky <kamensky@cisco.com>
 
-[ Upstream commit 72cf3b3df423c1bbd8fa1056fed009d3a260f8a9 ]
+[ Upstream commit d3f703c4359ff06619b2322b91f69710453e6b6d ]
 
-Clang does not support this option and errors out:
+Observed that when kernel is built with Yocto mips64-poky-linux-gcc,
+and mips64-poky-linux-gnun32-gcc toolchain, resulting vdso contains
+'jalr t9' instructions in its code and since in vdso case nobody
+sets GOT table code crashes when instruction reached. On other hand
+observed that when kernel is built mips-poky-linux-gcc toolchain, the
+same 'jalr t9' instruction are replaced with PC relative function
+calls using 'bal' instructions.
 
-clang-11: error: unknown argument: '-mexplicit-relocs'
+The difference boils down to -mrelax-pic-calls and -mexplicit-relocs
+gcc options that gets different default values depending on gcc
+target triplets and corresponding binutils. -mrelax-pic-calls got
+enabled by default only in mips-poky-linux-gcc case. MIPS binutils
+ld relies on R_MIPS_JALR relocation to convert 'jalr t9' into 'bal'
+and such relocation is generated only if -mrelax-pic-calls option
+is on.
 
-Clang does not appear to need this flag like GCC does because the jalr
-check that was added in commit 976c23af3ee5 ("mips: vdso: add build
-time check that no 'jalr t9' calls left") passes just fine with
+Please note 'jalr t9' conversion to 'bal' can happen only to static
+functions. These static PIC calls use mips local GOT entries that
+are supposed to be filled with start of DSO value by run-time linker
+(missing in VDSO case) and they do not have dynamic relocations.
+Global mips GOT entries must have dynamic relocations and they should
+be prevented by cmd_vdso_check Makefile rule.
 
-$ make ARCH=mips CC=clang CROSS_COMPILE=mipsel-linux-gnu- malta_defconfig arch/mips/vdso/
+Solution call out -mrelax-pic-calls and -mexplicit-relocs options
+explicitly while compiling MIPS vdso code. That would get correct
+and consistent between different toolchains behaviour.
 
-even before commit d3f703c4359f ("mips: vdso: fix 'jalr t9' crash in
-vdso code").
-
--mrelax-pic-calls has been supported since clang 9, which is the
-earliest version that could build a working MIPS kernel, and it is the
-default for clang so just leave it be.
-
-Fixes: d3f703c4359f ("mips: vdso: fix 'jalr t9' crash in vdso code")
-Link: https://github.com/ClangBuiltLinux/linux/issues/890
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+Reported-by: Bruce Ashfield <bruce.ashfield@gmail.com>
+Signed-off-by: Victor Kamensky <kamensky@cisco.com>
 Signed-off-by: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
 Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: clang-built-linux@googlegroups.com
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: richard.purdie@linuxfoundation.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/vdso/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/vdso/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index bfb65b2d57c7f..2cf4b6131d88d 100644
+index 996a934ece7d6..3fa4bbe1bae53 100644
 --- a/arch/mips/vdso/Makefile
 +++ b/arch/mips/vdso/Makefile
-@@ -29,7 +29,7 @@ endif
+@@ -29,6 +29,7 @@ endif
  cflags-vdso := $(ccflags-vdso) \
  	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
  	-O3 -g -fPIC -fno-strict-aliasing -fno-common -fno-builtin -G 0 \
--	-mrelax-pic-calls -mexplicit-relocs \
-+	-mrelax-pic-calls $(call cc-option, -mexplicit-relocs) \
++	-mrelax-pic-calls -mexplicit-relocs \
  	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
  	$(call cc-option, -fno-asynchronous-unwind-tables) \
  	$(call cc-option, -fno-stack-protector)
