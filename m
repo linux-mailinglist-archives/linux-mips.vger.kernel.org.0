@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D69C517C785
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Mar 2020 22:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7596E17C78B
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Mar 2020 22:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726676AbgCFVGk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 6 Mar 2020 16:06:40 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.82]:21724 "EHLO
+        id S1727000AbgCFVGr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Mar 2020 16:06:47 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.169]:27957 "EHLO
         mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726185AbgCFVGk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Mar 2020 16:06:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1583528798;
+        with ESMTP id S1726269AbgCFVGr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Mar 2020 16:06:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1583528804;
         s=strato-dkim-0002; d=goldelico.com;
         h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=vNO66+ztpQp9n8/S8Q3jA2wnH0xE9ZlJlnj64laLA5o=;
-        b=eC/fqldFRaN7a1/2Z9kfcASvQBRb92sv11tNfIQp669rrUR65NBwin1hnq59CPCbGh
-        VC93Wf6xwYIBRKirv5eNUntmZRlCd/nwpvBXknql6utIhS4xvtxsCLvbv5BrTbE92phb
-        OdLrVHl2LHvd/UcnV/7xAIKMkjDz5+2p8rFmcpPNj/UYqRoQfhUraIwL+5GCLmnTeQwf
-        TxY+YAQ04f/DzcbAFubu1nKhc+scivFQGjTVe8OISK71AwU3KM6HzWXc+xgJrUb0IVGc
-        IWxxy/sgpwAhEkgU09VpbhI2iYo6y9vU/ANFsrPY5uQQBbD9YaZJGY9Gj2zSKiwEwo/z
-        PUUg==
+        bh=F7Q7dzKizkE8VkIH23/riTwDlFWCGM9XLFl0TNbD9Eo=;
+        b=RBnW30MlH3BjQMJr3KIkb4lO1Tc65LC+T057CFV5C699oafjHP76y7AW2CJQUsXlw2
+        wHqCWvtbORnOlRejjz1g640y1AosRG58nB4hm8LyYWAJoddZoGF4UTvtqRLMsdRtr1C6
+        1waInOFh675KJ1sXENtjPirPaMdlSpR+rULztUsTwIXhd8FP7w4lCHSr7vlvgwUU9ACU
+        gp6trJFC/fCJ6WZpGhxqMJOh/IE9Jfvq7Xgr3/oZjrLelgo2fDqBt3NOnEY9MndFrBJx
+        IvoKddgeY9WTdFZHHXRrXjymranSXcnlrFLS7VqzI1OA6OvyB6QaXdUmN/f+7EaZNfMh
+        fTuw==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1mfYzBGHXH6GQjzrz4="
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 46.2.0 DYNA|AUTH)
-        with ESMTPSA id y0a02cw26L6baJd
+        with ESMTPSA id y0a02cw26L6baJe
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
         Fri, 6 Mar 2020 22:06:37 +0100 (CET)
@@ -42,9 +42,9 @@ To:     Paul Cercueil <paul@crapouillou.net>,
         Miquel Raynal <miquel.raynal@bootlin.com>
 Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org
-Subject: [PATCH v7 2/3] MIPS: DTS: CI20: multiple DTS improvements
-Date:   Fri,  6 Mar 2020 22:06:32 +0100
-Message-Id: <cc802abaf32370e852c4ba28d8598fdff45706f3.1583528793.git.hns@goldelico.com>
+Subject: [PATCH v7 3/3] MIPS: CI20: defconfig: multiple improvements
+Date:   Fri,  6 Mar 2020 22:06:33 +0100
+Message-Id: <c287fc50dbbd531bd87e629cb52ec58cba497347.1583528793.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <cover.1583528793.git.hns@goldelico.com>
 References: <cover.1583528793.git.hns@goldelico.com>
@@ -55,63 +55,83 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-a) add DT node for SW1 as Enter button
+a) configure for supporting modules
 
-The SW1 button can be used as a simple one-button keyboard
-and is connected to PD17.
+Not all drivers need to be compiled into the kernel.
+Support building and loading of kernel modules.
 
-Note: SW1 has a second meaning to change the boot sequence
-when pressed while powering on.
+b) compile leds-gpio driver into the kernel and configure for LED triggers
 
-b) give eth0_power a defined voltage.
+DTS has been augmented to add some gpio-leds. We need the leds-gpio driver
+and enable the triggers.
 
-This is a 3.3V power switch (DVNET3.3V).
+c) configure CONFIG_REGULATOR_ACT8865 for PMU
+
+The PMU on the CI20 board is an ACT8600 using the ACT8865 driver.
+Since it is not compiled, the PMU and the CI20 board is running in
+power-on reset state of the PMU.
+
+d) compile gpio-ir driver
+
+The CI20 board has a gpio based IR receiver.
+
+e) configure for CONFIG_KEYBOARD_GPIO=m
+
+The SW1 button is hooked up to send input events.
 
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 ---
- arch/mips/boot/dts/ingenic/ci20.dts | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ arch/mips/configs/ci20_defconfig | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index fc4e64200c3d..db0ca250bd1a 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -4,6 +4,7 @@
- #include "jz4780.dtsi"
- #include <dt-bindings/clock/ingenic,tcu.h>
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/regulator/active-semi,8865-regulator.h>
- 
-@@ -27,6 +28,17 @@
- 		       0x30000000 0x30000000>;
- 	};
- 
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		sw1 {
-+			label = "ci20:sw1";
-+			linux,code = <KEY_F13>;
-+			gpios = <&gpd 17 GPIO_ACTIVE_HIGH>;
-+			wakeup-source;
-+		};
-+	};
-+
- 	leds {
- 		compatible = "gpio-leds";
- 
-@@ -58,6 +70,8 @@
- 	eth0_power: fixedregulator@0 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "eth0_power";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
- 		gpio = <&gpb 25 GPIO_ACTIVE_LOW>;
- 		enable-active-high;
- 	};
+diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
+index be41df2a81fb..0db0088bbc1c 100644
+--- a/arch/mips/configs/ci20_defconfig
++++ b/arch/mips/configs/ci20_defconfig
+@@ -1,4 +1,5 @@
+ # CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_MODULES=y
+ CONFIG_KERNEL_XZ=y
+ CONFIG_SYSVIPC=y
+ CONFIG_POSIX_MQUEUE=y
+@@ -88,12 +89,14 @@ CONFIG_I2C_JZ4780=y
+ CONFIG_SPI=y
+ CONFIG_SPI_GPIO=y
+ CONFIG_GPIO_SYSFS=y
++CONFIG_KEYBOARD_GPIO=m
+ # CONFIG_HWMON is not set
+ CONFIG_WATCHDOG=y
+ CONFIG_JZ4740_WDT=y
+ CONFIG_REGULATOR=y
+ CONFIG_REGULATOR_DEBUG=y
+ CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_REGULATOR_ACT8865=y
+ # CONFIG_VGA_CONSOLE is not set
+ # CONFIG_HID is not set
+ # CONFIG_USB_SUPPORT is not set
+@@ -166,3 +169,21 @@ CONFIG_STACKTRACE=y
+ # CONFIG_FTRACE is not set
+ CONFIG_CMDLINE_BOOL=y
+ CONFIG_CMDLINE="earlycon console=ttyS4,115200 clk_ignore_unused"
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGERS=y
++CONFIG_LEDS_TRIGGER_MTD=y
++CONFIG_LEDS_TRIGGER_TIMER=y
++CONFIG_LEDS_TRIGGER_ONESHOT=y
++CONFIG_LEDS_TRIGGER_ONESHOT=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_LEDS_TRIGGER_BACKLIGHT=m
++CONFIG_LEDS_TRIGGER_CPU=y
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
++CONFIG_LEDS_TRIGGER_TRANSIENT=y
++CONFIG_LEDS_TRIGGER_CAMERA=m
++CONFIG_LIRC=y
++CONFIG_MEDIA_SUPPORT=m
++CONFIG_RC_DEVICES=y
++CONFIG_IR_GPIO_CIR=m
++CONFIG_IR_GPIO_TX=m
 -- 
 2.23.0
 
