@@ -2,189 +2,219 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF7E17BC95
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Mar 2020 13:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3487817BD0E
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Mar 2020 13:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727141AbgCFMSX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 6 Mar 2020 07:18:23 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:35024 "EHLO
+        id S1726162AbgCFMsN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Mar 2020 07:48:13 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:35370 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726646AbgCFMSD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Mar 2020 07:18:03 -0500
+        with ESMTP id S1726108AbgCFMsN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Mar 2020 07:48:13 -0500
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id D7EE7803079F;
-        Fri,  6 Mar 2020 12:11:35 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 3596F80307C2;
+        Fri,  6 Mar 2020 12:48:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id J3UrBVqSDUAw; Fri,  6 Mar 2020 15:11:35 +0300 (MSK)
+        with ESMTP id e-Q1VTnmsfw8; Fri,  6 Mar 2020 15:48:05 +0300 (MSK)
 From:   <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paul.burton@imgtec.com>,
         Ralf Baechle <ralf@linux-mips.org>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 10/22] mips: Add CP0 Write Merge config support
-Date:   Fri, 6 Mar 2020 15:08:34 +0300
-In-Reply-To: <20200306120847.32690-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200306120847.32690-1-Sergey.Semin@baikalelectronics.ru>
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, <linux-mips@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 00/22] mips: Prepare MIPS-arch code for Baikal-T1 SoC support
+Date:   Fri, 6 Mar 2020 15:46:43 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-Message-Id: <20200306121135.D7EE7803079F@mail.baikalelectronics.ru>
+Message-Id: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+From: Serge Semin <fancer.lancer@gmail.com>
 
-CP0 config register may indicate whether write-through merging
-is allowed. Currently there are two types of the merging available:
-SysAD Valid and Full modes. Whether each of them are supported by
-the core is implementation dependent. Moreover whether the ability
-to change the mode also depends on the chip family instance. Taking
-into account all of this we created a dedicated mm_config() method
-to detect and enable merging if it's supported. It is called for
-MIPS-type processors at CPU-probe stage and attempts to detect whether
-the write merging is available. If it's known to be supported and
-switchable, then switch on the full mode. Otherwise just perform the
-CP0.Config.MM field analysis.
+This is a first patchset of a series of about 25 ones, which are intended to
+add the full Baikal-T1 SoC [1] support to the Linux kernel. Since they will
+concern various kernel subsystems, I decided to split the whole work up into
+the patchesets in accordance with the subsystems/devices their changes are
+introduced for. Nearly 2/3 of the work is already done and will be sent out
+very soon. While the rest of the changes specifically related to the fast-speed
+interfaces (DW 12G PHY, PCIe, SATA, xGBE, GMAC, USB, DDRC, IC) are still in
+refactoring and preparation for integration into the mainline kernel. Hopefully
+I'll finish them up in the next two-three months, and submit them straight
+away.
 
-In addition there are platforms like InterAptiv/ProAptiv, which do have
-the MM bit field set by default, but having write-through cacheing
-unsupported makes write-merging also unsupported. In this case we just
-ignore the MM field value.
+Getting back to this patchset. As the subject states this is intended to
+prepare the MIPS-arch and generic kernel code for further Baikal-T1 SoC
+platform support integration (note the Baikal-T1 SoC platform code will be
+submitted last after the whole series of patchsets as a closure of the
+submission process). First of all the patchset starts with a set of changes
+to the dt-bindings kernel concerning MIPS CPC and CDMM nodes as being described
+by the trivial device bindings. In addition we updated the vendors prefix
+schema with Baikal Electronics JSC prefix so being further committed device
+drivers would be correctly accepted by the checkpatch-script.
+
+Then I found out that dtc-compiler integrated into the kernel doesn't support
+all the possible values of the 'reg'-property used to define the i2c-slave
+devices address. It may have 10-bits and own-slave flags, so the compiler has
+to deal with them. Even though the patch might be better to be integrated into
+the mainline dtc repo I decided to send it to the kernel first.
+
+While I was working with the MIPS architecture code, I discovered, that there
+is a bug in the Coherency Manager v2 error causes declaration and the errors
+handler lacked of CM2  L2 ECC/parity errors support. So the fixes are here in
+the patchset.
+
+Baikal-T1 SoC is based on the MIPS P5600 Warrior IP-core, which itself has
+MIPS32 Release 5 architecture. Even though on ISA level it doesn't differ much
+from the MIPS32 Release 2 release, there are still some peculiarities, which
+make it's justified to add the direct MIPS32r5 support into the kernel (see
+the specific patch for details). In addition seeing there is more than one
+real chip based on the MIPS P5600 core on the market, it would be good to have
+the direct P5600 CPU config in the MIPS-arch.
+
+There were some issues we discovered while were working with MIPS-arch code.
+So the cleanups and fixes are introduced in this patchset. First of all the
+Write-Merge CPU feature hasn't been handled in a generic way. Even if a
+platform defined the writecombine flag as _CACHE_UNCACHED_ACCELERATED, the
+feature might have been disabled in the CP0 register. We either enable it or
+leave it as is in accordance with the knowledge of whether the corresponding
+platform really supports it. Secondly Memory Accessibility Attribute Registers
+(MAAR) haven't been properly initialized when Extended Physical Address (XPA)
+mode was enabled. Thirdly since some of the platforms may have a very strict
+limitations on the IO-memory access instructions. For instance Baikal-T1 SoC
+IO-memory can be accessed by the lw/sw instructions only. In this case
+for early-printk and CPS-debug code we suggest to use the instructions in
+accordance with the UART-registers offset (lb/sb if offset = 0, lh/sh
+if offset = 1 and so on). Fourthly in case if CPUFREQ feature is enabled
+and frequency of the CPU is changed by the reference clock alteration, we
+must make sure that MIPS r4k timer related services are properly updated
+when CPU-frequency changes. It concerns udelay lpj adjustment, MIPS timer
+clockevent frequency update. In addition when CPU reference frequency changes
+it isn't recommended to use the timer as clocksource at all, since currently
+the subsystem isn't tolerant to the unstable clock sources. So in this case
+we suggest to use the r4k timer for clocksourcing only as a last resort.
+Fifthly we discovered a bug in a method of CPUFREQ boost feature enable
+procedure and fixed it in one of the patches within this patchset. And finally
+there are a few fixups/cleanups we suggest to integrate into the MIPS FDC
+and CDMM related code (see the patches for details).
+
+This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
+commit 98d54f81e36b ("Linux 5.6-rc4").
+
+[1] http://www.baikalelectronics.com/products/168/
+
+P.S. Sorry for the previous emails burst. I forgot to start the series with
+this cover-letter and the corporate smtp broke the transmission in the middle
+anyway. Please don't pay attention to them. Here is the proper emails
+resubmission.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
+Cc: Paul Burton <paul.burton@imgtec.com>
 Cc: Ralf Baechle <ralf@linux-mips.org>
----
- arch/mips/include/asm/cpu-features.h |  8 +++++
- arch/mips/include/asm/cpu.h          |  4 ++-
- arch/mips/include/asm/mipsregs.h     |  3 ++
- arch/mips/kernel/cpu-probe.c         | 48 ++++++++++++++++++++++++++++
- 4 files changed, 62 insertions(+), 1 deletion(-)
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Frank Rowand <frowand.list@gmail.com>
+cc: Tony Lindgren <tony@atomide.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jslaby@suse.com>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
-index 7e22b9c1e279..2b818f2036d0 100644
---- a/arch/mips/include/asm/cpu-features.h
-+++ b/arch/mips/include/asm/cpu-features.h
-@@ -630,6 +630,14 @@
- # endif
- #endif
- 
-+#ifndef cpu_has_mm_sysad
-+# define cpu_has_mm_sysad	__opt(MIPS_CPU_MM_SYSAD)
-+#endif
-+
-+#ifndef cpu_has_mm_full
-+# define cpu_has_mm_full	__opt(MIPS_CPU_MM_FULL)
-+#endif
-+
- /*
-  * Guest capabilities
-  */
-diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
-index 9bae99b568c9..191529ef0d05 100644
---- a/arch/mips/include/asm/cpu.h
-+++ b/arch/mips/include/asm/cpu.h
-@@ -417,7 +417,9 @@ enum cpu_type_enum {
- #define MIPS_CPU_MT_PER_TC_PERF_COUNTERS \
- 				BIT_ULL(56)	/* CPU has perf counters implemented per TC (MIPSMT ASE) */
- #define MIPS_CPU_MMID		BIT_ULL(57)	/* CPU supports MemoryMapIDs */
--#define MIPS_CPU_MAC_2008_ONLY	BIT_ULL(58)	/* CPU Only support MAC2008 Fused multiply-add instruction */
-+#define MIPS_CPU_MM_SYSAD	BIT_ULL(58)	/* CPU supports write-through SysAD Valid merge */
-+#define MIPS_CPU_MM_FULL	BIT_ULL(59)	/* CPU supports write-through full merge */
-+#define MIPS_CPU_MAC_2008_ONLY	BIT_ULL(60)	/* CPU Only support MAC2008 Fused multiply-add instruction */
- 
- /*
-  * CPU ASE encodings
-diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
-index 796fe47cfd17..b1c761279b13 100644
---- a/arch/mips/include/asm/mipsregs.h
-+++ b/arch/mips/include/asm/mipsregs.h
-@@ -563,6 +563,9 @@
- #define MIPS_CONF_MT_FTLB	(_ULCAST_(4) <<  7)
- #define MIPS_CONF_AR		(_ULCAST_(7) << 10)
- #define MIPS_CONF_AT		(_ULCAST_(3) << 13)
-+#define MIPS_CONF_MM		(_ULCAST_(3) << 17)
-+#define MIPS_CONF_MM_SYSAD	(_ULCAST_(1) << 17)
-+#define MIPS_CONF_MM_FULL	(_ULCAST_(2) << 17)
- #define MIPS_CONF_M		(_ULCAST_(1) << 31)
- 
- /*
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index c912277fa27a..ffe8956b7981 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -650,6 +650,52 @@ static int set_ftlb_enable(struct cpuinfo_mips *c, enum ftlb_flags flags)
- 	return 0;
- }
- 
-+static int mm_config(struct cpuinfo_mips *c)
-+{
-+	unsigned int config0, update, mm;
-+
-+	config0 = read_c0_config();
-+	mm = config0 & MIPS_CONF_MM;
-+
-+	/*
-+	 * It's implementation dependent what type of write-merge is supported
-+	 * and whether it can be enabled/disabled. If it is settable lets make
-+	 * the merging allowed by default. Some platforms might have
-+	 * write-through caching unsupported. In this case just ignore the
-+	 * CP0.Config.MM bit field value.
-+	 */
-+	switch (c->cputype) {
-+	case CPU_24K:
-+	case CPU_34K:
-+	case CPU_74K:
-+	case CPU_P5600:
-+	case CPU_P6600:
-+		c->options |= MIPS_CPU_MM_FULL;
-+		update = MIPS_CONF_MM_FULL;
-+		break;
-+	case CPU_1004K:
-+	case CPU_1074K:
-+	case CPU_INTERAPTIV:
-+	case CPU_PROAPTIV:
-+		mm = 0;
-+		/* fall through */
-+	default:
-+		update = 0;
-+		break;
-+	}
-+
-+	if (update) {
-+		config0 = (config0 & ~MIPS_CONF_MM) | update;
-+		write_c0_config(config0);
-+	} else if (mm == MIPS_CONF_MM_SYSAD) {
-+		c->options |= MIPS_CPU_MM_SYSAD;
-+	} else if (mm == MIPS_CONF_MM_FULL) {
-+		c->options |= MIPS_CPU_MM_FULL;
-+	}
-+
-+	return 0;
-+}
-+
- static inline unsigned int decode_config0(struct cpuinfo_mips *c)
- {
- 	unsigned int config0;
-@@ -1741,6 +1787,8 @@ static inline void cpu_probe_mips(struct cpuinfo_mips *c, unsigned int cpu)
- 
- 	spram_config();
- 
-+	mm_config(c);
-+
- 	switch (__get_cpu_type(c->cputype)) {
- 	case CPU_M5150:
- 	case CPU_P5600:
+Serge Semin (22):
+  dt-bindings: Permit platform devices in the trivial-devices bindings
+  dt-bindings: Add MIPS CPC controller as a trivial devices
+  dt-bindings: Add MIPS CDMM controller as a trivial device
+  dt-bindings: Add vendor prefix for Baikal Electronics, JSC
+  mips: cm: Fix an invalid error code of INTVN_*_ERR
+  mips: cm: Add L2 ECC/parity errors reporting
+  mips: Add MIPS32 Release 5 support
+  mips: Add MIPS Warrior P5600 support
+  mips: Fix cpu_has_mips64r1/2 activation for MIPS32 CPUs
+  mips: Add CP0 Write Merge config support
+  mips: Add CONFIG/CONFIG6 reg fields macro
+  mips: MAAR: Use more precise address mask
+  mips: MAAR: Add XPA mode support
+  mips: early_printk_8250: Use offset-sized IO-mem accessors
+  mips: Use offset-sized IO-mem accessors in CPS debug printout
+  mips: cdmm: Add mti,mips-cdmm dtb node support
+  bus: cdmm: Add MIPS R5 arch support
+  tty: mips_ejtag_fdc: Mark expected switch fall-through
+  mips: Add udelay lpj numbers adjustment
+  mips: csrc-r4k: Decrease r4k-clocksource rating if CPU_FREQ enabled
+  mips: cevt-r4k: Update the r4k-clockevent frequency in sync with CPU
+  cpufreq: Return zero on success in boost sw setting
+
+ .../bindings/power/mti,mips-cpc.txt           |  8 ---
+ .../devicetree/bindings/trivial-devices.yaml  | 12 ++--
+ .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+ arch/mips/Kconfig                             | 62 ++++++++++++++--
+ arch/mips/Makefile                            |  2 +
+ arch/mips/include/asm/asmmacro.h              | 18 ++---
+ arch/mips/include/asm/compiler.h              |  5 ++
+ arch/mips/include/asm/cpu-features.h          | 34 ++++++---
+ arch/mips/include/asm/cpu-info.h              |  2 +-
+ arch/mips/include/asm/cpu-type.h              |  6 +-
+ arch/mips/include/asm/cpu.h                   | 11 +--
+ arch/mips/include/asm/fpu.h                   |  4 +-
+ arch/mips/include/asm/hazards.h               |  8 ++-
+ arch/mips/include/asm/maar.h                  | 17 ++++-
+ arch/mips/include/asm/mipsregs.h              | 33 ++++++++-
+ arch/mips/include/asm/module.h                |  4 ++
+ arch/mips/include/asm/stackframe.h            |  2 +-
+ arch/mips/include/asm/switch_to.h             |  8 +--
+ arch/mips/kernel/cevt-r4k.c                   | 44 ++++++++++++
+ arch/mips/kernel/cps-vec-ns16550.S            | 18 ++++-
+ arch/mips/kernel/cpu-probe.c                  | 60 ++++++++++++++++
+ arch/mips/kernel/csrc-r4k.c                   |  4 ++
+ arch/mips/kernel/early_printk_8250.c          | 34 ++++++++-
+ arch/mips/kernel/entry.S                      |  6 +-
+ arch/mips/kernel/mips-cm.c                    | 66 +++++++++++++++--
+ arch/mips/kernel/proc.c                       |  2 +
+ arch/mips/kernel/r4k_fpu.S                    | 14 ++--
+ arch/mips/kernel/spram.c                      |  4 +-
+ arch/mips/kernel/time.c                       | 70 +++++++++++++++++++
+ arch/mips/kvm/vz.c                            |  6 +-
+ arch/mips/lib/csum_partial.S                  |  6 +-
+ arch/mips/mm/c-r4k.c                          |  7 +-
+ arch/mips/mm/init.c                           |  8 ++-
+ arch/mips/mm/sc-mips.c                        |  7 +-
+ drivers/bus/Kconfig                           |  2 +-
+ drivers/bus/mips_cdmm.c                       | 15 ++++
+ drivers/cpufreq/cpufreq.c                     |  2 +-
+ drivers/tty/mips_ejtag_fdc.c                  |  1 +
+ 38 files changed, 529 insertions(+), 85 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/mti,mips-cpc.txt
+
 -- 
 2.25.1
 
