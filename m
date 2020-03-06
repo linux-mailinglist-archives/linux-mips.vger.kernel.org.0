@@ -2,98 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA5B17BFDA
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Mar 2020 15:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFE117C0DE
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Mar 2020 15:49:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbgCFOF4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 6 Mar 2020 09:05:56 -0500
-Received: from mail-qv1-f65.google.com ([209.85.219.65]:40632 "EHLO
-        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726231AbgCFOF4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Mar 2020 09:05:56 -0500
-Received: by mail-qv1-f65.google.com with SMTP id u17so951817qvv.7
-        for <linux-mips@vger.kernel.org>; Fri, 06 Mar 2020 06:05:55 -0800 (PST)
+        id S1726182AbgCFOtu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Mar 2020 09:49:50 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:37285 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726054AbgCFOtu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Mar 2020 09:49:50 -0500
+Received: by mail-qk1-f193.google.com with SMTP id y126so2518818qke.4
+        for <linux-mips@vger.kernel.org>; Fri, 06 Mar 2020 06:49:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=B+DtfybZtzBvX/wSBkQ3pwj5wl5N3ahsmo8BZrm5qrQ=;
+        b=foHX4tU0R/X9wtfDqDwi0LWckki2d5QiPuKILZnaCtVZNYzqjchAcmxNfhMR1ejnoA
+         bttn1ZYooC1RI1yp5SBRwEP4H1PMZS2aAvK1fAzXYhWaFboutvD3y2hZl7nREp1chtZr
+         /bviax0RFQl0MkgJMu1i2V0RpP3NnNPcHA8VBzDxlyrlSjwcUPiFmkkYvkdLzUPHtvZj
+         F21kOzurjEoomqN+EveA5Qma3LEPv5mro8/2Us3tnwR7/ouQhdblAJ9XqtYXk+950uV8
+         QH+JUlmN+mamWNs4+O8Bn0eKdMKLbssgSFXR9saYRvG+61Ti6dsbvrPannmehHdUdNYq
+         9/QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=oqRlMWgdEsVveAh7gJOqWXplXzbgqFBkMqSkT0cieDk=;
-        b=a5KEghzHaI9eGqk3YD/oLuywRxr5mkTHhzTK0yZBaH3M6BmaGWf487x8N8W9Q49sL1
-         dR5pQVkHO3m7gJ1RbxvNPcSPvYjCDOIWfMnffAObdTuelkfDChFmUr8VO3UGuYGrzgo0
-         7pBqwbmVUC/ZfBLtp80oqqvXvSxhDtoLH+kBDkjCul1QRSmkaL4Lc8wusJxZfLIKlTuz
-         vi7nmHdEbaK1prqlcevXTwaVq78aVFw4/VhI1qQsyiHVHSa7+T1bOx0mb545O6tV0tHq
-         3EmaSWuMcu+6EXaGKQnfKzT+XxbMqz/jqa4wp14jzIGv55RfcbvCn9GXt+W8ubMltqiE
-         63yg==
-X-Gm-Message-State: ANhLgQ2JmbaIlAqsUVMvHgqJ58jdCgaS6Yu5cPd7IFDrvo6B2bQQ/iOO
-        LXRY46U8N82D5DENvhr6WBLS7kVPNqY8rXZwOnfFguJH
-X-Google-Smtp-Source: ADFU+vvE7jooon2QKCanu2nRmL0TFdM1v12o9+byygzfNybEsOroGnTtAaUty2XnvT53+bCHcEWNkTyXYcejsGIUL84=
-X-Received: by 2002:a0c:b669:: with SMTP id q41mr2964744qvf.20.1583503555221;
- Fri, 06 Mar 2020 06:05:55 -0800 (PST)
+         :message-id:subject:to;
+        bh=B+DtfybZtzBvX/wSBkQ3pwj5wl5N3ahsmo8BZrm5qrQ=;
+        b=olxfX9LAj3Yyz+LSinyTElr602g82ch5lWwsmnbkrltYqj2T0FA269DYl2YZTrOx/f
+         GguvG5Gr+ZHAR7hbMp1SKHp7Dnk9I/9WYoTgmuupSUAN14r6LcQoLqYVLw5ZnAYZXs5x
+         BgyZ8gu8BSnMQBrXpD3Ue4SPX6Mje4giDwQcVVRe9RGkYmmiBWPnO1YKEJRy4niwZPAB
+         hiKnZTM8Vq9Bhoiw2o9z85NjDIyxORJ2AQsOpnDpTBowJUV+kyDsMKjqZQmThR8DBfDd
+         ckH1ChKtEkt/zX/t/ym/o9B8dX+dsEiCS0bjZqf3JoPVZnROtJjpctnYP+8EI+wQWqk4
+         J5GA==
+X-Gm-Message-State: ANhLgQ0y85v8svE7YlXYT9k58WjFSQwkgdr+KW/paqXr1+j2M1eFEWCh
+        deYoU+g870R0HK3dMbID3z5LYYfYVZDJD7twoYIshQ==
+X-Google-Smtp-Source: ADFU+vvEZTS4Dp02hqmPVBcrI9KTA5svw75IaxPwnmc/wHeuuyjf9krqTyk0FJstX+x6ih4dB5nRDIFQqC6bGYcRETI=
+X-Received: by 2002:a05:620a:350:: with SMTP id t16mr3238556qkm.238.1583506187482;
+ Fri, 06 Mar 2020 06:49:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20200302022209.82874-1-syq@debian.org> <20200306134858.GA11459@alpha.franken.de>
-In-Reply-To: <20200306134858.GA11459@alpha.franken.de>
-From:   YunQiang Su <syq@debian.org>
-Date:   Fri, 6 Mar 2020 22:05:44 +0800
-Message-ID: <CAKcpw6VyPbifM4OXS3OrHCVzCU8i4EjPraZXugKrG7JrQnZ4sA@mail.gmail.com>
-Subject: Re: [PATCH v2] Use ELF_BASE_PLATFORM to pass ISA level
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips <linux-mips@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+References: <CAF_dkJCQuF0MaYddfqVRJ-8tNPWVkR8Q0ZYz22DUi9moAWsxeQ@mail.gmail.com>
+ <Pine.LNX.4.64.2003061230320.1467@Mobile0.Peter>
+In-Reply-To: <Pine.LNX.4.64.2003061230320.1467@Mobile0.Peter>
+From:   Patrick Doyle <wpdster@gmail.com>
+Date:   Fri, 6 Mar 2020 09:51:15 -0500
+Message-ID: <CAF_dkJDm=Kk6n-KqFZjabQ8GUY-axrhN4W2CBNmkzy++jBk2=A@mail.gmail.com>
+Subject: Re: Address space in MIPS Linux kernel
+To:     post@pfrst.de, linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Thomas Bogendoerfer <tsbogend@alpha.franken.de> 于2020年3月6日周五 下午9:49写道：
+On Fri, Mar 6, 2020 at 6:25 AM <post@pfrst.de> wrote:
+> Hi,
 >
-> On Mon, Mar 02, 2020 at 10:22:10AM +0800, YunQiang Su wrote:
-> > Some userland application/program runtime/dynamic loaded need to
-> > know about the current ISA level to use the best runtime.
-> > While kernel doesn't provides this info.
-> >
-> > ELF_PLATFORM only provides some info about the CPU, with very few info,
-> > for example, the value is "mips" for both 24Kc and P6600.
-> >
-> > Currently ELF_BASE_PLATFORM is not used by MIPS (only by powerpc).
-> > So we cant set its value as:
-> >   mips2, mips3, mips4, mips5,
-> >   mips32, mips32r2, mips32r6
-> >   mips64, mips64r2, mips64r6
-> > Then in userland, we can get it by:
-> >   getauxval(AT_BASE_PLATFORM)
-> >
-> > The only problem is that it seems has different defination than ppc:
-> >   on ppc, it is the mircoarchitecture
-> > while now we use it as ISA level on MIPS.
->
-> while I see how this could be used, it feels incomplete to me. What
-> about implemented ASEs ? Can't you just use information already present
+> Bit 31 being non-zero, these must be kernel-mode addresses anyway.
+> 0xcXXXXXXX is in ksseg, TLB-mapped (only used to access "high-memory"
+> outside the 0.5 GB unmapped kerenel-space, if at all)
+> 0x8XXXXXXX is in kseg0, unmapped, cached (the usual kernel-address)
+Hi Peter,
+Thank you for your reply.  I managed to find my MIPS book finally, and read:
 
-ASEs can be get by hwcap thu getauxval in userland.
+kuseg: 0x00000000-0x7FFFFFFF - User space mapped addresses
+kseg0: 0x80000000-0x9FFFFFFF - Cached, "untranslated" address
+kseg1: 0xA0000000-0xBFFFFFFF - Uncached, "untranslated" address
+kseg2: 0xC0000000-0xFFFFFFFF - Kernel space mapped addresses (cached?)
 
-> in /proc/cpuinfo ?
+So, I guess I'm wondering how the kernel ends up with some addresses
+in kseg0 and some in kseg2.  Is there any significance to the fact
+that one address is in kseg2 while the other is in kseg0.  I may be
+chasing down a rabbit hole here, but, at this point, I don't know
+what's causing my kernel panic, and I noticed something I didn't
+understand (kseg2 vs kseg0), so I figured I would ask folks on this
+list and learn something.  Maybe this will ultimately point me to the
+source of my problem.  Maybe I will just learn something new.  Either
+way, I win.
 
-cpuinfo is not always available, for example in some chroot env.
-Lot's of userland projects doesn't like to the way to parse cpuinfo,
-they prefer to get the info by a more elegant way.
+Thanks again for the reply.
 
->
-> > diff --git a/arch/mips/include/asm/elf.h b/arch/mips/include/asm/elf.h
-> > index f8f44b1a6cbb..5aa29ced6970 100644
-> > --- a/arch/mips/include/asm/elf.h
-> > +++ b/arch/mips/include/asm/elf.h
-> > @@ -2113,6 +2130,7 @@ EXPORT_SYMBOL(__ua_limit);
-> >
-> >  const char *__cpu_name[NR_CPUS];
-> >  const char *__elf_platform;
-> > +const char *__elf_base_platform = NULL;
->
-> no need to init static data with 0
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+--wpd
