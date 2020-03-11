@@ -2,139 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE530181DEC
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2020 17:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0B41820D4
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2020 19:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730052AbgCKQcx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Mar 2020 12:32:53 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:40409 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729852AbgCKQcx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Mar 2020 12:32:53 -0400
-Received: by mail-pj1-f67.google.com with SMTP id gv19so1283476pjb.5;
-        Wed, 11 Mar 2020 09:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zmUBvFmNMYqAgE4hUh5PxorZyEbBCYGzea7UV2DPByM=;
-        b=okn3wxoxdRHK59h+9WIq7oUfCZKvj8jYSlljDW2vEtjcLJX7mgYZASlfNT2PSYE6Ew
-         hTxbbboBZjfEQPOaLaDTKkp2kAaVqZVROy0sVYOndeFLtoC7w9dk7d90z8EtJQq0Vx0R
-         vy9cgKIwOxAWv5BdqTYwtuiYYyguWrlCbqRIYcLTabjY59Uz+WnOAb8XXE+r/5G2b4FS
-         0hKP4XWaegGUW05mM/tuyOjn8lu6DjLqOKDzuzDjE1W3KtsqetyMjI5B1hTR1nJumbKu
-         vF4IfBaBzIIt5RZA++Mg8wN3WcVTwUS5m/euqks2Ta8zJGfFhw2KCVKjQnHaLV+MY2Wg
-         tbuA==
+        id S1730468AbgCKScI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Mar 2020 14:32:08 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:25479 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730827AbgCKScI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 11 Mar 2020 14:32:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1583951527;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=spM5agWGar+ORsG2ukJRJ/Acpiv+8pritJ4Z+l+AEgc=;
+        b=K1flaRtFchzQeOMhixPvlwqSz+v0Ebn2VBtiQLHQWJYJeTTEu9I1lqg+pNy7bwKhD3jHKw
+        N3zrQm0puphZ1aPXISBZTltX/UOrkDePgLycjyusz9BeyFMBRZ0jSZS3hFGJuFexA01tAW
+        uJM1kKKEH2IAPsBjizBXz8f7o1p4pWI=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-428-XKFrYlS-MsCHtmUHDVwNwA-1; Wed, 11 Mar 2020 14:32:04 -0400
+X-MC-Unique: XKFrYlS-MsCHtmUHDVwNwA-1
+Received: by mail-qt1-f197.google.com with SMTP id v10so1808716qtk.7
+        for <linux-mips@vger.kernel.org>; Wed, 11 Mar 2020 11:32:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zmUBvFmNMYqAgE4hUh5PxorZyEbBCYGzea7UV2DPByM=;
-        b=M2rJnaR+2K0b0xNvw2qg5sMWEgCUFV4UCXZ8hobAzrGHHQOaQ2grG7zapKyvKEmSrL
-         Y4v3UvtNubOz1sbXM3xfGmYmD1f8+hXo31TQxzhuCK7AH+4nHmQerGgCZBzlZi3mxnIK
-         THm6TTztIXKvFUuzAyoiUAF7dqplG9NPaU8gQxrTLc3nPU0xqtYlnGMkqF9EP1GwTBKV
-         bMw1kLZhtEOC7UncLgHZWmA9p8fe18T8ato76Y/gPva91gei4lZSawLk+RjNXVqTB1wn
-         uI5/xL+yJhazasWX+/WN8lqEHBhGAccthdM+GLk2rzq3XG4v3H/4fauKf5QpxDkFs2T1
-         MumA==
-X-Gm-Message-State: ANhLgQ2exVk2bdb2LEHaWKGGz+sAf8ONpUiaIfulgCKP6WuIBlA9EjZy
-        pyd6AeXon2a8IokAbvl/iOY=
-X-Google-Smtp-Source: ADFU+vtseRHn4vAz5dlT4WliTsDFscNXLHw6uylAKsWiiB6pM6JEaG1187JNfqDIKnTVPdUgOiyByg==
-X-Received: by 2002:a17:90a:4487:: with SMTP id t7mr4170485pjg.104.1583944371770;
-        Wed, 11 Mar 2020 09:32:51 -0700 (PDT)
-Received: from localhost ([106.51.232.35])
-        by smtp.gmail.com with ESMTPSA id q12sm51720409pfh.158.2020.03.11.09.32.50
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 11 Mar 2020 09:32:50 -0700 (PDT)
-Date:   Wed, 11 Mar 2020 22:02:49 +0530
-From:   afzal mohammed <afzal.mohd.ma@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        "Maciej W. Rozycki" <macro@linux-mips.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        John Crispin <john@phrozen.org>
-Subject: Re: [PATCH v4] MIPS: Replace setup_irq() by request_irq()
-Message-ID: <20200311163249.GA4984@afzalpc>
-References: <20200304203144.GA4323@alpha.franken.de>
- <20200305115759.3186-1-afzal.mohd.ma@gmail.com>
- <20200311053126.GA48442@ubuntu-m2-xlarge-x86>
- <20200311090308.GA5060@afzalpc>
- <20200311104217.GA10615@alpha.franken.de>
- <20200311131210.GA5115@afzalpc>
- <20200311160307.GA15464@alpha.franken.de>
+         :mime-version:content-disposition:in-reply-to;
+        bh=spM5agWGar+ORsG2ukJRJ/Acpiv+8pritJ4Z+l+AEgc=;
+        b=ui/XzK06Kb7xsdHbjk/WK6WTq8Y7POGAhReQiQY9AbR9CWyOijDJhZdmJ++xikfowX
+         7rObfJ7BbL0VpLW8bjQ0lDxnXDGqrt0ZnLV3+nT1iquG4iQFZ8QIM8J9lArgCp41qOCL
+         Go3RdH0n/o8AM2DVZa1krtXx/0FAE2NsBSDa6U/506kf14/8Ahk2E2o4kEC45r6TzQvu
+         hddKQMlMwWYAZeXjg8c+d8nukMZ/vAhgf5MP0GRejvmF/gw3LF6rYmIvxewNblhp+X7d
+         MDIB6rkjlUGrsYP7zoP1mrDTe1QuNpwCzjj+8Qvdm2X2vWkGH+yQJjA3T4cNFU2uQvND
+         6Dzg==
+X-Gm-Message-State: ANhLgQ0y4k333Z+ld9uh4e4GHeA2GBQ/Ygf9LvuiwwWj2GK76oBAojcz
+        RpnaARhQwpMvLfYn90DZHrqnU+iXCjAfnB739u+kvLIOF8yPSHxC6SB+Nfmp+BeU6LWBeA97cNz
+        A/6tWyoxLkjQ3mlHVZkvIWA==
+X-Received: by 2002:a0c:bf0b:: with SMTP id m11mr4107326qvi.63.1583951524038;
+        Wed, 11 Mar 2020 11:32:04 -0700 (PDT)
+X-Google-Smtp-Source: ADFU+vvDO0+2HivD9CsnZqlnawBVE/5XfG4sJ4JQNxOeTz1KiYixvBmarAvMLC1hUJiRKxZ4PT/7NA==
+X-Received: by 2002:a0c:bf0b:: with SMTP id m11mr4107299qvi.63.1583951523712;
+        Wed, 11 Mar 2020 11:32:03 -0700 (PDT)
+Received: from xz-x1 ([2607:9880:19c0:32::2])
+        by smtp.gmail.com with ESMTPSA id w132sm3565718qkb.96.2020.03.11.11.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2020 11:32:02 -0700 (PDT)
+Date:   Wed, 11 Mar 2020 14:32:01 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        linux-mips@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>
+Subject: Re: [PATCH RFC 0/4] KVM: MIPS: Provide arch-specific
+ kvm_flush_remote_tlbs()
+Message-ID: <20200311183201.GK479302@xz-x1>
+References: <20200207223520.735523-1-peterx@redhat.com>
+ <44ba59d6-39a5-4221-1ae6-41e5a305d316@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200311160307.GA15464@alpha.franken.de>
-User-Agent: Mutt/1.9.3 (2018-01-21)
+In-Reply-To: <44ba59d6-39a5-4221-1ae6-41e5a305d316@redhat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
-
-On Wed, Mar 11, 2020 at 05:03:07PM +0100, Thomas Bogendoerfer wrote:
-> On Wed, Mar 11, 2020 at 06:42:10PM +0530, afzal mohammed wrote:
-
-> > If IRQF_SHARED is passed, it exepcts a non-NULL dev_id, here it is
-> > NULL, setup_irq() doesn't have any check like that.
-> 
-> so request_irq() is not a 1:1 replacement for our current setup_irq().
-> Or put it the another way our setup_irq() might be buggy, when used for
-> shared interrupts.
-
-AFAIU, this causes problems only while freeing irq, but not sure. Seems
-it is not happening with any of the cases in the diff.
-
-> > So i think proper solution is to add a non NULL dev_id, as removing
-> > IRQF_SHARED might affect some platforms that might be using that
-> > interrupt line shared.
+On Wed, Feb 12, 2020 at 01:25:30PM +0100, Paolo Bonzini wrote:
+> On 07/02/20 23:35, Peter Xu wrote:
+> > [This series is RFC because I don't have MIPS to compile and test]
 > > 
-> > Patch with non-NULL dev_id below, it works w/ Nathan's test case.
+> > kvm_flush_remote_tlbs() can be arch-specific, by either:
+> > 
+> > - Completely replace kvm_flush_remote_tlbs(), like ARM, who is the
+> >   only user of CONFIG_HAVE_KVM_ARCH_TLB_FLUSH_ALL so far
+> > 
+> > - Doing something extra before kvm_flush_remote_tlbs(), like MIPS VZ
+> >   support, however still wants to have the common tlb flush to be part
+> >   of the process.  Could refer to kvm_vz_flush_shadow_all().  Then in
+> >   MIPS it's awkward to flush remote TLBs: we'll need to call the mips
+> >   hooks.
+> > 
+> > It's awkward to have different ways to specialize this procedure,
+> > especially MIPS cannot use the genenal interface which is quite a
+> > pity.  It's good to make it a common interface.
+> > 
+> > This patch series removes the 2nd MIPS usage above, and let it also
+> > use the common kvm_flush_remote_tlbs() interface.  It should be
+> > suggested that we always keep kvm_flush_remote_tlbs() be a common
+> > entrance for tlb flushing on all archs.
+> > 
+> > This idea comes from the reading of Sean's patchset on dynamic memslot
+> > allocation, where a new dirty log specific hook is added for flushing
+> > TLBs only for the MIPS code [1].  With this patchset, logically the
+> > new hook in that patch can be dropped so we can directly use
+> > kvm_flush_remote_tlbs().
+> > 
+> > TODO: We can even extend another common interface for ranged TLB, but
+> > let's see how we think about this series first.
+> > 
+> > Any comment is welcomed, thanks.
+> > 
+> > Peter Xu (4):
+> >   KVM: Provide kvm_flush_remote_tlbs_common()
+> >   KVM: MIPS: Drop flush_shadow_memslot() callback
+> >   KVM: MIPS: Replace all the kvm_flush_remote_tlbs() references
+> >   KVM: MIPS: Define arch-specific kvm_flush_remote_tlbs()
+> > 
+> >  arch/mips/include/asm/kvm_host.h |  7 -------
+> >  arch/mips/kvm/Kconfig            |  1 +
+> >  arch/mips/kvm/mips.c             | 22 ++++++++++------------
+> >  arch/mips/kvm/trap_emul.c        | 15 +--------------
+> >  arch/mips/kvm/vz.c               | 14 ++------------
+> >  include/linux/kvm_host.h         |  1 +
+> >  virt/kvm/kvm_main.c              | 10 ++++++++--
+> >  7 files changed, 23 insertions(+), 47 deletions(-)
+> > 
 > 
-> I'm not sure, I like the adding of string pointers as dev_id arguments
-> in your patch. How can we make sure they are unique enough for the use
-> case ? I guess using handler as dev_id does a better job here.
+> Compile-tested and queued.
 
-There was one prior similar usage using string pointers, another way i
-have seen is using irq no. itself, but then it has to be typecasted,
-in file arch/mips/txx9/generic/pci.c,
+Just in case it fells through the crach - Paolo, do you still have
+plan to queue this again?
 
-        request_irq(irq, &i8259_interrupt, IRQF_SHARED,
-                "cascade(i8259)", (void *)(long)irq);
+Thanks,
 
-[ but i think that double casting is not required, only (void *) might
-suffice ]
+-- 
+Peter Xu
 
-If you prefer handler function pointer, i will use that.
-
-> And before doing that, lets clean up some of the IRQF_SHARED usage first.
-> All sni IRQF_SHARED can go away, the interrupt lines are exclusive there. 
-> 
-> loongson2ef/lemote-2f/irq.c: looks like the only user of
-> LOONGSON_NORTH_BRIDGE_IRQ, so IRQF_SHARED could go as well.
-> Could someone confirm that ?
-> 
-> All other need to stay, IMHO.
-
-Okay, i am venturing into MIPS the first time as part of this patch
-series, so no MIPS specific knowledge, just let me know
-loongson2ef/lemote-2f case as well, i will prepare patch accordingly. 
-
-> And v4 is already in mips-next, so I need an incremental patch please.
-
-Okay, i already sent a patch, it crossed your mail, i will make a new
-patch based on the outcome of the discusson here.
-
-Since there is some issue w/ lore.kernel.org, i send it again, but
-both are not seen in archives.
-
-Regards
-afzal
