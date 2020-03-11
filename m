@@ -2,93 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 467AD180F3F
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2020 06:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB6F18100F
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2020 06:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728220AbgCKFHR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Mar 2020 01:07:17 -0400
-Received: from smtprelay0162.hostedemail.com ([216.40.44.162]:51800 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728130AbgCKFHO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 11 Mar 2020 01:07:14 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 4B629101684F2;
-        Wed, 11 Mar 2020 05:07:13 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:541:800:960:967:973:982:988:989:1260:1311:1314:1345:1359:1437:1515:1534:1541:1711:1730:1747:1777:1792:2393:2525:2560:2563:2682:2685:2859:2902:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3352:3865:3866:3867:3868:3870:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:5007:6261:9025:9036:10004:11026:11658:11914:12043:12296:12297:12438:12555:12679:12895:12986:13069:13255:13311:13357:13894:14181:14384:14394:14721:21080:21433:21627:21811:21939:30054,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: queen12_21d50d9d4a639
-X-Filterd-Recvd-Size: 2278
-Received: from joe-laptop.perches.com (unknown [47.151.143.254])
-        (Authenticated sender: joe@perches.com)
-        by omf16.hostedemail.com (Postfix) with ESMTPA;
-        Wed, 11 Mar 2020 05:07:12 +0000 (UTC)
-From:   Joe Perches <joe@perches.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH -next 015/491] KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips): Use fallthrough;
-Date:   Tue, 10 Mar 2020 21:51:29 -0700
-Message-Id: <5a1ee76be0f502af626f50313456730d75fe424b.1583896348.git.joe@perches.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <cover.1583896344.git.joe@perches.com>
-References: <cover.1583896344.git.joe@perches.com>
+        id S1725958AbgCKFbb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Mar 2020 01:31:31 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:42234 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725813AbgCKFbb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Mar 2020 01:31:31 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 66so687181otd.9;
+        Tue, 10 Mar 2020 22:31:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=mRaU0AqIThL9bVRbu+a3uE7ULIqF+zwOfxIVLuqdJ+E=;
+        b=NtE3RCy7mnABRhFQlxK7AY6bPEJM4+yH1iCZhlEN6AmfDHifT0veCYRVYxUES13rYk
+         LNMHvBu0rpvTqdPmZIPc2vPhfWyp1CdyjE6hLLjiT93fxCpf9ju6tv0c1/tdzWV7Xa8+
+         K/Xf56eBn1Nz9l9yepM3HJi+eRl51tpuAJhBoBOYp0zbVUQhmsNn02+9u28PEMVkE+Mv
+         wLDQnlX7k4zyzmjwD3yXLDdiVuaa5dd0WGsxzEv0ZWIduEc/CiOGGxxdLIOuxnZq+lqW
+         2b8+afiBXLeWUuOIK4vqcKVoKNmKXy4CZFXImK+Tg/qnPtFquaKZnAFmbkE+6LPYit5u
+         yloQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mRaU0AqIThL9bVRbu+a3uE7ULIqF+zwOfxIVLuqdJ+E=;
+        b=hyKh7Kfj4gbIeqqk1YzOsW+3BOIlGDJAwdEMzFz5RPlp0lYiU2y6hGNWSQbb+fSIod
+         +ZHeupW/y7lFkGUQ9oof+opSdEkfVzvIcI/4GQn1kNkIjz5O1S1TAaVcVrr7dSongaKt
+         TMTI4yleUHc1Fnyy3W9/6R3dTC6j2GxmBD634xdkEUkqkCiODY2hjeeqYFTfZjGAe7PC
+         gnvIuf9vfIzp8C/lgM3kRGFpJAZv7p+rxfV0xSVZTIyRzhfSsa7Fr9HTOse3xThYPAUy
+         Xvx9R3L4MWiLM0TrkpMuGVjgPy0CrnftqgysI5F4KawyMYu3wntSIEqcZFMPsrOMCh/8
+         utfQ==
+X-Gm-Message-State: ANhLgQ3LhzhUNEprI0ZDuJsLfxDwdHXgff4ZuXATiXRp7YysrbdsR0Of
+        1u17SJDuGHzMSqm3k3cZ3cw=
+X-Google-Smtp-Source: ADFU+vvs2EpekK1XhQaOxK2H/diS+7ZScfO4M0urCZbqCYmSLIA7g/iGRL/1x2OE+pmtzyFhOSV3Ng==
+X-Received: by 2002:a9d:3b6:: with SMTP id f51mr1050716otf.255.1583904688182;
+        Tue, 10 Mar 2020 22:31:28 -0700 (PDT)
+Received: from ubuntu-m2-xlarge-x86 ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id m124sm776958oib.46.2020.03.10.22.31.27
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 10 Mar 2020 22:31:27 -0700 (PDT)
+Date:   Tue, 10 Mar 2020 22:31:26 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     afzal mohammed <afzal.mohd.ma@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        "Maciej W. Rozycki" <macro@linux-mips.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        John Crispin <john@phrozen.org>
+Subject: Re: [PATCH v4] MIPS: Replace setup_irq() by request_irq()
+Message-ID: <20200311053126.GA48442@ubuntu-m2-xlarge-x86>
+References: <20200304203144.GA4323@alpha.franken.de>
+ <20200305115759.3186-1-afzal.mohd.ma@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200305115759.3186-1-afzal.mohd.ma@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Convert the various uses of fallthrough comments to fallthrough;
+On Thu, Mar 05, 2020 at 05:27:53PM +0530, afzal mohammed wrote:
+> request_irq() is preferred over setup_irq(). Invocations of setup_irq()
+> occur after memory allocators are ready.
+> 
+> Per tglx[1], setup_irq() existed in olden days when allocators were not
+> ready by the time early interrupts were initialized.
+> 
+> Hence replace setup_irq() by request_irq().
+> 
+> remove_irq() has been replaced by free_irq() as well.
+> 
+> There were build error's during previous version, couple of which was
+> reported by kbuild test robot <lkp@intel.com> of which one was reported
+> by Thomas Bogendoerfer <tsbogend@alpha.franken.de> as well. There were a
+> few more issues including build errors, those also have been fixed.
+> 
+> [1] https://lkml.kernel.org/r/alpine.DEB.2.20.1710191609480.1971@nanos
+> 
+> Signed-off-by: afzal mohammed <afzal.mohd.ma@gmail.com>
 
-Done via script
-Link: https://lore.kernel.org/lkml/b56602fcf79f849e733e7b521bb0e17895d390fa.1582230379.git.joe.com/
+This patch regresses booting malta_defconfig with both GCC and clang
+with this rootfs and QEMU 4.2.0:
 
-Signed-off-by: Joe Perches <joe@perches.com>
----
- arch/mips/kvm/emulate.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+https://github.com/ClangBuiltLinux/continuous-integration/blob/a85e3e44c2570847e22ad8f92f317c2b007c4517/images/mipsel/rootfs.cpio
 
-diff --git a/arch/mips/kvm/emulate.c b/arch/mips/kvm/emulate.c
-index 754094..8c80333 100644
---- a/arch/mips/kvm/emulate.c
-+++ b/arch/mips/kvm/emulate.c
-@@ -64,7 +64,7 @@ static int kvm_compute_return_epc(struct kvm_vcpu *vcpu, unsigned long instpc,
- 		switch (insn.r_format.func) {
- 		case jalr_op:
- 			arch->gprs[insn.r_format.rd] = epc + 8;
--			/* Fall through */
-+			fallthrough;
- 		case jr_op:
- 			nextpc = arch->gprs[insn.r_format.rs];
- 			break;
-@@ -140,7 +140,7 @@ static int kvm_compute_return_epc(struct kvm_vcpu *vcpu, unsigned long instpc,
- 		/* These are unconditional and in j_format. */
- 	case jal_op:
- 		arch->gprs[31] = instpc + 8;
--		/* fall through */
-+		fallthrough;
- 	case j_op:
- 		epc += 4;
- 		epc >>= 28;
-@@ -1724,14 +1724,14 @@ enum emulation_result kvm_mips_emulate_load(union mips_instruction inst,
- 
- 	case lhu_op:
- 		vcpu->mmio_needed = 1;	/* unsigned */
--		/* fall through */
-+		fallthrough;
- 	case lh_op:
- 		run->mmio.len = 2;
- 		break;
- 
- 	case lbu_op:
- 		vcpu->mmio_needed = 1;	/* unsigned */
--		/* fall through */
-+		fallthrough;
- 	case lb_op:
- 		run->mmio.len = 1;
- 		break;
--- 
-2.24.0
+$ timeout 2m qemu-system-mipsel -machine malta -cpu 24Kf -initrd rootfs.cpio -kernel vmlinux -m 512m -display none -serial mon:stdio
 
+just hangs. I have not done further debugging past the initial bisect.
+
+Cheers,
+Nathan
