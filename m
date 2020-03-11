@@ -2,114 +2,274 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF65C1813E1
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2020 10:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBA11814CC
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2020 10:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728146AbgCKJDM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Mar 2020 05:03:12 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:37064 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726934AbgCKJDM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Mar 2020 05:03:12 -0400
-Received: by mail-pl1-f193.google.com with SMTP id f16so784585plj.4;
-        Wed, 11 Mar 2020 02:03:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=8bM/wCwSXrnJCqsSvi8wWOGSbVzcZwUzc890uChHZBM=;
-        b=MREjE9QBCCArLm3xVHXuKh2eNZCJvpe+U6eHgBpAqgXckRvOTJXvl4rYPKvUsIuZft
-         jSJc8Y9dEKJhD5RYe2r0DsZpdV9SzwzZeRyMzui9EsDm72JpbYGCzLRSNFsJ+iBi6iI+
-         Rxhn6PWNk7akIN5WNAiF3YsIMwWOFHSnyBSVP64A2yUNuOD9jjCwCzq3Ze8QSEr7xZ0r
-         CrX1ZjcHqj0shB7vUkzeN802e9xi7CVc2d1IV31kH5CEce+i3iNygy0t8ZUMlfSNop+1
-         4of2bEMFwEzqcuH/8QYIhAv5sbGJ2PThpb+CRC8AIhMywlqC1z0x95Vkt5bAki6IHgux
-         dO0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=8bM/wCwSXrnJCqsSvi8wWOGSbVzcZwUzc890uChHZBM=;
-        b=qq6/SXNGBDAcZDZCr+HRyd2BRCkroeFUYDhSPtBybXoq4NPUGKpmEaqRHouUwGl1Aj
-         OTR+cBoyTO3xZ512Iwyd0X/qIh4gFzrWNzC+F2OIWMVdR3up/8DLgVEmsxQfTyt+4B11
-         m2TvL3BgQQJiiYRhtSIYUqi3LWBc5dlAHkn+lgHgwehAN+BUU7hksIKJprm75csmjGuc
-         B5XdDly8+goNV2mGsJsUc5lUfrlQIA79+DB8KuFGstV3iyYcEbWg7JUc0wuPGbs38SnZ
-         I2GHwySakcWoc1t/LbjK3t2keKbVBPZ1sIUIbf6f4hjGxXRLjYRwvqvZ12pTu8BuBduL
-         jC7A==
-X-Gm-Message-State: ANhLgQ2JqEb+6FLzZIMVeUUMufsd1wLdCK32rj04t6sgReJNwZS0xwml
-        VHrYkN9MGFuQDoMP86w40aa5hKEm
-X-Google-Smtp-Source: ADFU+vuCDnh7w1xvfOVYsJQClMX8OE3C43uqARqIQzLzcdQQglFS7AAInUSwAo9xL8M4KffExDMNxA==
-X-Received: by 2002:a17:902:7248:: with SMTP id c8mr2219680pll.282.1583917391010;
-        Wed, 11 Mar 2020 02:03:11 -0700 (PDT)
-Received: from localhost ([106.51.232.35])
-        by smtp.gmail.com with ESMTPSA id i6sm10456074pfe.62.2020.03.11.02.03.09
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 11 Mar 2020 02:03:10 -0700 (PDT)
-Date:   Wed, 11 Mar 2020 14:33:08 +0530
-From:   afzal mohammed <afzal.mohd.ma@gmail.com>
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        "Maciej W. Rozycki" <macro@linux-mips.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
+        id S1728512AbgCKJ2N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Mar 2020 05:28:13 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:38804 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726934AbgCKJ2M (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 11 Mar 2020 05:28:12 -0400
+Received: from [10.130.0.70] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj2ggr2he_3sZAA--.31S3;
+        Wed, 11 Mar 2020 17:28:01 +0800 (CST)
+Subject: =?UTF-8?Q?Re:_=e5=9b=9e=e5=a4=8d:[PATCH]_MIPS:_Loongson:_Add_model_?=
+ =?UTF-8?Q?name_to_/proc/cpuinfo?=
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+References: <1583908414-22858-1-git-send-email-yangtiezhu@loongson.cn>
+ <170c85e33ef.10e7ed4c64871.7120630740497911364@flygoat.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Huacai Chen <chenhc@lemote.com>,
-        John Crispin <john@phrozen.org>
-Subject: Re: [PATCH v4] MIPS: Replace setup_irq() by request_irq()
-Message-ID: <20200311090308.GA5060@afzalpc>
-References: <20200304203144.GA4323@alpha.franken.de>
- <20200305115759.3186-1-afzal.mohd.ma@gmail.com>
- <20200311053126.GA48442@ubuntu-m2-xlarge-x86>
+        linux-mips <linux-mips@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <73820857-a9dd-0e5e-c3ee-fd63f4e5f10b@loongson.cn>
+Date:   Wed, 11 Mar 2020 17:28:00 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200311053126.GA48442@ubuntu-m2-xlarge-x86>
-User-Agent: Mutt/1.9.3 (2018-01-21)
+In-Reply-To: <170c85e33ef.10e7ed4c64871.7120630740497911364@flygoat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dxj2ggr2he_3sZAA--.31S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxtw4UZrWkWFW8GrWxJFWrXwb_yoWxtF45p3
+        ykAan3Gr4xKryDGa4fJFyj9rWYvr13JFyv9ay5tFWUXasaq3W5J3s7tF15ArsFvF1qkw1f
+        ZFZ29rsI9FWUZ3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
+        bIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUq38
+        nUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On 03/11/2020 02:53 PM, Jiaxun Yang wrote:
+>
+>   ---- 在 星期三, 2020-03-11 14:33:34 Tiezhu Yang <yangtiezhu@loongson.cn> 撰写 ----
+>   > In the current code, when execute command "cat /proc/cpuinfo" or "lscpu",
+>   > it can not get cpu type and frequency directly because the model name is
+>   > not exist, so add it.
+>   >
+>   > E.g. without this patch:
+>   >
+>   > [loongson@localhost ~]$ lscpu
+>   > Architecture:          mips64
+>   > Byte Order:            Little Endian
+>   > CPU(s):                4
+>   > On-line CPU(s) list:   0-3
+>   > Thread(s) per core:    1
+>   > Core(s) per socket:    4
+>   > Socket(s):             1
+>   > NUMA node(s):          1
+>   > L1d cache:             64K
+>   > L1i cache:             64K
+>   > L2 cache:              2048K
+>   > NUMA node0 CPU(s):     0-3
+>   >
+>   > With this patch:
+>   >
+>   > [loongson@localhost ~]$ lscpu
+>   > Architecture:          mips64
+>   > Byte Order:            Little Endian
+>   > CPU(s):                4
+>   > On-line CPU(s) list:   0-3
+>   > Thread(s) per core:    1
+>   > Core(s) per socket:    4
+>   > Socket(s):             1
+>   > NUMA node(s):          1
+>   > Model name:            Loongson-3A R3 (Loongson-3A3000) @ 1449MHz
+>   > L1d cache:             64K
+>   > L1i cache:             64K
+>   > L2 cache:              2048K
+>   > NUMA node0 CPU(s):     0-3
+>
+> Hi Tiezhu,
+>
+> Thanks for your patch, you're the successor of Huacai:
+>
+> https://www.linux-mips.org/archives/linux-mips/2018-09/msg00113.html
+Hi Jiaxun,
 
-On Tue, Mar 10, 2020 at 10:31:26PM -0700, Nathan Chancellor wrote:
+Thanks for your notice.
 
-> This patch regresses booting malta_defconfig with both GCC and clang
-> with this rootfs and QEMU 4.2.0:
+>
+> I think it's worthy to have this string in cpuinfo as many userspace
+> program is parsing it beacuse x86 have it.
+>
+> See my review comments below:
+>
+>   >
+>   > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>   > ---
+>   >  arch/mips/include/asm/cpu-info.h |  1 +
+>   >  arch/mips/kernel/cpu-probe.c     | 27 +++++++++++++++++++++++----
+>   >  arch/mips/kernel/proc.c          |  4 ++++
+>   >  3 files changed, 28 insertions(+), 4 deletions(-)
+>   >
+>   > diff --git a/arch/mips/include/asm/cpu-info.h b/arch/mips/include/asm/cpu-info.h
+>   > index ed7ffe4..50e924e 100644
+>   > --- a/arch/mips/include/asm/cpu-info.h
+>   > +++ b/arch/mips/include/asm/cpu-info.h
+>   > @@ -115,6 +115,7 @@ extern struct cpuinfo_mips cpu_data[];
+>   >  extern void cpu_probe(void);
+>   >  extern void cpu_report(void);
+>   >
+>   > +extern const char *__model_name[];
+>   >  extern const char *__cpu_name[];
+>   >  #define cpu_name_string()    __cpu_name[raw_smp_processor_id()]
+>   >
+>   > diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+>   > index 6ab6b03..3ae40cc 100644
+>   > --- a/arch/mips/kernel/cpu-probe.c
+>   > +++ b/arch/mips/kernel/cpu-probe.c
+>   > @@ -1548,6 +1548,7 @@ static inline void cpu_probe_legacy(struct cpuinfo_mips *c, unsigned int cpu)
+>   >              set_elf_platform(cpu, "loongson2e");
+>   >              set_isa(c, MIPS_CPU_ISA_III);
+>   >              c->fpu_msk31 |= FPU_CSR_CONDX;
+>   > +            __model_name[cpu] = "Loongson-2E";
+>   >              break;
+>   >          case PRID_REV_LOONGSON2F:
+>   >              c->cputype = CPU_LOONGSON2EF;
+>   > @@ -1555,23 +1556,37 @@ static inline void cpu_probe_legacy(struct cpuinfo_mips *c, unsigned int cpu)
+>   >              set_elf_platform(cpu, "loongson2f");
+>   >              set_isa(c, MIPS_CPU_ISA_III);
+>   >              c->fpu_msk31 |= FPU_CSR_CONDX;
+>   > +            __model_name[cpu] = "Loongson-2F";
+>   >              break;
+>   >          case PRID_REV_LOONGSON3A_R1:
+>   >              c->cputype = CPU_LOONGSON64;
+>   >              __cpu_name[cpu] = "ICT Loongson-3";
+>   >              set_elf_platform(cpu, "loongson3a");
+>   >              set_isa(c, MIPS_CPU_ISA_M64R1);
+>   > -            c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
+>   > -                MIPS_ASE_LOONGSON_EXT);
+>   > +            c->ases |= (MIPS_ASE_LOONGSON_MMI |
+>   > +                    MIPS_ASE_LOONGSON_CAM |
+>   > +                    MIPS_ASE_LOONGSON_EXT);
+>
+> Is the newline intentional?
+> Also applied to code below.
 
-On a quick debug, Diff at the end seems to fix the issue. i realize that
-all the execution sequences that can alter the earlier statically
-defined struct irqaction fields needs to be taken care carefully,let me
-recheck the resolution here as well as other instances where this kind
-of issue can happen. i will sent a proper patch later.
+Yes, just fix the checkpatch.pl warning:
 
-> 
-> https://github.com/ClangBuiltLinux/continuous-integration/blob/a85e3e44c2570847e22ad8f92f317c2b007c4517/images/mipsel/rootfs.cpio
-> 
-> $ timeout 2m qemu-system-mipsel -machine malta -cpu 24Kf -initrd rootfs.cpio -kernel vmlinux -m 512m -display none -serial mon:stdio
-> 
-> just hangs. I have not done further debugging past the initial bisect.
+WARNING: line over 80 characters
+#78: FILE: arch/mips/kernel/cpu-probe.c:1575:
++            c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
 
-Thanks for the reproducer.
+>
+>   > +            __model_name[cpu] = "Loongson-3A R1 (Loongson-3A1000)";
+>   >              break;
+>   >          case PRID_REV_LOONGSON3B_R1:
+>   > +            c->cputype = CPU_LOONGSON64;
+>   > +            __cpu_name[cpu] = "ICT Loongson-3";
+>   > +            set_elf_platform(cpu, "loongson3b");
+>   > +            set_isa(c, MIPS_CPU_ISA_M64R1);
+>   > +            c->ases |= (MIPS_ASE_LOONGSON_MMI |
+>   > +                    MIPS_ASE_LOONGSON_CAM |
+>   > +                    MIPS_ASE_LOONGSON_EXT);
+>   > +            __model_name[cpu] = "Loongson-3B R1 (Loongson-3B1000)";
+>   > +            break;
+>   >          case PRID_REV_LOONGSON3B_R2:
+>   >              c->cputype = CPU_LOONGSON64;
+>   >              __cpu_name[cpu] = "ICT Loongson-3";
+>   >              set_elf_platform(cpu, "loongson3b");
+>   >              set_isa(c, MIPS_CPU_ISA_M64R1);
+>   > -            c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
+>   > -                MIPS_ASE_LOONGSON_EXT);
+>   > +            c->ases |= (MIPS_ASE_LOONGSON_MMI |
+>   > +                    MIPS_ASE_LOONGSON_CAM |
+>   > +                    MIPS_ASE_LOONGSON_EXT);
+>   > +            __model_name[cpu] = "Loongson-3B R2 (Loongson-3B1500)";
+>   >              break;
+>   >          }
+>   >
+>   > @@ -1926,6 +1941,7 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+>   >              __cpu_name[cpu] = "ICT Loongson-3";
+>   >              set_elf_platform(cpu, "loongson3a");
+>   >              set_isa(c, MIPS_CPU_ISA_M64R2);
+>   > +            __model_name[cpu] = "Loongson-3A R2 (Loongson-3A2000)";
+>   >              break;
+>   >          case PRID_REV_LOONGSON3A_R3_0:
+>   >          case PRID_REV_LOONGSON3A_R3_1:
+>   > @@ -1933,6 +1949,7 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+>   >              __cpu_name[cpu] = "ICT Loongson-3";
+>   >              set_elf_platform(cpu, "loongson3a");
+>   >              set_isa(c, MIPS_CPU_ISA_M64R2);
+>   > +            __model_name[cpu] = "Loongson-3A R3 (Loongson-3A3000)";
+>   >              break;
+>   >          }
+>   >
+>   > @@ -1952,6 +1969,7 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+>   >          c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+>   >          c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
+>   >              MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
+>   > +        __model_name[cpu] = "Loongson-3A R4 (Loongson-3A4000)";
+>   >          break;
+>   >      default:
+>   >          panic("Unknown Loongson Processor ID!");
+>   > @@ -2111,6 +2129,7 @@ u64 __ua_limit;
+>   >  EXPORT_SYMBOL(__ua_limit);
+>   >  #endif
+>   >
+>   > +const char *__model_name[NR_CPUS];
+>   >  const char *__cpu_name[NR_CPUS];
+>   >  const char *__elf_platform;
+>   >
+>   > diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
+>   > index f8d3671..5fc74e6 100644
+>   > --- a/arch/mips/kernel/proc.c
+>   > +++ b/arch/mips/kernel/proc.c
+>   > @@ -15,6 +15,7 @@
+>   >  #include <asm/mipsregs.h>
+>   >  #include <asm/processor.h>
+>   >  #include <asm/prom.h>
+>   > +#include <asm/time.h>
+>   >
+>   >  unsigned int vced_count, vcei_count;
+>   >
+>   > @@ -63,6 +64,9 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+>   >      seq_printf(m, fmt, __cpu_name[n],
+>   >                (version >> 4) & 0x0f, version & 0x0f,
+>   >                (fp_vers >> 4) & 0x0f, fp_vers & 0x0f);
+>   > +    if (__model_name[n])
+>   > +        seq_printf(m, "model name\t\t: %s @ %uMHz\n",
+>   > +              __model_name[n], mips_hpt_frequency / 500000);
+>   >      seq_printf(m, "BogoMIPS\t\t: %u.%02u\n",
+>
+> Actually I don't think take mips_hpt_frequency here is a good option. mips_hpt_frequency
+> is used by cevt-r4k. Processors like Ingenic don't use cevt-r4k don't have it.
+>
+> Probably you can do as what Huacai did, append the frequency part in platform code.
 
-Regards
-afzal
+OK, I will do it.
 
+Thanks,
 
-diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
-index 64e917dfe6b2..d24e4f2985c3 100644
---- a/arch/mips/kernel/cevt-r4k.c
-+++ b/arch/mips/kernel/cevt-r4k.c
-@@ -252,7 +252,7 @@ unsigned int __weak get_c0_compare_int(void)
- 
- int r4k_clockevent_init(void)
- {
--	unsigned long flags = IRQF_PERCPU | IRQF_TIMER | IRQF_SHARED;
-+	unsigned long flags = IRQF_PERCPU | IRQF_TIMER;
- 	unsigned int cpu = smp_processor_id();
- 	struct clock_event_device *cd;
- 	unsigned int irq, min_delta;
+Tiezhu Yang
+
+>   
+>>                 cpu_data[n].udelay_val / (500000/HZ),
+>   >                (cpu_data[n].udelay_val / (5000/HZ)) % 100);
+>   > --
+>   > 2.1.0
+>   >
+>   >
+>
+> Thanks.
+>
+> --
+> Jiaxun Yang
+
