@@ -2,70 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F91181565
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2020 10:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2302E18158E
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2020 11:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728195AbgCKJ7Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Mar 2020 05:59:25 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:40887 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726934AbgCKJ7Z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Mar 2020 05:59:25 -0400
-Received: by mail-ot1-f66.google.com with SMTP id h17so1289788otn.7;
-        Wed, 11 Mar 2020 02:59:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w1JByWKdTvEc/E0ydHa6YNi6oG8qJB8lqqm0yGUUYU8=;
-        b=J4tfXdUXj7O71TJm0BSRYezV4F23iyqsoosYX1Hq7+8Y7Gtf1/3nfCxW81jU5Ecweg
-         UvEymHM7nXXqeUZEVG/2roDgsqIuuX8FYkFcq8EHQX82SZAOvvg4Qj/jRWRYVHX4dTPM
-         cB9gxAWrfl6eF6TQYAmRjD1eU5j8ETyQbMS1ThW4DQkyDP2/AO5H+utX9TlkLwusFUMD
-         8xMGERwS0bGmBHsijZZKd6VDHKjA4mtqoy0INFCmGGmJO+SS4n+Zqg7dyPASsyehFMta
-         9WikdX0n0Kw3n4U/2wYM+s3lGmUjTTEOlJYBXFsN0dmz+Kfm5B7BVy7EPlXqtAbKVhRX
-         kHnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w1JByWKdTvEc/E0ydHa6YNi6oG8qJB8lqqm0yGUUYU8=;
-        b=eqfH9wMbaSbw6mPwWbfdvmbg7R3SGVTiOs+9nF2MEm+ZkdqUS4o5PJAOMO/zrHnZbS
-         SnaUMslOc6FFReeaxdr/rKQs3+3geItwN23yGd+WbDoQdnF9UKN/hMjjGOOqrXxuus3/
-         5v1SfsiLMALk6ph9CJyGbdq3lYyJ+JQF28fgpu6iKt4hQ2IbiKatJlHmf6DT9SF08b/N
-         IBuO8JYY/oJcrFHvG9k6CWFA2Tn+/hktmH/mAGzoRomcA+eutUHUgEWMDgIEVb5gOldk
-         WzHW2NybvPK5aLI5TRoxt+1EYbATdN/z+lc1r6Cy51GYQk8wDpScrLu6S4r+ac/kZ1lZ
-         LBpQ==
-X-Gm-Message-State: ANhLgQ1a9U1OwYskyXCMzclwMKynorDegQWzEVVrUrqxkkvQUswQq4PN
-        1h9KjdF+xMY58F3/DAj31ypYpIoj72RzOH+aHUZUvQ==
-X-Google-Smtp-Source: ADFU+vt1qfz62teArix4RWcoHrX3dgkejn6Zx6SB6aqWHXWYPwDFYUwdeFdSEUbc7NDSxUNEif9TkDmcIliVgY8eUMQ=
-X-Received: by 2002:a05:6830:11d5:: with SMTP id v21mr1711403otq.290.1583920764878;
- Wed, 11 Mar 2020 02:59:24 -0700 (PDT)
+        id S1726097AbgCKKMF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Mar 2020 06:12:05 -0400
+Received: from elvis.franken.de ([193.175.24.41]:33982 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726044AbgCKKMF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 11 Mar 2020 06:12:05 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jByLL-00075u-00; Wed, 11 Mar 2020 11:12:03 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 4A00BC0FDD; Wed, 11 Mar 2020 11:11:55 +0100 (CET)
+Date:   Wed, 11 Mar 2020 11:11:55 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mips <linux-mips@vger.kernel.org>
+Subject: [GIT PULL] MIPS fixes for v5.6
+Message-ID: <20200311101155.GA9476@alpha.franken.de>
 MIME-Version: 1.0
-References: <1583908414-22858-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1583908414-22858-1-git-send-email-yangtiezhu@loongson.cn>
-From:   Manuel Lauss <manuel.lauss@gmail.com>
-Date:   Wed, 11 Mar 2020 10:58:48 +0100
-Message-ID: <CAOLZvyHEnnpWWhEAWx9RZASVjjQ=6HTREqwY+LK0hm=J4Wd8Xg@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Loongson: Add model name to /proc/cpuinfo
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Linux-MIPS <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+Hi Linus,
 
-> Model name:            Loongson-3A R3 (Loongson-3A3000) @ 1449MHz
+here are some small MIPS fixes for v5.6. Please pull.
 
-How is this different from the __cpu_name[] array?  Doesn't it serve
-the same purpose?
-E.g. on Alchemy, it lists the correct Model name. (I.e. "Au1000", "Au1250", ...)
+Thomas.
 
-Manuel
+The following changes since commit 3234f4ed3066a58cd5ce8edcf752fa4fe0c95cb5:
+
+  MAINTAINERS: Hand MIPS over to Thomas (2020-02-24 22:43:18 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git tags/mips_fixes_5.6.1
+
+for you to fetch changes up to f7d5f5655ef7e5d2a128f6696ac35256e83b119b:
+
+  MAINTAINERS: Correct MIPS patchwork URL (2020-03-09 12:10:01 +0100)
+
+----------------------------------------------------------------
+A few MIPS fixes:
+
+- DT fixes for CI20
+
+- Fix command line handling
+
+- Correct patchwork URL
+
+----------------------------------------------------------------
+H. Nikolaus Schaller (2):
+      MIPS: DTS: CI20: fix PMU definitions for ACT8600
+      MIPS: DTS: CI20: fix interrupt for pcf8563 RTC
+
+Paul Cercueil (1):
+      MIPS: Fix CONFIG_MIPS_CMDLINE_DTB_EXTEND handling
+
+Thomas Bogendoerfer (1):
+      MAINTAINERS: Correct MIPS patchwork URL
+
+ MAINTAINERS                         |  2 +-
+ arch/mips/boot/dts/ingenic/ci20.dts | 44 +++++++++++++++++++++++--------------
+ arch/mips/kernel/setup.c            |  3 ++-
+ 3 files changed, 31 insertions(+), 18 deletions(-)
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
