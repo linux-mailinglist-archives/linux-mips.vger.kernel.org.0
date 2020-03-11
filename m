@@ -2,51 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA9D181D29
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2020 17:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE530181DEC
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Mar 2020 17:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729921AbgCKQGR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Mar 2020 12:06:17 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:51603 "EHLO
+        id S1730052AbgCKQcx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Mar 2020 12:32:53 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:40409 "EHLO
         mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730004AbgCKQGR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Mar 2020 12:06:17 -0400
-Received: by mail-pj1-f67.google.com with SMTP id y7so1209796pjn.1;
-        Wed, 11 Mar 2020 09:06:16 -0700 (PDT)
+        with ESMTP id S1729852AbgCKQcx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Mar 2020 12:32:53 -0400
+Received: by mail-pj1-f67.google.com with SMTP id gv19so1283476pjb.5;
+        Wed, 11 Mar 2020 09:32:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=+j/nM3vIVr6PLm68eH7IHhh9AMZDOol9S36ENlD9mUc=;
-        b=WOsUbe29X2GerEydzZ1EnEHD35WKJoISv38Kh2WIhRruhfRj+taon96EHJJtGL4bgr
-         2WPyewyYEN8/O0z+Z6OuMmw/a4Uq9YlydVIAGKQzgAK1ujWKlHMssNOWMHylm6BiNcOE
-         ChatkW0oXBhFd4nWyxeuT0cf9K859X51A7Rzan6fgM8bze8qM1laWqr0GxNsnPMtvyDw
-         hXmWPrH47BmxmI/SVIwuSjyZmrv4R88B9MjLfO3pdV9G8CEvIkG21kyeuDoZspbOi0Wg
-         3MmsWG+BHNeYe8+leRQuga9jDceZVp18944FiM75nv3J9qPOoogjhbw5l5tRaws6WfTH
-         dSyg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zmUBvFmNMYqAgE4hUh5PxorZyEbBCYGzea7UV2DPByM=;
+        b=okn3wxoxdRHK59h+9WIq7oUfCZKvj8jYSlljDW2vEtjcLJX7mgYZASlfNT2PSYE6Ew
+         hTxbbboBZjfEQPOaLaDTKkp2kAaVqZVROy0sVYOndeFLtoC7w9dk7d90z8EtJQq0Vx0R
+         vy9cgKIwOxAWv5BdqTYwtuiYYyguWrlCbqRIYcLTabjY59Uz+WnOAb8XXE+r/5G2b4FS
+         0hKP4XWaegGUW05mM/tuyOjn8lu6DjLqOKDzuzDjE1W3KtsqetyMjI5B1hTR1nJumbKu
+         vF4IfBaBzIIt5RZA++Mg8wN3WcVTwUS5m/euqks2Ta8zJGfFhw2KCVKjQnHaLV+MY2Wg
+         tbuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=+j/nM3vIVr6PLm68eH7IHhh9AMZDOol9S36ENlD9mUc=;
-        b=bAo0+i7jpU1zRhYtOVkzLBd2rGCnWEnYDia/iCpIwbJdZso8Yqkix6GBtQKS3lOdTz
-         ZHWori6wh5WXJNKloQVg9CNrNH1pljgzhBfux4E+IV0ug7u9AWKVmDs0jg00UJKxuqk6
-         XveFMjs2Q/Jf0fUdZ/RNVtsHWZoRhJGV/NQlW1ClAJQNZhvHYKNLDdD7+0+4QAKS/iMC
-         ZGf6+QJwVxKqn1B4bLw2Blmb7a+CxJfFOCVUg0xQhAj8MJCYwOtem7dowtadYjVbIRCc
-         reA/nnK1GH8bsLTv3nqF2K0NXwTn97sW7VmYixwxqhQ0ZQlE/pWJcfQiWBRBH1ucozDM
-         X7qQ==
-X-Gm-Message-State: ANhLgQ2LW7b8uD/xBeg4lDNHSbDc4j6jM2L7LLRfBlbD2P4doSljFGPA
-        Mf/HFtonExEierW1OJpieLo=
-X-Google-Smtp-Source: ADFU+vufZ9CjDwf//AylLU2Lwn1Y/vS7+uckC0mMPnPCPET+mGy+kXfSfFgcA/2M7tZYVKEBRp27pQ==
-X-Received: by 2002:a17:90a:c218:: with SMTP id e24mr4107597pjt.64.1583942776095;
-        Wed, 11 Mar 2020 09:06:16 -0700 (PDT)
-Received: from localhost.localdomain ([106.51.232.35])
-        by smtp.gmail.com with ESMTPSA id cm2sm6215000pjb.23.2020.03.11.09.06.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2020 09:06:15 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zmUBvFmNMYqAgE4hUh5PxorZyEbBCYGzea7UV2DPByM=;
+        b=M2rJnaR+2K0b0xNvw2qg5sMWEgCUFV4UCXZ8hobAzrGHHQOaQ2grG7zapKyvKEmSrL
+         Y4v3UvtNubOz1sbXM3xfGmYmD1f8+hXo31TQxzhuCK7AH+4nHmQerGgCZBzlZi3mxnIK
+         THm6TTztIXKvFUuzAyoiUAF7dqplG9NPaU8gQxrTLc3nPU0xqtYlnGMkqF9EP1GwTBKV
+         bMw1kLZhtEOC7UncLgHZWmA9p8fe18T8ato76Y/gPva91gei4lZSawLk+RjNXVqTB1wn
+         uI5/xL+yJhazasWX+/WN8lqEHBhGAccthdM+GLk2rzq3XG4v3H/4fauKf5QpxDkFs2T1
+         MumA==
+X-Gm-Message-State: ANhLgQ2exVk2bdb2LEHaWKGGz+sAf8ONpUiaIfulgCKP6WuIBlA9EjZy
+        pyd6AeXon2a8IokAbvl/iOY=
+X-Google-Smtp-Source: ADFU+vtseRHn4vAz5dlT4WliTsDFscNXLHw6uylAKsWiiB6pM6JEaG1187JNfqDIKnTVPdUgOiyByg==
+X-Received: by 2002:a17:90a:4487:: with SMTP id t7mr4170485pjg.104.1583944371770;
+        Wed, 11 Mar 2020 09:32:51 -0700 (PDT)
+Received: from localhost ([106.51.232.35])
+        by smtp.gmail.com with ESMTPSA id q12sm51720409pfh.158.2020.03.11.09.32.50
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 11 Mar 2020 09:32:50 -0700 (PDT)
+Date:   Wed, 11 Mar 2020 22:02:49 +0530
 From:   afzal mohammed <afzal.mohd.ma@gmail.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Afzal Mohammed <afzal.mohd.ma@gmail.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Ralf Baechle <ralf@linux-mips.org>,
@@ -58,154 +59,82 @@ Cc:     Afzal Mohammed <afzal.mohd.ma@gmail.com>,
         Keguang Zhang <keguang.zhang@gmail.com>,
         Huacai Chen <chenhc@lemote.com>,
         John Crispin <john@phrozen.org>
-Subject: [PATCH] MIPS: pass non-NULL dev_id on shared request_irq()
-Date:   Wed, 11 Mar 2020 21:36:02 +0530
-Message-Id: <20200311160602.3571-1-afzal.mohd.ma@gmail.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200311104217.GA10615@alpha.franken.de>
-References: 
+Subject: Re: [PATCH v4] MIPS: Replace setup_irq() by request_irq()
+Message-ID: <20200311163249.GA4984@afzalpc>
+References: <20200304203144.GA4323@alpha.franken.de>
+ <20200305115759.3186-1-afzal.mohd.ma@gmail.com>
+ <20200311053126.GA48442@ubuntu-m2-xlarge-x86>
+ <20200311090308.GA5060@afzalpc>
+ <20200311104217.GA10615@alpha.franken.de>
+ <20200311131210.GA5115@afzalpc>
+ <20200311160307.GA15464@alpha.franken.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200311160307.GA15464@alpha.franken.de>
+User-Agent: Mutt/1.9.3 (2018-01-21)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Recently all usages of setup_irq() was replaced by request_irq().
-request_irq() does a few sanity checks that were not done in
-setup_irq(), if they fail irq registration will fail. One of the check is
-to ensure that non-NULL dev_id is passed in the case of shared irq. This
-caused malta on qemu to hang.
+Hi,
 
-Fix it by passing a dev_id to all request_irq()'s that are shared.
+On Wed, Mar 11, 2020 at 05:03:07PM +0100, Thomas Bogendoerfer wrote:
+> On Wed, Mar 11, 2020 at 06:42:10PM +0530, afzal mohammed wrote:
 
-Fixes: ac8fd122e070 ("MIPS: Replace setup_irq() by request_irq()")
-Reported-by: Nathan Chancellor <natechancellor@gmail.com>
-Signed-off-by: afzal mohammed <afzal.mohd.ma@gmail.com>
----
+> > If IRQF_SHARED is passed, it exepcts a non-NULL dev_id, here it is
+> > NULL, setup_irq() doesn't have any check like that.
+> 
+> so request_irq() is not a 1:1 replacement for our current setup_irq().
+> Or put it the another way our setup_irq() might be buggy, when used for
+> shared interrupts.
 
-[ resending since in the archives not seen, apologies if duplicate ]
+AFAIU, this causes problems only while freeing irq, but not sure. Seems
+it is not happening with any of the cases in the diff.
 
-Hi Thomas,
+> > So i think proper solution is to add a non NULL dev_id, as removing
+> > IRQF_SHARED might affect some platforms that might be using that
+> > interrupt line shared.
+> > 
+> > Patch with non-NULL dev_id below, it works w/ Nathan's test case.
+> 
+> I'm not sure, I like the adding of string pointers as dev_id arguments
+> in your patch. How can we make sure they are unique enough for the use
+> case ? I guess using handler as dev_id does a better job here.
 
-i am assuming your next tree is immutable, hence referring to the SHA-ID
-of the original commit in your tree. Else if you prefer a fixup'ed
-patch, let me know, i will send v5 with this fixup over v4.
+There was one prior similar usage using string pointers, another way i
+have seen is using irq no. itself, but then it has to be typecasted,
+in file arch/mips/txx9/generic/pci.c,
 
-REgards
+        request_irq(irq, &i8259_interrupt, IRQF_SHARED,
+                "cascade(i8259)", (void *)(long)irq);
+
+[ but i think that double casting is not required, only (void *) might
+suffice ]
+
+If you prefer handler function pointer, i will use that.
+
+> And before doing that, lets clean up some of the IRQF_SHARED usage first.
+> All sni IRQF_SHARED can go away, the interrupt lines are exclusive there. 
+> 
+> loongson2ef/lemote-2f/irq.c: looks like the only user of
+> LOONGSON_NORTH_BRIDGE_IRQ, so IRQF_SHARED could go as well.
+> Could someone confirm that ?
+> 
+> All other need to stay, IMHO.
+
+Okay, i am venturing into MIPS the first time as part of this patch
+series, so no MIPS specific knowledge, just let me know
+loongson2ef/lemote-2f case as well, i will prepare patch accordingly. 
+
+> And v4 is already in mips-next, so I need an incremental patch please.
+
+Okay, i already sent a patch, it crossed your mail, i will make a new
+patch based on the outcome of the discusson here.
+
+Since there is some issue w/ lore.kernel.org, i send it again, but
+both are not seen in archives.
+
+Regards
 afzal
-
- arch/mips/dec/setup.c                 | 2 +-
- arch/mips/kernel/cevt-r4k.c           | 2 +-
- arch/mips/loongson2ef/lemote-2f/irq.c | 2 +-
- arch/mips/pmcs-msp71xx/msp_time.c     | 2 +-
- arch/mips/sni/a20r.c                  | 2 +-
- arch/mips/sni/pcit.c                  | 4 ++--
- arch/mips/sni/rm200.c                 | 4 ++--
- 7 files changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/arch/mips/dec/setup.c b/arch/mips/dec/setup.c
-index c8bbac0c5051..cbbb27fbab19 100644
---- a/arch/mips/dec/setup.c
-+++ b/arch/mips/dec/setup.c
-@@ -758,7 +758,7 @@ void __init arch_init_irq(void)
- 	/* Register the bus error interrupt. */
- 	if (dec_interrupt[DEC_IRQ_BUS] >= 0 && busirq_handler) {
- 		if (request_irq(dec_interrupt[DEC_IRQ_BUS], busirq_handler,
--				busirq_flags, "bus error", NULL))
-+				busirq_flags, "bus error", "bus error"))
- 			pr_err("Failed to register bus error interrupt\n");
- 	}
- 	/* Register the HALT interrupt. */
-diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
-index 64e917dfe6b2..4b19810c67d4 100644
---- a/arch/mips/kernel/cevt-r4k.c
-+++ b/arch/mips/kernel/cevt-r4k.c
-@@ -292,7 +292,7 @@ int r4k_clockevent_init(void)
- 
- 	cp0_timer_irq_installed = 1;
- 
--	if (request_irq(irq, c0_compare_interrupt, flags, "timer", NULL))
-+	if (request_irq(irq, c0_compare_interrupt, flags, "timer", cd))
- 		pr_err("Failed to request irq %d (timer)\n", irq);
- 
- 	return 0;
-diff --git a/arch/mips/loongson2ef/lemote-2f/irq.c b/arch/mips/loongson2ef/lemote-2f/irq.c
-index 34e15e8b7a8f..1c99e83cabae 100644
---- a/arch/mips/loongson2ef/lemote-2f/irq.c
-+++ b/arch/mips/loongson2ef/lemote-2f/irq.c
-@@ -109,7 +109,7 @@ void __init mach_init_irq(void)
- 
- 	/* setup north bridge irq (bonito) */
- 	if (request_irq(LOONGSON_NORTH_BRIDGE_IRQ, ip6_action,
--			IRQF_SHARED | IRQF_NO_THREAD, "cascade", NULL))
-+			IRQF_SHARED | IRQF_NO_THREAD, "cascade", "cascade"))
- 		pr_err("Failed to register north bridge cascade interrupt\n");
- 	/* setup source bridge irq (i8259) */
- 	if (request_irq(LOONGSON_SOUTH_BRIDGE_IRQ, no_action,
-diff --git a/arch/mips/pmcs-msp71xx/msp_time.c b/arch/mips/pmcs-msp71xx/msp_time.c
-index baf0da8b4c98..0601a3f7f8f6 100644
---- a/arch/mips/pmcs-msp71xx/msp_time.c
-+++ b/arch/mips/pmcs-msp71xx/msp_time.c
-@@ -81,7 +81,7 @@ unsigned int get_c0_compare_int(void)
- 	/* MIPS_MT modes may want timer for second VPE */
- 	if ((get_current_vpe()) && !tim_installed) {
- 		if (request_irq(MSP_INT_VPE1_TIMER, c0_compare_interrupt, flags,
--				"timer", NULL))
-+				"timer", "timer"))
- 			pr_err("Failed to register timer interrupt\n");
- 		tim_installed++;
- 	}
-diff --git a/arch/mips/sni/a20r.c b/arch/mips/sni/a20r.c
-index ba966d62fb4b..1bfea4aae124 100644
---- a/arch/mips/sni/a20r.c
-+++ b/arch/mips/sni/a20r.c
-@@ -223,7 +223,7 @@ void __init sni_a20r_irq_init(void)
- 	sni_hwint = a20r_hwint;
- 	change_c0_status(ST0_IM, IE_IRQ0);
- 	if (request_irq(SNI_A20R_IRQ_BASE + 3, sni_isa_irq_handler,
--			IRQF_SHARED, "ISA", NULL))
-+			IRQF_SHARED, "ISA", "ISA"))
- 		pr_err("Failed to register ISA interrupt\n");
- }
- 
-diff --git a/arch/mips/sni/pcit.c b/arch/mips/sni/pcit.c
-index 4a850ab03398..15080155cc9a 100644
---- a/arch/mips/sni/pcit.c
-+++ b/arch/mips/sni/pcit.c
-@@ -245,7 +245,7 @@ void __init sni_pcit_irq_init(void)
- 	sni_hwint = sni_pcit_hwint;
- 	change_c0_status(ST0_IM, IE_IRQ1);
- 	if (request_irq(SNI_PCIT_INT_START + 6, sni_isa_irq_handler,
--			IRQF_SHARED, "ISA", NULL))
-+			IRQF_SHARED, "ISA", "ISA"))
- 		pr_err("Failed to register ISA interrupt\n");
- }
- 
-@@ -260,7 +260,7 @@ void __init sni_pcit_cplus_irq_init(void)
- 	sni_hwint = sni_pcit_hwint_cplus;
- 	change_c0_status(ST0_IM, IE_IRQ0);
- 	if (request_irq(MIPS_CPU_IRQ_BASE + 3, sni_isa_irq_handler,
--			IRQF_SHARED, "ISA", NULL))
-+			IRQF_SHARED, "ISA", "ISA"))
- 		pr_err("Failed to register ISA interrupt\n");
- }
- 
-diff --git a/arch/mips/sni/rm200.c b/arch/mips/sni/rm200.c
-index ba1f2fc6a43e..2b4a6448b428 100644
---- a/arch/mips/sni/rm200.c
-+++ b/arch/mips/sni/rm200.c
-@@ -473,10 +473,10 @@ void __init sni_rm200_irq_init(void)
- 	sni_hwint = sni_rm200_hwint;
- 	change_c0_status(ST0_IM, IE_IRQ0);
- 	if (request_irq(SNI_RM200_INT_START + 0, sni_rm200_i8259A_irq_handler,
--			IRQF_SHARED, "onboard ISA", NULL))
-+			IRQF_SHARED, "onboard ISA", "onboard ISA"))
- 		pr_err("Failed to register onboard ISA interrupt\n");
- 	if (request_irq(SNI_RM200_INT_START + 1, sni_isa_irq_handler,
--			IRQF_SHARED, "ISA", NULL))
-+			IRQF_SHARED, "ISA", "ISA"))
- 		pr_err("Failed to register ISA interrupt\n");
- }
- 
--- 
-2.18.0
-
