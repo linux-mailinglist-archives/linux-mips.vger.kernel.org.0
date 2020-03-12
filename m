@@ -2,350 +2,632 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 029D6182C81
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Mar 2020 10:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9527B182C83
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Mar 2020 10:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726194AbgCLJdT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Mar 2020 05:33:19 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34966 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725268AbgCLJdT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Mar 2020 05:33:19 -0400
-Received: by mail-pf1-f194.google.com with SMTP id u68so2992102pfb.2
-        for <linux-mips@vger.kernel.org>; Thu, 12 Mar 2020 02:33:18 -0700 (PDT)
+        id S1726023AbgCLJdz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Mar 2020 05:33:55 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:37333 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbgCLJdz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Mar 2020 05:33:55 -0400
+Received: by mail-pl1-f196.google.com with SMTP id f16so2445762plj.4
+        for <linux-mips@vger.kernel.org>; Thu, 12 Mar 2020 02:33:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id;
-        bh=KpQk/VuiscHk8dWEgfNGuNgOP8XwoC8+yutoUmH1R7s=;
-        b=STVvNQy3mYxdMmLgX1Z11GbONxlPl0iFc1TPL/2tCd+bwoRAtzAscWDG+OIN3xqUEv
-         rXcy6PPlpI1i9gsu8M3EysWLHInqp2NnvCjY8OlxrEC3xmVkgn112Avyolu4Ja4bX4O9
-         Ix6PUKaMwNlFmiNA0AhP0uEe4R9lOuU0rNDNG4qOczxlrBJzdQ3bEE5OBfhTZHPjXdHQ
-         pY7ZNSj8sXzGqhdPNkYTWQKgX0ClhJf14Ld1I6PKYv8Ja1UkvyjqLEQN1Z8pJpFPFquC
-         D5Ds/s+XPEnl80iIbjM1EVzpokrAZh4ARsfmXwTXyoc9E3/5LSh9XZA0L6XEKoVj81sl
-         Rghw==
+        bh=LUdZeKSTXev+wnQ/Yj7r38tHSrxBunDpclmUQ4TqSqE=;
+        b=gqqUkXBbtA8RhUjHrqKx+uWXENUiv9QLqkm/TLZzJ13qIGu+CsFSjFbwXBRro9x7QY
+         4xsQ3fnffubeU7mT5dU6SVQuOswXX+F2US4GqV+27aDLPyJ0LP5WMxl7zo/yLplu9HmC
+         8TQLHI5PYdY2TZJ0wtO2SA7G+WGTfRJTJ/tDBL4tfQngt5JpzPjkN9MtP6+57WBqW6cB
+         Ne6s4rmCKrJr8Aehz8KmlAVrIFLeA3fT/y8ve+TM0N5ir/jxSLW+K9mX94V8tjqk9tXo
+         1xEYUsj54BjAAPHo0sn2oLwfrfyMlSm1exf4rYXW2swHLeG78ddGuwjaEPWcHFMc0PRA
+         xQRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=KpQk/VuiscHk8dWEgfNGuNgOP8XwoC8+yutoUmH1R7s=;
-        b=ZrSgF62V8+e5zhK2ACG5iT5hUOVLJZqXjGsAZcCVSZqMNly1fAuHMlRUTWWe/LCV7a
-         /lAIg1ECNkuNRA6D6a2P6EG0uouk4HaigrpQatO13wkp+K4lCmeDeJ1YtkCqVmVgqMbB
-         /5Ay47SY5qFQcCDa8IpPHWYU19+ritutm+L8lbGl95bWa4bdBgsLa/3JElqZMXB0OejJ
-         FgC5fxq9UAhnSE+PgOflv5WFyWZUVu77Ehu74Um+x7+7RZwRpmzI/a4IbpHP0VutQ3Wm
-         tgFwYbs7qd+2GGCrkg+rNC9COOSPD6KMK6e3xSUrFQDmFOkWEKe3j4gKnzOVktMXnbWN
-         d+WA==
-X-Gm-Message-State: ANhLgQ1GrBtB8h0+jxj+9GvKgt764414rEIluFvI7CWEJIZhEqCuPrFz
-        4YNdZ0FTF0T6hnU2AKJpUUE=
-X-Google-Smtp-Source: ADFU+vscmsVOWUMyCgYXebmmKlCshnsXh1oR623XitwluMl1gB49gI+mtusJjenDCe7wjNboMZszqg==
-X-Received: by 2002:a63:340c:: with SMTP id b12mr6698665pga.180.1584005597580;
-        Thu, 12 Mar 2020 02:33:17 -0700 (PDT)
+        bh=LUdZeKSTXev+wnQ/Yj7r38tHSrxBunDpclmUQ4TqSqE=;
+        b=o2pTAjT6GrT3gzeNAbI4oGIHD34xw2IlnbQLgM2iqkzbXHCwjZGOLRMgtJ0EqglEHs
+         fZY+8HNdC+E+rMlOHI17jalNxP/XzC7cPGKn90RP5BO1TpDc6FSdrHeEyE9Kvwr3lpAp
+         td0BJOJJR6ju/ttEbJW5PKRKlXY1X1ZWsEjraIRQ8vHYbOGMzFxyCIyjDaNBo21t/Ay4
+         5yuEKMS5IvPqwu8oGPxxAUX6nA3xMxADnuTBsoxKsFNGWFN4p/9rIawoGTngMgRIJEJp
+         nmfezlxamk264ejbsYX6OvE17qu03xcszZaCvyCE5s37taHIDkqkRFY0Kuhq5aUZmoho
+         dDSw==
+X-Gm-Message-State: ANhLgQ2Rnl14KCQiQoJrpYbly3XPsIYzHMEoTfje1oxZIlFSH5j+4tXa
+        3aSieARznpHkLkOrcfgtBbQ=
+X-Google-Smtp-Source: ADFU+vuK4JzQQWun06lQuLs+J8/0Yhzt0gAoBhoFGQt9rLaXE8lfXwlqWCfOTIDWtSt+UA878XHFfg==
+X-Received: by 2002:a17:902:7583:: with SMTP id j3mr7398403pll.236.1584005632342;
+        Thu, 12 Mar 2020 02:33:52 -0700 (PDT)
 Received: from software.domain.org ([103.118.43.97])
-        by smtp.gmail.com with ESMTPSA id j13sm359286pgn.22.2020.03.12.02.33.12
+        by smtp.gmail.com with ESMTPSA id 17sm22474880pfu.166.2020.03.12.02.33.47
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 12 Mar 2020 02:33:17 -0700 (PDT)
+        Thu, 12 Mar 2020 02:33:51 -0700 (PDT)
 From:   Huacai Chen <chenhc@lemote.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
         Zhangjin Wu <wuzhangjin@gmail.com>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH Resend] MIPS: Add __cpu_full_name[] to make CPU names more human-readable
-Date:   Thu, 12 Mar 2020 17:40:53 +0800
-Message-Id: <1584006053-28887-1-git-send-email-chenhc@lemote.com>
+Subject: [PATCH Resend] MIPS: Add syscall auditing support
+Date:   Thu, 12 Mar 2020 17:41:23 +0800
+Message-Id: <1584006083-28936-1-git-send-email-chenhc@lemote.com>
 X-Mailer: git-send-email 2.7.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In /proc/cpuinfo, we keep "cpu model" as is, since GCC should use it
-for -march=native. Besides, we add __cpu_full_name[] to describe the
-processor in a more human-readable manner. The full name is displayed
-as "model name" in cpuinfo, which is needed by some userspace tools
-such as "lscpu" and "gnome-system-monitor".
+From: Ralf Baechle <ralf@linux-mips.org>
 
-The CPU frequency in "model name" is the default value (highest), and
-there is also a "CPU MHz" whose value can be changed by cpufreq.
+The original patch is from Ralf. I have maintained it for more than six
+years on Loongson platform, and it works perfectly. Most of the commit
+messages are written by Ralf.
 
-This is only used by Loongson now (ICT is dropped in cpu name, and cpu
-name can be overwritten by BIOS).
+MIPS doesn't quite fit into the existing pattern of other architectures
+and I'd appreciate your comments and maybe even an Acked-by.
 
-Why drop ICT?
-At the beginning, Loongson is designed by ICT, but now all Loongson
-processors is designed by "Loongson Technology Corporation Limited"
-which is independent from ICT. We have search the code in
-https://codesearch.debian.net/, and the result is:
+ - Linux on MIPS extends the traditional syscall table used by older UNIX
+   implementations.  This is why 32-bit Linux syscalls are starting from
+   4000; the native 64-bit syscalls start from 5000 and the N32 compat ABI
+   from 6000.  The existing syscall bitmap is only large enough for at most
+   2048 syscalls, so I had to increase AUDIT_BITMASK_SIZE to 256 which
+   provides enough space for 8192 syscalls.  Because include/uapi/linux/
+   audit.h and AUDIT_BITMASK_SIZE are exported to userspace I've used an
+   #ifdef __mips__ for this.
 
-1, GCC searches the "cpu model" in cpuinfo, but it only matches
-   "Loongson-2 V0.2" and so on, so drop "ICT" is comfortable;
-2, Debian Installer searches the "cpu model" in cpuinfo and matches
-   "ICT Loongson", but Yunqiang Su is modifying the code;
-3, Valgrind searches the "cpu model" in cpuinfo and matches "ICT
-   Loongson", and we are planning to fix it up.
+ - The code treats the little endian MIPS architecture as separate from
+   big endian.  Combined with the 3 ABIs that's 6 combinations.  I tried
+   to sort of follow the example set by ARM which explicitly lists the
+   (rare) big endian architecture variant - but it doesn't seem to very
+   useful so I wonder if this could be squashed to just the three ABIs
+   without consideration of endianess?
 
+Signed-off-by: Ralf Baechle <ralf@linux-mips.org>
 Signed-off-by: Huacai Chen <chenhc@lemote.com>
 ---
+ arch/mips/Kconfig                   | 13 +++++
+ arch/mips/include/asm/abi.h         |  1 +
+ arch/mips/include/asm/unistd.h      | 10 ++++
+ arch/mips/include/uapi/asm/unistd.h | 21 ++++----
+ arch/mips/kernel/Makefile           |  4 ++
+ arch/mips/kernel/audit-n32.c        | 58 ++++++++++++++++++++++
+ arch/mips/kernel/audit-native.c     | 97 +++++++++++++++++++++++++++++++++++++
+ arch/mips/kernel/audit-o32.c        | 60 +++++++++++++++++++++++
+ arch/mips/kernel/signal.c           | 18 +++++++
+ arch/mips/kernel/signal_n32.c       |  8 +++
+ arch/mips/kernel/signal_o32.c       |  8 +++
+ include/uapi/linux/audit.h          | 10 ++++
+ kernel/auditsc.c                    | 13 +++++
+ 13 files changed, 312 insertions(+), 9 deletions(-)
+ create mode 100644 arch/mips/kernel/audit-n32.c
+ create mode 100644 arch/mips/kernel/audit-native.c
+ create mode 100644 arch/mips/kernel/audit-o32.c
 
-Tips: Tiezhu Yang <yangtiezhu@loongson.cn> has send a patch to do the
-same thing but need to be improved. We has consulted with each other and
-decide to resend my version.
-
- arch/mips/include/asm/cpu-info.h                   |  2 ++
- arch/mips/include/asm/mach-loongson64/boot_param.h |  1 +
- arch/mips/include/asm/time.h                       |  2 ++
- arch/mips/kernel/cpu-probe.c                       | 30 +++++++++++++++++-----
- arch/mips/kernel/proc.c                            |  6 +++++
- arch/mips/kernel/time.c                            |  2 ++
- arch/mips/loongson64/env.c                         | 13 ++++++++++
- arch/mips/loongson64/smp.c                         |  1 +
- arch/mips/loongson64/smp.h                         |  1 +
- 9 files changed, 51 insertions(+), 7 deletions(-)
-
-diff --git a/arch/mips/include/asm/cpu-info.h b/arch/mips/include/asm/cpu-info.h
-index ed7ffe4..f5e1ce8 100644
---- a/arch/mips/include/asm/cpu-info.h
-+++ b/arch/mips/include/asm/cpu-info.h
-@@ -116,7 +116,9 @@ extern void cpu_probe(void);
- extern void cpu_report(void);
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 27f800f..ac71fb0 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -17,6 +17,7 @@ config MIPS
+ 	select ARCH_USE_QUEUED_SPINLOCKS
+ 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+ 	select ARCH_WANT_IPC_PARSE_VERSION
++	select AUDIT_ARCH
+ 	select BUILDTIME_TABLE_SORT
+ 	select CLONE_BACKWARDS
+ 	select CPU_NO_EFFICIENT_FFS if (TARGET_ISA_REV < 1)
+@@ -40,6 +41,7 @@ config MIPS
+ 	select GENERIC_TIME_VSYSCALL
+ 	select GUP_GET_PTE_LOW_HIGH if CPU_MIPS32 && PHYS_ADDR_T_64BIT
+ 	select HANDLE_DOMAIN_IRQ
++	select HAVE_ARCH_AUDITSYSCALL
+ 	select HAVE_ARCH_COMPILER_H
+ 	select HAVE_ARCH_JUMP_LABEL
+ 	select HAVE_ARCH_KGDB
+@@ -1121,6 +1123,15 @@ config FW_ARC
+ config ARCH_MAY_HAVE_PC_FDC
+ 	bool
  
- extern const char *__cpu_name[];
-+extern const char *__cpu_full_name[];
- #define cpu_name_string()	__cpu_name[raw_smp_processor_id()]
-+#define cpu_full_name_string()	__cpu_full_name[raw_smp_processor_id()]
- 
- struct seq_file;
- struct notifier_block;
-diff --git a/arch/mips/include/asm/mach-loongson64/boot_param.h b/arch/mips/include/asm/mach-loongson64/boot_param.h
-index 8c286be..1d69e4c 100644
---- a/arch/mips/include/asm/mach-loongson64/boot_param.h
-+++ b/arch/mips/include/asm/mach-loongson64/boot_param.h
-@@ -58,6 +58,7 @@ struct efi_cpuinfo_loongson {
- 	u16 reserved_cores_mask;
- 	u32 cpu_clock_freq; /* cpu_clock */
- 	u32 nr_cpus;
-+	char cpuname[64];
- } __packed;
- 
- #define MAX_UARTS 64
-diff --git a/arch/mips/include/asm/time.h b/arch/mips/include/asm/time.h
-index e855a36..3ba2bc0 100644
---- a/arch/mips/include/asm/time.h
-+++ b/arch/mips/include/asm/time.h
-@@ -22,6 +22,8 @@ extern spinlock_t rtc_lock;
-  */
- extern void plat_time_init(void);
- 
-+extern unsigned int mips_cpu_frequency;
++config AUDIT_ARCH
++	bool
 +
- /*
-  * mips_hpt_frequency - must be set if you intend to use an R4k-compatible
-  * counter as a timer interrupt source.
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index 6ab6b03..dec98dd 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -1544,32 +1544,44 @@ static inline void cpu_probe_legacy(struct cpuinfo_mips *c, unsigned int cpu)
- 		switch (c->processor_id & PRID_REV_MASK) {
- 		case PRID_REV_LOONGSON2E:
- 			c->cputype = CPU_LOONGSON2EF;
--			__cpu_name[cpu] = "ICT Loongson-2";
-+			__cpu_name[cpu] = "Loongson-2";
- 			set_elf_platform(cpu, "loongson2e");
- 			set_isa(c, MIPS_CPU_ISA_III);
- 			c->fpu_msk31 |= FPU_CSR_CONDX;
-+			__cpu_full_name[cpu] = "Loongson-2E";
- 			break;
- 		case PRID_REV_LOONGSON2F:
- 			c->cputype = CPU_LOONGSON2EF;
--			__cpu_name[cpu] = "ICT Loongson-2";
-+			__cpu_name[cpu] = "Loongson-2";
- 			set_elf_platform(cpu, "loongson2f");
- 			set_isa(c, MIPS_CPU_ISA_III);
- 			c->fpu_msk31 |= FPU_CSR_CONDX;
-+			__cpu_full_name[cpu] = "Loongson-2F";
- 			break;
- 		case PRID_REV_LOONGSON3A_R1:
- 			c->cputype = CPU_LOONGSON64;
--			__cpu_name[cpu] = "ICT Loongson-3";
-+			__cpu_name[cpu] = "Loongson-3";
- 			set_elf_platform(cpu, "loongson3a");
- 			set_isa(c, MIPS_CPU_ISA_M64R1);
-+			__cpu_full_name[cpu] = "Loongson-3A R1 (Loongson-3A1000)";
- 			c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
- 				MIPS_ASE_LOONGSON_EXT);
- 			break;
- 		case PRID_REV_LOONGSON3B_R1:
-+			c->cputype = CPU_LOONGSON64;
-+			__cpu_name[cpu] = "Loongson-3";
-+			set_elf_platform(cpu, "loongson3b");
-+			set_isa(c, MIPS_CPU_ISA_M64R1);
-+			__cpu_full_name[cpu] = "Loongson-3B R1 (Loongson-3B1000)";
-+			c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
-+				MIPS_ASE_LOONGSON_EXT);
++config AUDITSYSCALL_O32
++	bool
++
++config AUDITSYSCALL_N32
++	bool
++
+ config BOOT_RAW
+ 	bool
+ 
+@@ -3192,6 +3203,7 @@ config MIPS32_O32
+ 	select COMPAT
+ 	select MIPS32_COMPAT
+ 	select SYSVIPC_COMPAT if SYSVIPC
++	select AUDITSYSCALL_O32 if AUDITSYSCALL
+ 	help
+ 	  Select this option if you want to run o32 binaries.  These are pure
+ 	  32-bit binaries as used by the 32-bit Linux/MIPS port.  Most of
+@@ -3206,6 +3218,7 @@ config MIPS32_N32
+ 	select COMPAT
+ 	select MIPS32_COMPAT
+ 	select SYSVIPC_COMPAT if SYSVIPC
++	select AUDITSYSCALL_N32 if AUDITSYSCALL
+ 	help
+ 	  Select this option if you want to run n32 binaries.  These are
+ 	  64-bit binaries using 32-bit quantities for addressing and certain
+diff --git a/arch/mips/include/asm/abi.h b/arch/mips/include/asm/abi.h
+index dba7f4b..6e717a4a 100644
+--- a/arch/mips/include/asm/abi.h
++++ b/arch/mips/include/asm/abi.h
+@@ -21,6 +21,7 @@ struct mips_abi {
+ 	int (* const setup_rt_frame)(void *sig_return, struct ksignal *ksig,
+ 				     struct pt_regs *regs, sigset_t *set);
+ 	const unsigned long	restart;
++	const int audit_arch;
+ 
+ 	unsigned	off_sc_fpregs;
+ 	unsigned	off_sc_fpc_csr;
+diff --git a/arch/mips/include/asm/unistd.h b/arch/mips/include/asm/unistd.h
+index 5d70bab..80f5b5b 100644
+--- a/arch/mips/include/asm/unistd.h
++++ b/arch/mips/include/asm/unistd.h
+@@ -59,4 +59,14 @@
+ 
+ #endif /* !__ASSEMBLY__ */
+ 
++#ifdef CONFIG_MIPS32_N32
++#define NR_syscalls	(__NR_N32_Linux + __NR_N32_Linux_syscalls)
++#elif defined(CONFIG_64BIT)
++#define NR_syscalls	(__NR_64_Linux  + __NR_64_Linux_syscalls)
++#elif defined(CONFIG_32BIT)
++#define NR_syscalls	(__NR_O32_Linux + __NR_O32_Linux_syscalls)
++#else
++#error Must know ABIs in use to define NR_syscalls
++#endif
++
+ #endif /* _ASM_UNISTD_H */
+diff --git a/arch/mips/include/uapi/asm/unistd.h b/arch/mips/include/uapi/asm/unistd.h
+index 4abe387..b501ea1 100644
+--- a/arch/mips/include/uapi/asm/unistd.h
++++ b/arch/mips/include/uapi/asm/unistd.h
+@@ -6,34 +6,37 @@
+  *
+  * Copyright (C) 1995, 96, 97, 98, 99, 2000 by Ralf Baechle
+  * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
+- *
+- * Changed system calls macros _syscall5 - _syscall7 to push args 5 to 7 onto
+- * the stack. Robin Farine for ACN S.A, Copyright (C) 1996 by ACN S.A
+  */
+ #ifndef _UAPI_ASM_UNISTD_H
+ #define _UAPI_ASM_UNISTD_H
+ 
+ #include <asm/sgidefs.h>
+ 
+-#if _MIPS_SIM == _MIPS_SIM_ABI32
++#if (defined(__WANT_SYSCALL_NUMBERS) &&					\
++	(__WANT_SYSCALL_NUMBERS == _MIPS_SIM_ABI32)) ||			\
++	(!defined(__WANT_SYSCALL_NUMBERS) && _MIPS_SIM == _MIPS_SIM_ABI32)
+ 
+ #define __NR_Linux	4000
+ #include <asm/unistd_o32.h>
+ 
+-#endif /* _MIPS_SIM == _MIPS_SIM_ABI32 */
++#endif /* Want O32 || _MIPS_SIM == _MIPS_SIM_ABI32  */
+ 
+-#if _MIPS_SIM == _MIPS_SIM_ABI64
++#if (defined(__WANT_SYSCALL_NUMBERS) &&					\
++	(__WANT_SYSCALL_NUMBERS == _MIPS_SIM_ABI64)) ||			\
++	(!defined(__WANT_SYSCALL_NUMBERS) && _MIPS_SIM == _MIPS_SIM_ABI64)
+ 
+ #define __NR_Linux	5000
+ #include <asm/unistd_n64.h>
+ 
+-#endif /* _MIPS_SIM == _MIPS_SIM_ABI64 */
++#endif /* Want N64 || _MIPS_SIM == _MIPS_SIM_ABI64  */
+ 
+-#if _MIPS_SIM == _MIPS_SIM_NABI32
++#if (defined(__WANT_SYSCALL_NUMBERS) &&					\
++	(__WANT_SYSCALL_NUMBERS == _MIPS_SIM_NABI32)) ||		\
++	(!defined(__WANT_SYSCALL_NUMBERS) && _MIPS_SIM == _MIPS_SIM_NABI32)
+ 
+ #define __NR_Linux	6000
+ #include <asm/unistd_n32.h>
+ 
+-#endif /* _MIPS_SIM == _MIPS_SIM_NABI32 */
++#endif /* Want N32 || _MIPS_SIM == _MIPS_SIM_NABI32  */
+ 
+ #endif /* _UAPI_ASM_UNISTD_H */
+diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
+index d6e97df..a7ac38d 100644
+--- a/arch/mips/kernel/Makefile
++++ b/arch/mips/kernel/Makefile
+@@ -106,6 +106,10 @@ obj-$(CONFIG_HW_PERF_EVENTS)	+= perf_event_mipsxx.o
+ obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
+ obj-$(CONFIG_UPROBES)		+= uprobes.o
+ 
++obj-$(CONFIG_AUDITSYSCALL_O32)	+= audit-o32.o
++obj-$(CONFIG_AUDITSYSCALL_N32)	+= audit-n32.o
++obj-$(CONFIG_AUDITSYSCALL)	+= audit-native.o
++
+ obj-$(CONFIG_MIPS_CM)		+= mips-cm.o
+ obj-$(CONFIG_MIPS_CPC)		+= mips-cpc.o
+ 
+diff --git a/arch/mips/kernel/audit-n32.c b/arch/mips/kernel/audit-n32.c
+new file mode 100644
+index 00000000..2248badc
+--- /dev/null
++++ b/arch/mips/kernel/audit-n32.c
+@@ -0,0 +1,58 @@
++#define __WANT_SYSCALL_NUMBERS _MIPS_SIM_NABI32
++
++#include <linux/init.h>
++#include <linux/types.h>
++#include <linux/audit.h>
++#include <asm/unistd.h>
++
++static unsigned dir_class_n32[] = {
++#include <asm-generic/audit_dir_write.h>
++~0U
++};
++
++static unsigned read_class_n32[] = {
++#include <asm-generic/audit_read.h>
++~0U
++};
++
++static unsigned write_class_n32[] = {
++#include <asm-generic/audit_write.h>
++~0U
++};
++
++static unsigned chattr_class_n32[] = {
++#include <asm-generic/audit_change_attr.h>
++~0U
++};
++
++static unsigned signal_class_n32[] = {
++#include <asm-generic/audit_signal.h>
++~0U
++};
++
++int audit_classify_syscall_n32(int abi, unsigned syscall)
++{
++	switch (syscall) {
++	case __NR_open:
++		return 2;
++	case __NR_openat:
++		return 3;
++	case __NR_execve:
++		return 5;
++	default:
++		return 0;
++	}
++}
++
++static int __init audit_classes_n32_init(void)
++{
++	audit_register_class(AUDIT_CLASS_WRITE_N32, write_class_n32);
++	audit_register_class(AUDIT_CLASS_READ_N32, read_class_n32);
++	audit_register_class(AUDIT_CLASS_DIR_WRITE_N32, dir_class_n32);
++	audit_register_class(AUDIT_CLASS_CHATTR_N32, chattr_class_n32);
++	audit_register_class(AUDIT_CLASS_SIGNAL_N32, signal_class_n32);
++
++	return 0;
++}
++
++__initcall(audit_classes_n32_init);
+diff --git a/arch/mips/kernel/audit-native.c b/arch/mips/kernel/audit-native.c
+new file mode 100644
+index 00000000..09ae3db
+--- /dev/null
++++ b/arch/mips/kernel/audit-native.c
+@@ -0,0 +1,97 @@
++#include <linux/init.h>
++#include <linux/types.h>
++#include <linux/audit.h>
++#include <asm/unistd.h>
++
++static unsigned dir_class[] = {
++#include <asm-generic/audit_dir_write.h>
++~0U
++};
++
++static unsigned read_class[] = {
++#include <asm-generic/audit_read.h>
++~0U
++};
++
++static unsigned write_class[] = {
++#include <asm-generic/audit_write.h>
++~0U
++};
++
++static unsigned chattr_class[] = {
++#include <asm-generic/audit_change_attr.h>
++~0U
++};
++
++static unsigned signal_class[] = {
++#include <asm-generic/audit_signal.h>
++~0U
++};
++
++
++/*
++ * Pretend to be a single architecture
++ */
++int audit_classify_arch(int arch)
++{
++	return 0;
++}
++
++extern int audit_classify_syscall_o32(int abi, unsigned syscall);
++extern int audit_classify_syscall_n32(int abi, unsigned syscall);
++
++int audit_classify_syscall(int abi, unsigned syscall)
++{
++	int res;
++
++	switch (syscall) {
++	case __NR_open:
++		res = 2;
++		break;
++
++	case __NR_openat:
++		res = 3;
++		break;
++
++#ifdef __NR_socketcall		/* Only exists on O32 */
++	case __NR_socketcall:
++		res = 4;
++		break;
++#endif
++	case __NR_execve:
++		res = 5;
++		break;
++	default:
++#ifdef CONFIG_AUDITSYSCALL_O32
++		res = audit_classify_syscall_o32(abi, syscall);
++		if (res)
 +			break;
- 		case PRID_REV_LOONGSON3B_R2:
- 			c->cputype = CPU_LOONGSON64;
--			__cpu_name[cpu] = "ICT Loongson-3";
-+			__cpu_name[cpu] = "Loongson-3";
- 			set_elf_platform(cpu, "loongson3b");
- 			set_isa(c, MIPS_CPU_ISA_M64R1);
-+			__cpu_full_name[cpu] = "Loongson-3B R2 (Loongson-3B1500)";
- 			c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
- 				MIPS_ASE_LOONGSON_EXT);
- 			break;
-@@ -1923,16 +1935,18 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- 		case PRID_REV_LOONGSON3A_R2_0:
- 		case PRID_REV_LOONGSON3A_R2_1:
- 			c->cputype = CPU_LOONGSON64;
--			__cpu_name[cpu] = "ICT Loongson-3";
-+			__cpu_name[cpu] = "Loongson-3";
- 			set_elf_platform(cpu, "loongson3a");
- 			set_isa(c, MIPS_CPU_ISA_M64R2);
-+			__cpu_full_name[cpu] = "Loongson-3A R2 (Loongson-3A2000)";
- 			break;
- 		case PRID_REV_LOONGSON3A_R3_0:
- 		case PRID_REV_LOONGSON3A_R3_1:
- 			c->cputype = CPU_LOONGSON64;
--			__cpu_name[cpu] = "ICT Loongson-3";
-+			__cpu_name[cpu] = "Loongson-3";
- 			set_elf_platform(cpu, "loongson3a");
- 			set_isa(c, MIPS_CPU_ISA_M64R2);
-+			__cpu_full_name[cpu] = "Loongson-3A R3 (Loongson-3A3000)";
- 			break;
- 		}
- 
-@@ -1944,9 +1958,10 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- 		break;
- 	case PRID_IMP_LOONGSON_64G:
- 		c->cputype = CPU_LOONGSON64;
--		__cpu_name[cpu] = "ICT Loongson-3";
-+		__cpu_name[cpu] = "Loongson-3";
- 		set_elf_platform(cpu, "loongson3a");
- 		set_isa(c, MIPS_CPU_ISA_M64R2);
-+		__cpu_full_name[cpu] = "Loongson-3A R4 (Loongson-3A4000)";
- 		decode_configs(c);
- 		c->options |= MIPS_CPU_FTLB | MIPS_CPU_TLBINV | MIPS_CPU_LDPTE;
- 		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
-@@ -2112,6 +2127,7 @@ EXPORT_SYMBOL(__ua_limit);
- #endif
- 
- const char *__cpu_name[NR_CPUS];
-+const char *__cpu_full_name[NR_CPUS];
- const char *__elf_platform;
- 
- void cpu_probe(void)
-diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
-index f8d3671..97b66ed 100644
---- a/arch/mips/kernel/proc.c
-+++ b/arch/mips/kernel/proc.c
-@@ -15,6 +15,7 @@
- #include <asm/mipsregs.h>
- #include <asm/processor.h>
- #include <asm/prom.h>
-+#include <asm/time.h>
- 
- unsigned int vced_count, vcei_count;
- 
-@@ -63,6 +64,11 @@ static int show_cpuinfo(struct seq_file *m, void *v)
- 	seq_printf(m, fmt, __cpu_name[n],
- 		      (version >> 4) & 0x0f, version & 0x0f,
- 		      (fp_vers >> 4) & 0x0f, fp_vers & 0x0f);
-+	if (__cpu_full_name[n])
-+		seq_printf(m, "model name\t\t: %s\n", __cpu_full_name[n]);
-+	if (mips_cpu_frequency)
-+		seq_printf(m, "CPU MHz\t\t\t: %u.%02u\n",
-+		      mips_cpu_frequency / 1000000, (mips_cpu_frequency / 10000) % 100);
- 	seq_printf(m, "BogoMIPS\t\t: %u.%02u\n",
- 		      cpu_data[n].udelay_val / (500000/HZ),
- 		      (cpu_data[n].udelay_val / (5000/HZ)) % 100);
-diff --git a/arch/mips/kernel/time.c b/arch/mips/kernel/time.c
-index 37e9413..240581e 100644
---- a/arch/mips/kernel/time.c
-+++ b/arch/mips/kernel/time.c
-@@ -50,6 +50,8 @@ EXPORT_SYMBOL(perf_irq);
-  * 2) calculate a couple of cached variables for later usage
-  */
- 
-+unsigned int mips_cpu_frequency;
-+EXPORT_SYMBOL_GPL(mips_cpu_frequency);
- unsigned int mips_hpt_frequency;
- EXPORT_SYMBOL_GPL(mips_hpt_frequency);
- 
-diff --git a/arch/mips/loongson64/env.c b/arch/mips/loongson64/env.c
-index 0daeb7b..29cf27c 100644
---- a/arch/mips/loongson64/env.c
-+++ b/arch/mips/loongson64/env.c
-@@ -14,6 +14,7 @@
-  * Author: Wu Zhangjin, wuzhangjin@gmail.com
-  */
- #include <linux/export.h>
-+#include <asm/time.h>
- #include <asm/bootinfo.h>
- #include <loongson.h>
- #include <boot_param.h>
-@@ -21,6 +22,7 @@
- 
- u32 cpu_clock_freq;
- EXPORT_SYMBOL(cpu_clock_freq);
-+char cpu_full_name[64];
- struct efi_memory_map_loongson *loongson_memmap;
- struct loongson_system_configuration loongson_sysconf;
- 
-@@ -37,6 +39,7 @@ const char *get_system_type(void)
- 
- void __init prom_init_env(void)
- {
-+	char freq[12];
- 	struct boot_params *boot_p;
- 	struct loongson_params *loongson_p;
- 	struct system_loongson *esys;
-@@ -119,6 +122,10 @@ void __init prom_init_env(void)
- 	loongson_sysconf.nr_nodes = (loongson_sysconf.nr_cpus +
- 		loongson_sysconf.cores_per_node - 1) /
- 		loongson_sysconf.cores_per_node;
-+	if (!strncmp(ecpu->cpuname, "Loongson", 8))
-+		strncpy(cpu_full_name, ecpu->cpuname, sizeof(cpu_full_name));
-+	if (cpu_full_name[0] == 0)
-+		strncpy(cpu_full_name, __cpu_full_name[0], sizeof(cpu_full_name));
- 
- 	loongson_sysconf.pci_mem_start_addr = eirq_source->pci_mem_start_addr;
- 	loongson_sysconf.pci_mem_end_addr = eirq_source->pci_mem_end_addr;
-@@ -154,5 +161,11 @@ void __init prom_init_env(void)
- 	if (loongson_sysconf.nr_sensors)
- 		memcpy(loongson_sysconf.sensors, esys->sensors,
- 			sizeof(struct sensor_device) * loongson_sysconf.nr_sensors);
-+	mips_cpu_frequency = cpu_clock_freq;
- 	pr_info("CpuClock = %u\n", cpu_clock_freq);
++#endif
++#ifdef CONFIG_AUDITSYSCALL_N32
++		res = audit_classify_syscall_n32(abi, syscall);
++		if (res)
++			break;
++#endif
++		if (abi == AUDIT_ARCH_MIPS || abi == AUDIT_ARCH_MIPSEL)
++			res = 1;
++		else if (abi == AUDIT_ARCH_MIPS64 || abi == AUDIT_ARCH_MIPSEL64)
++			res = 0;
++		else if (abi == AUDIT_ARCH_MIPS64N32 || abi == AUDIT_ARCH_MIPSEL64N32)
++			res = 6;
++	}
 +
-+	/* Append default cpu frequency with round-off */
-+	sprintf(freq, " @ %uMHz", (cpu_clock_freq + 500000) / 1000000);
-+	strncat(cpu_full_name, freq, sizeof(cpu_full_name));
-+	__cpu_full_name[0] = cpu_full_name;
- }
-diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-index de8e074..ef6b83c 100644
---- a/arch/mips/loongson64/smp.c
-+++ b/arch/mips/loongson64/smp.c
-@@ -384,6 +384,7 @@ static void loongson3_init_secondary(void)
- 		initcount = core0_c0count[cpu] + i/2;
++	return res;
++}
++
++static int __init audit_classes_init(void)
++{
++	audit_register_class(AUDIT_CLASS_WRITE, write_class);
++	audit_register_class(AUDIT_CLASS_READ, read_class);
++	audit_register_class(AUDIT_CLASS_DIR_WRITE, dir_class);
++	audit_register_class(AUDIT_CLASS_CHATTR, chattr_class);
++	audit_register_class(AUDIT_CLASS_SIGNAL, signal_class);
++
++	return 0;
++}
++
++__initcall(audit_classes_init);
+diff --git a/arch/mips/kernel/audit-o32.c b/arch/mips/kernel/audit-o32.c
+new file mode 100644
+index 00000000..e8b9b50
+--- /dev/null
++++ b/arch/mips/kernel/audit-o32.c
+@@ -0,0 +1,60 @@
++#define __WANT_SYSCALL_NUMBERS _MIPS_SIM_ABI32
++
++#include <linux/init.h>
++#include <linux/types.h>
++#include <linux/audit.h>
++#include <linux/unistd.h>
++
++static unsigned dir_class_o32[] = {
++#include <asm-generic/audit_dir_write.h>
++~0U
++};
++
++static unsigned read_class_o32[] = {
++#include <asm-generic/audit_read.h>
++~0U
++};
++
++static unsigned write_class_o32[] = {
++#include <asm-generic/audit_write.h>
++~0U
++};
++
++static unsigned chattr_class_o32[] = {
++#include <asm-generic/audit_change_attr.h>
++~0U
++};
++
++static unsigned signal_class_o32[] = {
++#include <asm-generic/audit_signal.h>
++~0U
++};
++
++int audit_classify_syscall_o32(int abi, unsigned syscall)
++{
++	switch (syscall) {
++	case __NR_open:
++		return 2;
++	case __NR_openat:
++		return 3;
++	case __NR_socketcall:
++		return 4;
++	case __NR_execve:
++		return 5;
++	default:
++		return 0;
++	}
++}
++
++static int __init audit_classes_o32_init(void)
++{
++	audit_register_class(AUDIT_CLASS_WRITE_32, write_class_o32);
++	audit_register_class(AUDIT_CLASS_READ_32, read_class_o32);
++	audit_register_class(AUDIT_CLASS_DIR_WRITE_32, dir_class_o32);
++	audit_register_class(AUDIT_CLASS_CHATTR_32, chattr_class_o32);
++	audit_register_class(AUDIT_CLASS_SIGNAL_32, signal_class_o32);
++
++	return 0;
++}
++
++__initcall(audit_classes_o32_init);
+diff --git a/arch/mips/kernel/signal.c b/arch/mips/kernel/signal.c
+index f6efabc..b79d9a9 100644
+--- a/arch/mips/kernel/signal.c
++++ b/arch/mips/kernel/signal.c
+@@ -8,6 +8,7 @@
+  * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
+  * Copyright (C) 2014, Imagination Technologies Ltd.
+  */
++#include <linux/audit.h>
+ #include <linux/cache.h>
+ #include <linux/context_tracking.h>
+ #include <linux/irqflags.h>
+@@ -790,6 +791,23 @@ struct mips_abi mips_abi = {
+ #endif
+ 	.setup_rt_frame = setup_rt_frame,
+ 	.restart	= __NR_restart_syscall,
++#ifdef CONFIG_64BIT
++# ifdef __BIG_ENDIAN
++	.audit_arch	= AUDIT_ARCH_MIPS64,
++# elif defined(__LITTLE_ENDIAN)
++	.audit_arch	= AUDIT_ARCH_MIPSEL64,
++# else
++#  error "Neither big nor little endian ???"
++# endif
++#else
++# ifdef __BIG_ENDIAN
++	.audit_arch	= AUDIT_ARCH_MIPS,
++# elif defined(__LITTLE_ENDIAN)
++	.audit_arch	= AUDIT_ARCH_MIPSEL,
++# else
++#  error "Neither big nor little endian ???"
++# endif
++#endif
  
- 	write_c0_count(initcount);
-+	__cpu_full_name[cpu] = cpu_full_name;
- }
+ 	.off_sc_fpregs = offsetof(struct sigcontext, sc_fpregs),
+ 	.off_sc_fpc_csr = offsetof(struct sigcontext, sc_fpc_csr),
+diff --git a/arch/mips/kernel/signal_n32.c b/arch/mips/kernel/signal_n32.c
+index 7bd00fa..ed03ea1 100644
+--- a/arch/mips/kernel/signal_n32.c
++++ b/arch/mips/kernel/signal_n32.c
+@@ -2,6 +2,7 @@
+ /*
+  * Copyright (C) 2003 Broadcom Corporation
+  */
++#include <linux/audit.h>
+ #include <linux/cache.h>
+ #include <linux/sched.h>
+ #include <linux/mm.h>
+@@ -140,6 +141,13 @@ static int setup_rt_frame_n32(void *sig_return, struct ksignal *ksig,
+ struct mips_abi mips_abi_n32 = {
+ 	.setup_rt_frame = setup_rt_frame_n32,
+ 	.restart	= __NR_N32_restart_syscall,
++#ifdef __BIG_ENDIAN
++	.audit_arch	= AUDIT_ARCH_MIPS64N32,
++#elif defined(__LITTLE_ENDIAN)
++	.audit_arch	= AUDIT_ARCH_MIPSEL64N32,
++#else
++# error "Neither big nor little endian ???"
++#endif
  
- static void loongson3_smp_finish(void)
-diff --git a/arch/mips/loongson64/smp.h b/arch/mips/loongson64/smp.h
-index 957bde8..6112d9d 100644
---- a/arch/mips/loongson64/smp.h
-+++ b/arch/mips/loongson64/smp.h
-@@ -3,6 +3,7 @@
- #define __LOONGSON_SMP_H_
+ 	.off_sc_fpregs = offsetof(struct sigcontext, sc_fpregs),
+ 	.off_sc_fpc_csr = offsetof(struct sigcontext, sc_fpc_csr),
+diff --git a/arch/mips/kernel/signal_o32.c b/arch/mips/kernel/signal_o32.c
+index 299a7a2..9f4ad0a 100644
+--- a/arch/mips/kernel/signal_o32.c
++++ b/arch/mips/kernel/signal_o32.c
+@@ -8,6 +8,7 @@
+  * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
+  * Copyright (C) 2016, Imagination Technologies Ltd.
+  */
++#include <linux/audit.h>
+ #include <linux/compiler.h>
+ #include <linux/errno.h>
+ #include <linux/signal.h>
+@@ -244,6 +245,13 @@ struct mips_abi mips_abi_32 = {
+ 	.setup_frame	= setup_frame_32,
+ 	.setup_rt_frame = setup_rt_frame_32,
+ 	.restart	= __NR_O32_restart_syscall,
++#ifdef __BIG_ENDIAN
++	.audit_arch	= AUDIT_ARCH_MIPS,
++#elif defined(__LITTLE_ENDIAN)
++	.audit_arch	= AUDIT_ARCH_MIPSEL,
++#else
++# error "Neither big nor little endian ???"
++#endif
  
- /* for Loongson-3 smp support */
-+extern char cpu_full_name[64];
- extern unsigned long long smp_group[4];
+ 	.off_sc_fpregs = offsetof(struct sigcontext32, sc_fpregs),
+ 	.off_sc_fpc_csr = offsetof(struct sigcontext32, sc_fpc_csr),
+diff --git a/include/uapi/linux/audit.h b/include/uapi/linux/audit.h
+index a534d71..336c1eb 100644
+--- a/include/uapi/linux/audit.h
++++ b/include/uapi/linux/audit.h
+@@ -179,7 +179,11 @@
+  * AUDIT_LIST commands must be implemented. */
+ #define AUDIT_MAX_FIELDS   64
+ #define AUDIT_MAX_KEY_LEN  256
++#ifdef __mips__
++#define AUDIT_BITMASK_SIZE 256
++#else
+ #define AUDIT_BITMASK_SIZE 64
++#endif
+ #define AUDIT_WORD(nr) ((__u32)((nr)/32))
+ #define AUDIT_BIT(nr)  (1 << ((nr) - AUDIT_WORD(nr)*32))
  
- /* 4 groups(nodes) in maximum in numa case */
+@@ -195,6 +199,12 @@
+ #define AUDIT_CLASS_SIGNAL 8
+ #define AUDIT_CLASS_SIGNAL_32 9
+ 
++#define AUDIT_CLASS_DIR_WRITE_N32	10
++#define AUDIT_CLASS_CHATTR_N32		11
++#define AUDIT_CLASS_READ_N32		12
++#define AUDIT_CLASS_WRITE_N32		13
++#define AUDIT_CLASS_SIGNAL_N32		14
++
+ /* This bitmask is used to validate user input.  It represents all bits that
+  * are currently used in an audit field constant understood by the kernel.
+  * If you are adding a new #define AUDIT_<whatever>, please ensure that
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 4effe01..cf223c0 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -168,6 +168,19 @@ static int audit_match_perm(struct audit_context *ctx, int mask)
+ 		return ((mask & AUDIT_PERM_WRITE) && ctx->argv[0] == SYS_BIND);
+ 	case 5: /* execve */
+ 		return mask & AUDIT_PERM_EXEC;
++#ifdef CONFIG_MIPS
++	case 6: /* for N32 */
++		if ((mask & AUDIT_PERM_WRITE) &&
++		     audit_match_class(AUDIT_CLASS_WRITE_N32, n))
++			return 1;
++		if ((mask & AUDIT_PERM_READ) &&
++		     audit_match_class(AUDIT_CLASS_READ_N32, n))
++			return 1;
++		if ((mask & AUDIT_PERM_ATTR) &&
++		     audit_match_class(AUDIT_CLASS_CHATTR_N32, n))
++			return 1;
++		return 0;
++#endif
+ 	default:
+ 		return 0;
+ 	}
 -- 
 2.7.0
 
