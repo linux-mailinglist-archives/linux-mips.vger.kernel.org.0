@@ -2,123 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FE5184C3B
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Mar 2020 17:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8305A184CCE
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Mar 2020 17:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726952AbgCMQTc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 Mar 2020 12:19:32 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:36061 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726461AbgCMQTc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Mar 2020 12:19:32 -0400
-Received: by mail-wm1-f68.google.com with SMTP id g62so10964713wme.1;
-        Fri, 13 Mar 2020 09:19:30 -0700 (PDT)
+        id S1726947AbgCMQrz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Mar 2020 12:47:55 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40931 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726526AbgCMQrz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Mar 2020 12:47:55 -0400
+Received: by mail-pg1-f196.google.com with SMTP id t24so5301841pgj.7;
+        Fri, 13 Mar 2020 09:47:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=DzWpdx6328OZ0aH4x17MPaDC7GHF6Gljp2V0qUX/DXo=;
-        b=UaJGqhaStKvtpmCHIX3kKDpHnWc+X5jToC5SA/qFSF367bfEjsz2TVGFQPWSP8HeUx
-         GRLu8BKAOod/fH4D9Sowc0g+v0PGZvefYUcatrjW7Hns/gHMn0/5MvDT//4Z9EWPhYvQ
-         KJah4mfhH2zRxGewD8tH3WSFEYvcHtW/vfQO6ucpmC8zuWcsqvQ5w246yKiWspujo/Ly
-         vdN9l8dgYdikc6SF9YTp5CKa4Mi8ppQT3A9PbDL/lzQqsfGXhMpz8T50Q2WliEJDvN7x
-         nJt9rp5Tyx77XMF6/Rv1OlehOLOIkgQL2QYO5J0J0WTA4aa++VluIhkdS0C3yTOp8PjN
-         Y+nQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KV6MXizQl2EQtb2GS7sc4PeNvf+1aSQqTf3SkUL8FCs=;
+        b=FZC5iuQBEjOOouPc7R4fBUJh/Vyuhen8RnJnZDyJTxNAxIHvMlCB9DGm9Q1te7ElLk
+         E7Y4XK+19BxYhEhL3hcfKGhkGd+4DxGVrxpXNBb0bRxEwbtqISwK/oQ59vsGs9gEhaFN
+         VpikV7y82/akhBkyhIc2R/3CL94yT60HY1pGeFhrpTsYrFl7CM/czaE8qndB7tFi0xtK
+         A4tf6XDok9PKYgqfTjKg/EfPg9buqIX7DCL3xiBmavdRAAp3n1SdqZiCf3FsWEjBns9o
+         xLmZnIMwtaZlY+Hjg3d/OELWSZ8Lc3R8WRNr0JdP5a0WiEToA5GWSlDn2Yy2Q7xwDQ4e
+         QVHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=DzWpdx6328OZ0aH4x17MPaDC7GHF6Gljp2V0qUX/DXo=;
-        b=NYITuNGP1USg2O+J0QUggvMzwJGEABlr/kQ8vA6LpF7qh8OypZIH5jS67eFUxDPVvR
-         vHxHw3p5hnWaCXAuLpaft2KSxZOtrTWNIv1fbNvoyBKgcLhY/f8n5XTIUUj/TSVouRcC
-         VP6xtTFV52lZGKaTxqqh9XK15ZUtxQsrKQNqn7aKD41l6n9qMPTh+zX8lD0S7sz2siwC
-         bdUApVEE1Zwbj8yUuS1w3W9+eBGyHMsiZHzebskGOi3rGZQkg944tYxjcuUubsGjBVqE
-         GN7Cpx9rJu5lLlBAaYE7z9U0iXlRrnhOwUBy7tDEhmOzLRQ+dZmiYK7pGclTiOvZivb7
-         Y+6A==
-X-Gm-Message-State: ANhLgQ0nkLk+z7jmzJ5oE8HbNJpPdIJJmng49E2+NFABaxEv4GqIBD/Z
-        GJDguFYk8wQI5ptm9hj9eik=
-X-Google-Smtp-Source: ADFU+vsq06fil7othF27XQT8Yzw4TwrwXBYm7m6KjdoRKe730VpT0nmboNEJS30sUYpx7sh4hoWlkQ==
-X-Received: by 2002:a1c:791a:: with SMTP id l26mr11500620wme.103.1584116370132;
-        Fri, 13 Mar 2020 09:19:30 -0700 (PDT)
-Received: from [10.83.36.153] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id w1sm16365071wmc.11.2020.03.13.09.19.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Mar 2020 09:19:29 -0700 (PDT)
-Subject: Re: [PATCH v3 00/26] Introduce common headers for vDSO
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        clang-built-linux@googlegroups.com, x86@kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Paul Burton <paul.burton@mips.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrei Vagin <avagin@openvz.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>
-References: <20200313154345.56760-1-vincenzo.frascino@arm.com>
-From:   Dmitry Safonov <0x7f454c46@gmail.com>
-Message-ID: <693b6a61-b5f6-2744-1579-b356e6510547@gmail.com>
-Date:   Fri, 13 Mar 2020 16:19:23 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KV6MXizQl2EQtb2GS7sc4PeNvf+1aSQqTf3SkUL8FCs=;
+        b=ikRQVOCamAAucs6DjaQCscGK+MI/k35dTHy14artNbR2qSeboZuo9Uixjq1/B6jl6w
+         5zB+yn2wzbLDhkoaCH1BcTswMXA0zE8eIav3cGjoHBJFgORwjPYB60WquPDTbl8Zae4h
+         Vn6X/WBjPjkU7sTP2x+PyCQ6uysZ3SWaj+yOrZ9XM9EGrri9L6/Eer7Lpn24Cvz6z7k/
+         toLMEGrD4v20Zb9vwb6eatQEC308tKXA21/pDduvD0TnHcGjn6vqWWGDCz3Nso2X44FS
+         FjHn8JGo6q3ik92F/ldnKZRovqkcDRq101GPlD3UFNnYcTNauC+CITIJNHb6URN9kyCw
+         BdJQ==
+X-Gm-Message-State: ANhLgQ0f3pU88vQOZeGzwTsqi2pYkyBVrrvKBRYhZHdqklVVqYSuj21s
+        NZvk/heGaOBFJGgk9usjpsG6GNV+
+X-Google-Smtp-Source: ADFU+vuPO3GHP9BVqhQV8CoSMSeBWz+CnESs00u/cLxaePjAv/lamoVNtFMUduN+GLB/NM/UHIzEVA==
+X-Received: by 2002:a63:112:: with SMTP id 18mr13704404pgb.116.1584118073221;
+        Fri, 13 Mar 2020 09:47:53 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l11sm12279036pjy.44.2020.03.13.09.47.51
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 13 Mar 2020 09:47:52 -0700 (PDT)
+Date:   Fri, 13 Mar 2020 09:47:51 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     afzal mohammed <afzal.mohd.ma@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        "Maciej W. Rozycki" <macro@linux-mips.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        John Crispin <john@phrozen.org>
+Subject: Re: [PATCH v4] MIPS: Replace setup_irq() by request_irq()
+Message-ID: <20200313164751.GA30134@roeck-us.net>
+References: <20200304203144.GA4323@alpha.franken.de>
+ <20200305115759.3186-1-afzal.mohd.ma@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200313154345.56760-1-vincenzo.frascino@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200305115759.3186-1-afzal.mohd.ma@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Vincenzo, all
+On Thu, Mar 05, 2020 at 05:27:53PM +0530, afzal mohammed wrote:
+> request_irq() is preferred over setup_irq(). Invocations of setup_irq()
+> occur after memory allocators are ready.
+> 
+> Per tglx[1], setup_irq() existed in olden days when allocators were not
+> ready by the time early interrupts were initialized.
+> 
+> Hence replace setup_irq() by request_irq().
+> 
+> remove_irq() has been replaced by free_irq() as well.
+> 
+> There were build error's during previous version, couple of which was
+> reported by kbuild test robot <lkp@intel.com> of which one was reported
+> by Thomas Bogendoerfer <tsbogend@alpha.franken.de> as well. There were a
+> few more issues including build errors, those also have been fixed.
+> 
+> [1] https://lkml.kernel.org/r/alpine.DEB.2.20.1710191609480.1971@nanos
+> 
+> Signed-off-by: afzal mohammed <afzal.mohd.ma@gmail.com>
 
-I like the idea, but I'm wondering if we could have less-grained
-headers? Like, AFAICS the patches create headers < 10 lines and even
-mostly < 5 lines.. I like that header's names perfectly describe what's
-inside, but I'm not sure how effective to have a lot of extra-small
-includes.
+This patch causes all my mips qemu emulations to hang during boot. This affects
+all mips, mips64, mipsel, and mipsel64 emulations.
 
-Or maybe there's a plan to grow the code in them?
+Reverting this patch fixes the problem.
 
-On 3/13/20 3:43 PM, Vincenzo Frascino wrote:
-[..]
->  create mode 100644 arch/arm/include/asm/vdso/clocksource.h
->  create mode 100644 arch/arm/include/asm/vdso/cp15.h
->  create mode 100644 arch/arm/include/asm/vdso/processor.h
->  create mode 100644 arch/arm64/include/asm/vdso/arch_timer.h
->  create mode 100644 arch/arm64/include/asm/vdso/clocksource.h
->  create mode 100644 arch/arm64/include/asm/vdso/processor.h
->  create mode 100644 arch/mips/include/asm/vdso/clocksource.h
->  create mode 100644 arch/mips/include/asm/vdso/processor.h
->  create mode 100644 arch/x86/include/asm/vdso/clocksource.h
->  create mode 100644 arch/x86/include/asm/vdso/processor.h
->  create mode 100644 include/vdso/bits.h
->  create mode 100644 include/vdso/clocksource.h
->  create mode 100644 include/vdso/const.h
->  create mode 100644 include/vdso/jiffies.h
->  create mode 100644 include/vdso/ktime.h
->  create mode 100644 include/vdso/limits.h
->  create mode 100644 include/vdso/math64.h
->  create mode 100644 include/vdso/processor.h
->  create mode 100644 include/vdso/time.h
->  create mode 100644 include/vdso/time32.h
->  create mode 100644 include/vdso/time64.h
+Example log:
 
-Maybe we could made them less-grained?
+...
+Failed to request irq 23 (timer)
+clocksource: MIPS: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112584971 ns
+sched_clock: 32 bits at 100MHz, resolution 9ns, wraps every 21474814971ns
+Console: colour dummy device 80x25
+printk: console [tty0] enabled
+printk: bootconsole [uart8250] disabled
 
-I.e, time32 + time64 + time.h => time.h?
+[ silence ]
 
-Thanks for Cc,
-          Dmitry
+Bisect log attached.
+
+Guenter
+
+---
+# bad: [2e602db729948ce577bf07e2b113f2aa806b62c7] Add linux-next specific files for 20200313
+# good: [2c523b344dfa65a3738e7039832044aa133c75fb] Linux 5.6-rc5
+git bisect start 'HEAD' 'v5.6-rc5'
+# bad: [acfda12b3a9b7b8d8cb4ff5f6ff0e48f688e254c] Merge remote-tracking branch 'spi-nor/spi-nor/next'
+git bisect bad acfda12b3a9b7b8d8cb4ff5f6ff0e48f688e254c
+# bad: [bfd143114215b2c553277ee8ae4a8b8a6201de2e] Merge remote-tracking branch 'pstore/for-next/pstore'
+git bisect bad bfd143114215b2c553277ee8ae4a8b8a6201de2e
+# good: [9e771e47962b731c28d1b0a12967f711bf5cc281] Merge remote-tracking branch 'scmi/for-linux-next'
+git bisect good 9e771e47962b731c28d1b0a12967f711bf5cc281
+# bad: [cee36340e05bf662d19cb845708fa881369ed583] Merge remote-tracking branch 'xtensa/xtensa-for-next'
+git bisect bad cee36340e05bf662d19cb845708fa881369ed583
+# bad: [95c7851a03071bd2374b84b4f0079b3dcae30614] Merge remote-tracking branch 'nds32/next'
+git bisect bad 95c7851a03071bd2374b84b4f0079b3dcae30614
+# good: [43a3834a7d0fbb9116649185ff0926968cc553d5] Merge remote-tracking branch 'tegra/for-next'
+git bisect good 43a3834a7d0fbb9116649185ff0926968cc553d5
+# good: [8fae22fc750017fdf998ec3aa1315741fd3de857] Merge remote-tracking branch 'h8300/h8300-next'
+git bisect good 8fae22fc750017fdf998ec3aa1315741fd3de857
+# good: [e798861fd7b297370a8dd7b8dad2e139c1d08446] Merge remote-tracking branch 'm68knommu/for-next'
+git bisect good e798861fd7b297370a8dd7b8dad2e139c1d08446
+# bad: [ac8fd122e070ce0e60c608d4f085f7af77290844] MIPS: Replace setup_irq() by request_irq()
+git bisect bad ac8fd122e070ce0e60c608d4f085f7af77290844
+# good: [f6541f347bba6edbcbb1c930f802bb80b0c56468] MIPS: configs: Cleanup old Kconfig options
+git bisect good f6541f347bba6edbcbb1c930f802bb80b0c56468
+# good: [e5096625bc6bd9e3a0d5f7f9d7ecebda0383c7f5] MIPS: pic32mzda: Drop pointless static qualifier
+git bisect good e5096625bc6bd9e3a0d5f7f9d7ecebda0383c7f5
+# good: [172a37e9d011510aee37f62cc5ac4e53e49d17bb] arch/mips: change duplicated word in NUMA help text
+git bisect good 172a37e9d011510aee37f62cc5ac4e53e49d17bb
+# good: [792a402c2840054533ef56279c212ef6da87d811] MIPS: OCTEON: irq: Fix potential NULL pointer dereference
+git bisect good 792a402c2840054533ef56279c212ef6da87d811
+# first bad commit: [ac8fd122e070ce0e60c608d4f085f7af77290844] MIPS: Replace setup_irq() by request_irq()
