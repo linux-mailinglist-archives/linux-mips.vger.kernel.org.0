@@ -2,106 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86EC2183F51
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Mar 2020 04:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E92CD183F5F
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Mar 2020 04:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726371AbgCMDJi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Mar 2020 23:09:38 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:40858 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726331AbgCMDJi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Mar 2020 23:09:38 -0400
-Received: by mail-qk1-f196.google.com with SMTP id m2so10201895qka.7;
-        Thu, 12 Mar 2020 20:09:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=y+mnyt60IrxwqY8gBOAa8U5kdnGh5BymccVlM/S5jFY=;
-        b=Nz4f66aNz6UTRMnsPJWo6PaiGAphRvXBFNmEApfnqp0ngUNkyOWys98tc5BOTi5y5v
-         Bnf264UnBx3FcBO7QPuz1olSvo4ASZVq8wQib9InhpdjcHH1yYz1Smn9Ty7ZHX+SdvTy
-         ZP/vRMW2AzJP9RDCy7o9AnrqHADLkvqqVW7ml/JDCMcm3yXNN62SzTqEy0BigZ8cgyA6
-         N0Zi4hAHTATlw3dscZvq+gt/fURHDj8ka8zKM7cmYAS1QCFR5f0T6d3urRSCMivkfoXP
-         vgf/IAN33DjVgBj6PoC9W+T+/3ucq/F8oiG9rUjN/VBXiuuwGUiStNOpTLnOy8WTaIFY
-         nBEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=y+mnyt60IrxwqY8gBOAa8U5kdnGh5BymccVlM/S5jFY=;
-        b=NeV87iIeZxrpQDRedbeS6SVmoAYRA/XsAQrK5mIhPmQcW20IWA/3avNh5byyNS5/Eg
-         PLvh1s7MYV4g6KAb/FkqyHwu6zTisRo2/Pt3VpvKYY3zM4EPiWglkcAwxrpzvv2r4qxl
-         dryH7Ai4DLOprkCTV8K68ntfumsku1uRbqkgexXSKtOR4Mc8fmHvivvszIX8qLW8UlpN
-         FkyCf7GnXoy95CURrrdzDs7LRv/TIr+yvz6d5GRxL4bVJM3/rjp6f1OR31wmOC3Y+4ar
-         HddGxK99ki9KBBDSXjrbmWPsGtRo9iiFuXdXeDNAeTROU41ICcmvLLNSOXzQNbfXBUod
-         jGdg==
-X-Gm-Message-State: ANhLgQ1mByARvrMuHNip62SHiiYlcR7hBOeuvIBBkumuherl3Qp6T/YB
-        Z7UKGCuPxWPd2+yyAjAnCarwi0Yd
-X-Google-Smtp-Source: ADFU+vu+aRNTNzG+JZz8Cif9Nt9Ku+azqqksRXrAV27uFGOEeGQcvkMUMIIc6rVKT9cqdZgFUfJKDQ==
-X-Received: by 2002:a05:620a:1236:: with SMTP id v22mr10999159qkj.101.1584068977427;
-        Thu, 12 Mar 2020 20:09:37 -0700 (PDT)
-Received: from [10.0.0.29] (pool-98-118-94-114.bstnma.fios.verizon.net. [98.118.94.114])
-        by smtp.gmail.com with ESMTPSA id m92sm2452426qtd.94.2020.03.12.20.09.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Mar 2020 20:09:36 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Kamal Dasu <kdasu.kdev@gmail.com>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v2] MIPS: c-r4k: Invalidate BMIPS5000 ZSCM prefetch lines
-Date:   Thu, 12 Mar 2020 23:09:35 -0400
-Message-Id: <2388CCC9-8C2A-4907-988D-7A239DE0DD6C@gmail.com>
-References: <20200311214432.GA5900@alpha.franken.de>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-mips@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20200311214432.GA5900@alpha.franken.de>
+        id S1726514AbgCMDO3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Mar 2020 23:14:29 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:55506 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726420AbgCMDO3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 12 Mar 2020 23:14:29 -0400
+Received: from localhost.localdomain.localdomain (unknown [125.69.47.232])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9uK+mpe1gcaAA--.45S2;
+        Fri, 13 Mar 2020 11:14:19 +0800 (CST)
+From:   Xing Li <lixing@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-X-Mailer: iPhone Mail (17D50)
+Cc:     linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, maobibo@loongson.cn,
+        chenhc@lemote.com, jiaxun.yang@flygoat.com
+Subject: [PATCH v2 Resend 1/3] KVM: MIPS: Change KVM_ENTRYHI_ASID to cpu_asid_mask(&current_cpu_data)
+Date:   Fri, 13 Mar 2020 11:14:15 +0800
+Message-Id: <1584069257-30896-1-git-send-email-lixing@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxn9uK+mpe1gcaAA--.45S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtFWktw1rWw47uFW3tFWDJwb_yoWkWrc_Z3
+        W7Zws7ur4fCrZFy39Iywn3WFWFgw1UWF929r9IgFyq9asFyry5Wa9xJr9rAwsxur4qyF4r
+        W34DJ34rZrnrCjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb48FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUb2g4DUUUU
+        U==
+X-CM-SenderInfo: pol0x03j6o00pqjv00gofq/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is needed on dma reads from device. =20
+The code in decode_config4 of arch/mips/kernel/cpu-probe.c
 
-Kamal
+        asid_mask = MIPS_ENTRYHI_ASID;
+        if (config4 & MIPS_CONF4_AE)
+                asid_mask |= MIPS_ENTRYHI_ASIDX;
+        set_cpu_asid_mask(c, asid_mask);
 
+set asid_mask to cpuinfo->asid_mask
 
-> On Mar 11, 2020, at 5:44 PM, Thomas Bogendoerfer <tsbogend@alpha.franken.d=
-e> wrote:
->=20
-> =EF=BB=BFOn Wed, Mar 11, 2020 at 01:54:23PM -0700, Florian Fainelli wrote:=
+So KVM_ENTRYHI_ASID should change to cpu_asid_mask(&current_cpu_data)
+for support 10bits ASID_MASK
 
->>> On 2/7/20 2:33 PM, Kamal Dasu wrote:
->>> Zephyr secondary cache is 256KB, 128B lines. 32B sectors. A secondary ca=
-che
->>> line can contain two instruction cache lines (64B), or four data cache
->>> lines (32B). Hardware prefetch Cache detects stream access, and prefetch=
-es
->>> ahead of processor access. Add support to invalidate BMIPS5000 cpu zephy=
-r
->>> secondary cache module (ZSCM) on DMA from device so that data returned i=
-s
->>> coherent during DMA read operations.
->>>=20
->>> Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
->>=20
->> Thomas can review and apply this patch? Thank you!
->=20
-> looks good to me. I only wonder whether r4k_dma_cache_wbinv() also
-> needs this ?
->=20
-> Thomas.
->=20
-> --=20
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily=
- a
-> good idea.                                                [ RFC1925, 2.3 ]=
+Signed-off-by: Xing Li <lixing@loongson.cn>
+---
+ arch/mips/include/asm/kvm_host.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+index 41204a4..6be70d5 100644
+--- a/arch/mips/include/asm/kvm_host.h
++++ b/arch/mips/include/asm/kvm_host.h
+@@ -275,7 +275,7 @@ enum emulation_result {
+ #define MIPS3_PG_FRAME		0x3fffffc0
+ 
+ #define VPN2_MASK		0xffffe000
+-#define KVM_ENTRYHI_ASID	MIPS_ENTRYHI_ASID
++#define KVM_ENTRYHI_ASID	cpu_asid_mask(&current_cpu_data)
+ #define TLB_IS_GLOBAL(x)	((x).tlb_lo[0] & (x).tlb_lo[1] & ENTRYLO_G)
+ #define TLB_VPN2(x)		((x).tlb_hi & VPN2_MASK)
+ #define TLB_ASID(x)		((x).tlb_hi & KVM_ENTRYHI_ASID)
+-- 
+2.1.0
 
