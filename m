@@ -2,150 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 031F9182F22
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Mar 2020 12:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97368183E9D
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Mar 2020 02:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725978AbgCLL3U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Mar 2020 07:29:20 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:44122 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726254AbgCLL3U (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Mar 2020 07:29:20 -0400
-Received: by mail-wr1-f65.google.com with SMTP id l18so6919533wru.11
-        for <linux-mips@vger.kernel.org>; Thu, 12 Mar 2020 04:29:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JVMbx8vzUPwAVXj/Kyz58ssk2X5kisp+MU9GxZrJCOg=;
-        b=UFMcDxSfsWbEddWZyM0xlqNOyJJ6eHKrdZv3KcN409m+cMOfE/0sikyAIPuMB/RMhe
-         0FPhgzZUAy5LHIHVS/6Dtv20XkFuwqHbemxM5PyRsrtNGw2Rayy9BiO+mrQSxl5k3blq
-         mw28hltvaTmsGmVeRyQ26ZtXontu7laqmYUY3QUzs6MCOjHy1HSjItFcydiWl16q/UZo
-         2RCdwVuRvOjpy/2YvKlRrGgRIcWRC1XBcBfLr+12dlvgB541gbmp9WHjfrM09oJmc1l1
-         ukW5NCaPXNOcK0VeaenABO1IKVPjvKq99kYG/WrY9tkkE/l95ATYef7N/xKaR9rE43bZ
-         sixQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JVMbx8vzUPwAVXj/Kyz58ssk2X5kisp+MU9GxZrJCOg=;
-        b=DRkFxHymg2e0YWG5lcdz7VfKBdwz13PtAVgsJtUi5ZpeukhxhzyxJtMZNMlaMD4QeF
-         JBq140W1dpAxDM4eRm8VB9UnP0J15JoqNjhFapt8jhMBN8aaKvmFZTjiAVhpmh0NVwHj
-         qna6lJ6Ed5CusHlJQGPsqa82299z3zNEVWEWF2tbZKqRMWqLjsciVdTTFm5r2aSuHdIw
-         c9rTwvxKG4sWW+zNSbsUWBSehXbzq1tlV9x92BqXn+Xh1mW1Gd/XP+WydJ2w0zTM+JJB
-         i7kaD8LKJ6M4x+T7ZZwuQ2ULnrYcG8hPe9fHIZJd2gOIft8N+rrhAqMtgNaKBgEgNv0j
-         C9Jw==
-X-Gm-Message-State: ANhLgQ2/gJlCjBYfwX+BiERoffZ5nP1kxVLlUzeFgjCKinm8meffDMe6
-        UAfY81O/7j6E1ibGnpvA2wg=
-X-Google-Smtp-Source: ADFU+vvTL1J3PMDplpN7nW+2Vgp64n4beDHsIH4LErcHa/Y6oOjwR+OeAJS6Rv1O8dnej3MTGajeRw==
-X-Received: by 2002:adf:e485:: with SMTP id i5mr11151744wrm.81.1584012558492;
-        Thu, 12 Mar 2020 04:29:18 -0700 (PDT)
-Received: from localhost.localdomain (134.red-83-46-193.dynamicip.rima-tde.net. [83.46.193.134])
-        by smtp.gmail.com with ESMTPSA id v16sm58238852wrp.84.2020.03.12.04.29.16
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 12 Mar 2020 04:29:17 -0700 (PDT)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Paul Burton <paul.burton@mips.com>, ralf@linux-mips.org,
-        jhogan@kernel.org, john@phrozen.org, NeilBrown <neil@brown.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH] MIPS: ralink: mt7621: introduce 'soc_device' initialization
-Date:   Thu, 12 Mar 2020 12:29:15 +0100
-Message-Id: <20200312112915.2617-1-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S1726710AbgCMBPU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Mar 2020 21:15:20 -0400
+Received: from server100i.appriver.com ([8.31.233.122]:57416 "EHLO
+        server100.appriver.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726620AbgCMBPU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Mar 2020 21:15:20 -0400
+X-Greylist: delayed 903 seconds by postgrey-1.27 at vger.kernel.org; Thu, 12 Mar 2020 21:15:19 EDT
+X-Note: This Email was scanned by AppRiver SecureTide
+X-Note-AR-ScanTimeLocal: 03/12/2020 9:00:17 PM
+X-Note: SecureTide Build: 2/6/2020 4:08:38 PM UTC (2.8.16.0)
+X-Note: Filtered by 10.60.0.55
+X-Note-AR-Scan: None - PIPE
+Received: by server100.appriver.com (CommuniGate Pro PIPE 6.2.12)
+  with PIPE id 14587038; Thu, 12 Mar 2020 21:00:17 -0400
+Received: from [208.79.213.174] (HELO palladium.modernmerchant.com)
+  by server100.appriver.com (CommuniGate Pro SMTP 6.2.12)
+  with ESMTP id 14587036 for linux-mips@vger.kernel.org; Thu, 12 Mar 2020 21:00:16 -0400
+Message-ID: <OF26152112.986B2B0A-ON8525852A.000582FC-1584061212143@modernmerchant.com>
+Subject: Recommended soft CPU for FPGA for Linux-mips?
+To:     linux-mips@vger.kernel.org
+From:   Timothy J Massey <tmassey@modernmerchant.com>
+Date:   Thu, 12 Mar 2020 21:00:12 -0400
+X-Mailer: IBM Traveler 9.0.1.7 Build 201508211840_20
+X-KeepSent: 26152112:986B2B0A-8525852A:000582FC;
+ type=4; name=$KeepSent
+X-MIMETrack: Serialize by Router on palladium/OBSCorp(Release 9.0.1FP4|June  07, 2015) at
+ 03/12/2020 09:00:17 PM
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-type: text/plain; charset=UTF-8
+Content-transfer-encoding: base64
+X-Note: This Email was scanned by AppRiver SecureTide
+X-Note-AR-ScanTimeLocal: 03/12/2020 9:00:16 PM
+X-Note: SecureTide Build: 2/6/2020 4:08:38 PM UTC (2.8.16.0)
+X-Note: Filtered by 10.60.0.55
+X-Policy: obscorp.com
+X-Primary: obscorp.com@obscorp.com
+X-Note-Sender: <tmassey@modernmerchant.com>
+X-Virus-Scan: V-
+X-Note-SnifferID: 0
+X-GBUdb-Analysis: 0, 208.79.213.174, Ugly c=0 p=0 Source New
+X-Signature-Violations: 0-0-0-5060-c
+X-Note-419: 11.8879 ms. Fail:0 Chk:1357 of 1357 total
+X-Note: VSCH-CT/SI: 0-1357/SG:1 3/12/2020 8:59:35 PM
+X-Note: Spam Tests Failed: 
+X-Country-Path: United States of America->
+X-Note-Sending-IP: 208.79.213.174
+X-Note-Reverse-DNS: oxygen.obscorp.com
+X-Note-Return-Path: tmassey@modernmerchant.com
+X-Note: User Rule Hits: 
+X-Note: Global Rule Hits: G708 G709 G710 G711 G729 G730 G731 G886 
+X-Note: Encrypt Rule Hits: 
+X-Note: Mail Class: VALID
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-mt7621 SoC has its own 'ralink_soc_info' structure with some
-information about the soc itself. Pcie controller and pcie phy
-drivers for this soc which are still in staging git tree make uses
-of 'soc_device_attribute' looking for revision 'E2' in order to
-know if reset lines are or not inverted. This way of doing things
-seems to be necessary in order to make things clean and properly.
-Hence, introduce this 'soc_device' to be able to properly use those
-attributes in drivers. Also set 'data' pointer points to the struct
-'ralink_soc_info' to be able to export also current soc information
-using this mechanism.
+DQpIZWxsbw0KDQpJ4oCZbSB0cnlpbmcgdG8gZmluZCBhIHJlY29tbWVuZGF0aW9uIGZvciBhIHNv
+ZnQgQ1BVIHRvIHJ1biBMaW51eC1taXBzLg0KSWRlYWxseSwgSSBoYXZlIGEgVGVyYXNpYyBEZTAt
+bmFubyBib2FyZCBhbmQgSSB3b3VsZCBsaWtlIHRvIHVzZSBpdCB0bw0Kc3ludGhlc2l6ZSBhIE1J
+UFMgQ1BVIEkgY291bGQgdXNlIHRvIGJvb3QgYSBtYWlubGluZSBNSVBTIGtlcm5lbCB3aXRoLiAg
+SQ0Kb3JpZ2luYWxseSBwdXJjaGFzZWQgdGhpcyB0byB1c2Ugd2l0aCBPcGVuUklTQywgYnV0IHRo
+YXQgc2VlbXMgdG8gaGF2ZQ0Kc3RhbGxlZDogSeKAmWQgcmF0aGVyIHdvcmsgd2l0aCBzb21ldGhp
+bmcgbW9yZSBtYWluc3RyZWFtIGlmIEkgY2FuLiAgTUlQUw0Kc2VlbWVkIGxpa2UgYSBncmVhdCBp
+bnRlcnNlY3Rpb24gb2Ygc2ltcGxpY2l0eSBhbmQgcmVhbC13b3JsZCBwcmFjdGljYWxpdHkuDQpJ
+ZiBhbm90aGVyIChhZmZvcmRhYmxlKSBib2FyZCB3b3VsZCBiZSBhIGJldHRlciBmaXQsIEnigJlt
+IGNlcnRhaW5seSBvcGVuLg0KQnV0IEkgd291bGQgbGlrZSB0byB1c2UgYSBmdWxseSBzeW50aGVz
+aXplZCBvcGVuIENQVSBpZiBhdCBhbGwgcG9zc2libGUuDQoNCknigJl2ZSB0cmllZCBHb29nbGlu
+ZyBmb3IgcmVjb21tZW5kYXRpb25zLCBidXQgdGhpcyBpcyBtYWRlIGRpZmZpY3VsdCBieSBhDQpm
+ZXcgdGhpbmdzOiAgcHJvcHJpZXRhcnkgc29mdCBjb3JlcyBwcm92aWRlZCBieSBGUEdBIG1ha2Vy
+cyBhbmQgdGllZCB0bw0KdGhlaXIgRlBHQeKAmXM7IOKAnE1JUFMtbGlrZeKAnSBjb3JlcyB0aGF0
+IGFyZSB2YWd1ZSBhYm91dCB3aGF0IOKAnE1JUFMtbGlrZeKAnQ0KcmVhbGx5IG1lYW5zOyBhbmQg
+dGhlIGNvbmZ1c2lvbiBhcm91bmQgdGhlIHByZXNlbmNlIG9yIGFic2VuY2Ugb2YgdW5hbGlnbmVk
+DQpsb2FkL3N0b3JlIGFuZCB3aGF0IGltcGFjdCB0aGF0IGhhcy4gIChNeSB1bmRlcnN0YW5kaW5n
+IGlzIHRoZSBwYXRlbnRzIGhhdmUNCmV4cGlyZWQsIHNvIGl0IHNob3VsZG7igJl0IGJlIG5lY2Vz
+c2FyeSB0byBhdm9pZCB0aGVtIGFueW1vcmU/KS4NCg0KTUlQUyBPcGVuIGhhc27igJl0IG1hZGUg
+dGhpcyBhbnkgZWFzaWVyLiAgVGhleSB0cnVtcGV0IHRoZWlyIG9wZW5uZXNzLCBidXQNCndyYXAg
+ZXZlcnl0aGluZyB1cCBpbnRvIGEgY29uZnVzaW5nIG1lc3Mgb2Yg4oCccHJvZHVjdHPigJ0gdGhh
+dCBhcmUgbW9yZSBzYWxlcw0KaW5mb3JtYXRpb24gdGhhbiBhbnl0aGluZyBlbHNlLg0KDQpBbmQg
+d2hpbGUgdGhlIExpbnV4LU1JUFMgd2Vic2l0ZSBsaXN0cyBjb21wYXRpYmxlIGNvbXB1dGVycywg
+U29DLCBldGMuLCBJDQpkaWRu4oCZdCBzZWUgYW55IGxpc3RpbmdzIGZvciBhbnkgRlBHQSAvIHNv
+ZnQgQ1BVIGVudmlyb25tZW50cy4NCg0KRG8geW91IGhhdmUgYW55IHN1Z2dlc3Rpb25zIGZvciBh
+IHJlY29tbWVuZGVkIHNvZnQgQ1BVIHRvIHVzZSB3aXRoDQpMaW51eC1taXBzPyAgQW55IGluZm9y
+bWF0aW9uIHdvdWxkIGJlIGFwcHJlY2lhdGVkLg0KDQpUaGFuayB5b3UhDQoNClRpbW90aHkgTWFz
+c2V5
 
-Cc: Paul Burton <paul.burton@mips.com>
-Cc: ralf@linux-mips.org
-Cc: jhogan@kernel.org
-Cc: john@phrozen.org
-Cc: NeilBrown <neil@brown.name>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-mips@vger.kernel.org
-
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- arch/mips/ralink/mt7621.c | 32 +++++++++++++++++++++++++++++++-
- 1 file changed, 31 insertions(+), 1 deletion(-)
-
-diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
-index 9415be0d57b8..905460aeeb1f 100644
---- a/arch/mips/ralink/mt7621.c
-+++ b/arch/mips/ralink/mt7621.c
-@@ -7,6 +7,8 @@
- 
- #include <linux/kernel.h>
- #include <linux/init.h>
-+#include <linux/slab.h>
-+#include <linux/sys_soc.h>
- 
- #include <asm/mipsregs.h>
- #include <asm/smp-ops.h>
-@@ -160,6 +162,33 @@ void __init ralink_of_remap(void)
- 		panic("Failed to remap core resources");
- }
- 
-+static void soc_dev_init(struct ralink_soc_info *soc_info, u32 rev)
-+{
-+	struct soc_device *soc_dev;
-+	struct soc_device_attribute *soc_dev_attr;
-+
-+	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
-+	if (!soc_dev_attr)
-+		return;
-+
-+	soc_dev_attr->soc_id = "mt7621";
-+	soc_dev_attr->family = "Ralink";
-+
-+	if (((rev >> CHIP_REV_VER_SHIFT) & CHIP_REV_VER_MASK) == 1 &&
-+	    (rev & CHIP_REV_ECO_MASK) == 1)
-+		soc_dev_attr->revision = "E2";
-+	else
-+		soc_dev_attr->revision = "E1";
-+
-+	soc_dev_attr->data = soc_info;
-+
-+	soc_dev = soc_device_register(soc_dev_attr);
-+	if (IS_ERR(soc_dev)) {
-+		kfree(soc_dev_attr);
-+		return;
-+	}
-+}
-+
- void prom_soc_init(struct ralink_soc_info *soc_info)
- {
- 	void __iomem *sysc = (void __iomem *) KSEG1ADDR(MT7621_SYSC_BASE);
-@@ -214,11 +243,12 @@ void prom_soc_init(struct ralink_soc_info *soc_info)
- 
- 	rt2880_pinmux_data = mt7621_pinmux_data;
- 
--
- 	if (!register_cps_smp_ops())
- 		return;
- 	if (!register_cmp_smp_ops())
- 		return;
- 	if (!register_vsmp_smp_ops())
- 		return;
-+
-+	soc_dev_init(soc_info, rev);
- }
--- 
-2.25.1
 
