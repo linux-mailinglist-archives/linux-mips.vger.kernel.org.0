@@ -2,93 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97368183E9D
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Mar 2020 02:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EC2183F51
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Mar 2020 04:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726710AbgCMBPU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Mar 2020 21:15:20 -0400
-Received: from server100i.appriver.com ([8.31.233.122]:57416 "EHLO
-        server100.appriver.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726620AbgCMBPU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Mar 2020 21:15:20 -0400
-X-Greylist: delayed 903 seconds by postgrey-1.27 at vger.kernel.org; Thu, 12 Mar 2020 21:15:19 EDT
-X-Note: This Email was scanned by AppRiver SecureTide
-X-Note-AR-ScanTimeLocal: 03/12/2020 9:00:17 PM
-X-Note: SecureTide Build: 2/6/2020 4:08:38 PM UTC (2.8.16.0)
-X-Note: Filtered by 10.60.0.55
-X-Note-AR-Scan: None - PIPE
-Received: by server100.appriver.com (CommuniGate Pro PIPE 6.2.12)
-  with PIPE id 14587038; Thu, 12 Mar 2020 21:00:17 -0400
-Received: from [208.79.213.174] (HELO palladium.modernmerchant.com)
-  by server100.appriver.com (CommuniGate Pro SMTP 6.2.12)
-  with ESMTP id 14587036 for linux-mips@vger.kernel.org; Thu, 12 Mar 2020 21:00:16 -0400
-Message-ID: <OF26152112.986B2B0A-ON8525852A.000582FC-1584061212143@modernmerchant.com>
-Subject: Recommended soft CPU for FPGA for Linux-mips?
-To:     linux-mips@vger.kernel.org
-From:   Timothy J Massey <tmassey@modernmerchant.com>
-Date:   Thu, 12 Mar 2020 21:00:12 -0400
-X-Mailer: IBM Traveler 9.0.1.7 Build 201508211840_20
-X-KeepSent: 26152112:986B2B0A-8525852A:000582FC;
- type=4; name=$KeepSent
-X-MIMETrack: Serialize by Router on palladium/OBSCorp(Release 9.0.1FP4|June  07, 2015) at
- 03/12/2020 09:00:17 PM
-MIME-Version: 1.0
-Content-type: text/plain; charset=UTF-8
-Content-transfer-encoding: base64
-X-Note: This Email was scanned by AppRiver SecureTide
-X-Note-AR-ScanTimeLocal: 03/12/2020 9:00:16 PM
-X-Note: SecureTide Build: 2/6/2020 4:08:38 PM UTC (2.8.16.0)
-X-Note: Filtered by 10.60.0.55
-X-Policy: obscorp.com
-X-Primary: obscorp.com@obscorp.com
-X-Note-Sender: <tmassey@modernmerchant.com>
-X-Virus-Scan: V-
-X-Note-SnifferID: 0
-X-GBUdb-Analysis: 0, 208.79.213.174, Ugly c=0 p=0 Source New
-X-Signature-Violations: 0-0-0-5060-c
-X-Note-419: 11.8879 ms. Fail:0 Chk:1357 of 1357 total
-X-Note: VSCH-CT/SI: 0-1357/SG:1 3/12/2020 8:59:35 PM
-X-Note: Spam Tests Failed: 
-X-Country-Path: United States of America->
-X-Note-Sending-IP: 208.79.213.174
-X-Note-Reverse-DNS: oxygen.obscorp.com
-X-Note-Return-Path: tmassey@modernmerchant.com
-X-Note: User Rule Hits: 
-X-Note: Global Rule Hits: G708 G709 G710 G711 G729 G730 G731 G886 
-X-Note: Encrypt Rule Hits: 
-X-Note: Mail Class: VALID
+        id S1726371AbgCMDJi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Mar 2020 23:09:38 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:40858 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726331AbgCMDJi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Mar 2020 23:09:38 -0400
+Received: by mail-qk1-f196.google.com with SMTP id m2so10201895qka.7;
+        Thu, 12 Mar 2020 20:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=y+mnyt60IrxwqY8gBOAa8U5kdnGh5BymccVlM/S5jFY=;
+        b=Nz4f66aNz6UTRMnsPJWo6PaiGAphRvXBFNmEApfnqp0ngUNkyOWys98tc5BOTi5y5v
+         Bnf264UnBx3FcBO7QPuz1olSvo4ASZVq8wQib9InhpdjcHH1yYz1Smn9Ty7ZHX+SdvTy
+         ZP/vRMW2AzJP9RDCy7o9AnrqHADLkvqqVW7ml/JDCMcm3yXNN62SzTqEy0BigZ8cgyA6
+         N0Zi4hAHTATlw3dscZvq+gt/fURHDj8ka8zKM7cmYAS1QCFR5f0T6d3urRSCMivkfoXP
+         vgf/IAN33DjVgBj6PoC9W+T+/3ucq/F8oiG9rUjN/VBXiuuwGUiStNOpTLnOy8WTaIFY
+         nBEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=y+mnyt60IrxwqY8gBOAa8U5kdnGh5BymccVlM/S5jFY=;
+        b=NeV87iIeZxrpQDRedbeS6SVmoAYRA/XsAQrK5mIhPmQcW20IWA/3avNh5byyNS5/Eg
+         PLvh1s7MYV4g6KAb/FkqyHwu6zTisRo2/Pt3VpvKYY3zM4EPiWglkcAwxrpzvv2r4qxl
+         dryH7Ai4DLOprkCTV8K68ntfumsku1uRbqkgexXSKtOR4Mc8fmHvivvszIX8qLW8UlpN
+         FkyCf7GnXoy95CURrrdzDs7LRv/TIr+yvz6d5GRxL4bVJM3/rjp6f1OR31wmOC3Y+4ar
+         HddGxK99ki9KBBDSXjrbmWPsGtRo9iiFuXdXeDNAeTROU41ICcmvLLNSOXzQNbfXBUod
+         jGdg==
+X-Gm-Message-State: ANhLgQ1mByARvrMuHNip62SHiiYlcR7hBOeuvIBBkumuherl3Qp6T/YB
+        Z7UKGCuPxWPd2+yyAjAnCarwi0Yd
+X-Google-Smtp-Source: ADFU+vu+aRNTNzG+JZz8Cif9Nt9Ku+azqqksRXrAV27uFGOEeGQcvkMUMIIc6rVKT9cqdZgFUfJKDQ==
+X-Received: by 2002:a05:620a:1236:: with SMTP id v22mr10999159qkj.101.1584068977427;
+        Thu, 12 Mar 2020 20:09:37 -0700 (PDT)
+Received: from [10.0.0.29] (pool-98-118-94-114.bstnma.fios.verizon.net. [98.118.94.114])
+        by smtp.gmail.com with ESMTPSA id m92sm2452426qtd.94.2020.03.12.20.09.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Mar 2020 20:09:36 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Kamal Dasu <kdasu.kdev@gmail.com>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v2] MIPS: c-r4k: Invalidate BMIPS5000 ZSCM prefetch lines
+Date:   Thu, 12 Mar 2020 23:09:35 -0400
+Message-Id: <2388CCC9-8C2A-4907-988D-7A239DE0DD6C@gmail.com>
+References: <20200311214432.GA5900@alpha.franken.de>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-mips@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20200311214432.GA5900@alpha.franken.de>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+X-Mailer: iPhone Mail (17D50)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-DQpIZWxsbw0KDQpJ4oCZbSB0cnlpbmcgdG8gZmluZCBhIHJlY29tbWVuZGF0aW9uIGZvciBhIHNv
-ZnQgQ1BVIHRvIHJ1biBMaW51eC1taXBzLg0KSWRlYWxseSwgSSBoYXZlIGEgVGVyYXNpYyBEZTAt
-bmFubyBib2FyZCBhbmQgSSB3b3VsZCBsaWtlIHRvIHVzZSBpdCB0bw0Kc3ludGhlc2l6ZSBhIE1J
-UFMgQ1BVIEkgY291bGQgdXNlIHRvIGJvb3QgYSBtYWlubGluZSBNSVBTIGtlcm5lbCB3aXRoLiAg
-SQ0Kb3JpZ2luYWxseSBwdXJjaGFzZWQgdGhpcyB0byB1c2Ugd2l0aCBPcGVuUklTQywgYnV0IHRo
-YXQgc2VlbXMgdG8gaGF2ZQ0Kc3RhbGxlZDogSeKAmWQgcmF0aGVyIHdvcmsgd2l0aCBzb21ldGhp
-bmcgbW9yZSBtYWluc3RyZWFtIGlmIEkgY2FuLiAgTUlQUw0Kc2VlbWVkIGxpa2UgYSBncmVhdCBp
-bnRlcnNlY3Rpb24gb2Ygc2ltcGxpY2l0eSBhbmQgcmVhbC13b3JsZCBwcmFjdGljYWxpdHkuDQpJ
-ZiBhbm90aGVyIChhZmZvcmRhYmxlKSBib2FyZCB3b3VsZCBiZSBhIGJldHRlciBmaXQsIEnigJlt
-IGNlcnRhaW5seSBvcGVuLg0KQnV0IEkgd291bGQgbGlrZSB0byB1c2UgYSBmdWxseSBzeW50aGVz
-aXplZCBvcGVuIENQVSBpZiBhdCBhbGwgcG9zc2libGUuDQoNCknigJl2ZSB0cmllZCBHb29nbGlu
-ZyBmb3IgcmVjb21tZW5kYXRpb25zLCBidXQgdGhpcyBpcyBtYWRlIGRpZmZpY3VsdCBieSBhDQpm
-ZXcgdGhpbmdzOiAgcHJvcHJpZXRhcnkgc29mdCBjb3JlcyBwcm92aWRlZCBieSBGUEdBIG1ha2Vy
-cyBhbmQgdGllZCB0bw0KdGhlaXIgRlBHQeKAmXM7IOKAnE1JUFMtbGlrZeKAnSBjb3JlcyB0aGF0
-IGFyZSB2YWd1ZSBhYm91dCB3aGF0IOKAnE1JUFMtbGlrZeKAnQ0KcmVhbGx5IG1lYW5zOyBhbmQg
-dGhlIGNvbmZ1c2lvbiBhcm91bmQgdGhlIHByZXNlbmNlIG9yIGFic2VuY2Ugb2YgdW5hbGlnbmVk
-DQpsb2FkL3N0b3JlIGFuZCB3aGF0IGltcGFjdCB0aGF0IGhhcy4gIChNeSB1bmRlcnN0YW5kaW5n
-IGlzIHRoZSBwYXRlbnRzIGhhdmUNCmV4cGlyZWQsIHNvIGl0IHNob3VsZG7igJl0IGJlIG5lY2Vz
-c2FyeSB0byBhdm9pZCB0aGVtIGFueW1vcmU/KS4NCg0KTUlQUyBPcGVuIGhhc27igJl0IG1hZGUg
-dGhpcyBhbnkgZWFzaWVyLiAgVGhleSB0cnVtcGV0IHRoZWlyIG9wZW5uZXNzLCBidXQNCndyYXAg
-ZXZlcnl0aGluZyB1cCBpbnRvIGEgY29uZnVzaW5nIG1lc3Mgb2Yg4oCccHJvZHVjdHPigJ0gdGhh
-dCBhcmUgbW9yZSBzYWxlcw0KaW5mb3JtYXRpb24gdGhhbiBhbnl0aGluZyBlbHNlLg0KDQpBbmQg
-d2hpbGUgdGhlIExpbnV4LU1JUFMgd2Vic2l0ZSBsaXN0cyBjb21wYXRpYmxlIGNvbXB1dGVycywg
-U29DLCBldGMuLCBJDQpkaWRu4oCZdCBzZWUgYW55IGxpc3RpbmdzIGZvciBhbnkgRlBHQSAvIHNv
-ZnQgQ1BVIGVudmlyb25tZW50cy4NCg0KRG8geW91IGhhdmUgYW55IHN1Z2dlc3Rpb25zIGZvciBh
-IHJlY29tbWVuZGVkIHNvZnQgQ1BVIHRvIHVzZSB3aXRoDQpMaW51eC1taXBzPyAgQW55IGluZm9y
-bWF0aW9uIHdvdWxkIGJlIGFwcHJlY2lhdGVkLg0KDQpUaGFuayB5b3UhDQoNClRpbW90aHkgTWFz
-c2V5
+This is needed on dma reads from device. =20
 
+Kamal
+
+
+> On Mar 11, 2020, at 5:44 PM, Thomas Bogendoerfer <tsbogend@alpha.franken.d=
+e> wrote:
+>=20
+> =EF=BB=BFOn Wed, Mar 11, 2020 at 01:54:23PM -0700, Florian Fainelli wrote:=
+
+>>> On 2/7/20 2:33 PM, Kamal Dasu wrote:
+>>> Zephyr secondary cache is 256KB, 128B lines. 32B sectors. A secondary ca=
+che
+>>> line can contain two instruction cache lines (64B), or four data cache
+>>> lines (32B). Hardware prefetch Cache detects stream access, and prefetch=
+es
+>>> ahead of processor access. Add support to invalidate BMIPS5000 cpu zephy=
+r
+>>> secondary cache module (ZSCM) on DMA from device so that data returned i=
+s
+>>> coherent during DMA read operations.
+>>>=20
+>>> Signed-off-by: Kamal Dasu <kdasu.kdev@gmail.com>
+>>=20
+>> Thomas can review and apply this patch? Thank you!
+>=20
+> looks good to me. I only wonder whether r4k_dma_cache_wbinv() also
+> needs this ?
+>=20
+> Thomas.
+>=20
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily=
+ a
+> good idea.                                                [ RFC1925, 2.3 ]=
 
