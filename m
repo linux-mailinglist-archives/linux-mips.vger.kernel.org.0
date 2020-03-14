@@ -2,54 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 569601859AE
-	for <lists+linux-mips@lfdr.de>; Sun, 15 Mar 2020 04:32:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6632D1859DD
+	for <lists+linux-mips@lfdr.de>; Sun, 15 Mar 2020 04:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726738AbgCODcO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 14 Mar 2020 23:32:14 -0400
-Received: from mail-qv1-f65.google.com ([209.85.219.65]:39447 "EHLO
-        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726643AbgCODcO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 14 Mar 2020 23:32:14 -0400
-Received: by mail-qv1-f65.google.com with SMTP id v38so2933623qvf.6;
-        Sat, 14 Mar 2020 20:32:13 -0700 (PDT)
+        id S1726653AbgCODvi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 14 Mar 2020 23:51:38 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:32953 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726668AbgCODvi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 14 Mar 2020 23:51:38 -0400
+Received: by mail-pf1-f193.google.com with SMTP id n7so7798645pfn.0;
+        Sat, 14 Mar 2020 20:51:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=xbsrrOUuOCaew5V0EWs0+B+Jp0347VeucEvJJNOWq4g=;
-        b=Kie63I7dqrJ+CeU89vuO7pifO87HKB1RFY03QprPlryaQu20cucHqdDr/NbbN72R8s
-         Kkmvk5CRC3phlToat4QVCDWjgXXwgvzE0UTFdnza6TvBdPjp4i70j/RMi4Zk2W16/TOO
-         RrHX+5KF9kSSPz4vg5YB0DL+DIu1tE4/dgwNbhQVSUjdZSuz5e8nVZtodHQf+ExELFBc
-         xbbWEwa/8b1QyWp2r2NGH8RnsTwH/1dRv/Cybdzfdq0rjeEtin+4/YnwQlmGCzAAP+9v
-         JZIEs4tFktLsEnjHWRMTSvz6uVCekL3ib5cJzYddrnsOG92x0kS5JAFd6t/ep08CfkGD
-         s4+A==
+        bh=Uim4AzYBCm6V2z3QF09x5PPcRE01qrMuLypTdVFHimA=;
+        b=jE9cFqMIPYofiNcH+xERYgJ9saPt+Kj9OIakPPW3wROVmtHc2kEDMOO04aTSlsYSEm
+         AhJstHD5b6Y7Ka9JrfO/E/kIThMLUYmVc3DvSzHvFFsAnVPZbe/ug+yhHMJk2+DgRA8V
+         a9TzqqNb3H4w7M4EgiU+rUGvAtVUXTXr3r7+/2sqgNTCvKwLZ96PyfvDjWYqprG5+fH+
+         U19nzB0FSdOwDpDlDXi5bGp2k+i8bwk6k0woWuOPQcf7pEanHQyxMkcAT8ELObqiuTsL
+         fKSvK/EYwUN1H3eS6ez+aSRZA7ZO+8LphankfmBcTWpWDePWZUtI51qE/iIqcW0uIbao
+         zJgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xbsrrOUuOCaew5V0EWs0+B+Jp0347VeucEvJJNOWq4g=;
-        b=UZ8BdBox6MPgSziGZZqnjoJlRVIn7Hg6irmEkk11I74ZE5jMIuST4f5Xacml3B93xx
-         mdHyHa1za09X2QeYTe/j+BbdyPDErSs1y8DHckFFjHNCgfy3rNhDEOlARhfvsrYpS2B3
-         lH1j7CtSSQbwYfBYB0ovTTYpU2IfastDURem0hlNnC1uzyz+0Jmwk9YaBmbE4g5egzkH
-         O+skMAHpy2FZFqEjFE5Lm1G7UsfFcbFKj4WGUKTLxpoXFgI2NY+ox2ENJIsVGsebAB0R
-         k4qagwTxx30jstql0GXvaxtnV4+Mx2hCobsnMDvsF/oIBlnz0YCf2Tun96svDkxvf2KM
-         pQ/w==
-X-Gm-Message-State: ANhLgQ2n+rqUKgR9sfLbUK14QNToBQexcVXKEIg7k4o1b7bx0+lW9Yes
-        8X+Z+H+2Qa0fEzUIc44NEa7h9cnm4kU=
-X-Google-Smtp-Source: ADFU+vuNd6Tp1XUCLCGd+43lz8+qZo3gUwgEb1CVKJs42QFxX571L6En50gRptDRWtjpX1EtuWwuSQ==
-X-Received: by 2002:a17:902:9308:: with SMTP id bc8mr17473083plb.268.1584168950505;
-        Fri, 13 Mar 2020 23:55:50 -0700 (PDT)
+        bh=Uim4AzYBCm6V2z3QF09x5PPcRE01qrMuLypTdVFHimA=;
+        b=hiD5eVW10hiXZpLdyi4lYwiorm+HAzm+gMFpFn4gSUPqZgwU1pLF5JmIqWdKZpooQY
+         tcfYp7bqVZrFh7ofI2gpYWVqI+aUg3Mi4qvzHdGXqrQ0vy7RXEZXDaF1HuwD5SaDoaZi
+         wazQXN7nz48pDcbZre6z20tIEe/06Y2HkCRu1jKM++8a6YlnAQZ5CWJBsMjub6kgvYWQ
+         yzA7vwqLWjTFvpwvszVrr3esJBiB74nmmXSfaPNWs/k51Y17P2xsGxD+tHgY5ZmSiA+7
+         WKl3rixRJl9Oh+TMc2BuJOUCvR1GUlddkm/V9pLBFQROCfL0yosWCWNSJNdFrxBFfNxq
+         f3HA==
+X-Gm-Message-State: ANhLgQ3Iw95L1lLdvXMq7h1oyB3/QsfC9m0w01kdVBNJbcRBvuh/1uL6
+        AF59WqCDSc/7N0WSWrxNdYHoiem/MkM=
+X-Google-Smtp-Source: ADFU+vsAFNYY+qMaVOBxLw+qtltM33BNN6phFUmxCHU630aJrU4CWVFiR6zHzz/Y0D1cSUuGio/2wQ==
+X-Received: by 2002:a63:6101:: with SMTP id v1mr17235961pgb.318.1584186170624;
+        Sat, 14 Mar 2020 04:42:50 -0700 (PDT)
 Received: from localhost ([106.51.232.35])
-        by smtp.gmail.com with ESMTPSA id y18sm734349pge.73.2020.03.13.23.55.49
+        by smtp.gmail.com with ESMTPSA id y131sm17983125pfg.25.2020.03.14.04.42.49
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 13 Mar 2020 23:55:49 -0700 (PDT)
-Date:   Sat, 14 Mar 2020 12:25:48 +0530
+        Sat, 14 Mar 2020 04:42:49 -0700 (PDT)
+Date:   Sat, 14 Mar 2020 17:12:47 +0530
 From:   afzal mohammed <afzal.mohd.ma@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -58,41 +58,43 @@ Cc:     Nathan Chancellor <natechancellor@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Keguang Zhang <keguang.zhang@gmail.com>,
         Huacai Chen <chenhc@lemote.com>,
-        John Crispin <john@phrozen.org>
+        John Crispin <john@phrozen.org>,
+        Nathan Chancellor <natechancellor@gmail.com>
 Subject: Re: [PATCH v4] MIPS: Replace setup_irq() by request_irq()
-Message-ID: <20200314065548.GB5285@afzalpc>
+Message-ID: <20200314114247.GA5577@afzalpc>
 References: <20200304203144.GA4323@alpha.franken.de>
  <20200305115759.3186-1-afzal.mohd.ma@gmail.com>
- <20200311053126.GA48442@ubuntu-m2-xlarge-x86>
- <20200311090308.GA5060@afzalpc>
- <20200311104217.GA10615@alpha.franken.de>
- <20200311131210.GA5115@afzalpc>
- <20200311160307.GA15464@alpha.franken.de>
- <20200311163249.GA4984@afzalpc>
+ <20200313164751.GA30134@roeck-us.net>
+ <20200314010744.GA5494@afzalpc>
+ <204ac322-4214-fc83-e0b9-14473f855b0a@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200311163249.GA4984@afzalpc>
+In-Reply-To: <204ac322-4214-fc83-e0b9-14473f855b0a@roeck-us.net>
 User-Agent: Mutt/1.9.3 (2018-01-21)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On Sat, Mar 14, 2020 at 03:28:53AM -0700, Guenter Roeck wrote:
+> On 3/13/20 6:07 PM, afzal mohammed wrote:
 
-On Wed, Mar 11, 2020 at 10:02:49PM +0530, afzal mohammed wrote:
-> On Wed, Mar 11, 2020 at 05:03:07PM +0100, Thomas Bogendoerfer wrote:
+> > Can you please apply,
+> > 
+> > https://lkml.kernel.org/r/20200311152751.GA5044@afzalpc,
+> > 
+> > on top of this patch & see if it fixes the issue.
 
-> > in your patch. How can we make sure they are unique enough for the use
-> > case ? I guess using handler as dev_id does a better job here.
-> 
-> There was one prior similar usage using string pointers, another way i
-> have seen is using irq no. itself, 
+> I have not tested all configurations, but a quick check suggests
+> that it does indeed fix the problem.
 
-Huh, that was a total nonsense statement from me, considering the
-expectation of a unique dev_id, i don't know what i was thinking at
-that time, though you mentioned about uniqueness.
+Thanks Guenter for checking,
 
-Regards
+i have sent a newer version [1] of that patch based on the feedback
+from Thomas.
+
+REgards
 afzal
+
+[1] https://lkml.kernel.org/r/20200314081312.GA4948@afzalpc
