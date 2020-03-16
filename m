@@ -2,230 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FDE186D69
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2020 15:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2636186DA1
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2020 15:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731782AbgCPOlR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 16 Mar 2020 10:41:17 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:44240 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731753AbgCPOlR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 Mar 2020 10:41:17 -0400
-Received: by mail-pg1-f195.google.com with SMTP id 37so9864811pgm.11
-        for <linux-mips@vger.kernel.org>; Mon, 16 Mar 2020 07:41:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=googlenew;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ec/qljJseUj42+qXdMKQ/Cdd1Nw68u70B1BF4qO5fFk=;
-        b=PA43uhLJ4dV67BS6HBUW1ccyCma3ss0jBNt5wlVS4LOxSfNPNL/IWaKkGVIUVjAaFC
-         nbfLb3nxu/T8w91QAEqS91k6z48VGZruAaM3bf59RowqJMsQUAuUZHntA45bT6+xHSFr
-         TTW5IOs5I0KKhKbW5IVXXpXO+3joJjfP4mECiOi+TSCpENvT6YZKjDeIqpstPxDxURaY
-         iiPoUqUWHnt4Eij8NLaw0V3Xf4QoJpYDhrTN939zuVNpTB9SCHIEKKMDidgHPkxXSMsy
-         WLJVfutOCTbKWle2w+hxBnA1rOZbPKqTnd6LnFPg1TQterEsldTsSp1POiKrWb9/2CWs
-         hHyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ec/qljJseUj42+qXdMKQ/Cdd1Nw68u70B1BF4qO5fFk=;
-        b=Ged9dO8N6M73NZ3y3jKVIJHz58ul8EvxtJGl94ucWk+tU33S/0o63ZhjRnfQct5as1
-         eTJnBtMQqTRFWrXUMvPuzbCNDNhe5PbDekggwK34sGj58ldsPSSj3c52B7kwfYUEV97z
-         10y+w7/ita7Qv/fDf9t02EYrIc+v+I8p6OoqmI3juraP3Ly7pdTC4yJPe2eqRovYQVPu
-         XR3YHT9XMkChFmaUFRMvhvk7r3WUQGeOG+UuqUA0aQmgoxiaQAtLmI6hXnY1o9V0gdWj
-         WCo76tpGfnbZVtATAYigyFmdND+Io2HlpcOaqJIfPu2bLF8VrAlmv94J2WCEWPuuoJ6+
-         aRRA==
-X-Gm-Message-State: ANhLgQ0XMX8vkvILpkJnjVgg2cVftFF5/0cxSabt6WZ1F+4xxn7qlDt2
-        bVSHIhrk+9cXd36H8UostkkYWQ==
-X-Google-Smtp-Source: ADFU+vv9fNvlM9VkE8msbeFBPvyd020Kc7WOA9oT9awJJ2vvJOtgZ7ZP3GfmK6w+s097m3AxgtVHNg==
-X-Received: by 2002:aa7:961c:: with SMTP id q28mr9311527pfg.177.1584369675909;
-        Mon, 16 Mar 2020 07:41:15 -0700 (PDT)
-Received: from Mindolluin.aristanetworks.com ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
-        by smtp.gmail.com with ESMTPSA id i2sm81524pjs.21.2020.03.16.07.41.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2020 07:41:15 -0700 (PDT)
-From:   Dmitry Safonov <dima@arista.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
-        Dmitry Safonov <dima@arista.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@kernel.org>, Jiri Slaby <jslaby@suse.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        James Hogan <jhogan@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org
-Subject: [PATCHv2 21/50] mips: Add show_stack_loglvl()
-Date:   Mon, 16 Mar 2020 14:38:47 +0000
-Message-Id: <20200316143916.195608-22-dima@arista.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200316143916.195608-1-dima@arista.com>
-References: <20200316143916.195608-1-dima@arista.com>
+        id S1731560AbgCPOny (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 16 Mar 2020 10:43:54 -0400
+Received: from foss.arm.com ([217.140.110.172]:49640 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731551AbgCPOnx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 16 Mar 2020 10:43:53 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA63E1FB;
+        Mon, 16 Mar 2020 07:43:52 -0700 (PDT)
+Received: from mbp (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C84B43F52E;
+        Mon, 16 Mar 2020 07:43:49 -0700 (PDT)
+Date:   Mon, 16 Mar 2020 14:43:47 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        clang-built-linux@googlegroups.com, x86@kernel.org,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Paul Burton <paul.burton@mips.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Andrei Vagin <avagin@openvz.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <Mark.Rutland@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v3 18/26] arm64: Introduce asm/vdso/processor.h
+Message-ID: <20200316144346.GF3005@mbp>
+References: <20200313154345.56760-1-vincenzo.frascino@arm.com>
+ <20200313154345.56760-19-vincenzo.frascino@arm.com>
+ <20200315182950.GB32205@mbp>
+ <c2c0157a-107a-debf-100f-0d97781add7c@arm.com>
+ <20200316103437.GD3005@mbp>
+ <77a2e91a-58f4-3ba3-9eef-42d6a8faf859@arm.com>
+ <20200316112205.GE3005@mbp>
+ <9a0a9285-8a45-4f65-3a83-813cabd0f0d3@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a0a9285-8a45-4f65-3a83-813cabd0f0d3@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Currently, the log-level of show_stack() depends on a platform
-realization. It creates situations where the headers are printed with
-lower log level or higher than the stacktrace (depending on
-a platform or user).
+On Mon, Mar 16, 2020 at 01:35:17PM +0000, Vincenzo Frascino wrote:
+> On 3/16/20 11:22 AM, Catalin Marinas wrote:
+> > As I said above, I don't see how removing 'if ((u32)ts >= (1UL << 32))'
+> > makes any difference. This check was likely removed by the compiler
+> > already.
+> > 
+> > Also, userspace doesn't have a trivial way to figure out TASK_SIZE and I
+> > can't see anything that tests this in the vdsotest (though I haven't
+> > spent that much time looking). If it's hard-coded, note that arm32
+> > TASK_SIZE is different from TASK_SIZE_32 on arm64.
+> > 
+> > Can you tell what actually is failing in vdsotest if you remove the
+> > TASK_SIZE_32 checks in the arm64 compat vdso?
+> 
+> To me does not seem optimized out. Which version of the compiler are you using?
 
-Furthermore, it forces the logic decision from user to an architecture
-side. In result, some users as sysrq/kdb/etc are doing tricks with
-temporary rising console_loglevel while printing their messages.
-And in result it not only may print unwanted messages from other CPUs,
-but also omit printing at all in the unlucky case where the printk()
-was deferred.
+I misread the #ifdef'ery in asm/processor.h. So with 4K pages,
+TASK_SIZE_32 is (1UL<<32)-PAGE_SIZE. However, with 64K pages _and_
+CONFIG_KUSER_HELPERS, TASK_SIZE_32 is 1UL<<32 and the check is removed
+by the compiler.
 
-Introducing log-level parameter and KERN_UNSUPPRESSED [1] seems
-an easier approach than introducing more printk buffers.
-Also, it will consolidate printings with headers.
+With the 4K build, __vdso_clock_gettime starts as:
 
-Introduce show_stack_loglvl(), that eventually will substitute
-show_stack().
+00000194 <__vdso_clock_gettime>:
+ 194:   f511 5f80       cmn.w   r1, #4096       ; 0x1000
+ 198:   d214            bcs.n   1c4 <__vdso_clock_gettime+0x30>
+ 19a:   b5b0            push    {r4, r5, r7, lr}
+ ...
+ 1c4:   f06f 000d       mvn.w   r0, #13
+ 1c8:   4770            bx      lr
 
-Cc: James Hogan <jhogan@kernel.org>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: linux-mips@vger.kernel.org
-[1]: https://lore.kernel.org/lkml/20190528002412.1625-1-dima@arista.com/T/#u
-Signed-off-by: Dmitry Safonov <dima@arista.com>
----
- arch/mips/kernel/traps.c | 41 +++++++++++++++++++++++-----------------
- 1 file changed, 24 insertions(+), 17 deletions(-)
+With 64K pages:
 
-diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index de05503c680c..077aabbd6b9f 100644
---- a/arch/mips/kernel/traps.c
-+++ b/arch/mips/kernel/traps.c
-@@ -106,26 +106,26 @@ void (*board_bind_eic_interrupt)(int irq, int regset);
- void (*board_ebase_setup)(void);
- void(*board_cache_error_setup)(void);
- 
--static void show_raw_backtrace(unsigned long reg29)
-+static void show_raw_backtrace(unsigned long reg29, const char *loglvl)
- {
- 	unsigned long *sp = (unsigned long *)(reg29 & ~3);
- 	unsigned long addr;
- 
--	printk("Call Trace:");
-+	printk("%sCall Trace:", loglvl);
- #ifdef CONFIG_KALLSYMS
--	printk("\n");
-+	printk("%s\n", loglvl);
- #endif
- 	while (!kstack_end(sp)) {
- 		unsigned long __user *p =
- 			(unsigned long __user *)(unsigned long)sp++;
- 		if (__get_user(addr, p)) {
--			printk(" (Bad stack address)");
-+			printk("%s (Bad stack address)", loglvl);
- 			break;
- 		}
- 		if (__kernel_text_address(addr))
--			print_ip_sym(KERN_DEFAULT, addr);
-+			print_ip_sym(loglvl, addr);
- 	}
--	printk("\n");
-+	printk("%s\n", loglvl);
- }
- 
- #ifdef CONFIG_KALLSYMS
-@@ -138,7 +138,8 @@ static int __init set_raw_show_trace(char *str)
- __setup("raw_show_trace", set_raw_show_trace);
- #endif
- 
--static void show_backtrace(struct task_struct *task, const struct pt_regs *regs)
-+static void show_backtrace(struct task_struct *task, const struct pt_regs *regs,
-+			   const char *loglvl)
- {
- 	unsigned long sp = regs->regs[29];
- 	unsigned long ra = regs->regs[31];
-@@ -148,12 +149,12 @@ static void show_backtrace(struct task_struct *task, const struct pt_regs *regs)
- 		task = current;
- 
- 	if (raw_show_trace || user_mode(regs) || !__kernel_text_address(pc)) {
--		show_raw_backtrace(sp);
-+		show_raw_backtrace(sp, loglvl);
- 		return;
- 	}
--	printk("Call Trace:\n");
-+	printk("%sCall Trace:\n", loglvl);
- 	do {
--		print_ip_sym(KERN_DEFAULT, pc);
-+		print_ip_sym(loglvl, pc);
- 		pc = unwind_stack(task, &sp, pc, &ra);
- 	} while (pc);
- 	pr_cont("\n");
-@@ -164,19 +165,19 @@ static void show_backtrace(struct task_struct *task, const struct pt_regs *regs)
-  * with at least a bit of error checking ...
-  */
- static void show_stacktrace(struct task_struct *task,
--	const struct pt_regs *regs)
-+	const struct pt_regs *regs, const char *loglvl)
- {
- 	const int field = 2 * sizeof(unsigned long);
- 	long stackdata;
- 	int i;
- 	unsigned long __user *sp = (unsigned long __user *)regs->regs[29];
- 
--	printk("Stack :");
-+	printk("%sStack :", loglvl);
- 	i = 0;
- 	while ((unsigned long) sp & (PAGE_SIZE - 1)) {
- 		if (i && ((i % (64 / field)) == 0)) {
- 			pr_cont("\n");
--			printk("       ");
-+			printk("%s       ", loglvl);
- 		}
- 		if (i > 39) {
- 			pr_cont(" ...");
-@@ -192,10 +193,11 @@ static void show_stacktrace(struct task_struct *task,
- 		i++;
- 	}
- 	pr_cont("\n");
--	show_backtrace(task, regs);
-+	show_backtrace(task, regs, loglvl);
- }
- 
--void show_stack(struct task_struct *task, unsigned long *sp)
-+void show_stack_loglvl(struct task_struct *task, unsigned long *sp,
-+		       const char *loglvl)
- {
- 	struct pt_regs regs;
- 	mm_segment_t old_fs = get_fs();
-@@ -219,10 +221,15 @@ void show_stack(struct task_struct *task, unsigned long *sp)
- 	 * the stack in the kernel (not user) address space.
- 	 */
- 	set_fs(KERNEL_DS);
--	show_stacktrace(task, &regs);
-+	show_stacktrace(task, &regs, loglvl);
- 	set_fs(old_fs);
- }
- 
-+void show_stack(struct task_struct *task, unsigned long *sp)
-+{
-+	show_stack_loglvl(task, sp, KERN_DEFAULT)
-+}
-+
- static void show_code(unsigned int __user *pc)
- {
- 	long i;
-@@ -371,7 +378,7 @@ void show_registers(struct pt_regs *regs)
- 	if (!user_mode(regs))
- 		/* Necessary for getting the correct stack content */
- 		set_fs(KERNEL_DS);
--	show_stacktrace(current, regs);
-+	show_stacktrace(current, regs, KERN_DEFAULT);
- 	show_code((unsigned int __user *) regs->cp0_epc);
- 	printk("\n");
- 	set_fs(old_fs);
+00000194 <__vdso_clock_gettime>:
+ 194:   b5b0            push    {r4, r5, r7, lr}
+ ...
+ 1be:   bdb0            pop     {r4, r5, r7, pc}
+
+I haven't tried but it's likely that the vdsotest fails with 64K pages
+and compat enabled (requires EXPERT).
+
+> Please find below the list of errors for clock_gettime (similar for the other):
+> 
+> passing UINTPTR_MAX to clock_gettime (VDSO): terminated by unexpected signal 7
+> clock-gettime-monotonic/abi: 1 failures/inconsistencies encountered
+
+Ah, so it uses UINTPTR_MAX in the test. Fair enough but I don't think
+the arm64 check is entirely useful. On arm32, the check was meant to
+return -EFAULT for addresses beyond TASK_SIZE that may enter into the
+kernel or module space. On arm64 compat, the kernel space is well above
+the reach of the 32-bit code.
+
+If you want to preserve some compatibility for this specific test, what
+about checking for wrapping around 0, I think it would make more sense.
+Something like:
+
+	if ((u32)ts > UINTPTR_MAX - sizeof(*ts) + 1)
+
 -- 
-2.25.1
-
+Catalin
