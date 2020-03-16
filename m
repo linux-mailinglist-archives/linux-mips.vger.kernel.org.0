@@ -2,106 +2,228 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4625C186F95
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Mar 2020 17:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9715187628
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2020 00:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731704AbgCPQE4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 16 Mar 2020 12:04:56 -0400
-Received: from foss.arm.com ([217.140.110.172]:51308 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731674AbgCPQEz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 16 Mar 2020 12:04:55 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE4C71FB;
-        Mon, 16 Mar 2020 09:04:54 -0700 (PDT)
-Received: from [10.37.9.38] (unknown [10.37.9.38])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D35C33F534;
-        Mon, 16 Mar 2020 09:04:49 -0700 (PDT)
-Subject: Re: [PATCH v3 18/26] arm64: Introduce asm/vdso/processor.h
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        clang-built-linux@googlegroups.com, x86@kernel.org,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Paul Burton <paul.burton@mips.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Andrei Vagin <avagin@openvz.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        Will Deacon <will@kernel.org>
-References: <20200313154345.56760-1-vincenzo.frascino@arm.com>
- <20200313154345.56760-19-vincenzo.frascino@arm.com>
- <20200315182950.GB32205@mbp> <c2c0157a-107a-debf-100f-0d97781add7c@arm.com>
- <20200316103437.GD3005@mbp> <77a2e91a-58f4-3ba3-9eef-42d6a8faf859@arm.com>
- <20200316112205.GE3005@mbp> <9a0a9285-8a45-4f65-3a83-813cabd0f0d3@arm.com>
- <20200316144346.GF3005@mbp> <427064ee-45df-233c-0281-69e3d62ba784@arm.com>
- <20200316154930.GG3005@mbp>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <53eb7809-9da8-33e5-540f-7546de51b53d@arm.com>
-Date:   Mon, 16 Mar 2020 16:05:17 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1732855AbgCPXST (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 16 Mar 2020 19:18:19 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:34493 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732873AbgCPXSS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 16 Mar 2020 19:18:18 -0400
+Received: by mail-pl1-f195.google.com with SMTP id a23so8720458plm.1
+        for <linux-mips@vger.kernel.org>; Mon, 16 Mar 2020 16:18:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3FIhTFNcgat7mhCmnlEZ3vIzM5FnCV33yV9BtfaIwq8=;
+        b=MmUkFgM4y0R0205HYDTl+mpzKwJedpclTssgLi58VnRAsb2LQfRXiAy409ML7099t7
+         nyBwBQaLpfZwZF2beOeenydU2Zlnk82mFmrxNNPtjODSey0DAAi5/9NlEiBvn9VCDGW5
+         y6Ze/qAt/2SX7ejoRshEBOf1QfArq09LziPt81ANoCN2zLzhLCXTc+AV/NOxYe0Fpt8A
+         GmR9bsymibUv0D0LpAZNYqI2adnXqgqq3hsi0s269YUVVbfA9RsL23/RC4Cw/Q/Dh6ME
+         dgKz4hAaHauUDD3X5s5DKN5NlqNJ7XC1xnIa7udsdVWQl0UEILrRtXzKZgyTpjrJ53uV
+         J9Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3FIhTFNcgat7mhCmnlEZ3vIzM5FnCV33yV9BtfaIwq8=;
+        b=b9gqnNqJ8TCGnGQ1z09PAtU4xbZaW/v7GV/3Vi3yuKrjucu2znbcwVTclzSCr0u4A7
+         ixqyPUxVDWp57KSv/z55WxaliWe4HM5AUd+mjrwqb6OhfdwrUE55llt+3MyVOQyTohB6
+         8VD6ZxpqX7nvn+KUSaQeu3rSb7ytfQATpFwwRhGYS0phup1BXtKXLlPytoD4ePMoEXXd
+         yTqYQVA22IrtLlevjGBXUXx1QP7W4+m7s5CVC7bBBMhvz7j6Fnuh48toDmAKsm52lfTG
+         1gLZfeDVRylXOwlege09cgFNgpjeKUBYrNuVAhWllQnK/kM/j3H4FzJ3dd9Vv2Lqzmog
+         2NUQ==
+X-Gm-Message-State: ANhLgQ3Fe+F23cfqDdqRzRFeQod9UG8TGJhO+JcTOuJ3oHyXeF0FOzck
+        agw+/66V/oPXZWG0pns0hDdsSKhnNKiEFEoHhQkrtH2i
+X-Google-Smtp-Source: ADFU+vsrO9+sQubmwKt1ZMGewtSfsw6a08UDILUqifmsUkFxjnwZV7AqCy178tkIce9rBheZpfcd17qX827//YVfhDQ=
+X-Received: by 2002:a17:90b:311:: with SMTP id ay17mr2003744pjb.27.1584400694892;
+ Mon, 16 Mar 2020 16:18:14 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200316154930.GG3005@mbp>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200311223725.27662-2-masahiroy@kernel.org> <202003121230.lys3M8E8%lkp@intel.com>
+ <CAK7LNARwR5X2C_VzK_3RZo+30Cu3uPuiw-rFUut1j8azLhbxAA@mail.gmail.com> <CAKwvOdmGh+NkVvf=e1W_ThZ8hW2KFe0R+AJ=-0jJ5FUg4sGoaA@mail.gmail.com>
+In-Reply-To: <CAKwvOdmGh+NkVvf=e1W_ThZ8hW2KFe0R+AJ=-0jJ5FUg4sGoaA@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 16 Mar 2020 16:18:03 -0700
+Message-ID: <CAKwvOdkxBmGxj5N+3tPD4JUC=a+PRkD0kTPZ4vB6n3yTM=Rb_g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kbuild: link lib-y objects to vmlinux forcibly
+ when CONFIG_MODULES=y
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-mips@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        kbuild-all@lists.01.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        "sparclinux@vger.kernel.org, David S . Miller" <davem@davemloft.net>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Ilie Halip <ilie.halip@gmail.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        kbuild test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 3/16/20 3:49 PM, Catalin Marinas wrote:
-> On Mon, Mar 16, 2020 at 03:33:30PM +0000, Vincenzo Frascino wrote:
->> On 3/16/20 2:43 PM, Catalin Marinas wrote[...]
-[...]
-> 
->> To make it more explicit we could make COMPAT_VDSO on arm64 depend on
->> ARM64_4K_PAGES. What do you think?
-> 
-> No, I don't see why we should add this limitation.
-> 
++ linux-mips this time
 
-Fine by me.
+On Mon, Mar 16, 2020 at 4:13 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Wed, Mar 11, 2020 at 11:13 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Hi MIPS forks,
+> >
+> >
+> > I got the following report from 0-day bot.
+> > Please advise me how to fix it.
+> >
+> >
+> > I am not sure how multi-platform works in MIPS.
+> >
+> > The cavium-octeon platform has its own implementation
+> > of various functions.
+> >
+> > So, vmlinux links different library routines
+> > depending on whether CONFIG_CAVIUM_OCTEON_SOC, correct?
+> >
+> >
+> >
+> > fw_init_cmdline():
+> > arch/mips/cavium-octeon/setup.c
+> > arch/mips/fw/lib/cmdline.c
+> >
+> >
+> > __delay(), __udelay(), __ndelay():
+> > arch/mips/cavium-octeon/csrc-octeon.c
+> > arch/mips/lib/delay.S
+> >
+> >
+> > memcpy(), memmove():
+> > arch/mips/cavium-octeon/octeon-memcpy.S
+> > arch/mips/lib/memcpy.S
+> >
+> >
+> >
+> > FWIW, the following fixes the multiple definition errors.
+> >
+> >
+> >
+> > diff --git a/arch/mips/fw/lib/cmdline.c b/arch/mips/fw/lib/cmdline.c
+> > index 6ecda64ad184..6ac6e0493e1f 100644
+> > --- a/arch/mips/fw/lib/cmdline.c
+> > +++ b/arch/mips/fw/lib/cmdline.c
+> > @@ -16,6 +16,7 @@ int fw_argc;
+> >  int *_fw_argv;
+> >  int *_fw_envp;
+> >
+> > +#ifndef CONFIG_CAVIUM_OCTEON_SOC
+> >  void __init fw_init_cmdline(void)
+>
+> Alternatively, you could define this fw_init_cmdline as __weak, then
+> let the strong definition in arch/mips/cavium-octeon/setup.c override
+> it. But both should work, so:
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> Eitherway, octeon has some multiple definition errors that should get fixed.
+>
+> >  {
+> >         int i;
+> > @@ -41,6 +42,7 @@ void __init fw_init_cmdline(void)
+> >                         strlcat(arcs_cmdline, " ", COMMAND_LINE_SIZE);
+> >         }
+> >  }
+> > +#endif
+> >
+> >  char * __init fw_getcmdline(void)
+> >  {
+> > diff --git a/arch/mips/lib/Makefile b/arch/mips/lib/Makefile
+> > index 479f50559c83..4cc98af4161a 100644
+> > --- a/arch/mips/lib/Makefile
+> > +++ b/arch/mips/lib/Makefile
+> > @@ -3,10 +3,14 @@
+> >  # Makefile for MIPS-specific library files..
+> >  #
+> >
+> > -lib-y  += bitops.o csum_partial.o delay.o memcpy.o memset.o \
+> > +lib-y  += bitops.o csum_partial.o memset.o \
+> >            mips-atomic.o strncpy_user.o \
+> >            strnlen_user.o uncached.o
+> >
+> > +ifneq ($(CONFIG_CAVIUM_OCTEON_SOC),y)
+> > +lib-y  += delay.o memcpy.o
+> > +endif
+> > +
+> >  obj-y                  += iomap_copy.o
+> >  obj-$(CONFIG_PCI)      += iomap-pci.o
+> >  lib-$(CONFIG_GENERIC_CSUM)     := $(filter-out csum_partial.o, $(lib-y))
+> >
+> >
+> >
+> > On Thu, Mar 12, 2020 at 1:31 PM kbuild test robot <lkp@intel.com> wrote:
+> > >
+> > > Hi Masahiro,
+> > >
+> > > I love your patch! Yet something to improve:
+> > >
+> > > [auto build test ERROR on kbuild/for-next]
+> > > [also build test ERROR on v5.6-rc5 next-20200311]
+> > > [if your patch is applied to the wrong git tree, please drop us a note to help
+> > > improve the system. BTW, we also suggest to use '--base' option to specify the
+> > > base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+> > >
+> > > url:    https://github.com/0day-ci/linux/commits/Masahiro-Yamada/sparc-revive-__HAVE_ARCH_STRLEN-for-32bit-sparc/20200312-073459
+> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+> > > config: mips-cavium_octeon_defconfig (attached as .config)
+> > > compiler: mips64-linux-gcc (GCC) 9.2.0
+> > > reproduce:
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # save the attached .config to linux build tree
+> > >         GCC_VERSION=9.2.0 make.cross ARCH=mips
+> > >
+> > > If you fix the issue, kindly add following tag
+> > > Reported-by: kbuild test robot <lkp@intel.com>
+> > >
+> > > All errors (new ones prefixed by >>):
+> > >
+> > >    mips64-linux-ld: arch/mips/fw/lib/cmdline.o: in function `fw_init_cmdline':
+> > > >> cmdline.c:(.init.text+0x0): multiple definition of `fw_init_cmdline'; arch/mips/cavium-octeon/setup.o:setup.c:(.init.text+0xad8): first defined here
+> > >    mips64-linux-ld: arch/mips/lib/delay.o: in function `__delay':
+> > > >> delay.c:(.text+0x0): multiple definition of `__delay'; arch/mips/cavium-octeon/csrc-octeon.o:csrc-octeon.c:(.text+0x80): first defined here
+> > >    mips64-linux-ld: arch/mips/lib/delay.o: in function `__udelay':
+> > > >> delay.c:(.text+0x10): multiple definition of `__udelay'; arch/mips/cavium-octeon/csrc-octeon.o:csrc-octeon.c:(.text+0x8): first defined here
+> > >    mips64-linux-ld: arch/mips/lib/delay.o: in function `__ndelay':
+> > > >> delay.c:(.text+0x50): multiple definition of `__ndelay'; arch/mips/cavium-octeon/csrc-octeon.o:csrc-octeon.c:(.text+0x40): first defined here
+> > >    mips64-linux-ld: arch/mips/lib/memcpy.o: in function `memmove':
+> > > >> (.text+0x0): multiple definition of `memmove'; arch/mips/cavium-octeon/octeon-memcpy.o:(.text+0x3a0): first defined here
+> > >    mips64-linux-ld: arch/mips/lib/memcpy.o: in function `__rmemcpy':
+> > > >> (.text+0x20): multiple definition of `__rmemcpy'; arch/mips/cavium-octeon/octeon-memcpy.o:(.text+0x3c0): first defined here
+> > >    mips64-linux-ld: arch/mips/lib/memcpy.o: in function `memcpy':
+> > > >> (.text+0x80): multiple definition of `memcpy'; arch/mips/cavium-octeon/octeon-memcpy.o:(.text+0x0): first defined here
+> > >    mips64-linux-ld: arch/mips/lib/memcpy.o: in function `memcpy':
+> > > >> (.text+0x84): multiple definition of `__copy_user'; arch/mips/cavium-octeon/octeon-memcpy.o:(.text+0x4): first defined here
+> > >
+> > > ---
+> > > 0-DAY CI Kernel Test Service, Intel Corporation
+> > > https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> >
+> >
+> >
+> > --
+> > Best Regards
+> > Masahiro Yamada
+>
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
 
->>>> Please find below the list of errors for clock_gettime (similar for the other):
->>>>
->>>> passing UINTPTR_MAX to clock_gettime (VDSO): terminated by unexpected signal 7
->>>> clock-gettime-monotonic/abi: 1 failures/inconsistencies encountered
->>>
->>> Ah, so it uses UINTPTR_MAX in the test. Fair enough but I don't think
->>> the arm64 check is entirely useful. On arm32, the check was meant to
->>> return -EFAULT for addresses beyond TASK_SIZE that may enter into the
->>> kernel or module space. On arm64 compat, the kernel space is well above
->>> the reach of the 32-bit code.
->>>
->>> If you want to preserve some compatibility for this specific test, what
->>> about checking for wrapping around 0, I think it would make more sense.
->>> Something like:
->>>
->>> 	if ((u32)ts > UINTPTR_MAX - sizeof(*ts) + 1)
->>
->> Ok, sounds good to me. But it is something that this patch series inherited,
->> hence I would prefer to send a separate patch that introduces what you are
->> proposing and removes TASK_SIZE_32 from the headers. How does it sound?
-> 
-> I'd rather avoid moving TASK_SIZE_32 unnecessarily. Just add a
-> preparatory patch to your series for arm64 compat vdso and follow with
-> the rest without moving TASK_SIZE_32 around.
-> 
 
-Ok, sounds good. I will test it and repost.
 
 -- 
-Regards,
-Vincenzo
+Thanks,
+~Nick Desaulniers
