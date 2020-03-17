@@ -2,81 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3E4187D69
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2020 10:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5D1187D76
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Mar 2020 10:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726005AbgCQJuv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 Mar 2020 05:50:51 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:54734 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726016AbgCQJuv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Mar 2020 05:50:51 -0400
-Received: by mail-wm1-f66.google.com with SMTP id n8so20662914wmc.4
-        for <linux-mips@vger.kernel.org>; Tue, 17 Mar 2020 02:50:49 -0700 (PDT)
+        id S1726077AbgCQJxf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 17 Mar 2020 05:53:35 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:35148 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725928AbgCQJxf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Mar 2020 05:53:35 -0400
+Received: by mail-lj1-f194.google.com with SMTP id u12so22054657ljo.2
+        for <linux-mips@vger.kernel.org>; Tue, 17 Mar 2020 02:53:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=CfiAQpd8uQoL3iwwwAGqh6gxvyBaIrgMF1i3mX+btOA=;
-        b=bKLGfSM9UWMVgvxw9K4+lnLcWmqVr8N9nWD3shrd/QZtInCP8z5IrA4LsnnWcpQTDU
-         qP6buHmWIrzh9IVIxla3zk48G3q9HrTis+C/wMKr6qKELE/Bbq3x9M89bEuSBDjvdEyd
-         aD2U7OjDYVAA/VdnvZ5FSMaedfaNU+8nWtoS8=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ahtq2mQzZ/hKQzTlMcOpLhf6uob8xhN3CPDjeFKWyEM=;
+        b=aGfwBsRGZVXeDImvcp1rxaXVNVG6sI22MgbooYe+Fj1c8fxvBgW1JJUhESsKVK12dh
+         YGCH6QRWdfHOjrZGqWX5n5US/FhYIpo3wJovZ2G868vnRoVPGYgf1htRfNqFhBuToyPu
+         DABPhm4gTU6Rekp3tY5L5NbchKoy0A+oaLQu4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=CfiAQpd8uQoL3iwwwAGqh6gxvyBaIrgMF1i3mX+btOA=;
-        b=ou/eC9Mg6Wl3Y4BgqAqFTvc1uJ4i78rEN82Wo1i6OZUWpOz32r0UPF5n2HMmmpiQmf
-         TvDGYQohnZlI9qpgUe9krMqaUIQABYt5A3EBGSmejWwbVCWFEIQQOeVl/AohEKZPGhDo
-         XkFOJ1gLB5SylwD/9eTqpGGKvpFeLxfkolH5YthszfIcLwc+cFh102oc9i+rp2olyOaL
-         2XKxRCMIBHXbK2MUzxjfT+SX/k0S2zsu2qmguZAHfWBv/7mV3kj7ouiAuZhdKfhSR0xl
-         VX7j84ffM4Sd4ygj7ge6XGHOIxu1uYTucka2iJhlre6lGy2oVpuQnE+wGTFH4M7YDFeS
-         HhaA==
-X-Gm-Message-State: ANhLgQ1dOQNK89iOyRTbIVzU4T+TTX4JIu1ev3ovGrXA5J6GMU4zkUVs
-        k8b3hJivGVzd1cFEO+h7qmDGZA==
-X-Google-Smtp-Source: ADFU+vsvnEQ2euzuGI9HkfkPRYnzpyOc7RRTEavFnN573nqDk6l9mVYBfp2n1KUH8274z5uKVcgfZw==
-X-Received: by 2002:a7b:c950:: with SMTP id i16mr4335733wml.97.1584438648582;
-        Tue, 17 Mar 2020 02:50:48 -0700 (PDT)
-Received: from rayagonda.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id l18sm3845033wrr.17.2020.03.17.02.50.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2020 02:50:47 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ahtq2mQzZ/hKQzTlMcOpLhf6uob8xhN3CPDjeFKWyEM=;
+        b=bUHvk79Idm0gh63+BBx1hplQdMNX2P1kDckVUBr8YZGrBu2Sj34wkVA7ETumUNL05K
+         s2AhBf24/0PiBgD5Cn7EpbiKq7qXfqH0g7/XqBcykGf72sxQU/HB76R/L0XYJYhM/p1e
+         i6Kwl+7hhqyYGE4MqzC5HFGxiOHkERLMfionxMfyUr70Hb15xoIUoGsihy571APWUG2A
+         dJ62O89Esu5YNuSdU1ANvM791jX4WOO0O4+j7mq2+oQqLVmGHuvGoW4AI69WQo8v3oB6
+         v3QotJM3AcyFknYYVV3IryBEf1SxTPwptfaGMwrPqJ+fvUztq0SomWL0+eEuuUxPEn6n
+         2sVw==
+X-Gm-Message-State: ANhLgQ3hyrTNZiMzi/cmNdejJutM+lOJuIagoU9w5StcpEw0pNUYIlf3
+        D7hGlqhD3aIaQjQgmRdizMzc0SfSEdz+xkOFX0Uhuw==
+X-Google-Smtp-Source: ADFU+vvxuOLt1IwGKsrImxS13GFlvtmnCJR669U9slmviidnh+ZhPft+usarUg8t0soUz8b6zMNszgIWOKrVO9BWE+A=
+X-Received: by 2002:a2e:9214:: with SMTP id k20mr2344374ljg.157.1584438812259;
+ Tue, 17 Mar 2020 02:53:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200317040742.12143-1-rayagonda.kokatanur@broadcom.com> <e94bbb2c-6f36-61bb-d26a-2ce3e1a139e0@cogentembedded.com>
+In-Reply-To: <e94bbb2c-6f36-61bb-d26a-2ce3e1a139e0@cogentembedded.com>
 From:   Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-To:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+Date:   Tue, 17 Mar 2020 15:23:20 +0530
+Message-ID: <CAHO=5PEiPK=uF_rEJ+ujaP=oq2fPR1VHvczjZ1JQAqDdjTsMHQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] firmware: tee_bnxt: remove unused variable init
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>
-Cc:     Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
-Subject: [PATCH v2 1/1] firmware: tee_bnxt: remove unused variable assignment
-Date:   Tue, 17 Mar 2020 15:20:37 +0530
-Message-Id: <20200317095037.22313-1-rayagonda.kokatanur@broadcom.com>
-X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Remove unused variable assignment.
-
-Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
----
-Changes from v1:
-- Address code review comment from Sergei Shtylyov,
-  Correct the commit message.
-
- drivers/firmware/broadcom/tee_bnxt_fw.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
-index ed10da5313e8..6fd62657e35f 100644
---- a/drivers/firmware/broadcom/tee_bnxt_fw.c
-+++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
-@@ -143,8 +143,6 @@ int tee_bnxt_copy_coredump(void *buf, u32 offset, u32 size)
- 	prepare_args(TA_CMD_BNXT_COPY_COREDUMP, &arg, param);
- 
- 	while (rbytes)  {
--		nbytes = rbytes;
--
- 		nbytes = min_t(u32, rbytes, param[0].u.memref.size);
- 
- 		/* Fill additional invoke cmd params */
--- 
-2.17.1
-
+On Tue, Mar 17, 2020 at 2:39 PM Sergei Shtylyov
+<sergei.shtylyov@cogentembedded.com> wrote:
+>
+> Hello!
+>
+> On 17.03.2020 7:07, Rayagonda Kokatanur wrote:
+>
+> > Remove unused variable initialization.
+>
+>     I think it's not an initialization, it's an assignment. :-)
+Thanks  will fix it and send v2.
+>
+> > Signed-off-by: Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+> > ---
+> >   drivers/firmware/broadcom/tee_bnxt_fw.c | 2 --
+> >   1 file changed, 2 deletions(-)
+> >
+> > diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
+> > index ed10da5313e8..6fd62657e35f 100644
+> > --- a/drivers/firmware/broadcom/tee_bnxt_fw.c
+> > +++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
+> > @@ -143,8 +143,6 @@ int tee_bnxt_copy_coredump(void *buf, u32 offset, u32 size)
+> >       prepare_args(TA_CMD_BNXT_COPY_COREDUMP, &arg, param);
+> >
+> >       while (rbytes)  {
+> > -             nbytes = rbytes;
+> > -
+> >               nbytes = min_t(u32, rbytes, param[0].u.memref.size);
+> >
+> >               /* Fill additional invoke cmd params */
+>
+> MBR, Sergei
