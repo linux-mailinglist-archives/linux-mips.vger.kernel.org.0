@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD7718B5FF
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Mar 2020 14:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF0A18B645
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Mar 2020 14:25:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730317AbgCSNXL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 19 Mar 2020 09:23:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48982 "EHLO mail.kernel.org"
+        id S1730608AbgCSNZR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 19 Mar 2020 09:25:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52754 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730313AbgCSNXK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 19 Mar 2020 09:23:10 -0400
+        id S1730605AbgCSNZQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 19 Mar 2020 09:25:16 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4F13C20724;
-        Thu, 19 Mar 2020 13:23:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 64AB12098B;
+        Thu, 19 Mar 2020 13:25:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584624189;
-        bh=9g2gIbbLljcopMLsa1wpkRfrnY5cLA9djOVfX6VbqYg=;
+        s=default; t=1584624315;
+        bh=Tkr/6mrr1glEaInkhIb3wjUGtu3WF0DzZoe3urzNmhE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FR2ctbiNrY3apd3xUcg9lW7/ZKMeB8vO1ze0a194ounXr2w1pB969Q8NCxZRA4awg
-         r9KXj05k4/TGgqa5BtwrOBb/b8JSxE4E0Im+iW2jRdOO5/31ODTVuLTp8RyPsYlLU3
-         hJ0OQFAgw/oFsKUoZIZsQH0zCfvcWMJzvRMhauTg=
+        b=ubelOgWI6SWwRNjFJKr8nhVUyc4t+U6IYPyk8yfFEsm+mUczZO6GHkKuONfuArz8+
+         1Etx39qGUSVCj7cjzmUXqv6f1QV3Jos77cZIHiWQABSarXIAZZfH1yHT/djw9D3uki
+         AG83i1kRk/57C6OH71U/yNmbGKRHhlA1k8tHpmIM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org,
         clang-built-linux@googlegroups.com, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 20/60] MIPS: vdso: Wrap -mexplicit-relocs in cc-option
-Date:   Thu, 19 Mar 2020 14:03:58 +0100
-Message-Id: <20200319123925.617729599@linuxfoundation.org>
+Subject: [PATCH 5.5 20/65] MIPS: vdso: Wrap -mexplicit-relocs in cc-option
+Date:   Thu, 19 Mar 2020 14:04:02 +0100
+Message-Id: <20200319123932.742469978@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.2
-In-Reply-To: <20200319123919.441695203@linuxfoundation.org>
-References: <20200319123919.441695203@linuxfoundation.org>
+In-Reply-To: <20200319123926.466988514@linuxfoundation.org>
+References: <20200319123926.466988514@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -84,7 +84,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index 08c835d48520b..3dcfdee678fb9 100644
+index bfb65b2d57c7f..2cf4b6131d88d 100644
 --- a/arch/mips/vdso/Makefile
 +++ b/arch/mips/vdso/Makefile
 @@ -29,7 +29,7 @@ endif
