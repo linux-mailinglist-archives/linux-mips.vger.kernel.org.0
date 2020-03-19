@@ -2,43 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D6218B6AE
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Mar 2020 14:29:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD7718B5FF
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Mar 2020 14:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730709AbgCSNZ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 19 Mar 2020 09:25:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53740 "EHLO mail.kernel.org"
+        id S1730317AbgCSNXL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 19 Mar 2020 09:23:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48982 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730515AbgCSNZ5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 19 Mar 2020 09:25:57 -0400
+        id S1730313AbgCSNXK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 19 Mar 2020 09:23:10 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 578FD2080C;
-        Thu, 19 Mar 2020 13:25:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4F13C20724;
+        Thu, 19 Mar 2020 13:23:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584624355;
-        bh=5iPR7XCLsazQnaDrcx+zT2BH4J3il51Isf+Aw05JtG4=;
+        s=default; t=1584624189;
+        bh=9g2gIbbLljcopMLsa1wpkRfrnY5cLA9djOVfX6VbqYg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V00+g1ReQ5ZN/S2LQRGaxu6CjECtb2pY2qLqmqQStO9M/zo7vl+bjuSiQdu8A32yP
-         ZGoB69yUYBSPk0Dcc97B8VUPv/G949VaOvPGrXMgx4DVltRdhHD6ZAoEJoeMFYZjXw
-         cHNJ+xcNquBqNGl77AlhtjEDZ7XaSmsMXL6aZJeg=
+        b=FR2ctbiNrY3apd3xUcg9lW7/ZKMeB8vO1ze0a194ounXr2w1pB969Q8NCxZRA4awg
+         r9KXj05k4/TGgqa5BtwrOBb/b8JSxE4E0Im+iW2jRdOO5/31ODTVuLTp8RyPsYlLU3
+         hJ0OQFAgw/oFsKUoZIZsQH0zCfvcWMJzvRMhauTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Victor Kamensky <kamensky@cisco.com>,
+        stable@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Paul Burton <paulburton@kernel.org>,
-        linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        bruce.ashfield@gmail.com, richard.purdie@linuxfoundation.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.5 15/65] mips: vdso: add build time check that no jalr t9 calls left
-Date:   Thu, 19 Mar 2020 14:03:57 +0100
-Message-Id: <20200319123931.264495151@linuxfoundation.org>
+        Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org,
+        clang-built-linux@googlegroups.com, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 20/60] MIPS: vdso: Wrap -mexplicit-relocs in cc-option
+Date:   Thu, 19 Mar 2020 14:03:58 +0100
+Message-Id: <20200319123925.617729599@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.2
-In-Reply-To: <20200319123926.466988514@linuxfoundation.org>
-References: <20200319123926.466988514@linuxfoundation.org>
+In-Reply-To: <20200319123919.441695203@linuxfoundation.org>
+References: <20200319123919.441695203@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,65 +47,55 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Victor Kamensky <kamensky@cisco.com>
+From: Nathan Chancellor <natechancellor@gmail.com>
 
-[ Upstream commit 976c23af3ee5bd3447a7bfb6c356ceb4acf264a6 ]
+[ Upstream commit 72cf3b3df423c1bbd8fa1056fed009d3a260f8a9 ]
 
-vdso shared object cannot have GOT based PIC 'jalr t9' calls
-because nobody set GOT table in vdso. Contributing into vdso
-.o files are compiled in PIC mode and as result for internal
-static functions calls compiler will generate 'jalr t9'
-instructions. Those are supposed to be converted into PC
-relative 'bal' calls by linker when relocation are processed.
+Clang does not support this option and errors out:
 
-Mips global GOT entries do have dynamic relocations and they
-will be caught by cmd_vdso_check Makefile rule. Static PIC
-calls go through mips local GOT entries that do not have
-dynamic relocations. For those 'jalr t9' calls could be present
-but without dynamic relocations and they need to be converted
-to 'bal' calls by linker.
+clang-11: error: unknown argument: '-mexplicit-relocs'
 
-Add additional build time check to make sure that no 'jalr t9'
-slip through because of some toolchain misconfiguration that
-prevents 'jalr t9' to 'bal' conversion.
+Clang does not appear to need this flag like GCC does because the jalr
+check that was added in commit 976c23af3ee5 ("mips: vdso: add build
+time check that no 'jalr t9' calls left") passes just fine with
 
-Signed-off-by: Victor Kamensky <kamensky@cisco.com>
+$ make ARCH=mips CC=clang CROSS_COMPILE=mipsel-linux-gnu- malta_defconfig arch/mips/vdso/
+
+even before commit d3f703c4359f ("mips: vdso: fix 'jalr t9' crash in
+vdso code").
+
+-mrelax-pic-calls has been supported since clang 9, which is the
+earliest version that could build a working MIPS kernel, and it is the
+default for clang so just leave it be.
+
+Fixes: d3f703c4359f ("mips: vdso: fix 'jalr t9' crash in vdso code")
+Link: https://github.com/ClangBuiltLinux/linux/issues/890
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Paul Burton <paulburton@kernel.org>
-Cc: linux-mips@vger.kernel.org
 Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: James Hogan <jhogan@kernel.org>
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: bruce.ashfield@gmail.com
-Cc: richard.purdie@linuxfoundation.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: clang-built-linux@googlegroups.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/vdso/Makefile | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/mips/vdso/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index e8585a22b925c..bfb65b2d57c7f 100644
+index 08c835d48520b..3dcfdee678fb9 100644
 --- a/arch/mips/vdso/Makefile
 +++ b/arch/mips/vdso/Makefile
-@@ -93,12 +93,18 @@ GCOV_PROFILE := n
- UBSAN_SANITIZE := n
- KCOV_INSTRUMENT := n
- 
-+# Check that we don't have PIC 'jalr t9' calls left
-+quiet_cmd_vdso_mips_check = VDSOCHK $@
-+      cmd_vdso_mips_check = if $(OBJDUMP) --disassemble $@ | egrep -h "jalr.*t9" > /dev/null; \
-+		       then (echo >&2 "$@: PIC 'jalr t9' calls are not supported"; \
-+			     rm -f $@; /bin/false); fi
-+
- #
- # Shared build commands.
- #
- 
- quiet_cmd_vdsold_and_vdso_check = LD      $@
--      cmd_vdsold_and_vdso_check = $(cmd_vdsold); $(cmd_vdso_check)
-+      cmd_vdsold_and_vdso_check = $(cmd_vdsold); $(cmd_vdso_check); $(cmd_vdso_mips_check)
- 
- quiet_cmd_vdsold = VDSO    $@
-       cmd_vdsold = $(CC) $(c_flags) $(VDSO_LDFLAGS) \
+@@ -29,7 +29,7 @@ endif
+ cflags-vdso := $(ccflags-vdso) \
+ 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
+ 	-O3 -g -fPIC -fno-strict-aliasing -fno-common -fno-builtin -G 0 \
+-	-mrelax-pic-calls -mexplicit-relocs \
++	-mrelax-pic-calls $(call cc-option, -mexplicit-relocs) \
+ 	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
+ 	$(call cc-option, -fno-asynchronous-unwind-tables) \
+ 	$(call cc-option, -fno-stack-protector)
 -- 
 2.20.1
 
