@@ -2,95 +2,154 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E612718BDC6
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Mar 2020 18:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2FFF18BF16
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Mar 2020 19:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727556AbgCSRQb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 19 Mar 2020 13:16:31 -0400
-Received: from elvis.franken.de ([193.175.24.41]:51419 "EHLO elvis.franken.de"
+        id S1726663AbgCSSKM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 19 Mar 2020 14:10:12 -0400
+Received: from foss.arm.com ([217.140.110.172]:39886 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727446AbgCSRQb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 19 Mar 2020 13:16:31 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jEymJ-0004Hm-00; Thu, 19 Mar 2020 18:16:19 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 5A023C026A; Thu, 19 Mar 2020 17:22:45 +0100 (CET)
-Date:   Thu, 19 Mar 2020 17:22:45 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-mips@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
-        kbuild-all@lists.01.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "sparclinux@vger.kernel.org, David S . Miller" <davem@davemloft.net>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        id S1725787AbgCSSKL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 19 Mar 2020 14:10:11 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1FC730E;
+        Thu, 19 Mar 2020 11:10:10 -0700 (PDT)
+Received: from mbp (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5418C3F305;
+        Thu, 19 Mar 2020 11:10:07 -0700 (PDT)
+Date:   Thu, 19 Mar 2020 18:10:04 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
+        linux-mips@vger.kernel.org, x86@kernel.org,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Paul Burton <paul.burton@mips.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Andrei Vagin <avagin@openvz.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Ilie Halip <ilie.halip@gmail.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        kbuild test robot <lkp@intel.com>
-Subject: Re: [PATCH v2 2/2] kbuild: link lib-y objects to vmlinux forcibly
- when CONFIG_MODULES=y
-Message-ID: <20200319162245.GA19404@alpha.franken.de>
-References: <20200311223725.27662-2-masahiroy@kernel.org>
- <202003121230.lys3M8E8%lkp@intel.com>
- <CAK7LNARwR5X2C_VzK_3RZo+30Cu3uPuiw-rFUut1j8azLhbxAA@mail.gmail.com>
- <20200312083943.GA7278@alpha.franken.de>
- <CAK7LNAT8AVh8PawDsUoStjYMsOq-DLJbW30SpX7hDDJHZNCd9g@mail.gmail.com>
+        Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <Mark.Rutland@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v4 18/26] arm64: vdso32: Replace TASK_SIZE_32 check in
+ vgettimeofday
+Message-ID: <20200319181004.GA29214@mbp>
+References: <20200317122220.30393-1-vincenzo.frascino@arm.com>
+ <20200317122220.30393-19-vincenzo.frascino@arm.com>
+ <20200317143834.GC632169@arrakis.emea.arm.com>
+ <f03a9493-c8c2-e981-f560-b2f437a208e4@arm.com>
+ <20200317155031.GD632169@arrakis.emea.arm.com>
+ <83aaf9e1-0a8f-4908-577a-23766541b2ba@arm.com>
+ <20200317174806.GE632169@arrakis.emea.arm.com>
+ <93cfe94a-c2a3-1025-bc9c-e7c3fd891100@arm.com>
+ <20200318183603.GF94111@arrakis.emea.arm.com>
+ <1bc25a53-7a59-0f60-ecf2-a3cace46b823@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK7LNAT8AVh8PawDsUoStjYMsOq-DLJbW30SpX7hDDJHZNCd9g@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <1bc25a53-7a59-0f60-ecf2-a3cace46b823@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Mar 20, 2020 at 12:48:20AM +0900, Masahiro Yamada wrote:
-> Hi Thomas,
-> 
-> On Thu, Mar 12, 2020 at 5:40 PM Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> wrote:
-> >
-> > On Thu, Mar 12, 2020 at 03:12:28PM +0900, Masahiro Yamada wrote:
-> > > I got the following report from 0-day bot.
-> > > Please advise me how to fix it.
-> > >
-> > >
-> > > I am not sure how multi-platform works in MIPS.
-> > >
-> > > The cavium-octeon platform has its own implementation
-> > > of various functions.
-> > >
-> > > So, vmlinux links different library routines
-> > > depending on whether CONFIG_CAVIUM_OCTEON_SOC, correct?
-> >
-> > for cavium memcpy is directly linked in via octeon-memcpy.o, while for
-> > every other platform it's coming from lib/lib.a(memcpy.o).
-> >
-> > What have you changed, that this doesn't work anymore ?
-> >
-> > Thomas.
-> 
-> 
-> I want to change all objects from lib-y
-> to be linked to vmlinux (exactly like obj-y )
-> if CONFIG_MODULES is enabled.
+Hi Vincenzo,
 
-ic
-
-> So, annotating __weak is a good solution
-> (thanks Nick!).
+On Thu, Mar 19, 2020 at 12:38:42PM +0000, Vincenzo Frascino wrote:
+> On 3/18/20 6:36 PM, Catalin Marinas wrote:
+> > On Wed, Mar 18, 2020 at 04:14:26PM +0000, Vincenzo Frascino wrote:
+> >> On 3/17/20 5:48 PM, Catalin Marinas wrote:
+> >>> So clock_gettime() on arm32 always falls back to the syscall?
+> >>
+> >> This seems not what you asked, and I think I answered accordingly. Anyway, in
+> >> the case of arm32 the error code path is handled via syscall fallback.
+> >>
+> >> Look at the code below as an example (I am using getres because I know this
+> >> email will be already too long, and I do not want to add pointless code, but the
+> >> concept is the same for gettime and the others):
+> >>
+> >> static __maybe_unused
+> >> int __cvdso_clock_getres(clockid_t clock, struct __kernel_timespec *res)
+> >> {
+> >> 	int ret = __cvdso_clock_getres_common(clock, res);
+> >>
+> >> 	if (unlikely(ret))
+> >> 		return clock_getres_fallback(clock, res);
+> >> 	return 0;
+> >> }
+> >>
+> >> When the return code of the "vdso" internal function returns an error the system
+> >> call is triggered.
+> > 
+> > But when __cvdso_clock_getres_common() does *not* return an error, it
+> > means that it handled the clock_getres() call without a fallback to the
+> > syscall. I assume this is possible on arm32. When the clock_getres() is
+> > handled directly (not as a syscall), why doesn't arm32 need the same
+> > (res >= TASK_SIZE) check?
 > 
-> If I send a patch, is it acceptable?
+> Ok, I see what you mean.
 
-sure.
+I'm not sure.
 
-Thomas.
+> It does not need to differ when __cvdso_clock_getres_common() does *not* return
+> an error, we can move the checks in the fallback and leave the vdso code the
+> same. The reason why I put the checks at the beginning of vdso code is because
+> since I know such a condition it is going to fail I prefer to bailout
+> immediately when it is detected instead of going through a bus error and a
+> syscall before I can bailout.
+
+I don't dispute your choice of choosing to bail out early, that's fine
+by me. What I'm asking above, and you haven't answered, is why we don't
+need exactly the same check on arm32. I.e.:
+
+diff --git a/arch/arm/vdso/vgettimeofday.c b/arch/arm/vdso/vgettimeofday.c
+index 1976c6f325a4..17ee5d211228 100644
+--- a/arch/arm/vdso/vgettimeofday.c
++++ b/arch/arm/vdso/vgettimeofday.c
+@@ -28,6 +28,9 @@ int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
+ int __vdso_clock_getres(clockid_t clock_id,
+ 			struct old_timespec32 *res)
+ {
++	if ((u32)res >= TASK_SIZE)
++		return -EFAULT;
++
+ 	return __cvdso_clock_getres_time32(clock_id, res);
+ }
+ 
+
+(where arch/arm means arm32 ;)).
+
+If the arm32 vdsotest passes, I'd like to know why.
+
+> It is mainly a design choice based on what I explained above but I am open to
+> suggestions if you have a better way to proceed.
+
+I suggest just drop the TASK_SIZE_32 test altogether in this series to
+get it merged for 5.7-rc1. We'll fix the ABI issues in -rc2/-rc3 once
+you confirm that the test fully passes on arm32 when it doesn't fall
+back to the syscall handling and we understood why.
+
+> > Furthermore, my assumption is that __cvdso_clock_getres_common() should
+> > handle this case already and we don't need it in the arch vdso code.
+> > 
+> 
+> This is not the point I was trying to make, what I was trying to analyze here
+> was the check compared to why the test verifies it, not the correctness of the
+> check itself.
+
+You should implement it based on what the man page defines, not some
+specific test. Tests are rarely exhaustive (unless you do formal
+modelling).
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Catalin
