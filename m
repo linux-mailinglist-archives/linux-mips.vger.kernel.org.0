@@ -2,40 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 062F918B655
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Mar 2020 14:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D6218B6AE
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Mar 2020 14:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730229AbgCSNZw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 19 Mar 2020 09:25:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53602 "EHLO mail.kernel.org"
+        id S1730709AbgCSNZ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 19 Mar 2020 09:25:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53740 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730694AbgCSNZv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 19 Mar 2020 09:25:51 -0400
+        id S1730515AbgCSNZ5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 19 Mar 2020 09:25:57 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8045D208C3;
-        Thu, 19 Mar 2020 13:25:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 578FD2080C;
+        Thu, 19 Mar 2020 13:25:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584624351;
-        bh=kJdYtdkXoUJqBCbsGNBYogiLr8GIFp4ngkilDarlmMY=;
+        s=default; t=1584624355;
+        bh=5iPR7XCLsazQnaDrcx+zT2BH4J3il51Isf+Aw05JtG4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WDmgnlBAdY82QQ6cayWDQgfBx8T2WYBPyIabciDR/EpXXhdW5eRGUyf/dBCU70sHQ
-         Yq+nFlDEu7H42l/sG75fjmLUsvXQj2Tk5Fs99e+xSSz0u2/ocJy/IaxPZDjGJTWmAE
-         ro2MdfcbAec7sI6WfswFNrbhft+CdaV2MiiubkAk=
+        b=V00+g1ReQ5ZN/S2LQRGaxu6CjECtb2pY2qLqmqQStO9M/zo7vl+bjuSiQdu8A32yP
+         ZGoB69yUYBSPk0Dcc97B8VUPv/G949VaOvPGrXMgx4DVltRdhHD6ZAoEJoeMFYZjXw
+         cHNJ+xcNquBqNGl77AlhtjEDZ7XaSmsMXL6aZJeg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bruce Ashfield <bruce.ashfield@gmail.com>,
-        Victor Kamensky <kamensky@cisco.com>,
+        stable@vger.kernel.org, Victor Kamensky <kamensky@cisco.com>,
         Paul Burton <paulburton@kernel.org>,
         linux-mips@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
         James Hogan <jhogan@kernel.org>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        richard.purdie@linuxfoundation.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.5 13/65] mips: vdso: fix jalr t9 crash in vdso code
-Date:   Thu, 19 Mar 2020 14:03:55 +0100
-Message-Id: <20200319123930.497716995@linuxfoundation.org>
+        bruce.ashfield@gmail.com, richard.purdie@linuxfoundation.org,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.5 15/65] mips: vdso: add build time check that no jalr t9 calls left
+Date:   Thu, 19 Mar 2020 14:03:57 +0100
+Message-Id: <20200319123931.264495151@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.2
 In-Reply-To: <20200319123926.466988514@linuxfoundation.org>
 References: <20200319123926.466988514@linuxfoundation.org>
@@ -50,60 +50,63 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Victor Kamensky <kamensky@cisco.com>
 
-[ Upstream commit d3f703c4359ff06619b2322b91f69710453e6b6d ]
+[ Upstream commit 976c23af3ee5bd3447a7bfb6c356ceb4acf264a6 ]
 
-Observed that when kernel is built with Yocto mips64-poky-linux-gcc,
-and mips64-poky-linux-gnun32-gcc toolchain, resulting vdso contains
-'jalr t9' instructions in its code and since in vdso case nobody
-sets GOT table code crashes when instruction reached. On other hand
-observed that when kernel is built mips-poky-linux-gcc toolchain, the
-same 'jalr t9' instruction are replaced with PC relative function
-calls using 'bal' instructions.
+vdso shared object cannot have GOT based PIC 'jalr t9' calls
+because nobody set GOT table in vdso. Contributing into vdso
+.o files are compiled in PIC mode and as result for internal
+static functions calls compiler will generate 'jalr t9'
+instructions. Those are supposed to be converted into PC
+relative 'bal' calls by linker when relocation are processed.
 
-The difference boils down to -mrelax-pic-calls and -mexplicit-relocs
-gcc options that gets different default values depending on gcc
-target triplets and corresponding binutils. -mrelax-pic-calls got
-enabled by default only in mips-poky-linux-gcc case. MIPS binutils
-ld relies on R_MIPS_JALR relocation to convert 'jalr t9' into 'bal'
-and such relocation is generated only if -mrelax-pic-calls option
-is on.
+Mips global GOT entries do have dynamic relocations and they
+will be caught by cmd_vdso_check Makefile rule. Static PIC
+calls go through mips local GOT entries that do not have
+dynamic relocations. For those 'jalr t9' calls could be present
+but without dynamic relocations and they need to be converted
+to 'bal' calls by linker.
 
-Please note 'jalr t9' conversion to 'bal' can happen only to static
-functions. These static PIC calls use mips local GOT entries that
-are supposed to be filled with start of DSO value by run-time linker
-(missing in VDSO case) and they do not have dynamic relocations.
-Global mips GOT entries must have dynamic relocations and they should
-be prevented by cmd_vdso_check Makefile rule.
+Add additional build time check to make sure that no 'jalr t9'
+slip through because of some toolchain misconfiguration that
+prevents 'jalr t9' to 'bal' conversion.
 
-Solution call out -mrelax-pic-calls and -mexplicit-relocs options
-explicitly while compiling MIPS vdso code. That would get correct
-and consistent between different toolchains behaviour.
-
-Reported-by: Bruce Ashfield <bruce.ashfield@gmail.com>
 Signed-off-by: Victor Kamensky <kamensky@cisco.com>
 Signed-off-by: Paul Burton <paulburton@kernel.org>
 Cc: linux-mips@vger.kernel.org
 Cc: Ralf Baechle <ralf@linux-mips.org>
 Cc: James Hogan <jhogan@kernel.org>
 Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc: bruce.ashfield@gmail.com
 Cc: richard.purdie@linuxfoundation.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/vdso/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/vdso/Makefile | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index e05938997e696..96afd73c94e8a 100644
+index e8585a22b925c..bfb65b2d57c7f 100644
 --- a/arch/mips/vdso/Makefile
 +++ b/arch/mips/vdso/Makefile
-@@ -29,6 +29,7 @@ endif
- cflags-vdso := $(ccflags-vdso) \
- 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
- 	-O3 -g -fPIC -fno-strict-aliasing -fno-common -fno-builtin -G 0 \
-+	-mrelax-pic-calls -mexplicit-relocs \
- 	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
- 	$(call cc-option, -fno-asynchronous-unwind-tables) \
- 	$(call cc-option, -fno-stack-protector)
+@@ -93,12 +93,18 @@ GCOV_PROFILE := n
+ UBSAN_SANITIZE := n
+ KCOV_INSTRUMENT := n
+ 
++# Check that we don't have PIC 'jalr t9' calls left
++quiet_cmd_vdso_mips_check = VDSOCHK $@
++      cmd_vdso_mips_check = if $(OBJDUMP) --disassemble $@ | egrep -h "jalr.*t9" > /dev/null; \
++		       then (echo >&2 "$@: PIC 'jalr t9' calls are not supported"; \
++			     rm -f $@; /bin/false); fi
++
+ #
+ # Shared build commands.
+ #
+ 
+ quiet_cmd_vdsold_and_vdso_check = LD      $@
+-      cmd_vdsold_and_vdso_check = $(cmd_vdsold); $(cmd_vdso_check)
++      cmd_vdsold_and_vdso_check = $(cmd_vdsold); $(cmd_vdso_check); $(cmd_vdso_mips_check)
+ 
+ quiet_cmd_vdsold = VDSO    $@
+       cmd_vdsold = $(CC) $(c_flags) $(VDSO_LDFLAGS) \
 -- 
 2.20.1
 
