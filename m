@@ -2,197 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BB518C6A7
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2020 05:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A75318CCC3
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2020 12:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726831AbgCTEyq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 20 Mar 2020 00:54:46 -0400
-Received: from foss.arm.com ([217.140.110.172]:44408 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725446AbgCTEyq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 20 Mar 2020 00:54:46 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C0289101E;
-        Thu, 19 Mar 2020 21:54:45 -0700 (PDT)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.1.20])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7AE3D3F52E;
-        Thu, 19 Mar 2020 21:54:38 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        nouveau@lists.freedesktop.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] mm/thp: Rename pmd_mknotpresent() as pmd_mknotvalid()
-Date:   Fri, 20 Mar 2020 10:24:17 +0530
-Message-Id: <1584680057-13753-3-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1584680057-13753-1-git-send-email-anshuman.khandual@arm.com>
-References: <1584680057-13753-1-git-send-email-anshuman.khandual@arm.com>
+        id S1727152AbgCTLWT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 20 Mar 2020 07:22:19 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:37241 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726951AbgCTLWT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 Mar 2020 07:22:19 -0400
+Received: by mail-ot1-f66.google.com with SMTP id i12so5606346otp.4
+        for <linux-mips@vger.kernel.org>; Fri, 20 Mar 2020 04:22:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
+        b=Pf/weUAfOIiJrSxirpBihZi6rDPdhyQPdqV31VjwvFYCZrXzvBkOQEdBeDD+fX+N79
+         qt9tmCm3FjbnRdoqGWpCa20Uk5e1bhGZ/0wJS+wlw72uJad71tcUBjcoeSwEUuruvXcA
+         84tRSqCB2Tph2tBoxOjpJV1x/Ea/J8W5HzqXPv65IQxNfJKY1At/wswC5dSURMa29aoD
+         8zo4+xruOlzLz3L4vwtTRqRx9ghKaKGisLI9y4mD1Sh4zDOfgU90m4NEBHVFFDUWfnA4
+         NQH6UOJvtwAQlpwMApniIE8f8/D2Yc9OrACifoz9y0lKr31XZXe0ZPRAGdpIASeffTj+
+         mh1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
+        b=kv5oBgYSA4BahQPVmXu3Btct6VeNsmuvsrZoQVd5Ek2G011GARxmD1kz3TVb5M7Dr0
+         wdHXGvp6thF8OJ6RgDmnS6+QtIWkjCdtlBaaN+lQNunzKbwUoh75xuNgH2iRyFTpdjZV
+         YsHyPB1+9RKYasDHbxxgaLoom82tpkAmYZ00szps752JqkD8buwzoVwZ1CN6R4o/DIxB
+         Ufpg42vhMhPRfbqwrVumYSQhwNGpttkpa4PVocbnzYXmsT/A39Gyx+bgdgK4A6AQ7hj8
+         oovi4yCVo7BOUBbGERgEjD+WYkvm+JMcfVC8yApwRLyq9p7ofkc0g0mzAAH0dkV9uQfk
+         sv4Q==
+X-Gm-Message-State: ANhLgQ2pbw+fgFgu9IuHC48ndX+DNd4jYMbYGwGPyhoWuYsb5uQeFysi
+        xN+18hL25qgEmwgzs9pIDWT1f9UtrS7l63stTRg=
+X-Google-Smtp-Source: ADFU+vsduRj3hrCf9DhK2bNvKDpHo5/uVyU9cffULt+Uh+xPEULP1CtCYadaVmwGXRoaldTKMt0qeMlG0eCXLSlrUpo=
+X-Received: by 2002:a05:6830:3151:: with SMTP id c17mr6555852ots.310.1584703339020;
+ Fri, 20 Mar 2020 04:22:19 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6838:40c6:0:0:0:0 with HTTP; Fri, 20 Mar 2020 04:22:18
+ -0700 (PDT)
+From:   ECOWAS COMMITEE <ecowasmonitoringcommitteeabj@gmail.com>
+Date:   Fri, 20 Mar 2020 11:22:18 +0000
+Message-ID: <CAHHubrYe0Tme3z6y4=35rwkeKtHK_aNvGc957sh9eWYyPOf1Vg@mail.gmail.com>
+Subject: HAPPY SURVIVAL OF CORONAVIRUS
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-pmd_present() is expected to test positive after pmdp_mknotpresent() as the
-PMD entry still points to a valid huge page in memory. pmdp_mknotpresent()
-implies that given PMD entry is just invalidated from MMU perspective while
-still holding on to pmd_page() referred valid huge page thus also clearing
-pmd_present() test. This creates the following situation which is counter
-intuitive.
+Dear Sir/Madam
 
-[pmd_present(pmd_mknotpresent(pmd)) = true]
+HAPPY SURVIVAL OF CORONAVIRUS
 
-This renames pmd_mknotpresent() as pmd_mknotvalid() reflecting the helper's
-functionality more accurately while changing the above mentioned situation
-as follows. This does not create any functional change.
+We the West African Monitoring Committee of the West African Economic
+Community(ECOWAS)are contacting you for a business transaction which
+we feel will be of great interest to you.
 
-[pmd_present(pmd_mknotvalid(pmd)) = true]
+Our duty is to see to the coming in and out of funds into this sub
+region.There is a fund which we confiscated worth of $12.5 million
+dollars.We will like you to receive this fund on your name in your
+account and as well helping us in the investment.
 
-This is not applicable for platforms that define own pmdp_invalidate() via
-__HAVE_ARCH_PMDP_INVALIDATE. Suggestion for renaming came during a previous
-discussion here.
+You are advised to contact us as soon as you get this message for
+details of the transaction if you find it interesting.
 
-https://patchwork.kernel.org/patch/11019637/
+Best Regards,
 
-Cc: Vineet Gupta <vgupta@synopsys.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: nouveau@lists.freedesktop.org
-Cc: linux-snps-arc@lists.infradead.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-mips@vger.kernel.org
-Cc: x86@kernel.org
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
+Mr John Aka
 
-Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/arc/include/asm/hugepage.h       | 2 +-
- arch/arm/include/asm/pgtable-3level.h | 2 +-
- arch/arm64/include/asm/pgtable.h      | 2 +-
- arch/mips/include/asm/pgtable.h       | 2 +-
- arch/x86/include/asm/pgtable.h        | 2 +-
- arch/x86/mm/kmmio.c                   | 2 +-
- mm/pgtable-generic.c                  | 2 +-
- 7 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/arch/arc/include/asm/hugepage.h b/arch/arc/include/asm/hugepage.h
-index 30ac40fed2c5..98d56267050f 100644
---- a/arch/arc/include/asm/hugepage.h
-+++ b/arch/arc/include/asm/hugepage.h
-@@ -26,7 +26,7 @@ static inline pmd_t pte_pmd(pte_t pte)
- #define pmd_mkold(pmd)		pte_pmd(pte_mkold(pmd_pte(pmd)))
- #define pmd_mkyoung(pmd)	pte_pmd(pte_mkyoung(pmd_pte(pmd)))
- #define pmd_mkhuge(pmd)		pte_pmd(pte_mkhuge(pmd_pte(pmd)))
--#define pmd_mknotpresent(pmd)	pte_pmd(pte_mknotpresent(pmd_pte(pmd)))
-+#define pmd_mknotvalid(pmd)	pte_pmd(pte_mknotpresent(pmd_pte(pmd)))
- #define pmd_mkclean(pmd)	pte_pmd(pte_mkclean(pmd_pte(pmd)))
- 
- #define pmd_write(pmd)		pte_write(pmd_pte(pmd))
-diff --git a/arch/arm/include/asm/pgtable-3level.h b/arch/arm/include/asm/pgtable-3level.h
-index ad55ab068dbf..2943cdf2828b 100644
---- a/arch/arm/include/asm/pgtable-3level.h
-+++ b/arch/arm/include/asm/pgtable-3level.h
-@@ -241,7 +241,7 @@ PMD_BIT_FUNC(mkyoung,   |= PMD_SECT_AF);
- #define pmdp_establish generic_pmdp_establish
- 
- /* represent a notpresent pmd by faulting entry, this is used by pmdp_invalidate */
--static inline pmd_t pmd_mknotpresent(pmd_t pmd)
-+static inline pmd_t pmd_mknotvalid(pmd_t pmd)
- {
- 	return __pmd(pmd_val(pmd) & ~L_PMD_SECT_VALID);
- }
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 538c85e62f86..28cdd97578a5 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -366,7 +366,7 @@ static inline int pmd_protnone(pmd_t pmd)
- #define pmd_mkclean(pmd)	pte_pmd(pte_mkclean(pmd_pte(pmd)))
- #define pmd_mkdirty(pmd)	pte_pmd(pte_mkdirty(pmd_pte(pmd)))
- #define pmd_mkyoung(pmd)	pte_pmd(pte_mkyoung(pmd_pte(pmd)))
--#define pmd_mknotpresent(pmd)	(__pmd(pmd_val(pmd) & ~PMD_SECT_VALID))
-+#define pmd_mknotvalid(pmd)	(__pmd(pmd_val(pmd) & ~PMD_SECT_VALID))
- 
- #define pmd_thp_or_huge(pmd)	(pmd_huge(pmd) || pmd_trans_huge(pmd))
- 
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index aef5378f909c..2a66dee3a9b8 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -615,7 +615,7 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
- 	return pmd;
- }
- 
--static inline pmd_t pmd_mknotpresent(pmd_t pmd)
-+static inline pmd_t pmd_mknotvalid(pmd_t pmd)
- {
- 	pmd_val(pmd) &= ~(_PAGE_PRESENT | _PAGE_VALID | _PAGE_DIRTY);
- 
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 7e118660bbd9..6279668d430f 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -589,7 +589,7 @@ static inline pud_t pfn_pud(unsigned long page_nr, pgprot_t pgprot)
- 	return __pud(pfn | check_pgprot(pgprot));
- }
- 
--static inline pmd_t pmd_mknotpresent(pmd_t pmd)
-+static inline pmd_t pmd_mknotvalid(pmd_t pmd)
- {
- 	return pfn_pmd(pmd_pfn(pmd),
- 		      __pgprot(pmd_flags(pmd) & ~(_PAGE_PRESENT|_PAGE_PROTNONE)));
-diff --git a/arch/x86/mm/kmmio.c b/arch/x86/mm/kmmio.c
-index 49d7814b59a9..f9f61b934475 100644
---- a/arch/x86/mm/kmmio.c
-+++ b/arch/x86/mm/kmmio.c
-@@ -130,7 +130,7 @@ static void clear_pmd_presence(pmd_t *pmd, bool clear, pmdval_t *old)
- 	pmdval_t v = pmd_val(*pmd);
- 	if (clear) {
- 		*old = v;
--		new_pmd = pmd_mknotpresent(*pmd);
-+		new_pmd = pmd_mknotvalid(*pmd);
- 	} else {
- 		/* Presume this has been called with clear==true previously */
- 		new_pmd = __pmd(*old);
-diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
-index 3d7c01e76efc..5b8055ef4120 100644
---- a/mm/pgtable-generic.c
-+++ b/mm/pgtable-generic.c
-@@ -194,7 +194,7 @@ pgtable_t pgtable_trans_huge_withdraw(struct mm_struct *mm, pmd_t *pmdp)
- pmd_t pmdp_invalidate(struct vm_area_struct *vma, unsigned long address,
- 		     pmd_t *pmdp)
- {
--	pmd_t old = pmdp_establish(vma, address, pmdp, pmd_mknotpresent(*pmdp));
-+	pmd_t old = pmdp_establish(vma, address, pmdp, pmd_mknotvalid(*pmdp));
- 	flush_pmd_tlb_range(vma, address, address + HPAGE_PMD_SIZE);
- 	return old;
- }
--- 
-2.20.1
-
+Chairman
+ECOWAS
+West African Monitoring Committee
+Tel 00225 6716 6756
+Abidjan Cote D'Ivoire
