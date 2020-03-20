@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 970AD18DB99
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2020 00:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B7918DBB4
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2020 00:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727133AbgCTXPi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 20 Mar 2020 19:15:38 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:36786 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727061AbgCTXPi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 Mar 2020 19:15:38 -0400
-Received: by mail-pg1-f194.google.com with SMTP id z72so3833964pgz.3
-        for <linux-mips@vger.kernel.org>; Fri, 20 Mar 2020 16:15:38 -0700 (PDT)
+        id S1726801AbgCTXVJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 20 Mar 2020 19:21:09 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:55226 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726851AbgCTXVJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 Mar 2020 19:21:09 -0400
+Received: by mail-pj1-f65.google.com with SMTP id np9so3160500pjb.4
+        for <linux-mips@vger.kernel.org>; Fri, 20 Mar 2020 16:21:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:content-transfer-encoding:in-reply-to:references
          :subject:from:cc:to:date:message-id:user-agent;
-        bh=FZ6hZNPoLZ3W3C9xVYQQv7OrgmFwsZ++Y7nIhZkGcpo=;
-        b=jiYnz8bVXeq0itP0pxP27HI6/SYFsx300RilDAwVMZYhENQ1YftnGi51BSMCFMEIGD
-         Dkj6k/GK6mNXm2Yd9UV1DDeUbp2pDtxcn3si5eYLO9dS/5edgb66cO+wVwzZAw5SzacK
-         XtZNIOLqeOXUBk4/LwTuH36qyqw46Kl8DFl3o=
+        bh=clkZQy76N5lqDvPEfomSFrpTluUVK0zQr3gsx7h7nC8=;
+        b=Yu/8u83xc3BAK8swCPa1v47AYLOMOLAmKQCRaueAmpwbsZvhLe7j+g4VjaRWcl5977
+         8fC/o3X/U6nxKRhiSjURBtP56L1M68KMGL+Rs1ZlLDmm5u4cAhnafvmSejO0Pqby2rfp
+         hWfTochJhDhieWfuL68RKl+pRruYOx+rwqnvE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:content-transfer-encoding
          :in-reply-to:references:subject:from:cc:to:date:message-id
          :user-agent;
-        bh=FZ6hZNPoLZ3W3C9xVYQQv7OrgmFwsZ++Y7nIhZkGcpo=;
-        b=FLzil0eHdaAREQmpjlFiCVUBjs86/izfIVLvXrXDPBgJy0JIdaKg1cz0MrkYEQMYJH
-         +XPbaGPbo9WLAERpC+R33Lmdi5tjT83pxLZ1zpvqg8E+/8MSIolteGNfVWJuchu1U8TL
-         kbqqhppb6vhoypRpCoYXFX/G2lQIH0OJ6CYEqybuKPz92BBh4zLmSWZCJQS06PTE/nCA
-         M4s/Mm1AgLNIsv+/YfjbZ3WKgHNcC+kUDmocduduavcJ+hjQaMi5BPuFGZt9MccbqKdP
-         FFO0dLH4DlwBqWMcEY46X+PDao/mWsNEi1CRW1iIB3DWI8+8adjy9oqPEDtsTXW+SzZz
-         wpbQ==
-X-Gm-Message-State: ANhLgQ11zy2mWM9dBmoKX62/jaymwlLqTojHdL4uEGUGHTlx/F7FZDo1
-        ZbmWx7kbuOWf2dVD64xrk0chHZ2LvBA=
-X-Google-Smtp-Source: ADFU+vtydY5VUa4/aMdNCqTDJiiTqNfJKc15DKb+C4lCuklstLVnYRMwgrzRNWblISoaq5ADD2/j8w==
-X-Received: by 2002:a63:214c:: with SMTP id s12mr10576578pgm.296.1584746137439;
-        Fri, 20 Mar 2020 16:15:37 -0700 (PDT)
+        bh=clkZQy76N5lqDvPEfomSFrpTluUVK0zQr3gsx7h7nC8=;
+        b=O9nl22M3nRozAMOL7TSEi4kVWh6n860pk3HhZabS7tXzlc0uUvuYnBqkzJgC0eFlkC
+         3mTSe7PmWesBo6kVMwlE/XBn/Vos+IzBarJ/HLrsvGOTbva/FJuL/1p5ZSH3frdzwW/8
+         KS2O6PW6JHCPGWg5By9+HoX6pZx6KiyI10uVs76RXYV8Xsj1f8CIS9LhXKwrhDHQTgNL
+         FvlHhO2rpitTRfW3S+d7WgK8IA9hLiz6u8sW4G8qCs0QCUiuYOvAloxLzCJjMIGNRFdj
+         CJKzMYmek8ymXeqp90lZN+O+HTHgaJTF4qJNmW3uD2Z/J577Ma9bQ/spctmPKFc++lUc
+         ZmaA==
+X-Gm-Message-State: ANhLgQ16QvmmyZqOfMh7CvoLeDryGO2ZvoJM5cmCrSpzzojQ8P+HPwbZ
+        4jpzKzwTQoaoJNWVjX1NlIxtUQ==
+X-Google-Smtp-Source: ADFU+vv6GHvXzRwWkdEiLmO10nDPyub2Yebvzznb5KqbElkhWXj+ptG2lYIyNxGql1P+Jw5Jn/kvcw==
+X-Received: by 2002:a17:902:8e8b:: with SMTP id bg11mr11012475plb.138.1584746467739;
+        Fri, 20 Mar 2020 16:21:07 -0700 (PDT)
 Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id a15sm6552518pfg.77.2020.03.20.16.15.36
+        by smtp.gmail.com with ESMTPSA id w4sm3427639pfc.57.2020.03.20.16.21.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2020 16:15:36 -0700 (PDT)
+        Fri, 20 Mar 2020 16:21:07 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200320145351.32292-27-vincenzo.frascino@arm.com>
-References: <20200320145351.32292-1-vincenzo.frascino@arm.com> <20200320145351.32292-27-vincenzo.frascino@arm.com>
-Subject: Re: [PATCH v5 26/26] arm64: vdso32: Enable Clang Compilation
+In-Reply-To: <20200320145351.32292-19-vincenzo.frascino@arm.com>
+References: <20200320145351.32292-1-vincenzo.frascino@arm.com> <20200320145351.32292-19-vincenzo.frascino@arm.com>
+Subject: Re: [PATCH v5 18/26] arm64: vdso32: Code clean up
 From:   Stephen Boyd <swboyd@chromium.org>
 Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -64,29 +64,34 @@ Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Andrei Vagin <avagin@openvz.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        Nathan Chancellor <natechancellor@gmail.com>
+        Mark Rutland <Mark.Rutland@arm.com>
 To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
         clang-built-linux@googlegroups.com, linux-arch@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, x86@kernel.org
-Date:   Fri, 20 Mar 2020 16:15:35 -0700
-Message-ID: <158474613590.125146.6442368806113128893@swboyd.mtv.corp.google.com>
+Date:   Fri, 20 Mar 2020 16:21:06 -0700
+Message-ID: <158474646622.125146.3263940499372231797@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Quoting Vincenzo Frascino (2020-03-20 07:53:51)
-> Enable Clang Compilation for the vdso32 library.
+Quoting Vincenzo Frascino (2020-03-20 07:53:43)
+> The compat vdso library had some checks that are not anymore relevant.
+
+Can we get the information on why they aren't relevant anymore in the
+commit text? I'd rather not find this commit three years from now and
+have no idea why it was applied.
+
+>=20
+> Remove the unused code from the compat vDSO library.
+>=20
+> Note: This patch is preparatory for a future one that will introduce
+> asm/vdso/processor.h on arm64.
 >=20
 > Cc: Catalin Marinas <catalin.marinas@arm.com>
 > Cc: Will Deacon <will@kernel.org>
-> Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
-> Tested-by: Nathan Chancellor <natechancellor@gmail.com> # build
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 > Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> ---
-
-Tested-by: Stephen Boyd <swboyd@chromium.org>
+> Link: https://lore.kernel.org/lkml/20200317122220.30393-19-vincenzo.frasc=
+ino@arm.com
