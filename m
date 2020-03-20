@@ -2,80 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C75DD18D81F
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2020 20:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A45118DA14
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Mar 2020 22:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726783AbgCTTJE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 20 Mar 2020 15:09:04 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:45076 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726738AbgCTTJD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 Mar 2020 15:09:03 -0400
-Received: by mail-qk1-f194.google.com with SMTP id c145so8031925qke.12
-        for <linux-mips@vger.kernel.org>; Fri, 20 Mar 2020 12:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Coq8Ofu0U4DzajTyhT8NeznOYJKInngYKZ9RcK+J5Zc=;
-        b=TgKMm5iUsoUUoejkZRb1Y2VzGYc8z9CnyuC9wQVsIy7WKcewVGEE8cg2tWoTWOZk+L
-         bJlvH0s02E9ZSOIrQO4TRysFLjONSmPWmBhZ7d2lfxNIa5P/p0Wh76y1rw5cD/+qySCm
-         H4Z1kvipxe9K75PM42OsCC0jvcXW7vXL9P8kzx8GGx0RuMO4raPgTcqbL4nlwT7j6Jx5
-         pxxd/+AIlBLf1+OwW58e+vjPFmfBhvzFDKwZBtOYkbcDFzgcBSATzrSPN+MRCPoOCsRW
-         aZjR05UMvHYtOK4pzcWdBm+pSJAXh9LMnIq43SeMHFZYwgxtB7pfnNktjB1/L4NxuHSK
-         4hJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Coq8Ofu0U4DzajTyhT8NeznOYJKInngYKZ9RcK+J5Zc=;
-        b=EsQBbs3e6+GHtI7z3Wnbe0IKbdLFrVyvyYpfJYgAQfPh3E2vt+jLkneAjQmPue2tqB
-         JoUWkrF7L9/M5ovEZiPv37goUvqvYSKs5OwZdOhDI1rr6R2TVu7/PPws52BatyItn1tK
-         DvUKP/97Z6Vi2jTxe8scF5GdVZC5lxz5b8jlzWtYdPepp0AXTiZGeAy67FJ4xvSRe9xE
-         LziuENzIpcNM6PXBin/NhaZlPTwsywovSr6kZ9XUarSDfw+jJUyh4HSLrsc0V8NaIjKF
-         iCoJB7DYk/VhoZow54jr4k3J0hOSAazv8TzDTpmXbWU9ZIovOv3/Ug0zinnsakzerXFD
-         Ck0A==
-X-Gm-Message-State: ANhLgQ1L1YfO07xVzBL28WfiBRtNlHT/V0oIL8kGtwzCgBdpKhJgmyR6
-        xgNa3vxt6xhgIvrbCluCs+9YNZ1iQnyi/itTx9bFxA==
-X-Google-Smtp-Source: ADFU+vsEZzYu5wnaJbVv/GC3QPoANu+VJJDOnYqV31V+/SH805yGhSM2xF7V5uzn5KioGNJTPk1CCK03/hFMfyEfwrs=
-X-Received: by 2002:a05:620a:95b:: with SMTP id w27mr6169196qkw.238.1584731342710;
- Fri, 20 Mar 2020 12:09:02 -0700 (PDT)
+        id S1727032AbgCTVYa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 20 Mar 2020 17:24:30 -0400
+Received: from eddie.linux-mips.org ([148.251.95.138]:52820 "EHLO
+        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726983AbgCTVYa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 Mar 2020 17:24:30 -0400
+Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
+        with ESMTP id S23992645AbgCTVYZhCTr9 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org> + 1 other);
+        Fri, 20 Mar 2020 22:24:25 +0100
+Date:   Fri, 20 Mar 2020 21:24:25 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc:     Manuel Lauss <manuel.lauss@gmail.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Linux-MIPS <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: Re: [PATCH] MIPS: Loongson: Add model name to /proc/cpuinfo
+In-Reply-To: <788597FA-6AD6-4218-886F-35C0916EA3F2@flygoat.com>
+Message-ID: <alpine.LFD.2.21.2003202109190.2689954@eddie.linux-mips.org>
+References: <1583908414-22858-1-git-send-email-yangtiezhu@loongson.cn> <CAOLZvyHEnnpWWhEAWx9RZASVjjQ=6HTREqwY+LK0hm=J4Wd8Xg@mail.gmail.com> <788597FA-6AD6-4218-886F-35C0916EA3F2@flygoat.com>
 MIME-Version: 1.0
-References: <CAF_dkJCQuF0MaYddfqVRJ-8tNPWVkR8Q0ZYz22DUi9moAWsxeQ@mail.gmail.com>
- <Pine.LNX.4.64.2003061230320.1467@Mobile0.Peter> <CAF_dkJDm=Kk6n-KqFZjabQ8GUY-axrhN4W2CBNmkzy++jBk2=A@mail.gmail.com>
- <alpine.LFD.2.21.2003201517230.2689954@eddie.linux-mips.org>
-In-Reply-To: <alpine.LFD.2.21.2003201517230.2689954@eddie.linux-mips.org>
-From:   Patrick Doyle <wpdster@gmail.com>
-Date:   Fri, 20 Mar 2020 15:08:36 -0400
-Message-ID: <CAF_dkJDBtT=G+i9hPM81ik1zK2aiRbo3T4wT27zbubrunW7+og@mail.gmail.com>
-Subject: Re: Address space in MIPS Linux kernel
-To:     "Maciej W. Rozycki" <macro@linux-mips.org>
-Cc:     post@pfrst.de, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Mar 20, 2020 at 11:39 AM Maciej W. Rozycki <macro@linux-mips.org> wrote:
->  KSEG2 addresses are handed out with virtual allocations, typically
-> `vmalloc' and friends (also used for mapping kernel modules), but also
-> `ioremap' and friends if hardware constraints mandate it.  KSEG0 addresses
-> are handed out with regular allocations made with `kmalloc' and friends,
-> and also `ioremap' and friends where feasible.  Also addresses coming from
-> the kernel executable and the stack will be in KSEG0.
->
->  This is for 32-bit MIPS/Linux configurations; 64-bit ones have additional
-> segments, which will be used accordingly.
->
->  HTH,
->
->   Maciej
-Thanks.  I tracked down the call to vmalloc.  I'm still have no clue
-why we are triggering a kernel panic when/where we do, but it clearly
-does not have anything to do with calling memmove() from KSEG2 space
-to KSEG0 space, and I am now looking elsewhere (like what resources
-may get allocated/locked on the way to that call to memmove() that
-don't get freed/unlocked on the way back up, or what resources were
-not locked that should have been).
---wpd
+On Wed, 11 Mar 2020, Jiaxun Yang wrote:
+
+> __cpu_name[] will be displayed as "cpu model" in cpuinfo, however
+> in x86 world, the name line is started with "model name".
+> Most user applications like lscpu, hwinfo is following x86's rule, we don't have superpower to move all of them.
+> 
+> Also rename "cpu model" will break current ABI, so just create a new array
+> for it would be a better option.
+
+ Well, /proc/cpuinfo is not an ABI, it's meant for human interaction (use 
+`sysfs' for machine processing).
+
+ If tools want to use it anyway, then fine, but they need to adapt to the 
+relative volatility of the free-form text interface, and also learn all 
+the world is not x86 (just like all the MIPS world is not Loongson, so if 
+you argue about adding effectively a duplicate field, then that would have 
+to be applied across all the platforms).  IOW fix the tool and do not work 
+its deficiencies around in the kernel just because it seems easier for you 
+to do.
+
+ Here's how example /proc/cpuinfo looks like on RISC-V/Linux BTW:
+
+processor	: 0
+hart		: 1
+isa		: rv64imafdc
+mmu		: sv39
+uarch		: sifive,rocket0
+
+[...]
+
+-- every Linux platform is different in this respect and tools have to 
+live with that.
+
+  Maciej
