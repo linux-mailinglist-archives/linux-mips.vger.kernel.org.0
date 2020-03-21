@@ -2,106 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D4D18E365
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2020 18:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EDA18E459
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2020 21:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727192AbgCURnM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 21 Mar 2020 13:43:12 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46899 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726961AbgCURnM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 21 Mar 2020 13:43:12 -0400
-Received: by mail-pg1-f196.google.com with SMTP id k191so3631741pgc.13;
-        Sat, 21 Mar 2020 10:43:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=3fStVl9rL3YRgIiAf/TzVVtMNrh3VX50fi0qgiiuA8o=;
-        b=UXIHaUBhFEcnW+OMHvNaZ8x6pk7Kw7xSi1XSqUQ/ypXJwX+/0kjbU9/UcI39UYrFww
-         L4SWYiuz/x5ZDo+euy1EVFm6/xEfsJuGVNtbr58w1aJIyLLbxr5Zvw2YV6+Jz2IFJLx1
-         hSKDnD+ugCfCtYPbwa0qtQZzvaVCFI/U0Hh49Bh/9v4+8cPYNZpxmxPxHCL/ucL4FfPB
-         t55wM9/sifQrsJ2x7qaYOUyTwSXOMqFFX7kbT5BvfLIkW8EyaBXHAHAACDZSlA65LB0e
-         +oYG1mMj2pkG+negyyMWiq2E57sl6r93kYgmOlv5Tvke5FfWZ2pC2/wfVUCgtyT6TaL9
-         9P/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3fStVl9rL3YRgIiAf/TzVVtMNrh3VX50fi0qgiiuA8o=;
-        b=Za4uAK/Rnst3X52J/G6OTQ+l4s/AZHOKh6kKpQ5ZdDLx15z4OYR19Y68wga1kyVUUG
-         ee5zp6q5qTKny4UFqJGpeahJ/qbnOYjH1s7/aAjvoabkGxio6N2MmF1B0inrNYClKF9Z
-         MOd0xVTsyXhNx5gGofVLaVBNvXW8pVFwDfi3J6j7y008urMcx6FX2pPbORPJ3I/qcYNr
-         IUiPrlnt7xGuMXWU6edZb9U/MOBHUwNGMOwT3jQEnIOFM1lfl1EPLWcYQSrcMbwm9rXV
-         eklcwN1zNrtM67GneGGnNA2PoQjkjbwMKjFMWBSJG+MQzQ9NbQcQblBL0Dv5ERnfTyFi
-         MKlg==
-X-Gm-Message-State: ANhLgQ2QqQUUd2GCN1Ivg6KqoHNYnAiZxGyaoY7bqL3CaSA4W3yIPBqY
-        SDFD7Q2H5qPCaJxAoSHqado=
-X-Google-Smtp-Source: ADFU+vtSB9sj3T3LCfhecLdyVMoQimjNCV0Ow3ys209048E+VImdKW1kqpUYGGvxT4nwaYSYvsoI7Q==
-X-Received: by 2002:a63:e856:: with SMTP id a22mr1215468pgk.283.1584812590871;
-        Sat, 21 Mar 2020 10:43:10 -0700 (PDT)
-Received: from localhost ([49.207.51.24])
-        by smtp.gmail.com with ESMTPSA id f127sm8973833pfa.9.2020.03.21.10.43.09
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 21 Mar 2020 10:43:10 -0700 (PDT)
-Date:   Sat, 21 Mar 2020 23:13:03 +0530
-From:   afzal mohammed <afzal.mohd.ma@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, x86@kernel.org,
-        linux-sh@vger.kernel.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-ia64@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-c6x-dev@linux-c6x.org, linux-omap@vger.kernel.org,
-        linux-alpha@vger.kernel.org, Julia Lawall <Julia.Lawall@lip6.fr>,
-        Gilles Muller <Gilles.Muller@lip6.fr>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Michal Marek <michal.lkml@markovi.net>
-Subject: Re: [PATCH 00/18] genirq: Remove setup_irq()
-Message-ID: <20200321174303.GA7930@afzalpc>
-References: <cover.1581478323.git.afzal.mohd.ma@gmail.com>
- <87y2somido.fsf@nanos.tec.linutronix.de>
- <20200227110713.GA5708@afzalpc>
+        id S1728054AbgCUU0I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 21 Mar 2020 16:26:08 -0400
+Received: from mga03.intel.com ([134.134.136.65]:8930 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726846AbgCUU0I (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 21 Mar 2020 16:26:08 -0400
+IronPort-SDR: eFWtV/jdffBkXM4rVldq+kUR+7v4P0+e/PQZsWhjoIrgawmXlglnv9YqdZJV0qwWbLz5tsLmT4
+ fl1VvdtnfLeQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2020 13:26:05 -0700
+IronPort-SDR: wc7DG86xh4vPeKd3LZfA/TbWv8x9O/HuKQW/jGF3O4aUFN/qKwYCQ8SRM7iJWo2KoQnsDSJboM
+ NHtSa3M5ZLog==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,289,1580803200"; 
+   d="scan'208";a="280773532"
+Received: from sjchrist-coffee.jf.intel.com ([10.54.74.202])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Mar 2020 13:26:04 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/9]  KVM: Move x86 init ops to separate struct
+Date:   Sat, 21 Mar 2020 13:25:54 -0700
+Message-Id: <20200321202603.19355-1-sean.j.christopherson@intel.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200227110713.GA5708@afzalpc>
-User-Agent: Mutt/1.9.3 (2018-01-21)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+The non-x86 part of this series is wholly contained in patch 01.  Compared
+to other recent kvm-wide changes, this one is very straightforward (famous
+last words).
 
-On Thu, Feb 27, 2020 at 04:37:13PM +0530, afzal mohammed wrote:
-> On Thu, Feb 27, 2020 at 11:31:15AM +0100, Thomas Gleixner wrote:
+Like a few other architectures, e.g. PPC, x86 uses a set of global hooks
+to call back into vendor code on demand.  A handlful of the x86 hooks are
+used only within the scope of kvm_init().  This series moves the init-only
+hooks to a separate struct, partly to clean up the code a bit, but mainly
+so that the runtime hooks can be made available only after the x86 vendor
+has completed its ->hardware_setup().  While working on a different series
+I spent a fair bit of time scratching my as to why a kvm_x86_ops wasn't
+working, and eventually realized VMX's callback wasn't "ready" because the
+vmcs_config hadn't yet been populated.
 
-> > Vs. merging this series, I suggest the following approach:
-> > 
-> >    - Resubmit the individual changes as single patches or small series
-> >      to the relevant maintainers and subsystem mailing lists. They have
-> >      no dependency on a core change and can be applied where they belong
-> >      to.
-> > 
-> >    - After 5.6-rc6, verify which parts have made their way into
-> >      linux-next and resubmit the ignored ones as a series to me along
-> >      with the removal of the core parts.
-> > 
-> > That way we can avoid conflicting changes between subsystems and the tip
-> > irq/core branch as much as possible.
-> 
-> Okay, i will do accordingly.
+Due to lack of a cross-compiling setup, the non-x86 changes in patch 01
+are untested.
 
-i am on it, is delayed due to the reason as mentioned at,
+v3:
+ - Rebase to kvm/queue, d55c9d4009c7 ("KVM: nSVM: check for EFER ... ").
+   Conflicts galore, but all mechanical in nature.
+ - Drop an SVM patch that was obsoleted by kvm/queue.
+ - Collect an ack. [Marc]
 
-https://lkml.kernel.org/r/20200321172626.GA6323@afzalpc
+v2:
+  - Rebase to kvm/queue, 2c2787938512 ("KVM: selftests: Stop ...")
+  - Collect tags. [Cornelia]
+  - Add a patch to make kvm_x86_ops its own instance and copy
+    {vmx,svm}_x86_ops by value, which saves a memory access on every
+    invocation of a kvm_x86_ops hook. [Paolo]
+  - Add patches to tag {vmx,svm}_x86_ops as __initdata after they're
+    copied by value.
 
-[ not repeating contents here since other mail was sent just now,
-  cc'ing you ]
 
-Regards
-afzal
+Sean Christopherson (9):
+  KVM: Pass kvm_init()'s opaque param to additional arch funcs
+  KVM: x86: Move init-only kvm_x86_ops to separate struct
+  KVM: VMX: Move hardware_setup() definition below vmx_x86_ops
+  KVM: VMX: Configure runtime hooks using vmx_x86_ops
+  KVM: x86: Set kvm_x86_ops only after ->hardware_setup() completes
+  KVM: x86: Copy kvm_x86_ops by value to eliminate layer of indirection
+  KVM: x86: Drop __exit from kvm_x86_ops' hardware_unsetup()
+  KVM: VMX: Annotate vmx_x86_ops as __initdata
+  KVM: SVM: Annotate svm_x86_ops as __initdata
+
+ arch/mips/kvm/mips.c            |   4 +-
+ arch/powerpc/kvm/powerpc.c      |   4 +-
+ arch/s390/kvm/kvm-s390.c        |   4 +-
+ arch/x86/include/asm/kvm_host.h |  33 +--
+ arch/x86/kvm/cpuid.c            |   4 +-
+ arch/x86/kvm/hyperv.c           |   8 +-
+ arch/x86/kvm/kvm_cache_regs.h   |  10 +-
+ arch/x86/kvm/lapic.c            |  30 +--
+ arch/x86/kvm/mmu.h              |   8 +-
+ arch/x86/kvm/mmu/mmu.c          |  32 +--
+ arch/x86/kvm/pmu.c              |  30 +--
+ arch/x86/kvm/pmu.h              |   2 +-
+ arch/x86/kvm/svm.c              |  19 +-
+ arch/x86/kvm/trace.h            |   4 +-
+ arch/x86/kvm/vmx/nested.c       |  17 +-
+ arch/x86/kvm/vmx/nested.h       |   3 +-
+ arch/x86/kvm/vmx/vmx.c          | 371 ++++++++++++++++----------------
+ arch/x86/kvm/x86.c              | 370 +++++++++++++++----------------
+ arch/x86/kvm/x86.h              |   4 +-
+ include/linux/kvm_host.h        |   4 +-
+ virt/kvm/arm/arm.c              |   4 +-
+ virt/kvm/kvm_main.c             |  18 +-
+ 22 files changed, 507 insertions(+), 476 deletions(-)
+
+-- 
+2.24.1
 
