@@ -2,80 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC63418E44F
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Mar 2020 21:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 274FF18E6B5
+	for <lists+linux-mips@lfdr.de>; Sun, 22 Mar 2020 06:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728185AbgCUU02 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 21 Mar 2020 16:26:28 -0400
-Received: from mga03.intel.com ([134.134.136.65]:8932 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728129AbgCUU0L (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 21 Mar 2020 16:26:11 -0400
-IronPort-SDR: K6f7FwiQCcR4C/uj1V1NjyR4IoSKgvF/W1R3DA9i8cJL3jmx9eR9Eack/NAfLBS0TjI2hUdVVb
- 3qlxhE9atoug==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2020 13:26:10 -0700
-IronPort-SDR: +d1x3xGcoMDuPQQfneZxyL4m6x3XXrD/M3lrwE+cYTyLz1d0uqo1zw+BLWPmDuVB5XEPUaYYYI
- Zl4iaWEjHhaQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,289,1580803200"; 
-   d="scan'208";a="280773568"
-Received: from sjchrist-coffee.jf.intel.com ([10.54.74.202])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Mar 2020 13:26:10 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 9/9] KVM: SVM: Annotate svm_x86_ops as __initdata
-Date:   Sat, 21 Mar 2020 13:26:03 -0700
-Message-Id: <20200321202603.19355-10-sean.j.christopherson@intel.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200321202603.19355-1-sean.j.christopherson@intel.com>
-References: <20200321202603.19355-1-sean.j.christopherson@intel.com>
+        id S1725970AbgCVFeR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 22 Mar 2020 01:34:17 -0400
+Received: from out28-195.mail.aliyun.com ([115.124.28.195]:52287 "EHLO
+        out28-195.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725825AbgCVFeR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 22 Mar 2020 01:34:17 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1313025|-1;CH=green;DM=||false|;DS=CONTINUE|ham_system_inform|0.010799-0.000360341-0.988841;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03302;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.H3Ip5oC_1584855242;
+Received: from 192.168.10.227(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.H3Ip5oC_1584855242)
+          by smtp.aliyun-inc.com(10.147.41.120);
+          Sun, 22 Mar 2020 13:34:03 +0800
+Subject: Re: [PATCH v5 08/11] dt-bindings: mips: Add loongson boards
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+References: <20200318062102.8145-1-jiaxun.yang@flygoat.com>
+ <20200318062102.8145-9-jiaxun.yang@flygoat.com>
+Cc:     Huacai Chen <chenhc@lemote.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <5E76F8C7.5010500@wanyeetech.com>
+Date:   Sun, 22 Mar 2020 13:33:59 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.8.0
 MIME-Version: 1.0
+In-Reply-To: <20200318062102.8145-9-jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Tag svm_x86_ops with __initdata now the the struct is copied by value to
-a common x86 instance of kvm_x86_ops as part of kvm_init().
+Hi Jiaxun,
 
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
----
- arch/x86/kvm/svm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2020年03月18日 14:20, Jiaxun Yang wrote:
+> Prepare for later dts.
+>
+> Co-developed-by: Huacai Chen <chenhc@lemote.com>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>
+> --
+> v4-v5:
+> 	Remove unnecessary kernel details.
+> ---
+>   .../bindings/mips/loongson/devices.yaml       | 27 +++++++++++++++++++
+>   1 file changed, 27 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/mips/loongson/devices.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/mips/loongson/devices.yaml b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
+> new file mode 100644
+> index 000000000000..b1f811e251f1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mips/loongson/devices.yaml
+> @@ -0,0 +1,27 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mips/loongson/devices.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson based Platforms Device Tree Bindings
+> +
+> +maintainers:
+> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
+> +description: |
+> +  Devices with a Loongson CPU shall have the following properties.
+> +
+> +properties:
+> +  $nodename:
+> +    const: '/'
+> +  compatible:
+> +    oneOf:
+> +
+> +      - description: Generic Loongson3 4Core + RS780E
 
-diff --git a/arch/x86/kvm/svm.c b/arch/x86/kvm/svm.c
-index b61bb306602b..ab2a1cf6c188 100644
---- a/arch/x86/kvm/svm.c
-+++ b/arch/x86/kvm/svm.c
-@@ -7350,7 +7350,7 @@ static void svm_pre_update_apicv_exec_ctrl(struct kvm *kvm, bool activate)
- 	avic_update_access_page(kvm, activate);
- }
- 
--static struct kvm_x86_ops svm_x86_ops __ro_after_init = {
-+static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.hardware_unsetup = svm_hardware_teardown,
- 	.hardware_enable = svm_hardware_enable,
- 	.hardware_disable = svm_hardware_disable,
--- 
-2.24.1
+Maybe "Quad Core" and "Octal Core" are better.
+
+> +        items:
+> +          - const: loongson,loongson3-4core-rs780e
+> +
+> +      - description: Generic Loongson3 8Core + RS780E
+> +        items:
+> +          - const: loongson,loongson3-8core-rs780e
+> +...
 
