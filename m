@@ -2,98 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD5818E7EE
-	for <lists+linux-mips@lfdr.de>; Sun, 22 Mar 2020 10:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6435618EE50
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Mar 2020 04:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbgCVJzi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 22 Mar 2020 05:55:38 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:44330 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726866AbgCVJzi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 22 Mar 2020 05:55:38 -0400
-Received: by mail-pl1-f195.google.com with SMTP id h11so4528243plr.11;
-        Sun, 22 Mar 2020 02:55:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/2MzkSElXxPR2YxyIoEkVcfa13iFyx9aLxRmU5HJX8k=;
-        b=pqI0/sUylZqVpvTeukqO0MzSGLGwLVzv687iis5NqUEJLloAtRMa2uReoeRAoSoOXl
-         oI6RBN9HGFt8mkmepYg/DAn7nd1uaabCpTukKQN9ejdclf447xWqf2bEUrfieAn31ahG
-         VALfXlGCcWmEL+M0sTYxXJg6V3xTKAda5OZ1qcmfnPtOoV2rnScCd32Tl383fqtmZRlP
-         PmrlVPYXv0T+VHymnjBH9b4P7Vch5pIlmpegQmivHi5DSoerHGZsKVDE3zcdsJtQ1aiy
-         ptvmBG0E1MHra4CnVFIND/pI4CNPVMQZrUAYfbPFfQcggSgRNSM14oBg2/770GOk4A5v
-         z8kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=/2MzkSElXxPR2YxyIoEkVcfa13iFyx9aLxRmU5HJX8k=;
-        b=qGUCgw/uu70TsOAz04GS5kP5/M4SkvRyPORx+Tsd2RDA3pCIpNFU/S/OW8O+5PWY4g
-         n9EHXJifMiDXVWYv2WkrMERC2YkbL/xJwvjBTBYrd/YW5nLEY+62AVzdkB9zROIVqjiL
-         xeslPhVj/O7PGeSY9bhlkmwNQ2Qcy51XiOQBlujUXykfp39JozP34cI1RLX3nLMarMnc
-         aWf8fb1BoeiUiEIiuhsMTaZhavubdimLeIKbAOf0SVA2I6D8776/cXeiJpHRJyka99Pi
-         8h8t5UG+CeNivnAa2lr5XbcVmxdAP90Je294tl69sqnfmOg57N4fI+bO9lvDLz6WdRVZ
-         Kv2A==
-X-Gm-Message-State: ANhLgQ3gP5QvSf6Kh4ZV0JVZLsPpGE5XLr10BJ8ip4R7VCjrwxsI1AD7
-        5IM7gqnzuWLV1fXmhpVZ02k=
-X-Google-Smtp-Source: ADFU+vsDvnqFFrCKd23CR7w6aEcbIIYEkQgr2wGogrhdgAHGqQr3/iW0p0pGdWv6MEAc0U9JBji8DQ==
-X-Received: by 2002:a17:90b:300c:: with SMTP id hg12mr17559132pjb.96.1584870936422;
-        Sun, 22 Mar 2020 02:55:36 -0700 (PDT)
-Received: from xps.vpn2.bfsu.edu.cn ([103.125.232.133])
-        by smtp.gmail.com with ESMTPSA id h64sm9963548pfg.191.2020.03.22.02.55.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Mar 2020 02:55:35 -0700 (PDT)
-From:   YunQiang Su <syq@debian.org>
-To:     mtk.manpages@gmail.com
-Cc:     linux-mips@vger.kernel.org, linux-man@vger.kernel.org,
-        linux-kernel@vger.kernel.org, YunQiang Su <syq@debian.org>
-Subject: [PATCH v2] getauxval.3: MIPS, AT_BASE_PLATFORM passes ISA level
-Date:   Sun, 22 Mar 2020 17:55:27 +0800
-Message-Id: <20200322095527.397716-1-syq@debian.org>
-X-Mailer: git-send-email 2.26.0.rc2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727205AbgCWC70 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 22 Mar 2020 22:59:26 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:56006 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727050AbgCWC70 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 22 Mar 2020 22:59:26 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxP+gDJnhedaseAA--.407S2;
+        Mon, 23 Mar 2020 10:59:15 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH v2 0/3] Add basic support for Loongson 7A1000 bridge chip
+Date:   Mon, 23 Mar 2020 10:59:12 +0800
+Message-Id: <1584932355-3642-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9AxP+gDJnhedaseAA--.407S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw4UGr4xXFW7tryfGF48WFg_yoW8KFW7pF
+        WF9a1rWrs8Wry7Aasxur48ur4rArn3JrZrWa17Gr1kAa98XF10qr929a15t3W29r9a9a1U
+        Xry8WrWDKa15CaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
+        Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjg_-DUUUU
+        U==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Since Linux 5.7, on MIPS, we use AT_BASE_PLATFORM to pass ISA level.
-The values may be:
-  mips2, mips3, mips4, mips5,
-  mips32, mips32r2, mips32r6,
-  mips64, mips64r2, mips64r6.
+The Loongson 7A1000 bridge chip has been released for several years
+since the second half of 2017, but it is not supported by the Linux
+mainline kernel while it only works well with the Loongson internal
+kernel version. When I update the latest version of Linux mainline
+kernel on the Loongson 3A3000 CPU and 7A1000 bridge chip system,
+the boot process failed and I feel depressed.
 
-This behavior is different with PowerPC.
+The 7A1000 bridge chip is used a lot with 3A3000 or 3A4000 CPU in
+the most Loongson desktop and sever products, it is important to
+support Loongson 7A1000 bridge chip by the Linux mainline kernel.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=e585b768da111f2c2d413de6214e83bbdfee8f22
-Signed-off-by: YunQiang Su <syq@debian.org>
+This patch series adds the basic support for the Loongson 7A1000
+bridge chip, when apply these patches based on linux-5.6-rc7, the
+boot process is successful and we can login normally used with the
+latest firmware and discrete graphics card, the next work to do is
+power management and some other controller device drivers.
 
-----
-v1 -> v2: fix typo
----
- man3/getauxval.3 | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Additionally, when I git clone mips code [1], the speed is too slow
+and clone always failed, so this patch series is based on the latest
+linux-5.6-rc7 [2].
 
-diff --git a/man3/getauxval.3 b/man3/getauxval.3
-index 456371c6a..bcc116dd2 100644
---- a/man3/getauxval.3
-+++ b/man3/getauxval.3
-@@ -60,9 +60,10 @@ values are present on all architectures.
- The base address of the program interpreter (usually, the dynamic linker).
- .TP
- .BR AT_BASE_PLATFORM
--A pointer to a string identifying the real platform; may differ from
--.BR AT_PLATFORM
--(PowerPC only).
-+A pointer to a string (PowerPC and MIPS only).
-+On PowerPC, this identifies the real platform; may differ from
-+.BR AT_PLATFORM "."
-+On MIPS, this identifies the ISA level (Since 5.7).
- .TP
- .BR AT_CLKTCK
- The frequency with which
+If you have any questions and suggestions, please let me know.
+
+Thanks,
+
+Tiezhu Yang
+
+v2:
+  - The split patch series about Loongson vendor ID and SATA controller
+    has been merged into the linux-block.git by Jens Axboe [3].
+
+  - Think about using hierarchy IRQ domain in the patch of interrupt
+    controller, and this maybe depend on the patch series by Jiaxun
+    ("Modernize Loongson64 Machine"), so the patch about interrupt is
+    not included in this v2 patch series.
+
+[1] git clone https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
+[2] git clone https://github.com/torvalds/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?h=for-next&id=9acb9fe18d86
+    https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?h=for-next&id=e49bd683e00b
+
+Tiezhu Yang (3):
+  MIPS: Loongson: Get host bridge information
+  MIPS: Loongson: Add DMA support for 7A1000
+  MIPS: Loongson: Add PCI support for 7A1000
+
+ arch/mips/include/asm/mach-loongson64/boot_param.h | 20 ++++++
+ arch/mips/loongson64/dma.c                         |  9 ++-
+ arch/mips/loongson64/env.c                         | 20 ++++++
+ arch/mips/loongson64/init.c                        | 17 +++++
+ arch/mips/pci/ops-loongson3.c                      | 72 ++++++++++++++++++++--
+ 5 files changed, 131 insertions(+), 7 deletions(-)
+
 -- 
-2.26.0.rc2
+2.1.0
 
