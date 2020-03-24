@@ -2,203 +2,212 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0783B19161C
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2020 17:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D13241916D7
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2020 17:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728840AbgCXQUH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 Mar 2020 12:20:07 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:56062 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727951AbgCXQUG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Mar 2020 12:20:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=yyuJrtfVyD3fUEUFSeqLWA3IrF2yJjSqrC/bf4Fe8oE=; b=aRhKBcCCDp5rWVHuLJVj2GR1VF
-        qk/OKAziUNpNfEjiYSZLkTOU11V5e3nwUyYl9IP1OO+LX5zJKHNipJ4WgQhlSYo2bwtiO4On2Cxf8
-        vhn4uf1XDH76MK4/rvHxTYula2UEomkUU75pRE9CfDDXfIub8UDjez6t8CM1N+h0emCQvQRrlzuYZ
-        h63Ov535QYsewymF4p4C/p1CY4tXa+q9pNNKKqbybvnpGV3hVjiyaY0GV+GADzMj9UDPbNtC3nYSL
-        91UVuhq8TLFJ80V58VrgM9sOU+Q/vCEVDrSLQ9EWCQCbIbco1Ey9XgOuBgqhG0rim6PVjGxiW9wCG
-        vq2lQGvw==;
-Received: from [2001:4bb8:18c:2a9e:999c:283e:b14a:9189] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jGmHc-0003PT-Vq; Tue, 24 Mar 2020 16:20:05 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] MIPS: use ioremap_page_range
-Date:   Tue, 24 Mar 2020 17:15:25 +0100
-Message-Id: <20200324161525.754181-7-hch@lst.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200324161525.754181-1-hch@lst.de>
-References: <20200324161525.754181-1-hch@lst.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+        id S1727347AbgCXQti (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 Mar 2020 12:49:38 -0400
+Received: from condef-06.nifty.com ([202.248.20.71]:16495 "EHLO
+        condef-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725767AbgCXQti (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Mar 2020 12:49:38 -0400
+X-Greylist: delayed 354 seconds by postgrey-1.27 at vger.kernel.org; Tue, 24 Mar 2020 12:49:36 EDT
+Received: from conuserg-12.nifty.com ([10.126.8.75])by condef-06.nifty.com with ESMTP id 02OGerNW005898
+        for <linux-mips@vger.kernel.org>; Wed, 25 Mar 2020 01:41:05 +0900
+Received: from grover.flets-west.jp (softbank126093102113.bbtec.net [126.93.102.113]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id 02OGeCI1005472;
+        Wed, 25 Mar 2020 01:40:12 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 02OGeCI1005472
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1585068013;
+        bh=famtRWyjSfbAbF0DizSZCf3n5XKV3RZa5LsuHJNtpdI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OFracP2Ayh2CibAFHSv7zHXCGwaB3uQgJqaz7E14HAOSq1Aa1fhZQ8U3SH2P19yUo
+         WeQjVOV5Jt7nvamRZ4Xl6ca49BJ4UdA5sh4QdN5dCqHuHhD9+wOFBliIfvimLR1LKn
+         XNVj9kYPBgQmRp+qatxOv6EGmPuxH8WRqQc10HtdM2AzWG65Q7EVtUnRHvgouKyWU7
+         mtIkzsExWFd4HSd/AsPwyNYkgGU7y417B2+QEZCEt63VYKGMW1Egfu9sj06h2Hz8Sm
+         /9YzdB7RK0X6gvM0TY1ax52Zd84PJc+3MnjWUKgEJucQt0JTKRmUsOvmBdiiK5ueT8
+         SglJqk+QTe9tA==
+X-Nifty-SrcIP: [126.93.102.113]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Lobakin <alobakin@dlink.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH] MIPS: mark some functions as weak to avoid conflict with Octeon ones
+Date:   Wed, 25 Mar 2020 01:40:05 +0900
+Message-Id: <20200324164005.8259-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use the generic ioremap_page_range helper instead of reimplementing it.
+MIPS provides multiple definitions for the following functions:
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+  fw_init_cmdline
+  __delay
+  __udelay
+  __ndelay
+  memmove
+  __rmemcpy
+  memcpy
+  __copy_user
+
+The generic ones are defined in lib-y objects, which are overridden by
+the Octeon ones when CONFIG_CAVIUM_OCTEON_SOC is enabled.
+
+The use of EXPORT_SYMBOL in static libraries potentially causes a
+problem for the llvm linker [1]. So, I want to forcibly link lib-y
+objects to vmlinux when CONFIG_MODULES=y.
+
+As a groundwork, we must fix multiple definitions that have been
+hidden by lib-y.
+
+In this case, the generic implementations in arch/mips/lib/ are
+weaker than the ones in arch/mips/cavium-octen/, so annotating __weak
+is a straight-forward solution.
+
+I also removed EXPORT_SYMBOL from the Octeon files to avoid the
+'exported twice' warnings from modpost.
+
+[1]: https://github.com/ClangBuiltLinux/linux/issues/515
+
+Reported-by: kbuild test robot <lkp@intel.com>
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- arch/mips/mm/ioremap.c | 112 ++++-------------------------------------
- 1 file changed, 11 insertions(+), 101 deletions(-)
 
-diff --git a/arch/mips/mm/ioremap.c b/arch/mips/mm/ioremap.c
-index c5b5181c7cd0..b6dad2fd5575 100644
---- a/arch/mips/mm/ioremap.c
-+++ b/arch/mips/mm/ioremap.c
-@@ -14,99 +14,14 @@
- #include <linux/slab.h>
- #include <linux/vmalloc.h>
- #include <linux/mm_types.h>
-+#include <linux/io.h>
- #include <asm/cacheflush.h>
--#include <asm/io.h>
- #include <asm/tlbflush.h>
- #include <ioremap.h>
+ arch/mips/cavium-octeon/csrc-octeon.c   | 4 ----
+ arch/mips/cavium-octeon/octeon-memcpy.S | 3 ---
+ arch/mips/fw/lib/cmdline.c              | 2 +-
+ arch/mips/lib/delay.c                   | 6 +++---
+ arch/mips/lib/memcpy.S                  | 5 +++++
+ 5 files changed, 9 insertions(+), 11 deletions(-)
+
+diff --git a/arch/mips/cavium-octeon/csrc-octeon.c b/arch/mips/cavium-octeon/csrc-octeon.c
+index 124817609ce0..fdc28fb5eda4 100644
+--- a/arch/mips/cavium-octeon/csrc-octeon.c
++++ b/arch/mips/cavium-octeon/csrc-octeon.c
+@@ -153,7 +153,6 @@ void __udelay(unsigned long us)
+ 	while (end > cur)
+ 		cur = read_c0_cvmcount();
+ }
+-EXPORT_SYMBOL(__udelay);
  
- #define IS_LOW512(addr) (!((phys_addr_t)(addr) & (phys_addr_t) ~0x1fffffffULL))
- #define IS_KSEG1(addr) (((unsigned long)(addr) & ~0x1fffffffUL) == CKSEG1)
- 
--static inline void remap_area_pte(pte_t * pte, unsigned long address,
--	phys_addr_t size, phys_addr_t phys_addr, unsigned long flags)
--{
--	phys_addr_t end;
--	unsigned long pfn;
--	pgprot_t pgprot = __pgprot(_PAGE_GLOBAL | _PAGE_PRESENT | __READABLE
--				   | __WRITEABLE | flags);
--
--	address &= ~PMD_MASK;
--	end = address + size;
--	if (end > PMD_SIZE)
--		end = PMD_SIZE;
--	BUG_ON(address >= end);
--	pfn = phys_addr >> PAGE_SHIFT;
--	do {
--		if (!pte_none(*pte)) {
--			printk("remap_area_pte: page already exists\n");
--			BUG();
--		}
--		set_pte(pte, pfn_pte(pfn, pgprot));
--		address += PAGE_SIZE;
--		pfn++;
--		pte++;
--	} while (address && (address < end));
--}
--
--static inline int remap_area_pmd(pmd_t * pmd, unsigned long address,
--	phys_addr_t size, phys_addr_t phys_addr, unsigned long flags)
--{
--	phys_addr_t end;
--
--	address &= ~PGDIR_MASK;
--	end = address + size;
--	if (end > PGDIR_SIZE)
--		end = PGDIR_SIZE;
--	phys_addr -= address;
--	BUG_ON(address >= end);
--	do {
--		pte_t * pte = pte_alloc_kernel(pmd, address);
--		if (!pte)
--			return -ENOMEM;
--		remap_area_pte(pte, address, end - address, address + phys_addr, flags);
--		address = (address + PMD_SIZE) & PMD_MASK;
--		pmd++;
--	} while (address && (address < end));
--	return 0;
--}
--
--static int remap_area_pages(unsigned long address, phys_addr_t phys_addr,
--	phys_addr_t size, unsigned long flags)
--{
--	int error;
--	pgd_t * dir;
--	unsigned long end = address + size;
--
--	phys_addr -= address;
--	dir = pgd_offset(&init_mm, address);
--	flush_cache_all();
--	BUG_ON(address >= end);
--	do {
--		p4d_t *p4d;
--		pud_t *pud;
--		pmd_t *pmd;
--
--		error = -ENOMEM;
--		p4d = p4d_alloc(&init_mm, dir, address);
--		if (!p4d)
--			break;
--		pud = pud_alloc(&init_mm, p4d, address);
--		if (!pud)
--			break;
--		pmd = pmd_alloc(&init_mm, pud, address);
--		if (!pmd)
--			break;
--		if (remap_area_pmd(pmd, address, end - address,
--					 phys_addr + address, flags))
--			break;
--		error = 0;
--		address = (address + PGDIR_SIZE) & PGDIR_MASK;
--		dir++;
--	} while (address && (address < end));
--	flush_tlb_all();
--	return error;
--}
--
- static int __ioremap_check_ram(unsigned long start_pfn, unsigned long nr_pages,
- 			       void *arg)
+ void __ndelay(unsigned long ns)
  {
-@@ -135,7 +50,7 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, unsigned long size,
- 	unsigned long offset, pfn, last_pfn;
- 	struct vm_struct *area;
- 	phys_addr_t last_addr;
--	void *addr;
-+	unsigned long vaddr;
- 	void __iomem *cpu_addr;
+@@ -167,7 +166,6 @@ void __ndelay(unsigned long ns)
+ 	while (end > cur)
+ 		cur = read_c0_cvmcount();
+ }
+-EXPORT_SYMBOL(__ndelay);
  
- 	cpu_addr = plat_ioremap(phys_addr, size, flags);
-@@ -183,27 +98,22 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, unsigned long size,
- 	area = get_vm_area(size, VM_IOREMAP);
- 	if (!area)
- 		return NULL;
--	addr = area->addr;
--	if (remap_area_pages((unsigned long) addr, phys_addr, size, flags)) {
--		vunmap(addr);
-+	vaddr = (unsigned long)area->addr;
+ void __delay(unsigned long loops)
+ {
+@@ -179,8 +177,6 @@ void __delay(unsigned long loops)
+ 	while (end > cur)
+ 		cur = read_c0_cvmcount();
+ }
+-EXPORT_SYMBOL(__delay);
+-
+ 
+ /**
+  * octeon_io_clk_delay - wait for a given number of io clock cycles to pass.
+diff --git a/arch/mips/cavium-octeon/octeon-memcpy.S b/arch/mips/cavium-octeon/octeon-memcpy.S
+index 0a7c9834b81c..3eb8d1a72d7f 100644
+--- a/arch/mips/cavium-octeon/octeon-memcpy.S
++++ b/arch/mips/cavium-octeon/octeon-memcpy.S
+@@ -147,11 +147,9 @@
+  */
+ 	.align	5
+ LEAF(memcpy)					/* a0=dst a1=src a2=len */
+-EXPORT_SYMBOL(memcpy)
+ 	move	v0, dst				/* return value */
+ __memcpy:
+ FEXPORT(__copy_user)
+-EXPORT_SYMBOL(__copy_user)
+ 	/*
+ 	 * Note: dst & src may be unaligned, len may be 0
+ 	 * Temps
+@@ -438,7 +436,6 @@ s_exc:
+ 
+ 	.align	5
+ LEAF(memmove)
+-EXPORT_SYMBOL(memmove)
+ 	ADD	t0, a0, a2
+ 	ADD	t1, a1, a2
+ 	sltu	t0, a1, t0			# dst + len <= src -> memcpy
+diff --git a/arch/mips/fw/lib/cmdline.c b/arch/mips/fw/lib/cmdline.c
+index 6ecda64ad184..e1f9a0c23005 100644
+--- a/arch/mips/fw/lib/cmdline.c
++++ b/arch/mips/fw/lib/cmdline.c
+@@ -16,7 +16,7 @@ int fw_argc;
+ int *_fw_argv;
+ int *_fw_envp;
+ 
+-void __init fw_init_cmdline(void)
++void __init __weak fw_init_cmdline(void)
+ {
+ 	int i;
+ 
+diff --git a/arch/mips/lib/delay.c b/arch/mips/lib/delay.c
+index 68c495ed71e3..ba0ae7da5ced 100644
+--- a/arch/mips/lib/delay.c
++++ b/arch/mips/lib/delay.c
+@@ -24,7 +24,7 @@
+ #define GCC_DADDI_IMM_ASM() "r"
+ #endif
+ 
+-void __delay(unsigned long loops)
++void __weak __delay(unsigned long loops)
+ {
+ 	__asm__ __volatile__ (
+ 	"	.set	noreorder				\n"
+@@ -48,7 +48,7 @@ EXPORT_SYMBOL(__delay);
+  * a constant)
+  */
+ 
+-void __udelay(unsigned long us)
++void __weak __udelay(unsigned long us)
+ {
+ 	unsigned int lpj = raw_current_cpu_data.udelay_val;
+ 
+@@ -56,7 +56,7 @@ void __udelay(unsigned long us)
+ }
+ EXPORT_SYMBOL(__udelay);
+ 
+-void __ndelay(unsigned long ns)
++void __weak __ndelay(unsigned long ns)
+ {
+ 	unsigned int lpj = raw_current_cpu_data.udelay_val;
+ 
+diff --git a/arch/mips/lib/memcpy.S b/arch/mips/lib/memcpy.S
+index f7994d936505..f2f58326b927 100644
+--- a/arch/mips/lib/memcpy.S
++++ b/arch/mips/lib/memcpy.S
+@@ -598,6 +598,9 @@ SEXC(1)
+ 	 nop
+ 	.endm
+ 
++	.weak memmove
++	.weak __rmemcpy
 +
-+	flags |= _PAGE_GLOBAL | _PAGE_PRESENT | __READABLE | __WRITEABLE;
-+	if (ioremap_page_range(vaddr, vaddr + size, phys_addr,
-+			__pgprot(flags))) {
-+		free_vm_area(area);
- 		return NULL;
- 	}
- 
--	return (void __iomem *) (offset + (char *)addr);
-+	return (void __iomem *)(vaddr + offset);
- }
- EXPORT_SYMBOL(ioremap_prot);
- 
- void iounmap(const volatile void __iomem *addr)
- {
--	struct vm_struct *p;
--
--	if (plat_iounmap(addr) || IS_KSEG1(addr))
--		return;
--
--	p = remove_vm_area((void *) (PAGE_MASK & (unsigned long __force) addr));
--	if (!p)
--		printk(KERN_ERR "iounmap: bad address %p\n", addr);
--
--	kfree(p);
-+	if (!plat_iounmap(addr) && !IS_KSEG1(addr))
-+		vunmap((void *)((unsigned long)addr & PAGE_MASK));
- }
- EXPORT_SYMBOL(iounmap);
+ 	.align	5
+ LEAF(memmove)
+ EXPORT_SYMBOL(memmove)
+@@ -655,6 +658,8 @@ LEAF(__rmemcpy)					/* a0=dst a1=src a2=len */
+  * the number of uncopied bytes.
+  * memcpy sets v0 to dst.
+  */
++	.weak memcpy
++	.weak __copy_user
+ 	.align	5
+ LEAF(memcpy)					/* a0=dst a1=src a2=len */
+ EXPORT_SYMBOL(memcpy)
 -- 
-2.25.1
+2.17.1
 
