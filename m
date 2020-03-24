@@ -2,196 +2,158 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9748319145F
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2020 16:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 645251914DF
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2020 16:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727680AbgCXP2O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 Mar 2020 11:28:14 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:37887 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727699AbgCXP2N (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Mar 2020 11:28:13 -0400
-Received: by mail-pl1-f195.google.com with SMTP id x1so3497543plm.4
-        for <linux-mips@vger.kernel.org>; Tue, 24 Mar 2020 08:28:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=x+18KwjdW7xn5gJkSFR3X8gc0R4qDrX19hXMt3Pj6ho=;
-        b=pvUrJGil7R+6087PktRP0/DECaIQVODZg2s3+A40va3GDuZgZJd/rEpxH0IDIITB39
-         LIT3rFOghdff2XoPs/frGcHKhiobNuOAkPX4mJMqXszaDO4PhTfd8ugtyX+dpOSs49tS
-         kCVVsV2r3IdqK2aTziiqgZFaqJZa2BHugJRW/bHnO/obVGywPzwCWHmTo8TUqO5SPQGp
-         5Egsvu96gJ5/MAi1Fo5kankhyEj6HSAxcPQ0ydC3bkwkZcEpjLQzoogJxcn3ECC8z30S
-         FmPygP1OwqGgUIsTe4WBmYsr6e+MG7gau5eNBLI3tzJDf86zngiYu2FoH8dD0npDaS56
-         aKTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=x+18KwjdW7xn5gJkSFR3X8gc0R4qDrX19hXMt3Pj6ho=;
-        b=dA6x9eukLFDyLm2AzbJmxm2lE1J7h68odkeZjoOBfvmW5NEjxOatR6mwpZPlD/4fpr
-         i1UiHBGIIUh2NYjSXQj2VXVyPPwP4/LapKwAUkK5RTHy6pZQHko3N5+i8UDmdnWyCsyW
-         F5s2aoUYfUt6kAa5DY/Wr9riu6QwfwOkAcYXnUoKf18zluzcOvL/B/LGYYZCXbX3P57k
-         XwHtImfPWfMmr2kM1Ph2Rf/kHdjeOt6GeuFJcdv9vcC9h4Ut77ZRCN1moMzS2NzgsilJ
-         GdueZiCb3AcYxf5hYbP4Tv6SDLj30uE9yk5o5PaefP9Z3mqTFFW8AcXEOUIqLytUCHA6
-         VZKw==
-X-Gm-Message-State: ANhLgQ2SmQ/jzCCO1sOSu2JznYgqZ8ehRCe1xMrwuGxyofDog3+1eEAk
-        WZDiO8iPSqgjvx9QkSwfbaA=
-X-Google-Smtp-Source: ADFU+vuyf/gEhAf3CAGcpb87/uvQf3XVXrSZ6HrgPkNdzqZ0NlTq0YZRD0V+4G7cP1Qlq1Sa6bwrJw==
-X-Received: by 2002:a17:90a:2042:: with SMTP id n60mr6078928pjc.0.1585063691180;
-        Tue, 24 Mar 2020 08:28:11 -0700 (PDT)
-Received: from titan.hq.cloud.yunionyun.com ([47.244.19.249])
-        by smtp.gmail.com with ESMTPSA id k6sm1602879pfa.214.2020.03.24.08.28.08
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 24 Mar 2020 08:28:10 -0700 (PDT)
-From:   Yousong Zhou <yszhou4tech@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
-        Yousong Zhou <yszhou4tech@gmail.com>
-Subject: [PATCH v2] MIPS: Exclude more dsemul code when CONFIG_MIPS_FP_SUPPORT=n
-Date:   Tue, 24 Mar 2020 23:27:51 +0800
-Message-Id: <20200324152751.57666-1-yszhou4tech@gmail.com>
+        id S1728346AbgCXPi2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 Mar 2020 11:38:28 -0400
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17886 "EHLO
+        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728825AbgCXPi0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 24 Mar 2020 11:38:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1585064195;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=From:To:Cc:Message-ID:Subject:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type;
+        bh=c4pSrPeSV97w8bFNlp6bOa+S5k3Nj7plLKxawsPWKIg=;
+        b=GJRBWI+Z5Ih2aPsDC2w+GUjLIPH1sGyVT9eooJwiZBI8LEPaDgdYtnyDJ7NRMSiG
+        EDqyADUSQBNsbgM7fz60D+nIzcGzdCyhpy8e35tVHG4bch1MSJRwlVaehn8DwD3zev2
+        pMHpO9B8dx8Ll5Vn0AcdJWHjEmGakbtwQBCh/BYg=
+Received: from localhost.localdomain (39.155.141.144 [39.155.141.144]) by mx.zoho.com.cn
+        with SMTPS id 1585064191128266.1534878130593; Tue, 24 Mar 2020 23:36:31 +0800 (CST)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Message-ID: <20200324153624.23109-1-jiaxun.yang@flygoat.com>
+Subject: [PATCH v6 00/11] Modernize Loongson64 Machine v6
+Date:   Tue, 24 Mar 2020 23:35:57 +0800
+X-Mailer: git-send-email 2.26.0.rc2
+In-Reply-To: <20190827085302.5197-1-jiaxun.yang@flygoat.com>
+References: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-ZohoCNMailClient: External
+Content-Type: text/plain; charset=utf8
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This furthers what commit 42b10815d559 ("MIPS: Don't compile math-emu
-when CONFIG_MIPS_FP_SUPPORT=n") has done
+Loongson have a long history of contributing their code to mainline kernel.
+However, it seems like recent years, they are focusing on maintain a kernel=
+ by themselves
+rather than contribute there code to the community.
 
-Signed-off-by: Yousong Zhou <yszhou4tech@gmail.com>
+Kernel is progress rapidly too. Their code slept in mainline for a long per=
+oid without proper
+maintainance and became outdated.
+
+This patchset brings modern DeviceTree and irqchip support to the Loongson6=
+4 machine, and leaves
+Loongson 2e/f alone since they are too legacy to touch.
+
+PCI and some legacy I/O device will be converted later, together with LS7A =
+PCH support.
+
+v1:
+- dt-bindings fixup according to Rob's comments
+- irqchip fixup according to Marc's comments
+- ls3-iointc: Make Core&IP map per-IRQ
+- Regenerate kconfigs
+- Typo & style improvements
+
+v2:
+- dt-bindings: Fix IOINTC, collect Rob's review tag
+- dtbs: Drop CPU Node, merge different ways according to Huacai and Paul's =
+comments
+
+v3:
+- Split code have been merged
+- Fix IOINTC binding to allow map any child IRQ to and parent
+- Convert "HTINTC" into "HTPIC", which mixed HT vectors processing and i825=
+9
+- Naming style fix according to Huacai's suggestions
+
+v4:
+- More naming related fixes
+
+v5:
+- irqchip fixes thanks to maz (see per file changelog)
+- Remove unnecessary details in dt-bindings
+- Credit Huacai with Co-developed-by
+
+v6:
+- HTPIC minor fix
+- device binding naming fix=20
+
 ---
-v2 <- v1: Fix using unknown symbol CONFIG_MIPS_FP_EMULATOR, @tsbogend
+Jiaxun Yang (11):
+  irqchip: Add driver for Loongson I/O Local Interrupt Controller
+  irqchip: loongson-liointc: Workaround LPC IRQ Errata
+  dt-bindings: interrupt-controller: Add Loongson LIOINTC
+  irqchip: Add driver for Loongson-3 HyperTransport PIC controller
+  dt-bindings: interrupt-controller: Add Loongson-3 HTPIC
+  irqchip: mips-cpu: Convert to simple domain
+  MIPS: Loongson64: Drop legacy IRQ code
+  dt-bindings: mips: Add loongson boards
+  MIPS: Loongson64: Add generic dts
+  MIPS: Loongson64: Load built-in dtbs
+  MIPS: Loongson64: Move MIPS_CPU_IRQ_BASE
 
- arch/mips/include/asm/processor.h | 12 ++++++------
- arch/mips/kernel/process.c        | 10 ++++++++--
- arch/mips/kernel/vdso.c           | 26 +++++++++++++++-----------
- 3 files changed, 29 insertions(+), 19 deletions(-)
+ .../interrupt-controller/loongson,htpic.yaml  |  59 ++++
+ .../loongson,liointc.yaml                     |  93 ++++++
+ .../bindings/mips/loongson/devices.yaml       |  27 ++
+ arch/mips/Kconfig                             |   6 +-
+ arch/mips/boot/dts/Makefile                   |   1 +
+ arch/mips/boot/dts/loongson/Makefile          |   4 +
+ .../boot/dts/loongson/loongson3-package.dtsi  |  62 ++++
+ .../dts/loongson/loongson3_4core_rs780e.dts   |  25 ++
+ .../dts/loongson/loongson3_8core_rs780e.dts   |  25 ++
+ arch/mips/boot/dts/loongson/rs780e-pch.dtsi   |  26 ++
+ arch/mips/include/asm/i8259.h                 |   1 +
+ .../include/asm/mach-loongson64/boot_param.h  |   2 +
+ .../asm/mach-loongson64/builtin_dtbs.h        |  13 +
+ arch/mips/include/asm/mach-loongson64/irq.h   |  32 +--
+ .../include/asm/mach-loongson64/loongson.h    |   1 +
+ arch/mips/loongson64/Makefile                 |   2 +-
+ arch/mips/loongson64/env.c                    |  23 ++
+ arch/mips/loongson64/init.c                   |   6 +
+ arch/mips/loongson64/irq.c                    | 162 -----------
+ arch/mips/loongson64/setup.c                  |  16 ++
+ arch/mips/loongson64/smp.c                    |  28 +-
+ drivers/irqchip/Kconfig                       |  19 ++
+ drivers/irqchip/Makefile                      |   2 +
+ drivers/irqchip/irq-loongson-htpic.c          | 149 ++++++++++
+ drivers/irqchip/irq-loongson-liointc.c        | 271 ++++++++++++++++++
+ drivers/irqchip/irq-mips-cpu.c                |   2 +-
+ 26 files changed, 844 insertions(+), 213 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+loongson,htpic.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+loongson,liointc.yaml
+ create mode 100644 Documentation/devicetree/bindings/mips/loongson/devices=
+.yaml
+ create mode 100644 arch/mips/boot/dts/loongson/Makefile
+ create mode 100644 arch/mips/boot/dts/loongson/loongson3-package.dtsi
+ create mode 100644 arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dts
+ create mode 100644 arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dts
+ create mode 100644 arch/mips/boot/dts/loongson/rs780e-pch.dtsi
+ create mode 100644 arch/mips/include/asm/mach-loongson64/builtin_dtbs.h
+ delete mode 100644 arch/mips/loongson64/irq.c
+ create mode 100644 drivers/irqchip/irq-loongson-htpic.c
+ create mode 100644 drivers/irqchip/irq-loongson-liointc.c
 
-diff --git a/arch/mips/include/asm/processor.h b/arch/mips/include/asm/processor.h
-index 7619ad319400..813ba94d87bb 100644
---- a/arch/mips/include/asm/processor.h
-+++ b/arch/mips/include/asm/processor.h
-@@ -253,13 +253,13 @@ struct thread_struct {
- #ifdef CONFIG_MIPS_FP_SUPPORT
- 	/* Saved fpu/fpu emulator stuff. */
- 	struct mips_fpu_struct fpu FPU_ALIGN;
--#endif
- 	/* Assigned branch delay slot 'emulation' frame */
- 	atomic_t bd_emu_frame;
- 	/* PC of the branch from a branch delay slot 'emulation' */
- 	unsigned long bd_emu_branch_pc;
- 	/* PC to continue from following a branch delay slot 'emulation' */
- 	unsigned long bd_emu_cont_pc;
-+#endif
- #ifdef CONFIG_MIPS_MT_FPAFF
- 	/* Emulated instruction count */
- 	unsigned long emulated_fp;
-@@ -302,7 +302,11 @@ struct thread_struct {
- 		.fpr		= {{{0,},},},			\
- 		.fcr31		= 0,				\
- 		.msacsr		= 0,				\
--	},
-+	},							\
-+	/* Delay slot emulation */				\
-+	.bd_emu_frame = ATOMIC_INIT(BD_EMUFRAME_NONE),		\
-+	.bd_emu_branch_pc = 0,					\
-+	.bd_emu_cont_pc = 0,
- #else
- # define FPU_INIT
- #endif
-@@ -334,10 +338,6 @@ struct thread_struct {
- 	 * FPU affinity state (null if not FPAFF)		\
- 	 */							\
- 	FPAFF_INIT						\
--	/* Delay slot emulation */				\
--	.bd_emu_frame = ATOMIC_INIT(BD_EMUFRAME_NONE),		\
--	.bd_emu_branch_pc = 0,					\
--	.bd_emu_cont_pc = 0,					\
- 	/*							\
- 	 * Saved DSP stuff					\
- 	 */							\
-diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-index 339870ed92f7..b2a797557825 100644
---- a/arch/mips/kernel/process.c
-+++ b/arch/mips/kernel/process.c
-@@ -75,7 +75,9 @@ void start_thread(struct pt_regs * regs, unsigned long pc, unsigned long sp)
- 	lose_fpu(0);
- 	clear_thread_flag(TIF_MSA_CTX_LIVE);
- 	clear_used_math();
-+#ifdef CONFIG_MIPS_FP_SUPPORT
- 	atomic_set(&current->thread.bd_emu_frame, BD_EMUFRAME_NONE);
-+#endif
- 	init_dsp();
- 	regs->cp0_epc = pc;
- 	regs->regs[29] = sp;
-@@ -176,7 +178,9 @@ int copy_thread_tls(unsigned long clone_flags, unsigned long usp,
- 	clear_tsk_thread_flag(p, TIF_FPUBOUND);
- #endif /* CONFIG_MIPS_MT_FPAFF */
- 
-+#ifdef CONFIG_MIPS_FP_SUPPORT
- 	atomic_set(&p->thread.bd_emu_frame, BD_EMUFRAME_NONE);
-+#endif
- 
- 	if (clone_flags & CLONE_SETTLS)
- 		ti->tp_value = tls;
-@@ -650,8 +654,10 @@ unsigned long mips_stack_top(void)
- {
- 	unsigned long top = TASK_SIZE & PAGE_MASK;
- 
--	/* One page for branch delay slot "emulation" */
--	top -= PAGE_SIZE;
-+	if (IS_ENABLED(CONFIG_MIPS_FP_SUPPORT)) {
-+		/* One page for branch delay slot "emulation" */
-+		top -= PAGE_SIZE;
-+	}
- 
- 	/* Space for the VDSO, data page & GIC user page */
- 	top -= PAGE_ALIGN(current->thread.abi->vdso->size);
-diff --git a/arch/mips/kernel/vdso.c b/arch/mips/kernel/vdso.c
-index bc35f8499111..3adb7354bc01 100644
---- a/arch/mips/kernel/vdso.c
-+++ b/arch/mips/kernel/vdso.c
-@@ -71,10 +71,12 @@ subsys_initcall(init_vdso);
- 
- static unsigned long vdso_base(void)
- {
--	unsigned long base;
-+	unsigned long base = STACK_TOP;
- 
--	/* Skip the delay slot emulation page */
--	base = STACK_TOP + PAGE_SIZE;
-+	if (IS_ENABLED(CONFIG_MIPS_FP_SUPPORT)) {
-+		/* Skip the delay slot emulation page */
-+		base += PAGE_SIZE;
-+	}
- 
- 	if (current->flags & PF_RANDOMIZE) {
- 		base += get_random_int() & (VDSO_RANDOMIZE_SIZE - 1);
-@@ -95,14 +97,16 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- 	if (down_write_killable(&mm->mmap_sem))
- 		return -EINTR;
- 
--	/* Map delay slot emulation page */
--	base = mmap_region(NULL, STACK_TOP, PAGE_SIZE,
--			   VM_READ | VM_EXEC |
--			   VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC,
--			   0, NULL);
--	if (IS_ERR_VALUE(base)) {
--		ret = base;
--		goto out;
-+	if (IS_ENABLED(CONFIG_MIPS_FP_SUPPORT)) {
-+		/* Map delay slot emulation page */
-+		base = mmap_region(NULL, STACK_TOP, PAGE_SIZE,
-+				VM_READ | VM_EXEC |
-+				VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC,
-+				0, NULL);
-+		if (IS_ERR_VALUE(base)) {
-+			ret = base;
-+			goto out;
-+		}
- 	}
- 
- 	/*
+--=20
+2.26.0.rc2
+
+
