@@ -2,169 +2,196 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE97190DCE
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2020 13:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9748319145F
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Mar 2020 16:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727464AbgCXMjC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 Mar 2020 08:39:02 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:39064 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727443AbgCXMjC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 24 Mar 2020 08:39:02 -0400
-Received: from [10.130.0.79] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr2hW_3leCH8fAA--.1S3;
-        Tue, 24 Mar 2020 20:38:48 +0800 (CST)
-Subject: Re: [PATCH v2 1/3] MIPS: Loongson: Get host bridge information
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>
-References: <1584932355-3642-1-git-send-email-yangtiezhu@loongson.cn>
- <1584932355-3642-2-git-send-email-yangtiezhu@loongson.cn>
- <C251FD7C-87F0-454E-83D7-5198A6E060E2@flygoat.com>
- <c8702862-f9a7-4776-68b9-cc17dba5d6f6@loongson.cn>
- <BF29AC74-29B6-44F3-9B5A-037FB4FE1778@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <1c5b830e-ac2d-f35b-ec7f-1a4eb20a9984@loongson.cn>
-Date:   Tue, 24 Mar 2020 20:38:46 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1727680AbgCXP2O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 Mar 2020 11:28:14 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:37887 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727699AbgCXP2N (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Mar 2020 11:28:13 -0400
+Received: by mail-pl1-f195.google.com with SMTP id x1so3497543plm.4
+        for <linux-mips@vger.kernel.org>; Tue, 24 Mar 2020 08:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x+18KwjdW7xn5gJkSFR3X8gc0R4qDrX19hXMt3Pj6ho=;
+        b=pvUrJGil7R+6087PktRP0/DECaIQVODZg2s3+A40va3GDuZgZJd/rEpxH0IDIITB39
+         LIT3rFOghdff2XoPs/frGcHKhiobNuOAkPX4mJMqXszaDO4PhTfd8ugtyX+dpOSs49tS
+         kCVVsV2r3IdqK2aTziiqgZFaqJZa2BHugJRW/bHnO/obVGywPzwCWHmTo8TUqO5SPQGp
+         5Egsvu96gJ5/MAi1Fo5kankhyEj6HSAxcPQ0ydC3bkwkZcEpjLQzoogJxcn3ECC8z30S
+         FmPygP1OwqGgUIsTe4WBmYsr6e+MG7gau5eNBLI3tzJDf86zngiYu2FoH8dD0npDaS56
+         aKTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x+18KwjdW7xn5gJkSFR3X8gc0R4qDrX19hXMt3Pj6ho=;
+        b=dA6x9eukLFDyLm2AzbJmxm2lE1J7h68odkeZjoOBfvmW5NEjxOatR6mwpZPlD/4fpr
+         i1UiHBGIIUh2NYjSXQj2VXVyPPwP4/LapKwAUkK5RTHy6pZQHko3N5+i8UDmdnWyCsyW
+         F5s2aoUYfUt6kAa5DY/Wr9riu6QwfwOkAcYXnUoKf18zluzcOvL/B/LGYYZCXbX3P57k
+         XwHtImfPWfMmr2kM1Ph2Rf/kHdjeOt6GeuFJcdv9vcC9h4Ut77ZRCN1moMzS2NzgsilJ
+         GdueZiCb3AcYxf5hYbP4Tv6SDLj30uE9yk5o5PaefP9Z3mqTFFW8AcXEOUIqLytUCHA6
+         VZKw==
+X-Gm-Message-State: ANhLgQ2SmQ/jzCCO1sOSu2JznYgqZ8ehRCe1xMrwuGxyofDog3+1eEAk
+        WZDiO8iPSqgjvx9QkSwfbaA=
+X-Google-Smtp-Source: ADFU+vuyf/gEhAf3CAGcpb87/uvQf3XVXrSZ6HrgPkNdzqZ0NlTq0YZRD0V+4G7cP1Qlq1Sa6bwrJw==
+X-Received: by 2002:a17:90a:2042:: with SMTP id n60mr6078928pjc.0.1585063691180;
+        Tue, 24 Mar 2020 08:28:11 -0700 (PDT)
+Received: from titan.hq.cloud.yunionyun.com ([47.244.19.249])
+        by smtp.gmail.com with ESMTPSA id k6sm1602879pfa.214.2020.03.24.08.28.08
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 24 Mar 2020 08:28:10 -0700 (PDT)
+From:   Yousong Zhou <yszhou4tech@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
+        Yousong Zhou <yszhou4tech@gmail.com>
+Subject: [PATCH v2] MIPS: Exclude more dsemul code when CONFIG_MIPS_FP_SUPPORT=n
+Date:   Tue, 24 Mar 2020 23:27:51 +0800
+Message-Id: <20200324152751.57666-1-yszhou4tech@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <BF29AC74-29B6-44F3-9B5A-037FB4FE1778@flygoat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxr2hW_3leCH8fAA--.1S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJw1fWr43KrWrtw47Aw18Krg_yoWrXw4kp3
-        y7Aa1UGr48Wr17CrsIv3y5Xr9ayFZ8tFZ3WF47t3Wjgryqv3W3Xr4DGF1UCr4xZF1rGa40
-        qFyvgr4xWF13G3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU5sjjDU
-        UUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/24/2020 06:02 PM, Jiaxun Yang wrote:
->
-> 于 2020年3月24日 GMT+08:00 下午5:58:33, Tiezhu Yang <yangtiezhu@loongson.cn> 写到:
->> On 03/24/2020 03:36 PM, Jiaxun Yang wrote:
->>> 于 2020年3月23日 GMT+08:00 上午10:59:13, Tiezhu Yang
->> <yangtiezhu@loongson.cn> 写到:
->>>> Read the address of HyperTransport Configuration Space to get the
->>>> vendor ID
->>>> and device ID of bridge chip, and then we can distinguish various
->> types
->>>> of
->>>> bridge chip such as Loongson 7A1000 or AMD RS780E.
->>>>
->>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->>>> ---
->>>> arch/mips/include/asm/mach-loongson64/boot_param.h |  6 ++++++
->>>> arch/mips/loongson64/env.c                         | 16
->>>> ++++++++++++++++
->>>> 2 files changed, 22 insertions(+)
->>>>
->>>> diff --git a/arch/mips/include/asm/mach-loongson64/boot_param.h
->>>> b/arch/mips/include/asm/mach-loongson64/boot_param.h
->>>> index 8c286be..5e8c70d 100644
->>>> --- a/arch/mips/include/asm/mach-loongson64/boot_param.h
->>>> +++ b/arch/mips/include/asm/mach-loongson64/boot_param.h
->>>> @@ -190,6 +190,11 @@ struct boot_params {
->>>> 	struct efi_reset_system_t reset_system;
->>>> };
->>>>
->>>> +enum loongson_bridge_type {
->>>> +	RS780E = 1,
->>>> +	LS7A1000 = 2
->>>> +};
->>>> +
->>>> struct loongson_system_configuration {
->>>> 	u32 nr_cpus;
->>>> 	u32 nr_nodes;
->>>> @@ -198,6 +203,7 @@ struct loongson_system_configuration {
->>>> 	u16 boot_cpu_id;
->>>> 	u16 reserved_cpus_mask;
->>>> 	enum loongson_cpu_type cputype;
->>>> +	enum loongson_bridge_type bridgetype;
->>>> 	u64 ht_control_base;
->>>> 	u64 pci_mem_start_addr;
->>>> 	u64 pci_mem_end_addr;
->>>> diff --git a/arch/mips/loongson64/env.c b/arch/mips/loongson64/env.c
->>>> index 0daeb7b..42542c7 100644
->>>> --- a/arch/mips/loongson64/env.c
->>>> +++ b/arch/mips/loongson64/env.c
->>>> @@ -19,6 +19,8 @@
->>>> #include <boot_param.h>
->>>> #include <workarounds.h>
->>>>
->>>> +#define HT1_LO_BUS_CONFIG_BASE	0x90000efdfe000000
->>>> +
->>>> u32 cpu_clock_freq;
->>>> EXPORT_SYMBOL(cpu_clock_freq);
->>>> struct efi_memory_map_loongson *loongson_memmap;
->>>> @@ -42,6 +44,8 @@ void __init prom_init_env(void)
->>>> 	struct system_loongson *esys;
->>>> 	struct efi_cpuinfo_loongson *ecpu;
->>>> 	struct irq_source_routing_table *eirq_source;
->>>> +	u32 id;
->>>> +	u16 vendor, device;
->>>>
->>>> 	/* firmware arguments are initialized in head.S */
->>>> 	boot_p = (struct boot_params *)fw_arg2;
->>>> @@ -155,4 +159,16 @@ void __init prom_init_env(void)
->>>> 		memcpy(loongson_sysconf.sensors, esys->sensors,
->>>> 			sizeof(struct sensor_device) * loongson_sysconf.nr_sensors);
->>>> 	pr_info("CpuClock = %u\n", cpu_clock_freq);
->>>> +
->>>> +	id = readl((u32 *)HT1_LO_BUS_CONFIG_BASE);
->>> Is that pointer cast required?
->> Yes, otherwise it will compile failed:
->> arch/mips/loongson64/env.c:163:13: error: passing argument 1 of ‘readl’
-> I don't like it through....
-> Can we cast it in macro?
-> At least it should be void __iomem *.
+This furthers what commit 42b10815d559 ("MIPS: Don't compile math-emu
+when CONFIG_MIPS_FP_SUPPORT=n") has done
 
-OK, I will modify the code to make it easy to read.
+Signed-off-by: Yousong Zhou <yszhou4tech@gmail.com>
+---
+v2 <- v1: Fix using unknown symbol CONFIG_MIPS_FP_EMULATOR, @tsbogend
 
->
->
->> makes pointer from integer without a cast [-Werror]
->>    id = readl(HT1_LO_BUS_CONFIG_BASE);
->>               ^
->>> And you'd better add a comment here like
->>> /* Read HT PCI 00:00:00 Host Bridge's ID to detect bridge model */
->>> Otherwise it's hard for others to understand what you are doing.
->> OK, I will do it.
->>
->>>> +	vendor = id & 0xffff;
->>>> +	device = (id >> 16) & 0xffff;
->>>> +
->>>> +	if (vendor == 0x0014 && device == 0x7a00) {
->>> Please confirm with hardware design guys that bridge chip in future
->> will have different dev ID.
->>
->> Yes, it maybe have a new device ID for the new bridge chip.
->>
->>> Thanks.
->>>
->>>> +		pr_info("The bridge chip is Loongson 7A1000\n");
->>>> +		loongson_sysconf.bridgetype = LS7A1000;
->>>> +	} else {
->>>> +		pr_info("The bridge chip is AMD RS780E or SR5690\n");
->>>> +		loongson_sysconf.bridgetype = RS780E;
->>>> +	}
->>>> }
+ arch/mips/include/asm/processor.h | 12 ++++++------
+ arch/mips/kernel/process.c        | 10 ++++++++--
+ arch/mips/kernel/vdso.c           | 26 +++++++++++++++-----------
+ 3 files changed, 29 insertions(+), 19 deletions(-)
 
+diff --git a/arch/mips/include/asm/processor.h b/arch/mips/include/asm/processor.h
+index 7619ad319400..813ba94d87bb 100644
+--- a/arch/mips/include/asm/processor.h
++++ b/arch/mips/include/asm/processor.h
+@@ -253,13 +253,13 @@ struct thread_struct {
+ #ifdef CONFIG_MIPS_FP_SUPPORT
+ 	/* Saved fpu/fpu emulator stuff. */
+ 	struct mips_fpu_struct fpu FPU_ALIGN;
+-#endif
+ 	/* Assigned branch delay slot 'emulation' frame */
+ 	atomic_t bd_emu_frame;
+ 	/* PC of the branch from a branch delay slot 'emulation' */
+ 	unsigned long bd_emu_branch_pc;
+ 	/* PC to continue from following a branch delay slot 'emulation' */
+ 	unsigned long bd_emu_cont_pc;
++#endif
+ #ifdef CONFIG_MIPS_MT_FPAFF
+ 	/* Emulated instruction count */
+ 	unsigned long emulated_fp;
+@@ -302,7 +302,11 @@ struct thread_struct {
+ 		.fpr		= {{{0,},},},			\
+ 		.fcr31		= 0,				\
+ 		.msacsr		= 0,				\
+-	},
++	},							\
++	/* Delay slot emulation */				\
++	.bd_emu_frame = ATOMIC_INIT(BD_EMUFRAME_NONE),		\
++	.bd_emu_branch_pc = 0,					\
++	.bd_emu_cont_pc = 0,
+ #else
+ # define FPU_INIT
+ #endif
+@@ -334,10 +338,6 @@ struct thread_struct {
+ 	 * FPU affinity state (null if not FPAFF)		\
+ 	 */							\
+ 	FPAFF_INIT						\
+-	/* Delay slot emulation */				\
+-	.bd_emu_frame = ATOMIC_INIT(BD_EMUFRAME_NONE),		\
+-	.bd_emu_branch_pc = 0,					\
+-	.bd_emu_cont_pc = 0,					\
+ 	/*							\
+ 	 * Saved DSP stuff					\
+ 	 */							\
+diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+index 339870ed92f7..b2a797557825 100644
+--- a/arch/mips/kernel/process.c
++++ b/arch/mips/kernel/process.c
+@@ -75,7 +75,9 @@ void start_thread(struct pt_regs * regs, unsigned long pc, unsigned long sp)
+ 	lose_fpu(0);
+ 	clear_thread_flag(TIF_MSA_CTX_LIVE);
+ 	clear_used_math();
++#ifdef CONFIG_MIPS_FP_SUPPORT
+ 	atomic_set(&current->thread.bd_emu_frame, BD_EMUFRAME_NONE);
++#endif
+ 	init_dsp();
+ 	regs->cp0_epc = pc;
+ 	regs->regs[29] = sp;
+@@ -176,7 +178,9 @@ int copy_thread_tls(unsigned long clone_flags, unsigned long usp,
+ 	clear_tsk_thread_flag(p, TIF_FPUBOUND);
+ #endif /* CONFIG_MIPS_MT_FPAFF */
+ 
++#ifdef CONFIG_MIPS_FP_SUPPORT
+ 	atomic_set(&p->thread.bd_emu_frame, BD_EMUFRAME_NONE);
++#endif
+ 
+ 	if (clone_flags & CLONE_SETTLS)
+ 		ti->tp_value = tls;
+@@ -650,8 +654,10 @@ unsigned long mips_stack_top(void)
+ {
+ 	unsigned long top = TASK_SIZE & PAGE_MASK;
+ 
+-	/* One page for branch delay slot "emulation" */
+-	top -= PAGE_SIZE;
++	if (IS_ENABLED(CONFIG_MIPS_FP_SUPPORT)) {
++		/* One page for branch delay slot "emulation" */
++		top -= PAGE_SIZE;
++	}
+ 
+ 	/* Space for the VDSO, data page & GIC user page */
+ 	top -= PAGE_ALIGN(current->thread.abi->vdso->size);
+diff --git a/arch/mips/kernel/vdso.c b/arch/mips/kernel/vdso.c
+index bc35f8499111..3adb7354bc01 100644
+--- a/arch/mips/kernel/vdso.c
++++ b/arch/mips/kernel/vdso.c
+@@ -71,10 +71,12 @@ subsys_initcall(init_vdso);
+ 
+ static unsigned long vdso_base(void)
+ {
+-	unsigned long base;
++	unsigned long base = STACK_TOP;
+ 
+-	/* Skip the delay slot emulation page */
+-	base = STACK_TOP + PAGE_SIZE;
++	if (IS_ENABLED(CONFIG_MIPS_FP_SUPPORT)) {
++		/* Skip the delay slot emulation page */
++		base += PAGE_SIZE;
++	}
+ 
+ 	if (current->flags & PF_RANDOMIZE) {
+ 		base += get_random_int() & (VDSO_RANDOMIZE_SIZE - 1);
+@@ -95,14 +97,16 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+ 	if (down_write_killable(&mm->mmap_sem))
+ 		return -EINTR;
+ 
+-	/* Map delay slot emulation page */
+-	base = mmap_region(NULL, STACK_TOP, PAGE_SIZE,
+-			   VM_READ | VM_EXEC |
+-			   VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC,
+-			   0, NULL);
+-	if (IS_ERR_VALUE(base)) {
+-		ret = base;
+-		goto out;
++	if (IS_ENABLED(CONFIG_MIPS_FP_SUPPORT)) {
++		/* Map delay slot emulation page */
++		base = mmap_region(NULL, STACK_TOP, PAGE_SIZE,
++				VM_READ | VM_EXEC |
++				VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC,
++				0, NULL);
++		if (IS_ERR_VALUE(base)) {
++			ret = base;
++			goto out;
++		}
+ 	}
+ 
+ 	/*
