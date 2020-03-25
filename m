@@ -2,55 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2D9192F5C
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2020 18:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9F3192F57
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2020 18:34:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727695AbgCYRe3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 25 Mar 2020 13:34:29 -0400
-Received: from elvis.franken.de ([193.175.24.41]:34605 "EHLO elvis.franken.de"
+        id S1727456AbgCYRe0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 25 Mar 2020 13:34:26 -0400
+Received: from elvis.franken.de ([193.175.24.41]:34593 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727826AbgCYRe3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 25 Mar 2020 13:34:29 -0400
+        id S1727129AbgCYRe0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 25 Mar 2020 13:34:26 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jH9v6-0008NM-00; Wed, 25 Mar 2020 18:34:24 +0100
+        id 1jH9v6-0008NM-01; Wed, 25 Mar 2020 18:34:24 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 405D9C0D46; Wed, 25 Mar 2020 18:30:43 +0100 (CET)
-Date:   Wed, 25 Mar 2020 18:30:43 +0100
+        id D5A55C0D49; Wed, 25 Mar 2020 18:31:23 +0100 (CET)
+Date:   Wed, 25 Mar 2020 18:31:23 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org,
-        Pei Huang <huangpei@loongson.cn>
-Subject: Re: [PATCH] MIPS/tlbex: Fix LDDIR usage in setup_pw() for Loongson-3
-Message-ID: <20200325173043.GA17524@alpha.franken.de>
-References: <1585107894-8803-1-git-send-email-chenhc@lemote.com>
+To:     Yousong Zhou <yszhou4tech@gmail.com>
+Cc:     Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: Exclude more dsemul code when
+ CONFIG_MIPS_FP_SUPPORT=n
+Message-ID: <20200325173123.GB17524@alpha.franken.de>
+References: <20200324152751.57666-1-yszhou4tech@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1585107894-8803-1-git-send-email-chenhc@lemote.com>
+In-Reply-To: <20200324152751.57666-1-yszhou4tech@gmail.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 25, 2020 at 11:44:54AM +0800, Huacai Chen wrote:
-> LDDIR/LDPTE is Loongson-3's acceleration for Page Table Walking. If BD
-> (Base Directory, the 4th page directory) is not enabled, then GDOffset
-> is biased by BadVAddr[63:62]. So, if GDOffset (aka. BadVAddr[47:36] for
-> Loongson-3) is big enough, "0b11(BadVAddr[63:62])|BadVAddr[47:36]|...."
-> can far beyond pg_swapper_dir. This means the pg_swapper_dir may NOT be
-> accessed by LDDIR correctly, so fix it by set PWDirExt in CP0_PWCtl.
+On Tue, Mar 24, 2020 at 11:27:51PM +0800, Yousong Zhou wrote:
+> This furthers what commit 42b10815d559 ("MIPS: Don't compile math-emu
+> when CONFIG_MIPS_FP_SUPPORT=n") has done
 > 
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Pei Huang <huangpei@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> Signed-off-by: Yousong Zhou <yszhou4tech@gmail.com>
 > ---
->  arch/mips/mm/tlbex.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> v2 <- v1: Fix using unknown symbol CONFIG_MIPS_FP_EMULATOR, @tsbogend
+> 
+>  arch/mips/include/asm/processor.h | 12 ++++++------
+>  arch/mips/kernel/process.c        | 10 ++++++++--
+>  arch/mips/kernel/vdso.c           | 26 +++++++++++++++-----------
+>  3 files changed, 29 insertions(+), 19 deletions(-)
 
 applied to mips-next.
 
