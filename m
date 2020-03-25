@@ -2,198 +2,143 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B5E191F3B
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2020 03:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D4F191F13
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2020 03:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727374AbgCYCfT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 Mar 2020 22:35:19 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17890 "EHLO
+        id S1727275AbgCYCct (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 Mar 2020 22:32:49 -0400
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17833 "EHLO
         sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727268AbgCYCfT (ORCPT
+        by vger.kernel.org with ESMTP id S1727259AbgCYCct (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 24 Mar 2020 22:35:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1585103595;
+        Tue, 24 Mar 2020 22:32:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1585103515;
         s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=From:To:Cc:Message-ID:Subject:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type;
-        bh=q3522WmCMcchsrcIlYC+4bPpCWTc6GzKb+1Lr0erI0g=;
-        b=aow0CiwG/hBJpTXuR4X2GcdsbXYILhWzbR25pZEkKL1dnOVaDH2BRyez6/6r2dd2
-        GjGJmQMVISsaLIHz0qfSOU8kCoB0KQMx+2rbtyEPtJLbhSVAONkI3SkFlJ/VTIJkPCT
-        907zcU85fxxghl04s5c2HjtqFr3yGfNUyXzMVASQ=
-Received: from localhost.localdomain (39.155.141.144 [39.155.141.144]) by mx.zoho.com.cn
-        with SMTPS id 1585103593296580.9934269828649; Wed, 25 Mar 2020 10:33:13 +0800 (CST)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Rob Herring <robh@kernel.org>, Huacai Chen <chenhc@lemote.com>,
+        h=Date:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Subject:To:CC:From:Message-ID;
+        bh=IrhqHZkIgBzBX0NyQ/AdHmhnZ5Hiqdy+Ikjqv3i39Yo=;
+        b=UarPfnSOcQ4sjXrN8oKc7mlQTD0HEm33Qx8s6HXUka0Z4prsBLK6HU8zxXq88j3G
+        4W9MGjhQ8vnuw9SyB9ou2bTaJC8pEKR1ek9/mdl/CQZ4yGD4Pf4fGV5SDSqVpgdQjaj
+        yQFc1h4wr5SQ4i3m89+VtFwnmaU2xmWJCkMhHwSE=
+Received: from [10.233.233.252] (183.157.60.227 [183.157.60.227]) by mx.zoho.com.cn
+        with SMTPS id 15851035137201004.1544709728074; Wed, 25 Mar 2020 10:31:53 +0800 (CST)
+Date:   Wed, 25 Mar 2020 10:31:50 +0800
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAAhV-H7__WmeWZ4w8Kc37WztRZ+-du9nKbVkRJeK7=ZhPaVY3g@mail.gmail.com>
+References: <20200324153624.23109-1-jiaxun.yang@flygoat.com> <20200324153624.23109-3-jiaxun.yang@flygoat.com> <CAAhV-H7__WmeWZ4w8Kc37WztRZ+-du9nKbVkRJeK7=ZhPaVY3g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v6 02/11] irqchip: loongson-liointc: Workaround LPC IRQ Errata
+To:     Huacai Chen <chenhc@lemote.com>
+CC:     "open list:MIPS" <linux-mips@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Jason Cooper <jason@lakedaemon.net>,
         Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Cercueil <paul@crapouillou.net>,
-        John Crispin <john@phrozen.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Yinglu Yang <yangyinglu@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
         Allison Randal <allison@lohutok.net>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Manuel Lauss <manuel.lauss@gmail.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Matt Redfearn <matt.redfearn@mips.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-ide@vger.kernel.org
-Message-ID: <20200325022916.106641-6-jiaxun.yang@flygoat.com>
-Subject: [PATCH v7 03/12] dt-bindings: interrupt-controller: Add Loongson LIOINTC
-Date:   Wed, 25 Mar 2020 10:28:21 +0800
-X-Mailer: git-send-email 2.26.0.rc2
-In-Reply-To: <20200325022916.106641-1-jiaxun.yang@flygoat.com>
-References: <20200325022916.106641-1-jiaxun.yang@flygoat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        LKML <linux-kernel@vger.kernel.org>, devicetree@vger.kernel.org
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <C87B57FD-F4C2-4464-9692-A28DE343FDDB@flygoat.com>
 X-ZohoCNMailClient: External
-Content-Type: text/plain; charset=utf8
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Document Loongson I/O Interrupt controller.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Co-developed-by: Huacai Chen <chenhc@lemote.com>
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
----
- .../loongson,liointc.yaml                     | 93 +++++++++++++++++++
- 1 file changed, 93 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
-loongson,liointc.yaml
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongso=
-n,liointc.yaml b/Documentation/devicetree/bindings/interrupt-controller/loo=
-ngson,liointc.yaml
-new file mode 100644
-index 000000000000..9c6b91fee477
---- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,lioin=
-tc.yaml
-@@ -0,0 +1,93 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/interrupt-controller/loongson,liointc.=
-yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Loongson Local I/O Interrupt Controller
-+
-+maintainers:
-+  - Jiaxun Yang <jiaxun.yang@flygoat.com>
-+
-+description: |
-+  This interrupt controller is found in the Loongson-3 family of chips as =
-the primary
-+  package interrupt controller which can route local I/O interrupt to inte=
-rrupt lines
-+  of cores.
-+
-+allOf:
-+  - $ref: /schemas/interrupt-controller.yaml#
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: loongson,liointc-1.0
-+      - const: loongson,liointc-1.0a
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupt-controller: true
-+
-+  interrupts:
-+    description:
-+      Interrupt source of the CPU interrupts.
-+    minItems: 1
-+    maxItems: 4
-+
-+  interrupt-names:
-+    description: List of names for the parent interrupts.
-+    items:
-+      - const: int0
-+      - const: int1
-+      - const: int2
-+      - const: int3
-+    minItems: 1
-+    maxItems: 4
-+
-+  '#interrupt-cells':
-+    const: 2
-+
-+  'loongson,parent_int_map':
-+    description: |
-+      This property points how the children interrupts will be mapped into=
- CPU
-+      interrupt lines. Each cell refers to a parent interrupt line from 0 =
-to 3
-+      and each bit in the cell refers to a children interrupt fron 0 to 31=
-.
-+      If a CPU interrupt line didn't connected with liointc, then keep it'=
-s
-+      cell with zero.
-+    allOf:
-+      - $ref: /schemas/types.yaml#/definitions/uint32-array
-+      - items:
-+          minItems: 4
-+          maxItems: 4
-+
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-controller
-+  - '#interrupt-cells'
-+  - 'loongson,parent_int_map'
-+
-+
-+examples:
-+  - |
-+    iointc: interrupt-controller@3ff01400 {
-+      compatible =3D "loongson,liointc-1.0";
-+      reg =3D <0x3ff01400 0x64>;
-+
-+      interrupt-controller;
-+      #interrupt-cells =3D <2>;
-+
-+      interrupt-parent =3D <&cpuintc>;
-+      interrupts =3D <2>, <3>;
-+      interrupt-names =3D "int0", "int1";
-+
-+      loongson,parent_int_map =3D <0xf0ffffff>, /* int0 */
-+                                <0x0f000000>, /* int1 */
-+                                <0x00000000>, /* int2 */
-+                                <0x00000000>; /* int3 */
-+
-+    };
-+
-+...
+=E4=BA=8E 2020=E5=B9=B43=E6=9C=8825=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=889=
+:52:26, Huacai Chen <chenhc@lemote=2Ecom> =E5=86=99=E5=88=B0:
+>Hi, Jiaxun,
+>
+>On Tue, Mar 24, 2020 at 11:39 PM Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom=
+>
+>wrote:
+>>
+>> The 1=2E0 version of that controller has a bug that status bit
+>> of LPC IRQ sometimes doesn't get set correctly=2E
+>>
+>> So we can always blame LPC IRQ when spurious interrupt happens
+>> at the parent interrupt line which LPC IRQ supposed to route
+>> to=2E
+>>
+>> Co-developed-by: Huacai Chen <chenhc@lemote=2Ecom>
+>> Signed-off-by: Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom>
+>> ---
+>>  drivers/irqchip/irq-loongson-liointc=2Ec | 16 ++++++++++++++--
+>>  1 file changed, 14 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/irqchip/irq-loongson-liointc=2Ec
+>b/drivers/irqchip/irq-loongson-liointc=2Ec
+>> index 8b6d7b8ddaca=2E=2Ed5054e90eab8 100644
+>> --- a/drivers/irqchip/irq-loongson-liointc=2Ec
+>> +++ b/drivers/irqchip/irq-loongson-liointc=2Ec
+>> @@ -32,6 +32,8 @@
+>>
+>>  #define LIOINTC_SHIFT_INTx     4
+>>
+>> +#define LIOINTC_ERRATA_IRQ     10
+>> +
+>>  struct liointc_handler_data {
+>>         struct liointc_priv     *priv;
+>>         u32                     parent_int_map;
+>> @@ -41,6 +43,7 @@ struct liointc_priv {
+>>         struct irq_chip_generic         *gc;
+>>         struct liointc_handler_data     handler[LIOINTC_NUM_PARENT];
+>>         u8                              map_cache[LIOINTC_CHIP_IRQ];
+>> +       bool                            have_lpc_irq_errata;
+>Maybe has_lpc_irq_errata?
+
+Fixed, thanks=2E
+
+>
+>>  };
+>>
+>>  static void liointc_chained_handle_irq(struct irq_desc *desc)
+>> @@ -54,8 +57,14 @@ static void liointc_chained_handle_irq(struct
+>irq_desc *desc)
+>>
+>>         pending =3D readl(gc->reg_base + LIOINTC_REG_INTC_STATUS);
+>>
+>> -       if (!pending)
+>> -               spurious_interrupt();
+>> +       if (!pending) {
+>> +               /* Always blame LPC IRQ if we have that bug and LPC
+>IRQ is enabled */
+>> +               if (handler->priv->have_lpc_irq_errata &&
+>> +                       (handler->parent_int_map & ~gc->mask_cache &
+>BIT(LIOINTC_ERRATA_IRQ)))
+>> +                       pending =3D BIT(LIOINTC_ERRATA_IRQ);
+>> +               else
+>> +                       spurious_interrupt();
+>> +       }
+>>
+>>         while (pending) {
+>>                 int bit =3D __ffs(pending);
+>> @@ -164,6 +173,9 @@ int __init liointc_of_init(struct device_node
+>*node,
+>>                 goto out_iounmap;
+>>         }
+>>
+>> +       if (of_device_is_compatible(node, "loongson,liointc-1=2E0"))
+>> +               priv->have_lpc_irq_errata =3D true;
+>> +
+>>         sz =3D of_property_read_variable_u32_array(node,
+>"loongson,parent_int_map",
+>>                                               =20
+>&of_parent_int_map[0], LIOINTC_NUM_PARENT,
+>>                                                 LIOINTC_NUM_PARENT);
+>> --
+>> 2=2E26=2E0=2Erc2
+>>
+>>
+>
+>Regards,
+>Huacai Chen
+
 --=20
-2.26.0.rc2
-
-
+Jiaxun Yang
