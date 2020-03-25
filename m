@@ -2,32 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 282D3191FF2
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2020 04:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C964191FF6
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2020 05:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727174AbgCYD7r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 Mar 2020 23:59:47 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17894 "EHLO
+        id S1725815AbgCYEAI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 25 Mar 2020 00:00:08 -0400
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17801 "EHLO
         sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726842AbgCYD7r (ORCPT
+        by vger.kernel.org with ESMTP id S1725263AbgCYEAI (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 24 Mar 2020 23:59:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1585108715;
+        Wed, 25 Mar 2020 00:00:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1585108748;
         s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
         h=From:To:Cc:Message-ID:Subject:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type;
-        bh=HjVIeCBzllp+e4PnPI42dOjiNjtH6Uspoay0E7xupSU=;
-        b=bydMAF1Slx97hJpJnOzb+yLWyt70Rlc7NpH2tnBx8WN7FsitP5nH0UGuhanbXmWa
-        jFz3Q7hNXDBgTc49mUi1qtMhwLBdDlAYb/yHeLbOtbL6heFkYFTnbtbi6cHBdK4NVy0
-        0IQhCPoMDPTru/KzDkj0WkMJsDkXkZkY5cZT6GUQ=
+        bh=NuRfXCZxBaCO32O9oMXV7Tlb2T/c2IgMGdJC0/GooPQ=;
+        b=DkKv4VCGoL4pAFmexdTZsRrs6KNp4v4YGFMQwVXCqeZBYCof5AFzh8/oVI3Ndqc0
+        pW4ppzmC2Bidrpjjk/jrcaWhc+hk9KkIOwPAEBl9PQGZM1y5JISSXFB7qCWylxbqcaE
+        I+loniFh41CPURIxv6G8T/joi7m6ZTRSG3j/GnNE=
 Received: from localhost.localdomain (39.155.141.144 [39.155.141.144]) by mx.zoho.com.cn
-        with SMTPS id 1585108712968682.7866305460943; Wed, 25 Mar 2020 11:58:32 +0800 (CST)
+        with SMTPS id 1585108746857884.0267978010179; Wed, 25 Mar 2020 11:59:06 +0800 (CST)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Rob Herring <robh@kernel.org>, Huacai Chen <chenhc@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>, Marc Zyngier <maz@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -38,9 +37,9 @@ Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Allison Randal <allison@lohutok.net>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Message-ID: <20200325035537.156911-6-jiaxun.yang@flygoat.com>
-Subject: [PATCH v8 05/11] dt-bindings: interrupt-controller: Add Loongson-3 HTPIC
-Date:   Wed, 25 Mar 2020 11:54:58 +0800
+Message-ID: <20200325035537.156911-7-jiaxun.yang@flygoat.com>
+Subject: [PATCH v8 06/11] irqchip: mips-cpu: Convert to simple domain
+Date:   Wed, 25 Mar 2020 11:54:59 +0800
 X-Mailer: git-send-email 2.26.0.rc2
 In-Reply-To: <20200325035537.156911-1-jiaxun.yang@flygoat.com>
 References: <20200325035537.156911-1-jiaxun.yang@flygoat.com>
@@ -53,88 +52,38 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Document Loongson-3 HyperTransport PIC controller.
+The old code is using legacy domain to setup irq_domain for CPU interrupts
+which requires irq_desc to be preallocated.
+
+However, when MIPS_CPU_IRQ_BASE >=3D 16, irq_desc for CPU IRQs may end up
+unallocated and lead to incorrect behavior.
+
+Thus we convert the legacy domain to simple domain which can allocate
+irq_desc during initialization.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 Co-developed-by: Huacai Chen <chenhc@lemote.com>
 Signed-off-by: Huacai Chen <chenhc@lemote.com>
+Reviewed-by: Marc Zyngier <maz@kernel.org>
 ---
- .../interrupt-controller/loongson,htpic.yaml  | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
-loongson,htpic.yaml
+ drivers/irqchip/irq-mips-cpu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongso=
-n,htpic.yaml b/Documentation/devicetree/bindings/interrupt-controller/loong=
-son,htpic.yaml
-new file mode 100644
-index 000000000000..c8861cbbb8b5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,htpic=
-.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/interrupt-controller/loongson,htpic.ya=
-ml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Loongson-3 HyperTransport Interrupt Controller
-+
-+maintainers:
-+  - Jiaxun Yang <jiaxun.yang@flygoat.com>
-+
-+allOf:
-+  - $ref: /schemas/interrupt-controller.yaml#
-+
-+description: |
-+  This interrupt controller is found in the Loongson-3 family of chips to =
-transmit
-+  interrupts from PCH PIC connected on HyperTransport bus.
-+
-+properties:
-+  compatible:
-+    const: loongson,htpic-1.0
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    minItems: 1
-+    maxItems: 4
-+    description: |
-+      Four parent interrupts that receive chained interrupts.
-+
-+  interrupt-controller: true
-+
-+  '#interrupt-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-controller
-+  - '#interrupt-cells'
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    htintc: interrupt-controller@1fb000080 {
-+      compatible =3D "loongson,htintc-1.0";
-+      reg =3D <0xfb000080 0x40>;
-+      interrupt-controller;
-+      #interrupt-cells =3D <1>;
-+
-+      interrupt-parent =3D <&liointc>;
-+      interrupts =3D <24 IRQ_TYPE_LEVEL_HIGH>,
-+                    <25 IRQ_TYPE_LEVEL_HIGH>,
-+                    <26 IRQ_TYPE_LEVEL_HIGH>,
-+                    <27 IRQ_TYPE_LEVEL_HIGH>;
-+    };
-+...
+diff --git a/drivers/irqchip/irq-mips-cpu.c b/drivers/irqchip/irq-mips-cpu.=
+c
+index 95d4fd8f7a96..c3cf7fa76424 100644
+--- a/drivers/irqchip/irq-mips-cpu.c
++++ b/drivers/irqchip/irq-mips-cpu.c
+@@ -251,7 +251,7 @@ static void __init __mips_cpu_irq_init(struct device_no=
+de *of_node)
+ =09clear_c0_status(ST0_IM);
+ =09clear_c0_cause(CAUSEF_IP);
+=20
+-=09irq_domain =3D irq_domain_add_legacy(of_node, 8, MIPS_CPU_IRQ_BASE, 0,
++=09irq_domain =3D irq_domain_add_simple(of_node, 8, MIPS_CPU_IRQ_BASE,
+ =09=09=09=09=09   &mips_cpu_intc_irq_domain_ops,
+ =09=09=09=09=09   NULL);
+ =09if (!irq_domain)
 --=20
 2.26.0.rc2
 
