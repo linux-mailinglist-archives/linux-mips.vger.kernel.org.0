@@ -2,108 +2,168 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6C7191FCC
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2020 04:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A80191FDC
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Mar 2020 04:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727275AbgCYDgw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 Mar 2020 23:36:52 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33853 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727253AbgCYDgw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Mar 2020 23:36:52 -0400
-Received: by mail-pg1-f194.google.com with SMTP id t3so508545pgn.1;
-        Tue, 24 Mar 2020 20:36:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=TQggyO2aG3/J9tyHE64TxT0PFq58WGQfqt36Azet3yg=;
-        b=o5gis7qDgBKjJXhzvsX0VrxVPS54IUHWnCsEg5GCyHBh0ZIDrpjhcGP7HSYfIsoxys
-         5i57ygCgcyzJLMGA1/P+mBLC2TDTKajIeq/ILHv8sWXLP5dFmFUS3wuC/HXApmBUohlr
-         TtrWI8QJoSpvp0ftMXLbZ/EYWGNWtWkkBG4MEKTzIyk+EkLMVC3EFSOF7tq4Yc3GfnCq
-         DtJ93dGFP8D9C3t6wNwwaY0OgeVAIBFXHkHooHctkYyfgSwXFqn44ImvwkeJ9cPYBzD2
-         yqEHA2pgfGX5vEKgtUTd2DMrm5jL6b53ZLS8BaAWB2Nm9fq1qUC6pnxD2qtgA7udPvoy
-         7H1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=TQggyO2aG3/J9tyHE64TxT0PFq58WGQfqt36Azet3yg=;
-        b=GnqgSczbspq6SqZo4wFz3aquBbAPOgoF3xXuYOJoBcO4rJFGsrmK1wh+Lb7e7gnzKe
-         /601a7dRCeVYdecD2Ni2kSoNFNUd3LMpSg5+1uppe41t2dfcNYZUyVxCCP3mQLGaySB/
-         LOv3606Vmjx3RdqmgdwXYZHrGraN2Us27c6ruONj0LzQEpl2tmrFPkNXmAiYP1/D6WQh
-         noiyF60dLp6+VA2G01o3BGtDgGd32rOOwuuMQJvWEPwAdSVg7rP9gY+O20hYTzFw7gwt
-         yk4GGaQeYd/TD3dIP0HiE5IDKrSsiT7FkKbHKgNrl55O0BM4549fcva7fQ5+oslLjWhO
-         TsHw==
-X-Gm-Message-State: ANhLgQ04anus8RqZsJoozJmOCnf0V+L6BYy+gsO1Rno8F2OdIr4E6lag
-        6djlmmUI+TqxaEUQC2GaQUgECVVC3pLk2iqN
-X-Google-Smtp-Source: ADFU+vt0SEbslAUeIkMwoV0mKo8ZnPoNWtTbu+NRgu+LhYETVXY5iJlHeTYAFtJKYbzXAVOHILpl0A==
-X-Received: by 2002:a63:450b:: with SMTP id s11mr1041641pga.45.1585107410462;
-        Tue, 24 Mar 2020 20:36:50 -0700 (PDT)
-Received: from software.domain.org ([104.207.149.93])
-        by smtp.gmail.com with ESMTPSA id 144sm17405416pfx.184.2020.03.24.20.36.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 24 Mar 2020 20:36:49 -0700 (PDT)
-From:   Huacai Chen <chenhc@lemote.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>, stable@vger.kernel.org,
-        Pei Huang <huangpei@loongson.cn>
-Subject: [PATCH] MIPS/tlbex: Fix LDDIR usage in setup_pw() for Loongson-3
-Date:   Wed, 25 Mar 2020 11:44:54 +0800
-Message-Id: <1585107894-8803-1-git-send-email-chenhc@lemote.com>
-X-Mailer: git-send-email 2.7.0
+        id S1726596AbgCYD5F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 Mar 2020 23:57:05 -0400
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17839 "EHLO
+        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726103AbgCYD5E (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 24 Mar 2020 23:57:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1585108545;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=From:To:Cc:Message-ID:Subject:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type;
+        bh=w2jplGfaXO3aWSO9keKFkyE0pQSMu6AFxDUcVwZnrO0=;
+        b=dcbO+T4iZDT2xRJ3Vbrdzh0+Z9qSFaMGqk9IAY0ewZ8HRO3i1/EAqNfwup9QLXzu
+        21v4Eif72cLSgdiy0JbeXKXBGxlfPNEiR7ntzFq3MnwW8LWz17OlhPgzKVkB0MDrx5u
+        3zN5LiaANrcV2sepb2zFztGQAlVr4Qui25mKY4vE=
+Received: from localhost.localdomain (39.155.141.144 [39.155.141.144]) by mx.zoho.com.cn
+        with SMTPS id 1585108543034710.18358746742; Wed, 25 Mar 2020 11:55:43 +0800 (CST)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Message-ID: <20200325035537.156911-1-jiaxun.yang@flygoat.com>
+Subject: [PATCH v8 00/11] Modernize Loongson64 Machine v8
+Date:   Wed, 25 Mar 2020 11:54:53 +0800
+X-Mailer: git-send-email 2.26.0.rc2
+In-Reply-To: <20190827085302.5197-1-jiaxun.yang@flygoat.com>
+References: 
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-ZohoCNMailClient: External
+Content-Type: text/plain; charset=utf8
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-LDDIR/LDPTE is Loongson-3's acceleration for Page Table Walking. If BD
-(Base Directory, the 4th page directory) is not enabled, then GDOffset
-is biased by BadVAddr[63:62]. So, if GDOffset (aka. BadVAddr[47:36] for
-Loongson-3) is big enough, "0b11(BadVAddr[63:62])|BadVAddr[47:36]|...."
-can far beyond pg_swapper_dir. This means the pg_swapper_dir may NOT be
-accessed by LDDIR correctly, so fix it by set PWDirExt in CP0_PWCtl.
+Loongson have a long history of contributing their code to mainline kernel.
+However, it seems like recent years, they are focusing on maintain a kernel=
+ by themselves
+rather than contribute there code to the community.
 
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Pei Huang <huangpei@loongson.cn>
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
----
- arch/mips/mm/tlbex.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Kernel is progress rapidly too. Their code slept in mainline for a long per=
+oid without proper
+maintainance and became outdated.
 
-diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
-index 344e6e9..da407cd 100644
---- a/arch/mips/mm/tlbex.c
-+++ b/arch/mips/mm/tlbex.c
-@@ -1480,6 +1480,7 @@ static void build_r4000_tlb_refill_handler(void)
- 
- static void setup_pw(void)
- {
-+	unsigned int pwctl;
- 	unsigned long pgd_i, pgd_w;
- #ifndef __PAGETABLE_PMD_FOLDED
- 	unsigned long pmd_i, pmd_w;
-@@ -1506,6 +1507,7 @@ static void setup_pw(void)
- 
- 	pte_i = ilog2(_PAGE_GLOBAL);
- 	pte_w = 0;
-+	pwctl = 1 << 30; /* Set PWDirExt */
- 
- #ifndef __PAGETABLE_PMD_FOLDED
- 	write_c0_pwfield(pgd_i << 24 | pmd_i << 12 | pt_i << 6 | pte_i);
-@@ -1516,8 +1518,9 @@ static void setup_pw(void)
- #endif
- 
- #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
--	write_c0_pwctl(1 << 6 | psn);
-+	pwctl |= (1 << 6 | psn);
- #endif
-+	write_c0_pwctl(pwctl);
- 	write_c0_kpgd((long)swapper_pg_dir);
- 	kscratch_used_mask |= (1 << 7); /* KScratch6 is used for KPGD */
- }
--- 
-2.7.0
+This patchset brings modern DeviceTree and irqchip support to the Loongson6=
+4 machine, and leaves
+Loongson 2e/f alone since they are too legacy to touch.
+
+PCI and some legacy I/O device will be converted later, together with LS7A =
+PCH support.
+
+v1:
+- dt-bindings fixup according to Rob's comments
+- irqchip fixup according to Marc's comments
+- ls3-iointc: Make Core&IP map per-IRQ
+- Regenerate kconfigs
+- Typo & style improvements
+
+v2:
+- dt-bindings: Fix IOINTC, collect Rob's review tag
+- dtbs: Drop CPU Node, merge different ways according to Huacai and Paul's =
+comments
+
+v3:
+- Split code have been merged
+- Fix IOINTC binding to allow map any child IRQ to and parent
+- Convert "HTINTC" into "HTPIC", which mixed HT vectors processing and i825=
+9
+- Naming style fix according to Huacai's suggestions
+
+v4:
+- More naming related fixes
+
+v5:
+- irqchip fixes thanks to maz (see per file changelog)
+- Remove unnecessary details in dt-bindings
+- Credit Huacai with Co-developed-by
+
+v6:
+- HTPIC minor fix
+- device binding naming fix=20
+
+v7:
+- Messed up, please ignore it.
+
+v8:
+- Naming fix from Huacai
+- fix all reasonable checkpatch warnings
+
+Jiaxun Yang (11):
+  irqchip: Add driver for Loongson I/O Local Interrupt Controller
+  irqchip: loongson-liointc: Workaround LPC IRQ Errata
+  dt-bindings: interrupt-controller: Add Loongson LIOINTC
+  irqchip: Add driver for Loongson-3 HyperTransport PIC controller
+  dt-bindings: interrupt-controller: Add Loongson-3 HTPIC
+  irqchip: mips-cpu: Convert to simple domain
+  MIPS: Loongson64: Drop legacy IRQ code
+  dt-bindings: mips: Add loongson boards
+  MIPS: Loongson64: Add generic dts
+  MIPS: Loongson64: Load built-in dtbs
+  MAINTAINERS: Update Loongson64 entry
+
+ .../interrupt-controller/loongson,htpic.yaml  |  59 ++++
+ .../loongson,liointc.yaml                     |  93 ++++++
+ .../bindings/mips/loongson/devices.yaml       |  27 ++
+ MAINTAINERS                                   |   1 +
+ arch/mips/Kconfig                             |   6 +-
+ arch/mips/boot/dts/Makefile                   |   1 +
+ arch/mips/boot/dts/loongson/Makefile          |   4 +
+ .../boot/dts/loongson/loongson3-package.dtsi  |  64 +++++
+ .../dts/loongson/loongson3_4core_rs780e.dts   |  25 ++
+ .../dts/loongson/loongson3_8core_rs780e.dts   |  25 ++
+ arch/mips/boot/dts/loongson/rs780e-pch.dtsi   |  26 ++
+ arch/mips/include/asm/i8259.h                 |   1 +
+ .../include/asm/mach-loongson64/boot_param.h  |   2 +
+ .../asm/mach-loongson64/builtin_dtbs.h        |  13 +
+ arch/mips/include/asm/mach-loongson64/irq.h   |  30 +-
+ .../include/asm/mach-loongson64/loongson.h    |   1 +
+ arch/mips/loongson64/Makefile                 |   2 +-
+ arch/mips/loongson64/env.c                    |  23 ++
+ arch/mips/loongson64/init.c                   |   6 +
+ arch/mips/loongson64/irq.c                    | 162 -----------
+ arch/mips/loongson64/setup.c                  |  16 ++
+ arch/mips/loongson64/smp.c                    |  28 +-
+ drivers/irqchip/Kconfig                       |  19 ++
+ drivers/irqchip/Makefile                      |   2 +
+ drivers/irqchip/irq-loongson-htpic.c          | 149 ++++++++++
+ drivers/irqchip/irq-loongson-liointc.c        | 271 ++++++++++++++++++
+ drivers/irqchip/irq-mips-cpu.c                |   2 +-
+ 27 files changed, 846 insertions(+), 212 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+loongson,htpic.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/=
+loongson,liointc.yaml
+ create mode 100644 Documentation/devicetree/bindings/mips/loongson/devices=
+.yaml
+ create mode 100644 arch/mips/boot/dts/loongson/Makefile
+ create mode 100644 arch/mips/boot/dts/loongson/loongson3-package.dtsi
+ create mode 100644 arch/mips/boot/dts/loongson/loongson3_4core_rs780e.dts
+ create mode 100644 arch/mips/boot/dts/loongson/loongson3_8core_rs780e.dts
+ create mode 100644 arch/mips/boot/dts/loongson/rs780e-pch.dtsi
+ create mode 100644 arch/mips/include/asm/mach-loongson64/builtin_dtbs.h
+ delete mode 100644 arch/mips/loongson64/irq.c
+ create mode 100644 drivers/irqchip/irq-loongson-htpic.c
+ create mode 100644 drivers/irqchip/irq-loongson-liointc.c
+
+--=20
+2.26.0.rc2
+
 
