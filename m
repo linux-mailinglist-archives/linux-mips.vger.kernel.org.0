@@ -2,80 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6911939B9
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2020 08:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FFC193A7B
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2020 09:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727661AbgCZHnd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 26 Mar 2020 03:43:33 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:41582 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726138AbgCZHnd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 26 Mar 2020 03:43:33 -0400
-Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx_973XHxe+TMgAA--.30S2;
-        Thu, 26 Mar 2020 15:42:47 +0800 (CST)
-From:   bibo mao <maobibo@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>,
-        Allison Randal <allison@lohutok.net>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: xilfpga: Removed unused header files
-Date:   Thu, 26 Mar 2020 03:42:47 -0400
-Message-Id: <1585208567-17979-1-git-send-email-maobibo@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9Dx_973XHxe+TMgAA--.30S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GrW8Wr4rCFyUJF13ArWUurg_yoWDXwcEka
-        sFva1fur1fWr4xXrW7Jws3GFyUG397ur93Gr95Jrn0vw4Yqr4qvay8GFW7XrW7u398Zr4r
-        ZFyFvr1Ykay3KjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb7kYjsxI4VWkCwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE-syl42xK82IY
-        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7eOJUUUUU
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+        id S1726296AbgCZIMb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 26 Mar 2020 04:12:31 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:51638 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726347AbgCZIMb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 26 Mar 2020 04:12:31 -0400
+Received: by mail-wm1-f68.google.com with SMTP id c187so5462729wme.1;
+        Thu, 26 Mar 2020 01:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=cc:subject:to:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oEJ1iAQ+7+YVUW8+jUn/LpDi20P1xzzVQYh1aI/7o1g=;
+        b=Lh2oSAL4GWyDbds8Qlj6rCNPhLzwWT77jtNKGn4A2KUu3LwyNZaWE6RqlwJMgzYOXh
+         wzx0Ii/1s8D1Zo31ki/lYf3+3FEs+qnAYj+6NFdc39tlnSnajwqiHoyMr5H6EL9f4lp1
+         Oy4r73UaYdFrpVM8CzjrfrNvoxEkux+yyESJtnbbSA2fo0VzYi8qkTFzbzWy1NLZhvop
+         iSOY/CjWlYaE0f2uEKox4ueF0l99qS5ECt//F3qg5pdJQvtSgBx9QfwYiDGaktN4w0GZ
+         BFYvECvEjaUGto279tzEQuPdRjSpSRUtwN7foLVFF32q/ogVHNaetbsw0ymmI0ZpCojv
+         ItvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oEJ1iAQ+7+YVUW8+jUn/LpDi20P1xzzVQYh1aI/7o1g=;
+        b=t0ofAU7lfgTcMTZFCnCrHEWVCa4oX78uTzoiyy845svapqT1y+0i3s3Usjv76Xv0b5
+         74AaDNuh4fKEWVRVtqMlcfbs8CGwGBLN1z/kZiDk7uu4CqRZ2+DHFelLoOpO+EdXAUQ/
+         Y+BH+5x2aSEHwUMseBGDRZ1sjq4reGr3Z4B3Vy9SfLRgU0032YF/4hBhchTwKO/fBcrf
+         7RO7tiHuGurJm9LhQHUawQ9EW9RUa3aB2DemeWC00KANlnVSL1RVb83cBuT9yDWStain
+         Zt7jcXTIaZOzawg5BhfK6UIqVGH9utLwvNgGOTm7DVRAJDc8Y3iR5DPEceUmjt5EW4pN
+         iZlQ==
+X-Gm-Message-State: ANhLgQ0WTGnD98cg61sEmnNYkWyyV/M9QlV164LiUr9RTaD9gS4dJ+vu
+        vqrOK4AqOc8ptp1xamtiGPi9OrCr
+X-Google-Smtp-Source: ADFU+vszpHwa+9v6JWIYs2igDhHtyRgaaZLpc8HnU96QPA4kMyij9NCG459Q4bMX/H/k1EUBFXHtqw==
+X-Received: by 2002:a05:600c:4401:: with SMTP id u1mr1816379wmn.103.1585210347230;
+        Thu, 26 Mar 2020 01:12:27 -0700 (PDT)
+Received: from ?IPv6:2001:a61:2482:101:3351:6160:8173:cc31? ([2001:a61:2482:101:3351:6160:8173:cc31])
+        by smtp.gmail.com with ESMTPSA id i1sm2387292wrq.89.2020.03.26.01.12.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Mar 2020 01:12:26 -0700 (PDT)
+Cc:     mtk.manpages@gmail.com, linux-mips@vger.kernel.org,
+        linux-man@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] getauxval.3: MIPS, AT_BASE_PLATFORM passes ISA level
+To:     YunQiang Su <syq@debian.org>
+References: <20200322095527.397716-1-syq@debian.org>
+From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Message-ID: <827f0ae8-2e97-5eeb-387d-275d8aac98ad@gmail.com>
+Date:   Thu, 26 Mar 2020 09:12:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <20200322095527.397716-1-syq@debian.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Header in directory asm/mach-xilfpga is not used any more.
-Remove it here, and it passes to compile with xilfpga_defconfig
+Hello YunQiang Su
 
-Signed-off-by: bibo mao <maobibo@loongson.cn>
----
- arch/mips/include/asm/mach-xilfpga/irq.h | 14 --------------
- 1 file changed, 14 deletions(-)
- delete mode 100644 arch/mips/include/asm/mach-xilfpga/irq.h
+On 3/22/20 10:55 AM, YunQiang Su wrote:
+> Since Linux 5.7, on MIPS, we use AT_BASE_PLATFORM to pass ISA level.
+> The values may be:
+>   mips2, mips3, mips4, mips5,
+>   mips32, mips32r2, mips32r6,
+>   mips64, mips64r2, mips64r6.
+> 
+> This behavior is different with PowerPC.
 
-diff --git a/arch/mips/include/asm/mach-xilfpga/irq.h b/arch/mips/include/asm/mach-xilfpga/irq.h
-deleted file mode 100644
-index 15ad29e..0000000
---- a/arch/mips/include/asm/mach-xilfpga/irq.h
-+++ /dev/null
-@@ -1,14 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Copyright (C) 2015 Imagination Technologies
-- * Author: Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
-- */
--
--#ifndef __MIPS_ASM_MACH_XILFPGA_IRQ_H__
--#define __MIPS_ASM_MACH_XILFPGA_IRQ_H__
--
--#define NR_IRQS 32
--
--#include <asm/mach-generic/irq.h>
--
--#endif /* __MIPS_ASM_MACH_XILFPGA_IRQ_H__ */
+Thank you for the patch. I see that this is scheduled for 
+Linux 5.7 (for which the merge window is not yet open).
+How certain is it that the feature will land in 5.7?
+
+Thanks,
+
+Michael
+
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=e585b768da111f2c2d413de6214e83bbdfee8f22
+> Signed-off-by: YunQiang Su <syq@debian.org>
+> 
+> ----
+> v1 -> v2: fix typo
+> ---
+>  man3/getauxval.3 | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/man3/getauxval.3 b/man3/getauxval.3
+> index 456371c6a..bcc116dd2 100644
+> --- a/man3/getauxval.3
+> +++ b/man3/getauxval.3
+> @@ -60,9 +60,10 @@ values are present on all architectures.
+>  The base address of the program interpreter (usually, the dynamic linker).
+>  .TP
+>  .BR AT_BASE_PLATFORM
+> -A pointer to a string identifying the real platform; may differ from
+> -.BR AT_PLATFORM
+> -(PowerPC only).
+> +A pointer to a string (PowerPC and MIPS only).
+> +On PowerPC, this identifies the real platform; may differ from
+> +.BR AT_PLATFORM "."
+> +On MIPS, this identifies the ISA level (Since 5.7).
+>  .TP
+>  .BR AT_CLKTCK
+>  The frequency with which
+> 
+
+
 -- 
-1.8.3.1
-
+Michael Kerrisk
+Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
+Linux/UNIX System Programming Training: http://man7.org/training/
