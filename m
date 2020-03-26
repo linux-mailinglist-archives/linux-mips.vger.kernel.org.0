@@ -2,97 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8BF193621
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2020 03:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF703193760
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2020 05:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727612AbgCZCoT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 25 Mar 2020 22:44:19 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:47746 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727585AbgCZCoT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 25 Mar 2020 22:44:19 -0400
-Received: from [10.130.0.79] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn9_2Fnxeeh4gAA--.2S3;
-        Thu, 26 Mar 2020 10:44:07 +0800 (CST)
-Subject: Re: [PATCH v2 2/3] MIPS: Loongson: Add DMA support for 7A1000
-To:     Christoph Hellwig <hch@infradead.org>
-References: <1584932355-3642-1-git-send-email-yangtiezhu@loongson.cn>
- <1584932355-3642-3-git-send-email-yangtiezhu@loongson.cn>
- <20200325132756.GA13750@infradead.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <821ab35b-72d8-59e0-98cb-f5b199ae3a2f@loongson.cn>
-Date:   Thu, 26 Mar 2020 10:44:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1726014AbgCZEts (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 26 Mar 2020 00:49:48 -0400
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17955 "EHLO
+        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725775AbgCZEtr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 26 Mar 2020 00:49:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1585198133;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=From:To:Cc:Message-ID:Subject:Date:MIME-Version:Content-Transfer-Encoding:Content-Type;
+        bh=l2PNpR2Rc6LMbAWYXl8TckJ3AJ68KwDurPM44WgWOeQ=;
+        b=JktAJCvfbErbaXFiovxaNBK1nkVnA/v8QmlERPL5f4nE/J0LBVIusx9+rYAecu7W
+        mMZlfGsaO1mhB3nedStqoCwWyHD3gVrLomDwltPx09oTwa6Jjo6OAsc1nDQpo8zIraV
+        wyR9z3b36PLOpiQOwSUG2uW92Sp0oZcL19WxDjiY=
+Received: from localhost.localdomain (39.155.141.144 [39.155.141.144]) by mx.zoho.com.cn
+        with SMTPS id 1585198130690885.1881599862174; Thu, 26 Mar 2020 12:48:50 +0800 (CST)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, gch981213@gmail.com,
+        linux-mediatek@lists.infradead.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <20200326044804.382981-1-jiaxun.yang@flygoat.com>
+Subject: [PATCH 1/2] MIPS: Kill MIPS_GIC_IRQ_BASE
+Date:   Thu, 26 Mar 2020 12:48:03 +0800
+X-Mailer: git-send-email 2.26.0.rc2
 MIME-Version: 1.0
-In-Reply-To: <20200325132756.GA13750@infradead.org>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxn9_2Fnxeeh4gAA--.2S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Gw17Zr1kWF1rtrWfAr17GFg_yoW8Jr4UpF
-        s7XFWrCr1UKryUWFZ2vaykWr1YvrW5Cr9xWFWDCF90kas0q34jqa1Dta1jgas0qw1UCrs7
-        Xa97JayfZF4UGw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
-        67vIY487MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
-        73UjIFyTuYvjfUO_MaUUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+Content-Transfer-Encoding: quoted-printable
+X-ZohoCNMailClient: External
+Content-Type: text/plain; charset=utf8
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/25/2020 09:27 PM, Christoph Hellwig wrote:
-> On Mon, Mar 23, 2020 at 10:59:14AM +0800, Tiezhu Yang wrote:
->> Implement __phys_to_dma() and __dma_to_phys() according to the
->> node id offset in the 7A1000 DMA route config register.
-> Can you please try to just use the dma_pfn_offset field in struct device
-> for all loongson platforms?  I'm pretty sure I asked for that last time
-> around..
+It never got used by any driver.
 
-Oh, sorry, I don't quite understand what you mean last time.
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ arch/mips/include/asm/mach-generic/irq.h   | 6 ------
+ arch/mips/include/asm/mach-ralink/mt7621.h | 2 --
+ 2 files changed, 8 deletions(-)
 
-Do you mean use the default implementation in include/linux/dma-direct.h
-when CONFIG_ARCH_HAS_PHYS_TO_DMA is not set?
+diff --git a/arch/mips/include/asm/mach-generic/irq.h b/arch/mips/include/a=
+sm/mach-generic/irq.h
+index be546a0f65fa..72ac2c202c55 100644
+--- a/arch/mips/include/asm/mach-generic/irq.h
++++ b/arch/mips/include/asm/mach-generic/irq.h
+@@ -36,10 +36,4 @@
+=20
+ #endif /* CONFIG_IRQ_MIPS_CPU */
+=20
+-#ifdef CONFIG_MIPS_GIC
+-#ifndef MIPS_GIC_IRQ_BASE
+-#define MIPS_GIC_IRQ_BASE (MIPS_CPU_IRQ_BASE + 8)
+-#endif
+-#endif /* CONFIG_MIPS_GIC */
+-
+ #endif /* __ASM_MACH_GENERIC_IRQ_H */
+diff --git a/arch/mips/include/asm/mach-ralink/mt7621.h b/arch/mips/include=
+/asm/mach-ralink/mt7621.h
+index 65483a4681ab..e1af1ba50bd8 100644
+--- a/arch/mips/include/asm/mach-ralink/mt7621.h
++++ b/arch/mips/include/asm/mach-ralink/mt7621.h
+@@ -31,6 +31,4 @@
+ #define MT7621_CHIP_NAME0=09=090x3637544D
+ #define MT7621_CHIP_NAME1=09=090x20203132
+=20
+-#define MIPS_GIC_IRQ_BASE           (MIPS_CPU_IRQ_BASE + 8)
+-
+ #endif
+--=20
+2.26.0.rc2
 
-#ifdef CONFIG_ARCH_HAS_PHYS_TO_DMA
-#include <asm/dma-direct.h>
-#else
-static inline dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t 
-paddr)
-{
-         dma_addr_t dev_addr = (dma_addr_t)paddr;
-
-         return dev_addr - ((dma_addr_t)dev->dma_pfn_offset << PAGE_SHIFT);
-}
-
-static inline phys_addr_t __dma_to_phys(struct device *dev, dma_addr_t 
-dev_addr)
-{
-         phys_addr_t paddr = (phys_addr_t)dev_addr;
-
-         return paddr + ((phys_addr_t)dev->dma_pfn_offset << PAGE_SHIFT);
-}
-#endif /* !CONFIG_ARCH_HAS_PHYS_TO_DMA */
-
-If so, I will verify it used with the AMD RS780E and Loongson 7A1000 
-bridge chip.
-
-Thanks,
-
-Tiezhu Yang
 
