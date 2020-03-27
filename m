@@ -2,96 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B646194373
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Mar 2020 16:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2FDA194E5C
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Mar 2020 02:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727874AbgCZPqj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 26 Mar 2020 11:46:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53026 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727835AbgCZPqj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 26 Mar 2020 11:46:39 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E630A20737;
-        Thu, 26 Mar 2020 15:46:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585237599;
-        bh=NO2J3j8LSFqbndQOJNWzjQOGXWSDqd3mS+tKyOX/KWg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dpb6ZHMnaKP932SEGca49jpCUdvCbMfBAdMX+Xd+4YWSlyngN5wB7y+gKIhb5GAz/
-         87tIIm2WVDoNLLb9+NF6xO69F63wsGegUJNb1QAKSGOo/qjGIn/vLOM/T5RaTFjpRP
-         6JszulSKuG/7iFWudw8B6FwCPhQVLRtnxguoA7Jg=
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1jHUiL-00Fv7I-9c; Thu, 26 Mar 2020 15:46:37 +0000
+        id S1727600AbgC0BVi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 26 Mar 2020 21:21:38 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:53078 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727547AbgC0BVi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 26 Mar 2020 21:21:38 -0400
+Received: from [10.130.0.79] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj90NVX1ew3EgAA--.18S3;
+        Fri, 27 Mar 2020 09:21:18 +0800 (CST)
+Subject: Re: [PATCH v3 1/2] firmware: dmi: Add macro
+ SMBIOS_ENTRY_POINT_SCAN_START
+To:     Jean Delvare <jdelvare@suse.de>
+References: <1580875713-18252-1-git-send-email-yangtiezhu@loongson.cn>
+ <8ee01022-d3d1-8145-1a0b-ba77c5bb7101@loongson.cn>
+ <20200326150716.47b4152f@endymion>
+Cc:     jiaxun.yang@flygoat.com, chenhc@lemote.com,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        lixuefeng@loongson.cn, paulburton@kernel.org, ralf@linux-mips.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <623abcd1-7c5b-3cae-817b-fc993897b9a9@loongson.cn>
+Date:   Fri, 27 Mar 2020 09:21:17 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <20200326150716.47b4152f@endymion>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Thu, 26 Mar 2020 15:46:37 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
-        chenhc@lemote.com
-Subject: Re: [RFC PATCH 0/6] MIPS: Handle CPU IRQ in domain's way
-In-Reply-To: <20200326153849.GA14951@alpha.franken.de>
-References: <20200326061704.387483-1-jiaxun.yang@flygoat.com>
- <20200326153849.GA14951@alpha.franken.de>
-Message-ID: <7c179c74ec54a5a00c8cc9227f094868@kernel.org>
-X-Sender: maz@kernel.org
-User-Agent: Roundcube Webmail/1.3.10
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: tsbogend@alpha.franken.de, jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org, chenhc@lemote.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-CM-TRANSID: AQAAf9Dxj90NVX1ew3EgAA--.18S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7GrykJw4UZr43GrW7uFyDZFb_yoW3AFbE9w
+        4kCr1Sk34jkr1UAwnrKr1avFn5t34ktFWIya18Cw47Z3Z8Aan5Xr4fuwn5Jan5J3W8Cr4D
+        Ar15tryqyrsavjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbskFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJV
+        WxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+        wI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73Uj
+        IFyTuYvjfUFVyIUUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2020-03-26 15:38, Thomas Bogendoerfer wrote:
-> On Thu, Mar 26, 2020 at 02:16:56PM +0800, Jiaxun Yang wrote:
->> In [1], we discussed about why MIPS CPU IRQ doesn't fit simple IRQ 
->> domain.
->> I felt it's time to remove this barrier and "modernize" the whole 
->> flow.
->> 
->> This set is simply a proof of concept of removing the whole 
->> MIPS_CPU_IRQ_BASE
->> and use the irq_domain's way.
->> 
->> Currently only Loongson64 and ip22 are adapted for testing purpose,
->> if everybody is happy with it, then I'll take a look at more 
->> platforms.
->> 
->> Btw: Thomas, are you still willing to drop some platforms in 5.8?
-> 
-> yes, I didn't receive feedback to not drop them. So after merge
-> window is over I'm going to post a patch to remove LASAT, NEC_MARKEINS
-> and PMC_MSP.
-> 
->>  arch/mips/include/asm/irq_cpu.h      | 19 +++++++++++++++++-
->>  arch/mips/include/asm/sgi/ip22.h     | 30 
->> ++++++++++++++--------------
->>  arch/mips/kernel/cevt-r4k.c          |  2 +-
->>  arch/mips/kernel/perf_event_mipsxx.c |  3 ++-
->>  arch/mips/kernel/rtlx-mt.c           |  7 +++++--
->>  arch/mips/loongson64/smp.c           |  6 ++++--
->>  arch/mips/sgi-ip22/ip22-int.c        | 14 ++++++++-----
->>  drivers/irqchip/irq-mips-cpu.c       | 22 ++++++++++++++------
->>  8 files changed, 70 insertions(+), 33 deletions(-)
-> 
-> Adding more code for doing the same thing doesn't sound like the
-> best approach. Is there a big need for that change (like someone
-> getting rid of irq_domain_add_legacy) ?
+On 03/26/2020 10:07 PM, Jean Delvare wrote:
+> Hi Tiezhu,
+>
+> On Thu, 20 Feb 2020 10:43:56 +0800, Tiezhu Yang wrote:
+>> Since this patch is independent and it has no any negative influence,
+>> could you apply it to your DMI tree first?
+> I've just queued your patch for kernel 5.6. Thanks for your
+> contribution and sorry for the delay.
+>
 
-I have no plan to remove the API overnight, but if you guys start
-modernizing MIPS, I could be tempted...
+Hi Jean,
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Thank you very much, it has been merged into
+mips-next and linux-next tree by Thomas about
+three days ago, so you can drop it in your tree.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=3da27a4eb8c214d692e024473415fe7d2e88e7d7
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3da27a4eb8c214d692e024473415fe7d2e88e7d7
+
+Thanks,
+
+Tiezhu Yang
+
