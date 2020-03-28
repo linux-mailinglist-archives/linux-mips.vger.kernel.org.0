@@ -2,135 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DBC196384
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2020 05:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC35196407
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Mar 2020 07:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725845AbgC1EQ1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 28 Mar 2020 00:16:27 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:41644 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725372AbgC1EQ1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 28 Mar 2020 00:16:27 -0400
-Received: by mail-pl1-f194.google.com with SMTP id d24so433817pll.8;
-        Fri, 27 Mar 2020 21:16:26 -0700 (PDT)
+        id S1725937AbgC1Gth (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 28 Mar 2020 02:49:37 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:42914 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725919AbgC1Gth (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 28 Mar 2020 02:49:37 -0400
+Received: by mail-ot1-f66.google.com with SMTP id z5so11983641oth.9
+        for <linux-mips@vger.kernel.org>; Fri, 27 Mar 2020 23:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sVWn43NqLR3tLEZh5Y98iaDMlPEIz/1h2UHcds3kBXg=;
-        b=QGbyYModlVyJIfWRsIVy3qc0JDBrMzhVfgj81f2hF+ehgXDrGVkeNWDUnZBgd37qVH
-         S88oblXh+y+y19+93qDCbpwLtBT8Dehx2HKaBAcATYNq5Ow9x2lU7HNbvMSE3lVtD0xY
-         ht0Q4DUfegGtQ14gGSSQSY2h5MdSStYnJG9q2WHZ9+nFgyBqQ0UoIo05I+LoZvxC/wUS
-         CsT/cvY2oXTZLEvHUr1dExCgI2g4IxuIgeudQaNR/eRNO5ahWAhI85B2MuADh2eVaKNN
-         D7UEM29ybfc7zv/wlan4FYnXo+18uRlYV6efq/ROk1rXsMJtjVhnm/DNtlGmmtlsz5tA
-         IFSg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=vh3pvC0YrL65XzwRtnNjwLEeZNpHdRyyFSHt1NSoOg8=;
+        b=sVydZLGs6HRIgoyNL3bn/Of4n4y6h7K+xely4yAe35HpcxMfVEI7OWafCrTj2EMwkH
+         bfvL3d10wlky1FclfHZEAnejivPqfMC4yvUyauy0+t2ABZEugXJwVm8JDrnkMK3Sn85V
+         eS0aXMjjoxzgylRSlRr7dUvuSWEXHlA9M+8uWdM6SGB2uzNtNwmvEBMuv9GGW7sPHxRo
+         RGr2tRdiNNOOKXPiOIb678W+3RKe573fP0oDNl0LcQFaWMm5D3Jxd+mvHTNap2YC3M0w
+         2qdnbcYHoS+FVxoaOGGNC4jraEf/RnMIaPs6VzCWv8cwgMUD3Rg/48ZCfQa9IgQk5MbD
+         6aTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sVWn43NqLR3tLEZh5Y98iaDMlPEIz/1h2UHcds3kBXg=;
-        b=M12ZZJraYV0hZCTlV+m6MUE5IofK1aJ3wMfw/ckyeJwTpqFcgirwmru4TUGO3xOPNC
-         p3h+FxyOWgnJIjgHHNG2kfRsb1Y8QABq8MIjtnsRX0ieH9CedOzowaNvM3FuKN6849u8
-         A6R+A0Vl0VokSEF/rGqD8ZllgVRwhKbDTOgTnaXzmsyfeSPLaw1l1L7CCgrp0XM1BLYY
-         kURvKwc7tbQjkNbWMjsauZsg875XycLaMheSgH82SZFsZNC1DVoK8agmi+Xyazyr3SNG
-         mZspXn4XCWP69oEDhuyBcM0O+W/JHAXjAmpP49Ld1TR2LbI/5pSSjKf5kht3RHNSm7kx
-         UXxg==
-X-Gm-Message-State: ANhLgQ0tXp7Zdjj845Is3PZNVCcPkvimINNv7D2Mq05Jhiw0ihR+Sy9i
-        HqSHJySpcmHzPPzufcHNFlEw//Qi7jM=
-X-Google-Smtp-Source: ADFU+vs3Ce1yOll+zcwspdvoRrWuF4MokGCPI9kd7oMAXqYASz45vLAlrXMaw0wcl2frQjxLG/SpOA==
-X-Received: by 2002:a17:90a:db02:: with SMTP id g2mr2895113pjv.15.1585368985725;
-        Fri, 27 Mar 2020 21:16:25 -0700 (PDT)
-Received: from guoguo-omen.lan ([240e:379:97d:e970:8934:6f24:2a5f:6e75])
-        by smtp.gmail.com with ESMTPSA id v123sm5174578pfb.85.2020.03.27.21.16.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2020 21:16:25 -0700 (PDT)
-From:   Chuanhong Guo <gch981213@gmail.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Chuanhong Guo <gch981213@gmail.com>,
-        John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: ralink: drop ralink_clk_init for mt7621
-Date:   Sat, 28 Mar 2020 12:14:57 +0800
-Message-Id: <20200328041523.81229-1-gch981213@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vh3pvC0YrL65XzwRtnNjwLEeZNpHdRyyFSHt1NSoOg8=;
+        b=cedv8Cxs4xzDS//zlEZzWf+9FoBQnttljbckEbJVouPWcDN0qyOXapxifF5xqZRaHU
+         CMt+hcCXSUE87Reayww71CLvR0tft5FcLqmG4ODY1vB1vXW1hDG9i2310HqtSjjHXhWF
+         1wGYNQukJTh/tn65++EhyFRjd9Kx/6M04j2cTNCxE2VjgjgNWzaDi+GATLHBgMWiT2CU
+         WISXSMhA+9LxFYKdQXUSCk7bKGGkPHgtXAbpvsrxZtLEumeSTukRWfcY7kQI2ZuNgWIl
+         ZJAp9NinjOP3pfYMehjZr/G1zCRtvVrW/ddZUckwkPt17J80SJFg7j4RTk5BvrbBTtFQ
+         plcQ==
+X-Gm-Message-State: ANhLgQ3oEKNyInKeA9zr0HXzrHPhal+Bhk4E2Ab52bUbNUzqQWIBZOJJ
+        Dj1imYM/JMQSJC6BkAkbsYDSH/LoLC06WelsDTg25mgI
+X-Google-Smtp-Source: ADFU+vsg/41q/lYfSqsqVX1L/ha84M3+dBSKT7DTI/g/+7f7mu16jHwi5nRI0jY0KKKisDNTBo88z6KtP9rDnlws+Hg=
+X-Received: by 2002:a4a:3e90:: with SMTP id t138mr2426554oot.24.1585378176639;
+ Fri, 27 Mar 2020 23:49:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200327152624.Horde.4Z2ZjKkOtsKUryuWp4S7pe-@www.vdorst.com>
+In-Reply-To: <20200327152624.Horde.4Z2ZjKkOtsKUryuWp4S7pe-@www.vdorst.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Sat, 28 Mar 2020 07:49:25 +0100
+Message-ID: <CAMhs-H9BPx=v=BfnCaCOWtQ9-isGerY=vVNwA-OcBRxo3ie6gg@mail.gmail.com>
+Subject: Re: MIPS: ralink: mt7621: introduce 'soc_device' initialization,
+ compile issue
+To:     =?UTF-8?Q?Ren=C3=A9_van_Dorst?= <opensource@vdorst.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-ralink_clk_init is only called in arch/mips/ralink/clk.c which isn't
-compiled for mt7621. And it doesn't export a proper cpu clock.
-Drop this unused function.
+Hi Ren=C3=A9,
 
-Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
----
- arch/mips/ralink/mt7621.c | 43 ---------------------------------------
- 1 file changed, 43 deletions(-)
+On Fri, Mar 27, 2020 at 4:26 PM Ren=C3=A9 van Dorst <opensource@vdorst.com>=
+ wrote:
+>
+> Hi Sergio,
+>
+> I am hitting this issue with the lastest linux-next:
+>
+> /home/rene/dev/openwrt/staging_dir/toolchain-mipsel_24kc_gcc-8.3.0_musl/b=
+in/mipsel-openwrt-linux-ld: arch/mips/ralink/mt7621.o: in function
+> `soc_dev_init':
+> /home/rene/dev/net-next/arch/mips/ralink/mt7621.c:185: undefined
+> reference to `soc_device_register'
+> make: *** [Makefile:1086: vmlinux] Error 1
+>
+> Are you also experiencing this issue?
+>
 
-diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
-index 905460aeeb1f..e309a79b18e4 100644
---- a/arch/mips/ralink/mt7621.c
-+++ b/arch/mips/ralink/mt7621.c
-@@ -20,11 +20,6 @@
- 
- #include "common.h"
- 
--#define SYSC_REG_SYSCFG		0x10
--#define SYSC_REG_CPLL_CLKCFG0	0x2c
--#define SYSC_REG_CUR_CLK_STS	0x44
--#define CPU_CLK_SEL		(BIT(30) | BIT(31))
--
- #define MT7621_GPIO_MODE_UART1		1
- #define MT7621_GPIO_MODE_I2C		2
- #define MT7621_GPIO_MODE_UART3_MASK	0x3
-@@ -115,44 +110,6 @@ phys_addr_t mips_cpc_default_phys_base(void)
- 	panic("Cannot detect cpc address");
- }
- 
--void __init ralink_clk_init(void)
--{
--	int cpu_fdiv = 0;
--	int cpu_ffrac = 0;
--	int fbdiv = 0;
--	u32 clk_sts, syscfg;
--	u8 clk_sel = 0, xtal_mode;
--	u32 cpu_clk;
--
--	if ((rt_sysc_r32(SYSC_REG_CPLL_CLKCFG0) & CPU_CLK_SEL) != 0)
--		clk_sel = 1;
--
--	switch (clk_sel) {
--	case 0:
--		clk_sts = rt_sysc_r32(SYSC_REG_CUR_CLK_STS);
--		cpu_fdiv = ((clk_sts >> 8) & 0x1F);
--		cpu_ffrac = (clk_sts & 0x1F);
--		cpu_clk = (500 * cpu_ffrac / cpu_fdiv) * 1000 * 1000;
--		break;
--
--	case 1:
--		fbdiv = ((rt_sysc_r32(0x648) >> 4) & 0x7F) + 1;
--		syscfg = rt_sysc_r32(SYSC_REG_SYSCFG);
--		xtal_mode = (syscfg >> 6) & 0x7;
--		if (xtal_mode >= 6) {
--			/* 25Mhz Xtal */
--			cpu_clk = 25 * fbdiv * 1000 * 1000;
--		} else if (xtal_mode >= 3) {
--			/* 40Mhz Xtal */
--			cpu_clk = 40 * fbdiv * 1000 * 1000;
--		} else {
--			/* 20Mhz Xtal */
--			cpu_clk = 20 * fbdiv * 1000 * 1000;
--		}
--		break;
--	}
--}
--
- void __init ralink_of_remap(void)
- {
- 	rt_sysc_membase = plat_of_remap_node("mtk,mt7621-sysc");
--- 
-2.25.1
+No it compiles clean for me with the last linux-next. The function
+'soc_device_register' is implemented in drivers/base/soc.c which is
+included for compilation with
+CONFIG_SOC_BUS. Looks like kernel is not compiling soc.c for any reason.
 
+> I don't see any other compiler issue.
+>
+> Greats,
+>
+> Ren=C3=A9
+
+Best regards,
+    Sergio Paracuellos
+>
+>
+>
