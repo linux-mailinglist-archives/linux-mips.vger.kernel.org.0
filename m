@@ -2,34 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EE1196EC4
-	for <lists+linux-mips@lfdr.de>; Sun, 29 Mar 2020 19:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CC9196EC8
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Mar 2020 19:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728446AbgC2RgK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 29 Mar 2020 13:36:10 -0400
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.81]:9920 "EHLO
+        id S1728537AbgC2Rgn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 Mar 2020 13:36:43 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.83]:12476 "EHLO
         mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728349AbgC2RgK (ORCPT
+        with ESMTP id S1728285AbgC2RgK (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Sun, 29 Mar 2020 13:36:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1585503365;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1585503366;
         s=strato-dkim-0002; d=goldelico.com;
-        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
-        Subject:Sender;
-        bh=o9cl3lo73IupocSaAB1N567LORTRk86aGdGAIUt50w4=;
-        b=NoRv7Wi8QNU1agInI4m5RGjdrI9u9YW4/5Dbad/BxKiIcD59qbayZ+pULr1Nccp6HP
-        Iky8Hgq54eIcjvKGOIWVAhdYvgMjlbe64xABy9GEkMiCq5Zrw3ELXP/NIm2oxTScv1EO
-        FigQLX5lxrjE2o7JpC6+zGoKYxHeEfW2ieq60EWEhkwk0OVhm9KfxqgCG0IulZy/qJqT
-        Dtwtvvc/XZNPj/ETWR/JpyNQa4qMqDqrUg2xn4avZvgk34ed87syYGo6Nse7xgpcl+5L
-        NphI/RM3X4tIc74fNKZH2qtLaGrltpv7DxKBO1HcHBh/7OE9OP23egf/LOsh6fQk+19r
-        M8GQ==
+        h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=Zg1B2MSlw8LBkeQrcB+SbHPflxN5qiikKNdtggvwHAA=;
+        b=NRWEiUWc6buewPunl3ymSwFnhaLwWhtkGxTYzBZ7KNJpA3LvwjYMif4MkLTTqppEtF
+        jNUjgmVmOy3FbrJPfizy4KjC+oF3S9xamG209PGfLABs0aeJH2OJrG7ctO52ujrB+vH6
+        fHWGQoGoCvAMx0Ugb28zoQyFZ2wAwGSM2a8ri/sbNfI9NKBAW4jfKKbesQLDyxNNefzf
+        FYbx5/o16a5VT+FIwqUkBqiIF2m/f9MUbwu0/n2XvnN82+rakrOBjOu67aNpf+9lXWJj
+        OCSoT8lrwpvphmkQ4mQQ6mKbO7+2bibOPoC6h/L6jDXorZ2qnFZNJ28khftdHiDQah0d
+        8Ihg==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0pDz2rsNxxv"
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 46.2.1 DYNA|AUTH)
-        with ESMTPSA id m02241w2THZtBM7
+        with ESMTPSA id m02241w2THZvBM8
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Sun, 29 Mar 2020 19:35:55 +0200 (CEST)
+        Sun, 29 Mar 2020 19:35:57 +0200 (CEST)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     Paul Cercueil <paul@crapouillou.net>,
         Paul Boddie <paul@boddie.org.uk>,
@@ -51,11 +51,14 @@ To:     Paul Cercueil <paul@crapouillou.net>,
 Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-gpio@vger.kernel.org, letux-kernel@openphoenux.org,
-        mips-creator-ci20-dev@googlegroups.com
-Subject: [RFC v3 0/8] MIPS: CI20: add HDMI out support
-Date:   Sun, 29 Mar 2020 19:35:46 +0200
-Message-Id: <cover.1585503354.git.hns@goldelico.com>
+        mips-creator-ci20-dev@googlegroups.com,
+        Rob Herring <robh@kernel.org>
+Subject: [RFC v3 1/8] dt-bindings: display: convert ingenic,lcd.txt to ingenic,lcd.yaml
+Date:   Sun, 29 Mar 2020 19:35:47 +0200
+Message-Id: <a75c77fa8528f44832993f9780ae4ea409125a90.1585503354.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1585503354.git.hns@goldelico.com>
+References: <cover.1585503354.git.hns@goldelico.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -63,76 +66,209 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-+++ help is needed: driver is not completely working and shows no output signal on the HDMI data and clock lanes
-+++ HPD is working and /dev/fb0 does appear
-+++ but there is no trigger to initialize the lcdc
+and add compatible: jz4780-lcd, including an example how to
+configure both lcd controllers.
 
-* add definition for second jz4780-lcdc
-* diverse fixes for yaml schema
-* make ingenic-drm driver compatible to ingenic,jz4780-lcd
-* converted existing ingenic,lcd.txt to ingenic,lcd.yaml - suggested by Paul Cercueil <paul@crapouillou.net>
-* removed blank line before MODULE_DEVICE_TABLE() macro - Paul Cercueil <paul@crapouillou.net>
-* added some missing Signed-off:
-* removed Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com> from the
-  recipients list and Cc: since the address is no longer available.
-* removed "pinctrl: ingenic: add hdmi-ddc pin control group" from this patch
-  series since it is already applied elsewhere (by Linus Walleij <linus.walleij@linaro.org>)
+Also fix the clock names and examples.
 
-RFC V2 2020-02-28 19:19:40:
-* Converted .txt bindings to .yaml (by Sam Ravnborg <sam@ravnborg.org> - big THANKS)
+Based on work by Paul Cercueil <paul@crapouillou.net> and
+Sam Ravnborg <sam@ravnborg.org>
 
-RFC V1 2020-02-26 20:13:06:
-This patch series adds HDMI output to the jz4780/CI20 board.
-
-It is based on taking the old 3.18 vendor kernel as well as
-an earlier submission from 2015:
-https://lore.kernel.org/patchwork/patch/547872/
-and trying to achieve the same with modern DTS setup and new/modified
-drivers.
-
-Unfortunately, in this first RFC, only EDID and creation of
-/dev/fb0 are working. Also, HDMI hot plugging is detected.
-
-But there is no HDMI output signal. So some tiny piece seems
-to be missing to enable/configure the Synposys HDMI controller.
-
-We need help from the community to fix this.
-
-Original authors of most patches are
-* Paul Boddie <paul@boddie.org.uk>
-* Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>
-
-
-H. Nikolaus Schaller (4):
-  dt-bindings: display: convert ingenic,lcd.txt to ingenic,lcd.yaml
-  drm: ingenic-drm: add MODULE_DEVICE_TABLE
-  drm: ingenic-drm: add support for ingenic,jz4780-lcd
-  MIPS: CI20: defconfig: configure for DRM_DW_HDMI_JZ4780
-
-Paul Boddie (3):
-  drm: ingenic: add jz4780 Synopsys HDMI driver
-  MIPS: DTS: jz4780: account for Synopsys HDMI driver and LCD controller
-  MIPS: DTS: CI20: add HDMI setup
-
-Sam Ravnborg (1):
-  dt-bindings: display: add ingenic-jz4780-hdmi DT Schema
-
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: devicetree@vger.kernel.org
+---
  .../bindings/display/ingenic,lcd.txt          |  45 ------
  .../bindings/display/ingenic,lcd.yaml         | 128 ++++++++++++++++++
- .../bindings/display/ingenic-jz4780-hdmi.yaml |  82 +++++++++++
- arch/mips/boot/dts/ingenic/ci20.dts           |  64 +++++++++
- arch/mips/boot/dts/ingenic/jz4780.dtsi        |  46 +++++++
- arch/mips/configs/ci20_defconfig              |   3 +
- drivers/gpu/drm/ingenic/Kconfig               |   8 ++
- drivers/gpu/drm/ingenic/Makefile              |   1 +
- drivers/gpu/drm/ingenic/dw_hdmi-jz4780.c      | 120 ++++++++++++++++
- drivers/gpu/drm/ingenic/ingenic-drm.c         |   8 ++
- 10 files changed, 460 insertions(+), 45 deletions(-)
+ 2 files changed, 128 insertions(+), 45 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/display/ingenic,lcd.txt
  create mode 100644 Documentation/devicetree/bindings/display/ingenic,lcd.yaml
- create mode 100644 Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
- create mode 100644 drivers/gpu/drm/ingenic/dw_hdmi-jz4780.c
 
+diff --git a/Documentation/devicetree/bindings/display/ingenic,lcd.txt b/Documentation/devicetree/bindings/display/ingenic,lcd.txt
+deleted file mode 100644
+index 01e3261defb6..000000000000
+--- a/Documentation/devicetree/bindings/display/ingenic,lcd.txt
++++ /dev/null
+@@ -1,45 +0,0 @@
+-Ingenic JZ47xx LCD driver
+-
+-Required properties:
+-- compatible: one of:
+-  * ingenic,jz4740-lcd
+-  * ingenic,jz4725b-lcd
+-  * ingenic,jz4770-lcd
+-- reg: LCD registers location and length
+-- clocks: LCD pixclock and device clock specifiers.
+-	   The device clock is only required on the JZ4740.
+-- clock-names: "lcd_pclk" and "lcd"
+-- interrupts: Specifies the interrupt line the LCD controller is connected to.
+-
+-Example:
+-
+-panel {
+-	compatible = "sharp,ls020b1dd01d";
+-
+-	backlight = <&backlight>;
+-	power-supply = <&vcc>;
+-
+-	port {
+-		panel_input: endpoint {
+-			remote-endpoint = <&panel_output>;
+-		};
+-	};
+-};
+-
+-
+-lcd: lcd-controller@13050000 {
+-	compatible = "ingenic,jz4725b-lcd";
+-	reg = <0x13050000 0x1000>;
+-
+-	interrupt-parent = <&intc>;
+-	interrupts = <31>;
+-
+-	clocks = <&cgu JZ4725B_CLK_LCD>;
+-	clock-names = "lcd";
+-
+-	port {
+-		panel_output: endpoint {
+-			remote-endpoint = <&panel_input>;
+-		};
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/display/ingenic,lcd.yaml b/Documentation/devicetree/bindings/display/ingenic,lcd.yaml
+new file mode 100644
+index 000000000000..8b6467cfc191
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/ingenic,lcd.yaml
+@@ -0,0 +1,128 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/ingenic,lcd.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Bindings for Ingenic JZ4780 LCD Controller
++
++maintainers:
++  - Paul Cercueil <paul@crapouillou.net>
++
++description: |
++  LCD Controller is the Display Controller for the Ingenic JZ47xx SoC
++
++properties:
++  compatible:
++    oneOf:
++     - const: ingenic,jz4725b-lcd
++     - const: ingenic,jz4740-lcd
++     - const: ingenic,jz4770-lcd
++     - const: ingenic,jz4780-lcd
++
++  reg:
++    maxItems: 1
++    description: LCD registers location and length
++
++  interrupts:
++    maxItems: 1
++    description: Specifies the interrupt provided by parent
++
++  clocks:
++    maxItems: 2
++    description: Clock specifiers for LCD pixclock and device clock.
++      The device clock is only required on the JZ4740 and JZ4780
++
++  clock-names:
++    items:
++      - const: lcd
++      - const: lcd_pclk
++
++  port:
++    type: object
++    description: |
++      A port node with endpoint definitions as defined in
++      Documentation/devicetree/bindings/media/video-interfaces.txt
++
++required:
++    - compatible
++    - reg
++    - interrupts
++    - clocks
++    - clock-names
++    - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/jz4725b-cgu.h>
++
++    panel {
++      compatible = "sharp,ls020b1dd01d";
++
++      backlight = <&backlight>;
++      power-supply = <&vcc>;
++
++      port {
++        panel_input: endpoint {
++          remote-endpoint = <&panel_output>;
++          };
++        };
++      };
++
++    lcd: lcd-controller@13050000 {
++      compatible = "ingenic,jz4725b-lcd";
++      reg = <0x13050000 0x1000>;
++
++      interrupt-parent = <&intc>;
++      interrupts = <31>;
++
++      clocks = <&cgu JZ4725B_CLK_LCD>;
++      clock-names = "lcd", "lcd_pclk";
++
++      port {
++        panel_output: endpoint {
++          remote-endpoint = <&panel_input>;
++          };
++        };
++      };
++
++  - |
++    #include <dt-bindings/clock/jz4780-cgu.h>
++
++    lcdc0: lcdc0@13050000 {
++        compatible = "ingenic,jz4780-lcd";
++        reg = <0x13050000 0x1800>;
++
++        clocks = <&cgu JZ4780_CLK_TVE>, <&cgu JZ4780_CLK_LCD0PIXCLK>;
++        clock-names = "lcd", "lcd_pclk";
++
++        interrupt-parent = <&intc>;
++        interrupts = <31>;
++
++        jz4780_lcd_out: port {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            jz4780_out_hdmi: endpoint@0 {
++                reg = <0>;
++                remote-endpoint = <&hdmi_in_lcd>;
++            };
++        };
++    };
++
++    lcdc1: lcdc1@130a0000 {
++        compatible = "ingenic,jz4780-lcd";
++        reg = <0x130a0000 0x1800>;
++
++        clocks = <&cgu JZ4780_CLK_TVE>, <&cgu JZ4780_CLK_LCD1PIXCLK>;
++        clock-names = "lcd", "lcd_pclk";
++
++        interrupt-parent = <&intc>;
++        interrupts = <31>;
++
++        status = "disabled";
++    };
++
++...
 -- 
 2.25.1
 
