@@ -2,84 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F73F198035
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Mar 2020 17:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABE5198149
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Mar 2020 18:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729787AbgC3Pvr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Mar 2020 11:51:47 -0400
-Received: from mail-qv1-f67.google.com ([209.85.219.67]:43414 "EHLO
-        mail-qv1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729735AbgC3Pvq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Mar 2020 11:51:46 -0400
-Received: by mail-qv1-f67.google.com with SMTP id c28so9147234qvb.10
-        for <linux-mips@vger.kernel.org>; Mon, 30 Mar 2020 08:51:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=lh0sivaTAyzwQ/KMJES4MAb8ySxzeARIVx5WwejHlKg=;
-        b=g4nh1+NXN3wWnH08qVZreEQuuwAn7bgbfRqvmRDBGnrScPYRKLSXBNNbmcQ7uj9GGn
-         24PrlHH50PhLD9VVyQwCeSZd0E4j273aec6aI3zudBPLqE3dVUksSSa1dlpUVW2auCUE
-         FD1/fnD1ukDCpEdiq1B+KBa4miZK/3K4m9BDIMmw0gt2q2gI7cAZEDjTmwN2xzC//ekI
-         o/aFRDX4UqRDNxVO04Un8RUoppE4p8jH8ifZjOBzTdomDJmcuNr+bFjBzXDsuttEFkFN
-         99feJ6NGBIb0TQp3mL8dLnxPwOdt8lzrynAWi1juJSMI86E5Nf2lMg4ANJdChfAt11i3
-         RB6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=lh0sivaTAyzwQ/KMJES4MAb8ySxzeARIVx5WwejHlKg=;
-        b=Qsms8vVE4ksFTdj7h7xPLPurnZBgHtf2vIYwL8IndaMT9hIa4Dmf+kG/exBr+y19Tc
-         TI+kohr/FKEMQYDGTog4ZWl0ilwuUojIEgFw16kKGOMiM0/z5OsiBl5g88teh/lXPc64
-         j6/Va/q54qh4uZqWrvo6CXtatxEqZiotK9JxrqK4YEKtdfEgvCA/MiHBWuBcoZbZydpd
-         uYcbIXNlR8e37Uta+dQY9Y2/Msk4Jr1M+E3G38k8o4mVEXPzI9BhfQpFgOHeozyENorf
-         1ucO0DHu3EYgIPN2jNVlDc2qDZcSqnFad5+/GYY2dxJVkkXpWKdyB6f0+3d68UdN3DCi
-         adFA==
-X-Gm-Message-State: ANhLgQ0EVY3EwiQbM/eAsM3x3NiG4jt4cWdHZElad/oVo9AuMgeEqzES
-        lTMeKdPe7wKuDT+vCjmsYSJuNgp4WqA2ySRckn57Xk+j
-X-Google-Smtp-Source: ADFU+vtbfZIzovmMMWp4TmmA4rO0qXAnBaiQRpf3ODIaMdGIejtF7SKqHUzBmcgW5El94yyfSudFaQoLhojKyOHK4FI=
-X-Received: by 2002:a05:6214:3ea:: with SMTP id cf10mr12427072qvb.6.1585583505886;
- Mon, 30 Mar 2020 08:51:45 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a0c:b4a5:0:0:0:0:0 with HTTP; Mon, 30 Mar 2020 08:51:45
- -0700 (PDT)
-Reply-To: tofilbaman@gmail.com
-From:   Tofil Bama <zongomrgeorge1915@gmail.com>
-Date:   Mon, 30 Mar 2020 07:51:45 -0800
-Message-ID: <CAGH6k9ytbMSwMBuA_r+o+dvcLQrfmwayF4OCNVF9SS_uQ0zXBQ@mail.gmail.com>
-Subject: REPLY IMMEDIATELY.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1727728AbgC3QdU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Mar 2020 12:33:20 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:15212 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727191AbgC3QdU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Mar 2020 12:33:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1585585998;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=m5OQurJ34G52si3xIHL2HoNqFTlRdT/1c2JFQwVStnA=;
+        b=sevkwHAFC4Ku8T1/SpAy6r9w/mgj+9cMf79C4S7fF5p3ftt94frkFzwZZVRXXC4IyV
+        x9vhs8r6njYIIcOJmA9iyPDeF9SujHi8UmeFibidIAGmYkcWpDngfWP71hkEwU/PpQIa
+        QJp3nJyfoP9vamSPRVe6B8IPSzHowitCS/+cLu6DIzLdwwH7XHQuFtMhbdgm+1grWUUd
+        2631FiAqiXfhDGl+wf4pYYu+7undCxQ3rMJ/DLhrLhZHr+iMsHTjVj3xMrBYIGI9PtGO
+        Dw7jxmt59OV6QE+b31BPyPZMXkbe66+XtQC6nIo0VqWen1u5ozqU3lV4oZaNH5Ezy4Oc
+        r1Ew==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHmAgw43oE44="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+        by smtp.strato.de (RZmta 46.2.1 DYNA|AUTH)
+        with ESMTPSA id m02241w2UGXBGiV
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Mon, 30 Mar 2020 18:33:11 +0200 (CEST)
+Subject: Re: [RFC v3 1/8] dt-bindings: display: convert ingenic,lcd.txt to ingenic,lcd.yaml
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Content-Type: text/plain; charset=us-ascii
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <20200330154202.GA23233@bogus>
+Date:   Mon, 30 Mar 2020 18:33:10 +0200
+Cc:     Paul Boddie <paul@boddie.org.uk>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Kees Cook <keescook@chromium.org>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>,
+        MIPS Creator CI20 Development 
+        <mips-creator-ci20-dev@googlegroups.com>,
+        Rob Herring <robh@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <02E5EC5D-1FBB-45E4-907E-10450B449726@goldelico.com>
+References: <cover.1585503354.git.hns@goldelico.com> <a75c77fa8528f44832993f9780ae4ea409125a90.1585503354.git.hns@goldelico.com> <20200330154202.GA23233@bogus>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3124)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dear,
+Hi Paul,
 
-My name is Mr Tofil Bama, I am the Bill and Exchange (assistant)
-Manager of Bank of Africa Ouagadougou, Burkina Faso. In my department
-I discovered an abandoned sum of eighteen million three hundred
-thousand United State of American dollars (18.3MILLION USA DOLLARS)
-in an account that belongs to one of our foreign customer who died in
-airline that crashed on 4th October 2001.
+> Am 30.03.2020 um 17:42 schrieb Rob Herring <robh@kernel.org>:
+>=20
+> On Sun, 29 Mar 2020 19:35:47 +0200, "H. Nikolaus Schaller" wrote:
+>> and add compatible: jz4780-lcd, including an example how to
+>> configure both lcd controllers.
+>>=20
+>> Also fix the clock names and examples.
+>>=20
+>> Based on work by Paul Cercueil <paul@crapouillou.net> and
+>> Sam Ravnborg <sam@ravnborg.org>
+>>=20
+>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>> Cc: Rob Herring <robh@kernel.org>
+>> Cc: devicetree@vger.kernel.org
+>> ---
+>> .../bindings/display/ingenic,lcd.txt          |  45 ------
+>> .../bindings/display/ingenic,lcd.yaml         | 128 =
+++++++++++++++++++
+>> 2 files changed, 128 insertions(+), 45 deletions(-)
+>> delete mode 100644 =
+Documentation/devicetree/bindings/display/ingenic,lcd.txt
+>> create mode 100644 =
+Documentation/devicetree/bindings/display/ingenic,lcd.yaml
+>>=20
+>=20
+> My bot found errors running 'make dt_binding_check' on your patch:
+>=20
+> =
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/displ=
+ay/ingenic,lcd.example.dt.yaml: lcd-controller@13050000: clocks: =
+[[4294967295, 9]] is too short
+>=20
+> See https://patchwork.ozlabs.org/patch/1263508
 
-Since I got information about his death I have been expecting his next
-of kin to come over and claim his money because we can not release it
-unless somebody applies for it as the next of kin or relation to the
-deceased as indicated in our banking guidelines, but unfortunately we
-learnt that all his supposed next of kin or relation died alongside
-with him in the plane crash leaving nobody behind for the claim. It is
-therefore upon this discovery that I decided to make this business
-proposal to you and release the money to you as next of kin or
-relation to the deceased for safety and subsequent disbursement since
-nobody is coming for it and I don't want the money to go into the bank
-treasury as unclaimed bill.
+If I read the message correctly, I think there should be 2 clocks =
+specified in
+the jz4725b-lcd example and not just
 
-You will be entitled with 40% of the total sum while 60% will be for
-me after which I will visit your Country to invest my own share when
-the fund is successfully transferred into your account, Please I would
-like you to keep this transaction confidential and as a top secret as
-you may wish to know that I am a bank official.
+	clocks =3D <&cgu JZ4725B_CLK_LCD>;
 
-Yours sincerely,
-Mr Tofil Bama.
+Unfortunately the jz4725b.dtsi does not seem to be upstream or in =
+linux-next so
+I don't know if it works without lcd_pclk or not.
+
+If there is really just one clock, we need to modify the clocks and =
+clock-names
+schema and add minItems: 1 and maxItems: 2 to allow for this =
+flexibility.
+
+Otherwise we have to fix the example. Do you have some git with an =
+up-to-date
+jz4725b.dtsi to look at?
+
+>=20
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure dt-schema is up to date:
+>=20
+> pip3 install =
+git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
++++ :)
+
+>=20
+> Please check and re-submit.
+
+Sure, since it is a RFC.
+
+BR and thanks,
+Nikolaus
+
