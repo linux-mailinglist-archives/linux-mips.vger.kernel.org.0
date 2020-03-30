@@ -2,148 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD8E197FE9
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Mar 2020 17:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB51197FF7
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Mar 2020 17:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729514AbgC3Pks (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Mar 2020 11:40:48 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:44895 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725978AbgC3Pks (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Mar 2020 11:40:48 -0400
-Received: by mail-lj1-f193.google.com with SMTP id p14so18583691lji.11
-        for <linux-mips@vger.kernel.org>; Mon, 30 Mar 2020 08:40:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=t2iNbIaFPnk3agPmyy1f+f0q6P2ipfzolZ/zq3qtBgg=;
-        b=wLYxigK6ce75qGpQVnSi/ehLo4z7OsT1hrSFmQzM5G2J7uvGu8lIijCbRWbEojrbXq
-         kqmsl+5VMg6AXIZjRN/Zdw66ryv0oO/cemWlBBimpcfoFvl703Se39hxEFb2XtmF48KS
-         y4QiSGp0Moa2q1ldW5fva5xkY2ilW7Zi7cD4s3cPf6G7Q0BYv572i6RWHGPzdoNM/HLb
-         cxehI6Tck5i7Vh/RFw9KTJi52Quo3qF2byF1X0hemUbBodnLuTs5B/Rx/0gmUS2hy0nl
-         epTT123yy/3/NEVe/42SULBYmqNzqJGjValYNv6PUu7nkCq40WLQaYxU0cQHsWuUfp3x
-         gb4Q==
+        id S1729513AbgC3PmH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Mar 2020 11:42:07 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:46313 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726497AbgC3PmH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Mar 2020 11:42:07 -0400
+Received: by mail-io1-f66.google.com with SMTP id i3so9065464ioo.13;
+        Mon, 30 Mar 2020 08:42:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=t2iNbIaFPnk3agPmyy1f+f0q6P2ipfzolZ/zq3qtBgg=;
-        b=ieLrClW6nfpef61wWtYMGfYP3tp4n3mgyiLgmx7TzqlJrKU7xdg3GnWQJpmI3xBOBh
-         3A1siwzasVdIHtCFFG++T7DsVwao+6LZYiyOjxIGk0YAUXHZP6chCqb1PZLdE285EK3z
-         fdScovsFXS/JlTAmJn6SoeMKHcQkuDMPz8omHw5uMqxb1tHtRnxLBSBUTYtJ2/Ul9dGF
-         Dqtu+nIRQ3ZyIrIcLKcNUHI66FO/bQyW8fgwO0K6K0gG2tj7uC+x3y6DdP/tOYhR54vc
-         Z0rxv1I//nN6VXeRGrtTaCgGT+XaSpLGqxVzMojX4xGVEhgd3RWhfkEOiQK+JTR8dfLB
-         ADGA==
-X-Gm-Message-State: AGi0PuYsfNCo7De0ihWJdBRWn5DWPWaTR31i0HCetc4ezYT+u3RPsm/x
-        x9eYF8WKGqFrbQhSNalJI8bvjQ==
-X-Google-Smtp-Source: APiQypJPHFDKHQw+TrwwyYGZNcQlOi1smRsTSQfYnqQixygLyK2V5znQplnhieo8RtEMVHG6wruZOQ==
-X-Received: by 2002:a2e:7805:: with SMTP id t5mr7779439ljc.144.1585582846749;
-        Mon, 30 Mar 2020 08:40:46 -0700 (PDT)
-Received: from wasted.cogentembedded.com ([2a00:1fa0:654:d00e:d4e2:9dcc:b9fb:a661])
-        by smtp.gmail.com with ESMTPSA id r2sm4384825lfn.35.2020.03.30.08.40.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Mar 2020 08:40:45 -0700 (PDT)
-Subject: Re: [PATCH 3/5] dt-bindings: Document Loongson PCI Host Controller
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XToUOXTBi4v+G+zH1meistMeAK6/7kaJVHzaJ0IgHkE=;
+        b=f1ZsDbxR2FfpJdEdxwNjwq4aR3pKPSmVhTUSSHaC4GpZIBCxoN/ZQ0hw9614oIHJE3
+         UvLupyUmWwnN6esvWfGLH20978tGG4JyFS3qpvZ3bzD38y97Gh66nhcR7AdDCeJXQhzB
+         UegY+rWIq9S5GjZmssrAes2eOKGZ88UaQzCPvYBj6XGXkSpl0xdi+i1dvuffeT+6tib2
+         ZzHwpzGqIUVPdeEFsvJzqhg65Wef0JQ1NEggEIlo07EvAgbC4LxIOqJdxADUfpN7LO+Y
+         NNf8Ete1eSGEi75IekkSGmUA5A88RpiMY5nppTR3M3JebOwL1WJ04l3sCKJE3aFVJHiC
+         vnlA==
+X-Gm-Message-State: ANhLgQ33dmQEwg/DK2mN+1ybTVp9KXt+gxwjRTc7M0OXoBtDZOdjDi6c
+        Vz9me9OMBCuNs3c77HDeLw==
+X-Google-Smtp-Source: ADFU+vuo2GMSlIScfz8VpFQrF31IFo0FS6MvSyPlgMZwQJUJOQOv+ANaUZdUOCWSeh/xQWl4VpTXlQ==
+X-Received: by 2002:a02:641:: with SMTP id 62mr11747164jav.79.1585582926290;
+        Mon, 30 Mar 2020 08:42:06 -0700 (PDT)
+Received: from rob-hp-laptop ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id c12sm5004502ila.31.2020.03.30.08.42.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2020 08:42:05 -0700 (PDT)
+Received: (nullmailer pid 24611 invoked by uid 1000);
+        Mon, 30 Mar 2020 15:42:02 -0000
+Date:   Mon, 30 Mar 2020 09:42:02 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Paul Boddie <paul@boddie.org.uk>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Andrew Murray <amurray@thegoodpenguin.co.uk>,
-        Paul Burton <paulburton@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200330114239.1112759-1-jiaxun.yang@flygoat.com>
- <20200330114239.1112759-4-jiaxun.yang@flygoat.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Organization: Cogent Embedded
-Message-ID: <8ef09434-45bd-3704-6ff6-7469ebe55a4f@cogentembedded.com>
-Date:   Mon, 30 Mar 2020 18:40:43 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+        Kees Cook <keescook@chromium.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, letux-kernel@openphoenux.org,
+        mips-creator-ci20-dev@googlegroups.com
+Subject: Re: [RFC v3 1/8] dt-bindings: display: convert ingenic,lcd.txt to
+ ingenic,lcd.yaml
+Message-ID: <20200330154202.GA23233@bogus>
+References: <cover.1585503354.git.hns@goldelico.com>
+ <a75c77fa8528f44832993f9780ae4ea409125a90.1585503354.git.hns@goldelico.com>
 MIME-Version: 1.0
-In-Reply-To: <20200330114239.1112759-4-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a75c77fa8528f44832993f9780ae4ea409125a90.1585503354.git.hns@goldelico.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03/30/2020 02:42 PM, Jiaxun Yang wrote:
-
-> PCI host controller found on Loongson PCHs and SoCs.
+On Sun, 29 Mar 2020 19:35:47 +0200, "H. Nikolaus Schaller" wrote:
+> and add compatible: jz4780-lcd, including an example how to
+> configure both lcd controllers.
 > 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Also fix the clock names and examples.
+> 
+> Based on work by Paul Cercueil <paul@crapouillou.net> and
+> Sam Ravnborg <sam@ravnborg.org>
+> 
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: devicetree@vger.kernel.org
 > ---
->  .../devicetree/bindings/pci/loongson.yaml     | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pci/loongson.yaml
+>  .../bindings/display/ingenic,lcd.txt          |  45 ------
+>  .../bindings/display/ingenic,lcd.yaml         | 128 ++++++++++++++++++
+>  2 files changed, 128 insertions(+), 45 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/display/ingenic,lcd.txt
+>  create mode 100644 Documentation/devicetree/bindings/display/ingenic,lcd.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/pci/loongson.yaml b/Documentation/devicetree/bindings/pci/loongson.yaml
-> new file mode 100644
-> index 000000000000..623847980189
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pci/loongson.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pci/loongson.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson PCI Host Controller
-> +
-> +maintainers:
-> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
-> +
-> +description: |+
-> +  PCI host controller found on Loongson PCHs and SoCs.
-> +
-> +allOf:
-> +  - $ref: /schemas/pci/pci-bus.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: loongson,rs780e-pci
-> +      - const: loongson,ls7a-pci
-> +      - const: loongson,ls2k-pci
-> +
-> +  reg:
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      - description: CFG0 standard config space register
-> +      - description: CFG1 extend config space register
 
-   Extended?
+My bot found errors running 'make dt_binding_check' on your patch:
 
-> +
-> +  ranges:
-> +    maxItems: 3
-> +
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - ranges
-> +
-> +examples:
-> +  - |
-> +    pci@1a000000 {
-> +      compatible = "loongson,rs780e-pci";
-> +      device_type = "pci";
-> +      #address-cells = <3>;
-> +      #size-cells = <2>;
-> +
-> +      reg = <0x1a000000 0x2000000>;
-> +      ranges = <0x02000000 0 0x40000000 0x40000000 0 0x40000000>;
-> +    };
-> +...
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/ingenic,lcd.example.dt.yaml: lcd-controller@13050000: clocks: [[4294967295, 9]] is too short
 
-MBR, Sergei
+See https://patchwork.ozlabs.org/patch/1263508
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
