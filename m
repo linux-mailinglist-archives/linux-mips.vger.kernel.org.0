@@ -2,567 +2,489 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCCE19774C
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Mar 2020 11:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CF619774E
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Mar 2020 11:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728759AbgC3JAn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Mar 2020 05:00:43 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:33882 "EHLO loongson.cn"
+        id S1729852AbgC3JAu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Mar 2020 05:00:50 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:33912 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729816AbgC3JAm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 30 Mar 2020 05:00:42 -0400
+        id S1729816AbgC3JAt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 30 Mar 2020 05:00:49 -0400
 Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxfes2tYFeB5ohAA--.28S2;
-        Mon, 30 Mar 2020 17:00:38 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX2o8tYFeCZohAA--.38S2;
+        Mon, 30 Mar 2020 17:00:45 +0800 (CST)
 From:   bibo mao <maobibo@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhc@lemote.com>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 32/39] MIPS: rb532: Add header file path prefix
-Date:   Mon, 30 Mar 2020 05:00:38 -0400
-Message-Id: <1585558838-12570-1-git-send-email-maobibo@loongson.cn>
+Subject: [PATCH 33/39] MIPS: ralink: Add header file path prefix
+Date:   Mon, 30 Mar 2020 05:00:44 -0400
+Message-Id: <1585558844-14320-1-git-send-email-maobibo@loongson.cn>
 X-Mailer: git-send-email 1.8.3.1
-X-CM-TRANSID: AQAAf9Dxfes2tYFeB5ohAA--.28S2
-X-Coremail-Antispam: 1UD129KBjv3XoW7WryDtFyktw1DJoXrpr43ur47pa1DAa1kGr
-        4Uur1jkF15ZrW7Kr43Jan8ury5KFWF9347Z3Waq3WUJrs3Jrn0yryktF4DKFy09rW3XF4D
-        Ja1qvw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy29KBjDU0x
-        BIdaVrnRJUUUkSb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF
-        04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1V
-        AKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvE
-        c7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2js
-        IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
-        5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4UJVWxJr1lOx
-        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVCm-wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6x
-        AIw20EY4v20xvaj40_JFI_Gr1lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUgTKuUUUUU
+X-CM-TRANSID: AQAAf9DxX2o8tYFeCZohAA--.38S2
+X-Coremail-Antispam: 1UD129KBjvAXoWfJF48uFWDKF43Gr1xZw47urg_yoW8CFyxZo
+        Z7tFn7Kr4fJFW7JFy3ZFy3Aay8Zr92qFWrXw15XrZ8GasrZ3srJw1F9w4jqF15Gr1ftw17
+        GrWrZryUXryfKaykn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUYe7k0a2IF6w4kM7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0
+        x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj4
+        1l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0
+        I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjc
+        xK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8Jr
+        0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE-syl42xK
+        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1I6r4UMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU59iSJUUUUU==
 X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Remove header files from arch/mips/include/asm/mach-rc32434
-to arch/mips/rb532/include/mach
+Remove header files from arch/mips/include/asm/mach-ralink
+to arch/mips/ralink/include/mach
 
 Signed-off-by: bibo mao <maobibo@loongson.cn>
 ---
- arch/mips/Kconfig                                        |  1 +
- arch/mips/pci/fixup-rc32434.c                            |  4 ++--
- arch/mips/pci/ops-rc32434.c                              |  4 ++--
- arch/mips/pci/pci-rc32434.c                              |  4 ++--
- arch/mips/rb532/Platform                                 |  2 +-
- arch/mips/rb532/devices.c                                | 16 ++++++++--------
- arch/mips/rb532/gpio.c                                   |  4 ++--
- .../include/mach}/cpu-feature-overrides.h                |  0
- .../asm/mach-rc32434 => rb532/include/mach}/ddr.h        |  2 +-
- .../asm/mach-rc32434 => rb532/include/mach}/dma.h        |  2 +-
- .../asm/mach-rc32434 => rb532/include/mach}/dma_v.h      |  4 ++--
- .../asm/mach-rc32434 => rb532/include/mach}/eth.h        |  0
- .../asm/mach-rc32434 => rb532/include/mach}/gpio.h       |  0
- arch/mips/rb532/include/mach/ide.h                       |  2 ++
- .../asm/mach-rc32434 => rb532/include/mach}/integ.h      |  2 +-
- arch/mips/rb532/include/mach/ioremap.h                   |  2 ++
- .../asm/mach-rc32434 => rb532/include/mach}/irq.h        |  2 +-
- arch/mips/rb532/include/mach/kernel-entry-init.h         |  2 ++
- arch/mips/rb532/include/mach/kmalloc.h                   |  2 ++
- arch/mips/rb532/include/mach/mangle-port.h               |  2 ++
- arch/mips/rb532/include/mach/mc146818rtc.h               |  2 ++
- .../asm/mach-rc32434 => rb532/include/mach}/pci.h        |  0
- .../asm/mach-rc32434 => rb532/include/mach}/prom.h       |  0
- .../asm/mach-rc32434 => rb532/include/mach}/rb.h         |  0
- .../asm/mach-rc32434 => rb532/include/mach}/rc32434.h    |  0
- arch/mips/rb532/include/mach/spaces.h                    |  2 ++
- .../asm/mach-rc32434 => rb532/include/mach}/timer.h      |  2 +-
- arch/mips/rb532/include/mach/topology.h                  |  2 ++
- .../asm/mach-rc32434 => rb532/include/mach}/war.h        |  0
- arch/mips/rb532/irq.c                                    |  4 ++--
- arch/mips/rb532/prom.c                                   |  4 ++--
- arch/mips/rb532/serial.c                                 |  2 +-
- arch/mips/rb532/setup.c                                  |  4 ++--
- arch/mips/rb532/time.c                                   |  2 +-
- drivers/ata/pata_rb532_cf.c                              |  2 +-
- drivers/input/misc/rb532_button.c                        |  4 ++--
- drivers/leds/leds-rb532.c                                |  4 ++--
- drivers/net/ethernet/korina.c                            |  8 ++++----
- drivers/watchdog/rc32434_wdt.c                           |  2 +-
- 39 files changed, 59 insertions(+), 42 deletions(-)
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/cpu-feature-overrides.h (100%)
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/ddr.h (99%)
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/dma.h (98%)
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/dma_v.h (93%)
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/eth.h (100%)
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/gpio.h (100%)
- create mode 100644 arch/mips/rb532/include/mach/ide.h
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/integ.h (98%)
- create mode 100644 arch/mips/rb532/include/mach/ioremap.h
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/irq.h (96%)
- create mode 100644 arch/mips/rb532/include/mach/kernel-entry-init.h
- create mode 100644 arch/mips/rb532/include/mach/kmalloc.h
- create mode 100644 arch/mips/rb532/include/mach/mangle-port.h
- create mode 100644 arch/mips/rb532/include/mach/mc146818rtc.h
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/pci.h (100%)
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/prom.h (100%)
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/rb.h (100%)
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/rc32434.h (100%)
- create mode 100644 arch/mips/rb532/include/mach/spaces.h
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/timer.h (98%)
- create mode 100644 arch/mips/rb532/include/mach/topology.h
- rename arch/mips/{include/asm/mach-rc32434 => rb532/include/mach}/war.h (100%)
+ arch/mips/Kconfig                                          |  1 +
+ arch/mips/pci/pci-mt7620.c                                 |  4 ++--
+ arch/mips/pci/pci-rt3883.c                                 |  4 ++--
+ arch/mips/ralink/Platform                                  |  7 +------
+ arch/mips/ralink/cevt-rt3352.c                             |  2 +-
+ arch/mips/ralink/ill_acc.c                                 |  2 +-
+ arch/mips/ralink/include/mach/cpu-feature-overrides.h      | 14 ++++++++++++++
+ arch/mips/ralink/include/mach/ide.h                        |  2 ++
+ arch/mips/ralink/include/mach/ioremap.h                    |  2 ++
+ .../{include/asm/mach-ralink => ralink/include/mach}/irq.h |  0
+ arch/mips/ralink/include/mach/kernel-entry-init.h          |  2 ++
+ arch/mips/ralink/include/mach/kmalloc.h                    |  2 ++
+ arch/mips/ralink/include/mach/mangle-port.h                |  2 ++
+ arch/mips/ralink/include/mach/mc146818rtc.h                |  2 ++
+ .../asm/mach-ralink => ralink/include/mach}/mt7620.h       |  0
+ .../include/mach}/mt7620/cpu-feature-overrides.h           |  0
+ .../asm/mach-ralink => ralink/include/mach}/mt7621.h       |  0
+ .../include/mach}/mt7621/cpu-feature-overrides.h           |  0
+ .../asm/mach-ralink => ralink/include/mach}/pinmux.h       |  0
+ .../asm/mach-ralink => ralink/include/mach}/ralink_regs.h  |  0
+ .../asm/mach-ralink => ralink/include/mach}/rt288x.h       |  0
+ .../include/mach}/rt288x/cpu-feature-overrides.h           |  0
+ .../asm/mach-ralink => ralink/include/mach}/rt305x.h       |  0
+ .../include/mach}/rt305x/cpu-feature-overrides.h           |  0
+ .../asm/mach-ralink => ralink/include/mach}/rt3883.h       |  0
+ .../include/mach}/rt3883/cpu-feature-overrides.h           |  0
+ arch/mips/ralink/include/mach/spaces.h                     |  2 ++
+ arch/mips/ralink/include/mach/topology.h                   |  2 ++
+ arch/mips/ralink/include/mach/war.h                        |  2 ++
+ arch/mips/ralink/mt7620.c                                  |  6 +++---
+ arch/mips/ralink/mt7621.c                                  |  4 ++--
+ arch/mips/ralink/prom.c                                    |  2 +-
+ arch/mips/ralink/reset.c                                   |  2 +-
+ arch/mips/ralink/rt288x.c                                  |  6 +++---
+ arch/mips/ralink/rt305x.c                                  |  6 +++---
+ arch/mips/ralink/rt3883.c                                  |  6 +++---
+ arch/mips/ralink/timer.c                                   |  2 +-
+ 37 files changed, 57 insertions(+), 29 deletions(-)
+ create mode 100644 arch/mips/ralink/include/mach/cpu-feature-overrides.h
+ create mode 100644 arch/mips/ralink/include/mach/ide.h
+ create mode 100644 arch/mips/ralink/include/mach/ioremap.h
+ rename arch/mips/{include/asm/mach-ralink => ralink/include/mach}/irq.h (100%)
+ create mode 100644 arch/mips/ralink/include/mach/kernel-entry-init.h
+ create mode 100644 arch/mips/ralink/include/mach/kmalloc.h
+ create mode 100644 arch/mips/ralink/include/mach/mangle-port.h
+ create mode 100644 arch/mips/ralink/include/mach/mc146818rtc.h
+ rename arch/mips/{include/asm/mach-ralink => ralink/include/mach}/mt7620.h (100%)
+ rename arch/mips/{include/asm/mach-ralink => ralink/include/mach}/mt7620/cpu-feature-overrides.h (100%)
+ rename arch/mips/{include/asm/mach-ralink => ralink/include/mach}/mt7621.h (100%)
+ rename arch/mips/{include/asm/mach-ralink => ralink/include/mach}/mt7621/cpu-feature-overrides.h (100%)
+ rename arch/mips/{include/asm/mach-ralink => ralink/include/mach}/pinmux.h (100%)
+ rename arch/mips/{include/asm/mach-ralink => ralink/include/mach}/ralink_regs.h (100%)
+ rename arch/mips/{include/asm/mach-ralink => ralink/include/mach}/rt288x.h (100%)
+ rename arch/mips/{include/asm/mach-ralink => ralink/include/mach}/rt288x/cpu-feature-overrides.h (100%)
+ rename arch/mips/{include/asm/mach-ralink => ralink/include/mach}/rt305x.h (100%)
+ rename arch/mips/{include/asm/mach-ralink => ralink/include/mach}/rt305x/cpu-feature-overrides.h (100%)
+ rename arch/mips/{include/asm/mach-ralink => ralink/include/mach}/rt3883.h (100%)
+ rename arch/mips/{include/asm/mach-ralink => ralink/include/mach}/rt3883/cpu-feature-overrides.h (100%)
+ create mode 100644 arch/mips/ralink/include/mach/spaces.h
+ create mode 100644 arch/mips/ralink/include/mach/topology.h
+ create mode 100644 arch/mips/ralink/include/mach/war.h
 
 diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 30b520c..7a4ff6c 100644
+index 7a4ff6c..0687b94 100644
 --- a/arch/mips/Kconfig
 +++ b/arch/mips/Kconfig
-@@ -981,6 +981,7 @@ config MIKROTIK_RB532
- 	select BOOT_RAW
- 	select GPIOLIB
- 	select MIPS_L1_CACHE_SHIFT_4
+@@ -682,6 +682,7 @@ config RALINK
+ 	select CLKDEV_LOOKUP
+ 	select ARCH_HAS_RESET_CONTROLLER
+ 	select RESET_CONTROLLER
 +	select HAVE_MACH_HEAD_FILES
- 	help
- 	  Support the Mikrotik(tm) RouterBoard 532 series,
- 	  based on the IDT RC32434 SoC.
-diff --git a/arch/mips/pci/fixup-rc32434.c b/arch/mips/pci/fixup-rc32434.c
-index 7fcafd5..c1334b5 100644
---- a/arch/mips/pci/fixup-rc32434.c
-+++ b/arch/mips/pci/fixup-rc32434.c
-@@ -28,8 +28,8 @@
- #include <linux/pci.h>
- #include <linux/kernel.h>
  
--#include <asm/mach-rc32434/rc32434.h>
--#include <asm/mach-rc32434/irq.h>
-+#include <mach/rc32434.h>
-+#include <mach/irq.h>
- 
- static int irq_map[2][12] = {
- 	{0, 0, 2, 3, 2, 3, 0, 0, 0, 0, 0, 1},
-diff --git a/arch/mips/pci/ops-rc32434.c b/arch/mips/pci/ops-rc32434.c
-index 874ed6d..8a1fe0e 100644
---- a/arch/mips/pci/ops-rc32434.c
-+++ b/arch/mips/pci/ops-rc32434.c
-@@ -31,8 +31,8 @@
- #include <linux/types.h>
- 
- #include <asm/cpu.h>
--#include <asm/mach-rc32434/rc32434.h>
--#include <asm/mach-rc32434/pci.h>
-+#include <mach/rc32434.h>
-+#include <mach/pci.h>
- 
- #define PCI_ACCESS_READ	 0
- #define PCI_ACCESS_WRITE 1
-diff --git a/arch/mips/pci/pci-rc32434.c b/arch/mips/pci/pci-rc32434.c
-index 7f6ce6d..6cda27d 100644
---- a/arch/mips/pci/pci-rc32434.c
-+++ b/arch/mips/pci/pci-rc32434.c
-@@ -30,8 +30,8 @@
- #include <linux/kernel.h>
- #include <linux/init.h>
- 
--#include <asm/mach-rc32434/rc32434.h>
--#include <asm/mach-rc32434/pci.h>
-+#include <mach/rc32434.h>
-+#include <mach/pci.h>
- 
- #define PCI_ACCESS_READ	 0
- #define PCI_ACCESS_WRITE 1
-diff --git a/arch/mips/rb532/Platform b/arch/mips/rb532/Platform
-index aeec45a..20bd9db 100644
---- a/arch/mips/rb532/Platform
-+++ b/arch/mips/rb532/Platform
-@@ -3,5 +3,5 @@
- #
- platform-$(CONFIG_MIKROTIK_RB532)	+= rb532/
- cflags-$(CONFIG_MIKROTIK_RB532)		+=				\
--		-I$(srctree)/arch/mips/include/asm/mach-rc32434
-+		-I$(srctree)/arch/mips/rb532/include
- load-$(CONFIG_MIKROTIK_RB532)		+= 0xffffffff80101000
-diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-index dd34f1b..5b2694b 100644
---- a/arch/mips/rb532/devices.c
-+++ b/arch/mips/rb532/devices.c
-@@ -21,14 +21,14 @@
- 
- #include <asm/bootinfo.h>
- 
--#include <asm/mach-rc32434/rc32434.h>
--#include <asm/mach-rc32434/dma.h>
--#include <asm/mach-rc32434/dma_v.h>
--#include <asm/mach-rc32434/eth.h>
--#include <asm/mach-rc32434/rb.h>
--#include <asm/mach-rc32434/integ.h>
--#include <asm/mach-rc32434/gpio.h>
--#include <asm/mach-rc32434/irq.h>
-+#include <mach/rc32434.h>
-+#include <mach/dma.h>
-+#include <mach/dma_v.h>
-+#include <mach/eth.h>
-+#include <mach/rb.h>
-+#include <mach/integ.h>
-+#include <mach/gpio.h>
-+#include <mach/irq.h>
- 
- #define ETH0_RX_DMA_ADDR  (DMA0_BASE_ADDR + 0 * DMA_CHAN_OFFSET)
- #define ETH0_TX_DMA_ADDR  (DMA0_BASE_ADDR + 1 * DMA_CHAN_OFFSET)
-diff --git a/arch/mips/rb532/gpio.c b/arch/mips/rb532/gpio.c
-index 94f02ad..0225d42 100644
---- a/arch/mips/rb532/gpio.c
-+++ b/arch/mips/rb532/gpio.c
-@@ -34,8 +34,8 @@
+ config SGI_IP22
+ 	bool "SGI IP22 (Indy/Indigo2)"
+diff --git a/arch/mips/pci/pci-mt7620.c b/arch/mips/pci/pci-mt7620.c
+index d360616..1fe6829 100644
+--- a/arch/mips/pci/pci-mt7620.c
++++ b/arch/mips/pci/pci-mt7620.c
+@@ -18,8 +18,8 @@
+ #include <linux/reset.h>
  #include <linux/platform_device.h>
- #include <linux/gpio/driver.h>
  
--#include <asm/mach-rc32434/rb.h>
--#include <asm/mach-rc32434/gpio.h>
-+#include <mach/rb.h>
-+#include <mach/gpio.h>
+-#include <asm/mach-ralink/ralink_regs.h>
+-#include <asm/mach-ralink/mt7620.h>
++#include <mach/ralink_regs.h>
++#include <mach/mt7620.h>
  
- struct rb532_gpio_chip {
- 	struct gpio_chip chip;
-diff --git a/arch/mips/include/asm/mach-rc32434/cpu-feature-overrides.h b/arch/mips/rb532/include/mach/cpu-feature-overrides.h
-similarity index 100%
-rename from arch/mips/include/asm/mach-rc32434/cpu-feature-overrides.h
-rename to arch/mips/rb532/include/mach/cpu-feature-overrides.h
-diff --git a/arch/mips/include/asm/mach-rc32434/ddr.h b/arch/mips/rb532/include/mach/ddr.h
-similarity index 99%
-rename from arch/mips/include/asm/mach-rc32434/ddr.h
-rename to arch/mips/rb532/include/mach/ddr.h
-index e1cad0c..c24b2b5 100644
---- a/arch/mips/include/asm/mach-rc32434/ddr.h
-+++ b/arch/mips/rb532/include/mach/ddr.h
-@@ -29,7 +29,7 @@
- #ifndef _ASM_RC32434_DDR_H_
- #define _ASM_RC32434_DDR_H_
+ #define RALINK_PCI_IO_MAP_BASE		0x10160000
+ #define RALINK_PCI_MEMORY_BASE		0x0
+diff --git a/arch/mips/pci/pci-rt3883.c b/arch/mips/pci/pci-rt3883.c
+index 0ac6346..241cbe9 100644
+--- a/arch/mips/pci/pci-rt3883.c
++++ b/arch/mips/pci/pci-rt3883.c
+@@ -18,8 +18,8 @@
+ #include <linux/of_pci.h>
+ #include <linux/platform_device.h>
  
--#include <asm/mach-rc32434/rb.h>
-+#include <mach/rb.h>
+-#include <asm/mach-ralink/rt3883.h>
+-#include <asm/mach-ralink/ralink_regs.h>
++#include <mach/rt3883.h>
++#include <mach/ralink_regs.h>
  
- /* DDR register structure */
- struct ddr_ram {
-diff --git a/arch/mips/include/asm/mach-rc32434/dma.h b/arch/mips/rb532/include/mach/dma.h
-similarity index 98%
-rename from arch/mips/include/asm/mach-rc32434/dma.h
-rename to arch/mips/rb532/include/mach/dma.h
-index 44dc87b..e4ef0c3 100644
---- a/arch/mips/include/asm/mach-rc32434/dma.h
-+++ b/arch/mips/rb532/include/mach/dma.h
-@@ -12,7 +12,7 @@
- #ifndef __ASM_RC32434_DMA_H
- #define __ASM_RC32434_DMA_H
+ #define RT3883_MEMORY_BASE		0x00000000
+ #define RT3883_MEMORY_SIZE		0x02000000
+diff --git a/arch/mips/ralink/Platform b/arch/mips/ralink/Platform
+index 6095fcc..35e8b1b 100644
+--- a/arch/mips/ralink/Platform
++++ b/arch/mips/ralink/Platform
+@@ -2,33 +2,28 @@
+ # Ralink SoC common stuff
+ #
+ core-$(CONFIG_RALINK)		+= arch/mips/ralink/
+-cflags-$(CONFIG_RALINK)		+= -I$(srctree)/arch/mips/include/asm/mach-ralink
++cflags-$(CONFIG_RALINK)		+= -I$(srctree)/arch/mips/ralink/include
  
--#include <asm/mach-rc32434/rb.h>
-+#include <mach/rb.h>
+ #
+ # Ralink RT288x
+ #
+ load-$(CONFIG_SOC_RT288X)	+= 0xffffffff88000000
+-cflags-$(CONFIG_SOC_RT288X)	+= -I$(srctree)/arch/mips/include/asm/mach-ralink/rt288x
  
- #define DMA0_BASE_ADDR			0x18040000
+ #
+ # Ralink RT305x
+ #
+ load-$(CONFIG_SOC_RT305X)	+= 0xffffffff80000000
+-cflags-$(CONFIG_SOC_RT305X)	+= -I$(srctree)/arch/mips/include/asm/mach-ralink/rt305x
  
-diff --git a/arch/mips/include/asm/mach-rc32434/dma_v.h b/arch/mips/rb532/include/mach/dma_v.h
-similarity index 93%
-rename from arch/mips/include/asm/mach-rc32434/dma_v.h
-rename to arch/mips/rb532/include/mach/dma_v.h
-index 37d73b9..d675fb1 100644
---- a/arch/mips/include/asm/mach-rc32434/dma_v.h
-+++ b/arch/mips/rb532/include/mach/dma_v.h
-@@ -12,8 +12,8 @@
- #ifndef _ASM_RC32434_DMA_V_H_
- #define _ASM_RC32434_DMA_V_H_
+ #
+ # Ralink RT3883
+ #
+ load-$(CONFIG_SOC_RT3883)	+= 0xffffffff80000000
+-cflags-$(CONFIG_SOC_RT3883)	+= -I$(srctree)/arch/mips/include/asm/mach-ralink/rt3883
  
--#include  <asm/mach-rc32434/dma.h>
--#include  <asm/mach-rc32434/rc32434.h>
-+#include  <mach/dma.h>
-+#include  <mach/rc32434.h>
+ #
+ # Ralink MT7620
+ #
+ load-$(CONFIG_SOC_MT7620)	+= 0xffffffff80000000
+-cflags-$(CONFIG_SOC_MT7620)	+= -I$(srctree)/arch/mips/include/asm/mach-ralink/mt7620
  
- #define DMA_CHAN_OFFSET		0x14
- #define IS_DMA_USED(X)		(((X) & \
-diff --git a/arch/mips/include/asm/mach-rc32434/eth.h b/arch/mips/rb532/include/mach/eth.h
-similarity index 100%
-rename from arch/mips/include/asm/mach-rc32434/eth.h
-rename to arch/mips/rb532/include/mach/eth.h
-diff --git a/arch/mips/include/asm/mach-rc32434/gpio.h b/arch/mips/rb532/include/mach/gpio.h
-similarity index 100%
-rename from arch/mips/include/asm/mach-rc32434/gpio.h
-rename to arch/mips/rb532/include/mach/gpio.h
-diff --git a/arch/mips/rb532/include/mach/ide.h b/arch/mips/rb532/include/mach/ide.h
+ # Ralink MT7621
+ #
+ load-$(CONFIG_SOC_MT7621)	+= 0xffffffff80001000
+-cflags-$(CONFIG_SOC_MT7621)	+= -I$(srctree)/arch/mips/include/asm/mach-ralink/mt7621
+diff --git a/arch/mips/ralink/cevt-rt3352.c b/arch/mips/ralink/cevt-rt3352.c
+index 269d4877..1522581 100644
+--- a/arch/mips/ralink/cevt-rt3352.c
++++ b/arch/mips/ralink/cevt-rt3352.c
+@@ -16,7 +16,7 @@
+ #include <linux/of_irq.h>
+ #include <linux/of_address.h>
+ 
+-#include <asm/mach-ralink/ralink_regs.h>
++#include <mach/ralink_regs.h>
+ 
+ #define SYSTICK_FREQ		(50 * 1000)
+ 
+diff --git a/arch/mips/ralink/ill_acc.c b/arch/mips/ralink/ill_acc.c
+index bdf5380..43948e9 100644
+--- a/arch/mips/ralink/ill_acc.c
++++ b/arch/mips/ralink/ill_acc.c
+@@ -8,7 +8,7 @@
+ #include <linux/of_platform.h>
+ #include <linux/of_irq.h>
+ 
+-#include <asm/mach-ralink/ralink_regs.h>
++#include <mach/ralink_regs.h>
+ 
+ #define REG_ILL_ACC_ADDR	0x10
+ #define REG_ILL_ACC_TYPE	0x14
+diff --git a/arch/mips/ralink/include/mach/cpu-feature-overrides.h b/arch/mips/ralink/include/mach/cpu-feature-overrides.h
+new file mode 100644
+index 0000000..2a1c986
+--- /dev/null
++++ b/arch/mips/ralink/include/mach/cpu-feature-overrides.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifdef CONFIG_SOC_RT288X
++#include <mach/rt288x/cpu-feature-overrides.h>
++#elif defined(CONFIG_SOC_RT305X)
++#include <mach/rt305x/cpu-feature-overrides.h>
++#elif defined(CONFIG_SOC_RT3883)
++#include <mach/rt3883/cpu-feature-overrides.h>
++#elif defined(CONFIG_SOC_MT7620)
++#include <mach/mt7620/cpu-feature-overrides.h>
++#elif defined(CONFIG_SOC_MT7621)
++#include <mach/mt7621/cpu-feature-overrides.h>
++#else
++#include <asm/mach-generic/cpu-feature-overrides.h>
++#endif
+diff --git a/arch/mips/ralink/include/mach/ide.h b/arch/mips/ralink/include/mach/ide.h
 new file mode 100644
 index 0000000..1251c0c
 --- /dev/null
-+++ b/arch/mips/rb532/include/mach/ide.h
++++ b/arch/mips/ralink/include/mach/ide.h
 @@ -0,0 +1,2 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#include <asm/mach-generic/ide.h>
-diff --git a/arch/mips/include/asm/mach-rc32434/integ.h b/arch/mips/rb532/include/mach/integ.h
-similarity index 98%
-rename from arch/mips/include/asm/mach-rc32434/integ.h
-rename to arch/mips/rb532/include/mach/integ.h
-index fa65bc3..b270514 100644
---- a/arch/mips/include/asm/mach-rc32434/integ.h
-+++ b/arch/mips/rb532/include/mach/integ.h
-@@ -29,7 +29,7 @@
- #ifndef __RC32434_INTEG_H__
- #define __RC32434_INTEG_H__
- 
--#include <asm/mach-rc32434/rb.h>
-+#include <mach/rb.h>
- 
- #define INTEG0_BASE_ADDR	0x18030030
- 
-diff --git a/arch/mips/rb532/include/mach/ioremap.h b/arch/mips/rb532/include/mach/ioremap.h
+diff --git a/arch/mips/ralink/include/mach/ioremap.h b/arch/mips/ralink/include/mach/ioremap.h
 new file mode 100644
 index 0000000..2369393
 --- /dev/null
-+++ b/arch/mips/rb532/include/mach/ioremap.h
++++ b/arch/mips/ralink/include/mach/ioremap.h
 @@ -0,0 +1,2 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#include <asm/mach-generic/ioremap.h>
-diff --git a/arch/mips/include/asm/mach-rc32434/irq.h b/arch/mips/rb532/include/mach/irq.h
-similarity index 96%
-rename from arch/mips/include/asm/mach-rc32434/irq.h
-rename to arch/mips/rb532/include/mach/irq.h
-index ebe32bd..e1902b4 100644
---- a/arch/mips/include/asm/mach-rc32434/irq.h
-+++ b/arch/mips/rb532/include/mach/irq.h
-@@ -5,7 +5,7 @@
- #define NR_IRQS 256
- 
- #include <asm/mach-generic/irq.h>
--#include <asm/mach-rc32434/rb.h>
-+#include <mach/rb.h>
- 
- /* Interrupt Controller */
- #define IC_GROUP0_PEND		(REGBASE + 0x38000)
-diff --git a/arch/mips/rb532/include/mach/kernel-entry-init.h b/arch/mips/rb532/include/mach/kernel-entry-init.h
+diff --git a/arch/mips/include/asm/mach-ralink/irq.h b/arch/mips/ralink/include/mach/irq.h
+similarity index 100%
+rename from arch/mips/include/asm/mach-ralink/irq.h
+rename to arch/mips/ralink/include/mach/irq.h
+diff --git a/arch/mips/ralink/include/mach/kernel-entry-init.h b/arch/mips/ralink/include/mach/kernel-entry-init.h
 new file mode 100644
 index 0000000..19b872be
 --- /dev/null
-+++ b/arch/mips/rb532/include/mach/kernel-entry-init.h
++++ b/arch/mips/ralink/include/mach/kernel-entry-init.h
 @@ -0,0 +1,2 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#include <asm/mach-generic/kernel-entry-init.h>
-diff --git a/arch/mips/rb532/include/mach/kmalloc.h b/arch/mips/rb532/include/mach/kmalloc.h
+diff --git a/arch/mips/ralink/include/mach/kmalloc.h b/arch/mips/ralink/include/mach/kmalloc.h
 new file mode 100644
 index 0000000..4f056db
 --- /dev/null
-+++ b/arch/mips/rb532/include/mach/kmalloc.h
++++ b/arch/mips/ralink/include/mach/kmalloc.h
 @@ -0,0 +1,2 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#include <asm/mach-generic/kmalloc.h>
-diff --git a/arch/mips/rb532/include/mach/mangle-port.h b/arch/mips/rb532/include/mach/mangle-port.h
+diff --git a/arch/mips/ralink/include/mach/mangle-port.h b/arch/mips/ralink/include/mach/mangle-port.h
 new file mode 100644
 index 0000000..b9736e3
 --- /dev/null
-+++ b/arch/mips/rb532/include/mach/mangle-port.h
++++ b/arch/mips/ralink/include/mach/mangle-port.h
 @@ -0,0 +1,2 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#include <asm/mach-generic/mangle-port.h>
-diff --git a/arch/mips/rb532/include/mach/mc146818rtc.h b/arch/mips/rb532/include/mach/mc146818rtc.h
+diff --git a/arch/mips/ralink/include/mach/mc146818rtc.h b/arch/mips/ralink/include/mach/mc146818rtc.h
 new file mode 100644
 index 0000000..7284af8
 --- /dev/null
-+++ b/arch/mips/rb532/include/mach/mc146818rtc.h
++++ b/arch/mips/ralink/include/mach/mc146818rtc.h
 @@ -0,0 +1,2 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#include <asm/mach-generic/mc146818rtc.h>
-diff --git a/arch/mips/include/asm/mach-rc32434/pci.h b/arch/mips/rb532/include/mach/pci.h
+diff --git a/arch/mips/include/asm/mach-ralink/mt7620.h b/arch/mips/ralink/include/mach/mt7620.h
 similarity index 100%
-rename from arch/mips/include/asm/mach-rc32434/pci.h
-rename to arch/mips/rb532/include/mach/pci.h
-diff --git a/arch/mips/include/asm/mach-rc32434/prom.h b/arch/mips/rb532/include/mach/prom.h
+rename from arch/mips/include/asm/mach-ralink/mt7620.h
+rename to arch/mips/ralink/include/mach/mt7620.h
+diff --git a/arch/mips/include/asm/mach-ralink/mt7620/cpu-feature-overrides.h b/arch/mips/ralink/include/mach/mt7620/cpu-feature-overrides.h
 similarity index 100%
-rename from arch/mips/include/asm/mach-rc32434/prom.h
-rename to arch/mips/rb532/include/mach/prom.h
-diff --git a/arch/mips/include/asm/mach-rc32434/rb.h b/arch/mips/rb532/include/mach/rb.h
+rename from arch/mips/include/asm/mach-ralink/mt7620/cpu-feature-overrides.h
+rename to arch/mips/ralink/include/mach/mt7620/cpu-feature-overrides.h
+diff --git a/arch/mips/include/asm/mach-ralink/mt7621.h b/arch/mips/ralink/include/mach/mt7621.h
 similarity index 100%
-rename from arch/mips/include/asm/mach-rc32434/rb.h
-rename to arch/mips/rb532/include/mach/rb.h
-diff --git a/arch/mips/include/asm/mach-rc32434/rc32434.h b/arch/mips/rb532/include/mach/rc32434.h
+rename from arch/mips/include/asm/mach-ralink/mt7621.h
+rename to arch/mips/ralink/include/mach/mt7621.h
+diff --git a/arch/mips/include/asm/mach-ralink/mt7621/cpu-feature-overrides.h b/arch/mips/ralink/include/mach/mt7621/cpu-feature-overrides.h
 similarity index 100%
-rename from arch/mips/include/asm/mach-rc32434/rc32434.h
-rename to arch/mips/rb532/include/mach/rc32434.h
-diff --git a/arch/mips/rb532/include/mach/spaces.h b/arch/mips/rb532/include/mach/spaces.h
+rename from arch/mips/include/asm/mach-ralink/mt7621/cpu-feature-overrides.h
+rename to arch/mips/ralink/include/mach/mt7621/cpu-feature-overrides.h
+diff --git a/arch/mips/include/asm/mach-ralink/pinmux.h b/arch/mips/ralink/include/mach/pinmux.h
+similarity index 100%
+rename from arch/mips/include/asm/mach-ralink/pinmux.h
+rename to arch/mips/ralink/include/mach/pinmux.h
+diff --git a/arch/mips/include/asm/mach-ralink/ralink_regs.h b/arch/mips/ralink/include/mach/ralink_regs.h
+similarity index 100%
+rename from arch/mips/include/asm/mach-ralink/ralink_regs.h
+rename to arch/mips/ralink/include/mach/ralink_regs.h
+diff --git a/arch/mips/include/asm/mach-ralink/rt288x.h b/arch/mips/ralink/include/mach/rt288x.h
+similarity index 100%
+rename from arch/mips/include/asm/mach-ralink/rt288x.h
+rename to arch/mips/ralink/include/mach/rt288x.h
+diff --git a/arch/mips/include/asm/mach-ralink/rt288x/cpu-feature-overrides.h b/arch/mips/ralink/include/mach/rt288x/cpu-feature-overrides.h
+similarity index 100%
+rename from arch/mips/include/asm/mach-ralink/rt288x/cpu-feature-overrides.h
+rename to arch/mips/ralink/include/mach/rt288x/cpu-feature-overrides.h
+diff --git a/arch/mips/include/asm/mach-ralink/rt305x.h b/arch/mips/ralink/include/mach/rt305x.h
+similarity index 100%
+rename from arch/mips/include/asm/mach-ralink/rt305x.h
+rename to arch/mips/ralink/include/mach/rt305x.h
+diff --git a/arch/mips/include/asm/mach-ralink/rt305x/cpu-feature-overrides.h b/arch/mips/ralink/include/mach/rt305x/cpu-feature-overrides.h
+similarity index 100%
+rename from arch/mips/include/asm/mach-ralink/rt305x/cpu-feature-overrides.h
+rename to arch/mips/ralink/include/mach/rt305x/cpu-feature-overrides.h
+diff --git a/arch/mips/include/asm/mach-ralink/rt3883.h b/arch/mips/ralink/include/mach/rt3883.h
+similarity index 100%
+rename from arch/mips/include/asm/mach-ralink/rt3883.h
+rename to arch/mips/ralink/include/mach/rt3883.h
+diff --git a/arch/mips/include/asm/mach-ralink/rt3883/cpu-feature-overrides.h b/arch/mips/ralink/include/mach/rt3883/cpu-feature-overrides.h
+similarity index 100%
+rename from arch/mips/include/asm/mach-ralink/rt3883/cpu-feature-overrides.h
+rename to arch/mips/ralink/include/mach/rt3883/cpu-feature-overrides.h
+diff --git a/arch/mips/ralink/include/mach/spaces.h b/arch/mips/ralink/include/mach/spaces.h
 new file mode 100644
 index 0000000..39a4d72
 --- /dev/null
-+++ b/arch/mips/rb532/include/mach/spaces.h
++++ b/arch/mips/ralink/include/mach/spaces.h
 @@ -0,0 +1,2 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#include <asm/mach-generic/spaces.h>
-diff --git a/arch/mips/include/asm/mach-rc32434/timer.h b/arch/mips/rb532/include/mach/timer.h
-similarity index 98%
-rename from arch/mips/include/asm/mach-rc32434/timer.h
-rename to arch/mips/rb532/include/mach/timer.h
-index cda26bb9..f4f1500 100644
---- a/arch/mips/include/asm/mach-rc32434/timer.h
-+++ b/arch/mips/rb532/include/mach/timer.h
-@@ -29,7 +29,7 @@
- #ifndef __ASM_RC32434_TIMER_H
- #define __ASM_RC32434_TIMER_H
- 
--#include <asm/mach-rc32434/rb.h>
-+#include <mach/rb.h>
- 
- #define TIMER0_BASE_ADDR		0x18028000
- #define TIMER_COUNT			3
-diff --git a/arch/mips/rb532/include/mach/topology.h b/arch/mips/rb532/include/mach/topology.h
+diff --git a/arch/mips/ralink/include/mach/topology.h b/arch/mips/ralink/include/mach/topology.h
 new file mode 100644
 index 0000000..86e585b
 --- /dev/null
-+++ b/arch/mips/rb532/include/mach/topology.h
++++ b/arch/mips/ralink/include/mach/topology.h
 @@ -0,0 +1,2 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#include <asm/mach-generic/topology.h>
-diff --git a/arch/mips/include/asm/mach-rc32434/war.h b/arch/mips/rb532/include/mach/war.h
-similarity index 100%
-rename from arch/mips/include/asm/mach-rc32434/war.h
-rename to arch/mips/rb532/include/mach/war.h
-diff --git a/arch/mips/rb532/irq.c b/arch/mips/rb532/irq.c
-index 25cc250..7a2af1c 100644
---- a/arch/mips/rb532/irq.c
-+++ b/arch/mips/rb532/irq.c
-@@ -42,8 +42,8 @@
- #include <asm/time.h>
- #include <asm/mipsregs.h>
- 
--#include <asm/mach-rc32434/irq.h>
--#include <asm/mach-rc32434/gpio.h>
-+#include <mach/irq.h>
-+#include <mach/gpio.h>
- 
- struct intr_group {
- 	u32 mask;	/* mask of valid bits in pending/mask registers */
-diff --git a/arch/mips/rb532/prom.c b/arch/mips/rb532/prom.c
-index 303cc3d..6c4755e 100644
---- a/arch/mips/rb532/prom.c
-+++ b/arch/mips/rb532/prom.c
-@@ -19,8 +19,8 @@
- #include <linux/blkdev.h>
- 
- #include <asm/bootinfo.h>
--#include <asm/mach-rc32434/ddr.h>
--#include <asm/mach-rc32434/prom.h>
-+#include <mach/ddr.h>
-+#include <mach/prom.h>
- 
- unsigned int idt_cpu_freq = 132000000;
- EXPORT_SYMBOL(idt_cpu_freq);
-diff --git a/arch/mips/rb532/serial.c b/arch/mips/rb532/serial.c
-index 7048254..8af04a1 100644
---- a/arch/mips/rb532/serial.c
-+++ b/arch/mips/rb532/serial.c
-@@ -32,7 +32,7 @@
- #include <linux/irq.h>
- 
- #include <asm/serial.h>
--#include <asm/mach-rc32434/rb.h>
-+#include <mach/rb.h>
- 
- extern unsigned int idt_cpu_freq;
- 
-diff --git a/arch/mips/rb532/setup.c b/arch/mips/rb532/setup.c
-index 51af9d3..d8f7b0b 100644
---- a/arch/mips/rb532/setup.c
-+++ b/arch/mips/rb532/setup.c
-@@ -11,8 +11,8 @@
- #include <asm/time.h>
- #include <linux/ioport.h>
- 
--#include <asm/mach-rc32434/rb.h>
--#include <asm/mach-rc32434/pci.h>
-+#include <mach/rb.h>
-+#include <mach/pci.h>
- 
- struct pci_reg __iomem *pci_reg;
- EXPORT_SYMBOL(pci_reg);
-diff --git a/arch/mips/rb532/time.c b/arch/mips/rb532/time.c
-index 68713dd..0ccb5414 100644
---- a/arch/mips/rb532/time.c
-+++ b/arch/mips/rb532/time.c
-@@ -17,7 +17,7 @@
+diff --git a/arch/mips/ralink/include/mach/war.h b/arch/mips/ralink/include/mach/war.h
+new file mode 100644
+index 0000000..5b0422a
+--- /dev/null
++++ b/arch/mips/ralink/include/mach/war.h
+@@ -0,0 +1,2 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <asm/mach-generic/war.h>
+diff --git a/arch/mips/ralink/mt7620.c b/arch/mips/ralink/mt7620.c
+index fcf0100..0b911f8 100644
+--- a/arch/mips/ralink/mt7620.c
++++ b/arch/mips/ralink/mt7620.c
+@@ -13,9 +13,9 @@
+ #include <linux/bug.h>
  
  #include <asm/mipsregs.h>
- #include <asm/time.h>
--#include <asm/mach-rc32434/rc32434.h>
-+#include <mach/rc32434.h>
+-#include <asm/mach-ralink/ralink_regs.h>
+-#include <asm/mach-ralink/mt7620.h>
+-#include <asm/mach-ralink/pinmux.h>
++#include <mach/ralink_regs.h>
++#include <mach/mt7620.h>
++#include <mach/pinmux.h>
  
- extern unsigned int idt_cpu_freq;
+ #include "common.h"
  
-diff --git a/drivers/ata/pata_rb532_cf.c b/drivers/ata/pata_rb532_cf.c
-index 479c4b2..90ba838 100644
---- a/drivers/ata/pata_rb532_cf.c
-+++ b/drivers/ata/pata_rb532_cf.c
-@@ -28,7 +28,7 @@
- #include <linux/libata.h>
- #include <scsi/scsi_host.h>
- 
--#include <asm/mach-rc32434/rb.h>
-+#include <mach/rb.h>
- 
- #define DRV_NAME	"pata-rb532-cf"
- #define DRV_VERSION	"0.1.0"
-diff --git a/drivers/input/misc/rb532_button.c b/drivers/input/misc/rb532_button.c
-index 190a80e..5d2f2f0 100644
---- a/drivers/input/misc/rb532_button.c
-+++ b/drivers/input/misc/rb532_button.c
-@@ -10,8 +10,8 @@
- #include <linux/platform_device.h>
- #include <linux/gpio.h>
- 
--#include <asm/mach-rc32434/gpio.h>
--#include <asm/mach-rc32434/rb.h>
-+#include <mach/gpio.h>
-+#include <mach/rb.h>
- 
- #define DRV_NAME "rb532-button"
- 
-diff --git a/drivers/leds/leds-rb532.c b/drivers/leds/leds-rb532.c
-index b6447c1..413ef32 100644
---- a/drivers/leds/leds-rb532.c
-+++ b/drivers/leds/leds-rb532.c
+diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
+index 0accb80..b9f68c6 100644
+--- a/arch/mips/ralink/mt7621.c
++++ b/arch/mips/ralink/mt7621.c
 @@ -13,8 +13,8 @@
- #include <linux/module.h>
- #include <linux/platform_device.h>
+ #include <asm/mipsregs.h>
+ #include <asm/smp-ops.h>
+ #include <asm/mips-cps.h>
+-#include <asm/mach-ralink/ralink_regs.h>
+-#include <asm/mach-ralink/mt7621.h>
++#include <mach/ralink_regs.h>
++#include <mach/mt7621.h>
  
--#include <asm/mach-rc32434/gpio.h>
--#include <asm/mach-rc32434/rb.h>
-+#include <mach/gpio.h>
-+#include <mach/rb.h>
+ #include <pinmux.h>
  
- static void rb532_led_set(struct led_classdev *cdev,
- 			  enum led_brightness brightness)
-diff --git a/drivers/net/ethernet/korina.c b/drivers/net/ethernet/korina.c
-index f1d8492..b3ee4c8 100644
---- a/drivers/net/ethernet/korina.c
-+++ b/drivers/net/ethernet/korina.c
-@@ -60,10 +60,10 @@
+diff --git a/arch/mips/ralink/prom.c b/arch/mips/ralink/prom.c
+index 02e7878..9672735 100644
+--- a/arch/mips/ralink/prom.c
++++ b/arch/mips/ralink/prom.c
+@@ -13,7 +13,7 @@
+ #include <asm/bootinfo.h>
+ #include <asm/addrspace.h>
+ 
+-#include <asm/mach-ralink/ralink_regs.h>
++#include <mach/ralink_regs.h>
+ 
+ #include "common.h"
+ 
+diff --git a/arch/mips/ralink/reset.c b/arch/mips/ralink/reset.c
+index 8126f12..40ed566 100644
+--- a/arch/mips/ralink/reset.c
++++ b/arch/mips/ralink/reset.c
+@@ -14,7 +14,7 @@
+ 
+ #include <asm/reboot.h>
+ 
+-#include <asm/mach-ralink/ralink_regs.h>
++#include <mach/ralink_regs.h>
+ 
+ /* Reset Control */
+ #define SYSC_REG_RESET_CTRL	0x034
+diff --git a/arch/mips/ralink/rt288x.c b/arch/mips/ralink/rt288x.c
+index 3f09689..f92a8791 100644
+--- a/arch/mips/ralink/rt288x.c
++++ b/arch/mips/ralink/rt288x.c
+@@ -12,9 +12,9 @@
+ #include <linux/init.h>
+ 
+ #include <asm/mipsregs.h>
+-#include <asm/mach-ralink/ralink_regs.h>
+-#include <asm/mach-ralink/rt288x.h>
+-#include <asm/mach-ralink/pinmux.h>
++#include <mach/ralink_regs.h>
++#include <mach/rt288x.h>
++#include <mach/pinmux.h>
+ 
+ #include "common.h"
+ 
+diff --git a/arch/mips/ralink/rt305x.c b/arch/mips/ralink/rt305x.c
+index 496f966..a4cba53 100644
+--- a/arch/mips/ralink/rt305x.c
++++ b/arch/mips/ralink/rt305x.c
+@@ -14,9 +14,9 @@
+ 
  #include <asm/io.h>
- #include <asm/dma.h>
+ #include <asm/mipsregs.h>
+-#include <asm/mach-ralink/ralink_regs.h>
+-#include <asm/mach-ralink/rt305x.h>
+-#include <asm/mach-ralink/pinmux.h>
++#include <mach/ralink_regs.h>
++#include <mach/rt305x.h>
++#include <mach/pinmux.h>
  
--#include <asm/mach-rc32434/rb.h>
--#include <asm/mach-rc32434/rc32434.h>
--#include <asm/mach-rc32434/eth.h>
--#include <asm/mach-rc32434/dma_v.h>
-+#include <mach/rb.h>
-+#include <mach/rc32434.h>
-+#include <mach/eth.h>
-+#include <mach/dma_v.h>
+ #include "common.h"
  
- #define DRV_NAME	"korina"
- #define DRV_VERSION	"0.20"
-diff --git a/drivers/watchdog/rc32434_wdt.c b/drivers/watchdog/rc32434_wdt.c
-index aee3c2e..555bab4 100644
---- a/drivers/watchdog/rc32434_wdt.c
-+++ b/drivers/watchdog/rc32434_wdt.c
-@@ -28,7 +28,7 @@
- #include <linux/uaccess.h>		/* For copy_to_user/put_user/... */
- #include <linux/io.h>			/* For devm_ioremap */
+diff --git a/arch/mips/ralink/rt3883.c b/arch/mips/ralink/rt3883.c
+index 8f3fe31..61786c5 100644
+--- a/arch/mips/ralink/rt3883.c
++++ b/arch/mips/ralink/rt3883.c
+@@ -12,9 +12,9 @@
+ #include <linux/init.h>
  
--#include <asm/mach-rc32434/integ.h>	/* For the Watchdog registers */
-+#include <mach/integ.h>	/* For the Watchdog registers */
+ #include <asm/mipsregs.h>
+-#include <asm/mach-ralink/ralink_regs.h>
+-#include <asm/mach-ralink/rt3883.h>
+-#include <asm/mach-ralink/pinmux.h>
++#include <mach/ralink_regs.h>
++#include <mach/rt3883.h>
++#include <mach/pinmux.h>
  
- #define VERSION "1.0"
+ #include "common.h"
  
+diff --git a/arch/mips/ralink/timer.c b/arch/mips/ralink/timer.c
+index 652424d..e8d42c3 100644
+--- a/arch/mips/ralink/timer.c
++++ b/arch/mips/ralink/timer.c
+@@ -12,7 +12,7 @@
+ #include <linux/of_gpio.h>
+ #include <linux/clk.h>
+ 
+-#include <asm/mach-ralink/ralink_regs.h>
++#include <mach/ralink_regs.h>
+ 
+ #define TIMER_REG_TMRSTAT		0x00
+ #define TIMER_REG_TMR0LOAD		0x10
 -- 
 1.8.3.1
 
