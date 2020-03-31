@@ -2,242 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAF2199780
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2020 15:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56420199A2A
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2020 17:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730943AbgCaNdm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 31 Mar 2020 09:33:42 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:37370 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730216AbgCaNdm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 31 Mar 2020 09:33:42 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf9+pRoNeSSIiAA--.19S5;
-        Tue, 31 Mar 2020 21:33:32 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH v3 3/3] MIPS: Loongson: Add PCI support for 7A1000
-Date:   Tue, 31 Mar 2020 21:33:28 +0800
-Message-Id: <1585661608-3356-4-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1585661608-3356-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1585661608-3356-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9Dxf9+pRoNeSSIiAA--.19S5
-X-Coremail-Antispam: 1UD129KBjvJXoW3Xw1rKry3ZFWxuFy3uFWruFg_yoWxCF1UpF
-        43A3WUKr4FqF1fGFnYy3yUGF1rAFZxJF9rKFW2kryj93sxZryFqF95W3W5tr4fKw4DXa47
-        W3yfKF17G3WjkaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9v14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-        vE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-        r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUDKs7UUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S1731013AbgCaPr5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 31 Mar 2020 11:47:57 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:31080 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730999AbgCaPr4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Mar 2020 11:47:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1585669676;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=JZtZSbKo5LIE2USs8ZYw0MKFj7vPTw9aUaKq/XN8w6g=;
+        b=KxNPvEdBUo23UzmjFTIyZ4QFSqeDAsMNRhZ2JYMqW0Yoe8ZrlxDh4FLJXTbXlt9o3iBXDe
+        vehWY5mbDWq8GW7yUwndW1kVOGU+B3gRwXNH/vnXrH96by7HDvkOWCPzWEttmwL3Fnhaps
+        ASd66qq8oRBShngx61T//LSQyTswdy8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-107-tCcb4IJzNseAWG37EiM-yA-1; Tue, 31 Mar 2020 11:47:54 -0400
+X-MC-Unique: tCcb4IJzNseAWG37EiM-yA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1812C149C0;
+        Tue, 31 Mar 2020 15:47:53 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BD76060BE2;
+        Tue, 31 Mar 2020 15:47:49 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     linux-mips@vger.kernel.org, peterx@redhat.com, rppt@linux.ibm.com
+Subject: [PATCH] KVM: MIPS: fix compilation
+Date:   Tue, 31 Mar 2020 11:47:49 -0400
+Message-Id: <20200331154749.5457-1-pbonzini@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add PCI support for 7A1000 to detect PCI device.
+Commit 31168f033e37 is correct that pud_index() & __pud_offset() are the same
+when pud_index() is actually provided, however it does not take into account
+the __PAGETABLE_PUD_FOLDED case.  Provide kvm_pud_index so that MIPS KVM
+compiles.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
+ arch/mips/kvm/mmu.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-v3:
-  - Move ls7a1000_pci_class_quirk() to fixup-loongson3.c
-  - Use PCI_VENDOR_ID_LOONGSON in pci_ids.h instead of 0x0014
-
-  PCI_VENDOR_ID_LOONGSON depends on the mainline tree's commit:
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9acb9fe18d86
-
- arch/mips/include/asm/mach-loongson64/boot_param.h |  9 ++++
- arch/mips/loongson64/env.c                         |  2 +
- arch/mips/pci/fixup-loongson3.c                    | 12 +++++
- arch/mips/pci/ops-loongson3.c                      | 63 ++++++++++++++++++++--
- 4 files changed, 82 insertions(+), 4 deletions(-)
-
-diff --git a/arch/mips/include/asm/mach-loongson64/boot_param.h b/arch/mips/include/asm/mach-loongson64/boot_param.h
-index a36d3dc..c8f8d6b 100644
---- a/arch/mips/include/asm/mach-loongson64/boot_param.h
-+++ b/arch/mips/include/asm/mach-loongson64/boot_param.h
-@@ -197,6 +197,7 @@ enum loongson_bridge_type {
- 	LS7A1000 = 2
- };
- 
-+struct pci_bus;
- struct loongson_system_configuration {
- 	u32 nr_cpus;
- 	u32 nr_nodes;
-@@ -222,6 +223,8 @@ struct loongson_system_configuration {
- 	struct sensor_device sensors[MAX_SENSORS];
- 	u64 workarounds;
- 	void (*early_config)(void);
-+	int (*pci_config_access)(unsigned char access_type, struct pci_bus *bus,
-+				 unsigned int devfn, int where, u32 *data);
- };
- 
- extern struct efi_memory_map_loongson *loongson_memmap;
-@@ -230,5 +233,11 @@ extern struct loongson_system_configuration loongson_sysconf;
- extern u32 node_id_offset;
- extern void rs780e_early_config(void);
- extern void ls7a1000_early_config(void);
-+extern int rs780e_pci_config_access(unsigned char access_type,
-+		struct pci_bus *bus, unsigned int devfn,
-+		int where, u32 *data);
-+extern int ls7a1000_pci_config_access(unsigned char access_type,
-+		struct pci_bus *bus, unsigned int devfn,
-+		int where, u32 *data);
- 
+diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
+index 7dad7a293eae..ccf98c22fd2c 100644
+--- a/arch/mips/kvm/mmu.c
++++ b/arch/mips/kvm/mmu.c
+@@ -25,6 +25,12 @@
+ #define KVM_MMU_CACHE_MIN_PAGES 2
  #endif
-diff --git a/arch/mips/loongson64/env.c b/arch/mips/loongson64/env.c
-index 8b8d6f6..0190ea6 100644
---- a/arch/mips/loongson64/env.c
-+++ b/arch/mips/loongson64/env.c
-@@ -193,9 +193,11 @@ void __init prom_init_env(void)
- 		pr_info("The bridge chip is Loongson 7A1000\n");
- 		loongson_sysconf.bridgetype = LS7A1000;
- 		loongson_sysconf.early_config = ls7a1000_early_config;
-+		loongson_sysconf.pci_config_access = ls7a1000_pci_config_access;
- 	} else {
- 		pr_info("The bridge chip is AMD RS780E or SR5690\n");
- 		loongson_sysconf.bridgetype = RS780E;
- 		loongson_sysconf.early_config = rs780e_early_config;
-+		loongson_sysconf.pci_config_access = rs780e_pci_config_access;
- 	}
- }
-diff --git a/arch/mips/pci/fixup-loongson3.c b/arch/mips/pci/fixup-loongson3.c
-index 8a741c2..569649e 100644
---- a/arch/mips/pci/fixup-loongson3.c
-+++ b/arch/mips/pci/fixup-loongson3.c
-@@ -64,6 +64,18 @@ static void pci_fixup_radeon(struct pci_dev *pdev)
- DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_ATI, PCI_ANY_ID,
- 				PCI_CLASS_DISPLAY_VGA, 8, pci_fixup_radeon);
  
-+static void ls7a1000_pci_class_quirk(struct pci_dev *dev)
-+{
-+	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
-+}
++#if defined(__PAGETABLE_PUD_FOLDED)
++#define kvm_pud_index(gva) 0
++#else
++#define kvm_pud_index(gva) pud_index(gva)
++#endif
 +
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON, 0x7a09,
-+			ls7a1000_pci_class_quirk);
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON, 0x7a19,
-+			ls7a1000_pci_class_quirk);
-+DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON, 0x7a29,
-+			ls7a1000_pci_class_quirk);
-+
- /* Do platform specific device initialization at pci_enable_device() time */
- int pcibios_plat_dev_init(struct pci_dev *dev)
+ static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache,
+ 				  int min, int max)
  {
-diff --git a/arch/mips/pci/ops-loongson3.c b/arch/mips/pci/ops-loongson3.c
-index 2f6ad36..b69e569 100644
---- a/arch/mips/pci/ops-loongson3.c
-+++ b/arch/mips/pci/ops-loongson3.c
-@@ -13,7 +13,10 @@
- #define HT1LO_PCICFG_BASE      0x1a000000
- #define HT1LO_PCICFG_BASE_TP1  0x1b000000
- 
--static int loongson3_pci_config_access(unsigned char access_type,
-+#define HT1LO_PCICFG_BASE_EXT		0xefe00000000
-+#define HT1LO_PCICFG_BASE_TP1_EXT	0xefe10000000
-+
-+int rs780e_pci_config_access(unsigned char access_type,
- 		struct pci_bus *bus, unsigned int devfn,
- 		int where, u32 *data)
+@@ -234,8 +240,8 @@ static bool kvm_mips_flush_gpa_pud(pud_t *pud, unsigned long start_gpa,
  {
-@@ -62,11 +65,63 @@ static int loongson3_pci_config_access(unsigned char access_type,
- 	return PCIBIOS_SUCCESSFUL;
- }
+ 	pmd_t *pmd;
+ 	unsigned long end = ~0ul;
+-	int i_min = pud_index(start_gpa);
+-	int i_max = pud_index(end_gpa);
++	int i_min = kvm_pud_index(start_gpa);
++	int i_max = kvm_pud_index(end_gpa);
+ 	bool safe_to_remove = (i_min == 0 && i_max == PTRS_PER_PUD - 1);
+ 	int i;
  
-+
-+int ls7a1000_pci_config_access(unsigned char access_type,
-+		struct pci_bus *bus, unsigned int devfn,
-+		int where, u32 *data)
-+{
-+	u_int64_t addr;
-+	void *addrp;
-+	unsigned char busnum = bus->number;
-+	int device = PCI_SLOT(devfn);
-+	int function = PCI_FUNC(devfn);
-+	int reg = where & ~3;
-+
-+	if (where >= PCI_CFG_SPACE_EXP_SIZE)
-+		return PCIBIOS_DEVICE_NOT_FOUND;
-+
-+	if (busnum == 0 && device > 23)
-+		return PCIBIOS_DEVICE_NOT_FOUND;
-+
-+	if (where < PCI_CFG_SPACE_SIZE) { /* standard config */
-+		addr = (busnum << 16) | (device << 11) | (function << 8) | reg;
-+		if (busnum == 0) {
-+			addr = HT1LO_PCICFG_BASE | addr;
-+			addrp = (void *)TO_UNCAC(addr);
-+		} else {
-+			addr = HT1LO_PCICFG_BASE_TP1 | addr;
-+			addrp = (void *)TO_UNCAC(addr);
-+		}
-+	} else { /* extended config */
-+		reg = (reg & 0xff) | ((reg & 0xf00) << 16);
-+		addr = (busnum << 16) | (device << 11) | (function << 8) | reg;
-+		if (busnum == 0) {
-+			addr = HT1LO_PCICFG_BASE_EXT | addr;
-+			addrp = (void *)TO_UNCAC(addr);
-+		} else {
-+			addr = HT1LO_PCICFG_BASE_TP1_EXT | addr;
-+			addrp = (void *)TO_UNCAC(addr);
-+		}
-+	}
-+
-+	if (access_type == PCI_ACCESS_WRITE)
-+		*(unsigned int *)addrp = cpu_to_le32(*data);
-+	else {
-+		*data = le32_to_cpu(*(unsigned int *)addrp);
-+		if (*data == 0xffffffff) {
-+			*data = -1;
-+			return PCIBIOS_DEVICE_NOT_FOUND;
-+		}
-+	}
-+
-+	return PCIBIOS_SUCCESSFUL;
-+}
-+
- static int loongson3_pci_pcibios_read(struct pci_bus *bus, unsigned int devfn,
- 				 int where, int size, u32 *val)
+@@ -361,8 +367,8 @@ static int kvm_mips_##name##_pud(pud_t *pud, unsigned long start,	\
+ 	int ret = 0;							\
+ 	pmd_t *pmd;							\
+ 	unsigned long cur_end = ~0ul;					\
+-	int i_min = pud_index(start);				\
+-	int i_max = pud_index(end);					\
++	int i_min = kvm_pud_index(start);				\
++	int i_max = kvm_pud_index(end);					\
+ 	int i;								\
+ 									\
+ 	for (i = i_min; i <= i_max; ++i, start = 0) {			\
+@@ -896,8 +902,8 @@ static bool kvm_mips_flush_gva_pud(pud_t *pud, unsigned long start_gva,
  {
- 	u32 data = 0;
--	int ret = loongson3_pci_config_access(PCI_ACCESS_READ,
-+	int ret = loongson_sysconf.pci_config_access(PCI_ACCESS_READ,
- 			bus, devfn, where, &data);
+ 	pmd_t *pmd;
+ 	unsigned long end = ~0ul;
+-	int i_min = pud_index(start_gva);
+-	int i_max = pud_index(end_gva);
++	int i_min = kvm_pud_index(start_gva);
++	int i_max = kvm_pud_index(end_gva);
+ 	bool safe_to_remove = (i_min == 0 && i_max == PTRS_PER_PUD - 1);
+ 	int i;
  
- 	if (ret != PCIBIOS_SUCCESSFUL)
-@@ -91,7 +146,7 @@ static int loongson3_pci_pcibios_write(struct pci_bus *bus, unsigned int devfn,
- 	if (size == 4)
- 		data = val;
- 	else {
--		ret = loongson3_pci_config_access(PCI_ACCESS_READ,
-+		ret = loongson_sysconf.pci_config_access(PCI_ACCESS_READ,
- 				bus, devfn, where, &data);
- 		if (ret != PCIBIOS_SUCCESSFUL)
- 			return ret;
-@@ -104,7 +159,7 @@ static int loongson3_pci_pcibios_write(struct pci_bus *bus, unsigned int devfn,
- 			    (val << ((where & 3) << 3));
- 	}
- 
--	ret = loongson3_pci_config_access(PCI_ACCESS_WRITE,
-+	ret = loongson_sysconf.pci_config_access(PCI_ACCESS_WRITE,
- 			bus, devfn, where, &data);
- 
- 	return ret;
 -- 
-2.1.0
+2.18.2
 
