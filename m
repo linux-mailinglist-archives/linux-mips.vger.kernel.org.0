@@ -2,94 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA7F198A76
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2020 05:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092FC198A89
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2020 05:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727464AbgCaDZ4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Mar 2020 23:25:56 -0400
-Received: from smtp.gentoo.org ([140.211.166.183]:39874 "EHLO smtp.gentoo.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727614AbgCaDZ4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 30 Mar 2020 23:25:56 -0400
-Received: from [192.168.1.13] (c-73-173-172-109.hsd1.md.comcast.net [73.173.172.109])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: kumba)
-        by smtp.gentoo.org (Postfix) with ESMTPSA id 0503534EF51;
-        Tue, 31 Mar 2020 03:25:54 +0000 (UTC)
-To:     linux-mips@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Joshua Kinard <kumba@gentoo.org>
-Subject: [PATCH] Add missing ifdefs to SGI Platform files for IP22, IP32
-Openpgp: preference=signencrypt
-Message-ID: <87be6e36-04de-684b-0361-91de9ce2c731@gentoo.org>
-Date:   Mon, 30 Mar 2020 23:25:52 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1727708AbgCaDe5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Mar 2020 23:34:57 -0400
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17980 "EHLO
+        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727464AbgCaDe5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 30 Mar 2020 23:34:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1585625678;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=T/992S/NntFJbh2NBbKypuYLP245JSEjE8JiZ5fAzYI=;
+        b=Ii7pSBPt9GwUXMWZzsty1l2gAA+RJbsbJbl6nRghPH6alLEbSxiFKCzFUBovO7nY
+        Fhx9tuaSZGxHNlPXF9jfoNCIKWL7v3u0qytRKQqHy3liEmq7wiMxWc/E1pTQfx4N+4/
+        vp9d9VV/AkbiKOdgxS0hEMCqdxiMc13d+GPBheaE=
+Received: from mail.baihui.com by mx.zoho.com.cn
+        with SMTP id 1585625676445695.6779755877686; Tue, 31 Mar 2020 11:34:36 +0800 (CST)
+Date:   Tue, 31 Mar 2020 11:34:36 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     "maobibo" <maobibo@loongson.cn>
+Cc:     "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Huacai Chen" <chenhc@lemote.com>,
+        "linux-mips" <linux-mips@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>
+Message-ID: <1712ea7ba9a.dad1f80a33831.4741900511750683483@flygoat.com>
+In-Reply-To: <778df899-4dc4-c2be-5b7b-79c16223b0fb@loongson.cn>
+References: <1585557531-18849-1-git-send-email-maobibo@loongson.cn>
+ <53CC90A0-3926-4642-91D4-F4F265F6AE90@flygoat.com> <778df899-4dc4-c2be-5b7b-79c16223b0fb@loongson.cn>
+Subject: Re: [PATCH 02/39] MIPS: loongson64: Add header files path prefix
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Priority: Medium
+User-Agent: ZohoCN Mail
+X-Mailer: ZohoCN Mail
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The attached patch fixes the SGI-specific Platform files to only be
-included when their specific platform is actually built.  Both the
-IP27 and IP30 Platform files already have such ifdefs in place.  This
-patch adds the same to the IP22 and IP32 Platform files.
 
-Signed-off-by: Joshua Kinard <kumba@gentoo.org>
----
- arch/mips/sgi-ip22/Platform |    8 +++++---
- arch/mips/sgi-ip32/Platform |    2 ++
- 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/sgi-ip22/Platform b/arch/mips/sgi-ip22/Platform
-index e8f6b3a42a48..cffd31e3b230 100644
---- a/arch/mips/sgi-ip22/Platform
-+++ b/arch/mips/sgi-ip22/Platform
-@@ -7,7 +7,8 @@
- # current variable will break so for 64-bit kernels we have to raise the start
- # address by 8kb.
- #
--platform-$(CONFIG_SGI_IP22)		+= sgi-ip22/
-+ifdef CONFIG_SGI_IP22
-+platform-$(CONFIG_SGI_IP22)	+= sgi-ip22/
- cflags-$(CONFIG_SGI_IP22)	+= -I$(srctree)/arch/mips/include/asm/mach-ip22
- ifdef CONFIG_32BIT
- load-$(CONFIG_SGI_IP22)		+= 0xffffffff88002000
-@@ -15,6 +16,7 @@ endif
- ifdef CONFIG_64BIT
- load-$(CONFIG_SGI_IP22)		+= 0xffffffff88004000
- endif
-+endif
- 
- #
- # SGI IP28 (Indigo2 R10k)
-@@ -28,7 +30,7 @@ ifdef CONFIG_SGI_IP28
-   ifeq ($(call cc-option-yn,-march=r10000 -mr10k-cache-barrier=store), n)
-       $(error gcc doesn't support needed option -mr10k-cache-barrier=store)
-   endif
--endif
--platform-$(CONFIG_SGI_IP28)		+= sgi-ip22/
-+platform-$(CONFIG_SGI_IP28)	+= sgi-ip22/
- cflags-$(CONFIG_SGI_IP28)	+= -mr10k-cache-barrier=store -I$(srctree)/arch/mips/include/asm/mach-ip28
- load-$(CONFIG_SGI_IP28)		+= 0xa800000020004000
-+endif
-diff --git a/arch/mips/sgi-ip32/Platform b/arch/mips/sgi-ip32/Platform
-index 589930560088..7db2c1f05d89 100644
---- a/arch/mips/sgi-ip32/Platform
-+++ b/arch/mips/sgi-ip32/Platform
-@@ -6,8 +6,10 @@
- # a multiple of the kernel stack size or the handling of the current variable
- # will break.
- #
-+ifdef CONFIG_SGI_IP32
- platform-$(CONFIG_SGI_IP32)	+= sgi-ip32/
- cflags-$(CONFIG_SGI_IP32)	+= -I$(srctree)/arch/mips/include/asm/mach-ip32
- cflags-$(CONFIG_CPU_R10000)		+= -mr10k-cache-barrier=load-store
- cflags-$(CONFIG_CPU_R12K_R14K_R16K)	+= -mno-fix-r10000 -mr10k-cache-barrier=load-store
- load-$(CONFIG_SGI_IP32)		+= 0xffffffff80004000
-+endif
+--
+Jiaxun Yang
+
+ ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=B8=80, 2020-03-30 18:00:19 maobibo <m=
+aobibo@loongson.cn> =E6=92=B0=E5=86=99 ----
+ >=20
+ >=20
+ > On 03/30/2020 04:55 PM, Jiaxun Yang wrote:
+ > >=20
+ > >=20
+ > > =E4=BA=8E 2020=E5=B9=B43=E6=9C=8830=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=
+=884:38:51, bibo mao <maobibo@loongson.cn> =E5=86=99=E5=88=B0:
+ > >> Remove header files from arch/mips/include/asm/mach-loongson64
+ > >> to arch/mips/loongson64/include/mach
+ > >>
+ > >> Signed-off-by: bibo mao <maobibo@loongson.cn>
+ > >=20
+ > > Hi Bibo,
+ > >=20
+ > > Thanks for your patch.
+ > >=20
+ > > What's your intention?
+ > > Did you meet any problem about headers?
+ > >=20
+ >=20
+ > Hi Jiaxun,
+ >=20
+ > When I add irqchip support for mips kvm, file virt/kvm/irqchip.c
+ > requires local header file arch/mips/kvm/irq.h, it fails to compile.
+ > Since there is file with the same name located at:
+ >   arch/mips/include/asm/mach-generic/irq.h
+ >   arch/mips/include/asm/mach-loongson64/irq.h
+ >=20
+ > The compiler fails to choose the correct header file irq.h,
+
+You'd better rename kvm's irq.h in this case.
+
+ >=20
+ > regards
+ > bibo,mao
+ >=20
+ > >> ---
+ > >> arch/mips/Kconfig                                                 | 1=
+ +
+ > >> arch/mips/loongson64/Platform                                     | 2
+ > >> +-
+ > >> arch/mips/loongson64/env.c                                        | 8
+ > >> ++++----
+
