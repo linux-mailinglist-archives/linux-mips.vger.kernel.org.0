@@ -2,87 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 744D3198799
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2020 00:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA7F198A76
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2020 05:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729069AbgC3Wvx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Mar 2020 18:51:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51376 "EHLO mail.kernel.org"
+        id S1727464AbgCaDZ4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Mar 2020 23:25:56 -0400
+Received: from smtp.gentoo.org ([140.211.166.183]:39874 "EHLO smtp.gentoo.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728876AbgC3Wvw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 30 Mar 2020 18:51:52 -0400
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        id S1727614AbgCaDZ4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 30 Mar 2020 23:25:56 -0400
+Received: from [192.168.1.13] (c-73-173-172-109.hsd1.md.comcast.net [73.173.172.109])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0C8F620733;
-        Mon, 30 Mar 2020 22:51:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585608711;
-        bh=EXmX9dErmlEkFgnbipzAfMRYR83Acb60UF9bDXiz0DI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=z2ihfI3sBMfsr5Wfl0ingXQoY+GET5tztqWSEKsLwaPrr7s+ZlNiSAKTokhw8O+xN
-         ZHVynMZSxwgLZ5vqpo7pk6F7cOLNDYCHpT8EuVMpy6pEAuagf741mQ/aHK8qub7GET
-         5sfIGbrfC8VOGI745W0EmSJ89zj6DGCdOS5BwtB0=
-Date:   Mon, 30 Mar 2020 15:51:50 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mm@kvack.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        nouveau@lists.freedesktop.org, linuxppc-dev@lists.ozlabs.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] mm/thp: Rename pmd_mknotpresent() as
- pmd_mknotvalid()
-Message-Id: <20200330155150.750ef923d297c455c7b418e0@linux-foundation.org>
-In-Reply-To: <2e67f1b8-d196-89e4-aee1-f552db1433a0@arm.com>
-References: <1584680057-13753-1-git-send-email-anshuman.khandual@arm.com>
-        <2e67f1b8-d196-89e4-aee1-f552db1433a0@arm.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        (Authenticated sender: kumba)
+        by smtp.gentoo.org (Postfix) with ESMTPSA id 0503534EF51;
+        Tue, 31 Mar 2020 03:25:54 +0000 (UTC)
+To:     linux-mips@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From:   Joshua Kinard <kumba@gentoo.org>
+Subject: [PATCH] Add missing ifdefs to SGI Platform files for IP22, IP32
+Openpgp: preference=signencrypt
+Message-ID: <87be6e36-04de-684b-0361-91de9ce2c731@gentoo.org>
+Date:   Mon, 30 Mar 2020 23:25:52 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 29 Mar 2020 19:12:35 +0530 Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+The attached patch fixes the SGI-specific Platform files to only be
+included when their specific platform is actually built.  Both the
+IP27 and IP30 Platform files already have such ifdefs in place.  This
+patch adds the same to the IP22 and IP32 Platform files.
 
-> 
-> 
-> On 03/20/2020 10:24 AM, Anshuman Khandual wrote:
-> > This series renames pmd_mknotpresent() as pmd_mknotvalid(). Before that it
-> > drops an existing pmd_mknotpresent() definition from powerpc platform which
-> > was never required as it defines it's pmdp_invalidate() through subscribing
-> > __HAVE_ARCH_PMDP_INVALIDATE. This does not create any functional change.
-> > 
-> > This rename was suggested by Catalin during a previous discussion while we
-> > were trying to change the THP helpers on arm64 platform for migration.
-> > 
-> > https://patchwork.kernel.org/patch/11019637/
-> > 
-> > This series is based on v5.6-rc6.
-> > 
-> > Boot tested on arm64 and x86 platforms.
-> > Built tested on many other platforms including the ones changed here.
-> 
-> Gentle ping, any updates regarding this ?
+Signed-off-by: Joshua Kinard <kumba@gentoo.org>
+---
+ arch/mips/sgi-ip22/Platform |    8 +++++---
+ arch/mips/sgi-ip32/Platform |    2 ++
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-We're in the merge window so I have parked this for consideration after
--rc1.
-
+diff --git a/arch/mips/sgi-ip22/Platform b/arch/mips/sgi-ip22/Platform
+index e8f6b3a42a48..cffd31e3b230 100644
+--- a/arch/mips/sgi-ip22/Platform
++++ b/arch/mips/sgi-ip22/Platform
+@@ -7,7 +7,8 @@
+ # current variable will break so for 64-bit kernels we have to raise the start
+ # address by 8kb.
+ #
+-platform-$(CONFIG_SGI_IP22)		+= sgi-ip22/
++ifdef CONFIG_SGI_IP22
++platform-$(CONFIG_SGI_IP22)	+= sgi-ip22/
+ cflags-$(CONFIG_SGI_IP22)	+= -I$(srctree)/arch/mips/include/asm/mach-ip22
+ ifdef CONFIG_32BIT
+ load-$(CONFIG_SGI_IP22)		+= 0xffffffff88002000
+@@ -15,6 +16,7 @@ endif
+ ifdef CONFIG_64BIT
+ load-$(CONFIG_SGI_IP22)		+= 0xffffffff88004000
+ endif
++endif
+ 
+ #
+ # SGI IP28 (Indigo2 R10k)
+@@ -28,7 +30,7 @@ ifdef CONFIG_SGI_IP28
+   ifeq ($(call cc-option-yn,-march=r10000 -mr10k-cache-barrier=store), n)
+       $(error gcc doesn't support needed option -mr10k-cache-barrier=store)
+   endif
+-endif
+-platform-$(CONFIG_SGI_IP28)		+= sgi-ip22/
++platform-$(CONFIG_SGI_IP28)	+= sgi-ip22/
+ cflags-$(CONFIG_SGI_IP28)	+= -mr10k-cache-barrier=store -I$(srctree)/arch/mips/include/asm/mach-ip28
+ load-$(CONFIG_SGI_IP28)		+= 0xa800000020004000
++endif
+diff --git a/arch/mips/sgi-ip32/Platform b/arch/mips/sgi-ip32/Platform
+index 589930560088..7db2c1f05d89 100644
+--- a/arch/mips/sgi-ip32/Platform
++++ b/arch/mips/sgi-ip32/Platform
+@@ -6,8 +6,10 @@
+ # a multiple of the kernel stack size or the handling of the current variable
+ # will break.
+ #
++ifdef CONFIG_SGI_IP32
+ platform-$(CONFIG_SGI_IP32)	+= sgi-ip32/
+ cflags-$(CONFIG_SGI_IP32)	+= -I$(srctree)/arch/mips/include/asm/mach-ip32
+ cflags-$(CONFIG_CPU_R10000)		+= -mr10k-cache-barrier=load-store
+ cflags-$(CONFIG_CPU_R12K_R14K_R16K)	+= -mno-fix-r10000 -mr10k-cache-barrier=load-store
+ load-$(CONFIG_SGI_IP32)		+= 0xffffffff80004000
++endif
