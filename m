@@ -2,166 +2,194 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DE2199AEB
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2020 18:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 858D3199B54
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Mar 2020 18:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731160AbgCaQHP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 31 Mar 2020 12:07:15 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:32758 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731169AbgCaQHP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 31 Mar 2020 12:07:15 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02VG32RY004752
-        for <linux-mips@vger.kernel.org>; Tue, 31 Mar 2020 12:07:14 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3022qybdfq-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-mips@vger.kernel.org>; Tue, 31 Mar 2020 12:07:13 -0400
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-mips@vger.kernel.org> from <rppt@linux.ibm.com>;
-        Tue, 31 Mar 2020 17:07:05 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 31 Mar 2020 17:07:01 +0100
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02VG77c447775936
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Mar 2020 16:07:07 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3EB37AE056;
-        Tue, 31 Mar 2020 16:07:07 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 54913AE04D;
-        Tue, 31 Mar 2020 16:07:06 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.148.207.69])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 31 Mar 2020 16:07:06 +0000 (GMT)
-Date:   Tue, 31 Mar 2020 19:07:03 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mips@vger.kernel.org, peterx@redhat.com
-Subject: Re: [PATCH] KVM: MIPS: fix compilation
-References: <20200331154749.5457-1-pbonzini@redhat.com>
+        id S1726595AbgCaQWx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 31 Mar 2020 12:22:53 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:36037 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730149AbgCaQWx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Mar 2020 12:22:53 -0400
+Received: by mail-lj1-f195.google.com with SMTP id b1so2075690ljp.3
+        for <linux-mips@vger.kernel.org>; Tue, 31 Mar 2020 09:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H0krxhczgA496JeTGfWjPTKYIgHf9GcW9MVmaaVn2GY=;
+        b=PZypqVAapY01bjsOjN2q6EITWh5onkx6m6fo+GxMpFeF0I2LpJsrttwKpFnc3LNNpF
+         Z7cVt2tso8YtHq2cdzfIN1dqfk9kwXhDrdPuiPurGi7aarOS9FqdvqSAOYvfmqO4qLPW
+         3t9xxwV4L0CiXkuJQnpt5bW/75tf/vMt5o4uw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H0krxhczgA496JeTGfWjPTKYIgHf9GcW9MVmaaVn2GY=;
+        b=jNqIziQP/zqcquTv30YUamgcTgQnsTBYDu4TJgDKvgMqIsYHvGLsozbw4n0ujmIVeO
+         WwKTiih0ddARp55ANVqkyE+OI1zfw0/Xa5fxsLDmEYU+iH9Yyl2QFW4wXdFjnHW89Ur7
+         uphiUUGZ53cTKES9NxF5HxbQMGuS/4ttq4LgMFF4Kg2ltHAoBhmZ5NynBsv06x1GRNB2
+         waSwF8zP6UtvT5v4anUQSWxHuQYALOARPubHamZt4w1Dn5LWYCwqsdad3jlmTzlh0pr2
+         5hUtOWnXTuzbY+ybn7QG8+QdrCnAfUCL0z6hNuUfQF8bwmpPs/XhyiCU3O8URm9gmrWl
+         +BOQ==
+X-Gm-Message-State: AGi0PuZMm2yjceN6qhnvp44DMsIFD9eCAvDPbxuZZgOHxv6P0QyV+tgR
+        Drib77MVOlKDvE0iiRXa3+detAxsv7g=
+X-Google-Smtp-Source: APiQypITVceFtyxre9ouIIdiuV8o4omwWHl9Z2bRLwRVOcdEyuLQakdKzds8iBWybqU+jc8ZzJIUWQ==
+X-Received: by 2002:a2e:7a18:: with SMTP id v24mr6366059ljc.34.1585671768261;
+        Tue, 31 Mar 2020 09:22:48 -0700 (PDT)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
+        by smtp.gmail.com with ESMTPSA id 15sm10187782lfb.56.2020.03.31.09.22.47
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Mar 2020 09:22:47 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id u15so8730099lfi.3
+        for <linux-mips@vger.kernel.org>; Tue, 31 Mar 2020 09:22:47 -0700 (PDT)
+X-Received: by 2002:ac2:46d3:: with SMTP id p19mr6164735lfo.125.1585671766812;
+ Tue, 31 Mar 2020 09:22:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200331154749.5457-1-pbonzini@redhat.com>
-X-TM-AS-GCONF: 00
-x-cbid: 20033116-0012-0000-0000-0000039BB633
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20033116-0013-0000-0000-000021D8C2EF
-Message-Id: <20200331160703.GF30942@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-03-31_05:2020-03-31,2020-03-31 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=921 impostorscore=0
- suspectscore=1 adultscore=0 clxscore=1011 bulkscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2003310141
+References: <20200330120315.GA10196@alpha.franken.de>
+In-Reply-To: <20200330120315.GA10196@alpha.franken.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 31 Mar 2020 09:22:30 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg3wXH2JNxkQi+eLZkpuxqV+wPiHhw_Jf7ViH33Sw7PHA@mail.gmail.com>
+Message-ID: <CAHk-=wg3wXH2JNxkQi+eLZkpuxqV+wPiHhw_Jf7ViH33Sw7PHA@mail.gmail.com>
+Subject: Re: [GIT PULL] MIPS changes for v5.7-rc1
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 11:47:49AM -0400, Paolo Bonzini wrote:
-> Commit 31168f033e37 is correct that pud_index() & __pud_offset() are the same
-> when pud_index() is actually provided, however it does not take into account
-> the __PAGETABLE_PUD_FOLDED case.  Provide kvm_pud_index so that MIPS KVM
-> compiles.
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/mips/kvm/mmu.c | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
-> index 7dad7a293eae..ccf98c22fd2c 100644
-> --- a/arch/mips/kvm/mmu.c
-> +++ b/arch/mips/kvm/mmu.c
-> @@ -25,6 +25,12 @@
->  #define KVM_MMU_CACHE_MIN_PAGES 2
->  #endif
->  
-> +#if defined(__PAGETABLE_PUD_FOLDED)
-> +#define kvm_pud_index(gva) 0
-> +#else
-> +#define kvm_pud_index(gva) pud_index(gva)
-> +#endif
-> +
+On Mon, Mar 30, 2020 at 5:03 AM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> I probably messed up my tree, when merging mips_fixes_5_6_1. My way
+> to solve this was to merge v5.6 into mips-next to get a pull request with
+> just the changes from mips-next. I hope this is still ok for you.
 
-I'd prefer simply making pud_index() always defined. When pud level is
-folded asm-generic/pgtable-nopud.h will define PTRS_PER_PUD to 1 and
-pud_index() will evaluate to 0 anyway.
+Please don't do this.
 
-diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
-index f92716cfa4f4..ee5dc0c145b9 100644
---- a/arch/mips/include/asm/pgtable-64.h
-+++ b/arch/mips/include/asm/pgtable-64.h
-@@ -172,6 +172,8 @@
- 
- extern pte_t invalid_pte_table[PTRS_PER_PTE];
- 
-+#define pud_index(address)	(((address) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
-+
- #ifndef __PAGETABLE_PUD_FOLDED
- /*
-  * For 4-level pagetables we defines these ourselves, for 3-level the
-@@ -210,8 +212,6 @@ static inline void p4d_clear(p4d_t *p4dp)
- 	p4d_val(*p4dp) = (unsigned long)invalid_pud_table;
- }
- 
--#define pud_index(address)	(((address) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
--
- static inline unsigned long p4d_page_vaddr(p4d_t p4d)
- {
- 	return p4d_val(p4d);
+If you need to do a merge in order to get the right diffstat, do it as
+a local _test_ merge, and get the diffstat from that.
 
->  static int mmu_topup_memory_cache(struct kvm_mmu_memory_cache *cache,
->  				  int min, int max)
->  {
-> @@ -234,8 +240,8 @@ static bool kvm_mips_flush_gpa_pud(pud_t *pud, unsigned long start_gpa,
->  {
->  	pmd_t *pmd;
->  	unsigned long end = ~0ul;
-> -	int i_min = pud_index(start_gpa);
-> -	int i_max = pud_index(end_gpa);
-> +	int i_min = kvm_pud_index(start_gpa);
-> +	int i_max = kvm_pud_index(end_gpa);
->  	bool safe_to_remove = (i_min == 0 && i_max == PTRS_PER_PUD - 1);
->  	int i;
->  
-> @@ -361,8 +367,8 @@ static int kvm_mips_##name##_pud(pud_t *pud, unsigned long start,	\
->  	int ret = 0;							\
->  	pmd_t *pmd;							\
->  	unsigned long cur_end = ~0ul;					\
-> -	int i_min = pud_index(start);				\
-> -	int i_max = pud_index(end);					\
-> +	int i_min = kvm_pud_index(start);				\
-> +	int i_max = kvm_pud_index(end);					\
->  	int i;								\
->  									\
->  	for (i = i_min; i <= i_max; ++i, start = 0) {			\
-> @@ -896,8 +902,8 @@ static bool kvm_mips_flush_gva_pud(pud_t *pud, unsigned long start_gva,
->  {
->  	pmd_t *pmd;
->  	unsigned long end = ~0ul;
-> -	int i_min = pud_index(start_gva);
-> -	int i_max = pud_index(end_gva);
-> +	int i_min = kvm_pud_index(start_gva);
-> +	int i_max = kvm_pud_index(end_gva);
->  	bool safe_to_remove = (i_min == 0 && i_max == PTRS_PER_PUD - 1);
->  	int i;
->  
-> -- 
-> 2.18.2
-> 
+So what  happened is that you merged in mips_fixes-5.6-1 into the
+branch, and that part is fine. That merge makes sense in the context
+of mips development, and the merge even has a proper commit message,
+not just the "Merge xyz" messages that I hate.
 
--- 
-Sincerely yours,
-Mike.
+So far so good.
 
+HOWEVER.
+
+Now, _because_ you merged that other branch, your MIPS development
+branch has two different base commits - the base for the original
+development, and the base for the mips fixes.
+
+And again, this is all fine. There's absolutely nothing wrong with
+having multiple bases. It happens normally any time you don't have
+entirely linear development. No problem.
+
+But the one thing that having multiple base points of development
+means is that now you can't trivially do a diff for what has changed.
+A diff is by definition an operation that takes a beginning point and
+an end point, and shows the difference between those _two_ points.
+
+But with two bases for development thanks to that fixes branch merge,
+you don't have two points. You have _three_ points - you have your two
+beginning points, and the end point of your branch, and as a result,
+you can't trivially generate a diff of "this is what my branch has
+done.
+
+Your solution for this is technically correct: the way to get a "what
+have I changed" is to do a merge, in order to get the required two
+points: after doing a merge, you can now basically just say "ok, now I
+can diff the state before merging my work, and after merging my work,
+and I now have the two required points to do a diff with".
+
+BUT!
+
+By all means do the merge, but don't _send_ me the merge. Do it as a
+temporary branch in your own repository that you then just throw away.
+The only reason for the merge was to generate the diff, there's no
+reason to then expose it in the git history.
+
+See what I'm saying? The merge is the correct thing to do, but it
+doesn't make sense to anybody else than you as that "this is what I've
+done" final thing, so you shouldn't then ask me to pull the merge.
+
+Now, why do I hate these kinds of merges?
+
+ (a) a lot of people end up merging my tip-of-tree during the merge
+window, which is absolutely horrible and causes actual technical
+problems (in that they now get whatever buggy state my tree may be in
+during that unstable time).
+
+You did *not* make that mistake. You merged v5.6, which is good.
+That's the supposedly stable state (ok, we have a nasty wireless
+driver bug in it, but that's not your fault, and you did the best
+thing you could do if you have to do a merge in the first place).
+
+ (b) the back-merges inevitably have completely sucky merge messages
+
+This is fundamental. They have sucky merge messages, because they have
+no actual real reason, so you _cannot_ document the reason. The best
+you can do is "to get a clean diff" (which is _not_ a development
+reason) or "to fix up conflicts" (which is a *negative* reason, since
+I want to see them).
+
+So your merge message has "Merge tag 'v5.6' into mips-next"
+
+That's not useful. And as mentioned, it _cannot_ be useful. It's about
+as good as it ever gets in these situations. But it's not great, and
+it's not great for the reason I already mentioned: there simply
+_isn't_ a good reason for the merge. It only makes sense in your local
+context, not in the context of development activity.
+
+ (c) it makes it harder to figure out the development line.
+
+This is to me the big reason not to do back-merges. It makes the
+commit graph ugly and harder to follow. It very much shows up in
+"gitk" when you start looking visually at development, and it makes
+our development history even harder to visualize than it should
+normally be. It can also make for nastier bisection because now your
+development is more intertwined with upstream development, but
+_usually_ that ends up not being a huge deal.
+
+Anyway, because you merged a real tagged release, many of the
+fundamental problems with back-merges are much less of an issue.
+Merging a tagged release makes all of (a)-(c) better. So this isn't a
+disaster by any means, but this is still a "please don't do this".
+
+Now, I have two choices:
+
+ - I can merge your merge
+
+ - I can just merge your commit _before_ you did the merge (because
+you didn't do anything else after doing the merge).
+
+In this case, I've taken your merge. It's not the worst kind of merge
+because it took that tagged release, and by taking your merge I also
+end up getting your tag (and thus your signature) in my merge commit.
+So in this case, I have two non-optimal choices, and I'll just take
+the one with your signature.
+
+But I would have been much happier, and not have had to write this
+message (for the n'th time) if you simply hadn't done this.
+
+Yes, by all means do the merge locally into a "test-merge" branch. If
+you do it into a test branch, you can just merge my random state of
+the day (because it doesn't _matter_ - it's just for your own
+testing), and that way you can also see if there are conflicts and
+report them as part of the pull request. And you get the diff I would
+get, and see the whole "this is what my branch really ends up
+changing".
+
+But then throw that test branch away, and tag and send me the
+pre-merge state - your real development.
+
+So for next time, please keep this in mind.
+
+                     Linus
