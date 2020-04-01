@@ -2,41 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E1F19AB1B
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Apr 2020 13:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08EF19AB85
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Apr 2020 14:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732146AbgDALyH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Apr 2020 07:54:07 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:38488 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726804AbgDALyH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Apr 2020 07:54:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AgQFSxEvyQI5c9OqmsGVak2w5TUXqlTckkpw5+VXheM=; b=M5vzK71ssKANYsOooCUYejwb9M
-        oFdPsW/spZQC5r3KOxJ24gq/9mmqZqDcq24c6WgDObLoU7x82DOEM9Z591NQYuzlqoWOyDrZIrC3N
-        Y2w4Uv1JgeP3Itq1l/CvcZCUrIUjikT5OGTkYtR1wHoXIKeD/atEiUrNvgqxUyHp21kxdk1NofMv0
-        vqdUkvpnb2zI8ifnLp6EIa5Kp3YcWBQn2jvMfpSI2WkvTMM7HXKWsb7z82/ESE702oq/wJqtAHPko
-        t7GL4ceAWO04X+sq3uZTN6S78IzPP2temA9jDraixrWqO2dfeIDTrr7a/AiAVxDhsEoyDk1aQRPxV
-        t4A577TQ==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jJbwZ-0006QH-DI; Wed, 01 Apr 2020 11:54:03 +0000
-Date:   Wed, 1 Apr 2020 04:54:03 -0700
-From:   Matthew Wilcox <willy@infradead.org>
+        id S1727661AbgDAMUW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Apr 2020 08:20:22 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:33454 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726804AbgDAMUV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Apr 2020 08:20:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1585743620;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WDTPFa8ZURJktfLOzCbfsD4S80g+FQC7hULNIYlAu7Y=;
+        b=HZOqHMozCbWpkdd/KjVIKR4DlsITlLsJOPSQbPbvlqZX+gko4UO74zyyJGy8S79XwhiBa5
+        RBhsyfuQ5Uc5Ophbl7yMPVQwgZ0Lv82YJu322z/6kkFtChhSo+NrLF2IaeNCTiHqtd9WO1
+        W/3sJBZUNFYrqSxbFwBwIAxWxTNilzo=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-282-Ep7S1TqMNZaGd_eUHZQPAQ-1; Wed, 01 Apr 2020 08:20:18 -0400
+X-MC-Unique: Ep7S1TqMNZaGd_eUHZQPAQ-1
+Received: by mail-wr1-f72.google.com with SMTP id u16so11518889wrp.14
+        for <linux-mips@vger.kernel.org>; Wed, 01 Apr 2020 05:20:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WDTPFa8ZURJktfLOzCbfsD4S80g+FQC7hULNIYlAu7Y=;
+        b=iG5UxuFG8gIboglgD2KV2l6NJo8LP8CaSss3TRxUqadX6Q1MpQdfm5VoDBCApSTz7b
+         Nsg0XxW5wuB2k6f1VP2JDDEX6gvDitaYyrJdjKjJ5LqXK5f/erGi6eCG86bDy+tK01JF
+         De3jrJ+EPtHCQm736xxHvf4S9/2g3pHBgW+9rxYnLdQ2wB+qYYCft1Iq4RCYfDjP90dg
+         7jvBEPf/awZTvi/7tzpebOV6Hlnu54wChID/+8zSPcnKA9RDPFRjtyXNsuR9VbVEpoks
+         LyVvOkvIvlvmVKjDP/5gg7jqBTPozfs+0gSPzlE2k4fqdy8kbKIcuyCOmSce1RwPkDrD
+         H4Zw==
+X-Gm-Message-State: AGi0PuYP55/mE3EKdOa7Burise2rM2EZiRHVE7glwkw/49GURrGNkdJe
+        HqPZP7JF8T5+goLmLOo7TgQtLinag4ek6iPDANnN9tJSppzgqbajjrHQQMgclumRxF3YBtrKtCb
+        mc38jJsWt8mL68iKrHW5nEQ==
+X-Received: by 2002:a1c:7216:: with SMTP id n22mr3957781wmc.41.1585743617454;
+        Wed, 01 Apr 2020 05:20:17 -0700 (PDT)
+X-Google-Smtp-Source: APiQypJGm9VynkGDD62kpREjFTDmdSlFXsNNAMFtPN11ojKIAP6F3bbB/QcM2CPWq2x/1zd9n90kRw==
+X-Received: by 2002:a1c:7216:: with SMTP id n22mr3957763wmc.41.1585743617216;
+        Wed, 01 Apr 2020 05:20:17 -0700 (PDT)
+Received: from localhost.localdomain ([151.29.194.179])
+        by smtp.gmail.com with ESMTPSA id s15sm2646131wrt.16.2020.04.01.05.20.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2020 05:20:16 -0700 (PDT)
+Date:   Wed, 1 Apr 2020 14:20:14 +0200
+From:   Juri Lelli <juri.lelli@redhat.com>
 To:     John Mathew <john.mathew@unikie.com>
 Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, tsbogend@alpha.franken.de,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, tsbogend@alpha.franken.de,
         lukas.bulwahn@gmail.com, x86@kernel.org,
         linux-mips@vger.kernel.org, tglx@linutronix.de,
         mostafa.chamanara@basemark.com
 Subject: Re: [RFC PATCH 2/3] docs: scheduler: Add scheduler overview
  documentation
-Message-ID: <20200401115403.GG21484@bombadil.infradead.org>
+Message-ID: <20200401122014.GW14300@localhost.localdomain>
 References: <20200401100029.1445-1-john.mathew@unikie.com>
  <20200401100029.1445-3-john.mathew@unikie.com>
 MIME-Version: 1.0
@@ -48,73 +74,52 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 01, 2020 at 01:00:28PM +0300, John Mathew wrote:
-> +====================
-> +CFS Data Structures
-> +====================
+Hi,
+
+On 01/04/20 13:00, John Mathew wrote:
+> Add documentation for
+>  -scheduler overview
+>  -scheduler state transtion
+>  -CFS overview
+>  -CFS data structs
+> 
+> Add rst for scheduler APIs and modify sched/core.c
+> to add kernel-doc comments.
+> 
+> Suggested-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> Co-developed-by: Mostafa Chamanara <mostafa.chamanara@basemark.com>
+> Signed-off-by: Mostafa Chamanara <mostafa.chamanara@basemark.com>
+> Signed-off-by: John Mathew <john.mathew@unikie.com>
+> ---
+
+[...]
+
+> +Kernel forwards the tasks to each class based on the scheduling policy assigned
+> +to each task. Tasks assigned with SCHED_NORMAL, SCHED_IDLE and SCHED_BATCH
+> +go to fair_sched_class and tasks assigned with SCHED_RR and SCHED_FIFO go to
+> +rt_sched_class
+
+I think you also need to mention that SCHED_DEADLINE goes to
+dl_sched_class.
+
+[...]
+
+> +*poicy:* Value for scheduling policy. The possible values are:
 > +
-> +Main parts of the Linux scheduler are:
-
-The main parts ...
-
-> +**Running Queue:** This is the central data structure of process scheduling. It
-
-I've never heard anyone call this 'Running Queue'.  It's always called
-'run queue'.
-
-> +the CPU core. The main members of the :c:type:`struct rq <rq>` are:
+> +* SCHED_NORMAL: Regular tasks use this policy.
 > +
-> +:c:member:`nr_running`
-> +    Total number of tasks on the runqueue.
-
-This seems like it should be kernel-doc so the documentation is with the
-code ... meaning it might possibly get updated when the code changes as
-opposed to languishing over here.
-
-> +Each rq struct points to a cfs_rq struct which represents the rb tree. The main
-
-How does a cfs_rq struct represent an rb tree?  I suspect what you intended
-to say is that the cfs_rq structs are stored in an rb tree (I'm not familiar
-with the details of the scheduler implementation).
-
-More generally, you're making a mistake that a lot of documentation
-writers make which is to overdescribe the current implementation.
-The important thing to document is that they're stored in a tree; the
-type of tree used is an irrelevant detail.  If that changes, we shouldn't
-need to update this documentation.
-
-> +Each scheduling entity may be run from its parents runqueue. Scheduler traverses
-
-The scheduler ...
-
-also, please format your line lengths to more like 75 characters; don't go
-all the way to 80.  Just use 'fmt'; its defaults work fine.
-
-> +vruntime is the value by which tasks are ordered on the red-black tree. Tasks are
-> +arranged in increasing order of vruntime which is the amount of time a task has
-> +spent running on the cpu.vruntime of a task is updated periodically based on the
-> +:c:func:`scheduler_tick` function.
-
-This is a backwards explanation.
-
-vruntime is the amount of time a task has spent running on the cpu.  It is
-updated periodically by scheduler_tick().  Tasks are stored in the
-scheduler's tree sorted by vruntime.
-
-> +History
-> +-------
+> +* SCHED_BATCH:  Tasks which need to run longer  without pre-emption use this
+> +  policy. Suitable for batch jobs.
+> +* SCHED_IDLE: Policy used by background tasks.
 > +
-> +Linux 2.6.23 introduced a modular scheduler core and a Completely Fair Scheduler
-> +(CFS) implemented as a scheduling module. Scheduler has been improving since
-> +kernel version 2.4. In kernel 2.4  there was one running queue for all processes.
+> +* SCHED_FIFO & SCHED_RR: These policies for real time tasks. Handled by real
+> +  time scheduler.
 
-I would drop 'Scheduler has been improving since kernel version 2.4'.  I
-just assume that Linux has been improving.
+Here as well. Maybe add also a pointer to related documentation?
 
-> +CFS uses a time ordered red-black tree for each CPU. The red-black tree is a type
-> +of self-balancing binary search tree. Every running process, has a node in the
+Documentation/scheduler/sched-deadline.txt
 
-Don't explain what an rbtree is, just link to the rbtree documentation.
-Which, admittedly, hasn't been converted to rst format yet, but link to
-rbtree.txt and someone else can fix that up when they do the conversion.
+Thanks,
+
+Juri
 
