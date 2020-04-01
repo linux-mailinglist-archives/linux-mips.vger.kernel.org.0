@@ -2,207 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 902FA19AB09
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Apr 2020 13:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E1F19AB1B
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Apr 2020 13:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732262AbgDALrU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Apr 2020 07:47:20 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:51763 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726427AbgDALrU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Apr 2020 07:47:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585741638;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jtQiMLUrObG2ZqOqqL0sf6vOhLO3JFeraOf9+M5iTFs=;
-        b=FxTawJbdyuPpC+YgOBE7UDoBo1pX5FtLXiNLmsym0OTfFkpuvIj3iyhy/JFWRdUk0zU4iB
-        GQL7CdYJCANpvMgbfc0dtgWjX86WIUWxMgTxKGS57xDP5biWzzmhsij2+4E5+NNHMSIoZ8
-        QfqPS3uXNgJvCNyGhAab/I6knrETQfs=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-213-fHMdrLApNDm9gt27DBUtDA-1; Wed, 01 Apr 2020 07:47:08 -0400
-X-MC-Unique: fHMdrLApNDm9gt27DBUtDA-1
-Received: by mail-wm1-f69.google.com with SMTP id t22so1708259wmt.4
-        for <linux-mips@vger.kernel.org>; Wed, 01 Apr 2020 04:47:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jtQiMLUrObG2ZqOqqL0sf6vOhLO3JFeraOf9+M5iTFs=;
-        b=tdi2c7XhV4gaohtk/T0R4a7z5bEdb9mDd7m01NKAy2/4erLb0YgkNtsXtvyRsGndz0
-         G7BwWhQ9eRXuzj6r6Y7vj3In6oxrRKlIsbpXAjIXw/emyVC1OCaTlin9e57f6cyB11E1
-         a4KLum67ytfLZskm0/q/6PPzkvzKpLHTT2MuGn8n6XFKPkatZNFxhXWwxoxY6/QfKsZo
-         8v/hPb1HGCUZOP40eD74yGET/yt38x2xrqZ5GWqmTm05+q7RrduUDsgSgGksA70atrpt
-         HrObspXWvrj7t4yutZ3Q0ij0YQk8TwWhud3fYA2XwxVHhPOh/Hmg9ixARVbIZlaJmJqf
-         +Fow==
-X-Gm-Message-State: ANhLgQ2TpPOMIinO2OKEXSJTmfY3mB+6s779YRtTdcOERK0H3PXCxb8Y
-        RDcQiTflqo9HDLfmb/O62g4meHhv4RL810MnczZNDAi73XQw79dMf0BIjkcZWkkBip6R+f2FbgN
-        LYRFyJw4YCO6D143gPxnLMw==
-X-Received: by 2002:adf:ea8e:: with SMTP id s14mr25597599wrm.206.1585741627315;
-        Wed, 01 Apr 2020 04:47:07 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vs2V9GcpkSj0M42BT9Akh267wU4WB50noGdCC1E3oybQPVuSb1g9wyC8ImkOIZvR+7USqbBPw==
-X-Received: by 2002:adf:ea8e:: with SMTP id s14mr25597563wrm.206.1585741627069;
-        Wed, 01 Apr 2020 04:47:07 -0700 (PDT)
-Received: from x1.bristot.me ([87.19.200.153])
-        by smtp.gmail.com with ESMTPSA id d206sm2282983wmf.29.2020.04.01.04.47.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Apr 2020 04:47:06 -0700 (PDT)
-Subject: Re: [RFC PATCH 2/3] docs: scheduler: Add scheduler overview
- documentation
-To:     Peter Zijlstra <peterz@infradead.org>,
-        John Mathew <john.mathew@unikie.com>
+        id S1732146AbgDALyH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Apr 2020 07:54:07 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:38488 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726804AbgDALyH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Apr 2020 07:54:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AgQFSxEvyQI5c9OqmsGVak2w5TUXqlTckkpw5+VXheM=; b=M5vzK71ssKANYsOooCUYejwb9M
+        oFdPsW/spZQC5r3KOxJ24gq/9mmqZqDcq24c6WgDObLoU7x82DOEM9Z591NQYuzlqoWOyDrZIrC3N
+        Y2w4Uv1JgeP3Itq1l/CvcZCUrIUjikT5OGTkYtR1wHoXIKeD/atEiUrNvgqxUyHp21kxdk1NofMv0
+        vqdUkvpnb2zI8ifnLp6EIa5Kp3YcWBQn2jvMfpSI2WkvTMM7HXKWsb7z82/ESE702oq/wJqtAHPko
+        t7GL4ceAWO04X+sq3uZTN6S78IzPP2temA9jDraixrWqO2dfeIDTrr7a/AiAVxDhsEoyDk1aQRPxV
+        t4A577TQ==;
+Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jJbwZ-0006QH-DI; Wed, 01 Apr 2020 11:54:03 +0000
+Date:   Wed, 1 Apr 2020 04:54:03 -0700
+From:   Matthew Wilcox <willy@infradead.org>
+To:     John Mathew <john.mathew@unikie.com>
 Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        tsbogend@alpha.franken.de, lukas.bulwahn@gmail.com, x86@kernel.org,
+        corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, tsbogend@alpha.franken.de,
+        lukas.bulwahn@gmail.com, x86@kernel.org,
         linux-mips@vger.kernel.org, tglx@linutronix.de,
         mostafa.chamanara@basemark.com
+Subject: Re: [RFC PATCH 2/3] docs: scheduler: Add scheduler overview
+ documentation
+Message-ID: <20200401115403.GG21484@bombadil.infradead.org>
 References: <20200401100029.1445-1-john.mathew@unikie.com>
  <20200401100029.1445-3-john.mathew@unikie.com>
- <20200401103520.GA20713@hirez.programming.kicks-ass.net>
-From:   Daniel Bristot de Oliveira <bristot@redhat.com>
-Message-ID: <9614b346-a848-3e01-eea7-6237b759dad6@redhat.com>
-Date:   Wed, 1 Apr 2020 13:47:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <20200401103520.GA20713@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200401100029.1445-3-john.mathew@unikie.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 4/1/20 12:35 PM, Peter Zijlstra wrote:
->> +Scheduler State Transition
->> +==========================
->> +
->> +A very high level scheduler state transition flow with a few states can be
->> +depicted as follows.
->> +
->> +.. kernel-render:: DOT
->> +   :alt: DOT digraph of Scheduler state transition
->> +   :caption: Scheduler state transition
->> +
->> +   digraph sched_transition {
->> +      node [shape = point,  label="exisiting task\n calls fork()"]; fork
->> +      node [shape = box, label="TASK_NEW\n(Ready to run)"] tsk_new;
->> +      node [shape = box, label="TASK_RUNNING\n(Ready to run)"] tsk_ready_run;
->> +      node [shape = box, label="TASK_RUNNING\n(Running)"] tsk_running;
->> +      node [shape = box, label="TASK_DEAD\nEXIT_ZOMBIE"] exit_zombie;
->> +      node [shape = box, label="TASK_INTERRUPTIBLE\nTASK_UNINTERRUPTIBLE\nTASK_WAKEKILL"] tsk_int;
->> +      fork -> tsk_new [ label = "task\nforks" ];
->> +      tsk_new -> tsk_ready_run;
->> +      tsk_ready_run -> tsk_running [ label = "schedule() calls context_switch()" ];
->> +      tsk_running -> tsk_ready_run [ label = "task is pre-empted" ];
->> +      subgraph int {
->> +         tsk_running -> tsk_int [ label = "task needs to wait for event" ];
->> +         tsk_int ->  tsk_ready_run [ label = "event occurred" ];
->> +      }
->> +      tsk_int ->  exit_zombie [ label = "task exits via do_exit()" ];
->> +   }
-> And that is a prime example of why I hates RST, it pretty much mandates
-> you view this with something other than a text editor.
+On Wed, Apr 01, 2020 at 01:00:28PM +0300, John Mathew wrote:
+> +====================
+> +CFS Data Structures
+> +====================
+> +
+> +Main parts of the Linux scheduler are:
 
-The good thing about the dot format is that we can convert it to many other
-formats, including text:
+The main parts ...
 
-[bristot@x1 ~]$ cat sched_transition.dot | graph-easy 
+> +**Running Queue:** This is the central data structure of process scheduling. It
 
-                       *
+I've never heard anyone call this 'Running Queue'.  It's always called
+'run queue'.
 
-                       |
-                       | task
-                       | forks
-                       v
-                     +------------------------------------+
-                     |              TASK_NEW              |
-                     |           (Ready to run)           |
-                     +------------------------------------+
-                       |
-                       |
-                       v
-+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
-'                                     int                                            '
-'                                                                                    '
-'                    +------------------------------------+                          '
-'                    |            TASK_RUNNING            |                          '
-'   +--------------> |           (Ready to run)           | <--+                     '
-'   |                +------------------------------------+    |                     '
-'   |                  |                                       |                     '
-'   |                  | schedule() calls context_switch()     | task is pre-empted  '
-'   |                  v                                       |                     '
-'   |                +------------------------------------+    |                     '
-'   |                |            TASK_RUNNING            |    |                     '
-'   |                |             (Running)              | ---+                     '
-'   | event occurred +------------------------------------+                          '
-'   |                  |                                                             '
-'   |                  |                                      - - - - - - - - - - - -+
-'   |                  |                                    '
-'   |                  | task needs to wait for event       '
-'   |                  v                                    '
-'   |                +------------------------------------+ '
-'   |                |         TASK_INTERRUPTIBLE         | '
-'   |                |        TASK_UNINTERRUPTIBLE        | '
-'   +--------------- |           TASK_WAKEKILL            | '
-'                    +------------------------------------+ '
-'                                                           '
-+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
-                       |
-                       | task exits via do_exit()
-                       v
-                     +------------------------------------+
-                     |             TASK_DEAD              |
-                     |            EXIT_ZOMBIE             |
-                     +------------------------------------+
+> +the CPU core. The main members of the :c:type:`struct rq <rq>` are:
+> +
+> +:c:member:`nr_running`
+> +    Total number of tasks on the runqueue.
 
+This seems like it should be kernel-doc so the documentation is with the
+code ... meaning it might possibly get updated when the code changes as
+opposed to languishing over here.
 
-Is there a way to also add this representation, while hiding it
-when using a graphical reader?
+> +Each rq struct points to a cfs_rq struct which represents the rb tree. The main
 
-PS: I know nothing about rst, only about rts - real-time systems...
-yeah, it is a bad joke haha.
+How does a cfs_rq struct represent an rb tree?  I suspect what you intended
+to say is that the cfs_rq structs are stored in an rb tree (I'm not familiar
+with the details of the scheduler implementation).
 
-> Also, Daniel, you modeled all this, is the above anywhere close?
+More generally, you're making a mistake that a lot of documentation
+writers make which is to overdescribe the current implementation.
+The important thing to document is that they're stored in a tree; the
+type of tree used is an irrelevant detail.  If that changes, we shouldn't
+need to update this documentation.
 
-hum... let's say that we modeled things we a different goal. Here the
-idea is to explain, document... not to create an explicit model.
+> +Each scheduling entity may be run from its parents runqueue. Scheduler traverses
 
-For instance, there is the context switch _in_, but not the _out_ in the
-above example.
+The scheduler ...
 
-But, well, if the goal is to document, it is nice to have graphical
-representations.
+also, please format your line lengths to more like 75 characters; don't go
+all the way to 80.  Just use 'fmt'; its defaults work fine.
 
->> +Scheduler provides trace points tracing all major events of the scheduler.
->> +The tracepoints are defined in ::
->> +
->> +  include/trace/events/sched.h
->> +
->> +Using these treacepoints it is possible to model the scheduler state transition
->> +in an automata model. The following conference paper discusses such modeling.
+> +vruntime is the value by which tasks are ordered on the red-black tree. Tasks are
+> +arranged in increasing order of vruntime which is the amount of time a task has
+> +spent running on the cpu.vruntime of a task is updated periodically based on the
+> +:c:func:`scheduler_tick` function.
 
-this is a workshop paper.
+This is a backwards explanation.
 
->> +
->> +https://www.researchgate.net/publication/332440267_Modeling_the_Behavior_of_Threads_in_the_PREEMPT_RT_Linux_Kernel_Using_Automata
-> Ah, you've found Daniel ;-)
+vruntime is the amount of time a task has spent running on the cpu.  It is
+updated periodically by scheduler_tick().  Tasks are stored in the
+scheduler's tree sorted by vruntime.
 
-:-)
+> +History
+> +-------
+> +
+> +Linux 2.6.23 introduced a modular scheduler core and a Completely Fair Scheduler
+> +(CFS) implemented as a scheduling module. Scheduler has been improving since
+> +kernel version 2.4. In kernel 2.4  there was one running queue for all processes.
 
-This is a better reference (a journal paper).
+I would drop 'Scheduler has been improving since kernel version 2.4'.  I
+just assume that Linux has been improving.
 
-Daniel B. de Oliveira, Rômulo S. de Oliveira, Tommaso Cucinotta, **A thread
-synchronization model for the PREEMPT_RT Linux kernel**, *Journal of Systems
-Architecture*, Volume 107, 2020, 101729, ISSN 1383-7621,
-https://doi.org/10.1016/j.sysarc.2020.101729.
+> +CFS uses a time ordered red-black tree for each CPU. The red-black tree is a type
+> +of self-balancing binary search tree. Every running process, has a node in the
 
--- Daniel
+Don't explain what an rbtree is, just link to the rbtree documentation.
+Which, admittedly, hasn't been converted to rst format yet, but link to
+rbtree.txt and someone else can fix that up when they do the conversion.
 
