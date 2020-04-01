@@ -2,36 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8625719A99D
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Apr 2020 12:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D0019AA65
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Apr 2020 13:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731608AbgDAKfw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Apr 2020 06:35:52 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:40570 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728087AbgDAKfw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Apr 2020 06:35:52 -0400
+        id S1732591AbgDALHY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Apr 2020 07:07:24 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:45598 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732363AbgDALHU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Apr 2020 07:07:20 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jKC6THGZrwUVixb6BZ2XeXxaF8x3c1jFGIQFFG8nplo=; b=OdvRiX9s+jzUuN2+Trq6HNZNn3
-        bbIRTb4aXdDlvC1mJIYOImVV0lel7qBcabQ9EgJ/6uSseDHcrJFJgJ5Zr2VByt7m3izFEBItq2wVd
-        f3+H8sF9Km45g8oNzBfnmDC8G26ITO3gOm1Q1Oh+rDun6mWJOjgks9we2s9eHUen2shIk1kbOWORz
-        Ff9qwO99XBZrLhJXB40v7mzRUVVVrVDLj+B8hBBuyspXhiYHilrWK2DMN5GT5MGPZ2PUCklQ3Ovtc
-        Zi83iQfrA0LUz/nbaS6qX6zFxhZ8aLm52TylS5Kw5ZeZoKbIH/GS1blJ/rBdht/j3I60dOxxeMFha
-        a65iKE3g==;
+        bh=4Dqol62wdMFQWr43+PFoe4L05khr2GFOWLbBuj2BrZY=; b=CJOJUGJUbylcX9ljnoFUQM8aok
+        CFkJmums6o9KM90p3OTTH4wV0lUqpZt7d1YqpXOGs9TGwGPGAiSJDc4b2K6upOTHNpkF7KfIwY33r
+        OoDE1MdAH3IS+42t3K+pkn+6ndv2+Yv2P6AA/DmxZQR74eabbbaeEH9hmlwx9g+U2XxAEU3INgaFs
+        qHen1IgpzEVlcWfjxgs7OxTLXz4MjX3QiVSHhVx3/ctCz4fvSJaAgyzu41neVPd/4ZEHfC2gv3Cud
+        MAD2R1rckS2pcFXw0ASFu22V3dI4hKh1JFpL7YoSWJDUQ2N453jCQN+T7Xg76beEQCp3hATrwBCRy
+        x79X/Cpw==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jJaiR-0001R8-32; Wed, 01 Apr 2020 10:35:23 +0000
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jJbCu-0002HM-PF; Wed, 01 Apr 2020 11:06:53 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 970483060FD;
-        Wed,  1 Apr 2020 12:35:20 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 390B3307112;
+        Wed,  1 Apr 2020 13:06:49 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 75DD029C48EA9; Wed,  1 Apr 2020 12:35:20 +0200 (CEST)
-Date:   Wed, 1 Apr 2020 12:35:20 +0200
+        id 2A85629DB2526; Wed,  1 Apr 2020 13:06:49 +0200 (CEST)
+Date:   Wed, 1 Apr 2020 13:06:49 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     John Mathew <john.mathew@unikie.com>
 Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -42,179 +42,234 @@ Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         lukas.bulwahn@gmail.com, x86@kernel.org,
         linux-mips@vger.kernel.org, tglx@linutronix.de,
         mostafa.chamanara@basemark.com
-Subject: Re: [RFC PATCH 2/3] docs: scheduler: Add scheduler overview
- documentation
-Message-ID: <20200401103520.GA20713@hirez.programming.kicks-ass.net>
+Subject: Re: [RFC PATCH 3/3] docs: scheduler: Add introduction to scheduler
+ context-switch
+Message-ID: <20200401110649.GB20713@hirez.programming.kicks-ass.net>
 References: <20200401100029.1445-1-john.mathew@unikie.com>
- <20200401100029.1445-3-john.mathew@unikie.com>
+ <20200401100029.1445-4-john.mathew@unikie.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200401100029.1445-3-john.mathew@unikie.com>
+In-Reply-To: <20200401100029.1445-4-john.mathew@unikie.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 01, 2020 at 01:00:28PM +0300, John Mathew wrote:
+On Wed, Apr 01, 2020 at 01:00:29PM +0300, John Mathew wrote:
+> +Context switching, the switching from a running task to another, is handled by
+> +the :c:func:`context_switch()` function defined in kernel/sched.c . It is called
 
-I dispise RST, it's an unreadable mess, but I did skim the document and
-felt I should comment on this:
+Per my insitent complaints, :c:func: is now completely redundant,
+anything with '()' on is now automagically treated as a function name.
 
-> +* _cond_resched() : It gives the scheduler a chance to run a
-> +  higher-priority process.
+If it's not readable in a text editor, it's broken.
+
+> +by __schedule() when a new process has been selected to run.
 > +
-> +* __cond_resched_lock() :  if a reschedule is pending, drop the given
-> +  lock, call schedule, and on return reacquire the lock.
-
-Those are not functions anybody should be using; the normal entry points
-are: cond_resched() and cond_resched_lock().
-
-
-> +Scheduler State Transition
-> +==========================
+> + The execution flow is as follows:
 > +
-> +A very high level scheduler state transition flow with a few states can be
-> +depicted as follows.
+> +* Calls prepare_task_switch() to prepare both previous and new task by
+> +  storing or changing some values in their task_struct.
+
+This is wildly inacurate. Take for instance perf_event_task_sched_out(),
+that doesn't just store or change a few values.
+
+> +* Calls macro :c:macro:`arch_start_context_switch()`
+> +  A facility to provide batching of the reload of page tables and  other process
+> +  state with the actual context switch code for  paravirtualized guests.  By
+> +  convention, only one of the batched  update (lazy) modes (CPU, MMU) should be
+> +  active at any given time,  entry should never be nested, and entry and exits
+> +  should always be  paired. This is for sanity of maintaining and reasoning about
+> +  the kernel code.  In this case, the exit (end of the context switch) is  in
+> +  architecture-specific code, and so doesn't need a generic definition.
 > +
-> +.. kernel-render:: DOT
-> +   :alt: DOT digraph of Scheduler state transition
-> +   :caption: Scheduler state transition
 > +
-> +   digraph sched_transition {
-> +      node [shape = point,  label="exisiting task\n calls fork()"]; fork
-> +      node [shape = box, label="TASK_NEW\n(Ready to run)"] tsk_new;
-> +      node [shape = box, label="TASK_RUNNING\n(Ready to run)"] tsk_ready_run;
-> +      node [shape = box, label="TASK_RUNNING\n(Running)"] tsk_running;
-> +      node [shape = box, label="TASK_DEAD\nEXIT_ZOMBIE"] exit_zombie;
-> +      node [shape = box, label="TASK_INTERRUPTIBLE\nTASK_UNINTERRUPTIBLE\nTASK_WAKEKILL"] tsk_int;
-> +      fork -> tsk_new [ label = "task\nforks" ];
-> +      tsk_new -> tsk_ready_run;
-> +      tsk_ready_run -> tsk_running [ label = "schedule() calls context_switch()" ];
-> +      tsk_running -> tsk_ready_run [ label = "task is pre-empted" ];
-> +      subgraph int {
-> +         tsk_running -> tsk_int [ label = "task needs to wait for event" ];
-> +         tsk_int ->  tsk_ready_run [ label = "event occurred" ];
-> +      }
-> +      tsk_int ->  exit_zombie [ label = "task exits via do_exit()" ];
-> +   }
-
-And that is a prime example of why I hates RST, it pretty much mandates
-you view this with something other than a text editor.
-
-Also, Daniel, you modeled all this, is the above anywhere close?
-
-> +Scheduler provides trace points tracing all major events of the scheduler.
-> +The tracepoints are defined in ::
+> +* The next few steps consists of handling the transfer of real and anonymous
+> +  address spaces between the switching tasks.  Four possible context switches are
 > +
-> +  include/trace/events/sched.h
+> +  - kernel task switching to another kernel task.
+> +  - user task switching to a kernel task.
+> +  - kernel task switching to user task,
+> +  - user task switching to  user task.
 > +
-> +Using these treacepoints it is possible to model the scheduler state transition
-> +in an automata model. The following conference paper discusses such modeling.
+> +For a kernel task switching to kernel task :c:func:`enter_lazy_tlb()` is called
+> +which is an architecture specific implementation to handle a context without an
+> +mm. Architectures implement lazy tricks to minimize tlb flushes here.
+> +Then the active address space from the previous task is borrowed (transferred)
+> +to the next task. The active address space of the previous task is set to NULL.
 > +
-> +https://www.researchgate.net/publication/332440267_Modeling_the_Behavior_of_Threads_in_the_PREEMPT_RT_Linux_Kernel_Using_Automata
+> +For a user task switching to kernel task it will have a real address space. This
+> +address space is pinned by calling :c:func:`mmgrab()` . This makes sure that the
+> +address space will not get freed even after the previous task exits.
+> +
+> +For a user task switching to user task the architecture specific
+> +:c:func:`switch_mm_irqs_off()` or :c:func:`switch_mm()` functions. The main
+> +functionality of this calls is to switch the address space between the
+> +user space processes. This includes switching the page table pointers and
+> +ensuring that the new address space has a valid ASID.
 
-Ah, you've found Daniel ;-)
+That's worded a bit odd; you need an ASID allocated to a process in
+order for it to have an active address space.
 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 1a9983da4408..ccefc820557f 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -3578,8 +3578,12 @@ unsigned long long task_sched_runtime(struct task_struct *p)
->  	return ns;
->  }
->  
-> -/*
-> - * This function gets called by the timer code, with HZ frequency.
-> +/**
-> + * scheduler_tick -
-> + *
-> + * This function is called on every timer interrupt with HZ frequency and
-> + * calls scheduler on any task that has used up its quantum of CPU time.
-> + *
->   * We call it with interrupts disabled.
->   */
->  void scheduler_tick(void)
-> @@ -3958,8 +3962,8 @@ pick_next_task(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
->  	BUG();
->  }
->  
-> -/*
-> - * __schedule() is the main scheduler function.
-> +/**
-> + * __schedule() - The main scheduler function.
->   *
->   * The main means of driving the scheduler and thus entering this function are:
->   *
-> @@ -4086,6 +4090,12 @@ static void __sched notrace __schedule(bool preempt)
->  	balance_callback(rq);
->  }
->  
-> +/**
-> + * do_task_dead - Final step of task exit
-> + *
-> + *  Changes the the task state to TASK_DEAD and calls schedule to pick next
-> + *  task to run.
-> + */
+> +For a kernel task switching to a user task, the active address space of the
+> +kernel task is transferred to the user task and the active address space of the
+> +kernel task is set to NULL.
 
-That has whitespace damage.
+That reads odd. The kernel to user transition switches away from
+whatever address space the kernel task borrowed and to the address space
+of the user task (of course hoping they're the same).
 
->  void __noreturn do_task_dead(void)
->  {
->  	/* Causes final put_task_struct in finish_task_switch(): */
-> @@ -4244,7 +4254,9 @@ static void __sched notrace preempt_schedule_common(void)
->  }
->  
->  #ifdef CONFIG_PREEMPTION
-> -/*
-> +/**
-> + * preempt_schedule -
-> + *
->   * This is the entry point to schedule() from in-kernel preemption
->   * off of preempt_enable.
->   */
-> @@ -4316,7 +4328,9 @@ EXPORT_SYMBOL_GPL(preempt_schedule_notrace);
->  
->  #endif /* CONFIG_PREEMPTION */
->  
-> -/*
-> +/**
-> + * preempt_schedule_irq -
-> + *
->   * This is the entry point to schedule() from kernel preemption
->   * off of irq context.
->   * Note, that this is called and return with irqs disabled. This will
-> @@ -5614,6 +5628,11 @@ SYSCALL_DEFINE0(sched_yield)
->  }
->  
->  #ifndef CONFIG_PREEMPTION
-> +/**
-> + * _cond_resched -
-> + *
-> + * gives the scheduler a chance to run a higher-priority process
-> + */
->  int __sched _cond_resched(void)
->  {
->  	if (should_resched(0)) {
-> @@ -5626,9 +5645,10 @@ int __sched _cond_resched(void)
->  EXPORT_SYMBOL(_cond_resched);
->  #endif
->  
-> -/*
-> - * __cond_resched_lock() - if a reschedule is pending, drop the given lock,
-> +/**
-> + * __cond_resched_lock - if a reschedule is pending, drop the given lock,
->   * call schedule, and on return reacquire the lock.
-> + * @lock: target lock
->   *
->   * This works OK both with and without CONFIG_PREEMPTION. We do strange low-level
->   * operations here to prevent schedule() from being called twice (once via
+But we don't transfer anything to the user task, particularly kernel
+threads don't have an address space to give.
 
-Just know that the first time someone comes and whines about how a
-scheduler comment doesn't build or generates bad output, I remove the
-/** kerneldoc thing.
+> +
+> +* Next the  :c:func:`prepare_lock_switch()` function is called for a lockdep
+> +  release of the runqueue lock to handle the special case of the scheduler in which
+> +  the runqueue lock will be released by the next task.
+> +
+> +* Then the architecture specific implementation of the :c:func:`switch_to()`
+> +  function is called to switch the register state and the stack. This involves
+> +  saving and restoring stack information and the processor registers and any other
+> +  architecture-specific state that must be managed and restored on a per-process
+> +  basis.
+> +
+> +* Calls finish_task_switch()  must be called after the context switch,
+> +  paired with a prepare_task_switch() call before the context switch.It will
+> +  reconcile locking set up by prepare_task_switch, and do any other
+> +  architecture-specific cleanup actions.
 
-Also, like I said above, _cond_resched() and __cond_resched_lock()
-really should not be exposed like this, they're not API.
+You spend a lot of words on the prepare, but then ignore most of the
+finish_task_switch() magic. That seems unbalanced.
 
+> diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
+> index 9772cf81fd96..289e06a68764 100644
+> --- a/Documentation/scheduler/index.rst
+> +++ b/Documentation/scheduler/index.rst
 
+> +MIPS Context Switch
+> +-------------------
+> +
+> +Context switch behavior specific to MIPS begins in the way :c:macro:`switch_to()`
+> +macro is implemented. The main steps in the MIPS implementation of the macro are:
+> +
+> +* Handle the FPU affinity management feature . This feature is enabled by the
+> +  :c:macro:`CONFIG_MIPS_MT_FPAFF` at build time The macro checks if the FPU was
+> +  used in the most recent time slice. In case FPU was not used, the restriction of
+> +  having to run on a cpu with FPU is removed.
+
+Last time I looked at that gunk it was broken, presumably it still is.
+In particular it is racy against userspace changing task affinity
+itself.
+
+> +* For the previous task, disable the fpu and clear the bit indicating the FPU was
+> +  used in this quantum for the task.
+> +* If fpu is enabled in the next task, check FCSR for any unmasked exceptions
+> +  pending, clear them and send a signal.
+> +* if MIPS DSP modules is enabled, save the dsp context of the previous task and
+> +  restore the dsp context of the next task.
+> +* If coprocessor 2 is present set the access allowed field of the coprocessor 2.
+> +* if coprocessor 2 access allowed field was set in previous task, clear it.
+> +* clear the the access allowed field of the coprocessor 2.
+> +* clear the llbit on MIPS release 6 such that instruction eretnc can be used
+> +  unconditionally when returning to userland in entry.S. LLbit is used to specify
+> +  operation for instructions that provide atomic read-modify-write. LLbit is set
+> +  when a linked load occurs and is tested by the conditional store. It is cleared,
+> +  during other CPU operation, when a store to the location would no longer be
+> +  atomic. In particular, it is cleared by exception return instructions.
+> +  eretnc instruction enables to return from interrupt, exception, or error trap
+> +  without clearing the LLbit.
+> +* clear the global variable ll_bit used by mips exception handler.
+> +* write the thread pointer to the mips userlocal register if the cpu supports
+> +  this feature. This register is not interpreted by hardware and can be used to
+> +  share data between privileged and unprivileged software.
+> +* if hardware watchpoint feature is enabled during build the watchpoint registers
+> +  are restored from the next task.
+> +* Finally the mips processor specific implementation of the :c:func:`resume()`
+> +  function is called. It restores the registers of the next task including the
+> +  stack pointer. The implementation is in assembly::
+> +
+> +    arch/mips/kernel/r4k_switch.S
+
+There's also octeon_switch.S r2300_switch.S
+
+> diff --git a/Documentation/scheduler/x86-context-switch.rst b/Documentation/scheduler/x86-context-switch.rst
+> new file mode 100644
+> index 000000000000..ae7b2e09453a
+> --- /dev/null
+> +++ b/Documentation/scheduler/x86-context-switch.rst
+> @@ -0,0 +1,59 @@
+> +.. SPDX-License-Identifier: GPL-2.0+
+> +
+> +X86 Context Switch
+> +------------------
+> +
+> +The x86 architecture context switching logic is as follows.
+> +After the switching of MM in the scheduler :c:func:`context_switch()` the call
+> +to the x86 implementation of :c:macro:`switch_to()`
+> +is made.  For x86 arch it is located at ::
+> +
+> +    arch/x86/include/asm/switch_to.h
+> +
+> +Since 4.9, switch_to() has been broken in to two parts: a :c:func:`prepare_switch_to()`
+> +macro and the inline assembly portion of has been moved to an actual assembly
+> +file ::
+> +
+> +    arch/x86/entry/entry_64.S
+
+and entry_32.S
+
+Although I suspect it will soon move to another file... it has no
+business being in .entry.text
+
+> +
+> +* There is still a C portion of the switch which occurs via a jump in the middle
+> +  of the assembly code. The source is located in arch/x86/kernel/process_64.c
+> +  since 2.6.24
+
+Uhm what? afaict there is no jmp in the middle. There is a jump at the
+end, which is a tail-call optimization.
+
+> +The main function of the prepare_switch_to() is to handle the case when stack
+> +uses virtual memory. This is configured at build time and is mostly enable in
+> +most modern distributions. This function accesses the stack pointer to prevent a
+> +double fault.Switching to a stack that has top-level paging entry that is not
+> +present in the current MM will result in a page fault which will be promoted to
+> +double fault and the result is a panic. So it is necessary to probe the stack now
+> +so that the vmalloc_fault can fix the page tables.
+> +
+> +The main steps of the inline assembly function __switch_to_asm() are:
+> +
+> +* store the callee saved registers to the old stack which will be switched away from.
+> +* swaps the stack pointers between the old and the new task.
+> +* move the stack canary value to the current cpu's interrupt stack.
+> +* if return trampoline is enabled, overwrite all entries in the RSB on exiting
+> +  a guest, to prevent malicious branch target predictions from affecting the host
+> +  kernel.
+> +* restore all registers from the new stack previously pushed in reverse order.
+> +
+> +The main steps of the c function :c:func:`__switch_to()` which the assembly code
+> +jumps to is as follows:
+
+Note that this is effectively the new task running.
+
+> +* retrieve the thread :c:type:`struct thread_struct <thread_struct>` and fpu
+> +  :c:type:`struct fpu <fpu>` structs from the next and previous tasks.
+> +* gets the current cpu TSS :c:type:`struct tss_struct <tss_struct>`
+> +* save the current FPU state while on the old task.
+> +* store the FS and GS segment registers before changing the thread local storage.
+> +* reload the GDT for the new tasks TLS.
+
+You mentioned arch_start_context_switch() previously, this is where
+arch_end_context_switch() lives.
+
+> +* save the ES and DS segments of the previous task and load the same from the
+> +  nest task.
+> +* load the FS and GS segment registers.
+> +* update the current task of the cpu.
+> +* update the top of stack pointer for the CPU for entry trampoline.
+> +* initialize FPU state for next task.
+> +* set sp0 to point to the entry trampoline stack.
+> +* call :c:func:`_switch_to_xtra()` to  handles debug registers, i/o bitmaps and
+> +  speculation mitigation.
+> +* Writes the task's CLOSid/RMID to IA32_PQR_MSR.
