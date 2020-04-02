@@ -2,97 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F5419AE6A
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Apr 2020 17:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 045B519BD67
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Apr 2020 10:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733085AbgDAPDb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Apr 2020 11:03:31 -0400
-Received: from foss.arm.com ([217.140.110.172]:53918 "EHLO foss.arm.com"
+        id S2387714AbgDBIQY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Apr 2020 04:16:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49378 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732946AbgDAPDb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 1 Apr 2020 11:03:31 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E7F11FB;
-        Wed,  1 Apr 2020 08:03:30 -0700 (PDT)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C134C3F71E;
-        Wed,  1 Apr 2020 08:03:27 -0700 (PDT)
-References: <20200401100029.1445-1-john.mathew@unikie.com> <20200401100029.1445-3-john.mathew@unikie.com>
-User-agent: mu4e 0.9.17; emacs 26.3
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     John Mathew <john.mathew@unikie.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, tsbogend@alpha.franken.de,
-        lukas.bulwahn@gmail.com, x86@kernel.org,
-        linux-mips@vger.kernel.org, tglx@linutronix.de,
-        mostafa.chamanara@basemark.com
-Subject: Re: [RFC PATCH 2/3] docs: scheduler: Add scheduler overview documentation
-In-reply-to: <20200401100029.1445-3-john.mathew@unikie.com>
-Date:   Wed, 01 Apr 2020 16:03:19 +0100
-Message-ID: <jhjh7y3xn7s.mognet@arm.com>
+        id S2387574AbgDBIQY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 2 Apr 2020 04:16:24 -0400
+Received: from aquarius.haifa.ibm.com (nesher1.haifa.il.ibm.com [195.110.40.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F074D206F6;
+        Thu,  2 Apr 2020 08:16:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585815383;
+        bh=jxX8zNXGWAksHrGOsQVTIOOhLq7/MR35pRNCX6fWCos=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BqgoIuUHpNdmRSH98YK6zhpsptJiDZILd8lnD1NxEG6YImrDeiUj8YmwIukQQTRqt
+         Uw9RQW7bSFWCdoxvxs7/lfLWoRkU5cO24QB+HajjW1mte71fCGBjq/jjU629/X9AYV
+         baIRQbtXFwwgByK5TUXM0mI2E31fAj+mY+BLP+c0=
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        maobibo <maobibo@loongson.cn>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: [PATCH] mips: define pud_index() regardless of page table folding
+Date:   Thu,  2 Apr 2020 11:16:14 +0300
+Message-Id: <20200402081614.5696-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-On 01/04/20 11:00, John Mathew wrote:
-> +**Schedule class:** It is an extensible hierarchy of scheduler modules. The
-> +modules encapsulate scheduling policy details.
-> +They are called from the core code which is independent. Scheduling classes are
-> +implemented through the sched_class structure.
-> +fair_sched_class and rt_sched_class class are implementations of this class. The
-> +main members of the :c:type:`struct sched_class <sched_class>` are :
-> +
-> +For the fair_sched_class the hooks (implemented as <function name>_fair)
-> +does the following:
-> +
-> +:c:member:`enqueue_task`
-> +    Update the fair scheduling stats and puts scheduling entity in
-> +    to rb tree and increments the nr_running variable.
-> +
-> +:c:member:`dequeue_task`
-> +    Moves the entity out of the rb tree when entity no longer runnable
-> +    and decrements the nr_running variable. Also update the fair scheduling stats.
-> +
-> +:c:member:`yield_task`
-> +    Use the buddy mechanism to skip onto the next highest priority se at
-> +    every level in the CFS tree, unless doing so would introduce gross unfairness
-> +    in CPU time distribution.
-> +
-> +:c:member:`check_preempt_curr`
-> +    Check whether the task that woke up should pre-empt the
-> +    running task.
-> +
-> +:c:member:`pick_next_task`
-> +    Pick the next eligible task. This may not be the left most task
-> +    in the rbtree. Instead a buddy system is used which provides benefits of
-> +    cache locality and group scheduling.
-> +
-> +:c:member:`task_tick`
-> +    Called from scheduler_tick(). Updates the runtime statistics of the
-> +    currently running task and checks if this task needs to be pre-empted.
-> +
-> +:c:member:`task_fork`
-> +    scheduler setup for newly forked task.
-> +
-> +:c:member:`task_dead`
-> +    A task struct has one reference for the use as "current". If a task
-> +    dies, then it sets TASK_DEAD in tsk->state and calls schedule one last time.
-> +    The schedule call will never return, and the scheduled task must drop that
-> +    reference.
-> +
+Commit 31168f033e37 ("mips: drop __pXd_offset() macros that duplicate
+pXd_index() ones") is correct that pud_index() & __pud_offset() are the
+same when pud_index() is actually provided, however it does not take into
+account the __PAGETABLE_PUD_FOLDED case. This has broken MIPS KVM
+compilation because it relied on availability of pud_index().
 
-I tend to agree with Matthew in that this is too much info on the current
-implem. What would be useful however is some sort of documentation for the
-sched_class fields themselves; as you say those are (mainly) called from
-core code, so IMO what's interesting is when/why the core code calls them.
+Define pud_index() regardless of page table folded. It will evaluate to
+actual index for 4-level pagetables and to 0 for folded PUD level.
 
-For instance highlighting the "change" cycle would be a good start, see
-e.g. do_set_cpus_allowed() and what it does with {en,de}queue_task() &
-{set_next,put_prev}_task().
+Link: https://lore.kernel.org/lkml/20200331154749.5457-1-pbonzini@redhat.com
+Reported-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+---
+ arch/mips/include/asm/pgtable-64.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
+index f92716cfa4f4..ee5dc0c145b9 100644
+--- a/arch/mips/include/asm/pgtable-64.h
++++ b/arch/mips/include/asm/pgtable-64.h
+@@ -172,6 +172,8 @@
+ 
+ extern pte_t invalid_pte_table[PTRS_PER_PTE];
+ 
++#define pud_index(address)	(((address) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
++
+ #ifndef __PAGETABLE_PUD_FOLDED
+ /*
+  * For 4-level pagetables we defines these ourselves, for 3-level the
+@@ -210,8 +212,6 @@ static inline void p4d_clear(p4d_t *p4dp)
+ 	p4d_val(*p4dp) = (unsigned long)invalid_pud_table;
+ }
+ 
+-#define pud_index(address)	(((address) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
+-
+ static inline unsigned long p4d_page_vaddr(p4d_t p4d)
+ {
+ 	return p4d_val(p4d);
+-- 
+2.25.1
+
