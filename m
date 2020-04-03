@@ -2,59 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EE019D431
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Apr 2020 11:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F7119D44D
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Apr 2020 11:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727792AbgDCJnr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Apr 2020 05:43:47 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17878 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390641AbgDCJnr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Apr 2020 05:43:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1585907008;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Subject:To:CC:From:Message-ID;
-        bh=uwI00vkAdOcq/o9zOC7ziAMTueymxQERCr5acZzaYa0=;
-        b=YN8/SOTYB2iGMjJUSEKh6C/7aCTsUd0bCvMe1du1pCoNDeoa4EibUvcQAWbH6cLs
-        mDMrs+pid3GkOKqud+9L/Ng13tTeaCzJg+0n5bVn47I79Lgb4wqDYT//7tKY80wVbXD
-        +ua0nAySG1EClqvNFDag2Li0Flt0etE6Cuy0W4OU=
-Received: from [10.233.233.252] (115.193.87.168 [115.193.87.168]) by mx.zoho.com.cn
-        with SMTPS id 1585907006831778.1316964796324; Fri, 3 Apr 2020 17:43:26 +0800 (CST)
-Date:   Fri, 03 Apr 2020 17:43:19 +0800
-User-Agent: K-9 Mail for Android
-In-Reply-To: <1585906191-26037-4-git-send-email-yangtiezhu@loongson.cn>
-References: <1585906191-26037-1-git-send-email-yangtiezhu@loongson.cn> <1585906191-26037-4-git-send-email-yangtiezhu@loongson.cn>
+        id S2390704AbgDCJtZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Apr 2020 05:49:25 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:12613 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727882AbgDCJtZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 3 Apr 2020 05:49:25 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id EDB786EDEE7FA0446243;
+        Fri,  3 Apr 2020 17:49:12 +0800 (CST)
+Received: from localhost (10.173.223.234) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Fri, 3 Apr 2020
+ 17:49:05 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <tsbogend@alpha.franken.de>, <yuehaibing@huawei.com>
+CC:     <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ralf@linux-mips.org>
+Subject: [PATCH v2] MIPS: TXx9: Fix Kconfig warnings
+Date:   Fri, 3 Apr 2020 17:49:04 +0800
+Message-ID: <20200403094904.37072-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
+In-Reply-To: <20200403094228.12304-1-yuehaibing@huawei.com>
+References: <20200403094228.12304-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 3/3] MIPS: Loongson: Add PCI support for LS7A
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>
-CC:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <F8A72EE2-F609-47C7-9D99-0D1A4C342D7E@flygoat.com>
-X-ZohoCNMailClient: External
+Content-Type: text/plain
+X-Originating-IP: [10.173.223.234]
+X-CFilter-Loop: Reflected
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+If TTY and SND is not n, we got this warnings:
+
+WARNING: unmet direct dependencies detected for HAS_TXX9_SERIAL
+  Depends on [n]: TTY [=n] && HAS_IOMEM [=y]
+  Selected by [y]:
+  - SOC_TX3927 [=y]
+
+WARNING: unmet direct dependencies detected for HAS_TXX9_SERIAL
+  Depends on [n]: TTY [=n] && HAS_IOMEM [=y]
+  Selected by [y]:
+  - SOC_TX4938 [=y]
+
+Only dependencies is enabled, they can be enabled, so
+use 'imply' instead of 'select' to fix this.
+
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+v2: fix patch title
+---
+ arch/mips/txx9/Kconfig | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/arch/mips/txx9/Kconfig b/arch/mips/txx9/Kconfig
+index 9a22a182b7a4..85c4c121c71f 100644
+--- a/arch/mips/txx9/Kconfig
++++ b/arch/mips/txx9/Kconfig
+@@ -58,7 +58,7 @@ config TOSHIBA_RBTX4939
+ config SOC_TX3927
+ 	bool
+ 	select CEVT_TXX9
+-	select HAS_TXX9_SERIAL
++	imply HAS_TXX9_SERIAL
+ 	select HAVE_PCI
+ 	select IRQ_TXX9
+ 	select GPIO_TXX9
+@@ -66,30 +66,30 @@ config SOC_TX3927
+ config SOC_TX4927
+ 	bool
+ 	select CEVT_TXX9
+-	select HAS_TXX9_SERIAL
++	imply HAS_TXX9_SERIAL
+ 	select HAVE_PCI
+ 	select IRQ_TXX9
+ 	select PCI_TX4927
+ 	select GPIO_TXX9
+-	select HAS_TXX9_ACLC
++	imply HAS_TXX9_ACLC
+ 
+ config SOC_TX4938
+ 	bool
+ 	select CEVT_TXX9
+-	select HAS_TXX9_SERIAL
++	imply HAS_TXX9_SERIAL
+ 	select HAVE_PCI
+ 	select IRQ_TXX9
+ 	select PCI_TX4927
+ 	select GPIO_TXX9
+-	select HAS_TXX9_ACLC
++	imply HAS_TXX9_ACLC
+ 
+ config SOC_TX4939
+ 	bool
+ 	select CEVT_TXX9
+-	select HAS_TXX9_SERIAL
++	imply HAS_TXX9_SERIAL
+ 	select HAVE_PCI
+ 	select PCI_TX4927
+-	select HAS_TXX9_ACLC
++	imply HAS_TXX9_ACLC
+ 
+ config TXX9_7SEGLED
+ 	bool
+-- 
+2.17.1
 
 
-=E4=BA=8E 2020=E5=B9=B44=E6=9C=883=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=885:=
-29:51, Tiezhu Yang <yangtiezhu@loongson=2Ecn> =E5=86=99=E5=88=B0:
->Add PCI support for LS7A to detect PCI device=2E
->
->Signed-off-by: Tiezhu Yang <yangtiezhu@loongson=2Ecn>
-
-I'm going to convert Loongson PCI driver into Generic PCI Controller imple=
-mentation=2E
-
-My set have already included LS7A PCH support=2E
-
-Anyway, thanks for your patch=2E
---=20
-Jiaxun Yang
