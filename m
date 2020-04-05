@@ -2,98 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4EA019ECA0
-	for <lists+linux-mips@lfdr.de>; Sun,  5 Apr 2020 18:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC7D19ECB7
+	for <lists+linux-mips@lfdr.de>; Sun,  5 Apr 2020 18:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727009AbgDEQcV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 5 Apr 2020 12:32:21 -0400
-Received: from conuserg-12.nifty.com ([210.131.2.79]:31221 "EHLO
-        conuserg-12.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726667AbgDEQcV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 5 Apr 2020 12:32:21 -0400
-Received: from grover.flets-west.jp (softbank126125134031.bbtec.net [126.125.134.31]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 035GUxjX014785;
-        Mon, 6 Apr 2020 01:30:59 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 035GUxjX014785
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1586104259;
-        bh=5dte5dvvsDQ3wOKn6WARCRcNltPssbbsGfaDy3F1DZ8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NaC2xexFaOoeA+4Wyk79vOG79RDMzA1EzqcWHsj5lfpQ8wEgwpAeIMd/372L1zObg
-         P6lY6M91GVEjJ/xAoZolwDTyQkAJ8WFvLQ6awzewAwocCIqngrtbwFRGIHMtFSfvKe
-         6rG34v8soPcO4sLbDqZtL54upYVUDFyRy8qcv2gTRF063ShETYiBrDga6gjchJCsGG
-         1FQzGP3x91GAY8XXBQhrf/p0pNYTkjXhIATJ6L7jLnzAWjYgzGj4G5KKEalmAA2I2u
-         mC0pX7H3vkDFl79PV9K5uF2d4RylWgzNge9GOGkhj4Jgydj72Ibm4ay6uzKI86YN/b
-         7x8Hav1jv/wig==
-X-Nifty-SrcIP: [126.125.134.31]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org, linux-mips@linux-mips.org
-Cc:     clang-built-linux@googlegroups.com, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
+        id S1727075AbgDEQrc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 5 Apr 2020 12:47:32 -0400
+Received: from eddie.linux-mips.org ([148.251.95.138]:47490 "EHLO
+        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726669AbgDEQrc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 5 Apr 2020 12:47:32 -0400
+Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
+        with ESMTP id S23992819AbgDEQr3TATqt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org> + 1 other);
+        Sun, 5 Apr 2020 18:47:29 +0200
+Date:   Sun, 5 Apr 2020 17:47:29 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc:     linux-mips@vger.kernel.org, Fangrui Song <maskray@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH] MIPS: fw: arc: add __weak to prom_meminit and prom_free_prom_memory
-Date:   Mon,  6 Apr 2020 01:30:52 +0900
-Message-Id: <20200405163052.18942-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: malta: Set load address for 32bit kernel
+ correctly
+In-Reply-To: <20200405082451.694910-1-jiaxun.yang@flygoat.com>
+Message-ID: <alpine.LFD.2.21.2004051738000.4156324@eddie.linux-mips.org>
+References: <20200405082451.694910-1-jiaxun.yang@flygoat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-As far as I understood, prom_meminit() in arch/mips/fw/arc/memory.c
-is overridden by the one in arch/mips/sgi-ip32/ip32-memory.c if
-CONFIG_SGI_IP32 is enabled.
+On Sun, 5 Apr 2020, Jiaxun Yang wrote:
 
-The use of EXPORT_SYMBOL in static libraries potentially causes a
-problem for the llvm linker [1]. So, I want to forcibly link lib-y
-objects to vmlinux when CONFIG_MODULES=y.
+> LLD failed to link vmlinux with 64bit load address for 32bit ELF
+> while bfd will strip 64bit address into 32bit silently.
+> To fix LLD build, we should supply a 32bit load address for 32bit
+> kernel.
+[...]
+> diff --git a/arch/mips/mti-malta/Platform b/arch/mips/mti-malta/Platform
+> index 2cc72c9b38e3..f9b49cba1764 100644
+> --- a/arch/mips/mti-malta/Platform
+> +++ b/arch/mips/mti-malta/Platform
+> @@ -6,6 +6,10 @@ cflags-$(CONFIG_MIPS_MALTA)	+= -I$(srctree)/arch/mips/include/asm/mach-malta
+>  ifdef CONFIG_KVM_GUEST
+>      load-$(CONFIG_MIPS_MALTA)	+= 0x0000000040100000
+>  else
+> +ifdef CONFIG_64BIT
+>      load-$(CONFIG_MIPS_MALTA)	+= 0xffffffff80100000
+> +else
+> +    load-$(CONFIG_MIPS_MALTA)	+= 0x80100000
 
-As a groundwork, we must fix multiple definitions that have previously
-been hidden by lib-y.
+ Given the description above I think it should be done uniformly and 
+automatically across all platforms by trimming the address supplied with 
+$(load-y) to low 8 digits in a single place, that is at the place where 
+the variable is consumed.  This will reduce clutter across Makefile 
+fragments, avoid inconsistencies and extra work to handle individual 
+platforms as the problem is triggered over and over again, and limit the 
+risk of mistakes.
 
-The prom_cleanup() in this file is already marked as __weak (because
-it is overridden by the one in arch/mips/sgi-ip22/ip22-mc.c).
-I think it should be OK to do the same for these two.
+ Some error checking might be doable for verifying that the 64-bit address 
+truncated is a sign-extended 32-bit value, but that perhaps would be an 
+overkill as certainly any 64-bit system that sets the load address to be 
+outside the sign-extended 32-bit address range does not support a !64BIT 
+configuration anyway.
 
-[1]: https://github.com/ClangBuiltLinux/linux/issues/515
-
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
-If MIPS maintainers ack this patch,
-I want to inser it before the following patch:
-
-https://patchwork.kernel.org/patch/11432969/
-
- arch/mips/fw/arc/memory.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/fw/arc/memory.c b/arch/mips/fw/arc/memory.c
-index dbbcddc82823..89fa6e62a3b3 100644
---- a/arch/mips/fw/arc/memory.c
-+++ b/arch/mips/fw/arc/memory.c
-@@ -117,7 +117,7 @@ static int __init prom_memtype_classify(union linux_memtypes type)
- 	return memtype_classify_arc(type);
- }
- 
--void __init prom_meminit(void)
-+void __weak __init prom_meminit(void)
- {
- 	struct linux_mdesc *p;
- 
-@@ -162,7 +162,7 @@ void __weak __init prom_cleanup(void)
- {
- }
- 
--void __init prom_free_prom_memory(void)
-+void __weak __init prom_free_prom_memory(void)
- {
- 	int i;
- 
--- 
-2.17.1
-
+  Maciej
