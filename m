@@ -2,130 +2,143 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEB119FBA7
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Apr 2020 19:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 030E819FC60
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Apr 2020 20:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729456AbgDFReT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Apr 2020 13:34:19 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:41891 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729452AbgDFReT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Apr 2020 13:34:19 -0400
-Received: by mail-pl1-f193.google.com with SMTP id d24so71415pll.8
-        for <linux-mips@vger.kernel.org>; Mon, 06 Apr 2020 10:34:18 -0700 (PDT)
+        id S1726718AbgDFSCl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Apr 2020 14:02:41 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:41446 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726613AbgDFSCl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Apr 2020 14:02:41 -0400
+Received: by mail-pf1-f195.google.com with SMTP id a24so7928411pfc.8
+        for <linux-mips@vger.kernel.org>; Mon, 06 Apr 2020 11:02:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=iTnt6rhYcfPaF8VxFCcDjmb8zA/fEtWzdbsn94r3j0Q=;
-        b=MQCGMhsl3dwiSIjU6h4PN/T92rtkbBhx34/Z41X3W0geicFN53bfNoPfxQtJ/pFRf5
-         vpXbGe93sEk/Ugf6U80S2HR8m2aYOKSpXPKn4q32raZiTRepiQaoj20jfGG2bB+QwL8b
-         +LxPisBD2+aWLqlF1AOzIxF9qC9taRi+Fep4q3Rn/gxKL9aonCp8hCCq62w8MZsuqPVe
-         hnPwWs2lbCBSY7I8QBfMl+iOECe42bubYJGQb1DIi2bUqixQwtpnVgh6W/qcFidl+eFZ
-         e1FG1GySSb0OXSv+7uJAEnKYXfmalfMnBO6McNr52FxchDBlJhqB1eXcbzA0MTIkfo/Y
-         Lf0Q==
+        bh=6e1Q4vKzJzmKGtNiNjd8gFNJAJWEC5ayrvQVjXOX/iA=;
+        b=VKzVFvDbHxCrHuz1BGNeFLrQzjOqXm308/UzV4dy7t/94/5o8Eqc32uFmFoYw1GhVv
+         YL/PJrZ5wYaWlf09YP/5Cw9aVe6InMX/KFrOUrgH1YJZJlWiq0Opcgr8ReG8QawTI274
+         WKtN/MWOtTpvlpHUdwxVT22pAxgnoaRhgG6I2tYHtL7RiZpTtHHQ4uZytoqFsV3Ar8ar
+         ITcWYla8llaWu6JMF/9m/uIk+0Gwo3dkQMaEfnRI4dV96O34aZcV0bQr0GRy9DktfRs3
+         TkQw9r5uzIm1fP0iGYUwFSotBFCkb0R1wjfvHieZvIKI/5/QkP4n26nnVJRvQ5geQ51+
+         8Uvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iTnt6rhYcfPaF8VxFCcDjmb8zA/fEtWzdbsn94r3j0Q=;
-        b=BEEYumHSplqXnsYkDj2SxE4oLF624somltPmpuPQ/QWJaGAG1aTgq4SEBwM6csVWdB
-         J/cZ7slvFxXUJoC/ZerkBBjAUzNwNrNS2QFDlTz103f82OrqTWX9ZmSiMZmLxBPWKt7C
-         aO6cvQlmqKKx69E7hg5IXT3exP2SF9AMWsOz/94HY0jZOHBCSwku7NWCniX110uZz2ia
-         cjWXBkoqvWlat65MRP6MLsVztVqucKU15civWLJPAcZJNN1d2YYvjEU7NDJTaF+LxQfP
-         k8Z69wdnW9b+X/rEpHjbhf2G+Jiv0ROqlGDne4spIbiaJfaRdkSa9KrZOG9fqz7COAO3
-         6Qbg==
-X-Gm-Message-State: AGi0PuYsnJ8N9nksyrgGHfDuaQwW6TdNukPH0GjaDjbDxSKEJ5rAGUV+
-        U1g44uxVUIt7wnnr0T4Dqd9Z9ZLdPcoOfzcPnFN+GQ==
-X-Google-Smtp-Source: APiQypI6E0407sKfbsNG31VUnX4s1/lfeInDvss/VddCpI3Chm7RJCyzHTm3ROGPHFyV3k07BeU1QcN7icP/3xqtsuU=
-X-Received: by 2002:a17:90b:3783:: with SMTP id mz3mr300858pjb.27.1586194458092;
- Mon, 06 Apr 2020 10:34:18 -0700 (PDT)
+        bh=6e1Q4vKzJzmKGtNiNjd8gFNJAJWEC5ayrvQVjXOX/iA=;
+        b=T2iKlXr0xs996SnzThxKtSczA/c6WV3JYZHTmmLT6kapgtwXxH0SPDyCQa0T5vVyi6
+         MznxxUuFg7MWKGoHjXfr+duMIatLjVtLYWrwo/pai1ZP5cNKcEX5NxUUAtVoMk5hHEXm
+         j+u5qTuEh3k9sxtuaEXr+ulJyJWa0bMfQa7O7Hl22JJMqNyNRNROQWTVUIDTFQbbYS6R
+         zs4u2J8gQhaff53Il/S9LROKWGpFKizHaqgPswfT+VTzpH+2lYbF27fwKqhmNQ4d7sMk
+         0jDSJ5lFOuznCCpEB9dP08a+A20Fiy+QYpl3N2K38WVsqG5vuIOd6aFsF8Hz4XN+gfS5
+         8cGg==
+X-Gm-Message-State: AGi0PuZMKKv5ZXjbXscS25YGPLVhno6KTm8fu7T4MX3rzEZJ1G6DD+9b
+        2O/liDr2DoHCPOV+8OFuS5Z3SKxpsRY32AdhN2qJQw==
+X-Google-Smtp-Source: APiQypKM2PYCFQ6CoF0zH+mGNXOYzfT9ZqJG+BVP9vjjtE7Ws2bYfTPeukVx527QNaPkITHuCZ24GDQU95IlK8Bm80M=
+X-Received: by 2002:a63:b954:: with SMTP id v20mr264508pgo.381.1586196157861;
+ Mon, 06 Apr 2020 11:02:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <202004032329.oBqXCsfi%lkp@intel.com> <CAKwvOd=H71Q=r=S6Zr=N1zgkXTb9HyEwF78ZbuKkoigWZxiBDA@mail.gmail.com>
- <20200403192058.GA41585@ubuntu-m2-xlarge-x86> <20200404010210.GA13010@intel.com>
- <20200404013204.p53fteofnppvf7pe@google.com> <20200404211252.3540251a@flygoat-x1e>
-In-Reply-To: <20200404211252.3540251a@flygoat-x1e>
+References: <20200405163052.18942-1-masahiroy@kernel.org> <alpine.LFD.2.21.2004051813150.4156324@eddie.linux-mips.org>
+ <CAK7LNATKLcCPYxQZNbrS-jMPg+_BETU0dGv0qYvLqUkJ2fMt5w@mail.gmail.com> <alpine.LFD.2.21.2004061240060.4156324@eddie.linux-mips.org>
+In-Reply-To: <alpine.LFD.2.21.2004061240060.4156324@eddie.linux-mips.org>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 6 Apr 2020 10:34:06 -0700
-Message-ID: <CAKwvOdnS8MvEp7aqqswTjP_Mo5=+=+SziPoZ4knuuyQ6rWottg@mail.gmail.com>
-Subject: Re: [peterz-queue:sched/urgent 4/5] ld.lld: error: section .text at
- 0xFFFFFFFF80200000 of size 0x1E8915C exceeds available address space
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Fangrui Song <maskray@google.com>, linux-mips@vger.kernel.org,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Rui Ueyama <ruiu@google.com>,
-        George Rimar <grimar@accesssoftek.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        kbuild-all@lists.01.org,
+Date:   Mon, 6 Apr 2020 11:02:27 -0700
+Message-ID: <CAKwvOdkAXuTPR7Bm4+ai3GcKv+ytes3S2UZxOxqSrRtqkt485Q@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: fw: arc: add __weak to prom_meminit and prom_free_prom_memory
+To:     "Maciej W. Rozycki" <macro@linux-mips.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux-MIPS <linux-mips@linux-mips.org>,
         clang-built-linux <clang-built-linux@googlegroups.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        kbuild test robot <lkp@intel.com>,
-        Philip Li <philip.li@intel.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Apr 4, 2020 at 6:16 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+On Mon, Apr 6, 2020 at 4:54 AM Maciej W. Rozycki <macro@linux-mips.org> wrote:
 >
-> On Fri, 3 Apr 2020 18:32:04 -0700
-> Fangrui Song <maskray@google.com> wrote:
+> On Mon, 6 Apr 2020, Masahiro Yamada wrote:
 >
-> >
-> > Reproduce for a clang/lld developer:
-> >
-> > make -j$(nproc) ARCH=mips CC=clang CROSS_COMPILE=mipsel-linux-gnu-
-> > LD=ld.lld O=/tmp/out/mipsel distclean malta_defconfig vmlinux
-> > (Requires mipsel-linux-gnu-as and clang in PATH)
-> >
-> > I have noticed multiple problems.
-> >
-> > % file .tmp_vmlinux.kallsyms1
-> > .tmp_vmlinux.kallsyms1: ELF 32-bit LSB executable, MIPS, MIPS32 rel2
-> > version 1 (SYSV), statically linked,
-> > BuildID[sha1]=ff348ad92c80e525b3f14149e57e8987de66e041, not stripped
-> >
-> > In arch/mips/kernel/vmlinux.lds.S, VMLINUX_LOAD_ADDRESS (from load-y)
-> > is 0xffffffff8010000. GNU ld seems to allow 64-bit addresses when
-> > linking an ELFCLASS32 file. The addresses will be truncated to
-> > 32-bit. This behavior seems error-prone to me.
-> >
-> > lld does the right thing by erroring out. I do notice a display
-> > problem of lld -Map and I have a patch to address that:
-> > https://reviews.llvm.org/D77445
-> >
-> > For 32-bit linux-mips, the right approach seems to be make
-> > VMLINUX_LOAD_ADDRESS fit into 32-bit. However, my Linux-fu and
-> > MIPS-fu is not strong enough to do this :/
+> > > > As far as I understood, prom_meminit() in arch/mips/fw/arc/memory.c
+> > > > is overridden by the one in arch/mips/sgi-ip32/ip32-memory.c if
+> > > > CONFIG_SGI_IP32 is enabled.
+> > > >
+> > > > The use of EXPORT_SYMBOL in static libraries potentially causes a
+> > > > problem for the llvm linker [1]. So, I want to forcibly link lib-y
+> > > > objects to vmlinux when CONFIG_MODULES=y.
+> > >
+> > >  It looks to me like a bug in the linker in the handling of the EXTERN
+> > > command.  Why not fix the linker instead?
+> [...]
+> > I am not sure if this is a bug.
+> > Anyway, they decided to not change ld.lld
 >
-> Hi MaskRay,
->
-> Could you please try this?
+>  Well, maybe that was a conscious decision, however it's a linker feature
+> that has been there since forever and projects like Linux can legitimately
+> rely on it.  In this case perhaps sticking to other linkers, which have
+> the right features, is the right solution rather than trying to turn a
+> complex and mature project like Linux upside down (and quite possibly
+> introducing bugs and pessimisations on the way) just to match an inferior
+> tool.  Adapt your tool to the task, not the task to your tool.
 
-Hi Jiaxun, can you please send this patch?
+The feature you refer to and the feature Masahiro is referring to are
+two separate issues.  If you care to understand the issue Masahiro is
+trying to fix, please take the time to read the full discussion:
+https://github.com/ClangBuiltLinux/linux/issues/515 and particularly
+https://reviews.llvm.org/D63564
 
 >
-> --- a/arch/mips/mti-malta/Platform
-> +++ b/arch/mips/mti-malta/Platform
-> @@ -6,6 +6,10 @@ cflags-$(CONFIG_MIPS_MALTA)    +=
-> -I$(srctree)/arch/mips/include/asm/mach-malta ifdef CONFIG_KVM_GUEST
->      load-$(CONFIG_MIPS_MALTA)  += 0x0000000040100000
->  else
-> +ifdef CONFIG_64BIT
->      load-$(CONFIG_MIPS_MALTA)  += 0xffffffff80100000
-> +else
-> +    load-$(CONFIG_MIPS_MALTA)  += 0x80100000
-> +endif
->  endif
->  all-$(CONFIG_MIPS_MALTA)       := $(COMPRESSION_FNAME).bin
+> > MIPS code is so confusing.
+> > There are multiple definitions,
+> > and lib.a is (ab)used to hide them.
 >
-> Thanks.
+>  It's a standard feature of libraries that a symbol reference is satisfied
+> by the first symbol definition encountered.  Any extra ones provided later
+> in the link order are ignored.  And we have control over the link order.
+
+Relying on link order is terribly brittle. Renaming a file can cause
+your implementation to change, and ties your hands from ever using
+things like LTO or newer build systems like ninja.  Static
+initialization order is a plague to C and C++.  It's explicitly
+undefined behavior you've just admitted you prefer to rely on.  (A
+Google search for "static initialization order" wants to autocomplete
+to "static initialization order fiasco" which is also an interesting
+read; https://www.cryptopp.com/wiki/Static_Initialization_Order_Fiasco).
+
+Masahiro is right that this case has some questionable choices in
+terms of redefining symbols with different implementations.  I think
+__HAVE_ARCH_STRCPY and friends in lib/string.c is actually the best
+pattern for not providing multiple definitions of a symbol, followed
+by marking symbols meant to be overridden at link time based on config
+as __weak.  He's just trying to help clean this up.
+
 >
-> --
-> Jiaxun Yang
+> > I fixed another one for MIPS before, and
+> > 0-day bot reported this recently.
+> >
+> >
+> > There are lots of prom_meminit() definitions
+> > in arch/mips/.
+>
+>  Naturally, many platforms will have its own, in addition to some generic
+> (possibly dummy) one.
+>
+> > Making the intention clearer is a good thing, IMHO.
+>
+>  Hmm, what intention?  Can you please be more specific?
 
-
+That prom_meminit and prom_free_prom_memory are meant to be overridden
+by other configs.
 
 -- 
 Thanks,
