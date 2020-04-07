@@ -2,109 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6841A10E9
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Apr 2020 18:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A771A1205
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Apr 2020 18:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728005AbgDGQDt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Apr 2020 12:03:49 -0400
-Received: from conssluserg-05.nifty.com ([210.131.2.90]:24499 "EHLO
-        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727991AbgDGQDt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Apr 2020 12:03:49 -0400
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 037G3Ue9024707;
-        Wed, 8 Apr 2020 01:03:30 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 037G3Ue9024707
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1586275411;
-        bh=H1J7FezWT1dgglGN/erJ3S7DC6IYDiQ5DhPkx5GnfYo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=djBLvGd0L88sTtMnV7Ktcs7LOCu7upEpPBj4r3AIG6B3UH80aD6p0N80wXfqBwexX
-         GmI2q73EAYBwYtYWbCYlXFHLvCk0pmkSQe7agC/KKcQcmjoZR+h0rbU2Yq0JACA1ny
-         XCKJt7iKiI+sEqKyVoMsaqGz1LsWXxTKQvfWa3Ud3YJaWoQ+vr/7oZU4wZ0cAyyBBZ
-         LEi0D3KUjNTJbnHCtOGF976xzP0f7k0HYwaZx3Pi5729+UL1iRziZsZbOIigrzHzxj
-         TE8La+DxQ1PoUTkQxvPG38FHx+NP2C5EJ6yAZ3l13CasR4auPyw7KC8VV3UwbW2lJp
-         qrMaiN+3XQoeQ==
-X-Nifty-SrcIP: [209.85.217.44]
-Received: by mail-vs1-f44.google.com with SMTP id s10so2507357vsi.9;
-        Tue, 07 Apr 2020 09:03:30 -0700 (PDT)
-X-Gm-Message-State: AGi0PuYav1JspkgY3FaVtAbcoJieQT8N6gSe4oRdkT3VJJ3lNyFxMjKR
-        g+Z3gcVjx7pdfSgZmeW6gZSA0aLxFTOrN+iId8M=
-X-Google-Smtp-Source: APiQypJdib1woalCQ47LsPcjFIUt+uD0oJywtqnU3blPMN/3x09w4VC5A1Jftlia+RledGNP4o+h/SP9BtoezdZD7j8=
-X-Received: by 2002:a67:6542:: with SMTP id z63mr2511247vsb.179.1586275409554;
- Tue, 07 Apr 2020 09:03:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200405163052.18942-1-masahiroy@kernel.org> <20200406110333.GA6266@alpha.franken.de>
-In-Reply-To: <20200406110333.GA6266@alpha.franken.de>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 8 Apr 2020 01:02:53 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARGO5ciqaseZ7z1k+e-dVh9rU+HY3-1H0XYMwq6+5PqaQ@mail.gmail.com>
-Message-ID: <CAK7LNARGO5ciqaseZ7z1k+e-dVh9rU+HY3-1H0XYMwq6+5PqaQ@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: fw: arc: add __weak to prom_meminit and prom_free_prom_memory
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        id S1726329AbgDGQsO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Apr 2020 12:48:14 -0400
+Received: from eddie.linux-mips.org ([148.251.95.138]:59686 "EHLO
+        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726144AbgDGQsN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Apr 2020 12:48:13 -0400
+Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
+        with ESMTP id S23993062AbgDGQsJjgyE6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org> + 2 others);
+        Tue, 7 Apr 2020 18:48:09 +0200
+Date:   Tue, 7 Apr 2020 17:48:09 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         Linux-MIPS <linux-mips@linux-mips.org>,
         clang-built-linux <clang-built-linux@googlegroups.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        =?UTF-8?Q?F=C4=81ng-ru=C3=AC_S=C3=B2ng?= <maskray@google.com>
+Subject: Re: [PATCH] MIPS: fw: arc: add __weak to prom_meminit and
+ prom_free_prom_memory
+In-Reply-To: <CAKwvOdkAXuTPR7Bm4+ai3GcKv+ytes3S2UZxOxqSrRtqkt485Q@mail.gmail.com>
+Message-ID: <alpine.LFD.2.21.2004071720010.596385@eddie.linux-mips.org>
+References: <20200405163052.18942-1-masahiroy@kernel.org> <alpine.LFD.2.21.2004051813150.4156324@eddie.linux-mips.org> <CAK7LNATKLcCPYxQZNbrS-jMPg+_BETU0dGv0qYvLqUkJ2fMt5w@mail.gmail.com> <alpine.LFD.2.21.2004061240060.4156324@eddie.linux-mips.org>
+ <CAKwvOdkAXuTPR7Bm4+ai3GcKv+ytes3S2UZxOxqSrRtqkt485Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Apr 6, 2020 at 8:36 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Mon, Apr 06, 2020 at 01:30:52AM +0900, Masahiro Yamada wrote:
-> > As far as I understood, prom_meminit() in arch/mips/fw/arc/memory.c
-> > is overridden by the one in arch/mips/sgi-ip32/ip32-memory.c if
-> > CONFIG_SGI_IP32 is enabled.
-> >
-> > The use of EXPORT_SYMBOL in static libraries potentially causes a
-> > problem for the llvm linker [1]. So, I want to forcibly link lib-y
-> > objects to vmlinux when CONFIG_MODULES=y.
-> >
-> > As a groundwork, we must fix multiple definitions that have previously
-> > been hidden by lib-y.
-> >
-> > The prom_cleanup() in this file is already marked as __weak (because
-> > it is overridden by the one in arch/mips/sgi-ip22/ip22-mc.c).
-> > I think it should be OK to do the same for these two.
-> >
-> > [1]: https://github.com/ClangBuiltLinux/linux/issues/515
-> >
-> > Reported-by: kbuild test robot <lkp@intel.com>
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> > If MIPS maintainers ack this patch,
-> > I want to inser it before the following patch:
->
->
-> Acked-By: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->
-> Thomas.
+On Mon, 6 Apr 2020, Nick Desaulniers wrote:
 
+> >  Well, maybe that was a conscious decision, however it's a linker feature
+> > that has been there since forever and projects like Linux can legitimately
+> > rely on it.  In this case perhaps sticking to other linkers, which have
+> > the right features, is the right solution rather than trying to turn a
+> > complex and mature project like Linux upside down (and quite possibly
+> > introducing bugs and pessimisations on the way) just to match an inferior
+> > tool.  Adapt your tool to the task, not the task to your tool.
+> 
+> The feature you refer to and the feature Masahiro is referring to are
+> two separate issues.  If you care to understand the issue Masahiro is
+> trying to fix, please take the time to read the full discussion:
+> https://github.com/ClangBuiltLinux/linux/issues/515 and particularly
+> https://reviews.llvm.org/D63564
 
-Applied to linux-kbuild with Thomas' Ack.
+ The onus is on the patch submitter to justify a change I'm afraid, and 
+not the reviewer to chase such justification.  A change is supposed to be 
+self-contained and straightforward to understand for someone reasonably 
+familiar with the matters covered though not necessarily with the specific 
+issue.  And this change is missing such self-contained justification I'm 
+afraid.
 
-Thanks.
+ You need to make it easy for the reviewer to accept a change.  If a 
+reviewer looks at the proposed change itself, reads through the associated 
+description and immediately knows what is going on and that the change is 
+good, the this is a good submission.
 
+> >  It's a standard feature of libraries that a symbol reference is satisfied
+> > by the first symbol definition encountered.  Any extra ones provided later
+> > in the link order are ignored.  And we have control over the link order.
+> 
+> Relying on link order is terribly brittle. Renaming a file can cause
+> your implementation to change, and ties your hands from ever using
+> things like LTO or newer build systems like ninja.  Static
+> initialization order is a plague to C and C++.  It's explicitly
+> undefined behavior you've just admitted you prefer to rely on.  (A
+> Google search for "static initialization order" wants to autocomplete
+> to "static initialization order fiasco" which is also an interesting
+> read; https://www.cryptopp.com/wiki/Static_Initialization_Order_Fiasco).
 
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
->
-> --
-> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20200406110333.GA6266%40alpha.franken.de.
+ Renaming a file does not cause the link order to automatically change 
+(although I can imagine a build system where that happens).  And we're not 
+talking about static initialisers and their implicit dependencies that 
+might be hard to follow.
 
+ We just have pairs of symbols that need to appear in a specific order in 
+the link, and this is quite straightforward to control, by placing 
+platform files earlier on the linker's invocation line, followed by arch 
+files, followed by generic files.  That's certainly been defined linker's 
+behaviour, especially as tools had to rely on it in more complex build 
+systems before weak symbols were invented.
 
+> Masahiro is right that this case has some questionable choices in
+> terms of redefining symbols with different implementations.  I think
+> __HAVE_ARCH_STRCPY and friends in lib/string.c is actually the best
+> pattern for not providing multiple definitions of a symbol, followed
+> by marking symbols meant to be overridden at link time based on config
+> as __weak.  He's just trying to help clean this up.
 
--- 
-Best Regards
-Masahiro Yamada
+ That is perhaps a worthwhile improvement, but does not appear to have
+anything to do with LLVM and its bug in handling the EXTERN linker script 
+command.  Let's not mix up things.
+
+ Also IIUC this will result in a code bloat: previously objects providing 
+fallback symbols were not pulled from archives if not needed, whereas now 
+they will always be and will remain permanently unused, wasting memory at 
+run time.  So this looks to me like a (gratuitous) pessimisation.
+
+> >  Hmm, what intention?  Can you please be more specific?
+> 
+> That prom_meminit and prom_free_prom_memory are meant to be overridden
+> by other configs.
+
+ Then a comment at the fallback implementation should be enough.  Besides 
+you need to be somewhat familiar with code you want to work with and Linux 
+has always been terse in code annotations and relied on code being 
+self-explanatory instead.
+
+  Maciej
