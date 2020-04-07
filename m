@@ -2,137 +2,151 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E29E019FCEC
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Apr 2020 20:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65DA1A0608
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Apr 2020 07:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726703AbgDFSRS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Apr 2020 14:17:18 -0400
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:55601 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727547AbgDFSRJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Apr 2020 14:17:09 -0400
-Received: by mail-pj1-f66.google.com with SMTP id fh8so183532pjb.5
-        for <linux-mips@vger.kernel.org>; Mon, 06 Apr 2020 11:17:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QajOetIheYc6yFfn5cGXMzoheGBlCxA/mL7SE7Ps7+Y=;
-        b=i1GU0TXcRTrIK6ml6JtkYY0yUET+I0aZOROJzKxs15NqJj4ooP/Khnpk5SlXzB0pKz
-         lYQvJlybxyZgU5l+H5YtrUX/lSfvM6dUy2Ji53n/c3GKaKhpNHoCzrksnmsCt0jQ6jNu
-         Ema3D+STgHzRn7jQlZY/u8ckaR9CGnnE8fwBJjh/I618ZupFF675g+w3N9PGFt/I8WO6
-         V0dHWeHrH69undlHyIemld5sXtywcREzJ5tvP9cD1LZgdtFthxnjyVoYU9QN/id363tp
-         aL55rh4VSl9uDAaFUlV8VDQMd74Ya0Nx2EZQK5nuxqXHmy7S/nXn7+tt7GXO89JSNwaW
-         zrbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QajOetIheYc6yFfn5cGXMzoheGBlCxA/mL7SE7Ps7+Y=;
-        b=QR9z702wLTJ+U8STNDiv+2sKoH4PhS7sXbd40Kb3tSM0bt/0aApZ2dMGx8jdZsEf6b
-         zGQOc3xcfXN4i+aOHsI+z8GZDByPDkIZVyffTnwnoZyiGVWrDm3GJ40HLClJZCIL+9Gi
-         pdjlslYJcocdzJTpKz2Ep6E5qSxv8XBYroQ6q1jZwqux9pNleX+TVr2UhZESDyxDMY+a
-         Hpi1DDVkRNuUqHcrdqDBtCeGW1I2pybc5c4w8epcyhqNFceorKGv3aNJL1+8ysvFVZfs
-         TjNYicksfMrcAJxjAwmSOmVPJeMul8hbLw1paXmzsFQZIJzYicgeZBgCn9lmgxJ8zlZC
-         yy7w==
-X-Gm-Message-State: AGi0PubdfqxAkfLQrr8/uKEQ2CNoukK3m9Ecmi78UgF3aeHTw8GOTwdN
-        Ww4bgKn3tVLIgnrGTSSMQVcSQpuKTaiYyQoWushHPA==
-X-Google-Smtp-Source: APiQypLCp7t3h+6346geWCdUsx0/lS+7zihtrFuJoEZhdpUOzAzHYdVIsmSt/wPY3djawkdqH324uD1slvMx1toMJis=
-X-Received: by 2002:a17:902:bb91:: with SMTP id m17mr21132416pls.223.1586197027464;
- Mon, 06 Apr 2020 11:17:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200405163052.18942-1-masahiroy@kernel.org>
-In-Reply-To: <20200405163052.18942-1-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 6 Apr 2020 11:16:57 -0700
-Message-ID: <CAKwvOdmEcC7SszqpEYeT3v_gi89vAyDyofZaKkfF_YhEXu=E5A@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: fw: arc: add __weak to prom_meminit and prom_free_prom_memory
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux-MIPS <linux-mips@linux-mips.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>,
+        id S1726591AbgDGFHH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Apr 2020 01:07:07 -0400
+Received: from hfcrelay.icp-osb-irony-out6.external.iinet.net.au ([203.59.1.86]:8292
+        "EHLO hfcrelay.icp-osb-irony-out6.external.iinet.net.au"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726399AbgDGFHG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 7 Apr 2020 01:07:06 -0400
+X-Greylist: delayed 558 seconds by postgrey-1.27 at vger.kernel.org; Tue, 07 Apr 2020 01:07:03 EDT
+X-SMTP-MATCH: 0
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2AqAACBB4xe/yqY3MsNWRwBAQEBAQc?=
+ =?us-ascii?q?BAREBBAQBAYFpBQEBCwGERYQbj0oBAQEBAQEGgQoIJYl+j1CBewoBAQEBAQE?=
+ =?us-ascii?q?BAQE3BAEBhEQCgm02Bw4CEAEBAQUBAQEBAQUDAYV3hkkBAQEDIxVBEAsSBgI?=
+ =?us-ascii?q?CJgICSQ4GAQwGAgEBgyKCWK9hdYEyhUuDVYE/gQ4qAYxMeYEHgTgMgi8uPoQ?=
+ =?us-ascii?q?lgzuCXgSQRYdfmHoIgj+XJCOcAo83niYKgX8zGggoCIMkUCWcd2KNCYJDAQE?=
+X-IPAS-Result: =?us-ascii?q?A2AqAACBB4xe/yqY3MsNWRwBAQEBAQcBAREBBAQBAYFpB?=
+ =?us-ascii?q?QEBCwGERYQbj0oBAQEBAQEGgQoIJYl+j1CBewoBAQEBAQEBAQE3BAEBhEQCg?=
+ =?us-ascii?q?m02Bw4CEAEBAQUBAQEBAQUDAYV3hkkBAQEDIxVBEAsSBgICJgICSQ4GAQwGA?=
+ =?us-ascii?q?gEBgyKCWK9hdYEyhUuDVYE/gQ4qAYxMeYEHgTgMgi8uPoQlgzuCXgSQRYdfm?=
+ =?us-ascii?q?HoIgj+XJCOcAo83niYKgX8zGggoCIMkUCWcd2KNCYJDAQE?=
+X-IronPort-AV: E=Sophos;i="5.72,353,1580745600"; 
+   d="scan'208";a="234957621"
+Received: from 203-220-152-42.tpgi.com.au (HELO [192.168.1.108]) ([203.220.152.42])
+  by icp-osb-irony-out6.iinet.net.au with ESMTP; 07 Apr 2020 12:57:41 +0800
+Subject: Re: [PATCH 6/9] clk: Allow the common clk framework to be selectable
+To:     Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mark Salter <msalter@redhat.com>,
+        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
+        Guan Xuetao <gxt@pku.edu.cn>,
+        Russell King <linux@armlinux.org.uk>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-c6x-dev@linux-c6x.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>
+References: <20200405025123.154688-1-sboyd@kernel.org>
+ <20200405025123.154688-7-sboyd@kernel.org>
+ <CAK8P3a2M54quhRNK4xvwjz9O9oZwgrobc_wtkGaeA2PMYwOUdg@mail.gmail.com>
+ <158614207114.88454.6776609424163493475@swboyd.mtv.corp.google.com>
+ <CAK8P3a3Yt2woG2LMcQ0jNPGuHdMtFbBmLvtBbrWFQ4J6x3v9aQ@mail.gmail.com>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+Message-ID: <8a2a142a-106a-4241-fca5-5ef12e66cd41@linux-m68k.org>
+Date:   Tue, 7 Apr 2020 14:57:39 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <CAK8P3a3Yt2woG2LMcQ0jNPGuHdMtFbBmLvtBbrWFQ4J6x3v9aQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Apr 5, 2020 at 9:31 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> As far as I understood, prom_meminit() in arch/mips/fw/arc/memory.c
-> is overridden by the one in arch/mips/sgi-ip32/ip32-memory.c if
-> CONFIG_SGI_IP32 is enabled.
+Hi Arnd, Stephen
 
-I'm curious if this issue is affected by other combinations of files
-that each define prom_meminit with external linkage and symbol
-visibility.  I would expect __weak to be used when there's a base
-implementation that we expect to be overridden, but I don't think
-that's what's happening in this case.  It's not clear to me which
-definition would be the default, let alone the one in
-arch/mips/fw/arc/memory.c.
+On 6/4/20 5:35 pm, Arnd Bergmann wrote:
+> On Mon, Apr 6, 2020 at 5:01 AM Stephen Boyd <sboyd@kernel.org> wrote:
+>> Quoting Arnd Bergmann (2020-04-05 05:45:20)
+>>> On Sun, Apr 5, 2020 at 4:51 AM Stephen Boyd <sboyd@kernel.org> wrote:
+>>>> There's one snag with doing this, and that's making sure that randconfig
+>>>> builds don't select this option when some architecture or platform
+>>>> implements 'struct clk' outside of the common clk framework. Introduce a
+>>>> new config option 'HAVE_LEGACY_CLK' to indicate those platforms that
+>>>> haven't migrated to the common clk framework and therefore shouldn't be
+>>>> allowed to select this new config option. Also add a note that we hope
+>>>> one day to remove this config entirely.
+>>>
+>>> Good idea!
+>>>
+>>> I've looked through the individual ones and commented a bit on
+>>> what I think may or may not happen with them.
+>>>
+>>> ralink SOC_MT7621 is the only one that I think you got wrong,
+>>> as it already has common-clk support.
+>>
+>> Ah I missed that it was inside a big if RALINK. Thanks. I suppose I
+>> should just remove the select then for that config and not worry about
+>> the duplication of clkdev and common clk configs.
+> 
+> Won't that cause build failures in those configurations that have
+> both implementations?
+> 
+> According to the Makefile, the clk.c file is built whenever CONFIG_MIPS_GIC
+> is unset, so I think we need
+> 
+>           select HAVE_LEGACY_CLK if !MIPS_GIC
+> 
+> or maybe move the select into the per-chip configs that need it:
+> RT288X, RT305X, RT3883, and MT7620.
+> 
+>>>> diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
+>>>> index 60ac1cd8b96f..bd2d29c22a10 100644
+>>>> --- a/arch/m68k/Kconfig.cpu
+>>>> +++ b/arch/m68k/Kconfig.cpu
+>>>
+>>>     text    data     bss     dec     hex filename
+>>> 1934726 263616   83284 2281626 22d09a obj/vmlinux-before
+>>> 1971989 266192   83308 2321489 236c51 obj/vmlinux-after
+>>>
+>>> The coldfire clock implementation looks rather simple compared
+>>> to chips from the 2010s: most chips have only fixed clocks,
+>>> and three of them have one of two registers of clock gates.
+>>>
+>>> It shouldn't be hard to convert, but enabling common-clk will
+>>> cause a noticeable kernel size increase on the fairly limited
+>>> hardware.
+>>>
+>>> Simply enabling COMMON_CLK in m5475evb_defconfig
+>>> results in a 1.7% or 40KB growth in kernel size, plus there
+>>> would be additional dynamic memory usage:
+>> There could certainly be some work done to reduce the code size of the
+>> CCF. I haven't looked but perhaps we could save some memory by making
+>> the basic types selectable too and then push a bunch of kconfig updates
+>> through for that.
+> 
+> Right, that might help. Another possibility would be to support both
+> the common clk layer and the custom clk implementation on coldfire
+> until we remove the other custom implementations, by which point
+> even fewer people will care about coldfire.
+> 
+> Let's see what Geert and Greg think would be the best path for coldfire,
+> maybe the added 40KB is less of a problem after all.
 
-Looks like CONFIG_SGI_IP32 selects CONFIG_FW_ARC, so it's not clear
-why arch/mips/sgi-ip32/ip32-memory.c and arch/mips/fw/arc/memory.c
-define different implementations of prom_meminit, and which one was
-expected to be used.
+Losing another 40k is not ideal, but not the end of the world.
+It would not stop me running it on any platforms I regularly
+run on. For sure some of the really old hardware just doesn't
+have the RAM to spare.
 
-Hopefully the maintainers can clarify.
+Any way, I say we have to move forward and and move to using
+the common clock framework for ColdFire sooner than later.
 
->
-> The use of EXPORT_SYMBOL in static libraries potentially causes a
-> problem for the llvm linker [1]. So, I want to forcibly link lib-y
-> objects to vmlinux when CONFIG_MODULES=y.
->
-> As a groundwork, we must fix multiple definitions that have previously
-> been hidden by lib-y.
->
-> The prom_cleanup() in this file is already marked as __weak (because
-> it is overridden by the one in arch/mips/sgi-ip22/ip22-mc.c).
-> I think it should be OK to do the same for these two.
->
-> [1]: https://github.com/ClangBuiltLinux/linux/issues/515
->
-> Reported-by: kbuild test robot <lkp@intel.com>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
-> If MIPS maintainers ack this patch,
-> I want to inser it before the following patch:
->
-> https://patchwork.kernel.org/patch/11432969/
->
->  arch/mips/fw/arc/memory.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/mips/fw/arc/memory.c b/arch/mips/fw/arc/memory.c
-> index dbbcddc82823..89fa6e62a3b3 100644
-> --- a/arch/mips/fw/arc/memory.c
-> +++ b/arch/mips/fw/arc/memory.c
-> @@ -117,7 +117,7 @@ static int __init prom_memtype_classify(union linux_memtypes type)
->         return memtype_classify_arc(type);
->  }
->
-> -void __init prom_meminit(void)
-> +void __weak __init prom_meminit(void)
->  {
->         struct linux_mdesc *p;
->
-> @@ -162,7 +162,7 @@ void __weak __init prom_cleanup(void)
->  {
->  }
->
-> -void __init prom_free_prom_memory(void)
-> +void __weak __init prom_free_prom_memory(void)
->  {
->         int i;
->
-> --
+Regards
+Greg
 
--- 
-Thanks,
-~Nick Desaulniers
