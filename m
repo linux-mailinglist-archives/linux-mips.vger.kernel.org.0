@@ -2,38 +2,26 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5021A2293
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Apr 2020 15:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC9E1A286E
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Apr 2020 20:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728991AbgDHNGk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Apr 2020 09:06:40 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17893 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727902AbgDHNGk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Apr 2020 09:06:40 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1586351026; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=Xt3QlKHF9gAfs7PFxUfbfSkP2aVAC/tz3Gtn21Vxl34OaxdveVAogbirOWQxjbWyvWuNKvM9EA+oIzKP0hAKyK9keQCVyvtL8Deq/+x3WBcNPj755XaYkAd1Y7bYAyB1LsxBBkNzkhLBGXl25PA+/sKjHm/drvMlIP9cn2IlA7M=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1586351026; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=CuiH5YcI6tCfhJK48jBjzSJsIlmqrJPGhHGDuUriybY=; 
-        b=BvmgYeHKzI358gNXXMatE4R1i71CDcQkWEDt5jfAiSXCugqPHN3bU+6b7QgDbsga98pZlnvyq7UpqADjp3CZYAlmSX+7Sw9OjEzRAJ7E0601qcJsBcbCnBtVpbGg8H6CbksjNjAxbkX1ZeBe2puyLhTEWRNGIwh+fVOEMJXI2A8=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=flygoat.com;
-        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
-        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1586351026;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=From:To:Cc:Message-ID:Subject:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type;
-        bh=CuiH5YcI6tCfhJK48jBjzSJsIlmqrJPGhHGDuUriybY=;
-        b=JkkmTwA1xtnZOnvPqGgtJ0KvVe6ewM+F5dVZNsZSTsX9Ms1EI4MxqtL7JHf30NxI
-        8hmOZefcI7oPuh4T+8PLqukQLZgxX3VUx8ArFRvVJNEJqKHKhUl8+PktXp4ir7eJHSs
-        44ZBGWMRoTHvXf0EWiZy1VoLp8Sr9/TAvSqUn4kQ=
-Received: from localhost.localdomain (39.155.141.144 [39.155.141.144]) by mx.zoho.com.cn
-        with SMTPS id 15863510255787.563914307152345; Wed, 8 Apr 2020 21:03:45 +0800 (CST)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        id S1730625AbgDHSXU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Apr 2020 14:23:20 -0400
+Received: from foss.arm.com ([217.140.110.172]:41994 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729672AbgDHSXU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 8 Apr 2020 14:23:20 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 30FAE1FB;
+        Wed,  8 Apr 2020 11:23:19 -0700 (PDT)
+Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3EC083F73D;
+        Wed,  8 Apr 2020 11:23:14 -0700 (PDT)
+References: <20200408113505.2528103-1-jiaxun.yang@flygoat.com> <20200408113505.2528103-4-jiaxun.yang@flygoat.com>
+User-agent: mu4e 0.9.17; emacs 26.3
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Huacai Chen <chenhc@lemote.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -45,92 +33,125 @@ Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Robert Richter <rric@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Jason Cooper <jason@lakedaemon.net>,
         Marc Zyngier <maz@kernel.org>,
         Paul Burton <paulburton@kernel.org>,
         Allison Randal <allison@lohutok.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
+        Enrico Weigelt <info@metux.net>,
         Kate Stewart <kstewart@linuxfoundation.org>,
-        Alexios Zavras <alexios.zavras@intel.com>,
+        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Zhou Yanjie <zhouyanjie@zoho.com>,
+        =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmpp?= =?utf-8?B?ZSk=?= 
+        <zhouyanjie@wanyeetech.com>, YunQiang Su <syq@debian.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Serge Semin <fancer.lancer@gmail.com>,
         Matt Redfearn <matt.redfearn@mips.com>,
         Steve Winslow <swinslow@gmail.com>,
+        Alexios Zavras <alexios.zavras@intel.com>,
         Richard Fontana <rfontana@redhat.com>,
+        afzal mohammed <afzal.mohd.ma@gmail.com>,
+        Peter Xu <peterx@redhat.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Oleksij Rempel <linux@rempel-privat.de>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
         linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net
-Message-ID: <20200408130024.2529220-7-jiaxun.yang@flygoat.com>
-Subject: [PATCH 12/12] MIPS: ip27: Fix includes
-Date:   Wed,  8 Apr 2020 20:59:54 +0800
-X-Mailer: git-send-email 2.26.0.rc2
-In-Reply-To: <20200408113505.2528103-1-jiaxun.yang@flygoat.com>
-References: <20200408113505.2528103-1-jiaxun.yang@flygoat.com>
+        bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH 03/12] arch_topology: Make it avilable for MIPS
+In-reply-to: <20200408113505.2528103-4-jiaxun.yang@flygoat.com>
+Date:   Wed, 08 Apr 2020 19:23:04 +0100
+Message-ID: <jhjr1wxj0qf.mognet@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoCNMailClient: External
-Content-Type: text/plain; charset=utf8
+Content-Type: text/plain
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Somehow changes in topology messed up headers.
-So just add necessary headers to make it compile again.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/include/asm/mach-ip27/mmzone.h   | 2 ++
- arch/mips/include/asm/mach-ip27/topology.h | 2 ++
- arch/mips/include/asm/sn/addrs.h           | 1 +
- 3 files changed, 5 insertions(+)
+(+ Dietmar)
 
-diff --git a/arch/mips/include/asm/mach-ip27/mmzone.h b/arch/mips/include/a=
-sm/mach-ip27/mmzone.h
-index 08c36e50a860..e0a53b97b4a8 100644
---- a/arch/mips/include/asm/mach-ip27/mmzone.h
-+++ b/arch/mips/include/asm/mach-ip27/mmzone.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_MACH_MMZONE_H
- #define _ASM_MACH_MMZONE_H
-=20
-+#include <linux/mmzone.h>
-+
- #include <asm/sn/addrs.h>
- #include <asm/sn/arch.h>
- #include <asm/sn/agent.h>
-diff --git a/arch/mips/include/asm/mach-ip27/topology.h b/arch/mips/include=
-/asm/mach-ip27/topology.h
-index d66cc53feab8..601e350908f7 100644
---- a/arch/mips/include/asm/mach-ip27/topology.h
-+++ b/arch/mips/include/asm/mach-ip27/topology.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_MACH_TOPOLOGY_H
- #define _ASM_MACH_TOPOLOGY_H=091
-=20
-+#include <linux/numa.h>
-+
- #include <asm/sn/types.h>
- #include <asm/mmzone.h>
-=20
-diff --git a/arch/mips/include/asm/sn/addrs.h b/arch/mips/include/asm/sn/ad=
-drs.h
-index 837d23e24976..1d3945ef2ca4 100644
---- a/arch/mips/include/asm/sn/addrs.h
-+++ b/arch/mips/include/asm/sn/addrs.h
-@@ -13,6 +13,7 @@
- #ifndef __ASSEMBLY__
- #include <linux/smp.h>
- #include <linux/types.h>
-+#include <asm/io.h>
- #endif /* !__ASSEMBLY__ */
-=20
- #include <asm/addrspace.h>
---=20
-2.26.0.rc2
+On 08/04/20 12:34, Jiaxun Yang wrote:
+> @@ -275,7 +224,64 @@ static void parsing_done_workfn(struct work_struct *work)
+>  core_initcall(free_raw_capacity);
+>  #endif
+>
+> -#if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
+> +#if defined(CONFIG_OF) && !defined(CONFIG_ARM)
+> +#if defined(CONFIG_COMMON_CLK)
+> +bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
 
+We actually use this for arm:
 
+  arch/arm/kernel/topology.o: In function `init_cpu_topology':
+  topology.c:(.init.text+0xc8): undefined reference to `topology_parse_cpu_capacity'
+
+So that doesn't work. TBH I'd be quite happy to see the ifdef(ARCH) go away
+entirely; it's shame that arm is using some of those names already. I think
+some of that is due to the CPU efficiency faff, if we can't get rid of it /
+align those then perhaps the next best thing is to make some of those
+definitions __weak.
+
+> +{
+> +	struct clk *cpu_clk;
+> +	static bool cap_parsing_failed;
+> +	int ret;
+> +	u32 cpu_capacity;
+> +
+> +	if (cap_parsing_failed)
+> +		return false;
+> +
+> +	ret = of_property_read_u32(cpu_node, "capacity-dmips-mhz",
+> +				   &cpu_capacity);
+> +	if (!ret) {
+> +		if (!raw_capacity) {
+> +			raw_capacity = kcalloc(num_possible_cpus(),
+> +					       sizeof(*raw_capacity),
+> +					       GFP_KERNEL);
+> +			if (!raw_capacity) {
+> +				cap_parsing_failed = true;
+> +				return false;
+> +			}
+> +		}
+> +		raw_capacity[cpu] = cpu_capacity;
+> +		pr_debug("cpu_capacity: %pOF cpu_capacity=%u (raw)\n",
+> +			cpu_node, raw_capacity[cpu]);
+> +
+> +		/*
+> +		 * Update freq_factor for calculating early boot cpu capacities.
+> +		 * For non-clk CPU DVFS mechanism, there's no way to get the
+> +		 * frequency value now, assuming they are running at the same
+> +		 * frequency (by keeping the initial freq_factor value).
+> +		 */
+> +		cpu_clk = of_clk_get(cpu_node, 0);
+> +		if (!PTR_ERR_OR_ZERO(cpu_clk)) {
+> +			per_cpu(freq_factor, cpu) =
+> +				clk_get_rate(cpu_clk) / 1000;
+> +			clk_put(cpu_clk);
+> +		}
+> +	} else {
+> +		if (raw_capacity) {
+> +			pr_err("cpu_capacity: missing %pOF raw capacity\n",
+> +				cpu_node);
+> +			pr_err("cpu_capacity: partial information: fallback to 1024 for all CPUs\n");
+> +		}
+> +		cap_parsing_failed = true;
+> +		free_raw_capacity();
+> +	}
+> +
+> +	return !ret;
+> +}
+> +#else
+> +bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
+> +{
+> +		return false;
+> +}
+> +#endif /* CONFIG_COMMON_CLK */
+>  /*
+>   * This function returns the logic cpu number of the node.
+>   * There are basically three kinds of return values:
