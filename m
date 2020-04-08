@@ -2,35 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD94F1A2000
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Apr 2020 13:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2631A2012
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Apr 2020 13:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728561AbgDHLk2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Apr 2020 07:40:28 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17888 "EHLO
+        id S1728572AbgDHLnh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Apr 2020 07:43:37 -0400
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17840 "EHLO
         sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728495AbgDHLk1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Apr 2020 07:40:27 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1586345893; cv=none; 
+        by vger.kernel.org with ESMTP id S1728506AbgDHLng (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Apr 2020 07:43:36 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1586345939; cv=none; 
         d=zoho.com.cn; s=zohoarc; 
-        b=Efq+gcQEx2H8GOEA7ZDZc25+XeLXL3Woz/M2wraA/a1emfVJmXFdm8QIMVJ02bTub1vN3kZY7OhFJSobxwg9MU1C1OWqT3YoKZmNzBy2IXgUvTILgwySxE+9g/ROFGYhKdqaGixO3bisWX9rVDV0OCM65gOpuhysAY708o4rDtg=
+        b=pPf/pc3k9vjuwDh3UVX8al2oStSaSo6Rs7akY2rznXSXpkV830E+GsikAYsA6oo9r689yqSBtj+b4AnpcNfFDBxheRiGDPT3nnrLVvHIs9QRtXsyb7Q5Pu948mNlWvuVX7T5iHKTECUa5cFceTGsSuHhQvqpqCPaIWILYbmKwcg=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1586345893; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=lgd7A/vb6X/W8mGRRVs75qEfCfZlypVe17eEG7WjjtQ=; 
-        b=phiiC2xxlUbQsIdex4LxON7hhmNBXvWFYLq7Ux6Vdq2jYdpoInoYteZljbanq9fh5WdtDGwgrTkQTaBxSfg8Tz9yx3vcMGFyqVW/Os2Tw3p5ZgiGSub62+2sioRyJSL2vVFaWu2fRE5sRZ8L1X3TkRjivBOfirxozqX4HQjeg3U=
+        t=1586345939; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=+So5B32ryvAjtvrOHDFwVo1iY55d65dAEsJtVoTGv5Q=; 
+        b=Ba2o7RTwLWy5uk8yTbup8yR+cmbVpqlx9hVsJ34b7jX6yucCagtUm43kBIbUp88uvdau2h2HU9NmdWz128QG4vUhUmcEGKjQrcGw2tXziyNYibcd/t8RmXSx6bvVteoXFHRDRkF09wmiFd+mWmmQMGka6aWGnzAkT6KOCVLeDdg=
 ARC-Authentication-Results: i=1; mx.zoho.com.cn;
         dkim=pass  header.i=flygoat.com;
         spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
         dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1586345893;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1586345939;
         s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
         h=From:To:Cc:Message-ID:Subject:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type;
-        bh=lgd7A/vb6X/W8mGRRVs75qEfCfZlypVe17eEG7WjjtQ=;
-        b=IDHJUT/wkvueUgNmyasLLeWZXB6hPcb2zjUOvUgKOZjCX+2AZWljd8Zu4s+F69Xn
-        QmemEuQkGQXe0M2ukIn+YdMWUFNOyEQvBoROE//MGwuFHuzOVwe9xzhwbkblmFzdkmU
-        dNCNQ2K2mGk65bnRAWfCumAuVD2J8uz0zfmW5olg=
+        bh=+So5B32ryvAjtvrOHDFwVo1iY55d65dAEsJtVoTGv5Q=;
+        b=K0DaOXAuXjFvMhmHcm7BcxQVDkPi5ZjFwjhz4Fxtwor2KjS6ZeeoyHMizo7lUQh9
+        ++8jadptvuPjbDE/obpLSuimF9R/KtsvKCrduI62b/YAOMM0sJYzLIPjzF9Qw8AHJ8s
+        FTtJnETJcvqIBl01LNef6XLWN6EpzvhHGxjvIj8g=
 Received: from localhost.localdomain (39.155.141.144 [39.155.141.144]) by mx.zoho.com.cn
-        with SMTPS id 1586345891015636.0638866174513; Wed, 8 Apr 2020 19:38:11 +0800 (CST)
+        with SMTPS id 1586345938193401.8350435087435; Wed, 8 Apr 2020 19:38:58 +0800 (CST)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
@@ -56,7 +56,6 @@ Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Enrico Weigelt <info@metux.net>,
         Kate Stewart <kstewart@linuxfoundation.org>,
         Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
-        Richard Fontana <rfontana@redhat.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Zhou Yanjie <zhouyanjie@zoho.com>,
         =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
@@ -66,15 +65,17 @@ Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Matt Redfearn <matt.redfearn@mips.com>,
         Steve Winslow <swinslow@gmail.com>,
         Alexios Zavras <alexios.zavras@intel.com>,
+        Richard Fontana <rfontana@redhat.com>,
         afzal mohammed <afzal.mohd.ma@gmail.com>,
         Peter Xu <peterx@redhat.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
         Oleksij Rempel <linux@rempel-privat.de>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
         linux-kernel@vger.kernel.org,
         bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net
-Message-ID: <20200408113505.2528103-3-jiaxun.yang@flygoat.com>
-Subject: [PATCH 02/12] MIPS: prom: Add helper to parse CPU node in dt
-Date:   Wed,  8 Apr 2020 19:34:12 +0800
+Message-ID: <20200408113505.2528103-4-jiaxun.yang@flygoat.com>
+Subject: [PATCH 03/12] arch_topology: Make it avilable for MIPS
+Date:   Wed,  8 Apr 2020 19:34:13 +0800
 X-Mailer: git-send-email 2.26.0.rc2
 In-Reply-To: <20200408113505.2528103-1-jiaxun.yang@flygoat.com>
 References: <20200408113505.2528103-1-jiaxun.yang@flygoat.com>
@@ -87,140 +88,178 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Mostly identical with arm one. The only difference is that we allow
-to mark a CPU Node as status =3D "disabled" in dt, which means the core
-is physicaly present, but not possible for the kernel. It will occupy
-a bit in cpumask as well.
+Simply drop unnecessary archtecture limitions and add dummy
+function for platforms without OF/COMMON_CLK support.
+Also exclude functions for arm that existed in platform code.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/include/asm/prom.h |  2 +
- arch/mips/kernel/prom.c      | 96 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 98 insertions(+)
+ drivers/base/arch_topology.c | 121 +++++++++++++++++++----------------
+ 1 file changed, 66 insertions(+), 55 deletions(-)
 
-diff --git a/arch/mips/include/asm/prom.h b/arch/mips/include/asm/prom.h
-index c42e07671934..1ec46e09dc8b 100644
---- a/arch/mips/include/asm/prom.h
-+++ b/arch/mips/include/asm/prom.h
-@@ -19,9 +19,11 @@ struct boot_param_header;
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 4d0a0038b476..9c2405d08dae 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -143,57 +143,6 @@ void topology_normalize_cpu_scale(void)
+ =09}
+ }
 =20
- extern void __dt_setup_arch(void *bph);
- extern int __dt_register_buses(const char *bus0, const char *bus1);
-+extern void mips_dt_init_cpu_maps(void);
+-bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int =
+cpu)
+-{
+-=09struct clk *cpu_clk;
+-=09static bool cap_parsing_failed;
+-=09int ret;
+-=09u32 cpu_capacity;
+-
+-=09if (cap_parsing_failed)
+-=09=09return false;
+-
+-=09ret =3D of_property_read_u32(cpu_node, "capacity-dmips-mhz",
+-=09=09=09=09   &cpu_capacity);
+-=09if (!ret) {
+-=09=09if (!raw_capacity) {
+-=09=09=09raw_capacity =3D kcalloc(num_possible_cpus(),
+-=09=09=09=09=09       sizeof(*raw_capacity),
+-=09=09=09=09=09       GFP_KERNEL);
+-=09=09=09if (!raw_capacity) {
+-=09=09=09=09cap_parsing_failed =3D true;
+-=09=09=09=09return false;
+-=09=09=09}
+-=09=09}
+-=09=09raw_capacity[cpu] =3D cpu_capacity;
+-=09=09pr_debug("cpu_capacity: %pOF cpu_capacity=3D%u (raw)\n",
+-=09=09=09cpu_node, raw_capacity[cpu]);
+-
+-=09=09/*
+-=09=09 * Update freq_factor for calculating early boot cpu capacities.
+-=09=09 * For non-clk CPU DVFS mechanism, there's no way to get the
+-=09=09 * frequency value now, assuming they are running at the same
+-=09=09 * frequency (by keeping the initial freq_factor value).
+-=09=09 */
+-=09=09cpu_clk =3D of_clk_get(cpu_node, 0);
+-=09=09if (!PTR_ERR_OR_ZERO(cpu_clk)) {
+-=09=09=09per_cpu(freq_factor, cpu) =3D
+-=09=09=09=09clk_get_rate(cpu_clk) / 1000;
+-=09=09=09clk_put(cpu_clk);
+-=09=09}
+-=09} else {
+-=09=09if (raw_capacity) {
+-=09=09=09pr_err("cpu_capacity: missing %pOF raw capacity\n",
+-=09=09=09=09cpu_node);
+-=09=09=09pr_err("cpu_capacity: partial information: fallback to 1024 for a=
+ll CPUs\n");
+-=09=09}
+-=09=09cap_parsing_failed =3D true;
+-=09=09free_raw_capacity();
+-=09}
+-
+-=09return !ret;
+-}
+-
+ #ifdef CONFIG_CPU_FREQ
+ static cpumask_var_t cpus_to_visit;
+ static void parsing_done_workfn(struct work_struct *work);
+@@ -275,7 +224,64 @@ static void parsing_done_workfn(struct work_struct *wo=
+rk)
+ core_initcall(free_raw_capacity);
+ #endif
 =20
- #else /* CONFIG_OF */
- static inline void device_tree_init(void) { }
-+static inline void mips_dt_init_cpu_maps(void) { }
- #endif /* CONFIG_OF */
+-#if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
++#if defined(CONFIG_OF) && !defined(CONFIG_ARM)
++#if defined(CONFIG_COMMON_CLK)
++bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int =
+cpu)
++{
++=09struct clk *cpu_clk;
++=09static bool cap_parsing_failed;
++=09int ret;
++=09u32 cpu_capacity;
++
++=09if (cap_parsing_failed)
++=09=09return false;
++
++=09ret =3D of_property_read_u32(cpu_node, "capacity-dmips-mhz",
++=09=09=09=09   &cpu_capacity);
++=09if (!ret) {
++=09=09if (!raw_capacity) {
++=09=09=09raw_capacity =3D kcalloc(num_possible_cpus(),
++=09=09=09=09=09       sizeof(*raw_capacity),
++=09=09=09=09=09       GFP_KERNEL);
++=09=09=09if (!raw_capacity) {
++=09=09=09=09cap_parsing_failed =3D true;
++=09=09=09=09return false;
++=09=09=09}
++=09=09}
++=09=09raw_capacity[cpu] =3D cpu_capacity;
++=09=09pr_debug("cpu_capacity: %pOF cpu_capacity=3D%u (raw)\n",
++=09=09=09cpu_node, raw_capacity[cpu]);
++
++=09=09/*
++=09=09 * Update freq_factor for calculating early boot cpu capacities.
++=09=09 * For non-clk CPU DVFS mechanism, there's no way to get the
++=09=09 * frequency value now, assuming they are running at the same
++=09=09 * frequency (by keeping the initial freq_factor value).
++=09=09 */
++=09=09cpu_clk =3D of_clk_get(cpu_node, 0);
++=09=09if (!PTR_ERR_OR_ZERO(cpu_clk)) {
++=09=09=09per_cpu(freq_factor, cpu) =3D
++=09=09=09=09clk_get_rate(cpu_clk) / 1000;
++=09=09=09clk_put(cpu_clk);
++=09=09}
++=09} else {
++=09=09if (raw_capacity) {
++=09=09=09pr_err("cpu_capacity: missing %pOF raw capacity\n",
++=09=09=09=09cpu_node);
++=09=09=09pr_err("cpu_capacity: partial information: fallback to 1024 for a=
+ll CPUs\n");
++=09=09}
++=09=09cap_parsing_failed =3D true;
++=09=09free_raw_capacity();
++=09}
++
++=09return !ret;
++}
++#else
++bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int =
+cpu)
++{
++=09=09return false;
++}
++#endif /* CONFIG_COMMON_CLK */
+ /*
+  * This function returns the logic cpu number of the node.
+  * There are basically three kinds of return values:
+@@ -461,7 +467,12 @@ static int __init parse_dt_topology(void)
+ =09of_node_put(cn);
+ =09return ret;
+ }
+-#endif
++#else
++static int __init parse_dt_topology(void)
++{
++=09return 0;
++}
++#endif /* CONFIG_OF & !CONFIG_ARM */
 =20
- extern char *mips_get_machine_name(void);
-diff --git a/arch/mips/kernel/prom.c b/arch/mips/kernel/prom.c
-index 9e50dc8df2f6..ebeb22ffa76a 100644
---- a/arch/mips/kernel/prom.c
-+++ b/arch/mips/kernel/prom.c
-@@ -89,4 +89,100 @@ int __init __dt_register_buses(const char *bus0, const =
-char *bus1)
+ /*
+  * cpu topology table
+@@ -562,7 +573,7 @@ __weak int __init parse_acpi_topology(void)
  =09return 0;
  }
 =20
-+void __init mips_dt_init_cpu_maps(void)
-+{
-+=09struct device_node *cpu, *cpus;
-+=09u32 i, j, cpuidx =3D 1;
-+=09u32 cpunum;
-+=09u32 tmp_map[NR_CPUS] =3D { [0 ... NR_CPUS-1] =3D U32_MAX };
-+=09bool cpu_possible[NR_CPUS] =3D { [0 ... NR_CPUS-1] =3D false };
-+=09bool bootcpu_valid =3D false;
-+
-+=09cpus =3D of_find_node_by_path("/cpus");
-+=09if (!cpus)
-+=09=09return;
-+
-+=09if (cpu_has_mips_r2_r6)
-+=09=09cpunum =3D get_ebase_cpunum();
-+=09else
-+=09=09cpunum =3D 0; /* For legacy system we assume boot from CPU 0 */
-+
-+=09for_each_of_cpu_node(cpu) {
-+=09=09u32 hwid;
-+
-+=09=09pr_debug(" * %pOF...\n", cpu);
-+=09=09/*
-+=09=09 * A device tree containing CPU nodes with missing "reg"
-+=09=09 * properties is considered invalid to build the
-+=09=09 * cpu_logical_map.
-+=09=09 */
-+
-+=09=09if (of_property_read_u32(cpu, "reg", &hwid)) {
-+=09=09=09pr_debug(" * %pOF missing reg property\n", cpu);
-+=09=09=09of_node_put(cpu);
-+=09=09=09return;
-+=09=09}
-+
-+=09=09/*
-+=09=09 * Duplicate hwid are a recipe for disaster.
-+=09=09 * Scan all initialized entries and check for
-+=09=09 * duplicates. If any is found just bail out.
-+=09=09 */
-+=09=09for (j =3D 0; j < cpuidx; j++)
-+=09=09=09if (WARN(tmp_map[j] =3D=3D hwid,
-+=09=09=09=09 "Duplicate /cpu reg properties in the DT\n")) {
-+=09=09=09=09of_node_put(cpu);
-+=09=09=09=09return;
-+=09=09=09}
-+
-+=09=09/*
-+=09=09 * Build a stashed array of hwid values. Numbering scheme
-+=09=09 * requires that if detected the boot CPU must be assigned
-+=09=09 * logical id 0. Other CPUs get sequential indexes starting
-+=09=09 * from 1. If a CPU node with a reg property matching the
-+=09=09 * boot CPU hwid is detected, this is recorded so that the
-+=09=09 * logical map built from DT is validated.
-+=09=09 */
-+=09=09if (hwid =3D=3D cpunum) {
-+=09=09=09i =3D 0;
-+=09=09=09if (of_device_is_available(cpu))
-+=09=09=09=09bootcpu_valid =3D true;
-+=09=09} else {
-+=09=09=09i =3D cpuidx++;
-+=09=09}
-+
-+=09=09if (WARN(cpuidx > nr_cpu_ids, "DT /cpu %u nodes greater than "
-+=09=09=09=09=09=09   "max cores %u, capping them\n",
-+=09=09=09=09=09=09   cpuidx, nr_cpu_ids)) {
-+=09=09=09cpuidx =3D nr_cpu_ids;
-+=09=09=09of_node_put(cpu);
-+=09=09=09break;
-+=09=09}
-+
-+=09=09tmp_map[i] =3D hwid;
-+
-+=09=09if (of_device_is_available(cpu))
-+=09=09=09cpu_possible[i] =3D true;
-+=09}
-+
-+=09if (!bootcpu_valid) {
-+=09=09pr_warn("DT missing boot CPU, fall back to default cpu_logical_map\n=
-");
-+=09=09return;
-+=09}
-+
-+=09init_cpu_possible(cpu_none_mask);
-+=09init_cpu_present(cpu_none_mask);
-+
-+=09for (i =3D 0; i < cpuidx; i++) {
-+=09=09set_cpu_possible(i, cpu_possible[i]);
-+=09=09cpu_logical_map(i) =3D tmp_map[i];
-+=09=09pr_debug("cpu logical map 0x%x\n", cpu_logical_map(i));
-+=09}
-+}
-+
-+bool arch_match_cpu_phys_id(int cpu, u64 phys_id)
-+{
-+=09return phys_id =3D=3D cpu_logical_map(cpu);
-+}
-+
- #endif
+-#if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
++#if !defined(CONFIG_ARM)
+ void __init init_cpu_topology(void)
+ {
+ =09reset_cpu_topology();
+@@ -576,4 +587,4 @@ void __init init_cpu_topology(void)
+ =09else if (of_have_populated_dt() && parse_dt_topology())
+ =09=09reset_cpu_topology();
+ }
+-#endif
++#endif /* !CONFIG_ARM */
 --=20
 2.26.0.rc2
 
