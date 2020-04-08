@@ -2,114 +2,151 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A65DB1A1CA3
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Apr 2020 09:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6B01A1FFB
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Apr 2020 13:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbgDHHaI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Apr 2020 03:30:08 -0400
-Received: from sender2-op-o12.zoho.com.cn ([163.53.93.243]:17696 "EHLO
-        sender2-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726689AbgDHHaI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Apr 2020 03:30:08 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1586330965; cv=none; 
+        id S1728497AbgDHLkK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Apr 2020 07:40:10 -0400
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17847 "EHLO
+        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728495AbgDHLkK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Apr 2020 07:40:10 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1586345803; cv=none; 
         d=zoho.com.cn; s=zohoarc; 
-        b=Iycq5DlQ6SOtacyxA7XZxR+thyTuiVVtzIWJLfYi9XnYxwGhquS9MqjNxszhk68P93h2x/7dxVpMgRXoSCcAPgARjQvIXh82P7GdTOu2BxTJaN9dQPyYMjoI92rEi+vW0A/kuUXFpUSKL9VoqJDCNboJlMyN+qX7Hb+L5Xzt08I=
+        b=ktM0p/VLgeyxhuHarSGAHIWGuBytEId+BMh4P/kfdRl1DDvMpQG9ufh6qn2Ec764Y0KU1NUtcSrVSzy6yFmyC0Dzpfswe9POwQILYk46/f8DUskxKQOBoDaFSr/CVhSSN4VJV5/TlXnVkn78CxY93aHnqy6X9DbYh1m7LHIckVI=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1586330965; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=GNVZm3rqhhIk0ti5k0VINiyIi16Ulbzcehh+RXhWBNo=; 
-        b=kFOW50PX46xQnCjo1S9w/CKkkNsmhmFe6T8h68JG7hifzrhUmnQvqDakglihp1+bYTRwUETIsyKh0IoxOxRWGKLlnYOyPig8mUMxpam7t2+657NH+DRAlq90Vc7inTHzN9n2KfFTY5r4Pj61ddypTKfEq2Eoa7D4zAAw3KsyIU8=
+        t=1586345803; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=x1C0J0dW+TFy1A/rQgku1MmxKq3NJPJkkGtqpNKObTQ=; 
+        b=qktwhZsYG7BIHRgBgCH3Ou0bkfmki5IUBj8AXsncoZfT4mp7pyDLpuVo5uPfM78BxZewhsrFHUEIwbla/4yFslxF0GzZjKMl1IVul4BeUB3m2C4xFzC9ZJKEUOpnD+MyUiZ3G0j26jSQ/pGEKck59ZkKYFhH4euxxUEZFOWAS80=
 ARC-Authentication-Results: i=1; mx.zoho.com.cn;
         dkim=pass  header.i=flygoat.com;
         spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
         dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1586330965;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1586345803;
         s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=GNVZm3rqhhIk0ti5k0VINiyIi16Ulbzcehh+RXhWBNo=;
-        b=f3B2OdmvXKAck7Mb/q3crvtDKQsn3TqdDLfCWY1ykXQUh20aHjtdXwLV1za0TCiZ
-        Z0CaBXE+JD68vRly4w2Edx3HMUCpG+d2NiopxKxm91CoVqdsSG8UcENlN3iqq4pGn53
-        zi7KH3G50PelkIl4AWUKhk8gHzg/fJ+KNV4oQbhA=
-Received: from flygoat-x1e (183.156.33.240 [183.156.33.240]) by mx.zoho.com.cn
-        with SMTPS id 1586330963417478.574454780491; Wed, 8 Apr 2020 15:29:23 +0800 (CST)
-Date:   Wed, 8 Apr 2020 15:29:22 +0800
+        h=From:To:Cc:Message-ID:Subject:Date:MIME-Version:Content-Transfer-Encoding:Content-Type;
+        bh=x1C0J0dW+TFy1A/rQgku1MmxKq3NJPJkkGtqpNKObTQ=;
+        b=agrWO9EgVsZuV6M/NtYZPq/9kvBSLCtvE/CY3de3FNVq7T76ifH8N+uAvd7RbwRi
+        jCnrDk/P5JRLRMsYLEw8z4AXTjv57oErOXthP+KZy7JlR6yrpaNjG4z1vqw3FeLe5DM
+        EHeT/F/YwvYWUnaFxVnPdLYHh/dikNdqPW8hX6X4=
+Received: from localhost.localdomain (39.155.141.144 [39.155.141.144]) by mx.zoho.com.cn
+        with SMTPS id 1586345800507759.7747042437669; Wed, 8 Apr 2020 19:36:40 +0800 (CST)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hamish Martin" <Hamish.Martin@alliedtelesis.co.nz>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: Dealing with holes in CPU address space
-Message-ID: <20200408152922.14f90ff3@flygoat-x1e>
-In-Reply-To: <fcb8f2655452f60a7c734e2ce54ac4d47eec7e92.camel@alliedtelesis.co.nz>
-References: <fcb8f2655452f60a7c734e2ce54ac4d47eec7e92.camel@alliedtelesis.co.nz>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+To:     linux-mips@vger.kernel.org
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Robert Richter <rric@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Allison Randal <allison@lohutok.net>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Enrico Weigelt <info@metux.net>,
+        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Zhou Yanjie <zhouyanjie@zoho.com>,
+        =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>, YunQiang Su <syq@debian.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Matt Redfearn <matt.redfearn@mips.com>,
+        Steve Winslow <swinslow@gmail.com>,
+        Richard Fontana <rfontana@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        afzal mohammed <afzal.mohd.ma@gmail.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net
+Message-ID: <20200408113505.2528103-1-jiaxun.yang@flygoat.com>
+Subject: [PATCH 00/12] MIPS: Topology & DeviceTree CPU rework
+Date:   Wed,  8 Apr 2020 19:34:10 +0800
+X-Mailer: git-send-email 2.26.0.rc2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 X-ZohoCNMailClient: External
+Content-Type: text/plain; charset=utf8
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 8 Apr 2020 05:14:22 +0000
-Chris Packham <Chris.Packham@alliedtelesis.co.nz> wrote:
+This set mainly added DeviceTree based CPU probe support and reworked
+topology handling for MIPS. In order to prepare for pure DeviceTree
+boot for Loongson64. It can also convinient Yanjie's Inegnic jz4780/X2000
+SMP/SMT support.
 
-> Hi All,
-> 
-> I'm trying to port an old Broadcom MIPS CPU (BCM53003) to a shiny new
-> kernel. I have some old historic source from a long forgotten Broadcom
-> LDK but I'd prefer to do things the modern way with device-trees.
-> 
-> The problem I've been grappling with is trying to open up access to
-> all of the RAM on the board. It has 512MB of DDR2. The CPU has two
-> areas where this appears. The first 128MB is from 0 to 0x07ffffff the
-> second area is from 0x88000000 to 0x9fffffff.
-> 
-> SoC peripherals are at 0x18000000 and there is an IO window for flash
-> at 0x20000000.
-> 
-> The old code has some custom tlb initialisation to deal with this but
-> I figured it should be possible with the following dts snippet.
-> 
->         memory@0 {
->                 device_type = "memory";
->                 reg = <0x00000000 0x08000000
->                        0x88000000 0x18000000>;
->         };
-> 
-> I end up with only 128MB available. This appears to be
-> because the default HIGHMEM_START of 0x20000000 stops the rest from
-> being made available. If I add an override of HIGHMEM_START to
-> 0xffffffff I seem to have the full 512MB avaiable but then I get a
-> kernel panic
+I've done build test for bmips, nlm, ip27 and boot test for malta with
+34Kf, I6400 in QEMU, Loongson64 on a Loongson-3B1500 real machine.
 
-Hi,
+Thanks.
 
-Have you tried to enable CONFIG_HIGHMEM?
+Jiaxun Yang (12):
+  MIPS: setup: Drop prefill_possible_map
+  MIPS: prom: Add helper to parse CPU node in dt
+  arch_topology: Make it avilable for MIPS
+  arch_topology: Reset all cpus in reset_cpu_topology
+  MIPS: Switch to arch_topology
+  MIPS: Kernel: Switch to new topology interface
+  MIPS: CPS & MT: Switch to new topology interface
+  irqchip: mips-cpu: Switch to new topology interface
+  MIPS: bmips: Switch to new topology interface
+  MIPS: nlm: Switch to new topology interface
+  MIPS: Loongson64: Switch to new topology interface
+  MIPS: ip27: Fix includes
 
-> 
->   CPU 0 Unable to handle kernel paging request at virtual address
-> 1fc00000, epc == 800167b8, ra == 800e2860
-> 
-> 0x1fc00000 is in the range where the SoC peripherals are so I'm
-> thinking that is the problem. But then again that is a virtual address
-> so maybe it's just a co-incidence.
+ arch/mips/Kconfig                             |   1 +
+ arch/mips/include/asm/cpu-info.h              |  49 -------
+ arch/mips/include/asm/mach-ip27/mmzone.h      |   2 +
+ arch/mips/include/asm/mach-ip27/topology.h    |   2 +
+ .../include/asm/mach-loongson64/topology.h    |   2 +
+ arch/mips/include/asm/mips-cm.h               |   9 +-
+ arch/mips/include/asm/mips-cps.h              |   2 +
+ arch/mips/include/asm/prom.h                  |   2 +
+ arch/mips/include/asm/smp-ops.h               |   2 -
+ arch/mips/include/asm/smp.h                   |   2 -
+ arch/mips/include/asm/sn/addrs.h              |   1 +
+ arch/mips/include/asm/topology.h              |  48 ++++++-
+ arch/mips/kernel/cacheinfo.c                  |   5 +-
+ arch/mips/kernel/cpu-probe.c                  |  43 ------
+ arch/mips/kernel/mips-cm.c                    |   4 +-
+ arch/mips/kernel/mips-cpc.c                   |   4 +-
+ arch/mips/kernel/perf_event_mipsxx.c          |   4 +-
+ arch/mips/kernel/pm-cps.c                     |  12 +-
+ arch/mips/kernel/proc.c                       |   8 +-
+ arch/mips/kernel/prom.c                       |  96 ++++++++++++++
+ arch/mips/kernel/setup.c                      |  22 +---
+ arch/mips/kernel/smp-bmips.c                  |   3 +-
+ arch/mips/kernel/smp-cmp.c                    |   5 +-
+ arch/mips/kernel/smp-cps.c                    |  41 +++---
+ arch/mips/kernel/smp-mt.c                     |   3 +-
+ arch/mips/kernel/smp.c                        |  55 +-------
+ arch/mips/kernel/topology.c                   |  42 ++++++
+ arch/mips/loongson64/smp.c                    |  20 +--
+ arch/mips/mm/c-r4k.c                          |   4 +-
+ arch/mips/mm/context.c                        |   4 +-
+ arch/mips/netlogic/common/smp.c               |   4 +-
+ arch/mips/oprofile/op_model_mipsxx.c          |   4 +-
+ drivers/base/arch_topology.c                  | 123 ++++++++++--------
+ drivers/irqchip/irq-mips-cpu.c                |   2 +-
+ 34 files changed, 337 insertions(+), 293 deletions(-)
 
-0x1fc00000 should be the Boot ROM's physical address. Probably you
-forgot to convert it into virtual address in your platform code?
+--=20
+2.26.0.rc2
 
-Check the EPC of exception in vmlinux with addr2line may help. (Don't
-forget to compile your kernel with debuginfo). 
 
-> 
-> Anyway I'd really appreciate any guidance that anyone could provide on
-> this. Even if it's just "go look at this SoC".
-> 
-> Thanks,
-> Chris
-> 
-> 
-
---
-Jiaxun Yang
