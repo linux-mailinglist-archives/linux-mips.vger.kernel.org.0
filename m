@@ -2,178 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2E11A34B3
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 15:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8385E1A34D9
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 15:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726622AbgDINRe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Apr 2020 09:17:34 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17812 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726571AbgDINRd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Apr 2020 09:17:33 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1586438087; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=RuyIp8rmg/o8bHvm1RewjknYSY0fj36DxZCts9+HYJWTFJn9F4l2hdaaW+/qSBOyrAqphjshw1xN9d4i871t645+ifBs3om41236eGQUtUP5j3I2xSlyZG/qgdiiZGphnlWjKCYOl+qkIKWhol/+LpnSzSlwScHPD2b7E5WPatM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1586438087; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=ZvYtj/RbYVsRY5JpcUrg0fhrTDAU/G5r949Bh1IM33A=; 
-        b=R9fenA+w6lWu1hjU2k0NUip4w+diR4Ca2IQJyOiEDmS4eZH9UffgBVN1qkLFYI3OcP3diokgEcFe0CuBmY85UIoZeL2bR/t8w4hrIwjuI1zl/oX5dmD2uuDBCPRdi++SUaI1NbEviBK7qX4DOiDQJSyUcs+hEuCD6u3Cs+ccvSg=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=flygoat.com;
-        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
-        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1586438087;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=ZvYtj/RbYVsRY5JpcUrg0fhrTDAU/G5r949Bh1IM33A=;
-        b=dxHrbbRDsdAAN+mZc+1Mdo6b3Gcvpy7UmqYktPeFWu5dxjbEzyksvZMZVV/V5ou2
-        P7G9b5eZMfYHUsKOUI0IMYNt+Qd4eSfHL9fVEJY257hC3O7cp87pv7es5l5qn5rzkHK
-        mPBw2qXJLY5rF7VFGsI7q4X6eM3SzdvjPw4U3oMY=
-Received: from mail.baihui.com by mx.zoho.com.cn
-        with SMTP id 1586438083624724.6596107766019; Thu, 9 Apr 2020 21:14:43 +0800 (CST)
-Date:   Thu, 09 Apr 2020 21:14:43 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     "Sudeep Holla" <sudeep.holla@arm.com>
-Cc:     "linux-mips" <linux-mips@vger.kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Huacai Chen" <chenhc@lemote.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-        "Jiri Olsa" <jolsa@redhat.com>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Robert Richter" <rric@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Jason Cooper" <jason@lakedaemon.net>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Paul Burton" <paulburton@kernel.org>,
-        "Allison Randal" <allison@lohutok.net>,
-        "Enrico Weigelt" <info@metux.net>,
-        "Kate Stewart" <kstewart@linuxfoundation.org>,
-        "Vladimir Kondratiev" <vladimir.kondratiev@intel.com>,
-        "Richard Fontana" <rfontana@redhat.com>,
-        "Paul Cercueil" <paul@crapouillou.net>,
-        "Zhou Yanjie" <zhouyanjie@zoho.com>
-Message-ID: <1715f141424.c10c8fa43125.4230054954165603443@flygoat.com>
-In-Reply-To: <20200409125310.GA9655@bogus>
-References: <20200408113505.2528103-1-jiaxun.yang@flygoat.com>
- <20200408113505.2528103-6-jiaxun.yang@flygoat.com>
- <20200409103121.GD25948@bogus>
- <C2794910-48A0-4472-953A-13F40BA39423@flygoat.com>
- <20200409105832.GF25948@bogus>
- <20200409190713.3a695115@flygoat-x1e> <20200409125310.GA9655@bogus>
-Subject: Re: [PATCH 05/12] MIPS: Switch to arch_topology
+        id S1726786AbgDIN0l (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Apr 2020 09:26:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48448 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726681AbgDIN0l (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 9 Apr 2020 09:26:41 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 62E882072F;
+        Thu,  9 Apr 2020 13:26:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586438801;
+        bh=cV6hSehyX6lw4Tv9+IglB58tggNYFJ6BalVHwJs8cI8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H9uzvWqkZoza1WwcQy6lLYj+vDp8hvrlgELwPMjzCUzfYJ5JZZHkeINQiHfngaRFe
+         7WOLZlaXP9ZxF2dUO/OHweSokzXySPzG3A+GzKiIDeTCRFX6R5SSdhlywofkdfwzLU
+         IdwaSKjwyHFZtTWRiPWDOJOI9+eAPT6vkZvZF0Jk=
+Date:   Thu, 9 Apr 2020 14:26:34 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        clang-built-linux@googlegroups.com, x86@kernel.org,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Paul Burton <paul.burton@mips.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Andrei Vagin <avagin@openvz.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <Mark.Rutland@arm.com>
+Subject: Re: [PATCH v3 21/26] arm64: Introduce asm/vdso/arch_timer.h
+Message-ID: <20200409132633.GD13078@willie-the-truck>
+References: <20200313154345.56760-1-vincenzo.frascino@arm.com>
+ <20200313154345.56760-22-vincenzo.frascino@arm.com>
+ <20200315183151.GE32205@mbp>
+ <4914ad9c-3eaf-b328-f31b-5d3077ef272f@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Importance: Medium
-User-Agent: ZohoCN Mail
-X-Mailer: ZohoCN Mail
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4914ad9c-3eaf-b328-f31b-5d3077ef272f@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
- ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E5=9B=9B, 2020-04-09 20:53:10 Sudeep Hol=
-la <sudeep.holla@arm.com> =E6=92=B0=E5=86=99 ----
- > On Thu, Apr 09, 2020 at 07:07:13PM +0800, Jiaxun Yang wrote:
- > > On Thu, 9 Apr 2020 11:58:32 +0100
- > > Sudeep Holla <sudeep.holla@arm.com> wrote:
- > >
- > > > On Thu, Apr 09, 2020 at 06:35:21PM +0800, Jiaxun Yang wrote:
- > > > >
- > > > >
- > > > > =E4=BA=8E 2020=E5=B9=B44=E6=9C=889=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=
-=8D=886:31:21, Sudeep Holla
- > > > > <sudeep.holla@arm.com> =E5=86=99=E5=88=B0:
- > > > > >On Wed, Apr 08, 2020 at 07:34:15PM +0800, Jiaxun Yang wrote:
- > > > > >> Previously, MIPS is using self-defined "globalnumber" in struct
- > > > > >> mips_cpuinfo to store topology information. However, it's not
- > > > > >friendly
- > > > > >> to DeviceTree based systems and lack of cpu_capacity related
- > > > > >> feature which can take advantage of multi-cluster system.
- > > > > >>
- > > > > >> Here, we enabled arch_topology for MIPS and adapted some
- > > > > >> functions to fit arch_topology structure.
- > > > > >> Also, we implmented smp_store_cpu_info to probe CPU's topology
- > > > > >information
- > > > > >> by "globalnumber" registers in VP ASE or Ebase.CPUNum for legac=
-y
- > > > > >>
- > > > > >systems.
- > > > > >>
- > > > > >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
- > > > > >> ---
- > > > > >>  arch/mips/Kconfig                |  1 +
- > > > > >>  arch/mips/include/asm/cpu-info.h | 49
- > > > > >> ---------------------------- arch/mips/include/asm/smp.h      |
- > > > > >> 2 -- arch/mips/include/asm/topology.h | 48
- > > > > >> +++++++++++++++++++++++++--- arch/mips/kernel/cpu-probe.c     |
- > > > > >> 43 ------------------------- arch/mips/kernel/setup.c         |
- > > > > >> 1 + arch/mips/kernel/smp.c           | 55
- > > > > >++++----------------------------
- > > > > >>  arch/mips/kernel/topology.c      | 42 ++++++++++++++++++++++++
- > > > > >>  8 files changed, 93 insertions(+), 148 deletions(-)
- > > > > >>
- > > > > >
- > > > > >[...]
- > > > > >
- > > > > >> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.=
-c
- > > > > >> index 8a418783a6bb..b9fefc5dc702 100644
- > > > > >> --- a/arch/mips/kernel/setup.c
- > > > > >> +++ b/arch/mips/kernel/setup.c
- > > > > >> @@ -784,6 +784,7 @@ void __init setup_arch(char **cmdline_p)
- > > > > >>      dmi_setup();
- > > > > >>
- > > > > >>      resource_init();
- > > > > >> +    init_cpu_topology();
- > > > > >>      plat_smp_setup();
- > > > > >>
- > > > > >
- > > > > >Continuing my reply on previous patch, I see possible_cpu_mask
- > > > > >being set up in plat_smp_setup. Why not reverse the order above.
- > > > > >Further I see
- > > > > >that the logical->physical CPU mapping is done in plat_smp_setup
- > > > > >which is required to store/save any topology information.
- > > > >
- > > > > Some plat_smp_setup is touching topology so we must reset before
- > > > > that.
- > > >
- > > > Can you elaborate on this ? What gets overwritten if
- > > > init_cpu_topology is called after plat_smp_setup. I don't see any
- > > > plat_smp_setup setting up sibling masks.
- > >
- > > See arch/mips/kernel/smp-cps.c,
- > > in cps_smp_setup function, it is setting "cpu_data[nvpes + v].core",
- > > "cpu_data[nvpes + v].vpe_id", which is actually sibling thread_id and
- > > core_id after my patch.
- > >
- >=20
- > Sorry, I still don't understand how these relate to cpu_topology in
- > arch_topology.c
+Hi Vincenzo,
 
- cpu_data[nvpes + v].vpe_id  means cpu_topo->thread_id ,=20
-cpu_data[nvpes + v].core means cpu_topo->core_id after my patch.
-Here the topology isn't initialized by DT but being filled in plat_smp_setu=
-p.
+Sorry, I was on holiday when you posted this and it slipped through the
+cracks.
 
-And smp_store_cpu_info won't help as other SMP functions require topology
-information immediately, before the core being brought up.
+On Mon, Mar 16, 2020 at 03:37:23PM +0000, Vincenzo Frascino wrote:
+> > On Fri, Mar 13, 2020 at 03:43:40PM +0000, Vincenzo Frascino wrote:
+> >> The vDSO library should only include the necessary headers required for
+> >> a userspace library (UAPI and a minimal set of kernel headers). To make
+> >> this possible it is necessary to isolate from the kernel headers the
+> >> common parts that are strictly necessary to build the library.
+> >>
+> >> Introduce asm/vdso/arch_timer.h to contain all the arm64 specific
+> >> code. This allows to replace the second isb() in __arch_get_hw_counter()
+> >> with a fake dependent stack read of the counter which improves the vdso
+> >> library peformances of ~4.5%. Below the results of vdsotest [1] ran for
+> >> 100 iterations.
+> > 
+> > The subject seems to imply a non-functional change but as you read, it
+> > gets a lot more complicated. Could you keep the functional change
+> > separate from the header clean-up, maybe submit it as an independent
+> > patch? And it shouldn't go in without Will's ack ;).
+> > 
+> 
+> It is fine by me. I will repost the series with the required fixes and without
+> this patch. This will give to me enough time to address Mark's comments as well
+> and to Will to have a proper look.
 
-Thanks.
+Please can you post whatever is left at -rc1? I'll have a look then, but
+let's stick to just moving code around rather than randomly changing it
+at the same time, ok?
 
->=20
- > --
- > Regards,
- > Sudeep
- >=20
+Thanks,
 
-
---
-Jiaxun Yang
+Will
