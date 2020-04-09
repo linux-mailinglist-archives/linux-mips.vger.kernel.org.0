@@ -2,89 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A33A1A32D7
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 12:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F431A32DD
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 12:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726583AbgDIKxs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Apr 2020 06:53:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36252 "EHLO mail.kernel.org"
+        id S1725972AbgDIK6l (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Apr 2020 06:58:41 -0400
+Received: from foss.arm.com ([217.140.110.172]:48606 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725970AbgDIKxs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 9 Apr 2020 06:53:48 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 29C1320857;
-        Thu,  9 Apr 2020 10:53:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586429628;
-        bh=BZVpag0qQETEDSuxALqBEW3mh5PAYg0YPSQ6u6hT+os=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tTiZNE4MZTrKG51Y9OasNhBTM4o2bQLbPf4Wf7/YAQELzNOT+AZAkgn2K0xhT4IA2
-         HuyI4p0Y0c92dYiCkVqvymJQgjD6EbHBHAoaHwPXk/+7v+O7zifx1qUnqixV55VStn
-         4PNGjE29VSHGt8vR/xAWJjchP4WQ81ol1wBUKig8=
-Date:   Thu, 9 Apr 2020 11:53:46 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mark Salter <msalter@redhat.com>,
-        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Guan Xuetao <gxt@pku.edu.cn>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
+        id S1726536AbgDIK6l (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 9 Apr 2020 06:58:41 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9BFEE31B;
+        Thu,  9 Apr 2020 03:58:41 -0700 (PDT)
+Received: from bogus (unknown [10.37.12.63])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D94D33F73D;
+        Thu,  9 Apr 2020 03:58:35 -0700 (PDT)
+Date:   Thu, 9 Apr 2020 11:58:32 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-c6x-dev@linux-c6x.org,
-        linux-m68k@lists.linux-m68k.org,
-        linux-arm-kernel@lists.infradead.org, linux-sh@vger.kernel.org
-Subject: Re: [PATCH v2 07/10] clk: Allow the common clk framework to be
- selectable
-Message-ID: <20200409105346.GC5399@sirena.org.uk>
-References: <20200409064416.83340-1-sboyd@kernel.org>
- <20200409064416.83340-8-sboyd@kernel.org>
+        Huacai Chen <chenhc@lemote.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Robert Richter <rric@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
+        Richard Fontana <rfontana@redhat.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Zhou Yanjie <zhouyanjie@zoho.com>,
+        =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?=@bogus
+Subject: Re: [PATCH 05/12] MIPS: Switch to arch_topology
+Message-ID: <20200409105832.GF25948@bogus>
+References: <20200408113505.2528103-1-jiaxun.yang@flygoat.com>
+ <20200408113505.2528103-6-jiaxun.yang@flygoat.com>
+ <20200409103121.GD25948@bogus>
+ <C2794910-48A0-4472-953A-13F40BA39423@flygoat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8X7/QrJGcKSMr1RN"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200409064416.83340-8-sboyd@kernel.org>
-X-Cookie: HUGH BEAUMONT died in 1982!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <C2794910-48A0-4472-953A-13F40BA39423@flygoat.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, Apr 09, 2020 at 06:35:21PM +0800, Jiaxun Yang wrote:
+>
+>
+> 于 2020年4月9日 GMT+08:00 下午6:31:21, Sudeep Holla <sudeep.holla@arm.com> 写到:
+> >On Wed, Apr 08, 2020 at 07:34:15PM +0800, Jiaxun Yang wrote:
+> >> Previously, MIPS is using self-defined "globalnumber" in struct
+> >> mips_cpuinfo to store topology information. However, it's not
+> >friendly
+> >> to DeviceTree based systems and lack of cpu_capacity related feature
+> >> which can take advantage of multi-cluster system.
+> >>
+> >> Here, we enabled arch_topology for MIPS and adapted some functions
+> >> to fit arch_topology structure.
+> >> Also, we implmented smp_store_cpu_info to probe CPU's topology
+> >information
+> >> by "globalnumber" registers in VP ASE or Ebase.CPUNum for legacy
+> >systems.
+> >>
+> >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >> ---
+> >>  arch/mips/Kconfig                |  1 +
+> >>  arch/mips/include/asm/cpu-info.h | 49 ----------------------------
+> >>  arch/mips/include/asm/smp.h      |  2 --
+> >>  arch/mips/include/asm/topology.h | 48 +++++++++++++++++++++++++---
+> >>  arch/mips/kernel/cpu-probe.c     | 43 -------------------------
+> >>  arch/mips/kernel/setup.c         |  1 +
+> >>  arch/mips/kernel/smp.c           | 55
+> >++++----------------------------
+> >>  arch/mips/kernel/topology.c      | 42 ++++++++++++++++++++++++
+> >>  8 files changed, 93 insertions(+), 148 deletions(-)
+> >>
+> >
+> >[...]
+> >
+> >> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+> >> index 8a418783a6bb..b9fefc5dc702 100644
+> >> --- a/arch/mips/kernel/setup.c
+> >> +++ b/arch/mips/kernel/setup.c
+> >> @@ -784,6 +784,7 @@ void __init setup_arch(char **cmdline_p)
+> >>  	dmi_setup();
+> >>
+> >>  	resource_init();
+> >> +	init_cpu_topology();
+> >>  	plat_smp_setup();
+> >>
+> >
+> >Continuing my reply on previous patch, I see possible_cpu_mask being
+> >set up in plat_smp_setup. Why not reverse the order above. Further I
+> >see
+> >that the logical->physical CPU mapping is done in plat_smp_setup which
+> >is required to store/save any topology information.
+>
+> Some plat_smp_setup is touching topology so we must reset before that.
+>
 
---8X7/QrJGcKSMr1RN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Can you elaborate on this ? What gets overwritten if init_cpu_topology is
+called after plat_smp_setup. I don't see any plat_smp_setup setting up
+sibling masks.
 
-On Wed, Apr 08, 2020 at 11:44:13PM -0700, Stephen Boyd wrote:
-> Enable build testing and configuration control of the common clk
-> framework so that more code coverage and testing can be done on the
-> common clk framework across various architectures. This also nicely
-> removes the requirement that architectures must select the framework
-> when they don't use it in architecture code.
-
-Reviwed-by: Mark Brown <broonie@kernel.org>
-
---8X7/QrJGcKSMr1RN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6O/rkACgkQJNaLcl1U
-h9C8bAf/SJkvvbTRmpOunw3fAHei1NkJ2RUZ/Ax5l+NwzvC+fSezjkGHKH+2LVOV
-6vTimPH4EKoGc/4RRBVRSrlp20QY/mz4/7+/Ojsrfp9KsWdcH167Zd26sYP3kSy2
-8jxnHBccoWJ8B9p9YVYslrMb0+y1mjnfLOsBioILN1wa6R2vuv7/JXuu1FmaeYLl
-geaZWL7Aw8Knj421ywLqEbg57Zd7M/2ei5gI/plDWIS+UoeuPPPhsUCVkza76DOE
-pyvpA21x2ceFOmCTq0O5O2a/WlM8xwfklNLML6wx3NSS02WWiqnAbMS3sZ9Adk50
-k7m1LMdfWu/q1CQwp58kVOsZJVWZ4g==
-=+bDI
------END PGP SIGNATURE-----
-
---8X7/QrJGcKSMr1RN--
+--
+Regards,
+Sudeep
