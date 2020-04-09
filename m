@@ -2,160 +2,167 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C8B1A2EB4
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 07:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7351A2F4C
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 08:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725765AbgDIFHV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Apr 2020 01:07:21 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17863 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725271AbgDIFHV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Apr 2020 01:07:21 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1586408795; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=axyfKa6+yKpn/MMbVGEDwvxVo+0Xr6DHv6ASYKuSKyqf9F2sOADNOphNhQh+3kJXGEXW02S1Z46vJseXV3QH+IKYduSNqP/ex9n13nPOk1Kx0F1wiqbNz+UQI4evjx6ZqhLwRQk9j4aqxUOuwC+kFRa4dku5TKo/kQWtvNpXP5I=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1586408795; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=oZguYgV4dt6GMip/bfTlUgHicwDP44JSTvTs02Kyom4=; 
-        b=env2q6KeNYdV55Jy1oWWmf4NST8AWqg0c+z++ZShezUK6KIlSrZ/yXFcPOlfZI/Puij+TelHy/mjV0JGUewELfA2PRO0B200SwoPmbc11MCdB26VK7K9QLrP222BhDR7lqlSZNI3oQ07FNjvNFC2J+5e7xcbH6cPgCDTWMIcSOU=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=flygoat.com;
-        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
-        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1586408795;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=oZguYgV4dt6GMip/bfTlUgHicwDP44JSTvTs02Kyom4=;
-        b=KrcB7BQFuykNkEDk4Q17FFxcD5p9im+NmHklrjJgcdhUQwJ56DwSrKjOU8+bhI4V
-        LPDlLQUJWYe8xurWhNLfPCi1zd1yFqF1xM97g1RsvvWgxpZ8kJN4QubL0auAlVet2eC
-        Z4u//YB+e3BbY12XsmKE5TncKWgqQGq1hHANZvdA=
-Received: from flygoat-x1e (122.235.212.87 [122.235.212.87]) by mx.zoho.com.cn
-        with SMTPS id 1586408793441802.0844748222644; Thu, 9 Apr 2020 13:06:33 +0800 (CST)
-Date:   Thu, 9 Apr 2020 13:06:31 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hamish Martin" <Hamish.Martin@alliedtelesis.co.nz>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: Dealing with holes in CPU address space
-Message-ID: <20200409130631.69413b76@flygoat-x1e>
-In-Reply-To: <f5c7a3387dde5667be4fc462838edfaefae31e16.camel@alliedtelesis.co.nz>
-References: <fcb8f2655452f60a7c734e2ce54ac4d47eec7e92.camel@alliedtelesis.co.nz>
-        <20200408152922.14f90ff3@flygoat-x1e>
-        <2e10a19b6608a6c3413b52180c69500aa255a701.camel@alliedtelesis.co.nz>
-        <dd91aa7f-ed7d-44de-6887-ad25c7e4d4ff@gmail.com>
-        <f5c7a3387dde5667be4fc462838edfaefae31e16.camel@alliedtelesis.co.nz>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726052AbgDIGoT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Apr 2020 02:44:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37838 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725283AbgDIGoS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 9 Apr 2020 02:44:18 -0400
+Received: from mail.kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5DD14206F7;
+        Thu,  9 Apr 2020 06:44:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586414658;
+        bh=F/JmU3GTrtOwoY/DqKHIQ/xPGXNoOD3KdlAlsXkovuw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VIFA9hMRljgDWPtZhApOTUcSlKy7rTtE9Mmhq1LB5x7Likj7e2tXJaNJ9W8MXvE9t
+         CZL/0G5QvGLjZRcsREw1PN23JK4jeNSM9qcqHSNxNPdfDbvECcHtH0Wn8jZsGHrqU7
+         saKjrha9GrGBY38FOlE8Xe6y+RCzgknxI8nYenKE=
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Alexander Shiyan <shc_work@mail.ru>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, chenhc@lemote.com,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guan Xuetao <gxt@pku.edu.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-sh@vger.kernel.org, Lubomir Rintel <lkundrak@v3.sk>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Mark Salter <msalter@redhat.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Paul Walmsley <paul@pwsan.com>, Rich Felker <dalias@libc.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thierry Reding <treding@nvidia.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tony Prisk <linux@prisktech.co.nz>,
+        uclinux-h8-devel@lists.sourceforge.jp,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: [PATCH v2 00/10] Allow COMMON_CLK to be selectable
+Date:   Wed,  8 Apr 2020 23:44:06 -0700
+Message-Id: <20200409064416.83340-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.26.0.292.g33ef6b2f38-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ZohoCNMailClient: External
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 9 Apr 2020 04:50:23 +0000
-Chris Packham <Chris.Packham@alliedtelesis.co.nz> wrote:
+This patch series cleans up a handful of selects that were redundant and
+deletes presumably dead code with the goal of making it possible to add
+kunit tests for the CCF in the future. To do that, we introduce a
+"legacy" clk Kconfig option to mark code that hasn't migrated to the
+common clk framework and then make the COMMON_CLK config option visible
+in the menuconfig as long as that legacy option isn't enabled. I've also
+included a couple patches at the end that may be more controversial but
+helped me consolidate all this logic/code.
 
-> On Wed, 2020-04-08 at 21:03 -0700, Florian Fainelli wrote:
-> > 
-> > On 4/8/2020 2:33 PM, Chris Packham wrote:  
-> > > On Wed, 2020-04-08 at 15:29 +0800, Jiaxun Yang wrote:  
-> > > > On Wed, 8 Apr 2020 05:14:22 +0000
-> > > > Chris Packham <Chris.Packham@alliedtelesis.co.nz> wrote:
-> > > >   
-> > > > > Hi All,
-> > > > > 
-> > > > > I'm trying to port an old Broadcom MIPS CPU (BCM53003) to a
-> > > > > shiny
-> > > > > new
-> > > > > kernel. I have some old historic source from a long forgotten
-> > > > > Broadcom
-> > > > > LDK but I'd prefer to do things the modern way with device-
-> > > > > trees.
-> > > > > 
-> > > > > The problem I've been grappling with is trying to open up
-> > > > > access to
-> > > > > all of the RAM on the board. It has 512MB of DDR2. The CPU has
-> > > > > two
-> > > > > areas where this appears. The first 128MB is from 0 to
-> > > > > 0x07ffffff
-> > > > > the
-> > > > > second area is from 0x88000000 to 0x9fffffff.
-> > > > > 
-> > > > > SoC peripherals are at 0x18000000 and there is an IO window
-> > > > > for flash
-> > > > > at 0x20000000.
-> > > > > 
-> > > > > The old code has some custom tlb initialisation to deal with
-> > > > > this
-> > > > > but
-> > > > > I figured it should be possible with the following dts
-> > > > > snippet.
-> > > > > 
-> > > > >         memory@0 {
-> > > > >                 device_type = "memory";
-> > > > >                 reg = <0x00000000 0x08000000
-> > > > >                        0x88000000 0x18000000>;
-> > > > >         };
-> > > > > 
-> > > > > I end up with only 128MB available. This appears to be
-> > > > > because the default HIGHMEM_START of 0x20000000 stops the rest
-> > > > > from
-> > > > > being made available. If I add an override of HIGHMEM_START to
-> > > > > 0xffffffff I seem to have the full 512MB avaiable but then I
-> > > > > get a
-> > > > > kernel panic  
-> > > > 
-> > > > Hi,
-> > > > 
-> > > > Have you tried to enable CONFIG_HIGHMEM?
-> > > >   
-> > > 
-> > > I have but that didn't seem to help. As I understand it HIGHMEM is
-> > > intended for situations when you have more physical RAM that can
-> > > be addressed (e.g. >4GB on a 32-bit system).  
-> > 
-> > On MIPS you may have to enable HIGHMEM as soon as you run out of
-> > virtual
-> > kernel address space to map the entire amount of memory that is
-> > populated AFAICT. The kernel has a little under 1GB of virtual
-> > address
-> > space that can be mapped via the TLB since the first 512MB are
-> > occupied
-> > by KSEG0/1.
-> >   
-> 
-> My adventures thus far with HIGHMEM have got as far as
-> 
->   This processor doesn't support highmem. 2490368k highmem ignored
-> 
-> Which I think has something to do with the max_low_pfn and highend_pfn
-> being different.
-> 
+I haven't done more than compile test a few configs for arm, arm64,
+h8300, and mips. More testing is welcome.
 
-You might have cpu_has_dc_aliases defined.
-HIGHMEM is unsafe on these systems due to Cache Alias issue.
+The plan is that I'll just merge the whole pile through the clk tree. If
+the first five patches or the last three patches are better going
+through another tree like arm-soc or architecture trees that's fine too,
+but there are potential conflicts between trees so maybe it's better to
+just leave it all in one tree.
 
-Here is a comment in mips/kernel/cpu-probe.c:
+Changes from v1:
+ * Fixed MIPS ralink build problem pointed out by Arnd
+ * Fixed meson mx sdio build due to bad Kconfig exposed by this change
+ * Picked up acks
 
-/*
- * Early versions of the 74K do not update the cache tags on a
- * vtag miss/ptag hit which can occur in the case of KSEG0/KUSEG
- * aliases.  In this case it is better to treat the cache as always
- * having aliases.  Also disable the synonym tag update feature
- * where available.  In this case no opportunistic tag update will
- * happen where a load causes a virtual address miss but a physical
- * address hit during a D-cache look-up.
- */
+Stephen Boyd (10):
+  ARM: Remove redundant COMMON_CLK selects
+  ARM: Remove redundant CLKDEV_LOOKUP selects
+  arm64: tegra: Remove redundant CLKDEV_LOOKUP selects
+  h8300: Remove redundant CLKDEV_LOOKUP selects
+  MIPS: Remove redundant CLKDEV_LOOKUP selects
+  mmc: meson-mx-sdio: Depend on OF_ADDRESS and not just OF
+  clk: Allow the common clk framework to be selectable
+  ARM: mmp: Remove legacy clk code
+  MIPS: Loongson64: Drop asm/clock.h include
+  clk: Move HAVE_CLK config out of architecture layer
 
-Probably you system have this kind of issue?
+Cc: Alexander Shiyan <shc_work@mail.ru>
+Cc: "Andreas Färber" <afaerber@suse.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Aurelien Jacquiot <jacquiot.aurelien@gmail.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: <chenhc@lemote.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Guan Xuetao <gxt@pku.edu.cn>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: <linux-arm-kernel@lists.infradead.org>
+Cc: <linux-c6x-dev@linux-c6x.org>
+Cc: <linux-m68k@lists.linux-m68k.org>
+Cc: <linux-mips@vger.kernel.org>
+Cc: <linux-sh@vger.kernel.org>
+Cc: Lubomir Rintel <lkundrak@v3.sk>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Mark Salter <msalter@redhat.com>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Paul Walmsley <paul@pwsan.com>
+Cc: Rich Felker <dalias@libc.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Thierry Reding <treding@nvidia.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Tony Prisk <linux@prisktech.co.nz>
+Cc: uclinux-h8-devel@lists.sourceforge.jp
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
 
-You can determine waysize of D-Cache and set a larger pagesize.
+ arch/Kconfig                     |   6 --
+ arch/arm/Kconfig                 |   5 +-
+ arch/arm/mach-actions/Kconfig    |   1 -
+ arch/arm/mach-clps711x/Kconfig   |   1 -
+ arch/arm/mach-mmp/Kconfig        |   1 -
+ arch/arm/mach-mmp/Makefile       |   6 --
+ arch/arm/mach-mmp/clock-mmp2.c   | 114 -------------------------------
+ arch/arm/mach-mmp/clock-pxa168.c |  94 -------------------------
+ arch/arm/mach-mmp/clock-pxa910.c |  70 -------------------
+ arch/arm/mach-mmp/clock.c        | 105 ----------------------------
+ arch/arm/mach-mmp/clock.h        |  65 ------------------
+ arch/arm/mach-vt8500/Kconfig     |   1 -
+ arch/arm64/Kconfig.platforms     |   1 -
+ arch/c6x/Kconfig                 |   1 +
+ arch/h8300/Kconfig               |   1 -
+ arch/m68k/Kconfig.cpu            |   2 +-
+ arch/mips/Kconfig                |   7 +-
+ arch/mips/loongson2ef/Kconfig    |   2 +-
+ arch/mips/loongson64/smp.c       |   1 -
+ arch/mips/ralink/Kconfig         |   4 ++
+ arch/sh/boards/Kconfig           |   5 ++
+ arch/unicore32/Kconfig           |   2 +-
+ drivers/clk/Kconfig              |  23 +++++--
+ drivers/mmc/host/Kconfig         |   2 +-
+ 24 files changed, 38 insertions(+), 482 deletions(-)
+ delete mode 100644 arch/arm/mach-mmp/clock-mmp2.c
+ delete mode 100644 arch/arm/mach-mmp/clock-pxa168.c
+ delete mode 100644 arch/arm/mach-mmp/clock-pxa910.c
+ delete mode 100644 arch/arm/mach-mmp/clock.c
+ delete mode 100644 arch/arm/mach-mmp/clock.h
 
---
-Jiaxun Yang
+
+base-commit: 7111951b8d4973bda27ff663f2cf18b663d15b48
+-- 
+Sent by a computer, using git, on the internet
 
