@@ -2,108 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E86071A34F8
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 15:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA201A369A
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 17:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726621AbgDINgI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Apr 2020 09:36:08 -0400
-Received: from foss.arm.com ([217.140.110.172]:50244 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726597AbgDINgI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 9 Apr 2020 09:36:08 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD66930E;
-        Thu,  9 Apr 2020 06:36:07 -0700 (PDT)
-Received: from [10.37.8.193] (unknown [10.37.8.193])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B1603F73D;
-        Thu,  9 Apr 2020 06:36:03 -0700 (PDT)
-Subject: Re: [PATCH v3 21/26] arm64: Introduce asm/vdso/arch_timer.h
-To:     Will Deacon <will@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        clang-built-linux@googlegroups.com, x86@kernel.org,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Paul Burton <paul.burton@mips.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Kees Cook <keescook@chromium.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Andrei Vagin <avagin@openvz.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <Mark.Rutland@arm.com>
-References: <20200313154345.56760-1-vincenzo.frascino@arm.com>
- <20200313154345.56760-22-vincenzo.frascino@arm.com>
- <20200315183151.GE32205@mbp> <4914ad9c-3eaf-b328-f31b-5d3077ef272f@arm.com>
- <20200409132633.GD13078@willie-the-truck>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <d578db85-7581-9bbb-2dab-25555e424ceb@arm.com>
-Date:   Thu, 9 Apr 2020 14:36:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728003AbgDIPHt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Apr 2020 11:07:49 -0400
+Received: from eddie.linux-mips.org ([148.251.95.138]:39000 "EHLO
+        cvs.linux-mips.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727736AbgDIPHt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Apr 2020 11:07:49 -0400
+Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
+        with ESMTP id S23994900AbgDIPHqi08Bp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org> + 1 other);
+        Thu, 9 Apr 2020 17:07:46 +0200
+Date:   Thu, 9 Apr 2020 16:07:46 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc:     YunQiang Su <wzssyqa@gmail.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: Re: [PATCH] MIPS: Limit check_bugs32() under CONFIG_32BIT
+In-Reply-To: <20200409150923.5b224361@flygoat-x1e>
+Message-ID: <alpine.LFD.2.21.2004091540450.596385@eddie.linux-mips.org>
+References: <1586401829-22242-1-git-send-email-yangtiezhu@loongson.cn>        <CAKcpw6XywbOs-rh5ko0uz9vLz9nkgrJ0LiRTSkQQaU9dZbg7oQ@mail.gmail.com> <20200409150923.5b224361@flygoat-x1e>
 MIME-Version: 1.0
-In-Reply-To: <20200409132633.GD13078@willie-the-truck>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Will,
+On Thu, 9 Apr 2020, Jiaxun Yang wrote:
 
-On 4/9/20 2:26 PM, Will Deacon wrote:
-> Hi Vincenzo,
+> > > There is no need to build and call check_bugs32() under
+> > > CONFIG_64BIT, just limit it under CONFIG_32BIT.  
+> > 
+> > Since 32bit is subset of 64bit, and due to the code, I think that the
+> > initial purpose
+> > of check_bugs32() is also willing to run even with CONFIG_64BIT.
+> > 
+> > For example, if we have a CPU which is 64bit, and work well on 64bit
+> > mode, while has a bug only on 32bit mode, check_bugs32 should be used
+> > here.
+> > 
+> > Loongson's 3A 1000 is the example, I cannot support FP32 mode well.
 > 
-> Sorry, I was on holiday when you posted this and it slipped through the
-> cracks.
-> 
+> In this case bugs32 only contains a workaround for MIPS34K, which is a
+> MIPS32 processor. It's safe to do so.
 
-No issue at all. Thank you for getting back to me.
+ This is because commit c65a5480ff29 ("[MIPS] Fix potential latency 
+problem due to non-atomic cpu_wait.") moved the other generic workaround 
+elsewhere.
 
-> On Mon, Mar 16, 2020 at 03:37:23PM +0000, Vincenzo Frascino wrote:
->>> On Fri, Mar 13, 2020 at 03:43:40PM +0000, Vincenzo Frascino wrote:
->>>> The vDSO library should only include the necessary headers required for
->>>> a userspace library (UAPI and a minimal set of kernel headers). To make
->>>> this possible it is necessary to isolate from the kernel headers the
->>>> common parts that are strictly necessary to build the library.
->>>>
->>>> Introduce asm/vdso/arch_timer.h to contain all the arm64 specific
->>>> code. This allows to replace the second isb() in __arch_get_hw_counter()
->>>> with a fake dependent stack read of the counter which improves the vdso
->>>> library peformances of ~4.5%. Below the results of vdsotest [1] ran for
->>>> 100 iterations.
->>>
->>> The subject seems to imply a non-functional change but as you read, it
->>> gets a lot more complicated. Could you keep the functional change
->>> separate from the header clean-up, maybe submit it as an independent
->>> patch? And it shouldn't go in without Will's ack ;).
->>>
->>
->> It is fine by me. I will repost the series with the required fixes and without
->> this patch. This will give to me enough time to address Mark's comments as well
->> and to Will to have a proper look.
-> 
-> Please can you post whatever is left at -rc1? I'll have a look then, but
-> let's stick to just moving code around rather than randomly changing it
-> at the same time, ok?
-> 
+ The intent has been since historical commit 450ad16ba0ab ("Get rid of 
+arch/mips64/kernel.  9116 lines of code gone.") that `check_bugs32' is for 
+generic errata affecting both 32-bit and 64-bit operation (e.g. 32-bit 
+instructions, which naturally may occur in both cases) and `check_bugs64' 
+is for errata affecting 64-bit operation only (e.g. 64-bit instructions).
 
-Sure, I will try to re-post it by -rc1 and take on board your comments.
+ But currently it appears we have no generic errata handled, as surely a 
+34K erratum cannot affect 64-bit operation.  So I think such a change 
+makes sense in principle (if a generic erratum appears in the future we 
+can add a third category, which includes workarounds that are always 
+applied), but I think it has to be made in a cleaner way.
 
-> Thanks,
-> 
-> Will
-> 
+ Specifically `check_errata' has to be renamed to `check_errata32', some 
+commentary added as to the intent, and last but not least a proper change 
+description added that not only repeats what the change does (and what 
+everyone sees regardless), but actually justifies why the change is made.  
+Saying: "There is no need[...]" does not tell us *why* there is no need.
 
--- 
-Regards,
-Vincenzo
+> But my suggestion is if you're going to clean-up bugs and workarounds
+> you'd better establish a file for silicon bugs and provide Kconfig
+> options to enable & disable them. Manage bug dependencies by Kconfig
+> will be easier.
+
+ Why is using Kconfig supposed to be better?  Several configurations 
+support multiple processor types (e.g. swappable CPU daugthercards or FPGA 
+soft-cores) and having to list CPU types across platforms as CPUs are 
+added is going to be a maintenance nightmare.  Whereas having workarounds 
+or panics associated with run-time determination of the actual CPU type 
+guarantees they will trigger where necessary.  The use of `init' sections 
+assures the reclaim of memory for use after bootstrap.
+
+ OTOH I agree splitting off errata handling to a separate file may make 
+sense for structural reasons; we have it already for `check_bugs64'.
+
+  Maciej
