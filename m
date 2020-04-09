@@ -2,343 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFDF1A3046
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 09:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D6E1A3160
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 10:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbgDIHgS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Apr 2020 03:36:18 -0400
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.82]:8476 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725972AbgDIHgR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Apr 2020 03:36:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1586417772;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=p/fJO+m4yZtXR50Z5fB9MrtpHpTRjAxw4Da1env8x/c=;
-        b=Vz6JDLynP82xWBRafTHj1vIihXER/Lo73gUejjg75UfQahOcoMKtGw5kL3OUZ6JlEP
-        OzFy2CLXUCnsC5z2rbh3bmt3FrXlnl51sbszLajr7snNZ0gW9W/9F9YDpWxykJ2ODcnG
-        l8b4GHmbYEBLVHTpf6ZJszThyZco8fq1Q4X0Q78KFj7zsDSq60aX+QVpL5SVuU4mit46
-        NuT7E7pys3mIRGbXmUZPpjk6LMGTaTMEyzX5nlMwADbH5hGU7kyOqQe3DizzQnh4RtDD
-        9aPB0NsrnciWsKfy+f3gSODO2w9sDMUZ6UHWMV65KHz6gfXBGSBymnjToNOPwDdcDo/Z
-        x6hQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NMGH/zvwDCoFnA="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-        by smtp.strato.de (RZmta 46.2.1 DYNA|AUTH)
-        with ESMTPSA id m02241w397ZrtOR
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Thu, 9 Apr 2020 09:35:53 +0200 (CEST)
-Subject: Re: [RFC v3 1/8] dt-bindings: display: convert ingenic, lcd.txt to ingenic, lcd.yaml
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: text/plain; charset=us-ascii
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20200409072559.GB12367@ravnborg.org>
-Date:   Thu, 9 Apr 2020 09:35:53 +0200
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Paul Boddie <paul@boddie.org.uk>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
+        id S1726595AbgDII64 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Apr 2020 04:58:56 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:50675 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726536AbgDII6z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Apr 2020 04:58:55 -0400
+Received: from mail-qt1-f178.google.com ([209.85.160.178]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MhDAi-1iqzpE2uFW-00eI3c; Thu, 09 Apr 2020 10:58:54 +0200
+Received: by mail-qt1-f178.google.com with SMTP id g7so2144406qtj.13;
+        Thu, 09 Apr 2020 01:58:54 -0700 (PDT)
+X-Gm-Message-State: AGi0PuZnwcp+Tqdgl47obk3LyDCyWlo4dBmaaM0KkS9BIjsXI+mDHzu3
+        XEwP+Ipc4/ubF7jRNKv0i7K/1IVuQPRS8ER+J7s=
+X-Google-Smtp-Source: APiQypJGQnSKvwEmA3Uxqr21N7C28AlJ4H4USNdYjJ7jBa7oUXIlp/5GQn3RknUCUlZR5y4GP5LLx3U/KPQi69ASHsQ=
+X-Received: by 2002:aed:3b4c:: with SMTP id q12mr10854453qte.18.1586422733282;
+ Thu, 09 Apr 2020 01:58:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200409064416.83340-1-sboyd@kernel.org>
+In-Reply-To: <20200409064416.83340-1-sboyd@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 9 Apr 2020 10:58:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1mOS4bVs+FQNcWPXuAdXpB-rKAuRE-at-Pr0m=43D68g@mail.gmail.com>
+Message-ID: <CAK8P3a1mOS4bVs+FQNcWPXuAdXpB-rKAuRE-at-Pr0m=43D68g@mail.gmail.com>
+Subject: Re: [PATCH v2 00/10] Allow COMMON_CLK to be selectable
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guan Xuetao <gxt@pku.edu.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-c6x-dev@linux-c6x.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Mark Salter <msalter@redhat.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Paul Burton <paulburton@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Paul Walmsley <paul@pwsan.com>, Rich Felker <dalias@libc.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thierry Reding <treding@nvidia.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
-        mips-creator-ci20-dev@googlegroups.com,
-        letux-kernel@openphoenux.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F4F5D267-A538-444B-9DCA-EA87AC798FB3@goldelico.com>
-References: <cover.1585503354.git.hns@goldelico.com> <a75c77fa8528f44832993f9780ae4ea409125a90.1585503354.git.hns@goldelico.com> <20200409072559.GB12367@ravnborg.org>
-To:     Sam Ravnborg <sam@ravnborg.org>
-X-Mailer: Apple Mail (2.3124)
+        Tony Prisk <linux@prisktech.co.nz>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:O1q931hCZ40T0tLkpVu7G+bihKn8ZKa+7Q36I2aOnANCcD9rGPv
+ bNiYtUO1D51Vlkj+7/CjCy8tt3nrbLkCvViBQyHvFelIwFAPWhVlrNhVKKHjGdr9KoTxIlF
+ r67KKVv1oWwEiP5GAlv3JelwY2d3v8nfKlYfEbnhR2yCiAg42IaoG+JqXlsiN2+1/RZ1rE0
+ GY/sQddB5aPnMh3dufYOA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2AqidcnxkcA=:Hgp3RZDeZIgahRHJ/yk7nE
+ Ulqh8jc6o/Z+yMvq7M10nOyZxnr7eip5vdx1DIfSMCTMELWDmZBF0lxuo/QJ8nUGK/29NfnXD
+ B6dIoA072qWvbBqMbk5tNevgw/s2qWs/QhQqdoeSbFP0Xs6TeAsjBF8gcNEKo3bdPhAapgMXF
+ tiBDTacTW3a701mf+Hf/iBvexQ81Ui7JIClEs/xmQfVwVMbur5WlTINhgZ6aXtnt/Qxz617A5
+ Gu25OVYlcy/+wOGROa38MQwR1RZZvpt73ioF9Te5bYZPp4sC038OgxbZeNkPoVMaWb0h1L/q4
+ aLGdyPWfuI7878M6nv6dokLnav68ecWblRGBsJJ1A33KqDYvibuUPSb2rfx0dWDy+flUbbcXB
+ yjUtTz5NCsGhx8Z7A/2ms1FIi7P7EWhY/dZpMjR6JgKVzKzVxq48t0bc1y2tkXA9wV8V2rrqF
+ xwGhxQcAe1u69AvnVWQTMX5dD9JyHgJvdszBeOQTcbIVMPKUrNrXf+UU0cmPxq8PNO0Xpl57V
+ rClHRH0l4oFV2EkyLf8GS/vCfVDJny3RAQ/AOKzP5vxaVsmNH4YagBWKwapsPjgXcbeq14S2u
+ JqxgZ3TD1NmODtlIF4dzEyP+fvgmeagmYPEy4wtLw50777om8U+8ObPsozZcdMOBJzlJW4NY/
+ D88RxxGlgB9nV2tn0QEOEXnJHnlpDDD7ofucFN3mAdp5KPz5g9NZEmh4vsqrk5ZBbbDxXmZkC
+ ebUgF7k8cBaIBjJejSYhrRUuLN+Z4ISdfTNh5VBGy64rJsBNqCf2Uh1Kb62WN8zbGzS4IBdxj
+ 1wjjdT2t6f8d2eOsrSnyIGAnST+ls5XOE4pAXXP7wjCyNPJ4rE=
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Sam,
+On Thu, Apr 9, 2020 at 8:44 AM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> This patch series cleans up a handful of selects that were redundant and
+> deletes presumably dead code with the goal of making it possible to add
+> kunit tests for the CCF in the future. To do that, we introduce a
+> "legacy" clk Kconfig option to mark code that hasn't migrated to the
+> common clk framework and then make the COMMON_CLK config option visible
+> in the menuconfig as long as that legacy option isn't enabled. I've also
+> included a couple patches at the end that may be more controversial but
+> helped me consolidate all this logic/code.
+>
+> I haven't done more than compile test a few configs for arm, arm64,
+> h8300, and mips. More testing is welcome.
+>
+> The plan is that I'll just merge the whole pile through the clk tree. If
+> the first five patches or the last three patches are better going
+> through another tree like arm-soc or architecture trees that's fine too,
+> but there are potential conflicts between trees so maybe it's better to
+> just leave it all in one tree.
+>
+> Changes from v1:
+>  * Fixed MIPS ralink build problem pointed out by Arnd
+>  * Fixed meson mx sdio build due to bad Kconfig exposed by this change
+>  * Picked up acks
 
-> Am 09.04.2020 um 09:25 schrieb Sam Ravnborg <sam@ravnborg.org>:
->=20
-> Hi Nikolaus
->=20
->=20
-> Some comments below that will result in a simplee binding that passes
-> the checks.
-> Thanks for pushing this.
->=20
-> 	Sam
->=20
-> On Sun, Mar 29, 2020 at 07:35:47PM +0200, H. Nikolaus Schaller wrote:
->> and add compatible: jz4780-lcd, including an example how to
->> configure both lcd controllers.
->>=20
->> Also fix the clock names and examples.
->>=20
->> Based on work by Paul Cercueil <paul@crapouillou.net> and
->> Sam Ravnborg <sam@ravnborg.org>
->>=20
->> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->> Cc: Rob Herring <robh@kernel.org>
->> Cc: devicetree@vger.kernel.org
->> ---
->> .../bindings/display/ingenic,lcd.txt          |  45 ------
->> .../bindings/display/ingenic,lcd.yaml         | 128 =
-++++++++++++++++++
->> 2 files changed, 128 insertions(+), 45 deletions(-)
->> delete mode 100644 =
-Documentation/devicetree/bindings/display/ingenic,lcd.txt
->> create mode 100644 =
-Documentation/devicetree/bindings/display/ingenic,lcd.yaml
->>=20
->> diff --git =
-a/Documentation/devicetree/bindings/display/ingenic,lcd.txt =
-b/Documentation/devicetree/bindings/display/ingenic,lcd.txt
->> deleted file mode 100644
->> index 01e3261defb6..000000000000
->> --- a/Documentation/devicetree/bindings/display/ingenic,lcd.txt
->> +++ /dev/null
->> @@ -1,45 +0,0 @@
->> -Ingenic JZ47xx LCD driver
->> -
->> -Required properties:
->> -- compatible: one of:
->> -  * ingenic,jz4740-lcd
->> -  * ingenic,jz4725b-lcd
->> -  * ingenic,jz4770-lcd
->> -- reg: LCD registers location and length
->> -- clocks: LCD pixclock and device clock specifiers.
->> -	   The device clock is only required on the JZ4740.
->> -- clock-names: "lcd_pclk" and "lcd"
->> -- interrupts: Specifies the interrupt line the LCD controller is =
-connected to.
->> -
->> -Example:
->> -
->> -panel {
->> -	compatible =3D "sharp,ls020b1dd01d";
->> -
->> -	backlight =3D <&backlight>;
->> -	power-supply =3D <&vcc>;
->> -
->> -	port {
->> -		panel_input: endpoint {
->> -			remote-endpoint =3D <&panel_output>;
->> -		};
->> -	};
->> -};
->> -
->> -
->> -lcd: lcd-controller@13050000 {
->> -	compatible =3D "ingenic,jz4725b-lcd";
->> -	reg =3D <0x13050000 0x1000>;
->> -
->> -	interrupt-parent =3D <&intc>;
->> -	interrupts =3D <31>;
->> -
->> -	clocks =3D <&cgu JZ4725B_CLK_LCD>;
->> -	clock-names =3D "lcd";
->> -
->> -	port {
->> -		panel_output: endpoint {
->> -			remote-endpoint =3D <&panel_input>;
->> -		};
->> -	};
->> -};
->> diff --git =
-a/Documentation/devicetree/bindings/display/ingenic,lcd.yaml =
-b/Documentation/devicetree/bindings/display/ingenic,lcd.yaml
->> new file mode 100644
->> index 000000000000..8b6467cfc191
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/display/ingenic,lcd.yaml
->> @@ -0,0 +1,128 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/display/ingenic,lcd.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Bindings for Ingenic JZ4780 LCD Controller
->> +
->> +maintainers:
->> +  - Paul Cercueil <paul@crapouillou.net>
->> +
->> +description: |
->> +  LCD Controller is the Display Controller for the Ingenic JZ47xx =
-SoC
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +     - const: ingenic,jz4725b-lcd
->> +     - const: ingenic,jz4740-lcd
->> +     - const: ingenic,jz4770-lcd
->> +     - const: ingenic,jz4780-lcd
->> +
->> +  reg:
->> +    maxItems: 1
->> +    description: LCD registers location and length
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +    description: Specifies the interrupt provided by parent
->> +
->> +  clocks:
->> +    maxItems: 2
->> +    description: Clock specifiers for LCD pixclock and device clock.
->> +      The device clock is only required on the JZ4740 and JZ4780
->> +
->> +  clock-names:
->> +    items:
->> +      - const: lcd
->> +      - const: lcd_pclk
->> +
->> +  port:
->> +    type: object
->> +    description: |
->> +      A port node with endpoint definitions as defined in
->> +      Documentation/devicetree/bindings/media/video-interfaces.txt
->> +
->> +required:
->> +    - compatible
->> +    - reg
->> +    - interrupts
->> +    - clocks
->> +    - clock-names
->> +    - port
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/jz4725b-cgu.h>
->> +
->> +    panel {
->> +      compatible =3D "sharp,ls020b1dd01d";
->> +
->> +      backlight =3D <&backlight>;
->> +      power-supply =3D <&vcc>;
->> +
->> +      port {
->> +        panel_input: endpoint {
->> +          remote-endpoint =3D <&panel_output>;
->> +          };
->> +        };
->> +      };
-> The panel part is not needed - better to drop it.
+Whole series
 
-Well, it is needed to fulfill the remote-endpoint below.
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
->=20
->=20
->> +
->> +    lcd: lcd-controller@13050000 {
->> +      compatible =3D "ingenic,jz4725b-lcd";
->> +      reg =3D <0x13050000 0x1000>;
->> +
->> +      interrupt-parent =3D <&intc>;
->> +      interrupts =3D <31>;
->> +
->> +      clocks =3D <&cgu JZ4725B_CLK_LCD>;
->> +      clock-names =3D "lcd", "lcd_pclk";
->> +
->> +      port {
->> +        panel_output: endpoint {
->> +          remote-endpoint =3D <&panel_input>;
->> +          };
->> +        };
->> +      };
-> We know this example will not pass the check, as there is only
-> one clock specified.
-> I suggest to drop this example.
-> If it later turns out that jz4725b only have one clock,
+I also made a patch to completely remove the private clk implementation
+for mips/loongson2f, but it obviously clashes with your series at the moment.
 
-Paul already reported that it only wants to see one clock.
+I'll send you what I have today and you can decide if you want to
+add it to your series after it gets an Ack from the maintainers, or I'll
+send it separately later.
 
-> then the binding
-> needs to be updated.
-
-Yes, I have that on my to-do list to update the binding to reflect
-this minItems/maxItems thing but I am not yet sure about how
-to handle the clock-names in that case. I.e. make "lcd" optional
-and enforce "lcd_pclk" only.
-
-> But the best guess is that the example is wrong.
->=20
-> The example below for jz4780-lcd cover all relevant parts - so
-> just keep it as the only example.
->=20
->> +
->> +  - |
->> +    #include <dt-bindings/clock/jz4780-cgu.h>
->> +
->> +    lcdc0: lcdc0@13050000 {
-> Name this lcdc
-> And drop "lcdc0@13050000" as this is not relevant for this example.
->=20
-> Remember - the examples exist to explain the binding. They are
-> just examples.
->=20
->> +        compatible =3D "ingenic,jz4780-lcd";
->> +        reg =3D <0x13050000 0x1800>;
->> +
->> +        clocks =3D <&cgu JZ4780_CLK_TVE>, <&cgu =
-JZ4780_CLK_LCD0PIXCLK>;
->> +        clock-names =3D "lcd", "lcd_pclk";
->> +
->> +        interrupt-parent =3D <&intc>;
->> +        interrupts =3D <31>;
->> +
->> +        jz4780_lcd_out: port {
->> +            #address-cells =3D <1>;
->> +            #size-cells =3D <0>;
->> +
->> +            jz4780_out_hdmi: endpoint@0 {
->> +                reg =3D <0>;
->> +                remote-endpoint =3D <&hdmi_in_lcd>;
->> +            };
->> +        };
->> +    };
->> +
->=20
-> And drop this as it does not add anything extra.
-
-Well, it demonstrates how to add a second lcdc which is disabled.
-
-Showing that it is possible to do so is IMHO the most important
-part of the example because it is not at all obvious.
-
-I have also added both SoC to show how differently they can
-and should be.
-
->> +    lcdc1: lcdc1@130a0000 {
->> +        compatible =3D "ingenic,jz4780-lcd";
->> +        reg =3D <0x130a0000 0x1800>;
->> +
->> +        clocks =3D <&cgu JZ4780_CLK_TVE>, <&cgu =
-JZ4780_CLK_LCD1PIXCLK>;
->> +        clock-names =3D "lcd", "lcd_pclk";
->> +
->> +        interrupt-parent =3D <&intc>;
->> +        interrupts =3D <31>;
->> +
->> +        status =3D "disabled";
->> +    };
->=20
-> 	Sam
-
-BR and thanks,
-Nikolaus
-
-
+     Arnd
