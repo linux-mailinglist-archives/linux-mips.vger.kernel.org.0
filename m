@@ -2,202 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FB01A33F8
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 14:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 400DC1A33F9
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 14:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726470AbgDIMVI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Apr 2020 08:21:08 -0400
-Received: from asavdk4.altibox.net ([109.247.116.15]:56972 "EHLO
-        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725971AbgDIMVI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Apr 2020 08:21:08 -0400
-Received: from ravnborg.org (unknown [158.248.194.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by asavdk4.altibox.net (Postfix) with ESMTPS id DA56180539;
-        Thu,  9 Apr 2020 14:21:00 +0200 (CEST)
-Date:   Thu, 9 Apr 2020 14:20:54 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Paul Boddie <paul@boddie.org.uk>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
-        mips-creator-ci20-dev@googlegroups.com,
-        letux-kernel@openphoenux.org
-Subject: Re: [RFC v3 1/8] dt-bindings: display: convert ingenic, lcd.txt to
- ingenic, lcd.yaml
-Message-ID: <20200409122054.GA5683@ravnborg.org>
-References: <cover.1585503354.git.hns@goldelico.com>
- <a75c77fa8528f44832993f9780ae4ea409125a90.1585503354.git.hns@goldelico.com>
- <20200409072559.GB12367@ravnborg.org>
- <F4F5D267-A538-444B-9DCA-EA87AC798FB3@goldelico.com>
+        id S1726477AbgDIMXp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Apr 2020 08:23:45 -0400
+Received: from sender2-op-o12.zoho.com.cn ([163.53.93.243]:17681 "EHLO
+        sender2-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725970AbgDIMXp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Apr 2020 08:23:45 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1586434995; cv=none; 
+        d=zoho.com.cn; s=zohoarc; 
+        b=k6oQV9Ik5cHRdNyA2DKWk00SdMyiZJdLX2yIdQ+kvjAaWoZ1mqD2ESaLQADRY/5qcaNLY/d0gxSnmUMJdXyuyOUQi8V2zhx2tlBalmdgnBca9wnB2UcG/6p4D9h81a/JgEUOHbhTecEr5/F0UIpcf2Tye0wyXxDnIglbQsW2szY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
+        t=1586434995; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=7Gi/U9gbHDr1fJuuMi8qV5B2giMAOVeNAuodGZ/Mn8s=; 
+        b=CEq3G84Cg5MjXdScyRZcbsn04sB7ieypdBiKr1HV3XlXHaTB0TFdpelWAXc/wMS0D3ONXrclhSwuphAaPg6HIaik8DQ1iEdbW7u7m7hQJ5TQuJdlN4TtuGoVIwUqN/k7e22P8iHz7QRjSkCW9o882FfKbStbeKOYB6gN+uLJzzE=
+ARC-Authentication-Results: i=1; mx.zoho.com.cn;
+        dkim=pass  header.i=flygoat.com;
+        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
+        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1586434995;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=7Gi/U9gbHDr1fJuuMi8qV5B2giMAOVeNAuodGZ/Mn8s=;
+        b=Tf6uA9rhjaYTAlNaHzK05z9FI8n+8Urqz043Qu1CtMqpOyZMQVlVitlZ96+HrIt+
+        Q7ntwqFMVO7Yg6l82R6jTAj8rweiTAX/2uMg/SKMJXLaGAGfhnWGoMoYRhjcHyOuF0v
+        9OxN+KhlXJZPXVM/5vvJM1ytVUqYF0jjU6s5uJCc=
+Received: from mail.baihui.com by mx.zoho.com.cn
+        with SMTP id 1586434993193644.1752655984294; Thu, 9 Apr 2020 20:23:13 +0800 (CST)
+Date:   Thu, 09 Apr 2020 20:23:13 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     "Sudeep Holla" <sudeep.holla@arm.com>
+Cc:     "linux-mips" <linux-mips@vger.kernel.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Vladimir Kondratiev" <vladimir.kondratiev@intel.com>,
+        "Richard Fontana" <rfontana@redhat.com>
+Message-ID: <1715ee4ec25.101145f913108.2026113345842851287@flygoat.com>
+In-Reply-To: <20200409105832.GF25948@bogus>
+References: <20200408113505.2528103-1-jiaxun.yang@flygoat.com>
+ <20200408113505.2528103-6-jiaxun.yang@flygoat.com>
+ <20200409103121.GD25948@bogus>
+ <C2794910-48A0-4472-953A-13F40BA39423@flygoat.com> <20200409105832.GF25948@bogus>
+Subject: Re: [PATCH 05/12] MIPS: Switch to arch_topology
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <F4F5D267-A538-444B-9DCA-EA87AC798FB3@goldelico.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=XpTUx2N9 c=1 sm=1 tr=0
-        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
-        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10
-        a=Cwf29u2qlR-08nbE3pUA:9 a=CjuIK1q_8ugA:10
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Importance: Medium
+User-Agent: ZohoCN Mail
+X-Mailer: ZohoCN Mail
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nikolaus.
+ ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E5=9B=9B, 2020-04-09 18:58:32 Sudeep Hol=
+la <sudeep.holla@arm.com> =E6=92=B0=E5=86=99 ----
+ > On Thu, Apr 09, 2020 at 06:35:21PM +0800, Jiaxun Yang wrote:
+ > >
+ > >
+ > > =E4=BA=8E 2020=E5=B9=B44=E6=9C=889=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=
+=886:31:21, Sudeep Holla <sudeep.holla@arm.com> =E5=86=99=E5=88=B0:
+ > > >On Wed, Apr 08, 2020 at 07:34:15PM +0800, Jiaxun Yang wrote:
+ > > >> Previously, MIPS is using self-defined "globalnumber" in struct
+ > > >> mips_cpuinfo to store topology information. However, it's not
+ > > >friendly
+ > > >> to DeviceTree based systems and lack of cpu_capacity related featur=
+e
+ > > >> which can take advantage of multi-cluster system.
+ > > >>
+ > > >> Here, we enabled arch_topology for MIPS and adapted some functions
+ > > >> to fit arch_topology structure.
+ > > >> Also, we implmented smp_store_cpu_info to probe CPU's topology
+ > > >information
+ > > >> by "globalnumber" registers in VP ASE or Ebase.CPUNum for legacy
+ > > >systems.
+ > > >>
+ > > >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+ > > >> ---
+ > > >>  arch/mips/Kconfig                |  1 +
+ > > >>  arch/mips/include/asm/cpu-info.h | 49 ----------------------------
+ > > >>  arch/mips/include/asm/smp.h      |  2 --
+ > > >>  arch/mips/include/asm/topology.h | 48 +++++++++++++++++++++++++---
+ > > >>  arch/mips/kernel/cpu-probe.c     | 43 -------------------------
+ > > >>  arch/mips/kernel/setup.c         |  1 +
+ > > >>  arch/mips/kernel/smp.c           | 55
+ > > >++++----------------------------
+ > > >>  arch/mips/kernel/topology.c      | 42 ++++++++++++++++++++++++
+ > > >>  8 files changed, 93 insertions(+), 148 deletions(-)
+ > > >>
+ > > >
+ > > >[...]
+ > > >
+ > > >> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+ > > >> index 8a418783a6bb..b9fefc5dc702 100644
+ > > >> --- a/arch/mips/kernel/setup.c
+ > > >> +++ b/arch/mips/kernel/setup.c
+ > > >> @@ -784,6 +784,7 @@ void __init setup_arch(char **cmdline_p)
+ > > >>      dmi_setup();
+ > > >>
+ > > >>      resource_init();
+ > > >> +    init_cpu_topology();
+ > > >>      plat_smp_setup();
+ > > >>
+ > > >
+ > > >Continuing my reply on previous patch, I see possible_cpu_mask being
+ > > >set up in plat_smp_setup. Why not reverse the order above. Further I
+ > > >see
+ > > >that the logical->physical CPU mapping is done in plat_smp_setup whic=
+h
+ > > >is required to store/save any topology information.
+ > >
+ > > Some plat_smp_setup is touching topology so we must reset before that.
+ > >
+ >=20
+ > Can you elaborate on this ? What gets overwritten if init_cpu_topology i=
+s
+ > called after plat_smp_setup. I don't see any plat_smp_setup setting up
+ > sibling masks.
 
-> >> +
-> >> +examples:
-> >> +  - |
-> >> +    #include <dt-bindings/clock/jz4725b-cgu.h>
-> >> +
-> >> +    panel {
-> >> +      compatible = "sharp,ls020b1dd01d";
-> >> +
-> >> +      backlight = <&backlight>;
-> >> +      power-supply = <&vcc>;
-> >> +
-> >> +      port {
-> >> +        panel_input: endpoint {
-> >> +          remote-endpoint = <&panel_output>;
-> >> +          };
-> >> +        };
-> >> +      };
-> > The panel part is not needed - better to drop it.
-> 
-> Well, it is needed to fulfill the remote-endpoint below.
+See arch/mips/kernel/smp-cps.c,
+in cps_smp_setup function, it is setting "cpu_data[nvpes + v].core", "cpu_d=
+ata[nvpes + v].vpe_id",
+which is actually sibling thread_id and core_id after my patch.
 
-Examples may have phandle that are not defined.
-So the example will work fine without it.
-See other similar examples.
+Thanks.
 
-> 
-> > 
-> > 
-> >> +
-> >> +    lcd: lcd-controller@13050000 {
-> >> +      compatible = "ingenic,jz4725b-lcd";
-> >> +      reg = <0x13050000 0x1000>;
-> >> +
-> >> +      interrupt-parent = <&intc>;
-> >> +      interrupts = <31>;
-> >> +
-> >> +      clocks = <&cgu JZ4725B_CLK_LCD>;
-> >> +      clock-names = "lcd", "lcd_pclk";
-> >> +
-> >> +      port {
-> >> +        panel_output: endpoint {
-> >> +          remote-endpoint = <&panel_input>;
-> >> +          };
-> >> +        };
-> >> +      };
-> > We know this example will not pass the check, as there is only
-> > one clock specified.
-> > I suggest to drop this example.
-> > If it later turns out that jz4725b only have one clock,
-> 
-> Paul already reported that it only wants to see one clock.
-> 
-> > then the binding
-> > needs to be updated.
-> 
-> Yes, I have that on my to-do list to update the binding to reflect
-> this minItems/maxItems thing but I am not yet sure about how
-> to handle the clock-names in that case. I.e. make "lcd" optional
-> and enforce "lcd_pclk" only.
-Look forward to next version.
-
-> 
-> > But the best guess is that the example is wrong.
-> > 
-> > The example below for jz4780-lcd cover all relevant parts - so
-> > just keep it as the only example.
-> > 
-> >> +
-> >> +  - |
-> >> +    #include <dt-bindings/clock/jz4780-cgu.h>
-> >> +
-> >> +    lcdc0: lcdc0@13050000 {
-> > Name this lcdc
-> > And drop "lcdc0@13050000" as this is not relevant for this example.
-> > 
-> > Remember - the examples exist to explain the binding. They are
-> > just examples.
-> > 
-> >> +        compatible = "ingenic,jz4780-lcd";
-> >> +        reg = <0x13050000 0x1800>;
-> >> +
-> >> +        clocks = <&cgu JZ4780_CLK_TVE>, <&cgu JZ4780_CLK_LCD0PIXCLK>;
-> >> +        clock-names = "lcd", "lcd_pclk";
-> >> +
-> >> +        interrupt-parent = <&intc>;
-> >> +        interrupts = <31>;
-> >> +
-> >> +        jz4780_lcd_out: port {
-> >> +            #address-cells = <1>;
-> >> +            #size-cells = <0>;
-> >> +
-> >> +            jz4780_out_hdmi: endpoint@0 {
-> >> +                reg = <0>;
-> >> +                remote-endpoint = <&hdmi_in_lcd>;
-> >> +            };
-> >> +        };
-> >> +    };
-> >> +
-> > 
-> > And drop this as it does not add anything extra.
-> 
-> Well, it demonstrates how to add a second lcdc which is disabled.
-The purpose of the example is to show an example of the
-binding specified in this file.
-Adding a second disabled lcdc is a general thing, and not
-something we want in all the individual examples.
-
-Also the actual content, for example register values can be
-random as they are not part of the binding.
-This is not a documentation of the HW but a binding example.
-
-	Sam
-
-> 
-> Showing that it is possible to do so is IMHO the most important
-> part of the example because it is not at all obvious.
-> 
-> I have also added both SoC to show how differently they can
-> and should be.
-> 
-> >> +    lcdc1: lcdc1@130a0000 {
-> >> +        compatible = "ingenic,jz4780-lcd";
-> >> +        reg = <0x130a0000 0x1800>;
-> >> +
-> >> +        clocks = <&cgu JZ4780_CLK_TVE>, <&cgu JZ4780_CLK_LCD1PIXCLK>;
-> >> +        clock-names = "lcd", "lcd_pclk";
-> >> +
-> >> +        interrupt-parent = <&intc>;
-> >> +        interrupts = <31>;
-> >> +
-> >> +        status = "disabled";
-> >> +    };
-> > 
-> > 	Sam
-> 
-> BR and thanks,
-> Nikolaus
-> 
+ >=20
+ > --
+ > Regards,
+ > Sudeep
+ >=20
+--
+Jiaxun Yang
