@@ -2,367 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0006A1A3175
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 11:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8381D1A31B2
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Apr 2020 11:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726705AbgDIJCx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Apr 2020 05:02:53 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:47445 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726470AbgDIJCx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Apr 2020 05:02:53 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1N9Mh8-1jGjxi1CFg-015Llz; Thu, 09 Apr 2020 11:02:38 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     sboyd@kernel.org, jiaxun.yang@flygoat.com,
-        linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        chenhc@lemote.com, Paul Burton <paulburton@kernel.org>,
+        id S1726638AbgDIJTl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Apr 2020 05:19:41 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:53486 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726582AbgDIJTk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Apr 2020 05:19:40 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03993Kop054620
+        for <linux-mips@vger.kernel.org>; Thu, 9 Apr 2020 05:19:40 -0400
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3091ymg200-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-mips@vger.kernel.org>; Thu, 09 Apr 2020 05:19:40 -0400
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-mips@vger.kernel.org> from <rppt@linux.ibm.com>;
+        Thu, 9 Apr 2020 10:19:10 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 9 Apr 2020 10:19:01 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0399JRTc48169080
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Apr 2020 09:19:27 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 24E3CA405D;
+        Thu,  9 Apr 2020 09:19:27 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 757FDA404D;
+        Thu,  9 Apr 2020 09:19:24 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.148.207.228])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu,  9 Apr 2020 09:19:24 +0000 (GMT)
+Date:   Thu, 9 Apr 2020 12:19:22 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        mturquette@baylibre.com, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH] mips: loongsoon2ef: remove private clk api
-Date:   Thu,  9 Apr 2020 11:02:28 +0200
-Message-Id: <20200409090228.2241176-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200409064416.83340-1-sboyd@kernel.org>
-References: <20200409064416.83340-1-sboyd@kernel.org>
+        Huacai Chen <chenhc@lemote.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Robert Richter <rric@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Matt Redfearn <matt.redfearn@mips.com>,
+        Steve Winslow <swinslow@gmail.com>,
+        Richard Fontana <rfontana@redhat.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net
+Subject: Re: [PATCH 12/12] MIPS: ip27: Fix includes
+References: <20200408113505.2528103-1-jiaxun.yang@flygoat.com>
+ <20200408130024.2529220-7-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:+262q9UA77aJWFHjKmxZSa0iY5GOcX0ILth/tpOhPziL0YwsuY4
- 8fdhwju4nCRPdhxtQaF8nAF2oJnQs/Jpav/bcbTC/nPZ8fp7eMHtj3LbvnySELs9CC/BmPJ
- lTBfWXbC2tEZqfWDjCxc4SE75hTZY1X2poo/lRh3qg793jq9KkMhGTSSLeK10EyPK15nBFZ
- UzXVp03Etnc0wTa9MIfVA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:X/PMLhjxSe0=:roICuxUE8MhuZKW+fwvAlC
- JvAow4r4MlAl0tFAVvxX5TUUF4owyfDYsQPigU/eELySQjak71KpEx6/leLe6fSIX4dclO2rJ
- Wi0iT1H37SKwO7JXuEbdiL0De/ATGvyAo1K3qmypZ+IxOno00dht8CdaH1nELlWMh42swZMlU
- LdMi1MMoBkUHwTBuQ7Xi9xTbQe+yedPwSYtnYLyG/o7C/W7dygu/ww+vrKxlm/Sz+1WrgPaJk
- yknzx2vt0GLkWHFvhxlLMdTzt7uFyR8KtkGTAOz1ij4N1ikEageT1aMBvxz3aiSUef2KCA5ae
- PrNKwW8yvySzsBpHOC96iAj9yk58r8QuetPo/fmjOHiVCMrs588lkNPnk5WOlWwXfilGU9ktE
- nARDtpRvovXf92Yu06bN8wLykcUHr/eDyezGQOHRu8fb5tlCQaJHZYNJ7rZUd6s1j5nJGGDv1
- 7w68L8qcG4+bEW3MfJUrY7AwAcu4flmaWdzW3Ou1JLCxZOVTKU/Ja6W4arwiCobgaFIgHG7qs
- JvUQZEb63sPppPuGpoVX/xzt9ObvL240onMVBTd7tWJnl51GGEZiYmniBR7JtZzCu4hibuXbC
- H3EhCD9rS10XAeJiF8Jn22aOU9K0Er/jBspTR5NL2GxyhecXpuwekyhMRk13bYqdu4bnibvWE
- FbSkB18ViZfxkkWQFmzQdvq8ivgHIPev7MhZjwVl5Ov2NCx+HRWQFAGMhNLcFQbrhF9znb7mU
- tigmkvgon9cqDXxBl2nhrQuTozWxHvWtgEg9a3wY2FNo/wL9d+nM7Y5c5nJrWtCO0/36XsnSL
- 5td0e+gqBIYCDbUmOMCjsgmA5DKfFOV38ZMb3d477X6cxkkLxA=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200408130024.2529220-7-jiaxun.yang@flygoat.com>
+X-TM-AS-GCONF: 00
+x-cbid: 20040909-0016-0000-0000-000003014CE8
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20040909-0017-0000-0000-000033653176
+Message-Id: <20200409091922.GA17293@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-09_03:2020-04-07,2020-04-09 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ clxscore=1015 mlxscore=0 suspectscore=1 bulkscore=0 adultscore=0
+ phishscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=398
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004090070
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-As platforms are moving to COMMON_CLK in general, loongson2ef
-stuck out as something that has a private implementation but
-does not actually use it except for setting the frequency of
-the CPU itself from the loongson2_cpufreq driver.
+On Wed, Apr 08, 2020 at 08:59:54PM +0800, Jiaxun Yang wrote:
+> Somehow changes in topology messed up headers.
+> So just add necessary headers to make it compile again.
 
-Change that driver to call the register setting function directly
-and remove the rest of the stub implementation.
+Please avoid aftermath build fixes because it breaks bisection.
+Each commit should be buildable, so this changes should go into the patches
+that actually require them.
+ 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  arch/mips/include/asm/mach-ip27/mmzone.h   | 2 ++
+>  arch/mips/include/asm/mach-ip27/topology.h | 2 ++
+>  arch/mips/include/asm/sn/addrs.h           | 1 +
+>  3 files changed, 5 insertions(+)
+> 
+> diff --git a/arch/mips/include/asm/mach-ip27/mmzone.h b/arch/mips/include/asm/mach-ip27/mmzone.h
+> index 08c36e50a860..e0a53b97b4a8 100644
+> --- a/arch/mips/include/asm/mach-ip27/mmzone.h
+> +++ b/arch/mips/include/asm/mach-ip27/mmzone.h
+> @@ -2,6 +2,8 @@
+>  #ifndef _ASM_MACH_MMZONE_H
+>  #define _ASM_MACH_MMZONE_H
+>  
+> +#include <linux/mmzone.h>
+> +
+>  #include <asm/sn/addrs.h>
+>  #include <asm/sn/arch.h>
+>  #include <asm/sn/agent.h>
+> diff --git a/arch/mips/include/asm/mach-ip27/topology.h b/arch/mips/include/asm/mach-ip27/topology.h
+> index d66cc53feab8..601e350908f7 100644
+> --- a/arch/mips/include/asm/mach-ip27/topology.h
+> +++ b/arch/mips/include/asm/mach-ip27/topology.h
+> @@ -2,6 +2,8 @@
+>  #ifndef _ASM_MACH_TOPOLOGY_H
+>  #define _ASM_MACH_TOPOLOGY_H	1
+>  
+> +#include <linux/numa.h>
+> +
+>  #include <asm/sn/types.h>
+>  #include <asm/mmzone.h>
+>  
+> diff --git a/arch/mips/include/asm/sn/addrs.h b/arch/mips/include/asm/sn/addrs.h
+> index 837d23e24976..1d3945ef2ca4 100644
+> --- a/arch/mips/include/asm/sn/addrs.h
+> +++ b/arch/mips/include/asm/sn/addrs.h
+> @@ -13,6 +13,7 @@
+>  #ifndef __ASSEMBLY__
+>  #include <linux/smp.h>
+>  #include <linux/types.h>
+> +#include <asm/io.h>
+>  #endif /* !__ASSEMBLY__ */
+>  
+>  #include <asm/addrspace.h>
+> -- 
+> 2.26.0.rc2
+> 
+> 
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/mips/include/asm/clock.h                 | 49 ----------
- .../include/asm/mach-loongson2ef/loongson.h   |  1 +
- arch/mips/loongson2ef/Kconfig                 |  1 -
- arch/mips/loongson2ef/lemote-2f/clock.c       | 98 +------------------
- arch/mips/loongson64/smp.c                    |  1 -
- drivers/cpufreq/loongson2_cpufreq.c           | 22 +----
- 6 files changed, 8 insertions(+), 164 deletions(-)
- delete mode 100644 arch/mips/include/asm/clock.h
-
-diff --git a/arch/mips/include/asm/clock.h b/arch/mips/include/asm/clock.h
-deleted file mode 100644
-index 5a8f96ebe5fa..000000000000
---- a/arch/mips/include/asm/clock.h
-+++ /dev/null
-@@ -1,49 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __ASM_MIPS_CLOCK_H
--#define __ASM_MIPS_CLOCK_H
--
--#include <linux/kref.h>
--#include <linux/list.h>
--#include <linux/seq_file.h>
--#include <linux/clk.h>
--
--struct clk;
--
--struct clk_ops {
--	void (*init) (struct clk *clk);
--	void (*enable) (struct clk *clk);
--	void (*disable) (struct clk *clk);
--	void (*recalc) (struct clk *clk);
--	int (*set_rate) (struct clk *clk, unsigned long rate, int algo_id);
--	long (*round_rate) (struct clk *clk, unsigned long rate);
--};
--
--struct clk {
--	struct list_head node;
--	const char *name;
--	int id;
--	struct module *owner;
--
--	struct clk *parent;
--	struct clk_ops *ops;
--
--	struct kref kref;
--
--	unsigned long rate;
--	unsigned long flags;
--};
--
--#define CLK_ALWAYS_ENABLED	(1 << 0)
--#define CLK_RATE_PROPAGATES	(1 << 1)
--
--int clk_init(void);
--
--int __clk_enable(struct clk *);
--void __clk_disable(struct clk *);
--
--void clk_recalc_rate(struct clk *);
--
--int clk_register(struct clk *);
--void clk_unregister(struct clk *);
--
--#endif				/* __ASM_MIPS_CLOCK_H */
-diff --git a/arch/mips/include/asm/mach-loongson2ef/loongson.h b/arch/mips/include/asm/mach-loongson2ef/loongson.h
-index 5008af0a1a19..57e571128489 100644
---- a/arch/mips/include/asm/mach-loongson2ef/loongson.h
-+++ b/arch/mips/include/asm/mach-loongson2ef/loongson.h
-@@ -244,6 +244,7 @@ static inline void do_perfcnt_IRQ(void)
- #ifdef CONFIG_CPU_SUPPORTS_CPUFREQ
- #include <linux/cpufreq.h>
- extern struct cpufreq_frequency_table loongson2_clockmod_table[];
-+extern int loongson2_cpu_set_rate(unsigned long rate_khz);
- #endif
- 
- /*
-diff --git a/arch/mips/loongson2ef/Kconfig b/arch/mips/loongson2ef/Kconfig
-index 595dd48e1e4d..96dc6eba4310 100644
---- a/arch/mips/loongson2ef/Kconfig
-+++ b/arch/mips/loongson2ef/Kconfig
-@@ -46,7 +46,6 @@ config LEMOTE_MACH2F
- 	select CSRC_R4K if ! MIPS_EXTERNAL_TIMER
- 	select DMA_NONCOHERENT
- 	select GENERIC_ISA_DMA_SUPPORT_BROKEN
--	select HAVE_CLK
- 	select FORCE_PCI
- 	select I8259
- 	select IRQ_MIPS_CPU
-diff --git a/arch/mips/loongson2ef/lemote-2f/clock.c b/arch/mips/loongson2ef/lemote-2f/clock.c
-index 414f282c8ab5..850b6b9f8f15 100644
---- a/arch/mips/loongson2ef/lemote-2f/clock.c
-+++ b/arch/mips/loongson2ef/lemote-2f/clock.c
-@@ -6,22 +6,12 @@
-  * License.  See the file "COPYING" in the main directory of this archive
-  * for more details.
-  */
--#include <linux/clk.h>
- #include <linux/cpufreq.h>
- #include <linux/errno.h>
- #include <linux/export.h>
--#include <linux/list.h>
--#include <linux/mutex.h>
--#include <linux/spinlock.h>
- 
--#include <asm/clock.h>
- #include <asm/mach-loongson2ef/loongson.h>
- 
--static LIST_HEAD(clock_list);
--static DEFINE_SPINLOCK(clock_lock);
--static DEFINE_MUTEX(clock_list_sem);
--
--/* Minimum CLK support */
- enum {
- 	DC_ZERO, DC_25PT = 2, DC_37PT, DC_50PT, DC_62PT, DC_75PT,
- 	DC_87PT, DC_DISABLE, DC_RESV
-@@ -41,103 +31,21 @@ struct cpufreq_frequency_table loongson2_clockmod_table[] = {
- };
- EXPORT_SYMBOL_GPL(loongson2_clockmod_table);
- 
--static struct clk cpu_clk = {
--	.name = "cpu_clk",
--	.flags = CLK_ALWAYS_ENABLED | CLK_RATE_PROPAGATES,
--	.rate = 800000000,
--};
--
--struct clk *clk_get(struct device *dev, const char *id)
--{
--	return &cpu_clk;
--}
--EXPORT_SYMBOL(clk_get);
--
--static void propagate_rate(struct clk *clk)
--{
--	struct clk *clkp;
--
--	list_for_each_entry(clkp, &clock_list, node) {
--		if (likely(clkp->parent != clk))
--			continue;
--		if (likely(clkp->ops && clkp->ops->recalc))
--			clkp->ops->recalc(clkp);
--		if (unlikely(clkp->flags & CLK_RATE_PROPAGATES))
--			propagate_rate(clkp);
--	}
--}
--
--int clk_enable(struct clk *clk)
--{
--	return 0;
--}
--EXPORT_SYMBOL(clk_enable);
--
--void clk_disable(struct clk *clk)
-+int loongson2_cpu_set_rate(unsigned long rate_khz)
- {
--}
--EXPORT_SYMBOL(clk_disable);
--
--unsigned long clk_get_rate(struct clk *clk)
--{
--	if (!clk)
--		return 0;
--
--	return (unsigned long)clk->rate;
--}
--EXPORT_SYMBOL(clk_get_rate);
--
--void clk_put(struct clk *clk)
--{
--}
--EXPORT_SYMBOL(clk_put);
--
--int clk_set_rate(struct clk *clk, unsigned long rate)
--{
--	unsigned int rate_khz = rate / 1000;
- 	struct cpufreq_frequency_table *pos;
--	int ret = 0;
- 	int regval;
- 
--	if (likely(clk->ops && clk->ops->set_rate)) {
--		unsigned long flags;
--
--		spin_lock_irqsave(&clock_lock, flags);
--		ret = clk->ops->set_rate(clk, rate, 0);
--		spin_unlock_irqrestore(&clock_lock, flags);
--	}
--
--	if (unlikely(clk->flags & CLK_RATE_PROPAGATES))
--		propagate_rate(clk);
--
- 	cpufreq_for_each_valid_entry(pos, loongson2_clockmod_table)
- 		if (rate_khz == pos->frequency)
- 			break;
- 	if (rate_khz != pos->frequency)
- 		return -ENOTSUPP;
- 
--	clk->rate = rate;
--
- 	regval = readl(LOONGSON_CHIPCFG);
- 	regval = (regval & ~0x7) | (pos->driver_data - 1);
- 	writel(regval, LOONGSON_CHIPCFG);
- 
--	return ret;
--}
--EXPORT_SYMBOL_GPL(clk_set_rate);
--
--long clk_round_rate(struct clk *clk, unsigned long rate)
--{
--	if (likely(clk->ops && clk->ops->round_rate)) {
--		unsigned long flags, rounded;
--
--		spin_lock_irqsave(&clock_lock, flags);
--		rounded = clk->ops->round_rate(clk, rate);
--		spin_unlock_irqrestore(&clock_lock, flags);
--
--		return rounded;
--	}
--
--	return rate;
-+	return 0;
- }
--EXPORT_SYMBOL_GPL(clk_round_rate);
-+EXPORT_SYMBOL_GPL(loongson2_cpu_set_rate);
-diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
-index e1fe8bbb377d..e744e1bee49e 100644
---- a/arch/mips/loongson64/smp.c
-+++ b/arch/mips/loongson64/smp.c
-@@ -15,7 +15,6 @@
- #include <linux/kexec.h>
- #include <asm/processor.h>
- #include <asm/time.h>
--#include <asm/clock.h>
- #include <asm/tlbflush.h>
- #include <asm/cacheflush.h>
- #include <loongson.h>
-diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
-index 909f40fbcde2..d05e761d9572 100644
---- a/drivers/cpufreq/loongson2_cpufreq.c
-+++ b/drivers/cpufreq/loongson2_cpufreq.c
-@@ -20,7 +20,6 @@
- #include <linux/delay.h>
- #include <linux/platform_device.h>
- 
--#include <asm/clock.h>
- #include <asm/idle.h>
- 
- #include <asm/mach-loongson2ef/loongson.h>
-@@ -58,29 +57,20 @@ static int loongson2_cpufreq_target(struct cpufreq_policy *policy,
- 	     loongson2_clockmod_table[index].driver_data) / 8;
- 
- 	/* setting the cpu frequency */
--	clk_set_rate(policy->clk, freq * 1000);
-+	loongson2_cpu_set_rate(freq);
- 
- 	return 0;
- }
- 
- static int loongson2_cpufreq_cpu_init(struct cpufreq_policy *policy)
- {
--	struct clk *cpuclk;
- 	int i;
- 	unsigned long rate;
- 	int ret;
- 
--	cpuclk = clk_get(NULL, "cpu_clk");
--	if (IS_ERR(cpuclk)) {
--		pr_err("couldn't get CPU clk\n");
--		return PTR_ERR(cpuclk);
--	}
--
- 	rate = cpu_clock_freq / 1000;
--	if (!rate) {
--		clk_put(cpuclk);
-+	if (!rate)
- 		return -EINVAL;
--	}
- 
- 	/* clock table init */
- 	for (i = 2;
-@@ -88,20 +78,16 @@ static int loongson2_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	     i++)
- 		loongson2_clockmod_table[i].frequency = (rate * i) / 8;
- 
--	ret = clk_set_rate(cpuclk, rate * 1000);
--	if (ret) {
--		clk_put(cpuclk);
-+	ret = loongson2_cpu_set_rate(rate);
-+	if (ret)
- 		return ret;
--	}
- 
--	policy->clk = cpuclk;
- 	cpufreq_generic_init(policy, &loongson2_clockmod_table[0], 0);
- 	return 0;
- }
- 
- static int loongson2_cpufreq_exit(struct cpufreq_policy *policy)
- {
--	clk_put(policy->clk);
- 	return 0;
- }
- 
 -- 
-2.26.0
+Sincerely yours,
+Mike.
 
