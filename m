@@ -2,183 +2,223 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEC11A493A
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Apr 2020 19:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC6F1A4B5A
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Apr 2020 22:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726671AbgDJRiR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Apr 2020 13:38:17 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:38419 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726177AbgDJRiR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Apr 2020 13:38:17 -0400
-Received: by mail-oi1-f194.google.com with SMTP id w2so1969304oic.5;
-        Fri, 10 Apr 2020 10:38:15 -0700 (PDT)
+        id S1726654AbgDJUpl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Apr 2020 16:45:41 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:45346 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726646AbgDJUpl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Apr 2020 16:45:41 -0400
+Received: by mail-pl1-f196.google.com with SMTP id t4so1006501plq.12
+        for <linux-mips@vger.kernel.org>; Fri, 10 Apr 2020 13:45:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iij7zgytwGd4FsiXK28RwDWIfgaOYgN4ssh5i9GAVys=;
+        b=iIXb8hrVUdblD8Qt9cfCbOMlx7kiRGdihRYhXdGg/tymxxmG3+EhB8U9nNGGPkuY+H
+         +ifeOuvnFBH9TuzI16pZ6VmLe2Z45tOXmGIHdBUWfAAm6rszOQnwIi7qbWKvXAY6slVq
+         +g+dUftt0GmYEgBflilHq/894shvDcwD3244A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xMUIst4uwZNit/kezR50BEXwVLAD+7IMlqqlt2PZF4M=;
-        b=MwN06PBL/Zz+t7pQqPpKtwGRhwv0uLVp6kWSeLkTUWLmw/YSEClMMAkk/0rMo5TLmv
-         fwcEo8nSrl/yW1Ra35tB+Qx48Cpl3z8rrY9CHpTiZf9ed0ZQqgyLnUvt31oLWhzB4Hfy
-         ErErJHK5ocFhbRhFaJWSykerVd1H31RyOC6PMMafzOGRl2Kzw65+xf3zwMPrV3r278tr
-         /oPJ+ox2bY1yXvGeqwG7rirZLfI+mvESXlvb5QZ5kOSJbNLxyhaaEQTGmld14MGG/ARe
-         VilhMp/GeVxz9DSiquYqkgmCFZ0aVxHKwE5k+LSoLErU8gJr9fNXh8HV6qBS8IvtvijZ
-         xQFw==
-X-Gm-Message-State: AGi0Pua0W++e08jKEEoo2WlJLxqz+oERP+omUjTabVkfoekaMFEt9kHa
-        f7IO+ZR6vhiAsPOWfWoFaouQ36M=
-X-Google-Smtp-Source: APiQypJwusuEqgU1CYkOWOgcrzLL32tqNKeweZKcGAtisZ1kThdf4338Sn41hKMfM5QqP5/sISiZCg==
-X-Received: by 2002:aca:891:: with SMTP id 139mr4109648oii.137.1586540295214;
-        Fri, 10 Apr 2020 10:38:15 -0700 (PDT)
-Received: from rob-hp-laptop (ip-99-203-29-27.pools.cgn.spcsdns.net. [99.203.29.27])
-        by smtp.gmail.com with ESMTPSA id 89sm1469196otj.66.2020.04.10.10.38.07
+         :mime-version:content-disposition:in-reply-to;
+        bh=iij7zgytwGd4FsiXK28RwDWIfgaOYgN4ssh5i9GAVys=;
+        b=N2wq/ZdRBcoZ3N+CfhxSD8AHDF1iyFhP722AXZ+CJ9mM7nBqrc3kab3zLlAMMX2TtZ
+         44j2prMFP2ykBl6jyEGSqYfTO6Jx6PZRg2amUEaWlbDSuntLm9RyGvgboLLdmJg549kQ
+         w82kSKK5Z6v27BniVM4R8DUQRqzb954pCRYNMbZ/HaTnjXhl33TwhWzzr1uQUL2cE/px
+         TK3T0JZhkX3oFlhH9ltpKQn3qQb5gmgnHNGuV98MDgUblphD27XdBenOzXvHXIIaQIuE
+         qZN4AYpOJjgIlTlRuZKRiakWIxsWtglgxcIUqldGPmijS2Z4OcxGR53Dkb12ulXbDoFt
+         U8lQ==
+X-Gm-Message-State: AGi0PuZHeMeBCKf2QGeygxlA0FUCYvtppxUHALLlO8zonLON+qUzVyQS
+        gA6r0FuMmXo5zddhKUEPXrjJZw==
+X-Google-Smtp-Source: APiQypJoR3ChpIJlC+sDlXkEJrcf0eDJfm7xKW5c3isC/P4tJPJJS3fU5BEECvtKOi4KnIcLHNCB3w==
+X-Received: by 2002:a17:90b:8c4:: with SMTP id ds4mr7707878pjb.44.1586551540896;
+        Fri, 10 Apr 2020 13:45:40 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 80sm2302307pgb.45.2020.04.10.13.45.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Apr 2020 10:38:14 -0700 (PDT)
-Received: (nullmailer pid 12197 invoked by uid 1000);
-        Fri, 10 Apr 2020 16:52:01 -0000
-Date:   Fri, 10 Apr 2020 11:52:01 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Mark Rutland <mark.rutland@arm.com>,
-        =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
+        Fri, 10 Apr 2020 13:45:40 -0700 (PDT)
+Date:   Fri, 10 Apr 2020 13:45:39 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, macro@linux-mips.org,
+        Fangrui Song <maskray@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>,
-        Philipp Rossak <embed3d@gmail.com>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        OpenPVRSGX Linux Driver Group <openpvrsgx-devgroup@letux.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v5 1/8] dt-bindings: add img,pvrsgx.yaml for Imagination
- GPUs
-Message-ID: <20200410165201.GA9521@bogus>
-References: <cover.1585503505.git.hns@goldelico.com>
- <000359713a45bb1a1adc0b609e4e659aedf99e6c.1585503505.git.hns@goldelico.com>
- <0E273453-861D-45A2-8FA4-D5EC4B78F490@goldelico.com>
+        Borislav Petkov <bp@suse.de>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: Re: [PATCH v3] MIPS: Truncate link address into 32bit for 32bit
+ kernel
+Message-ID: <202004101334.A641706F0@keescook>
+References: <20200407080611.859256-1-jiaxun.yang@flygoat.com>
+ <20200410090634.3513101-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0E273453-861D-45A2-8FA4-D5EC4B78F490@goldelico.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200410090634.3513101-1-jiaxun.yang@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 07, 2020 at 09:00:48AM +0200, H. Nikolaus Schaller wrote:
+On Fri, Apr 10, 2020 at 05:06:23PM +0800, Jiaxun Yang wrote:
+> LLD failed to link vmlinux with 64bit load address for 32bit ELF
+> while bfd will strip 64bit address into 32bit silently.
+> To fix LLD build, we should truncate load address provided by platform
+> into 32bit for 32bit kernel.
 > 
-> > Am 29.03.2020 um 19:38 schrieb H. Nikolaus Schaller <hns@goldelico.com>:
-> > 
-> > The Imagination PVR/SGX GPU is part of several SoC from
-> > multiple vendors, e.g. TI OMAP, Ingenic JZ4780, Intel Poulsbo,
-> > Allwinner A83 and others.
-> > 
-> > With this binding, we describe how the SGX processor is
-> > interfaced to the SoC (registers, interrupt etc.).
-> > 
-> > In most cases, Clock, Reset and power management is handled
-> > by a parent node or elsewhere (e.g. code in the driver).
-> > 
-> > Tested by make dt_binding_check dtbs_check
-> > 
-> > Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> > ---
-> > .../devicetree/bindings/gpu/img,pvrsgx.yaml   | 109 ++++++++++++++++++
-> > 1 file changed, 109 insertions(+)
-> > create mode 100644 Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml b/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
-> > new file mode 100644
-> > index 000000000000..aadfb2d9b012
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
-> > @@ -0,0 +1,109 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/gpu/img,pvrsgx.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Imagination PVR/SGX GPU
-> > +
-> > +maintainers:
-> > +  - H. Nikolaus Schaller <hns@goldelico.com>
-> > +
-> > +description: |+
-> > +  This binding describes the Imagination SGX5 series of 3D accelerators which
-> > +  are found in several different SoC like TI OMAP, Sitara, Ingenic JZ4780,
-> > +  Allwinner A83, and Intel Poulsbo and CedarView and more.
-> > +
-> > +  For an extensive list see: https://en.wikipedia.org/wiki/PowerVR#Implementations
-> > +
-> > +  The SGX node is usually a child node of some DT node belonging to the SoC
-> > +  which handles clocks, reset and general address space mapping of the SGX
-> > +  register area.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - description: SGX530-121 based SoC
-> > +        items:
-> > +          - enum:
-> > +            - ti,omap3-sgx530-121 # BeagleBoard A/B/C, OpenPandora 600MHz and similar
-> > +          - const: img,sgx530-121
-> > +          - const: img,sgx530
-> > +
-> > +      - description: SGX530-125 based SoC
-> > +        items:
-> > +          - enum:
-> > +            - ti,am3352-sgx530-125 # BeagleBone Black
-> > +            - ti,am3517-sgx530-125
-> > +            - ti,am4-sgx530-125
-> > +            - ti,omap3-sgx530-125 # BeagleBoard XM, GTA04, OpenPandora 1GHz and similar
-> > +            - ti,ti81xx-sgx530-125
-> > +          - const: ti,omap3-sgx530-125
-> > +          - const: img,sgx530-125
-> > +          - const: img,sgx530
-> > +
-> > +      - description: SGX535-116 based SoC
-> > +        items:
-> > +          - const: intel,poulsbo-gma500-sgx535 # Atom Z5xx
-> > +          - const: img,sgx535-116
-> > +          - const: img,sgx535
-> > +
-> > +      - description: SGX540-116 based SoC
-> > +        items:
-> > +          - const: intel,medfield-gma-sgx540 # Atom Z24xx
-> > +          - const: img,sgx540-116
-> > +          - const: img,sgx540
-> > +
-> > +      - description: SGX540-120 based SoC
-> > +        items:
-> > +          - enum:
-> > +            - ingenic,jz4780-sgx540-120 # CI20
-> > +            - ti,omap4-sgx540-120 # Pandaboard, Pandaboard ES and similar
-> > +          - const: img,sgx540-120
-> > +          - const: img,sgx540
-> > +
-> > +      - description: SGX544-112 based SoC
-> > +        items:
-> > +          - const: ti,omap4-sgx544-112
-> > +          - const: img,sgx544-112
-> > +          - const: img,sgx544
-> > +
-> > +      - description: SGX544-116 based SoC
-> > +        items:
-> > +          - enum:
-> > +            - allwinner,sun8i-a83t-sgx544-116 # Banana-Pi-M3 (Allwinner A83T) and similar
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Reviewed-by: Fangrui Song <maskray@google.com>
+> Tested-by: Nathan Chancellor <natechancellor@gmail.com>
 > 
-> Philipp Rossak reported on a different list [1] that the a83t tells to have a sgx544-115 inside.
+> --
+> V2: Take MaskRay's shell magic.
 > 
-> So it needs a separate entry.
+> V3: After spent an hour on dealing with special character issue in
+> Makefile, I gave up to do shell hacks and write a util in C instead.
+> Thanks Maciej for pointing out Makefile variable problem.
+> ---
+>  arch/mips/Makefile             |  2 ++
+>  arch/mips/kernel/Makefile      | 11 ++++++++++-
+>  arch/mips/kernel/vmlinux.lds.S |  2 +-
+>  arch/mips/tools/.gitignore     |  1 +
+>  arch/mips/tools/Makefile       |  5 +++++
+>  arch/mips/tools/truncate32.c   | 29 +++++++++++++++++++++++++++++
+>  6 files changed, 48 insertions(+), 2 deletions(-)
+>  create mode 100644 arch/mips/tools/truncate32.c
+> 
+> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+> index e1c44aed8156..633e9de4d262 100644
+> --- a/arch/mips/Makefile
+> +++ b/arch/mips/Makefile
+> @@ -14,6 +14,7 @@
+>  
+>  archscripts: scripts_basic
+>  	$(Q)$(MAKE) $(build)=arch/mips/tools elf-entry
+> +	$(Q)$(MAKE) $(build)=arch/mips/tools truncate32
+>  ifeq ($(CONFIG_CPU_LOONGSON3_WORKAROUNDS),y)
+>  	$(Q)$(MAKE) $(build)=arch/mips/tools loongson3-llsc-check
+>  endif
+> @@ -261,6 +262,7 @@ include arch/mips/Kbuild.platforms
+>  ifdef CONFIG_PHYSICAL_START
+>  load-y					= $(CONFIG_PHYSICAL_START)
+>  endif
+> +export VMLINUX_LOAD_ADDRESS		:= $(load-y)
+>  
+>  entry-y				= $(shell $(objtree)/arch/mips/tools/elf-entry vmlinux)
+>  cflags-y			+= -I$(srctree)/arch/mips/include/asm/mach-generic
+> diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
+> index d6e97df51cfb..0178f7085317 100644
+> --- a/arch/mips/kernel/Makefile
+> +++ b/arch/mips/kernel/Makefile
+> @@ -112,4 +112,13 @@ obj-$(CONFIG_MIPS_CPC)		+= mips-cpc.o
+>  obj-$(CONFIG_CPU_PM)		+= pm.o
+>  obj-$(CONFIG_MIPS_CPS_PM)	+= pm-cps.o
+>  
+> -CPPFLAGS_vmlinux.lds		:= $(KBUILD_CFLAGS)
+> +# When linking a 32-bit executable the LLVM linker cannot cope with a
+> +# 32-bit load address that has been sign-extended to 64 bits.  Simply
+> +# remove the upper 32 bits then, as it is safe to do so with other
+> +# linkers.
+> +ifdef CONFIG_64BIT
+> +	load-ld			= $(VMLINUX_LOAD_ADDRESS)
+> +else
+> +	load-ld			= $(shell $(objtree)/arch/mips/tools/truncate32 $(VMLINUX_LOAD_ADDRESS))
 
-Okay, it looks fine otherwise.
+This is major overkill. Just use the Makefile's builtin text
+manipulation:
 
-Rob
+load-ld = $(subst 0xffffffff,0x,$(VMLINUX_LOAD_ADDRESS))
+
+And note that a shell failure here would be entirely ignored, so the use
+of die() in the proposed helper wouldn't actually stop a build, etc.
+
+> +endif
+> +CPPFLAGS_vmlinux.lds		:= $(KBUILD_CFLAGS) -DVMLINUX_LINK_ADDRESS=$(load-ld)
+> diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux.lds.S
+> index a5f00ec73ea6..5226cd8e4bee 100644
+> --- a/arch/mips/kernel/vmlinux.lds.S
+> +++ b/arch/mips/kernel/vmlinux.lds.S
+> @@ -55,7 +55,7 @@ SECTIONS
+>  	/* . = 0xa800000000300000; */
+>  	. = 0xffffffff80300000;
+>  #endif
+> -	. = VMLINUX_LOAD_ADDRESS;
+> +	. = VMLINUX_LINK_ADDRESS;
+>  	/* read-only */
+>  	_text = .;	/* Text and read-only data */
+>  	.text : {
+> diff --git a/arch/mips/tools/.gitignore b/arch/mips/tools/.gitignore
+> index 794817dfb389..58ead412c8d3 100644
+> --- a/arch/mips/tools/.gitignore
+> +++ b/arch/mips/tools/.gitignore
+> @@ -1,3 +1,4 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  elf-entry
+>  loongson3-llsc-check
+> +truncate32
+> diff --git a/arch/mips/tools/Makefile b/arch/mips/tools/Makefile
+> index b851e5dcc65a..69debb18bbb4 100644
+> --- a/arch/mips/tools/Makefile
+> +++ b/arch/mips/tools/Makefile
+> @@ -8,3 +8,8 @@ hostprogs += loongson3-llsc-check
+>  PHONY += loongson3-llsc-check
+>  loongson3-llsc-check: $(obj)/loongson3-llsc-check
+>  	@:
+> +
+> +hostprogs += truncate32
+> +PHONY += truncate32
+
+Isn't the special variable named ".PHONY"? (And also is that only for
+things the don't get written to disk, but truncate32 is...)
+
+> +truncate32: $(obj)/truncate32
+> +	@:
+> diff --git a/arch/mips/tools/truncate32.c b/arch/mips/tools/truncate32.c
+> new file mode 100644
+> index 000000000000..82c19b4c32da
+> --- /dev/null
+> +++ b/arch/mips/tools/truncate32.c
+> @@ -0,0 +1,29 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <stdint.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +
+> +__attribute__((noreturn))
+> +static void die(const char *msg)
+> +{
+> +	fputs(msg, stderr);
+> +	exit(EXIT_FAILURE);
+> +}
+> +
+> +int main(int argc, const char *argv[])
+> +{
+> +	unsigned long long val;
+> +
+> +	if (argc != 2)
+> +		die("Usage: truncate32 <address>\n");
+> +
+> +	val = strtoull(argv[1], NULL, 0);
+> +
+> +	if ((val & 0xffffffff00000000) != 0xffffffff00000000)
+> +		die("Invalid input\n");
+> +
+> +	val = val & 0xffffffff;
+> +	printf("0x%08llx\n", val);
+> +
+> +	return EXIT_SUCCESS;
+> +}
+> -- 
+> 2.26.0.rc2
+> 
+
+-- 
+Kees Cook
