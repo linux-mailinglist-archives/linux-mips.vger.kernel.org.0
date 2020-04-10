@@ -2,428 +2,208 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1D01A4247
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Apr 2020 07:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6BF1A43A3
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Apr 2020 10:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726009AbgDJFh2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Apr 2020 01:37:28 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:35849 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725710AbgDJFh2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Apr 2020 01:37:28 -0400
-Received: by mail-pl1-f194.google.com with SMTP id g2so349196plo.3
-        for <linux-mips@vger.kernel.org>; Thu, 09 Apr 2020 22:37:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=WM2Wyny9F6+jS/R2p8EAvShH5/a1oR5X0j92hk3ekh8=;
-        b=CbRXJEXf+7aDM938QKGvV718LDl9H+QQx33kCKWMO2YJbgvigWIlj5xkIgqm7RanLu
-         my/BjJtVUDrufYW3oNB7w+vZTr9wLiehSmeP7AePnfwufpyj+Fp2CsH0iTEZsFe6kp8p
-         vvccHltkprDTyG7ZSHvgqI9IiMbjVW9SqOFdDt64WCSU0RSqb1FbvSzu1x4JdFOmvCI6
-         YloXmFp6U7C7x+YGL1T26C7Kp17lRc0RiV7nglOis1fGQutmu3kqYTh1vuo5QHCG8oU5
-         uJj9v7tlIfzo6Gh0GA6P+vc70epSddUIY9yNIfL9L08/MeUbeha13rNlGh8ODr80zz4e
-         R+pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=WM2Wyny9F6+jS/R2p8EAvShH5/a1oR5X0j92hk3ekh8=;
-        b=E7BPW/yz/8fhjxke5Dm0ZavxTXVSsD8bU2l4B3ECv2D9f9bbBKBFvJ0Gwk9Yc9yGA2
-         mvVoMne6elLHtucLHeYaVZIeYxS4h7/AlfNjB82tkRDEBcRFkODXNvGi6abWIvhREn8E
-         6RgnfF4N8s/HpdnfEMHyz++kDBeJP/UNbtciDcErl7SeKVRqQwjb3hPrHk/lGroqg+Ou
-         mfxiBhAG0vcI0gizCdIsaEbVlR686/Pky/1khUJhCqdgjSYtOsB3CbOsa17nvSM1+Wlr
-         tQHW7DnwGYC4yvkF46s4oH7Mx3HrpvCuGlhn1bS0ZSty/njAIvmwQQALUZOlvkkOXawT
-         bzFA==
-X-Gm-Message-State: AGi0PubFD11whIyPvsBVn6cXrLSHJNOQe0k+9Q5GPEzAyF09H2AZIxSS
-        NsDTHOs4/aU+MuuJah5UMrM=
-X-Google-Smtp-Source: APiQypLODRWmc+70y7OmLSH/W2hjLoM7IxNKFQbw0OdJrBhQLVIn25Ty7rfa7UI374qjMHykpLTEtA==
-X-Received: by 2002:a17:902:ff01:: with SMTP id f1mr291299plj.256.1586497047659;
-        Thu, 09 Apr 2020 22:37:27 -0700 (PDT)
-Received: from software.domain.org ([104.207.149.93])
-        by smtp.gmail.com with ESMTPSA id c126sm780398pfb.83.2020.04.09.22.37.20
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 Apr 2020 22:37:27 -0700 (PDT)
-From:   Huacai Chen <chenhc@lemote.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Pei Huang <huangpei@loongson.cn>,
-        Shuangshuang Zhang <zhangshuangshuang@loongson.cn>
-Subject: [PATCH 3/3] MIPS: Loongson-3: Add some unaligned instructions emulation
-Date:   Fri, 10 Apr 2020 13:44:00 +0800
-Message-Id: <1586497440-25621-3-git-send-email-chenhc@lemote.com>
-X-Mailer: git-send-email 2.7.0
-In-Reply-To: <1586497440-25621-1-git-send-email-chenhc@lemote.com>
-References: <1586497440-25621-1-git-send-email-chenhc@lemote.com>
+        id S1726080AbgDJIma (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Apr 2020 04:42:30 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:54496 "EHLO
+        vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725858AbgDJIma (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Apr 2020 04:42:30 -0400
+X-Greylist: delayed 379 seconds by postgrey-1.27 at vger.kernel.org; Fri, 10 Apr 2020 04:42:30 EDT
+Received: from flygoat-x1e (unknown [IPv6:240e:390:499:a20::d68])
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 26A9F2022B;
+        Fri, 10 Apr 2020 08:36:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
+        t=1586507771; bh=0pgFuS6hYGazgfoGgXda4UZJLUuB0sacJswLmnmRtd8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=szLRbkR91sIV3aJsYTHGrKj797pe2U+qLc4H0X0mMgiiM4K+wnMuEibbc33zdNCjj
+         Z6sSYW+hbPxqYt5WhV41fSkx5xe5oCqb+k1duEO16E1fa/jqxLSMp0tgE8fMjhKgu0
+         T42oAPfcQPPVy+ZOF/GzNJcz77ouKk9SDRNHYRsqxopLFqH5S0JDPKDJNfQ8G/Pg7X
+         KXc0kNgRI7TnrICkl2uylVgk7GCqsuf47KyRshb2dZ5VcyHRC41qrG9O+QteikVA7p
+         M5rrTtm0fxUWI4YDvRU3a+bKs/olJqsb2R/kQjQaunZkL4JpPIE8HRZBZkS9IVRVjw
+         aQB3O0DIvVPkQ==
+Date:   Fri, 10 Apr 2020 16:36:03 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>
+Subject: Re: [PATCH v2] MIPS: Limit check_bugs32() to affected platform
+Message-ID: <20200410163603.22cc8b93@flygoat-x1e>
+In-Reply-To: <1586488859-18715-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1586488859-18715-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-1, Add unaligned gslq, gssq, gslqc1, gssqc1 emulation;
-2, Add unaligned gsl{h, w, d}x, gss{h, w, d}x emulation;
-3, Add unaligned gslwxc1, gsswxc1, gsldxc1, gssdxc1 emulation.
+On Fri, 10 Apr 2020 11:20:59 +0800
+Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 
-Signed-off-by: Pei Huang <huangpei@loongson.cn>
-Signed-off-by: Shuangshuang Zhang <zhangshuangshuang@loongson.cn>
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
----
- arch/mips/include/uapi/asm/inst.h |  26 ++++
- arch/mips/loongson64/cop2-ex.c    | 274 +++++++++++++++++++++++++++++++++++++-
- 2 files changed, 299 insertions(+), 1 deletion(-)
+> In the current code, check_bugs32() only handles MIPS32 CPU type
+> CPU_34K, it is better to build and call it on the affected platform.
+> 
+> Move check_bugs32() to the new added 34k-bugs32.c to indicate the
+> fact that the code is specific to the 34k CPU, and also add
+> CONFIG_CPU_34K_BUGS32 to control whether or not check the bugs.
+> 
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-diff --git a/arch/mips/include/uapi/asm/inst.h b/arch/mips/include/uapi/asm/inst.h
-index eaa3a80..98f97c8 100644
---- a/arch/mips/include/uapi/asm/inst.h
-+++ b/arch/mips/include/uapi/asm/inst.h
-@@ -989,6 +989,30 @@ struct mm16_r5_format {		/* Load/store from stack pointer format */
- };
- 
- /*
-+ * Loongson-3 overridden COP2 instruction formats (32-bit length)
-+ */
-+struct loongson3_lswc2_format {	/* Loongson-3 overridden lwc2/swc2 Load/Store format */
-+	__BITFIELD_FIELD(unsigned int opcode : 6,
-+	__BITFIELD_FIELD(unsigned int base : 5,
-+	__BITFIELD_FIELD(unsigned int rt : 5,
-+	__BITFIELD_FIELD(unsigned int fr : 1,
-+	__BITFIELD_FIELD(unsigned int offset : 9,
-+	__BITFIELD_FIELD(unsigned int ls : 1,
-+	__BITFIELD_FIELD(unsigned int rq : 5,
-+	;)))))))
-+};
-+
-+struct loongson3_lsdc2_format {	/* Loongson-3 overridden ldc2/sdc2 Load/Store format */
-+	__BITFIELD_FIELD(unsigned int opcode : 6,
-+	__BITFIELD_FIELD(unsigned int base : 5,
-+	__BITFIELD_FIELD(unsigned int rt : 5,
-+	__BITFIELD_FIELD(unsigned int index : 5,
-+	__BITFIELD_FIELD(unsigned int offset : 8,
-+	__BITFIELD_FIELD(unsigned int opcode1 : 3,
-+	;))))))
-+};
-+
-+/*
-  * MIPS16e instruction formats (16-bit length)
-  */
- struct m16e_rr {
-@@ -1088,6 +1112,8 @@ union mips_instruction {
- 	struct mm16_rb_format mm16_rb_format;
- 	struct mm16_r3_format mm16_r3_format;
- 	struct mm16_r5_format mm16_r5_format;
-+	struct loongson3_lswc2_format loongson3_lswc2_format;
-+	struct loongson3_lsdc2_format loongson3_lsdc2_format;
- };
- 
- union mips16e_instruction {
-diff --git a/arch/mips/loongson64/cop2-ex.c b/arch/mips/loongson64/cop2-ex.c
-index 9efdfe4..2269dc5 100644
---- a/arch/mips/loongson64/cop2-ex.c
-+++ b/arch/mips/loongson64/cop2-ex.c
-@@ -14,17 +14,29 @@
- #include <linux/sched.h>
- #include <linux/notifier.h>
- #include <linux/ptrace.h>
-+#include <linux/uaccess.h>
-+#include <linux/sched/signal.h>
- 
- #include <asm/fpu.h>
- #include <asm/cop2.h>
-+#include <asm/inst.h>
-+#include <asm/branch.h>
- #include <asm/current.h>
- #include <asm/mipsregs.h>
- 
- static int loongson_cu2_call(struct notifier_block *nfb, unsigned long action,
- 	void *data)
- {
--	int fpu_owned;
-+	unsigned int res, fpu_owned;
-+	unsigned long ra, value, value_next;
-+	union mips_instruction insn;
- 	int fr = !test_thread_flag(TIF_32BIT_FPREGS);
-+	struct pt_regs *regs = (struct pt_regs *)data;
-+	void __user *addr = (void __user *)regs->cp0_badvaddr;
-+	unsigned int __user *pc = (unsigned int __user *)exception_epc(regs);
-+
-+	ra = regs->regs[31];
-+	__get_user(insn.word, pc);
- 
- 	switch (action) {
- 	case CU2_EXCEPTION:
-@@ -49,9 +61,269 @@ static int loongson_cu2_call(struct notifier_block *nfb, unsigned long action,
- 		preempt_enable();
- 
- 		return NOTIFY_STOP;	/* Don't call default notifier */
-+
-+	case CU2_LWC2_OP:
-+		if(insn.loongson3_lswc2_format.ls == 0)
-+			goto sigbus;
-+
-+		if (insn.loongson3_lswc2_format.fr == 0) {	/* gslq */
-+			if (!access_ok(addr, 16))
-+				goto sigbus;
-+
-+			LoadDW(addr, value, res);
-+			if (res)
-+				goto fault;
-+
-+			LoadDW(addr + 8, value_next, res);
-+			if (res)
-+				goto fault;
-+			regs->regs[insn.loongson3_lswc2_format.rt] = value;
-+			regs->regs[insn.loongson3_lswc2_format.rq] = value_next;
-+			compute_return_epc(regs);
-+		} else {					/* gslqc1 */
-+			if (!access_ok(addr, 16))
-+				goto sigbus;
-+
-+			lose_fpu(1);
-+			LoadDW(addr, value, res);
-+			if (res)
-+				goto fault;
-+			LoadDW(addr+8, value_next, res);
-+			if (res)
-+				goto fault;
-+
-+			set_fpr64(current->thread.fpu.fpr, insn.loongson3_lswc2_format.rt, value);
-+			set_fpr64(current->thread.fpu.fpr, insn.loongson3_lswc2_format.rq, value_next);
-+			compute_return_epc(regs);
-+			own_fpu(1);
-+		}
-+		return NOTIFY_STOP;	/* Don't call default notifier */
-+
-+	case CU2_SWC2_OP:
-+		if(insn.loongson3_lswc2_format.ls == 0)
-+			goto sigbus;
-+
-+		if (insn.loongson3_lswc2_format.fr == 0) {	/* gssq */
-+			if (!access_ok(addr, 16))
-+				goto sigbus;
-+
-+			/* write upper 8 bytes first */
-+			value_next = regs->regs[insn.loongson3_lswc2_format.rq];
-+
-+			StoreDW(addr + 8, value_next, res);
-+			if (res)
-+				goto fault;
-+			value = regs->regs[insn.loongson3_lswc2_format.rt];
-+
-+			StoreDW(addr, value, res);
-+			if (res)
-+				goto fault;
-+			compute_return_epc(regs);
-+		} else {					/* gssqc1 */
-+			if (!access_ok(addr, 16))
-+				goto sigbus;
-+
-+			lose_fpu(1);
-+			value_next = get_fpr64(current->thread.fpu.fpr, insn.loongson3_lswc2_format.rq);
-+
-+			StoreDW(addr + 8, value_next, res);
-+			if (res)
-+				goto fault;
-+			value = get_fpr64(current->thread.fpu.fpr, insn.loongson3_lswc2_format.rt);
-+
-+			StoreDW(addr, value, res);
-+			if (res)
-+				goto fault;
-+			compute_return_epc(regs);
-+			own_fpu(1);
-+		}
-+		return NOTIFY_STOP;	/* Don't call default notifier */
-+
-+	case CU2_LDC2_OP:
-+		switch (insn.loongson3_lsdc2_format.opcode1) {
-+		/*
-+		 * Loongson-3 overridden ldc2 instructions.
-+		 * opcode1              instruction
-+		 *   0x1          gslhx: load 2 bytes to GPR
-+		 *   0x2          gslwx: load 4 bytes to GPR
-+		 *   0x3          gsldx: load 8 bytes to GPR
-+		 *   0x6	  gslwxc1: load 4 bytes to FPR
-+		 *   0x7	  gsldxc1: load 8 bytes to FPR
-+		 */
-+		case 0x1:
-+			if (!access_ok(addr, 2))
-+				goto sigbus;
-+
-+			LoadHW(addr, value, res);
-+
-+			if (res)
-+				goto fault;
-+			compute_return_epc(regs);
-+			regs->regs[insn.loongson3_lsdc2_format.rt] = value;
-+			break;
-+		case 0x2:
-+			if (!access_ok(addr, 4))
-+				goto sigbus;
-+
-+			LoadW(addr, value, res);
-+
-+			if (res)
-+				goto fault;
-+			compute_return_epc(regs);
-+			regs->regs[insn.loongson3_lsdc2_format.rt] = value;
-+			break;
-+		case 0x3:
-+			if (!access_ok(addr, 8))
-+				goto sigbus;
-+
-+			LoadDW(addr, value, res);
-+
-+			if (res)
-+				goto fault;
-+			compute_return_epc(regs);
-+			regs->regs[insn.loongson3_lsdc2_format.rt] = value;
-+			break;
-+		case 0x6:
-+			die_if_kernel("Unaligned FP access in kernel code", regs);
-+			BUG_ON(!used_math());
-+			if (!access_ok(addr, 4))
-+				goto sigbus;
-+
-+			lose_fpu(1);
-+			LoadW(addr, value, res);
-+			if (res)
-+				goto fault;
-+			set_fpr64(current->thread.fpu.fpr, insn.loongson3_lsdc2_format.rt, value);
-+			compute_return_epc(regs);
-+			own_fpu(1);
-+
-+			break;
-+		case 0x7:
-+			die_if_kernel("Unaligned FP access in kernel code", regs);
-+			BUG_ON(!used_math());
-+			if (!access_ok(addr, 8))
-+				goto sigbus;
-+
-+			lose_fpu(1);
-+			LoadDW(addr, value, res);
-+			if (res)
-+				goto fault;
-+			set_fpr64(current->thread.fpu.fpr, insn.loongson3_lsdc2_format.rt, value);
-+			compute_return_epc(regs);
-+			own_fpu(1);
-+			break;
-+
-+		}
-+		return NOTIFY_STOP;	/* Don't call default notifier */
-+
-+	case CU2_SDC2_OP:
-+		switch (insn.loongson3_lsdc2_format.opcode1) {
-+		/*
-+		 * Loongson-3 overridden sdc2 instructions.
-+		 * opcode1              instruction
-+		 *   0x1          gsshx: store 2 bytes from GPR
-+		 *   0x2          gsswx: store 4 bytes from GPR
-+		 *   0x3          gssdx: store 8 bytes from GPR
-+		 *   0x6          gsswxc1: store 4 bytes from FPR
-+		 *   0x7          gssdxc1: store 8 bytes from FPR
-+		 */
-+		case 0x1:
-+			if (!access_ok(addr, 2))
-+				goto sigbus;
-+
-+			compute_return_epc(regs);
-+			value = regs->regs[insn.loongson3_lsdc2_format.rt];
-+
-+			StoreHW(addr, value, res);
-+
-+			if (res)
-+				goto fault;
-+			break;
-+		case 0x2:
-+			if (!access_ok(addr, 4))
-+				goto sigbus;
-+
-+			compute_return_epc(regs);
-+			value = regs->regs[insn.loongson3_lsdc2_format.rt];
-+
-+			StoreW(addr, value, res);
-+
-+			if (res)
-+				goto fault;
-+			break;
-+		case 0x3:
-+			if (!access_ok(addr, 8))
-+				goto sigbus;
-+
-+			compute_return_epc(regs);
-+			value = regs->regs[insn.loongson3_lsdc2_format.rt];
-+
-+			StoreDW(addr, value, res);
-+
-+			if (res)
-+				goto fault;
-+			break;
-+
-+		case 0x6:
-+			die_if_kernel("Unaligned FP access in kernel code", regs);
-+			BUG_ON(!used_math());
-+
-+			if (!access_ok(addr, 4))
-+				goto sigbus;
-+
-+			lose_fpu(1);
-+			value = get_fpr64(current->thread.fpu.fpr, insn.loongson3_lsdc2_format.rt);
-+
-+			StoreW(addr, value, res);
-+
-+			if (res)
-+				goto fault;
-+			compute_return_epc(regs);
-+			own_fpu(1);
-+
-+			break;
-+		case 0x7:
-+			die_if_kernel("Unaligned FP access in kernel code", regs);
-+			BUG_ON(!used_math());
-+
-+			if (!access_ok(addr, 8))
-+				goto sigbus;
-+
-+			lose_fpu(1);
-+			value = get_fpr64(current->thread.fpu.fpr, insn.loongson3_lsdc2_format.rt);
-+
-+			StoreDW(addr, value, res);
-+
-+			if (res)
-+				goto fault;
-+			compute_return_epc(regs);
-+			own_fpu(1);
-+
-+			break;
-+		}
-+		return NOTIFY_STOP;	/* Don't call default notifier */
- 	}
- 
- 	return NOTIFY_OK;		/* Let default notifier send signals */
-+
-+fault:
-+	/* roll back jump/branch */
-+	regs->regs[31] = ra;
-+	regs->cp0_epc = (unsigned long)pc;
-+	/* Did we have an exception handler installed? */
-+	if (fixup_exception(regs))
-+		return NOTIFY_STOP;	/* Don't call default notifier */
-+
-+	die_if_kernel("Unhandled kernel unaligned access", regs);
-+	force_sig(SIGSEGV);
-+
-+	return NOTIFY_STOP;	/* Don't call default notifier */
-+
-+sigbus:
-+	die_if_kernel("Unhandled kernel unaligned access", regs);
-+	force_sig(SIGBUS);
-+
-+	return NOTIFY_STOP;	/* Don't call default notifier */
- }
- 
- static int __init loongson_cu2_setup(void)
--- 
-2.7.0
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
++Maciej, that's basically what I want.
+
+Thanks.
+
+> ---
+> 
+> v2:
+>   - Add new 34k-bugs32.c
+>   - Rename check_errata() to check_errata32()
+>   - Add CONFIG_CPU_34K_BUGS32
+>   - Modify commit message
+> 
+>  arch/mips/Kconfig             |  4 ++++
+>  arch/mips/include/asm/bugs.h  |  4 +++-
+>  arch/mips/kernel/34k-bugs32.c | 29 +++++++++++++++++++++++++++++
+>  arch/mips/kernel/Makefile     |  1 +
+>  arch/mips/kernel/cpu-probe.c  | 25 -------------------------
+>  5 files changed, 37 insertions(+), 26 deletions(-)
+>  create mode 100644 arch/mips/kernel/34k-bugs32.c
+> 
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index a1f973c..d95dc18 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -2619,6 +2619,10 @@ config CPU_R4X00_BUGS64
+>  	bool
+>  	default y if SYS_HAS_CPU_R4X00 && 64BIT && (TARGET_ISA_REV <
+> 1) 
+> +config CPU_34K_BUGS32
+> +	bool
+> +	default y if CPU_MIPS32_R2
+> +
+>  config MIPS_ASID_SHIFT
+>  	int
+>  	default 6 if CPU_R3000 || CPU_TX39XX
+> diff --git a/arch/mips/include/asm/bugs.h
+> b/arch/mips/include/asm/bugs.h index d72dc6e..bbf843a 100644
+> --- a/arch/mips/include/asm/bugs.h
+> +++ b/arch/mips/include/asm/bugs.h
+> @@ -35,7 +35,9 @@ static inline void check_bugs(void)
+>  	unsigned int cpu = smp_processor_id();
+>  
+>  	cpu_data[cpu].udelay_val = loops_per_jiffy;
+> -	check_bugs32();
+> +
+> +	if (IS_ENABLED(CONFIG_CPU_34K_BUGS32))
+> +		check_bugs32();
+>  
+>  	if (IS_ENABLED(CONFIG_CPU_R4X00_BUGS64))
+>  		check_bugs64();
+> diff --git a/arch/mips/kernel/34k-bugs32.c
+> b/arch/mips/kernel/34k-bugs32.c new file mode 100644
+> index 0000000..dc3ac01
+> --- /dev/null
+> +++ b/arch/mips/kernel/34k-bugs32.c
+> @@ -0,0 +1,29 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <asm/cpu.h>
+> +#include <asm/cpu-info.h>
+> +#include <asm/cpu-type.h>
+> +#include <asm/bugs.h>
+> +
+> +static inline void check_errata32(void)
+> +{
+> +	struct cpuinfo_mips *c = &current_cpu_data;
+> +
+> +	switch (current_cpu_type()) {
+> +	case CPU_34K:
+> +		/*
+> +		 * Erratum "RPS May Cause Incorrect Instruction
+> Execution"
+> +		 * This code only handles VPE0, any SMP/RTOS code
+> +		 * making use of VPE1 will be responsable for that
+> VPE.
+> +		 */
+> +		if ((c->processor_id & PRID_REV_MASK) <=
+> PRID_REV_34K_V1_0_2)
+> +			write_c0_config7(read_c0_config7() |
+> MIPS_CONF7_RPS);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +}
+> +
+> +void __init check_bugs32(void)
+> +{
+> +	check_errata32();
+> +}
+> diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
+> index d6e97df..c2fd191 100644
+> --- a/arch/mips/kernel/Makefile
+> +++ b/arch/mips/kernel/Makefile
+> @@ -81,6 +81,7 @@ obj-$(CONFIG_PROC_FS)		+= proc.o
+>  obj-$(CONFIG_MAGIC_SYSRQ)	+= sysrq.o
+>  
+>  obj-$(CONFIG_CPU_R4X00_BUGS64)	+= r4k-bugs64.o
+> +obj-$(CONFIG_CPU_34K_BUGS32)	+= 34k-bugs32.o
+>  
+>  obj-$(CONFIG_I8253)		+= i8253.o
+>  
+> diff --git a/arch/mips/kernel/cpu-probe.c
+> b/arch/mips/kernel/cpu-probe.c index f21a230..7179787 100644
+> --- a/arch/mips/kernel/cpu-probe.c
+> +++ b/arch/mips/kernel/cpu-probe.c
+> @@ -14,7 +14,6 @@
+>  #include <linux/stddef.h>
+>  #include <linux/export.h>
+>  
+> -#include <asm/bugs.h>
+>  #include <asm/cpu.h>
+>  #include <asm/cpu-features.h>
+>  #include <asm/cpu-type.h>
+> @@ -461,30 +460,6 @@ static inline void cpu_set_mt_per_tc_perf(struct
+> cpuinfo_mips *c) c->options |= MIPS_CPU_MT_PER_TC_PERF_COUNTERS;
+>  }
+>  
+> -static inline void check_errata(void)
+> -{
+> -	struct cpuinfo_mips *c = &current_cpu_data;
+> -
+> -	switch (current_cpu_type()) {
+> -	case CPU_34K:
+> -		/*
+> -		 * Erratum "RPS May Cause Incorrect Instruction
+> Execution"
+> -		 * This code only handles VPE0, any SMP/RTOS code
+> -		 * making use of VPE1 will be responsable for that
+> VPE.
+> -		 */
+> -		if ((c->processor_id & PRID_REV_MASK) <=
+> PRID_REV_34K_V1_0_2)
+> -			write_c0_config7(read_c0_config7() |
+> MIPS_CONF7_RPS);
+> -		break;
+> -	default:
+> -		break;
+> -	}
+> -}
+> -
+> -void __init check_bugs32(void)
+> -{
+> -	check_errata();
+> -}
+> -
+>  /*
+>   * Probe whether cpu has config register by trying to play with
+>   * alternate cache bit and see whether it matters.
 
