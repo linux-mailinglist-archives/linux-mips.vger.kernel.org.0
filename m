@@ -2,115 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 220FB1A5277
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Apr 2020 16:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5476D1A52B5
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Apr 2020 18:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726069AbgDKOOl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 11 Apr 2020 10:14:41 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.164]:31417 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726054AbgDKOOl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Apr 2020 10:14:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1586614477;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:Message-Id:Cc:Date:From:Subject:X-RZG-CLASS-ID:X-RZG-AUTH:From:
-        Subject:Sender;
-        bh=Y40ZjfNR5RQeKJlxlUDnzl8UAhefYWTC6w6r/2/VbF0=;
-        b=nLnJCHnWKykhgvewbomGLfHWVVMO7938PRsf50z8EQu+Geqd9qCQS4UurGF54ud9vD
-        xJVfC5BerQeNWi0gOrEVuZdVpjfI7KjCaMAiS6Z9Fux3lBRtfVl4bfEEd6JnesnJhafZ
-        YfwQ0UYBtCHtfeOgs5AxOLFGKpQk0NOV3TUZlMAs3+L49x8HmzJdOrXPJEYFLqNCALdh
-        0C/BP3E3lT/hsWaLqDT70IkxcA2CCeD0m6TSguwlwuMk2Ax68Nl0UMCCZ5k/RUC/hPK+
-        Pscq7fDkjNAEwAzbFgfjCxVGKl/unkMEjq4KOmfZrhDydqqJKWc+pOTsApfNmr8cBoIv
-        LeqQ==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlWdXAcJrw=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-        by smtp.strato.de (RZmta 46.2.1 DYNA|AUTH)
-        with ESMTPSA id m02241w3BEET21q
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Sat, 11 Apr 2020 16:14:29 +0200 (CEST)
+        id S1726124AbgDKQEL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 11 Apr 2020 12:04:11 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:38340 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726070AbgDKQEK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Apr 2020 12:04:10 -0400
+Received: by mail-pf1-f193.google.com with SMTP id y25so133950pfn.5;
+        Sat, 11 Apr 2020 09:04:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=uH/uW4uuwVc/sUawxiLaFcYoWaZecblOcPGAeVmrbRA=;
+        b=bpDd2PphtMcSemGxsrV2MW+BLa4JF/TZ9SPOkaI7IE8DsUJNM8Kugv5GA2SSkjKynG
+         M5PGUpytCyWBwp2GtTY/kdyooJF5UKajhfg5+GJgysfUrG5v9pdv9bmHfiY21C+tRDA8
+         H6QOu7cfT7F+ZDCCkZOJ68BuQy4yZy1M7jFcIXf+UuXeo24MdCYOH13d/ERfUYY7rDCn
+         lVsl56il3TN6e7ma+5n1yZKve/huDJRF0+m7ZYNPApriP5n2RBxS4tQDuDDPU+XUwpGX
+         PSqMjlsJRf2AzZAdOpzahXVHH+I6ai1+WEHk5YO1BvjwB6Lzg2aP4rbZFH9mBclETUut
+         US5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=uH/uW4uuwVc/sUawxiLaFcYoWaZecblOcPGAeVmrbRA=;
+        b=es1piTxgJB/h0NYtWFqTWiEVVaftAo2YPXHIVUbN7p8PLrBwY+U+MrIzcB6oR++4p5
+         53M2LDaO+H5ykNSstbkRSqUyUcja8/WYYOUQZivTgxJ2BEngN5Un0AXAonxTi1RSqNw3
+         NC4LvJz1DzpUNv2bUhDR/ZpC7wFXG+ZGLQ+bMkzu+VqUfiEeEfbxEebw8Wo3hy8AxVxQ
+         mRsjZO5nhGpU7oJwAtqPRyLN+j9m/9dUJe+xUrrjUmPoX3BYSgX8S133RXmU3DeE6c0z
+         2zmZn1GFJfJSMTrh680bVtJAT21MXan4LS4/oZjkAMF71IbOPtxTeMV8/XLrBJbRr3GF
+         npLg==
+X-Gm-Message-State: AGi0PuZu/UEXWHSw7W0Tno0wfHX6emu2L/+dRZKvP6tlUmglyUMv9QuK
+        vTS9oMSpBr9aZoMnU4Z+64c=
+X-Google-Smtp-Source: APiQypLdNiYiF+7hS+5k0UH+NUie1b5tew65NkXTnDcayarF6ShrqWloGrmA4pOce85bpSbWi3Slvg==
+X-Received: by 2002:a62:1946:: with SMTP id 67mr10618076pfz.0.1586621050221;
+        Sat, 11 Apr 2020 09:04:10 -0700 (PDT)
+Received: from localhost ([183.82.183.27])
+        by smtp.gmail.com with ESMTPSA id nl7sm4661950pjb.36.2020.04.11.09.04.09
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 11 Apr 2020 09:04:09 -0700 (PDT)
+Date:   Sat, 11 Apr 2020 21:34:07 +0530
+From:   afzal mohammed <afzal.mohd.ma@gmail.com>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH 0/3] Remove setup_percpu_irq() & remove_percpu_irq
+Message-ID: <cover.1586434781.git.afzal.mohd.ma@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Subject: DRM interaction problems on Ingenic CI20 / jz4780 with dw-hdmi and ingenic-drm
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-Date:   Sat, 11 Apr 2020 16:14:29 +0200
-Cc:     Paul Boddie <paul@boddie.org.uk>, linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        MIPS Creator CI20 Development 
-        <mips-creator-ci20-dev@googlegroups.com>
-Content-Transfer-Encoding: 7bit
-Message-Id: <ED77DCA8-FF50-4E9E-A4B8-688262774723@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Dave Airlie <airlied@linux.ie>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        Yakir Yang <ykk@rock-chips.com>,
-        Vladimir Zapolskiy <vladimir_zapolskiy@mentor.com>
-X-Mailer: Apple Mail (2.3124)
+Content-Disposition: inline
+User-Agent: Mutt/1.9.3 (2018-01-21)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi,
-we (Paul Boddie and me) are working to get HDMI functional on the
-Ingenic CI20 board with jz4780 SoC which uses a specialization of
-the dw-hdmi driver.
 
+While doing the removal of setup_irq(), it was observed that
+setup_percpu_irq() also can be removed similarly by replacing it w/
+request_percpu_irq(), which does allocate memory. In the initial
+setup_irq() removal cover letters [1], it was mentioned that
+setup_percpu_irq() is untouched.
 
-So far we have identified two issues.
+After removing setup_irq(), it does not look good to let live
+setup_percpu_irq(), especially since it being a low hanging fruit. Hence
+replace setup_percpu_irq() by it's allocator equivalent.
+request_percpu_irq() cannot be used since all the users need to pass
+IRQF_TIMER flag, which it would not allow. Thus it's variant,
+__request_percpu_irq() is used.
 
-The first is that HPD interrupts are not properly processed.
+In addition to removing setup_percpu_irq() definition,
+remove_percpu_irq(), unused, is also removed.
 
-drm_helper_hpd_irq_event() is called by HPD events but
-dev->mode_config.poll_enabled is false.
+It seems setup_percpu_irq() is used only by MIPS (even the one outside
+MIPS arch dir, i.e. the clocksource driver). The series has been build
+tested, though i would have loved to do a qemu test as well, i do not
+see a qemu machine type that can test the changes done here (in malta
+machine, in which clocksource changes are getting built, the changes
+done here are not being runtime tested).
 
-Therefore the interrupt is ignored and nothing happens.
+Regards
+afzal
 
-Now I wonder about the logic behind checking for poll_enabled.
-I understand that a driver can do either polling or irq or both.
+[1] https://lkml.kernel.org/r/cover.1581478323.git.afzal.mohd.ma@gmail.com
 
-Therefore handling the irq_event shouldn't be disabled by poll_enabled
-being false. Otherwise we can only do: nothing, polling, polling+irq
-but not irq alone.
+afzal mohammed (3):
+  MIPS: Replace setup_percpu_irq() by request_percpu_irq() variant
+  clocksource/drivers/mips-gic-timer: Replace setup_percpu_irq() by
+    request_percpu_irq() variant
+  genirq: Remove setup_percpu_irq() and remove_percpu_irq()
 
-The jz4780 hdmi subsystem (drm/bridge/dw-hdmi.c) uses
+ arch/mips/include/asm/cevt-r4k.h     |  1 -
+ arch/mips/kernel/cevt-r4k.c          | 11 --------
+ arch/mips/sgi-ip27/ip27-timer.c      | 13 ++++-----
+ arch/mips/sgi-ip30/ip30-timer.c      |  6 ++--
+ drivers/clocksource/mips-gic-timer.c | 10 ++-----
+ include/linux/irq.h                  |  2 --
+ kernel/irq/manage.c                  | 42 ----------------------------
+ 7 files changed, 10 insertions(+), 75 deletions(-)
 
-	connector->polled = DRM_CONNECTOR_POLL_HPD;
+-- 
+2.18.0
 
-but shouldn't this enable polling? Note that there seems to be
-no (direct) call to drm_kms_helper_poll_init().
-
-If we set dev->mode_config.poll_enabled = true in
-drm_helper_hpd_irq_event() things start to work.
-
-Please can you clarify what would be best practise here to
-get HPD event handling working.
-
-
-The other issue is in dw-hdmi.c:
-
-We found out that ingenic_drm_encoder_atomic_check() fails because
-
-info->num_bus_formats == 0
-
-and not 1. This blocks further initialization.
-
-The reason seems to be that dw_hdmi_bridge_attach() does not call
-drm_display_info_set_bus_formats() with a proper format like
-other drivers (e.g. drm/bridge/ti-tfp410.c) are doing.
-
-We have patched to set a single bus format MEDIA_BUS_FMT_RGB888_1X24
-and then DRM setup seems to work (although we still have no valid
-HDMI signal but that is likely something else).
-
-Please can you explain how setting the bus format should be fixed
-in dw-hdmi.c.
-
-If these questions should be forwarded to other specialists, please
-do so.
-
-
-BR and thanks,
-Nikolaus Schaller
