@@ -2,35 +2,30 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9391A5DD7
-	for <lists+linux-mips@lfdr.de>; Sun, 12 Apr 2020 11:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F581A5E4A
+	for <lists+linux-mips@lfdr.de>; Sun, 12 Apr 2020 13:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726614AbgDLJjP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 12 Apr 2020 05:39:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45412 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725907AbgDLJjP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 12 Apr 2020 05:39:15 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1D9A620709;
-        Sun, 12 Apr 2020 09:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586684354;
-        bh=wbyOBODIndCEMu0D2z+phq+6eSufCY9PcFL95wATkQc=;
+        id S1726043AbgDLLdW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 12 Apr 2020 07:33:22 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:55386 "EHLO
+        vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725909AbgDLLdV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 12 Apr 2020 07:33:21 -0400
+Received: from flygoat-x1e (unknown [IPv6:240e:390:499:a20::d68])
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 6461320D00;
+        Sun, 12 Apr 2020 11:32:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
+        t=1586691201; bh=sL4MzaGwxvIRSq9CUuhbsYMx0T4QWjj2y1rYAqSVLws=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CCvFXU6ZZAkPrqhY+3mO0dLN947kPjR0dnkmJSLpM8pYApfGKpeH/f2n2ddJe6pre
-         YIswjxP8gVprMtr/9TTFdGG9nzgWZGJs7MNrbIE4WGoIiShAV7Zft3ggd5BxeCt+YC
-         o23fwDeeTcJzz/NMWB712zrQ5FcEDe+ApYn4lckc=
-Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1jNZ55-002cys-Sy; Sun, 12 Apr 2020 10:39:12 +0100
-Date:   Sun, 12 Apr 2020 10:39:08 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+        b=HKcd+fItvP6Hapt81u6McR/G/BybTwn3ZURsy4BZib/1PjBh2tKi6u+OJFUSc2qpd
+         fsFLojsxIqB04tj7sKG2ACe7sVOS5TtTM/g9Y9vqolFWHquMOONkXrKcWwO2Mrc+0V
+         7dBHRoP1XMZyUPWQmmcKdZ27U141H3GZ+tTI0GvNDhwrnFRfFeUmXnQZy9GRNhBCjG
+         GH0JbQt+iaqvwDZ0SrrZqpkporGlnb7+XS+iybCr3/L2fL06Jh1eFSb9/feiAqBhcr
+         ktE1Sc8dO7p2vQMtI9YgJyFEvvyhzJ9RBLYnO1MquOdrUGdi23XekKr9N/u03ny4ZI
+         XEO1Do3o7sh+w==
+Date:   Sun, 12 Apr 2020 19:32:25 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     Marc Zyngier <maz@kernel.org>
 Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
         linux-mips@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -57,7 +52,7 @@ Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
         Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Zhou Yanjie <zhouyanjie@zoho.com>,
-        " =?UTF-8?Q?=E5=91=A8=E7=90=B0=E6=9D=B0?= (Zhou Yanjie) " 
+        " =?UTF-8?B?5ZGo55Cw5p2w?= (Zhou Yanjie) " 
         <zhouyanjie@wanyeetech.com>, YunQiang Su <syq@debian.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Serge Semin <fancer.lancer@gmail.com>,
@@ -73,78 +68,84 @@ Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
         bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
         linux-pm@vger.kernel.org
 Subject: Re: [PATCH v2 05/11] MIPS: Switch to arch_topology
-Message-ID: <20200412103908.2594483d@why>
-In-Reply-To: <20200412154927.7ac453d5@flygoat-x1e>
+Message-ID: <20200412193225.47fa4680@flygoat-x1e>
+In-Reply-To: <20200412103908.2594483d@why>
 References: <20200412032123.3896114-6-jiaxun.yang@flygoat.com>
         <202004121349.xFzTOGS4%lkp@intel.com>
         <20200412154927.7ac453d5@flygoat-x1e>
-Organization: Approximate
+        <20200412103908.2594483d@why>
 X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 62.31.163.78
-X-SA-Exim-Rcpt-To: jiaxun.yang@flygoat.com, lkp@intel.com, kbuild-all@lists.01.org, linux-mips@vger.kernel.org, tsbogend@alpha.franken.de, chenhc@lemote.com, peterz@infradead.org, mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, jolsa@redhat.com, namhyung@kernel.org, f.fainelli@gmail.com, rric@kernel.org, sudeep.holla@arm.com, gregkh@linuxfoundation.org, rafael@kernel.org, daniel.lezcano@linaro.org, tglx@linutronix.de, jason@lakedaemon.net, paulburton@kernel.org, allison@lohutok.net, info@metux.net, kstewart@linuxfoundation.org, vladimir.kondratiev@intel.com, paul@crapouillou.net, zhouyanjie@zoho.com, zhouyanjie@wanyeetech.com, syq@debian.org, arnd@arndb.de, fancer.lancer@gmail.com, matt.redfearn@mips.com, swinslow@gmail.com, alexios.zavras@intel.com, rfontana@redhat.com, peterx@redhat.com, afzal.mohd.ma@gmail.com, kdasu.kdev@gmail.com, linux@rempel-privat.de, linux-kernel@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com, oprofile-lis
- t@lists.sf.net, linux-pm@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 12 Apr 2020 15:49:27 +0800
-Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+On Sun, 12 Apr 2020 10:39:08 +0100
+Marc Zyngier <maz@kernel.org> wrote:
 
-> On Sun, 12 Apr 2020 13:24:21 +0800
-> kbuild test robot <lkp@intel.com> wrote:
+> On Sun, 12 Apr 2020 15:49:27 +0800
+> Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 > 
-> > Hi Jiaxun,
-> > 
-> > I love your patch! Yet something to improve:
-> > 
-> > [auto build test ERROR on driver-core/driver-core-testing]
-> > [also build test ERROR on pm/linux-next linus/master next-20200411]
-> > [cannot apply to tip/perf/core tip/irq/core v5.6]
-> > [if your patch is applied to the wrong git tree, please drop us a
-> > note to help improve the system. BTW, we also suggest to use '--base'
-> > option to specify the base tree in git format-patch, please see
-> > https://stackoverflow.com/a/37406982]
-> > 
-> > url:
-> > https://github.com/0day-ci/linux/commits/Jiaxun-Yang/MIPS-Topology-DeviceTree-CPU-rework-v2/20200412-113308
-> > base:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
-> > a10c9c710f9ecea87b9f4bbb837467893b4bef01 config: mips-allnoconfig
-> > (attached as .config) compiler: mips-linux-gcc (GCC) 9.3.0 reproduce:
-> > wget
-> > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
-> > -O ~/bin/make.cross chmod +x ~/bin/make.cross # save the attached
-> > .config to linux build tree GCC_VERSION=9.3.0 make.cross ARCH=mips 
-> > 
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kbuild test robot <lkp@intel.com>
-> > 
-> > Note: the
-> > linux-review/Jiaxun-Yang/MIPS-Topology-DeviceTree-CPU-rework-v2/20200412-113308
-> > HEAD 8e8e9d4f7aa74359f2199773786ffe2fbb7877d0 builds fine. It only
-> > hurts bisectibility.
+> > On Sun, 12 Apr 2020 13:24:21 +0800
+> > kbuild test robot <lkp@intel.com> wrote:
 > >   
-> Hi all,
+> > > Hi Jiaxun,
+> > > 
+> > > I love your patch! Yet something to improve:
+> > > 
+> > > [auto build test ERROR on driver-core/driver-core-testing]
+> > > [also build test ERROR on pm/linux-next linus/master
+> > > next-20200411] [cannot apply to tip/perf/core tip/irq/core v5.6]
+> > > [if your patch is applied to the wrong git tree, please drop us a
+> > > note to help improve the system. BTW, we also suggest to use
+> > > '--base' option to specify the base tree in git format-patch,
+> > > please see https://stackoverflow.com/a/37406982]
+> > > 
+> > > url:
+> > > https://github.com/0day-ci/linux/commits/Jiaxun-Yang/MIPS-Topology-DeviceTree-CPU-rework-v2/20200412-113308
+> > > base:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
+> > > a10c9c710f9ecea87b9f4bbb837467893b4bef01 config: mips-allnoconfig
+> > > (attached as .config) compiler: mips-linux-gcc (GCC) 9.3.0
+> > > reproduce: wget
+> > > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+> > > -O ~/bin/make.cross chmod +x ~/bin/make.cross # save the attached
+> > > .config to linux build tree GCC_VERSION=9.3.0 make.cross
+> > > ARCH=mips 
+> > > 
+> > > If you fix the issue, kindly add following tag as appropriate
+> > > Reported-by: kbuild test robot <lkp@intel.com>
+> > > 
+> > > Note: the
+> > > linux-review/Jiaxun-Yang/MIPS-Topology-DeviceTree-CPU-rework-v2/20200412-113308
+> > > HEAD 8e8e9d4f7aa74359f2199773786ffe2fbb7877d0 builds fine. It only
+> > > hurts bisectibility.
+> > >     
+> > Hi all,
+> > 
+> > In this case I think it should be fine to break bisect, otherwise
+> > #05 will combine too many modifications in different subsystems.  
 > 
-> In this case I think it should be fine to break bisect, otherwise #05
-> will combine too many modifications in different subsystems.
+> No. It is never OK to break bisection, specially when it affects a
+> whole architecture.
 
-No. It is never OK to break bisection, specially when it affects a
-whole architecture.
+I'm going to squash all these into patch #5.
+It's really hard to do it gradually.
 
-We introduce gradual changes over multiple subsystems all the time by
-using configuration symbols, no matter the number of patches. Yes, it is
-sometimes hard. But breaking the kernel and forcing everyone else to
-just deal with it is not acceptable.
+Thanks.
 
-Thanks,
+> 
+> We introduce gradual changes over multiple subsystems all the time by
+> using configuration symbols, no matter the number of patches. Yes, it
+> is sometimes hard. But breaking the kernel and forcing everyone else
+> to just deal with it is not acceptable.
+> 
+> Thanks,
+> 
+> 	M.
+--
+Jiaxun Yang
 
-	M.
--- 
-Jazz is not dead. It just smells funny...
