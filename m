@@ -2,112 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (unknown [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B790A1A62F2
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2020 08:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6E01A630D
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2020 08:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbgDMGOc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Apr 2020 02:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.18]:48340 "EHLO
+        id S1727673AbgDMG1T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Apr 2020 02:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbgDMGOb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Apr 2020 02:14:31 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EC1C008651;
-        Sun, 12 Apr 2020 23:14:30 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id h6so8304267iok.11;
-        Sun, 12 Apr 2020 23:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jCqUMGGUenYfmoVwgXjhS0dJxR72enCIJgvwl4G68tE=;
-        b=Ez9wTmvQupP6PCsa3kb0IT4H0YnWLMVJ7dULcMYhdhFyPNDI6i9aoyJ18sZvHLp5ib
-         e7p9AaT/1GxNduOtUoxauDlrKktGguez4444hsjbx3EiB3km7QQ6MW7C0WXx4c4yHY6e
-         q8feJk5hlTO35r+oO9CTSdHpPSvVr2SDHyb0RxgZHSrIkZG2S7cwHa3CKORf4RqGwGRf
-         tbTwFak5o6klQ/RIarADkIAu6Vadg924JUVeMMiGEi5tsa0rJBgcaoHGp2FbknZ5DtFi
-         cLleJEQcATQLb9G84TwF2HPgcz8NmwZylLRKWyT0VKXBMutadMEf1/NOyJLylvoZo1x2
-         W1uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jCqUMGGUenYfmoVwgXjhS0dJxR72enCIJgvwl4G68tE=;
-        b=a8bKUj0g0qBtrwBFK2cZlpVGuQYAKJwN/l/249rNyYvpCJbyXsyykhKBobak3nVE74
-         +eAsCZ+q51WC3elSxp3f2p1xGkTCGuR7MNW96TNQqJtl/80PYqBzfJHfhnj7vWMZK/q9
-         9cWYQizF+BxJ2TnHAKFfqdQW2UAhAoEPBkpta5MhRaBXBvzQkKx3tH3h75RKznmteoVB
-         oHm+M9Vwo6kWDjRtdg/BKzHCgz7r2+dqEEG3dUsyQIOOAqL6rtwo0W+aV6uUCt7cLTSr
-         3B/o7j8jtOv0STUwVtpU3Nnvoo0JMfvjtyy5BUrbhOFHq8LFS6S5PhgoeYSs9PAEkCr8
-         r8Sg==
-X-Gm-Message-State: AGi0PuaHOs/rDXN9V+wtCb3Xp6GHUweuXf2B6umU4ZJ2KfaWWbuF6766
-        kq5PhixoPNqM+/ymCbLyOFaLNQo8qBa78H0KH3o=
-X-Google-Smtp-Source: APiQypJr/7Y30/qSupKKzUhtTFP/1OZ364sIEHdlKIG9QjTV+/CC/CPY7e/niHiYgcLG+4mAzQzIjH6B/rwqfxLrrwU=
-X-Received: by 2002:a6b:8b4b:: with SMTP id n72mr15041934iod.72.1586758470225;
- Sun, 12 Apr 2020 23:14:30 -0700 (PDT)
+        with ESMTP id S1727588AbgDMG1S (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Apr 2020 02:27:18 -0400
+X-Greylist: delayed 3189 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 12 Apr 2020 23:27:19 PDT
+Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [IPv6:2001:19f0:6001:3633:5400:2ff:fe8c:553])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6552FC0A3BE0;
+        Sun, 12 Apr 2020 23:27:19 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 0EDB420D11;
+        Mon, 13 Apr 2020 06:27:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
+        t=1586759239; bh=Vr/QKJmn73LsQz9h411hekE4ProVb37szEZ2JtPfMcg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mSzmbvslStPKEzYu6kGPH/siw/nx7AViyUvyKLnBiw/cDiwZbiLCJ97To7Aa54/Z4
+         W+EWzspz9fxkpcd3FWu1aDZr2bdLHtwCFrJMtD+KVGE1zvcwnDXCE9mkN5C68dKv0N
+         7ZxjK4FTBmLSOjzPN0Aqbxsv/VFk+zms6jziMg9om3jonp/idpejbByMMBcI4j0Aws
+         qvcureHtpYO1BjqyREl43uLh1vyZKflg1qilTXC/DFjugn3RPrBlYLOlNA1kXhLsu8
+         RWaDIkuNWEVlVseGul6aTPrT2t+eI8Do2pCZR4rQGySPDR93YLqAFzl6VknpbY40TK
+         WYzgNo3n7Ar+w==
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     macro@linux-mips.org, clang-built-linux@googlegroups.com,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Fangrui Song <maskray@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Borislav Petkov <bp@suse.de>,
+        Kees Cook <keescook@chromium.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] MIPS: Truncate link address into 32bit for 32bit kernel
+Date:   Mon, 13 Apr 2020 14:26:49 +0800
+Message-Id: <20200413062651.3992652-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.26.0.rc2
 MIME-Version: 1.0
-References: <20200402081614.5696-1-rppt@kernel.org>
-In-Reply-To: <20200402081614.5696-1-rppt@kernel.org>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Mon, 13 Apr 2020 14:21:38 +0800
-Message-ID: <CAAhV-H7+swFnqoVk9VS=4UoM+OVW4PX5G0mqSPAbM1WfXC44rA@mail.gmail.com>
-Subject: Re: [PATCH] mips: define pud_index() regardless of page table folding
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>, maobibo <maobibo@loongson.cn>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>, kvm@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Tested-by: Huacai Chen <chenhc@lemote.com>
+LLD failed to link vmlinux with 64bit load address for 32bit ELF
+while bfd will strip 64bit address into 32bit silently.
+To fix LLD build, we should truncate load address provided by platform
+into 32bit for 32bit kernel.
 
-On Thu, Apr 2, 2020 at 4:17 PM Mike Rapoport <rppt@kernel.org> wrote:
->
-> From: Mike Rapoport <rppt@linux.ibm.com>
->
-> Commit 31168f033e37 ("mips: drop __pXd_offset() macros that duplicate
-> pXd_index() ones") is correct that pud_index() & __pud_offset() are the
-> same when pud_index() is actually provided, however it does not take into
-> account the __PAGETABLE_PUD_FOLDED case. This has broken MIPS KVM
-> compilation because it relied on availability of pud_index().
->
-> Define pud_index() regardless of page table folded. It will evaluate to
-> actual index for 4-level pagetables and to 0 for folded PUD level.
->
-> Link: https://lore.kernel.org/lkml/20200331154749.5457-1-pbonzini@redhat.com
-> Reported-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->  arch/mips/include/asm/pgtable-64.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
-> index f92716cfa4f4..ee5dc0c145b9 100644
-> --- a/arch/mips/include/asm/pgtable-64.h
-> +++ b/arch/mips/include/asm/pgtable-64.h
-> @@ -172,6 +172,8 @@
->
->  extern pte_t invalid_pte_table[PTRS_PER_PTE];
->
-> +#define pud_index(address)     (((address) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
-> +
->  #ifndef __PAGETABLE_PUD_FOLDED
->  /*
->   * For 4-level pagetables we defines these ourselves, for 3-level the
-> @@ -210,8 +212,6 @@ static inline void p4d_clear(p4d_t *p4dp)
->         p4d_val(*p4dp) = (unsigned long)invalid_pud_table;
->  }
->
-> -#define pud_index(address)     (((address) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
-> -
->  static inline unsigned long p4d_page_vaddr(p4d_t p4d)
->  {
->         return p4d_val(p4d);
-> --
-> 2.25.1
->
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/786
+Link: https://sourceware.org/bugzilla/show_bug.cgi?id=25784
+Cc: Fangrui Song <maskray@google.com>
+Cc: Nathan Chancellor <natechancellor@gmail.com>
+--
+V2: Take MaskRay's shell magic.
+
+V3: After spent an hour on dealing with special character issue in
+Makefile, I gave up to do shell hacks and write a util in C instead.
+Thanks Maciej for pointing out Makefile variable problem.
+
+v4: Finally we managed to find a Makefile method to do it properly
+thanks to Kees. As it's too far from the initial version, I removed
+Review & Test tag from Nick and Fangrui and Cc instead.
+---
+ arch/mips/Makefile             | 12 +++++++++++-
+ arch/mips/kernel/vmlinux.lds.S |  2 +-
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index e1c44aed8156..18495568f03e 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -288,9 +288,19 @@ ifdef CONFIG_64BIT
+   endif
+ endif
+ 
++# When linking a 32-bit executable the LLVM linker cannot cope with a
++# 32-bit load address that has been sign-extended to 64 bits.  Simply
++# remove the upper 32 bits then, as it is safe to do so with other
++# linkers.
++ifdef CONFIG_64BIT
++	load-ld			= $(load-y)
++else
++	load-ld			= $(subst 0xffffffff,0x,$(load-y))
++endif
++
+ KBUILD_AFLAGS	+= $(cflags-y)
+ KBUILD_CFLAGS	+= $(cflags-y)
+-KBUILD_CPPFLAGS += -DVMLINUX_LOAD_ADDRESS=$(load-y)
++KBUILD_CPPFLAGS += -DVMLINUX_LOAD_ADDRESS=$(load-y) -DVMLINUX_LINK_ADDRESS=$(load-ld)
+ KBUILD_CPPFLAGS += -DDATAOFFSET=$(if $(dataoffset-y),$(dataoffset-y),0)
+ 
+ bootvars-y	= VMLINUX_LOAD_ADDRESS=$(load-y) \
+diff --git a/arch/mips/kernel/vmlinux.lds.S b/arch/mips/kernel/vmlinux.lds.S
+index a5f00ec73ea6..5226cd8e4bee 100644
+--- a/arch/mips/kernel/vmlinux.lds.S
++++ b/arch/mips/kernel/vmlinux.lds.S
+@@ -55,7 +55,7 @@ SECTIONS
+ 	/* . = 0xa800000000300000; */
+ 	. = 0xffffffff80300000;
+ #endif
+-	. = VMLINUX_LOAD_ADDRESS;
++	. = VMLINUX_LINK_ADDRESS;
+ 	/* read-only */
+ 	_text = .;	/* Text and read-only data */
+ 	.text : {
+-- 
+2.26.0.rc2
+
