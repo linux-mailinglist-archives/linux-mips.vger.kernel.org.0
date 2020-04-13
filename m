@@ -2,120 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (unknown [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7BF1A63B9
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2020 09:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D95C1A63BF
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2020 09:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729337AbgDMHaz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Apr 2020 03:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.18]:32950 "EHLO
+        id S1729346AbgDMHcV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Apr 2020 03:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:33228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727612AbgDMHaz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Apr 2020 03:30:55 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A11EC008651;
-        Mon, 13 Apr 2020 00:30:55 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id mn19so3496760pjb.0;
-        Mon, 13 Apr 2020 00:30:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=lozGXI+RCcD8805GHzdbsHHUQvLgBz8cDlD+L+c1heU=;
-        b=Kcx4puo8ho90L2YsbhjK/H50hA2RCXsBXZpnLgbU09+jqnjb9lQ2nhCLP8GhBwv3wR
-         jNAUTY9hMqoT01OY7BLsavXjZhZTs9T6sGoxGW9eYd+3ixQ1QQa74P0ahHpcb44jEMD7
-         2EklggW0EczbXKxs6hGTbgQldVb0hVGNu6hFrHUqcbFeZnFRC+ntZns9C1d6z/+2OS7o
-         ezf0EIsvj4MiI+zzzRz7b5W7UG6qzqOoxtXCMoWbF0MtofE+YTyFKGKxVPC2vrjjKXuS
-         H4IVbXRYGQ+phiyisGvWSHm0TGMpyWqmi5uMk2PZKKMlA5Kftg4Jl3/jTzVdtJerVF4/
-         RqhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=lozGXI+RCcD8805GHzdbsHHUQvLgBz8cDlD+L+c1heU=;
-        b=Cov4m1zNSuY31DaGjcqgaJcQSwuC+A1piBkCiUwdLlKWWY0wigzPCW6cMI4aqEdCpn
-         BpGL+m3zpMuIVatTViAIWe9pm0nzQxoRI93s0USNPHtlOTFZqHWvmyWaupc+xcNYQOjG
-         NRSgVoCVLS3fNbPkEO7t9JNP28ElLx72LddhhDo2uRp9HHvfhv6oXenll3xwjo7yYj//
-         T7BC3Kd40ycZ5gJQh9VoNqlzZiNqqD5je0sPUJZc+ABLrnsDiN66Wh3LrBF4xJlMb3J4
-         oohiZnECN5k5AawvHFTmL8SzQtN3sKr0TLH+I2SSKxcT7uSeqUgTZBeoXtNQB464gE64
-         cMlw==
-X-Gm-Message-State: AGi0PuZoIlJfk7DMXlWRnrV2Q5eZEix3m0DTxoCaX317NyAduo78WqbI
-        hx9Y+A0VEKm0bLe4xeeBEWY=
-X-Google-Smtp-Source: APiQypJvTPl29jy0Un/24PxwFVkWS2cBvgRYlBkmJPaXAfhrOMi4sadbxXTfHq9f1iE3cmoC12OCQg==
-X-Received: by 2002:a17:902:9b90:: with SMTP id y16mr15589789plp.227.1586763054390;
-        Mon, 13 Apr 2020 00:30:54 -0700 (PDT)
-Received: from software.domain.org (28.144.92.34.bc.googleusercontent.com. [34.92.144.28])
-        by smtp.gmail.com with ESMTPSA id u8sm7241341pgl.19.2020.04.13.00.30.52
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 Apr 2020 00:30:54 -0700 (PDT)
-From:   Huacai Chen <chenhc@lemote.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     kvm@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH 15/15] KVM: MIPS: Enable KVM support for Loongson-3
-Date:   Mon, 13 Apr 2020 15:30:24 +0800
-Message-Id: <1586763024-12197-16-git-send-email-chenhc@lemote.com>
-X-Mailer: git-send-email 2.7.0
-In-Reply-To: <1586763024-12197-1-git-send-email-chenhc@lemote.com>
-References: <1586763024-12197-1-git-send-email-chenhc@lemote.com>
+        with ESMTP id S1727612AbgDMHcV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Apr 2020 03:32:21 -0400
+Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [IPv6:2001:19f0:6001:3633:5400:2ff:fe8c:553])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1853C008651;
+        Mon, 13 Apr 2020 00:32:20 -0700 (PDT)
+Received: from flygoat-x1e (unknown [IPv6:240e:390:49e:92c0::d68])
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id EEB2820D11;
+        Mon, 13 Apr 2020 07:32:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
+        t=1586763139; bh=bhQVP41inNwzZ4QYRL2kZVsflSK4XBShSyjAeWvLFKA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WwQyW3eYa2lybRg3oCYp1RfX49ZM16W8iuJsja/D/MbTjwhPTHL/27832nqi1mmE7
+         YrT2DZ4r/gne+9PV10KNIrGNDxcp08eWnHYWEw9vuEI1GL5qRqW0FLuOrSjJHEWY+6
+         yMvl+TVtWx6CyBDaX0pTTMCoA8oGdf7HRzib0ALNQo7mG1zR0iJ0BLVhcLIbC5JAJV
+         37QRkfTkMZlrQBRqzKimYzzBYR8Y3iT6+pYpL5PNYPFtVj/hyOTCjKkRjpwQ3LroSY
+         OhEbudeVM+ogVIpHPzFLQPnQig3oy+ZkYTVnlz1xzJaNzqE1X34nxyUGnU8W9kMP8X
+         F1BddQw4pHgKg==
+Date:   Mon, 13 Apr 2020 15:32:05 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     "Maciej W. Rozycki" <macro@linux-mips.org>
+Cc:     linux-mips@vger.kernel.org, clang-built-linux@googlegroups.com,
+        Fangrui Song <maskray@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Borislav Petkov <bp@suse.de>,
+        Kees Cook <keescook@chromium.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] MIPS: Truncate link address into 32bit for 32bit
+ kernel
+Message-ID: <20200413153205.4ee52239@flygoat-x1e>
+In-Reply-To: <alpine.LFD.2.21.2004130736410.851719@eddie.linux-mips.org>
+References: <20200413062651.3992652-1-jiaxun.yang@flygoat.com>
+        <alpine.LFD.2.21.2004130736410.851719@eddie.linux-mips.org>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This patch enable KVM support for Loongson-3 by selecting HAVE_KVM, but
-only enable KVM/VZ on Loongson-3A R4+ (because VZ of early processors
-are incomplete). Besides, Loongson-3 support SMP guests, so we clear the
-linked load bit of LLAddr in kvm_vz_vcpu_load() if the guest has more
-than one VCPUs.
+On Mon, 13 Apr 2020 07:59:29 +0100 (BST)
+"Maciej W. Rozycki" <macro@linux-mips.org> wrote:
 
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
-Co-developed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/Kconfig            | 1 +
- arch/mips/kernel/cpu-probe.c | 1 +
- arch/mips/kvm/vz.c           | 2 +-
- 3 files changed, 3 insertions(+), 1 deletion(-)
+> On Mon, 13 Apr 2020, Jiaxun Yang wrote:
+> 
+> > LLD failed to link vmlinux with 64bit load address for 32bit ELF
+> > while bfd will strip 64bit address into 32bit silently.
+> > To fix LLD build, we should truncate load address provided by
+> > platform into 32bit for 32bit kernel.  
+> 
+> Reviewed-by: Maciej W. Rozycki <macro@linux-mips.org>
+> 
+> > diff --git a/arch/mips/kernel/vmlinux.lds.S
+> > b/arch/mips/kernel/vmlinux.lds.S index a5f00ec73ea6..5226cd8e4bee
+> > 100644 --- a/arch/mips/kernel/vmlinux.lds.S
+> > +++ b/arch/mips/kernel/vmlinux.lds.S
+> > @@ -55,7 +55,7 @@ SECTIONS
+> >  	/* . = 0xa800000000300000; */
+> >  	. = 0xffffffff80300000;
+> >  #endif
+> > -	. = VMLINUX_LOAD_ADDRESS;
+> > +	. = VMLINUX_LINK_ADDRESS;  
+> 
+>  The CONFIG_BOOT_ELF64 cruft right above it looks interesting to me,
+> never have ever been used.  We have had the current arrangement since:
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index a1f973c..e9a1389 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -1465,6 +1465,7 @@ config CPU_LOONGSON64
- 	select MIPS_L1_CACHE_SHIFT_6
- 	select GPIOLIB
- 	select SWIOTLB
-+	select HAVE_KVM
- 	help
- 		The Loongson GSx64(GS264/GS464/GS464E/GS464V) series of processor
- 		cores implements the MIPS64R2 instruction set with many extensions,
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index 5bf0821..c46724e 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -1958,6 +1958,7 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- 		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
- 		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
- 			MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
-+		c->ases &= ~MIPS_ASE_VZ; /* VZ of Loongson-3A2000/3000 is incomplete */
- 		break;
- 	case PRID_IMP_LOONGSON_64G:
- 		c->cputype = CPU_LOONGSON64;
-diff --git a/arch/mips/kvm/vz.c b/arch/mips/kvm/vz.c
-index 2ea1f13..cddd5b0 100644
---- a/arch/mips/kvm/vz.c
-+++ b/arch/mips/kvm/vz.c
-@@ -2666,7 +2666,7 @@ static int kvm_vz_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
- 	 * prevents a SC on the next VCPU from succeeding by matching a LL on
- 	 * the previous VCPU.
- 	 */
--	if (cpu_guest_has_rw_llb)
-+	if (vcpu->kvm->created_vcpus > 1)
- 		write_gc0_lladdr(0);
- 
- 	return 0;
--- 
-2.7.0
+It confused me either.
+It's only used by SGI so probably it's time to rename it as
+BOOT_SEG_ELF64.
 
+Wish someone could clarify what is it.
+
+Thanks.
+
+> 
+> commit 923ec3d20eef9e36456868b590873ce39f17fe71
+> Author: Ralf Baechle <ralf@linux-mips.org>
+> Date:   Wed Nov 6 22:16:38 2002 +0000
+> 
+>     Define load address in linker script instead of relying on the
+>     deprecated and notoriously unreliable option -Ttext.
+> 
+> and previously `-Ttext' was used with this script anyway, though not
+> very long, as the script was entirely ignored until:
+> 
+> commit 7a782968041ffc4c2d89816238e2f8ea5cceddba
+> Author: Ralf Baechle <ralf@linux-mips.org>
+> Date:   Thu Oct 31 23:54:21 2002 +0000
+> 
+>     Merge with Linux 2.5.36.
+> 
+>   Maciej
+
+--
+Jiaxun Yang
