@@ -2,278 +2,487 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 597D11A677B
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2020 16:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB761A68B5
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2020 17:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730261AbgDMOED (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Apr 2020 10:04:03 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:51102 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730262AbgDMOEC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Apr 2020 10:04:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586786639;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=DMxjnALOO+13jpd4EXyv1/+VreDyJBNjIrO01oQGGFU=;
-        b=IByWYz4HOI8NUu9bAmZgQ1PyJEVVZ8Ag37YurNYee5YLWGFUtklExZk+EbVf+cyAWQZhHc
-        cxTNXp+l3p7p51puWp9/I2dXRWq2mwNIhMgoYiT/gvof/k7ekUjBzPI9CBTICx+Rjep4Im
-        s/MhHV6o/CITQnMe8FvPLM3GfW1O9U4=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-197-1sa94T1yNgyEUntN5zmtAQ-1; Mon, 13 Apr 2020 10:03:55 -0400
-X-MC-Unique: 1sa94T1yNgyEUntN5zmtAQ-1
-Received: by mail-wr1-f70.google.com with SMTP id w12so6711502wrl.23
-        for <linux-mips@vger.kernel.org>; Mon, 13 Apr 2020 07:03:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=DMxjnALOO+13jpd4EXyv1/+VreDyJBNjIrO01oQGGFU=;
-        b=SP69HaaPYW4AbE9UrW4zibuC1Jj/BrifOdh66dn0qV/NtmlhDSEa2uEWqpZA6Oi+jg
-         PrV7D3GswFN+6TzLHg/Ks+g5RUbIOqAGnEmuGEPQG82Qrzlye4D+odQYEcarfdtn7iAu
-         JzBqQHQOs50rjA+0F8gFkoX5ekKEDYO9ivPHjjZr2aQQ3F6aKypYaxAfLdDJRCh9psfH
-         w+iptswcDrQ6MhJgi1TSg9urIHzVUi1tZG1gZQJMiVJGbYK2Jng24qeLcNTAWnLQ+iEt
-         6X3tJbFQryXTYCCXXr5j6nTn1zEBWbyzJRdyTmflxNNPIAIAxPZnQJQMKIKCi+v8x0b/
-         QgvQ==
-X-Gm-Message-State: AGi0PuY9w7uZSr4CPEQfFx54tYw07A483UuX3jFqif8WQYbTZXOcB25W
-        3Eqo9TU/yJ/bQ8oV1u4x333djBsaYrc3pTGnrgX4SQdTZ5JZPB3NwZPYVz9Fb/ICfpIUzb+OGnR
-        9RovUzqJPythjkHbb9bm9Ng==
-X-Received: by 2002:adf:fc4c:: with SMTP id e12mr18660290wrs.265.1586786634646;
-        Mon, 13 Apr 2020 07:03:54 -0700 (PDT)
-X-Google-Smtp-Source: APiQypLRZJuELUsSHD7peAwU3uRWTiihVpgUEtD1l8rr9Jo5lHrC+5Swh69bNDnIpYlTippwc8wt9Q==
-X-Received: by 2002:adf:fc4c:: with SMTP id e12mr18660255wrs.265.1586786634361;
-        Mon, 13 Apr 2020 07:03:54 -0700 (PDT)
-Received: from emanuele-MacBookPro.redhat.com ([194.230.155.239])
-        by smtp.gmail.com with ESMTPSA id j10sm11726263wmi.18.2020.04.13.07.03.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2020 07:03:53 -0700 (PDT)
-From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org
-Subject: [PATCH] kvm_host: unify VM_STAT and VCPU_STAT definitions in a single place
-Date:   Mon, 13 Apr 2020 16:03:32 +0200
-Message-Id: <20200413140332.22896-1-eesposit@redhat.com>
-X-Mailer: git-send-email 2.17.1
+        id S1730201AbgDMP1O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Apr 2020 11:27:14 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:39604 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730200AbgDMP1N (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Apr 2020 11:27:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1586791630; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=BpUJKSG1QLwuJ8g/pPckTiPCHG4DN8mcNSgmsGC72ho=;
+        b=uK67vhGuVa81RDQWDAezncZS76DHPz9eoSBJb+3/UCrpQpWgLa0yAaJhD26+340Lp1My99
+        QddxVaHBAgzVRwcmuROY0KVpuvoCLWre0a4UMDUL3F4Xgi4sDjCVMwUmZp0Nmk6NssqWph
+        wKog0aR0w6Pdd98mDTuouLWERdjPkNU=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     od@zcrc.me,
+        =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0?= <zhouyanjie@wanyeetech.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 01/13] dt-bindings: timer: Convert ingenic,tcu.txt to YAML
+Date:   Mon, 13 Apr 2020 17:26:21 +0200
+Message-Id: <20200413152633.198301-1-paul@crapouillou.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The macros VM_STAT and VCPU_STAT are redundantly implemented in multiple
-files, each used by a different architecure to initialize the debugfs
-entries for statistics. Since they all have the same purpose, they can be
-unified in a single common definition in include/linux/kvm_host.h
+Convert the ingenic,tcu.txt file to YAML.
 
-Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- arch/arm64/kvm/guest.c    | 23 +++++++--------
- arch/mips/kvm/mips.c      | 61 +++++++++++++++++++--------------------
- arch/powerpc/kvm/book3s.c |  3 --
- arch/powerpc/kvm/booke.c  |  3 --
- arch/s390/kvm/kvm-s390.c  |  3 --
- arch/x86/kvm/x86.c        |  3 --
- include/linux/kvm_host.h  |  3 ++
- 7 files changed, 43 insertions(+), 56 deletions(-)
 
-diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
-index 23ebe51410f0..3e3aee8b37c0 100644
---- a/arch/arm64/kvm/guest.c
-+++ b/arch/arm64/kvm/guest.c
-@@ -29,20 +29,17 @@
- 
- #include "trace.h"
- 
--#define VM_STAT(x) { #x, offsetof(struct kvm, stat.x), KVM_STAT_VM }
--#define VCPU_STAT(x) { #x, offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU }
+Notes:
+    This one patch was sent as standalone before, so it's technically
+    a V2. Support for 'assigned-clocks', 'assigned-clock-parents',
+    'assigned-clock-rates' was added.
+
+ .../devicetree/bindings/timer/ingenic,tcu.txt | 138 ---------
+ .../bindings/timer/ingenic,tcu.yaml           | 281 ++++++++++++++++++
+ 2 files changed, 281 insertions(+), 138 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/timer/ingenic,tcu.txt
+ create mode 100644 Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
+
+diff --git a/Documentation/devicetree/bindings/timer/ingenic,tcu.txt b/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
+deleted file mode 100644
+index 91f704951845..000000000000
+--- a/Documentation/devicetree/bindings/timer/ingenic,tcu.txt
++++ /dev/null
+@@ -1,138 +0,0 @@
+-Ingenic JZ47xx SoCs Timer/Counter Unit devicetree bindings
+-==========================================================
 -
- struct kvm_stats_debugfs_item debugfs_entries[] = {
--	VCPU_STAT(halt_successful_poll),
--	VCPU_STAT(halt_attempted_poll),
--	VCPU_STAT(halt_poll_invalid),
--	VCPU_STAT(halt_wakeup),
--	VCPU_STAT(hvc_exit_stat),
--	VCPU_STAT(wfe_exit_stat),
--	VCPU_STAT(wfi_exit_stat),
--	VCPU_STAT(mmio_exit_user),
--	VCPU_STAT(mmio_exit_kernel),
--	VCPU_STAT(exits),
-+	{ "halt_successful_poll", VCPU_STAT(halt_successful_poll) },
-+	{ "halt_attempted_poll", VCPU_STAT(halt_attempted_poll) },
-+	{ "halt_poll_invalid", VCPU_STAT(halt_poll_invalid) },
-+	{ "halt_wakeup", VCPU_STAT(halt_wakeup) },
-+	{ "hvc_exit_stat", VCPU_STAT(hvc_exit_stat) },
-+	{ "wfe_exit_stat", VCPU_STAT(wfe_exit_stat) },
-+	{ "wfi_exit_stat", VCPU_STAT(wfi_exit_stat) },
-+	{ "mmio_exit_user", VCPU_STAT(mmio_exit_user) },
-+	{ "mmio_exit_kernel", VCPU_STAT(mmio_exit_kernel) },
-+	{ "exits", VCPU_STAT(exits) },
- 	{ NULL }
- };
- 
-diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-index 8f05dd0a0f4e..f14b93d02f02 100644
---- a/arch/mips/kvm/mips.c
-+++ b/arch/mips/kvm/mips.c
-@@ -39,40 +39,39 @@
- #define VECTORSPACING 0x100	/* for EI/VI mode */
- #endif
- 
--#define VCPU_STAT(x) offsetof(struct kvm_vcpu, stat.x)
- struct kvm_stats_debugfs_item debugfs_entries[] = {
--	{ "wait",	  VCPU_STAT(wait_exits),	 KVM_STAT_VCPU },
--	{ "cache",	  VCPU_STAT(cache_exits),	 KVM_STAT_VCPU },
--	{ "signal",	  VCPU_STAT(signal_exits),	 KVM_STAT_VCPU },
--	{ "interrupt",	  VCPU_STAT(int_exits),		 KVM_STAT_VCPU },
--	{ "cop_unusable", VCPU_STAT(cop_unusable_exits), KVM_STAT_VCPU },
--	{ "tlbmod",	  VCPU_STAT(tlbmod_exits),	 KVM_STAT_VCPU },
--	{ "tlbmiss_ld",	  VCPU_STAT(tlbmiss_ld_exits),	 KVM_STAT_VCPU },
--	{ "tlbmiss_st",	  VCPU_STAT(tlbmiss_st_exits),	 KVM_STAT_VCPU },
--	{ "addrerr_st",	  VCPU_STAT(addrerr_st_exits),	 KVM_STAT_VCPU },
--	{ "addrerr_ld",	  VCPU_STAT(addrerr_ld_exits),	 KVM_STAT_VCPU },
--	{ "syscall",	  VCPU_STAT(syscall_exits),	 KVM_STAT_VCPU },
--	{ "resvd_inst",	  VCPU_STAT(resvd_inst_exits),	 KVM_STAT_VCPU },
--	{ "break_inst",	  VCPU_STAT(break_inst_exits),	 KVM_STAT_VCPU },
--	{ "trap_inst",	  VCPU_STAT(trap_inst_exits),	 KVM_STAT_VCPU },
--	{ "msa_fpe",	  VCPU_STAT(msa_fpe_exits),	 KVM_STAT_VCPU },
--	{ "fpe",	  VCPU_STAT(fpe_exits),		 KVM_STAT_VCPU },
--	{ "msa_disabled", VCPU_STAT(msa_disabled_exits), KVM_STAT_VCPU },
--	{ "flush_dcache", VCPU_STAT(flush_dcache_exits), KVM_STAT_VCPU },
-+	{ "wait",	  VCPU_STAT(wait_exits) },
-+	{ "cache",	  VCPU_STAT(cache_exits) },
-+	{ "signal",	  VCPU_STAT(signal_exits) },
-+	{ "interrupt",	  VCPU_STAT(int_exits) },
-+	{ "cop_unusable", VCPU_STAT(cop_unusable_exits) },
-+	{ "tlbmod",	  VCPU_STAT(tlbmod_exits) },
-+	{ "tlbmiss_ld",	  VCPU_STAT(tlbmiss_ld_exits) },
-+	{ "tlbmiss_st",	  VCPU_STAT(tlbmiss_st_exits) },
-+	{ "addrerr_st",	  VCPU_STAT(addrerr_st_exits) },
-+	{ "addrerr_ld",	  VCPU_STAT(addrerr_ld_exits) },
-+	{ "syscall",	  VCPU_STAT(syscall_exits) },
-+	{ "resvd_inst",	  VCPU_STAT(resvd_inst_exits) },
-+	{ "break_inst",	  VCPU_STAT(break_inst_exits) },
-+	{ "trap_inst",	  VCPU_STAT(trap_inst_exits) },
-+	{ "msa_fpe",	  VCPU_STAT(msa_fpe_exits) },
-+	{ "fpe",	  VCPU_STAT(fpe_exits) },
-+	{ "msa_disabled", VCPU_STAT(msa_disabled_exits) },
-+	{ "flush_dcache", VCPU_STAT(flush_dcache_exits) },
- #ifdef CONFIG_KVM_MIPS_VZ
--	{ "vz_gpsi",	  VCPU_STAT(vz_gpsi_exits),	 KVM_STAT_VCPU },
--	{ "vz_gsfc",	  VCPU_STAT(vz_gsfc_exits),	 KVM_STAT_VCPU },
--	{ "vz_hc",	  VCPU_STAT(vz_hc_exits),	 KVM_STAT_VCPU },
--	{ "vz_grr",	  VCPU_STAT(vz_grr_exits),	 KVM_STAT_VCPU },
--	{ "vz_gva",	  VCPU_STAT(vz_gva_exits),	 KVM_STAT_VCPU },
--	{ "vz_ghfc",	  VCPU_STAT(vz_ghfc_exits),	 KVM_STAT_VCPU },
--	{ "vz_gpa",	  VCPU_STAT(vz_gpa_exits),	 KVM_STAT_VCPU },
--	{ "vz_resvd",	  VCPU_STAT(vz_resvd_exits),	 KVM_STAT_VCPU },
-+	{ "vz_gpsi",	  VCPU_STAT(vz_gpsi_exits) },
-+	{ "vz_gsfc",	  VCPU_STAT(vz_gsfc_exits) },
-+	{ "vz_hc",	  VCPU_STAT(vz_hc_exits) },
-+	{ "vz_grr",	  VCPU_STAT(vz_grr_exits) },
-+	{ "vz_gva",	  VCPU_STAT(vz_gva_exits) },
-+	{ "vz_ghfc",	  VCPU_STAT(vz_ghfc_exits) },
-+	{ "vz_gpa",	  VCPU_STAT(vz_gpa_exits) },
-+	{ "vz_resvd",	  VCPU_STAT(vz_resvd_exits) },
- #endif
--	{ "halt_successful_poll", VCPU_STAT(halt_successful_poll), KVM_STAT_VCPU },
--	{ "halt_attempted_poll", VCPU_STAT(halt_attempted_poll), KVM_STAT_VCPU },
--	{ "halt_poll_invalid", VCPU_STAT(halt_poll_invalid), KVM_STAT_VCPU },
--	{ "halt_wakeup",  VCPU_STAT(halt_wakeup),	 KVM_STAT_VCPU },
-+	{ "halt_successful_poll", VCPU_STAT(halt_successful_poll) },
-+	{ "halt_attempted_poll", VCPU_STAT(halt_attempted_poll) },
-+	{ "halt_poll_invalid", VCPU_STAT(halt_poll_invalid) },
-+	{ "halt_wakeup",  VCPU_STAT(halt_wakeup) },
- 	{NULL}
- };
- 
-diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
-index 5690a1f9b976..55cb728ba06e 100644
---- a/arch/powerpc/kvm/book3s.c
-+++ b/arch/powerpc/kvm/book3s.c
-@@ -36,9 +36,6 @@
- #include "book3s.h"
- #include "trace.h"
- 
--#define VM_STAT(x, ...) offsetof(struct kvm, stat.x), KVM_STAT_VM, ## __VA_ARGS__
--#define VCPU_STAT(x, ...) offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ## __VA_ARGS__
+-For a description of the TCU hardware and drivers, have a look at
+-Documentation/mips/ingenic-tcu.rst.
 -
- /* #define EXIT_DEBUG */
- 
- struct kvm_stats_debugfs_item debugfs_entries[] = {
-diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
-index 6c18ea88fd25..fb8fa7060804 100644
---- a/arch/powerpc/kvm/booke.c
-+++ b/arch/powerpc/kvm/booke.c
-@@ -35,9 +35,6 @@
- 
- unsigned long kvmppc_booke_handlers;
- 
--#define VM_STAT(x) offsetof(struct kvm, stat.x), KVM_STAT_VM
--#define VCPU_STAT(x) offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU
+-Required properties:
 -
- struct kvm_stats_debugfs_item debugfs_entries[] = {
- 	{ "mmio",       VCPU_STAT(mmio_exits) },
- 	{ "sig",        VCPU_STAT(signal_exits) },
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 19a81024fe16..1a7bf8759750 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -57,9 +57,6 @@
- #define VCPU_IRQS_MAX_BUF (sizeof(struct kvm_s390_irq) * \
- 			   (KVM_MAX_VCPUS + LOCAL_IRQS))
- 
--#define VCPU_STAT(x) offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU
--#define VM_STAT(x) offsetof(struct kvm, stat.x), KVM_STAT_VM
+-- compatible: Must be one of:
+-  * ingenic,jz4740-tcu
+-  * ingenic,jz4725b-tcu
+-  * ingenic,jz4770-tcu
+-  * ingenic,x1000-tcu
+-  followed by "simple-mfd".
+-- reg: Should be the offset/length value corresponding to the TCU registers
+-- clocks: List of phandle & clock specifiers for clocks external to the TCU.
+-  The "pclk", "rtc" and "ext" clocks should be provided. The "tcu" clock
+-  should be provided if the SoC has it.
+-- clock-names: List of name strings for the external clocks.
+-- #clock-cells: Should be <1>;
+-  Clock consumers specify this argument to identify a clock. The valid values
+-  may be found in <dt-bindings/clock/ingenic,tcu.h>.
+-- interrupt-controller : Identifies the node as an interrupt controller
+-- #interrupt-cells : Specifies the number of cells needed to encode an
+-  interrupt source. The value should be 1.
+-- interrupts : Specifies the interrupt the controller is connected to.
 -
- struct kvm_stats_debugfs_item debugfs_entries[] = {
- 	{ "userspace_handled", VCPU_STAT(exit_userspace) },
- 	{ "exit_null", VCPU_STAT(exit_null) },
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index b8124b562dea..fb035d304004 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -97,9 +97,6 @@ static u64 __read_mostly efer_reserved_bits = ~((u64)EFER_SCE);
- 
- static u64 __read_mostly cr4_reserved_bits = CR4_RESERVED_BITS;
- 
--#define VM_STAT(x, ...) offsetof(struct kvm, stat.x), KVM_STAT_VM, ## __VA_ARGS__
--#define VCPU_STAT(x, ...) offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ## __VA_ARGS__
+-Optional properties:
 -
- #define KVM_X2APIC_API_VALID_FLAGS (KVM_X2APIC_API_USE_32BIT_IDS | \
-                                     KVM_X2APIC_API_DISABLE_BROADCAST_QUIRK)
- 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 6d58beb65454..e02d38c7fff1 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1130,6 +1130,9 @@ struct kvm_stats_debugfs_item {
- #define KVM_DBGFS_GET_MODE(dbgfs_item)                                         \
- 	((dbgfs_item)->mode ? (dbgfs_item)->mode : 0644)
- 
-+#define VM_STAT(x, ...) offsetof(struct kvm, stat.x), KVM_STAT_VM, ## __VA_ARGS__
-+#define VCPU_STAT(x, ...) offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ## __VA_ARGS__
+-- ingenic,pwm-channels-mask: Bitmask of TCU channels reserved for PWM use.
+-  Default value is 0xfc.
+-
+-
+-Children nodes
+-==========================================================
+-
+-
+-PWM node:
+----------
+-
+-Required properties:
+-
+-- compatible: Must be one of:
+-  * ingenic,jz4740-pwm
+-  * ingenic,jz4725b-pwm
+-- #pwm-cells: Should be 3. See ../pwm/pwm.yaml for a description of the cell
+-  format.
+-- clocks: List of phandle & clock specifiers for the TCU clocks.
+-- clock-names: List of name strings for the TCU clocks.
+-
+-
+-Watchdog node:
+---------------
+-
+-Required properties:
+-
+-- compatible: Must be "ingenic,jz4740-watchdog"
+-- clocks: phandle to the WDT clock
+-- clock-names: should be "wdt"
+-
+-
+-OS Timer node:
+----------
+-
+-Required properties:
+-
+-- compatible: Must be one of:
+-  * ingenic,jz4725b-ost
+-  * ingenic,jz4770-ost
+-- clocks: phandle to the OST clock
+-- clock-names: should be "ost"
+-- interrupts : Specifies the interrupt the OST is connected to.
+-
+-
+-Example
+-==========================================================
+-
+-#include <dt-bindings/clock/jz4770-cgu.h>
+-#include <dt-bindings/clock/ingenic,tcu.h>
+-
+-/ {
+-	tcu: timer@10002000 {
+-		compatible = "ingenic,jz4770-tcu", "simple-mfd";
+-		reg = <0x10002000 0x1000>;
+-		#address-cells = <1>;
+-		#size-cells = <1>;
+-		ranges = <0x0 0x10002000 0x1000>;
+-
+-		#clock-cells = <1>;
+-
+-		clocks = <&cgu JZ4770_CLK_RTC
+-			  &cgu JZ4770_CLK_EXT
+-			  &cgu JZ4770_CLK_PCLK>;
+-		clock-names = "rtc", "ext", "pclk";
+-
+-		interrupt-controller;
+-		#interrupt-cells = <1>;
+-
+-		interrupt-parent = <&intc>;
+-		interrupts = <27 26 25>;
+-
+-		watchdog: watchdog@0 {
+-			compatible = "ingenic,jz4740-watchdog";
+-			reg = <0x0 0xc>;
+-
+-			clocks = <&tcu TCU_CLK_WDT>;
+-			clock-names = "wdt";
+-		};
+-
+-		pwm: pwm@40 {
+-			compatible = "ingenic,jz4740-pwm";
+-			reg = <0x40 0x80>;
+-
+-			#pwm-cells = <3>;
+-
+-			clocks = <&tcu TCU_CLK_TIMER0
+-				  &tcu TCU_CLK_TIMER1
+-				  &tcu TCU_CLK_TIMER2
+-				  &tcu TCU_CLK_TIMER3
+-				  &tcu TCU_CLK_TIMER4
+-				  &tcu TCU_CLK_TIMER5
+-				  &tcu TCU_CLK_TIMER6
+-				  &tcu TCU_CLK_TIMER7>;
+-			clock-names = "timer0", "timer1", "timer2", "timer3",
+-				      "timer4", "timer5", "timer6", "timer7";
+-		};
+-
+-		ost: timer@e0 {
+-			compatible = "ingenic,jz4770-ost";
+-			reg = <0xe0 0x20>;
+-
+-			clocks = <&tcu TCU_CLK_OST>;
+-			clock-names = "ost";
+-
+-			interrupts = <15>;
+-		};
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml b/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
+new file mode 100644
+index 000000000000..e21e9972ed65
+--- /dev/null
++++ b/Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
+@@ -0,0 +1,281 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/timer/ingenic,tcu.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- extern struct kvm_stats_debugfs_item debugfs_entries[];
- extern struct dentry *kvm_debugfs_dir;
- 
++title: Ingenic SoCs Timer/Counter Unit (TCU) devicetree bindings
++
++description: |
++  For a description of the TCU hardware and drivers, have a look at
++  Documentation/mips/ingenic-tcu.rst.
++
++maintainers:
++  - Paul Cercueil <paul@crapouillou.net>
++
++select:
++  properties:
++    compatible:
++      contains:
++        enum:
++          - ingenic,jz4740-tcu
++          - ingenic,jz4725b-tcu
++          - ingenic,jz4770-tcu
++          - ingenic,jz4780-tcu
++          - ingenic,x1000-tcu
++  required:
++    - compatible
++
++properties:
++  $nodename:
++    pattern: "^timer@[0-9a-f]+$"
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 1
++
++  "#clock-cells":
++    const: 1
++
++  "#interrupt-cells":
++    const: 1
++
++  interrupt-controller: true
++
++  ranges: true
++
++  compatible:
++    oneOf:
++      - items:
++        - enum:
++          - ingenic,jz4740-tcu
++          - ingenic,jz4725b-tcu
++          - ingenic,jz4770-tcu
++          - ingenic,x1000-tcu
++        - const: simple-mfd
++      - items:
++        - const: ingenic,jz4780-tcu
++        - const: ingenic,jz4770-tcu
++        - const: simple-mfd
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: RTC clock
++      - description: EXT clock
++      - description: PCLK clock
++      - description: TCU clock
++    minItems: 3
++
++  clock-names:
++    items:
++      - const: rtc
++      - const: ext
++      - const: pclk
++      - const: tcu
++    minItems: 3
++
++  interrupts:
++    items:
++      - description: TCU0 interrupt
++      - description: TCU1 interrupt
++      - description: TCU2 interrupt
++    minItems: 1
++
++  assigned-clocks:
++    minItems: 1
++    maxItems: 8
++
++  assigned-clock-parents:
++    minItems: 1
++    maxItems: 8
++
++  assigned-clock-rates:
++    minItems: 1
++    maxItems: 8
++
++  ingenic,pwm-channels-mask:
++    description: Bitmask of TCU channels reserved for PWM use.
++    allOf:
++      - $ref: /schemas/types.yaml#/definitions/uint32
++      - minimum: 0x00
++      - maximum: 0xff
++      - default: 0xfc
++
++patternProperties:
++  "^watchdog@[a-f0-9]+$":
++    type: object
++    allOf: [ $ref: ../watchdog/watchdog.yaml# ]
++    properties:
++      compatible:
++        oneOf:
++          - enum:
++            - ingenic,jz4740-watchdog
++            - ingenic,jz4780-watchdog
++          - items:
++            - const: ingenic,jz4770-watchdog
++            - const: ingenic,jz4740-watchdog
++
++      reg:
++        maxItems: 1
++
++      clocks:
++        maxItems: 1
++
++      clock-names:
++        const: wdt
++
++    required:
++      - compatible
++      - reg
++      - clocks
++      - clock-names
++
++  "^pwm@[a-f0-9]+$":
++    type: object
++    allOf: [ $ref: ../pwm/pwm.yaml# ]
++    properties:
++      compatible:
++        oneOf:
++          - enum:
++            - ingenic,jz4740-pwm
++          - items:
++            - enum:
++              - ingenic,jz4770-pwm
++              - ingenic,jz4780-pwm
++            - const: ingenic,jz4740-pwm
++
++      reg:
++        maxItems: 1
++
++      clocks:
++        minItems: 6
++        maxItems: 8
++
++      clock-names:
++        items:
++          - const: timer0
++          - const: timer1
++          - const: timer2
++          - const: timer3
++          - const: timer4
++          - const: timer5
++          - const: timer6
++          - const: timer7
++        minItems: 6
++
++    required:
++      - compatible
++      - reg
++      - clocks
++      - clock-names
++
++  "^timer@[a-f0-9]+$":
++    type: object
++    properties:
++      compatible:
++        oneOf:
++          - enum:
++            - ingenic,jz4725b-ost
++            - ingenic,jz4770-ost
++          - items:
++            - const: ingenic,jz4780-ost
++            - const: ingenic,jz4770-ost
++
++      reg:
++        maxItems: 1
++
++      clocks:
++        maxItems: 1
++
++      clock-names:
++        const: ost
++
++      interrupts:
++        maxItems: 1
++
++    required:
++      - compatible
++      - reg
++      - clocks
++      - clock-names
++      - interrupts
++
++    additionalProperties: false
++
++required:
++  - "#clock-cells"
++  - "#interrupt-cells"
++  - interrupt-controller
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/jz4770-cgu.h>
++    #include <dt-bindings/clock/ingenic,tcu.h>
++    tcu: timer@10002000 {
++      compatible = "ingenic,jz4770-tcu", "simple-mfd";
++      reg = <0x10002000 0x1000>;
++      #address-cells = <1>;
++      #size-cells = <1>;
++      ranges = <0x0 0x10002000 0x1000>;
++
++      #clock-cells = <1>;
++
++      clocks = <&cgu JZ4770_CLK_RTC>,
++               <&cgu JZ4770_CLK_EXT>,
++               <&cgu JZ4770_CLK_PCLK>;
++      clock-names = "rtc", "ext", "pclk";
++
++      interrupt-controller;
++      #interrupt-cells = <1>;
++
++      interrupt-parent = <&intc>;
++      interrupts = <27 26 25>;
++
++      watchdog: watchdog@0 {
++        compatible = "ingenic,jz4770-watchdog", "ingenic,jz4740-watchdog";
++        reg = <0x0 0xc>;
++
++        clocks = <&tcu TCU_CLK_WDT>;
++        clock-names = "wdt";
++      };
++
++      pwm: pwm@40 {
++        compatible = "ingenic,jz4770-pwm", "ingenic,jz4740-pwm";
++        reg = <0x40 0x80>;
++
++        #pwm-cells = <3>;
++
++        clocks = <&tcu TCU_CLK_TIMER0>,
++                 <&tcu TCU_CLK_TIMER1>,
++                 <&tcu TCU_CLK_TIMER2>,
++                 <&tcu TCU_CLK_TIMER3>,
++                 <&tcu TCU_CLK_TIMER4>,
++                 <&tcu TCU_CLK_TIMER5>,
++                 <&tcu TCU_CLK_TIMER6>,
++                 <&tcu TCU_CLK_TIMER7>;
++        clock-names = "timer0", "timer1", "timer2", "timer3",
++                "timer4", "timer5", "timer6", "timer7";
++      };
++
++      ost: timer@e0 {
++        compatible = "ingenic,jz4770-ost";
++        reg = <0xe0 0x20>;
++
++        clocks = <&tcu TCU_CLK_OST>;
++        clock-names = "ost";
++
++        interrupts = <15>;
++      };
++    };
 -- 
-2.17.1
+2.25.1
 
