@@ -1,48 +1,44 @@
 Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from vger.kernel.org (unknown [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D95C1A63BF
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2020 09:32:25 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 4324F1A65A8
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2020 13:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729346AbgDMHcV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Apr 2020 03:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.18]:33228 "EHLO
+        id S1728730AbgDMITX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Apr 2020 04:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:42722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727612AbgDMHcV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Apr 2020 03:32:21 -0400
-Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [IPv6:2001:19f0:6001:3633:5400:2ff:fe8c:553])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1853C008651;
-        Mon, 13 Apr 2020 00:32:20 -0700 (PDT)
+        with ESMTP id S1727971AbgDMITV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Apr 2020 04:19:21 -0400
+Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [149.28.68.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF2FC00860B
+        for <linux-mips@vger.kernel.org>; Mon, 13 Apr 2020 01:19:20 -0700 (PDT)
 Received: from flygoat-x1e (unknown [IPv6:240e:390:49e:92c0::d68])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id EEB2820D11;
-        Mon, 13 Apr 2020 07:32:10 +0000 (UTC)
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 1680920CF2;
+        Mon, 13 Apr 2020 08:19:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1586763139; bh=bhQVP41inNwzZ4QYRL2kZVsflSK4XBShSyjAeWvLFKA=;
+        t=1586765960; bh=4oWYtlgTtO0X4LB3G6OgFIKhhJH7k9TnuQnTQzRB24o=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WwQyW3eYa2lybRg3oCYp1RfX49ZM16W8iuJsja/D/MbTjwhPTHL/27832nqi1mmE7
-         YrT2DZ4r/gne+9PV10KNIrGNDxcp08eWnHYWEw9vuEI1GL5qRqW0FLuOrSjJHEWY+6
-         yMvl+TVtWx6CyBDaX0pTTMCoA8oGdf7HRzib0ALNQo7mG1zR0iJ0BLVhcLIbC5JAJV
-         37QRkfTkMZlrQBRqzKimYzzBYR8Y3iT6+pYpL5PNYPFtVj/hyOTCjKkRjpwQ3LroSY
-         OhEbudeVM+ogVIpHPzFLQPnQig3oy+ZkYTVnlz1xzJaNzqE1X34nxyUGnU8W9kMP8X
-         F1BddQw4pHgKg==
-Date:   Mon, 13 Apr 2020 15:32:05 +0800
+        b=vgL/gYJXeBGHG1mziH4t6cGyVwTKL3Fd8sATYRT5Y5Y5qLRFdPZrkpLT0ZzvJ2FoZ
+         hzL398788Qe1tgyx1pfiaUWRRX+05cKSO7N5e1EK+AOqtstAvz1povGiZy39PSbqbq
+         bx3SpCHz3hzJQjG0fV7jh7g5MbeK0iF1Mf2Z+zRD5jeRt6DMHbBv2L7L61+OKfrR75
+         5iaPJljwdBn3NfBzqzNBByprnt29vTlWqcf9Pj6FpAoEqTEc10hDRaO4GEIJhE0D68
+         +rb+cCjt7Zx/Goas7c4nUaPQBsm2HSwn3obSkn2fzM8qkIMSNNCWXOc4ay5NXf9lmr
+         TgbZYXUbC1fgQ==
+Date:   Mon, 13 Apr 2020 16:18:42 +0800
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     "Maciej W. Rozycki" <macro@linux-mips.org>
-Cc:     linux-mips@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Fangrui Song <maskray@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Borislav Petkov <bp@suse.de>,
-        Kees Cook <keescook@chromium.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] MIPS: Truncate link address into 32bit for 32bit
- kernel
-Message-ID: <20200413153205.4ee52239@flygoat-x1e>
-In-Reply-To: <alpine.LFD.2.21.2004130736410.851719@eddie.linux-mips.org>
-References: <20200413062651.3992652-1-jiaxun.yang@flygoat.com>
-        <alpine.LFD.2.21.2004130736410.851719@eddie.linux-mips.org>
+        kvm@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        aleksandar.qemu.devel@gmail.com
+Subject: Re: [PATCH 0/15] KVM: MIPS: Add Loongson-3 support (Host Side)
+Message-ID: <20200413161842.57ad8be4@flygoat-x1e>
+In-Reply-To: <1586763024-12197-1-git-send-email-chenhc@lemote.com>
+References: <1586763024-12197-1-git-send-email-chenhc@lemote.com>
 X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -52,58 +48,121 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 13 Apr 2020 07:59:29 +0100 (BST)
-"Maciej W. Rozycki" <macro@linux-mips.org> wrote:
+On Mon, 13 Apr 2020 15:30:09 +0800
+Huacai Chen <chenhc@lemote.com> wrote:
 
-> On Mon, 13 Apr 2020, Jiaxun Yang wrote:
+> We are preparing to add KVM support for Loongson-3. VZ extension is
+> fully supported in Loongson-3A R4+, and we will not care about old
+> CPUs (at least now). We already have a full functional Linux kernel
+> (based on Linux-5.4.x LTS) and QEMU (based on 5.0.0-rc2) and their git
+> repositories are here:
 > 
-> > LLD failed to link vmlinux with 64bit load address for 32bit ELF
-> > while bfd will strip 64bit address into 32bit silently.
-> > To fix LLD build, we should truncate load address provided by
-> > platform into 32bit for 32bit kernel.  
+> QEMU: https://github.com/chenhuacai/qemu
+> Kernel: https://github.com/chenhuacai/linux
 > 
-> Reviewed-by: Maciej W. Rozycki <macro@linux-mips.org>
+> Of course these two repositories need to be rework and not suitable
+> for upstream (especially the commits need to be splitted). We show
+> them here is just to tell others what we have done, and how
+> KVM/Loongson will look like.
 > 
-> > diff --git a/arch/mips/kernel/vmlinux.lds.S
-> > b/arch/mips/kernel/vmlinux.lds.S index a5f00ec73ea6..5226cd8e4bee
-> > 100644 --- a/arch/mips/kernel/vmlinux.lds.S
-> > +++ b/arch/mips/kernel/vmlinux.lds.S
-> > @@ -55,7 +55,7 @@ SECTIONS
-> >  	/* . = 0xa800000000300000; */
-> >  	. = 0xffffffff80300000;
-> >  #endif
-> > -	. = VMLINUX_LOAD_ADDRESS;
-> > +	. = VMLINUX_LINK_ADDRESS;  
-> 
->  The CONFIG_BOOT_ELF64 cruft right above it looks interesting to me,
-> never have ever been used.  We have had the current arrangement since:
+> Our plan is make the KVM host side be upstream first, and after that,
+> we will make the KVM guest side and QEMU emulator be upstream.
 
-It confused me either.
-It's only used by SGI so probably it's time to rename it as
-BOOT_SEG_ELF64.
++ Aleksandar as QEMU/MIPS mainatiner
 
-Wish someone could clarify what is it.
+I was involved in KVM/Loongson development a bit and also intend to
+help with mainline these works.
+
+After dealing with basic LS7A PCH kernel support, I'm going to
+cooperate with Huacai and anyone who interested in to deal with
+following stuff:
+
+- Basic QEMU/TCG support for Loongson64 instructions.
+	Well, it seems unrelated with KVM, but that would make
+	development easier with cross ISA emulation. I'm not going to
+	implement all the features like Loongson's page table fast walk
+	extension and binary translation extension but I'll ensure any
+	binary compiled with march=loongson3a can run flawlessly on
+	TCG.
+
+- Design of Loongson-VIRT QEMU machine
+	It is nearly impossible to bring a real Loongson system into
+	QEMU. Both RS780E and LS7A PCH have tons of unreasonable design
+	that would make the emulation extremely complex, Loongson
+	company's KVM implementation[1] has already proofed that,
+	thay're now in the hell. So we all agreed that we should build
+	a machine from draft. I think we should reuse existing infra as
+	far as possible to reduce our work load. I'm planing to use
+	pci-host-cam-generic together with VIRTIO PCI devices and a
+	a strip down version of loongson,liointc-1.0a to build a pure
+	PCI based system. But if any one have better idea please just
+	tell us, I'm still considering how to implement SMP-IPI and ACPI
+	stuff.
+
+- BIOS in VM
+	This has a lower priority. But BIOS is required to make a
+	emulated machine looks like a real machine. Loongson have their
+	open-sourced PMON and close-sourced UEFI(Based on tianocore).
+	I'd really with Loongson or Lemote will open-source their UEFI
+	but PMON is also a option.
+
+Any kind of feedback is appreciated.
 
 Thanks.
 
-> 
-> commit 923ec3d20eef9e36456868b590873ce39f17fe71
-> Author: Ralf Baechle <ralf@linux-mips.org>
-> Date:   Wed Nov 6 22:16:38 2002 +0000
-> 
->     Define load address in linker script instead of relying on the
->     deprecated and notoriously unreliable option -Ttext.
-> 
-> and previously `-Ttext' was used with this script anyway, though not
-> very long, as the script was entirely ignored until:
-> 
-> commit 7a782968041ffc4c2d89816238e2f8ea5cceddba
-> Author: Ralf Baechle <ralf@linux-mips.org>
-> Date:   Thu Oct 31 23:54:21 2002 +0000
-> 
->     Merge with Linux 2.5.36.
-> 
->   Maciej
+Wish you good health :-)
 
---
-Jiaxun Yang
+
+[1]: http://cgit.loongnix.org/cgit/linux-3.10/ &
+http://cgit.loongnix.org/cgit/qemu-2.7.0/
+
+Btw: I think Cc qemu-devel for the whole series is a little bit
+disturb, probably we should only Cc qemu-devel for the cover letter.
+
+> 
+> Mike Rapoport(1):
+>  mips: define pud_index() regardless of page table folding
+> 
+> Xing Li(2):
+>  KVM: MIPS: Define KVM_ENTRYHI_ASID to cpu_asid_mask(&boot_cpu_data)
+>  KVM: MIPS: Fix VPN2_MASK definition for variable cpu_vmbits
+> 
+> Huacai Chen(12):
+>  KVM: MIPS: Increase KVM_MAX_VCPUS and KVM_USER_MEM_SLOTS to 16
+>  KVM: MIPS: Add EVENTFD support which is needed by VHOST
+>  KVM: MIPS: Use lddir/ldpte instructions to lookup gpa_mm.pgd
+>  KVM: MIPS: Introduce and use cpu_guest_has_ldpte
+>  KVM: MIPS: Use root tlb to control guest's CCA for Loongson-3
+>  KVM: MIPS: Let indexed cacheops cause guest exit on Loongson-3
+>  KVM: MIPS: Add more types of virtual interrupts
+>  KVM: MIPS: Add Loongson-3 Virtual IPI interrupt support
+>  KVM: MIPS: Add CPUCFG emulation for Loongson-3
+>  KVM: MIPS: Add CONFIG6 and DIAG registers emulation
+>  KVM: MIPS: Add more MMIO load/store instructions emulation
+>  KVM: MIPS: Enable KVM support for Loongson-3
+> 
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> ---
+>  arch/mips/Kconfig                    |   1 +
+>  arch/mips/include/asm/cpu-features.h |   3 +
+>  arch/mips/include/asm/kvm_host.h     |  50 +++-
+>  arch/mips/include/asm/mipsregs.h     |   7 +
+>  arch/mips/include/asm/pgtable-64.h   |   4 +-
+>  arch/mips/include/uapi/asm/inst.h    |  11 +
+>  arch/mips/kernel/cpu-probe.c         |   2 +
+>  arch/mips/kvm/Kconfig                |   1 +
+>  arch/mips/kvm/Makefile               |   5 +-
+>  arch/mips/kvm/emulate.c              | 461
+> ++++++++++++++++++++++++++++++++++- arch/mips/kvm/entry.c
+>    |  19 +- arch/mips/kvm/interrupt.c            |  93 +------
+>  arch/mips/kvm/interrupt.h            |  14 +-
+>  arch/mips/kvm/loongson_ipi.c         | 215 ++++++++++++++++
+>  arch/mips/kvm/mips.c                 |  49 +++-
+>  arch/mips/kvm/tlb.c                  |  39 +++
+>  arch/mips/kvm/trap_emul.c            |   3 +
+>  arch/mips/kvm/vz.c                   | 204 +++++++++++-----
+>  18 files changed, 1013 insertions(+), 168 deletions(-)
+>  create mode 100644 arch/mips/kvm/loongson_ipi.c
+> --
+> 2.7.0
+
