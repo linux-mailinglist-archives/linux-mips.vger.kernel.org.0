@@ -2,254 +2,414 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4401D21EE
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 00:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DA81A6E3A
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Apr 2020 23:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731138AbgEMWXF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 May 2020 18:23:05 -0400
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:61133 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730064AbgEMWXE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 May 2020 18:23:04 -0400
-IronPort-SDR: yexkrOKO2iVAoGW9XWov+YvxtjjcTsS1LeB3m3LJot+7lz4cPI2zCwdZuD2r6OyY6E5jzsxqQ3
- 5P7R7CV9ZFcvByFge4O7DEihAiKPtRut5XoNIBGDgl07D8eNmW46bxC1vE0g3Lp0XOkF8ixCIg
- mSuAHgThNcijigkGX+cEHLtlhcCxAjGZesgjTwG6YdY4ycqH65oWUBLwSBt+VSBulXBt9gxEtH
- 7OI2923CqMGC2EDC+I4ZHq/Ee50IuDBsZQ2hQW1aXsErw8dtY4Rv7TvS1r4HqpU3ShLV5UK0H7
- V68=
-X-IronPort-AV: E=Sophos;i="5.73,389,1583164800"; 
-   d="scan'208";a="137620224"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 14 May 2020 06:23:03 +0800
-IronPort-SDR: TLBvdpXwg970kmEm5osqnWHOc8GbtP97wOPC5cf73YYlRwFCfdNSp0896sbcC4B1sKKclqnijf
- ku1w3CpU//SzMJzPEIlpWLClfK/3R6L+E=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 15:13:16 -0700
-IronPort-SDR: KYruNOjKLoQ8AwlGdQBr13ru8Y4GGC0ommx6movQJMP3nq4NTdhcJX6B8t+P0K+3OPWhe/yH94
- ouLRkQDBr57g==
-WDCIronportException: Internal
-Received: from unknown (HELO redsun52) ([10.149.66.28])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 15:23:02 -0700
-X-Received: from CY4PR04MB0374.namprd04.prod.outlook.com (2603:10b6:a03:117::45)
- by BYAPR04MB5176.namprd04.prod.outlook.com with HTTPS via
- BYAPR08CA0068.NAMPRD08.PROD.OUTLOOK.COM; Wed, 13 May 2020 22:19:15 +0000
-X-Received: from BN6PR21CA0015.namprd21.prod.outlook.com (2603:10b6:404:8e::25)
- by CY4PR04MB0374.namprd04.prod.outlook.com (2603:10b6:903:bb::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.33; Wed, 13 May
- 2020 22:19:15 +0000
-X-Received: from BN3NAM04FT036.eop-NAM04.prod.protection.outlook.com
- (2603:10b6:404:8e:cafe::54) by BN6PR21CA0015.outlook.office365.com
- (2603:10b6:404:8e::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.1 via Frontend
- Transport; Wed, 13 May 2020 22:19:14 +0000
-Authentication-Results: spf=none (sender IP is 216.71.153.141)
- smtp.mailfrom=linux-mips.org; wdc.com; dkim=none (message not signed)
- header.d=none;wdc.com; dmarc=none action=none header.from=linux-mips.org;
-X-Received: from esa3.hgst.iphmx.com (216.71.153.141) by
- BN3NAM04FT036.mail.protection.outlook.com (10.152.93.184) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3000.19 via Frontend Transport; Wed, 13 May 2020 22:19:14 +0000
-Authentication-Results-Original: esa3.hgst.iphmx.com; dkim=none (message not
- signed) header.i=none; spf=None smtp.mailfrom=macro@linux-mips.org; spf=None
- smtp.helo=postmaster@cvs.linux-mips.org
-X-Ironport-Dmarc-Check-Result: validskip
-IronPort-SDR: TZX4iXsRV8QJIgtAfarVTxH2vv9kSP1tJpaghLwdPiGWuory8XY2+OnBWh7JimM6+HldPIMQlG
- 9/CWr25AHV40iQgYODTsNnYZ3RoxEYaWsLDtR2aDDteT28Vlbzk1IA1lJLeRpg5auN9byL2OWr
- h0ZzWJbP4OfoGi76BIoFZenj/kxAuXoQIZGKAYEQtCkQUuM+YqkbZtUS6HB7dCGLeag+VhNsb7
- cB7H00Ty76+lmNjrrKi0hptlSg3Rai1Gvz5n6A6NvF2LrzLY3a+VcT69PUp1gpujUdUyOcXw5U
- jtz1+nrcz915nNxrlGChcIMD
-IronPort-PHdr: =?us-ascii?q?9a23=3ANq62KRxCPIbFP2LXCy+O+j09IxM/srCxBDY+r6?=
- =?us-ascii?q?Qd2ugSIJqq85mqBkHD//Il1AaPAdyGraMZwLKI+4nbGkU4qa6bt34DdJEeHz?=
- =?us-ascii?q?Qksu4x2zIaPcieFEfgJ+TrZSFpVO5LVVti4m3peRMNQJW2aFLduGC94iAPER?=
- =?us-ascii?q?vjKwV1Ov71GonPhMiryuy+4ZLebxhIiTanZb5/LBq6oRnQu8ILnYZsN6E9xw?=
- =?us-ascii?q?fTrHBVYepW32RoJVySnxb4+Mi9+YNo/jpTtfw86cNOSL32cKskQ7NWCjQmKH?=
- =?us-ascii?q?0169bwtRbfVwuP52ATXXsQnxFVHgXK9hD6XpP2sivnqupw3TSRMMPqQbwoXz?=
- =?us-ascii?q?mp8rxmQwH0higZKzE58XnXis1ug6JdvBKhvAF0z4rNbI2IKPZyYqbRcNUHTm?=
- =?us-ascii?q?RDQ8lRTTRMDI28YYUREuQOP+VWr4fyqFQStha+GRWgCP/zxjNUmnP6w6s32P?=
- =?us-ascii?q?khHwHc2wwgGsoDvHrTotrvKKgSUP66zKvVxjrDdf9dxCvz6I/JcxEhvf6MXr?=
- =?us-ascii?q?NwfcTMwkQoEgPKlEmfqZbiPz6O0uQNsm6b7/dvVO62jm4nqhlxoiO1yscrkI?=
- =?us-ascii?q?nJiZsYx1bZ/ip23Ig7P8e3SFJnYdG6CptQsTmXOpd4T84tTWxluSc3xL0HtJ?=
- =?us-ascii?q?C1fCUH1Jcqyh/dZvCafYaF7BPuWfuSLDp2hHxrd66yiRmu/EWkyuPxUtW43U?=
- =?us-ascii?q?pKoydDj9LCuHcN1xnJ5ciGTPtw5kOh1iuU1wzJ8eFLOlg4lbHcK5482L4/io?=
- =?us-ascii?q?QcsErZES/shkr6lqiWdl8r+uSw5OTnY6nmpp+BN4BvkA3xLqMumsm5DO8lMQ?=
- =?us-ascii?q?YOR3CW9fmz2bDg50H1XrVHguAsnqTdsJ3WP9kXq6C6DgJTz40t8QywDy2839?=
- =?us-ascii?q?QdhXQHLExKeBaAj4XxJ17OPuv4Ae27g1Stljdr2v/HMqTkApXMNnjDi63tfb?=
- =?us-ascii?q?Fn605T0AYzzNZf6IxICrwZPf7+VUz8uMbGAhI5LgC42eLqBdVn2o8DV2+CAb?=
- =?us-ascii?q?eVMKbIvl+J4uIvLfOMZIgQuDvlLvgq/eLhjWU+mVIGeamp3J0XaG23H/h/Jk?=
- =?us-ascii?q?WZYGLsgswbHWcNpAo+Q/TmiEeeXj5Le3ayQ6U86yk+CI28EYjDXIetjaeP3S?=
- =?us-ascii?q?imApJafHxJCleJESSgS4LRdf4KZziPI4dalToLHeykQpQizxi/nAD9zLVjI6?=
- =?us-ascii?q?zf/ShO5rz5090grcjanhA/93RLSYyn1HOcRGJ11CtcQjY9xqdXpU1710fG1K?=
- =?us-ascii?q?lgmLpfD9MFtKABaRszKZOJl78yMNv1QA+UO47REAz8EPy7HTE8SM4wyNYSYk?=
- =?us-ascii?q?F7Xu+vlQ3HwzHzXedHmqeCX9o0/bnAmXnpJ8NtjX3B0fppg1onR55JMmurzu?=
- =?us-ascii?q?56+hPIDoHE20Oei+6xdKsa0SKMvGeOxGaDpgdZBQh3V6iWFWsHaB7wqtL0rl?=
- =?us-ascii?q?jHU6foDL0mNgVbzsvXL6JBcNrBiVRAWeemPdXGeCS2gWjjTQ2QyOaqa4znM3?=
- =?us-ascii?q?4YwD2bCEUAlFUL+m2aMAElGiq7i2nAF3pqFFTycwbp8PFl7nShQRZunTuHZE?=
- =?us-ascii?q?Bgybe5vyUtq6bNEaE12bQJ8GcssDwvWlayxM6QCsKAohond6JZM5s75x9c2G?=
- =?us-ascii?q?TVuhY1N4G8L61kml8Vchhm2iGmnxRxBIJalME2rXQshANsIKOc2VlFenuWx5?=
- =?us-ascii?q?f1crHQL2Dz+lioZebT01rE1/6S+6ES+LE9qk34+gazGQtHkT0v0tVY1Wed+o?=
- =?us-ascii?q?SfCQMTVZzrVUNkvxN+przcfmw8/9aNiS0qa/Tt9G6fnYtyVLhAqF7oZdpUPa?=
- =?us-ascii?q?KaGRWnHtYTXI6uJ/c23VmxbhcUeutV8f1RXYvuev2Y1aqsJOslkiihiDEN5Y?=
- =?us-ascii?q?l2yEWk8yt6V/6N2pcd2LefxATNBFKexB+x99v6n4xJf2RYG2O00y/MAI9Xe7?=
- =?us-ascii?q?03eIcTEiGpOcL9lZ1uwpXqXXBf7luqAVgLjdSxdy2VaVjshFcC70kcrH25lC?=
- =?us-ascii?q?f99ARayGl4/IyY2iGGg+n5fUFBOmFQWC9jlVfpMc6/iNVIFE6vJxMkkheo/w?=
- =?us-ascii?q?7z2rRbqaJjLmLSXVYtHWC+LmdsVbG1v6aDZMgH4Y0hsCFeWuCxKV6ATbu1rx?=
- =?us-ascii?q?wf2iLlV2xQoVJzPymtoYn8lgdmhXi1J2ho6n7Yf9xggBLe/MeaQuRen3IHSC?=
- =?us-ascii?q?R+lTjLFw28Mt2urrD239/ItuGzUX7kV4UGKHW7i9nd7W3quCszWk3s1+q+kd?=
- =?us-ascii?q?DmDwUghCLg3oIsVSrTsFD9eonux+KxNuc0GysgTFL69cd+HZlz14Uqg5RFk3?=
- =?us-ascii?q?0TjY+S1X4Gl3rjdNBawbm4a2ACD21uoZad8E3+1UtvI2jcjZr+TWmYy9B9as?=
- =?us-ascii?q?OSaX0NnCY86d1aTaKV9KcCmjF66Andz0qZcb12mTETzuEr4XgRjrQSoAQayS?=
- =?us-ascii?q?OZE+lDT3kdBjTlklGz1/77qaxWYGi1dr3pihh6nNa8HPSHoxlHHnHjdcV6RH?=
- =?us-ascii?q?Ii3oBEKFvJlUbLxMTkdd3XN4pBvQOP1RPBifVFbZcwjuFMgjBoazrw?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0EUBADGcbxefYpf+5RmHgEBCxIMQIE?=
- =?us-ascii?q?8C4IldlAlAwQLLI0mh1+bSTwPATEKBAEBAoRCAoIrBjkGDgIDAQEBAwIFAQE?=
- =?us-ascii?q?BBAEBAQIBAQEDAgEBAQECEAEBFjo0YFOBR4FBLAkGAwEvDII7KQERXn4BAQE?=
- =?us-ascii?q?BAQEBAQEBAQEBAQEBAQEBAQEBARICDVRpAgEDEig/EAsOOFcGNYMFglclD6Q?=
- =?us-ascii?q?jAYEoPgIjAT8BDIEFiX6BNIROQYVbBoE4jBw6BoFBP4ERMwOCLC4+gk4ZAgE?=
- =?us-ascii?q?Bh1cEkRkBoWQHA4JNiB2QFx2dSZoLlWkigUQNB30IgyRNAQIBAgEMAQICAQE?=
- =?us-ascii?q?BAgEBCAEBAQGUL4UUhUNDMDcCBggBAQMJj0QBAQ?=
-X-IPAS-Result: =?us-ascii?q?A0EUBADGcbxefYpf+5RmHgEBCxIMQIE8C4IldlAlAwQLL?=
- =?us-ascii?q?I0mh1+bSTwPATEKBAEBAoRCAoIrBjkGDgIDAQEBAwIFAQEBBAEBAQIBAQEDA?=
- =?us-ascii?q?gEBAQECEAEBFjo0YFOBR4FBLAkGAwEvDII7KQERXn4BAQEBAQEBAQEBAQEBA?=
- =?us-ascii?q?QEBAQEBAQEBARICDVRpAgEDEig/EAsOOFcGNYMFglclD6QjAYEoPgIjAT8BD?=
- =?us-ascii?q?IEFiX6BNIROQYVbBoE4jBw6BoFBP4ERMwOCLC4+gk4ZAgEBh1cEkRkBoWQHA?=
- =?us-ascii?q?4JNiB2QFx2dSZoLlWkigUQNB30IgyRNAQIBAgEMAQICAQEBAgEBCAEBAQGUL?=
- =?us-ascii?q?4UUhUNDMDcCBggBAQMJj0QBAQ?=
-X-IronPort-AV: E=Sophos;i="5.73,389,1583164800"; 
-   d="scan'208";a="141966952"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-X-Received: from eddie.linux-mips.org (HELO cvs.linux-mips.org) ([148.251.95.138])
-  by esa3.hgst.iphmx.com with ESMTP; 14 May 2020 06:19:13 +0800
-X-Received: (from localhost user: 'macro', uid#1010) by eddie.linux-mips.org
-        with ESMTP id S23991633AbgEMWTL00TsP (ORCPT <rfc822;macro@wdc.com>);
-        Thu, 14 May 2020 00:19:11 +0200
-Date:   Mon, 13 Apr 2020 21:08:46 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Fangrui Song <maskray@google.com>
-cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        Nathan Chancellor <natechancellor@gmail.com>,
+        id S2389018AbgDMVZC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Apr 2020 17:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2388994AbgDMVZA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 13 Apr 2020 17:25:00 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E092C0A3BDC;
+        Mon, 13 Apr 2020 14:24:58 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id a201so11233242wme.1;
+        Mon, 13 Apr 2020 14:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=NjfnX3yyZ0YTWx7uzk4Ht6UqtS4i/q5/ley1mGpgiUA=;
+        b=aOzt04mQcPVwqtO8kLOHJZAnPH5hHG78mg5pGx/YxhCfgzmPj9P//8wK0uF6aTpM5x
+         bm1+0ujrEuWd9A7tyAXj5sNH62g18zm3WrxnhlKHKB/o8aO49X6yIh9nzlB0Ow5Trfi1
+         OpgRdNvx5NZO4OE+RGHeVhO+PWiTClWyBANB88/EbG8b7RAq2p5naam1gwmJNSa6wkyS
+         kyZYMYW8TNJ7BYPx17wRWibXC9u8AGeShHQS9NwskyciCEIrF2DBgHUO8PBvreXZvt75
+         Oz7+11ac6PiyFHdrxwVNVs4Mp/1Qxg95ehwWWTfres2QwX7rLHBAFFFxtFdw+LUquNaf
+         TqiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=NjfnX3yyZ0YTWx7uzk4Ht6UqtS4i/q5/ley1mGpgiUA=;
+        b=hcQ8MvtvE/bWDIFAtZqI4rbRvau0CtPSbEqkmD3ISSbcB4gCFO5/X6pM+eB4xKW2h9
+         6Vl7bYt92WfqdN9lIlcLibvEX+PITdMo1Lc24ZJxUID1/xBcU7C9+LdhhMpNgd/xmkak
+         9ih9kZglJcNTzHZtjevaQdJ5hfVrP/5ZuawEe6d2n3D0Td4KpXHi4fDSYAqETbioGwfc
+         oJMcUuLtxQSqFB2gpkkGKf3cL2K/956Zzv/1vzHySGDmqwTS6XZI2Bhkuv3YmUUVUg+C
+         mUviQSztHX6f/iSsxl1t7HMngG948TI5BqMZAVQRAuPoQjHtivzBGe6h3GUTJbFs4ysa
+         UYvw==
+X-Gm-Message-State: AGi0PubIrGOnQE+JhzUPpIUsO8IOwCP4PTwbmeuJkF6t4oiJsg44vyDB
+        LardY+kOEXbqQTikoK5CeWg=
+X-Google-Smtp-Source: APiQypJRdxj20oIPNdAL/a+40xXz2F4DVRGJHEuDUDY4+6Et6gxmp+8a/Iqx498/PHHb+L9nluovHQ==
+X-Received: by 2002:a1c:2506:: with SMTP id l6mr19601094wml.44.1586813097269;
+        Mon, 13 Apr 2020 14:24:57 -0700 (PDT)
+Received: from [192.168.1.39] (116.red-83-42-57.dynamicip.rima-tde.net. [83.42.57.116])
+        by smtp.gmail.com with ESMTPSA id w17sm7946268wru.20.2020.04.13.14.24.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Apr 2020 14:24:55 -0700 (PDT)
+Subject: Re: [PATCH] mips: loongsoon2ef: remove private clk api
+To:     Arnd Bergmann <arnd@arndb.de>, sboyd@kernel.org,
+        jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        chenhc@lemote.com, Paul Burton <paulburton@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Borislav Petkov <bp@suse.de>,
-        Kees Cook <keescook@chromium.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] MIPS: Truncate link address into 32bit for 32bit
- kernel
-In-Reply-To: <20200413153453.zi4jvu3c4ul23e23@google.com>
-Message-ID: <alpine.LFD.2.21.2004132107550.851719@eddie.linux-mips.org>
-References: <20200413062651.3992652-1-jiaxun.yang@flygoat.com> <alpine.LFD.2.21.2004130736410.851719@eddie.linux-mips.org> <20200413153205.4ee52239@flygoat-x1e> <20200413153453.zi4jvu3c4ul23e23@google.com>
-Content-Type: text/plain; charset=US-ASCII
-X-ReSent-Date: Wed, 13 May 2020 23:19:07 +0100 (BST)
-X-Resent-Sender: "Maciej W. Rozycki" <macro@linux-mips.org>
-X-ReSent-From: "Maciej W. Rozycki" <macro@linux-mips.org>
-X-ReSent-To: "Maciej W. Rozycki" <macro@wdc.com>
-X-ReSent-Subject: Re: [PATCH v4] MIPS: Truncate link address into 32bit for
- 32bit kernel
-X-ReSent-Message-ID: <alpine.LFD.2.21.2005132319070.1120869@eddie.linux-mips.org>
-X-Return-Path: macro@linux-mips.org
-X-MS-Exchange-Organization-ExpirationStartTime: 13 May 2020 22:19:14.3540
- (UTC)
-X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
-X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
-X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
-X-MS-Exchange-Organization-Network-Message-Id: d55ca279-a0d5-4aa6-243d-08d7f78bab5a
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Organization-MessageDirectionality: Originating
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:216.71.153.141;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esa3.hgst.iphmx.com;PTR:esa3.hgst.iphmx.com;CAT:NONE;SFTY:;SFS:(4636009)(33430700002)(34756004)(7636003)(8676002)(42186006)(1096003)(107886003)(26005)(5660300002)(6666004)(86362001)(966005)(7596003)(8936002)(33440700001)(54906003)(4326008)(336012)(6862004)(356005)(82310400002)(1736002);DIR:INB;SFP:;
-X-MS-PublicTrafficType: Email
-X-MS-Exchange-Organization-AuthSource: BN3NAM04FT036.eop-NAM04.prod.protection.outlook.com
-X-MS-Exchange-Organization-AuthAs: Anonymous
-X-OriginatorOrg: sharedspace.onmicrosoft.com
-X-MS-Office365-Filtering-Correlation-Id: d55ca279-a0d5-4aa6-243d-08d7f78bab5a
-X-MS-TrafficTypeDiagnostic: CY4PR04MB0374:
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-Organization-SCL: 1
-X-Microsoft-Antispam: BCL:0;
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2020 22:19:14.0842
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d55ca279-a0d5-4aa6-243d-08d7f78bab5a
-X-MS-Exchange-CrossTenant-Id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=b61c8803-16f3-4c35-9b17-6f65f441df86;Ip=[216.71.153.141];Helo=[esa3.hgst.iphmx.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR04MB0374
-X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.8162536
-X-MS-Exchange-Processed-By-BccFoldering: 15.20.2979.027
-X-Microsoft-Antispam-Mailbox-Delivery: ucf:1;jmr:0;auth:0;dest:C;OFR:CustomRules;ENG:(20160514016)(750127)(520002050)(944506383)(944626516);
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?0o0bCTELxBkISYuiTZX9t8b0x0kaYx0/h32EmG8ZfUn7aEyWX3+hxpRRh3uS?=
- =?us-ascii?Q?hqXoEQcw/aBndAvtItXOH59kM0bRCx3Naxzwn6q6uzHUYXUvkCJqOifXxUXB?=
- =?us-ascii?Q?qwVFXYVkMH4qiwm1Sn4TsoRvy9J4yIYFnEEzQrfI+JyzOLhukeKC4309O8T7?=
- =?us-ascii?Q?rB0cElPiZo0ixOArLZprjebe4ShxtChuNPE8nxf+IW5aVCJbf3Hd7jWWA4Ya?=
- =?us-ascii?Q?OTROgpuzrlUvoVx9o7U1ZWOr8IG5BYxnxtrJOMFBVTL4jTOkAj8c6gSFgmVS?=
- =?us-ascii?Q?xRT0mR22C1pwAAYmiXh+VoJ/9SGx5ONosfDwKSEd7ZOht4ZXHEnMmeguOa1B?=
- =?us-ascii?Q?zccq/YQhNW3Oc9f+m37CCkEZmG4ynWhJsTG/neKJ7L3E0GBxkXHN46BIc/DM?=
- =?us-ascii?Q?ew76xSp0mS9Ds+vuO8wglFsKenk4PzU7xKHtLF/UlhnbTElpXso+ZuQlVubF?=
- =?us-ascii?Q?NnZQgfX/EjoZNQYRTn69IpBp40y29mDMesjxNfDxz973T97ZkZjrsthOvp56?=
- =?us-ascii?Q?bpno1z6D1c3Kq/wO7CxApYSGCSDsnA4VQia14E7zcCXeWGMoktHEOpbR8PDS?=
- =?us-ascii?Q?ePNJFJv+pyv3wts3HnIPunCkXHf2AHqR1E4pvXAhQQpAuVH1iOROo8fBHEmS?=
- =?us-ascii?Q?6Asm91sr0tt9DJMYYsXrOcEmHXhEW/cQV3NIHTjs6hGmcknSKNpqWXD8kk9j?=
- =?us-ascii?Q?ZUbwJkCGIr+0+QTcJM8Mel2qrONP3wjJuzbMPgwnC9grkyZ2FDzfhEvzYuMk?=
- =?us-ascii?Q?sYAiQKjOD/JyRO2oKGalMG86gI1Pptcr8v2ddcy3iPw+AoBV4Q8Heq/G/UAq?=
- =?us-ascii?Q?Grv2SnVER/TujpxKCnQfOVl0LUNRRzricQl+R3qu/cZdidZm/88C1HQozjER?=
- =?us-ascii?Q?KVvjZ33NSlQqgRGkHzAmo2bZ2eC7dA/fqhD2Y9L7wN50NsyW0zu3N0pVzZ7a?=
- =?us-ascii?Q?76NO2yDtKAD3EoCcFp+66/wPW4A0Uud7m8UDA2oLdrdkeL5613E1iJJBv2ry?=
- =?us-ascii?Q?WxoPoDYkH13fMgDVDz2BvJdjmpBrJzmkdlxdeEk1a4K39YEqyHRS5moA3L4X?=
- =?us-ascii?Q?EXRV6Fkex9XLhEthjp0M7VKJQ4qtO2fE0vo56UFQdoDOwHoiqK+oaf3kXNo0?=
- =?us-ascii?Q?rkAD5v/fuEVvFme22qJQIPD/Tu6rvht18dmUZqOZMr7YyfK8iywLEJDSXq9g?=
- =?us-ascii?Q?YyukfnNsYYfA3Ob08UJ1eEucTF29gj5ptVGFKebKnyeQa/ZgwWUOi4cTg0+Y?=
- =?us-ascii?Q?SAjMvRFQgkHwdunh+V2b8nI0MLoxD6h0pSM1AugS9rxrgrCGgYDqllV9z/0t?=
- =?us-ascii?Q?+A/AqeBpJEZigDr0Marp2hUG9DLthT0FfXV0yJy+uAguPJF6JswkBUYpQ+FW?=
- =?us-ascii?Q?jq8T/Jxc+Z/LmEDFV+We+TEkk+d06XyHc9RoLRZSiLCA4lPyct7XwJ8gr4v7?=
- =?us-ascii?Q?+QP15LOlXAWNDiLyiCyfmvkufNCPAkH/?=
+        mturquette@baylibre.com
+References: <20200409064416.83340-1-sboyd@kernel.org>
+ <20200409090228.2241176-1-arnd@arndb.de>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
+Autocrypt: addr=f4bug@amsat.org; keydata=
+ mQINBDU8rLoBEADb5b5dyglKgWF9uDbIjFXU4gDtcwiga9wJ/wX6xdhBqU8tlQ4BroH7AeRl
+ u4zXP0QnBDAG7EetxlQzcfYbPmxFISWjckDBFvDbFsojrZmwF2/LkFSzlvKiN5KLghzzJhLO
+ HhjGlF8deEZz/d/G8qzO9mIw8GIBS8uuWh6SIcG/qq7+y+2+aifaj92EdwU79apZepT/U3vN
+ YrfcAuo1Ycy7/u0hJ7rlaFUn2Fu5KIgV2O++hHYtCCQfdPBg/+ujTL+U+sCDawCyq+9M5+LJ
+ ojCzP9rViLZDd/gS6jX8T48hhidtbtsFRj/e9QpdZgDZfowRMVsRx+TB9yzjFdMO0YaYybXp
+ dg/wCUepX5xmDBrle6cZ8VEe00+UQCAU1TY5Hs7QFfBbjgR3k9pgJzVXNUKcJ9DYQP0OBH9P
+ ZbZvM0Ut2Bk6bLBO5iCVDOco0alrPkX7iJul2QWBy3Iy9j02GnA5jZ1Xtjr9kpCqQT+sRXso
+ Vpm5TPGWaWljIeLWy/qL8drX1eyJzwTB3A36Ck4r3YmjMjfmvltSZB1uAdo1elHTlFEULpU/
+ HiwvvqXQ9koB15U154VCuguvx/Qnboz8GFb9Uw8VyawzVxYVNME7xw7CQF8FYxzj6eI7rBf2
+ Dj/II6wxWPgDEy3oUzuNOxTB7sT3b/Ym76yOJzWX5BylXQIJ5wARAQABtDFQaGlsaXBwZSBN
+ YXRoaWV1LURhdWTDqSAoRjRCVUcpIDxmNGJ1Z0BhbXNhdC5vcmc+iQJVBBMBCAA/AhsPBgsJ
+ CAcDAgYVCAIJCgsEFgIDAQIeAQIXgBYhBPqr514SkXIh3P1rsuPjLCzercDeBQJd660aBQks
+ klzgAAoJEOPjLCzercDe2iMP+gMG2dUf+qHz2uG8nTBGMjgK0aEJrKVPodFA+iedQ5Kp3BMo
+ jrTg3/DG1HMYdcvQu/NFLYwamUfUasyor1k+3dB23hY09O4xOsYJBWdilkBGsJTKErUmkUO2
+ 3J/kawosvYtJJSHUpw3N6mwz/iWnjkT8BPp7fFXSujV63aZWZINueTbK7Y8skFHI0zpype9s
+ loU8xc4JBrieGccy3n4E/kogGrTG5jcMTNHZ106DsQkhFnjhWETp6g9xOKrzZQbETeRBOe4P
+ sRsY9YSG2Sj+ZqmZePvO8LyzGRjYU7T6Z80S1xV0lH6KTMvq7vvz5rd92f3pL4YrXq+e//HZ
+ JsiLen8LH/FRhTsWRgBtNYkOsd5F9NvfJtSM0qbX32cSXMAStDVnS4U+H2vCVCWnfNug2TdY
+ 7v4NtdpaCi4CBBa3ZtqYVOU05IoLnlx0miKTBMqmI05kpgX98pi2QUPJBYi/+yNu3fjjcuS9
+ K5WmpNFTNi6yiBbNjJA5E2qUKbIT/RwQFQvhrxBUcRCuK4x/5uOZrysjFvhtR8YGm08h+8vS
+ n0JCnJD5aBhiVdkohEFAz7e5YNrAg6kOA5IVRHB44lTBOatLqz7ntwdGD0rteKuHaUuXpTYy
+ CRqCVAKqFJtxhvJvaX0vLS1Z2dwtDwhjfIdgPiKEGOgCNGH7R8l+aaM4OPOd
+Message-ID: <42da80f7-49ab-8c46-36fc-16e325c1707f@amsat.org>
+Date:   Mon, 13 Apr 2020 23:24:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
+In-Reply-To: <20200409090228.2241176-1-arnd@arndb.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 13 Apr 2020, Fangrui Song wrote:
-
-> >> > diff --git a/arch/mips/kernel/vmlinux.lds.S
-> >> > b/arch/mips/kernel/vmlinux.lds.S index a5f00ec73ea6..5226cd8e4bee
-> >> > 100644 --- a/arch/mips/kernel/vmlinux.lds.S
-> >> > +++ b/arch/mips/kernel/vmlinux.lds.S
-> >> > @@ -55,7 +55,7 @@ SECTIONS
-> >> >   /* . = 0xa800000000300000; */
-> >> >   . = 0xffffffff80300000;
-> >> > #endif
-> >> > -	. = VMLINUX_LOAD_ADDRESS;
-> >> > +	. = VMLINUX_LINK_ADDRESS;
-> >>
-> >> The CONFIG_BOOT_ELF64 cruft right above it looks interesting to me,
-> >> never have ever been used.  We have had the current arrangement since:
-> >
-> >It confused me either.
-> >It's only used by SGI so probably it's time to rename it as
-> >BOOT_SEG_ELF64.
-> >
-> >Wish someone could clarify what is it.
-> >
-> >Thanks.
+On 4/9/20 11:02 AM, Arnd Bergmann wrote:
+> As platforms are moving to COMMON_CLK in general, loongson2ef
+> stuck out as something that has a private implementation but
+> does not actually use it except for setting the frequency of
+> the CPU itself from the loongson2_cpufreq driver.
 > 
-> Agreed that -Ttext in
+> Change that driver to call the register setting function directly
+> and remove the rest of the stub implementation.
 > 
-> arch/mips/boot/compressed/Makefile
-> 100:      cmd_zld = $(LD) $(KBUILD_LDFLAGS) -Ttext $(VMLINUZ_LOAD_ADDRESS) -T
-> $< $(vmlinuzobjs-y) -o $@
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+
+> ---
+>  arch/mips/include/asm/clock.h                 | 49 ----------
+>  .../include/asm/mach-loongson2ef/loongson.h   |  1 +
+>  arch/mips/loongson2ef/Kconfig                 |  1 -
+>  arch/mips/loongson2ef/lemote-2f/clock.c       | 98 +------------------
+>  arch/mips/loongson64/smp.c                    |  1 -
+>  drivers/cpufreq/loongson2_cpufreq.c           | 22 +----
+>  6 files changed, 8 insertions(+), 164 deletions(-)
+>  delete mode 100644 arch/mips/include/asm/clock.h
 > 
-> and a few other places are brittle. They need to be replaced with Output
-> Section Address:
-> (https://sourceware.org/binutils/docs/ld/Output-Section-Address.html
-> https://github.com/llvm/llvm-project/blob/master/lld/docs/ELF/linker_script.rst#output-section-address)
+> diff --git a/arch/mips/include/asm/clock.h b/arch/mips/include/asm/clock.h
+> deleted file mode 100644
+> index 5a8f96ebe5fa..000000000000
+> --- a/arch/mips/include/asm/clock.h
+> +++ /dev/null
+> @@ -1,49 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> -#ifndef __ASM_MIPS_CLOCK_H
+> -#define __ASM_MIPS_CLOCK_H
+> -
+> -#include <linux/kref.h>
+> -#include <linux/list.h>
+> -#include <linux/seq_file.h>
+> -#include <linux/clk.h>
+> -
+> -struct clk;
+> -
+> -struct clk_ops {
+> -	void (*init) (struct clk *clk);
+> -	void (*enable) (struct clk *clk);
+> -	void (*disable) (struct clk *clk);
+> -	void (*recalc) (struct clk *clk);
+> -	int (*set_rate) (struct clk *clk, unsigned long rate, int algo_id);
+> -	long (*round_rate) (struct clk *clk, unsigned long rate);
+> -};
+> -
+> -struct clk {
+> -	struct list_head node;
+> -	const char *name;
+> -	int id;
+> -	struct module *owner;
+> -
+> -	struct clk *parent;
+> -	struct clk_ops *ops;
+> -
+> -	struct kref kref;
+> -
+> -	unsigned long rate;
+> -	unsigned long flags;
+> -};
+> -
+> -#define CLK_ALWAYS_ENABLED	(1 << 0)
+> -#define CLK_RATE_PROPAGATES	(1 << 1)
+> -
+> -int clk_init(void);
+> -
+> -int __clk_enable(struct clk *);
+> -void __clk_disable(struct clk *);
+> -
+> -void clk_recalc_rate(struct clk *);
+> -
+> -int clk_register(struct clk *);
+> -void clk_unregister(struct clk *);
+> -
+> -#endif				/* __ASM_MIPS_CLOCK_H */
+> diff --git a/arch/mips/include/asm/mach-loongson2ef/loongson.h b/arch/mips/include/asm/mach-loongson2ef/loongson.h
+> index 5008af0a1a19..57e571128489 100644
+> --- a/arch/mips/include/asm/mach-loongson2ef/loongson.h
+> +++ b/arch/mips/include/asm/mach-loongson2ef/loongson.h
+> @@ -244,6 +244,7 @@ static inline void do_perfcnt_IRQ(void)
+>  #ifdef CONFIG_CPU_SUPPORTS_CPUFREQ
+>  #include <linux/cpufreq.h>
+>  extern struct cpufreq_frequency_table loongson2_clockmod_table[];
+> +extern int loongson2_cpu_set_rate(unsigned long rate_khz);
+>  #endif
+>  
+>  /*
+> diff --git a/arch/mips/loongson2ef/Kconfig b/arch/mips/loongson2ef/Kconfig
+> index 595dd48e1e4d..96dc6eba4310 100644
+> --- a/arch/mips/loongson2ef/Kconfig
+> +++ b/arch/mips/loongson2ef/Kconfig
+> @@ -46,7 +46,6 @@ config LEMOTE_MACH2F
+>  	select CSRC_R4K if ! MIPS_EXTERNAL_TIMER
+>  	select DMA_NONCOHERENT
+>  	select GENERIC_ISA_DMA_SUPPORT_BROKEN
+> -	select HAVE_CLK
+>  	select FORCE_PCI
+>  	select I8259
+>  	select IRQ_MIPS_CPU
+> diff --git a/arch/mips/loongson2ef/lemote-2f/clock.c b/arch/mips/loongson2ef/lemote-2f/clock.c
+> index 414f282c8ab5..850b6b9f8f15 100644
+> --- a/arch/mips/loongson2ef/lemote-2f/clock.c
+> +++ b/arch/mips/loongson2ef/lemote-2f/clock.c
+> @@ -6,22 +6,12 @@
+>   * License.  See the file "COPYING" in the main directory of this archive
+>   * for more details.
+>   */
+> -#include <linux/clk.h>
+>  #include <linux/cpufreq.h>
+>  #include <linux/errno.h>
+>  #include <linux/export.h>
+> -#include <linux/list.h>
+> -#include <linux/mutex.h>
+> -#include <linux/spinlock.h>
+>  
+> -#include <asm/clock.h>
+>  #include <asm/mach-loongson2ef/loongson.h>
+>  
+> -static LIST_HEAD(clock_list);
+> -static DEFINE_SPINLOCK(clock_lock);
+> -static DEFINE_MUTEX(clock_list_sem);
+> -
+> -/* Minimum CLK support */
+>  enum {
+>  	DC_ZERO, DC_25PT = 2, DC_37PT, DC_50PT, DC_62PT, DC_75PT,
+>  	DC_87PT, DC_DISABLE, DC_RESV
+> @@ -41,103 +31,21 @@ struct cpufreq_frequency_table loongson2_clockmod_table[] = {
+>  };
+>  EXPORT_SYMBOL_GPL(loongson2_clockmod_table);
+>  
+> -static struct clk cpu_clk = {
+> -	.name = "cpu_clk",
+> -	.flags = CLK_ALWAYS_ENABLED | CLK_RATE_PROPAGATES,
+> -	.rate = 800000000,
+> -};
+> -
+> -struct clk *clk_get(struct device *dev, const char *id)
+> -{
+> -	return &cpu_clk;
+> -}
+> -EXPORT_SYMBOL(clk_get);
+> -
+> -static void propagate_rate(struct clk *clk)
+> -{
+> -	struct clk *clkp;
+> -
+> -	list_for_each_entry(clkp, &clock_list, node) {
+> -		if (likely(clkp->parent != clk))
+> -			continue;
+> -		if (likely(clkp->ops && clkp->ops->recalc))
+> -			clkp->ops->recalc(clkp);
+> -		if (unlikely(clkp->flags & CLK_RATE_PROPAGATES))
+> -			propagate_rate(clkp);
+> -	}
+> -}
+> -
+> -int clk_enable(struct clk *clk)
+> -{
+> -	return 0;
+> -}
+> -EXPORT_SYMBOL(clk_enable);
+> -
+> -void clk_disable(struct clk *clk)
+> +int loongson2_cpu_set_rate(unsigned long rate_khz)
+>  {
+> -}
+> -EXPORT_SYMBOL(clk_disable);
+> -
+> -unsigned long clk_get_rate(struct clk *clk)
+> -{
+> -	if (!clk)
+> -		return 0;
+> -
+> -	return (unsigned long)clk->rate;
+> -}
+> -EXPORT_SYMBOL(clk_get_rate);
+> -
+> -void clk_put(struct clk *clk)
+> -{
+> -}
+> -EXPORT_SYMBOL(clk_put);
+> -
+> -int clk_set_rate(struct clk *clk, unsigned long rate)
+> -{
+> -	unsigned int rate_khz = rate / 1000;
+>  	struct cpufreq_frequency_table *pos;
+> -	int ret = 0;
+>  	int regval;
+>  
+> -	if (likely(clk->ops && clk->ops->set_rate)) {
+> -		unsigned long flags;
+> -
+> -		spin_lock_irqsave(&clock_lock, flags);
+> -		ret = clk->ops->set_rate(clk, rate, 0);
+> -		spin_unlock_irqrestore(&clock_lock, flags);
+> -	}
+> -
+> -	if (unlikely(clk->flags & CLK_RATE_PROPAGATES))
+> -		propagate_rate(clk);
+> -
+>  	cpufreq_for_each_valid_entry(pos, loongson2_clockmod_table)
+>  		if (rate_khz == pos->frequency)
+>  			break;
+>  	if (rate_khz != pos->frequency)
+>  		return -ENOTSUPP;
+>  
+> -	clk->rate = rate;
+> -
+>  	regval = readl(LOONGSON_CHIPCFG);
+>  	regval = (regval & ~0x7) | (pos->driver_data - 1);
+>  	writel(regval, LOONGSON_CHIPCFG);
+>  
+> -	return ret;
+> -}
+> -EXPORT_SYMBOL_GPL(clk_set_rate);
+> -
+> -long clk_round_rate(struct clk *clk, unsigned long rate)
+> -{
+> -	if (likely(clk->ops && clk->ops->round_rate)) {
+> -		unsigned long flags, rounded;
+> -
+> -		spin_lock_irqsave(&clock_lock, flags);
+> -		rounded = clk->ops->round_rate(clk, rate);
+> -		spin_unlock_irqrestore(&clock_lock, flags);
+> -
+> -		return rounded;
+> -	}
+> -
+> -	return rate;
+> +	return 0;
+>  }
+> -EXPORT_SYMBOL_GPL(clk_round_rate);
+> +EXPORT_SYMBOL_GPL(loongson2_cpu_set_rate);
+> diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
+> index e1fe8bbb377d..e744e1bee49e 100644
+> --- a/arch/mips/loongson64/smp.c
+> +++ b/arch/mips/loongson64/smp.c
+> @@ -15,7 +15,6 @@
+>  #include <linux/kexec.h>
+>  #include <asm/processor.h>
+>  #include <asm/time.h>
+> -#include <asm/clock.h>
+>  #include <asm/tlbflush.h>
+>  #include <asm/cacheflush.h>
+>  #include <loongson.h>
+> diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
+> index 909f40fbcde2..d05e761d9572 100644
+> --- a/drivers/cpufreq/loongson2_cpufreq.c
+> +++ b/drivers/cpufreq/loongson2_cpufreq.c
+> @@ -20,7 +20,6 @@
+>  #include <linux/delay.h>
+>  #include <linux/platform_device.h>
+>  
+> -#include <asm/clock.h>
+>  #include <asm/idle.h>
+>  
+>  #include <asm/mach-loongson2ef/loongson.h>
+> @@ -58,29 +57,20 @@ static int loongson2_cpufreq_target(struct cpufreq_policy *policy,
+>  	     loongson2_clockmod_table[index].driver_data) / 8;
+>  
+>  	/* setting the cpu frequency */
+> -	clk_set_rate(policy->clk, freq * 1000);
+> +	loongson2_cpu_set_rate(freq);
+>  
+>  	return 0;
+>  }
+>  
+>  static int loongson2_cpufreq_cpu_init(struct cpufreq_policy *policy)
+>  {
+> -	struct clk *cpuclk;
+>  	int i;
+>  	unsigned long rate;
+>  	int ret;
+>  
+> -	cpuclk = clk_get(NULL, "cpu_clk");
+> -	if (IS_ERR(cpuclk)) {
+> -		pr_err("couldn't get CPU clk\n");
+> -		return PTR_ERR(cpuclk);
+> -	}
+> -
+>  	rate = cpu_clock_freq / 1000;
+> -	if (!rate) {
+> -		clk_put(cpuclk);
+> +	if (!rate)
+>  		return -EINVAL;
+> -	}
+>  
+>  	/* clock table init */
+>  	for (i = 2;
+> @@ -88,20 +78,16 @@ static int loongson2_cpufreq_cpu_init(struct cpufreq_policy *policy)
+>  	     i++)
+>  		loongson2_clockmod_table[i].frequency = (rate * i) / 8;
+>  
+> -	ret = clk_set_rate(cpuclk, rate * 1000);
+> -	if (ret) {
+> -		clk_put(cpuclk);
+> +	ret = loongson2_cpu_set_rate(rate);
+> +	if (ret)
+>  		return ret;
+> -	}
+>  
+> -	policy->clk = cpuclk;
+>  	cpufreq_generic_init(policy, &loongson2_clockmod_table[0], 0);
+>  	return 0;
+>  }
+>  
+>  static int loongson2_cpufreq_exit(struct cpufreq_policy *policy)
+>  {
+> -	clk_put(policy->clk);
+>  	return 0;
+>  }
+>  
 > 
-> -Ttext changes the address of .text . This can lead to the change of the
-> address of the text segment (RX), but this is not guaranteed (many
-> sections can be placed before .text and they are not affected).
-
- That is unrelated, but you're free to clean it up of course.
-
-  Maciej
-
-
