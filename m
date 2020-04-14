@@ -2,71 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 359331A86FA
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2020 19:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07FC71A8790
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2020 19:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407512AbgDNRHC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Apr 2020 13:07:02 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:36136 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729042AbgDNRG6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Apr 2020 13:06:58 -0400
-Received: by mail-ot1-f68.google.com with SMTP id b13so382256oti.3;
-        Tue, 14 Apr 2020 10:06:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=R7DvIE6xgB6bsjZY6OStsQ7vzWt/6mNtD60f488gFE0=;
-        b=gXCvYbn55D8xVCMLHfglEXzITOQetzVSAfCKD6TNpADR6FIj/VJLzIU9fjQ6GFaAxY
-         KILG10G3JyDlMeVK+kOyqeQwEw3Q1mHp68LB57NKB6oU4RGr5oqITp08WbwAP5Irnllh
-         rMghpCz1mERczcI9aktDsSWltM8p8Vmsh1AwpH8dL4RHKMkrQlEm7isVPrIQ/S6VjilL
-         YGXjVdsHzhHMO4fc804MI2nReGnwbREGLNH/yR5vOjA0xAcpBxTlJYFTMyU/LuzOUc8y
-         s1huHnfXxzyqCGtvpcVAqDhKWZkxIGFjy3Ayt0YZVJ1NJN9/xFdoWOy7Q2E2BkrZMOAr
-         6hyw==
-X-Gm-Message-State: AGi0PuYlyWPXq8uwJ7da4eChH5R8NEdUE9h+QZDAH/Wp2R35zM1K0Ve2
-        wNL7ei10ECL0Sh3yLSjQZvWT45Q=
-X-Google-Smtp-Source: APiQypLcWMJCxCvJhaBdIMDkx5zzMNBBqtXItGq/cEfJVplp7CnhWshFW1uiWYkqaLhu0iOA7MF6aw==
-X-Received: by 2002:a4a:92cd:: with SMTP id j13mr19440736ooh.96.1586884017955;
-        Tue, 14 Apr 2020 10:06:57 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id y8sm3450729otg.6.2020.04.14.10.06.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2020 10:06:57 -0700 (PDT)
-Received: (nullmailer pid 11468 invoked by uid 1000);
-        Tue, 14 Apr 2020 17:06:56 -0000
-Date:   Tue, 14 Apr 2020 12:06:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/5] dt-bindings: Document Loongson RS780E PCH ACPI
- Controller
-Message-ID: <20200414170656.GA11412@bogus>
-References: <20200402104851.368465-1-jiaxun.yang@flygoat.com>
- <20200402104851.368465-3-jiaxun.yang@flygoat.com>
+        id S2407635AbgDNRdO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Apr 2020 13:33:14 -0400
+Received: from elvis.franken.de ([193.175.24.41]:38894 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732341AbgDNRdN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 14 Apr 2020 13:33:13 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jOPQo-00026G-00; Tue, 14 Apr 2020 19:33:06 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id E7E29C010A; Tue, 14 Apr 2020 19:32:08 +0200 (CEST)
+Date:   Tue, 14 Apr 2020 19:32:08 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: Re: [PATCH v2] MIPS: Limit check_bugs32() to affected platform
+Message-ID: <20200414173208.GA22802@alpha.franken.de>
+References: <1586488859-18715-1-git-send-email-yangtiezhu@loongson.cn>
+ <c60f62cb-62e8-be13-f551-c9a13abc7f94@gmail.com>
+ <181cf95e-c5f6-3899-e8eb-3f8847ec86d9@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200402104851.368465-3-jiaxun.yang@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <181cf95e-c5f6-3899-e8eb-3f8847ec86d9@loongson.cn>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu,  2 Apr 2020 18:48:41 +0800, Jiaxun Yang wrote:
+On Sat, Apr 11, 2020 at 10:32:02AM +0800, Tiezhu Yang wrote:
+> On 04/11/2020 12:25 AM, Florian Fainelli wrote:
+> >
+> >On 4/9/2020 8:20 PM, Tiezhu Yang wrote:
+> >>In the current code, check_bugs32() only handles MIPS32 CPU type CPU_34K,
+> >>it is better to build and call it on the affected platform.
+> >>
+> >>Move check_bugs32() to the new added 34k-bugs32.c to indicate the fact that
+> >>the code is specific to the 34k CPU, and also add CONFIG_CPU_34K_BUGS32 to
+> >>control whether or not check the bugs.
+> >>
+> >>Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> >This is not a whole lot of code, so moving this to a separate
+> >translation unit seems a bit heavy handed, also file renames, albeit
+> >tracked properly by git are always a challenge when doing back ports.
 > 
-> This controller is attached under ISA Bus and can be found
-> in Loongson-3 systems with RS780E PCH.
+> Hi Florian,
 > 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  .../bindings/mips/loongson/rs780e-acpi.yaml   | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml
+> There exists the following three ways to do it, I'm fine either way,
+> maybe the first way looks better. Let us wait for the MIPS maintainer
+> to say what he prefer.
 > 
+> Hi Thomas,
+> 
+> What is your opinion?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+I don't see a reason for doing that at all. The 34K workaround is only
+compiled in if CONFIG_SYS_HAS_CPU_MIPS32_R2 is defined.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
