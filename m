@@ -2,112 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2091A75C1
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2020 10:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A51A1A75CD
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2020 10:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436546AbgDNIVy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Apr 2020 04:21:54 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:20277 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2436520AbgDNIVD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Apr 2020 04:21:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586852461;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TtBLM3c8JTLmBP2uDmSrWuT9/+Pwll6JJwpjBt6QX00=;
-        b=Gp1QYLF1PrEgX3vAu+dXARdbbNzC1ycYKeG+e0+OpE4vNR7LX6VMIJvieYXs4I87X9JUX/
-        gzuj5HEc/iaB6nLYR4Z289isVPNRjpA/FaBzKZI6u0tRNFN9Hc5SnZ4PMicCjfqTZnyeXs
-        lgf+SPEheVAIOy5fbj3vM1Ma0KNTWZQ=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-56-8OMWeXnUOD2WN6H5Qw75Ag-1; Tue, 14 Apr 2020 04:19:02 -0400
-X-MC-Unique: 8OMWeXnUOD2WN6H5Qw75Ag-1
-Received: by mail-wr1-f69.google.com with SMTP id v14so8295237wrq.13
-        for <linux-mips@vger.kernel.org>; Tue, 14 Apr 2020 01:19:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TtBLM3c8JTLmBP2uDmSrWuT9/+Pwll6JJwpjBt6QX00=;
-        b=CqfHZOh5W2QLmmFahzXs0ugZiQjtA85LEQuP1ozh2Vn0suAynOfwjHXgaflsQ/2lH/
-         kxXJc9b4mECi1BQz42z2EXD7kdmlwCdERGGTh+xRCFZBdKIzY5Zd4vJLKr6zd9sXpBkT
-         ukbaqxvaBWfgnowM+7fkubfnzvyoE7FQ6dLyQ5ZvlGcAMF65Lx2oQ9yfUDPLwvMYqY3F
-         EJUwC8zkYMDBlb+DOW4QbMOgOCtHPYvJAe/tR0EHeji5XtLLOmI/D+iQusEoZJSgUAu0
-         ivgcwBtKIRvNycKH0ll1yM2iQZJQ186B0kX+rtH9auyO82yqlrMQDUsFi4dgAfYBEGHM
-         4BSA==
-X-Gm-Message-State: AGi0PuZfBuJM26TP+1jO+yVkML8h1Ab1w+JOEvCOwF0heO9BECbzfRyj
-        qLU1QtVtMipXTboRji760KH1Wc409ZJb3dTGMyz6PxQE+iDmkgJbmeECw9NeKfpjDGe0Cxtei1P
-        /ZcvjgBBkG8qArdVzFHam1w==
-X-Received: by 2002:a05:6000:8b:: with SMTP id m11mr8390692wrx.168.1586852341223;
-        Tue, 14 Apr 2020 01:19:01 -0700 (PDT)
-X-Google-Smtp-Source: APiQypKNVMzJLyv+Go05DzXWcde1VJnPobjfS5TpC3OSGCsAYJkHQBkL4kr8iyDzRWBXP64iQWFZGA==
-X-Received: by 2002:a05:6000:8b:: with SMTP id m11mr8390681wrx.168.1586852340970;
-        Tue, 14 Apr 2020 01:19:00 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:e159:eda1:c472:fcfa? ([2001:b07:6468:f312:e159:eda1:c472:fcfa])
-        by smtp.gmail.com with ESMTPSA id o28sm3426907wra.84.2020.04.14.01.18.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Apr 2020 01:19:00 -0700 (PDT)
-Subject: Re: [PATCH] kvm_host: unify VM_STAT and VCPU_STAT definitions in a
- single place
-To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org
-References: <20200413140332.22896-1-eesposit@redhat.com>
- <03a481a8-bcf2-8755-d113-71ef393508bf@amsat.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <bf870876-9f9a-7ba8-d941-a3883e519eed@redhat.com>
-Date:   Tue, 14 Apr 2020 10:18:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S2436573AbgDNIWX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Apr 2020 04:22:23 -0400
+Received: from foss.arm.com ([217.140.110.172]:50778 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2436548AbgDNIWB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 14 Apr 2020 04:22:01 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 82AE91FB;
+        Tue, 14 Apr 2020 01:21:57 -0700 (PDT)
+Received: from bogus (unknown [10.37.12.71])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 539AC3F73D;
+        Tue, 14 Apr 2020 01:21:48 -0700 (PDT)
+Date:   Tue, 14 Apr 2020 09:21:36 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, dietmar.eggemann@arm.com,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Robert Richter <rric@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Zhou Yanjie <zhouyanjie@zoho.com>,
+        =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>, YunQiang Su <syq@debian.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Matt Redfearn <matt.redfearn@mips.com>,
+        Richard Fontana <rfontana@redhat.com>,
+        Steve Winslow <swinslow@gmail.com>,
+        afzal mohammed <afzal.mohd.ma@gmail.com>,
+        Peter Xu <peterx@redhat.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 01/11] MIPS: setup: Drop prefill_possible_map
+Message-ID: <20200414082123.GA6459@bogus>
+References: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
+ <20200412032123.3896114-2-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-In-Reply-To: <03a481a8-bcf2-8755-d113-71ef393508bf@amsat.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200412032123.3896114-2-jiaxun.yang@flygoat.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 13/04/20 23:34, Philippe Mathieu-Daudé wrote:
->> +#define VM_STAT(x, ...) offsetof(struct kvm, stat.x), KVM_STAT_VM, ## __VA_ARGS__
->> +#define VCPU_STAT(x, ...) offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ## __VA_ARGS__
-> I find this macro expanding into multiple fields odd... Maybe a matter
-> of taste. Sugggestion, have the macro define the full structure, as in
-> the arm64 arch:
-> 
-> #define VM_STAT(n, x, ...) { n, offsetof(struct kvm, stat.x),
-> KVM_STAT_VM, ## __VA_ARGS__ }
-> 
-> Ditto for VCPU_STAT().
+On Sun, Apr 12, 2020 at 11:20:31AM +0800, Jiaxun Yang wrote:
+> All the plat_smp_setup are setting up possible cpus in their
+> platform code. So prefill_possible_map is actually overwriting
+> platform's setup, which seems unreasonable.
 > 
 
-Yes, that's a good idea.  Emanuele, can you switch it to this format?
+Why don't you rearrange the code so that this still remains as is and
+the platforms can override if they need. If you do so, you don't need
+the change in 04/11 as I suggested previously.
 
-Thanks,
-
-Paolo
-
+-- 
+Regards,
+Sudeep
