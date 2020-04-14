@@ -2,121 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4233F1A7805
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2020 12:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD741A79D7
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2020 13:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438100AbgDNKDm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Apr 2020 06:03:42 -0400
-Received: from foss.arm.com ([217.140.110.172]:52300 "EHLO foss.arm.com"
+        id S2439515AbgDNLo6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Apr 2020 07:44:58 -0400
+Received: from foss.arm.com ([217.140.110.172]:53666 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2438097AbgDNKDl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 14 Apr 2020 06:03:41 -0400
+        id S2439489AbgDNLoy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 14 Apr 2020 07:44:54 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2ED3031B;
-        Tue, 14 Apr 2020 03:03:40 -0700 (PDT)
-Received: from bogus (unknown [10.37.12.71])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 896E43F6C4;
-        Tue, 14 Apr 2020 03:03:31 -0700 (PDT)
-Date:   Tue, 14 Apr 2020 11:03:24 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, dietmar.eggemann@arm.com,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF0571FB;
+        Tue, 14 Apr 2020 04:44:52 -0700 (PDT)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.1.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E0B493F6C4;
+        Tue, 14 Apr 2020 04:44:42 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Robert Richter <rric@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Zhou Yanjie <zhouyanjie@zoho.com>,
-        =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>, YunQiang Su <syq@debian.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Matt Redfearn <matt.redfearn@mips.com>,
-        Richard Fontana <rfontana@redhat.com>,
-        Steve Winslow <swinslow@gmail.com>,
-        afzal mohammed <afzal.mohd.ma@gmail.com>,
-        Peter Xu <peterx@redhat.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 04/11] arch_topology: Reset all cpus in
- reset_cpu_topology
-Message-ID: <20200414100324.GA17835@bogus>
-References: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
- <20200412032123.3896114-5-jiaxun.yang@flygoat.com>
- <20200414082734.GC6459@bogus>
- <20200414163514.00000100@flygoat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200414163514.00000100@flygoat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] mm/hugetlb: Add some new arch enabling macros
+Date:   Tue, 14 Apr 2020 17:14:27 +0530
+Message-Id: <1586864670-21799-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 04:35:14PM +0800, Jiaxun Yang wrote:
-> On Tue, 14 Apr 2020 09:27:34 +0100
-> Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> > On Sun, Apr 12, 2020 at 11:20:34AM +0800, Jiaxun Yang wrote:
-> > > For MIPS platform, when topology isn't probed by DeviceTree,
-> > > possible_cpu might be empty when calling init_cpu_topology,
-> > > that may result cpu_topology not fully reseted for all CPUs.
-> > > So here we can reset all cpus instead of possible cpus.
-> > >
-> >
-> > As I have told before adjust and make it default before this function
-> > gets called.
->
-> Hi,
->
-> That's really impossible under current MIPS code structure.
->
+This series adds two macros which platforms can enable to override generic
+fallback definitions. Before that it drops __HAVE_ARCH_HUGE_PTEP_GET from
+arm64 platform.
 
-I really doubt that, but I have no knowledge on MIPS port, so I would
-let maintainers take that call.
+1. HAVE_ARCH_IS_HUGEPAGE_ONLY_RANGE - is_hugepage_only_range()
+2. HAVE_ARCH_CLEAR_HUGEPAGE_FLAGS   - arch_clear_hugepage_flags()
 
-> Another option would be prefill possible_cpu with all_cpu_mask before
-> calling topology_init, but that would make the code unnecessarily
-> complex.
->
+This has been boot tested on arm64 and x86 platforms but built tested on
+some more platforms including the changed ones here. This series applies
+on v5.7-rc1. After this arm (32 bit) remains the sole platform defining
+it's own huge_ptep_get() via __HAVE_ARCH_HUGE_PTEP_GET.
 
-I still prefer that. By the time we call this function on a config
-with say NR_CPUS=1024, we would have parsed DT and set nr_cpus to say 8
-or 16 just for sake of example, so if platforms can't figure the
-possible CPUs, let them set it to NR_CPUs so that not all platforms
-have to run through that loop.
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: x86@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-ia64@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-> Here simply reset the whole array won't cause any regression.
->
+Anshuman Khandual (3):
+  arm64/mm: Drop __HAVE_ARCH_HUGE_PTEP_GET
+  mm/hugetlb: Introduce HAVE_ARCH_IS_HUGEPAGE_ONLY_RANGE
+  mm/hugetlb: Introduce HAVE_ARCH_CLEAR_HUGEPAGE_FLAGS
 
-Not necessary, please discuss and check if some simplification to MIPS
-can be done rather than patching here and there to make it work.
+ arch/arm/include/asm/hugetlb.h     |  7 +------
+ arch/arm64/include/asm/hugetlb.h   | 13 +------------
+ arch/ia64/include/asm/hugetlb.h    |  5 +----
+ arch/mips/include/asm/hugetlb.h    | 11 -----------
+ arch/parisc/include/asm/hugetlb.h  | 10 ----------
+ arch/powerpc/include/asm/hugetlb.h |  5 +----
+ arch/riscv/include/asm/hugetlb.h   | 10 ----------
+ arch/s390/include/asm/hugetlb.h    |  8 +-------
+ arch/sh/include/asm/hugetlb.h      |  7 +------
+ arch/sparc/include/asm/hugetlb.h   | 10 ----------
+ arch/x86/include/asm/hugetlb.h     | 10 ----------
+ include/linux/hugetlb.h            | 12 ++++++++++++
+ 12 files changed, 18 insertions(+), 90 deletions(-)
 
---
-Regards,
-Sudeep
+-- 
+2.20.1
+
