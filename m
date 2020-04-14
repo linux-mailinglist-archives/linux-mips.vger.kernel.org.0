@@ -2,118 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E221A7656
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2020 10:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F10E1A779E
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2020 11:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437019AbgDNImk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Apr 2020 04:42:40 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17852 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2436845AbgDNImi (ORCPT
+        id S2437777AbgDNJsV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Apr 2020 05:48:21 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:55876 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2437775AbgDNJsU (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 14 Apr 2020 04:42:38 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1586853598; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=ZSK1M9iyq2xeDVWV8f1PWAKe/9uCU4E9T6vOsK6u9aSiBWGXfIn0pocsjl4tzWveQh2ZDy2cj1b7bpHgekQf0jbXo9LUSmHOeFntpMA9PPG8b23qxVeQDSY4EsbYXLiuAT1HFLfypwEDqH3WZQeK5l7MGE8gNsnNqPEbAdLbAlU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1586853598; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=5yxE8rjIQbfWB2zY24IJme7e+SE38jsS1KkXESLePEI=; 
-        b=MxrSvTiMyZFwn8zPfXMUcshZgT9ZAOJ0+qDa6+Tzu6So7Sme1O/aiY+OqbHehQy4rx3Xw09wK2lY2ViNCEJpA1yP8gFpRCNHDfyGSPKKWhGbLu/guUngLhylu0oHCtT3ggf/NpQGrV50PP2CpYp0098dw1hWvD/QtR4tAy5dycc=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=flygoat.com;
-        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
-        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1586853598;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=5yxE8rjIQbfWB2zY24IJme7e+SE38jsS1KkXESLePEI=;
-        b=GpdV1a2IgBQOShDin5PNisEXA6+bNxd8Mf4rATLprEMaKlc4jf5QVVU3k27MHqSA
-        UeRk2dKl2ZRMbjt9syeLztoXGin7EcYipNexBIvvaQFIBtsgI+VxL4WIGrfrnDqUgNf
-        gaPqGT9RgEkxsHstO7khtgGjXMV3drq4ap00TVuE=
-Received: from localhost (122.235.212.87 [122.235.212.87]) by mx.zoho.com.cn
-        with SMTPS id 1586853596243411.62253278794117; Tue, 14 Apr 2020 16:39:56 +0800 (CST)
-Date:   Tue, 14 Apr 2020 16:39:57 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-mips@vger.kernel.org, dietmar.eggemann@arm.com,
+        Tue, 14 Apr 2020 05:48:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586857699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RCUnMVTMhiXmQTIRtH4ig9vejIyMaafXsJBXVyt/T0o=;
+        b=b7/7gdgq6fyPuZocF6zFox9d9RKmTixAci4HI4X9dV7lqRi7pYWCm4E9tNKxjcOj7BqsLQ
+        FR8Ot39mD3Zg/ipNrup0azP1lZ8xQsdd3y/GW/g7n/d/iB3DM1SvuRK2EDSYr6dndxTgoC
+        o1ZaT9uGCCLuPc9ppQqgR/4uIBmnnAA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-295-qE1gTkkzPsijc6xmZp2iOg-1; Tue, 14 Apr 2020 05:48:17 -0400
+X-MC-Unique: qE1gTkkzPsijc6xmZp2iOg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AF2DE800D53;
+        Tue, 14 Apr 2020 09:48:13 +0000 (UTC)
+Received: from [10.72.13.119] (ovpn-13-119.pek2.redhat.com [10.72.13.119])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7602F1001920;
+        Tue, 14 Apr 2020 09:48:05 +0000 (UTC)
+Subject: Re: [PATCH] vhost: do not enable VHOST_MENU by default
+To:     Christian Borntraeger <borntraeger@de.ibm.com>, mst@redhat.com
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, geert@linux-m68k.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Robert Richter <rric@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Zhou Yanjie <zhouyanjie@zoho.com>,
-        " =?GB18030?B?1tzn/L3c?= (Zhou Yanjie)" <zhouyanjie@wanyeetech.com>,
-        YunQiang Su <syq@debian.org>, Arnd Bergmann <arnd@arndb.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Matt Redfearn <matt.redfearn@mips.com>,
-        Richard Fontana <rfontana@redhat.com>,
-        Steve Winslow <swinslow@gmail.com>,
-        afzal mohammed <afzal.mohd.ma@gmail.com>,
-        Peter Xu <peterx@redhat.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 01/11] MIPS: setup: Drop prefill_possible_map
-Message-ID: <20200414163957.00006d65@flygoat.com>
-In-Reply-To: <20200414082123.GA6459@bogus>
-References: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
-        <20200412032123.3896114-2-jiaxun.yang@flygoat.com>
-        <20200414082123.GA6459@bogus>
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-w64-mingw32)
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+References: <20200414024438.19103-1-jasowang@redhat.com>
+ <375181ee-08ec-77a6-2dfc-f3c9c26705a1@de.ibm.com>
+From:   Jason Wang <jasowang@redhat.com>
+Message-ID: <802e6da9-4827-a9a4-b409-f08a5de4e750@redhat.com>
+Date:   Tue, 14 Apr 2020 17:48:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ZohoCNMailClient: External
+In-Reply-To: <375181ee-08ec-77a6-2dfc-f3c9c26705a1@de.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 14 Apr 2020 09:21:36 +0100
-Sudeep Holla <sudeep.holla@arm.com> wrote:
 
-> On Sun, Apr 12, 2020 at 11:20:31AM +0800, Jiaxun Yang wrote:
-> > All the plat_smp_setup are setting up possible cpus in their
-> > platform code. So prefill_possible_map is actually overwriting
-> > platform's setup, which seems unreasonable.
-> >   
-> 
-> Why don't you rearrange the code so that this still remains as is and
-> the platforms can override if they need. If you do so, you don't need
-> the change in 04/11 as I suggested previously.
+On 2020/4/14 =E4=B8=8B=E5=8D=883:26, Christian Borntraeger wrote:
+> On 14.04.20 04:44, Jason Wang wrote:
+>> We try to keep the defconfig untouched after decoupling CONFIG_VHOST
+>> out of CONFIG_VIRTUALIZATION in commit 20c384f1ea1a
+>> ("vhost: refine vhost and vringh kconfig") by enabling VHOST_MENU by
+>> default. Then the defconfigs can keep enabling CONFIG_VHOST_NET
+>> without the caring of CONFIG_VHOST.
+>>
+>> But this will leave a "CONFIG_VHOST_MENU=3Dy" in all defconfigs and ev=
+en
+>> for the ones that doesn't want vhost. So it actually shifts the
+>> burdens to the maintainers of all other to add "CONFIG_VHOST_MENU is
+>> not set". So this patch tries to enable CONFIG_VHOST explicitly in
+>> defconfigs that enables CONFIG_VHOST_NET and CONFIG_VHOST_VSOCK.
+>>
+>> Cc: Thomas Bogendoerfer<tsbogend@alpha.franken.de>
+>> Cc: Benjamin Herrenschmidt<benh@kernel.crashing.org>
+>> Cc: Paul Mackerras<paulus@samba.org>
+>> Cc: Michael Ellerman<mpe@ellerman.id.au>
+>> Cc: Heiko Carstens<heiko.carstens@de.ibm.com>
+>> Cc: Vasily Gorbik<gor@linux.ibm.com>
+>> Cc: Christian Borntraeger<borntraeger@de.ibm.com>
+> Fine with me.
+> s390 part
+>
+> Acked-by: Christian Borntraeger<borntraeger@de.ibm.com>
+>
+>   That was my first approach to get things fixed before I reported
+> this to you.
 
-Actually this code break a case that cpumask is not continuous.
-It do happen on some MIPS platforms.
 
-Yes. rearrange this is a option but I think it is making the logic
-unnecessarily complex.
+Exactly.
 
-If you think that's better I'll do so.
+Thanks
 
-Thanks.
-> 
+>
 
---
-Jiaxun Yang
