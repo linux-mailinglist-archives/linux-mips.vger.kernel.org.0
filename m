@@ -2,189 +2,223 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B41B1A7098
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2020 03:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEEFE1A712A
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2020 04:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403824AbgDNBkl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Apr 2020 21:40:41 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:33882 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728252AbgDNBkl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 13 Apr 2020 21:40:41 -0400
-Received: from [10.20.42.25] (unknown [10.20.42.25])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr9qKFJVeT5knAA--.11S3;
-        Tue, 14 Apr 2020 09:40:27 +0800 (CST)
-Subject: Re: [PATCH 0/15] KVM: MIPS: Add Loongson-3 support (Host Side)
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>
-References: <1586763024-12197-1-git-send-email-chenhc@lemote.com>
- <20200413161842.57ad8be4@flygoat-x1e>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        id S1728743AbgDNCpE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Apr 2020 22:45:04 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:25453 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2404193AbgDNCo6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Apr 2020 22:44:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586832296;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1JQT2Xm0ZoYwsGUbbr9yEBymLjUdcqLv7hF40ghU85w=;
+        b=dKcNSACjNqwLq6SxdH4RGRTN9SCauDFEtOCNqdf9pebrbcAUDQQC+bFh8surPtxjuKYpuw
+        HR3ZSxpHdwChNY6XtVcZj6phK1nHnshAd5Eb2BseEDF8x1Yylgx8XZ6TzF5yaB4WZnVVVN
+        WZHH5gEOoV1yxP5V22ppkKiwpVEVzOk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-223-DsspG1W7MT6P3LkdYibTNg-1; Mon, 13 Apr 2020 22:44:52 -0400
+X-MC-Unique: DsspG1W7MT6P3LkdYibTNg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 359E6107ACC4;
+        Tue, 14 Apr 2020 02:44:49 +0000 (UTC)
+Received: from jason-ThinkPad-X1-Carbon-6th.redhat.com (ovpn-13-119.pek2.redhat.com [10.72.13.119])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 199AB60BE1;
+        Tue, 14 Apr 2020 02:44:40 +0000 (UTC)
+From:   Jason Wang <jasowang@redhat.com>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, geert@linux-m68k.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        kvm@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        aleksandar.qemu.devel@gmail.com
-From:   maobibo <maobibo@loongson.cn>
-Message-ID: <bbbeb507-5692-5969-c320-57d04823edc7@loongson.cn>
-Date:   Tue, 14 Apr 2020 09:40:26 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Subject: [PATCH] vhost: do not enable VHOST_MENU by default
+Date:   Tue, 14 Apr 2020 10:44:38 +0800
+Message-Id: <20200414024438.19103-1-jasowang@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20200413161842.57ad8be4@flygoat-x1e>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxr9qKFJVeT5knAA--.11S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxKF47AFy3tF1fXr13Jr43Jrb_yoW7Zr47pa
-        17C3W3Kr4kGr97Cw1fJw18Wr1aqr95JFyUJwsrt340gF98XF1qvr4IyFWFya47Cr9Yg340
-        qFyFqr1DWa17C3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9mb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY
-        04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xva
-        j40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r
-        1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07beAp5UUUUU=
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+We try to keep the defconfig untouched after decoupling CONFIG_VHOST
+out of CONFIG_VIRTUALIZATION in commit 20c384f1ea1a
+("vhost: refine vhost and vringh kconfig") by enabling VHOST_MENU by
+default. Then the defconfigs can keep enabling CONFIG_VHOST_NET
+without the caring of CONFIG_VHOST.
 
+But this will leave a "CONFIG_VHOST_MENU=3Dy" in all defconfigs and even
+for the ones that doesn't want vhost. So it actually shifts the
+burdens to the maintainers of all other to add "CONFIG_VHOST_MENU is
+not set". So this patch tries to enable CONFIG_VHOST explicitly in
+defconfigs that enables CONFIG_VHOST_NET and CONFIG_VHOST_VSOCK.
 
-On 04/13/2020 04:18 PM, Jiaxun Yang wrote:
-> On Mon, 13 Apr 2020 15:30:09 +0800
-> Huacai Chen <chenhc@lemote.com> wrote:
-> 
->> We are preparing to add KVM support for Loongson-3. VZ extension is
->> fully supported in Loongson-3A R4+, and we will not care about old
->> CPUs (at least now). We already have a full functional Linux kernel
->> (based on Linux-5.4.x LTS) and QEMU (based on 5.0.0-rc2) and their git
->> repositories are here:
->>
->> QEMU: https://github.com/chenhuacai/qemu
->> Kernel: https://github.com/chenhuacai/linux
->>
->> Of course these two repositories need to be rework and not suitable
->> for upstream (especially the commits need to be splitted). We show
->> them here is just to tell others what we have done, and how
->> KVM/Loongson will look like.
->>
->> Our plan is make the KVM host side be upstream first, and after that,
->> we will make the KVM guest side and QEMU emulator be upstream.
-> 
-> + Aleksandar as QEMU/MIPS mainatiner
-> 
-> I was involved in KVM/Loongson development a bit and also intend to
-> help with mainline these works.
-> 
-> After dealing with basic LS7A PCH kernel support, I'm going to
-> cooperate with Huacai and anyone who interested in to deal with
-> following stuff:
-> 
-> - Basic QEMU/TCG support for Loongson64 instructions.
-> 	Well, it seems unrelated with KVM, but that would make
-> 	development easier with cross ISA emulation. I'm not going to
-> 	implement all the features like Loongson's page table fast walk
-> 	extension and binary translation extension but I'll ensure any
-> 	binary compiled with march=loongson3a can run flawlessly on
-> 	TCG.
-> 
-> - Design of Loongson-VIRT QEMU machine
-> 	It is nearly impossible to bring a real Loongson system into
-> 	QEMU. Both RS780E and LS7A PCH have tons of unreasonable design
-> 	that would make the emulation extremely complex, Loongson
-> 	company's KVM implementation[1] has already proofed that,
-> 	thay're now in the hell. So we all agreed that we should build
-> 	a machine from draft. I think we should reuse existing infra as
-> 	far as possible to reduce our work load. I'm planing to use
-> 	pci-host-cam-generic together with VIRTIO PCI devices and a
-> 	a strip down version of loongson,liointc-1.0a to build a pure
-> 	PCI based system. But if any one have better idea please just
-> 	tell us, I'm still considering how to implement SMP-IPI and ACPI
-> 	stuff.
-It is a good job to add kvm virtualization support on loongson64 platform. I agree that we should define common virt machine hardware system, however the compiled kernel binary should be the same with host system, else it will bring out trouble for customers to differentiate them between guest system and host system.
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+---
+ arch/mips/configs/malta_kvm_defconfig  |  1 +
+ arch/powerpc/configs/powernv_defconfig |  1 +
+ arch/powerpc/configs/ppc64_defconfig   |  1 +
+ arch/powerpc/configs/pseries_defconfig |  1 +
+ arch/s390/configs/debug_defconfig      |  1 +
+ arch/s390/configs/defconfig            |  1 +
+ drivers/vhost/Kconfig                  | 18 +++++-------------
+ 7 files changed, 11 insertions(+), 13 deletions(-)
 
-For pci host bridge emulation, I suggest that gpex pcie host bridge should be used, since it supports pcie hotplug and arm/riscv uses this pcie host bridge.
-
-For virtual interrupt controller, it should support MSI/MSIX interrupt, irqchip in kernel, IRQFD, vhost/vfio etc. I have no idea how to define virtual interrupt controller now.
-
-
-regards
-bibo,mao
-
-> 
-> - BIOS in VM
-> 	This has a lower priority. But BIOS is required to make a
-> 	emulated machine looks like a real machine. Loongson have their
-> 	open-sourced PMON and close-sourced UEFI(Based on tianocore).
-> 	I'd really with Loongson or Lemote will open-source their UEFI
-> 	but PMON is also a option.
-> 
-> Any kind of feedback is appreciated.
-> 
-> Thanks.
-> 
-> Wish you good health :-)
-> 
-> 
-> [1]: http://cgit.loongnix.org/cgit/linux-3.10/ &
-> http://cgit.loongnix.org/cgit/qemu-2.7.0/
-> 
-> Btw: I think Cc qemu-devel for the whole series is a little bit
-> disturb, probably we should only Cc qemu-devel for the cover letter.
-> 
->>
->> Mike Rapoport(1):
->>  mips: define pud_index() regardless of page table folding
->>
->> Xing Li(2):
->>  KVM: MIPS: Define KVM_ENTRYHI_ASID to cpu_asid_mask(&boot_cpu_data)
->>  KVM: MIPS: Fix VPN2_MASK definition for variable cpu_vmbits
->>
->> Huacai Chen(12):
->>  KVM: MIPS: Increase KVM_MAX_VCPUS and KVM_USER_MEM_SLOTS to 16
->>  KVM: MIPS: Add EVENTFD support which is needed by VHOST
->>  KVM: MIPS: Use lddir/ldpte instructions to lookup gpa_mm.pgd
->>  KVM: MIPS: Introduce and use cpu_guest_has_ldpte
->>  KVM: MIPS: Use root tlb to control guest's CCA for Loongson-3
->>  KVM: MIPS: Let indexed cacheops cause guest exit on Loongson-3
->>  KVM: MIPS: Add more types of virtual interrupts
->>  KVM: MIPS: Add Loongson-3 Virtual IPI interrupt support
->>  KVM: MIPS: Add CPUCFG emulation for Loongson-3
->>  KVM: MIPS: Add CONFIG6 and DIAG registers emulation
->>  KVM: MIPS: Add more MMIO load/store instructions emulation
->>  KVM: MIPS: Enable KVM support for Loongson-3
->>
->> Signed-off-by: Huacai Chen <chenhc@lemote.com>
->> ---
->>  arch/mips/Kconfig                    |   1 +
->>  arch/mips/include/asm/cpu-features.h |   3 +
->>  arch/mips/include/asm/kvm_host.h     |  50 +++-
->>  arch/mips/include/asm/mipsregs.h     |   7 +
->>  arch/mips/include/asm/pgtable-64.h   |   4 +-
->>  arch/mips/include/uapi/asm/inst.h    |  11 +
->>  arch/mips/kernel/cpu-probe.c         |   2 +
->>  arch/mips/kvm/Kconfig                |   1 +
->>  arch/mips/kvm/Makefile               |   5 +-
->>  arch/mips/kvm/emulate.c              | 461
->> ++++++++++++++++++++++++++++++++++- arch/mips/kvm/entry.c
->>    |  19 +- arch/mips/kvm/interrupt.c            |  93 +------
->>  arch/mips/kvm/interrupt.h            |  14 +-
->>  arch/mips/kvm/loongson_ipi.c         | 215 ++++++++++++++++
->>  arch/mips/kvm/mips.c                 |  49 +++-
->>  arch/mips/kvm/tlb.c                  |  39 +++
->>  arch/mips/kvm/trap_emul.c            |   3 +
->>  arch/mips/kvm/vz.c                   | 204 +++++++++++-----
->>  18 files changed, 1013 insertions(+), 168 deletions(-)
->>  create mode 100644 arch/mips/kvm/loongson_ipi.c
->> --
->> 2.7.0
+diff --git a/arch/mips/configs/malta_kvm_defconfig b/arch/mips/configs/ma=
+lta_kvm_defconfig
+index 8ef612552a19..06f0c7a0ca87 100644
+--- a/arch/mips/configs/malta_kvm_defconfig
++++ b/arch/mips/configs/malta_kvm_defconfig
+@@ -18,6 +18,7 @@ CONFIG_PCI=3Dy
+ CONFIG_VIRTUALIZATION=3Dy
+ CONFIG_KVM=3Dm
+ CONFIG_KVM_MIPS_DEBUG_COP0_COUNTERS=3Dy
++CONFIG_VHOST=3Dm
+ CONFIG_VHOST_NET=3Dm
+ CONFIG_MODULES=3Dy
+ CONFIG_MODULE_UNLOAD=3Dy
+diff --git a/arch/powerpc/configs/powernv_defconfig b/arch/powerpc/config=
+s/powernv_defconfig
+index 71749377d164..404245b4594d 100644
+--- a/arch/powerpc/configs/powernv_defconfig
++++ b/arch/powerpc/configs/powernv_defconfig
+@@ -346,5 +346,6 @@ CONFIG_CRYPTO_DEV_VMX=3Dy
+ CONFIG_VIRTUALIZATION=3Dy
+ CONFIG_KVM_BOOK3S_64=3Dm
+ CONFIG_KVM_BOOK3S_64_HV=3Dm
++CONFIG_VHOST=3Dm
+ CONFIG_VHOST_NET=3Dm
+ CONFIG_PRINTK_TIME=3Dy
+diff --git a/arch/powerpc/configs/ppc64_defconfig b/arch/powerpc/configs/=
+ppc64_defconfig
+index 7e68cb222c7b..4599fc7be285 100644
+--- a/arch/powerpc/configs/ppc64_defconfig
++++ b/arch/powerpc/configs/ppc64_defconfig
+@@ -61,6 +61,7 @@ CONFIG_ELECTRA_CF=3Dy
+ CONFIG_VIRTUALIZATION=3Dy
+ CONFIG_KVM_BOOK3S_64=3Dm
+ CONFIG_KVM_BOOK3S_64_HV=3Dm
++CONFIG_VHOST=3Dm
+ CONFIG_VHOST_NET=3Dm
+ CONFIG_OPROFILE=3Dm
+ CONFIG_KPROBES=3Dy
+diff --git a/arch/powerpc/configs/pseries_defconfig b/arch/powerpc/config=
+s/pseries_defconfig
+index 6b68109e248f..4cad3901b5de 100644
+--- a/arch/powerpc/configs/pseries_defconfig
++++ b/arch/powerpc/configs/pseries_defconfig
+@@ -321,5 +321,6 @@ CONFIG_CRYPTO_DEV_VMX=3Dy
+ CONFIG_VIRTUALIZATION=3Dy
+ CONFIG_KVM_BOOK3S_64=3Dm
+ CONFIG_KVM_BOOK3S_64_HV=3Dm
++CONFIG_VHOST=3Dm
+ CONFIG_VHOST_NET=3Dm
+ CONFIG_PRINTK_TIME=3Dy
+diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_=
+defconfig
+index 0c86ba19fa2b..6ec6e69630d1 100644
+--- a/arch/s390/configs/debug_defconfig
++++ b/arch/s390/configs/debug_defconfig
+@@ -57,6 +57,7 @@ CONFIG_PROTECTED_VIRTUALIZATION_GUEST=3Dy
+ CONFIG_CMM=3Dm
+ CONFIG_APPLDATA_BASE=3Dy
+ CONFIG_KVM=3Dm
++CONFIG_VHOST=3Dm
+ CONFIG_VHOST_NET=3Dm
+ CONFIG_VHOST_VSOCK=3Dm
+ CONFIG_OPROFILE=3Dm
+diff --git a/arch/s390/configs/defconfig b/arch/s390/configs/defconfig
+index 6b27d861a9a3..d1b3bf83d687 100644
+--- a/arch/s390/configs/defconfig
++++ b/arch/s390/configs/defconfig
+@@ -57,6 +57,7 @@ CONFIG_PROTECTED_VIRTUALIZATION_GUEST=3Dy
+ CONFIG_CMM=3Dm
+ CONFIG_APPLDATA_BASE=3Dy
+ CONFIG_KVM=3Dm
++CONFIG_VHOST=3Dm
+ CONFIG_VHOST_NET=3Dm
+ CONFIG_VHOST_VSOCK=3Dm
+ CONFIG_OPROFILE=3Dm
+diff --git a/drivers/vhost/Kconfig b/drivers/vhost/Kconfig
+index e79cbbdfea45..14d296dc18cd 100644
+--- a/drivers/vhost/Kconfig
++++ b/drivers/vhost/Kconfig
+@@ -12,23 +12,18 @@ config VHOST_RING
+ 	  This option is selected by any driver which needs to access
+ 	  the host side of a virtio ring.
+=20
+-config VHOST
+-	tristate
++menuconfig VHOST
++	tristate "Vhost Devices"
+ 	select VHOST_IOTLB
+ 	help
+-	  This option is selected by any driver which needs to access
+-	  the core of vhost.
+-
+-menuconfig VHOST_MENU
+-	bool "VHOST drivers"
+-	default y
++	  Enable option to support host kernel or hardware accelerator
++	  for virtio device.
+=20
+-if VHOST_MENU
++if VHOST
+=20
+ config VHOST_NET
+ 	tristate "Host kernel accelerator for virtio net"
+ 	depends on NET && EVENTFD && (TUN || !TUN) && (TAP || !TAP)
+-	select VHOST
+ 	---help---
+ 	  This kernel module can be loaded in host kernel to accelerate
+ 	  guest networking with virtio_net. Not to be confused with virtio_net
+@@ -40,7 +35,6 @@ config VHOST_NET
+ config VHOST_SCSI
+ 	tristate "VHOST_SCSI TCM fabric driver"
+ 	depends on TARGET_CORE && EVENTFD
+-	select VHOST
+ 	default n
+ 	---help---
+ 	Say M here to enable the vhost_scsi TCM fabric module
+@@ -49,7 +43,6 @@ config VHOST_SCSI
+ config VHOST_VSOCK
+ 	tristate "vhost virtio-vsock driver"
+ 	depends on VSOCKETS && EVENTFD
+-	select VHOST
+ 	select VIRTIO_VSOCKETS_COMMON
+ 	default n
+ 	---help---
+@@ -63,7 +56,6 @@ config VHOST_VSOCK
+ config VHOST_VDPA
+ 	tristate "Vhost driver for vDPA-based backend"
+ 	depends on EVENTFD
+-	select VHOST
+ 	depends on VDPA
+ 	help
+ 	  This kernel module can be loaded in host kernel to accelerate
+--=20
+2.20.1
 
