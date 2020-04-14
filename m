@@ -2,119 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0CC1A83E3
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2020 17:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 359331A86FA
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Apr 2020 19:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732395AbgDNP5L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Apr 2020 11:57:11 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:32913 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1732423AbgDNP5J (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Apr 2020 11:57:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586879828;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+YYLNoHPS0R9msE++qaePEk7EKWnckmMQYzoCYqpJRk=;
-        b=L5VaZIUX94Up2eOkbcGXD9ia6HQsLwWIG5x2EBP15ZVOAg0FYzA7/4JiAQ/Fn0e9zucPzj
-        cijSY8Y2Y28v1AhrGRN49yO+erNIXQ/Z7xWUPdqMb98nGB9Iy07jDACxr9zzYzhaFqH2qr
-        tzp5EynSZH27B3q5RamSSbSuYG38mL8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-415--YsJchixObK1hVVfN99Prg-1; Tue, 14 Apr 2020 11:57:06 -0400
-X-MC-Unique: -YsJchixObK1hVVfN99Prg-1
-Received: by mail-wm1-f72.google.com with SMTP id u11so1719841wmc.7
-        for <linux-mips@vger.kernel.org>; Tue, 14 Apr 2020 08:57:06 -0700 (PDT)
+        id S2407512AbgDNRHC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Apr 2020 13:07:02 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:36136 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729042AbgDNRG6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Apr 2020 13:06:58 -0400
+Received: by mail-ot1-f68.google.com with SMTP id b13so382256oti.3;
+        Tue, 14 Apr 2020 10:06:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+YYLNoHPS0R9msE++qaePEk7EKWnckmMQYzoCYqpJRk=;
-        b=Ye9n7NxNNeZRSaeSAfl98zfTTbVj9G1WTDqaRUu2IbTV09skjH3FtGspa9CPHhtoS2
-         VnoT57zueb7PrLOFIVOj6/nOxhwBBSJcNSGxQ56ZLx3C5HLTBN51nVeLe+fnQ3fu5WgT
-         ru9wnWmpUX76fMKxTYFe/HwoU986H69uxPM75z3VBqnHm9AZy6o/NWB2SbONhnu+uFc8
-         YHXtywTfrATSsAPbDAT1DynzTfYHuVwEZsUqc2AJbTXWyGpeJD6MReTW91l7q7BKWXu/
-         o2AUwN2U+f727O530mpoBVwiMFqyA4ymMeTLLG7a3ZaPuPPQ4s80dizr1l4k6lmGVkTG
-         5Cxg==
-X-Gm-Message-State: AGi0PubkoXGg2NpuPUPDawGWVu2vkTYtFp9c/W6DlLvtZ8RVYeN1mJ9P
-        wihfMk7kan0MUq9TijKdl4ij1ZIWVYQu6GLrqEX8FXAeEn6JRdg8UhZoDpILBVV/R+bCYJdSqZJ
-        Dwf9X5AaGTm4CCKMhmqH/Pw==
-X-Received: by 2002:a1c:5502:: with SMTP id j2mr502938wmb.93.1586879825146;
-        Tue, 14 Apr 2020 08:57:05 -0700 (PDT)
-X-Google-Smtp-Source: APiQypK43hPUptF5L9yvQziVzJGJV/VyMhS23tlGH7dzBh06iijjr98+S1d6K1K1pTXXFtXi18cgZQ==
-X-Received: by 2002:a1c:5502:: with SMTP id j2mr502914wmb.93.1586879824909;
-        Tue, 14 Apr 2020 08:57:04 -0700 (PDT)
-Received: from localhost.localdomain ([194.230.155.210])
-        by smtp.gmail.com with ESMTPSA id j10sm16390309wmi.18.2020.04.14.08.57.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Apr 2020 08:57:04 -0700 (PDT)
-Subject: Re: [PATCH] kvm_host: unify VM_STAT and VCPU_STAT definitions in a
- single place
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
-        kvm@vger.kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org
-References: <20200413140332.22896-1-eesposit@redhat.com>
- <03a481a8-bcf2-8755-d113-71ef393508bf@amsat.org>
- <bf870876-9f9a-7ba8-d941-a3883e519eed@redhat.com>
-From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Message-ID: <a5e9246e-2bf3-204e-b79b-0ed4c40fcc5d@redhat.com>
-Date:   Tue, 14 Apr 2020 17:57:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=R7DvIE6xgB6bsjZY6OStsQ7vzWt/6mNtD60f488gFE0=;
+        b=gXCvYbn55D8xVCMLHfglEXzITOQetzVSAfCKD6TNpADR6FIj/VJLzIU9fjQ6GFaAxY
+         KILG10G3JyDlMeVK+kOyqeQwEw3Q1mHp68LB57NKB6oU4RGr5oqITp08WbwAP5Irnllh
+         rMghpCz1mERczcI9aktDsSWltM8p8Vmsh1AwpH8dL4RHKMkrQlEm7isVPrIQ/S6VjilL
+         YGXjVdsHzhHMO4fc804MI2nReGnwbREGLNH/yR5vOjA0xAcpBxTlJYFTMyU/LuzOUc8y
+         s1huHnfXxzyqCGtvpcVAqDhKWZkxIGFjy3Ayt0YZVJ1NJN9/xFdoWOy7Q2E2BkrZMOAr
+         6hyw==
+X-Gm-Message-State: AGi0PuYlyWPXq8uwJ7da4eChH5R8NEdUE9h+QZDAH/Wp2R35zM1K0Ve2
+        wNL7ei10ECL0Sh3yLSjQZvWT45Q=
+X-Google-Smtp-Source: APiQypLcWMJCxCvJhaBdIMDkx5zzMNBBqtXItGq/cEfJVplp7CnhWshFW1uiWYkqaLhu0iOA7MF6aw==
+X-Received: by 2002:a4a:92cd:: with SMTP id j13mr19440736ooh.96.1586884017955;
+        Tue, 14 Apr 2020 10:06:57 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id y8sm3450729otg.6.2020.04.14.10.06.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2020 10:06:57 -0700 (PDT)
+Received: (nullmailer pid 11468 invoked by uid 1000);
+        Tue, 14 Apr 2020 17:06:56 -0000
+Date:   Tue, 14 Apr 2020 12:06:56 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/5] dt-bindings: Document Loongson RS780E PCH ACPI
+ Controller
+Message-ID: <20200414170656.GA11412@bogus>
+References: <20200402104851.368465-1-jiaxun.yang@flygoat.com>
+ <20200402104851.368465-3-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-In-Reply-To: <bf870876-9f9a-7ba8-d941-a3883e519eed@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200402104851.368465-3-jiaxun.yang@flygoat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 4/14/20 10:18 AM, Paolo Bonzini wrote:
-> On 13/04/20 23:34, Philippe Mathieu-Daudé wrote:
->>> +#define VM_STAT(x, ...) offsetof(struct kvm, stat.x), KVM_STAT_VM, ## __VA_ARGS__
->>> +#define VCPU_STAT(x, ...) offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ## __VA_ARGS__
->> I find this macro expanding into multiple fields odd... Maybe a matter
->> of taste. Sugggestion, have the macro define the full structure, as in
->> the arm64 arch:
->>
->> #define VM_STAT(n, x, ...) { n, offsetof(struct kvm, stat.x),
->> KVM_STAT_VM, ## __VA_ARGS__ }
->>
->> Ditto for VCPU_STAT().
->>
-Hi Philippe and Paolo,
+On Thu,  2 Apr 2020 18:48:41 +0800, Jiaxun Yang wrote:
 > 
-> Yes, that's a good idea.  Emanuele, can you switch it to this format?
+> This controller is attached under ISA Bus and can be found
+> in Loongson-3 systems with RS780E PCH.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  .../bindings/mips/loongson/rs780e-acpi.yaml   | 40 +++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml
+> 
 
-Sure, I just submitted the v2 version.
-
-Thanks,
-
-Emanuele
-
+Reviewed-by: Rob Herring <robh@kernel.org>
