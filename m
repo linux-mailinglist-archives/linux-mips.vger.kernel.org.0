@@ -2,32 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CE31A96C2
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 10:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268851A982C
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 11:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2894648AbgDOIgE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Apr 2020 04:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
+        id S2635974AbgDOJPf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Apr 2020 05:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2894641AbgDOIgB (ORCPT
+        by vger.kernel.org with ESMTP id S2635968AbgDOJPa (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 15 Apr 2020 04:36:01 -0400
-Received: from mo6-p04-ob.smtp.rzone.de (mo6-p04-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5304::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0832C061A0C;
-        Wed, 15 Apr 2020 01:36:00 -0700 (PDT)
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2M7O2CKN9ej"
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-        by smtp.strato.de (RZmta 46.4.0 DYNA|AUTH)
-        with ESMTPSA id 6028a2w3F8ZU0Iy
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Wed, 15 Apr 2020 10:35:30 +0200 (CEST)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Wed, 15 Apr 2020 05:15:30 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0720C061A41
+        for <linux-mips@vger.kernel.org>; Wed, 15 Apr 2020 02:15:29 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id q19so2829602ljp.9
+        for <linux-mips@vger.kernel.org>; Wed, 15 Apr 2020 02:15:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=69T9ZGqlIy7aImGgwrs75/hfGvsilwincFfwWiQFobg=;
+        b=QmYfPFaxi91fzgnYBmzUnbNLZxOG0Qvv9XHtQXYm/D+sTky/Yc25iONfxBlY/7wqsB
+         fRtQYUCgyxgK4p3vjoCdR1E4K1nsTfSz3bWGNyVBA7FGlzJ7W7xAZUor5i5MsgsA0hU6
+         1sVmcbUlUP1cDxtb+3jC+HIaRfadnrNzRFcNUoV22EicSEE5dlVf6RJieO6E9yC3PemP
+         qMb4hRiVMAXxE1MiwCuSopLulXmT+VCKUbpRSEH+BCrvLMZ4tKOYKabhdtdCWnXgNuRk
+         9lpcy+vti6/lVgJJk2gVDZg/BOarCjaD0Ak6NlGy7RcdUdyYk3SImWtP+7AMtEZqo2NA
+         +piQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=69T9ZGqlIy7aImGgwrs75/hfGvsilwincFfwWiQFobg=;
+        b=PfQlXDCnLdJKB/I7n4odrgSd52e0xivlHCx4mvr8PYxKyX7v76X+NNdknM0jiYb36/
+         y+uopESvoG3bIdKHymcZpXZ9ebKJSOYiFxCtTLKbH7XIbxV0eCttTFHRPMetZb0igVvL
+         GGSPbasi+/bTaATL9uaEQ25RNcM9HmG5KqMd2yvTPdpT7kdQk1VcsnFaPiQxa873Jhkw
+         dWx7pW1didpG/cTEVAobW7cDMI0TQhSDU/07+3ETVrEvrQwHv9ImzdS52EK5r3QM9jKp
+         D1eSJAmlWUrkVo5UDjH/JfEzmkRBqRbs3MwEdkYmPhJqFmOvTGvFVhH2uuY3oPP2qMuX
+         OVRQ==
+X-Gm-Message-State: AGi0PuZox6I50Rx9SuinYBbyPlL37kighaDBW01xCoAMndnIKj9XBXFU
+        R5PqhePe239KBtHxTwW/Wa3u0Q==
+X-Google-Smtp-Source: APiQypJt4bgg1yrZutHX1jnCNUTiEGk5PA6dcO1xYRoqGEwzcnoywOgKJNgJRfEssnCyTOQijG6tmA==
+X-Received: by 2002:a2e:6c0a:: with SMTP id h10mr2542581ljc.195.1586942127891;
+        Wed, 15 Apr 2020 02:15:27 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:81b:6e8d:a1dd:9870:4166:dead? ([2a00:1fa0:81b:6e8d:a1dd:9870:4166:dead])
+        by smtp.gmail.com with ESMTPSA id m13sm12192031lfk.12.2020.04.15.02.15.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Apr 2020 02:15:27 -0700 (PDT)
+Subject: Re: [PATCH v6 08/12] arm: dts: s5pv210: Add G3D node
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
         Tony Lindgren <tony@atomide.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Ralf Baechle <ralf@linux-mips.org>,
@@ -44,56 +72,51 @@ Cc:     Philipp Rossak <embed3d@gmail.com>,
         kernel@pyra-handheld.com, linux-mips@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Paul Boddie <paul@boddie.org.uk>
-Subject: [PATCH v6 12/12] MIPS: DTS: jz4780: add sgx gpu node
-Date:   Wed, 15 Apr 2020 10:35:19 +0200
-Message-Id: <2ee64babb11f79fe4a03b7bad6c94fbbe0ce4b64.1586939718.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1586939718.git.hns@goldelico.com>
+        Jonathan Bakker <xc-racer2@live.ca>
 References: <cover.1586939718.git.hns@goldelico.com>
+ <b6733f80546bf3e6b3799f716b9c8e0f407de03d.1586939718.git.hns@goldelico.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <b6ffa74a-acef-f329-0d9e-981483499e16@cogentembedded.com>
+Date:   Wed, 15 Apr 2020 12:15:17 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <b6733f80546bf3e6b3799f716b9c8e0f407de03d.1586939718.git.hns@goldelico.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-and add interrupt and clocks.
+Hello!
 
-Tested to build for CI20 board and load a driver.
-Setup can not yet be fully tested since there is no working
-HDMI driver for jz4780.
+On 15.04.2020 11:35, H. Nikolaus Schaller wrote:
 
-Suggested-by: Paul Boddie <paul@boddie.org.uk>
-Tested-by: H. Nikolaus Schaller <hns@goldelico.com> # CI20.
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- arch/mips/boot/dts/ingenic/jz4780.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+> From: Jonathan Bakker <xc-racer2@live.ca>
+> 
+> to add support for SGX540 GPU.
+> 
+> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>   arch/arm/boot/dts/s5pv210.dtsi | 15 +++++++++++++++
+>   1 file changed, 15 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/s5pv210.dtsi b/arch/arm/boot/dts/s5pv210.dtsi
+> index 2ad642f51fd9..e7fc709c0cca 100644
+> --- a/arch/arm/boot/dts/s5pv210.dtsi
+> +++ b/arch/arm/boot/dts/s5pv210.dtsi
+> @@ -512,6 +512,21 @@ vic3: interrupt-controller@f2300000 {
+>   			#interrupt-cells = <1>;
+>   		};
+>   
+> +		g3d: g3d@f3000000 {
 
-diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-index bb89653d16a3..883fe2c4c9e1 100644
---- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-@@ -357,6 +357,17 @@ i2c4: i2c@10054000 {
- 		status = "disabled";
- 	};
- 
-+	gpu: gpu@13040000 {
-+		compatible = "ingenic,jz4780-sgx540-130", "img,sgx540-130", "img,sgx540";
-+		reg = <0x13040000 0x4000>;
-+
-+		clocks = <&cgu JZ4780_CLK_GPU>;
-+		clock-names = "gpu";
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <63>;
-+	};
-+
- 	nemc: nemc@13410000 {
- 		compatible = "ingenic,jz4780-nemc";
- 		reg = <0x13410000 0x10000>;
--- 
-2.25.1
+    Should be named generically, "gpu@f3000000", according to the DT spec 0.2, 
+section 2.2.2. It's either "gpu" or "display" TTBOMK...
 
+[...]
+
+MBR, Sergei
