@@ -2,231 +2,190 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C81EA1A910F
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 04:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5D81A934F
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 08:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728267AbgDOCoU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Apr 2020 22:44:20 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:42237 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1732579AbgDOCoO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Apr 2020 22:44:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586918652;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=FTv5AkLYQ+5KJ9sSK50BNsriwFY0NMNF1swhxtvNcFc=;
-        b=KCV+PNFrxY34NHPD5wxP6s0jbP9VlizAqOhb1DnXVXR5m5h5hyl97HBAzBaQV0ev+BhTby
-        NT+2uAbSqQc3enZvQFOQ20BF5PwHTc5X5Yp9vbQ266W8WQ82UuHitxtG3AUZ5IPY3+vtBE
-        LlAOEyLJWu2EXXOF0slKB8iYjz+xlx4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-364-4zcwoXPfPQaXvOe1_HQyAA-1; Tue, 14 Apr 2020 22:44:08 -0400
-X-MC-Unique: 4zcwoXPfPQaXvOe1_HQyAA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B0981800D53;
-        Wed, 15 Apr 2020 02:44:06 +0000 (UTC)
-Received: from jason-ThinkPad-X1-Carbon-6th.redhat.com (ovpn-12-184.pek2.redhat.com [10.72.12.184])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 48DDF12656E;
-        Wed, 15 Apr 2020 02:43:57 +0000 (UTC)
-From:   Jason Wang <jasowang@redhat.com>
-To:     jasowang@redhat.com, mst@redhat.com
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, geert@linux-m68k.org,
-        tsbogend@alpha.franken.de, benh@kernel.crashing.org,
-        paulus@samba.org, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
-        borntraeger@de.ibm.com, Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH V2] vhost: do not enable VHOST_MENU by default
-Date:   Wed, 15 Apr 2020 10:43:56 +0800
-Message-Id: <20200415024356.23751-1-jasowang@redhat.com>
+        id S2390395AbgDOGgX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Apr 2020 02:36:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729019AbgDOGgU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Apr 2020 02:36:20 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F21EC061A0C;
+        Tue, 14 Apr 2020 23:36:20 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id ca21so3218372edb.7;
+        Tue, 14 Apr 2020 23:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ziy3CvjiTZBb7re9okjvNzQcGH3k+TOTS0/15gywnMU=;
+        b=qqWsPrEf0Ts6quEdGNgBCMsV+kOpY8DsnLT8o+GDgNvhTV7DBX8PBknwe8j0CFEmZX
+         jpltKjKxsibH1qtE9Pf+Yz7+KL62s7h7jGgyQlIBJ/TlhWE5yR2c4gr+7Tj1c78y1fr6
+         +Zrz2j6Hmf3jl/P4hZRQjAS6AYMTJfyK4LyMEMf53j3sfn38rtV0w5wPuRetHtwAIhxz
+         pWb4hDPYcN9P2BvtRDpRaqKHmXbtsK7GhxWOnwkikmDYVI0XvWIhVDDk0RLbEDIYG847
+         +cFNtefbyrNvpUo935pS2ws6qM5Vz4D5kiUbknZ6Gro0unFWFR9g7XFcFYGMgY7GmiKA
+         lYOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=ziy3CvjiTZBb7re9okjvNzQcGH3k+TOTS0/15gywnMU=;
+        b=CFoQ1JtgeIGw7IYaMOaTBznq7Y8J36YqBr/207bsKGHrIn7OXpVnLROXXWeJVSQql2
+         PawT57o9CgoOgaHZh6s+Kb3K9jN0fV9fx+XLaQevXvC8vpAWrt6gFgcoYueZYTeWOoP/
+         uIkU5MlERoKdmnUKu+AsBEmhglNWsHH+csNGqxiG4GuaZuAvxXxzxMaF/7gRU03BsIfS
+         SkeWEOPPqD0jcziuStjSzD1L7nSibPuwgkoQKL/8mNi9gIS9xr9JJdX0r+kZWqhtxKBm
+         g/H7+pD3sDddLQBxGoXBGFbiMTyrJXYsjWLWIL1caq/hBqWwvwPYSVj1W7aaw0bPYUwQ
+         loLQ==
+X-Gm-Message-State: AGi0PuZDPIHPOeEDrwx+krYcf3GvUP5QxSeMPedLo5sfXVhRgS+fp1No
+        uX8S9Gbmci8X4ZqkF0HJEG4su4mFPfeNmw==
+X-Google-Smtp-Source: APiQypLBhzQGFSJJza9fhbUNOdf67Ws8AWLLrc2T019xWRRZvN78jvwPXZ4Cq/fMHCh3e7IoI3AkbQ==
+X-Received: by 2002:aa7:cf15:: with SMTP id a21mr15771536edy.349.1586932578974;
+        Tue, 14 Apr 2020 23:36:18 -0700 (PDT)
+Received: from [192.168.1.39] (116.red-83-42-57.dynamicip.rima-tde.net. [83.42.57.116])
+        by smtp.gmail.com with ESMTPSA id y10sm2423364ejm.3.2020.04.14.23.36.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Apr 2020 23:36:18 -0700 (PDT)
+Subject: Re: [PATCH v2] kvm_host: unify VM_STAT and VCPU_STAT definitions in a
+ single place
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-s390@vger.kernel.org
+References: <20200414155625.20559-1-eesposit@redhat.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
+Autocrypt: addr=f4bug@amsat.org; keydata=
+ mQINBDU8rLoBEADb5b5dyglKgWF9uDbIjFXU4gDtcwiga9wJ/wX6xdhBqU8tlQ4BroH7AeRl
+ u4zXP0QnBDAG7EetxlQzcfYbPmxFISWjckDBFvDbFsojrZmwF2/LkFSzlvKiN5KLghzzJhLO
+ HhjGlF8deEZz/d/G8qzO9mIw8GIBS8uuWh6SIcG/qq7+y+2+aifaj92EdwU79apZepT/U3vN
+ YrfcAuo1Ycy7/u0hJ7rlaFUn2Fu5KIgV2O++hHYtCCQfdPBg/+ujTL+U+sCDawCyq+9M5+LJ
+ ojCzP9rViLZDd/gS6jX8T48hhidtbtsFRj/e9QpdZgDZfowRMVsRx+TB9yzjFdMO0YaYybXp
+ dg/wCUepX5xmDBrle6cZ8VEe00+UQCAU1TY5Hs7QFfBbjgR3k9pgJzVXNUKcJ9DYQP0OBH9P
+ ZbZvM0Ut2Bk6bLBO5iCVDOco0alrPkX7iJul2QWBy3Iy9j02GnA5jZ1Xtjr9kpCqQT+sRXso
+ Vpm5TPGWaWljIeLWy/qL8drX1eyJzwTB3A36Ck4r3YmjMjfmvltSZB1uAdo1elHTlFEULpU/
+ HiwvvqXQ9koB15U154VCuguvx/Qnboz8GFb9Uw8VyawzVxYVNME7xw7CQF8FYxzj6eI7rBf2
+ Dj/II6wxWPgDEy3oUzuNOxTB7sT3b/Ym76yOJzWX5BylXQIJ5wARAQABtDFQaGlsaXBwZSBN
+ YXRoaWV1LURhdWTDqSAoRjRCVUcpIDxmNGJ1Z0BhbXNhdC5vcmc+iQJVBBMBCAA/AhsPBgsJ
+ CAcDAgYVCAIJCgsEFgIDAQIeAQIXgBYhBPqr514SkXIh3P1rsuPjLCzercDeBQJd660aBQks
+ klzgAAoJEOPjLCzercDe2iMP+gMG2dUf+qHz2uG8nTBGMjgK0aEJrKVPodFA+iedQ5Kp3BMo
+ jrTg3/DG1HMYdcvQu/NFLYwamUfUasyor1k+3dB23hY09O4xOsYJBWdilkBGsJTKErUmkUO2
+ 3J/kawosvYtJJSHUpw3N6mwz/iWnjkT8BPp7fFXSujV63aZWZINueTbK7Y8skFHI0zpype9s
+ loU8xc4JBrieGccy3n4E/kogGrTG5jcMTNHZ106DsQkhFnjhWETp6g9xOKrzZQbETeRBOe4P
+ sRsY9YSG2Sj+ZqmZePvO8LyzGRjYU7T6Z80S1xV0lH6KTMvq7vvz5rd92f3pL4YrXq+e//HZ
+ JsiLen8LH/FRhTsWRgBtNYkOsd5F9NvfJtSM0qbX32cSXMAStDVnS4U+H2vCVCWnfNug2TdY
+ 7v4NtdpaCi4CBBa3ZtqYVOU05IoLnlx0miKTBMqmI05kpgX98pi2QUPJBYi/+yNu3fjjcuS9
+ K5WmpNFTNi6yiBbNjJA5E2qUKbIT/RwQFQvhrxBUcRCuK4x/5uOZrysjFvhtR8YGm08h+8vS
+ n0JCnJD5aBhiVdkohEFAz7e5YNrAg6kOA5IVRHB44lTBOatLqz7ntwdGD0rteKuHaUuXpTYy
+ CRqCVAKqFJtxhvJvaX0vLS1Z2dwtDwhjfIdgPiKEGOgCNGH7R8l+aaM4OPOd
+Message-ID: <b479e7ff-4534-5ced-e19b-2a2914905a8b@amsat.org>
+Date:   Wed, 15 Apr 2020 08:36:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200414155625.20559-1-eesposit@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-We try to keep the defconfig untouched after decoupling CONFIG_VHOST
-out of CONFIG_VIRTUALIZATION in commit 20c384f1ea1a
-("vhost: refine vhost and vringh kconfig") by enabling VHOST_MENU by
-default. Then the defconfigs can keep enabling CONFIG_VHOST_NET
-without the caring of CONFIG_VHOST.
+On 4/14/20 5:56 PM, Emanuele Giuseppe Esposito wrote:
+> The macros VM_STAT and VCPU_STAT are redundantly implemented in multiple
+> files, each used by a different architecure to initialize the debugfs
+> entries for statistics. Since they all have the same purpose, they can be
+> unified in a single common definition in include/linux/kvm_host.h
+> 
+> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+> ---
+>  arch/arm64/kvm/guest.c    |  23 ++---
+>  arch/mips/kvm/mips.c      |  61 ++++++------
+>  arch/powerpc/kvm/book3s.c |  61 ++++++------
+>  arch/powerpc/kvm/booke.c  |  41 ++++----
+>  arch/s390/kvm/kvm-s390.c  | 203 +++++++++++++++++++-------------------
+>  arch/x86/kvm/x86.c        |  80 +++++++--------
+>  include/linux/kvm_host.h  |   5 +
+>  7 files changed, 231 insertions(+), 243 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+> index 23ebe51410f0..8417b200bec9 100644
+> --- a/arch/arm64/kvm/guest.c
+> +++ b/arch/arm64/kvm/guest.c
+> @@ -29,20 +29,17 @@
+>  
+>  #include "trace.h"
+>  
+> -#define VM_STAT(x) { #x, offsetof(struct kvm, stat.x), KVM_STAT_VM }
+> -#define VCPU_STAT(x) { #x, offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU }
+> -
+>  struct kvm_stats_debugfs_item debugfs_entries[] = {
+> -	VCPU_STAT(halt_successful_poll),
+> -	VCPU_STAT(halt_attempted_poll),
+> -	VCPU_STAT(halt_poll_invalid),
+> -	VCPU_STAT(halt_wakeup),
+> -	VCPU_STAT(hvc_exit_stat),
+> -	VCPU_STAT(wfe_exit_stat),
+> -	VCPU_STAT(wfi_exit_stat),
+> -	VCPU_STAT(mmio_exit_user),
+> -	VCPU_STAT(mmio_exit_kernel),
+> -	VCPU_STAT(exits),
+> +	VCPU_STAT("halt_successful_poll", halt_successful_poll),
+> +	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+> +	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+> +	VCPU_STAT("halt_wakeup", halt_wakeup),
+> +	VCPU_STAT("hvc_exit_stat", hvc_exit_stat),
+> +	VCPU_STAT("wfe_exit_stat", wfe_exit_stat),
+> +	VCPU_STAT("wfi_exit_stat", wfi_exit_stat),
+> +	VCPU_STAT("mmio_exit_user", mmio_exit_user),
+> +	VCPU_STAT("mmio_exit_kernel", mmio_exit_kernel),
+> +	VCPU_STAT("exits", exits),
+>  	{ NULL }
+>  };
 
-But this will leave a "CONFIG_VHOST_MENU=3Dy" in all defconfigs and even
-for the ones that doesn't want vhost. So it actually shifts the
-burdens to the maintainers of all other to add "CONFIG_VHOST_MENU is
-not set". So this patch tries to enable CONFIG_VHOST explicitly in
-defconfigs that enables CONFIG_VHOST_NET and CONFIG_VHOST_VSOCK.
+Patch easily reviewed with --word-diff.
 
-Acked-by: Christian Borntraeger <borntraeger@de.ibm.com> (s390)
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@de.ibm.com>
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Jason Wang <jasowang@redhat.com>
----
-Change since V1:
-- depends on EVENTFD for VHOST
----
- arch/mips/configs/malta_kvm_defconfig  |  1 +
- arch/powerpc/configs/powernv_defconfig |  1 +
- arch/powerpc/configs/ppc64_defconfig   |  1 +
- arch/powerpc/configs/pseries_defconfig |  1 +
- arch/s390/configs/debug_defconfig      |  1 +
- arch/s390/configs/defconfig            |  1 +
- drivers/vhost/Kconfig                  | 26 +++++++++-----------------
- 7 files changed, 15 insertions(+), 17 deletions(-)
+[...]
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 6d58beb65454..2e6ead872957 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1130,6 +1130,11 @@ struct kvm_stats_debugfs_item {
+>  #define KVM_DBGFS_GET_MODE(dbgfs_item)                                         \
+>  	((dbgfs_item)->mode ? (dbgfs_item)->mode : 0644)
+>  
+> +#define VM_STAT(n, x, ...) 													   \
+> +	{ n, offsetof(struct kvm, stat.x), KVM_STAT_VM, ## __VA_ARGS__ }
+> +#define VCPU_STAT(n, x, ...)												   \
 
-diff --git a/arch/mips/configs/malta_kvm_defconfig b/arch/mips/configs/ma=
-lta_kvm_defconfig
-index 8ef612552a19..06f0c7a0ca87 100644
---- a/arch/mips/configs/malta_kvm_defconfig
-+++ b/arch/mips/configs/malta_kvm_defconfig
-@@ -18,6 +18,7 @@ CONFIG_PCI=3Dy
- CONFIG_VIRTUALIZATION=3Dy
- CONFIG_KVM=3Dm
- CONFIG_KVM_MIPS_DEBUG_COP0_COUNTERS=3Dy
-+CONFIG_VHOST=3Dm
- CONFIG_VHOST_NET=3Dm
- CONFIG_MODULES=3Dy
- CONFIG_MODULE_UNLOAD=3Dy
-diff --git a/arch/powerpc/configs/powernv_defconfig b/arch/powerpc/config=
-s/powernv_defconfig
-index 71749377d164..404245b4594d 100644
---- a/arch/powerpc/configs/powernv_defconfig
-+++ b/arch/powerpc/configs/powernv_defconfig
-@@ -346,5 +346,6 @@ CONFIG_CRYPTO_DEV_VMX=3Dy
- CONFIG_VIRTUALIZATION=3Dy
- CONFIG_KVM_BOOK3S_64=3Dm
- CONFIG_KVM_BOOK3S_64_HV=3Dm
-+CONFIG_VHOST=3Dm
- CONFIG_VHOST_NET=3Dm
- CONFIG_PRINTK_TIME=3Dy
-diff --git a/arch/powerpc/configs/ppc64_defconfig b/arch/powerpc/configs/=
-ppc64_defconfig
-index 7e68cb222c7b..4599fc7be285 100644
---- a/arch/powerpc/configs/ppc64_defconfig
-+++ b/arch/powerpc/configs/ppc64_defconfig
-@@ -61,6 +61,7 @@ CONFIG_ELECTRA_CF=3Dy
- CONFIG_VIRTUALIZATION=3Dy
- CONFIG_KVM_BOOK3S_64=3Dm
- CONFIG_KVM_BOOK3S_64_HV=3Dm
-+CONFIG_VHOST=3Dm
- CONFIG_VHOST_NET=3Dm
- CONFIG_OPROFILE=3Dm
- CONFIG_KPROBES=3Dy
-diff --git a/arch/powerpc/configs/pseries_defconfig b/arch/powerpc/config=
-s/pseries_defconfig
-index 6b68109e248f..4cad3901b5de 100644
---- a/arch/powerpc/configs/pseries_defconfig
-+++ b/arch/powerpc/configs/pseries_defconfig
-@@ -321,5 +321,6 @@ CONFIG_CRYPTO_DEV_VMX=3Dy
- CONFIG_VIRTUALIZATION=3Dy
- CONFIG_KVM_BOOK3S_64=3Dm
- CONFIG_KVM_BOOK3S_64_HV=3Dm
-+CONFIG_VHOST=3Dm
- CONFIG_VHOST_NET=3Dm
- CONFIG_PRINTK_TIME=3Dy
-diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_=
-defconfig
-index 0c86ba19fa2b..6ec6e69630d1 100644
---- a/arch/s390/configs/debug_defconfig
-+++ b/arch/s390/configs/debug_defconfig
-@@ -57,6 +57,7 @@ CONFIG_PROTECTED_VIRTUALIZATION_GUEST=3Dy
- CONFIG_CMM=3Dm
- CONFIG_APPLDATA_BASE=3Dy
- CONFIG_KVM=3Dm
-+CONFIG_VHOST=3Dm
- CONFIG_VHOST_NET=3Dm
- CONFIG_VHOST_VSOCK=3Dm
- CONFIG_OPROFILE=3Dm
-diff --git a/arch/s390/configs/defconfig b/arch/s390/configs/defconfig
-index 6b27d861a9a3..d1b3bf83d687 100644
---- a/arch/s390/configs/defconfig
-+++ b/arch/s390/configs/defconfig
-@@ -57,6 +57,7 @@ CONFIG_PROTECTED_VIRTUALIZATION_GUEST=3Dy
- CONFIG_CMM=3Dm
- CONFIG_APPLDATA_BASE=3Dy
- CONFIG_KVM=3Dm
-+CONFIG_VHOST=3Dm
- CONFIG_VHOST_NET=3Dm
- CONFIG_VHOST_VSOCK=3Dm
- CONFIG_OPROFILE=3Dm
-diff --git a/drivers/vhost/Kconfig b/drivers/vhost/Kconfig
-index e79cbbdfea45..29f171a53d8a 100644
---- a/drivers/vhost/Kconfig
-+++ b/drivers/vhost/Kconfig
-@@ -12,23 +12,19 @@ config VHOST_RING
- 	  This option is selected by any driver which needs to access
- 	  the host side of a virtio ring.
-=20
--config VHOST
--	tristate
-+menuconfig VHOST
-+	tristate "Vhost Devices"
-+	depends on EVENTFD
- 	select VHOST_IOTLB
- 	help
--	  This option is selected by any driver which needs to access
--	  the core of vhost.
-+	  Enable option to support host kernel or hardware accelerator
-+	  for virtio device.
-=20
--menuconfig VHOST_MENU
--	bool "VHOST drivers"
--	default y
--
--if VHOST_MENU
-+if VHOST
-=20
- config VHOST_NET
- 	tristate "Host kernel accelerator for virtio net"
--	depends on NET && EVENTFD && (TUN || !TUN) && (TAP || !TAP)
--	select VHOST
-+	depends on NET && (TUN || !TUN) && (TAP || !TAP)
- 	---help---
- 	  This kernel module can be loaded in host kernel to accelerate
- 	  guest networking with virtio_net. Not to be confused with virtio_net
-@@ -39,8 +35,7 @@ config VHOST_NET
-=20
- config VHOST_SCSI
- 	tristate "VHOST_SCSI TCM fabric driver"
--	depends on TARGET_CORE && EVENTFD
--	select VHOST
-+	depends on TARGET_CORE
- 	default n
- 	---help---
- 	Say M here to enable the vhost_scsi TCM fabric module
-@@ -48,8 +43,7 @@ config VHOST_SCSI
-=20
- config VHOST_VSOCK
- 	tristate "vhost virtio-vsock driver"
--	depends on VSOCKETS && EVENTFD
--	select VHOST
-+	depends on VSOCKETS
- 	select VIRTIO_VSOCKETS_COMMON
- 	default n
- 	---help---
-@@ -62,8 +56,6 @@ config VHOST_VSOCK
-=20
- config VHOST_VDPA
- 	tristate "Vhost driver for vDPA-based backend"
--	depends on EVENTFD
--	select VHOST
- 	depends on VDPA
- 	help
- 	  This kernel module can be loaded in host kernel to accelerate
---=20
-2.20.1
+Not sure while you use so many whitespaces here... (maybe Paolo can
+strip some when applying?).
 
+Otherwise it looks nicer that v1, thanks.
+
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+
+> +	{ n, offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ## __VA_ARGS__ }
+> +
+>  extern struct kvm_stats_debugfs_item debugfs_entries[];
+>  extern struct dentry *kvm_debugfs_dir;
+>  
+> 
