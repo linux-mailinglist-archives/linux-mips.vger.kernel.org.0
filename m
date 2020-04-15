@@ -2,77 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA341A9CCB
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 13:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753E41AA112
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 14:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2897276AbgDOLis (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Apr 2020 07:38:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58644 "EHLO mail.kernel.org"
+        id S2408986AbgDOLnQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Apr 2020 07:43:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35036 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2897264AbgDOLij (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:38:39 -0400
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+        id S2408978AbgDOLnO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:43:14 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3B603216FD;
-        Wed, 15 Apr 2020 11:38:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3EBDD21582;
+        Wed, 15 Apr 2020 11:43:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586950718;
-        bh=R43hO9Q3If9QrtnZ5K9TcR/a0ZvrCDhZjgGwgzT0xFE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=E5odArf/RDc2lUAWXYieDSICfp9q8nBXEpH8oGXMbl511ftW6vzpHvHktcBE2iKiC
-         CKixYDKgMb9QlA1aORiC5Eu+aRqxfTt+PKHC5/btAAOBgUVlxZbVPCpfvrqokmXOdZ
-         CbKDC6mtkLWOW1EL3z3pC7fdPh/RNVXyWZm30v4k=
-Received: by mail-lf1-f46.google.com with SMTP id r17so2379370lff.2;
-        Wed, 15 Apr 2020 04:38:38 -0700 (PDT)
-X-Gm-Message-State: AGi0PuZ9WSJnSO6AYiy7Kf5ZdRr9MshNvCwTwoSrOMpD4NZ/hdI+9w6u
-        soXlwgfAXMZs8mj1E5+u2Lxe0ZW+kPRqhjbIrKM=
-X-Google-Smtp-Source: APiQypI+VI3dpF2YbI7yVr/aHwnSBVAysHwaY+SScdUs4Jyyh+GbDgIy/bRBbEhJiawYLq4RWaZKVJOwvX1RTOgkOWY=
-X-Received: by 2002:a19:ae16:: with SMTP id f22mr2914229lfc.2.1586950716265;
- Wed, 15 Apr 2020 04:38:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1586939718.git.hns@goldelico.com> <004611c9660943759b635a87484932869927cf74.1586939718.git.hns@goldelico.com>
-In-Reply-To: <004611c9660943759b635a87484932869927cf74.1586939718.git.hns@goldelico.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 15 Apr 2020 13:38:25 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPdEkWniffmGZmf=S6E5UxWTdVGXnycqTFftXwo_45rz3w@mail.gmail.com>
-Message-ID: <CAJKOXPdEkWniffmGZmf=S6E5UxWTdVGXnycqTFftXwo_45rz3w@mail.gmail.com>
-Subject: Re: [PATCH v6 07/12] ARM: DTS: omap5: add sgx gpu child node
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        =?UTF-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
+        s=default; t=1586950994;
+        bh=Mc1pIuQsFh+DB+kAcRNt4P2NwE+ll1nbXbIDWqB5Y6M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pm9dSKrB7jcGwpIPcOmyY2mHLprxEHp7SgENhdiGFuKRNgbQLAvFE4+t3QXuzf3t9
+         sy8M4m1o3tRu58uqhJmuzO6LqgCxmLkPnF4Dzo4VaEX2fZjoeKaj2YXI4Jkk1lkNgL
+         UDw9n7zzAjSWMK2wJCob6vmRfm4wOyEuyjBanzIA=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Alex Smith <alex.smith@imgtec.com>,
+        "H . Nikolaus Schaller" <hns@goldelico.com>,
         Paul Cercueil <paul@crapouillou.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>, Kukjin Kim <kgene@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Philipp Rossak <embed3d@gmail.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-omap@vger.kernel.org, openpvrsgx-devgroup@letux.org,
-        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sasha Levin <sashal@kernel.org>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.5 040/106] MIPS: DTS: CI20: add DT node for IR sensor
+Date:   Wed, 15 Apr 2020 07:41:20 -0400
+Message-Id: <20200415114226.13103-40-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200415114226.13103-1-sashal@kernel.org>
+References: <20200415114226.13103-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 15 Apr 2020 at 10:36, H. Nikolaus Schaller <hns@goldelico.com> wrote:
->
-> and add interrupt.
->
-> Tested-by: H. Nikolaus Schaller <hns@goldelico.com> # Pyra-Handheld.
+From: Alex Smith <alex.smith@imgtec.com>
 
-Don't add your own Tested-by tags. These are implied by authorship,
-otherwise all patches people make should have such tag.
+[ Upstream commit f5e8fcf85a25bac26c32a0000dbab5857ead9113 ]
 
-Best regards,
-Krzysztof
+The infrared sensor on the CI20 board is connected to a GPIO and can
+be operated by using the gpio-ir-recv driver. Add a DT node for the
+sensor to allow that driver to be used.
+
+Signed-off-by: Alex Smith <alex.smith@imgtec.com>
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/boot/dts/ingenic/ci20.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
+index c340f947baa03..fc4e64200c3d5 100644
+--- a/arch/mips/boot/dts/ingenic/ci20.dts
++++ b/arch/mips/boot/dts/ingenic/ci20.dts
+@@ -62,6 +62,11 @@
+ 		enable-active-high;
+ 	};
+ 
++	ir: ir {
++		compatible = "gpio-ir-receiver";
++		gpios = <&gpe 3 GPIO_ACTIVE_LOW>;
++	};
++
+ 	wlan0_power: fixedregulator@1 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "wlan0_power";
+-- 
+2.20.1
+
