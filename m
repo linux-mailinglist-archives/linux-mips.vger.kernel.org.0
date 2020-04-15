@@ -2,116 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3E51A9E0B
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 13:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21BB1A9F75
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 14:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409509AbgDOLuB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Apr 2020 07:50:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45652 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406447AbgDOLt6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:49:58 -0400
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4691F21744;
-        Wed, 15 Apr 2020 11:49:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586951397;
-        bh=wuXS7RCUYgyS51p4SeDx49zy51VkJGb5/qdr8yBZ0d4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=xeYP5cgafRPn6YhT6fu/+txsms6Rtv2DIovKV6n2lrE++374gHweZw442o4eW6zsC
-         0QPce/mOtpt2CYbuX3ZFAnyYNI2ZEwjJnhtikf8CEIIN6kqNvsnWY7Mv65g7qt/ye7
-         uxrNjWBorfjR3nRfrgurBt9sUOOix1lQMqGuSVeE=
-Received: by mail-lj1-f172.google.com with SMTP id l14so3320926ljj.5;
-        Wed, 15 Apr 2020 04:49:57 -0700 (PDT)
-X-Gm-Message-State: AGi0PuZjsKu6zf8LL5CFFTykBFz9Ow4IvwbcDnVlR60DqUO+zLPg55Wi
-        Mn3f2JxQvMpWmfYUIWCrwd9HLJrKBdE/jlykFDA=
-X-Google-Smtp-Source: APiQypJ6JgZvNxuPA2SlFZq3seBA6kaFPbk0RkqFDGIpIMdWvmYwpqEO8cmLBYYdZ/c1p1IHSS++MGMZGzTZDC6zHHI=
-X-Received: by 2002:a2e:9845:: with SMTP id e5mr3131512ljj.201.1586951395296;
- Wed, 15 Apr 2020 04:49:55 -0700 (PDT)
+        id S368589AbgDOMMi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Apr 2020 08:12:38 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:40681 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S368583AbgDOMLs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Apr 2020 08:11:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586952701;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3g8pOUWTOZg7Xu60Mt7A1x/Ov3i7r+YKQXs6UW5HczM=;
+        b=RGQ9ReOxUD6zJxpTpcJyovIWYbtUkeED3xFLICuYpGDlGl/rd+rqnNoCERJwPU+rJtxclB
+        kzwoRxnLECElXSIlg1wGMaDqEmFbNwD+NqUGlqpurC/cuS6hFxs7UIIZr1SOGDyLOJPkzc
+        fwwsB7SR1oicULgzTA8mT74GS8uEOPk=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-163-seMxaawgOLaTsfXY1uOHoQ-1; Wed, 15 Apr 2020 08:11:39 -0400
+X-MC-Unique: seMxaawgOLaTsfXY1uOHoQ-1
+Received: by mail-wr1-f69.google.com with SMTP id o10so10409695wrj.7
+        for <linux-mips@vger.kernel.org>; Wed, 15 Apr 2020 05:11:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3g8pOUWTOZg7Xu60Mt7A1x/Ov3i7r+YKQXs6UW5HczM=;
+        b=NrEWX7EcVpwHFPnbC2syOhr94TRmGP3Y+ITxkqGvEFDGINLHRZCrkkzCuBcwtyfhOV
+         CVKHNMWv/jF5+seNVrpOXqIR2/O27kt2rVc4eNTzz7M+nFt+lK4p4lylDjDhUlLmKK/w
+         6A6hMz4MOPRw098pHSPzvYbzg/QSOhAuw8XO0cUfccdA5ckq5Fw9cE5/Vo/Xk4a9MQbi
+         i4OJ1o006wIc8c4oIymngrWJejPZsrZLL7cz17wTaKa3vYdA+nwxcTApWrj13x5Kndi0
+         IdMqyQ5LygUYHaryqqidPPnZXBti7wWGVI0qNGO9x6Vgha59HaqadeIruaz+QerUKX2/
+         Y/dQ==
+X-Gm-Message-State: AGi0PuZOkTLY66Z5ZV7uMZarhpFJW+WJaOXcIFSAQeM786ANNDgljNnj
+        BvBk6+ugqabijzLOarKjN+WZ3EsW4tdLLamuqILTAfjscyvZDV16n8gnxO+CiipGLsW/NJDmW4u
+        tz4orptsXFI9YAIKiRosJeQ==
+X-Received: by 2002:a5d:688f:: with SMTP id h15mr29234453wru.352.1586952698402;
+        Wed, 15 Apr 2020 05:11:38 -0700 (PDT)
+X-Google-Smtp-Source: APiQypKdWpo7ENEPbDqHP93vSXvdpZwuSMQZ1BbP1xfwyNZcod/63Icpez1n6CuR5oR+nIQbYmcMPw==
+X-Received: by 2002:a5d:688f:: with SMTP id h15mr29234435wru.352.1586952698180;
+        Wed, 15 Apr 2020 05:11:38 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:9066:4f2:9fbd:f90e? ([2001:b07:6468:f312:9066:4f2:9fbd:f90e])
+        by smtp.gmail.com with ESMTPSA id q8sm22064722wmg.22.2020.04.15.05.11.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Apr 2020 05:11:37 -0700 (PDT)
+Subject: Re: [PATCH 3/4] kvm: Replace vcpu->swait with rcuwait
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     tglx@linutronix.de, bigeasy@linutronix.de, peterz@infradead.org,
+        rostedt@goodmis.org, torvalds@linux-foundation.org,
+        will@kernel.org, joel@joelfernandes.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paul Mackerras <paulus@ozlabs.org>,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        Davidlohr Bueso <dbueso@suse.de>
+References: <20200324044453.15733-1-dave@stgolabs.net>
+ <20200324044453.15733-4-dave@stgolabs.net>
+ <a6b23828-aa50-bea0-1d2d-03e2871239d4@redhat.com>
+ <20200414211243.7vehybdrvbzmbduu@linux-p48b>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <b2f87633-8eef-4f84-5e65-a80523ca34f8@redhat.com>
+Date:   Wed, 15 Apr 2020 14:11:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-References: <cover.1586939718.git.hns@goldelico.com> <b6733f80546bf3e6b3799f716b9c8e0f407de03d.1586939718.git.hns@goldelico.com>
-In-Reply-To: <b6733f80546bf3e6b3799f716b9c8e0f407de03d.1586939718.git.hns@goldelico.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 15 Apr 2020 13:49:44 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPcb9KWNAem-CAx_zCS+sZoEHYc0J8x0nk1xjY9hD4-M4w@mail.gmail.com>
-Message-ID: <CAJKOXPcb9KWNAem-CAx_zCS+sZoEHYc0J8x0nk1xjY9hD4-M4w@mail.gmail.com>
-Subject: Re: [PATCH v6 08/12] arm: dts: s5pv210: Add G3D node
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        =?UTF-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>, Kukjin Kim <kgene@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Philipp Rossak <embed3d@gmail.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-omap@vger.kernel.org, openpvrsgx-devgroup@letux.org,
-        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        Jonathan Bakker <xc-racer2@live.ca>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200414211243.7vehybdrvbzmbduu@linux-p48b>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 15 Apr 2020 at 10:36, H. Nikolaus Schaller <hns@goldelico.com> wrote:
->
-> From: Jonathan Bakker <xc-racer2@live.ca>
->
-> to add support for SGX540 GPU.
+On 14/04/20 23:12, Davidlohr Bueso wrote:
+> On Wed, 25 Mar 2020, Paolo Bonzini wrote:
+> 
+>> On 24/03/20 05:44, Davidlohr Bueso wrote:
+>>> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+>>> index 71244bf87c3a..e049fcb3dffb 100644
+>>> --- a/arch/mips/kvm/mips.c
+>>> +++ b/arch/mips/kvm/mips.c
+>>> @@ -290,8 +290,7 @@ static enum hrtimer_restart
+>>> kvm_mips_comparecount_wakeup(struct hrtimer *timer)
+>>>     kvm_mips_callbacks->queue_timer_int(vcpu);
+>>>
+>>>     vcpu->arch.wait = 0;
+>>> -    if (swq_has_sleeper(&vcpu->wq))
+>>> -        swake_up_one(&vcpu->wq);
+>>> +    rcuwait_wake_up(&vcpu->wait)
+>>
+>> This is missing a semicolon.  (KVM MIPS is known not to compile and will
+>> be changed to "depends on BROKEN" in 5.7).
+> 
+> Do you want me to send another version with this fix or do you prefer
+> fixing it when/if picked up?
 
-Do not continue the subject in commit msg like it is one sentence.
-These are two separate sentences, so commit msg starts with capital
-letter and it is sentence by itself.
+It's up to the TIP tree people, but sending a fixed version is probably
+the best way to get their attention. :)
 
-> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> ---
->  arch/arm/boot/dts/s5pv210.dtsi | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/arch/arm/boot/dts/s5pv210.dtsi b/arch/arm/boot/dts/s5pv210.dtsi
-> index 2ad642f51fd9..e7fc709c0cca 100644
-> --- a/arch/arm/boot/dts/s5pv210.dtsi
-> +++ b/arch/arm/boot/dts/s5pv210.dtsi
-> @@ -512,6 +512,21 @@ vic3: interrupt-controller@f2300000 {
->                         #interrupt-cells = <1>;
->                 };
->
-> +               g3d: g3d@f3000000 {
-> +                       compatible = "samsung,s5pv210-sgx540-120";
-> +                       reg = <0xf3000000 0x10000>;
-> +                       interrupt-parent = <&vic2>;
-> +                       interrupts = <10>;
-> +                       clock-names = "sclk";
-> +                       clocks = <&clocks CLK_G3D>;
+I can also queue it myself (for 5.7 even) if I get an Acked-by from
+Peter though.
 
-Not part of bindings, please remove or add to the bindings.
+Paolo
 
-> +
-> +                       power-domains = <&pd S5PV210_PD_G3D>;
-
-Ditto
-
-> +
-> +                       assigned-clocks = <&clocks MOUT_G3D>, <&clocks DOUT_G3D>;
-> +                       assigned-clock-rates = <0>, <66700000>;
-> +                       assigned-clock-parents = <&clocks MOUT_MPLL>;
-
-Probably this should have status disabled because you do not set
-regulator supply.
-
-Best regards,
-Krzysztof
