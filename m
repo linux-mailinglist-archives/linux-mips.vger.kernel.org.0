@@ -2,83 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F12491A968C
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 10:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D47B1A96AC
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 10:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408077AbgDOIbp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Apr 2020 04:31:45 -0400
-Received: from elvis.franken.de ([193.175.24.41]:39993 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408073AbgDOIbo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 15 Apr 2020 04:31:44 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jOdSN-0007IZ-00; Wed, 15 Apr 2020 10:31:39 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 11724C010E; Wed, 15 Apr 2020 10:31:18 +0200 (CEST)
-Date:   Wed, 15 Apr 2020 10:31:18 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH v2] MIPS: Limit check_bugs32() to affected platform
-Message-ID: <20200415083117.GA3125@alpha.franken.de>
-References: <1586488859-18715-1-git-send-email-yangtiezhu@loongson.cn>
- <c60f62cb-62e8-be13-f551-c9a13abc7f94@gmail.com>
- <181cf95e-c5f6-3899-e8eb-3f8847ec86d9@loongson.cn>
- <20200414173208.GA22802@alpha.franken.de>
- <5e575f15-4efc-7bf7-e266-d01aca094bbc@loongson.cn>
+        id S2894630AbgDOIf6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Apr 2020 04:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2894621AbgDOIf4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 15 Apr 2020 04:35:56 -0400
+Received: from mo6-p02-ob.smtp.rzone.de (mo6-p02-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5302::5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47E9C061A0F;
+        Wed, 15 Apr 2020 01:35:53 -0700 (PDT)
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UNf2M7O2CKN9ej"
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+        by smtp.strato.de (RZmta 46.4.0 DYNA|AUTH)
+        with ESMTPSA id 6028a2w3F8ZJ0Ih
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Wed, 15 Apr 2020 10:35:19 +0200 (CEST)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Philipp Rossak <embed3d@gmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        openpvrsgx-devgroup@letux.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH v6 00/12] ARM/MIPS: DTS: add child nodes describing the PVRSGX GPU present in some OMAP SoC and JZ4780 (and many more)
+Date:   Wed, 15 Apr 2020 10:35:07 +0200
+Message-Id: <cover.1586939718.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5e575f15-4efc-7bf7-e266-d01aca094bbc@loongson.cn>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 15, 2020 at 09:48:30AM +0800, Tiezhu Yang wrote:
-> On 04/15/2020 01:32 AM, Thomas Bogendoerfer wrote:
-> >On Sat, Apr 11, 2020 at 10:32:02AM +0800, Tiezhu Yang wrote:
-> >>On 04/11/2020 12:25 AM, Florian Fainelli wrote:
-> >>>On 4/9/2020 8:20 PM, Tiezhu Yang wrote:
-> >>>>In the current code, check_bugs32() only handles MIPS32 CPU type CPU_34K,
-> >>>>it is better to build and call it on the affected platform.
-> >>>>
-> >>>>Move check_bugs32() to the new added 34k-bugs32.c to indicate the fact that
-> >>>>the code is specific to the 34k CPU, and also add CONFIG_CPU_34K_BUGS32 to
-> >>>>control whether or not check the bugs.
-> >>>>
-> >>>>Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> >>>This is not a whole lot of code, so moving this to a separate
-> >>>translation unit seems a bit heavy handed, also file renames, albeit
-> >>>tracked properly by git are always a challenge when doing back ports.
-> >>Hi Florian,
-> >>
-> >>There exists the following three ways to do it, I'm fine either way,
-> >>maybe the first way looks better. Let us wait for the MIPS maintainer
-> >>to say what he prefer.
-> >>
-> >>Hi Thomas,
-> >>
-> >>What is your opinion?
-> >I don't see a reason for doing that at all. The 34K workaround is only
-> >compiled in if CONFIG_SYS_HAS_CPU_MIPS32_R2 is defined.
-> 
-> Hi Thomas,
-> 
-> Thanks for your reply. My initial thought is to build and call check_bugs32() only for 34K CPU,
-> because it is useless for other CPU types.
-> 
-> Do you mean to use the following modification?
+* rebased to v5.7-rc1
+* added DTS for for a31, a31s, a83t - by Philipp Rossak <embed3d@gmail.com>
+* added DTS for "samsung,s5pv210-sgx540-120" - by Jonathan Bakker <xc-racer2@live.ca>
+* bindings.yaml fixes:
+  - added a31, a31
+  - fixes for omap4470
+  - jz4780 contains an sgx540-130 and not -120
+  - a83t contains an sgx544-115 and not -116
+  - removed "additionalProperties: false" because some SoC may need additional properties
 
-no, IMHO we don't need to change anything here. There is not much to save
-here.
+PATCH V5 2020-03-29 19:38:32:
+* reworked YAML bindings to pass dt_binding_check and be better grouped
+* rename all nodes to "gpu: gpu@<address>"
+* removed "img,sgx5" from example - suggested by Rob Herring <robh+dt@kernel.org>
 
-Thomas.
+PATCH V4 2019-12-17 19:02:11:
+* MIPS: DTS: jz4780: removed "img,sgx5" from bindings
+* YAML bindings: updated according to suggestions by Rob Herring
+* MIPS: DTS: jz4780: insert-sorted gpu node by register address - suggested by Paul Cercueil
+
+PATCH V3 2019-11-24 12:40:33:
+* reworked YAML format with help by Rob Herring
+* removed .txt binding document
+* change compatible "ti,am335x-sgx" to "ti,am3352-sgx" - suggested by Tony Lindgren
+
+PATCH V2 2019-11-07 12:06:17:
+* tried to convert bindings to YAML format - suggested by Rob Herring
+* added JZ4780 DTS node (proven to load the driver)
+* removed timer and img,cores properties until we know we really need them - suggested by Rob Herring
+
+PATCH V1 2019-10-18 20:46:35:
+
+This patch series defines child nodes for the SGX5xx interface inside
+different SoC so that a driver can be found and probed by the
+compatible strings and can retrieve information about the SGX revision
+that is included in a specific SoC. It also defines the interrupt number
+to be used by the SGX driver.
+
+There is currently no mainline driver for these GPUs, but a project [1]
+is ongoing with the goal to get the open-source part as provided by TI/IMG
+and others into drivers/gpu/drm/pvrsgx.
+
+The kernel modules built from this project have successfully demonstrated
+to work with the DTS definitions from this patch set on AM335x BeagleBone
+Black, DM3730 and OMAP5 Pyra and Droid 4. They partially work on OMAP3530 and
+PandaBoard ES but that is likely a problem in the kernel driver or the
+(non-free) user-space libraries and binaries.
+
+Wotk for JZ4780 (CI20 board) is in progress and there is potential to extend
+this work to e.g. BananaPi-M3 (A83) and  some Intel Poulsbo and CedarView
+devices.
+
+[1]: https://github.com/openpvrsgx-devgroup
+
+
+H. Nikolaus Schaller (8):
+  dt-bindings: add img,pvrsgx.yaml for Imagination GPUs
+  ARM: DTS: am33xx: add sgx gpu child node
+  ARM: DTS: am3517: add sgx gpu child node
+  ARM: DTS: omap34xx: add sgx gpu child node
+  ARM: DTS: omap36xx: add sgx gpu child node
+  ARM: DTS: omap4: add sgx gpu child node
+  ARM: DTS: omap5: add sgx gpu child node
+  MIPS: DTS: jz4780: add sgx gpu node
+
+Jonathan Bakker (1):
+  arm: dts: s5pv210: Add G3D node
+
+Philipp Rossak (3):
+  ARM: dts: sun6i: a31: add sgx gpu child node
+  ARM: dts: sun6i: a31s: add sgx gpu child node
+  ARM: dts: sun8i: a83t: add sgx gpu child node
+
+ .../devicetree/bindings/gpu/img,pvrsgx.yaml   | 122 ++++++++++++++++++
+ arch/arm/boot/dts/am33xx.dtsi                 |  11 +-
+ arch/arm/boot/dts/am3517.dtsi                 |   9 +-
+ arch/arm/boot/dts/omap34xx.dtsi               |  11 +-
+ arch/arm/boot/dts/omap36xx.dtsi               |   9 +-
+ arch/arm/boot/dts/omap4.dtsi                  |  11 +-
+ arch/arm/boot/dts/omap4470.dts                |  15 +++
+ arch/arm/boot/dts/omap5.dtsi                  |  11 +-
+ arch/arm/boot/dts/s5pv210.dtsi                |  15 +++
+ arch/arm/boot/dts/sun6i-a31.dtsi              |  11 ++
+ arch/arm/boot/dts/sun6i-a31s.dtsi             |  10 ++
+ arch/arm/boot/dts/sun8i-a83t.dtsi             |  11 ++
+ arch/mips/boot/dts/ingenic/jz4780.dtsi        |  11 ++
+ 13 files changed, 229 insertions(+), 28 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
+ create mode 100644 arch/arm/boot/dts/omap4470.dts
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.25.1
+
