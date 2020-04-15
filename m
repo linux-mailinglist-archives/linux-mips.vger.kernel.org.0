@@ -2,191 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D43F1A9CEA
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 13:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA341A9CCB
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 13:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2897393AbgDOLlL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 15 Apr 2020 07:41:11 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:59534 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2408907AbgDOLhk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:37:40 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03FBYJjT131218
-        for <linux-mips@vger.kernel.org>; Wed, 15 Apr 2020 07:37:32 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30dnmhtuqv-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-mips@vger.kernel.org>; Wed, 15 Apr 2020 07:37:32 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-mips@vger.kernel.org> from <imbrenda@linux.ibm.com>;
-        Wed, 15 Apr 2020 12:37:02 +0100
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 15 Apr 2020 12:36:56 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03FBbMGa54264042
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Apr 2020 11:37:22 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 25EB911C054;
-        Wed, 15 Apr 2020 11:37:22 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 29D7C11C04C;
-        Wed, 15 Apr 2020 11:37:21 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.145.12.13])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Apr 2020 11:37:21 +0000 (GMT)
-Date:   Wed, 15 Apr 2020 13:37:18 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Cc:     Philippe =?UTF-8?B?TWF0aGlldS1EYXVkw6k=?= <f4bug@amsat.org>,
-        kvm@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v2] kvm_host: unify VM_STAT and VCPU_STAT definitions in
- a single place
-In-Reply-To: <992ede27-3eae-f2da-ad38-1d3498853ad2@redhat.com>
-References: <20200414155625.20559-1-eesposit@redhat.com>
-        <b479e7ff-4534-5ced-e19b-2a2914905a8b@amsat.org>
-        <992ede27-3eae-f2da-ad38-1d3498853ad2@redhat.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S2897276AbgDOLis (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Apr 2020 07:38:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58644 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2897264AbgDOLij (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:38:39 -0400
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3B603216FD;
+        Wed, 15 Apr 2020 11:38:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586950718;
+        bh=R43hO9Q3If9QrtnZ5K9TcR/a0ZvrCDhZjgGwgzT0xFE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=E5odArf/RDc2lUAWXYieDSICfp9q8nBXEpH8oGXMbl511ftW6vzpHvHktcBE2iKiC
+         CKixYDKgMb9QlA1aORiC5Eu+aRqxfTt+PKHC5/btAAOBgUVlxZbVPCpfvrqokmXOdZ
+         CbKDC6mtkLWOW1EL3z3pC7fdPh/RNVXyWZm30v4k=
+Received: by mail-lf1-f46.google.com with SMTP id r17so2379370lff.2;
+        Wed, 15 Apr 2020 04:38:38 -0700 (PDT)
+X-Gm-Message-State: AGi0PuZ9WSJnSO6AYiy7Kf5ZdRr9MshNvCwTwoSrOMpD4NZ/hdI+9w6u
+        soXlwgfAXMZs8mj1E5+u2Lxe0ZW+kPRqhjbIrKM=
+X-Google-Smtp-Source: APiQypI+VI3dpF2YbI7yVr/aHwnSBVAysHwaY+SScdUs4Jyyh+GbDgIy/bRBbEhJiawYLq4RWaZKVJOwvX1RTOgkOWY=
+X-Received: by 2002:a19:ae16:: with SMTP id f22mr2914229lfc.2.1586950716265;
+ Wed, 15 Apr 2020 04:38:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-TM-AS-GCONF: 00
-x-cbid: 20041511-0008-0000-0000-00000371193C
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20041511-0009-0000-0000-00004A92CCDF
-Message-Id: <20200415133718.2db57666@p-imbrenda>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-15_02:2020-04-14,2020-04-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- lowpriorityscore=0 bulkscore=0 clxscore=1011 mlxscore=0 spamscore=0
- suspectscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
- phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004150084
+References: <cover.1586939718.git.hns@goldelico.com> <004611c9660943759b635a87484932869927cf74.1586939718.git.hns@goldelico.com>
+In-Reply-To: <004611c9660943759b635a87484932869927cf74.1586939718.git.hns@goldelico.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 15 Apr 2020 13:38:25 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPdEkWniffmGZmf=S6E5UxWTdVGXnycqTFftXwo_45rz3w@mail.gmail.com>
+Message-ID: <CAJKOXPdEkWniffmGZmf=S6E5UxWTdVGXnycqTFftXwo_45rz3w@mail.gmail.com>
+Subject: Re: [PATCH v6 07/12] ARM: DTS: omap5: add sgx gpu child node
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?UTF-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Philipp Rossak <embed3d@gmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-omap@vger.kernel.org, openpvrsgx-devgroup@letux.org,
+        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 15 Apr 2020 10:30:06 +0200
-Emanuele Giuseppe Esposito <eesposit@redhat.com> wrote:
+On Wed, 15 Apr 2020 at 10:36, H. Nikolaus Schaller <hns@goldelico.com> wrote:
+>
+> and add interrupt.
+>
+> Tested-by: H. Nikolaus Schaller <hns@goldelico.com> # Pyra-Handheld.
 
-> On 4/15/20 8:36 AM, Philippe Mathieu-Daudé wrote:
-> > On 4/14/20 5:56 PM, Emanuele Giuseppe Esposito wrote:  
-> >> The macros VM_STAT and VCPU_STAT are redundantly implemented in
-> >> multiple files, each used by a different architecure to initialize
-> >> the debugfs entries for statistics. Since they all have the same
-> >> purpose, they can be unified in a single common definition in
-> >> include/linux/kvm_host.h
-> >>
-> >> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
-> >> ---
-> >>   arch/arm64/kvm/guest.c    |  23 ++---
-> >>   arch/mips/kvm/mips.c      |  61 ++++++------
-> >>   arch/powerpc/kvm/book3s.c |  61 ++++++------
-> >>   arch/powerpc/kvm/booke.c  |  41 ++++----
-> >>   arch/s390/kvm/kvm-s390.c  | 203
-> >> +++++++++++++++++++------------------- arch/x86/kvm/x86.c        |
-> >>  80 +++++++-------- include/linux/kvm_host.h  |   5 +
-> >>   7 files changed, 231 insertions(+), 243 deletions(-)
-> >>
-> >> diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
-> >> index 23ebe51410f0..8417b200bec9 100644
-> >> --- a/arch/arm64/kvm/guest.c
-> >> +++ b/arch/arm64/kvm/guest.c
-> >> @@ -29,20 +29,17 @@
-> >>   
-> >>   #include "trace.h"
-> >>   
-> >> -#define VM_STAT(x) { #x, offsetof(struct kvm, stat.x),
-> >> KVM_STAT_VM } -#define VCPU_STAT(x) { #x, offsetof(struct
-> >> kvm_vcpu, stat.x), KVM_STAT_VCPU } -
-> >>   struct kvm_stats_debugfs_item debugfs_entries[] = {
-> >> -	VCPU_STAT(halt_successful_poll),
-> >> -	VCPU_STAT(halt_attempted_poll),
-> >> -	VCPU_STAT(halt_poll_invalid),
-> >> -	VCPU_STAT(halt_wakeup),
-> >> -	VCPU_STAT(hvc_exit_stat),
-> >> -	VCPU_STAT(wfe_exit_stat),
-> >> -	VCPU_STAT(wfi_exit_stat),
-> >> -	VCPU_STAT(mmio_exit_user),
-> >> -	VCPU_STAT(mmio_exit_kernel),
-> >> -	VCPU_STAT(exits),
-> >> +	VCPU_STAT("halt_successful_poll", halt_successful_poll),
-> >> +	VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
-> >> +	VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
-> >> +	VCPU_STAT("halt_wakeup", halt_wakeup),
-> >> +	VCPU_STAT("hvc_exit_stat", hvc_exit_stat),
-> >> +	VCPU_STAT("wfe_exit_stat", wfe_exit_stat),
-> >> +	VCPU_STAT("wfi_exit_stat", wfi_exit_stat),
-> >> +	VCPU_STAT("mmio_exit_user", mmio_exit_user),
-> >> +	VCPU_STAT("mmio_exit_kernel", mmio_exit_kernel),
-> >> +	VCPU_STAT("exits", exits),
-> >>   	{ NULL }
-> >>   };  
-> > 
-> > Patch easily reviewed with --word-diff.
-> > 
-> > [...]  
-> >> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> >> index 6d58beb65454..2e6ead872957 100644
-> >> --- a/include/linux/kvm_host.h
-> >> +++ b/include/linux/kvm_host.h
-> >> @@ -1130,6 +1130,11 @@ struct kvm_stats_debugfs_item {
-> >>   #define KVM_DBGFS_GET_MODE(dbgfs_item)
-> >>               \ ((dbgfs_item)->mode ? (dbgfs_item)->mode : 0644)
-> >>   
-> >> +#define VM_STAT(n, x, ...)
-> >> 									   \
-> >> +	{ n, offsetof(struct kvm, stat.x), KVM_STAT_VM, ##
-> >> __VA_ARGS__ } +#define VCPU_STAT(n, x, ...)
-> >> 									   \
-> >>  
-> > 
-> > Not sure while you use so many whitespaces here... (maybe Paolo can
-> > strip some when applying?).  
-> 
-> I honestly am not sure why it added few more spaces than I wanted,
-> but the idea was to follow the KVM_DBGFS_GET_MODE macro above and put
-> the backslash at the end of the line (80th char).
+Don't add your own Tested-by tags. These are implied by authorship,
+otherwise all patches people make should have such tag.
 
-once the whitespace issues are fixed, you can also add
-
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
- 
-> > 
-> > Otherwise it looks nicer that v1, thanks.
-> > 
-> > Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-> >   
-> >> +	{ n, offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ##
-> >> __VA_ARGS__ } +
-> >>   extern struct kvm_stats_debugfs_item debugfs_entries[];
-> >>   extern struct dentry *kvm_debugfs_dir;
-> >>   
-> >>  
-> >   
-> 
-
+Best regards,
+Krzysztof
