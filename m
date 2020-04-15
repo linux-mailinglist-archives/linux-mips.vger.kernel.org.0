@@ -2,48 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DCB1AA1EA
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 14:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3E51A9E0B
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Apr 2020 13:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S370252AbgDOMrS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Apr 2020 08:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S370242AbgDOMrJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 15 Apr 2020 08:47:09 -0400
-Received: from mo6-p02-ob.smtp.rzone.de (mo6-p02-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5302::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC4BC061A0C;
-        Wed, 15 Apr 2020 05:47:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1586954825;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=6/o2eUBt4iN9I0U74c2I8jHNfikxj7yqfISGp3x31ZE=;
-        b=lNs6HWucThpy3Ne1/nN6kfg7hfbpHhjXSde+1bdtjW3wQqRp1cvazGDuvc3fhe2NzZ
-        iLP4AMbcSbM074ClW6SKnXojI9Sg1fuOqNEcfx1L/JAoiPzK9a1KrJWwNcVBDzo8vtFs
-        cNFiftqcZuFF0kq2tE0oF2HXXRtN8M/I0zM3/pr7MHFQAX3pOoui7zrIGv6WfKJnTo1e
-        pVwJjGNEQ/MbNyeydyj2yzKCv6FJPmN/fQR/LR1qQBJ7Kg5nqhLURx9qT9K18rU1uHbl
-        H1raH6FCY2ZuQduRe07zuOEZdR1dwGYmFebMlJuTXeh4sjvhf7vKrNU4lHaIkNHw3vtX
-        Lbzw==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBp5hRw/qOxWRk4dCz3b9m9rH79DVZTKLB3vWvm2T1hRBz6in0C9d6y"
-X-RZG-CLASS-ID: mo00
-Received: from [IPv6:2001:16b8:26b3:fd00:4058:8a66:740e:2249]
-        by smtp.strato.de (RZmta 46.4.0 AUTH)
-        with ESMTPSA id 6028a2w3FCkp1ws
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Wed, 15 Apr 2020 14:46:51 +0200 (CEST)
-Subject: Re: [PATCH v6 07/12] ARM: DTS: omap5: add sgx gpu child node
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: text/plain; charset=us-ascii
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <CAJKOXPdEkWniffmGZmf=S6E5UxWTdVGXnycqTFftXwo_45rz3w@mail.gmail.com>
-Date:   Wed, 15 Apr 2020 13:46:06 +0200
+        id S2409509AbgDOLuB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Apr 2020 07:50:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45652 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2406447AbgDOLt6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:49:58 -0400
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4691F21744;
+        Wed, 15 Apr 2020 11:49:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586951397;
+        bh=wuXS7RCUYgyS51p4SeDx49zy51VkJGb5/qdr8yBZ0d4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=xeYP5cgafRPn6YhT6fu/+txsms6Rtv2DIovKV6n2lrE++374gHweZw442o4eW6zsC
+         0QPce/mOtpt2CYbuX3ZFAnyYNI2ZEwjJnhtikf8CEIIN6kqNvsnWY7Mv65g7qt/ye7
+         uxrNjWBorfjR3nRfrgurBt9sUOOix1lQMqGuSVeE=
+Received: by mail-lj1-f172.google.com with SMTP id l14so3320926ljj.5;
+        Wed, 15 Apr 2020 04:49:57 -0700 (PDT)
+X-Gm-Message-State: AGi0PuZjsKu6zf8LL5CFFTykBFz9Ow4IvwbcDnVlR60DqUO+zLPg55Wi
+        Mn3f2JxQvMpWmfYUIWCrwd9HLJrKBdE/jlykFDA=
+X-Google-Smtp-Source: APiQypJ6JgZvNxuPA2SlFZq3seBA6kaFPbk0RkqFDGIpIMdWvmYwpqEO8cmLBYYdZ/c1p1IHSS++MGMZGzTZDC6zHHI=
+X-Received: by 2002:a2e:9845:: with SMTP id e5mr3131512ljj.201.1586951395296;
+ Wed, 15 Apr 2020 04:49:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1586939718.git.hns@goldelico.com> <b6733f80546bf3e6b3799f716b9c8e0f407de03d.1586939718.git.hns@goldelico.com>
+In-Reply-To: <b6733f80546bf3e6b3799f716b9c8e0f407de03d.1586939718.git.hns@goldelico.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 15 Apr 2020 13:49:44 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPcb9KWNAem-CAx_zCS+sZoEHYc0J8x0nk1xjY9hD4-M4w@mail.gmail.com>
+Message-ID: <CAJKOXPcb9KWNAem-CAx_zCS+sZoEHYc0J8x0nk1xjY9hD4-M4w@mail.gmail.com>
+Subject: Re: [PATCH v6 08/12] arm: dts: s5pv210: Add G3D node
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
 Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+        =?UTF-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
         Tony Lindgren <tony@atomide.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Ralf Baechle <ralf@linux-mips.org>,
@@ -59,41 +58,60 @@ Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <EFA7F2F0-96EA-45D9-B8C8-00DC8C72344D@goldelico.com>
-References: <cover.1586939718.git.hns@goldelico.com> <004611c9660943759b635a87484932869927cf74.1586939718.git.hns@goldelico.com> <CAJKOXPdEkWniffmGZmf=S6E5UxWTdVGXnycqTFftXwo_45rz3w@mail.gmail.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-X-Mailer: Apple Mail (2.3124)
+        <linux-samsung-soc@vger.kernel.org>,
+        Jonathan Bakker <xc-racer2@live.ca>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Krzysztof,
+On Wed, 15 Apr 2020 at 10:36, H. Nikolaus Schaller <hns@goldelico.com> wrote:
+>
+> From: Jonathan Bakker <xc-racer2@live.ca>
+>
+> to add support for SGX540 GPU.
 
-> Am 15.04.2020 um 13:38 schrieb Krzysztof Kozlowski <krzk@kernel.org>:
->=20
-> On Wed, 15 Apr 2020 at 10:36, H. Nikolaus Schaller <hns@goldelico.com> =
-wrote:
->>=20
->> and add interrupt.
->>=20
->> Tested-by: H. Nikolaus Schaller <hns@goldelico.com> # Pyra-Handheld.
->=20
-> Don't add your own Tested-by tags. These are implied by authorship,
-> otherwise all patches people make should have such tag.
+Do not continue the subject in commit msg like it is one sentence.
+These are two separate sentences, so commit msg starts with capital
+letter and it is sentence by itself.
 
-Ok I see. AFAIR it originates in several phases of editing to report on =
-which device it was tested.
+> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>  arch/arm/boot/dts/s5pv210.dtsi | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>
+> diff --git a/arch/arm/boot/dts/s5pv210.dtsi b/arch/arm/boot/dts/s5pv210.dtsi
+> index 2ad642f51fd9..e7fc709c0cca 100644
+> --- a/arch/arm/boot/dts/s5pv210.dtsi
+> +++ b/arch/arm/boot/dts/s5pv210.dtsi
+> @@ -512,6 +512,21 @@ vic3: interrupt-controller@f2300000 {
+>                         #interrupt-cells = <1>;
+>                 };
+>
+> +               g3d: g3d@f3000000 {
+> +                       compatible = "samsung,s5pv210-sgx540-120";
+> +                       reg = <0xf3000000 0x10000>;
+> +                       interrupt-parent = <&vic2>;
+> +                       interrupts = <10>;
+> +                       clock-names = "sclk";
+> +                       clocks = <&clocks CLK_G3D>;
 
-Is there a canonical way of writing "tested-on: ${HARDWARE}"?
+Not part of bindings, please remove or add to the bindings.
 
-E.g. would this be ok?
+> +
+> +                       power-domains = <&pd S5PV210_PD_G3D>;
 
-Signed-off: H. Nikolaus Schaller <hns@goldelico.com> # tested on =
-Pyra-Handheld
+Ditto
 
-BR and thanks,
-Nikolaus Schaller
+> +
+> +                       assigned-clocks = <&clocks MOUT_G3D>, <&clocks DOUT_G3D>;
+> +                       assigned-clock-rates = <0>, <66700000>;
+> +                       assigned-clock-parents = <&clocks MOUT_MPLL>;
 
+Probably this should have status disabled because you do not set
+regulator supply.
+
+Best regards,
+Krzysztof
