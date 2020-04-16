@@ -2,209 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D56B21AC7E3
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2020 17:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82A81ACCF0
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2020 18:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438866AbgDPPAg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Apr 2020 11:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2438837AbgDPPAd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Apr 2020 11:00:33 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7160AC061A10;
-        Thu, 16 Apr 2020 08:00:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=yyuJrtfVyD3fUEUFSeqLWA3IrF2yJjSqrC/bf4Fe8oE=; b=Usb+FvXdnqXan+JxkQBhdGOZlg
-        wA8UpejFK3n0fE9XGKnHea/t+aVmCLNRdL7zyLOKMHR/dWmt8G+Uti19C3t90dgjsk4S7ZmmczWW/
-        Ez3AKbTKg6yUn6tUW5+u4MpklOAJAQnTCpStyLhkGLJDPCmD0JQX8BrT1uo7sHkztqwtq1fc9ZM2b
-        o78zCaIVcICZg6b86ord1mHoE9JLaN/VgoJYMDdw8Sgqo+kfaEwvvg/+opdzznV32stUMmPSO0mvj
-        LXNeSO8BGPnOt71kyP+5iI5jquMiHZDOCO0MSCezo82fW/woNvE7xDCV4KBMauuhWx5/PsaqHRErw
-        2IXgzbiQ==;
-Received: from [2001:4bb8:184:4aa1:c70:4a89:bc61:2] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jP60F-00037B-JH; Thu, 16 Apr 2020 15:00:31 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH 7/7] MIPS: use ioremap_page_range
-Date:   Thu, 16 Apr 2020 17:00:11 +0200
-Message-Id: <20200416150011.820984-8-hch@lst.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200416150011.820984-1-hch@lst.de>
+        id S2408379AbgDPQMa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Apr 2020 12:12:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43270 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728873AbgDPQM3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 16 Apr 2020 12:12:29 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 29CBC206B9;
+        Thu, 16 Apr 2020 16:12:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587053548;
+        bh=UBXmzFhBpFgoY6vyEgZDx/G29gEPaaN/4bc/3OJtawE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VIZX6WdXWGiQrMeDr2VMTqHBvMeh3c2VpUcozveNJsTJeaH7EW4QSN7gl+a5FZuLB
+         6trTiRAk9+2FGitd9VrRmDcoYphRYgEFrXs2+/AZMTrMjueRSQwPhx4k43Rxh1xLQ/
+         idLywQ7FmJEwBUTYf+Cb8idVbattvmERHkTFWLwk=
+Date:   Thu, 16 Apr 2020 17:12:26 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH 1/7] ASoC: txx9: don't work around too small
+ resource_size_t
+Message-ID: <20200416161226.GN5354@sirena.org.uk>
 References: <20200416150011.820984-1-hch@lst.de>
+ <20200416150011.820984-2-hch@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NJSRbAqOy4NeGDns"
+Content-Disposition: inline
+In-Reply-To: <20200416150011.820984-2-hch@lst.de>
+X-Cookie: Tempt me with a spoon!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use the generic ioremap_page_range helper instead of reimplementing it.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- arch/mips/mm/ioremap.c | 112 ++++-------------------------------------
- 1 file changed, 11 insertions(+), 101 deletions(-)
+--NJSRbAqOy4NeGDns
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/arch/mips/mm/ioremap.c b/arch/mips/mm/ioremap.c
-index c5b5181c7cd0..b6dad2fd5575 100644
---- a/arch/mips/mm/ioremap.c
-+++ b/arch/mips/mm/ioremap.c
-@@ -14,99 +14,14 @@
- #include <linux/slab.h>
- #include <linux/vmalloc.h>
- #include <linux/mm_types.h>
-+#include <linux/io.h>
- #include <asm/cacheflush.h>
--#include <asm/io.h>
- #include <asm/tlbflush.h>
- #include <ioremap.h>
- 
- #define IS_LOW512(addr) (!((phys_addr_t)(addr) & (phys_addr_t) ~0x1fffffffULL))
- #define IS_KSEG1(addr) (((unsigned long)(addr) & ~0x1fffffffUL) == CKSEG1)
- 
--static inline void remap_area_pte(pte_t * pte, unsigned long address,
--	phys_addr_t size, phys_addr_t phys_addr, unsigned long flags)
--{
--	phys_addr_t end;
--	unsigned long pfn;
--	pgprot_t pgprot = __pgprot(_PAGE_GLOBAL | _PAGE_PRESENT | __READABLE
--				   | __WRITEABLE | flags);
--
--	address &= ~PMD_MASK;
--	end = address + size;
--	if (end > PMD_SIZE)
--		end = PMD_SIZE;
--	BUG_ON(address >= end);
--	pfn = phys_addr >> PAGE_SHIFT;
--	do {
--		if (!pte_none(*pte)) {
--			printk("remap_area_pte: page already exists\n");
--			BUG();
--		}
--		set_pte(pte, pfn_pte(pfn, pgprot));
--		address += PAGE_SIZE;
--		pfn++;
--		pte++;
--	} while (address && (address < end));
--}
--
--static inline int remap_area_pmd(pmd_t * pmd, unsigned long address,
--	phys_addr_t size, phys_addr_t phys_addr, unsigned long flags)
--{
--	phys_addr_t end;
--
--	address &= ~PGDIR_MASK;
--	end = address + size;
--	if (end > PGDIR_SIZE)
--		end = PGDIR_SIZE;
--	phys_addr -= address;
--	BUG_ON(address >= end);
--	do {
--		pte_t * pte = pte_alloc_kernel(pmd, address);
--		if (!pte)
--			return -ENOMEM;
--		remap_area_pte(pte, address, end - address, address + phys_addr, flags);
--		address = (address + PMD_SIZE) & PMD_MASK;
--		pmd++;
--	} while (address && (address < end));
--	return 0;
--}
--
--static int remap_area_pages(unsigned long address, phys_addr_t phys_addr,
--	phys_addr_t size, unsigned long flags)
--{
--	int error;
--	pgd_t * dir;
--	unsigned long end = address + size;
--
--	phys_addr -= address;
--	dir = pgd_offset(&init_mm, address);
--	flush_cache_all();
--	BUG_ON(address >= end);
--	do {
--		p4d_t *p4d;
--		pud_t *pud;
--		pmd_t *pmd;
--
--		error = -ENOMEM;
--		p4d = p4d_alloc(&init_mm, dir, address);
--		if (!p4d)
--			break;
--		pud = pud_alloc(&init_mm, p4d, address);
--		if (!pud)
--			break;
--		pmd = pmd_alloc(&init_mm, pud, address);
--		if (!pmd)
--			break;
--		if (remap_area_pmd(pmd, address, end - address,
--					 phys_addr + address, flags))
--			break;
--		error = 0;
--		address = (address + PGDIR_SIZE) & PGDIR_MASK;
--		dir++;
--	} while (address && (address < end));
--	flush_tlb_all();
--	return error;
--}
--
- static int __ioremap_check_ram(unsigned long start_pfn, unsigned long nr_pages,
- 			       void *arg)
- {
-@@ -135,7 +50,7 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, unsigned long size,
- 	unsigned long offset, pfn, last_pfn;
- 	struct vm_struct *area;
- 	phys_addr_t last_addr;
--	void *addr;
-+	unsigned long vaddr;
- 	void __iomem *cpu_addr;
- 
- 	cpu_addr = plat_ioremap(phys_addr, size, flags);
-@@ -183,27 +98,22 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, unsigned long size,
- 	area = get_vm_area(size, VM_IOREMAP);
- 	if (!area)
- 		return NULL;
--	addr = area->addr;
--	if (remap_area_pages((unsigned long) addr, phys_addr, size, flags)) {
--		vunmap(addr);
-+	vaddr = (unsigned long)area->addr;
-+
-+	flags |= _PAGE_GLOBAL | _PAGE_PRESENT | __READABLE | __WRITEABLE;
-+	if (ioremap_page_range(vaddr, vaddr + size, phys_addr,
-+			__pgprot(flags))) {
-+		free_vm_area(area);
- 		return NULL;
- 	}
- 
--	return (void __iomem *) (offset + (char *)addr);
-+	return (void __iomem *)(vaddr + offset);
- }
- EXPORT_SYMBOL(ioremap_prot);
- 
- void iounmap(const volatile void __iomem *addr)
- {
--	struct vm_struct *p;
--
--	if (plat_iounmap(addr) || IS_KSEG1(addr))
--		return;
--
--	p = remove_vm_area((void *) (PAGE_MASK & (unsigned long __force) addr));
--	if (!p)
--		printk(KERN_ERR "iounmap: bad address %p\n", addr);
--
--	kfree(p);
-+	if (!plat_iounmap(addr) && !IS_KSEG1(addr))
-+		vunmap((void *)((unsigned long)addr & PAGE_MASK));
- }
- EXPORT_SYMBOL(iounmap);
--- 
-2.25.1
+On Thu, Apr 16, 2020 at 05:00:05PM +0200, Christoph Hellwig wrote:
+> The txx9 sound driver deends on HAS_TXX9_ACLC, which is only set for
+> three tx49xx SOCs, and thus always has a 64-bit phys_addr_t and
+> resource_size_t.  Instead of poking into ioremap internals to work
+> around a potentially too small resource_size_t just add a BUILD_BUG_ON
+> to catch such a case.
 
+Acked-by: Mark Brown <broonie@kernel.org>
+
+or can I just apply this independently of the rest of the series?
+
+--NJSRbAqOy4NeGDns
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6Yg+kACgkQJNaLcl1U
+h9DEbgf+JwzZc2jhXpAP4FvODQGQv1h0Vc/XAbA4UGDH2HWoKz9NJ+pIUCfuCnOw
+DAysKMiHzprQKBvLH5LmrsMjHlzCGa8tzGqf3FjRxRTEcTZwwzlHk/1+e12JctPK
+QZsERfcmkEvJcJajNoafnFi9DbHHzJvY2hd32zbrY97sgAXhqy7XhkFgvXKJBXZI
+sGrWoQS+vxQeQUzLToCWwNLo8akrKGmBX0oSvOf+9vgeqg3PF5ShpxjOyJs74nOc
+32mw8r9AB5A+K7QKVIe3Q4x9irWxv5kxQ7O09gqJ/PQZTeaJZ3XqnJ0uMMs5SadH
+gV4+DtvO63MROj2M0JdqnVWDPMjvjw==
+=uLa8
+-----END PGP SIGNATURE-----
+
+--NJSRbAqOy4NeGDns--
