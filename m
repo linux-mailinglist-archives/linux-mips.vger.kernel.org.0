@@ -2,95 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F24F91ABC02
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2020 11:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBEEA1ABC3D
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2020 11:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502961AbgDPI7f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Apr 2020 04:59:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58756 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2503097AbgDPI6s (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Apr 2020 04:58:48 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 84BF220784;
-        Thu, 16 Apr 2020 08:58:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587027527;
-        bh=dVAp91Tj6hWWtUY7tL+aLgKkZ276mvf5MWRT7goV5sk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NAw/DPQ2vN2rzJzmUreAA38rnfxIXX3BUID+0uehW0Z9v4f/Ntd1a7JWQHTF+uDMv
-         4tUi3XdV3gd/0EuPpoon9MJXibqbgTfuDttD3xyfrTBNZAOlFyJ4cRJ6Z+sHqArQUT
-         PeqbbpCCaPZTxxeljv/xMr+adoczGliqtOh0MmEk=
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1jP0M9-003lwb-Tr; Thu, 16 Apr 2020 09:58:46 +0100
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Thu, 16 Apr 2020 09:58:45 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        id S2503034AbgDPJJH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Apr 2020 05:09:07 -0400
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:48118 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2503327AbgDPJJA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 16 Apr 2020 05:09:00 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=36;SR=0;TI=SMTPD_---0TvhGIdK_1587028131;
+Received: from 30.27.118.45(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0TvhGIdK_1587028131)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 16 Apr 2020 17:08:53 +0800
+Subject: Re: [PATCH v2] KVM: Optimize kvm_arch_vcpu_ioctl_run function
+To:     Cornelia Huck <cohuck@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
         linux-kernel@vger.kernel.org, pbonzini@redhat.com,
         tsbogend@alpha.franken.de, paulus@ozlabs.org, mpe@ellerman.id.au,
         benh@kernel.crashing.org, borntraeger@de.ibm.com,
-        frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com,
-        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
-        sean.j.christopherson@intel.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        james.morse@arm.com, julien.thierry.kdev@gmail.com,
+        frankja@linux.ibm.com, david@redhat.com, heiko.carstens@de.ibm.com,
+        gor@linux.ibm.com, sean.j.christopherson@intel.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, james.morse@arm.com, julien.thierry.kdev@gmail.com,
         suzuki.poulose@arm.com, christoffer.dall@arm.com,
         peterx@redhat.com, thuth@redhat.com
-Subject: Re: [PATCH v2] KVM: Optimize kvm_arch_vcpu_ioctl_run function
-In-Reply-To: <8b92fb5b-5138-0695-fb90-6c36b8dfad00@linux.alibaba.com>
 References: <20200416051057.26526-1-tianjia.zhang@linux.alibaba.com>
  <878sivx67g.fsf@vitty.brq.redhat.com>
  <1000159f971a6fa3b5bd9e5871ce4d82@kernel.org>
  <8b92fb5b-5138-0695-fb90-6c36b8dfad00@linux.alibaba.com>
-Message-ID: <b700f9bde1218b217ca4e571b1d29c1e@kernel.org>
-X-Sender: maz@kernel.org
-User-Agent: Roundcube Webmail/1.3.10
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: tianjia.zhang@linux.alibaba.com, vkuznets@redhat.com, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org, pbonzini@redhat.com, tsbogend@alpha.franken.de, paulus@ozlabs.org, mpe@ellerman.id.au, benh@kernel.crashing.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com, heiko.carstens@de.ibm.com, gor@linux.ibm.com, sean.j.christopherson@intel.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com, james.morse@arm.com, julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com, christoffer.dall@arm.com, peterx@redhat.com, thuth@redhat.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+ <20200416105019.51191d79.cohuck@redhat.com>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Message-ID: <668a12b9-eda5-2d42-95f9-8d5e2990a465@linux.alibaba.com>
+Date:   Thu, 16 Apr 2020 17:08:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <20200416105019.51191d79.cohuck@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2020-04-16 09:45, Tianjia Zhang wrote:
-> On 2020/4/16 16:28, Marc Zyngier wrote:
 
-[...]
 
->> Overall, there is a large set of cleanups to be done when both the 
->> vcpu and the run
->> structures are passed as parameters at the same time. Just grepping 
->> the tree for
->> kvm_run is pretty instructive.
->> 
->>          M.
+On 2020/4/16 16:50, Cornelia Huck wrote:
+> On Thu, 16 Apr 2020 16:45:33 +0800
+> Tianjia Zhang <tianjia.zhang@linux.alibaba.com> wrote:
 > 
-> Sorry, it's my mistake, I only compiled the x86 platform, I will
-> submit patch again.
+>> On 2020/4/16 16:28, Marc Zyngier wrote:
+>>> On 2020-04-16 08:03, Vitaly Kuznetsov wrote:
+>>>> Tianjia Zhang <tianjia.zhang@linux.alibaba.com> writes:
+>>>>   
+>>>>> In earlier versions of kvm, 'kvm_run' is an independent structure
+>>>>> and is not included in the vcpu structure. At present, 'kvm_run'
+>>>>> is already included in the vcpu structure, so the parameter
+>>>>> 'kvm_run' is redundant.
+>>>>>
+>>>>> This patch simplify the function definition, removes the extra
+>>>>> 'kvm_run' parameter, and extract it from the 'kvm_vcpu' structure
+>>>>> if necessary.
+>>>>>
+>>>>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+>>>>> ---
+>>>>>
+>>>>> v2 change:
+>>>>>    remove 'kvm_run' parameter and extract it from 'kvm_vcpu'
+>>>>>
+>>>>>   arch/mips/kvm/mips.c       |  3 ++-
+>>>>>   arch/powerpc/kvm/powerpc.c |  3 ++-
+>>>>>   arch/s390/kvm/kvm-s390.c   |  3 ++-
+>>>>>   arch/x86/kvm/x86.c         | 11 ++++++-----
+>>>>>   include/linux/kvm_host.h   |  2 +-
+>>>>>   virt/kvm/arm/arm.c         |  6 +++---
+>>>>>   virt/kvm/kvm_main.c        |  2 +-
+>>>>>   7 files changed, 17 insertions(+), 13 deletions(-)
+> 
+>>> Overall, there is a large set of cleanups to be done when both the vcpu
+>>> and the run
+>>> structures are passed as parameters at the same time. Just grepping the
+>>> tree for
+>>> kvm_run is pretty instructive.
+>>>
+>>>           M.
+>>
+>> Sorry, it's my mistake, I only compiled the x86 platform, I will submit
+>> patch again.
+> 
+> I think it's completely fine (and even preferable) to do cleanups like
+> that on top.
+> 
+> [FWIW, I compiled s390 here.]
+> 
 
-Not a mistake. All I'm saying is that there is an opportunity for a 
-larger
-series that cleans up the code base, rather than just doing a couple of
-localized changes.
+Very good, I will do a comprehensive cleanup of this type of code.
 
 Thanks,
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Tianjia
