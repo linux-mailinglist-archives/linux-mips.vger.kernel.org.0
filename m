@@ -2,45 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 900441ACDE2
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2020 18:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8619A1ACDEC
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2020 18:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728208AbgDPQlc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Apr 2020 12:41:32 -0400
-Received: from elvis.franken.de ([193.175.24.41]:42196 "EHLO elvis.franken.de"
+        id S1732654AbgDPQl7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Apr 2020 12:41:59 -0400
+Received: from elvis.franken.de ([193.175.24.41]:42207 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728068AbgDPQlc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Apr 2020 12:41:32 -0400
+        id S1727800AbgDPQld (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 16 Apr 2020 12:41:33 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jP7Zy-0001kl-00; Thu, 16 Apr 2020 18:41:30 +0200
+        id 1jP7Zy-0001kl-01; Thu, 16 Apr 2020 18:41:30 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 5CB44C0135; Thu, 16 Apr 2020 18:34:16 +0200 (CEST)
-Date:   Thu, 16 Apr 2020 18:34:16 +0200
+        id 130E2C0144; Thu, 16 Apr 2020 18:35:21 +0200 (CEST)
+Date:   Thu, 16 Apr 2020 18:35:21 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     bibo mao <maobibo@loongson.cn>
-Cc:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Fix typo for user_ld macro definition
-Message-ID: <20200416163416.GA24743@alpha.franken.de>
-References: <1586944603-5107-1-git-send-email-maobibo@loongson.cn>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        maobibo <maobibo@loongson.cn>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH] mips: define pud_index() regardless of page table folding
+Message-ID: <20200416163521.GB24743@alpha.franken.de>
+References: <20200402081614.5696-1-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1586944603-5107-1-git-send-email-maobibo@loongson.cn>
+In-Reply-To: <20200402081614.5696-1-rppt@kernel.org>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Apr 15, 2020 at 05:56:43PM +0800, bibo mao wrote:
-> There is typo for macro user_ld if __ASSEMBLY__ is declared, this
-> patch fixes this issue.
+On Thu, Apr 02, 2020 at 11:16:14AM +0300, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> Signed-off-by: bibo mao <maobibo@loongson.cn>
+> Commit 31168f033e37 ("mips: drop __pXd_offset() macros that duplicate
+> pXd_index() ones") is correct that pud_index() & __pud_offset() are the
+> same when pud_index() is actually provided, however it does not take into
+> account the __PAGETABLE_PUD_FOLDED case. This has broken MIPS KVM
+> compilation because it relied on availability of pud_index().
+> 
+> Define pud_index() regardless of page table folded. It will evaluate to
+> actual index for 4-level pagetables and to 0 for folded PUD level.
+> 
+> Link: https://lore.kernel.org/lkml/20200331154749.5457-1-pbonzini@redhat.com
+> Reported-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 > ---
->  arch/mips/include/asm/asm-eva.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/mips/include/asm/pgtable-64.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
 applied to mips-next.
 
