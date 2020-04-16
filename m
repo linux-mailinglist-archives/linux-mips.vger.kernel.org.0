@@ -2,50 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99AFB1ACD32
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2020 18:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E639A1ACDBE
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Apr 2020 18:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2506936AbgDPQNo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Apr 2020 12:13:44 -0400
-Received: from verein.lst.de ([213.95.11.211]:53074 "EHLO verein.lst.de"
+        id S1726362AbgDPQbI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Apr 2020 12:31:08 -0400
+Received: from elvis.franken.de ([193.175.24.41]:42182 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2506930AbgDPQNj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Apr 2020 12:13:39 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 7880268BEB; Thu, 16 Apr 2020 18:13:35 +0200 (CEST)
-Date:   Thu, 16 Apr 2020 18:13:34 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 1/7] ASoC: txx9: don't work around too small
- resource_size_t
-Message-ID: <20200416161334.GA13919@lst.de>
-References: <20200416150011.820984-1-hch@lst.de> <20200416150011.820984-2-hch@lst.de> <20200416161226.GN5354@sirena.org.uk>
+        id S1726307AbgDPQbH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 16 Apr 2020 12:31:07 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jP7Pt-0001XT-00; Thu, 16 Apr 2020 18:31:05 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 9ED84C0127; Thu, 16 Apr 2020 18:30:51 +0200 (CEST)
+Date:   Thu, 16 Apr 2020 18:30:51 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Joshua Kinard <kumba@gentoo.org>
+Cc:     linux-mips@vger.kernel.org
+Subject: Re: [PATCH] Add missing ifdefs to SGI Platform files for IP22, IP32
+Message-ID: <20200416163051.GA24457@alpha.franken.de>
+References: <87be6e36-04de-684b-0361-91de9ce2c731@gentoo.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200416161226.GN5354@sirena.org.uk>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <87be6e36-04de-684b-0361-91de9ce2c731@gentoo.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 16, 2020 at 05:12:26PM +0100, Mark Brown wrote:
-> On Thu, Apr 16, 2020 at 05:00:05PM +0200, Christoph Hellwig wrote:
-> > The txx9 sound driver deends on HAS_TXX9_ACLC, which is only set for
-> > three tx49xx SOCs, and thus always has a 64-bit phys_addr_t and
-> > resource_size_t.  Instead of poking into ioremap internals to work
-> > around a potentially too small resource_size_t just add a BUILD_BUG_ON
-> > to catch such a case.
-> 
-> Acked-by: Mark Brown <broonie@kernel.org>
-> 
-> or can I just apply this independently of the rest of the series?
+On Mon, Mar 30, 2020 at 11:25:52PM -0400, Joshua Kinard wrote:
+> The attached patch fixes the SGI-specific Platform files to only be
+> included when their specific platform is actually built.  Both the
+> IP27 and IP30 Platform files already have such ifdefs in place.  This
+> patch adds the same to the IP22 and IP32 Platform files.
 
-No, once ioremap is moved out of line the driver would otherwise
-fail to compile as it doesn't pull in the defintitions anymore.
+looking at all other Platform files, I fail to see why this is needed.
+It looks like removing the ifdefs from IP27 and IP30 is the way to
+go. What do I miss here ?
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
