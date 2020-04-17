@@ -2,98 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A725B1ADBE8
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2020 13:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C471ADBF6
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2020 13:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730115AbgDQLK1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Apr 2020 07:10:27 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:60934 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729468AbgDQLK1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 17 Apr 2020 07:10:27 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 3A4A7F3EA52CC01CAB9E;
-        Fri, 17 Apr 2020 19:10:25 +0800 (CST)
-Received: from [127.0.0.1] (10.166.213.7) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Fri, 17 Apr 2020
- 19:10:15 +0800
-Subject: Re: [PATCH] irqchip/irq-bcm7038-l1: make bcm7038_l1_of_init() static
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        <f.fainelli@gmail.com>, <tglx@linutronix.de>,
-        <jason@lakedaemon.net>, <justinpopo6@gmail.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>
-References: <20200417074036.46594-1-yanaijie@huawei.com>
- <ecb3e3e1-7761-faa7-10fa-67da69604306@cogentembedded.com>
- <b2f6f8cd-557c-3978-f176-e615cba8b458@huawei.com>
- <a71e75e8e391c76bf2f260abbaad4f9d@kernel.org>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <f06da401-1083-c0c7-17a9-7a3fe0476820@huawei.com>
-Date:   Fri, 17 Apr 2020 19:10:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        id S1730230AbgDQLMl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Apr 2020 07:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729846AbgDQLMl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 17 Apr 2020 07:12:41 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05544C061A0C;
+        Fri, 17 Apr 2020 04:12:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8sFIV+/8fWUY1Zbo7nie6mENpkyN/bnZv7/UFlj2FCU=; b=YYrgq/hvPgReVdxVWoGhcDq5OH
+        bTtip9uQNfhfbbmBEukbzi+TjuaHGEoFqG47UgzsbLv240p6s/vtR8k6s1thPihwHGajzkKlVVXpb
+        nTTfBMJZn8WTuTDH4+oh/r6SS4ofu22zRjXRhVOqlSJKl6Mz6q3qvnI+JsCN1nx3obijkON7+ZOYG
+        5B53aEmaqbpH41A0CRp9eYifRtoWPLrLG/9sLsiac6odvXQ9wBPqGH5QZSR6Ui9lTNY5WmIpcj0Oc
+        RVS1FKCoO8b2LZuXy4Lj1EXODCGwav1Un8/U+rzwjHrv5kedEqM/tsdpghQBno3bTfzS/+mjkfCm7
+        Z6SzouSw==;
+Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jPOvB-0006uy-Fk; Fri, 17 Apr 2020 11:12:33 +0000
+Date:   Fri, 17 Apr 2020 04:12:33 -0700
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 00/11] Make PageWriteback use the PageLocked
+ optimisation
+Message-ID: <20200417111233.GL5820@bombadil.infradead.org>
+References: <20200416220130.13343-1-willy@infradead.org>
+ <CAMuHMdWxhVoPCZ5+=Pf1LFpdE9vPv9GGTqTYMQP9oFz7eCxDaQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <a71e75e8e391c76bf2f260abbaad4f9d@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.166.213.7]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWxhVoPCZ5+=Pf1LFpdE9vPv9GGTqTYMQP9oFz7eCxDaQ@mail.gmail.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-在 2020/4/17 19:07, Marc Zyngier 写道:
-> On 2020-04-17 11:56, Jason Yan wrote:
->> 在 2020/4/17 18:26, Sergei Shtylyov 写道:
->>> Hello!
->>>
->>> On 17.04.2020 10:40, Jason Yan wrote:
->>>
->>>> Fix the following sparse warning:
->>>>
->>>> drivers/irqchip/irq-bcm7038-l1.c:419:12: warning: symbol
->>>> 'bcm7038_l1_of_init' was not declared. Should it be static?
->>>>
->>>> Reported-by: Hulk Robot <hulkci@huawei.com>
->>>> Signed-off-by: Jason Yan <yanaijie@huawei.com>
->>>> ---
->>>>   drivers/irqchip/irq-bcm7038-l1.c | 2 +-
->>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/irqchip/irq-bcm7038-l1.c 
->>>> b/drivers/irqchip/irq-bcm7038-l1.c
->>>> index eb9bce93cd05..fd7c537fb42a 100644
->>>> --- a/drivers/irqchip/irq-bcm7038-l1.c
->>>> +++ b/drivers/irqchip/irq-bcm7038-l1.c
->>>> @@ -416,7 +416,7 @@ static const struct irq_domain_ops 
->>>> bcm7038_l1_domain_ops = {
->>>>       .map            = bcm7038_l1_map,
->>>>   };
->>>> -int __init bcm7038_l1_of_init(struct device_node *dn,
->>>> +static int __init bcm7038_l1_of_init(struct device_node *dn,
->>>>                     struct device_node *parent)
->>>
->>>     Reindent the above line please, it should start under *struct* on 
->>> the 1st line.
->>
->> OK, will cook a new one.
+On Fri, Apr 17, 2020 at 09:28:14AM +0200, Geert Uytterhoeven wrote:
+> On Fri, Apr 17, 2020 at 12:01 AM Matthew Wilcox <willy@infradead.org> wrote:
+> > v3:
+> >  - Added implementations of clear_bit_unlock_is_negative_byte()
+> >    to architectures which need it
 > 
-> Please don't bother. I've picked the patch already, and it is on its way 
-> to Linus.
+> I have two questions here?
+>   1. Why not implement arch_clear_bit_unlock_is_negative_byte()
+>      instead, so the kasan check in asm-generic is used everywhere?
+
+That would be a larger change.  As I understand it (and I may misunderstand
+it), I would need to rename all the clear_bit(), __clear_bit(), change_bit(),
+... functions to have an 'arch_' prefix and then include instrumented-lock.h
+
+>   2. Why not add the default implementation to
+>      include/asm-generic/bitops/instrumented-lock.h, in case an arch_*()
+>      variant is not provided yet?
 > 
+> Note that you did 1 for s390.
 
-I have send v2 before I saw this. You can just ignore it.
-
-Thanks,
-
-Jason
-
-> Thanks,
-> 
->          M.
-
+Well, s390 already uses instrumented-lock.h so I followed along with
+what they're doing.  I don't think instrumented-lock.h is used at all on
+these other architectures, but the whole bitops header files are such a
+mess that I could easily have built a completely wrong mental model of
+what's going on.
