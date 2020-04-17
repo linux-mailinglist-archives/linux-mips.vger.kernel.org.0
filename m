@@ -2,57 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68DF31AD94D
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2020 10:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33CB1AD957
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2020 11:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730097AbgDQI5y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Apr 2020 04:57:54 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:54300 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729956AbgDQI5u (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 17 Apr 2020 04:57:50 -0400
+        id S1730045AbgDQJBX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Apr 2020 05:01:23 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:57046 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729974AbgDQJBW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Apr 2020 05:01:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587113868;
+        s=mimecast20190719; t=1587114080;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=57oFuPD/q+SMkeSS1ok5ufPqZbzHPN868lU8tZLRaro=;
-        b=VZdrBjrZrkRkxSOQbWx1KTvjdExhJWTtZAJYUv3c30/DNe1rj61BDiTn2w7yDYx2ghur1G
-        Kd9kEwHUi7vEqmppZ1vGjTY3jbEgVAjsGqjtXF9umDW2+dxniPZhac8uoU23vt0qqdZdx8
-        IYrf/TjwQlyuVSRS9fjBbEYcJOtioXk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-440-TWGbV8fnPnikY9IHEVA4dw-1; Fri, 17 Apr 2020 04:57:46 -0400
-X-MC-Unique: TWGbV8fnPnikY9IHEVA4dw-1
-Received: by mail-wr1-f69.google.com with SMTP id f2so666754wrm.9
-        for <linux-mips@vger.kernel.org>; Fri, 17 Apr 2020 01:57:46 -0700 (PDT)
+        bh=+LYdr3kSxXBMDicQAv0M7nkPT5YyAgLG/RWsjILE6Rk=;
+        b=dCeJxIQ3mkjtD9bwvPhSkJecKXOSnr8/RwDJB4Nl6IXCco0s/11pIy5So6pYFoqE4K+O1U
+        sSqecPQCDYVgHW98hMFlSqXfzWrbfPR0coKizjNN0xYorh2gthNVVqhxnjBGJqYwXFwMNg
+        EkjKPqgyYlc655//L9MTpoEeKKSX3z0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-4-XCkJQx77NI6gFp7qyXhTuw-1; Fri, 17 Apr 2020 05:01:18 -0400
+X-MC-Unique: XCkJQx77NI6gFp7qyXhTuw-1
+Received: by mail-wm1-f72.google.com with SMTP id l21so689231wmh.2
+        for <linux-mips@vger.kernel.org>; Fri, 17 Apr 2020 02:01:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=57oFuPD/q+SMkeSS1ok5ufPqZbzHPN868lU8tZLRaro=;
-        b=hGEl2ghhTBR+i2GmO4QQwg+ouYcI1DqEueBhurcY5yT6hOYNO/8YQJQ3d7e9fD2g9n
-         CM8/HtE0AwmZwDfoR51uM4NbSIHoKJ+0srIJ09R3MsYtu+C46WwGOkqopH71mpJ3+dZ4
-         OrWpF11iR8tVNyVvg5DpJqNaYw3KJ2YTNnJPPagv0IUfUWZ7xrivp2PszCzzScMpgGmA
-         To4gP7CFoaCPUcIh3ZWqrXsjDP0SbCpxKKGXZc0VMqyaBll33lfTtFVttC1bO544ePeB
-         vrX2UbnIAmZdAFc+qymSaj3Mj5sOk1t2lbWRb5gkyTZ0ixMA/QZufRb3ATtE1zg7HaWJ
-         6fgg==
-X-Gm-Message-State: AGi0Pua/ZSvbiAgxxz5neVgASUYCg+LXQqe3SdS3vAv+vHzWgOzl/SSy
-        hJfu4DFdjqntCwUHwvaqWgJU38Irz/m3gEEhJX4meDdot0DG93BwfJ/LFBkX0CNYN7ukdpAFkHt
-        /w2hQNwYigL+GQCr9TXrtQg==
-X-Received: by 2002:a05:600c:4096:: with SMTP id k22mr2101844wmh.99.1587113865721;
-        Fri, 17 Apr 2020 01:57:45 -0700 (PDT)
-X-Google-Smtp-Source: APiQypKzNTX8c8fQ/vBkdSzMi35lJDuNvId/TTHeWg1TQWoHgILbrk1iRbqaecBOrIQnqlWsFeqPPQ==
-X-Received: by 2002:a05:600c:4096:: with SMTP id k22mr2101824wmh.99.1587113865518;
-        Fri, 17 Apr 2020 01:57:45 -0700 (PDT)
+        bh=+LYdr3kSxXBMDicQAv0M7nkPT5YyAgLG/RWsjILE6Rk=;
+        b=LnABxBgG5eUdL3UehAlRxskNtKUD84xEKBFGfI2yL9oqy4pCanKcUENy7zlKOr/pVU
+         F85M52hqGz1g25Sx+13tgJPZIpPHQbdcMvu1EZu1qVAyPCSOleNa1PeRH74z70c7QXZX
+         3c4qtuwnf8RSWUq5mvf5FeMGt167qBAQBKZ4zvp3+8zFysKsIlxkJIjusHgQuzXPaMWQ
+         3k2MwyCuNz3Px0ucnd/yIGRoANA1URyiPJ0dHlU38xnu2IvkvpXcgajz13upuPDfF4mb
+         raLPnPSdLtZQ/kHhNooWosrKbx19d8tbNSSOtRqGWbyo2RN1q5UeTm/KOZKOZ5uickGw
+         TdKg==
+X-Gm-Message-State: AGi0PuaaDiWlLesmGwhU7/f0HENTST6T3Dxj0/V2SYTt4Ri95LqOC6zK
+        NQ18NJjh2VQ7s9wR1dmy4FncpYNG4qvMJctiZtreVyenJ25tdLF0dMCi6KeHegQi4WzLr9OZaRq
+        InMIBYlcPrCWalHyH3RAX9Q==
+X-Received: by 2002:a1c:7c18:: with SMTP id x24mr2155046wmc.146.1587114077426;
+        Fri, 17 Apr 2020 02:01:17 -0700 (PDT)
+X-Google-Smtp-Source: APiQypK2vbW1OnmBJFQVh7bub7YEhkI6cUby2dGaO6wz+YQlB7a8+Q2NUcfxoXyc58GWwBIeKSXJyQ==
+X-Received: by 2002:a1c:7c18:: with SMTP id x24mr2155008wmc.146.1587114077204;
+        Fri, 17 Apr 2020 02:01:17 -0700 (PDT)
 Received: from redhat.com (bzq-79-183-51-3.red.bezeqint.net. [79.183.51.3])
-        by smtp.gmail.com with ESMTPSA id n6sm31931548wrs.81.2020.04.17.01.57.43
+        by smtp.gmail.com with ESMTPSA id c20sm7408863wmd.36.2020.04.17.02.01.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2020 01:57:44 -0700 (PDT)
-Date:   Fri, 17 Apr 2020 04:57:41 -0400
+        Fri, 17 Apr 2020 02:01:16 -0700 (PDT)
+Date:   Fri, 17 Apr 2020 05:01:13 -0400
 From:   "Michael S. Tsirkin" <mst@redhat.com>
 To:     Jason Wang <jasowang@redhat.com>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -63,7 +62,7 @@ Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         paulus@samba.org, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
         borntraeger@de.ibm.com, Michael Ellerman <mpe@ellerman.id.au>
 Subject: Re: [PATCH V2] vhost: do not enable VHOST_MENU by default
-Message-ID: <20200417045454-mutt-send-email-mst@kernel.org>
+Message-ID: <20200417050029-mutt-send-email-mst@kernel.org>
 References: <20200415024356.23751-1-jasowang@redhat.com>
  <20200416185426-mutt-send-email-mst@kernel.org>
  <b7e2deb7-cb64-b625-aeb4-760c7b28c0c8@redhat.com>
@@ -149,29 +148,9 @@ On Fri, Apr 17, 2020 at 04:51:19PM +0800, Jason Wang wrote:
 > not set.
 > 
 > Thanks
-
-Hmm. So looking at Documentation/kbuild/kconfig-language.rst :
-
-        Things that merit "default y/m" include:
-
-        a) A new Kconfig option for something that used to always be built
-           should be "default y".
-
-
-        b) A new gatekeeping Kconfig option that hides/shows other Kconfig
-           options (but does not generate any code of its own), should be
-           "default y" so people will see those other options.
-
-        c) Sub-driver behavior or similar options for a driver that is
-           "default n". This allows you to provide sane defaults.
-
-
-So it looks like VHOST_MENU is actually matching rule b).
-So what's the problem we are trying to solve with this patch, exactly?
-
-Geert could you clarify pls?
-
-
 > 
+
+BTW do entries with no prompt actually appear in defconfig?
+
 > > 
 
