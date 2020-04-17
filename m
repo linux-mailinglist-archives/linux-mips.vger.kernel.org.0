@@ -2,39 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 312DA1ADA0F
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2020 11:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E253C1ADA2A
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Apr 2020 11:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730313AbgDQJeT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Apr 2020 05:34:19 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:30153 "EHLO
+        id S1730385AbgDQJir (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Apr 2020 05:38:47 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:44457 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730258AbgDQJeS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Apr 2020 05:34:18 -0400
+        with ESMTP id S1730303AbgDQJiq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Apr 2020 05:38:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587116057;
+        s=mimecast20190719; t=1587116324;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1Nf4mx1Q48p/GPxnpmj6YDUYrbnnZDvMi6tbZSve7oY=;
-        b=dADWCXCScaS9JoqLUJsBwscMQcrW29zGyQtYc7DpBkdk4mQSBheHnY6E5+3SWv2feYxKgY
-        7xb/PFmGWP9ZogvecKvaXb5iJAwlmacG83mB3B8S0uYB8jlw9EwJlou2rZw1dBPKnrEfsj
-        zn1dAdBorkNlZW0jPpZhidsHHtm0Qrg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-475-45Ak_4WMOIGtSbuBaMmdUg-1; Fri, 17 Apr 2020 05:34:13 -0400
-X-MC-Unique: 45Ak_4WMOIGtSbuBaMmdUg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A5593107B0E1;
-        Fri, 17 Apr 2020 09:34:11 +0000 (UTC)
-Received: from [10.72.13.157] (ovpn-13-157.pek2.redhat.com [10.72.13.157])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C510E60BE0;
-        Fri, 17 Apr 2020 09:33:57 +0000 (UTC)
-Subject: Re: [PATCH V2] vhost: do not enable VHOST_MENU by default
-To:     "Michael S. Tsirkin" <mst@redhat.com>
+        bh=EVkbDn8gkw5+Noos0y5yOQUyWaS8jqC9S0wOjm7uqw4=;
+        b=E7yXcE89s8jUeGNZATNBPoSWrofGS94YVwHEkjOM1Zbj93t+wjSsvXUp8kQp3ppEDp76GZ
+        0QycDRKY8T5P+F+X3L8f+xgNB/bQIHoBt6VWMU4KuwyJGJB6ej1bcfWMNzHCENw4W8uC1d
+        gPzgPXP4TwoNcOd0ZC0km/IVtsgORRs=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-491-kuwHU1cZNwG66gVzHIu7cQ-1; Fri, 17 Apr 2020 05:38:43 -0400
+X-MC-Unique: kuwHU1cZNwG66gVzHIu7cQ-1
+Received: by mail-wr1-f69.google.com with SMTP id r11so699680wrx.21
+        for <linux-mips@vger.kernel.org>; Fri, 17 Apr 2020 02:38:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=EVkbDn8gkw5+Noos0y5yOQUyWaS8jqC9S0wOjm7uqw4=;
+        b=oQIAdAKEpoIHOtvllwdEOVRZMCET+trC1aCJvYRiuUO2xo8+G41aHUcqS87IhdfCf1
+         qeChXoi8ps2eiAJJTQ5Ex21KTAPurIOGJgPVVH6OKC51c0OSN7dN3CG9RwtwuUUWToM7
+         13+yIp1Gv+K5Uy8DeSgME0pm6LTSO3mL3AaFv/VRRXUd6V4Ze7alHiu4DHjeQfj3HQUd
+         ds1VBag6LXVuCULLSF0lmP0EwIaOcSsbi5BgGsp+PPoxTnR+xIN3GSxUYxcs5426GNzJ
+         rTIY8if8FR0n8iDLituppZSFo9AYSc2NqqdvnNILezeG5yTH1nUCreKaGB/VQjFc2oq4
+         FuyQ==
+X-Gm-Message-State: AGi0PuYDCdNc3g8e9j448VALuYr7ZifyP6l8kqLJxNxN56opT+jggaid
+        S9XXTqvpvChTrJ86v5xRO6/ETSmgTpnOGHirZxPMJhNQOEI7eRq/r0jJ6N8JJ15ZODgBNARkLqs
+        wbsJslRl06GdXSjo/yOFl4w==
+X-Received: by 2002:adf:e711:: with SMTP id c17mr1264155wrm.334.1587116322163;
+        Fri, 17 Apr 2020 02:38:42 -0700 (PDT)
+X-Google-Smtp-Source: APiQypLI0ZplMhJRXp9IgnvDd4jNrwD2zcF2noQBvqCsovqT0NxBwm05qUG6Nsovmh0zi9ATjf9KqA==
+X-Received: by 2002:adf:e711:: with SMTP id c17mr1264134wrm.334.1587116321952;
+        Fri, 17 Apr 2020 02:38:41 -0700 (PDT)
+Received: from redhat.com (bzq-79-183-51-3.red.bezeqint.net. [79.183.51.3])
+        by smtp.gmail.com with ESMTPSA id a24sm6912835wmb.24.2020.04.17.02.38.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Apr 2020 02:38:41 -0700 (PDT)
+Date:   Fri, 17 Apr 2020 05:38:38 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
         kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
@@ -42,8 +61,9 @@ Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         tsbogend@alpha.franken.de, benh@kernel.crashing.org,
         paulus@samba.org, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
         borntraeger@de.ibm.com, Michael Ellerman <mpe@ellerman.id.au>
-References: <20200415024356.23751-1-jasowang@redhat.com>
- <20200416185426-mutt-send-email-mst@kernel.org>
+Subject: Re: [PATCH V2] vhost: do not enable VHOST_MENU by default
+Message-ID: <20200417053803-mutt-send-email-mst@kernel.org>
+References: <20200416185426-mutt-send-email-mst@kernel.org>
  <b7e2deb7-cb64-b625-aeb4-760c7b28c0c8@redhat.com>
  <20200417022929-mutt-send-email-mst@kernel.org>
  <4274625d-6feb-81b6-5b0a-695229e7c33d@redhat.com>
@@ -52,36 +72,33 @@ References: <20200415024356.23751-1-jasowang@redhat.com>
  <20200417044230-mutt-send-email-mst@kernel.org>
  <73843240-3040-655d-baa9-683341ed4786@redhat.com>
  <20200417050029-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Message-ID: <ce8a18e5-3c74-73cc-57c5-10c40af838a3@redhat.com>
-Date:   Fri, 17 Apr 2020 17:33:56 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+ <ce8a18e5-3c74-73cc-57c5-10c40af838a3@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20200417050029-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ce8a18e5-3c74-73cc-57c5-10c40af838a3@redhat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Fri, Apr 17, 2020 at 05:33:56PM +0800, Jason Wang wrote:
+> 
+> On 2020/4/17 下午5:01, Michael S. Tsirkin wrote:
+> > > There could be some misunderstanding here. I thought it's somehow similar: a
+> > > CONFIG_VHOST_MENU=y will be left in the defconfigs even if CONFIG_VHOST is
+> > > not set.
+> > > 
+> > > Thanks
+> > > 
+> > BTW do entries with no prompt actually appear in defconfig?
+> > 
+> 
+> Yes. I can see CONFIG_VHOST_DPN=y after make ARCH=m68k defconfig
 
-On 2020/4/17 =E4=B8=8B=E5=8D=885:01, Michael S. Tsirkin wrote:
->> There could be some misunderstanding here. I thought it's somehow simi=
-lar: a
->> CONFIG_VHOST_MENU=3Dy will be left in the defconfigs even if CONFIG_VH=
-OST is
->> not set.
->>
->> Thanks
->>
-> BTW do entries with no prompt actually appear in defconfig?
->
+You see it in .config right? So that's harmless right?
 
-Yes. I can see CONFIG_VHOST_DPN=3Dy after make ARCH=3Dm68k defconfig
-
-Thanks
+-- 
+MST
 
