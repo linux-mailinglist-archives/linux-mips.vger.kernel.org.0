@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8792C1AFE0A
-	for <lists+linux-mips@lfdr.de>; Sun, 19 Apr 2020 22:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612051AFE0E
+	for <lists+linux-mips@lfdr.de>; Sun, 19 Apr 2020 22:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725950AbgDSUVw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 19 Apr 2020 16:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
+        id S1726141AbgDSUVz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 19 Apr 2020 16:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725848AbgDSUVv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Apr 2020 16:21:51 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B248CC061A0C;
-        Sun, 19 Apr 2020 13:21:51 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id r14so3923364pfg.2;
-        Sun, 19 Apr 2020 13:21:51 -0700 (PDT)
+        with ESMTP id S1725848AbgDSUVx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 19 Apr 2020 16:21:53 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB22C061A0C;
+        Sun, 19 Apr 2020 13:21:53 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id w11so3977943pga.12;
+        Sun, 19 Apr 2020 13:21:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HrfHo3gwGIOtAf36S+sgbFqzxxgJQCzD86LmLZ5F4KY=;
-        b=mnAdHYHtVbPwh95LrWoCAHkezV92Rpj8aT5HWhrXAE0At/B2ugr6R34oNQetPPTOe8
-         pZhcF3dBjq8ixAj4OveCnNjNE/Jau5UEfkpIwUuMWfjEbF7vahauc25AMRyF4JIeQAyg
-         snhn6U2AVl524MCdmeqhiyAgzQHR6bMcjJGBfzILLNkkZyV4q8DXMzOXs8o/mgh4tAN6
-         DhWz2MI2iBUUiY3CqUoY7YjFbwHTvsF1EaXk5V0+Wga8jAtGDg8vyBQm3QGrylkdN4Bn
-         NR2d+HAH4ci/NRMDrUyx2r45IDA/IJDKk8MLmS10P6bbpTnk4+Ysj80QRdl5ZUQelxwv
-         F+PA==
+        bh=vBTqjGSKxgqxZT9szVE8GVzxQE45UvUGVBjF3adPVE0=;
+        b=FWvrXP6CntvRsYPxzVTzUNRydPoYIZ4A7DdlMX4Ng+XWJDb8L0xAxZMUmQNA1r73cs
+         zOcvGl1RVuumjeJlXrZl2s7zQI2ewF2SCtOEgKVTiDB1T0o7WK8rxQVDg0M6EkNMNhVU
+         LDGt1Sb2FDl6XwLUWRGXtPpklR4K6St5lvDPKjGRyA/8isV5xNpyN6YX0+HPZepQDBSj
+         BmSxrb5brFn1qsYgrpOgG5wyWbJGpBPm9ebC9pkUcMo433rZ5sQVXqWfjkSxzYZp1pY2
+         IEldluRJe2ADydFFFeR6ZGfV4HeHIHLWD/jkFA9W7Qi3dTBiP7l+1zL4geSNsksXx7Xv
+         uc4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HrfHo3gwGIOtAf36S+sgbFqzxxgJQCzD86LmLZ5F4KY=;
-        b=BzCgI2ojLIlPuvjB9hROhwg3s2v6HpanKBSGWWfHsIcUleHWjIDAJ33abVuBVutaGM
-         pCOPAOXF2/idpo37P6Q5W4p02YPhQ3wf9o08SO0KJ61U3kgA3ki9aT2irZ0e1d4pvOL6
-         xKfpR33ZbV5J8JWH1ttuoeNpz+3f65hHha0dbZca/291Hfltxm+w5rmMXHHuZEZZBJBf
-         jitDWQPJUdlrLYYcKuv1kQXjV8a4x5mUpWKtKp9BNGPxtu0nA/0LLmhAWqwjPWEy54um
-         CzetKrZrxeWXR9AGFKxn0Kou7E0HwPUx2l+QcjlebrFK2r7BoNCDXGJTEQoYAO2+UpzB
-         Ihxw==
-X-Gm-Message-State: AGi0PubnJj1hvToemYuKWTHy+wKJOT8M9+we4ISWlrM+91qeY5FG7hTi
-        3XMwjG7u3Sua3DRuc7a86lo=
-X-Google-Smtp-Source: APiQypJoaWrd3LmC0rVtZw0OJi/EdE0iPELykqTaptq+/XZ611nc/Ib2kDxcc0vAelDsBiYwFiySTQ==
-X-Received: by 2002:aa7:9297:: with SMTP id j23mr13072001pfa.15.1587327711147;
-        Sun, 19 Apr 2020 13:21:51 -0700 (PDT)
+        bh=vBTqjGSKxgqxZT9szVE8GVzxQE45UvUGVBjF3adPVE0=;
+        b=gHSSfOHkUDegwS6ZvNBlz6QOUL2k4UFr9ESt7bLebXkNiqs/qO4j3bWFEoJ15B42ZA
+         JLw554ZQAY+2OQp4efLOjw5780BW+LNdKKHEFv5Sy54J47bFZoMHO9MqP+LCk8jO4oC8
+         KCFy9eSGI8KkpCrM8z5WHBKhEcJ3EVjNdTezBPIPb+7fhBEqzByhgMsJNyBDz4KnVzWd
+         hY/ocabv5CN0h2DH9ui2ao2Ivz3uykI+jq+6M2jCbFoVpSVNnt+k2otqCXGaZ8RIb+ET
+         4GdS9xxXnG7TDYuoJ0efjs9e6c1uJzhzh1t3P/2SPHVdJywUVRxop6fGt4d2S5AwxK3w
+         zJOw==
+X-Gm-Message-State: AGi0PuYj42tZdlKbDEorulOwwxi3/tYgb3CArbCSKEgMwTV6j/UsCIPm
+        a7p2/fV4OPeSmtejtOdY0c0=
+X-Google-Smtp-Source: APiQypIh9o5Ckl/3oHuyQjBPHeJK2UhvKUcM5DWz0EK2eYvUWxfMUgXaS/bAVcUEft80cdh6Xk2kLQ==
+X-Received: by 2002:aa7:8118:: with SMTP id b24mr1866865pfi.321.1587327713102;
+        Sun, 19 Apr 2020 13:21:53 -0700 (PDT)
 Received: from Ryzen-7-3700X.localdomain ([82.102.31.53])
-        by smtp.gmail.com with ESMTPSA id s66sm10881010pgb.84.2020.04.19.13.21.49
+        by smtp.gmail.com with ESMTPSA id s66sm10881010pgb.84.2020.04.19.13.21.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Apr 2020 13:21:50 -0700 (PDT)
+        Sun, 19 Apr 2020 13:21:52 -0700 (PDT)
 From:   Nathan Chancellor <natechancellor@gmail.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Masahiro Yamada <masahiroy@kernel.org>
@@ -57,9 +57,9 @@ Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dmitry Golovin <dima@golovin.in>,
         Sedat Dilek <sedat.dilek@gmail.com>,
         Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH v2 2/3] MIPS: VDSO: Move disabling the VDSO logic to Kconfig
-Date:   Sun, 19 Apr 2020 13:21:27 -0700
-Message-Id: <20200419202128.20571-2-natechancellor@gmail.com>
+Subject: [PATCH v2 3/3] MIPS: VDSO: Allow ld.lld to link the VDSO
+Date:   Sun, 19 Apr 2020 13:21:28 -0700
+Message-Id: <20200419202128.20571-3-natechancellor@gmail.com>
 X-Mailer: git-send-email 2.26.1
 In-Reply-To: <20200419202128.20571-1-natechancellor@gmail.com>
 References: <20200419180445.26722-1-natechancellor@gmail.com>
@@ -72,121 +72,54 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After commit 9553d16fa671 ("init/kconfig: Add LD_VERSION Kconfig"), we
-have access to GNU ld's version at configuration time. As a result, we
-can make it clearer under what configuration circumstances the MIPS VDSO
-needs to be disabled.
+Currently, when linking with ld.lld, this warning pops up:
 
-This is a prerequisite for getting rid of the MIPS VDSO binutils
-warning and linking the VDSO when LD is ld.lld. Wrapping the call to
-ld-ifversion with CONFIG_LD_IS_LLD does not work because the config
-values are wiped away during 'make clean'.
+    arch/mips/vdso/Makefile:70: MIPS VDSO requires binutils >= 2.25
 
+CONFIG_LD_VERSION is set with scripts/ld-version.sh, which is specific
+to GNU ld. It returns 0 for ld.lld so CONFIG_MIPS_LD_CAN_LINK_VDSO does
+not set.
+
+ld.lld has a completely different versioning scheme (as it follows
+LLVM's versioning) and it does not have the issue mentioned in the
+comment block so it should be allowed to link the VDSO.
+
+With this patch, the VDSO successfully links and shows P_MIPS_PC32 in
+vgettimeofday.o.
+
+$ llvm-objdump -Dr arch/mips/vdso/vgettimeofday.o | grep R_MIPS_PC32
+			00000024:  R_MIPS_PC32	_start
+			000000b0:  R_MIPS_PC32	_start
+			000002bc:  R_MIPS_PC32	_start
+			0000036c:  R_MIPS_PC32	_start
+			00000468:  R_MIPS_PC32	_start
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/785
+Link: https://github.com/llvm/llvm-project/commit/e364e2e9ce50c12eb2bf093560e1a1a8544d455a
+Reported-by: Dmitry Golovin <dima@golovin.in>
 Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 ---
 
 v1 -> v2:
 
-* New patch.
+* Move into Kconfig so that the warning does not happen.
 
- arch/mips/Kconfig         |  2 ++
- arch/mips/vdso/Kconfig    | 18 ++++++++++++++++++
- arch/mips/vdso/Makefile   | 30 ++----------------------------
- arch/mips/vdso/vdso.lds.S |  2 +-
- 4 files changed, 23 insertions(+), 29 deletions(-)
- create mode 100644 arch/mips/vdso/Kconfig
+ arch/mips/vdso/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 690718b3701a..45220e4b8a65 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -3275,3 +3275,5 @@ endmenu
- source "drivers/firmware/Kconfig"
- 
- source "arch/mips/kvm/Kconfig"
-+
-+source "arch/mips/vdso/Kconfig"
 diff --git a/arch/mips/vdso/Kconfig b/arch/mips/vdso/Kconfig
-new file mode 100644
-index 000000000000..36a52158d849
---- /dev/null
+index 36a52158d849..7aec721398d5 100644
+--- a/arch/mips/vdso/Kconfig
 +++ b/arch/mips/vdso/Kconfig
-@@ -0,0 +1,18 @@
-+# For the pre-R6 code in arch/mips/vdso/vdso.h for locating
-+# the base address of VDSO, the linker will emit a R_MIPS_PC32
-+# relocation in binutils > 2.25 but it will fail with older versions
-+# because that relocation is not supported for that symbol. As a result
-+# of which we are forced to disable the VDSO symbols when building
-+# with < 2.25 binutils on pre-R6 kernels. For more references on why we
-+# can't use other methods to get the base address of VDSO please refer to
-+# the comments on that file.
-+#
-+# GCC (at least up to version 9.2) appears to emit function calls that make use
-+# of the GOT when targeting microMIPS, which we can't use in the VDSO due to
-+# the lack of relocations. As such, we disable the VDSO for microMIPS builds.
-+
-+config MIPS_LD_CAN_LINK_VDSO
-+	def_bool LD_VERSION >= 225000000
-+
-+config MIPS_DISABLE_VDSO
-+	def_bool CPU_MICROMIPS || (!CPU_MIPSR6 && !MIPS_LD_CAN_LINK_VDSO)
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index d7fe8408603e..92b53d1df42c 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -52,37 +52,11 @@ endif
+@@ -12,7 +12,7 @@
+ # the lack of relocations. As such, we disable the VDSO for microMIPS builds.
  
- CFLAGS_REMOVE_vgettimeofday.o = -pg
+ config MIPS_LD_CAN_LINK_VDSO
+-	def_bool LD_VERSION >= 225000000
++	def_bool LD_VERSION >= 225000000 || LD_IS_LLD
  
--DISABLE_VDSO := n
--
--#
--# For the pre-R6 code in arch/mips/vdso/vdso.h for locating
--# the base address of VDSO, the linker will emit a R_MIPS_PC32
--# relocation in binutils > 2.25 but it will fail with older versions
--# because that relocation is not supported for that symbol. As a result
--# of which we are forced to disable the VDSO symbols when building
--# with < 2.25 binutils on pre-R6 kernels. For more references on why we
--# can't use other methods to get the base address of VDSO please refer to
--# the comments on that file.
--#
--ifndef CONFIG_CPU_MIPSR6
--  ifeq ($(call ld-ifversion, -lt, 225000000, y),y)
-+ifdef CONFIG_MIPS_DISABLE_VDSO
-+  ifndef CONFIG_MIPS_LD_CAN_LINK_VDSO
-     $(warning MIPS VDSO requires binutils >= 2.25)
--    DISABLE_VDSO := y
-   endif
--endif
--
--#
--# GCC (at least up to version 9.2) appears to emit function calls that make use
--# of the GOT when targeting microMIPS, which we can't use in the VDSO due to
--# the lack of relocations. As such, we disable the VDSO for microMIPS builds.
--#
--ifdef CONFIG_CPU_MICROMIPS
--  DISABLE_VDSO := y
--endif
--
--ifeq ($(DISABLE_VDSO),y)
-   obj-vdso-y := $(filter-out vgettimeofday.o, $(obj-vdso-y))
--  ccflags-vdso += -DDISABLE_MIPS_VDSO
- endif
- 
- # VDSO linker flags.
-diff --git a/arch/mips/vdso/vdso.lds.S b/arch/mips/vdso/vdso.lds.S
-index da4627430aba..ffcb5fc12708 100644
---- a/arch/mips/vdso/vdso.lds.S
-+++ b/arch/mips/vdso/vdso.lds.S
-@@ -91,7 +91,7 @@ PHDRS
- VERSION
- {
- 	LINUX_2.6 {
--#ifndef DISABLE_MIPS_VDSO
-+#ifndef CONFIG_DISABLE_MIPS_VDSO
- 	global:
- 		__vdso_clock_gettime;
- 		__vdso_gettimeofday;
+ config MIPS_DISABLE_VDSO
+ 	def_bool CPU_MICROMIPS || (!CPU_MIPSR6 && !MIPS_LD_CAN_LINK_VDSO)
 -- 
 2.26.1
 
