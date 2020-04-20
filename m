@@ -2,370 +2,465 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E251B03C5
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 10:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EBE1B0452
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 10:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726381AbgDTIE0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Apr 2020 04:04:26 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:48945 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725815AbgDTIE0 (ORCPT
+        id S1725773AbgDTIZh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Apr 2020 04:25:37 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33298 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726055AbgDTIZg (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 20 Apr 2020 04:04:26 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 108DD5801A8;
-        Mon, 20 Apr 2020 04:04:24 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 20 Apr 2020 04:04:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=0Kri24qKAtWKY81qyS0zWGtZ64i
-        rmvGC+WYSK93rMfU=; b=uALPsmZOaL0+f9UGIFeDjKt7qZmxxJR6GHwe/TvucIz
-        EBWImZ6U5oR2N0RoVF/3lDypQCEMP2rU85cvncJvwDasOPRQvFz+4eU12vj95Nw3
-        FrvOSz7Bl5VEmz6HlLrVrfLVT5woporD6IP7KTaqtYxeoZw84tckDvAK0QfJPUHu
-        aGmAdku18KmmavhMaxhLw6Z0DhpmWDe8WwcTHAdXfyDUQ2UhhaRtgGl2Kp87ep9g
-        ki3u1KeoDvY/fiinb5plU7vIY1BHy5K/cVg0VSwM84qnuTo+ogwABrHoLgg089zT
-        KRmM2n7BRq5wVSwZkDZ4b6r7oq/6wQuZZX+bY2pAb+A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=0Kri24
-        qKAtWKY81qyS0zWGtZ64irmvGC+WYSK93rMfU=; b=UKlU/dT4kJV1PCUHF4y69K
-        MWQMUQ3zJZjqsJ0cTi6Wmm7/E1Y4/l7ltphvIfLATz+M7mc46M+XihWWSDhnuAih
-        2R0U5JTW65FTDhWbHOjv1Qeov1SSUKiRCRINA29obUgEBNvm5/N42nKpK14qVett
-        4GMCqrHGfFa4r4FPqZGkg8xz7mn5KWeARoa2FmzlCpGdrVWSDt/vLmnp8D5IZIRt
-        oBVzvPOVN8mue/BLiDqcoziYCrWoz+YQ6CJ2tWWnb9GCTcTzR8NGKr6iaAA5Pt0b
-        IEmQZCxBkCWEh9f6zyI/+cdaoG0tPxN6PSDVL32BINxFMj6082FwODKPkpkAgI4A
-        ==
-X-ME-Sender: <xms:hVedXqMbFkvO3ic8WAiafn6japGnvzEIWJWReMNVoK3MaH6yU8uFgA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrgedvgdduvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecukfhppeeltd
-    drkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghi
-    lhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:hVedXtMrp0rp5d0lgGi9cHC9PcZoa524HbdAb-JoxdXd9kgfnWeppA>
-    <xmx:hVedXsQnvBzNAoYSMtPG8GgZ347HXehCqQ9LK-dbP3tRW-wXls8b-w>
-    <xmx:hVedXvAPhveWFxl6rMOWBiAviDwqYPO4iQtKeT3suORemteqWt6u7Q>
-    <xmx:iFedXmEMIYxgUKcD1L7itKa2KN6E-Ix-reU6GeCwaMRn_E9s9aedNQ>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id C1214328006A;
-        Mon, 20 Apr 2020 04:04:20 -0400 (EDT)
-Date:   Mon, 20 Apr 2020 10:04:19 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        David Airlie <airlied@linux.ie>,
-        James Hogan <jhogan@kernel.org>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        linux-samsung-soc@vger.kernel.org,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, Chen-Yu Tsai <wens@csie.org>,
-        Kukjin Kim <kgene@kernel.org>, devicetree@vger.kernel.org,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Philipp Rossak <embed3d@gmail.com>,
-        openpvrsgx-devgroup@letux.org, linux-kernel@vger.kernel.org,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Daniel Vetter <daniel@ffwll.ch>, kernel@pyra-handheld.com
-Subject: Re: [PATCH v6 01/12] dt-bindings: add img, pvrsgx.yaml for
- Imagination GPUs
-Message-ID: <20200420080419.yrucgndz6pblgedm@gilmour.lan>
-References: <20200415101251.o3wi5t6xvf56xmhq@gilmour.lan>
- <72919514-0657-4B71-902F-3E775E528F64@goldelico.com>
- <f4fdca8a-d18c-a8d2-7f51-d1ebbbab3647@baylibre.com>
- <535CAEBE-F43E-4BFC-B989-612C81F0D7EF@goldelico.com>
- <20200415142124.yzfh6mtqq7cdq22e@gilmour.lan>
- <DC0A2DE2-3D77-46F8-8DE1-55050FDACC9B@goldelico.com>
- <20200415162151.rwym4ioqz27migfn@gilmour.lan>
- <45F411C0-150B-4FBA-A0E1-B863B3F36DF6@goldelico.com>
- <20200417102500.erayf6quenp3cvn3@gilmour.lan>
- <C8816F10-8773-4ECD-B42D-6EEF642476EB@goldelico.com>
+        Mon, 20 Apr 2020 04:25:36 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03K829cA050604
+        for <linux-mips@vger.kernel.org>; Mon, 20 Apr 2020 04:25:32 -0400
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30ggr12fp9-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-mips@vger.kernel.org>; Mon, 20 Apr 2020 04:25:32 -0400
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-mips@vger.kernel.org> from <frankja@linux.ibm.com>;
+        Mon, 20 Apr 2020 09:25:08 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 20 Apr 2020 09:24:58 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03K8PJ1r43057442
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 Apr 2020 08:25:19 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ED2F2A4054;
+        Mon, 20 Apr 2020 08:25:18 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 578BDA405C;
+        Mon, 20 Apr 2020 08:25:17 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.145.27.207])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 20 Apr 2020 08:25:17 +0000 (GMT)
+Subject: Re: [PATCH 1/7] KVM: s390: clean up redundant 'kvm_run' parameters
+To:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+        pbonzini@redhat.com, tsbogend@alpha.franken.de, paulus@ozlabs.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, david@redhat.com,
+        cohuck@redhat.com, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        sean.j.christopherson@intel.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, maz@kernel.org, james.morse@arm.com,
+        julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com,
+        christoffer.dall@arm.com, peterx@redhat.com, thuth@redhat.com
+Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200419075106.16248-1-tianjia.zhang@linux.alibaba.com>
+ <20200419075106.16248-2-tianjia.zhang@linux.alibaba.com>
+ <7a783487-2f9b-08a6-0ff6-f57bb90495a1@de.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+Autocrypt: addr=frankja@linux.ibm.com; prefer-encrypt=mutual; keydata=
+ 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
+Date:   Mon, 20 Apr 2020 10:25:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
+In-Reply-To: <7a783487-2f9b-08a6-0ff6-f57bb90495a1@de.ibm.com>
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="n2wbqupykynsjuri"
-Content-Disposition: inline
-In-Reply-To: <C8816F10-8773-4ECD-B42D-6EEF642476EB@goldelico.com>
+ protocol="application/pgp-signature";
+ boundary="k9RSmBqTWYAbaP5rKw62ccEG7ES4hYhub"
+X-TM-AS-GCONF: 00
+x-cbid: 20042008-0012-0000-0000-000003A7CAB9
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20042008-0013-0000-0000-000021E513B5
+Message-Id: <d6e522e2-187e-04f3-440d-62b9d6d3b71f@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-20_02:2020-04-17,2020-04-20 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ spamscore=0 impostorscore=0 malwarescore=0 suspectscore=0 mlxscore=0
+ clxscore=1011 lowpriorityscore=0 bulkscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004200067
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--k9RSmBqTWYAbaP5rKw62ccEG7ES4hYhub
+Content-Type: multipart/mixed; boundary="7j45kMn58mnq4gXwEhb4vbWa5qGQ5JsDC"
 
---n2wbqupykynsjuri
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--7j45kMn58mnq4gXwEhb4vbWa5qGQ5JsDC
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 17, 2020 at 02:15:44PM +0200, H. Nikolaus Schaller wrote:
-> > Am 17.04.2020 um 12:25 schrieb Maxime Ripard <maxime@cerno.tech>:
-> > On Wed, Apr 15, 2020 at 06:42:18PM +0200, H. Nikolaus Schaller wrote:
-> >>> Am 15.04.2020 um 18:21 schrieb Maxime Ripard <maxime@cerno.tech>:
-> >>>=20
-> >>> On Wed, Apr 15, 2020 at 05:09:45PM +0200, H. Nikolaus Schaller wrote:
-> >>>> Hi Maxime,
-> >>>>=20
-> >>>> Hm. Yes. We know that there likely are clocks and maybe reset
-> >>>> but for some SoC this seems to be undocumented and the reset
-> >>>> line the VHDL of the sgx gpu provides may be permanently tied
-> >>>> to "inactive".
-> >>>>=20
-> >>>> So if clocks are optional and not provided, a driver simply can assu=
-me
-> >>>> they are enabled somewhere else and does not have to care about. If
-> >>>> they are specified, the driver can enable/disable them.
-> >>>=20
-> >>> Except that at the hardware level, the clock is always going to be
-> >>> there. You can't control it, but it's there.
-> >>=20
-> >> Sure, we can deduce that from general hardware design knowledge.
-> >> But not every detail must be described in DT. Only the important
-> >> ones.
-> >>=20
-> >>>>> If OMAP is too much of a pain, you can also make
-> >>>>> a separate binding for it, and a generic one for the rest of us.
-> >>>>=20
-> >>>> No, omap isn't any pain at all.
-> >>>>=20
-> >>>> The pain is that some other SoC are most easily defined by clocks in
-> >>>> the gpu node which the omap doesn't need to explicitly specify.
-> >>>>=20
-> >>>> I would expect a much bigger nightmare if we split this into two
-> >>>> bindings variants.
-> >>>>=20
-> >>>>> I'd say that it's pretty unlikely that the clocks, interrupts (and
-> >>>>> even regulators) are optional. It might be fixed on some SoCs, but
-> >>>>> that's up to the DT to express that using fixed clocks / regulators,
-> >>>>> not the GPU binding itself.
-> >>>>=20
-> >>>> omap already has these defined them not to be part of the GPU bindin=
-g.
-> >>>> The reason seems to be that this needs special clock gating control
-> >>>> especially for idle states which is beyond simple clock-enable.
-> >>>>=20
-> >>>> This sysc target-module@56000000 node is already merged and therefore
-> >>>> we are only adding the gpu child node. Without defining clocks.
-> >>>>=20
-> >>>> For example:
-> >>>>=20
-> >>>> 		sgx_module: target-module@56000000 {
-> >>>> 			compatible =3D "ti,sysc-omap4", "ti,sysc";
-> >>>> 			reg =3D <0x5600fe00 0x4>,
-> >>>> 			      <0x5600fe10 0x4>;
-> >>>> 			reg-names =3D "rev", "sysc";
-> >>>> 			ti,sysc-midle =3D <SYSC_IDLE_FORCE>,
-> >>>> 					<SYSC_IDLE_NO>,
-> >>>> 					<SYSC_IDLE_SMART>;
-> >>>> 			ti,sysc-sidle =3D <SYSC_IDLE_FORCE>,
-> >>>> 					<SYSC_IDLE_NO>,
-> >>>> 					<SYSC_IDLE_SMART>;
-> >>>> 			clocks =3D <&gpu_clkctrl OMAP5_GPU_CLKCTRL 0>;
-> >>>> 			clock-names =3D "fck";
-> >>>> 			#address-cells =3D <1>;
-> >>>> 			#size-cells =3D <1>;
-> >>>> 			ranges =3D <0 0x56000000 0x2000000>;
-> >>>>=20
-> >>>> 			gpu: gpu@0 {
-> >>>> 				compatible =3D "ti,omap5-sgx544-116", "img,sgx544-116", "img,sgx=
-544";
-> >>>> 				reg =3D <0x0 0x10000>;
-> >>>> 				interrupts =3D <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
-> >>>> 			};
-> >>>> 		};
-> >>>>=20
-> >>>> The jz4780 example will like this:
-> >>>>=20
-> >>>> 	gpu: gpu@13040000 {
-> >>>> 		compatible =3D "ingenic,jz4780-sgx540-130", "img,sgx540-130", "img=
-,sgx540";
-> >>>> 		reg =3D <0x13040000 0x4000>;
-> >>>>=20
-> >>>> 		clocks =3D <&cgu JZ4780_CLK_GPU>;
-> >>>> 		clock-names =3D "gpu";
-> >>>>=20
-> >>>> 		interrupt-parent =3D <&intc>;
-> >>>> 		interrupts =3D <63>;
-> >>>> 	};
-> >>>>=20
-> >>>> So the question is which one is "generic for the rest of us"?
-> >>>=20
-> >>> I'd say the latter.
-> >>=20
-> >> Why?
-> >>=20
-> >> TI SoC seem to be the broadest number of available users
-> >> of sgx5xx in the past and nowadays. Others are more the exception.
-> >=20
-> > And maybe TI has some complicated stuff around the GPU that others don'=
-t have?
+On 4/20/20 9:07 AM, Christian Borntraeger wrote:
 >=20
-> Looks so.
 >=20
-> > If I look quickly at the Allwinner stuff, I see nothing looking alike i=
-n the
-> > SoC, so making the binding like that for everyone just because TI did s=
-omething
-> > doesn't really make much sense.
+> On 19.04.20 09:51, Tianjia Zhang wrote:
+>> In the current kvm version, 'kvm_run' has been included in the 'kvm_vc=
+pu'
+>> structure. Earlier than historical reasons, many kvm-related function
+>> parameters retain the 'kvm_run' and 'kvm_vcpu' parameters at the same =
+time.
+>> This patch does a unified cleanup of these remaining redundant paramet=
+ers.
+>>
+>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+>> ---
+>>  arch/s390/kvm/kvm-s390.c | 127 +++++++++++++++++++++-----------------=
+-
+>>  1 file changed, 67 insertions(+), 60 deletions(-)
+>>
+>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+>> index 443af3ead739..cf420d013ba3 100644
+>> --- a/arch/s390/kvm/kvm-s390.c
+>> +++ b/arch/s390/kvm/kvm-s390.c
+>> @@ -4173,24 +4173,25 @@ static int __vcpu_run(struct kvm_vcpu *vcpu)
+>>  	return rc;
+>>  }
+>> =20
+>> -static void sync_regs_fmt2(struct kvm_vcpu *vcpu, struct kvm_run *kvm=
+_run)
+>> +static void sync_regs_fmt2(struct kvm_vcpu *vcpu)
+>>  {
+>> +	struct kvm_run *run =3D vcpu->run;
 >=20
-> That is why I propose to make the clocks optional. This solves both
-> cases in a simple and neat way.
+> Please use kvm_run as variable name. This makes all of the changes belo=
+w go away.
+
+Definitely
+
+@Tianjia
+This patch produces way to much churn to be picked up as is.
+I do not want patches that touch so much for small cosmetic changes.
+
 >=20
-> >=20
-> >>> If your clock is optional, then you define it but don't mandate
-> >>> it. Not documenting it will only result in a mess where everyone will
-> >>> put some clock into it, possibly with different semantics each and
-> >>> every time.
-> >>=20
-> >> So you mean that we should require a dummy clock for the omap gpu node
-> >> or did I misunderstand that?
-> >>=20
-> >> Well, yes there is of course a clock connection between the
-> >> omap target-module and the sgx but it is IMHO pointless to
-> >> describe it because it can't and does not need to be controlled
-> >> separately.
-> >>=20
-> >> As said the target-module is already accepted and upstream and my
-> >> proposal is to get the gpu node described there. There is simply
-> >> no need for a clocks node for the omap.
-> >=20
-> > There is no need for a clocks property *currently* *on the OMAP*.
 >=20
-> Yes. But why "currently"? Do you think the OMAPs we already have
-> defined and tested will change?
+>>  	struct runtime_instr_cb *riccb;
+>>  	struct gs_cb *gscb;
+>> =20
+>> -	riccb =3D (struct runtime_instr_cb *) &kvm_run->s.regs.riccb;
+>> -	gscb =3D (struct gs_cb *) &kvm_run->s.regs.gscb;
+>> -	vcpu->arch.sie_block->gpsw.mask =3D kvm_run->psw_mask;
+>> -	vcpu->arch.sie_block->gpsw.addr =3D kvm_run->psw_addr;
+>> -	if (kvm_run->kvm_dirty_regs & KVM_SYNC_ARCH0) {
+>> -		vcpu->arch.sie_block->todpr =3D kvm_run->s.regs.todpr;
+>> -		vcpu->arch.sie_block->pp =3D kvm_run->s.regs.pp;
+>> -		vcpu->arch.sie_block->gbea =3D kvm_run->s.regs.gbea;
+>> -	}
+>> -	if (kvm_run->kvm_dirty_regs & KVM_SYNC_PFAULT) {
+>> -		vcpu->arch.pfault_token =3D kvm_run->s.regs.pft;
+>> -		vcpu->arch.pfault_select =3D kvm_run->s.regs.pfs;
+>> -		vcpu->arch.pfault_compare =3D kvm_run->s.regs.pfc;
+>> +	riccb =3D (struct runtime_instr_cb *) &run->s.regs.riccb;
+>> +	gscb =3D (struct gs_cb *) &run->s.regs.gscb;
+>> +	vcpu->arch.sie_block->gpsw.mask =3D run->psw_mask;
+>> +	vcpu->arch.sie_block->gpsw.addr =3D run->psw_addr;
+>> +	if (run->kvm_dirty_regs & KVM_SYNC_ARCH0) {
+>> +		vcpu->arch.sie_block->todpr =3D run->s.regs.todpr;
+>> +		vcpu->arch.sie_block->pp =3D run->s.regs.pp;
+>> +		vcpu->arch.sie_block->gbea =3D run->s.regs.gbea;
+>> +	}
+>> +	if (run->kvm_dirty_regs & KVM_SYNC_PFAULT) {
+>> +		vcpu->arch.pfault_token =3D run->s.regs.pft;
+>> +		vcpu->arch.pfault_select =3D run->s.regs.pfs;
+>> +		vcpu->arch.pfault_compare =3D run->s.regs.pfc;
+>>  		if (vcpu->arch.pfault_token =3D=3D KVM_S390_PFAULT_TOKEN_INVALID)
+>>  			kvm_clear_async_pf_completion_queue(vcpu);
+>>  	}
+>> @@ -4198,7 +4199,7 @@ static void sync_regs_fmt2(struct kvm_vcpu *vcpu=
+, struct kvm_run *kvm_run)
+>>  	 * If userspace sets the riccb (e.g. after migration) to a valid sta=
+te,
+>>  	 * we should enable RI here instead of doing the lazy enablement.
+>>  	 */
+>> -	if ((kvm_run->kvm_dirty_regs & KVM_SYNC_RICCB) &&
+>> +	if ((run->kvm_dirty_regs & KVM_SYNC_RICCB) &&
+>>  	    test_kvm_facility(vcpu->kvm, 64) &&
+>>  	    riccb->v &&
+>>  	    !(vcpu->arch.sie_block->ecb3 & ECB3_RI)) {
+>> @@ -4209,7 +4210,7 @@ static void sync_regs_fmt2(struct kvm_vcpu *vcpu=
+, struct kvm_run *kvm_run)
+>>  	 * If userspace sets the gscb (e.g. after migration) to non-zero,
+>>  	 * we should enable GS here instead of doing the lazy enablement.
+>>  	 */
+>> -	if ((kvm_run->kvm_dirty_regs & KVM_SYNC_GSCB) &&
+>> +	if ((run->kvm_dirty_regs & KVM_SYNC_GSCB) &&
+>>  	    test_kvm_facility(vcpu->kvm, 133) &&
+>>  	    gscb->gssm &&
+>>  	    !vcpu->arch.gs_enabled) {
+>> @@ -4218,10 +4219,10 @@ static void sync_regs_fmt2(struct kvm_vcpu *vc=
+pu, struct kvm_run *kvm_run)
+>>  		vcpu->arch.sie_block->ecd |=3D ECD_HOSTREGMGMT;
+>>  		vcpu->arch.gs_enabled =3D 1;
+>>  	}
+>> -	if ((kvm_run->kvm_dirty_regs & KVM_SYNC_BPBC) &&
+>> +	if ((run->kvm_dirty_regs & KVM_SYNC_BPBC) &&
+>>  	    test_kvm_facility(vcpu->kvm, 82)) {
+>>  		vcpu->arch.sie_block->fpf &=3D ~FPF_BPBC;
+>> -		vcpu->arch.sie_block->fpf |=3D kvm_run->s.regs.bpbc ? FPF_BPBC : 0;=
 
-Like I said, DVFS is likely to be one in the future.
+>> +		vcpu->arch.sie_block->fpf |=3D run->s.regs.bpbc ? FPF_BPBC : 0;
+>>  	}
+>>  	if (MACHINE_HAS_GS) {
+>>  		preempt_disable();
+>> @@ -4232,45 +4233,47 @@ static void sync_regs_fmt2(struct kvm_vcpu *vc=
+pu, struct kvm_run *kvm_run)
+>>  		}
+>>  		if (vcpu->arch.gs_enabled) {
+>>  			current->thread.gs_cb =3D (struct gs_cb *)
+>> -						&vcpu->run->s.regs.gscb;
+>> +						&run->s.regs.gscb;
+>>  			restore_gs_cb(current->thread.gs_cb);
+>>  		}
+>>  		preempt_enable();
+>>  	}
+>> -	/* SIE will load etoken directly from SDNX and therefore kvm_run */
+>> +	/* SIE will load etoken directly from SDNX and therefore run */
+>>  }
+>> =20
+>> -static void sync_regs(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)=
 
-> >> What I also assume is that developers of DTS know what they do.
-> >> So the risk that there is different semantics is IMHO very low.
-> >=20
-> > Well, they know what they do if you document the binding. Let's say I h=
-ave two
-> > clocks now on my SoC, and you just document that you want a clocks prop=
-erty,
-> > with a generic name in clock-names like "gpu".
->=20
-> Yes, that is what I want to propose for v7:
->=20
->   clocks:
->     maxItems: 1
->=20
->   clock-names:
->     maxItems: 1
->     items:
->       - const: gpu
+>> +static void sync_regs(struct kvm_vcpu *vcpu)
+>>  {
+>> -	if (kvm_run->kvm_dirty_regs & KVM_SYNC_PREFIX)
+>> -		kvm_s390_set_prefix(vcpu, kvm_run->s.regs.prefix);
+>> -	if (kvm_run->kvm_dirty_regs & KVM_SYNC_CRS) {
+>> -		memcpy(&vcpu->arch.sie_block->gcr, &kvm_run->s.regs.crs, 128);
+>> +	struct kvm_run *run =3D vcpu->run;
+>> +
+>> +	if (run->kvm_dirty_regs & KVM_SYNC_PREFIX)
+>> +		kvm_s390_set_prefix(vcpu, run->s.regs.prefix);
+>> +	if (run->kvm_dirty_regs & KVM_SYNC_CRS) {
+>> +		memcpy(&vcpu->arch.sie_block->gcr, &run->s.regs.crs, 128);
+>>  		/* some control register changes require a tlb flush */
+>>  		kvm_make_request(KVM_REQ_TLB_FLUSH, vcpu);
+>>  	}
+>> -	if (kvm_run->kvm_dirty_regs & KVM_SYNC_ARCH0) {
+>> -		kvm_s390_set_cpu_timer(vcpu, kvm_run->s.regs.cputm);
+>> -		vcpu->arch.sie_block->ckc =3D kvm_run->s.regs.ckc;
+>> +	if (run->kvm_dirty_regs & KVM_SYNC_ARCH0) {
+>> +		kvm_s390_set_cpu_timer(vcpu, run->s.regs.cputm);
+>> +		vcpu->arch.sie_block->ckc =3D run->s.regs.ckc;
+>>  	}
+>>  	save_access_regs(vcpu->arch.host_acrs);
+>> -	restore_access_regs(vcpu->run->s.regs.acrs);
+>> +	restore_access_regs(run->s.regs.acrs);
+>>  	/* save host (userspace) fprs/vrs */
+>>  	save_fpu_regs();
+>>  	vcpu->arch.host_fpregs.fpc =3D current->thread.fpu.fpc;
+>>  	vcpu->arch.host_fpregs.regs =3D current->thread.fpu.regs;
+>>  	if (MACHINE_HAS_VX)
+>> -		current->thread.fpu.regs =3D vcpu->run->s.regs.vrs;
+>> +		current->thread.fpu.regs =3D run->s.regs.vrs;
+>>  	else
+>> -		current->thread.fpu.regs =3D vcpu->run->s.regs.fprs;
+>> -	current->thread.fpu.fpc =3D vcpu->run->s.regs.fpc;
+>> +		current->thread.fpu.regs =3D run->s.regs.fprs;
+>> +	current->thread.fpu.fpc =3D run->s.regs.fpc;
+>>  	if (test_fp_ctl(current->thread.fpu.fpc))
+>>  		/* User space provided an invalid FPC, let's clear it */
+>>  		current->thread.fpu.fpc =3D 0;
+>> =20
+>>  	/* Sync fmt2 only data */
+>>  	if (likely(!kvm_s390_pv_cpu_is_protected(vcpu))) {
+>> -		sync_regs_fmt2(vcpu, kvm_run);
+>> +		sync_regs_fmt2(vcpu);
+>>  	} else {
+>>  		/*
+>>  		 * In several places we have to modify our internal view to
+>> @@ -4282,19 +4285,21 @@ static void sync_regs(struct kvm_vcpu *vcpu, s=
+truct kvm_run *kvm_run)
+>>  		 * do only accept the condition code from userspace.
+>>  		 */
+>>  		vcpu->arch.sie_block->gpsw.mask &=3D ~PSW_MASK_CC;
+>> -		vcpu->arch.sie_block->gpsw.mask |=3D kvm_run->psw_mask &
+>> +		vcpu->arch.sie_block->gpsw.mask |=3D run->psw_mask &
+>>  						   PSW_MASK_CC;
+>>  	}
+>> =20
+>> -	kvm_run->kvm_dirty_regs =3D 0;
+>> +	run->kvm_dirty_regs =3D 0;
+>>  }
+>> =20
+>> -static void store_regs_fmt2(struct kvm_vcpu *vcpu, struct kvm_run *kv=
+m_run)
+>> +static void store_regs_fmt2(struct kvm_vcpu *vcpu)
+>>  {
+>> -	kvm_run->s.regs.todpr =3D vcpu->arch.sie_block->todpr;
+>> -	kvm_run->s.regs.pp =3D vcpu->arch.sie_block->pp;
+>> -	kvm_run->s.regs.gbea =3D vcpu->arch.sie_block->gbea;
+>> -	kvm_run->s.regs.bpbc =3D (vcpu->arch.sie_block->fpf & FPF_BPBC) =3D=3D=
+ FPF_BPBC;
+>> +	struct kvm_run *run =3D vcpu->run;
+>> +
+>> +	run->s.regs.todpr =3D vcpu->arch.sie_block->todpr;
+>> +	run->s.regs.pp =3D vcpu->arch.sie_block->pp;
+>> +	run->s.regs.gbea =3D vcpu->arch.sie_block->gbea;
+>> +	run->s.regs.bpbc =3D (vcpu->arch.sie_block->fpf & FPF_BPBC) =3D=3D F=
+PF_BPBC;
+>>  	if (MACHINE_HAS_GS) {
+>>  		__ctl_set_bit(2, 4);
+>>  		if (vcpu->arch.gs_enabled)
+>> @@ -4310,39 +4315,41 @@ static void store_regs_fmt2(struct kvm_vcpu *v=
+cpu, struct kvm_run *kvm_run)
+>>  	/* SIE will save etoken directly into SDNX and therefore kvm_run */
+>>  }
+>> =20
+>> -static void store_regs(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run=
+)
+>> +static void store_regs(struct kvm_vcpu *vcpu)
+>>  {
+>> -	kvm_run->psw_mask =3D vcpu->arch.sie_block->gpsw.mask;
+>> -	kvm_run->psw_addr =3D vcpu->arch.sie_block->gpsw.addr;
+>> -	kvm_run->s.regs.prefix =3D kvm_s390_get_prefix(vcpu);
+>> -	memcpy(&kvm_run->s.regs.crs, &vcpu->arch.sie_block->gcr, 128);
+>> -	kvm_run->s.regs.cputm =3D kvm_s390_get_cpu_timer(vcpu);
+>> -	kvm_run->s.regs.ckc =3D vcpu->arch.sie_block->ckc;
+>> -	kvm_run->s.regs.pft =3D vcpu->arch.pfault_token;
+>> -	kvm_run->s.regs.pfs =3D vcpu->arch.pfault_select;
+>> -	kvm_run->s.regs.pfc =3D vcpu->arch.pfault_compare;
+>> -	save_access_regs(vcpu->run->s.regs.acrs);
+>> +	struct kvm_run *run =3D vcpu->run;
+>> +
+>> +	run->psw_mask =3D vcpu->arch.sie_block->gpsw.mask;
+>> +	run->psw_addr =3D vcpu->arch.sie_block->gpsw.addr;
+>> +	run->s.regs.prefix =3D kvm_s390_get_prefix(vcpu);
+>> +	memcpy(&run->s.regs.crs, &vcpu->arch.sie_block->gcr, 128);
+>> +	run->s.regs.cputm =3D kvm_s390_get_cpu_timer(vcpu);
+>> +	run->s.regs.ckc =3D vcpu->arch.sie_block->ckc;
+>> +	run->s.regs.pft =3D vcpu->arch.pfault_token;
+>> +	run->s.regs.pfs =3D vcpu->arch.pfault_select;
+>> +	run->s.regs.pfc =3D vcpu->arch.pfault_compare;
+>> +	save_access_regs(run->s.regs.acrs);
+>>  	restore_access_regs(vcpu->arch.host_acrs);
+>>  	/* Save guest register state */
+>>  	save_fpu_regs();
+>> -	vcpu->run->s.regs.fpc =3D current->thread.fpu.fpc;
+>> +	run->s.regs.fpc =3D current->thread.fpu.fpc;
+>>  	/* Restore will be done lazily at return */
+>>  	current->thread.fpu.fpc =3D vcpu->arch.host_fpregs.fpc;
+>>  	current->thread.fpu.regs =3D vcpu->arch.host_fpregs.regs;
+>>  	if (likely(!kvm_s390_pv_cpu_is_protected(vcpu)))
+>> -		store_regs_fmt2(vcpu, kvm_run);
+>> +		store_regs_fmt2(vcpu);
+>>  }
+>> =20
+>>  int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+>>  {
+>> -	struct kvm_run *kvm_run =3D vcpu->run;
+>> +	struct kvm_run *run =3D vcpu->run;
+>>  	int rc;
+>> =20
+>> -	if (kvm_run->immediate_exit)
+>> +	if (run->immediate_exit)
+>>  		return -EINTR;
+>> =20
+>> -	if (kvm_run->kvm_valid_regs & ~KVM_SYNC_S390_VALID_FIELDS ||
+>> -	    kvm_run->kvm_dirty_regs & ~KVM_SYNC_S390_VALID_FIELDS)
+>> +	if (run->kvm_valid_regs & ~KVM_SYNC_S390_VALID_FIELDS ||
+>> +	    run->kvm_dirty_regs & ~KVM_SYNC_S390_VALID_FIELDS)
+>>  		return -EINVAL;
+>> =20
+>>  	vcpu_load(vcpu);
+>> @@ -4368,14 +4375,14 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *v=
+cpu)
+>>  		goto out;
+>>  	}
+>> =20
+>> -	sync_regs(vcpu, kvm_run);
+>> +	sync_regs(vcpu);
+>>  	enable_cpu_timer_accounting(vcpu);
+>> =20
+>>  	might_fault();
+>>  	rc =3D __vcpu_run(vcpu);
+>> =20
+>>  	if (signal_pending(current) && !rc) {
+>> -		kvm_run->exit_reason =3D KVM_EXIT_INTR;
+>> +		run->exit_reason =3D KVM_EXIT_INTR;
+>>  		rc =3D -EINTR;
+>>  	}
+>> =20
+>> @@ -4390,7 +4397,7 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcp=
+u)
+>>  	}
+>> =20
+>>  	disable_cpu_timer_accounting(vcpu);
+>> -	store_regs(vcpu, kvm_run);
+>> +	store_regs(vcpu);
+>> =20
+>>  	kvm_sigset_deactivate(vcpu);
+>> =20
+>>
 
-If you document what the "gpu" clock is supposed to be.
 
-Is it the clock for the bus (clocking the register part of the GPU), the cl=
-ock
-for the GPU cores? Something else?
 
-> >> If you agree I can add the clocks/clock-names property as an
-> >> optional property. This should solve omap and all others.
-> >=20
-> > With the above example, what clock should I put in there? In which orde=
-r? This
-> > isn't some random example pulled out of nowhere. The Allwinner A31 has =
-(at
-> > least) 4 clocks for the GPU, 1 reset line and 1 regulator, so I can onl=
-y assume
-> > that the GPU actually needs at least that amount to be properly integra=
-ted into
-> > an SoC.
->=20
-> Ah, now I understand your motivation: you have access and experience with
-> the A31 and you know that our proposal doesn't fit to it.
+--7j45kMn58mnq4gXwEhb4vbWa5qGQ5JsDC--
 
-Not only the A31. If you don't document what your expectations are for a ge=
-neric
-component like that, every SoC will assume that your GPU clock is something
-different and you won't be able to make any sense of it in your driver.
-
-> From what I know from your description is that the A31 is quite special w=
-ith
-> 4 GPU clocks... Are they all really for the GPU or 3 of them for the inte=
-rface
-> logic (like on OMAP which separates between "functional clocks" and "inte=
-rface
-> clocks")? Or are there 4 groups of GPU cores with a separate clock for ea=
-ch one?
-
-1 is the equivalent of the interface clock, the others seem to be for the
-functional clocks.
-
-> So what would be your proposal for the A31 DT?
->=20
-> Then I get a chance to compare DT snippets and try to make a mixture for
-> the bindings.
-
-You'd have to know the GPU to do that, and I don't.
-
-> >>> This has nothing to do with the binding being complete. And if you use
-> >>> a binding like this one, you'll be severely limited when you'll want
-> >>> to implement things like DVFS.
-> >>=20
-> >> Now you have unhooked me... Nobody seems to know if and how DVFS can be
-> >> applied to SGX. IMHO we should bake small bread first and get initial
-> >> support into mainline.
-> >=20
-> > On the software side, yes, of course. But the discussion here doesn't h=
-ave much
-> > to do with software support, this is about the hardware. No matter if y=
-ou enable
-> > DVFS or not, you'll have those resources connected to the GPU.
-> >=20
-> > And if you want to enable the strict minimum in DT for now and expand i=
-t later
-> > as the software gains support for more stuff, then you'll have to deal =
-with the
-> > minimal stuff in software later-on to keep the backward compatibility.
->=20
-> That is IMHO common practise everywhere. Sometimes you even have to adapt
-> years old DT to new limitations of the drivers (this happened recently for
-> combination of SPI and GPIO).
-
-To some extent, yes. But those old bindings that turn out to be wrong at le=
-ast
-contain most infos about the hardware, even though it's incomplete or flawe=
-d.
-Your proposal doesn't.
-
-> And you can still write two different drivers for a single bindings docum=
-ent
-> or use the .data field of the compatibility table. And I think clocks and=
- regulators
-> can also be referenced by name if they are not defined in DT. This is not=
- a
-> "single variety" style, but a potential solution.
->=20
-> What I want to say: there are many roads to Rome.
-
-What I want to say is: all the roads you listed above are going to be painf=
-ul.
-Take your time, have a generic driver running from your generic binding you=
- want
-to introduce on all the SoCs you want to support, and *then* start this
-discussion again.
-
-Maxime
-
---n2wbqupykynsjuri
+--k9RSmBqTWYAbaP5rKw62ccEG7ES4hYhub
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXp1XgwAKCRDj7w1vZxhR
-xYvmAP9KHUdB4quNWFa7siduKh9jQCUA3ovI+3VM4p8xzh0qPgEA+ZPetkVI8hGE
-xuIp0fgwWj1NWw9tW+3i+1pkI4J16Ag=
-=zM/B
+iQIzBAEBCAAdFiEEwGNS88vfc9+v45Yq41TmuOI4ufgFAl6dXGwACgkQ41TmuOI4
+ufjdvQ//YjHAPeQfGQn1w4S0yNXye7v/Jwl2Zaa5286dQDyhsMnYOKtrc3oz/cCM
+tZjRocVRfjlExANAaEt6i1pOakrh6iAkTkyPnCEG1fhdC5eRqO9LYqTLBXWnXjhM
+IBeJqoajbgCUN8FOJv02mjN52wmXhjxexJXZwtwE9tcGCNDUP+9yU5S6Qgw9Lqqi
+R+N66U7na38EcizvZK+BJoJkiO1DnL2Jc+wyQssULWZiqCyGQEIGJNPkW7qvqRV1
+IFMUnH5gryrF4tdbuoJk8N5EPkOoYbkMc5mWV/Y6opUuLgtKFaLul9m2eOAmZuKG
+dYGsjp9exQq5SXJIDaJaL8n1jpQgmAOodN5420uvdIsOmoyh9GCJ01II3Y0+GUpM
+rpMjbleasKzbQwWzGiZt7IGFZSgjo3PoA3JaqbGXrdJGUbtqUolPOWN3EJR4JDvr
+37FLPFoXcoAN6hixxGwRv+JF516S9cpSzE6zEeNCcQRiMP/mzK14qUa/k4DSjBss
+AdcafuOPOIaC5lfMyTXBJYCzik55V+swgAiI402SY0NFy/uJFEF+obIVA4vau50o
+ynlo3RxdSx+oPN8T47PYG3F8F5XfbQIpwAfGmv2AQ42j5wMYWFNFZncacDV+YIhq
++hoIV+bKjILnW2x8yJhrbJnxnMPRQCke+jsqbxhYCCJiE6aPMo0=
+=Ye8W
 -----END PGP SIGNATURE-----
 
---n2wbqupykynsjuri--
+--k9RSmBqTWYAbaP5rKw62ccEG7ES4hYhub--
+
