@@ -2,120 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACC01B175B
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 22:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE33F1B1775
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 22:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726743AbgDTUmq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Apr 2020 16:42:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53106 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725774AbgDTUmq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 20 Apr 2020 16:42:46 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 50BB9207FC;
-        Mon, 20 Apr 2020 20:42:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587415366;
-        bh=/Lm2cTmavSfvPwo3EnY/skppJ5i7CHKipIJNiAMzESE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vX206r139s9j+s4JKnaMI4JpxtutoxgTKEzqEw3LnEF+8MAWjTABg/8ixx8KpUvhJ
-         aBeW060QZCReO+UrYVjtFosA573ZmpGd4EEAhYESWJJ38YU2e8uDaSguoFjd9eEoa2
-         GF7apirwkq/9qg8hWCNZ5P1q630+XpFbjnKHsvw4=
-Date:   Mon, 20 Apr 2020 21:42:39 +0100
-From:   Will Deacon <will@kernel.org>
-To:     George Spelvin <lkml@sdf.org>
-Cc:     linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [RFC PATCH v1 40/50] arch/*/include/asm/stackprotector.h: Use
- get_random_canary() consistently
-Message-ID: <20200420204238.GB29998@willie-the-truck>
-References: <202003281643.02SGhM0T009250@sdf.org>
+        id S1726722AbgDTUrv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Apr 2020 16:47:51 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:44163 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726055AbgDTUrv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Apr 2020 16:47:51 -0400
+Received: by mail-ot1-f68.google.com with SMTP id j4so9364255otr.11;
+        Mon, 20 Apr 2020 13:47:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=03daUD91BmLRPkQX2g3OkI4KkmbbVSqJ0/5HyTXhZcc=;
+        b=qqYtHF7D7hJOvUHjPrpQpuGiq04khtT2zl5OzGwrBqLOCUWbYs4hOCHiLf00pEXk9G
+         6TqOmBlVzn6JfJPn071k5pmsBImb1jDrVxT226Ab2ou6KHCcuWJO2oEevzslHX/LI6wD
+         VKoHRlH+GBrFQJPb+RAXaU/t4cqD8P4WYhVkg6Ozn5JLFH9coROdY6QXdIAEeRDVdnuB
+         ONEyEa1QtC2GZq6nZoTH1R85yXdyr6bqWgMuRlStKpKwPcxcVXcIgTmtkXQxv87ZsIy5
+         RPOctmCGKCEJSMSO4wMcnjW/4lr5xe/AEeqMA6Fe7xtwfVMYDkb+DATdb9OEKprPZFVX
+         Ph3Q==
+X-Gm-Message-State: AGi0PuZuJGFrIsP8z0tlFt/DuMuqY3R3DbO0Gscw6bC5YeN35td70OEC
+        pxw9kimhDP5UJ9CpmKflHB8rT4o=
+X-Google-Smtp-Source: APiQypIc3Svb/uK4rCWU7hsCX+MGdL5CagM45jjt3R28s7oM272csJN2xAQ8XONrOXLQhKLdKOBmZg==
+X-Received: by 2002:a05:6830:3110:: with SMTP id b16mr4600911ots.68.1587415670216;
+        Mon, 20 Apr 2020 13:47:50 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id p13sm130461oom.34.2020.04.20.13.47.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Apr 2020 13:47:48 -0700 (PDT)
+Received: (nullmailer pid 2136 invoked by uid 1000);
+        Mon, 20 Apr 2020 20:47:47 -0000
+Date:   Mon, 20 Apr 2020 15:47:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>, od@zcrc.me,
+        =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 01/13] dt-bindings: timer: Convert ingenic,tcu.txt to YAML
+Message-ID: <20200420204747.GA2076@bogus>
+References: <20200413152633.198301-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202003281643.02SGhM0T009250@sdf.org>
+In-Reply-To: <20200413152633.198301-1-paul@crapouillou.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Dec 10, 2019 at 12:35:14AM -0500, George Spelvin wrote:
-> ... in boot_init_stack_canary().
+On Mon, 13 Apr 2020 17:26:21 +0200, Paul Cercueil wrote:
+> Convert the ingenic,tcu.txt file to YAML.
 > 
-> This is the archetypical example of where the extra security of
-> get_random_bytes() is wasted.  The canary is only important as
-> long as it's stored in __stack_chk_guard.
-> 
-> It's also a great example of code that has been copied around
-> a lot and not updated.
-> 
-> Remove the XOR with LINUX_VERSION_CODE as it's pointless; the inclusion
-> of utsname() in init_std_data in the random seeding obviates it.
-> 
-> The XOR with the TSC on x86 and mtfb() on powerPC were left in,
-> as I haven't proved them redundant yet.  For those, we call
-> get_random_long(), xor, and mask manually.
-> 
-> FUNCTIONAL CHANGE: mips and xtensa were changed from 64-bit
-> get_random_long() to 56-bit get_random_canary() to match the
-> others, in accordance with the logic in CANARY_MASK.
-> 
-> (We could do 1 bit better and zero *one* of the two high bytes.)
-> 
-> Signed-off-by: George Spelvin <lkml@sdf.org>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: James Hogan <jhogan@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: linux-sh@vger.kernel.org
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc:  "H. Peter Anvin" <hpa@zytor.com>
-> Cc: x86@kernel.org
-> Cc: Chris Zankel <chris@zankel.net>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Cc: linux-xtensa@linux-xtensa.org
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
->  arch/arm/include/asm/stackprotector.h     | 9 +++------
->  arch/arm64/include/asm/stackprotector.h   | 8 ++------
->  arch/mips/include/asm/stackprotector.h    | 7 ++-----
->  arch/powerpc/include/asm/stackprotector.h | 6 ++----
->  arch/sh/include/asm/stackprotector.h      | 8 ++------
->  arch/x86/include/asm/stackprotector.h     | 4 ++--
->  arch/xtensa/include/asm/stackprotector.h  | 7 ++-----
->  7 files changed, 15 insertions(+), 34 deletions(-)
+> 
+> Notes:
+>     This one patch was sent as standalone before, so it's technically
+>     a V2. Support for 'assigned-clocks', 'assigned-clock-parents',
+>     'assigned-clock-rates' was added.
+> 
+>  .../devicetree/bindings/timer/ingenic,tcu.txt | 138 ---------
+>  .../bindings/timer/ingenic,tcu.yaml           | 281 ++++++++++++++++++
+>  2 files changed, 281 insertions(+), 138 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/timer/ingenic,tcu.txt
+>  create mode 100644 Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
+> 
 
-Just found this kicking around in the depths of my inbox. Is the series
-dead?
+Applied, thanks.
 
-Will
+Rob
