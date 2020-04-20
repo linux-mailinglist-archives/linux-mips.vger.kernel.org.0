@@ -2,231 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E221B08FF
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 14:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7DE1B0C3B
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 15:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726435AbgDTMNZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Apr 2020 08:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726262AbgDTMNY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 20 Apr 2020 08:13:24 -0400
-Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [IPv6:2001:19f0:6001:3633:5400:2ff:fe8c:553])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8890CC061A0C;
-        Mon, 20 Apr 2020 05:13:24 -0700 (PDT)
-Received: from flygoat-x1e (unknown [IPv6:240e:390:495:8610::d68])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 990632049D;
-        Mon, 20 Apr 2020 12:13:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1587384802; bh=idKjj1yAQjx86fx6jHB6ioNV9LvwvWMp3rTVXY9oqy0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TnIbe8U575BKmefFkfM/6Qc7/UzFOdkkZ3ZDfoQ0RidrlpQKpicTm2gOr1VebXMNk
-         pZc0W+gNtKzeMfm4PIjy0M4vCtmyufzOwoNKHtyqcK1ItiddvPWLOrd8EgZubdw51S
-         20BJGqhDCDJletid0zFC2HufCOW111c2xN6XfPaYlNyJzy9mNgrlzbuh46oCfh7MOy
-         SJWOPJ9awezXUcwdRlH6PknIac/65qFmQxHLfP41EM9AVZ9Wi+EPCP2ftz1Q1iFwF3
-         F9NsIwXzqpvaKk9+ebo2Sz3yX8I8JQqrWBu7rc93cACebrGFjSGuX0vhDWdNkGjMfc
-         PM+KLYeo5YFbw==
-Date:   Mon, 20 Apr 2020 20:13:12 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     maobibo <maobibo@loongson.cn>
+        id S1727054AbgDTNE7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Apr 2020 09:04:59 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:56570 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727027AbgDTNE7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 20 Apr 2020 09:04:59 -0400
+Received: from [10.20.42.25] (unknown [10.20.42.25])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX9n0nZ1e+SoqAA--.1S3;
+        Mon, 20 Apr 2020 21:04:52 +0800 (CST)
+Subject: Re: [PATCH RESEND 1/5] MIPS: Loongson64: Remove dead RTC code
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+References: <20200420073347.157230-1-jiaxun.yang@flygoat.com>
+ <20200420073347.157230-2-jiaxun.yang@flygoat.com>
+ <15923f8b-7278-f510-e06a-99751bd68048@loongson.cn>
+ <20200420201312.7afe1bb7@flygoat-x1e>
 Cc:     linux-mips@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Rob Herring <robh+dt@kernel.org>,
         Huacai Chen <chenhc@lemote.com>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 1/5] MIPS: Loongson64: Remove dead RTC code
-Message-ID: <20200420201312.7afe1bb7@flygoat-x1e>
-In-Reply-To: <15923f8b-7278-f510-e06a-99751bd68048@loongson.cn>
-References: <20200420073347.157230-1-jiaxun.yang@flygoat.com>
-        <20200420073347.157230-2-jiaxun.yang@flygoat.com>
-        <15923f8b-7278-f510-e06a-99751bd68048@loongson.cn>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+From:   maobibo <maobibo@loongson.cn>
+Message-ID: <cd4b67eb-d689-793b-93b3-1ba2b3741b5b@loongson.cn>
+Date:   Mon, 20 Apr 2020 21:04:52 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20200420201312.7afe1bb7@flygoat-x1e>
+Content-Type: text/plain; charset=windows-1252
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9DxX9n0nZ1e+SoqAA--.1S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY47k0a2IF6w1UM7kC6x804xWl14x267AK
+        xVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGw
+        A2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I
+        6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr
+        1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv
+        0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z2
+        80aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IE
+        e2xFo4CEbIxvr21lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7IU8489tUUUUU==
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 20 Apr 2020 20:06:02 +0800
-maobibo <maobibo@loongson.cn> wrote:
 
-> On 04/20/2020 03:33 PM, Jiaxun Yang wrote:
-> > RTC is now enabled by devicetree. So platform code is
-> > no longer needed.
-> > 
-> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > ---
-> >  .../include/asm/mach-loongson64/mc146818rtc.h | 36
-> > ----------------- arch/mips/loongson64/Kconfig                  |
-> > 4 -- arch/mips/loongson64/Makefile                 |  1 -
-> >  arch/mips/loongson64/rtc.c                    | 39
-> > ------------------- arch/mips/loongson64/time.c                   |
-> >  8 +--- 5 files changed, 1 insertion(+), 87 deletions(-)
-> >  delete mode 100644
-> > arch/mips/include/asm/mach-loongson64/mc146818rtc.h delete mode
-> > 100644 arch/mips/loongson64/rtc.c
-> > 
-> > diff --git a/arch/mips/include/asm/mach-loongson64/mc146818rtc.h
-> > b/arch/mips/include/asm/mach-loongson64/mc146818rtc.h deleted file
-> > mode 100644 index ebdccfee50be..000000000000
-> > --- a/arch/mips/include/asm/mach-loongson64/mc146818rtc.h
-> > +++ /dev/null
-> > @@ -1,36 +0,0 @@
-> > -/*
-> > - * This file is subject to the terms and conditions of the GNU
-> > General Public
-> > - * License.  See the file "COPYING" in the main directory of this
-> > archive
-> > - * for more details.
-> > - *
-> > - * Copyright (C) 1998, 2001, 03, 07 by Ralf Baechle
-> > (ralf@linux-mips.org)
-> > - *
-> > - * RTC routines for PC style attached Dallas chip.
-> > - */
-> > -#ifndef __ASM_MACH_LOONGSON64_MC146818RTC_H
-> > -#define __ASM_MACH_LOONGSON64_MC146818RTC_H
-> > -
-> > -#include <linux/io.h>
-> > -
-> > -#define RTC_PORT(x)	(0x70 + (x))
-> > -#define RTC_IRQ		8
-> > -
-> > -static inline unsigned char CMOS_READ(unsigned long addr)
-> > -{
-> > -	outb_p(addr, RTC_PORT(0));
-> > -	return inb_p(RTC_PORT(1));
-> > -}
-> > -
-> > -static inline void CMOS_WRITE(unsigned char data, unsigned long
-> > addr) -{
-> > -	outb_p(addr, RTC_PORT(0));
-> > -	outb_p(data, RTC_PORT(1));
-> > -}
-> > -
-> > -#define RTC_ALWAYS_BCD	0
-> > -
-> > -#ifndef mc146818_decode_year
-> > -#define mc146818_decode_year(year) ((year) < 70 ? (year) + 2000 :
-> > (year) + 1970) -#endif
-> > -
-> > -#endif /* __ASM_MACH_LOONGSON64_MC146818RTC_H */
-> > diff --git a/arch/mips/loongson64/Kconfig
-> > b/arch/mips/loongson64/Kconfig index 48b29c198acf..c386b8a3c753
-> > 100644 --- a/arch/mips/loongson64/Kconfig
-> > +++ b/arch/mips/loongson64/Kconfig
-> > @@ -14,8 +14,4 @@ config RS780_HPET
-> >  	  If unsure, say Yes.
-> >  
-> >  
-> > -config LOONGSON_MC146818
-> > -	bool
-> > -	default n
-> > -
-> >  endif # MACH_LOONGSON64
-> > diff --git a/arch/mips/loongson64/Makefile
-> > b/arch/mips/loongson64/Makefile index f04461839540..102a19aa92aa
-> > 100644 --- a/arch/mips/loongson64/Makefile
-> > +++ b/arch/mips/loongson64/Makefile
-> > @@ -8,6 +8,5 @@ obj-$(CONFIG_MACH_LOONGSON64) += cop2-ex.o
-> > platform.o acpi_init.o dma.o \ obj-$(CONFIG_SMP)	+= smp.o
-> >  obj-$(CONFIG_NUMA)	+= numa.o
-> >  obj-$(CONFIG_RS780_HPET) += hpet.o
-> > -obj-$(CONFIG_LOONGSON_MC146818) += rtc.o
-> >  obj-$(CONFIG_SUSPEND) += pm.o
-> >  obj-$(CONFIG_PCI_QUIRKS) += vbios_quirk.o
-> > diff --git a/arch/mips/loongson64/rtc.c b/arch/mips/loongson64/rtc.c
-> > deleted file mode 100644
-> > index 8d7628c0f513..000000000000
-> > --- a/arch/mips/loongson64/rtc.c
-> > +++ /dev/null
-> > @@ -1,39 +0,0 @@
-> > -// SPDX-License-Identifier: GPL-2.0-or-later
-> > -/*
-> > - *  Lemote Fuloong platform support
-> > - *
-> > - *  Copyright(c) 2010 Arnaud Patard <apatard@mandriva.com>
-> > - */
-> > -
-> > -#include <linux/init.h>
-> > -#include <linux/kernel.h>
-> > -#include <linux/platform_device.h>
-> > -#include <linux/mc146818rtc.h>
-> > -
-> > -static struct resource loongson_rtc_resources[] = {
-> > -	{
-> > -		.start	= RTC_PORT(0),
-> > -		.end	= RTC_PORT(1),
-> > -		.flags	= IORESOURCE_IO,
-> > -	}, {
-> > -		.start	= RTC_IRQ,
-> > -		.end	= RTC_IRQ,
-> > -		.flags	= IORESOURCE_IRQ,
-> > -	}
-> > -};
-> > -
-> > -static struct platform_device loongson_rtc_device = {
-> > -	.name		= "rtc_cmos",
-> > -	.id		= -1,
-> > -	.resource	= loongson_rtc_resources,
-> > -	.num_resources	= ARRAY_SIZE(loongson_rtc_resources),
-> > -};
-> > -
-> > -
-> > -static int __init loongson_rtc_platform_init(void)
-> > -{
-> > -	platform_device_register(&loongson_rtc_device);
-> > -	return 0;
-> > -}
-> > -
-> > -device_initcall(loongson_rtc_platform_init);
-> > diff --git a/arch/mips/loongson64/time.c
-> > b/arch/mips/loongson64/time.c index 1245f22cec84..91e842b58365
-> > 100644 --- a/arch/mips/loongson64/time.c
-> > +++ b/arch/mips/loongson64/time.c
-> > @@ -6,7 +6,7 @@
-> >   * Copyright (C) 2009 Lemote Inc.
-> >   * Author: Wu Zhangjin, wuzhangjin@gmail.com
-> >   */
-> > -#include <asm/mc146818-time.h>
-> > +
-> >  #include <asm/time.h>
-> >  #include <asm/hpet.h>
-> >  
-> > @@ -21,9 +21,3 @@ void __init plat_time_init(void)
-> >  	setup_hpet_timer();
-> >  #endif
-> >  }
-> > -
-> > -void read_persistent_clock64(struct timespec64 *ts)
-> > -{
-> > -	ts->tv_sec = mc146818_get_cmos_time();
-> > -	ts->tv_nsec = 0;
-> > -}
-> >   
-> Hi Jiaxun,
+
+On 04/20/2020 08:13 PM, Jiaxun Yang wrote:
+> Hi Bibi,
 > 
-> Are you sure to remove function read_persistent_clock64 ? which is
-> called in kernel/time/timekeeping.c
-
-Hi Bibi,
-
-Thanks for your review.
-
-Pretty sure. It is mc146818 specified, it can never work on LS7A/LS2K
-which have another RTC implementation.
-
-I have performed boot test with this patch.
-Kernel have safety fallback on platforms without this callback. 
-
+> Thanks for your review.
 > 
-> regards
-> bibo,mao
+> Pretty sure. It is mc146818 specified, it can never work on LS7A/LS2K
+> which have another RTC implementation.
 > 
+> I have performed boot test with this patch.
+> Kernel have safety fallback on platforms without this callback. 
+Although it boots ok, the wall time will be 0 for every boot since it does not read from rtc
 
-Thanks
---
-Jiaxun Yang
+regards
+bibo, mao
+
