@@ -2,37 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 835251B0D1E
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 15:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2451B0D23
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 15:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728475AbgDTNqb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Apr 2020 09:46:31 -0400
-Received: from vultr.net.flygoat.com ([149.28.68.211]:59096 "EHLO
+        id S1728551AbgDTNqk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Apr 2020 09:46:40 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:59102 "EHLO
         vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725944AbgDTNqb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Apr 2020 09:46:31 -0400
+        with ESMTP id S1726845AbgDTNqk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Apr 2020 09:46:40 -0400
 Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 5334E20CD9;
-        Mon, 20 Apr 2020 13:46:29 +0000 (UTC)
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id CD7A320CD8;
+        Mon, 20 Apr 2020 13:46:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1587390390; bh=2Yha78wdaBWdV4Os8gh18PUzHd9AUb6A+au0cwwAvQ0=;
+        t=1587390399; bh=JIRXmtrKVz8AnOE2yfwa7R44IgnCUpDcFZBuh7UShw4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gLFWuolCyKX/s7wXlWaP50UKXmfpnKgZBwWFSoTeaA5F726Liy2qqg5fyS/G5VT0e
-         22FKNYcmvwfz+ACNhNuaqU6Po+u11skto8Jmuat90KO5M5GVRp0hfTWnpyObzuWYzn
-         hF8/6h/AUgrVqUNG3FWbaORBhs8a9xLBNrXUxxwaMiuNGaYNGx5bjejlMi22Mm3CO2
-         6dHr/P6QUX36PlG6YqN24BSI+KqTJfy/BjObzDViKySV0olHgFOg4iL5k7iRxQ2guz
-         bWTLJf7Mr9a0UDC0RvWoxbJfZEua/ly37lLfx7uy9axy5bNQgo4tWNgVIOIl/TLR5i
-         RV5MjrUrTh2xA==
+        b=XJitB7jwewz6iLIdGqKTjrmd1OP/J1nSkMsHIBSgiPPxhb37aDtuH7DjA10krVtG8
+         Dy8/L2a1OL5MpLWLKUEGKcKrDb/J+LJFrKY/Rf0PR8ZdhSGn7rB77kAiV9fbewOSez
+         k/KoPYp++D3ozoar0714NdGHX1FPj8rhs9iVids11sB8i5Pqr0xbhTEZrhNuNR9Qd6
+         N++ZnFNKrar1u3zp0mfI9d1djtI5OmA03XsXCJ9pEiGOxpfjsrEOfGiju/8KsL5OIR
+         XX4rwWrykeGG61XxQ0OVDk6F6DSwDOgeYMyy5Ic0tEHpkGbQpLLF+eU37Wacg6LMVB
+         wtlgLfXVD0NQg==
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Rob Herring <robh@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Rob Herring <robh+dt@kernel.org>,
         Huacai Chen <chenhc@lemote.com>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/5] MIPS: Loongson64: Make RS780E ACPI as a platform driver
-Date:   Mon, 20 Apr 2020 21:45:26 +0800
-Message-Id: <20200420134536.210475-2-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 3/5] dt-bindings: Document Loongson RS780E PCH ACPI Controller
+Date:   Mon, 20 Apr 2020 21:45:27 +0800
+Message-Id: <20200420134536.210475-3-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.26.0.rc2
 In-Reply-To: <20200420134536.210475-1-jiaxun.yang@flygoat.com>
 References: <20200420073347.157230-1-jiaxun.yang@flygoat.com>
@@ -44,160 +45,62 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Make RS780E ACPI as a platform driver so we can enable it
-by DeviceTree selectively.
+This controller is attached under ISA Bus and can be found
+in Loongson-3 systems with RS780E PCH.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
-v2: Rebase to mips-next
----
- arch/mips/loongson64/Makefile                 |  2 +-
- arch/mips/loongson64/pci.c                    |  2 -
- drivers/platform/mips/Kconfig                 |  6 ++
- drivers/platform/mips/Makefile                |  1 +
- .../platform/mips/rs780e-acpi.c               | 58 ++++++++++++-------
- 5 files changed, 46 insertions(+), 23 deletions(-)
- rename arch/mips/loongson64/acpi_init.c => drivers/platform/mips/rs780e-acpi.c (70%)
+ .../bindings/mips/loongson/rs780e-acpi.yaml   | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml
 
-diff --git a/arch/mips/loongson64/Makefile b/arch/mips/loongson64/Makefile
-index 32b8c224852f..6f3c2b47f66f 100644
---- a/arch/mips/loongson64/Makefile
-+++ b/arch/mips/loongson64/Makefile
-@@ -2,7 +2,7 @@
- #
- # Makefile for Loongson-3 family machines
- #
--obj-$(CONFIG_MACH_LOONGSON64) += cop2-ex.o platform.o acpi_init.o dma.o \
-+obj-$(CONFIG_MACH_LOONGSON64) += cop2-ex.o platform.o dma.o \
- 				setup.o init.o env.o time.o reset.o \
- 
- obj-$(CONFIG_SMP)	+= smp.o
-diff --git a/arch/mips/loongson64/pci.c b/arch/mips/loongson64/pci.c
-index e84ae20c3290..a440a2725a20 100644
---- a/arch/mips/loongson64/pci.c
-+++ b/arch/mips/loongson64/pci.c
-@@ -43,8 +43,6 @@ static int __init pcibios_init(void)
- 
- 	register_pci_controller(&loongson_pci_controller);
- 
--	sbx00_acpi_init();
--
- 	return 0;
- }
- 
-diff --git a/drivers/platform/mips/Kconfig b/drivers/platform/mips/Kconfig
-index 5e77b0dc5fd6..8ac149173c64 100644
---- a/drivers/platform/mips/Kconfig
-+++ b/drivers/platform/mips/Kconfig
-@@ -24,4 +24,10 @@ config CPU_HWMON
- 	help
- 	  Loongson-3A/3B CPU Hwmon (temperature sensor) driver.
- 
-+config RS780E_ACPI
-+	bool "Loongson RS780E ACPI Controller"
-+	depends on MACH_LOONGSON64 || COMPILE_TEST
-+	help
-+	  Loongson RS780E PCH ACPI Controller driver.
+diff --git a/Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml b/Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml
+new file mode 100644
+index 000000000000..d317897e1115
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mips/loongson/rs780e-acpi.yaml
+@@ -0,0 +1,40 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/mips/loongson/rs780e-acpi.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
- endif # MIPS_PLATFORM_DEVICES
-diff --git a/drivers/platform/mips/Makefile b/drivers/platform/mips/Makefile
-index be8146c20dc8..178149098777 100644
---- a/drivers/platform/mips/Makefile
-+++ b/drivers/platform/mips/Makefile
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_CPU_HWMON) += cpu_hwmon.o
-+obj-$(CONFIG_RS780E_ACPI) += rs780e-acpi.o
-diff --git a/arch/mips/loongson64/acpi_init.c b/drivers/platform/mips/rs780e-acpi.c
-similarity index 70%
-rename from arch/mips/loongson64/acpi_init.c
-rename to drivers/platform/mips/rs780e-acpi.c
-index 8d7c119ddf91..e5a643b78ac9 100644
---- a/arch/mips/loongson64/acpi_init.c
-+++ b/drivers/platform/mips/rs780e-acpi.c
-@@ -3,32 +3,23 @@
- #include <linux/init.h>
- #include <linux/ioport.h>
- #include <linux/export.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
- 
--#define SBX00_ACPI_IO_BASE 0x800
--#define SBX00_ACPI_IO_SIZE 0x100
-+static unsigned long acpi_iobase;
- 
--#define ACPI_PM_EVT_BLK         (SBX00_ACPI_IO_BASE + 0x00) /* 4 bytes */
--#define ACPI_PM_CNT_BLK         (SBX00_ACPI_IO_BASE + 0x04) /* 2 bytes */
--#define ACPI_PMA_CNT_BLK        (SBX00_ACPI_IO_BASE + 0x0F) /* 1 byte */
--#define ACPI_PM_TMR_BLK         (SBX00_ACPI_IO_BASE + 0x18) /* 4 bytes */
--#define ACPI_GPE0_BLK           (SBX00_ACPI_IO_BASE + 0x10) /* 8 bytes */
--#define ACPI_END                (SBX00_ACPI_IO_BASE + 0x80)
-+#define ACPI_PM_EVT_BLK         (acpi_iobase + 0x00) /* 4 bytes */
-+#define ACPI_PM_CNT_BLK         (acpi_iobase + 0x04) /* 2 bytes */
-+#define ACPI_PMA_CNT_BLK        (acpi_iobase + 0x0F) /* 1 byte */
-+#define ACPI_PM_TMR_BLK         (acpi_iobase + 0x18) /* 4 bytes */
-+#define ACPI_GPE0_BLK           (acpi_iobase + 0x10) /* 8 bytes */
-+#define ACPI_END                (acpi_iobase + 0x80)
- 
- #define PM_INDEX        0xCD6
- #define PM_DATA         0xCD7
- #define PM2_INDEX       0xCD0
- #define PM2_DATA        0xCD1
- 
--/*
-- * SCI interrupt need acpi space, allocate here
-- */
--
--static int __init register_acpi_resource(void)
--{
--	request_region(SBX00_ACPI_IO_BASE, SBX00_ACPI_IO_SIZE, "acpi");
--	return 0;
--}
--
- static void pmio_write_index(u16 index, u8 reg, u8 value)
- {
- 	outb(reg, index);
-@@ -141,11 +132,38 @@ void acpi_registers_setup(void)
- 	pm2_iowrite(0xf8, value);
- }
- 
--int __init sbx00_acpi_init(void)
-+static int rs780e_acpi_probe(struct platform_device *pdev)
- {
--	register_acpi_resource();
-+	struct resource *res;
++title: Loongson RS780E PCH ACPI Controller
 +
-+	res = platform_get_resource(pdev, IORESOURCE_IO, 0);
-+	if (!res)
-+		return -ENODEV;
++maintainers:
++  - Jiaxun Yang <jiaxun.yang@flygoat.com>
 +
-+	/* SCI interrupt need acpi space, allocate here */
-+	if (!request_region(res->start, resource_size(res), "acpi")) {
-+		pr_err("RS780E-ACPI: Failed to request IO Region\n");
-+		return -EBUSY;
-+	}
++description: |
++  This controller can be found in Loongson-3 systems with RS780E PCH.
 +
-+	acpi_iobase = res->start;
++properties:
++  compatible:
++    const: loongson,rs780e-acpi
 +
- 	acpi_registers_setup();
- 	acpi_hw_clear_status();
- 
- 	return 0;
- }
++  reg:
++    maxItems: 1
 +
-+static const struct of_device_id rs780e_acpi_match[] = {
-+	{ .compatible = "loongson,rs780e-acpi" },
-+	{},
-+};
++required:
++  - compatible
++  - reg
 +
-+static struct platform_driver rs780e_acpi_driver = {
-+	.probe = rs780e_acpi_probe,
-+	.driver = {
-+		.name = "RS780E-ACPI",
-+		.of_match_table = rs780e_acpi_match,
-+	},
-+};
-+builtin_platform_driver(rs780e_acpi_driver);
++examples:
++  - |
++    isa@0 {
++      compatible = "isa";
++      #address-cells = <2>;
++      #size-cells = <1>;
++      ranges = <1 0 0 0x1000>;
++
++      acpi@800 {
++        compatible = "loongson,rs780e-acpi";
++        reg = <1 0x800 0x100>;
++      };
++    };
++
++...
 -- 
 2.26.0.rc2
 
