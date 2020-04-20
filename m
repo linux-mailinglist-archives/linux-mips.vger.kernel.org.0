@@ -2,100 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AF31B05CF
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 11:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1CF1B05E0
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 11:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725886AbgDTJiw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Apr 2020 05:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S1725896AbgDTJpD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Apr 2020 05:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725773AbgDTJiw (ORCPT
+        by vger.kernel.org with ESMTP id S1725773AbgDTJpD (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 20 Apr 2020 05:38:52 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B0CC061A0C
-        for <linux-mips@vger.kernel.org>; Mon, 20 Apr 2020 02:38:52 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id x23so7365095lfq.1
-        for <linux-mips@vger.kernel.org>; Mon, 20 Apr 2020 02:38:51 -0700 (PDT)
+        Mon, 20 Apr 2020 05:45:03 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73168C061A0C;
+        Mon, 20 Apr 2020 02:45:03 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id w3so3754106plz.5;
+        Mon, 20 Apr 2020 02:45:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fC7yVlTF2dg5BszQAz4tJyESdZOBEbxLy1Uamcwth88=;
-        b=OAEQdus/uuBcOAthS3TtEvK7zG9rY3C+I5VwReBIuCwv2zXqb1cD/5zjsXepByhQ3d
-         UCcSueB286izGvk8BO7rr9Ggr2ajra4ogReJw0OeO7mmEf53K6IN+l29NJctj5COEcqE
-         Yo712wSYLvrq55NXzfSdoszUSYGWltWW6hWzCt7QO9VmVwiOPzXtyaALTMTax3Ux7Kof
-         xsui/qk+6y3PSgsPE1KkTyT8kB24U3cIto2jpiK1aLt4hPxa4HXdf0dL80rMMYTVKesS
-         biXxkI/wUmKgYpuV9t/yrDaBqiYDYnUyCFM+ehbd9gM9QIiTcspvH+6s7YrVkaGr8cTl
-         CvIQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=F+XcpZEsWmJmu2jfdAwkWGI+jCZB3DGbfi1Ga2IHxyw=;
+        b=qk9faXpZk6XzibVEOfRwfbql5CkYatmcsjpMfy17YSRMgeX3bsV3d2wgOfAfpn0qaO
+         +WBgB26ZaTXwc/7dURZ/bzbWGQWG5fhoiOIek0NChA7C7S1Kfj3LtRywiYIRlGUhJgQc
+         mlq2GgSqxDURI2sRh9xoWJHJwCZGtpUFDEfULO071x4l3IHQFRO6ecthNnD/kJppcVh2
+         4c5famVIPqEKQPz+nzL2hWZ2Q2ajrLwfKTL48d4E8fjD1I8XMjvSDL7UaTJqNTLG2AfE
+         8BHx5wlo3NsAKjGOLwBYq6QVC3nLlh2qSUXkKQ8jhDHViItBU2Zgj0c9adzu8r7HE1lO
+         L1Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fC7yVlTF2dg5BszQAz4tJyESdZOBEbxLy1Uamcwth88=;
-        b=by+YcuQqDQQ7nazxsbEyxZiev9E1gKeQyg2FpaUI7v9pLRr9eewQvz9wFy4elm7Hma
-         c4k5wtZ8Ko603J/XEyhpxBwrGQJQTBbmF0E1e6DlhFz1wPxeb1Hhl4dAhqldy4PrUd8L
-         dFKwPrtLXdaW0qCvtiCKvHJilw1f9CbYLID0MtVnQyVe/GwGe/tvBNhlQTSuz35JAUYm
-         CTzdNw2C1Yd8myyWz5KPsXwYNcSbpuEIyIWz/zn1vP29u+r20SCk2umQzWUF9wW9qcBF
-         vKNZ7AXQ8GE/l6cV5LwkRGN7uzDZZ6w46EBUO+BMTpPxl0/V4DJzPaggu8CUrbQG92Ee
-         Tmqw==
-X-Gm-Message-State: AGi0PubgbjxERTWIKMiVrKuYLFU3vgvMb6eJlu79WqPzBzvN9tnqunzF
-        EKTOpx8CpXLLHMpwN3Y4vT87ae4Fx2BjNg==
-X-Google-Smtp-Source: APiQypKznq9XrVI9hd+h/IzXvVE/uV6VvohF+/6F5gk7jvKwnPWCKyu2uLVFoOANvhPhLC1K8XldMg==
-X-Received: by 2002:a19:1c3:: with SMTP id 186mr9964767lfb.191.1587375530442;
-        Mon, 20 Apr 2020 02:38:50 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:25e:8f26:1014:e519:2b4e:4734? ([2a00:1fa0:25e:8f26:1014:e519:2b4e:4734])
-        by smtp.gmail.com with ESMTPSA id w24sm320690lfe.58.2020.04.20.02.38.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Apr 2020 02:38:49 -0700 (PDT)
-Subject: Re: [PATCH v4 1/5] PCI: OF: Don't remap iospace on unsupported
- platform
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Andrew Murray <amurray@thegoodpenguin.co.uk>,
-        Paul Burton <paulburton@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200330114239.1112759-1-jiaxun.yang@flygoat.com>
- <20200420071220.155357-1-jiaxun.yang@flygoat.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <d8f444bf-71a5-add6-2a2c-7807a397e8b7@cogentembedded.com>
-Date:   Mon, 20 Apr 2020 12:38:43 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F+XcpZEsWmJmu2jfdAwkWGI+jCZB3DGbfi1Ga2IHxyw=;
+        b=XtyQ/fXK0XcCFqssiowZg46seiZtZqZA+iipySfvy1ZE0SvG2k3s6eXSeyOF90/AYf
+         /d4sOJ/7tNGkszmqkgqeNqx4x47iFwn3CZm4X/owqHDziMtX2Y0vCBdOvDYJgALtIpZS
+         XVmJgS9M7rGKAL/EDPV9D1fUpnolshhFfKVNcnSk95BU2Gx2pmeuZGQC5L3DQPjIHmut
+         O3FoN22uQzs0yQJw6tw4OA+p/emqxCIpIgr930df6ssU6i83L07mHOPZDCMKjZa6SXmd
+         Kf4qZg+p9GQM4+vTUn/HEI3t7wyQZ4hdgoFBCcia9gAS3bW6AZU4OK4mgZVgt6l6QI1Z
+         UkKQ==
+X-Gm-Message-State: AGi0PuYqiuWKeJ1rA7R65Rdnu6A7KdNat9JXRxEuX6UuOTaaibg4dC75
+        mRSGhqLVNvbrIXBwyF3egdBLxSqCXfA/j9fPIK0dQTZYoWmTAQ==
+X-Google-Smtp-Source: APiQypKR5OqIb6o/nxyC3oiRNXPMjBFOmxp17fC3wElumd+N26CQvbwy/RWCvQ4QNO5kpA2YngvLzkAWC7YTfQznbM8=
+X-Received: by 2002:a17:902:9306:: with SMTP id bc6mr15802376plb.255.1587375902969;
+ Mon, 20 Apr 2020 02:45:02 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200420071220.155357-1-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200417082147.43384-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200417082147.43384-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200418105533.477ce529@collabora.com> <20200419222040.GJ185537@smile.fi.intel.com>
+ <20200420111754.5863324b@collabora.com>
+In-Reply-To: <20200420111754.5863324b@collabora.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 20 Apr 2020 12:44:51 +0300
+Message-ID: <CAHp75VeOH+DC362tsEo13gr9fJpeCHXok=7O19B3njbxCOzd2A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] mtd: rawnand: Add NAND controller support on Intel
+ LGM SoC
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:MEMORY TECHNOLOGY..." <linux-mtd@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh R <vigneshr@ti.com>, Arnd Bergmann <arnd@arndb.de>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        masonccyang@mxic.com.tw, piotrs@cadence.com,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        "hauke.mehrtens" <hauke.mehrtens@intel.com>, qi-ming.wu@intel.com,
+        cheol.yong.kim@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+On Mon, Apr 20, 2020 at 12:21 PM Boris Brezillon
+<boris.brezillon@collabora.com> wrote:
+> On Mon, 20 Apr 2020 01:20:40 +0300
+> Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
+> > On Sat, Apr 18, 2020 at 10:55:33AM +0200, Boris Brezillon wrote:
+> > > On Fri, 17 Apr 2020 16:21:47 +0800
+> > > "Ramuthevar,Vadivel MuruganX"
+> > > <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
+> > >
+> > > > From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> >
+> > > > +static const struct of_device_id lgm_nand_match[] = {
+> > > > + { .compatible = "intel,lgm-nand", },
+> > > > + {}
+> > > > +};
+> > > > +MODULE_DEVICE_TABLE(of, lgm_nand_match);
+> > >
+> > > You probably have a missing "depends on OF" in your Kconfig.
+> >
+> > Since it's using device property API, dependency is not needed.
+> >
+>
+> There's no compile-time dependency, but this driver will be pretty
+> useless if all its users have the NAND controller node defined in their
+> DT and CONFIG_OF is not enabled.
 
-On 20.04.2020 10:12, Jiaxun Yang wrote:
+No, it's not.
+See [1] for the details how ACPI may utilize this table.
 
-> There are some platforms don't support iospace remapping
-                           ^ that         ^^^^^^^ I/O space?
+[1]: https://www.kernel.org/doc/html/latest/firmware-guide/acpi/enumeration.html#device-tree-namespace-link-device-id
 
-> like MIPS. However, our PCI code will try to remap iospace
-> unconditionally and reject io resources on these platforms.
-> 
-> So we should remove iospace remapping check and use a range
+> I guess the OF option is selected by
+> arches, so explicitly depending on OF is only relevant if you change
+> the dependency rules as suggested in my other reply.
 
-    I/O space, maybe?
-
-> check instead on these platforms.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> --
-> v4: Fix a typo in commit message.
-[...]
-
-MBR, Sergei
+-- 
+With Best Regards,
+Andy Shevchenko
