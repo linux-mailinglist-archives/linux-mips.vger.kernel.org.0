@@ -2,74 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A490A1B178A
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 22:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBAD91B17D5
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 23:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726294AbgDTUua (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Apr 2020 16:50:30 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:39393 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725774AbgDTUua (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Apr 2020 16:50:30 -0400
-Received: by mail-oi1-f195.google.com with SMTP id 8so10092883oiy.6;
-        Mon, 20 Apr 2020 13:50:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=16FdVz3ITgqDjrOoSIkC294zmw/OenEAYTOhX7zYSIE=;
-        b=k2gn5tyEomzdbIk7/DgP1rWv5lhdakmYFQ7hfEwBMRXvvPc3ASBNtW57RcyouHqwwU
-         pMj27tIkRizXsSdU+H/cxID66v5I/a6Hz/96hfySfnT1hHy4m2wy2vFLnydNpMy7D3Ak
-         QMHQPEAwYKG5W5bdcVtpvHtenW8q5jIUAQQrG9NjM1EYbLF82P2AWF3IHheyiLc+1vNr
-         yunj90f9Kv/VI9x/a2YYwxTlGuSKo5nPQ3iytmjD11+rkYuotRUE6r0peTBRWPKAzybH
-         BmgK13QCAfaSXB0Tv5IrThHcRbR50gwS8X4wyWt3shttlvEsI2E6O8RbpjKsxIeZFHPY
-         YjcA==
-X-Gm-Message-State: AGi0PuYq0FuiEOii4EqKoQsbeGoVWj5CFEA3e2fhFwOeJZovMUP7Vlpl
-        2+kI1XNJjn0IOZ+SHKeAHYeFrM0=
-X-Google-Smtp-Source: APiQypJFaeZEeMs4FtaOugyToTSTEWk5RpbXAVgTwIHK1j3/5ttMAiknvkNdToyEQUG7YDPu3Ev9kw==
-X-Received: by 2002:aca:682:: with SMTP id 124mr947033oig.69.1587415829210;
-        Mon, 20 Apr 2020 13:50:29 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id s69sm205374otb.4.2020.04.20.13.50.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2020 13:50:28 -0700 (PDT)
-Received: (nullmailer pid 6716 invoked by uid 1000);
-        Mon, 20 Apr 2020 20:50:27 -0000
-Date:   Mon, 20 Apr 2020 15:50:27 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>, od@zcrc.me,
-        =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 05/13] dt-bindings: MIPS: Require SoC compatible string
- after board string
-Message-ID: <20200420205027.GA6613@bogus>
-References: <20200413152633.198301-1-paul@crapouillou.net>
- <20200413152633.198301-5-paul@crapouillou.net>
+        id S1726487AbgDTVAN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Apr 2020 17:00:13 -0400
+Received: from mx2.suse.de ([195.135.220.15]:50632 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725897AbgDTVAN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 20 Apr 2020 17:00:13 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id CAA6FAC7F;
+        Mon, 20 Apr 2020 21:00:09 +0000 (UTC)
+Date:   Mon, 20 Apr 2020 13:56:41 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     tglx@linutronix.de, pbonzini@redhat.com, kvm@vger.kernel.org,
+        Davidlohr Bueso <dbueso@suse.de>, peterz@infradead.org,
+        torvalds@linux-foundation.org, bigeasy@linutronix.de,
+        linux-kernel@vger.kernel.org, rostedt@goodmis.org,
+        linux-mips@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>,
+        joel@joelfernandes.org, will@kernel.org,
+        kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v2] kvm: Replace vcpu->swait with rcuwait
+Message-ID: <20200420205641.6sgsllj6pmsnwrvp@linux-p48b>
+References: <20200324044453.15733-1-dave@stgolabs.net>
+ <20200324044453.15733-4-dave@stgolabs.net>
+ <20200420164132.tjzk5ebx35m66yce@linux-p48b>
+ <418acdb5001a9ae836095b7187338085@misterjones.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20200413152633.198301-5-paul@crapouillou.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <418acdb5001a9ae836095b7187338085@misterjones.org>
+User-Agent: NeoMutt/20180716
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 13 Apr 2020 17:26:25 +0200, Paul Cercueil wrote:
-> All devicetree board files list a compatible string for the SoC after
-> the compatible string of the board.
-> 
-> Enhance the YAML format so that these SoC compatible strings appear
-> aside each supported Ingenic board.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  Documentation/devicetree/bindings/mips/ingenic/devices.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+On Mon, 20 Apr 2020, Marc Zyngier wrote:
 
-Applied, thanks.
+>This looks like a change in the semantics of the tracepoint. Before this
+>change, 'waited' would have been true if the vcpu waited at all. Here, 
+>you'd
+>have false if it has been interrupted by a signal, even if the vcpu 
+>has waited
+>for a period of time.
 
-Rob
+Hmm but sleeps are now uninterruptible as we're using TASK_IDLE.
+
+Thanks,
+Davidlohr
