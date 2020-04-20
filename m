@@ -2,87 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F781B05B3
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 11:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85AF31B05CF
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 11:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbgDTJcP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Apr 2020 05:32:15 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17866 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725775AbgDTJcO (ORCPT
+        id S1725886AbgDTJiw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Apr 2020 05:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725773AbgDTJiw (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 20 Apr 2020 05:32:14 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1587375114; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=WwfkyFbcuXnFIazV/b/xCYn+RCxqzjkdrFPhj3trVx5QZLQfTgIgehU2EAdRQB2gRJtkjvd7XQwfF/8r6ihwtE2/hZvTYetzdENWO9MJzHubTiCdy/DfKvQw3AGJfKAWZPEQtUBs2n/kVFHkhnk77z47NbR6z4+4Z774zv304F4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1587375114; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
-        bh=YWokOhjuoZJKbniCXhiZb2T0HCc4vugSkhCjBeD1p6M=; 
-        b=XlKsNGl86xQB1J1JLN3M564gAhsNgoPRi1BEAoKrYjjiSp8TyEZ8rkT6dL1GgQ2+W58ZQWPGZWkXkLqjkbtwp0b4lYk6jB19vaOcUtaDixkUIxSgQu76J5OgqS5EwsftgSHGbP9cZsFqpEJnBpqbO4J0NW75i5HDoOaEsk3njVo=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=flygoat.com;
-        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
-        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1587375114;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:From:To:CC:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=YWokOhjuoZJKbniCXhiZb2T0HCc4vugSkhCjBeD1p6M=;
-        b=d+DuWXGMpg3iToKjczmPbUL5Q9L9a+f4ZfNK/k3pD27VNs1Arucf5MNzFzbVujal
-        k65yj4QlWG0kcIJNqYMeitByF5QOHF/5ZZkRigkxYI1AHik6SiMZ7zExzn0eGqXUb5p
-        9Y0dnk23KN2c8leB2DacSCLO5wFCSwRx3IiSLp1I=
-Received: from [127.0.0.1] (115.205.241.167 [115.205.241.167]) by mx.zoho.com.cn
-        with SMTPS id 1587375111104526.5026860230735; Mon, 20 Apr 2020 17:31:51 +0800 (CST)
-Date:   Mon, 20 Apr 2020 17:31:49 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Huacai Chen <chenhc@lemote.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 0/5] Loongson64: RS780E clean-ups
-User-Agent: K-9 Mail for Android
-Reply-to: jiaxun.yang@flygoat.com
-In-Reply-To: <20200420090726.GA9388@alpha.franken.de>
-References: <20200420073347.157230-1-jiaxun.yang@flygoat.com> <20200420090726.GA9388@alpha.franken.de>
-Message-ID: <3C79E5D5-594D-4139-88CE-050BBD9C6D88@flygoat.com>
+        Mon, 20 Apr 2020 05:38:52 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B0CC061A0C
+        for <linux-mips@vger.kernel.org>; Mon, 20 Apr 2020 02:38:52 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id x23so7365095lfq.1
+        for <linux-mips@vger.kernel.org>; Mon, 20 Apr 2020 02:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fC7yVlTF2dg5BszQAz4tJyESdZOBEbxLy1Uamcwth88=;
+        b=OAEQdus/uuBcOAthS3TtEvK7zG9rY3C+I5VwReBIuCwv2zXqb1cD/5zjsXepByhQ3d
+         UCcSueB286izGvk8BO7rr9Ggr2ajra4ogReJw0OeO7mmEf53K6IN+l29NJctj5COEcqE
+         Yo712wSYLvrq55NXzfSdoszUSYGWltWW6hWzCt7QO9VmVwiOPzXtyaALTMTax3Ux7Kof
+         xsui/qk+6y3PSgsPE1KkTyT8kB24U3cIto2jpiK1aLt4hPxa4HXdf0dL80rMMYTVKesS
+         biXxkI/wUmKgYpuV9t/yrDaBqiYDYnUyCFM+ehbd9gM9QIiTcspvH+6s7YrVkaGr8cTl
+         CvIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fC7yVlTF2dg5BszQAz4tJyESdZOBEbxLy1Uamcwth88=;
+        b=by+YcuQqDQQ7nazxsbEyxZiev9E1gKeQyg2FpaUI7v9pLRr9eewQvz9wFy4elm7Hma
+         c4k5wtZ8Ko603J/XEyhpxBwrGQJQTBbmF0E1e6DlhFz1wPxeb1Hhl4dAhqldy4PrUd8L
+         dFKwPrtLXdaW0qCvtiCKvHJilw1f9CbYLID0MtVnQyVe/GwGe/tvBNhlQTSuz35JAUYm
+         CTzdNw2C1Yd8myyWz5KPsXwYNcSbpuEIyIWz/zn1vP29u+r20SCk2umQzWUF9wW9qcBF
+         vKNZ7AXQ8GE/l6cV5LwkRGN7uzDZZ6w46EBUO+BMTpPxl0/V4DJzPaggu8CUrbQG92Ee
+         Tmqw==
+X-Gm-Message-State: AGi0PubgbjxERTWIKMiVrKuYLFU3vgvMb6eJlu79WqPzBzvN9tnqunzF
+        EKTOpx8CpXLLHMpwN3Y4vT87ae4Fx2BjNg==
+X-Google-Smtp-Source: APiQypKznq9XrVI9hd+h/IzXvVE/uV6VvohF+/6F5gk7jvKwnPWCKyu2uLVFoOANvhPhLC1K8XldMg==
+X-Received: by 2002:a19:1c3:: with SMTP id 186mr9964767lfb.191.1587375530442;
+        Mon, 20 Apr 2020 02:38:50 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:25e:8f26:1014:e519:2b4e:4734? ([2a00:1fa0:25e:8f26:1014:e519:2b4e:4734])
+        by smtp.gmail.com with ESMTPSA id w24sm320690lfe.58.2020.04.20.02.38.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Apr 2020 02:38:49 -0700 (PDT)
+Subject: Re: [PATCH v4 1/5] PCI: OF: Don't remap iospace on unsupported
+ platform
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Andrew Murray <amurray@thegoodpenguin.co.uk>,
+        Paul Burton <paulburton@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200330114239.1112759-1-jiaxun.yang@flygoat.com>
+ <20200420071220.155357-1-jiaxun.yang@flygoat.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <d8f444bf-71a5-add6-2a2c-7807a397e8b7@cogentembedded.com>
+Date:   Mon, 20 Apr 2020 12:38:43 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoCNMailClient: External
+In-Reply-To: <20200420071220.155357-1-jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hello!
 
+On 20.04.2020 10:12, Jiaxun Yang wrote:
 
-=E4=BA=8E 2020=E5=B9=B44=E6=9C=8820=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=885=
-:07:26, Thomas Bogendoerfer <tsbogend@alpha=2Efranken=2Ede> =E5=86=99=E5=88=
-=B0:
->On Mon, Apr 20, 2020 at 03:33:35PM +0800, Jiaxun Yang wrote:
->> Basically ensure all RS780E stuff is enabled by DeviceTree=2E
->> So I can post LS7A support later on=2E
->>=20
->> Hi Thomas, could you please pick them into MIPS tree?
->
->well, first patch doesn't apply, because it relies on your PCI patch
->series=2E I've fixed this while applying and then faced
->
->arch/mips/loongson64/pci=2Eo: In function `pcibios_init':
->pci=2Ec:(=2Einit=2Etext+0x44): undefined reference to `sbx00_acpi_init'
->
->IMHO there is something to improve=2E=2E=2E
+> There are some platforms don't support iospace remapping
+                           ^ that         ^^^^^^^ I/O space?
 
-Oops, sorry=2E
-It should depends on PCI series=2E
+> like MIPS. However, our PCI code will try to remap iospace
+> unconditionally and reject io resources on these platforms.
+> 
+> So we should remove iospace remapping check and use a range
 
-I'll send v2 without this requirement soon=2E
+    I/O space, maybe?
 
-Thanks=2E
+> check instead on these platforms.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> --
+> v4: Fix a typo in commit message.
+[...]
 
->
->Thomas=2E
->
-
---=20
-Jiaxun Yang
+MBR, Sergei
