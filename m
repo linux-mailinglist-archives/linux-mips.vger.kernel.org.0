@@ -2,31 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A2A1B0D26
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 15:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AEB1B0D2B
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Apr 2020 15:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728583AbgDTNqs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Apr 2020 09:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726845AbgDTNqs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 20 Apr 2020 09:46:48 -0400
-Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [IPv6:2001:19f0:6001:3633:5400:2ff:fe8c:553])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E863CC061A0C;
-        Mon, 20 Apr 2020 06:46:47 -0700 (PDT)
+        id S1728252AbgDTNq5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Apr 2020 09:46:57 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:59124 "EHLO
+        vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728633AbgDTNq4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Apr 2020 09:46:56 -0400
 Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 550A420CDB;
-        Mon, 20 Apr 2020 13:46:46 +0000 (UTC)
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id DAEAF20CDC;
+        Mon, 20 Apr 2020 13:46:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1587390407; bh=e4TY+GCk2Ucsw3BDFnVc289FhHp/EOQdRohUPJEc2V8=;
+        t=1587390416; bh=nCAhVn2ma9z8r8dWxnzAROBI/Q4gJteYeVtwI1Vc6vc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wOR1An62VbncU0CYW2EAw5uFVILzJ6aK7EWmFNrlxIt7UpuJ0zyJgKQb/u+1ZpXFM
-         b7aktSdXpjWh1rIoZQN36L7XIyvn4KSnoCm3scMkYMETVysA965VfcdByYQy4RgPPd
-         Zi7oGcJ1QHhkkbosMZyH0Cdr+BfQI2tePms878XWiTYEdOa5lzUYXp58Pq9xUzkLdL
-         /TDxdOThySpGXqV3MNJCK8BYiCc+DS8GkCHIfOraRUD++s/WAyCxazH3pJCCkRyaEx
-         KsafmJcxCEfNdPsY/+UKSx8U8wukUc0I7kpOVRE4PXpBi4KSDiWUNS0b2TUpTm/XX9
-         CpN8ONb3t2VXw==
+        b=BJxFOh2EDvaxPBm7aU2KZJuJeqI+XsTgBv/gsCc24ctcMiVi3FDtCN8+ZiuPF3o54
+         OLGjhjRgCy5aDMABnqp1+wnfKr2g7Twn9kSeQPouMHGDxnHczqCIIjaWfDUU7ox8fZ
+         G2uuhVlRCFHjmQj6L7uKOwOu31JfKtOcnumBc90nD0lizLRx9CwzwN4/JCSY84WKIr
+         jzbqjoTzNQTKGsjU3MjoryhL5zSbPSIeXzVJm7nvXyX84mk165dAGm6bbOc63G5Wv2
+         AQWWUAh/BJrAIfwZc+t1peCbw76rtfC1HSiWYLYPE5Pyy4zjFQ9TnH239uPdOs1Z/4
+         roF8KwAjL1wlQ==
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
@@ -34,9 +30,9 @@ Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Huacai Chen <chenhc@lemote.com>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/5] MIPS: DTS: Loongson64: Add ACPI Controller Node
-Date:   Mon, 20 Apr 2020 21:45:28 +0800
-Message-Id: <20200420134536.210475-4-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 5/5] MIPS: Loongson64: Mark RS780 HPET as broken
+Date:   Mon, 20 Apr 2020 21:45:29 +0800
+Message-Id: <20200420134536.210475-5-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.26.0.rc2
 In-Reply-To: <20200420134536.210475-1-jiaxun.yang@flygoat.com>
 References: <20200420073347.157230-1-jiaxun.yang@flygoat.com>
@@ -48,29 +44,41 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add ACPI Controller Node for RS780E PCH to fit newly added driver.
+This driver is using some dangerous hack to set MMIO address for HPET,
+which might break systems with other kinds of PCH.
+
+Also, as Loongson-3 cpufreq driver never appeared in mainline,
+this driver rarely got used.
+
+So we temporarily mark it as broken until we find a better solution.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/boot/dts/loongson/rs780e-pch.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/mips/loongson64/Kconfig | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/arch/mips/boot/dts/loongson/rs780e-pch.dtsi b/arch/mips/boot/dts/loongson/rs780e-pch.dtsi
-index 45c54d555fa4..8687c4f7370a 100644
---- a/arch/mips/boot/dts/loongson/rs780e-pch.dtsi
-+++ b/arch/mips/boot/dts/loongson/rs780e-pch.dtsi
-@@ -21,6 +21,11 @@ rtc0: rtc@70 {
- 				interrupts = <8>;
- 				interrupt-parent = <&htpic>;
- 			};
-+
-+			acpi@800 {
-+				compatible = "loongson,rs780e-acpi";
-+				reg = <1 0x800 0x100>;
-+			};
- 		};
- 	};
- };
+diff --git a/arch/mips/loongson64/Kconfig b/arch/mips/loongson64/Kconfig
+index c386b8a3c753..517f1f8e81fb 100644
+--- a/arch/mips/loongson64/Kconfig
++++ b/arch/mips/loongson64/Kconfig
+@@ -4,14 +4,12 @@ if MACH_LOONGSON64
+ config RS780_HPET
+ 	bool "RS780/SBX00 HPET Timer"
+ 	depends on MACH_LOONGSON64
++	depends on BROKEN
+ 	select MIPS_EXTERNAL_TIMER
+ 	help
+ 	  This option enables the hpet timer of AMD RS780/SBX00.
+ 
+-	  If you want to enable the Loongson3 CPUFreq Driver, Please enable
+-	  this option at first, otherwise, You will get wrong system time.
+-
+-	  If unsure, say Yes.
+-
++	  Note: This driver is doing some dangerous hack. Please only enable
++	  it on RS780E systems.
+ 
+ endif # MACH_LOONGSON64
 -- 
 2.26.0.rc2
 
