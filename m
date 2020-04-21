@@ -2,176 +2,211 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1351B24B4
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2020 13:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6EC1B24F0
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2020 13:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726120AbgDULNd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Apr 2020 07:13:33 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:55664 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726018AbgDULNd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 21 Apr 2020 07:13:33 -0400
-Received: from [10.130.0.79] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT2lO1Z5erYUqAA--.59S3;
-        Tue, 21 Apr 2020 19:13:20 +0800 (CST)
-Subject: Re: [PATCH 3/3] MIPS: Reduce possibility of kernel panic under
- CONFIG_SWIOTLB
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <1587459869-12183-1-git-send-email-yangtiezhu@loongson.cn>
- <1587459869-12183-4-git-send-email-yangtiezhu@loongson.cn>
- <20200421173525.460949b0@flygoat-x1e>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Juxin Gao <gaojuxin@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <cde19f52-1c13-63f6-8a92-26011d70069c@loongson.cn>
-Date:   Tue, 21 Apr 2020 19:13:18 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1728602AbgDULVl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Apr 2020 07:21:41 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:37621 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728519AbgDULVh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 21 Apr 2020 07:21:37 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id BAF3D58033F;
+        Tue, 21 Apr 2020 07:21:35 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 21 Apr 2020 07:21:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=2qvNJ91IEb/AUiTXH8N0o6OegdF
+        zI2xnwcLyFKBhmMg=; b=DNBSndQeBovAjuo60LXetRogX5AaJdhObX1sjwe4xcf
+        CMMKX9QJTfF3+rlM36/XMBdZdLJXp1icf6pZtviVuNalueXOigbtH1QTRtnfsPtZ
+        TVanzwcq2ykxH3BuowaZjElynooJjih7PGmbX1G9kYfeYGWuzIgsbBIHIYNi1+Y0
+        qCjUhMSoau/3xr1yvYpU/Z3L+8mmxso/ek/ZXyer0tJEUcLEfZgonb2zrTShaDHs
+        PhgJ9HkBexWIwEEfTZZ7g4BphUuRegIWwuSoCTIR8nTwkQAo/09Jg9+73e9ykzm0
+        Qke4n693CDezgFuysXUZueqrhHDh2GQWkqp/d3k9GZg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=2qvNJ9
+        1IEb/AUiTXH8N0o6OegdFzI2xnwcLyFKBhmMg=; b=IJl+L5/geetMjN0XJzV3I6
+        UmgXvOceReTexMcUdkNPZUUBWhzKBS0xqgmTKNzYFV3pD7V2bA+mZ6jggj+yubnE
+        OPexT32D4Ok+h2o3gryATORbu2W667LHIzIK+TkxYZxngRmnL8SOMVgNdWxei0pm
+        ICzB6Cm855XL/C4a+Hg8S2GrgtuPyqwG5b84k/fCS2ulC1U3Vm6nEJ0r/9gqt8r7
+        Ave1Zuu5XyKUaX/4y2mQmePO54LN9NEp8RBRclCmvuzWFMAiEkxl9DFYpE/cqKRW
+        yZaOK/zOseCiM/zs7u7U9pOztzOVoIzVpVsrwjsDcbZat7fL88C1oYrN6GEykR/Q
+        ==
+X-ME-Sender: <xms:PNeeXnX3SmQG_u6OQi__5pBgi3j-koafOIeW1WBPVRoeu6KFqHqblg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrgeehgdegtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucfkphepledtrd
+    ekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
+    fhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:PNeeXuEChcO2S-tZ7fJK0z9aQAzoj90uEOW7EOuqdXysmOZ60Ko7HQ>
+    <xmx:PNeeXu6ewiM2DHh0QSD66uXdfHCHIQZfx3bLwEuShb8Ny4Dl5-0Dqg>
+    <xmx:PNeeXscSi97OlRj2s-EX6uC6eUYe1bPw7EVnrbNk7R-Of5rCmeQ6GQ>
+    <xmx:P9eeXuB6eG0fsJ1kExaStSp_hhHi7Bo7rTJCux1YR72gUeDHVqxesw>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id EC25B328005D;
+        Tue, 21 Apr 2020 07:21:31 -0400 (EDT)
+Date:   Tue, 21 Apr 2020 13:21:29 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Philipp Rossak <embed3d@gmail.com>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        OpenPVRSGX Linux Driver Group <openpvrsgx-devgroup@letux.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
+        linux-mips@vger.kernel.org,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v6 00/12] ARM/MIPS: DTS: add child nodes describing the
+ PVRSGX GPU present in some OMAP SoC and JZ4780 (and many more)
+Message-ID: <20200421112129.zjmkmzo3aftksgka@gilmour.lan>
+References: <cover.1586939718.git.hns@goldelico.com>
+ <20200415101008.zxzxca2vlfsefpdv@gilmour.lan>
+ <2E3401F1-A106-4396-8FE6-51CAB72926A4@goldelico.com>
+ <20200415130233.rgn7xrtwqicptke2@gilmour.lan>
+ <C589D06E-435E-4316-AD0A-8498325039E3@goldelico.com>
+ <10969e64-fe1f-d692-4984-4ba916bd2161@gmail.com>
+ <20200420073842.nx4xb3zqvu23arkc@gilmour.lan>
+ <b5a06c19-7a3e-bcb8-5ae3-76901b9c6c35@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200421173525.460949b0@flygoat-x1e>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9DxT2lO1Z5erYUqAA--.59S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF1rGFWxuFyxZw4rZFWxCrg_yoWrJw4fpr
-        yUAa13KF4vqr97A3yxCwn5uFyak3s5Cry7G3ySvr45u3sxuwnxAF1vgr43urWxZr48Xa1I
-        va40vr1q9F43AaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Gr0_
-        Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb0D73
-        UUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="bsmwn6lsujflbhcr"
+Content-Disposition: inline
+In-Reply-To: <b5a06c19-7a3e-bcb8-5ae3-76901b9c6c35@gmail.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 04/21/2020 05:35 PM, Jiaxun Yang wrote:
-> On Tue, 21 Apr 2020 17:04:29 +0800
-> Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->
->> In the current code, if CONFIG_SWIOTLB is set, when failed to get IO
->> TLB memory from the low pages by plat_swiotlb_setup(), it may lead to
->> the boot process failed with kernel panic.
-> Hi Tiezhu,
->
-> Thanks for you patch.
->
-> Firstly, your commit message should be more straight forward. Please
-> describe what you have changed (e.g. MIPS: Set memblock bottom up)
-> instead of what you solved.
 
-HI Jiaxun,
+--bsmwn6lsujflbhcr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for your suggestion.
+Hi,
 
-I will send a v2 patch used with the following subject:
-"MIPS: Make sparse_init() using top-down allocation"
+On Tue, Apr 21, 2020 at 11:57:33AM +0200, Philipp Rossak wrote:
+> On 20.04.20 09:38, Maxime Ripard wrote:
+> > Hi,
+> >=20
+> > On Fri, Apr 17, 2020 at 02:09:06PM +0200, Philipp Rossak wrote:
+> > > > > I'm a bit skeptical on that one since it doesn't even list the
+> > > > > interrupts connected to the GPU that the binding mandates.
+> > > >=20
+> > > > I think he left it out for a future update.
+> > > > But best he comments himself.
+> > >=20
+> > > I'm currently working on those bindings. They are now 90% done, but t=
+hey are
+> > > not finished till now. Currently there is some mainline support missi=
+ng to
+> > > add the full binding. The A83T and also the A31/A31s have a GPU Power=
+ Off
+> > > Gating Register in the R_PRCM module, that is not supported right now=
+ in
+> > > Mainline. The Register need to be written when the GPU is powered on =
+and
+> > > off.
+> > >=20
+> > > @Maxime: I totally agree on your point that a demo needs to be provid=
+ed
+> > > before the related DTS patches should be provided. That's the reason =
+why I
+> > > added the gpu placeholder patches.
+> > > Do you have an idea how a driver for the R_PRCM stuff can look like? =
+I'm not
+> > > that experienced with the clock driver framework.
+> >=20
+> > It looks like a power-domain to me, so you'd rather plug that into the =
+genpd
+> > framework.
+>=20
+> I had a look on genpd and I'm not really sure if that fits.
+>=20
+> It is basically some bit that verify that the clocks should be enabled or
+> disabled.
 
->
->> (1) On the Loongson and SiByte platform
->> arch/mips/loongson64/dma.c
->> arch/mips/sibyte/common/dma.c
->> void __init plat_swiotlb_setup(void)
->> {
->> 	swiotlb_init(1);
->> }
->>
->> kernel/dma/swiotlb.c
->> void  __init
->> swiotlb_init(int verbose)
->> {
->> ...
->> 	vstart = memblock_alloc_low(PAGE_ALIGN(bytes), PAGE_SIZE);
->> 	if (vstart && !swiotlb_init_with_tbl(vstart, io_tlb_nslabs,
->> verbose)) return;
->> ...
->> 	pr_warn("Cannot allocate buffer");
->> 	no_iotlb_memory = true;
->> }
->>
->> phys_addr_t swiotlb_tbl_map_single()
->> {
->> ...
->> 	if (no_iotlb_memory)
->> 		panic("Can not allocate SWIOTLB buffer earlier ...");
->> ...
->> }
->>
->> (2) On the Cavium OCTEON platform
->> arch/mips/cavium-octeon/dma-octeon.c
->> void __init plat_swiotlb_setup(void)
->> {
->> ...
->> 	octeon_swiotlb = memblock_alloc_low(swiotlbsize, PAGE_SIZE);
->> 	if (!octeon_swiotlb)
->> 		panic("%s: Failed to allocate %zu bytes align=%lx\n",
->> 		      __func__, swiotlbsize, PAGE_SIZE);
->> ...
->> }
->>
->> Because IO_TLB_DEFAULT_SIZE is 64M, if the rest size of low memory is
->> less than 64M when call plat_swiotlb_setup(), we can easily reproduce
->> the panic case.
->>
->> In order to reduce the possibility of kernel panic when failed to get
->> IO TLB memory under CONFIG_SWIOTLB, it is better to allocate low
->> memory as small as possible before plat_swiotlb_setup(), so make
->> sparse_init() using top-down allocation.
-> AFAIK there are some reasons that we set it to bottom_up.
-> On some platforms, bootloader won't place cmdline & devicetree into
-> reserved memory but place them just after kernel in memory. That means
-> if you set it as bottom up, then early allocate memory might collide
-> with these boot arguments.
->
-> I'm not even sure if it works fine on Loongson with early PMON.
->
-> I had met that issue before, the solution for me is to reduce SWIOTLB
-> size.
->
->> Reported-by: Juxin Gao <gaojuxin@loongson.cn>
->> Co-developed-by: Juxin Gao <gaojuxin@loongson.cn>
->> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>   arch/mips/kernel/setup.c | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
->> index 5481a0c..8db533c 100644
->> --- a/arch/mips/kernel/setup.c
->> +++ b/arch/mips/kernel/setup.c
->> @@ -700,7 +700,17 @@ static void __init arch_mem_init(char
->> **cmdline_p) memblock_reserve(crashk_res.start,
->> resource_size(&crashk_res)); #endif
->>   	device_tree_init();
->> +
->> +	/*
->> +	 * In order to reduce the possibility of kernel panic when
->> failed to
->> +	 * get IO TLB memory under CONFIG_SWIOTLB, it is better to
->> allocate
->> +	 * low memory as small as possible before
->> plat_swiotlb_setup(), so
->> +	 * make sparse_init() using top-down allocation.
->> +	 */
->> +	memblock_set_bottom_up(false);
->>   	sparse_init();
->> +	memblock_set_bottom_up(true);
->> +
->>   	plat_swiotlb_setup();
->>   
->>   	dma_contiguous_reserve(PFN_PHYS(max_low_pfn));
-> --
-> Jiaxun Yang
+No, it can do much more than that. It's a framework to control the SoCs pow=
+er
+domains, so clocks might be a part of it, but most of the time it's going t=
+o be
+about powering up a particular device.
 
+> I think this is better placed somewhere in the clocking framework.
+> I see there more similarities to the gating stuff.
+> Do you think it is suitable to implement it like the clock gating?
+
+I'm really not sure what makes you think that this should be modelled as a
+clock?
+
+> > > The big question is right now how to proceed with the A83T and A31s p=
+atches.
+> > > I see there three options, which one do you prefer?:
+> > >=20
+> > > 1. Provide now placeholder patches and send new patches, if everythin=
+g is
+> > > clear and other things are mainlined
+> > > 2. Provide now patches as complete as possible and provide later patc=
+hes to
+> > > complete them when the R_PRCM things are mainlined
+> > > 3. Leave them out, till the related work is mainlined and the binding=
+s are
+> > > final.
+> >=20
+> > Like I said, the DT *has* to be backward-compatible, so for any DT patc=
+h that
+> > you are asking to be merged, you should be prepared to support it indef=
+initely
+> > and be able to run from it, and you won't be able to change the binding=
+s later
+> > on.
+>=20
+> I agree on your points. But is this also suitable to drivers that are
+> currently off tree and might be merged in one or two years?
+
+This is what we done for the Mali. The devicetree binding was first done fo=
+r the
+out-of-tree driver, and then lima/panfrost reused it.
+
+The key thing here is to have enough confidence about how the hardware work=
+s so
+that you can accurately describe it.
+
+Maxime
+
+--bsmwn6lsujflbhcr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXp7XOQAKCRDj7w1vZxhR
+xY2FAP98NEADiujPOYdZcBw58gJhiTHRG5M+7cY4QmY6LLWi6wEAmaVzzE9csrhP
+gszgPuCUwSKxGaUpbu0VHqeb3LVqwQs=
+=LITU
+-----END PGP SIGNATURE-----
+
+--bsmwn6lsujflbhcr--
