@@ -2,124 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD031B2FB4
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2020 21:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B7E1B30B0
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2020 21:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726054AbgDUTDL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Apr 2020 15:03:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51464 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725994AbgDUTDK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 21 Apr 2020 15:03:10 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D923420753;
-        Tue, 21 Apr 2020 19:03:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587495790;
-        bh=zzuxna0xb8Q1TdC2MB2c2yaiRdzpJ1eGR8Ub8HY5Gd8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dlSItZt7NEZM/Xhn8o9UdDSbcwlgfVb8ydhF3rGtNtQmdEl+H3O9net1gHmR12AQ3
-         G+nGtdiWxr7TRRdz25FX0gFyjfRRj2d0d3nAZzfKyyacT1RN+gE1xH2EmseDfJahAO
-         HBJFoVO2yOmbas1tl76zAhDEBOt9TVZISj3h9NsE=
-Received: by mail-qk1-f169.google.com with SMTP id l25so15718509qkk.3;
-        Tue, 21 Apr 2020 12:03:09 -0700 (PDT)
-X-Gm-Message-State: AGi0PuacIsmUZho1o70AvfX0rBBGkgdjDNcYBytD0JGVg92mxT1rhlx1
-        JVWrR/FalrYZSI+ymleR1fTX6X+E/AAiRVNhRg==
-X-Google-Smtp-Source: APiQypK4Yv9pvWyQXJx3JdeSn124hpxtt1JLCDuQWjVYKhF0tbCsvIrqP7V2PBuV1TcfREEdndVuo0ZBbnynFvkhgvg=
-X-Received: by 2002:a37:4a85:: with SMTP id x127mr23060837qka.152.1587495788872;
- Tue, 21 Apr 2020 12:03:08 -0700 (PDT)
+        id S1726039AbgDUTxC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Apr 2020 15:53:02 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:53856 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726116AbgDUTxB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Apr 2020 15:53:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1587498772;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TTdCjw+xJyiyOVepRoiBzPpX6UPTHW6RSy1+eF5nCoY=;
+        b=OKA7CqagVR8YJzhv3BP5d/4LXlmwR9B72PI+za5vSt9aKcCss+YcZnwM860ZfhQj0DUAN+
+        Sg+yHE6uGqfnoYoutwIEYKkeQRqSURHX1c6Pvo6v7SQ5U4jTEF1zR6+usFdfwtfCN4o2XT
+        02ioOqsbExewzZlU6whFtbws/Yd3K0A=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-29-T59p11R1My630KCgCNkisg-1; Tue, 21 Apr 2020 15:52:51 -0400
+X-MC-Unique: T59p11R1My630KCgCNkisg-1
+Received: by mail-wr1-f72.google.com with SMTP id y10so3138840wrn.5
+        for <linux-mips@vger.kernel.org>; Tue, 21 Apr 2020 12:52:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=TTdCjw+xJyiyOVepRoiBzPpX6UPTHW6RSy1+eF5nCoY=;
+        b=X5+AMZE7g2LMMZLEqSmqKKC3DTL19u3RCcU/oEL8YDG5MYPLDhZ6ikBAJWZ6VambgO
+         j3M+P3rt47MimML9Zcj14IxA37XKZmqdqFMYrFSFvttiigYiqw3A0E6rRRMUAL5o/zER
+         e8yk5KM4Oine8HYpcSoqNkhlsCKjU4nFtHQxHwKlUFDafkzNhlqsy2UVHLi5swd5cZ8+
+         n+8Iq7M0Lzt4bH0576vdWB7cloImvZ2yW3zKKE6RGGfALUNYQY26cUhF8QAyGCzZVJKB
+         PfHDv93CL/K/uRUSxLH+cnrNq6aShVAdbp3Qgxzc69uiBVn41CIlIvUBbTbRbhKBOqXS
+         mpeg==
+X-Gm-Message-State: AGi0PuZZZPNSj+/C+PGSgy95dKvvXxyaEhT17bSWNzx99/DyN+03VkUP
+        WDGBeeRLVti62A3lAYU1wWBx9bS3vPSWCQbxLQYG8TDJQKo8Mmf7qvUNf/vivLe+ZO5mD6gIQQa
+        IWQvgsTU/6dDhDhQVeqTi3w==
+X-Received: by 2002:adf:bc05:: with SMTP id s5mr25183112wrg.70.1587498769683;
+        Tue, 21 Apr 2020 12:52:49 -0700 (PDT)
+X-Google-Smtp-Source: APiQypLppZDmxlXD8GhpLz87T+p+wy/ipriyB1TljFwkP+/SqFt2cdsfkDNAw/S0mujJ1KBuTCSHFg==
+X-Received: by 2002:adf:bc05:: with SMTP id s5mr25183091wrg.70.1587498769480;
+        Tue, 21 Apr 2020 12:52:49 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:f43b:97b2:4c89:7446? ([2001:b07:6468:f312:f43b:97b2:4c89:7446])
+        by smtp.gmail.com with ESMTPSA id 5sm4473852wmg.34.2020.04.21.12.52.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Apr 2020 12:52:48 -0700 (PDT)
+Subject: Re: [PATCH v2] kvm: Replace vcpu->swait with rcuwait
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     Marc Zyngier <maz@kernel.org>, tglx@linutronix.de,
+        kvm@vger.kernel.org, Davidlohr Bueso <dbueso@suse.de>,
+        peterz@infradead.org, torvalds@linux-foundation.org,
+        bigeasy@linutronix.de, linux-kernel@vger.kernel.org,
+        rostedt@goodmis.org, linux-mips@vger.kernel.org,
+        Paul Mackerras <paulus@ozlabs.org>, joel@joelfernandes.org,
+        will@kernel.org, kvmarm@lists.cs.columbia.edu
+References: <20200324044453.15733-1-dave@stgolabs.net>
+ <20200324044453.15733-4-dave@stgolabs.net>
+ <20200420164132.tjzk5ebx35m66yce@linux-p48b>
+ <418acdb5001a9ae836095b7187338085@misterjones.org>
+ <20200420205641.6sgsllj6pmsnwrvp@linux-p48b>
+ <f7cc83fe-3e91-0057-9af2-26c201456689@redhat.com>
+ <20200420215014.sarodevmhphnkkn7@linux-p48b>
+ <02e1b00d-a8ea-a947-bbe6-0b1380aa7ec4@redhat.com>
+ <20200421180733.xrl5ta6cuo2weuva@linux-p48b>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <ab78bbc8-aa03-6e88-940e-5e1c041f48e4@redhat.com>
+Date:   Tue, 21 Apr 2020 21:52:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-References: <cover.1586939718.git.hns@goldelico.com> <06fb6569259bb9183d0a0d0fe70ec4f3033b8aab.1586939718.git.hns@goldelico.com>
- <20200416204158.GA1006@bogus> <C7C58E41-99CB-49F6-934E-68FA458CB8B1@goldelico.com>
-In-Reply-To: <C7C58E41-99CB-49F6-934E-68FA458CB8B1@goldelico.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 21 Apr 2020 14:02:56 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLfamBLVus65GUzq9DUu0VcK=p_7KkHbKvnLc=0uhsVvg@mail.gmail.com>
-Message-ID: <CAL_JsqLfamBLVus65GUzq9DUu0VcK=p_7KkHbKvnLc=0uhsVvg@mail.gmail.com>
-Subject: Re: [PATCH v6 01/12] dt-bindings: add img, pvrsgx.yaml for
- Imagination GPUs
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     devicetree@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Philipp Rossak <embed3d@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        OpenPVRSGX Linux Driver Group <openpvrsgx-devgroup@letux.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>, kernel@pyra-handheld.com,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200421180733.xrl5ta6cuo2weuva@linux-p48b>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Apr 17, 2020 at 7:16 AM H. Nikolaus Schaller <hns@goldelico.com> wrote:
->
-> Hi Rob,
->
-> > Am 16.04.2020 um 22:41 schrieb Rob Herring <robh@kernel.org>:
-> >
-> > On Wed, 15 Apr 2020 10:35:08 +0200, "H. Nikolaus Schaller" wrote:
-> >> The Imagination PVR/SGX GPU is part of several SoC from
-> >> multiple vendors, e.g. TI OMAP, Ingenic JZ4780, Intel Poulsbo,
-> >> Allwinner A83 and others.
-> >>
-> >> With this binding, we describe how the SGX processor is
-> >> interfaced to the SoC (registers, interrupt etc.).
-> >>
-> >> In most cases, Clock, Reset and power management is handled
-> >> by a parent node or elsewhere (e.g. code in the driver).
-> >>
-> >> Tested by make dt_binding_check dtbs_check
-> >>
-> >> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> >> ---
-> >> .../devicetree/bindings/gpu/img,pvrsgx.yaml   | 122 ++++++++++++++++++
-> >> 1 file changed, 122 insertions(+)
-> >> create mode 100644 Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
-> >>
-> >
-> > My bot found errors running 'make dt_binding_check' on your patch:
-> >
-> > Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml:  while parsing a block mapping
-> >  in "<unicode string>", line 74, column 13
->
-> It turned out that there was a stray " in line 74 from the last editing phase.
-> Will be fixed in v7.
->
-> Would it be possible to make dt_binding_check not only report line/column but the
-> contents of the line instead of "<unicode string>"?
+On 21/04/20 20:07, Davidlohr Bueso wrote:
+>> 
+> 
+> I should have looked closer here - I was thinking about the return
+> value of rcuwait_wait_event. Yes, that signal_pending check you
+> mention makes the sleep semantics change bogus as interruptible is no
+> longer just to avoid contributing to the load balance.
+> 
+> And yes, unfortunately adding prepare_to and finish_rcuwait() looks
+> like the most reasonable approach to keeping the tracepoint
+> semantics. I also considered extending rcuwait_wait_event() by
+> another parameter to pass back to the caller if there was any wait at
+> all, but that enlarges the call and is probably less generic.
 
-This comes from ruamel.yaml module. I believe "<unicode string>" is
-supposed to be the type of the data, not what it is. However, it is
-possible to get something a bit more helpful, but it depends on which
-parser is used. By default we use the C based parser (aka 'safe'). If
-we use the round trip parser, we get this:
+Yes, at some point the usual prepare_to/finish APIs become simpler.
 
-ruamel.yaml.scanner.ScannerError: while scanning a simple key
-  in "<unicode string>", line 84, column 5:
-        maxItems
-        ^ (line: 84)
+> I'll send another version keeping the current sleep and tracepoint 
+> semantics.
 
-This can be enabled by passing '-n' (line numbers) to dt-doc-validate.
-Currently, you have have to edit the Makefile to do this. The C parser
-is a big difference in speed, so I don't want to change the default.
+Thanks---and sorry, I should have noticed that way earlier.
 
-I can probably work around this and dump the erroring line, but I'm
-not sure that's always useful. Many errors are indentation related and
-those need some context. Plus just dumping the line can be done easily
-with sed:
+Paolo
 
-sed -n ${LINE}p <file>
-
-Rob
