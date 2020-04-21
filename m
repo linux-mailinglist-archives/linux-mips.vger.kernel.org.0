@@ -2,88 +2,141 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9A51B1A24
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2020 01:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC75B1B1C12
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2020 04:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727950AbgDTX1q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Apr 2020 19:27:46 -0400
-Received: from foss.arm.com ([217.140.110.172]:55870 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726123AbgDTX1p (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 20 Apr 2020 19:27:45 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3DF641FB;
-        Mon, 20 Apr 2020 16:27:45 -0700 (PDT)
-Received: from [192.168.0.129] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6918F3F73D;
-        Mon, 20 Apr 2020 16:27:39 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: Re: [PATCH 2/2] mm/thp: Rename pmd_mknotpresent() as pmd_mknotvalid()
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-mm@kvack.org, Vineet Gupta <vgupta@synopsys.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        nouveau@lists.freedesktop.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <1584680057-13753-1-git-send-email-anshuman.khandual@arm.com>
- <1584680057-13753-3-git-send-email-anshuman.khandual@arm.com>
- <20200420210354.GD29998@willie-the-truck>
-Message-ID: <78fee884-78fc-6102-1a37-12106dc21336@arm.com>
-Date:   Tue, 21 Apr 2020 04:57:26 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1726389AbgDUCm7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Apr 2020 22:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725988AbgDUCm7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 20 Apr 2020 22:42:59 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD25C061A0E;
+        Mon, 20 Apr 2020 19:42:59 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id s202so10833202oih.3;
+        Mon, 20 Apr 2020 19:42:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=22HJzOmHnmam1tgxVzraGLccgsF7pCDzxppnKXmeCcc=;
+        b=jKmwOwQWKpYMPZofyZTuYn+7LdAMlYL6swWuBqaWWYS2ZHe065aplsFe1ypvqsjVg/
+         E79G3ZVOsXfSzITV1aNWOhL/+In9irYnxjpqJ4QUtvf3mMJCwB1hqygj3wSyZkyM9jtI
+         GL9bG947tM1umGFCgOdTRzHnZl2M1t1CwGB4ZyZeoh2ONAnlOTPW7w5sJ6dHdOC7LGy1
+         M70e4C+70oD1J2hsUkjImoXoNrDzlyd0lcd/IAMObQgb9rHaw0OegZzdtbtSdFUpJ67c
+         +xlz3pyhFZEtqYXqFur48USkQu5StZsixLj2jtbp5NqpaFCungz+3cEiNzynVfhMoG1i
+         WyQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=22HJzOmHnmam1tgxVzraGLccgsF7pCDzxppnKXmeCcc=;
+        b=TvH+Cssds32hzl6A7L8Yh8+D5+9gcYCudhLr28WqlPGSoV4qrjfuAXL2bV2uyBzGoR
+         jsueqJj+/kA6ps65AQLMhqk5hx1VcYsd1KRVtWX0M35ipedYyLP7lfOBM+qIpf7H57Za
+         6vSPvpBh0R0Tq6PziI7mIRmYWHBvIUaqlMZ0K2+kyOPFrXzIKMRvNfBd7wqWq0w73Oka
+         VKMn+o5py3EtJVOG7T38HSa5pAfVWfPTThAUzJn+Crrnl/g0eB6ey/kajctTEossG2tB
+         gv9B947GnqOLiEJSWUChKb4ob7GM01+EbpqvbPLzdUg8GMNlqMPvomvc+k+objLXoG7u
+         vf7w==
+X-Gm-Message-State: AGi0PuZpNKmk+cZ/tWg/SbGx/dP3S3g5gKr+y1vR0/ukf6kUGqkEzqGN
+        n1jCyQKOe3fEIYnU8VyBvMQ=
+X-Google-Smtp-Source: APiQypJkewVCDBhIo/LPbuliAqXKDGfd5imYzqWqvA5pHn7Gaa4TcDgnRMZK41fAT8W64wzDCFRm+w==
+X-Received: by 2002:a05:6808:64a:: with SMTP id z10mr1702091oih.71.1587436978810;
+        Mon, 20 Apr 2020 19:42:58 -0700 (PDT)
+Received: from ubuntu-s3-xlarge-x86 ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id b6sm425594otq.18.2020.04.20.19.42.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 20 Apr 2020 19:42:58 -0700 (PDT)
+Date:   Mon, 20 Apr 2020 19:42:56 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Dmitry Golovin <dima@golovin.in>
+Subject: Re: [PATCH v2 2/3] MIPS: VDSO: Move disabling the VDSO logic to
+ Kconfig
+Message-ID: <20200421024256.GA42179@ubuntu-s3-xlarge-x86>
+References: <20200419180445.26722-1-natechancellor@gmail.com>
+ <20200419202128.20571-1-natechancellor@gmail.com>
+ <20200419202128.20571-2-natechancellor@gmail.com>
+ <CA+icZUVaLW+38WEJhqnfO7B_unHvrbSr0moKnfJ6zXGGA06CWQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200420210354.GD29998@willie-the-truck>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+icZUVaLW+38WEJhqnfO7B_unHvrbSr0moKnfJ6zXGGA06CWQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 04/21/2020 02:33 AM, Will Deacon wrote:
-> On Fri, Mar 20, 2020 at 10:24:17AM +0530, Anshuman Khandual wrote:
->> pmd_present() is expected to test positive after pmdp_mknotpresent() as the
->> PMD entry still points to a valid huge page in memory. pmdp_mknotpresent()
->> implies that given PMD entry is just invalidated from MMU perspective while
->> still holding on to pmd_page() referred valid huge page thus also clearing
->> pmd_present() test. This creates the following situation which is counter
->> intuitive.
->>
->> [pmd_present(pmd_mknotpresent(pmd)) = true]
->>
->> This renames pmd_mknotpresent() as pmd_mknotvalid() reflecting the helper's
->> functionality more accurately while changing the above mentioned situation
->> as follows. This does not create any functional change.
->>
->> [pmd_present(pmd_mknotvalid(pmd)) = true]
->>
->> This is not applicable for platforms that define own pmdp_invalidate() via
->> __HAVE_ARCH_PMDP_INVALIDATE. Suggestion for renaming came during a previous
->> discussion here.
+On Mon, Apr 20, 2020 at 11:53:55AM +0200, Sedat Dilek wrote:
+> On Sun, Apr 19, 2020 at 10:21 PM Nathan Chancellor
+> <natechancellor@gmail.com> wrote:
+> >
+> > After commit 9553d16fa671 ("init/kconfig: Add LD_VERSION Kconfig"), we
+> > have access to GNU ld's version at configuration time. As a result, we
+> > can make it clearer under what configuration circumstances the MIPS VDSO
+> > needs to be disabled.
+> >
+> > This is a prerequisite for getting rid of the MIPS VDSO binutils
+> > warning and linking the VDSO when LD is ld.lld. Wrapping the call to
+> > ld-ifversion with CONFIG_LD_IS_LLD does not work because the config
+> > values are wiped away during 'make clean'.
+> >
+> > Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+> > ---
+> >
+> > v1 -> v2:
+> >
+> > * New patch.
+> >
+> >  arch/mips/Kconfig         |  2 ++
+> >  arch/mips/vdso/Kconfig    | 18 ++++++++++++++++++
+> >  arch/mips/vdso/Makefile   | 30 ++----------------------------
+> >  arch/mips/vdso/vdso.lds.S |  2 +-
+> >  4 files changed, 23 insertions(+), 29 deletions(-)
+> >  create mode 100644 arch/mips/vdso/Kconfig
+> >
+> > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> > index 690718b3701a..45220e4b8a65 100644
+> > --- a/arch/mips/Kconfig
+> > +++ b/arch/mips/Kconfig
+> > @@ -3275,3 +3275,5 @@ endmenu
+> >  source "drivers/firmware/Kconfig"
+> >
+> >  source "arch/mips/kvm/Kconfig"
+> > +
+> > +source "arch/mips/vdso/Kconfig"
+> > diff --git a/arch/mips/vdso/Kconfig b/arch/mips/vdso/Kconfig
+> ...
+> > --- /dev/null
+> > +++ b/arch/mips/vdso/Kconfig
+> ...
+> > +config MIPS_DISABLE_VDSO
+> > +       def_bool CPU_MICROMIPS || (!CPU_MIPSR6 && !MIPS_LD_CAN_LINK_VDSO)
+> ...
+> > diff --git a/arch/mips/vdso/vdso.lds.S b/arch/mips/vdso/vdso.lds.S
+> ...
+> > --- a/arch/mips/vdso/vdso.lds.S
+> > +++ b/arch/mips/vdso/vdso.lds.S
+> ...
+> > -#ifndef DISABLE_MIPS_VDSO
+> > +#ifndef CONFIG_DISABLE_MIPS_VDSO
 > 
-> Bikeshed alert: maybe pmd_mkinvalid() would be better, given that this is
-> a one-trick pony for pmdp_invalidate()?
-
-I had thought about making it pmd_mkinvalid() earlier. But as we were replacing
-pmd_mknotpresent(), hence went with similar pattern pmd_mknotvalid() which was
-originally suggested by Catalin. There is an existing pte_mknotpresent() in arc
-platform as well. I dont have a very strong opinion either way, will be happy
-to rename. But then still wondering if we really need to.
-
+> Should be s/CONFIG_DISABLE_MIPS_VDSO/CONFIG_MIPS_DISABLE_VDSO ?
 > 
-> Will
-> 
+> - Sedat -
+
+Ugh yes, thank you much for pointing it out.
+
+I'll send a v3 once I get further feedback on the series.
+
+Cheers!
+Nathan
