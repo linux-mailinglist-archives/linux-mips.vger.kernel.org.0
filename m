@@ -2,56 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 575441B2249
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2020 11:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B001B2245
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2020 11:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727911AbgDUJFT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Apr 2020 05:05:19 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:34924 "EHLO loongson.cn"
+        id S1728398AbgDUJE4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Apr 2020 05:04:56 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:34738 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726095AbgDUJFT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 21 Apr 2020 05:05:19 -0400
+        id S1726018AbgDUJEz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 21 Apr 2020 05:04:55 -0400
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT2knt55emXsqAA--.36S2;
-        Tue, 21 Apr 2020 17:04:40 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT2knt55emXsqAA--.36S3;
+        Tue, 21 Apr 2020 17:04:41 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH 0/3] MIPS: Fix some issues about arch_mem_init()
-Date:   Tue, 21 Apr 2020 17:04:26 +0800
-Message-Id: <1587459869-12183-1-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH 1/3] MIPS: Do not initialise globals to 0
+Date:   Tue, 21 Apr 2020 17:04:27 +0800
+Message-Id: <1587459869-12183-2-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9DxT2knt55emXsqAA--.36S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYo7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87
-        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
-        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72
-        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
-        MxkIecxEwVAFwVW8uwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
-        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
-        JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
-        vEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2
-        jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
-        ZFpf9x0JU4KZXUUUUU=
+In-Reply-To: <1587459869-12183-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1587459869-12183-1-git-send-email-yangtiezhu@loongson.cn>
+X-CM-TRANSID: AQAAf9DxT2knt55emXsqAA--.36S3
+X-Coremail-Antispam: 1UD129KBjvdXoWruFy8tw4fur1DJrWDuF1UAwb_yoWftFc_KF
+        1xtw4kWrn0vFWjvw47Gw4rWFyYqw45Wry5AwnIqay2v3sIqryUA39xAr1fXrs5JrZ5ArZY
+        y3sxGrn8Gw4fWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbSAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGwA2048vs2IY02
+        0Ec7CjxVAFwI0_Jrv_JF4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
+        ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
+        xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+        vE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+        r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8uwCF04k20x
+        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUfsqXUUUUU=
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Tiezhu Yang (3):
-  MIPS: Do not initialise globals to 0
-  MIPS: Cleanup code about plat_mem_setup()
-  MIPS: Reduce possibility of kernel panic under CONFIG_SWIOTLB
+Fix the following checkpatch error:
 
- arch/mips/include/asm/bootinfo.h |  2 +-
- arch/mips/kernel/setup.c         | 14 +++++++++++---
- 2 files changed, 12 insertions(+), 4 deletions(-)
+ERROR: do not initialise globals to 0
+#834: FILE: arch/mips/kernel/setup.c:834:
++int hw_coherentio = 0;	/* Actual hardware supported DMA coherency setting. */
 
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/kernel/setup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index 10bef8f..b1e2d43 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -831,7 +831,7 @@ arch_initcall(debugfs_mips);
+ /* User defined DMA coherency from command line. */
+ enum coherent_io_user_state coherentio = IO_COHERENCE_DEFAULT;
+ EXPORT_SYMBOL_GPL(coherentio);
+-int hw_coherentio = 0;	/* Actual hardware supported DMA coherency setting. */
++int hw_coherentio;	/* Actual hardware supported DMA coherency setting. */
+ 
+ static int __init setcoherentio(char *str)
+ {
 -- 
 2.1.0
 
