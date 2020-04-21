@@ -2,113 +2,177 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC181B231B
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2020 11:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048D01B236A
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Apr 2020 11:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726874AbgDUJpE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Apr 2020 05:45:04 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:32852 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726403AbgDUJpD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Apr 2020 05:45:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587462302;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vn871PQoRr8hKR73ojEvQDx4nU8OlY1HT3TpH6BJBpc=;
-        b=B79PIn3Ph9UElB5buFe6znFq/6gWgjQYqNFO2xjlcCMGTm5Uk6W73lAZz+zogfUA9ffHOe
-        vlhdUUCdn+BTyiYB0pHfoMnEmM2DeblltfyJgwPiqrKBI/HFw/ntzUi7Lvei+Te82BfR36
-        7bJjelCsnLA5X8LVmy2Wgo6g6lB/ZrM=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-330-3xxgwt3cObC-n8At5TmbSA-1; Tue, 21 Apr 2020 05:45:00 -0400
-X-MC-Unique: 3xxgwt3cObC-n8At5TmbSA-1
-Received: by mail-wr1-f71.google.com with SMTP id j16so7216561wrw.20
-        for <linux-mips@vger.kernel.org>; Tue, 21 Apr 2020 02:45:00 -0700 (PDT)
+        id S1727120AbgDUJ5i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Apr 2020 05:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725920AbgDUJ5h (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 21 Apr 2020 05:57:37 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A1EC061A0F;
+        Tue, 21 Apr 2020 02:57:37 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id r26so2976110wmh.0;
+        Tue, 21 Apr 2020 02:57:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WrPXEec4AITga6eSmOansPu77CmlHKFEwJJ/qpS6qN0=;
+        b=XzIAztT+mPDZUOwemSpHeuMKwyyom6UpYVUgvy9sW+plkI+MKvLzF0WIelhE/s4fQd
+         FdQLN8/mrEzy8YyT/vrCk46xeGu1rRAkl3J50y4Yh38jJwMBYr6JPXv4HDCOXp4X5cWG
+         lxvpYer0iUja0i9/cnq6qi/aczhg7taK+V1C5VP87hlnsVyIEmOwnZhYslHgNhX3JXrD
+         ORLG/NSj8yZZwwLlP2ddoTtJ2uTmIToQwF4ZS6XQPk0/a6yw1DpWbNWVJ5hwKCRc6n0c
+         6wI68y7E6M8JbLE07W3iSrNsXtH7b30IUSO1Fnp/QOx08JPxGM7xlafgolcctTcz/meZ
+         DFEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=Vn871PQoRr8hKR73ojEvQDx4nU8OlY1HT3TpH6BJBpc=;
-        b=U9jrvH6ClWhUE5Uazvl3QUSzRO+H8nUX3nB+Jozhu0LCgvnzwEgbFUJWjBwjHtGqki
-         gVqo7V/9vSIvFOr8xOOOL7uFgACrdR1jUbM6J/ehUqEHn0U+XN5h/ADZ4pfgYU90GdMu
-         G9tz8P4RtPAuhyxxj3NytjLS+dMG/Romnmhblr3/104VkKbXAS/pOHWr4rP9NbMEqt+Q
-         F8zkLeu7zeIgRxVSmzLzWpR+3Wye42jKuDB7Vikrr9JwiWMD67Te5ENqMDaOfj4hbUKL
-         XBBFk1nsdlCBhZVQ1l7lUpWpFnyEDdZcbYg56TzZsGLD1N/JKq63sISZ8RJDODc3H0ya
-         yo1g==
-X-Gm-Message-State: AGi0PubMzeV1vHCD4iu1yid4vvzM95hUG9zqVr80gKwXLnBYbXd3iP2H
-        u7C2v1/h4aDwgv/QFTAa0pCu+KGmy3Jbnw/8XclNn2s2vCkvlQG92v88GQYhN7w6Vk8QrYOJsUQ
-        CG0T1TGUVk8q1EoiVb9qhkg==
-X-Received: by 2002:adf:e982:: with SMTP id h2mr22309081wrm.425.1587462299214;
-        Tue, 21 Apr 2020 02:44:59 -0700 (PDT)
-X-Google-Smtp-Source: APiQypLbdpxyM62zaDI9d+6FTcqhJenduGXb99s5sXM8ly8KhMH8Zk/YVGvLVp9YOKq9Pttf2tCjnw==
-X-Received: by 2002:adf:e982:: with SMTP id h2mr22309050wrm.425.1587462299019;
-        Tue, 21 Apr 2020 02:44:59 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:d0a0:f143:e9e4:2926? ([2001:b07:6468:f312:d0a0:f143:e9e4:2926])
-        by smtp.gmail.com with ESMTPSA id a7sm2684985wmj.12.2020.04.21.02.43.43
+        bh=WrPXEec4AITga6eSmOansPu77CmlHKFEwJJ/qpS6qN0=;
+        b=MIbYpDbMej+FoMe+t0GbLxkeNs1fiQknuNQl9H3jV69KmxwnFzp1ky91n5vta7miFc
+         Z2VTE4oB42lAtVfzMGvfg+KV3Mvg1zi/btMADJV4WqfjNSv5OhjlA4FZWPLWgtjQV48A
+         0toR8hllXTZXNhknqbqPIRCg5tbJKDzdt3QJgV/pTegTp2n9Sb4MLSw6ULO9IoyfmlwA
+         0b+cPKUgpPYOJnXZEvGPyeUFrixt3RoDDrDMXl3e4tK9eSJDKL/VmnQ9zwH8pq7Kdzrp
+         46ypMAYK6lpcdbraUSMr+vwC7gOlpDyWOQzX3xlQXkkT/qGBhyPkCo6VC2PqIfP/PvWU
+         q99A==
+X-Gm-Message-State: AGi0PuYfXESpSPmUleg/XO59RGBrtpaNsXecCpX81yGFH9BsPgWHffX2
+        Zewsh4XvY1VQ+yRn90GrY26wbYmh
+X-Google-Smtp-Source: APiQypIk3cTAhoSv9SYqD5kOWe7sVp3s0kn28AOHHwlVh0ZbrjxfvG0bZNvA0N2HoKlsXm6HuX2Sig==
+X-Received: by 2002:a1c:9d8c:: with SMTP id g134mr4188162wme.79.1587463055735;
+        Tue, 21 Apr 2020 02:57:35 -0700 (PDT)
+Received: from ?IPv6:2a02:810d:340:2e50:bc17:18d9:e349:724? ([2a02:810d:340:2e50:bc17:18d9:e349:724])
+        by smtp.gmail.com with ESMTPSA id 17sm2751403wmo.2.2020.04.21.02.57.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Apr 2020 02:44:58 -0700 (PDT)
-Subject: Re: [PATCH v2] kvm: Replace vcpu->swait with rcuwait
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Marc Zyngier <maz@kernel.org>, tglx@linutronix.de,
-        kvm@vger.kernel.org, Davidlohr Bueso <dbueso@suse.de>,
-        peterz@infradead.org, torvalds@linux-foundation.org,
-        bigeasy@linutronix.de, linux-kernel@vger.kernel.org,
-        rostedt@goodmis.org, linux-mips@vger.kernel.org,
-        Paul Mackerras <paulus@ozlabs.org>, joel@joelfernandes.org,
-        will@kernel.org, kvmarm@lists.cs.columbia.edu
-References: <20200324044453.15733-1-dave@stgolabs.net>
- <20200324044453.15733-4-dave@stgolabs.net>
- <20200420164132.tjzk5ebx35m66yce@linux-p48b>
- <418acdb5001a9ae836095b7187338085@misterjones.org>
- <20200420205641.6sgsllj6pmsnwrvp@linux-p48b>
- <f7cc83fe-3e91-0057-9af2-26c201456689@redhat.com>
- <20200420215014.sarodevmhphnkkn7@linux-p48b>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <02e1b00d-a8ea-a947-bbe6-0b1380aa7ec4@redhat.com>
-Date:   Tue, 21 Apr 2020 11:43:39 +0200
+        Tue, 21 Apr 2020 02:57:35 -0700 (PDT)
+Subject: Re: [PATCH v6 00/12] ARM/MIPS: DTS: add child nodes describing the
+ PVRSGX GPU present in some OMAP SoC and JZ4780 (and many more)
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        OpenPVRSGX Linux Driver Group <openpvrsgx-devgroup@letux.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
+        linux-mips@vger.kernel.org,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc@vger.kernel.org
+References: <cover.1586939718.git.hns@goldelico.com>
+ <20200415101008.zxzxca2vlfsefpdv@gilmour.lan>
+ <2E3401F1-A106-4396-8FE6-51CAB72926A4@goldelico.com>
+ <20200415130233.rgn7xrtwqicptke2@gilmour.lan>
+ <C589D06E-435E-4316-AD0A-8498325039E3@goldelico.com>
+ <10969e64-fe1f-d692-4984-4ba916bd2161@gmail.com>
+ <20200420073842.nx4xb3zqvu23arkc@gilmour.lan>
+From:   Philipp Rossak <embed3d@gmail.com>
+Message-ID: <b5a06c19-7a3e-bcb8-5ae3-76901b9c6c35@gmail.com>
+Date:   Tue, 21 Apr 2020 11:57:33 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200420215014.sarodevmhphnkkn7@linux-p48b>
-Content-Type: text/plain; charset=windows-1252
+In-Reply-To: <20200420073842.nx4xb3zqvu23arkc@gilmour.lan>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 20/04/20 23:50, Davidlohr Bueso wrote:
-> On Mon, 20 Apr 2020, Paolo Bonzini wrote:
+Hi,
+
+On 20.04.20 09:38, Maxime Ripard wrote:
+> Hi,
 > 
->> On 20/04/20 22:56, Davidlohr Bueso wrote:
->>> On Mon, 20 Apr 2020, Marc Zyngier wrote:
+> On Fri, Apr 17, 2020 at 02:09:06PM +0200, Philipp Rossak wrote:
+>>>> I'm a bit skeptical on that one since it doesn't even list the
+>>>> interrupts connected to the GPU that the binding mandates.
 >>>
->>>> This looks like a change in the semantics of the tracepoint. Before
->>>> this
->>>> change, 'waited' would have been true if the vcpu waited at all. Here,
->>>> you'd
->>>> have false if it has been interrupted by a signal, even if the vcpu
->>>> has waited
->>>> for a period of time.
->>>
->>> Hmm but sleeps are now uninterruptible as we're using TASK_IDLE.
+>>> I think he left it out for a future update.
+>>> But best he comments himself.
 >>
->> Hold on, does that mean that you can't anymore send a signal in order to
->> kick a thread out of KVM_RUN?  Or am I just misunderstanding?
+>> I'm currently working on those bindings. They are now 90% done, but they are
+>> not finished till now. Currently there is some mainline support missing to
+>> add the full binding. The A83T and also the A31/A31s have a GPU Power Off
+>> Gating Register in the R_PRCM module, that is not supported right now in
+>> Mainline. The Register need to be written when the GPU is powered on and
+>> off.
+>>
+>> @Maxime: I totally agree on your point that a demo needs to be provided
+>> before the related DTS patches should be provided. That's the reason why I
+>> added the gpu placeholder patches.
+>> Do you have an idea how a driver for the R_PRCM stuff can look like? I'm not
+>> that experienced with the clock driver framework.
 > 
-> Considering that the return value of the interruptible wait is not
-> checked, I would not think this breaks KVM_RUN.
+> It looks like a power-domain to me, so you'd rather plug that into the genpd
+> framework.
 
-What return value?  kvm_vcpu_check_block checks signal_pending, so you
-could have a case where the signal is injected but you're not woken up.
+I had a look on genpd and I'm not really sure if that fits.
 
-Admittedly I am not familiar with how TASK_* work under the hood, but it
-does seem to be like that.
+It is basically some bit that verify that the clocks should be enabled 
+or disabled. I think this is better placed somewhere in the clocking 
+framework.
+I see there more similarities to the gating stuff.
+Do you think it is suitable to implement it like the clock gating?
 
-Paolo
+
+>> The big question is right now how to proceed with the A83T and A31s patches.
+>> I see there three options, which one do you prefer?:
+>>
+>> 1. Provide now placeholder patches and send new patches, if everything is
+>> clear and other things are mainlined
+>> 2. Provide now patches as complete as possible and provide later patches to
+>> complete them when the R_PRCM things are mainlined
+>> 3. Leave them out, till the related work is mainlined and the bindings are
+>> final.
+> 
+> Like I said, the DT *has* to be backward-compatible, so for any DT patch that
+> you are asking to be merged, you should be prepared to support it indefinitely
+> and be able to run from it, and you won't be able to change the bindings later
+> on.
+
+I agree on your points. But is this also suitable to drivers that are 
+currently off tree and might be merged in one or two years?
+
+>> Since this GPU IP core is very flexible and the SOC manufactures can
+>> configure it on their needs, I think the binding will extend in the future.
+>> For example the SGX544 GPU is available in different configurations: there
+>> is a SGX544 core and SGX544MPx core. The x stands for the count of the USSE
+>> (Universal Scalable Shader Engine) cores. For example the GPU in the A83T is
+>> a MP1 and the A31/A31s a MP2.
+> 
+> Mali is in the same situation and it didn't cause much trouble.
+> 
+Good to know.
+
+>> In addition to that some of the GPU's have also a 2D engine.
+> 
+> In the same memory region, running from the same interrupts, or is it a
+> completely separate IP that happens to be sold by the same vendor?
+> 
+What I know till now this is part of the PowerVR IP and not separated. 
+So it should use the same memory region, clocks and interrupts.
+
+Cheers
+Philipp
 
