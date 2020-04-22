@@ -2,68 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C51D1B45B5
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Apr 2020 15:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1021B1B4689
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Apr 2020 15:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbgDVNAY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Apr 2020 09:00:24 -0400
-Received: from mga04.intel.com ([192.55.52.120]:16985 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726168AbgDVNAY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 22 Apr 2020 09:00:24 -0400
-IronPort-SDR: DjKi2CAn2YVcnAu/OcskBQVJmxVs56d0Kno4P90hbd5/67nqgDGkD0rrPc3/jOe7+Iy9hU/Bq1
- OyVVfVYhDnqg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2020 06:00:24 -0700
-IronPort-SDR: mrNopApmj+qqPJpgHBUjtQ5hdlXCMTqnJaXk0fwhNJz1G8W6XcnHC2aNOmYA+aFaK/a2aHcbE/
- AkDfQv/XB4tw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,414,1580803200"; 
-   d="scan'208";a="457132719"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Apr 2020 06:00:22 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 025FD58F; Wed, 22 Apr 2020 16:00:21 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        linux-mips@vger.kernel.org, Vikas Gupta <vikas.gupta@broadcom.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1] firmware: tee_bnxt: Use UUID API for exporting the UUID
-Date:   Wed, 22 Apr 2020 16:00:21 +0300
-Message-Id: <20200422130021.38424-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.26.1
+        id S1726917AbgDVNqM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Apr 2020 09:46:12 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:40569 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726943AbgDVNqJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 22 Apr 2020 09:46:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1587563168;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fbzJ2c3Jbmfs6TXG5rybp4esqbXtRerCZxsEpCUlwvY=;
+        b=cTZ2fVNd3eY7j7XPo6jrhe+g5brhNAWuSN+sTn5IzIV6wIBAsUTqPTh0//f8kg8tz+VxDg
+        oQCS3q6nDkL14bf56Pedx358L5l0y06Fqd/siZBVcNukzeekQAcV+PcMo4Ryooh+5eVtrD
+        cFrmCke5JUZFd+gcmDPNkCX3oru5MYA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-169-lh4Pzp_SOlKmSyI6QDWB7Q-1; Wed, 22 Apr 2020 09:46:04 -0400
+X-MC-Unique: lh4Pzp_SOlKmSyI6QDWB7Q-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4D47C800FC7;
+        Wed, 22 Apr 2020 13:46:00 +0000 (UTC)
+Received: from gondolin (ovpn-112-195.ams2.redhat.com [10.36.112.195])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C266B5D706;
+        Wed, 22 Apr 2020 13:45:46 +0000 (UTC)
+Date:   Wed, 22 Apr 2020 15:45:43 +0200
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     pbonzini@redhat.com, tsbogend@alpha.franken.de, paulus@ozlabs.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        sean.j.christopherson@intel.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, maz@kernel.org, james.morse@arm.com,
+        julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com,
+        christoffer.dall@arm.com, peterx@redhat.com, thuth@redhat.com,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/7] KVM: s390: clean up redundant 'kvm_run'
+ parameters
+Message-ID: <20200422154543.2efba3dd.cohuck@redhat.com>
+In-Reply-To: <20200422125810.34847-2-tianjia.zhang@linux.alibaba.com>
+References: <20200422125810.34847-1-tianjia.zhang@linux.alibaba.com>
+        <20200422125810.34847-2-tianjia.zhang@linux.alibaba.com>
+Organization: Red Hat GmbH
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-There is export_uuid() function which exports uuid_t to the u8 array.
-Use it instead of open coding variant.
+On Wed, 22 Apr 2020 20:58:04 +0800
+Tianjia Zhang <tianjia.zhang@linux.alibaba.com> wrote:
 
-This allows to hide the uuid_t internals.
+> In the current kvm version, 'kvm_run' has been included in the 'kvm_vcpu'
+> structure. Earlier than historical reasons, many kvm-related function
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/firmware/broadcom/tee_bnxt_fw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+s/Earlier than/For/ ?
 
-diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
-index ed10da5313e86..4cf0c2576037d 100644
---- a/drivers/firmware/broadcom/tee_bnxt_fw.c
-+++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
-@@ -197,7 +197,7 @@ static int tee_bnxt_fw_probe(struct device *dev)
- 		return -ENODEV;
- 
- 	/* Open session with Bnxt load Trusted App */
--	memcpy(sess_arg.uuid, bnxt_device->id.uuid.b, TEE_IOCTL_UUID_LEN);
-+	export_uuid(sess_arg.uuid, &bnxt_device->id.uuid);
- 	sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
- 	sess_arg.num_params = 0;
- 
--- 
-2.26.1
+> parameters retain the 'kvm_run' and 'kvm_vcpu' parameters at the same time.
+> This patch does a unified cleanup of these remaining redundant parameters.
+> 
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> ---
+>  arch/s390/kvm/kvm-s390.c | 37 ++++++++++++++++++++++---------------
+>  1 file changed, 22 insertions(+), 15 deletions(-)
+> 
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index e335a7e5ead7..d7bb2e7a07ff 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -4176,8 +4176,9 @@ static int __vcpu_run(struct kvm_vcpu *vcpu)
+>  	return rc;
+>  }
+>  
+> -static void sync_regs_fmt2(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
+> +static void sync_regs_fmt2(struct kvm_vcpu *vcpu)
+>  {
+> +	struct kvm_run *kvm_run = vcpu->run;
+>  	struct runtime_instr_cb *riccb;
+>  	struct gs_cb *gscb;
+>  
+> @@ -4235,7 +4236,7 @@ static void sync_regs_fmt2(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
+>  		}
+>  		if (vcpu->arch.gs_enabled) {
+>  			current->thread.gs_cb = (struct gs_cb *)
+> -						&vcpu->run->s.regs.gscb;
+> +						&kvm_run->s.regs.gscb;
+
+Not sure if these changes (vcpu->run-> => kvm_run->) are really worth
+it. (It seems they amount to at least as much as the changes advertised
+in the patch description.)
+
+Other opinions?
+
+>  			restore_gs_cb(current->thread.gs_cb);
+>  		}
+>  		preempt_enable();
 
