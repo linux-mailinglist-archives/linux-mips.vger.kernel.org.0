@@ -2,92 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B2E1B57ED
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2020 11:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFE81B5965
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2020 12:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726101AbgDWJSv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Apr 2020 05:18:51 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:43558 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725854AbgDWJSv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Apr 2020 05:18:51 -0400
-Received: by mail-io1-f67.google.com with SMTP id 19so5626149ioz.10
-        for <linux-mips@vger.kernel.org>; Thu, 23 Apr 2020 02:18:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6eZiZWmNskUmkholijwyj4qSeQoHJYWmhK4Utg1NCJk=;
-        b=Ngtx9MX5W9Lrgr9oMGcTJneZvOF43Xq21UVg/jWKNhquOWMgbQ3gGzMzg//iiNz4/d
-         N3XDusht2qJTcnz/MRJWMgJEufsKhIxxmORFVrOleRCRL01erwLJtZSJf2OMfBeT2jMB
-         ylpr+Kx3HElAcgZdDtj4qzK2RNe1dYwMbl1Njn1NfNPs7GB9MFyvW5CZm4b3hnE8DpZw
-         ZQWzSGjZD+vbLoXs1lUHO0ywt/2pIxIoZHxO5YSsK6xt9y2cxdicL9XajxbktyJ3ijVF
-         1+ORgMllan48YzjRc0n8VvnFNiMSYy4o1AigxSNiLDsLaLEK9uJn2381Y1RBrVNBdqL0
-         FSCA==
-X-Gm-Message-State: AGi0PuZvUheRBtq3l/BvNu79d/yNvv8tBjtn5ZahO2ocdxaZvfKUTYcs
-        hV/C9v4prmeKAQdnBCGUVOM56s1dcioU0hXPbJdnVDiMsRk=
-X-Google-Smtp-Source: APiQypJMZS0fvE9mXtNyfpyg9plvxOCYB1juNUWBTZ6XKGkTZbdI+RXOo0gMumXBRtReuEytG9djOE0C+swLFa+moZw=
-X-Received: by 2002:a05:6638:1192:: with SMTP id f18mr2263777jas.123.1587633530069;
- Thu, 23 Apr 2020 02:18:50 -0700 (PDT)
+        id S1725863AbgDWKkF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Apr 2020 06:40:05 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:21634 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726960AbgDWKkE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 23 Apr 2020 06:40:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1587638402;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+r/PR2FbN4xLG8Nok2HJ4M/QJoOCF0Nk3Bss40sN0xs=;
+        b=fBDzYVCCqW1GoVdwQp91lZNHO5HeSb4pWmnedQElmzSBpXNLACkopal9QJXMg2pm3UJ3L+
+        +XpkN+whgwN7VBTpJK1UvxiK45oP99p+B8qza+MQOhVUymFMokiZwcpFQjGqIFVo6cUp8p
+        SeCWD8j9VoIYkfaBgy55TAtxYAumP9s=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-246-AkzxH94nMVKFKkFx37Ew_w-1; Thu, 23 Apr 2020 06:39:20 -0400
+X-MC-Unique: AkzxH94nMVKFKkFx37Ew_w-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 07DD5835B41;
+        Thu, 23 Apr 2020 10:39:17 +0000 (UTC)
+Received: from gondolin (ovpn-112-121.ams2.redhat.com [10.36.112.121])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 11C6260608;
+        Thu, 23 Apr 2020 10:39:03 +0000 (UTC)
+Date:   Thu, 23 Apr 2020 12:39:01 +0200
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        pbonzini@redhat.com, tsbogend@alpha.franken.de, paulus@ozlabs.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org,
+        frankja@linux.ibm.com, david@redhat.com, heiko.carstens@de.ibm.com,
+        gor@linux.ibm.com, sean.j.christopherson@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com, maz@kernel.org,
+        james.morse@arm.com, julien.thierry.kdev@gmail.com,
+        suzuki.poulose@arm.com, christoffer.dall@arm.com,
+        peterx@redhat.com, thuth@redhat.com, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/7] KVM: s390: clean up redundant 'kvm_run'
+ parameters
+Message-ID: <20200423123901.72a4c6a4.cohuck@redhat.com>
+In-Reply-To: <5e1e126d-f1b0-196c-594b-4289d0afb9a8@linux.alibaba.com>
+References: <20200422125810.34847-1-tianjia.zhang@linux.alibaba.com>
+        <20200422125810.34847-2-tianjia.zhang@linux.alibaba.com>
+        <20200422154543.2efba3dd.cohuck@redhat.com>
+        <dc5e0fa3-558b-d606-bda9-ed281cf9e9ae@de.ibm.com>
+        <20200422180403.03f60b0c.cohuck@redhat.com>
+        <5e1e126d-f1b0-196c-594b-4289d0afb9a8@linux.alibaba.com>
+Organization: Red Hat GmbH
 MIME-Version: 1.0
-References: <1587548422-10707-1-git-send-email-chenhc@lemote.com>
- <1587548422-10707-2-git-send-email-chenhc@lemote.com> <20200422161044.GA22753@alpha.franken.de>
-In-Reply-To: <20200422161044.GA22753@alpha.franken.de>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Thu, 23 Apr 2020 17:26:08 +0800
-Message-ID: <CAAhV-H4HNYs8UfdYFRjZacCXtTzERL-39w-fsHPK9UT91BP8xg@mail.gmail.com>
-Subject: Re: [PATCH V2 2/3] MIPS: Move unaligned load/store helpers to inst.h
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Pei Huang <huangpei@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Thomas,
+On Thu, 23 Apr 2020 11:01:43 +0800
+Tianjia Zhang <tianjia.zhang@linux.alibaba.com> wrote:
 
-On Thu, Apr 23, 2020 at 12:11 AM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Wed, Apr 22, 2020 at 05:40:21PM +0800, Huacai Chen wrote:
-> > Move unaligned load/store helpers from unaligned.c to inst.h, then
-> > other parts of the kernel can use these helpers.
-> >
-> > Signed-off-by: Pei Huang <huangpei@loongson.cn>
-> > Signed-off-by: Shuangshuang Zhang <zhangshuangshuang@loongson.cn>
-> > Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> > Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > ---
-> >  arch/mips/include/asm/inst.h | 773 ++++++++++++++++++++++++++++++++++++++++++
-> >  arch/mips/kernel/unaligned.c | 775 -------------------------------------------
->
-> this patch still has checkpatch errors/warnings and more serious
-> it breaks at least IP30 builds.
->
-> Patch 3 also contains checkpatch errors.
->
-> Please fix them before submitting again.
-I will try my best to fix the all possible checkpatch errors/warnings,
-but this patch (Patch 2) just move some code from one file to another
-file. Should I fix those errors in this patch?
+> On 2020/4/23 0:04, Cornelia Huck wrote:
+> > On Wed, 22 Apr 2020 17:58:04 +0200
+> > Christian Borntraeger <borntraeger@de.ibm.com> wrote:
+> >   
+> >> On 22.04.20 15:45, Cornelia Huck wrote:  
+> >>> On Wed, 22 Apr 2020 20:58:04 +0800
+> >>> Tianjia Zhang <tianjia.zhang@linux.alibaba.com> wrote:
+> >>>      
+> >>>> In the current kvm version, 'kvm_run' has been included in the 'kvm_vcpu'
+> >>>> structure. Earlier than historical reasons, many kvm-related function  
+> >>>
+> >>> s/Earlier than/For/ ?
+> >>>      
+> >>>> parameters retain the 'kvm_run' and 'kvm_vcpu' parameters at the same time.
+> >>>> This patch does a unified cleanup of these remaining redundant parameters.
+> >>>>
+> >>>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> >>>> ---
+> >>>>   arch/s390/kvm/kvm-s390.c | 37 ++++++++++++++++++++++---------------
+> >>>>   1 file changed, 22 insertions(+), 15 deletions(-)
+> >>>>
+> >>>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> >>>> index e335a7e5ead7..d7bb2e7a07ff 100644
+> >>>> --- a/arch/s390/kvm/kvm-s390.c
+> >>>> +++ b/arch/s390/kvm/kvm-s390.c
+> >>>> @@ -4176,8 +4176,9 @@ static int __vcpu_run(struct kvm_vcpu *vcpu)
+> >>>>   	return rc;
+> >>>>   }
+> >>>>   
+> >>>> -static void sync_regs_fmt2(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
+> >>>> +static void sync_regs_fmt2(struct kvm_vcpu *vcpu)
+> >>>>   {
+> >>>> +	struct kvm_run *kvm_run = vcpu->run;
+> >>>>   	struct runtime_instr_cb *riccb;
+> >>>>   	struct gs_cb *gscb;
+> >>>>   
+> >>>> @@ -4235,7 +4236,7 @@ static void sync_regs_fmt2(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
+> >>>>   		}
+> >>>>   		if (vcpu->arch.gs_enabled) {
+> >>>>   			current->thread.gs_cb = (struct gs_cb *)
+> >>>> -						&vcpu->run->s.regs.gscb;
+> >>>> +						&kvm_run->s.regs.gscb;  
+> >>>
+> >>> Not sure if these changes (vcpu->run-> => kvm_run->) are really worth
+> >>> it. (It seems they amount to at least as much as the changes advertised
+> >>> in the patch description.)
+> >>>
+> >>> Other opinions?  
+> >>
+> >> Agreed. It feels kind of random. Maybe just do the first line (move kvm_run from the
+> >> function parameter list into the variable declaration)? Not sure if this is better.
+> >>  
+> > 
+> > There's more in this patch that I cut... but I think just moving
+> > kvm_run from the parameter list would be much less disruptive.
+> >   
+> 
+> I think there are two kinds of code(`vcpu->run->` and `kvm_run->`), but 
+> there will be more disruptive, not less.
 
-The other problem, IP28/IP30 build fails because of the redefinition
-of "LONG". In asm.h "LONG" is .dword, but in
-arch/mips/include/asm/fw/arc/types.h "LONG" is "long". I don't know
-what is the best way to resolve this, maybe remove the "LONG"
-definition in types.h and use "long" instead?
+I just fail to see the benefit; sure, kvm_run-> is convenient, but the
+current code is just fine, and any rework should be balanced against
+the cost (e.g. cluttering git annotate).
 
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
-
-Thanks,
-Huacai
