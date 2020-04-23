@@ -2,139 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BDC81B5FD4
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2020 17:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8DB1B60A7
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2020 18:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729296AbgDWPqo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Apr 2020 11:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729176AbgDWPqo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 23 Apr 2020 11:46:44 -0400
-Received: from mo6-p02-ob.smtp.rzone.de (mo6-p02-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5302::9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F720C09B040;
-        Thu, 23 Apr 2020 08:46:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1587656801;
-        s=strato-dkim-0002; d=goldelico.com;
-        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=ybxxfVp12h/EJrmfUJdRJSGTmKH3W7lZYEApLFlERWY=;
-        b=DrKJ9fNz8WxLH/lxvzqH+AMSam9tu2FhRn1b+DxbazOFoXyS93+afrGgpwefT4t6QC
-        /4k7b51LsSANcN/xVgHDnGc9MzXErXxCPQeHuiElt1upkXq+nvKp9tSqjV5+k1mBfxS3
-        gAkvjEQjZJNlc0Yw5yj/hGkMx2dR3nhn+e4WqxPIVEcRt6S9melWvYcV+2h+8m47DJTF
-        K+utEk2anK6Ms4Lb8UzV2Zj3a1+UkWzb9yq/ZlLTRil6UF5EXzHTWRMjAccLpfo3BT1D
-        qJ7BmeYa+eOlmSQs2uTl6iNBaTpywNCpLK63P2AacOcUu0H5TmLKFwDnMPpJpV6cP8ls
-        aO1A==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBp5hRw/qOxWRk4dCysOfl5tOw33QtdTbGcCRJGxnkq3ByzlXOnoXby"
-X-RZG-CLASS-ID: mo00
-Received: from [IPv6:2001:16b8:2692:1500:61a3:e550:2224:7950]
-        by smtp.strato.de (RZmta 46.6.2 AUTH)
-        with ESMTPSA id R0acebw3NFjv7lw
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-        Thu, 23 Apr 2020 17:45:57 +0200 (CEST)
-Subject: Re: [PATCH v6 00/12] ARM/MIPS: DTS: add child nodes describing the PVRSGX GPU present in some OMAP SoC and JZ4780 (and many more)
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: text/plain; charset=us-ascii
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <43688597-4b99-8f4d-9ad5-548ddff07f52@baylibre.com>
-Date:   Thu, 23 Apr 2020 17:45:55 +0200
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Tony Lindgren <tony@atomide.com>,
-        James Hogan <jhogan@kernel.org>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        linux-samsung-soc@vger.kernel.org,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Philipp Rossak <embed3d@gmail.com>,
-        OpenPVRSGX Linux Driver Group <openpvrsgx-devgroup@letux.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
-        kernel@pyra-handheld.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <71F2F964-32C7-41E6-8F1A-A73161EA1BB3@goldelico.com>
-References: <20200415130233.rgn7xrtwqicptke2@gilmour.lan> <C589D06E-435E-4316-AD0A-8498325039E3@goldelico.com> <10969e64-fe1f-d692-4984-4ba916bd2161@gmail.com> <20200420073842.nx4xb3zqvu23arkc@gilmour.lan> <b5a06c19-7a3e-bcb8-5ae3-76901b9c6c35@gmail.com> <20200421112129.zjmkmzo3aftksgka@gilmour.lan> <20200421141543.GU37466@atomide.com> <D9D4D057-A73D-485F-898D-5C05E89C16B7@goldelico.com> <20200422065859.quy6ane5v7vsy5tf@gilmour.lan> <1AA57A0C-48E6-49BB-BB9A-2AAFFB371BCD@goldelico.com> <20200422151328.2oyqz7gqkbunmd6o@gilmour.lan> <07923B6C-4CCD-4B81-A98F-E19C43412A89@goldelico.com> <43688597-4b99-8f4d-9ad5-548ddff07f52@baylibre.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-X-Mailer: Apple Mail (2.3124)
+        id S1729512AbgDWQWJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Apr 2020 12:22:09 -0400
+Received: from mga18.intel.com ([134.134.136.126]:20646 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729477AbgDWQWI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 23 Apr 2020 12:22:08 -0400
+IronPort-SDR: daDRwMEVdYKP8z3z5u2+kbDy209qVdnZqImId1ARU4I02xw7Sj1rjjNRN0Eht3aHcw8IKEiQAo
+ L4KH5xWue2Qw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2020 09:22:07 -0700
+IronPort-SDR: pj0Y69wd4xhPZUL8O7agmF9d049aFDa29eVS+FtC4Ct+GxciTXL40ScRSE4MuzZ9LrtneqtnH0
+ E1E4L2J/QIng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,307,1583222400"; 
+   d="scan'208";a="274283346"
+Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
+  by orsmga002.jf.intel.com with ESMTP; 23 Apr 2020 09:22:03 -0700
+From:   "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+To:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org
+Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        arnd@arndb.de, brendanhiggins@google.com, tglx@linutronix.de,
+        boris.brezillon@collabora.com, anders.roxell@linaro.org,
+        masonccyang@mxic.com.tw, robh+dt@kernel.org,
+        linux-mips@vger.kernel.org, hauke.mehrtens@intel.com,
+        andriy.shevchenko@intel.com, qi-ming.wu@intel.com,
+        cheol.yong.kim@intel.com,
+        Ramuthevar Vadivel Murugan 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Subject: [PATCH v3 0/2] mtd: rawnand: Add NAND controller support on Intel LGM SoC
+Date:   Fri, 24 Apr 2020 00:21:11 +0800
+Message-Id: <20200423162113.38055-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Neil,
+From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
 
-> Am 23.04.2020 um 17:00 schrieb Neil Armstrong =
-<narmstrong@baylibre.com>:
->> One thing we can learn is that "core" seems to be a de facto standard=20=
+This patch adds the new IP of Nand Flash Controller(NFC) support
+on Intel's Lightning Mountain(LGM) SoC.
 
->> for the core clock-name. An alternative "gpu" is used by =
-nvidia,gk20a.txt.
->=20
-> Usually IPs needs a few clocks:
-> - pclk or apb or reg: the clock clocking the "slave" bus to serve the =
-registers
-> - axi or bus or ahb: the bus clocking the the "master" bus to get data =
-from system memory
-> - core: the actual clock feeding the GPU logic
+DMA is used for burst data transfer operation, also DMA HW supports
+aligned 32bit memory address and aligned data access by default.
+DMA burst of 8 supported. Data register used to support the read/write
+operation from/to device.
 
-And the sgx544 seems to have two such clocks.
+NAND controller also supports in-built HW ECC engine.
 
-> Sometimes you have a single clock for slave and master bus.
->=20
-> But you can also have separate clocks for shader cores, .. this =
-depends on the IP and it's architecture.
-> The IP can also have memories with separate clocks, etc...
+NAND controller driver implements ->exec_op() to replace legacy hooks,
+these specific call-back method to execute NAND operations.
 
-Indeed.
+Thank you very much Boris and Hauke for the reviews and suggestions.
+---
+v3:
+  - Add depends on MACRO in Kconfig
+  - file name update in Makefile
+  - file name update to intel-nand-controller
+  - modification of MACRO divided like EBU, HSNAND and NAND
+  - add NAND_ALE_OFFS, NAND_CLE_OFFS and NAND_CS_OFFS
+  - rename lgm_ to ebu_ and _va suffix is removed in the whole file
+  - rename structure and varaibles as per review comments.
+  - remove lgm_read_byte(), lgm_dev_ready() and cmd_ctrl() un-used function  
+  - update in exec_op() as per review comments
+  - rename function lgm_dma_exit() by lgm_dma_cleanup()
+  - hardcoded magic value  for base and offset replaced by MACRO defined
+  - mtd_device_unregister() + nand_cleanup() instead of nand_release()
+v2:
+  - implement the ->exec_op() to replaces the legacy hook-up.
+  - update the commit message
+  - YAML compatible string update to intel, lgm-nand-controller
+  - add MIPS maintainers and xway_nand driver author in CC
 
-> But all these clocks can be source by an unique clock on a SoC, but =
-different on another
-> SoC, this is why it's important to list them all, even optional.
->=20
-> You'll certainly have at least a reset signal, and a power domain, =
-these should exist and be optional.
+v1:
+ - initial version
+ 
 
-Well, they exist only as hints in block diagrams of some SoC data sheets
-(so we do not know if they represent the imagination definitions) and =
-the
-current driver code doesn't make use of it. Still the gpu core works.
 
-So I do not see any urgent need to add a complete list to the bindings =
-now.
+Ramuthevar Vadivel Murugan (2):
+  dt-bindings: mtd: Add YAML for Nand Flash Controller support
+  mtd: rawnand: Add NAND controller support on Intel LGM SoC
 
-Unless some special SoC integration makes use of them. Then it is IMHO =
-easier
-to extend the bindings by a follow-up patch than now thinking about all
-potential options and bloating the bindings with things we (the open =
-source
-community) doesn't and can't know.
+ .../devicetree/bindings/mtd/intel,lgm-nand.yaml    |  61 ++
+ drivers/mtd/nand/raw/Kconfig                       |   8 +
+ drivers/mtd/nand/raw/Makefile                      |   1 +
+ drivers/mtd/nand/raw/intel-nand-controller.c       | 705 +++++++++++++++++++++
+ 4 files changed, 775 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+ create mode 100644 drivers/mtd/nand/raw/intel-nand-controller.c
 
-My goal is to keep the bindings as minimalistic as possible. And reset =
-lines
-and power domains are (at least for those we have in the works) not =
-needed
-to make working systems.
-
-Therefore, for clocks I also would start with a minimalistic approach =
-for
-a single optional GPU core clock and leave out reset and power =
-completely.
-
-BR and thanks,
-Nikolaus
+-- 
+2.11.0
 
