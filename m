@@ -2,107 +2,186 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7EF51B5787
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2020 10:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4641B57EE
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2020 11:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726508AbgDWI6L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Apr 2020 04:58:11 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:55393 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726451AbgDWI6K (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 23 Apr 2020 04:58:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587632289;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kkq0uwjQBfxJhQKuYr+1chwz4XGWFG4HzoEt9DzJrws=;
-        b=iGAOCQ8qlGPHFbP9p+FqEGRRLBMdsIE6UH6o4zEembVbztHHxC/JWhRoWv34o5h0XkQf9s
-        dgj4jftcqXalejir7yAhsFS1HfgyurbDpxr3ZVe0F+AoDhsiUlgKIEvcAr97EuXqM4PKQa
-        Wgk7i3h8Mv5BWJLy7gLrXX+R+3kGtvs=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-175-_mdq8VvvPF-qtnBdoMCuUQ-1; Thu, 23 Apr 2020 04:58:07 -0400
-X-MC-Unique: _mdq8VvvPF-qtnBdoMCuUQ-1
-Received: by mail-wr1-f72.google.com with SMTP id y10so2536493wrn.5
-        for <linux-mips@vger.kernel.org>; Thu, 23 Apr 2020 01:58:06 -0700 (PDT)
+        id S1726145AbgDWJTA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Apr 2020 05:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725854AbgDWJS7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Apr 2020 05:18:59 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F6BC03C1AF;
+        Thu, 23 Apr 2020 02:18:59 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id d16so3769169edq.7;
+        Thu, 23 Apr 2020 02:18:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6or5H9vBftKfzm5WYSLYy4vvhyl7L7d44OPFeXI1ep8=;
+        b=UKPJfrExUb8T/KM2g1mTZIgagdvRlpwLeq1ewHvf+DpjMcF3ml+yCscaQjGxdMIEhF
+         2+XUqYM7GG7ivEL7pPVOmYKKuREQfGyU7gtjaylu8q7iOOkfWj08+XdmMIMqnBRE72uJ
+         E7FWdsvhsgIsCog/4y0smfiMt+KhiwVF6C7HI3vGJg7ZJ/TbATZixqrpy0aZ4jAc8fiP
+         MIYaprMYZdYk4zAXtGRLi/L3kGmt6t0Xa59cZa7X9ZxovfmlQR6wqV7aDanukNwBHke5
+         mcKEMce8qF6sf57JWjyh+aykLBS8N6X/W+RMmfZXiyNuXR/+YkYpj3gf1s64YhNZOYiD
+         8FRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Kkq0uwjQBfxJhQKuYr+1chwz4XGWFG4HzoEt9DzJrws=;
-        b=rtG2grCS79ZAh/nR+Enz6OqCbe0n/6LeSaCsOEz7y6YKTA++Zn/fbRjw8ZTMTfjdyl
-         StQjdZG9zkPVqlp+Cvm0j3PB8xMfPmQf8uDQvDWl7hCZj5fvoUsLYn3ksDg4jwwvqrF5
-         Q4nF9qAuXA5OpZqf3EhO43JkPnWPTUh+7pT7dJfoXZmis5JwzZk5dgWc/GHsEmngQ8kE
-         Rizmg5Bx8tTxFsckIf0Wq0ijoGehJlU3h2DZ0pJZfWNLRuoN3L05qj3kNxsWTfjDMJmD
-         46+MpxoDQGSDJF80vkjyYTqd9rOQEwXhMXGNVADTYb0J0c9O17JHFDN20gzmnBsIufdO
-         ewpg==
-X-Gm-Message-State: AGi0PuacVMrGeWVAKLRRTnHxVx76uZXqhHxIpIYnhsYLQhqPvkLH2fkq
-        CmuiYxq0rf8iMzsIsyuZ+xSfKUFjOMmPOa05tNpg1Ust4dxqi3vNy8h/EwI/AGWiJ4TZTQfRwEu
-        AizHP2lyZFYXRIw/MT8SKjA==
-X-Received: by 2002:a5d:664f:: with SMTP id f15mr3609438wrw.72.1587632286119;
-        Thu, 23 Apr 2020 01:58:06 -0700 (PDT)
-X-Google-Smtp-Source: APiQypJw0BmW6FuCWHcq3ZxzvKLkyVd4P0Y1C0QqksviQgntreRVEaQvmWwFSAjOCQTYt1Fqs4tEqA==
-X-Received: by 2002:a5d:664f:: with SMTP id f15mr3609406wrw.72.1587632285847;
-        Thu, 23 Apr 2020 01:58:05 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:d0a0:f143:e9e4:2926? ([2001:b07:6468:f312:d0a0:f143:e9e4:2926])
-        by smtp.gmail.com with ESMTPSA id h2sm2810041wmf.34.2020.04.23.01.58.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Apr 2020 01:58:05 -0700 (PDT)
-Subject: Re: [PATCH 4/5] kvm: Replace vcpu->swait with rcuwait
-To:     Marc Zyngier <maz@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>
-Cc:     tglx@linutronix.de, kvm@vger.kernel.org,
-        Davidlohr Bueso <dbueso@suse.de>, peterz@infradead.org,
-        torvalds@linux-foundation.org, bigeasy@linutronix.de,
-        linux-kernel@vger.kernel.org, rostedt@goodmis.org,
-        linux-mips@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>,
-        joel@joelfernandes.org, will@kernel.org,
-        kvmarm@lists.cs.columbia.edu
-References: <20200422040739.18601-1-dave@stgolabs.net>
- <20200422040739.18601-5-dave@stgolabs.net> <20200423094140.69909bbb@why>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <f07f6f55-9339-04b0-3877-d3240abd6d9c@redhat.com>
-Date:   Thu, 23 Apr 2020 10:57:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6or5H9vBftKfzm5WYSLYy4vvhyl7L7d44OPFeXI1ep8=;
+        b=Xas66uA69LI0rfcF9p7SxCEx+wRBJemzVe3VUdX0s96J1Xm9PZMOYGyegs1TxXll/V
+         PtMjcfqfd+9a6ZEOcG6xnaVNg28p3nWRuYCFJ2dDpF6A9Zd7lSWdlTNG2scmG5HJHq+V
+         xqw3D0bw/yh9LvdZuk2f3wH34CBegg7Oec9owiS+3aEP+9k4Kx9judMBQxf5oewJ7U3H
+         lSNriSmud8KzxyKowwwerGH7oRZGs6rPTLdK/j5HdOXoTkp9yexpU8iXUauNyFHj0KGe
+         IrxlUV2q3loH+Fvnm8rdq96Vumca2V5KYMu3t8FYRm8y8gnuiwxQCAPoGQ+z8pGm5GBQ
+         pA1Q==
+X-Gm-Message-State: AGi0PuZKaLG3w1k/e2OpOvHm9XK2x91qgKbD/yGEa1NbR41CyrqxqT/V
+        ecFH/ULAZlpNLRLNFbDzWjQiAq4FsNaaykMX1GU=
+X-Google-Smtp-Source: APiQypIFY3H8XCx2R696SxQCcrRwU6SmGyhS6FAqPehd6h1//Jf+BO2CLyWyKeFatEt2/WumqmusIU9XZ/Msiq5coAs=
+X-Received: by 2002:a05:6402:3041:: with SMTP id bu1mr1927283edb.145.1587633537874;
+ Thu, 23 Apr 2020 02:18:57 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200423094140.69909bbb@why>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1559287017-32397-1-git-send-email-horatiu.vultur@microchip.com>
+ <1559287017-32397-2-git-send-email-horatiu.vultur@microchip.com>
+ <CA+h21hprXnOYWExg7NxVZEX9Vjd=Y7o52ifKuAJqLwFuvDjaiw@mail.gmail.com> <20200423082948.t7sgq4ikrbm4cbnt@soft-dev3.microsemi.net>
+In-Reply-To: <20200423082948.t7sgq4ikrbm4cbnt@soft-dev3.microsemi.net>
+From:   Vladimir Oltean <olteanv@gmail.com>
+Date:   Thu, 23 Apr 2020 12:18:46 +0300
+Message-ID: <CA+h21hod2kOJP3SApEczq3+hcJFMWZd0UzZPvfYwTAP1h-cMwQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 1/2] net: mscc: ocelot: Add support for tcam
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Allan W. Nielsen" <allan.nielsen@microchip.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>, hongbo.wang@nxp.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 23/04/20 10:41, Marc Zyngier wrote:
->>  
->> -	if (swait_active(kvm_arch_vcpu_wq(vcpu)))
->> +	if (rcu_dereference(kvm_arch_vpu_get_wait(vcpu)) != NULL)
-> This doesn't compile (wrong function name, and rcu_dereference takes a
-> variable). But whatever it would do if we fixed it looks dodgy. it isn't
-> the rcuwait structure that you want to dereference, but rcuwait->task
-> (we are checking whether we are called because we are blocking or being
-> preempted).
-> 
+On Thu, 23 Apr 2020 at 11:29, Horatiu Vultur
+<horatiu.vultur@microchip.com> wrote:
+>
+> The 04/23/2020 00:26, Vladimir Oltean wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >
+> > Hi Horatiu,
+> >
+> > On Fri, 31 May 2019 at 10:18, Horatiu Vultur
+> > <horatiu.vultur@microchip.com> wrote:
+> > >
+> > > Add ACL support using the TCAM. Using ACL it is possible to create rules
+> > > in hardware to filter/redirect frames.
+> > >
+> > > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > > ---
 
-Yes, I agree.  Replacing swait with rcuwait is all good, but please make
-the API look the same first.  Just like you added prepare_to_rcuwait and
-finish_rcuwait, let's add rcuwait_active as well.
+[...]
 
-Actually let's do it like this:
+> > > +
+> > > +/* Calculate offsets for entry */
+> > > +static void is2_data_get(struct vcap_data *data, int ix)
+> > > +{
+> > > +       u32 i, col, offset, count, cnt, base, width = vcap_is2.tg_width;
+> > > +
+> > > +       count = (data->tg_sw == VCAP_TG_HALF ? 2 : 4);
+> > > +       col = (ix % 2);
+> > > +       cnt = (vcap_is2.sw_count / count);
+> > > +       base = (vcap_is2.sw_count - col * cnt - cnt);
+> > > +       data->tg_value = 0;
+> > > +       data->tg_mask = 0;
+> > > +       for (i = 0; i < cnt; i++) {
+> > > +               offset = ((base + i) * width);
+> > > +               data->tg_value |= (data->tg_sw << offset);
+> > > +               data->tg_mask |= GENMASK(offset + width - 1, offset);
+> > > +       }
+> > > +
+> > > +       /* Calculate key/action/counter offsets */
+> > > +       col = (count - col - 1);
+> > > +       data->key_offset = (base * vcap_is2.entry_width) / vcap_is2.sw_count;
+> > > +       data->counter_offset = (cnt * col * vcap_is2.counter_width);
+> > > +       i = data->type;
+> > > +       width = vcap_is2.action_table[i].width;
+> > > +       cnt = vcap_is2.action_table[i].count;
+> > > +       data->action_offset =
+> > > +               (((cnt * col * width) / count) + vcap_is2.action_type_width);
+> > > +}
+> > > +
 
-1) Davidlohr, please post only patches 1-3 to "equalize" the swait and
-rcuwait APIs.
+[...]
 
-2) Peter, please prepare a topic branch for those, or provide Acked-by
+> > > +}
+> > > +
+> > > +static void is2_entry_set(struct ocelot *ocelot, int ix,
+> > > +                         struct ocelot_ace_rule *ace)
+> > > +{
+> > > +       u32 val, msk, type, type_mask = 0xf, i, count;
+> > > +       struct ocelot_ace_vlan *tag = &ace->vlan;
+> > > +       struct ocelot_vcap_u64 payload = { 0 };
+> > > +       struct vcap_data data = { 0 };
+> > > +       int row = (ix / 2);
+> > > +
+> > > +       /* Read row */
+> > > +       vcap_row_cmd(ocelot, row, VCAP_CMD_READ, VCAP_SEL_ALL);
+> > > +       vcap_cache2entry(ocelot, &data);
+> > > +       vcap_cache2action(ocelot, &data);
+> > > +
+> > > +       data.tg_sw = VCAP_TG_HALF;
+> > > +       is2_data_get(&data, ix);
+> > > +       data.tg = (data.tg & ~data.tg_mask);
+> > > +       if (ace->prio != 0)
+> > > +               data.tg |= data.tg_value;
+> >
+>
+> Hi Vladimir,
+>
+> > This complicated piece of logic here populates the type-group for
+> > subwords > 0 unconditionally, and the type-group for subword 0 only if
+> > the ACE is enabled.
+> >
+> > tc filter add dev swp0 ingress protocol ip flower skip_sw src_ip
+> > 192.168.1.1 action drop
+> > [   34.172068] is2_entry_set: ace->prio 49152 data tg 0xaa
+> > tc filter del dev swp0 ingress pref 49152
+> > [   44.266662] is2_entry_set: ace->prio 0 data tg 0xa0
+> >
+> > What is the purpose of this? Why can't the entire data->tg be set to
+> > zero when deleting it?
+> I don't remember exactly but let me try:
+>
+> In case you have only one entry per row, then you could set the tg to
+> have value 0. But in case you have 2 entries(use half keys), you need to
+> set the tg to 0 only to the half entry that you delete.
+>
+> So for example if you have only 1 half entry at subword 1 then the tg
+> should be 0xa0. Then when you add a new entry on the same row but at
+> subword 0 then the tg should have the value 0xaa.
+> The value 0xaa, comes from the fact that the type group for half entry
+> is 0x2 and this needs to be set for each subword. And IS2 has 4 subwords
+> therefore 0b10101010 = 0xaa.
+>
+> I hope this helps, if not I can look deeper in the code and see exactly.
+>
 
-3) let's get everything else through the KVM tree.
+Oh, right, so for half and quarter keys you need to not affect the
+neighbour keys when modifying a row. That's exactly the information I
+was looking for, thanks!
 
-Thanks,
+> > Is there any special meaning to a TCAM entry > with subword zero unused?
+> >
 
-Paolo
+[...]
 
+>
+> --
+> /Horatiu
+
+-Vladimir
