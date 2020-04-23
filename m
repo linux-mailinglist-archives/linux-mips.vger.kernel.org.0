@@ -2,189 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C0A1B6586
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2020 22:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 679FE1B5AB1
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2020 13:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726439AbgDWUho (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Apr 2020 16:37:44 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:34665 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725884AbgDWUhn (ORCPT
+        id S1727122AbgDWLp0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Apr 2020 07:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727088AbgDWLpZ (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 23 Apr 2020 16:37:43 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 69404580311;
-        Thu, 23 Apr 2020 16:37:42 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 23 Apr 2020 16:37:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=1rgoWEglUTjk3ArPIIoAl+30lpL
-        4idh7C80OCTHpmUw=; b=SAJTsuiPodXPJOLPlP7oomUce1KO9HgLp4LSXSG2q9V
-        k99XrTsnVoZPCz2XKjQKD/wUosuK8MuRP1DWKzbl17A0aD9dPIcfL5Yv29wTyk/s
-        MxPtd1I8auIbqrXO6sX44R4LiutPyRWiA1ti78y/EUTrpxEy1duwnEXz88RMu+Wa
-        29LJ8E+3FKB4mPDCcNdNCTFAYCSjWqg98NxjT/PmRIX9XZYcDg8HGlb8Ek85mB+Y
-        afP7G0NWuBm2SWYwZUxi54SkwGeEkgnt8e2iIWKGi/rdjHY2FkoWTUfZma4E6I7p
-        8zBHjptMWfRwKtt/h5nnvYAnwr/EisDPFqpP7SVY4ew==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=1rgoWE
-        glUTjk3ArPIIoAl+30lpL4idh7C80OCTHpmUw=; b=FjH1HHY1SYTP/zk1w/wFGD
-        SQJkRMnQfaPNqbJSWS0avw2d6sCE0ifpDAK6vqra+AzCyPNpF/s1rZ1bEwox4Tgp
-        5pRbjM7eb2MuhvBXHwujlGQ6qpYXKeyP1LJNg4R8oz82cnPqnDpTB2nCKi/DI/YA
-        Ks5K8dR7ic8gJjYBr7a9npZnjiKmlpoGay9ZCGbr3KF+su+cblWqDQPKYrSD3IR/
-        kCSbFXIEV+Qjgu2OS5YFstcNjXDXy6Fnc7738GUpuHwryUCudVJ5gHwjTV5IveLR
-        qiGMtBCk9VdHZ3Y9yphlb5ppjnApd7jwJ+f9+lE0RQcS4Xdz9gzelpUkfHYLOJ8g
-        ==
-X-ME-Sender: <xms:kfyhXuV9_lOcQCaGhKDLNNqO3cyD3i3DpEf_1MWSOGICGvB7_Q4laA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrgeelgdduudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecukfhppeeltd
-    drkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghi
-    lhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:kfyhXhJGup0irbSm7vO_9T0yPLxTEYhpuZ2E8oHhgz9vj5BJ3Cw0kg>
-    <xmx:kfyhXvKW36ehC4KYnTQbBDBeA-onlsefkaFfDRE0si9E8P2EW3ls3g>
-    <xmx:kfyhXt-bSwETRMJWIWQ8-fwwZs4BZXSea5_ChbcjuZeeIB-CsnZ1CA>
-    <xmx:lvyhXvcpdjm9Gmks9Zw2iUnYhWgzea6einYlDWRsnbwdwAEZC9o6sA>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 632923065D59;
-        Thu, 23 Apr 2020 16:37:37 -0400 (EDT)
-Date:   Thu, 23 Apr 2020 22:37:35 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Philipp Rossak <embed3d@gmail.com>
-Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        OpenPVRSGX Linux Driver Group <openpvrsgx-devgroup@letux.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
-        linux-mips@vger.kernel.org,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v6 00/12] ARM/MIPS: DTS: add child nodes describing the
- PVRSGX GPU present in some OMAP SoC and JZ4780 (and many more)
-Message-ID: <20200423203735.imlafyw6oz6dspev@gilmour.lan>
-References: <cover.1586939718.git.hns@goldelico.com>
- <20200415101008.zxzxca2vlfsefpdv@gilmour.lan>
- <2E3401F1-A106-4396-8FE6-51CAB72926A4@goldelico.com>
- <20200415130233.rgn7xrtwqicptke2@gilmour.lan>
- <C589D06E-435E-4316-AD0A-8498325039E3@goldelico.com>
- <10969e64-fe1f-d692-4984-4ba916bd2161@gmail.com>
- <20200420073842.nx4xb3zqvu23arkc@gilmour.lan>
- <b5a06c19-7a3e-bcb8-5ae3-76901b9c6c35@gmail.com>
- <20200421112129.zjmkmzo3aftksgka@gilmour.lan>
- <5749af21-e707-c998-c83b-50c48867c9e8@gmail.com>
+        Thu, 23 Apr 2020 07:45:25 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ECCC035494
+        for <linux-mips@vger.kernel.org>; Thu, 23 Apr 2020 04:45:25 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id t40so2390307pjb.3
+        for <linux-mips@vger.kernel.org>; Thu, 23 Apr 2020 04:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FfKfDBS3E7O8+6weeyCOGB77mjSuhzvIHDondzmM7AE=;
+        b=caVDZ0HvxmyvmnuVbBENJMWBXz8S1/DGSCWPsRXLQwTzFWtxz1pA2c7NOkRkIV8CRN
+         k0RGr2ghXYmJi7mqC9UuihpLlVLSDcN+cla4v4KmyeY4nPQUjnqIy33flS6tiLURmn5g
+         ygWVBjeLgmgsnT3U50zojZ0R+6C4srWGurAD1seUOp0IhtK0REHIpGNVKBMd9+laF/sx
+         7xnYZQ3c3P5rvC/znlpGkRjkl9RE+Df5A8D+DJw4qkszkTtdgRdD5yoq0SLLBzkCnBu3
+         nunm7UQoE9SnzVimyBQ+UUXkScTr6Ekl3vDfr3rpbPgzqyEQ0/zFASa5lU+I7SLealXn
+         vMxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FfKfDBS3E7O8+6weeyCOGB77mjSuhzvIHDondzmM7AE=;
+        b=qIaXdjvuxHGkOxvzcyfdza85Qrn/f75CofV5kJNkbVM4uYU2BF7mUTPv84hA2ENoIL
+         FG3K4xYGxvEFLifonV58Ok/BG8MLbjH3M7AJjG7JxWQP5LHdfUkKmDGYRUI6XHgMN4tJ
+         hpzZesgBmpb1UeIqXbWsqIsMIA587HsZd5gJ/nG61YrSykDGo3ldvLjKzEa1ww7JR1GA
+         rXMC4lpYLjtBp8MTWxTb0aGh6/mewP1YD2IJE1fugj+Ity5/vDRg99FEzkhNvJKXBykU
+         /FztNgs9ijuur9MJfGUzIZcxCbilaT/Rmge2Odi9Av5EF9i5L5jY4/Sj1wDVNxh/Zjz9
+         2veA==
+X-Gm-Message-State: AGi0PuagdScQEL1ppLssyGCQit230tOEpbCgvqf05OaHCOQlcoldK06k
+        kxUeuJsAobgPlj05YVyfK+g=
+X-Google-Smtp-Source: APiQypKmSltNn/m3xT+76CSs5WizHmPRw2vuxIfzhx8szOQhDBPGdP9ZuIZf2THBzbbrejICjuH8TQ==
+X-Received: by 2002:a17:90a:aa0e:: with SMTP id k14mr157650pjq.74.1587642325030;
+        Thu, 23 Apr 2020 04:45:25 -0700 (PDT)
+Received: from huangll.lan ([47.74.51.72])
+        by smtp.gmail.com with ESMTPSA id u2sm2121327pjn.20.2020.04.23.04.45.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Apr 2020 04:45:24 -0700 (PDT)
+From:   Liangliang Huang <huanglllzu@gmail.com>
+X-Google-Original-From: Liangliang Huang <huangll@lemote.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Liangliang Huang <huangll@lemote.com>
+Subject: [PATCH] MIPS: arch_send_call_function_single_ipi() calling conventions change
+Date:   Thu, 23 Apr 2020 19:44:21 -0400
+Message-Id: <20200423234421.13805-1-huangll@lemote.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="uldmalad7cdsj5zk"
-Content-Disposition: inline
-In-Reply-To: <5749af21-e707-c998-c83b-50c48867c9e8@gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Use mp_ops->send_ipi_single() instead of mp_ops->send_ipi_mask() in
+arch_send_call_function_single_ipi(). send_ipi_single() can send
+IPI signal to a special cpu more efficiently.
 
---uldmalad7cdsj5zk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Liangliang Huang <huangll@lemote.com>
+---
+ arch/mips/include/asm/smp.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Tue, Apr 21, 2020 at 06:42:17PM +0200, Philipp Rossak wrote:
-> Hi,
->=20
-> On 21.04.20 13:21, Maxime Ripard wrote:
-> > Hi,
-> >=20
-> > On Tue, Apr 21, 2020 at 11:57:33AM +0200, Philipp Rossak wrote:
-> > > On 20.04.20 09:38, Maxime Ripard wrote:
-> > > > Hi,
-> > > >=20
-> > > > On Fri, Apr 17, 2020 at 02:09:06PM +0200, Philipp Rossak wrote:
-> > > > > > > I'm a bit skeptical on that one since it doesn't even list the
-> > > > > > > interrupts connected to the GPU that the binding mandates.
-> > > > > >=20
-> > > > > > I think he left it out for a future update.
-> > > > > > But best he comments himself.
-> > > > >=20
-> > > > > I'm currently working on those bindings. They are now 90% done, b=
-ut they are
-> > > > > not finished till now. Currently there is some mainline support m=
-issing to
-> > > > > add the full binding. The A83T and also the A31/A31s have a GPU P=
-ower Off
-> > > > > Gating Register in the R_PRCM module, that is not supported right=
- now in
-> > > > > Mainline. The Register need to be written when the GPU is powered=
- on and
-> > > > > off.
-> > > > >=20
-> > > > > @Maxime: I totally agree on your point that a demo needs to be pr=
-ovided
-> > > > > before the related DTS patches should be provided. That's the rea=
-son why I
-> > > > > added the gpu placeholder patches.
-> > > > > Do you have an idea how a driver for the R_PRCM stuff can look li=
-ke? I'm not
-> > > > > that experienced with the clock driver framework.
-> > > >=20
-> > > > It looks like a power-domain to me, so you'd rather plug that into =
-the genpd
-> > > > framework.
-> > >=20
-> > > I had a look on genpd and I'm not really sure if that fits.
-> > >=20
-> > > It is basically some bit that verify that the clocks should be enable=
-d or
-> > > disabled.
-> >=20
-> > No, it can do much more than that. It's a framework to control the SoCs=
- power
-> > domains, so clocks might be a part of it, but most of the time it's goi=
-ng to be
-> > about powering up a particular device.
-> >=20
-> So I think I've found now the right piece of documentation and a driver t=
-hat
-> implements something similar [1].
->=20
-> So I will write a similar driver like linked above that only sets the rig=
-ht
-> bits for A83T and A31/A31s.
-> Do you think this is the right approach?
+diff --git a/arch/mips/include/asm/smp.h b/arch/mips/include/asm/smp.h
+index 7990c1c..5d9ff61 100644
+--- a/arch/mips/include/asm/smp.h
++++ b/arch/mips/include/asm/smp.h
+@@ -125,7 +125,7 @@ static inline void arch_send_call_function_single_ipi(int cpu)
+ {
+ 	extern const struct plat_smp_ops *mp_ops;	/* private */
+ 
+-	mp_ops->send_ipi_mask(cpumask_of(cpu), SMP_CALL_FUNCTION);
++	mp_ops->send_ipi_single(cpu, SMP_CALL_FUNCTION);
+ }
+ 
+ static inline void arch_send_call_function_ipi_mask(const struct cpumask *mask)
+-- 
+2.7.0
 
-That sounds about right yes
-
-Maxime
-
---uldmalad7cdsj5zk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXqH8jwAKCRDj7w1vZxhR
-xa6OAPsG0hWkJM/X3rADW428/4uNb7tDwdYNFydI9sbl6UhzkAEAxIit7pCZ/iLs
-0cgwkg9mtFDlpNF5/GCnOiGoztgoNAU=
-=F7xP
------END PGP SIGNATURE-----
-
---uldmalad7cdsj5zk--
