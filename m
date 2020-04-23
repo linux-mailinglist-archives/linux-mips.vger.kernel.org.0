@@ -2,186 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4641B57EE
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2020 11:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5AC1B57F2
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Apr 2020 11:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726145AbgDWJTA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Apr 2020 05:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
+        id S1726101AbgDWJTk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Apr 2020 05:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725854AbgDWJS7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Apr 2020 05:18:59 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F6BC03C1AF;
-        Thu, 23 Apr 2020 02:18:59 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id d16so3769169edq.7;
-        Thu, 23 Apr 2020 02:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6or5H9vBftKfzm5WYSLYy4vvhyl7L7d44OPFeXI1ep8=;
-        b=UKPJfrExUb8T/KM2g1mTZIgagdvRlpwLeq1ewHvf+DpjMcF3ml+yCscaQjGxdMIEhF
-         2+XUqYM7GG7ivEL7pPVOmYKKuREQfGyU7gtjaylu8q7iOOkfWj08+XdmMIMqnBRE72uJ
-         E7FWdsvhsgIsCog/4y0smfiMt+KhiwVF6C7HI3vGJg7ZJ/TbATZixqrpy0aZ4jAc8fiP
-         MIYaprMYZdYk4zAXtGRLi/L3kGmt6t0Xa59cZa7X9ZxovfmlQR6wqV7aDanukNwBHke5
-         mcKEMce8qF6sf57JWjyh+aykLBS8N6X/W+RMmfZXiyNuXR/+YkYpj3gf1s64YhNZOYiD
-         8FRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6or5H9vBftKfzm5WYSLYy4vvhyl7L7d44OPFeXI1ep8=;
-        b=Xas66uA69LI0rfcF9p7SxCEx+wRBJemzVe3VUdX0s96J1Xm9PZMOYGyegs1TxXll/V
-         PtMjcfqfd+9a6ZEOcG6xnaVNg28p3nWRuYCFJ2dDpF6A9Zd7lSWdlTNG2scmG5HJHq+V
-         xqw3D0bw/yh9LvdZuk2f3wH34CBegg7Oec9owiS+3aEP+9k4Kx9judMBQxf5oewJ7U3H
-         lSNriSmud8KzxyKowwwerGH7oRZGs6rPTLdK/j5HdOXoTkp9yexpU8iXUauNyFHj0KGe
-         IrxlUV2q3loH+Fvnm8rdq96Vumca2V5KYMu3t8FYRm8y8gnuiwxQCAPoGQ+z8pGm5GBQ
-         pA1Q==
-X-Gm-Message-State: AGi0PuZKaLG3w1k/e2OpOvHm9XK2x91qgKbD/yGEa1NbR41CyrqxqT/V
-        ecFH/ULAZlpNLRLNFbDzWjQiAq4FsNaaykMX1GU=
-X-Google-Smtp-Source: APiQypIFY3H8XCx2R696SxQCcrRwU6SmGyhS6FAqPehd6h1//Jf+BO2CLyWyKeFatEt2/WumqmusIU9XZ/Msiq5coAs=
-X-Received: by 2002:a05:6402:3041:: with SMTP id bu1mr1927283edb.145.1587633537874;
- Thu, 23 Apr 2020 02:18:57 -0700 (PDT)
+        with ESMTP id S1725854AbgDWJTk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Apr 2020 05:19:40 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0074CC03C1AF;
+        Thu, 23 Apr 2020 02:19:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IF166yOm7z3m4Fk7SSrrLKAwHCMS4Qf9u239M1AvMd0=; b=NEv7cR+rgqIf2XOBxiAU9RR9Vs
+        ihCjSWBaJbsum5B6R4ENT5uYOyV4ul60eCJwViQD3oNK2ivAZU/N3oEgK/n9xN8K9f9CW43fHfkgt
+        hgxpQoU30ckQi9kJaAbADimpDHIBwLydqXpm8O3ccaLXNZiGOkA4tZsBPW4MyC+00xsks27Szn1AK
+        pHzaKGgvAQDmJ4WQisG8qDpEdmU00Otf7jMekdWZwrjboExbQQh5ZyYCtxI5ZmGv+2cREn059gQhK
+        amR13oJQKxMRq6inLqNxgqb/K5+1yN631HrSBA9pSYmVXLrrUdQTJHxpq1WaGbtJx5db0XSohzk/Q
+        9aPAUTZQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jRY0n-0003XN-Qx; Thu, 23 Apr 2020 09:19:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8CA4330257C;
+        Thu, 23 Apr 2020 11:19:11 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 469F520C02CD2; Thu, 23 Apr 2020 11:19:11 +0200 (CEST)
+Date:   Thu, 23 Apr 2020 11:19:11 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
+        tglx@linutronix.de, kvm@vger.kernel.org,
+        Davidlohr Bueso <dbueso@suse.de>,
+        torvalds@linux-foundation.org, bigeasy@linutronix.de,
+        linux-kernel@vger.kernel.org, rostedt@goodmis.org,
+        linux-mips@vger.kernel.org, Paul Mackerras <paulus@ozlabs.org>,
+        joel@joelfernandes.org, will@kernel.org,
+        kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH 4/5] kvm: Replace vcpu->swait with rcuwait
+Message-ID: <20200423091911.GP20730@hirez.programming.kicks-ass.net>
+References: <20200422040739.18601-1-dave@stgolabs.net>
+ <20200422040739.18601-5-dave@stgolabs.net>
+ <20200423094140.69909bbb@why>
+ <f07f6f55-9339-04b0-3877-d3240abd6d9c@redhat.com>
 MIME-Version: 1.0
-References: <1559287017-32397-1-git-send-email-horatiu.vultur@microchip.com>
- <1559287017-32397-2-git-send-email-horatiu.vultur@microchip.com>
- <CA+h21hprXnOYWExg7NxVZEX9Vjd=Y7o52ifKuAJqLwFuvDjaiw@mail.gmail.com> <20200423082948.t7sgq4ikrbm4cbnt@soft-dev3.microsemi.net>
-In-Reply-To: <20200423082948.t7sgq4ikrbm4cbnt@soft-dev3.microsemi.net>
-From:   Vladimir Oltean <olteanv@gmail.com>
-Date:   Thu, 23 Apr 2020 12:18:46 +0300
-Message-ID: <CA+h21hod2kOJP3SApEczq3+hcJFMWZd0UzZPvfYwTAP1h-cMwQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 1/2] net: mscc: ocelot: Add support for tcam
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Allan W. Nielsen" <allan.nielsen@microchip.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>, hongbo.wang@nxp.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f07f6f55-9339-04b0-3877-d3240abd6d9c@redhat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 23 Apr 2020 at 11:29, Horatiu Vultur
-<horatiu.vultur@microchip.com> wrote:
->
-> The 04/23/2020 00:26, Vladimir Oltean wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >
-> > Hi Horatiu,
-> >
-> > On Fri, 31 May 2019 at 10:18, Horatiu Vultur
-> > <horatiu.vultur@microchip.com> wrote:
-> > >
-> > > Add ACL support using the TCAM. Using ACL it is possible to create rules
-> > > in hardware to filter/redirect frames.
-> > >
-> > > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > > ---
+On Thu, Apr 23, 2020 at 10:57:57AM +0200, Paolo Bonzini wrote:
+> On 23/04/20 10:41, Marc Zyngier wrote:
+> >>  
+> >> -	if (swait_active(kvm_arch_vcpu_wq(vcpu)))
+> >> +	if (rcu_dereference(kvm_arch_vpu_get_wait(vcpu)) != NULL)
+> > This doesn't compile (wrong function name, and rcu_dereference takes a
+> > variable). But whatever it would do if we fixed it looks dodgy. it isn't
+> > the rcuwait structure that you want to dereference, but rcuwait->task
+> > (we are checking whether we are called because we are blocking or being
+> > preempted).
+> > 
+> 
+> Yes, I agree.  Replacing swait with rcuwait is all good, but please make
+> the API look the same first.  Just like you added prepare_to_rcuwait and
+> finish_rcuwait, let's add rcuwait_active as well.
+> 
+> Actually let's do it like this:
+> 
+> 1) Davidlohr, please post only patches 1-3 to "equalize" the swait and
+> rcuwait APIs.
+> 
+> 2) Peter, please prepare a topic branch for those, or provide Acked-by
 
-[...]
+I don't think I have anything that conflicts with this, so sure, take
+the whole thing through KVM.
 
-> > > +
-> > > +/* Calculate offsets for entry */
-> > > +static void is2_data_get(struct vcap_data *data, int ix)
-> > > +{
-> > > +       u32 i, col, offset, count, cnt, base, width = vcap_is2.tg_width;
-> > > +
-> > > +       count = (data->tg_sw == VCAP_TG_HALF ? 2 : 4);
-> > > +       col = (ix % 2);
-> > > +       cnt = (vcap_is2.sw_count / count);
-> > > +       base = (vcap_is2.sw_count - col * cnt - cnt);
-> > > +       data->tg_value = 0;
-> > > +       data->tg_mask = 0;
-> > > +       for (i = 0; i < cnt; i++) {
-> > > +               offset = ((base + i) * width);
-> > > +               data->tg_value |= (data->tg_sw << offset);
-> > > +               data->tg_mask |= GENMASK(offset + width - 1, offset);
-> > > +       }
-> > > +
-> > > +       /* Calculate key/action/counter offsets */
-> > > +       col = (count - col - 1);
-> > > +       data->key_offset = (base * vcap_is2.entry_width) / vcap_is2.sw_count;
-> > > +       data->counter_offset = (cnt * col * vcap_is2.counter_width);
-> > > +       i = data->type;
-> > > +       width = vcap_is2.action_table[i].width;
-> > > +       cnt = vcap_is2.action_table[i].count;
-> > > +       data->action_offset =
-> > > +               (((cnt * col * width) / count) + vcap_is2.action_type_width);
-> > > +}
-> > > +
+For 1-3 (and I'll send a small niggle for 3 right after this):
 
-[...]
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-> > > +}
-> > > +
-> > > +static void is2_entry_set(struct ocelot *ocelot, int ix,
-> > > +                         struct ocelot_ace_rule *ace)
-> > > +{
-> > > +       u32 val, msk, type, type_mask = 0xf, i, count;
-> > > +       struct ocelot_ace_vlan *tag = &ace->vlan;
-> > > +       struct ocelot_vcap_u64 payload = { 0 };
-> > > +       struct vcap_data data = { 0 };
-> > > +       int row = (ix / 2);
-> > > +
-> > > +       /* Read row */
-> > > +       vcap_row_cmd(ocelot, row, VCAP_CMD_READ, VCAP_SEL_ALL);
-> > > +       vcap_cache2entry(ocelot, &data);
-> > > +       vcap_cache2action(ocelot, &data);
-> > > +
-> > > +       data.tg_sw = VCAP_TG_HALF;
-> > > +       is2_data_get(&data, ix);
-> > > +       data.tg = (data.tg & ~data.tg_mask);
-> > > +       if (ace->prio != 0)
-> > > +               data.tg |= data.tg_value;
-> >
->
-> Hi Vladimir,
->
-> > This complicated piece of logic here populates the type-group for
-> > subwords > 0 unconditionally, and the type-group for subword 0 only if
-> > the ACE is enabled.
-> >
-> > tc filter add dev swp0 ingress protocol ip flower skip_sw src_ip
-> > 192.168.1.1 action drop
-> > [   34.172068] is2_entry_set: ace->prio 49152 data tg 0xaa
-> > tc filter del dev swp0 ingress pref 49152
-> > [   44.266662] is2_entry_set: ace->prio 0 data tg 0xa0
-> >
-> > What is the purpose of this? Why can't the entire data->tg be set to
-> > zero when deleting it?
-> I don't remember exactly but let me try:
->
-> In case you have only one entry per row, then you could set the tg to
-> have value 0. But in case you have 2 entries(use half keys), you need to
-> set the tg to 0 only to the half entry that you delete.
->
-> So for example if you have only 1 half entry at subword 1 then the tg
-> should be 0xa0. Then when you add a new entry on the same row but at
-> subword 0 then the tg should have the value 0xaa.
-> The value 0xaa, comes from the fact that the type group for half entry
-> is 0x2 and this needs to be set for each subword. And IS2 has 4 subwords
-> therefore 0b10101010 = 0xaa.
->
-> I hope this helps, if not I can look deeper in the code and see exactly.
->
-
-Oh, right, so for half and quarter keys you need to not affect the
-neighbour keys when modifying a row. That's exactly the information I
-was looking for, thanks!
-
-> > Is there any special meaning to a TCAM entry > with subword zero unused?
-> >
-
-[...]
-
->
-> --
-> /Horatiu
-
--Vladimir
+I'll keep 5 as it is unrelated.
