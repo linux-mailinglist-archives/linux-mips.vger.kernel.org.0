@@ -2,37 +2,37 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 754341B80BD
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Apr 2020 22:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3849A1B80F3
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Apr 2020 22:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726316AbgDXUe6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Apr 2020 16:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
+        id S1726423AbgDXUfl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Apr 2020 16:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726303AbgDXUe5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Apr 2020 16:34:57 -0400
-Received: from mo6-p04-ob.smtp.rzone.de (mo6-p04-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5304::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70413C09B049;
-        Fri, 24 Apr 2020 13:34:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1587760495;
+        with ESMTP id S1726124AbgDXUev (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Apr 2020 16:34:51 -0400
+Received: from mo6-p04-ob.smtp.rzone.de (mo6-p04-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5304::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417DDC09B04D;
+        Fri, 24 Apr 2020 13:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1587760488;
         s=strato-dkim-0002; d=goldelico.com;
         h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=NojKpJsr295KKzeE6Kfg0J7/g3gnxL5pXSLXeEqbQIE=;
-        b=iEbBFP37xXYNsIXksXI9lDadPgt/zvqh6xfy9tWdqzuEVGdswhG7PPYvBSo9QvOBKk
-        E4dxNTthGHtyZlSJHspjnHW/i1bIFb9ee3j5oi99ydZNK5LEwGrVedznzWsst+nVlprG
-        fiYCSKfVxyx2MPVIKcmv6XsOP8as6qBDDvmDU2xh4Bhrb2SLs484IlGRTSIdYxt07eHf
-        eL4BEtt+fF5yGFemQrwPmUuKnICmwPP1TT52wYRU801DaNvEOew1PZ/hvoROXs6zNWIY
-        PdZ14WsW2nC43a8hdstHVErg6yu3VcJTBjZrdFHZXuz9I/M6HjD8Qf7nHY1iCJ5tbdoo
-        b43w==
+        bh=iwq6f4uxoyZcQOQDzwMpNIO6Xy6nAFRtGvlqeQKWcIs=;
+        b=XHketxzB7+Lk9FXIR0lbyCs4RJklqKBC9dgHsBPPlpIR/yTtadGdjiVicE5/MZZjd7
+        nanYycDJ8cBta3wWsIo98JkcLlHyXtGF+gb/Zy3qwoJPsyWJ9zmg6WgdXdZPF+gQOxcT
+        DyuzDX4IKcNT51auJ+8ysC1r+91N3uBOAfCYa0qhtdg0xKwNrZNRMKVdBFDdIXThjHgl
+        CrbytsIwU7a4VJ1pWs8RF4WZmj/Jv1UNif3GRL0X5X/6ZpvpOxqIrXPvL1wIJYNUcgeg
+        qdEnwTdXSe3PHFrO995rt6bS/5Ox8r/Tfdp1E3QvQBUHqKimPYhqnGiTQ3ENvO4i8LoV
+        DlVQ==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1mfYzBGHXH6GK44R2FE"
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
         by smtp.strato.de (RZmta 46.6.2 DYNA|AUTH)
-        with ESMTPSA id R0acebw3OKYOEVH
+        with ESMTPSA id R0acebw3OKYPEVI
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Fri, 24 Apr 2020 22:34:24 +0200 (CEST)
+        Fri, 24 Apr 2020 22:34:25 +0200 (CEST)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
@@ -56,9 +56,9 @@ Cc:     Jonathan Bakker <xc-racer2@live.ca>,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org,
         "H . Nikolaus Schaller" <hns@goldelico.com>
-Subject: [PATCH v7 09/12] ARM: dts: sun6i: a31: add sgx gpu child node
-Date:   Fri, 24 Apr 2020 22:34:12 +0200
-Message-Id: <47740d708e00632735a8c1957109ca349029c716.1587760454.git.hns@goldelico.com>
+Subject: [PATCH v7 10/12] ARM: dts: sun6i: a31s: add sgx gpu child node
+Date:   Fri, 24 Apr 2020 22:34:13 +0200
+Message-Id: <1b0bd980347024c4b598fb89a32a55321d2eebd0.1587760454.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1587760454.git.hns@goldelico.com>
 References: <cover.1587760454.git.hns@goldelico.com>
@@ -83,30 +83,27 @@ complete and was already verifyed by loading the kernelmodule successful.
 Signed-off-by: Philipp Rossak <embed3d@gmail.com>
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- arch/arm/boot/dts/sun6i-a31.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ arch/arm/boot/dts/sun6i-a31s.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm/boot/dts/sun6i-a31.dtsi b/arch/arm/boot/dts/sun6i-a31.dtsi
-index f3425a66fc0a..933a825bf460 100644
---- a/arch/arm/boot/dts/sun6i-a31.dtsi
-+++ b/arch/arm/boot/dts/sun6i-a31.dtsi
-@@ -1417,5 +1417,16 @@ p2wi: i2c@1f03400 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 		};
-+
-+		gpu: gpu@1c400000 {
-+			compatible = "allwinner,sun8i-a31-sgx544-115",
-+				     "img,sgx544-115", "img,sgx544";
-+			reg = <0x01c40000 0x10000>;
-+			/*
-+			 * This node is currently a placeholder for the gpu.
-+			 * This will be completed when a full demonstration
-+			 * of the openpvrsgx driver is available for this board.
-+			 */
-+		};
- 	};
+diff --git a/arch/arm/boot/dts/sun6i-a31s.dtsi b/arch/arm/boot/dts/sun6i-a31s.dtsi
+index 97e2c51d0aea..669770d2934a 100644
+--- a/arch/arm/boot/dts/sun6i-a31s.dtsi
++++ b/arch/arm/boot/dts/sun6i-a31s.dtsi
+@@ -59,3 +59,13 @@ &pio {
+ &tcon0 {
+ 	compatible = "allwinner,sun6i-a31s-tcon";
  };
++
++&gpu {
++	compatible = "allwinner,sun8i-a31s-sgx544-115",
++		     "img,sgx544-115", "img,sgx544";
++	/*
++	 * This node is currently a placeholder for the gpu.
++	 * This will be completed when a full demonstration
++	 * of the openpvrsgx driver is available for this board.
++	 */
++};
 -- 
 2.25.1
 
