@@ -2,112 +2,171 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD441B7E98
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Apr 2020 21:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AF81B80F7
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Apr 2020 22:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727049AbgDXTKu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Apr 2020 15:10:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55896 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726793AbgDXTKu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 24 Apr 2020 15:10:50 -0400
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5EA6F20736;
-        Fri, 24 Apr 2020 19:10:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587755449;
-        bh=MfFP+6c7B6JLpXC5m9+1qaniqSz/QSXG2thGgEplmH8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rgKmfrMj1o/4cX50G1dvBw6xSNKJvBJx+AAKL5ZgLFgW4rvrnAuV6UzfEioIptCjd
-         9sspRnYsWFw27CdTR4aZLzGR63oSGt56WkFjjhi088vk8cMIAZucbR00cL2/tdS1aS
-         vfSWnSopPuP5b6tP6Hc/Aaq/q1x/osY2VsrvDEso=
-Received: by mail-qv1-f49.google.com with SMTP id v10so5240142qvr.2;
-        Fri, 24 Apr 2020 12:10:49 -0700 (PDT)
-X-Gm-Message-State: AGi0PuZUyrmeu1REItT1Jjyb17IjUZBay1s2UWH9yjrncNgQsqNMcOcx
-        TnFzHYvk1VbRU3HGBkU9vxi4KUxY4TUcGxAWhg==
-X-Google-Smtp-Source: APiQypL6nxwSwL1BSBuuHSRL7v8AeB98h/sxDCOI2obb6oGnVpTZ6TVIRL9TpJ9D4J0DlGUb56NPwcffqM7uZdaaWHA=
-X-Received: by 2002:a05:6214:227:: with SMTP id j7mr10830437qvt.85.1587755448530;
- Fri, 24 Apr 2020 12:10:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200424130847.328584-1-jiaxun.yang@flygoat.com> <20200424130847.328584-6-jiaxun.yang@flygoat.com>
-In-Reply-To: <20200424130847.328584-6-jiaxun.yang@flygoat.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 24 Apr 2020 14:10:36 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+33XrBowgg+pSAFLu-KChYzuFKL6DJRrOPuq60nSFN4g@mail.gmail.com>
-Message-ID: <CAL_Jsq+33XrBowgg+pSAFLu-KChYzuFKL6DJRrOPuq60nSFN4g@mail.gmail.com>
-Subject: Re: [PATCH v5 5/6] MIPS: DTS: Loongson64: Add PCI Controller Node
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     PCI <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Andrew Murray <amurray@thegoodpenguin.co.uk>,
+        id S1726477AbgDXUfs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Apr 2020 16:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726050AbgDXUeu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Apr 2020 16:34:50 -0400
+Received: from mo6-p02-ob.smtp.rzone.de (mo6-p02-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5302::7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6941DC09B04B;
+        Fri, 24 Apr 2020 13:34:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1587760487;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=JoQS5+/VnNzq1zyY0Zv12jz5vpTnfpwyE6okWTWlNgs=;
+        b=kbBeiHIszjfNce8Rd/zTeyxjbBDW+IodN/HfcbYBtympD7Q2TUTR8aXSe/9SrriG6P
+        VQVN0otdee8eRND2AfwicKkzhIZdEl0R8nHB4jhPSmvZqAWeHNRZ/5668/ss/CIuVjHG
+        tTn9ASzyXVx9rmOsXvWlYSjaZAWMy7RV0bmrE8IKHpiKdJ4dLbObhI03zO5MO1gzy66W
+        woUq8voUyQvD78i1OcZ8O4rRwK5F9RiblHGI0aLCRGYM1k+AqYf1nufn4F7r//n46yRr
+        WWzaUBBCP086vvsvqVreyoRcVCPtJ0PV2nbAWkhkvNxjjwYfEkIA+J2kbiq9/uMn3r4S
+        XORQ==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1mfYzBGHXH6GK44R2FE"
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+        by smtp.strato.de (RZmta 46.6.2 DYNA|AUTH)
+        with ESMTPSA id R0acebw3OKYHEV8
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Fri, 24 Apr 2020 22:34:17 +0200 (CEST)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        James Hogan <jhogan@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Jonathan Bakker <xc-racer2@live.ca>,
+        Philipp Rossak <embed3d@gmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        openpvrsgx-devgroup@letux.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH v7 00/12] ARM/MIPS: DTS: add child nodes describing the PVRSGX GPU present in some OMAP SoC and JZ4780 (and many more)
+Date:   Fri, 24 Apr 2020 22:34:03 +0200
+Message-Id: <cover.1587760454.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Apr 24, 2020 at 8:10 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
-> Add PCI Host controller node for Loongson64 with RS780E PCH dts.
-> Note that PCI interrupts are probed via legacy way, as different
-> machine have different interrupt arrangement, we can't cover all
-> of them in dt.
->
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> --
-> v2: Clean-up
-> ---
->  arch/mips/boot/dts/loongson/rs780e-pch.dtsi | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/mips/boot/dts/loongson/rs780e-pch.dtsi b/arch/mips/boot/dts/loongson/rs780e-pch.dtsi
-> index 8687c4f7370a..5e68ceae20ca 100644
-> --- a/arch/mips/boot/dts/loongson/rs780e-pch.dtsi
-> +++ b/arch/mips/boot/dts/loongson/rs780e-pch.dtsi
-> @@ -5,10 +5,25 @@ bus@10000000 {
->                 compatible = "simple-bus";
->                 #address-cells = <2>;
->                 #size-cells = <2>;
-> -               ranges = <0 0x10000000 0 0x10000000 0 0x10000000
-> +               ranges = <0 0x00000000 0 0x00000000 0 0x00010000 /* I/O Ports */
+* changed commit message for the dt-bindings to better describe latest situation
+* added properties for up to 4 clocks, reset, power-domains, sgx-supply - proposed by Maxime Ripard <maxime@cerno.tech>
+* fixed jz4780 and s5pv210 to use "core" clock name
+* simplified example
+* update for arm: dts: s5pv210 - by Jonathan Bakker <xc-racer2@live.ca>
+* removed a stray " from binding which had creeped in through copy&paste 
+* fixed commit / tested-by messages and some not well formed commit messages - suggested by Krzysztof Kozlowski <krzk@kernel.org>
+* added a $nodename: pattern: to enforce "gpu" nodenames - inspired by Neil Armstrong <narmstrong@baylibre.com>
+* fixed node name for s5pv210 - suggested by Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
 
-You're changing the first entry, so bus@10000000 unit-address should change.
+PATCH V6 2020-04-15 10:35:31:
+* rebased to v5.7-rc1
+* added DTS for for a31, a31s, a83t - by Philipp Rossak <embed3d@gmail.com>
+* added DTS for "samsung,s5pv210-sgx540-120" - by Jonathan Bakker <xc-racer2@live.ca>
+* bindings.yaml fixes:
+  - added a31, a31
+  - fixes for omap4470
+  - jz4780 contains an sgx540-130 and not -120
+  - a83t contains an sgx544-115 and not -116
+  - removed "additionalProperties: false" because some SoC may need additional properties
 
-Are i/o addresses really at 0x0 physical address?
+PATCH V5 2020-03-29 19:38:32:
+* reworked YAML bindings to pass dt_binding_check and be better grouped
+* rename all nodes to "gpu: gpu@<address>"
+* removed "img,sgx5" from example - suggested by Rob Herring <robh+dt@kernel.org>
 
-> +                               0 0x10000000 0 0x10000000 0 0x10000000
->                                 0 0x40000000 0 0x40000000 0 0x40000000
->                                 0xfd 0xfe000000 0xfd 0xfe000000  0 0x2000000 /* PCI Config Space */>;
->
-> +               pci@1a000000 {
-> +                       compatible = "loongson,rs780e-pci";
-> +                       device_type = "pci";
-> +                       #address-cells = <3>;
-> +                       #size-cells = <2>;
-> +
-> +                       reg = <0 0x1a000000 0 0x02000000>;
-> +
-> +                       ranges = <0x01000000 0 0x00004000 0 0x00004000 0 0x00004000>,
-> +                                <0x02000000 0 0x40000000 0 0x40000000 0 0x40000000>;
-> +
-> +                       bus-range = <0x00 0xff>;
+PATCH V4 2019-12-17 19:02:11:
+* MIPS: DTS: jz4780: removed "img,sgx5" from bindings
+* YAML bindings: updated according to suggestions by Rob Herring
+* MIPS: DTS: jz4780: insert-sorted gpu node by register address - suggested by Paul Cercueil
 
-Not needed.
+PATCH V3 2019-11-24 12:40:33:
+* reworked YAML format with help by Rob Herring
+* removed .txt binding document
+* change compatible "ti,am335x-sgx" to "ti,am3352-sgx" - suggested by Tony Lindgren
 
-> +               };
-> +
->                 isa {
->                         compatible = "isa";
->                         #address-cells = <2>;
-> --
-> 2.26.0.rc2
->
+PATCH V2 2019-11-07 12:06:17:
+* tried to convert bindings to YAML format - suggested by Rob Herring
+* added JZ4780 DTS node (proven to load the driver)
+* removed timer and img,cores properties until we know we really need them - suggested by Rob Herring
+
+PATCH V1 2019-10-18 20:46:35:
+
+This patch series defines child nodes for the SGX5xx interface inside
+different SoC so that a driver can be found and probed by the compatible
+strings and can retrieve information about the SGX revision that is
+included in a specific SoC. It also defines the interrupt number
+to be used by the SGX driver, and optionally clocks, power, resets
+depending on how the SoC integration is done.
+
+There is currently no mainline driver for these GPUs, but a project [1]
+is ongoing with the goal to get the open-source part as provided by TI/IMG
+and others into drivers/gpu/drm/pvrsgx in the future. So this patch series
+is the basis.
+
+The kernel modules built from this project have successfully demonstrated
+to work with the DTS definitions from this patch set on AM335x BeagleBone
+Black, DM3730 and OMAP5 Pyra and Droid 4. They partially work on OMAP3530 and
+PandaBoard ES but that is likely a problem in the kernel driver or the
+(non-free) user-space libraries and binaries. The driver works on jz4780
+but user-space could not yet be tested.
+
+[1]: https://github.com/openpvrsgx-devgroup
+
+
+H. Nikolaus Schaller (8):
+  dt-bindings: add img,pvrsgx.yaml for Imagination GPUs
+  ARM: DTS: am33xx: add sgx gpu child node
+  ARM: DTS: am3517: add sgx gpu child node
+  ARM: DTS: omap34xx: add sgx gpu child node
+  ARM: DTS: omap36xx: add sgx gpu child node
+  ARM: DTS: omap4: add sgx gpu child node
+  ARM: DTS: omap5: add sgx gpu child node
+  MIPS: DTS: jz4780: add sgx gpu node
+
+Jonathan Bakker (1):
+  arm: dts: s5pv210: Add node for SGX 540
+
+Philipp Rossak (3):
+  ARM: dts: sun6i: a31: add sgx gpu child node
+  ARM: dts: sun6i: a31s: add sgx gpu child node
+  ARM: dts: sun8i: a83t: add sgx gpu child node
+
+ .../devicetree/bindings/gpu/img,pvrsgx.yaml   | 150 ++++++++++++++++++
+ arch/arm/boot/dts/am33xx.dtsi                 |  11 +-
+ arch/arm/boot/dts/am3517.dtsi                 |   9 +-
+ arch/arm/boot/dts/omap34xx.dtsi               |  11 +-
+ arch/arm/boot/dts/omap36xx.dtsi               |   9 +-
+ arch/arm/boot/dts/omap4.dtsi                  |  11 +-
+ arch/arm/boot/dts/omap4470.dts                |  15 ++
+ arch/arm/boot/dts/omap5.dtsi                  |  11 +-
+ arch/arm/boot/dts/s5pv210.dtsi                |  13 ++
+ arch/arm/boot/dts/sun6i-a31.dtsi              |  11 ++
+ arch/arm/boot/dts/sun6i-a31s.dtsi             |  10 ++
+ arch/arm/boot/dts/sun8i-a83t.dtsi             |  11 ++
+ arch/mips/boot/dts/ingenic/jz4780.dtsi        |  11 ++
+ 13 files changed, 255 insertions(+), 28 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
+ create mode 100644 arch/arm/boot/dts/omap4470.dts
+
+-- 
+2.25.1
+
