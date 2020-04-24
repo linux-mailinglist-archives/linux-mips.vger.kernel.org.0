@@ -2,403 +2,200 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E41301B6D8C
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Apr 2020 07:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513571B6FBB
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Apr 2020 10:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726639AbgDXFwf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Apr 2020 01:52:35 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37108 "EHLO mx2.suse.de"
+        id S1726489AbgDXI2Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Apr 2020 04:28:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40034 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726646AbgDXFwd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 24 Apr 2020 01:52:33 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id E23BBAEB9;
-        Fri, 24 Apr 2020 05:52:29 +0000 (UTC)
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     tglx@linutronix.de, pbonzini@redhat.com
-Cc:     peterz@infradead.org, maz@kernel.org, bigeasy@linutronix.de,
-        rostedt@goodmis.org, torvalds@linux-foundation.org,
-        will@kernel.org, joel@joelfernandes.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dave@stgolabs.net, Paul Mackerras <paulus@ozlabs.org>,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        Davidlohr Bueso <dbueso@suse.de>
-Subject: [PATCH 5/5] kvm: Replace vcpu->swait with rcuwait
-Date:   Thu, 23 Apr 2020 22:48:37 -0700
-Message-Id: <20200424054837.5138-6-dave@stgolabs.net>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20200424054837.5138-1-dave@stgolabs.net>
-References: <20200424054837.5138-1-dave@stgolabs.net>
+        id S1726028AbgDXI2Z (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 24 Apr 2020 04:28:25 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 15A8220724;
+        Fri, 24 Apr 2020 08:28:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587716904;
+        bh=671AeezqaSdpn4DaBFsbVvETM5t+l6VPbG1sR5DenCs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=f8mLiEMMjzCrqle954gNLa0ZlIL2fhoxaNb12WQFbVCeMWVfGuGneUuHXCRsqYl6Y
+         siur82anLuAw+EoNhD2GT2Qiv6bJYaddTyxc6Qf7wbvLZEVa7C5lWXWdKM2o18WogZ
+         NYb5+tO3QoErU/p8WBwcEhIrLExD/nUCh+ySydnQ=
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1jRth8-005zhM-C6; Fri, 24 Apr 2020 09:28:22 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 24 Apr 2020 09:28:22 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Huacai Chen <chenhc@lemote.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 5/6] irqchip: Add Loongson PCH MSI controller
+In-Reply-To: <20200424093351.370c92e8@flygoat-x1e>
+References: <20200422142428.1249684-1-jiaxun.yang@flygoat.com>
+ <20200422142428.1249684-6-jiaxun.yang@flygoat.com>
+ <20200423154135.38b0ec25@why> <20200424093351.370c92e8@flygoat-x1e>
+Message-ID: <7c00f8964c2a83a56ae24a81ebe1c9e9@kernel.org>
+X-Sender: maz@kernel.org
+User-Agent: Roundcube Webmail/1.3.10
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org, tglx@linutronix.de, jason@lakedaemon.net, robh+dt@kernel.org, chenhc@lemote.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The use of any sort of waitqueue (simple or regular) for
-wait/waking vcpus has always been an overkill and semantically
-wrong. Because this is per-vcpu (which is blocked) there is
-only ever a single waiting vcpu, thus no need for any sort of
-queue.
+On 2020-04-24 02:33, Jiaxun Yang wrote:
+> On Thu, 23 Apr 2020 15:41:35 +0100
+> Marc Zyngier <maz@kernel.org> wrote:
+> 
+>> On Wed, 22 Apr 2020 22:24:25 +0800
+>> Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>> 
+>> > This controller appears on Loongson-7A family of PCH to transform
+>> > interrupts from PCI MSI into HyperTransport vectorized interrrupts
+>> > and send them to procrssor's HT vector controller.
+>> >
+>> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> > ---
+> [...]
+>> > +	ret = irq_domain_alloc_irqs_parent(domain, virq, 1,
+>> > &fwspec);
+>> > +	if (ret)
+>> > +		return ret;
+>> > +
+>> > +	irq_domain_set_info(domain, virq, hwirq,
+>> > +			    &middle_irq_chip, NULL,
+>> > +			    handle_simple_irq, NULL, NULL);
+>> 
+>> No, this should at least be handle_edge_irq. More importantly, you
+>> should use the flow set by the underlying irqchip, and not provide
+>> your own.
+> 
+> Hi Marc,
+> Thanks for your review.
+> 
+> The underlying irqchip (HTVEC) follows a simple_irq flow as it only
+> has mask/unmask callback, and it doesn't have tyoe configuration. so I
+> followed simple_irq flow.
 
-As such, make use of the rcuwait primitive, with the following
-considerations:
+Not having a type doesn't mean that it can stick to simple_irq, which is
+the wrong things to use in 99% of the HW cases.
 
-  - rcuwait already provides the proper barriers that serialize
-  concurrent waiter and waker.
+> How can I use the flow set by the underlying irqchip? Just use
+> irq_domain_set_hwirq_and_chip here and set_handler in HTVEC driver?
 
-  - Task wakeup is done in rcu read critical region, with a
-  stable task pointer.
+You need to find out how the HTVEC behaves. My gut feeling is that it
+is itself edge triggered, but you would need to look in the 
+documentation
+to find out.
 
-  - Because there is no concurrency among waiters, we need
-  not worry about rcuwait_wait_event() calls corrupting
-  the wait->task. As a consequence, this saves the locking
-  done in swait when modifying the queue. This also applies
-  to per-vcore wait for powerpc kvm-hv.
+> 
+> 
+>> 
+>> > +	irq_set_probe(virq);
+>> 
+>> Probe? what does it mean for MSIs? I also don't see how you tell the
+>> underlying irqchip that the MSI is edge triggered.
+>> 
+>> > +
+>> > +	return 0;
+>> > +}
+>> > +
+>> > +static int pch_msi_middle_domain_alloc(struct irq_domain *domain,
+>> > +					   unsigned int virq,
+>> > +					   unsigned int nr_irqs,
+>> > void *args) +{
+>> > +	struct pch_msi_data *priv = domain->host_data;
+>> > +	int hwirq, err, i;
+>> > +
+>> > +	hwirq = pch_msi_allocate_hwirq(priv, nr_irqs);
+>> > +	if (hwirq < 0)
+>> > +		return hwirq;
+>> > +
+>> > +	for (i = 0; i < nr_irqs; i++) {
+>> > +		err = pch_msi_parent_domain_alloc(domain, virq +
+>> > i, hwirq + i);
+>> > +		if (err)
+>> > +			goto err_hwirq;
+>> > +
+>> > +		irq_domain_set_hwirq_and_chip(domain, virq + i,
+>> > hwirq + i,
+>> > +					      &middle_irq_chip,
+>> > priv);
+>> > +	}
+>> > +
+>> > +	return 0;
+>> > +err_hwirq:
+>> > +	while (--i >= 0)
+>> > +		irq_domain_free_irqs_parent(domain, virq, i);
+>> > +
+>> > +	pch_msi_free_hwirq(priv, hwirq, nr_irqs);
+>> > +	return err;
+>> > +}
+>> > +
+>> > +static void pch_msi_middle_domain_free(struct irq_domain *domain,
+>> > +					   unsigned int virq,
+>> > +					   unsigned int nr_irqs)
+>> > +{
+>> > +	struct irq_data *d = irq_domain_get_irq_data(domain, virq);
+>> > +	struct pch_msi_data *priv = irq_data_get_irq_chip_data(d);
+>> > +
+>> > +	irq_domain_free_irqs_parent(domain, virq, nr_irqs);
+>> > +	pch_msi_free_hwirq(priv, d->hwirq, nr_irqs);
+>> > +}
+>> > +
+>> > +static const struct irq_domain_ops pch_msi_middle_domain_ops = {
+>> > +	.alloc	= pch_msi_middle_domain_alloc,
+>> > +	.free	= pch_msi_middle_domain_free,
+>> > +};
+>> > +
+>> > +static int pch_msi_init_domains(struct pch_msi_data *priv,
+>> > +				struct device_node *node,
+>> > +				struct device_node *parent)
+>> > +{
+>> > +	struct irq_domain *middle_domain, *msi_domain,
+>> > *parent_domain; +
+>> > +	parent_domain = irq_find_host(parent);
+>> > +	if (!parent_domain) {
+>> > +		pr_err("Failed to find the parent domain\n");
+>> > +		return -ENXIO;
+>> > +	}
+>> > +
+>> > +	middle_domain = irq_domain_add_tree(NULL,
+>> > +
+>> > &pch_msi_middle_domain_ops,
+>> > +					    priv);
+>> 
+>> You don't really need a tree, unless your interrupt space is huge and
+>> very sparse. Given that the DT example says 64, I would go with a
+>> linear domain if that number is realistic.
+>> 
+> It can up to 192 in latest generation of chip, is it still suitable?
 
-The x86 tscdeadline_latency test mentioned in 8577370fb0cb
-("KVM: Use simple waitqueue for vcpu->wq") shows that, on avg,
-latency is reduced by around 15-20% with this change.
+That's a pretty small number, really. Just stick to a linear domain.
 
-Cc: Paul Mackerras <paulus@ozlabs.org>
-Cc: kvmarm@lists.cs.columbia.edu
-Cc: linux-mips@vger.kernel.org
-Reviewed-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Davidlohr Bueso <dbueso@suse.de>
----
- arch/mips/kvm/mips.c                  |  6 ++----
- arch/powerpc/include/asm/kvm_book3s.h |  2 +-
- arch/powerpc/include/asm/kvm_host.h   |  2 +-
- arch/powerpc/kvm/book3s_hv.c          | 22 ++++++++--------------
- arch/powerpc/kvm/powerpc.c            |  2 +-
- arch/x86/kvm/lapic.c                  |  2 +-
- include/linux/kvm_host.h              | 10 +++++-----
- virt/kvm/arm/arch_timer.c             |  3 ++-
- virt/kvm/arm/arm.c                    |  9 +++++----
- virt/kvm/async_pf.c                   |  3 +--
- virt/kvm/kvm_main.c                   | 19 +++++++++----------
- 11 files changed, 36 insertions(+), 44 deletions(-)
+> In the latest generation, we have a enhanced version of HTVEC which has
+> another delivery system that will be able to configure affinity. That's
+> why I placed set_affinity call back here and in PCH PIC driver.
 
-diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-index 8f05dd0a0f4e..fad6acce46e4 100644
---- a/arch/mips/kvm/mips.c
-+++ b/arch/mips/kvm/mips.c
-@@ -284,8 +284,7 @@ static enum hrtimer_restart kvm_mips_comparecount_wakeup(struct hrtimer *timer)
- 	kvm_mips_callbacks->queue_timer_int(vcpu);
- 
- 	vcpu->arch.wait = 0;
--	if (swq_has_sleeper(&vcpu->wq))
--		swake_up_one(&vcpu->wq);
-+	rcuwait_wake_up(&vcpu->wait);
- 
- 	return kvm_mips_count_timeout(vcpu);
- }
-@@ -511,8 +510,7 @@ int kvm_vcpu_ioctl_interrupt(struct kvm_vcpu *vcpu,
- 
- 	dvcpu->arch.wait = 0;
- 
--	if (swq_has_sleeper(&dvcpu->wq))
--		swake_up_one(&dvcpu->wq);
-+	rcuwait_wake_up(&dvcpu->wait);
- 
- 	return 0;
- }
-diff --git a/arch/powerpc/include/asm/kvm_book3s.h b/arch/powerpc/include/asm/kvm_book3s.h
-index 506e4df2d730..6e5d85ba588d 100644
---- a/arch/powerpc/include/asm/kvm_book3s.h
-+++ b/arch/powerpc/include/asm/kvm_book3s.h
-@@ -78,7 +78,7 @@ struct kvmppc_vcore {
- 	struct kvm_vcpu *runnable_threads[MAX_SMT_THREADS];
- 	struct list_head preempt_list;
- 	spinlock_t lock;
--	struct swait_queue_head wq;
-+	struct rcuwait wait;
- 	spinlock_t stoltb_lock;	/* protects stolen_tb and preempt_tb */
- 	u64 stolen_tb;
- 	u64 preempt_tb;
-diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/include/asm/kvm_host.h
-index 1dc63101ffe1..337047ba4a56 100644
---- a/arch/powerpc/include/asm/kvm_host.h
-+++ b/arch/powerpc/include/asm/kvm_host.h
-@@ -751,7 +751,7 @@ struct kvm_vcpu_arch {
- 	u8 irq_pending; /* Used by XIVE to signal pending guest irqs */
- 	u32 last_inst;
- 
--	struct swait_queue_head *wqp;
-+	struct rcuwait *waitp;
- 	struct kvmppc_vcore *vcore;
- 	int ret;
- 	int trap;
-diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
-index 93493f0cbfe8..b8d42f523ca7 100644
---- a/arch/powerpc/kvm/book3s_hv.c
-+++ b/arch/powerpc/kvm/book3s_hv.c
-@@ -230,13 +230,11 @@ static bool kvmppc_ipi_thread(int cpu)
- static void kvmppc_fast_vcpu_kick_hv(struct kvm_vcpu *vcpu)
- {
- 	int cpu;
--	struct swait_queue_head *wqp;
-+	struct rcuwait *wait;
- 
--	wqp = kvm_arch_vcpu_wq(vcpu);
--	if (swq_has_sleeper(wqp)) {
--		swake_up_one(wqp);
-+	wait = kvm_arch_vcpu_get_wait(vcpu);
-+	if (rcuwait_wake_up(wait))
- 		++vcpu->stat.halt_wakeup;
--	}
- 
- 	cpu = READ_ONCE(vcpu->arch.thread_cpu);
- 	if (cpu >= 0 && kvmppc_ipi_thread(cpu))
-@@ -2125,7 +2123,7 @@ static struct kvmppc_vcore *kvmppc_vcore_create(struct kvm *kvm, int id)
- 
- 	spin_lock_init(&vcore->lock);
- 	spin_lock_init(&vcore->stoltb_lock);
--	init_swait_queue_head(&vcore->wq);
-+	rcuwait_init(&vcore->wait);
- 	vcore->preempt_tb = TB_NIL;
- 	vcore->lpcr = kvm->arch.lpcr;
- 	vcore->first_vcpuid = id;
-@@ -3784,7 +3782,6 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
- 	ktime_t cur, start_poll, start_wait;
- 	int do_sleep = 1;
- 	u64 block_ns;
--	DECLARE_SWAITQUEUE(wait);
- 
- 	/* Poll for pending exceptions and ceded state */
- 	cur = start_poll = ktime_get();
-@@ -3812,10 +3809,7 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
- 		}
- 	}
- 
--	prepare_to_swait_exclusive(&vc->wq, &wait, TASK_INTERRUPTIBLE);
--
- 	if (kvmppc_vcore_check_block(vc)) {
--		finish_swait(&vc->wq, &wait);
- 		do_sleep = 0;
- 		/* If we polled, count this as a successful poll */
- 		if (vc->halt_poll_ns)
-@@ -3828,8 +3822,8 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
- 	vc->vcore_state = VCORE_SLEEPING;
- 	trace_kvmppc_vcore_blocked(vc, 0);
- 	spin_unlock(&vc->lock);
--	schedule();
--	finish_swait(&vc->wq, &wait);
-+	rcuwait_wait_event(&vc->wait,
-+			   kvmppc_vcore_check_block(vc), TASK_INTERRUPTIBLE);
- 	spin_lock(&vc->lock);
- 	vc->vcore_state = VCORE_INACTIVE;
- 	trace_kvmppc_vcore_blocked(vc, 1);
-@@ -3940,7 +3934,7 @@ static int kvmppc_run_vcpu(struct kvm_run *kvm_run, struct kvm_vcpu *vcpu)
- 			kvmppc_start_thread(vcpu, vc);
- 			trace_kvm_guest_enter(vcpu);
- 		} else if (vc->vcore_state == VCORE_SLEEPING) {
--			swake_up_one(&vc->wq);
-+		        rcuwait_wake_up(&vc->wait);
- 		}
- 
- 	}
-@@ -4279,7 +4273,7 @@ static int kvmppc_vcpu_run_hv(struct kvm_run *run, struct kvm_vcpu *vcpu)
- 	}
- 	user_vrsave = mfspr(SPRN_VRSAVE);
- 
--	vcpu->arch.wqp = &vcpu->arch.vcore->wq;
-+	vcpu->arch.waitp = &vcpu->arch.vcore->wait;
- 	vcpu->arch.pgdir = kvm->mm->pgd;
- 	vcpu->arch.state = KVMPPC_VCPU_BUSY_IN_HOST;
- 
-diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-index e15166b0a16d..4a074b587520 100644
---- a/arch/powerpc/kvm/powerpc.c
-+++ b/arch/powerpc/kvm/powerpc.c
-@@ -751,7 +751,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
- 	if (err)
- 		goto out_vcpu_uninit;
- 
--	vcpu->arch.wqp = &vcpu->wq;
-+	vcpu->arch.waitp = &vcpu->wait;
- 	kvmppc_create_vcpu_debugfs(vcpu, vcpu->vcpu_id);
- 	return 0;
- 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 9af25c97612a..54345dc645ba 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -1833,7 +1833,7 @@ void kvm_lapic_expired_hv_timer(struct kvm_vcpu *vcpu)
- 	/* If the preempt notifier has already run, it also called apic_timer_expired */
- 	if (!apic->lapic_timer.hv_timer_in_use)
- 		goto out;
--	WARN_ON(swait_active(&vcpu->wq));
-+	WARN_ON(rcuwait_active(&vcpu->wait));
- 	cancel_hv_timer(apic);
- 	apic_timer_expired(apic);
- 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 6d58beb65454..fc34021546bd 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -23,7 +23,7 @@
- #include <linux/irqflags.h>
- #include <linux/context_tracking.h>
- #include <linux/irqbypass.h>
--#include <linux/swait.h>
-+#include <linux/rcuwait.h>
- #include <linux/refcount.h>
- #include <linux/nospec.h>
- #include <asm/signal.h>
-@@ -277,7 +277,7 @@ struct kvm_vcpu {
- 	struct mutex mutex;
- 	struct kvm_run *run;
- 
--	struct swait_queue_head wq;
-+	struct rcuwait wait;
- 	struct pid __rcu *pid;
- 	int sigset_active;
- 	sigset_t sigset;
-@@ -956,12 +956,12 @@ static inline bool kvm_arch_has_assigned_device(struct kvm *kvm)
- }
- #endif
- 
--static inline struct swait_queue_head *kvm_arch_vcpu_wq(struct kvm_vcpu *vcpu)
-+static inline struct rcuwait *kvm_arch_vcpu_get_wait(struct kvm_vcpu *vcpu)
- {
- #ifdef __KVM_HAVE_ARCH_WQP
--	return vcpu->arch.wqp;
-+	return vcpu->arch.waitp;
- #else
--	return &vcpu->wq;
-+	return &vcpu->wait;
- #endif
- }
- 
-diff --git a/virt/kvm/arm/arch_timer.c b/virt/kvm/arm/arch_timer.c
-index 93bd59b46848..d5024416e722 100644
---- a/virt/kvm/arm/arch_timer.c
-+++ b/virt/kvm/arm/arch_timer.c
-@@ -571,6 +571,7 @@ void kvm_timer_vcpu_put(struct kvm_vcpu *vcpu)
- {
- 	struct arch_timer_cpu *timer = vcpu_timer(vcpu);
- 	struct timer_map map;
-+	struct rcuwait *wait = kvm_arch_vcpu_get_wait(vcpu);
- 
- 	if (unlikely(!timer->enabled))
- 		return;
-@@ -593,7 +594,7 @@ void kvm_timer_vcpu_put(struct kvm_vcpu *vcpu)
- 	if (map.emul_ptimer)
- 		soft_timer_cancel(&map.emul_ptimer->hrtimer);
- 
--	if (swait_active(kvm_arch_vcpu_wq(vcpu)))
-+	if (rcuwait_active(wait))
- 		kvm_timer_blocking(vcpu);
- 
- 	/*
-diff --git a/virt/kvm/arm/arm.c b/virt/kvm/arm/arm.c
-index 48d0ec44ad77..479f36d02418 100644
---- a/virt/kvm/arm/arm.c
-+++ b/virt/kvm/arm/arm.c
-@@ -579,16 +579,17 @@ void kvm_arm_resume_guest(struct kvm *kvm)
- 
- 	kvm_for_each_vcpu(i, vcpu, kvm) {
- 		vcpu->arch.pause = false;
--		swake_up_one(kvm_arch_vcpu_wq(vcpu));
-+		rcuwait_wake_up(kvm_arch_vcpu_get_wait(vcpu));
- 	}
- }
- 
- static void vcpu_req_sleep(struct kvm_vcpu *vcpu)
- {
--	struct swait_queue_head *wq = kvm_arch_vcpu_wq(vcpu);
-+	struct rcuwait *wait = kvm_arch_vcpu_get_wait(vcpu);
- 
--	swait_event_interruptible_exclusive(*wq, ((!vcpu->arch.power_off) &&
--				       (!vcpu->arch.pause)));
-+	rcuwait_wait_event(wait,
-+			   (!vcpu->arch.power_off) &&(!vcpu->arch.pause),
-+			   TASK_INTERRUPTIBLE);
- 
- 	if (vcpu->arch.power_off || vcpu->arch.pause) {
- 		/* Awaken to handle a signal, request we sleep again later. */
-diff --git a/virt/kvm/async_pf.c b/virt/kvm/async_pf.c
-index 15e5b037f92d..10b533f641a6 100644
---- a/virt/kvm/async_pf.c
-+++ b/virt/kvm/async_pf.c
-@@ -80,8 +80,7 @@ static void async_pf_execute(struct work_struct *work)
- 
- 	trace_kvm_async_pf_completed(addr, cr2_or_gpa);
- 
--	if (swq_has_sleeper(&vcpu->wq))
--		swake_up_one(&vcpu->wq);
-+	rcuwait_wake_up(&vcpu->wait);
- 
- 	mmput(mm);
- 	kvm_put_kvm(vcpu->kvm);
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 74bdb7bf3295..f027ae3598e8 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -341,7 +341,7 @@ static void kvm_vcpu_init(struct kvm_vcpu *vcpu, struct kvm *kvm, unsigned id)
- 	vcpu->kvm = kvm;
- 	vcpu->vcpu_id = id;
- 	vcpu->pid = NULL;
--	init_swait_queue_head(&vcpu->wq);
-+	rcuwait_init(&vcpu->wait);
- 	kvm_async_pf_vcpu_init(vcpu);
- 
- 	vcpu->pre_pcpu = -1;
-@@ -2671,7 +2671,6 @@ static int kvm_vcpu_check_block(struct kvm_vcpu *vcpu)
- void kvm_vcpu_block(struct kvm_vcpu *vcpu)
- {
- 	ktime_t start, cur;
--	DECLARE_SWAITQUEUE(wait);
- 	bool waited = false;
- 	u64 block_ns;
- 
-@@ -2697,8 +2696,9 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
- 		} while (single_task_running() && ktime_before(cur, stop));
- 	}
- 
-+	prepare_to_rcuwait(&vcpu->wait);
- 	for (;;) {
--		prepare_to_swait_exclusive(&vcpu->wq, &wait, TASK_INTERRUPTIBLE);
-+		set_current_state(TASK_INTERRUPTIBLE);
- 
- 		if (kvm_vcpu_check_block(vcpu) < 0)
- 			break;
-@@ -2706,8 +2706,7 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
- 		waited = true;
- 		schedule();
- 	}
--
--	finish_swait(&vcpu->wq, &wait);
-+	finish_rcuwait(&vcpu->wait);
- 	cur = ktime_get();
- out:
- 	kvm_arch_vcpu_unblocking(vcpu);
-@@ -2738,11 +2737,10 @@ EXPORT_SYMBOL_GPL(kvm_vcpu_block);
- 
- bool kvm_vcpu_wake_up(struct kvm_vcpu *vcpu)
- {
--	struct swait_queue_head *wqp;
-+	struct rcuwait *wait;
- 
--	wqp = kvm_arch_vcpu_wq(vcpu);
--	if (swq_has_sleeper(wqp)) {
--		swake_up_one(wqp);
-+	wait = kvm_arch_vcpu_get_wait(vcpu);
-+	if (rcuwait_wake_up(wait)) {
- 		WRITE_ONCE(vcpu->ready, true);
- 		++vcpu->stat.halt_wakeup;
- 		return true;
-@@ -2884,7 +2882,8 @@ void kvm_vcpu_on_spin(struct kvm_vcpu *me, bool yield_to_kernel_mode)
- 				continue;
- 			if (vcpu == me)
- 				continue;
--			if (swait_active(&vcpu->wq) && !vcpu_dy_runnable(vcpu))
-+			if (rcuwait_active(&vcpu->wait) &&
-+			    !vcpu_dy_runnable(vcpu))
- 				continue;
- 			if (READ_ONCE(vcpu->preempted) && yield_to_kernel_mode &&
- 				!kvm_arch_vcpu_in_kernel(vcpu))
+Once you add support for this new version, this will make sense. at the
+moment, this is pretty pointless.
+
+Thanks,
+
+         M.
 -- 
-2.16.4
-
+Jazz is not dead. It just smells funny...
