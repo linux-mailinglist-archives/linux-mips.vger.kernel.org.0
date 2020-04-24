@@ -2,200 +2,171 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 513571B6FBB
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Apr 2020 10:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650251B713C
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Apr 2020 11:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726489AbgDXI2Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Apr 2020 04:28:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40034 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726028AbgDXI2Z (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 24 Apr 2020 04:28:25 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 15A8220724;
-        Fri, 24 Apr 2020 08:28:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587716904;
-        bh=671AeezqaSdpn4DaBFsbVvETM5t+l6VPbG1sR5DenCs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=f8mLiEMMjzCrqle954gNLa0ZlIL2fhoxaNb12WQFbVCeMWVfGuGneUuHXCRsqYl6Y
-         siur82anLuAw+EoNhD2GT2Qiv6bJYaddTyxc6Qf7wbvLZEVa7C5lWXWdKM2o18WogZ
-         NYb5+tO3QoErU/p8WBwcEhIrLExD/nUCh+ySydnQ=
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1jRth8-005zhM-C6; Fri, 24 Apr 2020 09:28:22 +0100
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 24 Apr 2020 09:28:22 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
+        id S1726802AbgDXJw2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Apr 2020 05:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726788AbgDXJw2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 24 Apr 2020 05:52:28 -0400
+Received: from mo6-p02-ob.smtp.rzone.de (mo6-p02-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5302::11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3758BC09B045;
+        Fri, 24 Apr 2020 02:52:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1587721943;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=EADzuRL+YsoGCLSE7b2pLcK0IVG9NS9sozBTxA+ffmU=;
+        b=qX4Tgh9DexKEcEKY8O3CSB7UEzJZ1Er7j0iMt+mCqFDpmNz0mtEAMbNthQakqarUvS
+        oezsCKUGyBkq1FlzG9KgCa6IAnZH81ggZ0FU+mT6Su2J/Heog5Qkh47YmFWPdeETREux
+        Cw8Eo00uB9npN4Nxeih9vCYiFtvmRyS6yi900ttbFqufXoNqTOnrm9GwWXCODZ/Jh0QJ
+        oURcz5yoIuaVxK04/Q061dqmzRwh1fdnLtKIU/7soLldpl2YL8QMysOWCg0MwofVlySv
+        v09I/sy2HTmQi0tP+VzeDTKVHgPIDCSQu4v4yJ2xTMThHoLBtyJeiUOpuK+MLKTtB+JH
+        XbQg==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlabXA0JT7U="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+        by smtp.strato.de (RZmta 46.6.2 DYNA|AUTH)
+        with ESMTPSA id R0acebw3O9pgAHY
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Fri, 24 Apr 2020 11:51:42 +0200 (CEST)
+Subject: Re: [PATCH v6 00/12] ARM/MIPS: DTS: add child nodes describing the PVRSGX GPU present in some OMAP SoC and JZ4780 (and many more)
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Content-Type: text/plain; charset=us-ascii
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <20200423203642.35ms4aarnv65tfp5@gilmour.lan>
+Date:   Fri, 24 Apr 2020 11:51:42 +0200
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Tony Lindgren <tony@atomide.com>,
+        James Hogan <jhogan@kernel.org>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        linux-samsung-soc@vger.kernel.org,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
-        Huacai Chen <chenhc@lemote.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 5/6] irqchip: Add Loongson PCH MSI controller
-In-Reply-To: <20200424093351.370c92e8@flygoat-x1e>
-References: <20200422142428.1249684-1-jiaxun.yang@flygoat.com>
- <20200422142428.1249684-6-jiaxun.yang@flygoat.com>
- <20200423154135.38b0ec25@why> <20200424093351.370c92e8@flygoat-x1e>
-Message-ID: <7c00f8964c2a83a56ae24a81ebe1c9e9@kernel.org>
-X-Sender: maz@kernel.org
-User-Agent: Roundcube Webmail/1.3.10
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org, tglx@linutronix.de, jason@lakedaemon.net, robh+dt@kernel.org, chenhc@lemote.com, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        linux-omap <linux-omap@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Philipp Rossak <embed3d@gmail.com>,
+        OpenPVRSGX Linux Driver Group <openpvrsgx-devgroup@letux.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        =?utf-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+        kernel@pyra-handheld.com
+Content-Transfer-Encoding: 7bit
+Message-Id: <A095F2EA-C6F8-47AD-A333-E19F7073581A@goldelico.com>
+References: <b5a06c19-7a3e-bcb8-5ae3-76901b9c6c35@gmail.com> <20200421112129.zjmkmzo3aftksgka@gilmour.lan> <20200421141543.GU37466@atomide.com> <D9D4D057-A73D-485F-898D-5C05E89C16B7@goldelico.com> <20200422065859.quy6ane5v7vsy5tf@gilmour.lan> <1AA57A0C-48E6-49BB-BB9A-2AAFFB371BCD@goldelico.com> <20200422151328.2oyqz7gqkbunmd6o@gilmour.lan> <07923B6C-4CCD-4B81-A98F-E19C43412A89@goldelico.com> <43688597-4b99-8f4d-9ad5-548ddff07f52@baylibre.com> <71F2F964-32C7-41E6-8F1A-A73161EA1BB3@goldelico.com> <20200423203642.35ms4aarnv65tfp5@gilmour.lan>
+To:     Maxime Ripard <maxime@cerno.tech>
+X-Mailer: Apple Mail (2.3124)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2020-04-24 02:33, Jiaxun Yang wrote:
-> On Thu, 23 Apr 2020 15:41:35 +0100
-> Marc Zyngier <maz@kernel.org> wrote:
+Hi,
+
+> Am 23.04.2020 um 22:36 schrieb Maxime Ripard <maxime@cerno.tech>:
+>> My goal is to keep the bindings as minimalistic as possible. And reset
+>> lines and power domains are (at least for those we have in the works)
+>> not needed to make working systems.
+>> 
+>> Therefore, for clocks I also would start with a minimalistic approach
+>> for a single optional GPU core clock and leave out reset and power
+>> completely.
 > 
->> On Wed, 22 Apr 2020 22:24:25 +0800
->> Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->> 
->> > This controller appears on Loongson-7A family of PCH to transform
->> > interrupts from PCI MSI into HyperTransport vectorized interrrupts
->> > and send them to procrssor's HT vector controller.
->> >
->> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> > ---
-> [...]
->> > +	ret = irq_domain_alloc_irqs_parent(domain, virq, 1,
->> > &fwspec);
->> > +	if (ret)
->> > +		return ret;
->> > +
->> > +	irq_domain_set_info(domain, virq, hwirq,
->> > +			    &middle_irq_chip, NULL,
->> > +			    handle_simple_irq, NULL, NULL);
->> 
->> No, this should at least be handle_edge_irq. More importantly, you
->> should use the flow set by the underlying irqchip, and not provide
->> your own.
+> Like I said above, the DT is considered an ABI and you'll have to
+> maintain backward compatibility (ie, newer kernel running with older
+> DT).
+
+Generally I fully agree to this rule (although I have experienced
+that exceptions happen more often than I like).
+
+But here, we don't have any older DT which define something about SGX.
+
+We introduce SGX for the first time with bindings and DT in parallel.
+So they are in sync.
+
+Therefore, newer kernels with SGX support and older DT simply will
+skip SGX and not load any drivers. So we can't break older DT and
+older DT can't break SGX.
+
+What we introduce is a DT code that is well hung and tested (originating
+in vendor kernels). It is cast in a bindings.yaml where not everyone
+is happy with for reasons outside the originally proposed DT.
+
+For new SoC not yet supported, I don't see a need to touch the
+existing ones.
+
+This is because I only propose to *add* properties to the bindings
+for devices that have not been supported with SGX before and are
+not sufficiently covered by what exists.
+
+So backward compatibility is a non-problem.
+
+> Therefore, you won't be able to require a new clock, reset or
+> power-domain later on for example.
 > 
-> Hi Marc,
-> Thanks for your review.
-> 
-> The underlying irqchip (HTVEC) follows a simple_irq flow as it only
-> has mask/unmask callback, and it doesn't have tyoe configuration. so I
-> followed simple_irq flow.
+> I guess the question I'm really asking is: since you don't really know
+> how the hardware is integrated at the moment,
 
-Not having a type doesn't mean that it can stick to simple_irq, which is
-the wrong things to use in 99% of the HW cases.
+Like I explained, we do not need to know and model all details about
+the hardware integration. The register set of an SoC does not always
+provide bits to control all signals we may see in a block diagram or
+think they must exist.
 
-> How can I use the flow set by the underlying irqchip? Just use
-> irq_domain_set_hwirq_and_chip here and set_handler in HTVEC driver?
+We have a set of SoC where it is demonstrated to work without need
+for more detailed knowledge about specific hardware integration.
 
-You need to find out how the HTVEC behaves. My gut feeling is that it
-is itself edge triggered, but you would need to look in the 
-documentation
-to find out.
+So we know everything of importance for this initial set of SoC to
+make it work.
 
-> 
-> 
->> 
->> > +	irq_set_probe(virq);
->> 
->> Probe? what does it mean for MSIs? I also don't see how you tell the
->> underlying irqchip that the MSI is edge triggered.
->> 
->> > +
->> > +	return 0;
->> > +}
->> > +
->> > +static int pch_msi_middle_domain_alloc(struct irq_domain *domain,
->> > +					   unsigned int virq,
->> > +					   unsigned int nr_irqs,
->> > void *args) +{
->> > +	struct pch_msi_data *priv = domain->host_data;
->> > +	int hwirq, err, i;
->> > +
->> > +	hwirq = pch_msi_allocate_hwirq(priv, nr_irqs);
->> > +	if (hwirq < 0)
->> > +		return hwirq;
->> > +
->> > +	for (i = 0; i < nr_irqs; i++) {
->> > +		err = pch_msi_parent_domain_alloc(domain, virq +
->> > i, hwirq + i);
->> > +		if (err)
->> > +			goto err_hwirq;
->> > +
->> > +		irq_domain_set_hwirq_and_chip(domain, virq + i,
->> > hwirq + i,
->> > +					      &middle_irq_chip,
->> > priv);
->> > +	}
->> > +
->> > +	return 0;
->> > +err_hwirq:
->> > +	while (--i >= 0)
->> > +		irq_domain_free_irqs_parent(domain, virq, i);
->> > +
->> > +	pch_msi_free_hwirq(priv, hwirq, nr_irqs);
->> > +	return err;
->> > +}
->> > +
->> > +static void pch_msi_middle_domain_free(struct irq_domain *domain,
->> > +					   unsigned int virq,
->> > +					   unsigned int nr_irqs)
->> > +{
->> > +	struct irq_data *d = irq_domain_get_irq_data(domain, virq);
->> > +	struct pch_msi_data *priv = irq_data_get_irq_chip_data(d);
->> > +
->> > +	irq_domain_free_irqs_parent(domain, virq, nr_irqs);
->> > +	pch_msi_free_hwirq(priv, d->hwirq, nr_irqs);
->> > +}
->> > +
->> > +static const struct irq_domain_ops pch_msi_middle_domain_ops = {
->> > +	.alloc	= pch_msi_middle_domain_alloc,
->> > +	.free	= pch_msi_middle_domain_free,
->> > +};
->> > +
->> > +static int pch_msi_init_domains(struct pch_msi_data *priv,
->> > +				struct device_node *node,
->> > +				struct device_node *parent)
->> > +{
->> > +	struct irq_domain *middle_domain, *msi_domain,
->> > *parent_domain; +
->> > +	parent_domain = irq_find_host(parent);
->> > +	if (!parent_domain) {
->> > +		pr_err("Failed to find the parent domain\n");
->> > +		return -ENXIO;
->> > +	}
->> > +
->> > +	middle_domain = irq_domain_add_tree(NULL,
->> > +
->> > &pch_msi_middle_domain_ops,
->> > +					    priv);
->> 
->> You don't really need a tree, unless your interrupt space is huge and
->> very sparse. Given that the DT example says 64, I would go with a
->> linear domain if that number is realistic.
->> 
-> It can up to 192 in latest generation of chip, is it still suitable?
+> why should we have that
+> discussion *now*. It's really not suprising that you don't know yet, so
+> I'm not sure why we need to rush in the bindings.
 
-That's a pretty small number, really. Just stick to a linear domain.
+Because:
+* there are people who want to have upstream SGX support for an initial
+  set of SoC *now*
+* the discussion already lasts ca. 6 months since I posted v1,
+  that should be enough and is not a rush
+* it is not required to know more details to make a working system
+* we will not gain more information by waiting for another year or two
+* problems are not solved by postponing them
+* there are DTS for some initial SoC, tested to work
+* it is no longer possible to submit DT without bindings.yaml (or is it?)
+* we just need to define a bindings.yaml for them, not invent something
+  completely new
+* we can start with a minimal bindings.yaml for the analysed SoC and
+  *extend* it in the future if really needed
+* we can discuss changes & extensions for the bindings when they are
+  really proposed
+* having this patch series upstream is a prerequisite for introducing
+  the sgx kernel driver to staging
 
-> In the latest generation, we have a enhanced version of HTVEC which has
-> another delivery system that will be able to configure affinity. That's
-> why I placed set_affinity call back here and in PCH PIC driver.
+In other words: your suggestion to postpone everything will keep finished
+work sitting in front of the door and rotting and blocking unfinished work...
 
-Once you add support for this new version, this will make sense. at the
-moment, this is pretty pointless.
+And to be honest, we have postponed SGX support already for too long
+time and could be much farther with more and broader community cooperation.
+So we should not block ourselves.
 
-Thanks,
+So if you can contribute new information or proposals to specifically
+improve the proposed bindings.yaml, you are very welcome. But please do
+it *now*.
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+BR and thanks,
+Nikolaus
+
