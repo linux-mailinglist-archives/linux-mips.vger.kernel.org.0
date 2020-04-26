@@ -2,56 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEE51B90B9
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 15:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A54611B90B7
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 15:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726196AbgDZNqz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 26 Apr 2020 09:46:55 -0400
-Received: from elvis.franken.de ([193.175.24.41]:55774 "EHLO elvis.franken.de"
+        id S1726142AbgDZNqy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Apr 2020 09:46:54 -0400
+Received: from elvis.franken.de ([193.175.24.41]:55778 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725876AbgDZNqy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S1726140AbgDZNqy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Sun, 26 Apr 2020 09:46:54 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jShcS-0000jA-00; Sun, 26 Apr 2020 15:46:52 +0200
+        id 1jShcS-0000jA-01; Sun, 26 Apr 2020 15:46:52 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 28010C02FB; Sun, 26 Apr 2020 15:45:04 +0200 (CEST)
-Date:   Sun, 26 Apr 2020 15:45:04 +0200
+        id E22A5C0301; Sun, 26 Apr 2020 15:45:31 +0200 (CEST)
+Date:   Sun, 26 Apr 2020 15:45:31 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH] MIPS: Rename the "Fill" cache ops to avoid build failure
-Message-ID: <20200426134504.GA8299@alpha.franken.de>
-References: <1587899392-10579-1-git-send-email-chenhc@lemote.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: Re: [PATCH] MIPS: Loongson: Add support for perf tool
+Message-ID: <20200426134531.GB8299@alpha.franken.de>
+References: <1587893445-9656-1-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1587899392-10579-1-git-send-email-chenhc@lemote.com>
+In-Reply-To: <1587893445-9656-1-git-send-email-yangtiezhu@loongson.cn>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Apr 26, 2020 at 07:09:52PM +0800, Huacai Chen wrote:
-> MIPS define a "Fill" macro as a cache operation in cacheops.h, this
-> will cause build failure under some special configurations because in
-> seq_file.c there is a "Fill" label. To avoid this failure we rename the
-> "Fill" macro to "Fill_I" which has the same coding style as other cache
-> operations in cacheops.h (we think renaming the "Fill" macro is more
-> reasonable than renaming the "Fill" label).
+On Sun, Apr 26, 2020 at 05:30:45PM +0800, Tiezhu Yang wrote:
+> In order to use perf tool on the Loongson platform, we should enable kernel
+> support for various performance events provided by software and hardware,
+> so add CONFIG_PERF_EVENTS=y to loongson3_defconfig.
 > 
-> Callers of "Fill" macro is also updated.
+> E.g. without this patch:
 > 
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> [loongson@localhost perf]$ ./perf list
+> 
+> List of pre-defined events (to be used in -e):
+> 
+>   duration_time                                      [Tool event]
+> 
+>   rNNN                                               [Raw hardware event descriptor]
+>   cpu/t1=v1[,t2=v2,t3 ...]/modifier                  [Raw hardware event descriptor]
+>    (see 'man perf-list' on how to encode it)
+> 
+>   mem:<addr>[/len][:access]                          [Hardware breakpoint]
+> 
+> With this patch:
+> 
+> [loongson@localhost perf]$ ./perf list
+> 
+> List of pre-defined events (to be used in -e):
+> 
+>   branch-instructions OR branches                    [Hardware event]
+>   branch-misses                                      [Hardware event]
+>   cpu-cycles OR cycles                               [Hardware event]
+>   instructions                                       [Hardware event]
+> 
+>   alignment-faults                                   [Software event]
+>   bpf-output                                         [Software event]
+>   context-switches OR cs                             [Software event]
+>   cpu-clock                                          [Software event]
+>   cpu-migrations OR migrations                       [Software event]
+>   dummy                                              [Software event]
+>   emulation-faults                                   [Software event]
+>   major-faults                                       [Software event]
+>   minor-faults                                       [Software event]
+>   page-faults OR faults                              [Software event]
+>   task-clock                                         [Software event]
+> 
+>   duration_time                                      [Tool event]
+> 
+>   L1-dcache-load-misses                              [Hardware cache event]
+>   L1-dcache-store-misses                             [Hardware cache event]
+>   L1-icache-load-misses                              [Hardware cache event]
+>   branch-load-misses                                 [Hardware cache event]
+>   branch-loads                                       [Hardware cache event]
+>   dTLB-load-misses                                   [Hardware cache event]
+>   dTLB-store-misses                                  [Hardware cache event]
+>   iTLB-load-misses                                   [Hardware cache event]
+> 
+>   rNNN                                               [Raw hardware event descriptor]
+>   cpu/t1=v1[,t2=v2,t3 ...]/modifier                  [Raw hardware event descriptor]
+>    (see 'man perf-list' on how to encode it)
+> 
+>   mem:<addr>[/len][:access]                          [Hardware breakpoint]
+> 
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > ---
->  arch/mips/include/asm/cacheops.h   | 2 +-
->  arch/mips/mm/c-r4k.c               | 2 +-
->  arch/mips/pmcs-msp71xx/msp_setup.c | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+>  arch/mips/configs/loongson3_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
 applied to mips-next.
 
