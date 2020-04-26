@@ -2,141 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3101B8B87
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 05:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 574091B8C9D
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 07:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726117AbgDZDB3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 25 Apr 2020 23:01:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59150 "EHLO mail.kernel.org"
+        id S1726108AbgDZFyV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Apr 2020 01:54:21 -0400
+Received: from mga05.intel.com ([192.55.52.43]:34948 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726092AbgDZDB2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 25 Apr 2020 23:01:28 -0400
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6969B206D4;
-        Sun, 26 Apr 2020 03:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587870086;
-        bh=tCSwWc8iRTvfzhr9Bpi0vaaHrDRBHLwWGG3vKGlFHqg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UVpTWp7EJhgRsQXBhfo6AT4VrUdy1nNy8nOq/LfihYfu1NC4LJc05Iz8GAX1ZT5f3
-         axlF830cN9T/YdFik2zo+N3qO2F4mins96Mu5bgI3K/fB5ghL5mkLmCLUuWklYIKG9
-         HZl62/U2hyOlgj8km6aRA/b/nX2GmC3gaq8w7s7A=
-Date:   Sat, 25 Apr 2020 20:01:24 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mm@kvack.org, Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
+        id S1725468AbgDZFyV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 26 Apr 2020 01:54:21 -0400
+IronPort-SDR: mhbP6M0vOROTf19G/v4XotjAsT4ouLrU2kIiSnOHMqit70Y+/7WaUpLvABrkzh/MUw5yK8jjAK
+ 2dcdVo/YkC0w==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2020 22:54:21 -0700
+IronPort-SDR: /cZ3umTa8B8PLh9tjA9EP3+bxl80qczghY2Si7yQnbojuyuxqol2zAYPUansPdHYwpezKRfg9s
+ EcpTlSW8XTMQ==
+X-IronPort-AV: E=Sophos;i="5.73,319,1583222400"; 
+   d="scan'208";a="281313737"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2020 22:54:20 -0700
+From:   ira.weiny@intel.com
+To:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
         Helge Deller <deller@gmx.de>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
         "David S. Miller" <davem@davemloft.net>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] mm/hugetlb: Introduce
- HAVE_ARCH_CLEAR_HUGEPAGE_FLAGS
-Message-Id: <20200425200124.20d0c75fcaef05d062d3667c@linux-foundation.org>
-In-Reply-To: <87d37591-caa2-b82b-392a-3a29b2c7e9a6@arm.com>
-References: <1586864670-21799-1-git-send-email-anshuman.khandual@arm.com>
-        <1586864670-21799-4-git-send-email-anshuman.khandual@arm.com>
-        <20200425175511.7a68efb5e2f4436fe0328c1d@linux-foundation.org>
-        <87d37591-caa2-b82b-392a-3a29b2c7e9a6@arm.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: [PATCH 0/5] Remove duplicated kmap code
+Date:   Sat, 25 Apr 2020 22:54:01 -0700
+Message-Id: <20200426055406.134198-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 26 Apr 2020 08:13:17 +0530 Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+From: Ira Weiny <ira.weiny@intel.com>
 
-> 
-> 
-> On 04/26/2020 06:25 AM, Andrew Morton wrote:
-> > On Tue, 14 Apr 2020 17:14:30 +0530 Anshuman Khandual <anshuman.khandual@arm.com> wrote:
-> > 
-> >> There are multiple similar definitions for arch_clear_hugepage_flags() on
-> >> various platforms. This introduces HAVE_ARCH_CLEAR_HUGEPAGE_FLAGS for those
-> >> platforms that need to define their own arch_clear_hugepage_flags() while
-> >> also providing a generic fallback definition for others to use. This help
-> >> reduce code duplication.
-> >>
-> >> ...
-> >>
-> >> --- a/include/linux/hugetlb.h
-> >> +++ b/include/linux/hugetlb.h
-> >> @@ -544,6 +544,10 @@ static inline int is_hugepage_only_range(struct mm_struct *mm,
-> >>  }
-> >>  #endif
-> >>  
-> >> +#ifndef HAVE_ARCH_CLEAR_HUGEPAGE_FLAGS
-> >> +static inline void arch_clear_hugepage_flags(struct page *page) { }
-> >> +#endif
-> >> +
-> >>  #ifndef arch_make_huge_pte
-> >>  static inline pte_t arch_make_huge_pte(pte_t entry, struct vm_area_struct *vma,
-> >>  				       struct page *page, int writable)
-> > 
-> > This is the rather old-school way of doing it.  The Linus-suggested way is
-> > 
-> > #ifndef arch_clear_hugepage_flags
-> > static inline void arch_clear_hugepage_flags(struct page *page)
-> > {
-> > }
-> > #define arch_clear_hugepage_flags arch_clear_hugepage_flags
-> 
-> Do we need that above line here ? Is not that implicit.
+The kmap infrastructure has been copied almost verbatim to every architecture.
+This series consolidates obvious duplicated code.  (k[un]map_atmoic has some
+additional duplication between some of the architectures but the differences
+were such to not warrant further changes.)
 
-It depends if other header files want to test whether
-arch_clear_hugepage_flags is already defined.  If the header heorarchy
-is well-defined and working properly, they shouldn't need to, because
-we're reliably indluding the relevant arch header before (or early
-within) include/linux/hugetlb.h.
+0day built successfully to cover all the architectures I can't readily build.
 
-It would be nice if
+Ira Weiny (5):
+  arch/kmap: Remove BUG_ON()
+  arch/kmap: Remove redundant arch specific kmaps
+  arch/kunmap: Remove duplicate kunmap implementations
+  arch/kmap_atomic: Consolidate duplicate code
+  arch/kunmap_atomic: Consolidate duplicate code
 
-#define arch_clear_hugepage_flags arch_clear_hugepage_flags
-#define arch_clear_hugepage_flags arch_clear_hugepage_flags
+ arch/arc/include/asm/highmem.h        | 11 -------
+ arch/arc/mm/highmem.c                 | 20 ++-----------
+ arch/arm/include/asm/highmem.h        |  3 --
+ arch/arm/mm/highmem.c                 | 28 ++----------------
+ arch/csky/include/asm/highmem.h       |  3 +-
+ arch/csky/mm/highmem.c                | 28 ++++--------------
+ arch/microblaze/include/asm/highmem.h | 17 -----------
+ arch/microblaze/mm/highmem.c          | 10 ++-----
+ arch/mips/include/asm/highmem.h       |  3 +-
+ arch/mips/mm/highmem.c                | 25 +++-------------
+ arch/nds32/include/asm/highmem.h      |  3 --
+ arch/nds32/mm/highmem.c               | 31 ++------------------
+ arch/parisc/include/asm/cacheflush.h  |  2 --
+ arch/powerpc/include/asm/highmem.h    | 17 -----------
+ arch/powerpc/mm/highmem.c             |  9 ++----
+ arch/sparc/include/asm/highmem.h      | 17 -----------
+ arch/sparc/mm/highmem.c               |  9 ++----
+ arch/x86/include/asm/highmem.h        |  4 ---
+ arch/x86/mm/highmem_32.c              | 30 ++------------------
+ arch/xtensa/include/asm/highmem.h     | 14 +--------
+ arch/xtensa/mm/highmem.c              | 10 ++-----
+ include/linux/highmem.h               | 41 +++++++++++++++++++++++++--
+ 22 files changed, 75 insertions(+), 260 deletions(-)
 
-were to generate an compiler error but it doesn't.  If it did we could
-detect these incorrect inclusion orders.
+-- 
+2.25.1
 
-> > #endif
-> > 
-> > And the various arch headers do
-> > 
-> > static inline void arch_clear_hugepage_flags(struct page *page)
-> > {
-> > 	<some implementation>
-> > }
-> > #define arch_clear_hugepage_flags arch_clear_hugepage_flags
-> > 
-> > It's a small difference - mainly to avoid adding two variables to the
-> > overall namespace where one would do.
-> 
-> Understood, will change and resend.
-
-That's OK - I've queued up that fix.
