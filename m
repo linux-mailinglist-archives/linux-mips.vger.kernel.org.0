@@ -2,89 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEFA1B8D67
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 09:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94661B8E34
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 11:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726143AbgDZH0o (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 26 Apr 2020 03:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725847AbgDZH0o (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 26 Apr 2020 03:26:44 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96806C061A0C;
-        Sun, 26 Apr 2020 00:26:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CWSwm8Yeluzm8cpwZm/62btaRJCyoviiCLbacfabnGM=; b=Re1ECLpOnjCxMnMxw3nbFwqX2n
-        aoIEpiDwCOhSXjRFQsAtKAUzFPfcZvScmnluhdPrGcpB4A73YnCcAK3X1/Udnt463gXZiWTPz/hdY
-        Zm1qsK/TTQvahB8trR8xHhgpUygnDRg+nIVFpopoPErU2kCehwboKE+gZgzOWx7tGiBfdqF+7XjLQ
-        nXGbVkpLeDiFJyDIB00acjlEnat0Goyv5mEX0AfFgXOl9BLdSgCkmDQwkWJK/Ym/oifDtpOlRDYDp
-        XopgAFXT0HVE//Q7QrX3iZhO0PVRR0c/B26jlIRviJj+L4KI9zh60oN87/iGag0hjjm6rgmN2bu1K
-        JDzqUHOw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jSbgY-00048J-Cx; Sun, 26 Apr 2020 07:26:42 +0000
-Date:   Sun, 26 Apr 2020 00:26:42 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     ira.weiny@intel.com
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH 4/5] arch/kmap_atomic: Consolidate duplicate code
-Message-ID: <20200426072642.GB22024@infradead.org>
-References: <20200426055406.134198-1-ira.weiny@intel.com>
- <20200426055406.134198-5-ira.weiny@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200426055406.134198-5-ira.weiny@intel.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+        id S1726116AbgDZJbF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Apr 2020 05:31:05 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:58560 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725806AbgDZJbF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 26 Apr 2020 05:31:05 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxdurGVKVeJFwsAA--.12S2;
+        Sun, 26 Apr 2020 17:30:46 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH] MIPS: Loongson: Add support for perf tool
+Date:   Sun, 26 Apr 2020 17:30:45 +0800
+Message-Id: <1587893445-9656-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9AxdurGVKVeJFwsAA--.12S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFyDAFW8Cw15ZFWxtF1xGrg_yoW8Kw13pF
+        4aywsxKFWkJrn5uw1Yk3ykury3JFWxtFZrGr4UJ3yUZryDZ3WkZFs3Zr4DGF4rJa97A3Wf
+        u3Wvgr1jvF97CrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfU1zuWDUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-> diff --git a/arch/arc/mm/highmem.c b/arch/arc/mm/highmem.c
-> index 4db13a6b9f3b..1cae4b911a33 100644
-> --- a/arch/arc/mm/highmem.c
-> +++ b/arch/arc/mm/highmem.c
-> @@ -53,11 +53,10 @@ void *kmap_atomic(struct page *page)
->  {
->  	int idx, cpu_idx;
->  	unsigned long vaddr;
-> +	void *addr = kmap_atomic_fast(page);
->  
-> -	preempt_disable();
-> -	pagefault_disable();
-> -	if (!PageHighMem(page))
-> -		return page_address(page);
-> +	if (addr)
-> +		return addr;
+In order to use perf tool on the Loongson platform, we should enable kernel
+support for various performance events provided by software and hardware,
+so add CONFIG_PERF_EVENTS=y to loongson3_defconfig.
 
-Wouldn't it make sense to just move kmap_atomic itelf to common code,
-and call out to a kmap_atomic_high for the highmem case, following the
-scheme in kmap?  Same for the unmap side.  That might require to support
-kmap_atomic_prot everywhere first, which sounds like a really good
-idea anyway, and would avoid the need for strange workaround in drm.
+E.g. without this patch:
+
+[loongson@localhost perf]$ ./perf list
+
+List of pre-defined events (to be used in -e):
+
+  duration_time                                      [Tool event]
+
+  rNNN                                               [Raw hardware event descriptor]
+  cpu/t1=v1[,t2=v2,t3 ...]/modifier                  [Raw hardware event descriptor]
+   (see 'man perf-list' on how to encode it)
+
+  mem:<addr>[/len][:access]                          [Hardware breakpoint]
+
+With this patch:
+
+[loongson@localhost perf]$ ./perf list
+
+List of pre-defined events (to be used in -e):
+
+  branch-instructions OR branches                    [Hardware event]
+  branch-misses                                      [Hardware event]
+  cpu-cycles OR cycles                               [Hardware event]
+  instructions                                       [Hardware event]
+
+  alignment-faults                                   [Software event]
+  bpf-output                                         [Software event]
+  context-switches OR cs                             [Software event]
+  cpu-clock                                          [Software event]
+  cpu-migrations OR migrations                       [Software event]
+  dummy                                              [Software event]
+  emulation-faults                                   [Software event]
+  major-faults                                       [Software event]
+  minor-faults                                       [Software event]
+  page-faults OR faults                              [Software event]
+  task-clock                                         [Software event]
+
+  duration_time                                      [Tool event]
+
+  L1-dcache-load-misses                              [Hardware cache event]
+  L1-dcache-store-misses                             [Hardware cache event]
+  L1-icache-load-misses                              [Hardware cache event]
+  branch-load-misses                                 [Hardware cache event]
+  branch-loads                                       [Hardware cache event]
+  dTLB-load-misses                                   [Hardware cache event]
+  dTLB-store-misses                                  [Hardware cache event]
+  iTLB-load-misses                                   [Hardware cache event]
+
+  rNNN                                               [Raw hardware event descriptor]
+  cpu/t1=v1[,t2=v2,t3 ...]/modifier                  [Raw hardware event descriptor]
+   (see 'man perf-list' on how to encode it)
+
+  mem:<addr>[/len][:access]                          [Hardware breakpoint]
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/configs/loongson3_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index 51675f5..6768c16 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -21,6 +21,7 @@ CONFIG_SYSFS_DEPRECATED=y
+ CONFIG_RELAY=y
+ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_EMBEDDED=y
++CONFIG_PERF_EVENTS=y
+ CONFIG_MACH_LOONGSON64=y
+ CONFIG_SMP=y
+ CONFIG_HZ_256=y
+-- 
+2.1.0
+
