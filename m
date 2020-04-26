@@ -2,151 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BE51B8F8E
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 13:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5F61B900C
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 14:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726154AbgDZLvQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 26 Apr 2020 07:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726135AbgDZLvP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 26 Apr 2020 07:51:15 -0400
-Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [IPv6:2001:19f0:6001:3633:5400:2ff:fe8c:553])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C71BC061A0E;
-        Sun, 26 Apr 2020 04:51:15 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 18F8420CE7;
-        Sun, 26 Apr 2020 11:51:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1587901875; bh=FIpkVgCcZIOSR5LDhY/QsB4UvPKGRBmMbi5Ln6/hcIA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QpyOxyFtVI9AhdwU/EaFyuJLre0YiMrOJR0N9E5ACBf3t3cAamMrKv1Numq1ZYnSg
-         UNd1r3qGxmz1+UjGqIPmYlXNHhxNniEg/7Q1Tngn+hkS9UYJC3JOBdcsi12mBBQZoy
-         HYY1RvPxMU9zuPuA3RL1RHBacPUF3aTZQkUxyW6t1g9NnYz/ZySf/oTuflKjsrzVgL
-         HYYKp2NFhYIQU1bMCapxhBZKH4eYLvClvEEpMMUPGHrNIhXQBa3U8J8mJISSWsdmhE
-         n94sJoMn2WP+OYWD/0pF7C80f0HHwAawkSyuq8GT4doBiZGRd5fLbpAK7k58zmCekV
-         cLW7rxDJBp5Ew==
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Stephen Kitt <steve@sk2.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Daniel Silsby <dansilsby@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        John Garry <john.garry@huawei.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] MIPS: Loongson64: Enable PCI_IO_VMMAP
-Date:   Sun, 26 Apr 2020 19:47:37 +0800
-Message-Id: <20200426114806.1176629-5-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.26.0.rc2
-In-Reply-To: <20200426114806.1176629-1-jiaxun.yang@flygoat.com>
-References: <20200426114806.1176629-1-jiaxun.yang@flygoat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726166AbgDZMjO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Apr 2020 08:39:14 -0400
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:48030 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726135AbgDZMjO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 26 Apr 2020 08:39:14 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01355;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=37;SR=0;TI=SMTPD_---0TwgoYV6_1587904745;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0TwgoYV6_1587904745)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sun, 26 Apr 2020 20:39:06 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     pbonzini@redhat.com, tsbogend@alpha.franken.de, paulus@ozlabs.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        cohuck@redhat.com, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        sean.j.christopherson@intel.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, maz@kernel.org, james.morse@arm.com,
+        julien.thierry.kdev@gmail.com, suzuki.poulose@arm.com,
+        christoffer.dall@arm.com, peterx@redhat.com, thuth@redhat.com
+Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianjia.zhang@linux.alibaba.com
+Subject: [PATCH v3 0/7] clean up redundant 'kvm_run' parameters
+Date:   Sun, 26 Apr 2020 20:38:58 +0800
+Message-Id: <20200426123905.8336-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Finally we are able to elegantly add I/O ports for PCI host bridge
-via devicetree with logic_pio.
+In the current kvm version, 'kvm_run' has been included in the 'kvm_vcpu'
+structure. Earlier than historical reasons, many kvm-related function
+parameters retain the 'kvm_run' and 'kvm_vcpu' parameters at the same time.
+This patch does a unified cleanup of these remaining redundant parameters.
 
-To deal with legacy drivers that have fixed I/O ports range we
-reserved 0x10000 in PCI_IOBASE, should be enough for i8259 i8042
-stuff.
+This series of patches has completely cleaned the architecture of
+arm64, mips, ppc, and s390 (no such redundant code on x86). Due to
+the large number of modified codes, a separate patch is made for each
+platform. On the ppc platform, there is also a redundant structure
+pointer of 'kvm_run' in 'vcpu_arch', which has also been cleaned
+separately.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/Kconfig           |  1 +
- arch/mips/include/asm/io.h  |  4 ++++
- arch/mips/loongson64/init.c | 12 ++++++++----
- arch/mips/loongson64/pci.c  |  2 +-
- 4 files changed, 14 insertions(+), 5 deletions(-)
+v3 change:
+  Keep the existing `vcpu->run` in the function body unchanged.
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 4e5308178649..1669735dacd8 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -479,6 +479,7 @@ config MACH_LOONGSON64
- 	select I8259
- 	select IRQ_MIPS_CPU
- 	select NR_CPUS_DEFAULT_64
-+	select PCI_IO_VMMAP
- 	select USE_GENERIC_EARLY_PRINTK_8250
- 	select SYS_HAS_CPU_LOONGSON64
- 	select SYS_HAS_EARLY_PRINTK
-diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index f15ddcd27f35..7f9716c95aa0 100644
---- a/arch/mips/include/asm/io.h
-+++ b/arch/mips/include/asm/io.h
-@@ -66,6 +66,10 @@
- #define PCI_IOBASE		((void __iomem *)PCI_IO_START)
- #define IOPORT_RW_BASE		PCI_IO_START
- 
-+#ifdef CONFIG_MACH_LOONGSON64
-+#define MMIO_LOWER_RESERVED	0x10000
-+#endif
-+
- #else
- 
- #define IO_SPACE_LIMIT 0xffff
-diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-index da38944471f4..3117edbbea46 100644
---- a/arch/mips/loongson64/init.c
-+++ b/arch/mips/loongson64/init.c
-@@ -29,10 +29,6 @@ void __init prom_init(void)
- 	fw_init_cmdline();
- 	prom_init_env();
- 
--	/* init base address of io space */
--	set_io_port_base((unsigned long)
--		ioremap(LOONGSON_PCIIO_BASE, LOONGSON_PCIIO_SIZE));
--
- 	prom_init_numa_memory();
- 
- 	/* Hardcode to CPU UART 0 */
-@@ -48,5 +44,13 @@ void __init prom_free_prom_memory(void)
- 
- void __init arch_init_irq(void)
- {
-+	/*
-+	 * i8259 would access I/O space, so mapping must be done here.
-+	 * Please remove it when all drivers can be managed by logic_pio.
-+	 */
-+	ioremap_page_range(PCI_IO_START, PCI_IO_START + MMIO_LOWER_RESERVED,
-+				  LOONGSON_PCIIO_BASE,
-+				  pgprot_device(PAGE_KERNEL));
-+
- 	irqchip_init();
- }
-diff --git a/arch/mips/loongson64/pci.c b/arch/mips/loongson64/pci.c
-index a440a2725a20..7aecb88dd377 100644
---- a/arch/mips/loongson64/pci.c
-+++ b/arch/mips/loongson64/pci.c
-@@ -37,7 +37,7 @@ extern int sbx00_acpi_init(void);
- static int __init pcibios_init(void)
- {
- 
--	loongson_pci_controller.io_map_base = mips_io_port_base;
-+	loongson_pci_controller.io_map_base = IOPORT_RW_BASE;
- 	loongson_pci_mem_resource.start = loongson_sysconf.pci_mem_start_addr;
- 	loongson_pci_mem_resource.end = loongson_sysconf.pci_mem_end_addr;
- 
+v2 change:
+  s390 retains the original variable name and minimizes modification.
+
+Tianjia Zhang (7):
+  KVM: s390: clean up redundant 'kvm_run' parameters
+  KVM: arm64: clean up redundant 'kvm_run' parameters
+  KVM: PPC: Remove redundant kvm_run from vcpu_arch
+  KVM: PPC: clean up redundant 'kvm_run' parameters
+  KVM: PPC: clean up redundant kvm_run parameters in assembly
+  KVM: MIPS: clean up redundant 'kvm_run' parameters
+  KVM: MIPS: clean up redundant kvm_run parameters in assembly
+
+ arch/arm64/include/asm/kvm_coproc.h      |  12 +--
+ arch/arm64/include/asm/kvm_host.h        |  11 +--
+ arch/arm64/include/asm/kvm_mmu.h         |   2 +-
+ arch/arm64/kvm/handle_exit.c             |  36 +++----
+ arch/arm64/kvm/sys_regs.c                |  13 ++-
+ arch/mips/include/asm/kvm_host.h         |  32 +------
+ arch/mips/kvm/emulate.c                  |  59 ++++--------
+ arch/mips/kvm/entry.c                    |  15 +--
+ arch/mips/kvm/mips.c                     |  14 +--
+ arch/mips/kvm/trap_emul.c                | 114 ++++++++++-------------
+ arch/mips/kvm/vz.c                       |  26 ++----
+ arch/powerpc/include/asm/kvm_book3s.h    |  16 ++--
+ arch/powerpc/include/asm/kvm_host.h      |   1 -
+ arch/powerpc/include/asm/kvm_ppc.h       |  27 +++---
+ arch/powerpc/kvm/book3s.c                |   4 +-
+ arch/powerpc/kvm/book3s.h                |   2 +-
+ arch/powerpc/kvm/book3s_64_mmu_hv.c      |  12 +--
+ arch/powerpc/kvm/book3s_64_mmu_radix.c   |   4 +-
+ arch/powerpc/kvm/book3s_emulate.c        |  10 +-
+ arch/powerpc/kvm/book3s_hv.c             |  64 ++++++-------
+ arch/powerpc/kvm/book3s_hv_nested.c      |  12 +--
+ arch/powerpc/kvm/book3s_interrupts.S     |  17 ++--
+ arch/powerpc/kvm/book3s_paired_singles.c |  72 +++++++-------
+ arch/powerpc/kvm/book3s_pr.c             |  33 ++++---
+ arch/powerpc/kvm/booke.c                 |  39 ++++----
+ arch/powerpc/kvm/booke.h                 |   8 +-
+ arch/powerpc/kvm/booke_emulate.c         |   2 +-
+ arch/powerpc/kvm/booke_interrupts.S      |   9 +-
+ arch/powerpc/kvm/bookehv_interrupts.S    |  10 +-
+ arch/powerpc/kvm/e500_emulate.c          |  15 ++-
+ arch/powerpc/kvm/emulate.c               |  10 +-
+ arch/powerpc/kvm/emulate_loadstore.c     |  32 +++----
+ arch/powerpc/kvm/powerpc.c               |  72 +++++++-------
+ arch/powerpc/kvm/trace_hv.h              |   6 +-
+ arch/s390/kvm/kvm-s390.c                 |  23 +++--
+ virt/kvm/arm/arm.c                       |   6 +-
+ virt/kvm/arm/mmio.c                      |  11 ++-
+ virt/kvm/arm/mmu.c                       |   5 +-
+ 38 files changed, 389 insertions(+), 467 deletions(-)
+
 -- 
-2.26.0.rc2
+2.17.1
 
