@@ -2,125 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E94661B8E34
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 11:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1201B8F2F
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 13:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726116AbgDZJbF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 26 Apr 2020 05:31:05 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:58560 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725806AbgDZJbF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 26 Apr 2020 05:31:05 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxdurGVKVeJFwsAA--.12S2;
-        Sun, 26 Apr 2020 17:30:46 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH] MIPS: Loongson: Add support for perf tool
-Date:   Sun, 26 Apr 2020 17:30:45 +0800
-Message-Id: <1587893445-9656-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9AxdurGVKVeJFwsAA--.12S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFyDAFW8Cw15ZFWxtF1xGrg_yoW8Kw13pF
-        4aywsxKFWkJrn5uw1Yk3ykury3JFWxtFZrGr4UJ3yUZryDZ3WkZFs3Zr4DGF4rJa97A3Wf
-        u3Wvgr1jvF97CrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkS14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfU1zuWDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S1726121AbgDZLAh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Apr 2020 07:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726119AbgDZLAh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 26 Apr 2020 07:00:37 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7ACC061A0C
+        for <linux-mips@vger.kernel.org>; Sun, 26 Apr 2020 04:00:37 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id fu13so5477205pjb.5
+        for <linux-mips@vger.kernel.org>; Sun, 26 Apr 2020 04:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=GlOyPyPfRjTvez5ZkorKH5ft3Et6+ySp+Q2Ucq9SL78=;
+        b=NosADfr9GqJxVHsH7Ct6unS9X0dRH665PJl0ZU0fjKg/lxf2vkhM4saw3n+y8xp41c
+         MlfWccgPMXM3o0mpowm2jIfS/HQhRk7FtVWsabLyIDVtEdjOY7o7nkE1JB5tFOd1wuFA
+         2nqXckH3k8ptmKDHcbEkNcddC+NJrkdbwycPdtC3Jub0CswqLJ4eoFTD0mkoIdb8Q6sp
+         LqsdJYJRdMr8EYj23xS/Smbb+/jwPrfsNeE8jVChN1qSqBea616N5vCsrHcqLdLewYvg
+         rF0i3XLkJI99mzqsEQDW62UpWCghObrCf2xloxafl/ljQvWunjkq9gyShtpkvu6BSDKF
+         zB+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=GlOyPyPfRjTvez5ZkorKH5ft3Et6+ySp+Q2Ucq9SL78=;
+        b=dccycupvhKExja94Ya4zK8CBlkEonOAY849Ct7MEjaDLlizZ4eTYN1VGbSXfGl3j+9
+         3zh3r7tQaXdCnyDjsYalq37d4r94kyG4e+zWsblO/Z9sPpA3WMKO8scxVr78VWO0Pi31
+         NF2IwkwT54KiApBEefPM0UbeOSGloLieUbZ+NzVEHs9uxO7tp9tlfN3ekHeYUN73UQQY
+         CBhiU9x4WYofTxFe9gSvbsKaWOrULKsfCdeF4XYds4+BjEq8nl3NOCBh5RiajUOZhnPV
+         0Pk5kSx5YdzCduGSB6ufhcldvHJ+4e4Z4vJh8YKJnciFgT5S7DD90qE7XLKRvNFoadr8
+         b3WQ==
+X-Gm-Message-State: AGi0Pubu5Yrn1PurwP5B8HW5LNwx7g4hiE/1lhZaVaB1o6VxP3ZVa+56
+        4HSMpnK72NAz3YnzHgHo6cE=
+X-Google-Smtp-Source: APiQypI/XuICgGBBlfF0MWg3690wSuis34g6f8HFaoMyWe0balMJ4S6RdoNH9HrZrsxvJvudIYgkkw==
+X-Received: by 2002:a17:902:8f89:: with SMTP id z9mr18663575plo.2.1587898836713;
+        Sun, 26 Apr 2020 04:00:36 -0700 (PDT)
+Received: from software.domain.org (28.144.92.34.bc.googleusercontent.com. [34.92.144.28])
+        by smtp.gmail.com with ESMTPSA id b1sm9647405pfa.202.2020.04.26.04.00.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 26 Apr 2020 04:00:36 -0700 (PDT)
+From:   Huacai Chen <chenhc@lemote.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: [PATCH] MIPS: Rename the "Fill" cache ops to avoid build failure
+Date:   Sun, 26 Apr 2020 19:09:52 +0800
+Message-Id: <1587899392-10579-1-git-send-email-chenhc@lemote.com>
+X-Mailer: git-send-email 2.7.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In order to use perf tool on the Loongson platform, we should enable kernel
-support for various performance events provided by software and hardware,
-so add CONFIG_PERF_EVENTS=y to loongson3_defconfig.
+MIPS define a "Fill" macro as a cache operation in cacheops.h, this
+will cause build failure under some special configurations because in
+seq_file.c there is a "Fill" label. To avoid this failure we rename the
+"Fill" macro to "Fill_I" which has the same coding style as other cache
+operations in cacheops.h (we think renaming the "Fill" macro is more
+reasonable than renaming the "Fill" label).
 
-E.g. without this patch:
+Callers of "Fill" macro is also updated.
 
-[loongson@localhost perf]$ ./perf list
-
-List of pre-defined events (to be used in -e):
-
-  duration_time                                      [Tool event]
-
-  rNNN                                               [Raw hardware event descriptor]
-  cpu/t1=v1[,t2=v2,t3 ...]/modifier                  [Raw hardware event descriptor]
-   (see 'man perf-list' on how to encode it)
-
-  mem:<addr>[/len][:access]                          [Hardware breakpoint]
-
-With this patch:
-
-[loongson@localhost perf]$ ./perf list
-
-List of pre-defined events (to be used in -e):
-
-  branch-instructions OR branches                    [Hardware event]
-  branch-misses                                      [Hardware event]
-  cpu-cycles OR cycles                               [Hardware event]
-  instructions                                       [Hardware event]
-
-  alignment-faults                                   [Software event]
-  bpf-output                                         [Software event]
-  context-switches OR cs                             [Software event]
-  cpu-clock                                          [Software event]
-  cpu-migrations OR migrations                       [Software event]
-  dummy                                              [Software event]
-  emulation-faults                                   [Software event]
-  major-faults                                       [Software event]
-  minor-faults                                       [Software event]
-  page-faults OR faults                              [Software event]
-  task-clock                                         [Software event]
-
-  duration_time                                      [Tool event]
-
-  L1-dcache-load-misses                              [Hardware cache event]
-  L1-dcache-store-misses                             [Hardware cache event]
-  L1-icache-load-misses                              [Hardware cache event]
-  branch-load-misses                                 [Hardware cache event]
-  branch-loads                                       [Hardware cache event]
-  dTLB-load-misses                                   [Hardware cache event]
-  dTLB-store-misses                                  [Hardware cache event]
-  iTLB-load-misses                                   [Hardware cache event]
-
-  rNNN                                               [Raw hardware event descriptor]
-  cpu/t1=v1[,t2=v2,t3 ...]/modifier                  [Raw hardware event descriptor]
-   (see 'man perf-list' on how to encode it)
-
-  mem:<addr>[/len][:access]                          [Hardware breakpoint]
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Signed-off-by: Huacai Chen <chenhc@lemote.com>
 ---
- arch/mips/configs/loongson3_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/include/asm/cacheops.h   | 2 +-
+ arch/mips/mm/c-r4k.c               | 2 +-
+ arch/mips/pmcs-msp71xx/msp_setup.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
-index 51675f5..6768c16 100644
---- a/arch/mips/configs/loongson3_defconfig
-+++ b/arch/mips/configs/loongson3_defconfig
-@@ -21,6 +21,7 @@ CONFIG_SYSFS_DEPRECATED=y
- CONFIG_RELAY=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_EMBEDDED=y
-+CONFIG_PERF_EVENTS=y
- CONFIG_MACH_LOONGSON64=y
- CONFIG_SMP=y
- CONFIG_HZ_256=y
+diff --git a/arch/mips/include/asm/cacheops.h b/arch/mips/include/asm/cacheops.h
+index 8031fbc..50253ef 100644
+--- a/arch/mips/include/asm/cacheops.h
++++ b/arch/mips/include/asm/cacheops.h
+@@ -48,7 +48,7 @@
+  * R4000-specific cacheops
+  */
+ #define Create_Dirty_Excl_D		(Cache_D | 0x0c)
+-#define Fill				(Cache_I | 0x14)
++#define Fill_I				(Cache_I | 0x14)
+ #define Hit_Writeback_I			(Cache_I | Hit_Writeback)
+ #define Hit_Writeback_D			(Cache_D | Hit_Writeback)
+ 
+diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
+index 36a3113..89b6839 100644
+--- a/arch/mips/mm/c-r4k.c
++++ b/arch/mips/mm/c-r4k.c
+@@ -1049,7 +1049,7 @@ static inline void rm7k_erratum31(void)
+ 			"cache\t%1, 0x3000(%0)\n\t"
+ 			".set pop\n"
+ 			:
+-			: "r" (addr), "i" (Index_Store_Tag_I), "i" (Fill));
++			: "r" (addr), "i" (Index_Store_Tag_I), "i" (Fill_I));
+ 	}
+ }
+ 
+diff --git a/arch/mips/pmcs-msp71xx/msp_setup.c b/arch/mips/pmcs-msp71xx/msp_setup.c
+index d1e59ce..e0f20f4 100644
+--- a/arch/mips/pmcs-msp71xx/msp_setup.c
++++ b/arch/mips/pmcs-msp71xx/msp_setup.c
+@@ -55,7 +55,7 @@ void msp7120_reset(void)
+ 
+ 	for (iptr = (void *)((unsigned int)start & ~(L1_CACHE_BYTES - 1));
+ 	     iptr < end; iptr += L1_CACHE_BYTES)
+-		cache_op(Fill, iptr);
++		cache_op(Fill_I, iptr);
+ 
+ 	__asm__ __volatile__ (
+ 		"startpoint:					\n"
 -- 
-2.1.0
+2.7.0
 
