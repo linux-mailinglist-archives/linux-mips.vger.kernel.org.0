@@ -2,121 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1201B8F2F
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 13:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772AD1B8F83
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 13:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726121AbgDZLAh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 26 Apr 2020 07:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726119AbgDZLAh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 26 Apr 2020 07:00:37 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7ACC061A0C
-        for <linux-mips@vger.kernel.org>; Sun, 26 Apr 2020 04:00:37 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id fu13so5477205pjb.5
-        for <linux-mips@vger.kernel.org>; Sun, 26 Apr 2020 04:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=GlOyPyPfRjTvez5ZkorKH5ft3Et6+ySp+Q2Ucq9SL78=;
-        b=NosADfr9GqJxVHsH7Ct6unS9X0dRH665PJl0ZU0fjKg/lxf2vkhM4saw3n+y8xp41c
-         MlfWccgPMXM3o0mpowm2jIfS/HQhRk7FtVWsabLyIDVtEdjOY7o7nkE1JB5tFOd1wuFA
-         2nqXckH3k8ptmKDHcbEkNcddC+NJrkdbwycPdtC3Jub0CswqLJ4eoFTD0mkoIdb8Q6sp
-         LqsdJYJRdMr8EYj23xS/Smbb+/jwPrfsNeE8jVChN1qSqBea616N5vCsrHcqLdLewYvg
-         rF0i3XLkJI99mzqsEQDW62UpWCghObrCf2xloxafl/ljQvWunjkq9gyShtpkvu6BSDKF
-         zB+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=GlOyPyPfRjTvez5ZkorKH5ft3Et6+ySp+Q2Ucq9SL78=;
-        b=dccycupvhKExja94Ya4zK8CBlkEonOAY849Ct7MEjaDLlizZ4eTYN1VGbSXfGl3j+9
-         3zh3r7tQaXdCnyDjsYalq37d4r94kyG4e+zWsblO/Z9sPpA3WMKO8scxVr78VWO0Pi31
-         NF2IwkwT54KiApBEefPM0UbeOSGloLieUbZ+NzVEHs9uxO7tp9tlfN3ekHeYUN73UQQY
-         CBhiU9x4WYofTxFe9gSvbsKaWOrULKsfCdeF4XYds4+BjEq8nl3NOCBh5RiajUOZhnPV
-         0Pk5kSx5YdzCduGSB6ufhcldvHJ+4e4Z4vJh8YKJnciFgT5S7DD90qE7XLKRvNFoadr8
-         b3WQ==
-X-Gm-Message-State: AGi0Pubu5Yrn1PurwP5B8HW5LNwx7g4hiE/1lhZaVaB1o6VxP3ZVa+56
-        4HSMpnK72NAz3YnzHgHo6cE=
-X-Google-Smtp-Source: APiQypI/XuICgGBBlfF0MWg3690wSuis34g6f8HFaoMyWe0balMJ4S6RdoNH9HrZrsxvJvudIYgkkw==
-X-Received: by 2002:a17:902:8f89:: with SMTP id z9mr18663575plo.2.1587898836713;
-        Sun, 26 Apr 2020 04:00:36 -0700 (PDT)
-Received: from software.domain.org (28.144.92.34.bc.googleusercontent.com. [34.92.144.28])
-        by smtp.gmail.com with ESMTPSA id b1sm9647405pfa.202.2020.04.26.04.00.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 26 Apr 2020 04:00:36 -0700 (PDT)
-From:   Huacai Chen <chenhc@lemote.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH] MIPS: Rename the "Fill" cache ops to avoid build failure
-Date:   Sun, 26 Apr 2020 19:09:52 +0800
-Message-Id: <1587899392-10579-1-git-send-email-chenhc@lemote.com>
-X-Mailer: git-send-email 2.7.0
+        id S1726165AbgDZLtW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Apr 2020 07:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726137AbgDZLtW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 26 Apr 2020 07:49:22 -0400
+Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [IPv6:2001:19f0:6001:3633:5400:2ff:fe8c:553])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F665C061A0E;
+        Sun, 26 Apr 2020 04:49:20 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 89E4420CDC;
+        Sun, 26 Apr 2020 11:49:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
+        t=1587901757; bh=r1y8SvWtc1gITjpG4/8SCMLhvpr+40ZG9Q9GWxOeYcU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fH+VvyM6my7OULyg0hlzUAoDF2Byd/WxGPNJBUYurFDCPOFSsANyB8eP2lxDP6n54
+         f8UugSOSk8MD9KuLNmZoIME02cQSxbmgI3eiOuTdj9ZxikG8UrHUfp732mEvVsQAEm
+         iHRIdzKrzPUXefgq5cD0tgKW5m2oELmHIWfbXwcJ/IslP3dHqu6KfpxtAuh8n+jzpM
+         vdjSrLlMVUchz0cu7vum/vWG5eStHnXMZKndk9UAyYhs0ahXPRR20IzOSLlIyxsmMz
+         q467ekCEZiXekKKwJ1Lb4lcR0z1CYz4o+7QeERsATa6iOfhMdq68SHYZNxGwXx/Kpi
+         1awAYIadNQrdg==
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Kitt <steve@sk2.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Daniel Silsby <dansilsby@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Allison Randal <allison@lohutok.net>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        John Garry <john.garry@huawei.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] MIPS: Loongson64: Use logic_pio 
+Date:   Sun, 26 Apr 2020 19:47:33 +0800
+Message-Id: <20200426114806.1176629-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.26.0.rc2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-MIPS define a "Fill" macro as a cache operation in cacheops.h, this
-will cause build failure under some special configurations because in
-seq_file.c there is a "Fill" label. To avoid this failure we rename the
-"Fill" macro to "Fill_I" which has the same coding style as other cache
-operations in cacheops.h (we think renaming the "Fill" macro is more
-reasonable than renaming the "Fill" label).
+To add I/O ports for PCI host bridge via devicetree, we have to use
+logic_pio mechanism.
+That would require convert I/O ports into virt memory map.
 
-Callers of "Fill" macro is also updated.
+Jiaxun Yang (4):
+  MIPS: Massage address spaces headers
+  MIPS: Introduce PCI_IO_VMMAP
+  lib: logic_pio: Introduce MMIO_LOWER_RESERVED
+  MIPS: Loongson64: Enable PCI_IO_VMMAP
 
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
----
- arch/mips/include/asm/cacheops.h   | 2 +-
- arch/mips/mm/c-r4k.c               | 2 +-
- arch/mips/pmcs-msp71xx/msp_setup.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ arch/mips/Kconfig                           |  4 ++
+ arch/mips/include/asm/addrspace.h           |  4 +-
+ arch/mips/include/asm/io.h                  | 40 ++++++++++++++++----
+ arch/mips/include/asm/mach-generic/spaces.h | 42 +++++++++++++++------
+ arch/mips/include/asm/page-def.h            | 28 ++++++++++++++
+ arch/mips/include/asm/page.h                | 21 -----------
+ arch/mips/include/asm/pgtable-32.h          |  2 -
+ arch/mips/include/asm/pgtable-64.h          | 10 +----
+ arch/mips/include/asm/sync.h                |  2 +
+ arch/mips/kernel/cps-vec.S                  |  3 +-
+ arch/mips/kernel/setup.c                    |  2 +
+ arch/mips/lib/iomap-pci.c                   |  2 +-
+ arch/mips/lib/uncached.c                    |  6 +--
+ arch/mips/loongson64/init.c                 | 12 ++++--
+ arch/mips/loongson64/pci.c                  |  2 +-
+ lib/logic_pio.c                             |  6 ++-
+ 16 files changed, 122 insertions(+), 64 deletions(-)
+ create mode 100644 arch/mips/include/asm/page-def.h
 
-diff --git a/arch/mips/include/asm/cacheops.h b/arch/mips/include/asm/cacheops.h
-index 8031fbc..50253ef 100644
---- a/arch/mips/include/asm/cacheops.h
-+++ b/arch/mips/include/asm/cacheops.h
-@@ -48,7 +48,7 @@
-  * R4000-specific cacheops
-  */
- #define Create_Dirty_Excl_D		(Cache_D | 0x0c)
--#define Fill				(Cache_I | 0x14)
-+#define Fill_I				(Cache_I | 0x14)
- #define Hit_Writeback_I			(Cache_I | Hit_Writeback)
- #define Hit_Writeback_D			(Cache_D | Hit_Writeback)
- 
-diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
-index 36a3113..89b6839 100644
---- a/arch/mips/mm/c-r4k.c
-+++ b/arch/mips/mm/c-r4k.c
-@@ -1049,7 +1049,7 @@ static inline void rm7k_erratum31(void)
- 			"cache\t%1, 0x3000(%0)\n\t"
- 			".set pop\n"
- 			:
--			: "r" (addr), "i" (Index_Store_Tag_I), "i" (Fill));
-+			: "r" (addr), "i" (Index_Store_Tag_I), "i" (Fill_I));
- 	}
- }
- 
-diff --git a/arch/mips/pmcs-msp71xx/msp_setup.c b/arch/mips/pmcs-msp71xx/msp_setup.c
-index d1e59ce..e0f20f4 100644
---- a/arch/mips/pmcs-msp71xx/msp_setup.c
-+++ b/arch/mips/pmcs-msp71xx/msp_setup.c
-@@ -55,7 +55,7 @@ void msp7120_reset(void)
- 
- 	for (iptr = (void *)((unsigned int)start & ~(L1_CACHE_BYTES - 1));
- 	     iptr < end; iptr += L1_CACHE_BYTES)
--		cache_op(Fill, iptr);
-+		cache_op(Fill_I, iptr);
- 
- 	__asm__ __volatile__ (
- 		"startpoint:					\n"
 -- 
-2.7.0
+2.26.0.rc2
 
