@@ -2,185 +2,273 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B31A1B9046
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 14:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF3A1B905E
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 15:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725876AbgDZM7r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 26 Apr 2020 08:59:47 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:52488 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726144AbgDZM7q (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 26 Apr 2020 08:59:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587905984;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        id S1726135AbgDZNL2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Apr 2020 09:11:28 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:45354 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725974AbgDZNL2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 26 Apr 2020 09:11:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1587906685; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:openpgp:openpgp;
-        bh=cS6N3dz+H92wTTUjeik0cWhJVJMk8JtsySToZ32DZB8=;
-        b=b1hZWwDcqvovp/B4plVziw8M8d1M81CA6YyEM7aWHu30eZqdLPuKZq8m23icuhdYUByfPD
-        iVYftsvse8U3/BmHAvGKDQJHBFTQmvMuKp64scTVRBrL+AkbBxxzhZOJXzNvU9j2pScbyk
-        y64eq1bRt2H8SSinPN9JVdYU+OFCS2g=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-295-L1Gr5bIyNaSAU5A4TdMIqA-1; Sun, 26 Apr 2020 08:59:40 -0400
-X-MC-Unique: L1Gr5bIyNaSAU5A4TdMIqA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1CAF545F;
-        Sun, 26 Apr 2020 12:59:36 +0000 (UTC)
-Received: from thuth.remote.csb (ovpn-112-33.ams2.redhat.com [10.36.112.33])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 26AC460C05;
-        Sun, 26 Apr 2020 12:59:19 +0000 (UTC)
-Subject: Re: [PATCH v2 1/7] KVM: s390: clean up redundant 'kvm_run' parameters
-To:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Cornelia Huck <cohuck@redhat.com>
-Cc:     pbonzini@redhat.com, tsbogend@alpha.franken.de, paulus@ozlabs.org,
-        mpe@ellerman.id.au, benh@kernel.crashing.org,
-        frankja@linux.ibm.com, david@redhat.com, heiko.carstens@de.ibm.com,
-        gor@linux.ibm.com, sean.j.christopherson@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com, maz@kernel.org,
-        james.morse@arm.com, julien.thierry.kdev@gmail.com,
-        suzuki.poulose@arm.com, christoffer.dall@arm.com,
-        peterx@redhat.com, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200422125810.34847-1-tianjia.zhang@linux.alibaba.com>
- <20200422125810.34847-2-tianjia.zhang@linux.alibaba.com>
- <20200422154543.2efba3dd.cohuck@redhat.com>
- <dc5e0fa3-558b-d606-bda9-ed281cf9e9ae@de.ibm.com>
- <20200422180403.03f60b0c.cohuck@redhat.com>
- <5e1e126d-f1b0-196c-594b-4289d0afb9a8@linux.alibaba.com>
- <20200423123901.72a4c6a4.cohuck@redhat.com>
- <71344f73-c34f-a373-49d1-5d839c6be5f6@linux.alibaba.com>
- <1d73b700-4a20-3d7a-66d1-29b5afa03f4d@de.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-Openpgp: preference=signencrypt
-Message-ID: <73f6ecd0-ac47-eaad-0e4f-2d41c2b34450@redhat.com>
-Date:   Sun, 26 Apr 2020 14:59:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+         in-reply-to:in-reply-to:references:references;
+        bh=IFur6tajK4evwgOz4FV0teTEfHnn4a4S53gL4pRIx+U=;
+        b=rEN2U32g4D6thtpQpuPow1CDCbmEFbpF31YB4DZy6fORR2TPLIw36Orji5bSif5fm2MrpK
+        udDOBDl+Y+AfopNc9b4VD6Dw5fR0YGbvkw7ICPiK7OtKY4orL3vMMV1BBGF4NHP2hSM9qN
+        GmHBhnKjl+9m1iS5TByvVx2BY/RnJl0=
+Date:   Sun, 26 Apr 2020 15:11:11 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v7 01/12] dt-bindings: add img,pvrsgx.yaml for Imagination
+ GPUs
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?iso-8859-1?q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Philipp Rossak <embed3d@gmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        openpvrsgx-devgroup@letux.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Message-Id: <NMCE9Q.LWG45P20NBVJ@crapouillou.net>
+In-Reply-To: <3a451e360fed84bc40287678b4d6be13821cfbc0.1587760454.git.hns@goldelico.com>
+References: <cover.1587760454.git.hns@goldelico.com>
+        <3a451e360fed84bc40287678b4d6be13821cfbc0.1587760454.git.hns@goldelico.com>
 MIME-Version: 1.0
-In-Reply-To: <1d73b700-4a20-3d7a-66d1-29b5afa03f4d@de.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 23/04/2020 13.00, Christian Borntraeger wrote:
->=20
->=20
-> On 23.04.20 12:58, Tianjia Zhang wrote:
->>
->>
->> On 2020/4/23 18:39, Cornelia Huck wrote:
->>> On Thu, 23 Apr 2020 11:01:43 +0800
->>> Tianjia Zhang <tianjia.zhang@linux.alibaba.com> wrote:
->>>
->>>> On 2020/4/23 0:04, Cornelia Huck wrote:
->>>>> On Wed, 22 Apr 2020 17:58:04 +0200
->>>>> Christian Borntraeger <borntraeger@de.ibm.com> wrote:
->>>>> =C2=A0=C2=A0
->>>>>> On 22.04.20 15:45, Cornelia Huck wrote:
->>>>>>> On Wed, 22 Apr 2020 20:58:04 +0800
->>>>>>> Tianjia Zhang <tianjia.zhang@linux.alibaba.com> wrote:
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
->>>>>>>> In the current kvm version, 'kvm_run' has been included in the '=
-kvm_vcpu'
->>>>>>>> structure. Earlier than historical reasons, many kvm-related fun=
-ction
->>>>>>>
->>>>>>> s/Earlier than/For/ ?
->>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
->>>>>>>> parameters retain the 'kvm_run' and 'kvm_vcpu' parameters at the=
- same time.
->>>>>>>> This patch does a unified cleanup of these remaining redundant p=
-arameters.
->>>>>>>>
->>>>>>>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
->>>>>>>> ---
->>>>>>>> =C2=A0=C2=A0 arch/s390/kvm/kvm-s390.c | 37 +++++++++++++++++++++=
-+---------------
->>>>>>>> =C2=A0=C2=A0 1 file changed, 22 insertions(+), 15 deletions(-)
->>>>>>>>
->>>>>>>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->>>>>>>> index e335a7e5ead7..d7bb2e7a07ff 100644
->>>>>>>> --- a/arch/s390/kvm/kvm-s390.c
->>>>>>>> +++ b/arch/s390/kvm/kvm-s390.c
->>>>>>>> @@ -4176,8 +4176,9 @@ static int __vcpu_run(struct kvm_vcpu *vcp=
-u)
->>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return rc;
->>>>>>>> =C2=A0=C2=A0 }
->>>>>>>> =C2=A0=C2=A0 -static void sync_regs_fmt2(struct kvm_vcpu *vcpu, =
-struct kvm_run *kvm_run)
->>>>>>>> +static void sync_regs_fmt2(struct kvm_vcpu *vcpu)
->>>>>>>> =C2=A0=C2=A0 {
->>>>>>>> +=C2=A0=C2=A0=C2=A0 struct kvm_run *kvm_run =3D vcpu->run;
->>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct runtime_instr_cb *ri=
-ccb;
->>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct gs_cb *gscb;
->>>>>>>> =C2=A0=C2=A0 @@ -4235,7 +4236,7 @@ static void sync_regs_fmt2(st=
-ruct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
->>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if =
-(vcpu->arch.gs_enabled) {
->>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 current->thread.gs_cb =3D (struct gs_cb *)
->>>>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- &vcpu->run->s.regs.gscb;
->>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- &kvm_run->s.regs.gscb;
->>>>>>>
->>>>>>> Not sure if these changes (vcpu->run-> =3D> kvm_run->) are really=
- worth
->>>>>>> it. (It seems they amount to at least as much as the changes adve=
-rtised
->>>>>>> in the patch description.)
->>>>>>>
->>>>>>> Other opinions?
->>>>>>
->>>>>> Agreed. It feels kind of random. Maybe just do the first line (mov=
-e kvm_run from the
->>>>>> function parameter list into the variable declaration)? Not sure i=
-f this is better.
->>>>>> =C2=A0=20
->>>>>
->>>>> There's more in this patch that I cut... but I think just moving
->>>>> kvm_run from the parameter list would be much less disruptive.
->>>>> =C2=A0=C2=A0=20
->>>>
->>>> I think there are two kinds of code(`vcpu->run->` and `kvm_run->`), =
-but
->>>> there will be more disruptive, not less.
->>>
->>> I just fail to see the benefit; sure, kvm_run-> is convenient, but th=
-e
->>> current code is just fine, and any rework should be balanced against
->>> the cost (e.g. cluttering git annotate).
->>>
->>
->> cluttering git annotate ? Does it mean Fix xxxx ("comment"). Is it pos=
-sible to solve this problem by splitting this patch?
->=20
-> No its about breaking git blame (and bugfix backports) for just a cosme=
-tic improvement.
+Hi Nikolaus,
 
-It could be slightly more than a cosmetic improvement (depending on the
-smartness of the compiler): vcpu->run-> are two dereferences, while
-kvm_run-> is only one dereference. So it could be slightly more compact
-and faster code.
+Le ven. 24 avril 2020 =E0 22:34, H. Nikolaus Schaller=20
+<hns@goldelico.com> a =E9crit :
+> The Imagination PVR/SGX GPU is part of several SoC from
+> multiple vendors, e.g. TI OMAP, Ingenic JZ4780, Intel Poulsbo,
+> Allwinner A83 and others.
+>=20
+> With this binding, we describe how the SGX processor is
+> interfaced to the SoC (registers and interrupt).
+>=20
+> The interface also consists of clocks, reset, power but
+> information from data sheets is vague and some SoC integrators
+> (TI) deciced to use a PRCM wrapper (ti,sysc) which does
+> all clock, reset and power-management through registers
+> outside of the sgx register block.
+>=20
+> Therefore all these properties are optional.
+>=20
+> Tested by make dt_binding_check
+>=20
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>  .../devicetree/bindings/gpu/img,pvrsgx.yaml   | 150=20
+> ++++++++++++++++++
+>  1 file changed, 150 insertions(+)
+>  create mode 100644=20
+> Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml=20
+> b/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
+> new file mode 100644
+> index 000000000000..33a9c4c6e784
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
+> @@ -0,0 +1,150 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpu/img,pvrsgx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Imagination PVR/SGX GPU
+> +
+> +maintainers:
+> +  - H. Nikolaus Schaller <hns@goldelico.com>
+> +
+> +description: |+
+> +  This binding describes the Imagination SGX5 series of 3D=20
+> accelerators which
+> +  are found in several different SoC like TI OMAP, Sitara, Ingenic=20
+> JZ4780,
+> +  Allwinner A83, and Intel Poulsbo and CedarView and more.
+> +
+> +  For an extensive list see:=20
+> https://en.wikipedia.org/wiki/PowerVR#Implementations
+> +
+> +  The SGX node is usually a child node of some DT node belonging to=20
+> the SoC
+> +  which handles clocks, reset and general address space mapping of=20
+> the SGX
+> +  register area. If not, an optional clock can be specified here.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: '^gpu@[a-f0-9]+$'
+> +  compatible:
+> +    oneOf:
+> +      - description: SGX530-121 based SoC
+> +        items:
+> +          - enum:
+> +            - ti,omap3-sgx530-121 # BeagleBoard A/B/C, OpenPandora=20
+> 600MHz and similar
+> +          - const: img,sgx530-121
+> +          - const: img,sgx530
+> +
+> +      - description: SGX530-125 based SoC
+> +        items:
+> +          - enum:
+> +            - ti,am3352-sgx530-125 # BeagleBone Black
+> +            - ti,am3517-sgx530-125
+> +            - ti,am4-sgx530-125
+> +            - ti,omap3-sgx530-125 # BeagleBoard XM, GTA04,=20
+> OpenPandora 1GHz and similar
+> +            - ti,ti81xx-sgx530-125
+> +          - const: ti,omap3-sgx530-125
+> +          - const: img,sgx530-125
+> +          - const: img,sgx530
+> +
+> +      - description: SGX535-116 based SoC
+> +        items:
+> +          - const: intel,poulsbo-gma500-sgx535 # Atom Z5xx
+> +          - const: img,sgx535-116
+> +          - const: img,sgx535
+> +
+> +      - description: SGX540-116 based SoC
+> +        items:
+> +          - const: intel,medfield-gma-sgx540 # Atom Z24xx
+> +          - const: img,sgx540-116
+> +          - const: img,sgx540
+> +
+> +      - description: SGX540-120 based SoC
+> +        items:
+> +          - enum:
+> +            - samsung,s5pv210-sgx540-120
+> +            - ti,omap4-sgx540-120 # Pandaboard, Pandaboard ES and=20
+> similar
+> +          - const: img,sgx540-120
+> +          - const: img,sgx540
+> +
+> +      - description: SGX540-130 based SoC
+> +        items:
+> +          - enum:
+> +            - ingenic,jz4780-sgx540-130 # CI20
+> +          - const: img,sgx540-130
+> +          - const: img,sgx540
+> +
+> +      - description: SGX544-112 based SoC
+> +        items:
+> +          - const: ti,omap4470-sgx544-112
+> +          - const: img,sgx544-112
+> +          - const: img,sgx544
+> +
+> +      - description: SGX544-115 based SoC
+> +        items:
+> +          - enum:
+> +            - allwinner,sun8i-a31-sgx544-115
+> +            - allwinner,sun8i-a31s-sgx544-115
+> +            - allwinner,sun8i-a83t-sgx544-115 # Banana-Pi-M3=20
+> (Allwinner A83T) and similar
+> +          - const: img,sgx544-115
+> +          - const: img,sgx544
+> +
+> +      - description: SGX544-116 based SoC
+> +        items:
+> +          - enum:
+> +            - ti,dra7-sgx544-116 # DRA7
+> +            - ti,omap5-sgx544-116 # OMAP5 UEVM, Pyra Handheld and=20
+> similar
+> +          - const: img,sgx544-116
+> +          - const: img,sgx544
+> +
+> +      - description: SGX545 based SoC
+> +        items:
+> +          - const: intel,cedarview-gma3600-sgx545 # Atom N2600, D2500
+> +          - const: img,sgx545-116
+> +          - const: img,sgx545
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-names:
+> +    maxItems: 1
+> +    items:
+> +      - const: sgx
+> +
+> +  clocks:
+> +    maxItems: 4
+> +
+> +  clock-names:
+> +    maxItems: 4
+> +    items:
+> +      - const: core
+> +      - const: sys
+> +      - const: mem
+> +      - const: hyd
+> +
+> +  sgx-supply: true
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
 
- Thomas
+By not making 'clocks' required you make it possible to create broken=20
+bindings; according to your schema, a GPU node without a 'clocks' for=20
+the JZ4780 would be perfectly valid.
+
+It's possible to forbid the presence of the 'clocks' property on some=20
+implementations, and require it on others.
+See how it's done for instance on=20
+Documentation/devicetree/bindings/serial/samsung_uart.yaml.
+
+-Paul
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |+
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    gpu: gpu@fe00 {
+> +      compatible =3D "ti,omap5-sgx544-116", "img,sgx544-116",=20
+> "img,sgx544";
+> +      reg =3D <0xfe00 0x200>;
+> +      interrupts =3D <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
+> +    };
+> +
+> +...
+> --
+> 2.25.1
+>=20
+
 
