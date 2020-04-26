@@ -2,77 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EBA1B910E
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 17:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 147C11B91D0
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Apr 2020 18:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbgDZPDo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 26 Apr 2020 11:03:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55098 "EHLO mail.kernel.org"
+        id S1726152AbgDZQjk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Apr 2020 12:39:40 -0400
+Received: from elvis.franken.de ([193.175.24.41]:56014 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726194AbgDZPDn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 26 Apr 2020 11:03:43 -0400
-Received: from localhost (unknown [137.135.114.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 62F0120A8B;
-        Sun, 26 Apr 2020 15:03:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587913423;
-        bh=jphvnaDJ59LJam6j47S/T9guNFEE39WqYXNatYSM1BA=;
-        h=Date:From:To:To:To:To:Cc:Cc:Cc:Subject:In-Reply-To:References:
-         From;
-        b=B5ejUTCBwDJwAwbSNXAZ9698RhtsSFBhf1kM7PMJIWCJ7NFWPFqU9IplaaK0HxVCf
-         eml65acONoZduWkrfuTzPbz2lYa8G82Lz/AfqC5QCvaoy5Bd2yzstc3T+f5C3nPRGd
-         2N+LMWvmim4JoFNRCNz0zm+UZ74EoxT99gp+J6rI=
-Date:   Sun, 26 Apr 2020 15:03:42 +0000
-From:   Sasha Levin <sashal@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-To:     Huacai Chen <chenhc@lemote.com>
-To:     Xing Li <lixing@loongson.cn>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH V2 01/14] KVM: MIPS: Define KVM_ENTRYHI_ASID to cpu_asid_mask(&boot_cpu_data)
-In-Reply-To: <1587726933-31757-2-git-send-email-chenhc@lemote.com>
-References: <1587726933-31757-2-git-send-email-chenhc@lemote.com>
-Message-Id: <20200426150343.62F0120A8B@mail.kernel.org>
+        id S1726147AbgDZQjk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 26 Apr 2020 12:39:40 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jSkJd-0001xo-00; Sun, 26 Apr 2020 18:39:37 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 7EA99C0301; Sun, 26 Apr 2020 18:27:37 +0200 (CEST)
+Date:   Sun, 26 Apr 2020 18:27:37 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Nathan Chancellor <natechancellor@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
+        linux-kbuild@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Dmitry Golovin <dima@golovin.in>,
+        Sedat Dilek <sedat.dilek@gmail.com>
+Subject: Re: [PATCH v3 3/4] MIPS: VDSO: Use $(LD) instead of $(CC) to link
+ VDSO
+Message-ID: <20200426162737.GA9322@alpha.franken.de>
+References: <20200419202128.20571-1-natechancellor@gmail.com>
+ <20200423171807.29713-1-natechancellor@gmail.com>
+ <20200423171807.29713-3-natechancellor@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200423171807.29713-3-natechancellor@gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi
+On Thu, Apr 23, 2020 at 10:18:06AM -0700, Nathan Chancellor wrote:
+> Currently, the VDSO is being linked through $(CC). This does not match
+> how the rest of the kernel links objects, which is through the $(LD)
+> variable.
 
-[This is an automated email]
+this causes build errors for me when (cross) compiling a big endian target:
 
-This commit has been processed because it contains a -stable tag.
-The stable tag indicates that it's relevant for the following trees: all
+target is little endian
+mips64-linux-gnu-ld: arch/mips/vdso/elf.o: endianness incompatible with that of the selected emulation
+mips64-linux-gnu-ld: failed to merge target specific data of file arch/mips/vdso/elf.o
 
-The bot has tested the following trees: v5.6.7, v5.4.35, v4.19.118, v4.14.177, v4.9.220, v4.4.220.
-
-v5.6.7: Build OK!
-v5.4.35: Build OK!
-v4.19.118: Build OK!
-v4.14.177: Build OK!
-v4.9.220: Build OK!
-v4.4.220: Failed to apply! Possible dependencies:
-    029499b47738 ("KVM: x86: MMU: Make mmu_set_spte() return emulate value")
-    19d194c62b25 ("MIPS: KVM: Simplify TLB_* macros")
-    403015b323a2 ("MIPS: KVM: Move non-TLB handling code out of tlb.c")
-    7ee0e5b29d27 ("KVM: x86: MMU: Remove unused parameter of __direct_map()")
-    9fbfb06a4065 ("MIPS: KVM: Arrayify struct kvm_mips_tlb::tlb_lo*")
-    ba049e93aef7 ("kvm: rename pfn_t to kvm_pfn_t")
-    bdb7ed8608f8 ("MIPS: KVM: Convert headers to kernel sized types")
-    ca64c2beecd4 ("MIPS: KVM: Abstract guest ASID mask")
-    caa1faa7aba6 ("MIPS: KVM: Trivial whitespace and style fixes")
-    e6207bbea16c ("MIPS: KVM: Use MIPS_ENTRYLO_* defs from mipsregs.h")
-
-
-NOTE: The patch will not be queued to stable trees until it is upstream.
-
-How should we proceed with this patch?
+Thomas.
 
 -- 
-Thanks
-Sasha
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
