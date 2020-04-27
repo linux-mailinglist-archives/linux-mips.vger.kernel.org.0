@@ -2,105 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA251B94DA
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2020 03:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48391B94F7
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2020 03:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726398AbgD0BQc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 26 Apr 2020 21:16:32 -0400
-Received: from mga11.intel.com ([192.55.52.93]:62678 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726323AbgD0BQc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 26 Apr 2020 21:16:32 -0400
-IronPort-SDR: Lv/v2Jhj0NyWAobklZlghw3MydTkknmxfhC7JeS1RSQhe+MFITHVsWvc2aHAnd5si+epKjfCQu
- IEveEu/quQnw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2020 18:16:31 -0700
-IronPort-SDR: ZrrKsQ6Zur3/bE2CO6sc6Wdv34dqrhqrjSlpkUGUwoboNwAHWFqd68hpZ33zjqX/g7EQHldNW4
- L627f0bj0fUw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,321,1583222400"; 
-   d="scan'208";a="336090274"
-Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by orsmga001.jf.intel.com with ESMTP; 26 Apr 2020 18:16:31 -0700
-Date:   Sun, 26 Apr 2020 18:16:30 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH 4/5] arch/kmap_atomic: Consolidate duplicate code
-Message-ID: <20200427011630.GC135929@iweiny-DESK2.sc.intel.com>
-References: <20200426055406.134198-1-ira.weiny@intel.com>
- <20200426055406.134198-5-ira.weiny@intel.com>
- <20200426072642.GB22024@infradead.org>
+        id S1726332AbgD0BcC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Apr 2020 21:32:02 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:35326 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726186AbgD0BcC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 26 Apr 2020 21:32:02 -0400
+Received: from [10.130.0.79] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxz2kKNqZePpQsAA--.0S3;
+        Mon, 27 Apr 2020 09:31:55 +0800 (CST)
+Subject: Re: [PATCH v4 0/3] Add basic support for LS7A bridge chip
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+References: <1585906191-26037-1-git-send-email-yangtiezhu@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <8afa3df1-9c9f-aa90-e630-2b77f24fe41f@loongson.cn>
+Date:   Mon, 27 Apr 2020 09:31:54 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200426072642.GB22024@infradead.org>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+In-Reply-To: <1585906191-26037-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxz2kKNqZePpQsAA--.0S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXw48tw1xuw18AF1rKF4UJwb_yoW5tF15pa
+        y5ua13Gr1DGr1UJa1fur4xua15Aws3Jr9xWw47G3s5AF9IqF10qr9avF15KF129r9Y93W2
+        qr12g3yvg3W7Ca7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
+        bIxvr21lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VU1ItC7UUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Apr 26, 2020 at 12:26:42AM -0700, Christoph Hellwig wrote:
-> > diff --git a/arch/arc/mm/highmem.c b/arch/arc/mm/highmem.c
-> > index 4db13a6b9f3b..1cae4b911a33 100644
-> > --- a/arch/arc/mm/highmem.c
-> > +++ b/arch/arc/mm/highmem.c
-> > @@ -53,11 +53,10 @@ void *kmap_atomic(struct page *page)
-> >  {
-> >  	int idx, cpu_idx;
-> >  	unsigned long vaddr;
-> > +	void *addr = kmap_atomic_fast(page);
-> >  
-> > -	preempt_disable();
-> > -	pagefault_disable();
-> > -	if (!PageHighMem(page))
-> > -		return page_address(page);
-> > +	if (addr)
-> > +		return addr;
-> 
-> Wouldn't it make sense to just move kmap_atomic itelf to common code,
-> and call out to a kmap_atomic_high for the highmem case, following the
-> scheme in kmap?
+On 04/03/2020 05:29 PM, Tiezhu Yang wrote:
+> The LS7A bridge chip has been released for several years since the
+> second half of 2017, but it is not supported by the Linux mainline
+> kernel while it only works well with the Loongson internal kernel
+> version. When I update the latest version of Linux mainline kernel
+> on the Loongson 3A3000 CPU and LS7A bridge chip system, the boot
+> process failed and I feel depressed.
+>
+> The LS7A bridge chip is used a lot with 3A3000 or 3A4000 CPU in
+> the most Loongson desktop and sever products, it is important to
+> support LS7A bridge chip by the Linux mainline kernel.
+>
+> This patch series adds the basic support for the LS7A bridge chip,
+> the patch about vendor ID and SATA has been merged into the mainline
+> tree, the next work is to refactor the code about the interrupt
+> controller, and then power management and some other controller
+> device drivers.
+>
+> By the way, if you want the boot process is successful (just for
+> test) on the Loongson 3A3000 CPU and LS7A bridge chip system,
+> you should not only apply these patches, but also need the support
+> for SATA and interrupt controller in the v1 patch series.
+>
+> This patch series is based on mips-next.
+>
+> If you have any questions and suggestions, please let me know.
+>
+> Thanks,
+>
+> Tiezhu Yang
+>
+> v2:
+>    - The split patch series about Loongson vendor ID and SATA controller
+>      has been merged into the linux-block.git by Jens Axboe [1].
+>
+>    - Think about using hierarchy IRQ domain in the patch of interrupt
+>      controller, and this maybe depend on the patch series by Jiaxun
+>      ("Modernize Loongson64 Machine"), so the patch about interrupt is
+>      not included in this v2 patch series.
+>
+> v3:
+>    - The split patch series about Loongson vendor ID and SATA controller
+>      has been merged into the mainline tree [2]
+>
+>    - Modify the macro definition and add comment to make it easy to read
+>
+>    - Move ls7a1000_pci_class_quirk() to fixup-loongson3.c
+>
+>    - Use PCI_VENDOR_ID_LOONGSON in pci_ids.h instead of 0x0014
+>
+> v4:
+>    - Use LS7A instead of Loongson 7A1000 in the description
+>    - Use LS7A or ls7a instead of LS7A1000 or ls7a1000 in the code
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?h=for-next&id=9acb9fe18d86
+>      https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?h=for-next&id=e49bd683e00b
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9acb9fe18d86
+>      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e49bd683e00b
+>
+> Tiezhu Yang (3):
+>    MIPS: Loongson: Get host bridge information
+>    MIPS: Loongson: Add DMA support for LS7A
+>    MIPS: Loongson: Add PCI support for LS7A
+>
+>   arch/mips/include/asm/mach-loongson64/boot_param.h | 20 +++++++
+>   arch/mips/loongson64/dma.c                         |  9 ++--
+>   arch/mips/loongson64/env.c                         | 22 ++++++++
+>   arch/mips/loongson64/init.c                        | 17 ++++++
+>   arch/mips/pci/fixup-loongson3.c                    | 12 +++++
+>   arch/mips/pci/ops-loongson3.c                      | 63 ++++++++++++++++++++--
+>   6 files changed, 136 insertions(+), 7 deletions(-)
 >
 
-Sure I do like that symmetry between the calls.
+Hi Thomas,
 
->
-> Same for the unmap side.
+Could you please apply the following two patches to mips-next?
 
-FWIW that would simply be renaming  __kunmap_atomic() to kunmap_atomic_high()
+[v4,1/3] MIPS: Loongson: Get host bridge information
+https://lore.kernel.org/patchwork/patch/1220009/
 
->
-> That might require to support
-> kmap_atomic_prot everywhere first, which sounds like a really good
-> idea anyway, and would avoid the need for strange workaround in drm.
+[v4,2/3] MIPS: Loongson: Add DMA support for LS7A
+https://lore.kernel.org/patchwork/patch/1220010/
 
-Having a kmap_atomic_prot() seems like a good idea.  But I'm not exactly sure
-why CONFIG_x86 is being called out specifically in the DRM code?
-
-Ira
+Thanks,
+Tiezhu Yang
 
