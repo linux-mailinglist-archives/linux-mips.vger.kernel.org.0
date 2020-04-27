@@ -2,92 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEE71B9507
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2020 04:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E37C1B9582
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2020 05:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726349AbgD0CIf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 26 Apr 2020 22:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726084AbgD0CIf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 26 Apr 2020 22:08:35 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52BFC061A0F;
-        Sun, 26 Apr 2020 19:08:34 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id h69so7969434pgc.8;
-        Sun, 26 Apr 2020 19:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YqeGjbRkHRifTCZxJaGXA8PQirJ4wk+R8m4oliZtO60=;
-        b=bhyxtfonS87CdrkvwBFz7qAvJHCPO6Rn/C3NENzutjkE0TyO2ONhgDJwj42DQ+0OZ2
-         9iVUNYDH+SOjmdpAixY+DhgpBefl4GLAU4fwJfLKBzYzBKYC/9evYFL+oSYhVvO23E0/
-         figzvrO3K1W4jY0XwRQo2HDjDjlcEpbqI/+0GXhsrNqEWzz1pAZS+s+5UQwdy3DPW+gI
-         G2eUWmf+a2rh0l3BzRtGZHMlg6B3ei5Um2HMY8JIV+KVjFcD7EKEdjm/pn4q03W3gVzP
-         U7zb2o54shedAYyTIFgu5bVLdEdNxoLxSUeR5mtERNR+NGhhbS9HadKwp7zfmDKf4t8a
-         mELg==
+        id S1726349AbgD0De7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 26 Apr 2020 23:34:59 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:33102 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726341AbgD0De6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 26 Apr 2020 23:34:58 -0400
+Received: by mail-io1-f67.google.com with SMTP id o127so17344361iof.0;
+        Sun, 26 Apr 2020 20:34:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YqeGjbRkHRifTCZxJaGXA8PQirJ4wk+R8m4oliZtO60=;
-        b=cn398Vo4Jys4ax44cvsZk7MQwZWXIb7UQtGeuB3Cf1DhpzUjXI4A2B3pKfbbU0OgTO
-         kMltV4VJvQK3VrLJYexRo4qqU+lBH+7dz92iOr5hmVoLvL2uMdKTgOUg5xY1qP1Tfkg9
-         rxAy5PNqW8A0AHvDkuZBJaaJOjPaE6JPDirikure1Zsisp7OEIQBdqaUUYRRTRln1qRI
-         U3mtbxdlASGh+UbXFtSpV0FHG7lNukTUvOp7VMIepDnbOvn/JSX+hEZ6cOdNcFlcUs0J
-         dJHbsQryRdzxpJWPDBiwXNxiF5t1CGmhtY06LX83Mp+M9FfbqEbFXdBD3UOCnDLcRTHj
-         oyvw==
-X-Gm-Message-State: AGi0PuYoFqLR7s5Q0AiPm0Mzb7NWiWwWsfsHXmHv2kMeHn/CvIvMhbS4
-        ch+ZYuZp7XWPYA4Me0JFias=
-X-Google-Smtp-Source: APiQypIgoHEyUq1+TMBpUyg8ytGcXIuJu5TdZvBYUuJudAgiYk8L7e2CQv/p6vKvur6+C8wXxd9iPA==
-X-Received: by 2002:a63:1510:: with SMTP id v16mr4873757pgl.17.1587953313922;
-        Sun, 26 Apr 2020 19:08:33 -0700 (PDT)
-Received: from Ryzen-7-3700X.localdomain ([45.152.182.77])
-        by smtp.gmail.com with ESMTPSA id d29sm9179662pgm.83.2020.04.26.19.08.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Apr 2020 19:08:33 -0700 (PDT)
-Date:   Sun, 26 Apr 2020 19:08:30 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Dmitry Golovin <dima@golovin.in>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Subject: Re: [PATCH v3 3/4] MIPS: VDSO: Use $(LD) instead of $(CC) to link
- VDSO
-Message-ID: <20200427020830.GA260@Ryzen-7-3700X.localdomain>
-References: <20200419202128.20571-1-natechancellor@gmail.com>
- <20200423171807.29713-1-natechancellor@gmail.com>
- <20200423171807.29713-3-natechancellor@gmail.com>
- <20200426162737.GA9322@alpha.franken.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bQd3lXTqblCEkvmd58RFuaaBCMl9c3wU/f2GfDs7JmE=;
+        b=PfExsySdpr5AqNHORy1X1prIeUVQRL967+1rUqcvhe4tQ4lSma2Va+t0AEDP3YYVzM
+         Hg07fO3TPHAWlaMV254l/ZzknyFnKpC4cYtHpL5cTeZLAPgq/9eXmojmskTYp3oOH4Yd
+         g5YUv1QBioubDEmvACgohn4irB3qKPXJ0sdoA+ZRseH+gXDbqA4cI8B85gcH0ImKF1qj
+         Yihv5mYmamzFWI2kyeGCQreFRSSQpmhFkwiY3Kr5bhL9xmtqE1ophRIebZfaT5ZHHfU3
+         osb2wfyFovXbKqS269byvmfF3Tfcowb1ONKBe1UqA+/HqAhqsZQ2rqGgy3hAKAAcGdQ7
+         s5Tw==
+X-Gm-Message-State: AGi0PuYUkfPJMUYCjrTtION/HLN27hoCZ+jcIPDlNnEL9sNubzuLFO/N
+        wWBCwLry5ztYLrbk1g11ZFltvBfHS49wmwEKS6PvMZzU
+X-Google-Smtp-Source: APiQypIqE+Y64fdtg5YbsWIbJ47vBWy9vxBZ64Sf5ebWBPKWB2Imr5Vekd1+Swivs+6HTxFREUiyxblizAZYQPDXEbM=
+X-Received: by 2002:a5e:8613:: with SMTP id z19mr18642912ioj.84.1587958498049;
+ Sun, 26 Apr 2020 20:34:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200426162737.GA9322@alpha.franken.de>
+References: <1587726933-31757-2-git-send-email-chenhc@lemote.com> <20200426150343.62F0120A8B@mail.kernel.org>
+In-Reply-To: <20200426150343.62F0120A8B@mail.kernel.org>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Mon, 27 Apr 2020 11:42:25 +0800
+Message-ID: <CAAhV-H6EcD8b-NB_toH3yiiNthMfPLCJu8aXbX=+4t3Se8mqaw@mail.gmail.com>
+Subject: Re: [PATCH V2 01/14] KVM: MIPS: Define KVM_ENTRYHI_ASID to cpu_asid_mask(&boot_cpu_data)
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Xing Li <lixing@loongson.cn>, Paolo Bonzini <pbonzini@redhat.com>,
+        kvm@vger.kernel.org, "open list:MIPS" <linux-mips@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Apr 26, 2020 at 06:27:37PM +0200, Thomas Bogendoerfer wrote:
-> On Thu, Apr 23, 2020 at 10:18:06AM -0700, Nathan Chancellor wrote:
-> > Currently, the VDSO is being linked through $(CC). This does not match
-> > how the rest of the kernel links objects, which is through the $(LD)
-> > variable.
-> 
-> this causes build errors for me when (cross) compiling a big endian target:
-> 
-> target is little endian
-> mips64-linux-gnu-ld: arch/mips/vdso/elf.o: endianness incompatible with that of the selected emulation
-> mips64-linux-gnu-ld: failed to merge target specific data of file arch/mips/vdso/elf.o
+Hi, Sasha,
 
-Thanks for the report. I will look into it tomorrow and hopefully have a
-v4 by then.
+On Sun, Apr 26, 2020 at 11:04 PM Sasha Levin <sashal@kernel.org> wrote:
+>
+> Hi
+>
+> [This is an automated email]
+>
+> This commit has been processed because it contains a -stable tag.
+> The stable tag indicates that it's relevant for the following trees: all
+>
+> The bot has tested the following trees: v5.6.7, v5.4.35, v4.19.118, v4.14.177, v4.9.220, v4.4.220.
+>
+> v5.6.7: Build OK!
+> v5.4.35: Build OK!
+> v4.19.118: Build OK!
+> v4.14.177: Build OK!
+> v4.9.220: Build OK!
+> v4.4.220: Failed to apply! Possible dependencies:
+>     029499b47738 ("KVM: x86: MMU: Make mmu_set_spte() return emulate value")
+>     19d194c62b25 ("MIPS: KVM: Simplify TLB_* macros")
+>     403015b323a2 ("MIPS: KVM: Move non-TLB handling code out of tlb.c")
+>     7ee0e5b29d27 ("KVM: x86: MMU: Remove unused parameter of __direct_map()")
+>     9fbfb06a4065 ("MIPS: KVM: Arrayify struct kvm_mips_tlb::tlb_lo*")
+>     ba049e93aef7 ("kvm: rename pfn_t to kvm_pfn_t")
+>     bdb7ed8608f8 ("MIPS: KVM: Convert headers to kernel sized types")
+>     ca64c2beecd4 ("MIPS: KVM: Abstract guest ASID mask")
+>     caa1faa7aba6 ("MIPS: KVM: Trivial whitespace and style fixes")
+>     e6207bbea16c ("MIPS: KVM: Use MIPS_ENTRYLO_* defs from mipsregs.h")
+>
+>
+> NOTE: The patch will not be queued to stable trees until it is upstream.
+>
+> How should we proceed with this patch?
+Please ignore this patch in linux-4.4 branch, thanks.
 
-Cheers,
-Nathan
+Huacai
+>
+> --
+> Thanks
+> Sasha
