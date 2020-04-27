@@ -2,106 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0C51B97B4
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2020 08:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2FA1B98DC
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Apr 2020 09:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726504AbgD0Gqh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Apr 2020 02:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726349AbgD0Gqh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Apr 2020 02:46:37 -0400
-Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [IPv6:2001:19f0:6001:3633:5400:2ff:fe8c:553])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4CAC061A0F;
-        Sun, 26 Apr 2020 23:46:37 -0700 (PDT)
-Received: from flygoat-x1e (unknown [IPv6:240e:390:491:f2b0::d68])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 491202049F;
-        Mon, 27 Apr 2020 06:46:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1587969996; bh=87cY8c65SZbqmYxYzk6T3jS7ROhx/jS7jol+umwWuSU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ipmZLB70pSVEu9CTWQUAPnv8VwbpFKilRfFvtvs2qQqppq+N6gnGsLm272ScTwsAT
-         pQOSD3mKgw1ZTRqT7P7EKI1Lgm7jEDUPAYpZJRW3emSSkbETQupWpVcLckr+fRsdS1
-         WIGijRv/PVDI/Uqt82jPlUetvVCk4jW4a4UF2H0v3dU8a5drnVxoPFYx0eGXc3vO49
-         INyafcEamxMEuTGOXCwS5H2uRvboiBRjuOte/zrPwWWini+IkfBdXRgdHFNucyPbTZ
-         CLUVS2jO7mdz1TeqKEsmLmAEFGammRDOnWMziS23ni9A8OKCcnY42fU+nJ1LJA2Yrj
-         eBUmFNS0uCXIg==
-Date:   Mon, 27 Apr 2020 14:46:18 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        id S1726784AbgD0Hmr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Apr 2020 03:42:47 -0400
+Received: from mail-yb1-f193.google.com ([209.85.219.193]:40407 "EHLO
+        mail-yb1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726766AbgD0Hmp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Apr 2020 03:42:45 -0400
+Received: by mail-yb1-f193.google.com with SMTP id f13so8976267ybk.7;
+        Mon, 27 Apr 2020 00:42:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7HDE8ph93EI2vOePc5ywVTgnLdaOVxztdKRCyPN5Qdw=;
+        b=IOJzamf8OgTB7SIpo/NaEc7tMItPB90nfPDnCKPs1EodhWcDBKChSF+miIlCAy/MZv
+         fJ3d+JrfeSxOm0td6knQTV5XFOGn0pqC/OxFawNfnosRM4b8HW1Wn4Q+snyPW+q/yJZd
+         rfBtOMvrbe0CfFB8ifB4D7fCmhaPhcadwdQhefhWcDvszF3zHA+KDI8Aql22PcmTN5G7
+         EgWn0wtrcjwX6pE79D6w3UdX4rV8A36TRLJ7r4L1yjYjT8NSamw0G8cWDQVZcOMJd4AR
+         Q2rUIhPLM0MtoRUN/B6efN3DUO/tnTVWUyVcSWtEcOWFw5uzHvNLZ0Qgj6bifpotmyaC
+         U+Tg==
+X-Gm-Message-State: AGi0PuY4Re6h2fUPpEe8bx1Oci1eQ7yq6g8HrrxAqtYKuE7sz84h7l8f
+        /OnCFxAJlW8zHWDk06HlxIfziOV52yg/A6eoz9/GmBvU
+X-Google-Smtp-Source: APiQypIs6NvYWnWH/ktGUdZ2rE2Z5KmJb3YhfiR/lt5cCzkoxxCqS3BQi8X2Ml1ldVHBef942mt8n8y7vFl2hwtoB3Q=
+X-Received: by 2002:a25:c646:: with SMTP id k67mr11247591ybf.309.1587973363986;
+ Mon, 27 Apr 2020 00:42:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200427060551.1372591-1-jiaxun.yang@flygoat.com> <20200427060551.1372591-2-jiaxun.yang@flygoat.com>
+In-Reply-To: <20200427060551.1372591-2-jiaxun.yang@flygoat.com>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Mon, 27 Apr 2020 09:42:32 +0200
+Message-ID: <CAAdtpL59=bpmEUgY56=xHS3w5ddtdVGjKnnW7i++a5sTzPs+3Q@mail.gmail.com>
+Subject: Re: [PATCH v6 1/5] PCI: Don't disable decoding when mmio_always_on is set
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
         Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Paul Burton <paulburton@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 2/5] PCI: Add Loongson PCI Controller support
-Message-ID: <20200427144618.1e7a642a@flygoat-x1e>
-In-Reply-To: <CAAhV-H6JpHUJ_aQ0zSzMquSQBkA5Roo6bOUqhLys_AZhbp1UmA@mail.gmail.com>
-References: <20200427060551.1372591-1-jiaxun.yang@flygoat.com>
-        <20200427060551.1372591-3-jiaxun.yang@flygoat.com>
-        <CAAhV-H6JpHUJ_aQ0zSzMquSQBkA5Roo6bOUqhLys_AZhbp1UmA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 27 Apr 2020 14:29:34 +0800
-Huacai Chen <chenhc@lemote.com> wrote:
+On Mon, Apr 27, 2020 at 8:08 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+> Don't disable MEM/IO decoing when a device have both non_compliant_bars
 
-> Hi, Jiaxun,
-> 
-> On Mon, Apr 27, 2020 at 2:06 PM Jiaxun Yang <jiaxun.yang@flygoat.com>
-> wrote:
-> >
-> > This controller can be found on Loongson-2K SoC, Loongson-3
-> > systems with RS780E/LS7A PCH.
-> >
-> > The RS780E part of code was previously located at
-> > arch/mips/pci/ops-loongson3.c and now it can use generic PCI
-> > driver implementation.
-> >
-> > Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >
-> > --
-> > v2:
-> >         - Clean up according to rob's suggestions
-> >         - Claim that it can't work as a module
-> > v3:
-> >         - Fix a typo
-> > v4:
-> >         - More clean-ups: Drop flag check, use devfn
-> > ---
-> >  drivers/pci/controller/Kconfig        |  10 +
-> >  drivers/pci/controller/Makefile       |   1 +
-> >  drivers/pci/controller/pci-loongson.c | 251
+Typo "decoing" -> "decoding"
 
-[...]
-
-> > +static const struct of_device_id loongson_pci_of_match[] = {
-> > +       { .compatible = "loongson,rs780e-pci",
-> > +               .data = (void *)(FLAG_CFG0), },
-> > +       { .compatible = "loongson,ls2k-pci",
-> > +               .data = (void *)(FLAG_CFG0 | FLAG_CFG1 |
-> > FLAG_DEV_FIX), },
-> > +       { .compatible = "loongson,ls7a-pci",
-> > +               .data = (void *)(FLAG_CFG0 | FLAG_CFG1 |
-> > FLAG_DEV_FIX), },  
-> I suggest to use alpha-betical order here: ls2k, ls7a and rs780 at
-> last.
-
-Thanks for pointing out this minor issue.
-I put rs780e at first at it appears to be the first system using this
-driver.
-If there is no more review suggestion I'll send out next revision very
-soon. 
-
-[...]
-
---
-Jiaxun Yang
+> and mmio_always_on.
+>
+> That would allow us quirk devices with junk in BARs but can't disable
+> their decoding.
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  drivers/pci/probe.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 77b8a145c39b..d9c2c3301a8a 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -1822,7 +1822,7 @@ int pci_setup_device(struct pci_dev *dev)
+>         /* Device class may be changed after fixup */
+>         class = dev->class >> 8;
+>
+> -       if (dev->non_compliant_bars) {
+> +       if (dev->non_compliant_bars && !dev->mmio_always_on) {
+>                 pci_read_config_word(dev, PCI_COMMAND, &cmd);
+>                 if (cmd & (PCI_COMMAND_IO | PCI_COMMAND_MEMORY)) {
+>                         pci_info(dev, "device has non-compliant BARs; disabling IO/MEM decoding\n");
+> --
+> 2.26.0.rc2
+>
