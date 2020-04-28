@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CEE1BCFAA
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 00:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C291BCFAE
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 00:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726960AbgD1WOv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Apr 2020 18:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
+        id S1726361AbgD1WO6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Apr 2020 18:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726898AbgD1WOr (ORCPT
+        by vger.kernel.org with ESMTP id S1726946AbgD1WOs (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Apr 2020 18:14:47 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4999EC03C1AD;
-        Tue, 28 Apr 2020 15:14:47 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id z17so35708450oto.4;
-        Tue, 28 Apr 2020 15:14:47 -0700 (PDT)
+        Tue, 28 Apr 2020 18:14:48 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ED9C03C1AE;
+        Tue, 28 Apr 2020 15:14:48 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id m13so35588371otf.6;
+        Tue, 28 Apr 2020 15:14:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5MojLeIiS5IJ/f4OVpVWsw3ucrS28qn0/t/fHk4cEKI=;
-        b=b/C9LOZ0PhFIybMMzacd5jkAEASReFP1A6oZuZTQSOyUW3Rmvy9DQHjLXwFZeuCXnk
-         0BJ0VMqjzl9Xk5f2oxAjSrdEmTLnBq+ALBBSt2BVxDo7VBQg0s8rXXuVlE0AXpsfV2MB
-         ho5HS+pfA3QlVD78R+8yFZCqYlDzjmFcyfdGzy6wuTY5Qy6P8H/xkYC/5dy1OlhImz4t
-         sGgzeAzDB4LL3pEj2Er8/yymkukWJ+sPhJATj8Glt3etrKDxrLemxrR1GAyytutqhUHc
-         RrOwosNmI0y8reCfHdOJjFudRuAYIlnETabEKhOUWXXu0l7jAcLUoDnVUdH7C4GFxJQz
-         VbBA==
+        bh=7RXicgLKtxfo0xJMhMqi5KWPBmvi4LyzTbOskfEYJQQ=;
+        b=cboZAHaR1XgMdVyexb3ZGscW0yg4jWB0WpJQsyGN+lTcL8lo0DgeHrbARXRAwiBelT
+         fv11CmiuZPcFsPUdZ8Dk+cJFKE8pyoidKR1d3NFr2BdZlfocsEijQwaSXTfJi06/l5hd
+         bghcn7uaGbR50pQ0KULUrZ/37+Xhf1drNozRzBeTLWLqMJN2OItBt7D8ILHkk7qhUv/R
+         FVSPXdnhK/XVrHtHF742d0mlh5PFTggLAAnQhz+u409zzuWp1T2W2dG3BUDYMand6XtU
+         M0E5oV3fpNweYRrDo7ridTW0Qfj/E++JGqWAGbPgSO8EfX8jQx9qmsZ7JzcIP7Qij4H1
+         Sqlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5MojLeIiS5IJ/f4OVpVWsw3ucrS28qn0/t/fHk4cEKI=;
-        b=X+py0a72r73bLk0wFBnpN3Cd9kUeC1VjC9uRCOXzWwZEq8eV2aSUxBkrYF2S/7VAIa
-         Hq5IEF9h/WG1aNDxTyjLSqgGyYFOktgLn3F4AWZFrhKKl0gQwuDl7uhJdiT2pdfntwZm
-         twsuBRU+JG2pEbahEGzp1P2OXbVoKMHTVCKcKXeAo4CtZMlK4USySsocRTJdX30dvkqV
-         X2EjuthS6qMZ1N/dmL3xobBq2yHSxe1s8mCMpJ6cWDQqbHvLN2e/ux60QSyauXQ/lS57
-         dgxHhA/9XWtu5pbqD6afbGCgP7VvIFpmzI24zAii944ExusyTQQnj/5GiGcLBzoa9pb4
-         tIog==
-X-Gm-Message-State: AGi0Pub3UzTf+QeEtzOxZvdEuuYLcIE230L2ZSEwBk3gXvs7w6OP7cYW
-        C6ZymaWUw632wY2yqLggjHU=
-X-Google-Smtp-Source: APiQypJfyklPMFQQYQL1OuANyjySeCQPdGYH7TjSCjrF2emF6AGXFPjeHCraQdzzIrRauzMdS8QFpQ==
-X-Received: by 2002:a9d:d06:: with SMTP id 6mr25675586oti.188.1588112086606;
-        Tue, 28 Apr 2020 15:14:46 -0700 (PDT)
+        bh=7RXicgLKtxfo0xJMhMqi5KWPBmvi4LyzTbOskfEYJQQ=;
+        b=jTdy/cX5adnxpDedcssbFj6GHk2j55rBwxPJRDs0APjjAIIZXpwDMtlAnU1AFSdUDT
+         SjhIiV5HX4wy9rtPU65TPuqmQGBcNzQrXMLkegBnMsbr5KE3jDgE0InQeOdNEHMqwu/W
+         MO0Ql4ZDPACNN4+dDuqQALJ+ekahxmpIKtZ35lvH4CEyg6LKkRf/hlwLlS+EAXjSHYGo
+         rW2YJJmWGkoZc0c2j7PX6Atbi8j/kihPFsiVwYhLmEza1anMKsVAHmxnv286tRZb0SW1
+         qPYcT39S+nvjaDJfOS+bTzhoTtkaztPlSvbPC+H955dXsqaeUFrPIhK/qfvDIrVNFOKK
+         84UA==
+X-Gm-Message-State: AGi0PuYZDZyJ4LnlohK8iz5PI5YRrdCfhFN+EaEWvdaYDFwqgQNPPLQC
+        KYFXSjh7NqsmW8xEwT/SjWc=
+X-Google-Smtp-Source: APiQypL7QIFgYkaJ3tpdi/WMTCTqv80Zf90fvEaMBmkj0KaYd0MyEcNgUPXo4UrUQWWmFQ5wK66MQQ==
+X-Received: by 2002:a05:6830:92:: with SMTP id a18mr25129047oto.317.1588112087977;
+        Tue, 28 Apr 2020 15:14:47 -0700 (PDT)
 Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id 186sm5267476ooi.30.2020.04.28.15.14.45
+        by smtp.gmail.com with ESMTPSA id 186sm5267476ooi.30.2020.04.28.15.14.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 15:14:45 -0700 (PDT)
+        Tue, 28 Apr 2020 15:14:47 -0700 (PDT)
 From:   Nathan Chancellor <natechancellor@gmail.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Masahiro Yamada <masahiroy@kernel.org>
@@ -59,9 +59,9 @@ Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dmitry Golovin <dima@golovin.in>,
         Sedat Dilek <sedat.dilek@gmail.com>,
         Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH v4 4/5] MIPS: VDSO: Use $(LD) instead of $(CC) to link VDSO
-Date:   Tue, 28 Apr 2020 15:14:18 -0700
-Message-Id: <20200428221419.2530697-5-natechancellor@gmail.com>
+Subject: [PATCH v4 5/5] MIPS: VDSO: Allow ld.lld to link the VDSO
+Date:   Tue, 28 Apr 2020 15:14:19 -0700
+Message-Id: <20200428221419.2530697-6-natechancellor@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200428221419.2530697-1-natechancellor@gmail.com>
 References: <20200423171807.29713-1-natechancellor@gmail.com>
@@ -74,140 +74,62 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Currently, the VDSO is being linked through $(CC). This does not match
-how the rest of the kernel links objects, which is through the $(LD)
-variable.
+Currently, when linking with ld.lld, this warning pops up:
 
-When clang is built in a default configuration, it first attempts to use
-the target triple's default linker then the system's default linker,
-unless told otherwise through -fuse-ld=... We do not use -fuse-ld=
-because it can be brittle and we have support for invoking $(LD)
-directly. See commit fe00e50b2db8c ("ARM: 8858/1: vdso: use $(LD)
-instead of $(CC) to link VDSO") and commit 691efbedc60d2 ("arm64: vdso:
-use $(LD) instead of $(CC) to link VDSO") for examples of doing this in
-the VDSO.
+    arch/mips/vdso/Makefile:70: MIPS VDSO requires binutils >= 2.25
 
-Do the same thing here. Replace the custom linking logic with $(cmd_ld)
-and ldflags-y so that $(LD) is respected. We need to explicitly add two
-flags to the linker that were implicitly passed by the compiler:
--G 0 (which comes from ccflags-vdso) and --eh-frame-hdr.
+CONFIG_LD_VERSION is set with scripts/ld-version.sh, which is specific
+to GNU ld. It returns 0 for ld.lld so CONFIG_MIPS_LD_CAN_LINK_VDSO does
+not set.
 
-Before this patch (generated by adding '-v' to VDSO_LDFLAGS):
+ld.lld has a completely different versioning scheme (as it follows
+LLVM's versioning) and it does not have the issue mentioned in the
+comment block so it should be allowed to link the VDSO.
 
-<gcc_prefix>/libexec/gcc/mips64-linux/9.3.0/collect2 \
--plugin <gcc_prefix>/libexec/gcc/mips64-linux/9.3.0/liblto_plugin.so \
--plugin-opt=<gcc_prefix>/libexec/gcc/mips64-linux/9.3.0/lto-wrapper \
--plugin-opt=-fresolution=/tmp/ccGEi5Ka.res \
---eh-frame-hdr \
--G 0 \
--EB \
--mips64r2 \
--shared \
--melf64btsmip \
--o arch/mips/vdso/vdso.so.dbg.raw \
--L<gcc_prefix>/lib/gcc/mips64-linux/9.3.0/64 \
--L<gcc_prefix>/lib/gcc/mips64-linux/9.3.0 \
--L<gcc_prefix>/lib/gcc/mips64-linux/9.3.0/../../../../mips64-linux/lib \
--Bsymbolic \
---no-undefined \
--soname=linux-vdso.so.1 \
--EB \
---hash-style=sysv \
---build-id \
--T arch/mips/vdso/vdso.lds \
-arch/mips/vdso/elf.o \
-arch/mips/vdso/vgettimeofday.o \
-arch/mips/vdso/sigreturn.o
+With this patch, the VDSO successfully links and shows P_MIPS_PC32 in
+vgettimeofday.o.
 
-After this patch:
+$ llvm-objdump -Dr arch/mips/vdso/vgettimeofday.o | grep R_MIPS_PC32
+			00000024:  R_MIPS_PC32	_start
+			000000b0:  R_MIPS_PC32	_start
+			000002bc:  R_MIPS_PC32	_start
+			0000036c:  R_MIPS_PC32	_start
+			00000468:  R_MIPS_PC32	_start
 
-<gcc_prefix>/bin/mips64-linux-ld \
--m elf64btsmip \
--Bsymbolic \
---no-undefined \
--soname=linux-vdso.so.1 \
--EB \
--nostdlib \
--shared \
--G 0 \
---eh-frame-hdr \
---hash-style=sysv \
---build-id \
--T  arch/mips/vdso/vdso.lds \
-arch/mips/vdso/elf.o \
-arch/mips/vdso/vgettimeofday.o
-arch/mips/vdso/sigreturn.o \
--o arch/mips/vdso/vdso.so.dbg.raw
-
-Note that we leave behind -mips64r2. Turns out that ld ignores it (see
-get_emulation in ld/ldmain.c). This is true of current trunk and 2.23,
-which is the minimum supported version for the kernel:
-
-https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=ld/ldmain.c;hb=aa4209e7b679afd74a3860ce25659e71cc4847d5#l593
-https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=ld/ldmain.c;hb=a55e30b51bc6227d8d41f707654d0a5620978dcf#l641
-
-Before this patch, LD=ld.lld did nothing:
-
-$ llvm-readelf -p.comment arch/mips/vdso/vdso.so.dbg | sed 's/(.*//'
-String dump of section '.comment':
-[     0] ClangBuiltLinux clang version 11.0.0
-
-After this patch, it does:
-
-$ llvm-readelf -p.comment arch/mips/vdso/vdso.so.dbg | sed 's/(.*//'
-String dump of section '.comment':
-[     0] Linker: LLD 11.0.0
-[    62] ClangBuiltLinux clang version 11.0.0
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/785
+Reported-by: Dmitry Golovin <dima@golovin.in>
 Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/785
+Link: https://github.com/llvm/llvm-project/commit/e364e2e9ce50c12eb2bf093560e1a1a8544d455a
 ---
 
 v3 -> v4:
 
-* Improve commit message to show that ld command is effectively the
-  same as the one generated by GCC.
-
-* Add '-G 0' and '--eh-frame-hdr' because they were added by GCC.
+* No changes.
 
 v2 -> v3:
 
-* New patch.
+* No changes.
 
- arch/mips/vdso/Makefile | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+v1 -> v2:
 
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index 92b53d1df42c3..2e64c7600eead 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -60,10 +60,9 @@ ifdef CONFIG_MIPS_DISABLE_VDSO
- endif
+* Move into Kconfig so that the warning does not happen.
+
+ arch/mips/vdso/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/mips/vdso/Kconfig b/arch/mips/vdso/Kconfig
+index 36a52158d849b..7aec721398d59 100644
+--- a/arch/mips/vdso/Kconfig
++++ b/arch/mips/vdso/Kconfig
+@@ -12,7 +12,7 @@
+ # the lack of relocations. As such, we disable the VDSO for microMIPS builds.
  
- # VDSO linker flags.
--VDSO_LDFLAGS := \
--	-Wl,-Bsymbolic -Wl,--no-undefined -Wl,-soname=linux-vdso.so.1 \
--	$(addprefix -Wl$(comma),$(filter -E%,$(KBUILD_CFLAGS))) \
--	-nostdlib -shared -Wl,--hash-style=sysv -Wl,--build-id
-+ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
-+	$(filter -E%,$(KBUILD_CFLAGS)) -nostdlib -shared \
-+	-G 0 --eh-frame-hdr --hash-style=sysv --build-id -T
+ config MIPS_LD_CAN_LINK_VDSO
+-	def_bool LD_VERSION >= 225000000
++	def_bool LD_VERSION >= 225000000 || LD_IS_LLD
  
- CFLAGS_REMOVE_vdso.o = -pg
- 
-@@ -82,11 +81,7 @@ quiet_cmd_vdso_mips_check = VDSOCHK $@
- #
- 
- quiet_cmd_vdsold_and_vdso_check = LD      $@
--      cmd_vdsold_and_vdso_check = $(cmd_vdsold); $(cmd_vdso_check); $(cmd_vdso_mips_check)
--
--quiet_cmd_vdsold = VDSO    $@
--      cmd_vdsold = $(CC) $(c_flags) $(VDSO_LDFLAGS) \
--                   -Wl,-T $(filter %.lds,$^) $(filter %.o,$^) -o $@
-+      cmd_vdsold_and_vdso_check = $(cmd_ld); $(cmd_vdso_check); $(cmd_vdso_mips_check)
- 
- quiet_cmd_vdsoas_o_S = AS      $@
-       cmd_vdsoas_o_S = $(CC) $(a_flags) -c -o $@ $<
+ config MIPS_DISABLE_VDSO
+ 	def_bool CPU_MICROMIPS || (!CPU_MIPSR6 && !MIPS_LD_CAN_LINK_VDSO)
 -- 
 2.26.2
 
