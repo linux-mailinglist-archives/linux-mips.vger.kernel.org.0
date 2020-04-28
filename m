@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F402C1BCF9A
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 00:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38BB1BCFAB
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 00:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726893AbgD1WOo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Apr 2020 18:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
+        id S1726949AbgD1WOv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Apr 2020 18:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726884AbgD1WOn (ORCPT
+        by vger.kernel.org with ESMTP id S1726884AbgD1WOr (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Apr 2020 18:14:43 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336C8C03C1AC;
-        Tue, 28 Apr 2020 15:14:43 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id a2so4549747oia.11;
-        Tue, 28 Apr 2020 15:14:43 -0700 (PDT)
+        Tue, 28 Apr 2020 18:14:47 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA90C03C1AC;
+        Tue, 28 Apr 2020 15:14:45 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id 72so35653389otu.1;
+        Tue, 28 Apr 2020 15:14:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zb1r7udqkPpghcAA099YBR0r79TnU7CL/+l6zX2FrtY=;
-        b=l27izJS8OBRWIRDCtgzoOfsf44WXDIr+bbAE+m2Td4/0V1MoS1gixfeA8Oh99cr5Y3
-         x8CPHcfkAzXrpZAfBFS5heTG3I0/YvVpnR06h6RHzS+yT4gDAs5DTtSar1MJ7MMjoDxT
-         zNLVsZ7FeQnjNQ1tYSg5H+UdmUSVKGmvfaocdilZjwuZv+dLBZUjZvbQoWOYySbBzI16
-         0LHLiZmT7pA5PyT592U63KzACQAyo32kPUJzxPMFhMZvHI1JbNFn9f+rlbN2qGJoDF21
-         zZ0y8Ajr2+hxJj7st2x+WQtcKqcUQC4RwYBtJc5HXWQbMx/ac2qwDIR4mvoAoC2idmfZ
-         KSww==
+        bh=D5XPjNeCefGZdrfYepQszWv1EoAyH1SJYjMY9egLiRQ=;
+        b=Iti+HequGOL2PRuJbXnmbHCjiKuiBfJAzPaw8pDrLBFUO76wVbANTBmENBrQptVY+X
+         FBumW6Q8M+cJTNNXqkgRIn/BpEW8C4gKFGoOESrw47zC2a6WrAzQH6qGn9YY1yOhQ67K
+         EMVmi6vrNlI4Ug3rb/6YM1mmA9JQwUBotIlqKLfQAl7rKtBO/H7s0FurgDgDdqR/7Pdn
+         byjVkaxjygBHj5EPMqqJRwqwdiN5qa4UJeWxCq8HnLKu8gG7oYy4IU2lUpV4fGn+fM18
+         vozwJ5GyPiHVyoBoWclyp9cS6to49xOt0mHwaou1wH+RgEcXp37H+5yOM3sNf7jGCsbP
+         3fAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zb1r7udqkPpghcAA099YBR0r79TnU7CL/+l6zX2FrtY=;
-        b=RjXZjK4UHJRsgqDYs8RCYu3n2d9SvBtPX3iZxgPS9dS/3RVbuIUESVb6qMmZEr/iis
-         d71Y4Wb1xi5ZapQrVTqPFsByX2eWXcoBUv8Jvw3Bbi4yhFMdU4IRy/aDyR7nQ3HHtQAx
-         OdkS+ZntNes9yrzo4zn92H+mMndT4S5LZpClJ5MfowFfzIWmI75kw2Buxo+YN3VILcgo
-         hknHYn9xSMDZ0Naw9QJGsonaacZakLKRX0wtu0fZsUqVBlCYXwLMENA015CR3BtGSxjk
-         E5dmhz5hzf6uU0bkg2k1rKVCCoM7FvKJwUGSYWSIIIlzYpoznHOpsFYb+XXgULvZvZAP
-         srEQ==
-X-Gm-Message-State: AGi0PuYHJ2bwBJByvBbdXo75A7YIMzx1Dsu3yj1HfzCkd8rGY+DGfA/i
-        sc6L13mer9vpwQasyw+w6ml2tQCEb7s=
-X-Google-Smtp-Source: APiQypIX6wAdCIUfNT1DTBfD1vHWMIOvDzIFzcWFGd4o0rt0yf0/tRDn8udG2XDVwZ2ByYagld2Vbw==
-X-Received: by 2002:aca:5e41:: with SMTP id s62mr4503048oib.53.1588112082531;
-        Tue, 28 Apr 2020 15:14:42 -0700 (PDT)
+        bh=D5XPjNeCefGZdrfYepQszWv1EoAyH1SJYjMY9egLiRQ=;
+        b=clg0EzYuGYbeXL+48/jJkgshIL46NOiQMJ1wyYZ5aTMul3ihPuG1CebRh7/ZioU1zG
+         f3UNaFyZH81J/dDuezwmtfvV8WLfUIf9yxmdy+ciSBGGEOyzGbdYyFn4F3WKuEBn74G4
+         wMe3LXHabmgHb6mXC49tCIc1r5R6OCKF53tcvUC59Yi2lMOzys+L7/dpUo/QRUSsL4TL
+         lrE/UQO9u34rvnMErwpg/ISPIz02vCnXE41LY0niB9DKvTQEA+QDH61JGWYgLMGweug7
+         mMtFNOcXWwUXubnRqhq8vOALChZsLsTzQF/tRm+c+6y301wTvQNPHXB26v7K4wFrvZxh
+         NVdQ==
+X-Gm-Message-State: AGi0Pub2QSjtOkZpvil/SgvRSCVBYvPxjWXYJ/opwtXIlZn8QSKoOYxG
+        tQT4hJXfZ3ZSCdy6Yxh1tEM=
+X-Google-Smtp-Source: APiQypJKBJEUubwCVk6BCR1txO0tCzVgiFwxHfcCK5o8MX1rilWMul+BWNV6kI1sscPSPp8xdpLWng==
+X-Received: by 2002:a05:6830:1ac6:: with SMTP id r6mr1353744otc.311.1588112085030;
+        Tue, 28 Apr 2020 15:14:45 -0700 (PDT)
 Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id 186sm5267476ooi.30.2020.04.28.15.14.41
+        by smtp.gmail.com with ESMTPSA id 186sm5267476ooi.30.2020.04.28.15.14.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 15:14:41 -0700 (PDT)
+        Tue, 28 Apr 2020 15:14:44 -0700 (PDT)
 From:   Nathan Chancellor <natechancellor@gmail.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Masahiro Yamada <masahiroy@kernel.org>
@@ -59,9 +59,9 @@ Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dmitry Golovin <dima@golovin.in>,
         Sedat Dilek <sedat.dilek@gmail.com>,
         Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH v4 2/5] MIPS: VDSO: Move disabling the VDSO logic to Kconfig
-Date:   Tue, 28 Apr 2020 15:14:16 -0700
-Message-Id: <20200428221419.2530697-3-natechancellor@gmail.com>
+Subject: [PATCH v4 3/5] MIPS: Unconditionally specify '-EB' or '-EL'
+Date:   Tue, 28 Apr 2020 15:14:17 -0700
+Message-Id: <20200428221419.2530697-4-natechancellor@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200428221419.2530697-1-natechancellor@gmail.com>
 References: <20200423171807.29713-1-natechancellor@gmail.com>
@@ -74,130 +74,103 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After commit 9553d16fa671 ("init/kconfig: Add LD_VERSION Kconfig"), we
-have access to GNU ld's version at configuration time. As a result, we
-can make it clearer under what configuration circumstances the MIPS VDSO
-needs to be disabled.
+This was all done to work around a GCC bug that has been fixed after
+4.2. The kernel requires GCC 4.6 or newer so remove all of these hacks
+and just use the traditional flags.
 
-This is a prerequisite for getting rid of the MIPS VDSO binutils
-warning and linking the VDSO when LD is ld.lld. Wrapping the call to
-ld-ifversion with CONFIG_LD_IS_LLD does not work because the config
-values are wiped away during 'make clean'.
+ $ mips64-linux-gcc --version | head -n1
+ mips64-linux-gcc (GCC) 4.6.3
 
+ $ mips64-linux-gcc -EB -dM -E -C -x c /dev/null | grep MIPSE
+ #define MIPSEB 1
+ #define __MIPSEB__ 1
+ #define _MIPSEB 1
+ #define __MIPSEB 1
+
+ $ mips64-linux-gcc -EL -dM -E -C -x c /dev/null | grep MIPSE
+ #define __MIPSEL__ 1
+ #define MIPSEL 1
+ #define _MIPSEL 1
+ #define __MIPSEL 1
+
+This is necessary when converting the MIPS VDSO to use $(LD) instead of
+$(CC) to link because the OUTPUT_FORMAT is defaulted to little endian
+and only flips to big endian when '-EB' is set on the command line.
+There is no issue currently because the compiler explicitly passes
+'-EB' or '-EL' to the linker regardless of whether or not it was
+provided by the user. Passing '-v' to VDSO_LDFLAGS shows:
+
+<gcc_prefix>/libexec/gcc/mips64-linux/9.3.0/collect2 ... -EB ...
+
+even though '-EB' is nowhere to be found in KBUILD_CFLAGS. The VDSO
+Makefile already supports getting '-EB' or '-EL' from KBUILD_CFLAGS
+through a filter directive but '-EB' or '-EL' is not always present.
+
+If we do not do this, we will see the following error when compiling
+for big endian:
+
+$ make -j$(nproc) ARCH=mips CROSS_COMPILE=mips64-linux- \
+  64r2el_defconfig arch/mips/vdso/
+...
+mips64-linux-ld: arch/mips/vdso/elf.o: compiled for a big endian system
+and target is little endian
+mips64-linux-ld: arch/mips/vdso/elf.o: endianness incompatible with that
+of the selected emulation
+mips64-linux-ld: failed to merge target specific data of file
+arch/mips/vdso/elf.o
+...
+
+Remove this legacy hack and just use '-EB' and '-EL' unconditionally.
+
+Reported-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 ---
 
 v3 -> v4:
 
-* No changes.
-
-v2 -> v3:
-
-* Fix CONFIG macro in arch/mips/vdso/vdso.lds.S, thanks to Sedat for
-  catching it.
-
-v1 -> v2:
-
 * New patch.
 
- arch/mips/Kconfig         |  2 ++
- arch/mips/vdso/Kconfig    | 18 ++++++++++++++++++
- arch/mips/vdso/Makefile   | 30 ++----------------------------
- arch/mips/vdso/vdso.lds.S |  2 +-
- 4 files changed, 23 insertions(+), 29 deletions(-)
- create mode 100644 arch/mips/vdso/Kconfig
+ arch/mips/Makefile | 25 -------------------------
+ 1 file changed, 25 deletions(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 690718b3701af..45220e4b8a653 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -3275,3 +3275,5 @@ endmenu
- source "drivers/firmware/Kconfig"
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index e1c44aed81565..301efb90b51ed 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -116,33 +116,8 @@ endif
  
- source "arch/mips/kvm/Kconfig"
-+
-+source "arch/mips/vdso/Kconfig"
-diff --git a/arch/mips/vdso/Kconfig b/arch/mips/vdso/Kconfig
-new file mode 100644
-index 0000000000000..36a52158d849b
---- /dev/null
-+++ b/arch/mips/vdso/Kconfig
-@@ -0,0 +1,18 @@
-+# For the pre-R6 code in arch/mips/vdso/vdso.h for locating
-+# the base address of VDSO, the linker will emit a R_MIPS_PC32
-+# relocation in binutils > 2.25 but it will fail with older versions
-+# because that relocation is not supported for that symbol. As a result
-+# of which we are forced to disable the VDSO symbols when building
-+# with < 2.25 binutils on pre-R6 kernels. For more references on why we
-+# can't use other methods to get the base address of VDSO please refer to
-+# the comments on that file.
-+#
-+# GCC (at least up to version 9.2) appears to emit function calls that make use
-+# of the GOT when targeting microMIPS, which we can't use in the VDSO due to
-+# the lack of relocations. As such, we disable the VDSO for microMIPS builds.
-+
-+config MIPS_LD_CAN_LINK_VDSO
-+	def_bool LD_VERSION >= 225000000
-+
-+config MIPS_DISABLE_VDSO
-+	def_bool CPU_MICROMIPS || (!CPU_MIPSR6 && !MIPS_LD_CAN_LINK_VDSO)
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index d7fe8408603e8..92b53d1df42c3 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -52,37 +52,11 @@ endif
+ cflags-y += -ffreestanding
  
- CFLAGS_REMOVE_vgettimeofday.o = -pg
- 
--DISABLE_VDSO := n
--
 -#
--# For the pre-R6 code in arch/mips/vdso/vdso.h for locating
--# the base address of VDSO, the linker will emit a R_MIPS_PC32
--# relocation in binutils > 2.25 but it will fail with older versions
--# because that relocation is not supported for that symbol. As a result
--# of which we are forced to disable the VDSO symbols when building
--# with < 2.25 binutils on pre-R6 kernels. For more references on why we
--# can't use other methods to get the base address of VDSO please refer to
--# the comments on that file.
+-# We explicitly add the endianness specifier if needed, this allows
+-# to compile kernels with a toolchain for the other endianness. We
+-# carefully avoid to add it redundantly because gcc 3.3/3.4 complains
+-# when fed the toolchain default!
 -#
--ifndef CONFIG_CPU_MIPSR6
--  ifeq ($(call ld-ifversion, -lt, 225000000, y),y)
-+ifdef CONFIG_MIPS_DISABLE_VDSO
-+  ifndef CONFIG_MIPS_LD_CAN_LINK_VDSO
-     $(warning MIPS VDSO requires binutils >= 2.25)
--    DISABLE_VDSO := y
-   endif
+-# Certain gcc versions up to gcc 4.1.1 (probably 4.2-subversion as of
+-# 2006-10-10 don't properly change the predefined symbols if -EB / -EL
+-# are used, so we kludge that here.  A bug has been filed at
+-# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=29413.
+-#
+-# clang doesn't suffer from these issues and our checks against -dumpmachine
+-# don't work so well when cross compiling, since without providing --target
+-# clang's output will be based upon the build machine. So for clang we simply
+-# unconditionally specify -EB or -EL as appropriate.
+-#
+-ifdef CONFIG_CC_IS_CLANG
+ cflags-$(CONFIG_CPU_BIG_ENDIAN)		+= -EB
+ cflags-$(CONFIG_CPU_LITTLE_ENDIAN)	+= -EL
+-else
+-undef-all += -UMIPSEB -U_MIPSEB -U__MIPSEB -U__MIPSEB__
+-undef-all += -UMIPSEL -U_MIPSEL -U__MIPSEL -U__MIPSEL__
+-predef-be += -DMIPSEB -D_MIPSEB -D__MIPSEB -D__MIPSEB__
+-predef-le += -DMIPSEL -D_MIPSEL -D__MIPSEL -D__MIPSEL__
+-cflags-$(CONFIG_CPU_BIG_ENDIAN)		+= $(shell $(CC) -dumpmachine |grep -q 'mips.*el-.*' && echo -EB $(undef-all) $(predef-be))
+-cflags-$(CONFIG_CPU_LITTLE_ENDIAN)	+= $(shell $(CC) -dumpmachine |grep -q 'mips.*el-.*' || echo -EL $(undef-all) $(predef-le))
 -endif
--
--#
--# GCC (at least up to version 9.2) appears to emit function calls that make use
--# of the GOT when targeting microMIPS, which we can't use in the VDSO due to
--# the lack of relocations. As such, we disable the VDSO for microMIPS builds.
--#
--ifdef CONFIG_CPU_MICROMIPS
--  DISABLE_VDSO := y
--endif
--
--ifeq ($(DISABLE_VDSO),y)
-   obj-vdso-y := $(filter-out vgettimeofday.o, $(obj-vdso-y))
--  ccflags-vdso += -DDISABLE_MIPS_VDSO
- endif
  
- # VDSO linker flags.
-diff --git a/arch/mips/vdso/vdso.lds.S b/arch/mips/vdso/vdso.lds.S
-index da4627430aba4..d90b65724d78e 100644
---- a/arch/mips/vdso/vdso.lds.S
-+++ b/arch/mips/vdso/vdso.lds.S
-@@ -91,7 +91,7 @@ PHDRS
- VERSION
- {
- 	LINUX_2.6 {
--#ifndef DISABLE_MIPS_VDSO
-+#ifndef CONFIG_MIPS_DISABLE_VDSO
- 	global:
- 		__vdso_clock_gettime;
- 		__vdso_gettimeofday;
+ cflags-$(CONFIG_SB1XXX_CORELIS)	+= $(call cc-option,-mno-sched-prolog) \
+ 				   -fno-omit-frame-pointer
 -- 
 2.26.2
 
