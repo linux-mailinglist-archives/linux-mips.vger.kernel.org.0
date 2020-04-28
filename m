@@ -2,43 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6B11BB361
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2020 03:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D7C1BB3C4
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2020 04:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726447AbgD1BRU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Apr 2020 21:17:20 -0400
-Received: from vultr.net.flygoat.com ([149.28.68.211]:60330 "EHLO
+        id S1726270AbgD1CPM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Apr 2020 22:15:12 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:60356 "EHLO
         vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726233AbgD1BRU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Apr 2020 21:17:20 -0400
+        with ESMTP id S1726262AbgD1CPM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Apr 2020 22:15:12 -0400
 Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 1003220C7D;
-        Tue, 28 Apr 2020 01:17:17 +0000 (UTC)
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id AEAE82049B;
+        Tue, 28 Apr 2020 02:15:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1588036640; bh=SGBfa2eJmecsiBLSL68kPrqdaswa5FzCvQdpVidpcYg=;
+        t=1588040111; bh=GkNn6QDS6+1D5/N1KKM+IIJftlwxUET+1TaEhVK7DDc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cyFS7pGUASnD1uwtpU/MSkyw5mb9ZHhHrqnZU0AO/Ft9XeDdI7MW6vt7eA5dhI6nx
-         5xlJt1+d+wEMRFYSYOV6aVQpztWFav12aJwSMIq+EzYZA4+oXPwbTy21iYxxO58J7s
-         VjXnSIpsltztC06iIhTFHVdCgVVy/O5+KPWcZ/SNfz6dK0XCcojUGypHy2fYALABUS
-         ojoQ41mcERIRg9psRfj/8efDVsKJtxd2lJxyHgSBg5VtUoeHs/QgSEvu/Hx1eTOWy2
-         oA7WDLsceJcT73YDyd3CpoK8mVsN+DtQ+CeXvjDdQTcUAxJHotOLiYudST7qLpZXFJ
-         vwtocUu4xGapw==
+        b=OIVpEj1hTI1EHHTITeN/a1gvWSbzafVeYpfsmb75lfz6g/nL2w4GrzGORSelO7hbD
+         oRp2k5LOGOVeNTCWmHN2LxvYXwnyHVqcKZHLJLZNmPqDLdnqijvUoh7CyRyAy4CfQl
+         nh/n3L237Z0j/6rduYk5N531su177IfvlZRmXKr3ceUwiVKBX59u5KFtfpaYd4fUOr
+         AFVnLc9v9KYtYclP0X7fi1vrbCtIKdcA/yy1VcPoOANm+EZqz4hCs0G+HQcE/kGp0F
+         cpagZKT3yYTU3C+1bzZQQm33JkQphVpVTTrAyPPU3W02nyyclYzqiB3bWv5h0z0nni
+         GvTV/1vNZ4L5Q==
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
+Cc:     john.garry@huawei.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Huacai Chen <chenhc@lemote.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Paul Burton <paulburton@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v7 5/5] MIPS: Loongson64: Switch to generic PCI driver
-Date:   Tue, 28 Apr 2020 09:14:20 +0800
-Message-Id: <20200428011429.1852081-6-jiaxun.yang@flygoat.com>
+        Paul Burton <paulburton@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Stephen Kitt <steve@sk2.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Daniel Silsby <dansilsby@gmail.com>,
+        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Allison Randal <allison@lohutok.net>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] MIPS: Loongson64: Use logic_pio v2
+Date:   Tue, 28 Apr 2020 10:14:11 +0800
+Message-Id: <20200428021437.2000066-1-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.26.0.rc2
-In-Reply-To: <20200428011429.1852081-1-jiaxun.yang@flygoat.com>
-References: <20200428011429.1852081-1-jiaxun.yang@flygoat.com>
+In-Reply-To: 20200426114806.1176629-1-jiaxun.yang@flygoat.com
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -46,294 +59,36 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-We can now enable generic PCI driver in Kconfig, and remove legacy
-PCI driver code.
+To add I/O ports for PCI host bridge via devicetree, we have to use
+logic_pio mechanism.
+That would require convert I/O ports into virt memory map.
 
-Radeon vbios quirk is moved to the platform folder to fit the
-new structure.
+v2: Register a logic_pio range instead of reserve in logic_pio system.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/Kconfig                  |   1 +
- arch/mips/loongson64/Makefile      |   2 +-
- arch/mips/loongson64/vbios_quirk.c |  29 ++++++++
- arch/mips/pci/Makefile             |   1 -
- arch/mips/pci/fixup-loongson3.c    |  71 ------------------
- arch/mips/pci/ops-loongson3.c      | 116 -----------------------------
- 6 files changed, 31 insertions(+), 189 deletions(-)
- create mode 100644 arch/mips/loongson64/vbios_quirk.c
- delete mode 100644 arch/mips/pci/fixup-loongson3.c
- delete mode 100644 arch/mips/pci/ops-loongson3.c
+Jiaxun Yang (3):
+  MIPS: Massage address spaces headers
+  MIPS: Introduce PCI_IO_VMMAP
+  MIPS: Loongson64: Enable PCI_IO_VMMAP
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 0519ca9f00f9..7a4fcc4ade1f 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -480,6 +480,7 @@ config MACH_LOONGSON64
- 	select IRQ_MIPS_CPU
- 	select NR_CPUS_DEFAULT_64
- 	select USE_GENERIC_EARLY_PRINTK_8250
-+	select PCI_DRIVERS_GENERIC
- 	select SYS_HAS_CPU_LOONGSON64
- 	select SYS_HAS_EARLY_PRINTK
- 	select SYS_SUPPORTS_SMP
-diff --git a/arch/mips/loongson64/Makefile b/arch/mips/loongson64/Makefile
-index 6f3c2b47f66f..6f81b822aeae 100644
---- a/arch/mips/loongson64/Makefile
-+++ b/arch/mips/loongson64/Makefile
-@@ -8,5 +8,5 @@ obj-$(CONFIG_MACH_LOONGSON64) += cop2-ex.o platform.o dma.o \
- obj-$(CONFIG_SMP)	+= smp.o
- obj-$(CONFIG_NUMA)	+= numa.o
- obj-$(CONFIG_RS780_HPET) += hpet.o
--obj-$(CONFIG_PCI) += pci.o
- obj-$(CONFIG_SUSPEND) += pm.o
-+obj-$(CONFIG_PCI_QUIRKS) += vbios_quirk.o
-diff --git a/arch/mips/loongson64/vbios_quirk.c b/arch/mips/loongson64/vbios_quirk.c
-new file mode 100644
-index 000000000000..1f0a462aeddd
---- /dev/null
-+++ b/arch/mips/loongson64/vbios_quirk.c
-@@ -0,0 +1,29 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/pci.h>
-+#include <loongson.h>
-+
-+static void pci_fixup_radeon(struct pci_dev *pdev)
-+{
-+	struct resource *res = &pdev->resource[PCI_ROM_RESOURCE];
-+
-+	if (res->start)
-+		return;
-+
-+	if (!loongson_sysconf.vgabios_addr)
-+		return;
-+
-+	pci_disable_rom(pdev);
-+	if (res->parent)
-+		release_resource(res);
-+
-+	res->start = virt_to_phys((void *) loongson_sysconf.vgabios_addr);
-+	res->end   = res->start + 256*1024 - 1;
-+	res->flags = IORESOURCE_MEM | IORESOURCE_ROM_SHADOW |
-+		     IORESOURCE_PCI_FIXED;
-+
-+	dev_info(&pdev->dev, "BAR %d: assigned %pR for Radeon ROM\n",
-+		 PCI_ROM_RESOURCE, res);
-+}
-+DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_ATI, 0x9615,
-+				PCI_CLASS_DISPLAY_VGA, 8, pci_fixup_radeon);
-diff --git a/arch/mips/pci/Makefile b/arch/mips/pci/Makefile
-index 342ce10ef593..438f10955d89 100644
---- a/arch/mips/pci/Makefile
-+++ b/arch/mips/pci/Makefile
-@@ -35,7 +35,6 @@ obj-$(CONFIG_LASAT)		+= pci-lasat.o
- obj-$(CONFIG_MIPS_COBALT)	+= fixup-cobalt.o
- obj-$(CONFIG_LEMOTE_FULOONG2E)	+= fixup-fuloong2e.o ops-loongson2.o
- obj-$(CONFIG_LEMOTE_MACH2F)	+= fixup-lemote2f.o ops-loongson2.o
--obj-$(CONFIG_MACH_LOONGSON64)	+= fixup-loongson3.o ops-loongson3.o
- obj-$(CONFIG_MIPS_MALTA)	+= fixup-malta.o pci-malta.o
- obj-$(CONFIG_PMC_MSP7120_GW)	+= fixup-pmcmsp.o ops-pmcmsp.o
- obj-$(CONFIG_PMC_MSP7120_EVAL)	+= fixup-pmcmsp.o ops-pmcmsp.o
-diff --git a/arch/mips/pci/fixup-loongson3.c b/arch/mips/pci/fixup-loongson3.c
-deleted file mode 100644
-index 8a741c2c6685..000000000000
---- a/arch/mips/pci/fixup-loongson3.c
-+++ /dev/null
-@@ -1,71 +0,0 @@
--/*
-- * fixup-loongson3.c
-- *
-- * Copyright (C) 2012 Lemote, Inc.
-- * Author: Xiang Yu, xiangy@lemote.com
-- *         Chen Huacai, chenhc@lemote.com
-- *
-- * This program is free software; you can redistribute  it and/or modify it
-- * under  the terms of  the GNU General  Public License as published by the
-- * Free Software Foundation;  either version 2 of the  License, or (at your
-- * option) any later version.
-- *
-- * THIS  SOFTWARE  IS PROVIDED   ``AS  IS'' AND   ANY  EXPRESS OR IMPLIED
-- * WARRANTIES,   INCLUDING, BUT NOT  LIMITED  TO, THE IMPLIED WARRANTIES OF
-- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN
-- * NO  EVENT  SHALL   THE AUTHOR  BE    LIABLE FOR ANY   DIRECT, INDIRECT,
-- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-- * NOT LIMITED   TO, PROCUREMENT OF  SUBSTITUTE GOODS  OR SERVICES; LOSS OF
-- * USE, DATA,  OR PROFITS; OR  BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-- * ANY THEORY OF LIABILITY, WHETHER IN  CONTRACT, STRICT LIABILITY, OR TORT
-- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-- *
-- */
--
--#include <linux/pci.h>
--#include <boot_param.h>
--
--static void print_fixup_info(const struct pci_dev *pdev)
--{
--	dev_info(&pdev->dev, "Device %x:%x, irq %d\n",
--			pdev->vendor, pdev->device, pdev->irq);
--}
--
--int pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
--{
--	print_fixup_info(dev);
--	return dev->irq;
--}
--
--static void pci_fixup_radeon(struct pci_dev *pdev)
--{
--	struct resource *res = &pdev->resource[PCI_ROM_RESOURCE];
--
--	if (res->start)
--		return;
--
--	if (!loongson_sysconf.vgabios_addr)
--		return;
--
--	pci_disable_rom(pdev);
--	if (res->parent)
--		release_resource(res);
--
--	res->start = virt_to_phys((void *) loongson_sysconf.vgabios_addr);
--	res->end   = res->start + 256*1024 - 1;
--	res->flags = IORESOURCE_MEM | IORESOURCE_ROM_SHADOW |
--		     IORESOURCE_PCI_FIXED;
--
--	dev_info(&pdev->dev, "BAR %d: assigned %pR for Radeon ROM\n",
--		 PCI_ROM_RESOURCE, res);
--}
--
--DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_ATI, PCI_ANY_ID,
--				PCI_CLASS_DISPLAY_VGA, 8, pci_fixup_radeon);
--
--/* Do platform specific device initialization at pci_enable_device() time */
--int pcibios_plat_dev_init(struct pci_dev *dev)
--{
--	return 0;
--}
-diff --git a/arch/mips/pci/ops-loongson3.c b/arch/mips/pci/ops-loongson3.c
-deleted file mode 100644
-index 2f6ad36bdea6..000000000000
---- a/arch/mips/pci/ops-loongson3.c
-+++ /dev/null
-@@ -1,116 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include <linux/types.h>
--#include <linux/pci.h>
--#include <linux/kernel.h>
--
--#include <asm/mips-boards/bonito64.h>
--
--#include <loongson.h>
--
--#define PCI_ACCESS_READ  0
--#define PCI_ACCESS_WRITE 1
--
--#define HT1LO_PCICFG_BASE      0x1a000000
--#define HT1LO_PCICFG_BASE_TP1  0x1b000000
--
--static int loongson3_pci_config_access(unsigned char access_type,
--		struct pci_bus *bus, unsigned int devfn,
--		int where, u32 *data)
--{
--	unsigned char busnum = bus->number;
--	int function = PCI_FUNC(devfn);
--	int device = PCI_SLOT(devfn);
--	int reg = where & ~3;
--	void *addrp;
--	u64 addr;
--
--	if (where < PCI_CFG_SPACE_SIZE) { /* standard config */
--		addr = (busnum << 16) | (device << 11) | (function << 8) | reg;
--		if (busnum == 0) {
--			if (device > 31)
--				return PCIBIOS_DEVICE_NOT_FOUND;
--			addrp = (void *)TO_UNCAC(HT1LO_PCICFG_BASE | addr);
--		} else {
--			addrp = (void *)TO_UNCAC(HT1LO_PCICFG_BASE_TP1 | addr);
--		}
--	} else if (where < PCI_CFG_SPACE_EXP_SIZE) {  /* extended config */
--		struct pci_dev *rootdev;
--
--		rootdev = pci_get_domain_bus_and_slot(0, 0, 0);
--		if (!rootdev)
--			return PCIBIOS_DEVICE_NOT_FOUND;
--
--		addr = pci_resource_start(rootdev, 3);
--		if (!addr)
--			return PCIBIOS_DEVICE_NOT_FOUND;
--
--		addr |= busnum << 20 | device << 15 | function << 12 | reg;
--		addrp = (void *)TO_UNCAC(addr);
--	} else {
--		return PCIBIOS_DEVICE_NOT_FOUND;
--	}
--
--	if (access_type == PCI_ACCESS_WRITE)
--		writel(*data, addrp);
--	else {
--		*data = readl(addrp);
--		if (*data == 0xffffffff) {
--			*data = -1;
--			return PCIBIOS_DEVICE_NOT_FOUND;
--		}
--	}
--	return PCIBIOS_SUCCESSFUL;
--}
--
--static int loongson3_pci_pcibios_read(struct pci_bus *bus, unsigned int devfn,
--				 int where, int size, u32 *val)
--{
--	u32 data = 0;
--	int ret = loongson3_pci_config_access(PCI_ACCESS_READ,
--			bus, devfn, where, &data);
--
--	if (ret != PCIBIOS_SUCCESSFUL)
--		return ret;
--
--	if (size == 1)
--		*val = (data >> ((where & 3) << 3)) & 0xff;
--	else if (size == 2)
--		*val = (data >> ((where & 3) << 3)) & 0xffff;
--	else
--		*val = data;
--
--	return PCIBIOS_SUCCESSFUL;
--}
--
--static int loongson3_pci_pcibios_write(struct pci_bus *bus, unsigned int devfn,
--				  int where, int size, u32 val)
--{
--	u32 data = 0;
--	int ret;
--
--	if (size == 4)
--		data = val;
--	else {
--		ret = loongson3_pci_config_access(PCI_ACCESS_READ,
--				bus, devfn, where, &data);
--		if (ret != PCIBIOS_SUCCESSFUL)
--			return ret;
--
--		if (size == 1)
--			data = (data & ~(0xff << ((where & 3) << 3))) |
--			    (val << ((where & 3) << 3));
--		else if (size == 2)
--			data = (data & ~(0xffff << ((where & 3) << 3))) |
--			    (val << ((where & 3) << 3));
--	}
--
--	ret = loongson3_pci_config_access(PCI_ACCESS_WRITE,
--			bus, devfn, where, &data);
--
--	return ret;
--}
--
--struct pci_ops loongson_pci_ops = {
--	.read = loongson3_pci_pcibios_read,
--	.write = loongson3_pci_pcibios_write
--};
+ arch/mips/Kconfig                             |  4 ++
+ arch/mips/include/asm/addrspace.h             |  4 +-
+ arch/mips/include/asm/io.h                    | 36 ++++++++++++----
+ arch/mips/include/asm/mach-generic/spaces.h   | 42 ++++++++++++++-----
+ .../include/asm/mach-loongson64/loongson.h    |  2 +
+ arch/mips/include/asm/page-def.h              | 29 +++++++++++++
+ arch/mips/include/asm/page.h                  | 21 ----------
+ arch/mips/include/asm/pgtable-32.h            |  2 -
+ arch/mips/include/asm/pgtable-64.h            | 10 +----
+ arch/mips/include/asm/sync.h                  |  2 +
+ arch/mips/kernel/cps-vec.S                    |  3 +-
+ arch/mips/kernel/setup.c                      |  2 +
+ arch/mips/lib/iomap-pci.c                     |  2 +-
+ arch/mips/lib/uncached.c                      |  6 +--
+ arch/mips/loongson64/init.c                   | 34 +++++++++++++--
+ arch/mips/loongson64/pci.c                    |  2 +-
+ 16 files changed, 138 insertions(+), 63 deletions(-)
+ create mode 100644 arch/mips/include/asm/page-def.h
+
 -- 
 2.26.0.rc2
 
