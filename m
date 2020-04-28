@@ -2,112 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE04A1BB1F9
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2020 01:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A4E1BB34C
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2020 03:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726251AbgD0XYK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Apr 2020 19:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726204AbgD0XYJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 27 Apr 2020 19:24:09 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79EEC0610D5;
-        Mon, 27 Apr 2020 16:24:09 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id i27so29439210ota.7;
-        Mon, 27 Apr 2020 16:24:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=3NvGKWCvX9120+4SFSj7x6CopUI9oxRRZeaZqM3V8Fs=;
-        b=SIcBei/ItMBM8AJd3BzmaYwepbjkhCNF+8xVAmjd3nGLvxtN5+De2zwJPLWUtFWWpT
-         K4o55HtTZGm7D5XH8S85AfUilD2oH4X9f/wPo8nOJ1sWhDvoo3enLNyQs57eT0/v7yGH
-         Uof/vmXGg14a2xxDdVPWVmKe20k1NZCv5KXUiCfxiQxaFD6qldoWM5Ua7ouGl1v28sCd
-         TNCkBKcMyHrw6VpFNrnl60qmZfPVWXsy80hOwutKewAXy+uVu/Ng8p4Ej801UezokVms
-         FutO9avZhq7OHf1mGLiWT2hHk8bBV73CBY3uJC8LjUgI/Gc/cotqn0SwqBKuz7xzyOcU
-         e3pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3NvGKWCvX9120+4SFSj7x6CopUI9oxRRZeaZqM3V8Fs=;
-        b=IM/jBaF8sRqCmGEzEvleKslrlYxG4N59VAvQJSBVjgR/Hp7HA4E8tBlv3vcfP5Jbc/
-         0g/1iLrTGoFiODG+jq9UdLCYE6+4gvfE41AHviTIKD2j753cUgF0WWzeUQPc3aSXw8Za
-         niuIIurZmXVgcSlaM7oF6Bso3rrGRpDTQL+sR7tUSDUi3dw/sV/vbePZ3Ol5D/3PF9Mz
-         bocPGDSWy/65+4JMSdRQr4s64p5WK4efq0uohvxTzFH8apAwTcTZfs4up7Jrf7pE3zcW
-         +8vLaWWtUShOJEmPKIc5kYbUEl3gJ+dK1eQwDvUzzwohMVpz7Lee2OpYBZjQX1d2KWQG
-         tf8Q==
-X-Gm-Message-State: AGi0PuaM9arfmnV0aUXkqQmWt/0dgOvQSbm/+TKEKsb1ZS3zPdZj7Y7R
-        qDpkJXhuez7EB8m2Gb5ovK4=
-X-Google-Smtp-Source: APiQypKAyNo+CaSnexEEHLOEPVodWBBWv6kYHOWfmuv3W1Q34xaWYa8BHOWz534p7aujUy0y55E2lg==
-X-Received: by 2002:aca:4dca:: with SMTP id a193mr939911oib.90.1588029848995;
-        Mon, 27 Apr 2020 16:24:08 -0700 (PDT)
-Received: from ubuntu-s3-xlarge-x86 ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id u9sm3613337ote.47.2020.04.27.16.24.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 27 Apr 2020 16:24:08 -0700 (PDT)
-Date:   Mon, 27 Apr 2020 16:24:06 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     "Maciej W. Rozycki" <macro@linux-mips.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com, linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Dmitry Golovin <dima@golovin.in>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Subject: Re: [PATCH v3 3/4] MIPS: VDSO: Use $(LD) instead of $(CC) to link
- VDSO
-Message-ID: <20200427232406.GA8226@ubuntu-s3-xlarge-x86>
-References: <20200419202128.20571-1-natechancellor@gmail.com>
- <20200423171807.29713-1-natechancellor@gmail.com>
- <20200423171807.29713-3-natechancellor@gmail.com>
- <20200426162737.GA9322@alpha.franken.de>
- <20200427020830.GA260@Ryzen-7-3700X.localdomain>
- <alpine.LFD.2.21.2004271712130.851719@eddie.linux-mips.org>
+        id S1726263AbgD1BQ1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Apr 2020 21:16:27 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:60258 "EHLO
+        vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726233AbgD1BQ1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Apr 2020 21:16:27 -0400
+Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id D7F792049E;
+        Tue, 28 Apr 2020 01:16:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
+        t=1588036582; bh=YpbKFu2GtHuJRM3elJ1UDPWZ42z5iYMpD3wZVprdR/8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KpvpSpyyHeInj2hqGchbkiq09c63G1ENf9haGk7dFZPGammg8EawvRr/YwVlxJooX
+         kxJlHf0Y9TGG5/uFX8jLJU1WPUgMA7/Fdfiysfm54tYp0n737kCdNQ+cVlewm+RDLo
+         /bmg6AcNc4aNmPuvfyPhxBE7ppHaiZsPgYb3o/GWd57D07ndZ/IX0MBMekLGjnJdkB
+         PpM1TQmjDeUQj/ECZAjncTEvhB9NyobtCgmrIvCiEvWlYX2H8wkz4PzQr2jhEiaw26
+         Ej+bD6lnA6cHQTeF91p+x/9LE15Xd8+YrQ7lX54Axpmd7x0hB8L0prOpVwbCCp8fDg
+         xZ+shF5SWa8mg==
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Paul Burton <paulburton@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/5] Loongson PCI Generic Driver 
+Date:   Tue, 28 Apr 2020 09:14:15 +0800
+Message-Id: <20200428011429.1852081-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.26.0.rc2
+In-Reply-To: <20200427060551.1372591-1-jiaxun.yang@flygoat.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LFD.2.21.2004271712130.851719@eddie.linux-mips.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Apr 27, 2020 at 05:22:53PM +0100, Maciej W. Rozycki wrote:
-> On Sun, 26 Apr 2020, Nathan Chancellor wrote:
-> 
-> > > this causes build errors for me when (cross) compiling a big endian target:
-> > > 
-> > > target is little endian
-> > > mips64-linux-gnu-ld: arch/mips/vdso/elf.o: endianness incompatible with that of the selected emulation
-> > > mips64-linux-gnu-ld: failed to merge target specific data of file arch/mips/vdso/elf.o
-> > 
-> > Thanks for the report. I will look into it tomorrow and hopefully have a
-> > v4 by then.
-> 
->  Can you actually record in the change description what the difference in 
-> the relevant link command is, as shown where `V=1' has been used with 
-> `make' invocation?
+Hi,
 
-That will be rather unweildy to put in the commit message since
-currently, $(CC) + $(KBUILD_CFLAGS) is being used but I can if it is
-really desired. Otherwise, I can just put it where I put the changelog.
+This series converts Loongson PCI into a generic PCI controller
+driver and adds support for LS2K SoC and LS7A PCH's PCI support.
 
->  Actually running `diff -bu' on the whole `V=1' build log obtained without 
-> and with your proposed change applied and ensuring there are no unwanted 
-> changes elsewhere will be a good measure of the correctness of your patch. 
-> You may have to prepare to be patient and run with `-j1' to make sure any 
-> `make' parallelism does not interfere with the order of commands printed.
-> 
->   Maciej
-> 
+Is it possible to let patch 1~3 go through PCI tree and patch
+4~5 go through MIPS tree?
 
-Thanks for the input, I will take a look.
+Thanks.
 
-Cheers,
-Nathan
+v6: Drop first the patch of previous versions. Driver code clean-ups
+according to rob's suggestion.
+
+It looks like I had a wrong impression on generic IO port handeling
+and now the issue has been fixed, I implemented PCI_IOBASE for MIPS[1].
+Now the address is uniform here.
+
+[1]: https://patchwork.kernel.org/cover/11510499/
+
+v7: Fix some minor issues.
+
+Jiaxun Yang (5):
+  PCI: Don't disable decoding when mmio_always_on is set
+  PCI: Add Loongson PCI Controller support
+  dt-bindings: Document Loongson PCI Host Controller
+  MIPS: DTS: Loongson64: Add PCI Controller Node
+  MIPS: Loongson64: Switch to generic PCI driver
+
+ .../devicetree/bindings/pci/loongson.yaml     |  62 +++++
+ arch/mips/Kconfig                             |   1 +
+ arch/mips/boot/dts/loongson/rs780e-pch.dtsi   |  12 +
+ arch/mips/loongson64/Makefile                 |   2 +-
+ arch/mips/loongson64/vbios_quirk.c            |  29 ++
+ arch/mips/pci/Makefile                        |   1 -
+ arch/mips/pci/fixup-loongson3.c               |  71 -----
+ arch/mips/pci/ops-loongson3.c                 | 116 --------
+ drivers/pci/controller/Kconfig                |  10 +
+ drivers/pci/controller/Makefile               |   1 +
+ drivers/pci/controller/pci-loongson.c         | 251 ++++++++++++++++++
+ drivers/pci/probe.c                           |   2 +-
+ 12 files changed, 368 insertions(+), 190 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pci/loongson.yaml
+ create mode 100644 arch/mips/loongson64/vbios_quirk.c
+ delete mode 100644 arch/mips/pci/fixup-loongson3.c
+ delete mode 100644 arch/mips/pci/ops-loongson3.c
+ create mode 100644 drivers/pci/controller/pci-loongson.c
+
+-- 
+2.26.0.rc2
+
