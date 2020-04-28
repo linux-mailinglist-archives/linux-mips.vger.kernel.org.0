@@ -2,175 +2,185 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 963BA1BB3CD
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2020 04:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5CD1BB3D8
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Apr 2020 04:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726275AbgD1CQf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Apr 2020 22:16:35 -0400
-Received: from vultr.net.flygoat.com ([149.28.68.211]:60470 "EHLO
-        vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726251AbgD1CQf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Apr 2020 22:16:35 -0400
-Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id B0B1A2049D;
-        Tue, 28 Apr 2020 02:16:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1588040194; bh=tnGkIkCkT5Idq2mxbFt5cJNzJ2uwq6HAa+YVdrqU6Y0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C5yQWd2BtRrSwv7dRJAOGHLoaoXueKZCgvkVk7qRKw2octN4jyBCk/FrUutHIICyF
-         vx5h6b6pyzA8y/insy6Evq6Sn2ldnvOJAc9S8+5p8UVH+sz7QJeCmShMyzX4ZnCgvJ
-         /dmO+EmYyXoCJjlBmAngnFsu9hCk/oLp0wdNJEvT9iPB3RyUndMIBduzZJ76fjrxfy
-         j0DWL7C7PAghDwRzE5nLS+/9yw6/1gxE1lZWqlfaaIbulcRwP9AQPttGWkCUERmLHj
-         89IgtqiySm1mZ0h5y1TuMGzyZM5E+PPpWIByNuqatvJITxTTEn25qZivMyhVM7br43
-         0o9iPFAwly7MA==
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     john.garry@huawei.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Stephen Kitt <steve@sk2.org>,
+        id S1726272AbgD1CRk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Apr 2020 22:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726251AbgD1CRk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 27 Apr 2020 22:17:40 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AF5C03C1A8;
+        Mon, 27 Apr 2020 19:17:40 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id m13so29986120otf.6;
+        Mon, 27 Apr 2020 19:17:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=BmzYkSZJw46ftci/MHsN8rVkPDSOUgE2j3h7GJ0Fks8=;
+        b=vL04rXfQvKWKLOTmVx/y0ZnFLyIr3DQU6JUfJOSqTvsndS6+AFufohM4uec944uyPL
+         87eKP4+rBqtjfgt3neo65jO22FHXXefw0knhQmmGfGa9N3glF2HAewE7xv6/N2RXQ7xc
+         Ssr5PuE+wTE0tF/GSxJkp12TOP8Wphz8Q1+JZbjQ72GDZhrhdYpxWNtTnn/0plgKIo14
+         RkdYiNBPFeyEsBn8UZHkfzl5JLHmghvdRCPxypBNQ3RxezbTaUOjPUzUepk+usGSVZzU
+         mnePF7rtEifBhcrEDoac68/cmtKBkkfVRgJHeao3HkaxV5GSJgAKVoSet3F2iwe3Rdsc
+         IwbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=BmzYkSZJw46ftci/MHsN8rVkPDSOUgE2j3h7GJ0Fks8=;
+        b=EaBMiKZuiE9fCO39FBTMi49gjs1w/8+JoqasI8zT8U4Tk1buYV/PeZdBLLU4baVJWR
+         Szyvz8tmew56Qn++2nkz2dyD7Zf/JEsQLqCFbdK4CvGY+9Yv89aK9RvZVSIuGk7Jlq9Q
+         2PXlAO433ahEil4dmiWsVAmgNNJOuuNpcx/bVobfFX05sAZW+My3veHNbYmkidcCJZCv
+         xxiELBm3XFDOEwiM0MSSv9OSNOWlzQke8CfLaDpvyoXuoAKuFjDrsU8WXLfhPAswwJwN
+         4pr7xyped2ElBJ2lrDmM07fEKsrhGDfL9jIm/rAmNoIqPkNsm6A64ZTFRsY/BcBs683M
+         QSOg==
+X-Gm-Message-State: AGi0PuZo/r+W+3HQJcI+SFPRq0MFfAZ9KcaTHO5ydVbZwwHWV0UmcW3B
+        XQ2eorZ8Xoa0synJbYhZSF8=
+X-Google-Smtp-Source: APiQypIF98fCtl8pK8X9bVVrY45B4dnvdX4mnerURMhU5UO8rq60S4DZw3BTGckjpYyCEDKgn60pxg==
+X-Received: by 2002:aca:5716:: with SMTP id l22mr1348964oib.43.1588040259308;
+        Mon, 27 Apr 2020 19:17:39 -0700 (PDT)
+Received: from ubuntu-s3-xlarge-x86 ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id d61sm1580656otb.58.2020.04.27.19.17.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 27 Apr 2020 19:17:38 -0700 (PDT)
+Date:   Mon, 27 Apr 2020 19:17:37 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
+        linux-kbuild@vger.kernel.org,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Daniel Silsby <dansilsby@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] MIPS: Loongson64: Enable PCI_IO_VMMAP
-Date:   Tue, 28 Apr 2020 10:14:14 +0800
-Message-Id: <20200428021437.2000066-4-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.26.0.rc2
-In-Reply-To: <20200428021437.2000066-1-jiaxun.yang@flygoat.com>
-References: <20200428021437.2000066-1-jiaxun.yang@flygoat.com>
+        Sami Tolvanen <samitolvanen@google.com>,
+        Dmitry Golovin <dima@golovin.in>,
+        Sedat Dilek <sedat.dilek@gmail.com>
+Subject: Re: [PATCH v3 3/4] MIPS: VDSO: Use $(LD) instead of $(CC) to link
+ VDSO
+Message-ID: <20200428021737.GA7351@ubuntu-s3-xlarge-x86>
+References: <20200419202128.20571-1-natechancellor@gmail.com>
+ <20200423171807.29713-1-natechancellor@gmail.com>
+ <20200423171807.29713-3-natechancellor@gmail.com>
+ <20200426162737.GA9322@alpha.franken.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200426162737.GA9322@alpha.franken.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Finally we are able to elegantly add I/O ports for PCI host bridge
-via devicetree with logic_pio.
+On Sun, Apr 26, 2020 at 06:27:37PM +0200, Thomas Bogendoerfer wrote:
+> On Thu, Apr 23, 2020 at 10:18:06AM -0700, Nathan Chancellor wrote:
+> > Currently, the VDSO is being linked through $(CC). This does not match
+> > how the rest of the kernel links objects, which is through the $(LD)
+> > variable.
+> 
+> this causes build errors for me when (cross) compiling a big endian target:
+> 
+> target is little endian
+> mips64-linux-gnu-ld: arch/mips/vdso/elf.o: endianness incompatible with that of the selected emulation
+> mips64-linux-gnu-ld: failed to merge target specific data of file arch/mips/vdso/elf.o
+> 
+> Thomas.
+> 
 
-To deal with legacy drivers that have fixed I/O ports range we
-reserved 0x10000 in PCI_IOBASE, should be enough for i8259 i8042
-stuff.
+Thanks for reporting this, I figured it out. This is the solution that I
+came up with, I'll send out a v4 tomorrow once I do some more testing.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cheers,
+Nathan
+
+From 256e3b6c8fff7a66aa29961ebefc0fe653ec34b6 Mon Sep 17 00:00:00 2001
+From: Nathan Chancellor <natechancellor@gmail.com>
+Date: Mon, 27 Apr 2020 17:02:55 -0700
+Subject: [PATCH] MIPS: Unconditionally specify '-EL' or '-EB'
+
+This was all done to work around a GCC bug that has been fixed after
+4.2. The kernel requires GCC 4.6 or newer so remove all of these hacks
+and just use the traditional flags.
+
+ $ mips64-linux-gcc --version | head -n1
+ mips64-linux-gcc (GCC) 4.6.3
+
+ $ mips64-linux-gcc -EB -dM -E -C -x c /dev/null | grep MIPSE
+ #define MIPSEB 1
+ #define __MIPSEB__ 1
+ #define _MIPSEB 1
+ #define __MIPSEB 1
+
+ $ mips64-linux-gcc -EL -dM -E -C -x c /dev/null | grep MIPSE
+ #define __MIPSEL__ 1
+ #define MIPSEL 1
+ #define _MIPSEL 1
+ #define __MIPSEL 1
+
+This is necessary when converting the MIPS VDSO to use $(LD) instead of
+$(CC) to link because the OUTPUT_FORMAT is defaulted to little endian
+and only flips to big endian when -EB is set on the command line, which
+is inherited from KBUILD_CFLAGS. Without this, we will see the following
+error when compiling for big endian (64r2_defconfig):
+
+$ make -j$(nproc) ARCH=mips CROSS_COMPILE=mips64-linux- \
+  64r2el_defconfig arch/mips/vdso/
+...
+mips64-linux-ld: arch/mips/vdso/elf.o: compiled for a big endian system
+and target is little endian
+mips64-linux-ld: arch/mips/vdso/elf.o: endianness incompatible with that
+of the selected emulation
+mips64-linux-ld: failed to merge target specific data of file
+arch/mips/vdso/elf.o
+...
+
+Reported-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 ---
- arch/mips/Kconfig                             |  1 +
- .../include/asm/mach-loongson64/loongson.h    |  2 ++
- arch/mips/loongson64/init.c                   | 34 ++++++++++++++++---
- arch/mips/loongson64/pci.c                    |  2 +-
- 4 files changed, 34 insertions(+), 5 deletions(-)
+ arch/mips/Makefile | 25 -------------------------
+ 1 file changed, 25 deletions(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 4e5308178649..1669735dacd8 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -479,6 +479,7 @@ config MACH_LOONGSON64
- 	select I8259
- 	select IRQ_MIPS_CPU
- 	select NR_CPUS_DEFAULT_64
-+	select PCI_IO_VMMAP
- 	select USE_GENERIC_EARLY_PRINTK_8250
- 	select SYS_HAS_CPU_LOONGSON64
- 	select SYS_HAS_EARLY_PRINTK
-diff --git a/arch/mips/include/asm/mach-loongson64/loongson.h b/arch/mips/include/asm/mach-loongson64/loongson.h
-index fde1b75c45ea..94035a47be5b 100644
---- a/arch/mips/include/asm/mach-loongson64/loongson.h
-+++ b/arch/mips/include/asm/mach-loongson64/loongson.h
-@@ -86,6 +86,8 @@ extern int mach_i8259_irq(void);
- #define LOONGSON_PCIIO_SIZE	0x00100000	/* 1M */
- #define LOONGSON_PCIIO_TOP	(LOONGSON_PCIIO_BASE+LOONGSON_PCIIO_SIZE-1)
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index e1c44aed81565..301efb90b51ed 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -116,33 +116,8 @@ endif
  
-+#define MMIO_LOWER_RESERVED	0x10000
-+
- /* Loongson Register Bases */
+ cflags-y += -ffreestanding
  
- #define LOONGSON_PCICONFIGBASE	0x00
-diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-index da38944471f4..4592eb2f78dd 100644
---- a/arch/mips/loongson64/init.c
-+++ b/arch/mips/loongson64/init.c
-@@ -5,6 +5,7 @@
-  */
+-#
+-# We explicitly add the endianness specifier if needed, this allows
+-# to compile kernels with a toolchain for the other endianness. We
+-# carefully avoid to add it redundantly because gcc 3.3/3.4 complains
+-# when fed the toolchain default!
+-#
+-# Certain gcc versions up to gcc 4.1.1 (probably 4.2-subversion as of
+-# 2006-10-10 don't properly change the predefined symbols if -EB / -EL
+-# are used, so we kludge that here.  A bug has been filed at
+-# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=29413.
+-#
+-# clang doesn't suffer from these issues and our checks against -dumpmachine
+-# don't work so well when cross compiling, since without providing --target
+-# clang's output will be based upon the build machine. So for clang we simply
+-# unconditionally specify -EB or -EL as appropriate.
+-#
+-ifdef CONFIG_CC_IS_CLANG
+ cflags-$(CONFIG_CPU_BIG_ENDIAN)		+= -EB
+ cflags-$(CONFIG_CPU_LITTLE_ENDIAN)	+= -EL
+-else
+-undef-all += -UMIPSEB -U_MIPSEB -U__MIPSEB -U__MIPSEB__
+-undef-all += -UMIPSEL -U_MIPSEL -U__MIPSEL -U__MIPSEL__
+-predef-be += -DMIPSEB -D_MIPSEB -D__MIPSEB -D__MIPSEB__
+-predef-le += -DMIPSEL -D_MIPSEL -D__MIPSEL -D__MIPSEL__
+-cflags-$(CONFIG_CPU_BIG_ENDIAN)		+= $(shell $(CC) -dumpmachine |grep -q 'mips.*el-.*' && echo -EB $(undef-all) $(predef-be))
+-cflags-$(CONFIG_CPU_LITTLE_ENDIAN)	+= $(shell $(CC) -dumpmachine |grep -q 'mips.*el-.*' || echo -EL $(undef-all) $(predef-le))
+-endif
  
- #include <linux/irqchip.h>
-+#include <linux/logic_pio.h>
- #include <linux/memblock.h>
- #include <asm/bootinfo.h>
- #include <asm/traps.h>
-@@ -29,10 +30,6 @@ void __init prom_init(void)
- 	fw_init_cmdline();
- 	prom_init_env();
- 
--	/* init base address of io space */
--	set_io_port_base((unsigned long)
--		ioremap(LOONGSON_PCIIO_BASE, LOONGSON_PCIIO_SIZE));
--
- 	prom_init_numa_memory();
- 
- 	/* Hardcode to CPU UART 0 */
-@@ -46,7 +43,36 @@ void __init prom_free_prom_memory(void)
- {
- }
- 
-+static __init void reserve_pio_range(void)
-+{
-+	struct logic_pio_hwaddr *range;
-+
-+	range = kzalloc(sizeof(*range), GFP_ATOMIC);
-+	if (!range)
-+		return;
-+
-+	range->fwnode = &of_root->fwnode;
-+	range->size = MMIO_LOWER_RESERVED;
-+	range->hw_start = LOONGSON_PCIIO_BASE;
-+	range->flags = LOGIC_PIO_CPU_MMIO;
-+
-+	if (logic_pio_register_range(range)) {
-+		pr_err("Failed to reserve PIO range for legacy ISA\n");
-+		kfree(range);
-+		return;
-+	}
-+
-+	/*
-+	 * i8259 would access I/O space, so mapping must be done here.
-+	 * Please remove it when all drivers can be managed by logic_pio.
-+	 */
-+	ioremap_page_range(PCI_IO_START, PCI_IO_START + MMIO_LOWER_RESERVED,
-+				  LOONGSON_PCIIO_BASE,
-+				  pgprot_device(PAGE_KERNEL));
-+}
-+
- void __init arch_init_irq(void)
- {
-+	reserve_pio_range();
- 	irqchip_init();
- }
-diff --git a/arch/mips/loongson64/pci.c b/arch/mips/loongson64/pci.c
-index a440a2725a20..7aecb88dd377 100644
---- a/arch/mips/loongson64/pci.c
-+++ b/arch/mips/loongson64/pci.c
-@@ -37,7 +37,7 @@ extern int sbx00_acpi_init(void);
- static int __init pcibios_init(void)
- {
- 
--	loongson_pci_controller.io_map_base = mips_io_port_base;
-+	loongson_pci_controller.io_map_base = IOPORT_RW_BASE;
- 	loongson_pci_mem_resource.start = loongson_sysconf.pci_mem_start_addr;
- 	loongson_pci_mem_resource.end = loongson_sysconf.pci_mem_end_addr;
- 
+ cflags-$(CONFIG_SB1XXX_CORELIS)	+= $(call cc-option,-mno-sched-prolog) \
+ 				   -fno-omit-frame-pointer
 -- 
-2.26.0.rc2
+2.26.2
 
