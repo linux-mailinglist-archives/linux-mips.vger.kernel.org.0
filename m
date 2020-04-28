@@ -2,222 +2,190 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1569D1BD037
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 00:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBB11BD041
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 00:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbgD1WyG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Apr 2020 18:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726042AbgD1WyF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Apr 2020 18:54:05 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4014C03C1AC
-        for <linux-mips@vger.kernel.org>; Tue, 28 Apr 2020 15:54:05 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id 18so100822pfv.8
-        for <linux-mips@vger.kernel.org>; Tue, 28 Apr 2020 15:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xdhVxVxjCVp6Qqe+xTFCZZzPWjQcwdRMhEMU3zXTXbM=;
-        b=lZDn8hOpe6Orx5vNl0ApTSLRwJXULDkC6rY168+BbIR13IuGkIm6Bjp2a9BydV+OJQ
-         NAjXXsgxk0wGFTKvp/IiW3Q4BCCsNkDftSdqVoQgSax/kgjal9/7NI9TBFZJ6CzOddDE
-         yiJu2Z2IXUyYleZSCtekQITAqGsHikQbBV99DwAoFKbyd5IVP1QYet+YRMbtZVFGCbpm
-         ZplOgxABlp5Pc97RJRDWA6xX36nup+lzOPgY+k6Tv7P88b0sPaqJ7XPWDCQWuftjN87K
-         cm8iAoJOCGcJaUH4URp1Hs+X2+9+TYQ0YqUR0iHWUZ0rtJIUj6Uq+XxL1WZSil02tDuK
-         a7Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xdhVxVxjCVp6Qqe+xTFCZZzPWjQcwdRMhEMU3zXTXbM=;
-        b=UGpGLqDhwjpmUtS8CKQSllV3hR20JHFqHgoXdzHhLjiW4qxTAcHVOfa1giklHQ0suy
-         fLwZ/4H02BZTWh8pDYmbSdHgfir160VGEcVJ0aC7HQfVrr3Qw5lJ35uTvlNj/Pe6ZW9L
-         Xb0VRr9OBU3RS/OFuQpPudTx+rwr7/LB1eDePMImU15pn28VRgwuZNBffoi2dk9OANj5
-         GLpbyDZbeqscWLMJjUew0TBnq04wDxobPIQZzlizvlB3YuAVZadXp7tAIEH72LtLm7kN
-         monrK9HF3WOtgP8gudQGTp+R0RMZx7TF7qcVRNX1031G2RvE0WYDJrB2JKssz/eova6T
-         gFaQ==
-X-Gm-Message-State: AGi0PuYFDglwOI216p4B8V6GFM1U+lA5m8YXkzx1fLQd99wuz2VIPy+b
-        17wWZubdeT02MkdVFD8WO40T3Q==
-X-Google-Smtp-Source: APiQypJNucB0GAu1iaDS0cUINfCTVxRJEvfFFcvSDOLx2zmaCo8f+iE0QAo5svuV0Mv1rpNmPMI3PQ==
-X-Received: by 2002:a63:a35e:: with SMTP id v30mr5973904pgn.134.1588114444821;
-        Tue, 28 Apr 2020 15:54:04 -0700 (PDT)
-Received: from google.com ([2620:15c:2ce:0:9efe:9f1:9267:2b27])
-        by smtp.gmail.com with ESMTPSA id p2sm13799090pgh.25.2020.04.28.15.54.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 15:54:04 -0700 (PDT)
-Date:   Tue, 28 Apr 2020 15:54:01 -0700
-From:   Fangrui Song <maskray@google.com>
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com, linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Dmitry Golovin <dima@golovin.in>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Subject: Re: [PATCH v4 4/5] MIPS: VDSO: Use $(LD) instead of $(CC) to link
- VDSO
-Message-ID: <20200428225401.7yrld7u2xr67t4xf@google.com>
-References: <20200423171807.29713-1-natechancellor@gmail.com>
- <20200428221419.2530697-1-natechancellor@gmail.com>
- <20200428221419.2530697-5-natechancellor@gmail.com>
+        id S1726286AbgD1W6P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Apr 2020 18:58:15 -0400
+Received: from mail-dm6nam10olkn2022.outbound.protection.outlook.com ([40.92.41.22]:57792
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725934AbgD1W6P (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 28 Apr 2020 18:58:15 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dH4OalpptlhlKSBkjvdbN4KZvamuU0+zjqlKIoQ2+zXwzHYaU+zo/+P1vaLoAQqJ4lgpWbB7LCTD32URDk34NheeUOla9GIzo58E4x8IKWn7zyyDGkmUHqU+xZXaCQlGghZp18BBvLxbcrccoUWUwrcYQcVl7wKdGMe+YdlXmdSebBT1uKrg0zxcb9Clowu/FJjWgxfSxJZmUNQCQlVp7RGPLvIQSxthaTMpF20zYS697LXxMJflN5JKlf6Gz9YwZlG/1T8zufMctEW3QcoLjhMv9gf1Yj1CoWkRnp/UMniFrc3XgrzJdIBqv4w0Lq9u820tDWx/bsxUsx8iqSSsQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MuaIE8TgI8eeUG5HV45zullZYlfZTfh5z+WzEAXePtY=;
+ b=CIYuZMhb+xwGuItEubHM6hBQ4Y0g8275Yw/I424BkGXAsWOzZwPuA21PZM4pWz9pvU1vuG+eCiPYJEhqsryBr8WinXtqHr3QzQOUhs5IuH2u2yO52uiR8qF7t/WZup8JesmrkqcIkaoBVBFtPOyvlKPc1dLvq6Sv+soIKJssA4laP7fW2Xix3nNjqDKdNdnkWg+42+FlWhTBo5HkT7Oq0YQ2Cqdqi4aW/t8g/xaPcG36EBcn9zr/mkGiKlJEbW+7qnBr5afjwSmGo6fdL7/u9R/1h4tp1oz4O+HS6uy9lzyIsJNxT5zmkzOXzE+zE8+BNirk8cE7zpiHpJ4SgmBTyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=live.ca; dmarc=pass action=none header.from=live.ca; dkim=pass
+ header.d=live.ca; arc=none
+Received: from DM6NAM10FT053.eop-nam10.prod.protection.outlook.com
+ (2a01:111:e400:7e86::45) by
+ DM6NAM10HT010.eop-nam10.prod.protection.outlook.com (2a01:111:e400:7e86::83)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.15; Tue, 28 Apr
+ 2020 22:58:11 +0000
+Received: from BN6PR04MB0660.namprd04.prod.outlook.com
+ (2a01:111:e400:7e86::4f) by DM6NAM10FT053.mail.protection.outlook.com
+ (2a01:111:e400:7e86::442) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.15 via Frontend
+ Transport; Tue, 28 Apr 2020 22:58:11 +0000
+X-IncomingTopHeaderMarker: OriginalChecksum:9DD91C560F719B6A0FD0859D0B9EB727363D20AB69F890889C2A5E39D02BC068;UpperCasedChecksum:C40B9486CA0DDFBB9B19B9961A7974577A1BE048E67E179F3A60565C4A004CED;SizeAsReceived:10167;Count:50
+Received: from BN6PR04MB0660.namprd04.prod.outlook.com
+ ([fe80::ad10:4127:4bc8:76fc]) by BN6PR04MB0660.namprd04.prod.outlook.com
+ ([fe80::ad10:4127:4bc8:76fc%6]) with mapi id 15.20.2937.023; Tue, 28 Apr 2020
+ 22:58:11 +0000
+Subject: Re: [PATCH v7 08/12] arm: dts: s5pv210: Add node for SGX 540
+From:   Jonathan Bakker <xc-racer2@live.ca>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Philipp Rossak <embed3d@gmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        openpvrsgx-devgroup@letux.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+References: <cover.1587760454.git.hns@goldelico.com>
+ <3fd18c747426e15fd1f3500b9c4adce2db9ddd0c.1587760454.git.hns@goldelico.com>
+ <NYBE9Q.YH08US7A7DC3@crapouillou.net>
+ <BN6PR04MB0660A180D2069848E5C03D7EA3AE0@BN6PR04MB0660.namprd04.prod.outlook.com>
+ <20200427154617.GA1798@pi3>
+ <BN6PR04MB06605F014024061C894AFBA4A3AC0@BN6PR04MB0660.namprd04.prod.outlook.com>
+Message-ID: <BN6PR04MB0660044B5B1D45BE4CBCD2AAA3AC0@BN6PR04MB0660.namprd04.prod.outlook.com>
+Date:   Tue, 28 Apr 2020 15:58:03 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+In-Reply-To: <BN6PR04MB06605F014024061C894AFBA4A3AC0@BN6PR04MB0660.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MWHPR1701CA0020.namprd17.prod.outlook.com
+ (2603:10b6:301:14::30) To BN6PR04MB0660.namprd04.prod.outlook.com
+ (2603:10b6:404:d9::21)
+X-Microsoft-Original-Message-ID: <f4d70bab-caba-8700-00aa-010384f053e2@live.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200428221419.2530697-5-natechancellor@gmail.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2001:569:fb67:7300:9f89:4b96:de0b:cd14] (2001:569:fb67:7300:9f89:4b96:de0b:cd14) by MWHPR1701CA0020.namprd17.prod.outlook.com (2603:10b6:301:14::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2958.19 via Frontend Transport; Tue, 28 Apr 2020 22:58:06 +0000
+X-Microsoft-Original-Message-ID: <f4d70bab-caba-8700-00aa-010384f053e2@live.ca>
+X-TMN:  [p5xCICxpvEcF+C5bcn3IY6/23cHHsfWLGQe5HxJm1+AAXApmKRg140W6WwoNl3IS]
+X-MS-PublicTrafficType: Email
+X-IncomingHeaderCount: 50
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-Correlation-Id: 9f8a5563-8f46-468c-edd6-08d7ebc7a02f
+X-MS-TrafficTypeDiagnostic: DM6NAM10HT010:
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Eu6+DJDb/VXQQhT1KQyJeLAlptyYlZo/0nlf3oPLCHod9hzxJfrhd+tN5qcfmT7gYUsFmIbDt3JXi0dg+KmPHIK812Vz864xR/+SnPw6AlAHXKmnVC2PyxrhzDKdsXp6uVVEXXcYzI/BR2TCh7kFG9zx9cgrVDX+ZlmCCZfI+UwZFroiWr7qRKhycdzA9AheuLe4DYxk+4fi2x7z/I5iBQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:0;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR04MB0660.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:;DIR:OUT;SFP:1901;
+X-MS-Exchange-AntiSpam-MessageData: jcwqMPeBOgdjmQA0oMP6IpFxptHmfDaomCReXOB2Xj68q1dz2VvhXXz4M2Uj+NaKxE86mtQV5Dl5AD7n6nMInqZuBpyZw3wu8FB380euZHZzI71vmdADajZdObPM2fFdAqbEtMkfds9ldDO3ul3irkcaxUq4cgZuIQI6qdt9B6Rq9eYvTGzJoES2/nw7P6ruYwvNsv8uD/0bs8zhdJSZ8Q==
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f8a5563-8f46-468c-edd6-08d7ebc7a02f
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2020 22:58:11.8237
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6NAM10HT010
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi all,
 
-On 2020-04-28, Nathan Chancellor wrote:
->Currently, the VDSO is being linked through $(CC). This does not match
->how the rest of the kernel links objects, which is through the $(LD)
->variable.
->
->When clang is built in a default configuration, it first attempts to use
->the target triple's default linker then the system's default linker,
->unless told otherwise through -fuse-ld=... We do not use -fuse-ld=
->because it can be brittle and we have support for invoking $(LD)
->directly. See commit fe00e50b2db8c ("ARM: 8858/1: vdso: use $(LD)
->instead of $(CC) to link VDSO") and commit 691efbedc60d2 ("arm64: vdso:
->use $(LD) instead of $(CC) to link VDSO") for examples of doing this in
->the VDSO.
->
->Do the same thing here. Replace the custom linking logic with $(cmd_ld)
->and ldflags-y so that $(LD) is respected. We need to explicitly add two
->flags to the linker that were implicitly passed by the compiler:
->-G 0 (which comes from ccflags-vdso) and --eh-frame-hdr.
->
->Before this patch (generated by adding '-v' to VDSO_LDFLAGS):
->
-><gcc_prefix>/libexec/gcc/mips64-linux/9.3.0/collect2 \
->-plugin <gcc_prefix>/libexec/gcc/mips64-linux/9.3.0/liblto_plugin.so \
->-plugin-opt=<gcc_prefix>/libexec/gcc/mips64-linux/9.3.0/lto-wrapper \
->-plugin-opt=-fresolution=/tmp/ccGEi5Ka.res \
->--eh-frame-hdr \
->-G 0 \
->-EB \
->-mips64r2 \
->-shared \
->-melf64btsmip \
->-o arch/mips/vdso/vdso.so.dbg.raw \
->-L<gcc_prefix>/lib/gcc/mips64-linux/9.3.0/64 \
->-L<gcc_prefix>/lib/gcc/mips64-linux/9.3.0 \
->-L<gcc_prefix>/lib/gcc/mips64-linux/9.3.0/../../../../mips64-linux/lib \
->-Bsymbolic \
->--no-undefined \
->-soname=linux-vdso.so.1 \
->-EB \
->--hash-style=sysv \
->--build-id \
->-T arch/mips/vdso/vdso.lds \
->arch/mips/vdso/elf.o \
->arch/mips/vdso/vgettimeofday.o \
->arch/mips/vdso/sigreturn.o
->
->After this patch:
->
-><gcc_prefix>/bin/mips64-linux-ld \
->-m elf64btsmip \
->-Bsymbolic \
->--no-undefined \
->-soname=linux-vdso.so.1 \
->-EB \
->-nostdlib \
->-shared \
->-G 0 \
->--eh-frame-hdr \
->--hash-style=sysv \
->--build-id \
->-T  arch/mips/vdso/vdso.lds \
->arch/mips/vdso/elf.o \
->arch/mips/vdso/vgettimeofday.o
->arch/mips/vdso/sigreturn.o \
->-o arch/mips/vdso/vdso.so.dbg.raw
->
->Note that we leave behind -mips64r2. Turns out that ld ignores it (see
->get_emulation in ld/ldmain.c). This is true of current trunk and 2.23,
->which is the minimum supported version for the kernel:
->
->https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=ld/ldmain.c;hb=aa4209e7b679afd74a3860ce25659e71cc4847d5#l593
->https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=ld/ldmain.c;hb=a55e30b51bc6227d8d41f707654d0a5620978dcf#l641
->
->Before this patch, LD=ld.lld did nothing:
->
->$ llvm-readelf -p.comment arch/mips/vdso/vdso.so.dbg | sed 's/(.*//'
->String dump of section '.comment':
->[     0] ClangBuiltLinux clang version 11.0.0
->
->After this patch, it does:
->
->$ llvm-readelf -p.comment arch/mips/vdso/vdso.so.dbg | sed 's/(.*//'
->String dump of section '.comment':
->[     0] Linker: LLD 11.0.0
->[    62] ClangBuiltLinux clang version 11.0.0
->
->Link: https://github.com/ClangBuiltLinux/linux/issues/785
->Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
->---
->
->v3 -> v4:
->
->* Improve commit message to show that ld command is effectively the
->  same as the one generated by GCC.
->
->* Add '-G 0' and '--eh-frame-hdr' because they were added by GCC.
+On 2020-04-28 2:39 p.m., Jonathan Bakker wrote:
+> Hi Krzysztof,
+> 
+> On 2020-04-27 8:46 a.m., Krzysztof Kozlowski wrote:
+>> On Sun, Apr 26, 2020 at 07:57:12AM -0700, Jonathan Bakker wrote:
+>>> Hi Paul,
+>>>
+>>> On 2020-04-26 5:56 a.m., Paul Cercueil wrote:
+>>>>
+>>>>
+>>>> Le ven. 24 avril 2020 à 22:34, H. Nikolaus Schaller <hns@goldelico.com> a écrit :
+>>>>> From: Jonathan Bakker <xc-racer2@live.ca>
+>>>>>
+>>>>> All s5pv210 devices have a PowerVR SGX 540 (revision 120) attached.
+>>>>>
+>>>>> There is no external regulator for it so it can be enabled by default.
+>>>>>
+>>>>> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+>>>>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>>>>> ---
+>>>>>  arch/arm/boot/dts/s5pv210.dtsi | 13 +++++++++++++
+>>>>>  1 file changed, 13 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/arm/boot/dts/s5pv210.dtsi b/arch/arm/boot/dts/s5pv210.dtsi
+>>>>> index 2ad642f51fd9..abbdda205c1b 100644
+>>>>> --- a/arch/arm/boot/dts/s5pv210.dtsi
+>>>>> +++ b/arch/arm/boot/dts/s5pv210.dtsi
+>>>>> @@ -512,6 +512,19 @@ vic3: interrupt-controller@f2300000 {
+>>>>>              #interrupt-cells = <1>;
+>>>>>          };
+>>>>>
+>>>>> +        gpu: gpu@f3000000 {
+>>>>> +            compatible = "samsung,s5pv210-sgx540-120";
+>>
+>> This should not pass the bindings check because you missed last
+>> compatibles.
+>>
+> 
+> Thanks for pointing that out, I'll add it and make sure it passes the bindings check.
+> 
+>>>>> +            reg = <0xf3000000 0x10000>;
+>>>>> +            interrupt-parent = <&vic2>;
+>>>>> +            interrupts = <10>;
+>>>>> +            clock-names = "core";
+>>>>> +            clocks = <&clocks CLK_G3D>;
+>>>>> +
+>>>>> +            assigned-clocks = <&clocks MOUT_G3D>, <&clocks DOUT_G3D>;
+>>>>> +            assigned-clock-rates = <0>, <66700000>;
+>>>>> +            assigned-clock-parents = <&clocks MOUT_MPLL>;
+>>>>
+>>>> What are these clocks for, and why are they reparented / reclocked?
+>>>>
+>>>> Shouldn't they be passed to 'clocks' as well?
+>>>>
+>>>> -Paul
+>>>>
+>>>
+>>> The G3D clock system can have multiple parents, and for stable operation
+>>> it's recommended to use the MPLL clock as the parent (which in turn
+>>> is actually a mux as well).  MOUT_G3D is simply the mux for CLK_G3D
+>>> (SGX core clock), DOUT_G3D is the divider.  DOUT_G3D could equally be CLK_G3D
+>>> (and probably should be, for readability) as CLK_G3D is simply the gate and
+>>> DOUT_G3D is the divider for it.
+>>
+>> Good point, it should be CLK_G3D instead of DOUT.  Can you fix this as
+>> well?
+> 
+> Yep, will do.  Nikolaus, I'll send you an updated patch to include.
+> 
 
-My understanding is that we start to use more -fasynchronous-unwind-tables to eliminate .eh_frame in object files.
-Without .eh_frame, LD --eh-frame-hdr is really not useful.
+How are assigned-clocks handled in the yaml DT schema?  When running make dtbs_check,
+I end up with messages such as
 
+arch/arm/boot/dts/s5pv210-aquila.dt.yaml: gpu@f3000000: 'assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' do not match any of the regexes: 'pinctrl-[0-9]+'
 
-Sigh...  -G 0. This is an option ignored by LLD. GCC devs probably should
-have used the long option --gpsize rather than take the short option -G.
-Even better, -z gpsize= or similar if this option is specific to ELF.
+Do they need to explicitly be listed as valid entries?
 
->v2 -> v3:
->
->* New patch.
->
-> arch/mips/vdso/Makefile | 13 ++++---------
-> 1 file changed, 4 insertions(+), 9 deletions(-)
->
->diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
->index 92b53d1df42c3..2e64c7600eead 100644
->--- a/arch/mips/vdso/Makefile
->+++ b/arch/mips/vdso/Makefile
->@@ -60,10 +60,9 @@ ifdef CONFIG_MIPS_DISABLE_VDSO
-> endif
->
-> # VDSO linker flags.
->-VDSO_LDFLAGS := \
->-	-Wl,-Bsymbolic -Wl,--no-undefined -Wl,-soname=linux-vdso.so.1 \
->-	$(addprefix -Wl$(comma),$(filter -E%,$(KBUILD_CFLAGS))) \
->-	-nostdlib -shared -Wl,--hash-style=sysv -Wl,--build-id
->+ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
->+	$(filter -E%,$(KBUILD_CFLAGS)) -nostdlib -shared \
->+	-G 0 --eh-frame-hdr --hash-style=sysv --build-id -T
->
-> CFLAGS_REMOVE_vdso.o = -pg
->
->@@ -82,11 +81,7 @@ quiet_cmd_vdso_mips_check = VDSOCHK $@
-> #
->
-> quiet_cmd_vdsold_and_vdso_check = LD      $@
->-      cmd_vdsold_and_vdso_check = $(cmd_vdsold); $(cmd_vdso_check); $(cmd_vdso_mips_check)
->-
->-quiet_cmd_vdsold = VDSO    $@
->-      cmd_vdsold = $(CC) $(c_flags) $(VDSO_LDFLAGS) \
->-                   -Wl,-T $(filter %.lds,$^) $(filter %.o,$^) -o $@
->+      cmd_vdsold_and_vdso_check = $(cmd_ld); $(cmd_vdso_check); $(cmd_vdso_mips_check)
->
-> quiet_cmd_vdsoas_o_S = AS      $@
->       cmd_vdsoas_o_S = $(CC) $(a_flags) -c -o $@ $<
->-- 
->2.26.2
->
+Thanks,
+Jonathan
