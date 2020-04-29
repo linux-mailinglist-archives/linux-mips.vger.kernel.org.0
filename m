@@ -2,209 +2,218 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E00491BD777
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 10:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8990D1BD785
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 10:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726423AbgD2Ioz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Apr 2020 04:44:55 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:60904 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726345AbgD2Ioy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 29 Apr 2020 04:44:54 -0400
-Received: from localhost.cn (unknown [10.40.23.12])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxL2twPqleuLMtAA--.20S2;
-        Wed, 29 Apr 2020 16:44:33 +0800 (CST)
-From:   Guoyun Sun <sunguoyun@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Daniel Silsby <dansilsby@gmail.com>,
+        id S1726436AbgD2Irc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Apr 2020 04:47:32 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:60171 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726345AbgD2Irc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 29 Apr 2020 04:47:32 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 9AB75580104;
+        Wed, 29 Apr 2020 04:47:30 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 29 Apr 2020 04:47:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=+x1hnvO451DFLw58Xq3iUsbF2Jz
+        alXMCx3P3fGnFW08=; b=mDylNO0ImdJQcBjcJhxqGwZ0gLH65YlOxSjvQREEP3f
+        4qGYzmConM9HkJufYMjsnhf4/U5f/nMYa7Y4bpNHEPZRGxnLHIjQiWjERglE53zA
+        oKMD/cPGAwRaPGqCJ5/SiN46qyNsjQGFSvMny9nDQB6IkO1SJfBgD9EdtiaVDZ7d
+        A/0pbA75VQ1czsx3Ud3zZ0Ct1tM7dRs5LdgkX5nrL4wlzG5WiI+zMV3YRbG6e9lU
+        EfEjiSIOEGi0F1dFrhGkZzyaX9IhNnWJBcdmGy3kakaIYmrgYV2DTu3hhEr3UJ+B
+        5cyi95cQhZgjntybSHnjxI/ELKDeyPR6wO+DmEdIyNQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=+x1hnv
+        O451DFLw58Xq3iUsbF2JzalXMCx3P3fGnFW08=; b=E2GG4YtpPx9b335eVlOleh
+        Vf8483NTNxzjs95yfN4uRYnvVs2tiKuUvRyMMVSInBLyjh+qMlQ0dVtjSwJbsDUK
+        WQWtSA+Bwb1TRuouQ6Rb6pdXfGYF71YpiWoLMMd4B0/gUi2rfcg5JorfqN0JJssQ
+        b5NszxFBVjt1AJHxC1DJ+KMryBcTxX33yCPmx9xaU+gujbvcPTEUhLLXynjJE6yy
+        miqhu3mWUKdKBcCgKILcyM6xOfgqmO5G1ZTnt75gOcYXtIUlupWdCgLceHSTqR8Q
+        BUigUlYpBZcCXoJnGIlSKCLjDvyVjMLksV6GI/iUupM/vJJdPxnutvDdSf42SJBQ
+        ==
+X-ME-Sender: <xms:HT-pXhpN54g-6aCMfmUe-4DMD6dWLtA3usgSR6go2S5ER7rxsPhAww>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrieefgddtkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucfkphepledtrd
+    ekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
+    fhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:HT-pXrVffufAEMQkyDUZKoQp7m4gU6WDQH-928szCVw6XspkjR09Bw>
+    <xmx:HT-pXkD0RZGaxlLx-cC-xX6d0cZb-LFHZKS3nww8to01I-3FCcWuVg>
+    <xmx:HT-pXuTBDDqX0KhTqh3gFz8BYE7BbY0XahpKNhyToXMGSNRpH-Z_Jw>
+    <xmx:Ij-pXvat0UK807ynw6DTDs5CBzCYKJ5Cy3QP0hnPHBSOnNjslvCryA>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id D9FE03280066;
+        Wed, 29 Apr 2020 04:47:24 -0400 (EDT)
+Date:   Wed, 29 Apr 2020 10:47:23 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Jonathan Bakker <xc-racer2@live.ca>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
         Paul Cercueil <paul@crapouillou.net>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guoyun Sun <sunguoyun@loongson.cn>
-Subject: [PATCH v2] mips/mm: Add page soft dirty tracking
-Date:   Wed, 29 Apr 2020 16:44:32 +0800
-Message-Id: <1588149872-9780-1-git-send-email-sunguoyun@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9DxL2twPqleuLMtAA--.20S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw1xuw4rXr17Gr47Ary3twb_yoWrZw1rpF
-        s5JF4FvFWFqFWxKayftrs3Krya9rs7XFy5Xr9rGF4UKa45J3y8XFWagr4YvrZ5XFW8Aayr
-        XrWvqw45GrW2y3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvI14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        64x0Y40En7xvr7AKxVWUJVW8JwAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI
-        0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CE
-        Vc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
-        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x0JUDrcfUUUUU=
-X-CM-SenderInfo: 5vxqw3hr1x0qxorr0wxvrqhubq/
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Philipp Rossak <embed3d@gmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        openpvrsgx-devgroup@letux.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v7 08/12] arm: dts: s5pv210: Add node for SGX 540
+Message-ID: <20200429084723.jxybvsakniinvivt@gilmour.lan>
+References: <cover.1587760454.git.hns@goldelico.com>
+ <3fd18c747426e15fd1f3500b9c4adce2db9ddd0c.1587760454.git.hns@goldelico.com>
+ <NYBE9Q.YH08US7A7DC3@crapouillou.net>
+ <BN6PR04MB0660A180D2069848E5C03D7EA3AE0@BN6PR04MB0660.namprd04.prod.outlook.com>
+ <20200427154617.GA1798@pi3>
+ <BN6PR04MB06605F014024061C894AFBA4A3AC0@BN6PR04MB0660.namprd04.prod.outlook.com>
+ <BN6PR04MB0660044B5B1D45BE4CBCD2AAA3AC0@BN6PR04MB0660.namprd04.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="u22eiu3zouiknukx"
+Content-Disposition: inline
+In-Reply-To: <BN6PR04MB0660044B5B1D45BE4CBCD2AAA3AC0@BN6PR04MB0660.namprd04.prod.outlook.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-User space checkpoint and restart tool (CRIU) needs the page's change
-to be soft tracked. This allows to do a pre checkpoint and then dump
-only touched pages.
 
-Signed-off-by: Guoyun Sun <sunguoyun@loongson.cn>
----
- arch/mips/include/asm/pgtable-bits.h | 20 +++++++++++++--
- arch/mips/include/asm/pgtable.h      | 48 ++++++++++++++++++++++++++++++++++--
- 2 files changed, 64 insertions(+), 4 deletions(-)
+--u22eiu3zouiknukx
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/mips/include/asm/pgtable-bits.h b/arch/mips/include/asm/pgtable-bits.h
-index 4da79b8..e26dc41 100644
---- a/arch/mips/include/asm/pgtable-bits.h
-+++ b/arch/mips/include/asm/pgtable-bits.h
-@@ -55,6 +55,9 @@ enum pgtable_bits {
- #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
- 	_PAGE_SPECIAL_SHIFT,
- #endif
-+#if defined(CONFIG_HAVE_ARCH_SOFT_DIRTY)
-+	_PAGE_SOFT_DIRTY_SHIFT,
-+#endif
- };
- 
- /*
-@@ -84,6 +87,9 @@ enum pgtable_bits {
- #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
- 	_PAGE_SPECIAL_SHIFT,
- #endif
-+#if defined(CONFIG_HAVE_ARCH_SOFT_DIRTY)
-+	_PAGE_SOFT_DIRTY_SHIFT,
-+#endif
- };
- 
- #elif defined(CONFIG_CPU_R3K_TLB)
-@@ -99,6 +105,9 @@ enum pgtable_bits {
- #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
- 	_PAGE_SPECIAL_SHIFT,
- #endif
-+#if defined(CONFIG_HAVE_ARCH_SOFT_DIRTY)
-+	_PAGE_SOFT_DIRTY_SHIFT,
-+#endif
- 
- 	/* Used by TLB hardware (placed in EntryLo) */
- 	_PAGE_GLOBAL_SHIFT = 8,
-@@ -125,7 +134,9 @@ enum pgtable_bits {
- #if defined(CONFIG_ARCH_HAS_PTE_SPECIAL)
- 	_PAGE_SPECIAL_SHIFT,
- #endif
--
-+#if defined(CONFIG_HAVE_ARCH_SOFT_DIRTY)
-+	_PAGE_SOFT_DIRTY_SHIFT,
-+#endif
- 	/* Used by TLB hardware (placed in EntryLo*) */
- #if defined(CONFIG_CPU_HAS_RIXI)
- 	_PAGE_NO_EXEC_SHIFT,
-@@ -152,6 +163,11 @@ enum pgtable_bits {
- #else
- # define _PAGE_SPECIAL		0
- #endif
-+#if defined(CONFIG_HAVE_ARCH_SOFT_DIRTY)
-+# define _PAGE_SOFT_DIRTY	(1 << _PAGE_SOFT_DIRTY_SHIFT)
-+#else
-+# define _PAGE_SOFT_DIRTY	0
-+#endif
- 
- /* Used by TLB hardware (placed in EntryLo*) */
- #if defined(CONFIG_XPA)
-@@ -269,6 +285,6 @@ static inline uint64_t pte_to_entrylo(unsigned long pte_val)
- #define __WRITEABLE	(_PAGE_SILENT_WRITE | _PAGE_WRITE | _PAGE_MODIFIED)
- 
- #define _PAGE_CHG_MASK	(_PAGE_ACCESSED | _PAGE_MODIFIED |	\
--			 _PFN_MASK | _CACHE_MASK)
-+			 _PAGE_SOFT_DIRTY | _PFN_MASK | _CACHE_MASK)
- 
- #endif /* _ASM_PGTABLE_BITS_H */
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index aab0ec1..9b01d2d 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -400,7 +400,7 @@ static inline pte_t pte_mkwrite(pte_t pte)
- 
- static inline pte_t pte_mkdirty(pte_t pte)
- {
--	pte_val(pte) |= _PAGE_MODIFIED;
-+	pte_val(pte) |= _PAGE_MODIFIED | _PAGE_SOFT_DIRTY;
- 	if (pte_val(pte) & _PAGE_WRITE)
- 		pte_val(pte) |= _PAGE_SILENT_WRITE;
- 	return pte;
-@@ -423,6 +423,30 @@ static inline pte_t pte_mkhuge(pte_t pte)
- 	return pte;
- }
- #endif /* CONFIG_MIPS_HUGE_TLB_SUPPORT */
-+
-+#ifdef CONFIG_HAVE_ARCH_SOFT_DIRTY
-+static inline bool pte_soft_dirty(pte_t pte)
-+{
-+	return pte_val(pte) & _PAGE_SOFT_DIRTY;
-+}
-+#define pte_swp_soft_dirty pte_soft_dirty
-+
-+static inline pte_t pte_mksoft_dirty(pte_t pte)
-+{
-+	pte_val(pte) |= _PAGE_SOFT_DIRTY;
-+	return pte;
-+}
-+#define pte_swp_mksoft_dirty pte_mksoft_dirty
-+
-+static inline pte_t pte_clear_soft_dirty(pte_t pte)
-+{
-+	pte_val(pte) &= ~(_PAGE_SOFT_DIRTY);
-+	return pte;
-+}
-+#define pte_swp_clear_soft_dirty pte_clear_soft_dirty
-+
-+#endif /* CONFIG_HAVE_ARCH_SOFT_DIRTY */
-+
- #endif
- 
- /*
-@@ -576,7 +600,7 @@ static inline pmd_t pmd_mkclean(pmd_t pmd)
- 
- static inline pmd_t pmd_mkdirty(pmd_t pmd)
- {
--	pmd_val(pmd) |= _PAGE_MODIFIED;
-+	pmd_val(pmd) |= _PAGE_MODIFIED | _PAGE_SOFT_DIRTY;
- 	if (pmd_val(pmd) & _PAGE_WRITE)
- 		pmd_val(pmd) |= _PAGE_SILENT_WRITE;
- 
-@@ -605,6 +629,26 @@ static inline pmd_t pmd_mkyoung(pmd_t pmd)
- 	return pmd;
- }
- 
-+#ifdef CONFIG_HAVE_ARCH_SOFT_DIRTY
-+static inline int pmd_soft_dirty(pmd_t pmd)
-+{
-+	return !!(pmd_val(pmd) & _PAGE_SOFT_DIRTY);
-+}
-+
-+static inline pmd_t pmd_mksoft_dirty(pmd_t pmd)
-+{
-+	pmd_val(pmd) |= _PAGE_SOFT_DIRTY;
-+	return pmd;
-+}
-+
-+static inline pmd_t pmd_clear_soft_dirty(pmd_t pmd)
-+{
-+	pmd_val(pmd) &= ~(_PAGE_SOFT_DIRTY);
-+	return pmd;
-+}
-+
-+#endif /* CONFIG_HAVE_ARCH_SOFT_DIRTY */
-+
- /* Extern to avoid header file madness */
- extern pmd_t mk_pmd(struct page *page, pgprot_t prot);
- 
--- 
-2.1.0
+Hi,
 
+On Tue, Apr 28, 2020 at 03:58:03PM -0700, Jonathan Bakker wrote:
+> On 2020-04-28 2:39 p.m., Jonathan Bakker wrote:
+> > On 2020-04-27 8:46 a.m., Krzysztof Kozlowski wrote:
+> >> On Sun, Apr 26, 2020 at 07:57:12AM -0700, Jonathan Bakker wrote:
+> >>> Hi Paul,
+> >>>
+> >>> On 2020-04-26 5:56 a.m., Paul Cercueil wrote:
+> >>>>
+> >>>>
+> >>>> Le ven. 24 avril 2020 =E0 22:34, H. Nikolaus Schaller <hns@goldelico=
+=2Ecom> a =E9crit :
+> >>>>> From: Jonathan Bakker <xc-racer2@live.ca>
+> >>>>>
+> >>>>> All s5pv210 devices have a PowerVR SGX 540 (revision 120) attached.
+> >>>>>
+> >>>>> There is no external regulator for it so it can be enabled by defau=
+lt.
+> >>>>>
+> >>>>> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+> >>>>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> >>>>> ---
+> >>>>> =A0arch/arm/boot/dts/s5pv210.dtsi | 13 +++++++++++++
+> >>>>> =A01 file changed, 13 insertions(+)
+> >>>>>
+> >>>>> diff --git a/arch/arm/boot/dts/s5pv210.dtsi b/arch/arm/boot/dts/s5p=
+v210.dtsi
+> >>>>> index 2ad642f51fd9..abbdda205c1b 100644
+> >>>>> --- a/arch/arm/boot/dts/s5pv210.dtsi
+> >>>>> +++ b/arch/arm/boot/dts/s5pv210.dtsi
+> >>>>> @@ -512,6 +512,19 @@ vic3: interrupt-controller@f2300000 {
+> >>>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 #interrupt-cells =3D <1>;
+> >>>>> =A0=A0=A0=A0=A0=A0=A0=A0 };
+> >>>>>
+> >>>>> +=A0=A0=A0=A0=A0=A0=A0 gpu: gpu@f3000000 {
+> >>>>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 compatible =3D "samsung,s5pv210-=
+sgx540-120";
+> >>
+> >> This should not pass the bindings check because you missed last
+> >> compatibles.
+> >>
+> >=20
+> > Thanks for pointing that out, I'll add it and make sure it passes the b=
+indings check.
+> >=20
+> >>>>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 reg =3D <0xf3000000 0x10000>;
+> >>>>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 interrupt-parent =3D <&vic2>;
+> >>>>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 interrupts =3D <10>;
+> >>>>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 clock-names =3D "core";
+> >>>>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 clocks =3D <&clocks CLK_G3D>;
+> >>>>> +
+> >>>>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 assigned-clocks =3D <&clocks MOU=
+T_G3D>, <&clocks DOUT_G3D>;
+> >>>>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 assigned-clock-rates =3D <0>, <6=
+6700000>;
+> >>>>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 assigned-clock-parents =3D <&clo=
+cks MOUT_MPLL>;
+> >>>>
+> >>>> What are these clocks for, and why are they reparented / reclocked?
+> >>>>
+> >>>> Shouldn't they be passed to 'clocks' as well?
+> >>>>
+> >>>> -Paul
+> >>>>
+> >>>
+> >>> The G3D clock system can have multiple parents, and for stable operat=
+ion
+> >>> it's recommended to use the MPLL clock as the parent (which in turn
+> >>> is actually a mux as well).  MOUT_G3D is simply the mux for CLK_G3D
+> >>> (SGX core clock), DOUT_G3D is the divider.  DOUT_G3D could equally be=
+ CLK_G3D
+> >>> (and probably should be, for readability) as CLK_G3D is simply the ga=
+te and
+> >>> DOUT_G3D is the divider for it.
+> >>
+> >> Good point, it should be CLK_G3D instead of DOUT.  Can you fix this as
+> >> well?
+> >=20
+> > Yep, will do.  Nikolaus, I'll send you an updated patch to include.
+> >=20
+>=20
+> How are assigned-clocks handled in the yaml DT schema?  When running make=
+ dtbs_check,
+> I end up with messages such as
+>=20
+> arch/arm/boot/dts/s5pv210-aquila.dt.yaml: gpu@f3000000: 'assigned-clock-p=
+arents', 'assigned-clock-rates', 'assigned-clocks' do not match any of the =
+regexes: 'pinctrl-[0-9]+'
+>=20
+> Do they need to explicitly be listed as valid entries?
+
+If you have additionalProperties set to false, yes. But you should really
+consider not using them in the first place, since they provide no guarantee=
+ on
+whether the setup you did in the DT will remain during the life of the syst=
+em.
+
+I'm not sure why it's needed on that SoC in particular, but this should be =
+fixed
+in the driver itself (either the clock or the GPU driver).
+
+Maxime
+
+--u22eiu3zouiknukx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXqk/GwAKCRDj7w1vZxhR
+xR+OAP9zSq/md3bxfVKk4er7ZI7jk8/dQzTxgBO3mo3r+wRqmwEAy6d+UHyzeb5t
+qZLq2zIdK45SI8CMqYcGeBsbBQ1iVAc=
+=VCha
+-----END PGP SIGNATURE-----
+
+--u22eiu3zouiknukx--
