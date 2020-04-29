@@ -2,87 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8B51BE678
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 20:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3DC1BE986
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 23:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726456AbgD2Sna (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Apr 2020 14:43:30 -0400
-Received: from mail-oo1-f67.google.com ([209.85.161.67]:34104 "EHLO
-        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726481AbgD2Sna (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Apr 2020 14:43:30 -0400
-Received: by mail-oo1-f67.google.com with SMTP id q204so671008ooq.1;
-        Wed, 29 Apr 2020 11:43:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=yGhK3HaqbTPZiDc01w13tznQrtyKagfsL0YGpSLp9V4=;
-        b=qQS1TnGkPBE0qnsrbWzX8vMQYMpRZs8ciWUughlZSecsMBmbmT2sVt3zQAmDh/fZS6
-         uAcDCnYk1cHgJU+RLvGaeUfi5sZnDMsQQNLIsqSB7dq7tNTjeN49k9SbRABYRt53tDXk
-         AmRaURe5czs4aTuyH9TIbHiSsNYiQiOSApLeqk1D2CnJLkXjRn48+dinKnhjIbHy6lzJ
-         K5XYAx+r0iDI3bYCSm5Q/ZEYNk2bNGPmP0IH9H7RdhWI/L1nggz7XXCG7uh+aoGvSjOt
-         0MySE+2S0CgIDVZyDDml577qToO0VnvfuQFTS6w9wsoJFX9OSkdHdW+a9G6X/w27Cjlm
-         3M4g==
-X-Gm-Message-State: AGi0PuYtn+/CJHfgBKYBLIxuTOk4EfY62HTw/pFcFgSHA6cnYLL3qt6+
-        Sxid5U7/D/TMArIHgyJA7w==
-X-Google-Smtp-Source: APiQypKdzbHafmOU5qNFDG4p8xvLwoSybYIgvKvM6RuUy3zuV5g1H8Ui3VJ5dMoccojZ7oRFV1ueAQ==
-X-Received: by 2002:a4a:d0d6:: with SMTP id u22mr26838776oor.63.1588185807787;
-        Wed, 29 Apr 2020 11:43:27 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id c13sm627194oos.14.2020.04.29.11.43.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2020 11:43:27 -0700 (PDT)
-Received: (nullmailer pid 14812 invoked by uid 1000);
-        Wed, 29 Apr 2020 18:43:25 -0000
-Date:   Wed, 29 Apr 2020 13:43:25 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Paul Burton <paulburton@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 2/5] PCI: Add Loongson PCI Controller support
-Message-ID: <20200429184325.64eyiubr3badd7uc@bogus>
-References: <20200428011429.1852081-1-jiaxun.yang@flygoat.com>
- <20200428011429.1852081-3-jiaxun.yang@flygoat.com>
+        id S1727095AbgD2VG5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Apr 2020 17:06:57 -0400
+Received: from elvis.franken.de ([193.175.24.41]:60823 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726481AbgD2VG4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 29 Apr 2020 17:06:56 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jTtuv-0005Q3-01; Wed, 29 Apr 2020 23:06:53 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id CE78DC0355; Wed, 29 Apr 2020 23:04:16 +0200 (CEST)
+Date:   Wed, 29 Apr 2020 23:04:16 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Rob Herring <robh+dt@kernel.org>, od@zcrc.me,
+        =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/13] MIPS: ingenic: DTS: Respect cell count of common
+ properties
+Message-ID: <20200429210416.GB24583@alpha.franken.de>
+References: <20200413152633.198301-1-paul@crapouillou.net>
+ <20200413152633.198301-7-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200428011429.1852081-3-jiaxun.yang@flygoat.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20200413152633.198301-7-paul@crapouillou.net>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 09:14:17AM +0800, Jiaxun Yang wrote:
-> This controller can be found on Loongson-2K SoC, Loongson-3
-> systems with RS780E/LS7A PCH.
+On Mon, Apr 13, 2020 at 05:26:27PM +0200, Paul Cercueil wrote:
+> If N fields of X cells should be provided, then that's what the
+> devicetree should represent, instead of having one single field of
+> (N*X) cells.
 > 
-> The RS780E part of code was previously located at
-> arch/mips/pci/ops-loongson3.c and now it can use generic PCI
-> driver implementation.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> 
-> --
-> v2:
-> 	- Clean up according to rob's suggestions
-> 	- Claim that it can't work as a module
-> v3:
-> 	- Fix a typo
-> v4:
-> 	- More clean-ups: Drop flag check, use devfn
-> v7:
-> 	- Fix ordering according to huacai's suggestion
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
->  drivers/pci/controller/Kconfig        |  10 +
->  drivers/pci/controller/Makefile       |   1 +
->  drivers/pci/controller/pci-loongson.c | 251 ++++++++++++++++++++++++++
->  3 files changed, 262 insertions(+)
->  create mode 100644 drivers/pci/controller/pci-loongson.c
+>  arch/mips/boot/dts/ingenic/jz4740.dtsi | 19 +++++++++----------
+>  arch/mips/boot/dts/ingenic/jz4770.dtsi | 12 +++++-------
+>  arch/mips/boot/dts/ingenic/jz4780.dtsi | 24 +++++++++++-------------
+>  arch/mips/boot/dts/ingenic/x1000.dtsi  |  9 ++++-----
+>  4 files changed, 29 insertions(+), 35 deletions(-)
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+applied to mips-next. Please check if my resolution of the conflict
+in arch/mips/boot/dts/ingenic/jz4780.dtsi is correct.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
