@@ -2,56 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 558F71BE0D5
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 16:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15BD31BE120
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 16:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726519AbgD2O0c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Apr 2020 10:26:32 -0400
-Received: from mga12.intel.com ([192.55.52.136]:54130 "EHLO mga12.intel.com"
+        id S1726971AbgD2Odn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Apr 2020 10:33:43 -0400
+Received: from mga07.intel.com ([134.134.136.100]:1910 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726493AbgD2O0c (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 29 Apr 2020 10:26:32 -0400
-IronPort-SDR: 3NyGrNPqwWL+pR9wjTFmMlH9YZL2nyc7LKubZkK/OzBDTGi+FHrfHlj3F5tOuDFpbEpxM9wnv6
- uYkpWeaapaBg==
+        id S1726511AbgD2Odn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 29 Apr 2020 10:33:43 -0400
+IronPort-SDR: a6P1m7px73NOyQK3UrTu7TEa1FwN+j9vdeKMQN5gpdMgtBfhy2S22qPLt1Sd2RJSz3j4Ds5cY6
+ wAUFvLnKJN5w==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 07:26:32 -0700
-IronPort-SDR: nHOb7/rn16dZLOGoxN/XQ9MazwIUxFRwGeiva5XLcWsEixjxco2xTE/14H6sL6yhYGSjRJXH0s
- ylx8I0GDw0Uw==
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 07:33:42 -0700
+IronPort-SDR: GgDxLw7T5eFCu4vUB9yydCrksnAKVNlira8kc0/Yy/F1rwk2KwAWiigEPmqzDOKtRVtUrdmN2Q
+ 0tx2QchLc9Uw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,332,1583222400"; 
-   d="scan'208";a="248001618"
+   d="scan'208";a="257977442"
 Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga007.fm.intel.com with ESMTP; 29 Apr 2020 07:26:31 -0700
+  by orsmga003.jf.intel.com with ESMTP; 29 Apr 2020 07:33:42 -0700
 Received: from [10.255.166.42] (vramuthx-mobl1.gar.corp.intel.com [10.255.166.42])
-        by linux.intel.com (Postfix) with ESMTP id BD2D9580613;
-        Wed, 29 Apr 2020 07:26:26 -0700 (PDT)
+        by linux.intel.com (Postfix) with ESMTP id 8B1DE5802C8;
+        Wed, 29 Apr 2020 07:33:38 -0700 (PDT)
 Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
 Subject: Re: [PATCH v4 2/2] mtd: rawnand: Add NAND controller support on Intel
  LGM SoC
 To:     Boris Brezillon <boris.brezillon@collabora.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, arnd@arndb.de,
-        brendanhiggins@google.com, tglx@linutronix.de,
-        anders.roxell@linaro.org, masonccyang@mxic.com.tw,
-        robh+dt@kernel.org, linux-mips@vger.kernel.org,
-        hauke.mehrtens@intel.com, andriy.shevchenko@intel.com,
-        qi-ming.wu@intel.com, cheol.yong.kim@intel.com
+        devicetree@vger.kernel.org, cheol.yong.kim@intel.com,
+        hauke.mehrtens@intel.com, qi-ming.wu@intel.com,
+        anders.roxell@linaro.org, vigneshr@ti.com, arnd@arndb.de,
+        richard@nod.at, brendanhiggins@google.com,
+        linux-mips@vger.kernel.org, robh+dt@kernel.org,
+        miquel.raynal@bootlin.com, tglx@linutronix.de,
+        masonccyang@mxic.com.tw, andriy.shevchenko@intel.com
 References: <20200429104205.18780-1-vadivel.muruganx.ramuthevar@linux.intel.com>
  <20200429104205.18780-3-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200429133308.4f91c35c@collabora.com>
- <4c946dbc-1518-0f0d-fac7-b2cfb4836440@linux.intel.com>
- <20200429153205.09c498cd@collabora.com>
+ <20200429162249.55d38ee8@collabora.com>
 From:   "Ramuthevar, Vadivel MuruganX" 
         <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <6b3ad9f3-2a3c-b44c-3c3f-24f2178dd3fa@linux.intel.com>
-Date:   Wed, 29 Apr 2020 22:26:25 +0800
+Message-ID: <9d77c64c-d0f9-7a13-3391-d05bf458bdb1@linux.intel.com>
+Date:   Wed, 29 Apr 2020 22:33:37 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200429153205.09c498cd@collabora.com>
+In-Reply-To: <20200429162249.55d38ee8@collabora.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -62,36 +60,42 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Boris,
 
-   Thank you very much for the review comments and your time...
-
-On 29/4/2020 9:32 pm, Boris Brezillon wrote:
-> On Wed, 29 Apr 2020 21:29:40 +0800
+On 29/4/2020 10:22 pm, Boris Brezillon wrote:
+> On Wed, 29 Apr 2020 18:42:05 +0800
 > "Ramuthevar, Vadivel MuruganX"
 > <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
 > 
->> Hi Boris,
->>
->>      Thank you very much for the review comments and your time..
->>
->> On 29/4/2020 7:33 pm, Boris Brezillon wrote:
->>> On Wed, 29 Apr 2020 18:42:05 +0800
->>> "Ramuthevar,Vadivel MuruganX"
->>> <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
->>>    
->>>> +#define NAND_WRITE_CMD		(EBU_CON_CS_P_LOW | HSNAND_CLE_OFFS)
->>>> +#define NAND_WRITE_ADDR		(EBU_CON_CS_P_LOW | HSNAND_ALE_OFFS)
->>>> +
->>>
->>> I thought we agreed on dropping those definitions.
->>
->> Yes , we agreed upon it, due to assertion/de-assertion of CS kept it.
+>> +
+>> +#define EBU_ADDR_SEL(n)		(0x20 + (n) * 4)
+>> +#define EBU_ADDR_MASK		(5 << 4)
 > 
-> And I keep thinking we don't need that, just pass
-> 'HSNAND_CLE_OFFS | HSNAND_CS_OFFS' directly.
+> It's still unclear what ADDR_MASK is for. Can you add a comment
+> explaining what it does?
 
-Agreed!, will update in the next-patch version, Thanks!
+Thank you Boris, keep review and giving inputs, will update.
+> 
+>> +#define EBU_ADDR_SEL_REGEN	0x1
+> 
+> 
+>> +
+>> +	writel(lower_32_bits(ebu_host->cs[ebu_host->cs_num].nand_pa) |
+>> +	       EBU_ADDR_SEL_REGEN | EBU_ADDR_MASK,
+>> +	       ebu_host->ebu + EBU_ADDR_SEL(reg));
+>> +
+>> +	writel(EBU_MEM_BASE_CS_0 | EBU_ADDR_MASK | EBU_ADDR_SEL_REGEN,
+>> +	       ebu_host->ebu + EBU_ADDR_SEL(0));
+>> +	writel(EBU_MEM_BASE_CS_1 | EBU_ADDR_MASK | EBU_ADDR_SEL_REGEN,
+>> +	       ebu_host->ebu + EBU_ADDR_SEL(reg));
+> 
+> That's super weird. You seem to set EBU_ADDR_SEL(reg) twice. Are you
+> sure that's needed, and are we setting EBU_ADDR_SEL(0) here?
+
+You are right, its weird only, but we need it, since different chip 
+select has different memory region access address.
+
+Yes , we are setting both CS0 and CS1 memory access region, if you have 
+any concern to optimize, please suggest me, Thanks!
 
 Regards
 Vadivel
-
 > 
