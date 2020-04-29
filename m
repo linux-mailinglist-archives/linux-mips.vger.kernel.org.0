@@ -2,105 +2,171 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD3E1BD46F
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 08:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C09B21BD544
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 09:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726274AbgD2GLp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Apr 2020 02:11:45 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:41704 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726181AbgD2GLp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Apr 2020 02:11:45 -0400
-Received: by mail-io1-f65.google.com with SMTP id b12so936845ion.8
-        for <linux-mips@vger.kernel.org>; Tue, 28 Apr 2020 23:11:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wMJCVxMerwevHjh/fTxCiQ4ZPPEZOGRWXhtdBXCPrsA=;
-        b=T94GyOzJhza2PzerKDVeEt8KY8BS6UaOpW4WajXrDPI2BPSSo+6OVyXka5/GUslWxW
-         x7EMF3zisjR3SiRMM/D1igDphYEohTKDnnk+gBkk5vpXXbl33WQThIbDKnhIVjMQEZat
-         mTyr0tvWpGdrSuWVq5l1GYdXsTmf5ircdtBMnrcjZuxpFuVTMkocbewW8ayj9O0uqTVz
-         FzYNeNG8sp5lmq5feQlJ/Vda9MOoExjdnaZ4pclbTkzmY+KktVnrA1nwxD5RDIq7u6fh
-         JAsDKT+zpDAAsPNGG6z2jBzh75m6EeSOCoKamhJvbNn7j8kuruESXjokvFQIAI/WJJem
-         vYJw==
-X-Gm-Message-State: AGi0PuaJznBTop4hR4FS18p5hqllGPYMemkYrfFbocz56gB7ZYLaETkf
-        FCkEdgi9vfboNtx6NVO5+yIf+6kvhlO8/r/6pt8=
-X-Google-Smtp-Source: APiQypLS8HgT3lC4mTHZw56vPWLq7jJYeEREhE5lLKfoRWKOPDekezcTYGyeJUhOPj5pjQA593VQzyMrfSVg0TH/XOU=
-X-Received: by 2002:a02:966a:: with SMTP id c97mr29140740jai.106.1588140704617;
- Tue, 28 Apr 2020 23:11:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <1587978040-29624-1-git-send-email-chenhc@lemote.com> <20200428112033.GB11443@alpha.franken.de>
-In-Reply-To: <20200428112033.GB11443@alpha.franken.de>
-From:   Huacai Chen <chenhc@lemote.com>
-Date:   Wed, 29 Apr 2020 14:19:14 +0800
-Message-ID: <CAAhV-H649g_S+jFoK3U9ajD=3_3tAEkLhSdL5ou6KS=owRerMg@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: perf: Add hardware perf events support for new Loongson-3
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
+        id S1726401AbgD2HA0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Apr 2020 03:00:26 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:42934 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726158AbgD2HAZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 29 Apr 2020 03:00:25 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv9v8JaleeaktAA--.6S2;
+        Wed, 29 Apr 2020 15:00:13 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH v5] MIPS: Loongson: Add DMA support for LS7A
+Date:   Wed, 29 Apr 2020 15:00:11 +0800
+Message-Id: <1588143611-6815-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxv9v8JaleeaktAA--.6S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCr4xtry7XFWkAw43XFyrZwb_yoWrWFyxpa
+        9xA3Z5Gr4YgF15CrZ5AFW8ur1rAFZ5KrW3GF42vw15tasxZ34FqFs3GF18Xr1UAF1DG3Wx
+        XFWrKw48GF1xCFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        CwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU9o7NUUU
+        UU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Thomas,
+In the current market, the most used bridge chip on the Loongson
+platform are RS780E and LS7A, the RS780E bridge chip is already
+supported by the mainline kernel.
 
-Thanks for your suggestion, I'll send V2.
+In order to use the default implementation of __phys_to_dma() and
+__dma_to_phys() in dma-direct.h, remove CONFIG_ARCH_HAS_PHYS_TO_DMA
+and then set the bus's DMA limit to 36 bit for RS780E to maintain
+downward compatibility.
 
-On Tue, Apr 28, 2020 at 7:34 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Mon, Apr 27, 2020 at 05:00:40PM +0800, Huacai Chen wrote:
-> > diff --git a/arch/mips/kernel/perf_event_mipsxx.c b/arch/mips/kernel/perf_event_mipsxx.c
-> > index 128fc99..c96eb03 100644
-> > --- a/arch/mips/kernel/perf_event_mipsxx.c
-> > +++ b/arch/mips/kernel/perf_event_mipsxx.c
-> > @@ -90,6 +90,7 @@ struct mips_pmu {
-> > -     unsigned long cntr_mask = (hwc->event_base >> 8) & 0xffff;
-> > +     if (get_loongson3_pmu_type() != LOONGSON_PMU_TYPE2)
-> > +             cntr_mask = (hwc->event_base >> 8) & 0xffff;
-> > +     else
-> > +             cntr_mask = (hwc->event_base >> 10) & 0xffff;
->
-> please invert the logic and do
->
->          if (get_loongson3_pmu_type() == LOONGSON_PMU_TYPE2)
->                 cntr_mask = (hwc->event_base >> 10) & 0xffff;
->         else
->                 cntr_mask = (hwc->event_base >> 8) & 0xffff;
->
-> > +     if (get_loongson3_pmu_type() != LOONGSON_PMU_TYPE2)
-> > +             cpuc->saved_ctrl[idx] = M_PERFCTL_EVENT(evt->event_base & 0xff) |
-> > +                     (evt->config_base & M_PERFCTL_CONFIG_MASK) |
-> > +                     /* Make sure interrupt enabled. */
-> > +                     MIPS_PERFCTRL_IE;
-> > +     else
-> > +             cpuc->saved_ctrl[idx] = M_PERFCTL_EVENT(evt->event_base & 0x3ff) |
-> > +                     (evt->config_base & M_PERFCTL_CONFIG_MASK) |
-> > +                     /* Make sure interrupt enabled. */
-> > +                     MIPS_PERFCTRL_IE;
->
-> same here
->
-> >       else
-> >  #endif /* CONFIG_MIPS_MT_SMP */
-> > -             return ((pev->cntr_mask & 0xffff00) |
-> > -                     (pev->event_id & 0xff));
-> > +     if (get_loongson3_pmu_type() != LOONGSON_PMU_TYPE2)
-> > +             return (pev->cntr_mask & 0xffff00) |
-> > +                     (pev->event_id & 0xff);
-> > +     else
-> > +             return (pev->cntr_mask & 0xfffc00) |
-> > +                     (pev->event_id & 0x3ff);
->
-> and here.
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+
+Hi Christoph and Jiaxun,
+
+Thank you very much for your suggestions.
+
+v5:
+  - use the default implementation of __phys_to_dma()
+    and __dma_to_phys() in dma-direct.h
+
+ arch/mips/Kconfig                                  |  1 -
+ arch/mips/include/asm/mach-loongson64/boot_param.h |  5 +++++
+ arch/mips/loongson64/dma.c                         | 22 +++++++++++-----------
+ arch/mips/loongson64/env.c                         |  2 ++
+ 4 files changed, 18 insertions(+), 12 deletions(-)
+
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 9f15539..12b6bdb 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -1454,7 +1454,6 @@ choice
+ config CPU_LOONGSON64
+ 	bool "Loongson 64-bit CPU"
+ 	depends on SYS_HAS_CPU_LOONGSON64
+-	select ARCH_HAS_PHYS_TO_DMA
+ 	select CPU_MIPSR2
+ 	select CPU_HAS_PREFETCH
+ 	select CPU_SUPPORTS_64BIT_KERNEL
+diff --git a/arch/mips/include/asm/mach-loongson64/boot_param.h b/arch/mips/include/asm/mach-loongson64/boot_param.h
+index fc9f14b..cccf4cb 100644
+--- a/arch/mips/include/asm/mach-loongson64/boot_param.h
++++ b/arch/mips/include/asm/mach-loongson64/boot_param.h
+@@ -197,6 +197,7 @@ enum loongson_bridge_type {
+ 	LS7A = 2
+ };
+ 
++struct pci_dev;
+ struct loongson_system_configuration {
+ 	u32 nr_cpus;
+ 	u32 nr_nodes;
+@@ -221,9 +222,13 @@ struct loongson_system_configuration {
+ 	u32 nr_sensors;
+ 	struct sensor_device sensors[MAX_SENSORS];
+ 	u64 workarounds;
++	void (*dma_config)(struct pci_dev *pdev);
+ };
+ 
+ extern struct efi_memory_map_loongson *loongson_memmap;
+ extern struct loongson_system_configuration loongson_sysconf;
+ 
++extern void rs780e_dma_config(struct pci_dev *pdev);
++extern void ls7a_dma_config(struct pci_dev *pdev);
++
+ #endif
+diff --git a/arch/mips/loongson64/dma.c b/arch/mips/loongson64/dma.c
+index 5e86635..6878bcc 100644
+--- a/arch/mips/loongson64/dma.c
++++ b/arch/mips/loongson64/dma.c
+@@ -1,24 +1,24 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#include <linux/dma-direct.h>
++#include <linux/pci.h>
+ #include <linux/init.h>
+ #include <linux/swiotlb.h>
+ 
+-dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr)
++void rs780e_dma_config(struct pci_dev *pdev)
+ {
+-	/* We extract 2bit node id (bit 44~47, only bit 44~45 used now) from
+-	 * Loongson-3's 48bit address space and embed it into 40bit */
+-	long nid = (paddr >> 44) & 0x3;
+-	return ((nid << 44) ^ paddr) | (nid << 37);
++	pdev->dev.bus_dma_limit = DMA_BIT_MASK(36);
+ }
+ 
+-phys_addr_t __dma_to_phys(struct device *dev, dma_addr_t daddr)
++void ls7a_dma_config(struct pci_dev *pdev)
+ {
+-	/* We extract 2bit node id (bit 44~47, only bit 44~45 used now) from
+-	 * Loongson-3's 48bit address space and embed it into 40bit */
+-	long nid = (daddr >> 37) & 0x3;
+-	return ((nid << 37) ^ daddr) | (nid << 44);
+ }
+ 
++void loongson_dma_config(struct pci_dev *pdev)
++{
++	loongson_sysconf.dma_config(pdev);
++}
++
++DECLARE_PCI_FIXUP_EARLY(PCI_ANY_ID, PCI_ANY_ID, loongson_dma_config);
++
+ void __init plat_swiotlb_setup(void)
+ {
+ 	swiotlb_init(1);
+diff --git a/arch/mips/loongson64/env.c b/arch/mips/loongson64/env.c
+index 71f4aaf..496f401 100644
+--- a/arch/mips/loongson64/env.c
++++ b/arch/mips/loongson64/env.c
+@@ -192,8 +192,10 @@ void __init prom_init_env(void)
+ 	if (vendor == PCI_VENDOR_ID_LOONGSON && device == 0x7a00) {
+ 		pr_info("The bridge chip is LS7A\n");
+ 		loongson_sysconf.bridgetype = LS7A;
++		loongson_sysconf.dma_config = ls7a_dma_config;
+ 	} else {
+ 		pr_info("The bridge chip is RS780E or SR5690\n");
+ 		loongson_sysconf.bridgetype = RS780E;
++		loongson_sysconf.dma_config = rs780e_dma_config;
+ 	}
+ }
+-- 
+2.1.0
+
