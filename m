@@ -2,203 +2,186 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC3E1BDB31
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 13:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 041031BDB50
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 14:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726516AbgD2L4g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Apr 2020 07:56:36 -0400
-Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:40835 "EHLO
-        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726426AbgD2L4g (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 29 Apr 2020 07:56:36 -0400
-X-Greylist: delayed 382 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Apr 2020 07:56:36 EDT
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id DF3D5734;
-        Wed, 29 Apr 2020 07:50:12 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 29 Apr 2020 07:50:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=MZELg45ZQRts6Cx5sUhyiaLHCD8
-        lRyjQOu7wzrAbEX8=; b=AdwKmZuBTWOncc4vQFaslDngWdipB7Wqv3I7TYGxi8M
-        gPRbPacdPE2U0iNsmPnuHLlhAuUIgo6nEwFlp1DGKIW7NOb+Qhcme6/Twmc7wlL5
-        4pZOEdkEuDZCeqY0LSHmNZyT1KNta/K74rKhebaIbkfHtrcVc771P0xA7ahH8wzg
-        1GA0ibYCEAn4ZO0fYFvtPyCnvFv3dG2hZ9LGVztMVHSu8zo5RxnECqbv3JPGZfWo
-        ef50Ciky/KMuzxE7PWcd9SEVc0Rrvjpxg2tgX+HRhQW1At0R+jkpxqCPVtUU+Nav
-        GzjE+a+/X8H5WsczHIOxvYLKZTVmcSwVMeo+FFtKOuA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=MZELg4
-        5ZQRts6Cx5sUhyiaLHCD8lRyjQOu7wzrAbEX8=; b=MG42hl0NaysBYPaqZodAAc
-        8CULeoLq6hP+Evn53cgbUf138qUNy3Br4rVF5qXFuHiP+lmST6UyASqoxnoLdLA4
-        MGDM74Cx04fOiptzHNnyfUegnA0MsswcVwiHqJEqzVyKMOMGOYBFGPe5WN8qi/7V
-        urtTqzcbxu5M5FEfGyg2DfDl33Iqd6Voh5KkPGVbIvVSdxTG8BOmQCzdLVdVzCiE
-        2APiiZ4sdN+nEcM0rj492E70qFDTmGhUyoN5VSSNjkbUAnGVQkraEpTHm7wmn3Kp
-        cAC80tqeu9hXzGWiSKU4QfN1YFULJjXi2rLNEqGvrMuWOzayTb5lo4YJTXEZxyGQ
-        ==
-X-ME-Sender: <xms:8mmpXqlGaXjIB2AkWGkbyZSvzxcCYjWGfmFrsp-nsbnz3jNtI0RHRA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrieefgdeghecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucffohhmrghinh
-    epuggvvhhitggvthhrvggvrdhorhhgnecukfhppeeltddrkeelrdeikedrjeeinecuvehl
-    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvse
-    gtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:8mmpXukVgCosWgr-zmsPAEDwC7UJvcsqqluQmHAJr2oHydlhDldBEQ>
-    <xmx:8mmpXoN0JjU9yFBj4GFCjcgg6gfVWqEfzoFJP5jdLByiV51NWWC-KA>
-    <xmx:8mmpXnOoNQR4Ckq-KHGp8Nsvq94N2RXH8BFC3474gbm0LDXUfoLwrQ>
-    <xmx:9GmpXj6QDi0cK_8E3K5TcQZpcO3Qk37EfNurxpLAsBn0v9YDJmG45uNWzrQ>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id DAA333280060;
-        Wed, 29 Apr 2020 07:50:09 -0400 (EDT)
-Date:   Wed, 29 Apr 2020 13:50:08 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     "Ramuthevar,Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, arnd@arndb.de,
-        brendanhiggins@google.com, tglx@linutronix.de,
-        boris.brezillon@collabora.com, anders.roxell@linaro.org,
-        masonccyang@mxic.com.tw, robh+dt@kernel.org,
-        linux-mips@vger.kernel.org, hauke.mehrtens@intel.com,
-        andriy.shevchenko@intel.com, qi-ming.wu@intel.com,
-        cheol.yong.kim@intel.com
-Subject: Re: [PATCH v3 1/2] dt-bindings: mtd: Add YAML for Nand Flash
- Controller support
-Message-ID: <20200429115008.d5jmsc4ws2o3cm5w@gilmour.lan>
-References: <20200423162113.38055-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200423162113.38055-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+        id S1726617AbgD2MD5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Apr 2020 08:03:57 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:53467 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726743AbgD2MD4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Apr 2020 08:03:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588161834;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PqLyCXunZj5hIFRUBscgO/EQSOL9w9OMkdGXwDOCk6M=;
+        b=VNU9le3J0Fnzu7NyUHsMVo9C80npV4kOpJOAsjsilFZGH5lvXe4f8O6g2FdmJS4+8d9mbp
+        CJFsy8b41E7GP+bsq0RHW6rYECUhtrWx2T1MXVyoJSW2Ho+O3Y7JVomBK4stbe11rayxRY
+        LOIu95UNgm1RzaJGJ7MzZa0FhQst2Fg=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-22-uO-XQzjDMZeBjsNwPPlNow-1; Wed, 29 Apr 2020 08:03:53 -0400
+X-MC-Unique: uO-XQzjDMZeBjsNwPPlNow-1
+Received: by mail-wr1-f72.google.com with SMTP id q10so1606062wrv.10
+        for <linux-mips@vger.kernel.org>; Wed, 29 Apr 2020 05:03:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=PqLyCXunZj5hIFRUBscgO/EQSOL9w9OMkdGXwDOCk6M=;
+        b=CnQbrcZRImvBaiCswLiyFmHSIrWVRIi8s10jJwbfrzm50piLJsL4MktG1/KpwjENsc
+         xXbbfR4DOxP2sCrBDTakp/zV8xvTUBJH6/yOWK59b1morymMsIoL2kxiYfKfK0aH2etc
+         ff1E1sbaSW11MwiZIrGvBFwLsk2eqg+++wgoNUtDhp01xTzoBs6Xr32CS4D4bxz9EipL
+         njHHfbiLg8w1jhL6mzC3Y8wViT0YlzY3CJ0xIHxuyrvNEBvhxMyydbihNVouoHroQhdr
+         BgeiOQbDZLY3/k38SvgdvniCY1tPaw6Pjv/HMAoSOZRPpL3Ktru3qJmpOiCVc23xycTV
+         Fq0A==
+X-Gm-Message-State: AGi0Pubqfp50+6qT2uniK8x/qVGFtBvo6BEHzK1e92u3OYMHoKIyzgd9
+        2EJJS4ru1dsBAt+KLAQq/L8vFwovNIOrRs9QLsqJIgumMgr3yuKDya0Tbhww4TbfKHslQNwAKEK
+        3AQarGjadvBHAm51yPS+CLg==
+X-Received: by 2002:a5d:470a:: with SMTP id y10mr38056963wrq.63.1588161831815;
+        Wed, 29 Apr 2020 05:03:51 -0700 (PDT)
+X-Google-Smtp-Source: APiQypLf4KZ8Rngx22ZnSSPEeNNoZEwjNixMH7nATd8iA4vBWIWJ++JJzRvFnPP9z8By88bEDzPwkg==
+X-Received: by 2002:a5d:470a:: with SMTP id y10mr38056907wrq.63.1588161831501;
+        Wed, 29 Apr 2020 05:03:51 -0700 (PDT)
+Received: from vitty.brq.redhat.com (g-server-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id h16sm33279920wrw.36.2020.04.29.05.03.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Apr 2020 05:03:46 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianjia.zhang@linux.alibaba.com, pbonzini@redhat.com,
+        tsbogend@alpha.franken.de, paulus@ozlabs.org, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, borntraeger@de.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, cohuck@redhat.com,
+        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        sean.j.christopherson@intel.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        maz@kernel.org, james.morse@arm.com, julien.thierry.kdev@gmail.com,
+        suzuki.poulose@arm.com, christoffer.dall@arm.com,
+        peterx@redhat.com, thuth@redhat.com, chenhuacai@gmail.com
+Subject: Re: [PATCH v4 1/7] KVM: s390: clean up redundant 'kvm_run' parameters
+In-Reply-To: <20200427043514.16144-2-tianjia.zhang@linux.alibaba.com>
+References: <20200427043514.16144-1-tianjia.zhang@linux.alibaba.com> <20200427043514.16144-2-tianjia.zhang@linux.alibaba.com>
+Date:   Wed, 29 Apr 2020 14:03:41 +0200
+Message-ID: <87r1w6h52a.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="vrgo34uqoxmbwyae"
-Content-Disposition: inline
-In-Reply-To: <20200423162113.38055-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+Content-Type: text/plain
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Tianjia Zhang <tianjia.zhang@linux.alibaba.com> writes:
 
---vrgo34uqoxmbwyae
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Fri, Apr 24, 2020 at 12:21:12AM +0800, Ramuthevar,Vadivel MuruganX wrote:
-> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel=
-=2Ecom>
->=20
-> Add YAML file for dt-bindings to support NAND Flash Controller
-> on Intel's Lightning Mountain SoC.
->=20
-> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@li=
-nux.intel.com>
+> In the current kvm version, 'kvm_run' has been included in the 'kvm_vcpu'
+> structure. For historical reasons, many kvm-related function parameters
+> retain the 'kvm_run' and 'kvm_vcpu' parameters at the same time. This
+> patch does a unified cleanup of these remaining redundant parameters.
+>
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 > ---
->  .../devicetree/bindings/mtd/intel,lgm-nand.yaml    | 61 ++++++++++++++++=
-++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.=
-yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml b/=
-Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
-> new file mode 100644
-> index 000000000000..6dd899d367b4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
-> @@ -0,0 +1,61 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mtd/intel,lgm-nand.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  arch/s390/kvm/kvm-s390.c | 23 +++++++++++++++--------
+>  1 file changed, 15 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index e335a7e5ead7..c0d94eaa00d7 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -4176,8 +4176,9 @@ static int __vcpu_run(struct kvm_vcpu *vcpu)
+>  	return rc;
+>  }
+>  
+> -static void sync_regs_fmt2(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
+> +static void sync_regs_fmt2(struct kvm_vcpu *vcpu)
+>  {
+> +	struct kvm_run *kvm_run = vcpu->run;
+>  	struct runtime_instr_cb *riccb;
+>  	struct gs_cb *gscb;
+>  
+> @@ -4243,8 +4244,10 @@ static void sync_regs_fmt2(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
+>  	/* SIE will load etoken directly from SDNX and therefore kvm_run */
+>  }
+>  
+> -static void sync_regs(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
+> +static void sync_regs(struct kvm_vcpu *vcpu)
+>  {
+> +	struct kvm_run *kvm_run = vcpu->run;
 > +
-> +title: Intel LGM SoC NAND Controller Device Tree Bindings
+>  	if (kvm_run->kvm_dirty_regs & KVM_SYNC_PREFIX)
+>  		kvm_s390_set_prefix(vcpu, kvm_run->s.regs.prefix);
+>  	if (kvm_run->kvm_dirty_regs & KVM_SYNC_CRS) {
+> @@ -4273,7 +4276,7 @@ static void sync_regs(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
+>  
+>  	/* Sync fmt2 only data */
+>  	if (likely(!kvm_s390_pv_cpu_is_protected(vcpu))) {
+> -		sync_regs_fmt2(vcpu, kvm_run);
+> +		sync_regs_fmt2(vcpu);
+>  	} else {
+>  		/*
+>  		 * In several places we have to modify our internal view to
+> @@ -4292,8 +4295,10 @@ static void sync_regs(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
+>  	kvm_run->kvm_dirty_regs = 0;
+>  }
+>  
+> -static void store_regs_fmt2(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
+> +static void store_regs_fmt2(struct kvm_vcpu *vcpu)
+>  {
+> +	struct kvm_run *kvm_run = vcpu->run;
 > +
-> +allOf:
-> +  - $ref: "nand-controller.yaml"
+>  	kvm_run->s.regs.todpr = vcpu->arch.sie_block->todpr;
+>  	kvm_run->s.regs.pp = vcpu->arch.sie_block->pp;
+>  	kvm_run->s.regs.gbea = vcpu->arch.sie_block->gbea;
+> @@ -4313,8 +4318,10 @@ static void store_regs_fmt2(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
+>  	/* SIE will save etoken directly into SDNX and therefore kvm_run */
+>  }
+>  
+> -static void store_regs(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
+> +static void store_regs(struct kvm_vcpu *vcpu)
+>  {
+> +	struct kvm_run *kvm_run = vcpu->run;
 > +
-> +maintainers:
-> +  - Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.=
-com>
-> +
-> +properties:
-> +  compatible:
-> +    const: intel,lgm-nand-controller
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  dmas:
-> +    maxItems: 2
-> +
-> +  dma-names:
-> +    enum:
-> +      - rx
-> +      - tx
+>  	kvm_run->psw_mask = vcpu->arch.sie_block->gpsw.mask;
+>  	kvm_run->psw_addr = vcpu->arch.sie_block->gpsw.addr;
+>  	kvm_run->s.regs.prefix = kvm_s390_get_prefix(vcpu);
+> @@ -4333,7 +4340,7 @@ static void store_regs(struct kvm_vcpu *vcpu, struct kvm_run *kvm_run)
+>  	current->thread.fpu.fpc = vcpu->arch.host_fpregs.fpc;
+>  	current->thread.fpu.regs = vcpu->arch.host_fpregs.regs;
+>  	if (likely(!kvm_s390_pv_cpu_is_protected(vcpu)))
+> -		store_regs_fmt2(vcpu, kvm_run);
+> +		store_regs_fmt2(vcpu);
+>  }
+>  
+>  int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+> @@ -4371,7 +4378,7 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+>  		goto out;
+>  	}
+>  
+> -	sync_regs(vcpu, kvm_run);
+> +	sync_regs(vcpu);
+>  	enable_cpu_timer_accounting(vcpu);
+>  
+>  	might_fault();
+> @@ -4393,7 +4400,7 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+>  	}
+>  
+>  	disable_cpu_timer_accounting(vcpu);
+> -	store_regs(vcpu, kvm_run);
+> +	store_regs(vcpu);
+>  
+>  	kvm_sigset_deactivate(vcpu);
 
-This looks wrong?
+Haven't tried to compile this but the change itself looks obviously
+correct, so
 
-If you have two dmas channels, I assume you'll want to have both rx and tx,
-right? If so, then you need an items, not an enum.
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-> +  pinctrl-names: true
-> +
-> +patternProperties:
-> +  "^pinctrl-[0-9]+$": true
+-- 
+Vitaly
 
-both pinctrl-names and that pattern are added automatically by the tooling,=
- you
-should leave them out.
-
-> +  "^nand@[a-f0-9]+$":
-> +    type: object
-> +    properties:
-> +      reg:
-> +        minimum: 0
-> +        maximum: 7
-> +
-> +      nand-ecc-mode: true
-> +
-> +      nand-ecc-algo:
-> +        const: hw
-> +
-> +    additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - dmas
-> +
-> +additionalProperties: false
-> +
-> +...
-
-Can you provide an example too?
-
-Thanks!
-Maxime
-
---vrgo34uqoxmbwyae
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXqlp8AAKCRDj7w1vZxhR
-xaI7AP9HY2RRA2nv/CwHEUJZv3C50OrtP7Ir+YFN6Hd4bYtCcgEArOCPK1GJeB2l
-VoqKcGXOMea5Mx1PBMZF1eirh59GXgM=
-=tGn6
------END PGP SIGNATURE-----
-
---vrgo34uqoxmbwyae--
