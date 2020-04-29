@@ -2,28 +2,28 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3491BD9F1
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 12:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338711BD9F7
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Apr 2020 12:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726836AbgD2KnM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Apr 2020 06:43:12 -0400
-Received: from mga05.intel.com ([192.55.52.43]:31837 "EHLO mga05.intel.com"
+        id S1726686AbgD2KnU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Apr 2020 06:43:20 -0400
+Received: from mga06.intel.com ([134.134.136.31]:3876 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726686AbgD2KnL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 29 Apr 2020 06:43:11 -0400
-IronPort-SDR: iOvZuyU6q4rhjOL6OmyqqkSg85M0ABdYpfB4gGvMWNDsVfhk/vm8LTmedcBZ9Ur1ze+E7SP7Ka
- xRC6tMD7PRvQ==
+        id S1726875AbgD2KnU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 29 Apr 2020 06:43:20 -0400
+IronPort-SDR: 8wB4FBRQy28WFACKjRGqoazi0tqFHp3HwHciOUNoxcl4/s9pqr0XFDFovD6ItdOTWf0WM9S3Sk
+ D2tuDkyIzIjg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 03:43:11 -0700
-IronPort-SDR: 9Jx9NwxNY2JPoS2yf+EjHFue3aobICBG/OyEM1nzA4wtu4at6wbq7pMXDODz2bBcuydgXueJ1D
- /atmhjTv5l+A==
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 03:43:16 -0700
+IronPort-SDR: 1aj8Oo32vo/ImGeW+0xF7q2ZlmBAeaEA3hcpybJbCOUouBq/yEJB9N/wSS6O/ipf4GXoT/UCKW
+ n09XAhT7+s1w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,331,1583222400"; 
-   d="scan'208";a="257924250"
+   d="scan'208";a="459147463"
 Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
-  by orsmga003.jf.intel.com with ESMTP; 29 Apr 2020 03:43:06 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 29 Apr 2020 03:43:12 -0700
 From:   "Ramuthevar,Vadivel MuruganX" 
         <vadivel.muruganx.ramuthevar@linux.intel.com>
 To:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
@@ -37,10 +37,12 @@ Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
         cheol.yong.kim@intel.com,
         Ramuthevar Vadivel Murugan 
         <vadivel.muruganx.ramuthevar@linux.intel.com>
-Subject: [PATCH v4 0/2] mtd: rawnand: Add NAND controller support on Intel LGM SoC
-Date:   Wed, 29 Apr 2020 18:42:03 +0800
-Message-Id: <20200429104205.18780-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+Subject: [PATCH v4 1/2] dt-bindings: mtd: Add YAML for Nand Flash Controller support
+Date:   Wed, 29 Apr 2020 18:42:04 +0800
+Message-Id: <20200429104205.18780-2-vadivel.muruganx.ramuthevar@linux.intel.com>
 X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20200429104205.18780-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+References: <20200429104205.18780-1-vadivel.muruganx.ramuthevar@linux.intel.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -48,69 +50,82 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
 
-This patch adds the new IP of Nand Flash Controller(NFC) support
-on Intel's Lightning Mountain(LGM) SoC.
+Add YAML file for dt-bindings to support NAND Flash Controller
+on Intel's Lightning Mountain SoC.
 
-DMA is used for burst data transfer operation, also DMA HW supports
-aligned 32bit memory address and aligned data access by default.
-DMA burst of 8 supported. Data register used to support the read/write
-operation from/to device.
-
-NAND controller also supports in-built HW ECC engine.
-
-NAND controller driver implements ->exec_op() to replace legacy hooks,
-these specific call-back method to execute NAND operations.
-
-Thank you very much Boris, Miquel and Hauke for the reviews and suggestions.
+Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
 ---
-v4:
-  - add ebu_nand_cs structure for multiple-CS support
-  - mask/offset encoding for 0x51 value
-  - update macro HSNAND_CTL_ENABLE_ECC
-  - drop the op argument and un-used macros.
-  - updated the datatype and macros
-  - add function disable nand module
-  - remove ebu_host->dma_rx = NULL;
-  - rename MMIO address range variables to ebu and hsnand
-  - implement ->setup_data_interface()
-  - update label err_cleanup_nand and err_cleanup_dma
-  - add return value check in the nand_remove function
-  - add/remove tabs and spaces as per coding standard    
-  - encoded CS ids by reg property
-v3:
-  - Add depends on MACRO in Kconfig
-  - file name update in Makefile
-  - file name update to intel-nand-controller
-  - modification of MACRO divided like EBU, HSNAND and NAND
-  - add NAND_ALE_OFFS, NAND_CLE_OFFS and NAND_CS_OFFS
-  - rename lgm_ to ebu_ and _va suffix is removed in the whole file
-  - rename structure and varaibles as per review comments.
-  - remove lgm_read_byte(), lgm_dev_ready() and cmd_ctrl() un-used function
-  - update in exec_op() as per review comments
-  - rename function lgm_dma_exit() by lgm_dma_cleanup()
-  - hardcoded magic value  for base and offset replaced by MACRO defined
-  - mtd_device_unregister() + nand_cleanup() instead of nand_release()
-v2:
-  - implement the ->exec_op() to replaces the legacy hook-up.
-  - update the commit message
-  - YAML compatible string update to intel, lgm-nand-controller
-  - add MIPS maintainers and xway_nand driver author in CC
-
-v1:
- - initial version
-
-Ramuthevar Vadivel Murugan (2):
-  dt-bindings: mtd: Add YAML for Nand Flash Controller support
-  mtd: rawnand: Add NAND controller support on Intel LGM SoC
-
- .../devicetree/bindings/mtd/intel,lgm-nand.yaml    |  61 ++
- drivers/mtd/nand/raw/Kconfig                       |   8 +
- drivers/mtd/nand/raw/Makefile                      |   1 +
- drivers/mtd/nand/raw/intel-nand-controller.c       | 750 +++++++++++++++++++++
- 4 files changed, 820 insertions(+)
+ .../devicetree/bindings/mtd/intel,lgm-nand.yaml    | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
- create mode 100644 drivers/mtd/nand/raw/intel-nand-controller.c
 
+diff --git a/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+new file mode 100644
+index 000000000000..6dd899d367b4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+@@ -0,0 +1,61 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mtd/intel,lgm-nand.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Intel LGM SoC NAND Controller Device Tree Bindings
++
++allOf:
++  - $ref: "nand-controller.yaml"
++
++maintainers:
++  - Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
++
++properties:
++  compatible:
++    const: intel,lgm-nand-controller
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  dmas:
++    maxItems: 2
++
++  dma-names:
++    enum:
++      - rx
++      - tx
++
++  pinctrl-names: true
++
++patternProperties:
++  "^pinctrl-[0-9]+$": true
++
++  "^nand@[a-f0-9]+$":
++    type: object
++    properties:
++      reg:
++        minimum: 0
++        maximum: 7
++
++      nand-ecc-mode: true
++
++      nand-ecc-algo:
++        const: hw
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - dmas
++
++additionalProperties: false
++
++...
 -- 
 2.11.0
 
