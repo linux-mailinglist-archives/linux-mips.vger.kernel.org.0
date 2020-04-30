@@ -2,78 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5354A1BF7FC
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Apr 2020 14:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E291BF843
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Apr 2020 14:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726127AbgD3MRa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Apr 2020 08:17:30 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:52222 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725280AbgD3MRa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Apr 2020 08:17:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1588249046; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mrqQpdZI0iA0rbOEiH2YGzwk2jM3qRIXYq5akaHCo94=;
-        b=CcBdNJB/RZtu/4OVh1Z8vh03ug8YYH5He/qLM2zyCLxzfZFpV5IG6ARTJgsFQsQL6poT2n
-        jklgKb49O+UF7UxaD6g+I+nSsS3i8p1KLArlFmGRxUqzPTYi3RZ67vNu0+dhX+MWUZB7Ru
-        FOaCSE83nh75F/E1E4X3RbjurNnM3z0=
-Date:   Thu, 30 Apr 2020 14:17:16 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 07/13] MIPS: ingenic: DTS: Respect cell count of common
- properties
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Rob Herring <robh+dt@kernel.org>, od@zcrc.me,
-        =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <SSOL9Q.SPOBZNC76Y5J2@crapouillou.net>
-In-Reply-To: <20200429210416.GB24583@alpha.franken.de>
-References: <20200413152633.198301-1-paul@crapouillou.net>
-        <20200413152633.198301-7-paul@crapouillou.net>
-        <20200429210416.GB24583@alpha.franken.de>
+        id S1726500AbgD3MgF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Apr 2020 08:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726053AbgD3MgF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 30 Apr 2020 08:36:05 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E99C035494;
+        Thu, 30 Apr 2020 05:36:05 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 101482A23DC;
+        Thu, 30 Apr 2020 13:36:03 +0100 (BST)
+Date:   Thu, 30 Apr 2020 14:36:00 +0200
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     qi-ming.wu@intel.com, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        cheol.yong.kim@intel.com, hauke.mehrtens@intel.com,
+        anders.roxell@linaro.org, vigneshr@ti.com, arnd@arndb.de,
+        richard@nod.at, brendanhiggins@google.com,
+        linux-mips@vger.kernel.org, robh+dt@kernel.org,
+        miquel.raynal@bootlin.com, tglx@linutronix.de,
+        masonccyang@mxic.com.tw, andriy.shevchenko@intel.com
+Subject: Re: [PATCH v4 2/2] mtd: rawnand: Add NAND controller support on
+ Intel LGM SoC
+Message-ID: <20200430143600.27031639@collabora.com>
+In-Reply-To: <1d5aec11-a7b5-01c2-6614-16e57c64511b@linux.intel.com>
+References: <20200429104205.18780-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+        <20200429104205.18780-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+        <20200429162249.55d38ee8@collabora.com>
+        <9d77c64c-d0f9-7a13-3391-d05bf458bdb1@linux.intel.com>
+        <20200429164832.6800fc70@collabora.com>
+        <2e83a2f7-853c-f0e2-f686-daf1e0649eae@linux.intel.com>
+        <20200429173107.5c6d2f55@collabora.com>
+        <1de9ba29-30f1-6829-27e0-6f141e9bb1e6@linux.intel.com>
+        <20200430102114.29b6552f@collabora.com>
+        <1df71cf7-4cae-4cd0-864c-0812bb2cc123@linux.intel.com>
+        <20200430103658.4b0b979e@collabora.com>
+        <1d5aec11-a7b5-01c2-6614-16e57c64511b@linux.intel.com>
+Organization: Collabora
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+On Thu, 30 Apr 2020 17:07:03 +0800
+"Ramuthevar, Vadivel MuruganX"
+<vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
 
-Le mer. 29 avril 2020 =E0 23:04, Thomas Bogendoerfer=20
-<tsbogend@alpha.franken.de> a =E9crit :
-> On Mon, Apr 13, 2020 at 05:26:27PM +0200, Paul Cercueil wrote:
->>  If N fields of X cells should be provided, then that's what the
->>  devicetree should represent, instead of having one single field of
->>  (N*X) cells.
->>=20
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  ---
->>   arch/mips/boot/dts/ingenic/jz4740.dtsi | 19 +++++++++----------
->>   arch/mips/boot/dts/ingenic/jz4770.dtsi | 12 +++++-------
->>   arch/mips/boot/dts/ingenic/jz4780.dtsi | 24=20
->> +++++++++++-------------
->>   arch/mips/boot/dts/ingenic/x1000.dtsi  |  9 ++++-----
->>   4 files changed, 29 insertions(+), 35 deletions(-)
->=20
-> applied to mips-next. Please check if my resolution of the conflict
-> in arch/mips/boot/dts/ingenic/jz4780.dtsi is correct.
+> >>> The question is, is it the same value we have in nand_pa or it is
+> >>> different?
+> >>>      
+> >> Different address which is 0xE1400000 NAND_BASE_PHY address.  
+> > 
+> > Then why didn't you tell me they didn't match when I suggested to pass  
+> 
+> sorry, because you keep asking nand_pa after that only I realized that.
+> 
+> > nand_pa? So now the question is, what does this address represent?  
+> 
+>                 EBU-MODULE
+>   _________     _______________________
+> |         |   |            |NAND CTRL  |
+> | FPI BUS |==>| CS0(0x174) | 0xE100    ( 0xE14/0xE1C) NAND_PHY_BASE
+> |_________|   |_CS1(0x17C)_|__________ |
+> 
+> EBU_CONRTROLLER_BASE : 0xE0F0_0000
+> HSNAND_BASE: 0xE100_0000
+> NAND_CS0: 0xE140_0000
+> NAND_CS1: 0xE1C0_0000
+> 
+> MEM_REGION_BASE_CS0: 0x17400 (internal to ebu controller )
+> MEM_REGION_BASE_CS1: 0x17C00
+> 
 
-Looks good, thanks.
+Hm, I wonder if we shouldn't use a 'ranges' property to describe this
+address translation. Something like
 
--Paul
+	ebu@xxx {
+		ranges = <0x17400000 0xe1400000 0x1000>,
+			 <0x17c00000 0xe1c00000 0x1000>;
+		reg = <0x17400000>, <0x17c00000>;
+		reg-names = "cs-0", "cs-1";
+	}
 
-> Thomas.
->=20
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not=20
-> necessarily a
-> good idea.                                                [ RFC1925,=20
-> 2.3 ]
+The translated address (0xE1X00000) will be available in res->start,
+and the non-translated one (0x17X00000) can be retrieved with
+of_get_address(). All you'd have to do then would be calculate the
+mask:
 
+	mask = (translated_address & original_address) >> 22;
+	num_comp_bits = fls(mask);
+	WARN_ON(mask != GENMASK(num_comp_bits - 1, 0));
 
+Which allows you to properly set the ADDR_SEL() register without
+relying on some hardcoded values:
+
+	writel(original_address | EBU_ADDR_SEL_REGEN |
+	       EBU_ADDR_COMP_BITS(num_comp_bits),
+	       ebu_host->ebu + EBU_ADDR_SEL(csid));
+
+That's quite important if we want to merge the xway NAND driver with
+this one.
