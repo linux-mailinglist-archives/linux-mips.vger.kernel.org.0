@@ -2,118 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E291BF843
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Apr 2020 14:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152231BF845
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Apr 2020 14:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726500AbgD3MgF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Apr 2020 08:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726053AbgD3MgF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 30 Apr 2020 08:36:05 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E99C035494;
-        Thu, 30 Apr 2020 05:36:05 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 101482A23DC;
-        Thu, 30 Apr 2020 13:36:03 +0100 (BST)
-Date:   Thu, 30 Apr 2020 14:36:00 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Cc:     qi-ming.wu@intel.com, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        cheol.yong.kim@intel.com, hauke.mehrtens@intel.com,
-        anders.roxell@linaro.org, vigneshr@ti.com, arnd@arndb.de,
-        richard@nod.at, brendanhiggins@google.com,
-        linux-mips@vger.kernel.org, robh+dt@kernel.org,
-        miquel.raynal@bootlin.com, tglx@linutronix.de,
-        masonccyang@mxic.com.tw, andriy.shevchenko@intel.com
-Subject: Re: [PATCH v4 2/2] mtd: rawnand: Add NAND controller support on
- Intel LGM SoC
-Message-ID: <20200430143600.27031639@collabora.com>
-In-Reply-To: <1d5aec11-a7b5-01c2-6614-16e57c64511b@linux.intel.com>
-References: <20200429104205.18780-1-vadivel.muruganx.ramuthevar@linux.intel.com>
-        <20200429104205.18780-3-vadivel.muruganx.ramuthevar@linux.intel.com>
-        <20200429162249.55d38ee8@collabora.com>
-        <9d77c64c-d0f9-7a13-3391-d05bf458bdb1@linux.intel.com>
-        <20200429164832.6800fc70@collabora.com>
-        <2e83a2f7-853c-f0e2-f686-daf1e0649eae@linux.intel.com>
-        <20200429173107.5c6d2f55@collabora.com>
-        <1de9ba29-30f1-6829-27e0-6f141e9bb1e6@linux.intel.com>
-        <20200430102114.29b6552f@collabora.com>
-        <1df71cf7-4cae-4cd0-864c-0812bb2cc123@linux.intel.com>
-        <20200430103658.4b0b979e@collabora.com>
-        <1d5aec11-a7b5-01c2-6614-16e57c64511b@linux.intel.com>
-Organization: Collabora
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726413AbgD3MhC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Apr 2020 08:37:02 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:39842 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726053AbgD3MhC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 30 Apr 2020 08:37:02 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx395Ixqpeb0kuAA--.29S2;
+        Thu, 30 Apr 2020 20:36:25 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH] MIPS: tools: Show result for loongson3-llsc-check
+Date:   Thu, 30 Apr 2020 20:36:24 +0800
+Message-Id: <1588250184-18730-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dx395Ixqpeb0kuAA--.29S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZryxKw4kAw17Kw48Xr43ZFb_yoWDtFX_J3
+        s2g348GryfXrW2kaykury8XFZ7Wa4xZ3W7uanrZr17Wa4Yyr13XFW0yrZ8KF17Cw1jyF4f
+        Ar48ur1xAr4I9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Xr1l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjVOJ5UUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 30 Apr 2020 17:07:03 +0800
-"Ramuthevar, Vadivel MuruganX"
-<vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
+It is better to show the result before loongson3-llsc-check exit,
+otherwise we can see nothing if the return status is EXIT_SUCCESS,
+it seems confusing.
 
-> >>> The question is, is it the same value we have in nand_pa or it is
-> >>> different?
-> >>>      
-> >> Different address which is 0xE1400000 NAND_BASE_PHY address.  
-> > 
-> > Then why didn't you tell me they didn't match when I suggested to pass  
-> 
-> sorry, because you keep asking nand_pa after that only I realized that.
-> 
-> > nand_pa? So now the question is, what does this address represent?  
-> 
->                 EBU-MODULE
->   _________     _______________________
-> |         |   |            |NAND CTRL  |
-> | FPI BUS |==>| CS0(0x174) | 0xE100    ( 0xE14/0xE1C) NAND_PHY_BASE
-> |_________|   |_CS1(0x17C)_|__________ |
-> 
-> EBU_CONRTROLLER_BASE : 0xE0F0_0000
-> HSNAND_BASE: 0xE100_0000
-> NAND_CS0: 0xE140_0000
-> NAND_CS1: 0xE1C0_0000
-> 
-> MEM_REGION_BASE_CS0: 0x17400 (internal to ebu controller )
-> MEM_REGION_BASE_CS1: 0x17C00
-> 
+E.g. without this patch:
 
-Hm, I wonder if we shouldn't use a 'ranges' property to describe this
-address translation. Something like
+[loongson@localhost tools]$ ./loongson3-llsc-check ../../../vmlinux
+[loongson@localhost tools]$
 
-	ebu@xxx {
-		ranges = <0x17400000 0xe1400000 0x1000>,
-			 <0x17c00000 0xe1c00000 0x1000>;
-		reg = <0x17400000>, <0x17c00000>;
-		reg-names = "cs-0", "cs-1";
-	}
+With this patch:
 
-The translated address (0xE1X00000) will be available in res->start,
-and the non-translated one (0x17X00000) can be retrieved with
-of_get_address(). All you'd have to do then would be calculate the
-mask:
+[loongson@localhost tools]$ ./loongson3-llsc-check ../../../vmlinux
+loongson3-llsc-check returns success
+[loongson@localhost tools]$
 
-	mask = (translated_address & original_address) >> 22;
-	num_comp_bits = fls(mask);
-	WARN_ON(mask != GENMASK(num_comp_bits - 1, 0));
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/tools/loongson3-llsc-check.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Which allows you to properly set the ADDR_SEL() register without
-relying on some hardcoded values:
+diff --git a/arch/mips/tools/loongson3-llsc-check.c b/arch/mips/tools/loongson3-llsc-check.c
+index 0ebddd0..facd016 100644
+--- a/arch/mips/tools/loongson3-llsc-check.c
++++ b/arch/mips/tools/loongson3-llsc-check.c
+@@ -303,5 +303,7 @@ int main(int argc, char *argv[])
+ out_close:
+ 	close(vmlinux_fd);
+ out_ret:
++	fprintf(stdout, "loongson3-llsc-check %s\n",
++		status ? "returns failure" : "returns success");
+ 	return status;
+ }
+-- 
+2.1.0
 
-	writel(original_address | EBU_ADDR_SEL_REGEN |
-	       EBU_ADDR_COMP_BITS(num_comp_bits),
-	       ebu_host->ebu + EBU_ADDR_SEL(csid));
-
-That's quite important if we want to merge the xway NAND driver with
-this one.
