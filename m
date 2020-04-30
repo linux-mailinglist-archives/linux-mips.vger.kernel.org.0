@@ -2,132 +2,186 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7059B1BEECD
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Apr 2020 05:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C87D1BF00C
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Apr 2020 08:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726590AbgD3D6u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Apr 2020 23:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726453AbgD3D6u (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 29 Apr 2020 23:58:50 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB40C035494;
-        Wed, 29 Apr 2020 20:58:48 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id c18so31940ile.5;
-        Wed, 29 Apr 2020 20:58:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M+itFqMzz7ThWZKcLuQWzep+uBywhDgUdjtSyvWir0A=;
-        b=K6t4uqKhlLiVCOvHHnfn7uZCyC9NoNl1R56rKLl3c07k3kmUAiZwjvxwt4Qnq37WF7
-         VNgH3/oIiiHYRsbErGlPq2MX4f3T9V59jYn57yNqp3raQY8UYD93+7D9KP6xQjiklK+S
-         Qi4FAXQibliGyxBG9BvvYRntYZRoFOW7K+VFthODpKip1kWfFSAVDMiiHuOXR3dRb3lW
-         D/OxmFfMZg6PZ1xkFQX1ZmteVUKZO8Yt8C/jyoxPgaBv2ON4Qxg2j3apH6yVnjmhi7lP
-         dPH8MeSGv7QcWDP2b0vInXiS21WlWazeaJMniNVqQkhOG7GgWcvlC5Tlvbdw0a63gAF5
-         us9g==
+        id S1726358AbgD3GLz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Apr 2020 02:11:55 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:38737 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726180AbgD3GLz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Apr 2020 02:11:55 -0400
+Received: by mail-il1-f193.google.com with SMTP id c18so243625ile.5;
+        Wed, 29 Apr 2020 23:11:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=M+itFqMzz7ThWZKcLuQWzep+uBywhDgUdjtSyvWir0A=;
-        b=F6pxMFf584FFuO8c3WhZcHUejF7Mle4rBZXNlG48ZuJ9bZdYXH8SwB8Ur7fXGhOO6p
-         mQXAWlCXTfNk13vom1W+G7FUBHF1B9rSSRvI4kJsCf+1NFHiqE3qSH5klA/AI+/75sl/
-         k2ijOJoy36DQZ0QyE8AlGHBFvWBAzSVrEryhZ05+FywBYt7PibuS30jexnByP4s5s+iI
-         ks6wvnlisKdYfhZH5y4r3S0XjIHDmA+xSZcktcez6lg/WwhuiFRJEQAyBeIb3pu1fl2O
-         cmVgO6tvH1/9XC2j+7COLNg3B8xnTWvSYJpZvJNb/ZFaivO9lzf1AP3bgp1pn0bIEC77
-         aLrg==
-X-Gm-Message-State: AGi0PuZoPjrQLcdhGDHdVKra7F4W2ovv81KbUIxsP+eVNequvEeYQxVB
-        RZCDHG5hMo3y0+IDGRg8s5qr6NraA42cqfyyQA8=
-X-Google-Smtp-Source: APiQypJfj+2iP12ImL8Uqdjbw9c8nGy6u7ienyamsjDBxjC1bY7xoUznZGmMTlOrrsIfe3VT2sIUeWH8r3og68HqXio=
-X-Received: by 2002:a92:cece:: with SMTP id z14mr36110ilq.147.1588219128264;
- Wed, 29 Apr 2020 20:58:48 -0700 (PDT)
+        bh=H/Z/NG3xt+7eYef3fmAdT1EwVOP1RXMi/3PpMayvfSE=;
+        b=G1CyT6kxjGG7Q7pshAUsV+gDfqxj9o0Fj9b174+yQHi4IfBSR6RtHSI3JXfAyAbtxH
+         1w5clOPh3EfH1+L4JqBMR6PVAINNwtqC7Th5HokfSvs0keUv7RvWeMnu0PXPmCdUukqL
+         zl3lbCFkMLkq6vE4kSKo03QUeEFzs1/hD9TKeYg7Mc8OTIUtmQP8a4xaRh9bhjhMShxA
+         +zj2Ypd/cJw+19JSlEX9oB8UT21U2/1j/6uMBqoD3POQeR0Jv2S6g/uVoEY9FmIViYbY
+         P5oDINXNOPR2vPBlDQsR86HZNDwY9nRyvwjwIWLBn1Y+wXu6zM8x5DUcHPJaki6R+3nv
+         xRXg==
+X-Gm-Message-State: AGi0PuYYJVgpunHAcuehj3yXDUfHf2B1nMCWSt7iu1xXp/nAlCt9WHUu
+        4ZHuQ3zfCp07RQeosqtMpAmNcB7iklwxe28ypRQ=
+X-Google-Smtp-Source: APiQypL4QKDFwnemYhat/ReVkS9zXaIb/KMeKVVjiMkBPx0BuX2CER+6pj9ZLeSFvHmD1X46WjFXfNzB9ELgeT6ope4=
+X-Received: by 2002:a92:c52a:: with SMTP id m10mr410035ili.208.1588227114118;
+ Wed, 29 Apr 2020 23:11:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <1588216490-60282-1-git-send-email-zou_wei@huawei.com>
-In-Reply-To: <1588216490-60282-1-git-send-email-zou_wei@huawei.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Thu, 30 Apr 2020 12:06:19 +0800
-Message-ID: <CAAhV-H4Zh60bLLVkhZ7fJTRkBvqxiCuogHyQv-S9rC_e0+HZNw@mail.gmail.com>
-Subject: Re: [PATCH -next] KVM: MIPS/VZ: Remove unneeded semicolon
-To:     Zou Wei <zou_wei@huawei.com>
+References: <1588213867-32274-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1588213867-32274-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Thu, 30 Apr 2020 14:19:25 +0800
+Message-ID: <CAAhV-H5QBOnrqVbMfGf7H5vJ6UMhUxhkCqAzZiwRFn_VwTQHpA@mail.gmail.com>
+Subject: Re: [PATCH v6] MIPS: Loongson: Add DMA support for LS7A
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         "open list:MIPS" <linux-mips@vger.kernel.org>,
-        kvm <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Reviewed-by: Huacai Chen <chenhc@lemote.com>
+Hi  Christoph,
 
-On Thu, Apr 30, 2020 at 11:08 AM Zou Wei <zou_wei@huawei.com> wrote:
+On Thu, Apr 30, 2020 at 10:31 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 >
-> Fixes coccicheck warnings:
+> In the current market, the most used bridge chip on the Loongson
+> platform are RS780E and LS7A, the RS780E bridge chip is already
+> supported by the mainline kernel.
 >
-> arch/mips/kvm/vz.c:1186:4-5: Unneeded semicolon
-> arch/mips/kvm/vz.c:1195:3-4: Unneeded semicolon
-> arch/mips/kvm/vz.c:1949:3-4: Unneeded semicolon
-> arch/mips/kvm/vz.c:1121:2-3: Unneeded semicolon
-> arch/mips/kvm/vz.c:2188:3-4: Unneeded semicolon
+> In order to use the default implementation of __phys_to_dma() and
+> __dma_to_phys() in dma-direct.h, remove CONFIG_ARCH_HAS_PHYS_TO_DMA
+> and then set the bus's DMA limit to 36 bit for RS780E to maintain
+> downward compatibility.
+I know that you want use the default implementation of __phys_to_dma()
+and __dma_to_phys() as more as possible. But, if that is "impossible"
+on Loongson-3, should we still be forced to use the default? Yes, this
+patch makes the default version work, but it limit the device's DMA
+capability, which is not what we want.
+
 >
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zou Wei <zou_wei@huawei.com>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > ---
->  arch/mips/kvm/vz.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
 >
-> diff --git a/arch/mips/kvm/vz.c b/arch/mips/kvm/vz.c
-> index dde2088..389dd0f 100644
-> --- a/arch/mips/kvm/vz.c
-> +++ b/arch/mips/kvm/vz.c
-> @@ -1118,7 +1118,7 @@ static enum emulation_result kvm_vz_gpsi_cache(union mips_instruction inst,
->                 break;
->         default:
->                 break;
-> -       };
-> +       }
+> Hi Christoph and Jiaxun,
 >
->         kvm_err("@ %#lx/%#lx CACHE (cache: %#x, op: %#x, base[%d]: %#lx, offset: %#x\n",
->                 curr_pc, vcpu->arch.gprs[31], cache, op, base, arch->gprs[base],
-> @@ -1183,7 +1183,7 @@ static enum emulation_result kvm_trap_vz_handle_gpsi(u32 cause, u32 *opc,
->                                 trace_kvm_hwr(vcpu, KVM_TRACE_RDHWR,
->                                               KVM_TRACE_HWR(rd, sel), 0);
->                                 goto unknown;
-> -                       };
-> +                       }
+> Thank you very much for your suggestions.
 >
->                         trace_kvm_hwr(vcpu, KVM_TRACE_RDHWR,
->                                       KVM_TRACE_HWR(rd, sel), arch->gprs[rt]);
-> @@ -1192,7 +1192,7 @@ static enum emulation_result kvm_trap_vz_handle_gpsi(u32 cause, u32 *opc,
->                         break;
->                 default:
->                         goto unknown;
-> -               };
-> +               }
->                 break;
->  unknown:
+> v5:
+>   - use the default implementation of __phys_to_dma()
+>     and __dma_to_phys() in dma-direct.h
 >
-> @@ -1946,7 +1946,7 @@ static int kvm_vz_get_one_reg(struct kvm_vcpu *vcpu,
->                 default:
->                         *v = (long)kvm_read_c0_guest_prid(cop0);
->                         break;
-> -               };
-> +               }
->                 break;
->         case KVM_REG_MIPS_CP0_EBASE:
->                 *v = kvm_vz_read_gc0_ebase();
-> @@ -2185,7 +2185,7 @@ static int kvm_vz_set_one_reg(struct kvm_vcpu *vcpu,
->                 default:
->                         kvm_write_c0_guest_prid(cop0, v);
->                         break;
-> -               };
-> +               }
->                 break;
->         case KVM_REG_MIPS_CP0_EBASE:
->                 kvm_vz_write_gc0_ebase(v);
+> v6:
+>   - make loongson_dma_config() static
+>   - put ls7a things before rs780 things
+>
+>  arch/mips/Kconfig                                  |  1 -
+>  arch/mips/include/asm/mach-loongson64/boot_param.h |  5 +++++
+>  arch/mips/loongson64/dma.c                         | 22 +++++++++++-----------
+>  arch/mips/loongson64/env.c                         |  2 ++
+>  4 files changed, 18 insertions(+), 12 deletions(-)
+>
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 9f15539..12b6bdb 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -1454,7 +1454,6 @@ choice
+>  config CPU_LOONGSON64
+>         bool "Loongson 64-bit CPU"
+>         depends on SYS_HAS_CPU_LOONGSON64
+> -       select ARCH_HAS_PHYS_TO_DMA
+>         select CPU_MIPSR2
+>         select CPU_HAS_PREFETCH
+>         select CPU_SUPPORTS_64BIT_KERNEL
+> diff --git a/arch/mips/include/asm/mach-loongson64/boot_param.h b/arch/mips/include/asm/mach-loongson64/boot_param.h
+> index f082d87..0c07a96 100644
+> --- a/arch/mips/include/asm/mach-loongson64/boot_param.h
+> +++ b/arch/mips/include/asm/mach-loongson64/boot_param.h
+> @@ -197,6 +197,7 @@ enum loongson_bridge_type {
+>         RS780E = 2
+>  };
+>
+> +struct pci_dev;
+>  struct loongson_system_configuration {
+>         u32 nr_cpus;
+>         u32 nr_nodes;
+> @@ -221,9 +222,13 @@ struct loongson_system_configuration {
+>         u32 nr_sensors;
+>         struct sensor_device sensors[MAX_SENSORS];
+>         u64 workarounds;
+> +       void (*dma_config)(struct pci_dev *pdev);
+>  };
+>
+>  extern struct efi_memory_map_loongson *loongson_memmap;
+>  extern struct loongson_system_configuration loongson_sysconf;
+>
+> +extern void ls7a_dma_config(struct pci_dev *pdev);
+> +extern void rs780e_dma_config(struct pci_dev *pdev);
+> +
+>  #endif
+> diff --git a/arch/mips/loongson64/dma.c b/arch/mips/loongson64/dma.c
+> index 5e86635..ef40b0d 100644
+> --- a/arch/mips/loongson64/dma.c
+> +++ b/arch/mips/loongson64/dma.c
+> @@ -1,24 +1,24 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -#include <linux/dma-direct.h>
+> +#include <linux/pci.h>
+>  #include <linux/init.h>
+>  #include <linux/swiotlb.h>
+>
+> -dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr)
+> +void ls7a_dma_config(struct pci_dev *pdev)
+>  {
+> -       /* We extract 2bit node id (bit 44~47, only bit 44~45 used now) from
+> -        * Loongson-3's 48bit address space and embed it into 40bit */
+> -       long nid = (paddr >> 44) & 0x3;
+> -       return ((nid << 44) ^ paddr) | (nid << 37);
+>  }
+>
+> -phys_addr_t __dma_to_phys(struct device *dev, dma_addr_t daddr)
+> +void rs780e_dma_config(struct pci_dev *pdev)
+>  {
+> -       /* We extract 2bit node id (bit 44~47, only bit 44~45 used now) from
+> -        * Loongson-3's 48bit address space and embed it into 40bit */
+> -       long nid = (daddr >> 37) & 0x3;
+> -       return ((nid << 37) ^ daddr) | (nid << 44);
+> +       pdev->dev.bus_dma_limit = DMA_BIT_MASK(36);
+>  }
+>
+> +static void loongson_dma_config(struct pci_dev *pdev)
+> +{
+> +       loongson_sysconf.dma_config(pdev);
+> +}
+> +
+> +DECLARE_PCI_FIXUP_EARLY(PCI_ANY_ID, PCI_ANY_ID, loongson_dma_config);
+> +
+>  void __init plat_swiotlb_setup(void)
+>  {
+>         swiotlb_init(1);
+> diff --git a/arch/mips/loongson64/env.c b/arch/mips/loongson64/env.c
+> index 71f4aaf..496f401 100644
+> --- a/arch/mips/loongson64/env.c
+> +++ b/arch/mips/loongson64/env.c
+> @@ -192,8 +192,10 @@ void __init prom_init_env(void)
+>         if (vendor == PCI_VENDOR_ID_LOONGSON && device == 0x7a00) {
+>                 pr_info("The bridge chip is LS7A\n");
+>                 loongson_sysconf.bridgetype = LS7A;
+> +               loongson_sysconf.dma_config = ls7a_dma_config;
+>         } else {
+>                 pr_info("The bridge chip is RS780E or SR5690\n");
+>                 loongson_sysconf.bridgetype = RS780E;
+> +               loongson_sysconf.dma_config = rs780e_dma_config;
+>         }
+>  }
 > --
-> 2.6.2
+> 2.1.0
 >
