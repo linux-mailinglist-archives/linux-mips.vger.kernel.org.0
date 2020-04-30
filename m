@@ -2,171 +2,156 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F8B1BED40
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Apr 2020 02:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC3A1BED6D
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Apr 2020 03:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726419AbgD3A50 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Apr 2020 20:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726421AbgD3A50 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 29 Apr 2020 20:57:26 -0400
-Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [IPv6:2001:19f0:6001:3633:5400:2ff:fe8c:553])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D59EC08E859
-        for <linux-mips@vger.kernel.org>; Wed, 29 Apr 2020 17:57:26 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id DD6FF20CCE;
-        Thu, 30 Apr 2020 00:57:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1588208245; bh=1kQk/WYLAlboRq560nnxROoUXmI7jng34JcfCqZ59Eo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rU8Fjz4K2P5yzoFAPxphxpgQJDljG7tMWfKt16sPNc+aaRPvfcoAngdYgYHceE7gT
-         NC2TXhTHgfeZr70Gv4ej0x+5gBkcpuuJxcY/TD95mWZZO1HafYC8AFrUg2a5wpD0oB
-         hO+Ytv7DvQMC9xhhVu9j83fq8gL55d7YwaNvfxRd1lZslOJQ0o9JnWbbmJL20gPXgb
-         sZEIUyf1BB172q/JDp7y8DsNc/KckF6QWi1n8f/rGbj0IbweskPTshebpLhM2Gbzjd
-         P06uG1OEK+j+nIWRpMnddGpt1QiU9CUC0twTpKGJwqRoutTZqvf353tGo8CVmTdb6u
-         MOt4ObltqP5jg==
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     chenhc@lemote.com, tsbogend@alpha.franken.de,
-        john.garry@huawei.com, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v3 3/3] MIPS: Loongson64: Enable PCI_IO_VMMAP
-Date:   Thu, 30 Apr 2020 08:57:06 +0800
-Message-Id: <20200430005706.2520124-3-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.26.0.rc2
-In-Reply-To: <20200430005706.2520124-1-jiaxun.yang@flygoat.com>
-References: <20200426114806.1176629-1-jiaxun.yang@flygoat.com>
- <20200430005706.2520124-1-jiaxun.yang@flygoat.com>
+        id S1726500AbgD3BHj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Apr 2020 21:07:39 -0400
+Received: from mga01.intel.com ([192.55.52.88]:22543 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726357AbgD3BHi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 29 Apr 2020 21:07:38 -0400
+IronPort-SDR: N6aGNfBSFSFKe129VMQf37hhDS7jZ9hBOYnBF4AqPYo1u2e1QDbSNNrT0g45q7dTxIz3FLoPn5
+ La63eicm1NAw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 18:07:38 -0700
+IronPort-SDR: 8Q4gkOhp1ZUnE+RQpm1R4hBRrAC7b/3Ppd8uLI++yOdz/XX8f7mTAIc0o5U6zNpv7sk6HtOVAe
+ 6Lvw49YJsJkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,333,1583222400"; 
+   d="scan'208";a="432763015"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga005.jf.intel.com with ESMTP; 29 Apr 2020 18:07:38 -0700
+Received: from [10.215.170.136] (vramuthx-mobl1.gar.corp.intel.com [10.215.170.136])
+        by linux.intel.com (Postfix) with ESMTP id E824D5805EB;
+        Wed, 29 Apr 2020 18:07:33 -0700 (PDT)
+Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
+Subject: Re: [PATCH v4 1/2] dt-bindings: mtd: Add YAML for Nand Flash
+ Controller support
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, arnd@arndb.de,
+        brendanhiggins@google.com, tglx@linutronix.de,
+        anders.roxell@linaro.org, masonccyang@mxic.com.tw,
+        robh+dt@kernel.org, linux-mips@vger.kernel.org,
+        hauke.mehrtens@intel.com, andriy.shevchenko@intel.com,
+        qi-ming.wu@intel.com, cheol.yong.kim@intel.com
+References: <20200429104205.18780-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200429104205.18780-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200429173446.6682dfb8@collabora.com>
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Message-ID: <04423b9c-f70c-d461-05ac-9a4815af105c@linux.intel.com>
+Date:   Thu, 30 Apr 2020 09:07:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200429173446.6682dfb8@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Finally we are able to elegantly add I/O ports for PCI host bridge
-via devicetree with logic_pio.
+Hi Boris,
 
-To deal with legacy drivers that have fixed I/O ports range we
-reserved 0x10000 in PCI_IOBASE, should be enough for i8259 i8042
-stuff.
+  Thank you very much for the review comments and your time...
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/Kconfig                             |  1 +
- .../include/asm/mach-loongson64/loongson.h    |  2 +
- arch/mips/loongson64/init.c                   | 43 +++++++++++++++++--
- arch/mips/loongson64/pci.c                    |  2 +-
- 4 files changed, 43 insertions(+), 5 deletions(-)
+On 29/4/2020 11:34 pm, Boris Brezillon wrote:
+> On Wed, 29 Apr 2020 18:42:04 +0800
+> "Ramuthevar,Vadivel MuruganX"
+> <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
+> 
+>> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+>>
+>> Add YAML file for dt-bindings to support NAND Flash Controller
+>> on Intel's Lightning Mountain SoC.
+>>
+>> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+>> ---
+>>   .../devicetree/bindings/mtd/intel,lgm-nand.yaml    | 61 ++++++++++++++++++++++
+>>   1 file changed, 61 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+>> new file mode 100644
+>> index 000000000000..6dd899d367b4
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+>> @@ -0,0 +1,61 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mtd/intel,lgm-nand.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Intel LGM SoC NAND Controller Device Tree Bindings
+>> +
+>> +allOf:
+>> +  - $ref: "nand-controller.yaml"
+>> +
+>> +maintainers:
+>> +  - Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: intel,lgm-nand-controller
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  dmas:
+>> +    maxItems: 2
+>> +
+>> +  dma-names:
+>> +    enum:
+>> +      - rx
+>> +      - tx
+>> +
+>> +  pinctrl-names: true
+>> +
+>> +patternProperties:
+>> +  "^pinctrl-[0-9]+$": true
+>> +
+>> +  "^nand@[a-f0-9]+$":
+>> +    type: object
+>> +    properties:
+>> +      reg:
+>> +        minimum: 0
+>> +        maximum: 7
+>> +
+>> +      nand-ecc-mode: true
+>> +
+>> +      nand-ecc-algo:
+>> +        const: hw
+>> +
+>> +    additionalProperties: false
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +  - clock-names
+>> +  - dmas
+>> +
+>> +additionalProperties: false
+>> +
+>> +...
+> 
+> Can you provide an example? I'd like to make sure the binding looks
+> good.
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 4e5308178649..1669735dacd8 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -479,6 +479,7 @@ config MACH_LOONGSON64
- 	select I8259
- 	select IRQ_MIPS_CPU
- 	select NR_CPUS_DEFAULT_64
-+	select PCI_IO_VMMAP
- 	select USE_GENERIC_EARLY_PRINTK_8250
- 	select SYS_HAS_CPU_LOONGSON64
- 	select SYS_HAS_EARLY_PRINTK
-diff --git a/arch/mips/include/asm/mach-loongson64/loongson.h b/arch/mips/include/asm/mach-loongson64/loongson.h
-index fde1b75c45ea..94035a47be5b 100644
---- a/arch/mips/include/asm/mach-loongson64/loongson.h
-+++ b/arch/mips/include/asm/mach-loongson64/loongson.h
-@@ -86,6 +86,8 @@ extern int mach_i8259_irq(void);
- #define LOONGSON_PCIIO_SIZE	0x00100000	/* 1M */
- #define LOONGSON_PCIIO_TOP	(LOONGSON_PCIIO_BASE+LOONGSON_PCIIO_SIZE-1)
- 
-+#define MMIO_LOWER_RESERVED	0x10000
-+
- /* Loongson Register Bases */
- 
- #define LOONGSON_PCICONFIGBASE	0x00
-diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-index da38944471f4..f7c80b9e5243 100644
---- a/arch/mips/loongson64/init.c
-+++ b/arch/mips/loongson64/init.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/irqchip.h>
-+#include <linux/logic_pio.h>
- #include <linux/memblock.h>
- #include <asm/bootinfo.h>
- #include <asm/traps.h>
-@@ -29,10 +30,6 @@ void __init prom_init(void)
- 	fw_init_cmdline();
- 	prom_init_env();
- 
--	/* init base address of io space */
--	set_io_port_base((unsigned long)
--		ioremap(LOONGSON_PCIIO_BASE, LOONGSON_PCIIO_SIZE));
--
- 	prom_init_numa_memory();
- 
- 	/* Hardcode to CPU UART 0 */
-@@ -46,7 +43,45 @@ void __init prom_free_prom_memory(void)
- {
- }
- 
-+static __init void reserve_pio_range(void)
-+{
-+	struct logic_pio_hwaddr *range;
-+
-+	range = kzalloc(sizeof(*range), GFP_ATOMIC);
-+	if (!range)
-+		return;
-+
-+	range->fwnode = &of_root->fwnode;
-+	range->size = MMIO_LOWER_RESERVED;
-+	range->hw_start = LOONGSON_PCIIO_BASE;
-+	range->flags = LOGIC_PIO_CPU_MMIO;
-+
-+	if (logic_pio_register_range(range)) {
-+		pr_err("Failed to reserve PIO range for legacy ISA\n");
-+		goto free_range;
-+	}
-+
-+	if (WARN(range->io_start != 0,
-+			"Reserved PIO range does not start from 0\n"))
-+		goto unregister;
-+
-+	/*
-+	 * i8259 would access I/O space, so mapping must be done here.
-+	 * Please remove it when all drivers can be managed by logic_pio.
-+	 */
-+	ioremap_page_range(PCI_IO_START, PCI_IO_START + MMIO_LOWER_RESERVED,
-+				LOONGSON_PCIIO_BASE,
-+				pgprot_device(PAGE_KERNEL));
-+
-+	return;
-+unregister:
-+	logic_pio_unregister_range(range);
-+free_range:
-+	kfree(range);
-+}
-+
- void __init arch_init_irq(void)
- {
-+	reserve_pio_range();
- 	irqchip_init();
- }
-diff --git a/arch/mips/loongson64/pci.c b/arch/mips/loongson64/pci.c
-index a440a2725a20..7aecb88dd377 100644
---- a/arch/mips/loongson64/pci.c
-+++ b/arch/mips/loongson64/pci.c
-@@ -37,7 +37,7 @@ extern int sbx00_acpi_init(void);
- static int __init pcibios_init(void)
- {
- 
--	loongson_pci_controller.io_map_base = mips_io_port_base;
-+	loongson_pci_controller.io_map_base = IOPORT_RW_BASE;
- 	loongson_pci_mem_resource.start = loongson_sysconf.pci_mem_start_addr;
- 	loongson_pci_mem_resource.end = loongson_sysconf.pci_mem_end_addr;
- 
--- 
-2.26.0.rc2
+Noted, will update with example. Thanks!
 
+Regards
+Vadivel
+
+> 
