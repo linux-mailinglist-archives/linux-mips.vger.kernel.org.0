@@ -2,156 +2,174 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC3A1BED6D
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Apr 2020 03:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A966B1BEE4E
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Apr 2020 04:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726500AbgD3BHj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Apr 2020 21:07:39 -0400
-Received: from mga01.intel.com ([192.55.52.88]:22543 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726357AbgD3BHi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 29 Apr 2020 21:07:38 -0400
-IronPort-SDR: N6aGNfBSFSFKe129VMQf37hhDS7jZ9hBOYnBF4AqPYo1u2e1QDbSNNrT0g45q7dTxIz3FLoPn5
- La63eicm1NAw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 18:07:38 -0700
-IronPort-SDR: 8Q4gkOhp1ZUnE+RQpm1R4hBRrAC7b/3Ppd8uLI++yOdz/XX8f7mTAIc0o5U6zNpv7sk6HtOVAe
- 6Lvw49YJsJkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,333,1583222400"; 
-   d="scan'208";a="432763015"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga005.jf.intel.com with ESMTP; 29 Apr 2020 18:07:38 -0700
-Received: from [10.215.170.136] (vramuthx-mobl1.gar.corp.intel.com [10.215.170.136])
-        by linux.intel.com (Postfix) with ESMTP id E824D5805EB;
-        Wed, 29 Apr 2020 18:07:33 -0700 (PDT)
-Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
-Subject: Re: [PATCH v4 1/2] dt-bindings: mtd: Add YAML for Nand Flash
- Controller support
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, arnd@arndb.de,
-        brendanhiggins@google.com, tglx@linutronix.de,
-        anders.roxell@linaro.org, masonccyang@mxic.com.tw,
-        robh+dt@kernel.org, linux-mips@vger.kernel.org,
-        hauke.mehrtens@intel.com, andriy.shevchenko@intel.com,
-        qi-ming.wu@intel.com, cheol.yong.kim@intel.com
-References: <20200429104205.18780-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200429104205.18780-2-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200429173446.6682dfb8@collabora.com>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <04423b9c-f70c-d461-05ac-9a4815af105c@linux.intel.com>
-Date:   Thu, 30 Apr 2020 09:07:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200429173446.6682dfb8@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726291AbgD3CbV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Apr 2020 22:31:21 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:43948 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726180AbgD3CbV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 29 Apr 2020 22:31:21 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr9psOKpeog0uAA--.11S2;
+        Thu, 30 Apr 2020 10:31:08 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH v6] MIPS: Loongson: Add DMA support for LS7A
+Date:   Thu, 30 Apr 2020 10:31:07 +0800
+Message-Id: <1588213867-32274-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxr9psOKpeog0uAA--.11S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCr4xtry7XFykWw4UAFy7Jrb_yoWrArWkpa
+        9xA3WkGr4YgF15CrZ5AFW8uryrAFZ5KrW3GF42vw15KasxZ34FqFs3GF18Xr1UAF1DG3Wx
+        XFWrKw48GF1xCrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUCg4hUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Boris,
+In the current market, the most used bridge chip on the Loongson
+platform are RS780E and LS7A, the RS780E bridge chip is already
+supported by the mainline kernel.
 
-  Thank you very much for the review comments and your time...
+In order to use the default implementation of __phys_to_dma() and
+__dma_to_phys() in dma-direct.h, remove CONFIG_ARCH_HAS_PHYS_TO_DMA
+and then set the bus's DMA limit to 36 bit for RS780E to maintain
+downward compatibility.
 
-On 29/4/2020 11:34 pm, Boris Brezillon wrote:
-> On Wed, 29 Apr 2020 18:42:04 +0800
-> "Ramuthevar,Vadivel MuruganX"
-> <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
-> 
->> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
->>
->> Add YAML file for dt-bindings to support NAND Flash Controller
->> on Intel's Lightning Mountain SoC.
->>
->> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
->> ---
->>   .../devicetree/bindings/mtd/intel,lgm-nand.yaml    | 61 ++++++++++++++++++++++
->>   1 file changed, 61 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
->> new file mode 100644
->> index 000000000000..6dd899d367b4
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
->> @@ -0,0 +1,61 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/mtd/intel,lgm-nand.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Intel LGM SoC NAND Controller Device Tree Bindings
->> +
->> +allOf:
->> +  - $ref: "nand-controller.yaml"
->> +
->> +maintainers:
->> +  - Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
->> +
->> +properties:
->> +  compatible:
->> +    const: intel,lgm-nand-controller
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  dmas:
->> +    maxItems: 2
->> +
->> +  dma-names:
->> +    enum:
->> +      - rx
->> +      - tx
->> +
->> +  pinctrl-names: true
->> +
->> +patternProperties:
->> +  "^pinctrl-[0-9]+$": true
->> +
->> +  "^nand@[a-f0-9]+$":
->> +    type: object
->> +    properties:
->> +      reg:
->> +        minimum: 0
->> +        maximum: 7
->> +
->> +      nand-ecc-mode: true
->> +
->> +      nand-ecc-algo:
->> +        const: hw
->> +
->> +    additionalProperties: false
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - clock-names
->> +  - dmas
->> +
->> +additionalProperties: false
->> +
->> +...
-> 
-> Can you provide an example? I'd like to make sure the binding looks
-> good.
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
 
-Noted, will update with example. Thanks!
+Hi Christoph and Jiaxun,
 
-Regards
-Vadivel
+Thank you very much for your suggestions.
 
-> 
+v5:
+  - use the default implementation of __phys_to_dma()
+    and __dma_to_phys() in dma-direct.h
+
+v6:
+  - make loongson_dma_config() static
+  - put ls7a things before rs780 things
+
+ arch/mips/Kconfig                                  |  1 -
+ arch/mips/include/asm/mach-loongson64/boot_param.h |  5 +++++
+ arch/mips/loongson64/dma.c                         | 22 +++++++++++-----------
+ arch/mips/loongson64/env.c                         |  2 ++
+ 4 files changed, 18 insertions(+), 12 deletions(-)
+
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 9f15539..12b6bdb 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -1454,7 +1454,6 @@ choice
+ config CPU_LOONGSON64
+ 	bool "Loongson 64-bit CPU"
+ 	depends on SYS_HAS_CPU_LOONGSON64
+-	select ARCH_HAS_PHYS_TO_DMA
+ 	select CPU_MIPSR2
+ 	select CPU_HAS_PREFETCH
+ 	select CPU_SUPPORTS_64BIT_KERNEL
+diff --git a/arch/mips/include/asm/mach-loongson64/boot_param.h b/arch/mips/include/asm/mach-loongson64/boot_param.h
+index f082d87..0c07a96 100644
+--- a/arch/mips/include/asm/mach-loongson64/boot_param.h
++++ b/arch/mips/include/asm/mach-loongson64/boot_param.h
+@@ -197,6 +197,7 @@ enum loongson_bridge_type {
+ 	RS780E = 2
+ };
+ 
++struct pci_dev;
+ struct loongson_system_configuration {
+ 	u32 nr_cpus;
+ 	u32 nr_nodes;
+@@ -221,9 +222,13 @@ struct loongson_system_configuration {
+ 	u32 nr_sensors;
+ 	struct sensor_device sensors[MAX_SENSORS];
+ 	u64 workarounds;
++	void (*dma_config)(struct pci_dev *pdev);
+ };
+ 
+ extern struct efi_memory_map_loongson *loongson_memmap;
+ extern struct loongson_system_configuration loongson_sysconf;
+ 
++extern void ls7a_dma_config(struct pci_dev *pdev);
++extern void rs780e_dma_config(struct pci_dev *pdev);
++
+ #endif
+diff --git a/arch/mips/loongson64/dma.c b/arch/mips/loongson64/dma.c
+index 5e86635..ef40b0d 100644
+--- a/arch/mips/loongson64/dma.c
++++ b/arch/mips/loongson64/dma.c
+@@ -1,24 +1,24 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#include <linux/dma-direct.h>
++#include <linux/pci.h>
+ #include <linux/init.h>
+ #include <linux/swiotlb.h>
+ 
+-dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr)
++void ls7a_dma_config(struct pci_dev *pdev)
+ {
+-	/* We extract 2bit node id (bit 44~47, only bit 44~45 used now) from
+-	 * Loongson-3's 48bit address space and embed it into 40bit */
+-	long nid = (paddr >> 44) & 0x3;
+-	return ((nid << 44) ^ paddr) | (nid << 37);
+ }
+ 
+-phys_addr_t __dma_to_phys(struct device *dev, dma_addr_t daddr)
++void rs780e_dma_config(struct pci_dev *pdev)
+ {
+-	/* We extract 2bit node id (bit 44~47, only bit 44~45 used now) from
+-	 * Loongson-3's 48bit address space and embed it into 40bit */
+-	long nid = (daddr >> 37) & 0x3;
+-	return ((nid << 37) ^ daddr) | (nid << 44);
++	pdev->dev.bus_dma_limit = DMA_BIT_MASK(36);
+ }
+ 
++static void loongson_dma_config(struct pci_dev *pdev)
++{
++	loongson_sysconf.dma_config(pdev);
++}
++
++DECLARE_PCI_FIXUP_EARLY(PCI_ANY_ID, PCI_ANY_ID, loongson_dma_config);
++
+ void __init plat_swiotlb_setup(void)
+ {
+ 	swiotlb_init(1);
+diff --git a/arch/mips/loongson64/env.c b/arch/mips/loongson64/env.c
+index 71f4aaf..496f401 100644
+--- a/arch/mips/loongson64/env.c
++++ b/arch/mips/loongson64/env.c
+@@ -192,8 +192,10 @@ void __init prom_init_env(void)
+ 	if (vendor == PCI_VENDOR_ID_LOONGSON && device == 0x7a00) {
+ 		pr_info("The bridge chip is LS7A\n");
+ 		loongson_sysconf.bridgetype = LS7A;
++		loongson_sysconf.dma_config = ls7a_dma_config;
+ 	} else {
+ 		pr_info("The bridge chip is RS780E or SR5690\n");
+ 		loongson_sysconf.bridgetype = RS780E;
++		loongson_sysconf.dma_config = rs780e_dma_config;
+ 	}
+ }
+-- 
+2.1.0
+
