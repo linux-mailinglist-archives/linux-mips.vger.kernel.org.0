@@ -2,122 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F101BF3BE
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Apr 2020 11:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12061BF439
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Apr 2020 11:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726688AbgD3JHL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Apr 2020 05:07:11 -0400
-Received: from mga18.intel.com ([134.134.136.126]:59128 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726420AbgD3JHK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 30 Apr 2020 05:07:10 -0400
-IronPort-SDR: I5MeHe0KctUeZGiaghQxBPp1cUIVu/4ufhePQ5MpMV093Gk68HmUB2MqCZigWD26/xJle0QzIm
- Y4tCY2jgDFgg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2020 02:07:09 -0700
-IronPort-SDR: sbpOouhGDHR+YMNe2Z9b1DhyJjDbwCgL2R37kKPafy2HpM2FaMg02FkpDjtspk0u1CVIcdPNTO
- FiAGmXZuWgrg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,334,1583222400"; 
-   d="scan'208";a="248224274"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Apr 2020 02:07:09 -0700
-Received: from [10.215.169.74] (vramuthx-MOBL1.gar.corp.intel.com [10.215.169.74])
-        by linux.intel.com (Postfix) with ESMTP id 103315805EB;
-        Thu, 30 Apr 2020 02:07:04 -0700 (PDT)
-Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
-Subject: Re: [PATCH v4 2/2] mtd: rawnand: Add NAND controller support on Intel
- LGM SoC
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     qi-ming.wu@intel.com, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        cheol.yong.kim@intel.com, hauke.mehrtens@intel.com,
-        anders.roxell@linaro.org, vigneshr@ti.com, arnd@arndb.de,
-        richard@nod.at, brendanhiggins@google.com,
-        linux-mips@vger.kernel.org, robh+dt@kernel.org,
-        miquel.raynal@bootlin.com, tglx@linutronix.de,
-        masonccyang@mxic.com.tw, andriy.shevchenko@intel.com
-References: <20200429104205.18780-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200429104205.18780-3-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200429162249.55d38ee8@collabora.com>
- <9d77c64c-d0f9-7a13-3391-d05bf458bdb1@linux.intel.com>
- <20200429164832.6800fc70@collabora.com>
- <2e83a2f7-853c-f0e2-f686-daf1e0649eae@linux.intel.com>
- <20200429173107.5c6d2f55@collabora.com>
- <1de9ba29-30f1-6829-27e0-6f141e9bb1e6@linux.intel.com>
- <20200430102114.29b6552f@collabora.com>
- <1df71cf7-4cae-4cd0-864c-0812bb2cc123@linux.intel.com>
- <20200430103658.4b0b979e@collabora.com>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <1d5aec11-a7b5-01c2-6614-16e57c64511b@linux.intel.com>
-Date:   Thu, 30 Apr 2020 17:07:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726396AbgD3JfO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Apr 2020 05:35:14 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:37678 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726378AbgD3JfN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Apr 2020 05:35:13 -0400
+Received: by mail-il1-f196.google.com with SMTP id u189so699922ilc.4
+        for <linux-mips@vger.kernel.org>; Thu, 30 Apr 2020 02:35:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XjmGWm636Bu0l8iEZ0HDvc+H+u/T90tXGBhLTfpYUzU=;
+        b=IyAaDLvLLYChHZtHURejEQFv1YWK1r18vjMc4i+gR8VrZ2HwTZZ1WeKWfcvawg8haL
+         Z62B8KkQRngACg6qOvpysJsRIB3W+5ax1InRGDWySOhFZiXqwyKKo1HbMRiFgody+SPh
+         edTnP2hDv6bJHDv9rfZKLrze3EplaTUzqMRMMZTsbezie59+JSTrSBOvHpjFLcYGzY+T
+         ViYjGB61C5RAZENcdnZX0cYkjF291pzwlgdqgA3wxa8xGas+0R8yQ1d/enLxdb8wNWSu
+         aswQXQKLs280NBBsM1eezcwYzYyw7daFTgqJSzm37yTnVe8Q7a/TqDPJn59V6zLBPPE4
+         OTjA==
+X-Gm-Message-State: AGi0PuZnqjizl1do5J7gC79yKzbdIB07lJ5gKHCfKbiEPVPPG6ig3sHP
+        UGezw/s3/eRdJPAxMmehuPrSkwulluhNIdngjeEafJmqdD8=
+X-Google-Smtp-Source: APiQypL93EjdLF6M+etw8h0WiOacpdgG391os09Jn7zdkPsauWxJMyHLhmFeNDh+mYp1cUU+ATSvUNGWZt/CfgkiJmo=
+X-Received: by 2002:a92:bad5:: with SMTP id t82mr985674ill.171.1588239312756;
+ Thu, 30 Apr 2020 02:35:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200430103658.4b0b979e@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1588145170-9451-1-git-send-email-chenhc@lemote.com>
+ <20200429182231.GA21158@alpha.franken.de> <CAAhV-H6j9ktHZ2C2Psk6X+0jmh-L9GMgOmKM95x0iXHo0d7TqA@mail.gmail.com>
+ <20200430081357.GA7626@alpha.franken.de>
+In-Reply-To: <20200430081357.GA7626@alpha.franken.de>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Thu, 30 Apr 2020 17:42:43 +0800
+Message-ID: <CAAhV-H75EQ=Zd37qPe=VBwT-Z3Fu=_7W4TSG2v8TLpq03MRCdg@mail.gmail.com>
+Subject: Re: [PATCH V2] MIPS: perf: Add hardware perf events support for new Loongson-3
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Boris,
+Hi, Thomas,
 
-On 30/4/2020 4:36 pm, Boris Brezillon wrote:
-> On Thu, 30 Apr 2020 16:30:15 +0800
-> "Ramuthevar, Vadivel MuruganX"
-> <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
-> 
->>>>>
->>>>> And now I'd like you to explain why 5 is the right value for that field
->>>>> (I guess that has to do with the position of the CS/ALE/CLE pins).
->>>>
->>>> 5 : bit 26, 25, 24, 23, 22 to be included for comparison in the
->>>
->>> That's 6 bits to me, not 5.
->>
->> No , 5 bits only the above case.
-> 
-> Oops, right, sorry for the brain fart.
-> 
->>>
->>> The question is, is it the same value we have in nand_pa or it is
->>> different?
->>>    
->> Different address which is 0xE1400000 NAND_BASE_PHY address.
-> 
-> Then why didn't you tell me they didn't match when I suggested to pass
+On Thu, Apr 30, 2020 at 4:16 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Thu, Apr 30, 2020 at 03:30:55PM +0800, Huacai Chen wrote:
+> > Hi, Thomas,
+> >
+> > On Thu, Apr 30, 2020 at 2:33 AM Thomas Bogendoerfer
+> > <tsbogend@alpha.franken.de> wrote:
+> > >
+> > > On Wed, Apr 29, 2020 at 03:26:10PM +0800, Huacai Chen wrote:
+> > > > New Loongson-3 means Loongson-3A R2 (Loongson-3A2000) and newer CPUs.
+> > > > Loongson-3 processors have three types of PMU types (so there are three
+> > > > event maps): Loongson-3A1000/Loonngson-3B1000/Loongson-3B1500 is Type-1,
+> > > > Loongson-3A2000/Loongson-3A3000 is Type-2, Loongson-3A4000+ is Type-3.
+> > > >
+> > > > Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > > > ---
+> > > >  .../asm/mach-loongson64/cpu-feature-overrides.h    |   1 +
+> > > >  arch/mips/kernel/perf_event_mipsxx.c               | 358 +++++++++++++++++++--
+> > >
+> > > checkpatch warns about missing break/fallthrough statement and indention
+> > > problems, could please look at this ? And as all the new code is only
+> > > usefull for loongsoon CPUs could you try to only compile it in, if it's
+> > > enabled for the image ?
+> > OK, I will solve the "fallthrough" warnings and indention warnings.
+> > But the other problem is I should use #ifdef CONFIG_CPU_LOONGSON64 to
+> > guard all new code in this file? I remember that Paul Burton suggest
+> > us to avoid use #ifdef and use runtime detection instead.
+>
+> if you do the cpu checks for current_cpu_type() == CPU_LOONGSON64
+> the compiler will eliminate not needed cpu code. Looks like most
+> of the new code is done inside case CPU_LOONGSON64 blocks, so
+> that is fine. Could you check how much size increase you get for
+> a non loongson64 target with your patch ?
+I have build an IP28 kernel (ip28_defconfig+perf):
 
-sorry, because you keep asking nand_pa after that only I realized that.
+size of vmlinux with this perf patch: 10913440
+size of vmlinux without this perf patch:10913296
 
-> nand_pa? So now the question is, what does this address represent?
+readelf -a vmlinux with this perf patch:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  LOAD           0x0000000000001000 0xa800000020004000 0xa800000020004000
+                 0x0000000000800c0c 0x0000000000830dc0  RWE    0x1000
+  NOTE           0x000000000070d020 0xa800000020710020 0xa800000020710020
+                 0x000000000000003c 0x000000000000003c  R      0x4
 
-                EBU-MODULE
-  _________     _______________________
-|         |   |            |NAND CTRL  |
-| FPI BUS |==>| CS0(0x174) | 0xE100    ( 0xE14/0xE1C) NAND_PHY_BASE
-|_________|   |_CS1(0x17C)_|__________ |
+readelf -a vmlinux without this perf patch:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  LOAD           0x0000000000001000 0xa800000020004000 0xa800000020004000
+                 0x0000000000800c0c 0x0000000000830dc0  RWE    0x1000
+  NOTE           0x000000000070cff0 0xa80000002070fff0 0xa80000002070fff0
+                 0x000000000000003c 0x000000000000003c  R      0x4
 
-EBU_CONRTROLLER_BASE : 0xE0F0_0000
-HSNAND_BASE: 0xE100_0000
-NAND_CS0: 0xE140_0000
-NAND_CS1: 0xE1C0_0000
-
-MEM_REGION_BASE_CS0: 0x17400 (internal to ebu controller )
-MEM_REGION_BASE_CS1: 0x17C00
-
->Do you have a reference manual I can look at to understand what this is?
-
-We dont have reference manual since it is new SoC, we keep get 
-information from HW team and we have only register map
-
-Thanks a lot !!!
-
-Regards
-Vadivel
-> 
+>
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
