@@ -2,122 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A5E1C22B6
-	for <lists+linux-mips@lfdr.de>; Sat,  2 May 2020 06:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7CBB1C22E7
+	for <lists+linux-mips@lfdr.de>; Sat,  2 May 2020 06:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbgEBENi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 2 May 2020 00:13:38 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17759 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726439AbgEBENi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 May 2020 00:13:38 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1588392807; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=TcDizgMTnejLcEfd4ypPYU4q9usD4QnmRub5jE+jgB7fXg1YHz/u2uSG9wAYMCwtQhvWg97s4tOIf9HAtOxO/+v+iWX08GG3mKZvLMwApY4+gY+3bdSm2+tChH/MuaLIBNyVYxn1/dhmEsNFRU5XjxJQuc0c/FJqttIsFVlPFZ0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1588392807; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
-        bh=kIxq1SPrgIu4nogqTHMZhidpoyXBFul+evVc6olbwoE=; 
-        b=Rm2S+PJnME+Uqe8ZCh3EPPrn+Ig0BF9D78L9d/aonASGpJBwF6Fua3rrDXMqhCOmtLyFtJMS1TGRwy2aBdhui+Xjv88MeGJdtiqcNZVcwYuJx6HlQ9bx4nsvDv4gmOjbhXiZndrqOH9joqSdBTXP52FuaaFLqYOiqgKijli/bBI=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=flygoat.com;
-        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
-        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1588392807;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:From:To:CC:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=kIxq1SPrgIu4nogqTHMZhidpoyXBFul+evVc6olbwoE=;
-        b=HFQSxAt/nnNY1kc0tZe5Y61+ApnSNRbNtMa0GlWy5oiXS05eD/9BhZ6tvBtfGjC3
-        en8KwKXSij6rwVsND3qMsNT2HpkOflZkZ6YpIfOBx+POFtYwrQ8a0q99Y3T8cxDPIuK
-        N4FLcOXLdYJbMAzJla7fS8oBwoGNoP5ggbhkSjFE=
-Received: from [127.0.0.1] (115.205.241.207 [115.205.241.207]) by mx.zoho.com.cn
-        with SMTPS id 1588392803364372.4090948613691; Sat, 2 May 2020 12:13:23 +0800 (CST)
-Date:   Sat, 02 May 2020 12:13:19 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Subject: Re: [PATCH v2] MIPS: tools: Show result for loongson3-llsc-check
-User-Agent: K-9 Mail for Android
-Reply-to: jiaxun.yang@flygoat.com
-In-Reply-To: <1588391701-5588-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1588391701-5588-1-git-send-email-yangtiezhu@loongson.cn>
-Message-ID: <4851B907-6C9E-463B-ABE0-4588DB0BA748@flygoat.com>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoCNMailClient: External
+        id S1726435AbgEBEZz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 2 May 2020 00:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726058AbgEBEZy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 May 2020 00:25:54 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08E5C061A0C;
+        Fri,  1 May 2020 21:25:54 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id r14so2544962pfg.2;
+        Fri, 01 May 2020 21:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=kiUp2VuxecaGnL/1oYSuzHIIFHuTpPDWSWLWMhnipIs=;
+        b=iav88mJyD4okdvdlrlfIEySidY5usjuh3bgPsJWa7+0nKaQ0q0C7mkHJcK8M2WyjCN
+         eZ7TfNwZc7Dsw8UsCsNIcJ+8J3TmgeEHAFmXuhew4uPIS5hf3a/EqOLI4mlodmvoTF5F
+         X6KxCi/UR5e2lMWNwr5fe3k592cULvXzQCBgA+A0actihCsfmCsZfE4JKNQ6QNznOmf7
+         KIUFqOYJYzesac/VlkBlj25GsPmbIst+E9yEdgXhkYuVB3w+GC4RlAF7mLTBAMZWs6Nh
+         Zvk/mNJxPpDt5xTmVVrRAtcazBAh/TQRQW8JIKJ44JhoBEAPsG30cJAjNja29A6km96T
+         dXqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kiUp2VuxecaGnL/1oYSuzHIIFHuTpPDWSWLWMhnipIs=;
+        b=QT8fE/vR3N/AmK6UFciZIWy9MdsD/EjATJKderEnTOfRDTjESvA1Uft8KZW3bQf2bI
+         v/EZiF3wTKq+OhWGg2257GTgWWKd2Rxyp992l++ERUuFZBsQKjZPJlWGVuvM01iKM8dV
+         rD/QvrA3Nu+sF6tv7u0nXiQ23ioFMekeg/xwhjEnhgGbFH7IjVb3TYPEJ6xk2hAHRLEt
+         Idi4nR3GPZi5UDP3I3cfivTSCXLYLOJdj3SYZrXLPpXch1YKHwODK811NHEt+GJN7EX3
+         oGaJkV9DzfuxYyYRK+TCQd83a8HA8BCLxHnIJn/0FO460+DRdiUb0+yvllDGm/gkihsM
+         mi5w==
+X-Gm-Message-State: AGi0PuZx7y32N8A5KrZoqnyUq0JtuiDkeJ4PcBkOnFMClMyQ6xmruDx8
+        D7tiFJi+IAUlLlHgL6+uO7+vSFAL
+X-Google-Smtp-Source: APiQypLiFLElTqhkKYwGNcLAdbFzHMCcnD37IX+04dzbqo/uyPZkqZrq1s+SwZIkvCXCr+mHKQiGYw==
+X-Received: by 2002:aa7:95b2:: with SMTP id a18mr7616796pfk.91.1588393554216;
+        Fri, 01 May 2020 21:25:54 -0700 (PDT)
+Received: from localhost.localdomain (unknown-224-80.windriver.com. [147.11.224.80])
+        by smtp.gmail.com with ESMTPSA id x13sm3163431pgh.63.2020.05.01.21.25.53
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Fri, 01 May 2020 21:25:53 -0700 (PDT)
+From:   Bin Meng <bmeng.cn@gmail.com>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Bin Meng <bin.meng@windriver.com>
+Subject: [PATCH] mips: Drop CONFIG_MTD_M25P80 in various defconfig files
+Date:   Fri,  1 May 2020 21:25:49 -0700
+Message-Id: <1588393549-31371-1-git-send-email-bmeng.cn@gmail.com>
+X-Mailer: git-send-email 1.7.1
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+From: Bin Meng <bin.meng@windriver.com>
 
+Drop CONFIG_MTD_M25P80 that was removed in
+commit b35b9a10362d ("mtd: spi-nor: Move m25p80 code in spi-nor.c")
 
-=E4=BA=8E 2020=E5=B9=B45=E6=9C=882=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=8811=
-:55:01, Tiezhu Yang <yangtiezhu@loongson=2Ecn> =E5=86=99=E5=88=B0:
->It is better to show the result before loongson3-llsc-check exit,
->otherwise we can see nothing if the return status is EXIT_SUCCESS,
->it seems confusing=2E
->
->E=2Eg=2E without this patch:
->
->[loongson@localhost tools]$ =2E/loongson3-llsc-check =2E=2E/=2E=2E/=2E=2E=
-/vmlinux
->[loongson@localhost tools]$
->
->With this patch:
->
->[loongson@localhost tools]$ =2E/loongson3-llsc-check =2E=2E/=2E=2E/=2E=2E=
-/vmlinux
->loongson3-llsc-check returns success
->[loongson@localhost tools]$
->
->Signed-off-by: Tiezhu Yang <yangtiezhu@loongson=2Ecn>
+Signed-off-by: Bin Meng <bin.meng@windriver.com>
+---
 
-Reviewed-by: Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom>
+ arch/mips/configs/ath79_defconfig             | 1 -
+ arch/mips/configs/db1xxx_defconfig            | 1 -
+ arch/mips/configs/generic/board-ocelot.config | 1 -
+ arch/mips/configs/pistachio_defconfig         | 1 -
+ arch/mips/configs/rt305x_defconfig            | 1 -
+ 5 files changed, 5 deletions(-)
 
-Btw,
-Just learned from Loongson that the latest generation of Loongson-3
-doesn't have LLSC errata, also for Loongson 3A R2/R3, use synci instead
-of sync would give better performance=2E
+diff --git a/arch/mips/configs/ath79_defconfig b/arch/mips/configs/ath79_defconfig
+index 3d14d67..96622a2 100644
+--- a/arch/mips/configs/ath79_defconfig
++++ b/arch/mips/configs/ath79_defconfig
+@@ -46,7 +46,6 @@ CONFIG_MTD_JEDECPROBE=y
+ CONFIG_MTD_CFI_AMDSTD=y
+ CONFIG_MTD_COMPLEX_MAPPINGS=y
+ CONFIG_MTD_PHYSMAP=y
+-CONFIG_MTD_M25P80=y
+ CONFIG_MTD_SPI_NOR=y
+ CONFIG_NETDEVICES=y
+ CONFIG_ATH9K=m
+diff --git a/arch/mips/configs/db1xxx_defconfig b/arch/mips/configs/db1xxx_defconfig
+index e6f3e8e..b8bd663 100644
+--- a/arch/mips/configs/db1xxx_defconfig
++++ b/arch/mips/configs/db1xxx_defconfig
+@@ -92,7 +92,6 @@ CONFIG_MTD_CFI=y
+ CONFIG_MTD_CFI_ADV_OPTIONS=y
+ CONFIG_MTD_CFI_AMDSTD=y
+ CONFIG_MTD_PHYSMAP=y
+-CONFIG_MTD_M25P80=y
+ CONFIG_MTD_SST25L=y
+ CONFIG_MTD_RAW_NAND=y
+ CONFIG_MTD_NAND_ECC_SW_BCH=y
+diff --git a/arch/mips/configs/generic/board-ocelot.config b/arch/mips/configs/generic/board-ocelot.config
+index 7626f2a..5107095 100644
+--- a/arch/mips/configs/generic/board-ocelot.config
++++ b/arch/mips/configs/generic/board-ocelot.config
+@@ -9,7 +9,6 @@ CONFIG_GENERIC_PHY=y
+ CONFIG_MTD=y
+ CONFIG_MTD_CMDLINE_PARTS=y
+ CONFIG_MTD_BLOCK=y
+-CONFIG_MTD_M25P80=y
+ CONFIG_MTD_RAW_NAND=y
+ CONFIG_MTD_NAND_PLATFORM=y
+ CONFIG_MTD_SPI_NOR=y
+diff --git a/arch/mips/configs/pistachio_defconfig b/arch/mips/configs/pistachio_defconfig
+index 24e0718..b9adf15 100644
+--- a/arch/mips/configs/pistachio_defconfig
++++ b/arch/mips/configs/pistachio_defconfig
+@@ -127,7 +127,6 @@ CONFIG_DEBUG_DEVRES=y
+ CONFIG_CONNECTOR=y
+ CONFIG_MTD=y
+ CONFIG_MTD_BLOCK=y
+-CONFIG_MTD_M25P80=y
+ CONFIG_MTD_SPI_NOR=y
+ CONFIG_MTD_UBI=y
+ CONFIG_MTD_UBI_BLOCK=y
+diff --git a/arch/mips/configs/rt305x_defconfig b/arch/mips/configs/rt305x_defconfig
+index 8c2ead5..fec5851 100644
+--- a/arch/mips/configs/rt305x_defconfig
++++ b/arch/mips/configs/rt305x_defconfig
+@@ -76,7 +76,6 @@ CONFIG_MTD_CFI_AMDSTD=y
+ CONFIG_MTD_COMPLEX_MAPPINGS=y
+ CONFIG_MTD_PHYSMAP=y
+ CONFIG_MTD_PHYSMAP_OF=y
+-CONFIG_MTD_M25P80=y
+ CONFIG_MTD_SPI_NOR=y
+ CONFIG_EEPROM_93CX6=m
+ CONFIG_SCSI=y
+-- 
+2.7.4
 
-For performance approach, we'd better develop a method
-to enable/disable these workarounds at runtime, looks like smp_alternative=
-[1]
-that was already employed by x86 and arm64 can be ported to MIPS and
-serves to this target=2E
-
-I'm struggling with device drivers recently so wish somebody
-can take a look at it=2E
-
-Thanks=2E
-
-[1]: https://lwn=2Enet/Articles/164121/
-
->---
->
->v2:
->  - move "returns" after "loongson3-llsc-check" suggested by Sergei
->
-> arch/mips/tools/loongson3-llsc-check=2Ec | 2 ++
-> 1 file changed, 2 insertions(+)
->
->diff --git a/arch/mips/tools/loongson3-llsc-check=2Ec b/arch/mips/tools/l=
-oongson3-llsc-check=2Ec
->index 0ebddd0=2E=2Ebdbc7b4 100644
->--- a/arch/mips/tools/loongson3-llsc-check=2Ec
->+++ b/arch/mips/tools/loongson3-llsc-check=2Ec
->@@ -303,5 +303,7 @@ int main(int argc, char *argv[])
-> out_close:
-> 	close(vmlinux_fd);
-> out_ret:
->+	fprintf(stdout, "loongson3-llsc-check returns %s\n",
->+		status ? "failure" : "success");
-> 	return status;
-> }
-
---=20
-Jiaxun Yang
