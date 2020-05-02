@@ -2,33 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 556411C25E6
-	for <lists+linux-mips@lfdr.de>; Sat,  2 May 2020 15:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480181C25E8
+	for <lists+linux-mips@lfdr.de>; Sat,  2 May 2020 15:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728052AbgEBNqf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 2 May 2020 09:46:35 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:46292 "EHLO
+        id S1728035AbgEBNqg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 2 May 2020 09:46:36 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:46296 "EHLO
         mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1728034AbgEBNqf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 May 2020 09:46:35 -0400
+        by vger.kernel.org with ESMTP id S1728038AbgEBNqg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 2 May 2020 09:46:36 -0400
 Received: from localhost.localdomain (unknown [116.236.177.50])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id F145860161;
-        Sat,  2 May 2020 21:39:44 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 4547060162;
+        Sat,  2 May 2020 21:39:49 +0800 (CST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1588426785; bh=Yn5Z+8DuiLQa/cJoX6ZPjTfvrkeW8daV39JuqCOjncU=;
+        t=1588426789; bh=ONRtGOA4myqnZrJLa5c+bfIHlPkdzZQWJl5rHs3mfJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LwCFPJa1IQlHNPrUJoiwMwVjqjsrAGXI4Hmf5pPaunBrgQ3YQgqLOROyMZzEkt1zg
-         idYNXm3u1jnrRquGh59TYqbBSJhtEoIW+ALTHIC3MBV7N13eQ1JoNLSTdR1SrB9sWe
-         OaQVPErj+VfZy97kh1eB4fm1ZG3EgBdHgy9rDuw4=
+        b=r7DQWLtJ/OJM2slr13qfVQjX7i5oC4ujHJBiCrEMKOVaYmwaJMyDFTlUMo8PBSnsH
+         uC+bBFeJuV/QY9DGm2Gr9Hr5fyIH2S11O0EG7UZBtKAjPZf7CCF4jjO+cZbnK060DT
+         OK5ceSxCOa/dGgPXeZVLSeipAvsDG6bniPg1+6NI=
 From:   WANG Xuerui <git@xen0n.name>
 To:     linux-mips@vger.kernel.org
 Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH 2/4] MIPS: Loongson64: define offsets and known revisions for some CPUCFG features
-Date:   Sat,  2 May 2020 21:38:44 +0800
-Message-Id: <20200502133846.40590-3-git@xen0n.name>
+Subject: [PATCH 3/4] MIPS: define more Loongson CP0.Config6 and CP0.Diag feature bits
+Date:   Sat,  2 May 2020 21:38:45 +0800
+Message-Id: <20200502133846.40590-4-git@xen0n.name>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200502133846.40590-1-git@xen0n.name>
 References: <20200502133846.40590-1-git@xen0n.name>
@@ -39,60 +39,41 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add the constants for easier and maintainable composition of CPUCFG
-values.
+These are exposed to userland alternatively via the new CPUCFG
+instruction on Loongson-3A R4 and above. Add definitions for readback
+on older cores.
 
 Signed-off-by: WANG Xuerui <git@xen0n.name>
 Cc: Huacai Chen <chenhc@lemote.com>
 Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- .../asm/mach-loongson64/loongson_regs.h       | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ arch/mips/include/asm/mipsregs.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/mips/include/asm/mach-loongson64/loongson_regs.h b/arch/mips/include/asm/mach-loongson64/loongson_regs.h
-index 3fa94c6ec3b9..8508afffdfd1 100644
---- a/arch/mips/include/asm/mach-loongson64/loongson_regs.h
-+++ b/arch/mips/include/asm/mach-loongson64/loongson_regs.h
-@@ -67,6 +67,8 @@ static inline u32 read_cpucfg(u32 reg)
- #define LOONGSON_CFG1_SFBP	BIT(29)
- #define LOONGSON_CFG1_CDMAP	BIT(30)
+diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
+index 796fe47cfd17..90f843c72774 100644
+--- a/arch/mips/include/asm/mipsregs.h
++++ b/arch/mips/include/asm/mipsregs.h
+@@ -681,6 +681,10 @@
+ #define MIPS_CONF6_FTLBDIS	(_ULCAST_(1) << 22)
+ /* FTLB probability bits */
+ #define MIPS_CONF6_FTLBP_SHIFT	(16)
++/* Loongson-3 feature bits */
++#define MIPS_CONF6_LOONGSON_SCRAND	(_ULCAST_(1) << 17)
++#define MIPS_CONF6_LOONGSON_LLEXC	(_ULCAST_(1) << 16)
++#define MIPS_CONF6_LOONGSON_STFILL	(_ULCAST_(1) << 8)
  
-+#define LOONGSON_CFG1_FPREV_OFFSET	1
-+
- #define LOONGSON_CFG2 0x2
- #define LOONGSON_CFG2_LEXT1	BIT(0)
- #define LOONGSON_CFG2_LEXT2	BIT(1)
-@@ -90,6 +92,13 @@ static inline u32 read_cpucfg(u32 reg)
- #define LOONGSON_CFG2_LCSRP	BIT(27)
- #define LOONGSON_CFG2_LDISBLIKELY	BIT(28)
+ #define MIPS_CONF7_WII		(_ULCAST_(1) << 31)
  
-+#define LOONGSON_CFG2_LPMREV_OFFSET	9
-+#define LOONGSON_CFG2_LPM_REV1		(1 << LOONGSON_CFG2_LPMREV_OFFSET)
-+#define LOONGSON_CFG2_LPM_REV2		(2 << LOONGSON_CFG2_LPMREV_OFFSET)
-+#define LOONGSON_CFG2_LVZREV_OFFSET	16
-+#define LOONGSON_CFG2_LVZ_REV1		(1 << LOONGSON_CFG2_LVZREV_OFFSET)
-+#define LOONGSON_CFG2_LVZ_REV2		(2 << LOONGSON_CFG2_LVZREV_OFFSET)
-+
- #define LOONGSON_CFG3 0x3
- #define LOONGSON_CFG3_LCAMP	BIT(0)
- #define LOONGSON_CFG3_LCAMREV	GENMASK(3, 1)
-@@ -97,6 +106,16 @@ static inline u32 read_cpucfg(u32 reg)
- #define LOONGSON_CFG3_LCAMKW	GENMASK(19, 12)
- #define LOONGSON_CFG3_LCAMVW	GENMASK(27, 20)
- 
-+#define LOONGSON_CFG3_LCAMREV_OFFSET	1
-+#define LOONGSON_CFG3_LCAM_REV1		(1 << LOONGSON_CFG3_LCAMREV_OFFSET)
-+#define LOONGSON_CFG3_LCAM_REV2		(2 << LOONGSON_CFG3_LCAMREV_OFFSET)
-+#define LOONGSON_CFG3_LCAMNUM_OFFSET	4
-+#define LOONGSON_CFG3_LCAMNUM_REV1	(0x3f << LOONGSON_CFG3_LCAMNUM_OFFSET)
-+#define LOONGSON_CFG3_LCAMKW_OFFSET	12
-+#define LOONGSON_CFG3_LCAMKW_REV1	(0x27 << LOONGSON_CFG3_LCAMKW_OFFSET)
-+#define LOONGSON_CFG3_LCAMVW_OFFSET	20
-+#define LOONGSON_CFG3_LCAMVW_REV1	(0x3f << LOONGSON_CFG3_LCAMVW_OFFSET)
-+
- #define LOONGSON_CFG4 0x4
- #define LOONGSON_CFG4_CCFREQ	GENMASK(31, 0)
- 
+@@ -997,6 +1001,8 @@
+ #define LOONGSON_DIAG_ITLB	(_ULCAST_(1) << 2)
+ /* Flush DTLB */
+ #define LOONGSON_DIAG_DTLB	(_ULCAST_(1) << 3)
++/* Allow some CACHE instructions (CACHE0, 1, 3, 21 and 23) in user mode */
++#define LOONGSON_DIAG_UCAC	(_ULCAST_(1) << 8)
+ /* Flush VTLB */
+ #define LOONGSON_DIAG_VTLB	(_ULCAST_(1) << 12)
+ /* Flush FTLB */
 -- 
 2.21.0
 
