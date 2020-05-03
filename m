@@ -2,560 +2,341 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F521C2B73
-	for <lists+linux-mips@lfdr.de>; Sun,  3 May 2020 12:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36A01C2C82
+	for <lists+linux-mips@lfdr.de>; Sun,  3 May 2020 14:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727125AbgECKvt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 3 May 2020 06:51:49 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:57600 "EHLO
-        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1727051AbgECKvt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 3 May 2020 06:51:49 -0400
-Received: from localhost.localdomain (unknown [116.236.177.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 43480600B4;
-        Sun,  3 May 2020 18:51:43 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1588503103; bh=FegFd8GIuh0fulqe7k+4+vE4G1Xk1d9ixlgh3+q6KvI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Km+XPovHFsxqAIE2vUrT5nToo6xItRC5tsEVizgZ/XsIf2adrbVOVnsEQhBLqYXUR
-         xffLxfQWVeUnxfJ3Xce0xk4AkS2UXHAKbqYNrQ66Z/eVODninZH6reNQO310gnqk8/
-         vLXqqTKVRWVZmzVI6yA6q5aioXG1+oJdVBqtsYCo=
-From:   WANG Xuerui <git@xen0n.name>
-To:     linux-mips@vger.kernel.org
-Cc:     WANG Xuerui <git@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v2 RESEND 4/4] MIPS: emulate CPUCFG instruction on older Loongson64 cores
-Date:   Sun,  3 May 2020 18:50:13 +0800
-Message-Id: <20200503105012.43246-1-git@xen0n.name>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20200503103304.40678-5-git@xen0n.name>
-References: <20200503103304.40678-5-git@xen0n.name>
+        id S1728595AbgECMwY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 3 May 2020 08:52:24 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:41080 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728378AbgECMwY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 3 May 2020 08:52:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1588510339; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2ko4Xwt96nyrG2ofYwcaiQ3kO8FQgN99Oau+oASza+Y=;
+        b=vMLvvQ26mbkRB5ssq4TJnK7+m022JmcEKlGByK0qEt0wZ/cWuoZ2C+xRTochuMQahsnETO
+        ABOQBnQJ2/HLIwG+CvdEP4jyvQxShAa+HOezOJtmovqAdOYegmCHPgKTS4wd0UiUZCwl/5
+        56vda+SO7iF/CxZEL8qChIccueuMpcE=
+Date:   Sun, 03 May 2020 14:52:05 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v7 01/12] dt-bindings: add img,pvrsgx.yaml for Imagination
+ GPUs
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?iso-8859-1?q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Philipp Rossak <embed3d@gmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        openpvrsgx-devgroup@letux.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Message-Id: <TEAR9Q.6HI5DFRO5U0I3@crapouillou.net>
+In-Reply-To: <28138EC0-0FA5-4F97-B528-3442BF087C7A@goldelico.com>
+References: <cover.1587760454.git.hns@goldelico.com>
+        <3a451e360fed84bc40287678b4d6be13821cfbc0.1587760454.git.hns@goldelico.com>
+        <NMCE9Q.LWG45P20NBVJ@crapouillou.net>
+        <28138EC0-0FA5-4F97-B528-3442BF087C7A@goldelico.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-CPUCFG is the instruction for querying processor characteristics on
-newer Loongson processors, much like CPUID of x86. Since the instruction
-is supposedly designed to provide a unified way to do feature detection
-(without having to, for example, parse /proc/cpuinfo which is too
-heavyweight), it is important to provide compatibility for older cores
-without native support. Fortunately, most of the fields can be
-synthesized without changes to semantics. Performance is not really big
-a concern, because feature detection logic is not expected to be
-invoked very often in typical userland applications.
+Hi Nikolaus,
 
-The instruction can't be emulated on LOONGSON_2EF cores, according to
-FlyGoat's experiments. Because the LWC2 opcode is assigned to other
-valid instructions on 2E and 2F, no RI exception is raised for us to
-intercept. So compatibility is only extended back furthest to
-Loongson-3A1000. Loongson-2K is covered too, as it is basically a remix
-of various blocks from the 3A/3B models from a kernel perspective.
+Le sam. 2 mai 2020 =E0 22:26, H. Nikolaus Schaller <hns@goldelico.com> a=20
+=E9crit :
+> Hi Paul,
+>=20
+>>  Am 26.04.2020 um 15:11 schrieb Paul Cercueil <paul@crapouillou.net>:
+>>=20
+>>  Hi Nikolaus,
+>>=20
+>>  Le ven. 24 avril 2020 =E0 22:34, H. Nikolaus Schaller=20
+>> <hns@goldelico.com> a =E9crit :
+>>>  The Imagination PVR/SGX GPU is part of several SoC from
+>>>  multiple vendors, e.g. TI OMAP, Ingenic JZ4780, Intel Poulsbo,
+>>>  Allwinner A83 and others.
+>>>  With this binding, we describe how the SGX processor is
+>>>  interfaced to the SoC (registers and interrupt).
+>>>  The interface also consists of clocks, reset, power but
+>>>  information from data sheets is vague and some SoC integrators
+>>>  (TI) deciced to use a PRCM wrapper (ti,sysc) which does
+>>>  all clock, reset and power-management through registers
+>>>  outside of the sgx register block.
+>>>  Therefore all these properties are optional.
+>>>  Tested by make dt_binding_check
+>>>  Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>>>  ---
+>>>  .../devicetree/bindings/gpu/img,pvrsgx.yaml   | 150=20
+>>> ++++++++++++++++++
+>>>  1 file changed, 150 insertions(+)
+>>>  create mode 100644=20
+>>> Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
+>>>  diff --git a/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml=20
+>>> b/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
+>>>  new file mode 100644
+>>>  index 000000000000..33a9c4c6e784
+>>>  --- /dev/null
+>>>  +++ b/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
+>>>  @@ -0,0 +1,150 @@
+>>>  +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>>  +%YAML 1.2
+>>>  +---
+>>>  +$id: http://devicetree.org/schemas/gpu/img,pvrsgx.yaml#
+>>>  +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>  +
+>>>  +title: Imagination PVR/SGX GPU
+>>>  +
+>>>  +maintainers:
+>>>  +  - H. Nikolaus Schaller <hns@goldelico.com>
+>>>  +
+>>>  +description: |+
+>>>  +  This binding describes the Imagination SGX5 series of 3D=20
+>>> accelerators which
+>>>  +  are found in several different SoC like TI OMAP, Sitara,=20
+>>> Ingenic JZ4780,
+>>>  +  Allwinner A83, and Intel Poulsbo and CedarView and more.
+>>>  +
+>>>  +  For an extensive list see:=20
+>>> https://en.wikipedia.org/wiki/PowerVR#Implementations
+>>>  +
+>>>  +  The SGX node is usually a child node of some DT node belonging=20
+>>> to the SoC
+>>>  +  which handles clocks, reset and general address space mapping=20
+>>> of the SGX
+>>>  +  register area. If not, an optional clock can be specified here.
+>>>  +
+>>>  +properties:
+>>>  +  $nodename:
+>>>  +    pattern: '^gpu@[a-f0-9]+$'
+>>>  +  compatible:
+>>>  +    oneOf:
+>>>  +      - description: SGX530-121 based SoC
+>>>  +        items:
+>>>  +          - enum:
+>>>  +            - ti,omap3-sgx530-121 # BeagleBoard A/B/C,=20
+>>> OpenPandora 600MHz and similar
+>>>  +          - const: img,sgx530-121
+>>>  +          - const: img,sgx530
+>>>  +
+>>>  +      - description: SGX530-125 based SoC
+>>>  +        items:
+>>>  +          - enum:
+>>>  +            - ti,am3352-sgx530-125 # BeagleBone Black
+>>>  +            - ti,am3517-sgx530-125
+>>>  +            - ti,am4-sgx530-125
+>>>  +            - ti,omap3-sgx530-125 # BeagleBoard XM, GTA04,=20
+>>> OpenPandora 1GHz and similar
+>>>  +            - ti,ti81xx-sgx530-125
+>>>  +          - const: ti,omap3-sgx530-125
+>>>  +          - const: img,sgx530-125
+>>>  +          - const: img,sgx530
+>>>  +
+>>>  +      - description: SGX535-116 based SoC
+>>>  +        items:
+>>>  +          - const: intel,poulsbo-gma500-sgx535 # Atom Z5xx
+>>>  +          - const: img,sgx535-116
+>>>  +          - const: img,sgx535
+>>>  +
+>>>  +      - description: SGX540-116 based SoC
+>>>  +        items:
+>>>  +          - const: intel,medfield-gma-sgx540 # Atom Z24xx
+>>>  +          - const: img,sgx540-116
+>>>  +          - const: img,sgx540
+>>>  +
+>>>  +      - description: SGX540-120 based SoC
+>>>  +        items:
+>>>  +          - enum:
+>>>  +            - samsung,s5pv210-sgx540-120
+>>>  +            - ti,omap4-sgx540-120 # Pandaboard, Pandaboard ES and=20
+>>> similar
+>>>  +          - const: img,sgx540-120
+>>>  +          - const: img,sgx540
+>>>  +
+>>>  +      - description: SGX540-130 based SoC
+>>>  +        items:
+>>>  +          - enum:
+>>>  +            - ingenic,jz4780-sgx540-130 # CI20
+>>>  +          - const: img,sgx540-130
+>>>  +          - const: img,sgx540
+>>>  +
+>>>  +      - description: SGX544-112 based SoC
+>>>  +        items:
+>>>  +          - const: ti,omap4470-sgx544-112
+>>>  +          - const: img,sgx544-112
+>>>  +          - const: img,sgx544
+>>>  +
+>>>  +      - description: SGX544-115 based SoC
+>>>  +        items:
+>>>  +          - enum:
+>>>  +            - allwinner,sun8i-a31-sgx544-115
+>>>  +            - allwinner,sun8i-a31s-sgx544-115
+>>>  +            - allwinner,sun8i-a83t-sgx544-115 # Banana-Pi-M3=20
+>>> (Allwinner A83T) and similar
+>>>  +          - const: img,sgx544-115
+>>>  +          - const: img,sgx544
+>>>  +
+>>>  +      - description: SGX544-116 based SoC
+>>>  +        items:
+>>>  +          - enum:
+>>>  +            - ti,dra7-sgx544-116 # DRA7
+>>>  +            - ti,omap5-sgx544-116 # OMAP5 UEVM, Pyra Handheld and=20
+>>> similar
+>>>  +          - const: img,sgx544-116
+>>>  +          - const: img,sgx544
+>>>  +
+>>>  +      - description: SGX545 based SoC
+>>>  +        items:
+>>>  +          - const: intel,cedarview-gma3600-sgx545 # Atom N2600,=20
+>>> D2500
+>>>  +          - const: img,sgx545-116
+>>>  +          - const: img,sgx545
+>>>  +
+>>>  +  reg:
+>>>  +    maxItems: 1
+>>>  +
+>>>  +  interrupts:
+>>>  +    maxItems: 1
+>>>  +
+>>>  +  interrupt-names:
+>>>  +    maxItems: 1
+>>>  +    items:
+>>>  +      - const: sgx
+>>>  +
+>>>  +  clocks:
+>>>  +    maxItems: 4
+>>>  +
+>>>  +  clock-names:
+>>>  +    maxItems: 4
+>>>  +    items:
+>>>  +      - const: core
+>>>  +      - const: sys
+>>>  +      - const: mem
+>>>  +      - const: hyd
+>>>  +
+>>>  +  sgx-supply: true
+>>>  +
+>>>  +  power-domains:
+>>>  +    maxItems: 1
+>>>  +
+>>>  +  resets:
+>>>  +    maxItems: 1
+>>>  +
+>>>  +required:
+>>>  +  - compatible
+>>>  +  - reg
+>>>  +  - interrupts
+>>=20
+>>  By not making 'clocks' required you make it possible to create=20
+>> broken bindings; according to your schema, a GPU node without a=20
+>> 'clocks' for the JZ4780 would be perfectly valid.
+>=20
+> Yes. But it will never pass a test with real hardware. So it can't be=20
+> omitted anyways.
+>=20
+> On a more general thought, this argument holds for any optional=20
+> property. So it is not specific to clocks. Since the reg address=20
+> values are also never specified you can still create broken bindings.=20
+> Or by connecting the wrong clock. So the ways to create broken=20
+> bindings are numerous.
+>=20
+> I also assume that SGX integrators are not beginners and do you think=20
+> they need to find out through a make dt_binding_check dtbs_check that=20
+> they should define a clock? based on *assumptions* we do without=20
+> having access to all systems?
+>=20
+> IMHO the bindings documentation is a documentation. So it needs to be=20
+> helpful but not perfect. Formalizing all corner cases in a bindings=20
+> document (just because we can since .yaml was introduced) is IMHO=20
+> overkill.
+>=20
+> In times before the introduction of more formal .yaml I think we=20
+> would not even have considered this for a comment in the bindings.txt.
+>=20
+>>  It's possible to forbid the presence of the 'clocks' property on=20
+>> some implementations, and require it on others.
+>=20
+> To be precise we have to specify the exact number of clocks (between=20
+> 0 and 4) for every architecture.
+>=20
+> This also contradicts my dream to get rid of the architecture=20
+> specific components in the long run. My dream (because I can't tell=20
+> how it can be done) is that we can one day develop something which=20
+> just needs compatible =3D img,530 or imp,540 or img,544. Then we can't=20
+> make the number clocks depend on the implementation any more.
 
-This is lightly based on Loongson's work on their Linux 3.10 fork, for
-being the authority on the right feature flags to fill in, where things
-aren't otherwise discoverable.
+As we said before, the number of clocks is a property of the GPU and=20
+*not* its integration into the SoC.
 
-Signed-off-by: WANG Xuerui <git@xen0n.name>
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com> # Loongson-2K, 3B1500
-Cc: Huacai Chen <chenhc@lemote.com>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
----
+So you would *not* have a number of clocks between 0 and 4. You get=20
+either 0, or 4, depending on whether or not you have a wrapper.
 
-Resend because I forgot to include Jiaxun's review tags. Sorry for the
-noise.
 
- arch/mips/Kconfig                             |  11 ++
- arch/mips/include/asm/cpu-info.h              |   9 ++
- .../include/asm/mach-loongson64/cpucfg-emul.h |  67 +++++++++
- arch/mips/kernel/cpu-probe.c                  | 129 ++++++++++++++++++
- arch/mips/kernel/traps.c                      |  45 ++++++
- arch/mips/loongson64/Makefile                 |   1 +
- arch/mips/loongson64/cpucfg-emul.c            |  80 +++++++++++
- 7 files changed, 342 insertions(+)
- create mode 100644 arch/mips/include/asm/mach-loongson64/cpucfg-emul.h
- create mode 100644 arch/mips/loongson64/cpucfg-emul.c
+>>  See how it's done for instance on=20
+>> Documentation/devicetree/bindings/serial/samsung_uart.yaml.
+>=20
+> Yes I know the design pattern, but I wonder if such a move makes the=20
+> whole thing even less maintainable.
+>=20
+> Assume we have finished DTS for some SoC. Then these DTS have been=20
+> tested on real hardware and are working. Clocks are there where=20
+> needed and missing where not. We may now forbid or not forbid them=20
+> for some implementations in the bindings.yaml but the result of=20
+> dtbs_check won't change! Because they are tested and working and the=20
+> bindings.yaml has been adapted to the result. So we have just=20
+> duplicated something for no practical benefit.
+>=20
+> Next, assume there is coming support for more and more new SoC. Then,=20
+> developers not only have to figure out which clocks they need in the=20
+> DTS but they also have to add a patch to the implementation specific=20
+> part of the bindings.yaml to clearly define exactly the same what=20
+> they already have written into their .dts (the clocks are either=20
+> there for the of_node or they are not). So again the rules are for no=20
+> benefit, since a new SoC is introduced exactly once. And tested if it=20
+> works. And if it is there, it will stay as it is. It is just work for=20
+> maintainers to review that patch as well.
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 9f15539a6342..2ab189001917 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -1508,6 +1508,17 @@ config CPU_LOONGSON3_WORKAROUNDS
- 
- 	  If unsure, please say Y.
- 
-+config CPU_LOONGSON3_CPUCFG_EMULATION
-+	bool "Emulate the CPUCFG instruction on older cores"
-+	default y
-+	depends on CPU_LOONGSON64
-+	help
-+	  Loongson-3A R4 and newer have the CPUCFG instruction available for
-+	  userland to query CPU capabilities, much like CPUID on x86. This
-+	  option provides emulation of the instruction on older cores.
-+
-+	  If unsure, please say Y.
-+
- config CPU_LOONGSON2E
- 	bool "Loongson 2E"
- 	depends on SYS_HAS_CPU_LOONGSON2E
-diff --git a/arch/mips/include/asm/cpu-info.h b/arch/mips/include/asm/cpu-info.h
-index ed7ffe4e63a3..43c238567a80 100644
---- a/arch/mips/include/asm/cpu-info.h
-+++ b/arch/mips/include/asm/cpu-info.h
-@@ -105,6 +105,15 @@ struct cpuinfo_mips {
- 	unsigned int		gtoffset_mask;
- 	unsigned int		guestid_mask;
- 	unsigned int		guestid_cache;
-+
-+#ifdef CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION
-+	/* CPUCFG data for this CPU, synthesized at probe time.
-+	 *
-+	 * CPUCFG select 0 is PRId, others are unimplemented for now. So the
-+	 * only stored values are for CPUCFG selects 1-3 inclusive.
-+	 */
-+	u32 loongson3_cpucfg_data[3];
-+#endif
- } __attribute__((aligned(SMP_CACHE_BYTES)));
- 
- extern struct cpuinfo_mips cpu_data[];
-diff --git a/arch/mips/include/asm/mach-loongson64/cpucfg-emul.h b/arch/mips/include/asm/mach-loongson64/cpucfg-emul.h
-new file mode 100644
-index 000000000000..b9f6b2aa98f9
---- /dev/null
-+++ b/arch/mips/include/asm/mach-loongson64/cpucfg-emul.h
-@@ -0,0 +1,67 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_MACH_LOONGSON64_CPUCFG_EMUL_H_
-+#define _ASM_MACH_LOONGSON64_CPUCFG_EMUL_H_
-+
-+#include <asm/cpu-info.h>
-+
-+#include <loongson_regs.h>
-+
-+#define LOONGSON_FPREV_MASK 0x7
-+
-+#ifdef CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION
-+
-+/* Finalize synthesis of CPUCFG data by patching the partially filled data
-+ * with dynamically detected CPU characteristics. This keeps the amount of
-+ * hard-coded logic at a minimum.
-+ */
-+void loongson3_cpucfg_finish_synthesis(struct cpuinfo_mips *c);
-+
-+static inline u32 loongson3_cpucfg_read_synthesized(
-+	struct cpuinfo_mips *c,
-+	__u64 sel)
-+{
-+	switch (sel) {
-+	case LOONGSON_CFG0:
-+		return c->processor_id;
-+	case LOONGSON_CFG1:
-+	case LOONGSON_CFG2:
-+	case LOONGSON_CFG3:
-+		return c->loongson3_cpucfg_data[sel - 1];
-+	case LOONGSON_CFG4:
-+	case LOONGSON_CFG5:
-+		/* CPUCFG selects 4 and 5 are related to the processor clock.
-+		 * Unimplemented for now.
-+		 */
-+		return 0;
-+	case LOONGSON_CFG6:
-+		/* CPUCFG select 6 is for the undocumented Safe Extension. */
-+		return 0;
-+	case LOONGSON_CFG7:
-+		/* CPUCFG select 7 is for the virtualization extension.
-+		 * We don't know if the two currently known features are
-+		 * supported on older cores according to the public
-+		 * documentation, so leave this at zero.
-+		 */
-+		return 0;
-+	}
-+
-+	/*
-+	 * Return 0 for unrecognized CPUCFG selects, which is real hardware
-+	 * behavior observed on Loongson 3A R4.
-+	 */
-+	return 0;
-+}
-+#else
-+static void loongson3_cpucfg_finish_synthesis(struct cpuinfo_mips *c)
-+{
-+}
-+
-+static inline u32 loongson3_cpucfg_read_synthesized(
-+	struct cpuinfo_mips *c,
-+	__u64 sel)
-+{
-+	return 0;
-+}
-+#endif
-+
-+#endif /* _ASM_MACH_LOONGSON64_CPUCFG_EMUL_H_ */
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index ca2e6f1af4fe..907e31ff562f 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -28,6 +28,8 @@
- #include <asm/spram.h>
- #include <linux/uaccess.h>
- 
-+#include <asm/mach-loongson64/cpucfg-emul.h>
-+
- /* Hardware capabilities */
- unsigned int elf_hwcap __read_mostly;
- EXPORT_SYMBOL_GPL(elf_hwcap);
-@@ -1580,6 +1582,24 @@ static inline void cpu_probe_legacy(struct cpuinfo_mips *c, unsigned int cpu)
- 			set_isa(c, MIPS_CPU_ISA_M64R1);
- 			c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
- 				MIPS_ASE_LOONGSON_EXT);
-+#ifdef CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION
-+			/* Add CPUCFG features non-discoverable otherwise. */
-+			c->loongson3_cpucfg_data[0] |= (LOONGSON_CFG1_LSLDR0 |
-+				LOONGSON_CFG1_LSSYNCI | LOONGSON_CFG1_LSUCA |
-+				LOONGSON_CFG1_LLSYNC | LOONGSON_CFG1_TGTSYNC);
-+			c->loongson3_cpucfg_data[1] |= (LOONGSON_CFG2_LBT1 |
-+				LOONGSON_CFG2_LPMP | LOONGSON_CFG2_LPM_REV1);
-+			c->loongson3_cpucfg_data[2] |= (
-+				LOONGSON_CFG3_LCAM_REV1 |
-+				LOONGSON_CFG3_LCAMNUM_REV1 |
-+				LOONGSON_CFG3_LCAMKW_REV1 |
-+				LOONGSON_CFG3_LCAMVW_REV1);
-+
-+			/* This feature is set by firmware, but all known
-+			 * Loongson-3A Legacy systems are configured this way.
-+			 */
-+			c->loongson3_cpucfg_data[0] |= LOONGSON_CFG1_CDMAP;
-+#endif
- 			break;
- 		case PRID_REV_LOONGSON3B_R1:
- 		case PRID_REV_LOONGSON3B_R2:
-@@ -1589,6 +1609,24 @@ static inline void cpu_probe_legacy(struct cpuinfo_mips *c, unsigned int cpu)
- 			set_isa(c, MIPS_CPU_ISA_M64R1);
- 			c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
- 				MIPS_ASE_LOONGSON_EXT);
-+#ifdef CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION
-+			/* Add CPUCFG features non-discoverable otherwise. */
-+			c->loongson3_cpucfg_data[0] |= (LOONGSON_CFG1_LSLDR0 |
-+				LOONGSON_CFG1_LSSYNCI | LOONGSON_CFG1_LSUCA |
-+				LOONGSON_CFG1_LLSYNC | LOONGSON_CFG1_TGTSYNC);
-+			c->loongson3_cpucfg_data[1] |= (LOONGSON_CFG2_LBT1 |
-+				LOONGSON_CFG2_LPMP | LOONGSON_CFG2_LPM_REV1);
-+			c->loongson3_cpucfg_data[2] |= (
-+				LOONGSON_CFG3_LCAM_REV1 |
-+				LOONGSON_CFG3_LCAMNUM_REV1 |
-+				LOONGSON_CFG3_LCAMKW_REV1 |
-+				LOONGSON_CFG3_LCAMVW_REV1);
-+
-+			/* This feature is set by firmware, but all known
-+			 * Loongson-3B Legacy systems are configured this way.
-+			 */
-+			c->loongson3_cpucfg_data[0] |= LOONGSON_CFG1_CDMAP;
-+#endif
- 			break;
- 		}
- 
-@@ -1957,9 +1995,57 @@ static inline void decode_cpucfg(struct cpuinfo_mips *c)
- 		c->ases |= MIPS_ASE_LOONGSON_CAM;
- }
- 
-+#ifdef CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION
-+static inline int cpu_has_uca(void)
-+{
-+	u32 diag = read_c0_diag();
-+	u32 new_diag;
-+
-+	if (diag & LOONGSON_DIAG_UCAC)
-+		/* UCA is already enabled. */
-+		return 1;
-+
-+	/* See if UCAC bit can be flipped on. This should be safe. */
-+	new_diag = diag | LOONGSON_DIAG_UCAC;
-+	write_c0_diag(new_diag);
-+	new_diag = read_c0_diag();
-+	write_c0_diag(diag);
-+
-+	return (new_diag & LOONGSON_DIAG_UCAC) != 0;
-+}
-+
-+static inline void probe_uca(struct cpuinfo_mips *c)
-+{
-+	if (cpu_has_uca())
-+		c->loongson3_cpucfg_data[0] |= LOONGSON_CFG1_LSUCA;
-+}
-+
-+static inline void decode_loongson_config6(struct cpuinfo_mips *c)
-+{
-+	u32 config6 = read_c0_config6();
-+
-+	if (config6 & MIPS_CONF6_LOONGSON_STFILL)
-+		c->loongson3_cpucfg_data[0] |= LOONGSON_CFG1_SFBP;
-+	if (config6 & MIPS_CONF6_LOONGSON_LLEXC)
-+		c->loongson3_cpucfg_data[0] |= LOONGSON_CFG1_LLEXC;
-+	if (config6 & MIPS_CONF6_LOONGSON_SCRAND)
-+		c->loongson3_cpucfg_data[0] |= LOONGSON_CFG1_SCRAND;
-+}
-+#else
-+static inline void probe_uca(struct cpuinfo_mips *c)
-+{
-+}
-+
-+static inline void decode_loongson_config6(struct cpuinfo_mips *c)
-+{
-+}
-+#endif /* CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION */
-+
- static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- {
- 	decode_configs(c);
-+	decode_loongson_config6(c);
-+	probe_uca(c);
- 
- 	switch (c->processor_id & PRID_IMP_MASK) {
- 	case PRID_IMP_LOONGSON_64R: /* Loongson-64 Reduced */
-@@ -1977,6 +2063,21 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- 		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
- 		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_EXT |
- 				MIPS_ASE_LOONGSON_EXT2);
-+#ifdef CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION
-+		/* Add CPUCFG features non-discoverable otherwise. */
-+		c->loongson3_cpucfg_data[0] |= (LOONGSON_CFG1_LSLDR0 |
-+			LOONGSON_CFG1_LSSYNCI | LOONGSON_CFG1_LLSYNC |
-+			LOONGSON_CFG1_TGTSYNC);
-+		c->loongson3_cpucfg_data[1] |= (LOONGSON_CFG2_LBT1 |
-+			LOONGSON_CFG2_LBT2 | LOONGSON_CFG2_LPMP |
-+			LOONGSON_CFG2_LPM_REV2);
-+		c->loongson3_cpucfg_data[2] = 0;
-+
-+		/* This feature is set by firmware, but all known Loongson-2K
-+		 * systems are configured this way.
-+		 */
-+		c->loongson3_cpucfg_data[0] |= LOONGSON_CFG1_CDMAP;
-+#endif
- 		break;
- 	case PRID_IMP_LOONGSON_64C:  /* Loongson-3 Classic */
- 		switch (c->processor_id & PRID_REV_MASK) {
-@@ -2007,6 +2108,26 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- 		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
- 		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
- 			MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
-+#ifdef CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION
-+		/* Add CPUCFG features non-discoverable otherwise. */
-+		c->loongson3_cpucfg_data[0] |= (LOONGSON_CFG1_CNT64 |
-+			LOONGSON_CFG1_LSLDR0 | LOONGSON_CFG1_LSPREF |
-+			LOONGSON_CFG1_LSPREFX | LOONGSON_CFG1_LSSYNCI |
-+			LOONGSON_CFG1_LLSYNC | LOONGSON_CFG1_TGTSYNC);
-+		c->loongson3_cpucfg_data[1] |= (LOONGSON_CFG2_LBT1 |
-+			LOONGSON_CFG2_LBT2 | LOONGSON_CFG2_LBTMMU |
-+			LOONGSON_CFG2_LPMP | LOONGSON_CFG2_LPM_REV1 |
-+			LOONGSON_CFG2_LVZ_REV1);
-+		c->loongson3_cpucfg_data[2] |= (LOONGSON_CFG3_LCAM_REV1 |
-+			LOONGSON_CFG3_LCAMNUM_REV1 |
-+			LOONGSON_CFG3_LCAMKW_REV1 |
-+			LOONGSON_CFG3_LCAMVW_REV1);
-+
-+		/* This feature is set by firmware, but all known Loongson-3
-+		 * systems are configured this way.
-+		 */
-+		c->loongson3_cpucfg_data[0] |= LOONGSON_CFG1_CDMAP;
-+#endif
- 		break;
- 	case PRID_IMP_LOONGSON_64G:
- 		c->cputype = CPU_LOONGSON64;
-@@ -2200,6 +2321,12 @@ void cpu_probe(void)
- 	c->fpu_csr31	= FPU_CSR_RN;
- 	c->fpu_msk31	= FPU_CSR_RSVD | FPU_CSR_ABS2008 | FPU_CSR_NAN2008;
- 
-+#ifdef CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION
-+	c->loongson3_cpucfg_data[0] = 0;
-+	c->loongson3_cpucfg_data[1] = 0;
-+	c->loongson3_cpucfg_data[2] = 0;
-+#endif
-+
- 	c->processor_id = read_c0_prid();
- 	switch (c->processor_id & PRID_COMP_MASK) {
- 	case PRID_COMP_LEGACY:
-@@ -2333,6 +2460,8 @@ void cpu_probe(void)
- 	if (cpu_has_vz)
- 		cpu_probe_vz(c);
- 
-+	loongson3_cpucfg_finish_synthesis(c);
-+
- 	cpu_probe_vmbits(c);
- 
- #ifdef CONFIG_64BIT
-diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index 31968cbd6464..768790917724 100644
---- a/arch/mips/kernel/traps.c
-+++ b/arch/mips/kernel/traps.c
-@@ -71,6 +71,8 @@
- #include <asm/tlbex.h>
- #include <asm/uasm.h>
- 
-+#include <asm/mach-loongson64/cpucfg-emul.h>
-+
- extern void check_wait(void);
- extern asmlinkage void rollback_handle_int(void);
- extern asmlinkage void handle_int(void);
-@@ -693,6 +695,44 @@ static int simulate_sync(struct pt_regs *regs, unsigned int opcode)
- 	return -1;			/* Must be something else ... */
- }
- 
-+/*
-+ * Loongson-3 CSR instructions emulation
-+ */
-+
-+#ifdef CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION
-+
-+#define LWC2             0xc8000000
-+#define RS               BASE
-+#define CSR_OPCODE2      0x00000118
-+#define CSR_OPCODE2_MASK 0x000007ff
-+#define CSR_FUNC_MASK    RT
-+#define CSR_FUNC_CPUCFG  0x8
-+
-+static int simulate_loongson3_cpucfg(struct pt_regs *regs,
-+				     unsigned int opcode)
-+{
-+	int op = opcode & OPCODE;
-+	int op2 = opcode & CSR_OPCODE2_MASK;
-+	int csr_func = (opcode & CSR_FUNC_MASK) >> 16;
-+
-+	if (op == LWC2 && op2 == CSR_OPCODE2 && csr_func == CSR_FUNC_CPUCFG) {
-+		int rd = (opcode & RD) >> 11;
-+		int rs = (opcode & RS) >> 21;
-+		__u64 sel = regs->regs[rs];
-+
-+		perf_sw_event(PERF_COUNT_SW_EMULATION_FAULTS, 1, regs, 0);
-+
-+		regs->regs[rd] = loongson3_cpucfg_read_synthesized(
-+			&current_cpu_data, sel);
-+
-+		return 0;
-+	}
-+
-+	/* Not ours.  */
-+	return -1;
-+}
-+#endif /* CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION */
-+
- asmlinkage void do_ov(struct pt_regs *regs)
- {
- 	enum ctx_state prev_state;
-@@ -1166,6 +1206,11 @@ asmlinkage void do_ri(struct pt_regs *regs)
- 
- 		if (status < 0)
- 			status = simulate_fp(regs, opcode, old_epc, old31);
-+
-+#ifdef CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION
-+		if (status < 0)
-+			status = simulate_loongson3_cpucfg(regs, opcode);
-+#endif
- 	} else if (cpu_has_mmips) {
- 		unsigned short mmop[2] = { 0 };
- 
-diff --git a/arch/mips/loongson64/Makefile b/arch/mips/loongson64/Makefile
-index 6f3c2b47f66f..61f6add20530 100644
---- a/arch/mips/loongson64/Makefile
-+++ b/arch/mips/loongson64/Makefile
-@@ -10,3 +10,4 @@ obj-$(CONFIG_NUMA)	+= numa.o
- obj-$(CONFIG_RS780_HPET) += hpet.o
- obj-$(CONFIG_PCI) += pci.o
- obj-$(CONFIG_SUSPEND) += pm.o
-+obj-$(CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION) += cpucfg-emul.o
-diff --git a/arch/mips/loongson64/cpucfg-emul.c b/arch/mips/loongson64/cpucfg-emul.c
-new file mode 100644
-index 000000000000..a30f82b55c9e
---- /dev/null
-+++ b/arch/mips/loongson64/cpucfg-emul.c
-@@ -0,0 +1,80 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/smp.h>
-+#include <asm/cpu.h>
-+#include <asm/cpu-info.h>
-+
-+#include <loongson_regs.h>
-+#include <cpucfg-emul.h>
-+
-+static u32 get_loongson_fprev(struct cpuinfo_mips *c)
-+{
-+	return (c->fpu_id & LOONGSON_FPREV_MASK) << LOONGSON_CFG1_FPREV_OFFSET;
-+}
-+
-+static void patch_cpucfg_sel1(struct cpuinfo_mips *c)
-+{
-+	u64 ases = c->ases;
-+	u64 options = c->options;
-+	u32 data = c->loongson3_cpucfg_data[0];
-+
-+	if (options & MIPS_CPU_FPU) {
-+		data |= LOONGSON_CFG1_FP;
-+		data |= get_loongson_fprev(c);
-+	}
-+	if (ases & MIPS_ASE_LOONGSON_MMI)
-+		data |= LOONGSON_CFG1_MMI;
-+	if (ases & MIPS_ASE_MSA)
-+		data |= LOONGSON_CFG1_MSA1;
-+
-+	c->loongson3_cpucfg_data[0] = data;
-+}
-+
-+static void patch_cpucfg_sel2(struct cpuinfo_mips *c)
-+{
-+	u64 ases = c->ases;
-+	u64 options = c->options;
-+	u32 data = c->loongson3_cpucfg_data[1];
-+
-+	if (ases & MIPS_ASE_LOONGSON_EXT)
-+		data |= LOONGSON_CFG2_LEXT1;
-+	if (ases & MIPS_ASE_LOONGSON_EXT2)
-+		data |= LOONGSON_CFG2_LEXT2;
-+	if (options & MIPS_CPU_LDPTE)
-+		data |= LOONGSON_CFG2_LSPW;
-+
-+	if (ases & MIPS_ASE_VZ)
-+		data |= LOONGSON_CFG2_LVZP;
-+	else
-+		data &= ~LOONGSON_CFG2_LVZREV;
-+
-+	c->loongson3_cpucfg_data[1] = data;
-+}
-+
-+static void patch_cpucfg_sel3(struct cpuinfo_mips *c)
-+{
-+	u64 ases = c->ases;
-+	u32 data = c->loongson3_cpucfg_data[2];
-+
-+	if (ases & MIPS_ASE_LOONGSON_CAM) {
-+		data |= LOONGSON_CFG3_LCAMP;
-+	} else {
-+		data &= ~LOONGSON_CFG3_LCAMREV;
-+		data &= ~LOONGSON_CFG3_LCAMNUM;
-+		data &= ~LOONGSON_CFG3_LCAMKW;
-+		data &= ~LOONGSON_CFG3_LCAMVW;
-+	}
-+
-+	c->loongson3_cpucfg_data[2] = data;
-+}
-+
-+void loongson3_cpucfg_finish_synthesis(struct cpuinfo_mips *c)
-+{
-+	/* CPUs with CPUCFG support don't need to synthesize anything. */
-+	if (cpu_has_cfg())
-+		return;
-+
-+	patch_cpucfg_sel1(c);
-+	patch_cpucfg_sel2(c);
-+	patch_cpucfg_sel3(c);
-+}
--- 
-2.21.0
+If you add support for a new SoC, you'd still need to modify the=20
+binding to add the compatible string. So the argument of "more work" is=20
+moot.
+
+-Paul
+
+> It boils down to the question if we need to formalize the rule how a=20
+> working DTS was derived. Or just have a working DTS and not formalize=20
+> everything.
+>=20
+> So IMHO carrying along such a detail (forbid clocks on some=20
+> architectures) is nice to have (and fun to learn the .yaml thing) but=20
+> not of benefit for anyone. Not for the DTS developer nor for the=20
+> maintainers nor for the users of a Linux kernel. "Keep it simple" is=20
+> always a good rule for maintainability.
+>=20
+> In summary I don't see a good reason to follow this in v8. But you=20
+> could add it by a separate patch later if the DTS have been reviewed=20
+> and agreed.
+>=20
+> BR and thanks,
+> Nikolaus
+>=20
+
 
