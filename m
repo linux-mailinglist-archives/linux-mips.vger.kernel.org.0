@@ -2,37 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2391C2B65
-	for <lists+linux-mips@lfdr.de>; Sun,  3 May 2020 12:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F521C2B73
+	for <lists+linux-mips@lfdr.de>; Sun,  3 May 2020 12:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728018AbgECKhl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 3 May 2020 06:37:41 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:57460 "EHLO
+        id S1727125AbgECKvt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 3 May 2020 06:51:49 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:57600 "EHLO
         mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1728021AbgECKhl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 3 May 2020 06:37:41 -0400
+        by vger.kernel.org with ESMTP id S1727051AbgECKvt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 3 May 2020 06:51:49 -0400
 Received: from localhost.localdomain (unknown [116.236.177.50])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id F07DF600B4;
-        Sun,  3 May 2020 18:37:25 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 43480600B4;
+        Sun,  3 May 2020 18:51:43 +0800 (CST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1588502246; bh=AAChvVKDPzABQl//chf1Bxl09DBVv/io1eDRYyQwBgc=;
+        t=1588503103; bh=FegFd8GIuh0fulqe7k+4+vE4G1Xk1d9ixlgh3+q6KvI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kyIDFKqKn2DwSaGxq8RoGZZiZ9cA1Z8y+WzsJkoPwQjZArSYvtZA6ue3sD5eW94Jl
-         nbtQ0Q/yABhyzE6pdFEsDeT0cGBYj3iIGuKTVfkC81w8qHemkRTJt9DvdLQcXH/91p
-         YKWMBn/2RPgiqw5P6DRpa1hwHnabgzBVIqC28CcY=
+        b=Km+XPovHFsxqAIE2vUrT5nToo6xItRC5tsEVizgZ/XsIf2adrbVOVnsEQhBLqYXUR
+         xffLxfQWVeUnxfJ3Xce0xk4AkS2UXHAKbqYNrQ66Z/eVODninZH6reNQO310gnqk8/
+         vLXqqTKVRWVZmzVI6yA6q5aioXG1+oJdVBqtsYCo=
 From:   WANG Xuerui <git@xen0n.name>
 To:     linux-mips@vger.kernel.org
-Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhc@lemote.com>,
+Cc:     WANG Xuerui <git@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
         Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v2 4/4] MIPS: emulate CPUCFG instruction on older Loongson64 cores
-Date:   Sun,  3 May 2020 18:33:05 +0800
-Message-Id: <20200503103304.40678-5-git@xen0n.name>
+Subject: [PATCH v2 RESEND 4/4] MIPS: emulate CPUCFG instruction on older Loongson64 cores
+Date:   Sun,  3 May 2020 18:50:13 +0800
+Message-Id: <20200503105012.43246-1-git@xen0n.name>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20200502133846.40590-1-git@xen0n.name>
-References: <20200502133846.40590-1-git@xen0n.name>
+In-Reply-To: <20200503103304.40678-5-git@xen0n.name>
+References: <20200503103304.40678-5-git@xen0n.name>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -62,10 +63,16 @@ being the authority on the right feature flags to fill in, where things
 aren't otherwise discoverable.
 
 Signed-off-by: WANG Xuerui <git@xen0n.name>
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com> # Loongson-2K, 3B1500
 Cc: Huacai Chen <chenhc@lemote.com>
 Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
+
+Resend because I forgot to include Jiaxun's review tags. Sorry for the
+noise.
+
  arch/mips/Kconfig                             |  11 ++
  arch/mips/include/asm/cpu-info.h              |   9 ++
  .../include/asm/mach-loongson64/cpucfg-emul.h |  67 +++++++++
