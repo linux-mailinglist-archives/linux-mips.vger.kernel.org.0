@@ -2,34 +2,47 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B36A01C2C82
-	for <lists+linux-mips@lfdr.de>; Sun,  3 May 2020 14:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3B01C2CCA
+	for <lists+linux-mips@lfdr.de>; Sun,  3 May 2020 15:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728595AbgECMwY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 3 May 2020 08:52:24 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:41080 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728378AbgECMwY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 3 May 2020 08:52:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1588510339; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2ko4Xwt96nyrG2ofYwcaiQ3kO8FQgN99Oau+oASza+Y=;
-        b=vMLvvQ26mbkRB5ssq4TJnK7+m022JmcEKlGByK0qEt0wZ/cWuoZ2C+xRTochuMQahsnETO
-        ABOQBnQJ2/HLIwG+CvdEP4jyvQxShAa+HOezOJtmovqAdOYegmCHPgKTS4wd0UiUZCwl/5
-        56vda+SO7iF/CxZEL8qChIccueuMpcE=
-Date:   Sun, 03 May 2020 14:52:05 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v7 01/12] dt-bindings: add img,pvrsgx.yaml for Imagination
- GPUs
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+        id S1728636AbgECNcK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 3 May 2020 09:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728503AbgECNcK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 3 May 2020 09:32:10 -0400
+Received: from mo6-p02-ob.smtp.rzone.de (mo6-p02-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5302::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64477C061A0C;
+        Sun,  3 May 2020 06:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1588512727;
+        s=strato-dkim-0002; d=goldelico.com;
+        h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=P2n1VxAj51ovTRVckIsPeyqg24p7NzEQivx7HgyjYQo=;
+        b=Ts4OUC5koCSx1kYlDKLpEXzo1eiX95xIJB6kjRL3hoecFmUb1ucJWc8Go0aXzT8m7j
+        nlxNRKruUax54yyercfeJxEZBR6HaoeFDXUh+JN6BtBAc+M07lpwzL1ewmjohpPmuhGv
+        k++v8Kv91ASrsoix+VrCrb8Qn8R+J4xDhEILXdMJFivuftoO536SDd1E/VNwGaCBU5/3
+        fNcYQaJUk53H5zJBfv1Br6sIDzyahaf+7pAiD59eFGWXYodu2wPJQY78bxixlfxEtqnT
+        oA26IdHlU6CMnerM5BEO0qx7hDpQeKZePRPb6SKyCl3Ude6cls1hxbujWtOwgPy7sfp3
+        qlaQ==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlaZXA4J2Ms="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+        by smtp.strato.de (RZmta 46.6.2 DYNA|AUTH)
+        with ESMTPSA id R0acebw43DVhfoF
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Sun, 3 May 2020 15:31:43 +0200 (CEST)
+Subject: Re: [PATCH v7 01/12] dt-bindings: add img,pvrsgx.yaml for Imagination GPUs
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Content-Type: text/plain; charset=iso-8859-1
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <TEAR9Q.6HI5DFRO5U0I3@crapouillou.net>
+Date:   Sun, 3 May 2020 15:31:42 +0200
 Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        =?iso-8859-1?q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        =?iso-8859-1?Q?Beno=EEt_Cousson?= <bcousson@baylibre.com>,
         Tony Lindgren <tony@atomide.com>,
         Ralf Baechle <ralf@linux-mips.org>,
         Paul Burton <paulburton@kernel.org>,
@@ -46,297 +59,121 @@ Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         kernel@pyra-handheld.com, linux-mips@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org
-Message-Id: <TEAR9Q.6HI5DFRO5U0I3@crapouillou.net>
-In-Reply-To: <28138EC0-0FA5-4F97-B528-3442BF087C7A@goldelico.com>
-References: <cover.1587760454.git.hns@goldelico.com>
-        <3a451e360fed84bc40287678b4d6be13821cfbc0.1587760454.git.hns@goldelico.com>
-        <NMCE9Q.LWG45P20NBVJ@crapouillou.net>
-        <28138EC0-0FA5-4F97-B528-3442BF087C7A@goldelico.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <3D8B59D6-83E3-4FE6-9C99-E2E5616A8139@goldelico.com>
+References: <cover.1587760454.git.hns@goldelico.com> <3a451e360fed84bc40287678b4d6be13821cfbc0.1587760454.git.hns@goldelico.com> <NMCE9Q.LWG45P20NBVJ@crapouillou.net> <28138EC0-0FA5-4F97-B528-3442BF087C7A@goldelico.com> <TEAR9Q.6HI5DFRO5U0I3@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3124)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nikolaus,
+Hi Paul,
 
-Le sam. 2 mai 2020 =E0 22:26, H. Nikolaus Schaller <hns@goldelico.com> a=20
-=E9crit :
-> Hi Paul,
+> Am 03.05.2020 um 14:52 schrieb Paul Cercueil <paul@crapouillou.net>:
 >=20
->>  Am 26.04.2020 um 15:11 schrieb Paul Cercueil <paul@crapouillou.net>:
->>=20
->>  Hi Nikolaus,
->>=20
->>  Le ven. 24 avril 2020 =E0 22:34, H. Nikolaus Schaller=20
->> <hns@goldelico.com> a =E9crit :
->>>  The Imagination PVR/SGX GPU is part of several SoC from
->>>  multiple vendors, e.g. TI OMAP, Ingenic JZ4780, Intel Poulsbo,
->>>  Allwinner A83 and others.
->>>  With this binding, we describe how the SGX processor is
->>>  interfaced to the SoC (registers and interrupt).
->>>  The interface also consists of clocks, reset, power but
->>>  information from data sheets is vague and some SoC integrators
->>>  (TI) deciced to use a PRCM wrapper (ti,sysc) which does
->>>  all clock, reset and power-management through registers
->>>  outside of the sgx register block.
->>>  Therefore all these properties are optional.
->>>  Tested by make dt_binding_check
->>>  Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->>>  ---
->>>  .../devicetree/bindings/gpu/img,pvrsgx.yaml   | 150=20
->>> ++++++++++++++++++
->>>  1 file changed, 150 insertions(+)
->>>  create mode 100644=20
->>> Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
->>>  diff --git a/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml=20
->>> b/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
->>>  new file mode 100644
->>>  index 000000000000..33a9c4c6e784
->>>  --- /dev/null
->>>  +++ b/Documentation/devicetree/bindings/gpu/img,pvrsgx.yaml
->>>  @@ -0,0 +1,150 @@
->>>  +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>>  +%YAML 1.2
->>>  +---
->>>  +$id: http://devicetree.org/schemas/gpu/img,pvrsgx.yaml#
->>>  +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>  +
->>>  +title: Imagination PVR/SGX GPU
->>>  +
->>>  +maintainers:
->>>  +  - H. Nikolaus Schaller <hns@goldelico.com>
->>>  +
->>>  +description: |+
->>>  +  This binding describes the Imagination SGX5 series of 3D=20
->>> accelerators which
->>>  +  are found in several different SoC like TI OMAP, Sitara,=20
->>> Ingenic JZ4780,
->>>  +  Allwinner A83, and Intel Poulsbo and CedarView and more.
->>>  +
->>>  +  For an extensive list see:=20
->>> https://en.wikipedia.org/wiki/PowerVR#Implementations
->>>  +
->>>  +  The SGX node is usually a child node of some DT node belonging=20
->>> to the SoC
->>>  +  which handles clocks, reset and general address space mapping=20
->>> of the SGX
->>>  +  register area. If not, an optional clock can be specified here.
->>>  +
->>>  +properties:
->>>  +  $nodename:
->>>  +    pattern: '^gpu@[a-f0-9]+$'
->>>  +  compatible:
->>>  +    oneOf:
->>>  +      - description: SGX530-121 based SoC
->>>  +        items:
->>>  +          - enum:
->>>  +            - ti,omap3-sgx530-121 # BeagleBoard A/B/C,=20
->>> OpenPandora 600MHz and similar
->>>  +          - const: img,sgx530-121
->>>  +          - const: img,sgx530
->>>  +
->>>  +      - description: SGX530-125 based SoC
->>>  +        items:
->>>  +          - enum:
->>>  +            - ti,am3352-sgx530-125 # BeagleBone Black
->>>  +            - ti,am3517-sgx530-125
->>>  +            - ti,am4-sgx530-125
->>>  +            - ti,omap3-sgx530-125 # BeagleBoard XM, GTA04,=20
->>> OpenPandora 1GHz and similar
->>>  +            - ti,ti81xx-sgx530-125
->>>  +          - const: ti,omap3-sgx530-125
->>>  +          - const: img,sgx530-125
->>>  +          - const: img,sgx530
->>>  +
->>>  +      - description: SGX535-116 based SoC
->>>  +        items:
->>>  +          - const: intel,poulsbo-gma500-sgx535 # Atom Z5xx
->>>  +          - const: img,sgx535-116
->>>  +          - const: img,sgx535
->>>  +
->>>  +      - description: SGX540-116 based SoC
->>>  +        items:
->>>  +          - const: intel,medfield-gma-sgx540 # Atom Z24xx
->>>  +          - const: img,sgx540-116
->>>  +          - const: img,sgx540
->>>  +
->>>  +      - description: SGX540-120 based SoC
->>>  +        items:
->>>  +          - enum:
->>>  +            - samsung,s5pv210-sgx540-120
->>>  +            - ti,omap4-sgx540-120 # Pandaboard, Pandaboard ES and=20
->>> similar
->>>  +          - const: img,sgx540-120
->>>  +          - const: img,sgx540
->>>  +
->>>  +      - description: SGX540-130 based SoC
->>>  +        items:
->>>  +          - enum:
->>>  +            - ingenic,jz4780-sgx540-130 # CI20
->>>  +          - const: img,sgx540-130
->>>  +          - const: img,sgx540
->>>  +
->>>  +      - description: SGX544-112 based SoC
->>>  +        items:
->>>  +          - const: ti,omap4470-sgx544-112
->>>  +          - const: img,sgx544-112
->>>  +          - const: img,sgx544
->>>  +
->>>  +      - description: SGX544-115 based SoC
->>>  +        items:
->>>  +          - enum:
->>>  +            - allwinner,sun8i-a31-sgx544-115
->>>  +            - allwinner,sun8i-a31s-sgx544-115
->>>  +            - allwinner,sun8i-a83t-sgx544-115 # Banana-Pi-M3=20
->>> (Allwinner A83T) and similar
->>>  +          - const: img,sgx544-115
->>>  +          - const: img,sgx544
->>>  +
->>>  +      - description: SGX544-116 based SoC
->>>  +        items:
->>>  +          - enum:
->>>  +            - ti,dra7-sgx544-116 # DRA7
->>>  +            - ti,omap5-sgx544-116 # OMAP5 UEVM, Pyra Handheld and=20
->>> similar
->>>  +          - const: img,sgx544-116
->>>  +          - const: img,sgx544
->>>  +
->>>  +      - description: SGX545 based SoC
->>>  +        items:
->>>  +          - const: intel,cedarview-gma3600-sgx545 # Atom N2600,=20
->>> D2500
->>>  +          - const: img,sgx545-116
->>>  +          - const: img,sgx545
->>>  +
->>>  +  reg:
->>>  +    maxItems: 1
->>>  +
->>>  +  interrupts:
->>>  +    maxItems: 1
->>>  +
->>>  +  interrupt-names:
->>>  +    maxItems: 1
->>>  +    items:
->>>  +      - const: sgx
->>>  +
->>>  +  clocks:
->>>  +    maxItems: 4
->>>  +
->>>  +  clock-names:
->>>  +    maxItems: 4
->>>  +    items:
->>>  +      - const: core
->>>  +      - const: sys
->>>  +      - const: mem
->>>  +      - const: hyd
->>>  +
->>>  +  sgx-supply: true
->>>  +
->>>  +  power-domains:
->>>  +    maxItems: 1
->>>  +
->>>  +  resets:
->>>  +    maxItems: 1
->>>  +
->>>  +required:
->>>  +  - compatible
->>>  +  - reg
->>>  +  - interrupts
->>=20
->>  By not making 'clocks' required you make it possible to create=20
->> broken bindings; according to your schema, a GPU node without a=20
->> 'clocks' for the JZ4780 would be perfectly valid.
+>>> It's possible to forbid the presence of the 'clocks' property on =
+some implementations, and require it on others.
+>> To be precise we have to specify the exact number of clocks (between =
+0 and 4) for every architecture.
+>> This also contradicts my dream to get rid of the architecture =
+specific components in the long run. My dream (because I can't tell how =
+it can be done) is that we can one day develop something which just =
+needs compatible =3D img,530 or imp,540 or img,544. Then we can't make =
+the number clocks depend on the implementation any more.
 >=20
-> Yes. But it will never pass a test with real hardware. So it can't be=20
-> omitted anyways.
->=20
-> On a more general thought, this argument holds for any optional=20
-> property. So it is not specific to clocks. Since the reg address=20
-> values are also never specified you can still create broken bindings.=20
-> Or by connecting the wrong clock. So the ways to create broken=20
-> bindings are numerous.
->=20
-> I also assume that SGX integrators are not beginners and do you think=20
-> they need to find out through a make dt_binding_check dtbs_check that=20
-> they should define a clock? based on *assumptions* we do without=20
-> having access to all systems?
->=20
-> IMHO the bindings documentation is a documentation. So it needs to be=20
-> helpful but not perfect. Formalizing all corner cases in a bindings=20
-> document (just because we can since .yaml was introduced) is IMHO=20
-> overkill.
->=20
-> In times before the introduction of more formal .yaml I think we=20
-> would not even have considered this for a comment in the bindings.txt.
->=20
->>  It's possible to forbid the presence of the 'clocks' property on=20
->> some implementations, and require it on others.
->=20
-> To be precise we have to specify the exact number of clocks (between=20
-> 0 and 4) for every architecture.
->=20
-> This also contradicts my dream to get rid of the architecture=20
-> specific components in the long run. My dream (because I can't tell=20
-> how it can be done) is that we can one day develop something which=20
-> just needs compatible =3D img,530 or imp,540 or img,544. Then we can't=20
-> make the number clocks depend on the implementation any more.
-
-As we said before, the number of clocks is a property of the GPU and=20
+> As we said before, the number of clocks is a property of the GPU and =
 *not* its integration into the SoC.
 
-So you would *not* have a number of clocks between 0 and 4. You get=20
+Well, it is a not very well documented property of the GPU. We have no =
+data sheet of the standalone GPU. Only several SoC data sheets which =
+give some indications.
+
+It appears as if some sgx5xx versions have 3 clocks and some have 4. So =
+you are right, the number of clocks depends on the sgx5xx version and =
+that could be made dependent in the bindings (if necessary).
+
+>=20
+> So you would *not* have a number of clocks between 0 and 4. You get =
 either 0, or 4, depending on whether or not you have a wrapper.
 
+I think this is contradicting your previous sentence. If the number of =
+clocks is a property of the GPU and not the integration it must also not =
+depend on whether there is a wrapper. I.e. it must be a constant for any =
+type of integration.
 
->>  See how it's done for instance on=20
->> Documentation/devicetree/bindings/serial/samsung_uart.yaml.
->=20
-> Yes I know the design pattern, but I wonder if such a move makes the=20
-> whole thing even less maintainable.
->=20
-> Assume we have finished DTS for some SoC. Then these DTS have been=20
-> tested on real hardware and are working. Clocks are there where=20
-> needed and missing where not. We may now forbid or not forbid them=20
-> for some implementations in the bindings.yaml but the result of=20
-> dtbs_check won't change! Because they are tested and working and the=20
-> bindings.yaml has been adapted to the result. So we have just=20
-> duplicated something for no practical benefit.
->=20
-> Next, assume there is coming support for more and more new SoC. Then,=20
-> developers not only have to figure out which clocks they need in the=20
-> DTS but they also have to add a patch to the implementation specific=20
-> part of the bindings.yaml to clearly define exactly the same what=20
-> they already have written into their .dts (the clocks are either=20
-> there for the of_node or they are not). So again the rules are for no=20
-> benefit, since a new SoC is introduced exactly once. And tested if it=20
-> works. And if it is there, it will stay as it is. It is just work for=20
-> maintainers to review that patch as well.
+The really correct variant would be to always make the SoC integration =
+(wrapper) a separate subsystem (because it is never part of the SGX core =
+but some interface bus) and clock provider and connect it explicitly to =
+the clock inputs.
 
-If you add support for a new SoC, you'd still need to modify the=20
-binding to add the compatible string. So the argument of "more work" is=20
+To be clear: I am not at all against describing the clocks. I just doubt =
+that the time we invest into discussing on this level of detail and =
+adding conditional clock requirements is worth the result. IMHO the =
+bindings and .dts do not become better by describing them in more detail =
+than just "optional". It just takes our time from contributing to other =
+subsystems.
+
+>=20
+>=20
+>>> See how it's done for instance on =
+Documentation/devicetree/bindings/serial/samsung_uart.yaml.
+>> Yes I know the design pattern, but I wonder if such a move makes the =
+whole thing even less maintainable.
+>> Assume we have finished DTS for some SoC. Then these DTS have been =
+tested on real hardware and are working. Clocks are there where needed =
+and missing where not. We may now forbid or not forbid them for some =
+implementations in the bindings.yaml but the result of dtbs_check won't =
+change! Because they are tested and working and the bindings.yaml has =
+been adapted to the result. So we have just duplicated something for no =
+practical benefit.
+>> Next, assume there is coming support for more and more new SoC. Then, =
+developers not only have to figure out which clocks they need in the DTS =
+but they also have to add a patch to the implementation specific part of =
+the bindings.yaml to clearly define exactly the same what they already =
+have written into their .dts (the clocks are either there for the =
+of_node or they are not). So again the rules are for no benefit, since a =
+new SoC is introduced exactly once. And tested if it works. And if it is =
+there, it will stay as it is. It is just work for maintainers to review =
+that patch as well.
+>=20
+> If you add support for a new SoC, you'd still need to modify the =
+binding to add the compatible string. So the argument of "more work" is =
 moot.
 
--Paul
+Agreed, I forgot this aspect. Nevertheless, it is easier to review a new =
+compatible string than a new clock number rule (question: how do you =
+practically review this? By looking if it does match the DTS?).
 
-> It boils down to the question if we need to formalize the rule how a=20
-> working DTS was derived. Or just have a working DTS and not formalize=20
-> everything.
->=20
-> So IMHO carrying along such a detail (forbid clocks on some=20
-> architectures) is nice to have (and fun to learn the .yaml thing) but=20
-> not of benefit for anyone. Not for the DTS developer nor for the=20
-> maintainers nor for the users of a Linux kernel. "Keep it simple" is=20
-> always a good rule for maintainability.
->=20
-> In summary I don't see a good reason to follow this in v8. But you=20
-> could add it by a separate patch later if the DTS have been reviewed=20
-> and agreed.
->=20
-> BR and thanks,
-> Nikolaus
->=20
+We have to add the compatible string as long as we need to have the SoC =
+name in the compatible string (which as said is my dream to get rid of =
+in far future). If we could get rid of it, there won't be a change any =
+more. By just taking "img,sgx544" into a new SoC. The change would be =
+moved into SoC specific wrappers. In such an ideal world, we would =
+explicitly describe the wrappers as separate DT nodes. Even if they have =
+no explicit driver (e.g. by some simple-pm-bus).
 
+                   PRCM,bus,
+Processor <<---->> Wrapper <<----->> SGX
+ti,...             ti,sysc           img,sgx530
+img,...            simple-bus        img,sgx540
+samsung,...        ...               img,sgx544
+other,             other,gpu-wrapper img,...
+
+But this IMHO correct proposal was already rejected.
+
+So at the moment we are circling around several proposals because none =
+can fulfill all requirements.
+
+Therefore my attempt to solve the gordian knot is to make clocks =
+generally optional. This keeps the bindings simple but not generally =
+wrong. And since the DTS are not only tested against bindings.yaml but =
+on real hardware, the omission to enforce a specific number of clocks =
+doesn't harm anyone. As said it is impossible to get the SGX running =
+without defining the correct clocks (whether they are enforced by =
+bindings.yaml or not).
+
+BR and thanks,
+Nikolaus
 
