@@ -2,114 +2,118 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E5D1C2D29
-	for <lists+linux-mips@lfdr.de>; Sun,  3 May 2020 17:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9B51C2DAD
+	for <lists+linux-mips@lfdr.de>; Sun,  3 May 2020 17:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728696AbgECPBs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 3 May 2020 11:01:48 -0400
-Received: from muru.com ([72.249.23.125]:52668 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728002AbgECPBs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 3 May 2020 11:01:48 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 5955480BF;
-        Sun,  3 May 2020 15:02:34 +0000 (UTC)
-Date:   Sun, 3 May 2020 08:01:43 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        Philipp Rossak <embed3d@gmail.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        openpvrsgx-devgroup@letux.org, letux-kernel@openphoenux.org,
-        kernel@pyra-handheld.com, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v7 01/12] dt-bindings: add img,pvrsgx.yaml for
- Imagination GPUs
-Message-ID: <20200503150143.GG37466@atomide.com>
-References: <cover.1587760454.git.hns@goldelico.com>
- <3a451e360fed84bc40287678b4d6be13821cfbc0.1587760454.git.hns@goldelico.com>
- <NMCE9Q.LWG45P20NBVJ@crapouillou.net>
- <28138EC0-0FA5-4F97-B528-3442BF087C7A@goldelico.com>
- <TEAR9Q.6HI5DFRO5U0I3@crapouillou.net>
- <3D8B59D6-83E3-4FE6-9C99-E2E5616A8139@goldelico.com>
- <8EER9Q.C206SXNSICP7@crapouillou.net>
+        id S1728801AbgECPvk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 3 May 2020 11:51:40 -0400
+Received: from sender2-op-o12.zoho.com.cn ([163.53.93.243]:17462 "EHLO
+        sender2-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728207AbgECPvk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 3 May 2020 11:51:40 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1588521024; cv=none; 
+        d=zoho.com.cn; s=zohoarc; 
+        b=SPnOFObZMtonlaRFPRj00r00oSvBCq2VGST6ntsUlHDEq8TiiwxUtNCFmtCPVwGfZdW/W66ThivInEEiKVw5cJZezaMcVMlxsrhu+8O+k9B37WOmBX0l/05Ts/CWrmJdJSqWL+B7eNBwlMji9GllGq+jYicTc9P42Vth4LxEbh8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
+        t=1588521024; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
+        bh=PRG9PjWmPIb9rReNC9l8ioCROl7tNNyG/LQLSI+Ef0I=; 
+        b=CzJG/RrVNaExf6j+r7SjcdV7U9ISUzbVcl6CGGmyGUPLYsJaRjgQVxwydiIAkkb+7Hb+IaOexn/PovdxkIs02giOL73zYB9kNMxIUd8DAaRRAK4qlvBNm9opbyZaP3UYWm4uHrrNFoFgxrQbRs9aQVSY71ttULcJNzUT5HuRxvs=
+ARC-Authentication-Results: i=1; mx.zoho.com.cn;
+        dkim=pass  header.i=flygoat.com;
+        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
+        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1588521024;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=Date:From:To:CC:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=PRG9PjWmPIb9rReNC9l8ioCROl7tNNyG/LQLSI+Ef0I=;
+        b=CtWFrMrYM0zhZCzauJgpDcwhDefkPxdMgoZfRI/AJlgNKAyMOp5qLfa6R0PN4VKX
+        ESE4tCmMsuzIEvlqjeODEBm5rAD86qpJf77GlnGuiIBS7rKKjby04N+MATbqdzkFUbG
+        giMYsacr+tMyg1jrfXy7wQk5FcBbyDkJ9Zi7rYPg=
+Received: from [127.0.0.1] (122.235.211.112 [122.235.211.112]) by mx.zoho.com.cn
+        with SMTPS id 1588521013745808.7090818787239; Sun, 3 May 2020 23:50:13 +0800 (CST)
+Date:   Sun, 03 May 2020 23:50:09 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     WANG Xuerui <git@xen0n.name>, linux-mips@vger.kernel.org
+CC:     Huacai Chen <chenhc@lemote.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v2 RESEND 4/4] MIPS: emulate CPUCFG instruction on older Loongson64 cores
+User-Agent: K-9 Mail for Android
+Reply-to: jiaxun.yang@flygoat.com
+In-Reply-To: <20200503105012.43246-1-git@xen0n.name>
+References: <20200503103304.40678-5-git@xen0n.name> <20200503105012.43246-1-git@xen0n.name>
+Message-ID: <3B0FE747-AE18-404B-9CD3-D3401634340C@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8EER9Q.C206SXNSICP7@crapouillou.net>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ZohoCNMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-* Paul Cercueil <paul@crapouillou.net> [200503 14:19]:
-> You have a new SoC with a SGX, and you only need to enable one clock to get
-> it to work. So you create a devicetree node which receives only one clock.
-> 
-> Turns out, that the bootloader was enabling the other 3 clocks, and since
-> the last release, it doesn't anymore. You're left with having to support a
-> broken devicetree.
-> 
-> That's the kind of problem that can be easily avoided by enforcing the
-> number of clocks that have to be provided.
 
-The number of clocks depends on how it's wired for the SoC.
 
-On omaps, there's are no controls for additinoal SGX clocks. Sure some
-of the clocks may be routed to multple places internally by the wrapper
-module. But we have no control over that.
+=E4=BA=8E 2020=E5=B9=B45=E6=9C=883=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=886:=
+50:13, WANG Xuerui <git@xen0n=2Ename> =E5=86=99=E5=88=B0:
+>CPUCFG is the instruction for querying processor characteristics on
+>newer Loongson processors, much like CPUID of x86=2E Since the instructio=
+n
+>is supposedly designed to provide a unified way to do feature detection
+>(without having to, for example, parse /proc/cpuinfo which is too
+>heavyweight), it is important to provide compatibility for older cores
+>without native support=2E Fortunately, most of the fields can be
+>synthesized without changes to semantics=2E Performance is not really big
+>a concern, because feature detection logic is not expected to be
+>invoked very often in typical userland applications=2E
+>
+>The instruction can't be emulated on LOONGSON_2EF cores, according to
+>FlyGoat's experiments=2E Because the LWC2 opcode is assigned to other
+>valid instructions on 2E and 2F, no RI exception is raised for us to
+>intercept=2E So compatibility is only extended back furthest to
+>Loongson-3A1000=2E Loongson-2K is covered too, as it is basically a remix
+>of various blocks from the 3A/3B models from a kernel perspective=2E
+>
+>This is lightly based on Loongson's work on their Linux 3=2E10 fork, for
+>being the authority on the right feature flags to fill in, where things
+>aren't otherwise discoverable=2E
+>
+>Signed-off-by: WANG Xuerui <git@xen0n=2Ename>
+>Reviewed-by: Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom>
+>Tested-by: Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom> # Loongson-2K, 3B150=
+0
+>Cc: Huacai Chen <chenhc@lemote=2Ecom>
+>Cc: Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom>
+>Cc: Tiezhu Yang <yangtiezhu@loongson=2Ecn>
+>---
 
-If we wanted to specify just the "fck" clock on omaps, then we can
-do it with something like this:
+Some random thoughts on that:
 
-allOf:
-  - if:
-    properites:
-      compatible:
-        enum:
-	  - "ti,omap4-sgx544-112"
-	  - "ti,omap5-sgx544-116"
-	  - "ti,dra7-sgx544-116"
-    then:
-      properties:
-        clocks:
-	  minItems: 1
-	  maxItems: 1
+While cpucfg instruction would not be available on other MIPS
+processors, and given that most distros are more willing to provide
+general MIPS version instead of Loongson specified version, we'd better
+provide user space programs a way to probe emulated/physical cpucfg suppor=
+t=2E
 
-        clock-names:
-	  const: fck
+Looks like elf_hwcap would be a option? I've already added some flags abou=
+t
+Loongson's extension and now an extra HWCAP_LOONGSON_CPUCFG can cover ever=
+ything=2E
 
-    required:
-      - clocks
-      - clock-names
+>
+>Resend because I forgot to include Jiaxun's review tags=2E Sorry for the
+>noise=2E
+>
+> arch/mips/Kconfig                             |  11 ++
+> arch/mips/include/asm/cpu-info=2Eh              |   9 ++
+> =2E=2E=2E/include/asm/mach-loongson64/cpucfg-emul=2Eh |  67 +++++++++
+> arch/mips/kernel/cpu-probe=2Ec                  | 129 ++++++++++++++++++
+> arch/mips/kernel/traps=2Ec                      |  45 ++++++
+> arch/mips/loongson64/Makefile                 |   1 +
+> arch/mips/loongson64/cpucfg-emul=2Ec            |  80 +++++++++++
+> 7 files changed, 342 insertions(+)
+> create mode 100644 arch/mips/include/asm/mach-loongson64/cpucfg-emul=2Eh
+> create mode 100644 arch/mips/loongson64/cpucfg-emul=2Ec
 
-There's no need for the SGX driver to toggle the "fck" here, it's
-all done by PM runtime alreaedy so we would be just tweaking
-the usage count for it. But hey, showing the clock rate might
-be nice. Or maybe we want to at some point scale it, so no problem
-specifying it.
-
-For omap3, we should then specify "fck" and "ick". On omap4 and
-later, there's no separate control over the "ick".
-
-Then for the other SoCs, you can specify whatever clocks you need
-there.
-
-Regards,
-
-Tony
+--=20
+Jiaxun Yang
