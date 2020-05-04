@@ -2,260 +2,199 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA0271C355C
-	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2020 11:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070941C35BD
+	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2020 11:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727781AbgEDJRO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 May 2020 05:17:14 -0400
-Received: from mga01.intel.com ([192.55.52.88]:32748 "EHLO mga01.intel.com"
+        id S1728347AbgEDJab (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 May 2020 05:30:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44608 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726467AbgEDJRN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 4 May 2020 05:17:13 -0400
-IronPort-SDR: z+8C1aCJOkoJ3lT6HuKSUlbQaE2jCEDsp3Zb+lKplgk/9hVFI5SwAEXQXZO7H7AyrcqVmXTduS
- ttD6htasAS/Q==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2020 02:17:09 -0700
-IronPort-SDR: Dq52u6PWQtdqZ0Px8+M4c1TID7QfAh+HOAP/p6nNUDLeMMv1hJlRd8Q4jvanxUVo4vadOyl3wp
- vhi+rOAuJUHg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,351,1583222400"; 
-   d="scan'208";a="369037346"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 04 May 2020 02:17:09 -0700
-Received: from [10.214.154.10] (vramuthx-MOBL1.gar.corp.intel.com [10.214.154.10])
-        by linux.intel.com (Postfix) with ESMTP id 01894580613;
-        Mon,  4 May 2020 02:17:04 -0700 (PDT)
-Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
-Subject: Re: [PATCH v4 2/2] mtd: rawnand: Add NAND controller support on Intel
- LGM SoC
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     tglx@linutronix.de, cheol.yong.kim@intel.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        masonccyang@mxic.com.tw, anders.roxell@linaro.org, vigneshr@ti.com,
-        arnd@arndb.de, hauke.mehrtens@intel.com, richard@nod.at,
-        brendanhiggins@google.com, linux-mips@vger.kernel.org,
-        robh+dt@kernel.org, linux-mtd@lists.infradead.org,
-        miquel.raynal@bootlin.com, qi-ming.wu@intel.com,
-        andriy.shevchenko@intel.com
-References: <20200429104205.18780-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200429104205.18780-3-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200429162249.55d38ee8@collabora.com>
- <9d77c64c-d0f9-7a13-3391-d05bf458bdb1@linux.intel.com>
- <20200429164832.6800fc70@collabora.com>
- <2e83a2f7-853c-f0e2-f686-daf1e0649eae@linux.intel.com>
- <20200429173107.5c6d2f55@collabora.com>
- <1de9ba29-30f1-6829-27e0-6f141e9bb1e6@linux.intel.com>
- <20200430102114.29b6552f@collabora.com>
- <1df71cf7-4cae-4cd0-864c-0812bb2cc123@linux.intel.com>
- <20200430103658.4b0b979e@collabora.com>
- <1d5aec11-a7b5-01c2-6614-16e57c64511b@linux.intel.com>
- <20200430143600.27031639@collabora.com>
- <20200430150124.7856d112@collabora.com>
- <df7c1952-bc9b-bad7-bf31-d09707a0829e@linux.intel.com>
- <20200504090824.1eb16b78@collabora.com>
- <854521ed-b0f9-0f0f-2cd7-5ad11b2d059a@linux.intel.com>
- <20200504091755.0d0e73aa@collabora.com>
- <db023399-8b4d-c75c-30c8-b35e38e2e5f8@linux.intel.com>
- <20200504105828.72aaf7b8@collabora.com>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <b9c2bda4-39e0-a53f-528e-9beb50549acf@linux.intel.com>
-Date:   Mon, 4 May 2020 17:17:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1728071AbgEDJaa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 4 May 2020 05:30:30 -0400
+Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 97460206D9;
+        Mon,  4 May 2020 09:30:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588584627;
+        bh=+BYu54UZb1Hn39wdF2PjZDNEdRe0NffuWafcZDhnJco=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uPyrpH8/aA7GlqYfmtmKUC8nrR1WumCxFk2ou/QWK9N2hkKoSg0yEQpbVqpwcwurd
+         ECe3PSkwSzkdtBsbJy91NWmjMJse+5jSs6v70glXNnurUP3J1NZI2APJkZSNxFDGMZ
+         ILP+atlr2SJ4Rqo/DCPWbsePjXXw2B9aIjLHm0zI=
+Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jVXQf-000K77-18; Mon, 04 May 2020 11:30:25 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jyri Sarha <jsarha@ti.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Olivier Moysan <olivier.moysan@st.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
+Subject: [PATCH] docs: dt: fix broken links due to txt->yaml renames
+Date:   Mon,  4 May 2020 11:30:20 +0200
+Message-Id: <967df5c3303b478b76199d4379fe40f5094f3f9b.1588584538.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-In-Reply-To: <20200504105828.72aaf7b8@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Boris,
+There are some new broken doc links due to yaml renames
+at DT. Developers should really run:
 
-On 4/5/2020 4:58 pm, Boris Brezillon wrote:
-> On Mon, 4 May 2020 16:50:08 +0800
-> "Ramuthevar, Vadivel MuruganX"
-> <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
-> 
->> Hi Boris,
->>
->> On 4/5/2020 3:17 pm, Boris Brezillon wrote:
->>> On Mon, 4 May 2020 15:15:08 +0800
->>> "Ramuthevar, Vadivel MuruganX"
->>> <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
->>>    
->>>> Hi Boris,
->>>>
->>>>      Thank you very much for the prompt review and suggestions...
->>>>
->>>> On 4/5/2020 3:08 pm, Boris Brezillon wrote:
->>>>> On Mon, 4 May 2020 10:02:35 +0800
->>>>> "Ramuthevar, Vadivel MuruganX"
->>>>> <vadivel.muruganx.ramuthevar@linux.intel.com>  wrote:
->>>>>       
->>>>>> Hi Boris,
->>>>>>
->>>>>> On 30/4/2020 9:01 pm, Boris Brezillon wrote:
->>>>>>> On Thu, 30 Apr 2020 14:36:00 +0200
->>>>>>> Boris Brezillon<boris.brezillon@collabora.com>  wrote:
->>>>>>>          
->>>>>>>> On Thu, 30 Apr 2020 17:07:03 +0800
->>>>>>>> "Ramuthevar, Vadivel MuruganX"
->>>>>>>> <vadivel.muruganx.ramuthevar@linux.intel.com>  wrote:
->>>>>>>>         
->>>>>>>>>>>> The question is, is it the same value we have in nand_pa or it is
->>>>>>>>>>>> different?
->>>>>>>>>>>>                  
->>>>>>>>>>> Different address which is 0xE1400000 NAND_BASE_PHY address.
->>>>>>>>>> Then why didn't you tell me they didn't match when I suggested to pass
->>>>>>>>> sorry, because you keep asking nand_pa after that only I realized that.
->>>>>>>>>             
->>>>>>>>>> nand_pa? So now the question is, what does this address represent?
->>>>>>>>>                     EBU-MODULE
->>>>>>>>>       _________     _______________________
->>>>>>>>> |         |   |            |NAND CTRL  |
->>>>>>>>> | FPI BUS |==>| CS0(0x174) | 0xE100    ( 0xE14/0xE1C) NAND_PHY_BASE
->>>>>>>>> |_________|   |_CS1(0x17C)_|__________ |
->>>>>>>>>
->>>>>>>>> EBU_CONRTROLLER_BASE : 0xE0F0_0000
->>>>>>>>> HSNAND_BASE: 0xE100_0000
->>>>>>>>> NAND_CS0: 0xE140_0000
->>>>>>>>> NAND_CS1: 0xE1C0_0000
->>>>>>>>>
->>>>>>>>> MEM_REGION_BASE_CS0: 0x17400 (internal to ebu controller )
->>>>>>>>> MEM_REGION_BASE_CS1: 0x17C00
->>>>>>>>>             
->>>>>>>> Hm, I wonder if we shouldn't use a 'ranges' property to describe this
->>>>>>>> address translation. Something like
->>>>>>>>
->>>>>>>> 	ebu@xxx {
->>>>>>>> 		ranges = <0x17400000 0xe1400000 0x1000>,
->>>>>>>> 			 <0x17c00000 0xe1c00000 0x1000>;
->>>>>>>> 		reg = <0x17400000>, <0x17c00000>;
->>>>>>>> 		reg-names = "cs-0", "cs-1";
->>>>>>>> 	}
->>>>>>>>
->>>>>>>> The translated address (0xE1X00000) will be available in res->start,
->>>>>>>> and the non-translated one (0x17X00000) can be retrieved with
->>>>>>>> of_get_address(). All you'd have to do then would be calculate the
->>>>>>>> mask:
->>>>>>>>
->>>>>>>> 	mask = (translated_address & original_address) >> 22;
->>>>>>>> 	num_comp_bits = fls(mask);
->>>>>>>> 	WARN_ON(mask != GENMASK(num_comp_bits - 1, 0));
->>>>>>>>
->>>>>>>> Which allows you to properly set the ADDR_SEL() register without
->>>>>>>> relying on some hardcoded values:
->>>>>>>>
->>>>>>>> 	writel(original_address | EBU_ADDR_SEL_REGEN |
->>>>>>>> 	       EBU_ADDR_COMP_BITS(num_comp_bits),
->>>>>>>> 	       ebu_host->ebu + EBU_ADDR_SEL(csid));
->>>>>>>>
->>>>>>>> That's quite important if we want to merge the xway NAND driver with
->>>>>>>> this one.
->>>>>>> Looks like the translation is done at the FPI bus declaration level (see
->>>>>>> [1]). We really need to see the big picture to take a wise decision
->>>>>>> about the bindings. Would you mind pasting your dsti/dts files
->>>>>>> somewhere? It feels like the NAND controller is a sub-part of a more
->>>>>>> generic 'memory' controller, in which case the NAND controller should be
->>>>>>> declared as a child of this generic memory bus (called localbus in [1],
->>>>>>> but maybe EBU is more accurate).
->>>>>>>
->>>>>>> [1]https://github.com/xieyaxiongfly/Atheros_CSI_tool_OpenWRT_src/blob/master/target/linux/lantiq/files-4.14/arch/mips/boot/dts/vr9.dtsi#L162
->>>>>>
->>>>>>      ebu_nand: ebu_nand@e0f00000 {
->>>>>>                      compatible = "intel,lgm-ebu-nand";
->>>>>>                      reg = <0xe0f00000 0x100
->>>>>>                      0xe1000000 0x300
->>>>>>                      0xe1400000 0x80000
->>>>>>                      0xe1c00000 0x10000>;
->>>>>>                      reg-names = "ebunand", "hsnand", "nand_cs0", nand_cs1";
->>>>>>                      dmas = <&dma0 8>, <&dma0 9>;
->>>>>>                      dma-names = "ebu_rx", "ebu_tx";
->>>>>>                      clocks =  <&cgu0 LGM_GCLK_EBU>;
->>>>>>              };
->>>>>>
->>>>>>
->>>>>> 	 &ebu_nand {
->>>>>> 	         status = "disabled";
->>>>>> 	        nand,cs = <1>;
->>>>>> 	        nand-ecc-mode = "hw";
->>>>>> 	        pinctrl-names = "default";
->>>>>> 	        pinctrl-0 = <&ebu_nand_base &ebu_cs1>;
->>>>>> 	};
->>>>>>      
->>>>>>>          
->>>>> Ok. If I understand the SoC topology correctly it should actually be
->>>>> something like that:
->>>>>
->>>>> {
->>>>> 	...
->>>>> 	fpi@xxxxx {
->>>>> 		compatible = "intel,lgm-fpi", "simple-bus";
->>>>>
->>>>> 		/* You might have other ranges to define here */
->>>>> 		ranges = <0x16000000 0xe0000000 0x1000000>;
->>>>>
->>>>> 		...
->>>>
->>>> Sorry, we do not have fpi tree node in our dts/dtsi file instead we have
->>>> the below one.. , that also not included the major peripherals
->>>> controllers node.
->>>>            /* Special part from CPU core */
->>>>            core: core {
->>>>                    compatible = "intel,core", "simple-bus";
->>>>                    #address-cells = <1>;
->>>>                    #size-cells = <1>;
->>>>                    ranges;
->>>>
->>>>                    ioapic1: interrupt-controller@fec00000 {
->>>>                            #interrupt-cells = <2>;
->>>>                            #address-cells = <0>;
->>>>                            compatible = "intel,ce4100-ioapic";
->>>>                            interrupt-controller;
->>>>                            reg = <0xfec00000 0x1000>;
->>>>                            nr_entries = <256>;
->>>>                    };
->>>>
->>>>                    hpet: timer@fed00000 {
->>>>                            compatible = "intel,ce4100-hpet";
->>>>                            reg = <0xfed00000 0x400>;
->>>>                    };
->>>>
->>>>                    lapic0: interrupt-controller@fee00000 {
->>>>                            compatible = "intel,ce4100-lapic";
->>>>                            reg = <0xfee00000 0x1000>;
->>>>                            no_pic_mode;
->>>>                    };
->>>>            };
->>>>
->>>> other than this, rest all in independent node .
->>>
->>> But you do have an FPI bus, right? If this is the case it should be
->>> represented.
->>
->> Yes, FPI bus is slave to core which connects all the peripherals.
->>
->>    Or is the "intel,core" bus actually the FPI bus that you
->>> named differently?
->>
->> FPI slave bus connects to core bus by OCP bridge, so here it is named
->> FPI bus, but SW perspective didn't have root tree which has all
->> sub-nodes, as of now each peripheral has its own node.
-> 
-> Duh, not sure that's a good idea to hide that, especially since you
-> have to describe the address translation that happens when crossing the
-> FPI bus (the ranges thing I mentioned previously).
+	./scripts/documentation-file-ref-check
 
-Thanks Boris, Sure I will do as you have suggested.
+in order to solve those issues while submitting patches.
+This tool can even fix most of the issues with:
 
-can I proceed to send next patch-set.
+	./scripts/documentation-file-ref-check --fix
 
-Regards
-Vadivel
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+
+PS.: This patch is against today's linux-next.
+
+
+ .../devicetree/bindings/display/bridge/sii902x.txt          | 2 +-
+ .../devicetree/bindings/display/rockchip/rockchip-drm.yaml  | 2 +-
+ .../devicetree/bindings/net/mediatek-bluetooth.txt          | 2 +-
+ .../devicetree/bindings/sound/audio-graph-card.txt          | 2 +-
+ .../devicetree/bindings/sound/st,sti-asoc-card.txt          | 2 +-
+ Documentation/mips/ingenic-tcu.rst                          | 2 +-
+ MAINTAINERS                                                 | 6 +++---
+ 7 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/display/bridge/sii902x.txt b/Documentation/devicetree/bindings/display/bridge/sii902x.txt
+index 6e14e087c0d0..0d1db3f9da84 100644
+--- a/Documentation/devicetree/bindings/display/bridge/sii902x.txt
++++ b/Documentation/devicetree/bindings/display/bridge/sii902x.txt
+@@ -37,7 +37,7 @@ Optional properties:
+ 	simple-card or audio-graph-card binding. See their binding
+ 	documents on how to describe the way the sii902x device is
+ 	connected to the rest of the audio system:
+-	Documentation/devicetree/bindings/sound/simple-card.txt
++	Documentation/devicetree/bindings/sound/simple-card.yaml
+ 	Documentation/devicetree/bindings/sound/audio-graph-card.txt
+ 	Note: In case of the audio-graph-card binding the used port
+ 	index should be 3.
+diff --git a/Documentation/devicetree/bindings/display/rockchip/rockchip-drm.yaml b/Documentation/devicetree/bindings/display/rockchip/rockchip-drm.yaml
+index ec8ae742d4da..7204da5eb4c5 100644
+--- a/Documentation/devicetree/bindings/display/rockchip/rockchip-drm.yaml
++++ b/Documentation/devicetree/bindings/display/rockchip/rockchip-drm.yaml
+@@ -24,7 +24,7 @@ properties:
+     description: |
+       Should contain a list of phandles pointing to display interface port
+       of vop devices. vop definitions as defined in
+-      Documentation/devicetree/bindings/display/rockchip/rockchip-vop.txt
++      Documentation/devicetree/bindings/display/rockchip/rockchip-vop.yaml
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/net/mediatek-bluetooth.txt b/Documentation/devicetree/bindings/net/mediatek-bluetooth.txt
+index 219bcbd0d344..9ef5bacda8c1 100644
+--- a/Documentation/devicetree/bindings/net/mediatek-bluetooth.txt
++++ b/Documentation/devicetree/bindings/net/mediatek-bluetooth.txt
+@@ -3,7 +3,7 @@ MediaTek SoC built-in Bluetooth Devices
+ 
+ This device is a serial attached device to BTIF device and thus it must be a
+ child node of the serial node with BTIF. The dt-bindings details for BTIF
+-device can be known via Documentation/devicetree/bindings/serial/8250.txt.
++device can be known via Documentation/devicetree/bindings/serial/8250.yaml.
+ 
+ Required properties:
+ 
+diff --git a/Documentation/devicetree/bindings/sound/audio-graph-card.txt b/Documentation/devicetree/bindings/sound/audio-graph-card.txt
+index 269682619a70..d5f6919a2d69 100644
+--- a/Documentation/devicetree/bindings/sound/audio-graph-card.txt
++++ b/Documentation/devicetree/bindings/sound/audio-graph-card.txt
+@@ -5,7 +5,7 @@ It is based on common bindings for device graphs.
+ see ${LINUX}/Documentation/devicetree/bindings/graph.txt
+ 
+ Basically, Audio Graph Card property is same as Simple Card.
+-see ${LINUX}/Documentation/devicetree/bindings/sound/simple-card.txt
++see ${LINUX}/Documentation/devicetree/bindings/sound/simple-card.yaml
+ 
+ Below are same as Simple-Card.
+ 
+diff --git a/Documentation/devicetree/bindings/sound/st,sti-asoc-card.txt b/Documentation/devicetree/bindings/sound/st,sti-asoc-card.txt
+index 4d51f3f5ea98..a6ffcdec6f6a 100644
+--- a/Documentation/devicetree/bindings/sound/st,sti-asoc-card.txt
++++ b/Documentation/devicetree/bindings/sound/st,sti-asoc-card.txt
+@@ -5,7 +5,7 @@ codec or external codecs.
+ 
+ sti sound drivers allows to expose sti SoC audio interface through the
+ generic ASoC simple card. For details about sound card declaration please refer to
+-Documentation/devicetree/bindings/sound/simple-card.txt.
++Documentation/devicetree/bindings/sound/simple-card.yaml.
+ 
+ 1) sti-uniperiph-dai: audio dai device.
+ ---------------------------------------
+diff --git a/Documentation/mips/ingenic-tcu.rst b/Documentation/mips/ingenic-tcu.rst
+index c5a646b14450..2b75760619b4 100644
+--- a/Documentation/mips/ingenic-tcu.rst
++++ b/Documentation/mips/ingenic-tcu.rst
+@@ -68,4 +68,4 @@ and frameworks can be controlled from the same registers, all of these
+ drivers access their registers through the same regmap.
+ 
+ For more information regarding the devicetree bindings of the TCU drivers,
+-have a look at Documentation/devicetree/bindings/timer/ingenic,tcu.txt.
++have a look at Documentation/devicetree/bindings/timer/ingenic,tcu.yaml.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b6ec0b3c3125..b70842425302 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3911,7 +3911,7 @@ L:	linux-crypto@vger.kernel.org
+ S:	Supported
+ F:	drivers/char/hw_random/cctrng.c
+ F:	drivers/char/hw_random/cctrng.h
+-F:	Documentation/devicetree/bindings/rng/arm-cctrng.txt
++F:	Documentation/devicetree/bindings/rng/arm-cctrng.yaml
+ W:	https://developer.arm.com/products/system-ip/trustzone-cryptocell/cryptocell-700-family
+ 
+ CEC FRAMEWORK
+@@ -5446,7 +5446,7 @@ F:	include/uapi/drm/r128_drm.h
+ DRM DRIVER FOR RAYDIUM RM67191 PANELS
+ M:	Robert Chiras <robert.chiras@nxp.com>
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/display/panel/raydium,rm67191.txt
++F:	Documentation/devicetree/bindings/display/panel/raydium,rm67191.yaml
+ F:	drivers/gpu/drm/panel/panel-raydium-rm67191.c
+ 
+ DRM DRIVER FOR ROCKTECH JH057N00900 PANELS
+@@ -16294,7 +16294,7 @@ M:	Hoan Tran <hoan@os.amperecomputing.com>
+ M:	Serge Semin <fancer.lancer@gmail.com>
+ L:	linux-gpio@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/gpio/snps-dwapb-gpio.txt
++F:	Documentation/devicetree/bindings/gpio/snps,dw-apb-gpio.yaml
+ F:	drivers/gpio/gpio-dwapb.c
+ 
+ SYNOPSYS DESIGNWARE AXI DMAC DRIVER
+-- 
+2.25.4
 
