@@ -2,144 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F1B1C3092
-	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2020 03:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699341C3095
+	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2020 03:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726404AbgEDBFg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 3 May 2020 21:05:36 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:37862 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726282AbgEDBFg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 3 May 2020 21:05:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1588554334; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F3RwTvS4W/Ru6HPIjFj+d9jqrjj8rrS76agrs9WAWAA=;
-        b=JtCWfSGUh9re+3gtwIPVYhHKnqMydySyvWFRBnxPdQAKrSWiJggKm7kP2Ph05Ebp13bNoI
-        +MKgD6goxUhrjziZPjjkolIMpyezdg9oMQZoeimI6b9XAUNDW/oeQUqR4wGUH+XREi0Hi/
-        laW0mz6FxfeLc/Bnh8cccgXXwkkkBSM=
-Date:   Mon, 04 May 2020 03:05:22 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: DRM interaction problems on Ingenic CI20 / jz4780 with dw-hdmi
- and ingenic-drm
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        Yakir Yang <ykk@rock-chips.com>,
-        Vladimir Zapolskiy <vladimir_zapolskiy@mentor.com>,
-        Paul Boddie <paul@boddie.org.uk>, linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        MIPS Creator CI20 Development 
-        <mips-creator-ci20-dev@googlegroups.com>
-Message-Id: <YC8S9Q.M96AR8DWGF0F1@crapouillou.net>
-In-Reply-To: <125Q8Q.9F49TXF6ZICX1@crapouillou.net>
-References: <ED77DCA8-FF50-4E9E-A4B8-688262774723@goldelico.com>
-        <125Q8Q.9F49TXF6ZICX1@crapouillou.net>
+        id S1727109AbgEDBJX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 3 May 2020 21:09:23 -0400
+Received: from mga11.intel.com ([192.55.52.93]:17935 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726282AbgEDBJW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 3 May 2020 21:09:22 -0400
+IronPort-SDR: A9YDjvCFSAVRZt9PK6T6bah1ORcFaay/xLXeYJlc6YM+kvTo9s31EfXuPQPfGhntjjL6mPEk1b
+ znGgE4vjXnFQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2020 18:09:20 -0700
+IronPort-SDR: fHucA4RWhttBOWYdNcVbZcLe92djrCMA36BhMr8sTNTq9uR1pF6GcVTIexdnyZrcSkJFrWzqIJ
+ LnPtCLKlHAVA==
+X-IronPort-AV: E=Sophos;i="5.73,350,1583222400"; 
+   d="scan'208";a="248071661"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2020 18:09:19 -0700
+From:   ira.weiny@intel.com
+To:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Huang Rui <ray.huang@amd.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH V2 00/11] Subject: Remove duplicated kmap code
+Date:   Sun,  3 May 2020 18:09:01 -0700
+Message-Id: <20200504010912.982044-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nikolaus,
+From: Ira Weiny <ira.weiny@intel.com>
 
-So I just wrote a HDMI driver for a different chip, I guess I can=20
-answer some of your questions now.
+The kmap infrastructure has been copied almost verbatim to every architecture.
+This series consolidates obvious duplicated code by defining core functions
+which call into the architectures only when needed.
 
+Some of the k[un]map_atomic() implementations have some similarities but the
+similarities were not sufficient to warrant further changes.
 
-Le lun. 13 avril 2020 =E0 13:25, Paul Cercueil <paul@crapouillou.net> a=20
-=E9crit :
-> Hi Nikolaus,
->=20
->=20
-> Le sam. 11 avril 2020 =E0 16:14, H. Nikolaus Schaller=20
-> <hns@goldelico.com> a =E9crit :
->> Hi,
->> we (Paul Boddie and me) are working to get HDMI functional on the
->> Ingenic CI20 board with jz4780 SoC which uses a specialization of
->> the dw-hdmi driver.
->>=20
->>=20
->> So far we have identified two issues.
->>=20
->> The first is that HPD interrupts are not properly processed.
->>=20
->> drm_helper_hpd_irq_event() is called by HPD events but
->> dev->mode_config.poll_enabled is false.
->>=20
+In addition we remove a duplicate implementation of kmap() in DRM.
 
-This is to be used when there's no hardware interrupt. I believe you=20
-have one, right? Then call drm_kms_helper_hotplug_event() from the=20
-interrupt handler instead.
+Testing was done by 0day to cover all the architectures I can't readily
+build/test.
 
->> Therefore the interrupt is ignored and nothing happens.
->>=20
->> Now I wonder about the logic behind checking for poll_enabled.
->> I understand that a driver can do either polling or irq or both.
->>=20
->> Therefore handling the irq_event shouldn't be disabled by=20
->> poll_enabled
->> being false. Otherwise we can only do: nothing, polling, polling+irq
->> but not irq alone.
->>=20
->> The jz4780 hdmi subsystem (drm/bridge/dw-hdmi.c) uses
->>=20
->> 	connector->polled =3D DRM_CONNECTOR_POLL_HPD;
->>=20
->> but shouldn't this enable polling? Note that there seems to be
->> no (direct) call to drm_kms_helper_poll_init().
->>=20
->> If we set dev->mode_config.poll_enabled =3D true in
->> drm_helper_hpd_irq_event() things start to work.
->>=20
->> Please can you clarify what would be best practise here to
->> get HPD event handling working.
->>=20
+---
+Changes from V1:
+	Fix bisect-ability
+	Update commit message and fix line lengths
+	Remove unneded kunmap_atomic_high() declarations
+	Remove unneded kmap_atomic_high() declarations
+	collect reviews
+	rebase to 5.7-rc4
 
-Remove that - this stuff is for hardware without interrupts, where=20
-everything has to be polled.
+Changes from V0:
+	Define kmap_flush_tlb() and make kmap() truely arch independent.
+	Redefine the k[un]map_atomic_* code to call into the architectures for
+		high mem pages
+	Ensure all architectures define kmap_prot, use it appropriately, and
+		define kmap_atomic_prot()
+	Remove drm implementation of kmap_atomic()
 
->> The other issue is in dw-hdmi.c:
->>=20
->> We found out that ingenic_drm_encoder_atomic_check() fails because
->>=20
->> info->num_bus_formats =3D=3D 0
->>=20
->> and not 1. This blocks further initialization.
->>=20
->> The reason seems to be that dw_hdmi_bridge_attach() does not call
->> drm_display_info_set_bus_formats() with a proper format like
->> other drivers (e.g. drm/bridge/ti-tfp410.c) are doing.
->>=20
->> We have patched to set a single bus format MEDIA_BUS_FMT_RGB888_1X24
->> and then DRM setup seems to work (although we still have no valid
->> HDMI signal but that is likely something else).
->>=20
->> Please can you explain how setting the bus format should be fixed
->> in dw-hdmi.c.
->>=20
+Ira Weiny (11):
+  arch/kmap: Remove BUG_ON()
+  arch/xtensa: Move kmap build bug out of the way
+  arch/kmap: Remove redundant arch specific kmaps
+  arch/kunmap: Remove duplicate kunmap implementations
+  {x86,powerpc,microblaze}/kmap: Move preempt disable
+  arch/kmap_atomic: Consolidate duplicate code
+  arch/kunmap_atomic: Consolidate duplicate code
+  arch/kmap: Ensure kmap_prot visibility
+  arch/kmap: Don't hard code kmap_prot values
+  arch/kmap: Define kmap_atomic_prot() for all arch's
+  drm: Remove drm specific kmap_atomic code
 
-I'm not sure, but that information may come from EDID data. Are you=20
-able to obtain video modes from the connected monitor?
+ arch/arc/include/asm/highmem.h        | 15 -------
+ arch/arc/mm/highmem.c                 | 28 +++---------
+ arch/arm/include/asm/highmem.h        |  7 ---
+ arch/arm/mm/highmem.c                 | 35 +++------------
+ arch/csky/include/asm/highmem.h       |  9 +---
+ arch/csky/mm/highmem.c                | 43 +++++--------------
+ arch/microblaze/include/asm/highmem.h | 28 +-----------
+ arch/microblaze/mm/highmem.c          | 16 ++-----
+ arch/microblaze/mm/init.c             |  3 --
+ arch/mips/include/asm/highmem.h       |  9 +---
+ arch/mips/mm/cache.c                  |  6 +--
+ arch/mips/mm/highmem.c                | 49 ++++-----------------
+ arch/nds32/include/asm/highmem.h      |  7 ---
+ arch/nds32/mm/highmem.c               | 39 +++--------------
+ arch/parisc/include/asm/cacheflush.h  |  4 +-
+ arch/powerpc/include/asm/highmem.h    | 29 +------------
+ arch/powerpc/mm/highmem.c             | 21 ++-------
+ arch/powerpc/mm/mem.c                 |  3 --
+ arch/sparc/include/asm/highmem.h      | 22 ----------
+ arch/sparc/mm/highmem.c               | 18 +++-----
+ arch/x86/include/asm/highmem.h        |  9 ----
+ arch/x86/mm/highmem_32.c              | 50 ++-------------------
+ arch/xtensa/include/asm/highmem.h     | 27 ------------
+ arch/xtensa/mm/highmem.c              | 22 ++++------
+ drivers/gpu/drm/ttm/ttm_bo_util.c     | 56 ++----------------------
+ drivers/gpu/drm/vmwgfx/vmwgfx_blit.c  | 16 +++----
+ include/drm/ttm/ttm_bo_api.h          |  4 --
+ include/linux/highmem.h               | 62 +++++++++++++++++++++++++--
+ 28 files changed, 140 insertions(+), 497 deletions(-)
 
--Paul
-
->> If these questions should be forwarded to other specialists, please
->> do so.
->=20
-> It should be sent to the DRI mailing list, you missed the most=20
-> important one.
->=20
-> -Paul
->=20
->>=20
->> BR and thanks,
->> Nikolaus Schaller
-
+-- 
+2.25.1
 
