@@ -2,137 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 724BC1C320A
-	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2020 07:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E2B1C3246
+	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2020 07:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726897AbgEDFEv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 May 2020 01:04:51 -0400
-Received: from mga12.intel.com ([192.55.52.136]:43373 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725894AbgEDFEu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 4 May 2020 01:04:50 -0400
-IronPort-SDR: RI4gvK+9HDVAKbRklvMRzIq+pixxdYwbvyTVuNGFD83c+J+nmEf9PVYs8K3ZAJRRWmwQxHCADe
- 82/fHngT1KIw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2020 22:04:49 -0700
-IronPort-SDR: MxCGejezytWAFr2qtWtnEu9Zlbx9sDBny4KBWGPuntnxpb8eeVieC20Y3SJ8U7XteAAgk3t7Pj
- fSoUNNLnXPgQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,350,1583222400"; 
-   d="scan'208";a="295395757"
-Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by orsmga008.jf.intel.com with ESMTP; 03 May 2020 22:04:48 -0700
-Date:   Sun, 3 May 2020 22:04:47 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH V2 00/11] Subject: Remove duplicated kmap code
-Message-ID: <20200504050447.GA979899@iweiny-DESK2.sc.intel.com>
-References: <20200504010912.982044-1-ira.weiny@intel.com>
- <20200504013509.GU23230@ZenIV.linux.org.uk>
+        id S1726509AbgEDFbm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 May 2020 01:31:42 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:39344 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S1725859AbgEDFbm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 May 2020 01:31:42 -0400
+X-Greylist: delayed 398 seconds by postgrey-1.27 at vger.kernel.org; Mon, 04 May 2020 01:31:41 EDT
+Received: from [192.168.9.172] (unknown [140.207.23.182])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id ABFD1600B4;
+        Mon,  4 May 2020 13:25:00 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
+        t=1588569900; bh=O50RHHIgVEsTEEL5+9e+YuYaXRtUA2P6FLTNprIJCL8=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=iHpkAUU39ouhjr1/a0QPKO3/zzfKEWp2iAO8xHH8hNV583cL0SsOVKXnZOdcVfZeE
+         Ui3fCB6LL/mlb3bXfepOjFQmsd34jJw8T1K5iHKg4fXZLsVfP0R2tCWJhxwrdZr+mD
+         KBXYFiW8JpyQJ0yPxfxvhNMDp3dy0npUEtTvf3ME=
+Subject: Re: [PATCH v2 RESEND 4/4] MIPS: emulate CPUCFG instruction on older
+ Loongson64 cores
+To:     jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org
+Cc:     Huacai Chen <chenhc@lemote.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+References: <20200503103304.40678-5-git@xen0n.name>
+ <20200503105012.43246-1-git@xen0n.name>
+ <3B0FE747-AE18-404B-9CD3-D3401634340C@flygoat.com>
+From:   WANG Xuerui <kernel@xen0n.name>
+Message-ID: <f8eb83b8-7ec3-5d5c-7f4c-c78f72c04c1a@xen0n.name>
+Date:   Mon, 4 May 2020 13:25:00 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:77.0) Gecko/20100101
+ Thunderbird/77.0a1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200504013509.GU23230@ZenIV.linux.org.uk>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+In-Reply-To: <3B0FE747-AE18-404B-9CD3-D3401634340C@flygoat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 04, 2020 at 02:35:09AM +0100, Al Viro wrote:
-> On Sun, May 03, 2020 at 06:09:01PM -0700, ira.weiny@intel.com wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > The kmap infrastructure has been copied almost verbatim to every architecture.
-> > This series consolidates obvious duplicated code by defining core functions
-> > which call into the architectures only when needed.
-> > 
-> > Some of the k[un]map_atomic() implementations have some similarities but the
-> > similarities were not sufficient to warrant further changes.
-> > 
-> > In addition we remove a duplicate implementation of kmap() in DRM.
-> > 
-> > Testing was done by 0day to cover all the architectures I can't readily
-> > build/test.
-> 
-> OK...  Looking through my old notes on kmap unification (this winter, never
-> went anywhere),
-> 
-> * arch/mips/mm/cache.c ought to use linux/highmem.h, not asm/highmem.h
-> I suspect that your series doesn't build on some configs there.  Hadn't
-> verified that, though.
+On 5/3/20 11:50 PM, Jiaxun Yang wrote:
 
-Yes patch 6 makes the change because kmap_atomic() was no longer declared in
-asm/highmem.h.  I'm pretty sure 0-day caught that ...  but I seem to remember
-noticing some oddness in that file and I did go through it by hand.
+> Some random thoughts on that:
+>
+> While cpucfg instruction would not be available on other MIPS
+> processors, and given that most distros are more willing to provide
+> general MIPS version instead of Loongson specified version, we'd better
+> provide user space programs a way to probe emulated/physical cpucfg support.
+>
+> Looks like elf_hwcap would be a option? I've already added some flags about
+> Loongson's extension and now an extra HWCAP_LOONGSON_CPUCFG can cover everything.
 
-> 
-> * kmap_atomic_to_page() is dead, but not quite gone - csky and nds32 brought
-> the damn thing back (nds32 - only an extern).  It needs killin'...
+All emulated outputs from the older models have the LCSRP bit clear in 
+this patch. As CPUCFG is part of the Loongson CSR ASE, this is the 
+reliable way to distinguish between emulated and physical CPUCFG support.
 
-Easy enough. Added as a follow on patch.
+However, because detecting presence of CPUCFG itself still requires one 
+to handle SIGILL, exposing an hwcap might be an option. So we'll have 
+the following mapping:
 
-> 
-> * parisc is (arguably) abusing kunmap()/kunmap_atomic() for cache flushing.
-> Replace the bulk of its highmem.h with
-> #define ARCH_HAS_FLUSH_ON_KUNMAP
-> #define arch_before_kunmap flush_kernel_dcache_page_addr
-> and have default kunmap()/kunmap_atomic() do
-> #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
-> 	arch_before_kunmap(page_address(page));
-> #endif
-> and
-> #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
-> 	arch_before_kunmap(addr);
-> #endif
-> resp.  Kills ARCH_HAS_KMAP along with ifdefs on it, makes parisc use somewhat
-> less hacky.
+- no HWCAP_LOONGSON_CPUCFG -- other MIPS or Loongson-2EF or Loongson-32
+- CPUCFG.0x2.LCSRP == 0 -- older Loongson-64 models
+- otherwise, Loongson-3A R4 or later
 
-Agreed.  Done in a follow on patch.
+Seems some of the previously defined hwcaps will become unnecessary if 
+we make this change. But they're already part of kernel ABI so we have 
+to keep them, fortunately we still have plenty of bits available. At 
+least future additions of Loongson features wouldn't go through hwcap.
 
-> 
-> I'd suggest checking various configs on mips - that's likely to cause headache.
-> Said that, my analysis of include chains back then is pretty much worthless
-> by now - I really hate the amount of indirect include chains leading to that
-> sucker on some, but not all configs ;-/  IIRC, the proof that everything
-> using kmap*/kunmap* would pull linux/highmem.h regardless of config took several
-> hours of digging, ran for several pages and had been hopelessly brittle.
-> arch/mips/mm/cache.c was the only exception caught by it, but these days
-> there might be more.
-
-Grepping for 'asm/highmem.h' and investigations don't reveal any issues...  But
-you do have me worried.  That said 0-day has been crunching on multiple
-versions of this series without issues such as this (save the mips issue
-above).
-
-I have to say it would be nice if the relation between linux/highmem.h and
-asm/highmem.h was more straightforward.
-
-Ira
+I think the hwcap addition can be added in another follow-up series if 
+the idea gets consensus; let's keep this series focused.
 
