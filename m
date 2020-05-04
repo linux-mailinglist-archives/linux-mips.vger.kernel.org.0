@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF521C313B
-	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2020 03:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70DD1C3142
+	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2020 04:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726404AbgEDB6Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 3 May 2020 21:58:16 -0400
-Received: from mga14.intel.com ([192.55.52.115]:11877 "EHLO mga14.intel.com"
+        id S1726377AbgEDCCn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 3 May 2020 22:02:43 -0400
+Received: from mga05.intel.com ([192.55.52.43]:34840 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726377AbgEDB6Q (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 3 May 2020 21:58:16 -0400
-IronPort-SDR: 6LfdbkYPd+JfdkcUiLH+o+VXQefuNJyMHg0jir3nv6GRFZpk8HqMS2Be3DI1S+ZGcuuh0PlgYm
- w98kerXG/Q4w==
+        id S1726282AbgEDCCm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 3 May 2020 22:02:42 -0400
+IronPort-SDR: uA4JE8Wph2+I2omqayhzx9tlG3J9sEjPmUqUZh5RSUFedyq+MBaoHL7C/tn3z6Yj02E+Rup7FH
+ 51mrplkJVkTg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2020 18:58:16 -0700
-IronPort-SDR: Ff3Y4xZ2QEk7wxYUQl6+j0WiEaUTuZZrEcn2LGSUgpJZeG8g0PG+BE1CCGK1w7xYYrWgwaxpSR
- qjMzawbxhmnQ==
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2020 19:02:42 -0700
+IronPort-SDR: EEjwDPx5Hc8B2aMX+Qv9J67cB0Go8Ng30rmw+2h0TPOuzUXrrQW+TXYihNo1zgWj//FtpI8l5k
+ vIaq4vleTu8A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,350,1583222400"; 
-   d="scan'208";a="262680308"
+   d="scan'208";a="433947100"
 Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 03 May 2020 18:58:15 -0700
+  by orsmga005.jf.intel.com with ESMTP; 03 May 2020 19:02:42 -0700
 Received: from [10.214.154.10] (vramuthx-mobl1.gar.corp.intel.com [10.214.154.10])
-        by linux.intel.com (Postfix) with ESMTP id 773DE580609;
-        Sun,  3 May 2020 18:58:09 -0700 (PDT)
+        by linux.intel.com (Postfix) with ESMTP id 91507580609;
+        Sun,  3 May 2020 19:02:36 -0700 (PDT)
 Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
 Subject: Re: [PATCH v4 2/2] mtd: rawnand: Add NAND controller support on Intel
  LGM SoC
@@ -55,8 +55,8 @@ References: <20200429104205.18780-1-vadivel.muruganx.ramuthevar@linux.intel.com>
  <20200430150124.7856d112@collabora.com>
 From:   "Ramuthevar, Vadivel MuruganX" 
         <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <5bf637de-0ac1-1a24-0e91-aeb18bb563b4@linux.intel.com>
-Date:   Mon, 4 May 2020 09:58:08 +0800
+Message-ID: <df7c1952-bc9b-bad7-bf31-d09707a0829e@linux.intel.com>
+Date:   Mon, 4 May 2020 10:02:35 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
@@ -70,8 +70,6 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Boris,
-
-   Thank you very much for the review comments and your time...
 
 On 30/4/2020 9:01 pm, Boris Brezillon wrote:
 > On Thu, 30 Apr 2020 14:36:00 +0200
@@ -146,15 +144,14 @@ On 30/4/2020 9:01 pm, Boris Brezillon wrote:
 > 
 > [1]https://github.com/xieyaxiongfly/Atheros_CSI_tool_OpenWRT_src/blob/master/target/linux/lantiq/files-4.14/arch/mips/boot/dts/vr9.dtsi#L162
 
-for the ebu-nand node in the dts file.
 
-       ebu_nand: ebu_nand@e0f00000 {
+  ebu_nand: ebu_nand@e0f00000 {
                   compatible = "intel,lgm-ebu-nand";
-                  reg = <0xe0f00000 0x100 //EBU_NAND controller
-                   0xe1000000 0x300       //NAND ECC Extension access
+                  reg = <0xe0f00000 0x100
+                  0xe1000000 0x300
                   0xe1400000 0x80000
                   0xe1c00000 0x10000>;
-                  reg-names = "ebunand", "hsnand", "nand_cs0", "nand_cs1";
+                  reg-names = "ebunand", "hsnand", "nand_cs0", nand_cs1";
                   dmas = <&dma0 8>, <&dma0 9>;
                   dma-names = "ebu_rx", "ebu_tx";
                   clocks =  <&cgu0 LGM_GCLK_EBU>;
@@ -169,8 +166,4 @@ for the ebu-nand node in the dts file.
 	        pinctrl-0 = <&ebu_nand_base &ebu_cs1>;
 	};
 
-This is not comes under fpi in our devicetree.
-
-Regards
-Vadivel
 > 
