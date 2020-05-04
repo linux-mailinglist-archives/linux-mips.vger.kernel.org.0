@@ -2,90 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC8E1C4096
-	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2020 18:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A77D1C42B5
+	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2020 19:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729824AbgEDQ4f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 May 2020 12:56:35 -0400
-Received: from elvis.franken.de ([193.175.24.41]:39547 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728655AbgEDQ4f (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 4 May 2020 12:56:35 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jVeON-0004p9-00; Mon, 04 May 2020 18:56:31 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id C9E36C036D; Mon,  4 May 2020 18:56:14 +0200 (CEST)
-Date:   Mon, 4 May 2020 18:56:14 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     "Maciej W. Rozycki" <macro@linux-mips.org>,
-        linux-mips@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Fangrui Song <maskray@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Jouni Hogander <jouni.hogander@unikie.com>,
-        Kevin Darbyshire-Bryant <ldir@darbyshire-bryant.me.uk>,
-        Borislav Petkov <bp@suse.de>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] MIPS: Truncate link address into 32bit for 32bit
- kernel
-Message-ID: <20200504165614.GA15545@alpha.franken.de>
-References: <20200413062651.3992652-1-jiaxun.yang@flygoat.com>
- <20200422143258.1250960-1-jiaxun.yang@flygoat.com>
- <alpine.LFD.2.21.2004230036480.851719@eddie.linux-mips.org>
- <B307BFAC-9973-4444-B69A-40B054210E84@flygoat.com>
- <alpine.LFD.2.21.2004241316360.851719@eddie.linux-mips.org>
- <20200504154613.GA14031@alpha.franken.de>
- <86D4A0AC-59E1-4C82-B66D-6BFC71E08376@flygoat.com>
+        id S1730036AbgEDR2Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 May 2020 13:28:24 -0400
+Received: from smtprelay0098.hostedemail.com ([216.40.44.98]:45014 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729597AbgEDR2Y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 May 2020 13:28:24 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 9A50019B29;
+        Mon,  4 May 2020 17:28:22 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1537:1566:1593:1594:1711:1714:1730:1747:1777:1792:2198:2199:2393:2559:2562:2731:2828:3138:3139:3140:3141:3142:3622:3865:3866:3867:3870:4321:4362:5007:6742:6743:10004:10400:10848:11232:11658:11914:12043:12297:12740:12760:12895:13069:13311:13357:13439:14659:14721:21080:21627:30054:30060:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: edge64_2b6e02f508642
+X-Filterd-Recvd-Size: 2313
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf01.hostedemail.com (Postfix) with ESMTPA;
+        Mon,  4 May 2020 17:28:18 +0000 (UTC)
+Message-ID: <be112d4580b3dcd648fca7c23c09f5f13b31e435.camel@perches.com>
+Subject: Re: [PATCH] docs: dt: fix broken links due to txt->yaml renames
+From:   Joe Perches <joe@perches.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sandy Huang <hjc@rock-chips.com>,
+        Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jyri Sarha <jsarha@ti.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Olivier Moysan <olivier.moysan@st.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
+Date:   Mon, 04 May 2020 10:28:17 -0700
+In-Reply-To: <967df5c3303b478b76199d4379fe40f5094f3f9b.1588584538.git.mchehab+huawei@kernel.org>
+References: <967df5c3303b478b76199d4379fe40f5094f3f9b.1588584538.git.mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.1-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <86D4A0AC-59E1-4C82-B66D-6BFC71E08376@flygoat.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 05, 2020 at 12:09:46AM +0800, Jiaxun Yang wrote:
+On Mon, 2020-05-04 at 11:30 +0200, Mauro Carvalho Chehab wrote:
+> There are some new broken doc links due to yaml renames
+> at DT. Developers should really run:
 > 
-> 于 2020年5月4日 GMT+08:00 下午11:46:13, Thomas Bogendoerfer <tsbogend@alpha.franken.de> 写到:
-> >On Fri, Apr 24, 2020 at 01:22:30PM +0100, Maciej W. Rozycki wrote:
-> >> On Thu, 23 Apr 2020, Jiaxun Yang wrote:
-> >> 
-> >> > > Alternatively, have you made any attempt to verify if actually replacing 
-> >> > >the setting for VMLINUX_LOAD_ADDRESS would be safe?  Glancing over its use 
-> >> > >there do not appear to be many places.
-> >> > 
-> >> > Limited experiments showed it should be fine...
-> >> > 
-> >> > But MIPS kernel has some design I'm not really familiar with like SYM32 for
-> >> > 64-bit kernel and special address space design for Trap-and-emul KVM.
-> >> 
-> >>  This only affects CONFIG_32BIT kernels, so SYM32 does not apply; I can't 
-> >> comment on KVM.  There's still that bunch of:
-> >> 
-> >> $(shell expr $(...) \< 0xffffffff80000000)
-> >> 
-> >> constructs I mentioned before, so let's leave your change as it stands at 
-> >> this time.  Please do rename the variable as I suggested though, I hope 
-> >> that's not a big deal.
-> >
-> >Jiaxun, are you going to send an update with this change ?
+> 	./scripts/documentation-file-ref-check
 > 
-> Sorry my mail server missed Maciej's reply.
+> in order to solve those issues while submitting patches.
+> This tool can even fix most of the issues with:
 > 
-> Should I send another version or you just fix it at apply time?
+> 	./scripts/documentation-file-ref-check --fix
 
-please send a new version, thank you.
+Thanks Mauro.
 
-Thomas.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
