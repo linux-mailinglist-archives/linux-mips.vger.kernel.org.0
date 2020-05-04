@@ -2,168 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A70DD1C3142
-	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2020 04:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724BC1C320A
+	for <lists+linux-mips@lfdr.de>; Mon,  4 May 2020 07:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726377AbgEDCCn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 3 May 2020 22:02:43 -0400
-Received: from mga05.intel.com ([192.55.52.43]:34840 "EHLO mga05.intel.com"
+        id S1726897AbgEDFEv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 May 2020 01:04:51 -0400
+Received: from mga12.intel.com ([192.55.52.136]:43373 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726282AbgEDCCm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 3 May 2020 22:02:42 -0400
-IronPort-SDR: uA4JE8Wph2+I2omqayhzx9tlG3J9sEjPmUqUZh5RSUFedyq+MBaoHL7C/tn3z6Yj02E+Rup7FH
- 51mrplkJVkTg==
+        id S1725894AbgEDFEu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 4 May 2020 01:04:50 -0400
+IronPort-SDR: RI4gvK+9HDVAKbRklvMRzIq+pixxdYwbvyTVuNGFD83c+J+nmEf9PVYs8K3ZAJRRWmwQxHCADe
+ 82/fHngT1KIw==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2020 19:02:42 -0700
-IronPort-SDR: EEjwDPx5Hc8B2aMX+Qv9J67cB0Go8Ng30rmw+2h0TPOuzUXrrQW+TXYihNo1zgWj//FtpI8l5k
- vIaq4vleTu8A==
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2020 22:04:49 -0700
+IronPort-SDR: MxCGejezytWAFr2qtWtnEu9Zlbx9sDBny4KBWGPuntnxpb8eeVieC20Y3SJ8U7XteAAgk3t7Pj
+ fSoUNNLnXPgQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,350,1583222400"; 
-   d="scan'208";a="433947100"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga005.jf.intel.com with ESMTP; 03 May 2020 19:02:42 -0700
-Received: from [10.214.154.10] (vramuthx-mobl1.gar.corp.intel.com [10.214.154.10])
-        by linux.intel.com (Postfix) with ESMTP id 91507580609;
-        Sun,  3 May 2020 19:02:36 -0700 (PDT)
-Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
-Subject: Re: [PATCH v4 2/2] mtd: rawnand: Add NAND controller support on Intel
- LGM SoC
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     cheol.yong.kim@intel.com, devicetree@vger.kernel.org,
-        masonccyang@mxic.com.tw, anders.roxell@linaro.org, vigneshr@ti.com,
-        arnd@arndb.de, hauke.mehrtens@intel.com, richard@nod.at,
-        brendanhiggins@google.com, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, robh+dt@kernel.org,
-        linux-mtd@lists.infradead.org, miquel.raynal@bootlin.com,
-        tglx@linutronix.de, qi-ming.wu@intel.com,
-        andriy.shevchenko@intel.com
-References: <20200429104205.18780-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200429104205.18780-3-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200429162249.55d38ee8@collabora.com>
- <9d77c64c-d0f9-7a13-3391-d05bf458bdb1@linux.intel.com>
- <20200429164832.6800fc70@collabora.com>
- <2e83a2f7-853c-f0e2-f686-daf1e0649eae@linux.intel.com>
- <20200429173107.5c6d2f55@collabora.com>
- <1de9ba29-30f1-6829-27e0-6f141e9bb1e6@linux.intel.com>
- <20200430102114.29b6552f@collabora.com>
- <1df71cf7-4cae-4cd0-864c-0812bb2cc123@linux.intel.com>
- <20200430103658.4b0b979e@collabora.com>
- <1d5aec11-a7b5-01c2-6614-16e57c64511b@linux.intel.com>
- <20200430143600.27031639@collabora.com>
- <20200430150124.7856d112@collabora.com>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <df7c1952-bc9b-bad7-bf31-d09707a0829e@linux.intel.com>
-Date:   Mon, 4 May 2020 10:02:35 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+   d="scan'208";a="295395757"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
+  by orsmga008.jf.intel.com with ESMTP; 03 May 2020 22:04:48 -0700
+Date:   Sun, 3 May 2020 22:04:47 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Huang Rui <ray.huang@amd.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH V2 00/11] Subject: Remove duplicated kmap code
+Message-ID: <20200504050447.GA979899@iweiny-DESK2.sc.intel.com>
+References: <20200504010912.982044-1-ira.weiny@intel.com>
+ <20200504013509.GU23230@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <20200430150124.7856d112@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200504013509.GU23230@ZenIV.linux.org.uk>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Boris,
-
-On 30/4/2020 9:01 pm, Boris Brezillon wrote:
-> On Thu, 30 Apr 2020 14:36:00 +0200
-> Boris Brezillon <boris.brezillon@collabora.com> wrote:
+On Mon, May 04, 2020 at 02:35:09AM +0100, Al Viro wrote:
+> On Sun, May 03, 2020 at 06:09:01PM -0700, ira.weiny@intel.com wrote:
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
+> > The kmap infrastructure has been copied almost verbatim to every architecture.
+> > This series consolidates obvious duplicated code by defining core functions
+> > which call into the architectures only when needed.
+> > 
+> > Some of the k[un]map_atomic() implementations have some similarities but the
+> > similarities were not sufficient to warrant further changes.
+> > 
+> > In addition we remove a duplicate implementation of kmap() in DRM.
+> > 
+> > Testing was done by 0day to cover all the architectures I can't readily
+> > build/test.
 > 
->> On Thu, 30 Apr 2020 17:07:03 +0800
->> "Ramuthevar, Vadivel MuruganX"
->> <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
->>
->>>>>> The question is, is it the same value we have in nand_pa or it is
->>>>>> different?
->>>>>>         
->>>>> Different address which is 0xE1400000 NAND_BASE_PHY address.
->>>>
->>>> Then why didn't you tell me they didn't match when I suggested to pass
->>>
->>> sorry, because you keep asking nand_pa after that only I realized that.
->>>    
->>>> nand_pa? So now the question is, what does this address represent?
->>>
->>>                  EBU-MODULE
->>>    _________     _______________________
->>> |         |   |            |NAND CTRL  |
->>> | FPI BUS |==>| CS0(0x174) | 0xE100    ( 0xE14/0xE1C) NAND_PHY_BASE
->>> |_________|   |_CS1(0x17C)_|__________ |
->>>
->>> EBU_CONRTROLLER_BASE : 0xE0F0_0000
->>> HSNAND_BASE: 0xE100_0000
->>> NAND_CS0: 0xE140_0000
->>> NAND_CS1: 0xE1C0_0000
->>>
->>> MEM_REGION_BASE_CS0: 0x17400 (internal to ebu controller )
->>> MEM_REGION_BASE_CS1: 0x17C00
->>>    
->>
->> Hm, I wonder if we shouldn't use a 'ranges' property to describe this
->> address translation. Something like
->>
->> 	ebu@xxx {
->> 		ranges = <0x17400000 0xe1400000 0x1000>,
->> 			 <0x17c00000 0xe1c00000 0x1000>;
->> 		reg = <0x17400000>, <0x17c00000>;
->> 		reg-names = "cs-0", "cs-1";
->> 	}
->>
->> The translated address (0xE1X00000) will be available in res->start,
->> and the non-translated one (0x17X00000) can be retrieved with
->> of_get_address(). All you'd have to do then would be calculate the
->> mask:
->>
->> 	mask = (translated_address & original_address) >> 22;
->> 	num_comp_bits = fls(mask);
->> 	WARN_ON(mask != GENMASK(num_comp_bits - 1, 0));
->>
->> Which allows you to properly set the ADDR_SEL() register without
->> relying on some hardcoded values:
->>
->> 	writel(original_address | EBU_ADDR_SEL_REGEN |
->> 	       EBU_ADDR_COMP_BITS(num_comp_bits),
->> 	       ebu_host->ebu + EBU_ADDR_SEL(csid));
->>
->> That's quite important if we want to merge the xway NAND driver with
->> this one.
+> OK...  Looking through my old notes on kmap unification (this winter, never
+> went anywhere),
 > 
-> Looks like the translation is done at the FPI bus declaration level (see
-> [1]). We really need to see the big picture to take a wise decision
-> about the bindings. Would you mind pasting your dsti/dts files
-> somewhere? It feels like the NAND controller is a sub-part of a more
-> generic 'memory' controller, in which case the NAND controller should be
-> declared as a child of this generic memory bus (called localbus in [1],
-> but maybe EBU is more accurate).
-> 
-> [1]https://github.com/xieyaxiongfly/Atheros_CSI_tool_OpenWRT_src/blob/master/target/linux/lantiq/files-4.14/arch/mips/boot/dts/vr9.dtsi#L162
+> * arch/mips/mm/cache.c ought to use linux/highmem.h, not asm/highmem.h
+> I suspect that your series doesn't build on some configs there.  Hadn't
+> verified that, though.
 
-
-  ebu_nand: ebu_nand@e0f00000 {
-                  compatible = "intel,lgm-ebu-nand";
-                  reg = <0xe0f00000 0x100
-                  0xe1000000 0x300
-                  0xe1400000 0x80000
-                  0xe1c00000 0x10000>;
-                  reg-names = "ebunand", "hsnand", "nand_cs0", nand_cs1";
-                  dmas = <&dma0 8>, <&dma0 9>;
-                  dma-names = "ebu_rx", "ebu_tx";
-                  clocks =  <&cgu0 LGM_GCLK_EBU>;
-          };
-
-
-	 &ebu_nand {
-	         status = "disabled";
-	        nand,cs = <1>;
-	        nand-ecc-mode = "hw";
-	        pinctrl-names = "default";
-	        pinctrl-0 = <&ebu_nand_base &ebu_cs1>;
-	};
+Yes patch 6 makes the change because kmap_atomic() was no longer declared in
+asm/highmem.h.  I'm pretty sure 0-day caught that ...  but I seem to remember
+noticing some oddness in that file and I did go through it by hand.
 
 > 
+> * kmap_atomic_to_page() is dead, but not quite gone - csky and nds32 brought
+> the damn thing back (nds32 - only an extern).  It needs killin'...
+
+Easy enough. Added as a follow on patch.
+
+> 
+> * parisc is (arguably) abusing kunmap()/kunmap_atomic() for cache flushing.
+> Replace the bulk of its highmem.h with
+> #define ARCH_HAS_FLUSH_ON_KUNMAP
+> #define arch_before_kunmap flush_kernel_dcache_page_addr
+> and have default kunmap()/kunmap_atomic() do
+> #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
+> 	arch_before_kunmap(page_address(page));
+> #endif
+> and
+> #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
+> 	arch_before_kunmap(addr);
+> #endif
+> resp.  Kills ARCH_HAS_KMAP along with ifdefs on it, makes parisc use somewhat
+> less hacky.
+
+Agreed.  Done in a follow on patch.
+
+> 
+> I'd suggest checking various configs on mips - that's likely to cause headache.
+> Said that, my analysis of include chains back then is pretty much worthless
+> by now - I really hate the amount of indirect include chains leading to that
+> sucker on some, but not all configs ;-/  IIRC, the proof that everything
+> using kmap*/kunmap* would pull linux/highmem.h regardless of config took several
+> hours of digging, ran for several pages and had been hopelessly brittle.
+> arch/mips/mm/cache.c was the only exception caught by it, but these days
+> there might be more.
+
+Grepping for 'asm/highmem.h' and investigations don't reveal any issues...  But
+you do have me worried.  That said 0-day has been crunching on multiple
+versions of this series without issues such as this (save the mips issue
+above).
+
+I have to say it would be nice if the relation between linux/highmem.h and
+asm/highmem.h was more straightforward.
+
+Ira
+
