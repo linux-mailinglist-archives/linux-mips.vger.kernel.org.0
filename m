@@ -2,149 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 293C61C7D75
-	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 00:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3517D1C7DD7
+	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 01:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730261AbgEFWgm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 May 2020 18:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729675AbgEFWgm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 May 2020 18:36:42 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BCEC061A0F;
-        Wed,  6 May 2020 15:36:42 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id h4so4150727ljg.12;
-        Wed, 06 May 2020 15:36:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=B+lR9RibOagVSsl39LZ9OK8akQe4JLP7xJR19GpLf1o=;
-        b=Tsm34CKsvSLpR0vTdnP3NXEIfocWbivLXWk8w+tAJE4vffmJ6ALKGmPAv3YVr6sNTJ
-         PZhbhmMAaEJIGzYHbhPiJhHEcc3P37y+LVjHDK11d/zgxezjvH1QIiHmKvMoSMWkso+F
-         p9iRxQbECLqV26uxb4vt/iaRUo0fe68iCd2eQJXK51S3tYRbCQQUDyELDVHtlMplWRNW
-         irFmAnBBMMqbfnHmGW3cJyIwJGM1Pxx4RSYQMyd9fYnCp+iUIqYBaZwM9HpTy2VzOZIz
-         eDFakF5MmrzMKhoY8RzaeIbBgiMHs/uPr8z5P2yWV6A8M/DD3+sBc68tVFny5VTRfxSO
-         q+Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B+lR9RibOagVSsl39LZ9OK8akQe4JLP7xJR19GpLf1o=;
-        b=jdV95793K56F2VxemgqF4SBIs0eE6YIQHOSwaDBlYNtM2rGGF3dQw7ZZJLKRxHVm1K
-         zH+4+qS3TDeXdsW2G6+v8f3ElXAvMkE6dwFHT6grG0M4u6jCvIUsnqjEZ++NvuO+hwma
-         3K9xMmIa6RxBbpOi8/aLCw7S6cKNbtVqkaZA6snSuk7N6S+fw4Oh59SNwTT5DQG40bxg
-         QAhPg9VrbkJNUH8eC/a5IuEnYgF6JlmOcewbN++xY3y4ImI/UuKW8X6Xeezq8T6mHDX2
-         BKhq651gY5VRkrBuvSeVyrY+tPDucARZWH08A/EOxknBJicoY2jJqtmQBdC76pORY9nz
-         u00w==
-X-Gm-Message-State: AGi0PubTqOBRW2uVSFCrKnlOECXMUUWltAIPW1ElaedLROplcSrij9AZ
-        q/UMVvhW62Z+dptQJ/kzFow=
-X-Google-Smtp-Source: APiQypIn3b6fKkJd20UjwwrJFveGF8cjFc17xH6wdHxzh2I3WM+a3Zo4qxNiMUlQ/0tz6anyOynLdA==
-X-Received: by 2002:a2e:9b13:: with SMTP id u19mr6438685lji.161.1588804600577;
-        Wed, 06 May 2020 15:36:40 -0700 (PDT)
-Received: from mobilestation ([176.213.3.142])
-        by smtp.gmail.com with ESMTPSA id j19sm404666lfh.19.2020.05.06.15.36.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2020 15:36:39 -0700 (PDT)
-Date:   Thu, 7 May 2020 01:36:36 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        id S1727827AbgEFXbx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 May 2020 19:31:53 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:34512 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726555AbgEFXbx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 May 2020 19:31:53 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 8CC9C803080B;
+        Wed,  6 May 2020 23:31:50 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZPJCJBFg5i0k; Thu,  7 May 2020 02:31:46 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Michael Walle <michael@walle.cc>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Tony Xie <tony.xie@rock-chips.com>, Wen He <wen.he_1@nxp.com>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Joel Stanley <joel@jms.id.au>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] clk: Add Baikal-T1 CCU PLLs driver
-Message-ID: <20200506223636.pgegmxc2z4uqbnbg@mobilestation>
-References: <20200306130053.BCBFC803078F@mail.baikalelectronics.ru>
- <20200506222300.30895-1-Sergey.Semin@baikalelectronics.ru>
- <20200506222300.30895-4-Sergey.Semin@baikalelectronics.ru>
- <9259445e-86a8-8e4a-58c9-822bd00d62f8@infradead.org>
+        Long Cheng <long.cheng@mediatek.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        <linux-mips@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/4] serial: 8250_dw: Fix ref clock usage
+Date:   Thu, 7 May 2020 02:31:31 +0300
+Message-ID: <20200506233136.11842-1-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200323024611.16039-1-Sergey.Semin@baikalelectronics.ru>
+References: <20200323024611.16039-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9259445e-86a8-8e4a-58c9-822bd00d62f8@infradead.org>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+It might be dangerous if an UART port reference clock rate is suddenly
+changed. In particular the 8250 port drivers (and AFAICS most of the tty
+drivers using common clock framework clocks) rely either on the
+exclusive reference clock utilization or on the ref clock rate being
+always constant. Needless to say that it turns out not true and if some
+other service suddenly changes the clock rate behind an UART port driver
+back it's no good. So the port might not only end up with an invalid
+uartclk value saved, but may also experience a distorted output/input
+data since such action will effectively update the programmed baud-clock.
+We discovered such problem on Baikal-T1 SoC where two DW 8250 ports have
+got a shared reference clock. Allwinner SoC is equipped with an UART,
+which clock is derived from the CPU PLL clock source, so the CPU frequency
+change might be propagated down up to the serial port reference clock.
+This patchset provides a way to fix the problem to the 8250 serial port
+controllers and mostly fixes it for the DW 8250-compatible UART. I say
+mostly because due to not having a facility to pause/stop and resume/
+restart on-going transfers we implemented the UART clock rate update
+procedure executed post factum of the actual reference clock rate change.
 
-On Wed, May 06, 2020 at 03:27:57PM -0700, Randy Dunlap wrote:
-> Hi,
-> 
-> Typo(s):
-> 
-> On 5/6/20 3:22 PM, Serge Semin wrote:
-> > diff --git a/drivers/clk/baikal-t1/Kconfig b/drivers/clk/baikal-t1/Kconfig
-> > new file mode 100644
-> > index 000000000000..e1257af9f49e
-> > --- /dev/null
-> > +++ b/drivers/clk/baikal-t1/Kconfig
-> > @@ -0,0 +1,30 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +config CLK_BAIKAL_T1
-> > +	bool "Baikal-T1 Clocks Control Unit interface"
-> > +	depends on (MIPS_BAIKAL_T1 && OF) || COMPILE_TEST
-> > +	default MIPS_BAIKAL_T1
-> > +	help
-> > +	  Clocks Control Unit is the core of Baikal-T1 SoC System Controller
-> > +	  responsible for the chip subsystems clocking and resetting. It
-> > +	  consists of multiple global clock domains, which can be reset by
-> > +	  means of the CCU control registers. These domains and devices placed
-> > +	  in them are fed with clocks generated by a hierarchy of PLLs,
-> > +	  configurable and fixed clock dividers. Enable this option to be able
-> > +	  to select Baikal-T1 CCU PLLs and Dividers drivers.
-> > +
-> > +if CLK_BAIKAL_T1
-> > +
-> > +config CLK_BT1_CCU_PLL
-> > +	bool "Baikal-T1 CCU PLLs support"
-> > +	select MFD_SYSCON
-> > +	default MIPS_BAIKAL_T1
-> > +	help
-> > +	  Enable this to support the PLLs embedded into the Baikal-T1 SoC
-> > +	  System Controller. These are five PLLs placed at the root of the
-> > +	  clocks hierarchy, right after an external reference osciallator
-> 
-> 	                                                      oscillator
+In addition the patchset includes a few fixes we discovered when were
+working the issue. First one concerns the maximum baud rate setting used
+to determine a serial port baud based on the current UART port clock rate.
+Another one simplifies the ref clock rate setting procedure a bit.
 
-Fixed. Thanks.
+This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
+0e698dfa2822 ("Linux 5.7-rc4")
+tag: v5.7-rc4
 
-> 
-> > +	  (normally of 25MHz). They are used to generate high frequency
-> > +	  signals, which are either directly wired to the consumers (like
-> > +	  CPUs, DDR, etc) or passed over the clock dividers to be only then
-> 
-> and while you are here:
-> 
->                      etc.)
+Changelog v3:
+- Refactor the original patch to adjust the UART port divisor instead of
+  requesting an exclusive ref clock utilization.
 
-Thanks again.
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Long Cheng <long.cheng@mediatek.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-serial@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
--Sergey
+Serge Semin (4):
+  serial: 8250: Fix max baud limit in generic 8250 port
+  serial: 8250: Add 8250 port clock update method
+  serial: 8250_dw: Simplify the ref clock rate setting procedure
+  serial: 8250_dw: Fix common clocks usage race condition
 
-> 
-> > +	  used as an individual reference clock of a target device.
-> > +
-> > +endif
-> 
-> thanks.
-> -- 
-> ~Randy
-> 
+ drivers/tty/serial/8250/8250_dw.c   | 125 +++++++++++++++++++++++++---
+ drivers/tty/serial/8250/8250_port.c |  42 +++++++++-
+ include/linux/serial_8250.h         |   2 +
+ 3 files changed, 156 insertions(+), 13 deletions(-)
+
+-- 
+2.25.1
+
