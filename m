@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CB11C6820
-	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2020 08:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B871C6830
+	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2020 08:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727804AbgEFGN1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 May 2020 02:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
+        id S1726796AbgEFGON (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 May 2020 02:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726558AbgEFGN1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 May 2020 02:13:27 -0400
+        by vger.kernel.org with ESMTP id S1726495AbgEFGON (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 May 2020 02:14:13 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF52C061A0F;
-        Tue,  5 May 2020 23:13:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D22AC061A0F;
+        Tue,  5 May 2020 23:14:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
         :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bhX6YQjPJn6UvjIEP58QtY6wMlMp81noJ+wGjt8TO9U=; b=b9jznJ3E/WgGPYeqfC2WEjrMpO
-        nmdb+rtEx+uy6x0tfp/uriT6KZZ04y2H79aMig7JOklWeHqDkVDq7dXBUGRZ82jdi0Nk8x59QopDs
-        WhWLtlaP8l/ZTEvfn9GdTBZjvGGdCiLBQ/46tWFxw2kxfwtuqoRJKei9iwZ7Mwyif+bOV2n1u0Xjy
-        ek1eIkSBwnRCIlw0PvgchhJAYPfIBcHDmGRLoudR8Zz0mtqy2tIQUB9pc43ptqXK7XEYElk9uLfF9
-        u5zTorp7X8hzIaoj008hmuuq0rnmoYaemrTP3fgSSVFnnxn5oHA5X1b27YtGH/e0n5iEALX9NvXq6
-        RMCLcpkw==;
+        bh=4GHTrlwGxcD7riSfw6FoiiWpv9lgWgy1e6SGI+Jf+lk=; b=YQdcPidwWxUsGPCqlsV5vlo08W
+        WE8x+MoDuXM7hVPD+/jHc3dDvfTrn9tM8b6ev+ngbwncTVqcdaxewm6WCDle9njCK90Fa6uDM8pzz
+        V1XKGx1+Kpcns1k6UZYJf5Fj5DEan46YXQrVVoWIg1pzlOvy252FRwu+V+Xz4mzIUqpwuO0rHOWQ3
+        44n+12vujyorLPu546uL9Jr9Rjc2cs3Px+jF8MGMUozOLUVhKI7jXCci3SoqI+7OPayG3rYjHx9QF
+        3xqDiBy6CDrTege8f3bj4NtjfsI9xry8OurnktjyDACV315FnjWOvzsuEqTT6dzYmPcWVFR+g3F8g
+        +dARHVUA==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jWDJ8-0005JQ-4V; Wed, 06 May 2020 06:13:26 +0000
-Date:   Tue, 5 May 2020 23:13:26 -0700
+        id 1jWDJq-00064d-Uc; Wed, 06 May 2020 06:14:10 +0000
+Date:   Tue, 5 May 2020 23:14:10 -0700
 From:   Christoph Hellwig <hch@infradead.org>
 To:     ira.weiny@intel.com
 Cc:     linux-kernel@vger.kernel.org,
@@ -53,34 +53,37 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH V2 08/11] arch/kmap: Ensure kmap_prot visibility
-Message-ID: <20200506061326.GD5192@infradead.org>
+Subject: Re: [PATCH V2 10/11] arch/kmap: Define kmap_atomic_prot() for all
+ arch's
+Message-ID: <20200506061410.GE5192@infradead.org>
 References: <20200504010912.982044-1-ira.weiny@intel.com>
- <20200504010912.982044-9-ira.weiny@intel.com>
+ <20200504010912.982044-11-ira.weiny@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200504010912.982044-9-ira.weiny@intel.com>
+In-Reply-To: <20200504010912.982044-11-ira.weiny@intel.com>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, May 03, 2020 at 06:09:09PM -0700, ira.weiny@intel.com wrote:
+On Sun, May 03, 2020 at 06:09:11PM -0700, ira.weiny@intel.com wrote:
 > From: Ira Weiny <ira.weiny@intel.com>
 > 
-> We want to support kmap_atomic_prot() on all architectures and it makes
-> sense to define kmap_atomic() to use the default kmap_prot.
+> To support kmap_atomic_prot(), all architectures need to support
+> protections passed to their kmap_atomic_high() function.  Pass
+> protections into kmap_atomic_high() and change the name to
+> kmap_atomic_high_prot() to match.
 > 
-> So we ensure all arch's have a globally available kmap_prot either as a
-> define or exported symbol.
+> Then define kmap_atomic_prot() as a core function which calls
+> kmap_atomic_high_prot() when needed.
+> 
+> Finally, redefine kmap_atomic() as a wrapper of kmap_atomic_prot() with
+> the default kmap_prot exported by the architectures.
+> 
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-FYI, I still think a
+Looks good,
 
-#ifndef kmap_prot
-#define kmap_prot PAGE_KERNEL
-#endif
-
-in linux/highmem.h would be nicer.  Then only xtensa and sparc need
-to override it and clearly stand out.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
