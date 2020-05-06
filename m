@@ -2,95 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A391C7A41
-	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2020 21:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8EE1C7ABD
+	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2020 21:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729062AbgEFT1A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 May 2020 15:27:00 -0400
-Received: from asavdk4.altibox.net ([109.247.116.15]:49622 "EHLO
-        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728738AbgEFT1A (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 May 2020 15:27:00 -0400
-Received: from ravnborg.org (unknown [158.248.194.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by asavdk4.altibox.net (Postfix) with ESMTPS id 800CC803E8;
-        Wed,  6 May 2020 21:26:54 +0200 (CEST)
-Date:   Wed, 6 May 2020 21:26:53 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S1728845AbgEFTww (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 May 2020 15:52:52 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:33548 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725799AbgEFTww (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 May 2020 15:52:52 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 0533F8030808;
+        Wed,  6 May 2020 19:52:49 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id boAYS9ab8GRM; Wed,  6 May 2020 22:52:47 +0300 (MSK)
+Date:   Wed, 6 May 2020 22:52:46 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+CC:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
-        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 03/20] dt-bindings: Add vendor prefix for Baikal
- Electronics, JSC
-Message-ID: <20200506192653.GA30135@ravnborg.org>
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 14/20] mips: Use offset-sized IO-mem accessors in CPS
+ debug printout
+Message-ID: <20200506195246.noammz7zdt4d6gb4@mobilestation>
 References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
  <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-4-Sergey.Semin@baikalelectronics.ru>
- <20200506175553.GA7775@ravnborg.org>
- <20200506192049.bznhiwra5a43ao26@mobilestation>
+ <20200506174238.15385-15-Sergey.Semin@baikalelectronics.ru>
+ <82e98cee-d39e-7df2-8b0d-ac77defd5dd8@cogentembedded.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200506192049.bznhiwra5a43ao26@mobilestation>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=MOBOZvRl c=1 sm=1 tr=0
-        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
-        a=kj9zAlcOel0A:10 a=7gkXJVJtAAAA:8 a=8TNDbFa_6LcrRd7mousA:9
-        a=4rAq1Kjot4Fw8Xj5:21 a=CjuIK1q_8ugA:10 a=E9Po1WZjFZOl8hwRPBS3:22
+In-Reply-To: <82e98cee-d39e-7df2-8b0d-ac77defd5dd8@cogentembedded.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Sergey
-> > > +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > > @@ -139,6 +139,8 @@ patternProperties:
-> > >      description: Azoteq (Pty) Ltd
-> > >    "^azw,.*":
-> > >      description: Shenzhen AZW Technology Co., Ltd.
-> > > +  "^baikal,.*":
-> > > +    description: BAIKAL ELECTRONICS, JSC
-> > Baikal do not use ALL UPPSECASE on their website for their name.
-> > So please use same case use as they do themself.
-> > 
+Hi
+
+On Wed, May 06, 2020 at 09:16:24PM +0300, Sergei Shtylyov wrote:
+> Hello!
 > 
-> It's not like me can't be considered as part of them.) I discussed the
-> upper-case and normal version with our managers half a year ago and we
-> came up to use the upper-case version. From Russian legal point of view
-> it's also the upper-cased version what counts. I don't really know why
-> the site use different naming, but in the internal documents it's always
-> as submitted. Anyway I asked this question one more time to our managers.
-> If they say to use as you suggest, then I'll resend an update in v3
-> patchset, if v3 doesn't get to be necessary I'll send a followup patch
-> with fix.
+> On 05/06/2020 08:42 PM, Sergey.Semin@baikalelectronics.ru wrote:
+> 
+> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > Similar to commit 8e5c62e38a88 ("mips: early_printk_8250: Use offset-sized
+> > IO-mem accessors") the IO-memory might require to use a proper load/store
+> > instructions (like Bailal-T1 IO-memory). To fix the cps-vec UART debug
+> 
+>    Baikal? :-)
 
-I had expected it was upper case because others used upper case.
-But there is a good explanation and then all is fine wiht me.
-
-And it is an alphabetic order - so
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
+Yeah, thanks.)
 
 > 
-> -Sergey
+> > printout lets use the memory access instructions in accordance with the
+> > UART registers offset config specified at boot time.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Paul Burton <paulburton@kernel.org>
+> > Cc: Ralf Baechle <ralf@linux-mips.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: devicetree@vger.kernel.org
+> > 
+> > ---
+> > There might be another problem in cps-vec-ns16550.S connected with the
+> > difference in CPU/devices endinanness on some platforms. But there is
 > 
-> > 
-> > 	Sam
-> > 
-> > >    "^bananapi,.*":
-> > >      description: BIPAI KEJI LIMITED
-> > >    "^beacon,.*":
-> > > -- 
-> > > 2.25.1
+>    Endianness.
+
+Ah, this won't get into the commit message anyway. But thanks for noticing.)
+
+-Sergey
+
+
+> 
+> > no such for Baikal-T1 SoC.
+> [...]
+> 
+> MBR, Sergei
