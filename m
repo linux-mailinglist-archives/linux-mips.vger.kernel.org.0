@@ -2,29 +2,29 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC091C7B30
-	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2020 22:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF331C7B58
+	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2020 22:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726649AbgEFUZQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 May 2020 16:25:16 -0400
-Received: from mga07.intel.com ([134.134.136.100]:32872 "EHLO mga07.intel.com"
+        id S1728531AbgEFUdr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 May 2020 16:33:47 -0400
+Received: from mga07.intel.com ([134.134.136.100]:33389 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726627AbgEFUZQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 6 May 2020 16:25:16 -0400
-IronPort-SDR: iuyKOFRaSc5UDnIYcz6oLu/mTlBbbftpP66PZXTW2HTv2aLBgBX9vidybh/Bj2eRxHi6t8EZbY
- i+43cy2henJw==
+        id S1727102AbgEFUdq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 6 May 2020 16:33:46 -0400
+IronPort-SDR: iwj0sBkj/cjFpBhO79fExKo6hqhTLJjIzY9/dVy0zuLVt85sGotipJ12VQOun2+EdxWQ+Lo0ZU
+ iixUW2SnnWLg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2020 13:25:15 -0700
-IronPort-SDR: xSrhp4VCcSvP5bv2WtfYo6vFeSsnnsv3N44sSopWfpFOgIk9uc/zRJt3WrQM/g5MZyK9rPCoAV
- JVwDj2vxz4ng==
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2020 13:33:46 -0700
+IronPort-SDR: M/8biaEifOtf/KVemcKvoXhaN/dNTMq07DSDleAl9z1EKDvsLY2Gj1/J5kQQSyza0fRBg4vIeY
+ Ynf/+fytsXZg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,360,1583222400"; 
-   d="scan'208";a="461881349"
+   d="scan'208";a="435017008"
 Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
-  by fmsmga006.fm.intel.com with ESMTP; 06 May 2020 13:25:14 -0700
-Date:   Wed, 6 May 2020 13:25:14 -0700
+  by orsmga005.jf.intel.com with ESMTP; 06 May 2020 13:33:40 -0700
+Date:   Wed, 6 May 2020 13:33:39 -0700
 From:   Ira Weiny <ira.weiny@intel.com>
 To:     Christoph Hellwig <hch@infradead.org>
 Cc:     linux-kernel@vger.kernel.org,
@@ -51,69 +51,50 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH V2 05/11] {x86,powerpc,microblaze}/kmap: Move preempt
- disable
-Message-ID: <20200506202514.GF1084880@iweiny-DESK2.sc.intel.com>
+Subject: Re: [PATCH V2 08/11] arch/kmap: Ensure kmap_prot visibility
+Message-ID: <20200506203339.GG1084880@iweiny-DESK2.sc.intel.com>
 References: <20200504010912.982044-1-ira.weiny@intel.com>
- <20200504010912.982044-6-ira.weiny@intel.com>
- <20200506061113.GA5192@infradead.org>
+ <20200504010912.982044-9-ira.weiny@intel.com>
+ <20200506061326.GD5192@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200506061113.GA5192@infradead.org>
+In-Reply-To: <20200506061326.GD5192@infradead.org>
 User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 05, 2020 at 11:11:13PM -0700, Christoph Hellwig wrote:
-> On Sun, May 03, 2020 at 06:09:06PM -0700, ira.weiny@intel.com wrote:
+On Tue, May 05, 2020 at 11:13:26PM -0700, Christoph Hellwig wrote:
+> On Sun, May 03, 2020 at 06:09:09PM -0700, ira.weiny@intel.com wrote:
 > > From: Ira Weiny <ira.weiny@intel.com>
 > > 
-> > During this kmap() conversion series we must maintain bisect-ability.
-> > To do this, kmap_atomic_prot() in x86, powerpc, and microblaze need to
-> > remain functional.
+> > We want to support kmap_atomic_prot() on all architectures and it makes
+> > sense to define kmap_atomic() to use the default kmap_prot.
 > > 
-> > Create a temporary inline version of kmap_atomic_prot within these
-> > architectures so we can rework their kmap_atomic() calls and then lift
-> > kmap_atomic_prot() to the core.
-> > 
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > ---
-> > Changes from V1:
-> > 	New patch
-> > ---
-> >  arch/microblaze/include/asm/highmem.h | 11 ++++++++++-
-> >  arch/microblaze/mm/highmem.c          | 10 ++--------
-> >  arch/powerpc/include/asm/highmem.h    | 11 ++++++++++-
-> >  arch/powerpc/mm/highmem.c             |  9 ++-------
-> >  arch/x86/include/asm/highmem.h        | 11 ++++++++++-
-> >  arch/x86/mm/highmem_32.c              | 10 ++--------
-> >  6 files changed, 36 insertions(+), 26 deletions(-)
-> > 
-> > diff --git a/arch/microblaze/include/asm/highmem.h b/arch/microblaze/include/asm/highmem.h
-> > index 0c94046f2d58..ec9954b091e1 100644
-> > --- a/arch/microblaze/include/asm/highmem.h
-> > +++ b/arch/microblaze/include/asm/highmem.h
-> > @@ -51,7 +51,16 @@ extern pte_t *pkmap_page_table;
-> >  #define PKMAP_NR(virt)  ((virt - PKMAP_BASE) >> PAGE_SHIFT)
-> >  #define PKMAP_ADDR(nr)  (PKMAP_BASE + ((nr) << PAGE_SHIFT))
-> >  
-> > -extern void *kmap_atomic_prot(struct page *page, pgprot_t prot);
-> > +extern void *kmap_atomic_high_prot(struct page *page, pgprot_t prot);
-> > +void *kmap_atomic_prot(struct page *page, pgprot_t prot)
+> > So we ensure all arch's have a globally available kmap_prot either as a
+> > define or exported symbol.
 > 
-> Shouldn't this be marked inline?
-
-Yes Thanks.  Done.
-
+> FYI, I still think a
 > 
-> The rest looks fine:
+> #ifndef kmap_prot
+> #define kmap_prot PAGE_KERNEL
+> #endif
 > 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> in linux/highmem.h would be nicer.  Then only xtensa and sparc need
+> to override it and clearly stand out.
 
-Thanks,
+That would be nice...  But...  in this particular patch kmap_prot needs to be
+in arch/microblaze/include/asm/highmem.h to preserve bisect-ability.
+
+So there would be an inversion with this define and the core #ifndef...
+
+I like the change but I'm going to add this change as a follow on patch because
+at the end of the series microblaze no longer needs this.
+
+If this is reasonable could I get a review on this patch to add to the next
+series?
+
 Ira
 
