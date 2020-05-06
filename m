@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5871C67F1
-	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2020 08:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549581C67FA
+	for <lists+linux-mips@lfdr.de>; Wed,  6 May 2020 08:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727099AbgEFGLX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 May 2020 02:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S1727099AbgEFGMN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 May 2020 02:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725782AbgEFGLW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 May 2020 02:11:22 -0400
+        by vger.kernel.org with ESMTP id S1725782AbgEFGMM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 May 2020 02:12:12 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E3AC061A0F;
-        Tue,  5 May 2020 23:11:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A62C061A0F;
+        Tue,  5 May 2020 23:12:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
         :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=P11S868Du0HesvmsqxCwWCcyLr9HALCMySezlQJYbk0=; b=oP1hjP2OSgsVM0gfohwmDa6TcJ
-        pe2nyvwO4gyPy3EogWVPUyLuJPjNyzmhpbMc6GD0yzBaUgwBJpYMZIawh2cAn7pSWJAwKcIy+N0iG
-        9KkDB6HJKLdpOkO/nyh4dRaVF84SQb2vNPPhyCMtxFB0WAak2bb8S8mhB4zF3CH0ftvBkjXoHBk1j
-        lXn9GQGt6AGvGJ41Jsb/VXUqUImhdk8jGfzPUaJrKaKm9H3m2LOW5RvK+roHmF5va7Rs/3C0Fi/Yg
-        iNoAGMMEenG3ML28zKZZs3mCsUTgT0wAnSwGRhowW6de9Ed1X2TZvrXtds/aJBumQp91Nu+3irWcY
-        Z2xba3Cw==;
+        bh=l2WBiCb5duYJRA9nKpihqrJOH1Qjg6utSrFiu8qAdtc=; b=SZWs6cuTwWDpHnradHiRX/tMQZ
+        +Al2Fwz0adWeAKm7BUCM1a6l1tkbbJ8ZQog7GVVIkeO0X7gAY9m81Rv4rv0nDDkEb+PxjEJvPK0Ya
+        +Hh/826mXAFL+qTsal90JM2zjfE9f/x/DCnYyyw9k6mWGl7bU51QoIC4l6b7CQMQD1i/BqWGb9Udv
+        erKicqJNxaN9YezH+3Wx8x3AUCQ21pUpDBNZ9RAK817fBUxFMDx9lHx1p5UKm4j6rQsgjMWI9t/EA
+        2f3koc0nA9VhmzavBfVPBE6kZw9fsglQe8ENPgseP6QVG8TR7VhMVn5m60OuYUAuLnMGLw3V6+09y
+        TtfksgLw==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jWDGz-0003zA-SZ; Wed, 06 May 2020 06:11:13 +0000
-Date:   Tue, 5 May 2020 23:11:13 -0700
+        id 1jWDHu-0004KN-O0; Wed, 06 May 2020 06:12:10 +0000
+Date:   Tue, 5 May 2020 23:12:10 -0700
 From:   Christoph Hellwig <hch@infradead.org>
 To:     ira.weiny@intel.com
 Cc:     linux-kernel@vger.kernel.org,
@@ -53,60 +53,20 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
         linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH V2 05/11] {x86,powerpc,microblaze}/kmap: Move preempt
- disable
-Message-ID: <20200506061113.GA5192@infradead.org>
+Subject: Re: [PATCH V2 06/11] arch/kmap_atomic: Consolidate duplicate code
+Message-ID: <20200506061210.GB5192@infradead.org>
 References: <20200504010912.982044-1-ira.weiny@intel.com>
- <20200504010912.982044-6-ira.weiny@intel.com>
+ <20200504010912.982044-7-ira.weiny@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200504010912.982044-6-ira.weiny@intel.com>
+In-Reply-To: <20200504010912.982044-7-ira.weiny@intel.com>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, May 03, 2020 at 06:09:06PM -0700, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> During this kmap() conversion series we must maintain bisect-ability.
-> To do this, kmap_atomic_prot() in x86, powerpc, and microblaze need to
-> remain functional.
-> 
-> Create a temporary inline version of kmap_atomic_prot within these
-> architectures so we can rework their kmap_atomic() calls and then lift
-> kmap_atomic_prot() to the core.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> ---
-> Changes from V1:
-> 	New patch
-> ---
->  arch/microblaze/include/asm/highmem.h | 11 ++++++++++-
->  arch/microblaze/mm/highmem.c          | 10 ++--------
->  arch/powerpc/include/asm/highmem.h    | 11 ++++++++++-
->  arch/powerpc/mm/highmem.c             |  9 ++-------
->  arch/x86/include/asm/highmem.h        | 11 ++++++++++-
->  arch/x86/mm/highmem_32.c              | 10 ++--------
->  6 files changed, 36 insertions(+), 26 deletions(-)
-> 
-> diff --git a/arch/microblaze/include/asm/highmem.h b/arch/microblaze/include/asm/highmem.h
-> index 0c94046f2d58..ec9954b091e1 100644
-> --- a/arch/microblaze/include/asm/highmem.h
-> +++ b/arch/microblaze/include/asm/highmem.h
-> @@ -51,7 +51,16 @@ extern pte_t *pkmap_page_table;
->  #define PKMAP_NR(virt)  ((virt - PKMAP_BASE) >> PAGE_SHIFT)
->  #define PKMAP_ADDR(nr)  (PKMAP_BASE + ((nr) << PAGE_SHIFT))
->  
-> -extern void *kmap_atomic_prot(struct page *page, pgprot_t prot);
-> +extern void *kmap_atomic_high_prot(struct page *page, pgprot_t prot);
-> +void *kmap_atomic_prot(struct page *page, pgprot_t prot)
-
-Shouldn't this be marked inline?
-
-The rest looks fine:
+Looks good,
 
 Reviewed-by: Christoph Hellwig <hch@lst.de>
