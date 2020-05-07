@@ -2,86 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ABDC1C7E7F
-	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 02:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F2E1C7FD5
+	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 03:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbgEGAWH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 May 2020 20:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726014AbgEGAWH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 May 2020 20:22:07 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4233CC061A0F;
-        Wed,  6 May 2020 17:22:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=cj2TDq9YJ3M3PzXgjlWcgHNOf0t0JTr+blQ7myIxzsY=; b=AgKHhzvmV59z00CfGSgUszkYjH
-        fU0FtJTeieEUPnI6InfRKUoiXAKjYlRIJnZx+EuCUm2I4lMDIf6x37XuOe6Ee5xOIUGZak+opjt0u
-        cO+cAftUoDl5Ikqss4VsJcwDfZDjO1R30ach3tiwMKn5X9gQOIt9HfZ1pcrIoIiDHNhtsLwFz8nKB
-        RVDCJqX3127IyiG0dTdATsOaEz1eVcpOCW+5jmupHiveHs/STLNQxWAAtHAgB7VNGQQL2z8LTIXZM
-        jAJke27tINbz4sKDhziBPLFCbWhNZsNrJPpUF1sBzNzSaF/Ne84StQDYIyqgGoItyOVZgJCp1wiUo
-        qcj4sh7w==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jWUIf-0003hv-9A; Thu, 07 May 2020 00:22:05 +0000
-Subject: Re: [PATCH v5 2/2] mtd: rawnand: Add NAND controller support on Intel
- LGM SoC
-To:     "Ramuthevar,Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org
-Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        arnd@arndb.de, brendanhiggins@google.com, tglx@linutronix.de,
-        boris.brezillon@collabora.com, anders.roxell@linaro.org,
-        masonccyang@mxic.com.tw, robh+dt@kernel.org,
-        linux-mips@vger.kernel.org, hauke.mehrtens@intel.com,
-        andriy.shevchenko@intel.com, qi-ming.wu@intel.com,
-        cheol.yong.kim@intel.com
-References: <20200507001537.4034-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200507001537.4034-3-vadivel.muruganx.ramuthevar@linux.intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <35cf7227-0045-9916-7994-a5763367aab3@infradead.org>
-Date:   Wed, 6 May 2020 17:22:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1728595AbgEGBd7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 May 2020 21:33:59 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:40943 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728627AbgEGBd7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 May 2020 21:33:59 -0400
+Received: by mail-il1-f194.google.com with SMTP id e8so494528ilm.7;
+        Wed, 06 May 2020 18:33:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vCylJgABUnzQ0E9XU7BvrcKk5G6SKChz6Kr+QXgAThA=;
+        b=WgAhf+HXN/Qxe4LBDcd7lU6AYbmId+rci4n7PfZbWKmDayj1gKrJ+3ZI6aH4DV/T/x
+         bukkxYmXookqL6BYvbhC3WVNV3FN8VSWkJ3mfp+y6Jw8C/HbABEP2t9wQVotPOLAA+S7
+         CGLz+eV83FpZ0ZvjQJUpNbLvQXFhAsgIOeFwiGHduiI9pjwJh3jFl7Bx3COoFhwNYAQ6
+         i5DKJfcUrEySHcy0NaK02SgDhFdYlcWqtE90hvp+XHVnjNRRNQUa6lVtZ2KTdEu0Ejy+
+         /A7SGrXG6a4Q1ghuuTFJnytH79ZdqAm7DSnoIiwbdRh3mwmRTqGSaJAsxfF984Au3ihV
+         X95Q==
+X-Gm-Message-State: AGi0PuYvEXBvgor0zHmMZf+wkOYIa8zHVPtdpF9SB7SKe22zOlQGNUmk
+        bVaIzgcPYyPKEfk/xFuCEhvgHjBbScm063ygpF4=
+X-Google-Smtp-Source: APiQypIUy1wGCEHo7jfnrv9dqP9uPJXJaBu6bRbhpsazSAtlvs/E5H0NgL+qI/G8CQVoWcBSVlRcMzFqsXIn9wbFZWQ=
+X-Received: by 2002:a92:5d0f:: with SMTP id r15mr11975672ilb.251.1588815238547;
+ Wed, 06 May 2020 18:33:58 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200507001537.4034-3-vadivel.muruganx.ramuthevar@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1588213867-32274-1-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H5QBOnrqVbMfGf7H5vJ6UMhUxhkCqAzZiwRFn_VwTQHpA@mail.gmail.com>
+ <7d7f6211-f6bc-daae-5b13-b54092e762a1@loongson.cn> <CAAhV-H7jX9uVwb+GnaKXHPBsBQY35YKccbDedLrmfp8-hveVfw@mail.gmail.com>
+ <20200506144208.GD27643@infradead.org>
+In-Reply-To: <20200506144208.GD27643@infradead.org>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Thu, 7 May 2020 09:41:36 +0800
+Message-ID: <CAAhV-H4Mmu2LJx9crUTkOirH2RGr8XfHW7RCUmaT5T4mmYcaKg@mail.gmail.com>
+Subject: Re: [PATCH v6] MIPS: Loongson: Add DMA support for LS7A
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/6/20 5:15 PM, Ramuthevar,Vadivel MuruganX wrote:
-> diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-> index a80a46bb5b8b..a026bec28f39 100644
-> --- a/drivers/mtd/nand/raw/Kconfig
-> +++ b/drivers/mtd/nand/raw/Kconfig
-> @@ -457,6 +457,14 @@ config MTD_NAND_CADENCE
->  	  Enable the driver for NAND flash on platforms using a Cadence NAND
->  	  controller.
->  
-> +config MTD_NAND_INTEL_LGM
-> +	tristate "Support for NAND controller on Intel LGM SoC"
-> +	depends on OF || COMPILE_TEST
-> +	depends on HAS_IOMEM
-> +	help
-> +	  Enables support for NAND Flash chips on Intel's LGM SoC.
-> +          NAND flash interfaced through the External Bus Unit.
+Hi, Christoph,
 
-Please use one tab + 2 spaces for indentation in the line above.
-
-> +
->  comment "Misc"
->  
->  config MTD_SM_COMMON
-
-
--- 
-~Randy
-
+On Wed, May 6, 2020 at 10:44 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Wed, May 06, 2020 at 04:47:30PM +0800, Huacai Chen wrote:
+> > > For the above reasons, I think what you are concerned is not a
+> > > big deal.
+> > I don't think so, this is obviously a regression. If we can accept a
+> > regression of RS780E, why we still maintain Loongson-2EF rather than
+> > simply drop them?
+>
+> While I much prefer to use the default, regression an otherwise
+> working platform seems like a bad idea.  I don't really know much
+> about the Loongson platforms, do they all boot using the same kernel
+> image?
+All Loongson-3 machines (with LS7A bridge or RS780 bridge) use the
+same kernel image.
