@@ -2,62 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C31D11C8B92
-	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 14:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F831C8BB8
+	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 15:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726565AbgEGM6t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 May 2020 08:58:49 -0400
-Received: from elvis.franken.de ([193.175.24.41]:43717 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725903AbgEGM6t (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 7 May 2020 08:58:49 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jWg6w-0000LB-00; Thu, 07 May 2020 14:58:46 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 0E921C0409; Thu,  7 May 2020 14:44:53 +0200 (CEST)
-Date:   Thu, 7 May 2020 14:44:53 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH] MIPS: asm: Rename some macros to avoid build errors
-Message-ID: <20200507124452.GA14593@alpha.franken.de>
-References: <1588844958-23077-1-git-send-email-chenhc@lemote.com>
+        id S1726495AbgEGNEq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 May 2020 09:04:46 -0400
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:58059 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725914AbgEGNEq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 May 2020 09:04:46 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e07425;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=37;SR=0;TI=SMTPD_---0TxqomBt_1588856677;
+Received: from 30.27.116.247(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0TxqomBt_1588856677)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 07 May 2020 21:04:38 +0800
+Subject: Re: [PATCH v4 2/7] KVM: arm64: clean up redundant 'kvm_run'
+ parameters
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     pbonzini@redhat.com, tsbogend@alpha.franken.de, paulus@ozlabs.org,
+        mpe@ellerman.id.au, benh@kernel.crashing.org,
+        borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        cohuck@redhat.com, heiko.carstens@de.ibm.com, gor@linux.ibm.com,
+        sean.j.christopherson@intel.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, james.morse@arm.com, julien.thierry.kdev@gmail.com,
+        suzuki.poulose@arm.com, christoffer.dall@arm.com,
+        peterx@redhat.com, thuth@redhat.com, chenhuacai@gmail.com,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200427043514.16144-1-tianjia.zhang@linux.alibaba.com>
+ <20200427043514.16144-3-tianjia.zhang@linux.alibaba.com>
+ <35eb095a344b4192b912385bc02c54e6@kernel.org>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Message-ID: <f093f6cf-4892-7c8f-d3aa-e908d5740cba@linux.alibaba.com>
+Date:   Thu, 7 May 2020 21:04:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1588844958-23077-1-git-send-email-chenhc@lemote.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <35eb095a344b4192b912385bc02c54e6@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 07, 2020 at 05:49:18PM +0800, Huacai Chen wrote:
-> Use ASM_ prefix to rename some macros (PANIC and PRINT), in order to
-> avoid build errors (all users are updated as well):
+
+
+On 2020/5/5 16:39, Marc Zyngier wrote:
+> Hi Tianjia,
 > 
-> 1, PANIC conflicts with drivers/scsi/smartpqi/smartpqi_init.c
-> 2, PRINT conflicts with net/netfilter/nf_conntrack_h323_asn1.c and net/
->    mac80211/debugfs_sta.c
+> On 2020-04-27 05:35, Tianjia Zhang wrote:
+>> In the current kvm version, 'kvm_run' has been included in the 'kvm_vcpu'
+>> structure. For historical reasons, many kvm-related function parameters
+>> retain the 'kvm_run' and 'kvm_vcpu' parameters at the same time. This
+>> patch does a unified cleanup of these remaining redundant parameters.
+>>
+>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 > 
-> Fixes: d339cd02b888eb8 ("MIPS: Move unaligned load/store helpers to inst.h")
-> Reported-by: kbuild test robot <lkp@intel.com>
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> ---
->  arch/mips/dec/int-handler.S    |  4 ++--
->  arch/mips/include/asm/asm.h    | 20 ++++++++++----------
->  arch/mips/kernel/genex.S       |  6 +++---
->  arch/mips/kernel/scall64-o32.S |  2 +-
->  4 files changed, 16 insertions(+), 16 deletions(-)
+> On the face of it, this looks OK, but I haven't tried to run the
+> resulting kernel. I'm not opposed to taking this patch *if* there
+> is an agreement across architectures to take the series (I value
+> consistency over the janitorial exercise).
+> 
+> Another thing is that this is going to conflict with the set of
+> patches that move the KVM/arm code back where it belongs (arch/arm64/kvm),
+> so I'd probably cherry-pick that one directly.
+> 
+> Thanks,
+> 
+>          M.
+> 
 
-applied to mips-next.
+Do I need to submit this set of patches separately for each 
+architecture? Could it be merged at once, if necessary, I will
+resubmit based on the latest mainline.
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Thanks,
+Tianjia
