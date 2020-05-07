@@ -2,85 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7460A1C9D82
-	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 23:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F18F1C9DC5
+	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 23:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726638AbgEGVie (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 May 2020 17:38:34 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:38696 "EHLO
+        id S1727893AbgEGVrI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 May 2020 17:47:08 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:38786 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726445AbgEGVie (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 May 2020 17:38:34 -0400
+        with ESMTP id S1726815AbgEGVrI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 May 2020 17:47:08 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 704A680307C1;
-        Thu,  7 May 2020 21:38:31 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 32FE780307C1;
+        Thu,  7 May 2020 21:47:04 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Bsl9EF3_yS18; Fri,  8 May 2020 00:38:30 +0300 (MSK)
-Date:   Fri, 8 May 2020 00:38:29 +0300
+        with ESMTP id ATZSyttrcu1J; Fri,  8 May 2020 00:47:03 +0300 (MSK)
+Date:   Fri, 8 May 2020 00:46:56 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Randy Dunlap <rdunlap@infradead.org>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 05/20] mips: cm: Add L2 ECC/parity errors reporting
-Message-ID: <20200507213829.ro7vxasi3k3t3yga@mobilestation>
-References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
- <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-6-Sergey.Semin@baikalelectronics.ru>
- <20200507111753.GG11616@alpha.franken.de>
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Lee Jones <lee.jones@linaro.org>,
+        Michael Walle <michael@walle.cc>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Tony Xie <tony.xie@rock-chips.com>, Wen He <wen.he_1@nxp.com>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Joel Stanley <joel@jms.id.au>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v2 3/4] clk: Add Baikal-T1 CCU PLLs driver
+Message-ID: <20200507214656.bh254nytzrzfk5hx@mobilestation>
+References: <20200306130053.BCBFC803078F@mail.baikalelectronics.ru>
+ <20200506222300.30895-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506222300.30895-4-Sergey.Semin@baikalelectronics.ru>
+ <9259445e-86a8-8e4a-58c9-822bd00d62f8@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200507111753.GG11616@alpha.franken.de>
+In-Reply-To: <9259445e-86a8-8e4a-58c9-822bd00d62f8@infradead.org>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 07, 2020 at 01:17:53PM +0200, Thomas Bogendoerfer wrote:
-> On Wed, May 06, 2020 at 08:42:23PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
-> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > According to the MIPS32 InterAptiv software manual error codes 24 - 26
-> > of CM2 indicate L2 ECC/parity error with switching to a corresponding
-> > errors info fields. This patch provides these errors parsing code,
-> > which handles the read/write uncorrectable and correctable ECC/parity
-> > errors, and prints instruction causing the fault, RAM array type, cache
-> > way/dword and syndrome associated with the faulty data.
-> > 
-> > Co-developed-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Paul Burton <paulburton@kernel.org>
-> > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: devicetree@vger.kernel.org
-> > ---
-> >  arch/mips/kernel/mips-cm.c | 62 ++++++++++++++++++++++++++++++++++++--
-> >  1 file changed, 60 insertions(+), 2 deletions(-)
+On Wed, May 06, 2020 at 03:27:57PM -0700, Randy Dunlap wrote:
+> Hi,
 > 
-> applied to mips-next.
+> Typo(s):
+> 
+> On 5/6/20 3:22 PM, Serge Semin wrote:
+> > diff --git a/drivers/clk/baikal-t1/Kconfig b/drivers/clk/baikal-t1/Kconfig
+> > new file mode 100644
+> > index 000000000000..e1257af9f49e
+> > --- /dev/null
+> > +++ b/drivers/clk/baikal-t1/Kconfig
+> > @@ -0,0 +1,30 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +config CLK_BAIKAL_T1
+> > +	bool "Baikal-T1 Clocks Control Unit interface"
+> > +	depends on (MIPS_BAIKAL_T1 && OF) || COMPILE_TEST
+> > +	default MIPS_BAIKAL_T1
+> > +	help
+> > +	  Clocks Control Unit is the core of Baikal-T1 SoC System Controller
+> > +	  responsible for the chip subsystems clocking and resetting. It
+> > +	  consists of multiple global clock domains, which can be reset by
+> > +	  means of the CCU control registers. These domains and devices placed
+> > +	  in them are fed with clocks generated by a hierarchy of PLLs,
+> > +	  configurable and fixed clock dividers. Enable this option to be able
+> > +	  to select Baikal-T1 CCU PLLs and Dividers drivers.
+> > +
+> > +if CLK_BAIKAL_T1
+> > +
+> > +config CLK_BT1_CCU_PLL
+> > +	bool "Baikal-T1 CCU PLLs support"
+> > +	select MFD_SYSCON
+> > +	default MIPS_BAIKAL_T1
+> > +	help
+> > +	  Enable this to support the PLLs embedded into the Baikal-T1 SoC
+> > +	  System Controller. These are five PLLs placed at the root of the
+> > +	  clocks hierarchy, right after an external reference osciallator
+> 
+> 	                                                      oscillator
+> 
+> > +	  (normally of 25MHz). They are used to generate high frequency
+> > +	  signals, which are either directly wired to the consumers (like
+> > +	  CPUs, DDR, etc) or passed over the clock dividers to be only then
+> 
+> and while you are here:
+> 
+>                      etc.)
 
-Great! Thanks.
+Both will be fixed in v3. Thanks.
 
--Sergey
+-Sergey 
 
 > 
-> Thomas.
+> > +	  used as an individual reference clock of a target device.
+> > +
+> > +endif
 > 
+> thanks.
 > -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+> ~Randy
+> 
