@@ -2,251 +2,221 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB121C9324
-	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 17:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7461C9834
+	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 19:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727971AbgEGPAb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 May 2020 11:00:31 -0400
-Received: from mga07.intel.com ([134.134.136.100]:27764 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727940AbgEGPA0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 7 May 2020 11:00:26 -0400
-IronPort-SDR: gE1yANNbj+uEqmVzOz4rSNlo9FkP6zkIt4Ba88M4ZgF3iBCxXs72JqUxvgXt70VVl4t1f5rrSl
- DG6h9qfD1opA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2020 08:00:25 -0700
-IronPort-SDR: ccj/YBIhZWifHTceF3C935K94/o3dJdXmT/VRmo3rphR+KioUyOCSj372Y/MERIhXtEQ84T1Fq
- 9jpOl8Z1pCKQ==
-X-IronPort-AV: E=Sophos;i="5.73,364,1583222400"; 
-   d="scan'208";a="407664237"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2020 08:00:24 -0700
-From:   ira.weiny@intel.com
-To:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
-        Christian Koenig <christian.koenig@amd.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH V3 15/15] kmap: Consolidate kmap_prot definitions
-Date:   Thu,  7 May 2020 08:00:03 -0700
-Message-Id: <20200507150004.1423069-16-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200507150004.1423069-1-ira.weiny@intel.com>
-References: <20200507150004.1423069-1-ira.weiny@intel.com>
+        id S1728056AbgEGRqT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 May 2020 13:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726950AbgEGRqS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 May 2020 13:46:18 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935F6C05BD0B
+        for <linux-mips@vger.kernel.org>; Thu,  7 May 2020 10:46:18 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id j8so1483036iog.13
+        for <linux-mips@vger.kernel.org>; Thu, 07 May 2020 10:46:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=yU0mJ28GxeMYjUBMEveE72PctswqptxZPEqLuEZt3cA=;
+        b=vnd3Wz+k5EBZmosgqi5KKkGOlJPJfOp4+cC5rwQ5WKpxRuQIpmmoJ3cc9pg33/Ra2g
+         /q3iGdwk0pNt0z7FaQrx4sYZVKT6xvn6L11gFpzroAtPAbaIaFOaFA33AOzmsY2oJVzE
+         jtgyAMHmQRTny/Ymt7q8IJQ7lmehM/dp2fOPtkiEAf4fIS+TJ1gOCEXPyqVc+EempRvT
+         LnIlcIIg3aPKzbfL50LWiVOlU2fXt/KiLSoS1PkVzECJlOLjp7YUx+z81+MOMhjkymjK
+         17ES11qP77zrlhR4/OPv4Jsjafu984eSlgI/TG6K8fqacWkVukhDDXeHg0UV09ujnOXR
+         8eVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=yU0mJ28GxeMYjUBMEveE72PctswqptxZPEqLuEZt3cA=;
+        b=Dros7DHHbee9rTj66ix51JYTbtK7IVbEYomSi8sZHoAUqB7086iBi0/yb1fR7I/M9N
+         m7Jd9uvG5t5i5ipA9vfME2qhfmN65HlD2g81oo7DDkVGj4lpnIb1l2dh+zngRGDmkhNV
+         MgZe5v9bTHsxcXN0Z70qyjhaskA9w/1XfxvSVs4S1p96sjrA4JwMPLThl9qN81rTtx6U
+         A9Z4IyhtEpxY9levZsS8GZfVy2jBoy8Npru1ebIa+Pyb+j0IKFcOId+suuPsRa5qzXpX
+         uipydhaZw1J4RjWrsGiRCZx5m1eLkegUmBkc5qQT+PjnoTvvBwscCf1rRhR6Z/4EUux0
+         kDBw==
+X-Gm-Message-State: AGi0PuaPmecdbQBBFNBR/5o3gHuoNKf+4R4ElAM+0wsLjdzZN2jv7Vjj
+        ytzSTe9L8Rury1KO2kIFnfmf8sse7/ZJSOcSCOsBNeFhdZPBzVM=
+X-Google-Smtp-Source: APiQypKtjV9RP7CzUz6PwlgUeogcwCqPXHQgs82XapWkRetj+C9fCnc4inT+4h675n5xp5ipP2PRJql00+jL03kLjws=
+X-Received: by 2002:a6b:c9cc:: with SMTP id z195mr2514506iof.164.1588873577069;
+ Thu, 07 May 2020 10:46:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200504110344.17560-1-eesposit@redhat.com>
+In-Reply-To: <20200504110344.17560-1-eesposit@redhat.com>
+From:   Jonathan Adams <jwadams@google.com>
+Date:   Thu, 7 May 2020 10:45:40 -0700
+Message-ID: <CA+VK+GN=iDhDV2ZDJbBsxrjZ3Qoyotk_L0DvsbwDVvqrpFZ8fQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] Statsfs: a new ram-based file sytem for Linux
+ kernel statistics
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Cc:     kvm list <kvm@vger.kernel.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Emanuele Giuseppe Esposito <e.emanuelegiuseppe@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+On Mon, May 4, 2020 at 4:05 AM Emanuele Giuseppe Esposito
+<eesposit@redhat.com> wrote:
+...
+> Statsfs offers a generic and stable API, allowing any kind of
+> directory/file organization and supporting multiple kind of aggregations
+> (not only sum, but also average, max, min and count_zero) and data types
+> (all unsigned and signed types plus boolean). The implementation, which i=
+s
+> a generalization of KVM=E2=80=99s debugfs statistics code, takes care of =
+gathering
+> and displaying information at run time; users only need to specify the
+> values to be included in each source.
+>
+> Statsfs would also be a different mountpoint from debugfs, and would not
+> suffer from limited access due to the security lock down patches. Its mai=
+n
+> function is to display each statistics as a file in the desired folder
+> hierarchy defined through the API. Statsfs files can be read, and possibl=
+y
+> cleared if their file mode allows it.
+>
+> Statsfs has two main components: the public API defined by
+> include/linux/statsfs.h, and the virtual file system which should end up
+> in /sys/kernel/stats.
 
-Most architectures define kmap_prot to be PAGE_KERNEL.
+This is good work.  As David Rientjes mentioned, I'm currently investigatin=
+g
+a similar project, based on a google-internal debugfs-based FS we call
+"metricfs".  It's
+designed in a slightly different fashion than statsfs here is, and the
+statistics exported are
+mostly fed into our OpenTelemetry-like system.  We're motivated by
+wanting an upstreamed solution, so that we can upstream the metrics we
+create that are of general interest, and lower the overall rebasing
+burden for our tree.
 
-Let sparc and xtensa define there own and define PAGE_KERNEL as the
-default if not overridden.
+Some feedback on your design as proposed:
 
-Suggested-by: Christoph Hellwig <hch@infradead.org>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+ - the 8/16/32/64 signed/unsigned integers seems like a wart, and the
+built-in support to grab any offset from a structure doesn't seem like
+much of an advantage.  A simpler interface would be to just support an
+"integer" (possibly signed/unsigned) type, which is always 64-bit, and
+allow the caller to provide a function pointer to retrieve the value,
+with one or two void *s cbargs.  Then the framework could provide an
+offset-based callback (or callbacks) similar to the existing
+functionality, and a similar one for per-CPU based statistics.  A
+second "clear" callback could be optionally provided to allow for
+statistics to be cleared, as in your current proposal.
 
----
-Changes from V2:
-	New Patch for this series
----
- arch/arc/include/asm/highmem.h        | 3 ---
- arch/arm/include/asm/highmem.h        | 2 --
- arch/csky/include/asm/highmem.h       | 2 --
- arch/microblaze/include/asm/highmem.h | 1 -
- arch/mips/include/asm/highmem.h       | 2 --
- arch/nds32/include/asm/highmem.h      | 1 -
- arch/powerpc/include/asm/highmem.h    | 1 -
- arch/sparc/include/asm/highmem.h      | 3 ++-
- arch/sparc/mm/highmem.c               | 4 ----
- arch/x86/include/asm/fixmap.h         | 1 -
- include/linux/highmem.h               | 4 ++++
- 11 files changed, 6 insertions(+), 18 deletions(-)
+ - A callback-style interface also allows for a lot more flexibility
+in sourcing values, and doesn't lock your callers into one way of
+storing them.  You would, of course, have to be clear about locking
+rules etc. for the callbacks.
 
-diff --git a/arch/arc/include/asm/highmem.h b/arch/arc/include/asm/highmem.h
-index 70900a73bfc8..6e5eafb3afdd 100644
---- a/arch/arc/include/asm/highmem.h
-+++ b/arch/arc/include/asm/highmem.h
-@@ -25,9 +25,6 @@
- #define PKMAP_ADDR(nr)		(PKMAP_BASE + ((nr) << PAGE_SHIFT))
- #define PKMAP_NR(virt)		(((virt) - PKMAP_BASE) >> PAGE_SHIFT)
- 
--#define kmap_prot		PAGE_KERNEL
--
--
- #include <asm/cacheflush.h>
- 
- extern void kmap_init(void);
-diff --git a/arch/arm/include/asm/highmem.h b/arch/arm/include/asm/highmem.h
-index b0d4bd8dc3c1..31811be38d78 100644
---- a/arch/arm/include/asm/highmem.h
-+++ b/arch/arm/include/asm/highmem.h
-@@ -10,8 +10,6 @@
- #define PKMAP_NR(virt)		(((virt) - PKMAP_BASE) >> PAGE_SHIFT)
- #define PKMAP_ADDR(nr)		(PKMAP_BASE + ((nr) << PAGE_SHIFT))
- 
--#define kmap_prot		PAGE_KERNEL
--
- #define flush_cache_kmaps() \
- 	do { \
- 		if (cache_is_vivt()) \
-diff --git a/arch/csky/include/asm/highmem.h b/arch/csky/include/asm/highmem.h
-index ea2f3f39174d..14645e3d5cd5 100644
---- a/arch/csky/include/asm/highmem.h
-+++ b/arch/csky/include/asm/highmem.h
-@@ -38,8 +38,6 @@ extern void *kmap_atomic_pfn(unsigned long pfn);
- 
- extern void kmap_init(void);
- 
--#define kmap_prot PAGE_KERNEL
--
- #endif /* __KERNEL__ */
- 
- #endif /* __ASM_CSKY_HIGHMEM_H */
-diff --git a/arch/microblaze/include/asm/highmem.h b/arch/microblaze/include/asm/highmem.h
-index d7c55cfd27bd..284ca8fb54c1 100644
---- a/arch/microblaze/include/asm/highmem.h
-+++ b/arch/microblaze/include/asm/highmem.h
-@@ -25,7 +25,6 @@
- #include <linux/uaccess.h>
- #include <asm/fixmap.h>
- 
--#define kmap_prot		PAGE_KERNEL
- extern pte_t *kmap_pte;
- extern pte_t *pkmap_page_table;
- 
-diff --git a/arch/mips/include/asm/highmem.h b/arch/mips/include/asm/highmem.h
-index 76dec0bd4f59..f1f788b57166 100644
---- a/arch/mips/include/asm/highmem.h
-+++ b/arch/mips/include/asm/highmem.h
-@@ -54,8 +54,6 @@ extern void *kmap_atomic_pfn(unsigned long pfn);
- 
- extern void kmap_init(void);
- 
--#define kmap_prot PAGE_KERNEL
--
- #endif /* __KERNEL__ */
- 
- #endif /* _ASM_HIGHMEM_H */
-diff --git a/arch/nds32/include/asm/highmem.h b/arch/nds32/include/asm/highmem.h
-index a48a6536d41a..5717647d14d1 100644
---- a/arch/nds32/include/asm/highmem.h
-+++ b/arch/nds32/include/asm/highmem.h
-@@ -32,7 +32,6 @@
- #define LAST_PKMAP_MASK		(LAST_PKMAP - 1)
- #define PKMAP_NR(virt)		(((virt) - (PKMAP_BASE)) >> PAGE_SHIFT)
- #define PKMAP_ADDR(nr)		(PKMAP_BASE + ((nr) << PAGE_SHIFT))
--#define kmap_prot		PAGE_KERNEL
- 
- static inline void flush_cache_kmaps(void)
- {
-diff --git a/arch/powerpc/include/asm/highmem.h b/arch/powerpc/include/asm/highmem.h
-index 8d8ee3fcd800..104026f7d6bc 100644
---- a/arch/powerpc/include/asm/highmem.h
-+++ b/arch/powerpc/include/asm/highmem.h
-@@ -29,7 +29,6 @@
- #include <asm/page.h>
- #include <asm/fixmap.h>
- 
--#define kmap_prot		PAGE_KERNEL
- extern pte_t *kmap_pte;
- extern pte_t *pkmap_page_table;
- 
-diff --git a/arch/sparc/include/asm/highmem.h b/arch/sparc/include/asm/highmem.h
-index f4babe67cb5d..37f8694bde84 100644
---- a/arch/sparc/include/asm/highmem.h
-+++ b/arch/sparc/include/asm/highmem.h
-@@ -25,11 +25,12 @@
- #include <asm/vaddrs.h>
- #include <asm/kmap_types.h>
- #include <asm/pgtable.h>
-+#include <asm/pgtsrmmu.h>
- 
- /* declarations for highmem.c */
- extern unsigned long highstart_pfn, highend_pfn;
- 
--extern pgprot_t kmap_prot;
-+#define kmap_prot __pgprot(SRMMU_ET_PTE | SRMMU_PRIV | SRMMU_CACHE);
- extern pte_t *pkmap_page_table;
- 
- void kmap_init(void) __init;
-diff --git a/arch/sparc/mm/highmem.c b/arch/sparc/mm/highmem.c
-index 414f578d1e57..d237d902f9c3 100644
---- a/arch/sparc/mm/highmem.c
-+++ b/arch/sparc/mm/highmem.c
-@@ -32,9 +32,6 @@
- #include <asm/pgalloc.h>
- #include <asm/vaddrs.h>
- 
--pgprot_t kmap_prot;
--EXPORT_SYMBOL(kmap_prot);
--
- static pte_t *kmap_pte;
- 
- void __init kmap_init(void)
-@@ -51,7 +48,6 @@ void __init kmap_init(void)
- 
-         /* cache the first kmap pte */
-         kmap_pte = pte_offset_kernel(dir, address);
--        kmap_prot = __pgprot(SRMMU_ET_PTE | SRMMU_PRIV | SRMMU_CACHE);
- }
- 
- void *kmap_atomic_high_prot(struct page *page, pgprot_t prot)
-diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
-index 28183ee3cc42..b9527a54db99 100644
---- a/arch/x86/include/asm/fixmap.h
-+++ b/arch/x86/include/asm/fixmap.h
-@@ -152,7 +152,6 @@ extern void reserve_top_address(unsigned long reserve);
- extern int fixmaps_set;
- 
- extern pte_t *kmap_pte;
--#define kmap_prot PAGE_KERNEL
- extern pte_t *pkmap_page_table;
- 
- void __native_set_fixmap(enum fixed_addresses idx, pte_t pte);
-diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-index cc0c3904e501..bf470c16cecb 100644
---- a/include/linux/highmem.h
-+++ b/include/linux/highmem.h
-@@ -40,6 +40,10 @@ extern void kunmap_atomic_high(void *kvaddr);
- static inline void kmap_flush_tlb(unsigned long addr) { }
- #endif
- 
-+#ifndef kmap_prot
-+#define kmap_prot PAGE_KERNEL
-+#endif
-+
- void *kmap_high(struct page *page);
- static inline void *kmap(struct page *page)
- {
--- 
-2.25.1
+ - Beyond the statistic's type, one *very* useful piece of metadata
+for telemetry tools is knowing whether a given statistic is
+"cumulative" (an unsigned counter which is only ever increased), as
+opposed to a floating value (like "amount of memory used").
 
+I agree with the folks asking for a binary interface to read
+statistics, but I also agree that it can be added on later.  I'm more
+concerned with getting the statistics model and capabilities right
+from the beginning, because those are harder to adjust later.
+
+Would you be open to collaborating on the statsfs design?  As
+background for this discussion, here are some details of how our
+metricfs implementation approaches statistics:
+
+1. Each metricfs metric can have one or two string or integer "keys".
+If these exist, they expand the metric from a single value into a
+multi-dimensional table. For example, we use this to report a hash
+table we keep of functions calling "WARN()", in a 'warnings'
+statistic:
+
+% cat .../warnings/values
+x86_pmu_stop 1
+%
+
+Indicates that the x86_pmu_stop() function has had a WARN() fire once
+since the system was booted.  If multiple functions have fired
+WARN()s, they are listed in this table with their own counts. [1]  We
+also use these to report per-CPU counters on a CPU-by-CPU basis:
+
+% cat .../irq_x86/NMI/values
+0 42
+1 18
+... one line per cpu
+%
+
+2.  We also export some metadata about each statistic.  For example,
+the metadata for the NMI counter above looks like:
+
+% cat .../NMI/annotations
+DESCRIPTION Non-maskable\ interrupts
+CUMULATIVE
+% cat .../NMI/fields
+cpu value
+int int
+%
+
+(Describing the statistic, marking it as "cumulative", and saying the
+fields are "cpu" and "value", both ints).  The metadata doesn't change
+much, so having separate files allows the user-space agent to read
+them once and then the values multiple times.
+
+3. We have a (very few) statistics where the value itself is a string,
+usually for device statuses.
+
+For our use cases, we generally don't both output a statistic and it's
+aggregation from the kernel; either we sum up things in the kernel
+(e.g. over a bunch of per-cpu or per-memcg counters) and only have the
+result statistic, or we expect user-space to sum up the data if it's
+interested.  The tabular form makes it pretty easy to do so (i.e. you
+can use awk(1) to sum all of the per-cpu NMI counters).  We don't
+generally reset statistics, except as a side effect of removing a
+device.
+
+Thanks again for the patchset, and for pointing out that KVM also
+needs statistics sent out; it's great that there is interest in this.
+
+Cheers,
+- jonathan
+
+P.S.  I also have a couple (non-critical) high-level notes:
+  * It's not clear what tree your patches are against, or their
+dependencies; I was able to get them to apply to linux-next master
+with a little massaging, but then they failed to compile because
+they're built on top of your "libfs: group and simplify linux fs code"
+patch series you sent out in late april.  Including a git link or at
+least a baseline tree and a list of the patch series you rely upon is
+helpful for anyone wanting to try out your changes.
+
+  * The main reason I was trying to try out your patches was to get a
+sense of the set of directories and things the KVM example generates;
+while it's apparently the same as the existing KVM debugfs tree, it's
+useful to know how this ends up looking on a real system, and I'm not
+familiar with the KVM stats.  Since this patch is intended slightly
+more broadly than just KVM, it might have been useful to include
+sample output for those not familiar with how things are today.
+
+
+[1]    We also use this to export various network/storage statistics
+on a per-device basis.  e.g. network bytes received counts:
+
+% cat .../rx_bytes/values
+lo 501360681
+eth0 1457631256
+...
+%
