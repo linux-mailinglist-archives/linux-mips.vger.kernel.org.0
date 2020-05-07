@@ -2,101 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF1A1C81E3
-	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 07:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEE61C81F1
+	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 07:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725848AbgEGFyP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 May 2020 01:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725793AbgEGFyP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 May 2020 01:54:15 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A68FC061A0F
-        for <linux-mips@vger.kernel.org>; Wed,  6 May 2020 22:54:15 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id js4so117999pjb.5
-        for <linux-mips@vger.kernel.org>; Wed, 06 May 2020 22:54:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=DSez4N0yarBpZ5CDI4/L071hnr+Fr8/yKrsk6OTCcqc=;
-        b=FMoh6qruoxZiNgfG/iEu3Vl5HrfoH9uXVJv7HtuY5KzUFxD+xJkelBNNShB43gXfK7
-         XHQf12YsXAfvIW6bsKRP92nj/OYkjGfrJWvhayouTfol1XZnBsv0BShDAVfajecgQZmc
-         bm75LF1nkuH7qJBI0ikmCD68G25dJEFBeSl76Iy5FKehE6P6incg449U/PEiHPMfTFbX
-         +ISYTGrk5LXzffGuOyetdBgn8L5UEXva2J3B7/V5AXV9bmIP96q0alPp0/Dy35saFLnP
-         Bh6QC5cW6q7EU2VYYQBR+VCobDTajTUwYGVTCuYSXxff2O7hYDOt7jz4UsPfEJkjLgQq
-         m60g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=DSez4N0yarBpZ5CDI4/L071hnr+Fr8/yKrsk6OTCcqc=;
-        b=MIQT/mSwqsUCodfiGpMpMQ+AdMRpGjuuT1eaLZrdDQUypxdZUD6xRDUxFeKZbIoZA3
-         YSYTQnZDCI6uqU6F1Qd4h6Mhk4OnLYkNypgNri7hWNjhWR+Ih1+/f5el+UeaVH5IBZM6
-         hf3DPcZnqE9cOaFc7LiS1uqr+jvX2F6WKf4qVKcOr5EkZeYUIAAqoDYbICCTpc3G7i51
-         X1C6E3hzORYKdGIXhjRmLGe8rb07NRFH1ww4ESALRToCz8rONhSqxIZ0JY9xcfxNboGj
-         sw05q8jl12swbr91Yo9YPYY0wmTGkyTWhB5JWoFLASNMT8T2MCdJkBklCZ0YkfeK24oI
-         LiNw==
-X-Gm-Message-State: AGi0PuYge8MWU8bZNtMjGBWWiVobocTNQYr2WqpUeAYgsZlRimOuP4mO
-        vzz1liRFg59y5lE9Sn6U+70=
-X-Google-Smtp-Source: APiQypKQ35TzncYPOqh83wHwA+9EKzaz+uMRDaNe/1AIfzSxtbxq93IDociSqTYfIyWXGR0IZLzpAQ==
-X-Received: by 2002:a17:90a:688f:: with SMTP id a15mr973766pjd.111.1588830854701;
-        Wed, 06 May 2020 22:54:14 -0700 (PDT)
-Received: from software.domain.org (28.144.92.34.bc.googleusercontent.com. [34.92.144.28])
-        by smtp.gmail.com with ESMTPSA id h17sm3682661pfk.13.2020.05.06.22.54.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 06 May 2020 22:54:14 -0700 (PDT)
-From:   Huacai Chen <chenhc@lemote.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH] MIPS: asm: Use __ASSEMBLY__ to guard some macros to avoid build error
-Date:   Thu,  7 May 2020 13:54:23 +0800
-Message-Id: <1588830863-30416-1-git-send-email-chenhc@lemote.com>
-X-Mailer: git-send-email 2.7.0
+        id S1725845AbgEGF6A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 May 2020 01:58:00 -0400
+Received: from mga01.intel.com ([192.55.52.88]:39294 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725763AbgEGF6A (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 7 May 2020 01:58:00 -0400
+IronPort-SDR: nTzTknIBBE32ruSyvusQZ6G2cQuhuL2EOBl5cvqiOxGstVAyIoel5CoLE7oczetCA9rIiGjiRu
+ 4TEJ7kidm2Cg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2020 22:57:59 -0700
+IronPort-SDR: +dQnhUyCtoAS7P9tJ4kRMIintnMG83RYJknm6ccVykoDNKn6QhOzw9gQqKVoh5FN/wQSzfvv3t
+ 43ny4/J9n+zA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,362,1583222400"; 
+   d="scan'208";a="370016534"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga001.fm.intel.com with ESMTP; 06 May 2020 22:57:59 -0700
+Received: from [10.213.151.174] (unknown [10.213.151.174])
+        by linux.intel.com (Postfix) with ESMTP id 7A0B6580378;
+        Wed,  6 May 2020 22:57:54 -0700 (PDT)
+Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
+Subject: Re: [PATCH v5 2/2] mtd: rawnand: Add NAND controller support on Intel
+ LGM SoC
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        arnd@arndb.de, brendanhiggins@google.com, tglx@linutronix.de,
+        boris.brezillon@collabora.com, anders.roxell@linaro.org,
+        masonccyang@mxic.com.tw, robh+dt@kernel.org,
+        linux-mips@vger.kernel.org, hauke.mehrtens@intel.com,
+        andriy.shevchenko@intel.com, qi-ming.wu@intel.com,
+        cheol.yong.kim@intel.com
+References: <20200507001537.4034-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200507001537.4034-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <35cf7227-0045-9916-7994-a5763367aab3@infradead.org>
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Message-ID: <68b1f45b-4d44-83a1-ddd9-710ff8e03016@linux.intel.com>
+Date:   Thu, 7 May 2020 13:57:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <35cf7227-0045-9916-7994-a5763367aab3@infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use __ASSEMBLY__ to guard definitions of some macros (PANIC and PRINT)
-to avoid build error:
+Hi,
 
-1, PANIC conflicts with drivers/scsi/smartpqi/smartpqi_init.c
-2, PRINT conflicts with net/netfilter/nf_conntrack_h323_asn1.c and net/
-   mac80211/debugfs_sta.c
+On 7/5/2020 8:22 am, Randy Dunlap wrote:
+> On 5/6/20 5:15 PM, Ramuthevar,Vadivel MuruganX wrote:
+>> diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
+>> index a80a46bb5b8b..a026bec28f39 100644
+>> --- a/drivers/mtd/nand/raw/Kconfig
+>> +++ b/drivers/mtd/nand/raw/Kconfig
+>> @@ -457,6 +457,14 @@ config MTD_NAND_CADENCE
+>>   	  Enable the driver for NAND flash on platforms using a Cadence NAND
+>>   	  controller.
+>>   
+>> +config MTD_NAND_INTEL_LGM
+>> +	tristate "Support for NAND controller on Intel LGM SoC"
+>> +	depends on OF || COMPILE_TEST
+>> +	depends on HAS_IOMEM
+>> +	help
+>> +	  Enables support for NAND Flash chips on Intel's LGM SoC.
+>> +          NAND flash interfaced through the External Bus Unit.
+> 
+> Please use one tab + 2 spaces for indentation in the line above.
 
-Fixes: d339cd02b888eb8c ("MIPS: Move unaligned load/store helpers to inst.h")
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
----
- arch/mips/include/asm/asm.h | 4 ++++
- 1 file changed, 4 insertions(+)
+Thank you for the review comments, will update in the next patch-set.
 
-diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
-index 934465d..b01762ab 100644
---- a/arch/mips/include/asm/asm.h
-+++ b/arch/mips/include/asm/asm.h
-@@ -74,6 +74,8 @@ symbol:		.insn
- 		.globl	symbol;				\
- symbol		=	value
- 
-+#ifdef __ASSEMBLY__
-+
- #define PANIC(msg)					\
- 		.set	push;				\
- 		.set	reorder;			\
-@@ -98,6 +100,8 @@ symbol		=	value
- #define PRINT(string)
- #endif
- 
-+#endif
-+
- #define TEXT(msg)					\
- 		.pushsection .data;			\
- 8:		.asciiz msg;				\
--- 
-2.7.0
-
+Regards
+Vadivel
+> 
+>> +
+>>   comment "Misc"
+>>   
+>>   config MTD_SM_COMMON
+> 
+> 
