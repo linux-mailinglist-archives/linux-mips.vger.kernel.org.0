@@ -2,92 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E0D1C8244
-	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 08:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 116B81C8249
+	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 08:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726235AbgEGGNH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 May 2020 02:13:07 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:49798 "EHLO
-        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1725809AbgEGGNG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 May 2020 02:13:06 -0400
-Received: from hanazono.local (unknown [116.236.177.50])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 38953600B4;
-        Thu,  7 May 2020 14:13:03 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1588831983; bh=gJE2XOR81V9RBUrOJZ4bBHo/8EGWu7sXJKtaObUFykg=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ASCFRiFgISzby0+y0I9EV86uw50rRHR15NPtY3JGhOvGPMVMlCySy5VyaeLWvsra8
-         F1QhJwAavWqrUw2hTK1Z+XHTMH5leG/mNry+HiHRhIic4pcMSsHLHzDuZzCmZsVrMi
-         vibB4F6aisZjWV0mo4ctMC9woFZdr+I4JSYutcAE=
-Subject: Re: [PATCH] MIPS: asm: Use __ASSEMBLY__ to guard some macros to avoid
- build error
-To:     Huacai Chen <chenhc@lemote.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <1588830863-30416-1-git-send-email-chenhc@lemote.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-Message-ID: <abdd1464-277e-3921-5714-39a8058d06a8@xen0n.name>
-Date:   Thu, 7 May 2020 14:13:02 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0)
- Gecko/20100101 Thunderbird/78.0a1
+        id S1725848AbgEGGNu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 May 2020 02:13:50 -0400
+Received: from mga07.intel.com ([134.134.136.100]:63528 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725783AbgEGGNu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 7 May 2020 02:13:50 -0400
+IronPort-SDR: LydA99ryZxQLh0RMUfB4y4FrgAGl18jo1hGWMEnBd8YMi4EGYgKKHWJrf5puCD38spAAjZUegY
+ n4NUhvr9SDmA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2020 23:13:49 -0700
+IronPort-SDR: 3pDNn0r5IGGk0SnSXaAW1JDk8AxJKKpW3Zm5csAz/Jifn4GP0vN9jsiLVbHHZTvsyxe4CTgvya
+ EI8JlTgeEQPw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,362,1583222400"; 
+   d="scan'208";a="260423999"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga003.jf.intel.com with ESMTP; 06 May 2020 23:13:47 -0700
+Received: from [10.213.151.174] (vramuthx-MOBL1.gar.corp.intel.com [10.213.151.174])
+        by linux.intel.com (Postfix) with ESMTP id 695D9580378;
+        Wed,  6 May 2020 23:13:43 -0700 (PDT)
+Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
+Subject: Re: [PATCH v5 2/2] mtd: rawnand: Add NAND controller support on Intel
+ LGM SoC
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, arnd@arndb.de,
+        brendanhiggins@google.com, tglx@linutronix.de,
+        anders.roxell@linaro.org, masonccyang@mxic.com.tw,
+        robh+dt@kernel.org, linux-mips@vger.kernel.org,
+        hauke.mehrtens@intel.com, andriy.shevchenko@intel.com,
+        qi-ming.wu@intel.com, cheol.yong.kim@intel.com
+References: <20200507001537.4034-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200507001537.4034-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200507072831.1bf7f784@collabora.com>
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Message-ID: <440c0002-e572-7b8b-ba08-773932370eb0@linux.intel.com>
+Date:   Thu, 7 May 2020 14:13:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <1588830863-30416-1-git-send-email-chenhc@lemote.com>
+In-Reply-To: <20200507072831.1bf7f784@collabora.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2020/5/7 13:54, Huacai Chen wrote:
+Hi Boris,
 
-> Use __ASSEMBLY__ to guard definitions of some macros (PANIC and PRINT)
-> to avoid build error:
->
-> 1, PANIC conflicts with drivers/scsi/smartpqi/smartpqi_init.c
-> 2, PRINT conflicts with net/netfilter/nf_conntrack_h323_asn1.c and net/
->     mac80211/debugfs_sta.c
->
-> Fixes: d339cd02b888eb8c ("MIPS: Move unaligned load/store helpers to inst.h")
-> Reported-by: kbuild test robot <lkp@intel.com>
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> ---
->   arch/mips/include/asm/asm.h | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
-> index 934465d..b01762ab 100644
-> --- a/arch/mips/include/asm/asm.h
-> +++ b/arch/mips/include/asm/asm.h
-> @@ -74,6 +74,8 @@ symbol:		.insn
->   		.globl	symbol;				\
->   symbol		=	value
->   
-> +#ifdef __ASSEMBLY__
-> +
->   #define PANIC(msg)					\
->   		.set	push;				\
->   		.set	reorder;			\
-> @@ -98,6 +100,8 @@ symbol		=	value
->   #define PRINT(string)
->   #endif
->   
-> +#endif
-> +
->   #define TEXT(msg)					\
->   		.pushsection .data;			\
->   8:		.asciiz msg;				\
+    Thank you very much for the review comments and your time...
 
-It looks like the whole file is meant for assembly code, not just the 
-couple of conflicting definitions that were caught. At least the parts 
-containing assembler directives are nothing to be consumed by C code.
+On 7/5/2020 1:28 pm, Boris Brezillon wrote:
+> On Thu,  7 May 2020 08:15:37 +0800
+> "Ramuthevar,Vadivel MuruganX"
+> <vadivel.muruganx.ramuthevar@linux.intel.com> wrote:
+> 
+>> +	reg = readl(ebu_host->ebu + EBU_ADDR_SEL(ebu_host->cs_num));
+>> +	writel(reg | EBU_ADDR_MASK(5) | EBU_ADDR_SEL_REGEN,
+>> +	       ebu_host->ebu + EBU_ADDR_SEL(ebu_host->cs_num));
+> 
+> Seriously, did you really think I would not notice what you're doing
+> here?
+Yes , I know that you have very good understanding about this.
+  You're reading the previous value which either contains a default
+> mapping or has the mapping set by the bootloader, and write it back to
+> the register along with a new mask and the REGEN bit set (which
+> BTW is wrong since you don't mask out other fields before updating
+> them).
+There is no other field get overwritten
+  This confirms that this Core -> FPI address translation exists
+> and has to be set properly, so please stop lying about that.
 
-Maybe wrap the whole file and see if it correctly builds?
+Sorry, there is no SW translation, as I have mentioned that it's 
+optional only, for safer side , reading and writing the default values.
+The memory region to enabled that's my concern so written the same 
+register values.
 
+This will not be impact other fields, so please see below for reference
+
+The EBU Address Select Registers EBU_ADDR_SEL_0 to EBU_ADDSEL3 establish 
+and control memory regions for external accesses.
+
+Reset Value: 17400001H
+
+
+Regards
+Vadivel
+
+> 
