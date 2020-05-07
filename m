@@ -2,470 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA151C9D10
-	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 23:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E731C9D19
+	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 23:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726476AbgEGVPi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 May 2020 17:15:38 -0400
-Received: from foss.arm.com ([217.140.110.172]:39464 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726382AbgEGVPh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 7 May 2020 17:15:37 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A3BA1FB;
-        Thu,  7 May 2020 14:15:36 -0700 (PDT)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7162F3F68F;
-        Thu,  7 May 2020 14:15:33 -0700 (PDT)
-References: <20200507180553.9993-1-john.mathew@unikie.com> <20200507180553.9993-3-john.mathew@unikie.com>
-User-agent: mu4e 0.9.17; emacs 26.3
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     John Mathew <john.mathew@unikie.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, tsbogend@alpha.franken.de,
-        lukas.bulwahn@gmail.com, x86@kernel.org,
-        linux-mips@vger.kernel.org, tglx@linutronix.de,
-        mostafa.chamanara@basemark.com, rdunlap@infradead.org,
-        Oleg Tsymbal <oleg.tsymbal@unikie.com>
-Subject: Re: [RFC PATCH v3 2/3] docs: scheduler: Add scheduler overview documentation
-In-reply-to: <20200507180553.9993-3-john.mathew@unikie.com>
-Date:   Thu, 07 May 2020 22:15:27 +0100
-Message-ID: <jhjh7wrtpjk.mognet@arm.com>
+        id S1726542AbgEGVTb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 May 2020 17:19:31 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:38566 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726531AbgEGVTa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 May 2020 17:19:30 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 8EF3C803087C;
+        Thu,  7 May 2020 21:19:27 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id iD8rLD5BeSaP; Fri,  8 May 2020 00:19:26 +0300 (MSK)
+Date:   Fri, 8 May 2020 00:19:23 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alexander Lobakin <alobakin@dlink.ru>,
+        Huacai Chen <chenhc@lemote.com>,
+        Cedric Hombourger <Cedric_Hombourger@mentor.com>,
+        =?utf-8?B?UmVuw6k=?= van Dorst <opensource@vdorst.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 07/20] mips: Add MIPS Warrior P5600 support
+Message-ID: <20200507211923.kfu2ly3ncqms4c2u@mobilestation>
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-8-Sergey.Semin@baikalelectronics.ru>
+ <20200507111735.GF11616@alpha.franken.de>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200507111735.GF11616@alpha.franken.de>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, May 07, 2020 at 01:17:35PM +0200, Thomas Bogendoerfer wrote:
+> On Wed, May 06, 2020 at 08:42:25PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+> >  
+> > +config CPU_P5600
+> > +	bool "MIPS Warrior P5600"
+> > +	depends on SYS_HAS_CPU_P5600
+> > +	select CPU_HAS_PREFETCH
+> > +	select CPU_SUPPORTS_32BIT_KERNEL
+> > +	select CPU_SUPPORTS_HIGHMEM
+> > +	select CPU_SUPPORTS_MSA
+> > +	select CPU_SUPPORTS_UNCACHED_ACCELERATED
+> > +	select CPU_SUPPORTS_CPUFREQ
+> > +	select CPU_MIPSR2_IRQ_VI
+> > +	select CPU_MIPSR2_IRQ_EI
+> > +	select HAVE_KVM
+> > +	select MIPS_O32_FP64_SUPPORT
+> > +	help
+> > +	  Choose this option to build a kernel for MIPS Warrior P5600 CPU.
+> > +	  It's based on MIPS32r5 ISA with XPA, EVA, dual/quad issue exec pipes,
+> > +	  MMU with two-levels TLB, UCA, MSA, MDU core level features and system
+> > +	  level features like up to six P5600 calculation cores, CM2 with L2
+> > +	  cache, IOCU/IOMMU (though might be unused depending on the system-
+> > +	  specific IP core configuration), GIC, CPC, virtualisation module,
+> > +	  eJTAG and PDtrace.
+> > +
+> >  config CPU_R3000
+> >  	bool "R3000"
+> >  	depends on SYS_HAS_CPU_R3000
+> > @@ -1841,7 +1863,8 @@ endchoice
+> >  config CPU_MIPS32_3_5_FEATURES
+> >  	bool "MIPS32 Release 3.5 Features"
+> >  	depends on SYS_HAS_CPU_MIPS32_R3_5
+> > -	depends on CPU_MIPS32_R2 || CPU_MIPS32_R5 || CPU_MIPS32_R6
+> > +	depends on CPU_MIPS32_R2 || CPU_MIPS32_R5 || CPU_MIPS32_R6 || \
+> > +		   CPU_P5600
+> >  	help
+> >  	  Choose this option to build a kernel for release 2 or later of the
+> >  	  MIPS32 architecture including features from the 3.5 release such as
+> > @@ -1861,7 +1884,7 @@ config CPU_MIPS32_3_5_EVA
+> >  config CPU_MIPS32_R5_FEATURES
+> >  	bool "MIPS32 Release 5 Features"
+> >  	depends on SYS_HAS_CPU_MIPS32_R5
+> > -	depends on CPU_MIPS32_R2 || CPU_MIPS32_R5
+> > +	depends on CPU_MIPS32_R2 || CPU_MIPS32_R5 || CPU_P5600
+> >  	help
+> >  	  Choose this option to build a kernel for release 2 or later of the
+> >  	  MIPS32 architecture including features from release 5 such as
+> > @@ -2016,6 +2039,10 @@ config SYS_HAS_CPU_MIPS64_R6
+> >  	bool
+> >  	select ARCH_HAS_SYNC_DMA_FOR_CPU if DMA_NONCOHERENT
+> >  
+> > +config SYS_HAS_CPU_P5600
+> > +	bool
+> > +	select ARCH_HAS_SYNC_DMA_FOR_CPU if DMA_NONCOHERENT
+> > +
+> 
+> P5600 is CPU_MIPS_R5 so can't you select it here and drop all the || CPU_5600
+> above/below ?
 
-On 07/05/20 19:05, John Mathew wrote:
-> Add documentation for
->  -scheduler overview
->  -scheduler state transtion
->  -CFS overview
->  -scheduler data structs
->
-> Add rst for scheduler APIs and modify sched/core.c
-> to add kernel-doc comments.
->
-> Suggested-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> Co-developed-by: Mostafa Chamanara <mostafa.chamanara@basemark.com>
-> Signed-off-by: Mostafa Chamanara <mostafa.chamanara@basemark.com>
-> Co-developed-by: Oleg Tsymbal <oleg.tsymbal@unikie.com>
-> Signed-off-by: Oleg Tsymbal <oleg.tsymbal@unikie.com>
-> Signed-off-by: John Mathew <john.mathew@unikie.com>
-> ---
->  Documentation/scheduler/cfs-overview.rst      | 113 ++++++++
->  Documentation/scheduler/index.rst             |   7 +-
->  Documentation/scheduler/overview.rst          | 266 ++++++++++++++++++
->  .../scheduler/sched-data-structs.rst          | 253 +++++++++++++++++
->  Documentation/scheduler/scheduler-api.rst     |  31 ++
->  kernel/sched/core.c                           |  28 +-
->  kernel/sched/sched.h                          | 169 ++++++++++-
->  7 files changed, 858 insertions(+), 9 deletions(-)
->  create mode 100644 Documentation/scheduler/cfs-overview.rst
->  create mode 100644 Documentation/scheduler/sched-data-structs.rst
->  create mode 100644 Documentation/scheduler/scheduler-api.rst
->
-> diff --git a/Documentation/scheduler/cfs-overview.rst b/Documentation/scheduler/cfs-overview.rst
-> new file mode 100644
-> index 000000000000..b717f2d3e340
-> --- /dev/null
-> +++ b/Documentation/scheduler/cfs-overview.rst
-> @@ -0,0 +1,113 @@
-> +.. SPDX-License-Identifier: GPL-2.0+
-> +
-> +=============
-> +CFS Overview
-> +=============
-> +
-> +Linux 2.6.23 introduced a modular scheduler core and a Completely Fair
-> +Scheduler (CFS) implemented as a scheduling module. A brief overview of the
-> +CFS design is provided in :doc:`sched-design-CFS`
-> +
-> +In addition there have been many improvements to the CFS, a few of which are
+Alas, We can't do this so easy. CONFIG_CPU_MIPS32_{R2,R5,R6} and any other
+CONFIG_CPU_* configs is something that kernel config-file is supposed to select.
+Their availability is enabled by the CONFIG_SYS_HAS_CPU_* configs. CONFIG_CPU_*
+is supposed to activate CPU-specific features and there is only one
+CONFIG_CPU_x can be enabled at a time seeing it's a part of the "CPU type"
+choice kconfig menu. In addition the CPU config also tunes a compiler to activate
+the arch-specific ISA and optimizations in the arch/mips/Makefile by setting
+-march=cpu-name (where cpu-name can be p5600, mips32r5, etc).
 
-<snip>
+Yes, P5600 is based on the MIPS32r5, but it also has got some specific features
+(see config CPU_P5600 and config MIPS32_R5), which makes it to be different from
+the ancestor. So In addition to the difficulties described above IMHO converting
+CPU_P5600 to a set of features activated on top of the CPU_MIPS32_R5 config
+would contradict the design of the CPU-support configs implemented in the MIPS
+arch subsystem.
 
-> +**Consider misfit tasks when load-balancing**:
-> +On asymmetric CPU capacity systems load intensive tasks can end up on
-> +CPUs that don't suit their compute demand. In this scenario 'misfit'
-> +tasks are migrated to CPUs with higher compute capacity to ensure better
-> +throughput. A new group_type: group_misfit_task is added and indicates this
-> +scenario. Tweaks to the load-balance code are done to make the migrations
-> +happen. Misfit balancing is done between a source group of lower per-CPU
-> +capacity and destination group of higher compute capacity. Otherwise, misfit
-> +balancing is ignored.
-> +
+-Sergey
 
-I'm not sure how useful this cherry-picked git history is, but that's
-making me think we may want to have an asymmetric CPU capacity scheduling
-section somewhere - I've had to explain what we do here a few times
-already, and it's true that unless you look at the git history or at the
-code it isn't laid out for you (with the exception of EAS that was blessed
-with Quentin's writings).
-
-It would also be an opportunity to have one place to (at least briefly)
-describe what the different sched classes do wrt capacity asymmetry - CFS
-does one thing, RT now does one thing (see Qais' work), and DL will
-hopefully soon follow (see Dietmar's work).
-
-I'd be happy to contribute (some of) that, if it can be deemed useful (I
-personally think it might).
-
-> +=========================
-> +Scheduler Data Structures
-> +=========================
-> +
-> +The main parts of the Linux scheduler are:
-> +
-> +Runqueue
-> +~~~~~~~~
-> +
-> +:c:type:`struct rq <rq>` is the central data structure of process
-> +scheduling. It keeps track of tasks that are in a runnable state assigned
-> +for a particular processor. Each CPU has its own run queue and stored in a
-> +per CPU array::
-> +
-> +    DEFINE_PER_CPU(struct rq, runqueues);
-> +
-> +Access to the queue requires locking and lock acquire operations must be
-> +ordered by ascending runqueue. Macros for accessing and locking the runqueue
-> +are provided in::
-> +
-> +    kernel/sched/sched.h
-> +
-> +The runqueue contains scheduling class specific queues and several scheduling
-> +statistics.
-> +
-> +Scheduling entity
-> +~~~~~~~~~~~~~~~~~
-> +Scheduler uses scheduling entities which contain sufficient information to
-> +actually accomplish the scheduling job of a task or a task-group. The
-> +scheduling entity may be a group of tasks or a single task. Every task is
-> +associated with a sched_entity structure. CFS adds support for nesting of
-> +tasks and task groups. Each scheduling entity may be run from its parents
-> +runqueue. The scheduler traverses the sched_entity hierarchy to pick the
-> +next task to run on the CPU. The entity gets picked up from the cfs_rq on
-> +which it is queued and its time slice is divided among all the tasks on its my_q.
-> +
-> +Virtual Runtime
-> +~~~~~~~~~~~~~~~~~
-
-That probably should be under CFS specific stuff.
-
-> +Virtual Run Time or vruntime is the amount of time a task has spent running
-> +on the CPU. It is updated periodically by scheduler_tick(). Tasks are stored
-> +in the CFS scheduling class rbtree sorted by vruntime. scheduler_tick() calls
-> +corresponding hook of CFS which first updates the runtime statistics of the
-> +currently running task and checks if the current task needs to be preempted.
-> +vruntime of the task based on the formula ::
-> +
-> +    vruntime += delta_exec * (NICE_0_LOAD/curr->load.weight);
-> +
-> +where:
-> +
-> +* delta_exec is the time in nanoseconds spent by the task since the last time
-> +  vruntime was updated.
-
-There's the whole task_clock() shenanigans there, i.e. depending on your
-config knobs that delta may not include IRQ or paravirt time; though that
-doesn't necessarily help in understanding vruntime, so it might be best to
-leave it at that.
-
-> +* NICE_0_LOAD is the load of a task with normal priority.
-
-s/normal/default/
-
-> +* curr is the shed_entity instance of the cfs_rq struct of the currently
-> +  running task.
-> +* load.weight: sched_entity load_weight. load_weight is the encoding of
-> +  the tasks priority and vruntime. The load of a task is the metric
-> +  indicating the number of CPUs needed to make satisfactory progress on its
-> +  job. Load of a task influences the time a task spends on the CPU and also
-> +  helps to estimate the overall CPU load which is needed for load balancing.
-
-Careful not to mix up se.load and se.avg.load_avg. Load balancing decisions
-are based (amongst other things) on (sums of) se.avg.load_avg, i.e. the
-'load' signal generated via PELT. It is indeed weighted by priority, but
-se.load is *not* that load signal.
-
-It's also the first time I see that bit about load being ~how many CPUs
-that task needs. That's peculiar; you can't really split a task up to
-schedule it on other CPUs, so how would that help? And, again, the load
-signal being weighted by priority makes this even weirder.
-
-> +  Priority of the task is not enough for the scheduler to estimate the
-> +  vruntime of a process. So priority value must be mapped to the capacity of
-> +  the standard CPU which is done in the array :c:type:`sched_prio_to_weight[]`.
-> +  The array contains mappings for the nice values from -20 to 19. Nice value
-> +  0 is mapped to 1024. Each entry advances by approximately 1.25 which means
-> +  for every increment in nice value the task gets 10% less CPU and vice versa.
-> +
-> +Scheduler classes
-> +~~~~~~~~~~~~~~~~~
-> +It is an extensible hierarchy of scheduler modules. The modules encapsulate
-> +scheduling policy details. They are called from the core code which is
-> +independent. Scheduling classes are implemented through the sched_class
-> +structure. dl_sched_class for deadline scheduler, fair_sched_class for CFS
-> +and rt_sched_class for RT are implementations of this class.
-
-There's stop (at the top) and idle (at the bottom), but admittedly they
-are somewhat special.
-
-> +
-> +The important methods of scheduler class are:
-> +
-> +enqueue_task and dequeue_task
-> +    These functions are used to put and remove tasks from the runqueue
-> +    respectively. The function takes the runqueue, the task which needs to
-> +    be enqueued/dequeued and a bit mask of flags. The main purpose of the
-> +    flags is to describe why the enqueue or dequeue is being called.
-> +    The different flags used are described in ::
-> +
-> +        kernel/sched/sched.h
-> +
-> +    enqueue_task and dequeue_task are called for following purposes.
-> +
-> +    - When waking a newly created task for the first time. Called with
-> +      ENQUEUE_NOCLOCK
-> +    - When migrating a task from one CPU's runqueue to another. Task will be
-> +      first dequeued from its old runqueue, new CPU will be added to the
-> +      task struct,  runqueue of the new CPU will be retrieved and task is
-> +      then enqueued on this new runqueue.
-
-
-> +    - When do_set_cpus_allowed() is called to change a tasks CPU affinity. If
-> +      the task is queued on a runqueue, it is first dequeued with the
-> +      DEQUEUE_SAVE and DEQUEUE_NOCLOCK flags set. The set_cpus_allowed()
-> +      function of the corresponding scheduling class will be called.
-> +      enqueue_task() is then called with ENQUEUE_RESTORE and ENQUEUE_NOCLOCK
-> +      flags set.
-> +    - When changing the priority of a task using rt_mutex_setprio(). This
-> +      function implements the priority inheritance logic of the RT mutex
-> +      code. This function changes the effective priority of a task which may
-> +      in turn change the scheduling class of the task. If so enqueue_task is
-> +      called with flags corresponding to each class.
-> +    - When user changes the nice value of the task. If the task is queued on
-> +      a runqueue, it first needs to be dequeued, then its load weight and
-> +      effective priority needs to be set. Following which the task is
-> +      enqueued with ENQUEUE_RESTORE and ENQUEUE_NOCLOCK flags set.
-> +    - When __sched_setscheduler() is called. This function enables changing
-> +      the scheduling policy and/or RT priority of a thread. If the task is
-> +      on a runqueue, it will be first dequeued, changes will be made and
-> +      then enqueued.
-> +    - When moving tasks between scheduling groups. The runqueue of the tasks
-> +      is changed when moving between groups. For this purpose if the task
-> +      is running on a queue, it is first dequeued with DEQUEUE_SAVE, DEQUEUE_MOVE
-> +      and DEQUEUE_NOCLOCK flags set, followed by which scheduler function to
-> +      change the tsk->se.cfs_rq and tsk->se.parent and then task is enqueued
-> +      on the runqueue with the same flags used in dequeue.
-> +
-
-Those are all what Peter dubs the "change pattern", you may want to just
-explain the principle (we need to dequeue tasks to do some operations; and
-ofc we need to put them back as they were once that's done) & pick just one
-rather than exhaustively list them all.
-
-This still applies to a lot of other places IMO - I think you need less
-exhaustive listings and more "what's the gist of that".
-
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index db3a57675ccf..21f2953b72c7 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -865,12 +865,175 @@ struct uclamp_rq {
->  };
->  #endif /* CONFIG_UCLAMP_TASK */
->
-> -/*
-> - * This is the main, per-CPU runqueue data structure.
-> +/**
-> + * struct rq - This is the main, per-CPU runqueue data structure.
->   *
->   * Locking rule: those places that want to lock multiple runqueues
->   * (such as the load balancing or the thread migration code), lock
->   * acquire operations must be ordered by ascending &runqueue.
-> + *
-> + * @lock:
-> + *	lock to be acquired while modifying the runqueue
-> + * @nr_running:
-> + *	number of runnable tasks on this queue
-> + * @nr_numa_running:
-> + *	number of tasks running that care about their placement
-> + * @nr_preferred_running:
-> + *	number of tasks that are optimally NUMA placed
-> + * @numa_migrate_on:
-> + *	per run-queue variable to check if NUMA-balance is
-> + *	active on the run-queue
-> + * @last_blocked_load_update_tick:
-> + *	tick stamp for decay of blocked load
-> + * @has_blocked_load:
-> + *	idle CPU has blocked load
-> + * @nohz_tick_stopped:
-> + *	CPU is going idle with tick stopped
-> + * @nohz_flags:
-> + *	flags indicating NOHZ idle balancer actions
-> + * @nr_load_updates:
-> + *	unused
-> + * @nr_switches:
-> + *	number of context switches
-> + * @uclamp:
-> + *	utilization clamp values based on CPU's RUNNABLE tasks
-> + * @uclamp_flags:
-> + *	flags for uclamp actions, currently one flag for idle.
-> + * @cfs:
-> + *	fair scheduling class runqueue
-> + * @rt:
-> + *	rt scheduling class runqueue
-> + * @dl:
-> + *	dl scheduing class runqueue
-> + * @leaf_cfs_rq_list:
-> + *	list of leaf cfs_rq on this CPU
-> + * @tmp_alone_branch:
-> + *	reference to add child before its parent in leaf_cfs_rq_list
-> + * @nr_uninterruptible:
-> + *	global counter where the total sum over all CPUs matters. A task
-> + *      can increase this counter on one CPU and if it got migrated
-> + *	afterwards it may decrease it on another CPU. Always updated under
-> + *	the runqueue lock
-> + * @curr:
-> + *	points to the currently running task of this rq.
-> + * @idle:
-> + *	points to the idle task of this rq
-> + * @stop:
-> + *	points to the stop task of this rq
-> + * @next_balance:
-> + *	shortest next balance before updating nohz.next_balance
-> + * @prev_mm:
-> + *	real address space of the previous task
-> + * @clock_update_flags:
-> + *	RQCF clock_update_flags bits
-> + * @clock:
-> + *	sched_clock() value for the queue
-> + * @clock_task:
-> + *	clock value minus irq handling time
-> + * @clock_pelt:
-> + *	clock which scales with current capacity when something is
-> + *	running on rq and synchronizes with clock_task when rq is idle
-> + * @lost_idle_time:
-> + *	idle time lost when utilization of a rq has reached the
-> + *	maximum value
-> + * @nr_iowait:
-> + *	account the idle time that we could have spend running if it
-> + *	were not for IO
-> + * @membarrier_state:
-> + *	copy of membarrier_state from the mm_struct
-> + * @rd:
-> + *	root domain, each exclusive cpuset essentially defines an island
-> + *	domain by fully partitioning the member CPUs from any other cpuset
-> + * @sd:
-> + *	a domain heirarchy of CPU groups to balance process load among them
-> + * @cpu_capacity:
-> + *	information about CPUs heterogeneity used for CPU performance
-> + *	scaling
-> + * @cpu_capacity_orig:
-> + *	original capacity of a CPU before being altered by
-> + *	rt tasks and/or IRQ
-> + * @balance_callback:
-> + *	queue to hold load balancing push and pull operations
-> + * @idle_balance:
-> + *	flag to do the nohz idle load balance
-> + * @misfit_task_load:
-> + *	set whenever the current running task has a utilization
-> + *	greater than 80% of rq->cpu_capacity. A non-zero value
-> + *	in this field enables misfit load balancing
-> + * @active_balance:
-> + *	synchronizes accesses to ->active_balance_work
-> + * @push_cpu:
-> + *	idle cpu to push the running task on to during active load
-> + *	balancing.
-> + * @active_balance_work:
-> + *	callback scheduled to run on one or multiple cpus
-> + *	with maximum priority monopolozing those cpus.
-> + * @cpu:
-> + *	CPU of this runqueue
-> + * @online:
-> + *	Used by scheduling classes to support CPU hotplug
-> + * @cfs_tasks:
-> + *	an MRU list used for load balancing, sorted (except
-> + *	woken tasks) starting from recently given CPU time tasks
-> + *	toward tasks with max wait time in a run-queue
-> + * @avg_rt:
-> + *	track the utilization of RT tasks for a  more accurate
-> + *	view of the utilization of the CPU when overloaded by CFS and
-> + *	RT tasks
-> + * @avg_dl:
-> + *	track the utilization of DL tasks as CFS tasks can be preempted
-> + *	by DL tasks and the CFS's utilization might no longer describe
-> + *	the real utilization level
-> + * @avg_irq:
-> + *	track the the utilization of interrupt to give a more accurate
-> + *	level of utilization of CPU taking into account the time spent
-> + *	under interrupt context when rqs' clock is updated
-> + * @avg_thermal:
-> + *	tracks thermal pressure which is the reduction in maximum
-> + *	possible capacity due to thermal events
-> + * @idle_stamp:
-> + *	time stamp at which idle load balance started for this rq.
-> + *	Used to find the idlest CPU, when multiple idle CPUs are in
-> + *	the same state
-> + * @avg_idle:
-> + *	average idle time for this rq
-> + * @max_idle_balance_cost:
-> + *	used to determine avg_idle's max value
-> + * @prev_irq_time:
-> + *	updated to account time consumed when a previous
-> + *	update_rq_clock() happened inside a {soft,}irq region
-> + * @prev_steal_time:
-> + *	to account how much elapsed time was spent in steal
-> + * @prev_steal_time_rq:
-> + *	for fine granularity task steal time accounting by
-> + *	making update_rq_clock() aware of steal time
-> + * @calc_load_update:
-> + *	sample window for global load-average calculations
-> + * @calc_load_active:
-> + *	fold any nr_active delta into a global accumulate
-> + * @hrtick_csd:
-> + *	call_single_data used to set hrtick timer state on a specific CPU
-> + * @hrtick_timer:
-> + *	HR-timer to deliver an accurate preemption tick
-> + * @rq_sched_info:
-> + *	runqueue specific latency stats
-> + * @rq_cpu_time:
-> + *	runqueue specific accumulated per-task cpu runtime
-> + * @yld_count:
-> + *	runqueue specific sys_sched_yield() stats
-> + * @sched_count:
-> + *	runqueue specific __schedule() stats
-> + * @sched_goidle:
-> + *	runqueue specific idle scheduling class stats
-> + * @ttwu_count:
-> + *	runqueue specific idle ttwu stats , both remote and local
-> + * @ttwu_local:
-> + *	ttwu count for the CPU of the rq
-> + * @wake_list:
-> + *	list which stores tasks being woken up remotely by ttwu
-> + * @idle_state:
-> + *	cpuidle state pointer of the CPU of this rq used to make a
-> + *	better decision when balancing tasks
-
-Holy moly! I appreciate the effort, but I'm thinking the targeted audience
-might prefer this under the form of comments within the struct definition...
-
->   */
->  struct rq {
->       /* runqueue lock: */
-> @@ -1136,7 +1299,7 @@ static inline u64 rq_clock_task(struct rq *rq)
->       return rq->clock_task;
->  }
->
-> -/**
-> +/*
->   * By default the decay is the default pelt decay period.
->   * The decay shift can change the decay period in
->   * multiples of 32.
+> 
+> Thomas.
+> 
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
