@@ -2,68 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7FF1C9D49
-	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 23:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7460A1C9D82
+	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 23:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726445AbgEGVc2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 May 2020 17:32:28 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:38628 "EHLO
+        id S1726638AbgEGVie (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 May 2020 17:38:34 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:38696 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726320AbgEGVc2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 May 2020 17:32:28 -0400
+        with ESMTP id S1726445AbgEGVie (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 May 2020 17:38:34 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 7CEDE803087C;
-        Thu,  7 May 2020 21:32:25 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 704A680307C1;
+        Thu,  7 May 2020 21:38:31 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fl9KsNoMQI8f; Fri,  8 May 2020 00:32:24 +0300 (MSK)
-Date:   Fri, 8 May 2020 00:32:22 +0300
+        with ESMTP id Bsl9EF3_yS18; Fri,  8 May 2020 00:38:30 +0300 (MSK)
+Date:   Fri, 8 May 2020 00:38:29 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Markos Chandras <markos.chandras@imgtec.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
         <devicetree@vger.kernel.org>, Allison Randal <allison@lohutok.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 04/20] mips: cm: Fix an invalid error code of
- INTVN_*_ERR
-Message-ID: <20200507213222.ju3qeb27ml22omej@mobilestation>
+Subject: Re: [PATCH v2 05/20] mips: cm: Add L2 ECC/parity errors reporting
+Message-ID: <20200507213829.ro7vxasi3k3t3yga@mobilestation>
 References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
  <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-5-Sergey.Semin@baikalelectronics.ru>
- <20200507111007.GE11616@alpha.franken.de>
+ <20200506174238.15385-6-Sergey.Semin@baikalelectronics.ru>
+ <20200507111753.GG11616@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200507111007.GE11616@alpha.franken.de>
+In-Reply-To: <20200507111753.GG11616@alpha.franken.de>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 07, 2020 at 01:10:07PM +0200, Thomas Bogendoerfer wrote:
-> On Wed, May 06, 2020 at 08:42:22PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+On Thu, May 07, 2020 at 01:17:53PM +0200, Thomas Bogendoerfer wrote:
+> On Wed, May 06, 2020 at 08:42:23PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
 > > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > > 
-> > Commit 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache
-> > errors") adds cm2_causes[] array with map of error type ID and
-> > pointers to the short description string. There is a mistake in
-> > the table, since according to MIPS32 manual CM2_ERROR_TYPE = {17,18}
-> > correspond to INTVN_WR_ERR and INTVN_RD_ERR, while the table
-> > claims they have {0x17,0x18} codes. This is obviously hex-dec
-> > copy-paste bug. Moreover codes {0x18 - 0x1a} indicate L2 ECC errors.
+> > According to the MIPS32 InterAptiv software manual error codes 24 - 26
+> > of CM2 indicate L2 ECC/parity error with switching to a corresponding
+> > errors info fields. This patch provides these errors parsing code,
+> > which handles the read/write uncorrectable and correctable ECC/parity
+> > errors, and prints instruction causing the fault, RAM array type, cache
+> > way/dword and syndrome associated with the faulty data.
 > > 
-> > Fixes: 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache errors")
+> > Co-developed-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 > > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > > Cc: Paul Burton <paulburton@kernel.org>
 > > Cc: Ralf Baechle <ralf@linux-mips.org>
@@ -72,8 +69,8 @@ On Thu, May 07, 2020 at 01:10:07PM +0200, Thomas Bogendoerfer wrote:
 > > Cc: linux-pm@vger.kernel.org
 > > Cc: devicetree@vger.kernel.org
 > > ---
-> >  arch/mips/kernel/mips-cm.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >  arch/mips/kernel/mips-cm.c | 62 ++++++++++++++++++++++++++++++++++++--
+> >  1 file changed, 60 insertions(+), 2 deletions(-)
 > 
 > applied to mips-next.
 
