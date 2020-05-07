@@ -2,76 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF741C889D
-	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 13:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E111C887E
+	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 13:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbgEGLnW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 May 2020 07:43:22 -0400
-Received: from elvis.franken.de ([193.175.24.41]:43591 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726575AbgEGLnW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 7 May 2020 07:43:22 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jWevq-00081e-06; Thu, 07 May 2020 13:43:14 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 903F3C0409; Thu,  7 May 2020 13:17:53 +0200 (CEST)
-Date:   Thu, 7 May 2020 13:17:53 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Sergey.Semin@baikalelectronics.ru
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 05/20] mips: cm: Add L2 ECC/parity errors reporting
-Message-ID: <20200507111753.GG11616@alpha.franken.de>
-References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
- <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-6-Sergey.Semin@baikalelectronics.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200506174238.15385-6-Sergey.Semin@baikalelectronics.ru>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+        id S1725879AbgEGLkT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 May 2020 07:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725848AbgEGLkT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 May 2020 07:40:19 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778B9C05BD43
+        for <linux-mips@vger.kernel.org>; Thu,  7 May 2020 04:40:18 -0700 (PDT)
+Received: from ramsan ([IPv6:2a02:1810:ac12:ed60:6572:4a1f:d283:9ae8])
+        by michel.telenet-ops.be with bizsmtp
+        id bngG2200E3ZRV0X06ngGdk; Thu, 07 May 2020 13:40:17 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1jWesy-0007KV-Iw; Thu, 07 May 2020 13:40:16 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1jWesy-0006NG-Gt; Thu, 07 May 2020 13:40:16 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] pinctrl: ocelot: Add platform dependency
+Date:   Thu,  7 May 2020 13:40:15 +0200
+Message-Id: <20200507114015.24461-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 06, 2020 at 08:42:23PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
-> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> According to the MIPS32 InterAptiv software manual error codes 24 - 26
-> of CM2 indicate L2 ECC/parity error with switching to a corresponding
-> errors info fields. This patch provides these errors parsing code,
-> which handles the read/write uncorrectable and correctable ECC/parity
-> errors, and prints instruction causing the fault, RAM array type, cache
-> way/dword and syndrome associated with the faulty data.
-> 
-> Co-developed-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-pm@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> ---
->  arch/mips/kernel/mips-cm.c | 62 ++++++++++++++++++++++++++++++++++++--
->  1 file changed, 60 insertions(+), 2 deletions(-)
+The Microsemi Ocelot pin controller is only present on Microsemi Ocelot
+and Jaguar2 SoCs.  Add a platform dependency to the PINCTRL_OCELOT
+config symbol, to avoid asking the user about it when configuring a
+kernel without Ocelot or Jaguar2 support.
 
-applied to mips-next.
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/pinctrl/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas.
-
+diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+index f0ce4ce3e0f52456..bed67c08a0892240 100644
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+@@ -394,8 +394,8 @@ config PINCTRL_RK805
+ 
+ config PINCTRL_OCELOT
+ 	bool "Pinctrl driver for the Microsemi Ocelot and Jaguar2 SoCs"
+-	depends on OF
+-	depends on HAS_IOMEM
++	depends on OF && HAS_IOMEM
++	depends on MSCC_OCELOT || COMPILE_TEST
+ 	select GPIOLIB
+ 	select GPIOLIB_IRQCHIP
+ 	select GENERIC_PINCONF
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.17.1
+
