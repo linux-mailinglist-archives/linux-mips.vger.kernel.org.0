@@ -2,38 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 174291C9EE7
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 01:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8F11C9EEA
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 01:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbgEGXHS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 May 2020 19:07:18 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:39192 "EHLO
+        id S1727826AbgEGXHW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 May 2020 19:07:22 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:39234 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726531AbgEGXHS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 May 2020 19:07:18 -0400
+        with ESMTP id S1726531AbgEGXHW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 May 2020 19:07:22 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 12EEF803087B;
-        Thu,  7 May 2020 23:07:15 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 51BF4803087C;
+        Thu,  7 May 2020 23:07:18 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id molr0_Og1NvB; Fri,  8 May 2020 02:07:13 +0300 (MSK)
+        with ESMTP id RgeR1JaAaddZ; Fri,  8 May 2020 02:07:17 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
+        Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Rob Herring <robh+dt@kernel.org>,
         Olof Johansson <olof@lixom.net>,
         Boris Brezillon <bbrezillon@kernel.org>,
         Paul Cercueil <paul@crapouillou.net>,
@@ -41,11 +34,12 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
         <linux-mips@vger.kernel.org>, <soc@kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 0/2] memory: Add Baikal-T1 L2-cache driver
-Date:   Fri, 8 May 2020 02:07:02 +0300
-Message-ID: <20200507230705.6468-1-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200306130731.938808030702@mail.baikalelectronics.ru>
+Subject: [PATCH v2 1/2] dt-bindings: memory: Add Baikal-T1 L2-cache Control Block binding
+Date:   Fri, 8 May 2020 02:07:03 +0300
+Message-ID: <20200507230705.6468-2-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200507230705.6468-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200306130731.938808030702@mail.baikalelectronics.ru>
+ <20200507230705.6468-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -55,50 +49,16 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Aside from PCIe/SATA/DDR/I2C/CPU-reboot specific settings the Baikal-T1
-system controller provides a MIPS P5600 CM2 L2-cache tuning block.
-It is responsible for the setting up the Tag/Data/WS L2-to-RAM latencies.
-This small patchset provides a driver and DT-schema-based binding for the
-described device. So that the latencies can be tuned up by means of
-dedicated DT properties and sysfs nodes.
-
-This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
-0e698dfa2822 ("Linux 5.7-rc4")
-tag: v5.7-rc4
-
-Note initially the driver was a part of the patchset created to reside in
-the kernel soc subsystem. But after a short discussion with Arnd:
-https://lkml.org/lkml/2020/3/6/422
-we decided to move it here.
-
-New vendor prefix will be added in the framework of the next patchset:
-https://lkml.org/lkml/2020/5/6/1047
-
-Changelog v2:
-- Fix some commit message and Kconfig help text spelling.
-- Move the driver to the memory subsystem.
-- Assign dual GPL/BSD license to the DT binding.
-- Use single lined copyright header in the binding.
-- Discard reg property and syscon compatible string.
-- Move "allOf" restrictions to the root level of the properties.
-- The DT node is supposed to be a child of the Baikal-T1 system controller
-  node. So regmap will be fetched from there.
-- Use generic FIELD_{GET,PREP} macro.
-- Remove probe-status info string printout.
-- Since the driver depends on the OF config we can remove of_match_ptr()
-  macro utilization.
+There is a single register provided by the SoC system controller,
+which can be used to tune the L2-cache RAM up. It only provides a way
+to change the L2-RAM access latencies. So aside from "be,bt1-l2-ctl"
+compatible string the device node can be optionally equipped with the
+properties of Tag/Data/WS latencies.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
-Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
-Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
-Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
 Cc: Paul Burton <paulburton@kernel.org>
 Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Rob Herring <robh+dt@kernel.org>
 Cc: Olof Johansson <olof@lixom.net>
 Cc: Boris Brezillon <bbrezillon@kernel.org>
 Cc: Paul Cercueil <paul@crapouillou.net>
@@ -106,21 +66,87 @@ Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
 Cc: linux-mips@vger.kernel.org
 Cc: soc@kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
 
-Serge Semin (2):
-  dt-bindings: memory: Add Baikal-T1 L2-cache Control Block binding
-  memory: Add Baikal-T1 L2-cache Control Block driver
+---
 
- .../memory-controllers/baikal,bt1-l2-ctl.yaml |  59 ++++
- drivers/memory/Kconfig                        |  11 +
- drivers/memory/Makefile                       |   1 +
- drivers/memory/bt1-l2-ctl.c                   | 322 ++++++++++++++++++
- 4 files changed, 393 insertions(+)
+Changelog v2:
+- Move driver to the memory subsystem.
+- Use dual GPL/BSD license.
+- Use single lined copyright header.
+- Move "allOf" restrictions to the root level of the properties.
+- Discard syscon compatible string and reg property.
+- The DT node is supposed to be a child of the Baikal-T1 system controller
+  node.
+---
+ .../memory-controllers/baikal,bt1-l2-ctl.yaml | 59 +++++++++++++++++++
+ 1 file changed, 59 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/memory-controllers/baikal,bt1-l2-ctl.yaml
- create mode 100644 drivers/memory/bt1-l2-ctl.c
 
+diff --git a/Documentation/devicetree/bindings/memory-controllers/baikal,bt1-l2-ctl.yaml b/Documentation/devicetree/bindings/memory-controllers/baikal,bt1-l2-ctl.yaml
+new file mode 100644
+index 000000000000..263f0cdab4e6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/memory-controllers/baikal,bt1-l2-ctl.yaml
+@@ -0,0 +1,59 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/memory-controllers/baikal,bt1-l2-ctl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Baikal-T1 L2-cache Control Block
++
++maintainers:
++  - Serge Semin <fancer.lancer@gmail.com>
++
++description: |
++  By means of the System Controller Baikal-T1 SoC exposes a few settings to
++  tune the MIPS P5600 CM2 L2 cache performance up. In particular it's possible
++  to change the Tag, Data and Way-select RAM access latencies. Baikal-T1
++  L2-cache controller block is responsible for the tuning. Its DT node is
++  supposed to be a child of the system controller.
++
++properties:
++  compatible:
++    const: baikal,bt1-l2-ctl
++
++  baikal,l2-ws-latency:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Cycles of latency for Way-select RAM accesses
++    default: 0
++    minimum: 0
++    maximum: 3
++
++  baikal,l2-tag-latency:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Cycles of latency for Tag RAM accesses
++    default: 0
++    minimum: 0
++    maximum: 3
++
++  baikal,l2-data-latency:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Cycles of latency for Data RAM accesses
++    default: 1
++    minimum: 0
++    maximum: 3
++
++additionalProperties: false
++
++required:
++  - compatible
++
++examples:
++  - |
++    l2_ctl {
++      compatible = "baikal,bt1-l2-ctl";
++
++      baikal,l2-ws-latency = <0>;
++      baikal,l2-tag-latency = <0>;
++      baikal,l2-data-latency = <1>;
++    };
++...
 -- 
 2.25.1
 
