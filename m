@@ -2,100 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8D51C9A99
-	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 21:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EE51C9CB7
+	for <lists+linux-mips@lfdr.de>; Thu,  7 May 2020 22:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726641AbgEGTNt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 May 2020 15:13:49 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:38258 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726558AbgEGTNt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 7 May 2020 15:13:49 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 590F2803087B;
-        Thu,  7 May 2020 19:13:40 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 7gxrh3JYj9Az; Thu,  7 May 2020 22:13:38 +0300 (MSK)
-Date:   Thu, 7 May 2020 22:13:37 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Zhou Yanjie <zhouyanjie@zoho.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 11/20] mips: MAAR: Use more precise address mask
-Message-ID: <20200507191337.la6z476myszqethj@mobilestation>
-References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
- <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-12-Sergey.Semin@baikalelectronics.ru>
- <20200507110951.GD11616@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200507110951.GD11616@alpha.franken.de>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+        id S1726767AbgEGUxC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 May 2020 16:53:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34952 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726218AbgEGUxC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 7 May 2020 16:53:02 -0400
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E2E7920735;
+        Thu,  7 May 2020 20:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588884780;
+        bh=TyVMubmSwnb6HspI26I671gs2+xz/BioghUujIiqGH8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pLECSGx/bjY/e6dPZHg/pogKtFknD7CQxEbYnTijPvo31G65TH5qkje/0482SYoYN
+         DUxu9XSArBxL1RHMChRsQBx2Ke74CL6dm6TMRGPJJfX7xkDXTBpZl44fWyvfgMqhU0
+         epsvy3zKnV8VlRwcWKCyI4E8L4mB8LcbloZDf/RA=
+Date:   Thu, 7 May 2020 13:52:58 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     ira.weiny@intel.com
+Cc:     linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, dri-devel@lists.freedesktop.org,
+        Christian Koenig <christian.koenig@amd.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH V3 13/15] parisc/kmap: Remove duplicate kmap code
+Message-Id: <20200507135258.f430182578c0d63b7488916e@linux-foundation.org>
+In-Reply-To: <20200507150004.1423069-14-ira.weiny@intel.com>
+References: <20200507150004.1423069-1-ira.weiny@intel.com>
+        <20200507150004.1423069-14-ira.weiny@intel.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 07, 2020 at 01:09:51PM +0200, Thomas Bogendoerfer wrote:
-> On Wed, May 06, 2020 at 08:42:29PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
-> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > Indeed according to the P5600/P6000 manual the MAAR pair register
-> > address field either takes [12:31] bits for 32-bits non-XPA systems
-> > and [12:35] otherwise. In any case the current address mask is just
-> > wrong for 64-bit and 32-bits XPA chips. So lets extend it to 39-bits
-> > value. This shall cover the 64-bits architecture and systems with XPA
-> > enabled, and won't cause any problem for non-XPA 32-bit systems, since
-> > the value will be just truncated when written to the 32-bits register.
+On Thu,  7 May 2020 08:00:01 -0700 ira.weiny@intel.com wrote:
+
+> parisc reimplements the kmap calls except to flush it's dcache.  This is
+> arguably an abuse of kmap but regardless it is messy and confusing.
 > 
-> according to MIPS32 Priveleged Resoure Architecture Rev. 6.02
-> ADDR spans from bit 12 to bit 55. So your patch fits only for P5600.
+> Remove the duplicate code and have parisc define
+> ARCH_HAS_FLUSH_ON_KUNMAP for a kunmap_flush_on_unmap() architecture
+> specific call to flush the cache.
 
-> Does the wider mask cause any problems ?
+checkpatch says:
 
-No, it won't. Bits written to the [40:62] range will be just ignored,
-while reading from there should return zeros. Setting GENMASK_ULL(55, 12)
-would also work. Though this solution is a bit workarounding because
-MIPS_MAAR_ADDR wouldn't reflect the real mask of the ADDR field. Something
-like the next macro would work better:
+ERROR: #define of 'ARCH_HAS_FLUSH_ON_KUNMAP' is wrong - use Kconfig variables or standard guards instead
+#69: FILE: arch/parisc/include/asm/cacheflush.h:103:
++#define ARCH_HAS_FLUSH_ON_KUNMAP
 
-+#define MIPS_MAAR_ADDR							\
-+({									\
-+	u64 __mask;							\
-+									\
-+	if (cpu_has_lpa && read_c0_pagegrain() & PG_ELPA) {		\
-+		__mask = GENMASK_ULL(55, 12);				\
-+	else								\
-+		__mask = GENMASK_ULL(31, 12);				\
-+									\
-+	__mask;								\
-+})
+which is fair enough, I guess.  More conventional would be
 
-What do you think? What is better: the macro above or setting
-GENMASK_ULL(55, 12)?
+arch/parisc/include/asm/cacheflush.h:
 
-BTW I've just figured out, that since XPA is currently only supported by
-kernels with CPU_MIPS32x config enabled, then only MIPS32 may have extended
-physical addressing of 2^60 bytes if CONFIG_XPA is enabled. Generic MIPS64
-doesn't support the extended phys addressing so only 2^36 bytes are available
-on such platforms. (Loongson64 doesn't count, the platform code sets the
-PG_ELPA bit manually in kernel-entry-init.h)
+static inline void kunmap_flush_on_unmap(void *addr)
+{
+	...
+}
+#define kunmap_flush_on_unmap kunmap_flush_on_unmap
 
--Sergey
 
-> 
-> Thomas.
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+include/linux/highmem.h:
+
+#ifndef kunmap_flush_on_unmap
+static inline void kunmap_flush_on_unmap(void *addr)
+{
+}
+#define kunmap_flush_on_unmap kunmap_flush_on_unmap
+#endif
+
+
+static inline void kunmap_atomic_high(void *addr)
+{
+	/* Mostly nothing to do in the CONFIG_HIGHMEM=n case as kunmap_atomic()
+	 * handles re-enabling faults + preemption */
+	kunmap_flush_on_unmap(addr);
+}
+
+
+but I don't really think it's worth bothering changing it.	
+
+(Ditto patch 3/15)
