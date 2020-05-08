@@ -2,340 +2,336 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD391CA9B6
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 13:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2581CA9C2
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 13:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727106AbgEHLfY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 07:35:24 -0400
-Received: from vultr.net.flygoat.com ([149.28.68.211]:33128 "EHLO
-        vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726690AbgEHLfY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 07:35:24 -0400
-Received: from localhost.localdomain (unknown [142.147.94.151])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 12B2D20CE7;
-        Fri,  8 May 2020 11:35:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1588937723; bh=SGBfa2eJmecsiBLSL68kPrqdaswa5FzCvQdpVidpcYg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DgvdMkbPjNBzVXDGfQfEpl/Aq0/EGKEZrBYz44+1UdidIJYbd/9cCFxJkU9V9FsGp
-         M0Pd8lNW8ConcvqXt2Y1wH+n4Ob6f01Q9q2cmAyMJrlugEh264rqIGvbD6g95qGXNe
-         GWXNwHXxKl4Epv1PDaY9EtR/J/LIl/nMUInbhk/lbM8p8LBDMTOL/bMCNKQbfTyIyl
-         aqOXCmmIOQIc0WqA4Niokdj/C6fkmmY3Rplh/DadyxrveZgVTpS4gsYn6W2dQl9rcM
-         +bE2oOtDTvq8uFNKPDkt8btrH8I9dXFyXBviff/KV0pJO3dIZWLdX1ZSnQJQjMENxG
-         UBFGuDo4WSebA==
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     maz@kernel.org
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S1726756AbgEHLh4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 07:37:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35020 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726616AbgEHLh4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 May 2020 07:37:56 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C197720870;
+        Fri,  8 May 2020 11:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588937874;
+        bh=k8fC3Rc3/kU/7pCZDuV9/xXsQEEdbFVMU4be5d0n8P8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YaBZkD0TliGk20MveuXOFenI+PttMo9PUAlCOUTShriIDrFc4V9p+L58Eg6nhD37N
+         a2CBBgNw5DsipnEwV3aUTjfv0XdxZdxumFGBgDFMBjgCeciiX7R/+3pERw109QGiVr
+         jp3igJokxRJFTEWp+V4+9GlMidZbhxpOJZFZEoOo=
+Date:   Fri, 8 May 2020 12:37:51 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Paul Burton <paulburton@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v8 5/5] MIPS: Loongson64: Switch to generic PCI driver
-Date:   Fri,  8 May 2020 19:34:05 +0800
-Message-Id: <20200508113414.3091532-5-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.26.0.rc2
-In-Reply-To: <20200508113414.3091532-1-jiaxun.yang@flygoat.com>
-References: <20200427060551.1372591-1-jiaxun.yang@flygoat.com>
- <20200508113414.3091532-1-jiaxun.yang@flygoat.com>
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
+Message-ID: <20200508113751.GD4820@sirena.org.uk>
+References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eqp4TxRxnD4KrmFZ"
+Content-Disposition: inline
+In-Reply-To: <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
+X-Cookie: Give him an evasive answer.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-We can now enable generic PCI driver in Kconfig, and remove legacy
-PCI driver code.
 
-Radeon vbios quirk is moved to the platform folder to fit the
-new structure.
+--eqp4TxRxnD4KrmFZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/Kconfig                  |   1 +
- arch/mips/loongson64/Makefile      |   2 +-
- arch/mips/loongson64/vbios_quirk.c |  29 ++++++++
- arch/mips/pci/Makefile             |   1 -
- arch/mips/pci/fixup-loongson3.c    |  71 ------------------
- arch/mips/pci/ops-loongson3.c      | 116 -----------------------------
- 6 files changed, 31 insertions(+), 189 deletions(-)
- create mode 100644 arch/mips/loongson64/vbios_quirk.c
- delete mode 100644 arch/mips/pci/fixup-loongson3.c
- delete mode 100644 arch/mips/pci/ops-loongson3.c
+On Fri, May 08, 2020 at 12:36:21PM +0300, Serge Semin wrote:
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 0519ca9f00f9..7a4fcc4ade1f 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -480,6 +480,7 @@ config MACH_LOONGSON64
- 	select IRQ_MIPS_CPU
- 	select NR_CPUS_DEFAULT_64
- 	select USE_GENERIC_EARLY_PRINTK_8250
-+	select PCI_DRIVERS_GENERIC
- 	select SYS_HAS_CPU_LOONGSON64
- 	select SYS_HAS_EARLY_PRINTK
- 	select SYS_SUPPORTS_SMP
-diff --git a/arch/mips/loongson64/Makefile b/arch/mips/loongson64/Makefile
-index 6f3c2b47f66f..6f81b822aeae 100644
---- a/arch/mips/loongson64/Makefile
-+++ b/arch/mips/loongson64/Makefile
-@@ -8,5 +8,5 @@ obj-$(CONFIG_MACH_LOONGSON64) += cop2-ex.o platform.o dma.o \
- obj-$(CONFIG_SMP)	+= smp.o
- obj-$(CONFIG_NUMA)	+= numa.o
- obj-$(CONFIG_RS780_HPET) += hpet.o
--obj-$(CONFIG_PCI) += pci.o
- obj-$(CONFIG_SUSPEND) += pm.o
-+obj-$(CONFIG_PCI_QUIRKS) += vbios_quirk.o
-diff --git a/arch/mips/loongson64/vbios_quirk.c b/arch/mips/loongson64/vbios_quirk.c
-new file mode 100644
-index 000000000000..1f0a462aeddd
---- /dev/null
-+++ b/arch/mips/loongson64/vbios_quirk.c
-@@ -0,0 +1,29 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/pci.h>
-+#include <loongson.h>
-+
-+static void pci_fixup_radeon(struct pci_dev *pdev)
-+{
-+	struct resource *res = &pdev->resource[PCI_ROM_RESOURCE];
-+
-+	if (res->start)
-+		return;
-+
-+	if (!loongson_sysconf.vgabios_addr)
-+		return;
-+
-+	pci_disable_rom(pdev);
-+	if (res->parent)
-+		release_resource(res);
-+
-+	res->start = virt_to_phys((void *) loongson_sysconf.vgabios_addr);
-+	res->end   = res->start + 256*1024 - 1;
-+	res->flags = IORESOURCE_MEM | IORESOURCE_ROM_SHADOW |
-+		     IORESOURCE_PCI_FIXED;
-+
-+	dev_info(&pdev->dev, "BAR %d: assigned %pR for Radeon ROM\n",
-+		 PCI_ROM_RESOURCE, res);
-+}
-+DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_ATI, 0x9615,
-+				PCI_CLASS_DISPLAY_VGA, 8, pci_fixup_radeon);
-diff --git a/arch/mips/pci/Makefile b/arch/mips/pci/Makefile
-index 342ce10ef593..438f10955d89 100644
---- a/arch/mips/pci/Makefile
-+++ b/arch/mips/pci/Makefile
-@@ -35,7 +35,6 @@ obj-$(CONFIG_LASAT)		+= pci-lasat.o
- obj-$(CONFIG_MIPS_COBALT)	+= fixup-cobalt.o
- obj-$(CONFIG_LEMOTE_FULOONG2E)	+= fixup-fuloong2e.o ops-loongson2.o
- obj-$(CONFIG_LEMOTE_MACH2F)	+= fixup-lemote2f.o ops-loongson2.o
--obj-$(CONFIG_MACH_LOONGSON64)	+= fixup-loongson3.o ops-loongson3.o
- obj-$(CONFIG_MIPS_MALTA)	+= fixup-malta.o pci-malta.o
- obj-$(CONFIG_PMC_MSP7120_GW)	+= fixup-pmcmsp.o ops-pmcmsp.o
- obj-$(CONFIG_PMC_MSP7120_EVAL)	+= fixup-pmcmsp.o ops-pmcmsp.o
-diff --git a/arch/mips/pci/fixup-loongson3.c b/arch/mips/pci/fixup-loongson3.c
-deleted file mode 100644
-index 8a741c2c6685..000000000000
---- a/arch/mips/pci/fixup-loongson3.c
-+++ /dev/null
-@@ -1,71 +0,0 @@
--/*
-- * fixup-loongson3.c
-- *
-- * Copyright (C) 2012 Lemote, Inc.
-- * Author: Xiang Yu, xiangy@lemote.com
-- *         Chen Huacai, chenhc@lemote.com
-- *
-- * This program is free software; you can redistribute  it and/or modify it
-- * under  the terms of  the GNU General  Public License as published by the
-- * Free Software Foundation;  either version 2 of the  License, or (at your
-- * option) any later version.
-- *
-- * THIS  SOFTWARE  IS PROVIDED   ``AS  IS'' AND   ANY  EXPRESS OR IMPLIED
-- * WARRANTIES,   INCLUDING, BUT NOT  LIMITED  TO, THE IMPLIED WARRANTIES OF
-- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN
-- * NO  EVENT  SHALL   THE AUTHOR  BE    LIABLE FOR ANY   DIRECT, INDIRECT,
-- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-- * NOT LIMITED   TO, PROCUREMENT OF  SUBSTITUTE GOODS  OR SERVICES; LOSS OF
-- * USE, DATA,  OR PROFITS; OR  BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-- * ANY THEORY OF LIABILITY, WHETHER IN  CONTRACT, STRICT LIABILITY, OR TORT
-- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-- *
-- */
--
--#include <linux/pci.h>
--#include <boot_param.h>
--
--static void print_fixup_info(const struct pci_dev *pdev)
--{
--	dev_info(&pdev->dev, "Device %x:%x, irq %d\n",
--			pdev->vendor, pdev->device, pdev->irq);
--}
--
--int pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
--{
--	print_fixup_info(dev);
--	return dev->irq;
--}
--
--static void pci_fixup_radeon(struct pci_dev *pdev)
--{
--	struct resource *res = &pdev->resource[PCI_ROM_RESOURCE];
--
--	if (res->start)
--		return;
--
--	if (!loongson_sysconf.vgabios_addr)
--		return;
--
--	pci_disable_rom(pdev);
--	if (res->parent)
--		release_resource(res);
--
--	res->start = virt_to_phys((void *) loongson_sysconf.vgabios_addr);
--	res->end   = res->start + 256*1024 - 1;
--	res->flags = IORESOURCE_MEM | IORESOURCE_ROM_SHADOW |
--		     IORESOURCE_PCI_FIXED;
--
--	dev_info(&pdev->dev, "BAR %d: assigned %pR for Radeon ROM\n",
--		 PCI_ROM_RESOURCE, res);
--}
--
--DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_ATI, PCI_ANY_ID,
--				PCI_CLASS_DISPLAY_VGA, 8, pci_fixup_radeon);
--
--/* Do platform specific device initialization at pci_enable_device() time */
--int pcibios_plat_dev_init(struct pci_dev *dev)
--{
--	return 0;
--}
-diff --git a/arch/mips/pci/ops-loongson3.c b/arch/mips/pci/ops-loongson3.c
-deleted file mode 100644
-index 2f6ad36bdea6..000000000000
---- a/arch/mips/pci/ops-loongson3.c
-+++ /dev/null
-@@ -1,116 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include <linux/types.h>
--#include <linux/pci.h>
--#include <linux/kernel.h>
--
--#include <asm/mips-boards/bonito64.h>
--
--#include <loongson.h>
--
--#define PCI_ACCESS_READ  0
--#define PCI_ACCESS_WRITE 1
--
--#define HT1LO_PCICFG_BASE      0x1a000000
--#define HT1LO_PCICFG_BASE_TP1  0x1b000000
--
--static int loongson3_pci_config_access(unsigned char access_type,
--		struct pci_bus *bus, unsigned int devfn,
--		int where, u32 *data)
--{
--	unsigned char busnum = bus->number;
--	int function = PCI_FUNC(devfn);
--	int device = PCI_SLOT(devfn);
--	int reg = where & ~3;
--	void *addrp;
--	u64 addr;
--
--	if (where < PCI_CFG_SPACE_SIZE) { /* standard config */
--		addr = (busnum << 16) | (device << 11) | (function << 8) | reg;
--		if (busnum == 0) {
--			if (device > 31)
--				return PCIBIOS_DEVICE_NOT_FOUND;
--			addrp = (void *)TO_UNCAC(HT1LO_PCICFG_BASE | addr);
--		} else {
--			addrp = (void *)TO_UNCAC(HT1LO_PCICFG_BASE_TP1 | addr);
--		}
--	} else if (where < PCI_CFG_SPACE_EXP_SIZE) {  /* extended config */
--		struct pci_dev *rootdev;
--
--		rootdev = pci_get_domain_bus_and_slot(0, 0, 0);
--		if (!rootdev)
--			return PCIBIOS_DEVICE_NOT_FOUND;
--
--		addr = pci_resource_start(rootdev, 3);
--		if (!addr)
--			return PCIBIOS_DEVICE_NOT_FOUND;
--
--		addr |= busnum << 20 | device << 15 | function << 12 | reg;
--		addrp = (void *)TO_UNCAC(addr);
--	} else {
--		return PCIBIOS_DEVICE_NOT_FOUND;
--	}
--
--	if (access_type == PCI_ACCESS_WRITE)
--		writel(*data, addrp);
--	else {
--		*data = readl(addrp);
--		if (*data == 0xffffffff) {
--			*data = -1;
--			return PCIBIOS_DEVICE_NOT_FOUND;
--		}
--	}
--	return PCIBIOS_SUCCESSFUL;
--}
--
--static int loongson3_pci_pcibios_read(struct pci_bus *bus, unsigned int devfn,
--				 int where, int size, u32 *val)
--{
--	u32 data = 0;
--	int ret = loongson3_pci_config_access(PCI_ACCESS_READ,
--			bus, devfn, where, &data);
--
--	if (ret != PCIBIOS_SUCCESSFUL)
--		return ret;
--
--	if (size == 1)
--		*val = (data >> ((where & 3) << 3)) & 0xff;
--	else if (size == 2)
--		*val = (data >> ((where & 3) << 3)) & 0xffff;
--	else
--		*val = data;
--
--	return PCIBIOS_SUCCESSFUL;
--}
--
--static int loongson3_pci_pcibios_write(struct pci_bus *bus, unsigned int devfn,
--				  int where, int size, u32 val)
--{
--	u32 data = 0;
--	int ret;
--
--	if (size == 4)
--		data = val;
--	else {
--		ret = loongson3_pci_config_access(PCI_ACCESS_READ,
--				bus, devfn, where, &data);
--		if (ret != PCIBIOS_SUCCESSFUL)
--			return ret;
--
--		if (size == 1)
--			data = (data & ~(0xff << ((where & 3) << 3))) |
--			    (val << ((where & 3) << 3));
--		else if (size == 2)
--			data = (data & ~(0xffff << ((where & 3) << 3))) |
--			    (val << ((where & 3) << 3));
--	}
--
--	ret = loongson3_pci_config_access(PCI_ACCESS_WRITE,
--			bus, devfn, where, &data);
--
--	return ret;
--}
--
--struct pci_ops loongson_pci_ops = {
--	.read = loongson3_pci_pcibios_read,
--	.write = loongson3_pci_pcibios_write
--};
--- 
-2.26.0.rc2
+Your CC list on this series is *very* wide - are you sure that this is
+relevant to everyone you're sending things to?  Kernel developers often
+get a lot of mail meaning that extra mail can become a bit overwhelming
+and cause things to get lost in the noise.
 
+> This SPI-controller is a part of the Baikal-T1 System Controller and
+> is based on the DW APB SSI IP-core, but with very limited resources:
+> no IRQ, no DMA, only a single native chip-select and just 8 bytes Tx/Rx
+> FIFO available. In order to provide a transparent initial boot code
+> execution this controller is also utilized by an vendor-specific block,
+> which provides an CS0 SPI flash direct mapping interface. Since both
+> direct mapping and SPI controller normal utilization are mutual exclusive
+> only a one of these interfaces can be used to access an external SPI
+> slave device. Taking into account the peculiarities of the controller
+> registers and physically mapped SPI flash access, very limited resources
+> and seeing the normal usecase of the controller is to access an external
+> SPI-nor flash, we decided to create a dedicated SPI driver for it.
+
+My overall impression reading this is that there could be a lot more
+reliance on both generic functionality and as Andy suggested the spi-dw
+driver - the headers seem easy for example.  As far as I can tell the
+main things this is adding compared to spi-dw are the dirmap code and
+the IRQ disabling around the PIO on the FIFO both of which seem like
+relatively small additions which it should be possible to accomodate
+within spi-dw.  For example the driver could have multiple transfer
+functions and pick a different one with the interrupt disabling when
+running on this hardware.
+
+> --- /dev/null
+> +++ b/drivers/spi/spi-bt1-sys.c
+> @@ -0,0 +1,873 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2020 BAIKAL ELECTRONICS, JSC
+
+Please make the entire comment a C++ one so things look a bit cleaner
+and more intentional.
+
+> +	writel(BIT(req->cs), bs->regs + BC_SPI_SER);
+> +	if (req->cs_gpiod) {
+> +		gpiod_set_value_cansleep(req->cs_gpiod,
+> +					 !!(bs->cfg.mode & SPI_CS_HIGH));
+
+If you have a GPIO chip select you should just let the core manage it
+through cs_gpiod rather than open coding.
+
+> +	} else if (!req->dirmap) {
+> +		local_irq_save(bs->cfg.flags);
+> +		preempt_disable();
+> +	}
+
+This is obviously not great, especially for larger transfers.  It would
+be a lot easier to review and manage this if the IRQ disabling was done
+around the transfers in a single function rather than separately, that
+way everything is next to each other and it's clearer that we're doing
+this for the minimum time and didn't miss anything.  Right now it's hard
+to tell if everything is joined up.
+
+> +static void bs_update_cfg(struct bt1_spi *bs, struct spi_transfer *xfer)
+> +{
+
+This has exactly one caller, perhaps it could just be inlined there?  I
+think this applies to some of the other internal functions.
+
+> +static int bs_check_status(struct bt1_spi *bs)
+> +{
+
+It's not obvious from the name that this function will busy wait rather
+than just reading some status registers.
+
+> +	/*
+> +	 * Spin around the BUSY-state bit waiting for the controller to finish
+> +	 * all the requested IO-operations.
+> +	 */
+> +	do {
+> +		data =3D readl(bs->regs + BC_SPI_SR);
+> +	} while ((data & BC_SPI_SR_BUSY) || !(data & BC_SPI_SR_TFE));
+
+We could use a timeout or something here in case something goes wrong,
+as things stand we could end up spinning for ever.
+
+It's also not clear to me why we only check for over/underrun before we
+do the busy wait, especially a RX overrun could happen and cause us to
+loose data while things are finishing up.
+
+> +	while (txlen || rxlen) {
+> +		cnt =3D BC_SPI_FIFO_LVL - __raw_readl(bs->regs + BC_SPI_TXFLR);
+> +		cnt =3D min(cnt, txlen);
+> +		txlen -=3D cnt;
+> +		while (cnt--) {
+> +			data =3D src ? *src++ : 0xFF;
+> +			__raw_writel(data, bs->regs + BC_SPI_DR);
+> +		}
+
+It's more typical to write zeros when there's no data.
+
+> +static int bs_exec_mem_op(struct spi_mem *mem,
+> +			  const struct spi_mem_op *op)
+> +{
+
+It's not clear to me that this hardware actually supports spi_mem in
+hardware? =20
+
+> +	if (!bs->cfg.cs_gpiod) {
+> +		bs_push_bytes(bs, cmd, len);
+> +
+> +		if (op->data.dir =3D=3D SPI_MEM_DATA_IN)
+> +			ret =3D bs_pull_bytes(bs, op->data.buf.in,
+> +					    op->data.nbytes);
+> +	} else {
+> +		bs_pp_bytes(bs, cmd, NULL, len);
+> +
+> +		if (op->data.dir =3D=3D SPI_MEM_DATA_IN)
+> +			bs_pp_bytes(bs, NULL, op->data.buf.in,
+> +				    op->data.nbytes);
+> +	}
+
+The actual transfers here are done using the same PIO functions as
+everything else as far as I can see which makes me wonder what this
+spi_mem implementation is adding over the standard SPI flash support.
+I've not checked but if we need this to get the dirmap support to kick
+in then we should fix this by making the core not have that requirement.
+
+> +static void bs_copy_from_map(void *to, void __iomem *from, size_t len)
+> +{
+> +	size_t shift, chunk;
+> +	u32 data;
+
+This feels like something that is likely to be suitable for a generic
+implementation?  Indeed I'd kind of expect that the architecture
+memcpy_to/fromio() would try to copy aligned blocks since it's usually
+going to perform better (which I assume is why this function is doing
+it).
+
+> +	if (shift) {
+> +		chunk =3D min_t(size_t, 4 - shift, len);
+> +		data =3D readl_relaxed(from - shift);
+> +		memcpy(to, &data + shift, chunk);
+
+It's a little unclear what we're actually doing though - we read a data
+address from the hardware?
+
+> +static int bs_prepare_message(struct spi_controller *ctrl,
+> +			      struct spi_message *msg)
+> +{
+> +	struct bt1_spi *bs =3D spi_controller_get_devdata(ctrl);
+> +	struct spi_transfer *xfer;
+> +	struct bt1_spi_cfg req;
+> +
+> +	/*
+> +	 * Currently the driver doesn't support the generic messages-based
+> +	 * SPI interface with pure native chip-select signal. This is due
+> +	 * to the automatic native chip-select toggle peculiarity described
+> +	 * in the comment of the bs_set_cfg() method. Alas we can't use the
+> +	 * IRQ-disable-based boost approach here since the native queue-based
+> +	 * SPI messages transfer method can sleep waiting for the
+> +	 * transfers/CS-change delays.
+> +	 */
+> +	if (!msg->spi->cs_gpiod)
+> +		return -ENOTSUPP;
+
+This seems a bit much - we can validate that the message doesn't contain
+any delays (which is going to be the overwhelming majority of devices)
+or multiple transfers and reject just those transfers we can't support.
+Multiple transfers are an issue with this hardware but you could
+implement support in the core for coalescing them into single transfers,
+this isn't the only hardware with automatic chip select handling that
+can't cope with scatter/gather so it would be a useful thing to have.
+
+> +	/*
+> +	 * Collect the controller configuration common for all transfers and
+> +	 * specific to the very first one.
+> +	 */
+> +	xfer =3D list_first_entry(&msg->transfers, typeof(*xfer), transfer_list=
+);
+> +	req.dirmap =3D false;
+> +	req.cs =3D msg->spi->chip_select;
+> +	req.cs_gpiod =3D msg->spi->cs_gpiod;
+> +	req.flags =3D 0;
+> +	req.mode =3D msg->spi->mode;
+> +	req.tmode =3D BC_SPI_CTRL0_TMOD_TR;
+> +	req.ndf =3D 0;
+> +	req.dfs =3D xfer->bits_per_word;
+> +	req.freq =3D xfer->speed_hz;
+> +
+> +	bs_set_cfg(bs, &req);
+
+It's not clear to me what the benefit is in this indirection through
+req?
+
+> +static int bs_transfer_one(struct spi_controller *ctrl, struct spi_devic=
+e *spi,
+> +			   struct spi_transfer *xfer)
+> +{
+> +	struct bt1_spi *bs =3D spi_controller_get_devdata(ctrl);
+> +
+> +	bs_update_cfg(bs, xfer);
+> +
+> +	if (bs->cfg.dfs <=3D 8)
+> +		bs_pp_bytes(bs, xfer->tx_buf, xfer->rx_buf, xfer->len);
+> +	else
+> +		bs_pp_words(bs, xfer->tx_buf, xfer->rx_buf, xfer->len / 2);
+
+This will have issues with transfers with an odd number of bytes won't
+it?
+
+> +static struct bt1_spi *bs_create_data(struct platform_device *pdev)
+> +{
+> +	struct device *dev =3D &pdev->dev;
+> +	struct bt1_spi *bs;
+
+As with some of the other functions this has exactly one caller and
+barely any content in it, just inline it.
+
+> +	bs->dev =3D dev;
+> +	bs->pdev =3D pdev;
+
+Do you really need to separately save these (and is there a context
+where you have the driver data but not the device anyway)?
+
+> +#ifdef CONFIG_DEBUG_FS
+> +
+> +#define BC_SPI_DBGFS_REG(_name, _off)	\
+> +{					\
+> +	.name =3D _name,			\
+> +	.offset =3D _off			\
+> +}
+
+Perhaps consider regmap_mmio?
+
+> +static int bs_dbgfs_open_regs(struct inode *inode, struct file *file)
+> +{
+> +	struct bt1_spi *bs =3D inode->i_private;
+> +	int ret;
+> +
+> +	ret =3D single_open(file, bs_dbgfs_show_regs, bs);
+> +	if (!ret) {
+> +		mutex_lock(&bs->ctrl->io_mutex);
+
+Holding a mutex over the entire time that a file is open is not good,
+it's also not clear to me what this mutex is supposed to be protecting
+given that it's only referenced in these debugfs functions.
+
+> +		writel(BC_CSR_SPI_RDA, bs->regs + BC_CSR);
+
+Whatever this write is doing we never seem to undo it?
+
+--eqp4TxRxnD4KrmFZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl61RI8ACgkQJNaLcl1U
+h9D1Uwf/TBmBhHo7fKNiQCxqbOOc004sw/O9ZVtPw7gJLrVT+11j/IDggUNg7PuT
+pZs9bRz5Bw8XhkPg//TqhimQS7f226tjbzRjFavwP2sBhFTE13+LyjsCBtSi4/cK
+q4bHDKbbt4JQtmpJzLcxbbu6pxZ2oTlcrKLqvJFNhyTVhw97yaO9vtmaBKHmSxbF
+DhvoMEGINDP2KYodtPVY1kiVPFOdmfTnybPpZSTdcvdFELNbAMZOaFexevCWhQXM
+W7YXepA3F3wRllrpYTXQ3qx5CaEHwqSRWquOfCrMqPB4VIa7dST9laCnjXT0eWEp
+rb3hrzlhyxcJuthhd2B6pQ7CmXE9Og==
+=b8h+
+-----END PGP SIGNATURE-----
+
+--eqp4TxRxnD4KrmFZ--
