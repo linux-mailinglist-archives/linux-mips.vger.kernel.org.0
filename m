@@ -2,117 +2,155 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 321531CB85B
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 21:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C041CB870
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 21:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726797AbgEHTeo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 15:34:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58084 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726767AbgEHTeo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 8 May 2020 15:34:44 -0400
-Received: from localhost (mobile-166-175-190-200.mycingular.net [166.175.190.200])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5CA742184D;
-        Fri,  8 May 2020 19:34:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588966483;
-        bh=1hUwFfzEcUZwoxVfZXocLGcacNeAw7nbeQ0hdIZswyc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=xeizsLOvp0BJhjU5dW7s4MSkDsuKCLkwKFVKKdm1CDubYDkqp1o+av6is+N3NkxZq
-         hs2WgEUNUlS+6j0dkuX5ptpl0bgHfkpGjX7gIu8SThaYirm3kwqmhW4EewP26LvvV+
-         s0YqBtvlLXxpr/uFaHfLYBLrJbLXR7F++Dd1lSmo=
-Date:   Fri, 8 May 2020 14:34:41 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     maz@kernel.org, Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Paul Burton <paulburton@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v8 2/5] PCI: Add Loongson PCI Controller support
-Message-ID: <20200508193441.GA79854@bjorn-Precision-5520>
+        id S1727786AbgEHTjS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 15:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727802AbgEHTjR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 15:39:17 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33B1C05BD43
+        for <linux-mips@vger.kernel.org>; Fri,  8 May 2020 12:39:15 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id g4so2920320ljl.2
+        for <linux-mips@vger.kernel.org>; Fri, 08 May 2020 12:39:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gjrGLJHLzoxchg9f/7+BzZ/emAWiNvtOkRqlM0vdoIg=;
+        b=aGj4Wnxz1/aQyFPMr7NUm4zXJhJ8h7VAryh5DVU6ZQt6AVBxS9tmKQlupGJ5KeXejP
+         KSz+L58WUX50UeLf1ShwLZkVfus9ZX0lgD06QjMNC3/zKkfIiXkiwYge15T1/gUc27aO
+         SkBLyUASa8xg9hfhlhGe48TZ8pL8eEM/DPhjceFCm41s4igWICxrTAtxmj/XVBmMuxC4
+         E0I1gaydT5OWK5CYVJmqK9YvykFVgSYts/bi6SSXxHBh3rqtCTLdTb3PJAIbT3TVcvcg
+         VNqziYQkuxX1HykgiPzPe2jl2OWQ4sEXFDROXuEuqS3AeWyiXcSOnUPjvLntH8TtjK2v
+         OUaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gjrGLJHLzoxchg9f/7+BzZ/emAWiNvtOkRqlM0vdoIg=;
+        b=oLeEoJACZHGvGUSgSlgLdzvTgxaiA2/af3Bk8XCNOnfnSkDlntvkmpEryy7Rf/QbYG
+         a+n1z6KkHXdjMmN0w4i1vOMa17S+ZDbZ5PyTmQ6mzwB6yJZXP4vRA1pcXIYZXP4LC6YJ
+         c8y1noTutsu3082AYU0xEWN0T5kFOf/4uGgXIbsy1up5XZ5tSnl13TCyhijLyN0e/YM1
+         e2MFpTzp9Gr1JSccQN/lDBEa43bcyf83cy5BsrolRjTJ7qdb01gszrGMVyIU3diFHE8/
+         ezGo704Mdhr4rMlvEqM5zLSLqPcemNx4eBukD4X+VfKxj0MrsDLHnuPx40BhXi8AnP+2
+         mszQ==
+X-Gm-Message-State: AOAM533USb1N6ZG6XxHIoW6rBqvc2CEuZUV+VMGml9mlBEG89Hr/B1fc
+        d/gaGhWQCfspME1cVp/WQvYMtOB60j/Lazyt/YivOw==
+X-Google-Smtp-Source: ABdhPJzVNt0K7k0tLrvgknOBlVHyrZtBVYfRv9CoX9LYJ+b2t/u4YporDzh0yTsMzYpoIig38TiOGb/ERqa5Fzvduw8=
+X-Received: by 2002:a2e:8087:: with SMTP id i7mr2546861ljg.99.1588966753962;
+ Fri, 08 May 2020 12:39:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2C23FC3E-6BBF-47EB-8EE6-89EAC5A28104@flygoat.com>
+References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru> <20200508132943.9826-12-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200508132943.9826-12-Sergey.Semin@baikalelectronics.ru>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 8 May 2020 21:39:02 +0200
+Message-ID: <CACRpkdY=wkgnYPcqSzyzNpS6ckJZs-9kXfTfdwa1E+POzOBQGA@mail.gmail.com>
+Subject: Re: [PATCH 11/17] spi: dw: Fix native CS being unset
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gregory Clement <gregory.clement@bootlin.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Allison Randal <allison@lohutok.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        "wuxu.wu" <wuxu.wu@huawei.com>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, May 09, 2020 at 01:28:24AM +0800, Jiaxun Yang wrote:
-> 于 2020年5月9日 GMT+08:00 上午1:17:30, Bjorn Helgaas <helgaas@kernel.org> 写到:
-> >On Fri, May 08, 2020 at 07:34:02PM +0800, Jiaxun Yang wrote:
-> >> This controller can be found on Loongson-2K SoC, Loongson-3
-> >> systems with RS780E/LS7A PCH.
-> >> 
-> >> The RS780E part of code was previously located at
-> >> arch/mips/pci/ops-loongson3.c and now it can use generic PCI
-> >> driver implementation.
-> >> 
-> >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> >> Reviewed-by: Rob Herring <robh@kernel.org>
-> >
-> >> +static void system_bus_quirk(struct pci_dev *pdev)
-> >> +{
-> >> +	u16 tmp;
-> >> +
-> >> +	/* 
-> >> +	 * System buses on Loongson system contain garbage in BARs
-> >> +	 * but their decoding need to be enabled to ensure devices
-> >> +	 * under system buses are reachable. In most cases it should
-> >> +	 * be done by the firmware.
-> >
-> >This isn't a very satisfying explanation because devices that have
-> >decoding enabled can interfere with other devices in the system, and I
-> >can't tell whether that's a problem here.
-> >
-> >What happens when you turn on MEM/IO decoding below?  Does the device
-> >decode any address space?  How do we know what it is?  Is it related
-> >to the BAR contents?
-> >
-> >I'm a little dubious about the need for the PCI_COMMAND write because
-> >the previous version didn't do it (since it incorrectly wrote to
-> >PCI_STATUS), and I assume that version worked.
-> 
-> Sorry, but that's all I can tell from the chips manual as I'm not a
-> employee of the vendor.
-> 
-> My assumption is these BAR contains the address of those system
-> components that already configured by firmware and we shouldn't
-> touch it.
+On Fri, May 8, 2020 at 3:31 PM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
 
-What are the values in the BARs?  Do they look like addresses?  Would
-they make sense in the iomem_resource, i.e., in /proc/iomem?
+> Commit 6e0a32d6f376 ("spi: dw: Fix default polarity of native
+> chipselect") attempted to fix the problem when GPIO active-high
+> chip-select is utilized to communicate with some SPI slave. It fixed
+> the problem, but broke the normal native CS support. At the same time
+> the reversion commit ada9e3fcc175 ("spi: dw: Correct handling of native
+> chipselect") didn't solve the problem either, since it just inverted
+> the set_cs() polarity perception without taking into account that
+> CS-high might be applicable. Here is what is done to finally fix the
+> problem.
 
-If the BARs contain addresses of devices, the kernel needs to avoid
-that address space when allocating space for other devices.  But
-without probing the BARs, the kernel has no idea what the *size* of
-the regions is.  Does the manual say anything about that?
+I'm not sure this is the whole story.
 
-Can you tell if there's anything at all Linux could do with these
-devices?  If they don't have BARs and they don't document any
-device-specific registers in config space, there's not much value in
-treating them like PCI devices at all.
+I think Charles' fix made it work, and then commit
+3e5ec1db8bfee845d9f8560d1c64aeaccd586398
+"spi: Fix SPI_CS_HIGH setting when using native and GPIO CS"
+fixed it broken again.
 
-I wonder if we should just make a way to completely ignore them, e.g.,
-a way for pci_setup_device() to return an error.   I guess we *could*
-do that already by making your early fixup set dev->hdr_type to 0xff
-or something.
+This commit will make sure only set SPI_CS_HIGH on a
+spi_device if it is using a GPIO as CS. Before this change,
+the core would set that on everything, and expect the
+.set_cs() callback to cope.
 
-> In fact according to my tests if we let Kernel probe these BAR then
-> the system will hang immediately.
-> 
-> Chip manual suggested OS to ensure decoding is enabled so I'm doing
-> like this. But without this system can also work.
-> 
-> Do you think I should drop it until figure out what was it actually
-> doing?
+I think we fixed that and that fix should have been undone
+when applying commit 3e5ec1db8bfe.
 
+So possibly Fixes: should be set only to this commit, so
+that the fix is not backported to kernels without it.
+
+> DW SPI controller demands any native CS being set in order to proceed
+> with data transfer. So in order to activate the SPI communications we
+> must set any bit in the Slave Select DW SPI controller register no
+> matter whether the platform requests the GPIO- or native CS.
+
+Ah-ha! Maybe we should even add a comment explaining that.
+And that is why SPI_MASTER_GPIO_SS is set.
+
+I suppose my naive understanding was:
+"bit set to 1" = CS asserted (driven low)
+"bit set to 0" = CS de-asserted  (driven high)
+So that is not how this register works at all.
+
+> This commit fixes the problem for all described cases. So no matter
+> whether an SPI slave needs GPIO- or native-based CS with active-high
+> or low signal the corresponding bit will be set in SER.
+
+Makes sense.
+
+>         struct dw_spi *dws = spi_controller_get_devdata(spi->controller);
+>         struct chip_data *chip = spi_get_ctldata(spi);
+> +       bool cs_high = !!(spi->mode & SPI_CS_HIGH);
+>
+>         /* Chip select logic is inverted from spi_set_cs() */
+>         if (chip && chip->cs_control)
+>                 chip->cs_control(!enable);
+>
+> -       if (!enable)
+> +       if (cs_high == enable)
+>                 dw_writel(dws, DW_SPI_SER, BIT(spi->chip_select));
+
+This is the correct fix now but I an afraid not correct before
+commit 3e5ec1db8bfe.
+
+What I can't help but asking is: can the native chip select even
+handle active high chip select if not backed by a GPIO?
+Which register would set that polarity?
+
+Yours,
+Linus Walleij
