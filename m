@@ -2,80 +2,149 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 523B21CB887
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 21:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A1C1CBA67
+	for <lists+linux-mips@lfdr.de>; Sat,  9 May 2020 00:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726863AbgEHTon (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 15:44:43 -0400
-Received: from mga17.intel.com ([192.55.52.151]:5925 "EHLO mga17.intel.com"
+        id S1727110AbgEHWET (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 18:04:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54558 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726797AbgEHTon (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 8 May 2020 15:44:43 -0400
-IronPort-SDR: +JCo43J6zYH5NryhOTS7QVMhh4w8fT2akZh88a8vJM5e7/k+28gFZFVBBT/KvJZPpfH34Tff3y
- dbP0XAPH+U9g==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2020 12:44:43 -0700
-IronPort-SDR: 3IRkX/kfHWSVSG1JAB9t0SfwNgiwPppn8pnGu8iPEOQRlmtSxKPMUEjU0kDUIcQxF4QYcefZ1K
- NkL3gpkFdMCw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,368,1583222400"; 
-   d="scan'208";a="370611050"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga001.fm.intel.com with ESMTP; 08 May 2020 12:44:39 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jX8vJ-005TGv-Ov; Fri, 08 May 2020 22:44:41 +0300
-Date:   Fri, 8 May 2020 22:44:41 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        id S1727095AbgEHWET (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 May 2020 18:04:19 -0400
+Received: from localhost (mobile-166-175-190-200.mycingular.net [166.175.190.200])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 48981214D8;
+        Fri,  8 May 2020 22:04:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588975458;
+        bh=avZYZU8DXmnKvpPLGgUx20xCLw9v/4nfaCqlduZjnv4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=KBavIX4Pysh7EosejxjixI0cFqB9BEaEdy0QPxU3GCLD3fv51XYL6ZPBg4+wru/Er
+         iTF08hKBfdE59zWgKOUG/OGLxgDA1qqRMG98awwWJ9J3AeALSzdxn3dxeHUiW9TRZN
+         3oQrr5y84xuut4/pP2vgOKnUpc03F7YuEfgeVuOw=
+Date:   Fri, 8 May 2020 17:04:16 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     maz@kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Allison Randal <allison@lohutok.net>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "wuxu.wu" <wuxu.wu@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/17] spi: dw: Discard static DW DMA slave structures
-Message-ID: <20200508194441.GB185537@smile.fi.intel.com>
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
- <20200508132943.9826-6-Sergey.Semin@baikalelectronics.ru>
+        Huacai Chen <chenhc@lemote.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Paul Burton <paulburton@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v8 5/5] MIPS: Loongson64: Switch to generic PCI driver
+Message-ID: <20200508220416.GA96874@bjorn-Precision-5520>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200508132943.9826-6-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200508113414.3091532-5-jiaxun.yang@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 08, 2020 at 04:29:30PM +0300, Serge Semin wrote:
-> Having them declared is redundant since each struct dw_dma_chan has
-> the same structure embedded and the structure from the passed dma_chan
-> private pointer will be copied there as a result of the next calls
-> chain:
-> dma_request_channel() -> find_candidate() -> dma_chan_get() ->
-> device_alloc_chan_resources() = dwc_alloc_chan_resources() ->
-> dw_dma_filter().
-> So just remove the static dw_dma_chan structures and use a locally
-> declared data instance with dst_id/src_id set to the same values as
-> the static copies used to have.
+On Fri, May 08, 2020 at 07:34:05PM +0800, Jiaxun Yang wrote:
+> We can now enable generic PCI driver in Kconfig, and remove legacy
+> PCI driver code.
+> 
+> Radeon vbios quirk is moved to the platform folder to fit the
+> new structure.
 
-I'm not against it, but you may leave if for the future (see spi/for-next).
+> diff --git a/arch/mips/loongson64/vbios_quirk.c b/arch/mips/loongson64/vbios_quirk.c
+> new file mode 100644
+> index 000000000000..1f0a462aeddd
+> --- /dev/null
+> +++ b/arch/mips/loongson64/vbios_quirk.c
+> @@ -0,0 +1,29 @@
+> +// SPDX-License-Identifier: GPL-2.0
 
--- 
-With Best Regards,
-Andy Shevchenko
+In arch/mips/pci/fixup-loongson3.c, pci_fixup_radeon() was under "GPL
+version 2 or (at your option) any later version."
 
+Documentation/process/license-rules.rst says that corresponds to
+GPL-2.0+, not GPL-2.0.
 
+> +static void pci_fixup_radeon(struct pci_dev *pdev)
+> +{
+> ...
+> +}
+
+> diff --git a/arch/mips/pci/fixup-loongson3.c b/arch/mips/pci/fixup-loongson3.c
+> deleted file mode 100644
+> index 8a741c2c6685..000000000000
+> --- a/arch/mips/pci/fixup-loongson3.c
+> +++ /dev/null
+> @@ -1,71 +0,0 @@
+> -/*
+> - * fixup-loongson3.c
+> - *
+> - * Copyright (C) 2012 Lemote, Inc.
+> - * Author: Xiang Yu, xiangy@lemote.com
+> - *         Chen Huacai, chenhc@lemote.com
+> - *
+> - * This program is free software; you can redistribute  it and/or modify it
+> - * under  the terms of  the GNU General  Public License as published by the
+> - * Free Software Foundation;  either version 2 of the  License, or (at your
+> - * option) any later version.
+> - *
+> - * THIS  SOFTWARE  IS PROVIDED   ``AS  IS'' AND   ANY  EXPRESS OR IMPLIED
+> - * WARRANTIES,   INCLUDING, BUT NOT  LIMITED  TO, THE IMPLIED WARRANTIES OF
+> - * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN
+> - * NO  EVENT  SHALL   THE AUTHOR  BE    LIABLE FOR ANY   DIRECT, INDIRECT,
+> - * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+> - * NOT LIMITED   TO, PROCUREMENT OF  SUBSTITUTE GOODS  OR SERVICES; LOSS OF
+> - * USE, DATA,  OR PROFITS; OR  BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+> - * ANY THEORY OF LIABILITY, WHETHER IN  CONTRACT, STRICT LIABILITY, OR TORT
+> - * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+> - * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+> - *
+> - */
+> -
+> -#include <linux/pci.h>
+> -#include <boot_param.h>
+> -
+> -static void print_fixup_info(const struct pci_dev *pdev)
+> -{
+> -	dev_info(&pdev->dev, "Device %x:%x, irq %d\n",
+> -			pdev->vendor, pdev->device, pdev->irq);
+> -}
+> -
+> -int pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+> -{
+> -	print_fixup_info(dev);
+> -	return dev->irq;
+> -}
+> -
+> -static void pci_fixup_radeon(struct pci_dev *pdev)
+> -{
+> -	struct resource *res = &pdev->resource[PCI_ROM_RESOURCE];
+> -
+> -	if (res->start)
+> -		return;
+> -
+> -	if (!loongson_sysconf.vgabios_addr)
+> -		return;
+> -
+> -	pci_disable_rom(pdev);
+> -	if (res->parent)
+> -		release_resource(res);
+> -
+> -	res->start = virt_to_phys((void *) loongson_sysconf.vgabios_addr);
+> -	res->end   = res->start + 256*1024 - 1;
+> -	res->flags = IORESOURCE_MEM | IORESOURCE_ROM_SHADOW |
+> -		     IORESOURCE_PCI_FIXED;
+> -
+> -	dev_info(&pdev->dev, "BAR %d: assigned %pR for Radeon ROM\n",
+> -		 PCI_ROM_RESOURCE, res);
+> -}
+> -
+> -DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_VENDOR_ID_ATI, PCI_ANY_ID,
+> -				PCI_CLASS_DISPLAY_VGA, 8, pci_fixup_radeon);
+> -
+> -/* Do platform specific device initialization at pci_enable_device() time */
+> -int pcibios_plat_dev_init(struct pci_dev *dev)
+> -{
+> -	return 0;
+> -}
