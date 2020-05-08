@@ -2,115 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D62E81CA7D7
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 12:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE0B1CA7E4
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 12:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726689AbgEHKDU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 06:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
+        id S1726083AbgEHKGK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 06:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbgEHKDT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 06:03:19 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89582C05BD43;
-        Fri,  8 May 2020 03:03:18 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id a7so4043473pju.2;
-        Fri, 08 May 2020 03:03:18 -0700 (PDT)
+        with ESMTP id S1725815AbgEHKGK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 06:06:10 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A71C05BD43;
+        Fri,  8 May 2020 03:06:08 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id e26so9612811wmk.5;
+        Fri, 08 May 2020 03:06:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9Fg0tqQ7YdDHVvpo6cAydXlG7VoLZVAf5Pe+YX8RF1U=;
-        b=u/NCyVG6CzWS7pw0cVQAQnsq+Lf6SFeLH7drFG01yY59AfQ7lMhouQ3Pg2ToMqbJQL
-         2POW+E2A5sROd3nUY8fmotQr5FoH2M/JlcIIkysWB8eO8ogi6JXo+H56/wpD4EfUJ5n0
-         994SFeBIX7AJ1nG1Rz3CwPP4hoUHla1nDCpFo5RAE0ekzm6MAYZJjxK+jSvng+sF9HIt
-         6KNmn+2qIDY410kZd7xhCIb0cmC+ipwD+fjNCWAnw2dujVHotaxpAsxRwA9IEcOHukpk
-         Rn/FzsDrK+46oQqBtt24AOFdR1meEYkGeqetdSO0HNrJ15VPF76HEodrshyYicE1r7o5
-         nEHQ==
+         :cc:content-transfer-encoding;
+        bh=T5xlC7qPnScxdD8HfkPXyyRLvRSedibj7CnwraNl2wo=;
+        b=ligq+n587Hx4n2gUCiSweXFiBtq9wqtVWw1i94hYEQuOFEwLOzUK2AqmeVJrfk8Xwm
+         OkUUqBsbITm5nSRLWTuoYJH8LK++ZXDlh/mMFJru9ZlE4aSDvc4n/1XUyX6E/laKqPHM
+         HF6FlZcKWLpjuxB+hrneX4v5zBJJTYl9dcEWqejyAp66TdRRd/tn/4Ki17LF+GkNnyWr
+         QrmgmoCAiKaCdpI7Y5kKIKzCk2S6uszGqOo5IKQ0EL/s+xrvUBxzDHH+gtBqmXBVybMv
+         KiO4s4CMfm3YBwMRgD+keUeWzHZTHQDS6H+2uuqgURebT7cE1ugO4fEZs2SM46p2ZLvm
+         YxQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9Fg0tqQ7YdDHVvpo6cAydXlG7VoLZVAf5Pe+YX8RF1U=;
-        b=T6gt70RpdDsVNPB6O4FYQ5/iIhlaaAnkiay+/BqubM/Guxtx6S+k7J4YJ/IlMznogY
-         2iOWZTj9Qbllq1PSOXLyrkzq8SNE6BrnMZCWUXlI22iEDhul58bJOcRu+mQ6hZQwFQcq
-         eeLhBIkaN36NgCJ2MMaYj4DcjGp3Nl8z9Qcm9+rvYcSfAiMDhN1h3GcniBoXs1mwIQV6
-         lXv8wXGxo/7Ci1N/zVP+UfVqLOhjuZ4ZuIVXhbTKXos2MdOL3iSiJjQSiTRAG966Crbx
-         jqL9VigZvBmN7iG6Nyol7ACB8SP/N+S4+d7oMq9IO1v77NFLUDlFBht/qSv9FOI/TYQ1
-         YqDw==
-X-Gm-Message-State: AGi0PuZ4eswVW4llvECyxkmHKW+X7cuThYPTi/yQa0b6kyW1N8rzlbGI
-        nDJy5ibOMZIFsedyZeXAEI49Nf3dlY6vebqd7Uk=
-X-Google-Smtp-Source: APiQypIYSY85bDmuNcTHocu/ewpdNMG8j/aKGbo5ccq1Q5fhJ062xJSYj+xkopkvK/UvMdGwbYVbRLif6bs3S8dCqrc=
-X-Received: by 2002:a17:902:6901:: with SMTP id j1mr1688511plk.255.1588932198001;
- Fri, 08 May 2020 03:03:18 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=T5xlC7qPnScxdD8HfkPXyyRLvRSedibj7CnwraNl2wo=;
+        b=SC5SXJ37rl7xBBYGDziRHtuBijcfT/L0CXGdQK4emYw6ekVBbKMdPV+XxeOEkYv1rT
+         ZZuokyTFrwQrQkVtGUIfAEB+b5zUnN8ocoiXHPmhpHODt9fjGVSBYmnHsffPwnAlYK4M
+         fz6FKCqFScn4/gY54CFYNKSdHClmJst0YmByTHfyxY9SbTxRvkXoonlVnWv/p+pJV6wA
+         whMhJapyMau9+NPMXnLY9qFIasKePtBjng+dm5aXLd/ehFi1//WQlmXb41ZXyzbC+eTQ
+         Ps1kjahN+1Zz5ZpQllB0uDDBihIxixdWbzHYiMwjiQbK9s0y+SUZ1M0ftgXJjMiQL29z
+         y2IQ==
+X-Gm-Message-State: AGi0PubJsf44Intj6Ja2NvzRMf+011Vuc+40Lq7rMMVVihrjkcnP6ssi
+        0j2mTbYmzMhl2Cvnuix7qYfgVF3qXgqZzN47+TQ=
+X-Google-Smtp-Source: APiQypITeNK+k5wXCOBAFXPWVcF9IAiL/o64wDX9ljR63w3WxyhEA1CStyUedfLaHR+RNHQCtwr8y258jLkSDvBRBPA=
+X-Received: by 2002:a7b:c74d:: with SMTP id w13mr14758749wmk.36.1588932366832;
+ Fri, 08 May 2020 03:06:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru> <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 8 May 2020 13:03:11 +0300
-Message-ID: <CAHp75VdtzdX-sOvq2cZdXqGUmU=0rdzQW_USGD_q0D59pUMTWg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+References: <1588500367-1056-1-git-send-email-chenhc@lemote.com> <1588500367-1056-2-git-send-email-chenhc@lemote.com>
+In-Reply-To: <1588500367-1056-2-git-send-email-chenhc@lemote.com>
+From:   Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Date:   Fri, 8 May 2020 12:05:33 +0200
+Message-ID: <CAHiYmc41JQ+H+D6rsot34gDoKG1dsyFWCcs_FbuA2neAgReaOw@mail.gmail.com>
+Subject: Re: [PATCH V3 01/14] KVM: MIPS: Define KVM_ENTRYHI_ASID to cpu_asid_mask(&boot_cpu_data)
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
+        kvm@vger.kernel.org, QEMU Developers <qemu-devel@nongnu.org>,
+        linux-mips@vger.kernel.org,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Xing Li <lixing@loongson.cn>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 8, 2020 at 12:37 PM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
+=D0=BD=D0=B5=D0=B4, 3. =D0=BC=D0=B0=D1=98 2020. =D1=83 12:06 Huacai Chen <c=
+henhc@lemote.com> =D1=98=D0=B5 =D0=BD=D0=B0=D0=BF=D0=B8=D1=81=D0=B0=D0=BE/=
+=D0=BB=D0=B0:
 >
-> This SPI-controller is a part of the Baikal-T1 System Controller and
-> is based on the DW APB SSI IP-core, but with very limited resources:
-> no IRQ, no DMA, only a single native chip-select and just 8 bytes Tx/Rx
-> FIFO available. In order to provide a transparent initial boot code
-> execution this controller is also utilized by an vendor-specific block,
-> which provides an CS0 SPI flash direct mapping interface. Since both
-> direct mapping and SPI controller normal utilization are mutual exclusive
-> only a one of these interfaces can be used to access an external SPI
-> slave device. Taking into account the peculiarities of the controller
-> registers and physically mapped SPI flash access, very limited resources
-> and seeing the normal usecase of the controller is to access an external
-> SPI-nor flash, we decided to create a dedicated SPI driver for it.
+> From: Xing Li <lixing@loongson.cn>
+>
+> The code in decode_config4() of arch/mips/kernel/cpu-probe.c
+>
+>         asid_mask =3D MIPS_ENTRYHI_ASID;
+>         if (config4 & MIPS_CONF4_AE)
+>                 asid_mask |=3D MIPS_ENTRYHI_ASIDX;
+>         set_cpu_asid_mask(c, asid_mask);
+>
+> set asid_mask to cpuinfo->asid_mask.
+>
+> So in order to support variable ASID_MASK, KVM_ENTRYHI_ASID should also
+> be changed to cpu_asid_mask(&boot_cpu_data).
+>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Xing Li <lixing@loongson.cn>
+> [Huacai: Change current_cpu_data to boot_cpu_data for optimization]
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> ---
+>  arch/mips/include/asm/kvm_host.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
 
-It seems a lot of code.
-Why can't you use spi-dw-mmio.c et al.?
+For what is worth:
 
-> The driver provides callbacks for native messages-based SPI interface,
-> SPI-memory and direct mapping read operations. Due to not having any
-> asynchronous signaling interface provided by the core we have no choice
-> but to implement a polling-based data transmission/reception algorithm.
-> In addition to that in order to bypass the automatic native chip-select
-> toggle the driver disables the local interrupts during the memory-based
-> transfers if no complementary GPIO-based chip-select detected in the
-> platform.
+Reviewed-by: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
 
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm=
+_host.h
+> index 2c343c3..a01cee9 100644
+> --- a/arch/mips/include/asm/kvm_host.h
+> +++ b/arch/mips/include/asm/kvm_host.h
+> @@ -275,7 +275,7 @@ enum emulation_result {
+>  #define MIPS3_PG_FRAME         0x3fffffc0
+>
+>  #define VPN2_MASK              0xffffe000
+> -#define KVM_ENTRYHI_ASID       MIPS_ENTRYHI_ASID
+> +#define KVM_ENTRYHI_ASID       cpu_asid_mask(&boot_cpu_data)
+>  #define TLB_IS_GLOBAL(x)       ((x).tlb_lo[0] & (x).tlb_lo[1] & ENTRYLO_=
+G)
+>  #define TLB_VPN2(x)            ((x).tlb_hi & VPN2_MASK)
+>  #define TLB_ASID(x)            ((x).tlb_hi & KVM_ENTRYHI_ASID)
+> --
+> 2.7.0
+>
