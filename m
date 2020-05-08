@@ -2,109 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 072991CB4EA
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 18:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CE41CB536
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 18:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgEHQZB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 12:25:01 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:43686 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726756AbgEHQZB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 12:25:01 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 44FF880307C7;
-        Fri,  8 May 2020 16:24:57 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FDqnx249YwhR; Fri,  8 May 2020 19:24:56 +0300 (MSK)
-Date:   Fri, 8 May 2020 19:24:55 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Mark Brown <broonie@kernel.org>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Eddie James <eajames@linux.ibm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
-Message-ID: <20200508162455.3cgfquqmbx7ep2zf@mobilestation>
-References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
- <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
- <CAHp75VdtzdX-sOvq2cZdXqGUmU=0rdzQW_USGD_q0D59pUMTWg@mail.gmail.com>
- <20200508101541.e3yxaocuilaiyutg@mobilestation>
- <CAHp75VcaVGHfYN1hjD5eKgpKJkpKEif8NxBGO1YF61_apv82Kg@mail.gmail.com>
+        id S1727099AbgEHQwx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 12:52:53 -0400
+Received: from elvis.franken.de ([193.175.24.41]:45060 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727097AbgEHQwx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 May 2020 12:52:53 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jX6Ey-00060q-00; Fri, 08 May 2020 18:52:48 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id F1396C043D; Fri,  8 May 2020 18:52:35 +0200 (CEST)
+Date:   Fri, 8 May 2020 18:52:35 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, chenhc@lemote.com,
+        john.garry@huawei.com
+Subject: Re: [PATCH RESEND v3 2/3] MIPS: Introduce PCI_IO_VMMAP
+Message-ID: <20200508165235.GA24425@alpha.franken.de>
+References: <20200426114806.1176629-1-jiaxun.yang@flygoat.com>
+ <20200508114438.3092215-1-jiaxun.yang@flygoat.com>
+ <20200508114438.3092215-2-jiaxun.yang@flygoat.com>
+ <20200508161102.GA23094@alpha.franken.de>
+ <18B84249-7CA1-411E-B595-6E215D8C9C34@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHp75VcaVGHfYN1hjD5eKgpKJkpKEif8NxBGO1YF61_apv82Kg@mail.gmail.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <18B84249-7CA1-411E-B595-6E215D8C9C34@flygoat.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 08, 2020 at 01:26:52PM +0300, Andy Shevchenko wrote:
-> On Fri, May 8, 2020 at 1:15 PM Serge Semin
-> <Sergey.Semin@baikalelectronics.ru> wrote:
-> >
-> > On Fri, May 08, 2020 at 01:03:11PM +0300, Andy Shevchenko wrote:
-> > > On Fri, May 8, 2020 at 12:37 PM Serge Semin
-> > > <Sergey.Semin@baikalelectronics.ru> wrote:
-> > > >
-> > > > This SPI-controller is a part of the Baikal-T1 System Controller and
-> > > > is based on the DW APB SSI IP-core, but with very limited resources:
-> > > > no IRQ, no DMA, only a single native chip-select and just 8 bytes Tx/Rx
-> > > > FIFO available. In order to provide a transparent initial boot code
-> > > > execution this controller is also utilized by an vendor-specific block,
-> > > > which provides an CS0 SPI flash direct mapping interface. Since both
-> > > > direct mapping and SPI controller normal utilization are mutual exclusive
-> > > > only a one of these interfaces can be used to access an external SPI
-> > > > slave device. Taking into account the peculiarities of the controller
-> > > > registers and physically mapped SPI flash access, very limited resources
-> > > > and seeing the normal usecase of the controller is to access an external
-> > > > SPI-nor flash, we decided to create a dedicated SPI driver for it.
-> > >
-> > > It seems a lot of code.
-> > > Why can't you use spi-dw-mmio.c et al.?
-> >
-> > I said above why. Even though the registers set is similar It's too specific
-> > to be integrated into the generic DW SSI driver.
+On Sat, May 09, 2020 at 12:22:25AM +0800, Jiaxun Yang wrote:
 > 
-> At least you may do at the beginning is to reuse header spi-dw.h and
-> put your stuff under
-> spi-dw-baikal.c or so. Then, look at the spi-dw.c and check what can
-> be reused (I think a lot).
-
-Nah, It's not a lot, barely a few things. What is useful is the registers map
-(though it has to be shifted and most of the registers are unused), IO operations
-(two small read-write methods with questionable design) and possibly a few lines
-of config setting procedure.
-
-You think I didn't had in mind to integrate this controller support into
-the generic driver or resuse something from there? If it was worth a try I would
-have done it.
-
--Sergey
-
 > 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+> 于 2020年5月9日 GMT+08:00 上午12:11:02, Thomas Bogendoerfer <tsbogend@alpha.franken.de> 写到:
+> >On Fri, May 08, 2020 at 07:44:37PM +0800, Jiaxun Yang wrote:
+> >> Define PCI_IOBASE for MIPS at the strat of kernel mapping segment.
+> >> That would allow virt address of I/O ports to be dynamicly mapped.
+> >> So we'll be able to combine multiple MMIO ranges into I/O ports
+> >> and thus we can take advantage of logic_pio mechanism.
+> >
+> >What is the advantage ?
+> >
+> >From my point of view this will be slower because of TLB faults for
+> >PCI IO space accesses.
+> 
+> Advantage is we can use logic_pio to manage multiple I/O Port ranges.
+
+and what exactly does this buy us ? I looked at lib/logic_pio.c and
+there didn't appear anything in my mind other than yet another
+interface for doing the same thing...
+
+> That can help us reuse generic PCI I/O design.
+
+please explain this.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
