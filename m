@@ -2,93 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4859B1CB08D
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 15:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D80CE1CB263
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 16:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727113AbgEHNdk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 09:33:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53656 "EHLO mail.kernel.org"
+        id S1728137AbgEHO65 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 10:58:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:49730 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726736AbgEHNdj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 8 May 2020 09:33:39 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AC1B120708;
-        Fri,  8 May 2020 13:33:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588944819;
-        bh=mONIV7U+kyBJ+32pgZbmybpjfg+r5T9JwvmQQECspjk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nyn14izNbLw13+C8aRmGKLcZ3BwlQUuLEJ+wYP5GhFb2XP30lsbQM10NmgZC09Vk+
-         UckP1Oje+G2jOGzqWw2Ut/0r8k5jd+3UhDGOVWT+ssUTm6Cvxir3gVhiZHdxwzrl2M
-         ywV18wQajYEE9Ko/eynJhng+mXsz4m3l1ELplzdk=
-Date:   Fri, 8 May 2020 14:33:36 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/17] spi: dw: Add generic DW DMA controller support
-Message-ID: <20200508133336.GK4820@sirena.org.uk>
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+        id S1726690AbgEHO64 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 May 2020 10:58:56 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2C2C01FB;
+        Fri,  8 May 2020 07:58:56 -0700 (PDT)
+Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9AC403F305;
+        Fri,  8 May 2020 07:58:53 -0700 (PDT)
+References: <20200507180553.9993-1-john.mathew@unikie.com> <20200507180553.9993-3-john.mathew@unikie.com> <jhjh7wrtpjk.mognet@arm.com> <b974b959-7b9a-2874-dca6-674b74ad5b42@arm.com>
+User-agent: mu4e 0.9.17; emacs 26.3
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     John Mathew <john.mathew@unikie.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, corbet@lwn.net, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        tsbogend@alpha.franken.de, lukas.bulwahn@gmail.com, x86@kernel.org,
+        linux-mips@vger.kernel.org, tglx@linutronix.de,
+        mostafa.chamanara@basemark.com, rdunlap@infradead.org,
+        Oleg Tsymbal <oleg.tsymbal@unikie.com>
+Subject: Re: [RFC PATCH v3 2/3] docs: scheduler: Add scheduler overview documentation
+In-reply-to: <b974b959-7b9a-2874-dca6-674b74ad5b42@arm.com>
+Date:   Fri, 08 May 2020 15:58:51 +0100
+Message-ID: <jhjd07etqvo.mognet@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HcXnUX77nabWBLF4"
-Content-Disposition: inline
-In-Reply-To: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
-X-Cookie: Give him an evasive answer.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
---HcXnUX77nabWBLF4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 08/05/20 11:58, Dietmar Eggemann wrote:
+> On 07/05/2020 23:15, Valentin Schneider wrote:
+>>
+>> On 07/05/20 19:05, John Mathew wrote:
+>
+> [...]
+>
+>> It would also be an opportunity to have one place to (at least briefly)
+>> describe what the different sched classes do wrt capacity asymmetry - CFS
+>> does one thing, RT now does one thing (see Qais' work), and DL will
+>> hopefully soon follow (see Dietmar's work).
+>>
+>> I'd be happy to contribute (some of) that, if it can be deemed useful (I
+>> personally think it might).
+>
+> I like the idea.
+>
+> Essentially all the code which is guarded by the 'if
+> (static_branch_unlikely(&sched_asym_cpucapacity)' condition or which
+> sets it during bring-up.
+>
+> * 'Cpu capacity < SCHED_LOAD_SCALE for non-big' CPUs setting during
+>    bringup (necessary dt binding, CPUfreq influence)
+>
+> * CFS capacity awareness:
+>
+>   * wakeup - select_idle_capacity() (replaced wake_cap() & slow path to
+>              cover DynamIQ and classical big.LITTLE)
+>
+>   * load_balance - misfit handling
+>
+> * RT & DL capacity awareness
+>
+> * ... & the relation to EAS (Documentation/scheduler/sched-energy.rst)
+>
+> This is what we referred to (at least internally) as CAS (Capacity-Aware
+> Scheduling).
 
-On Fri, May 08, 2020 at 04:29:25PM +0300, Serge Semin wrote:
-
-> Serge Semin (17):
->   dt-bindings: spi: Convert DW SPI binding to DT schema
-
-Please don't make new feature development dependent on conversion to the
-new schema format, there's quite a backlog of reviews of schema
-conversions so it can slow things down.  It's good to do the conversions
-but please do them after adding any new stuff to the binding rather than
-before.
-
---HcXnUX77nabWBLF4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl61X7AACgkQJNaLcl1U
-h9CLnAf+O/mkQGXZWskF1aU9ifA3WKCaGO7ENKOG2HlI7+/2BtDt7ImOkCrcBbKb
-K9yAjXfWqhx47uiQoeLJtmdZQVBhn73fL867tXqzbvo1IfIw8nAk7VNmePzIDMcL
-61DQCKjbmBvQd70xDDzjrOCZbMSJ5zzjWSBClVFZDi7VvB0Q7ngIRoWJkKy/mm8D
-joP8Y76nidk0LMvKgqhmCwxIXKTFgacy9ld8zckl1VgkzFAQ5AT1yKOOWZiCUHMt
-8dfJt0DwzuBEUKUDcGFXFg4duheda20SgYnFkrM19Nh/D39dqJ//xyCUhViWz/yB
-GaOwQ+OgauLqiTph56P0R/1rFek2/Q==
-=FjO8
------END PGP SIGNATURE-----
-
---HcXnUX77nabWBLF4--
+Yeah, something like that. I'll sharpen my quill and have a go at it,
+though it won't be for right now with OSPM and the other ongoing stuff.
