@@ -2,117 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 116BC1CA8BE
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 12:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5209F1CA8C3
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 12:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727932AbgEHKxr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 06:53:47 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:41862 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726091AbgEHKxq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 06:53:46 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id C9DE98030779;
-        Fri,  8 May 2020 10:53:37 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id k_ka0vsYUEeH; Fri,  8 May 2020 13:53:37 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Vinod Koul <vkoul@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 6/6] dmaengine: dw: Take HC_LLP flag into account for noLLP auto-config
-Date:   Fri, 8 May 2020 13:53:04 +0300
-Message-ID: <20200508105304.14065-7-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200508105304.14065-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200306131048.ADBE18030797@mail.baikalelectronics.ru>
- <20200508105304.14065-1-Sergey.Semin@baikalelectronics.ru>
+        id S1727100AbgEHKy0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 06:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726948AbgEHKy0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 06:54:26 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018B3C05BD43;
+        Fri,  8 May 2020 03:54:25 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id u127so10092303wmg.1;
+        Fri, 08 May 2020 03:54:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=tRc1wFGoADt31h04bCok03WJLaNfqn/3kUZGVULqzzQ=;
+        b=qg0xLkSj0rReMs6wUMdkgawQJduE6glcaZ3M/JJNhVwkt47v2fVBPJJfVKzDv432mw
+         ycNE8i27pktwDKHPaeE2/BEh+ZLyMzY1uorEcKg6cQpuYDvvKsZZX6cRFcxS930xQ9d7
+         b8c+P0Fv6oahC72K3eG1xJ5V1UetdetBoEL4CBnzGBvSKpvc9X19XtU0Q+vE8Xasm3lM
+         /ZqXjKMndFB856wEA0onmOGrGXS8RRGDJMN9GI9tSFRS+3XK2LyYguZgjEMzZEINky13
+         ww7r+oMl/P05KRjXICcDy7c1Zy7mFiQEGlESv+q9v67NuzTKadDw9o0BaUecJJySfyUe
+         LNVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=tRc1wFGoADt31h04bCok03WJLaNfqn/3kUZGVULqzzQ=;
+        b=Oco+kT1mpL+EtKythhWSuPPJCs4Ac0WDrmZXpagey+BdqEXriuA2QtFUclS1sYDwy2
+         12bS34cky/cgQ7/IOOZKi0/OzXZ0U/qOxmstFppHKCPUh5g91UKKEI+2pi3U8JKWY0qj
+         7zRxw+mviEBJCzJEE/q/YkAkMaRCXysR2XXlAa7pm8xsFXseiJADG7Mx07YyW36KK6l5
+         VKRCBVp24MBLsYo6/SZUmoHh0dPP/stai+ViuCQZhuylJ8dByBRjxHTln9xSPDBRAeVZ
+         ksusIFjBVV94seg/Ct1DGqhBb6KbOYcmngSMl8BhpF9xBUfqp3KhEUD2/WT61930pzEE
+         J19A==
+X-Gm-Message-State: AGi0PuYgMgLIZHmY2Z9jxPSixozMUpq1i0w8SDte8PQgUabFEwc3dARn
+        S/iPaBrP4GJwUMQv1wiYm82iY5csJs8kbAm8tSk=
+X-Google-Smtp-Source: APiQypJ9ewqTeRIergKcspUnlfNfDA/Isven7yFAosfVEH3inHBXuq+mw/Q2T5qLTRjRDQYvID21eFcXo7IpnBuaqco=
+X-Received: by 2002:a1c:f211:: with SMTP id s17mr17073649wmc.168.1588935264569;
+ Fri, 08 May 2020 03:54:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+References: <1588500367-1056-1-git-send-email-chenhc@lemote.com> <1588500367-1056-8-git-send-email-chenhc@lemote.com>
+In-Reply-To: <1588500367-1056-8-git-send-email-chenhc@lemote.com>
+From:   Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Date:   Fri, 8 May 2020 12:53:35 +0200
+Message-ID: <CAHiYmc4auUtJayvB-qTFNsv5BGhe0FaTTRxODZLw+yNRzwHB_Q@mail.gmail.com>
+Subject: Re: [PATCH V3 07/14] KVM: MIPS: Use root tlb to control guest's CCA
+ for Loongson-3
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        kvm@vger.kernel.org, QEMU Developers <qemu-devel@nongnu.org>,
+        linux-mips@vger.kernel.org,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Full multi-block transfers functionality is enabled in DW DMA
-controller only if CHx_MULTI_BLK_EN is set. But LLP-based transfers
-can be executed only if hardcode channel x LLP register feature isn't
-enabled, which can be switched on at the IP core synthesis for
-optimization. If it's enabled then the LLP register is hardcoded to
-zero, so the blocks chaining based on the LLPs is unsupported.
+=D0=BD=D0=B5=D0=B4, 3. =D0=BC=D0=B0=D1=98 2020. =D1=83 12:12 Huacai Chen <c=
+henhc@lemote.com> =D1=98=D0=B5 =D0=BD=D0=B0=D0=BF=D0=B8=D1=81=D0=B0=D0=BE/=
+=D0=BB=D0=B0:
+>
+> KVM guest has two levels of address translation: guest tlb translates
+> GVA to GPA, and root tlb translates GPA to HPA. By default guest's CCA
+> is controlled by guest tlb, but Loongson-3 maintains all cache coherency
+> by hardware (including multi-core coherency and I/O DMA coherency) so it
+> prefers all guest mappings be cacheable mappings. Thus, we use root tlb
+> to control guest's CCA for Loongson-3.
+>
+> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> Co-developed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  arch/mips/kvm/vz.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/arch/mips/kvm/vz.c b/arch/mips/kvm/vz.c
+> index 422cd06..f9fbbc16 100644
+> --- a/arch/mips/kvm/vz.c
+> +++ b/arch/mips/kvm/vz.c
+> @@ -2871,6 +2871,12 @@ static int kvm_vz_hardware_enable(void)
+>         if (cpu_has_guestctl2)
+>                 clear_c0_guestctl2(0x3f << 10);
+>
+> +#ifdef CONFIG_CPU_LOONGSON64
+> +       /* Control guest CCA attribute */
+> +       if (cpu_has_csr())
+> +               csr_writel(csr_readl(0xffffffec) | 0x1, 0xffffffec);
+> +#endif
+> +
+>         return 0;
+>  }
+>
+> --
+> 2.7.0
+>
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-
----
-
-Changelog v2:
-- Rearrange SoBs.
-- Add comment about why hardware accelerated LLP list support depends
-  on both MBLK_EN and HC_LLP configs setting.
-- Use explicit bits state comparison operator.
----
- drivers/dma/dw/core.c | 11 ++++++++++-
- drivers/dma/dw/regs.h |  1 +
- 2 files changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/dma/dw/core.c b/drivers/dma/dw/core.c
-index 5b76ccc857fd..3179d45df662 100644
---- a/drivers/dma/dw/core.c
-+++ b/drivers/dma/dw/core.c
-@@ -1180,8 +1180,17 @@ int do_dma_probe(struct dw_dma_chip *chip)
- 			 */
- 			dwc->block_size =
- 				(4 << ((pdata->block_size >> 4 * i) & 0xf)) - 1;
-+
-+			/*
-+			 * According to the DW DMA databook the true scatter-
-+			 * gether LLPs aren't available if either multi-block
-+			 * config is disabled (CHx_MULTI_BLK_EN == 0) or the
-+			 * LLP register is hard-coded to zeros
-+			 * (CHx_HC_LLP == 1).
-+			 */
- 			dwc->nollp =
--				(dwc_params >> DWC_PARAMS_MBLK_EN & 0x1) == 0;
-+				(dwc_params >> DWC_PARAMS_MBLK_EN & 0x1) == 0 ||
-+				(dwc_params >> DWC_PARAMS_HC_LLP & 0x1) == 1;
- 			dwc->max_burst =
- 				(0x4 << (dwc_params >> DWC_PARAMS_MSIZE & 0x7));
- 		} else {
-diff --git a/drivers/dma/dw/regs.h b/drivers/dma/dw/regs.h
-index f581d4809b71..a8af19d0eabd 100644
---- a/drivers/dma/dw/regs.h
-+++ b/drivers/dma/dw/regs.h
-@@ -126,6 +126,7 @@ struct dw_dma_regs {
- 
- /* Bitfields in DWC_PARAMS */
- #define DWC_PARAMS_MSIZE	16		/* max group transaction size */
-+#define DWC_PARAMS_HC_LLP	13		/* set LLP register to zero */
- #define DWC_PARAMS_MBLK_EN	11		/* multi block transfer */
- 
- /* bursts size */
--- 
-2.25.1
-
+Reviewed-by: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
