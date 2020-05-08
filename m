@@ -2,170 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B601CB855
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 21:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321531CB85B
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 21:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726807AbgEHTdK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 15:33:10 -0400
-Received: from mga06.intel.com ([134.134.136.31]:2774 "EHLO mga06.intel.com"
+        id S1726797AbgEHTeo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 15:34:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58084 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726767AbgEHTdK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 8 May 2020 15:33:10 -0400
-IronPort-SDR: ar/jzKlPRPjHRLBb34mVRZ1tlYHqDtXcMHRJ93GCprZ5hSplf8p6ekYxq4jjzmu6ckIV9rt3Hs
- vnH0ygEc75YQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2020 12:33:08 -0700
-IronPort-SDR: 002AOp5wCldfgzZv4UwAGWSVaxE7gIe4/6KUiz7y4EPA3Viwh04rlES1CabE3Vx3+FfIMnAZWm
- wzIcM96lRuPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,368,1583222400"; 
-   d="scan'208";a="264490515"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga006.jf.intel.com with ESMTP; 08 May 2020 12:33:03 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jX8k6-005TAq-7s; Fri, 08 May 2020 22:33:06 +0300
-Date:   Fri, 8 May 2020 22:33:06 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        id S1726767AbgEHTeo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 May 2020 15:34:44 -0400
+Received: from localhost (mobile-166-175-190-200.mycingular.net [166.175.190.200])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5CA742184D;
+        Fri,  8 May 2020 19:34:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588966483;
+        bh=1hUwFfzEcUZwoxVfZXocLGcacNeAw7nbeQ0hdIZswyc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=xeizsLOvp0BJhjU5dW7s4MSkDsuKCLkwKFVKKdm1CDubYDkqp1o+av6is+N3NkxZq
+         hs2WgEUNUlS+6j0dkuX5ptpl0bgHfkpGjX7gIu8SThaYirm3kwqmhW4EewP26LvvV+
+         s0YqBtvlLXxpr/uFaHfLYBLrJbLXR7F++Dd1lSmo=
+Date:   Fri, 8 May 2020 14:34:41 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     maz@kernel.org, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/17] spi: dw: Add generic DW DMA controller support
-Message-ID: <20200508193306.GX185537@smile.fi.intel.com>
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+        Huacai Chen <chenhc@lemote.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Paul Burton <paulburton@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v8 2/5] PCI: Add Loongson PCI Controller support
+Message-ID: <20200508193441.GA79854@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2C23FC3E-6BBF-47EB-8EE6-89EAC5A28104@flygoat.com>
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 08, 2020 at 04:29:25PM +0300, Serge Semin wrote:
-> Baikal-T1 SoC provides DW DMA controller to perform low-speed peripherals
-> Mem-to-Dev and Dev-to-Mem transaction. This is also applicable to the DW
-> APB SSI devices embedded into the SoC. Currently this type DMA device is
-> supported by the DW APB SPI driver only as a middle layer code for Intel
-> MID PCI devices. Seeing the same code can be used for normal platform
-> DW DMAC device we introduced a set of patches to fix it within this
-> patchset.
+On Sat, May 09, 2020 at 01:28:24AM +0800, Jiaxun Yang wrote:
+> 于 2020年5月9日 GMT+08:00 上午1:17:30, Bjorn Helgaas <helgaas@kernel.org> 写到:
+> >On Fri, May 08, 2020 at 07:34:02PM +0800, Jiaxun Yang wrote:
+> >> This controller can be found on Loongson-2K SoC, Loongson-3
+> >> systems with RS780E/LS7A PCH.
+> >> 
+> >> The RS780E part of code was previously located at
+> >> arch/mips/pci/ops-loongson3.c and now it can use generic PCI
+> >> driver implementation.
+> >> 
+> >> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> >> Reviewed-by: Rob Herring <robh@kernel.org>
+> >
+> >> +static void system_bus_quirk(struct pci_dev *pdev)
+> >> +{
+> >> +	u16 tmp;
+> >> +
+> >> +	/* 
+> >> +	 * System buses on Loongson system contain garbage in BARs
+> >> +	 * but their decoding need to be enabled to ensure devices
+> >> +	 * under system buses are reachable. In most cases it should
+> >> +	 * be done by the firmware.
+> >
+> >This isn't a very satisfying explanation because devices that have
+> >decoding enabled can interfere with other devices in the system, and I
+> >can't tell whether that's a problem here.
+> >
+> >What happens when you turn on MEM/IO decoding below?  Does the device
+> >decode any address space?  How do we know what it is?  Is it related
+> >to the BAR contents?
+> >
+> >I'm a little dubious about the need for the PCI_COMMAND write because
+> >the previous version didn't do it (since it incorrectly wrote to
+> >PCI_STATUS), and I assume that version worked.
 > 
-> First of all traditionally we replaced the legacy plain text-based dt-binding
-> file with yaml-based one. Then we unpinned the Intel MID specific code from
-> the generic DMA one and placed it into the spi-dw-pci.c driver, which was a
-> better place for it anyway. Then we introduced a set of naming cleanups since
-> the code was going to be used for generic DW DMAC device and DMAC usage
-> alterations to handle the controller functionality in a generic way by the
-> DW APB SSI MMIO driver as well. See the individual patches commit messages
-> for details.
+> Sorry, but that's all I can tell from the chips manual as I'm not a
+> employee of the vendor.
 > 
-> In addition we fixed a problem in the native chip-select method, which despite
-> of multiple attempts to be fixed doesn't correctly perceive the SPI_CS_HIGH
-> flag and the enable-argument.
-> 
-> Finally as a cherry on a cake we replaced the manually written DebugFS
-> registers read method with a ready-to-use for the same purpose regset32
-> DebugFS interface usage.
+> My assumption is these BAR contains the address of those system
+> components that already configured by firmware and we shouldn't
+> touch it.
 
-Thanks! Appreciate the series (some of the things I would like to have done
-myself, but lack of time and no specific request from our hardware).
+What are the values in the BARs?  Do they look like addresses?  Would
+they make sense in the iomem_resource, i.e., in /proc/iomem?
 
-Though, I will wait for v2 rebased on top of spi/for-next and I will review the
-rest of the patches (mostly those I haven't commented out).
+If the BARs contain addresses of devices, the kernel needs to avoid
+that address space when allocating space for other devices.  But
+without probing the BARs, the kernel has no idea what the *size* of
+the regions is.  Does the manual say anything about that?
 
-> This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
-> 0e698dfa2822 ("Linux 5.7-rc4")
-> tag: v5.7-rc4
+Can you tell if there's anything at all Linux could do with these
+devices?  If they don't have BARs and they don't document any
+device-specific registers in config space, there's not much value in
+treating them like PCI devices at all.
 
-Perhaps --base will do the trick?
+I wonder if we should just make a way to completely ignore them, e.g.,
+a way for pci_setup_device() to return an error.   I guess we *could*
+do that already by making your early fixup set dev->hdr_type to 0xff
+or something.
 
+> In fact according to my tests if we let Kernel probe these BAR then
+> the system will hang immediately.
 > 
-> Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-> Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-> Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
-> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
-> Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
-> Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Allison Randal <allison@lohutok.net>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Gareth Williams <gareth.williams.jx@renesas.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
+> Chip manual suggested OS to ensure decoding is enabled so I'm doing
+> like this. But without this system can also work.
 > 
-> Serge Semin (17):
->   dt-bindings: spi: Convert DW SPI binding to DT schema
->   dt-bindings: spi: dw: Add DMA properties bindings
->   spi: dw: Split up the generic DMA code and Intel MID driver
->   spi: dw: Cleanup generic DW DMA code namings
->   spi: dw: Discard static DW DMA slave structures
->   spi: dw: Add DW SPI DMA/PCI/MMIO dependency on DW SPI core
->   spi: dw: Add Tx/Rx finish wait methods to DMA
->   spi: dw: Clear DMAC register when done or stopped
->   spi: dw: Enable interrupts in accordance with DMA xfer mode
->   spi: dw: Parameterize the DMA Rx/Tx burst length
->   spi: dw: Fix native CS being unset
->   spi: dw: Fix dma_slave_config used partly uninitialized
->   spi: dw: Initialize paddr in DW SPI MMIO private data
->   spi: dw: Add DMA support to the DW SPI MMIO driver
->   spi: dw: Use DMA max burst to set the request thresholds
->   spi: dw: Fix Rx-only DMA transfers
->   spi: dw: Use regset32 DebugFS method to create a registers file
-> 
->  .../bindings/spi/snps,dw-apb-ssi.txt          |  41 ---
->  .../bindings/spi/snps,dw-apb-ssi.yaml         | 123 +++++++++
->  .../devicetree/bindings/spi/spi-dw.txt        |  24 --
->  drivers/spi/Kconfig                           |  16 +-
->  drivers/spi/Makefile                          |   4 +-
->  drivers/spi/{spi-dw-mid.c => spi-dw-dma.c}    | 237 ++++++++++++------
->  drivers/spi/spi-dw-mmio.c                     |  15 +-
->  drivers/spi/spi-dw-pci.c                      |  38 ++-
->  drivers/spi/spi-dw.c                          |  89 +++----
->  drivers/spi/spi-dw.h                          |  27 +-
->  10 files changed, 402 insertions(+), 212 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.txt
->  create mode 100644 Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
->  delete mode 100644 Documentation/devicetree/bindings/spi/spi-dw.txt
->  rename drivers/spi/{spi-dw-mid.c => spi-dw-dma.c} (53%)
-> 
-> -- 
-> 2.25.1
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> Do you think I should drop it until figure out what was it actually
+> doing?
 
