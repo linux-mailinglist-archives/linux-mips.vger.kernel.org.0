@@ -2,81 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0331CB4E5
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 18:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 072991CB4EA
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 18:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726767AbgEHQWx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 12:22:53 -0400
-Received: from sender2-op-o12.zoho.com.cn ([163.53.93.243]:17491 "EHLO
-        sender2-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726756AbgEHQWx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 12:22:53 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1588954951; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=pebGk6hsd3YsLzG0W4Jnx0wlWqIDRYYjsneDzu0/78WVpiXtDdbEOGJbxHwsrsz9ajDY58b2D2/6cE6tsTlpvhSZBjTMF6cub0GB6q6yfMQ45OjpHRLlI4oq6aZFuoFoonGYAuazdk9PMo8zWB2F3736FefCiS51Y/hFFw0xRV4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1588954951; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
-        bh=Cz58bBGyWKkKJdTIxuW4a8aOuPWzKoBbhuGqr+LTMDU=; 
-        b=MWcmVMvkdZW/vAqV0/FJ5iElMbgvN/R6yVV8hJr1Io0mZw0K5DjGDuA/UGp4GKkvuHXPucK6qHEYvl6HT4xvCTGGv8SbGJtQ5HXeN0MU9LJvCiY31iL/iCrvko9kXuiGNes29TPy+puoRWjBP4PXIO9Qc1AyDIeO8FB4qF2W0V0=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=flygoat.com;
-        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
-        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1588954951;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:From:To:CC:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=Cz58bBGyWKkKJdTIxuW4a8aOuPWzKoBbhuGqr+LTMDU=;
-        b=BaoBRVgmdc72uD7ucEdzwXukBzrcPf+eYzslfL7V0quPS8v7bwCh/GE1oD5a5v43
-        4/0u3cbkgpTCVA2AGfFYK0uOB4tvet8mIQmSOvVJszpj6vQfxcRepzBXMhUcmtpO4w6
-        bFFx3DARRomIxrcCGiRyLUziv3Z3/fb5NlpAH41k=
-Received: from [127.0.0.1] (114.87.80.20 [114.87.80.20]) by mx.zoho.com.cn
-        with SMTPS id 1588954947751654.5132856099553; Sat, 9 May 2020 00:22:27 +0800 (CST)
-Date:   Sat, 09 May 2020 00:22:25 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     linux-mips@vger.kernel.org, chenhc@lemote.com,
-        john.garry@huawei.com
-Subject: Re: [PATCH RESEND v3 2/3] MIPS: Introduce PCI_IO_VMMAP
-User-Agent: K-9 Mail for Android
-Reply-to: jiaxun.yang@flygoat.com
-In-Reply-To: <20200508161102.GA23094@alpha.franken.de>
-References: <20200426114806.1176629-1-jiaxun.yang@flygoat.com> <20200508114438.3092215-1-jiaxun.yang@flygoat.com> <20200508114438.3092215-2-jiaxun.yang@flygoat.com> <20200508161102.GA23094@alpha.franken.de>
-Message-ID: <18B84249-7CA1-411E-B595-6E215D8C9C34@flygoat.com>
+        id S1726817AbgEHQZB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 12:25:01 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:43686 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726756AbgEHQZB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 12:25:01 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 44FF880307C7;
+        Fri,  8 May 2020 16:24:57 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FDqnx249YwhR; Fri,  8 May 2020 19:24:56 +0300 (MSK)
+Date:   Fri, 8 May 2020 19:24:55 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Mark Brown <broonie@kernel.org>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
+Message-ID: <20200508162455.3cgfquqmbx7ep2zf@mobilestation>
+References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
+ <CAHp75VdtzdX-sOvq2cZdXqGUmU=0rdzQW_USGD_q0D59pUMTWg@mail.gmail.com>
+ <20200508101541.e3yxaocuilaiyutg@mobilestation>
+ <CAHp75VcaVGHfYN1hjD5eKgpKJkpKEif8NxBGO1YF61_apv82Kg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoCNMailClient: External
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VcaVGHfYN1hjD5eKgpKJkpKEif8NxBGO1YF61_apv82Kg@mail.gmail.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Fri, May 08, 2020 at 01:26:52PM +0300, Andy Shevchenko wrote:
+> On Fri, May 8, 2020 at 1:15 PM Serge Semin
+> <Sergey.Semin@baikalelectronics.ru> wrote:
+> >
+> > On Fri, May 08, 2020 at 01:03:11PM +0300, Andy Shevchenko wrote:
+> > > On Fri, May 8, 2020 at 12:37 PM Serge Semin
+> > > <Sergey.Semin@baikalelectronics.ru> wrote:
+> > > >
+> > > > This SPI-controller is a part of the Baikal-T1 System Controller and
+> > > > is based on the DW APB SSI IP-core, but with very limited resources:
+> > > > no IRQ, no DMA, only a single native chip-select and just 8 bytes Tx/Rx
+> > > > FIFO available. In order to provide a transparent initial boot code
+> > > > execution this controller is also utilized by an vendor-specific block,
+> > > > which provides an CS0 SPI flash direct mapping interface. Since both
+> > > > direct mapping and SPI controller normal utilization are mutual exclusive
+> > > > only a one of these interfaces can be used to access an external SPI
+> > > > slave device. Taking into account the peculiarities of the controller
+> > > > registers and physically mapped SPI flash access, very limited resources
+> > > > and seeing the normal usecase of the controller is to access an external
+> > > > SPI-nor flash, we decided to create a dedicated SPI driver for it.
+> > >
+> > > It seems a lot of code.
+> > > Why can't you use spi-dw-mmio.c et al.?
+> >
+> > I said above why. Even though the registers set is similar It's too specific
+> > to be integrated into the generic DW SSI driver.
+> 
+> At least you may do at the beginning is to reuse header spi-dw.h and
+> put your stuff under
+> spi-dw-baikal.c or so. Then, look at the spi-dw.c and check what can
+> be reused (I think a lot).
 
+Nah, It's not a lot, barely a few things. What is useful is the registers map
+(though it has to be shifted and most of the registers are unused), IO operations
+(two small read-write methods with questionable design) and possibly a few lines
+of config setting procedure.
 
-=E4=BA=8E 2020=E5=B9=B45=E6=9C=889=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=8812=
-:11:02, Thomas Bogendoerfer <tsbogend@alpha=2Efranken=2Ede> =E5=86=99=E5=88=
-=B0:
->On Fri, May 08, 2020 at 07:44:37PM +0800, Jiaxun Yang wrote:
->> Define PCI_IOBASE for MIPS at the strat of kernel mapping segment=2E
->> That would allow virt address of I/O ports to be dynamicly mapped=2E
->> So we'll be able to combine multiple MMIO ranges into I/O ports
->> and thus we can take advantage of logic_pio mechanism=2E
->
->What is the advantage ?
->
->From my point of view this will be slower because of TLB faults for
->PCI IO space accesses=2E
+You think I didn't had in mind to integrate this controller support into
+the generic driver or resuse something from there? If it was worth a try I would
+have done it.
 
-Advantage is we can use logic_pio to manage multiple I/O Port ranges=2E
+-Sergey
 
-That can help us reuse generic PCI I/O design=2E
-
-Thanks=2E
-
->
->Thomas=2E
->
-
---=20
-Jiaxun Yang
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
