@@ -2,55 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B291CA885
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 12:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6AF11CA898
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 12:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727072AbgEHKrk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 06:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
+        id S1726598AbgEHKuc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 06:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727067AbgEHKrk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 06:47:40 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F6CC05BD43;
-        Fri,  8 May 2020 03:47:38 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id i15so1300727wrx.10;
-        Fri, 08 May 2020 03:47:38 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726751AbgEHKub (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 06:50:31 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE0BC05BD43;
+        Fri,  8 May 2020 03:50:30 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id v12so1304347wrp.12;
+        Fri, 08 May 2020 03:50:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=k49C5zyuYWcuoY4kwjTau665FvHnQw5Q4jQ2RG6JlUs=;
-        b=QguEcWV+11prMAuzF3jYEYwv5SxpfNZG2xQkTu11plqRp90UWMVo0aJa3HsD/iZFX8
-         +WP/EuT13v01+If9nilD7Y9tX+8j4BtM86jUgNPW+OLFuoYNG8aDGRWiRLH7xGQPxG/8
-         Y6pwl8sULQb4XOK1Y/P9TPGB0hnybV1E+FVKK4HpfIWNNo0MPZf9UoJhC6jeE+TujAd4
-         gvFThLks4WjpZK3OEQoyGt32VkLrpEeNGRIOqN1X8uJeSr0yks9W5DPN+YuR0oLJbRE3
-         VVujulFL+0Wio0rar075WJ39Lmc4alesuj7pQk9rHAk+D4H4ZcpT2HkwQiyocl2MMOuq
-         5khg==
+        bh=na4PxtxYBtTgNIyJrJVZOQfkqaOH+MD6SpKh/IbaOOY=;
+        b=Z7nc9dUhR+2Lor8t1HZfAy4TQYymAvZSCiBn0Ox7KKvkPi6dzD056wMC2FcNHBF8ks
+         OAFqOTcQnj7quLWA7+Hax5AqDDXjcHh1Hdp/bYyF3yXHYiXw1WBqo/NLJx4kPb0NhnUZ
+         ELJrpRSmowesx+Fc6f2TJc6qBTIC5Hkl6GJyEbkGNYLcNKDHBTgpLfQu7JOgu2D9ocGR
+         sXaekMiXCv+YPyxvML82fWyzj3uBlA6IoPVieEx0NBYlkbRsjGrU81iI0q9bgC9Z4OB2
+         GascgWJTJBYItZDYI+L4YelrC/IVI9mU6vPdpgQLwRJfScBREvuhxJxkvQTRZocu3iRy
+         7uow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=k49C5zyuYWcuoY4kwjTau665FvHnQw5Q4jQ2RG6JlUs=;
-        b=nw2cmuDolrOl5G1lPADBNrCIZhNxJqCx5BRWWV8DFM5hZoeYR3LWK9N6y/pGuObuLD
-         54RhRuaVInL6kibEOHsEnsSntUsTXrLnliov4O1+lQOuB4aud7so5UFTaj/RPHWarvRL
-         gJ1wfxCm5E4RlqG/o7MADa3iVhUne7VDRRUfl4cSu32Ol1JwGLaBpd9dWCkFJs7qPhmd
-         H0bVtFAXPoEVumAmMKLNWoIZWlWOOdyQAK9EXdtx1KaewBgN80xxDKYpFn9QrwT2rduq
-         59jdbCqK/Ofzo7LpQKlB/ApDzeN7qcUuhuVr5bXbKGoDtGTkhjYtNrjNvoK9GQE7q6jt
-         +YQA==
-X-Gm-Message-State: AGi0Pualpd9NZWsri0vdx/QcEyIgCxixCurpDJPWP2BMs8v87FJ/uaFc
-        mLD/TRtclAedDCy9DrmsUaOdH0RzK0G9KIt89/c=
-X-Google-Smtp-Source: APiQypImQ782kwPY61AeIdZOXoSu5RXAc69bVqdP/Ob3z4w8gKoCL38Lf2ltKEyIaAFDNueYCjRRdJCrS8Nickb4kkY=
-X-Received: by 2002:adf:94a6:: with SMTP id 35mr2213072wrr.420.1588934857318;
- Fri, 08 May 2020 03:47:37 -0700 (PDT)
+        bh=na4PxtxYBtTgNIyJrJVZOQfkqaOH+MD6SpKh/IbaOOY=;
+        b=c2tlrwH59fRd7l4z0YbIVpLJlnVwl+PivOLxl1/kDPCsbJDPKeRzcy3whYQocOcA4Q
+         HXrflDB05uCRLt/Sv67PP2xGg7AAELtVhTvDuuS7bEFrNvw0uE3qgDYkatJpc2cgXUFq
+         o4Rp5AGtC5/tkqOsWSpuoAhpDf5122JGxyDeb8udK1a3CdP87BUa3gzOEjumWyj+03Th
+         pBQbpx9xLc0e6BYTKB01xAzhoeNIiwXV0+I9RhcrYUUkCg8bVWz9gil79p4D42yTJm53
+         66O3rWUtcmM6iPTQCcP7ltd44dqgSunVibkq4X32tIJmsVaXerGueVdhCKoBsO3p+WgD
+         bgOQ==
+X-Gm-Message-State: AGi0PuZwcs7Rn0opexA0n5O82Xz+dqAxEtpDSisfKo9mb2xBa13RAfBw
+        dsjGrk9TSFXL6bpLZh1w4B/X8KbP4OMM1hHoK34=
+X-Google-Smtp-Source: APiQypLps5e89dryAJ1QstWGUCC3pDIOliobPu6WMtlfpmaqxoS1yp2kh2z3aXIKNNmT+rqhwwgHq4EwpWC53c73bAM=
+X-Received: by 2002:adf:a2d7:: with SMTP id t23mr2248151wra.402.1588935029568;
+ Fri, 08 May 2020 03:50:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <1588500367-1056-1-git-send-email-chenhc@lemote.com> <1588500367-1056-6-git-send-email-chenhc@lemote.com>
-In-Reply-To: <1588500367-1056-6-git-send-email-chenhc@lemote.com>
+References: <1588500367-1056-1-git-send-email-chenhc@lemote.com> <1588500367-1056-7-git-send-email-chenhc@lemote.com>
+In-Reply-To: <1588500367-1056-7-git-send-email-chenhc@lemote.com>
 From:   Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Date:   Fri, 8 May 2020 12:46:12 +0200
-Message-ID: <CAHiYmc604JH9YVXMEVCFgrMvWqaAtWqWjF-iQjGTLZzpzC3dKA@mail.gmail.com>
-Subject: Re: [PATCH V3 05/14] KVM: MIPS: Use lddir/ldpte instructions to
- lookup gpa_mm.pgd
+Date:   Fri, 8 May 2020 12:49:14 +0200
+Message-ID: <CAHiYmc5o93GwReZ2YhqF_SF9A5Pg-px9aMj7PZDi9weoygOdTA@mail.gmail.com>
+Subject: Re: [PATCH V3 06/14] KVM: MIPS: Introduce and use cpu_guest_has_ldpte
 To:     Huacai Chen <chenhc@lemote.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -71,82 +70,164 @@ X-Mailing-List: linux-mips@vger.kernel.org
 henhc@lemote.com> =D1=98=D0=B5 =D0=BD=D0=B0=D0=BF=D0=B8=D1=81=D0=B0=D0=BE/=
 =D0=BB=D0=B0:
 >
-> Loongson-3 can use lddir/ldpte instuctions to accelerate page table
-> walking, so use them to lookup gpa_mm.pgd.
+> Loongson-3 has lddir/ldpte instructions and their related CP0 registers
+> are the same as HTW. So we introduce a cpu_guest_has_ldpte flag and use
+> it to indicate whether we need to save/restore HTW related CP0 registers
+> (PWBase, PWSize, PWField and PWCtl).
 >
 > Signed-off-by: Huacai Chen <chenhc@lemote.com>
 > Co-developed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->  arch/mips/kvm/entry.c | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
+>  arch/mips/include/asm/cpu-features.h |  3 +++
+>  arch/mips/kernel/cpu-probe.c         |  1 +
+>  arch/mips/kvm/vz.c                   | 26 +++++++++++++-------------
+>  3 files changed, 17 insertions(+), 13 deletions(-)
 >
-> diff --git a/arch/mips/kvm/entry.c b/arch/mips/kvm/entry.c
-> index 16e1c93..fd71694 100644
-> --- a/arch/mips/kvm/entry.c
-> +++ b/arch/mips/kvm/entry.c
-> @@ -56,6 +56,7 @@
->  #define C0_BADVADDR    8, 0
->  #define C0_BADINSTR    8, 1
->  #define C0_BADINSTRP   8, 2
-> +#define C0_PGD         9, 7
->  #define C0_ENTRYHI     10, 0
->  #define C0_GUESTCTL1   10, 4
->  #define C0_STATUS      12, 0
-> @@ -307,7 +308,10 @@ static void *kvm_mips_build_enter_guest(void *addr)
->
->  #ifdef CONFIG_KVM_MIPS_VZ
->         /* Save normal linux process pgd (VZ guarantees pgd_reg is set) *=
-/
-> -       UASM_i_MFC0(&p, K0, c0_kscratch(), pgd_reg);
-> +       if (cpu_has_ldpte)
-> +               UASM_i_MFC0(&p, K0, C0_PWBASE);
-> +       else
-> +               UASM_i_MFC0(&p, K0, c0_kscratch(), pgd_reg);
->         UASM_i_SW(&p, K0, offsetof(struct kvm_vcpu_arch, host_pgd), K1);
->
->         /*
-> @@ -469,8 +473,10 @@ void *kvm_mips_build_tlb_refill_exception(void *addr=
-, void *handler)
->         u32 *p =3D addr;
->         struct uasm_label labels[2];
->         struct uasm_reloc relocs[2];
-> +#ifndef CONFIG_CPU_LOONGSON64
->         struct uasm_label *l =3D labels;
->         struct uasm_reloc *r =3D relocs;
+> diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm=
+/cpu-features.h
+> index 400b123..e127495 100644
+> --- a/arch/mips/include/asm/cpu-features.h
+> +++ b/arch/mips/include/asm/cpu-features.h
+> @@ -659,6 +659,9 @@
+>  #ifndef cpu_guest_has_htw
+>  #define cpu_guest_has_htw      (cpu_data[0].guest.options & MIPS_CPU_HTW=
+)
+>  #endif
+> +#ifndef cpu_guest_has_ldpte
+> +#define cpu_guest_has_ldpte    (cpu_data[0].guest.options & MIPS_CPU_LDP=
+TE)
 > +#endif
+>  #ifndef cpu_guest_has_mvh
+>  #define cpu_guest_has_mvh      (cpu_data[0].guest.options & MIPS_CPU_MVH=
+)
+>  #endif
+> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+> index ca2e6f1..be1b556 100644
+> --- a/arch/mips/kernel/cpu-probe.c
+> +++ b/arch/mips/kernel/cpu-probe.c
+> @@ -2004,6 +2004,7 @@ static inline void cpu_probe_loongson(struct cpuinf=
+o_mips *c, unsigned int cpu)
+>                  * register, we correct it here.
+>                  */
+>                 c->options |=3D MIPS_CPU_FTLB | MIPS_CPU_TLBINV | MIPS_CP=
+U_LDPTE;
+> +               c->guest.options |=3D MIPS_CPU_LDPTE;
+>                 c->writecombine =3D _CACHE_UNCACHED_ACCELERATED;
+>                 c->ases |=3D (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_C=
+AM |
+>                         MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
+> diff --git a/arch/mips/kvm/vz.c b/arch/mips/kvm/vz.c
+> index 17932ab..422cd06 100644
+> --- a/arch/mips/kvm/vz.c
+> +++ b/arch/mips/kvm/vz.c
+> @@ -1706,7 +1706,7 @@ static unsigned long kvm_vz_num_regs(struct kvm_vcp=
+u *vcpu)
+>                 ret +=3D ARRAY_SIZE(kvm_vz_get_one_regs_contextconfig);
+>         if (cpu_guest_has_segments)
+>                 ret +=3D ARRAY_SIZE(kvm_vz_get_one_regs_segments);
+> -       if (cpu_guest_has_htw)
+> +       if (cpu_guest_has_htw || cpu_guest_has_ldpte)
+>                 ret +=3D ARRAY_SIZE(kvm_vz_get_one_regs_htw);
+>         if (cpu_guest_has_maar && !cpu_guest_has_dyn_maar)
+>                 ret +=3D 1 + ARRAY_SIZE(vcpu->arch.maar);
+> @@ -1755,7 +1755,7 @@ static int kvm_vz_copy_reg_indices(struct kvm_vcpu =
+*vcpu, u64 __user *indices)
+>                         return -EFAULT;
+>                 indices +=3D ARRAY_SIZE(kvm_vz_get_one_regs_segments);
+>         }
+> -       if (cpu_guest_has_htw) {
+> +       if (cpu_guest_has_htw || cpu_guest_has_ldpte) {
+>                 if (copy_to_user(indices, kvm_vz_get_one_regs_htw,
+>                                  sizeof(kvm_vz_get_one_regs_htw)))
+>                         return -EFAULT;
+> @@ -1878,17 +1878,17 @@ static int kvm_vz_get_one_reg(struct kvm_vcpu *vc=
+pu,
+>                 *v =3D read_gc0_segctl2();
+>                 break;
+>         case KVM_REG_MIPS_CP0_PWBASE:
+> -               if (!cpu_guest_has_htw)
+> +               if (!cpu_guest_has_htw && !cpu_guest_has_ldpte)
+>                         return -EINVAL;
+>                 *v =3D read_gc0_pwbase();
+>                 break;
+>         case KVM_REG_MIPS_CP0_PWFIELD:
+> -               if (!cpu_guest_has_htw)
+> +               if (!cpu_guest_has_htw && !cpu_guest_has_ldpte)
+>                         return -EINVAL;
+>                 *v =3D read_gc0_pwfield();
+>                 break;
+>         case KVM_REG_MIPS_CP0_PWSIZE:
+> -               if (!cpu_guest_has_htw)
+> +               if (!cpu_guest_has_htw && !cpu_guest_has_ldpte)
+>                         return -EINVAL;
+>                 *v =3D read_gc0_pwsize();
+>                 break;
+> @@ -1896,7 +1896,7 @@ static int kvm_vz_get_one_reg(struct kvm_vcpu *vcpu=
+,
+>                 *v =3D (long)read_gc0_wired();
+>                 break;
+>         case KVM_REG_MIPS_CP0_PWCTL:
+> -               if (!cpu_guest_has_htw)
+> +               if (!cpu_guest_has_htw && !cpu_guest_has_ldpte)
+>                         return -EINVAL;
+>                 *v =3D read_gc0_pwctl();
+>                 break;
+> @@ -2101,17 +2101,17 @@ static int kvm_vz_set_one_reg(struct kvm_vcpu *vc=
+pu,
+>                 write_gc0_segctl2(v);
+>                 break;
+>         case KVM_REG_MIPS_CP0_PWBASE:
+> -               if (!cpu_guest_has_htw)
+> +               if (!cpu_guest_has_htw && !cpu_guest_has_ldpte)
+>                         return -EINVAL;
+>                 write_gc0_pwbase(v);
+>                 break;
+>         case KVM_REG_MIPS_CP0_PWFIELD:
+> -               if (!cpu_guest_has_htw)
+> +               if (!cpu_guest_has_htw && !cpu_guest_has_ldpte)
+>                         return -EINVAL;
+>                 write_gc0_pwfield(v);
+>                 break;
+>         case KVM_REG_MIPS_CP0_PWSIZE:
+> -               if (!cpu_guest_has_htw)
+> +               if (!cpu_guest_has_htw && !cpu_guest_has_ldpte)
+>                         return -EINVAL;
+>                 write_gc0_pwsize(v);
+>                 break;
+> @@ -2119,7 +2119,7 @@ static int kvm_vz_set_one_reg(struct kvm_vcpu *vcpu=
+,
+>                 change_gc0_wired(MIPSR6_WIRED_WIRED, v);
+>                 break;
+>         case KVM_REG_MIPS_CP0_PWCTL:
+> -               if (!cpu_guest_has_htw)
+> +               if (!cpu_guest_has_htw && !cpu_guest_has_ldpte)
+>                         return -EINVAL;
+>                 write_gc0_pwctl(v);
+>                 break;
+> @@ -2580,7 +2580,7 @@ static int kvm_vz_vcpu_load(struct kvm_vcpu *vcpu, =
+int cpu)
+>         }
 >
->         memset(labels, 0, sizeof(labels));
->         memset(relocs, 0, sizeof(relocs));
-> @@ -490,6 +496,16 @@ void *kvm_mips_build_tlb_refill_exception(void *addr=
-, void *handler)
->          */
->         preempt_disable();
+>         /* restore HTW registers */
+> -       if (cpu_guest_has_htw) {
+> +       if (cpu_guest_has_htw || cpu_guest_has_ldpte) {
+>                 kvm_restore_gc0_pwbase(cop0);
+>                 kvm_restore_gc0_pwfield(cop0);
+>                 kvm_restore_gc0_pwsize(cop0);
+> @@ -2685,8 +2685,8 @@ static int kvm_vz_vcpu_put(struct kvm_vcpu *vcpu, i=
+nt cpu)
+>         }
 >
-> +#ifdef CONFIG_CPU_LOONGSON64
-> +       UASM_i_MFC0(&p, K1, C0_PGD);
-> +       uasm_i_lddir(&p, K0, K1, 3);  /* global page dir */
-> +#ifndef __PAGETABLE_PMD_FOLDED
-> +       uasm_i_lddir(&p, K1, K0, 1);  /* middle page dir */
-> +#endif
-> +       uasm_i_ldpte(&p, K1, 0);      /* even */
-> +       uasm_i_ldpte(&p, K1, 1);      /* odd */
-> +       uasm_i_tlbwr(&p);
-> +#else
->         /*
->          * Now for the actual refill bit. A lot of this can be common wit=
-h the
->          * Linux TLB refill handler, however we don't need to handle so m=
-any
-> @@ -512,6 +528,7 @@ void *kvm_mips_build_tlb_refill_exception(void *addr,=
- void *handler)
->         build_get_ptep(&p, K0, K1);
->         build_update_entries(&p, K0, K1);
->         build_tlb_write_entry(&p, &l, &r, tlb_random);
-> +#endif
->
->         preempt_enable();
->
+>         /* save HTW registers if enabled in guest */
+> -       if (cpu_guest_has_htw &&
+> -           kvm_read_sw_gc0_config3(cop0) & MIPS_CONF3_PW) {
+> +       if (cpu_guest_has_ldpte || (cpu_guest_has_htw &&
+> +           kvm_read_sw_gc0_config3(cop0) & MIPS_CONF3_PW)) {
+>                 kvm_save_gc0_pwbase(cop0);
+>                 kvm_save_gc0_pwfield(cop0);
+>                 kvm_save_gc0_pwsize(cop0);
 > --
 > 2.7.0
 >
+
 Reviewed-by: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
