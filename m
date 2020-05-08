@@ -2,112 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 046DD1CA80E
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 12:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1D31CA812
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 12:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727071AbgEHKPU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 06:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbgEHKPT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 06:15:19 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B4BC05BD43;
-        Fri,  8 May 2020 03:15:18 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id g12so9992848wmh.3;
-        Fri, 08 May 2020 03:15:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=mH4zcj4jAFO6of/XHBeCHGTKbSV21AdNuIYsxQykbg0=;
-        b=pDdlmsdZ8CkNvrQbbd4GjumxAzozSa2oP2fF1wBBFwzTGatcplKgpfDIqVQipqpecq
-         4N9xuoN0ltj8m4CzfaDwc8g84ygpzkzAuddOyYBpIfvI8sy+5KAmizrto8RteRINems4
-         Hy2XgXTNbdv9qFolyPghf1DVtzIieYcGZJitGh3HtL5CuLGvsuO/kl8wpLxVczKdS/r4
-         WDJY3AE/TGyhu5uAgteiM9DqFuWZjZgd02ddFHImczuHt0kYfUPCBJ80KiI0OmqQLage
-         8QlpThHUPyLS4+b5aAr5XiRyvoM3EtOZIz9XJ3nL6HFEsX4yNdiUgbNY8dNCFcNnuZmU
-         9mvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=mH4zcj4jAFO6of/XHBeCHGTKbSV21AdNuIYsxQykbg0=;
-        b=XV0t9Zw31oZW3U5OBqr1j7tNBp8UWkATk/UCLm4eioFvNhMT2s6R4OtuZi2iKN7TPl
-         +qsq0BlUvoih4KG2/nO9WiYT2xRlFMrYLLjEZCKJTDzkRt9LdnXlixLqlZQMm5Pifp24
-         jTAX/jE5Om2j77EYJ0TY1FroWFBFgDFctoEl2it26clSbMkqrCgi4KFUy/AuDL3Pq2H+
-         9xVIfkwvnMBnxpLVIYFgR8GXZIIek8bdoskY+ux7qLIX1BvLuAgpz6WcVi+0bmQUsII3
-         Bb32awTr/aMRTTgen13QBAy2HFCHDfqSyArtHEeb17C95qnhvwC2W4cLQPK8CZuiDT22
-         gVcg==
-X-Gm-Message-State: AGi0PuaTyWPwErykeO7U6UG+lnW/fOw149d0WRtsJd0h5bYCGEirre08
-        mHp39+4CojbcEshFlT6QoCmSU4BPDKEdkVL3Sck=
-X-Google-Smtp-Source: APiQypIREaQqmfF7+C8yUOxOZSymcWKhbwxCIVdrJyeSmilFqo7y6mn+Or2O1brlhklUlY5+b0V7MLT3rhV4/VuubS0=
-X-Received: by 2002:a7b:c190:: with SMTP id y16mr16390070wmi.50.1588932916746;
- Fri, 08 May 2020 03:15:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <1588500367-1056-1-git-send-email-chenhc@lemote.com> <1588500367-1056-3-git-send-email-chenhc@lemote.com>
-In-Reply-To: <1588500367-1056-3-git-send-email-chenhc@lemote.com>
-From:   Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Date:   Fri, 8 May 2020 12:14:40 +0200
-Message-ID: <CAHiYmc44B4e1PZXoyhBGy_AizLbbOrScPg2w=tZT1OPsnVcuUA@mail.gmail.com>
-Subject: Re: [PATCH V3 02/14] KVM: MIPS: Fix VPN2_MASK definition for variable cpu_vmbits
-To:     Huacai Chen <chenhc@lemote.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        id S1727104AbgEHKPr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 06:15:47 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:41496 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726746AbgEHKPr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 06:15:47 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 1A11D80307C7;
+        Fri,  8 May 2020 10:15:44 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Wxdbd-7H0-MF; Fri,  8 May 2020 13:15:43 +0300 (MSK)
+Date:   Fri, 8 May 2020 13:15:41 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Mark Brown <broonie@kernel.org>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        kvm@vger.kernel.org, QEMU Developers <qemu-devel@nongnu.org>,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Xing Li <lixing@loongson.cn>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
+Message-ID: <20200508101541.e3yxaocuilaiyutg@mobilestation>
+References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
+ <CAHp75VdtzdX-sOvq2cZdXqGUmU=0rdzQW_USGD_q0D59pUMTWg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VdtzdX-sOvq2cZdXqGUmU=0rdzQW_USGD_q0D59pUMTWg@mail.gmail.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-=D0=BD=D0=B5=D0=B4, 3. =D0=BC=D0=B0=D1=98 2020. =D1=83 12:07 Huacai Chen <c=
-henhc@lemote.com> =D1=98=D0=B5 =D0=BD=D0=B0=D0=BF=D0=B8=D1=81=D0=B0=D0=BE/=
-=D0=BB=D0=B0:
->
-> From: Xing Li <lixing@loongson.cn>
->
-> If a CPU support more than 32bit vmbits (which is true for 64bit CPUs),
-> VPN2_MASK set to fixed 0xffffe000 will lead to a wrong EntryHi in some
-> functions such as _kvm_mips_host_tlb_inv().
->
-> The cpu_vmbits definition of 32bit CPU in cpu-features.h is 31, so we
-> still use the old definition.
->
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Xing Li <lixing@loongson.cn>
-> [Huacai: Improve commit messages]
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> ---
->  arch/mips/include/asm/kvm_host.h | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm=
-_host.h
-> index a01cee9..caa2b936 100644
-> --- a/arch/mips/include/asm/kvm_host.h
-> +++ b/arch/mips/include/asm/kvm_host.h
-> @@ -274,7 +274,11 @@ enum emulation_result {
->  #define MIPS3_PG_SHIFT         6
->  #define MIPS3_PG_FRAME         0x3fffffc0
->
-> +#if defined(CONFIG_64BIT)
-> +#define VPN2_MASK              GENMASK(cpu_vmbits - 1, 13)
-> +#else
->  #define VPN2_MASK              0xffffe000
-> +#endif
->  #define KVM_ENTRYHI_ASID       cpu_asid_mask(&boot_cpu_data)
->  #define TLB_IS_GLOBAL(x)       ((x).tlb_lo[0] & (x).tlb_lo[1] & ENTRYLO_=
-G)
->  #define TLB_VPN2(x)            ((x).tlb_hi & VPN2_MASK)
-> --
-> 2.7.0
->
+On Fri, May 08, 2020 at 01:03:11PM +0300, Andy Shevchenko wrote:
+> On Fri, May 8, 2020 at 12:37 PM Serge Semin
+> <Sergey.Semin@baikalelectronics.ru> wrote:
+> >
+> > This SPI-controller is a part of the Baikal-T1 System Controller and
+> > is based on the DW APB SSI IP-core, but with very limited resources:
+> > no IRQ, no DMA, only a single native chip-select and just 8 bytes Tx/Rx
+> > FIFO available. In order to provide a transparent initial boot code
+> > execution this controller is also utilized by an vendor-specific block,
+> > which provides an CS0 SPI flash direct mapping interface. Since both
+> > direct mapping and SPI controller normal utilization are mutual exclusive
+> > only a one of these interfaces can be used to access an external SPI
+> > slave device. Taking into account the peculiarities of the controller
+> > registers and physically mapped SPI flash access, very limited resources
+> > and seeing the normal usecase of the controller is to access an external
+> > SPI-nor flash, we decided to create a dedicated SPI driver for it.
+> 
+> It seems a lot of code.
+> Why can't you use spi-dw-mmio.c et al.?
 
-Reviewed-by: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+I said above why. Even though the registers set is similar It's too specific
+to be integrated into the generic DW SSI driver.
+
+-Sergey
+
+> 
+> > The driver provides callbacks for native messages-based SPI interface,
+> > SPI-memory and direct mapping read operations. Due to not having any
+> > asynchronous signaling interface provided by the core we have no choice
+> > but to implement a polling-based data transmission/reception algorithm.
+> > In addition to that in order to bypass the automatic native chip-select
+> > toggle the driver disables the local interrupts during the memory-based
+> > transfers if no complementary GPIO-based chip-select detected in the
+> > platform.
+> 
+> 
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
