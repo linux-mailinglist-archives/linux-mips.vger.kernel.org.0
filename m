@@ -2,461 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC57B1CA725
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 11:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4683C1CA739
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 11:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725774AbgEHJaD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 05:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725379AbgEHJaC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 05:30:02 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B0CC05BD43
-        for <linux-mips@vger.kernel.org>; Fri,  8 May 2020 02:30:01 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id t40so3997681pjb.3
-        for <linux-mips@vger.kernel.org>; Fri, 08 May 2020 02:30:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=aU/g92V8O2S/ZZdiz5NX1eAbv8iWTGUGsH8frvYwFaY=;
-        b=obYWZ0DpM68ICVMRx7Bn7BuFDBig728Icxqm11JVftAigne8IlONDgrHEGd5ZPx13i
-         Ozw2rNSOPNjyIbRZPRqYrX9ayGmsZ3NtQc3onpUTaziz7iJz3IdeqoOqtJ7RApISvcGi
-         3Yv2UzYpkCA/t0i3/1f9QUqhFgjjByu6eTDrvug2BZzApaaNR6V2Q+B5+Jdr2Ai+I9J8
-         vghddSh4Ni8uxNRbXA8h3yemorfWvcnBBi0x2hvZbKp90n8XIINHtt1FzV8unZV+sWKp
-         ZMh2wYTfq7etkPV9k1cYI40iwsmsIa7QHdYh4BPH9a+hEzwykQpyDvMf2uqCFroKYOOj
-         5CMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=aU/g92V8O2S/ZZdiz5NX1eAbv8iWTGUGsH8frvYwFaY=;
-        b=OXfMEiVrf0hit+0hiSNPo2IV2qxBYYLukdqZYY627P46GofeYwgp7dX1rtKu6JPYsQ
-         TtUslXW9LK1QPKy5akmnnVKbO9CwRCJyZYUzHinfMU7dTWpA9Ua81jhC3MuzjYstfnZH
-         74JskjaZKcnwUch0LFL0tQygvHFL+GqVr8IWZnsq5dfYF1RtRDyj5bJwRKGoCFHRxDnF
-         q0gLYssOMJ2m97t0O1QBRvG2lh0URtB2n8xQCenQIFjmMqQwcknJqafP0OAhvkbfNLRN
-         2YMvh+EfmSsWHvYXhAcVWpPB9Dx84R44lU7+ZqdcqaicN3uoDZWbBNi+fx+TtZLXFKi9
-         A5pQ==
-X-Gm-Message-State: AGi0Pub3ItD8r6iwlYY1rC8NE6Cc3QYJYefu6h3g3y649+zEIK3CQoNJ
-        lND+17fouMz/7i1wr1re/HE=
-X-Google-Smtp-Source: APiQypJZok/5phLARSS4GR0zmzd6eO62VWnIZCz2mw8m2ofYMypIlsbveuKoLpHQp7812OWoyuEhcA==
-X-Received: by 2002:a17:902:6901:: with SMTP id j1mr1561878plk.255.1588930200662;
-        Fri, 08 May 2020 02:30:00 -0700 (PDT)
-Received: from software.domain.org (28.144.92.34.bc.googleusercontent.com. [34.92.144.28])
-        by smtp.gmail.com with ESMTPSA id s136sm1306539pfc.29.2020.05.08.02.29.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 08 May 2020 02:29:59 -0700 (PDT)
-From:   Huacai Chen <chenhc@lemote.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH] MIPS: inst.h: Stop including asm.h to avoid various build failures
-Date:   Fri,  8 May 2020 17:30:12 +0800
-Message-Id: <1588930212-5255-1-git-send-email-chenhc@lemote.com>
-X-Mailer: git-send-email 2.7.0
+        id S1726863AbgEHJdO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 05:33:14 -0400
+Received: from elvis.franken.de ([193.175.24.41]:44684 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725825AbgEHJdO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 May 2020 05:33:14 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jWzNV-0001bD-01; Fri, 08 May 2020 11:33:09 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id DB100C0418; Fri,  8 May 2020 11:32:59 +0200 (CEST)
+Date:   Fri, 8 May 2020 11:32:59 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alexander Lobakin <alobakin@dlink.ru>,
+        Huacai Chen <chenhc@lemote.com>,
+        Cedric Hombourger <Cedric_Hombourger@mentor.com>,
+        =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 07/20] mips: Add MIPS Warrior P5600 support
+Message-ID: <20200508093259.GB9085@alpha.franken.de>
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-8-Sergey.Semin@baikalelectronics.ru>
+ <20200507111735.GF11616@alpha.franken.de>
+ <20200507211923.kfu2ly3ncqms4c2u@mobilestation>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200507211923.kfu2ly3ncqms4c2u@mobilestation>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Commit d339cd02b888eb8 ("MIPS: Move unaligned load/store helpers to
-inst.h") causes a lot of build failures because macros in asm.h conflict
-with various subsystems. Some of these conflictions has been fixed (such
-as LONG, PANIC and PRINT) by adjusting asm.h, but some of them is nearly
-impossible to fix (such as PTR and END). The only reason of including
-asm.h in inst.h is that we need the PTR macro which is used by unaligned
-load/store helpers. So in this patch we define a new PTR_STR macro and
-use it to replace STR(PTR), then we can stop including asm.h to avoid
-various build failures.
+On Fri, May 08, 2020 at 12:19:23AM +0300, Serge Semin wrote:
+> On Thu, May 07, 2020 at 01:17:35PM +0200, Thomas Bogendoerfer wrote:
+> > P5600 is CPU_MIPS_R5 so can't you select it here and drop all the || CPU_5600
+> > above/below ?
+> 
+> Alas, We can't do this so easy. CONFIG_CPU_MIPS32_{R2,R5,R6} and any other
+> CONFIG_CPU_* configs is something that kernel config-file is supposed to select.
+> Their availability is enabled by the CONFIG_SYS_HAS_CPU_* configs. CONFIG_CPU_*
+> is supposed to activate CPU-specific features and there is only one
+> CONFIG_CPU_x can be enabled at a time seeing it's a part of the "CPU type"
+> choice kconfig menu. In addition the CPU config also tunes a compiler to activate
+> the arch-specific ISA and optimizations in the arch/mips/Makefile by setting
+> -march=cpu-name (where cpu-name can be p5600, mips32r5, etc).
+> 
+> Yes, P5600 is based on the MIPS32r5, but it also has got some specific features
+> (see config CPU_P5600 and config MIPS32_R5), which makes it to be different from
+> the ancestor. So In addition to the difficulties described above IMHO converting
+> CPU_P5600 to a set of features activated on top of the CPU_MIPS32_R5 config
+> would contradict the design of the CPU-support configs implemented in the MIPS
+> arch subsystem.
 
-Fixes: d339cd02b888eb8 ("MIPS: Move unaligned load/store helpers to inst.h")
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
----
- arch/mips/include/asm/inst.h | 184 ++++++++++++++++++++++---------------------
- 1 file changed, 95 insertions(+), 89 deletions(-)
+maybe I wasn't clear enough, my suggestion is
 
-diff --git a/arch/mips/include/asm/inst.h b/arch/mips/include/asm/inst.h
-index 8254545..6d74ba3 100644
---- a/arch/mips/include/asm/inst.h
-+++ b/arch/mips/include/asm/inst.h
-@@ -11,9 +11,15 @@
- #ifndef _ASM_INST_H
- #define _ASM_INST_H
- 
--#include <asm/asm.h>
- #include <uapi/asm/inst.h>
- 
-+#if (_MIPS_SZPTR == 32)
-+#define PTR_STR		".word"
-+#endif
-+#if (_MIPS_SZPTR == 64)
-+#define PTR_STR		".dword"
-+#endif
-+
- /* HACHACHAHCAHC ...  */
- 
- /* In case some other massaging is needed, keep MIPSInst as wrapper */
-@@ -102,8 +108,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -123,8 +129,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -156,10 +162,10 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 11b\n\t"		    \
--		STR(PTR)"\t2b, 11b\n\t"		    \
--		STR(PTR)"\t3b, 11b\n\t"		    \
--		STR(PTR)"\t4b, 11b\n\t"		    \
-+		PTR_STR"\t1b, 11b\n\t"		    \
-+		PTR_STR"\t2b, 11b\n\t"		    \
-+		PTR_STR"\t3b, 11b\n\t"		    \
-+		PTR_STR"\t4b, 11b\n\t"		    \
- 		".previous"			    \
- 		: "=&r" (value), "=r" (res)	    \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -184,8 +190,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -207,8 +213,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -227,8 +233,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -260,10 +266,10 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 11b\n\t"		    \
--		STR(PTR)"\t2b, 11b\n\t"		    \
--		STR(PTR)"\t3b, 11b\n\t"		    \
--		STR(PTR)"\t4b, 11b\n\t"		    \
-+		PTR_STR"\t1b, 11b\n\t"		    \
-+		PTR_STR"\t2b, 11b\n\t"		    \
-+		PTR_STR"\t3b, 11b\n\t"		    \
-+		PTR_STR"\t4b, 11b\n\t"		    \
- 		".previous"			    \
- 		: "=&r" (value), "=r" (res)	    \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -305,14 +311,14 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 11b\n\t"		    \
--		STR(PTR)"\t2b, 11b\n\t"		    \
--		STR(PTR)"\t3b, 11b\n\t"		    \
--		STR(PTR)"\t4b, 11b\n\t"		    \
--		STR(PTR)"\t5b, 11b\n\t"		    \
--		STR(PTR)"\t6b, 11b\n\t"		    \
--		STR(PTR)"\t7b, 11b\n\t"		    \
--		STR(PTR)"\t8b, 11b\n\t"		    \
-+		PTR_STR"\t1b, 11b\n\t"		    \
-+		PTR_STR"\t2b, 11b\n\t"		    \
-+		PTR_STR"\t3b, 11b\n\t"		    \
-+		PTR_STR"\t4b, 11b\n\t"		    \
-+		PTR_STR"\t5b, 11b\n\t"		    \
-+		PTR_STR"\t6b, 11b\n\t"		    \
-+		PTR_STR"\t7b, 11b\n\t"		    \
-+		PTR_STR"\t8b, 11b\n\t"		    \
- 		".previous"			    \
- 		: "=&r" (value), "=r" (res)	    \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -337,8 +343,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"              \
-+		PTR_STR"\t2b, 4b\n\t"              \
- 		".previous"                         \
- 		: "=r" (res)                        \
- 		: "r" (value), "r" (addr), "i" (-EFAULT));\
-@@ -358,8 +364,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=r" (res)                                \
- 		: "r" (value), "r" (addr), "i" (-EFAULT));  \
-@@ -378,8 +384,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=r" (res)                                \
- 		: "r" (value), "r" (addr), "i" (-EFAULT));  \
-@@ -407,10 +413,10 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 11b\n\t"		    \
--		STR(PTR)"\t2b, 11b\n\t"		    \
--		STR(PTR)"\t3b, 11b\n\t"		    \
--		STR(PTR)"\t4b, 11b\n\t"		    \
-+		PTR_STR"\t1b, 11b\n\t"		    \
-+		PTR_STR"\t2b, 11b\n\t"		    \
-+		PTR_STR"\t3b, 11b\n\t"		    \
-+		PTR_STR"\t4b, 11b\n\t"		    \
- 		".previous"			    \
- 		: "=&r" (res)				    \
- 		: "r" (value), "r" (addr), "i" (-EFAULT)    \
-@@ -447,14 +453,14 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 11b\n\t"		    \
--		STR(PTR)"\t2b, 11b\n\t"		    \
--		STR(PTR)"\t3b, 11b\n\t"		    \
--		STR(PTR)"\t4b, 11b\n\t"		    \
--		STR(PTR)"\t5b, 11b\n\t"		    \
--		STR(PTR)"\t6b, 11b\n\t"		    \
--		STR(PTR)"\t7b, 11b\n\t"		    \
--		STR(PTR)"\t8b, 11b\n\t"		    \
-+		PTR_STR"\t1b, 11b\n\t"		    \
-+		PTR_STR"\t2b, 11b\n\t"		    \
-+		PTR_STR"\t3b, 11b\n\t"		    \
-+		PTR_STR"\t4b, 11b\n\t"		    \
-+		PTR_STR"\t5b, 11b\n\t"		    \
-+		PTR_STR"\t6b, 11b\n\t"		    \
-+		PTR_STR"\t7b, 11b\n\t"		    \
-+		PTR_STR"\t8b, 11b\n\t"		    \
- 		".previous"			    \
- 		: "=&r" (res)				    \
- 		: "r" (value), "r" (addr), "i" (-EFAULT)    \
-@@ -480,8 +486,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -501,8 +507,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -534,10 +540,10 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 11b\n\t"		    \
--		STR(PTR)"\t2b, 11b\n\t"		    \
--		STR(PTR)"\t3b, 11b\n\t"		    \
--		STR(PTR)"\t4b, 11b\n\t"		    \
-+		PTR_STR"\t1b, 11b\n\t"		    \
-+		PTR_STR"\t2b, 11b\n\t"		    \
-+		PTR_STR"\t3b, 11b\n\t"		    \
-+		PTR_STR"\t4b, 11b\n\t"		    \
- 		".previous"			    \
- 		: "=&r" (value), "=r" (res)	    \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -563,8 +569,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -586,8 +592,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -606,8 +612,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=&r" (value), "=r" (res)         \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -639,10 +645,10 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 11b\n\t"		    \
--		STR(PTR)"\t2b, 11b\n\t"		    \
--		STR(PTR)"\t3b, 11b\n\t"		    \
--		STR(PTR)"\t4b, 11b\n\t"		    \
-+		PTR_STR"\t1b, 11b\n\t"		    \
-+		PTR_STR"\t2b, 11b\n\t"		    \
-+		PTR_STR"\t3b, 11b\n\t"		    \
-+		PTR_STR"\t4b, 11b\n\t"		    \
- 		".previous"			    \
- 		: "=&r" (value), "=r" (res)	    \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -684,14 +690,14 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 11b\n\t"		    \
--		STR(PTR)"\t2b, 11b\n\t"		    \
--		STR(PTR)"\t3b, 11b\n\t"		    \
--		STR(PTR)"\t4b, 11b\n\t"		    \
--		STR(PTR)"\t5b, 11b\n\t"		    \
--		STR(PTR)"\t6b, 11b\n\t"		    \
--		STR(PTR)"\t7b, 11b\n\t"		    \
--		STR(PTR)"\t8b, 11b\n\t"		    \
-+		PTR_STR"\t1b, 11b\n\t"		    \
-+		PTR_STR"\t2b, 11b\n\t"		    \
-+		PTR_STR"\t3b, 11b\n\t"		    \
-+		PTR_STR"\t4b, 11b\n\t"		    \
-+		PTR_STR"\t5b, 11b\n\t"		    \
-+		PTR_STR"\t6b, 11b\n\t"		    \
-+		PTR_STR"\t7b, 11b\n\t"		    \
-+		PTR_STR"\t8b, 11b\n\t"		    \
- 		".previous"			    \
- 		: "=&r" (value), "=r" (res)	    \
- 		: "r" (addr), "i" (-EFAULT));       \
-@@ -714,8 +720,8 @@ do {                                                 \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=r" (res)                        \
- 		: "r" (value), "r" (addr), "i" (-EFAULT));\
-@@ -735,8 +741,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=r" (res)                                \
- 		: "r" (value), "r" (addr), "i" (-EFAULT));  \
-@@ -755,8 +761,8 @@ do {                                                \
- 		"j\t3b\n\t"                         \
- 		".previous\n\t"                     \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 4b\n\t"              \
--		STR(PTR)"\t2b, 4b\n\t"              \
-+		PTR_STR"\t1b, 4b\n\t"               \
-+		PTR_STR"\t2b, 4b\n\t"               \
- 		".previous"                         \
- 		: "=r" (res)                                \
- 		: "r" (value), "r" (addr), "i" (-EFAULT));  \
-@@ -785,10 +791,10 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 11b\n\t"		    \
--		STR(PTR)"\t2b, 11b\n\t"		    \
--		STR(PTR)"\t3b, 11b\n\t"		    \
--		STR(PTR)"\t4b, 11b\n\t"		    \
-+		PTR_STR"\t1b, 11b\n\t"		    \
-+		PTR_STR"\t2b, 11b\n\t"		    \
-+		PTR_STR"\t3b, 11b\n\t"		    \
-+		PTR_STR"\t4b, 11b\n\t"		    \
- 		".previous"			    \
- 		: "=&r" (res)				    \
- 		: "r" (value), "r" (addr), "i" (-EFAULT)    \
-@@ -825,14 +831,14 @@ do {                                                \
- 		"j\t10b\n\t"			    \
- 		".previous\n\t"			    \
- 		".section\t__ex_table,\"a\"\n\t"    \
--		STR(PTR)"\t1b, 11b\n\t"		    \
--		STR(PTR)"\t2b, 11b\n\t"		    \
--		STR(PTR)"\t3b, 11b\n\t"		    \
--		STR(PTR)"\t4b, 11b\n\t"		    \
--		STR(PTR)"\t5b, 11b\n\t"		    \
--		STR(PTR)"\t6b, 11b\n\t"		    \
--		STR(PTR)"\t7b, 11b\n\t"		    \
--		STR(PTR)"\t8b, 11b\n\t"		    \
-+		PTR_STR"\t1b, 11b\n\t"		    \
-+		PTR_STR"\t2b, 11b\n\t"		    \
-+		PTR_STR"\t3b, 11b\n\t"		    \
-+		PTR_STR"\t4b, 11b\n\t"		    \
-+		PTR_STR"\t5b, 11b\n\t"		    \
-+		PTR_STR"\t6b, 11b\n\t"		    \
-+		PTR_STR"\t7b, 11b\n\t"		    \
-+		PTR_STR"\t8b, 11b\n\t"		    \
- 		".previous"			    \
- 		: "=&r" (res)				    \
- 		: "r" (value), "r" (addr), "i" (-EFAULT)    \
+use 
+
+config CPU_P5600
+	bool "MIPS Warrior P5600"
+	depends on SYS_HAS_CPU_P5600
+	select CPU_MIPS32_R5
+	select CPU_SUPPORTS_UNCACHED_ACCELERATED
+	select CPU_SUPPORTS_CPUFREQ
+	select CPU_MIPSR2_IRQ_VI
+	select CPU_MIPSR2_IRQ_EI
+
+That way you don't need to any "|| CPU_P5600" where CPU_MIPS32_R5 is
+already there. Or are there cases, where this would be wrong ?
+
+Thomas.
+
+
 -- 
-2.7.0
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
