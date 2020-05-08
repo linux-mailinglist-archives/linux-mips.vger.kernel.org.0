@@ -2,285 +2,238 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 135201CA155
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 05:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8464A1CA629
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 10:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726701AbgEHDJM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 7 May 2020 23:09:12 -0400
-Received: from foss.arm.com ([217.140.110.172]:42582 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726612AbgEHDJM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 7 May 2020 23:09:12 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B91FD1FB;
-        Thu,  7 May 2020 20:09:10 -0700 (PDT)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.73.155])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AE1633F305;
-        Thu,  7 May 2020 20:09:00 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V3 3/3] mm/hugetlb: Define a generic fallback for arch_clear_hugepage_flags()
-Date:   Fri,  8 May 2020 08:37:51 +0530
-Message-Id: <1588907271-11920-4-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1588907271-11920-1-git-send-email-anshuman.khandual@arm.com>
-References: <1588907271-11920-1-git-send-email-anshuman.khandual@arm.com>
+        id S1726873AbgEHIg0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 04:36:26 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:45390 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726598AbgEHIg0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 May 2020 04:36:26 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx_931GbVe+hgyAA--.17S2;
+        Fri, 08 May 2020 16:36:06 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH v7] MIPS: Loongson: Add DMA support for LS7A
+Date:   Fri,  8 May 2020 16:36:05 +0800
+Message-Id: <1588926965-16134-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dx_931GbVe+hgyAA--.17S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Gw1xZF4rCFW3ZrWrCr1ftFb_yoWxJFW8pa
+        y7A3Z5Gr4YgF1furZ3AryxuryrAanxKrsrGF42gr1Ykas8Z34FvFs7C3Z5XF17Jr4kW3Wx
+        ZFyFgrWxWF1xCrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r43
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUj3CztUUUU
+        U==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-There are multiple similar definitions for arch_clear_hugepage_flags() on
-various platforms. Lets just add it's generic fallback definition for
-platforms that do not override. This help reduce code duplication.
+In the current market, the most used bridge chip on the Loongson platform
+are RS780E and LS7A, the RS780E bridge chip is already supported by the
+mainline kernel.
 
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Fenghua Yu <fenghua.yu@intel.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@de.ibm.com>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: Rich Felker <dalias@libc.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: x86@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-ia64@vger.kernel.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-parisc@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-riscv@lists.infradead.org
-Cc: linux-s390@vger.kernel.org
-Cc: linux-sh@vger.kernel.org
-Cc: sparclinux@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: linux-arch@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+If use the default implementation of __phys_to_dma() and __dma_to_phys()
+in dma-direct.h when CONFIG_ARCH_HAS_PHYS_TO_DMA is not set, it works
+well used with LS7A on the Loongson single-way and multi-way platform,
+and also works well used with RS780E on the Loongson single-way platform,
+but the DMA address will be wrong on the non-node0 used with RS780E on
+the Loongson multi-way platform.
+
+Just as the description in the code comment, the devices get node id from
+40 bit of HyperTransport bus, so we extract 2 bit node id (bit 44~45) from
+48 bit address space of Loongson CPU and embed it into HyperTransport bus
+(bit 37-38), this operation can be done only at the software level used
+with RS780E on the Loongson multi-way platform, because it has no hardware
+function to translate address of node id, this is a hardware compatibility
+problem.
+
+Device
+    |
+    | DMA address
+    |
+Host Bridge
+    |
+    | HT bus address (40 bit)
+    |
+   CPU
+    |
+    | physical address (48 bit)
+    |
+   RAM
+
+The LS7A has dma_node_id_offset field in the DMA route config register,
+the hardware can use the dma_node_id_offset to translate address of
+node id automatically, so we can get correct address when just use the
+dma_pfn_offset field in struct device.
+
+For the above reasons, in order to maintain downward compatibility
+to support the RS780E bridge chip, it is better to use the platform
+dependent implementation of __phys_to_dma() and __dma_to_phys().
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- arch/arm/include/asm/hugetlb.h     | 1 +
- arch/arm64/include/asm/hugetlb.h   | 1 +
- arch/ia64/include/asm/hugetlb.h    | 4 ----
- arch/mips/include/asm/hugetlb.h    | 4 ----
- arch/parisc/include/asm/hugetlb.h  | 4 ----
- arch/powerpc/include/asm/hugetlb.h | 4 ----
- arch/riscv/include/asm/hugetlb.h   | 4 ----
- arch/s390/include/asm/hugetlb.h    | 1 +
- arch/sh/include/asm/hugetlb.h      | 1 +
- arch/sparc/include/asm/hugetlb.h   | 4 ----
- arch/x86/include/asm/hugetlb.h     | 4 ----
- include/linux/hugetlb.h            | 5 +++++
- 12 files changed, 9 insertions(+), 28 deletions(-)
 
-diff --git a/arch/arm/include/asm/hugetlb.h b/arch/arm/include/asm/hugetlb.h
-index 9ecd516d1ff7..d02d6ca88e92 100644
---- a/arch/arm/include/asm/hugetlb.h
-+++ b/arch/arm/include/asm/hugetlb.h
-@@ -18,5 +18,6 @@ static inline void arch_clear_hugepage_flags(struct page *page)
- {
- 	clear_bit(PG_dcache_clean, &page->flags);
- }
-+#define arch_clear_hugepage_flags arch_clear_hugepage_flags
+v7:
+  - According to the discussion of the v6 patch [1],
+    use the platform dependent implementation of
+    __phys_to_dma() and __dma_to_phys()
+  - Make a slight modification based on the v4 patch [2]
+    to put ls7a things before rs780e things
+
+[1] https://lore.kernel.org/patchwork/patch/1233541/
+[2] https://lore.kernel.org/patchwork/patch/1220010/
+
+v6:
+  - Make loongson_dma_config() static
+  - Put ls7a things before rs780 things
+
+v5:
+  - Use the default implementation of __phys_to_dma()
+    and __dma_to_phys() in dma-direct.h
+
+v4:
+  - Use LS7A instead of Loongson 7A1000 in the description
+  - Use LS7A or ls7a instead of LS7A1000 or ls7a1000 in the code
+
+v3:
+  - Modify the macro definition NODE_ID_OFFSET_ADDR to
+    make it easy to read
+  - update the commit message
+
+ arch/mips/include/asm/mach-loongson64/boot_param.h |  5 +++++
+ arch/mips/loongson64/dma.c                         |  9 ++++++---
+ arch/mips/loongson64/env.c                         |  2 ++
+ arch/mips/loongson64/init.c                        | 17 +++++++++++++++++
+ 4 files changed, 30 insertions(+), 3 deletions(-)
+
+diff --git a/arch/mips/include/asm/mach-loongson64/boot_param.h b/arch/mips/include/asm/mach-loongson64/boot_param.h
+index f082d87..b35be70 100644
+--- a/arch/mips/include/asm/mach-loongson64/boot_param.h
++++ b/arch/mips/include/asm/mach-loongson64/boot_param.h
+@@ -221,9 +221,14 @@ struct loongson_system_configuration {
+ 	u32 nr_sensors;
+ 	struct sensor_device sensors[MAX_SENSORS];
+ 	u64 workarounds;
++	void (*early_config)(void);
+ };
  
- #endif /* _ASM_ARM_HUGETLB_H */
-diff --git a/arch/arm64/include/asm/hugetlb.h b/arch/arm64/include/asm/hugetlb.h
-index 8f58e052697a..94ba0c5bced2 100644
---- a/arch/arm64/include/asm/hugetlb.h
-+++ b/arch/arm64/include/asm/hugetlb.h
-@@ -21,6 +21,7 @@ static inline void arch_clear_hugepage_flags(struct page *page)
- {
- 	clear_bit(PG_dcache_clean, &page->flags);
- }
-+#define arch_clear_hugepage_flags arch_clear_hugepage_flags
+ extern struct efi_memory_map_loongson *loongson_memmap;
+ extern struct loongson_system_configuration loongson_sysconf;
  
- extern pte_t arch_make_huge_pte(pte_t entry, struct vm_area_struct *vma,
- 				struct page *page, int writable);
-diff --git a/arch/ia64/include/asm/hugetlb.h b/arch/ia64/include/asm/hugetlb.h
-index 6ef50b9a4bdf..7e46ebde8c0c 100644
---- a/arch/ia64/include/asm/hugetlb.h
-+++ b/arch/ia64/include/asm/hugetlb.h
-@@ -28,10 +28,6 @@ static inline void huge_ptep_clear_flush(struct vm_area_struct *vma,
- {
- }
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #include <asm-generic/hugetlb.h>
- 
- #endif /* _ASM_IA64_HUGETLB_H */
-diff --git a/arch/mips/include/asm/hugetlb.h b/arch/mips/include/asm/hugetlb.h
-index 8b201e281f67..10e3be870df7 100644
---- a/arch/mips/include/asm/hugetlb.h
-+++ b/arch/mips/include/asm/hugetlb.h
-@@ -75,10 +75,6 @@ static inline int huge_ptep_set_access_flags(struct vm_area_struct *vma,
- 	return changed;
- }
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #include <asm-generic/hugetlb.h>
- 
- #endif /* __ASM_HUGETLB_H */
-diff --git a/arch/parisc/include/asm/hugetlb.h b/arch/parisc/include/asm/hugetlb.h
-index 411d9d867baa..a69cf9efb0c1 100644
---- a/arch/parisc/include/asm/hugetlb.h
-+++ b/arch/parisc/include/asm/hugetlb.h
-@@ -42,10 +42,6 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
- 					     unsigned long addr, pte_t *ptep,
- 					     pte_t pte, int dirty);
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #include <asm-generic/hugetlb.h>
- 
- #endif /* _ASM_PARISC64_HUGETLB_H */
-diff --git a/arch/powerpc/include/asm/hugetlb.h b/arch/powerpc/include/asm/hugetlb.h
-index b167c869d72d..e6dfa63da552 100644
---- a/arch/powerpc/include/asm/hugetlb.h
-+++ b/arch/powerpc/include/asm/hugetlb.h
-@@ -61,10 +61,6 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
- 			       unsigned long addr, pte_t *ptep,
- 			       pte_t pte, int dirty);
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #include <asm-generic/hugetlb.h>
- 
- #else /* ! CONFIG_HUGETLB_PAGE */
-diff --git a/arch/riscv/include/asm/hugetlb.h b/arch/riscv/include/asm/hugetlb.h
-index 866f6ae6467c..a5c2ca1d1cd8 100644
---- a/arch/riscv/include/asm/hugetlb.h
-+++ b/arch/riscv/include/asm/hugetlb.h
-@@ -5,8 +5,4 @@
- #include <asm-generic/hugetlb.h>
- #include <asm/page.h>
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #endif /* _ASM_RISCV_HUGETLB_H */
-diff --git a/arch/s390/include/asm/hugetlb.h b/arch/s390/include/asm/hugetlb.h
-index 7d27ea96ec2f..9ddf4a43a590 100644
---- a/arch/s390/include/asm/hugetlb.h
-+++ b/arch/s390/include/asm/hugetlb.h
-@@ -39,6 +39,7 @@ static inline void arch_clear_hugepage_flags(struct page *page)
- {
- 	clear_bit(PG_arch_1, &page->flags);
- }
-+#define arch_clear_hugepage_flags arch_clear_hugepage_flags
- 
- static inline void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
- 				  pte_t *ptep, unsigned long sz)
-diff --git a/arch/sh/include/asm/hugetlb.h b/arch/sh/include/asm/hugetlb.h
-index 536ad2cb8aa4..ae4de7b89210 100644
---- a/arch/sh/include/asm/hugetlb.h
-+++ b/arch/sh/include/asm/hugetlb.h
-@@ -30,6 +30,7 @@ static inline void arch_clear_hugepage_flags(struct page *page)
- {
- 	clear_bit(PG_dcache_clean, &page->flags);
- }
-+#define arch_clear_hugepage_flags arch_clear_hugepage_flags
- 
- #include <asm-generic/hugetlb.h>
- 
-diff --git a/arch/sparc/include/asm/hugetlb.h b/arch/sparc/include/asm/hugetlb.h
-index a056fe1119f5..53838a173f62 100644
---- a/arch/sparc/include/asm/hugetlb.h
-+++ b/arch/sparc/include/asm/hugetlb.h
-@@ -47,10 +47,6 @@ static inline int huge_ptep_set_access_flags(struct vm_area_struct *vma,
- 	return changed;
- }
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #define __HAVE_ARCH_HUGETLB_FREE_PGD_RANGE
- void hugetlb_free_pgd_range(struct mmu_gather *tlb, unsigned long addr,
- 			    unsigned long end, unsigned long floor,
-diff --git a/arch/x86/include/asm/hugetlb.h b/arch/x86/include/asm/hugetlb.h
-index cc98f79074d0..1721b1aadeb1 100644
---- a/arch/x86/include/asm/hugetlb.h
-+++ b/arch/x86/include/asm/hugetlb.h
-@@ -7,8 +7,4 @@
- 
- #define hugepages_supported() boot_cpu_has(X86_FEATURE_PSE)
- 
--static inline void arch_clear_hugepage_flags(struct page *page)
--{
--}
--
- #endif /* _ASM_X86_HUGETLB_H */
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index c01c0c6f7fd4..04bc794becfc 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -600,6 +600,11 @@ static inline int is_hugepage_only_range(struct mm_struct *mm,
- #define is_hugepage_only_range is_hugepage_only_range
- #endif
- 
-+#ifndef arch_clear_hugepage_flags
-+static inline void arch_clear_hugepage_flags(struct page *page) { }
-+#define arch_clear_hugepage_flags arch_clear_hugepage_flags
-+#endif
++extern u32 node_id_offset;
++extern void ls7a_early_config(void);
++extern void rs780e_early_config(void);
 +
- #ifndef arch_make_huge_pte
- static inline pte_t arch_make_huge_pte(pte_t entry, struct vm_area_struct *vma,
- 				       struct page *page, int writable)
+ #endif
+diff --git a/arch/mips/loongson64/dma.c b/arch/mips/loongson64/dma.c
+index 5e86635..dbfe6e8 100644
+--- a/arch/mips/loongson64/dma.c
++++ b/arch/mips/loongson64/dma.c
+@@ -2,21 +2,24 @@
+ #include <linux/dma-direct.h>
+ #include <linux/init.h>
+ #include <linux/swiotlb.h>
++#include <boot_param.h>
+ 
+ dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr)
+ {
+ 	/* We extract 2bit node id (bit 44~47, only bit 44~45 used now) from
+ 	 * Loongson-3's 48bit address space and embed it into 40bit */
+ 	long nid = (paddr >> 44) & 0x3;
+-	return ((nid << 44) ^ paddr) | (nid << 37);
++
++	return ((nid << 44) ^ paddr) | (nid << node_id_offset);
+ }
+ 
+ phys_addr_t __dma_to_phys(struct device *dev, dma_addr_t daddr)
+ {
+ 	/* We extract 2bit node id (bit 44~47, only bit 44~45 used now) from
+ 	 * Loongson-3's 48bit address space and embed it into 40bit */
+-	long nid = (daddr >> 37) & 0x3;
+-	return ((nid << 37) ^ daddr) | (nid << 44);
++	long nid = (daddr >> node_id_offset) & 0x3;
++
++	return ((nid << node_id_offset) ^ daddr) | (nid << 44);
+ }
+ 
+ void __init plat_swiotlb_setup(void)
+diff --git a/arch/mips/loongson64/env.c b/arch/mips/loongson64/env.c
+index 71f4aaf..d11bc34 100644
+--- a/arch/mips/loongson64/env.c
++++ b/arch/mips/loongson64/env.c
+@@ -192,8 +192,10 @@ void __init prom_init_env(void)
+ 	if (vendor == PCI_VENDOR_ID_LOONGSON && device == 0x7a00) {
+ 		pr_info("The bridge chip is LS7A\n");
+ 		loongson_sysconf.bridgetype = LS7A;
++		loongson_sysconf.early_config = ls7a_early_config;
+ 	} else {
+ 		pr_info("The bridge chip is RS780E or SR5690\n");
+ 		loongson_sysconf.bridgetype = RS780E;
++		loongson_sysconf.early_config = rs780e_early_config;
+ 	}
+ }
+diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
+index da38944..2b45ca6 100644
+--- a/arch/mips/loongson64/init.c
++++ b/arch/mips/loongson64/init.c
+@@ -13,6 +13,11 @@
+ #include <asm/fw/fw.h>
+ 
+ #include <loongson.h>
++#include <boot_param.h>
++
++#define NODE_ID_OFFSET_ADDR	((void __iomem *)TO_UNCAC(0x1001041c))
++
++u32 node_id_offset;
+ 
+ static void __init mips_nmi_setup(void)
+ {
+@@ -24,6 +29,16 @@ static void __init mips_nmi_setup(void)
+ 	flush_icache_range((unsigned long)base, (unsigned long)base + 0x80);
+ }
+ 
++void ls7a_early_config(void)
++{
++	node_id_offset = ((readl(NODE_ID_OFFSET_ADDR) >> 8) & 0x1f) + 36;
++}
++
++void rs780e_early_config(void)
++{
++	node_id_offset = 37;
++}
++
+ void __init prom_init(void)
+ {
+ 	fw_init_cmdline();
+@@ -33,6 +48,8 @@ void __init prom_init(void)
+ 	set_io_port_base((unsigned long)
+ 		ioremap(LOONGSON_PCIIO_BASE, LOONGSON_PCIIO_SIZE));
+ 
++	loongson_sysconf.early_config();
++
+ 	prom_init_numa_memory();
+ 
+ 	/* Hardcode to CPU UART 0 */
 -- 
-2.20.1
+2.1.0
 
