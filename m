@@ -2,93 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4683C1CA739
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 11:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569541CA748
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 11:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726863AbgEHJdO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 05:33:14 -0400
-Received: from elvis.franken.de ([193.175.24.41]:44684 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725825AbgEHJdO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 8 May 2020 05:33:14 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jWzNV-0001bD-01; Fri, 08 May 2020 11:33:09 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id DB100C0418; Fri,  8 May 2020 11:32:59 +0200 (CEST)
-Date:   Fri, 8 May 2020 11:32:59 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        id S1725379AbgEHJg4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 05:36:56 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:41156 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbgEHJgz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 05:36:55 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 8C9AD80307C2;
+        Fri,  8 May 2020 09:36:52 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZVwyYHvRLEER; Fri,  8 May 2020 12:36:51 +0300 (MSK)
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
+        John Garry <john.garry@huawei.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alexander Lobakin <alobakin@dlink.ru>,
-        Huacai Chen <chenhc@lemote.com>,
-        Cedric Hombourger <Cedric_Hombourger@mentor.com>,
-        =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 07/20] mips: Add MIPS Warrior P5600 support
-Message-ID: <20200508093259.GB9085@alpha.franken.de>
-References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
- <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-8-Sergey.Semin@baikalelectronics.ru>
- <20200507111735.GF11616@alpha.franken.de>
- <20200507211923.kfu2ly3ncqms4c2u@mobilestation>
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] spi: Add Baikal-T1 System Boot SPI Controller driver
+Date:   Fri, 8 May 2020 12:36:19 +0300
+Message-ID: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200507211923.kfu2ly3ncqms4c2u@mobilestation>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 08, 2020 at 12:19:23AM +0300, Serge Semin wrote:
-> On Thu, May 07, 2020 at 01:17:35PM +0200, Thomas Bogendoerfer wrote:
-> > P5600 is CPU_MIPS_R5 so can't you select it here and drop all the || CPU_5600
-> > above/below ?
-> 
-> Alas, We can't do this so easy. CONFIG_CPU_MIPS32_{R2,R5,R6} and any other
-> CONFIG_CPU_* configs is something that kernel config-file is supposed to select.
-> Their availability is enabled by the CONFIG_SYS_HAS_CPU_* configs. CONFIG_CPU_*
-> is supposed to activate CPU-specific features and there is only one
-> CONFIG_CPU_x can be enabled at a time seeing it's a part of the "CPU type"
-> choice kconfig menu. In addition the CPU config also tunes a compiler to activate
-> the arch-specific ISA and optimizations in the arch/mips/Makefile by setting
-> -march=cpu-name (where cpu-name can be p5600, mips32r5, etc).
-> 
-> Yes, P5600 is based on the MIPS32r5, but it also has got some specific features
-> (see config CPU_P5600 and config MIPS32_R5), which makes it to be different from
-> the ancestor. So In addition to the difficulties described above IMHO converting
-> CPU_P5600 to a set of features activated on top of the CPU_MIPS32_R5 config
-> would contradict the design of the CPU-support configs implemented in the MIPS
-> arch subsystem.
+Baikal-T1 SoC System Controller is equipped with a Boot Controller. It's
+responsible for the system starting up from different sources. In
+particular it's possible to boot the chip either from an internal firmware
+or from an externally attached 16MB SPI flash or from the SoC SRAM
+pre-initialized with first 64KB of the external SPI flash. Though the later
+option is formally unavailable thus undocumented. Anyway in order to
+perform the booting up from the SPI flash there is a DW APB SSI-based SPI
+controller embedded into the System Boot Controller. Due to being utilized
+for a specific usecase it's got very limited resources: no IRQ, no DMA,
+a single native chip-select and just 8 bytes Tx/Rx FIFO available. In
+addition to that the transparent (from SoC CPU point of view) initial code
+execution is implemented by means of the SPI flash direct mapping method.
+It's done by a vendor-specific block built on top the SPI controller so the
+SPI flash slave device data is available just by dword-readings from a
+dedicated memory region of 16MB. Taking into account the peculiarities of
+the controller registers and physically mapped SPI flash access, very
+limited resources, seeing the normal usecase of the controller is to
+access an external SPI-nor flash, and due to multiple Baikal-T1 specifics,
+which had to be workarounded in the driver code we decided to create a
+dedicated SPI driver for it instead of using the DW APB SSI driver
+available in the kernel.
 
-maybe I wasn't clear enough, my suggestion is
+The driver provides callbacks for the native messages-based SPI API
+(though only if GPIO-based chip-select is declared), SPI-memory and direct
+mapping read operations. Due to not having any asynchronous signaling
+interface provided by the core we have no choice but to implement a
+polling-based data transmission/reception algorithm. In addition to that
+in order to bypass the automatic native chip-select toggle the driver
+disables the local interrupts during the memory-based transfers if no
+complementary GPIO-based chip-select detected in the platform.
 
-use 
+This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
+base-commit: 0e698dfa2822 ("Linux 5.7-rc4")
+tag: v5.7-rc4
 
-config CPU_P5600
-	bool "MIPS Warrior P5600"
-	depends on SYS_HAS_CPU_P5600
-	select CPU_MIPS32_R5
-	select CPU_SUPPORTS_UNCACHED_ACCELERATED
-	select CPU_SUPPORTS_CPUFREQ
-	select CPU_MIPSR2_IRQ_VI
-	select CPU_MIPSR2_IRQ_EI
+New vendor prefix will be added in the framework of the next patchset:
+https://lkml.org/lkml/2020/5/6/1047
 
-That way you don't need to any "|| CPU_P5600" where CPU_MIPS32_R5 is
-already there. Or are there cases, where this would be wrong ?
+Note as a result of next discussion with @Lee and @Miquel
+https://lkml.org/lkml/2020/3/6/421
+I've added dirmap_create() and dirmap_read() callbacks to this driver,
+so the Baikal-T1 Boot MFD driver won't be resubmitted and can be dropped.
 
-Thomas.
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: John Garry <john.garry@huawei.com>
+Cc: Chuanhong Guo <gch981213@gmail.com>
+Cc: Tomer Maimon <tmaimon77@gmail.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-spi@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
+Serge Semin (2):
+  dt-bindings: spi: Add Baikal-T1 System Boot SPI Controller binding
+  spi: Add Baikal-T1 System Boot SPI Controller driver
+
+ .../bindings/spi/baikal,bt1-sys-ssi.yaml      | 100 ++
+ drivers/spi/Kconfig                           |  13 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-bt1-sys.c                     | 873 ++++++++++++++++++
+ drivers/spi/spi-bt1-sys.h                     | 169 ++++
+ 5 files changed, 1156 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/baikal,bt1-sys-ssi.yaml
+ create mode 100644 drivers/spi/spi-bt1-sys.c
+ create mode 100644 drivers/spi/spi-bt1-sys.h
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.25.1
+
