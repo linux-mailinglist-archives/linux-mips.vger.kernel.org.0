@@ -2,109 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3041CB074
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 15:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF991CB083
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 15:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726809AbgEHNbb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 09:31:31 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:43046 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727794AbgEHNbb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 May 2020 09:31:31 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id D436C8030790;
-        Fri,  8 May 2020 13:31:27 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id tIQrgy8F71PE; Fri,  8 May 2020 16:31:27 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        id S1728857AbgEHNb7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 09:31:59 -0400
+Received: from elvis.franken.de ([193.175.24.41]:44873 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728754AbgEHNbz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 May 2020 09:31:55 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jX36M-0003ty-04; Fri, 08 May 2020 15:31:42 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 82BA6C041B; Fri,  8 May 2020 15:30:40 +0200 (CEST)
+Date:   Fri, 8 May 2020 15:30:40 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Sergey.Semin@baikalelectronics.ru
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Alexander Lobakin <alobakin@dlink.ru>,
+        Daniel Silsby <dansilsby@gmail.com>,
+        =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
+        Cedric Hombourger <Cedric_Hombourger@mentor.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 13/17] spi: dw: Initialize paddr in DW SPI MMIO private data
-Date:   Fri, 8 May 2020 16:29:38 +0300
-Message-ID: <20200508132943.9826-14-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Allison Randal <allison@lohutok.net>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Jessica Yu <jeyu@kernel.org>,
+        Zhou Yanjie <zhouyanjie@zoho.com>,
+        =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v2 06/20] mips: Add MIPS32 Release 5 support
+Message-ID: <20200508133040.GB15641@alpha.franken.de>
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-7-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200506174238.15385-7-Sergey.Semin@baikalelectronics.ru>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This field is used only for the DW SPI DMA code initialization, that's
-why there were no problems with it being uninitialized in Dw SPI MMIO
-driver. Since in a further patch we are going to introduce the DW SPI DMA
-support in the MMIO version of the driver, lets set the field with the
-physical address of the DW SPI controller registers region.
+On Wed, May 06, 2020 at 08:42:24PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+> We also could add CPU_MIPS64_R5 config support here, but I don't think
+> it's necessary at the moment seeing there is no any real chip ever
+> produced with that arch. Right?
 
-Co-developed-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-Signed-off-by: Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>
-Co-developed-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Signed-off-by: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Allison Randal <allison@lohutok.net>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Gareth Williams <gareth.williams.jx@renesas.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: devicetree@vger.kernel.org
----
- drivers/spi/spi-dw-mmio.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+how much is missing ? Looks like not too much, so it might be worth
+to add it at least for symmetry to the other ISAs...
 
-diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-index 384a3ab6dc2d..2ff1b700305f 100644
---- a/drivers/spi/spi-dw-mmio.c
-+++ b/drivers/spi/spi-dw-mmio.c
-@@ -136,6 +136,7 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
- 	int (*init_func)(struct platform_device *pdev,
- 			 struct dw_spi_mmio *dwsmmio);
- 	struct dw_spi_mmio *dwsmmio;
-+	struct resource *mem;
- 	struct dw_spi *dws;
- 	int ret;
- 	int num_cs;
-@@ -148,11 +149,13 @@ static int dw_spi_mmio_probe(struct platform_device *pdev)
- 	dws = &dwsmmio->dws;
- 
- 	/* Get basic io resource and map it */
--	dws->regs = devm_platform_ioremap_resource(pdev, 0);
-+	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	dws->regs = devm_ioremap_resource(&pdev->dev, mem);
- 	if (IS_ERR(dws->regs)) {
- 		dev_err(&pdev->dev, "SPI region map failed\n");
- 		return PTR_ERR(dws->regs);
- 	}
-+	dws->paddr = mem->start;
- 
- 	dws->irq = platform_get_irq(pdev, 0);
- 	if (dws->irq < 0)
+Thomas.
+
 -- 
-2.25.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
