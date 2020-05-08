@@ -2,21 +2,21 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2B61CB3A1
+	by mail.lfdr.de (Postfix) with ESMTP id 487591CB3A0
 	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 17:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728304AbgEHPm0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S1728273AbgEHPm0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Fri, 8 May 2020 11:42:26 -0400
-Received: from elvis.franken.de ([193.175.24.41]:44977 "EHLO elvis.franken.de"
+Received: from elvis.franken.de ([193.175.24.41]:44985 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726736AbgEHPmX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 8 May 2020 11:42:23 -0400
+        id S1728282AbgEHPmZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 May 2020 11:42:25 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jX58n-0005J7-00; Fri, 08 May 2020 17:42:21 +0200
+        id 1jX58n-0005J7-01; Fri, 08 May 2020 17:42:21 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 106BCC041B; Fri,  8 May 2020 17:40:46 +0200 (CEST)
-Date:   Fri, 8 May 2020 17:40:46 +0200
+        id 65A77C043A; Fri,  8 May 2020 17:41:50 +0200 (CEST)
+Date:   Fri, 8 May 2020 17:41:50 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To:     Sergey.Semin@baikalelectronics.ru
 Cc:     Serge Semin <fancer.lancer@gmail.com>,
@@ -27,61 +27,65 @@ Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org,
-        afzal mohammed <afzal.mohd.ma@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 19/20] mips: cevt-r4k: Update the r4k-clockevent
- frequency in sync with CPU
-Message-ID: <20200508154045.GA22247@alpha.franken.de>
+Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
+ if CPU_FREQ enabled
+Message-ID: <20200508154150.GB22247@alpha.franken.de>
 References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
  <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-20-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200506174238.15385-20-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 06, 2020 at 08:42:37PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
-> diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
-> index 17a9cbb8b3df..f5b72fb7d5ee 100644
-> --- a/arch/mips/kernel/cevt-r4k.c
-> +++ b/arch/mips/kernel/cevt-r4k.c
-> @@ -8,6 +8,7 @@
->   */
->  #include <linux/clockchips.h>
->  #include <linux/interrupt.h>
-> +#include <linux/cpufreq.h>
->  #include <linux/percpu.h>
->  #include <linux/smp.h>
->  #include <linux/irq.h>
-> @@ -250,6 +251,49 @@ unsigned int __weak get_c0_compare_int(void)
->  	return MIPS_CPU_IRQ_BASE + cp0_compare_irq;
->  }
+On Wed, May 06, 2020 at 08:42:36PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> Commit 07d69579e7fe ("MIPS: Don't register r4k sched clock when
+> CPUFREQ enabled") disabled the r4k-clock usage for scheduler ticks
+> counting due to the scheduler being non-tolerant for unstable
+> clocks sources. For the same reason the clock should be used
+> in the system clocksource framework only as a last resort if CPU
+> frequency may change.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> ---
+>  arch/mips/kernel/csrc-r4k.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/mips/kernel/csrc-r4k.c b/arch/mips/kernel/csrc-r4k.c
+> index 437dda64fd7a..d81fb374f477 100644
+> --- a/arch/mips/kernel/csrc-r4k.c
+> +++ b/arch/mips/kernel/csrc-r4k.c
+> @@ -71,7 +71,11 @@ int __init init_r4k_clocksource(void)
+>  		return -ENXIO;
 >  
-> +#ifdef CONFIG_CPU_FREQ
-> +
-> +static unsigned long mips_ref_freq;
-> +
-> +static int cpufreq_callback(struct notifier_block *nb,
-> +			    unsigned long val, void *data)
+>  	/* Calculate a somewhat reasonable rating value */
+> +#ifndef CONFIG_CPU_FREQ
+>  	clocksource_mips.rating = 200 + mips_hpt_frequency / 10000000;
+> +#else
+> +	clocksource_mips.rating = 99;
+> +#endif
 
-please prefix function names with r4k_ to make them different from
-the other ones you implemented in kernel/time.c. I know they are
-static, but keeping different names makes looking at crashes easier.
-
-> +	struct cpufreq_freqs *freq = data;
-> +	struct clock_event_device *cd;
-> +	unsigned long rate;
-> +	int cpu;
-> +
-> +	if (!mips_ref_freq)
-> +		mips_ref_freq = freq->old;
-
-isn't this the same as mips_hpt_frequency ?
+I dislike this patch. Assuming you have an other clocksource, why not
+simply disable csrc-r4k, if CPU_FREQ is enabled ?
 
 Thomas.
 
