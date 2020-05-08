@@ -2,251 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7931CA830
-	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 12:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29FA1CA83B
+	for <lists+linux-mips@lfdr.de>; Fri,  8 May 2020 12:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726636AbgEHKTt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 06:19:49 -0400
-Received: from foss.arm.com ([217.140.110.172]:46210 "EHLO foss.arm.com"
+        id S1726598AbgEHKWN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 May 2020 06:22:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37256 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725825AbgEHKTt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 8 May 2020 06:19:49 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 56DD130E;
-        Fri,  8 May 2020 03:19:47 -0700 (PDT)
-Received: from [192.168.0.7] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 591CC3F71F;
-        Fri,  8 May 2020 03:19:44 -0700 (PDT)
-Subject: Re: [RFC PATCH v3 2/3] docs: scheduler: Add scheduler overview
- documentation
-To:     John Mathew <john.mathew@unikie.com>, linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        tsbogend@alpha.franken.de, lukas.bulwahn@gmail.com, x86@kernel.org,
-        linux-mips@vger.kernel.org, tglx@linutronix.de,
-        mostafa.chamanara@basemark.com, rdunlap@infradead.org,
-        Oleg Tsymbal <oleg.tsymbal@unikie.com>
-References: <20200507180553.9993-1-john.mathew@unikie.com>
- <20200507180553.9993-3-john.mathew@unikie.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <9a41369c-8617-e80e-61e5-c659c51d631b@arm.com>
-Date:   Fri, 8 May 2020 12:19:42 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1725815AbgEHKWN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 8 May 2020 06:22:13 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D2DBA208D6;
+        Fri,  8 May 2020 10:22:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588933332;
+        bh=0zdzBynO1wxpltbyCDGMW3LJkzChWsD2F3DXAG0KVvs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1LorngV4QwrEbOgNnfaULvNuCzhPnLImq+CL9GgvYjaScTv/v1pQTz7r67TRzncGC
+         wnJoT6sRoiyLNpqXUsZhDchHJZhmOrP9iYVSr4QGjPFiXMC9pKtsJLpWVNmXG/oO6d
+         mOSP6xhcQ5fR9Zdxi+tbEjHDtt1EygyINhUb5aEo=
+Date:   Fri, 8 May 2020 11:22:10 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree <devicetree@vger.kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
+Message-ID: <20200508102210.GC4820@sirena.org.uk>
+References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
+ <CAHp75VdtzdX-sOvq2cZdXqGUmU=0rdzQW_USGD_q0D59pUMTWg@mail.gmail.com>
+ <20200508101541.e3yxaocuilaiyutg@mobilestation>
 MIME-Version: 1.0
-In-Reply-To: <20200507180553.9993-3-john.mathew@unikie.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+nBD6E3TurpgldQp"
+Content-Disposition: inline
+In-Reply-To: <20200508101541.e3yxaocuilaiyutg@mobilestation>
+X-Cookie: Give him an evasive answer.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 07/05/2020 20:05, John Mathew wrote:
 
-[...]
+--+nBD6E3TurpgldQp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> diff --git a/Documentation/scheduler/cfs-overview.rst b/Documentation/scheduler/cfs-overview.rst
-> new file mode 100644
-> index 000000000000..b717f2d3e340
-> --- /dev/null
-> +++ b/Documentation/scheduler/cfs-overview.rst
-> @@ -0,0 +1,113 @@
-> +.. SPDX-License-Identifier: GPL-2.0+
-> +
-> +=============
-> +CFS Overview
-> +=============
-> +
-> +Linux 2.6.23 introduced a modular scheduler core and a Completely Fair
-> +Scheduler (CFS) implemented as a scheduling module. A brief overview of the
-> +CFS design is provided in :doc:`sched-design-CFS`
-> +
-> +In addition there have been many improvements to the CFS, a few of which are
-> +
-> +**Thermal Pressure**:
-> +cpu_capacity initially reflects the maximum possible capacity of a CPU.
-> +Thermal pressure on a CPU means this maximum possible capacity is
-> +unavailable due to thermal events. Average thermal pressure for a CPU
-> +is now subtracted from its maximum possible capacity so that cpu_capacity
-> +reflects the remaining maximum capacity.
-> +
+On Fri, May 08, 2020 at 01:15:41PM +0300, Serge Semin wrote:
+> On Fri, May 08, 2020 at 01:03:11PM +0300, Andy Shevchenko wrote:
 
-I agree with what Valentin mentioned already. Instead of describing
-recent patch-sets, the functionality which was added (or enhanced) by
-them) should be depicted instead.
+> > > slave device. Taking into account the peculiarities of the controller
+> > > registers and physically mapped SPI flash access, very limited resources
+> > > and seeing the normal usecase of the controller is to access an external
+> > > SPI-nor flash, we decided to create a dedicated SPI driver for it.
 
-E.g. in case of 'Thermal Pressure' this would be the "scale CPU
-capacity" mechanism for CFS so it knows how much CPU capacity is left
-for its use after higher priority sched classes (RT, DL), IRQs and
-'Thermal Pressure' have reduced the 'original' CPU capacity.
+> > It seems a lot of code.
+> > Why can't you use spi-dw-mmio.c et al.?
 
-[...]
+> I said above why. Even though the registers set is similar It's too specific
+> to be integrated into the generic DW SSI driver.
 
-> +**Load balancing algorithm Reworked**:
-> +The load balancing algorithm contained some heuristics which became
-> +meaningless since the rework of the scheduler's metrics like the
-> +introduction of PELT. The new load balancing algorithm fixes several
-> +pending wrong tasks placement
-> +
-> + * the 1 task per CPU case with asymmetric system
-> + * the case of CFS task preempted by other class
-> + * the case of tasks not evenly spread on groups with spare capacity
-> +
-> +Also the load balance decisions have been consolidated in the 3 separate
-> +functions.
+Can you be more specific about the issues?  From what you wrote it
+sounded like the main thing was chip select handling.
 
-What are those 3 separate functions? I guess you refer to the 3
-(actually 4) migration types (migrate_task, migrate_util, migrate_load,
-(migrate_misfit)).
+> > > The driver provides callbacks for native messages-based SPI interface,
+> > > SPI-memory and direct mapping read operations. Due to not having any
+> > > asynchronous signaling interface provided by the core we have no choice
 
-[...]
+What do you mean by "asynchronous signaling interface provided by the
+core" here?
 
-> diff --git a/Documentation/scheduler/overview.rst b/Documentation/scheduler/overview.rst
-> index aee16feefc61..f2cb0c901208 100644
-> --- a/Documentation/scheduler/overview.rst
-> +++ b/Documentation/scheduler/overview.rst
-> @@ -3,3 +3,269 @@
->  ====================
->  Scheduler overview
->  ====================
-> +
-> +Linux kernel implements priority-based scheduling. More than one process are
-> +allowed to run at any given time and each process is allowed to run as if it
-> +were the only process on the system. The process scheduler coordinates which
-> +process runs when. In that context, it has the following tasks:
-> +
-> +* share CPU cores equally among all currently running processes.
-> +* pick appropriate process to run next if required, considering scheduling
-> +  class/policy and process priorities.
-> +* balance processes between multiple cores in SMP systems.
-> +
-> +The scheduler attempts to be responsive for I/O bound processes and efficient
-> +for CPU bound processes. The scheduler also applies different scheduling
-> +policies for real time and normal processes based on their respective
-> +priorities. Higher priorities in the kernel have a numerical smaller
-> +value. Real time priorities range from 1 (highest) – 99 whereas normal
-> +priorities range from 100 – 139 (lowest). SCHED_DEADLINE tasks have negative
-> +priorities, reflecting the fact that any of them has higher priority than
-> +RT and NORMAL/BATCH tasks.
+--+nBD6E3TurpgldQp
+Content-Type: application/pgp-signature; name="signature.asc"
 
-s/RT/SCHED_FIFO, SCHED_RR
-s/NORMAL/SCHED_NORMAL
-s/BATCH/SCHED_BATCH
+-----BEGIN PGP SIGNATURE-----
 
-SCHED_IDLE tasks can be set in the 100 – 139 range too but IMHO are
-treated as 139 (nice 20). Their priority doesn't matter since they get
-minimal weight WEIGHT_IDLEPRI=3 anyway.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl61MtEACgkQJNaLcl1U
+h9BbBAf+Jl9EnhQJquSLhnymjo26KCwHkpt/NEN6OKsKTLYfqL6Emy6SUPmqzpdM
+AUxNE0209CAMHG/ThduAVeKtICEoc5aek/HHkit5GcPze80sUzY2xRTLvNtVFp2S
+DcYhPtO+n422dQo/pp4T7LOBp+9o/oLkw3laGi8PL2zqGu7JOMOaEt8Zxsr1V5OV
+UrtTzdDW6ztfatRY/p1Re4Uy+pDS6fPEgfHKxImaZSeoLSbhLc07y3R6QOtChd+p
+Kk3L9eoLS90IjB9xTHjgASfmLKE+15kuoRfH0w3bU3ldRRUVlfckYXxKklZBVRO4
+KnZnpFoa6wjOYpoPbHLv5cpFOXKpPw==
+=5r9D
+-----END PGP SIGNATURE-----
 
-And then there are the maintenance sched classes, idle sched class and
-its idle tasks 'swapper/X' with priority 120 (was MAX_PRIO) as well as
-the stop sched class and its stopper tasks 'migration/X' who disguise as
-SCHED_FIFO with priority 139.
-Might be that people might find this too detailed though but it helps
-when you try to understand how it all works.
-
-[...]
-
-> diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
-> index ede1a30a6894..f311abe5b711 100644
-> --- a/Documentation/scheduler/index.rst
-> +++ b/Documentation/scheduler/index.rst
-> @@ -17,10 +17,13 @@ specific implementation differences.
->      :maxdepth: 2
->  
->      overview
-> +    sched-data-structs
-> +    cfs-overview
->      sched-design-CFS
->      sched-features
-> -    arch-specific.rst
-> -    sched-debugging.rst
-> +    arch-specific
-> +    sched-debugging
-> +    scheduler-api
->  
->  .. only::  subproject and html
->  
-> +                     +------------------------------------+
-> +                     |            TASK_RUNNING            |
-> +   +---------------> |           (Ready to run)           | <--+
-> +   |                 +------------------------------------+    |
-> +   |                   |                                       |
-> +   |                   | schedule() calls context_switch()     | task is preempted
-> +   |                   v                                       |
-> +   |                 +------------------------------------+    |
-> +   |                 |            TASK_RUNNING            |    |
-> +   |                 |             (Running)              | ---+
-> +   | event occurred  +------------------------------------+
-> +   |                   |
-> +   |                   | task needs to wait for event
-> +   |                   v
-> +   |                 +------------------------------------+
-> +   |                 |         TASK_INTERRUPTIBLE         |
-> +   |                 |        TASK_UNINTERRUPTIBLE        |
-> +   +-----------------|           TASK_WAKEKILL            |
-> +                     +------------------------------------+
-> +                                       |
-> +                                       | task exits via do_exit()
-> +                                       v
-> +                        +------------------------------+
-> +                        |          TASK_DEAD           |
-> +                        |         EXIT_ZOMBIE          |
-> +                        +------------------------------+
-> +
-> +
-> +Scheduler provides tracepoints tracing all major events of the scheduler.
-> +The tracepoints are defined in ::
-> +
-> +  include/trace/events/sched.h
-> +
-> +Using these tracepoints it is possible to model the scheduler state transition
-
-I would refer to them as trace events.
-
-The scheduler started to export (bare) trace points for PELT and
-overutilization (e.g. pelt_cfs_tp) (commit ba19f51fcb54 "sched/debug:
-Add new tracepoints to track PELT at rq level"). They are not bound to a
-trace event and so they don't expose any internal data structures.
-
-[...]
-
-> +Virtual Runtime
-> +~~~~~~~~~~~~~~~~~
-> +Virtual Run Time or vruntime is the amount of time a task has spent running
-> +on the CPU. It is updated periodically by scheduler_tick(). Tasks are stored
-> +in the CFS scheduling class rbtree sorted by vruntime. scheduler_tick() calls
-> +corresponding hook of CFS which first updates the runtime statistics of the
-> +currently running task and checks if the current task needs to be preempted.
-> +vruntime of the task based on the formula ::
-> +
-> +    vruntime += delta_exec * (NICE_0_LOAD/curr->load.weight);
-> +
-> +where:
-> +
-> +* delta_exec is the time in nanoseconds spent by the task since the last time
-> +  vruntime was updated.
-> +* NICE_0_LOAD is the load of a task with normal priority.
-> +* curr is the shed_entity instance of the cfs_rq struct of the currently
-> +  running task.
-> +* load.weight: sched_entity load_weight. load_weight is the encoding of
-> +  the tasks priority and vruntime. The load of a task is the metric
-> +  indicating the number of CPUs needed to make satisfactory progress on its
-> +  job. Load of a task influences the time a task spends on the CPU and also
-> +  helps to estimate the overall CPU load which is needed for load balancing.
-
-load.weight is replaced by PELT in load balancing.
-
-> +  Priority of the task is not enough for the scheduler to estimate the
-> +  vruntime of a process. So priority value must be mapped to the capacity of
-> +  the standard CPU which is done in the array :c:type:`sched_prio_to_weight[]`.
-> +  The array contains mappings for the nice values from -20 to 19. Nice value
-> +  0 is mapped to 1024. Each entry advances by approximately 1.25 which means
-> +  for every increment in nice value the task gets 10% less CPU and vice versa.
-
-SCHED_IDLE get minimal weight (WEIGHT_IDLEPRIO=3)
-
-[...]
+--+nBD6E3TurpgldQp--
