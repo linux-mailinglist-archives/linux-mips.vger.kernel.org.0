@@ -2,107 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 101ED1CBC6E
-	for <lists+linux-mips@lfdr.de>; Sat,  9 May 2020 04:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 023F11CBD1E
+	for <lists+linux-mips@lfdr.de>; Sat,  9 May 2020 06:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728353AbgEICYB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 May 2020 22:24:01 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:53710 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728158AbgEICYA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 8 May 2020 22:24:00 -0400
-Received: from [10.130.0.52] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx72ozFLZe5F8yAA--.25S3;
-        Sat, 09 May 2020 10:23:48 +0800 (CST)
-Subject: Re: [PATCH 2/3] MIPS: Loongson: Add hwmon support for generic CPU
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <1588938904-924-1-git-send-email-yangtiezhu@loongson.cn>
- <1588938904-924-3-git-send-email-yangtiezhu@loongson.cn>
- <f7184121-c044-6e79-78ab-dcc9103b27c2@xen0n.name>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <234fe99b-44db-46b9-76fb-6426598f4448@loongson.cn>
-Date:   Sat, 9 May 2020 10:23:47 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1726067AbgEIEC1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 May 2020 00:02:27 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:42797 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725385AbgEIEC1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 May 2020 00:02:27 -0400
+Received: by mail-il1-f194.google.com with SMTP id t12so3347359ile.9
+        for <linux-mips@vger.kernel.org>; Fri, 08 May 2020 21:02:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6xua7Jmgc6X8rMKuMjL528rW3WjsqSVGHqeP4mYGGbI=;
+        b=O7l1tO1XHu2qQQfwiKMtg/MEvl9o6iowZFwwJ4WTT8sctxGocWxMIzrgsxmnm7woNs
+         DKTIQYYw4fnGKi0FtKgfhLAQ/XCWwstcAXsHN4119iwX7plEl4B/8G5faOvzAZJ/B3FX
+         SxhohJ380o4E0vf5JXlkn1yxYSRtbaTS1T3z8dFPFfdYq3kcFgXSjRUz6Xnf62muNhO0
+         VG0RZ0eXEfDiJk7oQezPECJPdJ0pBKrSi0GJm8Z0/PAGSXOwAnGg9bhvC6AyCGr9wW8D
+         vAocc7FMjhuhFPqp42p85x53zo33OaLYOLEndyhlUuViagP5Nzx1MbpErsdtIm4J2muN
+         WaHw==
+X-Gm-Message-State: AGi0PuaCobIOhoBOy+dVYQ++MMACNoqUggixZsZJGU5IACZraiBuAPwo
+        1cNfCRj/RbCKQd2nFagxfIhkVwI557RjcgL0ldXV275Oyhc=
+X-Google-Smtp-Source: APiQypI6jruPM9osllFHMNluc29Ipbp/tjHkHTiAXrefbo46iwZHL1dvSzAfE0F0DtI6TqkTvr/KEEHZmHmiXCwFCvM=
+X-Received: by 2002:a92:cece:: with SMTP id z14mr6001292ilq.147.1588996945143;
+ Fri, 08 May 2020 21:02:25 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <f7184121-c044-6e79-78ab-dcc9103b27c2@xen0n.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dx72ozFLZe5F8yAA--.25S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw48tr48uF18Gr47tw4fKrg_yoW8WF13pF
-        Z5Kay3ur1jqr1jkanrJw4Uur45Za15KrZ7CFWDA34UZas8Wwnxua4IqFnIyrnrZr4fua12
-        yF4vqa4ruF43ZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07Al
-        zVAYIcxG8wCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxh
-        VjvjDU0xZFpf9x0JUHWlkUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+References: <1588930212-5255-1-git-send-email-chenhc@lemote.com> <20200508130149.GA14297@alpha.franken.de>
+In-Reply-To: <20200508130149.GA14297@alpha.franken.de>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Sat, 9 May 2020 12:10:05 +0800
+Message-ID: <CAAhV-H5BRhxvaQ_-RHYkEe8BY-OSQto1FhQtBx3T+bZTOVs+-Q@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: inst.h: Stop including asm.h to avoid various build failures
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 05/08/2020 08:51 PM, WANG Xuerui wrote:
-> On 2020/5/8 19:55, Tiezhu Yang wrote:
+Hi, Thomas,
+
+On Fri, May 8, 2020 at 9:31 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
 >
->> Add PRID_IMP_LOONGSON_64G case to enable hwmon support for Loongson
->> generic CPU such as 3A4000 and newer CPU.
->>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>   drivers/platform/mips/cpu_hwmon.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/platform/mips/cpu_hwmon.c 
->> b/drivers/platform/mips/cpu_hwmon.c
->> index add5f52..7b4bde1 100644
->> --- a/drivers/platform/mips/cpu_hwmon.c
->> +++ b/drivers/platform/mips/cpu_hwmon.c
->> @@ -43,6 +43,7 @@ int loongson3_cpu_temp(int cpu)
->>           break;
->>       case PRID_REV_LOONGSON3A_R3_0:
->>       case PRID_REV_LOONGSON3A_R3_1:
->> +    case PRID_IMP_LOONGSON_64G:
->>       default:
->>           reg = (reg & 0xffff)*731/0x4000 - 273;
->>           break;
+> On Fri, May 08, 2020 at 05:30:12PM +0800, Huacai Chen wrote:
+> > Commit d339cd02b888eb8 ("MIPS: Move unaligned load/store helpers to
+> > inst.h") causes a lot of build failures because macros in asm.h conflict
+> > with various subsystems. Some of these conflictions has been fixed (such
+> > as LONG, PANIC and PRINT) by adjusting asm.h, but some of them is nearly
+> > impossible to fix (such as PTR and END). The only reason of including
+> > asm.h in inst.h is that we need the PTR macro which is used by unaligned
+> > load/store helpers. So in this patch we define a new PTR_STR macro and
+> > use it to replace STR(PTR), then we can stop including asm.h to avoid
+> > various build failures.
+> >
+> > Fixes: d339cd02b888eb8 ("MIPS: Move unaligned load/store helpers to inst.h")
+> > Reported-by: kbuild test robot <lkp@intel.com>
+> > Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > ---
+> >  arch/mips/include/asm/inst.h | 184 ++++++++++++++++++++++---------------------
 >
-> Hi,
+> applied to mips-next. /me hopes this is the last fix... thanks
+I think this is the last fix... and, does "MIPS: asm: Rename some
+macros to avoid build errors" need to be reverted?
+
+Huacai
 >
-> This is obviously wrong, as the value being matched is a PRID_REV. You 
-> can tell from the neighboring match arms.
+> Thomas.
 >
-> Also, the LOONGSON_64G cores are 3A4000 and newer, that have CSR 
-> support. The csr_temp_enable flag is probed in loongson_hwmon_init, 
-> then the switch is simply never entered for these.
-
-Hi Xuerui,
-
-Thanks for your review. You are right.
-
-I notice that this feature has been done in the commit 7507445b1993
-("MIPS: Loongson: Add Loongson-3A R4 basic support"). My initial aim
-is to get CPU temperature for the Loongson generic CPU when the flag
-csr_temp_enable is false, but this is just the default case. So this
-patch is meaningless, please ignore it.
-
-Because patch 3/3 depends on this patch 2/3, I will remake and send v2
-patch series without this patch.
-
-Thanks,
-Tiezhu Yang
-
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
