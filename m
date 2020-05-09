@@ -2,219 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A6D1CC1D7
-	for <lists+linux-mips@lfdr.de>; Sat,  9 May 2020 15:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 347161CC270
+	for <lists+linux-mips@lfdr.de>; Sat,  9 May 2020 17:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727844AbgEINnh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 May 2020 09:43:37 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:58252 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726942AbgEINng (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 May 2020 09:43:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1589031813; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3+OUbR3nAMHj6vOkoLNKrouoG7vK2MNU8TiGQFCjkNE=;
-        b=mzYvCsSkmTcvd80dckxAzm86ehgWKmiR+rQMbWEdfhl0qfnXd53qsC+5ePCfu/qkCPfwyp
-        lHMrHUrqXJ/qFUEwRSbjrcH8ezx68Ub8amGNPxkbF3G/Y6lZ1eYIfrR8WJsrbxj5rDH/y6
-        WGniJIlDkxh3l4Xf/F8JAahNCU5JL/Y=
-Date:   Sat, 09 May 2020 15:43:21 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: DRM interaction problems on Ingenic CI20 / jz4780 with dw-hdmi
- and ingenic-drm
-To:     Paul Boddie <paul@boddie.org.uk>
-Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Dave Airlie <airlied@linux.ie>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        Yakir Yang <ykk@rock-chips.com>,
-        Vladimir Zapolskiy <vladimir_zapolskiy@mentor.com>,
-        linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        MIPS Creator CI20 Development 
-        <mips-creator-ci20-dev@googlegroups.com>
-Message-Id: <9SG2AQ.ALB8O9UHXRT11@crapouillou.net>
-In-Reply-To: <79437309.Fv5JZGVDrq@jeremy>
-References: <ED77DCA8-FF50-4E9E-A4B8-688262774723@goldelico.com>
-        <125Q8Q.9F49TXF6ZICX1@crapouillou.net>
-        <YC8S9Q.M96AR8DWGF0F1@crapouillou.net> <79437309.Fv5JZGVDrq@jeremy>
+        id S1727863AbgEIPfa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 May 2020 11:35:30 -0400
+Received: from elvis.franken.de ([193.175.24.41]:46036 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727092AbgEIPfa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 9 May 2020 11:35:30 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jXRVf-0005ZO-00; Sat, 09 May 2020 17:35:27 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 9AB96C044C; Sat,  9 May 2020 17:25:01 +0200 (CEST)
+Date:   Sat, 9 May 2020 17:25:01 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH] MIPS: inst.h: Stop including asm.h to avoid various
+ build failures
+Message-ID: <20200509152501.GA9125@alpha.franken.de>
+References: <1588930212-5255-1-git-send-email-chenhc@lemote.com>
+ <20200508130149.GA14297@alpha.franken.de>
+ <CAAhV-H5BRhxvaQ_-RHYkEe8BY-OSQto1FhQtBx3T+bZTOVs+-Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhV-H5BRhxvaQ_-RHYkEe8BY-OSQto1FhQtBx3T+bZTOVs+-Q@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+On Sat, May 09, 2020 at 12:10:05PM +0800, Huacai Chen wrote:
+> On Fri, May 8, 2020 at 9:31 PM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+> >
+> > On Fri, May 08, 2020 at 05:30:12PM +0800, Huacai Chen wrote:
+> > > Commit d339cd02b888eb8 ("MIPS: Move unaligned load/store helpers to
+> > > inst.h") causes a lot of build failures because macros in asm.h conflict
+> > > with various subsystems. Some of these conflictions has been fixed (such
+> > > as LONG, PANIC and PRINT) by adjusting asm.h, but some of them is nearly
+> > > impossible to fix (such as PTR and END). The only reason of including
+> > > asm.h in inst.h is that we need the PTR macro which is used by unaligned
+> > > load/store helpers. So in this patch we define a new PTR_STR macro and
+> > > use it to replace STR(PTR), then we can stop including asm.h to avoid
+> > > various build failures.
+> > >
+> > > Fixes: d339cd02b888eb8 ("MIPS: Move unaligned load/store helpers to inst.h")
+> > > Reported-by: kbuild test robot <lkp@intel.com>
+> > > Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > > ---
+> > >  arch/mips/include/asm/inst.h | 184 ++++++++++++++++++++++---------------------
+> >
+> > applied to mips-next. /me hopes this is the last fix... thanks
+> I think this is the last fix... and, does "MIPS: asm: Rename some
+> macros to avoid build errors" need to be reverted?
 
-Le mar. 5 mai 2020 =E0 20:26, Paul Boddie <paul@boddie.org.uk> a =E9crit :
-> On Monday 4. May 2020 03.05.22 Paul Cercueil wrote:
->>=20
->>  > Le sam. 11 avril 2020 =E0 16:14, H. Nikolaus Schaller=20
->> <hns@goldelico.com> a
->>  > =E9crit :
->>  >>
->>  >> So far we have identified two issues.
->>  >>
->>  >> The first is that HPD interrupts are not properly processed.
->>  >>
->>  >> drm_helper_hpd_irq_event() is called by HPD events but
->>  >> dev->mode_config.poll_enabled is false.
->>=20
->>  This is to be used when there's no hardware interrupt. I believe you
->>  have one, right? Then call drm_kms_helper_hotplug_event() from the
->>  interrupt handler instead.
->=20
-> What we have in drivers/gpu/drm/bridge/synopsys/dw-hdmi.c is a=20
-> function called
-> dw_hdmi_irq which appears to be the thread_fn for HDMI interrupts=20
-> (alongside
-> the dw_hdmi_hardirq which is the handler), initialised by a call to
-> devm_request_threaded_irq.
->=20
-> In dw_hdmi_irq, a hotplug event seems to cause=20
-> drm_helper_hpd_irq_event to be
-> called. However...
->=20
-> [...]
->=20
->>  >> The jz4780 hdmi subsystem (drm/bridge/dw-hdmi.c) uses
->>  >>
->>  >> 	connector->polled =3D DRM_CONNECTOR_POLL_HPD;
->>  >>
->>  >> but shouldn't this enable polling? Note that there seems to be
->>  >> no (direct) call to drm_kms_helper_poll_init().
->>  >>
->>  >> If we set dev->mode_config.poll_enabled =3D true in
->>  >> drm_helper_hpd_irq_event() things start to work.
->>  >>
->>  >> Please can you clarify what would be best practise here to
->>  >> get HPD event handling working.
->>=20
->>  Remove that - this stuff is for hardware without interrupts, where
->>  everything has to be polled.
->=20
-> Yes, I think this must be a mistake in the driver. In
-> drm_helper_hpd_irq_event, the connector is tested for the
-> DRM_CONNECTOR_POLL_HPD flag and skips the connector. It isn't clear=20
-> whether
-> this actually matters for the other hardware using this technology,
-> documentation being rather thin on the ground.
->=20
->>  >> The other issue is in dw-hdmi.c:
->>  >>
->>  >> We found out that ingenic_drm_encoder_atomic_check() fails=20
->> because
->>  >>
->>  >> info->num_bus_formats =3D=3D 0
->>  >>
->>  >> and not 1. This blocks further initialization.
->>  >>
->>  >> The reason seems to be that dw_hdmi_bridge_attach() does not call
->>  >> drm_display_info_set_bus_formats() with a proper format like
->>  >> other drivers (e.g. drm/bridge/ti-tfp410.c) are doing.
->>  >>
->>  >> We have patched to set a single bus format=20
->> MEDIA_BUS_FMT_RGB888_1X24
->>  >> and then DRM setup seems to work (although we still have no valid
->>  >> HDMI signal but that is likely something else).
->>  >>
->>  >> Please can you explain how setting the bus format should be fixed
->>  >> in dw-hdmi.c.
->>=20
->>  I'm not sure, but that information may come from EDID data. Are you
->>  able to obtain video modes from the connected monitor?
->=20
-> The modes are definitely received, or at least the list of modes=20
-> given by
-> /sys/devices/platform/13050000.lcd/drm/card0/card0-HDMI-A-1/modes is=20
-> viable.
->=20
-> However, it rather looked like the bus format information wasn't=20
-> being set and
-> that this inhibited the completion of the initialisation process=20
-> which, if
-> completed, would ultimately cause the format to be set. (This being=20
-> the short
-> version of the story as I remember it right now.) So, the problem=20
-> presents
-> itself as an initialisation order problem.
+let's keep it as it is now.
 
-It's not an initialization order problem, the ingenic-drm expects the=20
-bus_formats to be provided and the synopsis driver never calls=20
-drm_display_info_set_bus_formats().
+Thomas.
 
-> I removed the flag from the connector to see if it makes any=20
-> difference, but
-> it doesn't look like it. Here is what /sys/kernel/debug/dri/0/state=20
-> contains:
->=20
-> plane[31]: plane-0
->         crtc=3D(null)
->         fb=3D0
->         crtc-pos=3D0x0+0+0
->         src-pos=3D0.000000x0.000000+0.000000+0.000000
->         rotation=3D1
->         normalized-zpos=3D0
->         color-encoding=3DITU-R BT.601 YCbCr
->         color-range=3DYCbCr limited range
-> crtc[32]: crtc-0
->         enable=3D0
->         active=3D0
->         self_refresh_active=3D0
->         planes_changed=3D0
->         mode_changed=3D0
->         active_changed=3D0
->         connectors_changed=3D0
->         color_mgmt_changed=3D0
->         plane_mask=3D0
->         connector_mask=3D0
->         encoder_mask=3D0
->         mode: "": 0 0 0 0 0 0 0 0 0 0 0x0 0x0
-> connector[34]: HDMI-A-1
->         crtc=3D(null)
->         self_refresh_aware=3D0
->=20
-> The crtc member values do not look encouraging. In fact, it just=20
-> looks like
-> most structure members are uninitialised.
->=20
-> Thanks for the advice: I spent some time the other day reviewing=20
-> various
-> aspects of the Synopsys drivers of different vintages (Ingenic 3.0.8=20
-> non-DRM
-> driver for JZ4780, MIPS/Ingenic 3.18 DRM driver for JZ4780 based on=20
-> Freescale
-> driver code, the recent generic DRM bridge driver), and so this=20
-> information is
-> timely and valuable.
-
-With a hardcoded bus_format of RGB888 in the ingenic-drm driver, and=20
-jz4780_dw_hdmi_plat_data.input_bus_format initialized too:
-
-modetest -D /dev/dri/card0 -M ingenic-drm -s 35@32:1280x720-60
-
-My PC monitor sees a signal - unfortunately it says "input not=20
-supported".
-
-
-> Paul
->=20
-> P.S. Sorry if this message goes to far too many people. I don't want=20
-> to
-> "personalise" it by taking people off the recipients list, but I=20
-> realise that
-> this is probably not interesting to most recipients, either. Feel=20
-> free to trim
-> recipients if replying.
-
-Again, you shoul send this message to the DRI mailing list. The people=20
-who did work with the Synopsis IP may be able to help.
-
--Paul
-
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
