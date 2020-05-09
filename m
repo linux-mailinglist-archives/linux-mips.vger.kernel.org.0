@@ -2,81 +2,154 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 023F11CBD1E
-	for <lists+linux-mips@lfdr.de>; Sat,  9 May 2020 06:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E2B1CBD29
+	for <lists+linux-mips@lfdr.de>; Sat,  9 May 2020 06:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726067AbgEIEC1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 May 2020 00:02:27 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:42797 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725385AbgEIEC1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 May 2020 00:02:27 -0400
-Received: by mail-il1-f194.google.com with SMTP id t12so3347359ile.9
-        for <linux-mips@vger.kernel.org>; Fri, 08 May 2020 21:02:25 -0700 (PDT)
+        id S1725820AbgEIEYw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Sat, 9 May 2020 00:24:52 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:36359 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725795AbgEIEYv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 May 2020 00:24:51 -0400
+Received: by mail-io1-f66.google.com with SMTP id k6so3932129iob.3;
+        Fri, 08 May 2020 21:24:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6xua7Jmgc6X8rMKuMjL528rW3WjsqSVGHqeP4mYGGbI=;
-        b=O7l1tO1XHu2qQQfwiKMtg/MEvl9o6iowZFwwJ4WTT8sctxGocWxMIzrgsxmnm7woNs
-         DKTIQYYw4fnGKi0FtKgfhLAQ/XCWwstcAXsHN4119iwX7plEl4B/8G5faOvzAZJ/B3FX
-         SxhohJ380o4E0vf5JXlkn1yxYSRtbaTS1T3z8dFPFfdYq3kcFgXSjRUz6Xnf62muNhO0
-         VG0RZ0eXEfDiJk7oQezPECJPdJ0pBKrSi0GJm8Z0/PAGSXOwAnGg9bhvC6AyCGr9wW8D
-         vAocc7FMjhuhFPqp42p85x53zo33OaLYOLEndyhlUuViagP5Nzx1MbpErsdtIm4J2muN
-         WaHw==
-X-Gm-Message-State: AGi0PuaCobIOhoBOy+dVYQ++MMACNoqUggixZsZJGU5IACZraiBuAPwo
-        1cNfCRj/RbCKQd2nFagxfIhkVwI557RjcgL0ldXV275Oyhc=
-X-Google-Smtp-Source: APiQypI6jruPM9osllFHMNluc29Ipbp/tjHkHTiAXrefbo46iwZHL1dvSzAfE0F0DtI6TqkTvr/KEEHZmHmiXCwFCvM=
-X-Received: by 2002:a92:cece:: with SMTP id z14mr6001292ilq.147.1588996945143;
- Fri, 08 May 2020 21:02:25 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=T729zuWLucZwsQ3fGdwS2CX71Nd+c9u7n/xXTLXgwos=;
+        b=ojy5wwrujp74GwIluAwT0Yp7j0TMPNJsGXPCYbB232tcr6ePY+ygbvIQNZQOAB3se9
+         nHZE+v7t39ulQ/36LDnQQiyzcupDTQNPkB2Ab0vI8jNyxkIgpNrwv5BVfrsjwaMPlrDT
+         rDBdmaZYUbiOPMF2PtHcTlN+pXJkVs0ID4hue3OeoUe5A9eGUloLboRzZdwSpl4zZPAB
+         4BVsWmGW2OSvRwbbe9WNtHM2hShEaZ7wYRwQmuyMJAAezzXFRmsVSsuPK/itliK0dLIj
+         NN0gKk10TjEX95qL98YX4TMYhg+5NS3BizTkjH0KUlFPxFSm6Pj8xWGmWc9R9zWIHHOu
+         kdwA==
+X-Gm-Message-State: AGi0PubaDPADrixYRYNYSnCUHJv0q4y66kpqr8pq4qNn2zddwqFB1iUI
+        50sfoUSwlUsgHGgYvcNaaRXvuO1cJiwf/3lzLw1vr7ai
+X-Google-Smtp-Source: APiQypJh1BjUcRA4lxUJWeKav/PPITNxXFDGZKYVfEZckYRMBOyxoLqKXw7BuxYc66PDgEeX2hQ8fHq2fRWX+XNO74E=
+X-Received: by 2002:a02:966a:: with SMTP id c97mr5911573jai.106.1588998290317;
+ Fri, 08 May 2020 21:24:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <1588930212-5255-1-git-send-email-chenhc@lemote.com> <20200508130149.GA14297@alpha.franken.de>
-In-Reply-To: <20200508130149.GA14297@alpha.franken.de>
+References: <1588500367-1056-1-git-send-email-chenhc@lemote.com> <CAHiYmc4f1N-8mvMEZNcxVP+zbxjp0=OWFQc2pDDssnpmZ6eJig@mail.gmail.com>
+In-Reply-To: <CAHiYmc4f1N-8mvMEZNcxVP+zbxjp0=OWFQc2pDDssnpmZ6eJig@mail.gmail.com>
 From:   Huacai Chen <chenhc@lemote.com>
-Date:   Sat, 9 May 2020 12:10:05 +0800
-Message-ID: <CAAhV-H5BRhxvaQ_-RHYkEe8BY-OSQto1FhQtBx3T+bZTOVs+-Q@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: inst.h: Stop including asm.h to avoid various build failures
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+Date:   Sat, 9 May 2020 12:32:30 +0800
+Message-ID: <CAAhV-H6521opsPrsorDK+Dk3qDHjOK=c7L5qmS=_O7cF4Uh=UA@mail.gmail.com>
+Subject: Re: [PATCH V3 00/14] KVM: MIPS: Add Loongson-3 support (Host Side)
+To:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        kvm <kvm@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>,
         Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Thomas,
+Hi, Aleksandar,
 
-On Fri, May 8, 2020 at 9:31 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
+On Fri, May 8, 2020 at 7:43 PM Aleksandar Markovic
+<aleksandar.qemu.devel@gmail.com> wrote:
 >
-> On Fri, May 08, 2020 at 05:30:12PM +0800, Huacai Chen wrote:
-> > Commit d339cd02b888eb8 ("MIPS: Move unaligned load/store helpers to
-> > inst.h") causes a lot of build failures because macros in asm.h conflict
-> > with various subsystems. Some of these conflictions has been fixed (such
-> > as LONG, PANIC and PRINT) by adjusting asm.h, but some of them is nearly
-> > impossible to fix (such as PTR and END). The only reason of including
-> > asm.h in inst.h is that we need the PTR macro which is used by unaligned
-> > load/store helpers. So in this patch we define a new PTR_STR macro and
-> > use it to replace STR(PTR), then we can stop including asm.h to avoid
-> > various build failures.
+> нед, 3. мај 2020. у 12:06 Huacai Chen <chenhc@lemote.com> је написао/ла:
 > >
-> > Fixes: d339cd02b888eb8 ("MIPS: Move unaligned load/store helpers to inst.h")
-> > Reported-by: kbuild test robot <lkp@intel.com>
+> > We are preparing to add KVM support for Loongson-3. VZ extension is
+> > fully supported in Loongson-3A R4+, and we will not care about old CPUs
+> > (at least now). We already have a full functional Linux kernel (based
+> > on Linux-5.4.x LTS) and QEMU (based on 5.0.0-rc2) and their git
+> > repositories are here:
+> >
+> > QEMU: https://github.com/chenhuacai/qemu
+> > Kernel: https://github.com/chenhuacai/linux
+> >
+> > Of course these two repositories need to be rework and not suitable for
+> > upstream (especially the commits need to be splitted). We show them here
+> > is just to tell others what we have done, and how KVM/Loongson will look
+> > like.
+> >
+> > Our plan is make the KVM host side be upstream first, and after that,
+> > we will make the KVM guest side and QEMU emulator be upstream.
+> >
+>
+> Huacei, I absolutely salute this series, as it is, in my opinion, of
+> tremendous significance not only for Loongson, but also for KVM for
+> MIPS in general.
+>
+> As you probably know, James Hogan left KVM for MIPS kernel
+> maintainership some time ago. It was really too bad, as he was and
+> still is, from my direct experience, an excellent colleague and
+> engineer.
+>
+> KVM for MIPS kernel maintainership left orphaned put me (as the
+> maintainer for KVM for MIPS in QEMU) in an awkward position.
+>
+> May I ask that you and me jointly assume KVM for MIPS kernel
+> maintainership? For me, it makes perfect sense, and I would certainly
+> enjoy working with you. If you agree, please add such patch at the end
+> of this series, in its next version.
+I'm very glad to join maintainership with you, thank you for your invitation.
+
+Regards,
+Huacai
+
+>
+> Yours,
+> Aleksandar
+>
+>
+> > V1 -> V2:
+> > 1, Remove "mips: define pud_index() regardless of page table folding"
+> >    because it has been applied.
+> > 2, Make Loongson-specific code be guarded by CONFIG_CPU_LOONGSON64.
+> >
+> > V2 -> V3:
+> > 1, Emulate a reduced feature list of CPUCFG.
+> > 2, Fix all possible checkpatch.pl errors and warnings.
+> >
+> > Xing Li(2):
+> >  KVM: MIPS: Define KVM_ENTRYHI_ASID to cpu_asid_mask(&boot_cpu_data)
+> >  KVM: MIPS: Fix VPN2_MASK definition for variable cpu_vmbits
+> >
+> > Huacai Chen(12):
+> >  KVM: MIPS: Increase KVM_MAX_VCPUS and KVM_USER_MEM_SLOTS to 16
+> >  KVM: MIPS: Add EVENTFD support which is needed by VHOST
+> >  KVM: MIPS: Use lddir/ldpte instructions to lookup gpa_mm.pgd
+> >  KVM: MIPS: Introduce and use cpu_guest_has_ldpte
+> >  KVM: MIPS: Use root tlb to control guest's CCA for Loongson-3
+> >  KVM: MIPS: Let indexed cacheops cause guest exit on Loongson-3
+> >  KVM: MIPS: Add more types of virtual interrupts
+> >  KVM: MIPS: Add Loongson-3 Virtual IPI interrupt support
+> >  KVM: MIPS: Add CPUCFG emulation for Loongson-3
+> >  KVM: MIPS: Add CONFIG6 and DIAG registers emulation
+> >  KVM: MIPS: Add more MMIO load/store instructions emulation
+> >  KVM: MIPS: Enable KVM support for Loongson-3
+> >
 > > Signed-off-by: Huacai Chen <chenhc@lemote.com>
 > > ---
-> >  arch/mips/include/asm/inst.h | 184 ++++++++++++++++++++++---------------------
->
-> applied to mips-next. /me hopes this is the last fix... thanks
-I think this is the last fix... and, does "MIPS: asm: Rename some
-macros to avoid build errors" need to be reverted?
-
-Huacai
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+> >  arch/mips/Kconfig                    |   1 +
+> >  arch/mips/include/asm/cpu-features.h |   3 +
+> >  arch/mips/include/asm/kvm_host.h     |  52 +++-
+> >  arch/mips/include/asm/mipsregs.h     |   7 +
+> >  arch/mips/include/uapi/asm/inst.h    |  11 +
+> >  arch/mips/kernel/cpu-probe.c         |   2 +
+> >  arch/mips/kvm/Kconfig                |   1 +
+> >  arch/mips/kvm/Makefile               |   5 +-
+> >  arch/mips/kvm/emulate.c              | 503 ++++++++++++++++++++++++++++++++++-
+> >  arch/mips/kvm/entry.c                |  19 +-
+> >  arch/mips/kvm/interrupt.c            |  93 +------
+> >  arch/mips/kvm/interrupt.h            |  14 +-
+> >  arch/mips/kvm/loongson_ipi.c         | 214 +++++++++++++++
+> >  arch/mips/kvm/mips.c                 |  49 +++-
+> >  arch/mips/kvm/tlb.c                  |  41 +++
+> >  arch/mips/kvm/trap_emul.c            |   3 +
+> >  arch/mips/kvm/vz.c                   | 235 +++++++++++-----
+> >  17 files changed, 1087 insertions(+), 166 deletions(-)
+> >  create mode 100644 arch/mips/kvm/loongson_ipi.c
+> > --
+> > 2.7.0
