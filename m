@@ -2,22 +2,22 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 473981CCA63
-	for <lists+linux-mips@lfdr.de>; Sun, 10 May 2020 12:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8C91CCA6D
+	for <lists+linux-mips@lfdr.de>; Sun, 10 May 2020 12:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728468AbgEJK6g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 May 2020 06:58:36 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:46550 "EHLO
+        id S1728794AbgEJK6i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 May 2020 06:58:38 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:46576 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726080AbgEJK6g (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 May 2020 06:58:36 -0400
+        with ESMTP id S1726863AbgEJK6i (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 May 2020 06:58:38 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 270B880307CB;
-        Sun, 10 May 2020 10:58:30 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 969698030807;
+        Sun, 10 May 2020 10:58:32 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EqW14APDEKpH; Sun, 10 May 2020 13:58:29 +0300 (MSK)
+        with ESMTP id 21DbGkKu43dC; Sun, 10 May 2020 13:58:31 +0300 (MSK)
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -32,9 +32,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         <linux-mips@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 1/7] dt-bindings: watchdog: Convert DW WDT binding to DT schema
-Date:   Sun, 10 May 2020 13:58:01 +0300
-Message-ID: <20200510105807.880-2-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v2 2/7] dt-bindings: watchdog: dw-wdt: Support devices with asynch clocks
+Date:   Sun, 10 May 2020 13:58:02 +0300
+Message-ID: <20200510105807.880-3-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200510105807.880-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200306132758.703FC8030704@mail.baikalelectronics.ru>
  <20200510105807.880-1-Sergey.Semin@baikalelectronics.ru>
@@ -47,12 +47,12 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Modern device tree bindings are supposed to be created as YAML-files
-in accordance with dt-schema. This commit replaces the DW Watchdog
-legacy bare text bindings with YAML file. As before the binding states
-that the corresponding dts node is supposed to have a registers
-range, a watchdog timer references clock source, optional reset line and
-pre-timeout interrupt.
+DW Watchdog IP core can be synthesised with asynchronous timer/APB
+clocks support (WDT_ASYNC_CLK_MODE_ENABLE == 1). In this case
+a separate clock signal is supposed to be used to feed watchdog timer
+and APB interface of the device. Lets along with the watchdog timer
+reference clock expect to have the optional APB3 bus interface clock
+sepcified in a DW WDT dt node.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
@@ -66,106 +66,32 @@ Cc: linux-mips@vger.kernel.org
 ---
 
 Changelog v2:
-- Rearrange SoBs.
-- Discard BE copyright header.
-- Replace "additionalProperties: false" with "unevaluatedProperties: false"
-  property.
-- Discard interrupts property from the required properties list.
-- Remove a label definition from the binding example.
-- Move the asynchronous APB3 clock support into a dedicated patch.
+- It's a new patch unpinned from the previous one.
 ---
- .../devicetree/bindings/watchdog/dw_wdt.txt   | 24 ---------
- .../bindings/watchdog/snps,dw-wdt.yaml        | 50 +++++++++++++++++++
- 2 files changed, 50 insertions(+), 24 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/dw_wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+ .../devicetree/bindings/watchdog/snps,dw-wdt.yaml         | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/dw_wdt.txt b/Documentation/devicetree/bindings/watchdog/dw_wdt.txt
-deleted file mode 100644
-index eb0914420c7c..000000000000
---- a/Documentation/devicetree/bindings/watchdog/dw_wdt.txt
-+++ /dev/null
-@@ -1,24 +0,0 @@
--Synopsys Designware Watchdog Timer
--
--Required Properties:
--
--- compatible	: Should contain "snps,dw-wdt"
--- reg		: Base address and size of the watchdog timer registers.
--- clocks	: phandle + clock-specifier for the clock that drives the
--		watchdog timer.
--
--Optional Properties:
--
--- interrupts	: The interrupt used for the watchdog timeout warning.
--- resets	: phandle pointing to the system reset controller with
--		line index for the watchdog.
--
--Example:
--
--	watchdog0: wd@ffd02000 {
--		compatible = "snps,dw-wdt";
--		reg = <0xffd02000 0x1000>;
--		interrupts = <0 171 4>;
--		clocks = <&per_base_clk>;
--		resets = <&rst WDT0_RESET>;
--	};
 diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-new file mode 100644
-index 000000000000..4f6944756ab4
---- /dev/null
+index 4f6944756ab4..5bf6dc6377f3 100644
+--- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
 +++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-@@ -0,0 +1,50 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/snps,dw-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+@@ -24,8 +24,16 @@ properties:
+     maxItems: 1
+ 
+   clocks:
++    minItems: 1
+     items:
+       - description: Watchdog timer reference clock
++      - description: APB3 interface clock
 +
-+title: Synopsys Designware Watchdog Timer
-+
-+allOf:
-+  - $ref: "watchdog.yaml#"
-+
-+maintainers:
-+  - Jamie Iles <jamie@jamieiles.com>
-+
-+properties:
-+  compatible:
-+    const: snps,dw-wdt
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    description: DW Watchdog pre-timeout interrupt
-+    maxItems: 1
-+
-+  clocks:
++  clock-names:
++    minItems: 1
 +    items:
-+      - description: Watchdog timer reference clock
-+
-+  resets:
-+    description: Phandle to the DW Watchdog reset lane
-+    maxItems: 1
-+
-+unevaluatedProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+
-+examples:
-+  - |
-+    watchdog@ffd02000 {
-+      compatible = "snps,dw-wdt";
-+      reg = <0xffd02000 0x1000>;
-+      interrupts = <0 171 4>;
-+      clocks = <&per_base_clk>;
-+      resets = <&wdt_rst>;
-+    };
-+...
++      - const: tclk
++      - const: pclk
+ 
+   resets:
+     description: Phandle to the DW Watchdog reset lane
 -- 
 2.25.1
 
