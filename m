@@ -2,51 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C34D61CCD78
-	for <lists+linux-mips@lfdr.de>; Sun, 10 May 2020 22:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DA11CCE70
+	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 00:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728926AbgEJUGe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 May 2020 16:06:34 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:46609 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728071AbgEJUGe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 May 2020 16:06:34 -0400
-Received: from localhost.localdomain (unknown [91.224.148.103])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 5725C100002;
-        Sun, 10 May 2020 20:06:31 +0000 (UTC)
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Boris Brezillon <boris.brezillon@collabora.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-mtd@lists.infradead.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Richard Weinberger <richard@nod.at>,
-        linux-mips@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 1/4] mtd: rawnand: au1550nd: Stop using IO_ADDR_{R, W} in au_{read, write}_buf[16]()
-Date:   Sun, 10 May 2020 22:06:30 +0200
-Message-Id: <20200510200630.2987-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200419193037.1544035-2-boris.brezillon@collabora.com>
-References: 
+        id S1728301AbgEJWFx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 May 2020 18:05:53 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:47498 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727771AbgEJWFw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 May 2020 18:05:52 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 738CA8030802;
+        Sun, 10 May 2020 22:05:49 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9vGjWYW_TGFn; Mon, 11 May 2020 01:05:48 +0300 (MSK)
+Date:   Mon, 11 May 2020 01:05:41 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Alexander Lobakin <alobakin@dlink.ru>,
+        Daniel Silsby <dansilsby@gmail.com>,
+        =?utf-8?B?UmVuw6k=?= van Dorst <opensource@vdorst.com>,
+        Cedric Hombourger <Cedric_Hombourger@mentor.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Allison Randal <allison@lohutok.net>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Jessica Yu <jeyu@kernel.org>,
+        Zhou Yanjie <zhouyanjie@zoho.com>,
+        =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kvm@vger.kernel.org>
+Subject: Re: [PATCH v2 06/20] mips: Add MIPS32 Release 5 support
+Message-ID: <20200510220541.izel23i5ss7yiirq@mobilestation>
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-7-Sergey.Semin@baikalelectronics.ru>
+ <20200508133040.GB15641@alpha.franken.de>
 MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: 15770370df4d51bd5ca408f0b8c46c90098d3300
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200508133040.GB15641@alpha.franken.de>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 2020-04-19 at 19:30:34 UTC, Boris Brezillon wrote:
-> We are about to re-use those for the exec_op() implementation which
-> will not rely on au1550_hwcontrol(). Let's patch those helpers to
-> simply use the iomem address stored in the context.
+On Fri, May 08, 2020 at 03:30:40PM +0200, Thomas Bogendoerfer wrote:
+> On Wed, May 06, 2020 at 08:42:24PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+> > We also could add CPU_MIPS64_R5 config support here, but I don't think
+> > it's necessary at the moment seeing there is no any real chip ever
+> > produced with that arch. Right?
 > 
-> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-> Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> how much is missing ? Looks like not too much, so it might be worth
+> to add it at least for symmetry to the other ISAs...
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
+Yeah, just a few more alteration to add together with new CPU_MIPS64_R5 config.
+I'll do this in v3.
 
-Miquel
+-Sergey
+
+> 
+> Thomas.
+> 
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
