@@ -2,70 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F8E1CC710
-	for <lists+linux-mips@lfdr.de>; Sun, 10 May 2020 08:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726E41CC7CE
+	for <lists+linux-mips@lfdr.de>; Sun, 10 May 2020 09:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726041AbgEJGDa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 May 2020 02:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49098 "EHLO
+        id S1728692AbgEJHzW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 May 2020 03:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725808AbgEJGDa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 May 2020 02:03:30 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA4EC061A0E
-        for <linux-mips@vger.kernel.org>; Sat,  9 May 2020 23:03:30 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1jXf3e-0001nf-PS; Sun, 10 May 2020 08:03:26 +0200
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1jXf3e-0006YT-FH; Sun, 10 May 2020 08:03:26 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: [PATCH v1 2/2] MIPS: ath79: ar9331: rename uart to serial node
-Date:   Sun, 10 May 2020 08:03:24 +0200
-Message-Id: <20200510060324.25134-2-o.rempel@pengutronix.de>
+        with ESMTP id S1725839AbgEJHzU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 May 2020 03:55:20 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE92FC061A0E;
+        Sun, 10 May 2020 00:55:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=7/gXVwxfQCALl/htOL9nGBBdk9CR2DqbWyS3c9DzJzg=; b=TvxbsuwUX/hm6+Z8fi/17h3sCr
+        V6hTHGgSMnPIXClp9WBd4xHpkact4TdSPlY40kgpTlFrc4X0TcbVrodeZch2eF33X40QtPmPFET1U
+        Tys5kVImtNbCnWZn12idX8lvZh32iDnfxIDeXhSFPGHn0PMIm30TD0pbjnUShEADOadDDfLCmcKnm
+        wKfgOhNBY1n/ICaPIfQgdGgBtYZHWT6fzJbX2O0Ol1Icyt3JJoleMMbRsBA4C7Ht6DLkc7DlYLbcX
+        cjmyou6JXKISuiamP88TvDgJ4S2xixwnMizgAVSPuwNbaVDo6GTG7tK/YFq90voaly/1rUW1zB1cS
+        ecEzX6Qw==;
+Received: from [2001:4bb8:180:9d3f:c70:4a89:bc61:2] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jXgno-0007lE-9T; Sun, 10 May 2020 07:55:13 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Roman Zippel <zippel@linux-m68k.org>
+Cc:     Jessica Yu <jeyu@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-c6x-dev@linux-c6x.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux-fsdevel@vger.kernel.org
+Subject: sort out the flush_icache_range mess
+Date:   Sun, 10 May 2020 09:54:39 +0200
+Message-Id: <20200510075510.987823-1-hch@lst.de>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200510060324.25134-1-o.rempel@pengutronix.de>
-References: <20200510060324.25134-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-schema violation was detected by the dtbs_check
+Hi all,
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- arch/mips/boot/dts/qca/ar9331.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+flush_icache_range is mostly used for kernel address, except for the following
+cases:
 
-diff --git a/arch/mips/boot/dts/qca/ar9331.dtsi b/arch/mips/boot/dts/qca/ar9331.dtsi
-index 6e1e17cbc1ee0..9267bc9e4cc09 100644
---- a/arch/mips/boot/dts/qca/ar9331.dtsi
-+++ b/arch/mips/boot/dts/qca/ar9331.dtsi
-@@ -59,7 +59,7 @@ ddr_ctrl: memory-controller@18000000 {
- 				#qca,ddr-wb-channel-cells = <1>;
- 			};
- 
--			uart: uart@18020000 {
-+			uart: serial@18020000 {
- 				compatible = "qca,ar9330-uart";
- 				reg = <0x18020000 0x14>;
- 
--- 
-2.26.2
+ - the nommu brk and mmap implementations,
+ - the read_code helper that is only used for binfmt_flat, binfmt_elf_fdpic,
+   and binfmt_aout including the broken ia32 compat version
+ - binfmt_flat itself,
 
+none of which really are used by a typical MMU enabled kernel, as a.out can
+only be build for alpha and m68k to start with.
+
+But strangely enough commit ae92ef8a4424 ("PATCH] flush icache in correct
+context") added a "set_fs(KERNEL_DS)" around the flush_icache_range call
+in the module loader, because apparently m68k assumed user pointers.
+
+This series first cleans up the cacheflush implementations, largely by
+switching as much as possible to the asm-generic version after a few
+preparations, then moves the misnamed current flush_icache_user_range to
+a new name, to finally introduce a real flush_icache_user_range to be used
+for the above use cases to flush the instruction cache for a userspace
+address range.  The last patch then drops the set_fs in the module code
+and moves it into the m68k implementation.
+
+A git tree is available here:
+
+    git://git.infradead.org/users/hch/misc.git flush_icache_range
+
+Gitweb:
+
+    http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/flush_icache_range
