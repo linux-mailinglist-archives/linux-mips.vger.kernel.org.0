@@ -2,123 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CC01CCE84
-	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 00:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C0A1CCECC
+	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 01:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729365AbgEJWRW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 May 2020 18:17:22 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:53958 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729347AbgEJWRW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 May 2020 18:17:22 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id BFD26891B0;
-        Mon, 11 May 2020 10:17:17 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1589149037;
-        bh=SrgIz+PJYHKXN8CEOXRS3rQhCzXZZWj0itaj5yb73VI=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=gEu2+LoqCppAt8TRqOphp/vqL/bORRCpyc75HO2xMe7P2uzzetrCirReJdLrP72hg
-         BRzJ+9E/PAS0mct2NLJ1JVpaifeXxb31Kg7soOOdDCggCh6POqPVPD8JqNDfX9BcFN
-         sx9J8tVPeiuTZZxcS4g5bQjZJBMaZvdLug6iBmpNMJNx3/0eda8V9+NaC45gFIrPzD
-         34UD/8Ope365T8ynddyjKfiIzmWerkDn2wsl8pVNEqiVf91kqEySmfr65jplqgOmmG
-         qUUxMQihQsB+BHsA3TcWnQxj2cjmp6DAU6lcY0I6815ZZ6YDKEuuKexPyBjPjfEadW
-         l1O+ZjQJQaYEg==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5eb87d6e0001>; Mon, 11 May 2020 10:17:18 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.2; Mon, 11 May 2020 10:17:17 +1200
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.006; Mon, 11 May 2020 10:17:17 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mark Brown <broonie@kernel.org>
+        id S1729126AbgEJX7r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 May 2020 19:59:47 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:47676 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729078AbgEJX7r (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 May 2020 19:59:47 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 0AB0C803088B;
+        Sun, 10 May 2020 23:59:44 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id okmZ8RUkSoro; Mon, 11 May 2020 02:59:43 +0300 (MSK)
+Date:   Mon, 11 May 2020 02:59:42 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
-        "Ralf Baechle" <ralf@linux-mips.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        "Chuanhong Guo" <gch981213@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "Eddie James" <eajames@linux.ibm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: Re: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
-Thread-Topic: [PATCH 2/2] spi: Add Baikal-T1 System Boot SPI Controller driver
-Thread-Index: AQHWJR1LjfOM6n85g0qPl2lemRFsA6idRtCAgAJndYCAAW/cAA==
-Date:   Sun, 10 May 2020 22:17:16 +0000
-Message-ID: <740f1569-d8d3-606a-73a8-f9feeb20e06f@alliedtelesis.co.nz>
-References: <20200508093621.31619-1-Sergey.Semin@baikalelectronics.ru>
- <20200508093621.31619-3-Sergey.Semin@baikalelectronics.ru>
- <20200508113751.GD4820@sirena.org.uk>
- <20200510002039.hwahqasnnceowskz@mobilestation>
-In-Reply-To: <20200510002039.hwahqasnnceowskz@mobilestation>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F0C745804143EC40B042AF8A4CCB7FE5@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 08/20] mips: Fix cpu_has_mips64r1/2 activation for
+ MIPS32 CPUs
+Message-ID: <20200510235942.msznsepuaww7gj2c@mobilestation>
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-9-Sergey.Semin@baikalelectronics.ru>
+ <20200508132809.GA15641@alpha.franken.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200508132809.GA15641@alpha.franken.de>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-DQpPbiAxMC8wNS8yMCAxMjoyMCBwbSwgU2VyZ2UgU2VtaW4gd3JvdGU6DQo+IE9uIEZyaSwgTWF5
-IDA4LCAyMDIwIGF0IDEyOjM3OjUxUE0gKzAxMDAsIE1hcmsgQnJvd24gd3JvdGU6DQo8c25pcD4N
-Cj4+PiArCXdyaXRlbChCSVQocmVxLT5jcyksIGJzLT5yZWdzICsgQkNfU1BJX1NFUik7DQo+Pj4g
-KwlpZiAocmVxLT5jc19ncGlvZCkgew0KPj4+ICsJCWdwaW9kX3NldF92YWx1ZV9jYW5zbGVlcChy
-ZXEtPmNzX2dwaW9kLA0KPj4+ICsJCQkJCSAhIShicy0+Y2ZnLm1vZGUgJiBTUElfQ1NfSElHSCkp
-Ow0KPj4gSWYgeW91IGhhdmUgYSBHUElPIGNoaXAgc2VsZWN0IHlvdSBzaG91bGQganVzdCBsZXQg
-dGhlIGNvcmUgbWFuYWdlIGl0DQo+PiB0aHJvdWdoIGNzX2dwaW9kIHJhdGhlciB0aGFuIG9wZW4g
-Y29kaW5nLg0KPiBPZiBjb3Vyc2UgSSBrbm93IHRoaXMsIGFuZCBub3JtYWxseSBJIHdvdWxkIGhh
-dmUgb21pdHRlZCB0aGUgR1BJTyBtYW51YWwNCj4gYXNzZXJ0aW9uIChob3BlZnVsbHkgc29vbiBt
-eSBoYW5kcyBnZXQgdG8gbWVyZ2luZyB0aGUgQVg5OTEwMCBkcml2ZXIgSSd2ZQ0KPiBkZXZlbG9w
-ZWQgc29tZSB0aW1lIGFnbykuIFRoZSB0aGluZyBpcyB0aGF0IHRoaXMgQmFpa2FsLVQxIFN5c3Rl
-bSBTU0kgZGV2aWNlDQo+IGRyaXZlciBoYXMgYmVlbiBpbml0aWFsbHkgd3JpdHRlbiBiZWZvcmUg
-Y29tbWl0IDA1NzY2MDUwZDViZCAoInNwaTogc3BpLW1lbToNCj4gZmFsbGJhY2sgdG8gdXNpbmcg
-dHJhbnNmZXJzIHdoZW4gQ1MgZ3Bpb3MgYXJlIHVzZWQiKS4gU28gYXNzZXJ0aW5nIEdQSU8gQ1Mg
-aGFkDQo+IGJlZW4gcmVxdWlyZWQgdG8gaW5pdGlhdGUgdGhlIFNQSSBtZW1vcnkgY29tbXVuaWNh
-dGlvbnMgc2VlaW5nIHRoZSBnZW5lcmljDQo+IHNwaV9tZW1fZXhlY19vcCgpIGRvZXNuJ3QgZG8g
-dGhpcy4gTWFudWFsIEdQSU8gbWFuaXB1bGF0aW9uIGlzIGluZGVlZCByZWR1bmRhbnQNCj4gZm9y
-IHRoZSBjdXJyZW50IFNQSS1tZW0gb3AgZXhlY3V0aW9uIHByb2NlZHVyZS4NCj4NCj4gU2Vjb25k
-bHkgdGhlIG1lc3NhZ2Ugb2YgdGhhdCBjb21taXQgc3RhdGVzICJEZXZpY2VzIHdpdGggY2hpcCBz
-ZWxlY3RzIGRyaXZlbg0KPiB2aWEgR1BJTyBhcmUgbm90IGNvbXBhdGlibGUgd2l0aCB0aGUgc3Bp
-LW1lbSBvcGVyYXRpb25zLiIgSSBmaW5kIHRoaXMgc3RhdGVtZW50DQo+IHF1ZXN0aW9uYWJsZSwg
-YmVjYXVzZSBmb3IgaW5zdGFuY2UgdGhpcyBkZXZpY2Ugc3VwcG9ydHMgbWVtb3J5IG9wZXJhdGlv
-bnMgd2l0aA0KPiBHUElPLWRyaXZlbiBDUy4gVGhvdWdoIGluIGN1cnJlbnQgaW1wbGVtZW50YXRp
-b24gdGhlIGRyaXZlciBmYWxsYmFjayB0byB1c2luZyBub3JtYWwNCj4gcHVzaC1wdWxsIElPIG1v
-ZGUgaWYgR1BJTyBDUyBpcyB1dGlsaXplZCBhcyBzYWZlciBvbmUuIEJ1dCBldmVuIGluIHRoaXMg
-Y2FzZQ0KPiBpdCdzIGJldHRlciB0aGFuIHNwbGl0dGluZyB0aGUgbWVtb3J5IG9wZXJhdGlvbnMg
-dXAgaW50byB0aGUgdHJhbnNmZXJzLCB3aGljaCBpcw0KPiBkZXZlbG9wZWQgaW4gdGhlIHNwaV9t
-ZW1fZXhlY19vcCgpIG1ldGhvZC4NCk9uIHRoaXMgc3BlY2lmaWMgYml0LiBNeSB1c2UtY2FzZSBm
-b3IgMDU3NjYwNTBkNWJkIHdhcyBhIFNQSSBjb250cm9sbGVyIA0KdGhhdCBzdXBwb3J0ZWQgZGly
-ZWN0IG1lbSBhY2Nlc3NlcyBidXQgYSBoYXJkd2FyZSBkZXNpZ24gdGhhdCByZXF1aXJlZCBhIA0K
-R1BJTyBDUy4gU28geWVzIEkgcHJvYmFibHkgc2hvdWxkIGhhdmUgcXVhbGlmaWVkIGl0IGFzIF9z
-b21lXyBkZXZpY2VzLg0KPiBTbyBpbiB0aGlzIG1hdHRlciBteSBxdWVzdGlvbiBpczogaG93IHRv
-IG1vZGlmeSB0aGUgU1BJLW1lbSBpbnRlcmZhY2Ugc28gdGhlDQo+IFNQSS1tZW1vcnkgb3BlcmF0
-aW9ucyB3b3VsZCBhbHNvIHdvcmsgd2l0aCBHUElPIGRyaXZlbiBDUz8gU29tZSBhZGRpdGlvbmFs
-IGZsYWcNCj4gbWlnaHQgd29yay4uLg==
+On Fri, May 08, 2020 at 03:28:09PM +0200, Thomas Bogendoerfer wrote:
+> On Wed, May 06, 2020 at 08:42:26PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
+> > index e2f31bd6363b..7e22b9c1e279 100644
+> > --- a/arch/mips/include/asm/cpu-features.h
+> > +++ b/arch/mips/include/asm/cpu-features.h
+> > @@ -64,6 +64,8 @@
+> >  	((MIPS_ISA_REV >= (ge)) && (MIPS_ISA_REV < (lt)))
+> >  #define __isa_range_or_flag(ge, lt, flag) \
+> >  	(__isa_range(ge, lt) || ((MIPS_ISA_REV < (lt)) && __isa(flag)))
+> > +#define __isa_range_and_flag(ge, lt, flag) \
+> > +	(__isa_range(ge, lt) && __isa(flag))
+> >  
+> >  /*
+> >   * SMP assumption: Options of CPU 0 are a superset of all processors.
+> > @@ -291,10 +293,10 @@
+> >  # define cpu_has_mips32r6	__isa_ge_or_flag(6, MIPS_CPU_ISA_M32R6)
+> >  #endif
+> >  #ifndef cpu_has_mips64r1
+> > -# define cpu_has_mips64r1	__isa_range_or_flag(1, 6, MIPS_CPU_ISA_M64R1)
+> > +# define cpu_has_mips64r1	__isa_range_and_flag(1, 6, MIPS_CPU_ISA_M64R1)
+> 
+> that's not the correct fix. You want to check for cpu_has_64bits here.
+> Something like 
+> 
+> # define cpu_has_mips64r1    (cpu_has_64bits && __isa_range_or_flag(1, 6, MIPS_CPU_ISA_M64R1))
+> 
+> should do the trick.
+
+Good point. Thanks. I'll fix it in v3.
+
+-Sergey
+
+> 
+> Thomas.
+> 
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
