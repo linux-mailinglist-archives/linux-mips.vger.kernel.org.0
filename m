@@ -2,135 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F981CE1CA
-	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 19:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6214B1CE1ED
+	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 19:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731007AbgEKReg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 May 2020 13:34:36 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:46142 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730774AbgEKReg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 May 2020 13:34:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1589218474;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jCAJG5qvZrEQpE9xVUmgEKkY6ZGLKpgEhGop1JiyIl0=;
-        b=hcyCwnUXTdYBNYFLqUg2GihL4D9uas+zLEUKIUGv/xskDRIm/IoyiczJXfYo/BSslHxCuu
-        EfRQlwpWh/vC1qOSUP/IUt6SEic3zgNbVCxYSsAwK2CM53VzR2tf5AsKUcJT+I9umDjRrx
-        ysh4dq1P/gu2OJsZCJiKLoFZ2Ggr+S4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-140-KgTiZRhgOZCvhYyugrIz2w-1; Mon, 11 May 2020 13:34:32 -0400
-X-MC-Unique: KgTiZRhgOZCvhYyugrIz2w-1
-Received: by mail-wm1-f71.google.com with SMTP id a67so2504482wme.6
-        for <linux-mips@vger.kernel.org>; Mon, 11 May 2020 10:34:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jCAJG5qvZrEQpE9xVUmgEKkY6ZGLKpgEhGop1JiyIl0=;
-        b=M7DZEDutz7njqa0OW8sQB7g1zTYPmu4nMgB+PazR9nqLZtn9JnnsGcYwsSSzUw5puJ
-         MG9VV7oL00E0Bkbq8o/ODQnszF9ViydjziKENO+B0XvJw+YfCtMoO8lCOwNB8BQmxvLq
-         BoQr9e3qEzw6mLKrtEfLMyZ62tANYIGmDFXpiDftLNMnOg85qUuyo7jm/BeOnmdctW5o
-         WauOsECSIfbVM8HX48MFD1rfi6DhZ/bXeOu32xQ8dpmukjoBrqG3zkQ/vE+eVyRtGTqR
-         +9mGE9ufVbEW22rvITpinePO73J/Im8DlFH7ZQUaolYFcaaIS4l3MYKOY2XahKATRUvh
-         DbPA==
-X-Gm-Message-State: AGi0PubxV9T6hDUOMh/TQnV8eClI+l+27qeYVRyPgx7yxYwlyBsiivAJ
-        nidzdoFR38kRHDxnJm/KnWNxbwvjTFnd4CtQ7tAVpTvEG5tAayC+XCGY7UjEykMkCe8dkSAXm+P
-        8z0BblTA0ke+mjfq7s3q7aA==
-X-Received: by 2002:a5d:49ca:: with SMTP id t10mr12469222wrs.285.1589218471440;
-        Mon, 11 May 2020 10:34:31 -0700 (PDT)
-X-Google-Smtp-Source: APiQypJNe6I7z0SbQYOHpqyl28aME7TxGvpzSGiIlzFVueJrlC+GRcVDtQgQEgjyS86Oa3oOuu0xgw==
-X-Received: by 2002:a5d:49ca:: with SMTP id t10mr12469194wrs.285.1589218471191;
-        Mon, 11 May 2020 10:34:31 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:4c95:a679:8cf7:9fb6? ([2001:b07:6468:f312:4c95:a679:8cf7:9fb6])
-        by smtp.gmail.com with ESMTPSA id 89sm18102311wrj.37.2020.05.11.10.34.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 May 2020 10:34:30 -0700 (PDT)
-Subject: Re: [PATCH v2 0/5] Statsfs: a new ram-based file sytem for Linux
- kernel statistics
-To:     Jonathan Adams <jwadams@google.com>
-Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Emanuele Giuseppe Esposito <e.emanuelegiuseppe@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org
-References: <20200504110344.17560-1-eesposit@redhat.com>
- <CA+VK+GN=iDhDV2ZDJbBsxrjZ3Qoyotk_L0DvsbwDVvqrpFZ8fQ@mail.gmail.com>
- <29982969-92f6-b6d0-aeae-22edb401e3ac@redhat.com>
- <CA+VK+GOccmwVov9Fx1eMZkzivBduWRuoyAuCRtjMfM4LemRkgw@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <fe21094c-bdb0-b802-482e-72bc17e5232a@redhat.com>
-Date:   Mon, 11 May 2020 19:34:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1728046AbgEKRoS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 May 2020 13:44:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41816 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726661AbgEKRoS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 11 May 2020 13:44:18 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8A81E206D6;
+        Mon, 11 May 2020 17:44:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589219057;
+        bh=TyqQgXbRU7CHTNnWXo92tDp4bkKKH+QHCcrcrAeZ0Xg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M5M0yr01sJrjR4NQQHjYco8Zm2A79QvQoS+JgFLzt3UtWZozf/K5RaXdDLDwpsV4n
+         wQ4Llyx/KGkvcaEaZuIe/aT5WnmIVgxYInVSxRkj1xyI6x7VQqYBwTQcCt1+Wq38K2
+         eFbuTzTTMJ7pHQiH04ug7PF5ar1YT8bmqKYk6agc=
+Date:   Mon, 11 May 2020 18:44:14 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] dmaengine: dw: Print warning if multi-block is
+ unsupported
+Message-ID: <20200511174414.GL8216@sirena.org.uk>
+References: <20200306131048.ADBE18030797@mail.baikalelectronics.ru>
+ <20200508105304.14065-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508105304.14065-5-Sergey.Semin@baikalelectronics.ru>
+ <20200508112604.GJ185537@smile.fi.intel.com>
+ <20200508115334.GE4820@sirena.org.uk>
+ <20200511021016.wptcgnc3iq3kadgz@mobilestation>
+ <20200511115813.GG8216@sirena.org.uk>
+ <20200511134502.hjbu5evkiuh75chr@mobilestation>
 MIME-Version: 1.0
-In-Reply-To: <CA+VK+GOccmwVov9Fx1eMZkzivBduWRuoyAuCRtjMfM4LemRkgw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="W/+CTqSGWdiRg+8j"
+Content-Disposition: inline
+In-Reply-To: <20200511134502.hjbu5evkiuh75chr@mobilestation>
+X-Cookie: TANSTAAFL
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jonathan, I think the remaining sticky point is this one:
 
-On 11/05/20 19:02, Jonathan Adams wrote:
-> I think I'd characterize this slightly differently; we have a set of
-> statistics which are essentially "in parallel":
-> 
->   - a variety of statistics, N CPUs they're available for, or
->   - a variety of statistics, N interfaces they're available for.
->   - a variety of statistics, N kvm object they're available for.
-> 
-> Recreating a parallel hierarchy of statistics any time we add/subtract
-> a CPU or interface seems like a lot of overhead.  Perhaps a better 
-> model would be some sort of "parameter enumn" (naming is hard;
-> parameter set?), so when a CPU/network interface/etc is added you'd
-> add its ID to the "CPUs" we know about, and at removal time you'd
-> take it out; it would have an associated cbarg for the value getting
-> callback.
-> 
->> Yep, the above "not create a dentry" flag would handle the case where
->> you sum things up in the kernel because the more fine grained counters
->> would be overwhelming.
->
-> nodnod; or the callback could handle the sum itself.
+--W/+CTqSGWdiRg+8j
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-In general for statsfs we took a more explicit approach where each
-addend in a sum is a separate stats_fs_source.  In this version of the
-patches it's also a directory, but we'll take your feedback and add both
-the ability to hide directories (first) and to list values (second).
+On Mon, May 11, 2020 at 04:45:02PM +0300, Serge Semin wrote:
+> On Mon, May 11, 2020 at 12:58:13PM +0100, Mark Brown wrote:
 
-So, in the cases of interfaces and KVM objects I would prefer to keep
-each addend separate.
+> > That sounds like you need to also impose a limit on the maximum message
+> > size as well then, with that you should be able to handle messages up
+> > to whatever that limit is.  There's code for that bit already, so long
+> > as the limit is not too low it should be fine for most devices and
+> > client drivers can see the limit so they can be updated to work with it
+> > if needed.
 
-For CPUs that however would be pretty bad.  Many subsystems might
-accumulate stats percpu for performance reason, which would then be
-exposed as the sum (usually).  So yeah, native handling of percpu values
-makes sense.  I think it should fit naturally into the same custom
-aggregation framework as hash table keys, we'll see if there's any devil
-in the details.
+> Hmm, this might work. The problem will be with imposing such limitation through
+> the DW APB SSI driver. In order to do this I need to know:
 
-Core kernel stats such as /proc/interrupts or /proc/stat are the
-exception here, since individual per-CPU values can be vital for
-debugging.  For those, creating a source per stat, possibly on-the-fly
-at hotplug/hot-unplug time because NR_CPUS can be huge, would still be
-my preferred way to do it.
+> 1) Whether multi-block LLP is supported by the DW DMA controller.
+> 2) Maximum DW DMA transfer block size.
 
-Thanks,
+There is a constraint enumeration interface in the DMA API which you
+should be able to extend for this if it doesn't already support what you
+need.
 
-Paolo
+> Then I'll be able to use this information in the can_dma() callback to enable
+> the DMA xfers only for the safe transfers. Did you mean something like this when
+> you said "There's code for that bit already" ? If you meant the max_dma_len
+> parameter, then setting it won't work, because it just limits the SG items size
+> not the total length of a single transfer.
 
+You can set max_transfer_size and/or max_message_size in the SPI driver
+- you should be able to do this on probe.
+
+--W/+CTqSGWdiRg+8j
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl65ju0ACgkQJNaLcl1U
+h9BWuwf9GYDZfT9SEAR6UO5jhJk6RWwFsHU3BhxdAnvDK/l2K93uI+11WQq2An8H
+yiMiIaTllJPZmNs7mg1+lxpT1gRmKbmoXqb3DFml9K4gKxVJMXoIAPyhTL6wLqaV
+wiCzkwszsZsVvzFiQyPNAau0qzkaOC+wHPr8PUiEFxZIRUxEsThin07HXK7X0APj
+7LoKnOaB28MWVN/ezndCECaxoOgexp8LZ6jhVMMg/Kpd8UMCaJwB8yEz80uBFL+q
+mglQQesF6cb/dQZcynpOyCWm2dZhnCdd5yvyHWH1d2rVbcfi3xoTq+tWfPMLbW12
+45bciv1TxBU7iqLX1sF/YYO33YIO1Q==
+=HGPI
+-----END PGP SIGNATURE-----
+
+--W/+CTqSGWdiRg+8j--
