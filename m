@@ -2,105 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8201CDEE7
-	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 17:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175D21CE29F
+	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 20:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730365AbgEKPZ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 May 2020 11:25:58 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:36978 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726410AbgEKPZ6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 May 2020 11:25:58 -0400
-Received: by mail-oi1-f194.google.com with SMTP id r25so15415948oij.4;
-        Mon, 11 May 2020 08:25:57 -0700 (PDT)
+        id S1731028AbgEKS1Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 May 2020 14:27:25 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:44601 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729772AbgEKS1Z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 May 2020 14:27:25 -0400
+Received: by mail-ot1-f66.google.com with SMTP id j4so8344924otr.11;
+        Mon, 11 May 2020 11:27:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TzBIrOjeonGRZOL/Fq7k9DQ5ZvmwekoG5+JYmyzDCXE=;
-        b=jOR/6PLEpfED1ickDxn5i2ZrU3OM+CrqcXnBUtHMbnWSnkl6n6KaDix3nyu9JJO0F/
-         FfdrvHpPXZAM5WZZc/sC/eyV8V4lrdJXmvGHqXpSiPzLKN+VSuUrNfuGxKMJpQjreoMM
-         AzAy+PI8DEoVz2icsbyhP0YFl8siNsITfrPQSjoQPy18A6PbAGobwRG4E0fOWCXGSsVb
-         MQvaNTX4vk7/l4tO0ivuyg90lMBGLh8YWYPrR9IBMGqXsxgJCe6WDO8GvaJqUKgcXcoS
-         s8BqoOVWbymQKb2ovrdKUKEQDnKrfXvVtoM7eMhJb7rLOz/lEX2VNizsKIdbY24WJ9a0
-         XjlA==
-X-Gm-Message-State: AGi0PuZXRLSMWl+TlgDCCeF6yJHFuJETAiti9ETrRx3W3GXlMeQsP3DT
-        OcuUc0Z8gZQ3pqhYGqDaz6Bm7Evuxpd5h18aZlI=
-X-Google-Smtp-Source: APiQypLlj1mTr31cEwJB2xy6sDTZQtzFBc6S7Z09a7MvI75cUG4xFy+vj6rnOik7yeSDKBHlS8j7JE0DJYDjRznsD0s=
-X-Received: by 2002:aca:895:: with SMTP id 143mr19322774oii.153.1589210756876;
- Mon, 11 May 2020 08:25:56 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=0hPBkYeKIiodMWs/enk89cPCGVXGgMcnp/mkphaKHR0=;
+        b=O6XgTj/V8prOCbfC1OnEO1b0FUTmpFXhSNlc8/KS/DG3awquhhvln+DUAAzrSijyIx
+         Vx/RjdRGPBaIvgOpuzgPwBcw0VH7M0WilzlfLtclP/Vmc2RwqgLD/FTw3Fr6Oh8+3uPq
+         PKS6XYjNYUCMmlO0mON27H1v1Dbrl8cqfYFrnFvoQ4aa3ZdKLdrlWBB/DDmGJ0FIc8Ir
+         xvwQCMhB9zjt+GI0pyV/cIhIB1hzz02Q+GqzxbaxfsaYf0T/afYKx+M0LKlwdpXa6Zw1
+         tPAWZQWWeb+x7DcFKjFLc5FstuN4rS6nofXUpd71HkONqXruv8lIhednHmLB+Dnk3qVU
+         NzPg==
+X-Gm-Message-State: AGi0Puatv+PTp7RUA8IMxHZXNwT1vtFl8tjz+4JuBkUZSgdIQRZH4EnJ
+        h+N0vu9zMX2ifqsF5m7CGA==
+X-Google-Smtp-Source: APiQypKkLLpfS5uFZ7qDGesr8w1obstysUYqHlic1hxCJgCQLeL+ae1OZe/dsWHP/TD49Qm1gGUNpg==
+X-Received: by 2002:a9d:7858:: with SMTP id c24mr13282165otm.163.1589221644004;
+        Mon, 11 May 2020 11:27:24 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id e91sm2834465otb.40.2020.05.11.11.27.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2020 11:27:23 -0700 (PDT)
+Received: (nullmailer pid 6693 invoked by uid 1000);
+        Mon, 11 May 2020 15:37:12 -0000
+Date:   Mon, 11 May 2020 10:37:12 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, arnd@arndb.de,
+        brendanhiggins@google.com, tglx@linutronix.de,
+        boris.brezillon@collabora.com, anders.roxell@linaro.org,
+        masonccyang@mxic.com.tw, linux-mips@vger.kernel.org,
+        hauke.mehrtens@intel.com, andriy.shevchenko@intel.com,
+        qi-ming.wu@intel.com, cheol.yong.kim@intel.com
+Subject: Re: [PATCH v5 1/2] dt-bindings: mtd: Add YAML for Nand Flash
+ Controller support
+Message-ID: <20200511153712.GA25497@bogus>
+References: <20200507001537.4034-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200507001537.4034-2-vadivel.muruganx.ramuthevar@linux.intel.com>
 MIME-Version: 1.0
-References: <20200510075510.987823-1-hch@lst.de> <CAMuHMdXazsBw0mjJd0uFHQud7qbb5-Uw-PTDB3+-M=huRWOfgQ@mail.gmail.com>
- <20200511151356.GB28634@lst.de>
-In-Reply-To: <20200511151356.GB28634@lst.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 11 May 2020 17:25:45 +0200
-Message-ID: <CAMuHMdU1xAmyWysi5xRoaRL7PFurPncvEL0CcEY0V_sUz3EJPw@mail.gmail.com>
-Subject: Re: sort out the flush_icache_range mess
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Roman Zippel <zippel@linux-m68k.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Michal Simek <monstr@monstr.eu>,
-        Jessica Yu <jeyu@kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-c6x-dev@linux-c6x.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-riscv@lists.infradead.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200507001537.4034-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Christoph,
+On Thu, May 07, 2020 at 08:15:36AM +0800, Ramuthevar,Vadivel MuruganX wrote:
+> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> 
+> Add YAML file for dt-bindings to support NAND Flash Controller
+> on Intel's Lightning Mountain SoC.
 
-On Mon, May 11, 2020 at 5:14 PM Christoph Hellwig <hch@lst.de> wrote:
-> On Mon, May 11, 2020 at 09:46:17AM +0200, Geert Uytterhoeven wrote:
-> > On Sun, May 10, 2020 at 9:55 AM Christoph Hellwig <hch@lst.de> wrote:
-> > > none of which really are used by a typical MMU enabled kernel, as a.out can
-> > > only be build for alpha and m68k to start with.
-> >
-> > Quoting myself:
-> > "I think it's safe to assume no one still runs a.out binaries on m68k."
-> > http://lore.kernel.org/r/CAMuHMdW+m0Q+j3rsQdMXnrEPm+XB5Y2AQrxW5sD1mZAKgmEqoA@mail.gmail.com
->
-> Do you want to drop the:
->
->     select HAVE_AOUT if MMU
->
-> for m68k then?
+The $subject should some how reflect this is for this SoC.
 
-If that helps to reduce maintenance, it's fine for me.
-That leaves alpha as the sole user?
+> 
+> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> ---
+>  .../devicetree/bindings/mtd/intel,lgm-nand.yaml    | 85 ++++++++++++++++++++++
+>  1 file changed, 85 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+> new file mode 100644
+> index 000000000000..69b592ae62f4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/intel,lgm-nand.yaml
+> @@ -0,0 +1,85 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/intel,lgm-nand.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Intel LGM SoC NAND Controller Device Tree Bindings
+> +
+> +allOf:
+> +  - $ref: "nand-controller.yaml"
+> +
+> +maintainers:
+> +  - Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: intel,lgm-nand-controller
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  dmas:
+> +    maxItems: 2
+> +
+> +  dma-names:
+> +    enum:
+> +      - rx
+> +      - tx
+> +
+> +  pinctrl-names: true
+> +
+> +patternProperties:
+> +  "^pinctrl-[0-9]+$": true
 
-> Note that we'll still need flush_icache_user_range for m68k with mmu,
-> as it also allows binfmt_flat for mmu configs.
+Don't need the pinctrl properties. The tooling adds them.
 
-Understood.
+> +
+> +  "^nand@[a-f0-9]+$":
+> +    type: object
+> +    properties:
+> +      reg:
+> +        minimum: 0
+> +        maximum: 7
+> +
+> +      nand-ecc-mode: true
+> +
+> +      nand-ecc-algo:
+> +        const: hw
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - dmas
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/intel,lgm-clk.h>
 
-Gr{oetje,eeting}s,
+Is this applied somewhere? It's missing in my check and will break the 
+build.
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +    nand-controller@e0f00000 {
+> +      compatible = "intel,nand-controller";
+> +      reg = <0xe0f00000 0x100>,
+> +            <0xe1000000 0x300>,
+> +            <0xe1400000 0x8000>,
+> +            <0xe1c00000 0x1000>;
+> +      reg-names = "ebunand", "hsnand", "nand_cs0", "nand_cs1";
+> +      clocks = <&cgu0 LGM_GCLK_EBU>;
+> +      dma-names = "tx", "rx";
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      #clock-cells = <1>;
+> +
+> +      nand@0 {
+> +        reg = <0>;
+> +        nand-on-flash-bbt;
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +      };
+> +    };
+> +
+> +...
+> -- 
+> 2.11.0
+> 
