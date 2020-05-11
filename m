@@ -2,58 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E84831CDDD0
-	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 16:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAD31CDE75
+	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 17:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730611AbgEKOxc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 May 2020 10:53:32 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:36967 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730532AbgEKOxc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 May 2020 10:53:32 -0400
-Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id E630A240003;
-        Mon, 11 May 2020 14:53:29 +0000 (UTC)
-Date:   Mon, 11 May 2020 16:53:29 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+        id S1729589AbgEKPL1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 May 2020 11:11:27 -0400
+Received: from verein.lst.de ([213.95.11.211]:36580 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729439AbgEKPL1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 11 May 2020 11:11:27 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 2865568BFE; Mon, 11 May 2020 17:11:21 +0200 (CEST)
+Date:   Mon, 11 May 2020 17:11:20 +0200
+From:   Christoph Hellwig <hch@lst.de>
 To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lars Povlsen <lars.povlsen@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH] pinctrl: ocelot: Add platform dependency
-Message-ID: <20200511145329.GV34497@piout.net>
-References: <20200507114015.24461-1-geert+renesas@glider.be>
- <20200507114525.GE34497@piout.net>
- <87ftccorqd.fsf@soft-dev15.microsemi.net>
- <20200507124419.GG34497@piout.net>
- <CAMuHMdUodZQ--jHT1atL1Cmfq7kqu9c=48LXx5o0PagHVNj+RA@mail.gmail.com>
- <20200511142038.GP34497@piout.net>
- <CAMuHMdXZMeY_Oz5fruxhfmS=6Tro0C3P+RoGiRZHpmACFrYXLg@mail.gmail.com>
+        Roman Zippel <zippel@linux-m68k.org>,
+        Jessica Yu <jeyu@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-c6x-dev@linux-c6x.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>
+Subject: Re: [PATCH 31/31] module: move the set_fs hack for
+ flush_icache_range to m68k
+Message-ID: <20200511151120.GA28634@lst.de>
+References: <20200510075510.987823-1-hch@lst.de> <20200510075510.987823-32-hch@lst.de> <CAMuHMdU_OxNoKfO=i903kx0mgk0-i2h4u2ase3m9_dn6oFh_5g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMuHMdXZMeY_Oz5fruxhfmS=6Tro0C3P+RoGiRZHpmACFrYXLg@mail.gmail.com>
+In-Reply-To: <CAMuHMdU_OxNoKfO=i903kx0mgk0-i2h4u2ase3m9_dn6oFh_5g@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/05/2020 16:48:01+0200, Geert Uytterhoeven wrote:
-> I can connect whatever other system using SPI, i2c, CAN, or Ethernet ;-)
-> That doesn't mean I will directly program the other system's pin controller
-> over that link, using the standard (MMIO) pinctrl driver.
+On Mon, May 11, 2020 at 09:40:39AM +0200, Geert Uytterhoeven wrote:
+> On Sun, May 10, 2020 at 9:57 AM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > flush_icache_range generally operates on kernel addresses, but for some
+> > reason m68k needed a set_fs override.  Move that into the m68k code
+> > insted of keeping it in the module loader.
+> >
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > 
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Yes, my point is that you can access all the SoC registers over SPI and
-so you will probably need to also control the pinctrl for example to be
-able to actually use the on-SoC switch.
-
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Btw, do you know what part of flush_icache_range relied on set_fs?
+Do any of the m68k maintainers have an idea how to handle that in
+a nicer way when we can split the implementations?
