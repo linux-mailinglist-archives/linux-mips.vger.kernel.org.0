@@ -2,123 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7E91CE348
-	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 20:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE5E1CE486
+	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 21:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731119AbgEKSyl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 May 2020 14:54:41 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:36664 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729319AbgEKSyk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 May 2020 14:54:40 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04BIl1RS193726;
-        Mon, 11 May 2020 18:52:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=lmEoEgyjfI3GJtDHmilX9SzLNvOcuTcOvW+PKUiq8MI=;
- b=EHSd0gyOZ6mJk8AUfljgZqe/l84M3dxdDwcVRDw3lihli7/i2Ooh9bj5w+NhMbvq+dFl
- +FaLdDGTwvHat1D1fTX9EysW7L+8m1FqNmjnP1V9Grb4VhLqayw4Rd6B5b5ZCDBnZrfU
- JWaJTpVkRmmbWYekhkSap850c0mJaWwjl9pi6axUTNK4z+ZIX+AX003KGJoo239cmPWE
- oqeYy7f7nIQBOOKDabvZBLSDOUgQ6SCUSohzsOuqTGGHU+E0BbpmeZ+V/KBXTwEmpuzQ
- IyfctIDTRsMjj+/zrpJ901i0t+bUlmAVcrTybfNsnwobMod1pi0U9lWm3kgq5X7GLtfk dg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 30x3mbpvsc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 11 May 2020 18:52:48 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04BImDbQ039635;
-        Mon, 11 May 2020 18:52:48 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 30x69rjjya-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 May 2020 18:52:48 +0000
-Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04BIqcwi024982;
-        Mon, 11 May 2020 18:52:39 GMT
-Received: from [192.168.2.157] (/73.164.160.178)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 11 May 2020 11:52:37 -0700
-Subject: Re: [PATCH V3 2/3] mm/hugetlb: Define a generic fallback for
- is_hugepage_only_range()
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
+        id S1731199AbgEKTdC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 May 2020 15:33:02 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:49834 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729453AbgEKTdB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 May 2020 15:33:01 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 45FF1803080A;
+        Mon, 11 May 2020 19:32:58 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Q65asuHJMWNf; Mon, 11 May 2020 22:32:57 +0300 (MSK)
+Date:   Mon, 11 May 2020 22:32:55 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1588907271-11920-1-git-send-email-anshuman.khandual@arm.com>
- <1588907271-11920-3-git-send-email-anshuman.khandual@arm.com>
- <9fc622e1-45ff-b79f-ebe0-35614837456c@oracle.com>
- <c21ab871-da06-baf6-ba31-80b13402b8c9@arm.com>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <ab931b52-1f1b-1ff3-47ee-377de3ed1a98@oracle.com>
-Date:   Mon, 11 May 2020 11:52:34 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        dmaengine <dmaengine@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/6] dmaengine: dw: Print warning if multi-block is
+ unsupported
+Message-ID: <20200511193255.t6orpcdz5ukmwmqo@mobilestation>
+References: <20200306131048.ADBE18030797@mail.baikalelectronics.ru>
+ <20200508105304.14065-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508105304.14065-5-Sergey.Semin@baikalelectronics.ru>
+ <20200508112604.GJ185537@smile.fi.intel.com>
+ <20200508115334.GE4820@sirena.org.uk>
+ <20200511021016.wptcgnc3iq3kadgz@mobilestation>
+ <20200511115813.GG8216@sirena.org.uk>
+ <20200511134502.hjbu5evkiuh75chr@mobilestation>
+ <CAHp75VdOi1rwaKjzowhj0KA-eNNL4NxpiCeqfELFgO_RcnZ-xw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <c21ab871-da06-baf6-ba31-80b13402b8c9@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 adultscore=0
- spamscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2005110142
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 impostorscore=0
- mlxscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
- malwarescore=0 lowpriorityscore=0 spamscore=0 adultscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2005110142
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VdOi1rwaKjzowhj0KA-eNNL4NxpiCeqfELFgO_RcnZ-xw@mail.gmail.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/10/20 8:14 PM, Anshuman Khandual wrote:
-> On 05/09/2020 03:52 AM, Mike Kravetz wrote:
->> On 5/7/20 8:07 PM, Anshuman Khandual wrote:
->>
->> Did you try building without CONFIG_HUGETLB_PAGE defined?  I'm guessing
+On Mon, May 11, 2020 at 04:58:53PM +0300, Andy Shevchenko wrote:
+> On Mon, May 11, 2020 at 4:48 PM Serge Semin
+> <Sergey.Semin@baikalelectronics.ru> wrote:
+> >
+> > On Mon, May 11, 2020 at 12:58:13PM +0100, Mark Brown wrote:
+> > > On Mon, May 11, 2020 at 05:10:16AM +0300, Serge Semin wrote:
+> > >
+> > > > Alas linearizing the SPI messages won't help in this case because the DW DMA
+> > > > driver will split it into the max transaction chunks anyway.
+> > >
+> > > That sounds like you need to also impose a limit on the maximum message
+> > > size as well then, with that you should be able to handle messages up
+> > > to whatever that limit is.  There's code for that bit already, so long
+> > > as the limit is not too low it should be fine for most devices and
+> > > client drivers can see the limit so they can be updated to work with it
+> > > if needed.
+> >
+> > Hmm, this might work. The problem will be with imposing such limitation through
+> > the DW APB SSI driver. In order to do this I need to know:
+> > 1) Whether multi-block LLP is supported by the DW DMA controller.
+> > 2) Maximum DW DMA transfer block size.
+> > Then I'll be able to use this information in the can_dma() callback to enable
+> > the DMA xfers only for the safe transfers. Did you mean something like this when
+> > you said "There's code for that bit already" ? If you meant the max_dma_len
+> > parameter, then setting it won't work, because it just limits the SG items size
+> > not the total length of a single transfer.
+> >
+> > So the question is of how to export the multi-block LLP flag from DW DMAc
+> > driver. Andy?
 > 
-> Yes I did for multiple platforms (s390, arm64, ia64, x86, powerpc etc).
+> I'm not sure I understand why do you need this being exported. Just
+> always supply SG list out of single entry and define the length
+> according to the maximum segment size (it's done IIRC in SPI core).
+
+Finally I see your point. So you suggest to feed the DMA engine with SG list
+entries one-by-one instead of sending all of them at once in a single
+dmaengine_prep_slave_sg() -> dmaengine_submit() -> dma_async_issue_pending()
+session. Hm, this solution will work, but there is an issue. There is no
+guarantee, that Tx and Rx SG lists are symmetric, consisting of the same
+number of items with the same sizes. It depends on the Tx/Rx buffers physical
+address alignment and their offsets within the memory pages. Though this
+problem can be solved by making the Tx and Rx SG lists symmetric. I'll have
+to implement a clever DMA IO loop, which would extract the DMA
+addresses/lengths from the SG entries and perform the single-buffer DMA 
+transactions with the DMA buffers of the same length.
+
+Regarding noLLP being exported. Obviously I intended to solve the problem in a
+generic way since the problem is common for noLLP DW APB SSI/DW DMAC combination.
+In order to do this we need to know whether the multi-block LLP feature is
+unsupported by the DW DMA controller. We either make such info somehow exported
+from the DW DMA driver, so the DMA clients (like Dw APB SSI controller driver)
+could be ready to work around the problem; or just implement a flag-based quirk
+in the DMA client driver, which would be enabled in the platform-specific basis
+depending on the platform device actually detected (for instance, a specific
+version of the DW APB SSI IP). AFAICS You'd prefer the later option. 
+
+Regarding SPI core toggling CS. It is irrelevant to this problem, since DMA
+transactions are implemented within a single SPI transfer so the CS won't be
+touched by the SPI core while we are working wht the xfer descriptor. Though
+the problem with DW APB SSI native CS automatic toggling will persist anyway
+no matter whether the multi-block LLPs are supported on not.
+
+-Sergey
+
 > 
->> that you need a stub for is_hugepage_only_range().  Or, perhaps add this
->> to asm-generic/hugetlb.h?
->>
-> There is already a stub (include/linux/hugetlb.h) when !CONFIG_HUGETLB_PAGE.
-> 
-
-Thanks!  I missed that stub in the existing code.  I like the removal of
-redundant code.
-
-Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
-
--- 
-Mike Kravetz
+> -- 
+> With Best Regards,
+> Andy Shevchenko
