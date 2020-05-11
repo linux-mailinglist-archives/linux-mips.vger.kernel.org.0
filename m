@@ -2,105 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A81531CCEE2
-	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 02:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E80961CCF59
+	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 04:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729282AbgEKAey (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 May 2020 20:34:54 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:47740 "EHLO
+        id S1729328AbgEKCKb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 May 2020 22:10:31 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:47822 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729255AbgEKAey (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 May 2020 20:34:54 -0400
+        with ESMTP id S1729075AbgEKCKb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 May 2020 22:10:31 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 83B488030807;
-        Mon, 11 May 2020 00:34:46 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 3F8068030809;
+        Mon, 11 May 2020 02:10:20 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id MfPFw58JDpyC; Mon, 11 May 2020 03:34:46 +0300 (MSK)
-Date:   Mon, 11 May 2020 03:34:44 +0300
+        with ESMTP id DIUJtZOGJa0j; Mon, 11 May 2020 05:10:19 +0300 (MSK)
+Date:   Mon, 11 May 2020 05:10:16 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Mark Brown <broonie@kernel.org>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        afzal mohammed <afzal.mohd.ma@gmail.com>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 19/20] mips: cevt-r4k: Update the r4k-clockevent
- frequency in sync with CPU
-Message-ID: <20200511003444.rcxp7e4elxdcgpyi@mobilestation>
-References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
- <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-20-Sergey.Semin@baikalelectronics.ru>
- <20200508154045.GA22247@alpha.franken.de>
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/6] dmaengine: dw: Print warning if multi-block is
+ unsupported
+Message-ID: <20200511021016.wptcgnc3iq3kadgz@mobilestation>
+References: <20200306131048.ADBE18030797@mail.baikalelectronics.ru>
+ <20200508105304.14065-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508105304.14065-5-Sergey.Semin@baikalelectronics.ru>
+ <20200508112604.GJ185537@smile.fi.intel.com>
+ <20200508115334.GE4820@sirena.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200508154045.GA22247@alpha.franken.de>
+In-Reply-To: <20200508115334.GE4820@sirena.org.uk>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 08, 2020 at 05:40:46PM +0200, Thomas Bogendoerfer wrote:
-> On Wed, May 06, 2020 at 08:42:37PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
-> > diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
-> > index 17a9cbb8b3df..f5b72fb7d5ee 100644
-> > --- a/arch/mips/kernel/cevt-r4k.c
-> > +++ b/arch/mips/kernel/cevt-r4k.c
-> > @@ -8,6 +8,7 @@
-> >   */
-> >  #include <linux/clockchips.h>
-> >  #include <linux/interrupt.h>
-> > +#include <linux/cpufreq.h>
-> >  #include <linux/percpu.h>
-> >  #include <linux/smp.h>
-> >  #include <linux/irq.h>
-> > @@ -250,6 +251,49 @@ unsigned int __weak get_c0_compare_int(void)
-> >  	return MIPS_CPU_IRQ_BASE + cp0_compare_irq;
-> >  }
-> >  
-> > +#ifdef CONFIG_CPU_FREQ
-> > +
-> > +static unsigned long mips_ref_freq;
-> > +
-> > +static int cpufreq_callback(struct notifier_block *nb,
-> > +			    unsigned long val, void *data)
-> 
-> please prefix function names with r4k_ to make them different from
-> the other ones you implemented in kernel/time.c. I know they are
-> static, but keeping different names makes looking at crashes easier.
+Hello Mark
 
-Agreed. I'll fix it in v3.
+On Fri, May 08, 2020 at 12:53:34PM +0100, Mark Brown wrote:
+> On Fri, May 08, 2020 at 02:26:04PM +0300, Andy Shevchenko wrote:
+> > On Fri, May 08, 2020 at 01:53:02PM +0300, Serge Semin wrote:
+> 
+> > > Multi-block support provides a way to map the kernel-specific SG-table so
+> > > the DW DMA device would handle it as a whole instead of handling the
+> > > SG-list items or so called LLP block items one by one. So if true LLP
+> > > list isn't supported by the DW DMA engine, then soft-LLP mode will be
+> > > utilized to load and execute each LLP-block one by one. A problem may
+> > > happen for multi-block DMA slave transfers, when the slave device buffers
+> > > (for example Tx and Rx FIFOs) depend on each other and have size smaller
+> > > than the block size. In this case writing data to the DMA slave Tx buffer
+> > > may cause the Rx buffer overflow if Rx DMA channel is paused to
+> > > reinitialize the DW DMA controller with a next Rx LLP item. In particular
+> > > We've discovered this problem in the framework of the DW APB SPI device
+> 
+> > Mark, do we have any adjustment knobs in SPI core to cope with this?
+> 
+> Frankly I'm not sure I follow what the issue is - is an LLP block item
+> different from a SG list entry?  As far as I can tell the problem is
+> that the DMA controller does not support chaining transactions together
+> and possibly also has a limit on the transfer size?  Or possibly some
+> issue with the DMA controller locking the CPU out of the I/O bus for
+> noticable periods?  I can't really think what we could do about that if
+> the issue is transfer sizes, that just seems like hardware which is
+> never going to work reliably.  If the issue is not being able to chain
+> transfers then possibly an option to linearize messages into a single
+> transfer as suggested to cope with PIO devices with ill considered
+> automated chip select handling, though at some point you have to worry
+> about the cost of the memcpy() vs the cost of just doing PIO.
+
+The problem is that our version of DW DMA controller can't automatically walk
+over the chained SG list (in the DW DMA driver the SG list is mapped into a
+chain of LLP items, which length is limited to the max transfer length supported
+by the controller). In order to cope with such devices the DW DMA driver
+manually (in IRQ handler) reloads the next SG/LLP item in the chain when a
+previous one is finished. This causes a problem in the generic DW SSI driver
+because normally the Tx DMA channel finishes working before the Rx DMA channel.
+So the DW DMA driver will reload the next Tx SG/LLP item and will start the Tx
+transaction while the Rx DMA finish IRQ is still pending. This most of the time
+causes the Rx FIFO overrun and obviously data loss.
+
+Alas linearizing the SPI messages won't help in this case because the DW DMA
+driver will split it into the max transaction chunks anyway.
 
 > 
-> > +	struct cpufreq_freqs *freq = data;
-> > +	struct clock_event_device *cd;
-> > +	unsigned long rate;
-> > +	int cpu;
-> > +
-> > +	if (!mips_ref_freq)
-> > +		mips_ref_freq = freq->old;
+> > > working in conjunction with DW DMA. Since there is no comprehensive way to
+> > > fix it right now lets at least print a warning for the first found
+> > > multi-blockless DW DMAC channel. This shall point a developer to the
+> > > possible cause of the problem if one would experience a sudden data loss.
 > 
-> isn't this the same as mips_hpt_frequency ?
+> I thought from the description of the SPI driver I just reviewed that
+> this hardware didn't have DMA?  Or are there separate blocks in the
+> hardware that have a more standard instantiation of the DesignWare SPI
+> controller with DMA attached?
 
-No. Here I save the initial CPU frequency so use one then to scale the
-mips_hpt_frequency value in accordance with the CPU clock rate change. Yes,
-mips_hpt_frequency value may initially match the CPU frequency on some platforms
-but normally the r4k timer is clocked with half of it while some systems may have
-a complicated algorithm of the timer ref clock rate calculation.
+You are right. Baikal-T1's got three SPI interfaces. Two of them are normal
+DW APB SSI interfaces with 64 bytes FIFO, DMA, IRQ, their registers are
+mapped in a dedicated memory space with no stuff like SPI flash direct mapping,
+and the third one is the embedded into the System Boot Controller DW APB SSI
+with all the peculiarities and complications I've described in the
+corresponding patchset. Here in this patch I am talking about the former
+ones.
 
 -Sergey
-
-> 
-> Thomas.
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
