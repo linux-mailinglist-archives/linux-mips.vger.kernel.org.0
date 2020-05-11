@@ -2,89 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F18DC1CD340
-	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 09:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDAF1CD3C4
+	for <lists+linux-mips@lfdr.de>; Mon, 11 May 2020 10:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728151AbgEKHvY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 11 May 2020 03:51:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50784 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726173AbgEKHvY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 11 May 2020 03:51:24 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 15B2F20735;
-        Mon, 11 May 2020 07:51:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589183483;
-        bh=ujV3u+dsl5PKS0aIWtuPo2XlUIWTrnZfhH9932lJ3Ck=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0mQ7t5as8jZps7eSFkQLnwLtzVeQdo1iP3qe/Hftt/g3zJxfzwQVDrNcWnrxBfusE
-         WGRRbC87hk6tU7Y02J552JkiWyPKHGmHG8/2xNIIubv0rRSCeTtP6ug62nSc345L3i
-         YbZ4edSRI7cSRvmZAntksnLnC8c2Z4vBB1WMY+EY=
-Date:   Mon, 11 May 2020 08:51:15 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>, james.morse@arm.com,
-        catalin.marinas@arm.com
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        id S1729046AbgEKIZi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 11 May 2020 04:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728968AbgEKIZi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 11 May 2020 04:25:38 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A842DC05BD09
+        for <linux-mips@vger.kernel.org>; Mon, 11 May 2020 01:25:37 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id a4so6726384lfh.12
+        for <linux-mips@vger.kernel.org>; Mon, 11 May 2020 01:25:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WDxg1DeZ8sJ0XodxOs3Lm7xIglVAG2LNLkzOH+NSeUw=;
+        b=a9kB4Tqs2dCfJPVXLW7rIUKcpadFGS95KUujA0Gg0bh3yvN04Iz5hXJvAqcYo0Fo0S
+         e2r7UnavF1g1b/yQKVtxwTj7QwPbAZ4neNiZ+DiFmEf1XD98zE76t0mSXo8oAcg+X3xe
+         l+jRZpz/1I1nC+f0b95Q4F33TiK5C7hQ9tkUIklIWnGk6+TMkp4h1ffCL9jUxWSQEeok
+         /l5ckU8tbMHVzxKLO7uOVNcKFbKJS/tFAODjz+tXLPwLtLlAvjsEsKOjCOyYnJ5jZ41z
+         yWY4QOs6wuj7Z5j0d/7twGR1B7bJocqwEe4xr1rhP/AdovuJq9xM0J1y/TbQuZnAcZOS
+         WtMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WDxg1DeZ8sJ0XodxOs3Lm7xIglVAG2LNLkzOH+NSeUw=;
+        b=Y1En3F68KcgfQBK6If8sjx2UjoCcBV7Nf5m2r8S4AIrHSS7Wr23XgTn//tvsMu2g8z
+         WLWIhB98tDZqUiYeeRAMUsgm+REWpjgBdpSwylm+yAeZ8/gJ4bD87CptuJaVtc4a9k0r
+         DTVS00h3XR4TeU0fHBJbaLE14rFmo1eFqlUa3Zsm6XofSRT0juw+7zOsbY9LRgEqIb4F
+         cRUNZ1vb2Y8eGsP0z6yzlibfjv/3h4caCs4k9js5Bfp1tZahZRrewpYDTq7+2PAQ4bbf
+         rWEk198t7vrmI95QhoZp2AbpDGCvQ2bZlDIs3RDjXKgdFcPmfS95xFRoauUr2lAX6+Z1
+         RvgQ==
+X-Gm-Message-State: AOAM531TICtNdxElh3fLDNA2k3SIIkczCkj/vOwWgXHjsd7/s8JIyYL7
+        vJe2ByY5MzXV57+bivMea0upHA==
+X-Google-Smtp-Source: ABdhPJwG0Z0oAyGtpSM5Xhb1unFN6lqX0CQnA/utE93CSThdYjV3Swfvkr8C4tDKnBb/YXkFbUWqSA==
+X-Received: by 2002:a19:e013:: with SMTP id x19mr1639311lfg.49.1589185536031;
+        Mon, 11 May 2020 01:25:36 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:482:2677:ba:b682:3c24:214e? ([2a00:1fa0:482:2677:ba:b682:3c24:214e])
+        by smtp.gmail.com with ESMTPSA id s27sm9101690ljo.80.2020.05.11.01.25.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 May 2020 01:25:35 -0700 (PDT)
+Subject: Re: [PATCH v2 2/7] dt-bindings: watchdog: dw-wdt: Support devices
+ with asynch clocks
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Roman Zippel <zippel@linux-m68k.org>,
-        Jessica Yu <jeyu@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-c6x-dev@linux-c6x.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 02/31] arm64: fix the flush_icache_range arguments in
- machine_kexec
-Message-ID: <20200511075115.GA16134@willie-the-truck>
-References: <20200510075510.987823-1-hch@lst.de>
- <20200510075510.987823-3-hch@lst.de>
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200306132758.703FC8030704@mail.baikalelectronics.ru>
+ <20200510105807.880-1-Sergey.Semin@baikalelectronics.ru>
+ <20200510105807.880-3-Sergey.Semin@baikalelectronics.ru>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <f065ff5f-af86-4293-b208-766e41699436@cogentembedded.com>
+Date:   Mon, 11 May 2020 11:25:31 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200510075510.987823-3-hch@lst.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200510105807.880-3-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-[+James and Catalin]
+Hello!
 
-On Sun, May 10, 2020 at 09:54:41AM +0200, Christoph Hellwig wrote:
-> The second argument is the end "pointer", not the length.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/arm64/kernel/machine_kexec.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/kernel/machine_kexec.c b/arch/arm64/kernel/machine_kexec.c
-> index 8e9c924423b4e..a0b144cfaea71 100644
-> --- a/arch/arm64/kernel/machine_kexec.c
-> +++ b/arch/arm64/kernel/machine_kexec.c
-> @@ -177,6 +177,7 @@ void machine_kexec(struct kimage *kimage)
->  	 * the offline CPUs. Therefore, we must use the __* variant here.
->  	 */
->  	__flush_icache_range((uintptr_t)reboot_code_buffer,
-> +			     (uintptr_t)reboot_code_buffer +
->  			     arm64_relocate_new_kernel_size);
+On 10.05.2020 13:58, Serge Semin wrote:
 
-Urgh, well spotted. It's annoyingly different from __flush_dcache_area().
+> DW Watchdog IP core can be synthesised with asynchronous timer/APB
+> clocks support (WDT_ASYNC_CLK_MODE_ENABLE == 1). In this case
+> a separate clock signal is supposed to be used to feed watchdog timer
+> and APB interface of the device. Lets along with the watchdog timer
+                                        ^ verb missing? or comma?
 
-But now I'm wondering what this code actually does... the loop condition
-in invalidate_icache_by_line works with 64-bit arithmetic, so we could
-spend a /very/ long time here afaict. It's also a bit annoying that we
-do a bunch of redundant D-cache maintenance too.
+> reference clock expect to have the optional APB3 bu interface clock
+> sepcified in a DW WDT dt node.
 
-Should we use invalidate_icache_range() here instead? (and why does that
-thing need to toggle uaccess)? Argh, too many questions!
+    Specified.
 
-Will
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: linux-mips@vger.kernel.org
+[...]
+
+MBR, Sergei
