@@ -2,151 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5B31CFB1E
-	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2020 18:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540141CFB7E
+	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2020 19:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725904AbgELQmg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 May 2020 12:42:36 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:34162 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725554AbgELQmf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 May 2020 12:42:35 -0400
-Received: by mail-oi1-f194.google.com with SMTP id c12so17791388oic.1;
-        Tue, 12 May 2020 09:42:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=t/zxT6QcAzvwsaSRHiVgR4FzAsz6oEzW+dxiDwnz3LY=;
-        b=V8oZ6EO7dn95giiU8SaXZLlPOdN2ZX1jm4pV1xsaV1+MnJelhdrjHP2gxhLeTokRON
-         u/fzuxCCUNMXj2UztB10MLvBDj/lKSD0HMD2zbcBFvmnDYv8O2oesHJc6nJihuAxuiZY
-         vpBAqjmG1+HKkH9Z65OzwsM8CU/RXroBD+5ntLIGZf8EJjQtHlOKn2+tWKcRIsOI3NnR
-         xc0L1HvZSS9mwvNTiNeaqWwAEGZBuDLPlPImS6AjMnJ2LJUczIS8ozna4DaGXhjMsRsh
-         LnvT8pZoYD9Uym9/mr5cJ8l34mdce9d4udub+dSImYCzmeqFYEOrbw/OGtNSgRasT95i
-         SZWg==
-X-Gm-Message-State: AGi0PuYBR0q2b+Ac+zjoHGWyqSs3nrT6QN8qwjABD9lEudSkxNFTPavx
-        SWclyFy3j0jWadIhrhUPSQ==
-X-Google-Smtp-Source: APiQypKnl8Q8RS5Ndc4MZqjXTedwdk2Q2Fe9QuS5IhFBnwb7YWQd+ESdSPYpBtyFypUbRpSr8flg2g==
-X-Received: by 2002:aca:ba05:: with SMTP id k5mr23382003oif.35.1589301754747;
-        Tue, 12 May 2020 09:42:34 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id c25sm3536777otp.50.2020.05.12.09.42.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 09:42:34 -0700 (PDT)
-Received: (nullmailer pid 18148 invoked by uid 1000);
-        Tue, 12 May 2020 16:42:33 -0000
-Date:   Tue, 12 May 2020 11:42:33 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     maz@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Huacai Chen <chenhc@lemote.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] dt-bindings: interrupt-controller: Add Loongson
- HTVEC
-Message-ID: <20200512164233.GB12151@bogus>
-References: <20200422142428.1249684-1-jiaxun.yang@flygoat.com>
- <20200501092139.2988670-1-jiaxun.yang@flygoat.com>
- <20200501092139.2988670-2-jiaxun.yang@flygoat.com>
+        id S1727096AbgELRBY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 May 2020 13:01:24 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:54412 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725554AbgELRBY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 May 2020 13:01:24 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 33F65803080B;
+        Tue, 12 May 2020 17:01:21 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id IZmXehCXf_Nc; Tue, 12 May 2020 20:01:20 +0300 (MSK)
+Date:   Tue, 12 May 2020 20:01:18 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/6] dmaengine: dw: Set DMA device max segment size
+ parameter
+Message-ID: <20200512170118.3qbtpuphtwltb7nu@mobilestation>
+References: <20200306131048.ADBE18030797@mail.baikalelectronics.ru>
+ <20200508105304.14065-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508105304.14065-4-Sergey.Semin@baikalelectronics.ru>
+ <20200508112152.GI185537@smile.fi.intel.com>
+ <20200511211622.yuh3ls2ay76yaxrf@mobilestation>
+ <20200512123551.GX185537@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200501092139.2988670-2-jiaxun.yang@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200512123551.GX185537@smile.fi.intel.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 01, 2020 at 05:21:33PM +0800, Jiaxun Yang wrote:
-> Add binding for Loongson-3 HyperTransport Interrupt Vector Controller.
+On Tue, May 12, 2020 at 03:35:51PM +0300, Andy Shevchenko wrote:
+> On Tue, May 12, 2020 at 12:16:22AM +0300, Serge Semin wrote:
+> > On Fri, May 08, 2020 at 02:21:52PM +0300, Andy Shevchenko wrote:
+> > > On Fri, May 08, 2020 at 01:53:01PM +0300, Serge Semin wrote:
+> > > > Maximum block size DW DMAC configuration corresponds to the max segment
+> > > > size DMA parameter in the DMA core subsystem notation. Lets set it with a
+> > > > value specific to the probed DW DMA controller. It shall help the DMA
+> > > > clients to create size-optimized SG-list items for the controller. This in
+> > > > turn will cause less dw_desc allocations, less LLP reinitializations,
+> > > > better DMA device performance.
 > 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  .../interrupt-controller/loongson,htvec.yaml  | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,htvec.yaml
+> > > Yeah, I have locally something like this and I didn't dare to upstream because
+> > > there is an issue. We have this information per DMA controller, while we
+> > > actually need this on per DMA channel basis.
+> > > 
+> > > Above will work only for synthesized DMA with all channels having same block
+> > > size. That's why above conditional is not needed anyway.
+> > 
+> > Hm, I don't really see why the conditional isn't needed and this won't work. As
+> > you can see in the loop above Initially I find a maximum of all channels maximum
+> > block sizes and use it then as a max segment size parameter for the whole device.
+> > If the DW DMA controller has the same max block size of all channels, then it
+> > will be found. If the channels've been synthesized with different block sizes,
+> > then the optimization will work for the one with greatest block size. The SG
+> > list entries of the channels with lesser max block size will be split up
+> > by the DW DMAC driver, which would have been done anyway without
+> > max_segment_size being set. Here we at least provide the optimization for the
+> > channels with greatest max block size.
+> > 
+> > I do understand that it would be good to have this parameter setup on per generic
+> > DMA channel descriptor basis. But DMA core and device descriptor doesn't provide
+> > such facility, so setting at least some justified value is a good idea.
+> > 
+> > > 
+> > > OTOH, I never saw the DesignWare DMA to be synthesized differently (I remember
+> > > that Intel Medfield has interesting settings, but I don't remember if DMA
+> > > channels are different inside the same controller).
+> > > 
+> > > Vineet, do you have any information that Synopsys customers synthesized DMA
+> > > controllers with different channel characteristics inside one DMA IP?
+> > 
+> > AFAICS the DW DMAC channels can be synthesized with different max block size.
+> > The IP core supports such configuration. So we can't assume that such DMAC
+> > release can't be found in a real hardware just because we've never seen one.
+> > No matter what Vineet will have to say in response to your question.
 > 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongson,htvec.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongson,htvec.yaml
-> new file mode 100644
-> index 000000000000..547a80c89eba
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongson,htvec.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/interrupt-controller/loongson,htvec.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Loongson-3 HyperTransport Interrupt Vector Controller
-> +
-> +maintainers:
-> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
-> +
-> +allOf:
-> +  - $ref: /schemas/interrupt-controller.yaml#
+> My point here that we probably can avoid complications till we have real
+> hardware where it's different. As I said I don't remember a such, except
+> *maybe* Intel Medfield, which is quite outdated and not supported for wider
+> audience anyway.
 
-Don't need this. It's already applied to any node named 
-'interrupt-controller'.
+I see your point. My position is different in this matter and explained in the
+previous emails. Let's see what Viresh and Vinod think of it.
 
-> +
-> +description: |
+-Sergey
 
-Can drop '|' if you don't need formatting.
-
-> +  This interrupt controller is found in the Loongson-3 family of chips for
-> +  receiving vectorized interrupts from PCH's interrupt controller.
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,htvec-1.0
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    minItems: 1
-> +    maxItems: 4
-> +    description: |
-> +      Four parent interrupts that receive chained interrupts.
-> +
-> +  interrupt-controller: true
-> +
-> +  '#interrupt-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-controller
-> +  - '#interrupt-cells'
-
-Add:
-
-additionalProperties: false
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    htvec: interrupt-controller@1fb000080 {
-
-Unit-address doesn't match reg.
-
-> +      compatible = "loongson,htvec-1.0";
-> +      reg = <0xfb000080 0x40>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <1>;
-> +
-> +      interrupt-parent = <&liointc>;
-> +      interrupts = <24 IRQ_TYPE_LEVEL_HIGH>,
-> +                    <25 IRQ_TYPE_LEVEL_HIGH>,
-> +                    <26 IRQ_TYPE_LEVEL_HIGH>,
-> +                    <27 IRQ_TYPE_LEVEL_HIGH>;
-> +    };
-> +...
+> 
 > -- 
-> 2.26.0.rc2
+> With Best Regards,
+> Andy Shevchenko
+> 
 > 
