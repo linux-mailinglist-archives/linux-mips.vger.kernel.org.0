@@ -2,104 +2,177 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E801D02A6
-	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 00:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80ECC1D02B1
+	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 01:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728220AbgELW6Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 May 2020 18:58:16 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:44718 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725938AbgELW6P (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 May 2020 18:58:15 -0400
-Received: by mail-ot1-f65.google.com with SMTP id j4so11921546otr.11;
-        Tue, 12 May 2020 15:58:15 -0700 (PDT)
+        id S1731620AbgELXAa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 May 2020 19:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731538AbgELXA3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 May 2020 19:00:29 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AA9C061A0F
+        for <linux-mips@vger.kernel.org>; Tue, 12 May 2020 16:00:29 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id x10so6046717plr.4
+        for <linux-mips@vger.kernel.org>; Tue, 12 May 2020 16:00:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TxR+iMR41NNC8Tp0Yh5G0J9anaHo/y+mAo5OJ6FnE3w=;
+        b=YV0IEXO5IABYUMUtMWw6Y0a2xNZhYt4iDNMNdBJAdhkLz+DhDJrEb2/tely+kMRfBe
+         elzT7mfwntttCi0+nBJzpxqW1RzbdA4k2z5m0sbPhXbgm86NhUGJ6ezv1UWvqUAF6AFb
+         GwYEyZnEpPlXtS0AdB1oOMIXhoSzH1oQ3QYdKyFvf7rV9a0F5474HoxquQdEEcVsoVZk
+         mkFDvy/LaDlTuj+uY+/sZnyRH+3w/Rut2ArIzwHPIrhPI856FrWtiOC99MOqCPnAlAt1
+         y5de0EiQgDBn8VhocdW7T7X+feJnXd114pzMo7qEMcn1qfbF3zf4gbB8O6Pkx7p0q4QB
+         ZmJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cBiUIrWE+UaIH5tajkgyIKVaNp7k7WAC/qZUFSsrV2E=;
-        b=Quy2hnWtTrPiaE6w/mM3yp7OIxqHlGJ5eM+iUum/AwdpHUe4Rg7MFlDGRaqQAnX1SX
-         E6FRZh8GGJ30bZwIrjJFxV1DzHtfhqIuo2/1nqAtZns97/R9JtUPlr3SJ7qEgghjXZ/1
-         yVN/FGL/MFQE1W24lrgq7TbHWabnYGDdBC9pvebbrORwN4kLkUKVynIIh4Z0ky7AYaFm
-         7j1iTAz0Ed6ci4wuk29R8zsU9PD7wLeeoBfC7+omGslPMb1ZHYocGFpWQkOdEe/Lv37e
-         oI+4tl5lVY8WLmlm8yUVBsQhHG5EXMR9MpWhiKf/TCO2LW0ZBLSFK9e9LyckdmNOBVn7
-         MQmw==
-X-Gm-Message-State: AGi0PuYRrcYZUMViwY50619klgPsRgqJLAmWkrR+uJzMK7lM4wCfkBB7
-        +gOLrJlN6G1cUJOLJ7foTw==
-X-Google-Smtp-Source: APiQypL7PdOIK7Is7Nz5WrJlgO2HUyJLl2vgiulZfCULhki8ejQCn9T9ykjPsFKJznmjeuGro1Uq+g==
-X-Received: by 2002:a05:6830:22f8:: with SMTP id t24mr18122890otc.148.1589324294619;
-        Tue, 12 May 2020 15:58:14 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id w62sm5632505oia.32.2020.05.12.15.58.12
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=TxR+iMR41NNC8Tp0Yh5G0J9anaHo/y+mAo5OJ6FnE3w=;
+        b=GNXCsqzPkIjckPUvVoBVrAfR46QCwQqdHVWOr+U9MM3DUMdy4hG/kq7wS+YE2tdS6N
+         KXMq3Q46+Ay32La1ujHWZvJofI45w2MbBPI0AcGH5LuNVgc+KBEraxv6Wev6VSzis9kO
+         guVKInLZZsFehEDMr4IB6h1YlvapMAQ+AAxIpez9rNHqSASgI7MjgAGDIlWwQXwCP7yR
+         k9Sm/L+uBk7ZAnjIezXZkT8dDtzNzuBfk3VUH3PxXpN61Keq7uT/X5RizwtlAm8UH+W6
+         NAEaL1NX5JEvTvb7nYIyuDuNB8PvQUc2dP3Kjk0UmlDxQH7Y/QNDoa/HGgVvdF83/Eh9
+         KHcw==
+X-Gm-Message-State: AGi0PubS7scypJU7qcjtGEuQrwyW/W0iYDb7U5AMdTWt7VhNJBQyg0gw
+        FLTFXfiGnstJvFnX/t4FQ3riqw==
+X-Google-Smtp-Source: APiQypKPbiNIuzOhnfWZK3aSuAimZ6kMvjtjoB3PUVWkLgrXCsrrvonJs2vHPqxiHQA1YoMJYuJ02Q==
+X-Received: by 2002:a17:90a:2281:: with SMTP id s1mr31687737pjc.68.1589324428530;
+        Tue, 12 May 2020 16:00:28 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id w143sm12602170pfc.165.2020.05.12.16.00.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 15:58:13 -0700 (PDT)
-Received: (nullmailer pid 32342 invoked by uid 1000);
-        Tue, 12 May 2020 22:58:12 -0000
-Date:   Tue, 12 May 2020 17:58:12 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jyri Sarha <jsarha@ti.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Olivier Moysan <olivier.moysan@st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH] docs: dt: fix broken links due to txt->yaml renames
-Message-ID: <20200512225812.GA28862@bogus>
-References: <967df5c3303b478b76199d4379fe40f5094f3f9b.1588584538.git.mchehab+huawei@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <967df5c3303b478b76199d4379fe40f5094f3f9b.1588584538.git.mchehab+huawei@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Tue, 12 May 2020 16:00:26 -0700 (PDT)
+Date:   Tue, 12 May 2020 16:00:26 -0700 (PDT)
+X-Google-Original-Date: Tue, 12 May 2020 15:59:50 PDT (-0700)
+Subject:     Re: [PATCH 19/31] riscv: use asm-generic/cacheflush.h
+In-Reply-To: <20200510075510.987823-20-hch@lst.de>
+CC:     akpm@linux-foundation.org, Arnd Bergmann <arnd@arndb.de>,
+        zippel@linux-m68k.org, linux-arch@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, monstr@monstr.eu, jeyu@kernel.org,
+        linux-ia64@vger.kernel.org, linux-c6x-dev@linux-c6x.org,
+        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        x86@kernel.org, linux-um@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-m68k@lists.linux-m68k.org,
+        openrisc@lists.librecores.org, linux-alpha@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Christoph Hellwig <hch@lst.de>
+Message-ID: <mhng-8adbedbc-0f91-4291-9471-2df5eb7b802b@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 04, 2020 at 11:30:20AM +0200, Mauro Carvalho Chehab wrote:
-> There are some new broken doc links due to yaml renames
-> at DT. Developers should really run:
-> 
-> 	./scripts/documentation-file-ref-check
-> 
-> in order to solve those issues while submitting patches.
-> This tool can even fix most of the issues with:
-> 
-> 	./scripts/documentation-file-ref-check --fix
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+On Sun, 10 May 2020 00:54:58 PDT (-0700), Christoph Hellwig wrote:
+> RISC-V needs almost no cache flushing routines of its own.  Rely on
+> asm-generic/cacheflush.h for the defaults.
+>
+> Also remove the pointless __KERNEL__ ifdef while we're at it.
 > ---
-> 
-> PS.: This patch is against today's linux-next.
+>  arch/riscv/include/asm/cacheflush.h | 62 ++---------------------------
+>  1 file changed, 3 insertions(+), 59 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
+> index c8677c75f82cb..a167b4fbdf007 100644
+> --- a/arch/riscv/include/asm/cacheflush.h
+> +++ b/arch/riscv/include/asm/cacheflush.h
+> @@ -8,65 +8,6 @@
+>
+>  #include <linux/mm.h>
+>
+> -#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
+> -
+> -/*
+> - * The cache doesn't need to be flushed when TLB entries change when
+> - * the cache is mapped to physical memory, not virtual memory
+> - */
+> -static inline void flush_cache_all(void)
+> -{
+> -}
+> -
+> -static inline void flush_cache_mm(struct mm_struct *mm)
+> -{
+> -}
+> -
+> -static inline void flush_cache_dup_mm(struct mm_struct *mm)
+> -{
+> -}
+> -
+> -static inline void flush_cache_range(struct vm_area_struct *vma,
+> -				     unsigned long start,
+> -				     unsigned long end)
+> -{
+> -}
+> -
+> -static inline void flush_cache_page(struct vm_area_struct *vma,
+> -				    unsigned long vmaddr,
+> -				    unsigned long pfn)
+> -{
+> -}
+> -
+> -static inline void flush_dcache_mmap_lock(struct address_space *mapping)
+> -{
+> -}
+> -
+> -static inline void flush_dcache_mmap_unlock(struct address_space *mapping)
+> -{
+> -}
+> -
+> -static inline void flush_icache_page(struct vm_area_struct *vma,
+> -				     struct page *page)
+> -{
+> -}
+> -
+> -static inline void flush_cache_vmap(unsigned long start, unsigned long end)
+> -{
+> -}
+> -
+> -static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
+> -{
+> -}
+> -
+> -#define copy_to_user_page(vma, page, vaddr, dst, src, len) \
+> -	do { \
+> -		memcpy(dst, src, len); \
+> -		flush_icache_user_range(vma, page, vaddr, len); \
+> -	} while (0)
+> -#define copy_from_user_page(vma, page, vaddr, dst, src, len) \
+> -	memcpy(dst, src, len)
+> -
+>  static inline void local_flush_icache_all(void)
+>  {
+>  	asm volatile ("fence.i" ::: "memory");
+> @@ -79,6 +20,7 @@ static inline void flush_dcache_page(struct page *page)
+>  	if (test_bit(PG_dcache_clean, &page->flags))
+>  		clear_bit(PG_dcache_clean, &page->flags);
+>  }
+> +#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
+>
+>  /*
+>   * RISC-V doesn't have an instruction to flush parts of the instruction cache,
+> @@ -105,4 +47,6 @@ void flush_icache_mm(struct mm_struct *mm, bool local);
+>  #define SYS_RISCV_FLUSH_ICACHE_LOCAL 1UL
+>  #define SYS_RISCV_FLUSH_ICACHE_ALL   (SYS_RISCV_FLUSH_ICACHE_LOCAL)
+>
+> +#include <asm-generic/cacheflush.h>
+> +
+>  #endif /* _ASM_RISCV_CACHEFLUSH_H */
 
-That's not a base anyone can apply this patch against.
+Thanks!
 
-> 
-> 
->  .../devicetree/bindings/display/bridge/sii902x.txt          | 2 +-
->  .../devicetree/bindings/display/rockchip/rockchip-drm.yaml  | 2 +-
->  .../devicetree/bindings/net/mediatek-bluetooth.txt          | 2 +-
->  .../devicetree/bindings/sound/audio-graph-card.txt          | 2 +-
->  .../devicetree/bindings/sound/st,sti-asoc-card.txt          | 2 +-
->  Documentation/mips/ingenic-tcu.rst                          | 2 +-
->  MAINTAINERS                                                 | 6 +++---
->  7 files changed, 9 insertions(+), 9 deletions(-)
+Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
+Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+
+Were you trying to get these all in at once, or do you want me to take it into
+my tree?
