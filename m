@@ -2,121 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6BF1CF110
-	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2020 11:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D269A1CF25D
+	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2020 12:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727783AbgELJIF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 May 2020 05:08:05 -0400
-Received: from mga12.intel.com ([192.55.52.136]:40872 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725889AbgELJIF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 12 May 2020 05:08:05 -0400
-IronPort-SDR: C6eIVAzKrKUdAjWa4LxTUXAN9hAYi/2yMG73h0gScD+45i5hE4+CukNgg1veYTv7oM348Y0Zf4
- j/GaWXogP7tg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2020 02:08:05 -0700
-IronPort-SDR: tK8Y1hj8lywcychMAVWY2TQBVdiHUmt66zVihP/hHXEbPQEzpNav1j/mL8IDsfr+cdnbEG0t44
- teUKiXogRV6g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,383,1583222400"; 
-   d="scan'208";a="265443794"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga006.jf.intel.com with ESMTP; 12 May 2020 02:08:01 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jYQtQ-00694C-A8; Tue, 12 May 2020 12:08:04 +0300
-Date:   Tue, 12 May 2020 12:08:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        id S1727783AbgELKaA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 May 2020 06:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726193AbgELKaA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 12 May 2020 06:30:00 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8B7C061A0C;
+        Tue, 12 May 2020 03:29:59 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id t40so9163095pjb.3;
+        Tue, 12 May 2020 03:29:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=mtUuXVwQma+6PI2bLTE3Br0qYTSiabzt8TWgTvym4EQ=;
+        b=NHgvoVjEo8SsVplbPh8TTFnE09GZ0iJB9NtjF7ZDELCcKpjzEuUeseGnw5PRE1S9OV
+         zeOFV+YRNkVbpHn6QzUNEXNz/We0xq9FFJgBwNTbRTeN5qU03md0dHdlirPTlJHPLxfO
+         Pwo62Gn4GRKlmDVDw6tiB4xGT58hIuqpfVYm9bWieoBhJ1LpvHryXTX2/+veHN4SBKa2
+         QBZWKTyxeXASl+Zwb0HbV8IZ9OIbdoUSg/GQY1h3gNGx+cy/2Z7ZSIQ2drnjJK53EL/g
+         mtXbSm7Fw0RLQjTIQPikUzrqfY2jSLeyNTMac09Dr+f8FMTpmGyadMVDLNzoyGZg23OR
+         xQRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=mtUuXVwQma+6PI2bLTE3Br0qYTSiabzt8TWgTvym4EQ=;
+        b=NQtBoWeemImgd/iFNMII7e5bITliaqN3YLEVUZevAx6BewYB8t09HwtVU5fVMDFTt7
+         +fDt7YjsBxwVHczvAPMRLT6D2UKtytB8qvPKvWHtGT2WNvjEfY9hzxc7UmpRZn51ruZP
+         eYUknb+BkbFD+PHO2Jsap4MBuQKWS113fGWtPv3mHjWEJDkj1ml0LBIqlOSms0lKbJVR
+         wbvBipY1CJO3zur64aGP5GGeWQc+4NkqKGwE110KjFaLzRUyuiyrb9MwlxqjeDqz6C9W
+         6qsuIGLYvj5EHBZlxby0TrjgqzSSwBzSAJwUGXAoN+iIkHKYA4Bc2qsoBcTLBjLoFPsk
+         K5Pg==
+X-Gm-Message-State: AGi0PuZjlc6Y7MLQ5wJXz11eG5dUIAMyEEcCagiVsOrkLavxr/ATIsvf
+        lVYposYyiJoc6tPRc2dPFRU=
+X-Google-Smtp-Source: APiQypLz17pbTJ74ITq/0VOlVlPZ0mdiDP1MRZugjfxVbtqtOWQKvDG2DwRbR4bdzYATsWb0mBarEg==
+X-Received: by 2002:a17:90a:8c3:: with SMTP id 3mr27932241pjn.147.1589279399438;
+        Tue, 12 May 2020 03:29:59 -0700 (PDT)
+Received: from software.domain.org (28.144.92.34.bc.googleusercontent.com. [34.92.144.28])
+        by smtp.gmail.com with ESMTPSA id z6sm11485660pfb.87.2020.05.12.03.29.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 12 May 2020 03:29:58 -0700 (PDT)
+From:   Huacai Chen <chenhc@lemote.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-mips@vger.kernel.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] dt-bindings: dma: dw: Add max burst transaction
- length property
-Message-ID: <20200512090804.GR185537@smile.fi.intel.com>
-References: <20200306131048.ADBE18030797@mail.baikalelectronics.ru>
- <20200508105304.14065-1-Sergey.Semin@baikalelectronics.ru>
- <20200508105304.14065-3-Sergey.Semin@baikalelectronics.ru>
- <20200508111242.GH185537@smile.fi.intel.com>
- <20200511200528.nfkc2zkh3bvupn7l@mobilestation>
- <20200511210138.GN185537@smile.fi.intel.com>
- <20200511213531.wnywlljiulvndx6s@mobilestation>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200511213531.wnywlljiulvndx6s@mobilestation>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhc@lemote.com>
+Subject: [PATCH V4 00/14] KVM: MIPS: Add Loongson-3 support (Host Side)
+Date:   Tue, 12 May 2020 18:29:57 +0800
+Message-Id: <1589279411-27643-1-git-send-email-chenhc@lemote.com>
+X-Mailer: git-send-email 2.7.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 12, 2020 at 12:35:31AM +0300, Serge Semin wrote:
-> On Tue, May 12, 2020 at 12:01:38AM +0300, Andy Shevchenko wrote:
-> > On Mon, May 11, 2020 at 11:05:28PM +0300, Serge Semin wrote:
-> > > On Fri, May 08, 2020 at 02:12:42PM +0300, Andy Shevchenko wrote:
-> > > > On Fri, May 08, 2020 at 01:53:00PM +0300, Serge Semin wrote:
-> > > > > This array property is used to indicate the maximum burst transaction
-> > > > > length supported by each DMA channel.
-> > > > 
-> > > > > +  snps,max-burst-len:
-> > > > > +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> > > > > +    description: |
-> > > > > +      Maximum length of burst transactions supported by hardware.
-> > > > > +      It's an array property with one cell per channel in units of
-> > > > > +      CTLx register SRC_TR_WIDTH/DST_TR_WIDTH (data-width) field.
-> > > > > +    items:
-> > > > > +      maxItems: 8
-> > > > > +      items:
-> > > > 
-> > > > > +        enum: [4, 8, 16, 32, 64, 128, 256]
-> > > > 
-> > > > Isn't 1 allowed?
-> > > 
-> > > Burst length of 1 unit is supported, but in accordance with Data Book the MAX
-> > > burst length is limited to be equal to a value from the set I submitted. So the
-> > > max value can be either 4, or 8, or 16 and so on.
-> > 
-> > Hmm... It seems you mistakenly took here DMAH_CHx_MAX_MULT_SIZE pre-silicon
-> > configuration parameter instead of runtime as described in Table 26:
-> > CTLx.SRC_MSIZE and DEST_MSIZE Decoding.
-> 
-> No. You misunderstood what I meant. We shouldn't use a runtime parameters values
-> here. Why would we?
+We are preparing to add KVM support for Loongson-3. VZ extension is
+fully supported in Loongson-3A R4+, and we will not care about old CPUs
+(at least now). We already have a full functional Linux kernel (based
+on Linux-5.4.x LTS) and QEMU (based on 5.0.0-rc2) and their git
+repositories are here:
 
-Because what we describe in the DTS is what user may do to the hardware. In
-some cases user might want to limit this to 1, how to achieve that?
+QEMU: https://github.com/chenhuacai/qemu
+Kernel: https://github.com/chenhuacai/linux
 
-Rob, is there any clarification that schema describes only synthesized values?
-Or i.o.w. shall we allow user to setup whatever hardware supports at run time?
+Of course these two repositories need to be rework and not suitable for
+upstream (especially the commits need to be splitted). We show them here
+is just to tell others what we have done, and how KVM/Loongson will look
+like.
 
-> Property "snps,max-burst-len" matches DMAH_CHx_MAX_MULT_SIZE
-> config parameter.
+Our plan is make the KVM host side be upstream first, and after that,
+we will make the KVM guest side and QEMU emulator be upstream.
 
-Why? User should have a possibility to ask whatever hardware supports at run time.
+V1 -> V2:
+1, Remove "mips: define pud_index() regardless of page table folding"
+   because it has been applied.
+2, Make Loongson-specific code be guarded by CONFIG_CPU_LOONGSON64.
 
-> See a comment to the "SRC_MSIZE" and "DEST_MSIZE" fields of the
-> registers. You'll find out that their maximum value is determined by the
-> DMAH_CHx_MAX_MULT_SIZE parameter, which must belong to the set [4, 8, 16, 32, 64,
-> 128, 256]. So no matter how you synthesize the DW DMAC block you'll have at least
-> 4x max burst length supported.
+V2 -> V3:
+1, Emulate a reduced feature list of CPUCFG.
+2, Fix all possible checkpatch.pl errors and warnings.
 
-That's true.
+V3 -> V4:
+1, Emulate LOONGSON_CFG0/LOONGSON_CFG3 in CPUCFG correctly.
+2, Update commit messages to explain Loongson-3 Virtual IPI.
+3, Add Reviewed-by: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>.
 
+Xing Li(2):
+ KVM: MIPS: Define KVM_ENTRYHI_ASID to cpu_asid_mask(&boot_cpu_data)
+ KVM: MIPS: Fix VPN2_MASK definition for variable cpu_vmbits
 
--- 
-With Best Regards,
-Andy Shevchenko
+Huacai Chen(12):
+ KVM: MIPS: Increase KVM_MAX_VCPUS and KVM_USER_MEM_SLOTS to 16
+ KVM: MIPS: Add EVENTFD support which is needed by VHOST
+ KVM: MIPS: Use lddir/ldpte instructions to lookup gpa_mm.pgd
+ KVM: MIPS: Introduce and use cpu_guest_has_ldpte
+ KVM: MIPS: Use root tlb to control guest's CCA for Loongson-3
+ KVM: MIPS: Let indexed cacheops cause guest exit on Loongson-3
+ KVM: MIPS: Add more types of virtual interrupts
+ KVM: MIPS: Add Loongson-3 Virtual IPI interrupt support
+ KVM: MIPS: Add CPUCFG emulation for Loongson-3
+ KVM: MIPS: Add CONFIG6 and DIAG registers emulation
+ KVM: MIPS: Add more MMIO load/store instructions emulation
+ KVM: MIPS: Enable KVM support for Loongson-3
 
-
+Signed-off-by: Huacai Chen <chenhc@lemote.com>
+---
+ arch/mips/Kconfig                    |   1 +
+ arch/mips/include/asm/cpu-features.h |   3 +
+ arch/mips/include/asm/kvm_host.h     |  52 +++-
+ arch/mips/include/asm/mipsregs.h     |   7 +
+ arch/mips/include/uapi/asm/inst.h    |  11 +
+ arch/mips/kernel/cpu-probe.c         |   2 +
+ arch/mips/kvm/Kconfig                |   1 +
+ arch/mips/kvm/Makefile               |   5 +-
+ arch/mips/kvm/emulate.c              | 503 ++++++++++++++++++++++++++++++++++-
+ arch/mips/kvm/entry.c                |  19 +-
+ arch/mips/kvm/interrupt.c            |  93 +------
+ arch/mips/kvm/interrupt.h            |  14 +-
+ arch/mips/kvm/loongson_ipi.c         | 214 +++++++++++++++
+ arch/mips/kvm/mips.c                 |  49 +++-
+ arch/mips/kvm/tlb.c                  |  41 +++
+ arch/mips/kvm/trap_emul.c            |   3 +
+ arch/mips/kvm/vz.c                   | 237 ++++++++++++-----
+ 17 files changed, 1089 insertions(+), 166 deletions(-)
+ create mode 100644 arch/mips/kvm/loongson_ipi.c
+--
+2.7.0
