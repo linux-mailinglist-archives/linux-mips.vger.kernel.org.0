@@ -2,177 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80ECC1D02B1
-	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 01:00:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 465211D2266
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 00:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731620AbgELXAa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 May 2020 19:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731538AbgELXA3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 May 2020 19:00:29 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AA9C061A0F
-        for <linux-mips@vger.kernel.org>; Tue, 12 May 2020 16:00:29 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id x10so6046717plr.4
-        for <linux-mips@vger.kernel.org>; Tue, 12 May 2020 16:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TxR+iMR41NNC8Tp0Yh5G0J9anaHo/y+mAo5OJ6FnE3w=;
-        b=YV0IEXO5IABYUMUtMWw6Y0a2xNZhYt4iDNMNdBJAdhkLz+DhDJrEb2/tely+kMRfBe
-         elzT7mfwntttCi0+nBJzpxqW1RzbdA4k2z5m0sbPhXbgm86NhUGJ6ezv1UWvqUAF6AFb
-         GwYEyZnEpPlXtS0AdB1oOMIXhoSzH1oQ3QYdKyFvf7rV9a0F5474HoxquQdEEcVsoVZk
-         mkFDvy/LaDlTuj+uY+/sZnyRH+3w/Rut2ArIzwHPIrhPI856FrWtiOC99MOqCPnAlAt1
-         y5de0EiQgDBn8VhocdW7T7X+feJnXd114pzMo7qEMcn1qfbF3zf4gbB8O6Pkx7p0q4QB
-         ZmJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=TxR+iMR41NNC8Tp0Yh5G0J9anaHo/y+mAo5OJ6FnE3w=;
-        b=GNXCsqzPkIjckPUvVoBVrAfR46QCwQqdHVWOr+U9MM3DUMdy4hG/kq7wS+YE2tdS6N
-         KXMq3Q46+Ay32La1ujHWZvJofI45w2MbBPI0AcGH5LuNVgc+KBEraxv6Wev6VSzis9kO
-         guVKInLZZsFehEDMr4IB6h1YlvapMAQ+AAxIpez9rNHqSASgI7MjgAGDIlWwQXwCP7yR
-         k9Sm/L+uBk7ZAnjIezXZkT8dDtzNzuBfk3VUH3PxXpN61Keq7uT/X5RizwtlAm8UH+W6
-         NAEaL1NX5JEvTvb7nYIyuDuNB8PvQUc2dP3Kjk0UmlDxQH7Y/QNDoa/HGgVvdF83/Eh9
-         KHcw==
-X-Gm-Message-State: AGi0PubS7scypJU7qcjtGEuQrwyW/W0iYDb7U5AMdTWt7VhNJBQyg0gw
-        FLTFXfiGnstJvFnX/t4FQ3riqw==
-X-Google-Smtp-Source: APiQypKPbiNIuzOhnfWZK3aSuAimZ6kMvjtjoB3PUVWkLgrXCsrrvonJs2vHPqxiHQA1YoMJYuJ02Q==
-X-Received: by 2002:a17:90a:2281:: with SMTP id s1mr31687737pjc.68.1589324428530;
-        Tue, 12 May 2020 16:00:28 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id w143sm12602170pfc.165.2020.05.12.16.00.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 16:00:26 -0700 (PDT)
-Date:   Tue, 12 May 2020 16:00:26 -0700 (PDT)
-X-Google-Original-Date: Tue, 12 May 2020 15:59:50 PDT (-0700)
-Subject:     Re: [PATCH 19/31] riscv: use asm-generic/cacheflush.h
-In-Reply-To: <20200510075510.987823-20-hch@lst.de>
-CC:     akpm@linux-foundation.org, Arnd Bergmann <arnd@arndb.de>,
-        zippel@linux-m68k.org, linux-arch@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, monstr@monstr.eu, jeyu@kernel.org,
-        linux-ia64@vger.kernel.org, linux-c6x-dev@linux-c6x.org,
-        linux-sh@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        x86@kernel.org, linux-um@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-m68k@lists.linux-m68k.org,
-        openrisc@lists.librecores.org, linux-alpha@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Christoph Hellwig <hch@lst.de>
-Message-ID: <mhng-8adbedbc-0f91-4291-9471-2df5eb7b802b@palmerdabbelt-glaptop1>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S1731690AbgEMWzH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 May 2020 18:55:07 -0400
+Received: from esa5.hgst.iphmx.com ([216.71.153.144]:28323 "EHLO
+        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731276AbgEMWzH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 May 2020 18:55:07 -0400
+IronPort-SDR: dxK+kVruO6R7RzTbFz8FhMQNlLMG2DNSQgr8xk1vrYGHuVKOEKizgwgiJqA24gE5stI2LTAShZ
+ eSEWPRNOVz8yB1gPWBDFZOVi2/7OA0dBALodQihKS7AIBg1MDDIofLF7bMHVd2IITtc/NvbvK2
+ /5ocJFjyIa9l/cT0b7ISkanckDjbaZqRCt+jYONcxchfibChof1J/T/XPIcJonDFLKpkE9dmbw
+ x4SDHuyIQG9WwIoT2poXHvO8N0jKJ13391BX3gKmoXdt2kbNv8EE+53FzaBje/osIlDZuyKPFo
+ ZaQ=
+X-IronPort-AV: E=Sophos;i="5.73,389,1583164800"; 
+   d="scan'208";a="137958561"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 14 May 2020 06:55:07 +0800
+IronPort-SDR: v2It7tWcty9NvlnDZ9sfk6nVZyG0FhiNPnqP/OTWNfjIXjOe+2VuUBhsWj8pRrCQBRZpv1fTSs
+ M6jci1+TnwofBT9enP5f+Z7hqT/Llwbsk=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 15:44:46 -0700
+IronPort-SDR: jlZ5A1kriLxb8dNClmXUI2YsaQQqlTCvZUVo3fj6doq0sXhvX/zkMW6mx2hGkv+0/zw8FAXdDl
+ sLnzsUP/Taeg==
+WDCIronportException: Internal
+Received: from unknown (HELO redsun52) ([10.149.66.28])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 15:55:06 -0700
+Date:   Wed, 13 May 2020 00:52:50 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@linux-mips.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     Huacai Chen <chenhc@lemote.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH] MIPS: inst.h: Stop including asm.h to avoid various
+ build failures
+In-Reply-To: <20200509152501.GA9125@alpha.franken.de>
+Message-ID: <alpine.LFD.2.21.2005130036060.677301@eddie.linux-mips.org>
+References: <1588930212-5255-1-git-send-email-chenhc@lemote.com> <20200508130149.GA14297@alpha.franken.de> <CAAhV-H5BRhxvaQ_-RHYkEe8BY-OSQto1FhQtBx3T+bZTOVs+-Q@mail.gmail.com> <20200509152501.GA9125@alpha.franken.de>
+Content-Type: text/plain; charset=US-ASCII
+X-ReSent-Date: Wed, 13 May 2020 23:45:46 +0100 (BST)
+X-ReSent-From: "Maciej W. Rozycki" <macro@linux-mips.org>
+X-ReSent-To: "Maciej W. Rozycki" <macro@wdc.com>
+X-ReSent-Subject: Re: [PATCH] MIPS: inst.h: Stop including asm.h to avoid
+ various build failures
+X-ReSent-Message-ID: <alpine.LFD.2.21.2005132345460.1120869@eddie.linux-mips.org>
+MIME-Version: 1.0
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 10 May 2020 00:54:58 PDT (-0700), Christoph Hellwig wrote:
-> RISC-V needs almost no cache flushing routines of its own.  Rely on
-> asm-generic/cacheflush.h for the defaults.
->
-> Also remove the pointless __KERNEL__ ifdef while we're at it.
-> ---
->  arch/riscv/include/asm/cacheflush.h | 62 ++---------------------------
->  1 file changed, 3 insertions(+), 59 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
-> index c8677c75f82cb..a167b4fbdf007 100644
-> --- a/arch/riscv/include/asm/cacheflush.h
-> +++ b/arch/riscv/include/asm/cacheflush.h
-> @@ -8,65 +8,6 @@
->
->  #include <linux/mm.h>
->
-> -#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 0
-> -
-> -/*
-> - * The cache doesn't need to be flushed when TLB entries change when
-> - * the cache is mapped to physical memory, not virtual memory
-> - */
-> -static inline void flush_cache_all(void)
-> -{
-> -}
-> -
-> -static inline void flush_cache_mm(struct mm_struct *mm)
-> -{
-> -}
-> -
-> -static inline void flush_cache_dup_mm(struct mm_struct *mm)
-> -{
-> -}
-> -
-> -static inline void flush_cache_range(struct vm_area_struct *vma,
-> -				     unsigned long start,
-> -				     unsigned long end)
-> -{
-> -}
-> -
-> -static inline void flush_cache_page(struct vm_area_struct *vma,
-> -				    unsigned long vmaddr,
-> -				    unsigned long pfn)
-> -{
-> -}
-> -
-> -static inline void flush_dcache_mmap_lock(struct address_space *mapping)
-> -{
-> -}
-> -
-> -static inline void flush_dcache_mmap_unlock(struct address_space *mapping)
-> -{
-> -}
-> -
-> -static inline void flush_icache_page(struct vm_area_struct *vma,
-> -				     struct page *page)
-> -{
-> -}
-> -
-> -static inline void flush_cache_vmap(unsigned long start, unsigned long end)
-> -{
-> -}
-> -
-> -static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
-> -{
-> -}
-> -
-> -#define copy_to_user_page(vma, page, vaddr, dst, src, len) \
-> -	do { \
-> -		memcpy(dst, src, len); \
-> -		flush_icache_user_range(vma, page, vaddr, len); \
-> -	} while (0)
-> -#define copy_from_user_page(vma, page, vaddr, dst, src, len) \
-> -	memcpy(dst, src, len)
-> -
->  static inline void local_flush_icache_all(void)
->  {
->  	asm volatile ("fence.i" ::: "memory");
-> @@ -79,6 +20,7 @@ static inline void flush_dcache_page(struct page *page)
->  	if (test_bit(PG_dcache_clean, &page->flags))
->  		clear_bit(PG_dcache_clean, &page->flags);
->  }
-> +#define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->
->  /*
->   * RISC-V doesn't have an instruction to flush parts of the instruction cache,
-> @@ -105,4 +47,6 @@ void flush_icache_mm(struct mm_struct *mm, bool local);
->  #define SYS_RISCV_FLUSH_ICACHE_LOCAL 1UL
->  #define SYS_RISCV_FLUSH_ICACHE_ALL   (SYS_RISCV_FLUSH_ICACHE_LOCAL)
->
-> +#include <asm-generic/cacheflush.h>
-> +
->  #endif /* _ASM_RISCV_CACHEFLUSH_H */
+On Sat, 9 May 2020, Thomas Bogendoerfer wrote:
 
-Thanks!
+> > > > Commit d339cd02b888eb8 ("MIPS: Move unaligned load/store helpers to
+> > > > inst.h") causes a lot of build failures because macros in asm.h conflict
+> > > > with various subsystems. Some of these conflictions has been fixed (such
+> > > > as LONG, PANIC and PRINT) by adjusting asm.h, but some of them is nearly
+> > > > impossible to fix (such as PTR and END). The only reason of including
+> > > > asm.h in inst.h is that we need the PTR macro which is used by unaligned
+> > > > load/store helpers. So in this patch we define a new PTR_STR macro and
+> > > > use it to replace STR(PTR), then we can stop including asm.h to avoid
+> > > > various build failures.
+> > > >
+> > > > Fixes: d339cd02b888eb8 ("MIPS: Move unaligned load/store helpers to inst.h")
+> > > > Reported-by: kbuild test robot <lkp@intel.com>
+> > > > Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > > > ---
+> > > >  arch/mips/include/asm/inst.h | 184 ++++++++++++++++++++++---------------------
+> > >
+> > > applied to mips-next. /me hopes this is the last fix... thanks
+> > I think this is the last fix... and, does "MIPS: asm: Rename some
+> > macros to avoid build errors" need to be reverted?
+> 
+> let's keep it as it is now.
 
-Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
-Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+ Sigh, this just shows how the original change was wrong in the first 
+place.  Why was <asm/inst.h> specifically chosen, whose purpose has been 
+machine code generators/interpreters that has nothing to do with unaligned 
+access helpers, over a more suitable location, such as (maybe obviously?) 
+<asm/unaligned.h>?
 
-Were you trying to get these all in at once, or do you want me to take it into
-my tree?
+ I suggest that we roll back to before the destruction, move the necessary 
+bits away from <asm/inst.h>, and then perhaps none of the follow-up hacks 
+will be required.
+
+  Maciej
+
+
