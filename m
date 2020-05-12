@@ -2,113 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFA61D00FA
-	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2020 23:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E801D02A6
+	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 00:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731379AbgELViD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 May 2020 17:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728313AbgELViC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 12 May 2020 17:38:02 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4CCC061A0C;
-        Tue, 12 May 2020 14:38:02 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id 145so6999077pfw.13;
-        Tue, 12 May 2020 14:38:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Tyo1TFdkWDgBr+SNz2GzBpADOWT+48QaLk9kJPjvFys=;
-        b=R2zWiomTXIUU7FTP8rTUAlIlUUiXALX0r+yu2oh0AAJujBYyPGTOB0WKDkbsAqRc4y
-         pQTlhw2M4+iKIb42xzK/sKyC8CYi1VMMtmefj1dLYm815MteG+1Vo8VPSpD++OFe0bto
-         JO3/nK9aTskjrwScKbtSjRlMsVfmGGy+I7J5U4VZItIYCaL7wGypqCV5kg/ErW2Z1alv
-         NEmf17truudxi2EKGIm1K71sLiaaC+oN8ea7GgLO5oUZohTrTWguMkv/qaMoZ8FN6YNs
-         US51cj/KaMptYwhR3WuCP8/fQ4CECht6btIdXmVzR9UNVb0vmqPL3qoo25vIhFIHpqMJ
-         v61w==
+        id S1728220AbgELW6Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 May 2020 18:58:16 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:44718 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725938AbgELW6P (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 May 2020 18:58:15 -0400
+Received: by mail-ot1-f65.google.com with SMTP id j4so11921546otr.11;
+        Tue, 12 May 2020 15:58:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Tyo1TFdkWDgBr+SNz2GzBpADOWT+48QaLk9kJPjvFys=;
-        b=JvFnZodhHmraDs1Av+3L8yc9UmisK06ruBXma+YKVj8DY/g1tRwumALC+AyBM6707t
-         SC9sVTVDY+D8J/y8j8c62Zv22MoGDEaXyiT9YrNRynJPbe/iDYESAd+BFbiPvYnLvVkF
-         uhSdXaCH9ZWE/SX8qKHYEg/0sRqCReWRf6CibVV7zqqFll4Yj3LwDgO9kWWArz67LAH5
-         ZNN5IyPhUxmQ5mRV5RcSdZ+bFey2wZq2eai71QLoAKEDVILNWRRpeGHCt6HoqqjSINQa
-         4XcBAK2MPfGR6FjJ/kEQgjVw6jpBxKymVvrdoM4B3MpHV+gUZ0y53rhhmUgRXEm2W7FO
-         TtUw==
-X-Gm-Message-State: AGi0PuY7Rb+aA/fM22MlvDre2b9Yl1xwb391kYjQL7YWCCjF+qyd4B0U
-        Cn9rD7nxokUQir+yTbHDOKnxZJw6I5aem1y1TbM=
-X-Google-Smtp-Source: APiQypJYKYmgz5pdLPekQqni1lIF4lwB+NqlpSWbo35f3rCpzIHjuVZHrDnrnBcq8uzXhibYVAHCN2qKpPUxbpNRtCc=
-X-Received: by 2002:a62:7f11:: with SMTP id a17mr21981022pfd.36.1589319482095;
- Tue, 12 May 2020 14:38:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
- <20200508132943.9826-5-Sergey.Semin@baikalelectronics.ru> <20200508194324.GA185537@smile.fi.intel.com>
- <20200512212650.bmq5i3mrl5mydcvz@mobilestation>
-In-Reply-To: <20200512212650.bmq5i3mrl5mydcvz@mobilestation>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 13 May 2020 00:37:50 +0300
-Message-ID: <CAHp75VcRN=kDRteK9KHPRCLqTSNEcCFH8q3OKGvt5YL5D44iyQ@mail.gmail.com>
-Subject: Re: [PATCH 04/17] spi: dw: Cleanup generic DW DMA code namings
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=cBiUIrWE+UaIH5tajkgyIKVaNp7k7WAC/qZUFSsrV2E=;
+        b=Quy2hnWtTrPiaE6w/mM3yp7OIxqHlGJ5eM+iUum/AwdpHUe4Rg7MFlDGRaqQAnX1SX
+         E6FRZh8GGJ30bZwIrjJFxV1DzHtfhqIuo2/1nqAtZns97/R9JtUPlr3SJ7qEgghjXZ/1
+         yVN/FGL/MFQE1W24lrgq7TbHWabnYGDdBC9pvebbrORwN4kLkUKVynIIh4Z0ky7AYaFm
+         7j1iTAz0Ed6ci4wuk29R8zsU9PD7wLeeoBfC7+omGslPMb1ZHYocGFpWQkOdEe/Lv37e
+         oI+4tl5lVY8WLmlm8yUVBsQhHG5EXMR9MpWhiKf/TCO2LW0ZBLSFK9e9LyckdmNOBVn7
+         MQmw==
+X-Gm-Message-State: AGi0PuYRrcYZUMViwY50619klgPsRgqJLAmWkrR+uJzMK7lM4wCfkBB7
+        +gOLrJlN6G1cUJOLJ7foTw==
+X-Google-Smtp-Source: APiQypL7PdOIK7Is7Nz5WrJlgO2HUyJLl2vgiulZfCULhki8ejQCn9T9ykjPsFKJznmjeuGro1Uq+g==
+X-Received: by 2002:a05:6830:22f8:: with SMTP id t24mr18122890otc.148.1589324294619;
+        Tue, 12 May 2020 15:58:14 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id w62sm5632505oia.32.2020.05.12.15.58.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2020 15:58:13 -0700 (PDT)
+Received: (nullmailer pid 32342 invoked by uid 1000);
+        Tue, 12 May 2020 22:58:12 -0000
+Date:   Tue, 12 May 2020 17:58:12 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jyri Sarha <jsarha@ti.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Olivier Moysan <olivier.moysan@st.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH] docs: dt: fix broken links due to txt->yaml renames
+Message-ID: <20200512225812.GA28862@bogus>
+References: <967df5c3303b478b76199d4379fe40f5094f3f9b.1588584538.git.mchehab+huawei@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <967df5c3303b478b76199d4379fe40f5094f3f9b.1588584538.git.mchehab+huawei@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 13, 2020 at 12:28 AM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
->
-> On Fri, May 08, 2020 at 10:43:24PM +0300, Andy Shevchenko wrote:
-> > On Fri, May 08, 2020 at 04:29:29PM +0300, Serge Semin wrote:
-> > > Since from now the former Intel MID platform layer will be used
-> > > as a generic DW SPI DMA module, lets alter the internal methods
-> > > naming to be DMA-related instead of having the "mid_" prefix. In
-> > > addition the DW PCI-DMA specific methods and structures should
-> > > be named with pci-suffexes, since we'll implement the DW MMIO DMA
-> > > specific functions and objects soon.
-> >
-> > I think we rather leave Intel Medfield things alone.  And I think I did this already in spi/for-next in less invasive way.
->
-> The naming is horrible in that module.
+On Mon, May 04, 2020 at 11:30:20AM +0200, Mauro Carvalho Chehab wrote:
+> There are some new broken doc links due to yaml renames
+> at DT. Developers should really run:
+> 
+> 	./scripts/documentation-file-ref-check
+> 
+> in order to solve those issues while submitting patches.
+> This tool can even fix most of the issues with:
+> 
+> 	./scripts/documentation-file-ref-check --fix
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+> 
+> PS.: This patch is against today's linux-next.
 
-I agree!
+That's not a base anyone can apply this patch against.
 
-> Since it's going to be a generic DMA
-> driver the prefixes should be correspondingly fixed. Currently they are a bit
-> random.
-
-Unfortunately, proposed '_pci' not anyhow better. There is Medfield
-stuff and non-Medfield.
-Luckily Elkhart Lake uses generic approach. That's why better to have
-suffix based on platform, rather than on bus.
-
-I think what should be done here are (in a patch per item):
-1) moving to new named module (w/o mid)
-2) removing mid_ prefix
-3) something else I forgot?
-
--- 
-With Best Regards,
-Andy Shevchenko
+> 
+> 
+>  .../devicetree/bindings/display/bridge/sii902x.txt          | 2 +-
+>  .../devicetree/bindings/display/rockchip/rockchip-drm.yaml  | 2 +-
+>  .../devicetree/bindings/net/mediatek-bluetooth.txt          | 2 +-
+>  .../devicetree/bindings/sound/audio-graph-card.txt          | 2 +-
+>  .../devicetree/bindings/sound/st,sti-asoc-card.txt          | 2 +-
+>  Documentation/mips/ingenic-tcu.rst                          | 2 +-
+>  MAINTAINERS                                                 | 6 +++---
+>  7 files changed, 9 insertions(+), 9 deletions(-)
