@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 318631CF498
-	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2020 14:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D9A1CF673
+	for <lists+linux-mips@lfdr.de>; Tue, 12 May 2020 16:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729568AbgELMmP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 May 2020 08:42:15 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:53368 "EHLO
+        id S1729229AbgELOI0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 May 2020 10:08:26 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:53740 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726891AbgELMmP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 May 2020 08:42:15 -0400
+        with ESMTP id S1727859AbgELOI0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 May 2020 10:08:26 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id B0FAC803080B;
-        Tue, 12 May 2020 12:42:07 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 995FB803088B;
+        Tue, 12 May 2020 14:08:22 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id PTikmzJM42z6; Tue, 12 May 2020 15:42:07 +0300 (MSK)
-Date:   Tue, 12 May 2020 15:42:06 +0300
+        with ESMTP id Wa5K0fYbgNer; Tue, 12 May 2020 17:08:21 +0300 (MSK)
+Date:   Tue, 12 May 2020 17:08:20 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
         Viresh Kumar <vireshk@kernel.org>,
         Dan Williams <dan.j.williams@intel.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
@@ -31,141 +31,96 @@ CC:     Serge Semin <fancer.lancer@gmail.com>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/6] dmaengine: dw: Print warning if multi-block is
- unsupported
-Message-ID: <20200512124206.l3uv5hg2zimi24dq@mobilestation>
-References: <20200508105304.14065-5-Sergey.Semin@baikalelectronics.ru>
- <20200508112604.GJ185537@smile.fi.intel.com>
- <20200508115334.GE4820@sirena.org.uk>
- <20200511021016.wptcgnc3iq3kadgz@mobilestation>
- <20200511115813.GG8216@sirena.org.uk>
- <20200511134502.hjbu5evkiuh75chr@mobilestation>
- <CAHp75VdOi1rwaKjzowhj0KA-eNNL4NxpiCeqfELFgO_RcnZ-xw@mail.gmail.com>
- <20200511193255.t6orpcdz5ukmwmqo@mobilestation>
- <20200511210714.GO185537@smile.fi.intel.com>
- <20200511210800.GP185537@smile.fi.intel.com>
+        <devicetree@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 5/6] dmaengine: dw: Introduce max burst length hw
+ config
+Message-ID: <20200512140820.ssjv6pl7busqqi3t@mobilestation>
+References: <20200306131048.ADBE18030797@mail.baikalelectronics.ru>
+ <20200508105304.14065-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508105304.14065-6-Sergey.Semin@baikalelectronics.ru>
+ <20200508114153.GK185537@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200511210800.GP185537@smile.fi.intel.com>
+In-Reply-To: <20200508114153.GK185537@smile.fi.intel.com>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Vinod,
-
-Could you join the discussion for a little bit?
-
-In order to properly fix the problem discussed in this topic, we need to
-introduce an additional capability exported by DMA channel handlers on per-channel
-basis. It must be a number, which would indicate an upper limitation of the SG list
-entries amount.
-Something like this would do it:
-struct dma_slave_caps {
-...
-	unsigned int max_sg_nents;
-...
-};
-As Andy suggested it's value should be interpreted as:
-0          - unlimited number of entries,
-1:MAX_UINT - actual limit to the number of entries.
-
-In addition to that seeing the dma_get_slave_caps() method provide the caps only
-by getting them from the DMA device descriptor, while we need to have an info on
-per-channel basis, it would be good to introduce a new DMA-device callback like:
-struct dma_device {
-...
-	int (*device_caps)(struct dma_chan *chan,
-			   struct dma_slave_caps *caps);
-...
-};
-So the DMA driver could override the generic DMA device capabilities with the
-values specific to the DMA channels. Such functionality will be also helpful for
-the max-burst-len parameter introduced by this patchset, since depending on the
-IP-core synthesis parameters it may be channel-specific.
-
-Alternatively we could just introduce a new fields to the dma_chan structure and
-retrieve the new caps values from them in the dma_get_slave_caps() method.
-Though the solution with callback I like better.
-
-What is your opinion about this? What solution you'd prefer?
-
-On Tue, May 12, 2020 at 12:08:00AM +0300, Andy Shevchenko wrote:
-> On Tue, May 12, 2020 at 12:07:14AM +0300, Andy Shevchenko wrote:
-> > On Mon, May 11, 2020 at 10:32:55PM +0300, Serge Semin wrote:
-> > > On Mon, May 11, 2020 at 04:58:53PM +0300, Andy Shevchenko wrote:
-> > > > On Mon, May 11, 2020 at 4:48 PM Serge Semin
-> > > > <Sergey.Semin@baikalelectronics.ru> wrote:
-> > > > >
-> > > > > On Mon, May 11, 2020 at 12:58:13PM +0100, Mark Brown wrote:
-> > > > > > On Mon, May 11, 2020 at 05:10:16AM +0300, Serge Semin wrote:
-> > > > > >
-> > > > > > > Alas linearizing the SPI messages won't help in this case because the DW DMA
-> > > > > > > driver will split it into the max transaction chunks anyway.
-> > > > > >
-> > > > > > That sounds like you need to also impose a limit on the maximum message
-> > > > > > size as well then, with that you should be able to handle messages up
-> > > > > > to whatever that limit is.  There's code for that bit already, so long
-> > > > > > as the limit is not too low it should be fine for most devices and
-> > > > > > client drivers can see the limit so they can be updated to work with it
-> > > > > > if needed.
-> > > > >
-> > > > > Hmm, this might work. The problem will be with imposing such limitation through
-> > > > > the DW APB SSI driver. In order to do this I need to know:
-> > > > > 1) Whether multi-block LLP is supported by the DW DMA controller.
-> > > > > 2) Maximum DW DMA transfer block size.
-> > > > > Then I'll be able to use this information in the can_dma() callback to enable
-> > > > > the DMA xfers only for the safe transfers. Did you mean something like this when
-> > > > > you said "There's code for that bit already" ? If you meant the max_dma_len
-> > > > > parameter, then setting it won't work, because it just limits the SG items size
-> > > > > not the total length of a single transfer.
-> > > > >
-> > > > > So the question is of how to export the multi-block LLP flag from DW DMAc
-> > > > > driver. Andy?
-> > > > 
-> > > > I'm not sure I understand why do you need this being exported. Just
-> > > > always supply SG list out of single entry and define the length
-> > > > according to the maximum segment size (it's done IIRC in SPI core).
-> > > 
-> > > Finally I see your point. So you suggest to feed the DMA engine with SG list
-> > > entries one-by-one instead of sending all of them at once in a single
-> > > dmaengine_prep_slave_sg() -> dmaengine_submit() -> dma_async_issue_pending()
-> > > session. Hm, this solution will work, but there is an issue. There is no
-> > > guarantee, that Tx and Rx SG lists are symmetric, consisting of the same
-> > > number of items with the same sizes. It depends on the Tx/Rx buffers physical
-> > > address alignment and their offsets within the memory pages. Though this
-> > > problem can be solved by making the Tx and Rx SG lists symmetric. I'll have
-> > > to implement a clever DMA IO loop, which would extract the DMA
-> > > addresses/lengths from the SG entries and perform the single-buffer DMA 
-> > > transactions with the DMA buffers of the same length.
-> > > 
-> > > Regarding noLLP being exported. Obviously I intended to solve the problem in a
-> > > generic way since the problem is common for noLLP DW APB SSI/DW DMAC combination.
-> > > In order to do this we need to know whether the multi-block LLP feature is
-> > > unsupported by the DW DMA controller. We either make such info somehow exported
-> > > from the DW DMA driver, so the DMA clients (like Dw APB SSI controller driver)
-> > > could be ready to work around the problem; or just implement a flag-based quirk
-> > > in the DMA client driver, which would be enabled in the platform-specific basis
-> > > depending on the platform device actually detected (for instance, a specific
-> > > version of the DW APB SSI IP). AFAICS You'd prefer the later option. 
-> > 
-> > So, we may extend the struct of DMA parameters to tell the consumer amount of entries (each of which is no longer than maximum segment size) it can afford:
-> > - 0: Auto (DMA driver handles any cases itself)
-> > - 1: Only single entry
-> > - 2: Up to two...
+On Fri, May 08, 2020 at 02:41:53PM +0300, Andy Shevchenko wrote:
+> On Fri, May 08, 2020 at 01:53:03PM +0300, Serge Semin wrote:
+> > IP core of the DW DMA controller may be synthesized with different
+> > max burst length of the transfers per each channel. According to Synopsis
+> > having the fixed maximum burst transactions length may provide some
+> > performance gain. At the same time setting up the source and destination
+> > multi size exceeding the max burst length limitation may cause a serious
+> > problems. In our case the system just hangs up. In order to fix this
+> > lets introduce the max burst length platform config of the DW DMA
+> > controller device and don't let the DMA channels configuration code
+> > exceed the burst length hardware limitation. Depending on the IP core
+> > configuration the maximum value can vary from channel to channel.
+> > It can be detected either in runtime from the DWC parameter registers
+> > or from the dedicated dts property.
 > 
-> It will left implementation details (or i.o.w. obstacles or limitation) why DMA
-> can't do otherwise.
+> I'm wondering what can be the scenario when your peripheral will ask something
+> which is not supported by DMA controller?
 
-Sounds good. Thanks for assistance.
+I may misunderstood your statement, because seeing your activity around my
+patchsets including the SPI patchset and sometimes very helpful comments,
+this question answer seems too obvious to see you asking it.
+
+No need to go far for an example. See the DW APB SSI driver. Its DMA module
+specifies the burst length to be 16, while not all of ours channels supports it.
+Yes, originally it has been developed for the Intel Midfield SPI, but since I
+converted the driver into a generic code we can't use a fixed value. For instance
+in our hardware only two DMA channels of total 16 are capable of bursting up to
+16 bytes (data items) at a time, the rest of them are limited with up to 4 bytes
+burst length. While there are two SPI interfaces, each of which need to have two
+DMA channels for communications. So I need four channels in total to allocate to
+provide the DMA capability for all interfaces. In order to set the SPI controller
+up with valid optimized parameters the max-burst-length is required. Otherwise we
+can end up with buffers overrun/underrun.
+
+> 
+> Peripheral needs to supply a lot of configuration parameters specific to the
+> DMA controller in use (that's why we have struct dw_dma_slave).
+> So, seems to me the feasible approach is supply correct data in the first place.
+
+How to supply a valid data if clients don't know the DMA controller limitations
+in general?
+
+> 
+> If you have specific channels to acquire then you probably need to provide a
+> custom xlate / filter functions. Because above seems a bit hackish workaround
+> of dynamic channel allocation mechanism.
+
+No, I don't have a specific channel to acquire and in general you may use any
+returned from the DMA subsystem (though some platforms may need a dedicated
+channels to use, in this case xlate / filter is required). In our SoC any DW DMAC
+channel can be used for any DMA-capable peripherals like SPI, I2C, UART. But the
+their DMA settings must properly and optimally configured. It can be only done
+if you know the DMA controller parameters like max burst length, max block-size,
+etc.
+
+So no. The change proposed by this patch isn't workaround, but a useful feature,
+moreover expected to be supported by the generic DMA subsystem.
+
+> 
+> But let's see what we can do better. Since maximum is defined on the slave side
+> device, it probably needs to define minimum as well, otherwise it's possible
+> that some hardware can't cope underrun bursts.
+
+There is no need to define minimum if such limit doesn't exists except a
+natural 1. Moreover it doesn't exist for all DMA controllers seeing noone has
+added such capability into the generic DMA subsystem so far.
 
 -Sergey
 
+> 
+> Vinod, what do you think?
 > 
 > -- 
 > With Best Regards,
