@@ -2,93 +2,144 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 465211D2266
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 00:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CBD1D0444
+	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 03:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731690AbgEMWzH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 May 2020 18:55:07 -0400
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:28323 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731276AbgEMWzH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 May 2020 18:55:07 -0400
-IronPort-SDR: dxK+kVruO6R7RzTbFz8FhMQNlLMG2DNSQgr8xk1vrYGHuVKOEKizgwgiJqA24gE5stI2LTAShZ
- eSEWPRNOVz8yB1gPWBDFZOVi2/7OA0dBALodQihKS7AIBg1MDDIofLF7bMHVd2IITtc/NvbvK2
- /5ocJFjyIa9l/cT0b7ISkanckDjbaZqRCt+jYONcxchfibChof1J/T/XPIcJonDFLKpkE9dmbw
- x4SDHuyIQG9WwIoT2poXHvO8N0jKJ13391BX3gKmoXdt2kbNv8EE+53FzaBje/osIlDZuyKPFo
- ZaQ=
-X-IronPort-AV: E=Sophos;i="5.73,389,1583164800"; 
-   d="scan'208";a="137958561"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 14 May 2020 06:55:07 +0800
-IronPort-SDR: v2It7tWcty9NvlnDZ9sfk6nVZyG0FhiNPnqP/OTWNfjIXjOe+2VuUBhsWj8pRrCQBRZpv1fTSs
- M6jci1+TnwofBT9enP5f+Z7hqT/Llwbsk=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 15:44:46 -0700
-IronPort-SDR: jlZ5A1kriLxb8dNClmXUI2YsaQQqlTCvZUVo3fj6doq0sXhvX/zkMW6mx2hGkv+0/zw8FAXdDl
- sLnzsUP/Taeg==
-WDCIronportException: Internal
-Received: from unknown (HELO redsun52) ([10.149.66.28])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 15:55:06 -0700
-Date:   Wed, 13 May 2020 00:52:50 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@linux-mips.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc:     Huacai Chen <chenhc@lemote.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Zhangjin Wu <wuzhangjin@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH] MIPS: inst.h: Stop including asm.h to avoid various
- build failures
-In-Reply-To: <20200509152501.GA9125@alpha.franken.de>
-Message-ID: <alpine.LFD.2.21.2005130036060.677301@eddie.linux-mips.org>
-References: <1588930212-5255-1-git-send-email-chenhc@lemote.com> <20200508130149.GA14297@alpha.franken.de> <CAAhV-H5BRhxvaQ_-RHYkEe8BY-OSQto1FhQtBx3T+bZTOVs+-Q@mail.gmail.com> <20200509152501.GA9125@alpha.franken.de>
-Content-Type: text/plain; charset=US-ASCII
-X-ReSent-Date: Wed, 13 May 2020 23:45:46 +0100 (BST)
-X-ReSent-From: "Maciej W. Rozycki" <macro@linux-mips.org>
-X-ReSent-To: "Maciej W. Rozycki" <macro@wdc.com>
-X-ReSent-Subject: Re: [PATCH] MIPS: inst.h: Stop including asm.h to avoid
- various build failures
-X-ReSent-Message-ID: <alpine.LFD.2.21.2005132345460.1120869@eddie.linux-mips.org>
+        id S1731653AbgEMBUr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 May 2020 21:20:47 -0400
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17766 "EHLO
+        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731604AbgEMBUr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 12 May 2020 21:20:47 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1589332815; cv=none; 
+        d=zoho.com.cn; s=zohoarc; 
+        b=cjRqHgQoFQcF9dXuptd75t76dh9Ox5nQ6TBCswsAIE4vmMvZMewIFAKPRRPZe/PJS2bY6Znhx+4w0WAA5Mc10//xuHcGOXibicDt0DNxz/yqmBq9jqQYI0HOJKQZLeRu97PeXH0+eg7Wh7IEp7qIfK2cgzhh49fR11LSI9OmNkM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
+        t=1589332815; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
+        bh=UUH9TBEsGZClV0UvQJYkiGlyJwxsXutgInjbHM/99OA=; 
+        b=UeVNz+dMSImscqxWTjoQW6hcrDNWN8PeWNk2/x2Z7sWF8rnNDKBCow+UF1rwxfp6prWwIgTltl1mXREQhk3JzzzL9uRc8V36S/nmjqTuPp8mHYV/KUcZasCsX1zXsKb+mm4yvqUoOl5SfBFRA/dS2EfEd67YRPZXmbW7VWWx9bw=
+ARC-Authentication-Results: i=1; mx.zoho.com.cn;
+        dkim=pass  header.i=flygoat.com;
+        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
+        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1589332815;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=Date:From:To:CC:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=UUH9TBEsGZClV0UvQJYkiGlyJwxsXutgInjbHM/99OA=;
+        b=bcpCCd4IolU5WLkjKiiyehRsPV+/qDkYcYvv6kgawo3IpvNaL0dpUfqw1G/bJJ3B
+        hTpUDBXWRJAWXQfNpXFhEmkx6v6tDlprHuJHAJtFK56CoaoP5V9/naZuiG0Yo92b7Hd
+        2ymduufrqGSTuebNjO6jnOS0hJEjt+PQJZIAEou0=
+Received: from [127.0.0.1] (223.104.5.223 [223.104.5.223]) by mx.zoho.com.cn
+        with SMTPS id 1589332811518609.5936666834109; Wed, 13 May 2020 09:20:11 +0800 (CST)
+Date:   Wed, 13 May 2020 09:20:08 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     linux-pci@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Paul Burton <paulburton@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v9 2/5] PCI: Add Loongson PCI Controller support
+User-Agent: K-9 Mail for Android
+Reply-to: jiaxun.yang@flygoat.com
+In-Reply-To: <20200512180602.GA273658@bjorn-Precision-5520>
+References: <20200512180602.GA273658@bjorn-Precision-5520>
+Message-ID: <08C2301A-7349-4044-80F4-0B0520780DB9@flygoat.com>
 MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ZohoCNMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 9 May 2020, Thomas Bogendoerfer wrote:
-
-> > > > Commit d339cd02b888eb8 ("MIPS: Move unaligned load/store helpers to
-> > > > inst.h") causes a lot of build failures because macros in asm.h conflict
-> > > > with various subsystems. Some of these conflictions has been fixed (such
-> > > > as LONG, PANIC and PRINT) by adjusting asm.h, but some of them is nearly
-> > > > impossible to fix (such as PTR and END). The only reason of including
-> > > > asm.h in inst.h is that we need the PTR macro which is used by unaligned
-> > > > load/store helpers. So in this patch we define a new PTR_STR macro and
-> > > > use it to replace STR(PTR), then we can stop including asm.h to avoid
-> > > > various build failures.
-> > > >
-> > > > Fixes: d339cd02b888eb8 ("MIPS: Move unaligned load/store helpers to inst.h")
-> > > > Reported-by: kbuild test robot <lkp@intel.com>
-> > > > Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> > > > ---
-> > > >  arch/mips/include/asm/inst.h | 184 ++++++++++++++++++++++---------------------
-> > >
-> > > applied to mips-next. /me hopes this is the last fix... thanks
-> > I think this is the last fix... and, does "MIPS: asm: Rename some
-> > macros to avoid build errors" need to be reverted?
-> 
-> let's keep it as it is now.
-
- Sigh, this just shows how the original change was wrong in the first 
-place.  Why was <asm/inst.h> specifically chosen, whose purpose has been 
-machine code generators/interpreters that has nothing to do with unaligned 
-access helpers, over a more suitable location, such as (maybe obviously?) 
-<asm/unaligned.h>?
-
- I suggest that we roll back to before the destruction, move the necessary 
-bits away from <asm/inst.h>, and then perhaps none of the follow-up hacks 
-will be required.
-
-  Maciej
 
 
+=E4=BA=8E 2020=E5=B9=B45=E6=9C=8813=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=882=
+:06:02, Bjorn Helgaas <helgaas@kernel=2Eorg> =E5=86=99=E5=88=B0:
+>On Tue, May 12, 2020 at 03:43:56PM +0800, Jiaxun Yang wrote:
+>> This controller can be found on Loongson-2K SoC, Loongson-3
+>> systems with RS780E/LS7A PCH=2E
+>>=20
+>> The RS780E part of code was previously located at
+>> arch/mips/pci/ops-loongson3=2Ec and now it can use generic PCI
+>> driver implementation=2E
+>>=20
+>> Signed-off-by: Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom>
+>> Reviewed-by: Rob Herring <robh@kernel=2Eorg>
+>
+>> +static void system_bus_quirk(struct pci_dev *pdev)
+>> +{
+>> +	u16 tmp;
+>> +
+>> +	/*=20
+>> +	 * These devices are not sharing resouces with rest of devices
+>> +	 * on host bus and firmware will ensure their BARs are placed
+>> +	 * in safe ranges=2E Also there might be some config registers
+>> +	 * in their config space so kernel shouldn't ignore them=2E
+>
+>"Firmware ensuring BARs are placed in 'safe' ranges" is not a
+>sufficient answer=2E  As I said before, Linux needs to know both the
+>ADDRESS and the SIZE of whatever non-standard BARs these are=2E
+>Otherwise, we're liable to assign that space to a different device=2E
+
+The address assigned to these devices will never be a part of resources
+belongs to the host bridge=2E That's enforced by hardware and firmware,
+so address conflict would never happen=2E
+
+I'm doing like this to ensure kernel will discover this device but do noth=
+ing
+about assignment of resources to it=2E
+
+>
+>If you have to hard-code the size, so be it=2E  That would mean the
+>hardware is completely broken, but at least we could make Linux deal
+>with it=2E  If the hardware consumes address space we don't know about,
+>we can't deal with that=2E
+>
+>> +	 */
+>> +	pdev->mmio_always_on =3D 1;
+>> +	pdev->non_compliant_bars =3D 1;
+>> +}
+>
+>> +void __iomem *pci_loongson_map_bus(struct pci_bus *bus, unsigned int d=
+evfn,
+>> +			       int where)
+>> +{
+>> +	unsigned char busnum =3D bus->number;
+>> +	struct pci_host_bridge *bridge =3D pci_find_host_bridge(bus);
+>> +	struct loongson_pci *priv =3D  pci_host_bridge_priv(bridge);
+>> +
+>> +	/*
+>> +	 * Do not read more than one device on the bus other than
+>> +	 * the host bus 0=2E
+>> +	 */
+>
+>If the hardware is restricted such that the root bus number must be
+>zero, pleae say that explicitly here=2E  Otherwise, it just looks like
+>a bug=2E
+>
+>> +	if (priv->flags & FLAG_DEV_FIX && busnum !=3D 0 &&
+>> +		PCI_SLOT(devfn) > 0)
+>> +		return NULL;
+>> +
+>> +	/* CFG0 can only access standard space */
+>> +	if (where < PCI_CFG_SPACE_SIZE && priv->cfg0_base)
+>> +		return cfg0_map(priv, busnum, devfn, where);
+>> +
+>> +	/* CFG1 can access extended space */
+>> +	if (where < PCI_CFG_SPACE_EXP_SIZE && priv->cfg1_base)
+>> +		return cfg1_map(priv, busnum, devfn, where);
+>> +
+>> +	return NULL;
+>> +}
+
+--=20
+Jiaxun Yang
