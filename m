@@ -2,99 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 337A91D0B2C
-	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 10:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F361D0FA4
+	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 12:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732414AbgEMIsU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 May 2020 04:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732413AbgEMIsU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 May 2020 04:48:20 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C045C061A0C;
-        Wed, 13 May 2020 01:48:20 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id u10so6563556pls.8;
-        Wed, 13 May 2020 01:48:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=NgUT9tq84isiHIXicXZD4qnZY4zEu1E8jGhDqHL1drg=;
-        b=MIaiTeg8t4YhI7Wa/z44iXQ2USRtJfhXvSrkaQFJmqdGxciSSZEBJ5lUB/O9y/L2P4
-         SZ5O2NrbkChwDdVZWv43DT1AMnwdcxrwdq6SJrgK7KXOjeSoG6mutlXhYddluslP6oYO
-         vrxj6kF/Sdoqiiz43PD15CgycQAn9A3eDNL58GppILPoEYBH2l6yv9TaVqnNgOL3xsxI
-         dvLsBuPsTfpC5RBA6pOVGYPF0J1cnJEEXDZk1Ilenv7Ne3oU+CgfrVEIw1fNjg1GRuye
-         C4iwFbQUdt+LWjRn9+URbsxLdAB7FqSDSa8bkRhoE4ToYoE9qSvM1pArZg5TmaHabH/G
-         3YIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references;
-        bh=NgUT9tq84isiHIXicXZD4qnZY4zEu1E8jGhDqHL1drg=;
-        b=kfO6dfRvHvzEX48xtBXP2W4ZV9TLzZdJ8IiVTbzSdAq2yoHcd4Z7LkVPX+ljFpd7kf
-         qmPeYX+aK9J9yCGAxpi2WPIzYjSyIGHM0dQxACb1QdVtrVgO1J7cbOeOGBg+4j5Bc7rS
-         KRwtgJodHRAWoH721nkwjUEudv5DJThqiIire4k1caMIW12Gz6WCc4lcZWrA1j8yFdfz
-         Mwow8AkDEFBvm84BQ0eAhRDwzqEoZrZj4m6o80FIzWWKuoAe2QojfwrCthtHtlTUatVY
-         VUgdpimMI0O+TD5KTW4mvo9FBEkLFfQjdOBCMkuwYmB4zau4vosifaW7HHZwGDyObpJD
-         Hq3A==
-X-Gm-Message-State: AGi0Puafb2LEow15B8V7nnfGU/JNL0DCPnegE8biNA+lxrKuKPr4JEHU
-        dR0oVphRqNErTdgcSS1VIUc=
-X-Google-Smtp-Source: APiQypLmtLeQhmID80+wwXma8IdJGa0cPkdiN1oqwror1mwDzN3chVhlZsBgaaQYeBClV+kDsuebFQ==
-X-Received: by 2002:a17:902:c40c:: with SMTP id k12mr24925809plk.238.1589359699735;
-        Wed, 13 May 2020 01:48:19 -0700 (PDT)
-Received: from software.domain.org (28.144.92.34.bc.googleusercontent.com. [34.92.144.28])
-        by smtp.gmail.com with ESMTPSA id o21sm14645570pjr.37.2020.05.13.01.48.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 13 May 2020 01:48:19 -0700 (PDT)
-From:   Huacai Chen <chenhc@lemote.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
+        id S1732735AbgEMKX1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 May 2020 06:23:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48590 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732472AbgEMKX1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 13 May 2020 06:23:27 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D2ADE205ED;
+        Wed, 13 May 2020 10:23:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589365406;
+        bh=SgltVphT3mpSTEBHdav7w7v68p4IcFWaePiyBQPkO8w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NrsN+a3kpBa7OFvfx9JXEBF+1YkN3RgZILtNd4fzcVkmVsRyKxSyx+gt6YXsmbXrz
+         Hx1RfoOlKR1O+niAskCU80lQ2ZSQTI3Q6rmpzlyPMTGKgmrfJJinz9rZfb/cTjDtwl
+         gI0HCGuNKK1ywI5CqXsbEbg51rVPBG0qLm+l4fIg=
+Date:   Wed, 13 May 2020 11:23:24 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhc@lemote.com>
-Subject: [PATCH V5 15/15] MAINTAINERS: Update KVM/MIPS maintainers
-Date:   Wed, 13 May 2020 16:42:46 +0800
-Message-Id: <1589359366-1669-16-git-send-email-chenhc@lemote.com>
-X-Mailer: git-send-email 2.7.0
-In-Reply-To: <1589359366-1669-1-git-send-email-chenhc@lemote.com>
-References: <1589359366-1669-1-git-send-email-chenhc@lemote.com>
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Allison Randal <allison@lohutok.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/17] spi: dw: Add generic DW DMA controller support
+Message-ID: <20200513102324.GB4803@sirena.org.uk>
+References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508133336.GK4820@sirena.org.uk>
+ <20200512200733.bdbbhkjkwjd5yzqq@mobilestation>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="E39vaYmALEf/7YXx"
+Content-Disposition: inline
+In-Reply-To: <20200512200733.bdbbhkjkwjd5yzqq@mobilestation>
+X-Cookie: Long life is in store for you.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-James Hogan has become inactive for a long time and leaves KVM for MIPS
-orphan. I'm working on KVM/Loongson and attempt to make it upstream both
-in kernel and QEMU, while Aleksandar Markovic is already a maintainer of
-QEMU/MIPS. We are both interested in QEMU/KVM/MIPS, and we have already
-made some contributions in kernel and QEMU. If possible, we want to take
-the KVM/MIPS maintainership.
 
-Signed-off-by: Huacai Chen <chenhc@lemote.com>
----
- MAINTAINERS | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+--E39vaYmALEf/7YXx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e64e5db..59b3f43 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9302,9 +9302,11 @@ F:	include/kvm/arm_*
- F:	virt/kvm/arm/
- 
- KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)
-+M:	Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-+M:	Huacai Chen <chenhc@lemote.com>
- L:	linux-mips@vger.kernel.org
- L:	kvm@vger.kernel.org
--S:	Orphan
-+S:	Maintained
- F:	arch/mips/include/asm/kvm*
- F:	arch/mips/include/uapi/asm/kvm*
- F:	arch/mips/kvm/
--- 
-2.7.0
+On Tue, May 12, 2020 at 11:07:33PM +0300, Serge Semin wrote:
+> On Fri, May 08, 2020 at 02:33:36PM +0100, Mark Brown wrote:
 
+> > Please don't make new feature development dependent on conversion to the
+> > new schema format, there's quite a backlog of reviews of schema
+> > conversions so it can slow things down.  It's good to do the conversions
+> > but please do them after adding any new stuff to the binding rather than
+> > before.
+
+> So by saying this do you want me to revert an order of the first two patches
+> in the series, right? So the series would first add the DMA properties support
+> to the binding, then would convert the binding file to DT schema.
+
+The conversion to YAML format should be the very last thing in the patch
+series, and as Andy says there's another patch in flight also doing this
+conversion which you should coordinate with.
+
+--E39vaYmALEf/7YXx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl67ypsACgkQJNaLcl1U
+h9AodAf/V7hLsdN16eZChRbVtE6dJ5AQUp2c5eX7YNYnMNJwp1c/rBpMUNUA8YL+
+noBZvjVO2gt+2IwQWc1EZhxbHT1r+6tX8UCrddNFQ6yJi8xsTnUZk3GV+2nd0B6w
+neS85VfshHlLkOZxoaBd7k48Z1aDmdYUkzgBZ432BHy5yzR4uE4zU8BZtcqkvBBT
+qs/Cd9VftFV3zv1HUofjURdirNqylzsQoApRaGtJT79eqZyt/0cSi2bWipJAtHTz
+lhVWfqby7g4FI+GGUYSvjY3eo4flsLhWk/hML+wQoZoSZiBvjoz0uoZnsM8FVQ3w
+4X17XlyTkbM6XVYez5I8xYh3U6TyoQ==
+=6nLk
+-----END PGP SIGNATURE-----
+
+--E39vaYmALEf/7YXx--
