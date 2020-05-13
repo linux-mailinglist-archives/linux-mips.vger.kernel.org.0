@@ -2,423 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8BA1D1628
-	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 15:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA9F1D16EC
+	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 16:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388412AbgEMNoD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 May 2020 09:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388444AbgEMNoB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 May 2020 09:44:01 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB1EC061A0E
-        for <linux-mips@vger.kernel.org>; Wed, 13 May 2020 06:44:01 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id x73so13674426lfa.2
-        for <linux-mips@vger.kernel.org>; Wed, 13 May 2020 06:44:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unikie-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1wL5R3vO+lL8Dd7C3wcfbER/n0qOq9bKPHk33Ao8I8U=;
-        b=y2zmzGuE0bY6Wzs20HJTlF3Ku+To8zkjs9keaGD2QzqTmd3kjIY/Cmy02j7Yr2ZyIH
-         uvr25QWNDWz/OTcSxt3AJynav+MUpHUzgvIYKuj8c/2djPkqeNXr6uZuCbSlHrFtpmhh
-         TCoJ86Sq4fx0D6LCp46G9s0ncSkAaaxNMV+6bssmsefOkdTXlHPP8Bcz/nxRTudwU52x
-         H1cXmKUyXmxw9PN9aWjV1LB0ilyfRzDQKPAFSBDp2vHv7tPK+/Mf3zb4ih90gyeLCqwE
-         BtdyM1dlxT/tGfXYkLhB1eoui1V5lEHxZ5g5dL0sESv17EXJ7FaqFShlJZiWviqELym9
-         x59g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1wL5R3vO+lL8Dd7C3wcfbER/n0qOq9bKPHk33Ao8I8U=;
-        b=m4nFAPjyxW2WJe09NolqzJG8Jk59BKOFQo0dJGAmZ0R7epcDwjsxnVA985Y8TOp3tR
-         pT6Hkfbj2ca65bZv3s8bJMXN1HtMiLpq2speOjWavcHC/z1wnv2xIKPmueRp0enDNBTh
-         iJGPsHm3dzK3NE3G+Tih/7XZsLNp9ZIt0t8rf/QKY5u/oMbHvcxjxchFu5BmA1ogdX2x
-         UmWofhh1nXzOlXqtXWtHES2dGj0IQi0DlDDFmg2zqoKSP0zLFHI5P2XAkwm04hfsadQK
-         4XDuN2UwVyZ2VWrdNlOVb98+fekcUmqSlVU5Oah+NCBOTds10Z8DCgXV6pKr+WA5yVIk
-         Rjog==
-X-Gm-Message-State: AOAM531wb5mptCUso5FOqWMHVUS6xc86hxPCHtmL9XSrr1gtn8b5KKPF
-        WXK2F+7WS96xzXiw0A+nP8iUpw==
-X-Google-Smtp-Source: ABdhPJwo5nA4XGhm02IeyJVF/ciPFR3CiqLopqOKjUy7RMLM32IUAHhVQMeBzrNc3Kv9+6PfC2ktwg==
-X-Received: by 2002:ac2:599b:: with SMTP id w27mr12134864lfn.164.1589377439396;
-        Wed, 13 May 2020 06:43:59 -0700 (PDT)
-Received: from localhost.localdomain ([109.204.235.119])
-        by smtp.googlemail.com with ESMTPSA id t16sm17441367lff.72.2020.05.13.06.43.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2020 06:43:58 -0700 (PDT)
-From:   john mathew <john.mathew@unikie.com>
-X-Google-Original-From: john mathew <John.Mathew@unikie.com>
-To:     linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, tsbogend@alpha.franken.de,
+        id S2388895AbgEMOD2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 13 May 2020 10:03:28 -0400
+Received: from foss.arm.com ([217.140.110.172]:47444 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388783AbgEMOD1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 13 May 2020 10:03:27 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25E5D31B;
+        Wed, 13 May 2020 07:03:27 -0700 (PDT)
+Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E06D3F71E;
+        Wed, 13 May 2020 07:03:24 -0700 (PDT)
+References: <20200513134338.19688-1-John.Mathew@unikie.com> <20200513134338.19688-4-John.Mathew@unikie.com>
+User-agent: mu4e 0.9.17; emacs 26.3
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     john mathew <john.mathew@unikie.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, tsbogend@alpha.franken.de,
         lukas.bulwahn@gmail.com, x86@kernel.org,
         linux-mips@vger.kernel.org, tglx@linutronix.de,
         mostafa.chamanara@gmail.com, willy@infradead.org,
-        valentin.schneider@arm.com, John Mathew <john.mathew@unikie.com>,
         Mostafa Chamanara <mostafa.chamanara@basemark.com>,
         Oleg Tsymbal <oleg.tsymbal@unikie.com>
-Subject: [RFC PATCH v4 3/3] docs: scheduler: Add introduction to scheduler context-switch
-Date:   Wed, 13 May 2020 16:43:38 +0300
-Message-Id: <20200513134338.19688-5-John.Mathew@unikie.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200513134338.19688-1-John.Mathew@unikie.com>
-References: <20200513134338.19688-1-John.Mathew@unikie.com>
+Subject: Re: [RFC PATCH v4 2/3] docs: scheduler: Add scheduler overview documentation
+In-reply-to: <20200513134338.19688-4-John.Mathew@unikie.com>
+Date:   Wed, 13 May 2020 15:03:17 +0100
+Message-ID: <jhjy2pwq6e2.mognet@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: John Mathew <john.mathew@unikie.com>
 
-Add documentation for introduction to
- -context-switch
- -x86 context-switch
- -MIPS context switch
+On 13/05/20 14:43, john mathew wrote:
+> +=========================
+> +Capacity-Aware Scheduling
+> +=========================
+> +
 
-Suggested-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Co-developed-by: Mostafa Chamanara <mostafa.chamanara@basemark.com>
-Signed-off-by: Mostafa Chamanara <mostafa.chamanara@basemark.com>
-Co-developed-by: Oleg Tsymbal <oleg.tsymbal@unikie.com>
-Signed-off-by: Oleg Tsymbal <oleg.tsymbal@unikie.com>
-Signed-off-by: John Mathew <john.mathew@unikie.com>
----
- Documentation/scheduler/arch-specific.rst     |   3 +
- Documentation/scheduler/context-switching.rst | 125 ++++++++++++++++++
- Documentation/scheduler/index.rst             |   1 +
- .../scheduler/mips-context-switch.rst         |  89 +++++++++++++
- .../scheduler/x86-context-switch.rst          |  65 +++++++++
- 5 files changed, 283 insertions(+)
- create mode 100644 Documentation/scheduler/context-switching.rst
- create mode 100644 Documentation/scheduler/mips-context-switch.rst
- create mode 100644 Documentation/scheduler/x86-context-switch.rst
+Thanks for taking a jab at this. At a glance it looks okay, with one
+comment below.
 
-diff --git a/Documentation/scheduler/arch-specific.rst b/Documentation/scheduler/arch-specific.rst
-index c9c34863d994..65dc393b605f 100644
---- a/Documentation/scheduler/arch-specific.rst
-+++ b/Documentation/scheduler/arch-specific.rst
-@@ -9,3 +9,6 @@ Architecture Specific Scheduler Implementation Differences
- 
- .. toctree::
-    :maxdepth: 2
-+
-+   x86-context-switch
-+   mips-context-switch
-diff --git a/Documentation/scheduler/context-switching.rst b/Documentation/scheduler/context-switching.rst
-new file mode 100644
-index 000000000000..44a185764d3c
---- /dev/null
-+++ b/Documentation/scheduler/context-switching.rst
-@@ -0,0 +1,125 @@
-+.. SPDX-License-Identifier: GPL-2.0+
-+
-+==========================
-+Process context switching
-+==========================
-+
-+Context Switching
-+-----------------
-+
-+Context switching, the switching from a running task to another,
-+is done by the context_switch() function defined in kernel/sched.c.
-+It is called by __schedule() when a new process has been selected to run.
-+The execution flow is as follows:
-+
-+* prepare_task_switch() performs necessary kernel preparations for the
-+  context switch and then calls prepare_arch_switch() for architecture
-+  specific context switch preparation. This call must be paired with a
-+  subsequent finish_task_switch() after the context switch. The various
-+  steps are:
-+
-+  - Prepare kcov for context switch. Context switch does switch_mm() to the
-+    next task's mm, then switch_to() that new task. This means vmalloc'd
-+    regions which had previously been faulted in can transiently disappear in
-+    the context of the prev task. Functions instrumented by KCOV may try to
-+    access a vmalloc'd kcov_area during this window, and result in a recursive
-+    fault. This is avoided by setting a new flag: KCOV_IN_CTXSW in kcov_mode
-+    prior to switching the mm, and cleared once the new task is live.
-+  - Update sched_info statistics for both the prev and next tasks.
-+  - Handle perf subsystem context switch from previous task to next.
-+    The various steps are:
-+
-+    * Remove perf events for the task being context-switched out.
-+    * Stop each perf event and update the event value in event->count.
-+    * Call the context switch callback for PMU with flag indicating
-+      schedule out.
-+    * Create a PERF_RECORD_MISC_SWITCH_OUT perf event.
-+    * Context switch the perf event contexts between the current and next tasks.
-+    * Schedule out current cgroup events if cgroup perf events exist on the
-+      CPU.
-+
-+  - Set TIF_NOTIFY_RESUME flag on the current thread for the Restartable
-+    sequence mechanism. Restartable sequences allow user-space to perform
-+    update operations on per-cpu data without requiring heavy-weight atomic
-+    operations.
-+  - Fire preempt notifiers. A task can request the scheduler to notify it
-+    whenever it is preempted or scheduled back in. This allows the task to
-+    swap any special-purpose registers like the FPU or Intel's VT registers.
-+  - Claim the next task as running to prevent load balancing run on it.
-+
-+* arch_start_context_switch() batches the reload of page tables and other
-+  process state with the actual context switch code for paravirtualized
-+  guests.
-+
-+* Transfer the real and anonymous address spaces between the switching tasks.
-+  Four possible transfer types are:
-+
-+  * kernel task switching to another kernel task
-+  * user task switching to a kernel task
-+  * kernel task switching to user task
-+  * user task switching to user task
-+
-+  For a kernel task switching to kernel task enter_lazy_tlb() is called
-+  which is an architecture specific implementation to handle a context
-+  without an mm. Architectures implement lazy tricks to minimize TLB
-+  flushes here. The active address space from the previous task is
-+  borrowed (transferred) to the next task.
-+
-+  For a user task switching to kernel task it will have a real address
-+  space and so its anonymous users counter is incremented. This makes
-+  sure that the address space will not get freed even after the previous
-+  task exits.
-+
-+  For a user task switching to user task the architecture specific
-+  switch_mm_irqs_off() or switch_mm() functions are called.  The main
-+  functionality of these calls is to switch the address space between
-+  the user space processes.  This includes switching the page table pointers
-+  either via retrieved valid ASID for the process or page mapping in the TLB.
-+
-+  For a kernel task switching to a user task, switch_mm_irqs_off()
-+  replaces the address space of prev kernel task with the next from the user
-+  task. Same as for exiting process in this case, the context_switch()
-+  function saves the pointer to the memory descriptor used by prev in the
-+  runqueue’s prev_mm field and resets prev task active address space.
-+
-+* prepare_lock_switch() releases lockdep of the runqueue lock to handle
-+  the special case of the scheduler context switch where the runqueue lock
-+  will be released by the next task.
-+
-+* Architecture specific implementation of switch_to() switches the
-+  register state and the stack. This involves saving and restoring stack
-+  information and the processor registers and any other
-+  architecture-specific state that must be managed and restored on a
-+  per-process basis.
-+
-+* finish_task_switch() performs the final steps of the context switch:
-+
-+  - Emit a warning if the preempt count is corrupted and set the preempt count
-+    to FORK_PREEMPT_COUNT.
-+  - Reset the pointer to the memory descriptor used by prev which was set in
-+    context_switch().
-+  - Store the state of the previous task to handle the possibility of a DEAD
-+    task.
-+  - Do virtual CPU time accounting for the previous task.
-+  - Handle perf subsystem context switch from previous task to current:
-+
-+    - Add perf events for the current task.
-+    - Schedule in current cgroup events if cgroup perf events exist on the
-+      CPU.
-+    - Context switch the perf event contexts between the prev and current
-+      tasks.
-+    - Clear the PERF_RECORD_MISC_SWITCH_OUT perf event.
-+    - Call the context switch callback for PMU with flag indicating
-+      schedule in.
-+  - Free the task for load balancing run on it.
-+  - Unlock the rq lock.
-+  - Clear the KCOV_IN_CTXSW in kcov_mode which was set in prepare_task_switch
-+    now that the new task is live.
-+  - Fire preempt notifiers to notify about task scheduled back in.
-+  - If the prev task state indicated that it was dead, the corresponding
-+    scheduler class task_dead hook is called. Function-return probe
-+    instances associated with the task are removed and put back on the
-+    free list. Stack for the task is freed and drop the RCU references.
-+  - Evaluate the need for No idle tick due to the context switch and do the
-+    idle tick if needed.
-+
-diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
-index f311abe5b711..691fdfe32954 100644
---- a/Documentation/scheduler/index.rst
-+++ b/Documentation/scheduler/index.rst
-@@ -20,6 +20,7 @@ specific implementation differences.
-     sched-data-structs
-     cfs-overview
-     sched-design-CFS
-+    context-switching
-     sched-features
-     arch-specific
-     sched-debugging
-diff --git a/Documentation/scheduler/mips-context-switch.rst b/Documentation/scheduler/mips-context-switch.rst
-new file mode 100644
-index 000000000000..d833ab6d8a76
---- /dev/null
-+++ b/Documentation/scheduler/mips-context-switch.rst
-@@ -0,0 +1,89 @@
-+.. SPDX-License-Identifier: GPL-2.0+
-+
-+==============================================
-+MIPS Architecture And Scheduler implementation
-+==============================================
-+
-+Multi-threading in MIPS CPUs
-+-----------------------------
-+The MIPS architecture defines four coprocessors.
-+
-+- CP0: supports virtual memory system and exception handling.
-+- CP1: reserved for the floating point coprocessor, the FPU.
-+- CP2: available for specific implementations.
-+- CP3: reserved for floating point operations in the release 1
-+  implementation of MIPS64.
-+
-+MIPS32 and MIPS64 architectures provide support for optional components
-+known as Modules or Application Specific Extensions. The MT module
-+enables the architecture to support multi-threaded implementations.
-+This includes support for virtual processors and lightweight thread
-+contexts. Implementation of MT features depends on the individual MIPS
-+cores. The virtual processing element (VPE) maintains a complete copy
-+of the processor state as seen by the software system which includes
-+interrupts, register set, and MMU. This enables a single processor to
-+appear to an SMP operating system like two separate cores if it has
-+2 VPE's. For example two separate OSes can run on each VPE such as Linux
-+and and an RTOS.
-+
-+A lighter version of VPE enables threading at the user/application
-+software level.  It is called Thread Context (TC). TC is the hardware
-+state necessary to support a thread of execution. This includes a set
-+of general purpose registers (GPRs), a program counter (PC), and some
-+multiplier and coprocessor state.  TCs have common execution unit.
-+MIPS ISA provides instructions to utilize TC.
-+
-+The Quality of service block of the MT module allows the allocation of
-+processor cycles to threads, and sets relative thread priorities. This
-+enables 2 thread prioritization mechanisms. The user can prioritize one
-+thread over the other as well as allocate a specific ratio of the cycles
-+to specific threads. These mechanisms allocate bandwidth to a set
-+of threads effectively. QoS block improves system level determinism
-+and predictability. Qos block can be replaced by more application
-+specific blocks.
-+
-+MIPS Context Switch
-+-------------------
-+
-+Context switch behavior specific to MIPS begins in the way
-+:c:macro:`switch_to()` macro is implemented. The main steps in the MIPS
-+implementation of the macro are:
-+
-+* Handle the FPU affinity management feature. This feature is enabled
-+  by the :c:macro:`CONFIG_MIPS_MT_FPAFF` at build time. The macro checks
-+  if the FPU was used in the most recent time slice. In case FPU was not
-+  used, the restriction of having to run on a CPU with FPU is removed.
-+* Disable the FPU and clear the bit indicating the FPU was used in this
-+  quantum for the task for the previous task.
-+* If FPU is enabled in the next task, check FCSR for any unmasked
-+  exceptions pending, clear them and send a signal.
-+* If MIPS DSP modules is enabled, save the DSP context of the previous
-+  task and restore the dsp context of the next task.
-+* If coprocessor 2 is present set the access allowed field of the
-+  coprocessor 2.
-+* If coprocessor 2 access allowed field was set in previous task, clear it.
-+* Clear the the access allowed field of the coprocessor 2.
-+* Clear the llbit on MIPS release 6 such that instruction eretnc can be
-+  used unconditionally when returning to userland in entry.S.
-+  LLbit is used to specify operation for instructions that provide atomic
-+  read-modify-write. LLbit is set when a linked load occurs and is tested
-+  by the conditional store.  It is cleared, during other CPU operation,
-+  when a store to the location would no longer be atomic. In particular,
-+  it is cleared by exception return instructions.  eretnc instruction
-+  enables to return from interrupt, exception, or error trap without
-+  clearing the LLbit.
-+* Clear the global variable ll_bit used by MIPS exception handler.
-+* Write the thread pointer to the MIPS userlocal register if the CPU
-+  supports this feature. This register is not interpreted by hardware and
-+  can be used to share data between privileged and unprivileged software.
-+* If hardware watchpoint feature is enabled during build, the watchpoint
-+  registers are restored from the next task.
-+* Finally the MIPS processor specific implementation of the resume()
-+  function is called. It restores the registers of the next task including
-+  the stack pointer. The implementation is in assembly in the following
-+  architecutre specific files ::
-+
-+    arch/mips/kernel/r4k_switch.S
-+    arch/mips/kernel/r2300_switch.S
-+    arch/mips/kernel/octeon_switch.S
-+
-diff --git a/Documentation/scheduler/x86-context-switch.rst b/Documentation/scheduler/x86-context-switch.rst
-new file mode 100644
-index 000000000000..68453e99cb2b
---- /dev/null
-+++ b/Documentation/scheduler/x86-context-switch.rst
-@@ -0,0 +1,65 @@
-+.. SPDX-License-Identifier: GPL-2.0+
-+
-+X86 Context Switch
-+------------------
-+
-+The x86 architecture context switching logic is as follows.
-+After the switching of MM in the scheduler context_switch() calls the x86
-+implementation of :c:macro:`switch_to()`. For x86 arch it is located at ::
-+
-+    arch/x86/include/asm/switch_to.h
-+
-+Since kernel 4.9, switch_to() has been split into two parts: a
-+`prepare_switch_to()` macro and the inline assembly implementation of
-+__switch_to_asm() in the assembly files ::
-+
-+    arch/x86/entry/entry_64.S
-+    arch/x86/entry/entry_32.S
-+
-+prepare_switch_to() handles the case when stack uses virtual memory. This
-+is configured at build time and is enabled in most modern distributions.
-+This function accesses the stack pointer to prevent a double fault.
-+Switching to a stack that has top-level paging entry that is not
-+present in the current MM will result in a page fault which will be promoted
-+to double fault and the result is a panic. So it is necessary to probe the
-+stack now so that the vmalloc_fault can fix the page tables.
-+
-+The main steps of the inline assembly function __switch_to_asm() are:
-+
-+* store the callee saved registers to the old stack which will be switched
-+  away from.
-+* swap the stack pointers between the old and the new task.
-+* move the stack canary value to the current CPU's interrupt stack
-+* if return trampoline is enabled, overwrite all entries in the RSB on
-+  exiting a guest, to prevent malicious branch target predictions from
-+  affecting the host kernel.
-+* restore all registers from the new stack previously pushed in reverse
-+  order.
-+* jump to a C implementation of __switch_to(). The sources are located in::
-+
-+      arch/x86/kernel/process_64.c
-+      arch/x86/kernel/process_32.c
-+
-+
-+The main steps of the C function __switch_to() which is effectively
-+the new task running are as follows:
-+
-+* retrieve the thread :c:type:`struct thread_struct <thread_struct>`
-+  and fpu :c:type:`struct fpu <fpu>` structs from the next and previous
-+  tasks.
-+* get the current CPU TSS :c:type:`struct tss_struct <tss_struct>`.
-+* save the current FPU state while on the old task.
-+* store the FS and GS segment registers before changing the thread local
-+  storage.
-+* reload the GDT for the new tasks TLS.
-+  Following is effectively arch_end_context_switch().
-+* save the ES and DS segments of the previous task and load the same from
-+  the nest task.
-+* load the FS and GS segment registers.
-+* update the current task of the CPU.
-+* update the top of stack pointer for the CPU for entry trampoline.
-+* initialize FPU state for next task.
-+* set sp0 to point to the entry trampoline stack.
-+* call _switch_to_xtra() to handle debug registers, I/O
-+  bitmaps and speculation mitigation.
-+* write the task's CLOSid/RMID to IA32_PQR_MSR.
--- 
-2.17.1
+FWIW I still intend to write a more pamphlet-sized thing, I'll toss
+something out in the coming weeks - depending on where this goes, I might
+base it on this.
 
+> +Scheduling load balancing on Asymmetric Multiprocessor systems was improved
+> +through the introduction of Capacity-Aware Scheduling. It identifies the
+> +most efficient CPU to assign a task based on its capacity. This capacity
+> +may be asymmetric due to heterogeneous computing architecture such
+> +as ARM big.LITTLE. Scheduler gets information about asymmetric capacities
+> +when the scheduler domain hierarchy is built using build_sched_domains().
+> +CPU capacities are provided to the scheduler topology code through the
+> +architecture specific implementation of the arch_scale_cpu_capacity().
+> +The SD_ASYM_CPUCAPACITY flag is set by the scheduler topology for a domain
+> +in the hierarchy where all CPU capacities are visible for any cpu's point
+> +of view on asymmetric CPU capacity systems. The scheduler can then take
+> +capacity asymmetry into account when load balancing.
+> +
+> +Initial CPU capacities are derived from the Device Tree and CPU frequency.
+> +For RISC-V & ARM64 it is done in drivers/base/arch_topology.c. A cpu-map
+> +device tree is parsed to obtain the cpu topology and the initial CPU capacity
+> +is set using the CPUFreq subsystem. A callback is registered to the CPUFreq
+> +subsystem to rebuild sched_domains when CPU frequency changes.
+> +
+
+We don't rebuild domains on frequency changes (that would be ludicrous!),
+rather we do that on policy changes. It's mostly because we need to wait
+for cpufreq to be loaded before having a complete view over the capacities
+of the CPUs (which is a mix of µarch and frequencies), i.e. we need to
+rebuild the SD's again once cpufreq comes up.
