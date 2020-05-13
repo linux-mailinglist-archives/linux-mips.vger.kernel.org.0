@@ -2,83 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA9F1D16EC
-	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 16:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE07A1D17C9
+	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 16:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388895AbgEMOD2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 13 May 2020 10:03:28 -0400
-Received: from foss.arm.com ([217.140.110.172]:47444 "EHLO foss.arm.com"
+        id S2389005AbgEMOlj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 May 2020 10:41:39 -0400
+Received: from mga05.intel.com ([192.55.52.43]:14940 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388783AbgEMOD1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 13 May 2020 10:03:27 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25E5D31B;
-        Wed, 13 May 2020 07:03:27 -0700 (PDT)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E06D3F71E;
-        Wed, 13 May 2020 07:03:24 -0700 (PDT)
-References: <20200513134338.19688-1-John.Mathew@unikie.com> <20200513134338.19688-4-John.Mathew@unikie.com>
-User-agent: mu4e 0.9.17; emacs 26.3
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     john mathew <john.mathew@unikie.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, tsbogend@alpha.franken.de,
-        lukas.bulwahn@gmail.com, x86@kernel.org,
-        linux-mips@vger.kernel.org, tglx@linutronix.de,
-        mostafa.chamanara@gmail.com, willy@infradead.org,
-        Mostafa Chamanara <mostafa.chamanara@basemark.com>,
-        Oleg Tsymbal <oleg.tsymbal@unikie.com>
-Subject: Re: [RFC PATCH v4 2/3] docs: scheduler: Add scheduler overview documentation
-In-reply-to: <20200513134338.19688-4-John.Mathew@unikie.com>
-Date:   Wed, 13 May 2020 15:03:17 +0100
-Message-ID: <jhjy2pwq6e2.mognet@arm.com>
+        id S2388395AbgEMOlj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 13 May 2020 10:41:39 -0400
+IronPort-SDR: fMcQmLgdCp9QN0PT92LMvDpFxtMC1+thL3c5pb7SQx8oWTDIzh0mTiaywaa57clcE/RtjMoEyS
+ UT0H8OvFCfLA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 07:41:39 -0700
+IronPort-SDR: z/LwwDOuZhSyS3rvaD9yFkLshHEjGog5cmKgX+mVSZttANYRsDanxeHRqykqKaOzpXjY2HC7j0
+ n95DSdK68+Mw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,388,1583222400"; 
+   d="scan'208";a="251271896"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga007.jf.intel.com with ESMTP; 13 May 2020 07:41:33 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jYsZj-006RTr-Aw; Wed, 13 May 2020 17:41:35 +0300
+Date:   Wed, 13 May 2020 17:41:35 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Allison Randal <allison@lohutok.net>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, fengsheng <fengsheng5@huawei.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Aditya Pakki <pakki001@umn.edu>,
+        "wuxu.wu" <wuxu.wu@huawei.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 17/17] spi: dw: Use regset32 DebugFS method to create a
+ registers file
+Message-ID: <20200513144135.GO185537@smile.fi.intel.com>
+References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508132943.9826-18-Sergey.Semin@baikalelectronics.ru>
+ <20200508193027.GW185537@smile.fi.intel.com>
+ <20200513124422.z6ctlmvipwer45q4@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200513124422.z6ctlmvipwer45q4@mobilestation>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Wed, May 13, 2020 at 03:44:22PM +0300, Serge Semin wrote:
+> On Fri, May 08, 2020 at 10:30:27PM +0300, Andy Shevchenko wrote:
+> > On Fri, May 08, 2020 at 04:29:42PM +0300, Serge Semin wrote:
+> > > DebugFS kernel interface provides a dedicated method to create the
+> > > registers dump file. Use it instead of creating a generic DebugFS
+> > > file with manually written read callback function.
 
-On 13/05/20 14:43, john mathew wrote:
-> +=========================
-> +Capacity-Aware Scheduling
-> +=========================
-> +
+> > > +#define DW_SPI_DBGFS_REG(_name, _off)	\
+> > > +{					\
+> > > +	.name = _name,			\
+> > > +	.offset = _off			\
+> > 
+> > Leave comma here.
+> 
+> don't see a point.
 
-Thanks for taking a jab at this. At a glance it looks okay, with one
-comment below.
+It will help in case if this getting extended. Also slightly better to
+distinguish between terminator type of members vs. data structures.
 
-FWIW I still intend to write a more pamphlet-sized thing, I'll toss
-something out in the coming weeks - depending on where this goes, I might
-base it on this.
+> > >  }
 
-> +Scheduling load balancing on Asymmetric Multiprocessor systems was improved
-> +through the introduction of Capacity-Aware Scheduling. It identifies the
-> +most efficient CPU to assign a task based on its capacity. This capacity
-> +may be asymmetric due to heterogeneous computing architecture such
-> +as ARM big.LITTLE. Scheduler gets information about asymmetric capacities
-> +when the scheduler domain hierarchy is built using build_sched_domains().
-> +CPU capacities are provided to the scheduler topology code through the
-> +architecture specific implementation of the arch_scale_cpu_capacity().
-> +The SD_ASYM_CPUCAPACITY flag is set by the scheduler topology for a domain
-> +in the hierarchy where all CPU capacities are visible for any cpu's point
-> +of view on asymmetric CPU capacity systems. The scheduler can then take
-> +capacity asymmetry into account when load balancing.
-> +
-> +Initial CPU capacities are derived from the Device Tree and CPU frequency.
-> +For RISC-V & ARM64 it is done in drivers/base/arch_topology.c. A cpu-map
-> +device tree is parsed to obtain the cpu topology and the initial CPU capacity
-> +is set using the CPUFreq subsystem. A callback is registered to the CPUFreq
-> +subsystem to rebuild sched_domains when CPU frequency changes.
-> +
+> > > +	struct debugfs_regset32 regset;
+> > 
+> > I'm wondering why we need it here and not simple on the stack?
+> 
+> Please see the way the DebugFS regset work. A prompt: how does the DebugFS
+> core get to know what is a base address of the registers? =)
 
-We don't rebuild domains on frequency changes (that would be ludicrous!),
-rather we do that on policy changes. It's mostly because we need to wait
-for cpufreq to be loaded before having a complete view over the capacities
-of the CPUs (which is a mix of µarch and frequencies), i.e. we need to
-rebuild the SD's again once cpufreq comes up.
+If they have a member in the struct which passed thru private pointer of inode.
+But I see your point.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
