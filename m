@@ -2,50 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B87F81D162F
-	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 15:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB4D1D1633
+	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 15:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388120AbgEMNnz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 May 2020 09:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
+        id S2388439AbgEMNoM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 May 2020 09:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387767AbgEMNnx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 May 2020 09:43:53 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2505C061A0C
-        for <linux-mips@vger.kernel.org>; Wed, 13 May 2020 06:43:52 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id b26so13673204lfa.5
-        for <linux-mips@vger.kernel.org>; Wed, 13 May 2020 06:43:52 -0700 (PDT)
+        with ESMTP id S2388254AbgEMNn4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 May 2020 09:43:56 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459E5C061A0E
+        for <linux-mips@vger.kernel.org>; Wed, 13 May 2020 06:43:55 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id g1so11929268ljk.7
+        for <linux-mips@vger.kernel.org>; Wed, 13 May 2020 06:43:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=unikie-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=aUaq+FTPLwUj6E+pCwoQEQ6JV9QgxALeXAkDkFOPR7g=;
-        b=gBh6jXYDqujE825pU+j4iL/+SPPrN3a5c0dt6G1hkUDBowbG+9aqlqYvKsY4df8k6x
-         ZUj7Ht+pPqQ0eEEX7B0FCwKQ+zCUJqc4tXVfQ0V/EuzpYgG2LxpGdZImzetVEXzIH3JC
-         tKLdjRv6THnXJZzRdYkx+HfejLWUuUoRPlFhoi8M5niVg0o0LjoX/KD7VCDFGPu9Xdn6
-         SldZsUhBTjf0a3Nxvg92rjgvv8Pb2yLkKrNTXiCNsZsNGzcyq2GWQHVgp4LqGh5u4S0B
-         +qjnUhPjLFhPfHjLx0+uZJRygFe+qo0kpg/K6f70T5ULVE4lwFgB9OablCG3sk622oIH
-         AeRQ==
+        bh=VdE4MiNfWQ7/UsB/TdHz4sDfTF/wlLohSStV9HV5fKw=;
+        b=WRomXU/PQ0ZbqL7E8TfaCKYgSV4V6n/Tqb6jpurAEwAxZHWkUDc7NpkLu+ugF5wgkU
+         RS/1eiPZZhq70uJbvCMM0lal4/V/Ki6+y1xu6VcJ0BnQsPSkFizVKpFXN5Ua5bN6ngz9
+         RddwbEJGatiRbqUyJifDrOLvbQGom/UVAAUv4ij2jtE6CrDPzgTgP+NHwXD9+Tk2DqOH
+         zCf62/9jAcd+Ih+FBz6TPQGvzMCfPE+tJrnNJ+QO/85GsXd1XQ3BS3xrd56uBXOj5+PS
+         /sONSiFXk61gF7+lh2cYkI1zzmen43eCohoJjzWJ86QByUB/PpLz8RPhqC87XEcMLmKG
+         aJ/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=aUaq+FTPLwUj6E+pCwoQEQ6JV9QgxALeXAkDkFOPR7g=;
-        b=nV41ppYnBBx4lkxWrQdeQqnaQQhkbbvC2KjxhxdEa3hYexyJ01PoiHpJ86dpeI8IPk
-         IeKqydU2Qrrt1IkZSJ9OPpluZXhCDADZnvFQCoZQvt0xUB3OXHDR4FIANDmsKH4zOym9
-         DQ+Qnbtd1EE+mLOcXJyOKuaYzICq8TW6cDX9rrPKnc3mckr1eyoTN2zbjQcD2iXFUolQ
-         /SnjVsRkUgcpWzedLhhhKqz0AGObBsMnrvhdyKrK9zacTrx1RvRs9fbmVYk+wE8tcpdk
-         n+IcLN5z9MCCWJ/1SZcF3pfex3p5LWi2DCA7YjHJzA4K4PatKoLVEG/47o3tz3G3i0Wq
-         OpXw==
-X-Gm-Message-State: AOAM530TB/b7bpOVB8/Q85l/DyLswYhmR7gAwF0VpYCp6kHq4daV6IKq
-        GDzX7HPb0RhiMJe+9qy5yp9C2Q==
-X-Google-Smtp-Source: ABdhPJzxzHWAVwfLKt83j5dQr07PJTsv42mFTW6jFhYAc8D8FiMzUovBw+zsgsA2DB1gKC7jY3rpQQ==
-X-Received: by 2002:a05:6512:455:: with SMTP id y21mr18596130lfk.202.1589377431091;
-        Wed, 13 May 2020 06:43:51 -0700 (PDT)
+        bh=VdE4MiNfWQ7/UsB/TdHz4sDfTF/wlLohSStV9HV5fKw=;
+        b=pcZQ3yQsHmJg21GIs8t1DQRVFcsCcjCBRp8Ky68xa3sSBv03rWDFvJ3yRSkLg0/4Xu
+         n1gHlFgjKF/Y1e2B4Zylm8ShRjDZGIrTdMPwAVqYz+KZqZStfcYF9WmdSqFd6UQFTM7I
+         SMS1xjxzRR/M1ClrqEhhdK+HuE2TQFzX5ZkDIHnyef5XtnMq8rMkuI//okZpX9w+1Ev/
+         k0kboAeJsv86TPn1wWxphSrtkOXOJRFu2DChRZHREgkvpjo4fbgkWj20XAzIecShOHOT
+         Hm4CKpIvRXK6lt+EB9Yhc+6TL2XfIFge8vrZc7+KcFe5bkHu9URs2UriLfiTpx/FHTnp
+         H7KQ==
+X-Gm-Message-State: AOAM530sTz0p8raoIpqi5Jzp6Wys/U8OfclakcWwoAbj+sJTN87jdZ/Q
+        TM7GdxOEwrl5MQB41xq5vXEFww==
+X-Google-Smtp-Source: ABdhPJxl76yv3bxNLRnWikxRI/wdw4wvQ/PlJlDgZgp0HA5+9/NUr6Yn/x9OLcbskXZMNhESCKPBlQ==
+X-Received: by 2002:a05:651c:105c:: with SMTP id x28mr5301731ljm.65.1589377433456;
+        Wed, 13 May 2020 06:43:53 -0700 (PDT)
 Received: from localhost.localdomain ([109.204.235.119])
-        by smtp.googlemail.com with ESMTPSA id t16sm17441367lff.72.2020.05.13.06.43.49
+        by smtp.googlemail.com with ESMTPSA id t16sm17441367lff.72.2020.05.13.06.43.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2020 06:43:50 -0700 (PDT)
+        Wed, 13 May 2020 06:43:52 -0700 (PDT)
 From:   john mathew <john.mathew@unikie.com>
 X-Google-Original-From: john mathew <John.Mathew@unikie.com>
 To:     linux-doc@vger.kernel.org
@@ -57,10 +57,10 @@ Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net, mingo@redhat.com,
         lukas.bulwahn@gmail.com, x86@kernel.org,
         linux-mips@vger.kernel.org, tglx@linutronix.de,
         mostafa.chamanara@gmail.com, willy@infradead.org,
-        valentin.schneider@arm.com, john mathew <John.Mathew@unikie.com>
-Subject: [RFC PATCH v4 0/3] Add scheduler overview documentation
-Date:   Wed, 13 May 2020 16:43:35 +0300
-Message-Id: <20200513134338.19688-2-John.Mathew@unikie.com>
+        valentin.schneider@arm.com, John Mathew <john.mathew@unikie.com>
+Subject: [RFC PATCH v4 1/3] docs: scheduler: Restructure scheduler documentation.
+Date:   Wed, 13 May 2020 16:43:36 +0300
+Message-Id: <20200513134338.19688-3-John.Mathew@unikie.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200513134338.19688-1-John.Mathew@unikie.com>
 References: <20200513134338.19688-1-John.Mathew@unikie.com>
@@ -69,62 +69,149 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-version 4:
- -Added section on Capacity-Aware Scheduling
- -Reworded CFS recently added features.
- -Removed vruntime description from scheduler structs
- -Added description of idle and stopper sched classses
+From: John Mathew <john.mathew@unikie.com>
 
-version 3:
- -Fix spelling, spacing and typo errors.
+Add new sections to enable addition of new documentation on
+the scheduler. Existing documentation is moved under the related
+new sections. The sections are
+  - overview
+  - sched-features
+  - arch-specific.rst
+  - sched-debugging.rst
 
-version 2:
-- Remove :c:func: directive as it was redundant
-- Limit document width (line symbol count) to 75
-- Replace dot file with ASCII art
-- Describe prepare_task_switch(), ASID use, 
-  kernel/user transtion, MIPS FPU affinity correctly
-- Add missing references to files
-- Removed internal APIs from scheduler API reference
-- Described rq struct member as kernel-doc comments
-- Replaced CFS history with CFS current status
-- Added documentation for sched_class fields
-- Refined explanation of context swtich functionality
-- Replace CFS history with recent changes
-- Added kernel-doc comments for struct rq
-
-John Mathew (3):
-  docs: scheduler: Restructure scheduler documentation.
-  docs: scheduler: Add scheduler overview documentation
-  docs: scheduler: Add introduction to scheduler context-switch
-
- Documentation/scheduler/arch-specific.rst     |  14 +
- Documentation/scheduler/cfs-overview.rst      | 102 ++++++
- Documentation/scheduler/context-switching.rst | 125 ++++++++
- Documentation/scheduler/index.rst             |  33 +-
- .../scheduler/mips-context-switch.rst         |  89 ++++++
- Documentation/scheduler/overview.rst          | 293 ++++++++++++++++++
- Documentation/scheduler/sched-cas.rst         |  90 ++++++
- .../scheduler/sched-data-structs.rst          | 182 +++++++++++
- Documentation/scheduler/sched-debugging.rst   |  14 +
- Documentation/scheduler/sched-features.rst    |  21 ++
- Documentation/scheduler/scheduler-api.rst     |  31 ++
- .../scheduler/x86-context-switch.rst          |  65 ++++
- kernel/sched/core.c                           |  28 +-
- kernel/sched/sched.h                          | 169 +++++++++-
- 14 files changed, 1236 insertions(+), 20 deletions(-)
+Suggested-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: John Mathew <john.mathew@unikie.com>
+---
+ Documentation/scheduler/arch-specific.rst   | 11 ++++++++
+ Documentation/scheduler/index.rst           | 30 ++++++++++++---------
+ Documentation/scheduler/overview.rst        |  5 ++++
+ Documentation/scheduler/sched-debugging.rst | 14 ++++++++++
+ Documentation/scheduler/sched-features.rst  | 20 ++++++++++++++
+ 5 files changed, 67 insertions(+), 13 deletions(-)
  create mode 100644 Documentation/scheduler/arch-specific.rst
- create mode 100644 Documentation/scheduler/cfs-overview.rst
- create mode 100644 Documentation/scheduler/context-switching.rst
- create mode 100644 Documentation/scheduler/mips-context-switch.rst
  create mode 100644 Documentation/scheduler/overview.rst
- create mode 100644 Documentation/scheduler/sched-cas.rst
- create mode 100644 Documentation/scheduler/sched-data-structs.rst
  create mode 100644 Documentation/scheduler/sched-debugging.rst
  create mode 100644 Documentation/scheduler/sched-features.rst
- create mode 100644 Documentation/scheduler/scheduler-api.rst
- create mode 100644 Documentation/scheduler/x86-context-switch.rst
 
+diff --git a/Documentation/scheduler/arch-specific.rst b/Documentation/scheduler/arch-specific.rst
+new file mode 100644
+index 000000000000..c9c34863d994
+--- /dev/null
++++ b/Documentation/scheduler/arch-specific.rst
+@@ -0,0 +1,11 @@
++.. SPDX-License-Identifier: GPL-2.0+
++
++Architecture Specific Scheduler Implementation Differences
++==========================================================
++
++.. class:: toc-title
++
++	   Table of contents
++
++.. toctree::
++   :maxdepth: 2
+diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
+index 69074e5de9c4..9bdccea74af9 100644
+--- a/Documentation/scheduler/index.rst
++++ b/Documentation/scheduler/index.rst
+@@ -1,23 +1,27 @@
++.. SPDX-License-Identifier: GPL-2.0+
++
+ ===============
+ Linux Scheduler
+ ===============
+ 
+-.. toctree::
+-    :maxdepth: 1
++This documentation outlines the Linux kernel scheduler with its concepts,
++details about the scheduler design and its data structures and architecture
++specific implementation differences.
+ 
+ 
+-    completion
+-    sched-arch
+-    sched-bwc
+-    sched-deadline
+-    sched-design-CFS
+-    sched-domains
+-    sched-energy
+-    sched-nice-design
+-    sched-rt-group
+-    sched-stats
++.. class:: toc-title
++
++	   Table of contents
+ 
+-    text_files
++.. toctree::
++    :maxdepth: 2
++
++    overview
++    sched-design-CFS
++    sched-features
++    arch-specific
++    sched-debugging
++    scheduler-api
+ 
+ .. only::  subproject and html
+ 
+diff --git a/Documentation/scheduler/overview.rst b/Documentation/scheduler/overview.rst
+new file mode 100644
+index 000000000000..aee16feefc61
+--- /dev/null
++++ b/Documentation/scheduler/overview.rst
+@@ -0,0 +1,5 @@
++.. SPDX-License-Identifier: GPL-2.0+
++
++====================
++Scheduler overview
++====================
+diff --git a/Documentation/scheduler/sched-debugging.rst b/Documentation/scheduler/sched-debugging.rst
+new file mode 100644
+index 000000000000..e332069f99d6
+--- /dev/null
++++ b/Documentation/scheduler/sched-debugging.rst
+@@ -0,0 +1,14 @@
++.. SPDX-License-Identifier: GPL-2.0+
++
++Scheduler Debugging Interface
++==============================
++
++.. class:: toc-title
++
++	   Table of contents
++
++.. toctree::
++   :maxdepth: 2
++
++   sched-stats
++   text_files
+diff --git a/Documentation/scheduler/sched-features.rst b/Documentation/scheduler/sched-features.rst
+new file mode 100644
+index 000000000000..1afbd9cc8d52
+--- /dev/null
++++ b/Documentation/scheduler/sched-features.rst
+@@ -0,0 +1,20 @@
++.. SPDX-License-Identifier: GPL-2.0+
++
++Scheduler Features
++=====================
++
++.. class:: toc-title
++
++	   Table of contents
++
++.. toctree::
++   :maxdepth: 2
++
++   sched-arch
++   sched-bwc
++   sched-deadline
++   sched-domains
++   sched-energy
++   sched-nice-design
++   sched-rt-group
++   completion
 -- 
 2.17.1
 
