@@ -2,93 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5560D1D2F8F
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 14:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97E71D2F93
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 14:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727898AbgENMWS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 May 2020 08:22:18 -0400
-Received: from mga12.intel.com ([192.55.52.136]:34995 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725955AbgENMWR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 14 May 2020 08:22:17 -0400
-IronPort-SDR: jq2G9j4l+MtmXiBskeawpsxih7yy4UmJ+LGfE9+Lk1E9tY6Q3W5xMH79i5d4wHG7PLmfYN7wg4
- t4Z3FDFHyuyg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 05:22:17 -0700
-IronPort-SDR: g4YTAvFTxqNPtU0jkIbc5r78CO9/Y4ylYkQmK+EhgU7xCpQhcG80N1AgmABpc/Vg8MOpmJRO+L
- MmVc/XiEeHqQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,391,1583222400"; 
-   d="scan'208";a="464312030"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005.fm.intel.com with ESMTP; 14 May 2020 05:22:12 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jZCsQ-006cUm-3m; Thu, 14 May 2020 15:22:14 +0300
-Date:   Thu, 14 May 2020 15:22:14 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        id S1726240AbgENMXk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 May 2020 08:23:40 -0400
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:65358 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725955AbgENMXk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 May 2020 08:23:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1589459063; x=1620995063;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=xQ9YEGxgyEkc0qQ3ym1KOpEOeOMx8cHzc+BQlU2UN48=;
+  b=ez4CE+RwARBKuDycI35qNBV2o5+cxshzxUcoPGo3IW4D3TQqCE+3YBq+
+   /pC39rEFPkdu93+HvcIBWIQSBAx24tJnsptfJJsmnie9jUmP1u47VWVU2
+   Cm9/aUtZ4kmDmOxf+Bp/UBHeWzy21yg+4V9BEx5WJeju0I85FGE+s+/uH
+   t2t4FMPph+887OFiUtDZZnyXwauKGc39Ef/03N2BjQeAa+E3Zc+0ab0O/
+   jxO/tlUpLrh8ffaK+4c1rt/s2Uib4p13r69t3rc6/WStpK/U1CajzBMlr
+   NevP/BRcm6pFtgQulHah80DsIKXKScWXsiFcRumR8M8VEoJwOLxIycwRy
+   w==;
+IronPort-SDR: ufy3p4zwxnT53bJVKJdEGS2dYd4PeAbueNEganeTm62t6UTHsP4deIQfkSecqV9ev2K29m7QSz
+ WVkjyfBoMs/Wv1bUku5aoOOpNr94BslVDGHN45TbqAj2tNieoYpvCz0qFlUtrvwqI6ZuVnGBmz
+ nZROsS9Qzlr449++k9IeujfutgHrqAQYYj+kQxAOpReFAIg+q8yZwbs/I1RHsodY2o0bV1cjSb
+ qrY8LR3teRkdHDMZsBmaBDkg85JB1h8O6MMwjly7BZI+hOxm+BLSR4+47wNVRPhHb4XzfbxfmR
+ wb0=
+X-IronPort-AV: E=Sophos;i="5.73,391,1583164800"; 
+   d="scan'208";a="240383564"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 14 May 2020 20:24:23 +0800
+IronPort-SDR: 0pQv2eOPjxRwKULtoQCnE9QynB7/+1ZmHkcz5Cl2C0eReCoGXcvpL5ovznjzgF4y5lMPfjy5TL
+ 6c2QLd4h5+wdRrUvM+DnH7QXkw0Vf6eR8=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 05:13:51 -0700
+IronPort-SDR: 7mCy3jjxMOOVbOpNCPl/9O/bfB60XnaBkGJBxvRhmMrIUi7HGVrRxxD7xt5GtNl5F0bMgpHdXG
+ 5kjvFkeJxjGA==
+WDCIronportException: Internal
+Received: from unknown (HELO redsun52) ([10.149.66.28])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 05:23:38 -0700
+Date:   Thu, 14 May 2020 13:23:33 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@wdc.com>
+To:     Huacai Chen <chenhc@lemote.com>
+cc:     "Maciej W. Rozycki" <macro@linux-mips.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Thor Thayer <thor.thayer@linux.intel.com>,
-        "wuxu.wu" <wuxu.wu@huawei.com>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 11/17] spi: dw: Fix native CS being unset
-Message-ID: <20200514122214.GC185537@smile.fi.intel.com>
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
- <20200508132943.9826-12-Sergey.Semin@baikalelectronics.ru>
- <CACRpkdY=wkgnYPcqSzyzNpS6ckJZs-9kXfTfdwa1E+POzOBQGA@mail.gmail.com>
- <20200513001347.dyt357erev7vzy3l@mobilestation>
- <CACRpkdZTH1DNHvi4r48nLNWp4rqyYDZTzT12hw0eTNcYmgSr3Q@mail.gmail.com>
- <20200514115558.e6cqnuxqyqkysfn7@mobilestation>
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH] MIPS: inst.h: Stop including asm.h to avoid various
+ build failures
+In-Reply-To: <CAAhV-H63n_wa8Z72WRNPjeG0aVYEujvcDJPmd2nPcER1NrUiGw@mail.gmail.com>
+Message-ID: <alpine.LFD.2.21.2005141316390.6492@redsun52.ssa.fujisawa.hgst.com>
+References: <1588930212-5255-1-git-send-email-chenhc@lemote.com> <20200508130149.GA14297@alpha.franken.de> <CAAhV-H5BRhxvaQ_-RHYkEe8BY-OSQto1FhQtBx3T+bZTOVs+-Q@mail.gmail.com> <20200509152501.GA9125@alpha.franken.de> <alpine.LFD.2.21.2005130036060.677301@eddie.linux-mips.org>
+ <CAAhV-H63n_wa8Z72WRNPjeG0aVYEujvcDJPmd2nPcER1NrUiGw@mail.gmail.com>
+User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200514115558.e6cqnuxqyqkysfn7@mobilestation>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 14, 2020 at 02:55:58PM +0300, Serge Semin wrote:
-> On Thu, May 14, 2020 at 10:31:13AM +0200, Linus Walleij wrote:
-> > On Wed, May 13, 2020 at 2:13 AM Serge Semin
-> > <Sergey.Semin@baikalelectronics.ru> wrote:
+On Thu, 14 May 2020, Huacai Chen wrote:
 
-> BTW I experience a problem with vger.kernel.org. For some reason a few days ago
-> it started bouncing my emails back sent to the GPIO/MIPS/SPI/kernel mailing lists.
-> I've sent multiple backward messages to the postmaster (postmaster (dog) vger.kernel.org)
-> with the bounce text, but still with no response. Could you tell me who should I
-> bother with this problem to get a help with its solution? 
+> >  Sigh, this just shows how the original change was wrong in the first
+> > place.  Why was <asm/inst.h> specifically chosen, whose purpose has been
+> > machine code generators/interpreters that has nothing to do with unaligned
+> > access helpers, over a more suitable location, such as (maybe obviously?)
+> > <asm/unaligned.h>?
+> >
+> >  I suggest that we roll back to before the destruction, move the necessary
+> > bits away from <asm/inst.h>, and then perhaps none of the follow-up hacks
+> > will be required.
+> I think you are right, but it is too late... so, I think we needn't roll back.
 
-Perhaps, helpdesk@kernel.org ?
+ Well, your change hasn't even hit the mainline yet, and anyway it's never 
+too late to get things right (it's not like software gets cast in stone) 
+and as I say these bits do not functionally belong to <asm/inst.h>.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+  Maciej
