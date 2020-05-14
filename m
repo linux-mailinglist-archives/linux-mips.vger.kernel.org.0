@@ -2,102 +2,220 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F3D1D215B
-	for <lists+linux-mips@lfdr.de>; Wed, 13 May 2020 23:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D1F1D2455
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 02:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729796AbgEMVqp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 May 2020 17:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729752AbgEMVqo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 13 May 2020 17:46:44 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128AEC061A0E;
-        Wed, 13 May 2020 14:46:44 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id z72so20605923wmc.2;
-        Wed, 13 May 2020 14:46:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SsGLhvtzNNE3Um+kD27FrquNqhBmiHi5qwlCc1MeclU=;
-        b=XiuECaHuWlZtqmf2V9RziiPXPESy1M5JPlu5ULkY1Lq+ut+oFJhcdMTgwL8RtzNBUV
-         slYA65/n18tW4XScYRxcfofPeB0hkM1niA79FfTflHA8206jGnBB1em5BozDhCCKIs5s
-         Of+LQcm2e4gZIPPxSt6hpTQ+oD0f7H7qjnnguQvB+7bPo4Q+A8tiYIewQkjcGa0TY4M6
-         2Vwfm8RIAaGCX8i19Ue/tSbRgXnuE5ME8dI8KYqGdr0JO95Bg3t63kP+vDCfdTvdEM34
-         GZ8DDZzy9jiM9k8AUC6DMts6GkZaNtSXkx+Jg041oD4WxMaElsC9zd2m1/qTAbUZulrg
-         N39w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SsGLhvtzNNE3Um+kD27FrquNqhBmiHi5qwlCc1MeclU=;
-        b=M7dvT4grnK0RYqsrGLH+jeXMJq+ItYuiu+WGmMYMLYT66E2o937WDiC4X6m4Ng/Zvt
-         PgvPL6JMciGW/0X3vm1ogcBCy9KDyDJGcyoc6gozORc3t1EIVP1IQuthMj8eYrUSWUPR
-         ilcppBjZlfGDT/7B9Omo7JDDXQ5l1JIHe0F68qMlKyl4D6TgIjNzHA27A4mMlY6PE58T
-         sDVpnudtYh5bjmi57OalFTs/Oo4Gd3HFWDJa4Gwmsgch00kEHX9eNihTIxmiBfR7vmW8
-         GlHFZfpVPX68AXU84KQx5KXAWBWd3W77EO1xBKRRAxRSk149wElD/Cm4cj/k9OMkSMzs
-         Q9XQ==
-X-Gm-Message-State: AGi0PuaF7fgsUmmbgscKTSe8yBO3zMDXSgh82u4hKekTdLDwv7Fhe8/7
-        esK4lJ7CY2KMtF1o3hInWsw=
-X-Google-Smtp-Source: APiQypIjDv9j1WGGbsrXKzuvn+8PI0doRo0I/EblRla78tb2gcpayV63BaEBdC9Tkx4qISmrxAydUQ==
-X-Received: by 2002:a1c:25c4:: with SMTP id l187mr42071872wml.89.1589406402802;
-        Wed, 13 May 2020 14:46:42 -0700 (PDT)
-Received: from localhost.localdomain (cpc91192-cmbg18-2-0-cust374.5-4.cable.virginm.net. [80.6.113.119])
-        by smtp.gmail.com with ESMTPSA id m23sm1699734wmg.45.2020.05.13.14.46.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2020 14:46:42 -0700 (PDT)
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     emil.l.velikov@gmail.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH 05/11] MIPS: constify sysrq_key_op
-Date:   Wed, 13 May 2020 22:43:45 +0100
-Message-Id: <20200513214351.2138580-5-emil.l.velikov@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200513214351.2138580-1-emil.l.velikov@gmail.com>
-References: <20200513214351.2138580-1-emil.l.velikov@gmail.com>
+        id S1725942AbgENAzc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 May 2020 20:55:32 -0400
+Received: from smtp.gentoo.org ([140.211.166.183]:36392 "EHLO smtp.gentoo.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725943AbgENAzb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 13 May 2020 20:55:31 -0400
+From:   Joshua Kinard <kumba@gentoo.org>
+Openpgp: preference=signencrypt
+To:     linux-mips@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: [PATCH v2] MIPS: Split R10000 to allow for R12K+ optimizations
+Message-ID: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org>
+Date:   Wed, 13 May 2020 20:55:27 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-With earlier commits, the API no longer discards the const-ness of the
-sysrq_key_op. As such we can add the notation.
+From: Joshua Kinard <kumba@gentoo.org>
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jslaby@suse.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
+The attached patch adds more-specific support for R12000 and higher
+CPUs by splitting the R10000 logic at several places.  This avoids
+the workarounds enabled by R10000_LLSC_WAR and passes -mno-fix-r10000
+to gcc during the kernel compile.
+
+Signed-off-by: Joshua Kinard <kumba@gentoo.org>
 ---
-Please keep me in the CC list, as I'm not subscribed to the list.
+Changes in v2:
+- Refactor against mips-next after the platform file fix was added.
+- Omitted changes to the IP27/IP30/IP32 Platform files to pass
+  -mno-fix-r10000, since that is done via arch/mips/Makefile.
 
-IMHO it would be better it this gets merged this via the tty tree.
 ---
- arch/mips/kernel/sysrq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/Kconfig                     |   21 +++++++++++++++++++--
+ arch/mips/Makefile                    |    3 +++
+ arch/mips/include/asm/cpu-type.h      |    2 ++
+ arch/mips/include/asm/hazards.h       |    3 ++-
+ arch/mips/include/asm/mach-ip27/war.h |    7 ++++++-
+ arch/mips/include/asm/module.h        |    2 ++
+ arch/mips/oprofile/Makefile           |    1 +
+ drivers/video/fbdev/gbefb.c           |    2 +-
+ 8 files changed, 36 insertions(+), 5 deletions(-)
 
-diff --git a/arch/mips/kernel/sysrq.c b/arch/mips/kernel/sysrq.c
-index e5a2a6ab71ac..9c1a2019113b 100644
---- a/arch/mips/kernel/sysrq.c
-+++ b/arch/mips/kernel/sysrq.c
-@@ -52,7 +52,7 @@ static void sysrq_handle_tlbdump(int key)
- #endif
- }
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index bfa9cd962b06..719434bf4f3a 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -673,6 +673,7 @@ config SGI_IP27
+ 	select PCI_DRIVERS_GENERIC
+ 	select PCI_XTALK_BRIDGE
+ 	select SYS_HAS_CPU_R10000
++	select SYS_HAS_CPU_R12K_R14K_R16K
+ 	select SYS_SUPPORTS_64BIT_KERNEL
+ 	select SYS_SUPPORTS_BIG_ENDIAN
+ 	select SYS_SUPPORTS_NUMA
+@@ -734,6 +735,7 @@ config SGI_IP30
+ 	select PCI_XTALK_BRIDGE
+ 	select SYS_HAS_EARLY_PRINTK
+ 	select SYS_HAS_CPU_R10000
++	select SYS_HAS_CPU_R12K_R14K_R16K
+ 	select SYS_SUPPORTS_64BIT_KERNEL
+ 	select SYS_SUPPORTS_BIG_ENDIAN
+ 	select SYS_SUPPORTS_SMP
+@@ -760,6 +762,7 @@ config SGI_IP32
+ 	select RM7000_CPU_SCACHE
+ 	select SYS_HAS_CPU_R5000
+ 	select SYS_HAS_CPU_R10000 if BROKEN
++	select SYS_HAS_CPU_R12K_R14K_R16K if BROKEN
+ 	select SYS_HAS_CPU_RM7000
+ 	select SYS_HAS_CPU_NEVADA
+ 	select SYS_SUPPORTS_64BIT_KERNEL
+@@ -1676,7 +1679,18 @@ config CPU_R10000
+ 	select CPU_SUPPORTS_HIGHMEM
+ 	select CPU_SUPPORTS_HUGEPAGES
+ 	help
+-	  MIPS Technologies R10000-series processors.
++	  MIPS Technologies R10000 processor.
++
++config CPU_R12K_R14K_R16K
++	bool "R12k/R14k/R16k"
++	depends on SYS_HAS_CPU_R12K_R14K_R16K
++	select CPU_HAS_PREFETCH
++	select CPU_SUPPORTS_32BIT_KERNEL
++	select CPU_SUPPORTS_64BIT_KERNEL
++	select CPU_SUPPORTS_HIGHMEM
++	select CPU_SUPPORTS_HUGEPAGES
++	help
++	  MIPS Technologies R12000, R14000, & R16000 processors.
  
--static struct sysrq_key_op sysrq_tlbdump_op = {
-+static const struct sysrq_key_op sysrq_tlbdump_op = {
- 	.handler        = sysrq_handle_tlbdump,
- 	.help_msg       = "show-tlbs(x)",
- 	.action_msg     = "Show TLB entries",
--- 
-2.25.1
+ config CPU_RM7000
+ 	bool "RM7000"
+@@ -1968,6 +1982,9 @@ config SYS_HAS_CPU_R10000
+ 	bool
+ 	select ARCH_HAS_SYNC_DMA_FOR_CPU if DMA_NONCOHERENT
+ 
++config SYS_HAS_CPU_R12K_R14K_R16K
++	bool
++
+ config SYS_HAS_CPU_RM7000
+ 	bool
+ 
+@@ -2706,7 +2723,7 @@ config NODES_SHIFT
+ 
+ config HW_PERF_EVENTS
+ 	bool "Enable hardware performance counter support for perf events"
+-	depends on PERF_EVENTS && !OPROFILE && (CPU_MIPS32 || CPU_MIPS64 || CPU_R10000 || CPU_SB1 || CPU_CAVIUM_OCTEON || CPU_XLP || CPU_LOONGSON64)
++	depends on PERF_EVENTS && !OPROFILE && (CPU_MIPS32 || CPU_MIPS64 || CPU_R10000 || CPU_R12K_R14K_R16K || CPU_SB1 || CPU_CAVIUM_OCTEON || CPU_XLP || CPU_LOONGSON64)
+ 	default y
+ 	help
+ 	  Enable hardware performance counter support for perf events. If
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index b50377ec3ab5..33572d347f47 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -163,6 +163,9 @@ cflags-$(CONFIG_CPU_SB1)	+= $(call cc-option,-mno-mdmx)
+ cflags-$(CONFIG_CPU_SB1)	+= $(call cc-option,-mno-mips3d)
+ cflags-$(CONFIG_CPU_R10000)	+= $(call cc-option,-march=r10000,-march=r8000) \
+ 			-Wa,--trap
++cflags-$(CONFIG_CPU_R12K_R14K_R16K)	+= $(call cc-option,-march=r12000,-march=r10000) \
++			$(call cc-option,-mno-fix-r10000,) \
++			-Wa,--trap
+ cflags-$(CONFIG_CPU_CAVIUM_OCTEON) += $(call cc-option,-march=octeon) -Wa,--trap
+ ifeq (,$(findstring march=octeon, $(cflags-$(CONFIG_CPU_CAVIUM_OCTEON))))
+ cflags-$(CONFIG_CPU_CAVIUM_OCTEON) += -Wa,-march=octeon
+diff --git a/arch/mips/include/asm/cpu-type.h b/arch/mips/include/asm/cpu-type.h
+index 49f0061a6051..833694782d05 100644
+--- a/arch/mips/include/asm/cpu-type.h
++++ b/arch/mips/include/asm/cpu-type.h
+@@ -148,6 +148,8 @@ static inline int __pure __get_cpu_type(const int cpu_type)
+ 
+ #ifdef CONFIG_SYS_HAS_CPU_R10000
+ 	case CPU_R10000:
++#endif
++#ifdef CONFIG_SYS_HAS_CPU_R12K_R14K_R16K
+ 	case CPU_R12000:
+ 	case CPU_R14000:
+ 	case CPU_R16000:
+diff --git a/arch/mips/include/asm/hazards.h b/arch/mips/include/asm/hazards.h
+index a0b92205f933..190ad53091ea 100644
+--- a/arch/mips/include/asm/hazards.h
++++ b/arch/mips/include/asm/hazards.h
+@@ -159,7 +159,8 @@ do {									\
+ 
+ #elif defined(CONFIG_MIPS_ALCHEMY) || defined(CONFIG_CPU_CAVIUM_OCTEON) || \
+ 	defined(CONFIG_CPU_LOONGSON2EF) || defined(CONFIG_CPU_LOONGSON64) || \
+-	defined(CONFIG_CPU_R10000) || defined(CONFIG_CPU_R5500) || defined(CONFIG_CPU_XLR)
++	defined(CONFIG_CPU_R10000) || defined(CONFIG_CPU_R12K_R14K_R16K) || \
++	defined(CONFIG_CPU_R5500) || defined(CONFIG_CPU_XLR)
+ 
+ /*
+  * R10000 rocks - all hazards handled in hardware, so this becomes a nobrainer.
+diff --git a/arch/mips/include/asm/mach-ip27/war.h b/arch/mips/include/asm/mach-ip27/war.h
+index ef3efce0094a..845b8951d74f 100644
+--- a/arch/mips/include/asm/mach-ip27/war.h
++++ b/arch/mips/include/asm/mach-ip27/war.h
+@@ -17,7 +17,12 @@
+ #define MIPS_CACHE_SYNC_WAR		0
+ #define TX49XX_ICACHE_INDEX_INV_WAR	0
+ #define ICACHE_REFILLS_WORKAROUND_WAR	0
+-#define R10000_LLSC_WAR			1
+ #define MIPS34K_MISSED_ITLB_WAR		0
+ 
++#ifdef CONFIG_CPU_R10000
++#define R10000_LLSC_WAR			1
++#else
++#define R10000_LLSC_WAR			0
++#endif
++
+ #endif /* __ASM_MIPS_MACH_IP27_WAR_H */
+diff --git a/arch/mips/include/asm/module.h b/arch/mips/include/asm/module.h
+index 9846047b3d3d..9697414af51c 100644
+--- a/arch/mips/include/asm/module.h
++++ b/arch/mips/include/asm/module.h
+@@ -115,6 +115,8 @@ search_module_dbetables(unsigned long addr)
+ #define MODULE_PROC_FAMILY "NEVADA "
+ #elif defined CONFIG_CPU_R10000
+ #define MODULE_PROC_FAMILY "R10000 "
++#elif defined CONFIG_CPU_R12K_R14K_R16K
++#define MODULE_PROC_FAMILY "R12K/R14K/R16K "
+ #elif defined CONFIG_CPU_RM7000
+ #define MODULE_PROC_FAMILY "RM7000 "
+ #elif defined CONFIG_CPU_SB1
+diff --git a/arch/mips/oprofile/Makefile b/arch/mips/oprofile/Makefile
+index e10f216d0422..60dfffdb32a0 100644
+--- a/arch/mips/oprofile/Makefile
++++ b/arch/mips/oprofile/Makefile
+@@ -12,6 +12,7 @@ oprofile-y				:= $(DRIVER_OBJS) common.o backtrace.o
+ oprofile-$(CONFIG_CPU_MIPS32)		+= op_model_mipsxx.o
+ oprofile-$(CONFIG_CPU_MIPS64)		+= op_model_mipsxx.o
+ oprofile-$(CONFIG_CPU_R10000)		+= op_model_mipsxx.o
++oprofile-$(CONFIG_CPU_R12K_R14K_R16K)	+= op_model_mipsxx.o
+ oprofile-$(CONFIG_CPU_SB1)		+= op_model_mipsxx.o
+ oprofile-$(CONFIG_CPU_XLR)		+= op_model_mipsxx.o
+ oprofile-$(CONFIG_CPU_LOONGSON2EF)	+= op_model_loongson2.o
+diff --git a/drivers/video/fbdev/gbefb.c b/drivers/video/fbdev/gbefb.c
+index 31270a8986e8..9d62246b0b42 100644
+--- a/drivers/video/fbdev/gbefb.c
++++ b/drivers/video/fbdev/gbefb.c
+@@ -43,7 +43,7 @@ struct gbefb_par {
+ 
+ /* macro for fastest write-though access to the framebuffer */
+ #ifdef CONFIG_MIPS
+-#ifdef CONFIG_CPU_R10000
++#if defined(CONFIG_CPU_R10000) || defined(CONFIG_CPU_R12K_R14K_R16K)
+ #define pgprot_fb(_prot) (((_prot) & (~_CACHE_MASK)) | _CACHE_UNCACHED_ACCELERATED)
+ #else
+ #define pgprot_fb(_prot) (((_prot) & (~_CACHE_MASK)) | _CACHE_CACHABLE_NO_WA)
 
