@@ -2,26 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D1F1D2455
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 02:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7F71D2468
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 03:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725942AbgENAzc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 May 2020 20:55:32 -0400
-Received: from smtp.gentoo.org ([140.211.166.183]:36392 "EHLO smtp.gentoo.org"
+        id S1725942AbgENBC2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 May 2020 21:02:28 -0400
+Received: from mga12.intel.com ([192.55.52.136]:54506 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725943AbgENAzb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 13 May 2020 20:55:31 -0400
-From:   Joshua Kinard <kumba@gentoo.org>
-Openpgp: preference=signencrypt
-To:     linux-mips@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [PATCH v2] MIPS: Split R10000 to allow for R12K+ optimizations
-Message-ID: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org>
-Date:   Wed, 13 May 2020 20:55:27 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1725925AbgENBC1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 13 May 2020 21:02:27 -0400
+IronPort-SDR: ZVX797FBOzzWSRRkN9FyyIBDzjeWDd4dhnv0KEgJmGMeY8rrK9514vxX6F1xcIcU6mQGjhLm4n
+ maGbxT37JL6Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 18:02:27 -0700
+IronPort-SDR: vejgvzA8ElnatyBbGq5Yk3x7aJmddwFE43yalkoKiZyRJVGbZCjtnvH7KN49EAuDbWO+QSQmWh
+ CP+RQZsvJIrw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,389,1583222400"; 
+   d="scan'208";a="409887144"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga004.jf.intel.com with ESMTP; 13 May 2020 18:02:27 -0700
+Received: from [10.249.66.53] (vramuthx-mobl1.gar.corp.intel.com [10.249.66.53])
+        by linux.intel.com (Postfix) with ESMTP id 0D32E580646;
+        Wed, 13 May 2020 18:02:19 -0700 (PDT)
+Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
+Subject: Re: [PATCH v6 2/2] mtd: rawnand: Add NAND controller support on Intel
+ LGM SoC
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, arnd@arndb.de,
+        brendanhiggins@google.com, tglx@linutronix.de,
+        boris.brezillon@collabora.com, anders.roxell@linaro.org,
+        masonccyang@mxic.com.tw, robh+dt@kernel.org,
+        linux-mips@vger.kernel.org, hauke.mehrtens@intel.com,
+        qi-ming.wu@intel.com, cheol.yong.kim@intel.com
+References: <20200513104615.7905-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200513104615.7905-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200513153405.GS185537@smile.fi.intel.com>
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Message-ID: <9d3fc773-d7ed-f2cd-808e-78748c43b81b@linux.intel.com>
+Date:   Thu, 14 May 2020 09:02:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200513153405.GS185537@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-mips-owner@vger.kernel.org
@@ -29,193 +58,128 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Joshua Kinard <kumba@gentoo.org>
+Hi Andy,
+On 13/5/2020 11:34 pm, Andy Shevchenko wrote:
+> On Wed, May 13, 2020 at 06:46:15PM +0800, Ramuthevar,Vadivel MuruganX wrote:
+>> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+>>
+>> This patch adds the new IP of Nand Flash Controller(NFC) support
+>> on Intel's Lightning Mountain(LGM) SoC.
+>>
+>> DMA is used for burst data transfer operation, also DMA HW supports
+>> aligned 32bit memory address and aligned data access by default.
+>> DMA burst of 8 supported. Data register used to support the read/write
+>> operation from/to device.
+>>
+>> NAND controller driver implements ->exec_op() to replace legacy hooks,
+>> these specific call-back method to execute NAND operations.
+> 
+> ...
+> 
+>> +static int ebu_nand_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct ebu_nand_controller *ebu_host;
+>> +	struct nand_chip *nand;
+>> +	struct mtd_info *mtd;
+>> +	struct resource *res;
+>> +	char *resname;
+>> +	int ret, i;
+>> +	u32 reg;
+>> +
+>> +	ebu_host = devm_kzalloc(dev, sizeof(*ebu_host), GFP_KERNEL);
+>> +	if (!ebu_host)
+>> +		return -ENOMEM;
+>> +
+>> +	ebu_host->dev = dev;
+>> +	nand_controller_init(&ebu_host->controller);
+>> +
+>> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ebunand");
+>> +	ebu_host->ebu = devm_ioremap_resource(&pdev->dev, res);
+> 
+> devm_platform_ioremap_resource_byname
+> 
+>> +	if (IS_ERR(ebu_host->ebu))
+>> +		return PTR_ERR(ebu_host->ebu);
+>> +
+>> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "hsnand");
+>> +	ebu_host->hsnand = devm_ioremap_resource(&pdev->dev, res);
+> 
+> devm_platform_ioremap_resource_byname
+Thanks for the review comments
+As Boris suggested , split into 2 API's.
 
-The attached patch adds more-specific support for R12000 and higher
-CPUs by splitting the R10000 logic at several places.  This avoids
-the workarounds enabled by R10000_LLSC_WAR and passes -mno-fix-r10000
-to gcc during the kernel compile.
+> 
+>> +	if (IS_ERR(ebu_host->hsnand))
+>> +		return PTR_ERR(ebu_host->hsnand);
+>> +
+>> +	ret = device_property_read_u32(dev, "nand,cs", &reg);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to get chip select: %d\n", ret);
+>> +		return ret;
+>> +	}
+>> +	ebu_host->cs_num = reg;
+>> +
+>> +	for (i = 0; i < MAX_CS; i++) {
+>> +		resname = devm_kasprintf(dev, GFP_KERNEL, "nand_cs%d", i);
+>> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+>> +						   resname);
+> 
+> if res is NULL?
+Noted.
+> 
+>> +		ebu_host->cs[i].chipaddr = devm_ioremap_resource(dev, res);
+>> +		ebu_host->cs[i].nand_pa = res->start;
+>> +			if (IS_ERR(ebu_host->cs[i].chipaddr))
+>> +				return PTR_ERR(ebu_host->cs[i].chipaddr);
+> 
+> Something happened with ordering / indentation along these lines...
+Noted.
+> 
+>> +	}
+>> +
+> 
+>> +	for (i = 0; i < MAX_CS; i++) {
+>> +		resname = devm_kasprintf(dev, GFP_KERNEL, "addr_sel%d", i);
+>> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+>> +						   resname);
+> 
+> if res is NULL?
+Noted.
 
-Signed-off-by: Joshua Kinard <kumba@gentoo.org>
----
-Changes in v2:
-- Refactor against mips-next after the platform file fix was added.
-- Omitted changes to the IP27/IP30/IP32 Platform files to pass
-  -mno-fix-r10000, since that is done via arch/mips/Makefile.
-
----
- arch/mips/Kconfig                     |   21 +++++++++++++++++++--
- arch/mips/Makefile                    |    3 +++
- arch/mips/include/asm/cpu-type.h      |    2 ++
- arch/mips/include/asm/hazards.h       |    3 ++-
- arch/mips/include/asm/mach-ip27/war.h |    7 ++++++-
- arch/mips/include/asm/module.h        |    2 ++
- arch/mips/oprofile/Makefile           |    1 +
- drivers/video/fbdev/gbefb.c           |    2 +-
- 8 files changed, 36 insertions(+), 5 deletions(-)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index bfa9cd962b06..719434bf4f3a 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -673,6 +673,7 @@ config SGI_IP27
- 	select PCI_DRIVERS_GENERIC
- 	select PCI_XTALK_BRIDGE
- 	select SYS_HAS_CPU_R10000
-+	select SYS_HAS_CPU_R12K_R14K_R16K
- 	select SYS_SUPPORTS_64BIT_KERNEL
- 	select SYS_SUPPORTS_BIG_ENDIAN
- 	select SYS_SUPPORTS_NUMA
-@@ -734,6 +735,7 @@ config SGI_IP30
- 	select PCI_XTALK_BRIDGE
- 	select SYS_HAS_EARLY_PRINTK
- 	select SYS_HAS_CPU_R10000
-+	select SYS_HAS_CPU_R12K_R14K_R16K
- 	select SYS_SUPPORTS_64BIT_KERNEL
- 	select SYS_SUPPORTS_BIG_ENDIAN
- 	select SYS_SUPPORTS_SMP
-@@ -760,6 +762,7 @@ config SGI_IP32
- 	select RM7000_CPU_SCACHE
- 	select SYS_HAS_CPU_R5000
- 	select SYS_HAS_CPU_R10000 if BROKEN
-+	select SYS_HAS_CPU_R12K_R14K_R16K if BROKEN
- 	select SYS_HAS_CPU_RM7000
- 	select SYS_HAS_CPU_NEVADA
- 	select SYS_SUPPORTS_64BIT_KERNEL
-@@ -1676,7 +1679,18 @@ config CPU_R10000
- 	select CPU_SUPPORTS_HIGHMEM
- 	select CPU_SUPPORTS_HUGEPAGES
- 	help
--	  MIPS Technologies R10000-series processors.
-+	  MIPS Technologies R10000 processor.
-+
-+config CPU_R12K_R14K_R16K
-+	bool "R12k/R14k/R16k"
-+	depends on SYS_HAS_CPU_R12K_R14K_R16K
-+	select CPU_HAS_PREFETCH
-+	select CPU_SUPPORTS_32BIT_KERNEL
-+	select CPU_SUPPORTS_64BIT_KERNEL
-+	select CPU_SUPPORTS_HIGHMEM
-+	select CPU_SUPPORTS_HUGEPAGES
-+	help
-+	  MIPS Technologies R12000, R14000, & R16000 processors.
- 
- config CPU_RM7000
- 	bool "RM7000"
-@@ -1968,6 +1982,9 @@ config SYS_HAS_CPU_R10000
- 	bool
- 	select ARCH_HAS_SYNC_DMA_FOR_CPU if DMA_NONCOHERENT
- 
-+config SYS_HAS_CPU_R12K_R14K_R16K
-+	bool
-+
- config SYS_HAS_CPU_RM7000
- 	bool
- 
-@@ -2706,7 +2723,7 @@ config NODES_SHIFT
- 
- config HW_PERF_EVENTS
- 	bool "Enable hardware performance counter support for perf events"
--	depends on PERF_EVENTS && !OPROFILE && (CPU_MIPS32 || CPU_MIPS64 || CPU_R10000 || CPU_SB1 || CPU_CAVIUM_OCTEON || CPU_XLP || CPU_LOONGSON64)
-+	depends on PERF_EVENTS && !OPROFILE && (CPU_MIPS32 || CPU_MIPS64 || CPU_R10000 || CPU_R12K_R14K_R16K || CPU_SB1 || CPU_CAVIUM_OCTEON || CPU_XLP || CPU_LOONGSON64)
- 	default y
- 	help
- 	  Enable hardware performance counter support for perf events. If
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index b50377ec3ab5..33572d347f47 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -163,6 +163,9 @@ cflags-$(CONFIG_CPU_SB1)	+= $(call cc-option,-mno-mdmx)
- cflags-$(CONFIG_CPU_SB1)	+= $(call cc-option,-mno-mips3d)
- cflags-$(CONFIG_CPU_R10000)	+= $(call cc-option,-march=r10000,-march=r8000) \
- 			-Wa,--trap
-+cflags-$(CONFIG_CPU_R12K_R14K_R16K)	+= $(call cc-option,-march=r12000,-march=r10000) \
-+			$(call cc-option,-mno-fix-r10000,) \
-+			-Wa,--trap
- cflags-$(CONFIG_CPU_CAVIUM_OCTEON) += $(call cc-option,-march=octeon) -Wa,--trap
- ifeq (,$(findstring march=octeon, $(cflags-$(CONFIG_CPU_CAVIUM_OCTEON))))
- cflags-$(CONFIG_CPU_CAVIUM_OCTEON) += -Wa,-march=octeon
-diff --git a/arch/mips/include/asm/cpu-type.h b/arch/mips/include/asm/cpu-type.h
-index 49f0061a6051..833694782d05 100644
---- a/arch/mips/include/asm/cpu-type.h
-+++ b/arch/mips/include/asm/cpu-type.h
-@@ -148,6 +148,8 @@ static inline int __pure __get_cpu_type(const int cpu_type)
- 
- #ifdef CONFIG_SYS_HAS_CPU_R10000
- 	case CPU_R10000:
-+#endif
-+#ifdef CONFIG_SYS_HAS_CPU_R12K_R14K_R16K
- 	case CPU_R12000:
- 	case CPU_R14000:
- 	case CPU_R16000:
-diff --git a/arch/mips/include/asm/hazards.h b/arch/mips/include/asm/hazards.h
-index a0b92205f933..190ad53091ea 100644
---- a/arch/mips/include/asm/hazards.h
-+++ b/arch/mips/include/asm/hazards.h
-@@ -159,7 +159,8 @@ do {									\
- 
- #elif defined(CONFIG_MIPS_ALCHEMY) || defined(CONFIG_CPU_CAVIUM_OCTEON) || \
- 	defined(CONFIG_CPU_LOONGSON2EF) || defined(CONFIG_CPU_LOONGSON64) || \
--	defined(CONFIG_CPU_R10000) || defined(CONFIG_CPU_R5500) || defined(CONFIG_CPU_XLR)
-+	defined(CONFIG_CPU_R10000) || defined(CONFIG_CPU_R12K_R14K_R16K) || \
-+	defined(CONFIG_CPU_R5500) || defined(CONFIG_CPU_XLR)
- 
- /*
-  * R10000 rocks - all hazards handled in hardware, so this becomes a nobrainer.
-diff --git a/arch/mips/include/asm/mach-ip27/war.h b/arch/mips/include/asm/mach-ip27/war.h
-index ef3efce0094a..845b8951d74f 100644
---- a/arch/mips/include/asm/mach-ip27/war.h
-+++ b/arch/mips/include/asm/mach-ip27/war.h
-@@ -17,7 +17,12 @@
- #define MIPS_CACHE_SYNC_WAR		0
- #define TX49XX_ICACHE_INDEX_INV_WAR	0
- #define ICACHE_REFILLS_WORKAROUND_WAR	0
--#define R10000_LLSC_WAR			1
- #define MIPS34K_MISSED_ITLB_WAR		0
- 
-+#ifdef CONFIG_CPU_R10000
-+#define R10000_LLSC_WAR			1
-+#else
-+#define R10000_LLSC_WAR			0
-+#endif
-+
- #endif /* __ASM_MIPS_MACH_IP27_WAR_H */
-diff --git a/arch/mips/include/asm/module.h b/arch/mips/include/asm/module.h
-index 9846047b3d3d..9697414af51c 100644
---- a/arch/mips/include/asm/module.h
-+++ b/arch/mips/include/asm/module.h
-@@ -115,6 +115,8 @@ search_module_dbetables(unsigned long addr)
- #define MODULE_PROC_FAMILY "NEVADA "
- #elif defined CONFIG_CPU_R10000
- #define MODULE_PROC_FAMILY "R10000 "
-+#elif defined CONFIG_CPU_R12K_R14K_R16K
-+#define MODULE_PROC_FAMILY "R12K/R14K/R16K "
- #elif defined CONFIG_CPU_RM7000
- #define MODULE_PROC_FAMILY "RM7000 "
- #elif defined CONFIG_CPU_SB1
-diff --git a/arch/mips/oprofile/Makefile b/arch/mips/oprofile/Makefile
-index e10f216d0422..60dfffdb32a0 100644
---- a/arch/mips/oprofile/Makefile
-+++ b/arch/mips/oprofile/Makefile
-@@ -12,6 +12,7 @@ oprofile-y				:= $(DRIVER_OBJS) common.o backtrace.o
- oprofile-$(CONFIG_CPU_MIPS32)		+= op_model_mipsxx.o
- oprofile-$(CONFIG_CPU_MIPS64)		+= op_model_mipsxx.o
- oprofile-$(CONFIG_CPU_R10000)		+= op_model_mipsxx.o
-+oprofile-$(CONFIG_CPU_R12K_R14K_R16K)	+= op_model_mipsxx.o
- oprofile-$(CONFIG_CPU_SB1)		+= op_model_mipsxx.o
- oprofile-$(CONFIG_CPU_XLR)		+= op_model_mipsxx.o
- oprofile-$(CONFIG_CPU_LOONGSON2EF)	+= op_model_loongson2.o
-diff --git a/drivers/video/fbdev/gbefb.c b/drivers/video/fbdev/gbefb.c
-index 31270a8986e8..9d62246b0b42 100644
---- a/drivers/video/fbdev/gbefb.c
-+++ b/drivers/video/fbdev/gbefb.c
-@@ -43,7 +43,7 @@ struct gbefb_par {
- 
- /* macro for fastest write-though access to the framebuffer */
- #ifdef CONFIG_MIPS
--#ifdef CONFIG_CPU_R10000
-+#if defined(CONFIG_CPU_R10000) || defined(CONFIG_CPU_R12K_R14K_R16K)
- #define pgprot_fb(_prot) (((_prot) & (~_CACHE_MASK)) | _CACHE_UNCACHED_ACCELERATED)
- #else
- #define pgprot_fb(_prot) (((_prot) & (~_CACHE_MASK)) | _CACHE_CACHABLE_NO_WA)
-
+Regards
+Vadivel
+> 
+>> +		ebu_host->cs[i].addr_sel = res->start;
+>> +		writel(ebu_host->cs[i].addr_sel | EBU_ADDR_MASK(5) |
+>> +		       EBU_ADDR_SEL_REGEN, ebu_host->ebu + EBU_ADDR_SEL(i));
+>> +	}
+> 
+>> +	return ret;
+>> +}
+> 
+> ...
+> 
+>> +static int ebu_nand_remove(struct platform_device *pdev)
+>> +{
+>> +	struct ebu_nand_controller *ebu_host = platform_get_drvdata(pdev);
+>> +
+> 
+>> +	if (ebu_host) {
+> 
+> How it can be NULL here?
+> 
+>> +		mtd_device_unregister(nand_to_mtd(&ebu_host->chip));
+>> +		nand_cleanup(&ebu_host->chip);
+>> +		ebu_nand_disable(&ebu_host->chip);
+>> +
+>> +		if (ebu_host->dma_rx || ebu_host->dma_tx)
+>> +			ebu_dma_cleanup(ebu_host);
+>> +
+>> +		clk_disable_unprepare(ebu_host->clk);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+> 
+> 
