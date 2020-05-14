@@ -2,98 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9731D246F
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 03:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D571D24F8
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 03:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727768AbgENBEX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 May 2020 21:04:23 -0400
-Received: from mga18.intel.com ([134.134.136.126]:31154 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725943AbgENBEX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 13 May 2020 21:04:23 -0400
-IronPort-SDR: xEAf9AC1SXzK7+QNw5Vjw2VJBT/2JRidro/8MNPkTi0qoNhymqzkRZEQajijTJcNJOgfnYwofD
- dq6qhGX6lJFQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 18:04:23 -0700
-IronPort-SDR: 7bbX+hPA/cSQi2+URin7m/oJ0Xx1k4B/wxePUY4vh+nXrzcqZQGlZIAlMmzI28irXsfEwaAHJw
- 7Y15zIhRrQJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,389,1583222400"; 
-   d="scan'208";a="298544452"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga008.jf.intel.com with ESMTP; 13 May 2020 18:04:22 -0700
-Received: from [10.249.66.53] (vramuthx-mobl1.gar.corp.intel.com [10.249.66.53])
-        by linux.intel.com (Postfix) with ESMTP id D48F5580646;
-        Wed, 13 May 2020 18:04:17 -0700 (PDT)
-Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
-Subject: Re: [PATCH v6 2/2] mtd: rawnand: Add NAND controller support on Intel
- LGM SoC
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, arnd@arndb.de,
-        brendanhiggins@google.com, tglx@linutronix.de,
-        boris.brezillon@collabora.com, anders.roxell@linaro.org,
-        masonccyang@mxic.com.tw, robh+dt@kernel.org,
-        linux-mips@vger.kernel.org, hauke.mehrtens@intel.com,
-        qi-ming.wu@intel.com, cheol.yong.kim@intel.com
-References: <20200513104615.7905-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200513104615.7905-3-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200513153405.GS185537@smile.fi.intel.com>
- <20200513153532.GT185537@smile.fi.intel.com>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <364cb1f3-1a66-20d3-f256-739ee9c915f0@linux.intel.com>
-Date:   Thu, 14 May 2020 09:04:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1725952AbgENBwp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 May 2020 21:52:45 -0400
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:12862 "EHLO
+        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725943AbgENBwo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 May 2020 21:52:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1589421165; x=1620957165;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=S19z5KsKCze3zWkgumRofgPmQU8kjGuHQGtAsDzsTcM=;
+  b=nqFWODEuRFr3Rc4QmNDh0aUujTyPLWXowOyO+WbXu0MYu4VMF/8HaEjj
+   en0nFkl0P5vQo1Xokw8NNxhbZO6WzkeMJWHK3+kfXlH9k1o4Kc7n2bK9M
+   t2t8dPbkqdZwlreNlF2tfYoS8w82E6CFi5ijMJ2Qj1qo3wInjpUKTOATL
+   jiRAi2ppYjKlIrroLGUoATohJqr/HDNnzZAbqYGy0QvM9ldHRrIWH+wog
+   0bCfgwekIGYvm6BGd0k+LOyR9zSIoSyVhOTqzQQJSqSQmBXzBdkR1WWNl
+   7OnXd90G6WM7jnT2AEgG+lsUiYQl3jV+Wd5G3yryj7EaqqiWhR+epMOwP
+   A==;
+IronPort-SDR: +og8+IL7fdOXLrxNXhSgvxup3QvH8BlrCCyosqfqQicFeKdIugvPjKGYd8NB+sGBSTqu30+eIX
+ sIPeIwVf0wfJXLJGWxnghuQmqxu5g9L2XMg9tIkRhfTHbTtJPhOZUEWGZ50eLzQnwF6+tx30sY
+ Xxq0oMUZPXmKSvO5YZ6uwk9iimimjuEZU+gq/foc4eMfANeUzwHh2/rHczv5uHV0eQ9/V/7Kdr
+ eD0eYOZzLBJ76wfQcke2M+QzIbyerI70WzFxf+XntWndAP3ijctput1EAboX69npewksC8lem2
+ P+U=
+X-IronPort-AV: E=Sophos;i="5.73,389,1583164800"; 
+   d="scan'208";a="141981873"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 14 May 2020 09:52:45 +0800
+IronPort-SDR: eF1PUH5XnMl7lzF9nyVqVBNRk8aRnRNAiMmiVolH+xLaScQWxXtD0lg+XlAL3NAvxrw7H/uxyX
+ KX6/WtFcSi3dbNLPsu59CLlfadq1GjP28=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 18:42:57 -0700
+IronPort-SDR: u3w7pgiuf9s2AtyRiVomo74JnhAtQGhpwQyhaIfDiJSZNodcotGuTrvseuOtDuH8BSclPEHE93
+ gwv9D7pB7Xww==
+WDCIronportException: Internal
+Received: from unknown (HELO redsun52) ([10.149.66.28])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 18:52:43 -0700
+Date:   Thu, 14 May 2020 02:52:40 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@wdc.com>
+To:     Joshua Kinard <kumba@gentoo.org>
+cc:     linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>
+Subject: Re: [PATCH v2] MIPS: Split R10000 to allow for R12K+ optimizations
+In-Reply-To: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org>
+Message-ID: <alpine.LFD.2.21.2005140251480.6492@redsun52.ssa.fujisawa.hgst.com>
+References: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org>
+User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20200513153532.GT185537@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Andy,
+On Wed, 13 May 2020, Joshua Kinard wrote:
 
-On 13/5/2020 11:35 pm, Andy Shevchenko wrote:
-> On Wed, May 13, 2020 at 06:34:05PM +0300, Andy Shevchenko wrote:
->> On Wed, May 13, 2020 at 06:46:15PM +0800, Ramuthevar,Vadivel MuruganX wrote:
-> 
-> ...
-> 
->>> +static int ebu_nand_remove(struct platform_device *pdev)
->>> +{
->>> +	struct ebu_nand_controller *ebu_host = platform_get_drvdata(pdev);
->>> +
->>
->>> +	if (ebu_host) {
->>
->> How it can be NULL here?
->>
->>> +		mtd_device_unregister(nand_to_mtd(&ebu_host->chip));
->>> +		nand_cleanup(&ebu_host->chip);
->>> +		ebu_nand_disable(&ebu_host->chip);
->>> +
-> 
->>> +		if (ebu_host->dma_rx || ebu_host->dma_tx)
-> 
-> This is duplicate and thus redundant.
-Let me check and update, Thanks!
+> diff --git a/arch/mips/include/asm/mach-ip27/war.h b/arch/mips/include/asm/mach-ip27/war.h
+> index ef3efce0094a..845b8951d74f 100644
+> --- a/arch/mips/include/asm/mach-ip27/war.h
+> +++ b/arch/mips/include/asm/mach-ip27/war.h
+> @@ -17,7 +17,12 @@
+>  #define MIPS_CACHE_SYNC_WAR		0
+>  #define TX49XX_ICACHE_INDEX_INV_WAR	0
+>  #define ICACHE_REFILLS_WORKAROUND_WAR	0
+> -#define R10000_LLSC_WAR			1
+>  #define MIPS34K_MISSED_ITLB_WAR		0
+>  
+> +#ifdef CONFIG_CPU_R10000
+> +#define R10000_LLSC_WAR			1
+> +#else
+> +#define R10000_LLSC_WAR			0
+> +#endif
+> +
 
-Regards
-Vadivel
-> 
->>> +			ebu_dma_cleanup(ebu_host);
->>> +
->>> +		clk_disable_unprepare(ebu_host->clk);
->>> +	}
->>> +
->>> +	return 0;
->>> +}
-> 
+ I think it would be good not to reorder the macros (even though there's
+preexisting breakage in <asm/mach-ip30/war.h>) so that all the files have
+them in the same order.
+
+  Maciej
