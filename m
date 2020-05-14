@@ -2,66 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C221A1D2521
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 04:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34DE1D2542
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 05:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725895AbgENC2T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 May 2020 22:28:19 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:47482 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725874AbgENC2T (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 13 May 2020 22:28:19 -0400
-Received: from [10.20.42.25] (unknown [10.20.42.25])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx793ArLxeIHc0AA--.12S3;
-        Thu, 14 May 2020 10:28:16 +0800 (CST)
-To:     linux-mips <linux-mips@vger.kernel.org>
-From:   maobibo <maobibo@loongson.cn>
-Subject: rtc is missing with mips-next tree
-Message-ID: <14cd0164-bc85-4ca2-65b0-b41688e034dc@loongson.cn>
-Date:   Thu, 14 May 2020 10:28:16 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1725931AbgENDBQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 May 2020 23:01:16 -0400
+Received: from sender2-op-o12.zoho.com.cn ([163.53.93.243]:17454 "EHLO
+        sender2-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725895AbgENDBP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 13 May 2020 23:01:15 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1589425264; cv=none; 
+        d=zoho.com.cn; s=zohoarc; 
+        b=VIsGblN2KUEoB2y4COsFCiKYppMB2jEf/FQYmnmcQsIJyfJXUqy3NtX0wrJrLRdgksjYi3vp5QW7RRfo/cPP4BE0xClukbFYgVL9wsNwPzT79aqxBQBi0+l/AYiNYpOwYZi4kGVa1SJSElKJcj7pHPteLnOZemRpPduVBJFBoAQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
+        t=1589425264; h=Content-Type:Content-Transfer-Encoding:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
+        bh=oi/fNbxcQfqV38u67GSmKWqpHjAnmzcR6V1yyCp18UQ=; 
+        b=VvBZUvM2xEpdI5k+vxX1sk3Rn0DRchlqsVvX6yF4JxT2x1b04pewsoeV6VAhcAO0YUPcYbGrl91F2CuHVGKd3c5L4bZmZpjSWROLG6pPgMpC56qRofmTVBIZUEl1fOEgzZS34eSOzeajXgqRe3IAp+0enKa3BNV3avezWt/Fnd0=
+ARC-Authentication-Results: i=1; mx.zoho.com.cn;
+        dkim=pass  header.i=flygoat.com;
+        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
+        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1589425264;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=Date:From:To:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=oi/fNbxcQfqV38u67GSmKWqpHjAnmzcR6V1yyCp18UQ=;
+        b=J5FbEmVjCcRr4RHuSMs9EsSJYs6IpEGy+82GPNdcfzxs/mZhr4lqvrVrreOMWARc
+        jBF1yLUHqc1L+zLtsJouaKk27lPhBSLcoLEISoyYqJVLiLXOR6pTTI9CXf9/GNYN3Se
+        tQeBFRW7rkTzfs4aa6jdY3Uq15x83TNEFt8V5Lxc=
+Received: from [127.0.0.1] (114.85.159.159 [114.85.159.159]) by mx.zoho.com.cn
+        with SMTPS id 1589425260456590.3860532318491; Thu, 14 May 2020 11:01:00 +0800 (CST)
+Date:   Thu, 14 May 2020 11:00:57 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     maobibo <maobibo@loongson.cn>,
+        linux-mips <linux-mips@vger.kernel.org>
+Subject: Re: rtc is missing with mips-next tree
+User-Agent: K-9 Mail for Android
+Reply-to: jiaxun.yang@flygoat.com
+In-Reply-To: <14cd0164-bc85-4ca2-65b0-b41688e034dc@loongson.cn>
+References: <14cd0164-bc85-4ca2-65b0-b41688e034dc@loongson.cn>
+Message-ID: <9C1B22C8-F383-4E75-A237-FFA0E99CBCD6@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dx793ArLxeIHc0AA--.12S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYs7k0a2IF6FyUM7kC6x804xWl14x267AK
-        xVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGw
-        A2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j
-        6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr
-        1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY
-        62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7V
-        C2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0
-        c2IEe2xFo4CEbIxvr21lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUJVWUXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3
-        Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7IU8pnQUUUUUU==
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ZohoCNMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
-Hi,
 
-On my rs780 machine with latest mips-next tree, rtc is missing with loongson3_defconfig
+=E4=BA=8E 2020=E5=B9=B45=E6=9C=8814=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=881=
+0:28:16, maobibo <maobibo@loongson=2Ecn> =E5=86=99=E5=88=B0:
+>
+>Hi,
+>
+>On my rs780 machine with latest mips-next tree, rtc is missing with loong=
+son3_defconfig
+>
+>Here is message:
+>
+>[root@mips-mainline test]# hwclock --debug
+>hwclock from util-linux 2=2E23=2E2
+>hwclock: cannot open /dev/rtc: No such file or directory
+>No usable clock interface found=2E
+>hwclock: Cannot access the Hardware Clock via any known method=2E
+>
+>[root@mips-mainline test]# date
+>Thu Jan  1 08:16:56 CST 1970
 
-Here is message:
 
-[root@mips-mainline test]# hwclock --debug
-hwclock from util-linux 2.23.2
-hwclock: cannot open /dev/rtc: No such file or directory
-No usable clock interface found.
-hwclock: Cannot access the Hardware Clock via any known method.
+I'll have a check later this month=2E
+Sorry but my RS780E machine is not available now=2E
 
-[root@mips-mainline test]# date
-Thu Jan  1 08:16:56 CST 1970
+Thanks=2E
 
+>
+>
+>regards
+>bibo,mao
+>
 
-regards
-bibo,mao
-
+--=20
+Jiaxun Yang
