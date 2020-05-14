@@ -2,83 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E92A71D256F
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 05:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2129B1D26C3
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 07:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725943AbgENDea (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 May 2020 23:34:30 -0400
-Received: from smtp.gentoo.org ([140.211.166.183]:36238 "EHLO smtp.gentoo.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725925AbgENDe3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 13 May 2020 23:34:29 -0400
-Subject: Re: [PATCH v2] MIPS: Split R10000 to allow for R12K+ optimizations
-To:     "Maciej W. Rozycki" <macro@wdc.com>
-Cc:     linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-References: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org>
- <alpine.LFD.2.21.2005140251480.6492@redsun52.ssa.fujisawa.hgst.com>
-From:   Joshua Kinard <kumba@gentoo.org>
-Openpgp: preference=signencrypt
-Message-ID: <78b68917-ec7e-7434-2a80-5fabbd5247a8@gentoo.org>
-Date:   Wed, 13 May 2020 23:34:24 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1725794AbgENFor (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 May 2020 01:44:47 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:46972 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725788AbgENFor (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 May 2020 01:44:47 -0400
+Received: by mail-io1-f68.google.com with SMTP id j8so581645iog.13
+        for <linux-mips@vger.kernel.org>; Wed, 13 May 2020 22:44:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7oDc3kobxbLN8zQjue8D4ls6OVvEC00+vj04oio67vo=;
+        b=qyxEGwwl5itlw9LTfker6uysZv472O64uxajOCMORYDg9L+WKEg89KT4IhLyAY4i5W
+         IPoUL9btH6bxZzPOxAYIgL5uj97cTN64isKn/YROtUml3ftB/W4NR1Wkd2Z4z85/rghT
+         PLbZIKahDDKhCHEXiykgeUbABxuTrMwnBMVZ9SRNntX8z1htp0oGj/tZ6idBx5huYe3z
+         EUEeVQnai4/wC0fD5LFkPmwGQsu1EDawHR8B3q/mpIGWWpq4Y2WnyhFBOl1NamG5e0vo
+         DWqMpWtWLnRxVN+orMoRuZiTDJFtzThUlzwRgYJHYUCAqzTbG1lZkiZcTK3+eUbV5i3Y
+         W1pA==
+X-Gm-Message-State: AOAM533FAn2rETfL9EwLVgjnrC9U8FinTGP8ZrKUIpb4ChT4lmnV1h3d
+        wFQbHY+m7aPuB05uGme8uDN7gxnRkNW6LenKlPQ=
+X-Google-Smtp-Source: ABdhPJxroh5u40yQ5KepP31yU6zZog4e7NkAyytC6rlf4B9qjFb0lyX1srCDgrm+zoX1IvYldw0zfrc13Af9bIPqSVk=
+X-Received: by 2002:a5e:880b:: with SMTP id l11mr2704858ioj.42.1589435085215;
+ Wed, 13 May 2020 22:44:45 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <alpine.LFD.2.21.2005140251480.6492@redsun52.ssa.fujisawa.hgst.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1588153121-28507-1-git-send-email-chenhc@lemote.com>
+ <20200429183305.GB21234@alpha.franken.de> <CAAhV-H6KWnzwB-p6aOL+L_ZXiYsMyzN1MbXeeeTYpimg7jG73w@mail.gmail.com>
+ <alpine.LFD.2.21.2005010117200.851719@eddie.linux-mips.org>
+In-Reply-To: <alpine.LFD.2.21.2005010117200.851719@eddie.linux-mips.org>
+From:   Huacai Chen <chenhc@lemote.com>
+Date:   Thu, 14 May 2020 13:44:34 +0800
+Message-ID: <CAAhV-H6-CBEh2jaTudon=X1tR6iGtjC20QBt74fUkAdh1ZbgcQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] MIPS: Loongson-3: Enable COP2 usage in kernel
+To:     "Maciej W. Rozycki" <macro@linux-mips.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/13/2020 21:52, Maciej W. Rozycki wrote:
-> On Wed, 13 May 2020, Joshua Kinard wrote:
-> 
->> diff --git a/arch/mips/include/asm/mach-ip27/war.h b/arch/mips/include/asm/mach-ip27/war.h
->> index ef3efce0094a..845b8951d74f 100644
->> --- a/arch/mips/include/asm/mach-ip27/war.h
->> +++ b/arch/mips/include/asm/mach-ip27/war.h
->> @@ -17,7 +17,12 @@
->>  #define MIPS_CACHE_SYNC_WAR		0
->>  #define TX49XX_ICACHE_INDEX_INV_WAR	0
->>  #define ICACHE_REFILLS_WORKAROUND_WAR	0
->> -#define R10000_LLSC_WAR			1
->>  #define MIPS34K_MISSED_ITLB_WAR		0
->>  
->> +#ifdef CONFIG_CPU_R10000
->> +#define R10000_LLSC_WAR			1
->> +#else
->> +#define R10000_LLSC_WAR			0
->> +#endif
->> +
-> 
->  I think it would be good not to reorder the macros (even though there's
-> preexisting breakage in <asm/mach-ip30/war.h>) so that all the files have
-> them in the same order.
+Hi, Maiej,
 
-They don't appear to be in any logical order to begin with.  That, and I
-wanted to keep conditional defines separate from the fixed defines, hence
-moving the first in those files down to its own block.
+On Thu, May 14, 2020 at 6:42 AM Maciej W. Rozycki <macro@linux-mips.org> wrote:
+>
+> On Thu, 30 Apr 2020, Huacai Chen wrote:
+>
+> > > > diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
+> > > > index ce40fbf..0f71540 100644
+> > > > --- a/arch/mips/include/asm/mipsregs.h
+> > > > +++ b/arch/mips/include/asm/mipsregs.h
+> > > > @@ -386,6 +386,7 @@
+> > > >  #define ST0_CU1                      0x20000000
+> > > >  #define ST0_CU2                      0x40000000
+> > > >  #define ST0_CU3                      0x80000000
+> > > > +#define ST0_MM                       0x40000000      /* Loongson-3 naming */
+> > >
+> > > please use ST0_CU2, so everybody understands it's COO2
+> > I see that there is already an alias  ST0_XX for ST0_CU3, and I think
+> > use a ST0_MM for ST0_CU2 is more meaningful in some places (at least
+> > in traps.c where ST0_XX is also used). If there are places only used
+> > to describe the CU Mask (such as in stackframe.h), I will use ST0_CU2.
+>
+>  Well ST0_XX is not an alias, because the bit has a different meaning that
+> has nothing to do with CP3.  It just happens to share the bit position in
+> CP0.Status with ST0_CU3.  Yes, ST0_XX is misplaced and misnamed as it
+> applies to R10k processors only, but it is our legacy from the old days of
+> chaos and some three processor types supported.  This is similar to say
+> ST0_ERL vs ST0_IEP, which also share the bit position in CP0.Status, but
+> have different meanings each.
+>
+>  All this could have been cleaned up (e.g. s/ST0_XX/R10K_ST0_XX/) if
+> someone had the incentive; I occasionally had and poked at these macros,
+> but apparently missed this one and a couple of other ones.  Maybe on some
+> rainy autumn evening...
+>
+>  However ST0_MM does enable CP2, even if a specific implementation, making
+> it no different from ST0_CU2 really.
+I have send a new version, could you please review that?Thank you.
 
-And the one in IP30's war.h is an artifact of my patchset that Thomas
-must've based off of for mainlining IP30 support.  That section actually
-should be in this patchset alongside the hunk for IP27's war.h.
-
-Is there some subtlety w/r to the existing ordering that I don't know about,
-or would it make sense to have two patches, one which reorders the defines
-to be alphabetical, then the second being the R10K split patch?
-
--- 
-Joshua Kinard
-Gentoo/MIPS
-kumba@gentoo.org
-rsa6144/5C63F4E3F5C6C943 2015-04-27
-177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
-
-"The past tempts us, the present confuses us, the future frightens us.  And
-our lives slip away, moment by moment, lost in that vast, terrible in-between."
-
---Emperor Turhan, Centauri Republic
+>
+>   Maciej
+>
+>
+Huacai
