@@ -2,134 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C5F81D2B52
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 11:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1CA1D2B5E
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 11:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726203AbgENJZC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 May 2020 05:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        id S1726168AbgENJ0s (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 May 2020 05:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726202AbgENJZC (ORCPT
+        by vger.kernel.org with ESMTP id S1726070AbgENJ0s (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 14 May 2020 05:25:02 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08753C061A0F
-        for <linux-mips@vger.kernel.org>; Thu, 14 May 2020 02:25:02 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id s3so2187973eji.6
-        for <linux-mips@vger.kernel.org>; Thu, 14 May 2020 02:25:01 -0700 (PDT)
+        Thu, 14 May 2020 05:26:48 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE730C061A0E
+        for <linux-mips@vger.kernel.org>; Thu, 14 May 2020 02:26:47 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id d21so2701343ljg.9
+        for <linux-mips@vger.kernel.org>; Thu, 14 May 2020 02:26:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=unikie-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nZk+31pniUIu3YX3HPBnqYE7/FWix23XhFWqIs5bURU=;
-        b=1vlobRK/LZFu0W4DpctQc74BE0OZggxftWAYyg9+kMh9UUhJxpacFHkwwXINlUM0Ql
-         Y9vyMrrE3Zd9KrKDr8izLnm8GsKai/wdW6x37oyhAk1n++lI2+CC6pvBswySW+5aoS77
-         Xf5Q+GeknU8mke0serBKon4AuRd0lNJUyw87yLSMoyWgOJy1v4Pi9GyDpfmJd4LKc+KI
-         gWRFWYp81EitWqScQBJ3IiapSvRNmLgKDryr6r+0bmMR/IO1dZBNd33L6bylGXS5A3Lf
-         556w5JsmiDWo9HVAZqJAIp2mIfTjiW447zFX4VD1IPk0mzhZvrWTitSEIV9ifw9HRe28
-         D8mg==
+        h=from:to:cc:subject:date:message-id;
+        bh=/tJIRKNQneeHlQjEaZHszK2k+iclO+jR+dvoNvPPVag=;
+        b=0w4nQel5wYmmZuOCNC96sAPuFmQwbr0ilMU5hH0f2m5RwAJDAf0vWJaJjGpDd4Xye/
+         5sgD0Jrp7stAugAy5kTH/BFKJOhiJUZ/f65X13cYFZM31Z5sQMkmeX8wtZvzYu0vDeIf
+         d/x+KrDtoLAArPmF5sFwM7+C4vhIGtai0LXmnrJpZ/kv27w6zkQgIhNYcHTnNe6/12lY
+         sV5Vhad3rEy4OI919WVv+fZlccGcCLA0igXtdSXXa4ehV2f8CR6NgCY0MZDJLQp//i7n
+         sA81o26C1WgsQyNpR3eDgkMibS1XJK/0c/r77nF6p5r5s/dYJ4KfUkCvvqpJEwdPHcdG
+         hGNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nZk+31pniUIu3YX3HPBnqYE7/FWix23XhFWqIs5bURU=;
-        b=dvPZ2ij0QHP4LjlKxNMLj7yn9IjDX63LAY9CftUq1x3tM/HbueJ2r+fVzJ/s83dGOg
-         kB9LoNSAcKuzaMQqWpqfzpPTBoDRVfBbdbyNSyOlUPt9S3muPw1TDkrEvpkKN9qWoKoy
-         aFkQJ9GQUrDjQEliy/3npvHHTIdTFSBGV98+rCyGn3HFKbucav5jRl7Gwd6fAaHpFNkY
-         a7tlzbzR/nEk5CjvrnoVrXHc5fiPVkmgugXMef36cbQErOgAAeC0ZGGpgKPm+XsMydut
-         Uv7FIaHr+JrhDxg8Tn2KLDFg1FhFYIMGhhFV9oABZSoZnmJKX+qjYGD92M+gJrSNnklW
-         b05g==
-X-Gm-Message-State: AOAM531xPVYgEMfoLQODG/kJTgynvfCsYmg4hJLP8LI05d3I8wmHF4vA
-        9CTsEBkdyNFj/+YTfyOFQd8WgWlgBBBkrz9oYpM2Kw==
-X-Google-Smtp-Source: ABdhPJxPW+ABXGCY3746+LcRvy1Lr3kAoSq4RmTxoSbROeKhyQWI13KRQosDbdmIB3eiu+igi9m/ADKsnI2Wvh3vob0=
-X-Received: by 2002:a17:906:4e8a:: with SMTP id v10mr2808640eju.63.1589448300598;
- Thu, 14 May 2020 02:25:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200513134338.19688-1-John.Mathew@unikie.com>
- <20200513134338.19688-4-John.Mathew@unikie.com> <jhjy2pwq6e2.mognet@arm.com>
-In-Reply-To: <jhjy2pwq6e2.mognet@arm.com>
-From:   John Mathew <john.mathew@unikie.com>
-Date:   Thu, 14 May 2020 12:24:49 +0300
-Message-ID: <CAJz2qXn+z3va-NuqXLfdgaG6Ah3S_f2SijmL7Jn96F-8SW_ndw@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 2/3] docs: scheduler: Add scheduler overview documentation
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        rostedt@goodmis.org, Benjamin Segall <bsegall@google.com>,
-        mgorman@suse.de, bristot@redhat.com, tsbogend@alpha.franken.de,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>, x86@kernel.org,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=/tJIRKNQneeHlQjEaZHszK2k+iclO+jR+dvoNvPPVag=;
+        b=qUpQUUh/OPLJoYZPv4z77oFtDeFLVrmqYHD+5qmIrz+pajJc4N9m4DZHsQOhHFv5pY
+         d7zmYzB0p5QCI2E7H9/seqSO1K2aNZJz9GeOmMv9BOFHOlLcWyRoXNcmLLppBqxy3BJZ
+         at+6ceV+m8rbcN6uMs/wCpTSiMK5UK9EeK6SAOuCbqK7sDXLxQOaHDxD+jLK9YOIsmD+
+         kMWO3GSHL39qPsbuwwSIZ4fZDohE7jwj598FY+M3FhxoZGVbf6nky8xfMLfKAFS10Voy
+         tujtqAQ0bibvOQTl4Gd6mXSo0piec2uAJnsjNqNax8J4Zo+kqC6D5mTkMkaSXFucLACR
+         8tWQ==
+X-Gm-Message-State: AOAM533dLya4JMak9kFuWzwSOONFkS2BFqVUxByckPMYfXeloN4kCueq
+        Q6UaBhpDSn8cX7PopNtWeQ9uKw==
+X-Google-Smtp-Source: ABdhPJypxqTmuwxppOif/Z3CQU8dOmf27s2EyHuP2mHtcLneEg9vxjP+VMreICRF8ePrT6CXo0k70w==
+X-Received: by 2002:a2e:731a:: with SMTP id o26mr2227667ljc.189.1589448406062;
+        Thu, 14 May 2020 02:26:46 -0700 (PDT)
+Received: from localhost.localdomain ([109.204.235.119])
+        by smtp.googlemail.com with ESMTPSA id e25sm1426117lfb.89.2020.05.14.02.26.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2020 02:26:45 -0700 (PDT)
+From:   john mathew <john.mathew@unikie.com>
+X-Google-Original-From: john mathew <John.Mathew@unikie.com>
+To:     linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, tsbogend@alpha.franken.de,
+        lukas.bulwahn@gmail.com, x86@kernel.org,
         linux-mips@vger.kernel.org, tglx@linutronix.de,
         mostafa.chamanara@gmail.com, willy@infradead.org,
-        Mostafa Chamanara <mostafa.chamanara@basemark.com>,
-        Oleg Tsymbal <oleg.tsymbal@unikie.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        valentin.schneider@arm.com, rdunlap@infradead.org,
+        john mathew <John.Mathew@unikie.com>
+Subject: [RFC PATCH v5 0/3] Add scheduler overview documentation
+Date:   Thu, 14 May 2020 12:26:34 +0300
+Message-Id: <20200514092637.15684-1-John.Mathew@unikie.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 13, 2020 at 5:03 PM Valentin Schneider
-<valentin.schneider@arm.com> wrote:
->
->
-> On 13/05/20 14:43, john mathew wrote:
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-> > +Capacity-Aware Scheduling
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-> > +
->
-> Thanks for taking a jab at this. At a glance it looks okay, with one
-> comment below.
->
-> FWIW I still intend to write a more pamphlet-sized thing, I'll toss
-> something out in the coming weeks - depending on where this goes, I might
-> base it on this.
->
-> > +Scheduling load balancing on Asymmetric Multiprocessor systems was imp=
-roved
-> > +through the introduction of Capacity-Aware Scheduling. It identifies t=
-he
-> > +most efficient CPU to assign a task based on its capacity. This capaci=
-ty
-> > +may be asymmetric due to heterogeneous computing architecture such
-> > +as ARM big.LITTLE. Scheduler gets information about asymmetric capacit=
-ies
-> > +when the scheduler domain hierarchy is built using build_sched_domains=
-().
-> > +CPU capacities are provided to the scheduler topology code through the
-> > +architecture specific implementation of the arch_scale_cpu_capacity().
-> > +The SD_ASYM_CPUCAPACITY flag is set by the scheduler topology for a do=
-main
-> > +in the hierarchy where all CPU capacities are visible for any cpu's po=
-int
-> > +of view on asymmetric CPU capacity systems. The scheduler can then tak=
-e
-> > +capacity asymmetry into account when load balancing.
-> > +
-> > +Initial CPU capacities are derived from the Device Tree and CPU freque=
-ncy.
-> > +For RISC-V & ARM64 it is done in drivers/base/arch_topology.c. A cpu-m=
-ap
-> > +device tree is parsed to obtain the cpu topology and the initial CPU c=
-apacity
-> > +is set using the CPUFreq subsystem. A callback is registered to the CP=
-UFreq
-> > +subsystem to rebuild sched_domains when CPU frequency changes.
-> > +
->
-> We don't rebuild domains on frequency changes (that would be ludicrous!),
-> rather we do that on policy changes. It's mostly because we need to wait
-> for cpufreq to be loaded before having a complete view over the capacitie=
-s
-> of the CPUs (which is a mix of =C2=B5arch and frequencies), i.e. we need =
-to
-> rebuild the SD's again once cpufreq comes up.
-Fixed in v5 of the patchset.
-Thanks
+This patch series updates the scheduler documentation to add more topics
+wrt to scheduler overview. New sections are added to provide a brief
+overview of the kernel structs used by the scheduler, scheduler invocation,
+context switch and Capacity Aware Scheduling. Previous version of
+the patch was reviewed at:
+Link: https://lore.kernel.org/lkml/20200513134338.19688-2-John.Mathew@unikie.com/
+
+version 5:
+ -Fix description error on CAS
+
+version 4:
+ -Added section on Capacity-Aware Scheduling
+ -Reworded CFS recently added features.
+ -Removed vruntime description from scheduler structs
+ -Added description of idle and stopper sched classses
+
+version 3:
+ -Fix spelling, spacing and typo errors.
+
+version 2:
+- Remove :c:func: directive as it was redundant
+- Limit document width (line symbol count) to 75
+- Replace dot file with ASCII art
+- Describe prepare_task_switch(), ASID use, 
+  kernel/user transtion, MIPS FPU affinity correctly
+- Add missing references to files
+- Removed internal APIs from scheduler API reference
+- Described rq struct member as kernel-doc comments
+- Replaced CFS history with CFS current status
+- Added documentation for sched_class fields
+- Refined explanation of context swtich functionality
+- Replace CFS history with recent changes
+- Added kernel-doc comments for struct rq
+
+John Mathew (3):
+  docs: scheduler: Restructure scheduler documentation.
+  docs: scheduler: Add scheduler overview documentation
+  docs: scheduler: Add introduction to scheduler context-switch
+
+ Documentation/scheduler/arch-specific.rst     |  14 +
+ Documentation/scheduler/cfs-overview.rst      | 102 ++++++
+ Documentation/scheduler/context-switching.rst | 125 ++++++++
+ Documentation/scheduler/index.rst             |  33 +-
+ .../scheduler/mips-context-switch.rst         |  89 ++++++
+ Documentation/scheduler/overview.rst          | 293 ++++++++++++++++++
+ Documentation/scheduler/sched-cas.rst         |  92 ++++++
+ .../scheduler/sched-data-structs.rst          | 182 +++++++++++
+ Documentation/scheduler/sched-debugging.rst   |  14 +
+ Documentation/scheduler/sched-features.rst    |  21 ++
+ Documentation/scheduler/scheduler-api.rst     |  31 ++
+ .../scheduler/x86-context-switch.rst          |  65 ++++
+ kernel/sched/core.c                           |  28 +-
+ kernel/sched/sched.h                          | 169 +++++++++-
+ 14 files changed, 1238 insertions(+), 20 deletions(-)
+ create mode 100644 Documentation/scheduler/arch-specific.rst
+ create mode 100644 Documentation/scheduler/cfs-overview.rst
+ create mode 100644 Documentation/scheduler/context-switching.rst
+ create mode 100644 Documentation/scheduler/mips-context-switch.rst
+ create mode 100644 Documentation/scheduler/overview.rst
+ create mode 100644 Documentation/scheduler/sched-cas.rst
+ create mode 100644 Documentation/scheduler/sched-data-structs.rst
+ create mode 100644 Documentation/scheduler/sched-debugging.rst
+ create mode 100644 Documentation/scheduler/sched-features.rst
+ create mode 100644 Documentation/scheduler/scheduler-api.rst
+ create mode 100644 Documentation/scheduler/x86-context-switch.rst
+
+-- 
+2.17.1
+
