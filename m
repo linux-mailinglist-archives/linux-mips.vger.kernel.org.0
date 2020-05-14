@@ -2,76 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3868B1D2DEF
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 13:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7791D2DF3
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 13:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726051AbgENLMn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 May 2020 07:12:43 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58224 "EHLO mx2.suse.de"
+        id S1726011AbgENLNd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 May 2020 07:13:33 -0400
+Received: from elvis.franken.de ([193.175.24.41]:53225 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726015AbgENLMn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 14 May 2020 07:12:43 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 54691B04F;
-        Thu, 14 May 2020 11:12:44 +0000 (UTC)
+        id S1725955AbgENLNd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 14 May 2020 07:13:33 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jZBnu-000745-00; Thu, 14 May 2020 13:13:30 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 5263AC0493; Thu, 14 May 2020 13:13:16 +0200 (CEST)
+Date:   Thu, 14 May 2020 13:13:16 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Fix builds for VR41xx platforms
-Date:   Thu, 14 May 2020 13:12:34 +0200
-Message-Id: <20200514111235.58459-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.16.4
+To:     Huacai Chen <chenhc@lemote.com>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Zhangjin Wu <wuzhangjin@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH 1/2] MIPS: Fix typos in arch/mips/Kbuild.platforms
+Message-ID: <20200514111316.GA10639@alpha.franken.de>
+References: <1589359121-1572-1-git-send-email-chenhc@lemote.com>
+ <20200513112101.GC7151@alpha.franken.de>
+ <CAAhV-H4bsXyLmGH=pAism3R7Gup1fCMyAcE6fB+F=9cgS6uM-Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhV-H4bsXyLmGH=pAism3R7Gup1fCMyAcE6fB+F=9cgS6uM-Q@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Changing inclusion of Platform files, broke VR41xx platforms. Add Makefile
-to vr41xx directory and traverse subdirs from it.
+On Thu, May 14, 2020 at 01:52:14PM +0800, Huacai Chen wrote:
+> Hi, Thomas,
+> 
+> On Wed, May 13, 2020 at 7:21 PM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+> >
+> > On Wed, May 13, 2020 at 04:38:40PM +0800, Huacai Chen wrote:
+> > > Commit 26bff9eb49201aeb ("MIPS: Only include the platform file needed")
+> > > misspelled "txx9" to "tx99", so fix it.
+> > >
+> > > Fixes: 26bff9eb49201aeb ("MIPS: Only include the platform file needed")
+> > > Signed-off-by: Huacai Chen <chenhc@lemote.com>
+> > > ---
+> > >  arch/mips/Kbuild.platforms | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > applied both patches to mips-next. Thank you for fixing.
+> It seems like there are more problems caused by your patch, due to the
+> lack of arch/mips/vr41xx/Makefile, all VR41XX configs cannot be build
+> now, including:
+> arch/mips/configs/workpad_defconfig
+> arch/mips/configs/tb0219_defconfig
+> arch/mips/configs/tb0287_defconfig
+> arch/mips/configs/tb0226_defconfig
+> arch/mips/configs/mpc30x_defconfig
+> arch/mips/configs/capcella_defconfig
+> arch/mips/configs/e55_defconfig
+> 
+> And I don't know how to fix...
 
-Fixes: 26bff9eb49201aeb ("MIPS: Only include the platformfile needed")
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/vr41xx/Makefile | 5 +++++
- arch/mips/vr41xx/Platform | 3 ---
- 2 files changed, 5 insertions(+), 3 deletions(-)
- create mode 100644 arch/mips/vr41xx/Makefile
+adding a Makefile solves it ;-) I've sent a patch for that.
 
-diff --git a/arch/mips/vr41xx/Makefile b/arch/mips/vr41xx/Makefile
-new file mode 100644
-index 000000000000..765020d5ee4d
---- /dev/null
-+++ b/arch/mips/vr41xx/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+obj-$(CONFIG_MACH_VR41XX)	+= common/
-+obj-$(CONFIG_CASIO_E55)		+= casio-e55/
-+obj-$(CONFIG_IBM_WORKPAD)	+= ibm-workpad/
-diff --git a/arch/mips/vr41xx/Platform b/arch/mips/vr41xx/Platform
-index b6c8d5c08ddb..3f593a3e5678 100644
---- a/arch/mips/vr41xx/Platform
-+++ b/arch/mips/vr41xx/Platform
-@@ -1,19 +1,16 @@
- #
- # NEC VR4100 series based machines
- #
--platform-$(CONFIG_MACH_VR41XX)	+= vr41xx/common/
- cflags-$(CONFIG_MACH_VR41XX)	+= -I$(srctree)/arch/mips/include/asm/mach-vr41xx
- 
- #
- # CASIO CASSIPEIA E-55/65 (VR4111)
- #
--platform-$(CONFIG_CASIO_E55)	+= vr41xx/casio-e55/
- load-$(CONFIG_CASIO_E55)	+= 0xffffffff80004000
- 
- #
- # IBM WorkPad z50 (VR4121)
- #
--platform-$(CONFIG_IBM_WORKPAD)	+= vr41xx/ibm-workpad/
- load-$(CONFIG_IBM_WORKPAD)	+= 0xffffffff80004000
- 
- #
+Thomas.
+
 -- 
-2.16.4
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
