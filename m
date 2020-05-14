@@ -2,56 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB531D3E29
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 21:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A931D4056
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 23:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728858AbgENT5q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 May 2020 15:57:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48972 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727117AbgENT5p (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 14 May 2020 15:57:45 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4157E2065C;
-        Thu, 14 May 2020 19:57:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589486265;
-        bh=CobDEcsnK28Wg/deTE3E0V6egb9tUvENMn5Ab3rRyrY=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=yF+8UvQxhMZFRf7YXLum4x8OUjj9OWV6Z7yavmEaf57DFTGro7sA6blykspH9iKpY
-         q5itK/6TDi6Yfb54HYIHZXU0S4/Uuo0CF6/VKaQlH1xlOBOsCGuCeogOEZ5t3rjADA
-         lapB+IyxCat1hOFItfhxHiKpXUW8O2+2K+f3j5lI=
-Content-Type: text/plain; charset="utf-8"
+        id S1727970AbgENVmu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 May 2020 17:42:50 -0400
+Received: from esa1.hgst.iphmx.com ([68.232.141.245]:32873 "EHLO
+        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727029AbgENVmu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 May 2020 17:42:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1589492570; x=1621028570;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=q63yo8bVkhWRaBDZ9S11RZ3fzbC5L5nmu6paGVut25U=;
+  b=ZlxXGgPtjDl+sLTYCXITfar8O9PBYjO2SmTvRxFOumlYYP4QSl6h4vpy
+   juyVq505OX9DuQWd04bi1Un1J54K6gK9/Cr49RDrxBEVFU8gCz5tfEaKE
+   /LlGCDjl35pbh4EmPYeN25SIWfEeEgaTRgchOP3o7eKW/KXvJGAvvUkw6
+   kswpExyeAWj/WCUXqN9nngVnroZDH3OrBYr4IziuN2t8gKweNMYZEA9nT
+   c0GexpCYIeR1zQRebfHb6GR4t35n2TcOpLuJ2VD04x1Hc6jP5VvJZKmjn
+   j311ACH9eHsvTYb3fXQeAMYeyYTFRbo3Quk8td69ubAmwi09EXBfPtay2
+   A==;
+IronPort-SDR: xu2fZKc7lVqAsRfwL150U2e2/v/lNqG8ZZqPav8lxgOaYqSeuqKZXmoFvaaC2Hajbx3RblL0XI
+ B+ppVCzCsJHvcVHUtPuMshvAaYOfqgNeN4ek6qbqWsq0orxM55PqTZ8638jiEMFHCPvqnW5Orm
+ Pfdxnhpw/eDL2gRuqt67To5+qFWAf/V5QyZ8gHbNMAtPsWl5XsnhH6KJf2PrVyjnpC2R1qg+Tn
+ tTLG1nVr359cET+GTSg6sncxy8xNaM192ZIQOQXE0I0vJ0K/Op97K/AZY36ZNhJofynpXSPXTc
+ YzE=
+X-IronPort-AV: E=Sophos;i="5.73,392,1583164800"; 
+   d="scan'208";a="246679804"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 15 May 2020 05:42:49 +0800
+IronPort-SDR: gnn2ZM3rxJUC3jsHKisciG4MFzLOytt/BxInFE48ZFgWWBXMArPZIvr9r6vwJgkps/nJ5EKLtt
+ nAvotnOJun/gO76nGxW2ODGggyIKqZMpU=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 14:33:02 -0700
+IronPort-SDR: ME9DiOneFyXMDgjyx7UX1+pqI4UwemYTPq1HyZfiEgpAkVnHWi1t960L7Y+DU9yvpgBEPZTjZC
+ Fq+nSvhf+XWA==
+WDCIronportException: Internal
+Received: from unknown (HELO redsun52) ([10.149.66.28])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 14:42:48 -0700
+Date:   Thu, 14 May 2020 22:42:45 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@wdc.com>
+To:     Joshua Kinard <kumba@gentoo.org>
+cc:     linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>
+Subject: Re: [PATCH v2] MIPS: Split R10000 to allow for R12K+ optimizations
+In-Reply-To: <78b68917-ec7e-7434-2a80-5fabbd5247a8@gentoo.org>
+Message-ID: <alpine.LFD.2.21.2005142233430.6492@redsun52.ssa.fujisawa.hgst.com>
+References: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org> <alpine.LFD.2.21.2005140251480.6492@redsun52.ssa.fujisawa.hgst.com> <78b68917-ec7e-7434-2a80-5fabbd5247a8@gentoo.org>
+User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200409064416.83340-10-sboyd@kernel.org>
-References: <20200409064416.83340-1-sboyd@kernel.org> <20200409064416.83340-10-sboyd@kernel.org>
-Subject: Re: [PATCH v2 09/10] MIPS: Loongson64: Drop asm/clock.h include
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        linux-mips@vger.kernel.org, chenhc@lemote.com
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Date:   Thu, 14 May 2020 12:57:44 -0700
-Message-ID: <158948626461.215346.9909793666449593660@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Quoting Stephen Boyd (2020-04-08 23:44:15)
-> This include isn't used by this file, so just remove it.
->=20
-> Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: <linux-mips@vger.kernel.org>
-> Cc: <chenhc@lemote.com>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> ---
+On Wed, 13 May 2020, Joshua Kinard wrote:
 
-Applied to clk-next
+> >  I think it would be good not to reorder the macros (even though there's
+> > preexisting breakage in <asm/mach-ip30/war.h>) so that all the files have
+> > them in the same order.
+> 
+> They don't appear to be in any logical order to begin with.  That, and I
+> wanted to keep conditional defines separate from the fixed defines, hence
+> moving the first in those files down to its own block.
+
+ I suppose they have just come up in the order they were added.  Whatever 
+the order is however as long as it is consistent you can `diff' a pair of 
+files against each other to spot differences easily without the need to 
+rely on your perceptiveness.  And <asm/mach-sibyte/war.h> already has 
+conditionals in the middle.
+
+> Is there some subtlety w/r to the existing ordering that I don't know about,
+> or would it make sense to have two patches, one which reorders the defines
+> to be alphabetical, then the second being the R10K split patch?
+
+ I wouldn't strongly mind reordering alphabetically, but it would disturb 
+`git blame' and would add little value I'm afraid.  I'm fine if new ones 
+keep being added at the end, though OTOH it's not the best way to avoid 
+conflicts.
+
+  Maciej
