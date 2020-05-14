@@ -2,95 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFAF71D2E8F
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 13:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5560D1D2F8F
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 14:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726094AbgENLmJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 May 2020 07:42:09 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:52152 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726067AbgENLmI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 14 May 2020 07:42:08 -0400
-Received: from [10.20.42.25] (unknown [10.20.42.25])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxj9mELr1ehaQ0AA--.10S3;
-        Thu, 14 May 2020 19:41:56 +0800 (CST)
-Subject: Re: [PATCH] MIPS: update tlb even if pte entry has no change
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        id S1727898AbgENMWS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 May 2020 08:22:18 -0400
+Received: from mga12.intel.com ([192.55.52.136]:34995 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725955AbgENMWR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 14 May 2020 08:22:17 -0400
+IronPort-SDR: jq2G9j4l+MtmXiBskeawpsxih7yy4UmJ+LGfE9+Lk1E9tY6Q3W5xMH79i5d4wHG7PLmfYN7wg4
+ t4Z3FDFHyuyg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 05:22:17 -0700
+IronPort-SDR: g4YTAvFTxqNPtU0jkIbc5r78CO9/Y4ylYkQmK+EhgU7xCpQhcG80N1AgmABpc/Vg8MOpmJRO+L
+ MmVc/XiEeHqQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,391,1583222400"; 
+   d="scan'208";a="464312030"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga005.fm.intel.com with ESMTP; 14 May 2020 05:22:12 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jZCsQ-006cUm-3m; Thu, 14 May 2020 15:22:14 +0300
+Date:   Thu, 14 May 2020 15:22:14 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
         Paul Burton <paulburton@kernel.org>,
-        Dmitry Korotin <dkorotin@wavecomp.com>,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>
-References: <1589422677-11455-1-git-send-email-maobibo@loongson.cn>
- <b46f4ac1-9738-6037-d60a-faebf2b4365c@cogentembedded.com>
- <f165deac-1a71-dd88-dfe5-c1701f31567b@cogentembedded.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   maobibo <maobibo@loongson.cn>
-Message-ID: <6ea926de-042b-eb44-0e41-156e2bd64bd8@loongson.cn>
-Date:   Thu, 14 May 2020 19:41:56 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Allison Randal <allison@lohutok.net>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Thor Thayer <thor.thayer@linux.intel.com>,
+        "wuxu.wu" <wuxu.wu@huawei.com>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 11/17] spi: dw: Fix native CS being unset
+Message-ID: <20200514122214.GC185537@smile.fi.intel.com>
+References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
+ <20200508132943.9826-12-Sergey.Semin@baikalelectronics.ru>
+ <CACRpkdY=wkgnYPcqSzyzNpS6ckJZs-9kXfTfdwa1E+POzOBQGA@mail.gmail.com>
+ <20200513001347.dyt357erev7vzy3l@mobilestation>
+ <CACRpkdZTH1DNHvi4r48nLNWp4rqyYDZTzT12hw0eTNcYmgSr3Q@mail.gmail.com>
+ <20200514115558.e6cqnuxqyqkysfn7@mobilestation>
 MIME-Version: 1.0
-In-Reply-To: <f165deac-1a71-dd88-dfe5-c1701f31567b@cogentembedded.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxj9mELr1ehaQ0AA--.10S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7JF18GrWUAFWfAry5KF45KFg_yoW3WrX_uF
-        4j9F95Gw4YqrsxK3ZIyw1SqFZ09w4kCws5JayDGFykWw15K348uF1Uur4xX3Z0qas7Ar1x
-        Wr4UWFWYyr13WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbaAYjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8Jw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
-        c7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4I
-        kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
-        WwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
-        0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3
-        JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr
-        UvcSsGvfC2KfnxnUUI43ZEXa7IU85GYPUUUUU==
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200514115558.e6cqnuxqyqkysfn7@mobilestation>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, May 14, 2020 at 02:55:58PM +0300, Serge Semin wrote:
+> On Thu, May 14, 2020 at 10:31:13AM +0200, Linus Walleij wrote:
+> > On Wed, May 13, 2020 at 2:13 AM Serge Semin
+> > <Sergey.Semin@baikalelectronics.ru> wrote:
 
+> BTW I experience a problem with vger.kernel.org. For some reason a few days ago
+> it started bouncing my emails back sent to the GPIO/MIPS/SPI/kernel mailing lists.
+> I've sent multiple backward messages to the postmaster (postmaster (dog) vger.kernel.org)
+> with the bounce text, but still with no response. Could you tell me who should I
+> bother with this problem to get a help with its solution? 
 
-On 05/14/2020 05:37 PM, Sergei Shtylyov wrote:
-> On 14.05.2020 12:35, Sergei Shtylyov wrote:
-> 
->>> From: bibo mao <maobibo@loongson.cn>
->>>
->>> If there are two threads reading the same memory and tlb miss happens,
->>> one thread fills pte entry, the other reads new pte value during page fault
->>> handling. PTE value may be updated before page faul, so the process need
->>
->>     Fault.
-> 
->    And "needs".
-> 
->>> need update tlb still.
-> 
->    Oh, and one "need" is enough. :-)
+Perhaps, helpdesk@kernel.org ?
 
-Thank for reviewing my patch, will fix this typo issue in next version.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Best Regards
-bibo, mao
-
-> 
->>> Also this patch define flush_tlb_fix_spurious_fault as empty, since it not
->>> necessary to flush the page for all CPUs
->>>
->>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
->> [...]
-> 
-> MBR, Sergei
 
