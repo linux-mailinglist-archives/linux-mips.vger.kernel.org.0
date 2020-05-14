@@ -2,86 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D571D24F8
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 03:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37921D250D
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 04:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725952AbgENBwp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 May 2020 21:52:45 -0400
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:12862 "EHLO
-        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725943AbgENBwo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 May 2020 21:52:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1589421165; x=1620957165;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=S19z5KsKCze3zWkgumRofgPmQU8kjGuHQGtAsDzsTcM=;
-  b=nqFWODEuRFr3Rc4QmNDh0aUujTyPLWXowOyO+WbXu0MYu4VMF/8HaEjj
-   en0nFkl0P5vQo1Xokw8NNxhbZO6WzkeMJWHK3+kfXlH9k1o4Kc7n2bK9M
-   t2t8dPbkqdZwlreNlF2tfYoS8w82E6CFi5ijMJ2Qj1qo3wInjpUKTOATL
-   jiRAi2ppYjKlIrroLGUoATohJqr/HDNnzZAbqYGy0QvM9ldHRrIWH+wog
-   0bCfgwekIGYvm6BGd0k+LOyR9zSIoSyVhOTqzQQJSqSQmBXzBdkR1WWNl
-   7OnXd90G6WM7jnT2AEgG+lsUiYQl3jV+Wd5G3yryj7EaqqiWhR+epMOwP
-   A==;
-IronPort-SDR: +og8+IL7fdOXLrxNXhSgvxup3QvH8BlrCCyosqfqQicFeKdIugvPjKGYd8NB+sGBSTqu30+eIX
- sIPeIwVf0wfJXLJGWxnghuQmqxu5g9L2XMg9tIkRhfTHbTtJPhOZUEWGZ50eLzQnwF6+tx30sY
- Xxq0oMUZPXmKSvO5YZ6uwk9iimimjuEZU+gq/foc4eMfANeUzwHh2/rHczv5uHV0eQ9/V/7Kdr
- eD0eYOZzLBJ76wfQcke2M+QzIbyerI70WzFxf+XntWndAP3ijctput1EAboX69npewksC8lem2
- P+U=
-X-IronPort-AV: E=Sophos;i="5.73,389,1583164800"; 
-   d="scan'208";a="141981873"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 14 May 2020 09:52:45 +0800
-IronPort-SDR: eF1PUH5XnMl7lzF9nyVqVBNRk8aRnRNAiMmiVolH+xLaScQWxXtD0lg+XlAL3NAvxrw7H/uxyX
- KX6/WtFcSi3dbNLPsu59CLlfadq1GjP28=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 18:42:57 -0700
-IronPort-SDR: u3w7pgiuf9s2AtyRiVomo74JnhAtQGhpwQyhaIfDiJSZNodcotGuTrvseuOtDuH8BSclPEHE93
- gwv9D7pB7Xww==
-WDCIronportException: Internal
-Received: from unknown (HELO redsun52) ([10.149.66.28])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 18:52:43 -0700
-Date:   Thu, 14 May 2020 02:52:40 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@wdc.com>
-To:     Joshua Kinard <kumba@gentoo.org>
-cc:     linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>
-Subject: Re: [PATCH v2] MIPS: Split R10000 to allow for R12K+ optimizations
-In-Reply-To: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org>
-Message-ID: <alpine.LFD.2.21.2005140251480.6492@redsun52.ssa.fujisawa.hgst.com>
-References: <19dc5a54-4f53-5f69-5ade-4c354f63a356@gentoo.org>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S1725973AbgENCSY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 May 2020 22:18:24 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:45450 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725943AbgENCSY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 13 May 2020 22:18:24 -0400
+Received: from kvm-dev1.localdomain (unknown [10.2.5.134])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx79xcqrxeenY0AA--.31S2;
+        Thu, 14 May 2020 10:18:06 +0800 (CST)
+From:   Bibo Mao <maobibo@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Dmitry Korotin <dkorotin@wavecomp.com>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bibo mao <maobibo@loongson.cn>
+Subject: [PATCH] MIPS: update tlb even if pte entry has no change
+Date:   Thu, 14 May 2020 10:17:57 +0800
+Message-Id: <1589422677-11455-1-git-send-email-maobibo@loongson.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-CM-TRANSID: AQAAf9Dx79xcqrxeenY0AA--.31S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AF17tr1fJr48KFy7CryDZFb_yoW8XrWkpF
+        Z7CFnagrZrGw1IyrWfJr1vgr15ua95GrZ3KFyxKFn0y3ZIqa15Jrs3G3yFyrW8Xa97Ka18
+        WFWFvrs8Wa12vw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
+        628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
+        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7VUbXdbUUUUUU==
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 13 May 2020, Joshua Kinard wrote:
+From: bibo mao <maobibo@loongson.cn>
 
-> diff --git a/arch/mips/include/asm/mach-ip27/war.h b/arch/mips/include/asm/mach-ip27/war.h
-> index ef3efce0094a..845b8951d74f 100644
-> --- a/arch/mips/include/asm/mach-ip27/war.h
-> +++ b/arch/mips/include/asm/mach-ip27/war.h
-> @@ -17,7 +17,12 @@
->  #define MIPS_CACHE_SYNC_WAR		0
->  #define TX49XX_ICACHE_INDEX_INV_WAR	0
->  #define ICACHE_REFILLS_WORKAROUND_WAR	0
-> -#define R10000_LLSC_WAR			1
->  #define MIPS34K_MISSED_ITLB_WAR		0
->  
-> +#ifdef CONFIG_CPU_R10000
-> +#define R10000_LLSC_WAR			1
-> +#else
-> +#define R10000_LLSC_WAR			0
-> +#endif
-> +
+If there are two threads reading the same memory and tlb miss happens,
+one thread fills pte entry, the other reads new pte value during page fault
+handling. PTE value may be updated before page faul, so the process need
+need update tlb still.
 
- I think it would be good not to reorder the macros (even though there's
-preexisting breakage in <asm/mach-ip30/war.h>) so that all the files have
-them in the same order.
+Also this patch define flush_tlb_fix_spurious_fault as empty, since it not
+necessary to flush the page for all CPUs
 
-  Maciej
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+---
+ arch/mips/include/asm/pgtable.h | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index aab0ec1..d0a4940 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -635,6 +635,26 @@ static inline pmd_t pmd_mknotpresent(pmd_t pmd)
+ 	return pmd;
+ }
+ 
++#define flush_tlb_fix_spurious_fault(vma, address) do { } while (0)
++
++#define __HAVE_ARCH_PTEP_SET_ACCESS_FLAGS
++int ptep_set_access_flags(struct vm_area_struct *vma,
++			unsigned long address, pte_t *ptep,
++			pte_t entry, int dirty)
++{
++	int changed = !pte_same(*ptep, entry);
++
++	if (changed)
++		set_pte_at(vma->vm_mm, address, ptep, entry);
++	else
++		/* update tlb with latest pte entry still, tlb entry is old
++		 * since there is page fault
++		 */
++		update_mmu_cache(vma, address, ptep);
++
++	return changed;
++}
++
+ /*
+  * The generic version pmdp_huge_get_and_clear uses a version of pmd_clear() with a
+  * different prototype.
+-- 
+1.8.3.1
+
