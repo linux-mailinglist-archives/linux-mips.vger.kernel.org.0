@@ -2,118 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 206491D2A22
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 10:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5F81D2B52
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 11:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726438AbgENIb2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 May 2020 04:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35878 "EHLO
+        id S1726203AbgENJZC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 May 2020 05:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726374AbgENIb1 (ORCPT
+        by vger.kernel.org with ESMTP id S1726202AbgENJZC (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 14 May 2020 04:31:27 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B821C061A0E
-        for <linux-mips@vger.kernel.org>; Thu, 14 May 2020 01:31:26 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id h4so2500030ljg.12
-        for <linux-mips@vger.kernel.org>; Thu, 14 May 2020 01:31:26 -0700 (PDT)
+        Thu, 14 May 2020 05:25:02 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08753C061A0F
+        for <linux-mips@vger.kernel.org>; Thu, 14 May 2020 02:25:02 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id s3so2187973eji.6
+        for <linux-mips@vger.kernel.org>; Thu, 14 May 2020 02:25:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=unikie-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ch5Lo0qUlNLfqqdr8oPDugFIwsbkUAsTV/pjrrFuHLo=;
-        b=xHi/CO+kw7Zb1AKTwwXYOr5rqnL21pX27PIcAoZpAyWED1KbMsgJJ+aHzrEV/Isbwh
-         cCj8ce0L7btUVbF3US3EeioBiXXi2iCdmOyXoxSJCWosyCfLczsKK9alpmOGav2v80w+
-         vuDG2+aAvxzcOE2K3TrrYIvY0mqmBU/BMbT7IEB1scIBSlpp8HiBHlfn8UCnFVtjjBns
-         DbfLyYIf6KoVVieHkBEAcyIGtiD44sr1xCf8Lwsd64ayvLqSzC2AAnY/k71w+wMolPqK
-         JyDlDZKYHbrozYowGa+UzXmNfLBfNgsdCqJb+BahKwZn8S+ATnRlB96BNNSEyPU6wjca
-         s33g==
+         :cc:content-transfer-encoding;
+        bh=nZk+31pniUIu3YX3HPBnqYE7/FWix23XhFWqIs5bURU=;
+        b=1vlobRK/LZFu0W4DpctQc74BE0OZggxftWAYyg9+kMh9UUhJxpacFHkwwXINlUM0Ql
+         Y9vyMrrE3Zd9KrKDr8izLnm8GsKai/wdW6x37oyhAk1n++lI2+CC6pvBswySW+5aoS77
+         Xf5Q+GeknU8mke0serBKon4AuRd0lNJUyw87yLSMoyWgOJy1v4Pi9GyDpfmJd4LKc+KI
+         gWRFWYp81EitWqScQBJ3IiapSvRNmLgKDryr6r+0bmMR/IO1dZBNd33L6bylGXS5A3Lf
+         556w5JsmiDWo9HVAZqJAIp2mIfTjiW447zFX4VD1IPk0mzhZvrWTitSEIV9ifw9HRe28
+         D8mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ch5Lo0qUlNLfqqdr8oPDugFIwsbkUAsTV/pjrrFuHLo=;
-        b=nGAnkwxM/dtfCUHEo+ZbseWpDGo4y/xSbtRX3w0Ju9WtRVcurdQ/mqHEKoE7SVfAD9
-         PVicCftp7h/Kg4XWLfHkf/LAeWf5U0PVlFkmKB9gqQUTww+cxw4JgVMPMrFJhm9W0dCy
-         meYEN569EHEj3fcnjFELrjNA2Nm3453r5JP7u/LSxNALKIUN2QvB4XwG/6tKTgEfbu8Z
-         WBnpKtsH9XUhdv1V4HQ0NJ9I6ewohJgPH7pDaEYpH5JxJ77AfJPpJQ5Lob0dEXPxjhpZ
-         UXDDlet4U/oOYefVnycNxUUOVRMBDEI/dN6WCZpAyxW6yqMHjA8gTYD0ogAhlMeQApGG
-         ob7w==
-X-Gm-Message-State: AOAM533x141/xSNKB9L25L3woFXIaZNqqtZ3z0DhjYC1jOAOP9pb1PxW
-        wHw+f8W+cAX3eK2LNvAXXeKB/iI9QCxdGyaUnakttA==
-X-Google-Smtp-Source: ABdhPJxYkw641+rzOfo0jk8kZqtPycWY4TTgsg+FJ176sdZrmEbUxUP61n/P+mU74fyLtp+Q1AgVt3G79WECR07lQH0=
-X-Received: by 2002:a2e:b609:: with SMTP id r9mr1982744ljn.125.1589445084550;
- Thu, 14 May 2020 01:31:24 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nZk+31pniUIu3YX3HPBnqYE7/FWix23XhFWqIs5bURU=;
+        b=dvPZ2ij0QHP4LjlKxNMLj7yn9IjDX63LAY9CftUq1x3tM/HbueJ2r+fVzJ/s83dGOg
+         kB9LoNSAcKuzaMQqWpqfzpPTBoDRVfBbdbyNSyOlUPt9S3muPw1TDkrEvpkKN9qWoKoy
+         aFkQJ9GQUrDjQEliy/3npvHHTIdTFSBGV98+rCyGn3HFKbucav5jRl7Gwd6fAaHpFNkY
+         a7tlzbzR/nEk5CjvrnoVrXHc5fiPVkmgugXMef36cbQErOgAAeC0ZGGpgKPm+XsMydut
+         Uv7FIaHr+JrhDxg8Tn2KLDFg1FhFYIMGhhFV9oABZSoZnmJKX+qjYGD92M+gJrSNnklW
+         b05g==
+X-Gm-Message-State: AOAM531xPVYgEMfoLQODG/kJTgynvfCsYmg4hJLP8LI05d3I8wmHF4vA
+        9CTsEBkdyNFj/+YTfyOFQd8WgWlgBBBkrz9oYpM2Kw==
+X-Google-Smtp-Source: ABdhPJxPW+ABXGCY3746+LcRvy1Lr3kAoSq4RmTxoSbROeKhyQWI13KRQosDbdmIB3eiu+igi9m/ADKsnI2Wvh3vob0=
+X-Received: by 2002:a17:906:4e8a:: with SMTP id v10mr2808640eju.63.1589448300598;
+ Thu, 14 May 2020 02:25:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
- <20200508132943.9826-12-Sergey.Semin@baikalelectronics.ru>
- <CACRpkdY=wkgnYPcqSzyzNpS6ckJZs-9kXfTfdwa1E+POzOBQGA@mail.gmail.com> <20200513001347.dyt357erev7vzy3l@mobilestation>
-In-Reply-To: <20200513001347.dyt357erev7vzy3l@mobilestation>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 14 May 2020 10:31:13 +0200
-Message-ID: <CACRpkdZTH1DNHvi4r48nLNWp4rqyYDZTzT12hw0eTNcYmgSr3Q@mail.gmail.com>
-Subject: Re: [PATCH 11/17] spi: dw: Fix native CS being unset
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Thor Thayer <thor.thayer@linux.intel.com>,
-        "wuxu.wu" <wuxu.wu@huawei.com>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20200513134338.19688-1-John.Mathew@unikie.com>
+ <20200513134338.19688-4-John.Mathew@unikie.com> <jhjy2pwq6e2.mognet@arm.com>
+In-Reply-To: <jhjy2pwq6e2.mognet@arm.com>
+From:   John Mathew <john.mathew@unikie.com>
+Date:   Thu, 14 May 2020 12:24:49 +0300
+Message-ID: <CAJz2qXn+z3va-NuqXLfdgaG6Ah3S_f2SijmL7Jn96F-8SW_ndw@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 2/3] docs: scheduler: Add scheduler overview documentation
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        rostedt@goodmis.org, Benjamin Segall <bsegall@google.com>,
+        mgorman@suse.de, bristot@redhat.com, tsbogend@alpha.franken.de,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>, x86@kernel.org,
+        linux-mips@vger.kernel.org, tglx@linutronix.de,
+        mostafa.chamanara@gmail.com, willy@infradead.org,
+        Mostafa Chamanara <mostafa.chamanara@basemark.com>,
+        Oleg Tsymbal <oleg.tsymbal@unikie.com>,
+        Randy Dunlap <rdunlap@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 13, 2020 at 2:13 AM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
-
-> > This is the correct fix now but I an afraid not correct before
-> > commit 3e5ec1db8bfe.
+On Wed, May 13, 2020 at 5:03 PM Valentin Schneider
+<valentin.schneider@arm.com> wrote:
 >
-> Sorry, but that's "enable" flag propagation from basic spi_set_cs() to the HW CS
-> setting callback is a nightmare. In Russia there is a common saying for such
-> cases, which can be translated as "you can't figure it out without a bottle of
-> vodka".)
 >
-> Actually the fix is correct no matter whether commit 3e5ec1db8bfe is applied or
-> not. At least I don't see a connection between them.
-
-OK that seems to hold given the resoning below so:
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-
-> > What I can't help but asking is: can the native chip select even
-> > handle active high chip select if not backed by a GPIO?
-> > Which register would set that polarity?
+> On 13/05/20 14:43, john mathew wrote:
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> > +Capacity-Aware Scheduling
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> > +
 >
-> No. DW APB SSI doesn't support active-high mode of the native CS's.
-
-We had some related discussion what to do with this case
-when a controller can support active high CS if and only if
-it is using a GPIO instead of the native CS. We didn't really
-figure it out, I suppose ideally we should use two flags in the
-master but that exercise is for another day.
-
-Yours.
-Linus Walleij
+> Thanks for taking a jab at this. At a glance it looks okay, with one
+> comment below.
+>
+> FWIW I still intend to write a more pamphlet-sized thing, I'll toss
+> something out in the coming weeks - depending on where this goes, I might
+> base it on this.
+>
+> > +Scheduling load balancing on Asymmetric Multiprocessor systems was imp=
+roved
+> > +through the introduction of Capacity-Aware Scheduling. It identifies t=
+he
+> > +most efficient CPU to assign a task based on its capacity. This capaci=
+ty
+> > +may be asymmetric due to heterogeneous computing architecture such
+> > +as ARM big.LITTLE. Scheduler gets information about asymmetric capacit=
+ies
+> > +when the scheduler domain hierarchy is built using build_sched_domains=
+().
+> > +CPU capacities are provided to the scheduler topology code through the
+> > +architecture specific implementation of the arch_scale_cpu_capacity().
+> > +The SD_ASYM_CPUCAPACITY flag is set by the scheduler topology for a do=
+main
+> > +in the hierarchy where all CPU capacities are visible for any cpu's po=
+int
+> > +of view on asymmetric CPU capacity systems. The scheduler can then tak=
+e
+> > +capacity asymmetry into account when load balancing.
+> > +
+> > +Initial CPU capacities are derived from the Device Tree and CPU freque=
+ncy.
+> > +For RISC-V & ARM64 it is done in drivers/base/arch_topology.c. A cpu-m=
+ap
+> > +device tree is parsed to obtain the cpu topology and the initial CPU c=
+apacity
+> > +is set using the CPUFreq subsystem. A callback is registered to the CP=
+UFreq
+> > +subsystem to rebuild sched_domains when CPU frequency changes.
+> > +
+>
+> We don't rebuild domains on frequency changes (that would be ludicrous!),
+> rather we do that on policy changes. It's mostly because we need to wait
+> for cpufreq to be loaded before having a complete view over the capacitie=
+s
+> of the CPUs (which is a mix of =C2=B5arch and frequencies), i.e. we need =
+to
+> rebuild the SD's again once cpufreq comes up.
+Fixed in v5 of the patchset.
+Thanks
