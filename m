@@ -2,65 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C17A91D3124
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 15:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D544C1D315E
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 15:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbgENNVJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 May 2020 09:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726011AbgENNVI (ORCPT
+        id S1726322AbgENNeN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 May 2020 09:34:13 -0400
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17728 "EHLO
+        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726146AbgENNeN (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 14 May 2020 09:21:08 -0400
-Received: from vultr.net.flygoat.com (vultr.net.flygoat.com [IPv6:2001:19f0:6001:3633:5400:2ff:fe8c:553])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7F6C061A0C
-        for <linux-mips@vger.kernel.org>; Thu, 14 May 2020 06:21:08 -0700 (PDT)
-Received: from flygoat-x1e (unknown [IPv6:240e:e0:f119:2cb7:6296:45e7:5f8f:e5ca])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 9F653204A1;
-        Thu, 14 May 2020 13:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1589462468; bh=dt0oMQnLD2dy80InntY+o/viGRveYVeggH/+jIqQpdo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LPQULIuxKLB/R8gDhccOB4Innq/kYwpaUMSQknxuJ+hACcfjRy5JOUc1aMBDts3D8
-         WBC5OocR1OQdQdleql8MjJfd2akehjUIcJSsZeBkB8XSEW232hN5nus6tkrSuZIz2v
-         i25RDmPogHdJe7NhK4cRpYdzrgI7GZnz/g4g7zlhn2WCAy1GDtl0Pf5rWSGiAlB+Ch
-         2IHAovFawsKqds5TWl6YOFsf1O8Y8KcJj/7p95DPIZNniMZw+tfCs2K+vCTsEcYHg0
-         0dp6hCxxedw/2obN+kvfnoocjzD/0NfyuaBhyXPUjTZuANTxduf4rH91p1Zk5f+oEy
-         AweSFZ+iWUOcw==
-Date:   Thu, 14 May 2020 21:20:43 +0800
+        Thu, 14 May 2020 09:34:13 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1589463221; cv=none; 
+        d=zoho.com.cn; s=zohoarc; 
+        b=IZ7LZzKqxM8JFB57jl3dBSxz1q9iKXBDVTiuMQ5E4fmfdVg1frTnbnbHUNWWc6c0HWVeBVTGxcF/54UMHo7SwXxXvUsBu8bXMoZ+2snDjJQsnmd3XOolj1B21NhvEDwpwI84wEUXHK8s5/3hbCiqTU4+Qn8pRzhnV7Y2yCsLb9o=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
+        t=1589463221; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
+        bh=DxSxIhjsXQ0oZ+ODruaLcydny7rxZb9pwc9UWDEzvZQ=; 
+        b=Dqh6QsttWuDnsLaq5zl19HhKzKM7hX17r/N8+9q/VjdBcdu+HbCf+d2UwfYuT1q1WpsTA4fZm3DIQs9rj/joGJyAiCNO7ER+yiWoYpQDNjI9haX91NGvnI5I00P191zZE8MwhqSkDbRB2rO64Q80Tf1UC5U1zbR9h/ewVpb4tjI=
+ARC-Authentication-Results: i=1; mx.zoho.com.cn;
+        dkim=pass  header.i=flygoat.com;
+        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
+        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1589463221;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=Date:From:To:CC:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=DxSxIhjsXQ0oZ+ODruaLcydny7rxZb9pwc9UWDEzvZQ=;
+        b=KeOcFB+xOeUH7Rs0FarxMQ6hYt6CXr+lg1ZM+LDeFU/f0e1ic147z0dZo0OR91Y7
+        9F2O7uB/n3I68VvIXyvyWH9iQre/gcrTiBKnU30Tw4jRibVMeoEMw7qM9IJBSb1Z5ei
+        3FVdQohkVittcroSrdgl8Prlsf+ikfQK/Soc6ypY=
+Received: from [127.0.0.1] (114.85.159.159 [114.85.159.159]) by mx.zoho.com.cn
+        with SMTPS id 1589463218310310.59631609983194; Thu, 14 May 2020 21:33:38 +0800 (CST)
+Date:   Thu, 14 May 2020 21:33:35 +0800
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     chenhc@lemote.com, tsbogend@alpha.franken.de, john.garry@huawei.com
-Subject: Re: [PATCH RESEND v3 2/3] MIPS: Introduce PCI_IO_VMMAP
-Message-ID: <20200514212043.4e41a4e7@flygoat-x1e>
-In-Reply-To: <20200508114438.3092215-2-jiaxun.yang@flygoat.com>
-References: <20200426114806.1176629-1-jiaxun.yang@flygoat.com>
-        <20200508114438.3092215-1-jiaxun.yang@flygoat.com>
-        <20200508114438.3092215-2-jiaxun.yang@flygoat.com>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+To:     Huacai Chen <chenhc@lemote.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+CC:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@gmail.com>
+Subject: Re: [PATCH V5 15/15] MAINTAINERS: Update KVM/MIPS maintainers
+User-Agent: K-9 Mail for Android
+Reply-to: jiaxun.yang@flygoat.com
+In-Reply-To: <1589359366-1669-16-git-send-email-chenhc@lemote.com>
+References: <1589359366-1669-1-git-send-email-chenhc@lemote.com> <1589359366-1669-16-git-send-email-chenhc@lemote.com>
+Message-ID: <AC9338A0-F449-4DCA-A294-248C86D57877@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ZohoCNMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri,  8 May 2020 19:44:37 +0800
-Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 
-> Define PCI_IOBASE for MIPS at the strat of kernel mapping segment.
-> That would allow virt address of I/O ports to be dynamicly mapped.
-> So we'll be able to combine multiple MMIO ranges into I/O ports
-> and thus we can take advantage of logic_pio mechanism.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
 
-Any update?
+=E4=BA=8E 2020=E5=B9=B45=E6=9C=8813=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=884=
+:42:46, Huacai Chen <chenhc@lemote=2Ecom> =E5=86=99=E5=88=B0:
+>James Hogan has become inactive for a long time and leaves KVM for MIPS
+>orphan=2E I'm working on KVM/Loongson and attempt to make it upstream bot=
+h
+>in kernel and QEMU, while Aleksandar Markovic is already a maintainer of
+>QEMU/MIPS=2E We are both interested in QEMU/KVM/MIPS, and we have already
+>made some contributions in kernel and QEMU=2E If possible, we want to tak=
+e
+>the KVM/MIPS maintainership=2E
+>
+>Signed-off-by: Huacai Chen <chenhc@lemote=2Ecom>
+>---
 
-Thanks.
+Reviewed-by: Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom>
 
-[...]
---
+Huacai is extremely experienced on virtualization,
+his PhD thesis is about virtualization too=2E
+He had been working on Loongson kernel for a long period=2E
+
+Alexander maintained QEMU/MIPS for some years, he is a expert on
+QEMU and MIPS architecture=2E
+
+I believe these guys can effectively bring MIPS/KVM support back to sea le=
+vel again=2E
+
+Best wishes!
+--=20
 Jiaxun Yang
