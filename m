@@ -2,89 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D544C1D315E
-	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 15:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE021D3161
+	for <lists+linux-mips@lfdr.de>; Thu, 14 May 2020 15:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726322AbgENNeN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 May 2020 09:34:13 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17728 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726146AbgENNeN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 14 May 2020 09:34:13 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1589463221; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=IZ7LZzKqxM8JFB57jl3dBSxz1q9iKXBDVTiuMQ5E4fmfdVg1frTnbnbHUNWWc6c0HWVeBVTGxcF/54UMHo7SwXxXvUsBu8bXMoZ+2snDjJQsnmd3XOolj1B21NhvEDwpwI84wEUXHK8s5/3hbCiqTU4+Qn8pRzhnV7Y2yCsLb9o=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1589463221; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
-        bh=DxSxIhjsXQ0oZ+ODruaLcydny7rxZb9pwc9UWDEzvZQ=; 
-        b=Dqh6QsttWuDnsLaq5zl19HhKzKM7hX17r/N8+9q/VjdBcdu+HbCf+d2UwfYuT1q1WpsTA4fZm3DIQs9rj/joGJyAiCNO7ER+yiWoYpQDNjI9haX91NGvnI5I00P191zZE8MwhqSkDbRB2rO64Q80Tf1UC5U1zbR9h/ewVpb4tjI=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=flygoat.com;
-        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
-        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1589463221;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:From:To:CC:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=DxSxIhjsXQ0oZ+ODruaLcydny7rxZb9pwc9UWDEzvZQ=;
-        b=KeOcFB+xOeUH7Rs0FarxMQ6hYt6CXr+lg1ZM+LDeFU/f0e1ic147z0dZo0OR91Y7
-        9F2O7uB/n3I68VvIXyvyWH9iQre/gcrTiBKnU30Tw4jRibVMeoEMw7qM9IJBSb1Z5ei
-        3FVdQohkVittcroSrdgl8Prlsf+ikfQK/Soc6ypY=
-Received: from [127.0.0.1] (114.85.159.159 [114.85.159.159]) by mx.zoho.com.cn
-        with SMTPS id 1589463218310310.59631609983194; Thu, 14 May 2020 21:33:38 +0800 (CST)
-Date:   Thu, 14 May 2020 21:33:35 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Huacai Chen <chenhc@lemote.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        id S1726168AbgENNed (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 May 2020 09:34:33 -0400
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:21015 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726140AbgENNed (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 May 2020 09:34:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1589463273; x=1620999273;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-transfer-encoding;
+  bh=8PX/L/naQftDsm+cBX69ACqTXRpTmFduJBFfTfnCbEE=;
+  b=C9hE8LpMowxWM/OSoTLdXkGb/G0znJeZsxE+KBhqS1lA7fqseDMgedVC
+   UONYckln/A2m9rhvuNDeAv25pLNifN7xiXXUi5WTS/YvSn3BEQwr+uQCl
+   cFtHNqV6o0UsB4wYjI8fW7j9oFpgWFnVItnnyEsv9E7HsHGa9HLs1DDCe
+   Pnm55j0X2otuaKgs5b3sTjYg8fkA5uQp7HL17Z2/fha5wqYo4AeGNJ6rv
+   00/Am6fPhVkakTcB9iTNrXSbMeC2Dc9fh2dEJklr4REw30rjHr1Q3TyCf
+   mZlg4jSogHkYYCVSNsrpo9GxplPJzgYC9VoQOsSJ8qJpwawOUl5/LkziD
+   Q==;
+IronPort-SDR: swCtBAYDjjCyyiUqg4mYkZSLQ0eObN975BJbFniIZu+olCbm32G7T6/8Q2eh04SdZ/klDr18cP
+ UQqv3n+rPSpY1Its92krlFMTWOt8jgHsED/459C/lx7/B3+i6PpQ0R2V2f9U2OpeTVQIbxBmX2
+ hifD8LMtyXKqP0QWcVT1lr0yyklabHo2D93jXkBJvkAUMoUKT8XUkxlnimdT2kW3MQNZpCowb8
+ nZJZuTlI+6OP5fVmKICvya+4mo62kYB4TdnUgTDCHt2WKuc+DbKnD2aorLFhIoyLrVshyba5sv
+ eWY=
+X-IronPort-AV: E=Sophos;i="5.73,391,1583164800"; 
+   d="scan'208";a="240388828"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 14 May 2020 21:34:33 +0800
+IronPort-SDR: UQqrcpAkSslpR8S1FwmY3S9XoKwk9p/bamfgOsV3dOP5nfLLVeItZvQIXbu99uDVzyy5qGFeRn
+ q/3UJoABjlwppkA7FGE6R35IKkv/Sf4sE=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 06:24:12 -0700
+IronPort-SDR: dOQ+2MaR1eefUwGBgVuaBVDuKbxo6IuUfevUdMIWNzRnJriKNVZWhzBAYBLQItiXfufb6QRhTF
+ P+f96057z1OA==
+WDCIronportException: Internal
+Received: from unknown (HELO redsun52) ([10.149.66.28])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 06:34:29 -0700
+Date:   Thu, 14 May 2020 14:34:26 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@wdc.com>
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+cc:     Bibo Mao <maobibo@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-CC:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Huacai Chen <chenhuacai@gmail.com>
-Subject: Re: [PATCH V5 15/15] MAINTAINERS: Update KVM/MIPS maintainers
-User-Agent: K-9 Mail for Android
-Reply-to: jiaxun.yang@flygoat.com
-In-Reply-To: <1589359366-1669-16-git-send-email-chenhc@lemote.com>
-References: <1589359366-1669-1-git-send-email-chenhc@lemote.com> <1589359366-1669-16-git-send-email-chenhc@lemote.com>
-Message-ID: <AC9338A0-F449-4DCA-A294-248C86D57877@flygoat.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Dmitry Korotin <dkorotin@wavecomp.com>,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Maciej W. Rozycki" <macro@linux-mips.org>
+Subject: Re: [PATCH] MIPS: update tlb even if pte entry has no change
+In-Reply-To: <f165deac-1a71-dd88-dfe5-c1701f31567b@cogentembedded.com>
+Message-ID: <alpine.LFD.2.21.2005141426160.6492@redsun52.ssa.fujisawa.hgst.com>
+References: <1589422677-11455-1-git-send-email-maobibo@loongson.cn> <b46f4ac1-9738-6037-d60a-faebf2b4365c@cogentembedded.com> <f165deac-1a71-dd88-dfe5-c1701f31567b@cogentembedded.com>
+User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoCNMailClient: External
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, 14 May 2020, Sergei Shtylyov wrote:
 
+> >> If there are two threads reading the same memory and tlb miss happens,
+> >> one thread fills pte entry, the other reads new pte value during page fault
+> >> handling. PTE value may be updated before page faul, so the process need
+> > 
+> >     Fault.
+> 
+>     And "needs".
+> 
+> >> need update tlb still.
+> 
+>     Oh, and one "need" is enough. :-)
 
-=E4=BA=8E 2020=E5=B9=B45=E6=9C=8813=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=884=
-:42:46, Huacai Chen <chenhc@lemote=2Ecom> =E5=86=99=E5=88=B0:
->James Hogan has become inactive for a long time and leaves KVM for MIPS
->orphan=2E I'm working on KVM/Loongson and attempt to make it upstream bot=
-h
->in kernel and QEMU, while Aleksandar Markovic is already a maintainer of
->QEMU/MIPS=2E We are both interested in QEMU/KVM/MIPS, and we have already
->made some contributions in kernel and QEMU=2E If possible, we want to tak=
-e
->the KVM/MIPS maintainership=2E
->
->Signed-off-by: Huacai Chen <chenhc@lemote=2Ecom>
->---
+ Hmm, "the process need update" looks right to me (compare "the process 
+need not update") as "need" is used as a modal verb in this sentence.  
+Alternatively "the process needs to update" could be used (with "need" as 
+a main verb, and "to" then).
 
-Reviewed-by: Jiaxun Yang <jiaxun=2Eyang@flygoat=2Ecom>
+ I'm not a native English speaker though, so I might be missing a usage 
+subtlety here.
 
-Huacai is extremely experienced on virtualization,
-his PhD thesis is about virtualization too=2E
-He had been working on Loongson kernel for a long period=2E
+ NB I'd be in favour of capitalising "PTE" and "TLB" consistently 
+throughout though as the norm is with acronyms.
 
-Alexander maintained QEMU/MIPS for some years, he is a expert on
-QEMU and MIPS architecture=2E
-
-I believe these guys can effectively bring MIPS/KVM support back to sea le=
-vel again=2E
-
-Best wishes!
---=20
-Jiaxun Yang
+  Maciej
