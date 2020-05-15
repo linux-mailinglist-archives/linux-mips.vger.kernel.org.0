@@ -2,80 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE3F1D54F0
-	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 17:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 572A01D5553
+	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 17:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726288AbgEOPnP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 May 2020 11:43:15 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:38004 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726246AbgEOPnP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 May 2020 11:43:15 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 4EE888029EC9;
-        Fri, 15 May 2020 15:43:12 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IQ3PdJDbfO6V; Fri, 15 May 2020 18:43:10 +0300 (MSK)
-Date:   Fri, 15 May 2020 18:43:08 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        id S1726438AbgEOP6y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 May 2020 11:58:54 -0400
+Received: from mga11.intel.com ([192.55.52.93]:23856 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726407AbgEOP6x (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 15 May 2020 11:58:53 -0400
+IronPort-SDR: 2mHQnDI+cDVuxPl4+6x4XzYcU9BCzxzHCrj7+4wEp8s+/sre3qQeA2EMi46obvskbTsdfHECEA
+ YPKufeby6AzA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 08:58:53 -0700
+IronPort-SDR: HirYw8rAPztdjIA+/NI+F9pTHI7jr2RVdgGVqpP6A1KNTRdCnoAGKJuyB90njmSwKQdRaaUe4r
+ 3Fk2+H3/lEUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,395,1583222400"; 
+   d="scan'208";a="263229930"
+Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.249.131.101]) ([10.249.131.101])
+  by orsmga003.jf.intel.com with ESMTP; 15 May 2020 08:58:48 -0700
+Subject: Re: [PATCH v2 20/20] cpufreq: Return zero on success in boost sw
+ setting
+To:     Sergey.Semin@baikalelectronics.ru,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Allison Randal <allison@lohutok.net>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        <linux-mips@vger.kernel.org>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 01/19] dt-bindings: spi: dw: Add Tx/Rx DMA properties
-Message-ID: <20200515154308.7s3wauq5edwj437y@mobilestation>
-References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-2-Sergey.Semin@baikalelectronics.ru>
- <20200515115151.GU185537@smile.fi.intel.com>
- <20200515122715.GC5066@sirena.org.uk>
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Yue Hu <huyue2@yulong.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-21-Sergey.Semin@baikalelectronics.ru>
+From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
+ 173, 80-298 Gdansk
+Message-ID: <c5109483-4c14-1a0c-efa9-51edf01c12de@intel.com>
+Date:   Fri, 15 May 2020 17:58:47 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200515122715.GC5066@sirena.org.uk>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200506174238.15385-21-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 15, 2020 at 01:27:15PM +0100, Mark Brown wrote:
-> On Fri, May 15, 2020 at 02:51:51PM +0300, Andy Shevchenko wrote:
-> > On Fri, May 15, 2020 at 01:47:40PM +0300, Serge Semin wrote:
-> 
-> > > Since commit 22d48ad7bfac ("spi: dw: Add Elkhart Lake PSE DMA support")
-> > > the spi-dw-mid.c module supports a platform DMA engine handling the DW APB
-> > > SSI controller requests. Lets alter the DW SPI bindings file to accept the
-> > > Rx and Tx DMA line specifiers.
-> 
-> > I'm wondering if these properties are implied by the SPI generic one?
-> > (forgive me if I'm not understanding all DT schema relations)
-> 
-> Which SPI generic DMA bindings are you thinking of here?  There aren't
-> any in spi-controller.yaml.
+On 5/6/2020 7:42 PM, Sergey.Semin@baikalelectronics.ru wrote:
+> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+>
+> Recent commit e61a41256edf ("cpufreq: dev_pm_qos_update_request() can
+> return 1 on success") fixed a problem when active policies traverse
+> was falsely stopped due to invalidly treating the non-zero return value
+> from freq_qos_update_request() method as an error. Yes, that function
+> can return positive values if the requested update actually took place.
+> The current problem is that the returned value is then passed to the
+> return cell of the cpufreq_boost_set_sw() (set_boost callback) method.
+> This value is then also analyzed for being non-zero, which is also
+> treated as having an error. As a result during the boost activation
+> we'll get an error returned while having the QOS frequency update
+> successfully performed. Fix this by returning a negative value from the
+> cpufreq_boost_set_sw() if actual error was encountered and zero
+> otherwise treating any positive values as the successful operations
+> completion.
+>
+> Fixes: 18c49926c4bf ("cpufreq: Add QoS requests for userspace constraints")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: linux-mips@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Cc: stable@vger.kernel.org
+> ---
+>   drivers/cpufreq/cpufreq.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 045f9fe157ce..5870cdca88cf 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2554,7 +2554,7 @@ static int cpufreq_boost_set_sw(int state)
+>   			break;
+>   	}
+>   
+> -	return ret;
+> +	return ret < 0 ? ret : 0;
+>   }
+>   
+>   int cpufreq_boost_trigger_state(int state)
 
-There are default schemas in the dt-core, which defines the dmas and dma-names
-type, but the exact naming and number of phandler+identifiers are implementation
-specific. So it's either supposed to be implemented on the generic SPI controller
-basis (like in someplace of spi-controller.yaml) or in individual controllers DT
-schema. As Mark said we don't have any DMA properties definition in the generic
-SPI controller schema (spi-controller.yaml), so the particular SPI controllers
-DT schemas have got their own DMA properties declared. Most of them BTW use the
-same naming as we do here: "rx" and "tx", but some alas don't.
+IMO it is better to update the caller of this function to handle the 
+positive value possibly returned by it correctly.
 
--Sergey
+Thanks!
+
+
