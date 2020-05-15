@@ -2,155 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF6E1D5090
-	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 16:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AC91D50AF
+	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 16:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726266AbgEOOdF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 May 2020 10:33:05 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:37638 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726140AbgEOOdF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 May 2020 10:33:05 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id DB4C080004AB;
-        Fri, 15 May 2020 14:33:01 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id DGjAxQRrTWZS; Fri, 15 May 2020 17:32:57 +0300 (MSK)
-Date:   Fri, 15 May 2020 17:32:54 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiri Slaby <jslaby@suse.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
+        id S1726479AbgEOOg5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 May 2020 10:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726163AbgEOOg4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 15 May 2020 10:36:56 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D3CC05BD09;
+        Fri, 15 May 2020 07:36:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=HKx/QpgyxJ6c+gcZJNfN2/GfGMIbydRitmrecAV7LdM=; b=e40fHlJwbNPK/oCRkiewUZHtoZ
+        JJJ+t1x8X3QV2n0Lukko+n8nlbWQFaqkAm9bXmAn0LEAHvsYtXA/ED46Qkhd3Wo4dC3lj9Cdjnhn4
+        2GMxO3l2bcfk8hCFGEkyKo79dCHF0dW0wzug2S7fOVDqqdxBiNErPRWKoqoW7a+vMOTzwhiXqzxde
+        yarxr8pniYHBW0nkAaHpSU30+qCnpw33gjGTv0zo9wd+L3+ubP8fVYYd3Mao0Mvo1SPygjDTG4M6W
+        uLpEub5zhVYe+GOr38SOefuPOEjNKqgIjZD47gM0x/vngs4vSjlwFW8ylRDeR9zXZutwV9Xx9BczP
+        T5GGltuQ==;
+Received: from [2001:4bb8:188:1506:c70:4a89:bc61:2] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jZbSC-0003n6-BC; Fri, 15 May 2020 14:36:49 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Andrew Morton <akpm@linux-foundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Long Cheng <long.cheng@mediatek.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        <linux-mips@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Lukas Wunner <lukas@wunner.de>, Stefan Roese <sr@denx.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Allison Randal <allison@lohutok.net>,
-        Yegor Yefremov <yegorslists@googlemail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/4] serial: 8250: Add 8250 port clock update method
-Message-ID: <20200515143254.oicqdkvvh6zkuqyl@mobilestation>
-References: <20200323024611.16039-1-Sergey.Semin@baikalelectronics.ru>
- <20200506233136.11842-1-Sergey.Semin@baikalelectronics.ru>
- <20200506233136.11842-3-Sergey.Semin@baikalelectronics.ru>
- <20200515124525.GA1888557@kroah.com>
+        Roman Zippel <zippel@linux-m68k.org>
+Cc:     Jessica Yu <jeyu@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-c6x-dev@linux-c6x.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux-fsdevel@vger.kernel.org
+Subject: sort out the flush_icache_range mess v2
+Date:   Fri, 15 May 2020 16:36:17 +0200
+Message-Id: <20200515143646.3857579-1-hch@lst.de>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200515124525.GA1888557@kroah.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 15, 2020 at 02:45:25PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, May 07, 2020 at 02:31:33AM +0300, Serge Semin wrote:
-> > Some platforms can be designed in a way so the UART port reference clock
-> > might be asynchronously changed at some point. In Baikal-T1 SoC this may
-> > happen due to the reference clock being shared between two UART ports, on
-> > the Allwinner SoC the reference clock is derived from the CPU clock, so
-> > any CPU frequency change should get to be known/reflected by/in the UART
-> > controller as well. But it's not enough to just update the
-> > uart_port->uartclk field of the corresponding UART port, the 8250
-> > controller reference clock divisor should be altered so to preserve
-> > current baud rate setting. All of these things is done in a coherent
-> > way by calling the serial8250_update_uartclk() method provided in this
-> > patch. Though note that it isn't supposed to be called from within the
-> > UART port callbacks because the locks using to the protect the UART port
-> > data are already taken in there.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Paul Burton <paulburton@kernel.org>
-> > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Long Cheng <long.cheng@mediatek.com>
-> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Cc: Maxime Ripard <mripard@kernel.org>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Russell King <linux@armlinux.org.uk>
-> > Cc: linux-mips@vger.kernel.org
-> > Cc: linux-arm-kernel@lists.infradead.org
-> > Cc: linux-mediatek@lists.infradead.org
-> > ---
-> >  drivers/tty/serial/8250/8250_port.c | 38 +++++++++++++++++++++++++++++
-> >  include/linux/serial_8250.h         |  2 ++
-> >  2 files changed, 40 insertions(+)
-> > 
-> > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> > index 4d83c85a7389..484ff9df1432 100644
-> > --- a/drivers/tty/serial/8250/8250_port.c
-> > +++ b/drivers/tty/serial/8250/8250_port.c
-> > @@ -2628,6 +2628,44 @@ static unsigned int serial8250_get_baud_rate(struct uart_port *port,
-> >  				  (port->uartclk + tolerance) / 16);
-> >  }
-> >  
-> > +/*
-> > + * Note in order to avoid the tty port mutex deadlock don't use the next method
-> > + * within the uart port callbacks. Primarily it's supposed to be utilized to
-> > + * handle a sudden reference clock rate change.
-> > + */
-> > +void serial8250_update_uartclk(struct uart_port *port, unsigned int uartclk)
-> > +{
-> > +	struct uart_8250_port *up = up_to_u8250p(port);
-> > +	unsigned int baud, quot, frac = 0;
-> > +	struct ktermios *termios;
-> > +	unsigned long flags;
-> > +
-> > +	mutex_lock(&port->state->port.mutex);
-> > +
-> > +	if (port->uartclk == uartclk)
-> > +		goto out_lock;
-> > +
-> > +	port->uartclk = uartclk;
-> > +	termios = &port->state->port.tty->termios;
-> > +
-> > +	baud = serial8250_get_baud_rate(port, termios, NULL);
-> > +	quot = serial8250_get_divisor(port, baud, &frac);
-> > +
-> > +	spin_lock_irqsave(&port->lock, flags);
-> > +
-> > +	uart_update_timeout(port, termios->c_cflag, baud);
-> > +
-> > +	serial8250_set_divisor(port, baud, quot, frac);
-> > +	serial_port_out(port, UART_LCR, up->lcr);
-> > +	serial8250_out_MCR(up, UART_MCR_DTR | UART_MCR_RTS);
-> > +
-> > +	spin_unlock_irqrestore(&port->lock, flags);
-> > +
-> > +out_lock:
-> > +	mutex_unlock(&port->state->port.mutex);
-> > +}
-> > +EXPORT_SYMBOL(serial8250_update_uartclk);
-> 
-> EXPORT_SYMBOL_GPL() please.
+Hi all,
 
-Ok. I guess I've just copied the line from some of the export symbol
-statements below. My mistake. Sorry.
+flush_icache_range is mostly used for kernel address, except for the following
+cases:
 
--Sergey
+ - the nommu brk and mmap implementations,
+ - the read_code helper that is only used for binfmt_flat, binfmt_elf_fdpic,
+   and binfmt_aout including the broken ia32 compat version
+ - binfmt_flat itself,
 
-> 
-> thanks,
-> 
-> greg k-h
+none of which really are used by a typical MMU enabled kernel, as a.out can
+only be build for alpha and m68k to start with.
+
+But strangely enough commit ae92ef8a4424 ("PATCH] flush icache in correct
+context") added a "set_fs(KERNEL_DS)" around the flush_icache_range call
+in the module loader, because apparently m68k assumed user pointers.
+
+This series first cleans up the cacheflush implementations, largely by
+switching as much as possible to the asm-generic version after a few
+preparations, then moves the misnamed current flush_icache_user_range to
+a new name, to finally introduce a real flush_icache_user_range to be used
+for the above use cases to flush the instruction cache for a userspace
+address range.  The last patch then drops the set_fs in the module code
+and moves it into the m68k implementation.
+
+A git tree is available here:
+
+    git://git.infradead.org/users/hch/misc.git flush_icache_range.2
+
+Gitweb:
+
+    http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/flush_icache_range.2
+
+Changes since v1:
+ - fix pmem.c compilation on some s390 configs
+ - drop two patches picked up by the arch maintainers
