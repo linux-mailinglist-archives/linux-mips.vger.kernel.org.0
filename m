@@ -2,29 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AADD1D5789
-	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 19:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 908491D58FC
+	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 20:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726231AbgEORWB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 May 2020 13:22:01 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:38296 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726257AbgEORWB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 May 2020 13:22:01 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 97B2780005C9;
-        Fri, 15 May 2020 17:21:58 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9GksroUVuDzB; Fri, 15 May 2020 20:21:57 +0300 (MSK)
-Date:   Fri, 15 May 2020 20:21:55 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
+        id S1726521AbgEOSVY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 May 2020 14:21:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45978 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726191AbgEOSVY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 15 May 2020 14:21:24 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6C75420728;
+        Fri, 15 May 2020 18:21:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589566884;
+        bh=ckBVg1MJiVxCyn1jj47za/KaV60o81y+aY8hdhxTv+Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SUFZPl9QG+I4sO2uHgaBRWO0H+NYBBemyg2JiqEHfu24RGQA70mbOne0B1OJdHGHS
+         xLZS7vxraN97lS4WEorIVxzbq69D68YIEDapFNN6Zr50BpVoR+wtpTRMPNEGwzmoGf
+         sfpUPlq3KwdhOB6PUcLXJun7s1kgOTM696A25Th4=
+Date:   Fri, 15 May 2020 19:21:21 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
         Georgy Vlasov <Georgy.Vlasov@baikalelectronics.ru>,
         Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
@@ -32,44 +42,70 @@ CC:     Serge Semin <fancer.lancer@gmail.com>,
         Allison Randal <allison@lohutok.net>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Gareth Williams <gareth.williams.jx@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Wan Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 03/19] spi: dw: Clear DMAC register when done or
- stopped
-Message-ID: <20200515172155.e4stpr7j66qp332a@mobilestation>
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/19] spi: dw: Add generic DW DMA controller support
+Message-ID: <20200515182121.GP5066@sirena.org.uk>
 References: <20200508132943.9826-1-Sergey.Semin@baikalelectronics.ru>
  <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
- <20200515104758.6934-4-Sergey.Semin@baikalelectronics.ru>
- <20200515164203.GJ5066@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="o41d8xLWOaLD8vYh"
 Content-Disposition: inline
-In-Reply-To: <20200515164203.GJ5066@sirena.org.uk>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200515104758.6934-1-Sergey.Semin@baikalelectronics.ru>
+X-Cookie: Avoid contact with eyes.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, May 15, 2020 at 05:42:03PM +0100, Mark Brown wrote:
-> On Fri, May 15, 2020 at 01:47:42PM +0300, Serge Semin wrote:
-> > If DMAC register is left uncleared any further DMAless transfers
-> > may cause the DMAC hardware handshaking interface getting activated.
-> 
-> This and patch 4 look good as is but they don't apply against for-5.7
-> due to context changes in -next, unfortunately everyone seems to have
-> decided that now is the time to start working on this driver which makes
-> combinations of new work and fixes awkward.  I'm going to apply these
-> for 5.8 but it'd be good if you could send versions based on for-5.7 as
-> well so I can apply there - I can sort out the conflicts with 5.8.
-> 
 
-Thanks. I'll send these two patches:
-spi: dw: Clear DMAC register when done or stopped
-spi: dw: Fix native CS being unset
-rebased on top of the for-5.7.
+--o41d8xLWOaLD8vYh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--Sergey
+On Fri, May 15, 2020 at 01:47:39PM +0300, Serge Semin wrote:
+
+Appled:
+
+>   dt-bindings: spi: dw: Add Tx/Rx DMA properties
+>   spi: dw: Clear DMAC register when done or stopped
+>   spi: dw: Fix native CS being unset
+>   spi: dw: Initialize paddr in DW SPI MMIO private data
+
+Thanks.  No issues from me with the other patches.
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+--o41d8xLWOaLD8vYh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6+3aAACgkQJNaLcl1U
+h9AGPAf/VsoxJ5zaBMEYFMY7L9rknyrkpX4QpC4b+7Dqn/k9fDezq5tQfvzsSRT+
+c53PKsNYEJmdWAa06UJpLHroHf4Tgu/SythyLU5ad2eUg2hHqrtoy2pFDtn4qFKp
+deRuFD01wqSKVe8zgyJ3kVRNOwosZiNYY2odh3t09vp7Xhsm0IBhlus6uRJH7szG
+YkHF44v54fVuQvm5FD5QxTIMLN8inIJk+4oC5Xx+LQ5qf7hCInCmUgg7x/d9I2mC
+HxfMDDegEPXj22WtkOvNlOlnWhL1ddS9VHNXBf7e5QDIoVlwq+9ZyKAKNMWgCYRV
+uefRPVN+eOxdTIDgjo4ftLeW9I6E4g==
+=tbav
+-----END PGP SIGNATURE-----
+
+--o41d8xLWOaLD8vYh--
