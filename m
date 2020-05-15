@@ -2,88 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD931D43FB
-	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 05:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14E71D4404
+	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 05:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727924AbgEODS0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 May 2020 23:18:26 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17768 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727869AbgEODSZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 14 May 2020 23:18:25 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1589512684; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=Kr82VYcwh3WX1pT2Oz1uE0TVVH+6tE7BKeDMG6WSj8nhIGEic/tb5AT080jfYk4Pqb71v13HBBK9pKrx5xre3BWuTUqkTISB0vsylpgZ4e1SlIuyWQY+gBjt2KrYh+EQ9tDdTnrr/BMSp6CFHUzx8Gan7YsdyCr03EKe2nXco5M=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1589512684; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
-        bh=a9MfE+IX939f7XSiZya+c23GX+UUfpJI7N9HjGVXA54=; 
-        b=eJ5JcL/ZlMz4eaMd3GqcgEp6r20GUk1IVL9+wQunCYW9BKmaxCI3NSaKl8RCzN5FrsB0HBO2aW5eP4cHyHHQa7cMotSfw4Na/pw7DZ0U1UCt4CIVD8dl5DEZes4R8RlGT16MU+yPH9n7Chwq4PqPOxbSvomYrxZswQjkF9G9Nzc=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=flygoat.com;
-        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
-        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1589512684;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:From:To:CC:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=a9MfE+IX939f7XSiZya+c23GX+UUfpJI7N9HjGVXA54=;
-        b=MaEKK/Mb8RQAk6lxjVcnvoEMdPLX2BhCBsjt91L3kre/rspxvztpC+xf1443+Xvq
-        PJSPLMmdCZC/y5xktWkiGPG//Sip7wcFNMDIUb5whHJEi4/oXAxeuJC8QOQ8fEK775h
-        kZoLMsY2Vt6J4dg35RuIgIdZywx6xovyv1Bw8oHY=
-Received: from [127.0.0.1] (101.84.172.108 [101.84.172.108]) by mx.zoho.com.cn
-        with SMTPS id 15895126814021012.4116349819437; Fri, 15 May 2020 11:18:01 +0800 (CST)
-Date:   Fri, 15 May 2020 11:17:58 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>
-CC:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S1728103AbgEODXL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 May 2020 23:23:11 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:46358 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727819AbgEODXL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 14 May 2020 23:23:11 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx32gaC75ehPA0AA--.47S2;
+        Fri, 15 May 2020 11:23:06 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH 1/2] MIPS: Loongson: Fix fatal error during GPU init
-User-Agent: K-9 Mail for Android
-Reply-to: jiaxun.yang@flygoat.com
-In-Reply-To: <636ba812-3849-2667-d625-ab7e35d5ac36@loongson.cn>
-References: <1589508901-18077-1-git-send-email-yangtiezhu@loongson.cn> <ECE71DFC-57D3-4132-BB85-609448B29238@flygoat.com> <636ba812-3849-2667-d625-ab7e35d5ac36@loongson.cn>
-Message-ID: <F7BAD661-9D82-4063-B685-4A7192B7F172@flygoat.com>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-ZohoCNMailClient: External
+Subject: [PATCH v2 1/2] MIPS: Loongson: Build ATI Radeon GPU driver as module
+Date:   Fri, 15 May 2020 11:23:04 +0800
+Message-Id: <1589512985-27419-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dx32gaC75ehPA0AA--.47S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFWUWr4kKrW7tFW5JF4ruFg_yoW8Xw1xpr
+        45Gan3JFWkGrnYkrZ7CrZ7WrWYvFs5JFW3ur40kry7Crs3Za40vry5tr1UJr4UXrZ8ta1S
+        9r93Gr1SkanrCa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
+        Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUg_-PUUUU
+        U==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+When ATI Radeon GPU driver has been compiled directly into the kernel
+instead of as a module, we should make sure the firmware for the model
+(check available ones in /lib/firmware/radeon) is built-in to the kernel
+as well, otherwise there exists the following fatal error during GPU init,
+change CONFIG_DRM_RADEON=y to CONFIG_DRM_RADEON=m to fix it.
 
+[    1.900997] [drm] Loading RS780 Microcode
+[    1.905077] radeon 0000:01:05.0: Direct firmware load for radeon/RS780_pfp.bin failed with error -2
+[    1.914140] r600_cp: Failed to load firmware "radeon/RS780_pfp.bin"
+[    1.920405] [drm:r600_init] *ERROR* Failed to load firmware!
+[    1.926069] radeon 0000:01:05.0: Fatal error during GPU init
+[    1.931729] [drm] radeon: finishing device.
 
-=E4=BA=8E 2020=E5=B9=B45=E6=9C=8815=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=881=
-1:09:56, Tiezhu Yang <yangtiezhu@loongson=2Ecn> =E5=86=99=E5=88=B0:
->On 05/15/2020 10:33 AM, Jiaxun Yang wrote:
->>
->> =E4=BA=8E 2020=E5=B9=B45=E6=9C=8815=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=
-=8810:15:00, Tiezhu Yang <yangtiezhu@loongson=2Ecn> =E5=86=99=E5=88=B0:
->>> When ATI Radeon graphics card has been compiled directly into the kern=
-el
->>> instead of as a module, we should make sure the firmware for the model
->>> (check available ones in /lib/firmware/radeon) is built-in to the kern=
-el
->>> as well, otherwise there exists the following fatal error during GPU i=
-nit,
->>> change CONFIG_DRM_RADEON=3Dy to CONFIG_DRM_RADEON=3Dm to fix it=2E
->>>
->> The commit message looks shocking=2E
->>
->> You'd better reword it as "MIPS: Loongson64: Mark GPU driver as module =
-in Kconfig"
->
->OK, I will modify the patch subject and send v2=2E
+Fixes: 024e6a8b5bb1 ("MIPS: Loongson: Add a Loongson-3 default config file")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
 
-Sorry I meant defconfig not Kconfig=2E
->
->>
->> Thanks=2E
->
+v2:
+  - Modify the patch subject and update the commit message
 
---=20
-Jiaxun Yang
+ arch/mips/configs/loongson3_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index 6768c16..4df2434 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -230,7 +230,7 @@ CONFIG_MEDIA_CAMERA_SUPPORT=y
+ CONFIG_MEDIA_USB_SUPPORT=y
+ CONFIG_USB_VIDEO_CLASS=m
+ CONFIG_DRM=y
+-CONFIG_DRM_RADEON=y
++CONFIG_DRM_RADEON=m
+ CONFIG_FB_RADEON=y
+ CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_LCD_PLATFORM=m
+-- 
+2.1.0
+
