@@ -2,97 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCB01D48CF
-	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 10:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9631D48E0
+	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 10:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727837AbgEOIvj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 May 2020 04:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727833AbgEOIvj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 15 May 2020 04:51:39 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12260C061A0C
-        for <linux-mips@vger.kernel.org>; Fri, 15 May 2020 01:51:39 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id g1so1367273ljk.7
-        for <linux-mips@vger.kernel.org>; Fri, 15 May 2020 01:51:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=E8iSa6ALDqacyJ/a+HRe0nZCH4WvMfQxe+p585lwoJE=;
-        b=ifUAfR6z5qzxx2rSJkcgO+arSZPSic63yjaBwBK+DBtdY41jLP1+kSNu7RDNaz6Rz7
-         uy8vIdVtQPqR4XjnUdzngajCpDyOrLcnBZI5rmDlAU+NgSr5B0wf/EZtSzP3Yv4XFLRl
-         h1DS5lpjBTR4bFDjpUtKXXS0eviDfS0h0/Jg/US9uB+flzv+Fx+D4Gogami8mz7gpaFE
-         HDJw6tllwrmoRy5xtniAg5kd9FSAzLnuMqrEKpiJmojLr223NbhFraZnEJo55fc7WOgA
-         9powX8lqymWuLCZwl6D8TXwuliU6FPoYuNxvsF2EQLwirxzivoY6nDoYBfeWOcRyyypg
-         +a7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=E8iSa6ALDqacyJ/a+HRe0nZCH4WvMfQxe+p585lwoJE=;
-        b=erPFrxlaLfncX5Uu+fBZA6gnS0yDzwRwyJ2LIZZA7fGf+EsQOedR7oObluY88Q0KRC
-         ET9jfl22axkeMq8r3a3zXKgQmdGYy3mVun4/Fc0rz8AUkTwhIEj/TfXsUayUkl55X0bJ
-         aDsbeWmLDvFZWKRCqimrClhV4zZgG1G7or8I8qAs0ar7ZMQ27mvNJDfSVR7U29M74Idz
-         YvSGU1dXLTQ2rm02bbamhUoKQMP5RqU6BRyQm4pyXjxfajM35mfwqDaZb3fgaMnicder
-         2Iq2rB6zfGJ9NWOypSyVp0ulKlNeVUKeYCZlkkJArq7wbYSzbSKXeGPUQhgI52jKmkdG
-         Cw0Q==
-X-Gm-Message-State: AOAM532IPqjXivNs6G+3DF3yFRW4GXd38lWRxATUH4xmsnCujFBpgUAL
-        m+FK3w8XkVJDwcCachOUUe8S6z/os8U7sw==
-X-Google-Smtp-Source: ABdhPJy/YvG5iCdqZMV5vnOhHeT1sBeHj6YHDTBZHwNFu044wP6T3JgWzucfB2LxnYJz4S5Zqa3i3g==
-X-Received: by 2002:a2e:9455:: with SMTP id o21mr1599107ljh.245.1589532697455;
-        Fri, 15 May 2020 01:51:37 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:46b9:e14c:2541:1887:9a5d:d412? ([2a00:1fa0:46b9:e14c:2541:1887:9a5d:d412])
-        by smtp.gmail.com with ESMTPSA id x2sm797962ljc.106.2020.05.15.01.51.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 May 2020 01:51:36 -0700 (PDT)
-Subject: Re: [PATCH 1/2] MIPS: Loongson: Fix fatal error during GPU init
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-References: <1589508901-18077-1-git-send-email-yangtiezhu@loongson.cn>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <1264becb-44aa-9e29-4e67-d1b5fbc0b56c@cogentembedded.com>
-Date:   Fri, 15 May 2020 11:51:24 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1727785AbgEOIyO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 May 2020 04:54:14 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:48878 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727116AbgEOIyN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 15 May 2020 04:54:13 -0400
+Received: from [10.130.0.52] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb2ixWL5eHQ41AA--.8S3;
+        Fri, 15 May 2020 16:54:10 +0800 (CST)
+Subject: Re: [PATCH v2 2/2] MIPS: Fix build errors under
+ CONFIG_HAVE_STD_PC_SERIAL_PORT
+To:     jiaxun.yang@flygoat.com,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <1589512985-27419-1-git-send-email-yangtiezhu@loongson.cn>
+ <1589512985-27419-2-git-send-email-yangtiezhu@loongson.cn>
+ <20200515073938.GA8289@alpha.franken.de>
+ <7715fe64-5d28-f8c8-3b04-0bf2b9f16497@loongson.cn>
+ <5AA0EB3A-DF33-4BE7-804C-45F6B51A0CF7@flygoat.com>
+Cc:     Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <db6fda56-27da-3705-1270-805e61defe4b@loongson.cn>
+Date:   Fri, 15 May 2020 16:54:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <1589508901-18077-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <5AA0EB3A-DF33-4BE7-804C-45F6B51A0CF7@flygoat.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dxb2ixWL5eHQ41AA--.8S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw18GFy8AFW5Kr4UJrW8WFg_yoWkArX_Wr
+        1jkr9rCw4rZw4Yy34DKws3JF9FgrZrCrW8Wa4Igw4Iq3s0vFy3Grs5G34SqF4rWr48Arsx
+        CF4rZa9IkwsI9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbsAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CEbIxv
+        r21lc2xSY4AK67AK6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
+        8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
+        xVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
+        8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2
+        z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUjxwIDUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+On 05/15/2020 04:19 PM, Jiaxun Yang wrote:
+>
+> 于 2020年5月15日 GMT+08:00 下午3:54:46, Tiezhu Yang <yangtiezhu@loongson.cn> 写到:
+>> On 05/15/2020 03:39 PM, Thomas Bogendoerfer wrote:
+>>> On Fri, May 15, 2020 at 11:23:05AM +0800, Tiezhu Yang wrote:
+>>>> When CONFIG_HAVE_STD_PC_SERIAL_PORT is set, include linux/module.h to fix
+>>>> the following build errors:
+>>> how are you doing this ? To me it looks like this CONFIG option isn't
+>>> used anymore.
+>> Because I will use arch/mips/kernel/8250-platform.c in the near future,
+>> so make MACH_LOONGSON64 selects HAVE_STD_PC_SERIAL_PORT, then
+>> I find the build errors.
+> Please never use it.
+> If you are willing to add serial port then please do it
+> in devicetree.
+> Platform devices in wild is dangerous and it will break everything.
 
-On 15.05.2020 5:15, Tiezhu Yang wrote:
+Hi Jiaxun,
 
-> When ATI Radeon graphics card has been compiled directly into the kernel
-                                ^ driver
+OK, Thanks for your suggestion. I will rethink my plan.
 
-> instead of as a module, we should make sure the firmware for the model
-> (check available ones in /lib/firmware/radeon) is built-in to the kernel
-> as well, otherwise there exists the following fatal error during GPU init,
-> change CONFIG_DRM_RADEON=y to CONFIG_DRM_RADEON=m to fix it.
-> 
-> [    1.900997] [drm] Loading RS780 Microcode
-> [    1.905077] radeon 0000:01:05.0: Direct firmware load for radeon/RS780_pfp.bin failed with error -2
-> [    1.914140] r600_cp: Failed to load firmware "radeon/RS780_pfp.bin"
-> [    1.920405] [drm:r600_init] *ERROR* Failed to load firmware!
-> [    1.926069] radeon 0000:01:05.0: Fatal error during GPU init
-> [    1.931729] [drm] radeon: finishing device.
-> 
-> Fixes: 024e6a8b5bb1 ("MIPS: Loongson: Add a Loongson-3 default config file")
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-[...]
+Hi Thomas,
 
-MBR, Sergei
+Because CONFIG_HAVE_STD_PC_SERIAL_PORT is not used anymore,
+(1) Is it necessary to fix this possible build error?
+or
+(2) Should we remove this arch/mips/kernel/8250-platform.c?
+
+Thanks,
+Tiezhu Yang
+
+>
+>> Thanks,
+>> Tiezhu Yang
+>>
+>>> Thomas.
+>>>
+
