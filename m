@@ -2,99 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1BC1D43F0
-	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 05:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD931D43FB
+	for <lists+linux-mips@lfdr.de>; Fri, 15 May 2020 05:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728028AbgEODOx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 14 May 2020 23:14:53 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:43085 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728026AbgEODOw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 14 May 2020 23:14:52 -0400
-Received: by mail-ot1-f65.google.com with SMTP id a68so801164otb.10;
-        Thu, 14 May 2020 20:14:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=yqs+xgalcbPDKtO7SirxVH1GzYsqpYVsPCsYXuYSFg0=;
-        b=owTAWSsDEjz4YhlNLD1Ny8JuodBv2FX+VARTSCklt64tarSIPpsXnP6L///nTrFRUH
-         flf7nT3Vi8dDYHIQChAv47maSzcRCuudZC+dyuHA4l9ckjZnjuxAlWUyaGkp2OltrTsA
-         tYfSbRGzVBjhze/MswPnN0Yfht0bCSiVhaSqS7oy3zFEg04hDjt10EFbFNzaccGOtfda
-         Al7mP8D+Syn2B7YwICMQkjTxL0AZR2e60pD2rFvHqdhgyLuYl0vxIq3h+vbgANWz7nma
-         UufoJ6w7KvULQq5Z8Pt/D9Ihr0yCU4n2INca1Dcqv8I0ve3BwE/XAbUBKzjnbplGeWVR
-         5gKg==
-X-Gm-Message-State: AOAM530DfC3Rp/xMDyoH/wyvOJtZizVitNDyFtad3OGZTvz0Gq1e/QgZ
-        XwRtDixDJKdzrThxUmpJDg==
-X-Google-Smtp-Source: ABdhPJwfXEmC9ltJAeX1EZtYduJdlosP1ejzhJQ0sxE6avvhSF7hIoTfhaRytn7FpFxvF04Z7YC4uw==
-X-Received: by 2002:a9d:69c2:: with SMTP id v2mr747510oto.313.1589512491573;
-        Thu, 14 May 2020 20:14:51 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id t204sm301843oih.39.2020.05.14.20.14.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2020 20:14:50 -0700 (PDT)
-Received: (nullmailer pid 32518 invoked by uid 1000);
-        Fri, 15 May 2020 03:14:49 -0000
-Date:   Thu, 14 May 2020 22:14:49 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org,
-        Allison Randal <allison@lohutok.net>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Sebastian Reichel <sre@kernel.org>,
+        id S1727924AbgEODS0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 14 May 2020 23:18:26 -0400
+Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17768 "EHLO
+        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727869AbgEODSZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 14 May 2020 23:18:25 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1589512684; cv=none; 
+        d=zoho.com.cn; s=zohoarc; 
+        b=Kr82VYcwh3WX1pT2Oz1uE0TVVH+6tE7BKeDMG6WSj8nhIGEic/tb5AT080jfYk4Pqb71v13HBBK9pKrx5xre3BWuTUqkTISB0vsylpgZ4e1SlIuyWQY+gBjt2KrYh+EQ9tDdTnrr/BMSp6CFHUzx8Gan7YsdyCr03EKe2nXco5M=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
+        t=1589512684; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
+        bh=a9MfE+IX939f7XSiZya+c23GX+UUfpJI7N9HjGVXA54=; 
+        b=eJ5JcL/ZlMz4eaMd3GqcgEp6r20GUk1IVL9+wQunCYW9BKmaxCI3NSaKl8RCzN5FrsB0HBO2aW5eP4cHyHHQa7cMotSfw4Na/pw7DZ0U1UCt4CIVD8dl5DEZes4R8RlGT16MU+yPH9n7Chwq4PqPOxbSvomYrxZswQjkF9G9Nzc=
+ARC-Authentication-Results: i=1; mx.zoho.com.cn;
+        dkim=pass  header.i=flygoat.com;
+        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
+        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1589512684;
+        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
+        h=Date:From:To:CC:Subject:Reply-to:In-Reply-To:References:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=a9MfE+IX939f7XSiZya+c23GX+UUfpJI7N9HjGVXA54=;
+        b=MaEKK/Mb8RQAk6lxjVcnvoEMdPLX2BhCBsjt91L3kre/rspxvztpC+xf1443+Xvq
+        PJSPLMmdCZC/y5xktWkiGPG//Sip7wcFNMDIUb5whHJEi4/oXAxeuJC8QOQ8fEK775h
+        kZoLMsY2Vt6J4dg35RuIgIdZywx6xovyv1Bw8oHY=
+Received: from [127.0.0.1] (101.84.172.108 [101.84.172.108]) by mx.zoho.com.cn
+        with SMTPS id 15895126814021012.4116349819437; Fri, 15 May 2020 11:18:01 +0800 (CST)
+Date:   Fri, 15 May 2020 11:17:58 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Paul Burton <paulburton@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Richard Fontana <rfontana@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Subject: Re: [PATCH v2 2/3] dt-bindings: power: reset: Unrequire regmap
- property in syscon-reboot node
-Message-ID: <20200515031449.GA32456@bogus>
-References: <20200306130356.6ABDD8030703@mail.baikalelectronics.ru>
- <20200507233846.11548-1-Sergey.Semin@baikalelectronics.ru>
- <20200507233846.11548-3-Sergey.Semin@baikalelectronics.ru>
+        Huacai Chen <chenhc@lemote.com>
+CC:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: Re: [PATCH 1/2] MIPS: Loongson: Fix fatal error during GPU init
+User-Agent: K-9 Mail for Android
+Reply-to: jiaxun.yang@flygoat.com
+In-Reply-To: <636ba812-3849-2667-d625-ab7e35d5ac36@loongson.cn>
+References: <1589508901-18077-1-git-send-email-yangtiezhu@loongson.cn> <ECE71DFC-57D3-4132-BB85-609448B29238@flygoat.com> <636ba812-3849-2667-d625-ab7e35d5ac36@loongson.cn>
+Message-ID: <F7BAD661-9D82-4063-B685-4A7192B7F172@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200507233846.11548-3-Sergey.Semin@baikalelectronics.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ZohoCNMailClient: External
 Sender: linux-mips-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 8 May 2020 02:38:45 +0300, Serge Semin wrote:
-> Since normally syscon-reboot block is supposed to be a part of a system
-> controller, lets mark the regmap property as deprecated and recommend the
-> syscon-reboot node to be a sub-node of SYSCON.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Allison Randal <allison@lohutok.net>
-> Cc: Richard Fontana <rfontana@redhat.com>
-> Cc: Kate Stewart <kstewart@linuxfoundation.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: linux-mips@vger.kernel.org
-> 
-> ---
-> 
-> Changelog v2:
-> - This is a new patch created as a result of the discussion:
->   https://lore.kernel.org/linux-pm/20200306130402.1F4F0803079F@mail.baikalelectronics.ru/
-> ---
->  .../bindings/power/reset/syscon-reboot.yaml       | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+
+=E4=BA=8E 2020=E5=B9=B45=E6=9C=8815=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=881=
+1:09:56, Tiezhu Yang <yangtiezhu@loongson=2Ecn> =E5=86=99=E5=88=B0:
+>On 05/15/2020 10:33 AM, Jiaxun Yang wrote:
+>>
+>> =E4=BA=8E 2020=E5=B9=B45=E6=9C=8815=E6=97=A5 GMT+08:00 =E4=B8=8A=E5=8D=
+=8810:15:00, Tiezhu Yang <yangtiezhu@loongson=2Ecn> =E5=86=99=E5=88=B0:
+>>> When ATI Radeon graphics card has been compiled directly into the kern=
+el
+>>> instead of as a module, we should make sure the firmware for the model
+>>> (check available ones in /lib/firmware/radeon) is built-in to the kern=
+el
+>>> as well, otherwise there exists the following fatal error during GPU i=
+nit,
+>>> change CONFIG_DRM_RADEON=3Dy to CONFIG_DRM_RADEON=3Dm to fix it=2E
+>>>
+>> The commit message looks shocking=2E
+>>
+>> You'd better reword it as "MIPS: Loongson64: Mark GPU driver as module =
+in Kconfig"
+>
+>OK, I will modify the patch subject and send v2=2E
+
+Sorry I meant defconfig not Kconfig=2E
+>
+>>
+>> Thanks=2E
+>
+
+--=20
+Jiaxun Yang
